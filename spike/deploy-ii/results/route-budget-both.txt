@@ -1,0 +1,61 @@
+sources  front-door        2116.8 KB  107 requests
+sources  sandbox           2116.8 KB  107 requests
+sources  kepler            3311.2 KB  146 requests
+sources  transit           3323.2 KB  146 requests   instrument 3400 KB 151 requests
+sources  power-law         3288.5 KB  146 requests   instrument 3341.7 KB 149 requests
+sources  largest-lesson    3420.7 KB  148 requests
+sources  teaching           201.4 KB   16 requests
+sources  evaluation          29.5 KB    5 requests
+sources  instructors        852.1 KB   15 requests
+sources  figure            2390.3 KB  126 requests
+sources  experiments       1062.2 KB   57 requests
+sources  observatory        186.7 KB   17 requests
+sources  catalog             88.3 KB   12 requests
+sources  library             59.3 KB   11 requests
+sources  adoption              10 KB    2 requests
+sources  teach-find          12.8 KB    3 requests
+sources  teach-kit           43.9 KB    6 requests
+sources  my-work             87.8 KB   10 requests
+sources  sky                114.7 KB   14 requests
+sources  compute            178.7 KB   20 requests
+sources  studio             929.4 KB   48 requests
+sources  composer           504.3 KB   31 requests
+sources  course-packs         629 KB   44 requests
+sources  course-builder      1053 KB   46 requests
+sources  course-home        263.3 KB   19 requests
+sources  lab3d               86.9 KB   10 requests
+sources  lab3d-lab          780.9 KB   34 requests
+sources  lab3d-guide        869.4 KB   39 requests
+sources  mission             66.2 KB    7 requests
+sources  mission-lab        418.8 KB   36 requests
+build    front-door         596.1 KB   54 requests
+build    sandbox            596.1 KB   54 requests
+build    kepler            1254.6 KB   71 requests
+build    transit           1266.1 KB   71 requests   instrument 1305.1 KB 75 requests
+build    power-law         1239.2 KB   71 requests   instrument 1255.9 KB 74 requests
+build    largest-lesson    1300.1 KB   73 requests
+build    teaching            81.7 KB    1 requests
+build    evaluation           5.7 KB    1 requests
+build    instructors        754.7 KB    1 requests
+build    figure             728.4 KB   56 requests
+build    experiments        288.7 KB    4 requests
+build    observatory           88 KB    5 requests
+build    catalog             33.1 KB    1 requests
+build    library               23 KB    1 requests
+build    adoption             1.7 KB    1 requests
+build    teach-find           2.8 KB    2 requests
+build    teach-kit           25.3 KB    2 requests
+build    my-work             33.9 KB    3 requests
+build    sky                 43.7 KB    4 requests
+build    compute               82 KB    2 requests
+build    studio             216.2 KB    2 requests
+build    composer           262.6 KB   15 requests
+build    course-packs       237.9 KB   13 requests
+build    course-builder     605.5 KB   13 requests
+build    course-home         66.7 KB    3 requests
+build    lab3d               31.2 KB    1 requests
+build    lab3d-lab            577 KB    2 requests
+build    lab3d-guide        661.6 KB    3 requests
+build    mission             33.8 KB    1 requests
+build    mission-lab        225.7 KB    2 requests
+EXIT=0

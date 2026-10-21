@@ -1,0 +1,425 @@
+// =============================================================================
+// Playwright configuration for the browser smoke suite
+// -----------------------------------------------------------------------------
+// What these tests are for, and what they are not
+// -----------------------------------------------------------------------------
+// They check that the major user workflows still work in a real browser. They do
+// not check pixels. Gravitas is a canvas application whose entire output is a
+// moving simulation, so a screenshot comparison of the sandbox would fail on
+// every commit for reasons nobody could act on. Where a stable surface is worth
+// snapshotting - the front door, a lesson panel - it is snapshotted deliberately
+// and named as such.
+//
+// Two targets, and the split is forced by the build
+// -----------------------------------------------------------------------------
+// The deep suite runs against the unbundled sources, because it needs to see
+// inside the application: a NaN check has to read the body list, a "the loop is
+// still alive" check has to read the frame counter, and a scenario has to be
+// loaded on a fixed seed. All of that goes through `import('/js/physics.js')`
+// from inside the page, which is exactly what the repository's other browser
+// tools already do - and which cannot work against `dist/`, where esbuild has
+// bundled those modules into hashed chunks with no `/js/ui.js` to import.
+//
+// So the production build gets its own spec, `production.spec.js`, which touches
+// nothing but the DOM. It is a narrower test and it defends the thing the deep
+// suite cannot reach: that the bundle boots, splits its chunks correctly, loads
+// its deferred lesson code and throws nothing. Between them the two targets
+// cover both failure modes.
+//
+//   npm run e2e            the deep suite, against sources
+//   npm run e2e:dist       the production spec, against dist/ (build it first)
+//   npm run e2e:all        both
+//   npm run e2e:headed     watch it happen, chromium only
+//   npm run e2e:ui         the Playwright inspector
+//
+// Browser coverage, and what each engine is actually for
+// -----------------------------------------------------------------------------
+// Chromium runs everything: the behavior, the layout, and the scientific
+// results - chaos divergence, resonance libration, conservation, the whole
+// suite. It is the engine the project is tested in.
+//
+// Firefox and WebKit run the `@cross-browser` profile and nothing else. This
+// used to say that CI ran "the full set" in every engine, and that was both
+// inaccurate and a bad idea:
+//
+//   It did not fit. The serial WebKit job reached GitHub's thirty-minute
+//   ceiling at 177 tests. Firefox took about twenty-three minutes and WebKit is
+//   slower.
+//
+//   Most of it was not testing the engine. A divergence exponent measured over
+//   3,200 simulated seconds is arithmetic over doubles. Running it in three
+//   engines does not check three engines; it checks the same IEEE-754 three
+//   times and charges twenty minutes for the second and third.
+//
+//   Two of the tests were actively wrong there. The video-capture tests waited
+//   for a button Gravitas deliberately hides when capture.canRecord() is false,
+//   which in Playwright's WebKit it is. The long chaos tests wait for a
+//   simulated span the bench reaches at a fixed step per animation frame, so on
+//   a two-core runner WebKit cannot get there inside the wait and then spends
+//   another five minutes retrying.
+//
+// So the profile carries what differs between engines - boot, canvas, downloads,
+// history, storage, WebGL, layout, i18n - and one short chaos test that proves
+// the bench records and samples without asserting a numerical outcome. Anything
+// whose result depends only on shared JavaScript arithmetic stays Chromium-only.
+//
+//   npm run e2e                      chromium, everything
+//   GRAVITAS_E2E_BROWSERS=all npm run e2e            all three, everything
+//   GRAVITAS_E2E_BROWSERS=webkit npm run e2e:cross-browser   the profile
+// =============================================================================
+
+import { defineConfig, devices } from '@playwright/test';
+
+const isCI = Boolean(process.env.CI);
+/**
+ * Whether this run is one shard of several: CI's shards are `--test-list`
+ * runs planned by tools/e2e-shards.mjs, and `--shard` is Playwright's own
+ * split. See `reporter` below.
+ */
+const SHARDED = process.argv.some(
+  arg => arg.startsWith('--shard') || arg.startsWith('--test-list')
+);
+
+/** 'src' (default) or 'dist'. */
+const target = process.env.GRAVITAS_E2E_TARGET === 'dist' ? 'dist' : 'src';
+const serveRoot = target === 'dist' ? 'dist' : '.';
+
+// The production spec is DOM-only and runs against the bundle alone. Apart from
+// BOTH_TARGETS below, everything else needs module access and can only run
+// against sources.
+const PRODUCTION_SPEC = /production\.spec\.js/;
+
+/**
+ * Specs that run against both targets.
+ *
+ * e2e/selfContained.spec.js asserts that the application reaches no origin but
+ * its own, and that has to hold for the sources and for the bundle: the two
+ * resolve three.js and the fonts by the same relative paths, and the
+ * whole point is that neither can quietly differ. Written DOM-only for the same
+ * reason production.spec.js is - there is no /js/ui.js to import in dist/.
+ *
+ * e2e/accessibilityParity.spec.js and e2e/sonifyTextEquivalent.spec.js check
+ * claims ACCESSIBILITY.md makes to a reader - the keyboard placement form, the
+ * data tables, the printed voices - and those claims have to hold in both
+ * builds. (What is published is the sources: the deploy job uploads the
+ * committed tree, and GitHub Pages serves it unbundled. dist/ is the build the
+ * bundle budgets measure.) Their
+ * DOM-only tests run here; the ones that compare against a module's own arrays
+ * carry a GRAVITAS_E2E_TARGET skip and stay on the sources.
+ *
+ * e2e/lazyInstruments.spec.js holds the lazily loaded instrument families to
+ * what a reader sees in both builds, because they differ: under the sources a
+ * retry can re-import a family under a new URL, and a bundle cannot.
+ *
+ * e2e/embedContract.spec.js and e2e/figureBuilder.spec.js hold the public
+ * embed contract and the page that writes it (EMBEDDING.md) in both, because
+ * a course page will frame whichever one is published.
+ *
+ * e2e/experimentRunner.spec.js runs real experiment Workers in both, because
+ * the Worker is its own bundle in dist/ and a source-only test would never
+ * know whether that bundle starts.
+ *
+ * e2e/observatory.spec.js opens every observation in both, because each one
+ * is a chunk of the observatory's bundle in dist/, fetched when opened.
+ *
+ * e2e/inference.spec.js runs a fit in both, because in dist/ the fit panel is
+ * a lazy chunk and its Worker a bundle of its own, found from the page.
+ *
+ * e2e/catalog.spec.js installs from the catalog in both, because in dist/ the
+ * page is a bundle, the archives are copied files, and the observatory opens
+ * an installed pack through a lazy chunk.
+ *
+ * e2e/archive.spec.js imports from CDS (played by fixtures) in both, because
+ * in dist/ the archive panel is a lazy chunk of the observatory's bundle, and
+ * the page's Content-Security-Policy has to hold in the page that is served.
+ *
+ * e2e/measure.spec.js measures in both, because in dist/ the measurement
+ * panel is a lazy chunk of the observatory's bundle, as the file reader it
+ * reads saved pipelines with now is too.
+ *
+ * e2e/analysisLab.spec.js and e2e/modelCompare.spec.js analyze in both,
+ * because in dist/ the laboratory is a lazy chunk of the experiment runner's
+ * bundle, and the comparison lives in the fit panel's chunk of the
+ * observatory's: neither may reach a module the page loads at start.
+ *
+ * e2e/historyOriginal.spec.js follows the quiet link in /model/'s footer to
+ * the first Gravitas in both, because dist/ gets that page from build.js's
+ * ARCHIVAL_PAGES rather than DOC_PAGES, and must serve it as committed.
+ *
+ * e2e/systemBuilder.spec.js builds a system from orbital elements in both,
+ * because in dist/ the builder is a lazy chunk that mounts its own dialog and
+ * brings its own styles, and the world it builds has to share, rebuild and
+ * save as the sources' does.
+ *
+ * e2e/studio.spec.js edits, saves and opens a scenario in both, because in
+ * dist/ the Scenario Studio is a page of its own with its own bundle
+ * (build.js), and the link it makes has to open the same world, with the same
+ * instruments out, in the application that is served.
+ *
+ * e2e/composer.spec.js composes and previews an investigation in both,
+ * because in dist/ the composer is a page with its own bundle and its preview
+ * is the served lesson engine opening the compiled draft, whose remediation
+ * steps the bundle's navigation has to honor.
+ *
+ * e2e/course.spec.js builds and opens a course in both, because in dist/ the
+ * builder and the course home are pages with bundles of their own, and the
+ * links they make open the served application and Observatory.
+ *
+ * e2e/lab3d.spec.js runs the 3-D kernel's diagnostics page in both, because
+ * in dist/ its Worker is a bundle of its own that the page must find.
+ *
+ * e2e/lab3dView.spec.js plays the 3-D lab in both: in dist/ the lab is a page
+ * with its own bundle, three.js inside it, and the same Worker.
+ *
+ * e2e/lab3dGuides.spec.js walks the lab's guided investigations in both: in
+ * dist/ the guide panel is a lazy chunk of the lab's bundle.
+ *
+ * e2e/mission.spec.js runs the mission-design diagnostics page in both,
+ * because in dist/ its Worker is a bundle of its own that the page must find.
+ *
+ * e2e/missionLab.spec.js runs the mission lab in both, for the same reason:
+ * in dist/ its Worker carries the ephemeris pack, and the page must find it.
+ *
+ * e2e/shell.spec.js works the shared shell in both: in dist/ it is inside the
+ * teaching bundle, and a module of its own for the pages that load it by URL.
+ */
+const BOTH_TARGETS =
+  /selfContained\.spec\.js|accessibilityParity\.spec\.js|sonifyTextEquivalent\.spec\.js|lazyInstruments\.spec\.js|capabilityPackages\.spec\.js|embedContract\.spec\.js|figureBuilder\.spec\.js|experimentRunner\.spec\.js|observatory\.spec\.js|inference\.spec\.js|catalog\.spec\.js|catalogGovernance\.spec\.js|archive\.spec\.js|measure\.spec\.js|historyOriginal\.spec\.js|analysisLab\.spec\.js|modelCompare\.spec\.js|exoplanetGuides\.spec\.js|populationsGuides\.spec\.js|systemBuilder\.spec\.js|studio\.spec\.js|composer\.spec\.js|course\.spec\.js|lab3d\.spec\.js|lab3dView\.spec\.js|lab3dGuides\.spec\.js|mission\.spec\.js|missionLab\.spec\.js|shell\.spec\.js/;
+
+/**
+ * Which engines to run.
+ *
+ * 'chromium' by default; 'all' for the full set; or an explicit comma-separated
+ * list, which is what CI uses to run firefox and webkit without repeating the
+ * chromium work a pull request has already done.
+ */
+const ENGINES = ['chromium', 'firefox', 'webkit'];
+const requested = (process.env.GRAVITAS_E2E_BROWSERS || 'chromium')
+  .toLowerCase()
+  .split(',')
+  .map(name => name.trim())
+  .filter(Boolean);
+const engines = requested.includes('all')
+  ? ENGINES
+  : ENGINES.filter(name => requested.includes(name));
+if (!engines.length) {
+  throw new Error(
+    `GRAVITAS_E2E_BROWSERS="${process.env.GRAVITAS_E2E_BROWSERS}" names no ` +
+      `known engine. Use "all", or a comma-separated list of: ${ENGINES.join(', ')}`
+  );
+}
+
+const PORT = Number(process.env.GRAVITAS_E2E_PORT || 4173);
+
+/**
+ * Which profile to run: everything, or the engine-compatibility subset.
+ *
+ * `GRAVITAS_E2E_PROFILE=cross-browser` narrows the run to tests tagged
+ * `@cross-browser`. A Playwright tag rather than a title-text filter, because a
+ * grep over titles silently loses a test the day somebody rewords it, and
+ * silently gains one the day somebody uses the same word for something else.
+ *
+ * What belongs in the profile is one question: does this exercise a browser
+ * API? Booting, canvas animation, downloads, MediaRecorder, history and
+ * navigation, IndexedDB, WebGL, fonts and layout all differ between engines and
+ * are worth running three times. A chaos divergence exponent or a resonance
+ * libration amplitude is arithmetic over doubles - it comes out the same in
+ * every engine, and running it three times buys nothing but wall clock. Those
+ * stay in the Chromium job, which runs everything.
+ */
+const PROFILE = process.env.GRAVITAS_E2E_PROFILE || 'full';
+const CROSS_BROWSER_TAG = /@cross-browser/;
+if (PROFILE !== 'full' && PROFILE !== 'cross-browser') {
+  throw new Error(
+    `GRAVITAS_E2E_PROFILE="${PROFILE}" is not a profile. Use "full" or "cross-browser".`
+  );
+}
+
+// The mobile spec belongs to the phone project alone: it opens the menu toggle
+// and asserts on layout that only exists below the breakpoint, so running it in
+// a 1440px window fails for reasons that are not bugs.
+const MOBILE_SPEC = /mobile\.spec\.js/;
+
+/**
+ * The viewport matrix (Roadmap II Prompt 55).
+ *
+ * PLATFORM_MODEL.md lays the application out at four widths, and the desktop
+ * projects test one of them. Two more projects carry the rest: the phone
+ * profile and a tablet. Each runs the investigation walker - every step of
+ * every lesson, at that size - and the layout assertions, which measure named
+ * regions at the size (no overlap, Next on screen, a third of the window
+ * left to the canvas) rather than compare screenshots. Nothing else: the
+ * rest of the suite tests behavior, which a viewport does not change, and a
+ * third copy of it would add CI time without adding a finding.
+ *
+ * e2e/responsiveLayout.spec.js picks its width from the project: 375 in the
+ * phone project, 768 in the tablet, 1024 and 1440 in the desktop ones.
+ *
+ * The tablet's walk is the exception, on cost: it is about 29 minutes of
+ * runner time, on every pull request and push, for a second walk of the same
+ * lessons at a layout the tablet's layout spec already measures. So the tablet
+ * walks the lessons only when GRAVITAS_E2E_TABLET_WALK is set, which the
+ * weekly `tablet-walk` CI job and the release gate (`npm run e2e:release`) do.
+ * A pull request still walks every lesson on the phone and runs the tablet's
+ * layout spec.
+ */
+const WALKTHROUGH_SPEC = /authorWalk\.spec\.js/;
+const LAYOUT_SPEC = /responsiveLayout\.spec\.js/;
+// Sets its own viewports and touch per test; the phone profile adds the real
+// device's user agent and touch screen to the same walk (P58 R-A).
+const NAV_TOUCH_SPEC = /twoActivationNavTouch\.spec\.js/;
+// The adoption pages and the instructor path (Prompt 76) also run on the
+// phone profile: the layout and the preview are what a finger meets.
+const ADOPTION_SPEC = /adoption\.spec\.js|instructorFlow\.spec\.js/;
+// The desktop half (twoActivationNav.spec.js) runs in the desktop projects, the
+// touch half in the phone project; each defines one cell per pull request; the whole matrix
+// when GRAVITAS_E2E_NAV_FULL is set (the weekly job and `npm run e2e:release`).
+const TABLET_WALK = Boolean(process.env.GRAVITAS_E2E_TABLET_WALK);
+
+/**
+ * A tablet held upright, in Chromium: 768 by 1024 CSS pixels, a touch screen
+ * and a tablet's user agent, which the application reads for its touch tips.
+ * Playwright's iPad profiles default to WebKit, and the matrix runs where the
+ * rest of the deep suite runs, so this is the iPad Mini's geometry in the
+ * engine CI already has.
+ */
+const TABLET = {
+  ...devices['iPad Mini'],
+  defaultBrowserType: 'chromium',
+};
+
+/**
+ * The desktop projects.
+ *
+ * A generous viewport on purpose: the rail docks only from 1201px (the
+ * breakpoint scale, tests/breakpoints.test.js), and the desktop suite is meant
+ * to be testing the desktop layout. The phone and the tablet have projects of
+ * their own.
+ */
+
+const DESKTOP_VIEWPORT = { width: 1440, height: 900 };
+const DEVICE_FOR = {
+  chromium: 'Desktop Chrome',
+  firefox: 'Desktop Firefox',
+  webkit: 'Desktop Safari',
+};
+
+const desktop = engines.map(name => ({
+  name,
+  testIgnore: [MOBILE_SPEC, NAV_TOUCH_SPEC],
+  use: { ...devices[DEVICE_FOR[name]], viewport: DESKTOP_VIEWPORT },
+}));
+
+export default defineConfig({
+  testDir: '/Users/carl/Desktop/Gravitas/worktrees/p158/e2e',
+  ...(target === 'dist'
+    ? {
+        testMatch: new RegExp('(onboarding|firstRun|investigations|sandbox|bodyPlacement|accessibilityParity|answerEntry|predictionLoops|measure|plotChart|chartParity|observatory|stellarSpectra|sky|observing|experimentRunner|experiments|htmlReport|myWork|progressSafety|presetRecovery|sharing|shareObserving|adoption|instructorFlow|assignment|submissionReview|instructorPortal)\\.spec\\.js$'),
+      }
+    : { testIgnore: PRODUCTION_SPEC }),
+  ...(PROFILE === 'cross-browser' ? { grep: CROSS_BROWSER_TAG } : {}),
+  // Every spec here drives a live simulation, so they are slower than a typical
+  // DOM test and the default 30s is too tight for the heavy-scenario one.
+  timeout: 90_000,
+  expect: { timeout: 10_000 },
+
+  // Every test is its own unit of work, so the tests of one file spread over
+  // every worker - except in a file that configures `mode: 'serial'` (chaos
+  // and resonance), whose long simulations would otherwise compete for the
+  // same cores. The specs share nothing but a server, and each test starts
+  // from a fresh browser context.
+  fullyParallel: true,
+  workers: isCI ? 2 : undefined,
+
+  // A canvas app has genuine timing flake in it. One retry in CI turns a
+  // coincidence into a pass and a real break into two failures; locally, none,
+  // so a developer sees the flake rather than having it hidden.
+  retries: isCI ? 1 : 0,
+
+  // No accidental `test.only` reaching main.
+  forbidOnly: isCI,
+
+  // A sharded run reports in `blob`, which is the only format that can be
+  // merged: every runner produces a fragment and one job stitches them into a
+  // single HTML report with everybody's traces and screenshots in it, while
+  // another checks that between them they ran every listed test once.
+  // An unsharded run - which is what `npm run e2e` still is locally - keeps
+  // the HTML report it always had, so nothing about running this by hand
+  // changes.
+  //
+  // Keyed on the command line that is actually running rather than on an
+  // environment variable of our own, so a workflow that shards and a config
+  // that reports cannot disagree about which is happening.
+  reporter: isCI
+    ? SHARDED
+      ? [['github'], ['blob'], ['list']]
+      : [['github'], ['html', { open: 'never' }], ['list']]
+    : [['list'], ['json', { outputFile: process.env.SPIKE_JSON || 'spike-results.json' }]],
+
+  use: {
+    baseURL: `http://127.0.0.1:${PORT}`,
+    // Traces and video only for a failure that survived its retry, which keeps
+    // the artifact small enough to actually download.
+    trace: 'retain-on-failure',
+    screenshot: 'only-on-failure',
+    video: isCI ? 'retain-on-failure' : 'off',
+    // Service workers are blocked by default, and e2e/offline.spec.js opts back
+    // in for itself.
+    //
+    // Not because they are a problem, but because they are a *variable*. Once
+    // sw.js is registered it answers requests from a cache, so a test that
+    // failed would leave the next one wondering whether it saw the application
+    // or a copy of it, and a change to a module would be invisible to any test
+    // whose context had already cached it. The offline behavior deserves tests
+    // that mean something; the other 200 deserve to be testing the application.
+    serviceWorkers: 'block',
+    // The simulation animates constantly, so there is no "network idle" and no
+    // settled DOM to wait for. Actions wait on the element, not the page.
+    actionTimeout: 15_000,
+    navigationTimeout: 30_000,
+  },
+
+  projects: [
+    ...desktop,
+    // A real phone profile rather than a narrow desktop window: the mobile layout
+    // branches on touch support and on the user agent, not only on width. Only
+    // meaningful against sources, where the mobile spec can read app state.
+    // Pixel 7 is a Chromium profile, so the phone project only exists when
+    // chromium is among the engines being run; the tablet beside it, for the
+    // same reason. See WALKTHROUGH_SPEC above.
+    ...(target === 'dist' || !engines.includes('chromium')
+      ? []
+      : [
+          {
+            name: 'mobile-chrome',
+            use: { ...devices['Pixel 7'] },
+            testMatch: [
+              MOBILE_SPEC,
+              WALKTHROUGH_SPEC,
+              LAYOUT_SPEC,
+              NAV_TOUCH_SPEC,
+              ADOPTION_SPEC,
+            ],
+          },
+          {
+            name: 'tablet',
+            use: TABLET,
+            testMatch: TABLET_WALK
+              ? [WALKTHROUGH_SPEC, LAYOUT_SPEC]
+              : [LAYOUT_SPEC],
+          },
+        ]),
+  ],
+
+  webServer: {
+    // The repository's own dependency-free server. `npx http-server` would work
+    // and would also fetch a package from the network in the middle of a CI run.
+    command: `node tools/static-server.mjs --root ${serveRoot} --port ${PORT}`,
+    url: `http://127.0.0.1:${PORT}/`,
+    reuseExistingServer: false,
+    cwd: '/Users/carl/Desktop/Gravitas/worktrees/p158',
+    timeout: 30_000,
+    stdout: 'ignore',
+    stderr: 'pipe',
+  },
+});

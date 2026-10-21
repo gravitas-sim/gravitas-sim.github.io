@@ -1,0 +1,132 @@
+{
+  "tess-light-curve": {
+    "sources": {
+      "requests": 2,
+      "kb": 17.5
+    },
+    "build": {
+      "requests": 3,
+      "kb": 11.9
+    }
+  },
+  "sdss-a": {
+    "sources": {
+      "requests": 1,
+      "kb": 21.2
+    },
+    "build": {
+      "requests": 1,
+      "kb": 17.5
+    }
+  },
+  "sdss-g": {
+    "sources": {
+      "requests": 1,
+      "kb": 21.2
+    },
+    "build": {
+      "requests": 1,
+      "kb": 17.5
+    }
+  },
+  "sdss-k": {
+    "sources": {
+      "requests": 1,
+      "kb": 21.2
+    },
+    "build": {
+      "requests": 1,
+      "kb": 17.5
+    }
+  },
+  "sdss-m": {
+    "sources": {
+      "requests": 1,
+      "kb": 21.2
+    },
+    "build": {
+      "requests": 1,
+      "kb": 17.5
+    }
+  },
+  "gwosc-events": {
+    "sources": {
+      "requests": 1,
+      "kb": 61.7
+    },
+    "build": {
+      "requests": 1,
+      "kb": 56.2
+    }
+  },
+  "ngc2420-photometry": {
+    "sources": {
+      "requests": 2,
+      "kb": 45.2
+    },
+    "build": {
+      "requests": 2,
+      "kb": 40.7
+    }
+  },
+  "ngc2420-segue": {
+    "sources": {
+      "requests": 2,
+      "kb": 28.3
+    },
+    "build": {
+      "requests": 2,
+      "kb": 23.2
+    }
+  },
+  "gaia-solar-neighbourhood": {
+    "sources": {
+      "requests": 3,
+      "kb": 70
+    },
+    "build": {
+      "requests": 3,
+      "kb": 65.6
+    }
+  },
+  "gaia-ngc2420": {
+    "sources": {
+      "requests": 3,
+      "kb": 42.3
+    },
+    "build": {
+      "requests": 3,
+      "kb": 38
+    }
+  },
+  "milky-way-rotation-curve": {
+    "sources": {
+      "requests": 3,
+      "kb": 13.4
+    },
+    "build": {
+      "requests": 3,
+      "kb": 9.1
+    }
+  },
+  "mist-isochrones": {
+    "sources": {
+      "requests": 2,
+      "kb": 38.7
+    },
+    "build": {
+      "requests": 2,
+      "kb": 34.2
+    }
+  },
+  "tess-aperture": {
+    "sources": {
+      "requests": 2,
+      "kb": 11.3
+    },
+    "build": {
+      "requests": 3,
+      "kb": 5.5
+    }
+  }
+}

@@ -1,0 +1,9 @@
+FAIL tests/buildIntegrity.test.js
+FAIL tests/engineConservation.test.js (9.163 s)
+FAIL tests/engineEvents.test.js (6.145 s)
+FAIL tests/engineState.test.js
+FAIL tests/physicsValidation.test.js (115.992 s)
+FAIL tests/platformBaseline.test.js
+FAIL tests/settingsWriters.test.js
+Test Suites: 7 failed, 401 passed, 408 total
+Tests:       32 failed, 13572 passed, 13604 total

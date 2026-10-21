@@ -1,0 +1,31 @@
+sources  front-door        1926.5 KB  100 requests
+sources  sandbox           1926.5 KB  100 requests
+sources  kepler            3120.9 KB  139 requests
+sources  transit           3132.8 KB  139 requests   instrument 3209.6 KB 144 requests
+sources  power-law         3098.1 KB  139 requests   instrument 3151.4 KB 142 requests
+sources  largest-lesson    3230.4 KB  141 requests
+sources  teaching           201.4 KB   16 requests
+sources  evaluation          29.5 KB    5 requests
+sources  instructors        852.1 KB   15 requests
+sources  figure              2200 KB  119 requests
+sources  experiments        871.8 KB   50 requests
+sources  observatory        186.7 KB   17 requests
+sources  catalog             88.3 KB   12 requests
+sources  library             59.3 KB   11 requests
+sources  adoption              10 KB    2 requests
+sources  teach-find          12.8 KB    3 requests
+sources  teach-kit           43.9 KB    6 requests
+sources  my-work             87.8 KB   10 requests
+sources  sky                114.7 KB   14 requests
+sources  compute            178.7 KB   20 requests
+sources  studio             739.1 KB   41 requests
+sources  composer           504.3 KB   31 requests
+sources  course-packs         629 KB   44 requests
+sources  course-builder      1053 KB   46 requests
+sources  course-home        263.3 KB   19 requests
+sources  lab3d               86.9 KB   10 requests
+sources  lab3d-lab          780.9 KB   34 requests
+sources  lab3d-guide        869.4 KB   39 requests
+sources  mission             66.2 KB    7 requests
+sources  mission-lab        418.8 KB   36 requests
+EXIT=0

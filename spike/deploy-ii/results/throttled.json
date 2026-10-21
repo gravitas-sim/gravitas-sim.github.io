@@ -1,0 +1,255 @@
+{
+  "profile": "Chromium, CPU x4, 150 ms RTT, 1.6 Mbit/s down, 0.75 Mbit/s up; service worker blocked; cold cache",
+  "runs": [
+    {
+      "route": "front-door",
+      "config": "sources",
+      "run": 0,
+      "ms": 19732,
+      "requests": 123,
+      "jsRequests": 107,
+      "jsKB": 2116.8,
+      "load0": "3.07",
+      "load1": "2.88"
+    },
+    {
+      "route": "front-door",
+      "config": "build",
+      "run": 0,
+      "ms": 10457,
+      "requests": 63,
+      "jsRequests": 54,
+      "jsKB": 596.1,
+      "load0": "2.88",
+      "load1": "2.97"
+    },
+    {
+      "route": "front-door",
+      "config": "sources",
+      "run": 1,
+      "ms": 19789,
+      "requests": 123,
+      "jsRequests": 107,
+      "jsKB": 2116.8,
+      "load0": "2.97",
+      "load1": "2.69"
+    },
+    {
+      "route": "front-door",
+      "config": "build",
+      "run": 1,
+      "ms": 10447,
+      "requests": 63,
+      "jsRequests": 54,
+      "jsKB": 596.1,
+      "load0": "2.69",
+      "load1": "2.58"
+    },
+    {
+      "route": "front-door",
+      "config": "sources",
+      "run": 2,
+      "ms": 19760,
+      "requests": 123,
+      "jsRequests": 107,
+      "jsKB": 2116.8,
+      "load0": "2.58",
+      "load1": "2.75"
+    },
+    {
+      "route": "front-door",
+      "config": "build",
+      "run": 2,
+      "ms": 10502,
+      "requests": 63,
+      "jsRequests": 54,
+      "jsKB": 596.1,
+      "load0": "2.75",
+      "load1": "2.95"
+    },
+    {
+      "route": "kepler",
+      "config": "sources",
+      "run": 0,
+      "ms": 22926,
+      "requests": 164,
+      "jsRequests": 146,
+      "jsKB": 3311.2,
+      "load0": "2.95",
+      "load1": "2.99"
+    },
+    {
+      "route": "kepler",
+      "config": "build",
+      "run": 0,
+      "ms": 10405,
+      "requests": 84,
+      "jsRequests": 73,
+      "jsKB": 1257.8,
+      "load0": "2.99",
+      "load1": "2.98"
+    },
+    {
+      "route": "kepler",
+      "config": "sources",
+      "run": 1,
+      "ms": 23034,
+      "requests": 164,
+      "jsRequests": 146,
+      "jsKB": 3311.2,
+      "load0": "2.98",
+      "load1": "3.39"
+    },
+    {
+      "route": "kepler",
+      "config": "build",
+      "run": 1,
+      "ms": 10430,
+      "requests": 84,
+      "jsRequests": 73,
+      "jsKB": 1257.8,
+      "load0": "3.39",
+      "load1": "3.88"
+    },
+    {
+      "route": "kepler",
+      "config": "sources",
+      "run": 2,
+      "ms": 23028,
+      "requests": 164,
+      "jsRequests": 146,
+      "jsKB": 3311.2,
+      "load0": "3.88",
+      "load1": "3.81"
+    },
+    {
+      "route": "kepler",
+      "config": "build",
+      "run": 2,
+      "ms": 10433,
+      "requests": 84,
+      "jsRequests": 73,
+      "jsKB": 1257.8,
+      "load0": "3.81",
+      "load1": "4.08"
+    },
+    {
+      "route": "observatory+1",
+      "config": "sources",
+      "run": 0,
+      "ms": 4653,
+      "requests": 25,
+      "jsRequests": 19,
+      "jsKB": 204.2,
+      "load0": "4.08",
+      "load1": "3.91"
+    },
+    {
+      "route": "observatory+1",
+      "config": "build",
+      "run": 0,
+      "ms": 4020,
+      "requests": 16,
+      "jsRequests": 8,
+      "jsKB": 100,
+      "load0": "3.91",
+      "load1": "3.76"
+    },
+    {
+      "route": "observatory+1",
+      "config": "sources",
+      "run": 1,
+      "ms": 4645,
+      "requests": 25,
+      "jsRequests": 19,
+      "jsKB": 204.2,
+      "load0": "3.76",
+      "load1": "4.02"
+    },
+    {
+      "route": "observatory+1",
+      "config": "build",
+      "run": 1,
+      "ms": 4115,
+      "requests": 16,
+      "jsRequests": 8,
+      "jsKB": 100,
+      "load0": "4.02",
+      "load1": "4.82"
+    },
+    {
+      "route": "observatory+1",
+      "config": "sources",
+      "run": 2,
+      "ms": 4658,
+      "requests": 25,
+      "jsRequests": 19,
+      "jsKB": 204.2,
+      "load0": "4.82",
+      "load1": "4.59"
+    },
+    {
+      "route": "observatory+1",
+      "config": "build",
+      "run": 2,
+      "ms": 4028,
+      "requests": 16,
+      "jsRequests": 8,
+      "jsKB": 100,
+      "load0": "4.59",
+      "load1": "4.54"
+    }
+  ],
+  "node": "v24.4.0",
+  "cpus": 12,
+  "summary": {
+    "front-door/sources": {
+      "medianMs": 19760,
+      "minMs": 19732,
+      "maxMs": 19789,
+      "requests": 123,
+      "jsRequests": 107,
+      "jsKB": 2116.8
+    },
+    "front-door/build": {
+      "medianMs": 10457,
+      "minMs": 10447,
+      "maxMs": 10502,
+      "requests": 63,
+      "jsRequests": 54,
+      "jsKB": 596.1
+    },
+    "kepler/sources": {
+      "medianMs": 23028,
+      "minMs": 22926,
+      "maxMs": 23034,
+      "requests": 164,
+      "jsRequests": 146,
+      "jsKB": 3311.2
+    },
+    "kepler/build": {
+      "medianMs": 10430,
+      "minMs": 10405,
+      "maxMs": 10433,
+      "requests": 84,
+      "jsRequests": 73,
+      "jsKB": 1257.8
+    },
+    "observatory+1/sources": {
+      "medianMs": 4653,
+      "minMs": 4645,
+      "maxMs": 4658,
+      "requests": 25,
+      "jsRequests": 19,
+      "jsKB": 204.2
+    },
+    "observatory+1/build": {
+      "medianMs": 4028,
+      "minMs": 4020,
+      "maxMs": 4115,
+      "requests": 16,
+      "jsRequests": 8,
+      "jsKB": 100
+    }
+  }
+}

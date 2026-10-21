@@ -1,0 +1,2485 @@
+{
+ "measuredAt": "b8f644a2",
+ "lessons": {
+  "keplers-laws": {
+   "sources": {
+    "usable": {
+     "kb": 3311.2,
+     "requests": 146,
+     "families": [],
+     "ms": 558
+    },
+    "arrivals": [],
+    "msMedian": 558
+   },
+   "build": {
+    "usable": {
+     "kb": 1254.6,
+     "requests": 71,
+     "families": [],
+     "ms": 464
+    },
+    "arrivals": [],
+    "msMedian": 464
+   }
+  },
+  "retrograde-motion": {
+   "sources": {
+    "usable": {
+     "kb": 3302.9,
+     "requests": 146,
+     "families": [],
+     "ms": 537
+    },
+    "arrivals": [],
+    "msMedian": 537
+   },
+   "build": {
+    "usable": {
+     "kb": 1251,
+     "requests": 71,
+     "families": [],
+     "ms": 454
+    },
+    "arrivals": [],
+    "msMedian": 454
+   }
+  },
+  "transit-photometry": {
+   "sources": {
+    "usable": {
+     "kb": 3323.2,
+     "requests": 146,
+     "families": [],
+     "ms": 535
+    },
+    "arrivals": [
+     {
+      "step": 5,
+      "family": "transitWidgets",
+      "kb": 3400,
+      "requests": 151,
+      "families": [
+       "transitWidgets"
+      ]
+     }
+    ],
+    "msMedian": 535
+   },
+   "build": {
+    "usable": {
+     "kb": 1266.1,
+     "requests": 71,
+     "families": [],
+     "ms": 461
+    },
+    "arrivals": [
+     {
+      "step": 5,
+      "family": "transitWidgets",
+      "kb": 1305.1,
+      "requests": 75,
+      "families": [
+       "transitWidgets"
+      ]
+     }
+    ],
+    "msMedian": 461
+   }
+  },
+  "orbital-energy": {
+   "sources": {
+    "usable": {
+     "kb": 3291.9,
+     "requests": 146,
+     "families": [],
+     "ms": 485
+    },
+    "arrivals": [
+     {
+      "step": 2,
+      "family": "energyWidgets",
+      "kb": 3329.1,
+      "requests": 147,
+      "families": [
+       "energyWidgets"
+      ]
+     }
+    ],
+    "msMedian": 485
+   },
+   "build": {
+    "usable": {
+     "kb": 1242.5,
+     "requests": 71,
+     "families": [],
+     "ms": 478
+    },
+    "arrivals": [
+     {
+      "step": 2,
+      "family": "energyWidgets",
+      "kb": 1262.3,
+      "requests": 74,
+      "families": [
+       "energyWidgets"
+      ]
+     }
+    ],
+    "msMedian": 478
+   }
+  },
+  "weighing-stars": {
+   "sources": {
+    "usable": {
+     "kb": 3306.2,
+     "requests": 146,
+     "families": [],
+     "ms": 515
+    },
+    "arrivals": [
+     {
+      "step": 8,
+      "family": "binaryWidgets",
+      "kb": 3343.6,
+      "requests": 147,
+      "families": [
+       "binaryWidgets"
+      ]
+     }
+    ],
+    "msMedian": 515
+   },
+   "build": {
+    "usable": {
+     "kb": 1252.8,
+     "requests": 71,
+     "families": [],
+     "ms": 479
+    },
+    "arrivals": [
+     {
+      "step": 8,
+      "family": "binaryWidgets",
+      "kb": 1272.9,
+      "requests": 74,
+      "families": [
+       "binaryWidgets"
+      ]
+     }
+    ],
+    "msMedian": 479
+   }
+  },
+  "black-holes": {
+   "sources": {
+    "usable": {
+     "kb": 3308.5,
+     "requests": 146,
+     "families": [],
+     "ms": 521
+    },
+    "arrivals": [
+     {
+      "step": 2,
+      "family": "blackHoleWidgets",
+      "kb": 3357.5,
+      "requests": 148,
+      "families": [
+       "blackHoleWidgets"
+      ]
+     }
+    ],
+    "msMedian": 521
+   },
+   "build": {
+    "usable": {
+     "kb": 1255.2,
+     "requests": 71,
+     "families": [],
+     "ms": 475
+    },
+    "arrivals": [
+     {
+      "step": 2,
+      "family": "blackHoleWidgets",
+      "kb": 1280.5,
+      "requests": 75,
+      "families": [
+       "blackHoleWidgets"
+      ]
+     }
+    ],
+    "msMedian": 475
+   }
+  },
+  "radial-velocity": {
+   "sources": {
+    "usable": {
+     "kb": 3297,
+     "requests": 146,
+     "families": [],
+     "ms": 556
+    },
+    "arrivals": [
+     {
+      "step": 3,
+      "family": "exoplanetWidgets",
+      "kb": 3426.1,
+      "requests": 151,
+      "families": [
+       "exoplanetWidgets"
+      ]
+     }
+    ],
+    "msMedian": 556
+   },
+   "build": {
+    "usable": {
+     "kb": 1244.9,
+     "requests": 71,
+     "families": [],
+     "ms": 490
+    },
+    "arrivals": [
+     {
+      "step": 3,
+      "family": "exoplanetWidgets",
+      "kb": 1286.4,
+      "requests": 78,
+      "families": [
+       "exoplanetWidgets"
+      ]
+     }
+    ],
+    "msMedian": 490
+   }
+  },
+  "goldilocks-question": {
+   "sources": {
+    "usable": {
+     "kb": 3316.4,
+     "requests": 146,
+     "families": [],
+     "ms": 522
+    },
+    "arrivals": [
+     {
+      "step": 1,
+      "family": "habitabilityWidgets",
+      "kb": 3367.4,
+      "requests": 148,
+      "families": [
+       "habitabilityWidgets"
+      ]
+     }
+    ],
+    "msMedian": 522
+   },
+   "build": {
+    "usable": {
+     "kb": 1261.2,
+     "requests": 71,
+     "families": [],
+     "ms": 485
+    },
+    "arrivals": [
+     {
+      "step": 1,
+      "family": "habitabilityWidgets",
+      "kb": 1288.2,
+      "requests": 75,
+      "families": [
+       "habitabilityWidgets"
+      ]
+     }
+    ],
+    "msMedian": 485
+   }
+  },
+  "missing-mass": {
+   "sources": {
+    "usable": {
+     "kb": 3311.3,
+     "requests": 146,
+     "families": [],
+     "ms": 530
+    },
+    "arrivals": [
+     {
+      "step": 1,
+      "family": "darkMatterWidgets",
+      "kb": 3388.2,
+      "requests": 149,
+      "families": [
+       "darkMatterWidgets"
+      ]
+     }
+    ],
+    "msMedian": 530
+   },
+   "build": {
+    "usable": {
+     "kb": 1256.2,
+     "requests": 71,
+     "families": [],
+     "ms": 489
+    },
+    "arrivals": [
+     {
+      "step": 1,
+      "family": "darkMatterWidgets",
+      "kb": 1289.8,
+      "requests": 75,
+      "families": [
+       "darkMatterWidgets"
+      ]
+     }
+    ],
+    "msMedian": 489
+   }
+  },
+  "tides": {
+   "sources": {
+    "usable": {
+     "kb": 3315.5,
+     "requests": 146,
+     "families": [],
+     "ms": 538
+    },
+    "arrivals": [
+     {
+      "step": 2,
+      "family": "tidalWidgets",
+      "kb": 3384.7,
+      "requests": 148,
+      "families": [
+       "tidalWidgets"
+      ]
+     }
+    ],
+    "msMedian": 538
+   },
+   "build": {
+    "usable": {
+     "kb": 1261.6,
+     "requests": 71,
+     "families": [],
+     "ms": 486
+    },
+    "arrivals": [
+     {
+      "step": 2,
+      "family": "tidalWidgets",
+      "kb": 1287.5,
+      "requests": 74,
+      "families": [
+       "tidalWidgets"
+      ]
+     }
+    ],
+    "msMedian": 486
+   }
+  },
+  "butterfly-effect": {
+   "sources": {
+    "usable": {
+     "kb": 3303.3,
+     "requests": 146,
+     "families": [],
+     "ms": 534
+    },
+    "arrivals": [
+     {
+      "step": 3,
+      "family": "chaosWidgets",
+      "kb": 3339.1,
+      "requests": 149,
+      "families": [
+       "chaosWidgets"
+      ]
+     }
+    ],
+    "msMedian": 534
+   },
+   "build": {
+    "usable": {
+     "kb": 1250.4,
+     "requests": 71,
+     "families": [],
+     "ms": 482
+    },
+    "arrivals": [
+     {
+      "step": 3,
+      "family": "chaosWidgets",
+      "kb": 1264.2,
+      "requests": 76,
+      "families": [
+       "chaosWidgets"
+      ]
+     }
+    ],
+    "msMedian": 482
+   }
+  },
+  "when-orbits-lock": {
+   "sources": {
+    "usable": {
+     "kb": 3322,
+     "requests": 146,
+     "families": [],
+     "ms": 535
+    },
+    "arrivals": [
+     {
+      "step": 2,
+      "family": "resonanceWidgets",
+      "kb": 3410,
+      "requests": 150,
+      "families": [
+       "resonanceWidgets"
+      ]
+     }
+    ],
+    "msMedian": 535
+   },
+   "build": {
+    "usable": {
+     "kb": 1263.2,
+     "requests": 71,
+     "families": [],
+     "ms": 490
+    },
+    "arrivals": [
+     {
+      "step": 2,
+      "family": "resonanceWidgets",
+      "kb": 1289.1,
+      "requests": 75,
+      "families": [
+       "resonanceWidgets"
+      ]
+     }
+    ],
+    "msMedian": 490
+   }
+  },
+  "detect-this-planet": {
+   "sources": {
+    "usable": {
+     "kb": 3302.9,
+     "requests": 146,
+     "families": [],
+     "ms": 531
+    },
+    "arrivals": [
+     {
+      "step": 2,
+      "family": "exoplanetWidgets",
+      "kb": 3431.9,
+      "requests": 151,
+      "families": [
+       "exoplanetWidgets"
+      ]
+     }
+    ],
+    "msMedian": 531
+   },
+   "build": {
+    "usable": {
+     "kb": 1250.4,
+     "requests": 71,
+     "families": [],
+     "ms": 483
+    },
+    "arrivals": [
+     {
+      "step": 2,
+      "family": "exoplanetWidgets",
+      "kb": 1291.9,
+      "requests": 78,
+      "families": [
+       "exoplanetWidgets"
+      ]
+     }
+    ],
+    "msMedian": 483
+   }
+  },
+  "design-the-schedule": {
+   "sources": {
+    "usable": {
+     "kb": 3281.1,
+     "requests": 146,
+     "families": [],
+     "ms": 505
+    },
+    "arrivals": [],
+    "msMedian": 505
+   },
+   "build": {
+    "usable": {
+     "kb": 1233.2,
+     "requests": 71,
+     "families": [],
+     "ms": 493
+    },
+    "arrivals": [],
+    "msMedian": 493
+   }
+  },
+  "binary-star-planets": {
+   "sources": {
+    "usable": {
+     "kb": 3373.1,
+     "requests": 149,
+     "families": [],
+     "ms": 530
+    },
+    "arrivals": [],
+    "msMedian": 530
+   },
+   "build": {
+    "usable": {
+     "kb": 1276.9,
+     "requests": 73,
+     "families": [],
+     "ms": 489
+    },
+    "arrivals": [],
+    "msMedian": 489
+   }
+  },
+  "gravity-assist": {
+   "sources": {
+    "usable": {
+     "kb": 3352.2,
+     "requests": 148,
+     "families": [],
+     "ms": 524
+    },
+    "arrivals": [],
+    "msMedian": 524
+   },
+   "build": {
+    "usable": {
+     "kb": 1264.5,
+     "requests": 73,
+     "families": [],
+     "ms": 482
+    },
+    "arrivals": [],
+    "msMedian": 482
+   }
+  },
+  "hohmann-transfer": {
+   "sources": {
+    "usable": {
+     "kb": 3286.9,
+     "requests": 146,
+     "families": [],
+     "ms": 532
+    },
+    "arrivals": [],
+    "msMedian": 532
+   },
+   "build": {
+    "usable": {
+     "kb": 1237.9,
+     "requests": 71,
+     "families": [],
+     "ms": 488
+    },
+    "arrivals": [],
+    "msMedian": 488
+   }
+  },
+  "lagrange-points": {
+   "sources": {
+    "usable": {
+     "kb": 3381.5,
+     "requests": 151,
+     "families": [],
+     "ms": 539
+    },
+    "arrivals": [],
+    "msMedian": 539
+   },
+   "build": {
+    "usable": {
+     "kb": 1261.8,
+     "requests": 76,
+     "families": [],
+     "ms": 485
+    },
+    "arrivals": [],
+    "msMedian": 485
+   }
+  },
+  "what-is-a-gravitational-wave": {
+   "sources": {
+    "usable": {
+     "kb": 3481.1,
+     "requests": 157,
+     "families": [
+      "gwWidgets"
+     ],
+     "ms": 554
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "gwWidgets",
+      "kb": 3481.1,
+      "requests": 157,
+      "families": [
+       "gwWidgets"
+      ]
+     }
+    ],
+    "msMedian": 554
+   },
+   "build": {
+    "usable": {
+     "kb": 1315.6,
+     "requests": 77,
+     "families": [
+      "gwWidgets"
+     ],
+     "ms": 484
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "gwWidgets",
+      "kb": 1315.6,
+      "requests": 77,
+      "families": [
+       "gwWidgets"
+      ]
+     }
+    ],
+    "msMedian": 484
+   }
+  },
+  "listening-to-spacetime": {
+   "sources": {
+    "usable": {
+     "kb": 3502.4,
+     "requests": 157,
+     "families": [
+      "gwWidgets"
+     ],
+     "ms": 523
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "gwWidgets",
+      "kb": 3502.4,
+      "requests": 157,
+      "families": [
+       "gwWidgets"
+      ]
+     },
+     {
+      "step": 22,
+      "family": "gwEventWidgets",
+      "kb": 3589.7,
+      "requests": 160,
+      "families": [
+       "gwEventWidgets",
+       "gwWidgets"
+      ]
+     }
+    ],
+    "msMedian": 523
+   },
+   "build": {
+    "usable": {
+     "kb": 1330.1,
+     "requests": 77,
+     "families": [
+      "gwWidgets"
+     ],
+     "ms": 478
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "gwWidgets",
+      "kb": 1330.1,
+      "requests": 77,
+      "families": [
+       "gwWidgets"
+      ]
+     },
+     {
+      "step": 22,
+      "family": "gwEventWidgets",
+      "kb": 1397.2,
+      "requests": 81,
+      "families": [
+       "gwEventWidgets",
+       "gwWidgets"
+      ]
+     }
+    ],
+    "msMedian": 478
+   }
+  },
+  "a-universe-of-stars": {
+   "sources": {
+    "usable": {
+     "kb": 3420.7,
+     "requests": 148,
+     "families": [
+      "stellarWidgets"
+     ],
+     "ms": 530
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "stellarWidgets",
+      "kb": 3420.7,
+      "requests": 148,
+      "families": [
+       "stellarWidgets"
+      ]
+     },
+     {
+      "step": 29,
+      "family": "stellarSpectraWidgets",
+      "kb": 3470.9,
+      "requests": 151,
+      "families": [
+       "stellarSpectraWidgets",
+       "stellarWidgets"
+      ]
+     }
+    ],
+    "msMedian": 530
+   },
+   "build": {
+    "usable": {
+     "kb": 1300.1,
+     "requests": 73,
+     "families": [
+      "stellarWidgets"
+     ],
+     "ms": 472
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "stellarWidgets",
+      "kb": 1300.1,
+      "requests": 73,
+      "families": [
+       "stellarWidgets"
+      ]
+     },
+     {
+      "step": 29,
+      "family": "stellarSpectraWidgets",
+      "kb": 1329.7,
+      "requests": 77,
+      "families": [
+       "stellarSpectraWidgets",
+       "stellarWidgets"
+      ]
+     }
+    ],
+    "msMedian": 472
+   }
+  },
+  "lives-of-stars": {
+   "sources": {
+    "usable": {
+     "kb": 3400.5,
+     "requests": 148,
+     "families": [
+      "stellarWidgets"
+     ],
+     "ms": 586
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "stellarWidgets",
+      "kb": 3400.5,
+      "requests": 148,
+      "families": [
+       "stellarWidgets"
+      ]
+     },
+     {
+      "step": 1,
+      "family": "stellarEvolutionWidgets",
+      "kb": 3483.8,
+      "requests": 151,
+      "families": [
+       "stellarEvolutionWidgets",
+       "stellarWidgets"
+      ]
+     }
+    ],
+    "msMedian": 586
+   },
+   "build": {
+    "usable": {
+     "kb": 1290.8,
+     "requests": 73,
+     "families": [
+      "stellarWidgets"
+     ],
+     "ms": 501
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "stellarWidgets",
+      "kb": 1290.8,
+      "requests": 73,
+      "families": [
+       "stellarWidgets"
+      ]
+     },
+     {
+      "step": 1,
+      "family": "stellarEvolutionWidgets",
+      "kb": 1322.8,
+      "requests": 76,
+      "families": [
+       "stellarEvolutionWidgets",
+       "stellarWidgets"
+      ]
+     }
+    ],
+    "msMedian": 501
+   }
+  },
+  "twelve-nights": {
+   "sources": {
+    "usable": {
+     "kb": 3283.8,
+     "requests": 146,
+     "families": [],
+     "ms": 545
+    },
+    "arrivals": [
+     {
+      "step": 1,
+      "family": "observingWidgets",
+      "kb": 3375.9,
+      "requests": 150,
+      "families": [
+       "observingWidgets"
+      ]
+     }
+    ],
+    "msMedian": 545
+   },
+   "build": {
+    "usable": {
+     "kb": 1235.1,
+     "requests": 71,
+     "families": [],
+     "ms": 489
+    },
+    "arrivals": [
+     {
+      "step": 1,
+      "family": "observingWidgets",
+      "kb": 1259.1,
+      "requests": 76,
+      "families": [
+       "observingWidgets"
+      ]
+     }
+    ],
+    "msMedian": 489
+   }
+  },
+  "power-law-gravity": {
+   "sources": {
+    "usable": {
+     "kb": 3288.5,
+     "requests": 146,
+     "families": [],
+     "ms": 527
+    },
+    "arrivals": [
+     {
+      "step": 3,
+      "family": "powerLawWidgets",
+      "kb": 3341.7,
+      "requests": 149,
+      "families": [
+       "powerLawWidgets"
+      ]
+     }
+    ],
+    "msMedian": 527
+   },
+   "build": {
+    "usable": {
+     "kb": 1239.2,
+     "requests": 71,
+     "families": [],
+     "ms": 485
+    },
+    "arrivals": [
+     {
+      "step": 3,
+      "family": "powerLawWidgets",
+      "kb": 1255.9,
+      "requests": 74,
+      "families": [
+       "powerLawWidgets"
+      ]
+     }
+    ],
+    "msMedian": 485
+   }
+  },
+  "color-and-temperature": {
+   "sources": {
+    "usable": {
+     "kb": 3395.4,
+     "requests": 160,
+     "families": [
+      "lightWidgets"
+     ],
+     "ms": 540
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "lightWidgets",
+      "kb": 3395.4,
+      "requests": 160,
+      "families": [
+       "lightWidgets"
+      ]
+     }
+    ],
+    "msMedian": 540
+   },
+   "build": {
+    "usable": {
+     "kb": 1291.8,
+     "requests": 79,
+     "families": [
+      "lightWidgets"
+     ],
+     "ms": 481
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "lightWidgets",
+      "kb": 1291.8,
+      "requests": 79,
+      "families": [
+       "lightWidgets"
+      ]
+     }
+    ],
+    "msMedian": 481
+   }
+  },
+  "the-turning-sky": {
+   "sources": {
+    "usable": {
+     "kb": 3395.9,
+     "requests": 161,
+     "families": [
+      "skyWidgets"
+     ],
+     "ms": 572
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "skyWidgets",
+      "kb": 3395.9,
+      "requests": 161,
+      "families": [
+       "skyWidgets"
+      ]
+     }
+    ],
+    "msMedian": 572
+   },
+   "build": {
+    "usable": {
+     "kb": 1273.3,
+     "requests": 73,
+     "families": [
+      "skyWidgets"
+     ],
+     "ms": 481
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "skyWidgets",
+      "kb": 1273.3,
+      "requests": 73,
+      "families": [
+       "skyWidgets"
+      ]
+     }
+    ],
+    "msMedian": 481
+   }
+  },
+  "the-sun-through-the-year": {
+   "sources": {
+    "usable": {
+     "kb": 3394.2,
+     "requests": 161,
+     "families": [
+      "skyWidgets"
+     ],
+     "ms": 567
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "skyWidgets",
+      "kb": 3394.2,
+      "requests": 161,
+      "families": [
+       "skyWidgets"
+      ]
+     }
+    ],
+    "msMedian": 567
+   },
+   "build": {
+    "usable": {
+     "kb": 1272.2,
+     "requests": 73,
+     "families": [
+      "skyWidgets"
+     ],
+     "ms": 476
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "skyWidgets",
+      "kb": 1272.2,
+      "requests": 73,
+      "families": [
+       "skyWidgets"
+      ]
+     }
+    ],
+    "msMedian": 476
+   }
+  },
+  "phases-and-eclipses": {
+   "sources": {
+    "usable": {
+     "kb": 3394.3,
+     "requests": 161,
+     "families": [
+      "skyWidgets"
+     ],
+     "ms": 562
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "skyWidgets",
+      "kb": 3394.3,
+      "requests": 161,
+      "families": [
+       "skyWidgets"
+      ]
+     }
+    ],
+    "msMedian": 562
+   },
+   "build": {
+    "usable": {
+     "kb": 1272.4,
+     "requests": 73,
+     "families": [
+      "skyWidgets"
+     ],
+     "ms": 485
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "skyWidgets",
+      "kb": 1272.4,
+      "requests": 73,
+      "families": [
+       "skyWidgets"
+      ]
+     }
+    ],
+    "msMedian": 485
+   }
+  },
+  "wanderers-on-the-sky": {
+   "sources": {
+    "usable": {
+     "kb": 3396.8,
+     "requests": 161,
+     "families": [
+      "skyWidgets"
+     ],
+     "ms": 566
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "skyWidgets",
+      "kb": 3396.8,
+      "requests": 161,
+      "families": [
+       "skyWidgets"
+      ]
+     }
+    ],
+    "msMedian": 566
+   },
+   "build": {
+    "usable": {
+     "kb": 1274.2,
+     "requests": 73,
+     "families": [
+      "skyWidgets"
+     ],
+     "ms": 478
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "skyWidgets",
+      "kb": 1274.2,
+      "requests": 73,
+      "families": [
+       "skyWidgets"
+      ]
+     }
+    ],
+    "msMedian": 478
+   }
+  },
+  "plan-a-night": {
+   "sources": {
+    "usable": {
+     "kb": 3394.7,
+     "requests": 161,
+     "families": [
+      "skyWidgets"
+     ],
+     "ms": 564
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "skyWidgets",
+      "kb": 3394.7,
+      "requests": 161,
+      "families": [
+       "skyWidgets"
+      ]
+     }
+    ],
+    "msMedian": 564
+   },
+   "build": {
+    "usable": {
+     "kb": 1272.6,
+     "requests": 73,
+     "families": [
+      "skyWidgets"
+     ],
+     "ms": 475
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "skyWidgets",
+      "kb": 1272.6,
+      "requests": 73,
+      "families": [
+       "skyWidgets"
+      ]
+     }
+    ],
+    "msMedian": 475
+   }
+  },
+  "lines-and-motion": {
+   "sources": {
+    "usable": {
+     "kb": 3396.3,
+     "requests": 160,
+     "families": [
+      "lightWidgets"
+     ],
+     "ms": 573
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "lightWidgets",
+      "kb": 3396.3,
+      "requests": 160,
+      "families": [
+       "lightWidgets"
+      ]
+     }
+    ],
+    "msMedian": 573
+   },
+   "build": {
+    "usable": {
+     "kb": 1292.5,
+     "requests": 79,
+     "families": [
+      "lightWidgets"
+     ],
+     "ms": 474
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "lightWidgets",
+      "kb": 1292.5,
+      "requests": 79,
+      "families": [
+       "lightWidgets"
+      ]
+     }
+    ],
+    "msMedian": 474
+   }
+  },
+  "what-a-spectrum-is-made-of": {
+   "sources": {
+    "usable": {
+     "kb": 3396.1,
+     "requests": 160,
+     "families": [
+      "lightWidgets"
+     ],
+     "ms": 523
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "lightWidgets",
+      "kb": 3396.1,
+      "requests": 160,
+      "families": [
+       "lightWidgets"
+      ]
+     }
+    ],
+    "msMedian": 523
+   },
+   "build": {
+    "usable": {
+     "kb": 1292.3,
+     "requests": 79,
+     "families": [
+      "lightWidgets"
+     ],
+     "ms": 478
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "lightWidgets",
+      "kb": 1292.3,
+      "requests": 79,
+      "families": [
+       "lightWidgets"
+      ]
+     }
+    ],
+    "msMedian": 478
+   }
+  },
+  "the-suns-motion": {
+   "sources": {
+    "usable": {
+     "kb": 3372.5,
+     "requests": 160,
+     "families": [
+      "galacticWidgets"
+     ],
+     "ms": 521
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "galacticWidgets",
+      "kb": 3372.5,
+      "requests": 160,
+      "families": [
+       "galacticWidgets"
+      ]
+     }
+    ],
+    "msMedian": 521
+   },
+   "build": {
+    "usable": {
+     "kb": 1278.5,
+     "requests": 77,
+     "families": [
+      "galacticWidgets"
+     ],
+     "ms": 476
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "galacticWidgets",
+      "kb": 1278.5,
+      "requests": 77,
+      "families": [
+       "galacticWidgets"
+      ]
+     }
+    ],
+    "msMedian": 476
+   }
+  },
+  "the-rotating-disk": {
+   "sources": {
+    "usable": {
+     "kb": 3372.1,
+     "requests": 160,
+     "families": [
+      "galacticWidgets"
+     ],
+     "ms": 500
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "galacticWidgets",
+      "kb": 3372.1,
+      "requests": 160,
+      "families": [
+       "galacticWidgets"
+      ]
+     }
+    ],
+    "msMedian": 500
+   },
+   "build": {
+    "usable": {
+     "kb": 1278.6,
+     "requests": 77,
+     "families": [
+      "galacticWidgets"
+     ],
+     "ms": 479
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "galacticWidgets",
+      "kb": 1278.6,
+      "requests": 77,
+      "families": [
+       "galacticWidgets"
+      ]
+     }
+    ],
+    "msMedian": 479
+   }
+  },
+  "cluster-membership": {
+   "sources": {
+    "usable": {
+     "kb": 3371.8,
+     "requests": 160,
+     "families": [
+      "galacticWidgets"
+     ],
+     "ms": 515
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "galacticWidgets",
+      "kb": 3371.8,
+      "requests": 160,
+      "families": [
+       "galacticWidgets"
+      ]
+     }
+    ],
+    "msMedian": 515
+   },
+   "build": {
+    "usable": {
+     "kb": 1278.1,
+     "requests": 77,
+     "families": [
+      "galacticWidgets"
+     ],
+     "ms": 483
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "galacticWidgets",
+      "kb": 1278.1,
+      "requests": 77,
+      "families": [
+       "galacticWidgets"
+      ]
+     }
+    ],
+    "msMedian": 483
+   }
+  },
+  "inside-a-star": {
+   "sources": {
+    "usable": {
+     "kb": 3357.3,
+     "requests": 166,
+     "families": [
+      "interiorsWidgets"
+     ],
+     "ms": 533
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "interiorsWidgets",
+      "kb": 3357.3,
+      "requests": 166,
+      "families": [
+       "interiorsWidgets"
+      ]
+     }
+    ],
+    "msMedian": 533
+   },
+   "build": {
+    "usable": {
+     "kb": 1252.5,
+     "requests": 74,
+     "families": [
+      "interiorsWidgets"
+     ],
+     "ms": 459
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "interiorsWidgets",
+      "kb": 1252.5,
+      "requests": 74,
+      "families": [
+       "interiorsWidgets"
+      ]
+     }
+    ],
+    "msMedian": 459
+   }
+  },
+  "scaling-the-main-sequence": {
+   "sources": {
+    "usable": {
+     "kb": 3359.1,
+     "requests": 166,
+     "families": [
+      "interiorsWidgets"
+     ],
+     "ms": 501
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "interiorsWidgets",
+      "kb": 3359.1,
+      "requests": 166,
+      "families": [
+       "interiorsWidgets"
+      ]
+     }
+    ],
+    "msMedian": 501
+   },
+   "build": {
+    "usable": {
+     "kb": 1254,
+     "requests": 74,
+     "families": [
+      "interiorsWidgets"
+     ],
+     "ms": 454
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "interiorsWidgets",
+      "kb": 1254,
+      "requests": 74,
+      "families": [
+       "interiorsWidgets"
+      ]
+     }
+    ],
+    "msMedian": 454
+   }
+  },
+  "the-limit": {
+   "sources": {
+    "usable": {
+     "kb": 3356.7,
+     "requests": 166,
+     "families": [
+      "interiorsWidgets"
+     ],
+     "ms": 517
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "interiorsWidgets",
+      "kb": 3356.7,
+      "requests": 166,
+      "families": [
+       "interiorsWidgets"
+      ]
+     }
+    ],
+    "msMedian": 517
+   },
+   "build": {
+    "usable": {
+     "kb": 1252.3,
+     "requests": 74,
+     "families": [
+      "interiorsWidgets"
+     ],
+     "ms": 790
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "interiorsWidgets",
+      "kb": 1252.3,
+      "requests": 74,
+      "families": [
+       "interiorsWidgets"
+      ]
+     }
+    ],
+    "msMedian": 790
+   }
+  },
+  "the-expanding-universe": {
+   "sources": {
+    "usable": {
+     "kb": 3368,
+     "requests": 163,
+     "families": [
+      "cosmologyWidgets"
+     ],
+     "ms": 516
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "cosmologyWidgets",
+      "kb": 3368,
+      "requests": 163,
+      "families": [
+       "cosmologyWidgets"
+      ]
+     }
+    ],
+    "msMedian": 516
+   },
+   "build": {
+    "usable": {
+     "kb": 1268.4,
+     "requests": 81,
+     "families": [
+      "cosmologyWidgets"
+     ],
+     "ms": 1708
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "cosmologyWidgets",
+      "kb": 1268.4,
+      "requests": 81,
+      "families": [
+       "cosmologyWidgets"
+      ]
+     }
+    ],
+    "msMedian": 1708
+   }
+  },
+  "standard-candles": {
+   "sources": {
+    "usable": {
+     "kb": 3366.3,
+     "requests": 163,
+     "families": [
+      "cosmologyWidgets"
+     ],
+     "ms": 501
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "cosmologyWidgets",
+      "kb": 3366.3,
+      "requests": 163,
+      "families": [
+       "cosmologyWidgets"
+      ]
+     }
+    ],
+    "msMedian": 501
+   },
+   "build": {
+    "usable": {
+     "kb": 1267.2,
+     "requests": 81,
+     "families": [
+      "cosmologyWidgets"
+     ],
+     "ms": 1229
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "cosmologyWidgets",
+      "kb": 1267.2,
+      "requests": 81,
+      "families": [
+       "cosmologyWidgets"
+      ]
+     }
+    ],
+    "msMedian": 1229
+   }
+  },
+  "the-shape-of-expansion": {
+   "sources": {
+    "usable": {
+     "kb": 3368.2,
+     "requests": 163,
+     "families": [
+      "cosmologyWidgets"
+     ],
+     "ms": 549
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "cosmologyWidgets",
+      "kb": 3368.2,
+      "requests": 163,
+      "families": [
+       "cosmologyWidgets"
+      ]
+     }
+    ],
+    "msMedian": 549
+   },
+   "build": {
+    "usable": {
+     "kb": 1268.7,
+     "requests": 81,
+     "families": [
+      "cosmologyWidgets"
+     ],
+     "ms": 1288
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "cosmologyWidgets",
+      "kb": 1268.7,
+      "requests": 81,
+      "families": [
+       "cosmologyWidgets"
+      ]
+     }
+    ],
+    "msMedian": 1288
+   }
+  },
+  "where-galaxies-live": {
+   "sources": {
+    "usable": {
+     "kb": 3366.8,
+     "requests": 163,
+     "families": [
+      "cosmologyWidgets"
+     ],
+     "ms": 543
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "cosmologyWidgets",
+      "kb": 3366.8,
+      "requests": 163,
+      "families": [
+       "cosmologyWidgets"
+      ]
+     }
+    ],
+    "msMedian": 543
+   },
+   "build": {
+    "usable": {
+     "kb": 1267.5,
+     "requests": 81,
+     "families": [
+      "cosmologyWidgets"
+     ],
+     "ms": 1378
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "cosmologyWidgets",
+      "kb": 1267.5,
+      "requests": 81,
+      "families": [
+       "cosmologyWidgets"
+      ]
+     }
+    ],
+    "msMedian": 1378
+   }
+  },
+  "what-a-ccd-records": {
+   "sources": {
+    "usable": {
+     "kb": 3371,
+     "requests": 157,
+     "families": [
+      "detectorWidgets"
+     ],
+     "ms": 515
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "detectorWidgets",
+      "kb": 3371,
+      "requests": 157,
+      "families": [
+       "detectorWidgets"
+      ]
+     }
+    ],
+    "msMedian": 515
+   },
+   "build": {
+    "usable": {
+     "kb": 1271.8,
+     "requests": 75,
+     "families": [
+      "detectorWidgets"
+     ],
+     "ms": 1277
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "detectorWidgets",
+      "kb": 1271.8,
+      "requests": 75,
+      "families": [
+       "detectorWidgets"
+      ]
+     }
+    ],
+    "msMedian": 1277
+   }
+  },
+  "signal-noise-and-exposure": {
+   "sources": {
+    "usable": {
+     "kb": 3368.6,
+     "requests": 157,
+     "families": [
+      "detectorWidgets"
+     ],
+     "ms": 513
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "detectorWidgets",
+      "kb": 3368.6,
+      "requests": 157,
+      "families": [
+       "detectorWidgets"
+      ]
+     }
+    ],
+    "msMedian": 513
+   },
+   "build": {
+    "usable": {
+     "kb": 1270.2,
+     "requests": 75,
+     "families": [
+      "detectorWidgets"
+     ],
+     "ms": 1044
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "detectorWidgets",
+      "kb": 1270.2,
+      "requests": 75,
+      "families": [
+       "detectorWidgets"
+      ]
+     }
+    ],
+    "msMedian": 1044
+   }
+  },
+  "a-variable-star-from-frames": {
+   "sources": {
+    "usable": {
+     "kb": 3365.8,
+     "requests": 157,
+     "families": [
+      "detectorWidgets"
+     ],
+     "ms": 525
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "detectorWidgets",
+      "kb": 3365.8,
+      "requests": 157,
+      "families": [
+       "detectorWidgets"
+      ]
+     }
+    ],
+    "msMedian": 525
+   },
+   "build": {
+    "usable": {
+     "kb": 1268.2,
+     "requests": 75,
+     "families": [
+      "detectorWidgets"
+     ],
+     "ms": 1064
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "detectorWidgets",
+      "kb": 1268.2,
+      "requests": 75,
+      "families": [
+       "detectorWidgets"
+      ]
+     }
+    ],
+    "msMedian": 1064
+   }
+  },
+  "the-beat-of-a-star": {
+   "sources": {
+    "usable": {
+     "kb": 3500.6,
+     "requests": 175,
+     "families": [
+      "variableWidgets"
+     ],
+     "ms": 517
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "variableWidgets",
+      "kb": 3500.6,
+      "requests": 175,
+      "families": [
+       "variableWidgets"
+      ]
+     }
+    ],
+    "msMedian": 517
+   },
+   "build": {
+    "usable": {
+     "kb": 1302.8,
+     "requests": 83,
+     "families": [
+      "variableWidgets"
+     ],
+     "ms": 1132
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "variableWidgets",
+      "kb": 1302.8,
+      "requests": 83,
+      "families": [
+       "variableWidgets"
+      ]
+     }
+    ],
+    "msMedian": 1132
+   }
+  },
+  "leavitts-law": {
+   "sources": {
+    "usable": {
+     "kb": 3492.8,
+     "requests": 175,
+     "families": [
+      "variableWidgets"
+     ],
+     "ms": 499
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "variableWidgets",
+      "kb": 3492.8,
+      "requests": 175,
+      "families": [
+       "variableWidgets"
+      ]
+     }
+    ],
+    "msMedian": 499
+   },
+   "build": {
+    "usable": {
+     "kb": 1296.9,
+     "requests": 83,
+     "families": [
+      "variableWidgets"
+     ],
+     "ms": 1212
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "variableWidgets",
+      "kb": 1296.9,
+      "requests": 83,
+      "families": [
+       "variableWidgets"
+      ]
+     }
+    ],
+    "msMedian": 1212
+   }
+  },
+  "the-first-rung": {
+   "sources": {
+    "usable": {
+     "kb": 3493.2,
+     "requests": 175,
+     "families": [
+      "variableWidgets"
+     ],
+     "ms": 518
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "variableWidgets",
+      "kb": 3493.2,
+      "requests": 175,
+      "families": [
+       "variableWidgets"
+      ]
+     }
+    ],
+    "msMedian": 518
+   },
+   "build": {
+    "usable": {
+     "kb": 1297,
+     "requests": 83,
+     "families": [
+      "variableWidgets"
+     ],
+     "ms": 1264
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "variableWidgets",
+      "kb": 1297,
+      "requests": 83,
+      "families": [
+       "variableWidgets"
+      ]
+     }
+    ],
+    "msMedian": 1264
+   }
+  },
+  "which-kind-of-variable": {
+   "sources": {
+    "usable": {
+     "kb": 3494.4,
+     "requests": 175,
+     "families": [
+      "variableWidgets"
+     ],
+     "ms": 513
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "variableWidgets",
+      "kb": 3494.4,
+      "requests": 175,
+      "families": [
+       "variableWidgets"
+      ]
+     }
+    ],
+    "msMedian": 513
+   },
+   "build": {
+    "usable": {
+     "kb": 1297.9,
+     "requests": 83,
+     "families": [
+      "variableWidgets"
+     ],
+     "ms": 1378
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "variableWidgets",
+      "kb": 1297.9,
+      "requests": 83,
+      "families": [
+       "variableWidgets"
+      ]
+     }
+    ],
+    "msMedian": 1378
+   }
+  },
+  "bending-light": {
+   "sources": {
+    "usable": {
+     "kb": 3344.3,
+     "requests": 157,
+     "families": [
+      "lensingWidgets"
+     ],
+     "ms": 497
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "lensingWidgets",
+      "kb": 3344.3,
+      "requests": 157,
+      "families": [
+       "lensingWidgets"
+      ]
+     }
+    ],
+    "msMedian": 497
+   },
+   "build": {
+    "usable": {
+     "kb": 1254.8,
+     "requests": 76,
+     "families": [
+      "lensingWidgets"
+     ],
+     "ms": 1333
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "lensingWidgets",
+      "kb": 1254.8,
+      "requests": 76,
+      "families": [
+       "lensingWidgets"
+      ]
+     }
+    ],
+    "msMedian": 1333
+   }
+  },
+  "einstein-rings-and-arcs": {
+   "sources": {
+    "usable": {
+     "kb": 3346,
+     "requests": 157,
+     "families": [
+      "lensingWidgets"
+     ],
+     "ms": 580
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "lensingWidgets",
+      "kb": 3346,
+      "requests": 157,
+      "families": [
+       "lensingWidgets"
+      ]
+     }
+    ],
+    "msMedian": 580
+   },
+   "build": {
+    "usable": {
+     "kb": 1256.1,
+     "requests": 76,
+     "families": [
+      "lensingWidgets"
+     ],
+     "ms": 1244
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "lensingWidgets",
+      "kb": 1256.1,
+      "requests": 76,
+      "families": [
+       "lensingWidgets"
+      ]
+     }
+    ],
+    "msMedian": 1244
+   }
+  },
+  "a-lens-passing-by": {
+   "sources": {
+    "usable": {
+     "kb": 3346.5,
+     "requests": 157,
+     "families": [
+      "lensingWidgets"
+     ],
+     "ms": 605
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "lensingWidgets",
+      "kb": 3346.5,
+      "requests": 157,
+      "families": [
+       "lensingWidgets"
+      ]
+     }
+    ],
+    "msMedian": 605
+   },
+   "build": {
+    "usable": {
+     "kb": 1256.3,
+     "requests": 76,
+     "families": [
+      "lensingWidgets"
+     ],
+     "ms": 1072
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "lensingWidgets",
+      "kb": 1256.3,
+      "requests": 76,
+      "families": [
+       "lensingWidgets"
+      ]
+     }
+    ],
+    "msMedian": 1072
+   }
+  },
+  "who-gets-counted": {
+   "sources": {
+    "usable": {
+     "kb": 3400.2,
+     "requests": 156,
+     "families": [
+      "surveyWidgets"
+     ],
+     "ms": 627
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "surveyWidgets",
+      "kb": 3400.2,
+      "requests": 156,
+      "families": [
+       "surveyWidgets"
+      ]
+     }
+    ],
+    "msMedian": 627
+   },
+   "build": {
+    "usable": {
+     "kb": 1262.4,
+     "requests": 78,
+     "families": [
+      "surveyWidgets"
+     ],
+     "ms": 1452
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "surveyWidgets",
+      "kb": 1262.4,
+      "requests": 78,
+      "families": [
+       "surveyWidgets"
+      ]
+     }
+    ],
+    "msMedian": 1452
+   }
+  },
+  "why-the-bright-ones-win": {
+   "sources": {
+    "usable": {
+     "kb": 3400.7,
+     "requests": 156,
+     "families": [
+      "surveyWidgets"
+     ],
+     "ms": 606
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "surveyWidgets",
+      "kb": 3400.7,
+      "requests": 156,
+      "families": [
+       "surveyWidgets"
+      ]
+     }
+    ],
+    "msMedian": 606
+   },
+   "build": {
+    "usable": {
+     "kb": 1263.4,
+     "requests": 78,
+     "families": [
+      "surveyWidgets"
+     ],
+     "ms": 1261
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "surveyWidgets",
+      "kb": 1263.4,
+      "requests": 78,
+      "families": [
+       "surveyWidgets"
+      ]
+     }
+    ],
+    "msMedian": 1261
+   }
+  },
+  "the-completeness-curve": {
+   "sources": {
+    "usable": {
+     "kb": 3400.9,
+     "requests": 156,
+     "families": [
+      "surveyWidgets"
+     ],
+     "ms": 615
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "surveyWidgets",
+      "kb": 3400.9,
+      "requests": 156,
+      "families": [
+       "surveyWidgets"
+      ]
+     }
+    ],
+    "msMedian": 615
+   },
+   "build": {
+    "usable": {
+     "kb": 1263.3,
+     "requests": 78,
+     "families": [
+      "surveyWidgets"
+     ],
+     "ms": 1074
+    },
+    "arrivals": [
+     {
+      "step": 0,
+      "family": "surveyWidgets",
+      "kb": 1263.3,
+      "requests": 78,
+      "families": [
+       "surveyWidgets"
+      ]
+     }
+    ],
+    "msMedian": 1074
+   }
+  },
+  "integrators-in-practice": {
+   "sources": {
+    "usable": {
+     "kb": 3330.5,
+     "requests": 149,
+     "families": [],
+     "ms": 622
+    },
+    "arrivals": [],
+    "msMedian": 622
+   },
+   "build": {
+    "usable": {
+     "kb": 1245.3,
+     "requests": 73,
+     "families": [],
+     "ms": 852
+    },
+    "arrivals": [],
+    "msMedian": 852
+   }
+  },
+  "extending-an-experiment": {
+   "sources": {
+    "usable": {
+     "kb": 3329,
+     "requests": 149,
+     "families": [],
+     "ms": 620
+    },
+    "arrivals": [],
+    "msMedian": 620
+   },
+   "build": {
+    "usable": {
+     "kb": 1244.6,
+     "requests": 73,
+     "families": [],
+     "ms": 885
+    },
+    "arrivals": [],
+    "msMedian": 885
+   }
+  },
+  "refitting-a-transit": {
+   "sources": {
+    "usable": {
+     "kb": 3271.4,
+     "requests": 146,
+     "families": [],
+     "ms": 615
+    },
+    "arrivals": [],
+    "msMedian": 615
+   },
+   "build": {
+    "usable": {
+     "kb": 1227.4,
+     "requests": 71,
+     "families": [],
+     "ms": 814
+    },
+    "arrivals": [],
+    "msMedian": 814
+   }
+  },
+  "two-periodograms": {
+   "sources": {
+    "usable": {
+     "kb": 3269,
+     "requests": 146,
+     "families": [],
+     "ms": 625
+    },
+    "arrivals": [],
+    "msMedian": 625
+   },
+   "build": {
+    "usable": {
+     "kb": 1225.5,
+     "requests": 71,
+     "families": [],
+     "ms": 874
+    },
+    "arrivals": [],
+    "msMedian": 874
+   }
+  },
+  "sampling-a-posterior": {
+   "sources": {
+    "usable": {
+     "kb": 3270.6,
+     "requests": 146,
+     "families": [],
+     "ms": 599
+    },
+    "arrivals": [],
+    "msMedian": 599
+   },
+   "build": {
+    "usable": {
+     "kb": 1226.8,
+     "requests": 71,
+     "families": [],
+     "ms": 772
+    },
+    "arrivals": [],
+    "msMedian": 772
+   }
+  }
+ }
+}

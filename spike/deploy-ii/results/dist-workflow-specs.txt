@@ -1,0 +1,486 @@
+  -    1 [chromium] › e2e/accessibilityParity.spec.js:133:3 › a system can be built without a pointer › a two-body system, typed
+  ✓    3 [chromium] › e2e/accessibilityParity.spec.js:232:3 › a system can be built without a pointer › Tab cannot carry focus out of the form into the page behind (5.3s)
+  ✓    2 [chromium] › e2e/accessibilityParity.spec.js:173:3 › a system can be built without a pointer › the form is reachable and operable from the keyboard alone (6.6s)
+  ✓    4 [chromium] › e2e/accessibilityParity.spec.js:272:3 › a system can be built without a pointer › a bad value is explained on the field it is about (6.3s)
+  -    6 [chromium] › e2e/accessibilityParity.spec.js:325:3 › a system can be built without a pointer › a typed system is indistinguishable from a placed one
+  ✓    5 [chromium] › e2e/accessibilityParity.spec.js:307:3 › a system can be built without a pointer › a hand-typed body is undone by the ordinary undo button (6.7s)
+  ✓    7 [chromium] › e2e/accessibilityParity.spec.js:383:5 › the form opens where it can be seen › inside a 1024x768 laptop window (4.9s)
+  ✓    8 [chromium] › e2e/accessibilityParity.spec.js:383:5 › the form opens where it can be seen › inside a 375x812 phone window (4.8s)
+  ✓    9 [chromium] › e2e/accessibilityParity.spec.js:462:3 › the numbers behind a plot are readable without the canvas › each series offers a table before it offers a download (8.6s)
+  ✓   10 [chromium] › e2e/accessibilityParity.spec.js:485:3 › the numbers behind a plot are readable without the canvas › the table is a real table, with headings and units (9.4s)
+  -   12 [chromium] › e2e/accessibilityParity.spec.js:541:3 › the numbers behind a plot are readable without the canvas › what the table shows is what the plot drew
+  -   13 [chromium] › e2e/accessibilityParity.spec.js:573:3 › the numbers behind a plot are readable without the canvas › the rotation curve exports the speed it plots
+  ✓   14 [chromium] › e2e/adoption.spec.js:41:3 › the instructor path › Teach, the index, a page, a clean preview, and back (2.8s)
+  ✓   15 [chromium] › e2e/adoption.spec.js:119:3 › the instructor path › the index narrows, counts and remembers (647ms)
+  ✓   16 [chromium] › e2e/adoption.spec.js:141:3 › the instructor path › a guide, an activity and a lesson each have their page (538ms)
+  ✓   17 [chromium] › e2e/adoption.spec.js:157:3 › the instructor path › the Spanish page is the one a Spanish reader sees (361ms)
+  ✓   18 [chromium] › e2e/adoption.spec.js:186:5 › at 375 px › nothing scrolls sideways (583ms)
+  ✓   11 [chromium] › e2e/accessibilityParity.spec.js:526:3 › the numbers behind a plot are readable without the canvas › the table reaches assistive technology as a table (8.6s)
+  ✓   19 [chromium] › e2e/adoption.spec.js:199:7 › at 375 px › axe finds nothing, in en (5.7s)
+  ✓   21 [chromium] › e2e/adoption.spec.js:186:5 › at 1024 px › nothing scrolls sideways (640ms)
+  ✓   20 [chromium] › e2e/adoption.spec.js:199:7 › at 375 px › axe finds nothing, in es (6.1s)
+  ✓   22 [chromium] › e2e/adoption.spec.js:199:7 › at 1024 px › axe finds nothing, in en (5.9s)
+  ✓   23 [chromium] › e2e/adoption.spec.js:199:7 › at 1024 px › axe finds nothing, in es (6.5s)
+  ✓   24 [chromium] › e2e/answerEntry.spec.js:26:3 › what the box says back › a placeholder describes the form, never the value (4.1s)
+  ✓   25 [chromium] › e2e/answerEntry.spec.js:39:3 › what the box says back › an unreadable answer is not a wrong one (4.5s)
+  ✓   26 [chromium] › e2e/answerEntry.spec.js:51:3 › what the box says back › a blank is refused rather than graded as zero (4.4s)
+  ✓   27 [chromium] › e2e/answerEntry.spec.js:62:3 › what the box says back › an equivalent unit is accepted, and the conversion is shown @covers:ce.radial-velocity (4.4s)
+  ✓   28 [chromium] › e2e/answerEntry.spec.js:73:3 › what the box says back › a named mistake is named; an unnamed one is not (4.6s)
+  ✓   29 [chromium] › e2e/answerEntry.spec.js:96:3 › hints arrive one at a time, and only when asked › nothing is shown before the first press (4.2s)
+  ✓   30 [chromium] › e2e/answerEntry.spec.js:102:3 › hints arrive one at a time, and only when asked › concept, then method, then the worked answer behind its own press (4.8s)
+  ✓   31 [chromium] › e2e/answerEntry.spec.js:128:3 › hints arrive one at a time, and only when asked › taking help is recorded on screen, not charged for (5.0s)
+  ✘   33 [chromium] › e2e/answerEntry.spec.js:248:3 › a saved answer comes back exactly as it was written › a quote typed into the numeric box is kept, and adds nothing to it (4.3s)
+  ✘   32 [chromium] › e2e/answerEntry.spec.js:148:3 › hints arrive one at a time, and only when asked › the first answer committed to is kept when it is revised (6.3s)
+  ✓   34 [chromium] › e2e/answerEntry.spec.js:296:3 › a saved answer comes back exactly as it was written › the backup button downloads the lesson's progress as a file the restore reads (6.5s)
+  ✘   35 [chromium] › e2e/answerEntry.spec.js:318:3 › a saved answer comes back exactly as it was written › a restored backup cannot add attributes to a measure field (6.4s)
+  ✘   36 [chromium] › e2e/answerEntry.spec.js:366:3 › in Spanish › a decimal comma is the same answer, and the hints are translated (4.4s)
+  ✘   37 [chromium] › e2e/answerEntry.spec.js:388:3 › in Spanish › a measurement table reads a decimal comma too (4.4s)
+  ✘   38 [chromium] › e2e/answerEntry.spec.js:412:3 › in Spanish › switching language does not re-mark an answer already given (4.5s)
+  ✓   39 [chromium] › e2e/assignment.spec.js:85:5 › building one › the builder is a dialog a keyboard reader is moved into (1024 px) (6.2s)
+  ✘   41 [chromium] › e2e/assignment.spec.js:118:3 › building one › a class code rides on the link, where the submission token reads it (4.7s)
+  ✓   40 [chromium] › e2e/assignment.spec.js:85:5 › building one › the builder is a dialog a keyboard reader is moved into (375 px) (7.3s)
+  ✘   42 [chromium] › e2e/assignment.spec.js:158:3 › building one › the link carries no answer key (4.7s)
+  ✘   43 [chromium] › e2e/assignment.spec.js:136:3 › building one › the world a step is about is added, and the reason is on screen (4.6s)
+  ✓   44 [chromium] › e2e/assignment.spec.js:188:3 › building one › the link length is reported while it can still be changed (5.2s)
+  ✘   45 [chromium] › e2e/assignment.spec.js:201:3 › building one › a printable page can be produced without an answer key (4.7s)
+  ✘   46 [chromium] › e2e/assignment.spec.js:228:3 › doing one › a student sees the selected sequence and nothing else (4.7s)
+  ✘   47 [chromium] › e2e/assignment.spec.js:272:3 › doing one › progress survives a reload and does not touch the full lesson (4.6s)
+  ✘   48 [chromium] › e2e/assignment.spec.js:319:3 › doing one › two assignments from one lesson keep separate progress (4.5s)
+  ✘   49 [chromium] › e2e/assignment.spec.js:417:3 › doing one › a link re-issued on another day keeps the work, and old keys move across (4.7s)
+  ✘   50 [chromium] › e2e/assignment.spec.js:491:3 › when the lesson has moved on › a retired step is left out and a rewritten one does not inherit its answer (4.8s)
+  ✘   51 [chromium] › e2e/assignment.spec.js:559:3 › when the lesson has moved on › a mangled or hostile link is refused with a reason (4.4s)
+  ✘   52 [chromium] › e2e/assignment.spec.js:605:3 › the rest of the machinery still works › the report names the assignment and its steps (4.8s)
+  ✘   53 [chromium] › e2e/assignment.spec.js:636:3 › the rest of the machinery still works › switching language does not make every step look rewritten (4.5s)
+  ✘   54 [chromium] › e2e/assignment.spec.js:681:3 › the rest of the machinery still works › a progress backup of an assignment restores into it (4.7s)
+  ✘   55 [chromium] › e2e/assignment.spec.js:760:3 › a calculation brings the measurements it copies › ticking the calculation pulls in the table it reads from (4.7s)
+  ✘   56 [chromium] › e2e/assignment.spec.js:778:3 › a calculation brings the measurements it copies › the assignment it builds actually runs (4.6s)
+  ✘   57 [chromium] › e2e/assignment.spec.js:833:3 › a calculation brings the measurements it copies › it holds in Spanish (4.5s)
+  ✘   58 [chromium] › e2e/assignment.spec.js:849:3 › an assignment and the package its lesson comes from › a link that predates pinning, or names an older major version, opens with a message s
+  ✘   59 [chromium] › e2e/bodyPlacement.spec.js:134:5 › placing a body with a pointer › a Star is created, in stars (4.4s)
+  ✘   60 [chromium] › e2e/bodyPlacement.spec.js:134:5 › placing a body with a pointer › a Planet is created, in planets (4.5s)
+  ✘   61 [chromium] › e2e/bodyPlacement.spec.js:134:5 › placing a body with a pointer › a GasGiant is created, in gas_giants (4.4s)
+  ✘   62 [chromium] › e2e/bodyPlacement.spec.js:134:5 › placing a body with a pointer › a Asteroid is created, in asteroids (4.4s)
+  ✘   63 [chromium] › e2e/bodyPlacement.spec.js:134:5 › placing a body with a pointer › a Comet is created, in comets (4.3s)
+  ✘   64 [chromium] › e2e/bodyPlacement.spec.js:134:5 › placing a body with a pointer › a WhiteDwarf is created, in white_dwarfs (4.4s)
+  ✘   65 [chromium] › e2e/bodyPlacement.spec.js:134:5 › placing a body with a pointer › a NeutronStar is created, in neutron_stars (4.4s)
+  ✘   66 [chromium] › e2e/bodyPlacement.spec.js:134:5 › placing a body with a pointer › a BlackHole is created, in bh_list (4.6s)
+  ✘   67 [chromium] › e2e/bodyPlacement.spec.js:172:5 › placing a body from the keyboard › a Star is created, in stars (4.4s)
+  ✘   68 [chromium] › e2e/bodyPlacement.spec.js:172:5 › placing a body from the keyboard › a Planet is created, in planets (4.5s)
+  ✘   69 [chromium] › e2e/bodyPlacement.spec.js:172:5 › placing a body from the keyboard › a GasGiant is created, in gas_giants (4.4s)
+  ✘   70 [chromium] › e2e/bodyPlacement.spec.js:172:5 › placing a body from the keyboard › a Asteroid is created, in asteroids (4.5s)
+  ✘   71 [chromium] › e2e/bodyPlacement.spec.js:172:5 › placing a body from the keyboard › a Comet is created, in comets (4.4s)
+  ✘   72 [chromium] › e2e/bodyPlacement.spec.js:172:5 › placing a body from the keyboard › a WhiteDwarf is created, in white_dwarfs (4.5s)
+  ✘   73 [chromium] › e2e/bodyPlacement.spec.js:172:5 › placing a body from the keyboard › a NeutronStar is created, in neutron_stars (4.4s)
+  ✘   74 [chromium] › e2e/bodyPlacement.spec.js:172:5 › placing a body from the keyboard › a BlackHole is created, in bh_list (4.5s)
+  ✘   75 [chromium] › e2e/bodyPlacement.spec.js:192:3 › placing a body from the keyboard › Escape cancels without creating anything (4.4s)
+  ✘   76 [chromium] › e2e/bodyPlacement.spec.js:205:3 › placing a body from the keyboard › the aim is announced, and so is the placement (4.5s)
+  ✘   77 [chromium] › e2e/bodyPlacement.spec.js:224:3 › placing a body from the keyboard › a farther aim throws harder (4.4s)
+  ✘   78 [chromium] › e2e/bodyPlacement.spec.js:235:3 › placing a body from the keyboard › nothing is placed when no type is armed (4.3s)
+  ✘   79 [chromium] › e2e/bodyPlacement.spec.js:258:5 › the keyboard path works where a reader needs it › a comet can be placed on a narrow phone (4.3s)
+  ✘   80 [chromium] › e2e/bodyPlacement.spec.js:258:5 › the keyboard path works where a reader needs it › a comet can be placed on a tablet (4.3s)
+  ✘   81 [chromium] › e2e/bodyPlacement.spec.js:274:3 › the keyboard path works where a reader needs it › a comet can be placed at 200% zoom (4.4s)
+  ✘   82 [chromium] › e2e/bodyPlacement.spec.js:291:3 › the keyboard path works where a reader needs it › a comet can be placed with reduced motion on (1.1s)
+  ✘   83 [chromium] › e2e/bodyPlacement.spec.js:309:3 › the keyboard path works where a reader needs it › a comet can be placed in Spanish, and the announcement is Spanish (4.4s)
+  ✘   84 [chromium] › e2e/bodyPlacement.spec.js:367:3 › the keyboard aim reaches the whole canvas › ten steps right and down throw ten times as hard as one (5.3s)
+  ✘   85 [chromium] › e2e/chartParity.spec.js:555:3 › the five charts, held to what the Chart.js ones were › A1: the energy chart in the object inspector (ported) (4.4s)
+  ✘   86 [chromium] › e2e/chartParity.spec.js:608:3 › the five charts, held to what the Chart.js ones were › A2: the light curve (ported) (4.5s)
+  ✘   87 [chromium] › e2e/chartParity.spec.js:710:3 › the five charts, held to what the Chart.js ones were › A3: the radial-velocity trace, plain and during a survey (ported) (4.5s)
+  ✓   89 [chromium] › e2e/chartParity.spec.js:948:3 › the five charts, held to what the Chart.js ones were › the fixture holds the five charts and nothing else (186ms)
+  ✘   88 [chromium] › e2e/chartParity.spec.js:791:3 › the five charts, held to what the Chart.js ones were › A4: the bench comparison, and A5: the sweep (ported) (4.5s)
+  ✘   90 [chromium] › e2e/chartParity.spec.js:958:3 › the point caps hold on the live paths › A1: 250 samples through updateChart draw the newest 200 (4.4s)
+  ✘   91 [chromium] › e2e/chartParity.spec.js:997:3 › the point caps hold on the live paths › A2: 2050 samples through updateLightCurve leave a recording of 2000 (4.6s)
+  ✓   93 [chromium] › e2e/experimentRunner.spec.js:57:3 › the experiment runner › runs every trial in its own Worker, and reports them in order (1.8s)
+  ✘   92 [chromium] › e2e/chartParity.spec.js:1014:3 › the point caps hold on the live paths › A3: more than 900 samples leave a recording of 900, never more (4.6s)
+  ✓   94 [chromium] › e2e/experimentRunner.spec.js:117:3 › the experiment runner › gives the same numbers every time it runs (2.5s)
+  ✓   96 [chromium] › e2e/experimentRunner.spec.js:170:3 › the experiment runner › refuses on a small device what would freeze it, and says why (1.3s)
+  ✓   97 [chromium] › e2e/experimentRunner.spec.js:184:3 › the experiment runner › prices on this device, and refuses trials that would all stop at the sample cap (1.9s)
+  ✓   98 [chromium] › e2e/experimentRunner.spec.js:213:3 › the experiment runner › a saved result checks as reproducible here, and an edited one does not (2.2s)
+  ✓   99 [chromium] › e2e/experimentRunner.spec.js:247:3 › the experiment runner › speaks Spanish when asked (1.8s)
+  ✓   95 [chromium] › e2e/experimentRunner.spec.js:131:3 › the experiment runner › can be canceled, keeps what finished, and resumes the rest (12.1s)
+  -  101 [chromium] › e2e/experimentRunner.spec.js:291:3 › realms that misbehave, in a real browser › a hung realm is terminated at its limit, and a garbled answer is reported
+  ✓  100 [chromium] › e2e/experimentRunner.spec.js:262:3 › the experiment runner › has no accessibility violations, before and after a run (4.8s)
+  ✘  102 [chromium] › e2e/experiments.spec.js:98:3 › the A/B experiment bench › a whole experiment: capture, run A, restore, change one thing, run B, compare (4.4s)
+  ✘  103 [chromium] › e2e/experiments.spec.js:198:3 › the A/B experiment bench › warns when more than one variable changed, and lets it be confirmed (4.4s)
+  ✘  104 [chromium] › e2e/experiments.spec.js:244:3 › the A/B experiment bench › exports a CSV and a manifest, and reopens from the manifest (4.5s)
+  ✘  105 [chromium] › e2e/experiments.spec.js:318:3 › the A/B experiment bench › saves locally, lists, renames and deletes (4.5s)
+  ✘  106 [chromium] › e2e/experiments.spec.js:350:3 › the A/B experiment bench › an experiment saved with the old drift opens without it, and says why (4.4s)
+  ✘  107 [chromium] › e2e/experiments.spec.js:413:3 › the A/B experiment bench › a share link reproduces the setup and the A/B difference (4.4s)
+  ✘  108 [chromium] › e2e/experiments.spec.js:472:3 › the A/B experiment bench › the panel fits a phone screen (4.4s)
+  ✘  109 [chromium] › e2e/experiments.spec.js:507:3 › the A/B experiment bench › an ordinary share link still opens, with no bench and no errors (4.4s)
+  ✓  110 [chromium] › e2e/firstRun.spec.js:23:3 › on a first visit › Home first, and the scenario card only after it (4.8s)
+  ✓  112 [chromium] › e2e/firstRun.spec.js:54:1 › Home hides the page behind it, and gives back only what it took (4.8s)
+  ✓  113 [chromium] › e2e/firstRun.spec.js:80:1 › a screen reader hears the scenario by name, not the sentinel (4.4s)
+  ✘  111 [chromium] › e2e/firstRun.spec.js:36:3 › on a first visit › the card closes from the keyboard, and stays closed on a rebuild (14.0s)
+  ✓  114 [chromium] › e2e/firstRun.spec.js:95:3 › the welcome close button leaves Menu reachable at 375 px, and focus lands somewhere (4.5s)
+  ✓  115 [chromium] › e2e/firstRun.spec.js:95:3 › the welcome close button leaves Menu reachable at 1024 px, and focus lands somewhere (4.6s)
+  ✓  116 [chromium] › e2e/firstRun.spec.js:138:1 › the investigations browser close chip clears its text at 375 px (4.6s)
+  ✘  117 [chromium] › e2e/htmlReport.spec.js:55:3 › the finish dialog hands over the report as a web page, in en (4.6s)
+  ✘  118 [chromium] › e2e/htmlReport.spec.js:55:3 › the finish dialog hands over the report as a web page, in es (4.5s)
+  ✘  119 [chromium] › e2e/htmlReport.spec.js:92:1 › the PDF download is unchanged beside it (4.6s)
+  ✓  120 [chromium] › e2e/instructorFlow.spec.js:78:3 › the instructor flow › from an adoption page to a gradebook file (4.5s)
+  ✓  121 [chromium] › e2e/instructorFlow.spec.js:234:3 › the instructor flow › a class code on three students is three students, and measures are not written answers (3.1s)
+  ✓  122 [chromium] › e2e/instructorFlow.spec.js:309:3 › the instructor flow › kit and course packs open in the browser language, with Spanish tab titles (P81 L-1, T-1) (1.5s)
+  ✓  123 [chromium] › e2e/instructorFlow.spec.js:343:3 › the instructor flow › the portal says how to ask for the passphrase, and each adoption page says where the key is (P81 A-1) (439ms)
+  ✓  124 [chromium] › e2e/instructorFlow.spec.js:358:3 › the instructor flow › the course builder opens with the item in place (392ms)
+  ✓  126 [chromium] › e2e/instructorFlow.spec.js:386:3 › the instructor flow › the kit refuses what is not an activity or a course (515ms)
+  ✓  125 [chromium] › e2e/instructorFlow.spec.js:371:3 › the instructor flow › the kit checks an activity file against this build (2.6s)
+  ✓  128 [chromium] › e2e/instructorPortal.spec.js:338:5 › the dashboard on a small screen and by keyboard › 320x700: nothing overflows, nothing is clipped (1.6s)
+  ✓  127 [chromium] › e2e/instructorFlow.spec.js:399:3 › the instructor flow › the kit and the review page pass axe, and the kit has no sideways scroll (4.2s)
+  ✓  129 [chromium] › e2e/instructorPortal.spec.js:338:5 › the dashboard on a small screen and by keyboard › 390x844: nothing overflows, nothing is clipped (845ms)
+  ✓  130 [chromium] › e2e/instructorPortal.spec.js:338:5 › the dashboard on a small screen and by keyboard › 640x800 (200% zoom): nothing overflows, nothing is clipped (868ms)
+  ✓  131 [chromium] › e2e/instructorPortal.spec.js:338:5 › the dashboard on a small screen and by keyboard › 768x1024: nothing overflows, nothing is clipped (883ms)
+  ✓  132 [chromium] › e2e/instructorPortal.spec.js:338:5 › the dashboard on a small screen and by keyboard › 1440x900: nothing overflows, nothing is clipped (842ms)
+  ✓  133 [chromium] › e2e/instructorPortal.spec.js:377:3 › the dashboard on a small screen and by keyboard › the dashboard can be operated from the keyboard alone (1.2s)
+  ✓  135 [chromium] › e2e/instructorPortal.spec.js:122:3 › the instructor portal, signed in › a wrong passphrase is refused, and says so (719ms)
+  ✓  136 [chromium] › e2e/instructorPortal.spec.js:131:3 › the instructor portal, signed in › the right passphrase opens the dashboard (768ms)
+  ✓  137 [chromium] › e2e/instructorPortal.spec.js:146:5 › the instructor portal, signed in › once inside › every investigation has a card, a guide and a key (823ms)
+  ✓  134 [chromium] › e2e/instructorPortal.spec.js:412:3 › the dashboard on a small screen and by keyboard › axe finds nothing on the dashboard (3.4s)
+  ✓  138 [chromium] › e2e/instructorPortal.spec.js:175:5 › the instructor portal, signed in › once inside › every activity document is individually reachable (818ms)
+  ✓  139 [chromium] › e2e/instructorPortal.spec.js:236:5 › the instructor portal, signed in › once inside › search narrows the investigations (884ms)
+  ✓  140 [chromium] › e2e/instructorPortal.spec.js:196:5 › the instructor portal, signed in › once inside › "Open in Gravitas" uses the canonical activity route (790ms)
+  ✓  141 [chromium] › e2e/instructorPortal.spec.js:250:5 › the instructor portal, signed in › once inside › search that matches nothing says so rather than showing nothing (788ms)
+  ✓  142 [chromium] › e2e/instructorPortal.spec.js:212:5 › the instructor portal, signed in › once inside › a download actually delivers the document (861ms)
+  ✓  143 [chromium] › e2e/instructorPortal.spec.js:260:5 › the instructor portal, signed in › once inside › the filters are three buttons and a select, not a wall of pills (807ms)
+  ✓  144 [chromium] › e2e/instructorPortal.spec.js:227:5 › the instructor portal, signed in › once inside › the status region is polite and empty until something happens (807ms)
+  ✓  145 [chromium] › e2e/instructorPortal.spec.js:275:5 › the instructor portal, signed in › once inside › a duration filter actually filters (929ms)
+  ✓  147 [chromium] › e2e/instructorPortal.spec.js:290:5 › the instructor portal, signed in › once inside › a topic filter actually filters (936ms)
+  ✓  148 [chromium] › e2e/instructorPortal.spec.js:304:5 › the instructor portal, signed in › once inside › the version line names the catalog it is describing (802ms)
+  ✓  146 [chromium] › e2e/investigations.spec.js:74:3 › opening a lesson › the browser lists lessons and one of them opens (5.8s)
+  ✓  149 [chromium] › e2e/investigations.spec.js:96:3 › opening a lesson › the browser opens on its heading, not scrolled past it (8.3s)
+  ✘  150 [chromium] › e2e/investigations.spec.js:145:3 › opening a lesson › a lesson sets up its own scenario and keeps the sim alive @covers:ce.weighing-stars (6.4s)
+  ✓  151 [chromium] › e2e/investigations.spec.js:157:3 › advancing through representative step types › walks the first several steps, meeting an instrument on the way @covers:ce.goldilocks-que
+  ✘  152 [chromium] › e2e/investigations.spec.js:211:3 › advancing through representative step types › a graded choice marks a right answer right (8.3s)
+  ✘  153 [chromium] › e2e/investigations.spec.js:250:3 › advancing through representative step types › a graded choice marks a wrong answer wrong (8.2s)
+  ✘  154 [chromium] › e2e/investigations.spec.js:278:3 › advancing through representative step types › a graded choice can be changed, keeping the first answer and the count (8.8s)
+  ✘  155 [chromium] › e2e/investigations.spec.js:319:3 › advancing through representative step types › a measure step accepts numbers and plots them back @covers:ce.keplers-laws (6.5s)
+  ✓  156 [chromium] › e2e/investigations.spec.js:361:3 › persistence › progress survives a reload (10.3s)
+  ✘  157 [chromium] › e2e/investigations.spec.js:387:3 › persistence › answers are remembered, not just the step number @covers:ce.tides (8.7s)
+  ✓  158 [chromium] › e2e/investigations.spec.js:411:3 › persistence › reset clears progress and returns to step one (8.1s)
+  ✘  159 [chromium] › e2e/investigations.spec.js:427:3 › the student report › the finish dialog opens and can produce a report @covers:ce.missing-mass (6.5s)
+  ✘  160 [chromium] › e2e/investigations.spec.js:517:3 › the student report › in Spanish, with the token to paste (4.5s)
+  ✘  161 [chromium] › e2e/investigations.spec.js:609:3 › lesson loading › the browser lists every lesson without loading any of them (6.0s)
+  ✘  162 [chromium] › e2e/investigations.spec.js:634:3 › lesson loading › opening a lesson fetches that lesson and no other (6.5s)
+  ✘  163 [chromium] › e2e/investigations.spec.js:656:3 › lesson loading › a lesson link loads only the lesson it names (4.6s)
+  ✘  165 [chromium] › e2e/investigations.spec.js:687:3 › lesson loading › closing while a lesson is still arriving does not reopen it (4.5s)
+  ✘  164 [chromium] › e2e/investigations.spec.js:670:3 › lesson loading › a card opened twice in a row fetches once (7.2s)
+  ✓  167 [chromium] › e2e/investigations.spec.js:803:3 › a lesson that locks placement says so › the add control is disabled and its picker cannot cover the lesson (6.7s)
+  ✓  168 [chromium] › e2e/investigations.spec.js:838:3 › lesson prose reads as characters, not entity names › Twelve Nights opens on HD 209458 at La Silla (4.4s)
+  ✓  166 [chromium] › e2e/investigations.spec.js:724:3 › a lesson can be driven at any window width › Next is clickable and nothing covers the lesson panel (21.9s)
+  ✘  170 [chromium] › e2e/investigations.spec.js:922:3 › a screen reader hears every answer, not only the first › two right answers in a row are each announced (4.5s)
+  ✓  169 [chromium] › e2e/investigations.spec.js:852:3 › lesson prose reads as characters, not entity names › a held prediction: its options, its name, what is announced and its verdict (14.2s
+  ✓  172 [chromium] › e2e/measure.spec.js:77:3 › the measurement pipeline › nothing of it loads until it is opened (915ms)
+  ✓  171 [chromium] › e2e/measure.spec.js:93:3 › the measurement pipeline › a transit search finds HD 209458 b, folds at its period, and the pipeline shows both (3.1s)
+  ✓  174 [chromium] › e2e/measure.spec.js:148:3 › the measurement pipeline › a Balmer line: the A star's velocity is SDSS's own redshift, and the rest wavelength is assumed (854ms)
+  ✓  175 [chromium] › e2e/measure.spec.js:162:3 › the measurement pipeline › the TESS aperture: NPIXSAP's 23 pixels, and where on the sky they center (795ms)
+  ✓  176 [chromium] › e2e/measure.spec.js:178:3 › the measurement pipeline › a filter on the GWTC masses keeps the three black-hole pairs, and masks the rest (868ms)
+  ✓  173 [chromium] › e2e/measure.spec.js:125:3 › the measurement pipeline › an undo behind a result makes it stale, and recomputing makes it current (4.8s)
+  ✓  177 [chromium] › e2e/measure.spec.js:198:3 › the measurement pipeline › a number typed in Spanish is read as Spanish, and an ambiguous one is refused (1.2s)
+  ✓  178 [chromium] › e2e/measure.spec.js:226:3 › the measurement pipeline › a cross-match pairs the GWTC events with a second table, one to one (923ms)
+  ✓  179 [chromium] › e2e/measure.spec.js:251:3 › the measurement pipeline › the measurements have their own undo and redo (1.0s)
+  ✓  181 [chromium] › e2e/measure.spec.js:309:3 › the measurement pipeline › a period search can be canceled, and leaves nothing behind (942ms)
+  ✓  180 [chromium] › e2e/measure.spec.js:269:3 › the measurement pipeline › saved, and read back to the same numbers (4.5s)
+  ✓  182 [chromium] › e2e/measure.spec.js:328:3 › the measurement pipeline › a result goes into the notebook, with where its data came from (2.7s)
+  ✘  184 [chromium] › e2e/myWork.spec.js:72:3 › My work › leave mid-lesson, export, import in a fresh context, resume at the same step (822ms)
+  ✘  185 [chromium] › e2e/myWork.spec.js:113:3 › My work › the preview names what would change, and "keep what is here" leaves it (793ms)
+  ✓  186 [chromium] › e2e/myWork.spec.js:153:3 › My work › a file that is not a backup is refused in words (393ms)
+  ✘  187 [chromium] › e2e/myWork.spec.js:166:3 › My work › a full browser refuses the import and offers a backup (743ms)
+  ✘  188 [chromium] › e2e/myWork.spec.js:195:3 › My work › delete waits for a copy (784ms)
+  ✓  183 [chromium] › e2e/measure.spec.js:366:3 › the measurement pipeline › no accessibility violations, in English and Spanish, and a language switch keeps the measurements (8.2s)
+  ✘  189 [chromium] › e2e/myWork.spec.js:213:3 › My work › keyboard reaches every list action, each named for its item (794ms)
+  ✘  190 [chromium] › e2e/myWork.spec.js:240:7 › My work › axe finds nothing in en at 375 px, with work listed (745ms)
+  ✘  191 [chromium] › e2e/myWork.spec.js:240:7 › My work › axe finds nothing in en at 1024 px, with work listed (768ms)
+  ✘  192 [chromium] › e2e/myWork.spec.js:240:7 › My work › axe finds nothing in es at 375 px, with work listed (759ms)
+  ✘  193 [chromium] › e2e/myWork.spec.js:240:7 › My work › axe finds nothing in es at 1024 px, with work listed (785ms)
+  ✓  194 [chromium] › e2e/myWork.spec.js:266:1 › the page title follows the language, on load and when it changes (416ms)
+  ✓  195 [chromium] › e2e/observatory.spec.js:108:3 › the observatory › a selection in the plot is the selection in the table, and back (1.2s)
+  ✓  197 [chromium] › e2e/observatory.spec.js:148:3 › the observatory › the plot answers the keyboard: along the axis, Shift extends, Space and Escape (1.4s)
+  ✓  198 [chromium] › e2e/observatory.spec.js:178:3 › the observatory › a pixel chosen in the image is a row in the table, decoded (850ms)
+  ✓  196 [chromium] › e2e/observatory.spec.js:55:3 › the observatory › opens every observation it offers, and says what was done to each (3.5s)
+  ✓  200 [chromium] › e2e/observatory.spec.js:283:3 › the observatory › an import is previewed, does not guess a unit, and names the line a bad file breaks on (1.1s)
+  ✓  199 [chromium] › e2e/observatory.spec.js:210:3 › the observatory › changes undo and redo, and a save is the same bytes twice (2.5s)
+  ✓  201 [chromium] › e2e/observatory.spec.js:352:3 › the observatory › the exporter is fetched by the first export, not at start-up (774ms)
+  -  203 [chromium] › e2e/observatory.spec.js:418:3 › the observatory offline › opens observations with no network once Gravitas has been opened
+  ✘  204 [chromium] › e2e/observing.spec.js:27:3 › the light curve › opens, plots, and reports a status @cross-browser (4.3s)
+  ✘  205 [chromium] › e2e/observing.spec.js:77:3 › the light curve › closes without leaving the toggle inconsistent (4.4s)
+  ✓  202 [chromium] › e2e/observatory.spec.js:388:3 › the observatory › speaks Spanish, and has no accessibility violations in either language (12.9s)
+  ✘  206 [chromium] › e2e/observing.spec.js:96:3 › radial velocity › opens and reports a velocity for the observed star (4.4s)
+  ✘  207 [chromium] › e2e/observing.spec.js:137:3 › radial velocity › says nothing rather than inventing a signal when the star is pinned (4.5s)
+  ✘  208 [chromium] › e2e/observing.spec.js:162:3 › astrometry › opens and reports a signature at an assumed distance (4.4s)
+  ✘  209 [chromium] › e2e/observing.spec.js:202:3 › the shared observer geometry › all three panels are open at once and none of them break (4.5s)
+  ✘  210 [chromium] › e2e/observing.spec.js:213:3 › the shared observer geometry › moving the observer reaches every panel (4.5s)
+  ✘  211 [chromium] › e2e/observing.spec.js:251:3 › the shared observer geometry › a collapsed panel comes back when its title bar is clicked (4.5s)
+  ✘  212 [chromium] › e2e/observing.spec.js:297:3 › the shared observer geometry › a face-on orbit produces no radial-velocity amplitude (4.5s)
+  ✘  213 [chromium] › e2e/observing.spec.js:320:3 › the shared observer geometry › the reference frame selector re-expresses the view (4.6s)
+  ✓  214 [chromium] › e2e/onboarding.spec.js:21:3 › first run › three screens inside Home, by keyboard, then the sandbox card, then never again (7.2s)
+  ✓  215 [chromium] › e2e/onboarding.spec.js:71:3 › first run › skipping ends it for good (4.9s)
+  ✓  216 [chromium] › e2e/onboarding.spec.js:83:3 › first run › in Spanish it reads in Spanish (4.3s)
+  ✓  217 [chromium] › e2e/onboarding.spec.js:97:3 › first run on a phone › the introduction fits, is reachable, and ends on a tap (4.9s)
+  ✘  218 [chromium] › e2e/onboarding.spec.js:146:3 › in a lesson › the where line, Help, and a problem note that sends nothing (4.4s)
+  ✘  219 [chromium] › e2e/onboarding.spec.js:175:3 › in a lesson › a finished investigation offers the next of its sequence, and nothing stale (4.3s)
+  ✘  220 [chromium] › e2e/onboarding.spec.js:198:3 › in a lesson › a renamed sequence still offers the next step from an old stored id (4.4s)
+  ✘  221 [chromium] › e2e/onboarding.spec.js:218:3 › in a lesson › a course item offers the course’s next one, and the deeper depth (4.5s)
+  ✘  222 [chromium] › e2e/plotChart.spec.js:90:3 › the series chart › axes and text take their colors from CSS variables set as attributes @cross-browser (623ms)
+  ✘  223 [chromium] › e2e/plotChart.spec.js:124:3 › the series chart › a theme change repaints series colors that are read from the page (666ms)
+  ✘  224 [chromium] › e2e/plotChart.spec.js:154:3 › the series chart › the legend works from the keyboard, and says what it did (621ms)
+  ✘  225 [chromium] › e2e/plotChart.spec.js:180:3 › the series chart › the readout is reachable and operable from the keyboard (623ms)
+  ✘  226 [chromium] › e2e/plotChart.spec.js:206:3 › the series chart › hovering shows the values under the pointer (649ms)
+  ✘  227 [chromium] › e2e/plotChart.spec.js:224:3 › the series chart › height: 'fill' takes what the host has left under the legend (677ms)
+  ✘  228 [chromium] › e2e/plotChart.spec.js:248:3 › the series chart › it redraws when its box changes size (697ms)
+  ✘  229 [chromium] › e2e/plotChart.spec.js:259:3 › the series chart › the PNG is a real image of the chart, legend included @cross-browser (694ms)
+  ✘  230 [chromium] › e2e/plotChart.spec.js:295:3 › the series chart › a live chart is drawn in place: new nodes only for new series (683ms)
+  ✘  231 [chromium] › e2e/plotChart.spec.js:322:3 › the series chart › axe finds nothing in the chart, its legend or its readout (645ms)
+  ✘  232 [chromium] › e2e/predictionLoops.spec.js:283:5 › a prediction is settled by the experiment, not by the answer key › keplers-laws: no widget: the canvas and the inspector @covers:ce.ke
+  ✘  233 [chromium] › e2e/predictionLoops.spec.js:283:5 › a prediction is settled by the experiment, not by the answer key › orbital-energy: energy widgets @covers:ce.orbital-energy (4.4s)
+  ✘  234 [chromium] › e2e/predictionLoops.spec.js:283:5 › a prediction is settled by the experiment, not by the answer key › transit-photometry: transit widgets @covers:ce.transit-photometry (
+  ✘  235 [chromium] › e2e/predictionLoops.spec.js:283:5 › a prediction is settled by the experiment, not by the answer key › weighing-stars: binary widgets @covers:ce.weighing-stars (4.7s)
+  ✘  236 [chromium] › e2e/predictionLoops.spec.js:283:5 › a prediction is settled by the experiment, not by the answer key › black-holes: black-hole widgets @covers:ce.black-holes (5.0s)
+  ✘  237 [chromium] › e2e/predictionLoops.spec.js:283:5 › a prediction is settled by the experiment, not by the answer key › radial-velocity: exoplanet widgets @covers:ce.radial-velocity (4.7s
+  ✘  238 [chromium] › e2e/predictionLoops.spec.js:283:5 › a prediction is settled by the experiment, not by the answer key › goldilocks-question: habitability widgets @covers:ce.goldilocks-que
+  ✘  239 [chromium] › e2e/predictionLoops.spec.js:283:5 › a prediction is settled by the experiment, not by the answer key › missing-mass: dark-matter widgets @covers:ce.missing-mass (4.7s)
+  ✘  240 [chromium] › e2e/predictionLoops.spec.js:283:5 › a prediction is settled by the experiment, not by the answer key › tides: tidal widgets @covers:ce.tides (4.5s)
+  ✘  241 [chromium] › e2e/predictionLoops.spec.js:283:5 › a prediction is settled by the experiment, not by the answer key › butterfly-effect: chaos widgets @covers:ce.butterfly-effect (4.5s)
+  ✘  242 [chromium] › e2e/predictionLoops.spec.js:283:5 › a prediction is settled by the experiment, not by the answer key › when-orbits-lock: resonance widgets @covers:ce.when-orbits-lock (4.
+  ✘  243 [chromium] › e2e/predictionLoops.spec.js:283:5 › a prediction is settled by the experiment, not by the answer key › hohmann-transfer: no widget: the maneuver planner @covers:ce.hohman
+  ✘  244 [chromium] › e2e/predictionLoops.spec.js:283:5 › a prediction is settled by the experiment, not by the answer key › lagrange-points: no widget: the rotating frame @covers:ce.lagrange-
+  ✘  245 [chromium] › e2e/predictionLoops.spec.js:283:5 › a prediction is settled by the experiment, not by the answer key › what-is-a-gravitational-wave: gravitational-wave widgets @covers:ce
+  ✘  246 [chromium] › e2e/predictionLoops.spec.js:283:5 › a prediction is settled by the experiment, not by the answer key › a-universe-of-stars: stellar widgets @covers:ce.a-universe-of-stars
+  ✘  247 [chromium] › e2e/predictionLoops.spec.js:283:5 › a prediction is settled by the experiment, not by the answer key › lives-of-stars: stellar-evolution widgets @covers:ce.lives-of-stars
+  ✘  248 [chromium] › e2e/predictionLoops.spec.js:357:3 › what a screen reader is told when an answer is committed › a held prediction answered correctly is not called correct (4.6s)
+  ✘  249 [chromium] › e2e/predictionLoops.spec.js:379:5 › what a screen reader is told when an answer is committed › an ordinary graded choice still announces that it was right (4.6s)
+  ✘  250 [chromium] › e2e/predictionLoops.spec.js:379:5 › what a screen reader is told when an answer is committed › an ordinary graded choice still announces the explanation when it was wrong
+  ✓  251 [chromium] › e2e/presetRecovery.spec.js:60:3 › an off-grid staged value can be recovered › dragging really cannot get back to the staged value (4.6s)
+  ✓  253 [chromium] › e2e/presetRecovery.spec.js:93:3 › an off-grid staged value can be recovered › from the keyboard alone (5.1s)
+  ✓  252 [chromium] › e2e/presetRecovery.spec.js:78:3 › an off-grid staged value can be recovered › with a pointer (4.9s)
+  ✓  254 [chromium] › e2e/progressSafety.spec.js:99:3 › the save status › confirms a write that worked, without announcing it (6.7s)
+  ✓  255 [chromium] › e2e/progressSafety.spec.js:113:3 › the save status › a full disk is reported, and stays reported (8.6s)
+  ✓  256 [chromium] › e2e/progressSafety.spec.js:129:3 › the save status › a browser that refuses storage is told apart from a full one (6.4s)
+  ✓  257 [chromium] › e2e/progressSafety.spec.js:143:3 › the save status › a failing write never becomes a toast (8.0s)
+  ✓  258 [chromium] › e2e/progressSafety.spec.js:161:3 › the save status › the answers keep working while storage is broken (8.7s)
+  ✓  259 [chromium] › e2e/progressSafety.spec.js:190:3 › work survives the panel closing when storage refuses › closing and reopening keeps the answers and the position (9.1s)
+  ✓  260 [chromium] › e2e/progressSafety.spec.js:212:3 › work survives the panel closing when storage refuses › switching to another lesson and back keeps both (11.9s)
+  ✓  261 [chromium] › e2e/progressSafety.spec.js:239:3 › work survives the panel closing when storage refuses › a backup taken after a failed save carries the real answers (8.9s)
+  ✓  262 [chromium] › e2e/progressSafety.spec.js:265:3 › work survives the panel closing when storage refuses › restoring still replaces what the session is holding (10.9s)
+  ✓  263 [chromium] › e2e/progressSafety.spec.js:293:3 › work survives the panel closing when storage refuses › an authoring preview never becomes the reader's progress (12.4s)
+  ✓  264 [chromium] › e2e/progressSafety.spec.js:319:3 › the backup file › lives behind a Progress disclosure, closed until opened (6.5s)
+  ✓  265 [chromium] › e2e/progressSafety.spec.js:333:3 › the backup file › carries the work out and puts it back (11.6s)
+  ✓  266 [chromium] › e2e/progressSafety.spec.js:394:3 › the backup file › replacing existing answers needs an explicit yes (9.9s)
+  ✓  267 [chromium] › e2e/progressSafety.spec.js:425:3 › the backup file › a file that is not a backup is refused by name (7.3s)
+  ✓  268 [chromium] › e2e/progressSafety.spec.js:461:3 › the backup file › a backup from a different lesson is refused (6.2s)
+  ✓  270 [chromium] › e2e/progressSafety.spec.js:546:3 › an authoring preview is not a student › offers no backup controls and writes nothing (9.7s)
+  ✘  271 [chromium] › e2e/sandbox.spec.js:12:3 › loading from a clean browser › boots, runs, and shows a simulation @cross-browser (4.8s)
+  ✓  269 [chromium] › e2e/progressSafety.spec.js:485:3 › the backup file › rescues the work when storage is refusing it (16.2s)
+  ✘  272 [chromium] › e2e/sandbox.spec.js:56:3 › loading from a clean browser › a returning visitor does not see the front door (4.6s)
+  ✘  273 [chromium] › e2e/sandbox.spec.js:31:3 › loading from a clean browser › the first-visit front door appears, and can be dismissed (5.3s)
+  ✘  274 [chromium] › e2e/sandbox.spec.js:67:3 › the scenario gallery › opens, filters, and loads a scenario by clicking it @cross-browser (6.5s)
+  ✓  275 [chromium] › e2e/sandbox.spec.js:112:3 › the scenario gallery › an empty search says so rather than showing everything (5.4s)
+  ✘  276 [chromium] › e2e/sandbox.spec.js:140:3 › the space bar › exactly one handler answers it (4.4s)
+  ✘  277 [chromium] › e2e/sandbox.spec.js:128:3 › the space bar › pauses the simulation, and resumes it (4.4s)
+  ✓  278 [chromium] › e2e/sandbox.spec.js:174:3 › the space bar › the transport button follows the key (4.6s)
+  ✘  279 [chromium] › e2e/sandbox.spec.js:190:3 › the space bar › but not while a field has the focus (4.8s)
+  ✘  280 [chromium] › e2e/sandbox.spec.js:207:3 › the space bar › nor while a button has the focus: the space bar presses it (4.6s)
+  ✘  281 [chromium] › e2e/sandbox.spec.js:239:3 › the transport controls › pause stops the clock and resume starts it again @cross-browser (4.5s)
+  ✘  282 [chromium] › e2e/sandbox.spec.js:266:3 › the transport controls › the speed controls change the simulation rate (4.5s)
+  ✘  283 [chromium] › e2e/sandbox.spec.js:292:3 › the transport controls › reset rebuilds the world and keeps it running @cross-browser (4.5s)
+  ✘  284 [chromium] › e2e/sandbox.spec.js:360:3 › placing an object is deliberate › a click on empty space adds nothing until a type is chosen (5.1s)
+  ✘  285 [chromium] › e2e/sandbox.spec.js:385:3 › placing an object is deliberate › choosing a type arms placement, and Escape disarms it (5.0s)
+  ✘  286 [chromium] › e2e/shareObserving.spec.js:95:5 › an ordinary share link reproduces the viewing context › seeded: inclination, position angle, distance and star (4.5s)
+  ✘  287 [chromium] › e2e/shareObserving.spec.js:123:5 › an ordinary share link reproduces the viewing context › seeded: a body-centered reference frame and its target (4.5s)
+  ✘  288 [chromium] › e2e/shareObserving.spec.js:95:5 › an ordinary share link reproduces the viewing context › full: inclination, position angle, distance and star (4.5s)
+  ✘  289 [chromium] › e2e/shareObserving.spec.js:123:5 › an ordinary share link reproduces the viewing context › full: a body-centered reference frame and its target (4.4s)
+  ✘  290 [chromium] › e2e/shareObserving.spec.js:144:3 › an ordinary share link reproduces the viewing context › opening the astrometry panel does not overwrite the restored distance (4.4s)
+  ✘  291 [chromium] › e2e/shareObserving.spec.js:178:3 › an ordinary share link reproduces the viewing context › a link made before this feature still opens on the defaults (4.5s)
+  ✘  292 [chromium] › e2e/shareObserving.spec.js:214:3 › an ordinary share link reproduces the viewing context › an old link clears a distance the previous link set (4.4s)
+  ✘  293 [chromium] › e2e/shareObserving.spec.js:252:3 › an ordinary share link reproduces the viewing context › opening the panels afterwards does not resurrect the old distance (4.4s)
+  ✘  294 [chromium] › e2e/shareObserving.spec.js:284:3 › an ordinary share link reproduces the viewing context › restoring the same scenario twice does not share a recording (4.4s)
+  ✘  295 [chromium] › e2e/shareObserving.spec.js:332:3 › embed mode › ?embed=1 restores the same observing context (4.6s)
+  ✘  296 [chromium] › e2e/sharing.spec.js:17:3 › a shared link › round-trips a scenario through the URL @cross-browser (4.4s)
+  ✘  297 [chromium] › e2e/sharing.spec.js:57:3 › a shared link › a seeded link carries its seed and scenario intact (4.5s)
+  ✘  298 [chromium] › e2e/sharing.spec.js:88:3 › a shared link › the same seed builds the same world every time (4.4s)
+  ✘  299 [chromium] › e2e/sharing.spec.js:140:3 › a shared link › the share dialog produces a usable link (4.5s)
+  ✓  301 [chromium] › e2e/sky.spec.js:47:3 › the Sky Lab › the drawing, the table and the map are one sky (684ms)
+  ✓  302 [chromium] › e2e/sky.spec.js:89:3 › the Sky Lab › a place and a time move the sky; layers toggle (1.7s)
+  ✘  300 [chromium] › e2e/sharing.spec.js:164:3 › a shared link › a corrupt link fails safely rather than breaking the app (4.5s)
+  ✓  303 [chromium] › e2e/sky.spec.js:116:3 › the Sky Lab › "Use my location" without permission says so and keeps the place (664ms)
+  ✓  304 [chromium] › e2e/sky.spec.js:169:3 › the Sky Lab › the views and the table export (868ms)
+  ✘  305 [chromium] › e2e/sky.spec.js:137:3 › the Sky Lab › the five instruments read and each saves a valid envelope (1.4s)
+  ✓  307 [chromium] › e2e/sky.spec.js:206:3 › the Sky Lab › fits a phone and offers no playback under reduced motion (796ms)
+  ✓  306 [chromium] › e2e/sky.spec.js:183:3 › the Sky Lab › reads in Spanish and passes axe in both languages, with the table and the instruments (15.3s)
+  ✘  308 [chromium] › e2e/stellarSpectra.spec.js:69:3 › the spectra arrive only when something needs them › nothing fetches them until the first spectra screen, which fetches them once (14.3s)
+  ✓  309 [chromium] › e2e/stellarSpectra.spec.js:112:3 › the instrument can be worked from the readout alone › the first spectra screen measures real features and says they are observations (1
+  ✓  311 [chromium] › e2e/submissionReview.spec.js:122:3 › the submission review page › says there is nothing to download until something is read (512ms)
+  ✓  312 [chromium] › e2e/submissionReview.spec.js:132:3 › the submission review page › reads a pile, keeps the duplicate, and refuses what it cannot read (593ms)
+  ✓  313 [chromium] › e2e/submissionReview.spec.js:149:3 › the submission review page › downloads a summary, a question file and the JSON, all from the same reading (833ms)
+  ✓  310 [chromium] › e2e/stellarSpectra.spec.js:138:3 › the instrument can be worked from the readout alone › the wavelength control moves from the keyboard and changes what is named (14.2s)
+  ✓  314 [chromium] › e2e/submissionReview.spec.js:201:3 › the submission review page › withholds written answers unless the instructor asks for them (1.0s)
+  ✓  315 [chromium] › e2e/submissionReview.spec.js:220:3 › the submission review page › shows each written answer beside its rubric, on this screen only (674ms)
+  ✓  316 [chromium] › e2e/submissionReview.spec.js:244:3 › the submission review page › works from the keyboard alone (548ms)
+  ✓  317 [chromium] › e2e/submissionReview.spec.js:261:3 › the submission review page › speaks Spanish, and remembers it for the rest of Gravitas (625ms)
+  ✓  319 [chromium] › e2e/submissionReview.spec.js:368:3 › the submission review page › passes axe with results on it (1.5s)
+  ✓  318 [chromium] › e2e/submissionReview.spec.js:280:3 › the submission review page › grades the answers a lesson in the application saved (8.2s)
+    test-results/answerEntry-hints-arrive-o-f10c2--is-kept-when-it-is-revised-chromium/test-failed-1.png
+    test-results/answerEntry-a-saved-answer-a366e-kept-and-adds-nothing-to-it-chromium/test-failed-1.png
+    test-results/answerEntry-a-saved-answer-ca216-tributes-to-a-measure-field-chromium/test-failed-1.png
+    test-results/answerEntry-in-Spanish-a-d-26df9-nd-the-hints-are-translated-chromium/test-failed-1.png
+    test-results/answerEntry-in-Spanish-a-m-9d6bb-e-reads-a-decimal-comma-too-chromium/test-failed-1.png
+    test-results/answerEntry-in-Spanish-swi-b03e4-ark-an-answer-already-given-chromium/test-failed-1.png
+    test-results/assignment-building-one-a--42d4d-e-submission-token-reads-it-chromium/test-failed-1.png
+    test-results/assignment-building-one-th-f50f9-and-the-reason-is-on-screen-chromium/test-failed-1.png
+    test-results/assignment-building-one-the-link-carries-no-answer-key-chromium/test-failed-1.png
+    test-results/assignment-building-one-a--84b08-duced-without-an-answer-key-chromium/test-failed-1.png
+    test-results/assignment-doing-one-a-stu-4bf1a-d-sequence-and-nothing-else-chromium/test-failed-1.png
+    test-results/assignment-doing-one-progr-e8398-s-not-touch-the-full-lesson-chromium/test-failed-1.png
+    test-results/assignment-doing-one-two-a-9fedc-sson-keep-separate-progress-chromium/test-failed-1.png
+    test-results/assignment-doing-one-a-lin-59424-rk-and-old-keys-move-across-chromium/test-failed-1.png
+    test-results/assignment-when-the-lesson-a427b-does-not-inherit-its-answer-chromium/test-failed-1.png
+    test-results/assignment-when-the-lesson-194e3-nk-is-refused-with-a-reason-chromium/test-failed-1.png
+    test-results/assignment-the-rest-of-the-dd7fd-he-assignment-and-its-steps-chromium/test-failed-1.png
+    test-results/assignment-the-rest-of-the-d2a8c-e-every-step-look-rewritten-chromium/test-failed-1.png
+    test-results/assignment-the-rest-of-the-0c52c-assignment-restores-into-it-chromium/test-failed-1.png
+    test-results/assignment-a-calculation-b-60c54--in-the-table-it-reads-from-chromium/test-failed-1.png
+    test-results/assignment-a-calculation-b-60e07-ent-it-builds-actually-runs-chromium/test-failed-1.png
+    test-results/assignment-a-calculation-b-f1195--copies-it-holds-in-Spanish-chromium/test-failed-1.png
+    test-results/assignment-an-assignment-a-c0b69-ns-with-a-message-saying-so-chromium/test-failed-1.png
+    test-results/bodyPlacement-placing-a-bo-18083--a-Star-is-created-in-stars-chromium/test-failed-1.png
+    test-results/bodyPlacement-placing-a-bo-a651c-lanet-is-created-in-planets-chromium/test-failed-1.png
+    test-results/bodyPlacement-placing-a-bo-e87ab-nt-is-created-in-gas-giants-chromium/test-failed-1.png
+    test-results/bodyPlacement-placing-a-bo-a62f3-oid-is-created-in-asteroids-chromium/test-failed-1.png
+    test-results/bodyPlacement-placing-a-bo-23b90--Comet-is-created-in-comets-chromium/test-failed-1.png
+    test-results/bodyPlacement-placing-a-bo-5f369--is-created-in-white-dwarfs-chromium/test-failed-1.png
+    test-results/bodyPlacement-placing-a-bo-b98a7-is-created-in-neutron-stars-chromium/test-failed-1.png
+    test-results/bodyPlacement-placing-a-bo-5745e-kHole-is-created-in-bh-list-chromium/test-failed-1.png
+    test-results/bodyPlacement-placing-a-bo-22e2b--a-Star-is-created-in-stars-chromium/test-failed-1.png
+    test-results/bodyPlacement-placing-a-bo-bb3ef-lanet-is-created-in-planets-chromium/test-failed-1.png
+    test-results/bodyPlacement-placing-a-bo-37fbf-nt-is-created-in-gas-giants-chromium/test-failed-1.png
+    test-results/bodyPlacement-placing-a-bo-24218-oid-is-created-in-asteroids-chromium/test-failed-1.png
+    test-results/bodyPlacement-placing-a-bo-46f7c--Comet-is-created-in-comets-chromium/test-failed-1.png
+    test-results/bodyPlacement-placing-a-bo-a4bd4--is-created-in-white-dwarfs-chromium/test-failed-1.png
+    test-results/bodyPlacement-placing-a-bo-2e8c5-is-created-in-neutron-stars-chromium/test-failed-1.png
+    test-results/bodyPlacement-placing-a-bo-b7663-kHole-is-created-in-bh-list-chromium/test-failed-1.png
+    test-results/bodyPlacement-placing-a-bo-f42fa-s-without-creating-anything-chromium/test-failed-1.png
+    test-results/bodyPlacement-placing-a-bo-19cbc-ced-and-so-is-the-placement-chromium/test-failed-1.png
+    test-results/bodyPlacement-placing-a-bo-1f4c2-a-farther-aim-throws-harder-chromium/test-failed-1.png
+    test-results/bodyPlacement-placing-a-bo-c6005-laced-when-no-type-is-armed-chromium/test-failed-1.png
+    test-results/bodyPlacement-the-keyboard-cd939-be-placed-on-a-narrow-phone-chromium/test-failed-1.png
+    test-results/bodyPlacement-the-keyboard-9afb4-t-can-be-placed-on-a-tablet-chromium/test-failed-1.png
+    test-results/bodyPlacement-the-keyboard-30fd5-t-can-be-placed-at-200-zoom-chromium/test-failed-1.png
+    test-results/bodyPlacement-the-keyboard-6f19f-aced-with-reduced-motion-on-chromium/test-failed-1.png
+    test-results/bodyPlacement-the-keyboard-2ad04-the-announcement-is-Spanish-chromium/test-failed-1.png
+    test-results/bodyPlacement-the-keyboard-4691c-ow-ten-times-as-hard-as-one-chromium/test-failed-1.png
+    test-results/chartParity-the-five-chart-16282-he-object-inspector-ported--chromium/test-failed-1.png
+    test-results/chartParity-the-five-chart-928c9--A2-the-light-curve-ported--chromium/test-failed-1.png
+    test-results/chartParity-the-five-chart-14c5c-and-during-a-survey-ported--chromium/test-failed-1.png
+    test-results/chartParity-the-five-chart-99dfa-on-and-A5-the-sweep-ported--chromium/test-failed-1.png
+    test-results/chartParity-the-point-caps-5fb5b-teChart-draw-the-newest-200-chromium/test-failed-1.png
+    test-results/chartParity-the-point-caps-ef980-e-leave-a-recording-of-2000-chromium/test-failed-1.png
+    test-results/chartParity-the-point-caps-8d344-recording-of-900-never-more-chromium/test-failed-1.png
+    test-results/experiments-the-A-B-experi-a3d9c-nge-one-thing-run-B-compare-chromium/test-failed-1.png
+    test-results/experiments-the-A-B-experi-72c32-ed-and-lets-it-be-confirmed-chromium/test-failed-1.png
+    test-results/experiments-the-A-B-experi-6679f-d-reopens-from-the-manifest-chromium/test-failed-1.png
+    test-results/experiments-the-A-B-experi-20ec5-y-lists-renames-and-deletes-chromium/test-failed-1.png
+    test-results/experiments-the-A-B-experi-e9026-ens-without-it-and-says-why-chromium/test-failed-1.png
+    test-results/experiments-the-A-B-experi-6ce11-etup-and-the-A-B-difference-chromium/test-failed-1.png
+    test-results/experiments-the-A-B-experi-b15d3-e-panel-fits-a-phone-screen-chromium/test-failed-1.png
+    test-results/experiments-the-A-B-experi-51595-with-no-bench-and-no-errors-chromium/test-failed-1.png
+    test-results/firstRun-on-a-first-visit--3287c-d-stays-closed-on-a-rebuild-chromium/test-failed-1.png
+    test-results/htmlReport-the-finish-dial-6a7dd--report-as-a-web-page-in-en-chromium/test-failed-1.png
+    test-results/htmlReport-the-finish-dial-91d0d--report-as-a-web-page-in-es-chromium/test-failed-1.png
+    test-results/htmlReport-the-PDF-download-is-unchanged-beside-it-chromium/test-failed-1.png
+    test-results/investigations-opening-a-l-b09f1-ve-covers-ce-weighing-stars-chromium/test-failed-1.png
+    test-results/investigations-advancing-t-5351c--marks-a-right-answer-right-chromium/test-failed-1.png
+    test-results/investigations-advancing-t-fdce5--marks-a-wrong-answer-wrong-chromium/test-failed-1.png
+    test-results/investigations-advancing-t-4cbdf--first-answer-and-the-count-chromium/test-failed-1.png
+    test-results/investigations-advancing-t-61273-back-covers-ce-keplers-laws-chromium/test-failed-1.png
+    test-results/investigations-persistence-67214-step-number-covers-ce-tides-chromium/test-failed-1.png
+    test-results/investigations-the-student-ded01-port-covers-ce-missing-mass-chromium/test-failed-1.png
+    test-results/investigations-the-student-835de-ish-with-the-token-to-paste-chromium/test-failed-1.png
+    test-results/investigations-lesson-load-ca081-without-loading-any-of-them-chromium/test-failed-1.png
+    test-results/investigations-lesson-load-d80e6-es-that-lesson-and-no-other-chromium/test-failed-1.png
+    test-results/investigations-lesson-load-a79fa-ds-only-the-lesson-it-names-chromium/test-failed-1.png
+    test-results/investigations-lesson-load-8e3e9-twice-in-a-row-fetches-once-chromium/test-failed-1.png
+    test-results/investigations-lesson-load-95af7-arriving-does-not-reopen-it-chromium/test-failed-1.png
+    test-results/investigations-a-screen-re-ee365-in-a-row-are-each-announced-chromium/test-failed-1.png
+    test-results/myWork-My-work-leave-mid-l-eba21-ext-resume-at-the-same-step-chromium/test-failed-1.png
+    test-results/myWork-My-work-the-preview-36b07-keep-what-is-here-leaves-it-chromium/test-failed-1.png
+    test-results/myWork-My-work-a-full-brow-eb21d--import-and-offers-a-backup-chromium/test-failed-1.png
+    test-results/myWork-My-work-delete-waits-for-a-copy-chromium/test-failed-1.png
+    test-results/myWork-My-work-keyboard-re-8735f-ion-each-named-for-its-item-chromium/test-failed-1.png
+    test-results/myWork-My-work-axe-finds-n-10eec--at-375-px-with-work-listed-chromium/test-failed-1.png
+    test-results/myWork-My-work-axe-finds-n-0ace1-at-1024-px-with-work-listed-chromium/test-failed-1.png
+    test-results/myWork-My-work-axe-finds-n-f04e3--at-375-px-with-work-listed-chromium/test-failed-1.png
+    test-results/myWork-My-work-axe-finds-n-75e0e-at-1024-px-with-work-listed-chromium/test-failed-1.png
+    test-results/observing-the-light-curve-opens-plots-and-reports-a-status-chromium/test-failed-1.png
+    test-results/observing-the-light-curve--341f2-ing-the-toggle-inconsistent-chromium/test-failed-1.png
+    test-results/observing-radial-velocity--a3ddc-ocity-for-the-observed-star-chromium/test-failed-1.png
+    test-results/observing-radial-velocity--412a8-nal-when-the-star-is-pinned-chromium/test-failed-1.png
+    test-results/observing-astrometry-opens-57bbc-ture-at-an-assumed-distance-chromium/test-failed-1.png
+    test-results/observing-the-shared-obser-08b38-once-and-none-of-them-break-chromium/test-failed-1.png
+    test-results/observing-the-shared-obser-3a24b-bserver-reaches-every-panel-chromium/test-failed-1.png
+    test-results/observing-the-shared-obser-7e39b-en-its-title-bar-is-clicked-chromium/test-failed-1.png
+    test-results/observing-the-shared-obser-42a57-o-radial-velocity-amplitude-chromium/test-failed-1.png
+    test-results/observing-the-shared-obser-5198b-ector-re-expresses-the-view-chromium/test-failed-1.png
+    test-results/onboarding-in-a-lesson-the-526a3-lem-note-that-sends-nothing-chromium/test-failed-1.png
+    test-results/onboarding-in-a-lesson-a-f-a1d95--sequence-and-nothing-stale-chromium/test-failed-1.png
+    test-results/onboarding-in-a-lesson-a-r-60ca2--step-from-an-old-stored-id-chromium/test-failed-1.png
+    test-results/onboarding-in-a-lesson-a-c-22752-xt-one-and-the-deeper-depth-chromium/test-failed-1.png
+    test-results/plotChart-the-series-chart-f85eb-variables-set-as-attributes-chromium/test-failed-1.png
+    test-results/plotChart-the-series-chart-9ed1f-that-are-read-from-the-page-chromium/test-failed-1.png
+    test-results/plotChart-the-series-chart-fb6f0-yboard-and-says-what-it-did-chromium/test-failed-1.png
+    test-results/plotChart-the-series-chart-69cc7--operable-from-the-keyboard-chromium/test-failed-1.png
+    test-results/plotChart-the-series-chart-c3915-he-values-under-the-pointer-chromium/test-failed-1.png
+    test-results/plotChart-the-series-chart-29540-t-has-left-under-the-legend-chromium/test-failed-1.png
+    test-results/plotChart-the-series-chart-cb9fa-s-when-its-box-changes-size-chromium/test-failed-1.png
+    test-results/plotChart-the-series-chart-b4cd7-f-the-chart-legend-included-chromium/test-failed-1.png
+    test-results/plotChart-the-series-chart-b8b13-w-nodes-only-for-new-series-chromium/test-failed-1.png
+    test-results/plotChart-the-series-chart-f8891-t-its-legend-or-its-readout-chromium/test-failed-1.png
+    test-results/predictionLoops-a-predicti-9f6b3-ctor-covers-ce-keplers-laws-chromium/test-failed-1.png
+    test-results/predictionLoops-a-predicti-783c2-ts-covers-ce-orbital-energy-chromium/test-failed-1.png
+    test-results/predictionLoops-a-predicti-5098e-overs-ce-transit-photometry-chromium/test-failed-1.png
+    test-results/predictionLoops-a-predicti-b1c15-ts-covers-ce-weighing-stars-chromium/test-failed-1.png
+    test-results/predictionLoops-a-predicti-f9965-dgets-covers-ce-black-holes-chromium/test-failed-1.png
+    test-results/predictionLoops-a-predicti-0edd6-s-covers-ce-radial-velocity-chromium/test-failed-1.png
+    test-results/predictionLoops-a-predicti-4172f-vers-ce-goldilocks-question-chromium/test-failed-1.png
+    test-results/predictionLoops-a-predicti-154b3-gets-covers-ce-missing-mass-chromium/test-failed-1.png
+    test-results/predictionLoops-a-predicti-32098-dal-widgets-covers-ce-tides-chromium/test-failed-1.png
+    test-results/predictionLoops-a-predicti-62fd5--covers-ce-butterfly-effect-chromium/test-failed-1.png
+    test-results/predictionLoops-a-predicti-a6bea--covers-ce-when-orbits-lock-chromium/test-failed-1.png
+    test-results/predictionLoops-a-predicti-0b3d0--covers-ce-hohmann-transfer-chromium/test-failed-1.png
+    test-results/predictionLoops-a-predicti-672bd-e-covers-ce-lagrange-points-chromium/test-failed-1.png
+    test-results/predictionLoops-a-predicti-bbf67-hat-is-a-gravitational-wave-chromium/test-failed-1.png
+    test-results/predictionLoops-a-predicti-83060-vers-ce-a-universe-of-stars-chromium/test-failed-1.png
+    test-results/predictionLoops-a-predicti-6d195-ts-covers-ce-lives-of-stars-chromium/test-failed-1.png
+    test-results/predictionLoops-what-a-scr-ec37a-ectly-is-not-called-correct-chromium/test-failed-1.png
+    test-results/predictionLoops-what-a-scr-0ee09-announces-that-it-was-right-chromium/test-failed-1.png
+    test-results/predictionLoops-what-a-scr-5503b-planation-when-it-was-wrong-chromium/test-failed-1.png
+    test-results/sandbox-loading-from-a-cle-026ba-runs-and-shows-a-simulation-chromium/test-failed-1.png
+    test-results/sandbox-loading-from-a-cle-081ae-ppears-and-can-be-dismissed-chromium/test-failed-1.png
+    test-results/sandbox-loading-from-a-cle-1d83c-does-not-see-the-front-door-chromium/test-failed-1.png
+    test-results/sandbox-the-scenario-galle-ed2fa-s-a-scenario-by-clicking-it-chromium/test-failed-1.png
+    test-results/sandbox-the-space-bar-pauses-the-simulation-and-resumes-it-chromium/test-failed-1.png
+    test-results/sandbox-the-space-bar-exactly-one-handler-answers-it-chromium/test-failed-1.png
+    test-results/sandbox-the-space-bar-but-not-while-a-field-has-the-focus-chromium/test-failed-1.png
+    test-results/sandbox-the-space-bar-nor--5b000-us-the-space-bar-presses-it-chromium/test-failed-1.png
+    test-results/sandbox-the-transport-cont-92d21--and-resume-starts-it-again-chromium/test-failed-1.png
+    test-results/sandbox-the-transport-cont-fbdf4--change-the-simulation-rate-chromium/test-failed-1.png
+    test-results/sandbox-the-transport-cont-c3cf7--world-and-keeps-it-running-chromium/test-failed-1.png
+    test-results/sandbox-placing-an-object--3d100-hing-until-a-type-is-chosen-chromium/test-failed-1.png
+    test-results/sandbox-placing-an-object--ba430-ement-and-Escape-disarms-it-chromium/test-failed-1.png
+    test-results/shareObserving-an-ordinary-6a759-ion-angle-distance-and-star-chromium/test-failed-1.png
+    test-results/shareObserving-an-ordinary-9f832-erence-frame-and-its-target-chromium/test-failed-1.png
+    test-results/shareObserving-an-ordinary-15100-ion-angle-distance-and-star-chromium/test-failed-1.png
+    test-results/shareObserving-an-ordinary-f6937-erence-frame-and-its-target-chromium/test-failed-1.png
+    test-results/shareObserving-an-ordinary-37e83-write-the-restored-distance-chromium/test-failed-1.png
+    test-results/shareObserving-an-ordinary-17889-still-opens-on-the-defaults-chromium/test-failed-1.png
+    test-results/shareObserving-an-ordinary-25ef6-tance-the-previous-link-set-chromium/test-failed-1.png
+    test-results/shareObserving-an-ordinary-6a7d8--resurrect-the-old-distance-chromium/test-failed-1.png
+    test-results/shareObserving-an-ordinary-e68b7--does-not-share-a-recording-chromium/test-failed-1.png
+    test-results/shareObserving-embed-mode--c6bc9--the-same-observing-context-chromium/test-failed-1.png
+    test-results/sharing-a-shared-link-round-trips-a-scenario-through-the-URL-chromium/test-failed-1.png
+    test-results/sharing-a-shared-link-a-se-3c5d1-ts-seed-and-scenario-intact-chromium/test-failed-1.png
+    test-results/sharing-a-shared-link-the--e135c-s-the-same-world-every-time-chromium/test-failed-1.png
+    test-results/sharing-a-shared-link-the--88c04-alog-produces-a-usable-link-chromium/test-failed-1.png
+    test-results/sharing-a-shared-link-a-co-4785e-ather-than-breaking-the-app-chromium/test-failed-1.png
+    test-results/sky-the-Sky-Lab-the-five-i-f4c15-each-saves-a-valid-envelope-chromium/test-failed-1.png
+    test-results/stellarSpectra-the-spectra-89143-een-which-fetches-them-once-chromium/test-failed-1.png
+  164 failed
+  6 skipped
+  149 passed (13.1m)

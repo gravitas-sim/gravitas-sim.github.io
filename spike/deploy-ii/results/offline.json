@@ -1,0 +1,18 @@
+{
+ "expectedCore": 1533,
+ "installed": {
+  "name": "gravitas-67cc40f612bc",
+  "count": 1642
+ },
+ "offlineFrontDoor": "booted",
+ "offlineLesson": "opened",
+ "offlineObservatory": "ready",
+ "failedRequestsOffline": 0,
+ "pageErrors": [],
+ "t6": {
+  "unchanged_tree_same_version": true,
+  "one_precached_file_changed_new_version": true,
+  "restored_same_version": true,
+  "unprecached_file_added_same_version": true
+ }
+}
