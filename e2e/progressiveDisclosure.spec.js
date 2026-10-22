@@ -453,6 +453,29 @@ test.describe('the new controls are targets', () => {
   }
 });
 
+test.describe('the Settings More is a target too', () => {
+  for (const [label, size] of [
+    ['desktop', DESKTOP],
+    ['phone', PHONE],
+  ]) {
+    test(`its summary is at least 24 px at ${label} width`, async ({
+      page,
+      app,
+    }) => {
+      await page.setViewportSize(size);
+      await app.boot();
+      await page.evaluate(() => document.getElementById('settingsBtn').click());
+      const summary = page.locator(
+        '#settingsGrid .settings-advanced > summary'
+      );
+      await expect(summary).toBeVisible();
+      const box = await summary.boundingBox();
+      expect(box.height).toBeGreaterThanOrEqual(24);
+      expect(box.width).toBeGreaterThanOrEqual(24);
+    });
+  }
+});
+
 test.describe('both languages', () => {
   test('the summary and the announcement are in Spanish for a Spanish reader', async ({
     page,

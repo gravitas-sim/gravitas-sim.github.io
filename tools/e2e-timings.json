@@ -1888,6 +1888,8 @@
   "[chromium] › progressiveDisclosure.spec.js › the lesson panel › what the student chose is remembered across a reload, per surface": 7.0,
   "[chromium] › progressiveDisclosure.spec.js › the new controls are targets › every More summary is at least 24 px, and the controls inside it too, at desktop width": 5.9,
   "[chromium] › progressiveDisclosure.spec.js › the new controls are targets › every More summary is at least 24 px, and the controls inside it too, at phone width": 5.4,
+  "[chromium] › progressiveDisclosure.spec.js › the Settings More is a target too › its summary is at least 24 px at desktop width": 3.1,
+  "[chromium] › progressiveDisclosure.spec.js › the Settings More is a target too › its summary is at least 24 px at phone width": 3.2,
   "[chromium] › progressiveDisclosure.spec.js › the task rule › a step that measures keeps every slider and every preset where it is": 5.5,
   "[chromium] › progressiveDisclosure.spec.js › the task rule › a step that reads folds the sliders after the first and the presets": 5.8,
   "[chromium] › progressiveDisclosure.spec.js › the task rule › the Explain button of an instrument stays in its header, folded or open": 5.1,
