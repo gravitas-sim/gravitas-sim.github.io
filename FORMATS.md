@@ -2,7 +2,7 @@
 
 # Formats
 
-Every versioned format Gravitas reads or writes: 55 of them. 31 have a JSON Schema in `sdk/schemas`, and 10 read their previous version rather than only their own.
+Every versioned format Gravitas reads or writes: 57 of them. 31 have a JSON Schema in `sdk/schemas`, and 10 read their previous version rather than only their own.
 
 Roadmap II Prompt 61 puts each under one rule:
 - a JSON Schema;
@@ -49,6 +49,7 @@ The columns:
 | gravitas.investigation.progress | kind, version | 2 | js/investigations/progressBackup.js restoreProgress | download | migrates v1 | refused, in words | no |
 | submission token | v (link prefix s) | 2 | js/submission/submissionToken.js readSubmissionToken | pasted text | reads v1 | refused, in words | [yes](sdk/schemas/submission-token-2.schema.json) |
 | gravitas.submission-results | kind, version | 2 | js/submission/results.js readResults | download | migrates v1 | refused by reason code | [yes](sdk/schemas/submission-results-2.schema.json) |
+| gravitas.submission-archive | format, formatVersion | 1 | js/instructorArchive.js readArchive | download (the review page opens it again) | v1 only | refused by reason code | no |
 | gravitas.lab3d-guide-report | format, formatVersion | 1 | none: written, never read | download | v1 only | nothing reads it | no |
 | gravitas.mission-lab-report | format, formatVersion | 1 | none: written, never read | download | v1 only | nothing reads it | no |
 | notebook store | v | 1 | js/notebook/store.js load | localStorage | v1 only | kept and not overwritten, in words | no |
@@ -73,6 +74,7 @@ The columns:
 | gravitas.student-data | format, formatVersion | 1 | js/storage/index.js Store.importAll | download | v1 only | refused, with a reason | no |
 | gravitas.made | format, formatVersion, kind | 1 | js/myWork/made.js readMade | localStorage, inside gravitas.student-data | v1 only | left out of the list, not overwritten | no |
 | resume record | v, items (id, route, step, path, title, at) | 1 | js/storage/local.js readResume | localStorage, inside gravitas.student-data (preferences) | v1 only | reads as nothing to resume; the next write replaces it | no |
+| course terms record | v, courses (id, term, title, at) | 1 | js/instructorCourseTerms.js readTerms | localStorage, inside gravitas.student-data (preferences) | v1 only | reads as no courses; the next write replaces it | no |
 | gravitas.evaluation | kind, schema | 1 | tools/evaluation-summary.mjs | download, localStorage draft | v1 only | skipped, in words | [yes](sdk/schemas/evaluation-1.schema.json) |
 
 ## What the table shows
@@ -135,6 +137,7 @@ An older build is a real reader: a browser still running 2.0.0's cached code, a 
 | gravitas.investigation.progress | `progress-backup` | ignored | policy (above) |
 | submission token | `submission-token` | n/a | policy (above) |
 | gravitas.submission-results | `submission-results` | ignored | policy (above) |
+| gravitas.submission-archive | none yet | not yet exercised | policy (above) |
 | gravitas.lab3d-guide-report | `report-files` | ignored | policy (above) |
 | gravitas.mission-lab-report | `report-files` | ignored | policy (above) |
 | notebook store | none yet | not yet exercised | policy (above) |
@@ -159,6 +162,7 @@ An older build is a real reader: a browser still running 2.0.0's cached code, a 
 | gravitas.student-data | none yet | not yet exercised | policy (above) |
 | gravitas.made | none yet | not yet exercised | policy (above) |
 | resume record | `resume-record` | ignored | policy (above) |
+| course terms record | `course-terms` | ignored | policy (above) |
 | gravitas.evaluation | none yet | not yet exercised | policy (above) |
 
 **The planned extensions against 2.0.0** (the list Prompt 176 starts from; `tests/compat/boundary.mjs`):
@@ -166,6 +170,7 @@ An older build is a real reader: a browser still running 2.0.0's cached code, a 
 | Planned (prompt) | Kind | What 2.0.0 does | Consequence |
 |---|---|---|---|
 | an additive `profile: "collection"` on the course package (164) | `course-pack` | refuses | refused in its own words: safe as a capability-required refusal |
+| a `term` label on the course package, written only when named (168) | `course-pack` | refuses | refused in its own words: safe as a capability-required refusal |
 | the one resume record carried as a field of the progress record (not built: Prompt 163 keeps it a sidecar key, `resume-record`) (163) | `progress-store` | ignores the field | accepted and silently dropped: a boundary, or the field must not be one an old reader needs |
 | a stated confidence level on the (already asymmetric) interval: `level` (150) | `artifact` | ignores the field | accepted and silently dropped: a boundary, or the field must not be one an old reader needs |
 | the states "not constrained", "failed", "assumed", "model-limited" (150) | `artifact` | refuses | refused in its own words: safe as a capability-required refusal |
@@ -177,6 +182,7 @@ An older build is a real reader: a browser still running 2.0.0's cached code, a 
 
 ## Fields added inside a version
 
+- **`term` on a course pack (Prompt 168).** A `gravitas.course-pack/2` may carry `term`, a short plain label such as `Spring 2027` (at most 40 characters), written only when an instructor names a term for a copy of the course. A 2.0.0 reader refuses a pack that has it, naming the field (`tests/compat/boundary.mjs` `course-term`), so the format stays version 2. Two records came with it: `gravitas.submission-archive/1`, an export the review page reads again (a 2.0.0 page refuses it in words, as a progress backup), and the `course terms record`, a sidecar key the 2.0.0 reader never looks at (`tests/compat/kinds/course-terms.mjs`).
 - **`rubricCriteria` (Prompt 79).** A written answer in an investigation pack or a question bank may carry one to six criteria beside its `rubric`, each a name and two to five levels (a label, what it looks like, optionally its points), best first, every text in the file's locales. It is optional, so `investigation-pack/1` and `question-bank/1` stay version 1: a reader that does not know the field refuses the file, in words, as an unknown field. The compile lays it on the lesson step and its Spanish shadow, a remix carries it (`REMIX.md`), the answer key prints it and the review page shows it.
 - **`synthetic` origin (Prompt 84).** A `gravitas.observation/1` made by a forward model has origin `synthetic`, source kind `forward` and a `synthetic` block holding the model, the `gravitas.observing-setup/1` it was run with and the truth manifest. The values are new members of two enums and the block is optional, so the format stays version 1: an older reader refuses such a file at the origin, in words, rather than opening it as if it were observed.
 - **Uncertainty states, `correlatedWith` and `fit` (Prompt 150).** The artifact envelope's uncertainty `kind` gains `not-constrained`, `failed`, `assumed`, `model-limited` and `limit`; a quantity gains `correlatedWith`; the envelope gains `fit`, a fit-result record; a `failed` quantity may have a `null` value. The format stays version 1. A 2.0.0 reader refuses a quantity of a new kind in words (`tests/compat/boundary.mjs`: `not-constrained-state`), and silently drops `correlatedWith` and `fit`, which no reader needs. The extension is therefore written only where a 2.0.0 reader is not met: the writers keep their 2.0.0 output unless asked (`fitArtifact` with `extended`), and `legacyView()` gives a 2.0.0 reader the envelope it can open, with the loss listed in the warnings. Version 2 of the envelope waits for 176.

@@ -82,6 +82,19 @@ export const WORDS = {
     'reuse.use': 'Use the new link',
     'reuse.loading': 'Checking…',
     'reuse.failed': 'The investigation could not be loaded.',
+    'term.h': 'Start a new term',
+    'term.note':
+      "Make this {what} for a new term: a fresh code, the term in the title so students who used it before start clean, and a new link. Last term's link and file are not touched.",
+    'term.what.activity': 'activity',
+    'term.what.course': 'course',
+    'term.label': 'Term',
+    'term.was': 'Last term, if it is in the title now (optional)',
+    'term.go': 'Start the new term',
+    'term.save': 'Save the new course file',
+    'term.done.activity':
+      'New term, {term}: the link, the code, the handout and the platform notes above are for it.',
+    'term.done.course':
+      'New term, {term}: the link, the handout and the platform notes above are for it.',
     'handout.open': 'To start',
     'handout.scan': 'Scan the code, or type this address:',
     'handout.do.activity': 'What to do ({steps} steps)',
@@ -175,6 +188,19 @@ export const WORDS = {
     'reuse.use': 'Usar el enlace nuevo',
     'reuse.loading': 'Comprobando…',
     'reuse.failed': 'No se pudo cargar la investigación.',
+    'term.h': 'Empezar un periodo nuevo',
+    'term.note':
+      'Crea esta {what} para un periodo nuevo: un código nuevo, el periodo en el título para que quienes ya la usaron empiecen desde cero, y un enlace nuevo. El enlace y el archivo del periodo pasado no se tocan.',
+    'term.what.activity': 'actividad',
+    'term.what.course': 'curso',
+    'term.label': 'Periodo',
+    'term.was': 'El periodo pasado, si está ahora en el título (opcional)',
+    'term.go': 'Empezar el periodo nuevo',
+    'term.save': 'Guardar el archivo del curso nuevo',
+    'term.done.activity':
+      'Periodo nuevo, {term}: el enlace, el código, la hoja y las notas de plataforma de arriba son para él.',
+    'term.done.course':
+      'Periodo nuevo, {term}: el enlace, la hoja y las notas de plataforma de arriba son para él.',
     'handout.open': 'Para empezar',
     'handout.scan': 'Escanee el código, o escriba esta dirección:',
     'handout.do.activity': 'Qué hacer ({steps} pasos)',

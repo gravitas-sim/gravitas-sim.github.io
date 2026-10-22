@@ -63,6 +63,12 @@
         "upper"
       ]
     },
+    "term": {
+      "description": "The term this copy of the course is for, such as Spring 2027: plain text, written only when the instructor names one.",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 40
+    },
     "title": {
       "$ref": "#/$defs/text120"
     },

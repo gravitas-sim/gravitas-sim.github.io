@@ -440,6 +440,41 @@ const SURFACES = [
     expect: '#drop',
     standalone: true,
   },
+  {
+    name: 'course builder, a course as it comes (Prompt 168)',
+    open: async ({ page }) => {
+      await page.goto('/studio/course/?use=intro-astronomy', {
+        waitUntil: 'domcontentloaded',
+      });
+      await expect(page.locator('#cb-term-go')).toBeVisible({
+        timeout: 60_000,
+      });
+      await page.locator('#cb-term-go').click();
+    },
+    expect: '#cb-term-ready',
+    standalone: true,
+  },
+  {
+    name: 'distribution kit, a new term (Prompt 168)',
+    open: async ({ page }) => {
+      await page.goto('/studio/course/?use=intro-astronomy', {
+        waitUntil: 'domcontentloaded',
+      });
+      await expect(page.locator('#cb-term-go')).toBeVisible({
+        timeout: 60_000,
+      });
+      await page.locator('#cb-term-go').click();
+      await expect(page.locator('#cb-term-kit')).toBeVisible({
+        timeout: 60_000,
+      });
+      await page.goto(await page.locator('#cb-term-kit').getAttribute('href'), {
+        waitUntil: 'domcontentloaded',
+      });
+      await expect(page.locator('#kitTermGo')).toBeVisible({ timeout: 30_000 });
+    },
+    expect: '#kitTermGo',
+    standalone: true,
+  },
 ];
 
 /** The two extremes of the palette. Midnight is the default. */

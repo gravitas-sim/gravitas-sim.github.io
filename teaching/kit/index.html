@@ -166,6 +166,22 @@ try {
             <button id="kitReuseSave" type="button" class="ui-button" data-k="reuse.save">Save the activity file</button>
           </div>
           <p id="kitReuseOut" class="ui-note" role="status" aria-live="polite"></p>
+          <h3 id="termH" data-k="term.h">Start a new term</h3>
+          <p id="kitTermNote" class="ui-note"></p>
+          <div class="kit-row">
+            <label for="kitTerm" data-k="term.label">Term</label>
+            <input id="kitTerm" class="ui-input" type="text" maxlength="40" autocomplete="off" />
+          </div>
+          <div id="kitTermWasRow" class="kit-row">
+            <label for="kitTermWas" data-k="term.was">Last term, if it is in the title now (optional)</label>
+            <input id="kitTermWas" class="ui-input" type="text" maxlength="40" autocomplete="off" />
+          </div>
+          <div class="kit-row">
+            <button id="kitTermGo" type="button" class="ui-button is-primary" data-k="term.go">Start the new term</button>
+            <button id="kitTermSave" type="button" class="ui-button" hidden data-k="term.save">Save the new course file</button>
+          </div>
+          <p id="kitTermOut" class="ui-note" role="status" aria-live="polite"></p>
+          <ul id="kitTermList" class="ui-issues"></ul>
         </section>
       </div>
       </div>
