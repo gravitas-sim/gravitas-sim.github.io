@@ -36,6 +36,14 @@ export const SLOWEST_FIRST = [
   'docsFactsScope.test.js',
   'missionEvidence.test.js',
   'rvMonteCarlo.test.js',
+  // The instrument-widget label golden, in parts of about 30 s each.
+  'labelGoldenWidgetsGw.test.js',
+  'labelGoldenWidgetsStellar.test.js',
+  'labelGoldenWidgetsSurvey.test.js',
+  'labelGoldenWidgetsDetector.test.js',
+  'labelGoldenWidgetsRest.test.js',
+  'labelGoldenWidgetsPowerLaw.test.js',
+  'labelGoldenWidgetsEngineMath.test.js',
 ];
 
 export default class SlowestFirstSequencer extends Sequencer {
