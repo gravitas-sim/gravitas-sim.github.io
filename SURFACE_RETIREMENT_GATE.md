@@ -93,6 +93,8 @@ A route, a capability or a stored record is **deprecated**, then **read-only**, 
 | CONSOLIDATE | merges the route into the named target, in its own pull request, `visible` | the old route is class L or R as the evidence says and redirects for its periods |
 | RETIRE | removes the capability from the site after the deprecated and read-only phases; the pull request that starts the phases only adds the notice | class L or R as the evidence says |
 
+**An owner ruling stands beside a verdict, not in place of one.** Carl may rule a surface's verdict over the function's. The record then carries a `ruling` (the verdict, who, where and when, his words, the register row, the reason and what would reverse it); the stored `verdict` and `rule` stay what the function gives, the tables name both ("owner ruling ... the function gives KEEP"), and the summary counts the surface under the ruling and says how many rulings there are. A ruling moves no threshold and no rule, the next surface is judged as before, and `tools/surface-gate.mjs check` refuses a ruling that agrees with the function or lacks any of its parts. A FREEZE by ruling commits the site to what a FREEZE by the function does (the row above): a notice in both languages, no new content or capability, judged again at the next checkpoint.
+
 ## The judgments
 
 ### How the evidence was gathered
@@ -112,6 +114,8 @@ What the evidence cannot say, stated plainly:
 
 **`/history/original/`: KEEP (R6b), and the closest call of the 65.** The page is the first Gravitas, kept byte for byte; Save and Load are inert and nothing runs an accessibility check on it. It is partly replaced by the archive (the commit, the `v2.0.0` tag and the Zenodo deposit keep every line; none of them runs on a click), it has no shipped link and no Library entry, and it reaches one signal of six (four test files; 1,396 lines against a threshold of 1,500). The function therefore keeps it. Three facts the cost signals do not count are reasons to look again (see "Decisions for Carl"): it is the one published page without a content-security policy, it imports a stylesheet from `fonts.googleapis.com` when opened (so it is the one page that asks a third party for something without an opt-in), and its tests pin its bytes so that no one may fix either.
 
+**`/history/original/`: FREEZE by owner ruling (D-R10-51); the function still gives KEEP (R6b).** Carl, in chat on 2026-10-22: "give the history original page a freeze". The function's answer is unchanged and nothing was moved to change it; the ruling rests on two facts the six signals do not count, the page being the one published page with no content-security policy and its asking `fonts.googleapis.com` for a stylesheet when opened with no opt-in. What the freeze consists of: a notice on the page in English and Spanish (frozen, no new features, kept as a record, a link to the current Gravitas), with no date; the page's behavior, its bytes outside the notice and its tests' pin on the original are unchanged (`tests/historyOriginal.test.js` strips the notice's two marked regions and checks the rest against the blob it pinned before). The page is judged again at the next checkpoint (171, then 287). The third-party request is a separate defect with its own decision for Carl, not part of the freeze (D-R10-51). The measured 1,396 lines in the tables below are the snapshot, before the notice; the page is now about 1,430.
+
 **The compute page: KEEP (R3b), a section of Observe, not a destination.** Five shipped investigations link it, a notebook saved in My work links it, and nothing else on the site names it; it stays off the menus under D-COMPUTE-03 and stays an acknowledged orphan. Whether its content stays at its present size is Prompt 268's gate and is not judged here.
 
 **Activity formats, by the subjects using each.** Demonstration (one subject, orbital speed) and route (three: orbital speed, binary planets, star sizes) are unique in what they do and are kept (R3b). Guided (one subject) and lab (one subject; the fourth format) are each partly replaced, by the route and by assigning the whole lesson, and each has a Library entry, so the function keeps them (R8b: used, no measured merge). Retiring a format that has a Library entry and a stable assignment id would be class R under the policy: progress is namespaced by that id, so a student's saved answers and an instructor's assignment link point at it.
@@ -129,12 +133,13 @@ Counts first, then every surface. "Links / Library / cited" are the shipped inve
 <!-- surface-gate:summary -->
 | Verdict | Surfaces |
 | --- | ---: |
-| KEEP | 63 |
-| FREEZE | 0 |
+| KEEP | 62 |
+| FREEZE | 1 |
 | GROUP | 0 |
 | CONSOLIDATE | 0 |
 | RETIRE | 2 |
 | Total judged | 65 |
+| Of these, owner rulings over the function | 1 |
 <!-- /surface-gate:summary -->
 
 ### Pages
@@ -175,7 +180,7 @@ Counts first, then every surface. "Links / Library / cited" are the shipped inve
 | User manual (PDF) | `/Gravitas_User_Manual.pdf` | document, no destination | yes | 0 / 0 / 0 | 0 of 6 | the manual PDF on the site | **KEEP** (R3b) | none |
 | 3-D kernel diagnostics | `/lab3d/` | diagnostic, no destination | yes | 0 / 0 / 1 | 1 of 6 (tests) | cited in README.md | **KEEP** (R3b) | none |
 | Mission core diagnostics | `/mission/` | diagnostic, no destination | yes | 0 / 0 / 2 | 4 of 6 (lines, tests, strings, precache), material | cited in README.md; cited in the manual | **KEEP** (R3b) | none |
-| The first Gravitas | `/history/original/` | document, no destination | partly (archive) | 0 / 0 / 0 | 1 of 6 (tests) | none | **KEEP** (R6b) | none |
+| The first Gravitas | `/history/original/` | document, no destination | partly (archive) | 0 / 0 / 0 | 1 of 6 (tests) | none | **FREEZE** (owner ruling D-R10-51; the function gives KEEP, R6b) | A notice on the page in both languages (frozen, no new features, kept as a record, where to go instead), pinned by tests/historyOriginal.test.js; no change to what the page does, no date, no new dependency. Owner ruling D-R10-51; the function still gives KEEP (R6b). |
 <!-- /surface-gate:pages -->
 
 ### Sections, facets and activity formats
@@ -274,7 +279,7 @@ The gate's own text says a threshold that proves wrong is Carl's to reset, and t
 
 1. **Almost everything is KEEP (63 of 65), and nothing is CONSOLIDATE.** That is what the committed function gives on this evidence, not a finding that the site is tidy. R7 needs a surface that is used, and "used" counts only links from investigations, courses and activities and Library entries; most tools are opened from the destination pages, which the roadmap and the committed text exclude as navigation. So no unused tool can be consolidated, however small its gain.
 2. **A measured merge exists that the function does not test.** *Investigations in a course* (`/studio/course/packs/`) is partly replaced by the course builder, is unused by the counted kinds and has a measured gain of one route and 6.0 KB of gzip in the precache (the threshold is 5 KB). R6 sends a partly replaced, unused surface to KEEP or FREEZE and never asks whether a merge is justified; the request ceiling of the course builder would have to be measured with the merged page (13 requests today) before the merge could be justified. **Recommended:** amend R6 so that a partly replaced, unused surface with a justified merge is CONSOLIDATE, as a register row before Prompt 166 runs; this document does not make the change, because the roadmap fixes the function before the judging.
-3. **`/history/original/`.** By the function it is KEEP. Two ways to a different verdict are Carl's to take: (a) rule its task not unique (`unique: "no"`, since the archive keeps the code), which gives RETIRE under class L (a notice, then 12 months before it leaves); (b) add a seventh cost signal for "outside a site-wide guarantee" (no policy, a third-party request, no accessibility run), which would make it material and give FREEZE (R6a). **Recommended:** (b) or a plain FREEZE notice, not (a): the page is an archive Carl chose to publish, and removing it is a different decision from judging it unjustified.
+3. **`/history/original/`.** By the function it is KEEP. Two ways to a different verdict are Carl's to take: (a) rule its task not unique (`unique: "no"`, since the archive keeps the code), which gives RETIRE under class L (a notice, then 12 months before it leaves); (b) add a seventh cost signal for "outside a site-wide guarantee" (no policy, a third-party request, no accessibility run), which would make it material and give FREEZE (R6a). **Recommended:** (b) or a plain FREEZE notice, not (a): the page is an archive Carl chose to publish, and removing it is a different decision from judging it unjustified. **Ruled 2026-10-22:** Carl ruled FREEZE, the plain-notice route (D-R10-51); neither (a) nor (b) was taken, so no cost signal was added.
 4. **Teach's "find content" page** is partly replaced by the Library (same filters) and adds instructor facts; it reaches no cost signal and is KEEP. If Prompt 163's Library grows an instructor view, re-judge.
 5. **The Sky Lab** shows 0 links and 0 Library entries but is cited by address in the manual; it is KEEP only because of that one citation (R3b). A release that corrected the manual would turn it into FREEZE (R3a: unique, unused, unheld, material). It is the surface most likely to move when real referrer data exists.
 
