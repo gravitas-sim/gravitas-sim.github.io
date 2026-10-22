@@ -25,6 +25,7 @@ menu entry: a menu entry restamps every page and `index.html` has no room
 
 | Claim | Rests on |
 |---|---|
+| The guide leads with one built-in course in fifteen minutes: Teach, use as is, the link, students hand in, review, archive; next term from the saved file (a plan, never timed with a class) | `e2e/minimalInstructorPath.spec.js` performs the walk in both languages and with the CPU throttled; INSTRUCTOR_FLOW.md, "The minimal path and the next term" |
 | Six steps in the first week: choose, preview, build an activity, post the link, collect, review | INSTRUCTOR_FLOW.md and the adoption pages; `e2e/adopterGuide.spec.js` follows the guide's own links through the first five and the review page |
 | A class code names the class, not the student; review matches on the typed name when one code covers several names | `js/submissionReview.js` (P81 R-1 repaired); INSTRUCTOR_FLOW.md, "The roster id" |
 | No accounts, no analytics, nothing uploaded, work stays in the browser | the Teach page's own text (`teach.access.offline.text`) and STORAGE.md |

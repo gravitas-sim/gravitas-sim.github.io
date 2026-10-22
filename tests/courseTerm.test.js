@@ -315,3 +315,74 @@ describe("the id of a term's copy", () => {
     expect(validateCoursePack(pack, api)).toEqual([]);
   });
 });
+
+describe('the pages that offer it', () => {
+  test('Teach lists every course Gravitas ships, and only those, with a use-as-is link', () => {
+    const html = readFileSync('teaching/index.html', 'utf8');
+    const linked = [
+      ...html.matchAll(/href="\/studio\/course\/\?use=([a-z0-9-]+)"/g),
+    ]
+      .map(m => m[1])
+      .sort();
+    expect(linked).toEqual(Object.keys(BUILTIN_COURSES).sort());
+    // And the section comes before the eight steps.
+    expect(html.indexOf('id="path-minimal"')).toBeLessThan(
+      html.indexOf('id="path-why"')
+    );
+  });
+
+  test('the words the panel and the kit read exist in both languages', async () => {
+    const { WORDS } = await import('../js/instructorTermText.js');
+    const { STATUS } = await import('../js/course/review.js');
+    const used = new Set();
+    const kitUsed = new Set();
+    const view = readFileSync('js/instructorTermView.js', 'utf8');
+    for (const m of view.matchAll(/\bT\(\s*'([a-z]+\.[A-Za-z.]+)'/g))
+      used.add(m[1]);
+    const kit = readFileSync('js/teach/kit.js', 'utf8');
+    for (const m of kit.matchAll(/\bW\(\s*'([a-z]+\.[A-Za-z.]+)'/g))
+      used.add(m[1]);
+    for (const m of kit.matchAll(/\bT\(\s*'(term\.[A-Za-z.]+)'/g))
+      kitUsed.add(m[1]);
+    // The panel builds `p.${mode}.lede`, `p.${mode}.h`, `p.${mode}.go` and a
+    // hint per mode, and a standing per status.
+    for (const mode of ['use', 'next']) {
+      for (const k of ['lede', 'h']) used.add(`p.${mode}.${k}`);
+      used.add(`p.go.${mode}`);
+      used.add(`p.term.hint.${mode}`);
+    }
+    for (const status of Object.values(STATUS)) used.add(`st.${status}`);
+    for (const reason of ['empty', 'long', 'markup'])
+      used.add(`p.term.${reason}`);
+    for (const k of ['activity', 'course']) kitUsed.add(`term.what.${k}`);
+    expect(used.size).toBeGreaterThan(30);
+    const kitWords = (await import('../js/teach/kitText.js')).WORDS;
+    for (const l of ['en', 'es']) {
+      for (const id of used)
+        expect({ id, l, has: id in WORDS[l] }).toEqual({ id, l, has: true });
+      for (const id of kitUsed)
+        expect({ id, l, has: id in kitWords[l] }).toEqual({
+          id,
+          l,
+          has: true,
+        });
+    }
+  });
+
+  test('both words tables fill every slot their sentences name', async () => {
+    const { WORDS } = await import('../js/instructorTermText.js');
+    for (const l of ['en', 'es'])
+      for (const [id, text] of Object.entries(WORDS[l]))
+        expect({ id, ok: !/\s{2,}|\{\s|\s\}/.test(text) }).toEqual({
+          id,
+          ok: true,
+        });
+    // The same slots in both languages, so a sentence cannot lose a value in translation.
+    const slots = t => [...t.matchAll(/\{(\w+)\}/g)].map(m => m[1]).sort();
+    for (const id of Object.keys(WORDS.en))
+      expect({ id, slots: slots(WORDS.es[id]) }).toEqual({
+        id,
+        slots: slots(WORDS.en[id]),
+      });
+  });
+});

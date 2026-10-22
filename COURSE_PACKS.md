@@ -30,6 +30,7 @@ manifest, and that is all.
 | `locales` | `["en"]` or `["en", "es"]` |
 | `pinning` | `exact` or `compatible` (see Pins) |
 | `courseLevel` | Optional: `survey`, `majors` or `upper`. A lesson item with no `depth` of its own opens at this level's depth (core, quantitative, advanced); the Library's course filter reads it |
+| `term` | Optional (Prompt 168): the term this copy is for, a short plain label such as `Spring 2027` (at most 40 characters), written only when the instructor names one |
 | `title`, `summary`, `audience` | What the course home shows first |
 | `teacherGuide` | How to run the course, for another instructor |
 | `objectives` | Up to 12, each an id and a text |
@@ -140,6 +141,20 @@ The file from before the upgrade is the archive. The upgrade makes a new one.
 | A lesson, scenario or dataset leaves Gravitas | The builder refuses to save or link the course until the item is removed. The course home still opens it and marks the item, so an archived course stays readable |
 | A catalog dataset needs a newer Gravitas | The builder refuses it, naming the version it needs |
 | A /1 course is opened | It becomes a /2 course with the same units and lessons, unpinned; upgrading its lessons pins them |
+
+## A copy for a term (Prompt 168)
+
+`js/instructorTerm.js` makes a copy of a course for a term, or for first use as it comes
+(INSTRUCTOR_FLOW.md): `startTerm(pack, facts, {term, today})` runs the reviewed upgrade on every lesson,
+assignment and pack item (so every pin is the lesson as it is now), gives every assignment a fresh id and
+date and the term in its title (both languages, the Spanish still marked as written from the English), puts
+the term in the public id and sets `term`. It returns the new pack and a report: for each pinned item its
+standing before (`same`, `changed`, `compatible`, `major`, `moved`, `unpinned`, `missing`), the assigned
+steps whose question changed or that are gone, and each assignment's old and new id. The pack passed in is
+not changed, and its links open what they opened. The builder's panel (`/studio/course/?use=<id>` and the
+Start a new term button) and the kit's term step are its two forms. The `term` field is additive: a 2.0.0
+reader refuses a pack that has it ("`term` is not a field here", `tests/compat/boundary.mjs`
+`course-term`), which is safe as a capability-required refusal, and every pack without one reads as before.
 
 ## Checks
 
