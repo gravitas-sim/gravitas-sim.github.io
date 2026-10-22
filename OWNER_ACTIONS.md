@@ -203,7 +203,8 @@ exists, not when it is planned.
       `.instructor-password` file on one machine, and whatever else), and who can
       get it. It is also what [`SUPPORT.md`](SUPPORT.md) says to email you for:
       the email address is part of this item. A second holder, or an emergency
-      copy, is the whole point.
+      copy, was the point; Carl decided on 2026-10-21 that there is none (see the
+      Instructor materials section: what that means if he is unavailable).
 - [ ] **Zenodo.** The account that holds the integration and the record's
       ownership, and a second person added as an owner of the record if
       Zenodo's settings allow. Without it nobody else can publish a version to
@@ -293,9 +294,11 @@ The author-facing side is [`CONTRIBUTING_CONTENT.md`](CONTRIBUTING_CONTENT.md).
       ("Who gets the passphrase, and how"); [`SUPPORT.md`](SUPPORT.md) points to it.
       Review it, or replace it, before the paper is published. It changes nothing
       about how the bundle is encrypted.
-- [ ] **Say who the second passphrase holder is, or that there is none.** Recorded
-      today as `UNKNOWN`, in the same document ("The second holder"). Record who
-      (a name and a role), never the passphrase and never where it is kept.
+- [x] **Say who the second passphrase holder is, or that there is none.** None:
+      Carl is the only holder, decided by him in chat on 2026-10-21 and recorded in
+      the same document ("The second holder"), with what it means if he is
+      unavailable. If that changes, record who (a name and a role), never the
+      passphrase and never where it is kept.
 Standing, not a box to tick: **rebuild and commit the instructor bundle**
 whenever instructional content changes. `npm run instructors:check` says
 whether it is current and needs no passphrase; rebuilding needs the real one.

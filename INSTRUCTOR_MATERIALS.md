@@ -163,8 +163,10 @@ This is the distribution policy for the one shared passphrase. It stays inside
 the static-encryption model above: no server, no account, no key service, and the
 passphrase never appears in the repository, an issue, a pull request, a log, a
 chat or a document. The owner's arrangements are recorded as *owner-confirmed*
-or `UNKNOWN`, and what is recorded is who, never what. Every rule below is a
-recommendation adopted by delegation (D-R10-43) until Carl reviews it.
+or `UNKNOWN`, and what is recorded is who, never what. The second holder is
+ruled by Carl (2026-10-21, below); every other rule here is a recommendation
+adopted under his standing rule to go with the recommendation (D-R10-43), until
+he reviews it.
 
 ### The request
 
@@ -252,13 +254,22 @@ place, which is not a secret.
 
 ### The second holder
 
-Recorded as: **UNKNOWN** (not owner-confirmed). Nobody besides the maintainer is
-recorded as holding the passphrase or able to rotate it. When Carl confirms an
-arrangement, this line becomes `owner-confirmed, <date>: <who>` (a name and a
-role, never the passphrase and never where it is kept), and OWNER_ACTIONS.md's
-checklist ("The instructor passphrase") follows it. Until then the continuity
-statement stays what CONTINUITY.md says: who besides the owner holds it is not
-known to the repository.
+Recorded as: **none: Carl is the only holder** (owner-confirmed, 2026-10-21; in
+his words in chat, "my decision is having no second passphrase holder").
+Nobody besides the maintainer holds the passphrase or can rotate it. What that
+means, stated plainly:
+
+- While Carl is available nothing changes: he answers requests and rotates.
+- If he is unavailable, nobody can issue the passphrase to a new instructor and
+  nobody can rotate it. The deployed bundle keeps opening for everyone who
+  already holds the passphrase, because it is a static file; it simply cannot be
+  updated, and a leaked passphrase cannot be replaced.
+- The way forward without him is the department route above: take a release
+  from the archive and build a bundle under a passphrase of the department's own
+  (CONTINUITY.md, "Hosting a copy"). That needs nothing from the owner.
+- If this changes, the line becomes `owner-confirmed, <date>: <who>` (a name and
+  a role, never the passphrase and never where it is kept) and the other
+  documents follow.
 
 The decision is `D-R10-43` in DECISION_REGISTER.md. Nothing in this section
 changes how the bundle is encrypted or keyed: that is unchanged.

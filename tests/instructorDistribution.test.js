@@ -15,7 +15,7 @@
 //      the bundle carries.
 //   2. That the policy names the parts the roadmap asks for, points from
 //      SUPPORT.md, CONTINUITY.md and OWNER_ACTIONS.md to one place, records the
-//      second holder as UNKNOWN until the owner confirms, and carries no
+//      second holder as none (Carl's ruling of 2026-10-21), and carries no
 //      passphrase.
 //
 // The builder runs in a private copy of its own sources, so a checkout that holds
@@ -244,10 +244,13 @@ describe('the policy is written, in one place, and holds no secret', () => {
     expect(policy).toMatch(/tests\/instructorDistribution\.test\.js/);
   });
 
-  test('the second holder is UNKNOWN, who and never what', () => {
+  test('the second holder is none, ruled by Carl, with the consequence stated', () => {
     const section = policy.slice(policy.indexOf('### The second holder'));
-    expect(section).toMatch(/\*\*UNKNOWN\*\*/);
-    expect(section).toMatch(/never the passphrase and never where it is kept/);
+    expect(section).toMatch(/none: Carl is the only holder/);
+    expect(section).toMatch(/owner-confirmed, 2026-10-21/);
+    expect(section).toMatch(/If he is unavailable/);
+    expect(section).toMatch(/department route/);
+    expect(section).not.toMatch(/UNKNOWN/);
   });
 
   test('SUPPORT, CONTINUITY and OWNER_ACTIONS point to it', () => {
