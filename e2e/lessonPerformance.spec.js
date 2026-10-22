@@ -441,7 +441,14 @@ test.describe('a page cleans up its panels', () => {
 // =============================================================================
 
 /**
- * Force a collection so a detached node is gone if nothing holds it.
+ * Force collections so a detached node is gone if nothing holds it.
+ *
+ * Three passes, not one. A collection that finishes a marking cycle begun
+ * earlier keeps everything allocated while that cycle ran (floating garbage),
+ * and on a loaded machine the cycle runs long enough to take in the last panel
+ * built and thrown away: that panel read as held, listeners and all, and one
+ * pass later it was gone with nothing changed. What something really holds is
+ * still there after every pass.
  *
  * A DevTools command, so Chromium only: the other engines return false and the
  * memory-side check is left to Chromium, while the listener census still runs.
@@ -449,7 +456,8 @@ test.describe('a page cleans up its panels', () => {
 async function collect(page) {
   try {
     const cdp = await page.context().newCDPSession(page);
-    await cdp.send('HeapProfiler.collectGarbage');
+    for (let pass = 0; pass < 3; pass++)
+      await cdp.send('HeapProfiler.collectGarbage');
     await cdp.detach();
     return true;
   } catch {
