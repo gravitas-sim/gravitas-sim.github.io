@@ -265,6 +265,8 @@ export const EN_COURSE = {
     'This course file is from another version of the format.',
   'course.error.id': 'Lower-case words joined by hyphens.',
   'course.error.seed': 'A word such as orbit-1.',
+  'course.error.term':
+    'A short label such as Spring 2027: up to 40 characters, no markup.',
   'course.error.tooMany': 'At most {max} items.',
   'course.error.access': 'Free online, through a library, or in print.',
   'course.error.assignmentId': "The activity's id and the date it was made.",
