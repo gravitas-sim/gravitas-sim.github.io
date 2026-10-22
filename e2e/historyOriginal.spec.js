@@ -3,8 +3,8 @@
 // -----------------------------------------------------------------------------
 // One unexplained word at the end of /model/'s footer, "origin", opens the
 // original Gravitas - the single index.html of commit a5d08fc, kept as it was
-// but for Save State and Load State, which are drawn and do nothing - at
-// /history/original/. This walks it the way a reader would: find the link,
+// but for Save State and Load State, which are drawn and do nothing, and a
+// freeze notice in two languages (D-R10-51) - at /history/original/. This walks it the way a reader would: find the link,
 // follow it from the keyboard, watch the old simulation start, press the two
 // buttons that no longer work, and come back with Back.
 //

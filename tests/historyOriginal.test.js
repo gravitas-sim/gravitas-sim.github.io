@@ -51,8 +51,8 @@ const SOURCE_BLOB = 'fe77fdc0afc47d0d3f24e93a690043bb4dee950e';
 /** The original without the two lines below, and without the freeze notice. */
 const SERVED_BLOB = '959822c4e570db8317f00072b26121c4f2568d46';
 /** The file as served: that, with the freeze notice's two regions. */
-const FREEZE_BLOB = 'b52e6eff586afa16714647bf880752163cdf8971';
-const FREEZE_BYTES = 68945;
+const FREEZE_BLOB = 'f6bfc5494ce20d79304bd21b429206096f3ff7c8';
+const FREEZE_BYTES = 68940;
 /** The notice's two regions: a block of CSS and a block of markup. */
 const NOTICE_REGIONS = [
   / *\/\* FREEZE-NOTICE:begin[\s\S]*?FREEZE-NOTICE:end \*\/\n/g,
