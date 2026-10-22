@@ -57,7 +57,7 @@ catalogue refers to it, so a change to it can reach a student.
 | [IMAGE_MEASUREMENT_GATE.md](IMAGE_MEASUREMENT_GATE.md) | The image-measurement gate: the thresholds, the predefined slices and the consumers each serves, and the measured verdict on one marks-and-scale instrument. | gate | P178 | written | no |
 | [INDEX_DECOMPOSITION.md](INDEX_DECOMPOSITION.md) | How index.html was decomposed into fragments. | design | P53 | written | yes |
 | [INFERENCE_CORE.md](INFERENCE_CORE.md) | The deterministic fitting core. | feature | unassigned | written | yes |
-| [INSTRUCTOR_FLOW.md](INSTRUCTOR_FLOW.md) | Activity, course, kit and review for instructors. | guide | P77 | written | no |
+| [INSTRUCTOR_FLOW.md](INSTRUCTOR_FLOW.md) | Activity, course, kit and review for instructors. | guide | P77 | written | yes |
 | [INSTRUCTOR_MATERIALS.md](INSTRUCTOR_MATERIALS.md) | The generated guides and answer keys. | guide | P79 | written | no |
 | [INTEGRATION.md](INTEGRATION.md) | Branch, train and merge protocol and the current integration status. | process | P122 | written | no |
 | [INTERACTION.md](INTERACTION.md) | The interaction contract: keyboard model, single-pointer rule, focus, announcements and reduced motion. | policy | P155 | written | no |

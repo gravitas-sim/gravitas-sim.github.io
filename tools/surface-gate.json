@@ -18,11 +18,11 @@
       "exposure": { "links": [], "records": [], "stateLinks": [] },
       "measure": { "pages": ["index.html"] },
       "cost": {
-        "lines": 76293,
-        "testFiles": 244,
+        "lines": 76404,
+        "testFiles": 247,
         "generated": 0,
         "strings": 0,
-        "precacheKb": 975.3,
+        "precacheKb": 977.2,
         "axeRows": 0
       },
       "use": { "shippedLinks": 0, "libraryEntries": 0 },
@@ -205,11 +205,11 @@
         "catalogs": ["courseHome"]
       },
       "cost": {
-        "lines": 1028,
-        "testFiles": 6,
+        "lines": 1117,
+        "testFiles": 8,
         "generated": 0,
-        "strings": 63,
-        "precacheKb": 15.6,
+        "strings": 64,
+        "precacheKb": 17.2,
         "axeRows": 1
       },
       "use": { "shippedLinks": 5, "libraryEntries": 4 },
@@ -362,11 +362,11 @@
         "generated": ["catalog/catalog.json"]
       },
       "cost": {
-        "lines": 924,
-        "testFiles": 5,
+        "lines": 891,
+        "testFiles": 6,
         "generated": 1,
-        "strings": 97,
-        "precacheKb": 14.7,
+        "strings": 94,
+        "precacheKb": 14.4,
         "axeRows": 1
       },
       "use": { "shippedLinks": 0, "libraryEntries": 4 },
@@ -420,11 +420,11 @@
       "exposure": { "links": [], "records": [], "stateLinks": [] },
       "measure": { "pages": ["my-work/index.html"], "routes": ["/my-work/"] },
       "cost": {
-        "lines": 2513,
-        "testFiles": 19,
+        "lines": 2546,
+        "testFiles": 21,
         "generated": 0,
         "strings": 0,
-        "precacheKb": 31.7,
+        "precacheKb": 32,
         "axeRows": 1
       },
       "use": { "shippedLinks": 0, "libraryEntries": 0 },
@@ -445,8 +445,8 @@
       "exposure": { "links": [], "records": [], "stateLinks": [] },
       "measure": { "pages": ["teaching/index.html"], "routes": ["/teaching/"] },
       "cost": {
-        "lines": 451,
-        "testFiles": 10,
+        "lines": 474,
+        "testFiles": 11,
         "generated": 0,
         "strings": 0,
         "precacheKb": 0,
@@ -509,11 +509,11 @@
         "routes": ["/instructors/submissions/"]
       },
       "cost": {
-        "lines": 5664,
-        "testFiles": 20,
+        "lines": 5793,
+        "testFiles": 21,
         "generated": 0,
         "strings": 0,
-        "precacheKb": 65.4,
+        "precacheKb": 66.2,
         "axeRows": 1
       },
       "use": { "shippedLinks": 0, "libraryEntries": 0 },
@@ -537,7 +537,7 @@
         "routes": ["/evaluation/"]
       },
       "cost": {
-        "lines": 1238,
+        "lines": 1258,
         "testFiles": 7,
         "generated": 0,
         "strings": 0,
@@ -603,12 +603,12 @@
         "catalogs": ["course"]
       },
       "cost": {
-        "lines": 3301,
-        "testFiles": 8,
+        "lines": 3763,
+        "testFiles": 10,
         "generated": 0,
-        "strings": 270,
-        "precacheKb": 46.1,
-        "axeRows": 1
+        "strings": 271,
+        "precacheKb": 50.5,
+        "axeRows": 3
       },
       "use": { "shippedLinks": 0, "libraryEntries": 0 },
       "cited": ["README.md", "manual/gravitas-user-manual.tex"],
@@ -693,7 +693,7 @@
         "routes": ["/teaching/adopt/"]
       },
       "cost": {
-        "lines": 215,
+        "lines": 225,
         "testFiles": 0,
         "generated": 0,
         "strings": 0,
@@ -749,11 +749,11 @@
         "routes": ["/teaching/kit/"]
       },
       "cost": {
-        "lines": 1325,
-        "testFiles": 4,
+        "lines": 1486,
+        "testFiles": 6,
         "generated": 0,
         "strings": 0,
-        "precacheKb": 15.8,
+        "precacheKb": 17.1,
         "axeRows": 0
       },
       "use": { "shippedLinks": 0, "libraryEntries": 0 },
@@ -1066,11 +1066,11 @@
       "measure": { "files": ["catalog/index.html"], "routes": [] },
       "consequence": "166 removes the section's heading and its empty-state line. A contributed entry keeps its badge and its 'Contributed by' row in the list; the pointer to CONTRIBUTING_CONTENT.md moves to the catalog's intro. Presentation: no support period (policy scope).",
       "cost": {
-        "lines": 203,
+        "lines": 179,
         "testFiles": 0,
         "generated": 0,
         "strings": 0,
-        "precacheKb": 3.3,
+        "precacheKb": 3.2,
         "axeRows": 0
       },
       "use": { "shippedLinks": 0, "libraryEntries": 0 },
@@ -1726,7 +1726,7 @@
         "precacheKb": 0,
         "axeRows": 0
       },
-      "use": { "shippedLinks": 17, "libraryEntries": 0 },
+      "use": { "shippedLinks": 18, "libraryEntries": 0 },
       "cited": [],
       "referrer": "UNKNOWN",
       "verdict": "KEEP",
@@ -1826,6 +1826,72 @@
         "axeRows": 0
       },
       "use": { "shippedLinks": 4, "libraryEntries": 0 },
+      "cited": [],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "format-course-terms-record",
+      "name": "course terms record",
+      "kind": "stored-format",
+      "unique": "yes",
+      "replacement": null,
+      "why": "localStorage; owner js/instructorCourseTerms.js readTerms.",
+      "exposure": {
+        "links": [],
+        "records": ["course terms record"],
+        "stateLinks": []
+      },
+      "persisted": "localStorage",
+      "measure": {
+        "ownerFiles": ["js/instructorCourseTerms.js"],
+        "testNames": ["course terms record"]
+      },
+      "consequence": "Keep; a schema in Prompt 290.",
+      "cost": {
+        "lines": 0,
+        "testFiles": 1,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 0,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 1, "libraryEntries": 0 },
+      "cited": [],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "format-gravitas-submission-archive",
+      "name": "gravitas.submission-archive",
+      "kind": "stored-format",
+      "unique": "yes",
+      "replacement": null,
+      "why": "a file the instructor keeps; owner js/instructorArchive.js readArchive.",
+      "exposure": {
+        "links": [],
+        "records": ["gravitas.submission-archive"],
+        "stateLinks": []
+      },
+      "persisted": "file",
+      "measure": {
+        "ownerFiles": ["js/instructorArchive.js"],
+        "testNames": ["gravitas.submission-archive"]
+      },
+      "consequence": "Keep; a schema in Prompt 290.",
+      "cost": {
+        "lines": 0,
+        "testFiles": 2,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 0,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 2, "libraryEntries": 0 },
       "cited": [],
       "referrer": "UNKNOWN",
       "verdict": "KEEP",
@@ -2017,7 +2083,7 @@
       "consequence": "Keep; a schema in Prompt 290.",
       "cost": {
         "lines": 0,
-        "testFiles": 3,
+        "testFiles": 4,
         "generated": 0,
         "strings": 0,
         "precacheKb": 0,

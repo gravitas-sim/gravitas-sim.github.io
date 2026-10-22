@@ -274,3 +274,37 @@ describe('the CI review', () => {
     ).toEqual(['catalog/packages/a-1.0.0.gxp', 'catalog/packages/b-1.0.0.gxp']);
   });
 });
+
+describe("the retired Contributed section (Prompt 166, 165's RETIRE verdict)", () => {
+  const page = readFileSync('catalog/index.html', 'utf8');
+  const source = readFileSync('js/catalogPage.js', 'utf8');
+  const catalogs = async () => ({
+    en: (await import('../js/i18n/en.catalog.js')).EN_CATALOG,
+    es: (await import('../js/i18n/es.catalog.js')).ES_CATALOG,
+  });
+
+  test('the page has no section, heading or empty-state line for it', () => {
+    expect(page).not.toMatch(
+      /catContributed|cw-contributed|cat\.contributed\.(title|intro|none)/
+    );
+    expect(source).not.toMatch(/catContributed/);
+  });
+
+  test('a contributed entry keeps its badge and its credit, in both languages', async () => {
+    const c = await catalogs();
+    for (const lang of ['en', 'es']) {
+      expect(c[lang]['cat.badge.contributed']).toBeTruthy();
+      expect(c[lang]['cat.contributedBy']).toBeTruthy();
+      for (const gone of ['title', 'intro', 'none'])
+        expect(c[lang][`cat.contributed.${gone}`]).toBeUndefined();
+    }
+    expect(source).toMatch(/cat\.badge\.contributed/);
+    expect(source).toMatch(/cat\.contributedBy/);
+  });
+
+  test('the invitation to contribute is in the intro, in both languages', async () => {
+    const c = await catalogs();
+    expect(c.en['cat.intro']).toContain('CONTRIBUTING_CONTENT.md');
+    expect(c.es['cat.intro']).toContain('CONTRIBUTING_CONTENT.md');
+  });
+});
