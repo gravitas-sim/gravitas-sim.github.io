@@ -6,12 +6,12 @@
 // as a working page, and the one way in is a single unexplained word, "origin",
 // at the end of /model/'s footer.
 //
-// It is an archive, not a page to maintain. Its old bugs, its Google Fonts
-// import and its styling are the point, so nothing may modernize it - not a
+// It is an archive, not a page to maintain. Its old bugs and its styling are
+// the point, so nothing may modernize it - not a
 // formatter sweep, not a find-and-replace across *.html, not a build step.
 //
-// One change was made on purpose, and only one: the two lines that wired Save
-// State and Load State to their handlers are gone. The page is here to show
+// Three changes were made on purpose, and only three. The first: the two lines that
+// wired Save State and Load State to their handlers are gone. The page is here to show
 // what Gravitas looked like, not to keep saves, and those two handlers wrote
 // to the same localStorage key today's application reads its own save from.
 // The buttons are still drawn and do nothing. The first test proves that is
@@ -19,6 +19,24 @@
 // a5d08fc recorded - and pins the file as served, so a change of one more
 // byte fails it. The right response to that failure is to restore the file,
 // not to update the hash.
+//
+// The second: a freeze notice (D-R10-51, Carl's ruling of 2026-10-22, under
+// SURFACE_RETIREMENT_GATE.md, where a FREEZE verdict adds a notice in both
+// languages). It is two marked regions, FREEZE-NOTICE:begin to :end, one of
+// CSS and one of markup, and nothing else of the page moved: strip them and
+// the result is the blob pinned as SERVED_BLOB, the file before the notice.
+// Edit the notice's words and only FREEZE_BLOB and its length change; touch a
+// byte outside the two regions and the first test fails.
+//
+// The third: the one @import line that asked fonts.googleapis.com for the
+// Poppins and Roboto Mono stylesheets is gone (D-R10-51, option (a), taken
+// under Carl's rule of 2026-10-22 that decisions go with the recommendation).
+// A visitor's address and referrer went to a third party on opening the page,
+// with no opt-in. The page's own `sans-serif` and `monospace` fallbacks draw
+// it now. The first test puts the line back after `<style>` and checks the
+// result against SERVED_BLOB, so this is the whole difference. Restoring the
+// line is what would reverse it. The page still carries no content-security
+// policy (tools/csp.mjs exempts it): that would be option (b), not taken.
 //
 // The rest keep it out of the way. The deploy stamps no revision into it, the
 // service worker does not precache it, and nothing the application loads at
@@ -40,8 +58,22 @@ const HREF = '/history/original/';
 const SOURCE_COMMIT = 'a5d08fc72cae60762765977f419225fb40e6c400';
 const SOURCE_BLOB = 'fe77fdc0afc47d0d3f24e93a690043bb4dee950e';
 
-/** The file as served: the original without the two lines below. */
+/** The original without the two lines below: the file before the notice and the removal of the font import. */
 const SERVED_BLOB = '959822c4e570db8317f00072b26121c4f2568d46';
+/** The file as served: SERVED_BLOB plus the notice's two regions, less the font import. */
+const FREEZE_BLOB = '763c2f86a9345492346159648581c7eadc12fb4f';
+const FREEZE_BYTES = 68805;
+/** The line removed, and the line it followed. */
+const FONT_IMPORT =
+  "        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Roboto+Mono:wght@400;700&display=swap');\n";
+const BEFORE_FONT_IMPORT = '    <style>\n';
+/** The notice's two regions: a block of CSS and a block of markup. */
+const NOTICE_REGIONS = [
+  / *\/\* FREEZE-NOTICE:begin[\s\S]*?FREEZE-NOTICE:end \*\/\n/g,
+  / *<!-- FREEZE-NOTICE:begin[\s\S]*?FREEZE-NOTICE:end -->\n/g,
+];
+const stripNotice = text =>
+  NOTICE_REGIONS.reduce((t, re) => t.replace(re, ''), text);
 const UNWIRED = [
   "    document.getElementById('saveBtn').onclick = save_simulation_state;\n",
   "    document.getElementById('loadBtn').onclick = load_simulation_state;\n",
@@ -77,13 +109,28 @@ function buildList(name) {
 
 describe('the first sketch is kept as it was', () => {
   test(`it is the index.html of ${SOURCE_COMMIT.slice(0, 7)} without its Save and Load wiring, and nothing else`, () => {
-    const bytes = readFileSync(path.join(REPO, PAGE));
+    const served = readFileSync(path.join(REPO, PAGE));
+    expect(served.length).toBe(FREEZE_BYTES);
+    expect(blobId(served)).toBe(FREEZE_BLOB);
+
+    // The notice out, and the font import back in, what is left is the file
+    // as it was before the freeze.
+    const noNotice = stripNotice(served.toString('latin1'));
+    expect(noNotice).not.toContain('googleapis');
+    const fontAt =
+      noNotice.indexOf(BEFORE_FONT_IMPORT) + BEFORE_FONT_IMPORT.length;
+    expect(fontAt).toBeGreaterThan(BEFORE_FONT_IMPORT.length - 1);
+    const text =
+      noNotice.slice(0, fontAt) + FONT_IMPORT + noNotice.slice(fontAt);
+    // Put back at the top of its style block, with the blank line after it
+    // that the original had.
+    expect(noNotice.slice(fontAt, fontAt + 1)).toBe('\n');
+    const bytes = Buffer.from(text, 'latin1');
     expect(bytes.length).toBe(67184);
     expect(blobId(bytes)).toBe(SERVED_BLOB);
 
     // The two lines go back after the line they followed, and what comes out
     // is the original, byte for byte.
-    const text = bytes.toString('latin1');
     expect(text).not.toContain(UNWIRED);
     const at = text.indexOf(BEFORE_UNWIRED);
     expect(at).toBeGreaterThan(-1);
@@ -121,6 +168,65 @@ describe('the first sketch is kept as it was', () => {
       await import('../tools/prepare-pages.mjs');
     expect(STAMPED_PAGES).not.toContain(PAGE);
     expect(ALLOWED_CHANGES).not.toContain(PAGE);
+  });
+});
+
+describe('the freeze notice (D-R10-51) says what the freeze means and does nothing else', () => {
+  const text = read(PAGE);
+  const markup = text.match(
+    / *<!-- FREEZE-NOTICE:begin[\s\S]*?FREEZE-NOTICE:end -->\n/g
+  );
+  const css = text.match(
+    / *\/\* FREEZE-NOTICE:begin[\s\S]*?FREEZE-NOTICE:end \*\/\n/g
+  );
+
+  test('there is one region of markup and one of CSS, and the markup comes after the buttons', () => {
+    expect(markup).toHaveLength(1);
+    expect(css).toHaveLength(1);
+    expect(text.indexOf(markup[0])).toBeGreaterThan(
+      text.indexOf('id="bhMassesModal"')
+    );
+    expect(text.indexOf(markup[0])).toBeLessThan(text.indexOf('<script>'));
+  });
+
+  test('it is a note in English and in Spanish, each saying frozen, no new features and where to go', () => {
+    const [block] = markup;
+    expect(block).toContain('<div id="freezeNotice" role="note">');
+    const en = block.match(/<p lang="en">([\s\S]*?)<\/p>/)[1];
+    const es = block.match(/<p lang="es">([\s\S]*?)<\/p>/)[1];
+    expect(en).toContain('Frozen.');
+    expect(en).toContain('kept as a record');
+    expect(en).toContain('no new features');
+    expect(es).toContain('Congelado.');
+    expect(es).toContain('conservado como registro');
+    expect(es).toContain('nuevas funciones');
+    // Where to go instead: the current Gravitas, one link in each language.
+    for (const part of [en, es])
+      expect(part.match(/<a href="\/">[^<]+<\/a>/g)).toHaveLength(1);
+    // Entities, so the file stays ASCII like the original.
+    expect([...block].every(c => c.charCodeAt(0) < 128)).toBe(true);
+    // The words carry no date (SURFACE_RETIREMENT_GATE.md, "What a verdict commits the site to").
+    expect(en + es).not.toMatch(/\b(19|20)\d\d\b/);
+  });
+
+  test('it brings no script and no request, and a click anywhere but its link falls through to the canvas', () => {
+    const [block] = markup;
+    expect(block).not.toMatch(/<script|<img|<iframe|<link|<form|src=|https?:/);
+    expect(css[0]).toMatch(/#freezeNotice \{[^}]*pointer-events: none;/);
+    expect(css[0]).toMatch(/#freezeNotice a \{[^}]*pointer-events: auto;/);
+    expect(css[0]).not.toContain('@import');
+    expect(css[0]).not.toContain('url(');
+  });
+
+  test('the page asks no other origin for anything: no import, no link, no script, no image, no URL', () => {
+    // The font import was removed on purpose (D-R10-51, option (a)); the page
+    // draws in its own sans-serif and monospace fallbacks.
+    expect(text).not.toMatch(/@import|googleapis|gstatic/);
+    expect(text).not.toMatch(/(src|href)\s*=\s*["']?(https?:)?\/\//i);
+    expect(text).not.toMatch(/url\(\s*["']?(https?:)?\/\//i);
+    expect(text).not.toMatch(/https?:\/\//);
+    for (const face of ["'Poppins', sans-serif", "'Roboto Mono', monospace"])
+      expect(text).toContain(`font-family: ${face};`);
   });
 });
 

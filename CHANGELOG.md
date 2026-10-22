@@ -48,6 +48,8 @@ Documents (invisible): `DOCUMENTS.md`, a generated map of every root document an
 
 Toolchain (invisible): `@playwright/test` and `playwright` 1.64.0 (supported browser builds move with it, Chromium 153 to 156), `@axe-core/playwright` 4.13.0 and `axe-core` 4.14.0, taken together (D-TOOL-03); the gallery chip counts' contrast raised to what axe 4.14 measures, and one failed-import spec made engine-agnostic.
 
+The first Gravitas is frozen (Prompt 165 follow-up, D-R10-51, visible, train v3): by Carl's ruling of 2026-10-22, `/history/original/` carries a notice in English and Spanish that it is a record, gets no new features, and where to find the current Gravitas. The page itself behaves as before and nothing else on the site changes. The surface gate's own verdict for it is still KEEP; the ruling is recorded beside that verdict (a new optional `ruling` field), not instead of it, and no threshold or rule moved. Separately, the page no longer asks `fonts.googleapis.com` for a stylesheet when it is opened (a third-party request with no opt-in; the one `@import` line is deleted and the page draws in its fallback typefaces, so its lettering differs from before). It still has no content-security policy.
+
 ## [2.0.0] - 2026-10-16
 
 **Gravitas 2.0.0.** Gravitas grows from a gravity sandbox with 22 guided

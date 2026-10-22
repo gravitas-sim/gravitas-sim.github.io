@@ -1121,6 +1121,7 @@
   "[chromium] › gwoscEvents.spec.js › the strain arrives from this site, once, and only when needed › nothing fetches it until the screen that uses it, which fetches the data once and never the provenance": 9.6,
   "[chromium] › historyOriginal.spec.js › the first sketch with the service worker installed › it is itself, not the sandbox, and nothing caches it": 27.5,
   "[chromium] › historyOriginal.spec.js › the first sketch › the application starts without fetching it": 4.9,
+  "[chromium] › historyOriginal.spec.js › the first sketch › the freeze notice reads in both languages, offers the way out and blocks nothing": 1.0,
   "[chromium] › historyOriginal.spec.js › the first sketch › the last link on /model/ opens the original, and Back returns": 1.9,
   "[chromium] › htmlReport.spec.js › the PDF download is unchanged beside it": 9.3,
   "[chromium] › htmlReport.spec.js › the finish dialog hands over the report as a web page, in en": 10.8,
