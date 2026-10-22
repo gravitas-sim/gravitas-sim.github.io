@@ -96,6 +96,7 @@ Every record a student's browser holds, its owner, how it migrates, whether a ba
 | `gravitas_course_preview` | The course handed to the course home | — | `js/course/links.js` | direct | none | transient: handed from one page to another | `course-home-link` |
 | `gravitas_next_context` | Where a lesson was opened from | — | `js/investigations/next.js` | `js/storage/local.js` | none | transient: handed from one page to another | a handed-over context |
 | `gravitas_resume` | Where a reader was: the items opened last, with pathway and step | preferences | `js/investigations/stepView.js` | `js/storage/local.js` | none; a record that is not v1 reads as empty | preference: in a backup file only when ticked | `resume-record` |
+| `gravitas_terms` | The courses opened that name a term, with the term and when | preferences | `js/instructorCourseTerms.js` | `js/storage/local.js` | none; a record that is not v1 reads as empty | preference: in a backup file only when ticked | `course-terms` |
 | `gravitas_course_…` | Course builder drafts and the last open | courses | `js/coursePage.js` | direct | reads course pack 1 | durable: in a backup file | `course-pack` |
 | `gravitas_composer_preview` | The lesson handed to the Composer preview | — | `js/composerPage.js` | direct | none | transient: handed from one page to another | `investigation-pack` |
 | `gravitas_composer_…` | Composer drafts and the last open | drafts | `js/composerPage.js` | direct | none | durable: in a backup file | `investigation-pack` |

@@ -45,8 +45,8 @@ outside the core with the SDK alone.
 ## Contributed, and withdrawn
 
 An entry has an `origin`. The maintainers' own have none. A package written
-outside the team is `contributed`, and /catalog/ lists it under **Contributed**
-with:
+outside the team is `contributed`, and /catalog/ lists it in the one list, with
+a **Contributed** badge and:
 
 - its author's attribution, in the author's words, in each language they gave;
 - the review: date, checks, and the checks `sdk review` ran and passed
@@ -264,7 +264,7 @@ the check is robust, and the light curve's sharp rise needs many terms.
 - **`tests/catalogGovernance.test.js`:** a contributed entry and its
   record, each refusal of a short record, a withdrawn tombstone, an archive no
   entry names.
-- **`e2e/catalogGovernance.spec.js`:** the Contributed section empty and
-  filled, installing a contributed package, a withdrawn one shown to a reader
+- **`e2e/catalogGovernance.spec.js`:** no Contributed section (Prompt 166
+  retired it), a contributed package listed with its badge, installing it, a withdrawn one shown to a reader
   who holds it (whose course still opens) and hidden from one who does not.
 - **`npm run catalog:check`,** in CI.

@@ -310,6 +310,13 @@
       "student": false
     },
     {
+      "file": "IMAGE_MEASUREMENT_GATE.md",
+      "kind": "gate",
+      "purpose": "The image-measurement gate: the thresholds, the predefined slices and the consumers each serves, and the measured verdict on one marks-and-scale instrument.",
+      "owner": 178,
+      "student": false
+    },
+    {
       "file": "INDEX_DECOMPOSITION.md",
       "kind": "design",
       "purpose": "How index.html was decomposed into fragments.",
@@ -328,7 +335,7 @@
       "kind": "guide",
       "purpose": "Activity, course, kit and review for instructors.",
       "owner": 77,
-      "student": false
+      "student": true
     },
     {
       "file": "INSTRUCTOR_MATERIALS.md",

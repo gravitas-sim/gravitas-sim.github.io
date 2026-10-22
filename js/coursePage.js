@@ -73,7 +73,7 @@ import {
   newAssignmentId,
 } from './course/api.js';
 import { PREVIEW_KEY, courseLink, itemLink, rootOf } from './course/links.js';
-import { courseManifest } from './course/manifest.js';
+import { courseManifest, newCourseItem } from './course/manifest.js';
 import { embedParams } from './embedOptions.js';
 import { EMBED_ASPECT, figureMarkup } from './embedMarkup.js';
 import {
@@ -226,6 +226,7 @@ async function useLanguage(id) {
   await setLocale(id);
   translateStatic();
   render();
+  termPanel?.refresh();
 }
 
 function translateStatic() {
@@ -595,67 +596,13 @@ function freshId(x, base) {
 }
 
 /** A new item of a kind, pinned to this build when it names a lesson. */
-function newItem(x, kind) {
-  const lesson = LESSONS[0].id;
-  const base = { kind };
-  switch (kind) {
-    case 'lesson':
-      return { ...base, id: freshId(x, lesson), lesson };
-    case 'assignment':
-      return {
-        ...base,
-        id: freshId(x, `${lesson}-assignment`),
-        lesson,
-        steps: [],
-        assignment: { id: 'pending', created: today() },
-      };
-    case 'scenario': {
-      const scenario = 'solar-system';
-      return {
-        ...base,
-        id: freshId(x, 'solar-system'),
-        minutes: 10,
-        scenario,
-        seed: 'orbit-1',
-        title: { en: scenarioTitle(scenario) },
-      };
-    }
-    case 'guide':
-      return {
-        ...base,
-        id: freshId(x, 'l3-planes'),
-        minutes: 20,
-        guide: 'l3-planes',
-        depth: 'core',
-      };
-    case 'dataset':
-      return {
-        ...base,
-        id: freshId(x, 'tess-light-curve'),
-        minutes: 15,
-        dataset: 'tess-light-curve',
-      };
-    case 'pack':
-      // Filled when its link is pasted (readPackItem).
-      return {
-        ...base,
-        id: freshId(x, 'investigation'),
-        pack: '',
-        version: '1.0.0',
-        link: '',
-      };
-    case 'reading':
-      return {
-        ...base,
-        id: freshId(x, 'reading'),
-        minutes: 20,
-        title: { en: '' },
-        cite: { authors: '', year: new Date().getFullYear(), source: '' },
-        access: 'open',
-      };
-  }
-  return base;
-}
+const newItem = (x, kind) =>
+  newCourseItem(kind, {
+    freshId: base => freshId(x, base),
+    lesson: LESSONS[0].id,
+    today: today(),
+    scenarioTitle,
+  });
 
 /** After a lesson item's lesson or steps change: the pin, and an assignment's id. */
 async function repin(path) {
@@ -2046,6 +1993,41 @@ function renderDrafts() {
 
 // --- Start-up ---------------------------------------------------------------------------
 
+/** The panel for a course as it comes, or for its next term (js/instructorTermView.js). */
+let termPanel = null;
+async function openTerm(mode) {
+  const { openTermPanel } = await import('./instructorTermView.js');
+  termPanel = openTermPanel({
+    host: $('cb-term-panel'),
+    mode,
+    source: doc,
+    facts: pack =>
+      courseFacts(pack, {
+        load: id => loadInvestigation(id, 'en'),
+        catalog,
+        known,
+      }),
+    problems: pack => validateCoursePack(pack, courseApi(catalog)).length,
+    apply: start,
+    nameOf: (pack, id) =>
+      itemName(itemsOf(pack).find(x => x.item.id === id)?.item ?? { id }),
+    download: downloadText,
+    serialize,
+    locale: getLocale,
+    root: ROOT,
+    today,
+    courseLink,
+    lib: {
+      STATUS,
+      itemsOf,
+      reviewCoursePack,
+      upgradeCoursePack,
+      shortHash,
+      newAssignmentId,
+    },
+  });
+}
+
 async function openExample() {
   const pack = clone(await BUILTIN_COURSES['intro-astronomy']());
   start(pack, t('course.status.example'));
@@ -2056,6 +2038,7 @@ function wire() {
     start(blankCourse(), t('course.status.new'))
   );
   $('cb-example').addEventListener('click', openExample);
+  $('cb-term').addEventListener('click', () => openTerm('next'));
   $('cb-open').addEventListener('click', () => $('cb-file').click());
   $('cb-file').addEventListener('change', () => {
     const file = $('cb-file').files?.[0];
@@ -2193,11 +2176,16 @@ async function init() {
   const named = new URLSearchParams(location.search).get('open');
   const last = named && drafts.load(named) ? named : drafts.last();
   const draft = last ? drafts.load(last) : null;
+  // ?use=<id>: a course Gravitas ships, to use as it comes (Prompt 168).
+  const use = new URLSearchParams(location.search).get('use');
+  const shipped = use && Object.hasOwn(BUILTIN_COURSES, use) ? use : null;
   // A first visit opens the example course; New starts from nothing.
   history = createHistory(
-    draft?.doc
-      ? byScenarioId(draft.doc)
-      : clone(await BUILTIN_COURSES['intro-astronomy']())
+    shipped
+      ? clone(await BUILTIN_COURSES[shipped]())
+      : draft?.doc
+        ? byScenarioId(draft.doc)
+        : clone(await BUILTIN_COURSES['intro-astronomy']())
   );
   baseline = history.current();
   render();
@@ -2209,6 +2197,7 @@ async function init() {
   );
   const added = await addFromAddress(Boolean(draft));
   if (added) setStatus(added);
+  if (shipped) await openTerm('use');
   document.body.dataset.ready = 'true';
 }
 

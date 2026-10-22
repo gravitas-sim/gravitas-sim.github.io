@@ -1320,6 +1320,11 @@ function guidePage(S) {
   const lead = (en, es) => `<strong>${T(en, es)}</strong>`;
 
   const toc = [
+    [
+      'minimal',
+      'Start here: one course in fifteen minutes',
+      'Empiece aquí: un curso en quince minutos',
+    ],
     ['what', 'What you are adopting', 'Qué va a adoptar'],
     ['week', 'The first week', 'La primera semana'],
     ['semester', 'The first semester', 'El primer semestre'],
@@ -1338,6 +1343,39 @@ function guidePage(S) {
     `<p id="toc-h"><strong>${T('On this page', 'En esta página')}</strong></p>\n<nav class="ad-toc" aria-labelledby="toc-h">${list(
       toc.map(([id, en, es]) => `<a href="#${id}-h">${T(en, es)}</a>`)
     )}</nav>`,
+    section(
+      'minimal',
+      T(
+        'Start here: one course in fifteen minutes',
+        'Empiece aquí: un curso en quince minutos'
+      ),
+      P(
+        'If you have one built-in course and fifteen minutes, you do not have to build anything. The fifteen minutes is a plan, not a measurement from a class.',
+        'Si tiene un curso incluido y quince minutos, no tiene que crear nada. Los quince minutos son un plan, no una medición hecha en una clase.'
+      ) +
+        ol([
+          `${lead('Choose a course and press the button.', 'Elija un curso y pulse el botón.')} ${T(
+            'On the Teach page, “Use as is” opens the course builder with that course. Name the term, and Gravitas pins every investigation to today’s version, gives each activity a fresh code and shows the link for your students, the course file to keep and what, if anything, changed under the course.',
+            'En la página Enseñar, «Usar tal cual» abre el creador de cursos con ese curso. Escriba el periodo y Gravitas fija cada investigación a la versión de hoy, da un código nuevo a cada actividad y muestra el enlace para sus estudiantes, el archivo del curso que debe guardar y qué cambió, si cambió algo, en el curso.'
+          )} ${a('/teaching/#minimal', 'Teach: one course in fifteen minutes', 'Enseñar: un curso en quince minutos')}.`,
+          `${lead('Give students the link.', 'Dé el enlace al estudiantado.')} ${T(
+            'The same panel opens the distribution kit: a code to scan, a handout in English and Spanish, and notes for Canvas, Moodle and Blackboard.',
+            'El mismo panel abre el kit de distribución: un código para escanear, un folleto en español e inglés y notas para Canvas, Moodle y Blackboard.'
+          )}`,
+          `${lead('Students work and hand in.', 'El estudiantado trabaja y entrega.')} ${T(
+            'They open the link, do an investigation and hand in the lab report as a PDF, or its token. Their work stays in their own browsers.',
+            'Abren el enlace, hacen una investigación y entregan el informe de laboratorio en PDF, o su ficha. Su trabajo se queda en sus propios navegadores.'
+          )}`,
+          `${lead('Read the reports.', 'Lea las entregas.')} ${T(
+            'Open submission review, drop in the course file and the reports, mark what needs your judgment, and write the gradebook files.',
+            'Abra la revisión de entregas, suelte el archivo del curso y las entregas, califique lo que necesita su criterio y escriba los archivos de calificaciones.'
+          )} ${a('/instructors/submissions/', 'Submission review', 'Revisión de entregas')}.`,
+        ]) +
+        P(
+          'Next term, open last term’s course file in the course builder and choose Start a new term: fresh codes, today’s investigations and a list of what changed, while last term’s file and links keep working. On the review page, Archive saves last term’s reports and your marks as one file and clears the page. Nothing a student made is deleted.',
+          'El periodo siguiente, abra el archivo del curso del periodo pasado en el creador de cursos y elija Empezar un periodo nuevo: códigos nuevos, las investigaciones de hoy y una lista de lo que cambió, mientras el archivo y los enlaces del periodo pasado siguen funcionando. En la revisión de entregas, Archivar guarda las entregas del periodo pasado y sus calificaciones en un solo archivo y limpia la página. No se borra nada de lo que hizo el estudiantado.'
+        )
+    ),
     section(
       'what',
       T('What you are adopting', 'Qué va a adoptar'),
