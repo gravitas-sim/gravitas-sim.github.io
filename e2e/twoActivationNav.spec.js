@@ -21,7 +21,7 @@ for (const [width, input] of FULL ? CELLS : [[1024, 'keyboard']]) {
       test(`${href} is within two activations`, edge(href, width, input));
     }
 
-    test('the Library is one activation, and every route is a second', async ({
+    test('the Library is one activation, its starts a second, and the whole list (Browse everything) a second too, every route a third', async ({
       page,
     }) => {
       test.setTimeout(240_000);

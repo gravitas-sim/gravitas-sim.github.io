@@ -1,3 +1,5 @@
+import { KEY_RESUME } from '../names.js';
+
 // Student data in localStorage (STORAGE.md): every writer's way in. Keys and
 // formats are unchanged; adds a size limit per record.
 const area = s => s ?? (globalThis.window ?? globalThis).localStorage;
@@ -47,3 +49,85 @@ export const writeJson = (key, value, collection, store) => {
     return false;
   }
 };
+
+// The one resume record (Prompt 163, STORAGE.md): the items a reader opened
+// last, newest first, with the pathway and step. A sidecar key, never a field of
+// a progress record, so 2.0.0 ignores it whole. A damaged record reads as empty.
+export const RESUME_KEY = KEY_RESUME;
+export const RESUME_VERSION = 1;
+export const RESUME_MAX = 6;
+
+const words = (v, max) =>
+  typeof v === 'string' && v.length > 0 && v.length <= max;
+
+/** One entry, cleaned to the shape the record allows, or null. */
+function resumeItem(raw) {
+  if (!raw || typeof raw !== 'object') return null;
+  const { id, route, step, path, title, at } = raw;
+  if (!words(id, 120) || !/^[\w.:/-]+$/.test(id)) return null;
+  if (!words(route, 240) || !route.startsWith('/') || route.startsWith('//'))
+    return null;
+  const item = { id, route, at: Number.isFinite(at) ? at : 0 };
+  if (words(step, 60)) item.step = step;
+  if (path && (path.k === 'seq' || path.k === 'course') && words(path.id, 120))
+    item.path = { k: path.k, id: path.id };
+  if (title && typeof title === 'object') {
+    const t = {};
+    for (const l of ['en', 'es']) if (words(title[l], 160)) t[l] = title[l];
+    if (t.en) item.title = t;
+  }
+  return item;
+}
+
+/** The items, newest first: {id, route, at, step?, path?, title?}. */
+export function readResume(store) {
+  const record = readJson(RESUME_KEY, null, store);
+  if (record?.v !== RESUME_VERSION || !Array.isArray(record.items)) return [];
+  const seen = new Set();
+  return record.items
+    .map(resumeItem)
+    .filter(i => i && !seen.has(i.id) && seen.add(i.id))
+    .slice(0, RESUME_MAX);
+}
+
+/**
+ * An item was opened or moved on: it becomes the newest. A step, pathway or
+ * title left out is kept from the earlier note of the same item. True if kept.
+ */
+export function noteResume(item, store) {
+  const next = resumeItem({ at: Date.now(), ...item });
+  if (!next) return false;
+  const items = readResume(store);
+  const before = items.find(i => i.id === next.id);
+  if (before) {
+    for (const k of ['step', 'path', 'title'])
+      if (!(k in next) && k in before) next[k] = before[k];
+  }
+  const top = items[0];
+  if (
+    top?.id === next.id &&
+    top.step === next.step &&
+    top.route === next.route &&
+    top.path?.id === next.path?.id
+  )
+    return true;
+  return writeJson(
+    RESUME_KEY,
+    {
+      v: RESUME_VERSION,
+      items: [next, ...items.filter(i => i.id !== next.id)].slice(
+        0,
+        RESUME_MAX
+      ),
+    },
+    'preferences',
+    store
+  );
+}
+
+/** A lesson was reached at a step (the lesson's own save calls this). */
+export const noteLesson = (id, step, store) =>
+  noteResume(
+    { id: `investigation:${id}`, route: `/#investigation=${id}`, step },
+    store
+  );

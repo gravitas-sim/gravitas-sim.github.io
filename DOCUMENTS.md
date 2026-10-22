@@ -147,7 +147,7 @@ out.
 | cards | `node tools/generate-lesson-cards.mjs` | `images/investigations` | deterministic |
 | compute | `node tools/compute.mjs` | `compute-frame`, `js/compute/framePin.js`, `js/compute/catalogueHashes.js` | deterministic |
 | teaching | `node tools/build-teaching-demos.mjs` | `js/data/teachingGenerated.js` | deterministic |
-| library | `node tools/build-library.mjs` | `library/library.json`, `LIBRARY.md`, `js/fragments/home.html` | deterministic |
+| library | `node tools/build-library.mjs` | `library/library.json`, `library/search-index.json`, `LIBRARY.md`, and 1 more | deterministic |
 | adoption | `node tools/build-adoption-pages.mjs` | `teaching/investigation`, `teaching/activity`, `teaching/find`, and 3 more | deterministic |
 | thumbnails | `node tools/generate-scenario-thumbnails.mjs` | `images/scenarios` | deterministic |
 | scene | `node tools/lesson-scene-audit.mjs --write` | `docs/lesson-scene-catalog.json`, `docs/lesson-scene-record.md`, `js/data/investigations/provenance.js` | deterministic |

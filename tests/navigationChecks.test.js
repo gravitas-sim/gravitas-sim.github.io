@@ -477,47 +477,91 @@ describe('Home and the global navigation follow the model (activated by Prompt 1
   });
 });
 
-describe('what the site still fails, by design (pending until Prompt 166 activates it)', () => {
-  const checks = {
-    'navigation.library.student-kinds-only': () => {
-      const shown = library.kinds.filter(k => !inv.kinds.students.includes(k));
-      if (shown.length)
-        throw new Error(
-          `the Library shows kinds students are not meant to see: ${shown.join(', ')}`
-        );
-    },
-    'navigation.library.no-where-it-runs': () => {
-      if (read('library/index.html').includes('id="libFormat"'))
-        throw new Error("the Library still offers a 'where it runs' facet");
-    },
-  };
+describe('The Library follows the model (activated by Prompt 163)', () => {
+  const THREE = [
+    'navigation.library.student-kinds-only',
+    'navigation.library.no-where-it-runs',
+    'navigation.library.default-view-is-bounded',
+  ];
+  const catalogs = { en: EN_LIBRARY, es: ES_LIBRARY };
 
-  for (const [id, body] of Object.entries(checks))
-    test(id, async () => {
-      const result = await runPending(id, body);
-      expect(['met', 'pending']).toContain(result.status);
-    });
-
-  test('each of the three is registered under the prompt that activates it, and the e2e one is not here', () => {
-    const registry = readRegistry().filter(c => c.id.startsWith('navigation.'));
-    const listed = inv.futureAcceptance.map(f => f.id).sort();
-    // the other six were activated by 162, and are ordinary tests above
+  test('the three are activated by name, so a failure fails, and nothing is left pending', () => {
+    const registry = readRegistry();
+    for (const id of THREE)
+      expect(
+        registry.find(c => c.id === id),
+        id
+      ).toMatchObject({ prompt: '163', activated: true });
+    expect(registry.filter(c => c.id.startsWith('navigation.'))).toHaveLength(
+      9
+    );
     expect(
-      registry
-        .filter(c => c.activated === false)
-        .map(c => c.id)
-        .sort()
-    ).toEqual(listed);
-    expect(registry).toHaveLength(9);
-    for (const f of inv.futureAcceptance) {
-      const entry = registry.find(c => c.id === f.id);
-      expect(entry.prompt, f.id).toBe(f.activatedBy);
-      expect(f.workedBy, f.id).toMatch(/^16[3-7](, 16[3-7])*$/);
+      registry.filter(
+        c => c.activated === false && c.id.startsWith('navigation.')
+      )
+    ).toEqual([]);
+    expect(inv.futureAcceptance).toEqual([]);
+  });
+
+  test('navigation.library.student-kinds-only: the facet offers the four, and every card says one of them', async () => {
+    const students = [...new Set(library.kinds.map(k => library.kindShown[k]))];
+    expect(students.sort()).toEqual([...inv.kinds.students].sort());
+    for (const k of library.kinds)
+      expect(inv.kinds.students, k).toContain(library.kindShown[k]);
+    const { libraryCardHtml } = await import('../js/library/card.js');
+    for (const lang of ['en', 'es']) {
+      const t = id => catalogs[lang][id] ?? id;
+      const nouns = new Set(
+        inv.kinds.students.map(k => catalogs[lang][`lib.badge.${k}`])
+      );
+      for (const e of library.entries) {
+        const html = libraryCardHtml(e, {
+          t,
+          pick: w => w[lang],
+          shown: library.kindShown,
+        });
+        const badge =
+          /<span class="lib-badges"><span class="ui-badge">([^<]*)</.exec(
+            html
+          )[1];
+        expect(nouns.has(badge), `${e.id} (${lang}) says "${badge}"`).toBe(
+          true
+        );
+      }
     }
-    const here = Object.keys(checks);
-    const browser = listed.filter(id => !here.includes(id));
-    expect(browser).toEqual(['navigation.library.default-view-is-bounded']);
-    expect(listed).toHaveLength(3);
+    const result = await runPending(THREE[0], () => {});
+    expect(result.status).toBe('met');
+  });
+
+  test('navigation.library.no-where-it-runs: no facet names where code runs', async () => {
+    expect(read('library/index.html')).not.toMatch(/id="libFormat"/);
+    expect(read('js/libraryPage.js')).not.toMatch(
+      /libFormat|lib\.filter\.format/
+    );
+    for (const lang of ['en', 'es'])
+      expect(
+        Object.keys(catalogs[lang]).filter(k =>
+          k.startsWith('lib.filter.format')
+        )
+      ).toEqual([]);
+    const result = await runPending(THREE[1], () => {});
+    expect(result.status).toBe('met');
+  });
+
+  test('navigation.library.default-view-is-bounded (its static half: the committed starts)', () => {
+    expect(measured.library.startCards).toBe(inv.ceilings.library.startCards);
+    for (const g of library.starts) {
+      expect(g.entries.length, g.id).toBeLessThanOrEqual(3);
+      expect(g.audience.en).toMatch(/\S/);
+      expect(g.audience.es).toMatch(/\S/);
+    }
+    // Home's first-week entries are among them (tools/build-library.mjs checks it).
+    const listed = new Set(library.starts.flatMap(g => g.entries));
+    for (const s of inv.firstWeek.starts)
+      if (s.entry) expect(listed.has(s.entry), s.entry).toBe(true);
+    expect(library.entries.length).toBeGreaterThan(
+      measured.library.startCards * 10
+    );
   });
 });
 

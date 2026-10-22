@@ -1217,7 +1217,7 @@ ${sel('f-offline', w('fOffline'), [opt('yes', wt('fOfflineOnly'))])}
   };
   const table = `<div class="doc-table-wrap" tabindex="0"><table class="doc-table" id="adTable"><thead><tr><th scope="col">${w('fName')}</th><th scope="col">${bi({ en: 'Kind', es: 'Tipo' })}</th><th scope="col">${w('fLevel')}</th><th scope="col">${w('fTime')} (${bi(wt('minutes'))})</th><th scope="col">${w('fMath')}</th></tr></thead><tbody>\n${rows.map(tr).join('\n')}\n</tbody></table></div>
 <p id="adEmpty" class="doc-note" hidden>${w('fEmpty')}</p>`;
-  const body = `${section('filters', w('filterTitle'), filters)}\n${table}`;
+  const body = `${section('filters', w('filterTitle'), filters)}\n${table}\n${topicsLine(S)}`;
   const text = pageHtml({
     file,
     title: {
@@ -1239,6 +1239,12 @@ ${sel('f-offline', w('fOffline'), [opt('yes', wt('fOfflineOnly'))])}
  * Astronomy 2e chapter it declares (Prompt 97). Generated from the same rows
  * the index filters, so a chapter can never be listed that no page declares.
  */
+/** The Library's topic pages (Prompt 163), one link per subject. */
+const topicsLine = S =>
+  `<p>${bi({ en: 'Browse the Library by topic:', es: 'Explore la Biblioteca por tema:' })} ${S.library.subjects
+    .map(s => `<a href="/library/?topic=${html(s.id)}">${plain(s.label)}</a>`)
+    .join(', ')}.</p>`;
+
 function alignmentPage(S, rows) {
   const file = `${BASE}/alignment/index.html`;
   const chapters = [...new Set(rows.map(r => r.chapter).filter(Boolean))].sort(
@@ -1257,6 +1263,7 @@ ${chapters
     );
   })
   .join('\n')}
+${topicsLine(S)}
 <p><a href="/teaching/find/">${w('back')}</a></p>`;
   const title = {
     en: 'Textbook alignment',

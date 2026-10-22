@@ -30,6 +30,7 @@ current, and the orchestrator checks it.
 | `build-lesson-translation-skeleton.mjs` | Skeleton for a lesson translation |  |
 | `build-library.mjs` | The Library: one index of everything a student or instructor can open |  |
 | `build-manual.mjs` | Build the user manual | `npm run manual` |
+| `build-relations.mjs` | Relations: what comes before, what comes next, what goes with it |  |
 | `build-sdss-spectra.mjs` | The four SDSS DR18 spectra, as a data pack | `npm run spectra:data`, `npm run spectra:provenance`, `npm run spectra:check` |
 | `build-service-worker.mjs` | Generate the service worker's precache manifest. | `npm run build`, `npm run build:ci`, `npm run sw:manifest` |
 | `build-stellar-tracks.mjs` | The MIST v1.2 tracks, as a data pack | `npm run stellar:data`, `npm run stellar:provenance`, `npm run stellar:check` |

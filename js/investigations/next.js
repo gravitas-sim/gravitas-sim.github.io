@@ -7,10 +7,13 @@
 // they came from is one small record the Library and the course home leave
 // when a link is followed (gravitas_next_context); it is only believed when the
 // investigation just finished is in it, so a stale record offers nothing.
-// Nothing here is sent anywhere; the Library index is a file of the site.
+// Failing that, or after it, the Library's own relations (Prompt 163,
+// tools/build-relations.mjs): what the index says comes next after this
+// investigation, up to two, and one related item. Nothing here is sent
+// anywhere; the Library index is a file of the site.
 // =============================================================================
 
-import { put } from '../storage/local.js';
+import { noteResume, put } from '../storage/local.js';
 import { getLocale } from '../i18n/index.js';
 import { KEY_NEXT_CONTEXT } from '../names.js';
 
@@ -60,9 +63,12 @@ export async function whatNext(list, { id, deeper, onDeeper }) {
   }
 
   const ctx = read();
+  let index = null;
+  const library = async () =>
+    (index ??= await (await fetch('/library/library.json')).json());
   try {
     if (ctx?.k === 'seq') {
-      const lib = await (await fetch('/library/library.json')).json();
+      const lib = await library();
       // A renamed sequence still answers to the id it was stored under.
       const sid = lib.sequenceAliases?.[ctx.id] ?? ctx.id;
       const seq = lib.sequences.find(s => s.id === sid);
@@ -97,6 +103,35 @@ export async function whatNext(list, { id, deeper, onDeeper }) {
       }
       if (at >= 0) link(ctx.home, say('home', { name: ctx.t }));
     }
+  } catch {
+    /* offline and not cached: the rest of the list stands */
+  }
+  try {
+    const lib = await library();
+    const rel = lib.entries.find(e => e.id === `investigation:${id}`)?.rel;
+    const entry = x => lib.entries.find(e => e.id === x);
+    const have = new Set(
+      out.map(li => li.querySelector('a')?.getAttribute('href'))
+    );
+    const opened = e => () =>
+      noteResume({ id: e.id, route: e.route, title: e.title });
+    let added = 0;
+    for (const nid of rel?.next ?? []) {
+      const e = entry(nid);
+      if (!e || have.has(e.route) || added >= 2) continue;
+      have.add(e.route);
+      added++;
+      link(e.route, say('rel', { title: word(e.title) }), opened(e));
+    }
+    const related = (rel?.related ?? [])
+      .map(entry)
+      .find(e => e && !have.has(e.route));
+    if (related)
+      link(
+        related.route,
+        say('related', { title: word(related.title) }),
+        opened(related)
+      );
   } catch {
     /* offline and not cached: the rest of the list stands */
   }

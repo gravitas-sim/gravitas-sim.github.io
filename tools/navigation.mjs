@@ -171,10 +171,19 @@ export async function measure() {
     library: {
       kinds: library.kinds.length,
       formats: new Set(library.entries.map(e => e.format)).size,
+      // The facets offered by default, and the ones behind "More filters".
       filters: (
-        libraryHtml.match(/<select class="ui-select" id="lib(?!Group)\w+"/g) ??
-        []
+        libraryHtml
+          .split('<details class="lib-more"')[0]
+          .match(/<select class="ui-select" id="lib(?!Group)\w+"/g) ?? []
       ).length,
+      moreFilters: (
+        (libraryHtml.split('<details class="lib-more"')[1] ?? '').match(
+          /<select class="ui-select" id="lib(?!Group)\w+"/g
+        ) ?? []
+      ).length,
+      // What the default view lists: the committed starting points.
+      startCards: library.starts.reduce((n, g) => n + g.entries.length, 0),
       entries: library.entries.length,
     },
   };
@@ -354,9 +363,14 @@ export function renderCeilings(inv) {
 }
 
 export function renderPending(inv) {
-  const rows = inv.futureAcceptance.map(
-    f => `| \`${f.id}\` | ${cell(f.says)} | ${f.workedBy} | ${f.activatedBy} |`
-  );
+  const rows = inv.futureAcceptance.length
+    ? inv.futureAcceptance.map(
+        f =>
+          `| \`${f.id}\` | ${cell(f.says)} | ${f.workedBy} | ${f.activatedBy} |`
+      )
+    : [
+        '| none | Every one of the nine checks is activated: 162 activated the six for Home and the global navigation, 163 the three for the Library. | | |',
+      ];
   return [
     '| Check | What it holds the site to | Work of | Activated by |',
     '| --- | --- | --- | --- |',
@@ -463,7 +477,7 @@ async function main(command) {
   if (command === 'report') {
     console.log(JSON.stringify(await measure(), null, 2));
     console.log(
-      `\nFuture acceptance (${inv.futureAcceptance.length}, none activated):`
+      `\nFuture acceptance (${inv.futureAcceptance.length} not yet activated):`
     );
     for (const f of inv.futureAcceptance)
       console.log(

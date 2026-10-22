@@ -65,6 +65,7 @@ const PINNED = {
   KEY_NEXT_CONTEXT: 'gravitas_next_context',
   KEY_ORIENTATION_SEEN_V1: 'gravitas_orientation_seen_v1',
   KEY_RAIL_SECTIONS: 'gravitas_rail_sections',
+  KEY_RESUME: 'gravitas_resume',
   KEY_SIMULATION_SAVE: 'gravitas_simulation_save',
   KEY_THEME: 'gravitas_theme',
   KEY_WELCOME_SEEN_V1: 'gravitas_welcome_seen_v1',

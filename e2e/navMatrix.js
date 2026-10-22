@@ -190,10 +190,14 @@ export const library =
     };
     await activate(page, lib, input); // activation 1
     await expect(page).toHaveURL(/\/library\/$/);
+    // The Library opens on its seven starts (Prompt 163), each a second
+    // activation; the whole list is "Browse everything", one more.
+    await expect(page.locator('#libStart .lib-card').first()).toBeVisible();
+    await activate(page, page.locator('#libBrowse'), input);
     await open();
 
     // Every entry is a card whose link is its route, on screen and
-    // focusable; the second activation is then that link.
+    // focusable; the last activation is then that link.
     const cards = await page.evaluate(() =>
       [...document.querySelectorAll('#libResults .lib-card')].map(c => {
         const a = c.matches('a') ? c : c.querySelector('a[href]');
