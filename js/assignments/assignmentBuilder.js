@@ -191,9 +191,8 @@ function mount() {
         <p class="assignment-hint">${esc(t('adapt.hint'))}</p>
         <label class="assignment-field">
           <span>${esc(t('adapt.due'))}</span>
-          <input id="assignDue" type="text" maxlength="${MAX_DUE}" aria-describedby="assignDueHelp" />
+          <input id="assignDue" type="text" maxlength="${MAX_DUE}" />
         </label>
-        <p id="assignDueHelp" class="assignment-hint">${esc(t('adapt.due.help'))}</p>
         <label class="assignment-row">
           <input id="assignMarking" type="checkbox" />
           <span>${esc(t('adapt.marking'))}</span>
@@ -435,12 +434,6 @@ function renderOrder() {
   if (signature !== drawn) {
     drawn = signature;
     list.innerHTML = '';
-    if (!order.length) {
-      const li = document.createElement('li');
-      li.className = 'assignment-step assignment-hint';
-      li.textContent = t('adapt.order.empty');
-      list.appendChild(li);
-    }
     order.forEach((sid, i) => {
       const li = document.createElement('li');
       li.className = 'assignment-step';
@@ -456,10 +449,7 @@ function renderOrder() {
         b.dataset.act = act;
         b.disabled = disabled;
         b.textContent = t(`adapt.${act}`);
-        b.setAttribute(
-          'aria-label',
-          t(`adapt.${act}.label`, { step: titleOf(sid) })
-        );
+        b.setAttribute('aria-label', `${t(`adapt.${act}`)}: ${titleOf(sid)}`);
         b.onclick = () =>
           act === 'remove' ? removeStep(sid) : move(sid, by, act);
         li.appendChild(b);

@@ -9,7 +9,6 @@ import {
   KEY_GUIDES,
   KEY_INVESTIGATION_PREFIX,
   KEY_LAB3D_GUIDE_PREFIX,
-  KEY_LOCALE,
   KEY_MADE_PREFIX,
   KEY_MISSIONLAB_PREFIX,
   KEY_RESUME,
@@ -55,20 +54,6 @@ const kept = (key, store) =>
   !store &&
   RECORD_KEYS.some(p => key.startsWith(p)) &&
   !OTHER.some(p => key.startsWith(p));
-
-/** The visible state: what a preview says it is, in the reader's language. */
-function banner() {
-  const es = (get(KEY_LOCALE) || document.documentElement.lang) === 'es';
-  const el = document.createElement('p');
-  el.id = 'previewBanner';
-  el.setAttribute('role', 'status');
-  el.textContent = es
-    ? 'Vista previa como estudiante: nada de esto se guarda.'
-    : 'Preview as a student: nothing here is saved.';
-  el.style.cssText =
-    'position:fixed;left:8px;bottom:8px;z-index:2147483000;margin:0;padding:6px 12px;border-radius:999px;font:600 14px/1.3 system-ui,sans-serif;background:#0b3d63;color:#fff;pointer-events:none;max-width:calc(100vw - 16px)';
-  document.body.append(el);
-}
 
 // Most one record may hold, in KiB (index.js COLLECTIONS has the same).
 export const ITEM = {
@@ -200,9 +185,3 @@ export const noteLesson = (id, step, store) =>
     { id: `investigation:${id}`, route: `/#investigation=${id}`, step },
     store
   );
-
-if (preview && typeof document !== 'undefined') {
-  if (document.readyState === 'loading')
-    document.addEventListener('DOMContentLoaded', banner);
-  else banner();
-}

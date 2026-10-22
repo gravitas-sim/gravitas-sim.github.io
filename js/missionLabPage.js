@@ -26,6 +26,11 @@ import { createGuidePanel } from './mission/lab/guidePanel.js';
 import { JD_J2000, dateOfJd } from './mission/ephemeris.js';
 import { planBytes, planFile } from './mission/plan.js';
 
+// A preview as a student (Prompt 175) says so on every page: the banner is
+// fetched only for one (the storage module holds the record).
+if (globalThis.location?.search.includes('preview=student'))
+  import('./storage/banner.js');
+
 const $ = id => document.getElementById(id);
 const SVG = 'http://www.w3.org/2000/svg';
 const AU = 149597870.7;

@@ -483,25 +483,6 @@ describe('what changed under a pinned activity', () => {
     expect(out.changedSids).toEqual(['ask']);
   });
 
-  test('a graph the lesson now declares is checked against the steps still there', () => {
-    const { lesson, a } = make();
-    const later = {
-      ...lesson,
-      steps: lesson.steps.map(s =>
-        s.sid === 'ask' ? { ...s, requires: ['intro'] } : s
-      ),
-    };
-    const r = stepBindings(a, later, stepFingerprint);
-    const out = whatChanged(a, later, r, packageBinding(a, null));
-    expect(out.graph).toContainEqual(
-      expect.objectContaining({
-        rule: 'requires',
-        step: 'Which bulge',
-        needsTitle: 'Welcome',
-      })
-    );
-  });
-
   test('re-pinning gives current digests, drops the gone, and a new id', () => {
     const { lesson, a } = make();
     const later = {

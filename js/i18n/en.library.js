@@ -149,7 +149,7 @@ export const EN_LIBRARY = {
   'lib.item.related': 'Related',
   'lib.item.preview': 'Preview as a student',
   'lib.item.preview.note':
-    'Opens it clean and keeps nothing: it reads none of the progress saved in this browser and writes none. A banner says so.',
+    'Opens it clean: nothing is read from this browser and nothing is saved.',
   'lib.item.teach': 'Instructor materials',
   'lib.item.in': 'In these pathways',
   'lib.item.in.seq': 'Sequence: {name}, number {n} of {total}',

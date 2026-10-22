@@ -286,13 +286,13 @@ it: `tests/assignmentAdaptation.test.js`). Nothing in the link is an answer.
 **The report.** Opening an activity whose steps have since been rewritten (a step's
 digest no longer matches), or removed, or whose package moved a major version,
 shows a report under the title in words: which steps were rewritten (by title),
-which are gone, what the lesson now needs that the activity does not give it, and
-the package pin. It offers to keep the activity as made or to update it, which
+which are gone, and the package pin. It offers to keep the activity as made or to update it, which
 makes a new activity with a new id (so no saved answer attaches to a question it
 did not answer; the rule the course pack's upgrade keeps). The digest is of a
 step's type, instrument, scenario, answer fields and the shape of its answer,
-never its words, so a reworded step is not reported. A new dependency the lesson
-declares without rewriting a step is not noticed unless something else is.
+never its words, so a reworded step is not reported. The order is proved when an
+activity is made, not again when it is opened: a new dependency the lesson declares
+without rewriting a step is not noticed.
 
 **Preview parity.** `preview=student` on any address reads none of the saved
 record and writes none (`js/storage/local.js`: every writer of the student's

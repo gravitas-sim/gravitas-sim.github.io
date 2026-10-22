@@ -294,8 +294,8 @@ export function readAdaptation(assignment) {
  * @param {{bindings: Array, missing: number, changed: number}} resolution -
  *   From stepBindings()
  * @param {object} pin - From packageBinding()
- * @returns {{missing: string[], changed: string[], graph: Array, pin: object,
- *   any: boolean}} Step titles, not ids
+ * @returns {{missing: string[], changed: string[], pin: object, any: boolean}}
+ *   Step titles, not ids
  */
 export function whatChanged(assignment, lesson, resolution, pin) {
   const title = sid =>
@@ -304,26 +304,14 @@ export function whatChanged(assignment, lesson, resolution, pin) {
     resolution.bindings.filter(b => b.status === status).map(b => b.sid);
   const missing = of('missing');
   const changed = of('changed');
-  const present = resolution.bindings.filter(b => b.step).map(b => b.sid);
-  // The graph as the lesson has it now, for the steps that are still there, in
-  // the order the activity gives them.
-  const graph = checkAdaptation(lesson, present, {
-    base: [],
-    depth: assignment.d,
-  }).problems.map(p => ({
-    ...p,
-    step: title(p.sid),
-    needsTitle: p.needs ? title(p.needs) : '',
-  }));
   const moved = ['major', 'moved'].includes(pin?.status);
   return {
     missing: missing.map(title),
     changed: changed.map(title),
     missingSids: missing,
     changedSids: changed,
-    graph,
     pin,
-    any: Boolean(missing.length || changed.length || graph.length || moved),
+    any: Boolean(missing.length || changed.length || moved),
   };
 }
 

@@ -29,7 +29,7 @@ import { stepFingerprint } from '../investigations/progressBackup.js';
 import { stepBindings } from './assignment.js';
 import { assignmentLink } from './assignmentLink.js';
 import { noteFor, readAdaptation, repin, whatChanged } from './adapt.js';
-import { ensureAdaptMessages, problemText } from './adaptText.js';
+import { ensureAdaptMessages } from './adaptText.js';
 import { packageBinding } from './pinning.js';
 import { lessonProvider } from './provider.js';
 
@@ -103,7 +103,7 @@ async function report(assignment, lesson) {
   box.setAttribute('aria-labelledby', 'adaptReportTitle');
   const head = para(t('adapt.report.title'), 'h3');
   head.id = 'adaptReportTitle';
-  box.append(head, para(t('adapt.report.lead')));
+  box.append(head);
   if (changes.changed.length)
     box.append(
       para(t('adapt.report.rewritten', { steps: changes.changed.join('; ') }))
@@ -112,14 +112,6 @@ async function report(assignment, lesson) {
     box.append(
       para(t('adapt.report.removed', { steps: changes.missingSids.join('; ') }))
     );
-  if (changes.graph.length) {
-    box.append(para(t('adapt.report.graph')));
-    const list = document.createElement('ul');
-    const title = sid => lesson.steps.find(s => s.sid === sid)?.title || sid;
-    for (const p of changes.graph)
-      list.append(para(problemText(p, title), 'li'));
-    box.append(list);
-  }
   if (pin.status === 'major' || pin.status === 'moved')
     box.append(
       para(
@@ -131,7 +123,6 @@ async function report(assignment, lesson) {
         })
       )
     );
-  box.append(para(t('adapt.report.same'), 'p'));
 
   const row = document.createElement('div');
   row.className = 'assignment-row';
