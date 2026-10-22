@@ -144,6 +144,11 @@ function accept(raw, from) {
     return false;
   }
   pack = p;
+  // A copy for a term is noted for My work, lazily: no course without one pays.
+  if (p.term)
+    import('./library/courseTerms.js')
+      .then(m => m.noteTerm({ id: p.id, term: p.term, title: p.title }))
+      .catch(() => {});
   document.documentElement.dataset.source = from;
   render();
   return true;
@@ -262,6 +267,13 @@ function render() {
 
   const head = [
     el('h1', { id: 'ch-title', text: words(pack.title) }),
+    pack.term
+      ? el('p', {
+          className: 'ui-note',
+          id: 'ch-term',
+          text: t('courseHome.term', { term: pack.term }),
+        })
+      : null,
     progress,
     pack.summary ? el('p', { text: words(pack.summary) }) : null,
     pack.audience

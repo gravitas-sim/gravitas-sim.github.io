@@ -60,6 +60,7 @@ export const ES_COURSEHOME = {
   'courseHome.open.reading': 'Abrir la lectura',
   'courseHome.open.pack': 'Abrir la investigación',
   'courseHome.openNamed': '{action}: {title}',
+  'courseHome.term': 'Periodo: {term}',
   'courseHome.progress': '{done} de {total} investigaciones terminadas',
   'courseHome.status.going': 'En curso',
   'courseHome.status.done': 'Terminada',

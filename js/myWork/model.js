@@ -11,6 +11,7 @@ import {
   KEY_MISSIONLAB_PREFIX,
   KEY_SIMULATION_SAVE,
   KEY_STUDENT_NAME,
+  KEY_TERMS,
   KEY_TEACHING_NOTES_PREFIX,
 } from '../names.js';
 // =============================================================================
@@ -216,6 +217,20 @@ export function describe(records, library = new Map()) {
       });
     } else if (key.startsWith(KEY_MADE_PREFIX)) {
       out.made.push({ key, title: text(value?.name) || key });
+    } else if (key === KEY_TERMS) {
+      // The courses opened that name a term (js/library/courseTerms.js owns the
+      // record; its route has no room for that module here, so this reads it).
+      for (const c of value?.v === 1 && Array.isArray(value.courses)
+        ? value.courses
+        : []) {
+        if (!isObj(c) || !text(c.id) || !text(c.term)) continue;
+        (out.terms ??= []).push({
+          id: text(c.id),
+          term: text(c.term),
+          title: { en: text(c.title?.en) || text(c.id), es: text(c.title?.es) },
+          when: iso(c.at),
+        });
+      }
     } else if (key === KEY_STUDENT_NAME) {
       out.name = text(value) || null;
     }
@@ -244,6 +259,7 @@ export function describe(records, library = new Map()) {
 export const total = d =>
   d.lessons.length +
   d.assignments.length +
+  (d.terms?.length ?? 0) +
   d.experiments.length +
   d.saved.length +
   d.drafts.length +

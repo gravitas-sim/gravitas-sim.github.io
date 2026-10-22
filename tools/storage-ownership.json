@@ -103,6 +103,13 @@
       "corpus": "resume-record"
     },
     {
+      "prefix": "gravitas_terms",
+      "name": "The courses opened that name a term, with the term and when",
+      "owner": "js/library/courseTerms.js",
+      "migration": "none; a record that is not v1 reads as empty",
+      "corpus": "course-terms"
+    },
+    {
       "prefix": "gravitas_course_",
       "name": "Course builder drafts and the last open",
       "owner": "js/coursePage.js",

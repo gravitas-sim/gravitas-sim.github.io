@@ -57,6 +57,7 @@ export const EN_COURSEHOME = {
   'courseHome.open.reading': 'Open the reading',
   'courseHome.open.pack': 'Open the investigation',
   'courseHome.openNamed': '{action}: {title}',
+  'courseHome.term': 'Term: {term}',
   'courseHome.progress': '{done} of {total} investigations finished',
   'courseHome.status.going': 'In progress',
   'courseHome.status.done': 'Finished',
