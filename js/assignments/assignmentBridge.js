@@ -83,6 +83,8 @@ export async function openAssignmentFromUrl() {
   if (
     a.x ||
     a.u ||
+    document.getElementById('adaptReport') ||
+    document.getElementById('adaptDue') ||
     binding?.missing ||
     binding?.changed ||
     ['major', 'moved'].includes(pin.status)
