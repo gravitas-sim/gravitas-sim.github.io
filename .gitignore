@@ -37,6 +37,7 @@ coverage/
 .instructor-password
 .instructor-build/
 .instructor-fixture/
+.instructor-rehearsal/
 
 # Playwright
 /playwright-report/
