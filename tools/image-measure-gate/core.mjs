@@ -1,4 +1,4 @@
-/* global console, performance */
+/* global console, performance, process */
 // =============================================================================
 // The gate's checks that need no browser: precision, undo, determinism and the
 // record (Prompt 178 prototype measurement; spike code)

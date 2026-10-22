@@ -558,8 +558,30 @@ export function mount(
     if (ui.sel?.id === m.id) tr.setAttribute('aria-selected', 'true');
     return tr;
   }
+  /** Rows kept between renders: a mark that did not change keeps its row. */
+  const rows = new Map();
   function renderTable() {
-    tbody.replaceChildren(...here().map(rowFor));
+    const list = here();
+    const want = new Set(list.map(m => m.id));
+    for (const [id, r] of rows)
+      if (!want.has(id)) {
+        r.tr.remove();
+        rows.delete(id);
+      }
+    let prev = null;
+    for (const m of list) {
+      const sel = ui.sel?.id === m.id ? ui.sel.handle : -1;
+      let r = rows.get(m.id);
+      if (!r || r.mark !== m || r.sel !== sel) {
+        const tr = rowFor(m);
+        if (r?.tr.isConnected) r.tr.replaceWith(tr);
+        r = { mark: m, sel, tr };
+        rows.set(m.id, r);
+      }
+      const at = prev ? prev.nextSibling : tbody.firstChild;
+      if (r.tr !== at) tbody.insertBefore(r.tr, at);
+      prev = r.tr;
+    }
     const sc = scaleOf(store.state, sidecar);
     scaleOut.textContent = `${T.scale}: ${sc ? `${fixed(sc.value * 1000) / 1000} ${sc.unit} ± ${fixed(sc.sigma * 1000) / 1000}` : T.none}`;
     status.textContent = T.frame(
@@ -576,6 +598,8 @@ export function mount(
     if (!m || !tr) return renderTable();
     const h = ui.sel?.id === id ? ui.sel.handle : 0;
     const [ix, iy] = tr.querySelectorAll('input[type=number]');
+    const kept = rows.get(id);
+    if (kept) kept.mark = m;
     ix.value = fixed(m.pts[h][0]);
     iy.value = fixed(m.pts[h][1]);
     tr.cells[6].textContent = sizeOf(m);

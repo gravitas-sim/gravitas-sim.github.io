@@ -189,15 +189,19 @@ export function moonSequence({
   R = 220,
 } = {}) {
   const rnd = makeRandom(seed);
-  const features = Array.from({ length: 12 }, (_, i) => {
+  // Twelve features, none within 40 pixels of another (rejection sampling).
+  const features = [];
+  while (features.length < 12) {
     const rho = rnd.uniform(0.15, 0.8) * R;
     const t = rnd.uniform(0, 2 * Math.PI);
-    return {
-      tag: String.fromCharCode(97 + i),
+    const f = {
+      tag: String.fromCharCode(97 + features.length),
       dx: rho * Math.cos(t),
       dy: rho * Math.sin(t),
     };
-  });
+    if (features.every(g => Math.hypot(g.dx - f.dx, g.dy - f.dy) >= 40))
+      features.push(f);
+  }
   const out = [];
   const v = [rnd.uniform(18, 26), rnd.uniform(-10, 10)];
   for (let k = 0; k < frames; k++) {
@@ -218,7 +222,7 @@ export function moonSequence({
       y: y0 + f.dy,
     }));
     for (const f of truth)
-      addStar(data, size, size, f.x, f.y, 4.5, 25 * SKY_SIGMA);
+      addStar(data, size, size, f.x, f.y, 4.5, 60 * SKY_SIGMA);
     addNoise(data, rnd);
     out.push({
       id: `moon-seq-${seed}-f${k + 1}`,
