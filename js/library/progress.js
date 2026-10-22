@@ -20,7 +20,10 @@ import {
 // reader is, so a guide is "in progress" once opened, and never claimed done.
 // =============================================================================
 
+// A preview as a student reads a clean record (js/storage/local.js).
+const preview = globalThis.location?.search.includes('preview=student');
 const read = key => {
+  if (preview) return null;
   try {
     return JSON.parse(window.localStorage.getItem(key) || 'null');
   } catch {

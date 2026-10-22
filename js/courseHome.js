@@ -48,6 +48,11 @@ import { BUILTIN_COURSES } from './data/courses/index.js';
 import { PLATFORM_API } from './platform/catalog.generated.js';
 import { KEY_NEXT_CONTEXT } from './names.js';
 
+// A preview as a student (Prompt 175) says so on every page: the storage module
+// puts up the banner and holds the record, and is fetched only for one.
+if (globalThis.location?.search.includes('preview=student'))
+  import('./storage/local.js');
+
 const MAX_FILE = 512 * 1024;
 
 const $ = id => document.getElementById(id);

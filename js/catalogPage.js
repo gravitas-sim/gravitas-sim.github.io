@@ -39,6 +39,11 @@ import {
 import { PLATFORM_API } from './platform/manifest.js';
 import { ID_CATALOG } from './names.js';
 
+// A preview as a student (Prompt 175) says so on every page: the storage module
+// puts up the banner and holds the record, and is fetched only for one.
+if (globalThis.location?.search.includes('preview=student'))
+  import('./storage/local.js');
+
 const $ = id => document.getElementById(id);
 const CATALOG_URL = new URL('catalog.json', document.baseURI);
 const TYPES = [

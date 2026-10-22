@@ -63,6 +63,11 @@ import { createPlot } from './plot/plot.js';
 import { createImageView, decodeBits } from './observatory/image.js';
 import { createTable } from './plot/table.js';
 
+// A preview as a student (Prompt 175) says so on every page: the storage module
+// puts up the banner and holds the record, and is fetched only for one.
+if (globalThis.location?.search.includes('preview=student'))
+  import('./storage/local.js');
+
 const $ = id => document.getElementById(id);
 
 const state = {
