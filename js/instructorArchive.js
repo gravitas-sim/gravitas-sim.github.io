@@ -124,14 +124,19 @@ export function readArchive(text) {
   };
 }
 
-/** A file name: the term in lower-case words joined by hyphens, and the day. */
-export function archiveName(term, day) {
-  const slug = String(term || '')
+/** A term as lower-case words joined by hyphens, for a file name or an id. */
+export function termSlug(term) {
+  return String(term || '')
     .normalize('NFKD')
-    .replace(/[̀-ͯ]/g, '')
+    .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '')
     .slice(0, 30);
+}
+
+/** A file name: the term in lower-case words joined by hyphens, and the day. */
+export function archiveName(term, day) {
+  const slug = termSlug(term);
   return `gravitas-archive-${slug ? `${slug}-` : ''}${day}.json`;
 }

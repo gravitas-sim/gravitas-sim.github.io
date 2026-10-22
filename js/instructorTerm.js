@@ -27,6 +27,7 @@
 // =============================================================================
 
 import { assignmentIdFor, shortHash } from './assignments/assignment.js';
+import { termSlug } from './instructorArchive.js';
 import { MAX_TERM, itemsOf } from './course/pack.js';
 import {
   STATUS,
@@ -79,6 +80,23 @@ export function titleWithTerm(text, term, was = null) {
     base = cut.slice(0, Math.max(cut.lastIndexOf(' '), room >> 1)).trimEnd();
   }
   return `${base}${suffix(term)}`;
+}
+
+/**
+ * A course's public id with its term, so each term's copy is a draft of its own
+ * and last term's stays where it was: `intro-astronomy` becomes
+ * `intro-astronomy-spring-2027`, and a later term replaces that suffix.
+ * @param {string} id - The id as it is
+ * @param {?string} term - The new term, or null for none
+ * @param {?string} [was] - The term the id carries now
+ * @returns {string}
+ */
+export function idWithTerm(id, term, was = null) {
+  let base = String(id);
+  const old = was ? termSlug(was) : '';
+  if (old && base.endsWith(`-${old}`)) base = base.slice(0, -old.length - 1);
+  const slug = term ? termSlug(term) : '';
+  return slug ? `${base}-${slug}` : base;
 }
 
 /** A text pair carrying the term, its Spanish still marked fresh if it was. */
@@ -154,6 +172,7 @@ export function startTerm(pack, facts, opts) {
   out.gravitas = facts.platform;
   if (term) out.term = term;
   else delete out.term;
+  out.id = idWithTerm(pack.id, term, was);
 
   const rekeyed = [];
   const ids = new Map(
@@ -194,6 +213,7 @@ export function startTerm(pack, facts, opts) {
     pack: out,
     report: {
       term,
+      id: { from: pack.id, to: out.id },
       items,
       rekeyed,
       version: { from: pack.version, to: out.version },

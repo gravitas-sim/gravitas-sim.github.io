@@ -100,7 +100,7 @@ describe('a course for a term', () => {
     expect(validateCoursePack(pack, api)).toEqual([]);
     expect(pack.term).toBe('Spring 2027');
     expect(INTRO_ASTRONOMY.term).toBeUndefined();
-    expect(pack.id).toBe(INTRO_ASTRONOMY.id);
+    expect(pack.id).toBe(`${INTRO_ASTRONOMY.id}-spring-2027`);
     expect(pack.gravitas).toBe(facts.platform);
   });
 
@@ -287,5 +287,31 @@ describe('the term on a pack', () => {
       p.term = bad;
       expect(validateCoursePack(p, api).map(e => e.code)).toContain('term');
     }
+  });
+});
+
+describe("the id of a term's copy", () => {
+  test('carries the term so each term is a draft of its own, and replaces the last', async () => {
+    const { idWithTerm } = await import('../js/instructorTerm.js');
+    expect(idWithTerm('intro-astronomy', 'Spring 2027')).toBe(
+      'intro-astronomy-spring-2027'
+    );
+    expect(
+      idWithTerm('intro-astronomy-fall-2026', 'Spring 2027', 'Fall 2026')
+    ).toBe('intro-astronomy-spring-2027');
+    expect(idWithTerm('intro-astronomy-fall-2026', null, 'Fall 2026')).toBe(
+      'intro-astronomy'
+    );
+    expect(idWithTerm('intro-astronomy', '!!!')).toBe('intro-astronomy');
+    const { pack, report } = startTerm(INTRO_ASTRONOMY, facts, {
+      term: 'Spring 2027',
+      today: TODAY,
+    });
+    expect(pack.id).toBe('intro-astronomy-spring-2027');
+    expect(report.id).toEqual({
+      from: 'intro-astronomy',
+      to: 'intro-astronomy-spring-2027',
+    });
+    expect(validateCoursePack(pack, api)).toEqual([]);
   });
 });

@@ -226,6 +226,7 @@ async function useLanguage(id) {
   await setLocale(id);
   translateStatic();
   render();
+  termPanel?.refresh();
 }
 
 function translateStatic() {
@@ -2046,6 +2047,32 @@ function renderDrafts() {
 
 // --- Start-up ---------------------------------------------------------------------------
 
+/** The panel for a course as it comes, or for its next term (js/instructorTermView.js). */
+let termPanel = null;
+async function openTerm(mode) {
+  const { openTermPanel } = await import('./instructorTermView.js');
+  termPanel = openTermPanel({
+    host: $('cb-term-panel'),
+    mode,
+    source: doc,
+    facts: pack =>
+      courseFacts(pack, {
+        load: id => loadInvestigation(id, 'en'),
+        catalog,
+        known,
+      }),
+    problems: pack => validateCoursePack(pack, courseApi(catalog)).length,
+    apply: start,
+    nameOf: (pack, id) =>
+      itemName(itemsOf(pack).find(x => x.item.id === id)?.item ?? { id }),
+    download: downloadText,
+    serialize,
+    locale: getLocale,
+    root: ROOT,
+    today,
+  });
+}
+
 async function openExample() {
   const pack = clone(await BUILTIN_COURSES['intro-astronomy']());
   start(pack, t('course.status.example'));
@@ -2056,6 +2083,7 @@ function wire() {
     start(blankCourse(), t('course.status.new'))
   );
   $('cb-example').addEventListener('click', openExample);
+  $('cb-term').addEventListener('click', () => openTerm('next'));
   $('cb-open').addEventListener('click', () => $('cb-file').click());
   $('cb-file').addEventListener('change', () => {
     const file = $('cb-file').files?.[0];
@@ -2193,11 +2221,16 @@ async function init() {
   const named = new URLSearchParams(location.search).get('open');
   const last = named && drafts.load(named) ? named : drafts.last();
   const draft = last ? drafts.load(last) : null;
+  // ?use=<id>: a course Gravitas ships, to use as it comes (Prompt 168).
+  const use = new URLSearchParams(location.search).get('use');
+  const shipped = use && Object.hasOwn(BUILTIN_COURSES, use) ? use : null;
   // A first visit opens the example course; New starts from nothing.
   history = createHistory(
-    draft?.doc
-      ? byScenarioId(draft.doc)
-      : clone(await BUILTIN_COURSES['intro-astronomy']())
+    shipped
+      ? clone(await BUILTIN_COURSES[shipped]())
+      : draft?.doc
+        ? byScenarioId(draft.doc)
+        : clone(await BUILTIN_COURSES['intro-astronomy']())
   );
   baseline = history.current();
   render();
@@ -2209,6 +2242,7 @@ async function init() {
   );
   const added = await addFromAddress(Boolean(draft));
   if (added) setStatus(added);
+  if (shipped) await openTerm('use');
   document.body.dataset.ready = 'true';
 }
 
