@@ -365,10 +365,10 @@ reports what the browser downloads at start-up separately from what is deferred:
 
 | What                   | Size                                                   | Files / chunks                                |
 | ---------------------- | ------------------------------------------------------ | --------------------------------------------- |
-| CSS                    | <!--fact:buildCss-->208<!--/fact--> KB                 | 1                                             |
-| JavaScript at start-up | <!--fact:buildStartupJs-->587<!--/fact--> KB           | <!--fact:buildStartupFiles-->52<!--/fact-->   |
-| JavaScript on demand   | <!--fact:buildDeferredJs-->5422<!--/fact--> KB         | <!--fact:buildDeferredChunks-->424<!--/fact--> |
-| **Initial download**   | **<!--fact:buildInitialDownload-->795<!--/fact--> KB** |                                               |
+| CSS                    | <!--fact:buildCss-->209<!--/fact--> KB                 | 1                                             |
+| JavaScript at start-up | <!--fact:buildStartupJs-->589<!--/fact--> KB           | <!--fact:buildStartupFiles-->53<!--/fact-->   |
+| JavaScript on demand   | <!--fact:buildDeferredJs-->5423<!--/fact--> KB         | <!--fact:buildDeferredChunks-->424<!--/fact--> |
+| **Initial download**   | **<!--fact:buildInitialDownload-->798<!--/fact--> KB** |                                               |
 
 Those figures are the last build's, to the nearest kilobyte, and are written
 into the page by `npm run docs:sync` from `dist/build-summary.json` rather than
@@ -486,8 +486,8 @@ npm run e2e:ui                    # the Playwright inspector
 npm run e2e:report                # open the last HTML report
 ```
 
-The suite is <!--fact:e2eTests-->2532<!--/fact--> tests
-in <!--fact:e2eFiles-->183<!--/fact--> files and takes several minutes in
+The suite is <!--fact:e2eTests-->2554<!--/fact--> tests
+in <!--fact:e2eFiles-->184<!--/fact--> files and takes several minutes in
 Chromium.
 
 Some notes on how it is put together, because two of the choices are not
