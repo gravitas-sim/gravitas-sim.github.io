@@ -159,7 +159,8 @@ export const WORDS = {
       'Estos no se pudieron fijar otra vez y quedan como estaban; quítalos o reemplázalos en el creador, más abajo: {ids}.',
     'r.item': '{name}: {standing}{steps}',
     'r.steps.changed': '; pasos cuya pregunta cambió: {n}',
-    'r.steps.missing': '; pasos que ya no están en la investigación, quitados: {n}',
+    'r.steps.missing':
+      '; pasos que ya no están en la investigación, quitados: {n}',
     'st.same': 'como estaba fijado',
     'st.changed': 'cambiaron los pasos de la investigación',
     'st.compatible': 'una versión compatible más nueva',

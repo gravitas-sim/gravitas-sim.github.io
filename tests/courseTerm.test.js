@@ -10,11 +10,7 @@ import './galacticFetch.js';
 import { describe, test, expect, beforeAll } from '@jest/globals';
 
 import { itemsOf, MAX_TERM, validateCoursePack } from '../js/course/pack.js';
-import {
-  courseApi,
-  courseFacts,
-  newAssignmentId,
-} from '../js/course/api.js';
+import { courseApi, courseFacts, newAssignmentId } from '../js/course/api.js';
 import {
   startActivityTerm as startActivity,
   startTerm as start,
