@@ -60,7 +60,7 @@ import {
   unitId,
 } from './observatory/units.js';
 import { createPlot } from './plot/plot.js';
-import { createImageView, decodeBits } from './observatory/image.js';
+import { createImageView, decodeBits, markHost } from './observatory/image.js';
 import { createTable } from './plot/table.js';
 
 const $ = id => document.getElementById(id);
@@ -253,10 +253,6 @@ function rebuild({ announceChange = null } = {}) {
   if (announceChange) status(announceChange);
 }
 
-/**
- * The fit panel, for an observation a model suits: loaded the first time a
- * reader opens it, so the page itself carries none of the inference core.
- */
 // What the page lends its lazily loaded panels (see js/observatory/fitPanel.js).
 const lent = {
   t,
@@ -280,6 +276,7 @@ function mountFit(m) {
   });
   return fit.panel;
 }
+// The fit panel (for an observation a model suits): loaded when first opened.
 async function fitPanel() {
   if (fit.panel) return fit.panel;
   fit.loading ??= import('./observatory/fitPanel.js').then(mountFit);
@@ -297,6 +294,7 @@ $('obsSkyPanel').addEventListener('toggle', async () => {
   await sky.loading;
   sky.panel.update(state.view);
 });
+const marks = markHost($('obsMarksPanel'), () => state.view, lent);
 // The archive import (ARCHIVE_IMPORT.md): loaded when first opened.
 let archive = null;
 $('obsArchivePanel').addEventListener('toggle', () => {
@@ -402,6 +400,7 @@ function renderFit(o) {
   // A table with positions can be drawn on the sky, and one with proper motions as vectors.
   const hasId = id => o.columns.some(c => c.id === id);
   $('obsSkyPanel').hidden = !(hasId('ra') && hasId('dec'));
+  marks.show(o);
   if (!$('obsSkyPanel').hidden && sky.panel && $('obsSkyPanel').open)
     sky.panel.update(o);
   // A model of a flux or a velocity against time can be laid over the data.
@@ -484,9 +483,8 @@ function onSelection({ source }) {
 function renderSelectionBar() {
   const s = state.selection;
   $('obsSelected').textContent = t('obs.selection.count', { n: s.size });
-  $('obsMask').disabled = !s.size;
-  $('obsNoteGo').disabled = !s.size;
-  $('obsClear').disabled = !s.size;
+  for (const id of ['obsMask', 'obsNoteGo', 'obsClear'])
+    $(id).disabled = !s.size;
 }
 
 // --- The observation's record, and what the reader is seeing ------------------------
@@ -1142,6 +1140,7 @@ async function readImport() {
     $('obsImport').hidden = true;
     if (r.changes.some(c => c.op === 'formula')) await formulaReady();
     open(r.observation, r.changes);
+    marks.restore(r.marks);
     const same =
       !r.expected || (await exporter()).sameObservation(state.view, r.expected);
     status(
@@ -1423,6 +1422,7 @@ $('obsExportJson').addEventListener('click', async () => {
       source: state.source,
       changes: state.history.changes(),
       digest: await x.openedDigest(state.source),
+      marks: await marks.block(),
     }),
     'application/json'
   );

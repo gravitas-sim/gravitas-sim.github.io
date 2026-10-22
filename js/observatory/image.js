@@ -242,3 +242,37 @@ export function createImageView(canvas, hooks) {
 
   return { draw, update: () => paint() };
 }
+
+/**
+ * The marks panel (imageMarks.js, Prompt 179): the details element that shows for
+ * an image, its instrument loaded when first opened. `saved` is a workspace's
+ * marks waiting for the instrument; the page keeps nothing else of them.
+ * @param {HTMLDetailsElement} box - Its body is the first div inside
+ * @param {() => ?object} view - The observation in view
+ * @param {object} lent - What the page lends its lazy panels
+ */
+export function markHost(box, view, lent) {
+  let panel = null;
+  let loading = null;
+  let saved = null;
+  box.addEventListener('toggle', async () => {
+    if (!box.open || view()?.kind !== 'image') return;
+    loading ??= import('./imageMarks.js').then(
+      m => (panel = m.mountMarks(box.querySelector('div'), { ...lent, saved }))
+    );
+    await loading;
+    panel.update(view());
+  });
+  return {
+    show(o) {
+      box.hidden = o.kind !== 'image';
+      if (!box.hidden) panel?.update(o);
+    },
+    block: () => (panel ? panel.block() : saved),
+    restore(marks) {
+      if (!(saved = marks ?? null)) return;
+      box.open = true;
+      panel?.restore(saved);
+    },
+  };
+}

@@ -22,7 +22,6 @@
 // Pure; async only for the digest.
 // =============================================================================
 
-import { artifact, validateArtifact } from '../platform/artifact.js';
 import { sha256Hex } from '../hash.js';
 import { ARITY, PLACE_SIGMA, emptyState, refine } from './marks.js';
 import { REFINE_VERSION } from './refine.js';
@@ -193,6 +192,8 @@ export async function marksBlock({ frames, state }) {
  *   state: object}} a
  */
 export async function writeRecord({ id, setId, frames, sidecar, state }) {
+  // The envelope's module is the Fit panel's too: fetched when a record is made.
+  const { artifact } = await import('../platform/artifact.js');
   const red = await marksRecord({ frames, state });
   return artifact({
     id,
@@ -219,96 +220,64 @@ export class ReplayError extends Error {
 
 const finite = v => typeof v === 'number' && Number.isFinite(v);
 const HEX = /^[0-9a-f]{64}$/;
+const pointList = p =>
+  Array.isArray(p) &&
+  p.length <= LIMITS.points &&
+  p.every(q => Array.isArray(q) && q.length === 2 && q.every(finite));
 
 /**
- * Whether a `workspace.marks` block is well formed (a list of problems, each
- * `{path, message}`; empty when it is). Data only: nothing here reads pixels.
+ * Whether a `workspace.marks` block is well formed: the paths that are not
+ * (empty when it is). Data only: nothing here reads pixels.
+ * @returns {string[]}
  */
 export function validateMarks(b) {
   const out = [];
-  const bad = (path, message) => out.push({ path, message });
-  if (!b || typeof b !== 'object')
-    return [{ path: 'marks', message: 'is an object' }];
-  if (b.format !== MARKS_FORMAT || b.formatVersion !== MARKS_VERSION)
-    bad('marks.format', `is ${MARKS_FORMAT}/${MARKS_VERSION}`);
+  const bad = path => out.push(path);
+  if (b?.format !== MARKS_FORMAT || b.formatVersion !== MARKS_VERSION)
+    return ['format'];
   if (
     !Array.isArray(b.frames) ||
     !b.frames.length ||
     b.frames.length > LIMITS.frames
   )
-    return [
-      ...out,
-      {
-        path: 'marks.frames',
-        message: 'lists the frames the marks were made on',
-      },
-    ];
+    return ['frames'];
   b.frames.forEach((f, k) => {
-    const at = `marks.frames[${k}]`;
-    if (!HEX.test(f?.digest ?? ''))
-      bad(`${at}.digest`, 'is the SHA-256 of the frame');
-    if (!(
-      Number.isInteger(f?.width) &&
+    const ok =
+      HEX.test(f?.digest ?? '') &&
+      Number.isInteger(f.width) &&
       f.width > 0 &&
-      Number.isInteger(f?.height) &&
-      f.height > 0
-    ))
-      bad(at, 'has a width and a height in pixels');
-    if (f?.time !== undefined && !timeOf(f.time))
-      bad(`${at}.time`, 'names its time scale');
+      Number.isInteger(f.height) &&
+      f.height > 0 &&
+      (f.time === undefined || timeOf(f.time));
+    if (!ok) bad(`frames[${k}]`);
   });
   if (!Array.isArray(b.marks) || b.marks.length > LIMITS.marks)
-    return [
-      ...out,
-      {
-        path: 'marks.marks',
-        message: `is a list of at most ${LIMITS.marks} marks`,
-      },
-    ];
+    return [...out, 'marks'];
   const ids = new Set();
   b.marks.forEach((m, i) => {
-    const at = `marks.marks[${i}]`;
     const need = ARITY[m?.kind];
-    if (!need)
-      return bad(`${at}.kind`, `is one of ${Object.keys(ARITY).join(', ')}`);
-    if (typeof m.id !== 'string' || !m.id || ids.has(m.id))
-      bad(`${at}.id`, 'is unique');
-    ids.add(m.id);
-    if (!(
+    const ok =
+      need &&
+      typeof m.id === 'string' &&
+      m.id &&
+      !ids.has(m.id) &&
       Number.isInteger(m.frame) &&
       m.frame >= 0 &&
-      m.frame < b.frames.length
-    ))
-      bad(`${at}.frame`, 'is a frame of the record');
-    if (typeof m.tag !== 'string' || m.tag.length > 40)
-      bad(`${at}.tag`, 'is text of at most 40 characters');
-    const pts = (p, name) =>
-      Array.isArray(p) &&
-      p.length <= LIMITS.points &&
-      p.every(q => Array.isArray(q) && q.length === 2 && q.every(finite))
-        ? p
-        : bad(`${at}.${name}`, 'is a list of [x, y] numbers');
-    const pl = pts(m.pts, 'pts');
-    if (pl && (m.kind === 'polygon' ? pl.length < 3 : pl.length !== need))
-      bad(
-        `${at}.pts`,
-        `has ${m.kind === 'polygon' ? 'three or more' : need} points`
-      );
-    if (
-      m.length !== undefined &&
-      !(
-        finite(m.length?.value) &&
-        m.length.value > 0 &&
-        typeof m.length.unit === 'string'
-      )
-    )
-      bad(`${at}.length`, 'is {value, unit, sigma?}');
-    if (m.result) {
-      const rp = pts(m.result.pts, 'result.pts');
-      if (rp && pl && rp.length !== pl.length)
-        bad(`${at}.result.pts`, 'has the points of the mark');
-      if (!finite(m.result.sigma)) bad(`${at}.result.sigma`, 'is a number');
-    }
+      m.frame < b.frames.length &&
+      typeof m.tag === 'string' &&
+      m.tag.length <= 40 &&
+      pointList(m.pts) &&
+      (m.kind === 'polygon' ? m.pts.length >= 3 : m.pts.length === need) &&
+      (m.length === undefined ||
+        (finite(m.length?.value) &&
+          m.length.value > 0 &&
+          typeof m.length.unit === 'string')) &&
+      (!m.result ||
+        (pointList(m.result.pts) &&
+          m.result.pts.length === m.pts.length &&
+          finite(m.result.sigma)));
+    if (!ok) bad(`marks[${i}]`);
+    ids.add(m?.id);
   });
   return out;
 }
@@ -333,10 +302,11 @@ export async function replay(record, frames) {
     if (problems.length)
       throw new ReplayError(
         'invalid',
-        `the marks are not a record: ${problems[0].path} ${problems[0].message}`
+        `the marks are not a record: ${problems[0]}`
       );
     red = record;
   } else {
+    const { validateArtifact } = await import('../platform/artifact.js');
     const problems = validateArtifact(record);
     if (problems.length)
       throw new ReplayError(

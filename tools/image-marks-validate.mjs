@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-/* global console, process */
 // =============================================================================
 // The marks instrument against the gate's thresholds (Prompt 179)
 // -----------------------------------------------------------------------------

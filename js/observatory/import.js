@@ -348,8 +348,14 @@ function readJson(body, file, opts) {
       ? data.workspace.changes
       : [];
     const saved = data.workspace?.source;
+    // The marks an image was marked with (js/measure/imageRecord.js): read
+    // as they are and checked when they are restored, against the pixels.
+    const marks =
+      data.workspace?.marks?.format === 'gravitas.image-marks'
+        ? { marks: data.workspace.marks }
+        : {};
     if (!changes.length || !saved)
-      return { ok: true, observation, changes: [] };
+      return { ok: true, observation, changes: [], ...marks };
     // A session: the observation as opened, and the changes to make again.
     // The observation the file holds is what they must give (`expected`).
     const source = revive(saved);
@@ -362,7 +368,13 @@ function readJson(body, file, opts) {
           .map(p => ({ message: `workspace.source ${p.path} ${p.message}` })),
       };
     }
-    return { ok: true, observation: source, changes, expected: observation };
+    return {
+      ok: true,
+      observation: source,
+      changes,
+      expected: observation,
+      ...marks,
+    };
   }
   let header;
   let rows;

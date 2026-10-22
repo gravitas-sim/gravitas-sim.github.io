@@ -88,6 +88,10 @@ export const SOURCE = Object.freeze({
   // budget, the patched conic against the propagated flight), kept as its
   // envelope (js/mission/evidence.js).
   MISSION_LAB: 'mission-lab',
+  // The marks, scale and frame times a reader put on an image in the
+  // Observatory, kept as their envelope with the replay that reopens the image
+  // (js/observatory/imageMarks.js, js/measure/imageRecord.js).
+  IMAGE_MARKS: 'image-marks',
 });
 
 /** The sources this build can capture from. */
@@ -109,6 +113,7 @@ export const SOURCES = [
   SOURCE.DERIVED_QUANTITY,
   SOURCE.LAB3D,
   SOURCE.MISSION_LAB,
+  SOURCE.IMAGE_MARKS,
 ];
 
 /** How long a student's prose may be, per field. */

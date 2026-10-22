@@ -286,6 +286,7 @@ export const ES_OBSERVATORY = {
   'obs.export.csv': 'Guardar las filas como CSV',
   'obs.cmp.title': 'Comparar un modelo con los datos',
   'obs.fit.title': 'Ajustar un modelo (diagnóstico)',
+  'obs.im.title': 'Marcas y escala sobre la imagen',
   'obs.sky.title': 'Cielo: mapa galáctico y vectores de movimiento propio',
   'obs.arc.title':
     'O busca las épocas de Gaia de una estrella en el CDS (en vivo, opcional)',
