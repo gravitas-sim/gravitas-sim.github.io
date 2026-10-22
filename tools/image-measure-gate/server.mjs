@@ -4,6 +4,7 @@
 import { createServer } from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
+import { HARNESS_HTML } from './harnessPage.mjs';
 import { fileURLToPath } from 'node:url';
 
 export const REPO = path.resolve(
@@ -23,6 +24,13 @@ export function serve(port = 4417) {
   const server = createServer(async (req, res) => {
     let p = decodeURIComponent(new URL(req.url, 'http://x').pathname);
     if (p.endsWith('/')) p += 'index.html';
+    if (p === '/tools/image-measure-gate/harness.html')
+      return res
+        .writeHead(200, {
+          'content-type': 'text/html',
+          'cache-control': 'no-store',
+        })
+        .end(HARNESS_HTML);
     const file = path.join(REPO, p);
     if (!file.startsWith(REPO)) return res.writeHead(403).end();
     try {

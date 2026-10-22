@@ -8,11 +8,13 @@
 // bundler) are not for Jest.
 // =============================================================================
 
+import { Buffer } from 'node:buffer';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 
 import { REPO } from './server.mjs';
+import { HARNESS_HTML } from './harnessPage.mjs';
 
 /** The files whose content the record is about: edit one and the record is stale. */
 export const PROTOTYPE_FILES = [
@@ -30,7 +32,11 @@ export const prototypeDigest = () => {
   const h = createHash('sha256');
   for (const f of PROTOTYPE_FILES) {
     h.update(f);
-    h.update(readFileSync(path.join(REPO, 'tools', 'image-measure-gate', f)));
+    h.update(
+      f === 'harness.html'
+        ? Buffer.from(HARNESS_HTML)
+        : readFileSync(path.join(REPO, 'tools', 'image-measure-gate', f))
+    );
   }
   return h.digest('hex').slice(0, 16);
 };

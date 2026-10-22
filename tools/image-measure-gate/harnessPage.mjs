@@ -1,4 +1,10 @@
-<!doctype html>
+// The gate's harness page, served by server.mjs at tools/image-measure-gate/harness.html.
+// It is a string and not an .html file because the site's page checks (the shell,
+// the content-security policy, the navigation inventory) take every .html file in
+// the tree for a page of the site, and this is spike code that is no page. The
+// text is exactly the file that was measured; digest.mjs hashes it under the name
+// harness.html. Spike code.
+export const HARNESS_HTML = String.raw`<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -27,3 +33,4 @@
     <script type="module" src="./harness.js"></script>
   </body>
 </html>
+`;
