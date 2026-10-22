@@ -148,4 +148,6 @@ submitted anywhere, and it claims no review, adopter or endorsement.
 - A "Find content" or "Adopter's guide" entry in the shell menu (M-1 in the P81
   checkpoint).
 - Instructor-note prose in Spanish, which the adoption pages still mark "In
-  English only" (D-ADOPT-01).
+  English only" (D-ADOPT-01). Prompt 170 added generated Spanish structured
+  notes for every investigation (INSTRUCTOR_MATERIALS.md); they are not that
+  prose, and the guide's languages row says what is and is not in Spanish.

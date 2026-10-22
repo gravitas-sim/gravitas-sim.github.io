@@ -173,7 +173,7 @@ their ceilings:
 | `js/data/instructorContent.js` | 6,715 | 6,715 |
 | `js/i18n/es.deferred.js` | 4,085 | 4,085 |
 | `js/i18n/en.deferred.js` | 3,838 | 3,838 |
-| `js/investigations.js` | 3,296 | 3,296 |
+| `js/investigations.js` | 3,293 | 3,293 |
 | `js/render.js` | 3,015 | 3,015 |
 | `js/world/build.js` | 2,599 | 2,599 |
 | `js/composerPage.js` | 2,532 | 2,532 |

@@ -171,6 +171,19 @@ says. An assignment link made without the choice is byte for byte what it was,
 and a 2.0.0 build opens one that carries it and prints the note as it always did.
 The assignment builder panel and the Studio do not offer the choice yet.
 
+**Which sections start open (Prompt 167).** The lesson panel, an instrument panel
+and the Settings dialog keep what a step does not ask about behind a "More"
+section, shut at the survey depths and open at the advanced one. An activity can
+choose for its students: `more: 'open'` or `more: 'shut'` on the activity
+(`js/data/activities.js`) writes `mo: 'open'` or `mo: 'shut'` on the assignment it
+builds, and the panels start accordingly. It is written only when set, so every
+link made without it is byte for byte what it was, and a 2.0.0 build opens one
+that carries it (proved in `tests/progressiveDisclosure.test.js`) and shows the
+sections as it always did. It sets a starting point only: a student can always
+open everything or fold it again, and what they last chose for a surface outranks
+the activity. It never folds anything a step asks about: the task rule holds
+whatever the activity says. No shipped activity sets it yet.
+
 Pack authors write the three fields in an investigation pack or a question bank
 (`gravitas.investigation-pack/1`, `gravitas.question-bank/1`); a 2.0.0 reader
 refuses a criterion that carries one, naming the field (the boundary list,

@@ -244,13 +244,17 @@ describe('the document inventory', () => {
     // 430 after the four cosmology investigations (Prompt 91).
     // 468 after the two computational investigations (Prompt 102).
     // 480 after the three compute-package investigations (Prompt 102 follow-up).
-    expect(inv.documents).toBe(480);
-    expect(inv.byLocale).toEqual({ en: 249, es: 231 });
+    // 540 after the generated Spanish structured notes, one per investigation
+    // (Prompt 170): Spanish only, so the English count does not move.
+    expect(inv.documents).toBe(540);
+    expect(inv.byLocale).toEqual({ en: 249, es: 291 });
+    expect(inv.byKind.notes).toBe(INVESTIGATIONS.length);
     expect(inv.byVariant).toEqual({
       activity: 12,
       depth: 210,
       full: 240,
       general: 18,
+      notes: 60,
     });
   });
 
@@ -262,13 +266,14 @@ describe('the document inventory', () => {
     }
   });
 
-  test('every investigation has a guide and a key in each language', () => {
+  test('every investigation has a guide and a key in each language, and Spanish notes', () => {
     for (const inv of INVESTIGATIONS)
       for (const id of [
         `${inv.id}-guide`,
         `${inv.id}-key`,
         `${inv.id}-guide-es`,
         `${inv.id}-key-es`,
+        `${inv.id}-notes-es`,
       ])
         expect(files.find(f => f.id === id)).toBeTruthy();
   });
