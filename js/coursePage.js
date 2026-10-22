@@ -2070,6 +2070,15 @@ async function openTerm(mode) {
     locale: getLocale,
     root: ROOT,
     today,
+    courseLink,
+    lib: {
+      STATUS,
+      itemsOf,
+      reviewCoursePack,
+      upgradeCoursePack,
+      shortHash,
+      newAssignmentId,
+    },
   });
 }
 

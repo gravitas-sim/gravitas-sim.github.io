@@ -1,5 +1,5 @@
 // =============================================================================
-// A course or an activity for the next term (Prompt 168, js/course/term.js)
+// A course or an activity for the next term (Prompt 168, js/instructorTerm.js)
 // -----------------------------------------------------------------------------
 // The new copy is valid, keeps last term's file untouched, has fresh submission
 // keys, says what the re-pin found, and last term's links still open what they
@@ -10,15 +10,24 @@ import './galacticFetch.js';
 import { describe, test, expect, beforeAll } from '@jest/globals';
 
 import { itemsOf, MAX_TERM, validateCoursePack } from '../js/course/pack.js';
-import { courseApi, courseFacts } from '../js/course/api.js';
 import {
-  startActivityTerm,
-  startTerm,
+  courseApi,
+  courseFacts,
+  newAssignmentId,
+} from '../js/course/api.js';
+import {
+  startActivityTerm as startActivity,
+  startTerm as start,
   termLabel,
   titleWithTerm,
 } from '../js/instructorTerm.js';
 import { assignmentPayload, courseLink } from '../js/course/links.js';
-import { shortHash } from '../js/course/review.js';
+import {
+  STATUS,
+  reviewCoursePack,
+  shortHash,
+  upgradeCoursePack,
+} from '../js/course/review.js';
 import { INTRO_ASTRONOMY } from '../js/data/courses/intro-astronomy.js';
 import { BUILTIN_COURSES } from '../js/data/courses/index.js';
 import { loadInvestigation } from '../js/data/investigations/registry.js';
@@ -27,6 +36,19 @@ import {
   assignmentIdFor,
 } from '../js/assignments/assignment.js';
 import { readFileSync } from 'node:fs';
+
+/** What the course builder's page and the kit hand js/instructorTerm.js. */
+const lib = {
+  STATUS,
+  itemsOf,
+  reviewCoursePack,
+  upgradeCoursePack,
+  shortHash,
+  newAssignmentId,
+};
+const startTerm = (pack, facts, opts) => start(pack, facts, { ...opts, lib });
+const startActivityTerm = (a, term, now, was) =>
+  startActivity(a, term, now, was, assignmentIdFor);
 
 const clone = v => JSON.parse(JSON.stringify(v));
 /**
@@ -65,6 +87,7 @@ describe('the term label', () => {
       term: 'Spring 2027',
     });
     expect(termLabel('   ')).toEqual({ ok: false, reason: 'empty' });
+    expect(termLabel('x'.repeat(MAX_TERM)).ok).toBe(true);
     expect(termLabel('x'.repeat(MAX_TERM + 1)).reason).toBe('long');
     expect(termLabel('Spring <b>').reason).toBe('markup');
     expect(termLabel('A &amp; B').reason).toBe('markup');
@@ -333,7 +356,6 @@ describe('the pages that offer it', () => {
 
   test('the words the panel and the kit read exist in both languages', async () => {
     const { WORDS } = await import('../js/instructorTermText.js');
-    const { STATUS } = await import('../js/course/review.js');
     const used = new Set();
     const kitUsed = new Set();
     const view = readFileSync('js/instructorTermView.js', 'utf8');

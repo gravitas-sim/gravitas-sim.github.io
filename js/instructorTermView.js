@@ -8,10 +8,10 @@
 // panel, opened on a course the instructor already has, starts its next term.
 // The logic is js/instructorTerm.js; this is only the form and the result, drawn
 // into an element the page gives it, with callbacks for everything the page
-// owns (the draft, the facts, the download).
+// owns (the draft, the facts, the download) and the modules it already holds
+// (so this lazy file adds no chunk to the page's start-up).
 // =============================================================================
 
-import { courseLink } from './course/links.js';
 import { startTerm, termLabel } from './instructorTerm.js';
 import { tr } from './instructorTermText.js';
 
@@ -62,6 +62,8 @@ function h(tag, attrs = {}, ...kids) {
  * @param {() => string} ctx.locale - 'en' or 'es'
  * @param {string} ctx.root - The site's root address
  * @param {() => string} ctx.today - `YYYY-MM-DD`
+ * @param {object} ctx.lib - The modules js/instructorTerm.js is given (see there)
+ * @param {Function} ctx.courseLink - js/course/links.js courseLink
  * @returns {{refresh: () => void, close: () => void}}
  */
 export function openTermPanel(ctx) {
@@ -368,8 +370,9 @@ export function openTermPanel(ctx) {
       const made = startTerm(source, facts, {
         term: parsed.term,
         today: ctx.today(),
+        lib: ctx.lib,
       });
-      const link = await courseLink(made.pack, { root: ctx.root });
+      const link = await ctx.courseLink(made.pack, { root: ctx.root });
       result = { ...made, link };
       ctx.apply(made.pack, T('r.ready', { title: titleOf(made.pack) }));
       draw();

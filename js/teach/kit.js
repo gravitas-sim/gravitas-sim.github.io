@@ -321,10 +321,22 @@ async function newTerm() {
   const out = $('kitTermOut');
   const list = $('kitTermList');
   list.replaceChildren();
-  const [mod, words] = await Promise.all([
+  const [mod, words, pack, review, api, assignment] = await Promise.all([
     import('../instructorTerm.js'),
     import('../instructorTermText.js'),
+    import('../course/pack.js'),
+    import('../course/review.js'),
+    import('../course/api.js'),
+    import('../assignments/assignment.js'),
   ]);
+  const lib = {
+    STATUS: review.STATUS,
+    itemsOf: pack.itemsOf,
+    reviewCoursePack: review.reviewCoursePack,
+    upgradeCoursePack: review.upgradeCoursePack,
+    shortHash: review.shortHash,
+    newAssignmentId: api.newAssignmentId,
+  };
   const W = (id, vars) => words.tr(lang(), id, vars);
   const parsed = mod.termLabel($('kitTerm').value);
   if (!parsed.ok) {
@@ -341,7 +353,8 @@ async function newTerm() {
         reissued ?? source.activity,
         term,
         new Date(),
-        was.ok ? was.term : null
+        was.ok ? was.term : null,
+        assignment.assignmentIdFor
       ),
     };
     reissued = null;
@@ -351,13 +364,13 @@ async function newTerm() {
   }
   out.textContent = T('reuse.loading');
   try {
-    const { courseFacts } = await import('../course/api.js');
-    const facts = await courseFacts(source.pack, {
+    const facts = await api.courseFacts(source.pack, {
       load: id => lesson(id, 'en'),
     });
     const made = mod.startTerm(source.pack, facts, {
       term,
       today: new Date().toISOString().slice(0, 10),
+      lib,
     });
     source = { ok: true, kind: 'course', pack: made.pack };
     await build();

@@ -26,15 +26,20 @@
 // still open exactly what they opened.
 // =============================================================================
 
-import { assignmentIdFor, shortHash } from './assignments/assignment.js';
 import { termSlug } from './instructorArchive.js';
-import { MAX_TERM, itemsOf } from './course/pack.js';
-import {
-  STATUS,
-  reviewCoursePack,
-  upgradeCoursePack,
-} from './course/review.js';
 
+// This module imports nothing the course builder's page also imports. The page
+// loads it lazily, and a module reachable from the page and from a lazy chunk
+// is split into a chunk of its own that every visit then fetches (the course
+// builder's request ceiling, tools/route-budgets.json, caught it). So what it
+// needs from js/course/pack.js, js/course/review.js and
+// js/assignments/assignment.js comes in as `lib`, from callers that already
+// hold those modules: { STATUS, itemsOf, reviewCoursePack, upgradeCoursePack,
+// shortHash, newAssignmentId (js/course/api.js) }. MAX_TERM below is checked equal to pack.js's in
+// tests/courseTerm.test.js.
+
+/** A term's longest label (js/course/pack.js MAX_TERM). */
+const MAX_TERM = 40;
 /** An assignment's title may not be longer than this (assignment.js MAX_TITLE). */
 const MAX_TITLE = 120;
 const MARKUP = /[<>]|&[a-zA-Z#0-9]+;/;
@@ -100,7 +105,7 @@ export function idWithTerm(id, term, was = null) {
 }
 
 /** A text pair carrying the term, its Spanish still marked fresh if it was. */
-function retitle(item, term, was) {
+function retitle(item, term, was, shortHash) {
   const old = item.title && typeof item.title === 'object' ? item.title : null;
   if (!old) {
     if (!term) return;
@@ -119,7 +124,7 @@ function retitle(item, term, was) {
  * What a standing means to say to an instructor, as a code: nothing for an
  * item whose pin still holds.
  */
-const moved = standing =>
+const movedFrom = STATUS => standing =>
   standing.status !== STATUS.SAME ||
   standing.detail?.changedSteps?.length ||
   standing.detail?.missingSteps?.length;
@@ -135,26 +140,21 @@ const moved = standing =>
  *
  * @param {object} pack - A valid /2 course pack
  * @param {object} facts - This build (js/course/api.js courseFacts)
- * @param {{term?: ?string, today: string, newAssignmentId?: Function}} opts
- *   today is `YYYY-MM-DD`; term a label already through termLabel
+ * @param {{term?: ?string, today: string, lib: object,
+ *   newAssignmentId?: Function}} opts - today is `YYYY-MM-DD`; term a label
+ *   already through termLabel; lib the modules named at the top of this file
  * @returns {{pack: object, report: object}} The new pack and what changed:
  *   report.items (one row per pinned item: id, kind, standing, changed steps,
  *   missing steps, result 'same' | 'repinned' | 'refused'), report.rekeyed (each
  *   assignment's old and new id), report.version (from, to), report.bump
  */
 export function startTerm(pack, facts, opts) {
-  const { term = null, today } = opts;
+  const { term = null, today, lib } = opts;
+  const { STATUS, itemsOf, reviewCoursePack, upgradeCoursePack } = lib;
+  const moved = movedFrom(STATUS);
   const newId =
     opts.newAssignmentId ??
-    (item =>
-      assignmentIdFor(
-        {
-          lesson: item.lesson,
-          sids: item.steps,
-          title: item.title?.en || '',
-        },
-        new Date(`${today}T12:00:00Z`)
-      ));
+    (item => lib.newAssignmentId(item, new Date(`${today}T12:00:00Z`)));
   const was = pack.term ?? null;
   const before = reviewCoursePack(pack, facts);
   const pinnable = new Set(
@@ -182,7 +182,7 @@ export function startTerm(pack, facts, opts) {
   );
   for (const { item } of itemsOf(out)) {
     if (item.kind !== 'assignment') continue;
-    retitle(item, term, was);
+    retitle(item, term, was, lib.shortHash);
     item.assignment = { id: newId(item), created: today };
     rekeyed.push({
       item: item.id,
@@ -234,13 +234,15 @@ export function startTerm(pack, facts, opts) {
  * @param {?string} term - A label through termLabel, or null
  * @param {Date} [now]
  * @param {?string} [was] - The term the title carries now, to take off first
+ * @param {Function} assignmentIdFor - js/assignments/assignment.js's
  * @returns {object} The new payload
  */
 export function startActivityTerm(
   activity,
   term,
   now = new Date(),
-  was = null
+  was = null,
+  assignmentIdFor
 ) {
   const t = titleWithTerm(activity.t, term, was);
   const next = {
