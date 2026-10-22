@@ -131,8 +131,13 @@ student meets it (the engine reads `draw`, `readout` and the controls in
 `js/investigations.js` `paintTool`): 100 widgets in 27 families,
 `tests/labelGolden/fixtures/widgets/<family>.json` and
 `tests/labelGolden/coverage-widgets.json`. The test is
-`tests/labelGoldenWidgets.test.js`; `npm run label:golden` records both
-families and `-- --regenerate-label-golden` rewrites both.
+`tests/labelGoldenWidgets.test.js` (the guard) and its parts, one suite per
+group of families (`tests/labelGoldenWidgets<Part>.test.js`, the groups in
+`PARTS` in `tests/labelGolden/widgetParts.mjs`): recording all 27 families in
+one suite took four to seven minutes on CI, so each part records its own
+families and checks them against the fixtures, and the guard fails when a
+family is in no part or in two. `npm run label:golden` records both families
+and `-- --regenerate-label-golden` rewrites both.
 
 **What is recorded**, per widget and locale:
 
