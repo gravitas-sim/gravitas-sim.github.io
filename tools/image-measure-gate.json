@@ -101,8 +101,226 @@
   },
   "authentic": {
     "lunar": {
-      "status": "not-measured",
-      "reason": "no public-domain lunar frame is in the repository and nothing is downloaded without Carl; not read by the verdict function"
+      "status": "measured",
+      "measuredOn": "2026-10-22",
+      "fixture": {
+        "path": "tests/fixtures/lunar/PIA00302-clementine-nearside.jpg",
+        "bytes": 265438,
+        "sha256": "c5bb394a48613440f24c59deb5e7cda253b14a18696e54f6f2cf4e37fbf92904",
+        "width": 1719,
+        "height": 1719,
+        "what": "A mosaic of about 50,000 Clementine frames in an orthographic projection, not one exposure: the albedo at 750 nm, with the disc filling the frame (the limb touches its four edges), maria and craters, and no photon-noise floor a CCD frame has. It carries no pixel-unit, gain, linearity or saturation documentation, so it is a display image and a real-data test of decode, draw and repeatability, never a calibrated measurement."
+      },
+      "environment": {
+        "node": "v24.4.0",
+        "chromium": "156.0.8078.4",
+        "platform": "darwin x64",
+        "loadAtStart": 4.56,
+        "loadBeforeThrottled": 4.56,
+        "loadAfterThrottled": 4.56,
+        "commit": "6c4dd662fcdfbe71bc6f56176a5785c510e339ff"
+      },
+      "decodeAndDraw": {
+        "throttle": 4,
+        "decodeMsRuns": [31.4, 32.6, 32.6, 34.8, 30],
+        "decodeMsMedian": 32.6,
+        "planeBuildMsThrottled": [61.5, 65.9, 62.9, 59, 56.2],
+        "drawMsThrottled": [202.8, 188.5, 168.9, 197.7, 167.4],
+        "displayFactor": 2,
+        "totalMs": 380.4,
+        "totalFormula": "throttle x median decode + median plane build + median draw",
+        "referenceBoundMs": 2000,
+        "countedBytes": 26598088,
+        "pageHeapPeakDeltaBytes": 84579476,
+        "maxDecodedBytes": 67108864,
+        "note": "the 2,048-pixel tier bounds are quoted for reference only; no bound was committed for this leg, so it is reported, not judged"
+      },
+      "disc": {
+        "backgroundLevel": 0,
+        "halfMaxThreshold": 17.5,
+        "centroidX": 859.937,
+        "centroidY": 859.756,
+        "equivalentRadiusPx": 860.159
+      },
+      "repeatability": {
+        "trialsPerAngle": 100,
+        "angles": [0, 45, 90, 135, 180, 225, 270, 315],
+        "seed": 2210,
+        "capturePx": 3,
+        "asSupplied": {
+          "condition": "frame as supplied",
+          "frame": "1719 x 1719",
+          "frameNoiseAdu": 1.048,
+          "trials": 800,
+          "refined": 0,
+          "refused": {
+            "no-edge": 800
+          },
+          "perAngle": [
+            {
+              "angleDeg": 0,
+              "refined": 0,
+              "trials": 100,
+              "medianX": null,
+              "medianY": null,
+              "medianR": null
+            },
+            {
+              "angleDeg": 45,
+              "refined": 0,
+              "trials": 100,
+              "medianX": null,
+              "medianY": null,
+              "medianR": null
+            },
+            {
+              "angleDeg": 90,
+              "refined": 0,
+              "trials": 100,
+              "medianX": null,
+              "medianY": null,
+              "medianR": null
+            },
+            {
+              "angleDeg": 135,
+              "refined": 0,
+              "trials": 100,
+              "medianX": null,
+              "medianY": null,
+              "medianR": null
+            },
+            {
+              "angleDeg": 180,
+              "refined": 0,
+              "trials": 100,
+              "medianX": null,
+              "medianY": null,
+              "medianR": null
+            },
+            {
+              "angleDeg": 225,
+              "refined": 0,
+              "trials": 100,
+              "medianX": null,
+              "medianY": null,
+              "medianR": null
+            },
+            {
+              "angleDeg": 270,
+              "refined": 0,
+              "trials": 100,
+              "medianX": null,
+              "medianY": null,
+              "medianR": null
+            },
+            {
+              "angleDeg": 315,
+              "refined": 0,
+              "trials": 100,
+              "medianX": null,
+              "medianY": null,
+              "medianR": null
+            }
+          ]
+        },
+        "padded": {
+          "condition": "frame padded with a 160-pixel border at the background level 0",
+          "frame": "2039 x 2039",
+          "frameNoiseAdu": 0,
+          "trials": 800,
+          "refined": 718,
+          "refused": {
+            "not-circular": 82
+          },
+          "perAngle": [
+            {
+              "angleDeg": 0,
+              "refined": 93,
+              "trials": 100,
+              "medianX": 1019.8273,
+              "medianY": 1019.8462,
+              "medianR": 860.09571
+            },
+            {
+              "angleDeg": 45,
+              "refined": 88,
+              "trials": 100,
+              "medianX": 1019.8258,
+              "medianY": 1019.8474,
+              "medianR": 860.09586
+            },
+            {
+              "angleDeg": 90,
+              "refined": 89,
+              "trials": 100,
+              "medianX": 1019.8267,
+              "medianY": 1019.8459,
+              "medianR": 860.09525
+            },
+            {
+              "angleDeg": 135,
+              "refined": 90,
+              "trials": 100,
+              "medianX": 1019.8275,
+              "medianY": 1019.8453,
+              "medianR": 860.0963
+            },
+            {
+              "angleDeg": 180,
+              "refined": 88,
+              "trials": 100,
+              "medianX": 1019.8308,
+              "medianY": 1019.8463,
+              "medianR": 860.09546
+            },
+            {
+              "angleDeg": 225,
+              "refined": 91,
+              "trials": 100,
+              "medianX": 1019.828,
+              "medianY": 1019.8455,
+              "medianR": 860.09581
+            },
+            {
+              "angleDeg": 270,
+              "refined": 91,
+              "trials": 100,
+              "medianX": 1019.8264,
+              "medianY": 1019.8462,
+              "medianR": 860.09596
+            },
+            {
+              "angleDeg": 315,
+              "refined": 88,
+              "trials": 100,
+              "medianX": 1019.8278,
+              "medianY": 1019.8464,
+              "medianR": 860.09584
+            }
+          ],
+          "fit": {
+            "medianX": 1019.83,
+            "medianY": 1019.85,
+            "medianR": 860.096,
+            "sdX": 0.01012,
+            "sdY": 0.0127,
+            "sdR": 0.006096,
+            "radiusP95RelativeToMedian": 0.00001428,
+            "centreP95OffsetPx": 0.03778,
+            "angleMedianRangeR": 0.00105,
+            "angleMedianRangeCentre": 0.003568
+          }
+        }
+      },
+      "scale": {
+        "knownLengthKm": 3474.8,
+        "fittedDiameterPx": 1720.19,
+        "kmPerPixel": 2.02001,
+        "kmPerPixelHalfMaxCrossCheck": 2.01986,
+        "relativeDifferenceFitVsHalfMax": 0.00007364,
+        "note": "the half-maximum radius is an independent cross-check, not truth: a mosaic limb is not an exact circle"
+      },
+      "readByVerdict": false
     }
   },
   "firstRun": {

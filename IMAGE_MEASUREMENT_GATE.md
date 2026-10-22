@@ -135,7 +135,7 @@ Consumers not named in a B take their Appendix C alternative until a later decis
 
 ## The lunar frame
 
-The prompt names one public-domain lunar frame beside the synthetic moon sequence. The repository holds none (the card images under `images/` are illustrations; the TESS aperture pack is a flag image with no intensities), and nothing is downloaded here without Carl's permission. The authentic-data leg is therefore reported on its own line as **not measured** and is not read by the verdict function: it would measure decode and draw time on a real image and repeatability of a circle mark with no truth to compare against, neither of which any of the seven thresholds needs. The text of the result says so, and Prompt 179 runs that leg before any claim is made about real images.
+*As committed in `ede242a2`, before any measurement (superseded by the two subsections below, which keep it true as history):* The prompt names one public-domain lunar frame beside the synthetic moon sequence. The repository holds none (the card images under `images/` are illustrations; the TESS aperture pack is a flag image with no intensities), and nothing is downloaded here without Carl's permission. The authentic-data leg is therefore reported on its own line as **not measured** and is not read by the verdict function: it would measure decode and draw time on a real image and repeatability of a circle mark with no truth to compare against, neither of which any of the seven thresholds needs. The text of the result says so, and Prompt 179 runs that leg before any claim is made about real images.
 
 ### The lunar leg, procedure fixed before it was run (2026-10-22)
 
@@ -151,7 +151,7 @@ Measured on darwin x64, Node v24.4.0, Chromium 156.0.8078.4, the one-minute load
 
 ### Verdict: **A**, on synthetic frames, as the session's recommendation
 
-All 21 checks pass. The verdict is the recommendation of the session that ran the gate; it is a DELEGATED register row (D-R10-48) and stays open for Carl's ratification, and so do the thresholds it was judged against. It is a verdict on the instrument's tested scope on **synthetic** frames with known truth: the lunar-frame leg is **not measured** (see below) and is not read by the function.
+All 21 checks pass. The verdict is the recommendation of the session that ran the gate; it is a DELEGATED register row (D-R10-48) and stays open for Carl's ratification, and so do the thresholds it was judged against. It is a verdict on the instrument's tested scope on **synthetic** frames with known truth: the 21 checks are on synthetic frames; the lunar-frame leg (below, added 2026-10-22 after Carl permitted one download) is a separate record on one real frame and is not read by the function, so it moves no check and not the verdict.
 
 | Check | Bound | Measured |
 | --- | --- | --- |
@@ -183,9 +183,29 @@ The negative cases (informational, as committed): 40 of 40 refused for a faint s
 
 The prototype as first written failed `T6.interaction` on its first run: it rebuilt all 50 table rows on every change. The placement handler's p95 was 29.7 ms against 28, the placement paint 249.4 ms, the delete paint 113.9 ms, the undo paint 108.6 ms (load 4.7 to 5.3). The prototype was changed, not a threshold: rows are kept between renders (a placement adds one row, a deletion removes one) and the table is fixed-layout; then everything was measured again, and the numbers above are that run. One more correction: the first draft of the driver also required the frame change to be painted within 100 ms, which the committed text asks only of key, tap, edit, delete and undo; the frame change is judged at 500 ms as committed (its paint, 173 ms, is reported). Two frames generators were also corrected when they, not the instrument, were wrong (the crater features were too faint on the disc's own photon noise and could sit within 40 pixels of each other); no bound moved.
 
+### The lunar leg: results (2026-10-22)
+
+Run once the procedure above had been committed (`6c4dd662`), by `npm run image-gate:lunar` on darwin x64, Node v24.4.0, Chromium 156.0.8078.4, the one-minute load 4.56. The numbers are `authentic.lunar` in `tools/image-measure-gate.json`. The 21 checks, the prototype digest and the verdict are exactly as they were before this leg: nothing the leg found changed a threshold, `decide()` or a status.
+
+| Part | Measured on `PIA00302-clementine-nearside.jpg` (1,719 by 1,719, 8-bit) |
+| --- | --- |
+| Decode (browser, off the main thread, five runs) | 31.4, 32.6, 32.6, 34.8, 30.0 ms; median 32.6 ms. Every pixel's three channels were equal |
+| Plane build (main thread, CPU x4, five runs) | median 61.5 ms |
+| Draw (`drawFrame`, CPU x4, five runs) | 202.8, 188.5, 168.9, 197.7, 167.4 ms; median 188.5 ms; the display rule applied (factor 2) |
+| Total, 2,048-pixel formula | **380.4 ms** (4 x 32.6 + 61.5 + 188.5). Reference only: the 2,048-pixel tier's 2,000 ms; this leg has no bound of its own |
+| Counted decoded bytes | 26,598,088 (plane plus the display's RGBA), against 157's 67,108,864 for reference. The page's heap peak above its baseline was 84,579,476 B, which also holds the harness's retained pixel copy and five planes awaiting collection; it is reported, not the counted figure |
+| Circle mark, frame as supplied | **0 of 800 trials refined** (`no-edge`, 800). The limb touches all four edges, the instrument's first pass samples to r + 10 + 0.15 r, and a sample outside the frame drops its whole ray, so no ray survives. The instrument cannot mark a feature that fills the frame |
+| Circle mark, frame padded with a 160-pixel border at the background level 0 | 718 of 800 refined, **82 refused** (`not-circular`, 82; 87 to 93 refined at each of the eight angles). Of the 718: radius SD 0.0061 px, centre SD 0.010 px (x) and 0.013 px (y); the 95th percentile of the radius change from the median 0.0014% (0.012 px) and of the centre's offset 0.038 px; the eight angle medians agree within 0.0011 px in radius and 0.0036 px in centre |
+| Fitted circle | centre (1019.83, 1019.85) in the padded frame, i.e. (859.83, 859.85) in the frame; radius 860.096 px, diameter 1,720.19 px; 2.0200 km per pixel from the lunar diameter of 3,474.8 km |
+| Cross-check, not truth | the half-maximum equivalent radius (threshold 17.5, background 0) is 860.159 px, centroid (859.94, 859.76), 2.0199 km per pixel; the fit and the cross-check differ by 0.007% |
+
+What this does and does not say. The decode, plane build and draw of a real 1,719-pixel frame took 380 ms on the throttled profile, a fifth of the 2,000 ms that the 2,048-pixel tier was given, and 26.6 MB counted, 40% of 157's bound; that is one real frame on one machine, the quantity the synthetic 2,048-pixel check already measures, and no bound was committed for it. The repeatability is of the instrument's own click-to-fit map: when it accepts, a click anywhere in the 3-pixel capture disc gives the same circle to 0.01 px, which says the refinement is repeatable, not that the radius is right (there is no truth here, and the cross-check is another estimate of a limb that is a mosaic edge). Three things limit it. The border is exactly flat, which drives the instrument's noise estimate to 0 ADU (1.05 on the frame as supplied) and so its edge-strength test to "any peak"; a real sky would not be flat. The radius, 860 pixels, is outside the 15 to 300 pixel range of the committed circle ensemble, and no accuracy is claimed there. And 10% of the padded trials were refused as not circular, which a student would meet as a mark that does not refine; the real limb of an orthographic mosaic is not a circle to the instrument's 1.5-pixel residual.
+
+Two things for 179, neither a change to the instrument here (the prototype never merges and never widens its tested scope). A feature that touches the frame's edge is refused outright, where clipping the rays that leave the frame would let the rest refine; 179 must choose and state which. And a real limb is refused about a tenth of the time, so the interface's "could not refine, kept your mark" path is not a rare one.
+
 ### What A does not say
 
-- **The lunar frame is not measured.** No public-domain lunar frame is in the repository and nothing is downloaded without Carl's permission. Everything above is on frames the generator made from a seed, with their truth manifests. To run that leg, Prompt 179 (or this gate again) needs one specific public-domain lunar image, named by Carl with its source and licence, committed as a fixture: it would measure decode and draw on a real frame and the repeatability of a circle mark, with no truth to compare against.
+- **One real frame is measured, and only its decode, draw and repeatability.** The lunar leg above is one Clementine mosaic, a display image with no calibration documentation: no truth, no photon noise, no scale test beyond the known diameter, and a feature that fills the frame, so it says nothing about accuracy on a real CCD frame, about crowded fields, or about a calibrated measurement. Everything else in the table is on frames the generator made from a seed, with their truth manifests.
 - **The margin on bytes is thin.** 24,080 of 25,600 B is a prototype: it has no sidecar reader, no calibration notes, no polygon area, no pack plumbing, and its Spanish is unread by a fluent reader. A production instrument that grows by 1,520 B (6%) fails `T1.deferred` on Node 24 here; CI's Node 20 gzips differently (the checkpoint says about 1.3 KB smaller). Everything past the first slice needs a granted allowance (D-R10-35).
 - **The instrument cannot import `js/interaction.js` or `js/notify.js` on the Observatory route.** Both pull `js/i18n/index.js` and every interface catalog: the first measurement of the instrument was 81 KiB, not 23.5, for that reason alone. The prototype takes the page's own `announce` as a hook (as `createImageView` does) and writes the settle rule and the nudge sizes out; a test holds the sizes equal to `js/shortcuts.js`. Prompt 179 must do the same or move the helpers.
 - **The tree is not the build.** The published site is the unbundled tree: opening an image observation there is 8 module requests, the "at most 3" being a build figure. The idle tier makes them cache hits after activation; the first open before that is not.
@@ -207,7 +227,7 @@ A C would have removed Appendix C's list above and a B only the slice it names. 
 
 ### Decisions for Carl
 
-1. Ratify the thresholds and the verdict (D-R10-48, DELEGATED), or amend. A reset threshold is his alone.
-2. Name a public-domain lunar frame (source and licence) if the authentic-data leg is wanted before 179 claims anything about real images.
+1. The thresholds and the verdict (D-R10-48): Carl wrote in chat on 2026-10-22 "All decisions are to go with your recommendations", taken for them as recommended, and "Download a public domain moon image if needed", for the lunar fixture; the register row stays DELEGATED and claims no more. A reset threshold is his alone.
+2. The lunar leg ran on one downloaded NASA/JPL/USGS frame (permitted 2026-10-22, recorded in `tests/fixtures/lunar/provenance.json`). If a sunspot or a photographed Moon with sky around it is wanted as the authentic leg, name it (source and licence); the Clementine mosaic fills its frame and is not a single exposure.
 3. The idle group "image measurement" (D-R10-36 recommended it): Prompt 179 adds the one `IDLE_TIER` entry; the first-visit tier stays at 18 B of room.
 4. Whether the 25.0 KiB first slice, which A uses to 94%, is to be raised for 179 now or when it overruns (a ceiling increase is Carl's).

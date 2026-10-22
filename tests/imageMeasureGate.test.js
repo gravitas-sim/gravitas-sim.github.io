@@ -10,7 +10,7 @@
 
 import { describe, test, expect } from '@jest/globals';
 import process from 'node:process';
-import { webcrypto } from 'node:crypto';
+import { createHash, webcrypto } from 'node:crypto';
 import { TextEncoder as NodeTextEncoder } from 'node:util';
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import path from 'node:path';
@@ -292,10 +292,48 @@ describe('the record (tools/image-measure-gate.json)', () => {
     expect(results.prototypeDigest).toBe(prototypeDigest());
   });
 
-  test('the lunar frame is reported as not measured and is not read by the verdict', () => {
-    expect(results.authentic.lunar.status).toBe('not-measured');
-    const without = { ...results.checks };
-    expect(decide(without).verdict).toBe(results.verdict);
+  test('the lunar leg is a measured record of the committed fixture and is not read by the verdict', () => {
+    const lunar = results.authentic.lunar;
+    const prov = JSON.parse(
+      readFileSync(
+        path.join(ROOT, 'tests/fixtures/lunar/provenance.json'),
+        'utf8'
+      )
+    );
+    const bytes = readFileSync(path.join(ROOT, lunar.fixture.path));
+    expect(lunar.status).toBe('measured');
+    expect(lunar.readByVerdict).toBe(false);
+    expect(bytes.length).toBe(prov.bytes);
+    expect(lunar.fixture.bytes).toBe(prov.bytes);
+    expect(createHash('sha256').update(bytes).digest('hex')).toBe(prov.sha256);
+    expect(lunar.fixture.sha256).toBe(prov.sha256);
+    // Taking the leg away, or giving it any value, changes no verdict: decide() reads checks only.
+    expect(decide(results.checks).verdict).toBe(results.verdict);
+    expect(decide({ ...results.checks, lunar: 'fail' }).verdict).toBe(
+      results.verdict
+    );
+  });
+
+  test('the lunar leg reports every trial and its refusals, and never calls a refusal a result', () => {
+    const { asSupplied, padded, trialsPerAngle, angles } =
+      results.authentic.lunar.repeatability;
+    for (const c of [asSupplied, padded]) {
+      const refused = Object.values(c.refused).reduce((a, b) => a + b, 0);
+      expect(c.trials).toBe(trialsPerAngle * angles.length);
+      expect(c.refined + refused).toBe(c.trials);
+      expect(c.perAngle.reduce((a, p) => a + p.refined, 0)).toBe(c.refined);
+    }
+    // The frame whose limb fills it cannot be refined (the first pass samples outside it) and says so.
+    expect(asSupplied.refined).toBe(0);
+    expect(asSupplied.fit).toBeUndefined();
+    expect(padded.fit.sdR).toBeLessThan(0.1);
+    const d = results.authentic.lunar.decodeAndDraw;
+    expect(d.totalMs).toBeCloseTo(
+      d.throttle * d.decodeMsMedian +
+        [...d.planeBuildMsThrottled].sort((a, b) => a - b)[2] +
+        [...d.drawMsThrottled].sort((a, b) => a - b)[2],
+      0
+    );
   });
 
   test('no check is a pass without a measurement behind it', () => {
@@ -346,6 +384,23 @@ describe('the prototype is kept out of the product', () => {
     expect(hits.map(f => path.relative(ROOT, f))).toEqual([]);
   });
 
+  test('the lunar fixture is under tests/, outside every route, and no page or module names it', () => {
+    const fixture = 'tests/fixtures/lunar/PIA00302-clementine-nearside.jpg';
+    const files = [
+      ...walk(path.join(ROOT, 'js')),
+      ...readdirSync(ROOT)
+        .filter(f => /\.(html|js|mjs)$/.test(f))
+        .map(f => path.join(ROOT, f)),
+      ...readdirSync(path.join(ROOT, 'tools'))
+        .filter(f => /^(build|sw|route|bundle|data-budget)/.test(f))
+        .map(f => path.join(ROOT, 'tools', f)),
+    ];
+    expect(
+      files.filter(f => readFileSync(f, 'utf8').includes('fixtures/lunar'))
+    ).toEqual([]);
+    expect(statSync(path.join(ROOT, fixture)).size).toBe(265438);
+  });
+
   test('the service worker precaches none of it', async () => {
     const prev = process.cwd();
     process.chdir(ROOT);
@@ -355,6 +410,7 @@ describe('the prototype is kept out of the product', () => {
       const m = await buildManifest();
       expect(m.paths.filter(p => p.startsWith('tools/'))).toEqual([]);
       expect(m.paths.some(p => p.includes('image-measure-gate'))).toBe(false);
+      expect(m.paths.some(p => p.includes('fixtures/lunar'))).toBe(false);
     } finally {
       process.chdir(prev);
     }

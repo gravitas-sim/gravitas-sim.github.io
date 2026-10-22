@@ -140,6 +140,7 @@
     "image-gate:check": "node tools/image-measure-gate.mjs check",
     "image-gate:report": "node tools/image-measure-gate.mjs report",
     "image-gate:measure": "node tools/image-measure-gate.mjs measure",
+    "image-gate:lunar": "node tools/image-measure-gate/lunar.mjs",
     "i18n:freshness": "node tools/i18n-freshness.mjs",
     "author:check": "node tools/author-check.mjs",
     "author:strict": "node tools/author-check.mjs --warnings",
