@@ -7660,6 +7660,15 @@
   .inv-tool-panel .more {
     flex: 1 0 100%;
   }
+  /* The folded sliders lay out as the visible ones do, one to a row. */
+  .inv-tool-panel .more-body.inv-tool-controls {
+    flex-direction: column;
+    align-items: stretch;
+    flex-wrap: nowrap;
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+  }
   .inv-tool-panel .more > summary,
   .inv-tool-panel .more-body {
     padding-left: 0;

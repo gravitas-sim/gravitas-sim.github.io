@@ -251,13 +251,10 @@ let plotTransformed = false;
 let plotLog = false;
 let toolValues = {};
 let toolFrame = null;
-/**
- * The action descriptors the current step's buttons were rendered from.
- *
- * Kept rather than rebuilt, because a label is a live getter: re-reading it
- * costs nothing and says what the widget is doing now.
- */
+/** The action descriptors the step's buttons were rendered from (labels are live getters). */
 let toolActionsShown = [];
+/** What every "More" is wired with: said through the live region. */
+const MORE = { say: announce, locale: getLocale };
 /** Cancels the current step's canvas listeners. @type {AbortController|null} */
 let toolPointer = null;
 let lastToolHtml = '';
@@ -1302,7 +1299,7 @@ function syncToolPanel(step) {
   els.toolControls.hidden = shown.length === 0;
   els.toolMore.lastElementChild.innerHTML = fold.folded.map(row).join('');
   if (fold.presets) els.toolMore.lastElementChild.append(els.toolPresets);
-  wireMore(els.toolMore, 'tool', { depth, say: announce, locale: getLocale });
+  wireMore(els.toolMore, 'tool', { ...MORE, depth, declared: assignment?.mo });
 
   // A widget can decide its buttons from the step: the binary instrument grows
   // a stopwatch on the step that asks for one and not before.
@@ -2409,7 +2406,7 @@ export async function openInvestigation(id, opts = {}) {
   lockedSettings = { interactive_add: SETTINGS.interactive_add };
   els.panel.hidden = false;
   els.panel.classList.add('is-open');
-  wireMore(els.more, 'lesson', { depth, say: announce, locale: getLocale });
+  wireMore(els.more, 'lesson', { ...MORE, depth, declared: assignment?.mo });
   els.title.textContent = assignment?.t || inv.title;
   // The lesson it was cut from stays visible: a student should be able to see
   // that this is eight steps of Tides rather than a thing called Week 3.
