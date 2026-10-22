@@ -291,6 +291,61 @@
       }
     },
     {
+      "id": "observatory.marks",
+      "name": "The Observatory: marking an image",
+      "source": "js/observatory/imageMarks.js",
+      "primaryTask": "Place a mark on an image and read its position, size and scale.",
+      "keys": [
+        {
+          "key": "ArrowLeft",
+          "action": "along"
+        },
+        {
+          "key": "ArrowRight",
+          "action": "along"
+        },
+        {
+          "key": "ArrowUp",
+          "action": "across"
+        },
+        {
+          "key": "ArrowDown",
+          "action": "across"
+        },
+        {
+          "key": "PageUp",
+          "action": "page"
+        },
+        {
+          "key": "PageDown",
+          "action": "page"
+        },
+        {
+          "key": "Enter",
+          "action": "confirm"
+        },
+        {
+          "key": "Escape",
+          "action": "cancel"
+        }
+      ],
+      "drags": [],
+      "tests": {
+        "keyboard": {
+          "file": "e2e/imageMarks.spec.js",
+          "title": "every kind is placed, nudged, read, edited and deleted with no pointer event"
+        },
+        "singlePointer": {
+          "file": "e2e/imageMarks.spec.js",
+          "title": "a tap places a draft, the pad moves it, Place confirms, with no key event"
+        },
+        "announcement": {
+          "file": "e2e/imageMarks.spec.js",
+          "title": "a commit is announced once, and a run of nudges is said when it stops"
+        }
+      }
+    },
+    {
       "id": "lab3d.camera",
       "name": "The 3-D lab: the camera",
       "source": "js/lab3dLab.js",
@@ -438,6 +493,9 @@
         "exempt": "The double-tap recognizer: one finger, no path."
       },
       "js/observatory/image.js": ["observatory.image-box"],
+      "js/observatory/imageMarks.js": {
+        "exempt": "A touch held on the picture shows the loupe and aims a draft; nothing is committed by it, and a tap, the nudge pad and Place do the same with no path."
+      },
       "js/placement.js": ["sandbox.throw", "sandbox.pan"],
       "js/plot/chart.js": {
         "exempt": "The hover readout; the pointer only points."

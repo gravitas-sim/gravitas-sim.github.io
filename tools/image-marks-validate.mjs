@@ -12,7 +12,7 @@
 // against the gate's own numbers (THRESHOLDS in tools/image-measure-gate.mjs, not
 // copied). tests/imageMeasure.test.js runs this in plain Node, because Jest's VM
 // makes Math and Float64Array reads about ten times slower, and asserts every
-// row; npm run measure:validate prints the same two precision rows. Nothing here
+// row. Nothing here
 // stores a value that passes through Math.log, exp, cos or sin (Node 20 and 24
 // differ in the last bits): only bands and counts are judged, and determinism is
 // shown in-process.

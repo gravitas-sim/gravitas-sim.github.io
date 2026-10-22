@@ -141,6 +141,8 @@
     "image-gate:report": "node tools/image-measure-gate.mjs report",
     "image-gate:measure": "node tools/image-measure-gate.mjs measure",
     "image-gate:lunar": "node tools/image-measure-gate/lunar.mjs",
+    "image-marks:validate": "node tools/image-marks-validate.mjs",
+    "image-marks:bytes": "node tools/image-marks-bytes.mjs",
     "i18n:freshness": "node tools/i18n-freshness.mjs",
     "author:check": "node tools/author-check.mjs",
     "author:strict": "node tools/author-check.mjs --warnings",
