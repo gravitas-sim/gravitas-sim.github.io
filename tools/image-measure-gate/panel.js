@@ -21,9 +21,6 @@
 //             commit, said when the pressing stops (js/interaction.js)
 // =============================================================================
 
-import { announce } from '../../js/notify.js';
-import { settledAnnouncer } from '../../js/interaction.js';
-import { nudgeScale } from '../../js/shortcuts.js';
 import { displayPlan, downsampleMean } from '../../js/dataKinds/limits.js';
 import {
   ARITY,
@@ -40,6 +37,42 @@ import {
   scaleOf,
 } from './marks.js';
 import { replay, writeRecord } from './record.js';
+
+/**
+ * The contract's nudge sizes (INTERACTION.md: Alt a quarter, none one, Shift four;
+ * js/shortcuts.js nudgeScale), written here because the registry module is a
+ * global one; tests/imageMeasureGate.test.js holds the two equal.
+ */
+export const nudgeScale = e => (e.altKey ? 0.25 : e.shiftKey ? 4 : 1);
+
+/**
+ * The announcement rule for a readout a nudge changes (js/interaction.js
+ * settledAnnouncer, written out because that module imports the whole interface
+ * catalog through js/notify.js, which the Observatory route does not load): a
+ * nudge is said once the pressing stops; a commit is said now and drops a nudge
+ * still waiting.
+ */
+function settledAnnouncer({ say, delay }) {
+  let timer = null;
+  const cancel = () => {
+    clearTimeout(timer);
+    timer = null;
+  };
+  return {
+    nudge(message) {
+      cancel();
+      timer = setTimeout(() => {
+        timer = null;
+        say(message);
+      }, delay);
+    },
+    commit(message) {
+      cancel();
+      say(message);
+    },
+    cancel,
+  };
+}
 
 const TEXT = {
   en: {
@@ -224,11 +257,12 @@ function stretch(values) {
 /**
  * Mount the instrument in `root`.
  * @param {HTMLElement} root
- * @param {{frames: object[], setId: string, sidecar?: object, lang?: string, settleMs?: number}} o
+ * @param {{frames: object[], setId: string, announce: Function, sidecar?: object, lang?: string, settleMs?: number}} o
+ *   `announce` is the page's own live-region writer, as createImageView's hooks are
  */
 export function mount(
   root,
-  { frames, setId, sidecar = {}, lang = 'en', settleMs = 700 }
+  { frames, setId, announce, sidecar = {}, lang = 'en', settleMs = 700 }
 ) {
   const T = TEXT[lang] ?? TEXT.en;
   const store = createStore(emptyState());

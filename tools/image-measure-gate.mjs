@@ -7,6 +7,7 @@
 //                                              function and the document says
 //                                              what the function says
 //   node tools/image-measure-gate.mjs report   print the verdict table
+//   node tools/image-measure-gate.mjs measure  run the prototype and write the record
 //
 // Prompt 178. IMAGE_MEASUREMENT_GATE.md says what is asked of one image-
 // measurement instrument and which consumers each answer serves; this file is
@@ -309,7 +310,18 @@ export function problems(results = readResults()) {
 if (import.meta.url === `file://${process.argv[1]}`) {
   const [cmd = 'check'] = process.argv.slice(2);
   const results = readResults();
-  if (cmd === 'report') {
+  if (cmd === 'measure') {
+    // Runs the prototype (tools/image-measure-gate/) and writes the record; slow
+    // (a few minutes) and never run by CI.
+    const { tmpdir } = await import('node:os');
+    const { measure } = await import('./image-measure-gate/measure.mjs');
+    const scratch =
+      process.argv[3] ?? path.join(tmpdir(), 'gravitas-image-gate');
+    const r = await measure({ scratch });
+    console.log(
+      `verdict ${r.verdict}; not passing: ${r.notPassing.join(', ') || 'none'}`
+    );
+  } else if (cmd === 'report') {
     const { verdict, failing } = decide(results?.checks);
     console.log(
       `verdict ${verdict}${results ? '' : ' (nothing measured yet)'}`

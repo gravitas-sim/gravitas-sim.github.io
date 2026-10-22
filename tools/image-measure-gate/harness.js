@@ -4,6 +4,7 @@
 // Spike code; nothing under js/ imports it.
 import { discFrame, largeFrame, moonSequence, pointField } from './frames.mjs';
 import { mount } from './panel.js';
+import { announce } from '../../js/notify.js';
 import { place } from './marks.js';
 import { decodePlane } from '../../js/dataKinds/planes.js';
 import { displayPlan, downsampleMean } from '../../js/dataKinds/limits.js';
@@ -54,6 +55,7 @@ const inst = mount(document.getElementById('root'), {
   ...made,
   lang,
   settleMs,
+  announce: m => announce(m, true),
 });
 window.__im = inst;
 window.__truth = made.truth;
