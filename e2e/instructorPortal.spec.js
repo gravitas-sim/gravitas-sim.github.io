@@ -27,6 +27,10 @@ import { MANIFEST } from '../js/data/investigations/manifest.js';
 import { ACTIVITIES } from '../js/data/activities.js';
 import { DEEPER } from '../js/investigations/depthAll.js';
 import { ensureFixture } from '../tools/instructor-fixture.mjs';
+import { execFileSync } from 'node:child_process';
+import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
 
 /**
  * How many lessons the portal should be showing.
@@ -56,9 +60,12 @@ const ACTIVITY_DOCUMENTS = 8;
 // lessons that have deeper steps.
 const ACTIVITY_KEYS = ACTIVITIES.reduce((n, a) => n + a.formats.length * 2, 0);
 const SPANISH_DOCUMENTS = LESSONS * 2;
+// Prompt 170: one generated Spanish structured-notes page per investigation.
+const NOTES_DOCUMENTS = LESSONS;
 const DEPTH_KEYS = Object.keys(DEEPER).length * 3 * 2;
 /** What the investigation cards list: both languages and every depth. */
-const DOCUMENTS = BASE_DOCUMENTS + SPANISH_DOCUMENTS + DEPTH_KEYS;
+const DOCUMENTS =
+  BASE_DOCUMENTS + SPANISH_DOCUMENTS + NOTES_DOCUMENTS + DEPTH_KEYS;
 // The Observatory suites' guides and answer keys (EXOPLANET_OBSERVATORY.md,
 // STELLAR_POPULATIONS.md): their investigations live in /observatory/, not in
 // the lesson manifest.
@@ -156,12 +163,13 @@ test.describe('the instructor portal, signed in', () => {
         .locator('#investigationCount')
         .evaluate(el => el.textContent.trim());
       expect(count).toBe(`${LESSONS} investigations, ${DOCUMENTS} documents`);
-      // Two download buttons and two links on each card: "open" the
-      // investigation, and its public adoption page (ADOPTION.md).
+      // Three download buttons and two links on each card: the guide, the key
+      // and the generated Spanish notes (Prompt 170), then "open" the
+      // investigation and its public adoption page (ADOPTION.md).
       const first = cards.first();
       await expect(
         first.locator('.res-actions > button.ui-button')
-      ).toHaveCount(2);
+      ).toHaveCount(3);
       // Spanish and per-depth documents sit in a disclosure, not among the two.
       await expect(first.locator('details.res-more button')).toHaveCount(
         2 + 3 + 3
@@ -170,6 +178,49 @@ test.describe('the instructor portal, signed in', () => {
       await expect(
         first.locator('a.ui-button[href^="/teaching/investigation/"]')
       ).toHaveCount(1);
+    });
+
+    test('every card lists the generated Spanish notes beside the guide and the key, and says what they are', async ({
+      page,
+    }) => {
+      const notes = page.locator(
+        '#investigationResources .res-actions > button.ui-button',
+        { hasText: 'Spanish structured notes, generated' }
+      );
+      await expect(notes).toHaveCount(LESSONS);
+      // They are not repeated in the disclosure of the other documents.
+      await expect(
+        page.locator('details.res-more button', { hasText: 'Notas' })
+      ).toHaveCount(0);
+      const [download] = await Promise.all([
+        page.waitForEvent('download'),
+        notes.first().click(),
+      ]);
+      expect(download.suggestedFilename()).toMatch(
+        /Notas-estructuradas|Notas estructuradas/
+      );
+    });
+
+    test('the filters narrow the notes with the investigations', async ({
+      page,
+    }) => {
+      await page.locator('#resourceSearch').fill('kepler');
+      await expect
+        .poll(() =>
+          page
+            .locator(
+              '#investigationResources button.ui-button:has-text("Spanish structured notes")'
+            )
+            .count()
+        )
+        .toBeLessThan(LESSONS);
+      expect(
+        await page
+          .locator(
+            '#investigationResources button.ui-button:has-text("Spanish structured notes")'
+          )
+          .count()
+      ).toBe(await page.locator('#investigationResources .res-card').count());
     });
 
     test('every activity document is individually reachable', async ({
@@ -308,6 +359,99 @@ test.describe('the instructor portal, signed in', () => {
         `${ALL_DOCUMENTS} documents`
       );
     });
+  });
+});
+
+test.describe('the portal in a Spanish browser', () => {
+  test.use({ locale: 'es-ES' });
+  let bundle;
+  test.beforeAll(() => {
+    bundle = fixtureBundle();
+  });
+
+  test('opens with the passphrase (the dashboard itself is English), and lists the Spanish notes for every investigation', async ({
+    page,
+  }) => {
+    await page.route('**/instructors/materials.enc.json*', route =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: bundle,
+      })
+    );
+    await page.addInitScript(() =>
+      localStorage.setItem('gravitas_locale', 'es')
+    );
+    await page.goto('/instructors/', { waitUntil: 'domcontentloaded' });
+    await expect(page.locator('#loginForm')).toBeVisible();
+    await page.locator('#passwordInput').fill(PASSPHRASE);
+    await page.locator('#loginSubmit').click();
+    await expect(page.locator('#dashboard')).toBeVisible();
+    await expect(
+      page.locator('#investigationResources .res-actions > button.ui-button', {
+        hasText: 'Spanish structured notes, generated',
+      })
+    ).toHaveCount(LESSONS);
+  });
+});
+
+// Prompt 170, the department route: a bundle a department builds under its own
+// passphrase is opened by the portal with that passphrase and by no other. The
+// project's passphrase is a secret this suite never holds, so the published
+// fixture passphrase stands in for it. The bundle is the builder's own
+// `--rehearse` output (placeholder pages, encrypted under the department's
+// words), served through the one request the page makes.
+test.describe("a department's own bundle (Prompt 170)", () => {
+  const DEPARTMENT = 'a department chose these words for itself 2026';
+  let bundle;
+  let dir;
+
+  test.beforeAll(() => {
+    dir = mkdtempSync(path.join(tmpdir(), 'gravitas-dept-e2e-'));
+    const out = path.join(dir, 'department.enc.json');
+    execFileSync(
+      process.execPath,
+      ['tools/build-instructor-materials.js', '--rehearse', out],
+      {
+        cwd: path.resolve(import.meta.dirname, '..'),
+        env: { ...process.env, GRAVITAS_INSTRUCTOR_PASSWORD: DEPARTMENT },
+        stdio: 'pipe',
+      }
+    );
+    bundle = readFileSync(out);
+  });
+  test.afterAll(() => {
+    rmSync(dir, { recursive: true, force: true });
+  });
+
+  async function open(page) {
+    await page.route('**/instructors/materials.enc.json*', route =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: bundle,
+      })
+    );
+    await page.goto('/instructors/', { waitUntil: 'domcontentloaded' });
+    await expect(page.locator('#loginForm')).toBeVisible();
+  }
+
+  test("the department's passphrase opens it", async ({ page }) => {
+    await open(page);
+    await page.locator('#passwordInput').fill(DEPARTMENT);
+    await page.locator('#loginSubmit').click();
+    await expect(page.locator('#dashboard')).toBeVisible();
+    await expect(page.locator('#investigationResources .res-card')).toHaveCount(
+      LESSONS
+    );
+  });
+
+  test("the project's passphrase does not", async ({ page }) => {
+    await open(page);
+    await page.locator('#passwordInput').fill(PASSPHRASE);
+    await page.locator('#loginSubmit').click();
+    await expect(page.locator('#loginError')).toBeVisible();
+    await expect(page.locator('#dashboard')).toBeHidden();
   });
 });
 

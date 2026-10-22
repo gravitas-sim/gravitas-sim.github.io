@@ -58,7 +58,9 @@ Nothing below needs the maintainer, an account on any service, or a build.
    `GRAVITAS_INSTRUCTOR_PASSWORD`, run `npm run build:instructors`, and serve
    the result. The materials are then encrypted under the department's key, and
    nobody outside it holds it. Choose a long passphrase: the ciphertext is
-   public, so its strength is the passphrase's.
+   public, so its strength is the passphrase's. The numbered procedure, with a
+   rehearsal step and the test that a bundle under one passphrase does not open
+   with another, is in [`INSTRUCTOR_MATERIALS.md`](INSTRUCTOR_MATERIALS.md).
 5. Read [`SUPPORT.md`](SUPPORT.md) for the browsers that are tested and the
    features that degrade.
 
@@ -68,8 +70,11 @@ budgets, `release:check --fast`, an instructor bundle under a throwaway
 passphrase opened in the portal) in about twelve minutes, alone, on one machine.
 The steps and the stumbles it found are in [`RELEASING.md`](RELEASING.md),
 "Rehearsing recovery from an archive". It is not independent evidence: nobody
-else has done it, and who besides the owner can administer the Zenodo record or
-holds the instructor passphrase is not known to the repository.
+else has done it. Who besides the owner can administer the Zenodo record is not
+known to the repository. The instructor passphrase has no second holder: Carl
+decided that on 2026-10-21 (INSTRUCTOR_MATERIALS.md, "The second holder"), so if
+he is unavailable nobody can issue or rotate it, the deployed bundle keeps
+opening for current holders, and a department builds its own (step 4 above).
 
 ## Adding a co-maintainer
 
