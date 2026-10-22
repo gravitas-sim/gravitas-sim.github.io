@@ -20,6 +20,14 @@
 //
 // Nothing here changes the site. A verdict is read by Prompt 166, which carries
 // out the ones Carl approves, one pull request each.
+//
+// An owner ruling is the one thing that stands beside a verdict without being
+// one. A record may carry `ruling` (the verdict Carl gave, in his words, where
+// and when, the register row, why, and what would reverse it); the stored
+// `verdict` and `rule` stay what decide() gives, and the tables show both. A
+// ruling changes no threshold and no rule, so the next surface is judged as
+// before, and problems() refuses a ruling that agrees with the function (it
+// would be nothing) or that is missing any of its parts.
 // =============================================================================
 
 import {
@@ -556,19 +564,38 @@ const costNumbers = e => {
 };
 /** Presentation (a section, a facet) carries no support period: the policy's scope. */
 const PRESENTATION = new Set(['section', 'facet']);
-const verdictCell = (d, kind) =>
-  `**${d.verdict}** (${d.rule}${d.support ? (PRESENTATION.has(kind) ? ', presentation' : `, class ${d.support}`) : ''})`;
+const verdictCell = (d, kind, rec) =>
+  rec?.ruling
+    ? `**${rec.ruling.verdict}** (owner ruling ${rec.ruling.register}; the function gives ${d.verdict}, ${d.rule})`
+    : `**${d.verdict}** (${d.rule}${d.support ? (PRESENTATION.has(kind) ? ', presentation' : `, class ${d.support}`) : ''})`;
+
+/** The verdict a surface stands under: the owner's ruling where there is one, else the function's. */
+export const standing = ({ rec, d }) => rec.ruling?.verdict ?? d.verdict;
+
+/** The parts an owner ruling must carry, each a non-empty string. */
+export const RULING_PARTS = Object.freeze([
+  'verdict',
+  'by',
+  'where',
+  'date',
+  'quote',
+  'register',
+  'reason',
+  'reverses',
+]);
 
 /** The generated tables, keyed by the marker that holds each one in SURFACE_RETIREMENT_GATE.md. */
 export function renderTables(rows = judge()) {
   const by = k => rows.filter(r => r.rec.kind === k);
   const counts = {};
-  for (const r of rows) counts[r.d.verdict] = (counts[r.d.verdict] || 0) + 1;
+  for (const r of rows) counts[standing(r)] = (counts[standing(r)] || 0) + 1;
+  const ruled = rows.filter(r => r.rec.ruling).length;
   const summary = [
     '| Verdict | Surfaces |',
     '| --- | ---: |',
     ...VERDICTS.map(v => `| ${v} | ${counts[v] || 0} |`),
     `| Total judged | ${rows.length} |`,
+    `| Of these, owner rulings over the function | ${ruled} |`,
   ];
   const place = e =>
     e.role
@@ -580,7 +607,7 @@ export function renderTables(rows = judge()) {
     ...by('page').map(({ rec, e, d }) => {
       const x = rec.exposure || {};
       const inv = inventory().surfaces.find(s => s.id === rec.inventoryId);
-      return `| ${esc2(rec.name)} | \`${inv ? inv.path : ''}\` | ${place(e)} | ${rec.unique}${rec.replacement ? ` (${esc2(rec.replacement)})` : ''} | ${useCell(e)} | ${costCell(e)} | ${esc2(exposureList(x, e))} | ${verdictCell(d, rec.kind)} | ${esc2(rec.consequence || 'none')} |`;
+      return `| ${esc2(rec.name)} | \`${inv ? inv.path : ''}\` | ${place(e)} | ${rec.unique}${rec.replacement ? ` (${esc2(rec.replacement)})` : ''} | ${useCell(e)} | ${costCell(e)} | ${esc2(exposureList(x, e))} | ${verdictCell(d, rec.kind, rec)} | ${esc2(rec.consequence || 'none')} |`;
     }),
   ];
   const others = [
@@ -589,7 +616,7 @@ export function renderTables(rows = judge()) {
     ...[...by('section'), ...by('facet'), ...by('activity-format')].map(
       ({ rec, e, d }) => {
         const x = rec.exposure || {};
-        return `| ${esc2(rec.name)} | ${rec.kind} | ${rec.unique}${rec.replacement ? ` (${esc2(rec.replacement)})` : ''} | ${useCell(e)} | ${costCell(e)} | ${esc2(exposureList(x, e))} | ${verdictCell(d, rec.kind)} | ${esc2(rec.consequence || 'none')} |`;
+        return `| ${esc2(rec.name)} | ${rec.kind} | ${rec.unique}${rec.replacement ? ` (${esc2(rec.replacement)})` : ''} | ${useCell(e)} | ${costCell(e)} | ${esc2(exposureList(x, e))} | ${verdictCell(d, rec.kind, rec)} | ${esc2(rec.consequence || 'none')} |`;
       }
     ),
   ];
@@ -598,7 +625,7 @@ export function renderTables(rows = judge()) {
     '| --- | --- | --- | ---: | --- | --- | --- |',
     ...by('stored-format').map(({ rec, e, d }) => {
       const x = rec.exposure || {};
-      return `| \`${esc2(rec.name)}\` | ${esc2(rec.persisted)} | ${rec.unique} | ${e.use.shippedLinks} | ${esc2(list([...((x.records || []).length ? ['record'] : []), ...((x.stateLinks || []).length ? ['link'] : [])]))} | ${verdictCell(d)} | ${esc2(rec.consequence || 'none')} |`;
+      return `| \`${esc2(rec.name)}\` | ${esc2(rec.persisted)} | ${rec.unique} | ${e.use.shippedLinks} | ${esc2(list([...((x.records || []).length ? ['record'] : []), ...((x.stateLinks || []).length ? ['link'] : [])]))} | ${verdictCell(d, rec.kind, rec)} | ${esc2(rec.consequence || 'none')} |`;
     }),
   ];
   const evidence = [
@@ -668,6 +695,22 @@ export function problems(evidence = readEvidence(), inv = inventory()) {
     if (!rec.why) out.push(`${rec.id}: no written reason`);
     if (!VERDICTS.includes(rec.verdict))
       out.push(`${rec.id}: ${rec.verdict} is not a verdict`);
+    if (rec.ruling !== undefined) {
+      const r = rec.ruling;
+      for (const k of RULING_PARTS)
+        if (typeof r?.[k] !== 'string' || !r[k].trim())
+          out.push(`${rec.id}: the owner ruling has no ${k}`);
+      if (r?.verdict && !VERDICTS.includes(r.verdict))
+        out.push(`${rec.id}: the ruling ${r.verdict} is not a verdict`);
+      if (r?.verdict === d.verdict)
+        out.push(
+          `${rec.id}: the ruling agrees with the function (${d.verdict}), so it is not a ruling over it`
+        );
+      if (r?.date && !/^\d{4}-\d{2}-\d{2}$/.test(r.date))
+        out.push(`${rec.id}: the ruling's date ${r.date} is not YYYY-MM-DD`);
+      if (r?.register && !/^D-[A-Z0-9]+-\d+$/.test(r.register))
+        out.push(`${rec.id}: ${r.register} is not a register id`);
+    }
   }
   for (const s of inv.surfaces) {
     if (!evidence.surfaces.some(r => r.inventoryId === s.id))
@@ -731,7 +774,9 @@ async function main() {
     console.log('SURFACE_RETIREMENT_GATE.md tables written');
   } else if (cmd === 'report') {
     for (const { rec, d } of judge())
-      console.log(`${rec.id.padEnd(40)} ${d.verdict.padEnd(11)} ${d.rule}`);
+      console.log(
+        `${rec.id.padEnd(40)} ${d.verdict.padEnd(11)} ${d.rule}${rec.ruling ? `  ruled ${rec.ruling.verdict} (${rec.ruling.register})` : ''}`
+      );
   } else if (cmd === 'check') {
     const p = problems();
     const doc = readFileSync(DOC, 'utf8');
