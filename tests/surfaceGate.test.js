@@ -9,6 +9,7 @@
 
 import { describe, test, expect } from '@jest/globals';
 import { readFileSync } from 'node:fs';
+import path from 'node:path';
 
 import {
   DOC,
@@ -316,8 +317,7 @@ describe('the recorded evidence is judged by the function and nothing else', () 
         expect(Number.isFinite(v)).toBe(true);
       expect(Number.isFinite(r.use.shippedLinks)).toBe(true);
       expect(Number.isFinite(r.use.libraryEntries)).toBe(true);
-      for (const f of r.cited)
-        readFileSync(new URL(`../${f}`, import.meta.url));
+      for (const f of r.cited) readFileSync(path.resolve(f));
     }
     expect(evidenceOf(evidence.surfaces[0]).exposure.links).toBeDefined();
   });
@@ -355,10 +355,7 @@ describe('the recorded evidence is judged by the function and nothing else', () 
   });
 
   test('the register row for the gate exists, is delegated and names Prompt 165', () => {
-    const reg = readFileSync(
-      new URL('../DECISION_REGISTER.md', import.meta.url),
-      'utf8'
-    );
+    const reg = readFileSync(path.resolve('DECISION_REGISTER.md'), 'utf8');
     const row = reg.split('\n').find(l => l.startsWith('| D-R10-44 |'));
     expect(row).toBeDefined();
     const cells = row
