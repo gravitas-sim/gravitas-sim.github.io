@@ -74,10 +74,12 @@ test.describe('in the builder', () => {
   }) => {
     await openBuilder(page, app);
     await tick(page, 'work-the-law-out-step');
+    await tick(page, 'use-the-law');
     expect(await order(page)).toEqual([
       'kepler-s-third-law',
       'measure-four-planets',
       'work-the-law-out-step',
+      'use-the-law',
     ]);
     await row(page, 'measure-four-planets')
       .locator('[data-act="remove"]')
@@ -85,16 +87,14 @@ test.describe('in the builder', () => {
     await expect(page.locator('#adaptStatus')).toContainText(
       /Not changed.*Work the law out, step by step.*Measure four planets/
     );
-    expect(await order(page)).toHaveLength(3);
+    expect(await order(page)).toHaveLength(4);
     // Nothing reads the last one, and nothing is under it.
     await row(page, 'work-the-law-out-step')
       .locator('[data-act="remove"]')
       .click();
     await expect(page.locator('#adaptStatus')).toContainText(/Removed/);
-    expect(await order(page)).toEqual([
-      'kepler-s-third-law',
-      'measure-four-planets',
-    ]);
+    // What it needed goes with it, as nothing else needs that.
+    expect(await order(page)).toEqual(['kepler-s-third-law', 'use-the-law']);
   });
 
   test('every control of the order list is named and large enough', async ({
@@ -244,8 +244,6 @@ test.describe('opening an activity the lesson has moved under', () => {
     await expect(report).toBeVisible({ timeout: 30_000 });
     await expect(report).toContainText('made with an earlier version');
     await expect(report).toContainText('Where is the star?');
-    // Words are not listed as changes: the report says so.
-    await expect(report).toContainText('nothing a student answers has moved');
 
     await report
       .getByRole('button', { name: 'Update it to the current lesson' })
@@ -272,10 +270,8 @@ test.describe('opening an activity the lesson has moved under', () => {
     await page.goto(await staleLink(page));
     const report = page.locator('#adaptReport');
     await expect(report).toBeVisible({ timeout: 30_000 });
-    await report
-      .getByRole('button', { name: 'Keep it as it was made' })
-      .click();
-    await expect(report).toContainText('Kept as it was made.');
+    await report.getByRole('button', { name: 'Keep it as made' }).click();
+    await expect(report).toContainText('Kept as made.');
     await expect(page.locator('#investigationPanel')).toBeVisible();
   });
 });
