@@ -238,7 +238,7 @@ Counts first, then every surface. "Links / Library / cited" are the shipped inve
 | Experiments | 5798 · 22 · 0 · 119 · 68.5 · 1 | pages `experiments/index.html` |
 | Sky Lab | 2182 · 5 · 0 · 119 · 33.6 · 0 | pages `sky/index.html` |
 | Compute page | 4027 · 12 · 0 · 0 · 0 · 0 | pages `compute/index.html`, `compute-frame/index.html` |
-| Catalog | 924 · 5 · 1 · 97 · 14.7 · 1 | pages `catalog/index.html` |
+| Catalog | 891 · 6 · 1 · 94 · 14.4 · 1 | pages `catalog/index.html` |
 | Figure builder | 1068 · 2 · 0 · 67 · 12.8 · 1 | pages `figure/index.html` |
 | My work | 2513 · 19 · 0 · 0 · 31.7 · 1 | pages `my-work/index.html` |
 | Teaching with Gravitas | 451 · 10 · 0 · 0 · 0 · 1 | pages `teaching/index.html` |
@@ -260,7 +260,7 @@ Counts first, then every surface. "Links / Library / cited" are the shipped inve
 | Mission core diagnostics | 1921 · 3 · 0 · 228 · 27.5 · 1 | pages `mission/index.html` |
 | The first Gravitas | 1396 · 4 · 0 · 0 · 0 · 0 | pages `history/original/index.html` |
 | Analysis lab (two sections) | 4122 · 8 · 0 · 136 · 48 · 0 | named files |
-| The "Contributed" catalog section | 203 · 0 · 0 · 0 · 3.3 · 0 | named files |
+| The "Contributed" catalog section | 179 · 0 · 0 · 0 · 3.2 · 0 | named files |
 | The Library's "Where it runs" facet | 0 · 0 · 0 · 0 · 0 · 0 | named files |
 | Activity format: demonstration | 0 · 0 · 0 · 0 · 0 · 0 | library and tests |
 | Activity format: route | 0 · 0 · 0 · 0 · 0 · 0 | library and tests |
@@ -282,7 +282,7 @@ The gate's own text says a threshold that proves wrong is Carl's to reset, and t
 
 ## What a verdict is not
 
-A verdict is not a retirement. Nothing on the site changed in Prompt 165. Prompt 166 carries out each verdict that is not KEEP, one pull request each: today the "Contributed" section (and the facet, if #409 has not removed it). A RETIRE of a route or capability would, under the policy, begin with a notice and take effect at least 12 months later; no such verdict exists today.
+A verdict is not a retirement. Nothing on the site changed in Prompt 165. Prompt 166 carries out each verdict that is not KEEP, one pull request each. It has: the "Contributed" section is gone from /catalog/ (one list, the badge and the "Contributed by" row kept, the invitation to submit in the intro), and the Library's "Where it runs" facet was already gone with Prompt 163. Both are presentation, so no route moved, no notice or redirect was needed, and the per-route period table of the policy has no rows. A RETIRE of a route or capability would, under the policy, begin with a notice and take effect at least 12 months later; no such verdict exists today.
 
 ## Re-running the gate
 

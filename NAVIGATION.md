@@ -186,7 +186,7 @@ They prove structure, language consistency and reachability. They do not prove c
 
 ## What the site still fails
 
-Nothing is pending. Prompt 161 registered nine checks the site failed by design under the future-acceptance contract of Prompt 145 (`tools/pending-acceptance.mjs`, `tools/pending-acceptance.json`): Prompt 162 activated the six for Home and the global navigation, and Prompt 163 the three for the Library (`activated: true`), so all nine are ordinary fatal tests (`tests/navigationChecks.test.js`, `e2e/navigation.spec.js`). Prompt 166 activates nothing more; its consolidation, with 165's verdicts for any surface that changes its route, works from this inventory.
+Nothing is pending. Prompt 161 registered nine checks the site failed by design under the future-acceptance contract of Prompt 145 (`tools/pending-acceptance.mjs`, `tools/pending-acceptance.json`): Prompt 162 activated the six for Home and the global navigation, and Prompt 163 the three for the Library (`activated: true`), so all nine are ordinary fatal tests (`tests/navigationChecks.test.js`, `e2e/navigation.spec.js`). Prompt 166 activates nothing more: it carried out 165's verdicts from this inventory, and since none of them groups, merges or retires a surface of the inventory, the menu, the mapping and the ceilings above did not change (the two RETIRE verdicts were presentation: the catalog's Contributed section and the Library's Where it runs facet, which Prompt 163 had already removed).
 
 <!-- navigation:pending -->
 | Check | What it holds the site to | Work of | Activated by |
