@@ -452,6 +452,36 @@ test.describe('an item, its relations and its pathway', () => {
   });
 });
 
+test.describe('every link on a Library view is a 24 px target', () => {
+  const VIEWS = [
+    ['the start', ''],
+    ['browse with a search', '?browse=1&q=transit'],
+    ['a topic', '?topic=exoplanets'],
+    ['an item', '?item=investigation:keplers-laws&path=seq:gravity-and-orbits'],
+    ['an item with no pathway', '?item=scenario:solar-system'],
+  ];
+  for (const width of [1280, 390]) {
+    for (const [name, query] of VIEWS) {
+      test(`${name} at ${width} px`, async ({ page }) => {
+        await page.setViewportSize({ width, height: 800 });
+        await openLibrary(page, query);
+        await expect(page.locator('main a:visible').first()).toBeVisible();
+        const small = await page.evaluate(() =>
+          [...document.querySelectorAll('main a')]
+            .map(a => ({ a, r: a.getBoundingClientRect() }))
+            .filter(({ r }) => r.width > 0 && r.height > 0)
+            .filter(({ r }) => r.height < 23.5 || r.width < 23.5)
+            .map(
+              ({ a, r }) =>
+                `${a.textContent.trim().slice(0, 30)} ${Math.round(r.width)}x${Math.round(r.height)}`
+            )
+        );
+        expect(small).toEqual([]);
+      });
+    }
+  }
+});
+
 test.describe('the one resume record', () => {
   test('a card opened from a sequence is noted with its pathway, and the next context is left', async ({
     page,

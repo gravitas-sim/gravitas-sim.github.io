@@ -146,11 +146,11 @@ export function itemView(lib, id, c) {
   const html = `<article class="lib-item" data-item="${escape(id)}">
 <h2>${escape(c.pick(entry.title))}</h2>
 ${entry.summary ? `<p>${escape(c.pick(entry.summary))}</p>` : ''}
-<p><a class="ui-button lib-link" href="${escape(entry.route)}">${escape(c.t('lib.item.open'))}</a>${
+<p><a class="ui-button lib-link" href="${escape(entry.route)}">${escape(c.t('lib.item.open'))}</a></p>${
     rel?.teach
-      ? ` <a href="${escape(rel.teach)}">${escape(c.t('lib.item.teach'))}</a>`
+      ? `\n<p><a href="${escape(rel.teach)}">${escape(c.t('lib.item.teach'))}</a></p>`
       : ''
-  }</p>
+  }
 ${membership ? `<section class="lib-group"><h3>${escape(c.t('lib.item.in'))}</h3><ul class="lib-rows">${membership}</ul></section>` : ''}
 ${group(c.t('lib.item.pre'), rel?.pre ?? [])}
 ${group(c.t('lib.item.next'), rel?.next ?? [])}
