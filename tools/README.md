@@ -30,6 +30,7 @@ current, and the orchestrator checks it.
 | `build-lesson-translation-skeleton.mjs` | Skeleton for a lesson translation |  |
 | `build-library.mjs` | The Library: one index of everything a student or instructor can open |  |
 | `build-manual.mjs` | Build the user manual | `npm run manual` |
+| `build-relations.mjs` | Relations: what comes before, what comes next, what goes with it |  |
 | `build-sdss-spectra.mjs` | The four SDSS DR18 spectra, as a data pack | `npm run spectra:data`, `npm run spectra:provenance`, `npm run spectra:check` |
 | `build-service-worker.mjs` | Generate the service worker's precache manifest. | `npm run build`, `npm run build:ci`, `npm run sw:manifest` |
 | `build-stellar-tracks.mjs` | The MIST v1.2 tracks, as a data pack | `npm run stellar:data`, `npm run stellar:provenance`, `npm run stellar:check` |
@@ -161,6 +162,7 @@ current, and the orchestrator checks it.
 | `stellar-shots.mjs` | Captures of the Stellar Lab |  |
 | `storage-matrix.mjs` | npm run storage:matrix | `npm run storage:matrix` |
 | `storage-profile.mjs` | npm run storage:profile -- --capture | `npm run storage:profile` |
+| `surface-gate.mjs` | The surface gate: one decision function, the same for every surface | `npm run surface:check`, `npm run surface:measure`, `npm run surface:write`, `npm run surface:report` |
 | `three-shaders.mjs` | three.js shaders in the bundle: pruned to what the 3-D view can reach, then |  |
 | `thumbnail-config.mjs` | Thumbnail capture settings |  |
 | `ui-shots.mjs` | The interface, at every size and in both languages |  |

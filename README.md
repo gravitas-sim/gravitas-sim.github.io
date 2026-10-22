@@ -306,7 +306,7 @@ service and works offline ([MISSION_LAB.md](MISSION_LAB.md)).
 
 **Spanish.** The interface ships in <!--fact:locales-->2<!--/fact--> languages
 — <!--fact:localeNames-->English, Español<!--/fact--> — from a catalog
-of <!--fact:uiStrings-->9611<!--/fact--> strings, and
+of <!--fact:uiStrings-->9671<!--/fact--> strings, and
 all <!--fact:investigations-->60<!--/fact--> investigations are translated. A
 translation carries only words: no scenario name, no seed, no widget id and no
 numeric answer can be reached from a locale file, so a mistranslation cannot
@@ -341,7 +341,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->14156<!--/fact--> tests across <!--fact:jestSuites-->421<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->14187<!--/fact--> tests across <!--fact:jestSuites-->422<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
@@ -367,7 +367,7 @@ reports what the browser downloads at start-up separately from what is deferred:
 | ---------------------- | ------------------------------------------------------ | --------------------------------------------- |
 | CSS                    | <!--fact:buildCss-->208<!--/fact--> KB                 | 1                                             |
 | JavaScript at start-up | <!--fact:buildStartupJs-->587<!--/fact--> KB           | <!--fact:buildStartupFiles-->52<!--/fact-->   |
-| JavaScript on demand   | <!--fact:buildDeferredJs-->5419<!--/fact--> KB         | <!--fact:buildDeferredChunks-->424<!--/fact--> |
+| JavaScript on demand   | <!--fact:buildDeferredJs-->5422<!--/fact--> KB         | <!--fact:buildDeferredChunks-->424<!--/fact--> |
 | **Initial download**   | **<!--fact:buildInitialDownload-->795<!--/fact--> KB** |                                               |
 
 Those figures are the last build's, to the nearest kilobyte, and are written
@@ -486,7 +486,7 @@ npm run e2e:ui                    # the Playwright inspector
 npm run e2e:report                # open the last HTML report
 ```
 
-The suite is <!--fact:e2eTests-->2485<!--/fact--> tests
+The suite is <!--fact:e2eTests-->2532<!--/fact--> tests
 in <!--fact:e2eFiles-->183<!--/fact--> files and takes several minutes in
 Chromium.
 

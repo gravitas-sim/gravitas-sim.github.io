@@ -63,18 +63,18 @@
     },
     {
       "id": "navigation.library.student-kinds-only",
-      "prompt": "166",
-      "activated": false
+      "prompt": "163",
+      "activated": true
     },
     {
       "id": "navigation.library.no-where-it-runs",
-      "prompt": "166",
-      "activated": false
+      "prompt": "163",
+      "activated": true
     },
     {
       "id": "navigation.library.default-view-is-bounded",
-      "prompt": "166",
-      "activated": false
+      "prompt": "163",
+      "activated": true
     }
   ]
 }

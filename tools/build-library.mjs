@@ -35,11 +35,13 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { buildRelations, problems } from './build-relations.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const load = rel => import(pathToFileURL(path.join(ROOT, rel)).href);
 
 export const OUT = 'library/library.json';
+export const SEARCH_OUT = 'library/search-index.json';
 export const DOC = 'LIBRARY.md';
 export { FORMAT, FORMAT_VERSION } from '../js/library/format.js';
 import { FORMAT, FORMAT_VERSION } from '../js/library/format.js';
@@ -319,11 +321,15 @@ export async function buildLibrary() {
     },
   ];
   const guideSeries = [];
+  /** What an entry is built on, for tools/build-relations.mjs. */
+  const uses = new Map();
   for (const set of guideSets) {
     const { GUIDES } = await load(set.file);
     const en = Object.values(await load(set.catalog[0]))[0];
     const esCat = Object.values(await load(set.catalog[1]))[0];
     const ids = [];
+    const { TARGETS } =
+      set.format === 'observatory' ? await load(set.file) : {};
     for (const g of GUIDES) {
       const minutes = Object.values(g.minutes || {});
       const duration = minutes.length
@@ -332,6 +338,20 @@ export async function buildLibrary() {
       const id = `investigation:${g.id}`;
       const c = curated('guides', g.id);
       ids.push(id);
+      if (TARGETS) {
+        const opened = new Set(
+          g.steps.map(st => st.go?.open ?? st.check?.target).filter(Boolean)
+        );
+        const data = [...opened].flatMap(t => {
+          const target = TARGETS[t];
+          if (!target) return [];
+          const name = /^installed:([^@]+)@/.exec(target.observation)?.[1];
+          return [
+            name ? `dataset:community.${name}` : `dataset:${target.fixture}`,
+          ];
+        });
+        uses.set(id, [...new Set(data)].sort());
+      }
       entries.push(
         entry({
           id,
@@ -694,11 +714,23 @@ export async function buildLibrary() {
   }
 
   // --- The vocabularies --------------------------------------------------------
-  const subjects = sorted(entries.flatMap(e => e.subjects || [])).map(id => ({
-    id,
-    label: words(EN_DEFERRED, ES_DEFERRED, `inv.tag.${id}`),
-    count: entries.filter(e => e.subjects?.includes(id)).length,
-  }));
+  const blurbs = curation.topics?.blurbs ?? {};
+  const subjects = sorted(entries.flatMap(e => e.subjects || [])).map(id => {
+    const blurb = blurbs[id];
+    if (!blurb?.en || !blurb?.es)
+      throw new Error(
+        `${CURATION}: topics.blurbs has no paragraph for "${id}"`
+      );
+    return {
+      id,
+      label: words(EN_DEFERRED, ES_DEFERRED, `inv.tag.${id}`),
+      blurb,
+      count: entries.filter(e => e.subjects?.includes(id)).length,
+    };
+  });
+  for (const id of Object.keys(blurbs))
+    if (!subjects.some(s => s.id === id))
+      throw new Error(`${CURATION}: topics.blurbs/${id} names no subject`);
 
   const sequences = SEQUENCES.map(s => ({
     id: s.id,
@@ -732,16 +764,122 @@ export async function buildLibrary() {
     });
   }
 
-  return {
+  // --- What a student sees, and where to begin (Prompt 163) -------------------
+  const { kinds: shown } = JSON.parse(
+    readFileSync(path.join(ROOT, 'tools/navigation-inventory.json'), 'utf8')
+  );
+  const kindShown = Object.fromEntries(
+    KINDS.map(k => [k, shown.internal[k] ?? k])
+  );
+  for (const k of Object.values(kindShown))
+    if (!shown.students.includes(k))
+      throw new Error(
+        `tools/navigation-inventory.json: "${k}" is not a kind students see`
+      );
+  const have = new Set(entries.map(e => e.id));
+  // The scenarios a lesson's steps open: what the lesson is built on.
+  for (const [id, lesson] of lessons) {
+    const opened = lesson.steps
+      .map(st => st.setup?.scenario)
+      .filter(Boolean)
+      .map(key => `scenario:${slug(key.replace(/['’]/g, ''))}`)
+      .filter(sid => have.has(sid));
+    if (opened.length)
+      uses.set(`investigation:${id}`, [...new Set(opened)].sort());
+  }
+  const starts = (curation.starts?.groups ?? []).map(g => {
+    for (const id of g.entries)
+      if (!have.has(id))
+        throw new Error(
+          `${CURATION}: starts/${g.id} names ${id}, which is not in the Library`
+        );
+    return {
+      id: g.id,
+      level: g.level,
+      audience: g.audience,
+      entries: g.entries,
+    };
+  });
+  const { firstWeek } = JSON.parse(
+    readFileSync(path.join(ROOT, 'tools/navigation-inventory.json'), 'utf8')
+  );
+  const listed = new Set(starts.flatMap(g => g.entries));
+  for (const start of firstWeek.starts)
+    if (start.entry && !listed.has(start.entry))
+      throw new Error(
+        `Home's first-week start ${start.entry} is in no Library start (${CURATION})`
+      );
+
+  // What the entry is built on: measured observations or the simulation. A
+  // lesson or a course is not filed under either: it can use both.
+  const dataOf = e =>
+    e.kind === 'dataset'
+      ? curation.datasets?.[e.id.replace(/^dataset:/, '')]?.kind === 'model'
+        ? 'synthetic'
+        : 'authentic'
+      : e.format === 'observatory'
+        ? 'authentic'
+        : e.kind === 'scenario' || e.kind === 'experiment'
+          ? 'synthetic'
+          : null;
+  for (const e of entries) {
+    const data = dataOf(e);
+    if (data) e.data = data;
+  }
+
+  const library = {
     format: FORMAT,
     formatVersion: FORMAT_VERSION,
     kinds: [...KINDS],
+    kindShown,
     subjects,
+    starts,
     sequences,
     // Old sequence ids a stored link may still carry, to the current id.
     sequenceAliases: { ...SEQUENCE_ALIASES },
     entries,
   };
+  // The relations (tools/build-relations.mjs) are derived from the rest.
+  const relations = buildRelations(library, { uses });
+  for (const e of entries) e.rel = relations.get(e.id);
+  const bad = problems(library);
+  if (bad.length) throw new Error(`relations:\n  ${bad.join('\n  ')}`);
+  return library;
+}
+
+/**
+ * What the search reads that the index does not carry: each lesson's learning
+ * objectives, in both languages (the Spanish from the lesson's shadow file).
+ * A separate file, fetched on the first search, so the page's first view
+ * does not pay for words only a search looks at.
+ * @param {object} library - The built library
+ * @returns {Promise<object>} A gravitas.library-search/1 document
+ */
+export async function buildSearchIndex(library) {
+  const { INVESTIGATIONS } = await load('js/data/investigations.js');
+  const objectives = {};
+  for (const e of library.entries) {
+    if (e.kind !== 'investigation' || e.format !== 'lesson') continue;
+    const id = e.id.replace(/^investigation:/, '');
+    const lesson = INVESTIGATIONS.find(l => l.id === id);
+    const en = lesson?.objectives ?? [];
+    if (!en.length) continue;
+    const shadow = (await load(`js/data/investigations/es/${id}.js`)).default;
+    // Arrays line up by index with the English; a null keeps the English.
+    objectives[e.id] = {
+      en,
+      es: en.map((line, i) => shadow.objectives?.[i] ?? line),
+    };
+  }
+  return { format: 'gravitas.library-search', formatVersion: 1, objectives };
+}
+
+/** The search index, one lesson a line. */
+export function renderSearchIndex(index) {
+  const rows = Object.entries(index.objectives).map(
+    ([id, words]) => `    ${JSON.stringify(id)}: ${JSON.stringify(words)}`
+  );
+  return `{\n  "format": ${JSON.stringify(index.format)},\n  "formatVersion": ${index.formatVersion},\n  "objectives": {\n${rows.join(',\n')}\n  }\n}\n`;
 }
 
 /**
@@ -855,6 +993,7 @@ async function main() {
   const library = await buildLibrary();
   const outputs = [
     [OUT, renderJson(library)],
+    [SEARCH_OUT, renderSearchIndex(await buildSearchIndex(library))],
     [DOC, withCoverage(readFileSync(path.join(ROOT, DOC), 'utf8'), library)],
     [
       HOME,

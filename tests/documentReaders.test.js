@@ -72,7 +72,12 @@ const PARSES = {
   'js/world.js': [1, 'none', OWN],
   'js/settingsPanel.js': [1, 'none', OWN],
   'js/controls.js': [1, 'none', OWN],
-  'js/welcome.js': [1, 'none', OWN],
+  'js/welcome.js': [
+    2,
+    'none',
+    OWN +
+      "; the second is the resume record, read inline and held equal to the storage module's reader",
+  ],
   'js/evaluationKit.js': [1, 'none', OWN],
   'js/investigations/next.js': [1, 'none', OWN],
   'js/myWork/made.js': [1, 'none', OWN + '; readMade checks it'],

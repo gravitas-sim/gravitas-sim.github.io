@@ -41,7 +41,7 @@ import {
   nextHintStage,
 } from '../answerFeedback.js';
 import { command, state } from '../appState.js';
-import { drop, get, put } from '../storage/local.js';
+import { drop, get, noteLesson, put } from '../storage/local.js';
 import { migrateSavedProgress } from '../platform/resolver.js';
 import { investigationMeta } from '../data/investigations/registry.js';
 import { assignmentStorageKey, shortHash } from '../assignments/assignment.js';
@@ -1327,6 +1327,7 @@ export function save() {
   try {
     put(progressKey(active.id), JSON.stringify(payload), progressArea());
     setSaveState('saved');
+    noteLesson(active.id, payload.stepSid);
   } catch (err) {
     // The answers stay in memory and the lesson keeps working; what changes is
     // that the reader is told, once, and given a way to take the work with

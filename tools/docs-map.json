@@ -779,6 +779,13 @@
       "student": true
     },
     {
+      "file": "SURFACE_RETIREMENT_GATE.md",
+      "kind": "gate",
+      "purpose": "The surface-retirement and consolidation gate: the decision function, the link-support policy and the verdict on every surface.",
+      "owner": 165,
+      "student": false
+    },
+    {
       "file": "TIME_DOMAIN_LADDER.md",
       "kind": "feature",
       "purpose": "Time-domain astronomy and the first distance-ladder rung.",

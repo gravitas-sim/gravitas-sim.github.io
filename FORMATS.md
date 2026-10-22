@@ -2,7 +2,7 @@
 
 # Formats
 
-Every versioned format Gravitas reads or writes: 54 of them. 31 have a JSON Schema in `sdk/schemas`, and 10 read their previous version rather than only their own.
+Every versioned format Gravitas reads or writes: 55 of them. 31 have a JSON Schema in `sdk/schemas`, and 10 read their previous version rather than only their own.
 
 Roadmap II Prompt 61 puts each under one rule:
 - a JSON Schema;
@@ -72,6 +72,7 @@ The columns:
 | embed options | query ev | 1 | js/embedOptions.js readEmbedOptions | link | v1 only | ignored: opens as a plain embed | no |
 | gravitas.student-data | format, formatVersion | 1 | js/storage/index.js Store.importAll | download | v1 only | refused, with a reason | no |
 | gravitas.made | format, formatVersion, kind | 1 | js/myWork/made.js readMade | localStorage, inside gravitas.student-data | v1 only | left out of the list, not overwritten | no |
+| resume record | v, items (id, route, step, path, title, at) | 1 | js/storage/local.js readResume | localStorage, inside gravitas.student-data (preferences) | v1 only | reads as nothing to resume; the next write replaces it | no |
 | gravitas.evaluation | kind, schema | 1 | tools/evaluation-summary.mjs | download, localStorage draft | v1 only | skipped, in words | [yes](sdk/schemas/evaluation-1.schema.json) |
 
 ## What the table shows
@@ -157,6 +158,7 @@ An older build is a real reader: a browser still running 2.0.0's cached code, a 
 | embed options | none yet | not yet exercised | policy (above) |
 | gravitas.student-data | none yet | not yet exercised | policy (above) |
 | gravitas.made | none yet | not yet exercised | policy (above) |
+| resume record | `resume-record` | ignored | policy (above) |
 | gravitas.evaluation | none yet | not yet exercised | policy (above) |
 
 **The planned extensions against 2.0.0** (the list Prompt 176 starts from; `tests/compat/boundary.mjs`):
@@ -164,7 +166,7 @@ An older build is a real reader: a browser still running 2.0.0's cached code, a 
 | Planned (prompt) | Kind | What 2.0.0 does | Consequence |
 |---|---|---|---|
 | an additive `profile: "collection"` on the course package (164) | `course-pack` | refuses | refused in its own words: safe as a capability-required refusal |
-| the one resume record carried as a field of the progress record (163) | `progress-store` | ignores the field | accepted and silently dropped: a boundary, or the field must not be one an old reader needs |
+| the one resume record carried as a field of the progress record (not built: Prompt 163 keeps it a sidecar key, `resume-record`) (163) | `progress-store` | ignores the field | accepted and silently dropped: a boundary, or the field must not be one an old reader needs |
 | a stated confidence level on the (already asymmetric) interval: `level` (150) | `artifact` | ignores the field | accepted and silently dropped: a boundary, or the field must not be one an old reader needs |
 | the states "not constrained", "failed", "assumed", "model-limited" (150) | `artifact` | refuses | refused in its own words: safe as a capability-required refusal |
 | a fit-result record carried by the envelope (150) | `artifact` | ignores the field | accepted and silently dropped: a boundary, or the field must not be one an old reader needs |

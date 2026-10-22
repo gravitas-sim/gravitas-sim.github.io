@@ -37,6 +37,15 @@ Every entry has the same sixteen fields:
 A field a source does not declare is `null`, never guessed. `prerequisites: []`
 means the source says there are none; `null` means it does not say.
 
+Since Prompt 163 an entry may also carry `data` (`authentic` for measured
+observations and the Observatory's guides, `synthetic` for scenarios,
+experiments and a model's output; absent where it can use both) and always
+carries `rel`, its relations (below). Additively, the document carries
+`kindShown` (the four kinds a student sees: an activity or an experiment is an
+investigation), `starts` (the committed starting points) and a `blurb` on each
+subject; `library/search-index.json` holds the lessons' learning objectives in
+both languages for the search.
+
 The document also carries the `subjects` (id, label in both languages, how many
 entries) and the `sequences`: the lesson browser's four curated orders and the
 Observatory's two suites, each an ordered list of Library ids.
@@ -141,22 +150,76 @@ edition should treat the field as a pointer, not a citation.
 ## The page
 
 `/library/` is a tool page in the shell (`js/libraryPage.js`, its own bundle,
-and its own route budget, `library`). It fetches the index and filters it with
-the lesson browser's own functions (`js/data/investigations/browse.js`): the
-same search, which folds accents and reads the id, and the same subject, time,
-arithmetic and progress filters, plus the Library's kind, format and level.
-It groups the results in one list, by subject, by course level or by
-sequence. Every kind gets one card (`js/library/card.js`), and the whole card
-is one link to its route. The filters are kept in the address (`?q=`,
-`?kind=`, `?group=`, ...), so a link can open the Library already narrowed.
-Its words are `js/i18n/en.library.js` and its Spanish shadow.
+and its own route budget, `library`). Since Prompt 163 it answers questions
+instead of listing things. It has four views, one page, no new destination:
+
+- **Start** (the default). Where you left off, from the one resume record
+  (below); where to start, a committed handful per audience and level
+  (`starts` in `tools/library-curation.json`, validated against the entries
+  and against Home's first-week list); the sequences and courses as pathways;
+  the subjects as topics, with generated counts. No grid of everything.
+- **Browse everything** (a button, or any filter or search). The whole catalog,
+  with four facets (subject, level, time, kind as a student sees it) and, behind
+  "More filters", mathematics, arithmetic, data (real or simulated), depth,
+  prerequisites met, sequence, progress and the arrangement. Every option shows
+  how many entries choosing it would leave. "Where it runs" is not a facet: the
+  surface is a property of the card.
+- **Topic** (`?topic=<subject>`). The subject's paragraph, its sequences, its
+  courses, its investigations by level, its datasets and its scenarios
+  (`js/library/views.js`, loaded when asked for). The alignment table links back.
+- **Item** (`?item=<id>`). What comes before, what comes next, what goes with
+  it, its instructor page, the pathways it is in (a sequence and a course say
+  which is which), and, when nothing comes after it, why. The breadcrumb names
+  the destination, the Library, the pathway it was opened from and the item.
+
+The search (`js/library/search.js`, fetched on the first query with
+`library/search-index.json`) needs every word to match, ranks a word in the
+title above the id and subject, those above the summary and the lesson's
+objectives, and those above its details, and each result names the fields that
+matched. It runs in the browser: no query leaves it.
+
+The filters are kept in the address (`?q=`, `?kind=`, `?subject=`, `?group=`,
+`?browse=1`, ...), so a link can open the Library already narrowed. Every kind
+gets one card (`js/library/card.js`), the whole card is one link to its route,
+and a second link goes to the item's page. Its words are
+`js/i18n/en.library.js` and its Spanish shadow.
 
 Progress badges are read, never written, from what each surface saved in this
 browser (`js/library/progress.js`): a lesson's steps seen, and whether a guide
 was opened. A guide's record cannot say it is finished, so a guide is never
 shown as finished.
 
-The page and the index are precached as optional, as the catalog is.
+The page, its index, the search index and its modules are precached as
+optional, as the catalog is.
+
+### Relations (Prompt 163)
+
+`tools/build-relations.mjs` derives, for every entry, `rel`: `pre` (its
+prerequisites), `next` (the following entry of each sequence it is in, the
+following lesson of each course, what lists it as a prerequisite, then what is
+built on it: the investigations that open a scenario or a dataset; at most 3),
+`related` (shared subjects, a sequence or a textbook chapter, at most 4), `uses`
+(what it is built on), `in` (its pathways), `teach` (its instructor page, when
+the site has one) and `why` (`last` or `standalone`) when nothing comes next.
+The same file validates them (no dangling or repeated id, a reason wherever
+nothing comes next, every instructor page real) and the build refuses a library
+that fails. The lesson's finish panel offers up to two of `next` and one of
+`related` after the sequence or course it came from.
+
+### The one resume record (Prompt 163)
+
+The key `gravitas_resume` (`js/storage/local.js`, `readResume` and `noteResume`)
+holds the last six items a reader opened, newest first, each with its route,
+the pathway it was opened from and the step it was at. The Library's links write
+the pathway, the lesson's save writes the step, and Home, the Library and the
+lesson's finish panel read it. It is a sidecar key and never a field of a
+progress record, because a 2.0.0 reader ignores an unknown field of a progress
+record silently (the boundary list), and does not know a key of its own at all
+(`tests/compat/kinds/resume-record.mjs`). Nothing in it is a progress record: a
+lesson's steps seen still live in its own record. A damaged record reads as
+empty. Home reads it with a small reader of its own (`js/welcome.js`), because
+the module would be one more request on every lesson route; a test holds the
+two readers to each other.
 
 ## Home
 
@@ -164,9 +227,9 @@ Home (`js/welcome.js`) keeps its heading in its module, and its sections are a
 fragment, `js/fragments/home.html`, fetched with it (INDEX_DECOMPOSITION.md's
 mechanism). Since Prompt 162 it is one calm page:
 
-- **Continue where you left off:** up to three lessons started and not
-  finished, most recently started first, each opening the lesson; shown only
-  when there is one.
+- **Continue where you left off:** the item opened last, from the one resume
+  record, then the lessons started and not finished, most recently started
+  first, at most three; shown only when there is one.
 - **Where to start:** one recommended start per audience, from the committed
   `firstWeek` list in `tools/navigation-inventory.json` (an investigation, an
   observation, the sandbox, a course for an instructor). Generated, as static

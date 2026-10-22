@@ -96,6 +96,13 @@
       "export": "transient"
     },
     {
+      "prefix": "gravitas_resume",
+      "name": "Where a reader was: the items opened last, with pathway and step",
+      "owner": "js/investigations/stepView.js",
+      "migration": "none; a record that is not v1 reads as empty",
+      "corpus": "resume-record"
+    },
+    {
       "prefix": "gravitas_course_",
       "name": "Course builder drafts and the last open",
       "owner": "js/coursePage.js",
@@ -359,16 +366,6 @@
         "kb": 1.4,
         "requests": 1,
         "route": "course-home"
-      },
-      "student": null
-    },
-    {
-      "file": "js/libraryPage.js",
-      "reason": "gravitas_next_context, not student work; its route has no room for the module",
-      "lacks": {
-        "kb": 1.4,
-        "requests": 0,
-        "route": "library"
       },
       "student": null
     },

@@ -659,5 +659,118 @@
         "gravity"
       ]
     }
+  },
+  "starts": {
+    "note": "Where to begin, per audience and level: two Library entries each, committed here and read by tools/build-library.mjs, which fails on an id that is not in the Library. Home's first-week list (tools/navigation-inventory.json) names entries that must also appear here. Prompt 163.",
+    "groups": [
+      {
+        "id": "new",
+        "level": "beginner",
+        "audience": {
+          "en": "New to astronomy",
+          "es": "Nuevo en la astronomía"
+        },
+        "entries": [
+          "investigation:the-turning-sky",
+          "scenario:solar-system"
+        ]
+      },
+      {
+        "id": "course",
+        "level": "intro",
+        "audience": {
+          "en": "In an astronomy course",
+          "es": "En un curso de astronomía"
+        },
+        "entries": [
+          "investigation:keplers-laws",
+          "investigation:color-and-temperature"
+        ]
+      },
+      {
+        "id": "measure",
+        "level": "intro",
+        "audience": {
+          "en": "Measure something real",
+          "es": "Mide algo real"
+        },
+        "entries": [
+          "dataset:tess-light-curve",
+          "investigation:exo-star"
+        ]
+      },
+      {
+        "id": "teach",
+        "level": "intro",
+        "audience": {
+          "en": "Teaching a course",
+          "es": "Para enseñar un curso"
+        },
+        "entries": [
+          "course:intro-astronomy"
+        ]
+      }
+    ]
+  },
+  "topics": {
+    "note": "One paragraph per Library subject, in both languages, for the topic view (?topic=<subject>). tools/build-library.mjs fails on a subject with none, or a paragraph naming no subject. The Spanish has not been read by a fluent reader (TRANSLATION.md).",
+    "blurbs": {
+      "chaos": {
+        "en": "Systems where a small change grows until the future cannot be predicted: three bodies, resonances that overlap, and the limits of a forecast.",
+        "es": "Sistemas donde un cambio pequeño crece hasta que el futuro deja de ser predecible: tres cuerpos, resonancias que se superponen y los límites de un pronóstico."
+      },
+      "compact-objects": {
+        "en": "White dwarfs, neutron stars and black holes: what is left when a star stops, and how matter behaves at the extremes.",
+        "es": "Enanas blancas, estrellas de neutrones y agujeros negros: lo que queda cuando una estrella se apaga y cómo se comporta la materia en los extremos."
+      },
+      "exoplanets": {
+        "en": "Planets around other stars: how they are found from a star's dimming or wobble, what the signal can and cannot say, and which could be like Earth.",
+        "es": "Planetas alrededor de otras estrellas: cómo se encuentran por el oscurecimiento o el bamboleo de la estrella, qué puede y qué no puede decir la señal, y cuáles podrían parecerse a la Tierra."
+      },
+      "galaxies": {
+        "en": "The Milky Way and other galaxies: how stars move in a disk, how the mass is weighed, and what rotation curves say about what is not seen.",
+        "es": "La Vía Láctea y otras galaxias: cómo se mueven las estrellas en un disco, cómo se pesa la masa y qué dicen las curvas de rotación sobre lo que no se ve."
+      },
+      "gravity": {
+        "en": "The force that shapes everything here: Newton's law, energy and angular momentum, tides, and what changes when a third body joins.",
+        "es": "La fuerza que da forma a todo lo que hay aquí: la ley de Newton, la energía y el momento angular, las mareas y qué cambia cuando se suma un tercer cuerpo."
+      },
+      "habitability": {
+        "en": "Where liquid water could last: the habitable zone, what shifts its edges, and why the answer is a range and not a line.",
+        "es": "Dónde podría durar el agua líquida: la zona habitable, qué desplaza sus bordes y por qué la respuesta es un intervalo y no una línea."
+      },
+      "observing": {
+        "en": "Turning light into measurements: planning a night, spectra, brightness and its uncertainty, and the real data behind the Observatory.",
+        "es": "Convertir la luz en mediciones: planificar una noche, los espectros, el brillo y su incertidumbre, y los datos reales detrás del Observatorio."
+      },
+      "orbits": {
+        "en": "How things go round: Kepler's laws, ellipses, periods and energy, from a single planet to a transfer between worlds.",
+        "es": "Cómo giran las cosas: las leyes de Kepler, las elipses, los períodos y la energía, desde un solo planeta hasta una transferencia entre mundos."
+      },
+      "resonance": {
+        "en": "Orbits that keep time with each other: why some periods lock into ratios, what that does to a system, and how it is seen in real planets.",
+        "es": "Órbitas que llevan el compás entre sí: por qué algunos períodos se enganchan en razones, qué hace eso a un sistema y cómo se ve en planetas reales."
+      },
+      "solar-system": {
+        "en": "Our own neighbourhood: the planets and their motions, the Moon and the Sun through the year, and the small bodies between.",
+        "es": "Nuestro propio vecindario: los planetas y sus movimientos, la Luna y el Sol a lo largo del año y los cuerpos pequeños entre ellos."
+      },
+      "spaceflight": {
+        "en": "Getting from one orbit to another: transfers, launch windows, gravity assists and what a mission has to get right.",
+        "es": "Ir de una órbita a otra: transferencias, ventanas de lanzamiento, asistencias gravitatorias y lo que una misión debe acertar."
+      },
+      "stars": {
+        "en": "What stars are and how we know: colour and temperature, spectra, binaries and clusters, and how a population gives a star's age.",
+        "es": "Qué son las estrellas y cómo lo sabemos: color y temperatura, espectros, binarias y cúmulos, y cómo una población da la edad de una estrella."
+      },
+      "stellar-evolution": {
+        "en": "A star's life from birth to its end: what sets how long it burns, how it changes, and what it leaves behind.",
+        "es": "La vida de una estrella desde su nacimiento hasta su final: qué fija cuánto arde, cómo cambia y qué deja detrás."
+      },
+      "waves": {
+        "en": "Ripples in spacetime: what a gravitational wave is, how a merger makes one, and what the five detected events let you measure.",
+        "es": "Ondulaciones del espacio-tiempo: qué es una onda gravitacional, cómo la produce una fusión y qué permiten medir los cinco eventos detectados."
+      }
+    }
   }
 }
