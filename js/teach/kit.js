@@ -477,6 +477,7 @@ function wire() {
   $('kitReuseSave').addEventListener('click', saveActivity);
   $('kitTermGo').addEventListener('click', newTerm);
   $('kitTermSave').addEventListener('click', saveCourse);
+  $('kitCollOpen').addEventListener('click', openCollections);
   $('kitReuseUse').addEventListener('click', async () => {
     if (!reissued) return;
     source = { ok: true, kind: 'activity', activity: reissued };
@@ -484,6 +485,16 @@ function wire() {
     await build();
     $('kitReuseOut').textContent = T('reuse.reissued');
   });
+}
+
+/** The collection editor (Prompt 164): its module loads when the section is opened. */
+async function openCollections() {
+  const host = $('kitCollections');
+  if (!host.hidden) return;
+  host.hidden = false;
+  $('kitCollOpen').setAttribute('aria-expanded', 'true');
+  const { mountMaker } = await import('../instructorCollections.js');
+  await mountMaker(host);
 }
 
 async function init() {
@@ -505,6 +516,7 @@ async function init() {
       if (source) build();
     },
   });
+  if (location.hash === '#collections') openCollections();
   if (/^#[ac]\d/.test(location.hash)) {
     const roster = new URLSearchParams(location.search).get('roster');
     await take(location.hash, roster);

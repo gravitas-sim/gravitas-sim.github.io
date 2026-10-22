@@ -787,18 +787,53 @@ export async function buildLibrary() {
     if (opened.length)
       uses.set(`investigation:${id}`, [...new Set(opened)].sort());
   }
+  // Each start whose entries a collection can hold is also written as one
+  // (Prompt 164): a course package with profile `collection`, checked by the
+  // package's own validator, and what the page draws the start from. A start
+  // that names a course has no collection: a course is not an item of one.
+  const { itemOfEntry } = await load('js/library/collections.js');
+  const { validateCoursePack } = await load('js/course/pack.js');
+  const { courseApi } = await load('js/course/api.js');
+  const { shortHash } = await load('js/assignments/assignment.js');
+  const { PLATFORM_API } = await load('js/platform/catalog.generated.js');
+  const byId = new Map(entries.map(e => [e.id, e]));
+  const textOf = (en, es) => ({ en, es, esOf: shortHash(en) });
   const starts = (curation.starts?.groups ?? []).map(g => {
     for (const id of g.entries)
       if (!have.has(id))
         throw new Error(
           `${CURATION}: starts/${g.id} names ${id}, which is not in the Library`
         );
-    return {
+    const start = {
       id: g.id,
       level: g.level,
       audience: g.audience,
       entries: g.entries,
     };
+    const items = g.entries.map(id => itemOfEntry(byId.get(id)));
+    if (items.every(Boolean)) {
+      const collection = {
+        format: 'gravitas.course-pack',
+        formatVersion: 2,
+        id: `start-${g.id}`,
+        version: '1.0.0',
+        gravitas: PLATFORM_API,
+        locales: ['en', 'es'],
+        pinning: 'compatible',
+        profile: 'collection',
+        title: textOf(g.audience.en, g.audience.es),
+        units: [{ id: 'start', title: textOf('Start', 'Inicio'), items }],
+      };
+      const bad = validateCoursePack(collection, courseApi());
+      if (bad.length)
+        throw new Error(
+          `${CURATION}: starts/${g.id} is not a collection: ${bad
+            .map(e => `${e.path} ${e.code}`)
+            .join('; ')}`
+        );
+      start.collection = collection;
+    }
+    return start;
   });
   const { firstWeek } = JSON.parse(
     readFileSync(path.join(ROOT, 'tools/navigation-inventory.json'), 'utf8')

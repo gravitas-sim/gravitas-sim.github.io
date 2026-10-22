@@ -30,6 +30,7 @@ manifest, and that is all.
 | `locales` | `["en"]` or `["en", "es"]` |
 | `pinning` | `exact` or `compatible` (see Pins) |
 | `courseLevel` | Optional: `survey`, `majors` or `upper`. A lesson item with no `depth` of its own opens at this level's depth (core, quantitative, advanced); the Library's course filter reads it |
+| `profile` | Optional (Prompt 164): `collection`, written only for a collection (see Collections below) |
 | `term` | Optional (Prompt 168): the term this copy is for, a short plain label such as `Spring 2027` (at most 40 characters), written only when the instructor names one |
 | `title`, `summary`, `audience` | What the course home shows first |
 | `teacherGuide` | How to run the course, for another instructor |
@@ -74,6 +75,22 @@ setting them is the instructor's job, in whatever they use to set them.
   that range in proportion to the steps it keeps (never under five minutes),
   unless it declares its minutes. Scenarios, datasets and readings declare
   theirs. A path takes the core's time plus its own items'.
+
+## Collections (Prompt 164)
+
+A collection is a course pack with `profile: "collection"`: a short list rather than a course. It is the same format and the same links (a Gravitas course home link or a file), so there is no second format to read, and what it leaves out is checked:
+
+- exactly one unit, of 1 to 30 items in order;
+- an optional note (`studentNote`, `teacherNote`) on any item, a `depth` on a lesson or a guide, and a pin where the package is exact;
+- no assignment items, no optional paths (every item is core), no `needs`, and no objectives, prerequisites, course level or term.
+
+A collection can hold a lesson, a 3-D or mission guide, a scenario, a dataset, a reading or an investigation carried as a link. The Library's Save button saves the first four. Who uses them:
+
+- **The recommended starts.** `tools/build-library.mjs` writes each start whose entries a collection can hold as one (`starts[].collection` in `library/library.json`, validated by `validateCoursePack` at build time) and the Library's start page draws those starts from them. Two of the four are collections today (new to astronomy, in an astronomy course). "Measure something real" names an Observatory investigation and "Teaching a course" names a course, and neither is an item of a package, so those two stay plain lists until a package can hold them.
+- **A student's saved items**, a collection of their own in one record (`gravitas_collections`: STORAGE.md), and the collections they kept from others. A collection opened from a link is kept only when the student presses Keep on the course home; opening one stores nothing.
+- **An instructor's collection**, made in the distribution kit (`/teaching/kit/#collections`) from what they saved in the Library: order, a sentence for each item, a depth where an item has one, a title, and a link or a file. The Spanish is written, never made up: once any text has Spanish, every text needs it.
+
+**A 2.0.0 build cannot open a collection.** Its reader refuses the pack and names the field `profile` (`tests/compat/boundary.mjs`, `collection-profile`), which is why the writer writes the field only for a collection, and why the release notes say so. The format stays version 2: no course is changed.
 
 ### 3-D lab investigations (Prompt 105)
 

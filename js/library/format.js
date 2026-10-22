@@ -21,3 +21,22 @@ export function checkLibrary(doc) {
   if (!Array.isArray(doc.entries)) throw new Error('no entries');
   return doc;
 }
+
+/**
+ * The Library entry a collection item stands for, or null (Prompt 164): a
+ * collection holds lessons, 3-D and mission guides, scenarios and datasets, and
+ * each is an entry with the same id and a kind prefix. A reading or an
+ * investigation carried as a link has no entry.
+ * @param {object} item - An item of a course package with profile collection
+ * @returns {?string} An entry id such as `investigation:keplers-laws`
+ */
+export function entryIdOfItem(item) {
+  const prefix = {
+    lesson: 'investigation',
+    guide: 'investigation',
+    scenario: 'scenario',
+    dataset: 'dataset',
+  }[item?.kind];
+  const id = prefix && item[item.kind];
+  return typeof id === 'string' && id ? `${prefix}:${id}` : null;
+}

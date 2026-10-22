@@ -34,6 +34,7 @@ export const KEY_PROTOCOL_EMBED = 'gravitas-embed';
 export const KEY_FORMAT_EXPERIMENT = 'gravitas-experiment';
 export const KEY_FORMAT_MANEUVER_LOG = 'gravitas-maneuver-log';
 export const KEY_META_REVISION = 'gravitas-revision';
+export const KEY_COLLECTIONS = 'gravitas_collections';
 export const KEY_COURSE_LEVEL = 'gravitas_course_level';
 export const KEY_EXPERIMENT_PREFIX = 'gravitas_experiment_';
 export const KEY_EXPERIMENTS_INDEX = 'gravitas_experiments_index';

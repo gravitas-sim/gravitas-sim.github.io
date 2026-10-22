@@ -2,7 +2,7 @@
 
 # Formats
 
-Every versioned format Gravitas reads or writes: 57 of them. 31 have a JSON Schema in `sdk/schemas`, and 10 read their previous version rather than only their own.
+Every versioned format Gravitas reads or writes: 58 of them. 31 have a JSON Schema in `sdk/schemas`, and 10 read their previous version rather than only their own.
 
 Roadmap II Prompt 61 puts each under one rule:
 - a JSON Schema;
@@ -75,6 +75,7 @@ The columns:
 | gravitas.made | format, formatVersion, kind | 1 | js/myWork/made.js readMade | localStorage, inside gravitas.student-data | v1 only | left out of the list, not overwritten | no |
 | resume record | v, items (id, route, step, path, title, at) | 1 | js/storage/local.js readResume | localStorage, inside gravitas.student-data (preferences) | v1 only | reads as nothing to resume; the next write replaces it | no |
 | course terms record | v, courses (id, term, title, at) | 1 | js/instructorCourseTerms.js readTerms | localStorage, inside gravitas.student-data (preferences) | v1 only | reads as no courses; the next write replaces it | no |
+| collections record | v, saved (a course package with profile collection), received (at, pack) | 1 | js/library/collections.js readCollections | localStorage, inside gravitas.student-data (courses) | v1 only | reads as no collections; the next write replaces it | no |
 | gravitas.evaluation | kind, schema | 1 | tools/evaluation-summary.mjs | download, localStorage draft | v1 only | skipped, in words | [yes](sdk/schemas/evaluation-1.schema.json) |
 
 ## What the table shows
@@ -163,6 +164,7 @@ An older build is a real reader: a browser still running 2.0.0's cached code, a 
 | gravitas.made | none yet | not yet exercised | policy (above) |
 | resume record | `resume-record` | ignored | policy (above) |
 | course terms record | `course-terms` | ignored | policy (above) |
+| collections record | `collections-record` | ignored | policy (above) |
 | gravitas.evaluation | none yet | not yet exercised | policy (above) |
 
 **The planned extensions against 2.0.0** (the list Prompt 176 starts from; `tests/compat/boundary.mjs`):

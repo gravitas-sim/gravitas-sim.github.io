@@ -110,6 +110,13 @@
       "corpus": "course-terms"
     },
     {
+      "prefix": "gravitas_collections",
+      "name": "The student's saved items and the collections they kept, each a course package with profile collection",
+      "owner": "js/library/collections.js",
+      "migration": "none; a record that is not v1, or a package that does not read as a collection, reads as empty",
+      "corpus": "collections-record"
+    },
+    {
       "prefix": "gravitas_course_",
       "name": "Course builder drafts and the last open",
       "owner": "js/coursePage.js",

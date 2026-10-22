@@ -1,5 +1,6 @@
 import {
   KEY_ASSIGNMENT_PREFIX,
+  KEY_COLLECTIONS,
   KEY_EVALUATION_DRAFT_PREFIX,
   KEY_EVIDENCE_NOTEBOOK,
   KEY_EXPERIMENT_CHECKPOINT_PREFIX,
@@ -231,6 +232,24 @@ export function describe(records, library = new Map()) {
           when: iso(c.at),
         });
       }
+    } else if (key === KEY_COLLECTIONS) {
+      // The saved items and the collections kept (js/library/collections.js
+      // owns the record; this reads its few fields for display).
+      const n = p =>
+        Array.isArray(p?.units?.[0]?.items) ? p.units[0].items.length : 0;
+      out.collections = {
+        saved: n(value?.saved),
+        received: (Array.isArray(value?.received) ? value.received : [])
+          .filter(r => isObj(r?.pack) && text(r.pack.id) && n(r.pack))
+          .map(r => ({
+            id: text(r.pack.id),
+            title: {
+              en: text(r.pack.title?.en) || text(r.pack.id),
+              ...(text(r.pack.title?.es) ? { es: text(r.pack.title.es) } : {}),
+            },
+            n: n(r.pack),
+          })),
+      };
     } else if (key === KEY_STUDENT_NAME) {
       out.name = text(value) || null;
     }
@@ -260,6 +279,9 @@ export const total = d =>
   d.lessons.length +
   d.assignments.length +
   (d.terms?.length ?? 0) +
+  (d.collections
+    ? (d.collections.saved ? 1 : 0) + d.collections.received.length
+    : 0) +
   d.experiments.length +
   d.saved.length +
   d.drafts.length +

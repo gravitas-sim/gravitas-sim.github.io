@@ -133,12 +133,12 @@ Counts first, then every surface. "Links / Library / cited" are the shipped inve
 <!-- surface-gate:summary -->
 | Verdict | Surfaces |
 | --- | ---: |
-| KEEP | 64 |
+| KEEP | 65 |
 | FREEZE | 1 |
 | GROUP | 0 |
 | CONSOLIDATE | 0 |
 | RETIRE | 2 |
-| Total judged | 67 |
+| Total judged | 68 |
 | Of these, owner rulings over the function | 1 |
 <!-- /surface-gate:summary -->
 
@@ -171,7 +171,7 @@ Counts first, then every surface. "Links / Library / cited" are the shipped inve
 | Find content to teach | `/teaching/find/` | document, teach | partly (library) | 0 / 0 / 1 | 1 of 6 (tests) | cited in the manual | **KEEP** (R6b) | none |
 | Adopter's guide | `/teaching/adopt/` | document, teach | yes | 0 / 0 / 1 | 0 of 6 | cited in the manual | **KEEP** (R3b) | none |
 | Textbook alignment | `/teaching/alignment/` | document, teach | yes | 0 / 0 / 1 | 0 of 6 | cited in the manual | **KEEP** (R3b) | none |
-| Classroom kit | `/teaching/kit/` | document, teach | yes | 0 / 0 / 1 | 1 of 6 (tests) | cited in the manual | **KEEP** (R3b) | none |
+| Classroom kit | `/teaching/kit/` | document, teach | yes | 0 / 0 / 1 | 3 of 6 (lines, tests, precache), material | cited in the manual | **KEEP** (R3b) | none |
 | Adoption pages: activities | `/teaching/activity/*` | content, teach | yes | 0 / 0 / 0 | 0 of 6 | links from the Library activity cards | **KEEP** (R3b) | none |
 | Adoption pages: investigations | `/teaching/investigation/*` | content, teach | yes | 0 / 0 / 0 | 0 of 6 | links from the Library investigation cards | **KEEP** (R3b) | none |
 | How the model works | `/model/` | document, no destination | yes | 0 / 0 / 2 | 2 of 6 (lines, tests), material | cited in README.md; cited in the manual | **KEEP** (R3b) | none |
@@ -216,11 +216,12 @@ Counts first, then every surface. "Links / Library / cited" are the shipped inve
 | `gravitas.lab3d-guide-report` | download | yes | 1 | record | **KEEP** (R3b) | Keep. Written for a person to read; Prompt 290 gives it a schema or says in words that it has none. |
 | `gravitas.mission-lab-report` | download | yes | 1 | record | **KEEP** (R3b) | Keep. Written for a person to read; Prompt 290 gives it a schema or says in words that it has none. |
 | `notebook store` | localStorage | yes | 10 | record | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
-| `resume record` | localStorage | yes | 18 | record | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
+| `resume record` | localStorage | yes | 20 | record | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
 | `notebook entry snapshot` | localStorage, download | yes | 14 | record | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
 | `gravitas.ledger` | inside a submission token (ev), never alone | yes | 2 | record | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
-| `course home link` | link | yes | 4 | link | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
+| `course home link` | link | yes | 5 | link | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
 | `course terms record` | localStorage | yes | 1 | record | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
+| `collections record` | localStorage | yes | 5 | record | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
 | `gravitas.submission-archive` | file | yes | 2 | record | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
 | `investigation link` | link | yes | 3 | link | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
 | `gravitas.course-manifest` | download | yes | 1 | record | **KEEP** (R3b) | Keep. Written for a person to read; Prompt 290 gives it a schema or says in words that it has none. |
@@ -235,37 +236,37 @@ Counts first, then every surface. "Links / Library / cited" are the shipped inve
 <!-- surface-gate:evidence -->
 | Item | Source lines · tests · generated · strings · precache KB · axe rows | Measured by |
 | --- | --- | --- |
-| Sandbox | 76404 · 247 · 0 · 0 · 977.2 · 0 | pages `index.html` |
+| Sandbox | 76404 · 248 · 0 · 0 · 977.2 · 0 | pages `index.html` |
 | 3-D lab | 11016 · 16 · 0 · 544 · 232.3 · 2 | pages `3d/index.html` |
 | Mission lab | 5684 · 10 · 0 · 445 · 192.7 · 1 | pages `mission/lab/index.html` |
 | Scenario Studio | 1759 · 8 · 0 · 172 · 25.2 · 1 | pages `studio/index.html` |
-| Library | 1974 · 11 · 0 · 0 · 24.1 · 4 | pages `library/index.html` |
-| Courses | 1117 · 8 · 0 · 64 · 17.2 · 1 | pages `course/index.html` |
+| Library | 2045 · 13 · 0 · 0 · 24.8 · 5 | pages `library/index.html` |
+| Courses | 1159 · 8 · 0 · 68 · 18 · 1 | pages `course/index.html` |
 | Observatory | 22104 · 63 · 0 · 230 · 326.7 · 1 | pages `observatory/index.html` |
 | Experiments | 5798 · 22 · 0 · 119 · 68.5 · 1 | pages `experiments/index.html` |
 | Sky Lab | 2182 · 5 · 0 · 119 · 33.6 · 0 | pages `sky/index.html` |
 | Compute page | 4027 · 12 · 0 · 0 · 0 · 0 | pages `compute/index.html`, `compute-frame/index.html` |
 | Catalog | 891 · 6 · 1 · 94 · 14.4 · 1 | pages `catalog/index.html` |
 | Figure builder | 1068 · 2 · 0 · 67 · 12.8 · 1 | pages `figure/index.html` |
-| My work | 2546 · 21 · 0 · 0 · 32 · 1 | pages `my-work/index.html` |
-| Teaching with Gravitas | 474 · 11 · 0 · 0 · 0 · 1 | pages `teaching/index.html` |
+| My work | 2600 · 23 · 0 · 0 · 32.5 · 1 | pages `my-work/index.html` |
+| Teaching with Gravitas | 477 · 12 · 0 · 0 · 0 · 1 | pages `teaching/index.html` |
 | Instructor resources | 290 · 7 · 0 · 0 · 0 · 1 | pages `instructors/index.html` |
 | Submission review | 5793 · 21 · 0 · 0 · 66.2 · 1 | pages `instructors/submissions/index.html` |
 | Classroom evidence kit | 1258 · 7 · 0 · 0 · 5.1 · 1 | pages `evaluation/index.html` |
 | Investigation Composer | 4173 · 16 · 0 · 328 · 56.4 · 1 | pages `studio/lesson/index.html` |
-| Course-package builder | 3763 · 10 · 0 · 271 · 50.5 · 3 | pages `studio/course/index.html` |
+| Course-package builder | 3774 · 10 · 0 · 275 · 50.9 · 3 | pages `studio/course/index.html` |
 | Investigations in a course | 594 · 4 · 0 · 0 · 6 · 1 | pages `studio/course/packs/index.html` |
 | Find content to teach | 236 · 3 · 0 · 0 · 0 · 0 | pages `teaching/find/index.html` |
 | Adopter's guide | 225 · 0 · 0 · 0 · 0 · 0 | pages `teaching/adopt/index.html` |
 | Textbook alignment | 309 · 1 · 0 · 0 · 0 · 0 | pages `teaching/alignment/index.html` |
-| Classroom kit | 1486 · 6 · 0 · 0 · 17.1 · 0 | pages `teaching/kit/index.html` |
+| Classroom kit | 2038 · 11 · 0 · 0 · 23.2 · 0 | pages `teaching/kit/index.html` |
 | How the model works | 3414 · 7 · 0 · 0 · 0 · 1 | pages `model/index.html` |
 | Physics validation | 9384 · 20 · 0 · 0 · 14.4 · 1 | pages `validation/index.html` |
 | Glossary | 203 · 0 · 0 · 0 · 0 · 1 | pages `glossary/index.html` |
 | User manual (PDF) | 0 · 0 · 0 · 0 · 0 · 0 | library and tests |
 | 3-D kernel diagnostics | 937 · 3 · 0 · 79 · 12.3 · 1 | pages `lab3d/index.html` |
 | Mission core diagnostics | 1921 · 3 · 0 · 228 · 27.5 · 1 | pages `mission/index.html` |
-| The first Gravitas | 1396 · 4 · 0 · 0 · 0 · 0 | pages `history/original/index.html` |
+| The first Gravitas | 1429 · 5 · 0 · 0 · 0 · 0 | pages `history/original/index.html` |
 | Analysis lab (two sections) | 4122 · 8 · 0 · 136 · 48 · 0 | named files |
 | The "Contributed" catalog section | 179 · 0 · 0 · 0 · 3.2 · 0 | named files |
 | The Library's "Where it runs" facet | 0 · 0 · 0 · 0 · 0 · 0 | named files |

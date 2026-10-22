@@ -57,6 +57,7 @@ const PINNED = {
   KEY_FORMAT_EXPERIMENT: 'gravitas-experiment',
   KEY_FORMAT_MANEUVER_LOG: 'gravitas-maneuver-log',
   KEY_META_REVISION: 'gravitas-revision',
+  KEY_COLLECTIONS: 'gravitas_collections',
   KEY_COURSE_LEVEL: 'gravitas_course_level',
   KEY_EXPERIMENT_PREFIX: 'gravitas_experiment_',
   KEY_EXPERIMENTS_INDEX: 'gravitas_experiments_index',

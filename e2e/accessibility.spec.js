@@ -32,6 +32,28 @@
 
 import { test, expect } from './fixtures.js';
 import AxeBuilder from '@axe-core/playwright';
+import { readFileSync } from 'node:fs';
+import { courseLink } from '../js/course/links.js';
+import { itemOfEntry, savedPack } from '../js/library/collections.js';
+import '../js/library/collectionsDeps.js'; // binds what collections.js needs
+
+// What a student who saved two things and kept a collection has (Prompt 164).
+const LIBRARY_INDEX = JSON.parse(readFileSync('library/library.json', 'utf8'));
+const KEPT = LIBRARY_INDEX.starts.find(s => s.collection).collection;
+const COLLECTIONS_RECORD = JSON.stringify({
+  v: 1,
+  saved: savedPack(
+    ['investigation:tides', 'scenario:solar-system'].map(id =>
+      itemOfEntry(LIBRARY_INDEX.entries.find(e => e.id === id))
+    )
+  ),
+  received: [{ at: 1, pack: KEPT }],
+});
+const withCollections = page =>
+  page.addInitScript(
+    r => window.localStorage.setItem('gravitas_collections', r),
+    COLLECTIONS_RECORD
+  );
 
 /**
  * The rule set.
@@ -334,6 +356,37 @@ const SURFACES = [
       );
     },
     expect: 'html[data-ready="true"] .lib-item .lib-rows',
+    standalone: true,
+  },
+  {
+    name: 'library, your collections',
+    open: async ({ page }) => {
+      await withCollections(page);
+      await page.goto('/library/', { waitUntil: 'domcontentloaded' });
+    },
+    expect: 'html[data-ready="true"] #libCollections .lib-collection',
+    standalone: true,
+  },
+  {
+    name: 'kit, the collection editor',
+    open: async ({ page }) => {
+      await withCollections(page);
+      await page.goto('/teaching/kit/#collections', {
+        waitUntil: 'domcontentloaded',
+      });
+    },
+    expect: '#kitCollections .coll-item',
+    standalone: true,
+  },
+  {
+    name: 'course home, a collection',
+    open: async ({ page }) => {
+      const { url } = await courseLink(KEPT, { root: 'http://localhost/' });
+      await page.goto(url.replace('http://localhost', ''), {
+        waitUntil: 'domcontentloaded',
+      });
+    },
+    expect: '#ch-keep button',
     standalone: true,
   },
   {
