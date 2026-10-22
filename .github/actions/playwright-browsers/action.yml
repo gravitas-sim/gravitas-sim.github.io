@@ -7,9 +7,18 @@
 # apt-get as root, and on some runners it stalls with no output until the
 # job's timeout - 30 minutes of a shard spent on nothing, after which the
 # coverage job fails for the missing shard (2026-09-30, and three runs on
-# 2026-10-07). So each attempt gets five minutes, a hung apt or dpkg is
+# 2026-10-07). So each attempt gets a bounded time, a hung apt or dpkg is
 # killed and its half-done state repaired, and it is tried three times before
 # the job gives up. Carl approved the change on 2026-10-07.
+#
+# 2026-10-22: with five minutes an attempt, a runner whose Azure mirror
+# (azure.archive.ubuntu.com) ignores every request lost two attempts (ten
+# minutes) before the third got through, and the shard then ran out of its own
+# timeout and was cancelled (PRs #416 and #419, shards 6/12 and the
+# accessibility job). The libraries normally take about a minute, so an attempt
+# now gets three minutes, and after a failed attempt the remaining ones use
+# archive.ubuntu.com instead of the Azure mirror. Carl approved the change in
+# chat on 2026-10-22.
 name: Playwright browsers
 description: Restore or install one Playwright browser, keyed on the pinned version
 inputs:
@@ -59,10 +68,10 @@ runs:
         BROWSER: ${{ inputs.browser }}
       run: |
         for attempt in 1 2 3; do
-          if timeout --kill-after=30 300 npx playwright install-deps "$BROWSER"; then
+          if timeout --kill-after=30 180 npx playwright install-deps "$BROWSER"; then
             exit 0
           fi
-          echo "::warning::install-deps attempt $attempt failed or ran past five minutes"
+          echo "::warning::install-deps attempt $attempt failed or ran past three minutes"
           # By exact process name, and by the locks themselves: a `pkill -f`
           # pattern also matches the `sudo pkill` running it, which killed
           # itself and left the hung apt-get holding the lock (2026-10-07).
@@ -72,6 +81,12 @@ runs:
           sudo fuser -k -9 /var/lib/dpkg/lock-frontend /var/lib/dpkg/lock \
             /var/lib/apt/lists/lock /var/cache/apt/archives/lock || true
           sudo dpkg --configure -a || true
+          # The Azure mirror is the one that stalls; the next attempt asks the
+          # main archive instead. Both the one-line and the deb822 source
+          # formats are covered, and a runner without the Azure name is left
+          # alone (the substitution then matches nothing).
+          sudo sed -i -E 's#(https?://)azure\.archive\.ubuntu\.com/#\1archive.ubuntu.com/#g' \
+            /etc/apt/sources.list /etc/apt/sources.list.d/* 2>/dev/null || true
         done
         echo "::error::install-deps failed three times"
         exit 1
