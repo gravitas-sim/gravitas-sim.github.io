@@ -218,7 +218,7 @@ export function describe(records, library = new Map()) {
     } else if (key.startsWith(KEY_MADE_PREFIX)) {
       out.made.push({ key, title: text(value?.name) || key });
     } else if (key === KEY_TERMS) {
-      // The courses opened that name a term (js/library/courseTerms.js owns the
+      // The courses opened that name a term (js/instructorCourseTerms.js owns the
       // record; its route has no room for that module here, so this reads it).
       for (const c of value?.v === 1 && Array.isArray(value.courses)
         ? value.courses

@@ -607,7 +607,7 @@
         "testFiles": 10,
         "generated": 0,
         "strings": 271,
-        "precacheKb": 47,
+        "precacheKb": 50.5,
         "axeRows": 3
       },
       "use": { "shippedLinks": 0, "libraryEntries": 0 },
@@ -1838,7 +1838,7 @@
       "kind": "stored-format",
       "unique": "yes",
       "replacement": null,
-      "why": "localStorage; owner js/library/courseTerms.js readTerms.",
+      "why": "localStorage; owner js/instructorCourseTerms.js readTerms.",
       "exposure": {
         "links": [],
         "records": ["course terms record"],
@@ -1846,7 +1846,7 @@
       },
       "persisted": "localStorage",
       "measure": {
-        "ownerFiles": ["js/library/courseTerms.js"],
+        "ownerFiles": ["js/instructorCourseTerms.js"],
         "testNames": ["course terms record"]
       },
       "consequence": "Keep; a schema in Prompt 290.",

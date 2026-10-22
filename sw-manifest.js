@@ -15,8 +15,8 @@
 // instructor modules, three.js, the 3-D lab, the mission lab, the Sky Lab, the
 // Library and the data tables. A missing one costs that surface its offline
 // copy, and the next open fetches only what is missing.
-self.__GRAVITAS_CACHE_VERSION = 'gravitas-53096d2ac3bf';
-self.__GRAVITAS_PRECACHE_BYTES = 18207264;
+self.__GRAVITAS_CACHE_VERSION = 'gravitas-d0feae3bbd8d';
+self.__GRAVITAS_PRECACHE_BYTES = 18207266;
 self.__GRAVITAS_PRECACHE_CORE = [
   './css/chrome.css',
   './css/components.css',
@@ -994,6 +994,7 @@ self.__GRAVITAS_PRECACHE_IDLE = [
   './js/i18n/es.missionLab.js',
   './js/i18n/es.missionLabGuides.js',
   './js/instructorArchive.js',
+  './js/instructorCourseTerms.js',
   './js/instructorDocs.js',
   './js/instructorExpectations.js',
   './js/instructorFacts.js',
@@ -1049,7 +1050,6 @@ self.__GRAVITAS_PRECACHE_IDLE = [
   './js/lab3dLab.js',
   './js/lab3dPage.js',
   './js/library/card.js',
-  './js/library/courseTerms.js',
   './js/library/format.js',
   './js/library/i18n.js',
   './js/library/progress.js',
@@ -1771,6 +1771,7 @@ self.__GRAVITAS_PRECACHE = [
   './js/inspectorView.js',
   './js/inspectorWindow.js',
   './js/instructorArchive.js',
+  './js/instructorCourseTerms.js',
   './js/instructorDocs.js',
   './js/instructorExpectations.js',
   './js/instructorFacts.js',
@@ -1901,7 +1902,6 @@ self.__GRAVITAS_PRECACHE = [
   './js/lessonScene.js',
   './js/lessonStage.js',
   './js/library/card.js',
-  './js/library/courseTerms.js',
   './js/library/format.js',
   './js/library/i18n.js',
   './js/library/progress.js',

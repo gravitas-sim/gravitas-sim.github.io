@@ -74,7 +74,7 @@ The columns:
 | gravitas.student-data | format, formatVersion | 1 | js/storage/index.js Store.importAll | download | v1 only | refused, with a reason | no |
 | gravitas.made | format, formatVersion, kind | 1 | js/myWork/made.js readMade | localStorage, inside gravitas.student-data | v1 only | left out of the list, not overwritten | no |
 | resume record | v, items (id, route, step, path, title, at) | 1 | js/storage/local.js readResume | localStorage, inside gravitas.student-data (preferences) | v1 only | reads as nothing to resume; the next write replaces it | no |
-| course terms record | v, courses (id, term, title, at) | 1 | js/library/courseTerms.js readTerms | localStorage, inside gravitas.student-data (preferences) | v1 only | reads as no courses; the next write replaces it | no |
+| course terms record | v, courses (id, term, title, at) | 1 | js/instructorCourseTerms.js readTerms | localStorage, inside gravitas.student-data (preferences) | v1 only | reads as no courses; the next write replaces it | no |
 | gravitas.evaluation | kind, schema | 1 | tools/evaluation-summary.mjs | download, localStorage draft | v1 only | skipped, in words | [yes](sdk/schemas/evaluation-1.schema.json) |
 
 ## What the table shows

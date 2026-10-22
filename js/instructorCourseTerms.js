@@ -1,5 +1,5 @@
-import { KEY_TERMS } from '../names.js';
-import { readJson, writeJson } from '../storage/local.js';
+import { KEY_TERMS } from './names.js';
+import { readJson, writeJson } from './storage/local.js';
 
 // The courses a student opened that name a term (Roadmap III Prompt 168).
 // An instructor's next-term copy of a course carries a term (Spring 2027); when

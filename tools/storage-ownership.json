@@ -105,7 +105,7 @@
     {
       "prefix": "gravitas_terms",
       "name": "The courses opened that name a term, with the term and when",
-      "owner": "js/library/courseTerms.js",
+      "owner": "js/instructorCourseTerms.js",
       "migration": "none; a record that is not v1 reads as empty",
       "corpus": "course-terms"
     },

@@ -146,7 +146,7 @@ function accept(raw, from) {
   pack = p;
   // A copy for a term is noted for My work, lazily: no course without one pays.
   if (p.term)
-    import('./library/courseTerms.js')
+    import('./instructorCourseTerms.js')
       .then(m => m.noteTerm({ id: p.id, term: p.term, title: p.title }))
       .catch(() => {});
   document.documentElement.dataset.source = from;

@@ -101,10 +101,10 @@ The idle tier, by surface (gzip level 6, to the nearest 10 KB: Node versions dif
 | --- | ---: | ---: |
 | 3-D lab | 38 | ~140 KB |
 | data tables | 33 | ~230 KB |
-| instructor modules | 27 | ~310 KB |
+| instructor modules | 28 | ~310 KB |
 | mission lab | 40 | ~230 KB |
 | Sky Lab | 22 | ~170 KB |
-| Library | 10 | ~90 KB |
+| Library | 9 | ~80 KB |
 | three.js | 2 | ~240 KB |
 <!--/fact-block-->
 

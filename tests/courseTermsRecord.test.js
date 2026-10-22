@@ -1,7 +1,7 @@
 // =============================================================================
 // The course terms record (Roadmap III Prompt 168)
 // -----------------------------------------------------------------------------
-// js/library/courseTerms.js owns it: one key, newest first, a line per course
+// js/instructorCourseTerms.js owns it: one key, newest first, a line per course
 // and term, and nothing but an id, a title, the term and a time. My work reads
 // it with its own few lines (js/myWork/model.js); the two must agree.
 // =============================================================================
@@ -12,7 +12,7 @@ import {
   TERMS_MAX,
   noteTerm,
   readTerms,
-} from '../js/library/courseTerms.js';
+} from '../js/instructorCourseTerms.js';
 import { KEYS, collectionOf } from '../js/storage/index.js';
 import { describe as describeWork } from '../js/myWork/model.js';
 
