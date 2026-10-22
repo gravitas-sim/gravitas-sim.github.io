@@ -85,9 +85,9 @@ export const WORDS = {
     'st.missing': 'no longer in Gravitas',
     'st.unchecked': 'not checked here',
     'r.keys.term':
-      "{n} activities have a new code and the term in their title, so this term's reports, and the answers students keep for them, stay apart from last term's.",
+      "Activities renewed: {n}. Each has a new code and the term in its title, so this term's reports, and the answers students keep for them, stay apart from last term's.",
     'r.keys.noterm':
-      '{n} activities have a new code, so reports from this class are grouped on their own on the review page.',
+      'Activities renewed: {n}. Each has a new code, so reports from this class are grouped on their own on the review page.',
     'r.keys.none':
       "This course has no activities, so there is no code to refresh. Progress on whole investigations is kept in each student's own browser, as it always was, and is not separated by term.",
     'r.next':
@@ -170,9 +170,9 @@ export const WORDS = {
     'st.missing': 'ya no está en Gravitas',
     'st.unchecked': 'no se comprobó aquí',
     'r.keys.term':
-      '{n} actividades tienen un código nuevo y el periodo en su título, así que las entregas de este periodo, y las respuestas que los estudiantes guardan, quedan aparte de las del periodo pasado.',
+      'Actividades renovadas: {n}. Cada una tiene un código nuevo y el periodo en su título, así que las entregas de este periodo, y las respuestas que los estudiantes guardan, quedan aparte de las del periodo pasado.',
     'r.keys.noterm':
-      '{n} actividades tienen un código nuevo, así que las entregas de esta clase se agrupan aparte en la página de revisión.',
+      'Actividades renovadas: {n}. Cada una tiene un código nuevo, así que las entregas de esta clase se agrupan aparte en la página de revisión.',
     'r.keys.none':
       'Este curso no tiene actividades, así que no hay código que renovar. El avance en investigaciones completas se guarda en el navegador de cada estudiante, como siempre, y no se separa por periodo.',
     'r.next':

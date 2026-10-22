@@ -322,10 +322,10 @@ export function openTermPanel(ctx) {
 
   function draw() {
     host.textContent = '';
-    host.append(
+    const parts = [
       h('h2', { id: 'cb-term-h' }, T(`p.${mode}.h`)),
-      ...(result ? [] : form()),
-      ...(result ? outcome() : []),
+      ...(result ? [] : form()).flat(),
+      ...(result ? outcome() : []).flat(),
       h(
         'div',
         { className: 'ui-toolbar' },
@@ -342,8 +342,10 @@ export function openTermPanel(ctx) {
           },
           T('p.close')
         )
-      )
-    );
+      ),
+    ];
+    // A branch that has nothing to draw is null, which append() would print.
+    host.append(...parts.filter(Boolean));
     status = host.querySelector('#cb-term-note');
     if (status) status.textContent = note;
   }

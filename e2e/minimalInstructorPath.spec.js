@@ -37,7 +37,7 @@ const WORDS = {
     term: 'Fall 2026',
     file: 'intro-astronomy-fall-2026.course.json',
     useHeading: 'Use this course as it comes',
-    keys: '1 assignments have a new code and the term in their title',
+    keys: 'Activities renewed: 1. Each has a new code and the term in its title',
     same: 'Nothing changed under the course',
     termLine: 'Term: Fall 2026',
     title: 'A first transit (Fall 2026)',
@@ -54,7 +54,7 @@ const WORDS = {
     term: 'Otoño 2026',
     file: 'intro-astronomy-otono-2026.course.json',
     useHeading: 'Usar este curso tal como viene',
-    keys: '1 tareas tienen un código nuevo y el periodo en su título',
+    keys: 'Actividades renovadas: 1. Cada una tiene un código nuevo y el periodo en su título',
     same: 'No cambió nada en el curso',
     termLine: 'Periodo: Otoño 2026',
     title: 'Un primer tránsito (Otoño 2026)',
@@ -146,6 +146,10 @@ async function walk(page, locale, clock) {
   const link = await page.locator('#cb-term-link').inputValue();
   expect(link).toContain('/course/#c');
   await expect(page.locator('#cb-term-keys')).toContainText(W.keys);
+  // A branch with nothing to draw must not print itself (it once showed "null").
+  await expect(page.locator('#cb-term-panel')).not.toContainText(
+    /null|\[object|undefined/
+  );
   await expect(page.locator('#cb-term-changes')).toContainText(W.same);
   const file = await take(page, '#cb-term-save');
   expect(file.name).toBe(W.file);
