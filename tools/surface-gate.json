@@ -209,7 +209,7 @@
         "testFiles": 8,
         "generated": 0,
         "strings": 64,
-        "precacheKb": 15.8,
+        "precacheKb": 17.2,
         "axeRows": 1
       },
       "use": { "shippedLinks": 5, "libraryEntries": 4 },
@@ -362,11 +362,11 @@
         "generated": ["catalog/catalog.json"]
       },
       "cost": {
-        "lines": 924,
-        "testFiles": 5,
+        "lines": 891,
+        "testFiles": 6,
         "generated": 1,
-        "strings": 97,
-        "precacheKb": 14.7,
+        "strings": 94,
+        "precacheKb": 14.4,
         "axeRows": 1
       },
       "use": { "shippedLinks": 0, "libraryEntries": 4 },
@@ -1066,11 +1066,11 @@
       "measure": { "files": ["catalog/index.html"], "routes": [] },
       "consequence": "166 removes the section's heading and its empty-state line. A contributed entry keeps its badge and its 'Contributed by' row in the list; the pointer to CONTRIBUTING_CONTENT.md moves to the catalog's intro. Presentation: no support period (policy scope).",
       "cost": {
-        "lines": 203,
+        "lines": 179,
         "testFiles": 0,
         "generated": 0,
         "strings": 0,
-        "precacheKb": 3.3,
+        "precacheKb": 3.2,
         "axeRows": 0
       },
       "use": { "shippedLinks": 0, "libraryEntries": 0 },

@@ -148,8 +148,8 @@ was already part of (below).
 
 ## What acceptance means
 
-- Your package is listed under **Contributed** with the attribution you gave,
-  the review date and its history.
+- Your package is listed in the catalog with a **Contributed** badge, the
+  attribution you gave, the review date and its history.
 - It is served from this site, under the license you declared.
 - It enters the **Zenodo archive** with the release that follows, so it is
   cited and preserved with Gravitas. An archived release is permanent:

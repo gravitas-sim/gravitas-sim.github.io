@@ -10,7 +10,7 @@ export const ES_CATALOG = {
   'cat.lang.label': 'Idioma',
   'cat.title': 'Catálogo',
   'cat.intro':
-    'Datos, cursos e instrumentos para Gravitas. Todo lo que aparece aquí se revisó antes de incluirse, y nada ejecuta código. Un paquete de datos o un curso que instales se guarda en este dispositivo y funciona sin conexión.',
+    'Datos, cursos e instrumentos para Gravitas. Todo lo que aparece aquí se revisó antes de incluirse, y nada ejecuta código. Un paquete de datos o un curso que instales se guarda en este dispositivo y funciona sin conexión. Un paquete escrito fuera del equipo de Gravitas se acredita a su autor; CONTRIBUTING_CONTENT.md, en el repositorio del código fuente, explica cómo enviar uno.',
   'cat.loading': 'Cargando el catálogo…',
   'cat.loadFailed': 'El catálogo no se cargó: {why}',
   'cat.retry': 'Intentar de nuevo',
@@ -111,11 +111,6 @@ export const ES_CATALOG = {
   'cat.course.student': 'Para el estudiante',
   'cat.badge.contributed': 'Aportado',
   'cat.badge.withdrawn': 'Retirado',
-  'cat.contributed.title': 'Aportes',
-  'cat.contributed.intro':
-    'Paquetes escritos por docentes e investigadores ajenos al equipo de Gravitas. Un responsable revisó cada uno con la misma lista que el resto de lo que hay aquí antes de publicarlo, y se acredita como pidió su autor.',
-  'cat.contributed.none':
-    'Todavía no se ha aportado nada. CONTRIBUTING_CONTENT.md, en el repositorio del código fuente, explica cómo enviar un paquete.',
   'cat.contributedBy': 'Aportado por',
   'cat.history': 'Historial',
   'cat.history.item': 'Versión {version}, {date}: {change}',
