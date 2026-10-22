@@ -1,0 +1,2001 @@
+{
+  "format": "gravitas.surface-gate/1",
+  "measuredAt": {
+    "commit": "b5325149",
+    "date": "2026-10-21",
+    "node": "v24.4.0",
+    "note": "v3 at the merge of #408. Measurements are a snapshot; report shows the drift. Deflate bytes are Node 24 on macOS."
+  },
+  "surfaces": [
+    {
+      "id": "sandbox",
+      "name": "Sandbox",
+      "kind": "page",
+      "inventoryId": "sandbox",
+      "unique": "yes",
+      "replacement": null,
+      "why": "The destination's own first-action page.",
+      "exposure": { "links": [], "records": [], "stateLinks": [] },
+      "measure": { "pages": ["index.html"] },
+      "cost": {
+        "lines": 76163,
+        "testFiles": 243,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 973.9,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 0, "libraryEntries": 0 },
+      "cited": [],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R1",
+      "support": null
+    },
+    {
+      "id": "lab3d",
+      "name": "3-D lab",
+      "kind": "page",
+      "inventoryId": "lab3d",
+      "unique": "yes",
+      "replacement": null,
+      "why": "The only three-dimensional small-N view with measurement; the 2-D sandbox cannot show out-of-plane motion. A section of Explore, reached from its places block and from 12 Library entries.",
+      "exposure": {
+        "links": [],
+        "records": ["gravitas.system3d", "gravitas.lab3d-guide-report"],
+        "stateLinks": ["3-D system link (?system=)", "guide link (?guide=)"]
+      },
+      "measure": {
+        "pages": ["3d/index.html"],
+        "routes": ["/3d/"],
+        "catalogs": ["lab3dLab", "lab3dGuides", "lab3dEvidence"]
+      },
+      "cost": {
+        "lines": 11016,
+        "testFiles": 16,
+        "generated": 0,
+        "strings": 544,
+        "precacheKb": 232.3,
+        "axeRows": 2
+      },
+      "use": { "shippedLinks": 0, "libraryEntries": 12 },
+      "cited": ["README.md", "manual/gravitas-user-manual.tex"],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "mission-lab",
+      "name": "Mission lab",
+      "kind": "page",
+      "inventoryId": "mission-lab",
+      "unique": "yes",
+      "replacement": null,
+      "why": "The only mission-design task (a Mars transfer on a real ephemeris). A section of Explore; three Library investigations open it.",
+      "exposure": {
+        "links": [],
+        "records": ["gravitas.mission-plan", "gravitas.mission-lab-report"],
+        "stateLinks": ["mission plan link (?plan=)"]
+      },
+      "measure": {
+        "pages": ["mission/lab/index.html"],
+        "routes": ["/mission/lab/"],
+        "catalogs": ["missionLab", "missionLabGuides", "missionEvidence"]
+      },
+      "cost": {
+        "lines": 5684,
+        "testFiles": 10,
+        "generated": 0,
+        "strings": 445,
+        "precacheKb": 192.7,
+        "axeRows": 1
+      },
+      "use": { "shippedLinks": 0, "libraryEntries": 3 },
+      "cited": ["README.md", "manual/gravitas-user-manual.tex"],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "scenario-studio",
+      "name": "Scenario Studio",
+      "kind": "page",
+      "inventoryId": "scenario-studio",
+      "unique": "yes",
+      "replacement": null,
+      "why": "The only way to make a scenario as data without editing the repository. A section of Explore for authors.",
+      "exposure": {
+        "links": [],
+        "records": ["gravitas.scenario-pack"],
+        "stateLinks": ["scenario link the application opens"]
+      },
+      "measure": {
+        "pages": ["studio/index.html"],
+        "routes": ["/studio/"],
+        "catalogs": ["studio"]
+      },
+      "cost": {
+        "lines": 1759,
+        "testFiles": 8,
+        "generated": 0,
+        "strings": 172,
+        "precacheKb": 25.2,
+        "axeRows": 1
+      },
+      "use": { "shippedLinks": 0, "libraryEntries": 0 },
+      "cited": ["README.md", "manual/gravitas-user-manual.tex"],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "library",
+      "name": "Library",
+      "kind": "page",
+      "inventoryId": "library",
+      "unique": "yes",
+      "replacement": null,
+      "why": "The destination's own first-action page.",
+      "exposure": { "links": [], "records": [], "stateLinks": [] },
+      "measure": { "pages": ["library/index.html"], "routes": ["/library/"] },
+      "cost": {
+        "lines": 1011,
+        "testFiles": 10,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 13.4,
+        "axeRows": 2
+      },
+      "use": { "shippedLinks": 0, "libraryEntries": 0 },
+      "cited": ["manual/gravitas-user-manual.tex"],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R1",
+      "support": null
+    },
+    {
+      "id": "investigations",
+      "name": "Investigations picker",
+      "kind": "page",
+      "inventoryId": "investigations",
+      "unique": "partly",
+      "replacement": "library",
+      "replacementLacks": "a student already in the sandbox can pick without leaving it",
+      "why": "The picker inside the sandbox page. The Library lists the same investigations with search, topics and relations; the picker's one distinct use is choosing from inside the sandbox. It is not a route (a fragment of the sandbox) and its cost cannot be separated from the sandbox's.",
+      "exposure": {
+        "links": [],
+        "records": [],
+        "stateLinks": ["investigation link (/#investigation=)"]
+      },
+      "measure": {},
+      "cost": {
+        "lines": 0,
+        "testFiles": 0,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 0,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 0, "libraryEntries": 0 },
+      "cited": [],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R6b",
+      "support": null
+    },
+    {
+      "id": "courses",
+      "name": "Courses",
+      "kind": "page",
+      "inventoryId": "courses",
+      "unique": "yes",
+      "replacement": null,
+      "why": "A course's own home: its units in order, progress and the next unit. Nothing else holds a course. A section of Learn.",
+      "exposure": {
+        "links": [],
+        "records": ["course home link"],
+        "stateLinks": ["course home link (c1)"]
+      },
+      "measure": {
+        "pages": ["course/index.html"],
+        "routes": ["/course/"],
+        "catalogs": ["courseHome"]
+      },
+      "cost": {
+        "lines": 1028,
+        "testFiles": 6,
+        "generated": 0,
+        "strings": 63,
+        "precacheKb": 15.6,
+        "axeRows": 1
+      },
+      "use": { "shippedLinks": 5, "libraryEntries": 4 },
+      "cited": ["README.md", "manual/gravitas-user-manual.tex"],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "observatory",
+      "name": "Observatory",
+      "kind": "page",
+      "inventoryId": "observatory",
+      "unique": "yes",
+      "replacement": null,
+      "why": "The destination's own first-action page.",
+      "exposure": { "links": [], "records": [], "stateLinks": [] },
+      "measure": {
+        "pages": ["observatory/index.html"],
+        "routes": ["/observatory/"],
+        "catalogs": ["observatory"]
+      },
+      "cost": {
+        "lines": 22104,
+        "testFiles": 61,
+        "generated": 0,
+        "strings": 230,
+        "precacheKb": 326.7,
+        "axeRows": 1
+      },
+      "use": { "shippedLinks": 0, "libraryEntries": 23 },
+      "cited": ["README.md", "manual/gravitas-user-manual.tex"],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R1",
+      "support": null
+    },
+    {
+      "id": "experiments",
+      "name": "Experiments",
+      "kind": "page",
+      "inventoryId": "experiments",
+      "unique": "yes",
+      "replacement": null,
+      "why": "The only parameter sweep with seeds in Worker realms; the sandbox's own bench compares runs on the live world and does not sweep. A section of Observe; four Library experiments open it.",
+      "exposure": {
+        "links": [],
+        "records": ["gravitas.experiment", "gravitas.experiment-result"],
+        "stateLinks": ["experiment link block (xp)"]
+      },
+      "measure": {
+        "pages": ["experiments/index.html"],
+        "routes": ["/experiments/"],
+        "catalogs": ["experiments"]
+      },
+      "cost": {
+        "lines": 5798,
+        "testFiles": 22,
+        "generated": 0,
+        "strings": 119,
+        "precacheKb": 68.5,
+        "axeRows": 1
+      },
+      "use": { "shippedLinks": 0, "libraryEntries": 4 },
+      "cited": ["README.md", "manual/gravitas-user-manual.tex"],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "sky-lab",
+      "name": "Sky Lab",
+      "kind": "page",
+      "inventoryId": "sky-lab",
+      "unique": "yes",
+      "replacement": null,
+      "why": "The only horizon view, equatorial map and what-is-up table; the Observatory measures observations and does not place the sky. A section of Observe. Its instruments are docked in lessons (SKY_LAB.md), but no lesson, course or Library entry links the page.",
+      "exposure": { "links": [], "records": [], "stateLinks": [] },
+      "measure": {
+        "pages": ["sky/index.html"],
+        "routes": ["/sky/"],
+        "catalogs": ["sky"]
+      },
+      "cost": {
+        "lines": 2182,
+        "testFiles": 5,
+        "generated": 0,
+        "strings": 119,
+        "precacheKb": 33.6,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 0, "libraryEntries": 0 },
+      "cited": ["manual/gravitas-user-manual.tex"],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "compute",
+      "name": "Compute page",
+      "kind": "page",
+      "inventoryId": "compute",
+      "unique": "yes",
+      "replacement": null,
+      "why": "The only place a reviewed Python notebook runs on a Gravitas document (opt-in, online, 9 to 19 MB). Five shipped investigations link it. Whether it is a destination or a section of Observe is Prompt 268's gate; the verdict here is only that it is not retired or consolidated on this evidence, and D-COMPUTE-03 (off the menus) stands.",
+      "exposure": {
+        "links": [],
+        "records": ["gravitas.analysis"],
+        "stateLinks": ["compute capsule"]
+      },
+      "measure": {
+        "pages": ["compute/index.html", "compute-frame/index.html"],
+        "routes": ["/compute/"]
+      },
+      "cost": {
+        "lines": 4027,
+        "testFiles": 12,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 0,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 5, "libraryEntries": 0 },
+      "cited": [],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "catalog",
+      "name": "Catalog",
+      "kind": "page",
+      "inventoryId": "catalog",
+      "unique": "yes",
+      "replacement": null,
+      "why": "The only place a data pack or a course package is installed for offline use. A section of Observe; four Library entries point at it.",
+      "exposure": {
+        "links": [],
+        "records": ["gravitas.extension-archive"],
+        "stateLinks": []
+      },
+      "measure": {
+        "pages": ["catalog/index.html"],
+        "routes": ["/catalog/"],
+        "catalogs": ["catalog"],
+        "generated": ["catalog/catalog.json"]
+      },
+      "cost": {
+        "lines": 924,
+        "testFiles": 5,
+        "generated": 1,
+        "strings": 97,
+        "precacheKb": 14.7,
+        "axeRows": 1
+      },
+      "use": { "shippedLinks": 0, "libraryEntries": 4 },
+      "cited": ["README.md", "manual/gravitas-user-manual.tex"],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "figure-builder",
+      "name": "Figure builder",
+      "kind": "page",
+      "inventoryId": "figure-builder",
+      "unique": "yes",
+      "replacement": null,
+      "why": "The only way to turn a simulation into an embeddable figure. A section of Observe, reached from the figure action of a plot.",
+      "exposure": {
+        "links": [],
+        "records": [],
+        "stateLinks": ["figure link (the figure is the link)"]
+      },
+      "measure": {
+        "pages": ["figure/index.html"],
+        "routes": ["/figure/"],
+        "catalogs": ["figure"]
+      },
+      "cost": {
+        "lines": 1068,
+        "testFiles": 2,
+        "generated": 0,
+        "strings": 67,
+        "precacheKb": 12.8,
+        "axeRows": 1
+      },
+      "use": { "shippedLinks": 0, "libraryEntries": 0 },
+      "cited": ["README.md", "manual/gravitas-user-manual.tex"],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "my-work",
+      "name": "My work",
+      "kind": "page",
+      "inventoryId": "my-work",
+      "unique": "yes",
+      "replacement": null,
+      "why": "The destination's own first-action page.",
+      "exposure": { "links": [], "records": [], "stateLinks": [] },
+      "measure": { "pages": ["my-work/index.html"], "routes": ["/my-work/"] },
+      "cost": {
+        "lines": 2511,
+        "testFiles": 18,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 31.7,
+        "axeRows": 1
+      },
+      "use": { "shippedLinks": 0, "libraryEntries": 0 },
+      "cited": ["manual/gravitas-user-manual.tex"],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R1",
+      "support": null
+    },
+    {
+      "id": "teaching",
+      "name": "Teaching with Gravitas",
+      "kind": "page",
+      "inventoryId": "teaching",
+      "unique": "yes",
+      "replacement": null,
+      "why": "The destination's own first-action page.",
+      "exposure": { "links": [], "records": [], "stateLinks": [] },
+      "measure": { "pages": ["teaching/index.html"], "routes": ["/teaching/"] },
+      "cost": {
+        "lines": 451,
+        "testFiles": 10,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 0,
+        "axeRows": 1
+      },
+      "use": { "shippedLinks": 0, "libraryEntries": 0 },
+      "cited": ["README.md", "paper.md", "manual/gravitas-user-manual.tex"],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R1",
+      "support": null
+    },
+    {
+      "id": "instructors",
+      "name": "Instructor resources",
+      "kind": "page",
+      "inventoryId": "instructors",
+      "unique": "yes",
+      "replacement": null,
+      "why": "The only door to the encrypted instructor materials (a static site cannot gate them any other way). Linked from Teach by name; instructors are given the address.",
+      "exposure": {
+        "links": ["the address given to instructors in the adopter's guide"],
+        "records": [],
+        "stateLinks": []
+      },
+      "measure": {
+        "pages": ["instructors/index.html"],
+        "routes": ["/instructors/"]
+      },
+      "cost": {
+        "lines": 290,
+        "testFiles": 7,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 0,
+        "axeRows": 1
+      },
+      "use": { "shippedLinks": 0, "libraryEntries": 0 },
+      "cited": ["README.md", "manual/gravitas-user-manual.tex"],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "submissions",
+      "name": "Submission review",
+      "kind": "page",
+      "inventoryId": "submissions",
+      "unique": "yes",
+      "replacement": null,
+      "why": "The only page that grades a student's report token. A section of Teach reached from the instructor resources.",
+      "exposure": {
+        "links": [],
+        "records": ["gravitas.ledger", "gravitas.student-data"],
+        "stateLinks": ["submission token"]
+      },
+      "measure": {
+        "pages": ["instructors/submissions/index.html"],
+        "routes": ["/instructors/submissions/"]
+      },
+      "cost": {
+        "lines": 5664,
+        "testFiles": 20,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 65.4,
+        "axeRows": 1
+      },
+      "use": { "shippedLinks": 0, "libraryEntries": 0 },
+      "cited": ["manual/gravitas-user-manual.tex"],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "evaluation",
+      "name": "Classroom evidence kit",
+      "kind": "page",
+      "inventoryId": "evaluation",
+      "unique": "yes",
+      "replacement": null,
+      "why": "The only page that asks a class the questions the project would need to say anything about learning. Distinct from the distribution kit (handing an activity out). Marked \"Not yet used in a class\".",
+      "exposure": { "links": [], "records": [], "stateLinks": [] },
+      "measure": {
+        "pages": ["evaluation/index.html"],
+        "routes": ["/evaluation/"]
+      },
+      "cost": {
+        "lines": 1238,
+        "testFiles": 7,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 5.1,
+        "axeRows": 1
+      },
+      "use": { "shippedLinks": 0, "libraryEntries": 0 },
+      "cited": ["README.md", "manual/gravitas-user-manual.tex"],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "composer",
+      "name": "Investigation Composer",
+      "kind": "page",
+      "inventoryId": "composer",
+      "unique": "yes",
+      "replacement": null,
+      "why": "The only way to write an investigation as data in the browser, judged by the repository's own checker. A section of Teach for authors.",
+      "exposure": {
+        "links": [],
+        "records": ["gravitas.investigation-pack"],
+        "stateLinks": ["investigation link (packLink)"]
+      },
+      "measure": {
+        "pages": ["studio/lesson/index.html"],
+        "routes": ["/studio/lesson/"],
+        "catalogs": ["composer"]
+      },
+      "cost": {
+        "lines": 4173,
+        "testFiles": 16,
+        "generated": 0,
+        "strings": 328,
+        "precacheKb": 56.4,
+        "axeRows": 1
+      },
+      "use": { "shippedLinks": 0, "libraryEntries": 0 },
+      "cited": ["README.md", "manual/gravitas-user-manual.tex"],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "course-builder",
+      "name": "Course-package builder",
+      "kind": "page",
+      "inventoryId": "course-builder",
+      "unique": "yes",
+      "replacement": null,
+      "why": "The only way to make a course package. A section of Teach for authors.",
+      "exposure": {
+        "links": [],
+        "records": ["gravitas.course-pack", "gravitas.course-manifest"],
+        "stateLinks": ["course home link"]
+      },
+      "measure": {
+        "pages": ["studio/course/index.html"],
+        "routes": ["/studio/course/"],
+        "catalogs": ["course"]
+      },
+      "cost": {
+        "lines": 3301,
+        "testFiles": 8,
+        "generated": 0,
+        "strings": 270,
+        "precacheKb": 46.1,
+        "axeRows": 1
+      },
+      "use": { "shippedLinks": 0, "libraryEntries": 0 },
+      "cited": ["README.md", "manual/gravitas-user-manual.tex"],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "course-packages",
+      "name": "Investigations in a course",
+      "kind": "page",
+      "inventoryId": "course-packages",
+      "unique": "partly",
+      "replacement": "course-builder",
+      "replacementLacks": "a pasted investigation link opened as a student sees it and judged by its format, before it becomes a course item",
+      "why": "Opens an investigation link, judges it and pins it as a course item. The course builder makes the course around it; this page is the same flow in a second place.",
+      "exposure": {
+        "links": [],
+        "records": [],
+        "stateLinks": ["investigation link (packLink)"]
+      },
+      "measure": {
+        "pages": ["studio/course/packs/index.html"],
+        "routes": ["/studio/course/packs/"]
+      },
+      "cost": {
+        "lines": 594,
+        "testFiles": 4,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 6,
+        "axeRows": 1
+      },
+      "use": { "shippedLinks": 0, "libraryEntries": 0 },
+      "cited": [],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R6b",
+      "support": null
+    },
+    {
+      "id": "teaching-find",
+      "name": "Find content to teach",
+      "kind": "page",
+      "inventoryId": "teaching-find",
+      "unique": "partly",
+      "replacement": "library",
+      "replacementLacks": "the instructor facts per entry (what is marked, how to hand it out) and the textbook-chapter filter",
+      "why": "One page per investigation and activity with filters by level, format, time, mathematics, subject and textbook chapter. The Library offers most of the same filters to students; this page adds what an instructor needs to adopt.",
+      "exposure": { "links": [], "records": [], "stateLinks": [] },
+      "measure": {
+        "pages": ["teaching/find/index.html"],
+        "routes": ["/teaching/find/"]
+      },
+      "cost": {
+        "lines": 235,
+        "testFiles": 3,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 0,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 0, "libraryEntries": 0 },
+      "cited": ["manual/gravitas-user-manual.tex"],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R6b",
+      "support": null
+    },
+    {
+      "id": "teaching-adopt",
+      "name": "Adopter's guide",
+      "kind": "page",
+      "inventoryId": "teaching-adopt",
+      "unique": "yes",
+      "replacement": null,
+      "why": "The only one-page guide for an instructor deciding whether to adopt; cited by the paper's adoption claims.",
+      "exposure": { "links": [], "records": [], "stateLinks": [] },
+      "measure": {
+        "pages": ["teaching/adopt/index.html"],
+        "routes": ["/teaching/adopt/"]
+      },
+      "cost": {
+        "lines": 215,
+        "testFiles": 0,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 0,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 0, "libraryEntries": 0 },
+      "cited": ["manual/gravitas-user-manual.tex"],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "teaching-alignment",
+      "name": "Textbook alignment",
+      "kind": "page",
+      "inventoryId": "teaching-alignment",
+      "unique": "yes",
+      "replacement": null,
+      "why": "The only chapter-by-chapter map to a named textbook (OpenStax Astronomy 2e).",
+      "exposure": { "links": [], "records": [], "stateLinks": [] },
+      "measure": {
+        "pages": ["teaching/alignment/index.html"],
+        "routes": ["/teaching/alignment/"]
+      },
+      "cost": {
+        "lines": 308,
+        "testFiles": 0,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 0,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 0, "libraryEntries": 0 },
+      "cited": ["manual/gravitas-user-manual.tex"],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "teaching-kit",
+      "name": "Classroom kit",
+      "kind": "page",
+      "inventoryId": "teaching-kit",
+      "unique": "yes",
+      "replacement": null,
+      "why": "The only generator of the link, QR code, handout and LMS notes for handing an activity out; nothing is uploaded.",
+      "exposure": { "links": [], "records": [], "stateLinks": [] },
+      "measure": {
+        "pages": ["teaching/kit/index.html"],
+        "routes": ["/teaching/kit/"]
+      },
+      "cost": {
+        "lines": 1325,
+        "testFiles": 4,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 15.8,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 0, "libraryEntries": 0 },
+      "cited": ["manual/gravitas-user-manual.tex"],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "teaching-activities",
+      "name": "Adoption pages: activities",
+      "kind": "page",
+      "inventoryId": "teaching-activities",
+      "unique": "yes",
+      "replacement": null,
+      "why": "One generated page per classroom activity, required by Roadmap III 7.5 rule 11 for every content prompt. Not a surface to be retired while that rule stands.",
+      "exposure": {
+        "links": ["links from the Library activity cards"],
+        "records": [],
+        "stateLinks": []
+      },
+      "measure": {},
+      "cost": {
+        "lines": 0,
+        "testFiles": 0,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 0,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 0, "libraryEntries": 0 },
+      "cited": [],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "teaching-investigations",
+      "name": "Adoption pages: investigations",
+      "kind": "page",
+      "inventoryId": "teaching-investigations",
+      "unique": "yes",
+      "replacement": null,
+      "why": "One generated page per investigation, required by Roadmap III 7.5 rule 11. Not a surface to be retired while that rule stands.",
+      "exposure": {
+        "links": ["links from the Library investigation cards"],
+        "records": [],
+        "stateLinks": []
+      },
+      "measure": {},
+      "cost": {
+        "lines": 0,
+        "testFiles": 0,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 0,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 0, "libraryEntries": 0 },
+      "cited": [],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "model",
+      "name": "How the model works",
+      "kind": "page",
+      "inventoryId": "model",
+      "unique": "yes",
+      "replacement": null,
+      "why": "The only plain statement of what the simulation computes and does not; linked from Home and Teach.",
+      "exposure": { "links": [], "records": [], "stateLinks": [] },
+      "measure": { "pages": ["model/index.html"], "routes": ["/model/"] },
+      "cost": {
+        "lines": 3414,
+        "testFiles": 7,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 0,
+        "axeRows": 1
+      },
+      "use": { "shippedLinks": 0, "libraryEntries": 0 },
+      "cited": ["README.md", "manual/gravitas-user-manual.tex"],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "validation",
+      "name": "Physics validation",
+      "kind": "page",
+      "inventoryId": "validation",
+      "unique": "yes",
+      "replacement": null,
+      "why": "The only live run of the physics checks in the reader's browser; the evidence behind the model page.",
+      "exposure": { "links": [], "records": [], "stateLinks": [] },
+      "measure": {
+        "pages": ["validation/index.html"],
+        "routes": ["/validation/"]
+      },
+      "cost": {
+        "lines": 9384,
+        "testFiles": 20,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 14.4,
+        "axeRows": 1
+      },
+      "use": { "shippedLinks": 0, "libraryEntries": 0 },
+      "cited": ["CITATION.cff"],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "glossary",
+      "name": "Glossary",
+      "kind": "page",
+      "inventoryId": "glossary",
+      "unique": "yes",
+      "replacement": null,
+      "why": "The only list of the eight nouns and the retired words.",
+      "exposure": { "links": [], "records": [], "stateLinks": [] },
+      "measure": { "pages": ["glossary/index.html"], "routes": ["/glossary/"] },
+      "cost": {
+        "lines": 203,
+        "testFiles": 0,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 0,
+        "axeRows": 1
+      },
+      "use": { "shippedLinks": 0, "libraryEntries": 0 },
+      "cited": [],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "manual",
+      "name": "User manual (PDF)",
+      "kind": "page",
+      "inventoryId": "manual",
+      "unique": "yes",
+      "replacement": null,
+      "why": "The only offline, citable long form; English only (D-ADOPT-03).",
+      "exposure": {
+        "links": ["the manual PDF on the site"],
+        "records": [],
+        "stateLinks": []
+      },
+      "measure": { "routes": ["/Gravitas_User_Manual.pdf"] },
+      "cost": {
+        "lines": 0,
+        "testFiles": 0,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 0,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 0, "libraryEntries": 0 },
+      "cited": [],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "kernel-diagnostics",
+      "name": "3-D kernel diagnostics",
+      "kind": "page",
+      "inventoryId": "kernel-diagnostics",
+      "unique": "yes",
+      "replacement": null,
+      "why": "The only page that runs the 3-D kernel's reference problems in the browser, the evidence for the lab. Reached from the lab's evidence section.",
+      "exposure": { "links": [], "records": [], "stateLinks": [] },
+      "measure": {
+        "pages": ["lab3d/index.html"],
+        "routes": ["/lab3d/"],
+        "catalogs": ["lab3d"]
+      },
+      "cost": {
+        "lines": 937,
+        "testFiles": 3,
+        "generated": 0,
+        "strings": 79,
+        "precacheKb": 12.3,
+        "axeRows": 1
+      },
+      "use": { "shippedLinks": 0, "libraryEntries": 0 },
+      "cited": ["README.md"],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "mission-diagnostics",
+      "name": "Mission core diagnostics",
+      "kind": "page",
+      "inventoryId": "mission-diagnostics",
+      "unique": "yes",
+      "replacement": null,
+      "why": "The only page that runs the mission core against its independent check. Reached from the Mission lab's evidence section.",
+      "exposure": { "links": [], "records": [], "stateLinks": [] },
+      "measure": {
+        "pages": ["mission/index.html"],
+        "routes": ["/mission/"],
+        "catalogs": ["mission"]
+      },
+      "cost": {
+        "lines": 1921,
+        "testFiles": 3,
+        "generated": 0,
+        "strings": 228,
+        "precacheKb": 27.5,
+        "axeRows": 1
+      },
+      "use": { "shippedLinks": 0, "libraryEntries": 0 },
+      "cited": ["README.md", "manual/gravitas-user-manual.tex"],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "history-original",
+      "name": "The first Gravitas",
+      "kind": "page",
+      "inventoryId": "history-original",
+      "unique": "partly",
+      "replacement": "archive",
+      "replacementLacks": "running the first version in a browser without a checkout: the code, the commit a5d08fc and every later commit stay in git, the v2.0.0 tag and the Zenodo deposit, but nothing there runs on a click",
+      "why": "A single file, the sandbox as it was put online in July 2025, with Save and Load inert and no accessibility run. It is a museum piece: one quiet link from the model page's footer, no shipped link, no Library entry. The archive keeps the code; what it cannot keep is the click-to-run.",
+      "exposure": { "links": [], "records": [], "stateLinks": [] },
+      "measure": {
+        "pages": ["history/original/index.html"],
+        "routes": ["/history/original/"],
+        "testNames": ["history/original"]
+      },
+      "cost": {
+        "lines": 1396,
+        "testFiles": 4,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 0,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 0, "libraryEntries": 0 },
+      "cited": [],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R6b",
+      "support": null
+    },
+    {
+      "id": "analysis-lab",
+      "name": "Analysis lab (two sections)",
+      "kind": "section",
+      "unique": "yes",
+      "replacement": null,
+      "why": "Not a page: \"Analyze\" on the experiment runner and \"Compare the fits\" in the Observatory fit panel, two lazy chunks over js/analysis. Reading a result closely (intervals, sources of uncertainty, model weights) is not done anywhere else. A section of Observe, not a destination.",
+      "exposure": {
+        "links": [],
+        "records": ["gravitas.analysis"],
+        "stateLinks": []
+      },
+      "measure": {
+        "files": [
+          "js/analysis/stats.js",
+          "js/analysis/sweepAnalysis.js",
+          "js/analysis/modelCompare.js",
+          "js/experiments/analysisPanel.js",
+          "js/observatory/fitPanel.js"
+        ],
+        "catalogs": ["analysis"],
+        "testNames": ["analysis lab", "analysisLab", "modelCompare"]
+      },
+      "cost": {
+        "lines": 4122,
+        "testFiles": 8,
+        "generated": 0,
+        "strings": 136,
+        "precacheKb": 48,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 0, "libraryEntries": 0 },
+      "cited": [],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "contributed-section",
+      "name": "The \"Contributed\" catalog section",
+      "kind": "section",
+      "unique": "no",
+      "replacement": "catalog",
+      "replacementLacks": "nothing: a contributed entry already carries a \"Contributed\" badge and a \"Contributed by\" row in the list; the section adds a heading and an empty-state message",
+      "why": "No catalog entry has origin \"contributed\" (0 of 10) and the section says so. The attribution lives on the entry; the section is presentation only.",
+      "exposure": { "links": [], "records": [], "stateLinks": [] },
+      "measure": { "files": ["catalog/index.html"], "routes": [] },
+      "consequence": "166 removes the section's heading and its empty-state line. A contributed entry keeps its badge and its 'Contributed by' row in the list; the pointer to CONTRIBUTING_CONTENT.md moves to the catalog's intro. Presentation: no support period (policy scope).",
+      "cost": {
+        "lines": 203,
+        "testFiles": 0,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 3.3,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 0, "libraryEntries": 0 },
+      "cited": [],
+      "referrer": "UNKNOWN",
+      "verdict": "RETIRE",
+      "rule": "R5",
+      "support": "L"
+    },
+    {
+      "id": "where-it-runs-facet",
+      "name": "The Library's \"Where it runs\" facet",
+      "kind": "facet",
+      "unique": "no",
+      "replacement": "library",
+      "replacementLacks": "nothing a student asks for: the kind facet and the topics already choose by what a thing is, and the facet names subsystems (\"3-D lab\", \"Observatory\") instead of tasks",
+      "why": "Navigation model: a student-facing reason or none. None was found: no investigation, course or document tells a student to choose by it, and the roadmap lists it as naming where code runs. Prompt 163 (PR #409, open, ratified in D-R10-42) already removes it; this verdict agrees by the function.",
+      "exposure": { "links": [], "records": [], "stateLinks": [] },
+      "measure": { "files": [] },
+      "consequence": "None for 166 if Prompt 163 (PR #409, open) merges; if it does not, 166 removes the facet. Presentation: no support period (policy scope). A Library link that names the old filter still opens the Library.",
+      "cost": {
+        "lines": 0,
+        "testFiles": 0,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 0,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 0, "libraryEntries": 0 },
+      "cited": [],
+      "referrer": "UNKNOWN",
+      "verdict": "RETIRE",
+      "rule": "R5",
+      "support": "L"
+    },
+    {
+      "id": "activity-demonstration",
+      "name": "Activity format: demonstration",
+      "kind": "activity-format",
+      "unique": "yes",
+      "replacement": null,
+      "why": "Five minutes projected to a room; the only format with no typed answer. One subject (orbital speed).",
+      "exposure": {
+        "links": [],
+        "records": ["investigation progress (namespaced by assignment id)"],
+        "stateLinks": [
+          "assignment link ?activity=&format= (act-orbital-speed-demo)"
+        ]
+      },
+      "measure": {
+        "libraryFormats": ["demonstration"],
+        "testNames": ["act-orbital-speed-demo"]
+      },
+      "cost": {
+        "lines": 0,
+        "testFiles": 0,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 0,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 0, "libraryEntries": 1 },
+      "cited": [],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "activity-route",
+      "name": "Activity format: route",
+      "kind": "activity-format",
+      "unique": "yes",
+      "replacement": null,
+      "why": "The smallest format that is still the whole predict, run, measure, explain cycle. Three subjects use it (orbital speed, binary planets, star sizes).",
+      "exposure": {
+        "links": [],
+        "records": ["investigation progress (namespaced by assignment id)"],
+        "stateLinks": [
+          "assignment link ?activity=&format= (act-orbital-speed-route)",
+          "assignment link ?activity=&format= (act-binary-planets-route)",
+          "assignment link ?activity=&format= (act-star-sizes-route)"
+        ]
+      },
+      "measure": {
+        "libraryFormats": ["route"],
+        "testNames": [
+          "act-orbital-speed-route",
+          "act-binary-planets-route",
+          "act-star-sizes-route"
+        ]
+      },
+      "cost": {
+        "lines": 0,
+        "testFiles": 0,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 0,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 0, "libraryEntries": 3 },
+      "cited": [],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "activity-guided",
+      "name": "Activity format: guided",
+      "kind": "activity-format",
+      "unique": "partly",
+      "replacement": "activity-route",
+      "replacementLacks": "the exact step selection and its stable assignment id",
+      "why": "Six of the lesson's twenty-three steps, between the route (four) and the lab (ten). Only orbital speed has one; the route plus the lesson's own pace cover most of what it does.",
+      "exposure": {
+        "links": [],
+        "records": ["investigation progress (namespaced by assignment id)"],
+        "stateLinks": [
+          "assignment link ?activity=&format= (act-orbital-speed-guided)"
+        ]
+      },
+      "measure": {
+        "libraryFormats": ["guided"],
+        "testNames": ["act-orbital-speed-guided"]
+      },
+      "cost": {
+        "lines": 0,
+        "testFiles": 0,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 0,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 0, "libraryEntries": 1 },
+      "cited": [],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R8b",
+      "support": null
+    },
+    {
+      "id": "activity-lab",
+      "name": "Activity format: lab",
+      "kind": "activity-format",
+      "unique": "partly",
+      "replacement": "investigation-keplers-laws",
+      "replacementLacks": "the exact step selection and its stable assignment id",
+      "why": "Ten of twenty-three steps with a controlled comparison and a transfer case. Only orbital speed has one. The whole lesson, assigned in full, covers it; the format is the cut.",
+      "exposure": {
+        "links": [],
+        "records": ["investigation progress (namespaced by assignment id)"],
+        "stateLinks": [
+          "assignment link ?activity=&format= (act-orbital-speed-lab)"
+        ]
+      },
+      "measure": {
+        "libraryFormats": ["lab"],
+        "testNames": ["act-orbital-speed-lab"]
+      },
+      "cost": {
+        "lines": 0,
+        "testFiles": 0,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 0,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 0, "libraryEntries": 1 },
+      "cited": [],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R8b",
+      "support": null
+    },
+    {
+      "id": "format-gravitas-observed",
+      "name": "gravitas.observed",
+      "kind": "stored-format",
+      "unique": "yes",
+      "replacement": null,
+      "why": "localStorage; owner js/notebook/observed.js (inside a notebook entry).",
+      "exposure": {
+        "links": [],
+        "records": ["gravitas.observed"],
+        "stateLinks": []
+      },
+      "persisted": "localStorage",
+      "measure": {
+        "ownerFiles": ["js/notebook/observed.js"],
+        "testNames": ["gravitas.observed"]
+      },
+      "consequence": "Keep; a schema in Prompt 290.",
+      "cost": {
+        "lines": 0,
+        "testFiles": 3,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 0,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 2, "libraryEntries": 0 },
+      "cited": [],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "format-world-share-link",
+      "name": "world share link",
+      "kind": "stored-format",
+      "unique": "yes",
+      "replacement": null,
+      "why": "link; owner js/shareState.js decodePayload.",
+      "exposure": {
+        "links": [],
+        "records": [],
+        "stateLinks": ["world share link"]
+      },
+      "persisted": "link",
+      "measure": {
+        "ownerFiles": ["js/shareState.js"],
+        "testNames": ["world share link"]
+      },
+      "consequence": "Keep; a schema in Prompt 290.",
+      "cost": {
+        "lines": 0,
+        "testFiles": 0,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 0,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 20, "libraryEntries": 0 },
+      "cited": [],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "format-experiment-link-block-xp",
+      "name": "experiment link block (xp)",
+      "kind": "stored-format",
+      "unique": "yes",
+      "replacement": null,
+      "why": "link; owner js/experiments/shareExperiment.js readExperimentBlock.",
+      "exposure": {
+        "links": [],
+        "records": [],
+        "stateLinks": ["experiment link block (xp)"]
+      },
+      "persisted": "link",
+      "measure": {
+        "ownerFiles": ["js/experiments/shareExperiment.js"],
+        "testNames": ["experiment link block (xp)"]
+      },
+      "consequence": "Keep; a schema in Prompt 290.",
+      "cost": {
+        "lines": 0,
+        "testFiles": 0,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 0,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 2, "libraryEntries": 0 },
+      "cited": [],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "format-link-extras-x",
+      "name": "link extras (x)",
+      "kind": "stored-format",
+      "unique": "yes",
+      "replacement": null,
+      "why": "link; owner js/experiments/canonicalState.js readExtras.",
+      "exposure": {
+        "links": [],
+        "records": [],
+        "stateLinks": ["link extras (x)"]
+      },
+      "persisted": "link",
+      "measure": {
+        "ownerFiles": ["js/experiments/canonicalState.js"],
+        "testNames": ["link extras (x)"]
+      },
+      "consequence": "Keep; a schema in Prompt 290.",
+      "cost": {
+        "lines": 0,
+        "testFiles": 0,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 0,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 6, "libraryEntries": 0 },
+      "cited": [],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "format-gravitas-system3d",
+      "name": "gravitas.system3d",
+      "kind": "stored-format",
+      "unique": "yes",
+      "replacement": null,
+      "why": "file, repository; owner js/lab3d/state.js migrateSystem.",
+      "exposure": {
+        "links": [],
+        "records": ["gravitas.system3d"],
+        "stateLinks": []
+      },
+      "persisted": "file, repository",
+      "measure": {
+        "ownerFiles": ["js/lab3d/state.js"],
+        "testNames": ["gravitas.system3d"]
+      },
+      "consequence": "Keep; a schema in Prompt 290.",
+      "cost": {
+        "lines": 0,
+        "testFiles": 5,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 0,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 13, "libraryEntries": 0 },
+      "cited": [],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "format-gravitas-lab3d-snapshot",
+      "name": "gravitas.lab3d.snapshot",
+      "kind": "stored-format",
+      "unique": "yes",
+      "replacement": null,
+      "why": "memory; owner js/lab3d/snapshot.js snapshotProblem.",
+      "exposure": { "links": [], "records": [], "stateLinks": [] },
+      "persisted": "memory",
+      "measure": {
+        "ownerFiles": ["js/lab3d/snapshot.js"],
+        "testNames": ["gravitas.lab3d.snapshot"]
+      },
+      "consequence": "Keep. Held in memory only; a schema is optional in Prompt 290.",
+      "cost": {
+        "lines": 0,
+        "testFiles": 1,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 0,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 2, "libraryEntries": 0 },
+      "cited": [],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "format-experiment-store",
+      "name": "experiment store",
+      "kind": "stored-format",
+      "unique": "yes",
+      "replacement": null,
+      "why": "localStorage; owner js/experiments/store.js migrate.",
+      "exposure": {
+        "links": [],
+        "records": ["experiment store"],
+        "stateLinks": []
+      },
+      "persisted": "localStorage",
+      "measure": {
+        "ownerFiles": ["js/experiments/store.js"],
+        "testNames": ["experiment store"]
+      },
+      "consequence": "Keep; a schema in Prompt 290.",
+      "cost": {
+        "lines": 0,
+        "testFiles": 1,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 0,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 1, "libraryEntries": 0 },
+      "cited": [],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "format-gravitas-mission-plan",
+      "name": "gravitas.mission-plan",
+      "kind": "stored-format",
+      "unique": "yes",
+      "replacement": null,
+      "why": "download, My work; owner js/mission/link.js readPlan.",
+      "exposure": {
+        "links": [],
+        "records": ["gravitas.mission-plan"],
+        "stateLinks": []
+      },
+      "persisted": "download, My work",
+      "measure": {
+        "ownerFiles": ["js/mission/link.js"],
+        "testNames": ["gravitas.mission-plan"]
+      },
+      "consequence": "Keep; a schema in Prompt 290.",
+      "cost": {
+        "lines": 0,
+        "testFiles": 4,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 0,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 3, "libraryEntries": 0 },
+      "cited": [],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "format-gravitas-ephemeris-pack",
+      "name": "gravitas.ephemeris-pack",
+      "kind": "stored-format",
+      "unique": "yes",
+      "replacement": null,
+      "why": "repository; owner js/mission/ephemeris.js createEphemeris.",
+      "exposure": { "links": [], "records": [], "stateLinks": [] },
+      "persisted": "repository",
+      "measure": {
+        "ownerFiles": ["js/mission/ephemeris.js"],
+        "testNames": ["gravitas.ephemeris-pack"]
+      },
+      "consequence": "Keep; a schema in Prompt 290.",
+      "cost": {
+        "lines": 0,
+        "testFiles": 3,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 0,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 7, "libraryEntries": 0 },
+      "cited": [],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "format-investigation-progress",
+      "name": "investigation progress",
+      "kind": "stored-format",
+      "unique": "yes",
+      "replacement": null,
+      "why": "localStorage; owner js/investigations/progressSchema.js readProgress.",
+      "exposure": {
+        "links": [],
+        "records": ["investigation progress"],
+        "stateLinks": []
+      },
+      "persisted": "localStorage",
+      "measure": {
+        "ownerFiles": ["js/investigations/progressSchema.js"],
+        "testNames": ["investigation progress"]
+      },
+      "consequence": "Keep; a schema in Prompt 290.",
+      "cost": {
+        "lines": 0,
+        "testFiles": 0,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 0,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 5, "libraryEntries": 0 },
+      "cited": [],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "format-gravitas-investigation-progress",
+      "name": "gravitas.investigation.progress",
+      "kind": "stored-format",
+      "unique": "yes",
+      "replacement": null,
+      "why": "download; owner js/investigations/progressBackup.js restoreProgress.",
+      "exposure": {
+        "links": [],
+        "records": ["gravitas.investigation.progress"],
+        "stateLinks": []
+      },
+      "persisted": "download",
+      "measure": {
+        "ownerFiles": ["js/investigations/progressBackup.js"],
+        "testNames": ["gravitas.investigation.progress"]
+      },
+      "consequence": "Keep; a schema in Prompt 290.",
+      "cost": {
+        "lines": 0,
+        "testFiles": 4,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 0,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 10, "libraryEntries": 0 },
+      "cited": [],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "format-gravitas-lab3d-guide-report",
+      "name": "gravitas.lab3d-guide-report",
+      "kind": "stored-format",
+      "unique": "yes",
+      "replacement": null,
+      "why": "download; owner none: written, never read. Written for a person to read, never read back by Gravitas.",
+      "exposure": {
+        "links": [],
+        "records": ["gravitas.lab3d-guide-report"],
+        "stateLinks": []
+      },
+      "persisted": "download",
+      "measure": {
+        "ownerFiles": ["js/lab3d/view/guidePanel.js"],
+        "testNames": ["gravitas.lab3d-guide-report"]
+      },
+      "consequence": "Keep. Written for a person to read; Prompt 290 gives it a schema or says in words that it has none.",
+      "cost": {
+        "lines": 0,
+        "testFiles": 1,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 0,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 1, "libraryEntries": 0 },
+      "cited": [],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "format-gravitas-mission-lab-report",
+      "name": "gravitas.mission-lab-report",
+      "kind": "stored-format",
+      "unique": "yes",
+      "replacement": null,
+      "why": "download; owner none: written, never read. Written for a person to read, never read back by Gravitas.",
+      "exposure": {
+        "links": [],
+        "records": ["gravitas.mission-lab-report"],
+        "stateLinks": []
+      },
+      "persisted": "download",
+      "measure": {
+        "ownerFiles": ["js/mission/lab/guidePanel.js"],
+        "testNames": ["gravitas.mission-lab-report"]
+      },
+      "consequence": "Keep. Written for a person to read; Prompt 290 gives it a schema or says in words that it has none.",
+      "cost": {
+        "lines": 0,
+        "testFiles": 2,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 0,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 1, "libraryEntries": 0 },
+      "cited": [],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "format-notebook-store",
+      "name": "notebook store",
+      "kind": "stored-format",
+      "unique": "yes",
+      "replacement": null,
+      "why": "localStorage; owner js/notebook/store.js load.",
+      "exposure": {
+        "links": [],
+        "records": ["notebook store"],
+        "stateLinks": []
+      },
+      "persisted": "localStorage",
+      "measure": {
+        "ownerFiles": ["js/notebook/store.js"],
+        "testNames": ["notebook store"]
+      },
+      "consequence": "Keep; a schema in Prompt 290.",
+      "cost": {
+        "lines": 0,
+        "testFiles": 1,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 0,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 10, "libraryEntries": 0 },
+      "cited": [],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "format-notebook-entry-snapshot",
+      "name": "notebook entry snapshot",
+      "kind": "stored-format",
+      "unique": "yes",
+      "replacement": null,
+      "why": "localStorage, download; owner js/notebook/entry.js validateEntry.",
+      "exposure": {
+        "links": [],
+        "records": ["notebook entry snapshot"],
+        "stateLinks": []
+      },
+      "persisted": "localStorage, download",
+      "measure": {
+        "ownerFiles": ["js/notebook/entry.js"],
+        "testNames": ["notebook entry snapshot"]
+      },
+      "consequence": "Keep; a schema in Prompt 290.",
+      "cost": {
+        "lines": 0,
+        "testFiles": 0,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 0,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 14, "libraryEntries": 0 },
+      "cited": [],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "format-gravitas-ledger",
+      "name": "gravitas.ledger",
+      "kind": "stored-format",
+      "unique": "yes",
+      "replacement": null,
+      "why": "inside a submission token (ev), never alone; owner js/submission/ledgerDigest.js checkEvidence.",
+      "exposure": {
+        "links": [],
+        "records": ["gravitas.ledger"],
+        "stateLinks": []
+      },
+      "persisted": "inside a submission token (ev), never alone",
+      "measure": {
+        "ownerFiles": ["js/submission/ledgerDigest.js"],
+        "testNames": ["gravitas.ledger"]
+      },
+      "consequence": "Keep; a schema in Prompt 290.",
+      "cost": {
+        "lines": 0,
+        "testFiles": 1,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 0,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 2, "libraryEntries": 0 },
+      "cited": [],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "format-course-home-link",
+      "name": "course home link",
+      "kind": "stored-format",
+      "unique": "yes",
+      "replacement": null,
+      "why": "link; owner js/course/links.js readCourseFragment.",
+      "exposure": {
+        "links": [],
+        "records": [],
+        "stateLinks": ["course home link"]
+      },
+      "persisted": "link",
+      "measure": {
+        "ownerFiles": ["js/course/links.js"],
+        "testNames": ["course home link"]
+      },
+      "consequence": "Keep; a schema in Prompt 290.",
+      "cost": {
+        "lines": 0,
+        "testFiles": 0,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 0,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 4, "libraryEntries": 0 },
+      "cited": [],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "format-investigation-link",
+      "name": "investigation link",
+      "kind": "stored-format",
+      "unique": "yes",
+      "replacement": null,
+      "why": "link; owner js/composer/packLink.js readPackFragment.",
+      "exposure": {
+        "links": [],
+        "records": [],
+        "stateLinks": ["investigation link"]
+      },
+      "persisted": "link",
+      "measure": {
+        "ownerFiles": ["js/composer/packLink.js"],
+        "testNames": ["investigation link"]
+      },
+      "consequence": "Keep; a schema in Prompt 290.",
+      "cost": {
+        "lines": 0,
+        "testFiles": 2,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 0,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 3, "libraryEntries": 0 },
+      "cited": [],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "format-gravitas-course-manifest",
+      "name": "gravitas.course-manifest",
+      "kind": "stored-format",
+      "unique": "yes",
+      "replacement": null,
+      "why": "download; owner none: written, never read. Written for a person to read, never read back by Gravitas.",
+      "exposure": {
+        "links": [],
+        "records": ["gravitas.course-manifest"],
+        "stateLinks": []
+      },
+      "persisted": "download",
+      "measure": {
+        "ownerFiles": ["js/course/manifest.js"],
+        "testNames": ["gravitas.course-manifest"]
+      },
+      "consequence": "Keep. Written for a person to read; Prompt 290 gives it a schema or says in words that it has none.",
+      "cost": {
+        "lines": 0,
+        "testFiles": 3,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 0,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 1, "libraryEntries": 0 },
+      "cited": [],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "format-gravitas-extension-archive",
+      "name": "gravitas.extension-archive",
+      "kind": "stored-format",
+      "unique": "yes",
+      "replacement": null,
+      "why": "repository, download; owner sdk/lib/archive.mjs, js/catalog/archive.js.",
+      "exposure": {
+        "links": [],
+        "records": ["gravitas.extension-archive"],
+        "stateLinks": []
+      },
+      "persisted": "repository, download",
+      "measure": {
+        "ownerFiles": ["sdk/lib/archive.mjs", "js/catalog/archive.js"],
+        "testNames": ["gravitas.extension-archive"]
+      },
+      "consequence": "Keep; a schema in Prompt 290.",
+      "cost": {
+        "lines": 0,
+        "testFiles": 0,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 0,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 1, "libraryEntries": 0 },
+      "cited": [],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "format-embed-options",
+      "name": "embed options",
+      "kind": "stored-format",
+      "unique": "yes",
+      "replacement": null,
+      "why": "link; owner js/embedOptions.js readEmbedOptions.",
+      "exposure": {
+        "links": [],
+        "records": [],
+        "stateLinks": ["embed options"]
+      },
+      "persisted": "link",
+      "measure": {
+        "ownerFiles": ["js/embedOptions.js"],
+        "testNames": ["embed options"]
+      },
+      "consequence": "Keep; a schema in Prompt 290.",
+      "cost": {
+        "lines": 0,
+        "testFiles": 0,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 0,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 5, "libraryEntries": 0 },
+      "cited": [],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "format-gravitas-student-data",
+      "name": "gravitas.student-data",
+      "kind": "stored-format",
+      "unique": "yes",
+      "replacement": null,
+      "why": "download; owner js/storage/index.js Store.importAll.",
+      "exposure": {
+        "links": [],
+        "records": ["gravitas.student-data"],
+        "stateLinks": []
+      },
+      "persisted": "download",
+      "measure": {
+        "ownerFiles": ["js/storage/index.js"],
+        "testNames": ["gravitas.student-data"]
+      },
+      "consequence": "Keep; a schema in Prompt 290.",
+      "cost": {
+        "lines": 0,
+        "testFiles": 4,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 0,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 1, "libraryEntries": 0 },
+      "cited": [],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "format-gravitas-made",
+      "name": "gravitas.made",
+      "kind": "stored-format",
+      "unique": "yes",
+      "replacement": null,
+      "why": "localStorage, inside gravitas.student-data; owner js/myWork/made.js readMade.",
+      "exposure": {
+        "links": [],
+        "records": ["gravitas.made"],
+        "stateLinks": []
+      },
+      "persisted": "localStorage, inside gravitas.student-data",
+      "measure": {
+        "ownerFiles": ["js/myWork/made.js"],
+        "testNames": ["gravitas.made"]
+      },
+      "consequence": "Keep; a schema in Prompt 290.",
+      "cost": {
+        "lines": 0,
+        "testFiles": 3,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 0,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 8, "libraryEntries": 0 },
+      "cited": [],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    }
+  ]
+}

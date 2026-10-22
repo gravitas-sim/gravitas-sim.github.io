@@ -162,6 +162,7 @@ current, and the orchestrator checks it.
 | `stellar-shots.mjs` | Captures of the Stellar Lab |  |
 | `storage-matrix.mjs` | npm run storage:matrix | `npm run storage:matrix` |
 | `storage-profile.mjs` | npm run storage:profile -- --capture | `npm run storage:profile` |
+| `surface-gate.mjs` | The surface gate: one decision function, the same for every surface | `npm run surface:check`, `npm run surface:measure`, `npm run surface:write`, `npm run surface:report` |
 | `three-shaders.mjs` | three.js shaders in the bundle: pruned to what the 3-D view can reach, then |  |
 | `thumbnail-config.mjs` | Thumbnail capture settings |  |
 | `ui-shots.mjs` | The interface, at every size and in both languages |  |
