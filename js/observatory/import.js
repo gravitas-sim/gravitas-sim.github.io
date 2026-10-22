@@ -321,9 +321,12 @@ function readJson(body, file, opts) {
     // The engine's own message differs between browsers; this one does not.
     return fail('the file starts like JSON and is not valid JSON');
   }
-  // Plain data within the workspace's own limits, and no prototype key.
+  // Plain data within the workspace's own limits, and no prototype key. A
+  // workspace's marks nest eight deep (workspace, marks, list, mark, result,
+  // points, a point); 2.0.0 read six and so refused such a file, in words that
+  // did not say why.
   const why = plainDataProblem(data, {
-    depth: 6,
+    depth: 8,
     items: LIMITS.rows,
     text: 10_000,
   });
