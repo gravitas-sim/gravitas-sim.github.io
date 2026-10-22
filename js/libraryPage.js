@@ -44,7 +44,7 @@ import {
   translatePage,
 } from './library/i18n.js';
 import { mountShell } from './shell.js';
-import { KEY_COLLECTIONS, KEY_NEXT_CONTEXT } from './names.js';
+import { ID_COURSE_PACK, KEY_COLLECTIONS, KEY_NEXT_CONTEXT } from './names.js';
 import {
   noteResume,
   put,
@@ -497,6 +497,7 @@ const collectionDeps = {
   read: () => readJson(KEY_COLLECTIONS, null),
   write: record => writeJson(KEY_COLLECTIONS, record, 'courses'),
   entryIdOfItem,
+  format: ID_COURSE_PACK,
 };
 
 /**

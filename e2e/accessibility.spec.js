@@ -35,6 +35,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { readFileSync } from 'node:fs';
 import { courseLink } from '../js/course/links.js';
 import { itemOfEntry, savedPack } from '../js/library/collections.js';
+import '../js/library/collectionsDeps.js'; // binds what collections.js needs
 
 // What a student who saved two things and kept a collection has (Prompt 164).
 const LIBRARY_INDEX = JSON.parse(readFileSync('library/library.json', 'utf8'));

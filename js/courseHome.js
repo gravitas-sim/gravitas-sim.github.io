@@ -46,7 +46,7 @@ import { DATASETS } from './course/datasets.js';
 import { progressOf } from './library/progress.js';
 import { BUILTIN_COURSES } from './data/courses/index.js';
 import { PLATFORM_API } from './platform/catalog.generated.js';
-import { KEY_COLLECTIONS, KEY_NEXT_CONTEXT } from './names.js';
+import { ID_COURSE_PACK, KEY_COLLECTIONS, KEY_NEXT_CONTEXT } from './names.js';
 
 const MAX_FILE = 512 * 1024;
 
@@ -492,6 +492,7 @@ async function keepControls() {
       read: () => readJson(KEY_COLLECTIONS, null),
       write: record => writeJson(KEY_COLLECTIONS, record, 'courses'),
       entryIdOfItem: () => null,
+      format: ID_COURSE_PACK,
       validate: p => validateCoursePack(p, { locales: ['en', 'es'] }),
       platform: PLATFORM_API,
     });

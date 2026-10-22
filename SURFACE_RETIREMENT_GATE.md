@@ -129,12 +129,12 @@ Counts first, then every surface. "Links / Library / cited" are the shipped inve
 <!-- surface-gate:summary -->
 | Verdict | Surfaces |
 | --- | ---: |
-| KEEP | 65 |
+| KEEP | 66 |
 | FREEZE | 0 |
 | GROUP | 0 |
 | CONSOLIDATE | 0 |
 | RETIRE | 2 |
-| Total judged | 67 |
+| Total judged | 68 |
 <!-- /surface-gate:summary -->
 
 ### Pages
@@ -216,6 +216,7 @@ Counts first, then every surface. "Links / Library / cited" are the shipped inve
 | `gravitas.ledger` | inside a submission token (ev), never alone | yes | 2 | record | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
 | `course home link` | link | yes | 5 | link | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
 | `course terms record` | localStorage | yes | 1 | record | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
+| `collections record` | localStorage | yes | 5 | record | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
 | `gravitas.submission-archive` | file | yes | 2 | record | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
 | `investigation link` | link | yes | 3 | link | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
 | `gravitas.course-manifest` | download | yes | 1 | record | **KEEP** (R3b) | Keep. Written for a person to read; Prompt 290 gives it a schema or says in words that it has none. |
@@ -234,8 +235,8 @@ Counts first, then every surface. "Links / Library / cited" are the shipped inve
 | 3-D lab | 11016 · 16 · 0 · 544 · 232.3 · 2 | pages `3d/index.html` |
 | Mission lab | 5684 · 10 · 0 · 445 · 192.7 · 1 | pages `mission/lab/index.html` |
 | Scenario Studio | 1759 · 8 · 0 · 172 · 25.2 · 1 | pages `studio/index.html` |
-| Library | 2044 · 13 · 0 · 0 · 24.7 · 5 | pages `library/index.html` |
-| Courses | 1158 · 8 · 0 · 68 · 17.9 · 1 | pages `course/index.html` |
+| Library | 2045 · 13 · 0 · 0 · 24.8 · 5 | pages `library/index.html` |
+| Courses | 1159 · 8 · 0 · 68 · 18 · 1 | pages `course/index.html` |
 | Observatory | 22104 · 63 · 0 · 230 · 326.7 · 1 | pages `observatory/index.html` |
 | Experiments | 5798 · 22 · 0 · 119 · 68.5 · 1 | pages `experiments/index.html` |
 | Sky Lab | 2182 · 5 · 0 · 119 · 33.6 · 0 | pages `sky/index.html` |
@@ -253,7 +254,7 @@ Counts first, then every surface. "Links / Library / cited" are the shipped inve
 | Find content to teach | 236 · 3 · 0 · 0 · 0 · 0 | pages `teaching/find/index.html` |
 | Adopter's guide | 225 · 0 · 0 · 0 · 0 · 0 | pages `teaching/adopt/index.html` |
 | Textbook alignment | 309 · 1 · 0 · 0 · 0 · 0 | pages `teaching/alignment/index.html` |
-| Classroom kit | 2037 · 11 · 0 · 0 · 23.2 · 0 | pages `teaching/kit/index.html` |
+| Classroom kit | 2038 · 11 · 0 · 0 · 23.2 · 0 | pages `teaching/kit/index.html` |
 | How the model works | 3414 · 7 · 0 · 0 · 0 · 1 | pages `model/index.html` |
 | Physics validation | 9384 · 20 · 0 · 0 · 14.4 · 1 | pages `validation/index.html` |
 | Glossary | 203 · 0 · 0 · 0 · 0 · 1 | pages `glossary/index.html` |

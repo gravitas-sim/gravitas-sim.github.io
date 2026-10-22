@@ -35,7 +35,6 @@ export const RECEIVED_MAX = 6;
 /** The id of the student's own collection. */
 export const SAVED_ID = 'saved-items';
 
-const FORMAT = 'gravitas.course-pack';
 const FORMAT_VERSION = 2;
 /** The most items a unit holds (js/course/pack.js MAX_ITEMS). */
 const MAX_ITEMS = 30;
@@ -52,6 +51,7 @@ let io = null;
  * @param {Function} deps.read - () => the stored record, or null
  * @param {Function} deps.write - (record) => whether the browser kept it
  * @param {Function} deps.entryIdOfItem - js/library/format.js
+ * @param {string} deps.format - ID_COURSE_PACK (js/names.js)
  * @param {Function} [deps.validate] - (package) => a list of problems; where
  *   it is left out a package is held only to its shape
  * @param {string} [deps.platform] - PLATFORM_API
@@ -161,7 +161,7 @@ export function itemOfEntry(entry) {
 
 /** The student's own collection holding these items. */
 export const savedPack = items => ({
-  format: FORMAT,
+  format: io.format,
   formatVersion: FORMAT_VERSION,
   id: SAVED_ID,
   version: '1.0.0',

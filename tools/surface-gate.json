@@ -142,11 +142,11 @@
       "exposure": { "links": [], "records": [], "stateLinks": [] },
       "measure": { "pages": ["library/index.html"], "routes": ["/library/"] },
       "cost": {
-        "lines": 2044,
+        "lines": 2045,
         "testFiles": 13,
         "generated": 0,
         "strings": 0,
-        "precacheKb": 24.7,
+        "precacheKb": 24.8,
         "axeRows": 5
       },
       "use": { "shippedLinks": 0, "libraryEntries": 0 },
@@ -205,11 +205,11 @@
         "catalogs": ["courseHome"]
       },
       "cost": {
-        "lines": 1158,
+        "lines": 1159,
         "testFiles": 8,
         "generated": 0,
         "strings": 68,
-        "precacheKb": 17.9,
+        "precacheKb": 18,
         "axeRows": 1
       },
       "use": { "shippedLinks": 5, "libraryEntries": 4 },
@@ -749,7 +749,7 @@
         "routes": ["/teaching/kit/"]
       },
       "cost": {
-        "lines": 2037,
+        "lines": 2038,
         "testFiles": 11,
         "generated": 0,
         "strings": 0,
@@ -1859,6 +1859,39 @@
         "axeRows": 0
       },
       "use": { "shippedLinks": 1, "libraryEntries": 0 },
+      "cited": [],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "format-collections-record",
+      "name": "collections record",
+      "kind": "stored-format",
+      "unique": "yes",
+      "replacement": null,
+      "why": "localStorage; owner js/library/collections.js readCollections.",
+      "exposure": {
+        "links": [],
+        "records": ["collections record"],
+        "stateLinks": []
+      },
+      "persisted": "localStorage",
+      "measure": {
+        "ownerFiles": ["js/library/collections.js"],
+        "testNames": ["collections record"]
+      },
+      "consequence": "Keep; a schema in Prompt 290.",
+      "cost": {
+        "lines": 0,
+        "testFiles": 0,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 0,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 5, "libraryEntries": 0 },
       "cited": [],
       "referrer": "UNKNOWN",
       "verdict": "KEEP",

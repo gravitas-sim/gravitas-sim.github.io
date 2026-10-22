@@ -1,4 +1,4 @@
-import { KEY_COLLECTIONS } from '../names.js';
+import { ID_COURSE_PACK, KEY_COLLECTIONS } from '../names.js';
 import { readJson, writeJson } from '../storage/local.js';
 import { PLATFORM_API } from '../platform/catalog.generated.js';
 import { validateCoursePack } from '../course/pack.js';
@@ -18,6 +18,7 @@ export const deps = Object.freeze({
   read: () => readJson(KEY_COLLECTIONS, null),
   write: record => writeJson(KEY_COLLECTIONS, record, 'courses'),
   entryIdOfItem,
+  format: ID_COURSE_PACK,
   validate: pack => validateCoursePack(pack, { locales: ['en', 'es'] }),
   platform: PLATFORM_API,
 });
