@@ -10,10 +10,8 @@
 // =============================================================================
 
 import { execFileSync } from 'node:child_process';
-import { createHash } from 'node:crypto';
-import { readFileSync, writeFileSync } from 'node:fs';
+import { writeFileSync } from 'node:fs';
 import { loadavg } from 'node:os';
-import path from 'node:path';
 import { setTimeout as sleep } from 'node:timers/promises';
 
 import { RESULTS_FILE, decide } from '../image-measure-gate.mjs';
@@ -22,28 +20,8 @@ import { measureBytes } from './bytes.mjs';
 import { measureRoute } from './route.mjs';
 import { runBrowser } from './browser.mjs';
 import { judge } from './judge.mjs';
+import { prototypeDigest } from './digest.mjs';
 import { REPO } from './server.mjs';
-
-/** The files whose content the record is about: edit one and the record is stale. */
-export const PROTOTYPE_FILES = [
-  'frames.mjs',
-  'marks.js',
-  'record.js',
-  'panel.js',
-  'harness.html',
-  'harness.js',
-  'decodeWorker.js',
-  'entries/kind.js',
-  'entries/fits.js',
-];
-export const prototypeDigest = () => {
-  const h = createHash('sha256');
-  for (const f of PROTOTYPE_FILES) {
-    h.update(f);
-    h.update(readFileSync(path.join(REPO, 'tools', 'image-measure-gate', f)));
-  }
-  return h.digest('hex').slice(0, 16);
-};
 
 /** What the first run of the throttled profile said, before the table rows were kept between renders. */
 export const FIRST_RUN = {

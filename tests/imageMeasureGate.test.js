@@ -9,7 +9,10 @@
 // =============================================================================
 
 import { describe, test, expect } from '@jest/globals';
-import { readFileSync } from 'node:fs';
+import process from 'node:process';
+import { webcrypto } from 'node:crypto';
+import { TextEncoder as NodeTextEncoder } from 'node:util';
+import { readFileSync, readdirSync, statSync } from 'node:fs';
 import path from 'node:path';
 
 import {
@@ -24,6 +27,41 @@ import {
   readResults,
   statusesOf,
 } from '../tools/image-measure-gate.mjs';
+import { judge } from '../tools/image-measure-gate/judge.mjs';
+import { prototypeDigest } from '../tools/image-measure-gate/digest.mjs';
+import {
+  discFrame,
+  makeRandom,
+  moonSequence,
+  pointField,
+} from '../tools/image-measure-gate/frames.mjs';
+import {
+  refineCircle,
+  refinePoint,
+  createStore,
+  emptyState,
+  place,
+  nudge,
+  edit,
+  remove,
+  refine,
+} from '../tools/image-measure-gate/marks.js';
+import {
+  replay,
+  writeRecord,
+  ReplayError,
+} from '../tools/image-measure-gate/record.js';
+import { nudgeScale as panelNudge } from '../tools/image-measure-gate/panel.js';
+import { nudgeScale } from '../js/shortcuts.js';
+import { validateArtifact } from '../js/platform/artifact.js';
+
+// The record's digest is WebCrypto's; the jsdom realm has neither it nor TextEncoder.
+if (!globalThis.crypto?.subtle)
+  Object.defineProperty(globalThis, 'crypto', {
+    value: webcrypto,
+    configurable: true,
+  });
+if (!globalThis.TextEncoder) globalThis.TextEncoder = NodeTextEncoder;
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const doc = readFileSync(path.join(ROOT, 'IMAGE_MEASUREMENT_GATE.md'), 'utf8');
@@ -230,4 +268,230 @@ describe('the document says what the code says', () => {
   test('the record, when there is one, follows the function', () => {
     expect(problems(readResults())).toEqual([]);
   });
+});
+
+// ---- the recorded measurement is the function of its evidence ---------------------
+
+const results = readResults();
+
+describe('the record (tools/image-measure-gate.json)', () => {
+  test('it exists, and its statuses are judge() of its own evidence', () => {
+    expect(results).not.toBeNull();
+    expect(results.thresholdsCommit).toMatch(/^[0-9a-f]{40}$/);
+    const derived = judge(results.evidence);
+    expect(Object.keys(derived).sort()).toEqual(Object.keys(CHECKS).sort());
+    for (const id of Object.keys(CHECKS)) {
+      expect(results.checks[id].status).toBe(derived[id].status);
+      expect(results.checks[id].why).toBe(derived[id].why);
+    }
+    expect(results.verdict).toBe(decide(results.checks).verdict);
+    expect(results.notPassing).toEqual(decide(results.checks).failing);
+  });
+
+  test('the prototype is the one that was measured', () => {
+    expect(results.prototypeDigest).toBe(prototypeDigest());
+  });
+
+  test('the lunar frame is reported as not measured and is not read by the verdict', () => {
+    expect(results.authentic.lunar.status).toBe('not-measured');
+    const without = { ...results.checks };
+    expect(decide(without).verdict).toBe(results.verdict);
+  });
+
+  test('no check is a pass without a measurement behind it', () => {
+    for (const c of Object.values(results.checks))
+      if (c.status === 'pass') expect(c.why).not.toMatch(/^no /);
+    expect(judge({})['T1.deferred'].status).toBe('not-measured');
+    expect(decide(judge({})).verdict).toBe('C');
+  });
+
+  test('the thresholds judged against are the committed ones: a worse number fails', () => {
+    const worse = JSON.parse(JSON.stringify(results.evidence));
+    worse.core.point.p95 = THRESHOLDS.precision.pointP95 + 0.01;
+    expect(judge(worse)['T2.point'].status).toBe('fail');
+    const heavy = JSON.parse(JSON.stringify(results.evidence));
+    heavy.bytes.deferredGzipBytes = THRESHOLDS.deferred.maxBytes + 1;
+    expect(judge(heavy)['T1.deferred'].status).toBe('fail');
+    const slow = JSON.parse(JSON.stringify(results.evidence));
+    slow.browser.interaction.valid = false;
+    expect(judge(slow)['T6.interaction'].status).toBe('fail');
+  });
+});
+
+// ---- the prototype is excluded from every route, build and precache ----------------
+
+const walk = (dir, out = []) => {
+  for (const name of readdirSync(dir)) {
+    const p = path.join(dir, name);
+    if (statSync(p).isDirectory()) walk(p, out);
+    else out.push(p);
+  }
+  return out;
+};
+
+describe('the prototype is kept out of the product', () => {
+  test('nothing under js/, no page, no build file imports tools/image-measure-gate', () => {
+    const files = [
+      ...walk(path.join(ROOT, 'js')),
+      ...readdirSync(ROOT)
+        .filter(f => /\.(html|js|mjs)$/.test(f))
+        .map(f => path.join(ROOT, f)),
+      ...readdirSync(path.join(ROOT, 'tools'))
+        .filter(f => /^(build|sw|route|bundle|data-budget)/.test(f))
+        .map(f => path.join(ROOT, 'tools', f)),
+    ];
+    const hits = files.filter(f =>
+      readFileSync(f, 'utf8').includes('image-measure-gate')
+    );
+    expect(hits.map(f => path.relative(ROOT, f))).toEqual([]);
+  });
+
+  test('the service worker precaches none of it', async () => {
+    const prev = process.cwd();
+    process.chdir(ROOT);
+    try {
+      const { buildManifest } =
+        await import('../tools/build-service-worker.mjs');
+      const m = await buildManifest();
+      expect(m.paths.filter(p => p.startsWith('tools/'))).toEqual([]);
+      expect(m.paths.some(p => p.includes('image-measure-gate'))).toBe(false);
+    } finally {
+      process.chdir(prev);
+    }
+  });
+
+  test("the panel's nudge sizes are the contract's (js/shortcuts.js)", () => {
+    for (const altKey of [false, true])
+      for (const shiftKey of [false, true])
+        expect(panelNudge({ altKey, shiftKey })).toBe(
+          nudgeScale({ altKey, shiftKey })
+        );
+  });
+});
+
+// ---- the prototype, small and live (the full ensembles are in the record) ---------
+
+describe('the prototype on small ensembles', () => {
+  test('point sources: refined within the bound, none refused', () => {
+    const f = pointField({ seed: 5, n: 25, size: 512 });
+    const errors = f.truth.map(s => {
+      const r = refinePoint(f, s.click.x, s.click.y);
+      expect(r.ok).toBe(true);
+      return Math.hypot(r.x - s.x, r.y - s.y);
+    });
+    expect(Math.max(...errors)).toBeLessThanOrEqual(
+      THRESHOLDS.precision.pointP95
+    );
+  }, 60000);
+
+  test('discs: radius within 2% where refined', () => {
+    let refined = 0;
+    for (let i = 0; i < 6; i++) {
+      const f = discFrame({ seed: 40 + i, bright: i < 4 });
+      const c = f.click;
+      const r = refineCircle(f, [c.centre.x, c.centre.y], [c.limb.x, c.limb.y]);
+      if (!r.ok) continue;
+      refined++;
+      expect(Math.abs(r.r - f.truth.r) / f.truth.r).toBeLessThanOrEqual(
+        THRESHOLDS.precision.circleP95
+      );
+    }
+    expect(refined).toBeGreaterThanOrEqual(4);
+  }, 120000);
+
+  test('a faint source, a click far from any source and a frame edge are refused, not guessed', () => {
+    const f = pointField({ seed: 6, n: 4, size: 512 });
+    expect(refinePoint(f, 5, 5).reason).toBe('edge');
+    expect(refinePoint(f, 11.3, 400.2).reason).toBe('edge');
+    const rnd = makeRandom(1);
+    const blank = {
+      ...f,
+      data: Float64Array.from(f.data, () => 200 + 9.7 * rnd.gauss()),
+    };
+    const s = f.truth[0];
+    expect(refinePoint(blank, s.click.x, s.click.y).ok).toBe(false);
+  });
+
+  test('undo restores exact states and refinement is deterministic', () => {
+    const f = discFrame({ seed: 77, bright: true });
+    const store = createStore(emptyState());
+    const seen = [JSON.stringify(store.state)];
+    let s = store.state;
+    for (const next of [
+      st => place(st, { kind: 'point', frame: 0, tag: 'a', pts: [[100, 100]] }),
+      st =>
+        place(st, {
+          kind: 'circle',
+          frame: 0,
+          tag: '',
+          pts: [
+            [f.truth.x + 1, f.truth.y - 1],
+            [f.truth.x + f.truth.r, f.truth.y],
+          ],
+        }),
+      st => nudge(st, 'm1', 0, 2, -3),
+      st => edit(st, 'm1', { tag: 'z', x: 150 }),
+      st => refine(st, 'm2', [f]).state,
+      st => remove(st, 'm1'),
+    ]) {
+      s = next(s);
+      store.apply(s);
+      store.seal();
+      seen.push(JSON.stringify(store.state));
+    }
+    for (let i = seen.length - 2; i >= 0; i--) {
+      store.undo();
+      expect(JSON.stringify(store.state)).toBe(seen[i]);
+    }
+    const c = f.click;
+    const a = refineCircle(f, [c.centre.x, c.centre.y], [c.limb.x, c.limb.y]);
+    const b = refineCircle(f, [c.centre.x, c.centre.y], [c.limb.x, c.limb.y]);
+    expect(Object.is(a.r, b.r) && Object.is(a.x, b.x)).toBe(true);
+  }, 60000);
+
+  test('a record validates, round-trips through JSON, replays bit for bit and refuses a changed image', async () => {
+    const seq = moonSequence({ seed: 3, frames: 2 });
+    const R = 220;
+    const d = seq.frames[0].truth.disc;
+    let s = place(emptyState(), {
+      kind: 'reference-pair',
+      frame: 0,
+      tag: 'diameter',
+      pts: [
+        [d.x - R + 1, d.y],
+        [d.x + R - 1, d.y + 1],
+      ],
+      length: seq.knownLength,
+    });
+    s = place(s, {
+      kind: 'circle',
+      frame: 0,
+      tag: 'limb',
+      pts: [
+        [d.x + 1, d.y - 1],
+        [d.x + R, d.y],
+      ],
+    });
+    s = refine(s, 'm2', seq.frames).state;
+    const record = await writeRecord({
+      id: 't',
+      setId: seq.id,
+      frames: seq.frames,
+      sidecar: { knownLength: seq.knownLength },
+      state: s,
+    });
+    expect(validateArtifact(record)).toEqual([]);
+    const back = JSON.parse(JSON.stringify(record));
+    const r = await replay(back, seq.frames);
+    expect(r.identical).toBe(true);
+    expect(r.state.marks.map(m => m.pts)).toEqual(s.marks.map(m => m.pts));
+    const changed = {
+      ...seq.frames[0],
+      data: Float64Array.from(seq.frames[0].data),
+    };
+    changed.data[99] += 1;
+    await expect(replay(back, [changed, seq.frames[1]])).rejects.toBeInstanceOf(
+      ReplayError
+    );
+  }, 120000);
 });

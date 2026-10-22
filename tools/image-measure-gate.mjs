@@ -312,14 +312,16 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const results = readResults();
   if (cmd === 'measure') {
     // Runs the prototype (tools/image-measure-gate/) and writes the record; slow
-    // (a few minutes) and never run by CI.
+    // (a few minutes) and never run by CI. A child process, because the
+    // measurement imports this file and a top-level await here would wait on it.
     const { tmpdir } = await import('node:os');
-    const { measure } = await import('./image-measure-gate/measure.mjs');
+    const { execFileSync } = await import('node:child_process');
     const scratch =
       process.argv[3] ?? path.join(tmpdir(), 'gravitas-image-gate');
-    const r = await measure({ scratch });
-    console.log(
-      `verdict ${r.verdict}; not passing: ${r.notPassing.join(', ') || 'none'}`
+    execFileSync(
+      process.execPath,
+      [path.join(HERE, 'image-measure-gate', 'measure.mjs'), scratch],
+      { stdio: 'inherit' }
     );
   } else if (cmd === 'report') {
     const { verdict, failing } = decide(results?.checks);
