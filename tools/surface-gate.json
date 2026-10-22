@@ -1022,10 +1022,10 @@
         "date": "2026-10-22",
         "quote": "give the history original page a freeze",
         "register": "D-R10-51",
-        "reason": "The function counts six costs and keeps the page (R6b: one signal of six). It does not count that this is the one published page with no content-security policy, and that on opening it asks fonts.googleapis.com for a stylesheet with no opt-in. A plain FREEZE notice was the gate author's recommended alternative to RETIRE; the archive keeps the code either way, and removing the page is a different decision from freezing it.",
+        "reason": "The function counts six costs and keeps the page (R6b: one signal of six). It does not count that this is the one published page with no content-security policy, and that on opening it asked fonts.googleapis.com for a stylesheet with no opt-in (that import has since been removed, D-R10-51 option (a); the policy is still absent). A plain FREEZE notice was the gate author's recommended alternative to RETIRE; the archive keeps the code either way, and removing the page is a different decision from freezing it.",
         "reverses": "Carl saying so in a register row. The page stays frozen until the next checkpoint (171, then 287) judges it again; real referrer data, a named adopter or a Library entry that links it would be new evidence for that judgment. No threshold or rule was moved to produce this ruling, and a seventh cost signal is not added."
       },
-      "consequence": "A notice on the page in both languages (frozen, no new features, kept as a record, where to go instead), pinned by tests/historyOriginal.test.js; no change to what the page does, no date, no new dependency. Owner ruling D-R10-51; the function still gives KEEP (R6b)."
+      "consequence": "A notice on the page in both languages (frozen, no new features, kept as a record, where to go instead), pinned by tests/historyOriginal.test.js; no change to what the page does, no date, no new dependency; the one font import (a third-party request) is removed. Owner ruling D-R10-51; the function still gives KEEP (R6b)."
     },
     {
       "id": "analysis-lab",

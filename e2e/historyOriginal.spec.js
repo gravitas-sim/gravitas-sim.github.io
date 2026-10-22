@@ -13,12 +13,12 @@
 // which copies the page through build.js's ARCHIVAL_PAGES. Either could lose
 // it or rewrite it, and the byte comparison below is what would notice.
 //
-// The original asks Google Fonts for its typefaces, which the current
-// application deliberately does not (e2e/selfContained.spec.js). That request
-// is part of the history and stays in the file, but a test must not depend on
-// another origin, so it is answered here with an empty stylesheet and the page
-// draws in its fallback faces - as it would behind a school firewall. It is
-// the page's only request to another origin, and the walk asserts that too.
+// The original used to ask Google Fonts for its typefaces. That one @import
+// line was removed (D-R10-51, option (a)), so the page draws in its own
+// sans-serif and monospace fallbacks and makes no request to another origin.
+// Every other origin is still answered here with an empty body, so that a
+// request which came back would be seen and not depend on the network, and the
+// walk asserts that none was made.
 //
 // DOM only, no module imports: /js/ui.js does not exist in dist/.
 // =============================================================================
@@ -168,11 +168,8 @@ test.describe('the first sketch', () => {
         .poll(async () => (await sampleCanvas(page)).hash, { timeout: 10_000 })
         .not.toBe(first.hash);
 
-      // Its only request to another origin is the Google Fonts stylesheet.
-      expect(seen.foreign.length).toBeGreaterThan(0);
-      for (const url of seen.foreign) {
-        expect(new URL(url).hostname).toBe('fonts.googleapis.com');
-      }
+      // No request to another origin at all: the font import is gone.
+      expect(seen.foreign).toEqual([]);
 
       // Save State and Load State are buttons with nothing behind them. The
       // original's handlers wrote to the key today's application keeps its
