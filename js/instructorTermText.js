@@ -175,7 +175,7 @@ export const WORDS = {
     'r.keys.none':
       'Este curso no tiene tareas, así que no hay código que renovar. El avance en lecciones completas se guarda en el navegador de cada estudiante, como siempre, y no se separa por periodo.',
     'r.next':
-      'Luego los estudiantes abren el enlace y trabajan, y entregan el PDF del informe o su código. Abre el archivo del curso en la página de revisión, con sus entregas, y las agrupa con tus nombres.',
+      'Luego los estudiantes abren el enlace y trabajan, y entregan el PDF del informe o su ficha. Abre el archivo del curso en la página de revisión, con sus entregas, y las agrupa con tus nombres.',
     'r.review': 'Abrir la revisión de entregas',
   },
 };
