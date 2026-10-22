@@ -1,0 +1,24 @@
+{
+  "file": "PIA00302-clementine-nearside.jpg",
+  "bytes": 265438,
+  "sha256": "c5bb394a48613440f24c59deb5e7cda253b14a18696e54f6f2cf4e37fbf92904",
+  "format": "JPEG, baseline, 8-bit grayscale, 1719 x 1719 pixels",
+  "retrieved": "2026-10-22",
+  "retrievedFrom": "https://images-assets.nasa.gov/image/PIA00302/PIA00302~orig.jpg",
+  "sourceLastModified": "Fri, 17 Feb 2017 00:40:03 GMT",
+  "catalogue": [
+    "https://images.nasa.gov/details/PIA00302",
+    "https://photojournal.jpl.nasa.gov/catalog/PIA00302"
+  ],
+  "title": "Nearside of Earth's Moon as Seen by the Clementine Spacecraft",
+  "nasaId": "PIA00302",
+  "credit": "NASA/JPL/USGS",
+  "imageAdditionDate": "1998-06-04",
+  "mission": "DSPSE (Deep Space Program Science Experiment), spacecraft Clementine 1, Ultraviolet/Visible Camera",
+  "sourceDescription": "About 50,000 Clementine images were processed to produce the four orthographic views of the Moon. The images show albedo variations (normalized brightness or reflectivity) of the surface at a wavelength of 750 nm (just longward of visible red).",
+  "licence": "NASA content generally is not subject to copyright in the United States (NASA Images and Media Usage Guidelines, https://www.nasa.gov/nasa-brand-center/images-and-media/, read 2026-10-22). The source page gives the credit NASA/JPL/USGS and no other restriction. The file is unmodified: byte for byte what the server sent.",
+  "permission": "Carl, in chat, 2026-10-22: \"Download a public domain moon image if needed\".",
+  "what": "A mosaic of about 50,000 Clementine frames in an orthographic projection, not one exposure: the albedo at 750 nm, with the disc filling the frame (the limb touches its four edges), maria and craters, and no photon-noise floor a CCD frame has. It carries no pixel-unit, gain, linearity or saturation documentation, so it is a display image and a real-data test of decode, draw and repeatability, never a calibrated measurement.",
+  "usedBy": "tools/image-measure-gate/lunar.mjs (npm run image-gate:lunar), tests/imageMeasureGate.test.js",
+  "notIn": "Not under images/ or js/, not imported by any page or module, not precached."
+}
