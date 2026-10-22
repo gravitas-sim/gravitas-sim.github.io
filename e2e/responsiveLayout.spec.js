@@ -516,7 +516,9 @@ test.describe('the four layouts', () => {
     for (const [width, height] of sizesFor(info)) {
       await test.step(`${width}x${height}`, async () => {
         await page.setViewportSize({ width, height });
-        await page.goto('/library/', { waitUntil: 'domcontentloaded' });
+        await page.goto('/library/?browse=1', {
+          waitUntil: 'domcontentloaded',
+        });
         await expect(page.locator('html')).toHaveAttribute(
           'data-ready',
           'true',

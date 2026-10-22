@@ -42,6 +42,7 @@ export const KEY_LECTURE_SEQUENCE = 'gravitas_lecture_sequence';
 export const KEY_NEXT_CONTEXT = 'gravitas_next_context';
 export const KEY_ORIENTATION_SEEN_V1 = 'gravitas_orientation_seen_v1';
 export const KEY_RAIL_SECTIONS = 'gravitas_rail_sections';
+export const KEY_RESUME = 'gravitas_resume';
 export const KEY_SIMULATION_SAVE = 'gravitas_simulation_save';
 export const KEY_THEME = 'gravitas_theme';
 export const KEY_WELCOME_SEEN_V1 = 'gravitas_welcome_seen_v1';

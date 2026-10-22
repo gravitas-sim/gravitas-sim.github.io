@@ -34,9 +34,17 @@ export function durationText(d, t) {
  * @param {Function} o.t - Translator
  * @param {Function} o.pick - Reads an {en, es} pair
  * @param {string} o.progress - 'new', 'going' or 'done'
+ * @param {object} [o.shown] - Each internal kind to the kind a student sees
+ * @param {string} [o.why] - The fields a search matched, in words
+ * @param {boolean} [o.details] - Add the link to the item's own page
+ * @param {boolean} [o.compact] - No picture or summary
+ * @param {string} [o.path] - The pathway it is listed in ('seq:<id>')
  * @returns {string} One <li>
  */
-export function libraryCardHtml(entry, { t, pick, progress }) {
+export function libraryCardHtml(
+  entry,
+  { t, pick, progress, shown, why, details, compact, path }
+) {
   const facts = [
     durationText(entry.duration, t),
     entry.steps && entry.kind !== 'course'
@@ -50,14 +58,17 @@ export function libraryCardHtml(entry, { t, pick, progress }) {
     progress && progress !== 'new'
       ? `<span class="ui-badge is-accent lib-progress" data-progress="${progress}">${escape(t(`lib.progress.${progress}`))}</span>`
       : '';
-  const shot = entry.thumbnail
-    ? `<img class="lib-shot" src="/${escape(entry.thumbnail)}" alt="" loading="lazy" decoding="async" width="640" height="360" />`
-    : '';
-  return `<li class="lib-card${shot ? '' : ' is-plain'}" data-entry="${escape(entry.id)}" data-kind="${escape(entry.kind)}">
+  const shot =
+    entry.thumbnail && !compact
+      ? `<img class="lib-shot" src="/${escape(entry.thumbnail)}" alt="" loading="lazy" decoding="async" width="640" height="360" />`
+      : '';
+  const kind = shown?.[entry.kind] ?? entry.kind;
+  return `<li class="lib-card${shot ? '' : ' is-plain'}${compact ? ' is-compact' : ''}" data-entry="${escape(entry.id)}" data-kind="${escape(entry.kind)}">
 <a class="lib-link" href="${escape(entry.route)}">${shot}<span class="lib-body">
-<span class="lib-badges"><span class="ui-badge">${escape(t(`lib.badge.${entry.kind}`))}</span><span class="ui-badge">${escape(t(`lib.format.${entry.format}`))}</span>${badge}</span>
+<span class="lib-badges"><span class="ui-badge">${escape(t(`lib.badge.${kind}`))}</span><span class="ui-badge">${escape(t(`lib.format.${entry.format}`))}</span>${badge}</span>
 <span class="lib-title">${escape(pick(entry.title))}</span>
-${entry.summary ? `<span class="lib-summary">${escape(pick(entry.summary))}</span>` : ''}
+${entry.summary && !compact ? `<span class="lib-summary">${escape(pick(entry.summary))}</span>` : ''}
+${why ? `<span class="lib-why">${escape(why)}</span>` : ''}
 ${facts.length ? `<span class="lib-facts">${facts.map(f => `<span>${escape(f)}</span>`).join('')}</span>` : ''}
-</span></a></li>`;
+</span></a>${details ? `<a class="lib-details" href="?item=${escape(entry.id)}${path ? `&amp;path=${escape(path)}` : ''}">${escape(t('lib.card.details'))}</a>` : ''}</li>`;
 }

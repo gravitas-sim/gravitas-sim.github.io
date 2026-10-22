@@ -296,11 +296,44 @@ const SURFACES = [
   {
     name: 'library by sequence',
     open: async ({ page }) => {
-      await page.goto('/library/?group=sequence', {
+      await page.goto('/library/?browse=1&group=sequence', {
         waitUntil: 'domcontentloaded',
       });
     },
     expect: 'html[data-ready="true"] .lib-group',
+    standalone: true,
+  },
+  {
+    // Everything, with "More filters" open: every control labelled.
+    name: 'library browse, all filters',
+    open: async ({ page }) => {
+      await page.goto('/library/?browse=1&q=transit', {
+        waitUntil: 'domcontentloaded',
+      });
+      await page.locator('#libMore summary').click();
+    },
+    expect: 'html[data-ready="true"] .lib-why',
+    standalone: true,
+  },
+  {
+    name: 'library topic',
+    open: async ({ page }) => {
+      await page.goto('/library/?topic=exoplanets', {
+        waitUntil: 'domcontentloaded',
+      });
+    },
+    expect: 'html[data-ready="true"] .lib-topic .lib-rows',
+    standalone: true,
+  },
+  {
+    name: 'library item',
+    open: async ({ page }) => {
+      await page.goto(
+        '/library/?item=investigation:keplers-laws&path=seq:gravity-and-orbits',
+        { waitUntil: 'domcontentloaded' }
+      );
+    },
+    expect: 'html[data-ready="true"] .lib-item .lib-rows',
     standalone: true,
   },
   {

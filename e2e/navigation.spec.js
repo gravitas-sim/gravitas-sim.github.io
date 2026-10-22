@@ -105,7 +105,7 @@ const VIEWS = {
   },
   library: async ({ page }) => {
     await page.goto('/library/', { waitUntil: 'domcontentloaded' });
-    await expect(page.locator('#libResults .lib-card').first()).toBeVisible();
+    await expect(page.locator('#libStart .lib-card').first()).toBeVisible();
   },
   'my-work': async ({ page }) => {
     await page.goto('/my-work/', { waitUntil: 'domcontentloaded' });
@@ -155,25 +155,25 @@ test.describe('the default view: choices above the fold', () => {
 // --- The Library's kinds, rendered --------------------------------------------
 
 test.describe('the kinds the Library exposes', () => {
+  const students = [...new Set(library.kinds.map(k => library.kindShown[k]))];
   for (const locale of ['en', 'es']) {
-    test(`the facet and every card's type label are the catalog's, in ${locale}`, async ({
+    test(`the facet offers the four kinds students see, and every card's type label is one of them, in ${locale}`, async ({
       page,
     }) => {
       const t = CATALOGS[locale];
       await inLocale(page, locale);
-      await page.goto('/library/', { waitUntil: 'domcontentloaded' });
+      await page.goto('/library/?browse=1', { waitUntil: 'domcontentloaded' });
       await expect(page.locator('#libResults .lib-card').first()).toBeVisible();
 
       const options = await page
         .locator('#libKind option')
-        .evaluateAll(os =>
-          os.map(o => ({ value: o.value, text: o.textContent }))
-        );
-      const expectedKinds = library.kinds.map(k => t[`lib.kind.${k}`]);
-      expect(options.map(o => o.text)).toEqual([
-        t['lib.filter.kind.any'],
-        ...expectedKinds,
-      ]);
+        .evaluateAll(os => os.map(o => o.value));
+      expect(options).toEqual(['', ...students]);
+      const texts = await page
+        .locator('#libKind option')
+        .evaluateAll(os => os.map(o => o.textContent));
+      for (const [i, kind] of students.entries())
+        expect(texts[i + 1]).toContain(t[`lib.kind.${kind}`]);
 
       const badges = await page
         .locator('#libResults .lib-card')
@@ -186,7 +186,7 @@ test.describe('the kinds the Library exposes', () => {
       expect(badges.length).toBe(library.entries.length);
       for (const [kind, text] of badges)
         expect(text, `a ${kind} card's type label`).toBe(
-          t[`lib.badge.${kind}`]
+          t[`lib.badge.${library.kindShown[kind]}`]
         );
 
       const labels = await page
@@ -203,47 +203,36 @@ test.describe('the kinds the Library exposes', () => {
     });
   }
 
-  test('what students are shown, against the model (pending until 166)', async ({
+  test('what students are shown, against the model (activated by 163)', async ({
     page,
   }) => {
     await page.goto('/library/', { waitUntil: 'domcontentloaded' });
-    await expect(page.locator('#libResults .lib-card').first()).toBeVisible();
+    await expect(page.locator('#libStart .lib-card').first()).toBeVisible();
     const shown = await page
       .locator('#libKind option')
       .evaluateAll(os => os.map(o => o.value).filter(Boolean));
-    const result = await runPending(
-      'navigation.library.student-kinds-only',
-      () => {
-        const extra = shown.filter(k => !inventory.kinds.students.includes(k));
-        if (extra.length)
-          throw new Error(
-            `the Library shows kinds students are not meant to see: ${extra.join(', ')}`
-          );
-      }
+    expect(shown.filter(k => !inventory.kinds.students.includes(k))).toEqual(
+      []
     );
-    expect(['met', 'pending']).toContain(result.status);
-    const placed = await runPending(
-      'navigation.library.no-where-it-runs',
-      async () => {
-        if ((await page.locator('#libFormat').count()) > 0)
-          throw new Error("the Library still offers a 'where it runs' facet");
-      }
-    );
-    expect(['met', 'pending']).toContain(placed.status);
-    const cards = await page.locator('#libResults .lib-card').count();
-    const bounded = await runPending(
-      'navigation.library.default-view-is-bounded',
-      () => {
-        const target = inventory.futureAcceptance.find(
-          f => f.id === 'navigation.library.default-view-is-bounded'
-        ).target;
-        if (cards > target)
-          throw new Error(
-            `the default view renders ${cards} cards; the target is ${target}`
-          );
-      }
-    );
-    expect(['met', 'pending']).toContain(bounded.status);
+    expect(
+      await runPending('navigation.library.student-kinds-only', () => {})
+    ).toMatchObject({ status: 'met' });
+    expect(await page.locator('#libFormat').count()).toBe(0);
+    expect(
+      await runPending('navigation.library.no-where-it-runs', () => {})
+    ).toMatchObject({ status: 'met' });
+    // The default view lists the committed handful, not the catalog.
+    const cards = await page.locator('main .lib-card').count();
+    const ceiling = inventory.ceilings.library.startCards;
+    expect(cards).toBeGreaterThan(0);
+    expect(
+      cards,
+      `the default view renders ${cards} cards; the committed starts are ${ceiling}`
+    ).toBeLessThanOrEqual(ceiling);
+    expect(cards).toBeLessThan(library.entries.length / 10);
+    expect(
+      await runPending('navigation.library.default-view-is-bounded', () => {})
+    ).toMatchObject({ status: 'met' });
   });
 });
 

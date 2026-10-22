@@ -18,11 +18,11 @@
       "exposure": { "links": [], "records": [], "stateLinks": [] },
       "measure": { "pages": ["index.html"] },
       "cost": {
-        "lines": 76163,
-        "testFiles": 243,
+        "lines": 76293,
+        "testFiles": 244,
         "generated": 0,
         "strings": 0,
-        "precacheKb": 973.9,
+        "precacheKb": 975.3,
         "axeRows": 0
       },
       "use": { "shippedLinks": 0, "libraryEntries": 0 },
@@ -142,12 +142,12 @@
       "exposure": { "links": [], "records": [], "stateLinks": [] },
       "measure": { "pages": ["library/index.html"], "routes": ["/library/"] },
       "cost": {
-        "lines": 1011,
-        "testFiles": 10,
+        "lines": 1974,
+        "testFiles": 11,
         "generated": 0,
         "strings": 0,
-        "precacheKb": 13.4,
-        "axeRows": 2
+        "precacheKb": 24.1,
+        "axeRows": 4
       },
       "use": { "shippedLinks": 0, "libraryEntries": 0 },
       "cited": ["manual/gravitas-user-manual.tex"],
@@ -235,7 +235,7 @@
       },
       "cost": {
         "lines": 22104,
-        "testFiles": 61,
+        "testFiles": 63,
         "generated": 0,
         "strings": 230,
         "precacheKb": 326.7,
@@ -420,8 +420,8 @@
       "exposure": { "links": [], "records": [], "stateLinks": [] },
       "measure": { "pages": ["my-work/index.html"], "routes": ["/my-work/"] },
       "cost": {
-        "lines": 2511,
-        "testFiles": 18,
+        "lines": 2513,
+        "testFiles": 19,
         "generated": 0,
         "strings": 0,
         "precacheKb": 31.7,
@@ -665,7 +665,7 @@
         "routes": ["/teaching/find/"]
       },
       "cost": {
-        "lines": 235,
+        "lines": 236,
         "testFiles": 3,
         "generated": 0,
         "strings": 0,
@@ -721,8 +721,8 @@
         "routes": ["/teaching/alignment/"]
       },
       "cost": {
-        "lines": 308,
-        "testFiles": 0,
+        "lines": 309,
+        "testFiles": 1,
         "generated": 0,
         "strings": 0,
         "precacheKb": 0,
@@ -1694,6 +1694,39 @@
         "axeRows": 0
       },
       "use": { "shippedLinks": 10, "libraryEntries": 0 },
+      "cited": [],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "format-resume-record",
+      "name": "resume record",
+      "kind": "stored-format",
+      "unique": "yes",
+      "replacement": null,
+      "why": "localStorage; owner js/storage/local.js readResume (Prompt 163, D-R10-42).",
+      "exposure": {
+        "links": [],
+        "records": ["resume record"],
+        "stateLinks": []
+      },
+      "persisted": "localStorage",
+      "measure": {
+        "ownerFiles": ["js/storage/local.js"],
+        "testNames": ["resume record"]
+      },
+      "consequence": "Keep; a schema in Prompt 290.",
+      "cost": {
+        "lines": 0,
+        "testFiles": 7,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 0,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 17, "libraryEntries": 0 },
       "cited": [],
       "referrer": "UNKNOWN",
       "verdict": "KEEP",

@@ -51,16 +51,16 @@ Measured from the committed `sw-manifest.js` and the files it lists, by
 <!--fact-block:precache-->
 | | Files | Raw |
 | --- | ---: | ---: |
-| JavaScript | 918 | 14.7 MB |
+| JavaScript | 920 | 14.8 MB |
 | Images | 99 | 860 KB |
 | Stylesheets | 10 | 490 KB |
 | Fonts | 9 | 140 KB |
 | Panel markup | 10 | 60 KB |
 | Pages | 12 | 310 KB |
-| Other | 16 | 640 KB |
-| **Total** | **1074** | **17.2 MB** |
+| Other | 16 | 690 KB |
+| **Total** | **1076** | **17.3 MB** |
 
-Of those, 803 are core (the install fails without them), 107 optional (installed with them; a missing one is reported and costs nothing) and 164 idle (installed after activation, when the browser is idle; a missing one costs that page its offline copy and is fetched again on the next open). The first-visit install is the core and the optional files: 910 files.
+Of those, 803 are core (the install fails without them), 107 optional (installed with them; a missing one is reported and costs nothing) and 166 idle (installed after activation, when the browser is idle; a missing one costs that page its offline copy and is fetched again on the next open). The first-visit install is the core and the optional files: 910 files.
 
 Gzipped, as Pages serves it, the whole is about 6 MB.
 
@@ -104,7 +104,7 @@ The idle tier, by surface (gzip level 6, to the nearest 10 KB: Node versions dif
 | instructor modules | 22 | ~290 KB |
 | mission lab | 40 | ~230 KB |
 | Sky Lab | 22 | ~170 KB |
-| Library | 7 | ~70 KB |
+| Library | 9 | ~80 KB |
 | three.js | 2 | ~240 KB |
 <!--/fact-block-->
 

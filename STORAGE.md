@@ -32,6 +32,12 @@ These are the student's own work, and what an "export everything" would carry:
 | `gravitas_evaluation_draft_v1` | The evaluation kit's unsent draft | `js/evaluationKit.js` | evaluation 1 | none |
 | `gravitas_teaching_notes_v1` | A teacher's notes on the teaching page | `js/teachingPage.js` | a JSON object | none |
 
+## The one resume record (Prompt 163)
+
+`gravitas_resume` holds where a reader was: up to six items, newest first, each with its route and, when known, the step it was at, the pathway it was opened from (`{k: 'seq' | 'course', id}`) and its title in both languages. `readResume` and `noteResume` in `js/storage/local.js` are its only reader and writer in the storage module's own code (the lesson's save writes the step, the Library's links write the pathway and the title, the lesson's finish panel notes the item it sends a reader to); Home reads it with a small reader of its own in `js/welcome.js`, held to the module's by `tests/resumeRecord.test.js` and `tests/libraryRelations.test.js`. It is in the preferences collection, so a backup file carries it only when preferences are ticked.
+
+It is a sidecar key and not a field of a progress record, on purpose. The compatibility corpus says a 2.0.0 reader accepts a progress record with an unknown field and silently drops it (the boundary row `resume-in-progress-record`, kept as the record of the design not built), and does not know a key of its own at all, so a rolled-back build neither misreads nor loses anything. `tests/compat/kinds/resume-record.mjs` is the corpus row: a progress record beside the sidecar reads exactly as before in both builds. A record that is not version 1, or is damaged, reads as empty and the next write replaces it. Nothing in it is a progress record: how many steps of a lesson were seen is still that lesson's own record.
+
 ## Previews, handed from one page to another
 
 | Key | Holds | Owner |
@@ -89,6 +95,7 @@ Every record a student's browser holds, its owner, how it migrates, whether a ba
 | `gravitas_course_level` | The course level | preferences | `js/settingsSchema.js` | direct | none | preference: in a backup file only when ticked | a one-word preference |
 | `gravitas_course_preview` | The course handed to the course home | — | `js/course/links.js` | direct | none | transient: handed from one page to another | `course-home-link` |
 | `gravitas_next_context` | Where a lesson was opened from | — | `js/investigations/next.js` | `js/storage/local.js` | none | transient: handed from one page to another | a handed-over context |
+| `gravitas_resume` | Where a reader was: the items opened last, with pathway and step | preferences | `js/investigations/stepView.js` | `js/storage/local.js` | none; a record that is not v1 reads as empty | preference: in a backup file only when ticked | `resume-record` |
 | `gravitas_course_…` | Course builder drafts and the last open | courses | `js/coursePage.js` | direct | reads course pack 1 | durable: in a backup file | `course-pack` |
 | `gravitas_composer_preview` | The lesson handed to the Composer preview | — | `js/composerPage.js` | direct | none | transient: handed from one page to another | `investigation-pack` |
 | `gravitas_composer_…` | Composer drafts and the last open | drafts | `js/composerPage.js` | direct | none | durable: in a backup file | `investigation-pack` |
@@ -146,7 +153,6 @@ Still direct, and why, with what each lacks (measured at Prompt 146; `tests/stud
 | `js/composerPage.js` | its route has no room for the module | 1.4 KB on composer |
 | `js/coursePage.js` | its route has no room for the module | 1.3 KB on course-builder |
 | `js/courseHome.js` | gravitas_next_context, not student work; its route has no room for the module | 1.4 KB and 1 request on course-home |
-| `js/libraryPage.js` | gravitas_next_context, not student work; its route has no room for the module | 1.4 KB on library |
 | `js/world.js` | reached from the start-up entry: the module there costs the front door and the Sandbox one build request, with 0 free | 1 request on front-door, sandbox (build) |
 | `js/controls.js` | as world.js | 1 request on front-door, sandbox (build) |
 | `js/lecture.js` | as world.js | 1 request on front-door, sandbox (build) |
