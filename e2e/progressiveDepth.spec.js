@@ -66,7 +66,9 @@ for (const id of LESSONS) {
       await open(page, app, id);
       const n = await counts(page, id);
       expect(await total(page)).toBe(n.core);
+      await openMore(page);
       await expect(page.locator('#investigationDeeper')).toBeVisible();
+      await openMore(page);
       await expect(page.locator('#investigationShallower')).toBeHidden();
     });
 
@@ -82,6 +84,7 @@ for (const id of LESSONS) {
       );
       await walkTo(page, n.first);
       // Not the advanced ones.
+      await openMore(page);
       await expect(page.locator('#investigationShallower')).toBeVisible();
     });
 
@@ -92,6 +95,7 @@ for (const id of LESSONS) {
       await open(page, app, `${id}/advanced`);
       const n = await counts(page, id);
       expect(await total(page)).toBe(n.advanced);
+      await openMore(page);
       await expect(page.locator('#investigationDeeper')).toBeHidden();
       await walkTo(page, n.firstAdvanced);
     });
