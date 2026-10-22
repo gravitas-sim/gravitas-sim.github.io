@@ -283,6 +283,10 @@ Nothing is uploaded and nothing a student holds is touched.
 sidecar record read by My work: a line per course and term, so two terms are two lines). The note holds an id, a
 title, the term and a time; no link, answer or name.
 
+## A collection of saved items (Prompt 164)
+
+When a whole course is more than an instructor needs, they save lessons, scenarios and datasets with the Library's Save button, open the distribution kit at `/teaching/kit/#collections`, put the items in order, write a sentence for each, pick a depth where an item has one, name the set and make a link or a file. It is a course package with `profile: "collection"` (COURSE_PACKS.md), so it travels as a course does and needs no server. A student who opens the link sees it on the course home and can keep it; it then shows in their Library and in My work. The order, notes and depths are kept on the instructor's saved collection as they change; the title and summary are written for the one being shared. Texts are the instructor's own words: once any text has Spanish, every text needs it, and the kit says which one is missing instead of translating. The kit's panel is a lazy instructor module (`js/instructorCollections.js`) and an older build of Gravitas, such as 2.0.0, cannot open the result.
+
 ## Budgets
 
 The kit is a new route (`teach-kit`, measured, added by hand: D-BIND-07): 36.7 KB

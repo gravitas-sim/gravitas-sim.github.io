@@ -142,12 +142,12 @@
       "exposure": { "links": [], "records": [], "stateLinks": [] },
       "measure": { "pages": ["library/index.html"], "routes": ["/library/"] },
       "cost": {
-        "lines": 1974,
-        "testFiles": 11,
+        "lines": 2044,
+        "testFiles": 13,
         "generated": 0,
         "strings": 0,
-        "precacheKb": 24.1,
-        "axeRows": 4
+        "precacheKb": 24.7,
+        "axeRows": 5
       },
       "use": { "shippedLinks": 0, "libraryEntries": 0 },
       "cited": ["manual/gravitas-user-manual.tex"],
@@ -205,11 +205,11 @@
         "catalogs": ["courseHome"]
       },
       "cost": {
-        "lines": 1117,
+        "lines": 1158,
         "testFiles": 8,
         "generated": 0,
-        "strings": 64,
-        "precacheKb": 17.2,
+        "strings": 68,
+        "precacheKb": 17.9,
         "axeRows": 1
       },
       "use": { "shippedLinks": 5, "libraryEntries": 4 },
@@ -420,11 +420,11 @@
       "exposure": { "links": [], "records": [], "stateLinks": [] },
       "measure": { "pages": ["my-work/index.html"], "routes": ["/my-work/"] },
       "cost": {
-        "lines": 2546,
-        "testFiles": 21,
+        "lines": 2600,
+        "testFiles": 23,
         "generated": 0,
         "strings": 0,
-        "precacheKb": 32,
+        "precacheKb": 32.5,
         "axeRows": 1
       },
       "use": { "shippedLinks": 0, "libraryEntries": 0 },
@@ -445,8 +445,8 @@
       "exposure": { "links": [], "records": [], "stateLinks": [] },
       "measure": { "pages": ["teaching/index.html"], "routes": ["/teaching/"] },
       "cost": {
-        "lines": 474,
-        "testFiles": 11,
+        "lines": 477,
+        "testFiles": 12,
         "generated": 0,
         "strings": 0,
         "precacheKb": 0,
@@ -603,11 +603,11 @@
         "catalogs": ["course"]
       },
       "cost": {
-        "lines": 3763,
+        "lines": 3774,
         "testFiles": 10,
         "generated": 0,
-        "strings": 271,
-        "precacheKb": 50.5,
+        "strings": 275,
+        "precacheKb": 50.9,
         "axeRows": 3
       },
       "use": { "shippedLinks": 0, "libraryEntries": 0 },
@@ -749,11 +749,11 @@
         "routes": ["/teaching/kit/"]
       },
       "cost": {
-        "lines": 1486,
-        "testFiles": 6,
+        "lines": 2037,
+        "testFiles": 11,
         "generated": 0,
         "strings": 0,
-        "precacheKb": 17.1,
+        "precacheKb": 23.2,
         "axeRows": 0
       },
       "use": { "shippedLinks": 0, "libraryEntries": 0 },
@@ -1726,7 +1726,7 @@
         "precacheKb": 0,
         "axeRows": 0
       },
-      "use": { "shippedLinks": 18, "libraryEntries": 0 },
+      "use": { "shippedLinks": 20, "libraryEntries": 0 },
       "cited": [],
       "referrer": "UNKNOWN",
       "verdict": "KEEP",
@@ -1819,13 +1819,13 @@
       "consequence": "Keep; a schema in Prompt 290.",
       "cost": {
         "lines": 0,
-        "testFiles": 0,
+        "testFiles": 1,
         "generated": 0,
         "strings": 0,
         "precacheKb": 0,
         "axeRows": 0
       },
-      "use": { "shippedLinks": 4, "libraryEntries": 0 },
+      "use": { "shippedLinks": 5, "libraryEntries": 0 },
       "cited": [],
       "referrer": "UNKNOWN",
       "verdict": "KEEP",
