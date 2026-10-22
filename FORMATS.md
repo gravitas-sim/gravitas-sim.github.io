@@ -166,6 +166,7 @@ An older build is a real reader: a browser still running 2.0.0's cached code, a 
 | Planned (prompt) | Kind | What 2.0.0 does | Consequence |
 |---|---|---|---|
 | an additive `profile: "collection"` on the course package (164) | `course-pack` | refuses | refused in its own words: safe as a capability-required refusal |
+| a `term` label on the course package, written only when named (168) | `course-pack` | refuses | refused in its own words: safe as a capability-required refusal |
 | the one resume record carried as a field of the progress record (not built: Prompt 163 keeps it a sidecar key, `resume-record`) (163) | `progress-store` | ignores the field | accepted and silently dropped: a boundary, or the field must not be one an old reader needs |
 | a stated confidence level on the (already asymmetric) interval: `level` (150) | `artifact` | ignores the field | accepted and silently dropped: a boundary, or the field must not be one an old reader needs |
 | the states "not constrained", "failed", "assumed", "model-limited" (150) | `artifact` | refuses | refused in its own words: safe as a capability-required refusal |
