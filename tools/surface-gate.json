@@ -19,7 +19,7 @@
       "measure": { "pages": ["index.html"] },
       "cost": {
         "lines": 76404,
-        "testFiles": 247,
+        "testFiles": 248,
         "generated": 0,
         "strings": 0,
         "precacheKb": 977.2,
