@@ -275,6 +275,9 @@ function render() {
         })
       : null,
     progress,
+    pack.profile === 'collection'
+      ? el('p', { className: 'ch-keep', id: 'ch-keep' })
+      : null,
     pack.summary ? el('p', { text: words(pack.summary) }) : null,
     pack.audience
       ? el('p', { className: 'ui-note', text: words(pack.audience) })
@@ -468,6 +471,12 @@ function render() {
     ].filter(Boolean)
   );
   fillLinks(pending);
+  // A collection can be kept in the Library (Prompt 164): its controls load
+  // only for one.
+  if (pack.profile === 'collection')
+    import('./library/collectionsView.js')
+      .then(m => m.mountKeep($('ch-keep'), pack, { t }))
+      .catch(() => {});
 }
 
 /** A reading's reference, and its terms. */

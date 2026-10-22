@@ -33,7 +33,7 @@ import {
 } from './data/investigations/browse.js';
 import { LENGTHS, CALCULATIONS } from './data/investigations/sequences.js';
 import { libraryCardHtml } from './library/card.js';
-import { checkLibrary } from './library/format.js';
+import { checkLibrary, entryIdOfItem } from './library/format.js';
 import { progressOf } from './library/progress.js';
 import {
   pick,
@@ -44,7 +44,7 @@ import {
   translatePage,
 } from './library/i18n.js';
 import { mountShell } from './shell.js';
-import { KEY_NEXT_CONTEXT } from './names.js';
+import { KEY_COLLECTIONS, KEY_NEXT_CONTEXT } from './names.js';
 import { noteResume, put, readResume } from './storage/local.js';
 
 const $ = id => document.getElementById(id);
@@ -483,11 +483,41 @@ function fillContinue() {
   $('libContinueBody').innerHTML = html;
 }
 
+/**
+ * The collections the student saved or kept (Prompt 164). The module that
+ * draws them loads only when the record exists.
+ */
+async function fillCollections() {
+  const box = $('libCollections');
+  let any = false;
+  try {
+    any = localStorage.getItem(KEY_COLLECTIONS) !== null;
+  } catch {
+    /* no storage: nothing is kept */
+  }
+  if (!any) {
+    box.hidden = true;
+    return;
+  }
+  const { drawCollections } = await import('./library/collectionsView.js');
+  const n = drawCollections($('libCollectionsBody'), {
+    t,
+    pick,
+    byId,
+    redraw: fillCollections,
+  });
+  box.hidden = viewOf() !== 'start' || !n;
+}
+
 function startHtml() {
   const lib = state.library;
   const groups = lib.starts
     .map(g => {
-      const rows = g.entries
+      // A start that is a collection (Prompt 164) is drawn from its items.
+      const ids = g.collection
+        ? g.collection.units[0].items.map(entryIdOfItem)
+        : g.entries;
+      const rows = ids
         .map(id => byId.get(id))
         .filter(Boolean)
         .map(e =>
@@ -566,6 +596,10 @@ async function renderDetail(kind) {
     return;
   }
   box.innerHTML = out.html;
+  if (kind === 'item')
+    import('./library/collectionsView.js').then(m =>
+      m.mountSave(box, byId.get(state.item), { t })
+    );
   document.title = `${out.title} | ${t('lib.doc.title')}`;
   setCrumbs(
     kind === 'topic'
@@ -607,6 +641,7 @@ function render() {
   localize();
   progressCache = new Map();
   fillContinue();
+  fillCollections();
   fillMenus();
   const view = viewOf();
   const f = state.filters;
