@@ -22,6 +22,10 @@ export const WORDS = {
     'start.h': 'Start from',
     'start.note':
       'The activity link you made, or the course link, pasted here; or the activity file or course file you saved. Opening this page from the builder does this for you.',
+    'coll.h': 'A collection of saved items',
+    'coll.note':
+      'Save lessons, scenarios and datasets with the Save button on a Library item page, then order them here, add a sentence to each and make one link or file. Your students can keep it, and it shows in their Library and in My work. A build from before Gravitas 2.1 cannot open a collection.',
+    'coll.open': 'Make a link from what I saved',
     'start.paste': 'Paste an activity link or a course link',
     'start.go': 'Make the kit',
     'start.file': 'or choose an activity file or a course file',
@@ -127,6 +131,10 @@ export const WORDS = {
     'start.h': 'Empezar desde',
     'start.note':
       'El enlace de actividad que hizo, o el enlace del curso, pegado aquí; o el archivo de actividad o de curso que guardó. Abrir esta página desde el creador lo hace por usted.',
+    'coll.h': 'Una colección de elementos guardados',
+    'coll.note':
+      'Guarde lecciones, escenarios y conjuntos de datos con el botón Guardar de la página de un elemento de la Biblioteca; luego ordénelos aquí, añada una frase a cada uno y cree un enlace o un archivo. Sus estudiantes pueden conservarla y aparece en su Biblioteca y en Mi trabajo. Una versión anterior a Gravitas 2.1 no puede abrir una colección.',
+    'coll.open': 'Crear un enlace con lo que guardé',
     'start.paste': 'Pegue un enlace de actividad o de curso',
     'start.go': 'Hacer el kit',
     'start.file': 'o elija un archivo de actividad o de curso',

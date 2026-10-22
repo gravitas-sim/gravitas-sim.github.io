@@ -1,5 +1,6 @@
 import {
   dropCollection,
+  entryIdOf,
   isSaved,
   itemOfEntry,
   itemsOfCollection,
@@ -8,7 +9,6 @@ import {
   removeSaved,
   toggleSaved,
 } from './collections.js';
-import { entryIdOfItem } from './format.js';
 
 // =============================================================================
 // Saved items and kept collections, drawn (Roadmap III Prompt 164)
@@ -74,7 +74,7 @@ export function drawCollections(host, c) {
   const have = readCollections();
   const list = (pack, own) => {
     const rows = itemsOfCollection(pack).map(item => {
-      const e = byId.get(entryIdOfItem(item));
+      const e = byId.get(entryIdOf(item));
       const title = e ? pick(e.title) : item.title ? pick(item.title) : item.id;
       const name = e
         ? `<a class="lib-link" data-entry="${escape(e.id)}" href="${escape(e.route)}">${escape(title)}</a>`
@@ -92,7 +92,7 @@ export function drawCollections(host, c) {
   const parts = [];
   if (have.saved)
     parts.push(
-      `<section class="lib-collection" data-collection="${escape(have.saved.id)}"><h3>${escape(t('lib.collections.saved'))}</h3>${list(have.saved, true)}<p><a href="/teaching/#collections">${escape(t('lib.collections.share'))}</a></p></section>`
+      `<section class="lib-collection" data-collection="${escape(have.saved.id)}"><h3>${escape(t('lib.collections.saved'))}</h3>${list(have.saved, true)}<p><a href="/teaching/kit/#collections">${escape(t('lib.collections.share'))}</a></p></section>`
     );
   for (const { pack } of have.received) {
     const title = pick(pack.title);

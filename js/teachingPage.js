@@ -1036,32 +1036,11 @@ function renderAll() {
   renderFeedbackForm();
 }
 
-/**
- * The collection editor (Prompt 164): its module loads when the section is
- * opened, or when the page is opened at its address, so the page's first
- * paint does not wait for it.
- */
-function wireCollections() {
-  const open = document.getElementById('teachCollectionsOpen');
-  const host = document.getElementById('teachCollections');
-  if (!open || !host) return;
-  const show = async () => {
-    if (!host.hidden) return;
-    host.hidden = false;
-    open.setAttribute('aria-expanded', 'true');
-    const { mountMaker } = await import('./library/collectionMaker.js');
-    await mountMaker(host);
-  };
-  open.onclick = show;
-  if (location.hash === '#collections') show();
-}
-
 /** Wire the page up. */
 export async function initTeachingPage() {
   activityRoute = routeFor(location.search);
   await useLanguage(preferred());
   renderAll();
-  wireCollections();
   mountShell({
     onLanguage: async id => {
       await useLanguage(id);

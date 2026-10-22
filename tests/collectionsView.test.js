@@ -3,6 +3,7 @@
 // =============================================================================
 
 import { readFileSync } from 'node:fs';
+import '../js/library/collectionsDeps.js';
 import { beforeEach, describe, expect, test } from '@jest/globals';
 import {
   drawCollections,
@@ -83,7 +84,9 @@ describe('your collections', () => {
     expect(draw(h)).toBe(1);
     expect(h.querySelectorAll('a.lib-link')).toHaveLength(2);
     expect(h.querySelectorAll('[data-remove]')).toHaveLength(2);
-    expect(h.querySelector('a[href="/teaching/#collections"]')).not.toBe(null);
+    expect(h.querySelector('a[href="/teaching/kit/#collections"]')).not.toBe(
+      null
+    );
   });
 
   test('removes one item and asks the page to redraw, once however often it is drawn', () => {

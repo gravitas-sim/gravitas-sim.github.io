@@ -1,3 +1,4 @@
+import './collectionsDeps.js';
 import {
   itemsOfCollection,
   readCollections,
@@ -215,7 +216,7 @@ export async function mountMaker(host) {
           className: 'ui-note',
           textContent: L(
             'Nothing is saved yet. Save lessons, scenarios and datasets with the Save button on a Library item page, then come back to order them and add notes.',
-            'Todavía no hay nada guardado. Guarda lecciones, escenarios y conjuntos de datos con el botón Guardar de la página de un elemento de la Biblioteca y vuelve aquí para ordenarlos y añadir notas.'
+            'Todavía no hay nada guardado. Guarde lecciones, escenarios y conjuntos de datos con el botón Guardar de la página de un elemento de la Biblioteca y vuelva aquí para ordenarlos y añadir notas.'
           ),
         }),
         el(
@@ -326,7 +327,7 @@ export async function mountMaker(host) {
         className: 'ui-note',
         textContent: L(
           'These are the items you saved in the Library, in the order saved. Name the set, say what each is for, and give your students the link or the file. Nothing is uploaded: the link holds the whole list.',
-          'Estos son los elementos que guardaste en la Biblioteca, en el orden en que los guardaste. Pon nombre al conjunto, di para qué sirve cada uno y da a tus estudiantes el enlace o el archivo. No se sube nada: el enlace contiene toda la lista.'
+          'Estos son los elementos que guardó en la Biblioteca, en el orden en que los guardó. Ponga nombre al conjunto, diga para qué sirve cada uno y dé a sus estudiantes el enlace o el archivo. No se sube nada: el enlace contiene toda la lista.'
         ),
       }),
       field(
@@ -384,7 +385,7 @@ export async function mountMaker(host) {
           htmlFor: 'coll-link',
           textContent: L(
             'Link for your students',
-            'Enlace para tus estudiantes'
+            'Enlace para sus estudiantes'
           ),
         }),
         el('input', {
@@ -403,7 +404,7 @@ export async function mountMaker(host) {
     const { pack: made, missing } = build();
     if (!made.title.en)
       return [
-        L('Name the collection first.', 'Primero pon nombre a la colección.'),
+        L('Name the collection first.', 'Primero ponga nombre a la colección.'),
       ];
     if (missing.length)
       return [
@@ -467,7 +468,7 @@ export async function mountMaker(host) {
       link.comfortable
         ? L(
             'The link is ready: copy it into your course page or message.',
-            'El enlace está listo: cópialo en tu página de curso o mensaje.'
+            'El enlace está listo: cópielo en su página de curso o mensaje.'
           )
         : L(
             'The link is long. A file is easier to hand out.',

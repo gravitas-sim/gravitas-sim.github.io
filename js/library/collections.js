@@ -1,15 +1,3 @@
-import { KEY_COLLECTIONS } from '../names.js';
-import { readJson, writeJson } from '../storage/local.js';
-import { PLATFORM_API } from '../platform/catalog.generated.js';
-import {
-  FORMAT,
-  FORMAT_VERSION,
-  GUIDES,
-  MAX_ITEMS_PER_UNIT,
-  validateCoursePack,
-} from '../course/pack.js';
-import { entryIdOfItem } from './format.js';
-
 // =============================================================================
 // Saved items and kept collections (Roadmap III Prompt 164)
 // -----------------------------------------------------------------------------
@@ -28,37 +16,80 @@ import { entryIdOfItem } from './format.js';
 // (tests/compat/kinds/collections-record.mjs). Nothing here leaves the
 // browser, and nothing but the package is stored: no answers and no name.
 //
-// Lazy and DOM-free: the Library, the course home and Teach load it when
+// Lazy and DOM-free: the Library, the course home and the kit load it when
 // something asks. A damaged record, or a package that does not read as a
 // collection, reads as empty and the next write replaces it.
+//
+// It imports nothing. Each page that loads it hands over what the page already
+// has (`bind`: how to read and write the record, the entry an item stands for,
+// a checker, the platform version): the build splits a page's bundle by which
+// entries reach a module, so a lazy module that imported the page's own storage
+// functions, names or package checker would cost every visit one more request
+// (the budget of each route holds that at none). js/library/collectionsDeps.js
+// binds the real ones, for the kit and the tests.
 // =============================================================================
 
-export const COLLECTIONS_KEY = KEY_COLLECTIONS;
 export const COLLECTIONS_VERSION = 1;
 /** How many collections a student keeps from others. */
 export const RECEIVED_MAX = 6;
 /** The id of the student's own collection. */
 export const SAVED_ID = 'saved-items';
 
-const API = { locales: ['en', 'es'] };
+const FORMAT = 'gravitas.course-pack';
+const FORMAT_VERSION = 2;
+/** The most items a unit holds (js/course/pack.js MAX_ITEMS). */
+const MAX_ITEMS = 30;
+/** The platform version a saved list is written for (PLATFORM_API). */
+export const SAVED_PLATFORM = '1.0.0';
 const isObj = v => v !== null && typeof v === 'object' && !Array.isArray(v);
 
-/** A package that reads as a collection (shape only: no lesson list is asked). */
+/** What the page handed over (see the header). */
+let io = null;
+
+/**
+ * Hand this module what the page already has.
+ * @param {object} deps
+ * @param {Function} deps.read - () => the stored record, or null
+ * @param {Function} deps.write - (record) => whether the browser kept it
+ * @param {Function} deps.entryIdOfItem - js/library/format.js
+ * @param {Function} [deps.validate] - (package) => a list of problems; where
+ *   it is left out a package is held only to its shape
+ * @param {string} [deps.platform] - PLATFORM_API
+ */
+export function bind(deps) {
+  io = deps;
+}
+
+/** The Library entry an item stands for. */
+export const entryIdOf = item => io.entryIdOfItem(item);
+
+/** A package's shape, the part a display relies on. */
+const shapeOk = pack =>
+  isObj(pack.title) &&
+  typeof pack.id === 'string' &&
+  Array.isArray(pack.units) &&
+  pack.units.length === 1 &&
+  Array.isArray(pack.units[0]?.items) &&
+  pack.units[0].items.length > 0 &&
+  pack.units[0].items.every(
+    i => isObj(i) && typeof i.id === 'string' && typeof i.kind === 'string'
+  );
+
+/** A package that reads as a collection. */
 export const readsAsCollection = pack =>
   isObj(pack) &&
   pack.profile === 'collection' &&
-  validateCoursePack(pack, API).length === 0;
+  (io.validate ? io.validate(pack).length === 0 : shapeOk(pack));
 
 /** The items of a collection, in order. */
 export const itemsOfCollection = pack => pack?.units?.[0]?.items ?? [];
 
 /**
  * What the student has: their own collection (or null) and the ones kept.
- * @param {Storage} [store] - Defaults to localStorage
  * @returns {{saved: ?object, received: Array<{at: number, pack: object}>}}
  */
-export function readCollections(store) {
-  const record = readJson(COLLECTIONS_KEY, null, store);
+export function readCollections() {
+  const record = io.read();
   const none = { saved: null, received: [] };
   if (record?.v !== COLLECTIONS_VERSION) return none;
   const seen = new Set();
@@ -73,13 +104,12 @@ export function readCollections(store) {
 }
 
 /** Whether the browser kept it. */
-function write({ saved, received }, store) {
-  return writeJson(
-    COLLECTIONS_KEY,
-    { v: COLLECTIONS_VERSION, ...(saved ? { saved } : {}), received },
-    'courses',
-    store
-  );
+function write({ saved, received }) {
+  return io.write({
+    v: COLLECTIONS_VERSION,
+    ...(saved ? { saved } : {}),
+    received,
+  });
 }
 
 const middle = d => {
@@ -102,15 +132,13 @@ export function itemOfEntry(entry) {
       return { id: `lesson-${id}`, kind: 'lesson', lesson: id };
     case 'lab3d':
     case 'mission':
-      return Object.hasOwn(GUIDES, id)
-        ? {
-            id: `guide-${id}`,
-            kind: 'guide',
-            guide: id,
-            depth: 'core',
-            minutes: GUIDES[id].intro,
-          }
-        : null;
+      return {
+        id: `guide-${id}`,
+        kind: 'guide',
+        guide: id,
+        depth: 'core',
+        minutes: middle(entry.duration),
+      };
     case 'sandbox':
       return {
         id: `scenario-${id}`,
@@ -137,7 +165,7 @@ export const savedPack = items => ({
   formatVersion: FORMAT_VERSION,
   id: SAVED_ID,
   version: '1.0.0',
-  gravitas: PLATFORM_API,
+  gravitas: io?.platform ?? SAVED_PLATFORM,
   locales: ['en'],
   pinning: 'compatible',
   profile: 'collection',
@@ -146,82 +174,74 @@ export const savedPack = items => ({
 });
 
 /** Whether an entry is among the saved items. */
-export const isSaved = (entryId, store) =>
-  itemsOfCollection(readCollections(store).saved).some(
-    i => entryIdOfItem(i) === entryId
+export const isSaved = entryId =>
+  itemsOfCollection(readCollections().saved).some(
+    i => entryIdOf(i) === entryId
   );
 
 /**
  * Save an entry, or take it out again when it is saved.
  * @param {object} entry - A Library entry
- * @param {Storage} [store]
  * @returns {{ok: boolean, saved: boolean, full?: boolean}} `ok` is false when
  *   the entry cannot be saved or the browser did not keep it
  */
-export function toggleSaved(entry, store) {
-  const have = readCollections(store);
+export function toggleSaved(entry) {
+  const have = readCollections();
   const items = [...itemsOfCollection(have.saved)];
-  const at = items.findIndex(i => entryIdOfItem(i) === entry.id);
+  const at = items.findIndex(i => entryIdOf(i) === entry.id);
   if (at >= 0) items.splice(at, 1);
   else {
     const item = itemOfEntry(entry);
     if (!item) return { ok: false, saved: false };
-    if (items.length >= MAX_ITEMS_PER_UNIT)
+    if (items.length >= MAX_ITEMS)
       return { ok: false, saved: false, full: true };
     items.push(item);
   }
-  const ok = write(
-    { saved: items.length ? savedPack(items) : null, received: have.received },
-    store
-  );
+  const ok = write({
+    saved: items.length ? savedPack(items) : null,
+    received: have.received,
+  });
   return { ok, saved: ok ? at < 0 : at >= 0 };
 }
 
 /** Take one item out of the student's own collection. */
-export function removeSaved(itemId, store) {
-  const have = readCollections(store);
+export function removeSaved(itemId) {
+  const have = readCollections();
   const items = itemsOfCollection(have.saved).filter(i => i.id !== itemId);
-  return write(
-    { saved: items.length ? savedPack(items) : null, received: have.received },
-    store
-  );
+  return write({
+    saved: items.length ? savedPack(items) : null,
+    received: have.received,
+  });
 }
 
 /** Replace the student's own collection with this one (Teach's editor). */
-export function replaceSaved(pack, store) {
+export function replaceSaved(pack) {
   if (!readsAsCollection(pack)) return false;
-  const have = readCollections(store);
-  return write(
-    { saved: { ...pack, id: SAVED_ID }, received: have.received },
-    store
-  );
+  const have = readCollections();
+  return write({ saved: { ...pack, id: SAVED_ID }, received: have.received });
 }
 
 /**
  * Keep a collection that arrived by a link or a file. The same collection kept
  * twice is one; the newest is first; the oldest of too many is let go.
  * @param {object} pack - A package with profile collection
- * @param {Storage} [store]
  * @returns {boolean} Whether the browser kept it
  */
-export function keepCollection(pack, store) {
+export function keepCollection(pack) {
   if (!readsAsCollection(pack) || pack.id === SAVED_ID) return false;
-  const have = readCollections(store);
+  const have = readCollections();
   const received = [
     { at: Date.now(), pack },
     ...have.received.filter(r => r.pack.id !== pack.id),
   ].slice(0, RECEIVED_MAX);
-  return write({ saved: have.saved, received }, store);
+  return write({ saved: have.saved, received });
 }
 
 /** Let go of a kept collection. */
-export function dropCollection(id, store) {
-  const have = readCollections(store);
-  return write(
-    {
-      saved: have.saved,
-      received: have.received.filter(r => r.pack.id !== id),
-    },
-    store
-  );
+export function dropCollection(id) {
+  const have = readCollections();
+  return write({
+    saved: have.saved,
+    received: have.received.filter(r => r.pack.id !== id),
+  });
 }

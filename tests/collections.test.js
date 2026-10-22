@@ -9,12 +9,23 @@
 
 import { readFileSync } from 'node:fs';
 import { beforeEach, describe, expect, test } from '@jest/globals';
-import { validateCoursePack, PROFILES } from '../js/course/pack.js';
+import '../js/library/collectionsDeps.js';
+import {
+  FORMAT,
+  FORMAT_VERSION,
+  MAX_ITEMS_PER_UNIT,
+  PROFILES,
+  validateCoursePack,
+} from '../js/course/pack.js';
+import { PLATFORM_API } from '../js/platform/catalog.generated.js';
+import { KEY_COLLECTIONS } from '../js/names.js';
 import { courseApi } from '../js/course/api.js';
 import { courseLink, readCourseFragment } from '../js/course/links.js';
 import { entryIdOfItem } from '../js/library/format.js';
+import { deps } from '../js/library/collectionsDeps.js';
 import {
-  COLLECTIONS_KEY,
+  SAVED_PLATFORM,
+  bind,
   RECEIVED_MAX,
   SAVED_ID,
   dropCollection,
@@ -214,9 +225,9 @@ describe('which Library entries a collection can hold', () => {
 
 describe('the student record', () => {
   test('is one key in the courses collection, so a backup carries it', () => {
-    expect(COLLECTIONS_KEY).toBe('gravitas_collections');
-    expect(KEYS.filter(([p]) => p === COLLECTIONS_KEY)).toHaveLength(1);
-    expect(collectionOf(COLLECTIONS_KEY)).toBe('courses');
+    expect(KEY_COLLECTIONS).toBe('gravitas_collections');
+    expect(KEYS.filter(([p]) => p === KEY_COLLECTIONS)).toHaveLength(1);
+    expect(collectionOf(KEY_COLLECTIONS)).toBe('courses');
   });
 
   test('saves an entry, says so, and takes it out again', () => {
@@ -295,7 +306,7 @@ describe('the student record', () => {
       false
     );
     expect(keepCollection({ nonsense: true })).toBe(false);
-    expect(localStorage.getItem(COLLECTIONS_KEY)).toBe(null);
+    expect(localStorage.getItem(KEY_COLLECTIONS)).toBe(null);
   });
 
   test('reads a damaged or foreign record as empty, and the next write replaces it', () => {
@@ -305,7 +316,7 @@ describe('the student record', () => {
       '{"v":1,"saved":{"profile":"collection"},"received":[{"pack":5}]}',
       '[]',
     ]) {
-      localStorage.setItem(COLLECTIONS_KEY, bad);
+      localStorage.setItem(KEY_COLLECTIONS, bad);
       expect(readCollections()).toEqual({ saved: null, received: [] });
     }
     toggleSaved(entry('investigation:tides'));
@@ -315,7 +326,7 @@ describe('the student record', () => {
   test('stores only the package: no answer, no name, no link', () => {
     toggleSaved(entry('investigation:tides'));
     keepCollection(collection([lessonItem()]));
-    const record = JSON.parse(localStorage.getItem(COLLECTIONS_KEY));
+    const record = JSON.parse(localStorage.getItem(KEY_COLLECTIONS));
     expect(Object.keys(record).sort()).toEqual(['received', 'saved', 'v']);
     expect(Object.keys(record.received[0]).sort()).toEqual(['at', 'pack']);
     expect(JSON.stringify(record)).not.toMatch(/http|answer|name/i);
@@ -339,8 +350,8 @@ describe('the student record', () => {
     const records = [
       {
         collection: 'courses',
-        id: COLLECTIONS_KEY,
-        value: JSON.parse(localStorage.getItem(COLLECTIONS_KEY)),
+        id: KEY_COLLECTIONS,
+        value: JSON.parse(localStorage.getItem(KEY_COLLECTIONS)),
       },
     ];
     const d = describeWork(records);
@@ -352,5 +363,50 @@ describe('the student record', () => {
 
   test('savedPack is valid for any one item', () => {
     expect(problems(savedPack([lessonItem()]))).toEqual([]);
+  });
+});
+
+describe('the module imports nothing, so a page\u2019s bundle is not split', () => {
+  test('collections.js and collectionsView.js import only each other', () => {
+    const imports = file =>
+      [
+        ...readFileSync(file, 'utf8').matchAll(
+          /^(?:import|\}) [^']*?from '([^']*)';$/gm
+        ),
+      ].map(m => m[1]);
+    expect(imports('js/library/collections.js')).toEqual([]);
+    expect(imports('js/library/collectionsView.js')).toEqual([
+      './collections.js',
+    ]);
+  });
+
+  test('its copies of the package constants are the package\u2019s', () => {
+    expect(SAVED_PLATFORM).toBe(PLATFORM_API);
+    const made = savedPack([lessonItem()]);
+    expect(made.format).toBe(FORMAT);
+    expect(made.formatVersion).toBe(FORMAT_VERSION);
+    const lessons = library.entries.filter(e => e.format === 'lesson');
+    for (const e of lessons.slice(0, MAX_ITEMS_PER_UNIT)) toggleSaved(e);
+    expect(toggleSaved(lessons[MAX_ITEMS_PER_UNIT]).full).toBe(true);
+  });
+
+  test('without a checker a package is held to its shape, and the real checker still agrees on what it writes', () => {
+    toggleSaved(entry('investigation:tides'));
+    const written = readCollections().saved;
+    bind({ ...deps, validate: undefined });
+    try {
+      expect(readCollections().saved).toEqual(written);
+      localStorage.setItem(
+        KEY_COLLECTIONS,
+        JSON.stringify({
+          v: 1,
+          saved: { profile: 'collection', units: [] },
+          received: [],
+        })
+      );
+      expect(readCollections().saved).toBe(null);
+    } finally {
+      bind(deps);
+    }
   });
 });

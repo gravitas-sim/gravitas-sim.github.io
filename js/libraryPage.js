@@ -45,7 +45,13 @@ import {
 } from './library/i18n.js';
 import { mountShell } from './shell.js';
 import { KEY_COLLECTIONS, KEY_NEXT_CONTEXT } from './names.js';
-import { noteResume, put, readResume } from './storage/local.js';
+import {
+  noteResume,
+  put,
+  readJson,
+  readResume,
+  writeJson,
+} from './storage/local.js';
 
 const $ = id => document.getElementById(id);
 const LEVELS = ['beginner', 'intro'];
@@ -484,6 +490,16 @@ function fillContinue() {
 }
 
 /**
+ * What the lazy collection code is handed (js/library/collections.js says why
+ * it imports none of this itself).
+ */
+const collectionDeps = {
+  read: () => readJson(KEY_COLLECTIONS, null),
+  write: record => writeJson(KEY_COLLECTIONS, record, 'courses'),
+  entryIdOfItem,
+};
+
+/**
  * The collections the student saved or kept (Prompt 164). The module that
  * draws them loads only when the record exists.
  */
@@ -499,7 +515,9 @@ async function fillCollections() {
     box.hidden = true;
     return;
   }
-  const { drawCollections } = await import('./library/collectionsView.js');
+  const { bindCollections, drawCollections } =
+    await import('./library/views.js');
+  bindCollections(collectionDeps);
   const n = drawCollections($('libCollectionsBody'), {
     t,
     pick,
@@ -581,7 +599,8 @@ let drawn = 0;
 
 async function renderDetail(kind) {
   const mine = ++drawn;
-  const { topicView, itemView } = await import('./library/views.js');
+  const { topicView, itemView, mountSave, bindCollections } =
+    await import('./library/views.js');
   if (mine !== drawn) return;
   const c = { t, pick, shown, byId, path: state.path };
   const lib = state.library;
@@ -596,10 +615,10 @@ async function renderDetail(kind) {
     return;
   }
   box.innerHTML = out.html;
-  if (kind === 'item')
-    import('./library/collectionsView.js').then(m =>
-      m.mountSave(box, byId.get(state.item), { t })
-    );
+  if (kind === 'item') {
+    bindCollections(collectionDeps);
+    mountSave(box, byId.get(state.item), { t });
+  }
   document.title = `${out.title} | ${t('lib.doc.title')}`;
   setCrumbs(
     kind === 'topic'

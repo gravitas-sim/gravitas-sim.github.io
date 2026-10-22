@@ -473,10 +473,34 @@ function render() {
   fillLinks(pending);
   // A collection can be kept in the Library (Prompt 164): its controls load
   // only for one.
-  if (pack.profile === 'collection')
-    import('./library/collectionsView.js')
-      .then(m => m.mountKeep($('ch-keep'), pack, { t }))
-      .catch(() => {});
+  if (pack.profile === 'collection') keepControls();
+}
+
+/**
+ * The controls to keep a collection. Both modules load for one; they are handed
+ * what this page already holds, because importing it there would split this
+ * page's bundle (js/library/collections.js).
+ */
+async function keepControls() {
+  try {
+    const [{ readJson, writeJson }, { KEY_COLLECTIONS }, view, lib] =
+      await Promise.all([
+        import('./storage/local.js'),
+        import('./names.js'),
+        import('./library/collectionsView.js'),
+        import('./library/collections.js'),
+      ]);
+    lib.bind({
+      read: () => readJson(KEY_COLLECTIONS, null),
+      write: record => writeJson(KEY_COLLECTIONS, record, 'courses'),
+      entryIdOfItem: () => null,
+      validate: p => validateCoursePack(p, { locales: ['en', 'es'] }),
+      platform: PLATFORM_API,
+    });
+    view.mountKeep($('ch-keep'), pack, { t });
+  } catch {
+    /* no storage or no module: the course still opens */
+  }
 }
 
 /** A reading's reference, and its terms. */

@@ -8,6 +8,7 @@
 // =============================================================================
 
 import { readFileSync } from 'node:fs';
+import '../js/library/collectionsDeps.js';
 import { describe, expect, test } from '@jest/globals';
 import { validateCoursePack } from '../js/course/pack.js';
 import { courseApi } from '../js/course/api.js';

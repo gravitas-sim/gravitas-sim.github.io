@@ -3,6 +3,7 @@
 // =============================================================================
 
 import { readFileSync } from 'node:fs';
+import '../js/library/collectionsDeps.js';
 import { beforeEach, describe, expect, test } from '@jest/globals';
 import { mountMaker } from '../js/library/collectionMaker.js';
 import { readCollections, toggleSaved } from '../js/library/collections.js';
