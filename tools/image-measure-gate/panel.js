@@ -1,4 +1,4 @@
-/* global document, window, performance, location, setTimeout, clearTimeout, URLSearchParams */
+/* global document, setTimeout, clearTimeout */
 // =============================================================================
 // The marks instrument's panel (Prompt 178 prototype; spike code, imported by no
 // page)
@@ -39,6 +39,7 @@ import {
   remove,
   scaleOf,
 } from './marks.js';
+import { replay, writeRecord } from './record.js';
 
 const TEXT = {
   en: {
@@ -50,6 +51,9 @@ const TEXT = {
       count: 'Count',
       'reference-pair': 'Reference pair',
     },
+    keep: 'Keep in ledger',
+    kept: n => `Kept in the ledger: ${n} quantities`,
+    reopened: n => `Record reopened with ${n} marks`,
     undo: 'Undo',
     redo: 'Redo',
     refine: 'Refine',
@@ -127,6 +131,9 @@ const TEXT = {
       count: 'Conteo',
       'reference-pair': 'Par de referencia',
     },
+    keep: 'Guardar en el registro',
+    kept: n => `Guardado en el registro: ${n} cantidades`,
+    reopened: n => `Registro reabierto con ${n} marcas`,
     undo: 'Deshacer',
     redo: 'Rehacer',
     refine: 'Refinar',
@@ -233,11 +240,19 @@ export function mount(
     frame: 0,
     draft: false,
     step: 'normal',
+    waiting: false,
   };
   let plan;
   let k = 1;
-  const say = m => announce(m, true);
-  const settled = settledAnnouncer({ say, delay: settleMs });
+  const settled = settledAnnouncer({
+    say: m => {
+      ui.waiting = false;
+      announce(m, true);
+    },
+    delay: settleMs,
+  });
+  /** A commit's one announcement; a nudge still waiting to be said is dropped. */
+  const say = m => settled.commit(m);
   const fr = () => frames[ui.frame];
   const here = () => marksOf(store.state, ui.frame);
   const byId = id => store.state.marks.find(m => m.id === id);
@@ -383,7 +398,8 @@ export function mount(
     button(T.redo, () => doRedo(), 'redo'),
     button(T.prev, () => goto(ui.frame - 1), 'prev'),
     button(T.next, () => goto(ui.frame + 1), 'next'),
-    button(T.copy, () => doCopy(), 'copy')
+    button(T.copy, () => doCopy(), 'copy'),
+    button(T.keep, () => keep(), 'keep')
   );
   root.replaceChildren(
     tools,
@@ -498,6 +514,13 @@ export function mount(
     tag.onchange = () => {
       store.apply(edit(store.state, m.id, { tag: tag.value }));
       store.seal();
+      if (ui.sel?.id === m.id) tagSelect.value = tag.value;
+      status.textContent = T.frame(
+        ui.frame + 1,
+        frames.length,
+        here().length,
+        missingTags(store.state, ui.frame).join(', ')
+      );
       say(T.edited(m.id, `${T.tag} ${tag.value || T.none}`));
     };
     const num = axis => {
@@ -516,6 +539,8 @@ export function mount(
           edit(store.state, m.id, { handle: sh, [axis ? 'y' : 'x']: v })
         );
         store.seal();
+        updateRow(m.id);
+        drawOverlay();
         say(T.edited(m.id, `${axis ? 'y' : 'x'} ${fixed(v)}`));
       };
       return i;
@@ -642,6 +667,7 @@ export function mount(
       ui.aim = { x: p[0], y: p[1] };
       updateRow(id);
       drawOverlay();
+      ui.waiting = true;
       settled.nudge(T.moved(id, fixed(p[0]), fixed(p[1])));
       sealLater();
     } else {
@@ -650,6 +676,7 @@ export function mount(
         y: Math.min(fr().height, Math.max(1, ui.aim.y + dy)),
       };
       drawOverlay();
+      ui.waiting = true;
       settled.nudge(T.draft(fixed(ui.aim.x), fixed(ui.aim.y)));
     }
   }
@@ -690,6 +717,7 @@ export function mount(
   }
   function doUndo() {
     settled.cancel();
+    ui.waiting = false;
     store.seal();
     if (store.undo()) after(T.undone(here().length));
   }
@@ -719,6 +747,30 @@ export function mount(
         missingTags(store.state, n).join(', ')
       )
     );
+  }
+  /** The marks as one record (the ledger bridge); resolves with the envelope. */
+  async function keep() {
+    const record = await writeRecord({
+      id: `marks-${setId}`,
+      setId,
+      frames,
+      sidecar,
+      state: store.state,
+    });
+    api.lastRecord = record;
+    say(T.kept(record.quantities.length));
+    return record;
+  }
+  /** Reopen a record on its image: the marks come back, or the replay refuses. */
+  async function reopen(record) {
+    const r = await replay(record, frames);
+    store.apply(r.state);
+    store.seal();
+    ui.sel = null;
+    renderTable();
+    drawOverlay();
+    say(T.reopened(r.state.marks.length));
+    return r;
   }
   function doCopy() {
     if (!ui.sel || ui.frame + 1 >= frames.length) return;
@@ -825,6 +877,8 @@ export function mount(
     setId,
     T,
     state: () => store.state,
+    keep,
+    reopen,
     goto,
     select,
     confirm,
