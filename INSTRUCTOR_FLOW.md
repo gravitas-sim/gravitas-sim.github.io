@@ -240,6 +240,67 @@ it as that, distinct from any study (`/evaluation/`). The modules and their two
 catalog fragments (`js/i18n/en.classSummary.js`, `es.classSummary.js`) are in the
 idle tier with the instructor modules, so no first-visit byte moved.
 
+## Adapting an activity, proven by the step graph (Prompt 175)
+
+An instructor adapts an activity without writing a new one: the order of the
+steps, a sentence of their own on a step (English, Spanish or both), when it is
+due (a line of text, neither checked nor enforced), whether the "More" sections
+start open or shut (`mo`, Prompt 167) and whether the lab report prints the
+marking note (`m`, Prompt 172). The builder (`js/assignments/assignmentBuilder.js`)
+draws the order as a list with Earlier, Later and Remove on each step.
+
+**"Proven" means checked against what the lesson already declares**, by
+`checkAdaptation()` in `js/assignments/adapt.js`, before anything is written, and
+the refusal names the step and the step it needs:
+
+| Rule | What the lesson declares | What is refused |
+|---|---|---|
+| requires | a step reads another's answer, measurement or action | moving it ahead of that step, or dropping that step |
+| reveal | a prediction's verdict is held until a later step | moving it after its reveal, or dropping the reveal |
+| when | a remediation step answers a graded one | moving it ahead of that one, or dropping it |
+| setup | the world a step is about is the nearest setup step at or before it | any order that leaves a step under another world |
+| scene | a step that stages nothing keeps the scene of the nearest staged step before it | moving it under another scene |
+| depth | a step deeper than the activity's depth is not shown | including it |
+
+Only what an adaptation introduces is refused: the cut the builder makes in lesson
+order is the baseline, so an instructor is never refused for a gap they did not
+make. `tests/assignmentAdaptation.test.js` runs the check over all 60 lessons and
+every `requires`, `reveal` and setup edge in them (each broken edge must be
+refused with both steps named), and compares it with a second reckoning, written
+with no shared code, over every adjacent swap in every lesson (more than 200
+refused and more than 200 allowed) and seeded shuffles of cuts.
+
+**What is refused, and why.** A depth per step is not built: a student opens an
+activity at one depth (`openDepth`), the engine has no per-step depth to honour,
+and `js/investigations.js` is at its size ceiling; the activity's one depth stays,
+and a step deeper than it is refused by name. Writing a new step is the Composer's.
+Grading is unchanged.
+
+**The link.** The new fields are additive and written only when set: `x` (the
+sentences, `{sid: [en, es]}`), `u` (the due line), and a reordered `s` with its
+`f`, which gets a new id because the id comes from the order. An activity made
+without any is byte for byte what it was. The 2.0.0 reader opens an adapted link,
+keeps the order and leaves the sentences and the due line out (proved by running
+it: `tests/assignmentAdaptation.test.js`). Nothing in the link is an answer.
+
+**The report.** Opening an activity whose steps have since been rewritten (a step's
+digest no longer matches), or removed, or whose package moved a major version,
+shows a report under the title in words: which steps were rewritten (by title),
+which are gone, what the lesson now needs that the activity does not give it, and
+the package pin. It offers to keep the activity as made or to update it, which
+makes a new activity with a new id (so no saved answer attaches to a question it
+did not answer; the rule the course pack's upgrade keeps). The digest is of a
+step's type, instrument, scenario, answer fields and the shape of its answer,
+never its words, so a reworded step is not reported. A new dependency the lesson
+declares without rewriting a step is not noticed unless something else is.
+
+**Preview parity.** `preview=student` on any address reads none of the saved
+record and writes none (`js/storage/local.js`: every writer of the student's
+record comes through it) and puts up a banner. The Library item page and every
+adoption page link it for every kind the Library lists; `previewRoute()` in
+`js/library/format.js` is the one place the address is made. `e2e/previewParity.spec.js`
+walks one entry of every kind and format.
+
 ## Budgets
 
 The kit is a new route (`teach-kit`, measured, added by hand: D-BIND-07): 36.7 KB

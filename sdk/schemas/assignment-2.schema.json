@@ -4,23 +4,14 @@
   "title": "gravitas.assignment/2",
   "description": "A short assignment cut from an investigation, as its downloaded file holds it and as its link carries it after the `a` tag is decoded: the lesson, its steps in lesson order with a fingerprint each, the instructor's title and introduction, the day it was made, and, from version 2, the capability package the lesson came from. Short keys, because a link is the first place it goes. It carries no answers and nobody's work, and a field that could hold them is refused. js/assignments/assignment.js validateAssignment() is the authority, and reads version 1 as it is. It also holds the fingerprints to one per step, which a schema cannot say, and reads a version given as text; it does not look inside a fingerprint or at the date. FORMATS.md lists it.",
   "type": "object",
-  "required": [
-    "k",
-    "v",
-    "i",
-    "l",
-    "s"
-  ],
+  "required": ["k", "v", "i", "l", "s"],
   "properties": {
     "k": {
       "const": "gravitas.assignment"
     },
     "v": {
       "description": "1, or 2 when the assignment names its package (`p`).",
-      "enum": [
-        1,
-        2
-      ]
+      "enum": [1, 2]
     },
     "i": {
       "description": "The assignment's id: a date and a hash of its lesson, steps and title, so the same activity issued again keeps its students' work.",
@@ -42,7 +33,7 @@
       "maxLength": 1200
     },
     "s": {
-      "description": "The steps, by their permanent ids, in lesson order. A colon would collide with the sub-keys progress is stored under.",
+      "description": "The steps, by their permanent ids, in lesson order or, when the instructor adapted the activity, in the order they set, which the lesson's own step dependencies allow (Prompt 175). A colon would collide with the sub-keys progress is stored under.",
       "type": "array",
       "minItems": 1,
       "maxItems": 60,
@@ -82,15 +73,30 @@
       ]
     },
     "mo": {
-      "enum": [
-        "open",
-        "shut"
-      ],
+      "enum": ["open", "shut"],
       "description": "Written only when the instructor chose whether the student's More sections start open or shut (Prompt 167); the student can always open everything, and what they last chose for a surface outranks it."
     },
     "m": {
       "const": 1,
       "description": "Written only when the instructor asked that the student's lab report print each written answer's marking note (Prompt 172); without it the report does not."
+    },
+    "x": {
+      "description": "The instructor's own words on a step, shown under that step's title (Prompt 175): by step id, an array of the English and then the Spanish, either of which may be empty. Written only when there are any; a build that does not know it opens the link without them.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "minItems": 1,
+        "maxItems": 2,
+        "items": {
+          "type": "string",
+          "maxLength": 600
+        }
+      }
+    },
+    "u": {
+      "description": "When the activity is due, in the instructor's own words (Prompt 175); read under the title and neither checked nor enforced.",
+      "type": "string",
+      "maxLength": 200
     },
     "responses": false,
     "answers": false,
@@ -98,11 +104,7 @@
     "r": false,
     "a": false,
     "d": {
-      "enum": [
-        "core",
-        "quantitative",
-        "advanced"
-      ],
+      "enum": ["core", "quantitative", "advanced"],
       "description": "The depth the item is set at (Prompt 72); steps deeper than it are not shown."
     }
   }
