@@ -22,9 +22,11 @@ import {
   judge,
   mergeJustified,
   problems,
+  RULING_PARTS,
   readEvidence,
   renderDoc,
   schemaLessFormats,
+  standing,
   supportClass,
 } from '../tools/surface-gate.mjs';
 
@@ -255,7 +257,7 @@ describe('the recorded evidence is judged by the function and nothing else', () 
       .filter(r => r.kind === 'stored-format')
       .map(r => r.name);
     expect(recorded.sort()).toEqual([...names].sort());
-    expect(names).toHaveLength(24);
+    expect(names).toHaveLength(27);
   });
 
   test('the surfaces the roadmap named are all judged', () => {
@@ -365,5 +367,103 @@ describe('the recorded evidence is judged by the function and nothing else', () 
     expect(cells).toHaveLength(8);
     expect(cells[4]).toBe('**DELEGATED**');
     expect(cells[7]).toBe('165');
+  });
+});
+
+describe('an owner ruling stands beside the function and moves nothing', () => {
+  const evidence = readEvidence();
+  const history = evidence.surfaces.find(r => r.id === 'history-original');
+  const doc = readFileSync(DOC, 'utf8');
+  const withRuling = ruling => ({
+    ...evidence,
+    surfaces: evidence.surfaces.map(r =>
+      r.id === 'history-original' ? { ...r, ruling } : r
+    ),
+  });
+
+  test('Carl ruled /history/original/ FREEZE, in his words, and the function still says KEEP', () => {
+    expect(history.ruling).toMatchObject({
+      verdict: 'FREEZE',
+      by: 'Carl',
+      where: 'chat',
+      date: '2026-10-22',
+      quote: 'give the history original page a freeze',
+      register: 'D-R10-51',
+    });
+    for (const k of RULING_PARTS)
+      expect(history.ruling[k].length).toBeGreaterThan(3);
+    // The stored verdict is the function's: the ruling does not overwrite it.
+    const row = judge(evidence).find(r => r.rec.id === 'history-original');
+    expect(row.d.verdict).toBe('KEEP');
+    expect(row.d.rule).toBe('R6b');
+    expect(history.verdict).toBe('KEEP');
+    expect(history.rule).toBe('R6b');
+    expect(standing(row)).toBe('FREEZE');
+  });
+
+  test('it is the only ruling, and it names the register row that records it', () => {
+    expect(evidence.surfaces.filter(r => r.ruling).map(r => r.id)).toEqual([
+      'history-original',
+    ]);
+    const reg = readFileSync(path.resolve('DECISION_REGISTER.md'), 'utf8');
+    const row = reg.split('\n').find(l => l.startsWith('| D-R10-51 |'));
+    expect(row).toBeDefined();
+    const cells = row
+      .split(/(?<!\\)\|/)
+      .slice(1, -1)
+      .map(c => c.trim());
+    expect(cells).toHaveLength(8);
+    expect(cells[5]).toContain(history.ruling.quote);
+    expect(cells[4]).toBe('**RATIFIED**');
+    expect(cells[5]).toContain('Carl, chat, 2026-10-22');
+    expect(cells[7]).toBe('165, 166');
+  });
+
+  test('a ruling must have every part, differ from the function and name a verdict and a register row', () => {
+    expect(problems(withRuling(history.ruling))).toEqual([]);
+    for (const k of RULING_PARTS) {
+      const r = { ...history.ruling, [k]: '' };
+      expect(problems(withRuling(r)).join('\n')).toContain(`no ${k}`);
+    }
+    expect(
+      problems(withRuling({ ...history.ruling, verdict: 'KEEP' })).join('\n')
+    ).toContain('agrees with the function');
+    expect(
+      problems(withRuling({ ...history.ruling, verdict: 'ERASE' })).join('\n')
+    ).toContain('not a verdict');
+    expect(
+      problems(withRuling({ ...history.ruling, date: '22 Oct 2026' })).join(
+        '\n'
+      )
+    ).toContain('YYYY-MM-DD');
+    expect(
+      problems(withRuling({ ...history.ruling, register: 'row 51' })).join('\n')
+    ).toContain('not a register id');
+  });
+
+  test('no threshold and no rule moved for it: the committed values are the ones the document states', () => {
+    expect(THRESHOLDS.material).toEqual({
+      atLeast: 2,
+      lines: 1500,
+      testFiles: 3,
+      generated: 2,
+      strings: 150,
+      precacheKb: 20,
+      axeRows: 4,
+    });
+    // The surface still reaches one signal of six, which is why R6b gives KEEP.
+    expect(costClass(history.cost).reached).toEqual(['testFiles']);
+  });
+
+  test('the tables name both the ruling and the function, and count the surface as frozen', () => {
+    const line = doc
+      .split('\n')
+      .find(l => l.startsWith('| The first Gravitas |'));
+    expect(line).toContain(
+      '**FREEZE** (owner ruling D-R10-51; the function gives KEEP, R6b)'
+    );
+    expect(doc).toContain('| FREEZE | 1 |');
+    expect(doc).toContain('| Of these, owner rulings over the function | 1 |');
+    expect(doc).toContain('give the history original page a freeze');
   });
 });

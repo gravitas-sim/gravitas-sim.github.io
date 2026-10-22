@@ -301,6 +301,53 @@ adoption page link it for every kind the Library lists; `previewRoute()` in
 `js/library/format.js` is the one place the address is made. `e2e/previewParity.spec.js`
 walks one entry of every kind and format.
 
+## The minimal path and the next term (Prompt 168)
+
+One built-in course, in about fifteen minutes (a plan: no class has been timed),
+with no authoring. A walk the tests perform in both languages
+(`e2e/minimalInstructorPath.spec.js`):
+
+1. **Teach** opens on "One course in fifteen minutes" and lists the four courses Gravitas ships; "Use as is"
+   opens `/studio/course/?use=<id>` with a panel above the editor.
+2. **The panel** (`js/instructorTermView.js`) asks for a term (started with this season and year) and, on one
+   press, makes the course for the class (`js/instructorTerm.js startTerm`): every lesson and assignment
+   re-pinned to this build, every assignment given a fresh code and date and the term in its title, the
+   public id carrying the term (`intro-astronomy-fall-2026`) so each term is a draft of its own. It shows the
+   link for students (the course home's), a link to the kit, the course file to save and a plain report of what
+   the re-pin found. The shipped course is not changed.
+3. **The kit** gives the code to scan, the handout and the platform notes.
+4. **Students** open the link: the course home says the term, the assignment opens in the lesson engine under
+   its own title.
+5. **The review page** reads the reports and, from the course file, names the activities; the gradebook files
+   carry the activity's name with the term.
+
+**Next term.** "Start a new term" on the course builder (and in the kit, for a course or for one activity)
+does the same to a course already open or to a file: a new id, term, codes and links, today's pins, and
+the report; the file it came from is untouched and its links open what they opened. An activity's new term
+(kit) is the same: a new code, date and title.
+
+**What "fresh keys" means.** A report carries the assignment id (`i`, dated, derived from the lesson, steps and
+title); a student's answers are kept under a hash of the lesson, the steps and the title
+(`keyForAssignment`, unchanged: "a new title is a new activity and re-keys on purpose"). The term in the
+title therefore gives both a new code for the review page and a new place for a student's answers, so
+a student who did the course last term starts this term clean and last term's answers stay where they
+were. A whole lesson in a course has no assignment code: its progress is the lesson's, in the student's browser, and is
+not separated by term (the panel says so when a course has no assignment).
+
+**Archive** (review page). "Archive and clear" writes the reports as handed in (a token or a backup each),
+the names they were grouped under, the term and the marks as one file, `gravitas.submission-archive/1`
+(`js/instructorArchive.js`), then clears the page; opening the file on the page brings it all back through the
+same readers, so grading is redone against this build. A 2.0.0 page given the file refuses it in words.
+Nothing is uploaded and nothing a student holds is touched.
+
+**On the student's side** a course opened from a link that names a term is noted (`gravitas_terms`, a
+sidecar record read by My work: a line per course and term, so two terms are two lines). The note holds an id, a
+title, the term and a time; no link, answer or name.
+
+## A collection of saved items (Prompt 164)
+
+When a whole course is more than an instructor needs, they save lessons, scenarios and datasets with the Library's Save button, open the distribution kit at `/teaching/kit/#collections`, put the items in order, write a sentence for each, pick a depth where an item has one, name the set and make a link or a file. It is a course package with `profile: "collection"` (COURSE_PACKS.md), so it travels as a course does and needs no server. A student who opens the link sees it on the course home and can keep it; it then shows in their Library and in My work. The order, notes and depths are kept on the instructor's saved collection as they change; the title and summary are written for the one being shared. Texts are the instructor's own words: once any text has Spanish, every text needs it, and the kit says which one is missing instead of translating. The kit's panel is a lazy instructor module (`js/instructorCollections.js`) and an older build of Gravitas, such as 2.0.0, cannot open the result.
+
 ## Budgets
 
 The kit is a new route (`teach-kit`, measured, added by hand: D-BIND-07): 36.7 KB

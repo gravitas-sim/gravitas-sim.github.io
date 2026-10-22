@@ -31,6 +31,8 @@ Installed Packages are in IndexedDB (`js/catalog/store.js`), which the store doe
 | progress: guides | `gravitas_guides` (Observatory), `gravitas_lab3d_guide_*`, `gravitas_missionlab_*` | yes | yes (an Observatory guide alone is cut from its record) | yes |
 | assignments | `gravitas_assignment_<hash>` | yes; reopens from the instructor's link | yes | yes |
 | courses | built-in course progress is derived from lesson records; `gravitas_course_draft:*` | per-unit progress; drafts under drafts | yes | drafts yes |
+| course terms | `gravitas_terms` (Prompt 168) | yes: under Courses, a line per course and term opened | in a backup file only when preferences are ticked | with delete-all |
+| collections | `gravitas_collections` (Prompt 164): the saved items and the collections kept | yes: under Courses, "Saved items" and a line per kept collection, each linking to the Library, where it is taken out | yes (a durable record of the courses collection) | with delete-all, or in the Library |
 | evidence | `gravitas_evidence_notebook` | yes, grouped by the page that made each entry, each with a link to it | yes (the notebook whole) | yes (the notebook whole) |
 | experiments | `gravitas_experiment_<id>`, `gravitas_experiments_index` | yes | yes (with its index row) | yes (the index row is removed too) |
 | made | `gravitas_made_<id>` | yes, with link, seed, scenario it came from, build and attachments | yes, per item and all | yes |

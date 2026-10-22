@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://gravitas-sim.online/sdk/schemas/course-pack-2.schema.json",
   "title": "gravitas.course-pack/2",
-  "description": "A course as data, as the course-pack builder (/studio/course/) writes it: units of items (lessons, assignments cut from a lesson, scenarios, datasets, readings and investigation packs carried as links) with objectives, prerequisites, times, optional introductory and advanced paths, notes for the teacher and the student, and a pin on each lesson it names so an archived pack says what it was made with. Content only: nothing in it is run. js/course/pack.js validateCoursePack() is the authority; /1 packs (course-pack-1.schema.json) are migrated to this by migrateCoursePack(). Beyond this schema the reader holds every text to the file's own locales, the rules across items (see item), at most 120 items in all, and, before any rule reads it, a file to plain data no deeper or larger than any pack needs. FORMATS.md lists it.",
+  "description": "A course as data, as the course-pack builder (/studio/course/) writes it: units of items (lessons, assignments cut from a lesson, scenarios, datasets, readings and investigation packs carried as links) with objectives, prerequisites, times, optional introductory and advanced paths, notes for the teacher and the student, and a pin on each lesson it names so an archived pack says what it was made with. Content only: nothing in it is run. js/course/pack.js validateCoursePack() is the authority; /1 packs (course-pack-1.schema.json) are migrated to this by migrateCoursePack(). Beyond this schema the reader holds every text to the file's own locales, the rules across items (see item), at most 120 items in all, and, before any rule reads it, a file to plain data no deeper or larger than any pack needs. A collection is this format with `profile: \"collection\"` (js/course/pack.js PROFILES). FORMATS.md lists it.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -61,6 +61,18 @@
         "survey",
         "majors",
         "upper"
+      ]
+    },
+    "term": {
+      "description": "The term this copy of the course is for, such as Spring 2027: plain text, written only when the instructor names one.",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 40
+    },
+    "profile": {
+      "description": "What kind of package this is, written only when it is not a course. A collection (Prompt 164) is a list: exactly one unit, items in order with a note or a depth where they have one, no assignments, no optional paths, no needs, and no objectives, prerequisites, course level or term. The reader holds those rules; a 2.0.0 reader refuses the field in its own words, so it is written only for a collection.",
+      "enum": [
+        "collection"
       ]
     },
     "title": {

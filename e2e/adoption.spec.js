@@ -50,9 +50,9 @@ test.describe('the instructor path', () => {
     );
 
     await page.goto('/teaching/', { waitUntil: 'domcontentloaded' });
-    // The page is the eight-step path, in order.
+    // The page is the path, in order: Start here (Prompt 168), then the eight steps.
     const steps = page.locator('.teach-path > li > a');
-    await expect(steps).toHaveCount(8);
+    await expect(steps).toHaveCount(9);
     await page
       .locator(
         '#find ~ .teach-find-links a.is-primary, #find + p + .teach-find-links a.is-primary'

@@ -14,6 +14,13 @@
 // in, and, when nothing comes after it, why.
 // =============================================================================
 
+// The controls of saved items and kept collections (Prompt 164) load with this
+// module and no other: a second lazy entry point would split the Library's
+// bundle into one more request (esbuild splits by the set of entries that
+// reach a module).
+export { drawCollections, mountSave } from './collectionsView.js';
+export { bind as bindCollections } from './collections.js';
+
 const escape = s =>
   String(s ?? '')
     .replace(/&/g, '&amp;')

@@ -143,6 +143,7 @@ const deepen = async lesson =>
     ? lesson
     : layDepth(lesson, (await DEEPER[lesson.id]()).default.steps);
 import { mountShell } from './shell.js';
+import { isArchiveText } from './instructorArchive.js';
 
 const $ = id => document.getElementById(id);
 
@@ -164,6 +165,13 @@ const marks = marksIndex();
  * steps from it (misconceptions, criteria); `lessons` holds the raw lesson.
  */
 const gradedAgainst = new Map();
+/**
+ * What was handed in, as it was, for the archive (Prompt 168): the token or
+ * backup of each report kept, and the text that named the activities. Never
+ * persisted; the archive file is how a term is kept.
+ */
+const kept = [];
+const keptNames = [];
 /** Whether the instructor has picked how to match students (then it is theirs). */
 let identifierChosen = false;
 
@@ -257,6 +265,7 @@ async function accept(label, thing, kind) {
   const evidence = await checkEvidence(submission.ev);
   const record = gradeSubmission(submission, lesson, { kind, label, evidence });
   graded.push(record);
+  kept.push({ label, kind, thing });
   gradedAgainst.set(record.fingerprint, lesson);
   render();
 }
@@ -291,9 +300,11 @@ async function takeContext(label, text) {
   }
   const found = activitiesOf(source, language());
   for (const a of found) context.set(a.id, a);
+  keptNames.push({ label, text });
   contexts.push({
     label,
     kind: source.kind,
+    term: source.pack?.term ?? null,
     n: found.length,
     title:
       source.kind === 'course'
@@ -320,6 +331,7 @@ async function takeFile(file) {
   if (text === null) return refuse(name, 'unreadable');
   if (isSubmissionToken(text.trim())) return accept(name, text.trim(), 'token');
   if (isContext(text.trim())) return takeContext(name, text.trim());
+  if (isArchiveText(text)) return openArchive(name, text);
   let parsed;
   try {
     parsed = parseDocument(text);
@@ -982,6 +994,8 @@ function render() {
   }
   const empty = $('exportEmpty');
   if (empty) empty.hidden = n > 0;
+  const save = $('archiveSave');
+  if (save) save.disabled = n === 0;
 }
 
 /**
@@ -1174,6 +1188,97 @@ function judged(e) {
 }
 
 /** Put every string in the chosen language. */
+/** A word of the next-term path, in the page's language (js/instructorTermText.js). */
+const termWords = async (id, vars) =>
+  (await import('./instructorTermText.js')).tr(language(), id, vars);
+
+/**
+ * Save everything read as one file and clear the page (Prompt 168). The page
+ * is cleared only after the file has been handed to the browser; nothing a
+ * student holds is touched.
+ * @returns {Promise<void>}
+ */
+async function archive() {
+  const records = annotate(graded);
+  const status = $('archiveStatus');
+  const say2 = async (id, vars) => {
+    if (status) status.textContent = await termWords(id, vars);
+  };
+  if (!records.length) return say2('archive.none');
+  try {
+    const { archiveName, buildArchive } =
+      await import('./instructorArchive.js');
+    const hasMarks = marks.size > 0;
+    const term = contexts.find(c => c.term)?.term ?? null;
+    const file = archiveName(term, stamp());
+    const n = kept.length;
+    const text = buildArchive({
+      reports: kept,
+      named: keptNames,
+      term,
+      marks: hasMarks
+        ? marksCsv(records, marks, {
+            includeWritten: false,
+            criteriaOf: criteriaFor,
+          })
+        : null,
+    });
+    download(text, file, 'application/json');
+    clearAll();
+    await say2('archive.saved', {
+      file,
+      n,
+      marks: hasMarks ? await termWords('archive.marks') : '',
+    });
+  } catch (err) {
+    await say2('archive.failed', { reason: err?.message || String(err) });
+  }
+}
+
+/**
+ * Read an archive this page saved: its names, then its reports, then its marks.
+ * @param {string} name - The file's name
+ * @param {string} text - The file's text
+ * @returns {Promise<void>}
+ */
+async function openArchive(name, text) {
+  const { readArchive } = await import('./instructorArchive.js');
+  const read = readArchive(text);
+  const status = $('archiveStatus');
+  if (!read.ok) {
+    if (status)
+      status.textContent = `${name}: ${await termWords(`archive.reason.${read.reason}`)}`;
+    return;
+  }
+  const { archive: a } = read;
+  for (const n of a.named) await takeContext(n.label || name, n.text);
+  for (const r of a.reports) await accept(r.label, r.thing, r.kind);
+  let withMarks = false;
+  if (a.marks) withMarks = readMarksCsv(a.marks, marks).ok;
+  render();
+  if (status)
+    status.textContent = await termWords('archive.opened', {
+      file: name,
+      n: a.reports.length,
+      marks: withMarks ? await termWords('archive.marks') : '',
+    });
+}
+
+/** Forget everything read, as the page does on opening. */
+function clearAll() {
+  graded.length = 0;
+  refused.length = 0;
+  context.clear();
+  contexts.length = 0;
+  kept.length = 0;
+  keptNames.length = 0;
+  marks.clear();
+  gradedAgainst.clear();
+  judging = false;
+  say('');
+  render();
+}
+
 function applyLanguage() {
   document.title = t('sub.doc.title');
   applyTranslations();
@@ -1213,17 +1318,8 @@ function wire() {
     else await accept(t('sub.paste.source'), text, 'token');
     $('paste').value = '';
   });
-  $('clear').addEventListener('click', () => {
-    graded.length = 0;
-    refused.length = 0;
-    context.clear();
-    contexts.length = 0;
-    marks.clear();
-    gradedAgainst.clear();
-    judging = false;
-    say('');
-    render();
-  });
+  $('clear').addEventListener('click', clearAll);
+  $('archiveSave')?.addEventListener('click', archive);
   $('exportSummary')?.addEventListener('click', () => exportResults('summary'));
   $('exportQuestions')?.addEventListener('click', () =>
     exportResults('questions')

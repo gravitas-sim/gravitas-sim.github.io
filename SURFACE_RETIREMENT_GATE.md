@@ -93,6 +93,8 @@ A route, a capability or a stored record is **deprecated**, then **read-only**, 
 | CONSOLIDATE | merges the route into the named target, in its own pull request, `visible` | the old route is class L or R as the evidence says and redirects for its periods |
 | RETIRE | removes the capability from the site after the deprecated and read-only phases; the pull request that starts the phases only adds the notice | class L or R as the evidence says |
 
+**An owner ruling stands beside a verdict, not in place of one.** Carl may rule a surface's verdict over the function's. The record then carries a `ruling` (the verdict, who, where and when, his words, the register row, the reason and what would reverse it); the stored `verdict` and `rule` stay what the function gives, the tables name both ("owner ruling ... the function gives KEEP"), and the summary counts the surface under the ruling and says how many rulings there are. A ruling moves no threshold and no rule, the next surface is judged as before, and `tools/surface-gate.mjs check` refuses a ruling that agrees with the function or lacks any of its parts. A FREEZE by ruling commits the site to what a FREEZE by the function does (the row above): a notice in both languages, no new content or capability, judged again at the next checkpoint.
+
 ## The judgments
 
 ### How the evidence was gathered
@@ -112,11 +114,13 @@ What the evidence cannot say, stated plainly:
 
 **`/history/original/`: KEEP (R6b), and the closest call of the 65.** The page is the first Gravitas, kept byte for byte; Save and Load are inert and nothing runs an accessibility check on it. It is partly replaced by the archive (the commit, the `v2.0.0` tag and the Zenodo deposit keep every line; none of them runs on a click), it has no shipped link and no Library entry, and it reaches one signal of six (four test files; 1,396 lines against a threshold of 1,500). The function therefore keeps it. Three facts the cost signals do not count are reasons to look again (see "Decisions for Carl"): it is the one published page without a content-security policy, it imports a stylesheet from `fonts.googleapis.com` when opened (so it is the one page that asks a third party for something without an opt-in), and its tests pin its bytes so that no one may fix either.
 
+**`/history/original/`: FREEZE by owner ruling (D-R10-51); the function still gives KEEP (R6b).** Carl, in chat on 2026-10-22: "give the history original page a freeze". The function's answer is unchanged and nothing was moved to change it; the ruling rests on two facts the six signals do not count, the page being the one published page with no content-security policy and its asking `fonts.googleapis.com` for a stylesheet when opened with no opt-in (the second has since been removed, below). What the freeze consists of: a notice on the page in English and Spanish (frozen, no new features, kept as a record, a link to the current Gravitas), with no date; the page's behavior is unchanged, and so is every byte outside the notice and the one removed line (`tests/historyOriginal.test.js` strips the notice's two marked regions, puts the line back and checks the result against the blob it pinned before). The page is judged again at the next checkpoint (171, then 287). The third-party request was a separate defect and was removed separately: the one `@import` line is deleted and the page's own `sans-serif` and `monospace` fallbacks draw it (D-R10-51, option (a), under Carl's rule that decisions go with the recommendation). The page still has no content-security policy; that is option (b), not taken. The measured 1,396 lines in the tables below are the snapshot, before the notice; the page is now about 1,430.
+
 **The compute page: KEEP (R3b), a section of Observe, not a destination.** Five shipped investigations link it, a notebook saved in My work links it, and nothing else on the site names it; it stays off the menus under D-COMPUTE-03 and stays an acknowledged orphan. Whether its content stays at its present size is Prompt 268's gate and is not judged here.
 
 **Activity formats, by the subjects using each.** Demonstration (one subject, orbital speed) and route (three: orbital speed, binary planets, star sizes) are unique in what they do and are kept (R3b). Guided (one subject) and lab (one subject; the fourth format) are each partly replaced, by the route and by assigning the whole lesson, and each has a Library entry, so the function keeps them (R8b: used, no measured merge). Retiring a format that has a Library entry and a stable assignment id would be class R under the policy: progress is namespaced by that id, so a student's saved answers and an instructor's assignment link point at it.
 
-**The 24 formats without a schema: all KEEP, with a schema in Prompt 290.** Each is a unique record kind, and 22 of the 24 are held by a person (a download, a browser's local storage, a file or a link). The other two, the 3-D lab's live snapshot (memory only) and the ephemeris pack (the repository only), are not. Three are written for a person to read and never read back by Gravitas (the 3-D guide report, the mission lab report, the course manifest); for those Prompt 290 either gives a schema or says in words that the file has none. None is retired, so no reader outlives a writer here.
+**The 26 formats without a schema: all KEEP, with a schema in Prompt 290.** Each is a unique record kind, and 24 of the 26 are held by a person (a download, a browser's local storage, a file or a link). The other two, the 3-D lab's live snapshot (memory only) and the ephemeris pack (the repository only), are not. Three are written for a person to read and never read back by Gravitas (the 3-D guide report, the mission lab report, the course manifest); for those Prompt 290 either gives a schema or says in words that the file has none. None is retired, so no reader outlives a writer here.
 
 **The "Contributed" catalog section: RETIRE (R5), presentation.** No catalog entry has `origin: "contributed"` (0 of 10). A contributed entry already carries a badge and a "Contributed by" row; the section adds a heading and the line "Nothing has been contributed yet". Retiring the section keeps both, and the invitation to contribute moves to the catalog's intro. Nothing student-made or shared points at a heading, so no period applies (policy scope).
 
@@ -129,12 +133,13 @@ Counts first, then every surface. "Links / Library / cited" are the shipped inve
 <!-- surface-gate:summary -->
 | Verdict | Surfaces |
 | --- | ---: |
-| KEEP | 63 |
-| FREEZE | 0 |
+| KEEP | 65 |
+| FREEZE | 1 |
 | GROUP | 0 |
 | CONSOLIDATE | 0 |
 | RETIRE | 2 |
-| Total judged | 65 |
+| Total judged | 68 |
+| Of these, owner rulings over the function | 1 |
 <!-- /surface-gate:summary -->
 
 ### Pages
@@ -166,7 +171,7 @@ Counts first, then every surface. "Links / Library / cited" are the shipped inve
 | Find content to teach | `/teaching/find/` | document, teach | partly (library) | 0 / 0 / 1 | 1 of 6 (tests) | cited in the manual | **KEEP** (R6b) | none |
 | Adopter's guide | `/teaching/adopt/` | document, teach | yes | 0 / 0 / 1 | 0 of 6 | cited in the manual | **KEEP** (R3b) | none |
 | Textbook alignment | `/teaching/alignment/` | document, teach | yes | 0 / 0 / 1 | 0 of 6 | cited in the manual | **KEEP** (R3b) | none |
-| Classroom kit | `/teaching/kit/` | document, teach | yes | 0 / 0 / 1 | 1 of 6 (tests) | cited in the manual | **KEEP** (R3b) | none |
+| Classroom kit | `/teaching/kit/` | document, teach | yes | 0 / 0 / 1 | 3 of 6 (lines, tests, precache), material | cited in the manual | **KEEP** (R3b) | none |
 | Adoption pages: activities | `/teaching/activity/*` | content, teach | yes | 0 / 0 / 0 | 0 of 6 | links from the Library activity cards | **KEEP** (R3b) | none |
 | Adoption pages: investigations | `/teaching/investigation/*` | content, teach | yes | 0 / 0 / 0 | 0 of 6 | links from the Library investigation cards | **KEEP** (R3b) | none |
 | How the model works | `/model/` | document, no destination | yes | 0 / 0 / 2 | 2 of 6 (lines, tests), material | cited in README.md; cited in the manual | **KEEP** (R3b) | none |
@@ -175,7 +180,7 @@ Counts first, then every surface. "Links / Library / cited" are the shipped inve
 | User manual (PDF) | `/Gravitas_User_Manual.pdf` | document, no destination | yes | 0 / 0 / 0 | 0 of 6 | the manual PDF on the site | **KEEP** (R3b) | none |
 | 3-D kernel diagnostics | `/lab3d/` | diagnostic, no destination | yes | 0 / 0 / 1 | 1 of 6 (tests) | cited in README.md | **KEEP** (R3b) | none |
 | Mission core diagnostics | `/mission/` | diagnostic, no destination | yes | 0 / 0 / 2 | 4 of 6 (lines, tests, strings, precache), material | cited in README.md; cited in the manual | **KEEP** (R3b) | none |
-| The first Gravitas | `/history/original/` | document, no destination | partly (archive) | 0 / 0 / 0 | 1 of 6 (tests) | none | **KEEP** (R6b) | none |
+| The first Gravitas | `/history/original/` | document, no destination | partly (archive) | 0 / 0 / 0 | 1 of 6 (tests) | none | **FREEZE** (owner ruling D-R10-51; the function gives KEEP, R6b) | A notice on the page in both languages (frozen, no new features, kept as a record, where to go instead), pinned by tests/historyOriginal.test.js; no change to what the page does, no date, no new dependency; the one font import (a third-party request) is removed. Owner ruling D-R10-51; the function still gives KEEP (R6b). |
 <!-- /surface-gate:pages -->
 
 ### Sections, facets and activity formats
@@ -192,7 +197,7 @@ Counts first, then every surface. "Links / Library / cited" are the shipped inve
 | Activity format: lab | activity-format | partly (investigation-keplers-laws) | 0 / 1 / 0 | 0 of 6 | investigation progress (namespaced by assignment id); assignment link ?activity=&format= (act-orbital-speed-lab) | **KEEP** (R8b) | none |
 <!-- /surface-gate:others -->
 
-### The 24 formats without a schema
+### The 26 formats without a schema
 
 <!-- surface-gate:formats -->
 | Format | Persisted | Unique | Importers | Exposure | Verdict | Consequence |
@@ -211,10 +216,13 @@ Counts first, then every surface. "Links / Library / cited" are the shipped inve
 | `gravitas.lab3d-guide-report` | download | yes | 1 | record | **KEEP** (R3b) | Keep. Written for a person to read; Prompt 290 gives it a schema or says in words that it has none. |
 | `gravitas.mission-lab-report` | download | yes | 1 | record | **KEEP** (R3b) | Keep. Written for a person to read; Prompt 290 gives it a schema or says in words that it has none. |
 | `notebook store` | localStorage | yes | 10 | record | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
-| `resume record` | localStorage | yes | 17 | record | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
+| `resume record` | localStorage | yes | 20 | record | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
 | `notebook entry snapshot` | localStorage, download | yes | 14 | record | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
 | `gravitas.ledger` | inside a submission token (ev), never alone | yes | 2 | record | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
-| `course home link` | link | yes | 4 | link | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
+| `course home link` | link | yes | 5 | link | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
+| `course terms record` | localStorage | yes | 1 | record | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
+| `collections record` | localStorage | yes | 5 | record | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
+| `gravitas.submission-archive` | file | yes | 2 | record | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
 | `investigation link` | link | yes | 3 | link | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
 | `gravitas.course-manifest` | download | yes | 1 | record | **KEEP** (R3b) | Keep. Written for a person to read; Prompt 290 gives it a schema or says in words that it has none. |
 | `gravitas.extension-archive` | repository, download | yes | 1 | record | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
@@ -228,39 +236,39 @@ Counts first, then every surface. "Links / Library / cited" are the shipped inve
 <!-- surface-gate:evidence -->
 | Item | Source lines · tests · generated · strings · precache KB · axe rows | Measured by |
 | --- | --- | --- |
-| Sandbox | 76293 · 244 · 0 · 0 · 975.3 · 0 | pages `index.html` |
+| Sandbox | 76404 · 248 · 0 · 0 · 977.2 · 0 | pages `index.html` |
 | 3-D lab | 11016 · 16 · 0 · 544 · 232.3 · 2 | pages `3d/index.html` |
 | Mission lab | 5684 · 10 · 0 · 445 · 192.7 · 1 | pages `mission/lab/index.html` |
 | Scenario Studio | 1759 · 8 · 0 · 172 · 25.2 · 1 | pages `studio/index.html` |
-| Library | 1974 · 11 · 0 · 0 · 24.1 · 4 | pages `library/index.html` |
-| Courses | 1028 · 6 · 0 · 63 · 15.6 · 1 | pages `course/index.html` |
+| Library | 2045 · 13 · 0 · 0 · 24.8 · 5 | pages `library/index.html` |
+| Courses | 1159 · 8 · 0 · 68 · 18 · 1 | pages `course/index.html` |
 | Observatory | 22104 · 63 · 0 · 230 · 326.7 · 1 | pages `observatory/index.html` |
 | Experiments | 5798 · 22 · 0 · 119 · 68.5 · 1 | pages `experiments/index.html` |
 | Sky Lab | 2182 · 5 · 0 · 119 · 33.6 · 0 | pages `sky/index.html` |
 | Compute page | 4027 · 12 · 0 · 0 · 0 · 0 | pages `compute/index.html`, `compute-frame/index.html` |
-| Catalog | 924 · 5 · 1 · 97 · 14.7 · 1 | pages `catalog/index.html` |
+| Catalog | 891 · 6 · 1 · 94 · 14.4 · 1 | pages `catalog/index.html` |
 | Figure builder | 1068 · 2 · 0 · 67 · 12.8 · 1 | pages `figure/index.html` |
-| My work | 2513 · 19 · 0 · 0 · 31.7 · 1 | pages `my-work/index.html` |
-| Teaching with Gravitas | 451 · 10 · 0 · 0 · 0 · 1 | pages `teaching/index.html` |
+| My work | 2600 · 23 · 0 · 0 · 32.5 · 1 | pages `my-work/index.html` |
+| Teaching with Gravitas | 477 · 12 · 0 · 0 · 0 · 1 | pages `teaching/index.html` |
 | Instructor resources | 290 · 7 · 0 · 0 · 0 · 1 | pages `instructors/index.html` |
-| Submission review | 5664 · 20 · 0 · 0 · 65.4 · 1 | pages `instructors/submissions/index.html` |
-| Classroom evidence kit | 1238 · 7 · 0 · 0 · 5.1 · 1 | pages `evaluation/index.html` |
+| Submission review | 5793 · 21 · 0 · 0 · 66.2 · 1 | pages `instructors/submissions/index.html` |
+| Classroom evidence kit | 1258 · 7 · 0 · 0 · 5.1 · 1 | pages `evaluation/index.html` |
 | Investigation Composer | 4173 · 16 · 0 · 328 · 56.4 · 1 | pages `studio/lesson/index.html` |
-| Course-package builder | 3301 · 8 · 0 · 270 · 46.1 · 1 | pages `studio/course/index.html` |
+| Course-package builder | 3774 · 10 · 0 · 275 · 50.9 · 3 | pages `studio/course/index.html` |
 | Investigations in a course | 594 · 4 · 0 · 0 · 6 · 1 | pages `studio/course/packs/index.html` |
 | Find content to teach | 236 · 3 · 0 · 0 · 0 · 0 | pages `teaching/find/index.html` |
-| Adopter's guide | 215 · 0 · 0 · 0 · 0 · 0 | pages `teaching/adopt/index.html` |
+| Adopter's guide | 225 · 0 · 0 · 0 · 0 · 0 | pages `teaching/adopt/index.html` |
 | Textbook alignment | 309 · 1 · 0 · 0 · 0 · 0 | pages `teaching/alignment/index.html` |
-| Classroom kit | 1325 · 4 · 0 · 0 · 15.8 · 0 | pages `teaching/kit/index.html` |
+| Classroom kit | 2038 · 11 · 0 · 0 · 23.2 · 0 | pages `teaching/kit/index.html` |
 | How the model works | 3414 · 7 · 0 · 0 · 0 · 1 | pages `model/index.html` |
 | Physics validation | 9384 · 20 · 0 · 0 · 14.4 · 1 | pages `validation/index.html` |
 | Glossary | 203 · 0 · 0 · 0 · 0 · 1 | pages `glossary/index.html` |
 | User manual (PDF) | 0 · 0 · 0 · 0 · 0 · 0 | library and tests |
 | 3-D kernel diagnostics | 937 · 3 · 0 · 79 · 12.3 · 1 | pages `lab3d/index.html` |
 | Mission core diagnostics | 1921 · 3 · 0 · 228 · 27.5 · 1 | pages `mission/index.html` |
-| The first Gravitas | 1396 · 4 · 0 · 0 · 0 · 0 | pages `history/original/index.html` |
+| The first Gravitas | 1429 · 5 · 0 · 0 · 0 · 0 | pages `history/original/index.html` |
 | Analysis lab (two sections) | 4122 · 8 · 0 · 136 · 48 · 0 | named files |
-| The "Contributed" catalog section | 203 · 0 · 0 · 0 · 3.3 · 0 | named files |
+| The "Contributed" catalog section | 179 · 0 · 0 · 0 · 3.2 · 0 | named files |
 | The Library's "Where it runs" facet | 0 · 0 · 0 · 0 · 0 · 0 | named files |
 | Activity format: demonstration | 0 · 0 · 0 · 0 · 0 · 0 | library and tests |
 | Activity format: route | 0 · 0 · 0 · 0 · 0 · 0 | library and tests |
@@ -274,7 +282,7 @@ The gate's own text says a threshold that proves wrong is Carl's to reset, and t
 
 1. **Almost everything is KEEP (63 of 65), and nothing is CONSOLIDATE.** That is what the committed function gives on this evidence, not a finding that the site is tidy. R7 needs a surface that is used, and "used" counts only links from investigations, courses and activities and Library entries; most tools are opened from the destination pages, which the roadmap and the committed text exclude as navigation. So no unused tool can be consolidated, however small its gain.
 2. **A measured merge exists that the function does not test.** *Investigations in a course* (`/studio/course/packs/`) is partly replaced by the course builder, is unused by the counted kinds and has a measured gain of one route and 6.0 KB of gzip in the precache (the threshold is 5 KB). R6 sends a partly replaced, unused surface to KEEP or FREEZE and never asks whether a merge is justified; the request ceiling of the course builder would have to be measured with the merged page (13 requests today) before the merge could be justified. **Recommended:** amend R6 so that a partly replaced, unused surface with a justified merge is CONSOLIDATE, as a register row before Prompt 166 runs; this document does not make the change, because the roadmap fixes the function before the judging.
-3. **`/history/original/`.** By the function it is KEEP. Two ways to a different verdict are Carl's to take: (a) rule its task not unique (`unique: "no"`, since the archive keeps the code), which gives RETIRE under class L (a notice, then 12 months before it leaves); (b) add a seventh cost signal for "outside a site-wide guarantee" (no policy, a third-party request, no accessibility run), which would make it material and give FREEZE (R6a). **Recommended:** (b) or a plain FREEZE notice, not (a): the page is an archive Carl chose to publish, and removing it is a different decision from judging it unjustified.
+3. **`/history/original/`.** By the function it is KEEP. Two ways to a different verdict are Carl's to take: (a) rule its task not unique (`unique: "no"`, since the archive keeps the code), which gives RETIRE under class L (a notice, then 12 months before it leaves); (b) add a seventh cost signal for "outside a site-wide guarantee" (no policy, a third-party request, no accessibility run), which would make it material and give FREEZE (R6a). **Recommended:** (b) or a plain FREEZE notice, not (a): the page is an archive Carl chose to publish, and removing it is a different decision from judging it unjustified. **Ruled 2026-10-22:** Carl ruled FREEZE, the plain-notice route (D-R10-51); neither (a) nor (b) was taken, so no cost signal was added.
 4. **Teach's "find content" page** is partly replaced by the Library (same filters) and adds instructor facts; it reaches no cost signal and is KEEP. If Prompt 163's Library grows an instructor view, re-judge.
 5. **The Sky Lab** shows 0 links and 0 Library entries but is cited by address in the manual; it is KEEP only because of that one citation (R3b). A release that corrected the manual would turn it into FREEZE (R3a: unique, unused, unheld, material). It is the surface most likely to move when real referrer data exists.
 
@@ -282,7 +290,7 @@ The gate's own text says a threshold that proves wrong is Carl's to reset, and t
 
 ## What a verdict is not
 
-A verdict is not a retirement. Nothing on the site changed in Prompt 165. Prompt 166 carries out each verdict that is not KEEP, one pull request each: today the "Contributed" section (and the facet, if #409 has not removed it). A RETIRE of a route or capability would, under the policy, begin with a notice and take effect at least 12 months later; no such verdict exists today.
+A verdict is not a retirement. Nothing on the site changed in Prompt 165. Prompt 166 carries out each verdict that is not KEEP, one pull request each. It has: the "Contributed" section is gone from /catalog/ (one list, the badge and the "Contributed by" row kept, the invitation to submit in the intro), and the Library's "Where it runs" facet was already gone with Prompt 163. Both are presentation, so no route moved, no notice or redirect was needed, and the per-route period table of the policy has no rows. A RETIRE of a route or capability would, under the policy, begin with a notice and take effect at least 12 months later; no such verdict exists today.
 
 ## Re-running the gate
 

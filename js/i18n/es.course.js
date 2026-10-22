@@ -270,6 +270,13 @@ export const ES_COURSE = {
     'Este archivo de curso es de otra versión del formato.',
   'course.error.id': 'Palabras en minúscula unidas por guiones.',
   'course.error.seed': 'Una palabra como orbit-1.',
+  'course.error.profile': 'El perfil es «collection», o se omite el campo.',
+  'course.error.collectionUnits': 'Una colección tiene exactamente una unidad.',
+  'course.error.collectionField': 'Una colección no tiene «{field}».',
+  'course.error.collectionItem':
+    'Una colección contiene elementos en orden: sin actividades, sin rutas opcionales, sin «needs».',
+  'course.error.term':
+    'Una etiqueta corta como Primavera 2027: hasta 40 caracteres, sin marcado.',
   'course.error.tooMany': 'Como mucho {max} elementos.',
   'course.error.access':
     'Libre en línea, a través de una biblioteca o impreso.',

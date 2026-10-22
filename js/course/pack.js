@@ -84,6 +84,14 @@ export const LEVEL_DEPTH = Object.freeze({
   upper: 'advanced',
 });
 export const ACCESS = Object.freeze(['open', 'library', 'print']);
+/**
+ * The profiles a package may declare (Prompt 164). A collection is a list, not
+ * a course: one unit, items in order, a note and a depth where an item has them,
+ * no assignments, no optional paths and no `needs`. It is written only for a
+ * collection, so every course ever written stays as it was; a 2.0.0 reader
+ * refuses the field in its own words (tests/compat/boundary.mjs).
+ */
+export const PROFILES = Object.freeze(['collection']);
 
 export const MAX_UNITS = 20;
 export const MAX_ITEMS = 120;
@@ -92,6 +100,8 @@ export const MAX_OBJECTIVES = 12;
 export const MAX_PREREQUISITES = 6;
 /** As js/assignments/assignment.js has them. */
 export const MAX_ASSIGNMENT_STEPS = 60;
+/** The longest term label: it is appended to an assignment's title, which has 120. */
+export const MAX_TERM = 40;
 const MAX_ASSIGNMENT_TITLE = 120;
 const MAX_ASSIGNMENT_INTRO = 1200;
 
@@ -120,6 +130,8 @@ const PACK_FIELDS = new Set([
   'locales',
   'pinning',
   'courseLevel',
+  'term',
+  'profile',
   'title',
   'summary',
   'audience',
@@ -311,6 +323,40 @@ export function validateCoursePack(c, api) {
       'survey, majors or upper'
     );
 
+  // The term a copy of the course is for (Prompt 168): a short plain label,
+  // written only when the instructor names one, so every older file is valid.
+  if (c.term !== undefined)
+    need(
+      typeof c.term === 'string' &&
+        c.term === c.term.trim() &&
+        c.term.length > 0 &&
+        c.term.length <= MAX_TERM &&
+        !MARKUP.test(c.term),
+      'term',
+      'term',
+      `a short plain label such as "Spring 2027", up to ${MAX_TERM} characters`,
+      { max: MAX_TERM }
+    );
+
+  // A collection (Prompt 164): the only profile, and what it leaves out.
+  if (c.profile !== undefined)
+    need(
+      PROFILES.includes(c.profile),
+      'profile',
+      'profile',
+      'a profile is "collection", or the field is left out'
+    );
+  const collection = c.profile === 'collection';
+  if (collection)
+    for (const k of ['objectives', 'prerequisites', 'courseLevel', 'term'])
+      need(
+        c[k] === undefined,
+        k,
+        'collectionField',
+        `a collection has no "${k}"`,
+        { field: k }
+      );
+
   text(c.title, 'title', true, 120);
   text(c.summary, 'summary', false);
   text(c.audience, 'audience', false, 300);
@@ -387,6 +433,12 @@ export function validateCoursePack(c, api) {
     `from 1 to ${MAX_UNITS} units`,
     { max: MAX_UNITS }
   );
+  need(
+    !collection || units.length === 1,
+    'units',
+    'collectionUnits',
+    'a collection has exactly one unit'
+  );
   const unitIds = new Set();
   units.forEach((u, i) => {
     const at = `units[${i}]`;
@@ -450,6 +502,13 @@ export function validateCoursePack(c, api) {
     );
     const path = item.path ?? 'core';
     need(PATHS.includes(path), `${at}.path`, 'path', 'core, intro or advanced');
+    if (collection)
+      need(
+        kind !== 'assignment' && path === 'core' && item.needs === undefined,
+        at,
+        'collectionItem',
+        'a collection holds items in order: no assignments, no optional paths, no "needs"'
+      );
     if (item.minutes !== undefined || !DERIVED_TIME.has(kind))
       need(
         Number.isInteger(item.minutes) &&

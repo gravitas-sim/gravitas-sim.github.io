@@ -60,6 +60,7 @@ export const ES_COURSEHOME = {
   'courseHome.open.reading': 'Abrir la lectura',
   'courseHome.open.pack': 'Abrir la investigación',
   'courseHome.openNamed': '{action}: {title}',
+  'courseHome.term': 'Periodo: {term}',
   'courseHome.progress': '{done} de {total} investigaciones terminadas',
   'courseHome.status.going': 'En curso',
   'courseHome.status.done': 'Terminada',
@@ -74,6 +75,11 @@ export const ES_COURSEHOME = {
   'courseHome.access.open': 'De lectura libre en línea.',
   'courseHome.access.library': 'A través de tu biblioteca.',
   'courseHome.access.print': 'Impreso.',
+  'courseHome.keep': 'Conservar en mis colecciones',
+  'courseHome.keep.done':
+    'Conservada en este dispositivo. Está en la Biblioteca y en Mi trabajo.',
+  'courseHome.keep.dropped': 'Ya no se conserva.',
+  'courseHome.keep.failed': 'Este navegador no la guardó.',
   'courseHome.made':
     'Versión {version} de este curso, hecha con la plataforma {platform} de Gravitas.',
   'courseHome.printNote':

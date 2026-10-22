@@ -3,11 +3,12 @@
 // -----------------------------------------------------------------------------
 // tests/catalogGovernance.test.js holds the generator and its record; this is
 // what a reader sees (CONTRIBUTING_CONTENT.md, CATALOG.md):
-//   - the Contributed section is there from the start and says nothing has been
-//     contributed yet, until something is;
-//   - a contributed package is listed in that section, credited as its author
-//     asked in the reader's language, with its review date and its history,
-//     and installs like any other;
+//   - there is no Contributed section (Prompt 166 carried out 165's verdict:
+//     the heading and its empty-state line went), and the intro says how to
+//     submit a package;
+//   - a contributed package is listed in the one list with its badge, credited
+//     as its author asked in the reader's language, with its review date and
+//     its history, and installs like any other;
 //   - a withdrawn package is shown to a reader who holds a copy, with the
 //     reason, offers no install or update, and the copy keeps working (the
 //     course still opens) until they remove it; a reader who has no copy never
@@ -93,30 +94,32 @@ const axe = async page => {
   expect(violations.map(v => `${v.id}: ${v.help}`)).toEqual([]);
 };
 
-test.describe('the Contributed section', () => {
-  test('is there, and says so while nothing has been contributed', async ({
+test.describe('a contributed package', () => {
+  test('has no section of its own, and the intro says how to submit one', async ({
     page,
   }) => {
     await open(page);
     await expect(
       page.getByRole('heading', { name: 'Contributed', level: 2 })
-    ).toBeVisible();
-    await expect(page.locator('#catContributedNone')).toBeVisible();
-    await expect(page.locator('#catContributedNone')).toContainText(
+    ).toHaveCount(0);
+    await expect(page.locator('#catContributedSection')).toHaveCount(0);
+    await expect(page.locator('main')).not.toContainText(
+      'Nothing has been contributed yet'
+    );
+    await expect(page.locator('[data-i18n="cat.intro"]')).toContainText(
       'CONTRIBUTING_CONTENT.md'
     );
-    await expect(page.locator('#catContributed article')).toHaveCount(0);
     await axe(page);
   });
 
-  test('lists a contributed package with its author, review and history, and it installs', async ({
+  test('is listed with its badge, author, review and history, and it installs', async ({
     page,
   }) => {
     await serve(page, contributed);
     await open(page);
-    const section = page.locator('#catContributedSection');
-    const card = section.locator(`article[data-entry="${COURSE}"]`);
+    const card = page.locator(`#catList article[data-entry="${COURSE}"]`);
     await expect(card).toBeVisible();
+    await expect(card).toContainText('Contributed');
     await expect(card).toContainText('Contributed by');
     await expect(card).toContainText('Dr. Ana Reyes, Example State University');
     await expect(card).toContainText('Reviewed');
@@ -124,11 +127,7 @@ test.describe('the Contributed section', () => {
     await expect(card).toContainText(
       'Version 1.0.0, 2026-10-09: Accepted into the catalog.'
     );
-    await expect(page.locator('#catContributedNone')).toBeHidden();
-    // It is not also in the first list.
-    await expect(
-      page.locator(`#catList article[data-entry="${COURSE}"]`)
-    ).toHaveCount(0);
+    await expect(page.locator('#catContributedSection')).toHaveCount(0);
     await axe(page);
 
     await card.getByRole('button', { name: 'Install for offline use' }).click();

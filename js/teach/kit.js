@@ -248,6 +248,11 @@ async function build() {
   $('kitReuseSave').hidden = source.kind !== 'activity';
   $('kitReuseNote').textContent =
     source.kind === 'course' ? T('reuse.course') : T('reuse.note');
+  $('kitTermNote').textContent = T('term.note', {
+    what: T(`term.what.${source.kind}`),
+  });
+  $('kitTermWasRow').hidden = source.kind !== 'activity';
+  $('kitTermSave').hidden = true;
 
   $('kitLink').value = url.url;
   const comfortable = url.length <= D.LIMIT;
@@ -307,6 +312,118 @@ async function reuse() {
   }
 }
 
+/**
+ * Make the activity or the course for a new term, and build the kit for it
+ * (Prompt 168). The logic is js/instructorTerm.js; nothing here changes the file
+ * that was opened.
+ */
+async function newTerm() {
+  const out = $('kitTermOut');
+  const list = $('kitTermList');
+  list.replaceChildren();
+  const [mod, words, pack, review, api, assignment] = await Promise.all([
+    import('../instructorTerm.js'),
+    import('../instructorTermText.js'),
+    import('../course/pack.js'),
+    import('../course/review.js'),
+    import('../course/api.js'),
+    import('../assignments/assignment.js'),
+  ]);
+  const lib = {
+    STATUS: review.STATUS,
+    itemsOf: pack.itemsOf,
+    reviewCoursePack: review.reviewCoursePack,
+    upgradeCoursePack: review.upgradeCoursePack,
+    shortHash: review.shortHash,
+    newAssignmentId: api.newAssignmentId,
+  };
+  const W = (id, vars) => words.tr(lang(), id, vars);
+  const parsed = mod.termLabel($('kitTerm').value);
+  if (!parsed.ok) {
+    out.textContent = W(`p.term.${parsed.reason}`, { max: 40 });
+    return;
+  }
+  const { term } = parsed;
+  if (source.kind === 'activity') {
+    const was = mod.termLabel($('kitTermWas').value);
+    source = {
+      ok: true,
+      kind: 'activity',
+      activity: mod.startActivityTerm(
+        reissued ?? source.activity,
+        term,
+        new Date(),
+        was.ok ? was.term : null,
+        assignment.assignmentIdFor
+      ),
+    };
+    reissued = null;
+    await build();
+    $('kitTermOut').textContent = T('term.done.activity', { term });
+    return;
+  }
+  out.textContent = T('reuse.loading');
+  try {
+    const facts = await api.courseFacts(source.pack, {
+      load: id => lesson(id, 'en'),
+    });
+    const made = mod.startTerm(source.pack, facts, {
+      term,
+      today: new Date().toISOString().slice(0, 10),
+      lib,
+    });
+    source = { ok: true, kind: 'course', pack: made.pack };
+    await build();
+    const loc = lang();
+    const moved = made.report.items.filter(r => r.result !== 'same');
+    list.replaceChildren(
+      ...moved.map(r => {
+        const item = D.itemsOf(made.pack).find(x => x.item.id === r.id)?.item;
+        const name =
+          text(item?.title, loc) ||
+          (item?.lesson ? cardTitle(item.lesson, loc) : r.id);
+        return Object.assign(document.createElement('li'), {
+          textContent: W('r.item', {
+            name,
+            standing: W(`st.${r.standing}`),
+            steps:
+              (r.changedSteps.length
+                ? W('r.steps.changed', { n: r.changedSteps.length })
+                : '') +
+              (r.missingSteps.length
+                ? W('r.steps.missing', { n: r.missingSteps.length })
+                : ''),
+          }),
+        });
+      })
+    );
+    $('kitTermSave').hidden = false;
+    $('kitTermOut').textContent = `${T('term.done.course', { term })} ${
+      moved.length === 0
+        ? W('r.same')
+        : moved.length === 1
+          ? W('r.changed.one')
+          : W('r.changed.many', { n: moved.length })
+    }`;
+  } catch {
+    out.textContent = T('reuse.failed');
+  }
+}
+
+function saveCourse() {
+  const p = source.pack;
+  const link = Object.assign(document.createElement('a'), {
+    href: URL.createObjectURL(
+      new Blob([`${JSON.stringify(p, null, 2)}\n`], {
+        type: 'application/json',
+      })
+    ),
+    download: `${p.id}.course.json`,
+  });
+  link.click();
+  setTimeout(() => URL.revokeObjectURL(link.href), 10000);
+}
+
 function saveActivity() {
   const a = source.activity;
   const blob = new Blob([`${JSON.stringify(a, null, 2)}\n`], {
@@ -358,6 +475,9 @@ function wire() {
   });
   $('kitReuseCheck').addEventListener('click', reuse);
   $('kitReuseSave').addEventListener('click', saveActivity);
+  $('kitTermGo').addEventListener('click', newTerm);
+  $('kitTermSave').addEventListener('click', saveCourse);
+  $('kitCollOpen').addEventListener('click', openCollections);
   $('kitReuseUse').addEventListener('click', async () => {
     if (!reissued) return;
     source = { ok: true, kind: 'activity', activity: reissued };
@@ -365,6 +485,16 @@ function wire() {
     await build();
     $('kitReuseOut').textContent = T('reuse.reissued');
   });
+}
+
+/** The collection editor (Prompt 164): its module loads when the section is opened. */
+async function openCollections() {
+  const host = $('kitCollections');
+  if (!host.hidden) return;
+  host.hidden = false;
+  $('kitCollOpen').setAttribute('aria-expanded', 'true');
+  const { mountMaker } = await import('../instructorCollections.js');
+  await mountMaker(host);
 }
 
 async function init() {
@@ -386,6 +516,7 @@ async function init() {
       if (source) build();
     },
   });
+  if (location.hash === '#collections') openCollections();
   if (/^#[ac]\d/.test(location.hash)) {
     const roster = new URLSearchParams(location.search).get('roster');
     await take(location.hash, roster);

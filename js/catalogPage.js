@@ -402,19 +402,10 @@ function render() {
   const q = $('catSearch').value.trim();
   const type = $('catType').value || 'all';
   const shown = c.entries.filter(e => matches(e, q, type));
-  const contributed = shown.filter(e => e.origin === 'contributed');
-  $('catList').replaceChildren(
-    ...shown.filter(e => e.origin !== 'contributed').map(entryItem)
-  );
-  // The contributed section is always there once the catalog has loaded, so a
-  // visitor can see that the catalog takes them and where; while none are
-  // listed it says so instead of showing an empty list.
-  const anyContributed = c.entries.some(
-    e => e.origin === 'contributed' && listed(e)
-  );
-  $('catContributed').replaceChildren(...contributed.map(entryItem));
-  $('catContributedNone').hidden = anyContributed;
-  $('catContributedSection').hidden = false;
+  // One list. A package written outside the team carries its own badge and a
+  // "Contributed by" row (Prompt 166 retired the separate section: 165's
+  // verdict, SURFACE_RETIREMENT_GATE.md); the intro says how to submit one.
+  $('catList').replaceChildren(...shown.map(entryItem));
   const total = c.entries.filter(listed).length;
   $('catCount').textContent = shown.length
     ? t('cat.count', { shown: shown.length, total })

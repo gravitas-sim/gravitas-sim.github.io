@@ -203,26 +203,69 @@ function sections() {
       ids: [a.key],
     })
   );
-  out.mwCourses = m.courses.map(c =>
-    item({
-      title: pick(c.title),
-      href: c.href,
-      open: L('Open course', 'Abrir curso'),
-      ids: [],
-      buttons: false,
-      extra: `<ul class="mw-units">${c.units
-        .map(
-          u =>
-            `<li>${esc(pick(u.title))}: ${esc(
+  out.mwCourses = [
+    ...(m.collections?.saved
+      ? [
+          item({
+            title: L('Saved items', 'Elementos guardados'),
+            facts: [
               L(
-                `${u.finished} of ${u.total} finished, ${u.begun} begun`,
-                `${u.finished} de ${u.total} terminadas, ${u.begun} empezadas`
-              )
-            )}</li>`
-        )
-        .join('')}</ul>`,
-    })
-  );
+                `${m.collections.saved} saved`,
+                `${m.collections.saved} guardados`
+              ),
+            ],
+            href: '/library/',
+            open: L('Open in the Library', 'Abrir en la Biblioteca'),
+            ids: [],
+            buttons: false,
+          }),
+        ]
+      : []),
+    ...(m.collections?.received ?? []).map(c =>
+      item({
+        title: pick(c.title) || c.title.en,
+        facts: [
+          L('Collection', 'Colección'),
+          L(`${c.n} items`, `${c.n} elementos`),
+        ],
+        href: '/library/',
+        open: L('Open in the Library', 'Abrir en la Biblioteca'),
+        ids: [],
+        buttons: false,
+      })
+    ),
+    ...(m.terms ?? []).map(c =>
+      item({
+        title: pick(c.title) || c.title.en,
+        facts: [
+          L(`Term: ${c.term}`, `Periodo: ${c.term}`),
+          c.when ? L(`opened ${day(c.when)}`, `abierto el ${day(c.when)}`) : '',
+        ],
+        ids: [],
+        buttons: false,
+      })
+    ),
+    ...m.courses.map(c =>
+      item({
+        title: pick(c.title),
+        href: c.href,
+        open: L('Open course', 'Abrir curso'),
+        ids: [],
+        buttons: false,
+        extra: `<ul class="mw-units">${c.units
+          .map(
+            u =>
+              `<li>${esc(pick(u.title))}: ${esc(
+                L(
+                  `${u.finished} of ${u.total} finished, ${u.begun} begun`,
+                  `${u.finished} de ${u.total} terminadas, ${u.begun} empezadas`
+                )
+              )}</li>`
+          )
+          .join('')}</ul>`,
+      })
+    ),
+  ];
   out.mwExperiments = m.experiments.map(x =>
     item({
       title: x.title,
