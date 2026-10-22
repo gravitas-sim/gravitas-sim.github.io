@@ -56,7 +56,6 @@ const pair = (en, es) => {
 };
 
 let library = null;
-let state = null;
 
 /**
  * Mount the editor.
@@ -76,7 +75,7 @@ export async function mountMaker(host) {
   const lang = () => (document.documentElement.lang === 'es' ? 1 : 0);
   const L = (en, es) => [en, es][lang()];
   const have = readCollections().saved;
-  state = {
+  const state = {
     items: have ? JSON.parse(JSON.stringify(itemsOfCollection(have))) : [],
     title: { en: '', es: '' },
     summary: { en: '', es: '' },
@@ -89,9 +88,9 @@ export async function mountMaker(host) {
 
   /** What the form says, as a package, and what is wrong with it in words. */
   const build = () => {
-    const missing = [];
+    const given = [];
     const need = (value, what) => {
-      if (value && !value.es) missing.push(what);
+      if (value) given.push({ value, what });
       return value;
     };
     const title = need(
@@ -114,9 +113,10 @@ export async function mountMaker(host) {
       );
       return { ...rest, ...(note ? { studentNote: note } : {}) };
     });
-    const spanish =
-      [title, summary, ...items.map(i => i.studentNote)].some(t => t?.es) ||
-      false;
+    const spanish = given.some(g => g.value.es);
+    const missing = spanish
+      ? given.filter(g => !g.value.es).map(g => g.what)
+      : [];
     const withEsOf = t =>
       t ? (spanish ? { ...t, esOf: shortHash(t.en) } : { en: t.en }) : t;
     const out = {
@@ -302,6 +302,11 @@ export async function mountMaker(host) {
             })
           )
         );
+        const depth = row.querySelector('select');
+        if (depth) {
+          depth.value = item.depth ?? '';
+          depth.dataset.f = 'depth';
+        }
         row.dataset.item = item.id;
         const [a, b, c] = row.querySelectorAll('.coll-row-actions button');
         a.dataset.act = 'up';
@@ -471,16 +476,20 @@ export async function mountMaker(host) {
     );
   };
   host.oninput = host.onchange = () => {
+    if (!host.querySelector('[data-f="title.en"]')) return;
     readForm();
     persist();
     state.link = '';
     const out = host.querySelector('#coll-link');
     if (out) out.value = '';
   };
-  new MutationObserver(() => {
-    readForm();
+  const watch = new MutationObserver(() => {
+    // A host that has left the page lets its observer go.
+    if (!host.isConnected) return watch.disconnect();
+    if (host.querySelector('[data-f="title.en"]')) readForm();
     draw();
-  }).observe(document.documentElement, {
+  });
+  watch.observe(document.documentElement, {
     attributes: true,
     attributeFilter: ['lang'],
   });
