@@ -299,14 +299,17 @@ export function openTermPanel(ctx) {
             })
           )
         : null,
+      h('p', { className: 'ui-hint' }, T('r.next')),
       h(
-        'p',
-        { className: 'ui-hint' },
-        T('r.next'),
-        ' ',
+        'div',
+        { className: 'ui-toolbar' },
         h(
           'a',
-          { href: `${ctx.root}instructors/submissions/`, id: 'cb-term-review' },
+          {
+            className: 'ui-button',
+            href: `${ctx.root}instructors/submissions/`,
+            id: 'cb-term-review',
+          },
           T('r.review')
         )
       ),

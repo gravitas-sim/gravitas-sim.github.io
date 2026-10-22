@@ -433,3 +433,106 @@ test('the kit starts a new term for an activity and for a course', async ({
   expect(now.i).not.toBe(was.i);
   expect(now.s).toEqual(was.s);
 });
+
+// Every control and link this path added, measured where a finger and a
+// keyboard meet it: at least 24 CSS pixels each way (the axe target-size rule
+// fails on Linux font metrics only, so the box is asserted here), inside the
+// viewport, and no sideways scroll, on a desktop and a phone, in both
+// languages and both light and dark.
+const SIZES = [
+  { name: '1280', width: 1280, height: 900 },
+  { name: '390', width: 390, height: 844 },
+];
+
+async function smallOrOutside(page, root) {
+  return page.evaluate(selector => {
+    const bad = [];
+    const vw = document.documentElement.clientWidth;
+    for (const host of document.querySelectorAll(selector)) {
+      for (const el of host.querySelectorAll(
+        'a[href], button, input, select, textarea, summary'
+      )) {
+        const r = el.getBoundingClientRect();
+        if (!r.width && !r.height) continue; // hidden
+        const label = (
+          el.id ||
+          el.textContent ||
+          el.getAttribute('aria-label') ||
+          el.tagName
+        )
+          .trim()
+          .slice(0, 40);
+        if (r.width < 24 || r.height < 24)
+          bad.push(`${label}: ${Math.round(r.width)}x${Math.round(r.height)}`);
+        if (r.left < -0.5 || r.right > vw + 0.5)
+          bad.push(
+            `${label}: outside the viewport (${Math.round(r.left)}..${Math.round(r.right)} of ${vw})`
+          );
+      }
+    }
+    if (document.documentElement.scrollWidth > vw + 1)
+      bad.push(
+        `sideways scroll: ${document.documentElement.scrollWidth} > ${vw}`
+      );
+    return bad;
+  }, root);
+}
+
+for (const size of SIZES) {
+  for (const locale of ['en', 'es']) {
+    for (const theme of ['midnight', 'daylight']) {
+      test(`the new controls fit at ${size.name} px, ${locale}, ${theme}`, async ({
+        page,
+      }) => {
+        test.setTimeout(180_000);
+        await page.setViewportSize({ width: size.width, height: size.height });
+        await page.addInitScript(
+          ([l, t]) => {
+            localStorage.setItem('gravitas_orientation_seen_v1', '1');
+            localStorage.setItem('gravitas_welcome_seen_v1', '1');
+            localStorage.setItem('gravitas_locale', l);
+            localStorage.setItem('gravitas_theme', t);
+          },
+          [locale, theme]
+        );
+        const W = WORDS[locale];
+
+        // Teach: the first section.
+        await page.goto('/teaching/');
+        await expect(page.locator('#teachMinimal')).toBeVisible();
+        expect(await smallOrOutside(page, '#teachStart')).toEqual([]);
+
+        // The course builder: the form, then the result.
+        await page.goto('/studio/course/?use=intro-astronomy');
+        await expect(page.locator('#cb-term-go')).toBeVisible({
+          timeout: 60_000,
+        });
+        expect(await smallOrOutside(page, '#cb-term-panel')).toEqual([]);
+        await page.locator('#cb-term-input').fill(W.term);
+        await page.locator('#cb-term-go').click();
+        await expect(page.locator('#cb-term-ready')).toBeVisible({
+          timeout: 60_000,
+        });
+        expect(await smallOrOutside(page, '#cb-term-panel')).toEqual([]);
+
+        // The kit's new-term block.
+        await page.goto(
+          await page.locator('#cb-term-kit').getAttribute('href')
+        );
+        await expect(page.locator('#kitTermGo')).toBeVisible({
+          timeout: 30_000,
+        });
+        expect(await smallOrOutside(page, '#kitReuse')).toEqual([]);
+
+        // The review page's archive section, and the page as a whole.
+        await page.goto('/instructors/submissions/');
+        await expect(page.locator('#archiveSave')).toBeVisible();
+        expect(await smallOrOutside(page, '#archTitle, #archiveSave')).toEqual(
+          []
+        );
+        const box = await page.locator('#archiveSave').boundingBox();
+        expect(box.height).toBeGreaterThanOrEqual(24);
+      });
+    }
+  }
+}
