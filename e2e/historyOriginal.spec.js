@@ -204,6 +204,75 @@ test.describe('the first sketch', () => {
     }
   );
 
+  test(
+    'the freeze notice reads in both languages, offers the way out and blocks nothing',
+    { tag: '@cross-browser' },
+    async ({ page }) => {
+      await watchRequests(page);
+      for (const size of [
+        { width: 1280, height: 720 },
+        { width: 390, height: 844 },
+      ]) {
+        await page.setViewportSize(size);
+        await page.goto(HREF, { waitUntil: 'load' });
+        const notice = page.locator('#freezeNotice');
+        await expect(notice).toBeVisible();
+        await expect(notice).toHaveAttribute('role', 'note');
+
+        // The same words in English and in Spanish, each in its own language.
+        await expect(notice.locator('p[lang="en"]')).toContainText(
+          'This is the first Gravitas, kept as a record'
+        );
+        await expect(notice.locator('p[lang="en"]')).toContainText(
+          'no new features'
+        );
+        await expect(notice.locator('p[lang="es"]')).toContainText(
+          'Este es el primer Gravitas, conservado como registro'
+        );
+        await expect(notice.locator('p[lang="es"]')).toContainText(
+          'nuevas funciones'
+        );
+
+        // Wholly on screen, at the foot, clear of the controls at the top, and
+        // each link to the current Gravitas a target of at least 24 px.
+        const box = await notice.boundingBox();
+        expect(box.x).toBeGreaterThanOrEqual(0);
+        expect(box.x + box.width).toBeLessThanOrEqual(size.width + 0.5);
+        expect(box.y + box.height).toBeLessThanOrEqual(size.height + 0.5);
+        expect(box.y + box.height).toBeGreaterThan(size.height - 1);
+        const controls = await page.locator('.ui-container').boundingBox();
+        expect(controls.y + controls.height).toBeLessThan(box.y);
+        const links = notice.getByRole('link');
+        await expect(links).toHaveCount(2);
+        for (const i of [0, 1]) {
+          await expect(links.nth(i)).toHaveAttribute('href', '/');
+          const b = await links.nth(i).boundingBox();
+          expect(b.height).toBeGreaterThanOrEqual(24);
+          expect(b.width).toBeGreaterThanOrEqual(24);
+          expect(b.x).toBeGreaterThanOrEqual(0);
+          expect(b.x + b.width).toBeLessThanOrEqual(size.width + 0.5);
+        }
+
+        // It adds no layer between a click and the canvas: the strip lets a
+        // click through, and only the links catch one.
+        const hit = await page.evaluate(
+          ({ x, y }) => document.elementFromPoint(x, y)?.id,
+          { x: size.width - 4, y: size.height - 2 }
+        );
+        expect(hit).toBe('simulationCanvas');
+        const [a, b] = await Promise.all([
+          links.nth(0).evaluate(el => getComputedStyle(el).pointerEvents),
+          notice.evaluate(el => getComputedStyle(el).pointerEvents),
+        ]);
+        expect([a, b]).toEqual(['auto', 'none']);
+
+        // The old simulation still runs underneath, and the page is the one
+        // file committed.
+        await expect(page.locator('#overlay')).toContainText('Status: Running');
+      }
+    }
+  );
+
   test('the application starts without fetching it', async ({ page, app }) => {
     const seen = await watchRequests(page);
     await app.boot();

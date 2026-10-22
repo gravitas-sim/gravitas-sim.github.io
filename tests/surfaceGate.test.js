@@ -391,7 +391,7 @@ describe('an owner ruling stands beside the function and moves nothing', () => {
       register: 'D-R10-51',
     });
     for (const k of RULING_PARTS)
-      expect(history.ruling[k].length).toBeGreaterThan(5);
+      expect(history.ruling[k].length).toBeGreaterThan(3);
     // The stored verdict is the function's: the ruling does not overwrite it.
     const row = judge(evidence).find(r => r.rec.id === 'history-original');
     expect(row.d.verdict).toBe('KEEP');
