@@ -135,6 +135,8 @@ describe('FNV-1a', () => {
       'js/bodyVisuals.js': 'a silhouette seed: the basis xor the body id',
       'js/analysis/modelCompare.js':
         'a fit data key over the bytes of floats: a bytes form of the loop in hash.js would add 0.3 KB to every route that has the module, for one caller',
+      'js/instructorNotes.js':
+        'an instructor-bundle source: importing js/hash.js (or js/composer/compile.js) adds a file to the bundle closure, which tests/instructorDigest.test.js holds under 270 files and 269 are in use (D-R10-43); tests/instructorNotes.test.js holds the copy equal to the ledger digest',
       'js/composer/compile.js':
         'a request on the composer and the course-packs routes (D-R10-19)',
       'js/experiments/canonicalState.js':

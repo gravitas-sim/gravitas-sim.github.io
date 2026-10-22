@@ -46,7 +46,11 @@ as you say where it came from.
   demonstrations you can open as embedded figures.
 - [/instructors/](https://gravitas-sim.online/instructors/) has the guides,
   learning objectives and answer keys. It asks for a passphrase, because the
-  answer keys are in it. Email me for it.
+  answer keys are in it. To ask for it, email me from an address your institution
+  issues; the form of words, what I check and how long it takes are in
+  [`INSTRUCTOR_MATERIALS.md`](INSTRUCTOR_MATERIALS.md), "Who gets the
+  passphrase, and how". A department can also build its own bundle under its
+  own passphrase, which I never see (same document).
 - The user manual is [`Gravitas_User_Manual.pdf`](Gravitas_User_Manual.pdf).
 
 If you do use it with a class I would genuinely like to hear how it went,

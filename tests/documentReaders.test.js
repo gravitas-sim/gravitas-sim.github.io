@@ -71,6 +71,7 @@ const PARSES = {
   'js/lecture.js': [1, 'none', OWN],
   'js/world.js': [1, 'none', OWN],
   'js/settingsPanel.js': [1, 'none', OWN],
+  'js/settingsSchema.js': [1, 'none', OWN],
   'js/controls.js': [1, 'none', OWN],
   'js/welcome.js': [
     2,

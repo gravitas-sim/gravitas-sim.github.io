@@ -58,8 +58,13 @@ describe('the profile holds everything a 2.0.0 student could have', () => {
     const keys = Object.keys(profile.localStorage);
     // Keys that did not exist in 2.0.0, so no 2.0.0 student could hold one:
     // gravitas_motion (Prompt 155, a one-word preference read by js/quality.js),
-    // gravitas_resume (Prompt 163, the one resume record).
-    const SINCE_2_0_0 = ['gravitas_motion', 'gravitas_resume'];
+    // gravitas_resume (Prompt 163, the one resume record), gravitas_disclosure
+    // (Prompt 167, which More sections the reader left open).
+    const SINCE_2_0_0 = [
+      'gravitas_motion',
+      'gravitas_resume',
+      'gravitas_disclosure',
+    ];
     const bare = KEYS.map(([p]) => p).filter(
       p => !SINCE_2_0_0.includes(p) && !keys.some(k => k.startsWith(p))
     );

@@ -385,6 +385,59 @@ A section that opens. The summary is semibold, at least 24px tall, with
 The marker turns with `[open]`, which assistive technology announces as
 expanded or collapsed; nothing is hidden by script.
 
+## More: `details.more` (task-aware disclosure)
+
+Simple by default, deeper on request, and never hiding what a task asks the
+student to reason about (Roadmap III Prompt 167). One pattern serves four
+surfaces: the lesson panel (`#investigationMore`: help, depth switching, the
+progress backup and Restart), an instrument panel (`#investigationToolMore`:
+sliders and presets the step does not ask about), the settings dialog (the
+`.settings-advanced` section: the simulation, black holes, compact objects,
+numerical accuracy and performance), and the lesson plot's options.
+
+```html
+<details class="more" data-more="lesson">
+  <summary>More</summary>
+  <div class="more-body">...</div>
+</details>
+```
+
+- **Native `<details>`.** The browser supplies Enter and Space on the summary,
+  the expanded state a screen reader announces and find-in-page, so collapsed
+  content stays discoverable by search. Nothing is hidden by script.
+- **The summary** is a real target: 32px (24px is the floor) and 44px under a
+  coarse pointer, with the panel's focus ring.
+- **When it starts open** (`moreOpen`, `js/settingsSchema.js`): what the
+  student last chose for that surface comes first, then an activity's
+  `'open'` or `'shut'`, then the depth's default: shut at the core and
+  quantitative depths and the survey course level, open at the advanced depth.
+  The student can always open everything and can always fold it again.
+- **Remembered per surface** in `gravitas_disclosure` (a preference: a map of
+  surface to a flag, device-local, never in a share link). A program that opens
+  a More for a reason of its own (a settings search that found something inside
+  it) calls `setMore`, which neither remembers nor announces.
+- **Announced once per change** through the page's live region
+  (`announce`, `js/notify.js`), by a student's own press only.
+- **Every control is reachable in two actions**: open More, then use it. The
+  explainer for an instrument stays in its panel header, one press away folded
+  or open, and the lesson's Help lists it again.
+
+**The task rule.** A step declares the quantities it asks about in the metadata
+it already has (`declaredQuantities`, `js/widgets.js`: the fields and their
+units, a numeric answer and its unit, the live readout it names, a derived
+quantity, a plot, a tolerance). A control or readout that produces a declared
+quantity, its unit or its uncertainty cannot be folded on that step:
+`toolFold` keeps every slider and every preset where it is on a step that
+declares a quantity or sends the student to measure or explore, folds the
+sliders after the first on a step that only reads, and folds only the presets
+on a step that asks a question with no number. Readouts never fold.
+`tests/progressiveDisclosure.test.js` reads every shipped step against this.
+
+**A new control goes behind the disclosure** unless its decision-register row
+says why not, and never when the task rule applies. The default-view control
+counts are committed in `tools/disclosure-ceilings.json` and held by
+`e2e/progressiveDisclosure.spec.js`; a count that rises fails.
+
 ## Data table: `.ui-table` and `.ui-table-wrap`
 
 ```html

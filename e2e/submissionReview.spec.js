@@ -19,7 +19,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import AxeBuilder from '@axe-core/playwright';
 
-import { test, expect } from './fixtures.js';
+import { test, expect, openMore } from './fixtures.js';
 import { buildBackup } from '../js/investigations/progressBackup.js';
 import { stepKey } from '../js/investigations/progressSchema.js';
 import {
@@ -34,11 +34,8 @@ import {
 import { fromCsv } from '../js/csv.js';
 import { stepKey as tabKey } from './keyboard.js';
 
-/** The backup buttons are in the lesson panel's Progress disclosure. */
-const openBackup = page =>
-  page.locator('.inv-backup').evaluate(el => {
-    el.open = true;
-  });
+/** The backup buttons are in the lesson panel's More (Prompt 167). */
+const openBackup = openMore;
 
 const kepler = await import('../js/data/investigations/keplers-laws.js').then(
   m => m.default || Object.values(m)[0]
