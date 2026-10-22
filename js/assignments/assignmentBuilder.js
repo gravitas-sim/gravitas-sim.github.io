@@ -31,6 +31,17 @@ import {
   resolveSelection,
   validateSelection,
 } from './assignment.js';
+import {
+  MAX_DUE,
+  MAX_NOTE,
+  applyAdaptation,
+  checkAdaptation,
+  lessonOrder,
+  mergeOrder,
+  moveStep,
+  noteFor,
+} from './adapt.js';
+import { ensureAdaptMessages, problemText } from './adaptText.js';
 import { lessonProvider } from './provider.js';
 import { shortRoute } from './shortRoute.js';
 import { assignmentLink } from './assignmentLink.js';
@@ -41,6 +52,12 @@ let lesson = null;
 let depth = null;
 let chosen = new Set();
 let built = null;
+/** The order the steps come in, once the instructor has chosen one. */
+let order = [];
+/** The instructor's words per step, {sid: [en, es]}. */
+let notes = {};
+/** What the order list was last drawn from, so typing never redraws it. */
+let drawn = '';
 /** The encoded link for the assignment just built, for the printable page. */
 let builtLink = null;
 
@@ -111,11 +128,15 @@ export async function openBuilder(loaded) {
     depth = 'core';
   } else lesson = loaded;
   chosen = new Set();
+  order = [];
+  notes = {};
+  drawn = '';
   // ?route=short starts from the derived short route (./shortRoute.js).
   if (/[?&]route=short\b/.test(location.search))
     chosen = new Set(shortRoute(lesson).chosen);
   built = null;
   builtLink = null;
+  await ensureAdaptMessages().catch(() => {});
   mount();
   render();
 }
@@ -164,6 +185,31 @@ function mount() {
       </div>
 
       <ol id="assignSteps" class="assignment-steps"></ol>
+
+      <section class="assignment-adapt" aria-labelledby="adaptTitle">
+        <h3 id="adaptTitle">${esc(t('adapt.title'))}</h3>
+        <p class="assignment-hint">${esc(t('adapt.hint'))}</p>
+        <label class="assignment-field">
+          <span>${esc(t('adapt.due'))}</span>
+          <input id="assignDue" type="text" maxlength="${MAX_DUE}" aria-describedby="assignDueHelp" />
+        </label>
+        <p id="assignDueHelp" class="assignment-hint">${esc(t('adapt.due.help'))}</p>
+        <label class="assignment-row">
+          <input id="assignMarking" type="checkbox" />
+          <span>${esc(t('adapt.marking'))}</span>
+        </label>
+        <label class="assignment-field">
+          <span>${esc(t('adapt.more'))}</span>
+          <select id="assignMore">
+            <option value="">${esc(t('adapt.more.depth'))}</option>
+            <option value="open">${esc(t('adapt.more.open'))}</option>
+            <option value="shut">${esc(t('adapt.more.shut'))}</option>
+          </select>
+        </label>
+        <h4 id="adaptOrderTitle">${esc(t('adapt.order'))}</h4>
+        <ol id="adaptOrder" class="assignment-steps" aria-labelledby="adaptOrderTitle"></ol>
+        <p id="adaptStatus" class="assignment-hint" role="status" aria-live="polite"></p>
+      </section>
 
       <div id="assignAdded" class="assignment-added"></div>
       <p id="assignProblem" class="assignment-problem" role="status" aria-live="polite"></p>
@@ -257,6 +303,7 @@ function render() {
     box.checked = chosen.has(step.sid);
     box.dataset.sid = step.sid;
     box.onchange = () => {
+      $('adaptStatus').textContent = '';
       if (box.checked) chosen.add(step.sid);
       else chosen.delete(step.sid);
       render();
@@ -298,6 +345,10 @@ function render() {
     list.appendChild(li);
   });
 
+  const opts = () => ({ depth: depth ?? undefined });
+  order = mergeOrder(lesson, order, resolved.sids, opts());
+  renderOrder();
+
   $('assignCount').textContent = t('assign.count', {
     chosen: chosen.size,
     included: resolved.sids.length,
@@ -319,6 +370,143 @@ function render() {
     ? ''
     : t(`assign.error.${check.reason}`, check.detail || {});
   $('assignBuild').disabled = !check.ok;
+}
+
+const titleOf = sid => lesson.steps.find(s => s.sid === sid)?.title || sid;
+
+/** Say what was done, or why it was not. @param {?Array} problems */
+function say(done, problems) {
+  $('adaptStatus').textContent = problems?.length
+    ? t('adapt.refused', { why: problemText(problems[0], titleOf) })
+    : done;
+}
+
+/** Move a step a place; the graph decides. */
+function move(sid, by, act) {
+  const o = { depth: depth ?? undefined, base: lessonOrder(lesson, order) };
+  const got = moveStep(lesson, order, sid, by, o);
+  if (got.problems.length) return say('', got.problems);
+  order = got.list;
+  refocus = { sid, act };
+  render();
+  say(t('adapt.moved', { step: titleOf(sid) }));
+}
+
+/**
+ * Take a step out of the activity, or refuse naming what needs it: a step
+ * another step reads, reveals through or stands under cannot go, and one the
+ * selection would bring straight back is refused with the reason it gave.
+ */
+function removeStep(sid) {
+  const without = order.filter(x => x !== sid);
+  const o = { depth: depth ?? undefined, base: order };
+  const check = checkAdaptation(lesson, without, o);
+  if (!check.ok) return say('', check.problems);
+  const rest = [...chosen].filter(x => x !== sid);
+  const again = resolveSelection(lesson, rest, depth ?? undefined);
+  const why = again.added.find(a => a.sid === sid);
+  if (why) {
+    const needer = lesson.steps.find(s => s.sid === why.forSid);
+    const key =
+      why.reason === 'requires'
+        ? 'assign.added.requires'
+        : 'assign.added.setup';
+    $('adaptStatus').textContent = t('adapt.refused', {
+      why: t(key, {
+        scenario: why.scenario || '—',
+        step: needer?.title || why.forSid,
+      }),
+    });
+    return;
+  }
+  chosen = new Set(rest);
+  refocus = { sid: without[0] ?? null, act: 'remove' };
+  render();
+  say(t('adapt.removed', { step: titleOf(sid) }));
+}
+
+/** Where focus goes after a redraw, so a keyboard instructor keeps their place. */
+let refocus = null;
+
+/** Draw the order list, unless it is already what is on screen. */
+function renderOrder() {
+  const list = $('adaptOrder');
+  const signature = `${order.join('|')}#${depth}`;
+  if (signature !== drawn) {
+    drawn = signature;
+    list.innerHTML = '';
+    if (!order.length) {
+      const li = document.createElement('li');
+      li.className = 'assignment-step assignment-hint';
+      li.textContent = t('adapt.order.empty');
+      list.appendChild(li);
+    }
+    order.forEach((sid, i) => {
+      const li = document.createElement('li');
+      li.className = 'assignment-step';
+      li.dataset.sid = sid;
+      const name = document.createElement('span');
+      name.style.flex = '1 1 12em';
+      name.textContent = `${i + 1}. ${titleOf(sid)}`;
+      li.appendChild(name);
+      const button = (act, by, disabled) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'ui-button';
+        b.dataset.act = act;
+        b.disabled = disabled;
+        b.textContent = t(`adapt.${act}`);
+        b.setAttribute(
+          'aria-label',
+          t(`adapt.${act}.label`, { step: titleOf(sid) })
+        );
+        b.onclick = () =>
+          act === 'remove' ? removeStep(sid) : move(sid, by, act);
+        li.appendChild(b);
+      };
+      button('up', -1, i === 0);
+      button('down', 1, i === order.length - 1);
+      button('remove', 0, false);
+      const more = document.createElement('details');
+      more.style.flexBasis = '100%';
+      const sum = document.createElement('summary');
+      sum.textContent = t('adapt.note');
+      more.appendChild(sum);
+      ['en', 'es'].forEach((lang, k) => {
+        const field = document.createElement('label');
+        field.className = 'assignment-field';
+        const cap = document.createElement('span');
+        cap.textContent = t(`adapt.note.${lang}`);
+        const area = document.createElement('textarea');
+        area.rows = 2;
+        area.maxLength = MAX_NOTE;
+        area.lang = lang;
+        area.value = notes[sid]?.[k] ?? '';
+        area.oninput = () => {
+          const pair = notes[sid] || ['', ''];
+          pair[k] = area.value;
+          notes[sid] = pair;
+        };
+        field.append(cap, area);
+        more.appendChild(field);
+      });
+      if (notes[sid]?.some(Boolean)) more.open = true;
+      li.appendChild(more);
+      list.appendChild(li);
+    });
+  }
+  if (refocus) {
+    const row =
+      refocus.sid && list.querySelector(`li[data-sid="${refocus.sid}"]`);
+    const pick = a => row?.querySelector(`[data-act="${a}"]:not(:disabled)`);
+    (
+      pick(refocus.act) ||
+      pick('down') ||
+      pick('up') ||
+      row?.querySelector('button')
+    )?.focus();
+    refocus = null;
+  }
 }
 
 /** Turn the selection into a payload and a link. */
@@ -343,15 +531,33 @@ async function build() {
   $('assignPrint').disabled = true;
   $('assignDownload').disabled = true;
 
-  built = buildAssignment({
-    lesson,
-    chosen: [...chosen],
-    title: $('assignName').value,
-    intro: $('assignIntro').value,
-    fingerprint: stepFingerprint,
-    provider: lessonProvider(lesson.id),
-    depth,
+  // The order is proved against the step graph before anything is written.
+  const graph = checkAdaptation(lesson, order, {
+    depth: depth ?? undefined,
+    base: lessonOrder(lesson, order),
   });
+  if (!graph.ok) return say('', graph.problems);
+
+  built = applyAdaptation(
+    buildAssignment({
+      lesson,
+      chosen: [...chosen],
+      title: $('assignName').value,
+      intro: $('assignIntro').value,
+      fingerprint: stepFingerprint,
+      provider: lessonProvider(lesson.id),
+      depth,
+      markingNote: $('assignMarking').checked,
+      more: $('assignMore').value || null,
+    }),
+    {
+      lesson,
+      order,
+      notes,
+      due: $('assignDue').value,
+      fingerprint: stepFingerprint,
+    }
+  );
 
   const link = await assignmentLink(built);
   // The class code rides on the query string, where the lesson puts it in
@@ -371,7 +577,10 @@ async function build() {
   if (roster) kit.searchParams.set('roster', roster);
   kit.hash = link.fragment;
   $('assignKit').href = kit.href;
-  $('assignPreview').href = link.url;
+  // Progress-free: the page reads none of the saved record and writes none.
+  const preview = new URL(link.url);
+  preview.searchParams.set('preview', 'student');
+  $('assignPreview').href = preview.href;
   const course = new URL('/studio/course/', location.origin);
   course.searchParams.set('activity', link.fragment);
   $('assignCourse').href = course.href;
@@ -405,8 +614,9 @@ function printInstructions() {
   const rows = built.s
     .map(sid => {
       const step = byId.get(sid);
+      const note = noteFor(built.x, sid, getLocale());
       return `<li><strong>${esc(step?.title || sid)}</strong>
-        <span class="t">${esc(step?.type || '')}</span></li>`;
+        <span class="t">${esc(step?.type || '')}</span>${note ? `<br><em>${esc(note)}</em>` : ''}</li>`;
     })
     .join('');
 
@@ -431,6 +641,7 @@ function printInstructions() {
     <h1>${esc(built.t || t('assign.title'))}</h1>
     <p class="sub">${esc(lesson.title)} — ${esc(t('assign.print.steps', { n: built.s.length }))}${built.d ? ` — ${esc(t('inv.depth.state', { depth: t(`inv.depth.${built.d}`) }))}` : ''}</p>
     ${built.n ? `<p>${esc(built.n)}</p>` : ''}
+    ${built.u ? `<p><strong>${esc(t('adapt.due.shown', { due: built.u }))}</strong></p>` : ''}
     <ol>${rows}</ol>
     <div class="meta">
       <p>${esc(t('assign.print.open'))}</p>

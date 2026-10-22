@@ -31,8 +31,10 @@ export function checkLibrary(doc) {
  * @returns {string} A same-origin address
  */
 export function previewRoute(entry) {
-  const [path, hash] = entry.route.split('#');
-  const mark = `preview=student`;
+  const cut = entry.route.indexOf('#');
+  const path = cut < 0 ? entry.route : entry.route.slice(0, cut);
+  const hash = cut < 0 ? undefined : entry.route.slice(cut + 1);
+  const mark = 'preview=student';
   if (entry.format === 'lesson') {
     const id = entry.id.slice(entry.id.indexOf(':') + 1);
     return `/?author=${id}&view=student&${mark}`;

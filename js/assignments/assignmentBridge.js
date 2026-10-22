@@ -77,5 +77,24 @@ export async function openAssignmentFromUrl() {
         current: pin.current ? `${pin.current.id} ${pin.current.version}` : '',
       })
     );
+  // The instructor's own words and what the lesson changed under the link, on
+  // the open panel (Prompt 175). Loaded only when there is something to show.
+  const a = read.assignment;
+  if (
+    a.x ||
+    a.u ||
+    binding?.missing ||
+    binding?.changed ||
+    ['major', 'moved'].includes(pin.status)
+  )
+    import('./adapted.js')
+      .then(m =>
+        m.showAdapted({
+          assignment: a,
+          active: investigations.activeAssignment,
+          binding: investigations.activeAssignmentBinding,
+        })
+      )
+      .catch(() => {});
   return true;
 }

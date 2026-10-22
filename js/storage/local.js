@@ -1,6 +1,8 @@
 import {
   KEY_ASSIGNMENT_PREFIX,
+  KEY_COURSE_LEVEL,
   KEY_COURSE_PREFIX,
+  KEY_COURSE_PREVIEW,
   KEY_EVIDENCE_NOTEBOOK,
   KEY_EXPERIMENT,
   KEY_EXPERIMENT_CHECKPOINT_PREFIX,
@@ -46,8 +48,13 @@ export const setPreview = on => {
   preview = Boolean(on);
   held.clear();
 };
+// Two keys under the course prefix are not the record (js/storage/index.js KEYS).
+const OTHER = [KEY_COURSE_LEVEL, KEY_COURSE_PREVIEW];
 const kept = (key, store) =>
-  preview && !store && RECORD_KEYS.some(p => key.startsWith(p));
+  preview &&
+  !store &&
+  RECORD_KEYS.some(p => key.startsWith(p)) &&
+  !OTHER.some(p => key.startsWith(p));
 
 /** The visible state: what a preview says it is, in the reader's language. */
 function banner() {

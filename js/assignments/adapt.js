@@ -315,7 +315,7 @@ export function whatChanged(assignment, lesson, resolution, pin) {
     step: title(p.sid),
     needsTitle: p.needs ? title(p.needs) : '',
   }));
-  const moved = ['unpinned', 'major', 'moved'].includes(pin?.status);
+  const moved = ['major', 'moved'].includes(pin?.status);
   return {
     missing: missing.map(title),
     changed: changed.map(title),
