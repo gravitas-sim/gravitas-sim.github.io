@@ -8,7 +8,8 @@
 //                 (js/observatory/wcs.js pixelScale). It is a claim about the sky,
 //                 so it needs what astrometry needs (js/dataKinds/contract.js
 //                 permits): a display-only image refuses it, in the contract's
-//                 words, and a reference pair is the way to a scale there.
+//                 words, until the person marks a reference pair, which is the
+//                 way to a scale there.
 //   a pair        a reference pair of marks and the length it spans, in any unit
 //                 the person states (the Moon's diameter in km, a ruler in mm).
 //                 It is the person's own measurement of the picture and is
@@ -54,13 +55,22 @@ export function areaOf(m) {
  *   |{refused: string, code: string}|null} null when there is no scale
  */
 export function scaleOf(state, { sidecar, permit } = {}) {
+  const pair = state.marks.find(m => m.kind === 'reference-pair' && m.length);
   if (sidecar?.wcs) {
     const ok = permit ?? permits(sidecar, 'astrometry');
-    if (!ok.ok) return { refused: ok.message, code: ok.code };
-    const value = pixelScale(sidecar.wcs);
-    return { value, sigma: 0, unit: 'arcsec/pix', source: 'sidecar' };
+    // Refused, the sidecar's scale gives way to a pair the person marked.
+    if (!ok.ok && !pair) return { refused: ok.message, code: ok.code };
+    if (ok.ok) {
+      // One number: the mean of the two axes, their disagreement its sigma.
+      const [a, b] = pixelScale(sidecar.wcs);
+      return {
+        value: (a + b) / 2,
+        sigma: Math.abs(a - b) / 2,
+        unit: 'arcsec/pix',
+        source: 'sidecar',
+      };
+    }
   }
-  const pair = state.marks.find(m => m.kind === 'reference-pair' && m.length);
   if (!pair) return null;
   const p = pixelLength(pair);
   const sp = lengthSigma(pair);

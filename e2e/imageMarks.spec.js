@@ -23,6 +23,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { test, expect } from './fixtures.js';
 import { mulberry32 } from '../js/rng.js';
+import { readFileSync } from 'node:fs';
 
 const TAGS = [
   'wcag2a',
@@ -658,6 +659,56 @@ test.describe('the marks instrument: both languages, axe, and every control', ()
       }
     });
   }
+});
+
+test.describe('the marks instrument: display-only images', () => {
+  const sidecar = use => ({
+    ...JSON.parse(
+      readFileSync('tests/fixtures/dataKinds/image-tess-hd209458-aperture.json')
+    ),
+    use,
+  });
+  const withSidecar = use => {
+    const o = imageObservation();
+    o.image.sidecar = sidecar(use);
+    return asFile(o, `frame-${use}.json`);
+  };
+
+  test('a display-only image can be marked, refuses the sky scale and says why, and takes a reference pair', async ({
+    page,
+  }) => {
+    await openPage(page);
+    await openMarks(page, withSidecar('display-only'));
+    await expect(body(page).locator('.ui-status.is-error')).toBeHidden();
+    await expect(body(page).locator('.im-scale')).toContainText('display-only');
+    await expect(body(page).locator('.im-scale')).toContainText(
+      'not available'
+    );
+    await tool(page, 'point').click();
+    await body(page).locator('.im-over').focus();
+    await aimAt(page, 30, 88);
+    await page.keyboard.press('Enter');
+    await expect(rows(page)).toHaveCount(1);
+    // The pair gives the scale in the person's unit, on the image that refuses the sky's.
+    await body(page).locator('input[type=number]').first().fill('56');
+    await tool(page, 'reference-pair').click();
+    await aimAt(page, 52, 46);
+    await page.keyboard.press('Enter');
+    await aimAt(page, 108, 46);
+    await page.keyboard.press('Enter');
+    await expect(body(page).locator('.im-scale')).toContainText(/Scale: 1 /);
+    await expect(body(page).locator('.im-scale')).not.toContainText(
+      'display-only'
+    );
+  });
+
+  test('a quantitative image with world coordinates shows its pixel scale in arcseconds', async ({
+    page,
+  }) => {
+    await openPage(page);
+    await openMarks(page, withSidecar('quantitative'));
+    await expect(body(page).locator('.im-scale')).toContainText('arcsec/pix');
+  });
 });
 
 test.describe("the marks instrument: the gate's throttled profile", () => {
