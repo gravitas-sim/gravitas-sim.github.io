@@ -486,7 +486,8 @@ const buildSettingsMenu = ({ keep = false } = {}) => {
       el => el.dataset.section
     )
   );
-  const priorAdvanced = settingsGrid.querySelector('.settings-advanced');
+  const advancedWasOpen =
+    settingsGrid.querySelector('.settings-advanced')?.open;
   settingsGrid.innerHTML = '';
   if (!keep) {
     localSettings = JSON.parse(JSON.stringify(SETTINGS));
@@ -859,12 +860,9 @@ const buildSettingsMenu = ({ keep = false } = {}) => {
         // What the reader had open survives a rebuild; a first build starts as
         // the course level's depth says, unless they chose otherwise.
         wireMore(advanced, 'settings', {
-          open: priorAdvanced
-            ? priorAdvanced.open
-            : moreOpen(
-                'settings',
-                courseLevelDefaults(pendingCourseLevel).depth
-              ),
+          open:
+            advancedWasOpen ??
+            moreOpen('settings', courseLevelDefaults(pendingCourseLevel).depth),
           say: announce,
           locale: getLocale,
         });
