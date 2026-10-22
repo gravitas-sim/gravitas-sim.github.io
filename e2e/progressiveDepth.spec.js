@@ -7,7 +7,7 @@
 // a number, and a link or an assignment can name the depth.
 // =============================================================================
 
-import { test, expect } from './fixtures.js';
+import { test, expect, openMore } from './fixtures.js';
 
 const LESSONS = [
   'keplers-laws',
@@ -106,10 +106,12 @@ for (const id of LESSONS) {
       const field = page.locator('input[data-field]:not([readonly])').first();
       const typed = (await field.count()) > 0;
       if (typed) await field.fill('1.5');
+      await openMore(page);
       await page.locator('#investigationShallower').click();
       await expect.poll(() => total(page)).toBe(n.core);
       await expect(page.locator('.inv-step-title')).not.toHaveText(n.first);
       // The step before the deeper ones: Go deeper leads straight in.
+      await openMore(page);
       await page.locator('#investigationDeeper').click();
       await expect.poll(() => total(page)).toBe(n.quantitative);
       await expect(page.locator('.inv-step-title')).toHaveText(n.first);

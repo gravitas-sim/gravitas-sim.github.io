@@ -13,13 +13,10 @@
 
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { test, expect } from './fixtures.js';
+import { test, expect, openMore } from './fixtures.js';
 
-/** The backup buttons are in the lesson panel's Progress disclosure. */
-const openBackup = page =>
-  page.locator('.inv-backup').evaluate(el => {
-    el.open = true;
-  });
+/** The backup buttons are in the lesson panel's More (Prompt 167). */
+const openBackup = openMore;
 
 const OUT = join(process.cwd(), 'test-results', 'progress-safety');
 const LESSON = 'missing-mass';
@@ -316,16 +313,16 @@ test.describe('work survives the panel closing when storage refuses', () => {
 });
 
 test.describe('the backup file', () => {
-  test('lives behind a Progress disclosure, closed until opened', async ({
+  test('lives behind More in the lesson panel, closed until opened', async ({
     page,
     app,
   }) => {
     await openLesson(page, app);
-    const backup = page.locator('.inv-backup');
-    await expect(backup).toBeVisible();
-    await expect(backup).toHaveJSProperty('open', false);
+    const more = page.locator('#investigationMore');
+    await expect(more).toBeVisible();
+    await expect(more).toHaveJSProperty('open', false);
     await expect(page.locator('#investigationBackupDownload')).toBeHidden();
-    await backup.locator('summary').click();
+    await more.locator(':scope > summary').click();
     await expect(page.locator('#investigationBackupDownload')).toBeVisible();
     await expect(page.locator('#investigationBackupRestore')).toBeVisible();
   });

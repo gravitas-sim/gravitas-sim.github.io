@@ -7,7 +7,7 @@
 // deeper depth. Nothing is sent anywhere; every check reads the page.
 // =============================================================================
 
-import { test, expect } from './fixtures.js';
+import { test, expect, openMore } from './fixtures.js';
 
 const CARD = '#scenarioInfoBox';
 const orient = page => page.locator('#welOrient');
@@ -155,6 +155,8 @@ test.describe('in a lesson', () => {
     const where = page.locator('#investigationWhere');
     await expect(where).toContainText(/Step \d+ of \d+/);
     await expect(where).toContainText('2 min of 35-45 min');
+
+    await openMore(page);
 
     await page.locator('#investigationHelp').click();
     const panel = page.locator('#investigationHelpPanel');

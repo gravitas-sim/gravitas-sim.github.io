@@ -1786,7 +1786,7 @@
   "[chromium] › progressSafety.spec.js › the backup file › a backup from a different lesson is refused": 7.6,
   "[chromium] › progressSafety.spec.js › the backup file › a file that is not a backup is refused by name": 9.2,
   "[chromium] › progressSafety.spec.js › the backup file › carries the work out and puts it back": 13,
-  "[chromium] › progressSafety.spec.js › the backup file › lives behind a Progress disclosure, closed until opened": 7.1,
+  "[chromium] › progressSafety.spec.js › the backup file › lives behind More in the lesson panel, closed until opened": 7.1,
   "[chromium] › progressSafety.spec.js › the backup file › replacing existing answers needs an explicit yes": 12.2,
   "[chromium] › progressSafety.spec.js › the backup file › rescues the work when storage is refusing it": 21.6,
   "[chromium] › progressSafety.spec.js › the save status › a browser that refuses storage is told apart from a full one": 7.8,

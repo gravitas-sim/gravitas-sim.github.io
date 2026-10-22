@@ -1236,7 +1236,7 @@ function syncToolPanel(step) {
     els.toolNote.textContent = t('inv.tool.loading');
     els.toolNote.hidden = false;
     els.toolControls.innerHTML = '';
-    els.toolControls.hidden = true;
+    els.toolControls.hidden = els.toolMore.hidden = true;
     clearToolInstrument();
     ensureWidget(spec.id)
       .then(() => {
