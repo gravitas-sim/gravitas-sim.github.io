@@ -29,7 +29,10 @@ import {
   getCourseLevel,
   helpId,
   itemsOf,
+  moreOpen,
   sectionLabelId,
+  setMore,
+  wireMore,
 } from './settingsSchema.js';
 import { SETTINGS, DEFAULT_SETTINGS } from './appState.js';
 
@@ -483,9 +486,7 @@ const buildSettingsMenu = ({ keep = false } = {}) => {
       el => el.dataset.section
     )
   );
-  const advancedOpen = Boolean(
-    settingsGrid.querySelector('.settings-advanced')?.open
-  );
+  const priorAdvanced = settingsGrid.querySelector('.settings-advanced');
   settingsGrid.innerHTML = '';
   if (!keep) {
     localSettings = JSON.parse(JSON.stringify(SETTINGS));
@@ -534,7 +535,7 @@ const buildSettingsMenu = ({ keep = false } = {}) => {
     localSettings.show_conservation_diagnostics = d.conservation;
     buildSettingsMenu({ keep: true });
     const advancedBox = settingsGrid.querySelector('.settings-advanced');
-    if (advancedBox) advancedBox.open = d.advancedOpen;
+    if (advancedBox) setMore(advancedBox, d.advancedOpen);
     document.getElementById('settingsCourseLevel')?.focus();
   };
   levelRow.append(levelLabel, levelSelect, levelHint);
@@ -850,12 +851,23 @@ const buildSettingsMenu = ({ keep = false } = {}) => {
     if (isAdvanced) {
       if (!advanced) {
         advanced = document.createElement('details');
-        advanced.className = 'settings-advanced';
-        advanced.open = advancedOpen;
+        advanced.className = 'settings-advanced more';
         const summary = document.createElement('summary');
         summary.textContent = t('settings.section.advanced');
         advanced.appendChild(summary);
         settingsGrid.appendChild(advanced);
+        // What the reader had open survives a rebuild; a first build starts as
+        // the course level's depth says, unless they chose otherwise.
+        wireMore(advanced, 'settings', {
+          open: priorAdvanced
+            ? priorAdvanced.open
+            : moreOpen(
+                'settings',
+                courseLevelDefaults(pendingCourseLevel).depth
+              ),
+          say: announce,
+          locale: getLocale,
+        });
       }
       advanced.appendChild(sectionDiv);
     } else {
@@ -924,7 +936,7 @@ const wireSettingsFilter = () => {
         section => !section.hidden
       );
       advanced.hidden = Boolean(query) && !hits;
-      if (query && hits) advanced.open = true;
+      if (query && hits) setMore(advanced, true);
     }
 
     if (empty) empty.hidden = !query || shown > 0;

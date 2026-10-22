@@ -78,6 +78,7 @@ const PINNED = {
   KEY_COMPOSER_PREVIEW: 'gravitas_composer_preview',
   KEY_COURSE_PREFIX: 'gravitas_course_',
   KEY_COURSE_PREVIEW: 'gravitas_course_preview',
+  KEY_DISCLOSURE: 'gravitas_disclosure',
   KEY_EVALUATION_DRAFT_PREFIX: 'gravitas_evaluation_draft_',
   KEY_EVALUATION_DRAFT_V1: 'gravitas_evaluation_draft_v1',
   KEY_EVIDENCE_NOTEBOOK: 'gravitas_evidence_notebook',

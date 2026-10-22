@@ -104,6 +104,7 @@ Every record a student's browser holds, its owner, how it migrates, whether a ba
 | `gravitas_motion` | The motion override | preferences | `js/quality.js` | direct | none | preference: in a backup file only when ticked | a one-word preference |
 | `gravitas_units` | Physical or simulation units | preferences | `js/units.js` | direct | none | preference: in a backup file only when ticked | a one-word preference |
 | `gravitas_lesson_objects_open` | Whether the objects list was left open | preferences | `js/investigations.js` | `js/storage/local.js` | none | preference: in a backup file only when ticked | a flag |
+| `gravitas_disclosure` | Which More sections were left open | preferences | `js/settingsSchema.js` | direct | none | preference: in a backup file only when ticked | a map of surface to a flag |
 | `gravitas_rail_sections` | Which rail sections are open | preferences | `js/controls.js` | direct | none | preference: in a backup file only when ticked | a list of ids |
 | `gravitas_lecture_sequence` | Lecture mode's sequence | preferences | `js/lecture.js` | direct | none | preference: in a backup file only when ticked | a list of links |
 | `gravitas_welcome_seen_…` | That the welcome was seen | preferences | `js/welcomeGate.js` | direct | none | preference: in a backup file only when ticked | a flag |

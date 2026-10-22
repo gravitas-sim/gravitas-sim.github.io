@@ -58,6 +58,7 @@ export const KEY_COMPOSER_PREFIX = 'gravitas_composer_';
 export const KEY_COMPOSER_PREVIEW = 'gravitas_composer_preview';
 export const KEY_COURSE_PREFIX = 'gravitas_course_';
 export const KEY_COURSE_PREVIEW = 'gravitas_course_preview';
+export const KEY_DISCLOSURE = 'gravitas_disclosure';
 export const KEY_EVALUATION_DRAFT_PREFIX = 'gravitas_evaluation_draft_';
 export const KEY_EVALUATION_DRAFT_V1 = 'gravitas_evaluation_draft_v1';
 export const KEY_EVIDENCE_NOTEBOOK = 'gravitas_evidence_notebook';

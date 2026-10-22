@@ -100,8 +100,10 @@ import {
   ensureWidget,
   getWidget,
   needsLoading,
+  toolFold,
   widgetDefaults,
 } from './widgets.js';
+import { wireMore } from './settingsSchema.js';
 import {
   inDepth,
   indexOfSid,
@@ -1284,20 +1286,23 @@ function syncToolPanel(step) {
   els.toolNote.hidden = !els.toolNote.innerHTML;
 
   const shown = widget.controls.filter(c => !spec.hide?.includes(c.id));
-  els.toolControls.innerHTML = shown
-    .map(
-      c => `<label class="inv-ecc-row" for="invTool-${escape(c.id)}">
+  // What the step does not ask about folds behind "More" (widgets.js toolFold).
+  const fold = toolFold(step, shown);
+  const row = c => `<label class="inv-ecc-row" for="invTool-${escape(c.id)}">
               <span>${prose(c.label)}</span>
               <input type="range" id="invTool-${escape(c.id)}" data-tool="${escape(c.id)}"
                      min="${c.min}" max="${c.max}" step="${c.step}"
                      value="${toolValues[c.id]}" />
               <output data-tool-out="${escape(c.id)}"></output>
-            </label>`
-    )
-    .join('');
-  // An empty controls block is a bordered strip of nothing, so it is left out
-  // rather than left blank.
+            </label>`;
+  // Presets go home before the rebuild, then into More if they fold.
+  els.toolPanel.append(els.toolPresets, els.toolPresetNote);
+  els.toolControls.innerHTML = fold.open.map(row).join('');
+  // An empty controls block is a bordered strip of nothing: left out.
   els.toolControls.hidden = shown.length === 0;
+  els.toolMore.lastElementChild.innerHTML = fold.folded.map(row).join('');
+  if (fold.presets) els.toolMore.lastElementChild.append(els.toolPresets);
+  wireMore(els.toolMore, 'tool', { depth, say: announce, locale: getLocale });
 
   // A widget can decide its buttons from the step: the binary instrument grows
   // a stopwatch on the step that asks for one and not before.
@@ -1316,12 +1321,10 @@ function syncToolPanel(step) {
   els.toolActions.hidden = !actions.length;
   toolActionsShown = actions;
 
-  // Presets can depend on the step, the same way actions already can. A step
-  // that hides a control has to be able to hide the presets that would set it:
-  // the rotation-curve fitting instrument hides its halo sliders while a student
-  // is asked to fit with stars alone, and a reachable "published decomposition"
-  // button there would hand over the answer and, worse, show a good fit with no
-  // visible reason for it.
+  // Presets can depend on the step, as actions can: a step that hides a control
+  // must be able to hide the presets that set it (the rotation-curve fit hides
+  // its halo sliders, and a "published decomposition" button would hand over
+  // the answer with no visible reason for the fit).
   const declared =
     typeof widget.presets === 'function'
       ? widget.presets(spec)
@@ -1334,28 +1337,24 @@ function syncToolPanel(step) {
     )
     .join('');
   els.toolPresets.hidden = presets.length === 0;
+  els.toolMore.hidden =
+    !fold.folded.length && !(fold.presets && presets.length);
   els.toolPresetNote.textContent = '';
 
   const applied = () => {
-    els.toolControls.querySelectorAll('[data-tool]').forEach(input => {
+    els.toolPanel.querySelectorAll('[data-tool]').forEach(input => {
       input.value = String(toolValues[input.dataset.tool]);
     });
-    // A widget that animates starts its run again from the new settings, which
-    // is what makes the launch experiment feel like an experiment: change the
-    // speed, watch it happen.
-    //
-    // `fromControl` says this is a reader moving something, not the step
-    // opening. A widget that parks itself where the step asked - the
-    // evolutionary playback parks on a named phase and a named track - has to
-    // do that once, on entry, and not again: re-imposing it here undid the
-    // reader's own input in the same tick, so on every step that named a
-    // phase the playhead could not be dragged and the track could not be
-    // changed. Both looked like dead controls.
+    // A widget that animates restarts its run from the new settings: change
+    // the speed, watch it happen. `fromControl` says a reader moved something,
+    // not that the step opened: a widget that parks itself where the step asked
+    // (the evolutionary playback's phase and track) does that once, on entry,
+    // or the playhead and the track could not be changed (dead controls).
     widget.reset?.(toolValues, { autorun: true, spec, fromControl: true });
     paintTool();
   };
 
-  els.toolControls.querySelectorAll('[data-tool]').forEach(input => {
+  els.toolPanel.querySelectorAll('[data-tool]').forEach(input => {
     input.addEventListener('input', () => {
       toolValues[input.dataset.tool] = input.valueAsNumber;
       els.toolPresetNote.textContent = '';
@@ -1581,7 +1580,7 @@ function paintTool({ quiet = false } = {}) {
 
   for (const c of widget.controls) {
     const value = Number(toolValues[c.id]);
-    const out = els.toolControls.querySelector(`[data-tool-out="${c.id}"]`);
+    const out = els.toolPanel.querySelector(`[data-tool-out="${c.id}"]`);
     if (out) {
       out.textContent = c.format
         ? c.format(value)
@@ -1592,7 +1591,7 @@ function paintTool({ quiet = false } = {}) {
     // was here the number beside the slider tracked while the thumb sat still.
     // Never while the control has focus: writing a value into an input a
     // student is dragging fights them for it.
-    const input = els.toolControls.querySelector(`[data-tool="${c.id}"]`);
+    const input = els.toolPanel.querySelector(`[data-tool="${c.id}"]`);
     if (
       input &&
       input !== document.activeElement &&
@@ -1790,11 +1789,9 @@ function renderFooter() {
   if (authoring?.render) authoring.render(active, stepIndex);
   renderSaveStatus();
   renderProgressNotice();
-  // An authoring preview has no progress to back up and must not write any, so
-  // the controls that do both are not offered. The status line still shows,
-  // saying why nothing is being saved.
-  const safety = els.backupDownload?.closest('.inv-progress-safety');
-  const backup = safety?.querySelector('.inv-backup');
+  // An authoring preview has no progress to back up and must not write any: the
+  // controls that do are not offered (the status line says why).
+  const backup = els.backupDownload?.closest('.inv-backup');
   if (backup) backup.hidden = Boolean(authoring);
   els.prev.disabled = stepIndex === 0;
   els.next.textContent =
@@ -2412,6 +2409,7 @@ export async function openInvestigation(id, opts = {}) {
   lockedSettings = { interactive_add: SETTINGS.interactive_add };
   els.panel.hidden = false;
   els.panel.classList.add('is-open');
+  wireMore(els.more, 'lesson', { depth, say: announce, locale: getLocale });
   els.title.textContent = assignment?.t || inv.title;
   // The lesson it was cut from stays visible: a student should be able to see
   // that this is eight steps of Tides rather than a thing called Week 3.
@@ -2978,6 +2976,8 @@ export function initInvestigations({ signal } = {}) {
     toolNote: document.getElementById('investigationToolNote'),
     toolReadout: document.getElementById('investigationToolReadout'),
     toolControls: document.getElementById('investigationToolControls'),
+    toolMore: document.getElementById('investigationToolMore'),
+    more: document.getElementById('investigationMore'),
     toolActions: document.getElementById('investigationToolActions'),
     toolPresets: document.getElementById('investigationToolPresets'),
     toolPresetNote: document.getElementById('investigationToolPresetNote'),
