@@ -21,3 +21,21 @@ export function checkLibrary(doc) {
   if (!Array.isArray(doc.entries)) throw new Error('no entries');
   return doc;
 }
+
+/**
+ * The address that opens an entry as a student would meet it, reading none of
+ * the saved record and writing none (Prompt 175): the lesson's own progress-free
+ * view for a lesson, and every other kind at its own route with `preview=student`
+ * (js/storage/local.js holds the record still for any page that carries it).
+ * @param {{id: string, format: string, route: string}} entry - A library entry
+ * @returns {string} A same-origin address
+ */
+export function previewRoute(entry) {
+  const [path, hash] = entry.route.split('#');
+  const mark = `preview=student`;
+  if (entry.format === 'lesson') {
+    const id = entry.id.slice(entry.id.indexOf(':') + 1);
+    return `/?author=${id}&view=student&${mark}`;
+  }
+  return `${path}${path.includes('?') ? '&' : '?'}${mark}${hash === undefined ? '' : `#${hash}`}`;
+}

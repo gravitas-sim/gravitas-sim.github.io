@@ -14,6 +14,8 @@
 // in, and, when nothing comes after it, why.
 // =============================================================================
 
+import { previewRoute } from './format.js';
+
 const escape = s =>
   String(s ?? '')
     .replace(/&/g, '&amp;')
@@ -146,7 +148,9 @@ export function itemView(lib, id, c) {
   const html = `<article class="lib-item" data-item="${escape(id)}">
 <h2>${escape(c.pick(entry.title))}</h2>
 ${entry.summary ? `<p>${escape(c.pick(entry.summary))}</p>` : ''}
-<p><a class="ui-button lib-link" href="${escape(entry.route)}">${escape(c.t('lib.item.open'))}</a></p>${
+<p><a class="ui-button lib-link" href="${escape(entry.route)}">${escape(c.t('lib.item.open'))}</a>
+<a class="ui-button lib-link" href="${escape(previewRoute(entry))}" data-preview>${escape(c.t('lib.item.preview'))}</a></p>
+<p class="ui-note">${escape(c.t('lib.item.preview.note'))}</p>${
     rel?.teach
       ? `\n<p><a href="${escape(rel.teach)}">${escape(c.t('lib.item.teach'))}</a></p>`
       : ''

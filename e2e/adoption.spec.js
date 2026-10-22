@@ -84,7 +84,7 @@ test.describe('the instructor path', () => {
     const preview = page.locator('a[data-preview]');
     await expect(preview).toHaveAttribute(
       'href',
-      `/?author=${LESSON}&view=student`
+      `/?author=${LESSON}&view=student&preview=student`
     );
     await preview.click();
 

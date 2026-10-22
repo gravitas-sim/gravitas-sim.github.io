@@ -42,6 +42,7 @@ import {
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
+import { previewRoute } from '../js/library/format.js';
 import { withShell } from './shell.mjs';
 import { withPolicy } from './csp.mjs';
 
@@ -110,8 +111,8 @@ const W = {
     'La abre limpia, desde el primer paso, y no lee ni escribe nada del progreso guardado en este navegador.',
   ],
   previewGuide: [
-    'This opens it as a student would. It keeps only the record that the investigation was opened, in this browser.',
-    'La abre como la vería un estudiante. Solo guarda en este navegador el registro de que la investigación se abrió.',
+    'This opens it as a student would, with a banner that says it is a preview. It reads none of the progress saved in this browser and writes none.',
+    'La abre como la vería un estudiante, con un aviso de que es una vista previa. No lee ni escribe nada del progreso guardado en este navegador.',
   ],
   objectives: [
     'What students will be able to do',
@@ -818,7 +819,7 @@ function investigationPage(S, entry) {
     rowOf(w('offline'), bi(wt(offlineKey))),
   ].join('\n');
 
-  const previewHref = lesson ? `/?author=${id}&view=student` : entry.route;
+  const previewHref = previewRoute(entry);
   const actions = `<div class="ad-actions">
 <a class="ui-button is-primary" href="${html(entry.route)}">${w('start')}</a>
 <a class="ui-button" href="${html(previewHref)}" data-preview>${w('preview')}</a>
