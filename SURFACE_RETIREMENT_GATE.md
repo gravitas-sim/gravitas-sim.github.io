@@ -230,7 +230,7 @@ Counts first, then every surface. "Links / Library / cited" are the shipped inve
 <!-- surface-gate:evidence -->
 | Item | Source lines · tests · generated · strings · precache KB · axe rows | Measured by |
 | --- | --- | --- |
-| Sandbox | 76293 · 246 · 0 · 0 · 975.3 · 0 | pages `index.html` |
+| Sandbox | 76404 · 247 · 0 · 0 · 977.2 · 0 | pages `index.html` |
 | 3-D lab | 11016 · 16 · 0 · 544 · 232.3 · 2 | pages `3d/index.html` |
 | Mission lab | 5684 · 10 · 0 · 445 · 192.7 · 1 | pages `mission/lab/index.html` |
 | Scenario Studio | 1759 · 8 · 0 · 172 · 25.2 · 1 | pages `studio/index.html` |
@@ -242,13 +242,13 @@ Counts first, then every surface. "Links / Library / cited" are the shipped inve
 | Compute page | 4027 · 12 · 0 · 0 · 0 · 0 | pages `compute/index.html`, `compute-frame/index.html` |
 | Catalog | 924 · 5 · 1 · 97 · 14.7 · 1 | pages `catalog/index.html` |
 | Figure builder | 1068 · 2 · 0 · 67 · 12.8 · 1 | pages `figure/index.html` |
-| My work | 2544 · 21 · 0 · 0 · 32 · 1 | pages `my-work/index.html` |
+| My work | 2546 · 21 · 0 · 0 · 32 · 1 | pages `my-work/index.html` |
 | Teaching with Gravitas | 474 · 11 · 0 · 0 · 0 · 1 | pages `teaching/index.html` |
 | Instructor resources | 290 · 7 · 0 · 0 · 0 · 1 | pages `instructors/index.html` |
 | Submission review | 5793 · 21 · 0 · 0 · 66.2 · 1 | pages `instructors/submissions/index.html` |
 | Classroom evidence kit | 1258 · 7 · 0 · 0 · 5.1 · 1 | pages `evaluation/index.html` |
 | Investigation Composer | 4173 · 16 · 0 · 328 · 56.4 · 1 | pages `studio/lesson/index.html` |
-| Course-package builder | 3741 · 10 · 0 · 271 · 46.7 · 3 | pages `studio/course/index.html` |
+| Course-package builder | 3763 · 10 · 0 · 271 · 47 · 3 | pages `studio/course/index.html` |
 | Investigations in a course | 594 · 4 · 0 · 0 · 6 · 1 | pages `studio/course/packs/index.html` |
 | Find content to teach | 236 · 3 · 0 · 0 · 0 · 0 | pages `teaching/find/index.html` |
 | Adopter's guide | 225 · 0 · 0 · 0 · 0 · 0 | pages `teaching/adopt/index.html` |

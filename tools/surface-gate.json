@@ -18,11 +18,11 @@
       "exposure": { "links": [], "records": [], "stateLinks": [] },
       "measure": { "pages": ["index.html"] },
       "cost": {
-        "lines": 76293,
-        "testFiles": 246,
+        "lines": 76404,
+        "testFiles": 247,
         "generated": 0,
         "strings": 0,
-        "precacheKb": 975.3,
+        "precacheKb": 977.2,
         "axeRows": 0
       },
       "use": { "shippedLinks": 0, "libraryEntries": 0 },
@@ -420,7 +420,7 @@
       "exposure": { "links": [], "records": [], "stateLinks": [] },
       "measure": { "pages": ["my-work/index.html"], "routes": ["/my-work/"] },
       "cost": {
-        "lines": 2544,
+        "lines": 2546,
         "testFiles": 21,
         "generated": 0,
         "strings": 0,
@@ -603,11 +603,11 @@
         "catalogs": ["course"]
       },
       "cost": {
-        "lines": 3741,
+        "lines": 3763,
         "testFiles": 10,
         "generated": 0,
         "strings": 271,
-        "precacheKb": 46.7,
+        "precacheKb": 47,
         "axeRows": 3
       },
       "use": { "shippedLinks": 0, "libraryEntries": 0 },
@@ -1885,7 +1885,7 @@
       "consequence": "Keep; a schema in Prompt 290.",
       "cost": {
         "lines": 0,
-        "testFiles": 1,
+        "testFiles": 2,
         "generated": 0,
         "strings": 0,
         "precacheKb": 0,
