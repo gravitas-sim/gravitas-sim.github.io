@@ -1,13 +1,13 @@
-import './collectionsDeps.js';
+import './library/collectionsDeps.js';
 import {
   itemsOfCollection,
   readCollections,
   replaceSaved,
-} from './collections.js';
-import { entryIdOfItem } from './format.js';
+} from './library/collections.js';
+import { entryIdOfItem } from './library/format.js';
 
 // =============================================================================
-// Teach: the instructor's collection (Roadmap III Prompt 164)
+// The kit: the instructor's collection (Roadmap III Prompt 164)
 // -----------------------------------------------------------------------------
 // An instructor curates a short list by saving items in the Library, then, here,
 // puts them in order, says in a sentence what each is for, picks a depth where
@@ -64,10 +64,10 @@ let library = null;
  */
 export async function mountMaker(host) {
   const [{ shortHash }, { courseLink }, pack, api] = await Promise.all([
-    import('../assignments/assignment.js'),
-    import('../course/links.js'),
-    import('../course/pack.js'),
-    import('../course/api.js'),
+    import('./assignments/assignment.js'),
+    import('./course/links.js'),
+    import('./course/pack.js'),
+    import('./course/api.js'),
   ]);
   library ??= await fetch(new URL('/library/library.json', document.baseURI))
     .then(r => (r.ok ? r.json() : { entries: [] }))

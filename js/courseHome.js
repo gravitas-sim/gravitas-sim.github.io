@@ -46,7 +46,7 @@ import { DATASETS } from './course/datasets.js';
 import { progressOf } from './library/progress.js';
 import { BUILTIN_COURSES } from './data/courses/index.js';
 import { PLATFORM_API } from './platform/catalog.generated.js';
-import { KEY_NEXT_CONTEXT } from './names.js';
+import { KEY_COLLECTIONS, KEY_NEXT_CONTEXT } from './names.js';
 
 const MAX_FILE = 512 * 1024;
 
@@ -483,13 +483,11 @@ function render() {
  */
 async function keepControls() {
   try {
-    const [{ readJson, writeJson }, { KEY_COLLECTIONS }, view, lib] =
-      await Promise.all([
-        import('./storage/local.js'),
-        import('./names.js'),
-        import('./library/collectionsView.js'),
-        import('./library/collections.js'),
-      ]);
+    const [{ readJson, writeJson }, view, lib] = await Promise.all([
+      import('./storage/local.js'),
+      import('./library/collectionsView.js'),
+      import('./library/collections.js'),
+    ]);
     lib.bind({
       read: () => readJson(KEY_COLLECTIONS, null),
       write: record => writeJson(KEY_COLLECTIONS, record, 'courses'),

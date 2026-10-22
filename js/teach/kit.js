@@ -493,7 +493,7 @@ async function openCollections() {
   if (!host.hidden) return;
   host.hidden = false;
   $('kitCollOpen').setAttribute('aria-expanded', 'true');
-  const { mountMaker } = await import('../library/collectionMaker.js');
+  const { mountMaker } = await import('../instructorCollections.js');
   await mountMaker(host);
 }
 
