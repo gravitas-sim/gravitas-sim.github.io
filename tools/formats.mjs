@@ -610,6 +610,16 @@ export const FORMATS = Object.freeze([
     newer: 'reads as no courses; the next write replaces it',
   },
   {
+    name: 'collections record',
+    fields: 'v, saved (a course package with profile collection), received (at, pack)',
+    version: 1,
+    const: ['js/library/collections.js', 'COLLECTIONS_VERSION'],
+    owner: 'js/library/collections.js readCollections',
+    persisted: 'localStorage, inside gravitas.student-data (courses)',
+    older: 'v1 only',
+    newer: 'reads as no collections; the next write replaces it',
+  },
+  {
     name: 'gravitas.evaluation',
     fields: 'kind, schema',
     version: 1,
@@ -643,6 +653,7 @@ export const COMPAT = Object.freeze({
   'submission token': { fixture: 'submission-token', unknown: 'n/a' },
   'resume record': { fixture: 'resume-record', unknown: 'ignored' },
   'course terms record': { fixture: 'course-terms', unknown: 'ignored' },
+  'collections record': { fixture: 'collections-record', unknown: 'ignored' },
   'gravitas.submission-results': {
     fixture: 'submission-results',
     unknown: 'ignored',
