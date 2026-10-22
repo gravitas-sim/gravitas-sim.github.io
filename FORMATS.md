@@ -2,7 +2,7 @@
 
 # Formats
 
-Every versioned format Gravitas reads or writes: 55 of them. 31 have a JSON Schema in `sdk/schemas`, and 10 read their previous version rather than only their own.
+Every versioned format Gravitas reads or writes: 56 of them. 31 have a JSON Schema in `sdk/schemas`, and 10 read their previous version rather than only their own.
 
 Roadmap II Prompt 61 puts each under one rule:
 - a JSON Schema;
@@ -49,6 +49,7 @@ The columns:
 | gravitas.investigation.progress | kind, version | 2 | js/investigations/progressBackup.js restoreProgress | download | migrates v1 | refused, in words | no |
 | submission token | v (link prefix s) | 2 | js/submission/submissionToken.js readSubmissionToken | pasted text | reads v1 | refused, in words | [yes](sdk/schemas/submission-token-2.schema.json) |
 | gravitas.submission-results | kind, version | 2 | js/submission/results.js readResults | download | migrates v1 | refused by reason code | [yes](sdk/schemas/submission-results-2.schema.json) |
+| gravitas.submission-archive | format, formatVersion | 1 | js/instructorArchive.js readArchive | download (the review page opens it again) | v1 only | refused by reason code | no |
 | gravitas.lab3d-guide-report | format, formatVersion | 1 | none: written, never read | download | v1 only | nothing reads it | no |
 | gravitas.mission-lab-report | format, formatVersion | 1 | none: written, never read | download | v1 only | nothing reads it | no |
 | notebook store | v | 1 | js/notebook/store.js load | localStorage | v1 only | kept and not overwritten, in words | no |
@@ -135,6 +136,7 @@ An older build is a real reader: a browser still running 2.0.0's cached code, a 
 | gravitas.investigation.progress | `progress-backup` | ignored | policy (above) |
 | submission token | `submission-token` | n/a | policy (above) |
 | gravitas.submission-results | `submission-results` | ignored | policy (above) |
+| gravitas.submission-archive | none yet | not yet exercised | policy (above) |
 | gravitas.lab3d-guide-report | `report-files` | ignored | policy (above) |
 | gravitas.mission-lab-report | `report-files` | ignored | policy (above) |
 | notebook store | none yet | not yet exercised | policy (above) |

@@ -16,7 +16,7 @@ import {
   startTerm,
   termLabel,
   titleWithTerm,
-} from '../js/course/term.js';
+} from '../js/instructorTerm.js';
 import { assignmentPayload, courseLink } from '../js/course/links.js';
 import { shortHash } from '../js/course/review.js';
 import { INTRO_ASTRONOMY } from '../js/data/courses/intro-astronomy.js';

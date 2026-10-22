@@ -1,5 +1,5 @@
 // =============================================================================
-// A course, or an activity, for the next term
+// A course, or an activity, for the next term (an instructor module)
 // -----------------------------------------------------------------------------
 // Roadmap III Prompt 168. An instructor who ran a course last term wants it
 // again, with last term's work kept apart from this term's, and wants to know
@@ -26,9 +26,13 @@
 // still open exactly what they opened.
 // =============================================================================
 
-import { assignmentIdFor, shortHash } from '../assignments/assignment.js';
-import { MAX_TERM, itemsOf } from './pack.js';
-import { STATUS, reviewCoursePack, upgradeCoursePack } from './review.js';
+import { assignmentIdFor, shortHash } from './assignments/assignment.js';
+import { MAX_TERM, itemsOf } from './course/pack.js';
+import {
+  STATUS,
+  reviewCoursePack,
+  upgradeCoursePack,
+} from './course/review.js';
 
 /** An assignment's title may not be longer than this (assignment.js MAX_TITLE). */
 const MAX_TITLE = 120;

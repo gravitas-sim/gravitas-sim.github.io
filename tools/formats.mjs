@@ -347,6 +347,16 @@ export const FORMATS = Object.freeze([
     schema: 'submission-results-2.schema.json',
   },
   {
+    name: 'gravitas.submission-archive',
+    fields: 'format, formatVersion',
+    version: 1,
+    const: ['js/instructorArchive.js', 'ARCHIVE_VERSION'],
+    owner: 'js/instructorArchive.js readArchive',
+    persisted: 'download (the review page opens it again)',
+    older: 'v1 only',
+    newer: 'refused by reason code',
+  },
+  {
     name: 'gravitas.lab3d-guide-report',
     fields: 'format, formatVersion',
     version: 1,
