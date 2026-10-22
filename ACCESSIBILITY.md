@@ -25,7 +25,8 @@ panels, lecture mode, model page, instructor portal, teaching page, figure
 builder, evaluation kit, glossary, validation report, observatory, catalog, library,
 library by sequence, library browse, all filters, library topic, library item, my work, experiment runner, scenario studio, investigation composer, course builder,
 investigations in a course, course home, 3-D kernel diagnostics, 3-D lab, 3-D lab guide, mission
-diagnostics, mission lab, submission review. (The figure builder is checked
+diagnostics, mission lab, submission review, and the two term surfaces of Prompt 168:
+course builder, a course as it comes (Prompt 168), distribution kit, a new term (Prompt 168). (The figure builder is checked
 without its live preview, which is the application in a frame and is
 checked as the surfaces above.) That list
 and the count above both come from the `SURFACES` array in the spec — the count through `npm run docs:sync`, the names by hand,

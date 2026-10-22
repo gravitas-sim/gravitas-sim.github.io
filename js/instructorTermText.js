@@ -33,15 +33,15 @@ export const WORDS = {
     'p.use.h': 'Use this course as it comes',
     'p.next.h': 'Start a new term',
     'p.use.lede':
-      "Gravitas makes a copy of this course for your class: every lesson pinned to today's version, a fresh code for each assignment and one link for your students. You change nothing, and you can still edit the copy below.",
+      "Gravitas makes a copy of this course for your class: every investigation pinned to today's version, a fresh code for each activity and one link for your students. You change nothing, and you can still edit the copy below.",
     'p.next.lede':
-      "Gravitas makes a copy of this course for the new term: every lesson re-pinned to today's version, a fresh code for each assignment, a new link and a list of what changed since last term. Last term's file and links are not touched, and nothing students made is deleted.",
+      "Gravitas makes a copy of this course for the new term: every investigation re-pinned to today's version, a fresh code for each activity, a new link and a list of what changed since last term. Last term's file and links are not touched, and nothing students made is deleted.",
     'p.course': 'Course: {title}, version {version}',
     'p.term': 'Term',
     'p.term.hint.use':
-      "For example Spring 2027. It is added to each assignment's title, so students who used the course before start this one clean.",
+      "For example Spring 2027. It is added to each activity's title, so students who used the course before start this one clean.",
     'p.term.hint.next':
-      "For example Spring 2027. It is added to each assignment's title, so students who used the course last term start this one clean.",
+      "For example Spring 2027. It is added to each activity's title, so students who used the course last term start this one clean.",
     'p.term.empty': 'Write the term, for example Spring 2027.',
     'p.term.long': 'Use {max} characters or fewer.',
     'p.term.markup': 'Use plain words: no angle brackets or character codes.',
@@ -53,7 +53,7 @@ export const WORDS = {
     'p.close': 'Close',
     'r.h': 'Ready for your class',
     'r.ready':
-      '{title} is ready. Every lesson is pinned to the version Gravitas has today.',
+      '{title} is ready. Every investigation is pinned to the version Gravitas has today.',
     'r.link': 'Link to give your students',
     'r.copy': 'Copy the link',
     'r.copied': 'Copied.',
@@ -66,7 +66,7 @@ export const WORDS = {
     'r.long':
       'The link is {n} characters, longer than some mail programs and platforms keep. Give students the course file instead (Save the course file); the course page opens it.',
     'r.same':
-      'Nothing changed under the course: every lesson is as it was pinned.',
+      'Nothing changed under the course: every investigation is as it was pinned.',
     'r.changed.one':
       "One item was not what the course pinned. It is pinned to today's version now:",
     'r.changed.many':
@@ -75,9 +75,9 @@ export const WORDS = {
       'These could not be re-pinned and stay as they were; remove or replace them in the builder below: {ids}.',
     'r.item': '{name}: {standing}{steps}',
     'r.steps.changed': '; steps whose question changed: {n}',
-    'r.steps.missing': '; steps no longer in the lesson, dropped: {n}',
+    'r.steps.missing': '; steps no longer in the investigation, dropped: {n}',
     'st.same': 'as pinned',
-    'st.changed': "the lesson's steps changed",
+    'st.changed': "the investigation's steps changed",
     'st.compatible': 'a newer compatible version',
     'st.major': 'a new major version of its package',
     'st.moved': 'now comes from another package',
@@ -85,11 +85,11 @@ export const WORDS = {
     'st.missing': 'no longer in Gravitas',
     'st.unchecked': 'not checked here',
     'r.keys.term':
-      "{n} assignments have a new code and the term in their title, so this term's reports, and the answers students keep for them, stay apart from last term's.",
+      "{n} activities have a new code and the term in their title, so this term's reports, and the answers students keep for them, stay apart from last term's.",
     'r.keys.noterm':
-      '{n} assignments have a new code, so reports from this class are grouped on their own on the review page.',
+      '{n} activities have a new code, so reports from this class are grouped on their own on the review page.',
     'r.keys.none':
-      "This course has no assignments, so there is no code to refresh. Progress on whole lessons is kept in each student's own browser, as it always was, and is not separated by term.",
+      "This course has no activities, so there is no code to refresh. Progress on whole investigations is kept in each student's own browser, as it always was, and is not separated by term.",
     'r.next':
       'Then students open the link and work, and hand in the lab report PDF or its token. Open the course file on the review page, with their reports, and it groups them under your names.',
     'r.review': 'Open submission review',
@@ -116,15 +116,15 @@ export const WORDS = {
     'p.use.h': 'Usar este curso tal como viene',
     'p.next.h': 'Empezar un periodo nuevo',
     'p.use.lede':
-      'Gravitas hace una copia de este curso para tu clase: cada lección fijada a la versión de hoy, un código nuevo para cada tarea y un enlace para tus estudiantes. No cambias nada, y puedes seguir editando la copia más abajo.',
+      'Gravitas hace una copia de este curso para tu clase: cada investigación fijada a la versión de hoy, un código nuevo para cada actividad y un enlace para tus estudiantes. No cambias nada, y puedes seguir editando la copia más abajo.',
     'p.next.lede':
-      'Gravitas hace una copia de este curso para el periodo nuevo: cada lección fijada otra vez a la versión de hoy, un código nuevo para cada tarea, un enlace nuevo y una lista de lo que cambió desde el periodo pasado. El archivo y los enlaces del periodo pasado no se tocan, y no se borra nada de lo que hicieron los estudiantes.',
+      'Gravitas hace una copia de este curso para el periodo nuevo: cada investigación fijada otra vez a la versión de hoy, un código nuevo para cada actividad, un enlace nuevo y una lista de lo que cambió desde el periodo pasado. El archivo y los enlaces del periodo pasado no se tocan, y no se borra nada de lo que hicieron los estudiantes.',
     'p.course': 'Curso: {title}, versión {version}',
     'p.term': 'Periodo',
     'p.term.hint.use':
-      'Por ejemplo Primavera 2027. Se añade al título de cada tarea, así quienes usaron el curso antes empiezan este desde cero.',
+      'Por ejemplo Primavera 2027. Se añade al título de cada actividad, así quienes usaron el curso antes empiezan este desde cero.',
     'p.term.hint.next':
-      'Por ejemplo Primavera 2027. Se añade al título de cada tarea, así quienes usaron el curso el periodo pasado empiezan este desde cero.',
+      'Por ejemplo Primavera 2027. Se añade al título de cada actividad, así quienes usaron el curso el periodo pasado empiezan este desde cero.',
     'p.term.empty': 'Escribe el periodo, por ejemplo Primavera 2027.',
     'p.term.long': 'Usa {max} caracteres o menos.',
     'p.term.markup':
@@ -137,7 +137,7 @@ export const WORDS = {
     'p.close': 'Cerrar',
     'r.h': 'Listo para tu clase',
     'r.ready':
-      '{title} está listo. Cada lección está fijada a la versión que Gravitas tiene hoy.',
+      '{title} está listo. Cada investigación está fijada a la versión que Gravitas tiene hoy.',
     'r.link': 'Enlace para dar a tus estudiantes',
     'r.copy': 'Copiar el enlace',
     'r.copied': 'Copiado.',
@@ -150,7 +150,7 @@ export const WORDS = {
     'r.long':
       'El enlace tiene {n} caracteres, más de lo que admiten algunos programas de correo y plataformas. Da a los estudiantes el archivo del curso (Guardar el archivo del curso); la página del curso lo abre.',
     'r.same':
-      'No cambió nada en el curso: cada lección está como estaba fijada.',
+      'No cambió nada en el curso: cada investigación está como estaba fijada.',
     'r.changed.one':
       'Un elemento no era lo que el curso tenía fijado. Ahora está fijado a la versión de hoy:',
     'r.changed.many':
@@ -159,9 +159,9 @@ export const WORDS = {
       'Estos no se pudieron fijar otra vez y quedan como estaban; quítalos o reemplázalos en el creador, más abajo: {ids}.',
     'r.item': '{name}: {standing}{steps}',
     'r.steps.changed': '; pasos cuya pregunta cambió: {n}',
-    'r.steps.missing': '; pasos que ya no están en la lección, quitados: {n}',
+    'r.steps.missing': '; pasos que ya no están en la investigación, quitados: {n}',
     'st.same': 'como estaba fijado',
-    'st.changed': 'cambiaron los pasos de la lección',
+    'st.changed': 'cambiaron los pasos de la investigación',
     'st.compatible': 'una versión compatible más nueva',
     'st.major': 'una versión mayor nueva de su paquete',
     'st.moved': 'ahora viene de otro paquete',
@@ -169,11 +169,11 @@ export const WORDS = {
     'st.missing': 'ya no está en Gravitas',
     'st.unchecked': 'no se comprobó aquí',
     'r.keys.term':
-      '{n} tareas tienen un código nuevo y el periodo en su título, así que las entregas de este periodo, y las respuestas que los estudiantes guardan, quedan aparte de las del periodo pasado.',
+      '{n} actividades tienen un código nuevo y el periodo en su título, así que las entregas de este periodo, y las respuestas que los estudiantes guardan, quedan aparte de las del periodo pasado.',
     'r.keys.noterm':
-      '{n} tareas tienen un código nuevo, así que las entregas de esta clase se agrupan aparte en la página de revisión.',
+      '{n} actividades tienen un código nuevo, así que las entregas de esta clase se agrupan aparte en la página de revisión.',
     'r.keys.none':
-      'Este curso no tiene tareas, así que no hay código que renovar. El avance en lecciones completas se guarda en el navegador de cada estudiante, como siempre, y no se separa por periodo.',
+      'Este curso no tiene actividades, así que no hay código que renovar. El avance en investigaciones completas se guarda en el navegador de cada estudiante, como siempre, y no se separa por periodo.',
     'r.next':
       'Luego los estudiantes abren el enlace y trabajan, y entregan el PDF del informe o su ficha. Abre el archivo del curso en la página de revisión, con sus entregas, y las agrupa con tus nombres.',
     'r.review': 'Abrir la revisión de entregas',

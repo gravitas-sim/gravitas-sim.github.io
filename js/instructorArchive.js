@@ -18,7 +18,9 @@
 // refuses it in words (tests/instructorArchive.test.js runs that reader).
 // =============================================================================
 
-export const ARCHIVE_FORMAT = 'gravitas.submission-archive';
+import { ID_SUBMISSION_ARCHIVE } from './names.js';
+
+export const ARCHIVE_FORMAT = ID_SUBMISSION_ARCHIVE;
 export const ARCHIVE_VERSION = 1;
 /** More reports than a class has; a bound so a hostile file cannot be a flood. */
 export const MAX_REPORTS = 2000;
@@ -30,7 +32,7 @@ const isObject = v => v && typeof v === 'object' && !Array.isArray(v);
 
 /** Whether text looks like an archive, before it is parsed. */
 export const isArchiveText = text =>
-  /"format"\s*:\s*"gravitas\.submission-archive"/.test(
+  new RegExp(`"format"\\s*:\\s*"${ARCHIVE_FORMAT.replace('.', '\\.')}"`).test(
     String(text).slice(0, 400)
   );
 

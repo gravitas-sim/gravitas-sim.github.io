@@ -74,6 +74,7 @@ import {
 } from './course/api.js';
 import { PREVIEW_KEY, courseLink, itemLink, rootOf } from './course/links.js';
 import { courseManifest } from './course/manifest.js';
+import { newItem as makeItem } from './coursePageItems.js';
 import { embedParams } from './embedOptions.js';
 import { EMBED_ASPECT, figureMarkup } from './embedMarkup.js';
 import {
@@ -596,67 +597,13 @@ function freshId(x, base) {
 }
 
 /** A new item of a kind, pinned to this build when it names a lesson. */
-function newItem(x, kind) {
-  const lesson = LESSONS[0].id;
-  const base = { kind };
-  switch (kind) {
-    case 'lesson':
-      return { ...base, id: freshId(x, lesson), lesson };
-    case 'assignment':
-      return {
-        ...base,
-        id: freshId(x, `${lesson}-assignment`),
-        lesson,
-        steps: [],
-        assignment: { id: 'pending', created: today() },
-      };
-    case 'scenario': {
-      const scenario = 'solar-system';
-      return {
-        ...base,
-        id: freshId(x, 'solar-system'),
-        minutes: 10,
-        scenario,
-        seed: 'orbit-1',
-        title: { en: scenarioTitle(scenario) },
-      };
-    }
-    case 'guide':
-      return {
-        ...base,
-        id: freshId(x, 'l3-planes'),
-        minutes: 20,
-        guide: 'l3-planes',
-        depth: 'core',
-      };
-    case 'dataset':
-      return {
-        ...base,
-        id: freshId(x, 'tess-light-curve'),
-        minutes: 15,
-        dataset: 'tess-light-curve',
-      };
-    case 'pack':
-      // Filled when its link is pasted (readPackItem).
-      return {
-        ...base,
-        id: freshId(x, 'investigation'),
-        pack: '',
-        version: '1.0.0',
-        link: '',
-      };
-    case 'reading':
-      return {
-        ...base,
-        id: freshId(x, 'reading'),
-        minutes: 20,
-        title: { en: '' },
-        cite: { authors: '', year: new Date().getFullYear(), source: '' },
-        access: 'open',
-      };
-  }
-  return base;
-}
+const newItem = (x, kind) =>
+  makeItem(kind, {
+    freshId: base => freshId(x, base),
+    lesson: LESSONS[0].id,
+    today: today(),
+    scenarioTitle,
+  });
 
 /** After a lesson item's lesson or steps change: the pin, and an assignment's id. */
 async function repin(path) {

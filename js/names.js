@@ -118,6 +118,7 @@ export const ID_QUESTION_BANK = 'gravitas.question-bank';
 export const ID_SCENARIO_PACK = 'gravitas.scenario-pack';
 export const ID_SDSS_DR18_SPECTRA = 'gravitas.sdss-dr18-spectra';
 export const ID_STUDENT_DATA = 'gravitas.student-data';
+export const ID_SUBMISSION_ARCHIVE = 'gravitas.submission-archive';
 export const ID_SUBMISSION_RESULTS = 'gravitas.submission-results';
 export const ID_SYSTEM3D = 'gravitas.system3d';
 export const ID_TESS_HD209458_S56 = 'gravitas.tess-hd209458-s56';

@@ -353,12 +353,14 @@ for (const locale of ['en', 'es']) {
       });
       const nextButton = student.locator('#investigationNext');
       if (await nextButton.isEnabled()) await nextButton.click();
-      await student.waitForTimeout(300);
-      return student.evaluate(async () => {
-        const inv = await import('/js/investigations.js');
-        const key = inv.activeAssignmentKey();
-        return { key, held: localStorage.getItem(key) !== null };
-      });
+      const held = () =>
+        student.evaluate(async () => {
+          const inv = await import('/js/investigations.js');
+          const key = inv.activeAssignmentKey();
+          return { key, held: !!key && localStorage.getItem(key) !== null };
+        });
+      await expect.poll(async () => (await held()).held).toBe(true);
+      return held();
     };
     const a = await keyAfter(oldHref);
     const b = await keyAfter(newHref);

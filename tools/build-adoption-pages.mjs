@@ -1355,8 +1355,8 @@ function guidePage(S) {
       ) +
         ol([
           `${lead('Choose a course and press the button.', 'Elija un curso y pulse el botón.')} ${T(
-            'On the Teach page, “Use as is” opens the course builder with that course. Name the term, and Gravitas pins every lesson to today’s version, gives each assignment a fresh code and shows the link for your students, the course file to keep and what, if anything, changed under the course.',
-            'En la página Enseñar, «Usar tal cual» abre el creador de cursos con ese curso. Escriba el periodo y Gravitas fija cada lección a la versión de hoy, da un código nuevo a cada tarea y muestra el enlace para sus estudiantes, el archivo del curso que debe guardar y qué cambió, si cambió algo, en el curso.'
+            'On the Teach page, “Use as is” opens the course builder with that course. Name the term, and Gravitas pins every investigation to today’s version, gives each activity a fresh code and shows the link for your students, the course file to keep and what, if anything, changed under the course.',
+            'En la página Enseñar, «Usar tal cual» abre el creador de cursos con ese curso. Escriba el periodo y Gravitas fija cada investigación a la versión de hoy, da un código nuevo a cada actividad y muestra el enlace para sus estudiantes, el archivo del curso que debe guardar y qué cambió, si cambió algo, en el curso.'
           )} ${a('/teaching/#minimal', 'Teach: one course in fifteen minutes', 'Enseñar: un curso en quince minutos')}.`,
           `${lead('Give students the link.', 'Dé el enlace al estudiantado.')} ${T(
             'The same panel opens the distribution kit: a code to scan, a handout in English and Spanish, and notes for Canvas, Moodle and Blackboard.',
@@ -1372,8 +1372,8 @@ function guidePage(S) {
           )} ${a('/instructors/submissions/', 'Submission review', 'Revisión de entregas')}.`,
         ]) +
         P(
-          'Next term, open last term’s course file in the course builder and choose Start a new term: fresh codes, today’s lessons and a list of what changed, while last term’s file and links keep working. On the review page, Archive saves last term’s reports and your marks as one file and clears the page. Nothing a student made is deleted.',
-          'El periodo siguiente, abra el archivo del curso del periodo pasado en el creador de cursos y elija Empezar un periodo nuevo: códigos nuevos, las lecciones de hoy y una lista de lo que cambió, mientras el archivo y los enlaces del periodo pasado siguen funcionando. En la revisión de entregas, Archivar guarda las entregas del periodo pasado y sus calificaciones en un solo archivo y limpia la página. No se borra nada de lo que hizo el estudiantado.'
+          'Next term, open last term’s course file in the course builder and choose Start a new term: fresh codes, today’s investigations and a list of what changed, while last term’s file and links keep working. On the review page, Archive saves last term’s reports and your marks as one file and clears the page. Nothing a student made is deleted.',
+          'El periodo siguiente, abra el archivo del curso del periodo pasado en el creador de cursos y elija Empezar un periodo nuevo: códigos nuevos, las investigaciones de hoy y una lista de lo que cambió, mientras el archivo y los enlaces del periodo pasado siguen funcionando. En la revisión de entregas, Archivar guarda las entregas del periodo pasado y sus calificaciones en un solo archivo y limpia la página. No se borra nada de lo que hizo el estudiantado.'
         )
     ),
     section(
