@@ -82,11 +82,20 @@ runs:
             /var/lib/apt/lists/lock /var/cache/apt/archives/lock || true
           sudo dpkg --configure -a || true
           # The Azure mirror is the one that stalls; the next attempt asks the
-          # main archive instead. Both the one-line and the deb822 source
-          # formats are covered, and a runner without the Azure name is left
-          # alone (the substitution then matches nothing).
+          # main archive instead. The ubuntu-24.04 runner image does not name
+          # the mirror in its sources: they say mirror+file:/etc/apt/apt-mirrors.txt
+          # (the failing logs show `Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist`)
+          # and the Azure URL lives in that list, so the list is rewritten as
+          # well as the one-line and deb822 sources. A runner without the Azure
+          # name is left alone (the substitution then matches nothing).
+          # `playwright install-deps` runs its own apt-get update at the start
+          # of the next attempt, which reads the new mirror. The two echoes
+          # let the log show which mirror the next attempt will use.
           sudo sed -i -E 's#(https?://)azure\.archive\.ubuntu\.com/#\1archive.ubuntu.com/#g' \
-            /etc/apt/sources.list /etc/apt/sources.list.d/* 2>/dev/null || true
+            /etc/apt/apt-mirrors.txt /etc/apt/sources.list /etc/apt/sources.list.d/* 2>/dev/null || true
+          echo "apt mirror list after attempt $attempt:"
+          cat /etc/apt/apt-mirrors.txt 2>/dev/null || echo "(no /etc/apt/apt-mirrors.txt)"
+          grep -rhE '^(URIs|deb) ' /etc/apt/sources.list /etc/apt/sources.list.d 2>/dev/null | head -n 4 || true
         done
         echo "::error::install-deps failed three times"
         exit 1
