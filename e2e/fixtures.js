@@ -941,4 +941,14 @@ export async function openObjectsList(page) {
   await disclosure.locator('summary').click();
 }
 
+/**
+ * Open the lesson panel's "More" (Prompt 167) if it is shut: Help, depth
+ * switching, the progress backup and Restart fold behind it. Idempotent.
+ */
+export async function openMore(page) {
+  const more = page.locator('#investigationMore');
+  if (!(await more.evaluate(d => d.open)))
+    await more.locator(':scope > summary').click();
+}
+
 export { expect };

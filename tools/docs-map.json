@@ -328,7 +328,7 @@
       "kind": "guide",
       "purpose": "Activity, course, kit and review for instructors.",
       "owner": 77,
-      "student": false
+      "student": true
     },
     {
       "file": "INSTRUCTOR_MATERIALS.md",

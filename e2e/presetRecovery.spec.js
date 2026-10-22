@@ -27,6 +27,11 @@ const slider = page =>
   page.locator('#investigationToolControls [data-tool="logm"]');
 const readout = page =>
   page.locator('#investigationToolControls [data-tool-out="logm"]');
+// Prompt 167: this step is a question with no number, so the presets fold
+// behind the tool panel's "More" (the slider stays). The way back is one
+// disclosure away, which is what these tests now prove.
+const toolMoreSummary = page =>
+  page.locator('#investigationToolMore > summary');
 const sgrPreset = page =>
   page
     .locator('#investigationToolPresets .inv-preset')
@@ -85,6 +90,8 @@ test.describe('an off-grid staged value can be recovered', () => {
     await expect(sgrPreset(page), 'the widget offers the way back').toHaveCount(
       1
     );
+    await expect(sgrPreset(page), 'folded until More is opened').toBeHidden();
+    await toolMoreSummary(page).click();
     await sgrPreset(page).click();
 
     await expect.poll(() => shown(page)).toBe(staged);
@@ -98,10 +105,25 @@ test.describe('an off-grid staged value can be recovered', () => {
     await expect.poll(() => shown(page), { timeout: 5_000 }).not.toBe(staged);
 
     // Tab forward until the preset has focus. Bounded, so a control that can
-    // never be reached fails here rather than hanging.
+    // never be reached fails here rather than hanging. The preset is behind
+    // the tool panel's More: the walk meets its summary and opens it with
+    // Enter, as a keyboard reader does, and goes on to the preset inside.
     let reached = false;
+    let opened = false;
     for (let i = 0; i < 25 && !reached; i++) {
       await page.keyboard.press('Tab');
+      if (
+        !opened &&
+        (await page.evaluate(
+          () =>
+            document.activeElement ===
+            document.querySelector('#investigationToolMore > summary')
+        ))
+      ) {
+        await page.keyboard.press('Enter');
+        opened = true;
+        continue;
+      }
       reached = await page.evaluate(() => {
         const el = document.activeElement;
         return Boolean(
@@ -110,6 +132,7 @@ test.describe('an off-grid staged value can be recovered', () => {
         );
       });
     }
+    expect(opened, 'More is reachable by Tab and opens with Enter').toBe(true);
     expect(reached, 'the preset is reachable by Tab').toBe(true);
 
     await page.keyboard.press('Enter');

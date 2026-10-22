@@ -477,6 +477,39 @@ try {
           />
         </div>
       </section>
+      <section class="sr-export" aria-labelledby="archTitle">
+        <h2 id="archTitle">
+          <span class="gs-en">Archive this term</span
+          ><span class="gs-es" lang="es">Archivar este periodo</span>
+        </h2>
+        <p class="ui-note">
+          <span class="gs-en"
+            >When the term is over, save everything on this page as one file: the
+            reports as they were handed in, the names they were grouped under and
+            your marks. The page is then cleared. Open the file here, like any
+            report, to bring it all back. Nothing leaves your browser, and nothing
+            a student holds is touched.</span
+          ><span class="gs-es" lang="es"
+            >Cuando termine el periodo, guarda todo lo de esta página en un solo
+            archivo: las entregas tal como llegaron, los nombres con que se
+            agruparon y tus notas. Después se limpia la página. Abre el archivo
+            aquí, como cualquier entrega, para recuperarlo todo. Nada sale de tu
+            navegador y no se toca nada de lo que guardan los estudiantes.</span
+          >
+        </p>
+        <div class="sr-gb-row">
+          <button id="archiveSave" type="button" class="ui-button" disabled>
+            <span class="gs-en">Archive and clear</span
+            ><span class="gs-es" lang="es">Archivar y limpiar</span>
+          </button>
+        </div>
+        <p
+          id="archiveStatus"
+          class="ui-note"
+          role="status"
+          aria-live="polite"
+        ></p>
+      </section>
       <hr />
       <p class="ui-note" data-i18n="sub.notice">
         A submission token says what a student answered. It is not proof of who

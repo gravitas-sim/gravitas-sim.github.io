@@ -81,6 +81,13 @@
         }
       ]
     },
+    "mo": {
+      "enum": [
+        "open",
+        "shut"
+      ],
+      "description": "Written only when the instructor chose whether the student's More sections start open or shut (Prompt 167); the student can always open everything, and what they last chose for a surface outranks it."
+    },
     "m": {
       "const": 1,
       "description": "Written only when the instructor asked that the student's lab report print each written answer's marking note (Prompt 172); without it the report does not."

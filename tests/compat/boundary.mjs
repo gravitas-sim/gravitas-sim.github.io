@@ -27,6 +27,14 @@ export const BOUNDARY = [
     expect: 'refused',
   },
   {
+    id: 'course-term',
+    prompt: 168,
+    kind: 'course-pack',
+    plans: 'a `term` label on the course package, written only when named',
+    mutate: doc => ({ ...clone(doc), term: 'Spring 2027' }),
+    expect: 'refused',
+  },
+  {
     id: 'resume-in-progress-record',
     prompt: 163,
     kind: 'progress-store',

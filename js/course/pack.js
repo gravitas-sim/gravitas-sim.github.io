@@ -92,6 +92,8 @@ export const MAX_OBJECTIVES = 12;
 export const MAX_PREREQUISITES = 6;
 /** As js/assignments/assignment.js has them. */
 export const MAX_ASSIGNMENT_STEPS = 60;
+/** The longest term label: it is appended to an assignment's title, which has 120. */
+export const MAX_TERM = 40;
 const MAX_ASSIGNMENT_TITLE = 120;
 const MAX_ASSIGNMENT_INTRO = 1200;
 
@@ -120,6 +122,7 @@ const PACK_FIELDS = new Set([
   'locales',
   'pinning',
   'courseLevel',
+  'term',
   'title',
   'summary',
   'audience',
@@ -309,6 +312,21 @@ export function validateCoursePack(c, api) {
       'courseLevel',
       'courseLevel',
       'survey, majors or upper'
+    );
+
+  // The term a copy of the course is for (Prompt 168): a short plain label,
+  // written only when the instructor names one, so every older file is valid.
+  if (c.term !== undefined)
+    need(
+      typeof c.term === 'string' &&
+        c.term === c.term.trim() &&
+        c.term.length > 0 &&
+        c.term.length <= MAX_TERM &&
+        !MARKUP.test(c.term),
+      'term',
+      'term',
+      `a short plain label such as "Spring 2027", up to ${MAX_TERM} characters`,
+      { max: MAX_TERM }
     );
 
   text(c.title, 'title', true, 120);

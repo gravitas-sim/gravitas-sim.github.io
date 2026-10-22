@@ -600,6 +600,24 @@ async function harvestSpecs() {
 
 // --- Call-site coverage ---------------------------------------------------------
 
+/**
+ * The caller of the function that calls this, as `file:line:column`. Read from
+ * the call sites themselves, because building and splitting the text of a
+ * stack for every toFixed call in a recording cost as much as the recording.
+ */
+function callerOf() {
+  const prepare = Error.prepareStackTrace;
+  Error.prepareStackTrace = (_, sites) => sites;
+  try {
+    const site = new Error().stack[2];
+    return site
+      ? `${site.getFileName()}:${site.getLineNumber()}:${site.getColumnNumber()}`
+      : '';
+  } finally {
+    Error.prepareStackTrace = prepare;
+  }
+}
+
 const SITE_AT = /\/(js\/[A-Za-z]+Widgets\.js):(\d+):(\d+)\)?$/;
 
 /**
@@ -615,9 +633,9 @@ export async function withWidgetCoverage(fn) {
   const { toFixed, toPrecision } = Number.prototype;
   const watch = original =>
     function watched(...args) {
-      const frameText = new Error().stack.split('\n')[2] ?? '';
+      const frameText = callerOf();
       const result = original.apply(this, args);
-      const m = SITE_AT.exec(frameText.trim());
+      const m = SITE_AT.exec(frameText);
       if (m) {
         const key = `${m[1]}:${m[2]}:${m[3]}`;
         const seen = sites.get(key) ?? { calls: 0, negative: 0, nonFinite: 0 };

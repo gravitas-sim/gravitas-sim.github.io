@@ -9,7 +9,7 @@
 // comes back from storage exactly as it was written.
 // =============================================================================
 
-import { test, expect } from './fixtures.js';
+import { test, expect, openMore } from './fixtures.js';
 
 /** Open one step of a lesson directly, through the authoring preview. */
 async function openStep(app, page, lesson, step) {
@@ -299,7 +299,7 @@ test.describe('a saved answer comes back exactly as it was written', () => {
   }) => {
     await app.boot();
     await openAsStudent(page);
-    await page.locator('.inv-backup > summary').click();
+    await openMore(page);
     const [download] = await Promise.all([
       page.waitForEvent('download'),
       page.locator('#investigationBackupDownload').click(),

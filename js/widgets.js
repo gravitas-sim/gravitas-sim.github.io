@@ -525,3 +525,51 @@ export function widgetDefaults(widget, overrides = {}) {
   }
   return out;
 }
+
+// --- The task rule (Prompt 167, DESIGN_SYSTEM.md "More") ----------------------
+
+/**
+ * What a step asks the student to reason about, read from the metadata it
+ * already has: the fields it asks them to fill (with their units), a numeric
+ * answer and its unit, the live readout it names, a derived quantity, a plot,
+ * a tolerance. Never empty for a step that asks for a number or a unit.
+ * @param {Object} step - A lesson step
+ * @returns {string[]} One entry per declared quantity, unit included
+ */
+export function declaredQuantities(step) {
+  const out = [];
+  for (const f of step?.fields || [])
+    out.push(f.unit ? `${f.id} (${f.unit})` : f.id);
+  if (step?.kind === 'numeric')
+    out.push(step.unit ? `(${step.unit})` : 'answer');
+  else if (step?.unit) out.push(`(${step.unit})`);
+  for (const key of ['probe', 'compute', 'plot', 'tolerance', 'expect'])
+    if (step?.[key] != null) out.push(key);
+  return out;
+}
+
+/**
+ * Which of an instrument's controls may fold behind "More" on a step. The rule
+ * is that nothing the step asks about is hidden: a step that declares a
+ * quantity, or sends the student to measure or explore, keeps every slider and
+ * every preset where it is, since either can be what produces the number. A
+ * step that only reads keeps the first slider and folds the rest; one that
+ * asks a question with no number keeps the sliders and folds the presets.
+ * @param {Object} step - A lesson step
+ * @param {Object[]} controls - The controls the step shows, in order
+ * @returns {{open: Object[], folded: Object[], presets: boolean}} What stays,
+ *   what folds, and whether the presets fold
+ */
+export function toolFold(step, controls) {
+  const asks =
+    declaredQuantities(step).length > 0 ||
+    step?.type === 'measure' ||
+    step?.type === 'explore';
+  if (asks) return { open: controls, folded: [], presets: false };
+  const keep = step?.type === 'read' ? 1 : controls.length;
+  return {
+    open: controls.slice(0, keep),
+    folded: controls.slice(keep),
+    presets: true,
+  };
+}

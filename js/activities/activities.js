@@ -82,6 +82,10 @@ export function assignmentForFormat(
     // (F-8: off unless the activity says `markingNote: true`, which the key
     // prints whatever it says).
     markingNote: activity.markingNote === true,
+    // Whether the student's panels start with their "More" sections open or
+    // shut (Prompt 167: `more: 'open'` or `'shut'`; the student can always
+    // open everything, and what they last chose for a surface outranks it).
+    more: activity.more,
   });
 
   return {

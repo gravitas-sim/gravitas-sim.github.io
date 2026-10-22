@@ -1,30 +1,32 @@
 {
   "version": "October 2026",
-  "generated": "2026-10-21",
-  "documents": 480,
+  "generated": "2026-10-22",
+  "documents": 540,
   "inventory": {
-    "documents": 480,
+    "documents": 540,
     "byLocale": {
       "en": 249,
-      "es": 231
+      "es": 291
     },
     "byKind": {
       "general": 2,
       "guide": 127,
       "key": 346,
+      "notes": 60,
       "worksheet": 5
     },
     "byVariant": {
       "activity": 12,
       "depth": 210,
       "full": 240,
-      "general": 18
+      "general": 18,
+      "notes": 60
     }
   },
-  "sourceFiles": 268,
-  "sourceDigest": "48754a9ca1ffbb5cada68b938e327fe23beb197fae86ec180cda71b27541763c",
+  "sourceFiles": 269,
+  "sourceDigest": "f81e7211984d89e78d6e786cc806da7b60ca368a0d1bb688107a8ae89a724620",
   "sources": {
-    "js/activities/activities.js": "bd72fc2b38a6c7dd2b59517725742344f3a151f5e2b6d4d04f71f6dfabe8dba9",
+    "js/activities/activities.js": "39ac98cd99b8b0387c55e41d5d4530bad55a8da8758819ad056be73e7a716b01",
     "js/activities/activityBridge.js": "67a82aff98e0ed935d6b8b0f0f654c6ad4332ee929cb3604e896a7f790a6fdc1",
     "js/activityDocs.js": "a5c56e6db7b4b82fdaf5535db62c402ed6ed90bf819b34e1473792af0724abe8",
     "js/answerCheck.js": "93d09ed32008916989cdc01b4acd9fc1a5e54581cebd9645d061b6c48303dfa4",
@@ -32,10 +34,10 @@
     "js/answerKey.js": "71169ff09ba8a1c051cc7c487ab6c17060fbba61cd72f1b6276bdb50f6b0a804",
     "js/answerKeyDocument.js": "25a66b1141220d2a3b4c025cae5adf63e5c73d2aa341d003ffe018bc0f72dd88",
     "js/answerParse.js": "420ce48b5513fa3c1d2b8abe1ad35c9a7c281ac3deca4c3cfd2204b38e1d4863",
-    "js/assignments/assignment.js": "4e95ebdcc28d430c99331b77d9e669a81066f7872f3c7e79ada98a2388d9a05c",
+    "js/assignments/assignment.js": "c89ab86e79b7727f9f51c52a06cb4df878901332b29d6785e371f6f44b39a62f",
     "js/authoring/instructorSchema.js": "e53fac3d680fd804ee5341004c86652bceb01c30015bb50c347a6356b6d9e002",
     "js/constants.js": "4610b3640de5b1c28f336d251e3817ddb440b562f5f72d75051c72f6d0388240",
-    "js/course/pack.js": "1d32418986c516d731bed1a73c9924d8fd388e410bdea8f88c9579e88bd15c4b",
+    "js/course/pack.js": "ef19663bab741e351bb2a736935318e1b224e9466f3a52c2f97931f2bf608f8e",
     "js/course/review.js": "6d49a4f7122c08c7243dd0185102d6cc7cea85bc61d19f059931a3e47d2b3d66",
     "js/data/activities.js": "e044dc2eb8942dfc9b9c9856bc6e30de828d9bc4d6b18829314bc893711a069c",
     "js/data/activityTeaching.js": "7694fc798f8c4130e5aead5357e69bab04d6a5d386013d009430dba9a1c31008",
@@ -46,7 +48,7 @@
     "js/data/instructorExpectations.js": "23b1535cbbc559cd6f2ad20e20ac65a0c092bc75fd6c31bc9b5d335370731019",
     "js/data/instructorFlow.es.js": "f1c087e5240114351245f6a7fa7ad9b3efd269ec6d415183fd945ac95534fd86",
     "js/data/instructorFlow.js": "b01df15d61607340096cbd352135b1b2d5475afc09cb81ffd718ee274d4093c0",
-    "js/data/instructorLabels.js": "7090a812b44525123d7ae3d6093951effc9942a9c09c1ed45e6e96260ca752f5",
+    "js/data/instructorLabels.js": "d6ea504f084d882295379f7df296e59f2aab572b5bf7fa985baf1b7253a16da1",
     "js/data/investigations.js": "d37b43165f76dc041c8a050ceb513a5e26892b4bf336e917545b69f60cf0988d",
     "js/data/investigations/a-lens-passing-by.js": "b0516c2bdb40f085f5dd2ab1ade0e006771d9507e3809c89e8de3ba35376e030",
     "js/data/investigations/a-universe-of-stars.js": "8a5cf66239f97a96d71b262a24b178cbe327a86500f252f6e65a405455f1dd65",
@@ -263,7 +265,8 @@
     "js/instructorExpectations.js": "09b1aeac6b3fa134374f0286029cdda1cbe68c9e3d7885afdc75387a4f5d6282",
     "js/instructorFacts.js": "a8939d4e55ea32df76d53d4ae9222ccb98554a0251603aafe523f4f37f658a41",
     "js/instructorFlow.js": "d06edcc3404196951515250e971b81ddb53cd00315704c7f65b2616de0084122",
-    "js/instructorLocale.js": "7e5d3b199452c1ef3fec552ce5a9f5eec6e943cf19a712ab40148b5f2d0fce7b",
+    "js/instructorLocale.js": "87d2124cbd6fb50dfeb3a6569fc79b3af79c227a3609459258cb214dfcb3e01d",
+    "js/instructorNotes.js": "f283e56619afc3cbad50def97001a97b482ed4c36e9bd524f7ed8897840c2d8b",
     "js/instructorSource.js": "da3fb5a0d4387db76d3117b0c7cac81919de0186041cf4161c328d5802f5890a",
     "js/investigations/depthAll.js": "874cbfbab7c467f9de0984b81a4bd37df9996b5231fbba452ec833c17f2b56c4",
     "js/investigations/depthPure.js": "61ea6369eef1b8b9c39c2395f2be1a1ebaf83772180520f6ec7fbe3c8ea085f6",
@@ -289,9 +292,9 @@
     "js/populationsGuideDocs.js": "0b22cd19ccaec3f16e16165a192b41d19fb6c78484623c5255966cc66c84906c",
     "js/rng.js": "f42b490eeeace3f87e198be1ae6df1681ff12adc06b1ac5f3445b64c13afbd03",
     "js/rubric.js": "7a01bf33f3d2789d1f6ec7759913e0a108bf9424f20671a35250bd6679e440f2",
-    "tools/build-instructor-materials.js": "2c299f75f329f21c32a9d8106d84b078bffdf3e212927e3243e225a7a785cb0f",
+    "tools/build-instructor-materials.js": "43d77d03e15616b4e445336ff9aa4317662867068801b0698d08b791bfcbf35c",
     "tools/instructor-freshness.mjs": "96052b2f27080f0243fdd4d5f7608927bd67f0c50808b6eac3345a65c14d1e28",
     "tools/source-closure.mjs": "961828e4d0d40d8a6f8c029fe9b9435ecaf39a74b62640efc0b4145c35c7650a"
   },
-  "contentDigest": "cd0915b688955d483dcea5fa9f1b0e3cf2801d1dff52718847e297bec40609e5"
+  "contentDigest": "1ca7df4e89e9c9f77498f681da4e00a4e22a3d5b6ce9a98666ca121917294749"
 }

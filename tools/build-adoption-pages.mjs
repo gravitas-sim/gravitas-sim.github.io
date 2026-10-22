@@ -1320,6 +1320,11 @@ function guidePage(S) {
   const lead = (en, es) => `<strong>${T(en, es)}</strong>`;
 
   const toc = [
+    [
+      'minimal',
+      'Start here: one course in fifteen minutes',
+      'Empiece aquí: un curso en quince minutos',
+    ],
     ['what', 'What you are adopting', 'Qué va a adoptar'],
     ['week', 'The first week', 'La primera semana'],
     ['semester', 'The first semester', 'El primer semestre'],
@@ -1338,6 +1343,39 @@ function guidePage(S) {
     `<p id="toc-h"><strong>${T('On this page', 'En esta página')}</strong></p>\n<nav class="ad-toc" aria-labelledby="toc-h">${list(
       toc.map(([id, en, es]) => `<a href="#${id}-h">${T(en, es)}</a>`)
     )}</nav>`,
+    section(
+      'minimal',
+      T(
+        'Start here: one course in fifteen minutes',
+        'Empiece aquí: un curso en quince minutos'
+      ),
+      P(
+        'If you have one built-in course and fifteen minutes, you do not have to build anything. The fifteen minutes is a plan, not a measurement from a class.',
+        'Si tiene un curso incluido y quince minutos, no tiene que crear nada. Los quince minutos son un plan, no una medición hecha en una clase.'
+      ) +
+        ol([
+          `${lead('Choose a course and press the button.', 'Elija un curso y pulse el botón.')} ${T(
+            'On the Teach page, “Use as is” opens the course builder with that course. Name the term, and Gravitas pins every investigation to today’s version, gives each activity a fresh code and shows the link for your students, the course file to keep and what, if anything, changed under the course.',
+            'En la página Enseñar, «Usar tal cual» abre el creador de cursos con ese curso. Escriba el periodo y Gravitas fija cada investigación a la versión de hoy, da un código nuevo a cada actividad y muestra el enlace para sus estudiantes, el archivo del curso que debe guardar y qué cambió, si cambió algo, en el curso.'
+          )} ${a('/teaching/#minimal', 'Teach: one course in fifteen minutes', 'Enseñar: un curso en quince minutos')}.`,
+          `${lead('Give students the link.', 'Dé el enlace al estudiantado.')} ${T(
+            'The same panel opens the distribution kit: a code to scan, a handout in English and Spanish, and notes for Canvas, Moodle and Blackboard.',
+            'El mismo panel abre el kit de distribución: un código para escanear, un folleto en español e inglés y notas para Canvas, Moodle y Blackboard.'
+          )}`,
+          `${lead('Students work and hand in.', 'El estudiantado trabaja y entrega.')} ${T(
+            'They open the link, do an investigation and hand in the lab report as a PDF, or its token. Their work stays in their own browsers.',
+            'Abren el enlace, hacen una investigación y entregan el informe de laboratorio en PDF, o su ficha. Su trabajo se queda en sus propios navegadores.'
+          )}`,
+          `${lead('Read the reports.', 'Lea las entregas.')} ${T(
+            'Open submission review, drop in the course file and the reports, mark what needs your judgment, and write the gradebook files.',
+            'Abra la revisión de entregas, suelte el archivo del curso y las entregas, califique lo que necesita su criterio y escriba los archivos de calificaciones.'
+          )} ${a('/instructors/submissions/', 'Submission review', 'Revisión de entregas')}.`,
+        ]) +
+        P(
+          'Next term, open last term’s course file in the course builder and choose Start a new term: fresh codes, today’s investigations and a list of what changed, while last term’s file and links keep working. On the review page, Archive saves last term’s reports and your marks as one file and clears the page. Nothing a student made is deleted.',
+          'El periodo siguiente, abra el archivo del curso del periodo pasado en el creador de cursos y elija Empezar un periodo nuevo: códigos nuevos, las investigaciones de hoy y una lista de lo que cambió, mientras el archivo y los enlaces del periodo pasado siguen funcionando. En la revisión de entregas, Archivar guarda las entregas del periodo pasado y sus calificaciones en un solo archivo y limpia la página. No se borra nada de lo que hizo el estudiantado.'
+        )
+    ),
     section(
       'what',
       T('What you are adopting', 'Qué va a adoptar'),
@@ -1401,8 +1439,8 @@ function guidePage(S) {
           `${deep} de las ${total} investigaciones tienen tres profundidades: principal, cuantitativa y avanzada. Puede fijar la profundidad en una actividad o en un curso, y el estudiante también puede elegirla. Un paso más profundo nunca cambia el escenario ni el modelo, solo lo que se pregunta.`
         )}`,
         `${lead('Materials.', 'Materiales.')} ${T(
-          'The instructor resources hold an instructor guide and an answer key for each investigation that runs in the simulation, keys cut to each format of a classroom activity, and student worksheets for the activities, in a bundle encrypted in the browser because the site is static. The passphrase is shared with instructors on request: write to the address in the citation file. The public parts (the topic, where it fits in a course, what students should already know and the wrong turns they take) are on each adoption page.',
-          'Los recursos para docentes contienen una guía docente y una clave de respuestas para cada investigación que se ejecuta en la simulación, claves adaptadas a cada formato de una actividad de clase y hojas de trabajo para las actividades, en un paquete cifrado en el navegador porque el sitio es estático. La contraseña se comparte con docentes a petición: escriba a la dirección del archivo de citas. Las partes públicas (el tema, el lugar en el curso, lo que el estudiantado debería saber ya y los errores que comete) están en cada página de adopción.'
+          'The instructor resources hold an instructor guide and an answer key for each investigation that runs in the simulation, keys cut to each format of a classroom activity, and student worksheets for the activities, in a bundle encrypted in the browser because the site is static. The passphrase is shared with instructors on request: write from an address your institution issues to the address in the citation file, and the maintainer replies within a week or two. A department can build a bundle under its own passphrase instead. The public parts (the topic, where it fits in a course, what students should already know and the wrong turns they take) are on each adoption page.',
+          'Los recursos para docentes contienen una guía docente y una clave de respuestas para cada investigación que se ejecuta en la simulación, claves adaptadas a cada formato de una actividad de clase y hojas de trabajo para las actividades, en un paquete cifrado en el navegador porque el sitio es estático. La contraseña se comparte con docentes a petición: escriba, desde una dirección que su institución le haya dado, a la dirección del archivo de citas; la persona responsable responde en una o dos semanas. Un departamento puede construir un paquete con su propia contraseña. Las partes públicas (el tema, el lugar en el curso, lo que el estudiantado debería saber ya y los errores que comete) están en cada página de adopción.'
         )} ${a('/instructors/', 'Instructor resources', 'Recursos para docentes')}.`,
         `${lead('Evaluation.', 'Evaluación.')} ${T(
           'The classroom evidence kit has a fidelity checklist, a twelve-item pilot pre/post assessment, a usability questionnaire and de-identified data templates. They are project-developed and unvalidated, and the kit says so. Research on students usually needs institutional review before any data is collected.',
@@ -1464,8 +1502,8 @@ function guidePage(S) {
         [
           ['Languages', 'Idiomas'],
           T(
-            'Student-facing pages are in English and Spanish. The instructor materials are in English only.',
-            'Las páginas para el estudiantado están en inglés y español. Los materiales docentes están solo en inglés.'
+            'Student-facing pages are in English and Spanish. The instructor guides and answer keys are written in English: their Spanish copies translate the headings and the investigation’s own words, and every investigation also has generated Spanish structured notes (objectives, steps, marked steps, named misconceptions), which a fluent reader has not read.',
+            'Las páginas para el estudiantado están en inglés y español. Las guías docentes y las claves de respuestas están escritas en inglés: sus copias en español traducen los encabezados y las palabras de la propia investigación, y cada investigación tiene además notas estructuradas generadas en español (objetivos, pasos, pasos que se califican, errores conceptuales con nombre), que ninguna persona con dominio pleno del idioma ha leído.'
           ),
         ],
         [

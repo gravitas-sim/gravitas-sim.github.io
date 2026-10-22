@@ -33,6 +33,8 @@ Navigation grouping and approved retirements (Prompt 166, visible, train v3): th
 
 Home and the global navigation (Prompt 162, visible, train v3): the navigation is the five destinations (Explore, Learn, Observe, My work, Teach), one link each, in both languages, the same on every page; the 25 links that were menu entries are places on their destination's page (and Home's Explore entry), nothing was removed; every page but the sandbox has a breadcrumb; Home is what Gravitas is, where to start (an investigation, an observation, the sandbox, a course for an instructor) and the five places, with no counts, scenario cards or feature lists; the introduction is reachable from Home's foot. The Spanish tab title of the adopter's guide reads "Guía de adopción".
 
+The minimal instructor path (Prompt 168, visible and instructional, train v3): Teach opens with one course in fifteen minutes (choose a built-in course, "use as is", a student link, the review page and the grade export, no authoring); "Start a new term" on the course builder and the distribution kit copies a course or an activity with fresh keys and a new course-home link, re-pins it and lists what changed under it (step digests); the review page's "Archive" saves its reports as one file (`gravitas.submission-archive`, version 1) and clears the page, and reads that file back; a course pack may carry an optional `term` (written only when set), shown on the course home page ("Term: ...") and by My work from a new local record `gravitas_terms` (twelve most recent) so terms do not merge. Last term's links and files open exactly what they opened; nothing a student keeps is deleted; the submission key is unchanged. The adopter's guide leads with the path and the evaluation kit says what comes back. One closure file edited: js/course/pack.js. Route byte ceilings raised by the measured overruns under the standing approval (D-R10-47); no request ceiling moved.
+
 Governance only (Prompt 122): INTEGRATION.md and BRANCHING.md describe `main` plus trains; a `Pull-request class` CI job enforces labels, windows and the instructor ciphertext rule; `tools/evidence-status.json` records the evidence class of each public claim and generates `docs/evidence-status.md`. No student-facing behavior changes.
 
 Scientific-defect triage (Prompt 125, visible): the model page has a generated known-discrepancies table (a register plus the validation report's per-check status); the extinction ratio of the cluster-fit tool is kept at 3.245 and its difference from the kernel's CCM89 value is explained (RADIATION.md); the Sky Lab and validation pages state that refraction below 5 degrees is not validated, in place of "several arcminutes" (it is up to about 20). No number a student sees changes.
@@ -55,7 +57,7 @@ investigations (<!--fact:investigations-->60<!--/fact--> that run in the
 simulation and <!--fact:guidedInvestigations-->17<!--/fact--> in the
 Observatory, the 3-D lab and the mission lab), a shared shell, a Library, a
 workspace for each student's own work, an instructor path from adoption page to
-gradebook file, <!--fact:instructorDocuments-->480<!--/fact--> generated
+gradebook file, <!--fact:instructorDocuments-->540<!--/fact--> generated
 instructor documents, a public validation suite
 of <!--fact:physicsChecks-->332<!--/fact--> checks, and authoring tools
 (Scenario Studio, Investigation Composer, course packs and an extension SDK).
@@ -1708,7 +1710,7 @@ listed here because this is the release that first carries it.
 - **An instructor portal that explains itself.** `/instructors/` states what is
   behind the passphrase before asking for it, says plainly what client-side
   encryption on a static host can and cannot promise, and presents the
-  <!--fact:instructorDocuments-->480<!--/fact--> documents grouped by investigation
+  <!--fact:instructorDocuments-->540<!--/fact--> documents grouped by investigation
   with their kind and size. A wrong passphrase and a missing bundle now report
   as the different problems they are.
 - **Dual licensing.** The code is MIT; the original educational material is
@@ -1793,7 +1795,7 @@ listed here because this is the release that first carries it.
   cycle or on a low-level module importing a coordinator.
 - **A bundle budget.** `npm run budget` holds the initial download to a written
   ceiling; raising it means saying why in the same commit.
-- **Accessibility checks in CI.** axe-core over <!--fact:axeSurfaces-->39<!--/fact--> surfaces in both
+- **Accessibility checks in CI.** axe-core over <!--fact:axeSurfaces-->41<!--/fact--> surfaces in both
   languages and both themes, plus keyboard, focus-trap, reflow and reduced-motion tests.
   See [ACCESSIBILITY.md](ACCESSIBILITY.md).
 

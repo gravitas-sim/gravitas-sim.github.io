@@ -53,10 +53,16 @@ describe('sections', () => {
       expect([id, itemsOf(id).length > 0]).toEqual([id, true]);
   });
 
-  test('one Visuals, and the numerical method and performance under Advanced', () => {
+  test('one Visuals, and the science settings, the numerical method and performance under Advanced', () => {
     expect(SETTING_SECTIONS.filter(s => s.id === 'visuals')).toHaveLength(1);
     const advanced = SETTING_SECTIONS.filter(s => s.advanced).map(s => s.id);
-    expect(advanced).toEqual(['accuracy', 'performance']);
+    expect(advanced).toEqual([
+      'simulation',
+      'black-holes',
+      'compact-objects',
+      'accuracy',
+      'performance',
+    ]);
     expect(itemsOf('accuracy').map(i => i.key)).toContain('integrator');
     // The advanced sections come last, so the disclosure that holds them is
     // one block at the foot of the panel.

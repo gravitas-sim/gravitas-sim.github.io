@@ -347,6 +347,16 @@ export const FORMATS = Object.freeze([
     schema: 'submission-results-2.schema.json',
   },
   {
+    name: 'gravitas.submission-archive',
+    fields: 'format, formatVersion',
+    version: 1,
+    const: ['js/instructorArchive.js', 'ARCHIVE_VERSION'],
+    owner: 'js/instructorArchive.js readArchive',
+    persisted: 'download (the review page opens it again)',
+    older: 'v1 only',
+    newer: 'refused by reason code',
+  },
+  {
     name: 'gravitas.lab3d-guide-report',
     fields: 'format, formatVersion',
     version: 1,
@@ -590,6 +600,16 @@ export const FORMATS = Object.freeze([
     newer: 'reads as nothing to resume; the next write replaces it',
   },
   {
+    name: 'course terms record',
+    fields: 'v, courses (id, term, title, at)',
+    version: 1,
+    const: ['js/instructorCourseTerms.js', 'TERMS_VERSION'],
+    owner: 'js/instructorCourseTerms.js readTerms',
+    persisted: 'localStorage, inside gravitas.student-data (preferences)',
+    older: 'v1 only',
+    newer: 'reads as no courses; the next write replaces it',
+  },
+  {
     name: 'gravitas.evaluation',
     fields: 'kind, schema',
     version: 1,
@@ -622,6 +642,7 @@ export const COMPAT = Object.freeze({
   },
   'submission token': { fixture: 'submission-token', unknown: 'n/a' },
   'resume record': { fixture: 'resume-record', unknown: 'ignored' },
+  'course terms record': { fixture: 'course-terms', unknown: 'ignored' },
   'gravitas.submission-results': {
     fixture: 'submission-results',
     unknown: 'ignored',
@@ -760,6 +781,7 @@ ${rows.join('\n')}
 ${compatibilitySection(formats)}
 ## Fields added inside a version
 
+- **\`term\` on a course pack (Prompt 168).** A \`gravitas.course-pack/2\` may carry \`term\`, a short plain label such as \`Spring 2027\` (at most 40 characters), written only when an instructor names a term for a copy of the course. A 2.0.0 reader refuses a pack that has it, naming the field (\`tests/compat/boundary.mjs\` \`course-term\`), so the format stays version 2. Two records came with it: \`gravitas.submission-archive/1\`, an export the review page reads again (a 2.0.0 page refuses it in words, as a progress backup), and the \`course terms record\`, a sidecar key the 2.0.0 reader never looks at (\`tests/compat/kinds/course-terms.mjs\`).
 - **\`rubricCriteria\` (Prompt 79).** A written answer in an investigation pack or a question bank may carry one to six criteria beside its \`rubric\`, each a name and two to five levels (a label, what it looks like, optionally its points), best first, every text in the file's locales. It is optional, so \`investigation-pack/1\` and \`question-bank/1\` stay version 1: a reader that does not know the field refuses the file, in words, as an unknown field. The compile lays it on the lesson step and its Spanish shadow, a remix carries it (\`REMIX.md\`), the answer key prints it and the review page shows it.
 - **\`synthetic\` origin (Prompt 84).** A \`gravitas.observation/1\` made by a forward model has origin \`synthetic\`, source kind \`forward\` and a \`synthetic\` block holding the model, the \`gravitas.observing-setup/1\` it was run with and the truth manifest. The values are new members of two enums and the block is optional, so the format stays version 1: an older reader refuses such a file at the origin, in words, rather than opening it as if it were observed.
 - **Uncertainty states, \`correlatedWith\` and \`fit\` (Prompt 150).** The artifact envelope's uncertainty \`kind\` gains \`not-constrained\`, \`failed\`, \`assumed\`, \`model-limited\` and \`limit\`; a quantity gains \`correlatedWith\`; the envelope gains \`fit\`, a fit-result record; a \`failed\` quantity may have a \`null\` value. The format stays version 1. A 2.0.0 reader refuses a quantity of a new kind in words (\`tests/compat/boundary.mjs\`: \`not-constrained-state\`), and silently drops \`correlatedWith\` and \`fit\`, which no reader needs. The extension is therefore written only where a 2.0.0 reader is not met: the writers keep their 2.0.0 output unless asked (\`fitArtifact\` with \`extended\`), and \`legacyView()\` gives a 2.0.0 reader the envelope it can open, with the loss listed in the warnings. Version 2 of the envelope waits for 176.

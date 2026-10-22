@@ -71,6 +71,7 @@ const PARSES = {
   'js/lecture.js': [1, 'none', OWN],
   'js/world.js': [1, 'none', OWN],
   'js/settingsPanel.js': [1, 'none', OWN],
+  'js/settingsSchema.js': [1, 'none', OWN],
   'js/controls.js': [1, 'none', OWN],
   'js/welcome.js': [
     2,
@@ -121,6 +122,11 @@ const PARSES = {
   ],
   'js/observatory/measurePanel.js': [1, 'none', 'its own serialisation'],
   'js/instructorPortal.js': [1, 'none', 'decrypted with the passphrase first'],
+  'js/instructorArchive.js': [
+    1,
+    'none',
+    'a file the instructor keeps; readArchive checks its format, version and shape before anything is used',
+  ],
   // A file a student opens, not yet behind parseDocument: route room.
   'js/composerPage.js': [2, 'none', 'route room: a file and the raw box'],
   'js/compute/capsule.js': [
@@ -229,6 +235,8 @@ const OWN_REFUSAL = {
   'js/investigations/progressBackup.js':
     'route room (every lesson); v1 is read as it is, which needs a migration entry',
   'js/myWork/made.js': 'a record with version 0 is still read',
+  'js/instructorArchive.js':
+    'route room (review page); a newer archive is refused in words by readArchive',
   'js/investigations/progressSchema.js':
     'keeps the payload and says so, as notes',
   'js/assignments/assignment.js': 'route room (every lesson, course home)',

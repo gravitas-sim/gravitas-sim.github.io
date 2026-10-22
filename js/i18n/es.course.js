@@ -270,6 +270,8 @@ export const ES_COURSE = {
     'Este archivo de curso es de otra versión del formato.',
   'course.error.id': 'Palabras en minúscula unidas por guiones.',
   'course.error.seed': 'Una palabra como orbit-1.',
+  'course.error.term':
+    'Una etiqueta corta como Primavera 2027: hasta 40 caracteres, sin marcado.',
   'course.error.tooMany': 'Como mucho {max} elementos.',
   'course.error.access':
     'Libre en línea, a través de una biblioteca o impreso.',
