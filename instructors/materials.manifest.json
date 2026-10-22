@@ -24,9 +24,9 @@
     }
   },
   "sourceFiles": 269,
-  "sourceDigest": "1a06f75d5a6049a6902c154cf388ef14362c1dbafc74d02c6c64e3374b7c4242",
+  "sourceDigest": "b49c4a92af42c509f910bd7da5a699a29e751f1a19c079c707e2ca56085ed950",
   "sources": {
-    "js/activities/activities.js": "bd72fc2b38a6c7dd2b59517725742344f3a151f5e2b6d4d04f71f6dfabe8dba9",
+    "js/activities/activities.js": "39ac98cd99b8b0387c55e41d5d4530bad55a8da8758819ad056be73e7a716b01",
     "js/activities/activityBridge.js": "67a82aff98e0ed935d6b8b0f0f654c6ad4332ee929cb3604e896a7f790a6fdc1",
     "js/activityDocs.js": "a5c56e6db7b4b82fdaf5535db62c402ed6ed90bf819b34e1473792af0724abe8",
     "js/answerCheck.js": "93d09ed32008916989cdc01b4acd9fc1a5e54581cebd9645d061b6c48303dfa4",
@@ -34,7 +34,7 @@
     "js/answerKey.js": "71169ff09ba8a1c051cc7c487ab6c17060fbba61cd72f1b6276bdb50f6b0a804",
     "js/answerKeyDocument.js": "25a66b1141220d2a3b4c025cae5adf63e5c73d2aa341d003ffe018bc0f72dd88",
     "js/answerParse.js": "420ce48b5513fa3c1d2b8abe1ad35c9a7c281ac3deca4c3cfd2204b38e1d4863",
-    "js/assignments/assignment.js": "4e95ebdcc28d430c99331b77d9e669a81066f7872f3c7e79ada98a2388d9a05c",
+    "js/assignments/assignment.js": "c89ab86e79b7727f9f51c52a06cb4df878901332b29d6785e371f6f44b39a62f",
     "js/authoring/instructorSchema.js": "e53fac3d680fd804ee5341004c86652bceb01c30015bb50c347a6356b6d9e002",
     "js/constants.js": "4610b3640de5b1c28f336d251e3817ddb440b562f5f72d75051c72f6d0388240",
     "js/course/pack.js": "1d32418986c516d731bed1a73c9924d8fd388e410bdea8f88c9579e88bd15c4b",

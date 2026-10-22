@@ -225,6 +225,15 @@
       "export": "preference"
     },
     {
+      "prefix": "gravitas_disclosure",
+      "name": "Which More sections were left open",
+      "owner": "js/settingsSchema.js",
+      "migration": "none",
+      "corpus": null,
+      "corpusWhy": "a map of surface to a flag",
+      "export": "preference"
+    },
+    {
       "prefix": "gravitas_rail_sections",
       "name": "Which rail sections are open",
       "owner": "js/controls.js",

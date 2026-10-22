@@ -53,7 +53,7 @@ Measured from the committed `sw-manifest.js` and the files it lists, by
 | --- | ---: | ---: |
 | JavaScript | 921 | 14.8 MB |
 | Images | 99 | 860 KB |
-| Stylesheets | 10 | 490 KB |
+| Stylesheets | 10 | 500 KB |
 | Fonts | 9 | 140 KB |
 | Panel markup | 10 | 60 KB |
 | Pages | 12 | 310 KB |
