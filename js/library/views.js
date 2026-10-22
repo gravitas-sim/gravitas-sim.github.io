@@ -14,8 +14,6 @@
 // in, and, when nothing comes after it, why.
 // =============================================================================
 
-import { previewRoute } from './format.js';
-
 const escape = s =>
   String(s ?? '')
     .replace(/&/g, '&amp;')
@@ -104,7 +102,7 @@ ${section(c.t('lib.topic.scenarios'), on.some(e => e.kind === 'scenario') ? of('
  * The page of one entry: its relations and its pathways.
  * @param {object} lib - The library document
  * @param {string} id - The entry id
- * @param {object} c - {t, pick, byId, shown, path}
+ * @param {object} c - {t, pick, byId, shown, path, preview}
  * @returns {?{html: string, title: string, pathway: ?{title: string, href: string}}}
  *   Null when the entry is unknown
  */
@@ -149,7 +147,7 @@ export function itemView(lib, id, c) {
 <h2>${escape(c.pick(entry.title))}</h2>
 ${entry.summary ? `<p>${escape(c.pick(entry.summary))}</p>` : ''}
 <p><a class="ui-button lib-link" href="${escape(entry.route)}">${escape(c.t('lib.item.open'))}</a>
-<a class="ui-button lib-link" href="${escape(previewRoute(entry))}" data-preview>${escape(c.t('lib.item.preview'))}</a></p>
+<a class="ui-button lib-link" href="${escape(c.preview(entry))}" data-preview>${escape(c.t('lib.item.preview'))}</a></p>
 <p class="ui-note">${escape(c.t('lib.item.preview.note'))}</p>${
     rel?.teach
       ? `\n<p><a href="${escape(rel.teach)}">${escape(c.t('lib.item.teach'))}</a></p>`

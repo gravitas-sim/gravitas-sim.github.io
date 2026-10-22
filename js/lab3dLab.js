@@ -55,8 +55,7 @@ import { formatNumber } from './format.js';
 import { chooseInterval } from './lab3d/view/tick.js';
 import { createScene, PALETTE } from './lab3d/view/scene.js';
 
-// A preview as a student (Prompt 175) says so on every page: the banner is
-// fetched only for one (the storage module holds the record).
+// The banner of a preview as a student (Prompt 175).
 if (globalThis.location?.search.includes('preview=student'))
   import('./storage/banner.js');
 

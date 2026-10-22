@@ -63,8 +63,7 @@ import { createPlot } from './plot/plot.js';
 import { createImageView, decodeBits } from './observatory/image.js';
 import { createTable } from './plot/table.js';
 
-// A preview as a student (Prompt 175) says so on every page: the banner is
-// fetched only for one (the storage module holds the record).
+// The banner of a preview as a student (Prompt 175).
 if (globalThis.location?.search.includes('preview=student'))
   import('./storage/banner.js');
 

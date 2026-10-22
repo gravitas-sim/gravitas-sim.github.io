@@ -22,14 +22,8 @@ export function checkLibrary(doc) {
   return doc;
 }
 
-/**
- * The address that opens an entry as a student would meet it, reading none of
- * the saved record and writing none (Prompt 175): the lesson's own progress-free
- * view for a lesson, and every other kind at its own route with `preview=student`
- * (js/storage/local.js holds the record still for any page that carries it).
- * @param {{id: string, format: string, route: string}} entry - A library entry
- * @returns {string} A same-origin address
- */
+// The address that opens an entry as a student would meet it, keeping no record
+// (Prompt 175, js/storage/local.js).
 export function previewRoute(entry) {
   const cut = entry.route.indexOf('#');
   const path = cut < 0 ? entry.route : entry.route.slice(0, cut);

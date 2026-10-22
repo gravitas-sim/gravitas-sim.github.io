@@ -33,7 +33,7 @@ import {
 } from './data/investigations/browse.js';
 import { LENGTHS, CALCULATIONS } from './data/investigations/sequences.js';
 import { libraryCardHtml } from './library/card.js';
-import { checkLibrary } from './library/format.js';
+import { checkLibrary, previewRoute } from './library/format.js';
 import { progressOf } from './library/progress.js';
 import {
   pick,
@@ -553,7 +553,7 @@ async function renderDetail(kind) {
   const mine = ++drawn;
   const { topicView, itemView } = await import('./library/views.js');
   if (mine !== drawn) return;
-  const c = { t, pick, shown, byId, path: state.path };
+  const c = { t, pick, shown, byId, path: state.path, preview: previewRoute };
   const lib = state.library;
   const out =
     kind === 'topic'

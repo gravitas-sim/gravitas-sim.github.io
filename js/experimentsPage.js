@@ -54,8 +54,7 @@ import { put, drop } from './storage/local.js';
 import { addMessages } from './experiments/i18n.js';
 import { KEY_EXPERIMENT_CHECKPOINT_PREFIX } from './names.js';
 
-// A preview as a student (Prompt 175) says so on every page: the banner is
-// fetched only for one (the storage module holds the record).
+// The banner of a preview as a student (Prompt 175).
 if (globalThis.location?.search.includes('preview=student'))
   import('./storage/banner.js');
 

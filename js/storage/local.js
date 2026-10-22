@@ -18,13 +18,8 @@ import {
 // formats are unchanged; adds a size limit per record.
 const area = s => s ?? (globalThis.window ?? globalThis).localStorage;
 
-// The preview as a student (Prompt 175): an address with `preview=student`
-// reads none of the student's record and writes none of it. Every writer of
-// the record comes through get, put and drop below, so this is the one place
-// that has to hold: a record key is answered from a table in memory that dies
-// with the page, and a preference (language, theme, units) goes through as ever.
-// Keys by prefix: tests/previewParity.test.js holds this list to the storage
-// module's key table, so a new record key cannot be left out.
+// A preview as a student (Prompt 175, STORAGE.md): `preview=student` holds the
+// record in memory, so nothing is read from or written to it.
 export const RECORD_KEYS = [
   KEY_ASSIGNMENT_PREFIX,
   KEY_COURSE_PREFIX,
@@ -40,14 +35,11 @@ export const RECORD_KEYS = [
 ];
 let preview = /[?&]preview=student(?:&|$)/.test(globalThis.location?.search);
 const held = new Map();
-/** Whether this page is a preview as a student. */
 export const previewing = () => preview;
-/** For tests: turn the preview on or off, and forget what it held. */
 export const setPreview = on => {
   preview = Boolean(on);
   held.clear();
 };
-// Two keys under the course prefix are not the record (js/storage/index.js KEYS).
 const OTHER = [KEY_COURSE_LEVEL, KEY_COURSE_PREVIEW];
 const kept = (key, store) =>
   preview &&
