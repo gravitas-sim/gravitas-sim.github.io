@@ -73,8 +73,7 @@ import {
   newAssignmentId,
 } from './course/api.js';
 import { PREVIEW_KEY, courseLink, itemLink, rootOf } from './course/links.js';
-import { courseManifest } from './course/manifest.js';
-import { newItem as makeItem } from './coursePageItems.js';
+import { courseManifest, newCourseItem } from './course/manifest.js';
 import { embedParams } from './embedOptions.js';
 import { EMBED_ASPECT, figureMarkup } from './embedMarkup.js';
 import {
@@ -598,7 +597,7 @@ function freshId(x, base) {
 
 /** A new item of a kind, pinned to this build when it names a lesson. */
 const newItem = (x, kind) =>
-  makeItem(kind, {
+  newCourseItem(kind, {
     freshId: base => freshId(x, base),
     lesson: LESSONS[0].id,
     today: today(),
