@@ -611,7 +611,8 @@ export const FORMATS = Object.freeze([
   },
   {
     name: 'collections record',
-    fields: 'v, saved (a course package with profile collection), received (at, pack)',
+    fields:
+      'v, saved (a course package with profile collection), received (at, pack)',
     version: 1,
     const: ['js/library/collections.js', 'COLLECTIONS_VERSION'],
     owner: 'js/library/collections.js readCollections',

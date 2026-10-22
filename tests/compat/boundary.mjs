@@ -23,7 +23,29 @@ export const BOUNDARY = [
     prompt: 164,
     kind: 'course-pack',
     plans: 'an additive `profile: "collection"` on the course package',
-    mutate: doc => ({ ...clone(doc), profile: 'collection' }),
+    // A collection as the current writer makes one: the first unit alone, no
+    // objectives, prerequisites, level or term, no needs and no optional path.
+    mutate: doc => {
+      const {
+        objectives: _o,
+        prerequisites: _p,
+        courseLevel: _l,
+        ...rest
+      } = clone(doc);
+      const unit = rest.units[0];
+      return {
+        ...rest,
+        profile: 'collection',
+        units: [
+          {
+            ...unit,
+            items: unit.items
+              .filter(i => i.kind === 'lesson' && (i.path ?? 'core') === 'core')
+              .map(({ needs: _n, objectives: _i, ...i }) => i),
+          },
+        ],
+      };
+    },
     expect: 'refused',
   },
   {
