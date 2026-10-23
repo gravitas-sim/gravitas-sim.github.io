@@ -289,6 +289,15 @@ $('obsSkyPanel').addEventListener('toggle', async () => {
   sky.panel.update(state.view);
 });
 const marks = {};
+// Sky coordinates for an image (ASTROMETRY.md): loaded when first opened.
+let cal = null;
+$('obsCalPanel').addEventListener('toggle', () => {
+  if ($('obsCalPanel').open && state.view)
+    cal ??= import('./observatory/imageCalibration.js').then(
+      m => m.mountCalibration($('obsCalBody'), { ...lent, marks, state }),
+      () => (cal = null)
+    );
+});
 // The archive import (ARCHIVE_IMPORT.md): loaded when first opened.
 let archive = null;
 $('obsArchivePanel').addEventListener('toggle', () => {
@@ -455,6 +464,8 @@ function renderAll() {
   renderMarks(o);
   renderChanges(o);
   renderFit(o);
+  $('obsCalPanel').hidden = !isImage;
+  marks.cal?.update();
   measure?.then(p => p.update());
   guide?.then(p => p.update());
   renderSelectionBar();
@@ -1136,6 +1147,8 @@ async function readImport() {
     $('obsImport').hidden = true;
     if (r.changes.some(c => c.op === 'formula')) await formulaReady();
     marks.saved = r.marks;
+    marks.savedCal = r.calibration;
+    if (r.calibration) $('obsCalPanel').open = true;
     open(r.observation, r.changes);
     const same =
       !r.expected || (await exporter()).sameObservation(state.view, r.expected);
@@ -1419,6 +1432,7 @@ $('obsExportJson').addEventListener('click', async () => {
       changes: state.history.changes(),
       digest: await x.openedDigest(state.source),
       marks: await marks.block?.(state.view),
+      calibration: await marks.cal?.block(state.view),
     }),
     'application/json'
   );

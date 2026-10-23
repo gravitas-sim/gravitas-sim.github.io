@@ -3628,6 +3628,7 @@ export const ES_DEFERRED = {
   'nb.source.lab3d': 'Medida del laboratorio 3-D',
   'nb.source.mission-lab': 'Resultado del laboratorio de misiones',
   'nb.source.image-marks': 'Marcas sobre una imagen',
+  'nb.source.image-calibration': 'Coordenadas celestes de una imagen',
   'nb.flag.missionModel':
     'impulsos instantáneos, cónicas empalmadas y masas puntuales: un modelo didáctico de una misión',
   'nb.flag.notOperational':

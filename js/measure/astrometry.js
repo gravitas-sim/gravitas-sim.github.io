@@ -43,11 +43,13 @@ export const DEFAULT_SIGMA = 0.5;
 const finite = Number.isFinite;
 const fin2 = a => Array.isArray(a) && a.length === 2 && a.every(finite);
 const wrap360 = d => ((d % 360) + 360) % 360;
-const refuse = (code, message) => ({
+/** A refusal: the code and the English message are the kernel's; `data` is what a page needs to say it in another language. */
+const refuse = (code, message, data = {}) => ({
   ok: false,
   status: 'not-constrained',
   code,
   message,
+  data,
 });
 
 // ---- the projection ---------------------------------------------------------------
@@ -178,21 +180,23 @@ function wcsOf(T, th) {
  * @returns {{ok: true, wcs: object}|{ok: false, code: string, message: string}}
  */
 export function fromHeader(h) {
-  const no = (code, message) => ({ ok: false, code, message });
+  const no = (code, message, data = {}) => ({ ok: false, code, message, data });
   if (!h || typeof h !== 'object')
     return no('no-wcs', 'the image has no world coordinates');
   const ct = h.ctype;
   if (!Array.isArray(ct) || ct.length !== 2)
     return no(
       'axes',
-      `it has ${Array.isArray(ct) ? ct.length : 'no'} celestial axes, and only two are read`
+      `it has ${Array.isArray(ct) ? ct.length : 'no'} celestial axes, and only two are read`,
+      { names: Array.isArray(ct) ? ct.join(' / ') : '?' }
     );
   const [a, b] = ct.map(c => String(c ?? ''));
   const ax = (c, want) => c.slice(0, 5) === want;
   if (!ax(a, 'RA---') || !ax(b, 'DEC--'))
     return no(
       'axes',
-      `${a || '?'} / ${b || '?'}: only right ascension and declination, in that order, are read`
+      `${a || '?'} / ${b || '?'}: only right ascension and declination, in that order, are read`,
+      { names: `${a || '?'} / ${b || '?'}` }
     );
   const pa = a.slice(5, 8);
   const pb = b.slice(5, 8);
@@ -201,17 +205,20 @@ export function fromHeader(h) {
   if (restA === '-SIP' || restB === '-SIP')
     return no(
       'distortion',
-      `${a} / ${b} carries a SIP distortion, which is not applied here`
+      `${a} / ${b} carries a SIP distortion, which is not applied here`,
+      { name: 'SIP' }
     );
   if (pa === 'TPV' || pb === 'TPV')
     return no(
       'distortion',
-      `${a} / ${b} carries a TPV distortion, which is not applied here`
+      `${a} / ${b} carries a TPV distortion, which is not applied here`,
+      { name: 'TPV' }
     );
   if (pa !== 'TAN' || pb !== 'TAN' || restA || restB)
     return no(
       'projection',
-      `${a} / ${b}: the ${pa !== 'TAN' ? pa || '?' : pb || '?'} projection is not read, only TAN`
+      `${a} / ${b}: the ${pa !== 'TAN' ? pa || '?' : pb || '?'} projection is not read, only TAN`,
+      { name: pa !== 'TAN' ? pa || '?' : pb || '?' }
     );
   if (!fin2(h.crpix) || !fin2(h.crval))
     return no('incomplete', 'its reference pixel or position is missing');
@@ -423,7 +430,8 @@ export function fitWcs(stars, opts = {}) {
   if (stars.length < RULES.minStars)
     return refuse(
       'too-few',
-      `${stars.length} matched star${stars.length === 1 ? '' : 's'}: at least ${RULES.minStars} are needed to put sky coordinates on a frame`
+      `${stars.length} matched star${stars.length === 1 ? '' : 's'}: at least ${RULES.minStars} are needed to put sky coordinates on a frame`,
+      { n: stars.length, min: RULES.minStars }
     );
   for (const [i, s] of stars.entries()) {
     const bad =
@@ -438,21 +446,25 @@ export function fitWcs(stars, opts = {}) {
               ? 'a catalogue uncertainty'
               : null;
     if (bad)
-      return refuse('malformed', `star ${s?.id ?? i + 1} has not got ${bad}`);
+      return refuse('malformed', `star ${s?.id ?? i + 1} has not got ${bad}`, {
+        id: String(s?.id ?? i + 1),
+      });
   }
   for (let i = 0; i < stars.length; i++)
     for (let j = 0; j < i; j++)
       if (Math.hypot(stars[i].x - stars[j].x, stars[i].y - stars[j].y) < 1e-9)
         return refuse(
           'duplicate',
-          `stars ${stars[j].id ?? j + 1} and ${stars[i].id ?? i + 1} are at one pixel`
+          `stars ${stars[j].id ?? j + 1} and ${stars[i].id ?? i + 1} are at one pixel`,
+          { a: String(stars[j].id ?? j + 1), b: String(stars[i].id ?? i + 1) }
         );
   const T =
     opts.tangent && fin2(opts.tangent) ? opts.tangent : meanDirection(stars);
   if (!T)
     return refuse(
       'too-wide',
-      'the stars surround the sky: there is no tangent plane for them'
+      'the stars surround the sky: there is no tangent plane for them',
+      { id: null, deg: RULES.maxRadiusDeg }
     );
   const pts = [];
   for (const [i, s] of stars.entries()) {
@@ -463,7 +475,8 @@ export function fitWcs(stars, opts = {}) {
     if (far)
       return refuse(
         'too-wide',
-        `star ${s.id ?? i + 1} is more than ${RULES.maxRadiusDeg} degrees from the reference position: the tangent plane does not describe a field this wide`
+        `star ${s.id ?? i + 1} is more than ${RULES.maxRadiusDeg} degrees from the reference position: the tangent plane does not describe a field this wide`,
+        { id: String(s.id ?? i + 1), deg: RULES.maxRadiusDeg }
       );
     pts.push({ x: s.x, y: s.y, xi: c.xi, eta: c.eta });
   }
@@ -489,7 +502,11 @@ export function fitWcs(stars, opts = {}) {
   if (!(ratio >= RULES.minSpreadRatio))
     return refuse(
       'collinear',
-      `the stars lie along a line (their spread across it is ${(ratio * 100).toFixed(1)}% of their spread along it, and at least ${RULES.minSpreadRatio * 100}% is needed): a line of stars cannot fix the scale and rotation across it`
+      `the stars lie along a line (their spread across it is ${Math.round(ratio * 1000) / 10}% of their spread along it, and at least ${RULES.minSpreadRatio * 100}% is needed): a line of stars cannot fix the scale and rotation across it`,
+      {
+        pct: Math.round(ratio * 1000) / 10,
+        min: RULES.minSpreadRatio * 100,
+      }
     );
   const S = Math.sqrt(tr);
   pts.forEach(p => {
@@ -683,7 +700,9 @@ export function checkWcs(wcs, stars) {
   for (const [i, s] of stars.entries()) {
     const p = pixelOf(wcs, s.ra, s.dec);
     if (!p || !finite(s.x) || !finite(s.y))
-      return refuse('malformed', `star ${s.id ?? i + 1} cannot be placed`);
+      return refuse('malformed', `star ${s.id ?? i + 1} cannot be placed`, {
+        id: String(s.id ?? i + 1),
+      });
     const sg = s.sigma ?? DEFAULT_SIGMA;
     const dx = s.x - p.x;
     const dy = s.y - p.y;
@@ -736,7 +755,8 @@ export function register(pairs, opts = {}) {
   if (pairs.length < RULES.minRegistrationSources)
     return refuse(
       'too-few',
-      `${pairs.length} matched source${pairs.length === 1 ? '' : 's'}: at least ${RULES.minRegistrationSources} are needed to register two frames and say how well`
+      `${pairs.length} matched source${pairs.length === 1 ? '' : 's'}: at least ${RULES.minRegistrationSources} are needed to register two frames and say how well`,
+      { n: pairs.length, min: RULES.minRegistrationSources }
     );
   for (const [i, p] of pairs.entries())
     if (
@@ -748,7 +768,8 @@ export function register(pairs, opts = {}) {
     )
       return refuse(
         'malformed',
-        `pair ${p?.id ?? i + 1} has not got two finite positions and positive uncertainties`
+        `pair ${p?.id ?? i + 1} has not got two finite positions and positive uncertainties`,
+        { id: String(p?.id ?? i + 1) }
       );
   const w = pairs.map(
     p => 1 / ((p.sigmaA ?? dflt) ** 2 + (p.sigmaB ?? dflt) ** 2)
@@ -781,7 +802,8 @@ export function register(pairs, opts = {}) {
   if (!(rmsA >= RULES.minRegistrationRms) || !(saa > 0))
     return refuse(
       'degenerate',
-      `the sources lie within ${rmsA.toFixed(2)} pixel (rms) of one another in the first frame: they cannot fix a rotation`
+      `the sources lie within ${Math.round(rmsA * 100) / 100} pixel (rms) of one another in the first frame: they cannot fix a rotation`,
+      { rms: Math.round(rmsA * 100) / 100 }
     );
   const theta = Math.atan2(cross, dot);
   const c = Math.cos(theta);
@@ -919,13 +941,15 @@ export function parseAngle(text, { hours = false } = {}) {
   return (neg ? -mag : mag) * (hours ? 15 : 1);
 }
 
-const pad = (v, w, d = 0) => v.toFixed(d).padStart(w + (d ? d + 1 : 0), '0');
+const pad = (v, w, tenths = false) =>
+  `${Math.floor(v)}`.padStart(w, '0') +
+  (tenths ? `.${Math.round((v - Math.floor(v)) * 10) % 10}` : '');
 /** Right ascension in degrees as `hh:mm:ss.s`. */
 export function formatRa(deg) {
   const s = Math.round((wrap360(deg) / 15) * 36000) / 10;
   const h = Math.floor(s / 3600) % 24;
   const m = Math.floor((s % 3600) / 60);
-  return `${pad(h, 2)}:${pad(m, 2)}:${pad(s % 60, 2, 1)}`;
+  return `${pad(h, 2)}:${pad(m, 2)}:${pad(s % 60, 2, true)}`;
 }
 /** Declination in degrees as `+dd:mm:ss`. */
 export function formatDec(deg) {

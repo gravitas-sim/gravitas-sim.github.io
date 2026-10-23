@@ -3718,6 +3718,7 @@ export const EN_DEFERRED = {
   'nb.source.lab3d': '3-D lab measurement',
   'nb.source.mission-lab': 'Mission lab result',
   'nb.source.image-marks': 'Marks on an image',
+  'nb.source.image-calibration': 'Sky coordinates for an image',
   'nb.flag.missionModel':
     'impulsive burns, patched conics and point masses: a teaching model of a mission',
   'nb.flag.notOperational': 'not for operational mission design or navigation',

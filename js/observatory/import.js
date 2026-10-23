@@ -353,10 +353,15 @@ function readJson(body, file, opts) {
     const saved = data.workspace?.source;
     // The marks an image was marked with (js/measure/imageRecord.js): read
     // as they are and checked when they are restored, against the pixels.
-    const marks =
-      data.workspace?.marks?.format === 'gravitas.image-marks'
+    const marks = {
+      ...(data.workspace?.marks?.format === 'gravitas.image-marks'
         ? { marks: data.workspace.marks }
-        : {};
+        : {}),
+      // And the sky calibration (js/measure/calibrationRecord.js, Prompt 181).
+      ...(data.workspace?.calibration?.format === 'gravitas.image-calibration'
+        ? { calibration: data.workspace.calibration }
+        : {}),
+    };
     if (!changes.length || !saved)
       return { ok: true, observation, changes: [], ...marks };
     // A session: the observation as opened, and the changes to make again.

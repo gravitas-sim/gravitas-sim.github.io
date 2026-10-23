@@ -9,6 +9,7 @@
     "js/observatory/comparePanel.js",
     "js/observatory/formulaPanel.js",
     "js/observatory/guidePanel.js",
+    "js/observatory/imageCalibration.js",
     "js/observatory/imageMarks.js",
     "js/observatory/measurePanel.js",
     "js/observatory/skyPanel.js",

@@ -92,6 +92,10 @@ export const SOURCE = Object.freeze({
   // Observatory, kept as their envelope with the replay that reopens the image
   // (js/observatory/imageMarks.js, js/measure/imageRecord.js).
   IMAGE_MARKS: 'image-marks',
+  // The sky calibration of an image: a solved WCS with its residuals and the
+  // reference catalogue's identity, and the reduction that solves it again
+  // (js/observatory/imageCalibration.js, js/measure/calibrationRecord.js).
+  IMAGE_CALIBRATION: 'image-calibration',
 });
 
 /** The sources this build can capture from. */
@@ -114,6 +118,7 @@ export const SOURCES = [
   SOURCE.LAB3D,
   SOURCE.MISSION_LAB,
   SOURCE.IMAGE_MARKS,
+  SOURCE.IMAGE_CALIBRATION,
 ];
 
 /** How long a student's prose may be, per field. */
