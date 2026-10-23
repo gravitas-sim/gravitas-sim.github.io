@@ -265,6 +265,12 @@ export const EN_COURSE = {
     'This course file is from another version of the format.',
   'course.error.id': 'Lower-case words joined by hyphens.',
   'course.error.seed': 'A word such as orbit-1.',
+  'course.error.profile':
+    'The profile is “collection”, or the field is left out.',
+  'course.error.collectionUnits': 'A collection has exactly one unit.',
+  'course.error.collectionField': 'A collection has no “{field}”.',
+  'course.error.collectionItem':
+    'A collection holds items in order: no activities, no optional paths, no “needs”.',
   'course.error.term':
     'A short label such as Spring 2027: up to 40 characters, no markup.',
   'course.error.tooMany': 'At most {max} items.',

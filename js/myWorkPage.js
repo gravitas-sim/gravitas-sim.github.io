@@ -204,6 +204,36 @@ function sections() {
     })
   );
   out.mwCourses = [
+    ...(m.collections?.saved
+      ? [
+          item({
+            title: L('Saved items', 'Elementos guardados'),
+            facts: [
+              L(
+                `${m.collections.saved} saved`,
+                `${m.collections.saved} guardados`
+              ),
+            ],
+            href: '/library/',
+            open: L('Open in the Library', 'Abrir en la Biblioteca'),
+            ids: [],
+            buttons: false,
+          }),
+        ]
+      : []),
+    ...(m.collections?.received ?? []).map(c =>
+      item({
+        title: pick(c.title) || c.title.en,
+        facts: [
+          L('Collection', 'Colección'),
+          L(`${c.n} items`, `${c.n} elementos`),
+        ],
+        href: '/library/',
+        open: L('Open in the Library', 'Abrir en la Biblioteca'),
+        ids: [],
+        buttons: false,
+      })
+    ),
     ...(m.terms ?? []).map(c =>
       item({
         title: pick(c.title) || c.title.en,

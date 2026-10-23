@@ -109,6 +109,12 @@ try {
         </div>
         <p id="kitStatus" class="ui-note" role="status" aria-live="polite"></p>
       </section>
+      <section id="collections" aria-labelledby="collH">
+        <h2 id="collH" data-k="coll.h">A collection of saved items</h2>
+        <p class="ui-note" data-k="coll.note">Save investigations, scenarios and datasets with the Save button on a Library item page, then order them here, add a sentence to each and make one link or file. Your students can keep it, and it shows in their Library and in My work. An older build of Gravitas, such as 2.0.0, cannot open a collection.</p>
+        <button id="kitCollOpen" type="button" class="ui-button" aria-expanded="false" aria-controls="kitCollections" data-k="coll.open">Make a link from what I saved</button>
+        <div id="kitCollections" hidden></div>
+      </section>
       <div id="kit" hidden>
         <h2 id="kitName"></h2>
         <p id="kitFacts" class="ui-note"></p>

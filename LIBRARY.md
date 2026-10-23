@@ -156,8 +156,10 @@ instead of listing things. It has four views, one page, no new destination:
 - **Start** (the default). Where you left off, from the one resume record
   (below); where to start, a committed handful per audience and level
   (`starts` in `tools/library-curation.json`, validated against the entries
-  and against Home's first-week list); the sequences and courses as pathways;
-  the subjects as topics, with generated counts. No grid of everything.
+  and against Home's first-week list; where a start's entries can all be items
+  of a package, the start is also a collection and is drawn from it, below);
+  the sequences and courses as pathways; the subjects as topics, with generated
+  counts; and, when there is one, "Your collections". No grid of everything.
 - **Browse everything** (a button, or any filter or search). The whole catalog,
   with four facets (subject, level, time, kind as a student sees it) and, behind
   "More filters", mathematics, arithmetic, data (real or simulated), depth,
@@ -205,6 +207,30 @@ The same file validates them (no dangling or repeated id, a reason wherever
 nothing comes next, every instructor page real) and the build refuses a library
 that fails. The lesson's finish panel offers up to two of `next` and one of
 `related` after the sequence or course it came from.
+
+### Collections and saved items (Prompt 164)
+
+A collection is a course package with `profile: "collection"` (COURSE_PACKS.md).
+Two things in the Library are collections:
+
+- **The starts.** `tools/build-library.mjs` writes a start as a collection
+  (`starts[].collection`) when every entry in it can be an item (a lesson, a 3-D
+  or mission guide, a scenario or a dataset), checks it with the package's own
+  validator, and the page draws the start from its items, so the default view is
+  what it was. A start with an Observatory investigation or a course in it has no
+  collection, and `tests/libraryCollections.test.js` fails if a start that could
+  have one does not.
+- **A student's own.** An item page has a Save button for the entries a collection
+  can hold (not a course, an activity, an experiment, a 3-D system or an
+  Observatory investigation: no button is shown for those). The saved items, in
+  the order saved (at most 30, a unit's limit), and the collections kept from
+  others are "Your collections" on the start page, each item a link with a Remove
+  button and each kept collection a "Stop keeping" button, written to one key
+  (STORAGE.md) and shown in My work. Nothing is kept by opening a link.
+
+The modules are lazy and take what the page already has (its storage functions,
+its names, its checker) as arguments, because a lazy module that imported them
+would split the page's bundle into one more request.
 
 ### The one resume record (Prompt 163)
 

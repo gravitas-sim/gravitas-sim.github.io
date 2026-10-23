@@ -75,6 +75,11 @@ export const ES_COURSEHOME = {
   'courseHome.access.open': 'De lectura libre en línea.',
   'courseHome.access.library': 'A través de tu biblioteca.',
   'courseHome.access.print': 'Impreso.',
+  'courseHome.keep': 'Conservar en mis colecciones',
+  'courseHome.keep.done':
+    'Conservada en este dispositivo. Está en la Biblioteca y en Mi trabajo.',
+  'courseHome.keep.dropped': 'Ya no se conserva.',
+  'courseHome.keep.failed': 'Este navegador no la guardó.',
   'courseHome.made':
     'Versión {version} de este curso, hecha con la plataforma {platform} de Gravitas.',
   'courseHome.printNote':
