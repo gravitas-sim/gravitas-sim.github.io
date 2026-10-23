@@ -184,6 +184,58 @@ export const BOUNDARY = [
     expect: 'refused',
   },
   {
+    id: 'workspace-calibration',
+    prompt: 181,
+    kind: 'observation',
+    plans:
+      'the sky calibration as `workspace.calibration`, a `gravitas.image-calibration/1` block (the solved WCS with its residuals and the reference catalogue\'s identity), written only when the reader calibrated an image (its WCS matrix nests seven deep; the 2.0.0 file reader stops at six and refuses the file as "nested too deep")',
+    mutate: doc => ({
+      ...clone(doc),
+      workspace: {
+        openedFrom: { kind: 'builtin', id: 'compat', version: null },
+        openedAs: 'compat:series',
+        changes: [],
+        source: null,
+        calibration: {
+          format: 'gravitas.image-calibration',
+          formatVersion: 1,
+          step: 'image-calibration',
+          version: 1,
+          frame: {
+            id: 'compat:image',
+            width: 64,
+            height: 64,
+            digest: '0'.repeat(64),
+          },
+          catalog: {
+            source: 'typed',
+            name: 'positions typed by the reader',
+            epoch: 'J2000.0',
+          },
+          stars: [
+            { id: 's1', x: 10, y: 12, sigma: 0.2, ra: 150.1, dec: 2.2 },
+            { id: 's2', x: 50, y: 14, sigma: 0.2, ra: 150.0, dec: 2.21 },
+            { id: 's3', x: 30, y: 52, sigma: 0.2, ra: 150.05, dec: 2.3 },
+          ],
+          solution: {
+            origin: 'header',
+            wcs: {
+              ctype: ['RA---TAN', 'DEC--TAN'],
+              crpix: [32.5, 32.5],
+              crval: [150.05, 2.25],
+              cd: [
+                [-0.0014, 0],
+                [0, 0.0014],
+              ],
+            },
+          },
+          result: null,
+        },
+      },
+    }),
+    expect: 'refused',
+  },
+  {
     id: 'rubric-criterion-semantics',
     prompt: 172,
     kind: 'investigation-pack',

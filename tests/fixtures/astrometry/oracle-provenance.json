@@ -1,0 +1,41 @@
+{
+  "format": "gravitas.astrometry-oracle-provenance/1",
+  "prompt": 181,
+  "oracle": "astropy 6.1.7 (wcslib), with scipy 1.15.3 and numpy 2.2.6",
+  "identity": "Independent, cited implementations; no Gravitas code ran: astropy.wcs.WCS (wcslib: all_pix2world, all_world2pix), astropy.wcs.utils.fit_wcs_from_points (projection TAN, no SIP, the tangent point given), scipy.linalg.orthogonal_procrustes.",
+  "retrieved": "2026-10-23",
+  "index": "https://pypi.org/simple (pip default index; no mirror, no pip.conf, no PIP_* variable); the venv is the one Prompt 180 made for its oracle (numpy, scipy, astropy, photutils and what they pull in), reused, nothing added",
+  "python": "3.10.12 (macOS-26.6.2-x86_64-i386-64bit, x86_64)",
+  "packages": {
+    "astropy": "6.1.7",
+    "numpy": "2.2.6",
+    "scipy": "1.15.3",
+    "pyerfa": "2.0.1.5",
+    "astropy-iers-data": "0.2026.10.19.0.52.1",
+    "photutils": "2.0.2",
+    "PyYAML": "6.0.3",
+    "packaging": "26.3"
+  },
+  "install": "python3.10 -m venv <scratchpad>/oracle180; <venv>/bin/python -m pip install --only-binary :all: numpy scipy astropy photutils (the resolved versions above); the venv is not committed and no package is",
+  "run": "cd <empty scratchpad directory>; <venv>/bin/python -I tools/astrometry-oracle/oracle.py tests/fixtures/astrometry/oracle-inputs.json tests/fixtures/astrometry/oracle-results.json; then Prettier",
+  "inputsFrom": "node tools/astrometry-oracle/make-inputs.mjs (the scenes of thresholds.json, built by tools/astrometry-validate.mjs), then Prettier",
+  "parameters": {
+    "projection": "WCS(naxis=2) with ctype RA---TAN, DEC--TAN, the truth's CRPIX, CRVAL and CD; all_pix2world(x, y, 1)",
+    "fit": "fit_wcs_from_points((x - 1, y - 1), SkyCoord(ra, dec, icrs), proj_point=the truth's reference position, projection='TAN', sip_degree=None) (it takes 0-based pixels); then all_world2pix(ra, dec, 1) at 25 sky points",
+    "registration": "orthogonal_procrustes(A - mean(A), B - mean(B)) on rows, R = result transposed, t = mean(B) - R mean(A), theta = atan2(R[1,0], R[0,0]); the determinant is recorded",
+    "header": "the authentic TESS header: CTYPE RA---TAN, DEC--TAN, CRPIX, CRVAL, CDELT, PC; all_pix2world(x, y, 1)"
+  },
+  "conventions": "pixels are FITS (origin 1) except as fit_wcs_from_points requires; positions in degrees",
+  "files": {
+    "tests/fixtures/astrometry/oracle-inputs.json": "485aac0abbe763419eae6cb43e6120fc27e9c66cd099fb6e29010de4537438ca",
+    "tests/fixtures/astrometry/oracle-results.json": "1e3d4a2f97b3bc021b6bacbf8cb1e3aeadb2f35ea68443465bc8931f8edb2f46",
+    "tools/astrometry-oracle/oracle.py": "981065511212daf875fa934261e4bf4d6f90b156d53b7c65a6c88bb97d1cb81c",
+    "tools/astrometry-oracle/make-inputs.mjs": "adade2970080506cb7dcbd1e92c6cd1fad7ca38bbcae4db25f2d543405030748"
+  },
+  "references": [
+    "Astropy Collaboration 2022, ApJ 935, 167",
+    "Calabretta, M. R. and Greisen, E. W. 2002, A&A 395, 1077 (the WCS papers wcslib implements)",
+    "Harris, C. R. et al. 2020, Nature 585, 357 (numpy)",
+    "Virtanen, P. et al. 2020, Nature Methods 17, 261 (scipy)"
+  ]
+}

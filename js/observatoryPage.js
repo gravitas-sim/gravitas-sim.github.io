@@ -49,7 +49,7 @@ import {
   unitId,
 } from './observatory/units.js';
 import { createPlot } from './plot/plot.js';
-import { createImageView, decodeBits } from './observatory/image.js';
+import { createImageView, describeRow } from './observatory/image.js';
 import { createTable } from './plot/table.js';
 
 const $ = id => document.getElementById(id);
@@ -90,59 +90,7 @@ const unitText = c =>
     ? ''
     : formatUnit(parseUnit(c.unit).unit, t('obs.unit.notStated'));
 
-/** What one row is, in words: every column's value and unit. */
-function describe(i) {
-  const o = state.view;
-  if (!o || !(i >= 0)) return '';
-  const n = rowCount(o);
-  if (o.kind === 'image') {
-    const im = o.image;
-    const x = (i % im.width) + 1;
-    const y = Math.floor(i / im.width) + 1;
-    const flags = columnOf(o, im.value);
-    const v = flags.values[i];
-    const meaning = flags.bits
-      ? decodeBits(v, flags.bits).join('; ')
-      : `${number(v)} ${unitText(flags)}`;
-    const ra = columnOf(o, 'ra')?.values[i];
-    const dec = columnOf(o, 'dec')?.values[i];
-    return t('obs.describe.pixel', {
-      x,
-      y,
-      value: number(v),
-      meaning,
-      ra: number(ra),
-      dec: number(dec),
-      masked: maskedRows(o).has(i) ? t('obs.describe.masked') : '',
-    });
-  }
-  const parts = [];
-  for (const c of o.columns) {
-    if (['uncertainty', 'lower', 'upper'].includes(c.role)) continue;
-    const v = c.values[i];
-    if (c.role === 'label') {
-      parts.push(`${c.name} ${v ?? t('obs.table.missing')}`);
-      continue;
-    }
-    if (!Number.isFinite(v)) {
-      parts.push(`${c.name} ${t('obs.table.missing')}`);
-      continue;
-    }
-    const { sigma, lower, upper } = uncertaintyOf(o, c.id);
-    let err = '';
-    if (sigma && Number.isFinite(sigma.values[i]))
-      err = ` ± ${number(sigma.values[i])}`;
-    else if (lower && upper && Number.isFinite(lower.values[i]))
-      err = ` (${number(lower.values[i])}, +${number(upper.values[i])})`;
-    parts.push(`${c.name} ${number(v)}${err} ${unitText(c)}`.trim());
-  }
-  return t('obs.describe.row', {
-    row: i + 1,
-    n,
-    values: parts.join(', '),
-    masked: maskedRows(o).has(i) ? t('obs.describe.masked') : '',
-  });
-}
+const describe = i => describeRow(state.view, i, { t, number, unitText });
 
 function status(text) {
   const s = $('obsStatus');
@@ -278,6 +226,15 @@ $('obsSkyPanel').addEventListener('toggle', async () => {
   sky.panel.update(state.view);
 });
 const marks = {};
+// Sky coordinates for an image (ASTROMETRY.md): loaded when first opened.
+let cal = null;
+$('obsCalPanel').addEventListener('toggle', () => {
+  if ($('obsCalPanel').open && state.view)
+    cal ??= import('./observatory/imageCalibration.js').then(
+      m => m.mountCalibration($('obsCalBody'), { ...lent, marks, state }),
+      () => (cal = null)
+    );
+});
 // Photometry on an image (PHOTOMETRY.md): loaded when first opened.
 let photo = null;
 $('obsPhotoPanel').addEventListener('toggle', () => {
@@ -454,6 +411,8 @@ function renderAll() {
   renderMarks(o);
   renderChanges(o);
   renderFit(o);
+  $('obsCalPanel').hidden = !isImage;
+  marks.cal?.update();
   measure?.then(p => p.update());
   photo?.then(p => p.update());
   guide?.then(p => p.update());
@@ -1136,6 +1095,8 @@ async function readImport() {
     $('obsImport').hidden = true;
     if (r.changes.some(c => c.op === 'formula')) await formulaReady();
     marks.saved = r.marks;
+    marks.savedCal = r.calibration;
+    if (r.calibration) $('obsCalPanel').open = true;
     open(r.observation, r.changes);
     const same =
       !r.expected || (await exporter()).sameObservation(state.view, r.expected);
@@ -1419,6 +1380,7 @@ $('obsExportJson').addEventListener('click', async () => {
       changes: state.history.changes(),
       digest: await x.openedDigest(state.source),
       marks: await marks.block?.(state.view),
+      calibration: await marks.cal?.block(state.view),
     }),
     'application/json'
   );
