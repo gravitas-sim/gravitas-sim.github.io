@@ -562,6 +562,43 @@ const SURFACES = [
     expect: '#kitCartridge #cc-go',
     standalone: true,
   },
+  {
+    name: 'course builder, the activity list panel with its outcomes (Prompt 174)',
+    open: async ({ page }) => {
+      await page.goto('/studio/course/', { waitUntil: 'domcontentloaded' });
+      await page.locator('#cb-example').click();
+      await page.waitForSelector('body[data-checked]', { timeout: 60_000 });
+      await page.locator('#cb-plan').click();
+      await expect(page.locator('#plan-print')).toBeEnabled({
+        timeout: 60_000,
+      });
+      await page.locator('#plan-out-add').click();
+      await page.locator('#plan-out-0-en').fill('Reason about the sky');
+      await page.locator('#plan-out-0-es').fill('Razonar sobre el cielo');
+      await page.locator('#plan-out-0-es').blur();
+      await expect(page.locator('#plan-print')).toBeEnabled({
+        timeout: 60_000,
+      });
+    },
+    expect: '#plan-preview table',
+    standalone: true,
+  },
+  {
+    name: 'distribution kit, the activity list panel (Prompt 174)',
+    open: async ({ page }) => {
+      await page.goto('/teaching/kit/', { waitUntil: 'domcontentloaded' });
+      await page.locator('#kitFile').setInputFiles(COURSE_FILE);
+      await expect(page.locator('#kitPlanOpen')).toBeVisible({
+        timeout: 60_000,
+      });
+      await page.locator('#kitPlanOpen').click();
+      await expect(page.locator('#kitPlan #plan-print')).toBeEnabled({
+        timeout: 60_000,
+      });
+    },
+    expect: '#kitPlan #plan-preview table',
+    standalone: true,
+  },
 ];
 
 /** The two extremes of the palette. Midnight is the default. */

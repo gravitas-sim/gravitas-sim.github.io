@@ -122,8 +122,7 @@ let verdict = null;
 let checkSeq = 0;
 let checkTimer = 0;
 let checkedFor = null;
-/** Items the instructor has marked reviewed, for the upgrade. */
-const reviewed = new Set();
+const reviewed = new Set(); // items marked reviewed, for the upgrade
 
 const doc = () => history.current();
 const today = () => new Date().toISOString().slice(0, 10);
@@ -213,8 +212,6 @@ const numberOf = (text, typedNumber) => {
   const n = typedNumber(s, getLocale());
   return Number.isFinite(n) ? n : s;
 };
-
-// --- Language ---------------------------------------------------------------------
 
 async function useLanguage(id) {
   if (!LOCAL[id] && LOADERS[id]) LOCAL[id] = await LOADERS[id]();
@@ -1977,6 +1974,7 @@ function render() {
   renderDiff(d);
   if (verdict) renderVerdict();
   scheduleCheck();
+  termPanel?.refresh({ light: true });
 }
 
 function renderDrafts() {
@@ -2007,6 +2005,7 @@ async function openTerm(mode) {
       }),
     problems: pack => validateCoursePack(pack, courseApi(catalog)).length,
     manifest: manifestOf,
+    plan: { commit, loadInvestigation, LESSONS },
     apply: start,
     nameOf: (pack, id) =>
       itemName(itemsOf(pack).find(x => x.item.id === id)?.item ?? { id }),
@@ -2039,6 +2038,7 @@ function wire() {
   $('cb-example').addEventListener('click', openExample);
   $('cb-term').addEventListener('click', () => openTerm('next'));
   $('cb-cartridge').addEventListener('click', () => openTerm('cartridge'));
+  $('cb-plan').addEventListener('click', () => openTerm('plan'));
   $('cb-open').addEventListener('click', () => $('cb-file').click());
   $('cb-file').addEventListener('change', () => {
     const file = $('cb-file').files?.[0];

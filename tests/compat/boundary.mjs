@@ -57,6 +57,20 @@ export const BOUNDARY = [
     expect: 'refused',
   },
   {
+    id: 'course-outcomes',
+    prompt: 174,
+    kind: 'course-pack',
+    plans:
+      "the instructor's own `outcomes` on the course package and the `outcomes` mapping on an objective, written only when entered",
+    mutate: doc => {
+      const d = clone(doc);
+      d.outcomes = [{ id: 'orbits', text: { en: 'Explain how orbits work' } }];
+      if (d.objectives?.length) d.objectives[0].outcomes = ['orbits'];
+      return d;
+    },
+    expect: 'refused',
+  },
+  {
     id: 'resume-in-progress-record',
     prompt: 163,
     kind: 'progress-store',

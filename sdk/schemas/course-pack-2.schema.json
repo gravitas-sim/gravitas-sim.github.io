@@ -103,6 +103,37 @@
           },
           "text": {
             "$ref": "#/$defs/text300"
+          },
+          "outcomes": {
+            "description": "The instructor's outcomes this objective is mapped to (Prompt 174): the instructor's own statement of what the objective serves, not evidence that any student reached an outcome.",
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 12,
+            "uniqueItems": true,
+            "items": {
+              "$ref": "#/$defs/publicId"
+            }
+          }
+        }
+      }
+    },
+    "outcomes": {
+      "description": "The instructor's own outcomes (Prompt 174): free text from a department or a syllabus, written only when the instructor enters some. Objectives map to them by `objectives[].outcomes`, and the printable activity list prints the matrix. The mapping is the instructor's claim, not attainment evidence; a 2.0.0 reader refuses the field in its own words.",
+      "type": "array",
+      "maxItems": 12,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "text"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/publicId"
+          },
+          "text": {
+            "$ref": "#/$defs/text300"
           }
         }
       }

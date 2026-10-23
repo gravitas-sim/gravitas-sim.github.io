@@ -25,7 +25,7 @@ Every entry has the same sixteen fields:
 | `title`, `summary` | `{en, es}` |
 | `level` | Who it is written for: `beginner` or `intro`, the lessons' `audience` |
 | `duration` | `{min, max}` minutes |
-| `length` | `demo`, `period` or `long`, bucketed from the duration by the lesson browser's own rule |
+| `length` | `demo`, `period` or `long`: a lesson's editorial time band at its default depth (`js/data/instructorTimeBands.js`, Prompt 174), and for everything else the band of its upper bound; the bands' upper bounds are the lesson browser's own cut-offs, and the editorial-estimate label is on every page that shows a time |
 | `mathematics` | What a student is asked to work out: `none`, `arithmetic`, `algebra`, `logarithms` |
 | `calculation` | How many numbers there are to work out, bucketed: `none`, `some`, `lots` (the lesson browser's "Arithmetic" filter) |
 | `subjects` | Subject ids, in the lessons' vocabulary |
