@@ -331,7 +331,7 @@ test.describe('sources: refusals and settings', () => {
     });
   }
 
-  test('a setting out of range is refused by name, and a very high threshold finds nothing, both said aloud', async ({
+  test('a setting out of range is refused by name, and a search that finds nothing says so aloud', async ({
     page,
   }) => {
     await openPage(page);

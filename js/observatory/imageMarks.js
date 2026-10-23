@@ -622,7 +622,7 @@ export function mountMarks(root, ctx) {
       })
     );
   }
-  /** The detection tool's hand-over (Prompt 183): its sources as point marks; how many fitted. */
+  /** Detected sources as point marks; how many were added. */
   function addPoints(list, tag) {
     if (blocked || !frames.length) return 0;
     const n = Math.max(

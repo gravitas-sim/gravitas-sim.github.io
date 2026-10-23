@@ -2747,5 +2747,14 @@
   "[chromium] › imagePhotometry.spec.js › photometry: the marks, a table, a file and the ledger › two marks are chosen by name, measured together, tabled, saved as CSV and kept in the ledger": 3.2,
   "[chromium] › imagePhotometry.spec.js › photometry: both languages, axe, and every control › axe with a result, and 24 px targets at 1280 and 390, en": 3.4,
   "[chromium] › imagePhotometry.spec.js › photometry: both languages, axe, and every control › axe with a result, and 24 px targets at 1280 and 390, es": 3.5,
-  "[chromium] › imagePhotometry.spec.js › photometry: both languages, axe, and every control › the page changing language re-words the open panel and keeps its result": 1.8
+  "[chromium] › imagePhotometry.spec.js › photometry: both languages, axe, and every control › the page changing language re-words the open panel and keeps its result": 1.8,
+  "[chromium] › imageDetect.spec.js › sources: keyboard alone › stars are found, flagged and read back against their flux, and the width is read back against the drawn FWHM, with no pointer event": 1.7,
+  "[chromium] › imageDetect.spec.js › sources: single pointer alone › the sources are found, added as marks, the width kept in the ledger, all by clicks and with no key event": 1.8,
+  "[chromium] › imageDetect.spec.js › sources: single pointer alone › the table is saved as a CSV with a header and a row a source": 0.9,
+  "[chromium] › imageDetect.spec.js › sources: refusals and settings › an image that is display-only says why, and every action is disabled": 0.7,
+  "[chromium] › imageDetect.spec.js › sources: refusals and settings › an image with no contract says why, and every action is disabled": 0.8,
+  "[chromium] › imageDetect.spec.js › sources: refusals and settings › a setting out of range is refused by name, and a search that finds nothing says so aloud": 1.4,
+  "[chromium] › imageDetect.spec.js › sources: both languages, axe, and every control › axe with a result, and 24 px targets at 1280 and 390, en": 3.1,
+  "[chromium] › imageDetect.spec.js › sources: both languages, axe, and every control › axe with a result, and 24 px targets at 1280 and 390, es": 3.2,
+  "[chromium] › imageDetect.spec.js › sources: both languages, axe, and every control › the page changing language re-words the open panel and keeps its result": 1.0
 }

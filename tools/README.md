@@ -65,6 +65,8 @@ current, and the orchestrator checks it.
 | `decoded-memory-probe.mjs` | npm run probe:decoded - what decoding an image holds, in a real browser | `npm run probe:decoded` |
 | `deps-audit.mjs` | The dependency audit | `npm run deps:audit` |
 | `design-ratchet.mjs` | Four migrations to the design system that may only go one way |  |
+| `detection-synth.mjs` | Synthetic frames for the detection checks: stars of known flux and shape on the detector kernel's sky (Prompt 183) |  |
+| `detection-validate.mjs` | Source detection and the PSF against their committed thresholds (Prompt 183) | `npm run detection:validate` |
 | `docs-facts.mjs` | Documentation facts: derive the numbers, then hold the docs to them | `npm run docs:facts`, `npm run docs:sync`, `npm run docs:check`, `npm run docs:check:tests`, `npm run docs:check:build` |
 | `docs-map.mjs` | DOCUMENTS.md, the map of every root document, from a committed table |  |
 | `draw-trace.mjs` | The canvas calls a body makes, recorded and hashed |  |
