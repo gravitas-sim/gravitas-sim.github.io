@@ -4,13 +4,13 @@
 // it changes when they do and only when they do - which is what makes the old
 // cache safe to delete on activate and safe to keep otherwise.
 //
-// Split three ways, and the split is what install enforces. The 809 core
+// Split three ways, and the split is what install enforces. The 803 core
 // entries are the shell, the modules, the stylesheets and the self-hosted
 // fonts and libraries: if any one of them cannot be fetched the install fails
 // and this version never activates, because a half-cached build is the mixed
 // revision the whole arrangement exists to prevent. The 107 optional
 // entries are pictures and small pages; a missing one is reported and does not
-// cost the reader the version. The 176 idle entries are installed after
+// cost the reader the version. The 182 idle entries are installed after
 // activation, on idle, by a message from the page (D-PERF-02, change 2): the
 // instructor modules, three.js, the 3-D lab, the mission lab, the Sky Lab, the
 // Library and the data tables. A missing one costs that surface its offline
@@ -47,12 +47,8 @@ self.__GRAVITAS_PRECACHE_CORE = [
   './js/archive/gaiaEpochs.js',
   './js/archive/net.js',
   './js/archive/votable.js',
-  './js/assignments/adapt.js',
-  './js/assignments/adapted.js',
-  './js/assignments/adaptText.js',
   './js/assignments/assignment.js',
   './js/assignments/assignmentBridge.js',
-  './js/assignments/assignmentBuilder.js',
   './js/assignments/assignmentLink.js',
   './js/assignments/pinning.js',
   './js/assignments/provider.js',
@@ -418,7 +414,6 @@ self.__GRAVITAS_PRECACHE_CORE = [
   './js/i18n/deferredMessages.js',
   './js/i18n/dom.js',
   './js/i18n/en.activities.js',
-  './js/i18n/en.adapt.js',
   './js/i18n/en.analysis.js',
   './js/i18n/en.archive.js',
   './js/i18n/en.builder.js',
@@ -460,7 +455,6 @@ self.__GRAVITAS_PRECACHE_CORE = [
   './js/i18n/en.teaching.js',
   './js/i18n/en.variables.js',
   './js/i18n/es.activities.js',
-  './js/i18n/es.adapt.js',
   './js/i18n/es.analysis.js',
   './js/i18n/es.archive.js',
   './js/i18n/es.builder.js',
@@ -947,6 +941,10 @@ self.__GRAVITAS_PRECACHE_IDLE = [
   './gaia/milky-way-rotation-curve.json',
   './gaia/ngc2420.json',
   './gaia/solar-neighbourhood.json',
+  './js/assignments/adapt.js',
+  './js/assignments/adapted.js',
+  './js/assignments/adaptText.js',
+  './js/assignments/assignmentBuilder.js',
   './js/authoring/instructorSchema.js',
   './js/data/ephemeris/solarSystem2025.js',
   './js/data/ephemeris/solarSystem2025Check.js',
@@ -981,6 +979,7 @@ self.__GRAVITAS_PRECACHE_IDLE = [
   './js/data/sky/brightStars.js',
   './js/data/sky/constellations.js',
   './js/forward/system3d.js',
+  './js/i18n/en.adapt.js',
   './js/i18n/en.classSummary.js',
   './js/i18n/en.lab3d.js',
   './js/i18n/en.lab3dEvidence.js',
@@ -990,6 +989,7 @@ self.__GRAVITAS_PRECACHE_IDLE = [
   './js/i18n/en.missionEvidence.js',
   './js/i18n/en.missionLab.js',
   './js/i18n/en.missionLabGuides.js',
+  './js/i18n/es.adapt.js',
   './js/i18n/es.classSummary.js',
   './js/i18n/es.lab3d.js',
   './js/i18n/es.lab3dEvidence.js',

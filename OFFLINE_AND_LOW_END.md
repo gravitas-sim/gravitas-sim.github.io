@@ -60,7 +60,7 @@ Measured from the committed `sw-manifest.js` and the files it lists, by
 | Other | 16 | 700 KB |
 | **Total** | **1092** | **17.4 MB** |
 
-Of those, 809 are core (the install fails without them), 107 optional (installed with them; a missing one is reported and costs nothing) and 176 idle (installed after activation, when the browser is idle; a missing one costs that page its offline copy and is fetched again on the next open). The first-visit install is the core and the optional files: 916 files.
+Of those, 803 are core (the install fails without them), 107 optional (installed with them; a missing one is reported and costs nothing) and 182 idle (installed after activation, when the browser is idle; a missing one costs that page its offline copy and is fetched again on the next open). The first-visit install is the core and the optional files: 910 files.
 
 Gzipped, as Pages serves it, the whole is about 6 MB.
 
@@ -78,11 +78,11 @@ decides whether a version activates; it has a committed ceiling in
 `tools/data-budget.json` that `tests/offlineTiers.test.js` enforces in every
 budget-policy mode. The **idle install** is fetched after activation, when the
 page has gone idle, by an `install-idle` message to the worker: the instructor
-modules, three.js, the 3-D lab, the mission lab, the Sky Lab, the Library and
-the data tables. It fetches only what the cache lacks, so a run cut short is
+modules, three.js, the 3-D lab, the mission lab, the Sky Lab, the Library, the
+activity builder and the data tables. It fetches only what the cache lacks, so a run cut short is
 finished by the next open, and a device that asked for less data (Save-Data) is
 not given it unasked. Until it finishes, those surfaces need the network; that
-is the trade D-PERF-02 accepted for a smaller install. The submission review page's own module (`js/submissionReview.js`) is in the idle tier with the instructor modules (Prompt 172, D-R10-38): it arrives with the idle install, not at the first visit, and its page, like the other `instructors/` pages, is runtime-cached once visited. **Parts** are on-demand:
+is the trade D-PERF-02 accepted for a smaller install. The submission review page's own module (`js/submissionReview.js`) is in the idle tier with the instructor modules (Prompt 172, D-R10-38): it arrives with the idle install, not at the first visit, and its page, like the other `instructors/` pages, is runtime-cached once visited. The activity builder (`js/assignments/assignmentBuilder.js`) and the adaptation it checks, with the report of what changed under an activity and their words, are an idle group of their own (Prompt 175, D-R10-49): until the idle install finishes, an offline first visit asks for a reload when the builder is opened and shows an adapted link without its notes, due line and report, and the activity itself opens as ever. **Parts** are on-demand:
 a reader asks for them, with a storage estimate first (`js/offlineParts.js`).
 
 <!--fact-block:promises-->
@@ -101,6 +101,7 @@ The idle tier, by surface (gzip level 6, to the nearest 10 KB: Node versions dif
 | --- | ---: | ---: |
 | 3-D lab | 38 | ~140 KB |
 | data tables | 33 | ~230 KB |
+| activity builder | 6 | ~20 KB |
 | instructor modules | 29 | ~320 KB |
 | mission lab | 40 | ~230 KB |
 | Sky Lab | 22 | ~170 KB |

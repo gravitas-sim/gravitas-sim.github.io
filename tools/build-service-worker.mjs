@@ -313,6 +313,17 @@ export const IDLE_TIER = [
   ],
   ['Library', /^(js\/library\/|js\/libraryPage\.js$|library\/)/],
   [
+    'activity builder',
+    // The instructor's half of an assignment (Prompt 175): the builder, the
+    // adaptation it checks and the student-side report of what changed under
+    // an activity, with their words. Reached from ?assign=<lesson> and from an
+    // adapted or out-of-date link, and imported only then; each import is
+    // already guarded (a reload prompt for the builder, silence for the
+    // report), so until the idle install finishes an offline first visit
+    // builds and opens activities as before and without these.
+    /^(js\/assignments\/(assignmentBuilder|adapt|adaptText|adapted)\.js|js\/i18n\/(en|es)\.adapt\.js)$/,
+  ],
+  [
     'data tables',
     /^((cosmology|gaia|variables)\/.*\.json$|js\/data\/(observations|radiation)\/)/,
   ],
