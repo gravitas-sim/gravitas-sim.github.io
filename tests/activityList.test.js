@@ -56,7 +56,7 @@ import { WORDS, tr } from '../js/instructorPlanText.js';
 import { openPlanPanel, printHtml } from '../js/instructorPlanView.js';
 import { itemTitle, linksOf, manifestLike } from '../js/instructorCartridge.js';
 
-const { document } = globalThis;
+const { document, window } = globalThis;
 const ROOT = 'https://gravitas-sim.online/';
 const read = p => readFileSync(new URL(`../${p}`, import.meta.url), 'utf8');
 const COURSES = Object.keys(BUILTIN_COURSES);
@@ -558,7 +558,7 @@ describe('the panel', () => {
         i < 400 && !host.querySelector('#plan-preview article');
         i++
       )
-        await new Promise(r => setTimeout(r, 25));
+        await new Promise(r => globalThis.setTimeout(r, 25));
     };
     return { host, panel, pack, settle, setLocale: l => (locale = l) };
   }
@@ -590,7 +590,7 @@ describe('the panel', () => {
     window.print = jest.fn();
     host.querySelector('#plan-print').click();
     for (let i = 0; i < 200 && !window.print.mock.calls.length; i++)
-      await new Promise(r => setTimeout(r, 25));
+      await new Promise(r => globalThis.setTimeout(r, 25));
     expect(window.print).toHaveBeenCalledTimes(1);
     expect(document.getElementById('plan-print-root')).not.toBeNull();
     expect(document.getElementById('plan-print-style').textContent).toContain(
@@ -621,7 +621,7 @@ describe('the panel', () => {
     };
     host.querySelector('#plan-md').click();
     for (let i = 0; i < 200 && !clicked.length; i++)
-      await new Promise(r => setTimeout(r, 25));
+      await new Promise(r => globalThis.setTimeout(r, 25));
     window.HTMLAnchorElement.prototype.click = click;
     expect(clicked).toEqual(['observing-lab.activity-list.en.md']);
     expect(saved[0].type).toMatch(/markdown/);
@@ -632,7 +632,7 @@ describe('the panel', () => {
     });
     host.querySelector('#plan-copy').click();
     for (let i = 0; i < 200 && !written.length; i++)
-      await new Promise(r => setTimeout(r, 25));
+      await new Promise(r => globalThis.setTimeout(r, 25));
     expect(written[0]).toContain(STATEMENT.en);
     expect(host.querySelector('#plan-status').textContent).toMatch(
       /Copied the Markdown/
@@ -642,7 +642,7 @@ describe('the panel', () => {
   test('a course with problems is not made into a list', async () => {
     const { host } = await open({ manifest: () => null });
     for (let i = 0; i < 100 && !host.querySelector('#plan-fix'); i++)
-      await new Promise(r => setTimeout(r, 25));
+      await new Promise(r => globalThis.setTimeout(r, 25));
     expect(host.querySelector('#plan-fix')).not.toBeNull();
     expect(host.querySelector('#plan-print').disabled).toBe(true);
   });
