@@ -100,3 +100,116 @@ a moving object, blinked and overlaid. **Not run until Prompt 189.**
 
 **Timing.** The whole pack over a 1,024 by 1,024 frame in 250 ms or less, and a
 1,024 by 1,024 carry and difference in 1,500 ms or less, in plain Node.
+
+## What was built
+
+- `js/measure/overlay.js` (504 lines, imports only Prompt 181's kernel and the
+  sky kernel): `starsIn` and `planetsIn` (which entries fall in a frame, where,
+  at what time), `skyFor` (the solved calibration wins over the header),
+  `predictionSigma` (the fit's covariance carried to a catalogue star's
+  pixel), `tieOf`, `carry` (bilinear), `subtract`, `differenceVerdict` (nine
+  refusal codes, each with the data that explains it) and `blinkPlan`.
+- `js/observatory/imageOverlay.js`, the panel "Catalogs, blink and compare" in
+  the Observatory, loaded when it is first opened (a lazy file, never
+  precached, listed in `NEVER_PRECACHED`); its words are two lazy catalogs,
+  `js/i18n/en.imageOverlay.js` and `es.imageOverlay.js`, registered for the
+  page's language and re-registered when it changes.
+- Overlay: one button, boxes for the stars, the planets and the names, a
+  magnitude limit, the notes (which sky coordinates, the epoch and the
+  proper-motion treatment, the planets' 0.2 degree), the picture, and a table
+  of read-only rows (name, kind, x, y, RA, Dec, magnitude, sigma) that holds
+  exactly what is drawn. The table is the panel's own; it does not write into
+  the marks table, so no measurement can come from a catalogue entry.
+- Compare: "use the next image I open" holds a second frame; the tie is the
+  sky, matched stars or the same pixels; the view is blink (0.5, 1, 2 or 4 a
+  second, a button by hand under reduced motion), side by side with two
+  cursors linked through the tie and moved by the arrow keys (Alt a quarter
+  pixel, Shift four, or buttons), or the difference, refused with the reason
+  unless both frames carry the quantitative contract with one calibration
+  state, one unit and, in counts, one exposure. A difference is a picture, not
+  a measurement, says so, and is never stored.
+- The count of what is drawn and listed is bounded at 500 by the same rule as
+  Prompt 181's table, and a frame pair is held only inside Prompt 157's
+  decoded-memory limit (`too-large` refuses the difference).
+- Nothing is fetched except the site's own `/sky/bright-stars.json`, when the
+  stars are first drawn. Nothing is stored or uploaded.
+
+## Results
+
+`npm run overlay:validate` runs every check and prints the table; `--json`
+gives the rows. Measured here, bounds as committed in `thresholds.json`.
+
+| Check | Bound | Measured | Verdict |
+|---|---|---|---|
+| a1 tangent point; 21 by 21 round trip | 1e-9 px; 1e-7 px | 0; 1.8e-12 px | pass |
+| a2 1000 mas/yr over ten years | 1e-4 arcsec | 7.9e-9 arcsec | pass |
+| a3 time scales (UTC to TT within 1 s; exact conversions 1e-6 s) | as stated | UTC 0.056 s; TAI 1.4e-5 s; start and end 1.0e-5 s | **FAIL** (see below) |
+| a4 frame edge, a5 cap of 500, a6 planets, a7 resample identity, a8 rotated centroid, a9 difference, a10 blink | as committed | all within | pass |
+| b1 904 stars, orion WCS, J2000.0 / at 2026-01-01, vs astropy wcslib | 1e-6 px / 0.002 px | 1.7e-12 / 5.9e-12 px, same stars in frame | pass |
+| b1 UTC to TT vs astropy | 1 s | 0.056 s | pass |
+| b2 five planets, five dates vs ERFA plan94 | 0.2 deg | worst Saturn 0.170, Jupiter 0.104 deg | pass |
+| b3 resample vs `map_coordinates` order 1 | 1e-9 | 2.6e-11 over 6,487 pixels | pass |
+| b4 sky-map through two WCS vs wcslib | 1e-6 px | 2.0e-12 px | pass |
+| c1, c2 coverage of the predicted pixel, 30,000 per model | 1 sigma 64 to 72 %; 1.96 sigma 93.5 to 97.5 % | affine 69.0 / 95.3 %; similarity 68.9 / 95.3 % | pass |
+| d1 to d6 refusals (no time, display-only, nine difference reasons, 300 swapped-pair trials, decoded memory, fewer than three pairs) | as committed | 300 of 300 refused; every reason named | pass |
+| f1 pack over 1,024 by 1,024; f2 carry and difference | 250 ms; 1,500 ms | 1.9 ms; 244 ms (Node, this Mac) | pass |
+| b5, e1 an authentic frame with catalogue stars; one authentic pair blinked | | | **NOT RUN until Prompt 189** |
+
+The oracle is astropy 6.1.7 (wcslib, ERFA 2.0.1.5) with scipy 1.15.3 and numpy
+2.2.6, run once in the scratch environment Prompt 180 made, nothing installed,
+no Gravitas code in it; `tests/fixtures/overlay/oracle-provenance.json` records
+versions, parameters, digests and the two ERFA warnings that were kept.
+
+## The leg that fails (a3.timeScales)
+
+The committed bound for exact conversions (TAI to TT, the half-exposure shift)
+is 1e-6 s. A Julian date near 2.46 million is a double whose neighbours are
+2^-31 day (4.0e-5 s) apart, so no arithmetic can read a 32.184 s or 50 s shift
+back from one double to 1e-6 s. The leg is reported failed, the bound is not
+moved, and `tests/fixtures/overlay/failed-legs.json` holds it with its cause;
+`tests/overlay.test.js` holds the measurement to that record, so a change that
+fixes or worsens it cannot pass unnoticed. A second row, `x.a3.timeScalesAtResolution`,
+states the same errors against one spacing of the doubles (all below it) as
+evidence, not as a replacement for the failed leg. Carl may rule on the bound.
+Nothing in the page depends on it: a time off by one spacing moves the
+fastest planet (about a degree a day) by 5e-10 degree, against its 0.2 degree
+bound.
+
+## Defects found in the harness while writing it
+
+Reported because the order matters: one was found on the first run and fixed
+before the leg was judged, and none changed a bound. `d2.noSky`'s history
+entry lacked a version and a lossy flag, so `permits` said "invalid" instead of
+"geometry-unrecorded": the case was built wrongly and was corrected. The
+oracle wrote `NaN` for stars behind the tangent plane, which is not JSON: it
+now writes `null` and the validator skips those entries. Two Jest cases had
+placed CRPIX and a half-pixel index wrongly.
+
+## Limits (said in the panel too)
+
+- Planets are Standish's elements, good to 0.2 degree; the circle drawn is the
+  bound, and it is larger than most frames. A planet outside the frame whose
+  bound reaches the frame is listed as "may be in view".
+- Stars move by linear proper motion only; no parallax, aberration or
+  precession (the pack and the tangent plane are J2000.0).
+- The overlay rows are not measurements and cannot be added to the marks table.
+- A header the page cannot project (not TAN, or with distortion) refuses.
+- Blink is not a registration check: two frames tied by the sky are as well
+  aligned as their calibrations.
+- The Spanish was not read by a fluent reader.
+
+## Not run until Prompt 189
+
+An authentic frame with catalogue stars (b5), and an authentic calibrated pair
+with a moving object blinked and overlaid (e1). Nothing was downloaded and no
+frame was simulated for either; the panel was driven in e2e by synthetic frames
+built from the pack's own stars at the pixels the truth WCS gives, which tests
+the panel and the arithmetic against the oracle, not the sky.
+
+## Where things are
+
+`tests/overlay.test.js` (25 tests) and `e2e/imageOverlay.spec.js` (13 tests, en
+and es, axe in light and dark, 24 pixel targets at 1280 and 390, the keyboard
+alone, reduced motion). `tools/overlay-validate.mjs` and `tools/overlay-oracle/`
+hold the validator and the oracle script, with their fixtures in
+`tests/fixtures/overlay/`.
