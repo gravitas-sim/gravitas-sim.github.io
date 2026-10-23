@@ -23,7 +23,18 @@ import { UNITS } from '../units/registry.js';
 import { ID_ARTIFACT } from '../names.js';
 
 export const FORMAT = ID_ARTIFACT;
-export const FORMAT_VERSION = 1;
+/**
+ * The newest version this reader reads. /2 (Prompt 176, the 3.0.0 format
+ * boundary) is /1 plus what only a newer build understands: an uncertainty
+ * state beyond sigma, interval and none, a failed quantity with no value,
+ * `correlatedWith` and `fit`. A 2.0.0 reader refuses a /2 envelope by its
+ * version, in words, instead of refusing one state and silently dropping the
+ * rest; an envelope that needs none of it is still written as /1
+ * (artifactVersion).
+ */
+export const FORMAT_VERSION = 2;
+/** The version of an envelope that needs nothing /2 adds, and what 2.0.0 wrote. */
+export const BASE_VERSION = 1;
 
 /**
  * What kind of number a quantity is.
@@ -137,10 +148,10 @@ export function validateArtifact(doc) {
 
   need(doc.format === FORMAT, 'format', 'format', `is not "${FORMAT}"`);
   need(
-    doc.formatVersion === FORMAT_VERSION,
+    doc.formatVersion === BASE_VERSION || doc.formatVersion === FORMAT_VERSION,
     'formatVersion',
     'version',
-    `is not ${FORMAT_VERSION}`
+    `is not ${BASE_VERSION} or ${FORMAT_VERSION}`
   );
   need(isText(doc.id), 'id', 'required', 'is required');
 
@@ -458,6 +469,23 @@ function fitProblems(f, at, quantities) {
 }
 
 /**
+ * The lowest version that carries this envelope: /2 only for what /1 cannot
+ * say, so an envelope made of 2.0.0's states is still one a 2.0.0 build opens.
+ * @param {{quantities?: object[], fit?: object}} doc
+ * @returns {number} 1 or 2
+ */
+export const artifactVersion = doc =>
+  doc.fit !== undefined ||
+  (doc.quantities ?? []).some(
+    q =>
+      q?.correlatedWith !== undefined ||
+      q?.value === null ||
+      !LEGACY_UNCERTAINTY_KINDS.includes(q?.uncertainty?.kind)
+  )
+    ? FORMAT_VERSION
+    : BASE_VERSION;
+
+/**
  * The envelope as a 2.0.0 reader can open it. The extension (Prompt 150) is
  * written only where such a reader would not meet it; a writer that must
  * reach one calls this, which turns each state a 2.0.0 reader refuses into
@@ -472,7 +500,7 @@ function fitProblems(f, at, quantities) {
  */
 export function legacyView(doc) {
   const warnings = [...(doc.warnings ?? [])];
-  const rest = { ...doc };
+  const rest = { ...doc, formatVersion: BASE_VERSION };
   delete rest.fit;
   const quantities = doc.quantities.map(q => {
     const base = { ...q };
@@ -506,7 +534,7 @@ export function artifact({
 }) {
   return {
     format: FORMAT,
-    formatVersion: FORMAT_VERSION,
+    formatVersion: artifactVersion({ quantities, fit }),
     id,
     made: { app: 'gravitas', ...made },
     source,

@@ -52,10 +52,12 @@ describe('the example', () => {
   test('reads through the migration unchanged', () => {
     const p = good();
     expect(migrateInvestigationPack(p)).toEqual({ ok: true, pack: p });
-    expect(migrateInvestigationPack({ ...p, formatVersion: 2 })).toEqual({
+    // /2 is read (Prompt 176); a version past it is refused as newer.
+    expect(migrateInvestigationPack({ ...p, formatVersion: 2 }).ok).toBe(true);
+    expect(migrateInvestigationPack({ ...p, formatVersion: 3 })).toEqual({
       ok: false,
       code: 'newer',
-      vars: { version: 2 },
+      vars: { version: 3 },
     });
     expect(migrateInvestigationPack({ format: BANK_FORMAT }).ok).toBe(false);
     expect(migrateInvestigationPack(null).ok).toBe(false);

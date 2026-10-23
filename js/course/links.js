@@ -42,6 +42,8 @@ import {
   GUIDE_DEPTHS,
   LEVEL_DEPTH,
   guideRoute,
+  packVersion,
+  withVersion,
 } from './pack.js';
 import { KEY_COURSE_PREVIEW } from '../names.js';
 
@@ -147,9 +149,13 @@ export async function itemLink(item, { root, locale = 'en', level }) {
   return null;
 }
 
-/** The course home's link for a pack, and whether it is a comfortable length. */
+/**
+ * The course home's link for a pack, and whether it is a comfortable length.
+ * The prefix is the pack's lowest version (c2, or c3 for a collection, a term
+ * or outcomes), so a 2.0.0 course home opens every link it could before.
+ */
 export async function courseLink(pack, { root }) {
-  const url = `${root}course/#${await encodeTagged(COURSE_TAG, FORMAT_VERSION, pack)}`;
+  const url = `${root}course/#${await encodeTagged(COURSE_TAG, packVersion(pack), withVersion(pack))}`;
   return {
     url,
     length: url.length,

@@ -85,7 +85,7 @@ describe('with items saved', () => {
     await press(host, '[data-item="dataset-tess-light-curve"] [data-act="up"]');
     await press(host, '#coll-link-make');
     const url = host.querySelector('#coll-link').value;
-    expect(url).toMatch(/\/course\/#c2z/);
+    expect(url).toMatch(/\/course\/#c3z/);
     const made = await readCourseFragment(url.split('#')[1]);
     expect(validateCoursePack(made, courseApi())).toEqual([]);
     expect(made.profile).toBe('collection');

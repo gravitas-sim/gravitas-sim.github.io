@@ -1,0 +1,460 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/artifact-2.schema.json",
+  "title": "gravitas.artifact/2",
+  "description": "One envelope for a scientific result: what made it, what it was made from, what may be done with it, and each quantity with its value, registry unit, uncertainty and origin. Data, not rendered text. js/platform/artifact.js validateArtifact() is the authority; PROVENANCE.md maps the older vocabularies onto origin and basis. Version 2 (Prompt 176, the 3.0.0 format boundary) is /1 plus what only a newer build understands: the uncertainty states not-constrained, failed, assumed, model-limited and limit (Prompt 150), a failed quantity with a null value, `correlatedWith` and `fit`. It is written only for an envelope that needs one of them, so a 2.0.0 build still opens every other envelope; legacyView() hands a /2 envelope to a 2.0.0 reader as /1, with what it loses listed in the warnings. FORMATS.md lists it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "format",
+    "formatVersion",
+    "id",
+    "made",
+    "source",
+    "quantities"
+  ],
+  "properties": {
+    "format": {
+      "const": "gravitas.artifact"
+    },
+    "formatVersion": {
+      "const": 2
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "made": {
+      "type": "object",
+      "required": [
+        "app"
+      ],
+      "properties": {
+        "app": {
+          "type": "string"
+        },
+        "platform": {
+          "type": "string"
+        },
+        "engineFingerprint": {
+          "type": "string"
+        },
+        "at": {
+          "type": "string"
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "required": [
+        "kind",
+        "id"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "simulation",
+            "observation",
+            "data-pack",
+            "pipeline",
+            "inference",
+            "experiment",
+            "analysis",
+            "guide",
+            "forward-model",
+            "comparison"
+          ]
+        },
+        "id": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8,64}$"
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "credit": {
+          "type": "string"
+        },
+        "license": {
+          "type": "object",
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "status": {
+              "type": "string"
+            },
+            "statement": {
+              "type": "string"
+            },
+            "basis": {
+              "type": "string"
+            }
+          }
+        },
+        "citations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "retrieved": {
+          "type": "string"
+        },
+        "reductions": {
+          "type": "array"
+        }
+      }
+    },
+    "quantities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "value",
+          "unit",
+          "uncertainty",
+          "origin"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "value": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "description": "Null only where the uncertainty kind is failed."
+          },
+          "unit": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "An id of js/units/registry.js, exactly; the empty string is dimensionless and null is not stated."
+          },
+          "uncertainty": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "kind"
+            ],
+            "properties": {
+              "kind": {
+                "enum": [
+                  "sigma",
+                  "interval",
+                  "none",
+                  "not-constrained",
+                  "failed",
+                  "assumed",
+                  "model-limited",
+                  "limit"
+                ],
+                "description": "The first three are the 2.0.0 envelope's; a 2.0.0 reader refuses the rest in its own words (FORMATS.md), so a writer that must reach one writes legacyView()."
+              },
+              "sigma": {
+                "type": "number",
+                "minimum": 0
+              },
+              "lo": {
+                "type": "number"
+              },
+              "hi": {
+                "type": "number"
+              },
+              "level": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "exclusiveMaximum": 1
+              },
+              "basis": {
+                "enum": [
+                  "data",
+                  "model",
+                  "assumed",
+                  "scaled",
+                  "profile",
+                  "derived"
+                ]
+              },
+              "bound": {
+                "enum": [
+                  "upper",
+                  "lower"
+                ],
+                "description": "Kind limit: the value is an upper or a lower limit."
+              },
+              "floor": {
+                "type": "number",
+                "minimum": 0,
+                "description": "Kind model-limited: the model's own error, which the precision cannot beat."
+              },
+              "reason": {
+                "type": "string",
+                "description": "Kind failed: why there is no result; kind not-constrained: optionally why."
+              }
+            }
+          },
+          "origin": {
+            "enum": [
+              "measured",
+              "derived",
+              "assumed",
+              "fitted",
+              "fixed",
+              "truth",
+              "analytic",
+              "synthetic"
+            ]
+          },
+          "label": {
+            "type": "string",
+            "description": "Optional, in the language the result was made in; a report renders its own."
+          },
+          "correlatedWith": {
+            "type": "array",
+            "description": "Other quantities of this envelope this one is correlated with, and how strongly; the pair is stated on either side.",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "rho"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "rho": {
+                  "type": "number",
+                  "minimum": -1,
+                  "maximum": 1
+                },
+                "basis": {
+                  "enum": [
+                    "data",
+                    "calibration",
+                    "model",
+                    "fit"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "fit": {
+      "type": "object",
+      "description": "A fit's result record (Prompt 150): the parameters are quantities of this envelope, named by id.",
+      "required": [
+        "model",
+        "parameters"
+      ],
+      "properties": {
+        "model": {
+          "type": "object",
+          "required": [
+            "id",
+            "version"
+          ],
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "version": {
+              "type": "string"
+            }
+          }
+        },
+        "parameters": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "covariance": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "description": "Null when the covariance could not be computed. Entry [i][j] is in the product of the units of parameters i and j.",
+          "required": [
+            "order",
+            "values",
+            "units"
+          ],
+          "properties": {
+            "order": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "values": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                }
+              }
+            },
+            "units": {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        },
+        "statistic": {
+          "type": "object",
+          "required": [
+            "name",
+            "value",
+            "dof"
+          ],
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "value": {
+              "type": "number"
+            },
+            "dof": {
+              "type": "number",
+              "minimum": 0
+            },
+            "reduced": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "weighted": {
+              "type": "boolean"
+            }
+          }
+        },
+        "residuals": {
+          "type": "object",
+          "required": [
+            "n",
+            "rms"
+          ],
+          "properties": {
+            "n": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "rms": {
+              "type": "number",
+              "minimum": 0
+            }
+          }
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "digest": {
+              "type": "string"
+            },
+            "rows": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "used": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "observation": {
+              "type": "string"
+            }
+          }
+        },
+        "settings": {
+          "type": "object",
+          "description": "The algorithm, the model's settings and the seed (null for a deterministic fitter)."
+        },
+        "convergence": {
+          "type": "object",
+          "required": [
+            "converged"
+          ],
+          "properties": {
+            "converged": {
+              "type": "boolean"
+            },
+            "reason": {
+              "type": "string"
+            },
+            "iterations": {
+              "type": "integer"
+            },
+            "evaluations": {
+              "type": "integer"
+            }
+          }
+        },
+        "rank": {
+          "type": "object",
+          "required": [
+            "free",
+            "rank",
+            "status",
+            "notConstrained"
+          ],
+          "properties": {
+            "free": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "rank": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "status": {
+              "enum": [
+                "full",
+                "deficient"
+              ]
+            },
+            "tolerance": {
+              "type": "number"
+            },
+            "notConstrained": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -402,7 +402,7 @@ declares all of it, and the contract suite fails if the two differ.
 |---|---|
 | `SDK_VERSION` | this SDK, `1.10.0` |
 | `PLATFORM_API` | the platform API this Gravitas implements, `1.0.0` |
-| `FORMATS` | each format this SDK reads and writes, with the highest version it reads (`gravitas.course-pack` is 2: it reads /1 too) |
+| `FORMATS` | each format this SDK reads and writes, with the highest version it reads (`gravitas.course-pack` is 3: it reads /1 and /2 too) |
 | `EXTENSION_TYPES`, `LOCALES` | the five types and their kinds; the interface languages (`en`, `es`) |
 | `publicIds()` | every lesson, instrument, scenario, data pack, course and package id, and each lesson's title in each language |
 | `acceptsPlatform(range)` | whether a `gravitas` range accepts this platform |
@@ -514,7 +514,8 @@ SDK 1.8.0 adds, and removes nothing, the two formats the SDK did not read
 - **`gravitas.course-pack/2`**, what the course-pack builder writes, as a
   course-pack extension, with its JSON Schema
   (`sdk/schemas/course-pack-2.schema.json`). `FORMATS['gravitas.course-pack']`
-  is 2, the highest it reads; a /1 pack is read exactly as before.
+  is 3 since 3.0.0, the highest it reads (`course-pack-3.schema.json`: /2 with
+  `profile`, `term` or `outcomes`); a /1 pack is read exactly as before.
 - **`gravitas.investigation-pack/1`** as a new extension type,
   `investigation-pack` (`provides.investigations` with a `file`), with
   `init`, `validate`, `test`, `inspect` and `pack`.

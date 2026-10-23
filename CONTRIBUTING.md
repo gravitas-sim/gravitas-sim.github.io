@@ -176,7 +176,7 @@ their ceilings:
 | `js/investigations.js` | 3,293 | 3,293 |
 | `js/render.js` | 3,015 | 3,015 |
 | `js/world/build.js` | 2,599 | 2,599 |
-| `js/composerPage.js` | 2,532 | 2,532 |
+| `js/composerPage.js` | 2,528 | 2,528 |
 | `js/darkMatterWidgets.js` | 2,329 | 2,329 |
 <!--/fact-block-->
 
