@@ -123,3 +123,7 @@ export function translatePage(root = document) {
   }
   document.title = t('obs.doc.title');
 }
+
+// The preview banner (Prompt 175); here because the page is at its line ceiling.
+if (globalThis.location?.search.includes('preview=student'))
+  import('../storage/banner.js');

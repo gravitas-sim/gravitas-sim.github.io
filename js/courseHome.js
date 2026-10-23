@@ -48,6 +48,10 @@ import { BUILTIN_COURSES } from './data/courses/index.js';
 import { PLATFORM_API } from './platform/catalog.generated.js';
 import { ID_COURSE_PACK, KEY_COLLECTIONS, KEY_NEXT_CONTEXT } from './names.js';
 
+// The banner of a preview as a student (Prompt 175).
+if (globalThis.location?.search.includes('preview=student'))
+  import('./storage/banner.js');
+
 const MAX_FILE = 512 * 1024;
 
 const $ = id => document.getElementById(id);

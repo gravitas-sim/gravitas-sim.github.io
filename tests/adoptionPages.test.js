@@ -214,7 +214,9 @@ describe('what each page says', () => {
       const html = built.pages.find(p =>
         p.file.endsWith(`investigation/${l.id}/index.html`)
       ).html;
-      expect(html).toContain(`href="/?author=${l.id}&amp;view=student"`);
+      expect(html).toContain(
+        `href="/?author=${l.id}&amp;view=student&amp;preview=student"`
+      );
       expect(html).toContain(`href="/?assign=${l.id}"`);
     }
   });

@@ -400,9 +400,13 @@ test.describe('an item, its relations and its pathway', () => {
     await openLibrary(page, `?item=${kepler.id}&path=seq:gravity-and-orbits`);
     const item = page.locator('#libDetail .lib-item');
     await expect(item.locator('h2')).toHaveText(kepler.title.en);
-    await expect(item.locator('a.ui-button')).toHaveAttribute(
+    // The open link and, beside it, the preview as a student (Prompt 175).
+    await expect(
+      item.locator('a.ui-button:not([data-preview])')
+    ).toHaveAttribute('href', kepler.route);
+    await expect(item.locator('a.ui-button[data-preview]')).toHaveAttribute(
       'href',
-      kepler.route
+      /preview=student/
     );
     await expect(
       item.locator('a[href="' + kepler.rel.teach + '"]')

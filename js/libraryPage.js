@@ -33,7 +33,7 @@ import {
 } from './data/investigations/browse.js';
 import { LENGTHS, CALCULATIONS } from './data/investigations/sequences.js';
 import { libraryCardHtml } from './library/card.js';
-import { checkLibrary, entryIdOfItem } from './library/format.js';
+import { checkLibrary, entryIdOfItem, previewRoute } from './library/format.js';
 import { progressOf } from './library/progress.js';
 import {
   pick,
@@ -46,6 +46,7 @@ import {
 import { mountShell } from './shell.js';
 import { ID_COURSE_PACK, KEY_COLLECTIONS, KEY_NEXT_CONTEXT } from './names.js';
 import {
+  get,
   noteResume,
   put,
   readJson,
@@ -508,7 +509,7 @@ async function fillCollections() {
   const box = $('libCollections');
   let any = false;
   try {
-    any = localStorage.getItem(KEY_COLLECTIONS) !== null;
+    any = get(KEY_COLLECTIONS) !== null;
   } catch {
     /* no storage: nothing is kept */
   }
@@ -603,7 +604,7 @@ async function renderDetail(kind) {
   const { topicView, itemView, mountSave, bindCollections } =
     await import('./library/views.js');
   if (mine !== drawn) return;
-  const c = { t, pick, shown, byId, path: state.path };
+  const c = { t, pick, shown, byId, path: state.path, preview: previewRoute };
   const lib = state.library;
   const out =
     kind === 'topic'
