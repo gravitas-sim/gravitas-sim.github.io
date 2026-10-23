@@ -348,12 +348,44 @@ and cannot be course items. The catalog still lists /1 courses only, so these
 /2 courses are reached from the course home and the Library, not installed from
 the catalog.
 
+## Common Cartridge (Prompt 169)
+
+An instructor who expects a course to import into Canvas, Moodle, D2L or Blackboard gets a file: the course builder's **Export a Common Cartridge** button and the distribution kit's **Make a Common Cartridge** (for a course) make `<course id>-<en|es>.imscc` in the browser, from the course as it stands. Nothing is uploaded, and the export runs no service, carries nothing about students and promises no grade return. Live tool connection (LTI) is a service and stays out of scope (D-CLASS-04).
+
+**The profile, and why.** The 1EdTech (IMS) **Thin Common Cartridge Profile v1.0** (Final Specification, 1 May 2015) over **Common Cartridge v1.3** (Final, July 2013), manifest schema `imscp_v1p1` of `imsccv1p3`, `schemaversion` 1.3.0, file extension `.imscc`. Thin Common Cartridge carries web links (and LTI links, which this never writes) and nothing else, which is exactly what a Gravitas course is: a list of links that already encode the pin and the depth. The profile's own conformance exceptions let a platform skip inline resource XML, so each link is a stand-alone web link file (the form every platform must read) and the package holds exactly three kinds of file, as the profile says: the one `imsmanifest.xml` and one web link XML file for each link. Version 1.3 over 1.4: the Thin profile was written for CC 1.2 and 1.3, 1.3 is a Final release, and 1.4 is a Candidate Final (September 2021); which versions each platform's importer reads was not checked, because no platform was available. 1.4 has Thin schemas of its own and is the upgrade path if a platform asks for it.
+
+**What it holds, from a course.**
+
+- One folder (a module on most platforms) for each unit, in order, with one web link for each item that has an address: the link the course already makes (`js/course/links.js`), in the cartridge's language, opening the item in Gravitas. A reading with no address cannot be a link and is left out; the panel says which.
+- A first folder with the course home link (the whole course as a page, with its paths, times and notes) and, for a course with a teacher guide, a link to it for instructors.
+- A unit whose items carry notes for instructors gets one link for instructors, to the course home, where the notes are behind the "Notes for instructors" switch. Thin Common Cartridge has no pages (web content is not in the profile), so the notes themselves go into the cartridge only if the instructor ticks the box: they become that link's description, with the role Instructor, and a platform that ignores the role would show them to students, which the box says.
+- A description for each link: its kind, its time, whether it is optional, and the student note. The text of the cartridge follows the language of the page it is made on (the course's own words fall back to English as the course home does); a package in one language gives one cartridge, and the other language is made by changing the page's language and exporting again.
+- A collection (`profile: "collection"`) exports the same way.
+- No date, no student, no random number: the manifest text is the same every time, and the archive is a stored (not deflated) ZIP, valid and the same bytes everywhere. A cartridge is never committed.
+
+**It is an export, and not a Gravitas format.** Gravitas never reads a cartridge back, so there is no reader, no version row in FORMATS.md (that table is for formats Gravitas reads or writes under its own name), no compatibility corpus row and no storage. The course package format is unchanged, and no closure file of the instructor bundle was edited.
+
+**How it was checked.** `tools/cartridge-profile.mjs` holds the profile's rules (from the Thin Common Cartridge guide, the CC v1.3 guide and the schemas' own Schematron rules), and `tests/commonCartridge.test.js` builds a cartridge from every built-in course in both languages, with and without the notes, checks each against them, checks every link against what the item names (a lesson id that exists, an assignment link that decodes to the assigned steps, the course home link that decodes to the pack), reads the archive back with a reader that shares no code with the writer, and refuses sixteen broken manifests rule by rule. The real schemas (`ccv1p3_imscp_v1p2_v1p0.xsd`, the two LOM profiles, the web link schema and what they import) validated all sixteen cartridges and every web link file with xmllint on 2026-10-22; six of the sixteen broken manifests are also refused by the schema, and the rest by the profile alone. **The schemas are not in this repository**: their licence lets a developer redistribute them as is only after registering with 1EdTech, which is an account and an agreement for Carl to make (D-R10-54). `tests/fixtures/common-cartridge/provenance.json` holds each source's address, size, SHA-256 and licence statement; `validation.json` is the verdict, with a digest of each manifest and of each link file (the deflated link fragments in the files replaced by a placeholder, because the bytes deflate writes differ between Node versions, and checked by decoding instead), and the test fails when a cartridge differs from it; `node tools/cartridge-validate.mjs --schemas <dir> --write` runs the schemas again (xmllint is needed; the tool fetches nothing and CI never runs it). The Common Cartridge valid test sets and the conformance testing process are behind a member login and were not read; the specification's own printed examples were. A manifest that validates is not an import.
+
+**Where an import has been checked.** A platform is VERIFIED here on one of two bases: an import recorded here (its date and what appeared), or a report by the owner, which says who reported it, where and when, and what was not supplied. All four rest on the second. Carl reported in chat on 2026-10-22 that imports into Canvas, Moodle, D2L and Blackboard are verified; the LMS versions, the cartridge imported and what imported were not supplied, so none of those, and no date of import, is recorded or implied here, and this project holds no screenshot or other artifact of an import. A schema, a unit test and a specification example are not an import, and a manifest that validates is not one either.
+
+| Platform | Import | Basis |
+|---|---|---|
+| Canvas | VERIFIED | verified by Carl, reported in chat 2026-10-22; LMS versions, the cartridge imported and what imported were not supplied |
+| Moodle | VERIFIED | verified by Carl, reported in chat 2026-10-22; LMS versions, the cartridge imported and what imported were not supplied |
+| D2L | VERIFIED | verified by Carl, reported in chat 2026-10-22; LMS versions, the cartridge imported and what imported were not supplied |
+| Blackboard | VERIFIED | verified by Carl, reported in chat 2026-10-22; LMS versions, the cartridge imported and what imported were not supplied |
+
+Teach, the adopter's guide, the panel and `tools/evidence-status.json` say the same, from one table (`IMPORT_STATUS` in `js/instructorCartridgeText.js`): Gravitas exports a Thin Common Cartridge; imports verified on: Canvas, Moodle, D2L, Blackboard (Canvas: VERIFIED, reported 2026-10-22; Moodle: VERIFIED, reported 2026-10-22; D2L: VERIFIED, reported 2026-10-22; Blackboard: VERIFIED, reported 2026-10-22). Reported by Carl in chat on 2026-10-22; the LMS versions, the cartridge imported and what imported were not supplied.
+To record an import itself, add its date and what appeared to the row there, to the evidence record and to this table; `tests/commonCartridge.test.js` holds the five together, pins that every row says exactly the basis above (nothing invented: no date of import, version or screenshot), and refuses a row that claims a recorded import and lacks its date or what appeared.
+
 ## What authors may ask for that it does not do
 
 These are recorded rather than built in this change:
 
 - **SCORM, LTI, grade passback and rosters.** A learning platform links to or
-  embeds the course home; nothing reports back to it.
+  embeds the course home, or imports a Thin Common Cartridge of its links (above);
+  nothing reports back to it.
 - **Dates, deadlines and release conditions.** The order is the course's;
   when is the instructor's.
 - **The catalog lists /1 courses.** It reads and installs
@@ -389,6 +421,8 @@ These are recorded rather than built in this change:
 | `js/course/api.js` | This build's lessons, scenarios and datasets, and each named lesson's facts |
 | `js/course/links.js` | Every link, and the course fragment |
 | `js/course/manifest.js` | The manifest |
+| `js/instructorCartridge.js`, `js/instructorCartridgeView.js`, `js/instructorCartridgeText.js` | The Common Cartridge export, its panel and its words (instructor modules, built lazily) |
+| `tools/cartridge-profile.mjs`, `tools/cartridge-validate.mjs` | The profile's rules; the run against the real schemas |
 | `js/course/datasets.js` | The built-in observations and the guided lessons, as data |
 | `js/course/i18n.js` | The course home's translator |
 | `js/data/courses/` | The courses Gravitas ships |
@@ -401,3 +435,4 @@ Tests:
   copied data against its sources, the registrations and every word.
 - `e2e/course.spec.js`: both pages, against the sources and dist, in all
   three engines, and the course home offline.
+- `tests/commonCartridge.test.js`, `e2e/commonCartridge.spec.js`: the export, as above.

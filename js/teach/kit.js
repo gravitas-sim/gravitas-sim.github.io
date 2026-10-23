@@ -244,6 +244,7 @@ async function build() {
       : text(source.pack.title, loc);
   $('kitRosterRow').hidden = source.kind !== 'activity';
   $('kitReuse').hidden = false;
+  $('kitCc').hidden = source.kind !== 'course';
   $('kitReuseCheck').hidden = source.kind !== 'activity';
   $('kitReuseSave').hidden = source.kind !== 'activity';
   $('kitReuseNote').textContent =
@@ -478,12 +479,69 @@ function wire() {
   $('kitTermGo').addEventListener('click', newTerm);
   $('kitTermSave').addEventListener('click', saveCourse);
   $('kitCollOpen').addEventListener('click', openCollections);
+  $('kitCcOpen').addEventListener('click', openCartridge);
   $('kitReuseUse').addEventListener('click', async () => {
     if (!reissued) return;
     source = { ok: true, kind: 'activity', activity: reissued };
     reissued = null;
     await build();
     $('kitReuseOut').textContent = T('reuse.reissued');
+  });
+}
+
+/**
+ * The Common Cartridge panel (Prompt 169): its modules load when it is opened,
+ * and take the page's from here (a lazy import of js/course/manifest.js would
+ * split a chunk the course builder's route then fetches).
+ */
+let cartridge = null;
+async function openCartridge() {
+  const out = $('kitStatus');
+  out.textContent = T('cc.loading');
+  const [view, cc, pack, review, api, links] = await Promise.all([
+    import('../instructorCartridgeView.js'),
+    import('../instructorCartridge.js'),
+    import('../course/pack.js'),
+    import('../course/review.js'),
+    import('../course/api.js'),
+    import('../course/links.js'),
+  ]);
+  const pk = source.pack;
+  const facts = await api.courseFacts(pk, { load: id => lesson(id, 'en') });
+  const made = await cc.linksOf(pk, {
+    itemsOf: pack.itemsOf,
+    itemLink: links.itemLink,
+    courseLink: links.courseLink,
+    root: ROOT,
+  });
+  const manifest = cc.manifestLike(
+    pk,
+    made,
+    review.estimate(pk, facts),
+    pack.itemsOf
+  );
+  out.textContent = '';
+  $('kitCcOpen').setAttribute('aria-expanded', 'true');
+  cartridge = view.openCartridgePanel({
+    host: $('kitCartridge'),
+    level: 3,
+    source: () => pk,
+    manifest: () => manifest,
+    nameOf: (p, id) =>
+      cc.itemTitle(
+        pack.itemsOf(p).find(x => x.item.id === id).item,
+        facts,
+        lang()
+      ),
+    download: (name, bytes, type) => {
+      const a = Object.assign(document.createElement('a'), {
+        href: URL.createObjectURL(new Blob([bytes], { type })),
+        download: name,
+      });
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(a.href), 10000);
+    },
+    locale: lang,
   });
 }
 
@@ -514,6 +572,7 @@ async function init() {
     onLanguage: () => {
       words();
       if (source) build();
+      cartridge?.refresh();
     },
   });
   if (location.hash === '#collections') openCollections();

@@ -128,8 +128,6 @@ const reviewed = new Set();
 const doc = () => history.current();
 const today = () => new Date().toISOString().slice(0, 10);
 
-// --- Cards --------------------------------------------------------------------
-
 /** Which cards are open, by the id of the unit or item they hold. */
 const openCards = new Set();
 const cardKey = (d, base) => {
@@ -183,8 +181,6 @@ function reveal(path) {
   const node = controlFor(path);
   (node?.tagName === 'DETAILS' ? node.querySelector('summary') : node)?.focus();
 }
-
-// --- Paths ----------------------------------------------------------------------
 
 const idOf = path =>
   `cb-${path.replace(/\[(\d+)\]/g, '-$1').replace(/\./g, '-')}`;
@@ -1727,18 +1723,20 @@ function savePack() {
   setStatus(t('course.status.saved', { file: `${d.id}.course.json` }));
 }
 
+const manifestOf = () =>
+  verdict?.facts && !blocking(verdict)
+    ? courseManifest(doc(), verdict.facts, {
+        links: verdict.links.items,
+        course: verdict.links.course.url,
+      })
+    : null;
+
 function saveManifest() {
-  const r = verdict;
-  if (!r?.facts || blocking(r)) return setStatus(t('studio.status.fixFirst'));
-  const d = doc();
-  const m = courseManifest(d, r.facts, {
-    links: r.links.items,
-    course: r.links.course.url,
-  });
-  downloadText(`${d.id}.course-manifest.json`, serialize(m));
-  setStatus(
-    t('course.status.manifest', { file: `${d.id}.course-manifest.json` })
-  );
+  const m = manifestOf();
+  if (!m) return setStatus(t('studio.status.fixFirst'));
+  const file = `${m.course.id}.course-manifest.json`;
+  downloadText(file, serialize(m));
+  setStatus(t('course.status.manifest', { file }));
 }
 
 function blankCourse() {
@@ -2008,6 +2006,7 @@ async function openTerm(mode) {
         known,
       }),
     problems: pack => validateCoursePack(pack, courseApi(catalog)).length,
+    manifest: manifestOf,
     apply: start,
     nameOf: (pack, id) =>
       itemName(itemsOf(pack).find(x => x.item.id === id)?.item ?? { id }),
@@ -2039,6 +2038,7 @@ function wire() {
   );
   $('cb-example').addEventListener('click', openExample);
   $('cb-term').addEventListener('click', () => openTerm('next'));
+  $('cb-cartridge').addEventListener('click', () => openTerm('cartridge'));
   $('cb-open').addEventListener('click', () => $('cb-file').click());
   $('cb-file').addEventListener('change', () => {
     const file = $('cb-file').files?.[0];

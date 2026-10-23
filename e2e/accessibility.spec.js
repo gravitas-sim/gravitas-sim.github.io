@@ -33,6 +33,8 @@
 import { test, expect } from './fixtures.js';
 import AxeBuilder from '@axe-core/playwright';
 import { readFileSync } from 'node:fs';
+import { Buffer } from 'node:buffer';
+import { INTRO_ASTRONOMY } from '../js/data/courses/intro-astronomy.js';
 import { courseLink } from '../js/course/links.js';
 import { itemOfEntry, savedPack } from '../js/library/collections.js';
 import '../js/library/collectionsDeps.js'; // binds what collections.js needs
@@ -81,6 +83,14 @@ const TAGS = [
  * have to write the reason next to it.
  */
 const OFF = {};
+
+// The example course as a file, for the distribution kit's file input
+// (Prompt 169). Outside the array: docs:sync counts the surfaces by their keys.
+const COURSE_FILE = {
+  name: 'intro-astronomy.course.json',
+  mimeType: 'application/json',
+  buffer: Buffer.from(JSON.stringify(INTRO_ASTRONOMY)),
+};
 
 /** Surfaces, and how to get to each one. */
 const SURFACES = [
@@ -526,6 +536,30 @@ const SURFACES = [
       await expect(page.locator('#kitTermGo')).toBeVisible({ timeout: 30_000 });
     },
     expect: '#kitTermGo',
+    standalone: true,
+  },
+  {
+    name: 'course builder, the Common Cartridge panel (Prompt 169)',
+    open: async ({ page }) => {
+      await page.goto('/studio/course/', { waitUntil: 'domcontentloaded' });
+      await page.locator('#cb-example').click();
+      await page.waitForSelector('body[data-checked]', { timeout: 60_000 });
+      await page.locator('#cb-cartridge').click();
+    },
+    expect: '#cc-go',
+    standalone: true,
+  },
+  {
+    name: 'distribution kit, the Common Cartridge panel (Prompt 169)',
+    open: async ({ page }) => {
+      await page.goto('/teaching/kit/', { waitUntil: 'domcontentloaded' });
+      await page.locator('#kitFile').setInputFiles(COURSE_FILE);
+      await expect(page.locator('#kitCcOpen')).toBeVisible({
+        timeout: 60_000,
+      });
+      await page.locator('#kitCcOpen').click();
+    },
+    expect: '#kitCartridge #cc-go',
     standalone: true,
   },
 ];
