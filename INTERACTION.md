@@ -154,6 +154,7 @@ as pending acceptance; Prompt 278 activates them.
 | `sandbox.view` | `e2e/canvasInput.spec.js` | gap (`sandbox.pan`) | not applicable: a picture moves, no value changes |
 | `plot.cursor` | `e2e/plotChart.spec.js` | `e2e/interactionContract.spec.js` | `e2e/interactionContract.spec.js` |
 | `observatory.selection` | `e2e/observatory.spec.js` | `e2e/interactionContract.spec.js` | `e2e/observatory.spec.js` |
+| `observatory.marks` | `e2e/imageMarks.spec.js` | `e2e/imageMarks.spec.js` (place, then nudge with the pad; no drag) | `e2e/imageMarks.spec.js` (one message per commit) |
 | `lab3d.camera` | `e2e/lab3dView.spec.js` | `e2e/interactionContract.spec.js` (presets); orbit is a gap | not applicable: a picture moves, the tables do not change |
 
 What the registered surfaces do not yet do is listed in the pending checks:

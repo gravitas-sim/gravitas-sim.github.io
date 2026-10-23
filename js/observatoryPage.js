@@ -253,18 +253,8 @@ function rebuild({ announceChange = null } = {}) {
   if (announceChange) status(announceChange);
 }
 
-/**
- * The fit panel, for an observation a model suits: loaded the first time a
- * reader opens it, so the page itself carries none of the inference core.
- */
 // What the page lends its lazily loaded panels (see js/observatory/fitPanel.js).
-const lent = {
-  t,
-  number,
-  language,
-  registerMessages,
-  createPlot,
-};
+const lent = { t, number, language, registerMessages, createPlot, pixelScale };
 const fit = { panel: null, loading: null, suits: false };
 function mountFit(m) {
   fit.module = m;
@@ -280,6 +270,7 @@ function mountFit(m) {
   });
   return fit.panel;
 }
+// The fit panel (for an observation a model suits): loaded when first opened.
 async function fitPanel() {
   if (fit.panel) return fit.panel;
   fit.loading ??= import('./observatory/fitPanel.js').then(mountFit);
@@ -297,6 +288,7 @@ $('obsSkyPanel').addEventListener('toggle', async () => {
   await sky.loading;
   sky.panel.update(state.view);
 });
+const marks = {};
 // The archive import (ARCHIVE_IMPORT.md): loaded when first opened.
 let archive = null;
 $('obsArchivePanel').addEventListener('toggle', () => {
@@ -424,11 +416,14 @@ function renderAll() {
   renderAxes(o);
   const isImage = o.kind === 'image';
   $('obsPlotBox').hidden = isImage;
-  $('obsImageBox').hidden = !isImage;
+  $('obsImageBox').hidden = $('obsMarksPanel').hidden = !isImage;
   let drawn = null;
   if (isImage) {
     const { legend } = image.draw(o, { selection: state.selection });
     renderLegend(legend);
+    import('./observatory/imageMarks.js').then(m =>
+      m.mount($('obsMarksPanel'), { ...lent, observation: o, marks })
+    );
   } else {
     // Curves a measurement drew, where the axes are the ones it drew them on.
     const overlays = state.overlays.filter(
@@ -484,9 +479,8 @@ function onSelection({ source }) {
 function renderSelectionBar() {
   const s = state.selection;
   $('obsSelected').textContent = t('obs.selection.count', { n: s.size });
-  $('obsMask').disabled = !s.size;
-  $('obsNoteGo').disabled = !s.size;
-  $('obsClear').disabled = !s.size;
+  for (const id of ['obsMask', 'obsNoteGo', 'obsClear'])
+    $(id).disabled = !s.size;
 }
 
 // --- The observation's record, and what the reader is seeing ------------------------
@@ -1141,6 +1135,7 @@ async function readImport() {
     // changes made again to it, so undo reaches back to where it started.
     $('obsImport').hidden = true;
     if (r.changes.some(c => c.op === 'formula')) await formulaReady();
+    marks.saved = r.marks;
     open(r.observation, r.changes);
     const same =
       !r.expected || (await exporter()).sameObservation(state.view, r.expected);
@@ -1423,6 +1418,7 @@ $('obsExportJson').addEventListener('click', async () => {
       source: state.source,
       changes: state.history.changes(),
       digest: await x.openedDigest(state.source),
+      marks: await marks.block?.(state.view),
     }),
     'application/json'
   );

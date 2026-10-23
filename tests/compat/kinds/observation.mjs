@@ -61,6 +61,18 @@ export default {
     };
   },
   async read(load, doc) {
+    // A saved workspace is opened by the file reader, which has limits of its
+    // own (how deep the file nests); only a file that has marks is sent there,
+    // so the fixtures of every other kind of record read as they always did.
+    if (doc.workspace?.marks) {
+      const { read } = await load('js/observatory/import.js');
+      const got = read(JSON.stringify(doc));
+      if (!got.ok)
+        return {
+          accepted: false,
+          problems: got.problems.slice(0, 5).map(p => p.message),
+        };
+    }
     const { validateObservation } = await load('js/observatory/schema.js');
     const typed = {
       ...doc,

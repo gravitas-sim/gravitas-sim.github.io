@@ -160,6 +160,9 @@ export const EN_LIBRARY = {
   'lib.item.pre': 'Before this',
   'lib.item.next': 'Next',
   'lib.item.related': 'Related',
+  'lib.item.preview': 'Preview as a student',
+  'lib.item.preview.note':
+    'Opens it clean: nothing is read from this browser and nothing is saved.',
   'lib.item.teach': 'Instructor materials',
   'lib.item.in': 'In these pathways',
   'lib.item.in.seq': 'Sequence: {name}, number {n} of {total}',

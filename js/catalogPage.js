@@ -39,6 +39,10 @@ import {
 import { PLATFORM_API } from './platform/manifest.js';
 import { ID_CATALOG } from './names.js';
 
+// The banner of a preview as a student (Prompt 175).
+if (globalThis.location?.search.includes('preview=student'))
+  import('./storage/banner.js');
+
 const $ = id => document.getElementById(id);
 const CATALOG_URL = new URL('catalog.json', document.baseURI);
 const TYPES = [

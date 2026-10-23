@@ -38,6 +38,17 @@ These are the student's own work, and what an "export everything" would carry:
 
 It is a sidecar key and not a field of a progress record, on purpose. The compatibility corpus says a 2.0.0 reader accepts a progress record with an unknown field and silently drops it (the boundary row `resume-in-progress-record`, kept as the record of the design not built), and does not know a key of its own at all, so a rolled-back build neither misreads nor loses anything. `tests/compat/kinds/resume-record.mjs` is the corpus row: a progress record beside the sidecar reads exactly as before in both builds. A record that is not version 1, or is damaged, reads as empty and the next write replaces it. Nothing in it is a progress record: how many steps of a lesson were seen is still that lesson's own record.
 
+## A preview as a student (Prompt 175)
+
+An address with `preview=student` is read and written in memory only for the
+student's record: every key the table below puts in progress, evidence, experiments,
+assignments, courses and made, the experiment checkpoint and the resume record.
+Preferences (language, theme, units, disclosure) go through as ever, and so does a
+store a caller hands in. The guard is `js/storage/local.js`, the one door every
+writer of the record uses, and `tests/previewParity.test.js` holds its list of
+prefixes to this table so a new key cannot be left out. The page says so in a
+banner (`#previewBanner`), in the reader's language.
+
 ## Previews, handed from one page to another
 
 | Key | Holds | Owner |

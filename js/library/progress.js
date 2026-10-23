@@ -20,7 +20,9 @@ import {
 // reader is, so a guide is "in progress" once opened, and never claimed done.
 // =============================================================================
 
+const preview = globalThis.location?.search.includes('preview=student');
 const read = key => {
+  if (preview) return null;
   try {
     return JSON.parse(window.localStorage.getItem(key) || 'null');
   } catch {

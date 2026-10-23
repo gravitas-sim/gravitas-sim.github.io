@@ -40,3 +40,17 @@ export function entryIdOfItem(item) {
   const id = prefix && item[item.kind];
   return typeof id === 'string' && id ? `${prefix}:${id}` : null;
 }
+
+// The address that opens an entry as a student would meet it, keeping no record
+// (Prompt 175, js/storage/local.js).
+export function previewRoute(entry) {
+  const cut = entry.route.indexOf('#');
+  const path = cut < 0 ? entry.route : entry.route.slice(0, cut);
+  const hash = cut < 0 ? undefined : entry.route.slice(cut + 1);
+  const mark = 'preview=student';
+  if (entry.format === 'lesson') {
+    const id = entry.id.slice(entry.id.indexOf(':') + 1);
+    return `/?author=${id}&view=student&${mark}`;
+  }
+  return `${path}${path.includes('?') ? '&' : '?'}${mark}${hash === undefined ? '' : `#${hash}`}`;
+}

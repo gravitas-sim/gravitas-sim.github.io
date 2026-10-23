@@ -5,15 +5,21 @@ import path from 'node:path';
 import {
   NEVER_PRECACHED,
   buildManifest,
+  idleGroupOf,
 } from '../tools/build-service-worker.mjs';
 
 // =============================================================================
 // Prompt 157: the install holds to its word
 // -----------------------------------------------------------------------------
-// js/dataKinds/ is in NEVER_PRECACHED until a shipped module imports it: no page
-// can fetch it, an install has no use for it, and the first-visit tier has no
-// room for it (D-R10-32 holds the measured cost of adopting it). The first
-// adopter deletes the entry and this test.
+// The FITS reader, its job and its Worker are in NEVER_PRECACHED until a shipped
+// module imports them (local import, Prompt 188): no page can fetch them, an
+// install has no use for them, and the first-visit tier has no room for them
+// (D-R10-32 holds the measured cost of adopting them). The first adopter deletes
+// the entry and the first test below. The contract and the limits were adopted by
+// the image marks instrument (Prompt 179): they are the idle group "image
+// measurement", never the first-visit install, and only that instrument imports
+// them. The planes, grid and draft files wait with the reader: no shipped module
+// imports them, and the idle tier's ceiling has no room for dead code.
 // =============================================================================
 
 const KIND = 'js/dataKinds';
@@ -35,11 +41,42 @@ describe('the install', () => {
     /['"][./]*\/dataKinds\//.test(readFileSync(f, 'utf8'))
   );
 
-  test('no module the install carries imports a data kind: the first adopter deletes the NEVER_PRECACHED entry and this test', async () => {
-    expect(NEVER_PRECACHED.some(re => re.test(`${KIND}/fits.js`))).toBe(true);
-    expect(importers).toEqual([]);
+  const CONTRACT = ['contract', 'limits'].map(n => `${KIND}/${n}.js`);
+  const READER = [
+    'fits',
+    'fitsJob',
+    'fitsWorker',
+    'planes',
+    'grid',
+    'draft',
+  ].map(n => `${KIND}/${n}.js`);
+
+  test('no module the install carries imports the FITS reader or the planes, grid and draft files: the first adopter deletes the NEVER_PRECACHED entry and this test', async () => {
+    for (const f of READER)
+      expect(NEVER_PRECACHED.some(re => re.test(f))).toBe(true);
+    const readerImporters = shipped.filter(f =>
+      /['"][./]*\/dataKinds\/(fits|fitsJob|fitsWorker|planes|grid|draft)/.test(
+        readFileSync(f, 'utf8')
+      )
+    );
+    expect(readerImporters).toEqual([]);
     const { paths } = await buildManifest();
-    for (const f of files) expect(paths).not.toContain(f);
+    for (const f of READER) expect(paths).not.toContain(f);
+  });
+
+  test('the contract files are the idle group "image measurement", only the instrument imports them, and the first visit does not carry them', async () => {
+    const m = await buildManifest();
+    const first = new Set([...m.core, ...m.optional]);
+    for (const f of CONTRACT) {
+      expect(idleGroupOf(f)).toBe('image measurement');
+      expect(m.idle).toContain(f);
+      expect(first.has(f)).toBe(false);
+    }
+    expect(importers.sort()).toEqual([
+      'js/measure/scale.js',
+      'js/observatory/imageMarks.js',
+    ]);
+    for (const f of importers) expect(idleGroupOf(f)).toBe('image measurement');
   });
 
   test('nothing in the folder imports the DOM, a clock or a random source', () => {

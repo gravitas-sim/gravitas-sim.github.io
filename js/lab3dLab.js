@@ -55,6 +55,10 @@ import { formatNumber } from './format.js';
 import { chooseInterval } from './lab3d/view/tick.js';
 import { createScene, PALETTE } from './lab3d/view/scene.js';
 
+// The banner of a preview as a student (Prompt 175).
+if (globalThis.location?.search.includes('preview=student'))
+  import('./storage/banner.js');
+
 const $ = id => document.getElementById(id);
 const spawn = () =>
   new Worker(new URL('./lab3d/worker.js', import.meta.url), {

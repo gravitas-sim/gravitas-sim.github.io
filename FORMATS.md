@@ -2,7 +2,7 @@
 
 # Formats
 
-Every versioned format Gravitas reads or writes: 58 of them. 31 have a JSON Schema in `sdk/schemas`, and 10 read their previous version rather than only their own.
+Every versioned format Gravitas reads or writes: 59 of them. 31 have a JSON Schema in `sdk/schemas`, and 10 read their previous version rather than only their own.
 
 Roadmap II Prompt 61 puts each under one rule:
 - a JSON Schema;
@@ -20,6 +20,7 @@ The columns:
 | Format | Identified by | Version | Owner | Persisted | Previous | Newer | Schema |
 |---|---|---|---|---|---|---|---|
 | gravitas.observation | format, formatVersion | 1 | js/observatory/schema.js validateObservation | download | v1 only | refused: "reads /1" | [yes](sdk/schemas/observation-1.schema.json) |
+| gravitas.image-marks | format, formatVersion | 1 | js/measure/imageRecord.js validateMarks | download, inside a workspace (`workspace.marks`), only when marks exist | v1 only | refused in words, by a nesting limit | no |
 | gravitas.observing-setup | format, formatVersion | 1 | js/forward/setup.js readSetup | download, inside a synthetic observation | reads the radial-velocity survey configuration (no format) as version 0 | refused, in words | [yes](sdk/schemas/observing-setup-1.schema.json) |
 | gravitas.pipeline | format, formatVersion | 1 | js/measure/pipeline.js readPipeline | download | v1 only | refused, in words | [yes](sdk/schemas/pipeline-1.schema.json) |
 | gravitas.inference | format, formatVersion | 1 | js/inference/manifest.js validateInference | download | v1 only | a validation problem | [yes](sdk/schemas/inference-1.schema.json) |
@@ -109,6 +110,7 @@ An older build is a real reader: a browser still running 2.0.0's cached code, a 
 | Format | 2.0.0 reader's fixture | Unknown top-level field | Support period |
 |---|---|---|---|
 | gravitas.observation | `observation` | ignored | policy (above) |
+| gravitas.image-marks | none yet | not yet exercised | policy (above) |
 | gravitas.observing-setup | none yet | not yet exercised | policy (above) |
 | gravitas.pipeline | none yet | not yet exercised | policy (above) |
 | gravitas.inference | none yet | not yet exercised | policy (above) |
@@ -179,7 +181,7 @@ An older build is a real reader: a browser still running 2.0.0's cached code, a 
 | the states "not constrained", "failed", "assumed", "model-limited" (150) | `artifact` | refuses | refused in its own words: safe as a capability-required refusal |
 | a fit-result record carried by the envelope (150) | `artifact` | ignores the field | accepted and silently dropped: a boundary, or the field must not be one an old reader needs |
 | a correlation reference between quantities that share data (150) | `artifact` | ignores the field | accepted and silently dropped: a boundary, or the field must not be one an old reader needs |
-| the mark set as part of the observation workspace record (179) | `observation` | ignores the field | accepted and silently dropped: a boundary, or the field must not be one an old reader needs |
+| the image mark set as `workspace.marks`, a `gravitas.image-marks/1` block, written only when the reader marked an image (it nests eight deep; the 2.0.0 file reader stops at six and refuses the file as "nested too deep") (179) | `observation` | refuses | refused in its own words: safe as a capability-required refusal |
 | a `kind`, `depth` and `weight` on a rubric criterion of a written step (172) | `investigation-pack` | refuses | refused in its own words: safe as a capability-required refusal |
 | named streams, the stream fork per trial and the kernel versions on the experiment record (265) | `experiment` | ignores the field | accepted and silently dropped: a boundary, or the field must not be one an old reader needs |
 
@@ -189,6 +191,7 @@ An older build is a real reader: a browser still running 2.0.0's cached code, a 
 - **`outcomes` on a course pack and on its objectives (Prompt 174).** A `gravitas.course-pack/2` may carry `outcomes`, up to 12 of the instructor's own outcomes (an id and a text in the file's languages), and an objective may carry `outcomes`, the ids of the ones it is mapped to. Both are written only when an instructor enters outcomes. They are the instructor's own statement of what the course intends and are not evidence that any student attained anything. A 2.0.0 reader refuses a pack that has either, naming the field (`tests/compat/boundary.mjs` `course-outcomes`), so the format stays version 2 and the boundary list keeps one more refusal for Prompt 176 to carry.
 - **`rubricCriteria` (Prompt 79).** A written answer in an investigation pack or a question bank may carry one to six criteria beside its `rubric`, each a name and two to five levels (a label, what it looks like, optionally its points), best first, every text in the file's locales. It is optional, so `investigation-pack/1` and `question-bank/1` stay version 1: a reader that does not know the field refuses the file, in words, as an unknown field. The compile lays it on the lesson step and its Spanish shadow, a remix carries it (`REMIX.md`), the answer key prints it and the review page shows it.
 - **`synthetic` origin (Prompt 84).** A `gravitas.observation/1` made by a forward model has origin `synthetic`, source kind `forward` and a `synthetic` block holding the model, the `gravitas.observing-setup/1` it was run with and the truth manifest. The values are new members of two enums and the block is optional, so the format stays version 1: an older reader refuses such a file at the origin, in words, rather than opening it as if it were observed.
+- **Image marks, `workspace.marks` (Prompt 179).** An Observatory save of an image the reader marked carries `workspace.marks`, a `gravitas.image-marks/1` block: the frames' SHA-256 digests, the marks as placed (kind, tag, points, a known length for a reference pair) and, for a refined mark, the result and its uncertainty. It is written only when marks exist, so a save without marks is the bytes it always was. The block nests eight deep, and the 2.0.0 file reader stops at six, so it refuses such a file as `nested too deep` (`tests/compat/boundary.mjs`: `workspace-marks`) rather than opening it without the marks; the current reader reads eight. The marks record in the ledger is a `gravitas.artifact/1` (notebook source `image-marks`), which the 2.0.0 reader opens as it opens any envelope. Reopening against a changed image is refused by the instrument, not by a reader.
 - **Uncertainty states, `correlatedWith` and `fit` (Prompt 150).** The artifact envelope's uncertainty `kind` gains `not-constrained`, `failed`, `assumed`, `model-limited` and `limit`; a quantity gains `correlatedWith`; the envelope gains `fit`, a fit-result record; a `failed` quantity may have a `null` value. The format stays version 1. A 2.0.0 reader refuses a quantity of a new kind in words (`tests/compat/boundary.mjs`: `not-constrained-state`), and silently drops `correlatedWith` and `fit`, which no reader needs. The extension is therefore written only where a 2.0.0 reader is not met: the writers keep their 2.0.0 output unless asked (`fitArtifact` with `extended`), and `legacyView()` gives a 2.0.0 reader the envelope it can open, with the loss listed in the warnings. Version 2 of the envelope waits for 176.
 - **`derived` uncertainty basis and a formula on a numeric question (Prompt 100).** The artifact envelope's `basis` gains `derived`, for an uncertainty propagated from a formula's inputs, and a numeric question in an investigation pack or question bank may carry `formula` ({expr, of, tolerancePct}) in place of an `answer`. Both are optional or new members of an enum, so `artifact/1`, `investigation-pack/1` and `question-bank/1` stay version 1: an older reader refuses them in words as an unknown value or field.
 - **Mission links and made records (Prompt 106).** A `gravitas.made` record may be of kind `mission`, holding a `gravitas.mission-plan/1` file; a build from before it reports the record unreadable. The mission lab reads a plan from `#plan1.<base64url JSON>`; any other fragment is ignored. A course pack /2 `guide` item may name `ml-orbit`, `ml-window` or `ml-cruise`; a build from before it refuses the id in words.

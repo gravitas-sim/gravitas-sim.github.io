@@ -54,6 +54,10 @@ import { put, drop } from './storage/local.js';
 import { addMessages } from './experiments/i18n.js';
 import { KEY_EXPERIMENT_CHECKPOINT_PREFIX } from './names.js';
 
+// The banner of a preview as a student (Prompt 175).
+if (globalThis.location?.search.includes('preview=student'))
+  import('./storage/banner.js');
+
 const $ = id => document.getElementById(id);
 const CHECKPOINT = KEY_EXPERIMENT_CHECKPOINT_PREFIX;
 const CHECKPOINT_MAX_CHARS = 1_500_000;

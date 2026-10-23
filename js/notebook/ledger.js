@@ -432,6 +432,7 @@ export const ARTIFACT_SOURCES = [
   'derived-quantity',
   'lab3d',
   'mission-lab',
+  'image-marks',
 ];
 
 /**
