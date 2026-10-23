@@ -92,7 +92,7 @@
       }
     },
     "b2.interval": {
-      "what": "the interval against scipy.stats.beta.ppf over 105 pinned cases: n in 1, 2, 5, 10, 30, 100, 1000; every k from 0 to n for n up to 10 and k at 0, 1, n/2, n-1, n beyond; levels 0.6827, 0.95, 0.99",
+      "what": "the interval against scipy.stats.beta.ppf over 111 pinned cases: n in 1, 2, 5, 10, 30, 100, 1000; every k from 0 to n for n up to 10 and k at 0, 1, n/2, n-1, n beyond; levels 0.6827, 0.95, 0.99",
       "bound": 1e-8
     },
     "c1.coverage": {

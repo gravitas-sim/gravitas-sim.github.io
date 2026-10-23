@@ -69,7 +69,7 @@ under the same settings and writes its curve; Gravitas runs the same plan with i
 noise; per bin of at least 50 sources `|z|` is at most 4 (the two as independent
 binomials, which is conservative because the shared plan correlates them), the summed
 `z^2` is under its 0.999 chi-square quantile and the half points agree within 0.05
-magnitude. b2: the interval against `scipy.stats.beta.ppf` over 105 pinned cases to 1e-8.
+magnitude. b2: the interval against `scipy.stats.beta.ppf` over 111 pinned cases to 1e-8.
 
 **(c) Coverage.** The binomial interval's coverage on a seeded ensemble of 300 whole
 injection runs (truth for a bin is the completeness pooled over the other 299): 0.65
