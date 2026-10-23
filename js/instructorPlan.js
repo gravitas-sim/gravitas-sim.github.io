@@ -47,6 +47,12 @@ const LAB_REPORT_KINDS = new Set(['lesson', 'assignment', 'pack']);
 /** The statement every time carries, or nothing once the record holds an observed value. */
 export const statementFor = locale => (OBSERVED ? '' : STATEMENT[locale]);
 
+/** The id the lesson engine knows an item by (js/course/pack.js lessonKeyOf; a test holds them equal). */
+export const keyOf = item =>
+  item?.kind === 'pack'
+    ? `rx-${item.pack}-${String(item.version).replace(/\./g, '-')}`
+    : item?.lesson;
+
 const pick = (v, locale) => (v ? v[locale] || v.en || '' : '');
 
 /**
@@ -55,7 +61,7 @@ const pick = (v, locale) => (v ? v[locale] || v.en || '' : '');
  * @param {object} pack - A valid /2 pack (not a collection's profile: a collection has no units to time, and prints as one unit)
  * @param {object} ctx - What the page owns
  * @param {'en'|'es'} ctx.locale - The language to write in
- * @param {{itemsOf: Function, lessonKeyOf: Function}} ctx.lib - js/course/pack.js's
+ * @param {{itemsOf: Function}} ctx.lib - js/course/pack.js's
  * @param {object} ctx.facts - js/course/api.js courseFacts()
  * @param {{course: {home?: string}, items: Array<{id: string, links: object}>}} ctx.links - A manifest, or what the kit makes of one
  * @param {(item: object) => string} ctx.name - What an item is called
@@ -86,7 +92,7 @@ export function buildPlan(pack, ctx) {
   /** The band an item falls in, or null. */
   function timeOf(item, depth) {
     let band = null;
-    const fact = facts?.lessons?.get(lib.lessonKeyOf(item));
+    const fact = facts?.lessons?.get(keyOf(item));
     if (Number.isInteger(item.minutes)) band = bandOfMinutes(item.minutes);
     else if (item.kind === 'lesson')
       band =
@@ -485,7 +491,9 @@ const esc = s =>
 
 /** A link, as text when it is short enough to print and as a word when it is not. */
 const anchor = (href, T) =>
-  `<a href="${esc(href)}">${esc(href.length > LONG_LINK ? T('doc.link.open') : href)}</a>`;
+  /^https?:\/\//.test(href)
+    ? `<a href="${esc(href)}">${esc(href.length > LONG_LINK ? T('doc.link.open') : href)}</a>`
+    : esc(href);
 
 /** The stylesheet of the list, for the saved page and for the print path. */
 export const PLAN_CSS = `
