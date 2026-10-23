@@ -42,7 +42,10 @@ import {
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-import { reportCaveat, statusStatement } from '../js/instructorCartridgeText.js';
+import {
+  reportCaveat,
+  statusStatement,
+} from '../js/instructorCartridgeText.js';
 import { withShell } from './shell.mjs';
 import { withPolicy } from './csp.mjs';
 
