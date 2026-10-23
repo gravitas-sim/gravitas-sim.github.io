@@ -306,7 +306,7 @@ service and works offline ([MISSION_LAB.md](MISSION_LAB.md)).
 
 **Spanish.** The interface ships in <!--fact:locales-->2<!--/fact--> languages
 — <!--fact:localeNames-->English, Español<!--/fact--> — from a catalog
-of <!--fact:uiStrings-->9835<!--/fact--> strings, and
+of <!--fact:uiStrings-->9954<!--/fact--> strings, and
 all <!--fact:investigations-->60<!--/fact--> investigations are translated. A
 translation carries only words: no scenario name, no seed, no widget id and no
 numeric answer can be reached from a locale file, so a mistranslation cannot
@@ -367,7 +367,7 @@ reports what the browser downloads at start-up separately from what is deferred:
 | ---------------------- | ------------------------------------------------------ | --------------------------------------------- |
 | CSS                    | <!--fact:buildCss-->209<!--/fact--> KB                 | 1                                             |
 | JavaScript at start-up | <!--fact:buildStartupJs-->589<!--/fact--> KB           | <!--fact:buildStartupFiles-->53<!--/fact-->   |
-| JavaScript on demand   | <!--fact:buildDeferredJs-->5440<!--/fact--> KB         | <!--fact:buildDeferredChunks-->430<!--/fact--> |
+| JavaScript on demand   | <!--fact:buildDeferredJs-->5441<!--/fact--> KB         | <!--fact:buildDeferredChunks-->430<!--/fact--> |
 | **Initial download**   | **<!--fact:buildInitialDownload-->798<!--/fact--> KB** |                                               |
 
 Those figures are the last build's, to the nearest kilobyte, and are written
