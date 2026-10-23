@@ -57,7 +57,12 @@ export const nudgeScale = e => (e.altKey ? 0.25 : e.shiftKey ? 4 : 1);
 export const SETTLE_MS = 700;
 const UNITS = ['km', 'm', 'cm', 'mm', 'arcsec', 'deg', 'AU', 'ly'];
 const SORTS = ['order', 'tag', 'frame'];
-const ARROWS = { left: [-1, 0], right: [1, 0], up: [0, 1], down: [0, -1] };
+const ARROWS = {
+  ArrowLeft: [-1, 0],
+  ArrowRight: [1, 0],
+  ArrowUp: [0, 1],
+  ArrowDown: [0, -1],
+};
 
 const el = (tag, props = {}, ...kids) => {
   const n = Object.assign(document.createElement(tag), props);
@@ -266,7 +271,8 @@ export function mountMarks(root, ctx) {
   const tbody = el('tbody');
   table.append(caption, thead, tbody);
   const ledgerRow = el('div', { className: 'im-tools' });
-  for (const [name, [dx, dy]] of Object.entries(ARROWS))
+  for (const [key, [dx, dy]] of Object.entries(ARROWS)) {
+    const name = key.slice(5).toLowerCase();
     pad.append(
       button(
         `obs.im.${name}`,
@@ -280,6 +286,7 @@ export function mountMarks(root, ctx) {
         name
       )
     );
+  }
   pad.append(
     labelOf('obs.im.step', stepSelect),
     button('obs.im.handleBack', () => cycle(-1), 'handleBack'),
@@ -898,8 +905,8 @@ export function mountMarks(root, ctx) {
       e.preventDefault();
       return e.shiftKey ? doRedo() : doUndo();
     }
-    const dir = ARROWS[e.key.replace('Arrow', '').toLowerCase()];
-    if (dir && e.key.startsWith('Arrow')) {
+    const dir = ARROWS[e.key];
+    if (dir) {
       e.preventDefault();
       const s = nudgeScale(e);
       return move(dir[0] * s, dir[1] * s);
