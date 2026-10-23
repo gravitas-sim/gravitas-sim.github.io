@@ -266,6 +266,14 @@ export const NEVER_PRECACHED = [
   // cost is in D-R10-31). Its first adopter deletes this entry, and
   // tests/statisticsKernel.test.js fails until it is deleted.
   /^js\/kernels\/statistics\//,
+  // Sky coordinates for an image (Prompt 181, ASTROMETRY.md): the WCS-lite and
+  // registration kernel, the calibration record, the panel and its words,
+  // fetched when a reader opens the Observatory's sky-coordinates panel on an
+  // image. The idle tier has no room under a data-budget ceiling the standing
+  // size approval does not cover, so none of the files is installed: the
+  // service worker keeps them after their first online use, and until then the
+  // panel says it needs the network. D-R10-57.
+  /^(js\/measure\/(astrometry|calibrationRecord)\.js|js\/observatory\/imageCalibration\.js|js\/i18n\/(en|es)\.imageCalibration\.js)$/,
   // Photometry on an image (Prompt 180, PHOTOMETRY.md): the adapters, the
   // panel and its words, 21.4 KB gzipped as source, fetched when a reader opens
   // the Observatory's photometry panel on an image. The idle tier has 266 B of

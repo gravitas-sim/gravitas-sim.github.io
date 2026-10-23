@@ -433,6 +433,7 @@ export const ARTIFACT_SOURCES = [
   'lab3d',
   'mission-lab',
   'image-marks',
+  'image-calibration',
   'image-photometry',
 ];
 

@@ -1,0 +1,215 @@
+{
+  "format": "gravitas.astrometry-thresholds/1",
+  "prompt": 181,
+  "committed": "Before any implementation output was inspected: this file and the validation contract in ASTROMETRY.md were committed ahead of js/measure/astrometry.js, the oracle fixtures and every measurement. A check that a measurement crosses is a failed check, not a reason to move the bound; only Carl resets a threshold, with a register row.",
+  "conventions": {
+    "pixels": "FITS: 1 is the centre of the first pixel, x along a row, y up",
+    "projection": "TAN (gnomonic) about the reference sky position, LONPOLE 180, standard coordinates xi (east) and eta (north)",
+    "model": "pixel = p0 + P (xi, eta): six parameters (affine) or four (similarity with a stated parity); CRPIX = p0, CD = inverse of P; no distortion terms"
+  },
+  "rules": {
+    "minStars": 3,
+    "minSpreadRatio": 0.02,
+    "maxRadiusDeg": 60,
+    "consistentPValue": 0.001,
+    "minRegistrationSources": 3,
+    "minRegistrationRms": 1
+  },
+  "scenes": {
+    "orion": {
+      "what": "Five real stars of the bright-star pack (sky/bright-stars.json, J2000.0, positions as the pack rounds them) on a synthetic frame whose pixels come from a truth WCS",
+      "stars": {
+        "Betelgeuse": 2061,
+        "Bellatrix": 1790,
+        "Alnilam": 1903,
+        "Saiph": 2004,
+        "Rigel": 1713
+      },
+      "width": 1024,
+      "height": 1024,
+      "truth": {
+        "crval": [83.5, -0.5],
+        "crpix": [512.5, 512.5],
+        "scaleArcsec": 90,
+        "positionAngleDeg": 17,
+        "parity": -1
+      },
+      "noise": { "sigmaPix": 0.1, "seed": 181002 },
+      "grid": { "n": 21, "from": 1, "to": 1024 }
+    },
+    "field": {
+      "what": "A small field (about 1.4 degrees) of five synthetic stars, for the tangent-point systematic of the default choice",
+      "width": 1024,
+      "height": 1024,
+      "truth": {
+        "crval": [150.1, 2.2],
+        "crpix": [512.5, 512.5],
+        "scaleArcsec": 5,
+        "positionAngleDeg": -31,
+        "parity": -1
+      },
+      "pixels": [
+        [130.2, 211.7],
+        [803.9, 154.3],
+        [455.1, 530.4],
+        [211.6, 880.2],
+        [902.3, 801.5]
+      ]
+    },
+    "registration": {
+      "what": "Twelve sources moved by a known rotation and shift between two frames, each centroid with its own noise",
+      "width": 1024,
+      "height": 1024,
+      "sources": 12,
+      "shift": [3.37, -5.81],
+      "rotationDeg": 0.35,
+      "about": [512.5, 512.5],
+      "noise": { "sigmaPix": 0.05, "seed": 181003 }
+    },
+    "ensemble": {
+      "what": "Random truth per trial: reference sky position RA uniform 0 to 360 and Dec uniform -60 to 60 degrees, scale log-uniform 0.5 to 60 arcsec per pixel, position angle uniform, parity at random; the affine truth also has an axis ratio within 0.5 percent and a skew within 0.2 degree; 5 to 8 stars uniform over [50, 974] squared at least 100 pixels apart; the stars' own positions with Gaussian noise of the stated sigma on each axis",
+      "width": 1024,
+      "height": 1024,
+      "trials": 3000,
+      "stars": [5, 8],
+      "sigmaPix": 0.15,
+      "catalogSigmaArcsec": 0.3,
+      "testPixels": [
+        [100, 100],
+        [924, 100],
+        [100, 924],
+        [924, 924],
+        [512.5, 512.5]
+      ],
+      "seedPrefix": 181100
+    },
+    "mismatch": {
+      "what": "The ensemble's matched trials, each with two stars' catalogue entries swapped (their pixels at least 100 apart); the same trials unswapped are the false-alarm count",
+      "trials": 500,
+      "seed": 181200
+    }
+  },
+  "checks": {
+    "a1.recoverNoiseless": {
+      "what": "The orion scene without noise and with the tangent point given as the truth's reference position: the largest sky difference over the 21 by 21 grid of pixels",
+      "boundArcsec": 1e-5,
+      "also": {
+        "scaleRelative": 1e-9,
+        "positionAngleDeg": 1e-8,
+        "crpixPix": 1e-7
+      }
+    },
+    "a1.recoverFiveStars": {
+      "what": "The same five stars with noise 0.1 pixel (one fixed seed), tangent point given: the stated one-sigma sky uncertainty at the 21 by 21 grid is within 3.5 sigma of the difference at every grid pixel, and the fit is consistent",
+      "boundSigma": 3.5
+    },
+    "a2.defaultTangent": {
+      "what": "The field scene without noise, the tangent point chosen by the rule (mean direction of the stars): the largest position difference over the 21 by 21 grid, in pixels. The model is exact only at the true reference position; the bound is the second-order systematic the roadmap's 'no distortion terms' leaves, with margin over its estimate (half-field squared times the offset, about 0.03 pixel here)",
+      "boundPix": 0.1
+    },
+    "a3.registrationNoiseless": {
+      "what": "Registration of the scene without noise: translation, rotation and every source's mapped position",
+      "boundPix": 1e-9,
+      "boundRotationDeg": 1e-9
+    },
+    "a3.registrationShift": {
+      "what": "Registration with centroid noise 0.05 pixel on both frames: the largest difference between the recovered and the true mapped position over the twelve sources and the frame centre",
+      "boundPix": 0.1
+    },
+    "a4.projectionVsKernel": {
+      "what": "The projection against the sky kernel's transforms: for a 15 by 15 grid of pixels of the orion truth WCS, the tangent-plane coordinates from the kernel's unit vectors (js/kernels/sky/coords.js unitVector; xi = p.e / p.n, eta = p.n_hat / p.n) against skyOf's, in degrees; and pixelOf of skyOf against the pixel",
+      "boundDeg": 1e-9,
+      "boundRoundTripPix": 1e-7
+    },
+    "a4.projectionVsPage": {
+      "what": "skyOf against the page's own reader (js/observatory/wcs.js skyOf) on the same grid, in degrees",
+      "boundDeg": 1e-9
+    },
+    "b1.oracleProjection": {
+      "what": "Pixel to sky of the synthetic truth WCS on the 21 by 21 grid against astropy.wcs (wcslib), pinned, in degrees",
+      "boundDeg": 1e-9
+    },
+    "b2.oracleFit": {
+      "what": "The noisy orion fit against astropy.wcs.utils.fit_wcs_from_points (TAN, no SIP) given the same matched stars and the same tangent point: the pixel of each of the 25 sky points of the 5 by 5 grid, from both solutions, largest difference in pixels",
+      "boundPix": 0.01
+    },
+    "b3.oracleRegistration": {
+      "what": "The noisy registration against scipy.linalg.orthogonal_procrustes with a determinant check and the centroid translation, pinned: rotation in radians and translation in pixels",
+      "boundRotationRad": 1e-9,
+      "boundPix": 1e-8
+    },
+    "b4.oracleAuthenticHeader": {
+      "what": "The authentic TESS aperture image of the repository (js/data/observations/tessHd209458S56Aperture.js, a TAN header of CDELT and PC) read by fromHeader: pixel to sky on every pixel and on a 20 by 20 pixel extension against astropy.wcs, pinned, in degrees",
+      "boundDeg": 1e-9
+    },
+    "b5.oracleAuthenticFit": {
+      "what": "A pinned solution of astropy on an authentic frame with matched reference stars",
+      "status": "NOT RUN until Prompt 189 lands an authentic image pack with a catalogue match; nothing was downloaded and nothing fabricated for this leg"
+    },
+    "c1.coverageAffine": {
+      "what": "The affine ensemble, tangent point given: z = (estimate - truth) / stated sigma for the sky offset (xi and eta, arcsec) at the five test pixels, and for CRPIX x and y, the mean scale and the position angle; fraction with |z| < 1 and with |z| < 1.96",
+      "oneSigma": [0.64, 0.72],
+      "twoSigma": [0.935, 0.975]
+    },
+    "c2.coverageSimilarity": {
+      "what": "The same for the similarity model (a truth that is one), same quantities except skew",
+      "oneSigma": [0.64, 0.72],
+      "twoSigma": [0.935, 0.975]
+    },
+    "c3.coverageCatalogue": {
+      "what": "The affine ensemble with the catalogue's own noise (0.3 arcsec on each sky coordinate, stated)",
+      "oneSigma": [0.64, 0.72],
+      "twoSigma": [0.935, 0.975]
+    },
+    "c4.falseAlarm": {
+      "what": "Fraction of the matched ensemble trials (affine, tangent given) the fit calls inconsistent (p below 0.001)",
+      "boundMax": 0.004
+    },
+    "c5.coverageRegistration": {
+      "what": "Registration ensemble (12 sources, 3000 trials, a random shift, rotation and sources): z of the shift at the five test pixels and of the rotation; one and 1.96 sigma",
+      "oneSigma": [0.64, 0.72],
+      "twoSigma": [0.935, 0.975]
+    },
+    "d1.collinear": {
+      "what": "Three collinear stars (exactly, and with 1e-12 pixel scatter) refuse: status not-constrained, code collinear, no WCS, on 200 random triples",
+      "refused": 1
+    },
+    "d2.tooFew": {
+      "what": "Zero, one and two stars: not-constrained, code too-few, no WCS",
+      "refused": 1
+    },
+    "d3.nearCollinear": {
+      "what": "Stars whose smallest-to-largest spread ratio is 0.01 refuse (collinear); 0.05 is accepted",
+      "refusedAt": 0.01,
+      "acceptedAt": 0.05
+    },
+    "d4.mismatchedCatalogue": {
+      "what": "Two catalogue entries swapped: the fit reports inconsistent (p below 0.001) and says so in its verdict",
+      "detectedMin": 0.99
+    },
+    "d5.unsupportedProjections": {
+      "what": "RA---SIN, RA---ARC, RA---ZPN, RA---AIT, RA---CAR, RA---TAN-SIP, RA---TPV, GLON-TAN, a third axis, a missing CD and PC, a singular CD, are each refused by fromHeader with their own code and the name in the message",
+      "refused": 1
+    },
+    "d6.tooWide": {
+      "what": "Stars more than 60 degrees from the tangent point: not-constrained, code too-wide",
+      "refused": 1
+    },
+    "d7.malformed": {
+      "what": "A non-finite pixel or sky position, a non-positive sigma, a declination beyond 90 degrees, two stars at one pixel: each refused with a code, never a number",
+      "refused": 1
+    },
+    "d8.registrationRefusals": {
+      "what": "Fewer than 3 sources: too-few; sources all within one pixel of their centroid: degenerate; a random pairing of two frames' sources (500 trials): inconsistent in at least 99 percent",
+      "detectedMin": 0.99
+    },
+    "d9.residualsAlways": {
+      "what": "Every solved result carries one residual per star in pixels and arcseconds, the degrees of freedom and a verdict; a result with no degree of freedom says that no check is possible, and says it is exactly determined",
+      "required": true
+    },
+    "e1.authenticFrame": {
+      "what": "One authentic frame with reference stars solved under a fixed analysis contract",
+      "status": "NOT RUN until Prompt 189; no frame fetched, none simulated"
+    }
+  }
+}

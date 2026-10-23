@@ -62,9 +62,10 @@ export default {
   },
   async read(load, doc) {
     // A saved workspace is opened by the file reader, which has limits of its
-    // own (how deep the file nests); only a file that has marks is sent there,
+    // own (how deep the file nests); only a file that has marks (or a sky
+    // calibration, Prompt 181) is sent there,
     // so the fixtures of every other kind of record read as they always did.
-    if (doc.workspace?.marks) {
+    if (doc.workspace?.marks || doc.workspace?.calibration) {
       const { read } = await load('js/observatory/import.js');
       const got = read(JSON.stringify(doc));
       if (!got.ok)

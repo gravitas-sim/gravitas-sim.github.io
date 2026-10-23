@@ -289,6 +289,9 @@ export const EN_OBSERVATORY = {
   'obs.sky.title': 'Sky: Galactic map and proper-motion vectors',
   'obs.arc.title': "Or find a star's Gaia epochs at CDS (live, opt-in)",
   'obs.ms.title': 'Measure, and the pipeline',
+  'obs.cal.title': 'Sky coordinates for the image',
+  'obs.cal.offline':
+    'The sky-coordinates tool is loading. It is fetched when first opened, so it needs the network the first time.',
   'obs.ph.title': 'Photometry on the image',
   'obs.ph.offline':
     'The photometry tool is loading. It is fetched when first opened, so it needs the network the first time.',

@@ -12,7 +12,9 @@
 //   the whole session, undo included, and checks that it gives the same
 //   observation it holds. When the reader marked an image, `workspace.marks`
 //   is a gravitas.image-marks/1 block (js/measure/imageRecord.js, Prompt 179),
-//   written only then: a save without marks is the bytes it always was.
+//   written only then: a save without marks is the bytes it always was. The
+//   same holds for `workspace.calibration`, a gravitas.image-calibration/1
+//   block (js/measure/calibrationRecord.js, Prompt 181).
 //   Keys are written in a fixed order, numbers as JavaScript writes them
 //   (the shortest string that reads back to the same double), a missing
 //   value as null, and nothing about when or where it was made: no clock, no
@@ -66,10 +68,14 @@ const OBSERVATION_KEYS = [
  * @param {{source: object, changes: object[], digest?: string, marks?: ?object}} workspace -
  *   What it was opened as, and the changes, in order; `digest` is what
  *   ./identity.js observationDigest() gives for the observation as opened;
- *   `marks` is the image marks block, if there is one
+ *   `marks` is the image marks block, if there is one, and `calibration` the
+ *   sky calibration block (Prompt 181), likewise written only when there is one
  * @returns {string} JSON, two-space indented, with a final newline
  */
-export function observationJson(o, { source, changes, digest, marks }) {
+export function observationJson(
+  o,
+  { source, changes, digest, marks, calibration }
+) {
   const doc = {
     ...plain(o),
     workspace: {
@@ -83,6 +89,7 @@ export function observationJson(o, { source, changes, digest, marks }) {
       // the changes are made again to this, and give the observation above.
       source: changes.length ? plain(source) : null,
       ...(marks ? { marks } : {}),
+      ...(calibration ? { calibration } : {}),
     },
   };
   return `${JSON.stringify(doc, null, 2)}\n`;
