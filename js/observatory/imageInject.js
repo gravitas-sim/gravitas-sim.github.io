@@ -172,9 +172,9 @@ export async function mountInject(box, ctx) {
   let psfSource = 'entered';
   let running = false;
   let stopped = false;
-  fwhmIn.addEventListener('input', () => {
+  fwhmIn.oninput = () => {
     psfSource = 'entered';
-  });
+  };
   const why = r =>
     t(`obs.inj.no.${r.code}`, {
       missing: (r.missing ?? []).join(', '),

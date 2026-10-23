@@ -369,7 +369,6 @@ export const ES_DEFERRED = {
     'Dos pasadas de {duration} unidades simuladas tardaron {seconds}s: {coarseSub} subpasos por fotograma y luego {fineSub}.',
   'reliability.steps': 'Paso {coarse} frente a {fine}',
   'reliability.export': 'Exportar esta comprobacion',
-
   'reliability.verdict.converging':
     'Reducir el paso a la mitad no movio este resultado.',
   'reliability.verdict.unresolved':

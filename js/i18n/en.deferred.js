@@ -367,7 +367,6 @@ export const EN_DEFERRED = {
     'Two runs of {duration} simulated units took {seconds}s: {coarseSub} substeps per frame, then {fineSub}.',
   'reliability.steps': 'Step {coarse} against {fine}',
   'reliability.export': 'Export this check',
-
   'reliability.verdict.converging':
     'Halving the step did not move this result.',
   'reliability.verdict.unresolved':

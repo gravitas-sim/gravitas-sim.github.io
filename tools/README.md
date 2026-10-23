@@ -107,6 +107,7 @@ current, and the orchestrator checks it.
 | `inference-bench.mjs` | npm run bench:inference - how long a fit takes in its Workers, and what the | `npm run bench:inference` |
 | `inference-cases.mjs` | The cases the inference core is validated and timed on |  |
 | `inference-validate.mjs` | npm run validate:inference - what the inference core recovers, and how often | `npm run validate:inference` |
+| `injection-validate.mjs` | Completeness by injection against its committed thresholds (Prompt 184) | `npm run injection:validate` |
 | `instructor-digest-audit.mjs` | Prove the freshness digest covers everything the build reads | `npm run instructors:audit` |
 | `instructor-fixture.mjs` | Is the disposable instructor fixture the one these sources would build? |  |
 | `instructor-freshness.mjs` | Was the committed instructor bundle built from these sources? |  |
