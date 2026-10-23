@@ -60,7 +60,7 @@ import {
   unitId,
 } from './observatory/units.js';
 import { createPlot } from './plot/plot.js';
-import { createImageView, decodeBits, markHost } from './observatory/image.js';
+import { createImageView, decodeBits } from './observatory/image.js';
 import { createTable } from './plot/table.js';
 
 const $ = id => document.getElementById(id);
@@ -288,7 +288,7 @@ $('obsSkyPanel').addEventListener('toggle', async () => {
   await sky.loading;
   sky.panel.update(state.view);
 });
-const marks = markHost($('obsMarksPanel'), () => state.view, lent);
+const marks = {};
 // The archive import (ARCHIVE_IMPORT.md): loaded when first opened.
 let archive = null;
 $('obsArchivePanel').addEventListener('toggle', () => {
@@ -394,7 +394,6 @@ function renderFit(o) {
   // A table with positions can be drawn on the sky, and one with proper motions as vectors.
   const hasId = id => o.columns.some(c => c.id === id);
   $('obsSkyPanel').hidden = !(hasId('ra') && hasId('dec'));
-  marks.show(o);
   if (!$('obsSkyPanel').hidden && sky.panel && $('obsSkyPanel').open)
     sky.panel.update(o);
   // A model of a flux or a velocity against time can be laid over the data.
@@ -417,11 +416,14 @@ function renderAll() {
   renderAxes(o);
   const isImage = o.kind === 'image';
   $('obsPlotBox').hidden = isImage;
-  $('obsImageBox').hidden = !isImage;
+  $('obsImageBox').hidden = $('obsMarksPanel').hidden = !isImage;
   let drawn = null;
   if (isImage) {
     const { legend } = image.draw(o, { selection: state.selection });
     renderLegend(legend);
+    import('./observatory/imageMarks.js').then(m =>
+      m.mount($('obsMarksPanel'), { ...lent, observation: o, marks })
+    );
   } else {
     // Curves a measurement drew, where the axes are the ones it drew them on.
     const overlays = state.overlays.filter(
@@ -1133,8 +1135,8 @@ async function readImport() {
     // changes made again to it, so undo reaches back to where it started.
     $('obsImport').hidden = true;
     if (r.changes.some(c => c.op === 'formula')) await formulaReady();
+    marks.saved = r.marks;
     open(r.observation, r.changes);
-    marks.restore(r.marks);
     const same =
       !r.expected || (await exporter()).sameObservation(state.view, r.expected);
     status(
@@ -1416,7 +1418,7 @@ $('obsExportJson').addEventListener('click', async () => {
       source: state.source,
       changes: state.history.changes(),
       digest: await x.openedDigest(state.source),
-      marks: await marks.block(),
+      marks: await marks.block?.(state.view),
     }),
     'application/json'
   );

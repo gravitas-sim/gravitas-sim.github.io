@@ -87,9 +87,10 @@ describe('T1: the route and the first visit', () => {
     ]) {
       const src = read(rel);
       expect(src).not.toMatch(/^import .*\/(imageMarks|measure\/\w+)\.js'/m);
-      if (/import\('\.\/imageMarks\.js'\)/.test(src)) owners.push(rel);
+      if (/import\('\.\/observatory\/imageMarks\.js'\)/.test(src))
+        owners.push(rel);
     }
-    expect(owners).toEqual(['js/observatory/image.js']);
+    expect(owners).toEqual(['js/observatoryPage.js']);
   });
 
   test('no module the first visit carries imports the instrument', () => {

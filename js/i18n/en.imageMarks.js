@@ -3,11 +3,11 @@
 // -----------------------------------------------------------------------------
 // Registered by js/observatory/imageMarks.js when the instrument loads (through
 // the Observatory's translator, `ctx.registerMessages`), so no other page carries
-// them. obs.im.* ids. The panel's heading, obs.im.title, is in en.observatory.js
-// because the page shows it before the instrument has loaded.
+// them. obs.im.* ids.
 // =============================================================================
 
 export const EN_IMAGEMARKS = {
+  'obs.im.title': 'Marks and scale on the image',
   'obs.im.tools': 'Mark tools',
   'obs.im.tool.point': 'Point',
   'obs.im.tool.segment': 'Segment',

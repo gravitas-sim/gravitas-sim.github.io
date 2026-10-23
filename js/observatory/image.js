@@ -242,30 +242,3 @@ export function createImageView(canvas, hooks) {
 
   return { draw, update: () => paint() };
 }
-
-/** The marks panel (imageMarks.js, Prompt 179): its instrument loads when first opened. */
-export function markHost(box, view, lent) {
-  let p;
-  let saved = null;
-  const load = () =>
-    (p ??= import('./imageMarks.js').then(m =>
-      m.mountMarks(box.querySelector('div'), { ...lent, saved })
-    ));
-  box.addEventListener(
-    'toggle',
-    async () =>
-      box.open && view()?.kind === 'image' && (await load()).update(view())
-  );
-  return {
-    show(o) {
-      box.hidden = o.kind !== 'image';
-      if (!box.hidden) p?.then(x => x.update(o));
-    },
-    block: async () => (p ? (await p).block() : saved),
-    restore(m) {
-      if (!(saved = m ?? null)) return;
-      box.open = true;
-      p?.then(x => x.restore(saved));
-    },
-  };
-}

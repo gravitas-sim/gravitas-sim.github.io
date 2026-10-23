@@ -1067,6 +1067,8 @@ export function mountMarks(root, ctx) {
     attributes: true,
     attributeFilter: ['lang'],
   });
+  const sum = root.parentElement?.querySelector('summary');
+  if (sum) labelled.push([sum, 'obs.im.title', 'textContent']);
   label();
   if (ctx.frames) {
     const [first, ...more] = ctx.frames;
@@ -1096,4 +1098,34 @@ export function mountMarks(root, ctx) {
     },
   };
   return api;
+}
+
+const panels = new WeakMap();
+/**
+ * The page's one call, made each time it shows an image observation: the first
+ * builds the panel (a pending `ctx.marks.saved` block restores into it), later
+ * ones show the new image. `ctx.marks` is the page's hand-over: it holds
+ * `saved` until taken, and gets `block(observation)` for the workspace save.
+ * @param {HTMLDetailsElement} box - Its first div is the panel's body
+ * @param {{observation: object, marks: object}} ctx - and what mountMarks takes
+ */
+export function mount(box, ctx) {
+  const { observation: o, marks } = ctx;
+  const saved = marks.saved ?? null;
+  delete marks.saved;
+  let p = panels.get(box);
+  const fresh = !p;
+  if (fresh) {
+    p = {
+      cur: o,
+      api: mountMarks(box.querySelector('div'), { ...ctx, saved }),
+    };
+    panels.set(box, p);
+    box.addEventListener('toggle', () => box.open && p.api.update(p.cur));
+    marks.block = view => (view?.id === p.cur?.id ? p.api.block() : null);
+  }
+  p.cur = o;
+  if (saved) box.open = true;
+  if (box.open) p.api.update(o);
+  if (saved && !fresh) p.api.restore(saved);
 }

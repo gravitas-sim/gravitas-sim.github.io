@@ -3,11 +3,11 @@
 // -----------------------------------------------------------------------------
 // Registradas por js/observatory/imageMarks.js al cargar el instrumento (por el
 // traductor del Observatorio, `ctx.registerMessages`). Sin revisar por una
-// persona hispanohablante fluida. El título del panel, obs.im.title, está en
-// es.observatory.js.
+// persona hispanohablante fluida.
 // =============================================================================
 
 export const ES_IMAGEMARKS = {
+  'obs.im.title': 'Marcas y escala sobre la imagen',
   'obs.im.tools': 'Herramientas de marcado',
   'obs.im.tool.point': 'Punto',
   'obs.im.tool.segment': 'Segmento',
