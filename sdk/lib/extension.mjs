@@ -557,7 +557,7 @@ async function validateInvestigationExtension(ext, m, report, ids) {
       entry.file,
       '',
       read.code === 'newer'
-        ? `is gravitas.investigation-pack/${read.vars.version}; this SDK reads up to /1`
+        ? `is gravitas.investigation-pack/${read.vars.version}; this SDK reads up to /2`
         : 'is not a gravitas.investigation-pack file'
     );
   // The format's own rules, then the compiled lesson through the checker every
