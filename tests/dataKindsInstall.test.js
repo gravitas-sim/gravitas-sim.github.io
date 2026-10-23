@@ -100,6 +100,8 @@ describe('the install', () => {
       'grid.js',
       'limits.js',
       'planes.js',
+      'raster.js',
+      'rasterJob.js',
     ]);
   });
 });

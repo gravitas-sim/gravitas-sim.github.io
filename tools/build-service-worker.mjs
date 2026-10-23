@@ -254,9 +254,12 @@ export const NEVER_PRECACHED = [
   // shipped module yet, so no page can fetch one and an install has no use for
   // them; the idle tier has no room for them (a data-budget ceiling, not one
   // the standing size approval covers), and the first-visit tier has 18 bytes.
-  // The adopters (the sequence and grid consumers, local import in Prompt 188)
-  // delete their entries, and tests/dataKindsInstall.test.js fails until they do.
-  /^js\/dataKinds\/(fits|fitsJob|fitsWorker|planes|grid|draft)\.js$/,
+  // The adopters (the sequence and grid consumers) delete their entries, and
+  // tests/dataKindsInstall.test.js fails until they do. Local import (Prompt
+  // 188) takes the FITS reader, the picture reader and the Worker through the
+  // import panel below, which is itself never precached, so these stay out
+  // too: the service worker keeps each after its first online use.
+  /^js\/dataKinds\/(fits|fitsJob|fitsWorker|raster|rasterJob|planes|grid|draft)\.js$/,
   // The statistics kernel (Prompt 154, STATISTICS.md): no shipped module imports
   // it yet, so no page can fetch it and an install has no use for it, and the
   // first-visit tier has 21 bytes of room (the adoption is a wait: its measured
@@ -288,6 +291,13 @@ export const NEVER_PRECACHED = [
   // approval does not cover, so none of the files is installed and the panel
   // says it needs the network the first time. D-R10-60.
   /^(js\/measure\/detect\.js|js\/observatory\/imageDetect\.js|js\/i18n\/(en|es)\.imageDetect\.js)$/,
+  // The image import (Prompt 188, IMAGE_IMPORT.md): the panel and its words,
+  // fetched when a reader first chooses a FITS image, a PNG or a JPEG in the
+  // Observatory's file box. Not installed, for the reason of the photometry
+  // files above (the idle tier has no room under a ceiling the standing size
+  // approval does not cover); until it has been fetched once the page says the
+  // import needs the network. D-R10-59.
+  /^(js\/observatory\/imageImport\.js|js\/i18n\/(en|es)\.imageImport\.js)$/,
   // The validation suite's groups and harness: fetched when the suite runs,
   // like physicsChecks.js itself (ON_DEMAND_ONLY below).
   /^js\/validation\/(groups\/|harness\.js$)/,

@@ -324,6 +324,13 @@
       "student": false
     },
     {
+      "file": "IMAGE_IMPORT.md",
+      "kind": "feature",
+      "purpose": "Bringing a FITS frame, a PNG or a JPEG into the Observatory: bounds, refusals, what the reader states and what is saved (Prompt 188).",
+      "owner": 188,
+      "student": false
+    },
+    {
       "file": "IMAGE_MARKS.md",
       "kind": "feature",
       "purpose": "The image marks instrument: marks, scale, time and the ledger (Prompt 179).",

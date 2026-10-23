@@ -1070,9 +1070,18 @@ const NOT_STATED = '__null';
 let importing = null;
 const importer = () => (importing ??= import('./observatory/import.js'));
 
+// A FITS image, PNG or JPEG goes the other way (IMAGE_IMPORT.md), loaded then.
+const IMAGE_FILE = /\.(fits?|fts|png|jpe?g)$/i;
+const openImage = file =>
+  import('./observatory/imageImport.js').then(
+    m => m.importImage(file, { ...lent, open, status }),
+    () => status(t('obs.imp.offline'))
+  );
+
 $('obsFile').addEventListener('change', async e => {
   const file = e.target.files?.[0];
   if (!file) return;
+  if (IMAGE_FILE.test(file.name)) return openImage(file);
   let text;
   try {
     text = await file.text();
@@ -1376,19 +1385,9 @@ $('obsImportCancel').addEventListener('click', () => {
 
 // --- Exports -----------------------------------------------------------------------
 
-function download(name, text, type) {
-  const url = URL.createObjectURL(new Blob([text], { type }));
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = name;
-  document.body.append(a);
-  a.click();
-  a.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-}
 $('obsExportJson').addEventListener('click', async () => {
   const x = await exporter();
-  download(
+  x.download(
     x.exportName(state.view, 'json'),
     x.observationJson(state.view, {
       source: state.source,
@@ -1402,7 +1401,7 @@ $('obsExportJson').addEventListener('click', async () => {
 });
 $('obsExportCsv').addEventListener('click', async () => {
   const x = await exporter();
-  download(
+  x.download(
     x.exportName(state.view, 'csv'),
     x.observationCsv(state.view),
     'text/csv'

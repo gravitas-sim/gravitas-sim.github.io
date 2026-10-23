@@ -297,13 +297,23 @@ try {
             class="ui-file"
             id="obsFile"
             type="file"
-            accept=".csv,.tsv,.txt,.json,text/csv,text/tab-separated-values,application/json"
+            accept=".csv,.tsv,.txt,.json,.fits,.fit,.fts,.png,.jpg,.jpeg,text/csv,text/tab-separated-values,application/json,image/png,image/jpeg"
             aria-describedby="obsImportHint"
           />
         </label>
         <p id="obsImportHint" class="ui-hint" data-i18n="obs.import.hint">
           CSV, tab- or semicolon-separated text, or JSON, up to 5 MB and
-          200,000 rows. It stays on this device.
+          200,000 rows; or a FITS image, PNG or JPEG of up to 4,194,304
+          pixels. It stays on this device.
+        </p>
+        <p id="obsImageHelp" class="ui-hint" data-i18n="obs.import.imageHelp">
+          Images come in two kinds. A FITS frame can be quantitative: its pixel
+          values measure light, and with the header and what you state about
+          it, marks, photometry and astrometry can be allowed. A PNG or a JPEG
+          is display-only: its numbers are gray levels made for the eye, so you
+          can mark it and measure it in pixels, but photometry and astrometry
+          are refused, because they need pixels that count light and positions
+          tied to the sky.
         </p>
         <details id="obsArchivePanel" class="ui-disclosure" style="margin-top: var(--space-4)">
           <summary data-i18n="obs.arc.title">
@@ -315,6 +325,13 @@ try {
       <details id="obsGuidePanel" class="ui-card ui-disclosure ow-panel">
         <summary data-i18n="obs.gd.title">Guided investigations</summary>
       </details>
+
+      <section
+        id="obsImageImport"
+        class="ui-card"
+        hidden
+        aria-labelledby="obsImpTitle"
+      ></section>
 
       <section
         id="obsImport"
@@ -714,6 +731,7 @@ try {
             Save the rows as CSV
           </button>
         </div>
+        <p id="obsImageSaveNote" class="ui-hint" hidden></p>
       </section>
       <p id="obsStatus" class="visually-hidden" role="status" aria-live="polite"></p>
     </main>
