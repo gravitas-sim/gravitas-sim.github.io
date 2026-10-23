@@ -167,14 +167,24 @@
       #obsCalBody .cal-table {
         min-width: 44rem;
       }
+      #obsCalBody .im-tablewrap { position: relative; }
       #obsCalBody .cal-dl {
         display: grid;
-        grid-template-columns: max-content 1fr;
+        grid-template-columns: minmax(0, max-content) minmax(0, 1fr);
         gap: var(--space-1) var(--space-3);
         margin: var(--space-2) 0;
       }
-      #obsCalBody .cal-dl dd {
+      #obsCalBody .cal-dl :is(dt, dd) {
         margin: 0;
+        overflow-wrap: anywhere;
+      }
+      @media (max-width: 40rem) {
+        #obsCalBody .cal-dl {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        #obsCalBody .cal-dl dd {
+          margin-bottom: var(--space-2);
+        }
       }
       @media (pointer: coarse) {
         #obsCalBody :is(button, select, input) {

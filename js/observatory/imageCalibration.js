@@ -161,6 +161,7 @@ export async function mountCalibration(box, ctx) {
   const parity = menu('obs.cal.parity', ['-1', '1']);
   const tanRa = text({ size: 12 });
   const tanDec = text({ size: 12 });
+  const epoch = text({ size: 24, maxLength: 80 });
   const options = el(
     'div',
     { className: 'im-tools' },
@@ -168,7 +169,8 @@ export async function mountCalibration(box, ctx) {
     field('obs.cal.modelLabel', model),
     field('obs.cal.parityLabel', parity),
     field('obs.cal.tangentRa', tanRa),
-    field('obs.cal.tangentDec', tanDec)
+    field('obs.cal.tangentDec', tanDec),
+    field('obs.cal.epoch', epoch)
   );
   const table = el('table', { className: 'im-table cal-table' });
   const caption = word(el('caption'), 'obs.cal.table');
@@ -233,7 +235,7 @@ export async function mountCalibration(box, ctx) {
   let fit = null; // fitWcs's answer for the table as it stands, or null
   let chosen = null; // 'fit' | 'header' | null: which WCS the record and readouts use
   let headerWcs = null;
-  let catalog = { source: 'typed' };
+  let catalog = null; // set by a look-up; null: the positions were typed
   let starDoc = null;
   let saved = ctx.marks.savedCal ?? null;
   delete ctx.marks.savedCal;
@@ -298,7 +300,7 @@ export async function mountCalibration(box, ctx) {
   function clearRows() {
     tbody.replaceChildren();
     stale();
-    catalog = { source: 'typed' };
+    catalog = null;
     say(t('obs.cal.cleared'));
   }
   /** A change to the table or the options: the last solution no longer describes them. */
@@ -459,7 +461,7 @@ export async function mountCalibration(box, ctx) {
       }),
     });
     const parts = [
-      el('h4', { textContent: t('obs.cal.solution') }),
+      el('p', {}, el('strong', { textContent: t('obs.cal.solution') })),
       dl(first),
       verdict,
     ];
@@ -535,7 +537,7 @@ export async function mountCalibration(box, ctx) {
     fit = null;
     chosen = 'header';
     out.replaceChildren(
-      el('h4', { textContent: t('obs.cal.solution') }),
+      el('p', {}, el('strong', { textContent: t('obs.cal.solution') })),
       dl([
         [t('obs.cal.res.ref'), hms(headerWcs.crval[0], headerWcs.crval[1])],
         [t('obs.cal.res.scale'), fmt(describeWcs(headerWcs).scale, 4)],
@@ -635,12 +637,17 @@ export async function mountCalibration(box, ctx) {
     const block = await ctx.marks.block?.(ctx.state.view);
     const points = (block?.marks ?? []).filter(m => m.kind === 'point');
     if (!points.length) return say(t('obs.cal.noMarks'));
+    const blank = () =>
+      [...tbody.rows].find(r =>
+        FIELDS.every(f => !r.querySelector(`[data-f="${f}"]`).value)
+      );
     for (const m of points) {
       const p = m.result?.pts?.[0] ?? m.pts[0];
       const name = m.tag || m.id;
-      const row = [...tbody.rows].find(
-        r => r.querySelector('[data-f="name"]').value === name
-      );
+      const row =
+        [...tbody.rows].find(
+          r => r.querySelector('[data-f="name"]').value === name
+        ) ?? blank();
       const vals = {
         name,
         x: p[0],
@@ -725,10 +732,11 @@ export async function mountCalibration(box, ctx) {
     return null;
   }
   const catalogRecord = () =>
-    catalog.source === 'sky-bright-stars' &&
-    !fit.stars.every(s => s.catalogSigma)
-      ? { ...catalog, note: 'some positions typed by the reader' }
-      : catalog;
+    !catalog
+      ? catalogOf({ typed: epoch.value.trim() })
+      : !fit.stars.every(s => s.catalogSigma)
+        ? { ...catalog, note: 'some positions typed by the reader' }
+        : catalog;
   const quantityLabel = q => t(`obs.cal.q.${q.id}`);
   async function keep() {
     const block = await currentBlock();
@@ -793,7 +801,11 @@ export async function mountCalibration(box, ctx) {
         tanDec.value = String(block.solution.tangent[1]);
       }
       if (block.solution.parity) parity.value = String(block.solution.parity);
-      catalog = block.catalog;
+      catalog = block.catalog.source === 'typed' ? null : block.catalog;
+      epoch.value =
+        catalog || block.catalog.epoch === 'not stated by the reader'
+          ? ''
+          : block.catalog.epoch;
       solve();
       if (!r.agrees) say(t('obs.cal.replay.differs'));
     } catch (err) {

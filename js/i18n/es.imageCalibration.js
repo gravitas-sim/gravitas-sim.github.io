@@ -43,6 +43,8 @@ export const ES_IMAGECALIBRATION = {
   'obs.cal.parity.mirrored': 'en espejo: este a la derecha con el norte arriba',
   'obs.cal.tangentRa': 'Posición de referencia, ascensión recta (opcional)',
   'obs.cal.tangentDec': 'Posición de referencia, declinación (opcional)',
+  'obs.cal.epoch':
+    'Origen y época de las posiciones escritas (para el registro)',
   'obs.cal.noMarks':
     'No hay marcas de punto en esta imagen. Pon algunas antes en el panel de marcas.',
   'obs.cal.marksAdded':

@@ -43,6 +43,7 @@ export const EN_IMAGECALIBRATION = {
   'obs.cal.parity.mirrored': 'mirrored: east to the right with north up',
   'obs.cal.tangentRa': 'Reference position, right ascension (optional)',
   'obs.cal.tangentDec': 'Reference position, declination (optional)',
+  'obs.cal.epoch': 'Source and epoch of typed positions (for the record)',
   'obs.cal.noMarks':
     'There are no point marks on this image. Place some in the marks panel first.',
   'obs.cal.marksAdded':
