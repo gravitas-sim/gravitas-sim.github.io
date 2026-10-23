@@ -234,11 +234,11 @@
         "catalogs": ["observatory"]
       },
       "cost": {
-        "lines": 25668,
-        "testFiles": 70,
+        "lines": 28350,
+        "testFiles": 72,
         "generated": 0,
-        "strings": 230,
-        "precacheKb": 366.8,
+        "strings": 232,
+        "precacheKb": 367.7,
         "axeRows": 1
       },
       "use": { "shippedLinks": 0, "libraryEntries": 23 },
@@ -420,7 +420,7 @@
       "exposure": { "links": [], "records": [], "stateLinks": [] },
       "measure": { "pages": ["my-work/index.html"], "routes": ["/my-work/"] },
       "cost": {
-        "lines": 2601,
+        "lines": 2602,
         "testFiles": 25,
         "generated": 0,
         "strings": 0,
@@ -603,12 +603,12 @@
         "catalogs": ["course"]
       },
       "cost": {
-        "lines": 3786,
-        "testFiles": 12,
+        "lines": 3819,
+        "testFiles": 13,
         "generated": 0,
-        "strings": 275,
-        "precacheKb": 51.1,
-        "axeRows": 4
+        "strings": 277,
+        "precacheKb": 51.6,
+        "axeRows": 5
       },
       "use": { "shippedLinks": 0, "libraryEntries": 0 },
       "cited": ["README.md", "manual/gravitas-user-manual.tex"],
@@ -665,8 +665,8 @@
         "routes": ["/teaching/find/"]
       },
       "cost": {
-        "lines": 236,
-        "testFiles": 3,
+        "lines": 237,
+        "testFiles": 4,
         "generated": 0,
         "strings": 0,
         "precacheKb": 0,
@@ -721,8 +721,8 @@
         "routes": ["/teaching/alignment/"]
       },
       "cost": {
-        "lines": 309,
-        "testFiles": 1,
+        "lines": 311,
+        "testFiles": 2,
         "generated": 0,
         "strings": 0,
         "precacheKb": 0,
@@ -749,12 +749,12 @@
         "routes": ["/teaching/kit/"]
       },
       "cost": {
-        "lines": 2113,
-        "testFiles": 12,
+        "lines": 2186,
+        "testFiles": 13,
         "generated": 0,
         "strings": 0,
-        "precacheKb": 23.9,
-        "axeRows": 1
+        "precacheKb": 24.4,
+        "axeRows": 2
       },
       "use": { "shippedLinks": 0, "libraryEntries": 0 },
       "cited": ["manual/gravitas-user-manual.tex"],
@@ -1704,7 +1704,7 @@
         "precacheKb": 0,
         "axeRows": 0
       },
-      "use": { "shippedLinks": 11, "libraryEntries": 0 },
+      "use": { "shippedLinks": 12, "libraryEntries": 0 },
       "cited": [],
       "referrer": "UNKNOWN",
       "verdict": "KEEP",
@@ -1770,7 +1770,7 @@
         "precacheKb": 0,
         "axeRows": 0
       },
-      "use": { "shippedLinks": 15, "libraryEntries": 0 },
+      "use": { "shippedLinks": 16, "libraryEntries": 0 },
       "cited": [],
       "referrer": "UNKNOWN",
       "verdict": "KEEP",
@@ -2061,7 +2061,43 @@
       "consequence": "Keep; written only when marks exist; a schema in Prompt 290.",
       "cost": {
         "lines": 0,
-        "testFiles": 2,
+        "testFiles": 3,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 0,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 3, "libraryEntries": 0 },
+      "cited": [],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "format-gravitas-image-calibration",
+      "name": "gravitas.image-calibration",
+      "kind": "stored-format",
+      "unique": "yes",
+      "replacement": null,
+      "why": "download, inside a workspace; owner js/measure/calibrationRecord.js validateCalibration, js/observatory/export.js.",
+      "exposure": {
+        "links": [],
+        "records": ["gravitas.image-calibration"],
+        "stateLinks": []
+      },
+      "persisted": "download, inside a workspace (workspace.calibration)",
+      "measure": {
+        "ownerFiles": [
+          "js/measure/calibrationRecord.js",
+          "js/observatory/export.js"
+        ],
+        "testNames": ["gravitas.image-calibration"]
+      },
+      "consequence": "Keep; written only when a calibration exists; a schema in Prompt 290.",
+      "cost": {
+        "lines": 0,
+        "testFiles": 1,
         "generated": 0,
         "strings": 0,
         "precacheKb": 0,

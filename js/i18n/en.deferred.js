@@ -3710,7 +3710,6 @@ export const EN_DEFERRED = {
   'nb.source.stellar-lab': 'Stellar Lab',
   'nb.source.binary-orbit': 'Binary orbit',
   'nb.source.observatory': 'Observatory measurement',
-  // --- A fit, an analysis or an experiment result kept as its envelope -----
   'nb.source.inference-fit': 'Inference-core fit',
   'nb.source.comparison': 'Model against data',
   'nb.source.sweep-analysis': 'Sweep analysis',

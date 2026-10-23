@@ -238,6 +238,28 @@ const every = () => [
       ],
     }),
   }),
+  // The calibration of an image (js/measure/calibrationRecord.js, Prompt 181):
+  // the fit and its replay are covered in tests/astrometry.test.js; here only
+  // that it is an envelope the ledger can hold.
+  artifactEntry({
+    source: SOURCE.IMAGE_CALIBRATION,
+    title: 'Sky coordinates',
+    capturedAt: at,
+    context: { page: 'observatory' },
+    envelope: artifact({
+      id: 'image-calibration-1',
+      source: { kind: 'observation', id: 'frame', digest },
+      quantities: [
+        {
+          id: 'scale',
+          value: 60.1,
+          unit: 'arcsec',
+          uncertainty: { kind: 'sigma', sigma: 0.2, basis: 'data' },
+          origin: 'fitted',
+        },
+      ],
+    }),
+  }),
   // A sweep's analysis and an experiment's result, which js/experiments/
   // analysisPanel.js keeps as envelopes (P75 R-5: the list used to omit them).
   ...[

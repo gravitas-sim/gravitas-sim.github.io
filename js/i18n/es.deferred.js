@@ -3620,7 +3620,6 @@ export const ES_DEFERRED = {
   'nb.source.stellar-lab': 'Laboratorio estelar',
   'nb.source.binary-orbit': 'Órbita binaria',
   'nb.source.observatory': 'Medida en el Observatorio',
-  // --- Un ajuste, un análisis o un resultado de experimento, con su sobre ---
   'nb.source.inference-fit': 'Ajuste del núcleo de inferencia',
   'nb.source.comparison': 'Modelo frente a datos',
   'nb.source.sweep-analysis': 'Análisis de barrido',

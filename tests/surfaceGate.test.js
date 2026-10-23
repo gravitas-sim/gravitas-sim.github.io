@@ -257,7 +257,7 @@ describe('the recorded evidence is judged by the function and nothing else', () 
       .filter(r => r.kind === 'stored-format')
       .map(r => r.name);
     expect(recorded.sort()).toEqual([...names].sort());
-    expect(names).toHaveLength(28);
+    expect(names).toHaveLength(29);
   });
 
   test('the surfaces the roadmap named are all judged', () => {
