@@ -110,6 +110,10 @@ The first run of the cancel probe failed: the 33 MiB it measured was the test
 double's own 1.5 s timer holding the file, not the application. The procedure
 now waits for the timer; the bound is unchanged.
 
+## The CI timing factor
+
+The two page timings (the largest frame chosen to shown, 5,000 ms; each refusal in the page, 2,000 ms) were committed first, as plain bounds, in aa4eb2c7, and they are the local standard: `e2e/imageImport.spec.js` holds them as written. After the largest frame was measured at 4,491 ms locally (a 10 percent margin), commit ecfbbad1 added a factor of 2 when `process.env.CI` is set, so a slower, noisier shared runner is not a false failure. That factor was added after the measurement, not before it. Carl allowed it (chat 2026-10-23, AskUserQuestion, "Allow 2x on CI (Recommended)"): "Keep the committed bounds as the local standard, and double them only on CI runners, which are slower and noisy (the 4,491 ms local figure leaves just 10% margin). State it in the register row and PR. Same practice as 179's T6 loaded-runner factor." `GRAVITAS_IMAGE_TIMING_FACTOR` overrides it by hand and is set nowhere in `.github/`; CI cannot raise it.
+
 ## Decisions
 
 See D-R10-59 in `DECISION_REGISTER.md`.
