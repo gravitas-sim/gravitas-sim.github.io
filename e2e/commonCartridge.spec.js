@@ -133,9 +133,11 @@ for (const locale of ['en', 'es']) {
     expect(manifest).toContain('IMS Thin Common Cartridge');
     expect(manifest).toContain(`<lomm:language>${locale}</lomm:language>`);
     expect(manifest).toContain(COURSE[locale]);
-    // Every link opens the app, the Observatory or a reading, over https.
+    // Every link opens the app, the Observatory or a reading: https, or this test server for the app's own pages.
     for (const text of files.values())
-      expect(text).toMatch(/<url href="https:\/\/[^"]+" target="_blank"\/>/);
+      expect(text).toMatch(
+        /<url href="(https:\/\/|http:\/\/127\.0\.0\.1:4429\/)[^"]+" target="_blank"\/>/
+      );
     // The notes for instructors are not in it unless asked for.
     expect(manifest).not.toMatch(
       /Notes for instructors, |Notas para docentes, /
@@ -248,7 +250,9 @@ async function smallOrOutside(page, root) {
       for (const el of host.querySelectorAll(
         'a[href], button, input, select, textarea, summary'
       )) {
-        const r = el.getBoundingClientRect();
+        // A checkbox is one target with its words: the label is what a finger meets.
+        const box = el.type === 'checkbox' ? (el.closest('label') ?? el) : el;
+        const r = box.getBoundingClientRect();
         if (!r.width && !r.height) continue;
         const label = (el.id || el.textContent || el.tagName)
           .trim()
@@ -278,12 +282,19 @@ for (const size of SIZES)
         await page.setViewportSize({ width: size.width, height: size.height });
         await quiet(page, locale, theme);
         await page.goto('/studio/course/');
-        await page.locator('#cb-example').click();
-        await page.waitForSelector('body[data-checked]', { timeout: 60_000 });
-        expect(await smallOrOutside(page, '#cb-cartridge')).toEqual([]);
-        await page.locator('#cb-cartridge').click();
-        await expect(page.locator('#cc-go')).toBeVisible();
-        expect(await smallOrOutside(page, '#cb-cartridge-panel')).toEqual([]);
+        // Under 768 px the builder is read-only (PLATFORM_MODEL.md): its
+        // editing toolbar, this button included, steps out and the page says
+        // so, so the builder's panel is judged at 1280 and the kit at both.
+        if (size.width >= 768) {
+          await page.locator('#cb-example').click();
+          await page.waitForSelector('body[data-checked]', {
+            timeout: 60_000,
+          });
+          expect(await smallOrOutside(page, '#cb-cartridge')).toEqual([]);
+          await page.locator('#cb-cartridge').click();
+          await expect(page.locator('#cc-go')).toBeVisible();
+          expect(await smallOrOutside(page, '#cb-cartridge-panel')).toEqual([]);
+        } else await expect(page.locator('#cb-cartridge')).toBeHidden();
 
         await page.goto('/teaching/kit/');
         await page.locator('#kitFile').setInputFiles({

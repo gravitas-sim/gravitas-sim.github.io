@@ -2619,5 +2619,21 @@
   "[tablet] › responsiveLayout.spec.js › the four layouts › the Observatory stacks its views and keeps them linked": 1.8,
   "[tablet] › responsiveLayout.spec.js › the four layouts › the Studio edits from the tablet up, and reads on a phone": 1.2,
   "[tablet] › responsiveLayout.spec.js › the four layouts › the application leaves every corner to one thing": 7.2,
-  "[tablet] › responsiveLayout.spec.js › the four layouts › the image of an observation fits the window": 1
+  "[tablet] › responsiveLayout.spec.js › the four layouts › the image of an observation fits the window": 1,
+  "[chromium] › commonCartridge.spec.js › Teach and the adopter’s guide say the contract’s sentence, in both languages, and no more": 1.9,
+  "[chromium] › commonCartridge.spec.js › a course with problems offers no file, and says to fix them": 1.3,
+  "[chromium] › commonCartridge.spec.js › en: the builder exports a cartridge the profile accepts, and says what is not verified": 2.2,
+  "[chromium] › commonCartridge.spec.js › en: the kit makes the same cartridge from the course file as the builder does": 3.2,
+  "[chromium] › commonCartridge.spec.js › es: the builder exports a cartridge the profile accepts, and says what is not verified": 2.2,
+  "[chromium] › commonCartridge.spec.js › es: the kit makes the same cartridge from the course file as the builder does": 2.7,
+  "[chromium] › commonCartridge.spec.js › the kit offers it for a course and not for an activity": 0.5,
+  "[chromium] › commonCartridge.spec.js › the new controls fit at 1280 px, en, daylight": 2.5,
+  "[chromium] › commonCartridge.spec.js › the new controls fit at 1280 px, en, midnight": 2.3,
+  "[chromium] › commonCartridge.spec.js › the new controls fit at 1280 px, es, daylight": 2.4,
+  "[chromium] › commonCartridge.spec.js › the new controls fit at 1280 px, es, midnight": 2.4,
+  "[chromium] › commonCartridge.spec.js › the new controls fit at 390 px, en, daylight": 1.5,
+  "[chromium] › commonCartridge.spec.js › the new controls fit at 390 px, en, midnight": 1.7,
+  "[chromium] › commonCartridge.spec.js › the new controls fit at 390 px, es, daylight": 1.2,
+  "[chromium] › commonCartridge.spec.js › the new controls fit at 390 px, es, midnight": 1.4,
+  "[chromium] › commonCartridge.spec.js › ticking the notes box puts them in, on links for instructors only": 2.2
 }
