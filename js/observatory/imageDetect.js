@@ -188,7 +188,7 @@ export async function mountDetect(box, ctx) {
     out,
     table,
     word(el('p', { className: 'ui-hint' }), 'obs.dt.limits'),
-    word(el('h4'), 'obs.dt.psfTitle'),
+    word(el('h3'), 'obs.dt.psfTitle'),
     word(el('p', { className: 'ui-hint' }), 'obs.dt.psfHelp'),
     el(
       'div',
@@ -203,7 +203,6 @@ export async function mountDetect(box, ctx) {
     svg,
     profileTable
   );
-  marksBtn.hidden = !ctx.marks.add;
 
   // ---- the frame and its contract -----------------------------------------------
   let cur = null;
@@ -233,6 +232,7 @@ export async function mountDetect(box, ctx) {
     refusal.hidden = !c || c.a.ok;
     if (c && !c.a.ok) refusal.textContent = why(c.a);
     for (const b of [...actions, ...psfActions]) b.disabled = !c?.a.ok;
+    marksBtn.hidden = !ctx.marks.add;
     marksBtn.disabled = !det;
     csvBtn.disabled = !det;
     psfBtn.disabled = !det || !c?.a.ok;

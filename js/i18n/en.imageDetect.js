@@ -24,7 +24,7 @@ export const EN_IMAGEDETECT = {
     'This frame is raw: its background still holds the bias, so the noise of the sky would be wrong. Calibrate it first.',
   'obs.dt.no.invalid': 'This is not a valid image description.',
   'obs.dt.no.bad-parameter':
-    'A setting is out of range ({name}). Use a width between 0.5 and 50 pixels, at least 2 sigma, a whole minimum area of at least 1 and a box of 4 to 256 pixels.',
+    'A setting is out of range ({name}). Use a width between 0.5 and 50 pixels, a threshold of 2 to 100 sigma, a whole minimum area of at least 1 and a box of 4 to 256 pixels.',
   'obs.dt.no.no-background':
     'The sky could not be estimated: every box of the image is masked or empty.',
   'obs.dt.no.edge':

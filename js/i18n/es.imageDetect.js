@@ -25,7 +25,7 @@ export const ES_IMAGEDETECT = {
     'Este fotograma está en bruto: su fondo aún contiene el bias, así que el ruido del cielo sería erróneo. Calíbralo primero.',
   'obs.dt.no.invalid': 'Esta no es una descripción de imagen válida.',
   'obs.dt.no.bad-parameter':
-    'Un ajuste está fuera de rango ({name}). Usa un ancho entre 0,5 y 50 píxeles, al menos 2 sigmas, un área mínima entera de al menos 1 y una caja de 4 a 256 píxeles.',
+    'Un ajuste está fuera de rango ({name}). Usa un ancho entre 0,5 y 50 píxeles, un umbral de 2 a 100 sigmas, un área mínima entera de al menos 1 y una caja de 4 a 256 píxeles.',
   'obs.dt.no.no-background':
     'No se pudo estimar el cielo: todas las cajas de la imagen están enmascaradas o vacías.',
   'obs.dt.no.edge':

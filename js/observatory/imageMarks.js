@@ -624,6 +624,7 @@ export function mountMarks(root, ctx) {
   }
   /** The detection tool's hand-over (Prompt 183): its sources as point marks; how many fitted. */
   function addPoints(list, tag) {
+    if (blocked || !frames.length) return 0;
     const n = Math.max(
       0,
       Math.min(list.length, 2000 - store.state.marks.length)
@@ -1085,7 +1086,10 @@ export async function mount(box, ctx) {
       box.addEventListener('toggle', () => box.open && p.api.update(p.cur));
       marks.block = view => (view?.id === p.cur?.id ? p.api.block() : null);
       marks.state = () => p.api.store.state;
-      marks.add = (list, tag) => p.api.add(list, tag);
+      marks.add = (list, tag) => {
+        p.api.update(p.cur);
+        return p.api.add(list, tag);
+      };
       return p;
     });
     panels.set(box, ready);
