@@ -238,6 +238,47 @@ const every = () => [
       ],
     }),
   }),
+  // Photometry on an image (js/measure/photometry.js, Prompt 180): its replay
+  // and the tool are covered in tests/photometry.test.js; here only that it is
+  // an envelope the ledger can hold, with a limit and a failed quantity in it.
+  artifactEntry({
+    source: SOURCE.IMAGE_PHOTOMETRY,
+    title: 'Photometry',
+    capturedAt: at,
+    context: { page: 'observatory' },
+    envelope: artifact({
+      id: 'image-photometry-1',
+      source: { kind: 'observation', id: 'frame', digest },
+      quantities: [
+        {
+          id: 'm1.net',
+          value: 15012,
+          unit: 'count',
+          uncertainty: { kind: 'sigma', sigma: 158, basis: 'derived' },
+          origin: 'measured',
+        },
+        {
+          id: 'm2.net',
+          value: 420,
+          unit: 'count',
+          uncertainty: {
+            kind: 'limit',
+            bound: 'upper',
+            basis: 'derived',
+            level: 0.99865,
+          },
+          origin: 'measured',
+        },
+        {
+          id: 'm3.net',
+          value: null,
+          unit: 'count',
+          uncertainty: { kind: 'failed', reason: 'saturated' },
+          origin: 'measured',
+        },
+      ],
+    }),
+  }),
   // The calibration of an image (js/measure/calibrationRecord.js, Prompt 181):
   // the fit and its replay are covered in tests/astrometry.test.js; here only
   // that it is an envelope the ledger can hold.

@@ -352,7 +352,6 @@ export const EN_DEFERRED = {
   'exoW.preset.earthTwin': 'Earth twin, TESS',
   'exoW.preset.earthTwin.note':
     'An Earth around a Sun, seen by TESS: 84 ppm, a thirteen-hour transit, one transit a year. The longest transit here and the least detectable planet, which is worth sitting with.',
-
   // --- The numerical reliability check ---------------------------------------
   // Deliberately careful wording throughout. There is no string here that says
   // a result is accurate, because a convergence check cannot establish that:
@@ -3718,6 +3717,7 @@ export const EN_DEFERRED = {
   'nb.source.mission-lab': 'Mission lab result',
   'nb.source.image-marks': 'Marks on an image',
   'nb.source.image-calibration': 'Sky coordinates for an image',
+  'nb.source.image-photometry': 'Photometry on an image',
   'nb.flag.missionModel':
     'impulsive burns, patched conics and point masses: a teaching model of a mission',
   'nb.flag.notOperational': 'not for operational mission design or navigation',

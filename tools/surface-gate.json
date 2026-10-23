@@ -234,11 +234,11 @@
         "catalogs": ["observatory"]
       },
       "cost": {
-        "lines": 28350,
-        "testFiles": 72,
+        "lines": 30080,
+        "testFiles": 74,
         "generated": 0,
-        "strings": 232,
-        "precacheKb": 367.7,
+        "strings": 234,
+        "precacheKb": 367.9,
         "axeRows": 1
       },
       "use": { "shippedLinks": 0, "libraryEntries": 23 },
@@ -420,11 +420,11 @@
       "exposure": { "links": [], "records": [], "stateLinks": [] },
       "measure": { "pages": ["my-work/index.html"], "routes": ["/my-work/"] },
       "cost": {
-        "lines": 2602,
+        "lines": 2603,
         "testFiles": 25,
         "generated": 0,
         "strings": 0,
-        "precacheKb": 32.5,
+        "precacheKb": 32.6,
         "axeRows": 1
       },
       "use": { "shippedLinks": 0, "libraryEntries": 0 },
@@ -1704,7 +1704,7 @@
         "precacheKb": 0,
         "axeRows": 0
       },
-      "use": { "shippedLinks": 12, "libraryEntries": 0 },
+      "use": { "shippedLinks": 13, "libraryEntries": 0 },
       "cited": [],
       "referrer": "UNKNOWN",
       "verdict": "KEEP",
@@ -1770,7 +1770,7 @@
         "precacheKb": 0,
         "axeRows": 0
       },
-      "use": { "shippedLinks": 16, "libraryEntries": 0 },
+      "use": { "shippedLinks": 17, "libraryEntries": 0 },
       "cited": [],
       "referrer": "UNKNOWN",
       "verdict": "KEEP",

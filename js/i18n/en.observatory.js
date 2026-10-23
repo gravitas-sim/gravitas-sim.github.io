@@ -288,5 +288,8 @@ export const EN_OBSERVATORY = {
   'obs.cal.title': 'Sky coordinates for the image',
   'obs.cal.offline':
     'The sky-coordinates tool is loading. It is fetched when first opened, so it needs the network the first time.',
+  'obs.ph.title': 'Photometry on the image',
+  'obs.ph.offline':
+    'The photometry tool is loading. It is fetched when first opened, so it needs the network the first time.',
   'obs.gd.title': 'Guided investigations',
 };

@@ -96,6 +96,10 @@ export const SOURCE = Object.freeze({
   // reference catalogue's identity, and the reduction that solves it again
   // (js/observatory/imageCalibration.js, js/measure/calibrationRecord.js).
   IMAGE_CALIBRATION: 'image-calibration',
+  // Photometry of the sources on an image: net light, sky and position with
+  // their uncertainties, and the request that runs it again
+  // (js/observatory/imagePhotometry.js, js/measure/photometry.js).
+  IMAGE_PHOTOMETRY: 'image-photometry',
 });
 
 /** The sources this build can capture from. */
@@ -119,6 +123,7 @@ export const SOURCES = [
   SOURCE.MISSION_LAB,
   SOURCE.IMAGE_MARKS,
   SOURCE.IMAGE_CALIBRATION,
+  SOURCE.IMAGE_PHOTOMETRY,
 ];
 
 /** How long a student's prose may be, per field. */

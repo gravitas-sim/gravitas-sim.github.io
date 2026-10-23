@@ -2737,5 +2737,15 @@
   "[chromium] › accessibility.spec.js › axe: distribution kit, the activity list panel (Prompt 174) › Spanish, dark theme": 4.7,
   "[chromium] › accessibility.spec.js › axe: distribution kit, the activity list panel (Prompt 174) › Spanish, deep space theme": 4.5,
   "[chromium] › accessibility.spec.js › axe: distribution kit, the activity list panel (Prompt 174) › Spanish, light theme": 4.6,
-  "[chromium] › accessibility.spec.js › axe: distribution kit, the activity list panel (Prompt 174) › Spanish, observatory red theme": 4.4
+  "[chromium] › accessibility.spec.js › axe: distribution kit, the activity list panel (Prompt 174) › Spanish, observatory red theme": 4.4,
+  "[chromium] › imagePhotometry.spec.js › photometry: keyboard alone › a star is measured and read back against its flux, a curve of growth drawn, with no pointer event": 3.1,
+  "[chromium] › imagePhotometry.spec.js › photometry: keyboard alone › the rings resize by the buttons and the step, in order, and say so": 1.6,
+  "[chromium] › imagePhotometry.spec.js › photometry: single pointer alone › a tap on the picture sets the ring, and Measure is a click, with no key event": 1.9,
+  "[chromium] › imagePhotometry.spec.js › photometry: refusals › an image that is display-only says why, and every action is disabled": 1.4,
+  "[chromium] › imagePhotometry.spec.js › photometry: refusals › an image with no contract says why, and every action is disabled": 1.4,
+  "[chromium] › imagePhotometry.spec.js › photometry: refusals › a star too near the saturation level is not measured, and the words say how many pixels": 1.5,
+  "[chromium] › imagePhotometry.spec.js › photometry: the marks, a table, a file and the ledger › two marks are chosen by name, measured together, tabled, saved as CSV and kept in the ledger": 3.2,
+  "[chromium] › imagePhotometry.spec.js › photometry: both languages, axe, and every control › axe with a result, and 24 px targets at 1280 and 390, en": 3.4,
+  "[chromium] › imagePhotometry.spec.js › photometry: both languages, axe, and every control › axe with a result, and 24 px targets at 1280 and 390, es": 3.5,
+  "[chromium] › imagePhotometry.spec.js › photometry: both languages, axe, and every control › the page changing language re-words the open panel and keeps its result": 1.8
 }

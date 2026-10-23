@@ -293,5 +293,8 @@ export const ES_OBSERVATORY = {
   'obs.cal.title': 'Coordenadas celestes de la imagen',
   'obs.cal.offline':
     'La herramienta de coordenadas celestes se está cargando. Se descarga al abrirla por primera vez, así que necesita la red esa primera vez.',
+  'obs.ph.title': 'Fotometría en la imagen',
+  'obs.ph.offline':
+    'La herramienta de fotometría se está cargando. Se descarga al abrirla por primera vez, así que necesita la red esa primera vez.',
   'obs.gd.title': 'Investigaciones guiadas',
 };

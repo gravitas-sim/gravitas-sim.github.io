@@ -434,6 +434,7 @@ export const ARTIFACT_SOURCES = [
   'mission-lab',
   'image-marks',
   'image-calibration',
+  'image-photometry',
 ];
 
 /**
