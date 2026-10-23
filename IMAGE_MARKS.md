@@ -62,7 +62,9 @@ out of the precache.
 - `npm run image-marks:validate` runs the gate's precision, undo, determinism,
   record and replay checks against these modules, in plain Node.
 - `npm run image-marks:bytes` measures the bytes and requests the way the gate
-  did.
+  did: 25,550 B by the gate's convention (at most 25,600), 19,408 B in two
+  requests for what opening an image observation fetches (the instrument and
+  the page's language: the words are fetched one language at a time).
 - `tests/imageMeasure.test.js` and `tests/imageMeasureBudget.test.js` hold both;
   `e2e/imageMarks.spec.js` holds the page (the keyboard-only and pointer-only
   paths, announcements, the sequence, both languages, axe, target sizes and the

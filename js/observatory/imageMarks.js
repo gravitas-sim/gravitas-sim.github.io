@@ -57,6 +57,7 @@ export const nudgeScale = e => (e.altKey ? 0.25 : e.shiftKey ? 4 : 1);
 export const SETTLE_MS = 700;
 const UNITS = ['km', 'm', 'cm', 'mm', 'arcsec', 'deg', 'AU', 'ly'];
 const SORTS = ['order', 'tag', 'frame'];
+const ARROWS = { left: [-1, 0], right: [1, 0], up: [0, 1], down: [0, -1] };
 
 const el = (tag, props = {}, ...kids) => {
   const n = Object.assign(document.createElement(tag), props);
@@ -116,26 +117,13 @@ export function mountMarks(root, ctx) {
     className: 'visually-hidden',
     id: 'obsMarksLive',
   });
-  const say = m => {
-    nudgeTimer.cancel();
-    live.replaceChildren(el('p', { textContent: m }));
+  let timer = 0;
+  const say = (m, later) => {
+    clearTimeout(timer);
+    const show = () => live.replaceChildren(el('p', { textContent: m }));
+    if (later) timer = setTimeout(show, settleMs);
+    else show();
   };
-  const nudgeTimer = (() => {
-    let timer = null;
-    return {
-      cancel() {
-        clearTimeout(timer);
-        timer = null;
-      },
-      later(m) {
-        this.cancel();
-        timer = setTimeout(() => {
-          timer = null;
-          live.replaceChildren(el('p', { textContent: m }));
-        }, settleMs);
-      },
-    };
-  })();
 
   let store = createStore(emptyState());
   let frames = [];
@@ -278,13 +266,7 @@ export function mountMarks(root, ctx) {
   const tbody = el('tbody');
   table.append(caption, thead, tbody);
   const ledgerRow = el('div', { className: 'im-tools' });
-  const dirs = [
-    ['left', -1, 0],
-    ['right', 1, 0],
-    ['up', 0, 1],
-    ['down', 0, -1],
-  ];
-  for (const [name, dx, dy] of dirs)
+  for (const [name, [dx, dy]] of Object.entries(ARROWS))
     pad.append(
       button(
         `obs.im.${name}`,
@@ -635,17 +617,13 @@ export function mountMarks(root, ctx) {
     if (blocked || !frames.length) return;
     const p = [ui.aim.x, ui.aim.y];
     const need = ARITY[ui.tool];
-    if (ui.tool === 'polygon') {
-      ui.pending.push(p);
-      ui.draft = false;
-      drawOverlay();
-      say(t('obs.im.pending', { n: ui.pending.length, m: '3+' }));
-    } else if (ui.pending.length + 1 < need) {
-      ui.pending.push(p);
-      ui.draft = false;
-      drawOverlay();
-      say(t('obs.im.pending', { n: ui.pending.length, m: need }));
-    } else commitPlace([...ui.pending, p]);
+    const poly = ui.tool === 'polygon';
+    if (!poly && ui.pending.length + 1 >= need)
+      return commitPlace([...ui.pending, p]);
+    ui.pending.push(p);
+    ui.draft = false;
+    drawOverlay();
+    say(t('obs.im.pending', { n: ui.pending.length, m: poly ? '3+' : need }));
   }
   function finishPolygon() {
     if (ui.tool === 'polygon' && ui.pending.length >= 3)
@@ -672,9 +650,7 @@ export function mountMarks(root, ctx) {
       ui.aim = { x: p[0], y: p[1] };
       updateRow(id);
       drawOverlay();
-      nudgeTimer.later(
-        t('obs.im.moved', { id, x: fixed(p[0]), y: fixed(p[1]) })
-      );
+      say(t('obs.im.moved', { id, x: fixed(p[0]), y: fixed(p[1]) }), 1);
       clearTimeout(sealTimer);
       sealTimer = setTimeout(() => {
         store.seal();
@@ -686,9 +662,7 @@ export function mountMarks(root, ctx) {
         y: Math.min(fr().height, Math.max(1, ui.aim.y + dy)),
       };
       drawOverlay();
-      nudgeTimer.later(
-        t('obs.im.draft', { x: fixed(ui.aim.x), y: fixed(ui.aim.y) })
-      );
+      say(t('obs.im.draft', { x: fixed(ui.aim.x), y: fixed(ui.aim.y) }), 1);
     }
   }
   function cycle(d) {
@@ -740,12 +714,12 @@ export function mountMarks(root, ctx) {
     say(message);
   }
   function doUndo() {
-    nudgeTimer.cancel();
+    clearTimeout(timer);
     store.seal();
     if (store.undo()) after(t('obs.im.undone', { n: here().length }));
   }
   function doRedo() {
-    nudgeTimer.cancel();
+    clearTimeout(timer);
     if (store.redo()) after(t('obs.im.redone', { n: here().length }));
   }
   function goto(n) {
@@ -889,56 +863,46 @@ export function mountMarks(root, ctx) {
     lc.strokeStyle = '#fff';
     lc.strokeRect(46, 46, 4, 4);
     loupe.hidden = false;
-    const top =
-      e.clientY - r.top - 72 - 96 < 0
-        ? e.clientY - r.top + 72
-        : e.clientY - r.top - 72 - 96;
+    const y = e.clientY - r.top;
+    const top = y < 168 ? y + 72 : y - 168;
     loupe.style.left = `${Math.min(r.width - 96, Math.max(0, e.clientX - r.left - 48))}px`;
     loupe.style.top = `${top}px`;
   };
   over.addEventListener('pointerdown', e => {
     if (!frames.length) return;
     over.focus();
-    const p = toImage(e);
-    ui.aim = { x: p.x, y: p.y };
+    ui.aim = toImage(e);
     if (e.pointerType === 'touch') showLoupe(e);
   });
   over.addEventListener('pointermove', e => {
     if (e.pointerType === 'touch' && e.buttons) {
-      const p = toImage(e);
-      ui.aim = { x: p.x, y: p.y };
+      ui.aim = toImage(e);
       showLoupe(e);
     }
   });
   over.addEventListener('pointerup', e => {
     loupe.hidden = true;
     if (!frames.length) return;
-    const p = toImage(e);
-    ui.aim = { x: p.x, y: p.y };
+    ui.aim = toImage(e);
     ui.sel = null;
     if (e.pointerType === 'touch') {
       ui.draft = true;
       drawOverlay();
-      say(t('obs.im.draft', { x: fixed(p.x), y: fixed(p.y) }));
+      say(t('obs.im.draft', { x: fixed(ui.aim.x), y: fixed(ui.aim.y) }));
     } else confirm();
   });
   over.addEventListener('focus', drawOverlay);
   over.addEventListener('blur', drawOverlay);
-  const ARROWS = {
-    ArrowLeft: [-1, 0],
-    ArrowRight: [1, 0],
-    ArrowUp: [0, 1],
-    ArrowDown: [0, -1],
-  };
   over.addEventListener('keydown', e => {
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') {
       e.preventDefault();
       return e.shiftKey ? doRedo() : doUndo();
     }
-    if (ARROWS[e.key]) {
+    const dir = ARROWS[e.key.replace('Arrow', '').toLowerCase()];
+    if (dir && e.key.startsWith('Arrow')) {
       e.preventDefault();
       const s = nudgeScale(e);
-      return move(ARROWS[e.key][0] * s, ARROWS[e.key][1] * s);
+      return move(dir[0] * s, dir[1] * s);
     }
     if (e.key === 'PageUp' || e.key === 'PageDown') {
       e.preventDefault();

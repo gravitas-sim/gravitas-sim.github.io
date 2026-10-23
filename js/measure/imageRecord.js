@@ -203,7 +203,8 @@ export class ReplayError extends Error {
   }
 }
 
-const finite = v => typeof v === 'number' && Number.isFinite(v);
+const finite = Number.isFinite;
+const pos = v => Number.isInteger(v) && v > 0;
 const HEX = /^[0-9a-f]{64}$/;
 const pointList = p =>
   Array.isArray(p) &&
@@ -229,10 +230,8 @@ export function validateMarks(b) {
   b.frames.forEach((f, k) => {
     const ok =
       HEX.test(f?.digest ?? '') &&
-      Number.isInteger(f.width) &&
-      f.width > 0 &&
-      Number.isInteger(f.height) &&
-      f.height > 0 &&
+      pos(f.width) &&
+      pos(f.height) &&
       (f.time === undefined || timeOf(f.time));
     if (!ok) bad(`frames[${k}]`);
   });
@@ -247,15 +246,14 @@ export function validateMarks(b) {
       m.id &&
       !ids.has(m.id) &&
       Number.isInteger(m.frame) &&
-      m.frame >= 0 &&
-      m.frame < b.frames.length &&
+      b.frames[m.frame] &&
       typeof m.tag === 'string' &&
       m.tag.length <= 40 &&
       pointList(m.pts) &&
       (m.kind === 'polygon' ? m.pts.length >= 3 : m.pts.length === need) &&
       (m.length === undefined ||
-        (finite(m.length?.value) &&
-          m.length.value > 0 &&
+        (m.length?.value > 0 &&
+          finite(m.length.value) &&
           typeof m.length.unit === 'string')) &&
       (!m.result ||
         (pointList(m.result.pts) &&
@@ -266,9 +264,6 @@ export function validateMarks(b) {
   });
   return out;
 }
-
-const same = (a, b) => Object.is(a, b);
-const near = (a, b) => Math.abs(a - b) <= 1e-6;
 
 /**
  * Reopen a record against the frames it was made on: refuse if a frame's pixels
@@ -285,22 +280,15 @@ export async function replay(record, frames) {
   if (record?.format === MARKS_FORMAT) {
     const problems = validateMarks(record);
     if (problems.length)
-      throw new ReplayError(
-        'invalid',
-        `the marks are not a record: ${problems[0]}`
-      );
+      throw new ReplayError('invalid', `bad marks: ${problems[0]}`);
     red = record;
   } else {
     const { validateArtifact } = await import('../platform/artifact.js');
     const problems = validateArtifact(record);
     if (problems.length)
-      throw new ReplayError(
-        'invalid',
-        `the record is not an envelope: ${problems[0].path} ${problems[0].message}`
-      );
+      throw new ReplayError('invalid', `bad envelope: ${problems[0].path}`);
     red = record.provenance.reductions.find(r => r.step === STEP);
-    if (!red)
-      throw new ReplayError('invalid', 'the record holds no image marks');
+    if (!red) throw new ReplayError('invalid', 'no image marks');
   }
   for (const [k, spec] of red.frames.entries()) {
     const f = frames[k];
@@ -310,10 +298,7 @@ export async function replay(record, frames) {
       f.height !== spec.height ||
       (await digestFrame(f)) !== spec.digest
     )
-      throw new ReplayError(
-        'image-changed',
-        `frame ${k + 1} (${spec.id}) is not the image this record was made on`
-      );
+      throw new ReplayError('image-changed', `frame ${k + 1} changed`);
   }
   let state = emptyState();
   const differ = [];
@@ -340,19 +325,16 @@ export async function replay(record, frames) {
       const r = refine(state, rec.id, frames).state.marks.find(
         m => m.id === rec.id
       );
-      const pairs = r.refined
-        ? r.pts.flatMap((p, i) => [
-            [p[0], rec.result.pts[i][0]],
-            [p[1], rec.result.pts[i][1]],
-          ])
-        : null;
+      const got = r.refined ? r.pts.flat() : null;
+      const want = rec.result.pts.flat();
       if (
-        !pairs ||
-        !pairs.every(([a, b]) => same(a, b)) ||
-        !same(r.sigma, rec.result.sigma)
+        !got ||
+        !got.every((a, i) => Object.is(a, want[i])) ||
+        !Object.is(r.sigma, rec.result.sigma)
       )
         differ.push(rec.id);
-      if (!pairs || !pairs.every(([a, b]) => near(a, b))) agrees = false;
+      if (!got || !got.every((a, i) => Math.abs(a - want[i]) <= 1e-6))
+        agrees = false;
       state = {
         ...state,
         marks: state.marks.map(m => (m.id === rec.id ? r : m)),

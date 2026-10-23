@@ -317,7 +317,7 @@ test.describe('the marks instrument: keyboard alone', () => {
     await press(act(page, 'refine'), page);
     await expect.poll(async () => (await said(page)).length).toBe(4);
     expect((await said(page))[3]).toMatch(
-      /m1 refined to x 30\.\d+, y 88\.\d+, uncertainty/
+      /m1 refined to x 30\.\d+, y 88\.\d+, ± 0\.\d+ px/
     );
   });
 
@@ -364,7 +364,7 @@ test.describe('the marks instrument: single pointer alone', () => {
     await tap(30, 88);
     await expect
       .poll(async () => (await said(page)).at(-1))
-      .toMatch(/Marker at x 3\d(\.\d+)?, y 8\d(\.\d+)?; nudge it, then Place/);
+      .toMatch(/Marker at x 3\d(\.\d+)?, y 8\d(\.\d+)?; nudge, then Place/);
     await act(page, 'up').tap();
     await act(page, 'right').tap();
     await act(page, 'place').tap();
