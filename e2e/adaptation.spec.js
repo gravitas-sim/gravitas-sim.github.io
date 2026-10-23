@@ -300,6 +300,17 @@ test.describe('opening an activity the lesson has moved under', () => {
     await expect(report).toBeVisible({ timeout: 30_000 });
     await expect(report).toContainText('made with an earlier version');
     await expect(report).toContainText('Where is the star?');
+    for (const width of [1280, 390]) {
+      await page.setViewportSize({ width, height: 900 });
+      for (const b of await report.getByRole('button').all()) {
+        const box = await b.boundingBox();
+        expect([width, box.height >= 24, box.width >= 24]).toEqual([
+          width,
+          true,
+          true,
+        ]);
+      }
+    }
 
     await report
       .getByRole('button', { name: 'Update it to the current investigation' })

@@ -123,8 +123,15 @@ test.describe('the preview matrix', () => {
       'href',
       '/course/?course=intro-astronomy&preview=student'
     );
-    const box = await link.boundingBox();
-    expect(box.height).toBeGreaterThanOrEqual(24);
+    for (const width of [1280, 390]) {
+      await page.setViewportSize({ width, height: 800 });
+      const box = await link.boundingBox();
+      expect([width, box.height >= 24, box.width >= 24]).toEqual([
+        width,
+        true,
+        true,
+      ]);
+    }
     await link.click();
     await expect(page.locator('#previewBanner')).toBeVisible();
   });
