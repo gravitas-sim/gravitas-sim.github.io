@@ -10,7 +10,7 @@
 
 export const ES_IMAGEDETECT = {
   'obs.dt.help':
-    'Encuentra las fuentes de la imagen: cada grupo de píxeles que sobresale del cielo local por el número de sigmas fijado abajo. Cada una recibe una posición, un tamaño, un brillo medido como en la herramienta de fotometría, una forma y avisos que dicen cuándo no fiarse de ella. Las fuentes que se tocan no se separan, y un campo muy poblado no es tarea de esta herramienta.',
+    'Encuentra las fuentes de la imagen: cada grupo de píxeles que sobresale del cielo local por el número de sigmas fijado abajo. Cada una recibe una posición, un tamaño, un brillo medido como en la herramienta de fotometría, una forma y avisos que dicen cuándo no fiarse de ella. Las fuentes que se tocan no se separan, y un campo muy poblado no es lo que hace esta herramienta.',
   'obs.dt.no.display-only':
     'Esta imagen es solo para mostrar: se puede marcar, pero encontrar fuentes necesita valores de píxel que midan luz, y los suyos se han estirado, recodificado o nunca tuvieron sus unidades anotadas.',
   'obs.dt.no.no-contract':

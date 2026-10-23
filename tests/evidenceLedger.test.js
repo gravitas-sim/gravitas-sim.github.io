@@ -616,10 +616,14 @@ describe('the submission token carries the ledger', () => {
       studentName: 'A Student',
     });
   // Every source's entry together holds more rows than a token carries
-  // (TOKEN_ROWS), so these leave out the calibration's one row; the cut to the
-  // limit is tested on its own below.
+  // (TOKEN_ROWS), so these leave out the calibration's and the PSF's one row
+  // each; the cut to the limit is tested on its own below.
   const withLedger = async (
-    entries = every().filter(e => e.source !== SOURCE.IMAGE_CALIBRATION)
+    entries = every().filter(
+      e =>
+        e.source !== SOURCE.IMAGE_CALIBRATION &&
+        e.source !== SOURCE.IMAGE_DETECTION
+    )
   ) => {
     const record = ledgerRecord(entries);
     const digest = await ledgerDigest(record);
