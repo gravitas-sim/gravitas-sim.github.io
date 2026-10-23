@@ -38,6 +38,7 @@ const SURFACE = {
   observatory: 'observatory',
   'inference-fit': 'observatory',
   comparison: 'observatory',
+  'image-marks': 'observatory',
   'sweep-analysis': 'experiments',
   'experiment-result': 'experiments',
   lab3d: 'lab3d',

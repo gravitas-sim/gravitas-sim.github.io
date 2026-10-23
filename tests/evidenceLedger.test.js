@@ -216,6 +216,28 @@ const every = () => [
       ],
     }),
   }),
+  // The marks on an image (js/measure/imageRecord.js, Prompt 179): replay and
+  // the instrument are covered in tests/imageMeasure.test.js; here only that
+  // it is an envelope the ledger can hold.
+  artifactEntry({
+    source: SOURCE.IMAGE_MARKS,
+    title: 'Marks',
+    capturedAt: at,
+    context: { page: 'observatory' },
+    envelope: artifact({
+      id: 'image-marks-1',
+      source: { kind: 'observation', id: 'frame', digest },
+      quantities: [
+        {
+          id: 'm1.x',
+          value: 30.2,
+          unit: 'pix',
+          uncertainty: { kind: 'sigma', sigma: 0.07, basis: 'data' },
+          origin: 'measured',
+        },
+      ],
+    }),
+  }),
   // A sweep's analysis and an experiment's result, which js/experiments/
   // analysisPanel.js keeps as envelopes (P75 R-5: the list used to omit them).
   ...[
