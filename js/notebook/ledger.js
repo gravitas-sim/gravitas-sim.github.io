@@ -435,6 +435,7 @@ export const ARTIFACT_SOURCES = [
   'image-marks',
   'image-calibration',
   'image-photometry',
+  'image-detection',
 ];
 
 /**

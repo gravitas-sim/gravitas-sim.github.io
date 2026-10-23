@@ -20,7 +20,7 @@
     "smoothing": {
       "kernel": "Gaussian of the stated FWHM, truncated at 3 sigma (radius ceil(3 sigma)), summing to 1",
       "edges": "the nearest edge pixel is repeated (astropy boundary 'extend'); a masked pixel is left out and the kernel renormalised over the pixels that remain",
-      "noiseScale": "the smoothed noise of a pixel is its local noise times the square root of the kernel's sum of squares"
+      "noiseScale": "the smoothed noise of a pixel is sqrt(sum of w^2 times the local noise squared) over the pixels its smoothed value draws on, with w the kernel weights as they land (a repeated edge pixel counts where it is repeated, a masked pixel is removed and the weights renormalised), so the threshold is the same number of sigma at the border and beside a mask as in the open field (revised before the kernel existed: one global sum of squares left the border rows about 1.3 times noisier than their threshold said, and false sources gathered along the edge)"
     },
     "detection": {
       "defaultFwhm": 3,

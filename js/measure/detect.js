@@ -780,6 +780,7 @@ export function fitStar(a, det, star, o = {}) {
     residualRms: rms,
     converged,
     iterations: iterations + 1,
+    start: { x: star.x, y: star.y, flux: star.flux, fwhm: star.fwhm },
   };
 }
 
@@ -941,4 +942,151 @@ export function measurePsf(a, det, stars, o = {}) {
       ? fits.reduce((s, f) => s + f.chi2red, 0) / fits.length
       : null,
   };
+}
+
+// ---- the record, its replay, the list as CSV and as marks ---------------------------
+
+export const STEP = 'image-psf';
+
+/**
+ * The PSF as the envelope's quantities and fit-result record (Prompt 150): the
+ * combined FWHM (and beta) with the uncertainty the fits give it, labelled
+ * model-limited, with a floor, when the reduced chi-square says the profile is
+ * not the model's; and the combination as a model (an inverse-variance mean)
+ * whose chi-square is the scatter of the stars about it.
+ */
+export function psfRecord(psf) {
+  const parts = [
+    ['psf.fwhm', 'PSF FWHM', 'pix', psf.fwhm, psf.stars.map(s => s.fwhm)],
+  ];
+  if (psf.beta)
+    parts.push([
+      'psf.beta',
+      'Moffat beta',
+      '',
+      psf.beta,
+      psf.stars.map(s => s.beta),
+    ]);
+  const quantities = parts.map(([id, label, unit, c]) => ({
+    id,
+    label,
+    value: c.mean,
+    unit,
+    origin: 'fitted',
+    uncertainty: psf.modelLimited
+      ? {
+          kind: 'model-limited',
+          basis: 'scaled',
+          sigma: c.sigma,
+          floor: c.sigma * Math.sqrt(Math.max(1, psf.chi2red ?? 1)),
+        }
+      : { kind: 'sigma', basis: c.scaled ? 'scaled' : 'data', sigma: c.sigma },
+  }));
+  const order = parts.map(p => p[0]);
+  const spread = parts[0][4];
+  const m = parts[0][3].mean;
+  return {
+    quantities,
+    fit: {
+      model: { id: `psf-${psf.model}-mean`, version: '1' },
+      parameters: order,
+      covariance: {
+        order,
+        values: parts.map((p, i) =>
+          parts.map((_, j) => (i === j ? p[3].sigma ** 2 : 0))
+        ),
+        units: parts.map(p => p[2]),
+      },
+      statistic: {
+        name: 'chi2',
+        value: parts[0][3].chi2,
+        dof: Math.max(0, parts[0][3].dof),
+      },
+      residuals: {
+        n: spread.length,
+        rms: Math.sqrt(
+          spread.reduce((s, v) => s + (v - m) ** 2, 0) / spread.length
+        ),
+      },
+      convergence: { converged: psf.stars.every(s => s.converged) },
+      rank: {
+        free: order.length,
+        rank: order.length,
+        status: 'full',
+        notConstrained: [],
+      },
+    },
+  };
+}
+
+/** What lets a PSF be run again: the frame's identity, the detection's settings, the stars and the model. */
+export function reductionOf(frame, digest, det, psf, o = {}) {
+  return {
+    step: STEP,
+    version: VERSION,
+    route: det.route,
+    unit: det.unit,
+    frame: { id: frame.id, width: frame.width, height: frame.height, digest },
+    detection: det.params,
+    model: psf.model,
+    weights: psf.weights,
+    stars: psf.stars.map(s => ({ id: s.id, ...s.start })),
+    result: {
+      fwhm: psf.fwhm.mean,
+      sigma: psf.fwhm.sigma,
+      ...(psf.beta ? { beta: psf.beta.mean } : {}),
+    },
+    ...o,
+  };
+}
+
+/**
+ * Run a record again on the frame now open: refuse if its pixels changed, then
+ * detect, fit the same stars and say whether the FWHM is bit-identical or
+ * within a part in 1e9 (another browser's Math.exp).
+ */
+export async function replay(red, frame, { check, digest }) {
+  if (
+    frame.width !== red.frame.width ||
+    frame.height !== red.frame.height ||
+    (await digest(frame)) !== red.frame.digest
+  )
+    return refuse('image-changed');
+  const a = adapt(frame, check);
+  if (!a.ok) return a;
+  const det = detectIn(a, red.detection);
+  if (!det.ok) return det;
+  const psf = measurePsf(a, det, red.stars, {
+    model: red.model,
+    weights: red.weights,
+  });
+  if (!psf.ok) return psf;
+  const got = psf.fwhm.mean;
+  const want = red.result.fwhm;
+  return {
+    ok: true,
+    identical: Object.is(got, want),
+    agrees: Math.abs(got - want) <= 1e-9 * Math.max(1, Math.abs(want)),
+  };
+}
+
+/** The source list as CSV rows through js/csv.js; the header is the reader's words. */
+export function csvRows(det, header, num) {
+  return [
+    header,
+    ...det.sources.map(s => [
+      s.id,
+      num(s.x + 1),
+      num(s.y + 1),
+      num(s.area),
+      num(s.peak),
+      num(s.flux ?? NaN),
+      num(s.fluxSigma ?? NaN),
+      num(s.snr ?? NaN),
+      num(s.ellipticity ?? NaN),
+      num(s.orientation ?? NaN),
+      num(s.fwhm ?? NaN),
+      s.flags.join(' '),
+    ]),
+  ];
 }

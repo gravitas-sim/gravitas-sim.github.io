@@ -5,18 +5,18 @@
   "legs": {
     "a4.profile.z": {
       "bound": 4,
-      "ceiling": 4.6,
-      "cause": "The largest |z| of 250 values (25 frames, 10 bins) is 4.26 where the bound says 4, and it is in the innermost bin (radius under 0.5 pixel), which holds one to six pixels from only some of a frame's twelve stars, so its standard error is estimated from two to five values: z there is Student t with 1 to 4 degrees of freedom and its root mean square is 1.13 against 0.2 to 0.9 in the other nine bins. The bound treated z as a normal statistic. Row x.a4.profile.zRms gives the signed z over all values (mean near 0, root mean square 0.77) and the half-maximum width agrees to 1.7 percent (a4.profile.width passes). Left as committed."
+      "cause": "The largest |z| of 250 values (25 frames, 10 bins) is 4.26 where the bound says 4, and it is in the innermost bin (radius under 0.5 pixel), which holds one to six pixels from only some of a frame's twelve stars, so its standard error is estimated from two to five values: z there is Student t with 1 to 4 degrees of freedom and its root mean square is 1.13 against 0.2 to 0.9 in the other nine bins. The bound treated z as a normal statistic. Row x.a4.profile.zRms gives the signed z over all values (mean near 0, root mean square 0.77) and the half-maximum width agrees to 1.7 percent (a4.profile.width passes). Left as committed.",
+      "measured": 4.256
     },
     "b3.fwhmGaussian": {
       "bound": 0.0001,
-      "ceiling": 0.0002,
-      "cause": "The largest relative difference between this kernel and photutils.psf.fit_fwhm over 60 fits is 1.3e-4. fit_fwhm runs scipy's TRF at its default tolerances (about 1e-8 on the cost, which is about 1e-4 on a parameter) and exposes none of them. The same objective minimised by scipy least_squares over the same photutils model at tolerances of 1e-15 agrees with fit_fwhm to the same 1.3e-4 and with this kernel to better than 1e-6 (row x.b3.fwhmGaussianTight; the oracle's results carry it as fwhmTight). The leg's bound was tighter than the oracle's own convergence; it is left as committed."
+      "cause": "The largest relative difference between this kernel and photutils.psf.fit_fwhm over 60 fits is 1.3e-4. fit_fwhm runs scipy's TRF at its default tolerances (about 1e-8 on the cost, which is about 1e-4 on a parameter) and exposes none of them. The same objective minimised by scipy least_squares over the same photutils model at tolerances of 1e-15 agrees with fit_fwhm to the same 1.3e-4 and with this kernel to better than 1e-6 (row x.b3.fwhmGaussianTight; the oracle's results carry it as fwhmTight). The leg's bound was tighter than the oracle's own convergence; it is left as committed.",
+      "measured": 0.0001323
     },
     "d8.modelLimited.moffat": {
       "bound": 0.95,
-      "floor": 0,
-      "cause": "The Gaussian fitted to Moffat stars of beta 2 and 20000 electrons has a reduced chi-square with median 1.25 and 90th percentile 1.40 (largest 1.64), below the committed label threshold of 1.5 for about 97 of 100 stars, while the fitted FWHM is about 30 percent too wide (3.9 for 3.0). The wings of a Moffat sit below the sky noise, so a chi-square over the whole cutout does not see a misfit that moves the width this much. The label is therefore a weak detector of the wrong profile family: a reduced chi-square above 1.5 means model-limited, a value below it does not mean the model is right. The page says so beside the number and offers both models, and the difference of their FWHMs is the practical check; no leg validates that comparison. Left as committed."
+      "cause": "The Gaussian fitted to Moffat stars of beta 2 and 20000 electrons has a reduced chi-square with median 1.25 and 90th percentile 1.40 (largest 1.64), below the committed label threshold of 1.5 for about 97 of 100 stars, while the fitted FWHM is about 30 percent too wide (3.9 for 3.0). The wings of a Moffat sit below the sky noise, so a chi-square over the whole cutout does not see a misfit that moves the width this much. The label is therefore a weak detector of the wrong profile family: a reduced chi-square above 1.5 means model-limited, a value below it does not mean the model is right. The page says so beside the number and offers both models, and the difference of their FWHMs is the practical check; no leg validates that comparison. Left as committed.",
+      "measured": 0.01
     }
   }
 }

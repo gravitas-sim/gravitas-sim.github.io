@@ -3704,7 +3704,6 @@ export const EN_DEFERRED = {
   'specW.row.limits': 'What four spectra are',
   'specW.value.limits':
     'Four examples, one per letter. Not an atlas, not a survey, and not a representative sample of anything — four stars that happened to be observed.',
-
   // The Stellar Lab's evidence
   'nb.source.stellar-lab': 'Stellar Lab',
   'nb.source.binary-orbit': 'Binary orbit',
@@ -3718,6 +3717,7 @@ export const EN_DEFERRED = {
   'nb.source.image-marks': 'Marks on an image',
   'nb.source.image-calibration': 'Sky coordinates for an image',
   'nb.source.image-photometry': 'Photometry on an image',
+  'nb.source.image-detection': 'Point-spread function of an image',
   'nb.flag.missionModel':
     'impulsive burns, patched conics and point masses: a teaching model of a mission',
   'nb.flag.notOperational': 'not for operational mission design or navigation',

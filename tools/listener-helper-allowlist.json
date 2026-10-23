@@ -10,6 +10,7 @@
     "js/observatory/formulaPanel.js",
     "js/observatory/guidePanel.js",
     "js/observatory/imageCalibration.js",
+    "js/observatory/imageDetect.js",
     "js/observatory/imageMarks.js",
     "js/observatory/imagePhotometry.js",
     "js/observatory/measurePanel.js",

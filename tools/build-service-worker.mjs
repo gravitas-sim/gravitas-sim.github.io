@@ -281,6 +281,13 @@ export const NEVER_PRECACHED = [
   // the panel says it needs the network (the marks instrument beside it stays
   // an idle-tier file). D-R10-56.
   /^(js\/measure\/photometry\.js|js\/observatory\/imagePhotometry\.js|js\/i18n\/(en|es)\.imagePhotometry\.js)$/,
+  // Sources and the width of the stars (Prompt 183, DETECTION.md): the
+  // detection kernel, the panel and its words, fetched when a reader opens the
+  // Observatory's sources panel on an image. Same reason as the two above: the
+  // idle tier has no room under a data-budget ceiling the standing size
+  // approval does not cover, so none of the files is installed and the panel
+  // says it needs the network the first time. D-R10-60.
+  /^(js\/measure\/detect\.js|js\/observatory\/imageDetect\.js|js\/i18n\/(en|es)\.imageDetect\.js)$/,
   // The validation suite's groups and harness: fetched when the suite runs,
   // like physicsChecks.js itself (ON_DEMAND_ONLY below).
   /^js\/validation\/(groups\/|harness\.js$)/,
