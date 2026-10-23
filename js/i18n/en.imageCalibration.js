@@ -8,7 +8,7 @@
 
 export const EN_IMAGECALIBRATION = {
   'obs.cal.intro':
-    'Put sky coordinates on this image from stars you can name. Give at least three reference stars: where each is in the picture (in pixels, 1 at the centre of the first pixel, y up) and where it is on the sky. The tool fits a tangent-plane projection with a scale, a rotation and, if you allow it, a skew, and shows what is left over.',
+    'Put sky coordinates on this image from stars you can name. Give at least three reference stars: where each is in the picture (in pixels, 1 at the center of the first pixel, y up) and where it is on the sky. The tool fits a tangent-plane projection with a scale, a rotation and, if you allow it, a skew, and shows what is left over.',
   'obs.cal.limits':
     'This is a linear fit with no distortion terms, so it suits a field of a few degrees or less; a wide field or a distorted image will show it in the residuals. A reading of any position through it is only as good as the stars that fix it.',
   'obs.cal.table': 'Reference stars',
@@ -51,11 +51,11 @@ export const EN_IMAGECALIBRATION = {
   'obs.cal.lookupNone':
     'Name a star in a row, and leave its sky position empty, to look it up.',
   'obs.cal.lookupDone':
-    '{found} positions looked up in the bright-star catalogue.',
+    '{found} positions looked up in the bright-star catalog.',
   'obs.cal.lookupSome':
     '{found} positions looked up; not found, or not one star: {missing}.',
   'obs.cal.lookupFailed':
-    'The bright-star catalogue could not be fetched. Type the positions instead.',
+    'The bright-star catalog could not be fetched. Type the positions instead.',
   'obs.cal.refuse.cell':
     'Star {n}: the {field} is not a number the tool can read.',
   'obs.cal.refuse.tangent':
@@ -93,7 +93,7 @@ export const EN_IMAGECALIBRATION = {
   'obs.cal.verdict.consistent':
     'The residuals are consistent with the stated uncertainties (chi-squared {chi2} for {dof} degrees of freedom, p = {p}).',
   'obs.cal.verdict.inconsistent':
-    'The residuals are too large for the stated uncertainties (chi-squared {chi2} for {dof} degrees of freedom, p = {p}). Check that each star is matched to the right catalogue entry, and the pixel positions.',
+    'The residuals are too large for the stated uncertainties (chi-squared {chi2} for {dof} degrees of freedom, p = {p}). Check that each star is matched to the right catalog entry, and the pixel positions.',
   'obs.cal.verdict.exact':
     'The stars fix the numbers exactly: no degree of freedom is left, so the residuals are zero and nothing checks the match. Add stars to check it.',
   'obs.cal.verdictShort.consistent': 'consistent',
@@ -154,8 +154,8 @@ export const EN_IMAGECALIBRATION = {
   'obs.cal.q.rotation': 'Position angle of the +y axis, east of north',
   'obs.cal.q.skew': 'Skew of the axes from a right angle',
   'obs.cal.q.axisRatio': 'x scale over y scale',
-  'obs.cal.q.centre.ra': 'Right ascension of the image centre',
-  'obs.cal.q.centre.dec': 'Declination of the image centre',
+  'obs.cal.q.centre.ra': 'Right ascension of the image center',
+  'obs.cal.q.centre.dec': 'Declination of the image center',
   'obs.cal.q.rms': 'rms residual of the reference stars',
   'obs.cal.q.chi2': 'Chi-squared of the residuals',
   'obs.cal.q.dof': 'Degrees of freedom',

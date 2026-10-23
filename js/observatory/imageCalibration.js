@@ -42,6 +42,7 @@ import {
 } from '../measure/calibrationRecord.js';
 import { loadStarFile } from '../kernels/sky/packs.js';
 import { columnOf } from './schema.js';
+import { decimalSeparatorFor } from '../answerParse.js';
 import { roundSig } from '../format.js';
 
 const WORDS = {
@@ -337,6 +338,8 @@ export async function mountCalibration(box, ctx) {
 
   // ---- reading the table -----------------------------------------------------------
   const hours = () => coords.value === 'hms';
+  const lang = () => ctx.language?.() ?? 'en';
+  const comma = () => decimalSeparatorFor(lang()) === ',';
   /** The stars of the table, or the first thing wrong with it. */
   function readRows() {
     const stars = [];
@@ -350,18 +353,20 @@ export async function mountCalibration(box, ctx) {
         code: 'cell',
         data: { n, field: t(`obs.cal.col.${f}`) },
       });
-      const x = v.x === '' ? NaN : Number(v.x);
-      const y = v.y === '' ? NaN : Number(v.y);
+      const cell = f => tr.querySelector(`[data-f="${f}"]`);
+      // A number field's value is the browser's own (a point, whatever the language).
+      const x = cell('x').valueAsNumber;
+      const y = cell('y').valueAsNumber;
       if (!Number.isFinite(x)) return { error: bad('x') };
       if (!Number.isFinite(y)) return { error: bad('y') };
-      const ra = parseAngle(v.ra, { hours: hours() });
-      const dec = parseAngle(v.dec);
+      const ra = parseAngle(v.ra, { hours: hours(), comma: comma() });
+      const dec = parseAngle(v.dec, { comma: comma() });
       if (!Number.isFinite(ra)) return { error: bad('ra') };
       if (!Number.isFinite(dec)) return { error: bad('dec') };
       const star = { id: v.name || String(n), x, y, ra, dec };
       if (v.name) star.name = v.name;
       if (v.sigma !== '') {
-        const s = Number(v.sigma);
+        const s = cell('sigma').valueAsNumber;
         if (!(s > 0)) return { error: bad('sigma') };
         star.sigma = s;
       }
@@ -555,8 +560,8 @@ export async function mountCalibration(box, ctx) {
     chosen === 'fit' ? fit?.wcs : chosen === 'header' ? headerWcs : null;
   function showSky() {
     const w = wcsNow();
-    const x = Number(pxIn.value);
-    const y = Number(pyIn.value);
+    const x = pxIn.valueAsNumber;
+    const y = pyIn.valueAsNumber;
     if (
       !w ||
       pxIn.value === '' ||
@@ -574,8 +579,8 @@ export async function mountCalibration(box, ctx) {
   }
   function showPixel() {
     const w = wcsNow();
-    const ra = parseAngle(raIn.value, { hours: hours() });
-    const dec = parseAngle(decIn.value);
+    const ra = parseAngle(raIn.value, { hours: hours(), comma: comma() });
+    const dec = parseAngle(decIn.value, { comma: comma() });
     const p =
       w && Number.isFinite(ra) && Number.isFinite(dec)
         ? pixelOf(w, ra, dec)
@@ -603,15 +608,15 @@ export async function mountCalibration(box, ctx) {
     if (read.error) return refuse(read.error.code, read.error.data);
     let tangent;
     if (tanRa.value.trim() || tanDec.value.trim()) {
-      const a = parseAngle(tanRa.value, { hours: hours() });
-      const d = parseAngle(tanDec.value);
+      const a = parseAngle(tanRa.value, { hours: hours(), comma: comma() });
+      const d = parseAngle(tanDec.value, { comma: comma() });
       if (!Number.isFinite(a) || !Number.isFinite(d) || d < -90 || d > 90)
         return refuse('tangent');
       tangent = [a, d];
     }
     const f = fitWcs(read.stars, {
       model: model.value,
-      parity: Number(parity.value),
+      parity: parity.value === '1' ? 1 : -1,
       tangent,
     });
     if (!f.ok) {

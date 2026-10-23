@@ -922,9 +922,10 @@ export function carryWcs(wcs, reg) {
  * `-5 23 28.1`): degrees, or hours for a right ascension when `hours` is set.
  * NaN when it is neither.
  */
-export function parseAngle(text, { hours = false } = {}) {
+export function parseAngle(text, { hours = false, comma = false } = {}) {
   const t = String(text ?? '')
     .trim()
+    .replace(/,/g, comma ? '.' : ',')
     .replace(/[°′″'"]/g, ' ')
     .replace(/[hdms:]/gi, ' ')
     .replace(/\s+/g, ' ')

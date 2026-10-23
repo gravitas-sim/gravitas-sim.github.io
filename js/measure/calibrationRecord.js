@@ -5,7 +5,7 @@
 // places a record lives, as Prompt 179's marks do:
 //   the ledger     a gravitas.artifact/1 (Prompt 150): the reference position,
 //                  reference pixel, scale, rotation and skew each with its
-//                  sigma, the residual rms and chi-squared, the frame centre's
+//                  sigma, the residual rms and chi-squared, the frame center's
 //                  sky position; in the provenance the whole reduction, so it
 //                  can be run again (replay)
 //   the workspace  `workspace.calibration`, a gravitas.image-calibration/1
@@ -67,9 +67,9 @@ export function catalogOf({ doc, mjd, typed } = {}) {
 
 /** An image's time as a Modified Julian Date, or NaN: {value, format?: 'mjd'|'jd'|'iso'} (the scale is not needed to move a star's proper motion). */
 export function mjdOf(time) {
-  if (!time || (time.format !== 'iso' && !Number.isFinite(Number(time.value))))
-    return NaN;
+  if (!time) return NaN;
   const v = time.value;
+  if (time.format !== 'iso' && !Number.isFinite(Number(v))) return NaN;
   if (time.format === 'iso')
     return Date.parse(String(v).endsWith('Z') ? v : `${v}Z`) / 86400000 + 40587;
   return time.format === 'jd' ? Number(v) - 2400000.5 : Number(v);
@@ -264,7 +264,7 @@ export function quantitiesOf(block) {
     );
     add(
       'centre.ra',
-      'right ascension of the frame centre',
+      'right ascension of the frame center',
       sky.ra,
       'deg',
       'derived',
@@ -272,7 +272,7 @@ export function quantitiesOf(block) {
     );
     add(
       'centre.dec',
-      'declination of the frame centre',
+      'declination of the frame center',
       sky.dec,
       'deg',
       'derived',
@@ -354,7 +354,7 @@ export function quantitiesOf(block) {
   const cosd = Math.cos((sky.dec * Math.PI) / 180);
   add(
     'centre.ra',
-    'right ascension of the frame centre',
+    'right ascension of the frame center',
     sky.ra,
     'deg',
     'derived',
@@ -362,7 +362,7 @@ export function quantitiesOf(block) {
   );
   add(
     'centre.dec',
-    'declination of the frame centre',
+    'declination of the frame center',
     sky.dec,
     'deg',
     'derived',
