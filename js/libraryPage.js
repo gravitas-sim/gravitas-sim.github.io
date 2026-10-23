@@ -46,6 +46,7 @@ import {
 import { mountShell } from './shell.js';
 import { ID_COURSE_PACK, KEY_COLLECTIONS, KEY_NEXT_CONTEXT } from './names.js';
 import {
+  get,
   noteResume,
   put,
   readJson,
@@ -508,7 +509,7 @@ async function fillCollections() {
   const box = $('libCollections');
   let any = false;
   try {
-    any = localStorage.getItem(KEY_COLLECTIONS) !== null;
+    any = get(KEY_COLLECTIONS) !== null;
   } catch {
     /* no storage: nothing is kept */
   }

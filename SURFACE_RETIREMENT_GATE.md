@@ -212,7 +212,7 @@ Counts first, then every surface. "Links / Library / cited" are the shipped inve
 | `gravitas.mission-plan` | download, My work | yes | 3 | record | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
 | `gravitas.ephemeris-pack` | repository | yes | 7 | none | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
 | `investigation progress` | localStorage | yes | 5 | record | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
-| `gravitas.investigation.progress` | download | yes | 10 | record | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
+| `gravitas.investigation.progress` | download | yes | 11 | record | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
 | `gravitas.lab3d-guide-report` | download | yes | 1 | record | **KEEP** (R3b) | Keep. Written for a person to read; Prompt 290 gives it a schema or says in words that it has none. |
 | `gravitas.mission-lab-report` | download | yes | 1 | record | **KEEP** (R3b) | Keep. Written for a person to read; Prompt 290 gives it a schema or says in words that it has none. |
 | `notebook store` | localStorage | yes | 10 | record | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
@@ -236,19 +236,19 @@ Counts first, then every surface. "Links / Library / cited" are the shipped inve
 <!-- surface-gate:evidence -->
 | Item | Source lines · tests · generated · strings · precache KB · axe rows | Measured by |
 | --- | --- | --- |
-| Sandbox | 76404 · 248 · 0 · 0 · 977.2 · 0 | pages `index.html` |
-| 3-D lab | 11016 · 16 · 0 · 544 · 232.3 · 2 | pages `3d/index.html` |
-| Mission lab | 5684 · 10 · 0 · 445 · 192.7 · 1 | pages `mission/lab/index.html` |
+| Sandbox | 77365 · 249 · 0 · 0 · 979.3 · 0 | pages `index.html` |
+| 3-D lab | 11020 · 16 · 0 · 544 · 232.4 · 2 | pages `3d/index.html` |
+| Mission lab | 5688 · 10 · 0 · 445 · 192.8 · 1 | pages `mission/lab/index.html` |
 | Scenario Studio | 1759 · 8 · 0 · 172 · 25.2 · 1 | pages `studio/index.html` |
-| Library | 2045 · 13 · 0 · 0 · 24.8 · 5 | pages `library/index.html` |
-| Courses | 1159 · 8 · 0 · 68 · 18 · 1 | pages `course/index.html` |
-| Observatory | 22104 · 63 · 0 · 230 · 326.7 · 1 | pages `observatory/index.html` |
-| Experiments | 5798 · 22 · 0 · 119 · 68.5 · 1 | pages `experiments/index.html` |
+| Library | 2054 · 14 · 0 · 0 · 24.9 · 5 | pages `library/index.html` |
+| Courses | 1163 · 9 · 0 · 68 · 18 · 1 | pages `course/index.html` |
+| Observatory | 22108 · 63 · 0 · 230 · 326.8 · 1 | pages `observatory/index.html` |
+| Experiments | 5802 · 22 · 0 · 119 · 68.5 · 1 | pages `experiments/index.html` |
 | Sky Lab | 2182 · 5 · 0 · 119 · 33.6 · 0 | pages `sky/index.html` |
 | Compute page | 4027 · 12 · 0 · 0 · 0 · 0 | pages `compute/index.html`, `compute-frame/index.html` |
-| Catalog | 891 · 6 · 1 · 94 · 14.4 · 1 | pages `catalog/index.html` |
+| Catalog | 895 · 6 · 1 · 94 · 14.5 · 1 | pages `catalog/index.html` |
 | Figure builder | 1068 · 2 · 0 · 67 · 12.8 · 1 | pages `figure/index.html` |
-| My work | 2600 · 23 · 0 · 0 · 32.5 · 1 | pages `my-work/index.html` |
+| My work | 2600 · 24 · 0 · 0 · 32.5 · 1 | pages `my-work/index.html` |
 | Teaching with Gravitas | 477 · 12 · 0 · 0 · 0 · 1 | pages `teaching/index.html` |
 | Instructor resources | 290 · 7 · 0 · 0 · 0 · 1 | pages `instructors/index.html` |
 | Submission review | 5793 · 21 · 0 · 0 · 66.2 · 1 | pages `instructors/submissions/index.html` |

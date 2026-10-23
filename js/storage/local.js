@@ -1,5 +1,6 @@
 import {
   KEY_ASSIGNMENT_PREFIX,
+  KEY_COLLECTIONS,
   KEY_COURSE_LEVEL,
   KEY_COURSE_PREFIX,
   KEY_COURSE_PREVIEW,
@@ -22,6 +23,7 @@ const area = s => s ?? (globalThis.window ?? globalThis).localStorage;
 // record in memory, so nothing is read from or written to it.
 export const RECORD_KEYS = [
   KEY_ASSIGNMENT_PREFIX,
+  KEY_COLLECTIONS,
   KEY_COURSE_PREFIX,
   KEY_EVIDENCE_NOTEBOOK,
   KEY_EXPERIMENT,

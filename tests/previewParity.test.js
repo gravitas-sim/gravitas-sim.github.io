@@ -170,6 +170,11 @@ describe('the guard in the storage module', () => {
       const text = readFileSync(file, 'utf8');
       if (!/localStorage\??\.(setItem|removeItem)/.test(text)) continue;
       if (names.some(n => text.includes(n))) offenders.push(file);
+      // The collections record is named in files that also write other keys
+      // by hand (the next-step context), so it is judged by the call.
+      const call =
+        /localStorage\??\.(?:setItem|removeItem)\(\s*KEY_COLLECTIONS/;
+      if (call.test(text)) offenders.push(file);
     }
     expect(offenders).toEqual([]);
   });
