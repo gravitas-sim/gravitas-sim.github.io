@@ -39,7 +39,11 @@ const TAGS = [
   'wcag22aa',
   'best-practice',
 ];
-const FACTOR = Number(process.env.GRAVITAS_IMAGE_TIMING_FACTOR ?? 2);
+// Page timings are held to BOUNDS as written; a shared CI runner gets twice the
+// time (the bounds were set on a laptop), and the override is for a loaded machine.
+const FACTOR = Number(
+  process.env.GRAVITAS_IMAGE_TIMING_FACTOR ?? (process.env.CI ? 2 : 1)
+);
 const fits = JSON.parse(
   readFileSync(
     new URL(
@@ -176,6 +180,10 @@ test.describe('every file of the corpus is refused in words, in time, and nothin
             ''
           );
       }
+      test.info().annotations.push({
+        type: 'measured',
+        description: `${cases.length} files, slowest ${slowest.ms} ms (${slowest.name})`,
+      });
       expect(slowest.ms, `slowest: ${slowest.name}`).toBeLessThan(
         BOUNDS.refusalMsPage * FACTOR
       );
@@ -389,23 +397,30 @@ test.describe('bounds', () => {
     await openPage(page);
     const n = 2048;
     const big = fitsImage({
-      bitpix: 16,
+      bitpix: -64,
       width: n,
       height: n,
-      values: Int16Array.from({ length: n * n }, (_, i) => (i * 7919) % 30000),
+      values: Float64Array.from(
+        { length: n * n },
+        (_, i) => (i * 7919) % 30000
+      ),
     });
     const t0 = Date.now();
     await choose(page, file('big.fits', big));
     await expect(panel(page).locator('#obsImpFields')).toBeVisible({
       timeout: 60_000,
     });
+    // The bound is chosen to shown, as the gate wrote it (BOUNDS).
+    const shown = Date.now() - t0;
     await expect(panel(page).locator('dl')).toContainText('2048 by 2048');
     expect((await ledger(page)).bytes).toBe(0);
+    const t1 = Date.now();
     await panel(page).locator('#obsImpOpen').click();
     await expect(page.locator('#obsWork')).toBeVisible({ timeout: 60_000 });
     await page.waitForFunction(
       () => Number(document.documentElement.dataset.opens) >= 1
     );
+    const opened = Date.now() - t1;
     // Too many pixels for a saved workspace to read back: saving is off, with the reason.
     await expect(page.locator('#obsExportJson')).toBeDisabled();
     await expect(page.locator('#obsExportCsv')).toBeDisabled();
@@ -418,7 +433,11 @@ test.describe('bounds', () => {
     await page.locator('#obsOpen').click();
     await expect(page.locator('#obsExportJson')).toBeEnabled();
     await expect(page.locator('#obsImageSaveNote')).toBeHidden();
-    expect(Date.now() - t0).toBeLessThan(BOUNDS.largestOpenMsPage * FACTOR * 4);
+    test.info().annotations.push({
+      type: 'measured',
+      description: `2048 x 2048 BITPIX -64 (33.5 MB): chosen to shown ${shown} ms, then opened in ${opened} ms`,
+    });
+    expect(shown).toBeLessThan(BOUNDS.largestOpenMsPage * FACTOR);
   });
 
   test('a cancelled read ends its Worker, empties the ledger and keeps nothing', async ({
