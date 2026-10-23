@@ -54,6 +54,7 @@ export const DEFAULTS = Object.freeze({
   level: 0.6827,
   model: 'gaussian',
   beta: 2.5,
+  fwhm: DETECT.fwhm,
 });
 /** What a curve must share with the frame it is used on (INJECTION.md). */
 export const APPLIES = Object.freeze({ fwhm: 0.1, noise: 0.1 });

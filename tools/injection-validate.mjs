@@ -1048,7 +1048,7 @@ export function runValidation() {
     id: 'g1.authentic',
     measured: null,
     pass: null,
-    note: C['g1.authentic'].bound,
+    note: 'NOT RUN until Prompt 189 has landed an authentic image pack',
   });
   return rows.slice();
 }
