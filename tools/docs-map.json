@@ -240,6 +240,13 @@
       "student": false
     },
     {
+      "file": "DETECTION.md",
+      "kind": "feature",
+      "purpose": "Source detection and the point-spread function over the photometry adapter: the algorithm, the limits, the oracle and the validation (Prompt 183).",
+      "owner": 183,
+      "student": false
+    },
+    {
       "file": "DOCUMENTS.md",
       "kind": "front-door",
       "purpose": "The map of every root document and every generated artifact.",

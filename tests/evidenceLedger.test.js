@@ -301,6 +301,41 @@ const every = () => [
       ],
     }),
   }),
+  // The PSF of an image (js/measure/detect.js, Prompt 183): its replay and the
+  // tool are covered in tests/detection.test.js; here only that it is an
+  // envelope the ledger can hold, with a fit-result record in it.
+  artifactEntry({
+    source: SOURCE.IMAGE_DETECTION,
+    title: 'PSF',
+    capturedAt: at,
+    context: { page: 'observatory' },
+    envelope: artifact({
+      id: 'image-psf-1',
+      source: { kind: 'observation', id: 'frame', digest },
+      quantities: [
+        {
+          id: 'psf.fwhm',
+          value: 3.02,
+          unit: 'pix',
+          uncertainty: { kind: 'sigma', sigma: 0.03, basis: 'data' },
+          origin: 'fitted',
+        },
+      ],
+      fit: {
+        model: { id: 'psf-gaussian-mean', version: '1' },
+        parameters: ['psf.fwhm'],
+        covariance: {
+          order: ['psf.fwhm'],
+          values: [[0.0009]],
+          units: ['pix'],
+        },
+        statistic: { name: 'chi2', value: 10.4, dof: 11 },
+        residuals: { n: 12, rms: 0.04 },
+        convergence: { converged: true },
+        rank: { free: 1, rank: 1, status: 'full', notConstrained: [] },
+      },
+    }),
+  }),
   // A sweep's analysis and an experiment's result, which js/experiments/
   // analysisPanel.js keeps as envelopes (P75 R-5: the list used to omit them).
   ...[
@@ -581,10 +616,14 @@ describe('the submission token carries the ledger', () => {
       studentName: 'A Student',
     });
   // Every source's entry together holds more rows than a token carries
-  // (TOKEN_ROWS), so these leave out the calibration's one row; the cut to the
-  // limit is tested on its own below.
+  // (TOKEN_ROWS), so these leave out the calibration's and the PSF's one row
+  // each; the cut to the limit is tested on its own below.
   const withLedger = async (
-    entries = every().filter(e => e.source !== SOURCE.IMAGE_CALIBRATION)
+    entries = every().filter(
+      e =>
+        e.source !== SOURCE.IMAGE_CALIBRATION &&
+        e.source !== SOURCE.IMAGE_DETECTION
+    )
   ) => {
     const record = ledgerRecord(entries);
     const digest = await ledgerDigest(record);

@@ -52,7 +52,7 @@
         "requests": 57
       },
       "observatory": {
-        "kb": 188.9,
+        "kb": 189.5,
         "requests": 17
       },
       "catalog": {
@@ -178,7 +178,7 @@
         "requests": 4
       },
       "observatory": {
-        "kb": 90.3,
+        "kb": 90.8,
         "requests": 5
       },
       "catalog": {
@@ -190,7 +190,7 @@
         "requests": 2
       },
       "my-work": {
-        "kb": 35.8,
+        "kb": 35.9,
         "requests": 3
       },
       "studio": {

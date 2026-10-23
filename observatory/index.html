@@ -115,9 +115,12 @@
       .ph-pic { display: block; width: 100%; max-width: 360px; height: auto; margin: var(--space-2) 0; image-rendering: pixelated; border-radius: var(--radius-sm); cursor: crosshair; touch-action: manipulation }
       #obsPhotoBody input[type='checkbox'] { flex: none; width: 24px; height: 24px }
       .ph-readout p { margin: var(--space-1) 0 }
+      .dt-pic { display: block; width: 100%; max-width: 480px; height: auto; margin: var(--space-2) 0; border-radius: var(--radius-sm) }
+      #obsDetectBody input[type='checkbox'] { flex: none; width: 24px; height: 24px }
+      #obsDetectBody .ow-plot { max-width: 720px }
       /* Touch measurement: 44 px handles on a touch screen. */
       @media (pointer: coarse) {
-        :is(#obsMarksBody, #obsPhotoBody) :is(button, select, input) {
+        :is(#obsMarksBody, #obsPhotoBody, #obsDetectBody) :is(button, select, input) {
           min-height: 44px;
           min-width: 44px;
         }
@@ -692,6 +695,11 @@ try {
         <details id="obsPhotoPanel" class="ui-card ui-disclosure ow-panel" hidden>
           <summary data-i18n="obs.ph.title">Photometry on the image</summary>
           <div id="obsPhotoBody"><p data-i18n="obs.ph.offline"></p></div>
+        </details>
+
+        <details id="obsDetectPanel" class="ui-card ui-disclosure ow-panel" hidden>
+          <summary data-i18n="obs.dt.title">Sources and the width of the stars</summary>
+          <div id="obsDetectBody"><p data-i18n="obs.dt.offline"></p></div>
         </details>
 
         <details id="obsMeasurePanel" class="ui-card ui-disclosure ow-panel">

@@ -622,6 +622,23 @@ export function mountMarks(root, ctx) {
       })
     );
   }
+  /** Detected sources as point marks; how many were added. */
+  function addPoints(list, tag) {
+    if (blocked || !frames.length) return 0;
+    const n = Math.max(
+      0,
+      Math.min(list.length, 2000 - store.state.marks.length)
+    );
+    let next = store.state;
+    for (const pt of list.slice(0, n))
+      next = place(next, { kind: 'point', frame: ui.frame, tag, pts: [pt] });
+    store.apply(next);
+    store.seal();
+    renderTable();
+    drawOverlay();
+    changed();
+    return n;
+  }
   /** The aim becomes a control point: the mark is made when it has all of them. */
   function confirm() {
     if (blocked || !frames.length) return;
@@ -1040,6 +1057,7 @@ export function mountMarks(root, ctx) {
     load,
     restore,
     block,
+    add: addPoints,
   };
 }
 
@@ -1068,6 +1086,10 @@ export async function mount(box, ctx) {
       box.addEventListener('toggle', () => box.open && p.api.update(p.cur));
       marks.block = view => (view?.id === p.cur?.id ? p.api.block() : null);
       marks.state = () => p.api.store.state;
+      marks.add = (list, tag) => {
+        p.api.update(p.cur);
+        return p.api.add(list, tag);
+      };
       return p;
     });
     panels.set(box, ready);

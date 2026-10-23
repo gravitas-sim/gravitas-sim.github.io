@@ -100,6 +100,11 @@ export const SOURCE = Object.freeze({
   // their uncertainties, and the request that runs it again
   // (js/observatory/imagePhotometry.js, js/measure/photometry.js).
   IMAGE_PHOTOMETRY: 'image-photometry',
+  // The point-spread function measured from the stars on an image: the
+  // combined FWHM (and Moffat beta) with its uncertainty as a fit-result
+  // record, and the request that runs it again
+  // (js/observatory/imageDetect.js, js/measure/detect.js).
+  IMAGE_DETECTION: 'image-detection',
 });
 
 /** The sources this build can capture from. */
@@ -124,6 +129,7 @@ export const SOURCES = [
   SOURCE.IMAGE_MARKS,
   SOURCE.IMAGE_CALIBRATION,
   SOURCE.IMAGE_PHOTOMETRY,
+  SOURCE.IMAGE_DETECTION,
 ];
 
 /** How long a student's prose may be, per field. */

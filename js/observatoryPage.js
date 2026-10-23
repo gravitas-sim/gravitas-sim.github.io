@@ -244,6 +244,15 @@ $('obsPhotoPanel').addEventListener('toggle', () => {
       () => (photo = null)
     );
 });
+// Sources and the width of the stars (DETECTION.md): loaded when first opened.
+let detect = null;
+$('obsDetectPanel').addEventListener('toggle', () => {
+  if ($('obsDetectPanel').open && state.view)
+    detect ??= import('./observatory/imageDetect.js').then(
+      m => m.mountDetect($('obsDetectBody'), { ...lent, marks, state }),
+      () => (detect = null)
+    );
+});
 // The archive import (ARCHIVE_IMPORT.md): loaded when first opened.
 let archive = null;
 $('obsArchivePanel').addEventListener('toggle', () => {
@@ -371,7 +380,12 @@ function renderAll() {
   renderAxes(o);
   const isImage = o.kind === 'image';
   $('obsPlotBox').hidden = isImage;
-  for (const id of ['obsImageBox', 'obsMarksPanel', 'obsPhotoPanel'])
+  for (const id of [
+    'obsImageBox',
+    'obsMarksPanel',
+    'obsPhotoPanel',
+    'obsDetectPanel',
+  ])
     $(id).hidden = !isImage;
   let drawn = null;
   if (isImage) {
@@ -415,6 +429,7 @@ function renderAll() {
   marks.cal?.update();
   measure?.then(p => p.update());
   photo?.then(p => p.update());
+  detect?.then(p => p.update());
   guide?.then(p => p.update());
   renderSelectionBar();
   $('obsUndo').disabled = !state.history.canUndo();

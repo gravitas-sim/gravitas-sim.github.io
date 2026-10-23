@@ -3628,6 +3628,7 @@ export const ES_DEFERRED = {
   'nb.source.image-marks': 'Marcas sobre una imagen',
   'nb.source.image-calibration': 'Coordenadas celestes de una imagen',
   'nb.source.image-photometry': 'Fotometría de una imagen',
+  'nb.source.image-detection': 'Función de dispersión de punto de una imagen',
   'nb.flag.missionModel':
     'impulsos instantáneos, cónicas empalmadas y masas puntuales: un modelo didáctico de una misión',
   'nb.flag.notOperational':
@@ -3729,7 +3730,6 @@ export const ES_DEFERRED = {
     'El final no sale de la traza. Es un resultado publicado citado para una estrella de esta masa: {cite}. Nada en Gravitas lo ha calculado.',
   'nb.stellar.limit.fitted':
     'La comparación se dibujó con cada estrella ajustada a su recuadro, así que los tamaños aparentes no son comparables.',
-
   // --- Words a lesson computes ----------------------------------------------
   // Here rather than in the start-up catalog because js/i18n/lesson.js is
   // the only module that reads them and js/investigations.js is the only
