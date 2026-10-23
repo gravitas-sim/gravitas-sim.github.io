@@ -63,10 +63,6 @@ import { createPlot } from './plot/plot.js';
 import { createImageView, decodeBits } from './observatory/image.js';
 import { createTable } from './plot/table.js';
 
-// The banner of a preview as a student (Prompt 175).
-if (globalThis.location?.search.includes('preview=student'))
-  import('./storage/banner.js');
-
 const $ = id => document.getElementById(id);
 
 const state = {

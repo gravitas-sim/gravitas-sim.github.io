@@ -48,7 +48,7 @@ export const EN_ADAPT = {
     'Rewritten, so answers saved to them are set aside: {steps}.',
   'adapt.report.removed': 'No longer in the investigation: {steps}.',
   'adapt.report.keep': 'Keep it as made',
-  'adapt.report.repin': 'Update it to the current lesson',
+  'adapt.report.repin': 'Update it to the current investigation',
   'adapt.report.kept': 'Kept as made.',
   'adapt.report.repinned':
     'A new activity with its own id: students on the old link start the rewritten steps afresh.',

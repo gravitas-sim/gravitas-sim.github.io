@@ -48,7 +48,7 @@ export const ES_ADAPT = {
     'Reescritos, así que las respuestas guardadas en ellos se dejan aparte: {steps}.',
   'adapt.report.removed': 'Ya no están en la investigación: {steps}.',
   'adapt.report.keep': 'Conservarla como se creó',
-  'adapt.report.repin': 'Actualizarla a la lección actual',
+  'adapt.report.repin': 'Actualizarla a la investigación actual',
   'adapt.report.kept': 'Se conserva como se creó.',
   'adapt.report.repinned':
     'Una actividad nueva con su propio id: quien use el enlace anterior empieza de cero los pasos reescritos.',
