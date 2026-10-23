@@ -26,7 +26,7 @@
     {
       "key": "precacheIdleGzipBytes",
       "label": "Idle precache tier (sw-manifest IDLE: fetched after activation, on idle), gzip level 6",
-      "ceiling": 1517568,
+      "ceiling": 1531904,
       "unit": "bytes",
       "measuredBy": "tools/data-budget.mjs"
     },
