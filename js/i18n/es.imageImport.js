@@ -19,6 +19,8 @@ export const ES_IMAGEIMPORT = {
     'Cancelado. Se detuvo la lectura, se liberó la memoria que ocupaba y no se guardó nada.',
   'obs.imp.close': 'Cerrar',
   'obs.imp.readerSays': 'En palabras del propio lector (en inglés):',
+  'obs.imp.noSave':
+    'Esta imagen tiene {n} píxeles. Un espacio de trabajo guardado escribe cada píxel como texto y vuelve a leer como máximo {max} filas, así que no se puede guardar; sus marcas y mediciones se pueden conservar en el cuaderno.',
   'obs.imp.ready': 'Se leyó {name}. Descríbelo y luego ábrelo.',
   'obs.imp.open': 'Abrir la imagen',
   'obs.imp.opened': 'Se abrió {name}: {w} por {h} píxeles.',

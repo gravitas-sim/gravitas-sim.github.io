@@ -1,3 +1,4 @@
+/* global createImageBitmap */
 // =============================================================================
 // Reading a PNG or a JPEG on the Worker pool (Prompt 188)
 // -----------------------------------------------------------------------------
@@ -117,7 +118,7 @@ export async function runRasterJob(msg, hooks = {}) {
     const bytes = new Uint8Array(msg.payload.buffer);
     const kind = sniff(bytes);
     if (kind !== 'png' && kind !== 'jpeg') throw unknownFormat(bytes);
-    const { width, height } = readRasterHeader(bytes, kind);
+    const { width, height, depth } = readRasterHeader(bytes, kind);
     if (
       typeof createImageBitmap !== 'function' ||
       typeof OffscreenCanvas !== 'function'
@@ -129,10 +130,13 @@ export async function runRasterJob(msg, hooks = {}) {
       );
     hooks.onProgress?.(0.1);
     try {
-      bitmap = await createImageBitmap(new Blob([bytes], { type: MIME[kind] }), {
-        colorSpaceConversion: 'none',
-        premultiplyAlpha: 'none',
-      });
+      bitmap = await createImageBitmap(
+        new Blob([bytes], { type: MIME[kind] }),
+        {
+          colorSpaceConversion: 'none',
+          premultiplyAlpha: 'none',
+        }
+      );
     } catch {
       return refused(
         echo,
@@ -140,39 +144,47 @@ export async function runRasterJob(msg, hooks = {}) {
         `the browser could not decode this ${kind === 'png' ? 'PNG' : 'JPEG'}: its pixel data is damaged or is not what its header says`
       );
     }
-    if (bitmap.width !== width || bitmap.height !== height)
+    // A decoder applies the file's orientation tag (a phone's rotated photo):
+    // the same pixels with the sides swapped. Any other size is a lie.
+    const rotated =
+      width !== height && bitmap.width === height && bitmap.height === width;
+    if (!rotated && (bitmap.width !== width || bitmap.height !== height))
       return refused(
         echo,
         'dimension-mismatch',
         `the header says ${width} by ${height} pixels and the decoder produced ${bitmap.width} by ${bitmap.height}`
       );
     hooks.onProgress?.(0.5);
-    const canvas = new OffscreenCanvas(width, height);
+    const [w, h] = [bitmap.width, bitmap.height];
+    const canvas = new OffscreenCanvas(w, h);
     const g = canvas.getContext('2d', { willReadFrequently: true });
     g.fillStyle = '#fff';
-    g.fillRect(0, 0, width, height);
+    g.fillRect(0, 0, w, h);
     g.drawImage(bitmap, 0, 0);
     bitmap.close();
     bitmap = null;
-    const rgba = g.getImageData(0, 0, width, height).data;
+    const rgba = g.getImageData(0, 0, w, h).data;
     hooks.onProgress?.(0.8);
-    const values = flipRows(
-      lumaPlane(rgba, width, height, hooks),
-      width,
-      height
-    );
+    const values = flipRows(lumaPlane(rgba, w, h, hooks), w, h);
     hooks.onProgress?.(1);
     return {
       result: {
         ...echo,
         status: 'ok',
-        image: { kind, width, height, values, decodedBytes: 8 * width * height },
+        image: {
+          kind,
+          width: w,
+          height: h,
+          values,
+          rotated,
+          depth: depth ?? 8,
+          decodedBytes: 8 * w * h,
+        },
       },
       transfer: [values.buffer],
     };
   } catch (e) {
-    if (e instanceof DataKindError)
-      return refused(echo, e.code, e.message);
+    if (e instanceof DataKindError) return refused(echo, e.code, e.message);
     throw e;
   } finally {
     bitmap?.close?.();

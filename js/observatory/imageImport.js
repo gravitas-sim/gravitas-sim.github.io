@@ -41,7 +41,7 @@ import {
   validateImage,
 } from '../dataKinds/contract.js';
 import { sniff, unknownFormat } from '../dataKinds/raster.js';
-import { createLedger, createPool } from '../workers/pool.js';
+import { createPool, ledger as book } from '../workers/pool.js';
 import { readFitsOnPool } from '../dataKinds/fitsJob.js';
 import { readRasterOnPool } from '../dataKinds/rasterJob.js';
 import { sha256Hex } from '../hash.js';
@@ -235,6 +235,17 @@ export function buildSidecar(read, f, { id, from = {}, title }) {
             // 8-bit gray levels from a JPEG (lossy) or a 16-bit PNG (reduced).
             lossy: read.kind === 'jpeg' || read.depth === 16,
           },
+      ...(read.rotated
+        ? [
+            {
+              step: 'rotate',
+              tool: 'the browser image decoder (the file’s orientation tag)',
+              version: 'createImageBitmap',
+              lossy: false,
+              wcsUpdated: true,
+            },
+          ]
+        : []),
     ],
     source: { kind: read.kind === 'fits' ? 'fits' : 'upload' },
   };
@@ -367,6 +378,11 @@ export function buildObservation(
         ]
       : [
           'Display levels from 0 to 255: the gray of the decoder’s red, green and blue (weights 0.299, 0.587, 0.114), transparency drawn over white, the rows turned over so that row 1 is the bottom.',
+          ...(read.rotated
+            ? [
+                'The decoder turned the picture as the file’s orientation tag says.',
+              ]
+            : []),
         ],
     columns: [
       { id: 'x', name: 'column', unit: 'pix', role: 'x', values: x },
@@ -407,17 +423,16 @@ export function buildObservation(
   };
 }
 
-// ---- the pool: one ledger, one pool, for the page's life -----------------------
+// ---- the pool: the page's ledger, one pool, for the page's life -----------------
 
-const book = createLedger({
-  memoryBytes: LIMITS.maxDecodedBytes + LIMITS.maxFileBytes,
-  realms: 1,
-});
 let pool = null;
 const poolFor = ctx =>
   (pool ??= createPool({
     book,
     concurrency: 1,
+    // The page's ledger, so the cap holds across every Worker it has; this
+    // pool's realms may hold the decoded images of one page and one file.
+    memoryBytes: LIMITS.maxDecodedBytes + LIMITS.maxFileBytes,
     spawn:
       ctx.spawn ??
       (() =>
@@ -427,7 +442,55 @@ const poolFor = ctx =>
   }));
 
 /** What the page's import holds in Workers now (the memory probe and the specs read it). */
-export const ledgerSnapshot = () => book.snapshot?.() ?? null;
+export const ledgerSnapshot = () => book.snapshot();
+
+// ---- saving: what the workspace file can hold ----------------------------------
+
+/** The rows a saved workspace reads back: the table import's own limit (js/observatory/import.js LIMITS.rows; a test holds the two equal). */
+export const SAVE_ROWS = 200000;
+
+/**
+ * An image of more pixels than a saved workspace reads back cannot be saved as
+ * one (it writes every pixel as text): the two save buttons are off, with the
+ * reason beside them, until anything else is opened.
+ */
+const saves = { big: false, own: false, n: 0, ctx: null };
+function renderSaves() {
+  const note = document.getElementById('obsImageSaveNote');
+  for (const id of ['obsExportJson', 'obsExportCsv'])
+    document.getElementById(id).disabled = saves.big;
+  note.hidden = !saves.big;
+  note.textContent = saves.big
+    ? saves.ctx.t('obs.imp.noSave', {
+        n: saves.ctx.number(saves.n),
+        max: saves.ctx.number(SAVE_ROWS),
+      })
+    : '';
+}
+function guardSaves(o, ctx) {
+  saves.big = o.columns[0].values.length > SAVE_ROWS;
+  saves.n = o.columns[0].values.length;
+  saves.ctx = ctx;
+  saves.own = true;
+  renderSaves();
+}
+let savesWatch = null;
+function watchSaves() {
+  if (savesWatch) return;
+  // The page counts every opening in <html data-opens>: one that is not ours
+  // gives the buttons back.
+  savesWatch = new MutationObserver(() => {
+    if (saves.own) saves.own = false;
+    else if (saves.big) {
+      saves.big = false;
+      renderSaves();
+    }
+  });
+  savesWatch.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['data-opens'],
+  });
+}
 
 // ---- the panel ------------------------------------------------------------------
 
@@ -814,14 +877,6 @@ function createPanel(first) {
   }
   const effect = (id, text) =>
     el('p', { className: 'ui-hint', id, textContent: text });
-  const fromNote = name =>
-    s.from[name]
-      ? el('span', {
-          className: 'ui-hint',
-          textContent: ` ${t('obs.imp.fromCard', { card: s.from[name].replace(/^header /, '') })}`,
-        })
-      : null;
-
   function fieldset() {
     const f = s.fields;
     const fs = el(
@@ -1105,6 +1160,8 @@ function createPanel(first) {
     s.read = null;
     s.fields = null;
     render();
+    watchSaves();
+    guardSaves(o, s.ctx);
     s.ctx.open(o);
     s.ctx.status(
       s.ctx.t('obs.imp.opened', {
@@ -1212,6 +1269,7 @@ function createPanel(first) {
   const watch = new MutationObserver(async () => {
     await words(s.ctx);
     render();
+    if (saves.big) renderSaves();
   });
   watch.observe(document.documentElement, {
     attributes: true,

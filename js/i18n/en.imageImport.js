@@ -19,6 +19,8 @@ export const EN_IMAGEIMPORT = {
     'Canceled. The read was stopped, the memory it held was released, and nothing was kept.',
   'obs.imp.close': 'Close',
   'obs.imp.readerSays': 'In the reader’s own words (English):',
+  'obs.imp.noSave':
+    'This image has {n} pixels. A saved workspace writes every pixel as text and reads back at most {max} rows, so saving it is off; its marks and measurements can be kept in the ledger.',
   'obs.imp.ready': '{name} was read. Describe it, then open it.',
   'obs.imp.open': 'Open the image',
   'obs.imp.opened': '{name} opened: {w} by {h} pixels.',

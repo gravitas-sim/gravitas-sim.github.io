@@ -21,7 +21,10 @@ const progress = fraction => self.postMessage({ type: 'progress', fraction });
 
 self.onmessage = async e => {
   const msg = e.data || {};
-  if (msg.type !== 'run' || (msg.kind !== FITS_JOB && msg.kind !== RASTER_JOB)) {
+  if (
+    msg.type !== 'run' ||
+    (msg.kind !== FITS_JOB && msg.kind !== RASTER_JOB)
+  ) {
     self.postMessage({
       type: 'error',
       message: 'this realm reads image files only',

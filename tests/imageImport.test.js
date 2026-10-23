@@ -1,3 +1,4 @@
+/* global process, performance, URL */
 import { describe, test, expect } from '@jest/globals';
 import { readFileSync } from 'node:fs';
 import { Buffer } from 'node:buffer';
@@ -597,5 +598,43 @@ describe('the install', () => {
       expect([f, NEVER_PRECACHED.some(re => re.test(f))]).toEqual([f, true]);
     const { paths } = await buildManifest();
     for (const f of files) expect(paths).not.toContain(f);
+  });
+});
+
+describe('the cancel probe’s record', () => {
+  const rec = JSON.parse(
+    readFileSync(
+      new URL('../tools/import-cancel-results.json', import.meta.url),
+      'utf8'
+    )
+  );
+
+  test('the recorded bounds are the committed ones and every recorded row passed them', () => {
+    expect(rec.bounds).toEqual({
+      ledgerBytes: BOUNDS.cancelledLedgerBytes,
+      workersEndedWithinMs: BOUNDS.cancelledWorkersAfterMs,
+      heapGrowthBytes: BOUNDS.cancelledHeapBytes,
+    });
+    expect(rec.rows.map(r => `${r.profile} ${r.mode}`).sort()).toEqual([
+      'desktop cancel',
+      'desktop close',
+      'low-end cancel',
+      'low-end close',
+    ]);
+    for (const r of rec.rows) {
+      expect(r.ledgerAfterCancel).toBe(BOUNDS.cancelledLedgerBytes);
+      expect(r.workers.started).toBe(r.workers.ended);
+      expect(r.growthBytes).toBeLessThanOrEqual(BOUNDS.cancelledHeapBytes);
+      expect(r.verdict).toBe('pass');
+    }
+    // The cancelled read really was in flight: the ledger held the file and the plane.
+    for (const r of rec.rows.filter(x => x.mode === 'cancel'))
+      expect(r.heldInFlight).toBeGreaterThan(60_000_000);
+  });
+
+  test('the save limit is the table import’s row limit', async () => {
+    const { LIMITS: table } = await import('../js/observatory/import.js');
+    const { SAVE_ROWS } = await import('../js/observatory/imageImport.js');
+    expect(SAVE_ROWS).toBe(table.rows);
   });
 });
