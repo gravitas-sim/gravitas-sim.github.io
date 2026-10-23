@@ -136,9 +136,14 @@ describe('the feature-detection inventory', () => {
     expect(unlisted).toEqual([]);
   });
 
-  test('the capability the code deliberately does not use stays unused', () => {
+  test('the one capability used for a single purpose stays in one place', () => {
+    // OffscreenCanvas was unused until the picture import (Prompt 188): the
+    // import Worker draws a decoded PNG or JPEG to read its pixels, and nowhere
+    // else may take it up without a new entry and a new reading of this test.
     const offscreen = FEATURES.find(f => f.id === 'offscreencanvas');
-    expect(offscreen.uses).toEqual([]);
+    expect(offscreen.uses.map(u => u.file)).toEqual([
+      'js/dataKinds/rasterJob.js',
+    ]);
   });
 
   test('SUPPORT.md says the inventory is held to the code', () => {

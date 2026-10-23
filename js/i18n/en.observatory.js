@@ -47,7 +47,11 @@ export const EN_OBSERVATORY = {
     'MIST isochrones in the SDSS bands (a model, not an observation)',
   'obs.import.file': 'Or import your own file',
   'obs.import.hint':
-    'CSV, tab- or semicolon-separated text, or JSON, up to 5 MB and 200,000 rows. It stays on this device.',
+    'CSV, tab- or semicolon-separated text, or JSON, up to 5 MB and 200,000 rows; or a FITS image, PNG or JPEG of up to 4,194,304 pixels. It stays on this device.',
+  'obs.import.imageHelp':
+    'Images come in two kinds. A FITS frame can be quantitative: its pixel values measure light, and with the header and what you state about it, marks, photometry and astrometry can be allowed. A PNG or a JPEG is display-only: its numbers are gray levels made for the eye, so you can mark it and measure it in pixels, but photometry and astrometry are refused, because they need pixels that count light and positions tied to the sky.',
+  'obs.imp.offline':
+    'The image reader could not be loaded. It is fetched the first time you choose an image, so it needs the network once.',
   'obs.import.title': 'Check what you are importing',
   'obs.import.summary':
     '{rows} rows and {columns} columns, {delimiter}, {header}.',

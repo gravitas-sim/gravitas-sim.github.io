@@ -47,7 +47,11 @@ export const ES_OBSERVATORY = {
     'Isócronas de MIST en las bandas de SDSS (un modelo, no una observación)',
   'obs.import.file': 'O importa tu propio archivo',
   'obs.import.hint':
-    'CSV, texto separado por tabuladores o por punto y coma, o JSON, hasta 5 MB y 200.000 filas. No sale de este dispositivo.',
+    'CSV, texto separado por tabuladores o por punto y coma, o JSON, hasta 5 MB y 200.000 filas; o una imagen FITS, PNG o JPEG de hasta 4.194.304 píxeles. No sale de este dispositivo.',
+  'obs.import.imageHelp':
+    'Las imágenes son de dos clases. Un cuadro FITS puede ser cuantitativo: sus valores de píxel miden luz, y con la cabecera y lo que declares de él se pueden permitir marcas, fotometría y astrometría. Un PNG o un JPEG es solo para mostrar: sus números son niveles de gris hechos para el ojo, así que puedes marcarlo y medirlo en píxeles, pero la fotometría y la astrometría se rechazan, porque necesitan píxeles que cuenten luz y posiciones ligadas al cielo.',
+  'obs.imp.offline':
+    'No se pudo cargar el lector de imágenes. Se descarga la primera vez que eliges una imagen, así que necesita la red una vez.',
   'obs.import.title': 'Revisa lo que vas a importar',
   'obs.import.summary':
     '{rows} filas y {columns} columnas, {delimiter}, {header}.',

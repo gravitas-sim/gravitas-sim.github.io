@@ -42,6 +42,7 @@
     "validate:statistics": "node tools/statistics-validate.mjs",
     "probe:workers": "node tools/worker-probe.mjs",
     "probe:decoded": "node tools/decoded-memory-probe.mjs",
+    "probe:import-cancel": "node tools/import-cancel-probe.mjs",
     "validate:inference": "node tools/inference-validate.mjs",
     "manifest": "node tools/build-investigation-manifest.js",
     "teaching:data": "node tools/build-teaching-demos.mjs",

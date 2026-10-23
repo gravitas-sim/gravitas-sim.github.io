@@ -91,6 +91,11 @@ export const FEATURES = [
         note: 'no fallback',
       },
       {
+        file: 'js/observatory/imageImport.js',
+        detect: /new Worker\(/,
+        note: 'no fallback: the read is refused in words (a failed Worker)',
+      },
+      {
         file: 'js/inference/rvClient.js',
         detect: /new Worker\(/,
         note: 'no fallback',
@@ -161,11 +166,18 @@ export const FEATURES = [
   {
     id: 'offscreencanvas',
     name: 'OffscreenCanvas',
-    purpose: 'Not used.',
+    purpose:
+      'Drawing a decoded PNG or JPEG in the import Worker, to read its pixels (the page never draws on a transferred canvas).',
     token: /OffscreenCanvas|transferControlToOffscreen/,
     without:
-      'Nothing to fall back from: Workers send numbers to the page and the page draws, so no canvas is ever transferred.',
-    uses: [],
+      'The picture is refused in words (no-decoder, a browser that cannot decode a picture in the background); a FITS frame needs no canvas and is read as usual. Nothing is drawn on a transferred canvas: the Worker sends numbers to the page.',
+    uses: [
+      {
+        file: 'js/dataKinds/rasterJob.js',
+        detect: /'no-decoder'/,
+        note: 'refuses the picture, in words',
+      },
+    ],
   },
   {
     id: 'serviceworker',

@@ -292,6 +292,8 @@ async function buildJs() {
       'js/lab3d/worker.js',
       'js/mission/worker.js',
       'js/mission/labWorker.js',
+      // The image reader (Prompt 188): started by the Observatory's import.
+      'js/dataKinds/fitsWorker.js',
     ],
     bundle: true,
     minify: true,

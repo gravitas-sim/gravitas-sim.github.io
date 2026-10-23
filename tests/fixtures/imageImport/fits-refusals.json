@@ -1,0 +1,589 @@
+{
+  "note": "The 73 FITS refusals of Prompt 157 (REFUSE in tools/data-kinds-cases.mjs), each with the code and the exact English message the import gives (readerCode is Prompt 157’s own; a file the format check turns away first, an empty one or one that is not FITS at all, has the import’s code), and whether the page refuses it (stage page: the header check, before a realm) or the realm does (stage realm). Recorded from js/dataKinds/fits.js as merged in #399; Prompt 188 changes none of its messages. A message that changes is a failing test, not a regenerated file.",
+  "cases": [
+    {
+      "name": "an empty buffer",
+      "readerCode": "not-fits",
+      "code": "empty-file",
+      "stage": "page",
+      "message": "the file is empty: it holds no bytes",
+      "bytes": 0
+    },
+    {
+      "name": "a GIF",
+      "readerCode": "not-fits",
+      "code": "unknown-format",
+      "stage": "page",
+      "message": "this is not a FITS, PNG or JPEG file (its first bytes are 47 49 46 38)",
+      "bytes": 10
+    },
+    {
+      "name": "plain text",
+      "readerCode": "not-fits",
+      "code": "unknown-format",
+      "stage": "page",
+      "message": "this is not a FITS, PNG or JPEG file (its first bytes are 68 65 6c 6c)",
+      "bytes": 33
+    },
+    {
+      "name": "SIMPLE = F",
+      "readerCode": "not-fits",
+      "code": "not-fits",
+      "stage": "page",
+      "message": "SIMPLE is not T: this file does not conform to FITS",
+      "bytes": 5760
+    },
+    {
+      "name": "the first card is not SIMPLE",
+      "readerCode": "not-fits",
+      "code": "unknown-format",
+      "stage": "page",
+      "message": "this is not a FITS, PNG or JPEG file (its first bytes are 42 49 54 50)",
+      "bytes": 2880
+    },
+    {
+      "name": "a header cut inside a card",
+      "readerCode": "truncated",
+      "code": "truncated",
+      "stage": "page",
+      "message": "the header of unit 0 ends at byte 100 with no END card",
+      "bytes": 100
+    },
+    {
+      "name": "a header with no END at the end of the file",
+      "readerCode": "truncated",
+      "code": "truncated",
+      "stage": "page",
+      "message": "the header of unit 0 ends at byte 2880 with no END card",
+      "bytes": 2880
+    },
+    {
+      "name": "the data cut short",
+      "readerCode": "truncated",
+      "code": "truncated",
+      "stage": "page",
+      "message": "the 32 by 32 image needs 2048 bytes from byte 2880 and the file has 1000",
+      "bytes": 3880
+    },
+    {
+      "name": "an extension header cut",
+      "readerCode": "truncated",
+      "code": "truncated",
+      "stage": "page",
+      "message": "the header of unit 1 ends at byte 3380 with no END card",
+      "bytes": 3380
+    },
+    {
+      "name": "no END in 17 blocks",
+      "readerCode": "header-too-large",
+      "code": "header-too-large",
+      "stage": "page",
+      "message": "the header of unit 0 has no END card in its first 16 blocks (576 cards)",
+      "bytes": 54720
+    },
+    {
+      "name": "a control character in a card",
+      "readerCode": "card-malformed",
+      "code": "card-malformed",
+      "stage": "page",
+      "message": "card 6 of unit 0 holds byte 1 at column 15, which is not printable ASCII",
+      "bytes": 5760
+    },
+    {
+      "name": "NAXIS1 as a string",
+      "readerCode": "card-malformed",
+      "code": "card-malformed",
+      "stage": "page",
+      "message": "NAXIS1 in unit 0 is not a whole number: 'abc'",
+      "bytes": 5760
+    },
+    {
+      "name": "NAXIS1 = 3.5",
+      "readerCode": "card-malformed",
+      "code": "card-malformed",
+      "stage": "page",
+      "message": "NAXIS1 in unit 0 is not a whole number: 3.5",
+      "bytes": 5760
+    },
+    {
+      "name": "BITPIX = 16.0, not an integer literal",
+      "readerCode": "card-malformed",
+      "code": "card-malformed",
+      "stage": "page",
+      "message": "BITPIX in unit 0 is not a whole number: 16.0",
+      "bytes": 5760
+    },
+    {
+      "name": "NAXIS1 with no value",
+      "readerCode": "card-malformed",
+      "code": "card-malformed",
+      "stage": "page",
+      "message": "NAXIS1 in unit 0 is not a whole number: ",
+      "bytes": 5760
+    },
+    {
+      "name": "no BITPIX card",
+      "readerCode": "missing-card",
+      "code": "missing-card",
+      "stage": "page",
+      "message": "unit 0 has no BITPIX card",
+      "bytes": 2880
+    },
+    {
+      "name": "no NAXIS2 card",
+      "readerCode": "missing-card",
+      "code": "missing-card",
+      "stage": "page",
+      "message": "unit 0 has no NAXIS2 card",
+      "bytes": 5760
+    },
+    {
+      "name": "BITPIX twice",
+      "readerCode": "duplicate-card",
+      "code": "duplicate-card",
+      "stage": "page",
+      "message": "BITPIX appears twice in the header of unit 0",
+      "bytes": 5760
+    },
+    {
+      "name": "NAXIS1 twice",
+      "readerCode": "duplicate-card",
+      "code": "duplicate-card",
+      "stage": "page",
+      "message": "NAXIS1 appears twice in the header of unit 0",
+      "bytes": 5760
+    },
+    {
+      "name": "BSCALE twice",
+      "readerCode": "duplicate-card",
+      "code": "duplicate-card",
+      "stage": "page",
+      "message": "BSCALE appears twice in the header of unit 0",
+      "bytes": 5760
+    },
+    {
+      "name": "CRPIX1 twice",
+      "readerCode": "duplicate-card",
+      "code": "duplicate-card",
+      "stage": "page",
+      "message": "CRPIX1 appears twice in the header of unit 0",
+      "bytes": 5760
+    },
+    {
+      "name": "BITPIX 64",
+      "readerCode": "bitpix-unsupported",
+      "code": "bitpix-unsupported",
+      "stage": "page",
+      "message": "BITPIX = 64 in unit 0: only 8, 16, 32, -32 and -64 are read",
+      "bytes": 5760
+    },
+    {
+      "name": "BITPIX 24",
+      "readerCode": "bitpix-unsupported",
+      "code": "bitpix-unsupported",
+      "stage": "page",
+      "message": "BITPIX = 24 in unit 0: only 8, 16, 32, -32 and -64 are read",
+      "bytes": 5760
+    },
+    {
+      "name": "BITPIX 0",
+      "readerCode": "bitpix-unsupported",
+      "code": "bitpix-unsupported",
+      "stage": "page",
+      "message": "BITPIX = 0 in unit 0: only 8, 16, 32, -32 and -64 are read",
+      "bytes": 5760
+    },
+    {
+      "name": "BITPIX -16",
+      "readerCode": "bitpix-unsupported",
+      "code": "bitpix-unsupported",
+      "stage": "page",
+      "message": "BITPIX = -16 in unit 0: only 8, 16, 32, -32 and -64 are read",
+      "bytes": 5760
+    },
+    {
+      "name": "a cube, 2 x 2 x 2",
+      "readerCode": "axes-unsupported",
+      "code": "axes-unsupported",
+      "stage": "page",
+      "message": "unit 0 has 3 axes; only two-dimensional images are read (a cube is not sliced)",
+      "bytes": 5760
+    },
+    {
+      "name": "a cube of one plane, 2 x 2 x 1",
+      "readerCode": "axes-unsupported",
+      "code": "axes-unsupported",
+      "stage": "page",
+      "message": "unit 0 has 3 axes; only two-dimensional images are read (a cube is not sliced)",
+      "bytes": 5760
+    },
+    {
+      "name": "a one-dimensional array",
+      "readerCode": "axes-unsupported",
+      "code": "axes-unsupported",
+      "stage": "page",
+      "message": "unit 0 has 1 axes; only two-dimensional images are read (a cube is not sliced)",
+      "bytes": 5760
+    },
+    {
+      "name": "no axes and no extension",
+      "readerCode": "no-image",
+      "code": "no-image",
+      "stage": "page",
+      "message": "the file holds no two-dimensional image (unit 0: empty)",
+      "bytes": 2880
+    },
+    {
+      "name": "a table and nothing else",
+      "readerCode": "no-image",
+      "code": "no-image",
+      "stage": "page",
+      "message": "the file holds no two-dimensional image (unit 0: empty, unit 1: bintable)",
+      "bytes": 8640
+    },
+    {
+      "name": "a tile-compressed image",
+      "readerCode": "compressed",
+      "code": "compressed",
+      "stage": "page",
+      "message": "unit 1 is a tile-compressed image, which this reader does not read",
+      "bytes": 8640
+    },
+    {
+      "name": "an extension type the reader does not know",
+      "readerCode": "hdu-unsupported",
+      "code": "hdu-unsupported",
+      "stage": "page",
+      "message": "unit 1 is an extension of type FOO, which this reader does not know",
+      "bytes": 5760
+    },
+    {
+      "name": "random groups",
+      "readerCode": "hdu-unsupported",
+      "code": "hdu-unsupported",
+      "stage": "page",
+      "message": "unit 0 is random groups, which this reader does not read",
+      "bytes": 2880
+    },
+    {
+      "name": "nine extensions before the image",
+      "readerCode": "too-many-hdus",
+      "code": "too-many-hdus",
+      "stage": "page",
+      "message": "no image in the first 8 units of the file; the reader looks no further",
+      "bytes": 34560
+    },
+    {
+      "name": "NAXIS1 = 0",
+      "readerCode": "axis-invalid",
+      "code": "axis-invalid",
+      "stage": "page",
+      "message": "unit 0 has an axis of 0 pixels",
+      "bytes": 2880
+    },
+    {
+      "name": "NAXIS2 = 0",
+      "readerCode": "axis-invalid",
+      "code": "axis-invalid",
+      "stage": "page",
+      "message": "unit 0 has an axis of 0 pixels",
+      "bytes": 2880
+    },
+    {
+      "name": "NAXIS1 = -5",
+      "readerCode": "axis-invalid",
+      "code": "axis-invalid",
+      "stage": "page",
+      "message": "NAXIS1 = -5 in unit 0 is negative",
+      "bytes": 5760
+    },
+    {
+      "name": "NAXIS1 = 8193",
+      "readerCode": "too-large",
+      "code": "too-large",
+      "stage": "page",
+      "message": "a side of 8193 pixels is more than the 8192 a frame may have",
+      "bytes": 2880
+    },
+    {
+      "name": "2049 x 2049 pixels",
+      "readerCode": "too-large",
+      "code": "too-large",
+      "stage": "page",
+      "message": "2049 by 2049 is 4198401 pixels; a frame may have 4194304 (2,048 by 2,048)",
+      "bytes": 2880
+    },
+    {
+      "name": "8192 x 513 pixels",
+      "readerCode": "too-large",
+      "code": "too-large",
+      "stage": "page",
+      "message": "8192 by 513 is 4202496 pixels; a frame may have 4194304 (2,048 by 2,048)",
+      "bytes": 2880
+    },
+    {
+      "name": "65536 x 65536 pixels, a header of 2,880 bytes",
+      "readerCode": "too-large",
+      "code": "too-large",
+      "stage": "page",
+      "message": "a side of 65536 pixels is more than the 8192 a frame may have",
+      "bytes": 2880
+    },
+    {
+      "name": "2^32 x 2^32, whose product is 2^64",
+      "readerCode": "too-large",
+      "code": "too-large",
+      "stage": "page",
+      "message": "a side of 4294967296 pixels is more than the 8192 a frame may have",
+      "bytes": 2880
+    },
+    {
+      "name": "an axis beyond the integers a double holds",
+      "readerCode": "dimension-overflow",
+      "code": "dimension-overflow",
+      "stage": "page",
+      "message": "NAXIS1 = 9007199254740993 in unit 0 is more than a double holds exactly",
+      "bytes": 5760
+    },
+    {
+      "name": "a table whose declared size overflows, behind an empty primary",
+      "readerCode": "dimension-overflow",
+      "code": "dimension-overflow",
+      "stage": "page",
+      "message": "unit 1 declares a data unit of 18446744073709551616 bytes, more than a double holds",
+      "bytes": 11520
+    },
+    {
+      "name": "a table whose declared size runs past the file, before the image",
+      "readerCode": "truncated",
+      "code": "truncated",
+      "stage": "page",
+      "message": "unit 1 declares 1000000000 bytes of data from byte 5760 and the file ends at 11520",
+      "bytes": 11520
+    },
+    {
+      "name": "BSCALE = 0",
+      "readerCode": "scale-invalid",
+      "code": "scale-invalid",
+      "stage": "realm",
+      "message": "BSCALE = 0 would make every pixel the same value",
+      "bytes": 5760
+    },
+    {
+      "name": "BSCALE = 1E999",
+      "readerCode": "nonfinite-header",
+      "code": "nonfinite-header",
+      "stage": "realm",
+      "message": "BSCALE = 1E999 in unit 0 is not a finite number",
+      "bytes": 5760
+    },
+    {
+      "name": "BZERO = 1E999",
+      "readerCode": "nonfinite-header",
+      "code": "nonfinite-header",
+      "stage": "realm",
+      "message": "BZERO = 1E999 in unit 0 is not a finite number",
+      "bytes": 5760
+    },
+    {
+      "name": "BZERO = NaN",
+      "readerCode": "nonfinite-header",
+      "code": "nonfinite-header",
+      "stage": "realm",
+      "message": "BZERO = NaN in unit 0 is not a finite number",
+      "bytes": 5760
+    },
+    {
+      "name": "BSCALE as a string",
+      "readerCode": "card-malformed",
+      "code": "card-malformed",
+      "stage": "realm",
+      "message": "BSCALE in unit 0 is not a number: 'two'",
+      "bytes": 5760
+    },
+    {
+      "name": "BLANK on a floating-point image",
+      "readerCode": "blank-invalid",
+      "code": "blank-invalid",
+      "stage": "realm",
+      "message": "BLANK is for integer images; a floating-point image marks a blank with NaN",
+      "bytes": 5760
+    },
+    {
+      "name": "BLANK outside the 16-bit range",
+      "readerCode": "blank-invalid",
+      "code": "blank-invalid",
+      "stage": "realm",
+      "message": "BLANK = 70000 is outside what BITPIX 16 can store (-32768 to 32767)",
+      "bytes": 5760
+    },
+    {
+      "name": "BLANK = 1.5",
+      "readerCode": "card-malformed",
+      "code": "card-malformed",
+      "stage": "realm",
+      "message": "BLANK in unit 0 is not a whole number: 1.5",
+      "bytes": 5760
+    },
+    {
+      "name": "an infinite pixel, BITPIX -32",
+      "readerCode": "nonfinite-pixel",
+      "code": "nonfinite-pixel",
+      "stage": "realm",
+      "message": "pixel (2, 1) is infinite; a blank is NaN and nothing in an image is infinite",
+      "bytes": 5760
+    },
+    {
+      "name": "a negative infinite pixel, BITPIX -64",
+      "readerCode": "nonfinite-pixel",
+      "code": "nonfinite-pixel",
+      "stage": "realm",
+      "message": "pixel (1, 2) is infinite; a blank is NaN and nothing in an image is infinite",
+      "bytes": 5760
+    },
+    {
+      "name": "SIN projection",
+      "readerCode": "wcs-projection",
+      "code": "wcs-projection",
+      "stage": "realm",
+      "message": "RA---SIN / DEC--SIN: the SIN projection is not read, only TAN",
+      "bytes": 5760
+    },
+    {
+      "name": "galactic TAN",
+      "readerCode": "wcs-projection",
+      "code": "wcs-projection",
+      "stage": "realm",
+      "message": "GLON-TAN / GLAT-TAN: only right ascension and declination in TAN are read",
+      "bytes": 5760
+    },
+    {
+      "name": "ARC projection",
+      "readerCode": "wcs-projection",
+      "code": "wcs-projection",
+      "stage": "realm",
+      "message": "RA---ARC / DEC--ARC: the ARC projection is not read, only TAN",
+      "bytes": 5760
+    },
+    {
+      "name": "mixed projections",
+      "readerCode": "wcs-projection",
+      "code": "wcs-projection",
+      "stage": "realm",
+      "message": "RA---TAN / DEC--SIN: the SIN projection is not read, only TAN",
+      "bytes": 5760
+    },
+    {
+      "name": "a linear axis",
+      "readerCode": "wcs-projection",
+      "code": "wcs-projection",
+      "stage": "realm",
+      "message": "LINEAR / DEC--TAN: only right ascension and declination in TAN are read",
+      "bytes": 5760
+    },
+    {
+      "name": "SIP distortion by suffix",
+      "readerCode": "wcs-distortion",
+      "code": "wcs-distortion",
+      "stage": "realm",
+      "message": "RA---TAN-SIP / DEC--TAN-SIP carries a distortion (SIP) this reader does not apply",
+      "bytes": 5760
+    },
+    {
+      "name": "SIP coefficients under a plain TAN",
+      "readerCode": "wcs-distortion",
+      "code": "wcs-distortion",
+      "stage": "realm",
+      "message": "A_ORDER gives SIP distortion coefficients, which this reader does not apply",
+      "bytes": 5760
+    },
+    {
+      "name": "TPV distortion",
+      "readerCode": "wcs-distortion",
+      "code": "wcs-distortion",
+      "stage": "realm",
+      "message": "RA---TPV / DEC--TPV carries a distortion (TPV) this reader does not apply",
+      "bytes": 5760
+    },
+    {
+      "name": "PV terms under TAN",
+      "readerCode": "wcs-distortion",
+      "code": "wcs-distortion",
+      "stage": "realm",
+      "message": "PV1_1 gives a projection term; TAN with PV terms is a distortion this reader does not apply",
+      "bytes": 5760
+    },
+    {
+      "name": "more than two world axes",
+      "readerCode": "wcs-projection",
+      "code": "wcs-projection",
+      "stage": "realm",
+      "message": "WCSAXES = 3: only two world axes are read",
+      "bytes": 5760
+    },
+    {
+      "name": "TAN without CRPIX2",
+      "readerCode": "wcs-incomplete",
+      "code": "wcs-incomplete",
+      "stage": "realm",
+      "message": "CRPIX2 is missing, so the world coordinates cannot be used",
+      "bytes": 5760
+    },
+    {
+      "name": "TAN without a matrix",
+      "readerCode": "wcs-incomplete",
+      "code": "wcs-incomplete",
+      "stage": "realm",
+      "message": "the header has neither a CD matrix nor CDELT1 and CDELT2",
+      "bytes": 5760
+    },
+    {
+      "name": "TAN with CDELT = 0",
+      "readerCode": "wcs-incomplete",
+      "code": "wcs-incomplete",
+      "stage": "realm",
+      "message": "the transformation matrix is singular, so pixels do not map to the sky",
+      "bytes": 5760
+    },
+    {
+      "name": "a singular CD matrix",
+      "readerCode": "wcs-incomplete",
+      "code": "wcs-incomplete",
+      "stage": "realm",
+      "message": "the transformation matrix is singular, so pixels do not map to the sky",
+      "bytes": 5760
+    },
+    {
+      "name": "a declination of 95 degrees",
+      "readerCode": "wcs-incomplete",
+      "code": "wcs-incomplete",
+      "stage": "realm",
+      "message": "CRVAL2 = 95 is not a declination",
+      "bytes": 5760
+    },
+    {
+      "name": "CRVAL1 beyond the doubles",
+      "readerCode": "nonfinite-header",
+      "code": "nonfinite-header",
+      "stage": "realm",
+      "message": "CRVAL1 = 1E999 in unit 0 is not a finite number",
+      "bytes": 5760
+    },
+    {
+      "name": "CD and PC together",
+      "readerCode": "wcs-ambiguous",
+      "code": "wcs-ambiguous",
+      "stage": "realm",
+      "message": "the header has a CD matrix and also PC, CDELT or CROTA2: FITS allows one form",
+      "bytes": 5760
+    },
+    {
+      "name": "CROTA2 with PC",
+      "readerCode": "wcs-ambiguous",
+      "code": "wcs-ambiguous",
+      "stage": "realm",
+      "message": "the header has CROTA2 and a PC matrix: FITS allows one form",
+      "bytes": 5760
+    }
+  ]
+}
