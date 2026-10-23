@@ -1,28 +1,18 @@
 // =============================================================================
 // Scale, time and size: what a mark's pixels are worth (Prompt 179)
 // -----------------------------------------------------------------------------
-// The scale is one number with its uncertainty, from one of two places and never
-// a blend of them:
-//
-//   the sidecar   arcseconds per pixel from the image's world coordinates
-//                 (js/observatory/wcs.js pixelScale). It is a claim about the sky,
-//                 so it needs what astrometry needs (js/dataKinds/contract.js
-//                 permits): a display-only image refuses it, in the contract's
-//                 words, until the person marks a reference pair, which is the
-//                 way to a scale there.
-//   a pair        a reference pair of marks and the length it spans, in any unit
-//                 the person states (the Moon's diameter in km, a ruler in mm).
-//                 It is the person's own measurement of the picture and is
-//                 allowed on any image that can be marked, display-only included;
-//                 its uncertainty is the pair's pixel length and the stated
-//                 length, relative errors added in quadrature.
-//
-// The frame's time comes with its scale named (UTC, TT, TDB...), from the sidecar
-// or the file's header; a time with no scale is not a time and is not shown as
-// one. Pure; no DOM.
+// One number with its uncertainty, from one of two places, never a blend:
+//   the sidecar   arcseconds per pixel from the image's world coordinates. A claim
+//                 about the sky, so it needs astrometry's permission
+//                 (js/dataKinds/contract.js): a display-only image refuses it, in
+//                 the contract's words, until a reference pair is marked
+//   a pair        a reference pair and the length it spans, in any unit the person
+//                 states; the person's own measurement, allowed on any image that
+//                 can be marked; relative errors added in quadrature
+// A frame's time comes with its scale (UTC, TT, TDB...); a time with no scale is
+// not shown as one. Pure; no DOM.
 // =============================================================================
 
-import { pixelScale } from '../observatory/wcs.js';
 import { permits } from '../dataKinds/contract.js';
 
 const pixelLength = m =>
@@ -49,12 +39,15 @@ export function areaOf(m) {
 /**
  * The scale of a frame set.
  * @param {{marks: object[]}} state
- * @param {{sidecar?: object, permit?: object}} [from] - `sidecar` is a
- *   gravitas.image document; `permit` is what permits(doc, 'astrometry') said
+ * @param {{sidecar?: object, permit?: object, pixelScale?: Function}} [from] -
+ *   `sidecar` is a gravitas.image document; `permit` is what
+ *   permits(doc, 'astrometry') said; `pixelScale` is the page's own
+ *   (js/observatory/wcs.js), lent so that this chunk shares no module with the
+ *   page, which would cost the route a request
  * @returns {{value: number, sigma: number, unit: string, source: string}
  *   |{refused: string, code: string}|null} null when there is no scale
  */
-export function scaleOf(state, { sidecar, permit } = {}) {
+export function scaleOf(state, { sidecar, permit, pixelScale } = {}) {
   const pair = state.marks.find(m => m.kind === 'reference-pair' && m.length);
   if (sidecar?.wcs) {
     const ok = permit ?? permits(sidecar, 'astrometry');
@@ -62,6 +55,8 @@ export function scaleOf(state, { sidecar, permit } = {}) {
     if (!ok.ok && !pair) return { refused: ok.message, code: ok.code };
     if (ok.ok) {
       // One number: the mean of the two axes, their disagreement its sigma.
+      if (!pixelScale)
+        throw new TypeError("scaleOf needs the page's pixelScale");
       const [a, b] = pixelScale(sidecar.wcs);
       return {
         value: (a + b) / 2,

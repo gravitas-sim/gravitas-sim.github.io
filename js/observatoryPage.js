@@ -254,13 +254,7 @@ function rebuild({ announceChange = null } = {}) {
 }
 
 // What the page lends its lazily loaded panels (see js/observatory/fitPanel.js).
-const lent = {
-  t,
-  number,
-  language,
-  registerMessages,
-  createPlot,
-};
+const lent = { t, number, language, registerMessages, createPlot, pixelScale };
 const fit = { panel: null, loading: null, suits: false };
 function mountFit(m) {
   fit.module = m;

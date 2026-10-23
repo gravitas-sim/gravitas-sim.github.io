@@ -1,27 +1,17 @@
 // =============================================================================
 // Refinement: a click becomes a centroid or a limb (Prompt 179)
 // -----------------------------------------------------------------------------
-// Ported from the gate's accepted prototype (IMAGE_MEASUREMENT_GATE.md, D-R10-48)
-// with its arithmetic unchanged, so every threshold the gate committed holds as a
-// regression test (tests/imageMeasure.test.js, tools/image-marks-validate.mjs).
-// Pure and isomorphic. Coordinates are FITS's (1 is the centre of the first
-// pixel, y up); a frame is {width, height, data, gain?}, data row by row.
-//
-// Refinement is deterministic arithmetic on the pixels, with no random start:
-//   point   the windowed centroid (SExtractor's XWIN: a Gaussian window, the
-//           centroid moved by twice the window-weighted offset until it stops),
-//           the window sized from the source's own second moment, the sky from
-//           an annulus median, the uncertainty propagated from the CCD's noise
-//   circle  the edge along 72 rays (the steepest gradient, with a parabola for
-//           the sub-sample), a circle fitted to the edge points (algebraic, then
-//           Gauss-Newton on the geometric distance) with a robust rejection, the
-//           uncertainty from the covariance of the fit
-// Either refuses, saying why, rather than returning a position it cannot stand
-// behind: too faint, too sharp to be a point source, not round, too near the
-// frame edge, or moved farther than the capture radius allows. A circle whose
-// limb leaves the frame refines from the rays that stay in it, if at least 70%
-// do, and is refused as `touches-frame` otherwise (the gate's lunar leg: a limb
-// that fills the frame cannot be marked).
+// Ported from the gate's prototype (IMAGE_MEASUREMENT_GATE.md, D-R10-48) with its
+// arithmetic unchanged, so the gate's thresholds hold as regression tests.
+// Pure. FITS coordinates (1 is the centre of the first pixel, y up); a frame is
+// {width, height, data, gain?}, row by row. Deterministic, no random start:
+//   point   windowed centroid (SExtractor's XWIN), sky from an annulus median,
+//           uncertainty from the CCD's noise
+//   circle  steepest-gradient edge along 72 rays, a circle fitted to it
+//           (algebraic, then Gauss-Newton) with robust rejection
+// Either refuses, saying why, rather than return a position it cannot stand
+// behind. A limb leaving the frame refines from the rays that stay in it if at
+// least 70% do, and is refused as `touches-frame` otherwise.
 // =============================================================================
 
 export const CAPTURE = 3;

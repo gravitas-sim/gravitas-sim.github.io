@@ -27,7 +27,29 @@
 
 import { LIMITS, checkFrame, residentFrames } from './limits.js';
 import { partProblems } from '../offlineParts.js';
-import { unusableWcs } from '../observatory/wcs.js';
+
+/**
+ * Why a WCS cannot be used, or null when it can: the rule of
+ * js/observatory/wcs.js unusableWcs, written out again here on purpose. The
+ * Observatory page imports that module, and a lazy chunk that imported it too
+ * would put it in a chunk the page has to fetch (a request on a route the
+ * marks instrument must not touch); tests/imageMeasure.test.js holds the two
+ * to the same answers.
+ * @returns {string|null}
+ */
+export function wcsUnusable(wcs) {
+  if (!wcs) return 'the image has no world coordinates';
+  const [a, b] = wcs.ctype || [];
+  if (!/^RA---TAN/.test(a || '') || !/^DEC--TAN/.test(b || ''))
+    return `it is projected as ${a || '?'} / ${b || '?'}, and only TAN is read here`;
+  const finite = x =>
+    Array.isArray(x) && x.length === 2 && x.every(Number.isFinite);
+  if (!finite(wcs.crpix) || !finite(wcs.crval))
+    return 'its reference pixel or position is missing';
+  if (!wcs.cd && !(finite(wcs.cdelt) && Array.isArray(wcs.pc)))
+    return 'it has neither a CD matrix nor PC and CDELT';
+  return null;
+}
 
 /** The units of the two noise terms, the one spelling of each. */
 export const GAIN_UNIT = 'electron/adu';
@@ -734,7 +756,7 @@ export function permits(doc, operation, i = 0) {
         'no-wcs',
         'This image has no world coordinate system, so a position in it cannot be a position on the sky.'
       );
-    const why = unusableWcs(image.wcs);
+    const why = wcsUnusable(image.wcs);
     if (why)
       return refuse(
         'wcs-unsupported',

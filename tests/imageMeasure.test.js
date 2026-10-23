@@ -45,8 +45,14 @@ import {
   marksBlock,
   validateMarks,
 } from '../js/measure/imageRecord.js';
-import { permits } from '../js/dataKinds/contract.js';
+import { permits, wcsUnusable } from '../js/dataKinds/contract.js';
+import { pixelScale, unusableWcs } from '../js/observatory/wcs.js';
 import { observationJson } from '../js/observatory/export.js';
+import {
+  SETTLE_MS,
+  nudgeScale as panelNudge,
+} from '../js/observatory/imageMarks.js';
+import { nudgeScale } from '../js/shortcuts.js';
 
 if (!globalThis.crypto?.subtle)
   Object.defineProperty(globalThis, 'crypto', {
@@ -134,6 +140,55 @@ describe('the gate thresholds hold for the production modules', () => {
 
 // ---- the scale, and what a display-only image allows ---------------------------
 
+describe('what the panel writes out is what the registry says', () => {
+  test("the nudge sizes are INTERACTION.md's, for every modifier", () => {
+    for (const altKey of [false, true])
+      for (const shiftKey of [false, true]) {
+        const e = { altKey, shiftKey };
+        expect(panelNudge(e)).toBe(nudgeScale(e));
+      }
+    expect([
+      panelNudge({ altKey: true }),
+      panelNudge({}),
+      panelNudge({ shiftKey: true }),
+    ]).toEqual([0.25, 1, 4]);
+  });
+
+  test('a run of nudges is said when it stops, after the settle time of js/interaction.js', () => {
+    const src = readFileSync(path.join(ROOT, 'js/interaction.js'), 'utf8');
+    expect(Number(/delay = (\d+)/.exec(src)[1])).toBe(SETTLE_MS);
+  });
+});
+
+describe('the contract keeps its own copy of the WCS rule', () => {
+  test("wcsUnusable answers as the Observatory page's unusableWcs does, case by case", () => {
+    const good = sidecar('quantitative').wcs;
+    const cases = [
+      good,
+      null,
+      undefined,
+      {},
+      { ...good, ctype: ['RA---SIN', 'DEC--SIN'] },
+      { ...good, ctype: undefined },
+      { ...good, crpix: [1] },
+      { ...good, crval: [NaN, 0] },
+      { ...good, cd: undefined, cdelt: undefined, pc: undefined },
+      {
+        ...good,
+        cd: undefined,
+        cdelt: [1e-3, 1e-3],
+        pc: [
+          [1, 0],
+          [0, 1],
+        ],
+      },
+      { ...good, cd: undefined, cdelt: [1e-3, 1e-3] },
+    ];
+    for (const w of cases) expect(wcsUnusable(w)).toBe(unusableWcs(w));
+    expect(cases.filter(w => wcsUnusable(w) === null)).toHaveLength(3);
+  });
+});
+
 describe('scale, size and time', () => {
   const pairState = (L = 100, unit = 'km', sigmaL = 0) =>
     place(emptyState(), {
@@ -157,19 +212,19 @@ describe('scale, size and time', () => {
   test('a quantitative sidecar gives arcseconds per pixel; display-only refuses it in the contract words and a pair still works', () => {
     const q = sidecar('quantitative');
     const d = sidecar('display-only');
-    const sc = scaleOf(emptyState(), { sidecar: q });
+    const sc = scaleOf(emptyState(), { sidecar: q, pixelScale });
     expect(sc.unit).toBe('arcsec/pix');
     expect(Number.isFinite(sc.value) && sc.value > 0).toBe(true);
     expect(sc.sigma).toBeGreaterThanOrEqual(0);
 
     // Marking is allowed on a display-only image; the sky's scale is not.
     expect(permits(d, 'marking').ok).toBe(true);
-    const refused = scaleOf(emptyState(), { sidecar: d });
+    const refused = scaleOf(emptyState(), { sidecar: d, pixelScale });
     expect(refused.code).toBe('display-only');
     expect(refused.refused).toMatch(/display-only/);
     expect(refused.value).toBeUndefined();
     // A pair is the person's own measurement and needs no contract.
-    const pair = scaleOf(pairState(56, 'mm'), { sidecar: d });
+    const pair = scaleOf(pairState(56, 'mm'), { sidecar: d, pixelScale });
     expect(pair.unit).toBe('mm/pix');
     expect(pair.value).toBeCloseTo(56 / 50, 12);
   });

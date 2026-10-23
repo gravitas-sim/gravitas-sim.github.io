@@ -1,25 +1,17 @@
 // =============================================================================
 // The record: marks, scale, frame time and image identity, and its replay
 // -----------------------------------------------------------------------------
-// Ported from the gate's accepted prototype (IMAGE_MEASUREMENT_GATE.md, D-R10-48).
-// One description of a set of marks, `marksRecord`, serves two places:
-//
-//   the ledger      one gravitas.artifact/1 envelope (js/platform/artifact.js,
-//                   Prompt 150): every coordinate a quantity with an uncertainty
-//                   of Prompt 150's kinds, the scale and each frame's time beside
-//                   them, the image's identity a SHA-256 of its pixels, and in the
-//                   provenance the marks as placed so that the refinement can be
-//                   run again on the same pixels (replay);
-//   the workspace   `workspace.marks` of an Observatory save, a
-//                   gravitas.image-marks/1 block (FORMATS.md), written only when
-//                   marks exist, so a workspace without marks is the bytes it was.
-//
-// A record reopens the image with its marks (`replay`): it refuses when a frame's
-// pixels are not the ones it was made on, rebuilds the marks as placed, refines
-// them again and says whether each refined coordinate is bit-identical to the one
-// the record holds (in the same engine: another browser's Math.exp may differ in
-// the last bit, so `agrees` also says whether every one is within a micro-pixel).
-// Pure; async only for the digest.
+// Ported from the gate's prototype (IMAGE_MEASUREMENT_GATE.md, D-R10-48). One
+// description of a set of marks, `marksRecord`, serves two places:
+//   the ledger      a gravitas.artifact/1 (Prompt 150): every coordinate a
+//                   quantity with its uncertainty, the scale and frame times,
+//                   the image's SHA-256, and in the provenance the marks as
+//                   placed, so the refinement can be run again (replay)
+//   the workspace   `workspace.marks`, a gravitas.image-marks/1 block (FORMATS.md),
+//                   written only when marks exist
+// `replay` refuses when a frame's pixels changed, refines again and says whether
+// each coordinate is bit-identical (`agrees`: within a micro-pixel, for another
+// browser's Math.exp). Pure; async only for the digest.
 // =============================================================================
 
 import { sha256Hex } from '../hash.js';
@@ -188,10 +180,9 @@ export async function marksBlock({ frames, state }) {
 
 /**
  * One gravitas.artifact/1 envelope with replay.
- * @param {{id: string, setId: string, frames: object[], sidecar?: object,
- *   state: object}} a
+ * @param {{id: string, setId: string, frames: object[], state: object}} a
  */
-export async function writeRecord({ id, setId, frames, sidecar, state }) {
+export async function writeRecord({ id, setId, frames, state }) {
   // The envelope's module is the Fit panel's too: fetched when a record is made.
   const { artifact } = await import('../platform/artifact.js');
   const red = await marksRecord({ frames, state });
@@ -205,7 +196,7 @@ export async function writeRecord({ id, setId, frames, sidecar, state }) {
         64
       ),
     },
-    quantities: quantitiesOf(state, frames, scaleOf(state, { sidecar })),
+    quantities: quantitiesOf(state, frames, scaleOf(state)),
     provenance: { reductions: [red] },
     made: { app: 'gravitas', tool: STEP },
   });

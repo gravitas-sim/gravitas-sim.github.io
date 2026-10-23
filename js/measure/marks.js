@@ -1,14 +1,12 @@
 // =============================================================================
 // Marks: the model, its operations and undo (Prompt 179)
 // -----------------------------------------------------------------------------
-// Ported from the gate's accepted prototype (IMAGE_MEASUREMENT_GATE.md, D-R10-48).
-// Pure and isomorphic. A mark is {id, kind, frame, tag, pts, sigma, refined, ...}:
-// a point and a count have one control point, a segment, a reference pair and a
-// circle (centre, then a point on the limb) two, a polygon three or more. The
-// coordinates are FITS's (1 is the centre of the first pixel, y up), in the full
-// resolution of the frame whatever size it is drawn at. A state is immutable and
-// every operation returns the next one, so undo is a list of states and a
-// refusal (or any operation that changes nothing) is not a step.
+// Ported from the gate's prototype (IMAGE_MEASUREMENT_GATE.md, D-R10-48). Pure.
+// A mark is {id, kind, frame, tag, pts, sigma, refined, ...}: a point and a
+// count have one control point, a segment, reference pair and circle two, a
+// polygon three or more, in FITS coordinates at the frame's full resolution. A
+// state is immutable; every operation returns the next, so undo is a list of
+// states and a refusal is not a step.
 // =============================================================================
 
 import { refineMark } from './refine.js';
