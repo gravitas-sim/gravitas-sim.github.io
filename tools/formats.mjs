@@ -17,7 +17,7 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { BOUNDARY } from '../tests/compat/boundary.mjs';
+import { BOUNDARY, LINKS } from '../tests/compat/boundary.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export const DOC = path.join(ROOT, 'FORMATS.md');
@@ -777,18 +777,32 @@ function compatibilitySection(formats) {
       return `| ${cell(f.name)} | ${c ? `\`${c.fixture}\`` : 'none yet'} | ${c ? c.unknown : 'not yet exercised'} | ${SUPPORT_PERIOD_SHORT} |`;
     })
     .join('\n');
-  const consequence = {
-    refused: 'refused in its own words: safe as a capability-required refusal',
-    ignored:
-      'accepted and silently dropped: a boundary, or the field must not be one an old reader needs',
-  };
-  const boundaryRows = BOUNDARY.map(
-    b =>
-      `| ${cell(b.plans)} (${b.prompt}) | \`${b.kind}\` | ${b.expect === 'refused' ? 'refuses' : 'ignores the field'} | ${consequence[b.expect]} |`
+  const carried = BOUNDARY.filter(b => b.boundary);
+  const version = ({ from, to }) =>
+    from === to ? `/${from}, unchanged` : `/${from} to /${to}`;
+  const says = b =>
+    b.rollback === 'refused'
+      ? `refuses it: \`${b.says}\``
+      : 'opens it and does not show the fields';
+  const carriedRows = carried
+    .map(
+      e =>
+        `| ${cell(e.plans)} (${e.prompt}) | ${cell(e.boundary.format)} ${version(e.boundary)} | ${cell(e.boundary.rule)} | ${cell(says(e.boundary))} | ${cell(e.boundary.requires)} |`
+    )
+    .join('\n');
+  const notCarried = BOUNDARY.filter(b => !b.boundary)
+    .map(b => `- ${b.plans} (${b.prompt}): ${b.note}.`)
+    .join('\n');
+  const linkRows = LINKS.map(
+    l =>
+      `| ${cell(l.link)} | ${l.prefix} | ${cell(l.versions)} | ${cell(l.written)} | ${cell(l.old)} |`
   ).join('\n');
+  const refusedNames = carried
+    .filter(e => e.boundary.rollback === 'refused')
+    .map(e => e.id);
   return `## Compatibility with 2.0.0 (Prompt 134)
 
-An older build is a real reader: a browser still running 2.0.0's cached code, a tab opened before a deploy, a deploy rolled back. \`tests/compat/\` runs the 2.0.0 readers (archived from the \`v2.0.0\` commit) beside the current ones on a fixture set per record kind, and holds a matrix to each: the old reader reads what 2.0.0 wrote; the current reader reads it losslessly; what the 2.0.0 reader says of what the current writer makes (accepted, or refused with the message recorded); a round trip; the capabilities a record needs; and the 2.0.0 reader's answer to an unknown field. \`tests/compat/boundary.test.js\` runs the fields later prompts plan to write against it.
+An older build is a real reader: a browser still running 2.0.0's cached code, a tab opened before a deploy, a deploy rolled back. \`tests/compat/\` runs the 2.0.0 readers (archived from the \`v2.0.0\` commit) beside the current ones on a fixture set per record kind, and holds a matrix to each: the old reader reads what 2.0.0 wrote; the current reader reads it losslessly; what the 2.0.0 reader says of what the current writer makes (accepted, or refused with the message recorded); a round trip; the capabilities a record needs; and the 2.0.0 reader's answer to an unknown field. \`tests/compat/boundary.test.js\` runs each field the current build writes, or plans to, against it.
 
 **The policy.**
 - A writer may change only when its corpus row is green for the change.
@@ -804,11 +818,37 @@ An older build is a real reader: a browser still running 2.0.0's cached code, a 
 |---|---|---|---|
 ${compatRows}
 
-**The planned extensions against 2.0.0** (the list Prompt 176 starts from; \`tests/compat/boundary.mjs\`):
+## The 3.0.0 boundary (Prompt 176)
 
-| Planned (prompt) | Kind | What 2.0.0 does | Consequence |
-|---|---|---|---|
-${boundaryRows}
+A change an older build refuses or misreads is a major version, and this is the one place the project makes it: **3.0.0**, which RELEASING.md names (the number is still Carl's choice at the release). Every format below keeps its reader for every version it ever had; a writer writes the **lowest version that carries the payload**, so a file or link that needs nothing new is the bytes 2.0.0 wrote and a 2.0.0 build opens it. What needs something new is written under a newer version number, and a 2.0.0 build refuses it by that number, in words the build already has ("made by a newer version of Gravitas", "is not 1", a link refused by reason code), rather than opening it with a field dropped. \`tests/compat/boundary.test.js\` runs each row below with the payload the current writer makes: the 2.0.0 reader (archived from the \`v2.0.0\` commit) is handed it, which is the rollback rehearsal, and says what the table records; the current reader reads it and a rewrite reads the same.
+
+| Change (prompt) | Format, 2.0.0 to 3.0.0 | The writer's rule | A 2.0.0 build, handed it | Needs |
+|---|---|---|---|---|
+${carriedRows}
+
+**Not carried.**
+${notCarried}
+
+**The rollback rehearsal.** A build rolled back to 2.0.0, or an older tab or cache, meets what 3.0.0 wrote. For the ${refusedNames.length} records above that 2.0.0 refuses (${refusedNames.map(n => `\`${n}\``).join(', ')}) the outcome is a refusal with the message recorded in the table, never an opened file with a field lost; the one it opens (\`assignment-link-presentation\`) carries the fields on and does not show them, which changes what a student sees and not which steps there are or their order. Nothing a 2.0.0 build wrote is unreadable to 3.0.0, and nothing is converted in place: a 3.0.0 file stays as written, and leaving out what needs 3.0.0 (a term, outcomes, a criterion's kind) makes the next save the older form again.
+
+**Links.** The supported-link policy (SURFACE_RETIREMENT_GATE.md, decision D-R10-44) is applied to the link kinds whose payload changed. A link carries state, so it is class R: a version is deprecated for twelve months when a later major supersedes it and its writer stops writing it, then read-only for twelve more, then retired with an export path, announced in CHANGELOG.md one release ahead. No version is superseded by 3.0.0, because every writer still writes the older prefix for the payload that always carried it, so no period has started; none will start for a version that is still the lowest one that carries a payload.
+
+| Link | Prefix | Versions | What is written | A 2.0.0 build |
+|---|---|---|---|---|
+${linkRows}
+
+**For the release notes** (generated here from the table above; the notes quote it):
+- A course, a lesson pack, a question bank, a result envelope, a link or a workspace file that needs nothing new opens in 2.0.0 and in 3.0.0 alike.
+- ${carried
+    .filter(e => e.boundary.from !== e.boundary.to)
+    .map(
+      e =>
+        `${e.plans} (${e.boundary.format}${version(e.boundary).replace(', unchanged', '')})`
+    )
+    .join('; ')}: a 2.0.0 build refuses these by their version number.
+- The Observatory workspace with image marks is refused by a 2.0.0 build as nested too deep.
+- To hand a file to someone still on 2.0.0, leave out what needs 3.0.0, and it is written in the older form.
+- Every format keeps its reader; no support period has started.
 `;
 }
 
