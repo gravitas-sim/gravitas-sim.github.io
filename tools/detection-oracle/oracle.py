@@ -23,7 +23,10 @@ astropy, numpy, scipy), on the SAME pixels the tests use:
     background-subtracted, unsmoothed image (area, centroid, second moments,
     ellipticity, orientation, maximum, segment flux)
   * the Gaussian FWHM: photutils.psf.fit_fwhm (CircularGaussianPRF) on a square
-    of pixels about each isolated bright source, unweighted, background zero
+    of pixels about each isolated bright source, unweighted, background zero;
+    and, as extra evidence recorded after the first comparison, the same
+    objective by scipy least_squares over CircularGaussianPRF at tolerances of
+    1e-15 (fit_fwhm exposes none of its fitter's tolerances)
   * the Moffat FWHM and beta: scipy.optimize.least_squares ('trf' with bounds that
     are not active at the solution, tolerances 1e-15) over photutils.psf.MoffatPSF, each pixel the mean of 5 by 5
     sub-pixel midpoints
@@ -43,7 +46,7 @@ import numpy as np
 from astropy.convolution import Gaussian2DKernel, convolve
 from astropy.stats import SigmaClip
 from photutils.background import Background2D, MedianBackground, StdBackgroundRMS
-from photutils.psf import MoffatPSF, fit_fwhm
+from photutils.psf import CircularGaussianPRF, MoffatPSF, fit_fwhm
 from photutils.segmentation import SourceCatalog, detect_sources
 from scipy.interpolate import RegularGridInterpolator
 from scipy.optimize import least_squares
@@ -192,7 +195,25 @@ for f in inputs["frames"]:
             if any(j != i and math.hypot(o["x"] - s["x"], o["y"] - s["y"]) < R + 3 for j, o in enumerate(srcs)):
                 continue
             fw = float(fit_fwhm(sub, xypos=[(s["x"], s["y"])], fwhm=s["fwhm"], fit_shape=(2 * R + 1, 2 * R + 1))[0])
-            rec["fits"].append({"source": i, "half": R, "fwhm": fw})
+            # the same objective by scipy least_squares over CircularGaussianPRF at tight tolerances
+            ysg, xsg = np.mgrid[yc - R : yc + R + 1, xc - R : xc + R + 1].astype(float)
+            cutg = sub[yc - R : yc + R + 1, xc - R : xc + R + 1]
+
+            def residg(p):
+                return (CircularGaussianPRF(flux=p[0], x_0=p[1], y_0=p[2], fwhm=p[3])(xsg, ysg) - cutg).ravel()
+
+            tight = least_squares(
+                residg,
+                [s["flux"], s["x"], s["y"], s["fwhm"]],
+                method="trf",
+                bounds=([-np.inf, -np.inf, -np.inf, 0.3], [np.inf, np.inf, np.inf, 40.0]),
+                x_scale="jac",
+                xtol=1e-15,
+                ftol=1e-15,
+                gtol=1e-15,
+                max_nfev=5000,
+            )
+            rec["fits"].append({"source": i, "half": R, "fwhm": fw, "fwhmTight": float(tight.x[3])})
             if f["id"] == "moffat":
                 cut = sub[yc - R : yc + R + 1, xc - R : xc + R + 1]
                 ys, xs = np.mgrid[yc - R : yc + R + 1, xc - R : xc + R + 1].astype(float)
