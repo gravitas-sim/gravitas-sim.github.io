@@ -51,7 +51,7 @@ function h(tag, attrs = {}, ...kids) {
  *
  * @param {object} ctx - What the page owns
  * @param {HTMLElement} ctx.host - The section to draw in
- * @param {'use'|'next'|'cartridge'} ctx.mode - A shipped course as it comes, the next term, or the cartridge panel
+ * @param {'use'|'next'|'cartridge'|'plan'} ctx.mode - A shipped course as it comes, the next term, or the cartridge or activity list panel
  * @param {() => object} ctx.source - The pack to copy, read when the button is pressed
  * @param {(pack: object) => Promise<object>} ctx.facts - This build's facts for it
  * @param {(pack: object) => number} ctx.problems - How many problems the pack has
@@ -69,6 +69,33 @@ function h(tag, attrs = {}, ...kids) {
 export function openTermPanel(ctx) {
   // The Common Cartridge panel (Prompt 169) is opened the same way, so the
   // builder's page needs one more line and no more imports.
+  // The activity list panel (Prompt 174) is opened the same way, with what the
+  // builder gives it in `ctx.plan`.
+  if (ctx.mode === 'plan') {
+    let panel = null;
+    const host = document.getElementById('cb-plan-panel');
+    import('./instructorPlanView.js').then(m => {
+      const { commit, loadInvestigation, LESSONS } = ctx.plan;
+      panel = m.openPlanPanel({
+        host,
+        source: ctx.source,
+        manifest: ctx.manifest,
+        facts: ctx.facts,
+        lib: { itemsOf: ctx.lib.itemsOf },
+        nameOf: ctx.nameOf,
+        load: loadInvestigation,
+        entries: () => m.libraryEntries(ctx.root),
+        cards: new Map(LESSONS.map(c => [c.id, c])),
+        locale: ctx.locale,
+        edit: commit,
+        shortHash: ctx.lib.shortHash,
+      });
+    });
+    return {
+      refresh: o => panel?.refresh(o),
+      close: () => panel?.close(),
+    };
+  }
   if (ctx.mode === 'cartridge') {
     let panel = null;
     const host = document.getElementById('cb-cartridge-panel');
