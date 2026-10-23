@@ -1,10 +1,13 @@
 import { afterAll, beforeAll, describe, expect, test } from '@jest/globals';
-import { BOUNDARY } from './boundary.mjs';
-import { archiveOld, run } from './harness.js';
+import { BOUNDARY, LINKS } from './boundary.mjs';
+import { FORMATS } from '../../tools/formats.mjs';
+import { REPO, archiveOld, run } from './harness.js';
 
 // The boundary list (Prompt 134, step 4): what the 2.0.0 readers do with the
-// fields later prompts plan to write. It is the content of Prompt 176 and
-// decides whether 177 is 3.0.0. See boundary.mjs for the two outcomes.
+// fields later prompts write. Prompt 176 settled it for 3.0.0: for each entry
+// that is carried, the payload as the current writer makes it is handed to the
+// 2.0.0 reader (the rollback rehearsal), which says what boundary.mjs records,
+// and to the current reader, which reads it. See boundary.mjs.
 
 let old;
 beforeAll(() => {
@@ -18,7 +21,7 @@ const clone = x => JSON.parse(JSON.stringify(x));
 async function outcome(entry) {
   const made = run(old.tree, entry.kind, 'make');
   expect(made.ok).toBe(true);
-  const variant = entry.mutate(made.value);
+  const variant = await entry.mutate(made.value);
   const base = run(old.tree, entry.kind, 'read', made.value);
   const read = run(old.tree, entry.kind, 'read', variant);
   expect(read.ok).toBe(true);
@@ -37,6 +40,55 @@ describe.each(BOUNDARY)('$id (Prompt $prompt)', entry => {
     });
   });
 });
+
+/** The version a written payload says: its formatVersion, or its link prefix. */
+const versionOf = doc =>
+  doc.formatVersion ??
+  Number(/^#?[a-z](\d+)/.exec(doc.hash ?? doc.fragment)?.[1]);
+
+// The rollback rehearsal (Prompt 176): a payload the current build wrote,
+// opened by the 2.0.0 build of the corpus, per record.
+describe.each(BOUNDARY.filter(b => b.boundary))(
+  'rollback: $id',
+  ({ boundary: b, kind, mutate }) => {
+    let made;
+    let written;
+    beforeAll(async () => {
+      made = run(old.tree, kind, 'make').value;
+      written = await b.write(await mutate(made));
+    });
+
+    test('the writer says the version the list names', () => {
+      expect(versionOf(written)).toBe(b.to);
+    });
+
+    test('a payload that needs nothing new is written as 2.0.0 wrote it', async () => {
+      expect(await b.write(made)).toEqual(made);
+      expect(versionOf(made)).toBe(b.from);
+    });
+
+    test(`a 2.0.0 build is handed it and ${b.rollback}`, () => {
+      const read = run(old.tree, kind, 'read', written);
+      expect(read.ok).toBe(true);
+      if (b.rollback === 'refused') {
+        expect(read.value.accepted).toBe(false);
+        expect(read.value.problems.join('; ')).toContain(b.says);
+      } else {
+        expect(b.rollback).toBe('opens-without');
+        expect(read.value.accepted).toBe(true);
+      }
+    });
+
+    test('the current build reads it, and a rewrite reads the same', () => {
+      const read = run(REPO, kind, 'read', written);
+      expect(read.ok).toBe(true);
+      expect(read.value.accepted).toBe(true);
+      const again = run(REPO, kind, 'rewrite', written);
+      expect(again.ok).toBe(true);
+      expect(run(REPO, kind, 'read', again.value).value).toEqual(read.value);
+    });
+  }
+);
 
 describe('what a 2.0.0 artifact reader is given (Prompt 150)', () => {
   test('legacyView turns every state it refuses into one it opens, and lists the loss', async () => {
@@ -91,6 +143,34 @@ describe('the list', () => {
     // 179's workspace marks and 265's ensemble fields.
     for (const p of [150, 163, 164, 179, 265])
       expect(prompts.has(p)).toBe(true);
+  });
+
+  test('every entry is carried by the boundary or says why not', () => {
+    const formats = new Set(FORMATS.map(f => f.name.replace(/\s*\(.*\)$/, '')));
+    for (const e of BOUNDARY) {
+      expect({ id: e.id, has: Boolean(e.boundary || e.note) }).toEqual({
+        id: e.id,
+        has: true,
+      });
+      if (!e.boundary) continue;
+      const b = e.boundary;
+      expect(formats.has(b.format)).toBe(true);
+      expect(b.to >= b.from).toBe(true);
+      expect(['refused', 'opens-without']).toContain(b.rollback);
+      expect(typeof b.rule).toBe('string');
+      expect(typeof b.requires).toBe('string');
+      expect(typeof b.write).toBe('function');
+      expect(b.rollback === 'refused' ? typeof b.says : b.says).toBe(
+        b.rollback === 'refused' ? 'string' : null
+      );
+    }
+  });
+
+  test('the link kinds that changed are rows of the format table', () => {
+    const names = new Set(FORMATS.map(f => f.name));
+    for (const l of LINKS) expect(l.link && l.versions && l.old).toBeTruthy();
+    for (const n of ['course home link', 'investigation link'])
+      expect(names.has(n)).toBe(true);
   });
 
   test('every entry names a corpus kind', async () => {

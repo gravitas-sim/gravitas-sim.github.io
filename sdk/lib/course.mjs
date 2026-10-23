@@ -1,5 +1,5 @@
 // =============================================================================
-// gravitas.course-pack, as the SDK sees it: /1 and /2
+// gravitas.course-pack, as the SDK sees it: /1, /2 and /3
 // -----------------------------------------------------------------------------
 // /1 belongs to the platform (js/platform/course.js), which the catalog page
 // also validates installed courses with: units of lessons, with notes.

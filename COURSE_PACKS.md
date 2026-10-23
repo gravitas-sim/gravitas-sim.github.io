@@ -4,7 +4,7 @@ A course pack is a course as a file: the lessons, assignments, simulations,
 data and readings an instructor sets, in order, in units, with learning
 objectives, prerequisites, time, optional introductory and advanced paths,
 and notes for students and instructors in English and Spanish. It is
-`gravitas.course-pack/2` (`js/course/pack.js`). Two pages use it:
+`gravitas.course-pack/2` (`js/course/pack.js`), or `/3` when it carries a profile, a term or outcomes (see The 3.0.0 version, below). Two pages use it:
 
 - **The course-pack builder**, at `/studio/course/`, the Studio's third page,
   makes one. It checks what the course depends on, pins every lesson it
@@ -91,7 +91,7 @@ A collection can hold a lesson, a 3-D or mission guide, a scenario, a dataset, a
 - **A student's saved items**, a collection of their own in one record (`gravitas_collections`: STORAGE.md), and the collections they kept from others. A collection opened from a link is kept only when the student presses Keep on the course home; opening one stores nothing.
 - **An instructor's collection**, made in the distribution kit (`/teaching/kit/#collections`) from what they saved in the Library: order, a sentence for each item, a depth where an item has one, a title, and a link or a file. The Spanish is written, never made up: once any text has Spanish, every text needs it.
 
-**A 2.0.0 build cannot open a collection.** Its reader refuses the pack and names the field `profile` (`tests/compat/boundary.mjs`, `collection-profile`), which is why the writer writes the field only for a collection, and why the release notes say so. The format stays version 2: no course is changed.
+**A 2.0.0 build cannot open a collection.** A collection is written as `gravitas.course-pack/3` (see The 3.0.0 version, below), which a 2.0.0 build refuses as made by a newer version of Gravitas (`tests/compat/boundary.mjs`, `collection-profile`), and the release notes say so. No course is changed: a course has no profile and stays /2.
 
 ### 3-D lab investigations (Prompt 105)
 
@@ -170,9 +170,9 @@ the term in the public id and sets `term`. It returns the new pack and a report:
 standing before (`same`, `changed`, `compatible`, `major`, `moved`, `unpinned`, `missing`), the assigned
 steps whose question changed or that are gone, and each assignment's old and new id. The pack passed in is
 not changed, and its links open what they opened. The builder's panel (`/studio/course/?use=<id>` and the
-Start a new term button) and the kit's term step are its two forms. The `term` field is additive: a 2.0.0
-reader refuses a pack that has it ("`term` is not a field here", `tests/compat/boundary.mjs`
-`course-term`), which is safe as a capability-required refusal, and every pack without one reads as before.
+Start a new term button) and the kit's term step are its two forms. The `term` field is written only when
+a term is named, and a pack that has it is `/3`: a 2.0.0 reader refuses it as made by a newer version
+(`tests/compat/boundary.mjs` `course-term`), and every pack without one reads as before.
 
 ## Checks
 
@@ -386,8 +386,12 @@ A course package becomes a plan to print or to paste into a page of a learning p
 
 - **What it holds.** The units and their items in order, each with what it is, its depth, its time band, its link (the link the course already makes), what comes after what (`needs`), what the investigation builds on and its OpenStax Astronomy 2e chapter (both read from the Library when the panel opens), the course objectives the item serves, the investigation's own objectives, and the notes. Then **what students hand in** (a lab report as a PDF, or its token, for an investigation, an activity cut from one and an instructor's investigation; nothing for a simulation, an observation, a guide or a reading, because Gravitas collects nothing there) and the outcome matrix. In English or Spanish, the language of the page it is made on; as a page to print (the list alone is on the page while printing, and the page is back after), as a saved web page, as Markdown to save or copy.
 - **Time bands, and what they are.** A time is a band, short (5 to 25 minutes), medium (30 to 50) or long (55 to 100), from one committed table, `js/data/instructorTimeBands.js`: for each investigation and each depth it offers, authored by the project from the lessons' declared durations and step counts (the table's header gives the rule, and `tests/timeBands.test.js` redoes it). A unit's time is its core items' bands added; optional items are counted apart. Every page that shows a band says **Editorial estimate; no observed class data.** (the plan, the adoption pages, the index and the alignment page) until the evidence-status record's `timing-estimates` claim holds an observed value; the test holds that constant to the record. No median from a test walk is used anywhere: a script reads faster than a student. The Library's length facet reads the same table (`tools/build-library.mjs`), and the lesson browser's cut-offs are the bands' upper bounds, so a duration cannot be one thing on a page and another in the filter.
-- **The instructor's outcomes.** `outcomes` is a list of the instructor's own outcomes (a department's or a syllabus's), free text in both languages like an objective's, and an objective's `outcomes` names the ones it serves. The plan prints the matrix of items against outcomes through the course objectives each item names, lists the objectives' mapping, says which outcome no item serves and which items name no objective (so are left out, not scored as zero). **The mapping is the instructor's claim of what the course intends. It is not evidence that any student attained an outcome**, and the plan says so beside the matrix. The builder's panel is where outcomes are written and mapped (an outcome with no words is a problem the builder lists); a course file that carries them prints the matrix from the kit too. Both fields are additive: a 2.0.0 reader refuses a package that has either, naming the field (`tests/compat/boundary.mjs` `course-outcomes`), which is safe as a capability-required refusal, and every package without them reads as before. The adoption pages list each investigation's objectives and say how to map them before a course is built.
+- **The instructor's outcomes.** `outcomes` is a list of the instructor's own outcomes (a department's or a syllabus's), free text in both languages like an objective's, and an objective's `outcomes` names the ones it serves. The plan prints the matrix of items against outcomes through the course objectives each item names, lists the objectives' mapping, says which outcome no item serves and which items name no objective (so are left out, not scored as zero). **The mapping is the instructor's claim of what the course intends. It is not evidence that any student attained an outcome**, and the plan says so beside the matrix. The builder's panel is where outcomes are written and mapped (an outcome with no words is a problem the builder lists); a course file that carries them prints the matrix from the kit too. Both fields are written only when entered, and a package that has either is `/3`: a 2.0.0 reader refuses it as made by a newer version (`tests/compat/boundary.mjs` `course-outcomes`), and every package without them reads as before. The adoption pages list each investigation's objectives and say how to map them before a course is built.
 - **A second textbook.** Not added. A second alignment needs a public table of contents that can be cited, and none was checked in this work (nothing was fetched); the alignment page says OpenStax is the only textbook aligned and why. Adding one is a content decision (a register row), not a change here.
+
+## The 3.0.0 version (Prompt 176)
+
+`gravitas.course-pack/3` is `/2` plus the three things only a 3.0.0 reader understands: `profile` (a collection), `term` and `outcomes` (on the course and on an objective). The writer writes the lowest version that carries the pack, so a course that needs none of them is `/2` byte for byte and a 2.0.0 build opens it; `withVersion()` in `js/course/pack.js` is that rule, applied where a pack is saved (`serializePack`) and where a link is made (`courseLink`: `c2`, or `c3` for a `/3` pack). Leave the term, the outcomes or the profile out and the next save is `/2` again. The reader reads `/1` (migrating it), `/2` and `/3`; a version past `/3` is refused in words. A 2.0.0 build that is handed a `/3` file or a `c3` link refuses it, and FORMATS.md records the message and the rollback outcome (the table "The 3.0.0 boundary"), held by `tests/compat/boundary.test.js` and `tests/formatBoundary.test.js`. The schemas are `sdk/schemas/course-pack-2.schema.json` (the form 2.0.0 reads) and `course-pack-3.schema.json`.
 
 ## What authors may ask for that it does not do
 

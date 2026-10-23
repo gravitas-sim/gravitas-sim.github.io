@@ -35,7 +35,7 @@ export const RECEIVED_MAX = 6;
 /** The id of the student's own collection. */
 export const SAVED_ID = 'saved-items';
 
-const FORMAT_VERSION = 2;
+const FORMAT_VERSION = 3; // a collection is course-pack/3 (Prompt 176)
 /** The most items a unit holds (js/course/pack.js MAX_ITEMS). */
 const MAX_ITEMS = 30;
 /** The platform version a saved list is written for (PLATFORM_API). */

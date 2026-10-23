@@ -570,8 +570,8 @@
         "catalogs": ["composer"]
       },
       "cost": {
-        "lines": 4173,
-        "testFiles": 16,
+        "lines": 4169,
+        "testFiles": 17,
         "generated": 0,
         "strings": 328,
         "precacheKb": 56.4,
@@ -603,7 +603,7 @@
         "catalogs": ["course"]
       },
       "cost": {
-        "lines": 3819,
+        "lines": 3816,
         "testFiles": 13,
         "generated": 0,
         "strings": 277,
@@ -1830,7 +1830,7 @@
       "consequence": "Keep; a schema in Prompt 290.",
       "cost": {
         "lines": 0,
-        "testFiles": 2,
+        "testFiles": 4,
         "generated": 0,
         "strings": 0,
         "precacheKb": 0,
@@ -1962,7 +1962,7 @@
       "consequence": "Keep; a schema in Prompt 290.",
       "cost": {
         "lines": 0,
-        "testFiles": 2,
+        "testFiles": 4,
         "generated": 0,
         "strings": 0,
         "precacheKb": 0,
@@ -1995,7 +1995,7 @@
       "consequence": "Keep. Written for a person to read; Prompt 290 gives it a schema or says in words that it has none.",
       "cost": {
         "lines": 0,
-        "testFiles": 3,
+        "testFiles": 4,
         "generated": 0,
         "strings": 0,
         "precacheKb": 0,

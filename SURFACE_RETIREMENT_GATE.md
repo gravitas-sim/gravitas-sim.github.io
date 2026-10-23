@@ -255,8 +255,8 @@ Counts first, then every surface. "Links / Library / cited" are the shipped inve
 | Instructor resources | 290 · 7 · 0 · 0 · 0 · 1 | pages `instructors/index.html` |
 | Submission review | 5793 · 21 · 0 · 0 · 66.2 · 1 | pages `instructors/submissions/index.html` |
 | Classroom evidence kit | 1258 · 7 · 0 · 0 · 5.1 · 1 | pages `evaluation/index.html` |
-| Investigation Composer | 4173 · 16 · 0 · 328 · 56.4 · 1 | pages `studio/lesson/index.html` |
-| Course-package builder | 3819 · 13 · 0 · 277 · 51.6 · 5 | pages `studio/course/index.html` |
+| Investigation Composer | 4169 · 17 · 0 · 328 · 56.4 · 1 | pages `studio/lesson/index.html` |
+| Course-package builder | 3816 · 13 · 0 · 277 · 51.6 · 5 | pages `studio/course/index.html` |
 | Investigations in a course | 594 · 4 · 0 · 0 · 6 · 1 | pages `studio/course/packs/index.html` |
 | Find content to teach | 237 · 4 · 0 · 0 · 0 · 0 | pages `teaching/find/index.html` |
 | Adopter's guide | 225 · 1 · 0 · 0 · 0 · 0 | pages `teaching/adopt/index.html` |

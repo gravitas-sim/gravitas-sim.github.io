@@ -34,13 +34,44 @@
 // =============================================================================
 
 import { isObject, knownKeys, makeChecker } from './checker.js';
-import { checkItems, checkUnitName } from './questionBank.js';
+import {
+  BANK_BASE_VERSION,
+  BANK_FORMAT_VERSION,
+  checkItems,
+  checkUnitName,
+  needsCriterionSemantics,
+} from './questionBank.js';
 import { ID_INVESTIGATION_PACK } from '../names.js';
 
 export { makeChecker };
 
 export const FORMAT = ID_INVESTIGATION_PACK;
-export const FORMAT_VERSION = 1;
+/**
+ * The newest version this reader reads: /2 (Prompt 176) is /1 plus a rubric
+ * criterion's `kind`, `depth` and `weight`, in a step or in the pack's bank
+ * (one rule with the question bank's). A pack that sets none is written as /1.
+ */
+export const FORMAT_VERSION = BANK_FORMAT_VERSION;
+/** The version of a pack that needs nothing /2 adds, and what 2.0.0 wrote. */
+export const BASE_VERSION = BANK_BASE_VERSION;
+
+/** The lowest version that carries this pack. */
+export const packVersion = p =>
+  needsCriterionSemantics([p?.steps, p?.bank?.items])
+    ? FORMAT_VERSION
+    : BASE_VERSION;
+
+/** A pack as it is written: the same document at the lowest version that carries it. */
+export const withVersion = p =>
+  p?.format === FORMAT && p.formatVersion >= BASE_VERSION
+    ? p.formatVersion === packVersion(p)
+      ? p
+      : { ...p, formatVersion: packVersion(p) }
+    : p;
+
+/** A file's text: a pack at its lowest version, anything else as it is (what ../studio/model.js serialize does). */
+export const serializePack = doc =>
+  `${JSON.stringify(withVersion(doc), null, 2)}\n`;
 
 export const STEP_TYPES = Object.freeze([
   'read',
@@ -152,10 +183,10 @@ export function validateInvestigationPack(p, api) {
   knownKeys(need, p, [...PACK_FIELDS], '', 'an investigation-pack field');
   need(p.format === FORMAT, 'format', 'format', `must be "${FORMAT}"`);
   need(
-    p.formatVersion === FORMAT_VERSION,
+    p.formatVersion === BASE_VERSION || p.formatVersion === FORMAT_VERSION,
     'formatVersion',
     'formatVersion',
-    `must be ${FORMAT_VERSION}`
+    `must be ${BASE_VERSION} or ${FORMAT_VERSION}`
   );
   need(
     typeof p.id === 'string' && PUBLIC_ID.test(p.id),

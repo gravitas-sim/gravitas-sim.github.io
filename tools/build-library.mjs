@@ -811,7 +811,7 @@ export async function buildLibrary() {
     if (items.every(Boolean)) {
       const collection = {
         format: 'gravitas.course-pack',
-        formatVersion: 2,
+        formatVersion: 3,
         id: `start-${g.id}`,
         version: '1.0.0',
         gravitas: PLATFORM_API,

@@ -32,7 +32,42 @@ export const FEEDBACK_CLASSES = Object.freeze([
 export const HINT_LIMIT = 3;
 
 export const BANK_FORMAT = ID_QUESTION_BANK;
-export const BANK_FORMAT_VERSION = 1;
+/**
+ * The newest version this reader reads. /2 (Prompt 176, the 3.0.0 format
+ * boundary) is /1 plus a criterion's `kind`, `depth` and `weight` (Prompt 172),
+ * which a 2.0.0 reader refuses as an unknown field; a bank, or an
+ * investigation pack, that sets none of them is still written as /1
+ * (needsCriterionSemantics), so every file that opened before opens now.
+ */
+export const BANK_FORMAT_VERSION = 2;
+/** The version of a bank, or a pack, that needs nothing /2 adds. */
+export const BANK_BASE_VERSION = 1;
+
+/**
+ * Whether any of these lists of items or steps has a written answer whose
+ * criteria say what only /2 reads: `kind`, `depth` or `weight`.
+ * @param {Array<?Array<object>>} lists - e.g. [pack.steps, pack.bank?.items]
+ * @returns {boolean}
+ */
+export const needsCriterionSemantics = lists =>
+  lists.some(
+    items =>
+      Array.isArray(items) &&
+      items.some(
+        it =>
+          Array.isArray(it?.rubricCriteria) &&
+          it.rubricCriteria.some(
+            c =>
+              c?.kind !== undefined ||
+              c?.depth !== undefined ||
+              c?.weight !== undefined
+          )
+      )
+  );
+
+/** A bank's lowest version: /2 only for criteria /1 cannot say. */
+export const bankVersion = items =>
+  needsCriterionSemantics([items]) ? BANK_FORMAT_VERSION : BANK_BASE_VERSION;
 
 export const ITEM_KINDS = Object.freeze(['choice', 'numeric', 'short']);
 /** What a criterion claims (Prompt 172: js/instructorRubric.js, held equal by a test). */
@@ -715,10 +750,11 @@ export function validateQuestionBankWith(b, api, makeChecker) {
     `must be "${BANK_FORMAT}"`
   );
   need(
-    b.formatVersion === BANK_FORMAT_VERSION,
+    b.formatVersion === BANK_BASE_VERSION ||
+      b.formatVersion === BANK_FORMAT_VERSION,
     'formatVersion',
     'formatVersion',
-    `must be ${BANK_FORMAT_VERSION}`
+    `must be ${BANK_BASE_VERSION} or ${BANK_FORMAT_VERSION}`
   );
   need(
     typeof b.id === 'string' && PUBLIC_ID.test(b.id),

@@ -52,7 +52,7 @@ const clone = x => JSON.parse(JSON.stringify(x));
 
 const collection = (items, extra = {}) => ({
   format: 'gravitas.course-pack',
-  formatVersion: 2,
+  formatVersion: 3,
   id: 'tides-set',
   version: '1.0.0',
   gravitas: '1.0.0',
@@ -147,7 +147,7 @@ describe('the profile', () => {
 
   test('is a field of the schema, with the one value', () => {
     const schema = JSON.parse(
-      readFileSync('sdk/schemas/course-pack-2.schema.json', 'utf8')
+      readFileSync('sdk/schemas/course-pack-3.schema.json', 'utf8')
     );
     expect(schema.properties.profile.enum).toEqual(['collection']);
     expect(schema.required).not.toContain('profile');

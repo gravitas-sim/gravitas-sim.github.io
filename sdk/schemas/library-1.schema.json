@@ -191,7 +191,7 @@
                 "const": "gravitas.course-pack"
               },
               "formatVersion": {
-                "const": 2
+                "const": 3
               },
               "id": {
                 "type": "string",

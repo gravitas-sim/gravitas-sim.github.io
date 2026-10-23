@@ -17,7 +17,7 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { BOUNDARY } from '../tests/compat/boundary.mjs';
+import { BOUNDARY, LINKS } from '../tests/compat/boundary.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export const DOC = path.join(ROOT, 'FORMATS.md');
@@ -110,12 +110,24 @@ export const FORMATS = Object.freeze([
     name: 'gravitas.artifact',
     fields: 'format, formatVersion',
     version: 1,
-    const: ['js/platform/artifact.js', 'FORMAT_VERSION'],
+    const: ['js/platform/artifact.js', 'BASE_VERSION'],
     owner: 'js/platform/artifact.js validateArtifact',
     persisted: 'memory',
     older: 'v1 only',
-    newer: 'a validation problem',
+    newer: 'a validation problem: a /2 envelope is "not 1"',
     schema: 'artifact-1.schema.json',
+  },
+  {
+    name: 'gravitas.artifact (with the extended uncertainty states, a correlation or a fit)',
+    fields: 'format, formatVersion',
+    version: 2,
+    const: ['js/platform/artifact.js', 'FORMAT_VERSION'],
+    owner:
+      'js/platform/artifact.js validateArtifact, artifactVersion, legacyView',
+    persisted: 'memory',
+    older: 'reads v1 as it is; written only when /1 cannot say it',
+    newer: 'a validation problem',
+    schema: 'artifact-2.schema.json',
   },
   {
     name: 'gravitas.observed',
@@ -299,23 +311,46 @@ export const FORMATS = Object.freeze([
     name: 'gravitas.investigation-pack',
     fields: 'format, formatVersion',
     version: 1,
-    const: ['js/platform/investigation.js', 'FORMAT_VERSION'],
+    const: ['js/platform/investigation.js', 'BASE_VERSION'],
     owner: 'js/platform/investigation.js migrateInvestigationPack',
     persisted: 'download, localStorage, repository',
     older: 'v1 only',
-    newer: 'refused, in words',
+    newer: 'refused, in words: a /2 file is "newer"',
     schema: 'investigation-pack-1.schema.json',
+  },
+  {
+    name: 'gravitas.investigation-pack (with criterion kinds, depths or weights)',
+    fields: 'format, formatVersion',
+    version: 2,
+    const: ['js/platform/investigation.js', 'FORMAT_VERSION'],
+    owner:
+      'js/platform/investigation.js validateInvestigationPack, packVersion',
+    persisted: 'download, localStorage, repository',
+    older: 'reads v1 as it is; written only when /1 cannot say it',
+    newer: 'refused, in words',
+    schema: 'investigation-pack-2.schema.json',
   },
   {
     name: 'gravitas.question-bank',
     fields: 'format, formatVersion',
     version: 1,
-    const: ['js/platform/questionBank.js', 'BANK_FORMAT_VERSION'],
+    const: ['js/platform/questionBank.js', 'BANK_BASE_VERSION'],
     owner: 'js/platform/questionBank.js validateQuestionBankWith',
     persisted: 'download',
     older: 'v1 only',
-    newer: 'a validation problem',
+    newer: 'a validation problem: a /2 file must be 1',
     schema: 'question-bank-1.schema.json',
+  },
+  {
+    name: 'gravitas.question-bank (with criterion kinds, depths or weights)',
+    fields: 'format, formatVersion',
+    version: 2,
+    const: ['js/platform/questionBank.js', 'BANK_FORMAT_VERSION'],
+    owner: 'js/platform/questionBank.js validateQuestionBankWith, bankVersion',
+    persisted: 'download',
+    older: 'reads v1 as it is; written only when /1 cannot say it',
+    newer: 'a validation problem',
+    schema: 'question-bank-2.schema.json',
   },
   {
     name: 'gravitas.assignment',
@@ -451,20 +486,33 @@ export const FORMATS = Object.freeze([
     name: 'gravitas.course-pack (builder form)',
     fields: 'format, formatVersion',
     version: 2,
-    const: ['js/course/pack.js', 'FORMAT_VERSION'],
+    const: ['js/course/pack.js', 'BASE_VERSION'],
     owner: 'js/course/pack.js migrateCoursePack',
     persisted: 'download, localStorage, repository, extension archive',
     older: 'migrates v1',
-    newer: 'refused, in words',
+    newer: 'refused, in words: a /3 file is "made by a newer version"',
     schema: 'course-pack-2.schema.json',
+  },
+  {
+    name: 'gravitas.course-pack (builder form, with a profile, a term or outcomes)',
+    fields: 'format, formatVersion',
+    version: 3,
+    const: ['js/course/pack.js', 'FORMAT_VERSION'],
+    owner: 'js/course/pack.js validateCoursePack, packVersion',
+    persisted: 'download, localStorage, repository, extension archive',
+    older:
+      'migrates v1 and reads v2 as it is; written only when /2 cannot say it',
+    newer: 'refused, in words',
+    schema: 'course-pack-3.schema.json',
   },
   {
     name: 'course home link',
     fields: 'link prefix c',
-    version: 2,
+    version: 3,
     owner: 'js/course/links.js readCourseFragment',
     persisted: 'link',
-    older: 'migrates c1',
+    older:
+      'migrates c1 and reads c2 as it is; c3 only for a pack that needs /3',
     newer: 'refused by reason code',
   },
   {
@@ -662,6 +710,8 @@ export const FORMATS = Object.freeze([
 // fixture has not been exercised against its old reader: that is a gap, stated.
 export const COMPAT = Object.freeze({
   'gravitas.artifact': { fixture: 'artifact', unknown: 'ignored' },
+  'gravitas.artifact (with the extended uncertainty states, a correlation or a fit)':
+    { fixture: 'artifact', unknown: 'ignored' },
   'gravitas.ledger': { fixture: 'ledger-entry', unknown: 'ignored' },
   'gravitas.observation': { fixture: 'observation', unknown: 'ignored' },
   'gravitas.experiment': { fixture: 'experiment', unknown: 'ignored' },
@@ -689,8 +739,22 @@ export const COMPAT = Object.freeze({
     fixture: 'course-pack',
     unknown: 'refused',
   },
+  'gravitas.course-pack (builder form, with a profile, a term or outcomes)': {
+    fixture: 'course-pack',
+    unknown: 'refused',
+  },
   'course home link': { fixture: 'course-home-link', unknown: 'n/a' },
+  'investigation link': { fixture: 'investigation-link', unknown: 'n/a' },
+  'gravitas.question-bank': { fixture: 'question-bank', unknown: 'refused' },
+  'gravitas.question-bank (with criterion kinds, depths or weights)': {
+    fixture: 'question-bank',
+    unknown: 'refused',
+  },
   'gravitas.investigation-pack': {
+    fixture: 'investigation-pack',
+    unknown: 'refused',
+  },
+  'gravitas.investigation-pack (with criterion kinds, depths or weights)': {
     fixture: 'investigation-pack',
     unknown: 'refused',
   },
@@ -724,18 +788,32 @@ function compatibilitySection(formats) {
       return `| ${cell(f.name)} | ${c ? `\`${c.fixture}\`` : 'none yet'} | ${c ? c.unknown : 'not yet exercised'} | ${SUPPORT_PERIOD_SHORT} |`;
     })
     .join('\n');
-  const consequence = {
-    refused: 'refused in its own words: safe as a capability-required refusal',
-    ignored:
-      'accepted and silently dropped: a boundary, or the field must not be one an old reader needs',
-  };
-  const boundaryRows = BOUNDARY.map(
-    b =>
-      `| ${cell(b.plans)} (${b.prompt}) | \`${b.kind}\` | ${b.expect === 'refused' ? 'refuses' : 'ignores the field'} | ${consequence[b.expect]} |`
+  const carried = BOUNDARY.filter(b => b.boundary);
+  const version = ({ from, to }) =>
+    from === to ? `/${from}, unchanged` : `/${from} to /${to}`;
+  const says = b =>
+    b.rollback === 'refused'
+      ? `refuses it: \`${b.says}\``
+      : 'opens it and does not show the fields';
+  const carriedRows = carried
+    .map(
+      e =>
+        `| ${cell(e.plans)} (${e.prompt}) | ${cell(e.boundary.format)} ${version(e.boundary)} | ${cell(e.boundary.rule)} | ${cell(says(e.boundary))} | ${cell(e.boundary.requires)} |`
+    )
+    .join('\n');
+  const notCarried = BOUNDARY.filter(b => !b.boundary)
+    .map(b => `- ${b.plans} (${b.prompt}): ${b.note}.`)
+    .join('\n');
+  const linkRows = LINKS.map(
+    l =>
+      `| ${cell(l.link)} | ${l.prefix} | ${cell(l.versions)} | ${cell(l.written)} | ${cell(l.old)} |`
   ).join('\n');
+  const refusedNames = carried
+    .filter(e => e.boundary.rollback === 'refused')
+    .map(e => e.id);
   return `## Compatibility with 2.0.0 (Prompt 134)
 
-An older build is a real reader: a browser still running 2.0.0's cached code, a tab opened before a deploy, a deploy rolled back. \`tests/compat/\` runs the 2.0.0 readers (archived from the \`v2.0.0\` commit) beside the current ones on a fixture set per record kind, and holds a matrix to each: the old reader reads what 2.0.0 wrote; the current reader reads it losslessly; what the 2.0.0 reader says of what the current writer makes (accepted, or refused with the message recorded); a round trip; the capabilities a record needs; and the 2.0.0 reader's answer to an unknown field. \`tests/compat/boundary.test.js\` runs the fields later prompts plan to write against it.
+An older build is a real reader: a browser still running 2.0.0's cached code, a tab opened before a deploy, a deploy rolled back. \`tests/compat/\` runs the 2.0.0 readers (archived from the \`v2.0.0\` commit) beside the current ones on a fixture set per record kind, and holds a matrix to each: the old reader reads what 2.0.0 wrote; the current reader reads it losslessly; what the 2.0.0 reader says of what the current writer makes (accepted, or refused with the message recorded); a round trip; the capabilities a record needs; and the 2.0.0 reader's answer to an unknown field. \`tests/compat/boundary.test.js\` runs each field the current build writes, or plans to, against it.
 
 **The policy.**
 - A writer may change only when its corpus row is green for the change.
@@ -751,11 +829,31 @@ An older build is a real reader: a browser still running 2.0.0's cached code, a 
 |---|---|---|---|
 ${compatRows}
 
-**The planned extensions against 2.0.0** (the list Prompt 176 starts from; \`tests/compat/boundary.mjs\`):
+## The 3.0.0 boundary (Prompt 176)
 
-| Planned (prompt) | Kind | What 2.0.0 does | Consequence |
-|---|---|---|---|
-${boundaryRows}
+A change an older build refuses or misreads is a major version, and this is the one place the project makes it: **3.0.0**, which RELEASING.md names (the number is still Carl's choice at the release). Every format below keeps its reader for every version it ever had; a writer writes the **lowest version that carries the payload**, so a file or link that needs nothing new is the bytes 2.0.0 wrote and a 2.0.0 build opens it. What needs something new is written under a newer version number, and a 2.0.0 build refuses it by that number, in words the build already has ("made by a newer version of Gravitas", "is not 1", a link refused by reason code), rather than opening it with a field dropped. \`tests/compat/boundary.test.js\` runs each row below with the payload the current writer makes: the 2.0.0 reader (archived from the \`v2.0.0\` commit) is handed it, which is the rollback rehearsal, and says what the table records; the current reader reads it and a rewrite reads the same.
+
+| Change (prompt) | Format, 2.0.0 to 3.0.0 | The writer's rule | A 2.0.0 build, handed it | Needs |
+|---|---|---|---|---|
+${carriedRows}
+
+**Not carried.**
+${notCarried}
+
+**The rollback rehearsal.** A build rolled back to 2.0.0, or an older tab or cache, meets what 3.0.0 wrote. For the ${refusedNames.length} records above that 2.0.0 refuses (${refusedNames.map(n => `\`${n}\``).join(', ')}) the outcome is a refusal with the message recorded in the table, never an opened file with a field lost; the one it opens (\`assignment-link-presentation\`) carries the fields on and does not show them, which changes what a student sees and not which steps there are or their order. Nothing a 2.0.0 build wrote is unreadable to 3.0.0, and nothing is converted in place: a 3.0.0 file stays as written, and leaving out what needs 3.0.0 (a term, outcomes, a criterion's kind) makes the next save the older form again.
+
+**Links.** The supported-link policy (SURFACE_RETIREMENT_GATE.md, decision D-R10-44) is applied to the link kinds whose payload changed. A link carries state, so it is class R: a version is deprecated for twelve months when a later major supersedes it and its writer stops writing it, then read-only for twelve more, then retired with an export path, announced in CHANGELOG.md one release ahead. No version is superseded by 3.0.0, because every writer still writes the older prefix for the payload that always carried it, so no period has started; none will start for a version that is still the lowest one that carries a payload.
+
+| Link | Prefix | Versions | What is written | A 2.0.0 build |
+|---|---|---|---|---|
+${linkRows}
+
+**For the release notes** (generated here from the table above; the notes quote it):
+- A course, a lesson pack, a question bank, a result envelope, a link or a workspace file that needs nothing new opens in 2.0.0 and in 3.0.0 alike.
+- A 2.0.0 build refuses, by their version number: ${[...new Set(carried.filter(e => e.boundary.from !== e.boundary.to).map(e => `${e.boundary.format}${version(e.boundary).replace(', unchanged', '')}`))].join('; ')}.
+- The Observatory workspace with image marks is refused by a 2.0.0 build as nested too deep.
+- To hand a file to someone still on 2.0.0, leave out what needs 3.0.0, and it is written in the older form.
+- Every format keeps its reader; no support period has started.
 `;
 }
 
@@ -815,13 +913,13 @@ ${rows.join('\n')}
 ${compatibilitySection(formats)}
 ## Fields added inside a version
 
-- **\`term\` on a course pack (Prompt 168).** A \`gravitas.course-pack/2\` may carry \`term\`, a short plain label such as \`Spring 2027\` (at most 40 characters), written only when an instructor names a term for a copy of the course. A 2.0.0 reader refuses a pack that has it, naming the field (\`tests/compat/boundary.mjs\` \`course-term\`), so the format stays version 2. Two records came with it: \`gravitas.submission-archive/1\`, an export the review page reads again (a 2.0.0 page refuses it in words, as a progress backup), and the \`course terms record\`, a sidecar key the 2.0.0 reader never looks at (\`tests/compat/kinds/course-terms.mjs\`).
-- **\`outcomes\` on a course pack and on its objectives (Prompt 174).** A \`gravitas.course-pack/2\` may carry \`outcomes\`, up to 12 of the instructor's own outcomes (an id and a text in the file's languages), and an objective may carry \`outcomes\`, the ids of the ones it is mapped to. Both are written only when an instructor enters outcomes. They are the instructor's own statement of what the course intends and are not evidence that any student attained anything. A 2.0.0 reader refuses a pack that has either, naming the field (\`tests/compat/boundary.mjs\` \`course-outcomes\`), so the format stays version 2 and the boundary list keeps one more refusal for Prompt 176 to carry.
-- **\`rubricCriteria\` (Prompt 79).** A written answer in an investigation pack or a question bank may carry one to six criteria beside its \`rubric\`, each a name and two to five levels (a label, what it looks like, optionally its points), best first, every text in the file's locales. It is optional, so \`investigation-pack/1\` and \`question-bank/1\` stay version 1: a reader that does not know the field refuses the file, in words, as an unknown field. The compile lays it on the lesson step and its Spanish shadow, a remix carries it (\`REMIX.md\`), the answer key prints it and the review page shows it.
+- **\`term\` on a course pack (Prompt 168).** A course pack may carry \`term\`, a short plain label such as \`Spring 2027\` (at most 40 characters), written only when an instructor names a term for a copy of the course. A pack that has it is written as \`gravitas.course-pack/3\` (the 3.0.0 boundary, above); a 2.0.0 build refuses it as made by a newer version (\`tests/compat/boundary.mjs\` \`course-term\`). Two records came with it: \`gravitas.submission-archive/1\`, an export the review page reads again (a 2.0.0 page refuses it in words, as a progress backup), and the \`course terms record\`, a sidecar key the 2.0.0 reader never looks at (\`tests/compat/kinds/course-terms.mjs\`).
+- **\`outcomes\` on a course pack and on its objectives (Prompt 174).** A course pack may carry \`outcomes\`, up to 12 of the instructor's own outcomes (an id and a text in the file's languages), and an objective may carry \`outcomes\`, the ids of the ones it is mapped to. Both are written only when an instructor enters outcomes. They are the instructor's own statement of what the course intends and are not evidence that any student attained anything. A pack that has either is written as \`gravitas.course-pack/3\`, as is a collection (\`profile\`, Prompt 164) and a pack with a term; a 2.0.0 build refuses it as made by a newer version (\`tests/compat/boundary.mjs\` \`course-outcomes\`).
+- **\`rubricCriteria\` (Prompt 79).** A written answer in an investigation pack or a question bank may carry one to six criteria beside its \`rubric\`, each a name and two to five levels (a label, what it looks like, optionally its points), best first, every text in the file's locales. It is optional, so \`investigation-pack/1\` and \`question-bank/1\` stayed version 1 in 2.0.0; a criterion's \`kind\`, \`depth\` and \`weight\` (Prompt 172) are \`investigation-pack/2\` and \`question-bank/2\`, written only when one is set. The compile lays it on the lesson step and its Spanish shadow, a remix carries it (\`REMIX.md\`), the answer key prints it and the review page shows it.
 - **\`synthetic\` origin (Prompt 84).** A \`gravitas.observation/1\` made by a forward model has origin \`synthetic\`, source kind \`forward\` and a \`synthetic\` block holding the model, the \`gravitas.observing-setup/1\` it was run with and the truth manifest. The values are new members of two enums and the block is optional, so the format stays version 1: an older reader refuses such a file at the origin, in words, rather than opening it as if it were observed.
-- **Image marks, \`workspace.marks\` (Prompt 179).** An Observatory save of an image the reader marked carries \`workspace.marks\`, a \`gravitas.image-marks/1\` block: the frames' SHA-256 digests, the marks as placed (kind, tag, points, a known length for a reference pair) and, for a refined mark, the result and its uncertainty. It is written only when marks exist, so a save without marks is the bytes it always was. The block nests eight deep, and the 2.0.0 file reader stops at six, so it refuses such a file as \`nested too deep\` (\`tests/compat/boundary.mjs\`: \`workspace-marks\`) rather than opening it without the marks; the current reader reads eight. The marks record in the ledger is a \`gravitas.artifact/1\` (notebook source \`image-marks\`), which the 2.0.0 reader opens as it opens any envelope. Reopening against a changed image is refused by the instrument, not by a reader.
+- **Image marks, \`workspace.marks\` (Prompt 179).** An Observatory save of an image the reader marked carries \`workspace.marks\`, a \`gravitas.image-marks/1\` block: the frames' SHA-256 digests, the marks as placed (kind, tag, points, a known length for a reference pair) and, for a refined mark, the result and its uncertainty. It is written only when marks exist, so a save without marks is the bytes it always was, and the file stays \`gravitas.observation/1\`. The block nests eight deep, and the 2.0.0 file reader stops at six, so it refuses such a file as \`nested too deep\` (\`tests/compat/boundary.mjs\`: \`workspace-marks\`) rather than opening it without the marks; the current reader reads eight. The marks record in the ledger is a \`gravitas.artifact/1\` (notebook source \`image-marks\`), which the 2.0.0 reader opens as it opens any envelope. Reopening against a changed image is refused by the instrument, not by a reader.
 - **Sky calibration, \`workspace.calibration\` (Prompt 181).** An Observatory save of an image the reader calibrated carries \`workspace.calibration\`, a \`gravitas.image-calibration/1\` block: the frame's SHA-256 digest, the reference stars (pixel position and its uncertainty, sky position), the reference catalogue's identity and epoch, and either the solved WCS (reference pixel and position, the CD matrix, the model and its tangent point) with its residuals, covariance and verdict, or a WCS read from the image's header and marked as not solved here. It is written only when a calibration exists, so a save without one is the bytes it always was. The WCS matrix nests seven deep, and the 2.0.0 file reader stops at six, so it refuses such a file as \`nested too deep\` (\`tests/compat/boundary.mjs\`: \`workspace-calibration\`) rather than opening it without the calibration; the current reader reads eight. The calibration in the ledger is a \`gravitas.artifact/1\` (notebook source \`image-calibration\`), which the 2.0.0 reader opens as it opens any envelope. Reopening against a changed image is refused by the tool, not by a reader.
-- **Uncertainty states, \`correlatedWith\` and \`fit\` (Prompt 150).** The artifact envelope's uncertainty \`kind\` gains \`not-constrained\`, \`failed\`, \`assumed\`, \`model-limited\` and \`limit\`; a quantity gains \`correlatedWith\`; the envelope gains \`fit\`, a fit-result record; a \`failed\` quantity may have a \`null\` value. The format stays version 1. A 2.0.0 reader refuses a quantity of a new kind in words (\`tests/compat/boundary.mjs\`: \`not-constrained-state\`), and silently drops \`correlatedWith\` and \`fit\`, which no reader needs. The extension is therefore written only where a 2.0.0 reader is not met: the writers keep their 2.0.0 output unless asked (\`fitArtifact\` with \`extended\`), and \`legacyView()\` gives a 2.0.0 reader the envelope it can open, with the loss listed in the warnings. Version 2 of the envelope waits for 176.
+- **Uncertainty states, \`correlatedWith\` and \`fit\` (Prompt 150).** The artifact envelope's uncertainty \`kind\` gains \`not-constrained\`, \`failed\`, \`assumed\`, \`model-limited\` and \`limit\`; a quantity gains \`correlatedWith\`; the envelope gains \`fit\`, a fit-result record; a \`failed\` quantity may have a \`null\` value. A 2.0.0 reader refuses a quantity of a new kind in words, and silently drops \`correlatedWith\` and \`fit\`, so an envelope that has any of them is written as \`gravitas.artifact/2\` (Prompt 176; \`tests/compat/boundary.mjs\`: \`not-constrained-state\`, \`fit-result-record\`, \`correlation-reference\`) and a 2.0.0 reader refuses it by its version instead. An envelope that needs none is still /1. \`legacyView()\` gives a 2.0.0 reader the /1 envelope it can open, with the loss listed in the warnings.
 - **\`derived\` uncertainty basis and a formula on a numeric question (Prompt 100).** The artifact envelope's \`basis\` gains \`derived\`, for an uncertainty propagated from a formula's inputs, and a numeric question in an investigation pack or question bank may carry \`formula\` ({expr, of, tolerancePct}) in place of an \`answer\`. Both are optional or new members of an enum, so \`artifact/1\`, \`investigation-pack/1\` and \`question-bank/1\` stay version 1: an older reader refuses them in words as an unknown value or field.
 - **Mission links and made records (Prompt 106).** A \`gravitas.made\` record may be of kind \`mission\`, holding a \`gravitas.mission-plan/1\` file; a build from before it reports the record unreadable. The mission lab reads a plan from \`#plan1.<base64url JSON>\`; any other fragment is ignored. A course pack /2 \`guide\` item may name \`ml-orbit\`, \`ml-window\` or \`ml-cruise\`; a build from before it refuses the id in words.
 - **\`system3d\` (Prompt 105).** A \`gravitas.scenario-pack/1\` may carry a \`system3d\`: a \`gravitas.system3d/1\`, validated by the lab's own checks in the SDK and by shape in the Studio. A build from before it reports \`unknownField\`. A course pack /2 item may be of kind \`guide\` (\`guide\`, \`depth\`, \`title\`), opening one of the 3-D lab's investigations; a build from before it refuses the kind in words.

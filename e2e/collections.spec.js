@@ -158,7 +158,7 @@ test.describe('saved items', () => {
             v: 1,
             saved: {
               format: 'gravitas.course-pack',
-              formatVersion: 2,
+              formatVersion: 3,
               id: 'saved-items',
               version: '1.0.0',
               gravitas: '1.0.0',
@@ -199,7 +199,7 @@ test.describe('a collection travels by link', () => {
     await page.locator('#coll-note-en-0').fill('Start here.');
     await page.locator('#coll-link-make').click();
     const link = page.locator('#coll-link');
-    await expect(link).toHaveValue(/\/course\/#c2z/);
+    await expect(link).toHaveValue(/\/course\/#c3z/);
     const url = await link.inputValue();
 
     // The student: a fresh browser, no storage of the instructor's.
@@ -270,7 +270,7 @@ test.describe('a collection travels by link', () => {
     const pack = JSON.parse(text);
     expect(pack).toMatchObject({
       format: 'gravitas.course-pack',
-      formatVersion: 2,
+      formatVersion: 3,
       profile: 'collection',
     });
   });
@@ -345,7 +345,7 @@ test.describe('every new control is at least 24 px', () => {
 
       await page.locator('[data-f="title.en"]').fill('Two things');
       await page.locator('#coll-link-make').click();
-      await expect(page.locator('#coll-link')).toHaveValue(/#c2z/);
+      await expect(page.locator('#coll-link')).toHaveValue(/#c3z/);
       const url = await page.locator('#coll-link').inputValue();
       await page.goto(url.replace(/^https?:\/\/[^/]+/, ''), {
         waitUntil: 'domcontentloaded',

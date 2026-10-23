@@ -24,7 +24,7 @@
     }
   },
   "sourceFiles": 269,
-  "sourceDigest": "7e7aacef8234e15e54219e2fa2ba549c78c8931b7cedae9650b31462f6ff81e9",
+  "sourceDigest": "a3837efa7bc350d48f3f683fa3f81d6aa1eaba3d3a0e4f341c9f0e30ddd0b4fb",
   "sources": {
     "js/activities/activities.js": "39ac98cd99b8b0387c55e41d5d4530bad55a8da8758819ad056be73e7a716b01",
     "js/activities/activityBridge.js": "67a82aff98e0ed935d6b8b0f0f654c6ad4332ee929cb3604e896a7f790a6fdc1",
@@ -37,7 +37,7 @@
     "js/assignments/assignment.js": "c89ab86e79b7727f9f51c52a06cb4df878901332b29d6785e371f6f44b39a62f",
     "js/authoring/instructorSchema.js": "e53fac3d680fd804ee5341004c86652bceb01c30015bb50c347a6356b6d9e002",
     "js/constants.js": "4610b3640de5b1c28f336d251e3817ddb440b562f5f72d75051c72f6d0388240",
-    "js/course/pack.js": "fda1894c991b934a971dfbc51253406656fe29501aaf388e6b10f6ade273b635",
+    "js/course/pack.js": "a07be9f80eb4f8d6b6f479cc51a1b8a45221722cdb3f0b5462460c2ad3fa652e",
     "js/course/review.js": "5da7fa2eeca27a09fdf40e31aaba5bf523845ac6d4cb262ae2e5f236cba2b489",
     "js/data/activities.js": "e044dc2eb8942dfc9b9c9856bc6e30de828d9bc4d6b18829314bc893711a069c",
     "js/data/activityTeaching.js": "7694fc798f8c4130e5aead5357e69bab04d6a5d386013d009430dba9a1c31008",
