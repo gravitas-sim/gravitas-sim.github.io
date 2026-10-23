@@ -2635,5 +2635,21 @@
   "[chromium] › commonCartridge.spec.js › the new controls fit at 390 px, en, midnight": 1.7,
   "[chromium] › commonCartridge.spec.js › the new controls fit at 390 px, es, daylight": 1.2,
   "[chromium] › commonCartridge.spec.js › the new controls fit at 390 px, es, midnight": 1.4,
-  "[chromium] › commonCartridge.spec.js › ticking the notes box puts them in, on links for instructors only": 2.2
+  "[chromium] › commonCartridge.spec.js › ticking the notes box puts them in, on links for instructors only": 2.2,
+  "[chromium] › accessibility.spec.js › axe: course builder, the Common Cartridge panel (Prompt 169) › English, dark theme": 4.9,
+  "[chromium] › accessibility.spec.js › axe: course builder, the Common Cartridge panel (Prompt 169) › English, deep space theme": 4.1,
+  "[chromium] › accessibility.spec.js › axe: course builder, the Common Cartridge panel (Prompt 169) › English, light theme": 4.9,
+  "[chromium] › accessibility.spec.js › axe: course builder, the Common Cartridge panel (Prompt 169) › English, observatory red theme": 4.1,
+  "[chromium] › accessibility.spec.js › axe: course builder, the Common Cartridge panel (Prompt 169) › Spanish, dark theme": 4.5,
+  "[chromium] › accessibility.spec.js › axe: course builder, the Common Cartridge panel (Prompt 169) › Spanish, deep space theme": 4.7,
+  "[chromium] › accessibility.spec.js › axe: course builder, the Common Cartridge panel (Prompt 169) › Spanish, light theme": 4.4,
+  "[chromium] › accessibility.spec.js › axe: course builder, the Common Cartridge panel (Prompt 169) › Spanish, observatory red theme": 4.7,
+  "[chromium] › accessibility.spec.js › axe: distribution kit, the Common Cartridge panel (Prompt 169) › English, dark theme": 3,
+  "[chromium] › accessibility.spec.js › axe: distribution kit, the Common Cartridge panel (Prompt 169) › English, deep space theme": 3.3,
+  "[chromium] › accessibility.spec.js › axe: distribution kit, the Common Cartridge panel (Prompt 169) › English, light theme": 2.9,
+  "[chromium] › accessibility.spec.js › axe: distribution kit, the Common Cartridge panel (Prompt 169) › English, observatory red theme": 3.2,
+  "[chromium] › accessibility.spec.js › axe: distribution kit, the Common Cartridge panel (Prompt 169) › Spanish, dark theme": 3,
+  "[chromium] › accessibility.spec.js › axe: distribution kit, the Common Cartridge panel (Prompt 169) › Spanish, deep space theme": 2.9,
+  "[chromium] › accessibility.spec.js › axe: distribution kit, the Common Cartridge panel (Prompt 169) › Spanish, light theme": 2.9,
+  "[chromium] › accessibility.spec.js › axe: distribution kit, the Common Cartridge panel (Prompt 169) › Spanish, observatory red theme": 2.8
 }

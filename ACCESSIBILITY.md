@@ -10,7 +10,7 @@ The scoped conformance report, a status for each WCAG 2.1 and 2.2 A and AA crite
 
 | Check | Covers |
 | --- | --- |
-| `e2e/accessibility.spec.js` | axe-core over <!--fact:axeSurfaces-->44<!--/fact--> surfaces × <!--fact:locales-->2<!--/fact--> languages: the <!--fact:axeShellSurfaces-->32<!--/fact--> pages with the shared shell in all <!--fact:axeAllThemes-->4<!--/fact--> themes, the application's surfaces in <!--fact:axeThemes-->2<!--/fact--> — <!--fact:axeRuns-->304<!--/fact--> runs |
+| `e2e/accessibility.spec.js` | axe-core over <!--fact:axeSurfaces-->47<!--/fact--> surfaces × <!--fact:locales-->2<!--/fact--> languages: the <!--fact:axeShellSurfaces-->34<!--/fact--> pages with the shared shell in all <!--fact:axeAllThemes-->4<!--/fact--> themes, the application's surfaces in <!--fact:axeThemes-->2<!--/fact--> — <!--fact:axeRuns-->324<!--/fact--> runs |
 | `e2e/accessibilityManual.spec.js` | Focus order, focus traps, Escape, focus restoration, heading order, landmarks, reflow, reduced motion, and the canvas description |
 
 Both run in CI. The axe run uses the `wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa`,
@@ -365,7 +365,7 @@ listed there and run as pending acceptance checks.
 links in a sentence, which WCAG 2.5.8 explicitly exempts. Enlarging them would
 mean changing a line of running text into a row of buttons.
 
-**Automated checks are a floor, not a ceiling.** <!--fact:axeRuns-->304<!--/fact--> clean axe runs mean no
+**Automated checks are a floor, not a ceiling.** <!--fact:axeRuns-->324<!--/fact--> clean axe runs mean no
 machine-detectable violation on those surfaces in those states. They do not
 mean the application is pleasant to use with a screen reader, and nothing here
 substitutes for testing with one. Nothing in this pass was made to pass by
@@ -413,6 +413,6 @@ only route to the material.
 
 ```bash
 npm run a11y            # both suites
-npm run a11y:axe        # axe only, all <!--fact:axeRuns-->304<!--/fact--> combinations
+npm run a11y:axe        # axe only, all <!--fact:axeRuns-->324<!--/fact--> combinations
 npm run a11y:manual     # keyboard, focus, reflow, reduced motion, the canvas
 ```
