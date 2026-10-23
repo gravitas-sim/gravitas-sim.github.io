@@ -13,8 +13,8 @@
 //         modules only it uses, plus ONE language's words (a reader downloads
 //         the page's language; the other is fetched on a live switch)
 //   gate  the gate's own convention, which also counts the rest of the image
-//         kind's files (planes, grid, draft) that the idle group carries for the
-//         consumers after this one, and the larger language's words: the number
+//         kind's files (planes, grid, draft; the install does not carry them, no
+//         shipped module imports them) for the consumers after this one, and the larger language's words: the number
 //         24,080 B was measured as. At most 25,600 B, as the gate states it.
 // =============================================================================
 

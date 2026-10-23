@@ -15,10 +15,11 @@ import {
 // module imports them (local import, Prompt 188): no page can fetch them, an
 // install has no use for them, and the first-visit tier has no room for them
 // (D-R10-32 holds the measured cost of adopting them). The first adopter deletes
-// the entry and the first test below. The five contract files were adopted by the
-// image marks instrument (Prompt 179): they are the idle group "image
+// the entry and the first test below. The contract and the limits were adopted by
+// the image marks instrument (Prompt 179): they are the idle group "image
 // measurement", never the first-visit install, and only that instrument imports
-// them.
+// them. The planes, grid and draft files wait with the reader: no shipped module
+// imports them, and the idle tier's ceiling has no room for dead code.
 // =============================================================================
 
 const KIND = 'js/dataKinds';
@@ -40,16 +41,21 @@ describe('the install', () => {
     /['"][./]*\/dataKinds\//.test(readFileSync(f, 'utf8'))
   );
 
-  const CONTRACT = ['contract', 'limits', 'planes', 'grid', 'draft'].map(
-    n => `${KIND}/${n}.js`
-  );
-  const READER = ['fits', 'fitsJob', 'fitsWorker'].map(n => `${KIND}/${n}.js`);
+  const CONTRACT = ['contract', 'limits'].map(n => `${KIND}/${n}.js`);
+  const READER = [
+    'fits',
+    'fitsJob',
+    'fitsWorker',
+    'planes',
+    'grid',
+    'draft',
+  ].map(n => `${KIND}/${n}.js`);
 
-  test('no module the install carries imports the FITS reader: the first adopter deletes the NEVER_PRECACHED entry and this test', async () => {
+  test('no module the install carries imports the FITS reader or the planes, grid and draft files: the first adopter deletes the NEVER_PRECACHED entry and this test', async () => {
     for (const f of READER)
       expect(NEVER_PRECACHED.some(re => re.test(f))).toBe(true);
     const readerImporters = shipped.filter(f =>
-      /['"][./]*\/dataKinds\/(fits|fitsJob|fitsWorker)/.test(
+      /['"][./]*\/dataKinds\/(fits|fitsJob|fitsWorker|planes|grid|draft)/.test(
         readFileSync(f, 'utf8')
       )
     );

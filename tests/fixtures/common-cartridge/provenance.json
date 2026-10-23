@@ -1,0 +1,160 @@
+{
+  "note": "Provenance of the 1EdTech (IMS Global) files the Common Cartridge export was written and checked against (Roadmap III Prompt 169). Downloaded on 2026-10-22 under Carl's permission in chat the same day, from the public pages of imsglobal.org, honouring its robots.txt crawl delay (10 s). None of them is committed: see licence.",
+  "profile": "Thin Common Cartridge Profile v1.0 over Common Cartridge v1.3",
+  "committed": false,
+  "licence": {
+    "schemaHeader": "Each schema file carries an IPR, License and Distribution notice in its annotation. A user may use it royalty-free. A developer may distribute it as is from a third-party source other than IMS; one who takes it from IMS and distributes it must register with IMS and be granted the licence by email.",
+    "quote": "If you wish to distribute this document as is, with no modifications, you are hereby granted permission to copy, display and distribute the contents of this document in any medium for any purpose without fee or royalty provided that you include this IPR, License and Distribution notice in its entirety on ALL copies, or portions thereof, that you make and you complete a valid license registration with IMS and receive an email from IMS granting the license.",
+    "specification": "The specification documents are under the 1EdTech Specification Document License: a worldwide, perpetual, royalty-free, nontransferable, nonexclusive, nonsublicenseable licence to download and utilize the specification for developing products that implement it, with no right to create modifications or derivatives and an obligation to attribute 1EdTech.",
+    "consequence": "Registering with IMS is an account and an agreement nobody on this project may make on Carl's behalf, so the schemas are not committed. This record holds their addresses and SHA-256 digests; tools/cartridge-validate.mjs checks a directory of them against these digests and runs them. DECISION_REGISTER.md D-R10-54 puts the choice to Carl."
+  },
+  "sources": [
+    {
+      "url": "https://www.imsglobal.org/profile/cc/ccv1p3/ccv1p3_imscp_v1p2_v1p0.xsd",
+      "kind": "schema",
+      "file": "ccv1p3_imscp_v1p2_v1p0.xsd",
+      "bytes": 66452,
+      "sha256": "ad96ef19dfb66d2d22c20722a46a3c3b37b9ba8a155d496d18b425fa887b035f",
+      "retrieved": "2026-10-22",
+      "redistributed": false,
+      "note": "the CC v1.3 manifest profile; its Schematron rules are in its appinfo"
+    },
+    {
+      "url": "https://www.imsglobal.org/profile/cc/ccv1p3/LOM/ccv1p3_lommanifest_v1p0.xsd",
+      "kind": "schema",
+      "file": "ccv1p3_lommanifest_v1p0.xsd",
+      "bytes": 93742,
+      "sha256": "b4b92a6780b3f8df2c7bfb42b13bbee24a68a5863dc9b8ba3283a9d304834855",
+      "retrieved": "2026-10-22",
+      "redistributed": false
+    },
+    {
+      "url": "https://www.imsglobal.org/profile/cc/ccv1p3/LOM/ccv1p3_lomresource_v1p0.xsd",
+      "kind": "schema",
+      "file": "ccv1p3_lomresource_v1p0.xsd",
+      "bytes": 93742,
+      "sha256": "ecd1883e727eb1d28d2889bb6843e168fd3147d75cd401889a8f0349f86448a6",
+      "retrieved": "2026-10-22",
+      "redistributed": false
+    },
+    {
+      "url": "https://www.imsglobal.org/profile/cc/ccv1p3/ccv1p3_imswl_v1p3.xsd",
+      "kind": "schema",
+      "file": "ccv1p3_imswl_v1p3.xsd",
+      "bytes": 14853,
+      "sha256": "8aa100742d93ed5eff35387d62d767ecd160426a58efc2accb5c6cb7283a761e",
+      "retrieved": "2026-10-22",
+      "redistributed": false,
+      "note": "the web link descriptor"
+    },
+    {
+      "url": "https://www.imsglobal.org/profile/cc/ccv1p3/ccv1p3_imsccauth_v1p3.xsd",
+      "kind": "schema",
+      "file": "ccv1p3_imsccauth_v1p3.xsd",
+      "bytes": 14958,
+      "sha256": "b47fd703287a2d1d10bb37f677f9704180abb633e9b41d856eb60985fa6228b9",
+      "retrieved": "2026-10-22",
+      "redistributed": false,
+      "note": "imported by the manifest profile"
+    },
+    {
+      "url": "https://www.imsglobal.org/profile/cc/ccv1p3/ccv1p3_imscsmd_v1p0.xsd",
+      "kind": "schema",
+      "file": "ccv1p3_imscsmd_v1p0.xsd",
+      "bytes": 15995,
+      "sha256": "364e2d5ebc274c03370ea3c5c82ef644bd9880a3499b9656096e48cda2638fb8",
+      "retrieved": "2026-10-22",
+      "redistributed": false,
+      "note": "imported by the manifest profile"
+    },
+    {
+      "url": "https://www.imsglobal.org/xsd/w3/2001/xml.xsd",
+      "kind": "schema",
+      "file": "xml.xsd",
+      "bytes": 9121,
+      "sha256": "1d8a08f612250dcb59b9e4a9568afd764bb5acf0fc52fc5837ae22379f75f630",
+      "retrieved": "2026-10-22",
+      "redistributed": false,
+      "note": "imported by the manifest profile"
+    },
+    {
+      "url": "https://www.imsglobal.org/cc/CCv1p0thin/ims_thinCC_impl-v1p0.html",
+      "kind": "document",
+      "file": "ims_thinCC_impl-v1p0.html",
+      "bytes": 201997,
+      "sha256": "b63aa29d1d15a6ab1dc7eac80c6a3f4794f4152f06cbb23b29bb470ef91e68b5",
+      "retrieved": "2026-10-22",
+      "redistributed": false,
+      "note": "Thin Common Cartridge Profile: Implementation Guide (for CC v1.2 and v1.3), v1.0 Final Specification, 1 May 2015: the profile"
+    },
+    {
+      "url": "https://www.imsglobal.org/cc/ccv1p3/imscc_Implementation-v1p3.html",
+      "kind": "document",
+      "file": "imscc_Implementation-v1p3.html",
+      "bytes": 296323,
+      "sha256": "76af3587402324bf89f4020434d6f3f1b836d71d243dfa746d1cf1b3ef50579b",
+      "retrieved": "2026-10-22",
+      "redistributed": false,
+      "note": "Common Cartridge v1.3 Profile: Implementation (inline descriptor XML, web links, metadata)"
+    },
+    {
+      "url": "https://www.imsglobal.org/cc/ccv1p3/imscc_Conformance-v1p3.html",
+      "kind": "document",
+      "file": "imscc_Conformance-v1p3.html",
+      "bytes": 94873,
+      "sha256": "f040c346d2837e6236d822f41855f5647f873003694a1b97c1cdb4dc9614ce3c",
+      "retrieved": "2026-10-22",
+      "redistributed": false,
+      "note": "Common Cartridge v1.3 Profile: Conformance"
+    },
+    {
+      "url": "https://www.imsglobal.org/spec/cc/v1p4/impl",
+      "kind": "document",
+      "file": "impl",
+      "bytes": 387027,
+      "sha256": "ddfec89ac7261208ce79a7cee83c3778a3bc42bd63f3edb89dbbe64f6333daec",
+      "retrieved": "2026-10-22",
+      "redistributed": false,
+      "note": "Common Cartridge 1.4 Implementation Guide, Candidate Final (read to choose; not the profile used)"
+    },
+    {
+      "url": "https://www.imsglobal.org/speclicense.html",
+      "kind": "licence",
+      "file": "speclicense.html",
+      "bytes": 88098,
+      "sha256": "8aa8a94f7550f2685d0734f4e404e84ebca4ecf118a0b1fa83c5438762299c84",
+      "retrieved": "2026-10-22",
+      "redistributed": false,
+      "note": "Specification Document License; redirects to https://www.1edtech.org/standards/specification-license"
+    },
+    {
+      "url": "https://www.imsglobal.org/cc/index.html",
+      "kind": "document",
+      "file": "index.html",
+      "bytes": 59138,
+      "sha256": "23e35178e34dca11ed64ac5db9983a306db16c8860d7de32575b556fb5c95bee",
+      "retrieved": "2026-10-22",
+      "redistributed": false,
+      "note": "the Common Cartridge index, which lists the documents and schemas"
+    }
+  ],
+  "membersOnly": [
+    {
+      "url": "https://www.imsglobal.org/common-cartridge-valid-test-sets",
+      "status": "403 Access Denied (member login)",
+      "what": "the Common Cartridge valid test sets"
+    },
+    {
+      "url": "https://www.imsglobal.org/common-cartridge-conformance-testing-process",
+      "status": "403 Access Denied (member login)",
+      "what": "the conformance testing process"
+    },
+    {
+      "url": "https://www.imsglobal.org/spec/cc/v1p4",
+      "status": "403 Access Denied (member login)",
+      "what": "the Common Cartridge 1.4 specification page"
+    }
+  ],
+  "redirect": "imsglobal.org now redirects some pages (the licence, the activity page) to www.1edtech.org, the same organisation under its present name. Only those redirects were followed, and nothing was fetched from 1edtech.org directly except by redirect.",
+  "examples": "The specification's own conformance examples are the manifests printed in the implementation guides above (the Thin CC and CC v1.3 guides). The member-only valid test sets were not available and were not requested."
+}

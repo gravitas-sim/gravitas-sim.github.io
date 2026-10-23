@@ -6,6 +6,10 @@
     "note": "Every translation present on this date was taken as written against the English it stood beside. That records no review."
   },
   "rows": {
+    "kit/cc.h": "e61c0718:3602e45f",
+    "kit/cc.loading": "3cf0ad79:4b55e75e",
+    "kit/cc.note": "c0e772df:028420e6",
+    "kit/cc.open": "64dd7ccc:445c1bcd",
     "kit/coll.h": "b898ba6e:6b2702f5",
     "kit/coll.note": "0118df21:474ca841",
     "kit/coll.open": "8e6c81de:a5ef3f0d",

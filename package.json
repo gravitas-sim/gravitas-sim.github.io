@@ -140,6 +140,7 @@
     "image-gate:check": "node tools/image-measure-gate.mjs check",
     "image-gate:report": "node tools/image-measure-gate.mjs report",
     "image-gate:measure": "node tools/image-measure-gate.mjs measure",
+    "cartridge:validate": "node tools/cartridge-validate.mjs",
     "image-gate:lunar": "node tools/image-measure-gate/lunar.mjs",
     "image-marks:validate": "node tools/image-marks-validate.mjs",
     "image-marks:bytes": "node tools/image-marks-bytes.mjs",

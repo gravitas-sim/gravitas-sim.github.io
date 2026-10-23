@@ -13,8 +13,8 @@
 // marked external, each output chunk gzipped on its own. Two lazy builds:
 //
 //   gate      the image kind as the checkpoint counts it (contract, limits,
-//             planes, grid, draft: the files the idle group carries for the
-//             consumers after this one) together with the instrument, which is
+//             planes, grid, draft: files no shipped module imports yet, so the
+//             install does not carry them; the checkpoint counts them) together with the instrument, which is
 //             what the gate's number is (24,080 B for the prototype)
 //   open      what opening an image observation fetches today: the instrument's
 //             own closure (it imports contract and limits only)
