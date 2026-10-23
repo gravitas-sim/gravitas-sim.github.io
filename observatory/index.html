@@ -162,6 +162,39 @@
         border: 1px solid var(--accent);
         border-radius: var(--radius-full);
       }
+      /* The sky-coordinates panel (js/observatory/imageCalibration.js, Prompt 181). */
+      #obsCalBody :is(button, select, input) {
+        min-height: 24px;
+        min-width: 24px;
+      }
+      #obsCalBody .cal-table {
+        min-width: 44rem;
+      }
+      #obsCalBody .im-tablewrap { position: relative; }
+      #obsCalBody .cal-dl {
+        display: grid;
+        grid-template-columns: minmax(0, max-content) minmax(0, 1fr);
+        gap: var(--space-1) var(--space-3);
+        margin: var(--space-2) 0;
+      }
+      #obsCalBody .cal-dl :is(dt, dd) {
+        margin: 0;
+        overflow-wrap: anywhere;
+      }
+      @media (max-width: 767px) {
+        #obsCalBody .cal-dl {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        #obsCalBody .cal-dl dd {
+          margin-bottom: var(--space-2);
+        }
+      }
+      @media (pointer: coarse) {
+        #obsCalBody :is(button, select, input) {
+          min-height: 44px;
+          min-width: 44px;
+        }
+      }
     </style>
     <!-- shell:head -->
 <link rel="stylesheet" href="/css/shell.css" />
@@ -646,6 +679,11 @@ try {
 
         <details id="obsMeasurePanel" class="ui-card ui-disclosure ow-panel">
           <summary data-i18n="obs.ms.title">Measure, and the pipeline</summary>
+        </details>
+
+        <details id="obsCalPanel" class="ui-card ui-disclosure ow-panel" hidden>
+          <summary data-i18n="obs.cal.title">Sky coordinates for the image</summary>
+          <div id="obsCalBody"><p data-i18n="obs.cal.offline"></p></div>
         </details>
 
         <div class="ui-table-wrap is-numeric is-scroll" style="--ui-table-height: min(70vh, 40rem)">

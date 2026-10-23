@@ -300,6 +300,11 @@ export const FEATURES = [
         detect: /crypto\.subtle\.digest/,
         note: 'no fallback (the compute frame, opt-in)',
       },
+      {
+        file: 'js/measure/calibrationRecord.js',
+        detect: /crypto\.subtle\.digest/,
+        note: 'no fallback (the digest of a frame in a saved calibration)',
+      },
     ],
   },
 ];
