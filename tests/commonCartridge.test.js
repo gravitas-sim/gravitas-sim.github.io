@@ -17,7 +17,7 @@
 //     (tests/fixtures/common-cartridge/validation.json) written by
 //     `npm run cartridge:validate` against the downloaded schemas; this test
 //     fails when the cartridges changed after the last run;
-//   - the import status is NOT VERIFIED for every platform, and the same four
+//   - the import status is exactly the owner's report for every platform, and the same four
 //     rows are in COURSE_PACKS.md, Teach, the adopter's guide and the evidence
 //     record: nothing says more than the table.
 // =============================================================================
@@ -59,7 +59,9 @@ import {
 } from '../js/instructorCartridge.js';
 import {
   IMPORT_STATUS,
+  REPORT_BASIS,
   WORDS,
+  reportCaveat,
   statusStatement,
   tr,
 } from '../js/instructorCartridgeText.js';
@@ -67,7 +69,12 @@ import {
   LONG_LINK,
   openCartridgePanel,
 } from '../js/instructorCartridgeView.js';
-import { MUTATIONS, NS, checkCartridge } from '../tools/cartridge-profile.mjs';
+import {
+  MUTATIONS,
+  NS,
+  checkCartridge,
+  versionFree,
+} from '../tools/cartridge-profile.mjs';
 
 // jsdom has neither; the cartridge's modules use the browser's.
 globalThis.TextEncoder ??= TextEncoder;
@@ -517,47 +524,76 @@ describe('the words', () => {
 });
 
 describe('what the cartridge says it has been imported into', () => {
-  test('is NOT VERIFIED for every platform: no import has been recorded', () => {
+  const BASIS =
+    'verified by Carl, reported in chat 2026-10-22; LMS versions, the cartridge imported and what imported were not supplied';
+
+  test('is exactly what the owner reported, and nothing is invented: four platforms, one basis, no date of import, version or screenshot', () => {
     expect(IMPORT_STATUS.map(r => r.lms)).toEqual([
       'Canvas',
       'Moodle',
       'D2L',
       'Blackboard',
     ]);
-    for (const r of IMPORT_STATUS) {
-      if (r.status === 'VERIFIED') {
-        expect(r.date).toMatch(/^\d{4}-\d{2}-\d{2}$/);
-        expect(r.seen?.length).toBeGreaterThan(10);
-      } else {
-        expect(r).toEqual({
-          lms: r.lms,
-          status: 'NOT VERIFIED',
-          date: null,
-          seen: null,
-        });
-      }
-    }
-    expect(IMPORT_STATUS.filter(r => r.status === 'VERIFIED')).toEqual([]);
+    expect(REPORT_BASIS).toBe(BASIS);
+    for (const r of IMPORT_STATUS)
+      expect(r).toEqual({
+        lms: r.lms,
+        status: 'VERIFIED',
+        date: null,
+        seen: null,
+        reported: '2026-10-22',
+        basis: BASIS,
+      });
+    // The panel's own words say the same basis in English, and the Spanish names the same facts.
+    expect(WORDS.en['p.basis']).toBe(BASIS);
+    expect(WORDS.es['p.basis']).toMatch(
+      /Carl.*2026-10-22.*no se proporcionaron/
+    );
+    expect(Object.keys(IMPORT_STATUS[0]).sort()).toEqual(
+      ['basis', 'date', 'lms', 'reported', 'seen', 'status'].sort()
+    );
   });
 
-  test('is one sentence, the contract’s, in both languages', () => {
+  test('a row that claims a recorded import must carry its date and what appeared, and a row that is not verified carries nothing', () => {
+    // The rule the table is held to for a later, recorded import.
+    const recorded = {
+      lms: 'Canvas',
+      status: 'VERIFIED',
+      date: '2027-01-05',
+      seen: 'modules and links',
+    };
+    expect(recorded.date).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    expect(recorded.seen.length).toBeGreaterThan(10);
+    expect(
+      statusStatement('en', [
+        recorded,
+        { lms: 'Moodle', status: 'NOT VERIFIED', date: null, seen: null },
+      ])
+    ).toBe(
+      'exports a Thin Common Cartridge; imports verified on: Canvas (Canvas: VERIFIED 2027-01-05; Moodle: NOT VERIFIED)'
+    );
+    expect(
+      statusStatement('es', [
+        { lms: 'Moodle', status: 'NOT VERIFIED', date: null, seen: null },
+      ])
+    ).toBe(
+      'exporta un Thin Common Cartridge; importaciones verificadas en: ninguna (Moodle: SIN VERIFICAR)'
+    );
+    expect(reportCaveat('en', [recorded])).toBe('');
+  });
+
+  test('is one sentence, the contract’s, in both languages, with the report’s caveat beside it', () => {
     expect(statusStatement('en')).toBe(
-      'exports a Thin Common Cartridge; imports verified on: none (Canvas: NOT VERIFIED; Moodle: NOT VERIFIED; D2L: NOT VERIFIED; Blackboard: NOT VERIFIED)'
+      'exports a Thin Common Cartridge; imports verified on: Canvas, Moodle, D2L, Blackboard (Canvas: VERIFIED, reported 2026-10-22; Moodle: VERIFIED, reported 2026-10-22; D2L: VERIFIED, reported 2026-10-22; Blackboard: VERIFIED, reported 2026-10-22)'
     );
     expect(statusStatement('es')).toBe(
-      'exporta un Thin Common Cartridge; importaciones verificadas en: ninguna (Canvas: SIN VERIFICAR; Moodle: SIN VERIFICAR; D2L: SIN VERIFICAR; Blackboard: SIN VERIFICAR)'
+      'exporta un Thin Common Cartridge; importaciones verificadas en: Canvas, Moodle, D2L, Blackboard (Canvas: VERIFICADO, informado el 2026-10-22; Moodle: VERIFICADO, informado el 2026-10-22; D2L: VERIFICADO, informado el 2026-10-22; Blackboard: VERIFICADO, informado el 2026-10-22)'
     );
-    const one = [
-      {
-        lms: 'Canvas',
-        status: 'VERIFIED',
-        date: '2027-01-05',
-        seen: 'modules and links',
-      },
-      ...IMPORT_STATUS.slice(1),
-    ];
-    expect(statusStatement('en', one)).toBe(
-      'exports a Thin Common Cartridge; imports verified on: Canvas (Canvas: VERIFIED 2027-01-05; Moodle: NOT VERIFIED; D2L: NOT VERIFIED; Blackboard: NOT VERIFIED)'
+    expect(reportCaveat('en')).toBe(
+      'Reported by Carl in chat on 2026-10-22; the LMS versions, the cartridge imported and what imported were not supplied.'
+    );
+    expect(reportCaveat('es')).toBe(
+      'Informado por Carl en el chat el 2026-10-22; no se proporcionaron las versiones de cada plataforma, el cartucho importado ni lo que se importó.'
     );
   });
 
@@ -573,26 +609,34 @@ describe('what the cartridge says it has been imported into', () => {
           .map(c => c.trim())
           .filter(Boolean)
       );
-    expect(rows.map(r => [r[0], r[1]])).toEqual(
-      IMPORT_STATUS.map(r => [r.lms, r.status])
-    );
-    expect(read('teaching/index.html')).toContain(
-      `Gravitas ${statusStatement('en')}.`
-    );
-    expect(read('teaching/index.html')).toContain(
-      `Gravitas ${statusStatement('es')}.`
-    );
-    const guide = read('teaching/adopt/index.html');
-    expect(guide).toContain(`Gravitas ${statusStatement('en')}.`);
-    expect(guide).toContain(`Gravitas ${statusStatement('es')}.`);
+    expect(rows).toEqual(IMPORT_STATUS.map(r => [r.lms, r.status, r.basis]));
+    for (const lang of ['en', 'es']) {
+      const said = `Gravitas ${statusStatement(lang)}. ${reportCaveat(lang)}`;
+      expect(read('teaching/index.html')).toContain(said);
+      expect(read('teaching/adopt/index.html')).toContain(said);
+    }
     const ev = JSON.parse(read('tools/evidence-status.json')).claims.find(
       c => c.id === 'cartridge-lms-import'
     );
-    expect(ev).toMatchObject({ class: 'A', status: 'UNKNOWN' });
-    for (const r of IMPORT_STATUS)
-      expect(ev.limitations).toContain(`${r.lms}: ${r.status}`);
-    expect(read('ADOPTER_GUIDE.md')).toContain(
-      'exports a Thin Common Cartridge; imports verified on'
+    // The owner's report, not a recorded import: partial, never established.
+    expect(ev).toMatchObject({ class: 'A', status: 'partial' });
+    expect(ev.limitations).toContain(
+      'each verified by Carl, reported in chat 2026-10-22; LMS versions, the cartridge imported and what imported were not supplied'
+    );
+    expect(ev.limitations).toContain(
+      'Canvas: VERIFIED; Moodle: VERIFIED; D2L: VERIFIED; Blackboard: VERIFIED'
+    );
+    expect(ev.anchors.map(x => x.text)).toEqual([
+      `${statusStatement('en')}`,
+      `${statusStatement('en')}`,
+    ]);
+    const guideRow = read('ADOPTER_GUIDE.md')
+      .split('\n')
+      .find(l =>
+        l.includes('exports a Thin Common Cartridge; imports verified on')
+      );
+    expect(guideRow).toContain(
+      `Gravitas ${statusStatement('en')}. ${reportCaveat('en')}`
     );
   });
 
@@ -647,7 +691,9 @@ describe('the panel', () => {
     );
     expect(
       [...h.querySelectorAll('#cc-table tbody tr')].map(r => r.textContent)
-    ).toEqual(IMPORT_STATUS.map(r => `${r.lms}${r.status}—`));
+    ).toEqual(
+      IMPORT_STATUS.map(r => `${r.lms}${r.status}${WORDS.en['p.basis']}`)
+    );
     expect(h.querySelector('#cc-count').textContent).toMatch(
       /^16 links in 5 modules\./
     );
@@ -703,6 +749,23 @@ describe('the panel', () => {
   });
 });
 
+describe('the link the course home carries', () => {
+  // What the digests in validation.json leave out, by design: the deflated
+  // fragment, whose bytes differ between Node versions. Its content does not.
+  test('opens the very course the cartridge was made from, in every cartridge', async () => {
+    for (const b of built) {
+      const part = b.cartridge.parts.find(p =>
+        /\/course\/#c[A-Za-z0-9_-]{24,}"/.test(p.text)
+      );
+      expect(part).toBeDefined();
+      const fragment = part.text.match(/\/course\/#(c[A-Za-z0-9_-]+)"/)[1];
+      expect(await readCourseFragment(fragment)).toEqual(
+        JSON.parse(JSON.stringify(packs.get(b.id).pack))
+      );
+    }
+  });
+});
+
 describe('the record of the real schemas', () => {
   const dir = 'tests/fixtures/common-cartridge';
 
@@ -746,7 +809,11 @@ describe('the record of the real schemas', () => {
       });
       expect(c.parts).toBe(b.cartridge.parts.length);
       expect(c.partsSha256).toBe(
-        sha(b.cartridge.parts.map(p => `${p.path}\n${p.text}`).join('\u0000'))
+        sha(
+          b.cartridge.parts
+            .map(p => `${p.path}\n${versionFree(p.text)}`)
+            .join('\u0000')
+        )
       );
       expect(c.manifestSchema).toBe('valid');
       expect(c.webLinkSchema).toBe('valid');

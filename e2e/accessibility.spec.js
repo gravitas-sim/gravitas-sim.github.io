@@ -84,6 +84,14 @@ const TAGS = [
  */
 const OFF = {};
 
+// The example course as a file, for the distribution kit's file input
+// (Prompt 169). Outside the array: docs:sync counts the surfaces by their keys.
+const COURSE_FILE = {
+  name: 'intro-astronomy.course.json',
+  mimeType: 'application/json',
+  buffer: Buffer.from(JSON.stringify(INTRO_ASTRONOMY)),
+};
+
 /** Surfaces, and how to get to each one. */
 const SURFACES = [
   {
@@ -545,11 +553,7 @@ const SURFACES = [
     name: 'distribution kit, the Common Cartridge panel (Prompt 169)',
     open: async ({ page }) => {
       await page.goto('/teaching/kit/', { waitUntil: 'domcontentloaded' });
-      await page.locator('#kitFile').setInputFiles({
-        name: 'intro-astronomy.course.json',
-        mimeType: 'application/json',
-        buffer: Buffer.from(JSON.stringify(INTRO_ASTRONOMY)),
-      });
+      await page.locator('#kitFile').setInputFiles(COURSE_FILE);
       await expect(page.locator('#kitCcOpen')).toBeVisible({
         timeout: 60_000,
       });

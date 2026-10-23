@@ -6,7 +6,7 @@
 // builder (opened as `openTerm('cartridge')`, so the page needed one more line
 // and no more imports) and the distribution kit. It says what the file is, in
 // words, what it leaves out, and where an import has been checked (the table
-// says NOT VERIFIED until a recorded import says otherwise), and makes the
+// says what each platform's status rests on), and makes the
 // file when asked. The cartridge itself is js/instructorCartridge.js and its
 // words are js/instructorCartridgeText.js; this is only the form, drawn into an
 // element the page gives it, with callbacks for everything the page owns.
@@ -15,6 +15,7 @@
 import { buildCartridge, cartridgeBytes } from './instructorCartridge.js';
 import {
   IMPORT_STATUS,
+  reportCaveat,
   statusStatement,
   tr,
 } from './instructorCartridgeText.js';
@@ -160,12 +161,24 @@ export function openCartridgePanel(ctx) {
               { 'data-lms': r.lms },
               h('th', { scope: 'row' }, r.lms),
               h('td', {}, r.status),
-              h('td', {}, r.seen ? `${r.date}: ${r.seen}` : T('p.empty'))
+              h(
+                'td',
+                {},
+                r.seen
+                  ? `${r.date}: ${r.seen}`
+                  : r.basis
+                    ? T('p.basis')
+                    : T('p.empty')
+              )
             )
           )
         )
       ),
-      h('p', { className: 'ui-hint' }, T('p.table.note')),
+      h(
+        'p',
+        { className: 'ui-hint' },
+        T('p.table.note', { caveat: reportCaveat(ctx.locale()) })
+      ),
       h(
         'div',
         { className: 'ui-toolbar' },

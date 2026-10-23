@@ -37,7 +37,11 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import { JSDOM } from 'jsdom';
 
-import { MUTATIONS, checkCartridge } from './cartridge-profile.mjs';
+import {
+  MUTATIONS,
+  checkCartridge,
+  versionFree,
+} from './cartridge-profile.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const FIXTURES = path.join(ROOT, 'tests/fixtures/common-cartridge');
@@ -166,7 +170,9 @@ for (const { id, locale, notes, cartridge: c } of all) {
     notes,
     parts: c.parts.length,
     manifestSha256: sha(c.manifest),
-    partsSha256: sha(c.parts.map(p => `${p.path}\n${p.text}`).join('\u0000')),
+    partsSha256: sha(
+      c.parts.map(p => `${p.path}\n${versionFree(p.text)}`).join('\u0000')
+    ),
     manifestSchema: m.status === 0 ? 'valid' : 'invalid',
     webLinkSchema: links.every(r => r.status === 0) ? 'valid' : 'invalid',
     profile: problems.length ? 'invalid' : 'valid',
@@ -209,7 +215,7 @@ if (write && !failed) {
     path.join(FIXTURES, 'validation.json'),
     `${JSON.stringify(
       {
-        note: 'The verdict of the real CC v1.3 schemas on every built-in course in both languages, written by tools/cartridge-validate.mjs. Digests are of the manifest text and of the web link files (path, newline, text), which are deterministic; no digest of an archive is kept, because deflate would differ between Node versions and the archive here is stored. tests/commonCartridge.test.js fails when a cartridge differs from this record: run the tool again with the schemas.',
+        note: 'The verdict of the real CC v1.3 schemas on every built-in course in both languages, written by tools/cartridge-validate.mjs. Digests are of the manifest text and of the web link files (path, newline, text) with their deflated link fragments replaced by a placeholder (versionFree in tools/cartridge-profile.mjs), because the bytes deflate writes differ between Node versions; the fragments are checked by decoding them in tests/commonCartridge.test.js. No digest of an archive is kept. tests/commonCartridge.test.js fails when a cartridge differs from this record: run the tool again with the schemas.',
         tool: 'tools/cartridge-validate.mjs',
         validatedOn: '2026-10-22',
         xmllint,

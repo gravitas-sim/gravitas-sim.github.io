@@ -9,8 +9,10 @@
 //
 // What this does not do, and says plainly: it imports nothing into a learning
 // platform (none is available to this project), so a green run says the file is
-// well made, not that Canvas, Moodle, D2L or Blackboard reads it. The panel
-// and Teach say NOT VERIFIED, and this spec holds them to it.
+// well made, not that Canvas, Moodle, D2L or Blackboard reads it. The four
+// platforms are VERIFIED on the owner's report alone (Carl, in chat, 2026-10-22;
+// no versions, cartridge or result supplied), and the panel and Teach say just
+// that; this spec holds them to the one table.
 // =============================================================================
 
 import { Buffer } from 'node:buffer';
@@ -19,7 +21,12 @@ import { TextDecoder } from 'node:util';
 import { JSDOM } from 'jsdom';
 import { test, expect } from './fixtures.js';
 import { checkCartridge } from '../tools/cartridge-profile.mjs';
-import { statusStatement } from '../js/instructorCartridgeText.js';
+import {
+  IMPORT_STATUS,
+  WORDS,
+  reportCaveat,
+  statusStatement,
+} from '../js/instructorCartridgeText.js';
 import { INTRO_ASTRONOMY } from '../js/data/courses/intro-astronomy.js';
 
 const parse = text =>
@@ -100,7 +107,7 @@ async function builder(page, locale) {
 const COURSE = { en: 'Introductory astronomy', es: 'Astronomía introductoria' };
 
 for (const locale of ['en', 'es']) {
-  test(`${locale}: the builder exports a cartridge the profile accepts, and says what is not verified`, async ({
+  test(`${locale}: the builder exports a cartridge the profile accepts, and says what the status rests on`, async ({
     page,
   }) => {
     test.setTimeout(120_000);
@@ -116,10 +123,14 @@ for (const locale of ['en', 'es']) {
       `Gravitas ${statusStatement(locale)}.`
     );
     await expect(panel.locator('#cc-table tbody tr')).toHaveCount(4);
-    for (const lms of ['Canvas', 'Moodle', 'D2L', 'Blackboard'])
-      await expect(
-        panel.locator(`tr[data-lms="${lms}"] td`).first()
-      ).toHaveText('NOT VERIFIED');
+    for (const r of IMPORT_STATUS) {
+      const cells = panel.locator(`tr[data-lms="${r.lms}"] td`);
+      await expect(cells.first()).toHaveText('VERIFIED');
+      await expect(cells.nth(1)).toHaveText(WORDS[locale]['p.basis']);
+    }
+    await expect(panel.locator('#cc-table + p')).toContainText(
+      reportCaveat(locale)
+    );
     await expect(panel.locator('#cc-count')).toContainText(
       locale === 'en' ? '16 links in 5 modules.' : '16 enlaces en 5 módulos.'
     );
@@ -133,11 +144,16 @@ for (const locale of ['en', 'es']) {
     expect(manifest).toContain('IMS Thin Common Cartridge');
     expect(manifest).toContain(`<lomm:language>${locale}</lomm:language>`);
     expect(manifest).toContain(COURSE[locale]);
-    // Every link opens the app, the Observatory or a reading: https, or this test server for the app's own pages.
-    for (const text of files.values())
-      expect(text).toMatch(
-        /<url href="(https:\/\/|http:\/\/127\.0\.0\.1:4429\/)[^"]+" target="_blank"\/>/
-      );
+    // Every link opens the app, the Observatory or a reading: https, or this
+    // test server's own origin for the app's pages, whatever port it serves on.
+    const own = new URL(page.url()).origin.replace(
+      /[.*+?^${}()|[\]\\/]/g,
+      '\\$&'
+    );
+    const link = new RegExp(
+      `<url href="(https://|${own}/)[^"]+" target="_blank"/>`
+    );
+    for (const text of files.values()) expect(text).toMatch(link);
     // The notes for instructors are not in it unless asked for.
     expect(manifest).not.toMatch(
       /Notes for instructors, |Notas para docentes, /
@@ -232,6 +248,7 @@ test('Teach and the adopter’s guide say the contract’s sentence, in both lan
         .locator('p', { hasText: statusStatement(locale) })
         .first();
       await expect(paragraph).toBeVisible();
+      expect(await paragraph.innerText()).toContain(reportCaveat(locale));
       expect(await paragraph.innerText()).not.toMatch(/works|funciona/i);
     }
 });

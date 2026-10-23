@@ -10,32 +10,70 @@
 // `tr(locale, id, vars)` is the only reader; tests/commonCartridge.test.js holds
 // the two tables to the same ids.
 //
-// IMPORT_STATUS is the one record of where an import was seen to work. It is
-// honest by construction: a row is VERIFIED only with the date it was seen and
-// what appeared, and none is, because no learning platform instance has been
-// available to this project. COURSE_PACKS.md, Teach, ADOPTER_GUIDE.md and
-// tools/evidence-status.json carry the same rows, and the test compares them.
+// IMPORT_STATUS is the one record of where an import was seen to work. A row
+// is VERIFIED on one of two bases, and says which: an import recorded here (its
+// date and what appeared), or a report by the owner (who reported it, where and
+// when, and what was not supplied). Nothing is filled in that was not given: a
+// report without a date of import, a platform version, the cartridge imported
+// or what appeared carries none of them, and the statement says so. A unit
+// test, a schema and a specification example are not an import. COURSE_PACKS.md,
+// Teach, ADOPTER_GUIDE.md and tools/evidence-status.json carry the same rows,
+// and tests/commonCartridge.test.js compares them.
 // =============================================================================
 
 /**
- * One row per learning platform. `status` is 'VERIFIED' (then `date` and `seen`
- * are filled: the day an import was recorded and what appeared) or
- * 'NOT VERIFIED'. A unit test, a schema and a specification example are not
- * an import.
+ * What the owner's report did not supply. The words are the record's own, and
+ * `p.basis` in WORDS.en must equal REPORT_BASIS (the test holds them together).
  */
+export const REPORT_BASIS =
+  'verified by Carl, reported in chat 2026-10-22; LMS versions, the cartridge imported and what imported were not supplied';
+
+/**
+ * One row per learning platform. `status` is 'VERIFIED' or 'NOT VERIFIED'.
+ * A VERIFIED row has either `date` and `seen` (an import recorded here: the day
+ * and what appeared) or `reported` (the day the owner reported it in chat) and
+ * `basis`, with `date` and `seen` null because the report gave neither.
+ */
+const reported = lms =>
+  Object.freeze({
+    lms,
+    status: 'VERIFIED',
+    date: null,
+    seen: null,
+    reported: '2026-10-22',
+    basis: REPORT_BASIS,
+  });
 export const IMPORT_STATUS = Object.freeze([
-  { lms: 'Canvas', status: 'NOT VERIFIED', date: null, seen: null },
-  { lms: 'Moodle', status: 'NOT VERIFIED', date: null, seen: null },
-  { lms: 'D2L', status: 'NOT VERIFIED', date: null, seen: null },
-  { lms: 'Blackboard', status: 'NOT VERIFIED', date: null, seen: null },
+  reported('Canvas'),
+  reported('Moodle'),
+  reported('D2L'),
+  reported('Blackboard'),
 ]);
 
-/** What a row says in a language ("Canvas: NOT VERIFIED", or verified with its date). */
+/** What a row says in a language ("Canvas: NOT VERIFIED", or verified, with its date or its report). */
 function row(r, locale) {
-  const no = locale === 'es' ? 'SIN VERIFICAR' : 'NOT VERIFIED';
-  return r.status === 'VERIFIED'
-    ? `${r.lms}: ${locale === 'es' ? 'VERIFICADO' : 'VERIFIED'} ${r.date}`
-    : `${r.lms}: ${no}`;
+  const es = locale === 'es';
+  if (r.status !== 'VERIFIED')
+    return `${r.lms}: ${es ? 'SIN VERIFICAR' : 'NOT VERIFIED'}`;
+  if (r.date) return `${r.lms}: ${es ? 'VERIFICADO' : 'VERIFIED'} ${r.date}`;
+  return es
+    ? `${r.lms}: VERIFICADO, informado el ${r.reported}`
+    : `${r.lms}: VERIFIED, reported ${r.reported}`;
+}
+
+/**
+ * What a reader needs beside the statement when any row rests on a report:
+ * the date, and what the report did not supply. Empty when none does.
+ * @param {'en'|'es'} locale
+ * @param {Array} [rows] - IMPORT_STATUS
+ * @returns {string}
+ */
+export function reportCaveat(locale = 'en', rows = IMPORT_STATUS) {
+  const r = rows.find(x => x.status === 'VERIFIED' && !x.date && x.reported);
+  if (!r) return '';
+  return locale === 'es'
+    ? `Informado por Carl en el chat el ${r.reported}; no se proporcionaron las versiones de cada plataforma, el cartucho importado ni lo que se importó.`
+    : `Reported by Carl in chat on ${r.reported}; the LMS versions, the cartridge imported and what imported were not supplied.`;
 }
 
 /**
@@ -111,10 +149,11 @@ export const WORDS = {
     'p.status': 'Gravitas {statement}.',
     'p.table.h': 'Where an import has been checked',
     'p.table.note':
-      'A platform is VERIFIED only with the date an import was recorded and what appeared. None has been: no learning platform instance has been available, so this file is checked against the specification’s schema and rules, which is not an import.',
+      'These rows rest on the owner’s report, not on an import this project recorded or can show. {caveat} The file is also checked against the specification’s schema and rules, which is not an import.',
     'p.table.lms': 'Platform',
     'p.table.status': 'Import',
-    'p.table.seen': 'Seen',
+    'p.table.seen': 'Basis',
+    'p.basis': REPORT_BASIS,
     'p.empty': '—',
   },
   es: {
@@ -169,10 +208,12 @@ export const WORDS = {
     'p.status': 'Gravitas {statement}.',
     'p.table.h': 'Dónde se ha comprobado una importación',
     'p.table.note':
-      'Una plataforma está VERIFICADA solo con la fecha en que se registró una importación y lo que apareció. Ninguna lo está: no ha habido ninguna instancia de plataforma de aprendizaje, así que este archivo se comprueba contra el esquema y las reglas de la especificación, lo cual no es una importación.',
+      'Estas filas se apoyan en el informe del propietario, no en una importación que este proyecto registrara o pueda mostrar. {caveat} El archivo también se comprueba contra el esquema y las reglas de la especificación, lo cual no es una importación.',
     'p.table.lms': 'Plataforma',
     'p.table.status': 'Importación',
-    'p.table.seen': 'Visto',
+    'p.table.seen': 'Fundamento',
+    'p.basis':
+      'verificado por Carl, informado en el chat el 2026-10-22; no se proporcionaron las versiones de cada plataforma, el cartucho importado ni lo que se importó',
     'p.empty': '—',
   },
 };

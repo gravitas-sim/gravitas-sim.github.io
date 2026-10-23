@@ -42,7 +42,7 @@ import {
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-import { statusStatement } from '../js/instructorCartridgeText.js';
+import { reportCaveat, statusStatement } from '../js/instructorCartridgeText.js';
 import { withShell } from './shell.mjs';
 import { withPolicy } from './csp.mjs';
 
@@ -1377,8 +1377,8 @@ function guidePage(S) {
           'El periodo siguiente, abra el archivo del curso del periodo pasado en el creador de cursos y elija Empezar un periodo nuevo: códigos nuevos, las investigaciones de hoy y una lista de lo que cambió, mientras el archivo y los enlaces del periodo pasado siguen funcionando. En la revisión de entregas, Archivar guarda las entregas del periodo pasado y sus calificaciones en un solo archivo y limpia la página. No se borra nada de lo que hizo el estudiantado.'
         ) +
         P(
-          `For a course platform, Gravitas ${statusStatement('en')}.`,
-          `Para una plataforma de cursos, Gravitas ${statusStatement('es')}.`
+          `For a course platform, Gravitas ${statusStatement('en')}. ${reportCaveat('en')}`,
+          `Para una plataforma de cursos, Gravitas ${statusStatement('es')}. ${reportCaveat('es')}`
         )
     ),
     section(

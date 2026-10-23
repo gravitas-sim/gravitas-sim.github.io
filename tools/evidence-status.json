@@ -354,20 +354,20 @@
       "scope": "the Thin Common Cartridge the course builder and the distribution kit export",
       "version": "2.1.0-dev",
       "class": "A",
-      "status": "UNKNOWN",
-      "method": "none; no import has been recorded",
-      "evaluator": "none",
+      "status": "partial",
+      "method": "the owner's report in chat on 2026-10-22 that imports into Canvas, Moodle, D2L and Blackboard are verified; no import is recorded in this repository",
+      "evaluator": "Carl, the owner, by his own report",
       "artifact": "COURSE_PACKS.md",
-      "limitations": "Canvas: NOT VERIFIED; Moodle: NOT VERIFIED; D2L: NOT VERIFIED; Blackboard: NOT VERIFIED. No learning platform instance has been available to this project, and a schema, a unit test and a specification example are not an import. A platform becomes VERIFIED only with the date of a recorded import and what appeared. Owner action: import a cartridge into an instance and record the result.",
+      "limitations": "Canvas: VERIFIED; Moodle: VERIFIED; D2L: VERIFIED; Blackboard: VERIFIED, each verified by Carl, reported in chat 2026-10-22; LMS versions, the cartridge imported and what imported were not supplied. There is no date of import, platform version, cartridge or screenshot behind it in this project, so it is the owner's report and not an artifact this project can show, and a schema, a unit test and a specification example are not an import. Owner action: record the platform versions, the cartridge imported and what appeared.",
       "date": "2026-10-22",
       "anchors": [
         {
           "file": "COURSE_PACKS.md",
-          "text": "exports a Thin Common Cartridge; imports verified on: none (Canvas: NOT VERIFIED; Moodle: NOT VERIFIED; D2L: NOT VERIFIED; Blackboard: NOT VERIFIED)"
+          "text": "exports a Thin Common Cartridge; imports verified on: Canvas, Moodle, D2L, Blackboard (Canvas: VERIFIED, reported 2026-10-22; Moodle: VERIFIED, reported 2026-10-22; D2L: VERIFIED, reported 2026-10-22; Blackboard: VERIFIED, reported 2026-10-22)"
         },
         {
           "file": "ADOPTER_GUIDE.md",
-          "text": "exports a Thin Common Cartridge; imports verified on: none (Canvas: NOT VERIFIED; Moodle: NOT VERIFIED; D2L: NOT VERIFIED; Blackboard: NOT VERIFIED)"
+          "text": "exports a Thin Common Cartridge; imports verified on: Canvas, Moodle, D2L, Blackboard (Canvas: VERIFIED, reported 2026-10-22; Moodle: VERIFIED, reported 2026-10-22; D2L: VERIFIED, reported 2026-10-22; Blackboard: VERIFIED, reported 2026-10-22)"
         }
       ]
     }

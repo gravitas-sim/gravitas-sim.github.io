@@ -300,6 +300,22 @@ export function checkCartridge(parse, manifestText, files) {
  * the checker must refuse it. tools/cartridge-validate.mjs runs the same
  * manifests through the schemas and records where xmllint refuses them too.
  */
+/**
+ * A web link file with its deflated link fragments replaced by a placeholder.
+ * An item that carries its own data (an assignment, a scenario, a pack, the
+ * course home itself) links to the app with the data deflated into the
+ * fragment, and deflate's bytes differ between Node versions (CI is Node 20,
+ * the Mac Node 24), so a digest of them is not a fact about the cartridge. What
+ * is left is the structure and every address a reader follows; the fragments
+ * are checked by decoding them (tests/commonCartridge.test.js), not by bytes.
+ * Readable fragments (\`#investigation=...\`) are kept.
+ */
+export const versionFree = text =>
+  text.replace(
+    /(href="[^"#]*)#(?!investigation=)[A-Za-z0-9_-]{24,}/g,
+    '$1#<payload>'
+  );
+
 export const MUTATIONS = [
   {
     name: 'a Common Cartridge schema name instead of Thin',
