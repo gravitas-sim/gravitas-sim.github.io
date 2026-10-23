@@ -42,7 +42,7 @@ current, and the orchestrator checks it.
 | `capabilities.mjs` | Capability packages at build time | `npm run capabilities` |
 | `capability-registries.mjs` | The lazy registries, generated from what describes them | `npm run registries` |
 | `cartridge-profile.mjs` | The Thin Common Cartridge profile, checked (Roadmap III Prompt 169) |  |
-| `cartridge-validate.mjs` | Validate the Common Cartridge export against the real schemas (Roadmap III | `npm run cartridge:validate` |
+| `cartridge-validate.mjs` | Validate the Common Cartridge export against the real schemas | `npm run cartridge:validate` |
 | `catalog-review.mjs` | `sdk review` on the archives a pull request adds to catalog/packages | `npm run catalog:review` |
 | `catalog.mjs` | The curated catalog: generated at release time, checked on every change | `npm run packs:data`, `npm run packs:provenance`, `npm run catalog` |
 | `check-activities.mjs` | Are the classroom activities coherent? | `npm run activities:check` |

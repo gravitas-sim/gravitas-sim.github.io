@@ -1,6 +1,7 @@
 // =============================================================================
-// Validate the Common Cartridge export against the real schemas (Roadmap III
-// Prompt 169). A local tool, run by a person with the schemas: never by CI.
+// Validate the Common Cartridge export against the real schemas
+// (Roadmap III Prompt 169). A local tool, run by a person with the schemas:
+// never by CI.
 // -----------------------------------------------------------------------------
 //   node tools/cartridge-validate.mjs --schemas <dir>          check and print
 //   node tools/cartridge-validate.mjs --schemas <dir> --write  and record it
