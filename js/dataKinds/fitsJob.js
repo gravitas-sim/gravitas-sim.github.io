@@ -106,13 +106,13 @@ export function runFitsJob(msg, hooks = {}) {
  * Read a file in a pool realm.
  * @param {{batch: Function}} pool - From createPool, whose `spawn` starts js/dataKinds/fitsWorker.js
  * @param {ArrayBuffer|ArrayBufferView} source
- * @param {{signal?: AbortSignal, channel?: string, jobTimeoutMs?: number}} [o]
+ * @param {{signal?: AbortSignal, channel?: string, jobTimeoutMs?: number, onProgress?: Function}} [o]
  * @returns {Promise<{ok: true, image: object}|{ok: false, code: string, message: string}>}
  */
 export async function readFitsOnPool(
   pool,
   source,
-  { signal, channel, jobTimeoutMs } = {}
+  { signal, channel, jobTimeoutMs, onProgress } = {}
 ) {
   if (signal?.aborted)
     return {
@@ -128,6 +128,7 @@ export async function readFitsOnPool(
     noun: 'image file',
     owner: 'image reader',
     accept: r => r?.status === 'ok' || r?.status === 'refused',
+    onProgress: s => onProgress?.(s.fraction),
   });
   const stop = () => run.cancel('the read was canceled');
   signal?.addEventListener('abort', stop, { once: true });

@@ -154,3 +154,15 @@ export function exportName(o, ext) {
     .replace(/^-+|-+$/g, '');
   return `${base || 'observation'}.${ext}`;
 }
+
+/** Hand a file to the reader's browser to save. */
+export function download(name, text, type) {
+  const url = URL.createObjectURL(new Blob([text], { type }));
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = name;
+  document.body.append(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}

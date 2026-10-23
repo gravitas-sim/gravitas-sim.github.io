@@ -31,7 +31,7 @@
 // =============================================================================
 
 import { DataKindError, LIMITS, checkFrame } from './limits.js';
-import { unusableWcs } from '../observatory/wcs.js';
+import { wcsUnusable } from './contract.js';
 
 const BLOCK = 2880;
 const CARD = 80;
@@ -402,7 +402,7 @@ function worldCoordinates(cards, index) {
     );
   const radesys = text(cards, 'RADESYS');
   if (radesys) wcs.radesys = radesys;
-  const why = unusableWcs(wcs);
+  const why = wcsUnusable(wcs);
   if (why)
     throw fail(
       'wcs-incomplete',

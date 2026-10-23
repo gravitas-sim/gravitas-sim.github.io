@@ -829,6 +829,7 @@ export const REFUSAL_CODES = Object.freeze([
   'undecodable',
   'dimension-mismatch',
   'no-decoder',
+  'unreadable',
   // The pool's, when a realm fails
   'timeout',
   'resourceLimit',
