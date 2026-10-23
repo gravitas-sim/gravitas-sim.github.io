@@ -45,6 +45,7 @@ import { createPool, ledger as book } from '../workers/pool.js';
 import { readFitsOnPool } from '../dataKinds/fitsJob.js';
 import { readRasterOnPool } from '../dataKinds/rasterJob.js';
 import { sha256Hex } from '../hash.js';
+import { ID_OBSERVATION } from '../names.js';
 import { roundSig } from '../format.js';
 
 // ---- words --------------------------------------------------------------------
@@ -351,7 +352,7 @@ export function buildObservation(
     )
     .map(String);
   return {
-    format: 'gravitas.observation',
+    format: ID_OBSERVATION,
     formatVersion: 1,
     kind: 'image',
     id: `import:image-${digest.slice(0, 12)}`,
