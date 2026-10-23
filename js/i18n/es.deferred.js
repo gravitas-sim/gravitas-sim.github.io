@@ -3629,6 +3629,7 @@ export const ES_DEFERRED = {
   'nb.source.image-calibration': 'Coordenadas celestes de una imagen',
   'nb.source.image-photometry': 'Fotometría de una imagen',
   'nb.source.image-detection': 'Función de dispersión de punto de una imagen',
+  'nb.source.image-injection': 'Completitud de una imagen',
   'nb.flag.missionModel':
     'impulsos instantáneos, cónicas empalmadas y masas puntuales: un modelo didáctico de una misión',
   'nb.flag.notOperational':
