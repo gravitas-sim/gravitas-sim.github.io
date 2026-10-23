@@ -508,6 +508,7 @@ export const PLAN_CSS = `
 .plan a{color:#0b3d91;overflow-wrap:anywhere}
 .plan .plan-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .plan-scroll{overflow-x:auto}
+@media (max-width:40rem){.plan dl.plan-item{display:block}.plan dl.plan-item dd{margin:0 0 .4em}}
 @media print{.plan{max-width:none;padding:0;font-size:11pt}.plan a{color:#000}.plan h2,.plan h3,.plan h4{break-after:avoid}.plan dl.plan-item,.plan tr{break-inside:avoid}.plan .plan-note{background:none}}
 `;
 

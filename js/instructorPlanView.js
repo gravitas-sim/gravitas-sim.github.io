@@ -49,6 +49,9 @@ export async function libraryEntries(root) {
   return new Map((await res.json()).entries.map(e => [e.id, e]));
 }
 
+/** The list's own stylesheet, made to take the page's colors where it is previewed. */
+const PREVIEW_CSS = `${PLAN_CSS}#plan-preview .plan{font:inherit;color:inherit;background:none;padding:0;max-width:none;overflow-wrap:anywhere}#plan-preview .plan a{color:inherit;text-decoration:underline}#plan-preview .plan .plan-note{background:none}#plan-preview .plan h1,#plan-preview .plan h2,#plan-preview .plan h3,#plan-preview .plan h4,#plan-preview .plan h5{border-color:currentColor}`;
+
 /** Save text as a file. */
 function saveText(name, text, type) {
   const a = Object.assign(document.createElement('a'), {
@@ -357,6 +360,7 @@ export function openPlanPanel(ctx) {
       if (plan) fn(plan);
     };
     host.append(
+      h('style', {}, PREVIEW_CSS),
       h(`h${ctx.level ?? 2}`, { id: 'plan-h', tabindex: '-1' }, T('p.h')),
       h('p', { className: 'ui-hint' }, T('p.lede')),
       h(

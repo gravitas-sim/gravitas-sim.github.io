@@ -31,6 +31,11 @@ export const WORDS = {
       'A course can go to a course platform as one file: a Thin Common Cartridge of web links, one module for each unit, each link opening an item in Gravitas. It carries nothing about students and no grades come back.',
     'cc.open': 'Make a Common Cartridge',
     'cc.loading': 'Reading the course…',
+    'plan.h': 'A printable activity list',
+    'plan.note':
+      'A course can be printed as a plan: its units, items, links, depths, time bands, textbook chapters, objectives and what students hand in, to print or to paste into a page of your platform. The time bands are editorial estimates with no observed class data.',
+    'plan.open': 'Make the activity list',
+    'plan.loading': 'Reading the course…',
     'start.paste': 'Paste an activity link or a course link',
     'start.go': 'Make the kit',
     'start.file': 'or choose an activity file or a course file',
@@ -145,6 +150,11 @@ export const WORDS = {
       'Un curso puede ir a una plataforma de cursos como un solo archivo: un Thin Common Cartridge de enlaces web, un módulo por unidad, cada enlace abre un elemento en Gravitas. No lleva nada sobre los estudiantes y no se devuelven calificaciones.',
     'cc.open': 'Hacer un Common Cartridge',
     'cc.loading': 'Leyendo el curso…',
+    'plan.h': 'Una lista de actividades para imprimir',
+    'plan.note':
+      'Un curso puede imprimirse como un plan: sus unidades, elementos, enlaces, profundidades, franjas de tiempo, capítulos del libro de texto, objetivos y qué entregan los estudiantes, para imprimir o para pegar en una página de su plataforma. Las franjas de tiempo son estimaciones editoriales, sin datos observados en clase.',
+    'plan.open': 'Hacer la lista de actividades',
+    'plan.loading': 'Leyendo el curso…',
     'start.paste': 'Pegue un enlace de actividad o de curso',
     'start.go': 'Hacer el kit',
     'start.file': 'o elija un archivo de actividad o de curso',
