@@ -15,6 +15,9 @@
 
 import { permits } from '../dataKinds/contract.js';
 
+/** The sidecar's scale: a pixel is not a physical unit, so the registry has no name for this. */
+const PIXEL_SCALE_UNIT = 'arcsec/pix';
+
 const pixelLength = m =>
   Math.hypot(m.pts[1][0] - m.pts[0][0], m.pts[1][1] - m.pts[0][1]);
 /** The sigma of a segment's length from its two end points' sigmas (equal, independent axes). */
@@ -61,7 +64,7 @@ export function scaleOf(state, { sidecar, permit, pixelScale } = {}) {
       return {
         value: (a + b) / 2,
         sigma: Math.abs(a - b) / 2,
-        unit: 'arcsec/pix',
+        unit: PIXEL_SCALE_UNIT,
         source: 'sidecar',
       };
     }
@@ -119,17 +122,18 @@ const MJD_UNIX = 40587;
 export function timeOf(t) {
   if (!t || typeof t.scale !== 'string' || !t.scale) return null;
   const format = t.format ?? 'mjd';
+  const v = t.value;
   let mjd;
   if (format === 'iso')
     mjd =
-      Date.parse(String(t.value).endsWith('Z') ? t.value : `${t.value}Z`) /
+      Date.parse(String(v).endsWith('Z') ? v : `${v}Z`) /
         DAY +
       MJD_UNIX;
-  else if (format === 'jd') mjd = Number(t.value) - 2400000.5;
-  else mjd = Number(t.value);
+  else if (format === 'jd') mjd = Number(v) - 2400000.5;
+  else mjd = Number(v);
   if (!Number.isFinite(mjd)) return null;
   const label =
-    format === 'iso' ? String(t.value) : `${format.toUpperCase()} ${t.value}`;
+    format === 'iso' ? String(v) : `${format.toUpperCase()} ${v}`;
   return {
     mjd,
     scale: t.scale,

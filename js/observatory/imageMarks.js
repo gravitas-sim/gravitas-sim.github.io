@@ -58,7 +58,11 @@ const el = (tag, props = {}, ...kids) => {
   return n;
 };
 const fixed = v => (Math.round(v * 100) / 100).toString();
-const sig3 = v => Number(v.toPrecision(3)).toString();
+const sig3 = v => {
+  if (!Number.isFinite(v) || v === 0) return String(v);
+  const k = 10 ** (2 - Math.floor(Math.log10(Math.abs(v))));
+  return String(Math.round(v * k) / k);
+};
 
 /** The frames of an image observation: its pixels as the reader sees them. */
 export function framesOf(o) {
@@ -590,7 +594,7 @@ export function mountMarks(root, ctx) {
   }
   function commitPlace(pts) {
     const kind = ui.tool;
-    const value = Number(known.value);
+    const value = known.valueAsNumber;
     const length =
       kind === 'reference-pair' && value > 0
         ? { value, unit: unit.value, sigma: 0 }
@@ -972,10 +976,10 @@ export function mountMarks(root, ctx) {
   known.onchange = () => {
     // A length typed after the pair was placed belongs to the selected pair.
     const m = ui.sel && byId(ui.sel.id);
-    if (m?.kind !== 'reference-pair' || !(Number(known.value) > 0)) return;
+    if (m?.kind !== 'reference-pair' || !(known.valueAsNumber > 0)) return;
     store.apply(
       edit(store.state, m.id, {
-        length: { value: Number(known.value), unit: unit.value, sigma: 0 },
+        length: { value: known.valueAsNumber, unit: unit.value, sigma: 0 },
       })
     );
     store.seal();
@@ -1005,7 +1009,7 @@ export function mountMarks(root, ctx) {
       store.apply(edit(store.state, id, { tag: i.value }));
       if (ui.sel?.id === id) tagInput.value = i.value;
     } else {
-      const v = Number(i.value);
+      const v = i.valueAsNumber;
       if (!Number.isFinite(v)) return;
       const handle = ui.sel?.id === id ? ui.sel.handle : 0;
       store.apply(edit(store.state, id, { handle, [axis]: v }));

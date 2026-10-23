@@ -304,7 +304,9 @@ test.describe('the marks instrument: keyboard alone', () => {
     await page.keyboard.press('Enter');
     await expect.poll(async () => (await said(page)).length).toBe(2);
     expect((await said(page))[1]).toMatch(/Point m1 placed at x 30, y 88/);
-    await page.waitForTimeout(900);
+    // Longer than the settle time with nothing more said: the clock, not a guess.
+    const t0 = await page.evaluate(() => performance.now());
+    await page.waitForFunction(t => performance.now() - t > 900, t0);
     expect((await said(page)).length).toBe(2);
     await press(
       body(page).locator('tr[data-id="m1"] button[data-act="select"]'),

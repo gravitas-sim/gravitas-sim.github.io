@@ -76,7 +76,7 @@ export const EN_IMAGEMARKS = {
   'obs.im.noTime': 'not recorded',
   'obs.im.copied': '{id} copied to frame {k}',
   'obs.im.selected': '{id} selected, control point {h}',
-  'obs.im.cancelled': 'Cancelled',
+  'obs.im.cancelled': 'Canceled',
   'obs.im.kept': 'Kept in the ledger: {n} quantities',
   'obs.im.reopened': 'Record reopened with {n} marks',
   'obs.im.ledgerEntry': 'Marks on {title}',

@@ -47,7 +47,7 @@ const UNREACHED = {
     'a rounding inside the guide panel, which needs a mounted observation',
   'js/observatory/measurePanel.js:491':
     'a rounding inside the measure panel, which needs a mounted pipeline',
-  'js/observatoryPage.js:512':
+  'js/observatoryPage.js:504':
     "an imported file's size, written by the page's own script",
 };
 const lineOf = site => site.replace(/:\d+$/, '');

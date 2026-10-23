@@ -84,7 +84,8 @@
       }
       .im-loupe {
         position: absolute;
-        border: 2px solid #fff;
+        border: 2px solid var(--text-primary);
+        box-shadow: 0 0 0 1px var(--text-inverse);
         border-radius: 50%;
         pointer-events: none;
       }
@@ -111,7 +112,7 @@
       .im-table tr[aria-selected='true'] {
         background: var(--accent-soft);
       }
-      /* DESIGN_SYSTEM.md, touch measurement: 44 px handles on a touch screen. */
+      /* Touch measurement: 44 px handles on a touch screen. */
       @media (pointer: coarse) {
         #obsMarksBody :is(button, select, input) {
           min-height: 44px;
