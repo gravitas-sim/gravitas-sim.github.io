@@ -117,7 +117,6 @@ const PINNED = {
   ID_EVIDENCE_NOTEBOOK: 'gravitas.evidence.notebook',
   ID_EXPERIMENT: 'gravitas.experiment',
   ID_EXPERIMENT_RESULT: 'gravitas.experiment-result',
-  ID_IMAGE_MARKS: 'gravitas.image-marks',
   ID_INFERENCE: 'gravitas.inference',
   ID_INVESTIGATION_PACK: 'gravitas.investigation-pack',
   ID_INVESTIGATION_PROGRESS: 'gravitas.investigation.progress',

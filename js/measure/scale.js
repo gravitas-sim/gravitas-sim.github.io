@@ -125,15 +125,11 @@ export function timeOf(t) {
   const v = t.value;
   let mjd;
   if (format === 'iso')
-    mjd =
-      Date.parse(String(v).endsWith('Z') ? v : `${v}Z`) /
-        DAY +
-      MJD_UNIX;
+    mjd = Date.parse(String(v).endsWith('Z') ? v : `${v}Z`) / DAY + MJD_UNIX;
   else if (format === 'jd') mjd = Number(v) - 2400000.5;
   else mjd = Number(v);
   if (!Number.isFinite(mjd)) return null;
-  const label =
-    format === 'iso' ? String(v) : `${format.toUpperCase()} ${v}`;
+  const label = format === 'iso' ? String(v) : `${format.toUpperCase()} ${v}`;
   return {
     mjd,
     scale: t.scale,

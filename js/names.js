@@ -100,7 +100,6 @@ export const ID_EVALUATION = 'gravitas.evaluation';
 export const ID_EVIDENCE_NOTEBOOK = 'gravitas.evidence.notebook';
 export const ID_EXPERIMENT = 'gravitas.experiment';
 export const ID_EXPERIMENT_RESULT = 'gravitas.experiment-result';
-export const ID_IMAGE_MARKS = 'gravitas.image-marks';
 export const ID_INFERENCE = 'gravitas.inference';
 export const ID_INVESTIGATION_PACK = 'gravitas.investigation-pack';
 export const ID_INVESTIGATION_PROGRESS = 'gravitas.investigation.progress';

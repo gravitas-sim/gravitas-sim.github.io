@@ -34,7 +34,6 @@
 import { FORMAT, FORMAT_VERSION, validateObservation } from './schema.js';
 import { plainDataProblem } from '../platform/common.js';
 import { fnvHex8 } from '../hash.js';
-import { ID_IMAGE_MARKS } from '../names.js';
 import { TIME_FORMATS, TIME_SCALES, dimensionOf, parseUnit } from './units.js';
 
 export const LIMITS = Object.freeze({
@@ -355,7 +354,7 @@ function readJson(body, file, opts) {
     // The marks an image was marked with (js/measure/imageRecord.js): read
     // as they are and checked when they are restored, against the pixels.
     const marks =
-      data.workspace?.marks?.format === ID_IMAGE_MARKS
+      data.workspace?.marks?.format === 'gravitas.image-marks'
         ? { marks: data.workspace.marks }
         : {};
     if (!changes.length || !saved)

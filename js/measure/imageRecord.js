@@ -15,12 +15,11 @@
 // =============================================================================
 
 import { sha256Hex } from '../hash.js';
-import { ID_IMAGE_MARKS } from '../names.js';
 import { ARITY, PLACE_SIGMA, emptyState, refine } from './marks.js';
 import { REFINE_VERSION } from './refine.js';
 import { areaOf, lengthOf, scaleOf, timeOf } from './scale.js';
 
-export const MARKS_FORMAT = ID_IMAGE_MARKS;
+export const MARKS_FORMAT = 'gravitas.image-marks';
 export const MARKS_VERSION = 1;
 export const STEP = 'image-marks';
 /** The most marks and frames a record holds (the workspace's own limits are larger). */
