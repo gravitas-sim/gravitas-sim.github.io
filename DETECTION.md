@@ -66,3 +66,26 @@ model-limited and a correct fit is not.
 **(e) Authentic data.** One frame from Prompt 189, the source list and FWHM
 against photutils on the same pixels. **NOT RUN until Prompt 189** has landed an
 authentic image pack: nothing was downloaded and nothing fabricated for this leg.
+
+## Corrections made before the kernel existed
+
+The oracle's first run (before `js/measure/detect.js` was written) showed a
+flaw in the committed algorithm, not in a bound: the background map continued
+the outer boxes as a constant, so on a frame with a strong gradient the strip
+within 8 pixels of the border had a sky wrong by the slope times the distance,
+and eight false sources appeared along it. The interpolation was changed to
+continue the first and last interval linearly to the border (and the noise map
+floored at half of the smallest box noise). No threshold was touched and no
+Gravitas implementation output had been seen; `thresholds.json` carries the
+revised wording and the git history the order.
+
+A second correction of the same kind, from the same run: two of eight frames
+had a false source on the border, 5 and 6 pixels in area. Repeating the edge
+pixel in the smoothing makes the smoothed noise at the border about 1.3 times
+the interior's, while the threshold used one global sum of squares. The
+threshold is now the noise computed exactly from the kernel's weights as they
+land (repeated edge pixels, masked pixels removed and the weights renormalised),
+so it means the same number of sigma at the border and beside a mask as in the
+open field. The oracle's matrices of weights agree with astropy's `convolve`
+to 1e-12 on all eight frames (recorded in its results), and with the change no
+frame of the eight has a false source.
