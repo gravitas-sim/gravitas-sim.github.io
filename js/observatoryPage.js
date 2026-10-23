@@ -2,9 +2,8 @@
 // /observatory/: open an observation, look at it every way, change it, keep it
 // -----------------------------------------------------------------------------
 // The page around the workspace's contracts (OBSERVATORY_WORKSPACE_DESIGN.md):
-// state.source, state.history, state.view = replay(source, changes) and
-// state.selection. A change goes through whyNot() first and every view is
-// redrawn from the replay. Its own bundle; each observation loads when opened.
+// state.source, history, view = replay(source, changes) and selection. A change
+// goes through whyNot() first and every view is redrawn from the replay.
 // =============================================================================
 
 import {
@@ -283,8 +282,9 @@ const marks = {};
 let photo = null;
 $('obsPhotoPanel').addEventListener('toggle', () => {
   if ($('obsPhotoPanel').open && state.view)
-    photo ??= import('./observatory/imagePhotometry.js').then(m =>
-      m.mountPhotometry($('obsPhotoBody'), { ...lent, marks, state })
+    photo ??= import('./observatory/imagePhotometry.js').then(
+      m => m.mountPhotometry($('obsPhotoBody'), { ...lent, marks, state }),
+      () => (photo = null)
     );
 });
 // The archive import (ARCHIVE_IMPORT.md): loaded when first opened.

@@ -291,5 +291,7 @@ export const ES_OBSERVATORY = {
     'O busca las épocas de Gaia de una estrella en el CDS (en vivo, opcional)',
   'obs.ms.title': 'Medir, y el flujo',
   'obs.ph.title': 'Fotometría en la imagen',
+  'obs.ph.offline':
+    'La herramienta de fotometría se está cargando. Se descarga al abrirla por primera vez, así que necesita la red esa primera vez.',
   'obs.gd.title': 'Investigaciones guiadas',
 };
