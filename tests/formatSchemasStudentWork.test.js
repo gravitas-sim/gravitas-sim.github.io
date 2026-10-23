@@ -49,8 +49,8 @@ const literals = (text, re) => [...text.matchAll(re)].map(m => m[1]);
 
 describe('each schema', () => {
   test.each([
-    ['investigation-pack-1', 'gravitas.investigation-pack', IP.FORMAT_VERSION],
-    ['question-bank-1', 'gravitas.question-bank', QB.BANK_FORMAT_VERSION],
+    ['investigation-pack-1', 'gravitas.investigation-pack', IP.BASE_VERSION],
+    ['question-bank-1', 'gravitas.question-bank', QB.BANK_BASE_VERSION],
     ['assignment-2', 'gravitas.assignment', AS.ASSIGNMENT_SCHEMA],
     ['submission-token-2', 'submission token', ST.SUBMISSION_SCHEMA],
     ['submission-results-2', 'gravitas.submission-results', RS.RESULTS_VERSION],
@@ -501,7 +501,7 @@ const item = p => p.bank.items[0];
 /** The bank the composer saves beside a pack (js/composerPage.js saveBank). */
 const bankOf = p => ({
   format: QB.BANK_FORMAT,
-  formatVersion: QB.BANK_FORMAT_VERSION,
+  formatVersion: QB.BANK_BASE_VERSION,
   id: `${p.id}-bank`,
   version: p.version,
   locales: p.locales,
@@ -859,7 +859,7 @@ describe('the investigation pack schema', () => {
         /'([a-zA-Z0-9]+)'/g
       );
     expect(s.properties.format.const).toBe(IP.FORMAT);
-    expect(s.properties.formatVersion.const).toBe(IP.FORMAT_VERSION);
+    expect(s.properties.formatVersion.const).toBe(IP.BASE_VERSION);
     expect(Object.keys(s.properties).sort()).toEqual(set('PACK_FIELDS').sort());
     expect(s.properties.locales.items.enum).toEqual(api.locales);
     expect(s.properties.id.not.enum).toEqual(api.lessons);
@@ -976,7 +976,10 @@ describe('the question bank schema', () => {
     const at = (d, id) => d.items.find(x => x.id === id);
     const cases = [
       ['both', 'another format', d => (d.format = IP.FORMAT)],
-      ['both', 'version 2', d => (d.formatVersion = 2)],
+      // /2 adds criterion kinds, depths and weights (Prompt 176): the reader
+      // reads it, and this schema, the form 2.0.0 reads, does not.
+      ['lenient', 'version 2', d => (d.formatVersion = 2)],
+      ['both', 'version 3', d => (d.formatVersion = 3)],
       ['both', 'an id that is not public', d => (d.id = 'Orbits Bank')],
       // Tested as text, a number passed for an id until the schema said so.
       ['both', 'an id that is a number', d => (d.id = 2026)],
@@ -1125,7 +1128,7 @@ describe('the question bank schema', () => {
 
   test('its tables are the code’s', () => {
     expect(s.properties.format.const).toBe(QB.BANK_FORMAT);
-    expect(s.properties.formatVersion.const).toBe(QB.BANK_FORMAT_VERSION);
+    expect(s.properties.formatVersion.const).toBe(QB.BANK_BASE_VERSION);
     expect(s.properties.items.maxItems).toBe(QB.MAX_ITEMS);
     const d = s.$defs;
     const src = read('js/platform/questionBank.js');

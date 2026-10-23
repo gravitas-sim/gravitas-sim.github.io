@@ -29,6 +29,7 @@ import { digest, compileInvestigation } from '../composer/compile.js';
 import { shortHash } from '../assignments/assignment.js';
 import { stepFingerprint } from '../investigations/progressBackup.js';
 import { ID_INVESTIGATION_PACK } from '../names.js';
+import { withVersion } from './investigation.js';
 
 const isObject = v => v !== null && typeof v === 'object' && !Array.isArray(v);
 
@@ -383,7 +384,7 @@ export function remixInvestigation(lesson, spanish, options) {
     steps,
   };
   // A pack is JSON: an absent text is absent, not undefined.
-  return { pack: clone(pack), kept };
+  return { pack: withVersion(clone(pack)), kept };
 }
 
 // ---------------------------------------------------------------------------

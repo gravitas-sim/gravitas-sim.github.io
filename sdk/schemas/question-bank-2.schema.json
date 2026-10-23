@@ -1,0 +1,909 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/question-bank-2.schema.json",
+  "title": "gravitas.question-bank/2",
+  "description": "Questions an investigation can draw on, as data (js/platform/questionBank.js): each a choice, a number or a short written answer with its prompt, answer, tolerance and unit, staged hints, misconceptions and rubric, and three things a lesson's own question does not carry: a stable id and version, explicit scoring, and controlled variants (a choice's shuffled options, or a number's inputs from a vetted relation, so every variant's answer is computed by Gravitas and none is typed). Text is in every declared locale, and its prose carries no markup but the four tags and the entities lessons use. A bank is its own file, or `bank` in an investigation pack (investigation-pack-1.schema.json, whose $defs include these). validateQuestionBankWith() is the authority; it also refuses a repeated item id, two variants a copied answer would pass, a prompt that does not say a relation's every input, and, before any rule reads it, a file deeper or larger than any bank needs. This is version 2 (Prompt 176, the 3.0.0 format boundary): version 1 plus a rubric criterion's `kind`, `depth` and `weight`, which a 2.0.0 reader refuses; a 2.0.0 build refuses a /2 file as made by a newer version. Written only for a file that needs them; question-bank-1.schema.json is the rest. FORMATS.md lists it.",
+  "type": "object",
+  "required": [
+    "format",
+    "formatVersion",
+    "id",
+    "version",
+    "title",
+    "items"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "format": {
+      "const": "gravitas.question-bank"
+    },
+    "formatVersion": {
+      "const": 2
+    },
+    "id": {
+      "$ref": "#/$defs/publicId"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "locales": {
+      "description": "The languages its text is in. A bank's are not checked against the interface's.",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "title": {
+      "$ref": "#/$defs/text"
+    },
+    "items": {
+      "type": "array",
+      "maxItems": 200,
+      "items": {
+        "$ref": "#/$defs/item"
+      }
+    }
+  },
+  "$defs": {
+    "publicId": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "prose": {
+      "description": "Lesson prose: the renderer's four tags (strong, em, sub, sup) and the entities lessons use, and no other markup, link or script. The validator removes the four tags before it looks, so markup split by a tag is refused by it alone.",
+      "type": "string",
+      "maxLength": 4000,
+      "pattern": "^(?:(?!<(?!/?(?:strong|em|sub|sup)>)[a-zA-Z!/?]|[jJ][aA][vV][aA][sS][cC][rR][iI][pP][tT]:|[dD][aA][tT][aA]:|[vV][bB][sS][cC][rR][iI][pP][tT]:|[hH][tT][tT][pP][sS]?://|[wW][wW][wW]\\.|&(?!(?:amp|lt|gt|rsquo|ldquo|rdquo|ndash|mdash|hellip|nbsp|times|minus|plusmn|deg|beta);)[a-zA-Z]+;)[\\s\\S])*$"
+    },
+    "text": {
+      "description": "A text in every declared language: the English, required and not blank; the Spanish; and the digest of the English the Spanish was written from, so a stale translation is known. A key must be one of the file's own locales, which a schema cannot hold it to.",
+      "type": "object",
+      "required": [
+        "en"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "en": {
+          "$ref": "#/$defs/prose",
+          "pattern": "\\S"
+        },
+        "es": {
+          "$ref": "#/$defs/prose"
+        },
+        "esOf": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}$"
+        }
+      }
+    },
+    "rubricCriteria": {
+      "description": "What to look for in a written answer, as a table the instructor reads down: one to six criteria, each a name and two to five levels, best first. A level has a label, what it looks like and, optionally, its points. On a reflection the criteria guide reading and mark nothing; the answer key prints them and the review page shows them beside the response. The validator also holds the levels of a criterion to best first when they carry points.",
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 6,
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "levels"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "$ref": "#/$defs/text"
+          },
+          "kind": {
+            "description": "What the criterion claims: completion (an answer is there and speaks to the question), correctness (it agrees with the key within the step's tolerance), reasoning (the explanation is present and sound, judged by the instructor) or uncertainty (it says how well the quantity is known). Absent means reasoning.",
+            "enum": [
+              "completion",
+              "correctness",
+              "reasoning",
+              "uncertainty"
+            ]
+          },
+          "depth": {
+            "description": "The shallowest depth at which the criterion is marked; absent means every depth.",
+            "enum": [
+              "core",
+              "quantitative",
+              "advanced"
+            ]
+          },
+          "weight": {
+            "description": "The criterion's relative share of the step's rubric fraction; absent means 1.",
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "maximum": 10
+          },
+          "levels": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 5,
+            "items": {
+              "type": "object",
+              "required": [
+                "label",
+                "text"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "label": {
+                  "$ref": "#/$defs/text"
+                },
+                "text": {
+                  "$ref": "#/$defs/text"
+                },
+                "points": {
+                  "type": "number",
+                  "minimum": 0
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "scoring": {
+      "description": "How many points, and which attempt counts.",
+      "type": "object",
+      "required": [
+        "points",
+        "attempts"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "points": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10
+        },
+        "attempts": {
+          "enum": [
+            "first",
+            "best"
+          ]
+        }
+      }
+    },
+    "hints": {
+      "description": "Hints: a ladder of one to three, each shown when asked for, or the original object of an idea hint then a method hint (never the method alone). A hint teaches the check to make and never contains the expected value (author:check).",
+      "anyOf": [
+        {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "items": {
+            "$ref": "#/$defs/text"
+          }
+        },
+        {
+          "description": "Staged hints: the idea, then the method, never the method alone.",
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "concept": {
+              "$ref": "#/$defs/text"
+            },
+            "method": {
+              "$ref": "#/$defs/text"
+            }
+          },
+          "anyOf": [
+            {
+              "not": {
+                "required": [
+                  "method"
+                ]
+              }
+            },
+            {
+              "required": [
+                "concept"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "a11y": {
+      "description": "Whether the question can be answered from its text alone, and, when it cannot, a note for a reader who cannot use the simulation.",
+      "type": "object",
+      "required": [
+        "textOnly"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "textOnly": {
+          "type": "boolean"
+        },
+        "note": {
+          "$ref": "#/$defs/text"
+        }
+      },
+      "anyOf": [
+        {
+          "properties": {
+            "textOnly": {
+              "const": true
+            }
+          }
+        },
+        {
+          "required": [
+            "note"
+          ]
+        }
+      ]
+    },
+    "expect": {
+      "description": "The answer parser's unit expectation: a dimension, the unit the answer is graded in, and the other units it accepts, each read whatever its case. The graded unit must be among those accepted, which a schema cannot say.",
+      "type": "object",
+      "required": [
+        "dimension",
+        "unit"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "dimension": {
+          "enum": [
+            "time",
+            "length",
+            "speed",
+            "mass",
+            "density",
+            "angle"
+          ]
+        },
+        "unit": {
+          "type": "string"
+        },
+        "accept": {
+          "type": "array",
+          "maxItems": 8,
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "anyOf": [
+        {
+          "properties": {
+            "dimension": {
+              "const": "time"
+            },
+            "unit": {
+              "type": "string",
+              "pattern": "^(?:[sS]|[sS][eE][cC]|[sS][eE][cC][sS]|[sS][eE][cC][oO][nN][dD]|[sS][eE][cC][oO][nN][dD][sS]|[mM][iI][nN]|[mM][iI][nN][sS]|[mM][iI][nN][uU][tT][eE]|[mM][iI][nN][uU][tT][eE][sS]|[hH]|[hH][rR]|[hH][rR][sS]|[hH][oO][uU][rR]|[hH][oO][uU][rR][sS]|[dD]|[dD][aA][yY]|[dD][aA][yY][sS]|[yY][rR]|[yY][rR][sS]|[yY][eE][aA][rR]|[yY][eE][aA][rR][sS])$"
+            },
+            "accept": {
+              "items": {
+                "type": "string",
+                "pattern": "^(?:[sS]|[sS][eE][cC]|[sS][eE][cC][sS]|[sS][eE][cC][oO][nN][dD]|[sS][eE][cC][oO][nN][dD][sS]|[mM][iI][nN]|[mM][iI][nN][sS]|[mM][iI][nN][uU][tT][eE]|[mM][iI][nN][uU][tT][eE][sS]|[hH]|[hH][rR]|[hH][rR][sS]|[hH][oO][uU][rR]|[hH][oO][uU][rR][sS]|[dD]|[dD][aA][yY]|[dD][aA][yY][sS]|[yY][rR]|[yY][rR][sS]|[yY][eE][aA][rR]|[yY][eE][aA][rR][sS])$"
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "dimension": {
+              "const": "length"
+            },
+            "unit": {
+              "type": "string",
+              "pattern": "^(?:[mM]|[mM][eE][tT][rR][eE]|[mM][eE][tT][rR][eE][sS]|[mM][eE][tT][eE][rR]|[mM][eE][tT][eE][rR][sS]|[kK][mM]|[aA][uU]|[rR]_[sS][uU][nN]|[rR][sS][uU][nN])$"
+            },
+            "accept": {
+              "items": {
+                "type": "string",
+                "pattern": "^(?:[mM]|[mM][eE][tT][rR][eE]|[mM][eE][tT][rR][eE][sS]|[mM][eE][tT][eE][rR]|[mM][eE][tT][eE][rR][sS]|[kK][mM]|[aA][uU]|[rR]_[sS][uU][nN]|[rR][sS][uU][nN])$"
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "dimension": {
+              "const": "speed"
+            },
+            "unit": {
+              "type": "string",
+              "pattern": "^(?:[mM]\\/[sS]|[kK][mM]\\/[sS]|[kK][mM]\\/[hH]|[aA][uU]\\/[yY][rR])$"
+            },
+            "accept": {
+              "items": {
+                "type": "string",
+                "pattern": "^(?:[mM]\\/[sS]|[kK][mM]\\/[sS]|[kK][mM]\\/[hH]|[aA][uU]\\/[yY][rR])$"
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "dimension": {
+              "const": "mass"
+            },
+            "unit": {
+              "type": "string",
+              "pattern": "^(?:[kK][gG]|[mM]_[sS][uU][nN]|[mM][sS][uU][nN]|[mM]_[eE][aA][rR][tT][hH]|[mM][eE][aA][rR][tT][hH]|[mM]_[jJ][uU][pP]|[mM][jJ][uU][pP])$"
+            },
+            "accept": {
+              "items": {
+                "type": "string",
+                "pattern": "^(?:[kK][gG]|[mM]_[sS][uU][nN]|[mM][sS][uU][nN]|[mM]_[eE][aA][rR][tT][hH]|[mM][eE][aA][rR][tT][hH]|[mM]_[jJ][uU][pP]|[mM][jJ][uU][pP])$"
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "dimension": {
+              "const": "density"
+            },
+            "unit": {
+              "type": "string",
+              "pattern": "^(?:[gG]\\/[cC][mM]3|[gG]\\/[cC][mM]³|[gG]\\/[cC][cC]|[kK][gG]\\/[mM]3|[kK][gG]\\/[mM]³)$"
+            },
+            "accept": {
+              "items": {
+                "type": "string",
+                "pattern": "^(?:[gG]\\/[cC][mM]3|[gG]\\/[cC][mM]³|[gG]\\/[cC][cC]|[kK][gG]\\/[mM]3|[kK][gG]\\/[mM]³)$"
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "dimension": {
+              "const": "angle"
+            },
+            "unit": {
+              "type": "string",
+              "pattern": "^(?:[dD][eE][gG]|[dD][eE][gG][rR][eE][eE]|[dD][eE][gG][rR][eE][eE][sS]|°|[rR][aA][dD]|[rR][aA][dD][iI][aA][nN]|[rR][aA][dD][iI][aA][nN][sS]|[aA][rR][cC][sS][eE][cC]|[mM][aA][sS])$"
+            },
+            "accept": {
+              "items": {
+                "type": "string",
+                "pattern": "^(?:[dD][eE][gG]|[dD][eE][gG][rR][eE][eE]|[dD][eE][gG][rR][eE][eE][sS]|°|[rR][aA][dD]|[rR][aA][dD][iI][aA][nN]|[rR][aA][dD][iI][aA][nN][sS]|[aA][rR][cC][sS][eE][cC]|[mM][aA][sS])$"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "misconception": {
+      "description": "A wrong answer worth naming: either the factor it is off by or the number it equals, and what to say. On a choice, `option` is the number of the wrong option that is this mistake, in place of a factor or a number.",
+      "anyOf": [
+        {
+          "description": "A wrong answer worth naming: either the factor it is off by or the number it equals, and what to say.",
+          "type": "object",
+          "required": [
+            "id",
+            "say"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "id": {
+              "$ref": "#/$defs/publicId"
+            },
+            "factor": {},
+            "equals": {},
+            "say": {
+              "$ref": "#/$defs/text"
+            }
+          },
+          "anyOf": [
+            {
+              "required": [
+                "factor"
+              ],
+              "properties": {
+                "factor": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "equals": {
+                  "not": {
+                    "type": "number"
+                  }
+                }
+              }
+            },
+            {
+              "required": [
+                "equals"
+              ],
+              "properties": {
+                "equals": {
+                  "type": "number"
+                },
+                "factor": {
+                  "not": {
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "object",
+          "required": [
+            "id",
+            "option",
+            "say"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "id": {
+              "$ref": "#/$defs/publicId"
+            },
+            "option": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "say": {
+              "$ref": "#/$defs/text"
+            }
+          }
+        }
+      ]
+    },
+    "relationVariants": {
+      "description": "A numeric question's inputs from a vetted relation (js/platform/relations.js), which computes every variant's answer; the tolerance is a share of it. No two variants may give answers within the tolerance of each other, and the prompt must say every input as {name}, which only the validator checks.",
+      "anyOf": [
+        {
+          "required": [
+            "variants",
+            "unit"
+          ],
+          "properties": {
+            "variants": {
+              "properties": {
+                "relation": {
+                  "const": "kepler3"
+                },
+                "values": {
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "a",
+                      "M"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "a": {
+                        "type": "number",
+                        "minimum": 0.01,
+                        "maximum": 1000
+                      },
+                      "M": {
+                        "type": "number",
+                        "minimum": 0.05,
+                        "maximum": 100
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "unit": {
+              "const": "yr"
+            }
+          }
+        },
+        {
+          "required": [
+            "variants",
+            "unit"
+          ],
+          "properties": {
+            "variants": {
+              "properties": {
+                "relation": {
+                  "const": "circularSpeed"
+                },
+                "values": {
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "a",
+                      "M"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "a": {
+                        "type": "number",
+                        "minimum": 0.01,
+                        "maximum": 1000
+                      },
+                      "M": {
+                        "type": "number",
+                        "minimum": 0.05,
+                        "maximum": 100
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "unit": {
+              "const": "km/s"
+            }
+          }
+        },
+        {
+          "required": [
+            "variants",
+            "unit"
+          ],
+          "properties": {
+            "variants": {
+              "properties": {
+                "relation": {
+                  "const": "escapeSpeed"
+                },
+                "values": {
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "a",
+                      "M"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "a": {
+                        "type": "number",
+                        "minimum": 0.01,
+                        "maximum": 1000
+                      },
+                      "M": {
+                        "type": "number",
+                        "minimum": 0.05,
+                        "maximum": 100
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "unit": {
+              "const": "km/s"
+            }
+          }
+        },
+        {
+          "required": [
+            "variants"
+          ],
+          "properties": {
+            "variants": {
+              "properties": {
+                "relation": {
+                  "const": "inverseSquare"
+                },
+                "values": {
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "r1",
+                      "r2"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "r1": {
+                        "type": "number",
+                        "minimum": 0.01,
+                        "maximum": 1000
+                      },
+                      "r2": {
+                        "type": "number",
+                        "minimum": 0.01,
+                        "maximum": 1000
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "unit": false
+          }
+        },
+        {
+          "required": [
+            "variants",
+            "unit"
+          ],
+          "properties": {
+            "variants": {
+              "properties": {
+                "relation": {
+                  "const": "transitDepth"
+                },
+                "values": {
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "Rp",
+                      "Rs"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "Rp": {
+                        "type": "number",
+                        "minimum": 0.3,
+                        "maximum": 25
+                      },
+                      "Rs": {
+                        "type": "number",
+                        "minimum": 0.1,
+                        "maximum": 10
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "unit": {
+              "const": "%"
+            }
+          }
+        }
+      ]
+    },
+    "questionRules": {
+      "description": "What each kind of question carries: a choice its options and the right one, counted from 0; a number its answer and tolerance, or inputs from a relation; a short written answer its rubric, and nothing a checker would grade.",
+      "anyOf": [
+        {
+          "required": [
+            "kind",
+            "prompt",
+            "because",
+            "options",
+            "answer",
+            "scoring"
+          ],
+          "properties": {
+            "kind": {
+              "const": "choice"
+            },
+            "options": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 6,
+              "items": {
+                "$ref": "#/$defs/text"
+              }
+            },
+            "answer": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 5
+            },
+            "variants": {
+              "type": "object",
+              "required": [
+                "shuffle"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "shuffle": {
+                  "const": true
+                }
+              }
+            }
+          }
+        },
+        {
+          "required": [
+            "kind",
+            "prompt",
+            "because",
+            "answer",
+            "tolerance",
+            "scoring"
+          ],
+          "properties": {
+            "kind": {
+              "const": "numeric"
+            },
+            "options": false,
+            "answer": {
+              "type": "number",
+              "not": {
+                "const": 0
+              }
+            },
+            "tolerance": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "variants": {
+              "type": "object",
+              "not": {
+                "required": [
+                  "relation"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "required": [
+            "kind",
+            "prompt",
+            "because",
+            "variants",
+            "scoring"
+          ],
+          "properties": {
+            "kind": {
+              "const": "numeric"
+            },
+            "options": false,
+            "answer": false,
+            "tolerance": false,
+            "variants": {
+              "type": "object",
+              "required": [
+                "relation",
+                "values",
+                "tolerancePct"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "relation": {
+                  "enum": [
+                    "kepler3",
+                    "circularSpeed",
+                    "escapeSpeed",
+                    "inverseSquare",
+                    "transitDepth"
+                  ]
+                },
+                "values": {
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 12
+                },
+                "tolerancePct": {
+                  "type": "number",
+                  "minimum": 0.5,
+                  "maximum": 25
+                }
+              }
+            }
+          },
+          "$ref": "#/$defs/relationVariants"
+        },
+        {
+          "required": [
+            "kind",
+            "prompt",
+            "rubric",
+            "scoring"
+          ],
+          "properties": {
+            "kind": {
+              "const": "short"
+            },
+            "options": false,
+            "answer": false,
+            "tolerance": false,
+            "unit": false,
+            "expect": false,
+            "misconceptions": false,
+            "variants": false
+          }
+        }
+      ]
+    },
+    "item": {
+      "description": "One question a lesson can draw on, with a stable id and a version raised whenever a grade could change, its scoring, its accessibility, and controlled variants. Item ids are unique in their list, which only the validator checks.",
+      "type": "object",
+      "required": [
+        "id",
+        "version",
+        "scoring",
+        "a11y"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/publicId"
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "kind": {
+          "enum": [
+            "choice",
+            "numeric",
+            "short"
+          ]
+        },
+        "prompt": {
+          "$ref": "#/$defs/text"
+        },
+        "options": {
+          "type": "array"
+        },
+        "answer": {},
+        "because": {
+          "$ref": "#/$defs/text"
+        },
+        "unit": {
+          "type": "string",
+          "maxLength": 16
+        },
+        "tolerance": {},
+        "expect": {
+          "$ref": "#/$defs/expect"
+        },
+        "hints": {
+          "$ref": "#/$defs/hints"
+        },
+        "worked": {
+          "$ref": "#/$defs/text"
+        },
+        "misconceptions": {
+          "type": "array",
+          "maxItems": 6,
+          "items": {
+            "$ref": "#/$defs/misconception"
+          }
+        },
+        "feedback": {
+          "$ref": "#/$defs/feedback"
+        },
+        "reflect": {
+          "description": "True on a written answer that is a reflection: kept with the student's work, read by a person and never marked, so it carries no rubric.",
+          "const": true
+        },
+        "rubric": {
+          "$ref": "#/$defs/text"
+        },
+        "rubricCriteria": {
+          "$ref": "#/$defs/rubricCriteria"
+        },
+        "scoring": {
+          "$ref": "#/$defs/scoring"
+        },
+        "a11y": {
+          "$ref": "#/$defs/a11y"
+        },
+        "variants": {
+          "type": "object"
+        }
+      },
+      "$ref": "#/$defs/questionRules"
+    },
+    "feedback": {
+      "description": "What to say for each kind of wrong number, teaching the check to make and never the answer. The classes are those of js/answerFeedback.js.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "correct": {
+          "$ref": "#/$defs/text"
+        },
+        "close": {
+          "$ref": "#/$defs/text"
+        },
+        "wrong-sign": {
+          "$ref": "#/$defs/text"
+        },
+        "wrong-unit": {
+          "$ref": "#/$defs/text"
+        },
+        "wrong-order-of-magnitude": {
+          "$ref": "#/$defs/text"
+        },
+        "off": {
+          "$ref": "#/$defs/text"
+        }
+      }
+    }
+  }
+}

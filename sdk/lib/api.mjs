@@ -99,7 +99,8 @@ export const FORMATS = Object.freeze({
   // Reads /1 (units of lessons), /2 (what the course-pack builder writes) and
   // /3 (a /2 with `profile`, `term` or `outcomes`: Prompt 176).
   'gravitas.course-pack': 3,
-  'gravitas.investigation-pack': 1,
+  // Reads /1 and /2 (a rubric criterion's kind, depth or weight).
+  'gravitas.investigation-pack': 2,
   'gravitas.scenario-pack': 1,
   'gravitas.extension-archive': 1,
   // Reads /1 and /2 (the extended uncertainty states, a correlation or a fit).

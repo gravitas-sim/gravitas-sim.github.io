@@ -36,15 +36,16 @@ import { MANIFEST } from './data/investigations/manifest.js';
 import { scenarioTitle } from './i18n/scenario.js';
 import { randomSeed } from './rng.js';
 import {
+  BASE_VERSION,
   FORMAT,
-  FORMAT_VERSION,
   STEP_TYPES,
   migrateInvestigationPack,
   makeChecker,
+  serializePack as serialize,
 } from './platform/investigation.js';
 import {
   BANK_FORMAT,
-  BANK_FORMAT_VERSION,
+  bankVersion,
   ITEM_KINDS,
   ATTEMPT_RULES,
   validateQuestionBankWith,
@@ -68,12 +69,7 @@ import {
   WIDGET_FAMILIES,
 } from './composer/api.js';
 import { EXAMPLE_INVESTIGATION } from './composer/example.js';
-import {
-  createHistory,
-  createDrafts,
-  semanticDiff,
-  serialize,
-} from './studio/model.js';
+import { createHistory, createDrafts, semanticDiff } from './studio/model.js';
 
 /** A copy of plain data: a pack is JSON, so this loses nothing. */
 const clone = v => JSON.parse(JSON.stringify(v));
@@ -2225,7 +2221,7 @@ async function sampleReport() {
 function blankInvestigation(seed) {
   return {
     format: FORMAT,
-    formatVersion: FORMAT_VERSION,
+    formatVersion: BASE_VERSION,
     id: 'my-investigation',
     version: '1.0.0',
     locales: ['en', 'es'],
@@ -2284,7 +2280,7 @@ function saveBank() {
   const d = doc();
   const bank = {
     format: BANK_FORMAT,
-    formatVersion: BANK_FORMAT_VERSION,
+    formatVersion: bankVersion(d.bank?.items),
     id: `${d.id}-bank`,
     version: d.version,
     locales: d.locales,

@@ -2,7 +2,7 @@
 
 # Formats
 
-Every versioned format Gravitas reads or writes: 61 of them. 33 have a JSON Schema in `sdk/schemas`, and 12 read their previous version rather than only their own.
+Every versioned format Gravitas reads or writes: 63 of them. 35 have a JSON Schema in `sdk/schemas`, and 14 read their previous version rather than only their own.
 
 Roadmap II Prompt 61 puts each under one rule:
 - a JSON Schema;
@@ -44,8 +44,10 @@ The columns:
 | experiment store | v, beside format and formatVersion | 3 | js/experiments/store.js migrate | localStorage | migrates v1 and v2; a record without a format is read by v | refused by reason code | no |
 | gravitas.mission-plan | format, formatVersion | 1 | js/mission/link.js readPlan | download, My work | v1 only | fields it does not know are dropped; a plan with a wrong field is refused, in words | no |
 | gravitas.ephemeris-pack | format, formatVersion | 1 | js/mission/ephemeris.js createEphemeris | repository | v1 only | refused | no |
-| gravitas.investigation-pack | format, formatVersion | 1 | js/platform/investigation.js migrateInvestigationPack | download, localStorage, repository | v1 only | refused, in words | [yes](sdk/schemas/investigation-pack-1.schema.json) |
-| gravitas.question-bank | format, formatVersion | 1 | js/platform/questionBank.js validateQuestionBankWith | download | v1 only | a validation problem | [yes](sdk/schemas/question-bank-1.schema.json) |
+| gravitas.investigation-pack | format, formatVersion | 1 | js/platform/investigation.js migrateInvestigationPack | download, localStorage, repository | v1 only | refused, in words: a /2 file is "newer" | [yes](sdk/schemas/investigation-pack-1.schema.json) |
+| gravitas.investigation-pack (with criterion kinds, depths or weights) | format, formatVersion | 2 | js/platform/investigation.js validateInvestigationPack, packVersion | download, localStorage, repository | reads v1 as it is; written only when /1 cannot say it | refused, in words | [yes](sdk/schemas/investigation-pack-2.schema.json) |
+| gravitas.question-bank | format, formatVersion | 1 | js/platform/questionBank.js validateQuestionBankWith | download | v1 only | a validation problem: a /2 file must be 1 | [yes](sdk/schemas/question-bank-1.schema.json) |
+| gravitas.question-bank (with criterion kinds, depths or weights) | format, formatVersion | 2 | js/platform/questionBank.js validateQuestionBankWith, bankVersion | download | reads v1 as it is; written only when /1 cannot say it | a validation problem | [yes](sdk/schemas/question-bank-2.schema.json) |
 | gravitas.assignment | k, v (link prefix a) | 2 | js/assignments/assignment.js validateAssignment | link, download | reads v1 as it is | refused, in words | [yes](sdk/schemas/assignment-2.schema.json) |
 | investigation progress | schema | 2 | js/investigations/progressSchema.js readProgress | localStorage | migrates v1 (migrateFromV1) | kept and not overwritten, in words | no |
 | gravitas.investigation.progress | kind, version | 2 | js/investigations/progressBackup.js restoreProgress | download | migrates v1 | refused, in words | no |
@@ -137,7 +139,9 @@ An older build is a real reader: a browser still running 2.0.0's cached code, a 
 | gravitas.mission-plan | none yet | not yet exercised | policy (above) |
 | gravitas.ephemeris-pack | none yet | not yet exercised | policy (above) |
 | gravitas.investigation-pack | `investigation-pack` | refused | policy (above) |
+| gravitas.investigation-pack (with criterion kinds, depths or weights) | `investigation-pack` | refused | policy (above) |
 | gravitas.question-bank | none yet | not yet exercised | policy (above) |
+| gravitas.question-bank (with criterion kinds, depths or weights) | none yet | not yet exercised | policy (above) |
 | gravitas.assignment | `assignment-link` | n/a | policy (above) |
 | investigation progress | `progress-store` | ignored | policy (above) |
 | gravitas.investigation.progress | `progress-backup` | ignored | policy (above) |

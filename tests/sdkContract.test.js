@@ -109,7 +109,7 @@ describe('the public surface', () => {
       'gravitas.observation-data-pack': 1,
       // It reads /1, /2 and /3: the highest it reads.
       'gravitas.course-pack': 3,
-      'gravitas.investigation-pack': 1,
+      'gravitas.investigation-pack': 2,
       'gravitas.scenario-pack': 1,
     });
     expect(Object.keys(api.EXTENSION_TYPES).sort()).toEqual([
@@ -799,10 +799,10 @@ describe('course packs /2 and investigation packs, as extensions', () => {
 
   test('an investigation pack from a newer Gravitas, and a file that is no pack, are said so', async () => {
     const newer = edited('reading-an-orbit', 'investigation.json', p => {
-      p.formatVersion = 2;
+      p.formatVersion = 3;
     });
     expect((await findings(newer)).map(f => f.message)).toEqual([
-      'is gravitas.investigation-pack/2; this SDK reads up to /1',
+      'is gravitas.investigation-pack/3; this SDK reads up to /2',
     ]);
     const other = edited('reading-an-orbit', 'investigation.json', p => {
       p.format = 'gravitas.course-pack';
