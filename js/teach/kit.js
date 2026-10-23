@@ -245,6 +245,7 @@ async function build() {
   $('kitRosterRow').hidden = source.kind !== 'activity';
   $('kitReuse').hidden = false;
   $('kitCc').hidden = source.kind !== 'course';
+  $('kitPlanSection').hidden = source.kind !== 'course';
   $('kitReuseCheck').hidden = source.kind !== 'activity';
   $('kitReuseSave').hidden = source.kind !== 'activity';
   $('kitReuseNote').textContent =
@@ -480,6 +481,7 @@ function wire() {
   $('kitTermSave').addEventListener('click', saveCourse);
   $('kitCollOpen').addEventListener('click', openCollections);
   $('kitCcOpen').addEventListener('click', openCartridge);
+  $('kitPlanOpen').addEventListener('click', openPlan);
   $('kitReuseUse').addEventListener('click', async () => {
     if (!reissued) return;
     source = { ok: true, kind: 'activity', activity: reissued };
@@ -545,6 +547,60 @@ async function openCartridge() {
   });
 }
 
+/**
+ * The activity list panel (Prompt 174): loaded when it is opened, and given the
+ * page's modules from here, as the cartridge panel is. The kit holds a package it
+ * cannot edit, so the panel has no outcomes editor here: a course file that
+ * carries outcomes prints its matrix.
+ */
+let plan = null;
+async function openPlan() {
+  const out = $('kitStatus');
+  out.textContent = T('plan.loading');
+  const [view, cc, pack, review, api, links] = await Promise.all([
+    import('../instructorPlanView.js'),
+    import('../instructorCartridge.js'),
+    import('../course/pack.js'),
+    import('../course/review.js'),
+    import('../course/api.js'),
+    import('../course/links.js'),
+  ]);
+  const pk = source.pack;
+  const facts = await api.courseFacts(pk, { load: id => lesson(id, 'en') });
+  const made = await cc.linksOf(pk, {
+    itemsOf: pack.itemsOf,
+    itemLink: links.itemLink,
+    courseLink: links.courseLink,
+    root: ROOT,
+  });
+  const manifest = cc.manifestLike(
+    pk,
+    made,
+    review.estimate(pk, facts),
+    pack.itemsOf
+  );
+  out.textContent = '';
+  $('kitPlanOpen').setAttribute('aria-expanded', 'true');
+  plan = view.openPlanPanel({
+    host: $('kitPlan'),
+    level: 3,
+    source: () => pk,
+    manifest: () => manifest,
+    facts: async () => facts,
+    lib: { itemsOf: pack.itemsOf },
+    nameOf: (p, id) =>
+      cc.itemTitle(
+        pack.itemsOf(p).find(x => x.item.id === id).item,
+        facts,
+        lang()
+      ),
+    load: (id, loc) => lesson(id, loc),
+    entries: () => view.libraryEntries(ROOT),
+    cards: new Map(api.LESSONS.map(c => [c.id, c])),
+    locale: lang,
+  });
+}
+
 /** The collection editor (Prompt 164): its module loads when the section is opened. */
 async function openCollections() {
   const host = $('kitCollections');
@@ -573,6 +629,7 @@ async function init() {
       words();
       if (source) build();
       cartridge?.refresh();
+      plan?.refresh();
     },
   });
   if (location.hash === '#collections') openCollections();

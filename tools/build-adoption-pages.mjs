@@ -64,6 +64,10 @@ const load = rel => import(pathToFileURL(path.join(ROOT, rel)).href);
 const readJson = rel => JSON.parse(readFileSync(path.join(ROOT, rel), 'utf8'));
 
 const { shortRoute } = await load('js/assignments/shortRoute.js');
+// The editorial time bands (Prompt 174): the table the Library's length facet
+// and the printable activity list read, so a band cannot be one thing here and
+// another in the filter.
+const TB = await load('js/data/instructorTimeBands.js');
 
 export const BASE = 'teaching';
 export const SITE = 'https://gravitas-sim.online';
@@ -101,6 +105,22 @@ const W = {
   textbook: ['Textbook', 'Libro de texto'],
   time: ['Time', 'Tiempo'],
   minutes: ['minutes', 'minutos'],
+  bandLabel: ['Time band', 'Franja de tiempo'],
+  band_short: ['short', 'corta'],
+  band_medium: ['medium', 'media'],
+  band_long: ['long', 'larga'],
+  depth_core: ['core depth', 'profundidad básica'],
+  depth_quantitative: ['quantitative depth', 'profundidad cuantitativa'],
+  depth_advanced: ['advanced depth', 'profundidad avanzada'],
+  bandStatement: [TB.STATEMENT.en, TB.STATEMENT.es],
+  objectivesMap: [
+    'To map these to your own course outcomes, write them as course objectives in the course builder and add your outcomes there: the printable activity list prints the matrix of outcomes against the items. The mapping is yours; it is not evidence that students attained an outcome.',
+    'Para asociarlos con los resultados de su propio curso, escríbalos como objetivos del curso en el creador de cursos y añada allí sus resultados: la lista de actividades imprimible imprime la matriz de resultados contra los elementos. La asociación es suya; no es evidencia de que el estudiantado alcanzara un resultado.',
+  ],
+  alignOnly: [
+    'OpenStax Astronomy 2e is the only textbook aligned here. Another is added only when it has a public table of contents that can be cited; none has been checked yet.',
+    'OpenStax Astronomy 2e es el único libro de texto alineado aquí. Se añadirá otro solo cuando tenga una tabla de contenidos pública que pueda citarse; todavía no se ha comprobado ninguno.',
+  ],
   math: ['Mathematics asked', 'Matemáticas que se piden'],
   calc: ['Arithmetic', 'Aritmética'],
   subjects: ['Subjects', 'Temas'],
@@ -322,6 +342,37 @@ const W = {
 };
 const w = key => bi({ en: W[key][0], es: W[key][1] });
 const wt = key => ({ en: W[key][0], es: W[key][1] });
+
+/**
+ * A band in words, with its minutes: "medium, 30–50 min".
+ * @param {string} band - short, medium or long
+ */
+const bandText = band => {
+  const r = TB.BANDS[band];
+  return bi({
+    en: `${W[`band_${band}`][0]}, ${r.lo}–${r.hi} min`,
+    es: `${W[`band_${band}`][1]}, ${r.lo}–${r.hi} min`,
+  });
+};
+
+/**
+ * What an adoption page says of time beyond the declared minutes: the band at
+ * each depth the investigation offers, or the band of an activity or guide's
+ * minutes, and always the statement that it is an editorial estimate.
+ */
+function bandCell(id, entry, lesson) {
+  const row = lesson && TB.LESSON_BANDS[id];
+  const bands = row
+    ? Object.entries(row)
+        .map(
+          ([depth, band]) => `${bi(wt(`depth_${depth}`))}: ${bandText(band)}`
+        )
+        .join('; ')
+    : entry.duration
+      ? bandText(TB.bandOfMinutes(entry.duration.max))
+      : '';
+  return `${bi(wt('bandLabel'))}: ${bands}<br><span class="ad-type" id="ad-band-note">${bi(wt('bandStatement'))}</span>`;
+}
 
 const MATH_KEY = {
   none: 'mathNone',
@@ -811,7 +862,7 @@ function investigationPage(S, entry) {
     rowOf(w('textbook'), tbText),
     rowOf(
       w('time'),
-      `${durationText} ${bi(wt('minutes'))}<br><span class="ad-type">${plain(lib(S, `lib.length.${entry.length}`))}</span>`
+      `${durationText} ${bi(wt('minutes'))}<br><span class="ad-type">${plain(lib(S, `lib.length.${entry.length}`))}</span><br>${bandCell(id, entry, lesson)}`
     ),
     rowOf(w('math'), bi(wt(MATH_KEY[entry.mathematics]))),
     rowOf(w('calc'), plain(calc)),
@@ -836,11 +887,11 @@ function investigationPage(S, entry) {
     objectives = section(
       'objectives',
       w('objectives'),
-      list(
+      `${list(
         lesson.objectives.map((o, i) =>
           bi({ en: o, es: es?.objectives?.[i] ?? o })
         )
-      )
+      )}\n<p class="doc-note">${w('objectivesMap')}</p>`
     );
   }
 
@@ -1075,6 +1126,7 @@ ${rowOf(w('actFrom'), `<a href="/${BASE}/investigation/${a.lesson}/">${plain(inv
 </dl>
 ${section('question', w('actQuestion'), `<p>${plain(question)}</p>`)}
 ${section('formats', w('actFormats'), `<div class="doc-table-wrap" tabindex="0"><table class="doc-table"><thead><tr><th scope="col">${w('format')}</th><th scope="col">${w('time')}</th><th scope="col">${w('steps')}</th><th scope="col"><span class="gs-vh">${w('start')}</span></th></tr></thead><tbody>\n${rows}\n</tbody></table></div>`)}
+<p class="doc-note" id="ad-band-note">${w('bandStatement')}</p>
 <p>${w('readMore')}</p>
 <p>${w('actKey')}</p>
 <p><a href="/teaching/find/">${w('back')}</a></p>`;
@@ -1222,7 +1274,7 @@ ${sel('f-offline', w('fOffline'), [opt('yes', wt('fOfflineOnly'))])}
   };
   const table = `<div class="doc-table-wrap" tabindex="0"><table class="doc-table" id="adTable"><thead><tr><th scope="col">${w('fName')}</th><th scope="col">${bi({ en: 'Kind', es: 'Tipo' })}</th><th scope="col">${w('fLevel')}</th><th scope="col">${w('fTime')} (${bi(wt('minutes'))})</th><th scope="col">${w('fMath')}</th></tr></thead><tbody>\n${rows.map(tr).join('\n')}\n</tbody></table></div>
 <p id="adEmpty" class="doc-note" hidden>${w('fEmpty')}</p>`;
-  const body = `${section('filters', w('filterTitle'), filters)}\n${table}\n${topicsLine(S)}`;
+  const body = `${section('filters', w('filterTitle'), filters)}\n${table}\n<p class="doc-note" id="ad-band-note">${w('bandStatement')}</p>\n${topicsLine(S)}`;
   const text = pageHtml({
     file,
     title: {
@@ -1268,6 +1320,8 @@ ${chapters
     );
   })
   .join('\n')}
+<p class="doc-note">${w('alignOnly')}</p>
+<p class="doc-note" id="ad-band-note">${w('bandStatement')}</p>
 ${topicsLine(S)}
 <p><a href="/teaching/find/">${w('back')}</a></p>`;
   const title = {

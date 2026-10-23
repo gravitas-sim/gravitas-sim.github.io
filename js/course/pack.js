@@ -97,6 +97,8 @@ export const MAX_UNITS = 20;
 export const MAX_ITEMS = 120;
 export const MAX_ITEMS_PER_UNIT = 30;
 export const MAX_OBJECTIVES = 12;
+/** The instructor's own outcomes (Prompt 174), as many as the objectives. */
+export const MAX_OUTCOMES = 12;
 export const MAX_PREREQUISITES = 6;
 /** As js/assignments/assignment.js has them. */
 export const MAX_ASSIGNMENT_STEPS = 60;
@@ -137,6 +139,7 @@ const PACK_FIELDS = new Set([
   'audience',
   'teacherGuide',
   'objectives',
+  'outcomes',
   'prerequisites',
   'units',
 ]);
@@ -348,7 +351,13 @@ export function validateCoursePack(c, api) {
     );
   const collection = c.profile === 'collection';
   if (collection)
-    for (const k of ['objectives', 'prerequisites', 'courseLevel', 'term'])
+    for (const k of [
+      'objectives',
+      'outcomes',
+      'prerequisites',
+      'courseLevel',
+      'term',
+    ])
       need(
         c[k] === undefined,
         k,
@@ -361,6 +370,38 @@ export function validateCoursePack(c, api) {
   text(c.summary, 'summary', false);
   text(c.audience, 'audience', false, 300);
   text(c.teacherGuide, 'teacherGuide', false, 4000);
+
+  // --- The instructor's outcomes (Prompt 174): free text the instructor's
+  // department or syllabus states, which the course's objectives are mapped to
+  // (`objectives[].outcomes`). Written only when the instructor enters some, so
+  // every older file is valid; a mapping is the instructor's own claim of what
+  // an objective serves and is never evidence that a student attained anything.
+  const outcomeIds = new Set();
+  if (c.outcomes !== undefined) {
+    const list = Array.isArray(c.outcomes) ? c.outcomes : [];
+    need(
+      Array.isArray(c.outcomes) && list.length <= MAX_OUTCOMES,
+      'outcomes',
+      'count',
+      `a list of up to ${MAX_OUTCOMES}`,
+      { max: MAX_OUTCOMES }
+    );
+    list.forEach((o, i) => {
+      const at = `outcomes[${i}]`;
+      if (!isObject(o)) return need(false, at, 'object', 'an object');
+      fields(o, at, ['id', 'text']);
+      need(PUBLIC_ID.test(o.id || ''), `${at}.id`, 'id', 'a public id');
+      need(
+        !outcomeIds.has(o.id),
+        `${at}.id`,
+        'duplicate',
+        `"${o.id}" is used above`,
+        { id: o.id }
+      );
+      outcomeIds.add(o.id);
+      text(o.text, `${at}.text`, true, 300);
+    });
+  }
 
   // --- Objectives and prerequisites
   const objectives = new Set();
@@ -376,8 +417,29 @@ export function validateCoursePack(c, api) {
     list.forEach((o, i) => {
       const at = `objectives[${i}]`;
       if (!isObject(o)) return need(false, at, 'object', 'an object');
-      fields(o, at, ['id', 'text']);
+      fields(o, at, ['id', 'text', 'outcomes']);
       need(PUBLIC_ID.test(o.id || ''), `${at}.id`, 'id', 'a public id');
+      if (o.outcomes !== undefined) {
+        const got = Array.isArray(o.outcomes) ? o.outcomes : [];
+        need(
+          Array.isArray(o.outcomes) &&
+            got.length >= 1 &&
+            got.length <= MAX_OUTCOMES &&
+            new Set(got).size === got.length,
+          `${at}.outcomes`,
+          'outcomes',
+          'a list of outcome ids, each once'
+        );
+        got.forEach((id, k) =>
+          need(
+            outcomeIds.has(id),
+            `${at}.outcomes[${k}]`,
+            'outcome',
+            `the course has no outcome "${id}"`,
+            { id }
+          )
+        );
+      }
       need(
         !objectives.has(o.id),
         `${at}.id`,

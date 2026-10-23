@@ -45,6 +45,11 @@ export const SEARCH_OUT = 'library/search-index.json';
 export const DOC = 'LIBRARY.md';
 export { FORMAT, FORMAT_VERSION } from '../js/library/format.js';
 import { FORMAT, FORMAT_VERSION } from '../js/library/format.js';
+import {
+  BAND_LENGTH,
+  bandOfMinutes,
+  lessonBand,
+} from '../js/data/instructorTimeBands.js';
 
 /** The nouns of PLATFORM_MODEL.md the Library holds, in the order it offers them. */
 export const KINDS = Object.freeze([
@@ -214,14 +219,9 @@ export async function buildLibrary() {
   }));
   const { BROWSE_META } = await load('js/data/investigations/browseData.js');
   const { DISCOVERY } = await load('js/data/investigations/discovery.js');
-  const {
-    SEQUENCES,
-    LENGTH,
-    lengthOf,
-    calculationOf,
-    DEMO_MINUTES,
-    PERIOD_MINUTES,
-  } = await load('js/data/investigations/sequences.js');
+  const { SEQUENCES, lengthOf, calculationOf } = await load(
+    'js/data/investigations/sequences.js'
+  );
   const { SEQUENCE_ALIASES } = await load('js/data/sequenceAliases.js');
   const { INVESTIGATIONS } = await load('js/data/investigations.js');
   const curation = JSON.parse(readFileSync(path.join(ROOT, CURATION), 'utf8'));
@@ -242,15 +242,12 @@ export async function buildLibrary() {
   const { EN_DEFERRED } = await load('js/i18n/en.deferred.js');
   const { ES_DEFERRED } = await load('js/i18n/es.deferred.js');
 
-  /** The bucket a number of minutes falls in: lengthOf's rule. */
-  const lengthFor = d =>
-    !d
-      ? null
-      : d.max <= DEMO_MINUTES
-        ? LENGTH.DEMO
-        : d.max <= PERIOD_MINUTES
-          ? LENGTH.PERIOD
-          : LENGTH.LONG;
+  /**
+   * The length facet reads the editorial band table (Prompt 174,
+   * js/data/instructorTimeBands.js): a lesson's band at its default depth, and
+   * the band of an upper bound for everything that declares minutes.
+   */
+  const lengthFor = d => (!d ? null : BAND_LENGTH[bandOfMinutes(d.max)]);
   /**
    * calculationOf's rule (sequences.js), for a count of numbers to work out:
    * that one reads a lesson's count from browseData.js by its id.
@@ -275,7 +272,7 @@ export async function buildLibrary() {
         summary: both(m.summary, e.summary),
         level: d?.audience,
         duration: durationOf(m.duration),
-        length: lengthOf(m),
+        length: BAND_LENGTH[lessonBand(m.id)] ?? lengthOf(m),
         mathematics: d?.mathematics,
         calculation: calculationOf(m),
         subjects: BROWSE_META[m.id]?.tags,

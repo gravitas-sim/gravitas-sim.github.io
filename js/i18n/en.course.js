@@ -285,6 +285,8 @@ export const EN_COURSE = {
   'course.error.date': 'A date such as 2026-09-28.',
   'course.error.doi': 'A DOI such as 10.1119/1.1234.',
   'course.error.duplicate': '“{id}” is used above.',
+  'course.error.outcome': 'The course has no outcome “{id}”.',
+  'course.error.outcomes': 'A list of outcome ids, each once.',
   'course.error.entity': 'Plain text only.',
   'course.error.esOf':
     'The record of which English the Spanish translates is damaged.',

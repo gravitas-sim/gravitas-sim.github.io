@@ -291,6 +291,8 @@ export const ES_COURSE = {
   'course.error.date': 'Una fecha como 2026-09-28.',
   'course.error.doi': 'Un DOI como 10.1119/1.1234.',
   'course.error.duplicate': '«{id}» ya se usa más arriba.',
+  'course.error.outcome': 'El curso no tiene ningún resultado «{id}».',
+  'course.error.outcomes': 'Una lista de ids de resultados, cada uno una vez.',
   'course.error.entity': 'Solo texto sin formato.',
   'course.error.esOf':
     'El registro de qué inglés traduce el español está dañado.',

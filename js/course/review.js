@@ -361,6 +361,7 @@ export function textsOf(pack) {
   (pack.objectives || []).forEach((o, i) =>
     add(o.text, `objectives[${i}].text`)
   );
+  (pack.outcomes || []).forEach((o, i) => add(o.text, `outcomes[${i}].text`));
   (pack.prerequisites || []).forEach((p, i) =>
     add(p.text, `prerequisites[${i}].text`)
   );
