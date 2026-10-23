@@ -414,7 +414,7 @@ export function differenceVerdict(a, b, { permits, tie }) {
       return no(
         'incomplete-contract',
         `The ${name} frame states no pixel contract, so its pixels are not known to measure light.`,
-        { which: name }
+        { which: name, missing: [], reason: 'none' }
       );
     const p = permits(f.sidecar, 'photometry');
     if (!p.ok) {
@@ -424,6 +424,7 @@ export function differenceVerdict(a, b, { permits, tie }) {
       return no(code, `The ${name} frame: ${p.message}`, {
         which: name,
         missing: p.missing ?? [],
+        reason: p.code,
       });
     }
   }

@@ -253,6 +253,15 @@ $('obsDetectPanel').addEventListener('toggle', () => {
       () => (detect = null)
     );
 });
+// Catalog overlays, blink and compare (OVERLAYS.md): loaded when first opened.
+let overlay = null;
+$('obsOverlayPanel').addEventListener('toggle', () => {
+  if ($('obsOverlayPanel').open && state.view)
+    overlay ??= import('./observatory/imageOverlay.js').then(
+      m => m.mountOverlay($('obsOverlayBody'), { ...lent, marks, state }),
+      () => (overlay = null)
+    );
+});
 // The archive import (ARCHIVE_IMPORT.md): loaded when first opened.
 let archive = null;
 $('obsArchivePanel').addEventListener('toggle', () => {
@@ -385,6 +394,7 @@ function renderAll() {
     'obsMarksPanel',
     'obsPhotoPanel',
     'obsDetectPanel',
+    'obsOverlayPanel',
   ])
     $(id).hidden = !isImage;
   let drawn = null;
@@ -430,6 +440,7 @@ function renderAll() {
   measure?.then(p => p.update());
   photo?.then(p => p.update());
   detect?.then(p => p.update());
+  overlay?.then(p => p.update());
   guide?.then(p => p.update());
   renderSelectionBar();
   $('obsUndo').disabled = !state.history.canUndo();
@@ -1015,6 +1026,8 @@ $('obsNextPage').addEventListener('click', () => table.turn(1));
 // --- Opening ----------------------------------------------------------------------
 
 function open(o, changes = []) {
+  // The overlay panel can ask to hold the next image as its second frame.
+  if (marks.take?.(o)) return;
   state.source = o;
   state.history.reset(changes);
   state.selection = null;
