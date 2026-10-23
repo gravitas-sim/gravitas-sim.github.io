@@ -263,6 +263,16 @@ export const NEVER_PRECACHED = [
   // cost is in D-R10-31). Its first adopter deletes this entry, and
   // tests/statisticsKernel.test.js fails until it is deleted.
   /^js\/kernels\/statistics\//,
+  // Photometry on an image (Prompt 180, PHOTOMETRY.md): the adapters, the
+  // panel and its words, 21.4 KB gzipped as source, fetched when a reader opens
+  // the Observatory's photometry panel on an image. The idle tier has 266 B of
+  // room under a data-budget ceiling the standing size approval does not cover
+  // (Node 22, after #417) and the first-visit tier a few KB, so none of the
+  // files is installed:
+  // the service worker keeps them after their first online use, and until then
+  // the panel says it needs the network (the marks instrument beside it stays
+  // an idle-tier file). D-R10-56.
+  /^(js\/measure\/photometry\.js|js\/observatory\/imagePhotometry\.js|js\/i18n\/(en|es)\.imagePhotometry\.js)$/,
   // The validation suite's groups and harness: fetched when the suite runs,
   // like physicsChecks.js itself (ON_DEMAND_ONLY below).
   /^js\/validation\/(groups\/|harness\.js$)/,

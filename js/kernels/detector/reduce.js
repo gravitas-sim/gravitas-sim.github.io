@@ -456,6 +456,14 @@ export function aperturePixels(img, x, y, r) {
  * electrons the dark made in this exposure) and any `extraVariance` per pixel
  * (the masters' own noise). Pixels at or above `saturation` electrons, and
  * masked pixels in the aperture, are reported as warnings.
+ *
+ * Two optional inputs let an adapter (js/measure/photometry.js) change the
+ * geometry without a second kernel: `weights`, a list of [pixel index, fraction
+ * of the pixel inside the aperture] (the default is the whole pixels whose
+ * centre lies inside), and `background`, a sky already estimated ({ level, n }:
+ * the electrons per pixel under the aperture and the pixels that determined
+ * it), which skips the annulus. The pixel count is the sum of the fractions,
+ * the area; the CCD equation is otherwise untouched.
  */
 export function aperturePhotometry(
   img,
@@ -470,19 +478,22 @@ export function aperturePhotometry(
     extraVariance = 0,
     mask = null,
     saturation = Infinity,
+    weights = null,
+    background = null,
   }
 ) {
-  const bg = estimateBackground(img, { x, y, rIn, rOut, mask });
-  const ap = aperturePixels(img, x, y, r);
+  const bg = background ?? estimateBackground(img, { x, y, rIn, rOut, mask });
+  const ap = weights ?? aperturePixels(img, x, y, r).map(i => [i, 1]);
   let sum = 0;
+  let npix = 0;
   let masked = 0;
   let saturated = 0;
-  for (const i of ap) {
-    sum += img.values[i];
+  for (const [i, w] of ap) {
+    sum += w * img.values[i];
+    npix += w;
     if (mask && mask[i]) masked++;
     if (img.values[i] >= saturation) saturated++;
   }
-  const npix = ap.length;
   const net = sum - npix * bg.level;
   const terms = noiseTerms({
     signal: Math.max(net, 0),

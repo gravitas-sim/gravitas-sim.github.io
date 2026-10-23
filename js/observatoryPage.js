@@ -2,19 +2,8 @@
 // /observatory/: open an observation, look at it every way, change it, keep it
 // -----------------------------------------------------------------------------
 // The page around the workspace's contracts (OBSERVATORY_WORKSPACE_DESIGN.md):
-//
-//   state.source     the observation as opened (a fixture, an import, or an
-//                    export read back), never changed
-//   state.history    the list of changes, with undo and redo (./history.js)
-//   state.view       replay(source, changes): what every view shows
-//   state.selection  one set of rows every view shares (./plot/select.js)
-//
-// A change goes through whyNot() first, so the list never holds one that
-// fails, and every view is redrawn from the replay. A change that renumbers
-// the rows (a crop, a bin) starts a new selection; anything else keeps it.
-//
-// Its own bundle, like /experiments/: the simulation never imports it, and it
-// never imports the simulation. Each observation loads only when opened.
+// state.source, history, view = replay(source, changes) and selection. A change
+// goes through whyNot() first and every view is redrawn from the replay.
 // =============================================================================
 
 import {
@@ -289,6 +278,15 @@ $('obsSkyPanel').addEventListener('toggle', async () => {
   sky.panel.update(state.view);
 });
 const marks = {};
+// Photometry on an image (PHOTOMETRY.md): loaded when first opened.
+let photo = null;
+$('obsPhotoPanel').addEventListener('toggle', () => {
+  if ($('obsPhotoPanel').open && state.view)
+    photo ??= import('./observatory/imagePhotometry.js').then(
+      m => m.mountPhotometry($('obsPhotoBody'), { ...lent, marks, state }),
+      () => (photo = null)
+    );
+});
 // The archive import (ARCHIVE_IMPORT.md): loaded when first opened.
 let archive = null;
 $('obsArchivePanel').addEventListener('toggle', () => {
@@ -416,7 +414,8 @@ function renderAll() {
   renderAxes(o);
   const isImage = o.kind === 'image';
   $('obsPlotBox').hidden = isImage;
-  $('obsImageBox').hidden = $('obsMarksPanel').hidden = !isImage;
+  for (const id of ['obsImageBox', 'obsMarksPanel', 'obsPhotoPanel'])
+    $(id).hidden = !isImage;
   let drawn = null;
   if (isImage) {
     const { legend } = image.draw(o, { selection: state.selection });
@@ -456,6 +455,7 @@ function renderAll() {
   renderChanges(o);
   renderFit(o);
   measure?.then(p => p.update());
+  photo?.then(p => p.update());
   guide?.then(p => p.update());
   renderSelectionBar();
   $('obsUndo').disabled = !state.history.canUndo();

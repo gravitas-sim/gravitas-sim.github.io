@@ -576,6 +576,13 @@
       "student": false
     },
     {
+      "file": "PHOTOMETRY.md",
+      "kind": "feature",
+      "purpose": "Photometry on an image over the existing reduction: the equations, the contract, the limits, the oracle and the validation (Prompt 180).",
+      "owner": 180,
+      "student": false
+    },
+    {
       "file": "PHYSICS_VALIDATION.md",
       "kind": "reference",
       "purpose": "What the physics model has been checked against.",

@@ -1,0 +1,150 @@
+{
+  "format": "gravitas.photometry-thresholds/1",
+  "prompt": 180,
+  "committed": "Before any implementation output was inspected: this file and the validation contract in PHOTOMETRY.md were committed ahead of js/measure/photometry.js and the oracle fixtures. A check that a measurement crosses is a failed check, not a reason to move the bound; only Carl resets a threshold, with a register row.",
+  "scene": {
+    "detector": {
+      "width": 64,
+      "height": 64,
+      "gain": 1.5,
+      "readNoise": 8,
+      "biasLevel": 500,
+      "biasColumnSigma": 0,
+      "darkRate": 0,
+      "hotFraction": 0,
+      "qeScatter": 0,
+      "vignette": 0,
+      "dustCount": 0,
+      "cosmicRate": 0,
+      "fullWell": 100000,
+      "fwhm": 3
+    },
+    "exposure": 30,
+    "skyRate": 3,
+    "positionRange": [28, 36],
+    "aperture": { "rFwhm": 1.5, "rInFwhm": 3, "rOutFwhm": 5 },
+    "centroid": { "halfWidthSigma": 4, "weightSigmaFwhm": 0.4246609 },
+    "contract": {
+      "unit": "adu",
+      "gain": 1.5,
+      "readNoise": 8,
+      "saturationAdu": 33333,
+      "linearLimitAdu": 30000,
+      "calibration": "bias-subtracted"
+    },
+    "levels": { "faint": 1500, "mid": 15000, "bright": 150000 },
+    "trials": 800,
+    "seedPrefix": "photometry-180"
+  },
+  "checks": {
+    "a1.fluxBias": {
+      "what": "mean of z = (net - F * EE(r)) / sigma_stated over the ensemble, per level; EE is the analytic encircled energy of the Gaussian, 1 - exp(-r^2 / (2 s^2))",
+      "bound": 0.2
+    },
+    "a1.fluxRms": {
+      "what": "root mean square of z, per level",
+      "bounds": [0.87, 1.13]
+    },
+    "a2.skyBiasGradient": {
+      "what": "mean of (sky estimate - truth at the aperture centre) / stated sigma over 400 frames with a linear sky gradient (a 25 percent change of the sky across the annulus): the annulus mean and the local plane, each",
+      "bound": 0.2,
+      "frames": 400
+    },
+    "a2.skyBiasHalfMasked": {
+      "what": "the same for the local plane only, with the half of the annulus on one side of the star masked (the annulus mean is biased there by construction and is not held to this bound)",
+      "bound": 0.2,
+      "frames": 400
+    },
+    "a3.curveOfGrowth": {
+      "what": "largest |net(r) / F - EE(r)| over r = 0.5 to 6 sigma in steps of 0.5 sigma, exact aperture weights, on a frame with F = 1e9 electrons, no sky and no read noise (Poisson noise 3e-5 of the flux)",
+      "bound": 0.004
+    },
+    "a4.centroidBias": {
+      "what": "mean position error (x and y separately), pixels, Gaussian-weighted iterated centroid from a start within 1.5 pixels",
+      "bounds": { "faint": 0.05, "mid": 0.02, "bright": 0.02 }
+    },
+    "b1.apertureSumExact": {
+      "what": "aperture sum, exact weights, against photutils aperture_photometry(method='exact') on the same frames, relative",
+      "bound": 1e-9
+    },
+    "b1.apertureSumCenter": {
+      "what": "aperture sum, centre-in-pixel weights (the kernel's default), against photutils method='center', relative",
+      "bound": 1e-12
+    },
+    "b2.backgroundMean": {
+      "what": "clipped annulus mean, its pixel count and its scatter against astropy sigma_clip (median, mad_std, 3 sigma, 4 iterations) on a centre-method annulus mask",
+      "boundRelative": 1e-9
+    },
+    "b3.backgroundPlane": {
+      "what": "local plane: the value at the aperture centre and the plane summed under the exact aperture, against astropy FittingWithOutlierRemoval(LinearLSQFitter, Planar2D) with the same clipping, relative to the sky level",
+      "boundRelative": 1e-7
+    },
+    "b4.centroid": {
+      "what": "flux-weighted centroid in a window with the window recentred on the rounded position, against photutils centroid_com on the same final window; and the Gaussian-weighted fixed point against centroid_com of the weighted cutout",
+      "boundPixelsFlux": 1e-6,
+      "boundPixelsGaussian": 1e-5
+    },
+    "b5.sourceVariance": {
+      "what": "the aperture's variance under a variance plane, sum of w * variance, against photutils' reported aperture error squared, for exact and for centre weights, relative",
+      "bound": 1e-9
+    },
+    "c1.coverage68": {
+      "what": "fraction of the ensemble with |z| <= 1 for the net flux, per level",
+      "bounds": [0.62, 0.745]
+    },
+    "c1.coverage95": {
+      "what": "fraction of the ensemble with |z| <= 1.96 for the net flux, per level",
+      "bounds": [0.925, 0.985]
+    },
+    "c2.centroidCoverage68": {
+      "what": "fraction of position errors within the stated 1-sigma, x and y pooled, per level",
+      "bounds": [0.6, 0.76]
+    },
+    "c2.centroidCoverage95": {
+      "what": "fraction within 1.96 stated sigma, pooled, per level",
+      "bounds": [0.91, 0.99]
+    },
+    "d1.saturated": {
+      "what": "a star whose pixels pass the contract's linear limit is refused with the code 'saturated' and reports no flux",
+      "trials": 50
+    },
+    "d2.masked": {
+      "what": "a masked pixel inside the aperture is refused with the code 'masked' and reports no flux; a masked pixel only in the annulus is left out of the sky and reported",
+      "trials": 50
+    },
+    "d3.crowded": {
+      "what": "two stars 8 pixels apart (less than the outer annulus radius plus the aperture radius): both are flagged 'crowded' and neither is measured; a star more than 25 pixels from every other is measured",
+      "separationPixels": 8
+    },
+    "d4.contract": {
+      "what": "display-only, no sidecar, light in unknown units, an incomplete contract, a raw frame, a lossy history: each refused with its own code and no number",
+      "codes": [
+        "display-only",
+        "no-contract",
+        "not-flux",
+        "incomplete-contract",
+        "raw-frame",
+        "lossy-history"
+      ]
+    },
+    "d5.nondetection": {
+      "what": "fraction of 500 blank positions (mid-level scene, no star) reported as a nondetection (net below 3 sigma), with an upper limit of 3 sigma",
+      "bound": 0.98,
+      "trials": 500
+    },
+    "e1.batchOfTen": {
+      "what": "ten stars of known flux on a 128 x 128 frame, each started from a click within 1.5 pixels, centred then measured as one batch: every |z| of the flux at most 3.5, every position error at most 4 stated sigma, no star refused",
+      "stars": 10,
+      "zBound": 3.5,
+      "positionSigmas": 4
+    },
+    "e2.authentic": {
+      "what": "one authentic frame from Prompt 189 under a fixed analysis contract",
+      "status": "NOT RUN until Prompt 189 lands an authentic image pack; nothing was downloaded or fabricated for this leg"
+    },
+    "k1.kernelUnchanged": {
+      "what": "reduce.js aperturePhotometry and estimateBackground, and aperture.js measureFlux, give the numbers they gave on v3 80668d38 for the golden cases, relative",
+      "bound": 1e-12
+    }
+  }
+}
