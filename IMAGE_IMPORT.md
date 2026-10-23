@@ -102,7 +102,7 @@ On one machine, Node 24 and Chromium, no gate beyond the bounds:
 | Corpus in Node (121 files) | 250 ms each, < 1 MiB ArrayBuffer growth | slowest 8.2 ms; growth none (net negative, earlier buffers collected) | pass |
 | Corpus in the page (124 files, en and es) | 2,000 ms each | slowest 100 ms (en), 108 ms (es) | pass |
 | Over-size file | 0 bytes read | 0 | pass |
-| 2,048 x 2,048 BITPIX -64, chosen to shown | 5,000 ms | 4,491 ms (the margin is 10 percent; opened as an observation in a further 4,537 ms) | pass, tight |
+| 2,048 x 2,048 BITPIX -64, chosen to shown | 5,000 ms | 4,491 ms on a quiet machine (the margin is 10 percent; opened as an observation in a further 4,537 ms). With other sessions loading the machine (load 5 to 8) it took 5,03x ms on the pre-merge and the merged head alike, so the local bound fails there: the machine, not the code | pass quiet, tight |
 | Cancel and close (`npm run probe:import-cancel`, both profiles) | ledger 0 B, Worker ended, heap within 8 MiB | 0 B, 1/1 ended, 1.19 to 1.32 MiB | pass |
 | Hostile PNG decode against an authentic frame | needs a frame from Prompt 189 | NOT RUN until 189 | open |
 
