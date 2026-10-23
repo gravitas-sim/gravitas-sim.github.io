@@ -54,8 +54,9 @@ is recovered when the detector lists one within 2 pixels of it.
 - a4: the half point moves with the PSF width as the closed form says: a shift of
   -0.292 magnitude from FWHM 3 to FWHM 4.5, within 0.15.
 - a5: the binomial interval, exactly: closed ends, a published case, and its exact
-  coverage summed over the binomial distribution (never below the level, at most 0.06
-  above it on average).
+  coverage summed over the binomial distribution (never below the level; on average
+  at most 0.25 above it at 68.27 percent and 0.10 above at 95 percent: see "Corrections made
+  before the module existed").
 
 **(b) An independent oracle.** photutils 2.0.2 with astropy 6.1.7, numpy 2.2.6 and
 scipy 1.15.3 (the throwaway environment of Prompt 180, nothing added), run offline
@@ -102,3 +103,22 @@ percent.
 **(g) Authentic data.** One frame from Prompt 189, injected and recovered against
 photutils on the same pixels. **NOT RUN until Prompt 189** has landed an authentic image
 pack: nothing was downloaded and nothing was fabricated for this leg.
+
+## Corrections made before the module existed
+
+Three statements in the committed contract were wrong in themselves and were
+corrected, in `thresholds.json` (`corrections`) and here, before the module existed
+or any Gravitas coverage, curve or count was computed; none moved a bound after a
+result.
+
+1. The pinned interval cases number 111, not 105 (arithmetic of the committed
+   enumeration).
+2. a5 (iii) said the exact interval's mean coverage exceeds the level by at most
+   0.06. It does not for small counts, because the interval's edges are discrete:
+   an independent computation (scipy `beta.ppf` and `binom`) gives a mean over p of
+   0.894, 0.851, 0.805, 0.761 and 0.740 at 68.27 percent for n = 5, 10, 20, 50 and 100
+   (0.991 to 0.964 at 95 percent). The floor (never below the level) is the exactness
+   claim and is unchanged; the bound on the mean is 0.25 and 0.10.
+3. a2 names 60 trials of 100 sources, which a 128 by 128 frame cannot hold at 4 FWHM
+   spacing (about 58 fit); the a2 frame is a blank 512 by 512 frame, whose pixels the
+   stand-in detector ignores.

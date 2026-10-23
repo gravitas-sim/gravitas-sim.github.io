@@ -21,6 +21,11 @@
     "memory": "the frame's decoded planes (js/dataKinds/limits.js decodedBytes) plus one Float64 plane for the injected copy must not exceed LIMITS.maxDecodedBytes, 67,108,864",
     "applies": "a curve is the detection probability only for the PSF and the noise it was measured under: another frame's FWHM must be within 10 percent, its sky noise within 10 percent and its detection settings equal, or the use is refused with the names of what differs"
   },
+  "corrections": [
+    "1: the count of pinned interval cases is 111, not 105 (the committed enumeration gives 37 pairs of (k, n) and three levels); fixed before any result existed",
+    "2: a5 (iii) first said the mean coverage of the exact interval exceeds the level by at most 0.06. That is wrong for small n: the exact interval over-covers where its edges are discrete (scipy.stats.beta.ppf and scipy.stats.binom, an independent computation, give a mean over p of 0.894, 0.851, 0.805, 0.761 and 0.740 at 68.27 percent for n = 5, 10, 20, 50, 100, and 0.991, 0.982, 0.977, 0.970 and 0.964 at 95 percent). The floor (never below the level) is the exactness claim and is unchanged; the bound on the mean is now 0.25 and 0.10, the width that discreteness justifies, fixed before the module's own coverage was computed. The c1 coverage bounds were set with the larger bin counts in mind and are unchanged",
+    "3: a2 names 60 trials of 100 sources; at 4 FWHM spacing a 128 by 128 frame holds about 58, so the a2 frame is a blank 512 by 512 frame (the stand-in detector ignores its pixels); no count or bound changed"
+  ],
   "scene": {
     "from": "tests/fixtures/detection/thresholds.json scene: the detector kernel's clean detector, 128 by 128 pixels, gain 1.5, read noise 8 electrons, a sky of 3 electrons a second for 30 seconds (90 electrons), bias subtracted, whole ADU; frames from tools/detection-synth.mjs makeFrame",
     "noise": "sqrt(sky 90 + read noise 8^2 + gain^2/12) = 12.416 electrons a pixel",
@@ -69,12 +74,15 @@
       "bound": 0.15
     },
     "a5.interval": {
-      "what": "the binomial interval, exactly. (i) the closed ends: k = 0 gives lo = 0 and hi = 1 - (a/2)^(1/n), k = n gives lo = (a/2)^(1/n) and hi = 1, for n = 1, 2, 5, 10, 50 at levels 0.6827 and 0.95, to 1e-9; (ii) Clopper and Pearson's published case, 3 of 10 at 95 percent: 0.0667 to 0.6525, to 5e-5; (iii) the exact coverage, summed over the binomial distribution, of the interval at levels 0.6827 and 0.95 for n in 5, 10, 20, 50, 100 and p from 0.02 to 0.98 in steps of 0.02: at least the level less 1e-9 for every (n, p), and the mean over p at most the level plus 0.06.",
+      "what": "the binomial interval, exactly. (i) the closed ends: k = 0 gives lo = 0 and hi = 1 - (a/2)^(1/n), k = n gives lo = (a/2)^(1/n) and hi = 1, for n = 1, 2, 5, 10, 50 at levels 0.6827 and 0.95, to 1e-9; (ii) Clopper and Pearson's published case, 3 of 10 at 95 percent: 0.0667 to 0.6525, to 5e-5; (iii) the exact coverage, summed over the binomial distribution, of the interval at levels 0.6827 and 0.95 for n in 5, 10, 20, 50, 100 and p from 0.02 to 0.98 in steps of 0.02: at least the level less 1e-9 for every (n, p), and the mean over p at most the level plus 0.25 at 68.27 percent and plus 0.10 at 95 percent (the exact interval over-covers where the counts are small, because its edges are discrete: corrected before any Gravitas coverage was computed, see `corrections`).",
       "bounds": {
         "closedEnds": 1e-9,
         "published": 5e-5,
         "coverageFloor": 1e-9,
-        "meanExcess": 0.06
+        "meanExcess": {
+          "level68": 0.25,
+          "level95": 0.1
+        }
       }
     },
     "b0.rendering": {
