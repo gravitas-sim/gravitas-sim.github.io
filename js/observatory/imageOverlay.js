@@ -39,6 +39,7 @@ import {
 } from '../measure/overlay.js';
 import { loadStarFile } from '../kernels/sky/packs.js';
 import { roundSig } from '../format.js';
+import { listeners } from '../listeners.js';
 
 const WORDS = {
   en: () => import('../i18n/en.imageOverlay.js').then(m => m.EN_IMAGEOVERLAY),
@@ -53,7 +54,7 @@ const words = async ctx => {
 };
 
 const SIZE = 480;
-const STEPS = ['0.25', '1', '4'];
+const STEPS = [0.25, 1, 4];
 const ARROWS = {
   ArrowLeft: [-1, 0],
   ArrowRight: [1, 0],
@@ -94,6 +95,7 @@ const geometryOf = f => {
  * @returns {Promise<{update: () => void}>}
  */
 export async function mountOverlay(box, ctx) {
+  const listen = listeners();
   await words(ctx);
   const { framesOf, permits } = await import('./imageMarks.js');
   const { t } = ctx;
@@ -224,7 +226,7 @@ export async function mountOverlay(box, ctx) {
   const linkOn = check('obs.ov.link', true);
   const stepMenu = menu('obs.ov.step', STEPS, '1');
   const padButton = (id, dx, dy) =>
-    button(id, () => nudge(dx, dy, Number(stepMenu.value), focusedPic));
+    button(id, () => nudge(dx, dy, STEPS[stepMenu.selectedIndex], focusedPic));
   const pad = el(
     'div',
     { className: 'im-tools' },
@@ -883,16 +885,15 @@ export async function mountOverlay(box, ctx) {
   }
   function toggleBlink() {
     if (blinking) return stopBlink(true);
-    const plan = blinkPlan(Number(rateMenu.value), {
+    const rate = RULES.blinkRatesPerSecond[rateMenu.selectedIndex];
+    const plan = blinkPlan(rate, {
       reducedMotion: isReduced(),
     });
     if (!plan.ok || plan.mode !== 'timer' || !tie) return;
     blinking = setInterval(() => flip(false), plan.intervalMs);
     startBtn.textContent = t('obs.ov.blinkStop');
     startBtn.dataset.intervalMs = String(plan.intervalMs);
-    say(
-      t('obs.ov.said.blinking', { rate: ctx.number(Number(rateMenu.value)) })
-    );
+    say(t('obs.ov.said.blinking', { rate: ctx.number(rate) }));
   }
   rateMenu.onchange = () => {
     if (blinking) {
@@ -909,13 +910,18 @@ export async function mountOverlay(box, ctx) {
     return tieAgain();
   }
   tieMenu.onchange = syncTie;
-  reduced?.addEventListener?.('change', () => {
-    stopBlink(false);
-    showView();
-  });
-  box.closest('details')?.addEventListener('toggle', e => {
-    if (!e.target.open) stopBlink(false);
-  });
+  if (reduced) {
+    listen(reduced, 'change', () => {
+      stopBlink(false);
+      showView();
+    });
+  }
+  const details = box.closest('details');
+  if (details) {
+    listen(details, 'toggle', e => {
+      if (!e.target.open) stopBlink(false);
+    });
+  }
   pairTools.hidden = pairsBox.hidden = true;
 
   // ---- the cursors -------------------------------------------------------------------------
@@ -955,14 +961,14 @@ export async function mountOverlay(box, ctx) {
     moveTo(canvas, p[0] + dx * size, p[1] + dy * size);
   };
   for (const c of [picA, picB]) {
-    c.addEventListener('focus', () => (focusedPic = c));
-    c.addEventListener('keydown', e => {
+    listen(c, 'focus', () => (focusedPic = c));
+    listen(c, 'keydown', e => {
       const a = ARROWS[e.key];
       if (!a || e.ctrlKey || e.metaKey) return;
       e.preventDefault();
       nudge(a[0], a[1], nudgeScale(e), c);
     });
-    c.addEventListener('click', e => {
+    listen(c, 'click', e => {
       const g = geo.get(c);
       const f = c === picB ? other?.frame : cur?.frame;
       if (!g || !f) return;

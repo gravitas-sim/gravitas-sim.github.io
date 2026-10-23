@@ -106,14 +106,15 @@ export function toTt(time, exposureSeconds) {
   const scale = String(time.scale ?? '');
   if (!scale) return no('no-time', 'the frame’s time has no scale');
   const format = time.format ?? 'mjd';
+  const { value } = time;
   let jd;
   if (format === 'iso') {
-    const s = String(time.value);
+    const s = String(value);
     jd =
       Date.parse(/(Z|[+-]\d\d:?\d\d)$/.test(s) ? s : `${s}Z`) / 86400000 +
       2440587.5;
-  } else if (format === 'jd') jd = Number(time.value);
-  else if (format === 'mjd') jd = Number(time.value) + MJD_JD;
+  } else if (format === 'jd') jd = Number(value);
+  else if (format === 'mjd') jd = Number(value) + MJD_JD;
   else jd = NaN;
   if (!finite(jd)) return no('time', 'the frame’s time cannot be read');
   if (finite(exposureSeconds) && exposureSeconds > 0) {

@@ -88,7 +88,7 @@ export const EN_IMAGEOVERLAY = {
   'obs.ov.clear': 'Remove the second frame',
   'obs.ov.waiting':
     'Waiting: choose the second image with the file box above, or open one of the examples. It is read in your browser.',
-  'obs.ov.cancelled': 'Cancelled: the next image opens as usual.',
+  'obs.ov.cancelled': 'Canceled: the next image opens as usual.',
   'obs.ov.taken': 'The second frame is {title}.',
   'obs.ov.cleared': 'The second frame is removed.',
   'obs.ov.second': 'Second frame: {title} ({width} by {height} pixels).',
