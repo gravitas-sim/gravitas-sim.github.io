@@ -19,6 +19,7 @@
 // =============================================================================
 
 import { adapt } from '../measure/photometry.js';
+import { typedNumber } from '../answerParse.js';
 import {
   DEFAULTS as DETECT,
   detectIn,
@@ -243,8 +244,8 @@ export async function mountInject(box, ctx) {
         ? {}
         : {
             magnitude: {
-              min: Number(lo.replace(',', '.')),
-              max: Number(hi.replace(',', '.')),
+              min: typedNumber(lo, ctx.language()),
+              max: typedNumber(hi, ctx.language()),
             },
           }),
     };

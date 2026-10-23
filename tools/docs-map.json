@@ -361,7 +361,7 @@
     {
       "file": "INJECTION.md",
       "kind": "feature",
-      "purpose": "Completeness by injection: synthetic sources added to a copy of a frame, found again by the detector, the curve with its exact intervals, the selection function, the oracle and the validation (Prompt 184).",
+      "purpose": "Completeness by injection: synthetic sources added to a copy of a frame and found again, the curve with exact intervals, the selection function, the oracle and the validation (Prompt 184).",
       "owner": 184,
       "student": false
     },
