@@ -141,6 +141,23 @@ reader's side:
   - a new capability package.
 - **Patch:** a fix that changes no stored state and no format.
 
+**The next release is 3.0.0 (Prompt 176).** The compatibility corpus
+(`tests/compat/`) found changes that a 2.0.0 build refuses or misreads: the
+course package's collection profile, term and outcomes, the result envelope's
+extended states, an investigation pack's or question bank's criterion kinds,
+depths and weights, and an Observatory workspace's image marks. By the major
+rule above that is **3.0.0**, and the version this boundary asks for. It is
+carried, not hidden: each format has a reader for every version it ever had, a
+writer that writes the lowest version that carries the payload (so what needs
+nothing new is the bytes 2.0.0 wrote), a refusal a 2.0.0 build gives in words
+that name the version, link prefixes that follow the pack (`c3`, `i2`), and a
+rollback rehearsal recorded per record in [FORMATS.md](FORMATS.md) (the section
+"The 3.0.0 boundary", whose last list is the compatibility paragraph for the
+release notes). This does not set the version: Carl still edits `RELEASE` in
+`tools/project-metadata.mjs` at the release, and a later change that needs no
+new refusal does not move it. Had the corpus found nothing, the next release
+would have been 2.2.0 and this paragraph would say so.
+
 **The changelog.** `CHANGELOG.md`'s `[Unreleased]` section collects entries as
 pull requests land. It is cut into a dated, versioned section **by the release,
 not by feature pull requests**. A feature pull request adds its entry under

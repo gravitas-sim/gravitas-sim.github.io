@@ -13,6 +13,10 @@ the release rather than in the tag.
 
 ## [Unreleased]
 
+### 3.0.0 (planned; Prompt 176, the format version boundary)
+
+- The saved formats a 2.0.0 build refuses or misreads now carry a version number it refuses by, in words it already has. A course package that carries a collection profile, a term or outcomes is `gravitas.course-pack/3` (a course link for it is `c3`); a result envelope with an uncertainty state beyond sigma, interval and none, a failed quantity, a correlation or a fit record is `gravitas.artifact/2`; an investigation pack or question bank whose rubric criterion sets a kind, a depth or a weight is `/2` (its link is `i2`). Every other file and link is written as 2.0.0 wrote it (the lowest version that carries the payload), so it opens in 2.0.0 and in 3.0.0 alike. Readers for every earlier version stay; no support period starts. A 2.0.0 build refuses a newer file as made by a newer version of Gravitas, and refuses an Observatory workspace with image marks as nested too deep (it checks nesting before the version, so no version could name it). FORMATS.md records every refusal message and the rollback rehearsal (`tests/compat/`), and the paragraph for the release notes is generated there. RELEASING.md names 3.0.0 as the version this boundary asks for.
+
 ### 2.0.1 (planned; Prompt 123, byte-neutral)
 
 - While an investigation is open, the frosted panels are drawn solid (the same opaque surfaces `prefers-reduced-transparency` already gives), and frosted again when it closes. Linux software WebKit stopped producing frames once the lesson panel opened over the stack of blurs; removing all of them restored the frames, removing only the panel's own did not.
