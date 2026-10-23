@@ -6,67 +6,63 @@
     "heapGrowthBytes": 8388608
   },
   "machine": {
-    "loadAverageAtStart": 3.73
+    "loadAverageAtStart": 2.77
   },
   "rows": [
     {
       "profile": "low-end",
       "mode": "cancel",
-      "baselineBytes": 1704409,
+      "baselineBytes": 1706571,
       "heldInFlight": 67112192,
-      "heapInFlight": 722385792,
       "ledgerAfterCancel": 0,
       "workers": {
         "started": 1,
         "ended": 1
       },
-      "afterBytes": 2959467,
-      "growthBytes": 1255058,
+      "afterBytes": 2961127,
+      "growthBytes": 1254556,
       "verdict": "pass"
     },
     {
       "profile": "low-end",
       "mode": "close",
-      "baselineBytes": 1704409,
-      "readMs": 15454,
-      "heapOpen": 722700133,
+      "baselineBytes": 1706571,
+      "readMs": 15463,
       "ledgerAfterCancel": 0,
       "workers": {
         "started": 1,
         "ended": 1
       },
-      "afterBytes": 3084449,
-      "growthBytes": 1380040,
+      "afterBytes": 3086705,
+      "growthBytes": 1380134,
       "verdict": "pass"
     },
     {
       "profile": "desktop",
       "mode": "cancel",
-      "baselineBytes": 1678561,
+      "baselineBytes": 1680723,
       "heldInFlight": 67112192,
-      "heapInFlight": 722353404,
       "ledgerAfterCancel": 0,
       "workers": {
         "started": 1,
         "ended": 1
       },
-      "afterBytes": 2929239,
-      "growthBytes": 1250678,
+      "afterBytes": 2931503,
+      "growthBytes": 1250780,
       "verdict": "pass"
     },
     {
       "profile": "desktop",
       "mode": "close",
-      "baselineBytes": 1678561,
-      "readMs": 4423,
-      "heapOpen": 722419241,
+      "baselineBytes": 1680723,
+      "readMs": 4450,
       "ledgerAfterCancel": 0,
       "workers": {
         "started": 1,
         "ended": 1
       },
-      "afterBytes": 3048661,
-      "growthBytes": 1370100,
+      "afterBytes": 3050917,
+      "growthBytes": 1370194,
       "verdict": "pass"
     }
   ]
