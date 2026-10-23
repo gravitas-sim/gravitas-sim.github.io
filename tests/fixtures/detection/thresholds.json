@@ -240,5 +240,52 @@
       "what": "one authentic frame from Prompt 189 under a fixed analysis contract: the source list and the FWHM against photutils on the same pixels",
       "status": "NOT RUN until Prompt 189 lands an authentic image pack; nothing was downloaded or fabricated for this leg"
     }
+  },
+  "restated": {
+    "what": "Three legs of 'checks' failed their committed bounds and were left failing (failed-legs.json). Carl ruled they be restated. 'checks' above is untouched and is what was committed first (674862d4); this section is what the validation tool and the tests now judge those three legs by, each with the original bound, the measured value that failed it, the new bound and the reason it is principled. A restated leg is labeled restated after measurement wherever it is shown; it is not a leg that passed as committed.",
+    "ruling": {
+      "by": "Carl",
+      "when": "chat 2026-10-23",
+      "via": "AskUserQuestion in the main session, relayed by the coordinating session",
+      "question": "Prompt 183 (source detection, PR #429) passes the independent photutils oracle, but three committed legs fail: [a4.profile.z 4.256 vs 4, b3.fwhmGaussian 1.32e-4 vs 1e-4, d8.modelLimited.moffat 0.01 vs 0.95]. How should #429 proceed?",
+      "answer": "Restate the legs",
+      "answerDescription": "Rewrite the three bounds (Student-t bound, 3e-4, a different model-limited criterion) so they pass. This moves thresholds after seeing the result."
+    },
+    "legs": {
+      "a4.profile.z": {
+        "originalBound": 4,
+        "originalMeasured": 4.256,
+        "restatedBound": {
+          "pTwoSided": 6.334248366635e-5,
+          "ratio": 1
+        },
+        "statistic": "the largest over the 250 values (25 frames, 10 bins) of |z| divided by the Student-t quantile with n-1 degrees of freedom at the two-sided tail probability pTwoSided, n being the number of stars that contribute to that bin; at most 1",
+        "reason": "z is (stack - truth) divided by the standard error of the mean over the n stars that reach the bin, which is Student t with n-1 degrees of freedom, not normal (the innermost bin holds one to six pixels, so only two to five of a frame's twelve stars reach it). pTwoSided is the two-sided tail probability of the committed normal bound 4, 2(1 - Phi(4)), so the restatement changes the distribution and not the level. For n = 2 the bound is about 10,050 sigma: the test says nothing about a bin of two stars, and the leg says so (the evidence rows give the innermost bin's largest z with its n, and the calibration of z against t over all 250 values)."
+      },
+      "b3.fwhmGaussian": {
+        "originalBound": 0.0001,
+        "originalMeasured": 0.0001323,
+        "restatedBound": 0.0003,
+        "reason": "photutils.psf.fit_fwhm runs scipy least_squares at its default tolerances (about 1e-8 on the cost, about 1e-4 on a fitted parameter) and exposes none of them, so the oracle's own convergence is of the order of the committed bound. The same objective by scipy least_squares over the same photutils model at tolerances of 1e-15 agrees with this kernel to 9.7e-9 (evidence row x.b3.fwhmGaussianTight): the kernel is the converged answer and fit_fwhm is the unconverged one. 3e-4 is three times the order of the oracle's default convergence, Carl's figure."
+      },
+      "d8.modelLimited": {
+        "originalBound": {
+          "flaggedMin": 0.95,
+          "falseFlagMax": 0.02,
+          "criterion": "reduced chi-square of the fit above 1.5"
+        },
+        "originalMeasured": {
+          "moffat": 0.01,
+          "gaussian": 0
+        },
+        "restatedBound": {
+          "flaggedMin": 0.95,
+          "falseFlagMax": 0.02,
+          "criterion": "the width disagreement between the two models: a star is model-limited when its reduced chi-square is above 1.5 or when the Moffat fit of the same pixels gives a FWHM that differs from the Gaussian's by more than 3 sigma of the difference",
+          "agreeSigma": 3
+        },
+        "reason": "The reduced chi-square over a cutout does not see a profile error that moves the width by 30 percent, because the Moffat's wings sit under the sky noise (measured median 1.25 against the 1.5 threshold). The width is what the tool reports, so the criterion is the width's own sensitivity to the model. Derivation: if the Gaussian is the true profile it is the efficient estimator and the Moffat (beta free) a consistent one, so Var(FWHM_moffat - FWHM_gaussian) = Var(FWHM_moffat) - Var(FWHM_gaussian) (Hausman 1978) and z = |difference| / sqrt of that is standard normal; 3 is the convention of a three-sigma departure (0.27 percent false rate if the Gaussian is right), fixed before the measurement and not tuned to the frame sets. The chi-square criterion is kept (a star is model-limited by either), the bounds 0.95 and 0.02 are the committed ones. The leg is judged on the same stars as committed (100 Moffat stars of beta 2 and 20000 electrons, 800 Gaussian stars of 6000 electrons)."
+      }
+    }
   }
 }

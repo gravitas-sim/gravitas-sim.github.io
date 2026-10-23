@@ -22,8 +22,10 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 
 import { makeFrame, SCENE } from '../tools/detection-synth.mjs';
+import { normalSf } from '../js/kernels/statistics/special.js';
 import {
   DEFAULTS,
+  SELECT,
   STEP,
   backgroundMesh,
   combine,
@@ -45,6 +47,7 @@ import {
   segment,
   selectStars,
   smooth,
+  widthAgreement,
 } from '../js/measure/detect.js';
 import { adapt } from '../js/measure/photometry.js';
 import { permits } from '../js/dataKinds/contract.js';
@@ -76,15 +79,78 @@ describe('the committed thresholds hold for the production module', () => {
   );
   const failed = read('failed-legs.json');
 
-  test('every row passes except the legs recorded as failed, and each of those still fails', () => {
+  test('every row passes; the three restated legs pass their restated bound and their committed bound still fails', () => {
     for (const r of rows) {
       if (r.id === 'e2.authentic' || r.evidence) continue;
-      if (failed.legs[r.id])
-        expect({ id: r.id, pass: r.pass }).toEqual({ id: r.id, pass: false });
-      else expect({ id: r.id, pass: r.pass }).toEqual({ id: r.id, pass: true });
+      expect({ id: r.id, pass: r.pass }).toEqual({ id: r.id, pass: true });
     }
-    for (const id of Object.keys(failed.legs))
-      expect(rows.some(r => r.id === id)).toBe(true);
+    // each recorded failure has a restated row that says so, and the committed statistic still fails it
+    for (const id of Object.keys(failed.legs)) {
+      const row = rows.find(r => r.id === id);
+      expect(row.restated).toBe(true);
+      expect(row.note).toMatch(/^restated after measurement/);
+      expect(row.original.pass).toBe(false);
+    }
+    // no other row is restated, and the restated rows are exactly the three failed legs and d8's second row
+    expect(
+      rows
+        .filter(r => r.restated)
+        .map(r => r.id)
+        .sort()
+    ).toEqual([
+      'a4.profile.z',
+      'b3.fwhmGaussian',
+      'd8.modelLimited.gaussian',
+      'd8.modelLimited.moffat',
+    ]);
+  });
+
+  test('the committed bounds and the failing values are still on record, beside the restated ones and the ruling', () => {
+    // thresholds.json 'checks' is what was committed first (674862d4): untouched
+    expect(THRESHOLDS.checks['a4.profile'].zBound).toBe(4);
+    expect(THRESHOLDS.checks['b3.fwhmGaussian'].bound).toBe(1e-4);
+    expect(THRESHOLDS.checks['d8.modelLimited'].flaggedMin).toBe(0.95);
+    expect(THRESHOLDS.checks['d8.modelLimited'].falseFlagMax).toBe(0.02);
+    expect(failed.legs['a4.profile.z']).toMatchObject({
+      bound: 4,
+      measured: 4.256,
+    });
+    expect(failed.legs['b3.fwhmGaussian'].bound).toBe(1e-4);
+    expect(failed.legs['d8.modelLimited.moffat']).toMatchObject({
+      bound: 0.95,
+      measured: 0.01,
+    });
+    // the restated section keeps the original bound and measured value beside the new bound
+    for (const [id, leg] of Object.entries(failed.restated.legs)) {
+      expect(failed.legs[id].bound).toBe(leg.originalBound);
+      expect(failed.legs[id].measured).toBe(leg.originalMeasured);
+      expect(leg.newBound).toBeDefined();
+      expect(leg.reason.length).toBeGreaterThan(200);
+    }
+    expect(Object.keys(failed.restated.legs).sort()).toEqual(
+      Object.keys(failed.legs).sort()
+    );
+    const rule = THRESHOLDS.restated.ruling;
+    expect(rule.when).toBe('chat 2026-10-23');
+    expect(rule.answer).toBe('Restate the legs');
+    expect(rule.answerDescription).toBe(
+      'Rewrite the three bounds (Student-t bound, 3e-4, a different model-limited criterion) so they pass. This moves thresholds after seeing the result.'
+    );
+    expect(failed.restated.ruling).toEqual(rule);
+    // the restated bounds, as derived and not tuned
+    const legs = THRESHOLDS.restated.legs;
+    expect(
+      Math.abs(
+        legs['a4.profile.z'].restatedBound.pTwoSided / (2 * normalSf(4)) - 1
+      )
+    ).toBeLessThan(1e-9);
+    expect(legs['b3.fwhmGaussian'].restatedBound).toBe(3e-4);
+    expect(legs['d8.modelLimited'].restatedBound).toMatchObject({
+      flaggedMin: 0.95,
+      falseFlagMax: 0.02,
+      agreeSigma: 3,
+    });
+    expect(SELECT.agree).toBe(legs['d8.modelLimited'].restatedBound.agreeSigma);
   });
 
   test('every committed check has at least one row, and the authentic leg is not run', () => {
@@ -110,20 +176,29 @@ describe('the committed thresholds hold for the production module', () => {
     for (const [id, leg] of Object.entries(failed.legs)) {
       const r = rows.find(x => x.id === id);
       expect(leg.cause.length).toBeGreaterThan(80);
-      // Recorded on Node 24; another engine moves the last digits, not the verdict.
-      expect(Math.abs(r.measured - leg.measured)).toBeLessThan(
+      // The committed statistic, measured again beside the restated one. Recorded on
+      // Node 24; another engine moves the last digits, not the verdict.
+      expect(r.original.bound).toBe(leg.bound);
+      expect(Math.abs(r.original.measured - leg.measured)).toBeLessThan(
         0.2 * Math.abs(leg.measured)
       );
     }
   });
 
-  test('the evidence rows are labelled as added after the first run', () => {
+  test('the evidence rows are labeled as added after the first run', () => {
     const extra = rows.filter(r => r.evidence);
     expect(extra.map(r => r.id).sort()).toEqual([
+      'x.a4.profile.tCalibration',
+      'x.a4.profile.zInnermost',
       'x.a4.profile.zRms',
       'x.b3.fwhmGaussianTight',
+      'x.d8.gaussian.agreementZ',
+      'x.d8.moffat.agreementOnly',
     ]);
-    for (const r of extra) expect(r.note).toMatch(/added after the first run/);
+    // the restated a4 leg's innermost bin: its z and its n are stated
+    expect(rows.find(r => r.id === 'x.a4.profile.zInnermost').note).toMatch(
+      /from \d+ stars/
+    );
     // fit_fwhm's convergence is the whole of b3: the tight fit agrees with this kernel.
     expect(
       rows.find(r => r.id === 'x.b3.fwhmGaussianTight').measured
@@ -522,6 +597,44 @@ describe('the point-spread function', () => {
     expect(r.profileFwhm).toBeGreaterThan(2.5);
     expect(r.profileFwhm).toBeLessThan(3.8);
     expect(r.modelLimited).toBe(false);
+    // the two models agree on a Gaussian's width: no star disagrees, and the Moffat's width is the same
+    expect(r.disagree).toBe(0);
+    expect(Math.abs(r.moffatFwhm - r.fwhm.mean)).toBeLessThan(0.1);
+  });
+
+  test('the width disagreement between the two models labels Moffat stars model-limited, which the chi-square does not', () => {
+    const moffat = Array.from({ length: 6 }, (_, i) => ({
+      ...star(20 + 17 * i + 0.37 * i, 30 + 11 * ((i * 5) % 7), 20000),
+      psf: { kind: 'moffat', fwhm: 3, beta: 2 },
+    }));
+    const mf = frameWith('psf-moffat', moffat);
+    const ma = adapt(mf, permits);
+    const md = detectIn(ma, { fwhm: 3 });
+    const chosen = selectStars(md).map(s => ({
+      id: s.id,
+      x: s.x,
+      y: s.y,
+      flux: s.flux,
+      fwhm: s.fwhm,
+    }));
+    expect(chosen.length).toBeGreaterThanOrEqual(5);
+    const g = measurePsf(ma, md, chosen, {});
+    // the Gaussian is too wide (the wings), the Moffat's width is the star's
+    expect(g.fwhm.mean).toBeGreaterThan(3.4);
+    expect(Math.abs(g.moffatFwhm - 3)).toBeLessThan(0.3);
+    expect(g.disagree).toBeGreaterThanOrEqual(chosen.length - 1);
+    expect(g.modelLimited).toBe(true);
+    // the committed chi-square alone would not have said so for most of them
+    expect(g.stars.filter(f => f.modelLimited).length).toBeLessThan(
+      chosen.length / 2
+    );
+    // an unflagged Gaussian fit has no agreement object on the Moffat model
+    expect(
+      measurePsf(ma, md, chosen, { model: 'moffat' }).stars[0].agreement
+    ).toBeUndefined();
+    expect(
+      widthAgreement(ma, md, chosen[0], fitStar(ma, md, chosen[0])).z
+    ).toBeGreaterThan(SELECT.agree);
   });
 
   test('a fit refuses near the border, on a saturated pixel and on a masked square, with no number', () => {

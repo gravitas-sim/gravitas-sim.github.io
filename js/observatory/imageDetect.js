@@ -486,6 +486,18 @@ export async function mountDetect(box, ctx) {
             }),
           ]
         : []),
+      ...(r.moffatFwhm
+        ? [
+            line(
+              t('obs.dt.models', {
+                moffat: fmt(r.moffatFwhm, 4),
+                gauss: fmt(r.fwhm.mean, 4),
+                n: r.disagree,
+                k: SELECT.agree,
+              })
+            ),
+          ]
+        : []),
       ...(r.modelLimited
         ? [
             el('p', {

@@ -49,6 +49,8 @@ export const SELECT = Object.freeze({
   ellipticity: 0.3,
   stars: 25,
   chi2: 1.5,
+  /** The width disagreement between the two models that labels a star model-limited, in sigmas of the difference (DETECTION.md). */
+  agree: 3,
 });
 
 const refuse = (code, extra = {}) => ({ ok: false, code, ...extra });
@@ -784,6 +786,38 @@ export function fitStar(a, det, star, o = {}) {
   };
 }
 
+/**
+ * Whether the Gaussian's width is the star's: the same pixels fitted with the
+ * Moffat (beta free), and the two FWHMs compared. If the Gaussian is the true
+ * profile it is the efficient estimator and the Moffat a consistent one, so the
+ * variance of their difference is the difference of their variances (Hausman
+ * 1978): z = |FWHM_moffat - FWHM_gaussian| / sqrt(var_moffat - var_gaussian),
+ * which is a standard normal when the Gaussian is right. A star is
+ * disagreeing at z above SELECT.agree (3, the convention of a three-sigma
+ * departure, fixed before any measurement). The fit is the Gaussian fit's own
+ * square of pixels, weights and start. A Moffat that cannot be fitted, or whose
+ * variance is not above the Gaussian's, gives no verdict (`flagged` false,
+ * `z` null).
+ * @param {object} a - adapt()'s result
+ * @param {object} det - detectIn()'s result
+ * @param {{x: number, y: number, flux?: number, fwhm?: number}} star
+ * @param {object} gauss - fitStar's result for the Gaussian model, ok
+ * @returns {{fwhm: number|null, beta: number|null, z: number|null, flagged: boolean}}
+ */
+export function widthAgreement(a, det, star, gauss) {
+  const m = fitStar(a, det, star, {
+    model: 'moffat',
+    weights: gauss.weights,
+    half: gauss.half,
+  });
+  const none = { fwhm: null, beta: null, z: null, flagged: false };
+  if (!m.ok) return none;
+  const v = m.sigma.fwhm ** 2 - gauss.sigma.fwhm ** 2;
+  if (!(v > 0)) return { ...none, fwhm: m.fwhm, beta: m.beta };
+  const z = Math.abs(m.fwhm - gauss.fwhm) / Math.sqrt(v);
+  return { fwhm: m.fwhm, beta: m.beta, z, flagged: z > SELECT.agree };
+}
+
 // ---- the point-spread function: stars, combination and profile ------------------------
 
 /** The stars the PSF is measured from: unflagged, bright, round, the brightest first (DETECTION.md). */
@@ -900,7 +934,14 @@ export function measurePsf(a, det, stars, o = {}) {
   const refused = [];
   for (const s of stars) {
     const f = fitStar(a, det, s, o);
-    if (f.ok) fits.push({ id: s.id, ...f });
+    if (f.ok)
+      fits.push({
+        id: s.id,
+        ...f,
+        ...(f.model === 'gaussian'
+          ? { agreement: widthAgreement(a, det, s, f) }
+          : {}),
+      });
     else refused.push({ id: s.id, code: f.code });
   }
   if (!fits.length) return refuse('no-stars', { refused });
@@ -924,8 +965,14 @@ export function measurePsf(a, det, stars, o = {}) {
       )
     )
   );
-  const modelLimited =
-    fits.filter(f => f.modelLimited).length > fits.length / 2;
+  // Model-limited: more than half of the stars leave more than noise behind
+  // (reduced chi-square above 1.5) or disagree on the width with the other model.
+  const limited = f => f.modelLimited || f.agreement?.flagged;
+  const modelLimited = fits.filter(limited).length > fits.length / 2;
+  const widths = fits.filter(f => f.agreement?.fwhm);
+  const agreement = widths.length
+    ? widths.reduce((t, f) => t + f.agreement.fwhm, 0) / widths.length
+    : null;
   return {
     ok: true,
     version: VERSION,
@@ -938,6 +985,8 @@ export function measurePsf(a, det, stars, o = {}) {
     profile,
     profileFwhm: profile.length ? profileWidth(profile) : null,
     modelLimited,
+    moffatFwhm: agreement,
+    disagree: fits.filter(f => f.agreement?.flagged).length,
     chi2red: fits.every(f => f.chi2red !== null)
       ? fits.reduce((s, f) => s + f.chi2red, 0) / fits.length
       : null,

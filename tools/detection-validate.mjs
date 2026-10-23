@@ -37,7 +37,9 @@ import {
   selectStars,
   smooth,
   stack,
+  widthAgreement,
 } from '../js/measure/detect.js';
+import { tQuantile } from '../js/kernels/statistics/special.js';
 import {
   FWHM_PER_SIGMA,
   SCENE,
@@ -54,6 +56,12 @@ const read = name => JSON.parse(readFileSync(path.join(FIX, name), 'utf8'));
 const C = THRESHOLDS.checks;
 /** Legs that fail as committed, recorded with their cause (failed-legs.json). */
 export const RECORDED = read('failed-legs.json').legs;
+/**
+ * The three legs restated after measurement by Carl's ruling (thresholds.json
+ * `restated`): they are judged by the restated bound and shown as restated, with
+ * the committed bound and the live value of the committed statistic beside them.
+ */
+export const RESTATED = THRESHOLDS.restated.legs;
 const W = SCENE.detector.width;
 const SIGMA_PSF = SCENE.detector.fwhm / FWHM_PER_SIGMA;
 const R_AP = 1.5 * SCENE.detector.fwhm;
@@ -64,6 +72,16 @@ const MATCH = SCENE.matchRadius;
 const rows = [];
 const add = (id, measured, ok, extra = {}) =>
   rows.push({ id, measured, pass: Boolean(ok), ...extra });
+/** A leg restated after measurement: judged by the new bound, the original statistic kept as `original`. */
+const restate = (id, measured, ok, original, extra = {}) =>
+  rows.push({
+    id,
+    measured,
+    pass: Boolean(ok),
+    restated: true,
+    original,
+    ...extra,
+  });
 /** A row that is not one of the committed legs: evidence added after a first run, never a verdict. */
 const evidence = (id, measured, note) =>
   rows.push({ id: `x.${id}`, measured, pass: true, evidence: true, note });
@@ -320,6 +338,17 @@ function profiles(kept) {
   let zMax = 0;
   let wMax = 0;
   const zs = [];
+  // Student t: z is over the n stars that reach the bin, so n - 1 degrees of freedom
+  const R4 = RESTATED['a4.profile.z'].restatedBound;
+  const tq = new Map();
+  const quantile = n => {
+    if (!tq.has(n)) tq.set(n, tQuantile(1 - R4.pTwoSided / 2, n - 1));
+    return tq.get(n);
+  };
+  let ratioMax = 0;
+  let inner = { z: 0, n: 0 };
+  let beyond = 0;
+  let counted = 0;
   for (const { frame, psf, truth } of kept) {
     const ids = psf.stars;
     const profs = ids.map(f => {
@@ -339,15 +368,36 @@ function profiles(kept) {
         Math.abs(psf.profile[b].value - want[b].value) / psf.profile[b].sem;
       zMax = Math.max(zMax, z);
       zs.push((psf.profile[b].value - want[b].value) / psf.profile[b].sem);
+      const n = psf.profile[b].stars;
+      ratioMax = Math.max(ratioMax, z / quantile(n));
+      if (b === 0 && z > inner.z) inner = { z, n };
+      counted++;
+      if (z > tQuantile(0.975, n - 1)) beyond++;
     }
     const w1 = profileWidth(psf.profile);
     const w0 = profileWidth(want);
     wMax = Math.max(wMax, Math.abs(w1 - w0) / w0);
   }
-  add('a4.profile.z', zMax, zMax <= T.zBound, {
-    bound: T.zBound,
-    note: `largest of the first ${T.bins} bins over ${kept.length} frames`,
-  });
+  restate(
+    'a4.profile.z',
+    ratioMax,
+    ratioMax <= R4.ratio,
+    { bound: T.zBound, measured: zMax, pass: zMax <= T.zBound },
+    {
+      bound: R4.ratio,
+      note: `restated after measurement: the largest |z| over its Student-t bound for the bin's n, ${counted} values over ${kept.length} frames`,
+    }
+  );
+  evidence(
+    'a4.profile.zInnermost',
+    inner.z,
+    `the innermost bin's largest z and its n: ${inner.z.toFixed(3)} from ${inner.n} stars, whose Student-t bound at the committed tail probability is ${quantile(inner.n).toFixed(1)}`
+  );
+  evidence(
+    'a4.profile.tCalibration',
+    beyond / counted,
+    `the fraction of the ${counted} values with |z| beyond the two-sided 5 percent Student-t quantile of its own n (0.05 if z is t with n - 1 degrees of freedom)`
+  );
   evidence(
     'a4.profile.zRms',
     rms(zs),
@@ -543,13 +593,18 @@ function oracle() {
       note: 'degrees',
     }
   );
-  add(
+  restate(
     'b3.fwhmGaussian',
     gaussWorst,
-    fitsDone > 0 && gaussWorst <= T['b3.fwhmGaussian'].bound,
+    fitsDone > 0 && gaussWorst <= RESTATED['b3.fwhmGaussian'].restatedBound,
     {
       bound: T['b3.fwhmGaussian'].bound,
-      note: `${fitsDone} fits against photutils fit_fwhm`,
+      measured: gaussWorst,
+      pass: gaussWorst <= T['b3.fwhmGaussian'].bound,
+    },
+    {
+      bound: RESTATED['b3.fwhmGaussian'].restatedBound,
+      note: `restated after measurement: ${fitsDone} fits against photutils fit_fwhm`,
     }
   );
   evidence(
@@ -603,14 +658,19 @@ function smoothAgreement(d, frame, o, lvl, noi) {
 // ---- c: coverage -----------------------------------------------------------------------
 
 /** Fit every unflagged detection of a frame (positions from the detections), one star each. */
-function fitFrame(frame) {
+function fitFrame(frame, agree = false) {
   const d = run(frame);
   const a = adapt(frame, permits);
   const fits = d.sources
     .filter(s => !s.flags.length && s.shape)
-    .map(s =>
-      fitStar(a, d, { x: s.x, y: s.y, flux: s.flux ?? undefined, fwhm: s.fwhm })
-    );
+    .map(s => {
+      const star = { x: s.x, y: s.y, flux: s.flux ?? undefined, fwhm: s.fwhm };
+      const f = fitStar(a, d, star);
+      // the width disagreement between the two models (restated d8)
+      return agree && f.ok
+        ? { ...f, agreement: widthAgreement(a, d, star, f) }
+        : f;
+    });
   return fits;
 }
 
@@ -619,6 +679,9 @@ function coverage() {
   const T95 = C['c1.coverage95'];
   const truth = SCENE.detector.fwhm;
   let midLimited = 0;
+  let midChi = 0;
+  let midAgree = 0;
+  const midZ = [];
   let midCount = 0;
   for (const [name, flux] of Object.entries(T.levels)) {
     const z = [];
@@ -629,13 +692,16 @@ function coverage() {
         seed: seedOf(`cover-${name}`, k),
         stars: stars12(`cover-${name}`, k, flux),
       });
-      for (const f of fitFrame(frame)) {
+      for (const f of fitFrame(frame, name === 'mid')) {
         if (attempted >= T.stars) break;
         attempted++;
         z.push(f.ok ? (f.fwhm - truth) / f.sigma.fwhm : Infinity);
         if (name === 'mid' && f.ok) {
           midCount++;
-          if (f.modelLimited) midLimited++;
+          if (f.modelLimited) midChi++;
+          if (f.agreement.flagged) midAgree++;
+          if (f.agreement.z !== null) midZ.push(f.agreement.z);
+          if (f.modelLimited || f.agreement.flagged) midLimited++;
         }
       }
       k++;
@@ -678,7 +744,7 @@ function coverage() {
     within(in95 / T2.frames, T2.bounds95),
     { bound: T2.bounds95 }
   );
-  return { midLimited, midCount };
+  return { midLimited, midCount, midChi, midAgree, midZ };
 }
 
 // ---- d: refusals and negative cases ---------------------------------------------------
@@ -928,30 +994,66 @@ function pairs() {
 
 function modelLimited(mid) {
   const T = C['d8.modelLimited'];
+  const R = RESTATED['d8.modelLimited'].restatedBound;
   let hit = 0;
+  let chi = 0;
+  let agree = 0;
   let n = 0;
   let k = 0;
+  const zs = [];
   while (n < T.moffatStars) {
     const truth = stars12('misfit', k, T.flux, {
       psf: { kind: 'moffat', fwhm: 3, beta: T.betaMoffat },
     });
     const frame = makeFrame({ seed: seedOf('misfit', k), stars: truth });
-    for (const f of fitFrame(frame)) {
+    for (const f of fitFrame(frame, true)) {
       if (n >= T.moffatStars) break;
       n++;
-      if (f.ok && f.modelLimited) hit++;
+      if (f.ok && f.modelLimited) chi++;
+      if (f.ok && f.agreement.flagged) agree++;
+      if (f.ok && f.agreement.z !== null) zs.push(f.agreement.z);
+      if (f.ok && (f.modelLimited || f.agreement.flagged)) hit++;
     }
     k++;
   }
-  add('d8.modelLimited.moffat', hit / n, hit / n >= T.flaggedMin, {
-    bound: T.flaggedMin,
-    note: `${hit} of ${n} Moffat stars fitted by a Gaussian`,
-  });
+  restate(
+    'd8.modelLimited.moffat',
+    hit / n,
+    hit / n >= R.flaggedMin,
+    { bound: T.flaggedMin, measured: chi / n, pass: chi / n >= T.flaggedMin },
+    {
+      bound: R.flaggedMin,
+      note: `restated after measurement: ${hit} of ${n} Moffat stars fitted by a Gaussian are model-limited by the width disagreement or the chi-square`,
+    }
+  );
+  evidence(
+    'd8.moffat.agreementOnly',
+    agree / n,
+    `the Moffat stars flagged by the width disagreement alone (${agree} of ${n}); the committed chi-square criterion alone flags ${chi} of ${n}; the smallest disagreement is ${Math.min(...zs).toFixed(1)} sigma of the difference against the 3 of the criterion`
+  );
   const wrong = mid.midLimited / mid.midCount;
-  add('d8.modelLimited.gaussian', wrong, wrong <= T.falseFlagMax, {
-    bound: T.falseFlagMax,
-    note: `${mid.midLimited} of ${mid.midCount} Gaussian stars`,
-  });
+  restate(
+    'd8.modelLimited.gaussian',
+    wrong,
+    wrong <= R.falseFlagMax,
+    {
+      bound: T.falseFlagMax,
+      measured: mid.midChi / mid.midCount,
+      pass: mid.midChi / mid.midCount <= T.falseFlagMax,
+    },
+    {
+      bound: R.falseFlagMax,
+      note: `restated after measurement: ${mid.midLimited} of ${mid.midCount} Gaussian stars labeled by either criterion (chi-square alone ${mid.midChi}, width disagreement alone ${mid.midAgree})`,
+    }
+  );
+  const zr = Math.sqrt(
+    mid.midZ.reduce((s, v) => s + v * v, 0) / mid.midZ.length
+  );
+  evidence(
+    'd8.gaussian.agreementZ',
+    zr,
+    `the root mean square of the width-disagreement z over ${mid.midZ.length} Gaussian stars (1 for a standard normal; 0.27 percent beyond 3 expected, ${mid.midAgree} of ${mid.midCount} seen)`
+  );
 }
 
 /** Every row, as the tests and the command line read them. */
@@ -985,18 +1087,24 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
         ? 'evidence'
         : r.pass === null
           ? 'NOT RUN'
-          : r.pass
-            ? 'pass'
-            : RECORDED[r.id]
-              ? 'FAIL*'
-              : 'FAIL';
+          : r.restated
+            ? r.pass
+              ? 'RESTATED'
+              : 'FAIL'
+            : r.pass
+              ? 'pass'
+              : RECORDED[r.id]
+                ? 'FAIL*'
+                : 'FAIL';
       console.log(
         `${tag.padEnd(9)}${r.id.padEnd(40)}${v.padEnd(12)}${b} ${r.note ?? ''}`
       );
     }
     console.log(
-      `${out.filter(r => r.pass === false).length} failing as committed, ${Date.now() - t0} ms`
+      `${out.filter(r => r.restated).length} rows restated after measurement (their committed bounds still fail: ${out.filter(r => r.restated && !r.original.pass).length}), ${out.filter(r => r.pass === false).length} failing, ${Date.now() - t0} ms`
     );
   }
-  process.exit(out.some(r => r.pass === false && !RECORDED[r.id]) ? 1 : 0);
+  process.exit(
+    out.some(r => r.pass === false && (r.restated || !RECORDED[r.id])) ? 1 : 0
+  );
 }

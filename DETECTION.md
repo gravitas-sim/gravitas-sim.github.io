@@ -158,8 +158,19 @@ exceeds 1 (the stars disagree by more than they say, and the page says so). The
 **stacked radial profile** bins every star's pixels by distance from its fitted center
 (0.5 pixel bins), each pixel as a share of its star's fitted flux, the bin value the
 mean and its error the standard error of the mean; the width read from the profile is
-its half-maximum. **Model-limited:** when more than half of the stars' fits are
-`modelLimited`, the combination is, and the 150 record's uncertainty is of kind
+its half-maximum. **Model-limited** (restated after measurement, see below): a star
+is model-limited when its reduced chi-square is above 1.5 (the committed criterion) or
+when **the two models disagree on its width**: `widthAgreement` fits the Moffat (beta
+free) to the same pixels, weights and start as the Gaussian and forms
+`z = |FWHM_moffat - FWHM_gaussian| / sqrt(var_moffat - var_gaussian)`. If the Gaussian
+is the true profile it is the efficient estimator and the Moffat a consistent one, so
+the variance of the difference is the difference of the variances (Hausman 1978) and z
+is a standard normal; a star disagrees at z above 3 (a three-sigma departure, fixed
+before any measurement; 0.27 percent false if the Gaussian is right). A Moffat that
+cannot be fitted, or whose variance is not above the Gaussian's, gives no verdict. The
+check runs on the Gaussian model only: the Moffat is the most general profile the tool
+offers. When more than half of the stars are model-limited the combination is, and the
+150 record's uncertainty is of kind
 `model-limited` with a floor of its sigma times the root of the mean reduced
 chi-square: the number is conditional on the model and the error is only the part
 the noise explains.
@@ -200,8 +211,11 @@ action is disabled. The panel's strings are in `js/i18n/en.imageDetect.js` and
 - The PSF model is a circular Gaussian or Moffat: no ellipticity, no variation across the
   frame, no undersampling correction beyond pixel integration. **A low reduced chi-square
   does not show the model is right** (leg d8: a Gaussian fitted to Moffat stars is
-  30 percent too wide at a median reduced chi-square of 1.25); the practical check is
-  to fit both models and compare the widths.
+  30 percent too wide at a median reduced chi-square of 1.25, which is why the label
+  now also asks whether the two models agree on the width). The comparison sees a
+  Gaussian-versus-Moffat family error; it does not see a profile that neither
+  describes (a double star, a trailed image) and gives no verdict where the Moffat
+  cannot be fitted.
 - A frame with a gradient steeper than the box can follow, or structure on the box's
   scale (nebulosity), is not a case this background handles; the sky estimate is a
   step function of box statistics, not a fit.
@@ -223,8 +237,18 @@ recompute these; they read the pinned values.
 
 Run by `npm run detection:validate` (Node 24.4.0; `tests/detection.test.js` runs the
 same rows in plain Node and asserts each). Every bound is the one committed in
-`thresholds.json` before the module existed. The three **FAIL** rows are failures of
-the committed bound and are left failing; none was relaxed, rescaled or restated.
+`thresholds.json` before the module existed (674862d4). **Three legs are marked
+RESTATED: they failed their committed bounds, and after seeing the results Carl ruled
+they be restated** ("Restate the legs": "Rewrite the three bounds (Student-t bound,
+3e-4, a different model-limited criterion) so they pass. This moves thresholds after
+seeing the result.", Carl, chat 2026-10-23, asked "Prompt 183 (source detection, PR
+\#429) passes the independent photutils oracle, but three committed legs fail:
+[a4.profile.z 4.256 vs 4, b3.fwhmGaussian 1.32e-4 vs 1e-4, d8.modelLimited.moffat 0.01
+vs 0.95]. How should #429 proceed?"). They did not pass as committed. The committed
+bounds and the failing values stay on record unchanged in `thresholds.json` (`checks`)
+and `failed-legs.json` (`legs`), the restated bounds and the reasons are beside them
+(`thresholds.json` `restated`, `failed-legs.json` `restated`), and a test holds both.
+Every other row is judged by its committed bound.
 
 | Leg | Measured | Committed bound | Verdict |
 | --- | --- | --- | --- |
@@ -235,12 +259,12 @@ the committed bound and are left failing; none was relaxed, rescaled or restated
 | a2 ellipticity bias, orientation error, round stars | -0.021; 0.55 degrees; 1.000 | 0.03; 3; 0.95 | pass |
 | a3 Gaussian FWHM bias at 2, 3, 4.5 pixels; frame error | 0.0002, -0.0011, -0.0029; to 0.0077 | 0.005; 0.015 | pass |
 | a3 Moffat FWHM bias | 0.0205 | 0.025 | pass |
-| a4 stacked profile, largest z of the first 10 bins | **4.256** | 4 | **FAIL** |
+| a4 stacked profile, largest z of the first 10 bins | committed statistic **4.256**; restated statistic (z over its Student-t bound for the bin's n) 0.484 | committed 4; restated at most 1 | **RESTATED after measurement** |
 | a4 width read from the profile | 0.0169 | 0.02 | pass |
 | b1 background and noise meshes, interpolated maps | 1.9e-15, 2.2e-15 | 1e-9 | pass |
 | b2 smoothed image, properties, orientation | 5.7e-13, 2.3e-13, 4.9e-12 degrees | 1e-9, 1e-9, 1e-7 | pass |
 | b2 number of sources, segmented pixel sets, areas (8 frames) | all equal | equal | pass |
-| b3 Gaussian FWHM against `fit_fwhm` (60 fits) | **1.32e-4** | 1e-4 | **FAIL** |
+| b3 Gaussian FWHM against `fit_fwhm` (60 fits) | 1.32e-4 | committed 1e-4; restated 3e-4 | **RESTATED after measurement** |
 | b4 Moffat FWHM, beta against scipy | 2.5e-9, 1.3e-8 | 1e-4, 1e-3 | pass |
 | c1 coverage 68 and 95 percent, faint, mid, bright | 0.686/0.944, 0.674/0.945, 0.671/0.954 | 0.62 to 0.745; 0.925 to 0.985 | pass |
 | c2 combined coverage, 68 and 95 percent | 0.604, 0.932 | 0.58 to 0.78; 0.90 to 0.995 | pass |
@@ -250,26 +274,46 @@ the committed bound and are left failing; none was relaxed, rescaled or restated
 | d5 contract refusals, each its own code | 6 of 6 | 6 | pass |
 | d6 border: flag, fit refused | pass | pass | pass |
 | d7 no deblending: merged, excluded, crowded | pass | pass | pass |
-| d8 a Gaussian fitted to Moffat stars labeled model-limited | **0.01** | at least 0.95 | **FAIL** |
-| d8 a Gaussian fitted to Gaussian stars wrongly labeled | 0 | at most 0.02 | pass |
+| d8 a Gaussian fitted to Moffat stars labeled model-limited | committed criterion (chi-square) **0.01**; restated criterion (chi-square or width disagreement) 0.98 | at least 0.95, both | **RESTATED after measurement** (criterion) |
+| d8 a Gaussian fitted to Gaussian stars wrongly labeled | chi-square 0; restated criterion 0.0025 (2 of 800) | at most 0.02, both | pass under the committed and the restated criterion |
 | e authentic data | not run | | **NOT RUN until Prompt 189** |
 
-(Rows marked FAIL are the three recorded in `tests/fixtures/detection/failed-legs.json`
-with their causes; the test holds each to its record, so a change that repairs or
-worsens one cannot pass unnoticed.)
+(The three restated legs are the ones in `tests/fixtures/detection/failed-legs.json`;
+the test checks that each still fails its committed bound as measured and passes its
+restated one, so a change that moves either cannot pass unnoticed.)
 
-**Why the three fail.** a4: the innermost bin holds one to six pixels from only some
-of a frame's twelve stars, so its standard error comes from two to five values and its z
-is Student's t with 1 to 4 degrees of freedom, not a normal; the signed z over all 250
-values has mean -0.096 and rms 0.77 (row `x.a4.profile.zRms`) and the width agrees.
-b3: `fit_fwhm` runs scipy's TRF at default tolerances and exposes none; the same
-objective at tolerances of 1e-15 agrees with this kernel to 9.7e-9 (row
-`x.b3.fwhmGaussianTight`), so the bound was tighter than the oracle's own
-convergence. d8: the Moffat's wings sit under the sky noise, so a chi-square over the
-cutout does not see a profile error that widens the FWHM by 30 percent (median reduced
-chi-square 1.25); the label is a weak detector of the wrong family, which the page
-states beside the number. The options for Carl are in the decision register row
-D-R10-60.
+**What was restated, and why each new bound is derived and not set above the value.**
+
+- **a4.** z is the stack's departure from truth over the standard error of the mean of
+  the n stars that reach the bin, which is Student t with n - 1 degrees of freedom, not
+  normal. The restated statistic divides each |z| by the Student-t quantile for its own n
+  at the two-sided tail probability of the committed normal bound 4 (6.33e-5), and must
+  stay at most 1: the level is unchanged, the distribution is the right one. Measured
+  0.484. The innermost bin's largest z is 4.256 from 6 stars, whose bound is 12.3 (row
+  `x.a4.profile.zInnermost`); for n = 2 the bound is about 10,050 sigma, so the test says
+  nothing about a bin of two stars, and that is stated here and not hidden. The
+  calibration of z against t over all 250 values (row `x.a4.profile.tCalibration`) is
+  0.016 beyond the two-sided 5 percent quantile (0.05 expected if z is t: fewer exceed it
+  than that), and the width agreement (a4 width
+  row) is unchanged.
+- **b3.** `fit_fwhm` runs scipy `least_squares` at its default tolerances (about 1e-8 on
+  the cost, about 1e-4 on a fitted parameter) and exposes none; the same objective at
+  tolerances of 1e-15 agrees with this kernel to 9.7e-9 (row `x.b3.fwhmGaussianTight`). The
+  committed 1e-4 was the oracle's own convergence, not a test of the kernel. The
+  restated bound is 3e-4, Carl's figure (three times that order); the measured 1.32e-4 is
+  inside it and the kernel's agreement with the converged fit is 9.7e-9.
+- **d8.** The reduced chi-square of a cutout does not see a profile error that widens the
+  FWHM by 30 percent because a Moffat's wings sit under the sky noise (median 1.25 against
+  the 1.5 threshold). The width is what the tool reports, so the label is now also the
+  disagreement of the two models on the width, a Hausman statistic fixed by derivation
+  (above) with the three-sigma convention chosen before the measurement. On 100 Moffat
+  stars (beta 2, 20000 electrons) 98 are labeled (the chi-square alone labels 1); the
+  smallest z among them is 12.9 against the criterion's 3, and the two that are not have
+  no verdict (the Moffat fit failed or its variance was not above the Gaussian's). On 800 Gaussian
+  stars (6000 electrons) 2 are labeled, by the width disagreement and not the chi-square,
+  against 0.27 percent expected from the criterion's own definition (the z has rms 0.66, below
+  the 1 of a standard normal, so the criterion is conservative on these stars). The bounds 0.95
+  and 0.02 are the committed ones.
 
 ## Corrections made after the kernel existed
 

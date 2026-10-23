@@ -96,7 +96,9 @@ export const EN_IMAGEDETECT = {
   'obs.dt.scaled':
     'The stars disagree more than their errors say, so the error is scaled up by the square root of their chi-square ({chi2}).',
   'obs.dt.modelLimited':
-    'The fits leave more than noise behind: the profile may not be this model’s, and the error above is only the part the noise explains. A low chi-square does not show the model is right, because the faint wings sit under the sky noise: fit the other model too and compare the widths.',
+    'The profile may not be this model’s: the fits leave more than noise behind, or the Moffat model gives a width that differs from the Gaussian’s by more than their errors allow. The error above is only the part the noise explains. A low chi-square does not show the model is right, because the faint wings sit under the sky noise; the line above compares the widths of the two models.',
+  'obs.dt.models':
+    'The Moffat model on the same pixels gives a width of {moffat} pixels against the Gaussian’s {gauss}; {n} of the stars differ by more than {k} sigma of the difference.',
   'obs.dt.profileLabel':
     'The stacked radial profile of {n} stars: the share of each star’s light in a pixel against its distance from the center, with the fitted model drawn through it.',
   'obs.dt.profile.table': 'Stacked radial profile',

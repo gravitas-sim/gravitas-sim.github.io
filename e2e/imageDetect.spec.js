@@ -239,6 +239,9 @@ test.describe('sources: keyboard alone', () => {
     ).toBeVisible();
     // The stars used are marked in the table and the readout says how many.
     await expect(readouts(page).last()).toContainText(/From \d+ stars/);
+    await expect(readouts(page).last()).toContainText(
+      'Moffat model on the same pixels'
+    );
     const used = (await table(page)).filter(c => c[11] === 'yes');
     expect(used.length).toBeGreaterThanOrEqual(3);
     for (const c of used) expect(c[10]).toBe('');

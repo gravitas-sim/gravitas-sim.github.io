@@ -97,7 +97,9 @@ export const ES_IMAGEDETECT = {
   'obs.dt.scaled':
     'Las estrellas discrepan más de lo que dicen sus errores, así que el error se multiplica por la raíz de su chi-cuadrado ({chi2}).',
   'obs.dt.modelLimited':
-    'Los ajustes dejan más que ruido: el perfil puede no ser el de este modelo, y el error de arriba es solo la parte que explica el ruido. Un chi-cuadrado bajo no demuestra que el modelo sea correcto, porque las alas débiles quedan bajo el ruido del cielo: ajusta también el otro modelo y compara los anchos.',
+    'El perfil puede no ser el de este modelo: los ajustes dejan más que ruido, o el modelo de Moffat da un ancho que difiere del gaussiano más de lo que permiten sus errores. El error de arriba es solo la parte que explica el ruido. Un chi-cuadrado bajo no demuestra que el modelo sea correcto, porque las alas débiles quedan bajo el ruido del cielo; la línea de arriba compara los anchos de los dos modelos.',
+  'obs.dt.models':
+    'El modelo de Moffat sobre los mismos píxeles da un ancho de {moffat} píxeles frente a {gauss} del gaussiano; {n} de las estrellas difieren más de {k} sigmas de la diferencia.',
   'obs.dt.profileLabel':
     'El perfil radial apilado de {n} estrellas: la parte de la luz de cada estrella en un píxel frente a su distancia al centro, con el modelo ajustado dibujado encima.',
   'obs.dt.profile.table': 'Perfil radial apilado',
