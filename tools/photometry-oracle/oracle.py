@@ -132,16 +132,25 @@ for c in inputs["centroids"]:
         return e[sl] - bg, xx.astype(float), yy.astype(float)
 
     # flux-weighted: move the window to the rounded centroid until it stops
+    # (a centroid on the edge between two windows gives each a position on the
+    # other's side: the loop stops on the first window it has been in, and the
+    # result says it did not settle)
     ix, iy = int(round(x0)), int(round(y0))
+    seen = set()
+    settled = False
     for _ in range(50):
+        seen.add((ix, iy))
         d, xx, yy = cut(ix, iy)
         gx, gy = centroid_com(d)
         cx, cy = ix - half + gx, iy - half + gy
         nx, ny = int(round(cx)), int(round(cy))
         if (nx, ny) == (ix, iy):
+            settled = True
+            break
+        if (nx, ny) in seen:
             break
         ix, iy = nx, ny
-    flux = {"x": float(cx), "y": float(cy), "window": [ix, iy]}
+    flux = {"x": float(cx), "y": float(cy), "window": [ix, iy], "settled": settled}
     # Gaussian-weighted fixed point
     cx, cy = float(x0), float(y0)
     for _ in range(500):

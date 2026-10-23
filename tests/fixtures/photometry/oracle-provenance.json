@@ -17,8 +17,12 @@
     "packaging": "26.3"
   },
   "install": "python3.10 -m venv <scratchpad>/oracle180; <venv>/bin/python -m pip install --only-binary :all: numpy scipy astropy photutils (the resolved versions above); the venv is not committed and no package is",
-  "run": "cd <empty scratchpad directory>; <venv>/bin/python -I tools/photometry-oracle/oracle.py tests/fixtures/photometry/oracle-inputs.json tests/fixtures/photometry/oracle-results.json",
+  "run": "cd <empty scratchpad directory>; <venv>/bin/python -I tools/photometry-oracle/oracle.py tests/fixtures/photometry/oracle-inputs.json tests/fixtures/photometry/oracle-results.json; then Prettier",
   "inputsFrom": "node tools/photometry-oracle/make-inputs.mjs (detector-kernel frames of fixed seeds), then Prettier",
+  "revisions": [
+    "1: results first pinned at 265ac3bd",
+    "2: oracle.py gained the `settled` flag on the flux-weighted centroid (the window loop stops on the first window it has been in and says it did not settle); every number of revision 1 is unchanged, and the inputs are the same bytes"
+  ],
   "parameters": {
     "apertures": "CircularAperture, methods exact and center; the aperture error from a variance plane max(e, 0) + readNoise^2 (photutils sums error^2 times the weight)",
     "annulus": "CircularAnnulus.to_mask(method=center); sigma_clip(sigma=3, maxiters=4, cenfunc=median, stdfunc=mad_std); mean, std with ddof=1",
@@ -28,8 +32,8 @@
   "conventions": "pixel (0, 0) is the centre of the first pixel; electrons are bias-subtracted ADU times the gain 1.5",
   "files": {
     "tests/fixtures/photometry/oracle-inputs.json": "03fc0f3cfc0ac7b850cc0806bb0b55eb11e3180034f50a4820a6a78ca26d4289",
-    "tests/fixtures/photometry/oracle-results.json": "93e67be0a81d12691147d21d873734d04afa5865de74933a04793069becf8e38",
-    "tools/photometry-oracle/oracle.py": "95760e805db280f8c845f64f1c54d68a9ce532ce7c203a9343bae9e7a24dbf54",
+    "tests/fixtures/photometry/oracle-results.json": "f14d1226920715321e89fd3fc0b76ecd0aa8a5b7282664a1b257ab06ee80ceee",
+    "tools/photometry-oracle/oracle.py": "e42581fbc8734814c3e7be778cb9e1adeaf9289f4b19d79355777f4e624eed7f",
     "tools/photometry-oracle/make-inputs.mjs": "86b417c1db79573e266e65f22f6c8e41385589d8940e8f257e1e9430ee5d2705"
   },
   "references": [
