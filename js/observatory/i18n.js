@@ -124,7 +124,6 @@ export function translatePage(root = document) {
   document.title = t('obs.doc.title');
 }
 
-// The banner of a preview as a student (Prompt 175). It is here, not in the
-// page, because the page is at its line ceiling; the page imports this module.
+// The preview banner (Prompt 175); here because the page is at its line ceiling.
 if (globalThis.location?.search.includes('preview=student'))
   import('../storage/banner.js');
