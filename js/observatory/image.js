@@ -243,27 +243,29 @@ export function createImageView(canvas, hooks) {
   return { draw, update: () => paint() };
 }
 
-/** The marks panel (imageMarks.js, Prompt 179), its instrument loaded when first opened. */
+/** The marks panel (imageMarks.js, Prompt 179): its instrument loads when first opened. */
 export function markHost(box, view, lent) {
-  let panel;
+  let p;
   let saved = null;
-  box.addEventListener('toggle', async () => {
-    if (!box.open || view()?.kind !== 'image') return;
-    panel ??= import('./imageMarks.js').then(m =>
+  const load = () =>
+    (p ??= import('./imageMarks.js').then(m =>
       m.mountMarks(box.querySelector('div'), { ...lent, saved })
-    );
-    (await panel).update(view());
-  });
+    ));
+  box.addEventListener(
+    'toggle',
+    async () =>
+      box.open && view()?.kind === 'image' && (await load()).update(view())
+  );
   return {
     show(o) {
       box.hidden = o.kind !== 'image';
-      if (!box.hidden) panel?.then(p => p.update(o));
+      if (!box.hidden) p?.then(x => x.update(o));
     },
-    block: async () => (panel ? (await panel).block() : saved),
-    restore(marks) {
-      if (!(saved = marks ?? null)) return;
+    block: async () => (p ? (await p).block() : saved),
+    restore(m) {
+      if (!(saved = m ?? null)) return;
       box.open = true;
-      panel?.then(p => p.restore(saved));
+      p?.then(x => x.restore(saved));
     },
   };
 }
