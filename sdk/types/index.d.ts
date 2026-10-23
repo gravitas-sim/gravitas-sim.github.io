@@ -131,12 +131,20 @@ export type CourseItem = {
 );
 
 /**
- * gravitas.course-pack/2: what the course-pack builder writes. A course-pack
- * extension may carry this or the /1 form (CoursePack).
+ * gravitas.course-pack/2 and /3: what the course-pack builder writes. A
+ * course-pack extension may carry this or the /1 form (CoursePack). /3 is /2
+ * with `profile`, `term` or `outcomes`, which only a 3.0.0 reader opens; a
+ * pack without them is written as /2 (js/course/pack.js packVersion).
  */
 export interface CoursePack2 {
   format: 'gravitas.course-pack';
-  formatVersion: 2;
+  formatVersion: 2 | 3;
+  /** `collection`: one unit of items in order (/3). */
+  profile?: 'collection';
+  /** The term a copy is for (/3). */
+  term?: string;
+  /** The instructor's own outcomes (/3); an objective may name them. */
+  outcomes?: Array<{ id: string; text: PlainText }>;
   id: string;
   version: string;
   /** The platform version it was made with. */
@@ -147,7 +155,7 @@ export interface CoursePack2 {
   summary?: PlainText;
   audience?: PlainText;
   teacherGuide?: PlainText;
-  objectives?: Array<{ id: string; text: PlainText }>;
+  objectives?: Array<{ id: string; text: PlainText; outcomes?: string[] }>;
   prerequisites?: Array<{ lesson: string } | { text: PlainText }>;
   units: Array<{ id: string; title: PlainText; summary?: PlainText; items: CourseItem[] }>;
 }
@@ -283,10 +291,14 @@ export interface FitRecord {
   rank?: { free: number; rank: number; status: 'full' | 'deficient'; tolerance?: number; notConstrained: string[] };
 }
 
-/** gravitas.artifact/1: one scientific result (sdk/schemas/artifact-1.schema.json). */
+/**
+ * gravitas.artifact/1 and /2: one scientific result (sdk/schemas/artifact-1.schema.json,
+ * artifact-2.schema.json). /2 only where /1 cannot say it: an uncertainty state
+ * beyond sigma, interval and none, a failed quantity, `correlatedWith` or `fit`.
+ */
 export interface Artifact {
   format: 'gravitas.artifact';
-  formatVersion: 1;
+  formatVersion: 1 | 2;
   id: string;
   made: { app: string; platform?: string; engineFingerprint?: string; at?: string };
   source: {

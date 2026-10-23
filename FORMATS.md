@@ -2,7 +2,7 @@
 
 # Formats
 
-Every versioned format Gravitas reads or writes: 59 of them. 31 have a JSON Schema in `sdk/schemas`, and 10 read their previous version rather than only their own.
+Every versioned format Gravitas reads or writes: 61 of them. 33 have a JSON Schema in `sdk/schemas`, and 12 read their previous version rather than only their own.
 
 Roadmap II Prompt 61 puts each under one rule:
 - a JSON Schema;
@@ -25,7 +25,8 @@ The columns:
 | gravitas.pipeline | format, formatVersion | 1 | js/measure/pipeline.js readPipeline | download | v1 only | refused, in words | [yes](sdk/schemas/pipeline-1.schema.json) |
 | gravitas.inference | format, formatVersion | 1 | js/inference/manifest.js validateInference | download | v1 only | a validation problem | [yes](sdk/schemas/inference-1.schema.json) |
 | gravitas.analysis | format, formatVersion, kind | 1 | js/analysis/seams.js readAnalysis (the analysis lab) | download | v1 only | refused, in words | [yes](sdk/schemas/analysis-1.schema.json) |
-| gravitas.artifact | format, formatVersion | 1 | js/platform/artifact.js validateArtifact | memory | v1 only | a validation problem | [yes](sdk/schemas/artifact-1.schema.json) |
+| gravitas.artifact | format, formatVersion | 1 | js/platform/artifact.js validateArtifact | memory | v1 only | a validation problem: a /2 envelope is "not 1" | [yes](sdk/schemas/artifact-1.schema.json) |
+| gravitas.artifact (with the extended uncertainty states, a correlation or a fit) | format, formatVersion | 2 | js/platform/artifact.js validateArtifact, artifactVersion, legacyView | memory | reads v1 as it is; written only when /1 cannot say it | a validation problem | [yes](sdk/schemas/artifact-2.schema.json) |
 | gravitas.observed | format, formatVersion | 1 | js/notebook/observed.js (inside a notebook entry) | localStorage | v1 only | not checked | no |
 | gravitas.observation-data-pack | format, formatVersion | 1 | tools/data-packs/schema.mjs validateDataPack | repository, extension archive | v1 only | a validation problem | [yes](sdk/schemas/observation-data-pack-1.schema.json) |
 | gravitas.image | format, formatVersion | 1 | js/dataKinds/contract.js validateImage | repository, extension archive | v1 only | a validation problem | [yes](sdk/schemas/image-1.schema.json) |
@@ -58,8 +59,9 @@ The columns:
 | gravitas.evidence.notebook | kind, version | 1 | js/notebook/notebook.js validateBackup | download | v1 only | refused, in words | [yes](sdk/schemas/evidence-notebook-1.schema.json) |
 | gravitas.ledger | LEDGER_FORMAT (a record, not a file) | 1 | js/submission/ledgerDigest.js checkEvidence | inside a submission token (ev), never alone | v1 only | checked as a mismatch, in words | no |
 | gravitas.course-pack (extension form) | format, formatVersion | 1 | js/platform/course.js validateCoursePack | repository, extension archive, IndexedDB | v1 only | a validation problem, which /2 gets too | [yes](sdk/schemas/course-pack-1.schema.json) |
-| gravitas.course-pack (builder form) | format, formatVersion | 2 | js/course/pack.js migrateCoursePack | download, localStorage, repository, extension archive | migrates v1 | refused, in words | [yes](sdk/schemas/course-pack-2.schema.json) |
-| course home link | link prefix c | 2 | js/course/links.js readCourseFragment | link | migrates c1 | refused by reason code | no |
+| gravitas.course-pack (builder form) | format, formatVersion | 2 | js/course/pack.js migrateCoursePack | download, localStorage, repository, extension archive | migrates v1 | refused, in words: a /3 file is "made by a newer version" | [yes](sdk/schemas/course-pack-2.schema.json) |
+| gravitas.course-pack (builder form, with a profile, a term or outcomes) | format, formatVersion | 3 | js/course/pack.js validateCoursePack, packVersion | download, localStorage, repository, extension archive | migrates v1 and reads v2 as it is; written only when /2 cannot say it | refused, in words | [yes](sdk/schemas/course-pack-3.schema.json) |
+| course home link | link prefix c | 3 | js/course/links.js readCourseFragment | link | migrates c1 and reads c2 as it is; c3 only for a pack that needs /3 | refused by reason code | no |
 | investigation link | link prefix i | 1 | js/composer/packLink.js readPackFragment | link | v1 only | refused by reason code | no |
 | gravitas.course-manifest | format, formatVersion | 1 | none: written, never read | download | v1 only | nothing reads it | no |
 | gravitas.capability-package | format, formatVersion | 1 | js/platform/manifest.js validateManifest | repository, IndexedDB | v1 only | refused, in words | [yes](sdk/schemas/capability-package-1.schema.json) |
@@ -116,6 +118,7 @@ An older build is a real reader: a browser still running 2.0.0's cached code, a 
 | gravitas.inference | none yet | not yet exercised | policy (above) |
 | gravitas.analysis | none yet | not yet exercised | policy (above) |
 | gravitas.artifact | `artifact` | ignored | policy (above) |
+| gravitas.artifact (with the extended uncertainty states, a correlation or a fit) | `artifact` | ignored | policy (above) |
 | gravitas.observed | none yet | not yet exercised | policy (above) |
 | gravitas.observation-data-pack | none yet | not yet exercised | policy (above) |
 | gravitas.image | none yet | not yet exercised | policy (above) |
@@ -149,6 +152,7 @@ An older build is a real reader: a browser still running 2.0.0's cached code, a 
 | gravitas.ledger | `ledger-entry` | ignored | policy (above) |
 | gravitas.course-pack (extension form) | `course-pack-extension` | refused | policy (above) |
 | gravitas.course-pack (builder form) | `course-pack` | refused | policy (above) |
+| gravitas.course-pack (builder form, with a profile, a term or outcomes) | `course-pack` | refused | policy (above) |
 | course home link | `course-home-link` | n/a | policy (above) |
 | investigation link | none yet | not yet exercised | policy (above) |
 | gravitas.course-manifest | `report-files` | ignored | policy (above) |

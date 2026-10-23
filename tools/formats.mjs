@@ -99,12 +99,24 @@ export const FORMATS = Object.freeze([
     name: 'gravitas.artifact',
     fields: 'format, formatVersion',
     version: 1,
-    const: ['js/platform/artifact.js', 'FORMAT_VERSION'],
+    const: ['js/platform/artifact.js', 'BASE_VERSION'],
     owner: 'js/platform/artifact.js validateArtifact',
     persisted: 'memory',
     older: 'v1 only',
-    newer: 'a validation problem',
+    newer: 'a validation problem: a /2 envelope is "not 1"',
     schema: 'artifact-1.schema.json',
+  },
+  {
+    name: 'gravitas.artifact (with the extended uncertainty states, a correlation or a fit)',
+    fields: 'format, formatVersion',
+    version: 2,
+    const: ['js/platform/artifact.js', 'FORMAT_VERSION'],
+    owner:
+      'js/platform/artifact.js validateArtifact, artifactVersion, legacyView',
+    persisted: 'memory',
+    older: 'reads v1 as it is; written only when /1 cannot say it',
+    newer: 'a validation problem',
+    schema: 'artifact-2.schema.json',
   },
   {
     name: 'gravitas.observed',
@@ -440,20 +452,33 @@ export const FORMATS = Object.freeze([
     name: 'gravitas.course-pack (builder form)',
     fields: 'format, formatVersion',
     version: 2,
-    const: ['js/course/pack.js', 'FORMAT_VERSION'],
+    const: ['js/course/pack.js', 'BASE_VERSION'],
     owner: 'js/course/pack.js migrateCoursePack',
     persisted: 'download, localStorage, repository, extension archive',
     older: 'migrates v1',
-    newer: 'refused, in words',
+    newer: 'refused, in words: a /3 file is "made by a newer version"',
     schema: 'course-pack-2.schema.json',
+  },
+  {
+    name: 'gravitas.course-pack (builder form, with a profile, a term or outcomes)',
+    fields: 'format, formatVersion',
+    version: 3,
+    const: ['js/course/pack.js', 'FORMAT_VERSION'],
+    owner: 'js/course/pack.js validateCoursePack, packVersion',
+    persisted: 'download, localStorage, repository, extension archive',
+    older:
+      'migrates v1 and reads v2 as it is; written only when /2 cannot say it',
+    newer: 'refused, in words',
+    schema: 'course-pack-3.schema.json',
   },
   {
     name: 'course home link',
     fields: 'link prefix c',
-    version: 2,
+    version: 3,
     owner: 'js/course/links.js readCourseFragment',
     persisted: 'link',
-    older: 'migrates c1',
+    older:
+      'migrates c1 and reads c2 as it is; c3 only for a pack that needs /3',
     newer: 'refused by reason code',
   },
   {
@@ -651,6 +676,8 @@ export const FORMATS = Object.freeze([
 // fixture has not been exercised against its old reader: that is a gap, stated.
 export const COMPAT = Object.freeze({
   'gravitas.artifact': { fixture: 'artifact', unknown: 'ignored' },
+  'gravitas.artifact (with the extended uncertainty states, a correlation or a fit)':
+    { fixture: 'artifact', unknown: 'ignored' },
   'gravitas.ledger': { fixture: 'ledger-entry', unknown: 'ignored' },
   'gravitas.observation': { fixture: 'observation', unknown: 'ignored' },
   'gravitas.experiment': { fixture: 'experiment', unknown: 'ignored' },
@@ -675,6 +702,10 @@ export const COMPAT = Object.freeze({
     unknown: 'refused',
   },
   'gravitas.course-pack (builder form)': {
+    fixture: 'course-pack',
+    unknown: 'refused',
+  },
+  'gravitas.course-pack (builder form, with a profile, a term or outcomes)': {
     fixture: 'course-pack',
     unknown: 'refused',
   },

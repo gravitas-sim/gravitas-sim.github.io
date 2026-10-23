@@ -96,12 +96,14 @@ export { COLOR_TOKENS } from '../../js/platform/instrument/tokens.js';
 export const FORMATS = Object.freeze({
   'gravitas.capability-package': 1,
   'gravitas.observation-data-pack': 1,
-  // Reads /1 (units of lessons) and /2 (what the course-pack builder writes).
-  'gravitas.course-pack': 2,
+  // Reads /1 (units of lessons), /2 (what the course-pack builder writes) and
+  // /3 (a /2 with `profile`, `term` or `outcomes`: Prompt 176).
+  'gravitas.course-pack': 3,
   'gravitas.investigation-pack': 1,
   'gravitas.scenario-pack': 1,
   'gravitas.extension-archive': 1,
-  'gravitas.artifact': 1,
+  // Reads /1 and /2 (the extended uncertainty states, a correlation or a fit).
+  'gravitas.artifact': 2,
 });
 
 /** The five kinds of extension, and whether each may carry code. */

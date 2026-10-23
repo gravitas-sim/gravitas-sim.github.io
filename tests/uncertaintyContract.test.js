@@ -31,9 +31,15 @@ const U = await import('../js/platform/uncertain.js');
 const { parseNumber } = await import('../js/answerParse.js');
 const { fitDocument } = await import('./analysisSeamsFixtures.js');
 
-const schema = JSON.parse(
-  readFileSync('sdk/schemas/artifact-1.schema.json', 'utf8')
+// An envelope fits the schema of its own version: /1 where 2.0.0 could say it,
+// /2 where it needs a newer state, a correlation or a fit (Prompt 176).
+const SCHEMAS = Object.fromEntries(
+  [1, 2].map(v => [
+    v,
+    JSON.parse(readFileSync(`sdk/schemas/artifact-${v}.schema.json`, 'utf8')),
+  ])
 );
+const fits = doc => valid(SCHEMAS[doc.formatVersion], doc);
 const clone = v => JSON.parse(JSON.stringify(v));
 
 const envelope = (...uncertainties) =>
@@ -70,7 +76,7 @@ describe('the extension is lossless for what 2.0.0 wrote', () => {
       expect([u, A.validateArtifact(doc)]).toEqual([u, []]);
       expect(A.legacyView(doc)).toEqual(doc);
       expect(JSON.parse(JSON.stringify(doc))).toEqual(doc);
-      expect(valid(schema, doc)).toBe(true);
+      expect(fits(doc)).toBe(true);
     }
   });
 
@@ -113,7 +119,7 @@ describe('the new states', () => {
     for (const u of states) {
       const doc = envelope(u);
       expect([u, A.validateArtifact(doc)]).toEqual([u, []]);
-      expect([u, valid(schema, doc)]).toEqual([u, true]);
+      expect([u, fits(doc)]).toEqual([u, true]);
     }
   });
 
@@ -121,7 +127,7 @@ describe('the new states', () => {
     const doc = envelope({ kind: 'failed', reason: 'notConverged' });
     doc.quantities[0].value = null;
     expect(A.validateArtifact(doc)).toEqual([]);
-    expect(valid(schema, doc)).toBe(true);
+    expect(fits(doc)).toBe(true);
     // The reason is required, and null is a value only for a failed quantity.
     const bare = envelope({ kind: 'failed' });
     bare.quantities[0].value = null;
@@ -173,12 +179,14 @@ describe('correlation references', () => {
       { kind: 'sigma', sigma: 0.2, basis: 'data' }
     );
     doc.quantities[0].correlatedWith = [{ id: 'q1', rho: -0.6, basis: 'data' }];
+    // A correlation is what /1 cannot say (Prompt 176): it is a /2 envelope.
+    doc.formatVersion = A.artifactVersion(doc);
     return doc;
   };
 
   test('a correlation to another quantity is valid and fits the schema', () => {
     expect(A.validateArtifact(two())).toEqual([]);
-    expect(valid(schema, two())).toBe(true);
+    expect(fits(two())).toBe(true);
   });
 
   test('to a quantity that is not there, to itself, or beyond 1, it is refused', () => {
@@ -205,7 +213,7 @@ describe('the fitter writes the record', () => {
       extended: true,
     });
     expect(A.validateArtifact(env)).toEqual([]);
-    expect(valid(schema, env)).toBe(true);
+    expect(fits(env)).toBe(true);
     const r = env.fit;
     expect(r.model).toEqual({
       id: 'rv-keplerian',

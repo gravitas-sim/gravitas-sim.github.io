@@ -1,5 +1,5 @@
 // =============================================================================
-// gravitas.course-pack/2: a course, as data
+// gravitas.course-pack/2 and /3: a course, as data
 // -----------------------------------------------------------------------------
 // A course pack /1 (js/platform/course.js) is an ordering of lessons in units,
 // with notes: what the catalog installs and the SDK validates. /2 is what the
@@ -28,7 +28,39 @@
 import { makeChecker } from '../platform/checker.js';
 
 export const FORMAT = 'gravitas.course-pack';
-export const FORMAT_VERSION = 2;
+/**
+ * The newest version this reader reads. /3 (Prompt 176, the 3.0.0 format
+ * boundary) is /2 plus the three fields only a newer build understands:
+ * `profile`, `term` and `outcomes` (also on an objective). A 2.0.0 builder
+ * refuses a /3 file as made by a newer version, in words that name it; a
+ * pack that needs none of the three is still written as /2 (packVersion), so
+ * every course that opened before opens now.
+ */
+export const FORMAT_VERSION = 3;
+/** The version a pack without those fields is written as, and a /1 pack migrates to. */
+export const BASE_VERSION = 2;
+
+/** The lowest version that carries this pack: /3 only for what /2 cannot say. */
+export const packVersion = p =>
+  p?.profile !== undefined ||
+  p?.term !== undefined ||
+  p?.outcomes !== undefined ||
+  (Array.isArray(p?.objectives) &&
+    p.objectives.some(o => o?.outcomes !== undefined))
+    ? FORMAT_VERSION
+    : BASE_VERSION;
+
+/** A pack as it is written: the same document, at the lowest version that carries it. */
+export const withVersion = p =>
+  p?.format === FORMAT && p.formatVersion >= BASE_VERSION
+    ? p.formatVersion === packVersion(p)
+      ? p
+      : { ...p, formatVersion: packVersion(p) }
+    : p;
+
+/** A file's text: a pack at its lowest version, anything else as it is (what ../studio/model.js serialize does). */
+export const serializePack = doc =>
+  `${JSON.stringify(withVersion(doc), null, 2)}\n`;
 
 // The 3-D lab's guided investigations, as a `guide` item may name them
 // (Prompt 105). Kept here, small, so that no page needs a module of its own for
@@ -270,10 +302,10 @@ export function validateCoursePack(c, api) {
     format: FORMAT,
   });
   need(
-    c.formatVersion === FORMAT_VERSION,
+    c.formatVersion === BASE_VERSION || c.formatVersion === FORMAT_VERSION,
     'formatVersion',
     'formatVersion',
-    `must be ${FORMAT_VERSION}`,
+    `must be ${BASE_VERSION} or ${FORMAT_VERSION}`,
     { version: FORMAT_VERSION }
   );
   need(
@@ -963,7 +995,7 @@ export function migrateCoursePack(p, { platform }) {
   const locales = Array.isArray(p.locales) ? [...p.locales] : ['en'];
   const out = {
     format: FORMAT,
-    formatVersion: FORMAT_VERSION,
+    formatVersion: BASE_VERSION,
     id: p.id,
     version: p.version,
     gravitas: platform,

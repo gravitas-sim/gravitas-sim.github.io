@@ -489,9 +489,10 @@ async function validateCourseExtension(ext, m, report, ids) {
     return report.error(M, 'provides.courses[0].file', 'the course file');
   const course = parseJson(ext, entry.file, report);
   if (!course) return [];
-  // /1 and /2 are told apart by the number the file says; anything else goes
-  // to /1's validator, which says what it reads.
-  if (course.formatVersion === 2) {
+  // /1 and /2 (and /3, which is /2 with the fields only 3.0.0 reads) are told
+  // apart by the number the file says; anything else goes to /1's validator,
+  // which says what it reads.
+  if (course.formatVersion >= 2) {
     const errors = validateCoursePack2(course, await courseApi2(ids.dataPacks));
     for (const e of errors) report.error(entry.file, e.path, e.message);
     // The pins, against this build: a lesson that has changed since the pack
@@ -800,7 +801,7 @@ export async function testExtension(ext, { type, manifest: m }) {
     const ids = await publicIds();
     const course = json(m.provides.courses[0].file);
     const lessonsOf =
-      course.formatVersion === 2
+      course.formatVersion >= 2
         ? itemsOf(course)
             .filter(({ item }) => item.lesson)
             .map(({ item }) => item.lesson)
@@ -817,7 +818,7 @@ export async function testExtension(ext, { type, manifest: m }) {
     }
     // A /2 pack's pins, held to this build: the digest of each pinned
     // lesson's steps, and of each step an assignment names.
-    if (course.formatVersion === 2)
+    if (course.formatVersion >= 2)
       for (const r of await reviewPins(course))
         if (r.kind === 'lesson' || r.kind === 'assignment')
           check(

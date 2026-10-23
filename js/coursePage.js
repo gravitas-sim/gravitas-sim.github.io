@@ -40,6 +40,7 @@ import { scenarioTitle } from './i18n/scenario.js';
 import { loadInvestigation } from './data/investigations/registry.js';
 import { BUILTIN_COURSES } from './data/courses/index.js';
 import {
+  BASE_VERSION,
   FORMAT,
   FORMAT_VERSION,
   GUIDES,
@@ -50,6 +51,7 @@ import {
   ACCESS,
   itemsOf,
   migrateCoursePack,
+  serializePack as serialize,
   validateCoursePack,
 } from './course/pack.js';
 import {
@@ -76,12 +78,7 @@ import { PREVIEW_KEY, courseLink, itemLink, rootOf } from './course/links.js';
 import { courseManifest, newCourseItem } from './course/manifest.js';
 import { embedParams } from './embedOptions.js';
 import { EMBED_ASPECT, figureMarkup } from './embedMarkup.js';
-import {
-  createHistory,
-  createDrafts,
-  semanticDiff,
-  serialize,
-} from './studio/model.js';
+import { createHistory, createDrafts, semanticDiff } from './studio/model.js';
 import { mountShell } from './shell.js';
 
 const clone = v => JSON.parse(JSON.stringify(v));
@@ -1739,7 +1736,7 @@ function saveManifest() {
 function blankCourse() {
   return {
     format: FORMAT,
-    formatVersion: FORMAT_VERSION,
+    formatVersion: BASE_VERSION,
     id: 'my-course',
     version: '1.0.0',
     gravitas: PLATFORM_API,
