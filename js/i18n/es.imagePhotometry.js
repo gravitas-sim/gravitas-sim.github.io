@@ -81,6 +81,8 @@ export const ES_IMAGEPHOTOMETRY = {
   'obs.ph.mag': 'Magnitud instrumental {mag} ± {sigma}',
   'obs.ph.limit':
     'No detectada: la luz neta es menor que tres veces su error. A lo sumo {limit} electrones (magnitud instrumental {mag} o más débil).',
+  'obs.ph.floor':
+    'Un píxel que la apertura cubre solo en parte se cuenta por su área, lo que supone que su luz está repartida por igual en él. Una estrella de unos 3 píxeles de ancho no lo está, así que la luz sale algo baja: 0,16 por ciento con la apertura por defecto (1,5 anchos de la estrella), y hasta 3 por ciento en una apertura de 1 ancho o menos. Es un límite del método, no ruido.',
   'obs.ph.area': 'Área de la apertura {area} píxeles',
   'obs.ph.route.variance': 'ruido del plano de varianza de la imagen',
   'obs.ph.route.ccd':

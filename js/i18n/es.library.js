@@ -159,6 +159,9 @@ export const ES_LIBRARY = {
   'lib.item.pre': 'Antes de esto',
   'lib.item.next': 'Siguiente',
   'lib.item.related': 'Relacionados',
+  'lib.item.preview': 'Vista previa como estudiante',
+  'lib.item.preview.note':
+    'La abre limpia: no se lee nada de este navegador ni se guarda nada.',
   'lib.item.teach': 'Materiales para docentes',
   'lib.item.in': 'En estos recorridos',
   'lib.item.in.seq': 'Secuencia: {name}, número {n} de {total}',

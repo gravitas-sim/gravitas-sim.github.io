@@ -190,12 +190,7 @@ curve of growth is held to 0.004 from 0.5 sigma, where the aperture is smaller
 than the pixel, and the measured error is 1.4 percent at 0.5 sigma, 3.4 percent
 at 1.5 sigma, 0.65 percent at 3, 0.16 at 3.5 and under 1e-5 from 5 sigma.
 Of the two weightings measured, the kernel's centre in pixel weights does worse
-(0.072). Options for Carl, each a register decision,
-none taken here: (1) accept the floor, restating a1 and c1 at the bright level
-(an aperture of at least 5 sigma, about 2.1 FWHM, where the measured error is under 1e-5) and a3 from 3.5 sigma, with the figures above
-as the new committed bounds; (2) keep the bounds and fund a pixel-integrated
-model (an aperture correction from a fitted PSF, a different tool, out of scope
-here); (3) leave them failing, labelled, as the honest statement of the method.
+(0.072). Carl's ruling (chat, 2026-10-23, D-R10-56): option (3), "Leave failing, labelled". "Keep every committed bound, merge #425 out of draft with the three failures recorded as known (tests hold each to its record; PHOTOMETRY.md and the instrument state the 0.16% sampling floor), and queue a separate pixel-integrated-model follow-up. No threshold is moved." The panel states the floor beside its readout in both languages (the note after the buttons), and `failed-legs.json` and `tests/photometry.test.js` hold each failure to its record. The follow-up, a pixel-integrated PSF model (an aperture correction from a fitted or modelled PSF, so that a1, c1 and a3 can be met against the same committed bounds), is a separate prompt.
 
 ## Two things the roadmap named and this does not do
 

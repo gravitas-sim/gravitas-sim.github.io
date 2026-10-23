@@ -51,16 +51,16 @@ Measured from the committed `sw-manifest.js` and the files it lists, by
 <!--fact-block:precache-->
 | | Files | Raw |
 | --- | ---: | ---: |
-| JavaScript | 942 | 15.0 MB |
+| JavaScript | 948 | 15.1 MB |
 | Images | 99 | 860 KB |
 | Stylesheets | 10 | 500 KB |
 | Fonts | 9 | 140 KB |
 | Panel markup | 10 | 60 KB |
 | Pages | 12 | 320 KB |
 | Other | 16 | 700 KB |
-| **Total** | **1098** | **17.6 MB** |
+| **Total** | **1104** | **17.6 MB** |
 
-Of those, 803 are core (the install fails without them), 107 optional (installed with them; a missing one is reported and costs nothing) and 188 idle (installed after activation, when the browser is idle; a missing one costs that page its offline copy and is fetched again on the next open). The first-visit install is the core and the optional files: 910 files.
+Of those, 803 are core (the install fails without them), 107 optional (installed with them; a missing one is reported and costs nothing) and 194 idle (installed after activation, when the browser is idle; a missing one costs that page its offline copy and is fetched again on the next open). The first-visit install is the core and the optional files: 910 files.
 
 Gzipped, as Pages serves it, the whole is about 6 MB.
 
@@ -76,13 +76,13 @@ Three tiers, and a page promises offline only what its tier delivers. The
 **first-visit install** (core and optional) is what a reader waits for and what
 decides whether a version activates; it has a committed ceiling in
 `tools/data-budget.json` that `tests/offlineTiers.test.js` enforces in every
-budget-policy mode. The **idle install** is fetched after activation, when the
+budget-policy mode. The idle install has one too (`precacheIdleGzipBytes`, 1,528,832 B, raised for the activity builder group, D-R10-49): both are CI's figures, measured under Node 22, so on a Mac under Node 24, whose gzip reads a few KB larger, the idle-tier tests can fail by design (2,242 B at the time of writing) and pass in CI. The **idle install** is fetched after activation, when the
 page has gone idle, by an `install-idle` message to the worker: the instructor
-modules, three.js, the 3-D lab, the mission lab, the Sky Lab, the Library and
-the data tables. It fetches only what the cache lacks, so a run cut short is
+modules, three.js, the 3-D lab, the mission lab, the Sky Lab, the Library, the
+activity builder and the data tables. It fetches only what the cache lacks, so a run cut short is
 finished by the next open, and a device that asked for less data (Save-Data) is
 not given it unasked. Until it finishes, those surfaces need the network; that
-is the trade D-PERF-02 accepted for a smaller install. The submission review page's own module (`js/submissionReview.js`) is in the idle tier with the instructor modules (Prompt 172, D-R10-38): it arrives with the idle install, not at the first visit, and its page, like the other `instructors/` pages, is runtime-cached once visited. **Parts** are on-demand:
+is the trade D-PERF-02 accepted for a smaller install. The submission review page's own module (`js/submissionReview.js`) is in the idle tier with the instructor modules (Prompt 172, D-R10-38): it arrives with the idle install, not at the first visit, and its page, like the other `instructors/` pages, is runtime-cached once visited. The activity builder (`js/assignments/assignmentBuilder.js`) and the adaptation it checks, with the report of what changed under an activity and their words, are an idle group of their own (Prompt 175, D-R10-49): until the idle install finishes, an offline first visit asks for a reload when the builder is opened and shows an adapted link without its notes, due line and report, and the activity itself opens as ever. **Parts** are on-demand:
 a reader asks for them, with a storage estimate first (`js/offlineParts.js`).
 
 <!--fact-block:promises-->
@@ -101,6 +101,7 @@ The idle tier, by surface (gzip level 6, to the nearest 10 KB: Node versions dif
 | --- | ---: | ---: |
 | 3-D lab | 38 | ~140 KB |
 | data tables | 33 | ~230 KB |
+| activity builder | 6 | ~20 KB |
 | instructor modules | 32 | ~330 KB |
 | mission lab | 40 | ~230 KB |
 | Sky Lab | 22 | ~170 KB |

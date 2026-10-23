@@ -26,6 +26,10 @@ import { createGuidePanel } from './mission/lab/guidePanel.js';
 import { JD_J2000, dateOfJd } from './mission/ephemeris.js';
 import { planBytes, planFile } from './mission/plan.js';
 
+// The banner of a preview as a student (Prompt 175).
+if (globalThis.location?.search.includes('preview=student'))
+  import('./storage/banner.js');
+
 const $ = id => document.getElementById(id);
 const SVG = 'http://www.w3.org/2000/svg';
 const AU = 149597870.7;

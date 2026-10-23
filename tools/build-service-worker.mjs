@@ -264,10 +264,11 @@ export const NEVER_PRECACHED = [
   // tests/statisticsKernel.test.js fails until it is deleted.
   /^js\/kernels\/statistics\//,
   // Photometry on an image (Prompt 180, PHOTOMETRY.md): the adapters, the
-  // panel and its words, 21.0 KB gzipped as source, fetched when a reader opens
-  // the Observatory's photometry panel on an image. The first-visit tier has
-  // 4.1 KB of room and the idle tier 5.5 KB under a data-budget ceiling the
-  // standing size approval does not cover, so none of the files is installed:
+  // panel and its words, 21.4 KB gzipped as source, fetched when a reader opens
+  // the Observatory's photometry panel on an image. The idle tier has 266 B of
+  // room under a data-budget ceiling the standing size approval does not cover
+  // (Node 22, after #417) and the first-visit tier a few KB, so none of the
+  // files is installed:
   // the service worker keeps them after their first online use, and until then
   // the panel says it needs the network (the marks instrument beside it stays
   // an idle-tier file). D-R10-56.
@@ -325,6 +326,17 @@ export const IDLE_TIER = [
     /^(js\/kernels\/sky\/|js\/sky\/|js\/sky[A-Za-z]*\.js$|js\/data\/sky\/|sky\/)/,
   ],
   ['Library', /^(js\/library\/|js\/libraryPage\.js$|library\/)/],
+  [
+    'activity builder',
+    // The instructor's half of an assignment (Prompt 175): the builder, the
+    // adaptation it checks and the student-side report of what changed under
+    // an activity, with their words. Reached from ?assign=<lesson> and from an
+    // adapted or out-of-date link, and imported only then; each import is
+    // already guarded (a reload prompt for the builder, silence for the
+    // report), so until the idle install finishes an offline first visit
+    // builds and opens activities as before and without these.
+    /^(js\/assignments\/(assignmentBuilder|adapt|adaptText|adapted)\.js|js\/i18n\/(en|es)\.adapt\.js)$/,
+  ],
   [
     // The image marks instrument (Prompt 179, IMAGE_MEASUREMENT.md): loaded when
     // a reader opens the Observatory's marks panel on an image, so no first

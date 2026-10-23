@@ -100,6 +100,10 @@ import {
   EV_WORKER_FAILED,
 } from './names.js';
 
+// The banner of a preview as a student (Prompt 175).
+if (globalThis.location?.search.includes('preview=student'))
+  import('./storage/banner.js');
+
 // Add global flag to track splash screen status
 window.isSplashActive = true;
 

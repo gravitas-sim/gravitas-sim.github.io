@@ -193,6 +193,9 @@ test.describe('photometry: keyboard alone', () => {
     expect(Math.abs(net - truth(s))).toBeLessThan(5 * sigma);
     expect(sigma).toBeGreaterThan(20);
     await expect(readout(page)).toContainText('Instrumental magnitude');
+    await expect(box(page)).toContainText(
+      '0.16 percent at the default aperture'
+    );
     await expect(readout(page)).toContainText('noise from the CCD equation');
     // The same star centred first: the position moves to the star's centre.
     await box(page).getByLabel('Center on the star first').focus();

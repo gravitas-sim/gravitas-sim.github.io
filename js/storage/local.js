@@ -1,8 +1,53 @@
-import { KEY_RESUME } from '../names.js';
+import {
+  KEY_ASSIGNMENT_PREFIX,
+  KEY_COLLECTIONS,
+  KEY_COURSE_LEVEL,
+  KEY_COURSE_PREFIX,
+  KEY_COURSE_PREVIEW,
+  KEY_EVIDENCE_NOTEBOOK,
+  KEY_EXPERIMENT,
+  KEY_EXPERIMENT_CHECKPOINT_PREFIX,
+  KEY_GUIDES,
+  KEY_INVESTIGATION_PREFIX,
+  KEY_LAB3D_GUIDE_PREFIX,
+  KEY_MADE_PREFIX,
+  KEY_MISSIONLAB_PREFIX,
+  KEY_RESUME,
+} from '../names.js';
 
 // Student data in localStorage (STORAGE.md): every writer's way in. Keys and
 // formats are unchanged; adds a size limit per record.
 const area = s => s ?? (globalThis.window ?? globalThis).localStorage;
+
+// A preview as a student (Prompt 175, STORAGE.md): `preview=student` holds the
+// record in memory, so nothing is read from or written to it.
+export const RECORD_KEYS = [
+  KEY_ASSIGNMENT_PREFIX,
+  KEY_COLLECTIONS,
+  KEY_COURSE_PREFIX,
+  KEY_EVIDENCE_NOTEBOOK,
+  KEY_EXPERIMENT,
+  KEY_EXPERIMENT_CHECKPOINT_PREFIX,
+  KEY_GUIDES,
+  KEY_INVESTIGATION_PREFIX,
+  KEY_LAB3D_GUIDE_PREFIX,
+  KEY_MADE_PREFIX,
+  KEY_MISSIONLAB_PREFIX,
+  KEY_RESUME,
+];
+let preview = /[?&]preview=student(?:&|$)/.test(globalThis.location?.search);
+const held = new Map();
+export const previewing = () => preview;
+export const setPreview = on => {
+  preview = Boolean(on);
+  held.clear();
+};
+const OTHER = [KEY_COURSE_LEVEL, KEY_COURSE_PREVIEW];
+const kept = (key, store) =>
+  preview &&
+  !store &&
+  RECORD_KEYS.some(p => key.startsWith(p)) &&
+  !OTHER.some(p => key.startsWith(p));
 
 // Most one record may hold, in KiB (index.js COLLECTIONS has the same).
 export const ITEM = {
@@ -17,7 +62,8 @@ export const ITEM = {
   preferences: 64,
 };
 
-export const get = (key, store) => area(store).getItem(key);
+export const get = (key, store) =>
+  kept(key, store) ? (held.get(key) ?? null) : area(store).getItem(key);
 
 // Over a collection's limit is a QuotaExceededError, as a full disk is.
 export const put = (key, text, collection, store) => {
@@ -26,10 +72,12 @@ export const put = (key, text, collection, store) => {
     const name = 'QuotaExceededError';
     throw Object.assign(error, { name, reason: 'itemTooLarge', collection });
   }
-  area(store).setItem(key, text);
+  if (kept(key, store)) held.set(key, text);
+  else area(store).setItem(key, text);
 };
 
-export const drop = (key, store) => area(store).removeItem(key);
+export const drop = (key, store) =>
+  kept(key, store) ? held.delete(key) : area(store).removeItem(key);
 
 // The value, or `fallback` if there is none or it is damaged.
 export const readJson = (key, fallback = null, store) => {

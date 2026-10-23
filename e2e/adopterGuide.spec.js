@@ -94,7 +94,7 @@ test.describe('the adopter’s guide', () => {
     // 2. Preview as a student, and 3. Make an activity: both are on this page.
     await expect(page.locator('a[data-preview]')).toHaveAttribute(
       'href',
-      `/?author=${id}&view=student`
+      `/?author=${id}&view=student&preview=student`
     );
     await page.locator(`main a[href="/?assign=${id}"]`).first().click();
     await expect(page.locator('#assignmentBuilder')).toBeVisible({

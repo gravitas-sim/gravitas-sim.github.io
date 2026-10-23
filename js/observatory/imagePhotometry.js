@@ -140,6 +140,7 @@ export async function mountPhotometry(box, ctx) {
   step.value = 'normal';
   const pic = el('canvas', { className: 'ph-pic', width: SIZE, height: SIZE });
   const help = word(el('p', { className: 'ui-hint' }), 'obs.ph.help');
+  const floor = word(el('p', { className: 'ui-hint' }), 'obs.ph.floor');
   const out = el('div', { className: 'ph-readout' });
   const growth = el('div');
   const table = el('div', { className: 'im-tablewrap' });
@@ -204,6 +205,7 @@ export async function mountPhotometry(box, ctx) {
     resize,
     pic,
     actions,
+    floor,
     out,
     growth,
     table

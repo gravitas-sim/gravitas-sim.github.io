@@ -79,6 +79,8 @@ export const EN_IMAGEPHOTOMETRY = {
   'obs.ph.mag': 'Instrumental magnitude {mag} ± {sigma}',
   'obs.ph.limit':
     'Not detected: the net light is under three times its error. At most {limit} electrons (instrumental magnitude {mag} or fainter).',
+  'obs.ph.floor':
+    'A pixel the aperture only partly covers is counted by its area, which assumes its light is spread evenly across it. A star of about 3 pixels width is not, so the light reads a little low: 0.16 percent at the default aperture (1.5 widths of the star), and up to 3 percent in an aperture of about 1 width or less. This is a floor of the method, not noise.',
   'obs.ph.area': 'Aperture area {area} pixels',
   'obs.ph.route.variance': 'noise from the image’s variance plane',
   'obs.ph.route.ccd': 'noise from the CCD equation (gain and read noise)',
