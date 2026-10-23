@@ -51,56 +51,39 @@ function quantitiesOf(state, frames, scale) {
         : { kind: 'assumed' },
     });
   for (const m of state.marks) {
-    const tag = m.tag ? ` (${m.tag})` : '';
-    const single = m.pts.length === 1 || m.kind === 'circle';
-    m.pts.forEach((p, i) => {
-      if (m.kind === 'circle' && i === 1) return;
-      const n = single ? (m.kind === 'circle' ? 'centre ' : '') : `${i + 1} `;
-      ['x', 'y'].forEach((a, j) =>
-        pix(
-          `${m.id}.${a}${single ? '' : i + 1}`,
-          `${m.kind} ${m.id}${tag}: ${n}${a}, frame ${m.frame + 1}`,
-          p[j],
-          m.sigma,
-          m.refined
+    const head = `${m.kind} ${m.id}${m.tag ? ` (${m.tag})` : ''}: `;
+    const add = (k, v, sigma, refined, unit) =>
+      pix(
+        `${m.id}.${k}`,
+        `${head}${k}, frame ${m.frame + 1}`,
+        v,
+        sigma,
+        refined,
+        unit
+      );
+    const n = m.kind === 'circle' ? 1 : m.pts.length;
+    m.pts
+      .slice(0, n)
+      .forEach((p, i) =>
+        ['x', 'y'].forEach((a, j) =>
+          add(`${a}${n > 1 ? i + 1 : ''}`, p[j], m.sigma, m.refined)
         )
       );
-    });
     if (m.kind === 'circle')
-      pix(
-        `${m.id}.r`,
-        `circle ${m.id}${tag}: radius, frame ${m.frame + 1}`,
-        lengthOf(m),
-        m.sigmaR ?? m.sigma,
-        m.refined
-      );
-    else if (m.kind === 'polygon')
-      pix(
-        `${m.id}.area`,
-        `polygon ${m.id}${tag}: area, frame ${m.frame + 1}`,
-        areaOf(m),
-        NaN,
-        false,
-        'pix^2'
-      );
+      add('r', lengthOf(m), m.sigmaR ?? m.sigma, m.refined);
+    else if (m.kind === 'polygon') add('area', areaOf(m), NaN, false, 'pix^2');
   }
   if (scale && !scale.refused && scale.source !== 'sidecar') {
     const pair = state.marks.find(m => m.id === scale.source);
     q.push({
       id: 'scale.length',
-      label: 'known length of the reference pair',
+      label: 'known length',
       value: pair.length.value,
       unit: pair.length.unit,
       origin: 'assumed',
       uncertainty: { kind: 'assumed' },
     });
-    pix(
-      'scale.pixels',
-      'length of the reference pair',
-      scale.pixels,
-      scale.pixelSigma,
-      false
-    );
+    pix('scale.pixels', 'pair length', scale.pixels, scale.pixelSigma, false);
     q.push({
       id: 'scale',
       label: `scale, ${scale.unit}`,
@@ -197,8 +180,8 @@ export async function writeRecord({ id, setId, frames, state }) {
 }
 
 export class ReplayError extends Error {
-  constructor(code, message) {
-    super(message);
+  constructor(code, detail = code) {
+    super(detail);
     this.code = code;
   }
 }
@@ -279,16 +262,14 @@ export async function replay(record, frames) {
   let red;
   if (record?.format === MARKS_FORMAT) {
     const problems = validateMarks(record);
-    if (problems.length)
-      throw new ReplayError('invalid', `bad marks: ${problems[0]}`);
+    if (problems.length) throw new ReplayError('invalid', problems[0]);
     red = record;
   } else {
     const { validateArtifact } = await import('../platform/artifact.js');
     const problems = validateArtifact(record);
-    if (problems.length)
-      throw new ReplayError('invalid', `bad envelope: ${problems[0].path}`);
+    if (problems.length) throw new ReplayError('invalid', problems[0].path);
     red = record.provenance.reductions.find(r => r.step === STEP);
-    if (!red) throw new ReplayError('invalid', 'no image marks');
+    if (!red) throw new ReplayError('invalid');
   }
   for (const [k, spec] of red.frames.entries()) {
     const f = frames[k];
@@ -298,7 +279,7 @@ export async function replay(record, frames) {
       f.height !== spec.height ||
       (await digestFrame(f)) !== spec.digest
     )
-      throw new ReplayError('image-changed', `frame ${k + 1} changed`);
+      throw new ReplayError('image-changed');
   }
   let state = emptyState();
   const differ = [];

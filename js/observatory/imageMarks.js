@@ -508,7 +508,7 @@ export function mountMarks(root, ctx) {
       time,
       missing: miss,
     };
-    return t(miss ? 'obs.im.frameMissing' : 'obs.im.frame', v);
+    return t('obs.im.frame', v) + (miss ? t('obs.im.missing', v) : '');
   };
   function renderTable() {
     const list = ordered();

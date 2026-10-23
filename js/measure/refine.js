@@ -14,8 +14,6 @@
 // least 70% do, and is refused as `touches-frame` otherwise.
 // =============================================================================
 
-export const CAPTURE = 3;
-export const MIN_RADIUS = 15;
 export const REFINE_VERSION = 1;
 
 const at = (f, x, y) => f.data[(y - 1) * f.width + (x - 1)];
@@ -43,7 +41,7 @@ const median = a => {
   return n % 2 ? s[(n - 1) / 2] : 0.5 * (s[n / 2 - 1] + s[n / 2]);
 };
 const mad = (a, m) => 1.4826 * median(a.map(v => Math.abs(v - m)));
-const refuse = (reason, extra) => ({ ok: false, reason, ...extra });
+const refuse = reason => ({ ok: false, reason });
 
 // ---- refinement: a point source ----------------------------------------------
 
@@ -84,7 +82,7 @@ function windowPass(f, bg, xc, yc, sw, iterations) {
  * Refine a click on a point source to its centroid.
  * @returns {{ok: true, x: number, y: number, sigma: number, fwhm: number, snr: number}|{ok: false, reason: string}}
  */
-export function refinePoint(f, x0, y0, { capture = CAPTURE } = {}) {
+export function refinePoint(f, x0, y0) {
   if (!(x0 >= 21 && y0 >= 21 && x0 <= f.width - 20 && y0 <= f.height - 20))
     return refuse('edge');
   const ring = [];
@@ -108,8 +106,7 @@ export function refinePoint(f, x0, y0, { capture = CAPTURE } = {}) {
   const sw = Math.min(4, Math.max(1.2, sp));
   const fin = windowPass(f, bg, first.xc, first.yc, sw, 40);
   if (!fin) return refuse('no-flux');
-  if (Math.hypot(fin.xc - x0, fin.yc - y0) > 2 * capture)
-    return refuse('moved-too-far');
+  if (Math.hypot(fin.xc - x0, fin.yc - y0) > 6) return refuse('moved-too-far');
   const a = fin.mxx / fin.sw;
   const b = fin.myy / fin.sw;
   const c = fin.mxy / fin.sw;
@@ -125,8 +122,7 @@ export function refinePoint(f, x0, y0, { capture = CAPTURE } = {}) {
         s += at(f, Math.round(fin.xc) + i, Math.round(fin.yc) + j) - bg;
     return s / 9;
   })();
-  const snr = peak / noise;
-  if (snr < 10) return refuse('too-faint', { snr });
+  if (peak / noise < 10) return refuse('too-faint');
   // The uncertainty: the centroid is x_c + 2 sum(w I dx) / sum(w I), so its
   // variance is 4 sum(w^2 dx^2 var_i) / (sum w I)^2, var_i the pixel's CCD noise.
   const gain = f.gain ?? 1.5;
@@ -159,9 +155,6 @@ export function refinePoint(f, x0, y0, { capture = CAPTURE } = {}) {
     x: fin.xc,
     y: fin.yc,
     sigma,
-    fwhm: 2.354820045 * sp,
-    snr,
-    version: REFINE_VERSION,
   };
 }
 
@@ -323,21 +316,19 @@ export function edgePoints(f, cx, cy, r, m, rays, noise = frameNoise(f)) {
  * Refine a centre click and a limb click to the circle of the limb.
  * @returns {{ok: true, x, y, r, sigmaR, sigmaXY, n}|{ok: false, reason: string}}
  */
-export function refineCircle(f, c0, l0, { capture = CAPTURE, rays = 72 } = {}) {
+export function refineCircle(f, c0, l0) {
+  const rays = 72;
   let cx = c0[0],
     cy = c0[1];
   let r = Math.hypot(l0[0] - c0[0], l0[1] - c0[1]);
   if (!(r > 3)) return refuse('too-small');
   let fit = null;
-  let used = 0;
   const noise = frameNoise(f);
   for (let pass = 0; pass < 3; pass++) {
     const m = pass === 0 ? 10 + 0.15 * r : 3 + 0.02 * r;
     let pts = edgePoints(f, cx, cy, r, m, rays, noise);
     if (pts.length < 0.7 * rays)
-      return refuse(pts.dropped > 0.3 * rays ? 'touches-frame' : 'no-edge', {
-        found: pts.length,
-      });
+      return refuse(pts.dropped > 0.3 * rays ? 'touches-frame' : 'no-edge');
     fit = fitCircle(pts);
     for (let again = 0; again < 2; again++) {
       const d = pts.map(([x, y]) => Math.hypot(x - fit.x, y - fit.y) - fit.r);
@@ -348,14 +339,12 @@ export function refineCircle(f, c0, l0, { capture = CAPTURE, rays = 72 } = {}) {
       pts = keep;
       fit = fitCircle(pts, [fit.x, fit.y, fit.r]);
     }
-    used = pts.length;
     cx = fit.x;
     cy = fit.y;
     r = fit.r;
   }
-  if (!(r >= MIN_RADIUS)) return refuse('too-small');
-  if (Math.hypot(cx - c0[0], cy - c0[1]) > 3 * capture)
-    return refuse('moved-too-far');
+  if (!(r >= 15)) return refuse('too-small');
+  if (Math.hypot(cx - c0[0], cy - c0[1]) > 9) return refuse('moved-too-far');
   if (fit.rms > 1.5) return refuse('not-circular');
   return {
     ok: true,
@@ -364,8 +353,6 @@ export function refineCircle(f, c0, l0, { capture = CAPTURE, rays = 72 } = {}) {
     r,
     sigmaR: fit.sigmaR,
     sigmaXY: fit.sigmaXY,
-    n: used,
-    version: REFINE_VERSION,
   };
 }
 
@@ -373,9 +360,7 @@ export function refineCircle(f, c0, l0, { capture = CAPTURE, rays = 72 } = {}) {
 export function refineMark(mark, f) {
   if (mark.kind === 'point' || mark.kind === 'count') {
     const r = refinePoint(f, mark.pts[0][0], mark.pts[0][1]);
-    return r.ok
-      ? { ok: true, pts: [[r.x, r.y]], sigma: r.sigma, detail: r }
-      : r;
+    return r.ok ? { ok: true, pts: [[r.x, r.y]], sigma: r.sigma } : r;
   }
   if (mark.kind === 'circle') {
     const r = refineCircle(f, mark.pts[0], mark.pts[1]);
@@ -390,7 +375,6 @@ export function refineMark(mark, f) {
       ],
       sigma: r.sigmaXY,
       sigmaR: r.sigmaR,
-      detail: r,
     };
   }
   return refuse('not-refinable');

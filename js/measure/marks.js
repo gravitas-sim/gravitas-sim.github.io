@@ -129,8 +129,14 @@ export function createStore(initial = emptyState()) {
   const past = [];
   let future = [];
   let key = null;
-  const listeners = new Set();
-  const emit = why => listeners.forEach(l => l(present, why));
+  // One step of history from a list to the other; false when there is none.
+  const travel = (from, to) => {
+    if (!from.length) return false;
+    to.push(present);
+    present = from.pop();
+    key = null;
+    return true;
+  };
   return {
     get state() {
       return present;
@@ -141,33 +147,14 @@ export function createStore(initial = emptyState()) {
       key = runKey;
       present = next;
       future = [];
-      emit('apply');
     },
     seal() {
       key = null;
     },
-    undo() {
-      if (!past.length) return false;
-      future.push(present);
-      present = past.pop();
-      key = null;
-      emit('undo');
-      return true;
-    },
-    redo() {
-      if (!future.length) return false;
-      past.push(present);
-      present = future.pop();
-      key = null;
-      emit('redo');
-      return true;
-    },
+    undo: () => travel(past, future),
+    redo: () => travel(future, past),
     get depth() {
       return { past: past.length, future: future.length };
-    },
-    subscribe(l) {
-      listeners.add(l);
-      return () => listeners.delete(l);
     },
   };
 }

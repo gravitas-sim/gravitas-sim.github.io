@@ -88,24 +88,18 @@ export function scaleOf(state, { sidecar, permit, pixelScale } = {}) {
 /**
  * What a mark measures, with the scale where there is one: a length (a circle's
  * radius) or a polygon's area, in pixels and, if the scale allows, in its unit.
- * @returns {{kind: 'length'|'area', px: number, sigmaPx: number,
- *   phys?: number, sigmaPhys?: number, unit?: string}|null}
+ * @returns {{kind: 'length'|'area', px: number,
+ *   phys?: number, unit?: string}|null}
  */
 export function sizeOf(m, scale) {
   const area = m.kind === 'polygon';
   const px = area ? areaOf(m) : lengthOf(m);
   if (!(px >= 0)) return null;
-  const sigmaPx = area ? NaN : (m.sigmaR ?? lengthSigma(m));
-  const out = { kind: area ? 'area' : 'length', px, sigmaPx };
+  const out = { kind: area ? 'area' : 'length', px };
   if (scale?.value > 0) {
-    const k = area ? scale.value ** 2 : scale.value;
-    out.phys = px * k;
-    out.unit = area
-      ? `${scale.unit.replace('/pix', '')}^2`
-      : scale.unit.replace('/pix', '');
-    out.sigmaPhys = area
-      ? NaN
-      : out.phys * Math.hypot(sigmaPx / px, scale.sigma / scale.value);
+    const unit = scale.unit.replace('/pix', '');
+    out.phys = px * (area ? scale.value ** 2 : scale.value);
+    out.unit = area ? `${unit}^2` : unit;
   }
   return out;
 }
@@ -116,8 +110,8 @@ const MJD_UNIX = 40587;
 /**
  * A frame's time as the contract states it, or null: a number alone has no
  * scale and is not accepted; a legacy `{value, scale}` is read as an MJD.
- * @param {object} t - {value, scale, format?, reference?}
- * @returns {{mjd: number, scale: string, label: string, reference?: string}|null}
+ * @param {object} t - {value, scale, format?}
+ * @returns {{mjd: number, scale: string, label: string}|null}
  */
 export function timeOf(t) {
   if (!t || typeof t.scale !== 'string' || !t.scale) return null;
@@ -130,10 +124,5 @@ export function timeOf(t) {
   else mjd = Number(v);
   if (!Number.isFinite(mjd)) return null;
   const label = format === 'iso' ? String(v) : `${format.toUpperCase()} ${v}`;
-  return {
-    mjd,
-    scale: t.scale,
-    label: `${label} ${t.scale}`,
-    reference: t.reference,
-  };
+  return { mjd, scale: t.scale, label: `${label} ${t.scale}` };
 }
