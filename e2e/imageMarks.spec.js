@@ -99,6 +99,7 @@ const asFile = (o, name = 'frame.json') => ({
 });
 
 async function openPage(page, lang = 'en') {
+  aim = [64, 64];
   await page.addInitScript(l => {
     try {
       localStorage.setItem('gravitas_locale', l);
