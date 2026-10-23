@@ -290,5 +290,6 @@ export const ES_OBSERVATORY = {
   'obs.arc.title':
     'O busca las épocas de Gaia de una estrella en el CDS (en vivo, opcional)',
   'obs.ms.title': 'Medir, y el flujo',
+  'obs.ph.title': 'Fotometría en la imagen',
   'obs.gd.title': 'Investigaciones guiadas',
 };

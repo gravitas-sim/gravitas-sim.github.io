@@ -285,5 +285,6 @@ export const EN_OBSERVATORY = {
   'obs.sky.title': 'Sky: Galactic map and proper-motion vectors',
   'obs.arc.title': "Or find a star's Gaia epochs at CDS (live, opt-in)",
   'obs.ms.title': 'Measure, and the pipeline',
+  'obs.ph.title': 'Photometry on the image',
   'obs.gd.title': 'Guided investigations',
 };

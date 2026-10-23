@@ -358,7 +358,6 @@ export const ES_DEFERRED = {
   'exoW.preset.earthTwin': 'Gemela de la Tierra, TESS',
   'exoW.preset.earthTwin.note':
     'Una Tierra alrededor de un Sol, vista por TESS: 84 ppm, un tránsito de trece horas, un tránsito al año. El tránsito más largo de aquí y el planeta menos detectable, lo que merece una pausa.',
-
   // --- La comprobacion de fiabilidad numerica --------------------------------
   'reliability.title': 'Fiabilidad numerica',
   'reliability.hint':
@@ -3628,6 +3627,7 @@ export const ES_DEFERRED = {
   'nb.source.lab3d': 'Medida del laboratorio 3-D',
   'nb.source.mission-lab': 'Resultado del laboratorio de misiones',
   'nb.source.image-marks': 'Marcas sobre una imagen',
+  'nb.source.image-photometry': 'Fotometría de una imagen',
   'nb.flag.missionModel':
     'impulsos instantáneos, cónicas empalmadas y masas puntuales: un modelo didáctico de una misión',
   'nb.flag.notOperational':

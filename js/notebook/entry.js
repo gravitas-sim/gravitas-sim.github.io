@@ -92,6 +92,10 @@ export const SOURCE = Object.freeze({
   // Observatory, kept as their envelope with the replay that reopens the image
   // (js/observatory/imageMarks.js, js/measure/imageRecord.js).
   IMAGE_MARKS: 'image-marks',
+  // Photometry of the sources on an image: net light, sky and position with
+  // their uncertainties, and the request that runs it again
+  // (js/observatory/imagePhotometry.js, js/measure/photometry.js).
+  IMAGE_PHOTOMETRY: 'image-photometry',
 });
 
 /** The sources this build can capture from. */
@@ -114,6 +118,7 @@ export const SOURCES = [
   SOURCE.LAB3D,
   SOURCE.MISSION_LAB,
   SOURCE.IMAGE_MARKS,
+  SOURCE.IMAGE_PHOTOMETRY,
 ];
 
 /** How long a student's prose may be, per field. */

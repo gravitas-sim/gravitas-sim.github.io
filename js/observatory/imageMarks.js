@@ -23,6 +23,9 @@
 import { columnOf } from './schema.js';
 import { displayPlan, downsampleMean } from '../dataKinds/limits.js';
 import { permits } from '../dataKinds/contract.js';
+// The photometry tool (imagePhotometry.js) takes the contract's check from here,
+// by import(), so that no chunk is shared between the two.
+export { permits };
 import {
   ARITY,
   copyForward,
@@ -1064,6 +1067,7 @@ export async function mount(box, ctx) {
       };
       box.addEventListener('toggle', () => box.open && p.api.update(p.cur));
       marks.block = view => (view?.id === p.cur?.id ? p.api.block() : null);
+      marks.state = () => p.api.store.state;
       return p;
     });
     panels.set(box, ready);
