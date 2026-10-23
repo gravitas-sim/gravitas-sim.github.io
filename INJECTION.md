@@ -104,12 +104,15 @@ percent.
 photutils on the same pixels. **NOT RUN until Prompt 189** has landed an authentic image
 pack: nothing was downloaded and nothing was fabricated for this leg.
 
-## Corrections made before the module existed
+## Corrections made before the validation ran
 
 Three statements in the committed contract were wrong in themselves and were
-corrected, in `thresholds.json` (`corrections`) and here, before the module existed
-or any Gravitas coverage, curve or count was computed; none moved a bound after a
-result.
+corrected, in `thresholds.json` (`corrections`) and here, before the validation tool
+or any test existed and before any Gravitas coverage or validation count was
+computed; none moved a bound after a result. (Candidly: the first correction came
+before the module, the other two after a first draft of it and one smoke run of six
+completeness levels had been seen; neither concerns the completeness curve's bounds,
+and the smoke numbers were not used to choose anything.)
 
 1. The pinned interval cases number 111, not 105 (arithmetic of the committed
    enumeration).
