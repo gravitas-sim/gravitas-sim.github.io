@@ -51,7 +51,7 @@ function h(tag, attrs = {}, ...kids) {
  *
  * @param {object} ctx - What the page owns
  * @param {HTMLElement} ctx.host - The section to draw in
- * @param {'use'|'next'} ctx.mode - A shipped course as it comes, or the next term
+ * @param {'use'|'next'|'cartridge'} ctx.mode - A shipped course as it comes, the next term, or the cartridge panel
  * @param {() => object} ctx.source - The pack to copy, read when the button is pressed
  * @param {(pack: object) => Promise<object>} ctx.facts - This build's facts for it
  * @param {(pack: object) => number} ctx.problems - How many problems the pack has
@@ -67,6 +67,16 @@ function h(tag, attrs = {}, ...kids) {
  * @returns {{refresh: () => void, close: () => void}}
  */
 export function openTermPanel(ctx) {
+  // The Common Cartridge panel (Prompt 169) is opened the same way, so the
+  // builder's page needs one more line and no more imports.
+  if (ctx.mode === 'cartridge') {
+    let panel = null;
+    const host = document.getElementById('cb-cartridge-panel');
+    import('./instructorCartridgeView.js').then(m => {
+      panel = m.openCartridgePanel({ ...ctx, host });
+    });
+    return { refresh: () => panel?.refresh(), close: () => panel?.close() };
+  }
   const { host, mode } = ctx;
   const T = (id, vars) => tr(ctx.locale(), id, vars);
   let typed = suggestTerm(ctx.locale());

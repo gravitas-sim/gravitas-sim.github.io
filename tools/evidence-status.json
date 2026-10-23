@@ -328,6 +328,48 @@
           "text": "Rebuilds every pack from the cached raw product and compares both files byte"
         }
       ]
+    },
+    {
+      "id": "cartridge-profile-valid",
+      "claim": "A course exported as a Thin Common Cartridge validates against the Common Cartridge v1.3 schemas and the Thin Common Cartridge profile's rules.",
+      "scope": "the four built-in courses in English and Spanish, with and without the notes for instructors (16 cartridges), as built by the course builder's and the kit's export",
+      "version": "2.1.0-dev",
+      "class": "S",
+      "status": "established",
+      "method": "tools/cartridge-validate.mjs ran xmllint against the CC v1.3 manifest and web link schemas and the profile checker (tools/cartridge-profile.mjs) over every cartridge; tests/commonCartridge.test.js runs the checker in CI and fails when a cartridge differs from the recorded run",
+      "evaluator": "the project's own tools; the schemas are 1EdTech's",
+      "artifact": "tests/fixtures/common-cartridge/validation.json",
+      "limitations": "A valid manifest is not an import: the 1EdTech valid test sets and conformance testing are member-only and were not used, and the schemas are not committed (their licence needs a registration with 1EdTech), so CI checks the profile's rules and the digests of the recorded run, and the schemas themselves only run on a machine that has them.",
+      "date": "2026-10-22",
+      "anchors": [
+        {
+          "file": "COURSE_PACKS.md",
+          "text": "A manifest that validates is not an import."
+        }
+      ]
+    },
+    {
+      "id": "cartridge-lms-import",
+      "claim": "A Gravitas course cartridge imports into Canvas, Moodle, D2L or Blackboard.",
+      "scope": "the Thin Common Cartridge the course builder and the distribution kit export",
+      "version": "2.1.0-dev",
+      "class": "A",
+      "status": "UNKNOWN",
+      "method": "none; no import has been recorded",
+      "evaluator": "none",
+      "artifact": "COURSE_PACKS.md",
+      "limitations": "Canvas: NOT VERIFIED; Moodle: NOT VERIFIED; D2L: NOT VERIFIED; Blackboard: NOT VERIFIED. No learning platform instance has been available to this project, and a schema, a unit test and a specification example are not an import. A platform becomes VERIFIED only with the date of a recorded import and what appeared. Owner action: import a cartridge into an instance and record the result.",
+      "date": "2026-10-22",
+      "anchors": [
+        {
+          "file": "COURSE_PACKS.md",
+          "text": "exports a Thin Common Cartridge; imports verified on: none (Canvas: NOT VERIFIED; Moodle: NOT VERIFIED; D2L: NOT VERIFIED; Blackboard: NOT VERIFIED)"
+        },
+        {
+          "file": "ADOPTER_GUIDE.md",
+          "text": "exports a Thin Common Cartridge; imports verified on: none (Canvas: NOT VERIFIED; Moodle: NOT VERIFIED; D2L: NOT VERIFIED; Blackboard: NOT VERIFIED)"
+        }
+      ]
     }
   ]
 }

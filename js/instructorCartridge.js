@@ -11,8 +11,9 @@
 // The 1EdTech (IMS) Thin Common Cartridge Profile v1.0, Final Specification of
 // 1 May 2015, over Common Cartridge v1.3 (Final, July 2013): a cartridge of
 // web links (and LTI links, which this never writes) and nothing else, so no
-// web content, no assessments and no service. v1.3 over v1.4 because v1.4 is a
-// Candidate Final of 2021 and the platforms' documented importers are 1.0 to 1.3.
+// web content, no assessments and no service. v1.3 over v1.4 because the
+// Thin profile was written for 1.2 and 1.3 and 1.4 is a Candidate Final of 2021
+// (which versions a platform reads was not checked: none was available).
 // The package holds exactly three kinds of file, as the profile says: the one
 // imsmanifest.xml and one web link XML file per link. Inline resource XML
 // ("Minimalist Thin CC") would save the link files, but the profile lets a
@@ -151,6 +152,25 @@ export async function linksOf(pack, { itemsOf, itemLink, courseLink, root }) {
   return { items, course: (await courseLink(pack, { root })).url };
 }
 
+/**
+ * What buildCartridge reads of a manifest, without the manifest: for the kit,
+ * which has links and times but not js/course/manifest.js (a module the course
+ * builder also imports, which a lazy import from the kit would split into a
+ * chunk of its own on the builder's route).
+ * @param {object} pack
+ * @param {{items: Map<string, object>, course: string}} links - linksOf()
+ * @param {{items: Map<string, ?{lo: number, hi: number}>}} time - js/course/review.js estimate()
+ * @param {Function} itemsOf - js/course/pack.js itemsOf
+ */
+export const manifestLike = (pack, links, time, itemsOf) => ({
+  course: { home: links.course },
+  items: itemsOf(pack).map(({ item }) => ({
+    id: item.id,
+    links: links.items.get(item.id) || {},
+    minutes: time.items.get(item.id),
+  })),
+});
+
 const lomString = (p, tag, locale, value) =>
   `<${p}:${tag}><${p}:string language="${locale}">${esc(value)}</${p}:string></${p}:${tag}>`;
 
@@ -193,9 +213,9 @@ const INSTRUCTOR = ['Instructor'];
  * @param {object} manifest - js/course/manifest.js courseManifest() of it: each
  *   item's links by language and its time, and the course home's link
  * @param {{locale?: 'en'|'es', name: (item: object) => string,
- *   notes?: boolean, itemsOf: Function}} opts - `name` says what an item is
- *   called (the page's own naming, or `itemTitle`), `notes` puts the notes for
- *   instructors in the cartridge, `itemsOf` is js/course/pack.js's
+ *   notes?: boolean}} opts - `name` says what an item is called (the page's
+ *   own naming, or `itemTitle`), `notes` puts the notes for instructors in the
+ *   cartridge
  * @returns {{file: string, locale: string, manifest: string,
  *   parts: Array<{path: string, text: string}>,
  *   counts: {modules: number, links: number}, left: Array<{id: string, name: string}>}}
@@ -203,7 +223,7 @@ const INSTRUCTOR = ['Instructor'];
 export function buildCartridge(
   pack,
   manifest,
-  { locale = 'en', name, notes = false, itemsOf }
+  { locale = 'en', name, notes = false }
 ) {
   const T = (id, vars) => tr(locale, id, vars);
   const byId = new Map(manifest.items.map(i => [i.id, i]));
