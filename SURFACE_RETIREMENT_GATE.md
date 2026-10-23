@@ -133,12 +133,12 @@ Counts first, then every surface. "Links / Library / cited" are the shipped inve
 <!-- surface-gate:summary -->
 | Verdict | Surfaces |
 | --- | ---: |
-| KEEP | 65 |
+| KEEP | 66 |
 | FREEZE | 1 |
 | GROUP | 0 |
 | CONSOLIDATE | 0 |
 | RETIRE | 2 |
-| Total judged | 68 |
+| Total judged | 69 |
 | Of these, owner rulings over the function | 1 |
 <!-- /surface-gate:summary -->
 
@@ -226,6 +226,7 @@ Counts first, then every surface. "Links / Library / cited" are the shipped inve
 | `investigation link` | link | yes | 3 | link | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
 | `gravitas.course-manifest` | download | yes | 1 | record | **KEEP** (R3b) | Keep. Written for a person to read; Prompt 290 gives it a schema or says in words that it has none. |
 | `gravitas.extension-archive` | repository, download | yes | 1 | record | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
+| `gravitas.image-marks` | download, inside a workspace (workspace.marks) | yes | 0 | record | **KEEP** (R3b) | Keep; written only when marks exist; a schema in Prompt 290. |
 | `embed options` | link | yes | 5 | link | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
 | `gravitas.student-data` | download | yes | 1 | record | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
 | `gravitas.made` | localStorage, inside gravitas.student-data | yes | 8 | record | **KEEP** (R3b) | Keep; a schema in Prompt 290. |

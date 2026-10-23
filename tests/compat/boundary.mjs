@@ -130,12 +130,44 @@ export const BOUNDARY = [
     id: 'workspace-marks',
     prompt: 179,
     kind: 'observation',
-    plans: 'the mark set as part of the observation workspace record',
+    plans:
+      'the image mark set as `workspace.marks`, a `gravitas.image-marks/1` block, written only when the reader marked an image (it nests eight deep; the 2.0.0 file reader stops at six and refuses the file as "nested too deep")',
     mutate: doc => ({
       ...clone(doc),
-      marks: [{ kind: 'point', tag: 'star', x: 1, y: 2 }],
+      workspace: {
+        openedFrom: { kind: 'builtin', id: 'compat', version: null },
+        openedAs: 'compat:series',
+        changes: [],
+        source: null,
+        marks: {
+          format: 'gravitas.image-marks',
+          formatVersion: 1,
+          step: 'image-marks',
+          version: 1,
+          refine: 1,
+          frames: [
+            {
+              id: 'compat:image',
+              width: 64,
+              height: 64,
+              digest: '0'.repeat(64),
+              used: true,
+            },
+          ],
+          marks: [
+            {
+              id: 'm1',
+              kind: 'point',
+              frame: 0,
+              tag: 'star',
+              pts: [[30, 20]],
+              result: { pts: [[30.2, 20.1]], sigma: 0.07, sigmaR: null },
+            },
+          ],
+        },
+      },
     }),
-    expect: 'ignored',
+    expect: 'refused',
   },
   {
     id: 'rubric-criterion-semantics',

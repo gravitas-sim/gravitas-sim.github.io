@@ -212,7 +212,6 @@ export const EN_DEFERRED = {
     'UNRESOLVED: the e-folding times span {spread}%, which is more than refinement should move a physical answer. The honest report is that this measurement is numerically unresolved.',
   'bench.chaos.canceled':
     'This was stopped before it finished, so at least one arm is shorter than it was asked to be.',
-
   // --- The Lagrange lesson's controlled pair -------------------------------
   'cr3bp.pair.title': 'Two directions, one accessible region',
   'cr3bp.pair.hint':
@@ -3718,6 +3717,7 @@ export const EN_DEFERRED = {
   'nb.source.derived-quantity': 'Derived quantity',
   'nb.source.lab3d': '3-D lab measurement',
   'nb.source.mission-lab': 'Mission lab result',
+  'nb.source.image-marks': 'Marks on an image',
   'nb.flag.missionModel':
     'impulsive burns, patched conics and point masses: a teaching model of a mission',
   'nb.flag.notOperational': 'not for operational mission design or navigation',

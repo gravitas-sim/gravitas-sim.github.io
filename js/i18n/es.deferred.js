@@ -214,7 +214,6 @@ export const ES_DEFERRED = {
     'NO RESUELTO: los tiempos de e-plegado abarcan un {spread}%, mas de lo que el refinamiento deberia mover una respuesta fisica. El informe honesto es que esta medida no esta resuelta numericamente.',
   'bench.chaos.canceled':
     'Esto se detuvo antes de terminar, asi que al menos un brazo es mas corto de lo que se le pidio.',
-
   // --- El par controlado de la leccion de Lagrange -------------------------
   'cr3bp.pair.title': 'Dos direcciones, una misma region accesible',
   'cr3bp.pair.hint':
@@ -3628,6 +3627,7 @@ export const ES_DEFERRED = {
   'nb.source.derived-quantity': 'Cantidad derivada',
   'nb.source.lab3d': 'Medida del laboratorio 3-D',
   'nb.source.mission-lab': 'Resultado del laboratorio de misiones',
+  'nb.source.image-marks': 'Marcas sobre una imagen',
   'nb.flag.missionModel':
     'impulsos instantáneos, cónicas empalmadas y masas puntuales: un modelo didáctico de una misión',
   'nb.flag.notOperational':

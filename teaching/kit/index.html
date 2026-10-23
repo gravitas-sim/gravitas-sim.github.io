@@ -163,6 +163,12 @@ try {
           <p class="ui-note" data-k="lms.note">Gravitas is not connected to any platform and is not an LTI tool: a platform holds a link, and students send back a PDF. Platform menus change; these notes name the setting, not its place.</p>
           <div id="lms"></div>
         </section>
+        <section id="kitCc" aria-labelledby="ccH" hidden>
+          <h2 id="ccH" data-k="cc.h">A Common Cartridge for a course platform</h2>
+          <p class="ui-note" data-k="cc.note">A course can go to a course platform as one file: a Thin Common Cartridge of web links, one module for each unit, each link opening an item in Gravitas. It carries nothing about students and no grades come back.</p>
+          <button id="kitCcOpen" type="button" class="ui-button" aria-expanded="false" aria-controls="kitCartridge" data-k="cc.open">Make a Common Cartridge</button>
+          <div id="kitCartridge" class="ui-card" hidden></div>
+        </section>
         <section id="kitReuse" aria-labelledby="reuseH" hidden>
           <h2 id="reuseH" data-k="reuse.h">Reuse next term</h2>
           <p id="kitReuseNote" class="ui-note"></p>

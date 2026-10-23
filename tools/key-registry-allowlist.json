@@ -64,6 +64,12 @@
     "js/lab3d/view/guidePanel.js": {
       "gravitas.lab3d-guide-report": 1
     },
+    "js/measure/imageRecord.js": {
+      "gravitas.image-marks": 1
+    },
+    "js/observatory/import.js": {
+      "gravitas.image-marks": 1
+    },
     "js/offline.js": {
       "gravitasBeforeUpdate": 1,
       "gravitasUpdateReady": 1,

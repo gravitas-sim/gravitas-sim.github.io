@@ -26,6 +26,11 @@ export const WORDS = {
     'coll.note':
       'Save investigations, scenarios and datasets with the Save button on a Library item page, then order them here, add a sentence to each and make one link or file. Your students can keep it, and it shows in their Library and in My work. An older build of Gravitas, such as 2.0.0, cannot open a collection.',
     'coll.open': 'Make a link from what I saved',
+    'cc.h': 'A Common Cartridge for a course platform',
+    'cc.note':
+      'A course can go to a course platform as one file: a Thin Common Cartridge of web links, one module for each unit, each link opening an item in Gravitas. It carries nothing about students and no grades come back.',
+    'cc.open': 'Make a Common Cartridge',
+    'cc.loading': 'Reading the course…',
     'start.paste': 'Paste an activity link or a course link',
     'start.go': 'Make the kit',
     'start.file': 'or choose an activity file or a course file',
@@ -135,6 +140,11 @@ export const WORDS = {
     'coll.note':
       'Guarde investigaciones, escenarios y conjuntos de datos con el botón Guardar de la página de un elemento de la Biblioteca; luego ordénelos aquí, añada una frase a cada uno y cree un enlace o un archivo. Sus estudiantes pueden conservarla y aparece en su Biblioteca y en Mi trabajo. Una versión anterior de Gravitas, como la 2.0.0, no puede abrir una colección.',
     'coll.open': 'Crear un enlace con lo que guardé',
+    'cc.h': 'Un Common Cartridge para una plataforma de cursos',
+    'cc.note':
+      'Un curso puede ir a una plataforma de cursos como un solo archivo: un Thin Common Cartridge de enlaces web, un módulo por unidad, cada enlace abre un elemento en Gravitas. No lleva nada sobre los estudiantes y no se devuelven calificaciones.',
+    'cc.open': 'Hacer un Common Cartridge',
+    'cc.loading': 'Leyendo el curso…',
     'start.paste': 'Pegue un enlace de actividad o de curso',
     'start.go': 'Hacer el kit',
     'start.file': 'o elija un archivo de actividad o de curso',

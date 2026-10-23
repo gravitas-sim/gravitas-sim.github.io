@@ -247,12 +247,16 @@ export const NEVER_PRECACHED = [
   // tests/workerPoolAdoption.test.js fails until it is deleted.
   /^js\/workers\/pool\.js$/,
   // The data kinds (Prompt 157, DATA_PACKS.md): the image, sequence and grid
-  // contracts, the bounded local FITS reader and its Worker, no shipped module
-  // imports any of them yet, so no page can fetch one and an install has no use
-  // for them, and the first-visit tier has 18 bytes of room (adopting them is a
-  // wait: the measured costs are in D-R10-32). The first adopter deletes this
-  // entry, and tests/dataKindsInstall.test.js fails until it does.
-  /^js\/dataKinds\//,
+  // contracts, the bounded local FITS reader and its Worker. The first adopter
+  // is the image marks instrument (Prompt 179), which takes the contract and
+  // the limits into the idle group "image measurement" below. The planes, grid
+  // and draft files, the FITS reader, its job and its Worker are imported by no
+  // shipped module yet, so no page can fetch one and an install has no use for
+  // them; the idle tier has no room for them (a data-budget ceiling, not one
+  // the standing size approval covers), and the first-visit tier has 18 bytes.
+  // The adopters (the sequence and grid consumers, local import in Prompt 188)
+  // delete their entries, and tests/dataKindsInstall.test.js fails until they do.
+  /^js\/dataKinds\/(fits|fitsJob|fitsWorker|planes|grid|draft)\.js$/,
   // The statistics kernel (Prompt 154, STATISTICS.md): no shipped module imports
   // it yet, so no page can fetch it and an install has no use for it, and the
   // first-visit tier has 21 bytes of room (the adoption is a wait: its measured
@@ -322,6 +326,15 @@ export const IDLE_TIER = [
     // report), so until the idle install finishes an offline first visit
     // builds and opens activities as before and without these.
     /^(js\/assignments\/(assignmentBuilder|adapt|adaptText|adapted)\.js|js\/i18n\/(en|es)\.adapt\.js)$/,
+  ],
+  [
+    // The image marks instrument (Prompt 179, IMAGE_MEASUREMENT.md): loaded when
+    // a reader opens the Observatory's marks panel on an image, so no first
+    // visit needs it. Idle wins over the core walk of js/, which would
+    // otherwise carry these files in the install. The kind's other three
+    // files (planes, grid, draft) are not here: nothing imports them yet.
+    'image measurement',
+    /^(js\/dataKinds\/(contract|limits)\.js|js\/measure\/(marks|refine|scale|imageRecord)\.js|js\/observatory\/imageMarks\.js|js\/i18n\/(en|es)\.imageMarks\.js)$/,
   ],
   [
     'data tables',

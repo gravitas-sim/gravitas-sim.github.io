@@ -45,6 +45,80 @@
         outline: var(--focus-ring);
         outline-offset: var(--focus-ring-offset);
       }
+      /* The marks panel (js/observatory/imageMarks.js, Prompt 179). */
+      .im-tools,
+      .im-pad {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-2);
+        align-items: center;
+        margin: var(--space-2) 0;
+      }
+      .im-field {
+        display: inline-flex;
+        gap: var(--space-2);
+        align-items: center;
+      }
+      .im-stage {
+        position: relative;
+        width: 100%;
+        max-width: 1024px;
+        line-height: 0;
+      }
+      .im-img,
+      .im-over {
+        display: block;
+        width: 100%;
+        height: auto;
+        image-rendering: pixelated;
+        border-radius: var(--radius-sm);
+      }
+      .im-over {
+        position: absolute;
+        inset: 0;
+        touch-action: manipulation;
+      }
+      .im-over:focus-visible {
+        outline: var(--focus-ring);
+        outline-offset: var(--focus-ring-offset);
+      }
+      .im-loupe {
+        position: absolute;
+        border: 2px solid var(--text-primary);
+        box-shadow: 0 0 0 1px var(--text-inverse);
+        border-radius: 50%;
+        pointer-events: none;
+      }
+      .im-tablewrap {
+        overflow-x: auto;
+      }
+      .im-table {
+        width: 100%;
+        min-width: 56rem;
+        table-layout: fixed;
+        border-collapse: collapse;
+      }
+      .im-table th,
+      .im-table td {
+        padding: var(--space-1) var(--space-2);
+        border: 1px solid var(--border-subtle);
+        text-align: start;
+      }
+      .im-table input {
+        width: 100%;
+        min-width: 24px;
+        box-sizing: border-box;
+      }
+      .im-table tr[aria-selected='true'] {
+        background: var(--accent-soft);
+      }
+      /* Touch measurement: 44 px handles on a touch screen. */
+      @media (pointer: coarse) {
+        #obsMarksBody :is(button, select, input) {
+          min-height: 44px;
+          min-width: 44px;
+        }
+      }
       .ow-map-row {
         display: grid;
         gap: var(--space-2);
@@ -555,6 +629,11 @@ try {
         <details id="obsComparePanel" class="ui-card ui-disclosure ow-panel" hidden>
           <summary data-i18n="obs.cmp.title">Compare a model with the data</summary>
           <div id="obsCompareBody"></div>
+        </details>
+
+        <details id="obsMarksPanel" class="ui-card ui-disclosure ow-panel" hidden>
+          <summary>Marks and scale on the image</summary>
+          <div id="obsMarksBody"></div>
         </details>
 
         <details id="obsMeasurePanel" class="ui-card ui-disclosure ow-panel">

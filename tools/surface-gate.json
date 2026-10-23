@@ -2042,6 +2042,39 @@
       "support": null
     },
     {
+      "id": "format-gravitas-image-marks",
+      "name": "gravitas.image-marks",
+      "kind": "stored-format",
+      "unique": "yes",
+      "replacement": null,
+      "why": "download, inside a workspace; owner js/measure/imageRecord.js validateMarks, js/observatory/export.js.",
+      "exposure": {
+        "links": [],
+        "records": ["gravitas.image-marks"],
+        "stateLinks": []
+      },
+      "persisted": "download, inside a workspace (workspace.marks)",
+      "measure": {
+        "ownerFiles": ["js/measure/imageRecord.js", "js/observatory/export.js"],
+        "testNames": ["gravitas.image-marks"]
+      },
+      "consequence": "Keep; written only when marks exist; a schema in Prompt 290.",
+      "cost": {
+        "lines": 0,
+        "testFiles": 0,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 0,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 0, "libraryEntries": 0 },
+      "cited": [],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
       "id": "format-embed-options",
       "name": "embed options",
       "kind": "stored-format",

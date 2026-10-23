@@ -310,6 +310,13 @@
       "student": false
     },
     {
+      "file": "IMAGE_MARKS.md",
+      "kind": "feature",
+      "purpose": "The image marks instrument: marks, scale, time and the ledger (Prompt 179).",
+      "owner": 179,
+      "student": false
+    },
+    {
       "file": "IMAGE_MEASUREMENT_GATE.md",
       "kind": "gate",
       "purpose": "The image-measurement gate: the thresholds, the predefined slices and the consumers each serves, and the measured verdict on one marks-and-scale instrument.",

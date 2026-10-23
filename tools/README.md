@@ -41,6 +41,8 @@ current, and the orchestrator checks it.
 | `bundle-composition.mjs` | What is in the bundle, module by module | `npm run budget:composition` |
 | `capabilities.mjs` | Capability packages at build time | `npm run capabilities` |
 | `capability-registries.mjs` | The lazy registries, generated from what describes them | `npm run registries` |
+| `cartridge-profile.mjs` | The Thin Common Cartridge profile, checked (Roadmap III Prompt 169) |  |
+| `cartridge-validate.mjs` | Validate the Common Cartridge export against the real schemas | `npm run cartridge:validate` |
 | `catalog-review.mjs` | `sdk review` on the archives a pull request adds to catalog/packages | `npm run catalog:review` |
 | `catalog.mjs` | The curated catalog: generated at release time, checked on every change | `npm run packs:data`, `npm run packs:provenance`, `npm run catalog` |
 | `check-activities.mjs` | Are the classroom activities coherent? | `npm run activities:check` |
@@ -93,6 +95,8 @@ current, and the orchestrator checks it.
 | `i18n-ledger.mjs` | The translation-freshness ledger: what a translation was written against |  |
 | `i18n-sources.mjs` | Where the translations are, read as pairs of English and translated text |  |
 | `i18n-surfaces.mjs` | Which surfaces are English only, and is that a decision or an accident? |  |
+| `image-marks-bytes.mjs` | The marks instrument's bytes and requests against the gate (Prompt 179) | `npm run image-marks:bytes` |
+| `image-marks-validate.mjs` | The marks instrument against the gate's thresholds (Prompt 179) | `npm run image-marks:validate` |
 | `image-measure-gate.mjs` | The image-measurement gate: thresholds, slices, consumers and one decision | `npm run image-gate:check`, `npm run image-gate:report`, `npm run image-gate:measure` |
 | `index-fragments.mjs` | The panels index.html no longer carries, and where each one went |  |
 | `inference-bench.mjs` | npm run bench:inference - how long a fit takes in its Workers, and what the | `npm run bench:inference` |

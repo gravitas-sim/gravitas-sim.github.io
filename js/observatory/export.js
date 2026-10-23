@@ -10,7 +10,9 @@
 //   when there are changes, the observation as it was opened. ./import.js
 //   reads it back by making the changes again to that, so the file restores
 //   the whole session, undo included, and checks that it gives the same
-//   observation it holds.
+//   observation it holds. When the reader marked an image, `workspace.marks`
+//   is a gravitas.image-marks/1 block (js/measure/imageRecord.js, Prompt 179),
+//   written only then: a save without marks is the bytes it always was.
 //   Keys are written in a fixed order, numbers as JavaScript writes them
 //   (the shortest string that reads back to the same double), a missing
 //   value as null, and nothing about when or where it was made: no clock, no
@@ -61,12 +63,13 @@ const OBSERVATION_KEYS = [
 /**
  * The observation as it stands, with how it got there.
  * @param {object} o - After the changes (transforms.replay)
- * @param {{source: object, changes: object[], digest?: string}} workspace -
+ * @param {{source: object, changes: object[], digest?: string, marks?: ?object}} workspace -
  *   What it was opened as, and the changes, in order; `digest` is what
- *   ./identity.js observationDigest() gives for the observation as opened
+ *   ./identity.js observationDigest() gives for the observation as opened;
+ *   `marks` is the image marks block, if there is one
  * @returns {string} JSON, two-space indented, with a final newline
  */
-export function observationJson(o, { source, changes, digest }) {
+export function observationJson(o, { source, changes, digest, marks }) {
   const doc = {
     ...plain(o),
     workspace: {
@@ -79,6 +82,7 @@ export function observationJson(o, { source, changes, digest }) {
       // The observation as it was opened, so the file replays: read back,
       // the changes are made again to this, and give the observation above.
       source: changes.length ? plain(source) : null,
+      ...(marks ? { marks } : {}),
     },
   };
   return `${JSON.stringify(doc, null, 2)}\n`;
