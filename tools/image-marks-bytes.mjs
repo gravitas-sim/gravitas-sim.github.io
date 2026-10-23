@@ -146,13 +146,28 @@ export async function measureBytes() {
         .join('\n')
     );
     const keep = await lazyBuild({ keep: keepEntry }, eager);
+    // The words are fetched one language at a time (the instrument imports the
+    // page's language's file when it opens): a reader downloads the larger of
+    // the two at worst, so that is what opening costs on top of the chunks.
+    const en = await lazyBuild({ words: 'js/i18n/en.imageMarks.js' }, eager);
+    const es = await lazyBuild({ words: 'js/i18n/es.imageMarks.js' }, eager);
+    const words = {
+      en: en.total,
+      es: es.total,
+      worst: Math.max(en.total, es.total),
+    };
     return {
       eagerModules: eager.size,
-      gate: { chunks: gate.files, bytes: gate.total, requests: gate.requests },
+      words,
+      gate: {
+        chunks: gate.files,
+        bytes: gate.total + words.worst,
+        requests: gate.requests + 1,
+      },
       open: {
         chunks: open.files,
-        bytes: open.total,
-        requests: open.requests,
+        bytes: open.total + words.worst,
+        requests: open.requests + 1,
         modules: open.inputs.filter(p => !eager.has(p)),
       },
       keep: { bytes: keep.total, requests: keep.requests },

@@ -56,20 +56,14 @@ function quantitiesOf(state, frames, scale) {
     m.pts.forEach((p, i) => {
       if (m.kind === 'circle' && i === 1) return;
       const n = single ? (m.kind === 'circle' ? 'centre ' : '') : `${i + 1} `;
-      const key = single ? '' : i + 1;
-      pix(
-        `${m.id}.x${key}`,
-        `${m.kind} ${m.id}${tag}: ${n}x, frame ${m.frame + 1}`,
-        p[0],
-        m.sigma,
-        m.refined
-      );
-      pix(
-        `${m.id}.y${key}`,
-        `${m.kind} ${m.id}${tag}: ${n}y, frame ${m.frame + 1}`,
-        p[1],
-        m.sigma,
-        m.refined
+      ['x', 'y'].forEach((a, j) =>
+        pix(
+          `${m.id}.${a}${single ? '' : i + 1}`,
+          `${m.kind} ${m.id}${tag}: ${n}${a}, frame ${m.frame + 1}`,
+          p[j],
+          m.sigma,
+          m.refined
+        )
       );
     });
     if (m.kind === 'circle')

@@ -42,11 +42,11 @@ export function wcsUnusable(wcs) {
   const [a, b] = wcs.ctype || [];
   if (!/^RA---TAN/.test(a || '') || !/^DEC--TAN/.test(b || ''))
     return `it is projected as ${a || '?'} / ${b || '?'}, and only TAN is read here`;
-  const finite = x =>
+  const ok = x =>
     Array.isArray(x) && x.length === 2 && x.every(Number.isFinite);
-  if (!finite(wcs.crpix) || !finite(wcs.crval))
+  if (!ok(wcs.crpix) || !ok(wcs.crval))
     return 'its reference pixel or position is missing';
-  if (!wcs.cd && !(finite(wcs.cdelt) && Array.isArray(wcs.pc)))
+  if (!wcs.cd && !(ok(wcs.cdelt) && Array.isArray(wcs.pc)))
     return 'it has neither a CD matrix nor PC and CDELT';
   return null;
 }

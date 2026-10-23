@@ -59,14 +59,14 @@ export const EN_IMAGEMARKS = {
   'obs.im.col.phys': 'Size ({unit})',
   'obs.im.col.sigma': 'Uncertainty (px)',
   'obs.im.help':
-    'Arrows move the marker or selected mark: Alt a quarter pixel, Shift four, Page keys fifty. Enter places, Escape cancels, Delete removes, Ctrl+Z undoes.',
+    'Arrows nudge the marker or mark: Alt 0.25 px, Shift 4, Page keys 50. Enter places, Escape cancels, Delete removes, Ctrl+Z undoes.',
   'obs.im.placed': '{kind} {id} placed at x {x}, y {y}',
   'obs.im.pending': 'Point {n} of {m} set',
-  'obs.im.draft': 'Marker at x {x}, y {y}; nudge it, then Place',
+  'obs.im.draft': 'Marker at x {x}, y {y}; nudge, then Place',
   'obs.im.moved': '{id} moved to x {x}, y {y}',
   'obs.im.edited': '{id}: {what} changed',
   'obs.im.deleted': '{id} deleted',
-  'obs.im.refined': '{id} refined to x {x}, y {y}, uncertainty {s} px',
+  'obs.im.refined': '{id} refined to x {x}, y {y}, ± {s} px',
   'obs.im.refused': '{id} not refined: {why}',
   'obs.im.undone': 'Undone; {n} marks in this frame',
   'obs.im.redone': 'Redone; {n} marks in this frame',
@@ -104,13 +104,12 @@ export const EN_IMAGEMARKS = {
   'obs.im.q.pixels': 'length in pixels',
   'obs.im.q.time': 'time of frame {frame}',
   'obs.im.why.display-only':
-    'it is display-only, with no units or provenance in its pixels; only a reference pair gives a scale',
+    'it is display-only, so its pixels carry no units; a reference pair gives a scale',
   'obs.im.why.other': 'its world coordinates cannot be used',
-  'obs.im.scaleNotAllowed':
-    'Scale from the image coordinates: not available, {why}',
+  'obs.im.scaleNotAllowed': 'Sky scale: not available, {why}',
   'obs.im.replay.invalid': 'These marks are not a valid record.',
   'obs.im.noRecords': 'No ledger record was made on this image',
   'obs.im.keepFailed': 'Not kept: {why}',
   'obs.im.reopenDiffers':
-    'Record reopened with {n} marks; {m} refined positions differ',
+    'Reopened with {n} marks; {m} refined positions differ',
 };

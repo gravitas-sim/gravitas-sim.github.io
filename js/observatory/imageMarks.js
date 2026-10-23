@@ -37,14 +37,20 @@ import {
   remove,
 } from '../measure/marks.js';
 import { scaleOf, sizeOf, timeOf } from '../measure/scale.js';
-import {
-  digestFrame,
-  marksBlock,
-  replay,
-  writeRecord,
-} from '../measure/imageRecord.js';
-import { EN_IMAGEMARKS } from '../i18n/en.imageMarks.js';
-import { ES_IMAGEMARKS } from '../i18n/es.imageMarks.js';
+import { marksBlock, replay, writeRecord } from '../measure/imageRecord.js';
+
+// One language's words, fetched when it is the page's: a reader downloads one.
+const WORDS = {
+  en: () => import('../i18n/en.imageMarks.js').then(m => m.EN_IMAGEMARKS),
+  es: () => import('../i18n/es.imageMarks.js').then(m => m.ES_IMAGEMARKS),
+};
+const have = new Set();
+const words = async ctx => {
+  const id = ctx.language();
+  if (have.has(id) || !WORDS[id]) return;
+  ctx.registerMessages({ [id]: await WORDS[id]() });
+  have.add(id);
+};
 
 /** INTERACTION.md's nudge sizes: Alt a quarter, none one, Shift four (js/shortcuts.js nudgeScale). */
 export const nudgeScale = e => (e.altKey ? 0.25 : e.shiftKey ? 4 : 1);
@@ -96,14 +102,13 @@ function stretch(values) {
 /**
  * Mount the instrument in `root`.
  * @param {HTMLElement} root
- * @param {{t: Function, registerMessages: Function, frames?: object[],
+ * @param {{t: Function, registerMessages: Function, language: Function, frames?: object[],
  *   setId?: string, saved?: object, settleMs?: number, ledger?: boolean,
  *   onChange?: Function}} ctx - `t` and `registerMessages` are the
  *   Observatory's; `saved` is a gravitas.image-marks/1 block to restore
  *   once the frames are known; `ledger: false` turns the ledger off
  */
 export function mountMarks(root, ctx) {
-  ctx.registerMessages({ en: EN_IMAGEMARKS, es: ES_IMAGEMARKS });
   const { t } = ctx;
   const settleMs = ctx.settleMs ?? SETTLE_MS;
   const live = el('div', {
@@ -808,7 +813,6 @@ export function mountMarks(root, ctx) {
         const saved2 = nb.save([...loaded.entries, entry]);
         if (!saved2.ok) throw new Error(saved2.reason);
       }
-      api.lastRecord = record;
       say(t('obs.im.kept', { n: record.quantities.length }));
       return record;
     } catch (err) {
@@ -842,32 +846,14 @@ export function mountMarks(root, ctx) {
       return null;
     }
   }
-  /** The records in the ledger made on exactly these frames. */
-  async function ledgerRecords() {
-    const [nb, mine] = await Promise.all([
-      import('../notebook/store.js'),
-      Promise.all(frames.map(digestFrame)),
-    ]);
-    const loaded = nb.load();
-    if (!loaded.ok) return [];
-    return loaded.entries
-      .filter(e => e.source === 'image-marks')
-      .map(e => ({ e, rec: e.snapshot.artifact }))
-      .filter(({ rec }) => {
-        const red = rec.provenance.reductions.find(
-          r => r.step === 'image-marks'
-        );
-        return (
-          red &&
-          red.frames.length === mine.length &&
-          red.frames.every((f, i) => f.digest === mine[i])
-        );
-      });
-  }
+  /** The latest record in the ledger made on this image; the replay refuses one made on other pixels. */
   async function reopenFromLedger() {
-    const list = await ledgerRecords();
-    return list.length
-      ? reopen(list[list.length - 1].rec)
+    const loaded = (await import('../notebook/store.js')).load();
+    const mine = (loaded.entries ?? []).filter(
+      e => e.source === 'image-marks' && e.snapshot.artifact.source.id === setId
+    );
+    return mine.length
+      ? reopen(mine.at(-1).snapshot.artifact)
       : say(t('obs.im.noRecords'));
   }
   /** Restore a workspace's marks (a gravitas.image-marks/1 block), or say why not. */
@@ -1059,7 +1045,8 @@ export function mountMarks(root, ctx) {
     if (next) load(next, o.id);
   }
   // A language chosen on the page changes the words here (the page sets <html lang>).
-  const langWatch = new MutationObserver(() => {
+  const langWatch = new MutationObserver(async () => {
+    await words(ctx);
     label();
     if (frames.length) renderTable();
   });
@@ -1070,60 +1057,47 @@ export function mountMarks(root, ctx) {
   const sum = root.parentElement?.querySelector('summary');
   if (sum) labelled.push([sum, 'obs.im.title', 'textContent']);
   label();
-  if (ctx.frames) {
-    const [first, ...more] = ctx.frames;
-    load(
-      [ctx.sidecar ? { ...first, sidecar: ctx.sidecar } : first, ...more],
-      ctx.setId ?? first.id
-    );
-  }
 
-  const api = {
+  return {
     get store() {
       return store;
     },
-    state: () => store.state,
     update,
     load,
     restore,
     block,
-    keep,
-    reopen,
-    lastRecord: null,
-    destroy() {
-      langWatch.disconnect();
-      nudgeTimer.cancel();
-      clearTimeout(sealTimer);
-      root.replaceChildren();
-    },
   };
-  return api;
 }
 
 const panels = new WeakMap();
 /**
  * The page's one call, made each time it shows an image observation: the first
- * builds the panel (a pending `ctx.marks.saved` block restores into it), later
- * ones show the new image. `ctx.marks` is the page's hand-over: it holds
- * `saved` until taken, and gets `block(observation)` for the workspace save.
+ * fetches the words and builds the panel (a pending `ctx.marks.saved` block
+ * restores into it), later ones show the new image. `ctx.marks` is the page's
+ * hand-over: it holds `saved` until taken, and gets `block(observation)` for the
+ * workspace save.
  * @param {HTMLDetailsElement} box - Its first div is the panel's body
  * @param {{observation: object, marks: object}} ctx - and what mountMarks takes
  */
-export function mount(box, ctx) {
+export async function mount(box, ctx) {
   const { observation: o, marks } = ctx;
   const saved = marks.saved ?? null;
   delete marks.saved;
-  let p = panels.get(box);
-  const fresh = !p;
+  let ready = panels.get(box);
+  const fresh = !ready;
   if (fresh) {
-    p = {
-      cur: o,
-      api: mountMarks(box.querySelector('div'), { ...ctx, saved }),
-    };
-    panels.set(box, p);
-    box.addEventListener('toggle', () => box.open && p.api.update(p.cur));
-    marks.block = view => (view?.id === p.cur?.id ? p.api.block() : null);
+    ready = words(ctx).then(() => {
+      const p = {
+        cur: o,
+        api: mountMarks(box.querySelector('div'), { ...ctx, saved }),
+      };
+      box.addEventListener('toggle', () => box.open && p.api.update(p.cur));
+      marks.block = view => (view?.id === p.cur?.id ? p.api.block() : null);
+      return p;
+    });
+    panels.set(box, ready);
   }
+  const p = await ready;
   p.cur = o;
   if (saved) box.open = true;
   if (box.open) p.api.update(o);

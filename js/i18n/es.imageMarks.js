@@ -59,14 +59,14 @@ export const ES_IMAGEMARKS = {
   'obs.im.col.phys': 'Tamaño ({unit})',
   'obs.im.col.sigma': 'Incertidumbre (px)',
   'obs.im.help':
-    'Las flechas mueven el marcador o la marca elegida: Alt un cuarto de píxel, Mayús cuatro, Re Pág y Av Pág cincuenta. Intro coloca, Esc cancela, Supr borra, Ctrl+Z deshace.',
+    'Las flechas mueven el marcador o la marca: Alt 0,25 px, Mayús 4, Re Pág y Av Pág 50. Intro coloca, Esc cancela, Supr borra, Ctrl+Z deshace.',
   'obs.im.placed': '{kind} {id} colocado en x {x}, y {y}',
   'obs.im.pending': 'Punto {n} de {m} fijado',
-  'obs.im.draft': 'Marcador en x {x}, y {y}; desplácelo y pulse Colocar',
+  'obs.im.draft': 'Marcador en x {x}, y {y}; muévalo y pulse Colocar',
   'obs.im.moved': '{id} movido a x {x}, y {y}',
   'obs.im.edited': '{id}: {what} modificado',
   'obs.im.deleted': '{id} borrado',
-  'obs.im.refined': '{id} refinado a x {x}, y {y}, incertidumbre {s} px',
+  'obs.im.refined': '{id} refinado a x {x}, y {y}, ± {s} px',
   'obs.im.refused': '{id} no refinado: {why}',
   'obs.im.undone': 'Deshecho; {n} marcas en esta imagen',
   'obs.im.redone': 'Rehecho; {n} marcas en esta imagen',
@@ -104,13 +104,12 @@ export const ES_IMAGEMARKS = {
   'obs.im.q.pixels': 'longitud en píxeles',
   'obs.im.q.time': 'hora de la imagen {frame}',
   'obs.im.why.display-only':
-    'es solo para mostrar, sin unidades ni procedencia en sus píxeles; solo un par de referencia da una escala',
+    'es solo para mostrar, y sus píxeles no tienen unidades; un par de referencia da una escala',
   'obs.im.why.other': 'sus coordenadas del mundo no se pueden usar',
-  'obs.im.scaleNotAllowed':
-    'Escala a partir de las coordenadas de la imagen: no disponible, {why}',
+  'obs.im.scaleNotAllowed': 'Escala del cielo: no disponible, {why}',
   'obs.im.replay.invalid': 'Estas marcas no son un registro válido.',
   'obs.im.noRecords': 'Ningún registro se hizo sobre esta imagen',
   'obs.im.keepFailed': 'No guardado: {why}',
   'obs.im.reopenDiffers':
-    'Registro reabierto con {n} marcas; {m} posiciones refinadas difieren',
+    'Reabierto con {n} marcas; {m} posiciones refinadas difieren',
 };

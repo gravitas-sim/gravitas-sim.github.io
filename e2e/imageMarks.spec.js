@@ -523,6 +523,9 @@ test.describe('the marks instrument: sequence', () => {
       timeout: 30_000,
     });
     // A second instance on three small frames, mounted the way the page mounts the first.
+    await expect(page.locator('#obsMarksBody .im-over')).toBeAttached({
+      timeout: 30_000,
+    });
     await page.evaluate(async () => {
       const [{ mountMarks }, i18n] = await Promise.all([
         import('/js/observatory/imageMarks.js'),
@@ -549,10 +552,10 @@ test.describe('the marks instrument: sequence', () => {
       window.__seq = mountMarks(host, {
         t: i18n.t,
         registerMessages: i18n.registerMessages,
-        frames,
-        setId: 'seq',
+        language: i18n.language,
         ledger: false,
       });
+      window.__seq.load(frames, 'seq');
     });
     const host = page.locator('#seqHost');
     await expect(host.locator('output.im-scale')).toBeVisible();
@@ -728,6 +731,9 @@ test.describe("the marks instrument: the gate's throttled profile", () => {
       timeout: 30_000,
     });
     const cdp = await context.newCDPSession(page);
+    await expect(page.locator('#obsMarksBody .im-over')).toBeAttached({
+      timeout: 30_000,
+    });
     const result = await page.evaluate(async () => {
       const [{ mountMarks }, i18n, { decodePlane }] = await Promise.all([
         import('/js/observatory/imageMarks.js'),
@@ -759,11 +765,11 @@ test.describe("the marks instrument: the gate's throttled profile", () => {
       const m = mountMarks(host, {
         t: i18n.t,
         registerMessages: i18n.registerMessages,
-        frames,
-        setId: 'timing',
+        language: i18n.language,
         ledger: false,
         settleMs: 5,
       });
+      m.load(frames, 'timing');
       // 50 marks: 30 points, 10 circles, 5 segments, 3 polygons, 2 counts, placed through the table's own path.
       const { place } = await import('/js/measure/marks.js');
       const kinds = [
@@ -916,6 +922,9 @@ test.describe("the marks instrument: the gate's throttled profile", () => {
       timeout: 30_000,
     });
     const cdp = await context.newCDPSession(page);
+    await expect(page.locator('#obsMarksBody .im-over')).toBeAttached({
+      timeout: 30_000,
+    });
     const decoded = await page.evaluate(async () => {
       const [{ mountMarks }, i18n, planes, limits] = await Promise.all([
         import('/js/observatory/imageMarks.js'),
@@ -948,13 +957,13 @@ test.describe("the marks instrument: the gate's throttled profile", () => {
       const { mountMarks, i18n, host } = window.__bigHost;
       const { plane, size } = window.__big;
       const t0 = performance.now();
-      mountMarks(host, {
+      const m = mountMarks(host, {
         t: i18n.t,
         registerMessages: i18n.registerMessages,
-        frames: [{ id: 'big', width: size, height: size, data: plane }],
-        setId: 'big',
+        language: i18n.language,
         ledger: false,
       });
+      m.load([{ id: 'big', width: size, height: size, data: plane }], 'big');
       return performance.now() - t0;
     });
     await cdp.send('Emulation.setCPUThrottlingRate', { rate: 1 });
