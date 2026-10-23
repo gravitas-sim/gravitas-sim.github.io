@@ -580,8 +580,13 @@ describe('the submission token carries the ledger', () => {
       startedAt: '2026-09-01T10:00:00.000Z',
       studentName: 'A Student',
     });
-  const withLedger = async () => {
-    const record = ledgerRecord(every());
+  // Every source's entry together holds more rows than a token carries
+  // (TOKEN_ROWS), so these leave out the calibration's one row; the cut to the
+  // limit is tested on its own below.
+  const withLedger = async (
+    entries = every().filter(e => e.source !== SOURCE.IMAGE_CALIBRATION)
+  ) => {
+    const record = ledgerRecord(entries);
     const digest = await ledgerDigest(record);
     return {
       record,
