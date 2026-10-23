@@ -733,6 +733,12 @@ export const COMPAT = Object.freeze({
     unknown: 'refused',
   },
   'course home link': { fixture: 'course-home-link', unknown: 'n/a' },
+  'investigation link': { fixture: 'investigation-link', unknown: 'n/a' },
+  'gravitas.question-bank': { fixture: 'question-bank', unknown: 'refused' },
+  'gravitas.question-bank (with criterion kinds, depths or weights)': {
+    fixture: 'question-bank',
+    unknown: 'refused',
+  },
   'gravitas.investigation-pack': {
     fixture: 'investigation-pack',
     unknown: 'refused',

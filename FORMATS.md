@@ -140,8 +140,8 @@ An older build is a real reader: a browser still running 2.0.0's cached code, a 
 | gravitas.ephemeris-pack | none yet | not yet exercised | policy (above) |
 | gravitas.investigation-pack | `investigation-pack` | refused | policy (above) |
 | gravitas.investigation-pack (with criterion kinds, depths or weights) | `investigation-pack` | refused | policy (above) |
-| gravitas.question-bank | none yet | not yet exercised | policy (above) |
-| gravitas.question-bank (with criterion kinds, depths or weights) | none yet | not yet exercised | policy (above) |
+| gravitas.question-bank | `question-bank` | refused | policy (above) |
+| gravitas.question-bank (with criterion kinds, depths or weights) | `question-bank` | refused | policy (above) |
 | gravitas.assignment | `assignment-link` | n/a | policy (above) |
 | investigation progress | `progress-store` | ignored | policy (above) |
 | gravitas.investigation.progress | `progress-backup` | ignored | policy (above) |
@@ -158,7 +158,7 @@ An older build is a real reader: a browser still running 2.0.0's cached code, a 
 | gravitas.course-pack (builder form) | `course-pack` | refused | policy (above) |
 | gravitas.course-pack (builder form, with a profile, a term or outcomes) | `course-pack` | refused | policy (above) |
 | course home link | `course-home-link` | n/a | policy (above) |
-| investigation link | none yet | not yet exercised | policy (above) |
+| investigation link | `investigation-link` | n/a | policy (above) |
 | gravitas.course-manifest | `report-files` | ignored | policy (above) |
 | gravitas.capability-package | `capability-package` | refused | policy (above) |
 | gravitas.scenario-pack | none yet | not yet exercised | policy (above) |
@@ -192,6 +192,10 @@ An older build is a real reader: a browser still running 2.0.0's cached code, a 
 | the image mark set as `workspace.marks`, a `gravitas.image-marks/1` block, written only when the reader marked an image (it nests eight deep; the 2.0.0 file reader stops at six and refuses the file as "nested too deep") (179) | `observation` | refuses | refused in its own words: safe as a capability-required refusal |
 | a `kind`, `depth` and `weight` on a rubric criterion of a written step (172) | `investigation-pack` | refuses | refused in its own words: safe as a capability-required refusal |
 | named streams, the stream fork per trial and the kernel versions on the experiment record (265) | `experiment` | ignores the field | accepted and silently dropped: a boundary, or the field must not be one an old reader needs |
+| a course home link for a /3 pack (a collection, a term or outcomes) carries prefix c3 (164) | `course-home-link` | refuses | refused in its own words: safe as a capability-required refusal |
+| an investigation link for a /2 pack (a criterion with a kind, a depth or a weight) carries prefix i2 (172) | `investigation-link` | refuses | refused in its own words: safe as a capability-required refusal |
+| a `kind`, `depth` and `weight` on the rubric criterion of a written item in a question bank (172) | `question-bank` | refuses | refused in its own words: safe as a capability-required refusal |
+| the instructor's sentence on a step (`x`), a due line (`u`), the marking-note choice (`m`) and the disclosure default (`mo`) on an assignment link, each written only when set (175) | `assignment-link` | ignores the field | accepted and silently dropped: a boundary, or the field must not be one an old reader needs |
 
 ## Fields added inside a version
 
