@@ -1,3 +1,4 @@
+          <div id="obsPhotoBody"><p data-i18n="obs.ph.offline"></p></div>
 <!doctype html>
 <html lang="en">
   <head>
@@ -112,26 +113,9 @@
       .im-table tr[aria-selected='true'] {
         background: var(--accent-soft);
       }
-      /* The photometry panel (js/observatory/imagePhotometry.js, Prompt 180). */
-      .ph-pic {
-        display: block;
-        width: 100%;
-        max-width: 360px;
-        height: auto;
-        margin: var(--space-2) 0;
-        image-rendering: pixelated;
-        border-radius: var(--radius-sm);
-        cursor: crosshair;
-        touch-action: manipulation;
-      }
-      #obsPhotoBody input[type='checkbox'] {
-        flex: none;
-        width: 24px;
-        height: 24px;
-      }
-      .ph-readout p {
-        margin: var(--space-1) 0;
-      }
+      .ph-pic { display: block; width: 100%; max-width: 360px; height: auto; margin: var(--space-2) 0; image-rendering: pixelated; border-radius: var(--radius-sm); cursor: crosshair; touch-action: manipulation }
+      #obsPhotoBody input[type='checkbox'] { flex: none; width: 24px; height: 24px }
+      .ph-readout p { margin: var(--space-1) 0 }
       /* Touch measurement: 44 px handles on a touch screen. */
       @media (pointer: coarse) {
         :is(#obsMarksBody, #obsPhotoBody) :is(button, select, input) {

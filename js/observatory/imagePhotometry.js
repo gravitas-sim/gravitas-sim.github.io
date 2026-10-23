@@ -29,6 +29,7 @@ import {
   reductionOf,
 } from '../measure/photometry.js';
 import { toCsv } from '../csv.js';
+import { roundSig } from '../format.js';
 import { sha256Hex } from '../hash.js';
 
 const WORDS = {
@@ -85,7 +86,7 @@ export async function mountPhotometry(box, ctx) {
   const { framesOf, permits } = await import('./imageMarks.js');
   const { t } = ctx;
   const fmt = (v, d = 4) =>
-    Number.isFinite(v) ? ctx.number(Number(v.toPrecision(d))) : '—';
+    Number.isFinite(v) ? ctx.number(roundSig(v, d)) : '—';
   const labelled = [];
   const word = (node, id, prop = 'textContent') => {
     labelled.push([node, id, prop]);

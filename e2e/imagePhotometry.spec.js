@@ -195,7 +195,7 @@ test.describe('photometry: keyboard alone', () => {
     await expect(readout(page)).toContainText('Instrumental magnitude');
     await expect(readout(page)).toContainText('noise from the CCD equation');
     // The same star centred first: the position moves to the star's centre.
-    await box(page).getByLabel('Centre on the star first').focus();
+    await box(page).getByLabel('Center on the star first').focus();
     await page.keyboard.press('Space');
     await press(btn(page, 'Measure'), page);
     await expect(readout(page)).toContainText(/Position x 30\.\d/);

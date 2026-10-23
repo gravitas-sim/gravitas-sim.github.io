@@ -29,11 +29,11 @@ export const EN_IMAGEPHOTOMETRY = {
     'Not measured: {pixels} pixels in the aperture are masked or have no value.',
   'obs.ph.no.edge': 'Not measured: the aperture reaches beyond the image.',
   'obs.ph.no.crowded':
-    'Not measured: another source ({with}) is close enough to reach this one’s sky ring. This tool does not separate neighbours.',
+    'Not measured: another source ({with}) is close enough to reach this one’s sky ring. This tool does not separate neighbors.',
   'obs.ph.no.annulus':
     'Not measured: the sky ring holds only {pixels} usable pixels; it needs at least 20.',
   'obs.ph.no.centroid':
-    'Not measured: the centre could not be found ({reason}).',
+    'Not measured: the center could not be found ({reason}).',
   'obs.ph.reason.edge': 'the window reaches the edge',
   'obs.ph.reason.no-flux': 'there is no light above the sky in the window',
   'obs.ph.reason.not-converged': 'it did not settle',
@@ -52,7 +52,7 @@ export const EN_IMAGEPHOTOMETRY = {
   'obs.ph.sky': 'Sky',
   'obs.ph.sky.annulus': 'Mean of the ring',
   'obs.ph.sky.plane': 'Plane through the ring',
-  'obs.ph.recentre': 'Centre on the star first (weighted centroid)',
+  'obs.ph.recentre': 'Center on the star first (weighted centroid)',
   'obs.ph.ring': 'Resize the',
   'obs.ph.ring.aperture': 'aperture',
   'obs.ph.ring.inner': 'inner ring',
