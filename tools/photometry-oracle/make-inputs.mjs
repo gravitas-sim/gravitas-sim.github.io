@@ -12,7 +12,9 @@
 // synthetic star is in `truth` (the frame's manifest).
 // =============================================================================
 
+import { Buffer } from 'node:buffer';
 import { writeFileSync } from 'node:fs';
+import process from 'node:process';
 import { simulateFrame } from '../../js/kernels/detector/frame.js';
 
 const DETECTOR = {
@@ -152,6 +154,6 @@ const doc = {
   centroids: CENTROIDS,
 };
 writeFileSync(process.argv[2], JSON.stringify(doc) + '\n');
-console.log(
-  `wrote ${process.argv[2]}: ${frames.length} frames, ${CASES.length} apertures, ${CENTROIDS.length} centroids`
+process.stdout.write(
+  `wrote ${process.argv[2]}: ${frames.length} frames, ${CASES.length} apertures, ${CENTROIDS.length} centroids\n`
 );

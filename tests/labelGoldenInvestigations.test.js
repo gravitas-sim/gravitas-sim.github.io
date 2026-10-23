@@ -45,6 +45,8 @@ const UNREACHED = {
     'the seconds a fit took, read from the clock when the run ends',
   'js/observatory/guidePanel.js:330':
     'a rounding inside the guide panel, which needs a mounted observation',
+  'js/observatory/imagePhotometry.js:88':
+    'the significant digits of a measured value in the photometry panel, which needs a mounted image observation',
   'js/observatory/measurePanel.js:491':
     'a rounding inside the measure panel, which needs a mounted pipeline',
   'js/observatoryPage.js:506':
@@ -118,12 +120,12 @@ describe('the recording', () => {
 describe('coverage', () => {
   test('every toFixed and toPrecision call in the family ran, or is listed with its reason', () => {
     expect(all.sites).toEqual(familySites());
-    expect(all.sites).toHaveLength(12);
+    expect(all.sites).toHaveLength(13);
     const reached = new Set(all.reached);
     const unreached = all.sites.filter(s => !reached.has(s));
     expect(unreached.map(lineOf).sort()).toEqual(Object.keys(UNREACHED).sort());
     expect(readJson(COVERAGE_FILE)).toEqual(coverageOf(all));
-    expect(coverageOf(all)).toMatchObject({ calls: 12, reached: 8 });
+    expect(coverageOf(all)).toMatchObject({ calls: 13, reached: 8 });
   });
 
   test('nothing is counted that is not in the family', () => {

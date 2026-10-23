@@ -1,10 +1,11 @@
 {
  "family": "js/investigations/*, js/lesson/*, js/observatory/**, js/observatoryPage.js",
- "calls": 12,
+ "calls": 13,
  "reached": 8,
  "unreached": [
   "js/observatory/fitPanel.js:557:62",
   "js/observatory/guidePanel.js:330:53",
+  "js/observatory/imagePhotometry.js:88:46",
   "js/observatory/measurePanel.js:491:29",
   "js/observatoryPage.js:506:50"
  ],

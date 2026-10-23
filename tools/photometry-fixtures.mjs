@@ -79,7 +79,7 @@ export function goldenCase(img, a, gain, readNoise) {
   const bg = estimateBackground(img, a);
   const p = aperturePhotometry(img, { ...a, readNoise });
   const m = measureFlux({ ...img, values: img.values }, { ...a, gain });
-  const strip = ({ node, ...rest }) => rest;
+  const strip = ({ node: _node, ...rest }) => rest;
   return {
     aperture: a,
     background: { level: bg.level, scatter: bg.scatter, n: bg.n },

@@ -37,6 +37,7 @@ rec = {
     "revisions": [
         "1: results first pinned at 265ac3bd",
         "2: oracle.py gained the `settled` flag on the flux-weighted centroid (the window loop stops on the first window it has been in and says it did not settle); every number of revision 1 is unchanged, and the inputs are the same bytes",
+        "3: make-inputs.mjs imports Buffer and process from node: and writes with process.stdout (an ESLint finding); the inputs it writes are the same bytes",
     ],
     "parameters": {
         "apertures": "CircularAperture, methods exact and center; the aperture error from a variance plane max(e, 0) + readNoise^2 (photutils sums error^2 times the weight)",
