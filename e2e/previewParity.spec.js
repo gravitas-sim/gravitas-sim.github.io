@@ -11,6 +11,7 @@
 
 import { readFileSync } from 'node:fs';
 import { test, expect } from './fixtures.js';
+import AxeBuilder from '@axe-core/playwright';
 import { previewRoute } from '../js/library/format.js';
 import { RECORD_KEYS } from '../js/storage/local.js';
 
@@ -128,3 +129,51 @@ test.describe('the preview matrix', () => {
     await expect(page.locator('#previewBanner')).toBeVisible();
   });
 });
+
+// The banner at the two widths, in both languages and the two themes the
+// accessibility suite holds every page to: no axe finding, and it fits.
+for (const [width, language, theme] of [
+  [1280, 'en', 'midnight'],
+  [1280, 'es', 'daylight'],
+  [390, 'en', 'daylight'],
+  [390, 'es', 'midnight'],
+]) {
+  test(`the banner at ${width} px: ${language}, ${theme}`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 800 });
+    await page.addInitScript(
+      ([l, t]) => {
+        localStorage.setItem('gravitas_locale', l);
+        localStorage.setItem('gravitas_theme', t);
+      },
+      [language, theme]
+    );
+    await page.goto(previewRoute(matrix.find(e => e.kind === 'course')));
+    const banner = page.locator('#previewBanner');
+    await expect(banner).toBeVisible({ timeout: 30_000 });
+    const box = await banner.boundingBox();
+    expect(box.x).toBeGreaterThanOrEqual(0);
+    expect(box.x + box.width).toBeLessThanOrEqual(width + 1);
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= window.innerWidth
+      )
+    ).toBe(true);
+    await page.evaluate(() =>
+      Promise.all(
+        document
+          .getAnimations()
+          .filter(a => a.effect?.getTiming?.().iterations !== Infinity)
+          .map(a => a.finished.catch(() => {}))
+      )
+    );
+    const { violations } = await new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
+      .analyze();
+    expect(
+      violations.map(v => [
+        v.id,
+        v.nodes.slice(0, 3).map(n => n.target.join(' ')),
+      ])
+    ).toEqual([]);
+  });
+}

@@ -9,6 +9,42 @@
 // =============================================================================
 
 import { test, expect } from './fixtures.js';
+import AxeBuilder from '@axe-core/playwright';
+
+// What axe finds on the new surfaces, in both languages and the two themes
+// accessibility.spec.js holds every page to.
+const THEMES = ['midnight', 'daylight'];
+const LANGUAGES = ['en', 'es'];
+const TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];
+
+const seed = (page, language, theme) =>
+  page.addInitScript(
+    ([l, t]) => {
+      localStorage.setItem('gravitas_locale', l);
+      localStorage.setItem('gravitas_theme', t);
+    },
+    [language, theme]
+  );
+
+async function axe(page) {
+  await page
+    .evaluate(() =>
+      Promise.all(
+        document
+          .getAnimations()
+          .filter(a => a.effect?.getTiming?.().iterations !== Infinity)
+          .map(a => a.finished.catch(() => {}))
+      )
+    )
+    .catch(() => {});
+  const { violations } = await new AxeBuilder({ page })
+    .withTags(TAGS)
+    .analyze();
+  return violations.map(v => ({
+    id: v.id,
+    nodes: v.nodes.slice(0, 3).map(n => n.target.join(' ')),
+  }));
+}
 
 const LESSON = 'keplers-laws';
 
@@ -211,6 +247,26 @@ test.describe('in the builder', () => {
   });
 });
 
+for (const language of LANGUAGES) {
+  for (const theme of THEMES) {
+    test(`axe: the order list with a refusal (${language}, ${theme})`, async ({
+      page,
+      app,
+    }, testInfo) => {
+      testInfo.setTimeout(120_000);
+      await seed(page, language, theme);
+      await openBuilder(page, app);
+      await tick(page, 'where-is-the-star');
+      await tick(page, 'measure-the-two-orbits');
+      await row(page, 'measure-the-two-orbits')
+        .locator('[data-act="up"]')
+        .click();
+      await expect(page.locator('#adaptStatus')).not.toBeEmpty();
+      expect(await axe(page)).toEqual([]);
+    });
+  }
+}
+
 test.describe('opening an activity the lesson has moved under', () => {
   /** A link made as if the first predict step had since been rewritten. */
   async function staleLink(page) {
@@ -246,7 +302,7 @@ test.describe('opening an activity the lesson has moved under', () => {
     await expect(report).toContainText('Where is the star?');
 
     await report
-      .getByRole('button', { name: 'Update it to the current lesson' })
+      .getByRole('button', { name: 'Update it to the current investigation' })
       .click();
     const fresh = await report.locator('input').inputValue();
     expect(fresh).toMatch(/#a/);
@@ -274,4 +330,22 @@ test.describe('opening an activity the lesson has moved under', () => {
     await expect(report).toContainText('Kept as made.');
     await expect(page.locator('#investigationPanel')).toBeVisible();
   });
+
+  for (const language of LANGUAGES) {
+    for (const theme of THEMES) {
+      test(`axe: the report (${language}, ${theme})`, async ({
+        page,
+        app,
+      }, testInfo) => {
+        testInfo.setTimeout(120_000);
+        await seed(page, language, theme);
+        await app.boot({ url: '/' });
+        await page.goto(await staleLink(page));
+        await expect(page.locator('#adaptReport')).toBeVisible({
+          timeout: 30_000,
+        });
+        expect(await axe(page)).toEqual([]);
+      });
+    }
+  }
 });
