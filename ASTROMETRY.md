@@ -71,3 +71,139 @@ registration. Every solution carries its residuals.
 
 **(e) Authentic data.** One authentic frame with reference stars under a fixed
 analysis contract. **Not run until Prompt 189.**
+
+## What was built
+
+- `js/measure/astrometry.js`: the model, the fit, the registration and the
+  header reader, with no import but `js/numeric/linalg.js`. A solution carries
+  its parameters, their covariance, the residuals (pixels and arcseconds), the
+  chi-squared, the degrees of freedom and a verdict (`consistent`,
+  `inconsistent` or `exact`); a refusal is `{ ok: false, status:
+  'not-constrained', code, message, data }`.
+- `js/measure/calibrationRecord.js`: the `gravitas.image-calibration/1` block
+  (workspace field `calibration`, written only when a calibration exists), its
+  validator, the replay that re-runs the fit from the stored stars and checks it
+  against the stored numbers, and the ledger entry (notebook source
+  `image-calibration`).
+- `js/observatory/imageCalibration.js`: the lazy panel on the Observatory
+  route: a reference-star table (typed, from the marks panel's points, or looked
+  up by name in the bright-star pack with its proper motion carried to the
+  image's epoch), the model and parity, the residual table and verdict, the
+  pixel-to-sky and sky-to-pixel readouts with their uncertainty, the reader for
+  the image's own header, and Keep in the ledger.
+- `tools/astrometry-validate.mjs` (the checks below), `tools/astrometry-oracle/`
+  (the offline oracle) and the pinned fixtures in `tests/fixtures/astrometry/`.
+
+Registration (two frames, rotation plus shift) is complete as a kernel, with
+tests and an oracle, and has no page of its own yet: its first consumer is the
+blink and the stacking of the next prompts, which hold two frames.
+
+## The equations
+
+The reference position `T = (alpha0, delta0)`. For a star at `(alpha, delta)`,
+with `cos c = sin delta0 sin delta + cos delta0 cos delta cos(alpha - alpha0)`,
+
+    xi  = cos delta sin(alpha - alpha0) / cos c
+    eta = (cos delta0 sin delta - sin delta0 cos delta cos(alpha - alpha0)) / cos c
+
+and the pixel is `p = p0 + P (xi, eta)` (radians). With `n` stars, the fit
+solves `min sum_i |p_i - p0 - P t_i|^2 / sigma_i^2` over the six numbers of
+`(p0, P)` by the normal equations on centred and scaled `t_i`, by Cholesky
+(`invertSpd`). The similarity model restricts `P` to one scale and one rotation with the
+stated parity, which is linear in two numbers (`a`, `b`) and is solved the same
+way. A second pass adds
+the catalogue's sigma, projected through the first pass's scale, to each star's
+pixel sigma. The derived numbers (scale `sqrt|det P|`, per-axis scales, the
+position angle of the +y axis east of north, skew, axis ratio, parity) get their
+sigmas by the delta method; `uncertaintyAt` has the analytic Jacobian for the
+sky position at a pixel.
+
+Registration is the weighted Procrustes problem for rotation `R(theta)` and
+translation `t` with `b_i ~ R a_i + t`: the closed form on the weighted
+centroids, `theta = atan2(sum (a x b), sum (a . b))`, with the residual
+distribution and `sigma_theta`, `sigma_centre` from the stated source sigmas.
+
+## Limits, said on the page
+
+- **No distortion terms.** A TAN projection with a linear map is right for a
+  field of a few degrees or less. A tangent point far from the stars' mean
+  direction is a second-order systematic the fit does not model. The page says
+  so beside the result.
+- **Three stars fix an affine solution exactly.** With zero degrees of freedom
+  nothing checks the match; the verdict says `exact` and the page says that no
+  check is possible. Five stars give four degrees of freedom.
+- **The header is read, not solved.** A header WCS is shown as read, with no
+  residuals, and a header in a projection this page does not do (SIN, ARC, ZPN,
+  AIT, CAR), a distortion convention (SIP, TPV) or non-equatorial axes is
+  refused by name.
+- **The fit does not identify the stars.** The pairing of pixels with catalogue
+  entries is the user's; a wrong pairing shows as inconsistent residuals (500 of
+  500 swapped-pair trials), and a consistent verdict is not a proof of a right
+  pairing.
+- **A saved calibration is bound to its pixels.** The block carries the frame's
+  digest; another frame's pixels refuse it.
+- **Older readers.** The WCS matrix nests deeper than the 2.0.0 file reader
+  allows, so that reader refuses a file with a calibration as nested too deep
+  (the compatibility row `workspace-calibration`, expected refused); the
+  current reader reads it.
+
+## The independent oracle
+
+`astropy.wcs` (wcslib) and `fit_wcs_from_points`, with
+`scipy.linalg.orthogonal_procrustes`: astropy 6.1.7, scipy 1.15.3, numpy 2.2.6,
+Python 3.10.12, retrieved 2026-10-23 in a throwaway virtual environment (the one
+Prompt 180 made, reused, nothing added) and run with `-I` from an empty
+directory. No Gravitas code ran in it. The inputs are built by
+`tools/astrometry-oracle/make-inputs.mjs`, the results are in
+`tests/fixtures/astrometry/oracle-results.json`, and
+`oracle-provenance.json` carries the versions, the parameters, the command and
+the digests. To re-run it: the command in the provenance file, then Prettier.
+
+## Validation results
+
+`npm run astrometry:validate` runs every row below; the bound is the one
+committed before the module existed (`thresholds.json`). 27 rows, 25 pass, 2
+not run, 0 failed.
+
+| Check | Measured | Bound | Verdict |
+| --- | --- | --- | --- |
+| a1 recover, noiseless | 3.7e-11 arcsec | 1e-5 | pass |
+| a1 recover, five stars | worst 1.92 sigma | 3.5 | pass |
+| a2 default tangent | 0.0028 px | 0.1 | pass |
+| a3 registration, noiseless | 1.6e-13 px | 1e-9 | pass |
+| a3 registration, 0.05 px noise | 0.055 px | 0.1 | pass |
+| a4 projection vs the sky kernel, and vs the page | 4.8e-14, 5.7e-14 deg | 1e-9 | pass |
+| b1 oracle projection | 5.6e-14 deg | 1e-9 | pass |
+| b2 oracle fit | 0.0018 px | 0.01 | pass |
+| b3 oracle registration | 3.3e-17 rad, 3.4e-13 px | 1e-9, 1e-8 | pass |
+| b4 oracle on the authentic TESS header | 1.1e-13 deg over 1,023 px | 1e-9 | pass |
+| b5 oracle on an authentic fit | | | NOT RUN until 189 |
+| c1 coverage, affine (1 sigma, 1.96 sigma) | 0.693, 0.953 | 0.64-0.72, 0.935-0.975 | pass |
+| c2 coverage, similarity | 0.693, 0.953 | same | pass |
+| c3 coverage, with catalogue noise | 0.684, 0.952 | same | pass |
+| c4 false alarm of the consistency test | 0.0013 | 0.004 | pass |
+| c5 coverage, registration | 0.685, 0.951 | same | pass |
+| d1 collinear refused | 200 of 200 | all | pass |
+| d2 too few, d3 near-collinear edge | refused / refused at 0.01, solved at 0.05 | as stated | pass |
+| d4 mismatched catalogue detected | 500 of 500 | 0.99 | pass |
+| d5 unsupported projections refused by name | all | all | pass |
+| d6 too wide | refused | refused | pass |
+| d7 malformed input | 5 of 5 refused with the right code | all | pass |
+| d8 registration refusals | 500 of 500 flagged | 0.99 | pass |
+| d9 residuals always present | yes | yes | pass |
+| e1 authentic frame under a fixed contract | | | NOT RUN until 189 |
+
+**A defect in the harness, found on the first run.** The first run of d7 failed:
+the duplicate-pixel case replaced the wrong star, so the case under test was
+not duplicated. The module was right and the harness was wrong. The harness was
+fixed (the duplicate case is appended after the four others); no threshold was
+moved. Every other row passed on its first run.
+
+## Not run until Prompt 189
+
+b5 (a pinned astropy solution on an authentic frame with matched reference
+stars) and e1 (one authentic frame under a fixed analysis contract) need an
+authentic frame with a catalogue match, which Prompt 189 lands. No frame was
+fetched, none was simulated, and the numbers above do not stand in for them.
+The Spanish text of the panel was written without a fluent reader and is
+unread by one.

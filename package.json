@@ -144,6 +144,7 @@
     "image-gate:lunar": "node tools/image-measure-gate/lunar.mjs",
     "image-marks:validate": "node tools/image-marks-validate.mjs",
     "image-marks:bytes": "node tools/image-marks-bytes.mjs",
+    "astrometry:validate": "node tools/astrometry-validate.mjs",
     "i18n:freshness": "node tools/i18n-freshness.mjs",
     "author:check": "node tools/author-check.mjs",
     "author:strict": "node tools/author-check.mjs --warnings",

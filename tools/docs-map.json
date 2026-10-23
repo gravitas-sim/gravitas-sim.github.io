@@ -58,6 +58,13 @@
       "student": false
     },
     {
+      "file": "ASTROMETRY.md",
+      "kind": "feature",
+      "purpose": "Sky coordinates for an image: WCS-lite, registration and their validation (Prompt 181).",
+      "owner": 181,
+      "student": false
+    },
+    {
       "file": "BRANCHING.md",
       "kind": "process",
       "purpose": "Branches, the publish rule and the table of generated artifacts.",
