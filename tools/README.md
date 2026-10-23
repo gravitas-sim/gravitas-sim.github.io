@@ -141,6 +141,8 @@ current, and the orchestrator checks it.
 | `pending-acceptance.mjs` | Acceptance checks for features that are not built yet |  |
 | `perf-probe.mjs` | Frame-time probe | `npm run perf` |
 | `perf-trace.mjs` | Compositor measurement: what a Chromium trace says about where a frame went |  |
+| `photometry-fixtures.mjs` | Photometry fixtures: what is captured, and from what (Prompt 180) |  |
+| `photometry-validate.mjs` | Photometry against its committed thresholds (Prompt 180) | `npm run photometry:validate` |
 | `playwright-cache.mjs` | A Playwright transform cache that no other process is writing |  |
 | `plot-live-bench.mjs` | What a live update of the series chart costs (D-PLOT-02, stage 3a) |  |
 | `populations-reference.mjs` | Stars and their populations: the reference run, and its answer key | `npm run guides:populations-key` |
