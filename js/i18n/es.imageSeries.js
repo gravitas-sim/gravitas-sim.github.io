@@ -12,6 +12,7 @@ export const ES_IMAGESERIES = {
   'obs.ser.help':
     'Ajusta las posiciones de una fuente a lo largo del tiempo. Da su posición en cada época (escríbelas, pega una tabla o añade una fila desde la marca de la imagen abierta, que usa las coordenadas del cielo de arriba) y elige qué ajustar. Dos épocas dan solo un desplazamiento. Un paralaje se ajusta junto con el movimiento propio solo si las épocas muestrean la elipse paraláctica: al menos 8 épocas durante al menos 0,9 años, en al menos 3 de los 4 cuartos de la órbita de la Tierra.',
   'obs.ser.rows': 'Posiciones en cada época',
+  'obs.ser.col.n': 'Fila',
   'obs.ser.col.epoch': 'Época',
   'obs.ser.col.ra': 'Ascensión recta',
   'obs.ser.col.dec': 'Declinación',

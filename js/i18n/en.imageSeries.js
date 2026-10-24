@@ -11,6 +11,7 @@ export const EN_IMAGESERIES = {
   'obs.ser.help':
     "Fit the positions of one source over time. Give its position at each epoch (type them, paste a table, or add a row from the mark of the image that is open, which uses the sky coordinates above), then choose what to fit. Two epochs give only a shift. A parallax is fitted together with the proper motion only when the epochs sample the parallactic ellipse: at least 8 epochs over at least 0.9 year, in at least 3 of the 4 quarters of the Earth's orbit.",
   'obs.ser.rows': 'Positions at each epoch',
+  'obs.ser.col.n': 'Row',
   'obs.ser.col.epoch': 'Epoch',
   'obs.ser.col.ra': 'Right ascension',
   'obs.ser.col.dec': 'Declination',

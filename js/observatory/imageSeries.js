@@ -145,7 +145,10 @@ export async function mountSeries(box, ctx) {
   const head = el(
     'tr',
     {},
-    el('th', { scope: 'col' }),
+    word(
+      el('th', { scope: 'col', className: 'visually-hidden' }),
+      'obs.ser.col.n'
+    ),
     ...COLS.map(c => word(el('th', { scope: 'col' }), `obs.ser.col.${c}`)),
     word(el('th', { scope: 'col' }), 'obs.ser.col.remove')
   );
@@ -423,20 +426,29 @@ export async function mountSeries(box, ctx) {
       !['utc', 'tt', 'tdb'].includes(scale)
     )
       return fail('noTime');
-    if (rowCount() === 0) {
+    const blank = tr =>
+      [...tr.querySelectorAll('input')].every(i => !i.value.trim());
+    if ([...rowsBody.rows].every(blank)) {
       formatSel.value = format;
       scaleSel.value = scale;
     } else if (formatSel.value !== format || scaleSel.value !== scale)
       return fail('mismatch');
     const sigma = Math.hypot(m.sigma * sky.scale, sky.sigma?.[0] ?? 0);
     const sigmaN = Math.hypot(m.sigma * sky.scale, sky.sigma?.[1] ?? 0);
-    addRow({
+    const values = {
       epoch: String(time.value),
       ra: String(roundSig(sky.ra, 12)),
       dec: String(roundSig(sky.dec, 12)),
       sx: String(roundSig(sigma, 4)),
       sy: String(roundSig(sigmaN, 4)),
-    });
+    };
+    // A row left empty is filled before another is added.
+    const spare = [...rowsBody.rows].find(blank);
+    if (spare)
+      spare.querySelectorAll('input').forEach((inp, k) => {
+        inp.value = values[COLS[k]];
+      });
+    else addRow(values);
     refusal.hidden = true;
     invalidate();
     say(t('obs.ser.said.rowAdded', { n: rowCount() }));
