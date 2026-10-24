@@ -427,7 +427,11 @@ export async function mountOrbit(box, ctx) {
 
   // ---- fitting ----------------------------------------------------------------------
   function doExample() {
-    data.value = EXAMPLE[modeSel.value];
+    // The example is written with decimal points; a Spanish reader's table has commas.
+    data.value =
+      lang() === 'es'
+        ? EXAMPLE[modeSel.value].replace(/(\d)\.(\d)/g, '$1,$2')
+        : EXAMPLE[modeSel.value];
     if (modeSel.value === 'orbit') {
       inputSel.value = 'offsets';
       yearSel.value = 'year';
@@ -472,7 +476,9 @@ export async function mountOrbit(box, ctx) {
     const d = r.data ?? {};
     return {
       n: d.epochs ?? '',
-      need: d.need ?? d.coverageNeeded ?? '',
+      need:
+        d.need ??
+        (d.coverageNeeded !== undefined ? fmt(d.coverageNeeded, 2) : ''),
       have: d.coverageLower !== undefined ? fmt(d.coverageLower, 2) : '',
       kappa: d.condition !== undefined ? fmt(d.condition, 2) : '',
       max: d.conditionMax !== undefined ? fmt(d.conditionMax, 2) : '',
