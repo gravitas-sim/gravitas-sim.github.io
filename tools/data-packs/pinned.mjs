@@ -67,7 +67,7 @@ export function pinProblem(bytes, pin) {
  * SDSS spectra, the GWOSC events, GW150914 and the MIST tracks), which each
  * used to carry a fetch-cache-hash copy of their own.
  *
- * @param {{file: string, url: string, bytes?: number, sha256: string, canonical?: string}} pin
+ * @param {{file: string, url: string, bytes?: number, sha256: string, canonical?: string, range?: string}} pin
  * @param {object} opts
  * @param {string} opts.cache - The directory raw products are kept in
  * @param {boolean} [opts.offline] - Refuse the network (the default)
@@ -99,9 +99,17 @@ export async function pinnedBytes(
       `${pin.file} is not in ${cache}${offlineFlag ? ' and --offline was given' : ''}. Run \`${refetch}\` once to fetch it from ${pin.url}.`
     );
   } else {
+    // A pin may name a byte range of a large file (`range: "a-b"`, inclusive,
+    // as an HTTP Range header says it), for a product of which a pack needs a
+    // few kilobytes (a TESS target pixel file is 58 MB; one cadence is 2.9 KB).
+    // The pin's bytes and digest are those of the range as served.
+    const ask = {
+      ...(headers ?? {}),
+      ...(pin.range ? { Range: `bytes=${pin.range}` } : {}),
+    };
     const res = await fetchImpl(pin.url, {
       signal: globalThis.AbortSignal.timeout(timeoutMs),
-      ...(headers ? { headers } : {}),
+      ...(Object.keys(ask).length ? { headers: ask } : {}),
     });
     if (!res.ok) throw new Error(`${pin.url}: HTTP ${res.status}`);
     bytes = Buffer.from(await res.arrayBuffer());

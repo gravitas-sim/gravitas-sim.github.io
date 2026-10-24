@@ -75,12 +75,17 @@ test.describe('the observatory', () => {
       'milky-way-rotation-curve',
       'mist-isochrones',
       'tess-aperture',
+      'tess-frame',
+      'sdo-hmi-sun',
+      'galileo-moon',
+      'hirise-cerberus-fossae',
     ]);
     const expected = {
       'tess-light-curve': { rows: 1882, seeing: /20-minute bins/ },
       'sdss-g': { rows: 1271, seeing: /no uncertainty here/ },
       'gwosc-events': { rows: 5, seeing: /90% interval/ },
       'tess-aperture': { rows: 143, seeing: /as the archive has them/ },
+      'tess-frame': { rows: 143, seeing: /\S/ },
       // The tables say what was left out, and the model says it is one.
       'ngc2420-photometry': { rows: 2301, seeing: /not from the sky/ },
       'ngc2420-segue': { rows: 517, seeing: /55 arcsec/ },

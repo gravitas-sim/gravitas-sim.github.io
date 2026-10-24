@@ -25,6 +25,18 @@
     "js/data/instructorFlow.js": {
       "gravitas.instructor-flow": 1
     },
+    "js/data/observations/galileoMoon19921207.js": {
+      "gravitas.image": 1
+    },
+    "js/data/observations/hiriseCerberusFossae.js": {
+      "gravitas.image": 1
+    },
+    "js/data/observations/sdoHmiContinuum20240510.js": {
+      "gravitas.image": 1
+    },
+    "js/data/observations/tessHd209458S56Frame.js": {
+      "gravitas.image": 1
+    },
     "js/dataKinds/contract.js": {
       "gravitas.grid": 1,
       "gravitas.image": 1,
@@ -69,6 +81,9 @@
     },
     "js/measure/imageRecord.js": {
       "gravitas.image-marks": 1
+    },
+    "js/observatory/imagePacks.js": {
+      "gravitas.image-pack-planes": 1
     },
     "js/observatory/import.js": {
       "gravitas.image-marks": 1,
