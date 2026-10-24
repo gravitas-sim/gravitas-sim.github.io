@@ -1,0 +1,108 @@
+{
+  "format": "gravitas.image-packs-analysis-contract/1",
+  "prompt": 189,
+  "committedBefore": "any authentic-frame leg was run, any oracle was run on an authentic frame, or any measurement of an authentic frame was read; the only number read before this file is the peak pixel of the chosen frame (42,971 electron/s, read to check that the star is below the pack's saturation level) and the total SAP flux of the chosen cadence in the light curve (214,537.7 electron/s)",
+  "rule": "Bounds that exist in a committed thresholds file of Prompts 179 to 184 are referenced by file and check id and are read from that file by the test; none is restated here as a number except where a new bound is stated with its derivation. A leg that fails is reported with its value; no bound in this file or in any referenced file is changed after a result is seen.",
+  "frame": {
+    "pack": "tess-hd209458-s56-frame",
+    "product": "tess2022244194134-s0056-0000000420814525-0243-s_tp.fits (TESS SPOC 2-minute target pixel file, sector 56, TIC 420814525)",
+    "cadenceRow": 8016,
+    "cadenceNo": 1158430,
+    "why": "the first out-of-transit cadence with QUALITY 0 within 0.01 d of BTJD 2836.4, the middle of the sector; chosen from the light curve before the frame was read",
+    "size": "11 by 13 pixels of 21 arcseconds; one dominant star (HD 209458, T 7.13) and fainter neighbours",
+    "limits": "a frame of 143 pixels: the background mesh is one box, so the mesh legs compare one box; no catalogue star beyond the target is available, so the astrometry and overlay legs cannot run on it"
+  },
+  "legs": {
+    "pack.integrity": {
+      "prompt": "189 (not a leg of an earlier prompt: the check that the pack holds the archive's pixels)",
+      "what": "(a) the three planes of the pack decode and match the sha256 the manifest records; (b) the sum of FLUX over the pixels of the SPOC optimal aperture (aperture mask bit 2) equals SAP_FLUX of the same cadence in the pinned light-curve file (214537.7 electron/s, tess2022244194134-s0056-0000000420814525-0243-s_lc.fits, SHA-256 1b76b4a4b73e24954fa6e29a7e28a174685113ecdbad1bf10ef0e7b766ce99e9) within a relative 1e-5; (c) the peak pixel is below the contract's saturation level; (d) permits(photometry) and permits(astrometry) are both ok",
+      "bounds": { "sapRelative": 1e-5, "peakBelowSaturation": true, "permits": true },
+      "why1e-5": "float32 sums of 23 pixels: the rounding is below 1e-6; 1e-5 leaves a factor of ten"
+    },
+    "photometry.e2": {
+      "prompt": 180,
+      "references": "tests/fixtures/photometry/thresholds.json",
+      "what": "one authentic frame under a fixed analysis contract",
+      "contract": {
+        "detection": { "box": 16, "fwhm": 2.0, "sigma": 4, "minArea": 5, "note": "js/measure/detect.js defaults except fwhm, which is stated here: the documented blur of one pixel (TESS telescope information, HEASARC) makes a Gaussian FWHM of about 2 pixels" },
+        "source": "the brightest detection",
+        "aperture": "apertureFor(2.0): r 3.0, annulus 6.0 to 10.0 pixels, exact weights, annulus background, recentre by the flux-weighted centroid with half = apertureFor(2.0).half",
+        "route": "variance plane (FLUX_ERR squared)",
+        "oracle": "photutils (the venv of Prompt 180) given the x, y, r, rIn and rOut Gravitas used and the same pixels; python -I; run offline; inputs, script, results and versions pinned as fixtures"
+      },
+      "bounds": {
+        "apertureSumExact": { "from": "b1.apertureSumExact" },
+        "backgroundMean": { "from": "b2.backgroundMean" },
+        "centroid": { "from": "b4.centroid" },
+        "sourceVariance": { "from": "b5.sourceVariance" },
+        "netOverSap": { "value": 0.1, "what": "|net / SAP_FLUX - 1| of the circular aperture against the SPOC optimal aperture (23 pixels, 95.06 percent of the target's light by FLFRCSAP): a circle of 3 pixels radius holds about the same light; ten percent is the stated applicability limit, not a precision claim" }
+      },
+      "refusalExpected": "if the annulus lies too far outside the 11 by 13 frame for 20 pixels, the kernel refuses with 'annulus'; that is then the result of the leg (a refusal), not a reason to change the radii"
+    },
+    "detection.e2": {
+      "prompt": 183,
+      "references": "tests/fixtures/detection/thresholds.json",
+      "what": "one authentic frame: the source list and the FWHM against photutils on the same pixels",
+      "contract": {
+        "parameters": { "box": 16, "fwhm": 2.0, "sigma": 4, "minArea": 5 },
+        "oracle": "photutils Background2D with one box covering the frame, astropy convolve with the same kernel, detect_sources (connectivity 8) with the same threshold map, SourceCatalog moments; fit_fwhm on the brightest source over the same square of pixels"
+      },
+      "bounds": {
+        "mesh": { "from": "b1.mesh" },
+        "segmentation": { "from": "b2.segmentation" },
+        "fwhmGaussian": { "value": 3e-4, "what": "relative difference of the Gaussian FWHM of the brightest source from fit_fwhm: the bound Prompt 183 restated for two fitters after measuring 1.32e-4 on 60 fits (DETECTION.md, failed-legs.json); stated here as a new, committed bound, because the committed 1e-4 of b3.fwhmGaussian was restated by that prompt" }
+      },
+      "reported": "the number of sources each finds and the FWHM of the brightest, with no bound: the frame has one dominant star and a few faint neighbours, and nothing here says how many stars it holds"
+    },
+    "injection.g1": {
+      "prompt": 184,
+      "references": "tests/fixtures/injection/thresholds.json",
+      "what": "completeness on one authentic frame, injected and recovered, against photutils on the same pixels",
+      "contract": {
+        "spec": { "count": 1, "trials": 200, "binWidth": 0.5, "seed": 189, "margin": 3, "separation": 4, "model": "gaussian", "fwhm": 2.0 },
+        "detection": { "box": 16, "fwhm": 2.0, "sigma": 4, "minArea": 5 },
+        "magnitudes": "suggestRange(conditionsOf(frame)) as the panel offers them",
+        "oracle": "an independent injection run: the oracle takes the frame and the plan Gravitas drew (positions and fluxes), draws its own Poisson noise (numpy), renders with scipy.special.erf, runs the photutils detection of detection.e2 and counts matches within matchRadius 2"
+      },
+      "bounds": {
+        "halfPointDifference": { "value": 0.2, "unit": "magnitude", "what": "difference of the two runs' half points of completeness; derived before the run: with 200 sources the standard error of a half point is about 0.06 magnitude, so the difference of two independent runs has a standard deviation near 0.09 and 0.2 is more than two of them" },
+        "binZ": { "from": "b1.curve", "what": "the largest bin z of the two runs' counts, over bins with at least 5 trials in each" }
+      },
+      "refusalExpected": "if the kernel refuses (no room for a source, an annulus, a bad parameter), the refusal and its code are the result"
+    },
+    "import.hostilePng": {
+      "prompt": 188,
+      "references": "tests/fixtures/imageImport (the committed refusal corpus and the 250 ms Node bound)",
+      "what": "a hostile PNG decode against an authentic frame: the authentic Galileo Moon frame of the pack, re-encoded as an 8-bit gray PNG by the committed deterministic encoder (tools/image-packs-hostile.mjs), with hostile variants made from that file",
+      "variants": [
+        "truncated after the signature", "truncated inside IHDR", "truncated inside the first IDAT", "truncated before IEND",
+        "IHDR CRC flipped", "IDAT CRC flipped", "IHDR width and height 65535", "IHDR width 0",
+        "bit depth 16 with colour type 3", "interlace method 1 with a short IDAT", "chunk length 4294967295",
+        "IDAT that inflates past the declared size", "IDAT of zeros that would inflate to 4 GiB", "a second IHDR",
+        "a PLTE before IHDR", "extra bytes after IEND (accepted: the picture is intact)"
+      ],
+      "bounds": {
+        "refusedOrAccepted": "each variant refused with a stable code, except the intact file and the file with bytes after IEND, which are read",
+        "nodeMs": { "from": "tests/fixtures/imageImport: the 250 ms Node bound per file" },
+        "noThrowOutsideTheReaderError": true
+      },
+      "scope": "the header and structure checks (js/dataKinds/raster.js sniff and the structural reader) run in Node; the pixel decode needs a browser decoder and is run in the page by e2e/imagePacks.spec.js with the committed 2,000 ms bound of Prompt 188"
+    },
+    "astrometry.b5.e1": {
+      "prompt": 181,
+      "status": "NOT RUN: no authentic frame with three or more catalogued stars and a redistributable catalogue was obtained; the only authentic frame with a world coordinate system holds one catalogued star"
+    },
+    "overlay.b5.e1": {
+      "prompt": 182,
+      "status": "NOT RUN: as above, and no authentic pair with a moving object"
+    },
+    "framepipeline.g1": {
+      "prompt": 185,
+      "status": "NOT RUN here: Prompt 185's modules are in PR #433, not in v3; the pack holds one cadence, not a sequence"
+    },
+    "series.b6": {
+      "prompt": 186,
+      "status": "NOT RUN here: Prompt 186's modules are in PR #434, not in v3; no authentic astrometric series exists in the packs"
+    }
+  }
+}
