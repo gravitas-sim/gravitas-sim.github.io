@@ -307,12 +307,14 @@ function oracles() {
         : Math.round(k * step + step * 0.3 * (2 * u() - 1))
     );
     const epochs = picks.map(i => epochOf(res.samples[i]));
+    const exact = runToEnd(system, {
+      ...options,
+      span: 1.2 * context.P,
+      samples: 15,
+      limits: { maxSamples: 30000, maxEvals: 1e9 },
+    });
     const regular = fitOrbit(
-      {
-        epochs: Array.from({ length: 16 }, (_, k) =>
-          epochOf(res.samples[Math.round(k * step)])
-        ),
-      },
+      { epochs: exact.samples.map(epochOf) },
       { depth: 'elliptical' }
     );
     evidence(
