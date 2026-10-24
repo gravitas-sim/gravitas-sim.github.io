@@ -226,49 +226,34 @@ $('obsSkyPanel').addEventListener('toggle', async () => {
   sky.panel.update(state.view);
 });
 const marks = {};
-// Sky coordinates for an image (ASTROMETRY.md): loaded when first opened.
-let cal = null;
-$('obsCalPanel').addEventListener('toggle', () => {
-  if ($('obsCalPanel').open && state.view)
-    cal ??= import('./observatory/imageCalibration.js').then(
-      m => m.mountCalibration($('obsCalBody'), { ...lent, marks, state }),
-      () => (cal = null)
-    );
-});
-// Photometry on an image (PHOTOMETRY.md): loaded when first opened.
-let photo = null;
-$('obsPhotoPanel').addEventListener('toggle', () => {
-  if ($('obsPhotoPanel').open && state.view)
-    photo ??= import('./observatory/imagePhotometry.js').then(
-      m => m.mountPhotometry($('obsPhotoBody'), { ...lent, marks, state }),
-      () => (photo = null)
-    );
-});
-// Sources and the width of the stars (DETECTION.md): loaded when first opened.
-let detect = null;
-$('obsDetectPanel').addEventListener('toggle', () => {
-  if ($('obsDetectPanel').open && state.view)
-    detect ??= import('./observatory/imageDetect.js').then(
-      m => m.mountDetect($('obsDetectBody'), { ...lent, marks, state }),
-      () => (detect = null)
-    );
-});
-let inject = null; // completeness (INJECTION.md): loaded when first opened
-let overlay = null; // catalog overlays (OVERLAYS.md): loaded when first opened
-$('obsInjectPanel').addEventListener('toggle', () => {
-  if ($('obsInjectPanel').open && state.view)
-    inject ??= import('./observatory/imageInject.js').then(
-      m => m.mountInject($('obsInjectBody'), { ...lent, state }),
-      () => (inject = null)
-    );
-});
-$('obsOverlayPanel').addEventListener('toggle', () => {
-  if ($('obsOverlayPanel').open && state.view)
-    overlay ??= import('./observatory/imageOverlay.js').then(
-      m => m.mountOverlay($('obsOverlayBody'), { ...lent, marks, state }),
-      () => (overlay = null)
-    );
-});
+// The image panels (ASTROMETRY.md, PHOTOMETRY.md, DETECTION.md, INJECTION.md,
+// OVERLAYS.md, FRAME_PIPELINE.md): each loads its module, whose one mount*
+// export it calls, when first opened; the ones given the page's state wait for
+// an image.
+const lazyPanel = (id, load, args) => {
+  let loaded = null;
+  $(`obs${id}Panel`).addEventListener('toggle', () => {
+    if ($(`obs${id}Panel`).open && (state.view || !args.state))
+      loaded ??= load().then(
+        m =>
+          m[Object.keys(m).find(k => k.startsWith('mount'))](
+            $(`obs${id}Body`),
+            { ...lent, ...args }
+          ),
+        () => (loaded = null)
+      );
+  });
+  return () => loaded;
+};
+const IMG = { marks, state };
+lazyPanel('Cal', () => import('./observatory/imageCalibration.js'), IMG);
+const panels = [
+  lazyPanel('Photo', () => import('./observatory/imagePhotometry.js'), IMG),
+  lazyPanel('Detect', () => import('./observatory/imageDetect.js'), IMG),
+  lazyPanel('Inject', () => import('./observatory/imageInject.js'), { state }),
+  lazyPanel('Overlay', () => import('./observatory/imageOverlay.js'), IMG),
+];
+lazyPanel('Seq', () => import('./observatory/imageSequence.js'), { open });
 // The archive import (ARCHIVE_IMPORT.md): loaded when first opened.
 let archive = null;
 $('obsArchivePanel').addEventListener('toggle', () => {
@@ -446,10 +431,7 @@ function renderAll() {
   $('obsCalPanel').hidden = !isImage;
   marks.cal?.update();
   measure?.then(p => p.update());
-  photo?.then(p => p.update());
-  detect?.then(p => p.update());
-  inject?.then(p => p.update());
-  overlay?.then(p => p.update());
+  for (const get of panels) get()?.then(p => p.update());
   guide?.then(p => p.update());
   renderSelectionBar();
   $('obsUndo').disabled = !state.history.canUndo();

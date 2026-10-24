@@ -302,6 +302,9 @@ export const EN_OBSERVATORY = {
   'obs.inj.title': 'Completeness: what the detector misses',
   'obs.inj.offline':
     'The completeness tool is loading. It is fetched when first opened, so it needs the network the first time.',
+  'obs.sq.title': 'Frames to a light curve',
+  'obs.sq.offline':
+    'The frame pipeline is loading. It is fetched when first opened, so it needs the network the first time.',
   'obs.ph.offline':
     'The photometry tool is loading. It is fetched when first opened, so it needs the network the first time.',
   'obs.gd.title': 'Guided investigations',

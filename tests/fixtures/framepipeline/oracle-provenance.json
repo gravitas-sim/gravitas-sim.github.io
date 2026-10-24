@@ -1,0 +1,45 @@
+{
+  "format": "gravitas.frame-pipeline-oracle-provenance/1",
+  "prompt": 185,
+  "oracle": "photutils 2.0.2 with astropy 6.1.7, numpy 2.2.6 and scipy 1.15.3",
+  "identity": "Independent, cited implementations; no Gravitas code ran: numpy (median and mean masters, the calibration algebra), scipy.signal.fftconvolve and scipy.ndimage.gaussian_filter (the FFT cross-correlation that finds each frame's shift), photutils.aperture (CircularAperture with method exact, CircularAnnulus, ApertureStats with astropy SigmaClip), astropy.timeseries.LombScargle (the sinusoid).",
+  "retrieved": "2026-10-23",
+  "index": "https://pypi.org/simple (pip default index; no mirror, no pip.conf, no PIP_* variable); the virtual environment is Prompt 180's, in which nothing was added for this prompt",
+  "python": "3.10.12 (macOS-26.6.2-x86_64-i386-64bit, x86_64)",
+  "packages": {
+    "photutils": "2.0.2",
+    "astropy": "6.1.7",
+    "numpy": "2.2.6",
+    "scipy": "1.15.3",
+    "pyerfa": "2.0.1.5",
+    "astropy-iers-data": "0.2026.10.19.0.52.1",
+    "PyYAML": "6.0.3",
+    "packaging": "26.3"
+  },
+  "install": "python3.10 -m venv <scratchpad>/oracle180; <venv>/bin/python -m pip install --only-binary :all: numpy scipy astropy photutils (the resolved versions above); the venv is not committed and no package is",
+  "run": "cd <empty scratchpad directory>; <venv>/bin/python -I tools/frame-pipeline-oracle/oracle.py tests/fixtures/framepipeline/oracle-inputs.json tests/fixtures/framepipeline/oracle-results.json; then Prettier",
+  "inputsFrom": "node tools/frame-pipeline-oracle/make-inputs.mjs (the committed scene, seed fp-b-1, 48 frames and the lab's calibration set, whole counts, each frame deflated and packed as base64), then Prettier",
+  "committedBefore": "the oracle's script was committed before its results existed and before the validation tool read them; thresholds.json and FRAME_PIPELINE.md were committed before the oracle ran",
+  "parameters": {
+    "masters": "bias = numpy.median over the bias frames; dark = numpy.median over (dark - bias); flat = mean over (flat - bias - 5/120 dark) divided by its own mean",
+    "calibration": "(raw - bias - (60 / 120) dark) / flat, in counts, times the gain 1.5",
+    "shift": "scipy.signal.fftconvolve of the star field smoothed by gaussian_filter(sigma 1.5, the median removed) with the reference, the integer peak and a parabolic refinement on each axis; a translation only",
+    "aperture": "CircularAperture r and CircularAnnulus r_in, r_out as Gravitas's marks stage chose them (recorded in the inputs), aperture_photometry method exact; sky = ApertureStats(annulus, sum_method center, SigmaClip(sigma 3, maxiters 5)).mean; net = sum - sky x exact area",
+    "sinusoid": "LombScargle(t, dm) (floating mean, unweighted) over frequencies from 1/(baseline/2) to 1/(4 median cadences), 400001 samples; model_parameters at the highest power"
+  },
+  "conventions": "pixel (0, 0) is the centre of the first pixel; electrons are counts times the gain 1.5 after calibration",
+  "files": {
+    "tests/fixtures/framepipeline/oracle-inputs.json": "98a4c672adc91c25fbcc93fd3d3b2fe6d8d675f21b8679b9f0b1efd722afad58",
+    "tests/fixtures/framepipeline/oracle-results.json": "cf0d5baaa2fe277a9ecb4fd1dd2f7857771a14e9465c307073fd16d7e66877d9",
+    "tools/frame-pipeline-oracle/oracle.py": "2e003ce0f24208206938f39ed084469eb8b1e3e4a3de88ba8f97eaeb01ced327",
+    "tools/frame-pipeline-oracle/make-inputs.mjs": "c4cce97e6aefc6200161e57b79486f08bd945ad568acf5a484feeac83d821117",
+    "tools/frame-pipeline-synth.mjs": "41d5405d92494aed589fa1ff7d52211545e40cd27aa6462c11f90a06f55e39b0"
+  },
+  "references": [
+    "Howell, S. B. 2006, Handbook of CCD Astronomy, 2nd ed. (Cambridge University Press): the calibration recipe and the CCD equation",
+    "Bradley, L. et al., photutils (Zenodo release 2.0.2)",
+    "Astropy Collaboration 2022, ApJ 935, 167 (astropy, LombScargle)",
+    "Harris, C. R. et al. 2020, Nature 585, 357 (numpy)",
+    "Virtanen, P. et al. 2020, Nature Methods 17, 261 (scipy)"
+  ]
+}

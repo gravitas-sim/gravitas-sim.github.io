@@ -136,10 +136,26 @@ env:
 # move is made on purpose in a pull request of its own and not under whichever
 # branch happens to run first that day (Carl, 2026-10-09).
 jobs:
+  # 2026-10-24: this job's limit goes from 15 to 20 minutes. Prompt 185's frame
+  # pipeline adds a Jest suite, tests/framePipeline.test.js, that asserts every
+  # committed validation leg at its committed ensemble size (about 300 seeded
+  # sequences, about 12 CPU-minutes on a runner); with it, Jest took 12.9 minutes
+  # on PR #433's runs (9.6 on v3) and about 2 minutes of other steps follow, so
+  # the job was cancelled at 15 even after the Jest order and the suite's own
+  # processes were rebalanced (#435 and #433). Twenty leaves about five minutes
+  # of margin and keeps every ensemble asserted in CI. Carl, chat 2026-10-24,
+  # asked "PR #433 (Prompt 185) adds a Jest suite that costs about 12 CPU-minutes
+  # on CI (its committed ensembles of ~300 sequences), pushing the lint job past
+  # its 15-minute timeout even after #435. ... How should CI absorb it?", chose
+  # "Raise the lint job timeout (Recommended)": "Edit .github/workflows/ci.yml
+  # timeout-minutes for 'Lint, tests and physics validation' from 15 to the
+  # smallest value that clears (about 20), as #420 did for the apt mirror; keeps
+  # every committed ensemble asserted in CI. A workflow change, with your words
+  # quoted in the commit." (D-R10-63).
   checks:
     name: Lint, tests and physics validation
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       # The whole history, without old file contents: tests/decisionRegister.test.js
       # checks that every decision's source commit is in history, and a

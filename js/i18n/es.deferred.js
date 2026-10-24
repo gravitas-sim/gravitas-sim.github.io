@@ -377,7 +377,6 @@ export const ES_DEFERRED = {
     'Las dos pasadas no miden lo mismo, asi que la diferencia no permite concluir nada.',
   'reliability.verdict.diverged':
     'Las dos trayectorias se separaron, pero las medidas agregadas se mantuvieron.',
-
   'reliability.reason.missingRun': 'Falta una de las dos pasadas.',
   'reliability.reason.noDuration':
     'Una pasada no cubrio tiempo simulado alguno.',
@@ -3629,6 +3628,7 @@ export const ES_DEFERRED = {
   'nb.source.image-photometry': 'Fotometría de una imagen',
   'nb.source.image-detection': 'Función de dispersión de punto de una imagen',
   'nb.source.image-injection': 'Completitud de una imagen',
+  'nb.source.image-sequence': 'Curva de luz a partir de imágenes',
   'nb.flag.missionModel':
     'impulsos instantáneos, cónicas empalmadas y masas puntuales: un modelo didáctico de una misión',
   'nb.flag.notOperational':

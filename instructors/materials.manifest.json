@@ -1,6 +1,6 @@
 {
   "version": "October 2026",
-  "generated": "2026-10-23",
+  "generated": "2026-10-24",
   "documents": 540,
   "inventory": {
     "documents": 540,
@@ -24,7 +24,7 @@
     }
   },
   "sourceFiles": 269,
-  "sourceDigest": "a3837efa7bc350d48f3f683fa3f81d6aa1eaba3d3a0e4f341c9f0e30ddd0b4fb",
+  "sourceDigest": "7ee261ff56c51063ed2c96c67d7ea8062ee1dd13b21db15649d62e65f9719d8d",
   "sources": {
     "js/activities/activities.js": "39ac98cd99b8b0387c55e41d5d4530bad55a8da8758819ad056be73e7a716b01",
     "js/activities/activityBridge.js": "67a82aff98e0ed935d6b8b0f0f654c6ad4332ee929cb3604e896a7f790a6fdc1",
@@ -61,13 +61,13 @@
     "js/data/investigations/cluster-membership.js": "fe91cda6b5037b403ae16c9cb677d0c0038a872bac1ee4d023745555a2aaf691",
     "js/data/investigations/color-and-temperature.js": "76b99b8ae55fdc4029b92b852e61d656ffec185503088d2b97b0629bf16b18aa",
     "js/data/investigations/depth/a-lens-passing-by.js": "812e2dca2dfdc7a416554c59b64b6cd6e699b82a43aa23c30a4e288e91851439",
-    "js/data/investigations/depth/a-variable-star-from-frames.js": "08369a01ddabc7bf06993ee65224cdbac9c6900759ec89bf3a30f93fc357fc88",
+    "js/data/investigations/depth/a-variable-star-from-frames.js": "c4f2e754c77bbc614562c9581bfc42a80c92b0ad38099f9896e29cd68da8b3c9",
     "js/data/investigations/depth/bending-light.js": "935305df378f9ef2933b5a05124fc7ca032582db220218aeeecfde7b5855c966",
     "js/data/investigations/depth/cluster-membership.js": "ffcc0c200eebff3a73113b80cda5c6e8af5b56eb911ed5314e760312443849c8",
     "js/data/investigations/depth/color-and-temperature.js": "f7167525956a3de941f787a5b7f74e76edc0c30c3b56a4dcd75b4610d7ad1d17",
     "js/data/investigations/depth/einstein-rings-and-arcs.js": "1fc7cfdd3a1d8c518f81a1bed61acffdd69dbef9b3ad894e8fded04c0c549a39",
     "js/data/investigations/depth/es/a-lens-passing-by.js": "db610c76a63b2e398506f60865008baae4a5fa93d98ac783d19b7559fca3172d",
-    "js/data/investigations/depth/es/a-variable-star-from-frames.js": "1685a4627561904bf92641643d022b2e9bb43f9b5ddf69673dc0ce0c65c0a885",
+    "js/data/investigations/depth/es/a-variable-star-from-frames.js": "901f6641d046de4cade2a9d14fe34489bdbf54b3f89f1b50c9733dc31f7b04b5",
     "js/data/investigations/depth/es/bending-light.js": "ec36b74d506d72838dfe0bc9526ff221b351c8abba026f032b5b75290cf7d76b",
     "js/data/investigations/depth/es/cluster-membership.js": "76ed2e20189d6a7c232abe3883f44bd503d2b6e99cf84dfefcf44ff04ee09050",
     "js/data/investigations/depth/es/color-and-temperature.js": "28ae3e6aa32be6ece9baf98378f001535f5a2921447fa68bfa223b845204a123",
@@ -296,5 +296,5 @@
     "tools/instructor-freshness.mjs": "96052b2f27080f0243fdd4d5f7608927bd67f0c50808b6eac3345a65c14d1e28",
     "tools/source-closure.mjs": "961828e4d0d40d8a6f8c029fe9b9435ecaf39a74b62640efc0b4145c35c7650a"
   },
-  "contentDigest": "1ca7df4e89e9c9f77498f681da4e00a4e22a3d5b6ce9a98666ca121917294749"
+  "contentDigest": "c91859739a750b1fd3cb357d87244380200408b218a867386d4ffcd96fdf652a"
 }

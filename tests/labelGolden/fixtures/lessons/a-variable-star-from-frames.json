@@ -11,7 +11,8 @@
     ["steps.the-sine.fields.1.unit","mag"],
     ["steps.the-period-in-hours.unit","h"],
     ["steps.how-many-errors.unit",""],
-    ["steps.the-uncalibrated-night.unit","mag"]
+    ["steps.the-uncalibrated-night.unit","mag"],
+    ["steps.the-whole-pipeline.unit","h"]
    ],
    "numbered": [
     ["steps.the-star-alone.fields.0.hint","0.070"],
@@ -51,6 +52,12 @@
     "answer": "0.032",
     "tolerance": "0.004",
     "unit": "mag"
+   },
+   {
+    "sid": "the-whole-pipeline",
+    "answer": "2.88",
+    "tolerance": "0.1",
+    "unit": "h"
    }
   ],
   "decimals": []

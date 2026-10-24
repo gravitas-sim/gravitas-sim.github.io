@@ -30,6 +30,8 @@ import path from 'node:path';
  */
 export const SLOWEST_FIRST = [
   'detection.test.js', // 383
+  // Four child processes of about 130 s each locally (tools/frame-pipeline-validate.mjs).
+  'framePipeline.test.js', // 355
   'physicsValidation.test.js', // 155
   // The instrument-widget label golden, in parts of about 30 s each locally.
   'labelGoldenWidgetsPowerLaw.test.js', // 70
