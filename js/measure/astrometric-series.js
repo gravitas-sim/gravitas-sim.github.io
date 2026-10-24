@@ -67,7 +67,7 @@ const OBLIQUITY = 23.439291111 * RAD;
 const AU_KM = 149597870.7;
 /** The first JD (UTC) at which TAI - UTC = 37 s holds: 2017-01-01. */
 const JD_UTC_37 = 2457754.5;
-const TT_MINUS_UTC = 69.184;
+export const TT_MINUS_UTC = 69.184;
 
 /** A refusal: the code and the English message are the kernel's; `data` is what a page needs to say it in another language. */
 const refuse = (code, message, data = {}) => ({
@@ -569,10 +569,13 @@ export function fitMotion(series, opts = {}) {
  * (the difference of the parallax factors of the two epochs).
  * @param {object} a - an epoch of `prepare`'s form
  * @param {object} b
- * @param {{earth?: object}} [opts]
+ * @param {{earth?: object, tangent?: number[]}} [opts]
  */
 export function twoEpochShift(a, b, opts = {}) {
-  const prep = prepare({ epochs: [a, b] }, { utcBefore2017: 'keep' });
+  const prep = prepare(
+    { epochs: [a, b] },
+    { utcBefore2017: 'keep', tangent: opts.tangent }
+  );
   if (!prep.ok) return prep;
   const [r1, r2] = prep.rows;
   const dt = (r2.jd - r1.jd) / YEAR;
@@ -803,9 +806,22 @@ export function fitJoint(series, earth, opts = {}) {
   out.sectors = sectors.size;
   out.zeroPoint = zeroPointOf(series.reference);
   out.distance = distanceOf(out, series.reference, opts.levels ?? RULES.levels);
-  if (out.verdict === 'inconsistent')
+  // A parallax below zero by more than 3 sigma is not a measurement any source can give.
+  // Added after the first measurement of check d3: shifting every epoch by half a year turns
+  // the parallax into its negative, and the residuals cannot tell (the verdict stays
+  // consistent); the result says so instead.
+  out.warnings = [];
+  if (out.params.parallax.value + 3 * out.params.parallax.sigma < 0) {
+    out.warnings.push('negative-parallax');
+    out.hints = ['epoch-time-scale', 'reference-frame', 'model'];
+    out.message =
+      'The parallax is negative by more than 3 times its uncertainty, which no source can have. Check the epoch time scale and origin (a shift of half a year turns a parallax into its negative), the reference stars and the stated uncertainties.';
+  }
+  if (out.verdict === 'inconsistent' || out.warnings.length)
     out.distance.withheld =
-      'the residuals are larger than the stated uncertainties allow, so no distance is presented';
+      out.verdict === 'inconsistent'
+        ? 'the residuals are larger than the stated uncertainties allow, so no distance is presented'
+        : 'the parallax is negative by more than 3 sigma, so no distance is presented';
   return out;
 }
 
