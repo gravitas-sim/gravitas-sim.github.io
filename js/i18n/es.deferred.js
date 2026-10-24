@@ -1936,9 +1936,15 @@ export const ES_DEFERRED = {
 
   'inv.seq.observing.title': 'Observar y medir',
   'inv.seq.observing.blurb':
-    'Cómo aprender algo cierto con un telescopio: elegir objetivos, programar una sesión, medir espectros y curvas de luz y preguntar qué deja fuera un sondeo. Usa la profundidad cuantitativa donde la hay. Mejor después de El cielo.',
+    'Cómo aprender algo cierto con un telescopio: qué afirman una medición y su incertidumbre, elegir objetivos, programar una sesión, medir espectros y curvas de luz y preguntar qué deja fuera un sondeo. Usa la profundidad cuantitativa donde la hay. Mejor después de El cielo.',
+  'inv.seq.observing.what-is-a-measurement':
+    'Empieza aquí: marca una estrella sintética una y otra vez, y lee la media, su error estándar y lo que compran más marcas.',
+  'inv.seq.observing.what-does-plus-minus-claim':
+    'Cuenta con qué frecuencia un más-menos declarado contiene la verdad, y por qué un instrumento preciso y sesgado se equivoca con seguridad.',
+  'inv.seq.observing.when-the-method-must-refuse':
+    'Datos que solo fijan un producto de dos parámetros, y un modelo que no describe los datos: qué informa un análisis honesto en lugar de un número.',
   'inv.seq.observing.plan-a-night':
-    'Empieza aquí: elige objetivos para una noche en un telescopio, con la hora y el lugar del Laboratorio del cielo.',
+    'Elige objetivos para una noche en un telescopio, con la hora y el lugar del Laboratorio del cielo.',
   'inv.seq.observing.twelve-nights':
     'Una campaña real de doce noches: el clima, la Luna y lo que te cuesta el calendario.',
   'inv.seq.observing.what-a-spectrum-is-made-of':

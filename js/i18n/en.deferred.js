@@ -1915,9 +1915,15 @@ export const EN_DEFERRED = {
 
   'inv.seq.observing.title': 'Observing and measuring',
   'inv.seq.observing.blurb':
-    'How to learn something true from a telescope: choose targets, schedule a run, measure spectra and light curves, and ask what a survey leaves out. Uses the quantitative depth where there is one. Better after The sky.',
+    'How to learn something true from a telescope: what a measurement and its uncertainty claim, choose targets, schedule a run, measure spectra and light curves, and ask what a survey leaves out. Uses the quantitative depth where there is one. Better after The sky.',
+  'inv.seq.observing.what-is-a-measurement':
+    'Start here: mark one synthetic star again and again, and read the mean, its standard error and what more marks buy.',
+  'inv.seq.observing.what-does-plus-minus-claim':
+    'Count how often a stated plus-or-minus holds the truth, and why a precise, biased instrument is confidently wrong.',
+  'inv.seq.observing.when-the-method-must-refuse':
+    'Data that fix only a product of two parameters, and a model that does not describe the data: what an honest analysis reports instead of a number.',
   'inv.seq.observing.plan-a-night':
-    'Start here: choose targets for a night at a telescope, with the Sky Lab’s time and place.',
+    'Choose targets for a night at a telescope, with the Sky Lab’s time and place.',
   'inv.seq.observing.twelve-nights':
     'A real run of twelve nights: weather, the Moon and what the schedule costs you.',
   'inv.seq.observing.what-a-spectrum-is-made-of':

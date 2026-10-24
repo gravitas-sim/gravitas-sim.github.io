@@ -2409,6 +2409,37 @@ test.describe('the central experiment of each investigation', () => {
         [20, 56.7, 3],
       ],
     },
+    // ---- The measurement and claim sequence (Roadmap III, Prompt 190) --------
+    {
+      id: 'what-is-a-measurement',
+      title:
+        'what-is-a-measurement: four times the marks halve the standard error of the mean @accepts:ce.what-is-a-measurement',
+      row: /^Standard error of x$/i,
+      values: [
+        [5, 0.357, 0.02],
+        [20, 0.174, 0.02],
+      ],
+    },
+    {
+      id: 'what-does-plus-minus-claim',
+      title:
+        'what-does-plus-minus-claim: a one-sigma interval holds the truth about two times in three and a two-sigma about nineteen in twenty @accepts:ce.what-does-plus-minus-claim',
+      row: /^Coverage$/i,
+      values: [
+        [1, 68.05, 1.6],
+        [2, 95.05, 1.6],
+      ],
+    },
+    {
+      id: 'when-the-method-must-refuse',
+      title:
+        'when-the-method-must-refuse: a mass above the product fits perfectly and one below it costs a large chi-square @accepts:ce.when-the-method-must-refuse',
+      row: /^Chi-square of that fit$/i,
+      values: [
+        [2, 0, 0.1],
+        [0.5, 34.03, 0.5],
+      ],
+    },
   ];
   for (const c of SURVEY) {
     test(c.title, async ({ page, app }) => {
