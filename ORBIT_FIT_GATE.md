@@ -93,13 +93,31 @@ the repository's seeded `stream` and `gaussian`):
   **eccentric misspecification truths** (for the circular model's refusal): `e`
   uniform in `[0.4, 0.8]`;
 - **arcs** of **10 percent, 30 percent, 60 percent and 110 percent** of the
-  period, each with **12 epochs evenly spaced** from 0 to `f P` inclusive;
+  period, each with **12 epochs**: the first at 0, the last at `f P`, and the ten
+  between at the even positions plus a seeded uniform jitter of plus or minus 0.3
+  of the spacing (amendment A1 below: the committed text said "evenly spaced");
 - the stated and actual noise is **2 percent of `a`** per axis, white;
 - **400 trials** per cell. Every cell is its own stream label.
 
 The result holds for this design (12 regular epochs, 2 percent noise, the stated
 orbit distribution) and is not extended to other sampling or noise by this gate;
 the validation of Part B tests other cells under its own thresholds.
+
+## Amendment A1 (before any gate run)
+
+The first commit of this file said the 12 epochs were evenly spaced. On a
+development stream (`dev187`, not the gate's stream, no gate leg run, no bound
+read) a fit of a 110 percent arc returned the period 10 / 11 years for a ten-year
+orbit in two trials of six: with a spacing of exactly one year and a period of
+ten, the frequency `1/P + 1/spacing` aliases every harmonic of the orbit exactly,
+so the two periods fit equally well and no least-squares fit can choose. That is
+a property of the sampling, not of the fitter, and a regular cadence is not what
+visual-binary data look like. The test set was amended to the jittered epochs
+above, **before the gate stream was run once**; no criterion constant and no leg
+bound moved. The exactly regular cadence is kept as one evidence row of the
+validation (its refusal is a rule of Part B, `period-ambiguous`, which is
+stricter than the criterion committed here: the gate below is measured on the
+criterion as committed, without that rule).
 
 ## The legs (committed)
 

@@ -3,11 +3,20 @@
   "prompt": 187,
   "committed": "Before any fit was run: this file and ORBIT_FIT_GATE.md were committed ahead of every line of the prototype, the oracle, the production module and every measurement. A leg that a measurement crosses is a failed leg, not a reason to move its bound; only Carl resets a threshold, with a register row.",
   "criterion": {
-    "minEpochs": { "circular": 6, "elliptical": 8 },
-    "coverageFraction": { "circular": 0.4, "elliptical": 0.5 },
+    "minEpochs": {
+      "circular": 6,
+      "elliptical": 8
+    },
+    "coverageFraction": {
+      "circular": 0.4,
+      "elliptical": 0.5
+    },
     "coverageSigmas": 2,
     "maxConditionNumber": 1000000,
-    "periodSearch": { "spanFractionLow": 0.05, "spanMultipleHigh": 100 },
+    "periodSearch": {
+      "spanFractionLow": 0.05,
+      "spanMultipleHigh": 100
+    },
     "profileDeltaChi2": 1,
     "consistentPValue": 0.001,
     "eccentricityDeltaChi2": 11.83
@@ -16,31 +25,86 @@
     "stream": "orbit-fit-gate-187",
     "semiMajorAxisArcsec": 1,
     "periodYears": 10,
-    "cosI": [-0.85, 0.85],
-    "eccentric": [0.1, 0.8],
-    "misspecified": [0.4, 0.8],
-    "arcs": [0.1, 0.3, 0.6, 1.1],
+    "cosI": [
+      -0.85,
+      0.85
+    ],
+    "eccentric": [
+      0.1,
+      0.8
+    ],
+    "misspecified": [
+      0.4,
+      0.8
+    ],
+    "arcs": [
+      0.1,
+      0.3,
+      0.6,
+      1.1
+    ],
     "epochs": 12,
     "noiseFractionOfA": 0.02,
-    "trialsPerCell": 400
+    "trialsPerCell": 400,
+    "jitterFractionOfSpacing": 0.3
   },
   "legs": {
-    "G1": { "refuseAt": { "0.1": 0.99, "0.3": 0.95 } },
-    "G2": { "acceptAt": { "1.1": 0.8 } },
-    "G3": {
-      "arcs": [0.6, 1.1],
-      "minAccepted": 100,
-      "coverage1sigma": [0.6, 0.76],
-      "coverage95": [0.9, 0.99],
-      "quantities": ["P", "a", "a3overP2"]
+    "G1": {
+      "refuseAt": {
+        "0.1": 0.99,
+        "0.3": 0.95
+      }
     },
-    "G4": { "arc": 1.1, "medianRelP": 0.05, "medianRelA": 0.1 },
-    "G5": { "arc": 1.1, "refuseAtLeast": 0.95 },
-    "G6": { "arc": 1.1, "detectedAtMost": 0.01 }
+    "G2": {
+      "acceptAt": {
+        "1.1": 0.8
+      }
+    },
+    "G3": {
+      "arcs": [
+        0.6,
+        1.1
+      ],
+      "minAccepted": 100,
+      "coverage1sigma": [
+        0.6,
+        0.76
+      ],
+      "coverage95": [
+        0.9,
+        0.99
+      ],
+      "quantities": [
+        "P",
+        "a",
+        "a3overP2"
+      ]
+    },
+    "G4": {
+      "arc": 1.1,
+      "medianRelP": 0.05,
+      "medianRelA": 0.1
+    },
+    "G5": {
+      "arc": 1.1,
+      "refuseAtLeast": 0.95
+    },
+    "G6": {
+      "arc": 1.1,
+      "detectedAtMost": 0.01
+    }
   },
   "verdict": {
     "A": "elliptical passes G1 to G4 and G6; circular ships iff it passes G1 to G5",
     "B": "elliptical fails a leg and circular passes G1 to G5; elliptical only at 110 percent if it passes G2 to G4 there",
     "C": "neither passes: no orbit fitting"
-  }
+  },
+  "amendments": [
+    {
+      "id": "A1",
+      "what": "epochs jittered by +-0.3 of the spacing instead of evenly spaced",
+      "why": "a one-year cadence aliases a ten-year period exactly (found on the development stream dev187 before any gate run)",
+      "moved": "no criterion constant and no leg bound"
+    }
+  ]
 }
