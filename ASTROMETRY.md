@@ -207,3 +207,102 @@ authentic frame with a catalogue match, which Prompt 189 lands. No frame was
 fetched, none was simulated, and the numbers above do not stand in for them.
 The Spanish text of the panel was written without a fluent reader and is
 unread by one.
+
+# Astrometric time series: motion and well-sampled parallax
+
+Roadmap III, Prompt 186. Positions of one source at several epochs, fitted over
+time. This part of the file is written in the order the work was done: the
+validation contract first (below), and the rest after the measurements.
+
+## The validation contract for the time series (committed first)
+
+The thresholds are in `tests/fixtures/astrometric-series/thresholds.json` and
+were committed, with this section, before `js/measure/astrometric-series.js`,
+the oracle's inputs, script and results, the validation tool or any measurement
+existed (the branch history shows the order). A check that a measurement
+crosses is a failed check, not a reason to move its bound; only Carl resets
+one. The checks follow the roadmap's section 7.5.8.
+
+**The model.** Standard coordinates `(xi, eta)` (east and north on the plane
+tangent to the sky at a reference direction, the normalised mean of the
+positions' unit vectors unless the caller names one), in arcseconds. Every fit
+is weighted linear least squares on the two coordinates of each epoch with the
+stated, independent per-axis uncertainties. The proper-motion model is
+`xi = x0 + mux (t - tRef)`, `eta = y0 + muy (t - tRef)`, `tRef` the
+inverse-variance-weighted mean epoch, `mu` in arcseconds per Julian year. The
+joint model adds `p fx(t)` and `p fy(t)` with the Earth's barycentric position
+`(X, Y, Z)` in au in the equatorial frame,
+`fx = X sin a - Y cos a`, `fy = X cos a sin d + Y sin a sin d - Z cos d` at the
+reference direction `(a, d)`; `p` is in arcseconds and the distance is `1/p`
+parsecs. The Earth's position comes from the repository's own ephemeris pack
+(2025 to 2045, TDB) plus the Sun's offset from the barycentre, with Saturn,
+Uranus and Neptune from the sky kernel's elements; nothing is fetched.
+
+**Rules fixed in advance.** A proper-motion fit needs 2 epochs at least one day
+apart (3 for any check of the residuals; with 2 the verdict is `exact`). A
+joint fit needs at least 8 epochs, a span of at least 0.9 year, and epochs in
+at least 3 of the 4 sectors of the Earth's heliocentric ecliptic longitude;
+otherwise it says `not-constrained`, with the code and the numbers. A fit is
+consistent when the chi-squared survival probability of its residuals is at
+least 0.001. A distance is never shown without its interval (the image of the
+chi-square profile interval of the parallax at 0.6827 and 0.95, open above when
+the parallax interval reaches zero) and its reference-frame statement: the
+parallax is **relative to the reference frame of the positions**, not absolute,
+and a correction to absolute is applied only when the caller gives its size and
+its source. A two-epoch shift always carries the label "shift under a
+fixed-motion assumption; not a parallax" and has no parallax field.
+
+**(a) Analytic cases.** Noise-free linear motion in a named tangent plane
+recovered to 1e-9 arcsec (and arcsec a year); a three-epoch case with unequal
+weights solved by hand to 1e-10 relative; the two-epoch displacement and its
+uncertainty exactly; the parallax factors against closed forms on a circular
+Earth orbit (pole: a circle of radius 1; ecliptic: a line of length 1; latitude
+b: semi-minor axis |sin b|) to 1e-12; a one-year, well-sampled noise-free
+spherical series (24 epochs, `p` = 0.12 arcsec, two sky positions) recovered to
+1e-5 arcsec and arcsec a year; the time-scale conversions (TT - UTC = 69.184 s,
+TDB - TT below 1.7 ms, MJD = JD - 2400000.5); the chi-square profile of `p` by
+refitting equal to the analytic quadratic to 1e-9.
+
+**(b) An independent oracle.** `astropy.coordinates.get_body_barycentric` and
+`astropy.time` (ERFA: epv00, the leap-second table), `scipy.optimize.least_squares`
+(method lm, on the exact spherical model, with the Earth's position from
+ERFA) and `scipy.optimize.curve_fit`, run offline in a throwaway virtual
+environment, no Gravitas code, pinned as fixtures with versions, parameters,
+retrieval and digests. The pack's barycentric Earth against ERFA's at 365 dates
+to 1.5e-4 au (and 5e-5 au after removing a straight line from each two-year
+window, which is what a parallax series sees); noise-free series made in Python
+with ERFA's Earth and fitted here with the pack's: parallax to 0.05 percent
+and proper motion to 5e-5 arcsec a year; three noisy series fitted by scipy's
+nonlinear least squares on the exact spherical model against this fit: each of
+`p`, `mux` and `muy` within 0.1 formal sigma, the formal sigma of `p` within
+0.2 percent, chi-squared within 0.5 percent; the proper-motion fit against
+`curve_fit` to 1e-8; UTC to TT and TDB of 40 dates against astropy to 1 microsecond
+and 0.1 millisecond. **Not run until Prompt 189:** an authentic series under a
+fixed analysis contract (b6, and the roadmap's tier (e)): no authentic series is
+held, none was fetched, none was simulated.
+
+**(c) Coverage.** On fixed seeded ensembles (3,000 trials each) the stated sigma
+covers the truth at 64 to 72 percent for one sigma and 93.5 to 97.5 percent for
+1.96 sigma, for `p`, `mux` and `muy` of the joint fit, for `mux` and `muy` of
+the proper-motion fit, and for the two-epoch displacement; the distance
+interval covers the true distance at the same rates in the symmetric regime (`p`
+about 100 sigma, never open) and in the asymmetric one (`p` = 2.5 sigma, open
+ones counted, the interval's mean upper-to-lower arm ratio at least 1.5); the
+false-alarm rate of the consistency test is at most 0.4 percent.
+
+**(d) Refusals and negative cases.** The joint fit refuses two epochs, seven
+epochs, a span of 0.5 year, epochs in two sectors and identical epochs, each
+with its code, and solves a series that meets the rules exactly; the two-epoch
+label appears on every one of 200 results; shifting a well-sampled year's epochs
+by 45, 91.3, 182.6 or 273.9 days (a wrong time scale or origin) fails the
+consistency test in at least 99 percent of 200 series each, and the hints and
+the message name the epoch time scale; Julian dates declared as modified Julian
+dates (and the reverse) and a series outside the ephemeris are refused with
+`epoch-range`; malformed input is refused with the right code; one 12-sigma
+outlier fails the test in at least 99 percent of 200 series and the residual
+table finds it in at least 95 percent; a distance always carries its frame
+statement and a correction without a source is refused; a true parallax of zero
+leaves the 0.6827 distance interval open above in 80 to 88 percent of series
+(0.841 expected).
+
+**(e) Authentic data.** Not run until Prompt 189.
