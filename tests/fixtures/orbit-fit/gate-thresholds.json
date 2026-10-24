@@ -25,24 +25,10 @@
     "stream": "orbit-fit-gate-187",
     "semiMajorAxisArcsec": 1,
     "periodYears": 10,
-    "cosI": [
-      -0.85,
-      0.85
-    ],
-    "eccentric": [
-      0.1,
-      0.8
-    ],
-    "misspecified": [
-      0.4,
-      0.8
-    ],
-    "arcs": [
-      0.1,
-      0.3,
-      0.6,
-      1.1
-    ],
+    "cosI": [-0.85, 0.85],
+    "eccentric": [0.1, 0.8],
+    "misspecified": [0.4, 0.8],
+    "arcs": [0.1, 0.3, 0.6, 1.1],
     "epochs": 12,
     "noiseFractionOfA": 0.02,
     "trialsPerCell": 400,
@@ -61,24 +47,11 @@
       }
     },
     "G3": {
-      "arcs": [
-        0.6,
-        1.1
-      ],
+      "arcs": [0.6, 1.1],
       "minAccepted": 100,
-      "coverage1sigma": [
-        0.6,
-        0.76
-      ],
-      "coverage95": [
-        0.9,
-        0.99
-      ],
-      "quantities": [
-        "P",
-        "a",
-        "a3overP2"
-      ]
+      "coverage1sigma": [0.6, 0.76],
+      "coverage95": [0.9, 0.99],
+      "quantities": ["P", "a", "a3overP2"]
     },
     "G4": {
       "arc": 1.1,
