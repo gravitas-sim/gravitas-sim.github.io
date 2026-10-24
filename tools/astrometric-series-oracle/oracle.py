@@ -156,7 +156,18 @@ def line_fit(case, jd, ra_deg, dec_deg):
 
     out = {"tRefJd": t_ref, "tangentRa": a0, "tangentDec": d0}
     for name, y in (("x", xi), ("y", eta)):
-        popt, pcov = curve_fit(f, t_yr, y, p0=[0.0, 0.0], sigma=np.full(len(jd), sig), absolute_sigma=True)
+        popt, pcov = curve_fit(
+            f,
+            t_yr,
+            y,
+            p0=[0.1, 0.1],
+            sigma=np.full(len(jd), sig),
+            absolute_sigma=True,
+            jac=lambda t, x0, mu: np.column_stack([np.ones_like(t), t]),
+            xtol=1e-15,
+            ftol=1e-15,
+            gtol=1e-15,
+        )
         res = (y - f(t_yr, *popt)) / sig
         out[name] = {
             "x0": float(popt[0]),
