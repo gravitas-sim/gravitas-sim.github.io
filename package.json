@@ -151,6 +151,7 @@
     "overlay:validate": "node tools/overlay-validate.mjs",
     "injection:validate": "node tools/injection-validate.mjs",
     "frame-pipeline:validate": "node tools/frame-pipeline-validate.mjs",
+    "astrometric-series:validate": "node tools/astrometric-series-validate.mjs",
     "i18n:freshness": "node tools/i18n-freshness.mjs",
     "author:check": "node tools/author-check.mjs",
     "author:strict": "node tools/author-check.mjs --warnings",

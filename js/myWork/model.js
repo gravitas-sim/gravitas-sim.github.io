@@ -44,6 +44,7 @@ const SURFACE = {
   'image-detection': 'observatory',
   'image-injection': 'observatory',
   'image-sequence': 'observatory',
+  'image-series': 'observatory',
   'sweep-analysis': 'experiments',
   'experiment-result': 'experiments',
   lab3d: 'lab3d',

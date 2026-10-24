@@ -114,6 +114,10 @@ export const SOURCE = Object.freeze({
   // comparison stars' steadiness and every point, and the request that runs it
   // again (js/observatory/imageSequence.js, js/measure/frameSeries.js).
   IMAGE_SEQUENCE: 'image-sequence',
+  // The motion and parallax of one source over time: a proper motion or a joint
+  // fit with its frame statement and distance interval, and the request that
+  // runs it again (js/observatory/imageSeries.js, js/measure/astrometric-series.js).
+  IMAGE_SERIES: 'image-series',
 });
 
 /** The sources this build can capture from. */
@@ -141,6 +145,7 @@ export const SOURCES = [
   SOURCE.IMAGE_DETECTION,
   SOURCE.IMAGE_INJECTION,
   SOURCE.IMAGE_SEQUENCE,
+  SOURCE.IMAGE_SERIES,
 ];
 
 /** How long a student's prose may be, per field. */

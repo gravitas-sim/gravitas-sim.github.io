@@ -310,6 +310,9 @@ export const ES_OBSERVATORY = {
   'obs.sq.title': 'De imágenes a una curva de luz',
   'obs.sq.offline':
     'El proceso de imágenes se está cargando. Se descarga al abrirlo por primera vez, así que necesita la red esa primera vez.',
+  'obs.ser.title': 'Movimiento y paralaje en el tiempo',
+  'obs.ser.offline':
+    'La herramienta de movimiento y paralaje se está cargando. Se descarga al abrirla por primera vez, así que necesita la red esa primera vez.',
   'obs.ph.offline':
     'La herramienta de fotometría se está cargando. Se descarga al abrirla por primera vez, así que necesita la red esa primera vez.',
   'obs.gd.title': 'Investigaciones guiadas',

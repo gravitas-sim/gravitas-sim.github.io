@@ -1152,7 +1152,6 @@ export const ES_DEFERRED = {
   'rvfit.mc.outcome.partial': '{done} de {total} pruebas dieron ajuste.',
   'rvfit.mc.stale':
     'La grabación, el ajuste o el rango de búsqueda han cambiado desde que se ejecutó este análisis, así que sus intervalos ya no describen lo que hay en pantalla. Vuelve a ejecutarlo.',
-
   'rvfit.mc.refused.noFit':
     'No hay ningún ajuste en pantalla alrededor del cual remuestrear. Fija primero un período.',
   'rvfit.mc.refused.tooFewPoints':
@@ -3629,6 +3628,7 @@ export const ES_DEFERRED = {
   'nb.source.image-detection': 'Función de dispersión de punto de una imagen',
   'nb.source.image-injection': 'Completitud de una imagen',
   'nb.source.image-sequence': 'Curva de luz a partir de imágenes',
+  'nb.source.image-series': 'Movimiento y paralaje de una fuente',
   'nb.flag.missionModel':
     'impulsos instantáneos, cónicas empalmadas y masas puntuales: un modelo didáctico de una misión',
   'nb.flag.notOperational':

@@ -11,6 +11,8 @@ current, and the orchestrator checks it.
 | `analysis-validate.mjs` | The analysis laboratory's recovery, coverage and error-rate tables | `npm run analysis:validate` |
 | `archive-check.mjs` | Can somebody who only has the archive rebuild this? | `npm run archive:check` |
 | `archive-live-check.mjs` | Does CDS still answer the way the archive import was built for? | `npm run archive:live` |
+| `astrometric-series-synth.mjs` | Synthetic astrometric series with a truth manifest (Prompt 186, ASTROMETRY.md) |  |
+| `astrometric-series-validate.mjs` | Astrometric time series against its committed thresholds (Prompt 186) | `npm run astrometric-series:validate` |
 | `astrometry-validate.mjs` | WCS-lite and registration against their committed thresholds (Prompt 181) | `npm run astrometry:validate` |
 | `author-check.mjs` | npm run author:check | `npm run author:check`, `npm run author:strict`, `npm run author:rules` |
 | `blackhole-profile.mjs` | What a black hole costs to draw |  |
