@@ -18,7 +18,7 @@ catalogue refers to it, so a change to it can reach a student.
 | [AI_ASSISTANCE_GATE.md](AI_ASSISTANCE_GATE.md) | Instructor-side AI assistance gate. | gate | unassigned | written | no |
 | [ANALYSIS_LAB.md](ANALYSIS_LAB.md) | The analysis laboratory. | feature | unassigned | written | no |
 | [ARCHIVE_IMPORT.md](ARCHIVE_IMPORT.md) | Importing from an archive. | feature | unassigned | written | no |
-| [ASTROMETRY.md](ASTROMETRY.md) | Sky coordinates for an image: WCS-lite, registration and their validation (Prompt 181). | feature | P181 | written | no |
+| [ASTROMETRY.md](ASTROMETRY.md) | Sky coordinates for an image (WCS-lite, registration; Prompt 181) and astrometric time series, motion and well-sampled parallax (Prompt 186), with their validation. | feature | P181 | written | no |
 | [BRANCHING.md](BRANCHING.md) | Branches, the publish rule and the table of generated artifacts. | process | unassigned | regions (docs) | no |
 | [CALIBRATION_LAB.md](CALIBRATION_LAB.md) | The calibration lab. | feature | P86 | written | yes |
 | [CAPABILITY_RUNTIME.md](CAPABILITY_RUNTIME.md) | The capability runtime, the first slice of the platform package. | design | unassigned | written | no |
@@ -53,6 +53,7 @@ catalogue refers to it, so a change to it can reach a student.
 | [FORMATS.md](FORMATS.md) | Every versioned format Gravitas reads or writes. | reference | P61 | written | no |
 | [FORMULA_LANGUAGE.md](FORMULA_LANGUAGE.md) | The closed formula language for derived columns. | reference | unassigned | written | no |
 | [FORWARD_MODELS.md](FORWARD_MODELS.md) | The forward-model loop. | feature | P84 | written | no |
+| [FRAME_PIPELINE.md](FRAME_PIPELINE.md) | The frame pipeline from a stack of frames to a light curve over the calibration lab, registration, detection and photometry: the algorithm, the limits, the oracle and the validation (Prompt 185). | feature | P185 | written | no |
 | [GALACTIC_DYNAMICS.md](GALACTIC_DYNAMICS.md) | Galactic dynamics with Gaia. | feature | P92 | written | yes |
 | [GRAVITATIONAL_LENSING.md](GRAVITATIONAL_LENSING.md) | Gravitational lensing. | feature | P94 | written | yes |
 | [GRAVITATIONAL_WAVES.md](GRAVITATIONAL_WAVES.md) | What the application computes for gravitational waves. | feature | unassigned | written | no |

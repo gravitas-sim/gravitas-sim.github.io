@@ -11,6 +11,8 @@ current, and the orchestrator checks it.
 | `analysis-validate.mjs` | The analysis laboratory's recovery, coverage and error-rate tables | `npm run analysis:validate` |
 | `archive-check.mjs` | Can somebody who only has the archive rebuild this? | `npm run archive:check` |
 | `archive-live-check.mjs` | Does CDS still answer the way the archive import was built for? | `npm run archive:live` |
+| `astrometric-series-synth.mjs` | Synthetic astrometric series with a truth manifest (Prompt 186, ASTROMETRY.md) |  |
+| `astrometric-series-validate.mjs` | Astrometric time series against its committed thresholds (Prompt 186) | `npm run astrometric-series:validate` |
 | `astrometry-validate.mjs` | WCS-lite and registration against their committed thresholds (Prompt 181) | `npm run astrometry:validate` |
 | `author-check.mjs` | npm run author:check | `npm run author:check`, `npm run author:strict`, `npm run author:rules` |
 | `blackhole-profile.mjs` | What a black hole costs to draw |  |
@@ -81,6 +83,8 @@ current, and the orchestrator checks it.
 | `feature-inventory.mjs` | The feature-detection inventory (Prompt 111) |  |
 | `formats.mjs` | Every versioned format Gravitas reads or writes, and FORMATS.md from them |  |
 | `formula-size.mjs` | node tools/formula-size.mjs |  |
+| `frame-pipeline-synth.mjs` | The committed scene of the frame-pipeline checks (Prompt 185, FRAME_PIPELINE.md) |  |
+| `frame-pipeline-validate.mjs` | The frame pipeline against its committed thresholds (Prompt 185) | `npm run frame-pipeline:validate` |
 | `generate-graph.mjs` | Every generated artifact, what it is made from, and what it must follow |  |
 | `generate-lesson-cards.mjs` | A card picture for a lesson that stages its own scene | `npm run cards` |
 | `generate-scenario-thumbnails.mjs` | Scenario thumbnail generator | `npm run thumbnails` |

@@ -60,7 +60,7 @@
     {
       "file": "ASTROMETRY.md",
       "kind": "feature",
-      "purpose": "Sky coordinates for an image: WCS-lite, registration and their validation (Prompt 181).",
+      "purpose": "Sky coordinates for an image (WCS-lite, registration; Prompt 181) and astrometric time series, motion and well-sampled parallax (Prompt 186), with their validation.",
       "owner": 181,
       "student": false
     },
@@ -300,6 +300,13 @@
       "kind": "feature",
       "purpose": "The forward-model loop.",
       "owner": 84,
+      "student": false
+    },
+    {
+      "file": "FRAME_PIPELINE.md",
+      "kind": "feature",
+      "purpose": "The frame pipeline from a stack of frames to a light curve over the calibration lab, registration, detection and photometry: the algorithm, the limits, the oracle and the validation (Prompt 185).",
+      "owner": 185,
       "student": false
     },
     {

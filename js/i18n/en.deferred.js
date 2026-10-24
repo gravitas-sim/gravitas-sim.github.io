@@ -375,7 +375,6 @@ export const EN_DEFERRED = {
     'These two runs are not measurements of the same thing, so nothing can be concluded from the difference.',
   'reliability.verdict.diverged':
     'The two paths separated, but the aggregate measurements held.',
-
   'reliability.reason.missingRun': 'One of the two runs is missing.',
   'reliability.reason.noDuration': 'A run covered no simulated time.',
   'reliability.reason.differentDurations':
@@ -1141,7 +1140,6 @@ export const EN_DEFERRED = {
   'rvfit.mc.outcome.partial': '{done} of {total} trials produced a fit.',
   'rvfit.mc.stale':
     'The recording, the fit or the search range has changed since this analysis ran, so its intervals no longer describe what is on screen. Run it again.',
-
   'rvfit.mc.refused.noFit':
     'There is no fit on screen to resample around. Set a period first.',
   'rvfit.mc.refused.tooFewPoints':
@@ -3718,6 +3716,8 @@ export const EN_DEFERRED = {
   'nb.source.image-photometry': 'Photometry on an image',
   'nb.source.image-detection': 'Point-spread function of an image',
   'nb.source.image-injection': 'Completeness of an image',
+  'nb.source.image-sequence': 'Light curve from frames',
+  'nb.source.image-series': 'Motion and parallax of a source',
   'nb.flag.missionModel':
     'impulsive burns, patched conics and point masses: a teaching model of a mission',
   'nb.flag.notOperational': 'not for operational mission design or navigation',
