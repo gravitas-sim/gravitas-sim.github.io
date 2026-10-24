@@ -561,7 +561,7 @@ less than 3 times its uncertainty, no frame statement, an absolute parallax with
 no source).
 
 **The mass sum** `M = K (a / parallax)^3 / P^2` solar masses (`K` from the IAU
-nominal `GM_sun`, the au and the Julian year: 1.0000349...), `a` and the parallax
+nominal `GM_sun`, the au and the Julian year: 1.0000378), `a` and the parallax
 in one unit, `P` in Julian years. The orbit's `ln(a^3 / P^2)` is a log-normal from
 the fit's covariance and the parallax a normal truncated above zero (the
 parallax profile of Prompt 186 is exactly a parabola), 20,000 seeded draws, and
@@ -626,3 +626,130 @@ two frames, a slow mover and two movers get their codes.
 
 **(e) Authentic data.** Not run: no authentic visual-binary arc or asteroid track
 exists in the repository and nothing was fetched.
+
+## What was built for orbit fitting
+
+- **`js/measure/orbit-fit.js`** (kernel, no DOM): `fitOrbit(series, {depth})` for
+  the circular apparent orbit and the Thiele-Innes orbit through variable
+  projection (the nonlinear parameters are `ln P` and the eccentricity vector;
+  the four matrix entries are linear); the global search is a frequency scan, the
+  circular scan with a golden-section refinement and, for the elliptical model,
+  an envelope scan over 13 eccentricity-vector seeds with the best 8 minima
+  polished by Levenberg-Marquardt, and a finer retry (25 seeds, 20 starts) if
+  the first result is rejected; the committed criterion as a refusal
+  `{ok: false, status: 'not-constrained', code, message, data}` with the
+  codes `epochs`, `coverage`, `conditioning`, `period-unbounded`,
+  `inconsistent` and Part B's `period-ambiguous`; the profile intervals of the
+  period; an eccentricity that is "detected" only above a chi-squared gain of
+  11.83 and otherwise the circular elements with an upper 95 percent limit; the
+  node folded into `[0, 180)`; `massSum` (a seeded Monte Carlo of 20,000 draws);
+  the Prompt 150 quantities and fit record (the elements with a derived
+  covariance), a replayable reduction (step `image-orbit`), CSV rows, and
+  `predict`, `orbitCurve` and the Thiele-Innes helpers.
+- **`js/measure/mover-track.js`** (kernel): `findMover(frames)`, a tangent-plane
+  weighted straight line per candidate track, the static sources identified by
+  being seen at every frame within 4 sigma, quantities in mas/yr (the panel
+  shows arcsec per hour), position angle as the local great-circle bearing for
+  sky input and the plane angle for offsets, a replayable reduction (step
+  `image-track`).
+- **`js/observatory/imageOrbit.js`** and `js/i18n/{en,es}.imageOrbit.js`: a lazy
+  disclosure beside the series tool in the sky-coordinates panel (`#obsOrbitPanel`),
+  fetched when first opened and not installed offline (the files are
+  `NEVER_PRECACHED` in `tools/build-service-worker.mjs`; the page says it needs
+  the network the first time). It takes a table (offsets north and east, or
+  separation and angle; or, for a track, one detection per line), draws the
+  orbit and the residuals through the plot component, prints the elements, the
+  period interval, the criterion's numbers, the eccentricity decision, the node
+  statement, the mass sum with its reference-frame statement, saves a CSV and
+  keeps the result in the ledger (source `image-series`, source kind
+  `analysis`). A refusal is in words with its numbers.
+- **`tools/orbit-fit-synth.mjs`**, **`tools/orbit-fit-validate.mjs`**
+  (`npm run orbit-fit:validate`), **`tools/orbit-fit-oracle/`** (script, inputs,
+  provenance), **`tests/fixtures/orbit-fit/`**, **`tests/orbitFit.test.js`**
+  (32 tests, run as a child process in plain Node because Jest's VM makes `Math`
+  reads about ten times slower), **`e2e/imageOrbit.spec.js`** (8 tests).
+
+## Validation results for orbit fitting
+
+`npm run orbit-fit:validate` (Node v24.4.0, 52 s): **68 judged rows pass, 1
+FAILS**, 4 evidence rows, 1 not run. Every threshold is in
+`tests/fixtures/orbit-fit/thresholds.json`, committed before the production
+rules, the track module, the oracle and the tool existed. The oracle is
+`oracle.py` under `python -I` in Prompt 180's virtual environment (numpy 2.2.6,
+scipy 1.15.3, astropy 6.1.7, photutils 2.0.2, Python 3.10.12; nothing added),
+with its own Kepler solver and no Gravitas code; its provenance and the hashes of
+its files are in `oracle-provenance.json`. The kernel side of leg (a) and (b)
+uses `js/lab3d/elements.js` (its own solver) and Prompt 148's layer.
+
+| Leg | Measured | Bound |
+| --- | --- | --- |
+| a1 Thiele-Innes against the 3-D kernel, 300 sets | 0 | 1e-9 |
+| a2 Prompt 148's layer, 100 sets | 5.9e-13 | 1e-9 |
+| a3 constants to elements and back | 1.4e-15 | 1e-10 |
+| a4 noise-free recovery, 50 orbits (worst of P, a, e, angles, T) | 4e-16 to 1e-13 | 1e-5 to 1e-3 |
+| a5 noise-free circular recovery | 5.7e-14 worst | 1e-6 to 1e-4 |
+| a6 Kepler's constant against astropy | 2.2e-16 | 1e-9 |
+| b1 R1 integrated by the kernel (worst of P, a, e; angles) | 5.2e-11; 3.5e-9 degree | 1e-6; 1e-4 |
+| b2 against scipy: 8 series, worst of P, a, e in sigmas; chi-squared | 4.2e-6; 6.1e-12 | 0.1; 1e-4 |
+| b3 sigma of P and a against `(J^T J)^-1` | 5.2e-7 | 0.01 |
+| b4 five tracks against scipy and astropy: rate; angle; local angle | 4.6e-9; 3.6e-7; 3.8e-7 | 1e-6; 1e-3; 1e-3 |
+| c1 elliptical coverage, 250 orbits: P, a, a^3/P^2 at 0.6827 | 0.728, 0.668, 0.688 | 0.60 to 0.76 |
+| c1 the same at 0.95 | 0.984, 0.956, 0.952 | 0.90 to 0.99 |
+| c2 circular coverage at 0.6827 (0.95) | 0.696, 0.692, 0.684 (0.96, 0.956, 0.948) | 0.60 to 0.76 (0.90 to 0.99) |
+| c3 mass sum, parallax S/N 10: 0.6827 and 0.95 | 0.644, 0.964 | 0.60 to 0.76; 0.90 to 0.99 |
+| c3 mass sum, S/N 4: 0.95; asymmetry | 0.976; 2.79 | 0.90 to 0.99; at least 1.3 |
+| **c3 mass sum, S/N 4: 0.6827** | **0.824 (FAILS)** | 0.60 to 0.76 |
+| c4 track coverage of rate and angle, 300 fields (0.6827; 0.95) | 0.70, 0.69; 0.94, 0.96 | 0.60 to 0.76; 0.90 to 0.99 |
+| d1 10 and 30 percent arcs refuse (both depths, 80 trials each) | 1.000 | 0.99 and 0.95 |
+| d3 regular cadence refused `period-ambiguous`; jittered false alarm | 1.000; 0 | 0.95; 0.02 |
+| d4 circular model on eccentric truths refused | 1.000 | 0.95 |
+| d5 stated uncertainties 0.3 of the noise refused | 1.000 | 0.99 |
+| d6 separation and angle against offsets | 2.9e-11 | 1e-8 |
+| d8 the node in `[0, 180)` with its ambiguity stated, 500 fits | 0 violations | 0 |
+| d9 a static field returns `no-mover`, 300 fields | 0 | 0.01 |
+| d10 the mover identified among 30 static sources, 500 fields | 1.000 | 0.99 |
+
+**The failed leg: c3 at parallax S/N 4, the 0.6827 interval (0.824 against
+0.60 to 0.76).** The committed contract said the mass-sum interval covers the true
+mass sum at 0.60 to 0.76 at S/N 4. The sum refuses an observed S/N below 3, which
+at a true S/N of 4 removes 40 of 250 trials (210 accepted), and the refusal
+selects against the trials whose parallax happened to read low, which are the
+ones where the interval's lower arm would have to carry the truth; among the
+accepted trials the expected coverage of a 0.6827 interval is therefore not
+0.6827 (about 0.81), and the measured 0.824 agrees with that. The 0.95 interval
+at S/N 4 is inside its bound (0.976). **The leg is left failing as committed and
+is not restated; the bound is not moved.** `npm run orbit-fit:validate` exits 1
+on it and `tests/orbitFit.test.js` names it as the one known failure. A reader
+of the mass sum at a weak parallax should read the 0.95 interval and its
+asymmetry, not the 0.6827 one; the panel states the refusal rule in its limits.
+
+**Not run.** E1, an authentic visual-binary arc or asteroid track, is **NOT RUN:
+no authentic arc pack exists**; nothing was downloaded, fetched or simulated.
+Prompt 189's packs are images, not an astrometric series of a binary.
+
+**Evidence, not judged.** The corpus orbit R1 at 16 exactly regular epochs is
+refused `period-ambiguous` (an aliasing of an exactly regular cadence the
+criterion could not have known); the harness's R1 leg therefore uses 16 jittered
+epochs, which is disclosed in the leg's note and is the same jittering the gate's
+amendment A1 introduced. The 110 percent cell's refusals were none in 250.
+
+**Corrections made before any Gravitas number of the gate was read** (none to a
+bound; recorded here and in the register row): the gate's regular cadence aliased the
+period of an orbit of ten years sampled yearly (found on a development stream
+before any gate run) and the test set was amended to jittered epochs (A1,
+`ORBIT_FIT_GATE.md`); the first global search missed edge-on and highly
+eccentric orbits and was replaced by the envelope scan above; the oracle's
+position angle first differed from the tangent-plane angle by the convergence of
+the meridians (up to 7e-3 degree), so the track reports the local great-circle
+angle and the oracle computes astropy's from the mean epoch to one hour later;
+`GM_sun` was set to the IAU nominal value to match astropy.
+
+## Limits of the orbit fit, said on the page
+
+Relative astrometry only: the ascending node is ambiguous by 180 degrees (stated
+with every result); no radial velocities, perturbations, light-travel time or
+relative proper motion; the criterion's numbers were tested on 12 jittered
+epochs and about 2 percent noise, other designs are not covered; a relative
+parallax makes the mass sum read high by the reference stars' mean parallax (the
+statement is always printed); a track is a rate and an angle and not an orbit.
+The Spanish words are unread by a fluent reader.
