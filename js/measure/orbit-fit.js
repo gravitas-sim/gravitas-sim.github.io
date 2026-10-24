@@ -732,14 +732,19 @@ function derivedSigmas(v, nl, tRef, cov, P) {
       grads[name][j] = d / (2 * step);
     }
   }
-  for (const name of DERIVED) {
-    const g = grads[name];
-    let acc = 0;
-    for (let p = 0; p < v.length; p++)
-      for (let q = 0; q < v.length; q++) acc += g[p] * cov[p][q] * g[q];
-    out[name] = Math.sqrt(Math.max(acc, 0));
+  const covariance = {};
+  for (const x of DERIVED) {
+    covariance[x] = {};
+    for (const y of DERIVED) {
+      let acc = 0;
+      for (let p = 0; p < v.length; p++)
+        for (let q = 0; q < v.length; q++)
+          acc += grads[x][p] * cov[p][q] * grads[y][q];
+      covariance[x][y] = acc;
+    }
+    out[x] = Math.sqrt(Math.max(covariance[x][x], 0));
   }
-  return { sigmas: out, grads };
+  return { sigmas: out, grads, covariance };
 }
 
 // ---- the profile of the period -----------------------------------------------------
@@ -936,7 +941,7 @@ function assess(S, fit, depth, candidates) {
     );
   const v = [...fit.x, ...fit.u];
   const el = elementsOf(v, nl, S.tRef);
-  const { sigmas, grads } = derivedSigmas(v, nl, S.tRef, cv.cov, P);
+  const { sigmas, grads, covariance } = derivedSigmas(v, nl, S.tRef, cv.cov, P);
   const eccentric = nl > 1;
   const q = (value, sigma, extra = {}) => ({ value, sigma, ...extra });
   const elements = {
@@ -995,6 +1000,7 @@ function assess(S, fit, depth, candidates) {
     values: v,
     covariance: cv.cov,
     gradients: { lnK3: grads.lnK3, sigmaLnK3: sigmas.lnK3 },
+    derivedCovariance: covariance,
     residuals,
     prepared: S,
     fitState: { x: fit.x, u: fit.u },
@@ -1267,6 +1273,14 @@ export function quantitiesOf(fit, mass = null) {
     });
   sigma('orbit.i', 'inclination', el.i.value, 'deg', el.i.sigma);
   sigma('orbit.Omega', 'node (mod 180)', el.Omega.value, 'deg', el.Omega.sigma);
+  if (fit.kind !== 'thiele-innes-orbit' || !detected)
+    sigma(
+      'orbit.omega',
+      'argument of latitude at the reference epoch',
+      el.omega.value,
+      'deg',
+      el.omega.sigma
+    );
   if (fit.kind === 'thiele-innes-orbit' && detected) {
     sigma(
       'orbit.omega',
@@ -1297,9 +1311,40 @@ export function quantitiesOf(fit, mass = null) {
   return out;
 }
 
-/** The Prompt 150 fit-result record: parameters (ln P, ...), their covariance, the statistic and the residuals. */
+/** The reported elements of a fit, in the order of its quantities (ids without the prefix). */
+const reportedIds = fit =>
+  fit.kind === 'thiele-innes-orbit' && fit.eccentricity?.detected
+    ? ['P', 'a', 'e', 'i', 'Omega', 'omega', 'T']
+    : ['P', 'a', 'i', 'Omega', 'omega'];
+/** Reporting units of each element against the module's own: arcsec to mas, radians to degrees. */
+const REPORT_SCALE = {
+  P: 1,
+  a: MAS,
+  e: 1,
+  i: 1 / RAD,
+  Omega: 1 / RAD,
+  omega: 1 / RAD,
+  T: 1,
+};
+const REPORT_UNITS = {
+  P: 'yr',
+  a: 'mas',
+  e: '',
+  i: 'deg',
+  Omega: 'deg',
+  omega: 'deg',
+  T: 'yr',
+};
+
+/**
+ * The Prompt 150 fit-result record: the reported elements as the parameters, with
+ * their covariance (propagated from the fit's own parameters), the statistic and
+ * the residuals.
+ */
 export function fitRecordOf(fit) {
-  const ids = fit.order.map(n => `orbit.${n}`);
+  const names = reportedIds(fit);
+  const ids = names.map(n => `orbit.${n}`);
+  const c = fit.derivedCovariance;
   return {
     model: {
       id:
@@ -1311,10 +1356,10 @@ export function fitRecordOf(fit) {
     parameters: ids,
     covariance: {
       order: ids,
-      values: fit.covariance.map(r => r.slice()),
-      units: fit.order.map(n =>
-        n === 'lnP' || n === 'h' || n === 'k' ? '' : 'arcsec'
+      values: names.map(x =>
+        names.map(y => c[x][y] * REPORT_SCALE[x] * REPORT_SCALE[y])
       ),
+      units: names.map(n => REPORT_UNITS[n]),
     },
     statistic: { name: 'chi2', value: fit.chi2, dof: Math.max(0, fit.dof) },
     residuals: { n: fit.epochs * 2, rms: fit.rms * MAS },

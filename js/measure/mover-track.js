@@ -474,14 +474,21 @@ export function findMover(frames, opts = {}) {
 
 /** The result as the envelope's quantities (Prompt 150's kinds): the rate and the position angle. */
 export function quantitiesOf(result) {
+  // the units registry has mas/yr for an angular rate and no arcsec/hour:
+  // 1 arcsec/hour = 1000 mas x 8766 hours/year (Julian) = 8,766,000 mas/yr
+  const K = 1000 * 8766;
   return [
     {
       id: 'track.rate',
-      label: 'rate of motion',
-      value: result.rate.value,
-      unit: 'arcsec/h',
+      label: 'rate of motion (1 arcsec/hour is 8,766,000 mas/yr)',
+      value: result.rate.value * K,
+      unit: 'mas/yr',
       origin: 'fitted',
-      uncertainty: { kind: 'sigma', basis: 'data', sigma: result.rate.sigma },
+      uncertainty: {
+        kind: 'sigma',
+        basis: 'data',
+        sigma: result.rate.sigma * K,
+      },
     },
     {
       id: 'track.pa',
