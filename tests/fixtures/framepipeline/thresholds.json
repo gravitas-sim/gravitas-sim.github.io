@@ -15,8 +15,8 @@
   },
   "scene": {
     "detector": {
-      "width": 64,
-      "height": 64,
+      "width": 96,
+      "height": 96,
       "cosmicRate": 0,
       "otherwise": "DEFAULT_DETECTOR of js/kernels/detector/frame.js (gain 1.5, read noise 8, bias 500 counts with a column pattern, dark 0.1 e/s with 1 percent hot pixels at 4 e/s, flat structure with vignetting, dust and 1 percent pixel scatter, FWHM 2.8)"
     },
@@ -24,14 +24,62 @@
     "exposure": 60,
     "sky": 3,
     "stars": [
-      { "id": "V", "x": 31.3, "y": 18.6, "rate": 900, "role": "variable" },
-      { "id": "C1", "x": 14.2, "y": 40.7, "rate": 1400, "role": "comparison" },
-      { "id": "C2", "x": 47.8, "y": 44.1, "rate": 1000, "role": "comparison" },
-      { "id": "C3", "x": 50.6, "y": 13.9, "rate": 700, "role": "comparison" },
-      { "id": "C4", "x": 20.4, "y": 12.2, "rate": 1200, "role": "comparison" },
-      { "id": "C5", "x": 36.9, "y": 51.5, "rate": 800, "role": "check" },
-      { "id": "F1", "x": 8.7, "y": 25.3, "rate": 120, "role": "faint" },
-      { "id": "F2", "x": 55.2, "y": 31.8, "rate": 90, "role": "faint" }
+      {
+        "id": "V",
+        "x": 47.3,
+        "y": 28.6,
+        "rate": 900,
+        "role": "variable"
+      },
+      {
+        "id": "C1",
+        "x": 20.2,
+        "y": 62.7,
+        "rate": 1400,
+        "role": "comparison"
+      },
+      {
+        "id": "C2",
+        "x": 74.8,
+        "y": 66.1,
+        "rate": 1000,
+        "role": "comparison"
+      },
+      {
+        "id": "C3",
+        "x": 76.6,
+        "y": 22.9,
+        "rate": 700,
+        "role": "comparison"
+      },
+      {
+        "id": "C4",
+        "x": 21.4,
+        "y": 20.2,
+        "rate": 1200,
+        "role": "comparison"
+      },
+      {
+        "id": "C5",
+        "x": 50.9,
+        "y": 79.5,
+        "rate": 800,
+        "role": "check"
+      },
+      {
+        "id": "F1",
+        "x": 8.7,
+        "y": 41.3,
+        "rate": 120,
+        "role": "faint"
+      },
+      {
+        "id": "F2",
+        "x": 88.2,
+        "y": 44.8,
+        "rate": 90,
+        "role": "faint"
+      }
     ],
     "frames": 48,
     "cadenceDays": 0.01,
@@ -41,7 +89,7 @@
       "phase": "drawn from the seed, uniform in [0, 1) cycles"
     },
     "cloud": "the lab's: a damped walk of the common transparency, rms 0.1, correlation 0.8, never below 0.3",
-    "pointing": "frame 0 is the reference at the nominal positions; every other frame shifts every star by a draw of N(0, 1.5 pixel) in each axis and turns the field about the frame centre (31.5, 31.5) by a draw of N(0, 0.2 degree); the fixed pattern of the detector does not move",
+    "pointing": "frame 0 is the reference at the nominal positions; every other frame shifts every star by a draw of N(0, 1.5 pixel) in each axis and turns the field about the frame centre (47.5, 47.5) by a draw of N(0, 0.2 degree); the fixed pattern of the detector does not move",
     "generator": "tools/frame-pipeline-synth.mjs and js/measure/frameSource.js, which makes each frame with the detector kernel's simulateFrame and, with no pointing change, the very frames simulateSeries makes",
     "seedPrefix": "fp",
     "ensemble": 100,
@@ -59,7 +107,10 @@
     },
     "a2.uncertainty": {
       "what": "the stated uncertainties agree with the scatter of constant stars. On the ensemble, with the comparison set fixed to C1 to C4 and C5 as the check star: the pooled ratio sqrt(mean over sequences of the check's sample variance / mean over sequences of its mean squared propagated sigma) lies in the interval; and the target's raw magnitudes (no differential) are at least 5 times noisier than the check star (the differential step does its work).",
-      "bounds": { "pooledRatio": [0.9, 1.1], "rawOverCheckAtLeast": 5 }
+      "bounds": {
+        "pooledRatio": [0.9, 1.1],
+        "rawOverCheckAtLeast": 5
+      }
     },
     "a3.lab": {
       "what": "nothing is reimplemented. With marks given as the true positions, registration off, no recentring, centre weighting, the lab's aperture (5, 8, 13), one comparison star (C1) and the lab's series (js/kernels/detector/lab.js labSeries, draws 1 to 3), the light curve's dm and sigma are those of js/kernels/detector/pipeline.js reduceSeries, to 1e-9 in magnitudes and the masters' extra variance is its mastersVariance exactly.",
@@ -95,17 +146,29 @@
     },
     "b3.oracleFit": {
       "what": "the oracle fits its own light curve with astropy LombScargle (weighted, floating mean, the same period limits) and Gravitas fits its own: the period and the amplitude agree within half of Gravitas's stated sigma each.",
-      "bounds": { "periodSigmas": 0.5, "amplitudeSigmas": 0.5 }
+      "bounds": {
+        "periodSigmas": 0.5,
+        "amplitudeSigmas": 0.5
+      }
     },
     "b4.oracleShifts": {
       "what": "the pointing of the sequence: the position of V in each frame by Gravitas's registration against the oracle's cross-correlation shift applied to the same reference position: root mean square at most 0.25 pixel, largest at most 0.6 pixel.",
-      "bounds": { "rmsPix": 0.25, "maxPix": 0.6 }
+      "bounds": {
+        "rmsPix": 0.25,
+        "maxPix": 0.6
+      }
     },
     "c1.coverage": {
       "what": "the stated uncertainties cover the truth at the stated rate on the 100 ensemble sequences: the share of amplitudes within 1 sigma and within 2 sigma of 0.05, and of periods within 1 sigma and within 2 sigma of 0.12 (sigma as stated: the amplitude's covariance sigma scaled, the period's asymptotic one); the levels are 68.27 and 95.45 percent and the bounds are 4.5 standard errors of a binomial at 100 draws.",
       "bounds": {
-        "amplitude": { "oneSigma": [0.474, 0.892], "twoSigma": [0.86, 1.0] },
-        "period": { "oneSigma": [0.474, 0.892], "twoSigma": [0.86, 1.0] }
+        "amplitude": {
+          "oneSigma": [0.474, 0.892],
+          "twoSigma": [0.86, 1.0]
+        },
+        "period": {
+          "oneSigma": [0.474, 0.892],
+          "twoSigma": [0.86, 1.0]
+        }
       }
     },
     "d1.registrationRefusal": {
@@ -114,7 +177,10 @@
     },
     "d2.stability": {
       "what": "a comparison star that varies is flagged. (i) 40 seeded sequences (fp-d2v-0 to 39) in which C2 varies with amplitude 0.06 mag and period 0.2 d: the default pipeline flags C2 and no other star in at least 95 percent of them, and the light curve it returns does not use C2; (ii) 40 constant-comparison sequences (fp-d2c-0 to 39, every comparison constant): at most 2 stars flagged over the 5 stars of all 40 (200 star tests). With the manual override naming C2 the node warns unstable and the flag is kept.",
-      "bounds": { "variableFlaggedAtLeast": 0.95, "falseFlagsAtMost": 2 }
+      "bounds": {
+        "variableFlaggedAtLeast": 0.95,
+        "falseFlagsAtMost": 2
+      }
     },
     "d3.refusals": {
       "what": "pre-flight and structural refusals, each with its own code, the frame provider asked for no more frames than the check needs and the input frames unchanged: too-many-frames (257 frames, provider asked for 0), too-large (a frame whose planes do not fit 64 MiB, provider asked for at most 1), no-masters (a raw sequence with no calibration set), frame-shape (frame 7 of another size, named), too-few-frames (4 usable frames), target-not-found (a target 10 pixels from every mark), no-comparison (the only candidate flagged or every candidate under the signal-to-noise floor), saturated-target (frame 5's target aperture holds a saturated pixel: refused naming frame 5 under code photometry), a parameter outside its limit (bad-parameter: the period limits reversed, a minimum period under twice the cadence). No refusal carries a number.",
@@ -128,7 +194,7 @@
       }
     },
     "d5.memory": {
-      "what": "the frames are read one at a time. The frame provider is told when the pipeline has finished with each frame; over a 256-frame run (64 by 64) the number of frames handed out and not yet released never exceeds 1 at a request; the working set the pipeline declares (planes of the three masters, the raw, calibrated and electrons frames, 8 bytes a pixel) equals 6 planes and is within Prompt 157's decoded-memory bound for 1,398,101 pixels and refused above it; 256 frames run, 257 are refused.",
+      "what": "the frames are read one at a time. The frame provider is told when the pipeline has finished with each frame; over a 256-frame run (the scene's frames) the number of frames handed out and not yet released never exceeds 1 at a request; the working set the pipeline declares (planes of the three masters, the raw, calibrated and electrons frames, 8 bytes a pixel) equals 6 planes and is within Prompt 157's decoded-memory bound for 1,398,101 pixels and refused above it; 256 frames run, 257 are refused.",
       "bound": "peak frames in flight 1; 6 planes; 256 accepted, 257 refused, 1,398,101 accepted and 1,398,102 refused"
     },
     "e1.reproducible": {
@@ -144,5 +210,10 @@
       "bound": "not run"
     }
   },
-  "corrections": []
+  "corrections": [
+    {
+      "n": 1,
+      "what": "The scene's frame and star positions. The first layout (64 by 64 pixels, stars 12 to 25 pixels apart) was found, on the first run of Prompt 183's detector on frame 0 of a smoke sequence and before any light curve, pull, ratio, coverage or oracle number existed, to be crowded under Prompt 180's rule (another source nearer than the outer annulus plus the aperture radius, 19.5 pixels at FWHM 3): every star was flagged crowded and so would have been left out of the marks by the committed algorithm. The frame is 96 by 96 and the eight stars are at least 24 pixels apart (positions above). No bound, rule or constant of the algorithm changed; the generator's pointing turns about (47.5, 47.5). The first layout and its reason stay in the history of this file."
+    }
+  ]
 }
