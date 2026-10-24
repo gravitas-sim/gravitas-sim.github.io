@@ -11,10 +11,13 @@
 // covering each step once.
 // =============================================================================
 
+import { INSTRUCTOR as MEASUREMENT } from './investigations/depth/measurement-sequence.js';
+
 export default {
   format: 'gravitas.instructor-flow',
   formatVersion: 2,
   lessons: {
+    ...MEASUREMENT.flow,
     'the-suns-motion': [
       {
         from: 'from-stars-to-velocities',

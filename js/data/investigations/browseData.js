@@ -252,4 +252,16 @@ export const BROWSE_META = {
     tags: ['exoplanets'],
     numericCount: 0,
   },
+  'what-is-a-measurement': {
+    tags: ['observing', 'statistics'],
+    numericCount: 0,
+  },
+  'what-does-plus-minus-claim': {
+    tags: ['observing', 'statistics'],
+    numericCount: 0,
+  },
+  'when-the-method-must-refuse': {
+    tags: ['observing', 'statistics'],
+    numericCount: 0,
+  },
 };

@@ -113,6 +113,8 @@ import EXTENDING_AN_EXPERIMENT from './data/investigations/es/extending-an-exper
 import REFITTING_A_TRANSIT from './data/investigations/es/refitting-a-transit.js';
 import TWO_PERIODOGRAMS from './data/investigations/es/two-periodograms.js';
 import SAMPLING_A_POSTERIOR from './data/investigations/es/sampling-a-posterior.js';
+import MEASUREMENT_SHADOWS from './data/investigations/es/measurement-sequence.js';
+import MEASUREMENT_DEEPER from './data/investigations/depth/es/measurement-sequence.js';
 
 /** The Spanish shadow of each lesson, by lesson id. */
 export const SHADOWS = Object.freeze({
@@ -156,6 +158,7 @@ export const SHADOWS = Object.freeze({
   'refitting-a-transit': REFITTING_A_TRANSIT,
   'two-periodograms': TWO_PERIODOGRAMS,
   'sampling-a-posterior': SAMPLING_A_POSTERIOR,
+  ...MEASUREMENT_SHADOWS,
   'design-the-schedule': DESIGN_THE_SCHEDULE,
   'detect-this-planet': DETECT_THIS_PLANET,
   'goldilocks-question': GOLDILOCKS_QUESTION,
@@ -215,6 +218,7 @@ export const DEEPER_SHADOWS = Object.freeze({
   'missing-mass': MISSING_MASS_DEEPER,
   'transit-photometry': TRANSIT_PHOTOMETRY_DEEPER,
   'weighing-stars': WEIGHING_STARS_DEEPER,
+  ...MEASUREMENT_DEEPER,
 });
 
 /**

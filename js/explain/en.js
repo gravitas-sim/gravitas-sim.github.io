@@ -172,6 +172,12 @@ export default {
     'When the signal appears, and whether a model of the event follows it.',
     'The noise is real and often larger than the signal in the raw data.',
   ],
+  claim: [
+    'Synthetic data with a known truth: marks of one blurred star on a frame, seeded repeats of a measurement drawn as intervals, or the chi-square of a fit against a trial value or a line through six points.',
+    'How the mean, the spread and the standard error of the marks, the share of intervals that hold the truth, or the chi-square and the reduced chi-square change as the number of marks, the interval, the trial mass or the terms change.',
+    'How well a position is known and what the plus-or-minus claims, which parameter the data fix and which they leave open, and whether a model describes the data.',
+    'Everything is a model with the truth built in: real repeats rarely come with the truth to count against, and a fit with a good chi-square is not thereby shown to be right.',
+  ],
   'plot-measure': [
     'Your own measurements, one point each, with the quantities named on the axes.',
     'A straight line of points means the two quantities are proportional, or after a transform, a power law.',

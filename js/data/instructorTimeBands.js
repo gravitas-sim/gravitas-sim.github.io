@@ -66,7 +66,10 @@ export const bandOfMinutes = minutes =>
  * Each investigation's band at each depth it offers (core always; quantitative
  * and advanced where the lesson has deeper steps, DEPTH.md).
  */
+import { INSTRUCTOR as MEASUREMENT } from './investigations/depth/measurement-sequence.js';
+
 export const LESSON_BANDS = Object.freeze({
+  ...MEASUREMENT.bands,
   'keplers-laws': { core: 'medium', quantitative: 'long', advanced: 'long' },
   'retrograde-motion': { core: 'medium' },
   'transit-photometry': {

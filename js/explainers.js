@@ -125,6 +125,7 @@ export const FAMILY_IDS = Object.freeze({
   ],
   compare: ['compare-transit'],
   gwEvents: ['gw-events'],
+  claim: ['frame-marks', 'coverage-repeats', 'profile-refusal'],
 });
 
 /**

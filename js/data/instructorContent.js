@@ -15,7 +15,10 @@
 /** Shared closing note pointing at the public model page. */
 const MODEL_PAGE = 'https://gravitas-sim.online/model/';
 
+import { INSTRUCTOR as MEASUREMENT } from './investigations/depth/measurement-sequence.js';
+
 export const INSTRUCTOR_CONTENT = {
+  ...MEASUREMENT.content,
   'extending-an-experiment': {
     topic:
       'Classifying an experiment’s trials, fitting the chance of an outcome with a bootstrap, and extending it to a large synthetic population, in Python, with the limits of what the interval covers',
