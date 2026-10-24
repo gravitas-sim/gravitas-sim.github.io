@@ -128,7 +128,13 @@ def spherical_fit(case, jd, e_au, ra_deg, dec_deg):
         return np.concatenate([da * np.cos(dec_o) / ARCSEC / sig, (dec_o - dec) / ARCSEC / sig])
 
     start = np.array([0.0, 0.0, truth[2] * 1.05, truth[3] * 0.95, truth[4] * 1.1])
-    r = least_squares(resid, start, method="lm", x_scale="jac", xtol=1e-15, ftol=1e-15, gtol=1e-15, max_nfev=2000)
+    # trf with three-point differences and an absolute step of 1e-4 (arcsec, arcsec/yr): the
+    # first run used method lm, whose two-point step (1.5e-8) is below what a double holds of an
+    # angle of order 1 radian, and it stopped short of the minimum (chi-square 48.324 where
+    # 48.2985 is the minimum).
+    r = least_squares(
+        resid, start, method="trf", jac="3-point", diff_step=1e-4, x_scale="jac", xtol=1e-15, ftol=1e-15, gtol=1e-15, max_nfev=5000
+    )
     cov = np.linalg.inv(r.jac.T @ r.jac)
     return {
         "parallax": r.x[4],

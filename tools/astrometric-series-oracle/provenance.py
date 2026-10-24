@@ -26,7 +26,7 @@ rec = {
     "format": "gravitas.astrometric-series-oracle-provenance/1",
     "prompt": 186,
     "oracle": "astropy " + pk["astropy"] + " (coordinates.get_body_barycentric, time) with numpy " + pk["numpy"] + " and scipy " + pk["scipy"],
-    "identity": "Independent, cited implementations; no Gravitas code ran: astropy.coordinates.get_body_barycentric('earth') with the built-in ephemeris (ERFA epv00 of pyerfa " + pk["pyerfa"] + ", nothing downloaded), astropy.time (ERFA time-scale conversions, leap-second table), scipy.optimize.least_squares (method lm, the exact spherical five-parameter astrometric model of a source with constant barycentric velocity, the normalised vector from the Earth to the source), scipy.optimize.curve_fit with absolute sigmas (straight lines in the tangent plane), numpy.random.default_rng (the noise).",
+    "identity": "Independent, cited implementations; no Gravitas code ran: astropy.coordinates.get_body_barycentric('earth') with the built-in ephemeris (ERFA epv00 of pyerfa " + pk["pyerfa"] + ", nothing downloaded), astropy.time (ERFA time-scale conversions, leap-second table), scipy.optimize.least_squares (method trf with three-point differences and diff_step 1e-4; the first run used lm and did not converge, see thresholds.json corrections; the exact spherical five-parameter astrometric model of a source with constant barycentric velocity, the normalised vector from the Earth to the source), scipy.optimize.curve_fit with absolute sigmas (straight lines in the tangent plane), numpy.random.default_rng (the noise).",
     "retrieved": "2026-10-23",
     "index": "https://pypi.org/simple (pip default index; no mirror, no pip.conf, no PIP_* variable); the virtual environment is Prompt 180's, in which nothing was added for this prompt",
     "python": sys.version.split()[0] + " (" + platform.platform() + ", " + platform.machine() + ")",
@@ -37,7 +37,7 @@ rec = {
     "parameters": {
         "model": "x(t) = D (p0 + m (t - t0)) with D = 648000 / (pi parallax) au, p0 the unit vector of (ra, dec), m = mu_a* e_alpha + mu_d e_delta in radians per Julian year, t0 the first epoch; the apparent direction is (x - r_Earth) normalised, r_Earth the barycentric position in au from astropy; no aberration, no light deflection, no light time",
         "noise": "numpy.random.default_rng(noiseSeed): sigma-scaled normals, first the n right ascension offsets (divided by cos dec) and then the n declination offsets, in arcseconds",
-        "sphericalFit": "scipy.optimize.least_squares(method='lm', x_scale='jac', xtol=ftol=gtol=1e-15), parameters the offsets in arcseconds of the first-epoch position from the truth, mu_a*, mu_d and the parallax, started at 1.05, 0.95 and 1.1 times the truth; residuals in sigma units; covariance inv(J^T J)",
+        "sphericalFit": "scipy.optimize.least_squares(method='trf', jac='3-point', diff_step=1e-4, x_scale='jac', xtol=ftol=gtol=1e-15, max_nfev=5000), parameters the offsets in arcseconds of the first-epoch position from the truth, mu_a*, mu_d and the parallax, started at 1.05, 0.95 and 1.1 times the truth; residuals in sigma units; covariance inv(J^T J)",
         "lineFit": "xi and eta (arcsec) of a gnomonic projection about the normalised mean of the unit vectors; the weighted mean epoch as reference; scipy.optimize.curve_fit(absolute_sigma=True, an analytic Jacobian, started at 0.1 and 0.1)",
         "times": "astropy.time.Time(jd, format='jd', scale='utc'), .tt and .tdb; offsets in seconds from the two-part Julian dates",
     },

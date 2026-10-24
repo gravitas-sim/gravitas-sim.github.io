@@ -53,15 +53,22 @@
     },
     "a2.pmClosedForm": {
       "what": "three epochs at 0, 1 and 3 years with xi = 0, 1, 2 arcsec and sigmas 1, 2, 1 arcsec, eta the negative, solved by hand: slope, intercept at tRef and their sigmas from the normal equations in rational arithmetic",
-      "bounds": { "relative": 1e-10 }
+      "bounds": {
+        "relative": 1e-10
+      }
     },
     "a3.twoEpoch": {
       "what": "the two-epoch shift: displacement and its uncertainty sqrt(s1^2 + s2^2) exactly; the label text above appears on every result and the result has no parallax and no distance field; a joint fit of the same two epochs refuses with code too-few-epochs",
-      "bounds": { "displacementArcsec": 1e-9, "sigmaRelative": 1e-12 }
+      "bounds": {
+        "displacementArcsec": 1e-9,
+        "sigmaRelative": 1e-12
+      }
     },
     "a4.parallaxFactors": {
       "what": "the factors against closed forms on a synthetic circular Earth orbit of radius 1 au in the ecliptic (not the ephemeris): at the north ecliptic pole the ellipse is a circle of radius 1; on the ecliptic its semi-minor axis is 0 and its semi-major axis 1, along the ecliptic; at ecliptic latitude b the semi-minor axis is |sin b|",
-      "bounds": { "absolute": 1e-12 }
+      "bounds": {
+        "absolute": 1e-12
+      }
     },
     "a5.jointNoiseless": {
       "what": "one-year, well-sampled (24 epochs evenly spaced over 365 days from 2026-01-05, TDB), noise-free spherical truth through the pack's Earth: p = 0.12 arcsec, mu = (0.35, -0.18) arcsec/yr at ra 265, dec +62 and at ra 75, dec +22 (near the ecliptic), recovered with the same Earth; the model is linear in the tangent plane and the truth is exactly spherical, the difference being a term of order p times the offset (below a micro-arcsecond)",
@@ -81,15 +88,24 @@
     },
     "a7.profile": {
       "what": "the chi-square profile of the parallax by refitting at fixed parallax equals the analytic quadratic of the joint fit at five parallaxes, and profileInterval of it equals the covariance interval",
-      "bounds": { "chi2": 1e-9, "intervalRelative": 1e-3 }
+      "bounds": {
+        "chi2": 1e-9,
+        "intervalRelative": 0.001
+      }
     },
     "b1.earth": {
       "what": "the pack-derived barycentric Earth (equatorial, au) against astropy's get_body_barycentric('earth') (ERFA epv00, built in, no download) at 365 TDB dates 20 days apart from 2025-01-05; and after removing the best straight line from each two-year window the remainder, which is what a parallax series can see",
-      "bounds": { "maxDifferenceAu": 0.00015, "windowResidualAu": 0.00005 }
+      "bounds": {
+        "maxDifferenceAu": 0.00015,
+        "windowResidualAu": 5e-5
+      }
     },
     "b2.jointCrossEphemeris": {
       "what": "noise-free series made in Python (spherical truth, ERFA's Earth) fitted by Gravitas with the pack's Earth: star A ra 265 dec +62, p 0.12, mu (0.35, -0.18), 24 epochs over 2026; star B ra 75 dec +22, p 0.045, mu (-0.08, 0.06), 16 uneven epochs over 2027-03-01 to 2028-02-20",
-      "bounds": { "parallaxRelative": 0.0005, "muArcsecPerYr": 5e-5 }
+      "bounds": {
+        "parallaxRelative": 0.0005,
+        "muArcsecPerYr": 5e-5
+      }
     },
     "b3.jointVsScipy": {
       "what": "noisy series made in Python with a fixed numpy seed (A: sigma 0.004 arcsec, B: 0.006, C: ra 150 dec -35, 40 epochs over 2026-2029, p 0.03, mu (1.2, -0.8), sigma 0.008), fitted by scipy.optimize.least_squares (method lm) on the exact spherical model with ERFA's Earth and by Gravitas on the same positions: the difference in each of p, mux, muy as a share of the formal sigma, the formal sigma of p, and chi-square",
@@ -109,7 +125,10 @@
     },
     "b5.timeVsErfa": {
       "what": "UTC to TT and TDB of 40 dates from 2025 to 2044 against astropy.time (ERFA, the leap-second table)",
-      "bounds": { "ttSeconds": 1e-6, "tdbSeconds": 0.0001 }
+      "bounds": {
+        "ttSeconds": 1e-6,
+        "tdbSeconds": 0.0001
+      }
     },
     "b6.authentic": {
       "what": "an authentic series (published astrometry of a nearby star, or a frame sequence) under a fixed analysis contract; NOT RUN until Prompt 189 supplies authentic frames; nothing fetched, nothing fabricated or simulated"
@@ -143,58 +162,89 @@
     "c4.pmCoverage": {
       "what": "3000 seeded series of 6 epochs spread over 2 to 5 years, sigma 0.02 arcsec, mu uniform in [-1, 1] arcsec/yr, the proper-motion fit; the share of trials where the truth lies within 1 and 1.96 stated sigma, for mux and muy",
       "trials": 3000,
-      "bounds": { "oneSigma": [0.64, 0.72], "oneNinetySix": [0.935, 0.975] }
+      "bounds": {
+        "oneSigma": [0.64, 0.72],
+        "oneNinetySix": [0.935, 0.975]
+      }
     },
     "c5.falseAlarm": {
       "what": "the share of the c1 series and of the c4 series whose residuals fail the consistency test (p below 0.001) when the model is right",
-      "bounds": { "atMost": 0.004 }
+      "bounds": {
+        "atMost": 0.004
+      }
     },
     "c6.shiftCoverage": {
       "what": "3000 seeded two-epoch series with no parallax (sigma 0.02 arcsec at each epoch, epochs 0.5 to 3 years apart, mu uniform in [-1, 1] arcsec/yr): the share where the true displacement lies within 1 and 1.96 stated sigma, for both axes",
       "trials": 3000,
-      "bounds": { "oneSigma": [0.64, 0.72], "oneNinetySix": [0.935, 0.975] }
+      "bounds": {
+        "oneSigma": [0.64, 0.72],
+        "oneNinetySix": [0.935, 0.975]
+      }
     },
     "d1.jointRefusals": {
       "what": "the joint fit refuses (not-constrained, the stated code and the numbers in data) a two-epoch series (too-few-epochs), seven epochs over a year (too-few-epochs), eight epochs over 0.5 year (span), eight epochs over 1.2 years that fall in two sectors only (phase-coverage), epochs identical (no-baseline); and solves one that meets the rules exactly (8 epochs, 0.9 year, 3 sectors): refusal codes exact",
-      "bounds": { "refusalsCorrect": "all" }
+      "bounds": {
+        "refusalsCorrect": "all"
+      }
     },
     "d2.twoEpochLabel": {
       "what": "the label text appears on the result of every two-epoch call over 200 seeded pairs, however far apart the epochs are, and no result has a parallax or a distance",
-      "bounds": { "labelShare": 1 }
+      "bounds": {
+        "labelShare": 1
+      }
     },
     "d3.wrongTimeScale": {
       "what": "the epochs of a well-sampled year (24 epochs, sigma 0.004 arcsec, p = 0.15 arcsec) are all shifted by 45, 91.3, 182.6 and 273.9 days from the epochs the positions were made at (a wrong time scale or origin): at least 99 percent of 200 series each fail the consistency test, and the result's hints name the epoch time scale and its message contains the words time scale",
       "trialsEach": 200,
-      "bounds": { "failShare": 0.99, "namesTimeScale": 1 }
+      "bounds": {
+        "failShare": 0.99,
+        "namesTimeScale": 1
+      }
     },
     "d4.unitConfusion": {
       "what": "a series whose epochs are Julian dates declared as modified Julian dates, and one whose epochs are modified Julian dates declared as Julian dates, are refused with code epoch-range and a message that names the format; a proper-motion fit (no ephemeris needed) of the same declared-wrong epochs is not refused for range",
-      "bounds": { "refusalsCorrect": "all" }
+      "bounds": {
+        "refusalsCorrect": "all"
+      }
     },
     "d5.outsideEphemeris": {
       "what": "a series in 2010 (inside no ephemeris) is refused for the joint fit with code epoch-range and the pack's range in data, and its proper-motion fit works",
-      "bounds": { "refusalsCorrect": "all" }
+      "bounds": {
+        "refusalsCorrect": "all"
+      }
     },
     "d6.malformed": {
       "what": "a non-finite position, a negative or zero sigma, an unknown scale or format, a declination beyond 90, an empty series, a position more than 3600 arcseconds from the others (too-wide) and more than 2000 epochs are each refused with the right code",
-      "bounds": { "refusalsCorrect": "all" }
+      "bounds": {
+        "refusalsCorrect": "all"
+      }
     },
     "d7.outlier": {
       "what": "one epoch of 24 displaced by 12 sigma in a joint fit: at least 99 percent of 200 series fail the consistency test and the residual table's largest normalised residual is at that epoch in at least 95 percent",
       "trials": 200,
-      "bounds": { "failShare": 0.99, "locatedShare": 0.95 }
+      "bounds": {
+        "failShare": 0.99,
+        "locatedShare": 0.95
+      }
     },
     "d8.frameStatement": {
       "what": "over 200 seeded joint fits every parallax and every distance carries the frame statement (kind relative); a distance is always accompanied by its interval at both levels and its method; with a supplied correction without a source the fit refuses (correction-source); with one supplied the absolute parallax is the relative plus the correction and both are shown",
-      "bounds": { "statementShare": 1 }
+      "bounds": {
+        "statementShare": 1
+      }
     },
     "d9.zeroParallax": {
       "what": "3000 seeded series (sigma 0.01 arcsec, 20 epochs, true parallax 0): the share whose 0.6827 distance interval is open above is the share of p estimates within one sigma of zero from above, 0.841; and no point distance is shown for a non-positive estimate",
       "trials": 3000,
-      "bounds": { "openShare": [0.8, 0.88] }
+      "bounds": {
+        "openShare": [0.8, 0.88]
+      }
     }
   },
   "notRun": [
     "b6 until Prompt 189: no authentic series is held, none was fetched"
+  ],
+  "corrections": [
+    "1: the oracle's nonlinear fit named scipy.optimize.least_squares method lm. Its first run stopped short of the minimum (chi-square 48.324 for series B where the minimum is 48.2985): the method's two-point difference step, 1.5e-8, is below what a double holds of an angle of order one radian, so the Jacobian was noise. This was found because the first Gravitas fit disagreed with it by 0.11 sigma in one proper-motion component, against the bound 0.1; the oracle was wrong and the module was right (the same fit by method trf with three-point differences and a step of 1e-4 reaches 48.29854, the module's 48.29853). The oracle was re-run with method trf; no bound, no case, no tolerance and no input was changed, and the first lm results were never committed"
   ]
 }
