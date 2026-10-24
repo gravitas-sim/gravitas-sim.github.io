@@ -1,0 +1,219 @@
+{
+  "format": "gravitas.frame-pipeline-thresholds/1",
+  "prompt": 185,
+  "committed": "Before any implementation output was inspected: this file and the validation contract in FRAME_PIPELINE.md were committed ahead of js/measure/frameSeries.js, the sequence generator, the validation tool and the oracle's results. Only the speed of the existing kernel functions (milliseconds a frame, which fixed the ensemble sizes) had been timed. A check that a measurement crosses is a failed check, not a reason to move the bound; only Carl resets a threshold, with a register row.",
+  "algorithm": {
+    "sequence": "an ordered list of raw frames read one at a time (the pipeline never holds two), each with its time (days from the first) and exposure, and a calibration set (bias, dark and flat frames) read once into three masters with js/kernels/detector/pipeline.js buildMasters (bias median, bias-subtracted dark median, flat mean normalised to 1). At most 256 frames (Prompt 157's limit). Peak decoded planes at once: the three masters, the raw frame, the calibrated frame and the electrons frame, 8 bytes a pixel each, which must fit the page's 64 MiB (a frame of up to 1,398,101 pixels).",
+    "calibrate": "js/kernels/detector/reduce.js calibrate (bias, the dark scaled by the exposure ratio, the flat), counts times the gain to electrons, then maskCosmicRays with the stated read noise; the sidecar of the result has calibration.state 'calibrated', unit electron, the stated gain and read noise, and a history that names the three masters.",
+    "marks": "from one reference frame (index 0 unless asked): Prompt 183's detectIn at sigma 5, minimum area 5, FWHM the stated one or the Gaussian FWHM Prompt 183's measurePsf finds on the reference (the typed width, with a warning, when it finds none); the marks are the sources with none of the flags saturated, edge, masked, crowded, ordered by flux; at most 20. Marks may instead be given as positions, in which case nothing is detected and the registration may be switched off. The aperture is Prompt 180's apertureFor(FWHM): r = 1.5 FWHM, annulus 3 to 5 FWHM, exact edges, the weighted centroid iteration to recentre, unless the radii are given.",
+    "target": "a position in the reference frame, or a mark id; the mark within 2 pixels of it, else the run is refused (target-not-found).",
+    "register": "every other frame is registered to the reference. Its own sources are detectIn at sigma 6 on its calibrated electrons; translations are voted for over every (reference mark, frame source) pair within a search radius of 10 pixels, counting the pairs that agree within 1.0 pixel (the largest count wins, the smaller shift on a tie); the matched pairs go to Prompt 181's register (a weighted Procrustes fit: shift and rotation, no scale) and are matched again through that transform within 1.0 pixel and fitted again. The frame is registered when at least max(3, ceil(0.5 x marks)) marks are matched and the rms of the residuals is at most 0.5 pixel. The reference is registered by identity.",
+    "photometry": "every mark in every frame at its registered position, Prompt 180's exact-edge aperture through the kernel's aperturePhotometry with the CCD equation, plus the dark's shot noise and the masters' own per-pixel variance (js/kernels/detector/pipeline.js mastersVariance); a mark is recentred by Prompt 180's weighted centroid unless that is off. A refusal of any kind (masked, saturated, edge, annulus, centroid) is the refusal of that mark in that frame and is kept with its code.",
+    "comparison": "default: candidates are the marks other than the target with reference signal to noise at least 20 and a measurement in every frame that is used. Stability: for each candidate j, d_jk = -2.5 log10(F_jk / sum of the other candidates' F_ik) and chi2_j = sum_k ((d_jk - mean d_j) / sigma_jk)^2, with sigma_jk the CCD-equation errors in quadrature, N - 1 degrees of freedom; the star with the smallest chi-square survival probability is removed while that probability is below 0.001, and the test runs again on the rest (sequential elimination); with fewer than 3 candidates the test is not run and each is 'untested'. The comparison set is the brightest 5 of the stars that remain. The override is a list of mark ids, used as given, each still tested and labelled (a star flagged unstable and used anyway carries a warning). No comparison star is a refusal (no-comparison).",
+    "lightcurve": "the ensemble flux is the sum of the comparison stars' net fluxes with their errors in quadrature; dm_k is js/kernels/detector/reduce.js differentialMagnitude of the target against the ensemble, sigma_k its propagated error. The fit is js/kernels/detector/lightcurve.js scanPeriod (weighted sinusoid, a frequency grid finer than 1/(8 baseline), golden-section refinement) between a minimum period of 4 median cadences and a maximum of half the baseline unless given. The stated uncertainties: the amplitude's and the constant's from the fit covariance times sqrt(max(1, chi2/dof)); the period's from the asymptotic bound sigma_P = P^2 sqrt(6) s / (pi T A sqrt(N)), with s the root mean square of the stated per-point sigmas (times sqrt(max(1, chi2/dof))), T the baseline, A the fitted amplitude and N the points, labelled derived and asymptotic. The variability test: the chi-square of the weighted constant against N - 1 degrees of freedom, 'variable' when its survival probability is below 0.001.",
+    "refusals": "a light curve is refused, with the frames named, when any used frame has no registration or any photometry refusal for the target or for the ensemble; the student may exclude named frames and run again, and the record says which were excluded and why. Pre-flight refusals (too many frames, a size that does not fit, missing masters, a frame whose size differs from the first, fewer than 5 usable frames) are made before the frame provider is asked for any frame beyond the one that shows the problem."
+  },
+  "scene": {
+    "detector": {
+      "width": 96,
+      "height": 96,
+      "cosmicRate": 0,
+      "otherwise": "DEFAULT_DETECTOR of js/kernels/detector/frame.js (gain 1.5, read noise 8, bias 500 counts with a column pattern, dark 0.1 e/s with 1 percent hot pixels at 4 e/s, flat structure with vignetting, dust and 1 percent pixel scatter, FWHM 2.8)"
+    },
+    "calibrationSet": "calibrationSet(seed, {nBias: 10, nDark: 7, darkExposure: 120, nFlat: 10, flatExposure: 5, flatLevel: 20000}) of the same seed as the frames (the lab's own set)",
+    "exposure": 60,
+    "sky": 3,
+    "stars": [
+      {
+        "id": "V",
+        "x": 47.3,
+        "y": 28.6,
+        "rate": 900,
+        "role": "variable"
+      },
+      {
+        "id": "C1",
+        "x": 20.2,
+        "y": 62.7,
+        "rate": 1400,
+        "role": "comparison"
+      },
+      {
+        "id": "C2",
+        "x": 74.8,
+        "y": 66.1,
+        "rate": 1000,
+        "role": "comparison"
+      },
+      {
+        "id": "C3",
+        "x": 76.6,
+        "y": 22.9,
+        "rate": 700,
+        "role": "comparison"
+      },
+      {
+        "id": "C4",
+        "x": 21.4,
+        "y": 20.2,
+        "rate": 1200,
+        "role": "comparison"
+      },
+      {
+        "id": "C5",
+        "x": 50.9,
+        "y": 79.5,
+        "rate": 800,
+        "role": "check"
+      },
+      {
+        "id": "F1",
+        "x": 8.7,
+        "y": 41.3,
+        "rate": 120,
+        "role": "faint"
+      },
+      {
+        "id": "F2",
+        "x": 88.2,
+        "y": 44.8,
+        "rate": 90,
+        "role": "faint"
+      }
+    ],
+    "frames": 48,
+    "cadenceDays": 0.01,
+    "variable": {
+      "period": 0.12,
+      "amplitude": 0.05,
+      "phase": "drawn from the seed, uniform in [0, 1) cycles"
+    },
+    "cloud": "the lab's: a damped walk of the common transparency, rms 0.1, correlation 0.8, never below 0.3",
+    "pointing": "frame 0 is the reference at the nominal positions; every other frame shifts every star by a draw of N(0, 1.5 pixel) in each axis and turns the field about the frame centre (47.5, 47.5) by a draw of N(0, 0.2 degree); the fixed pattern of the detector does not move",
+    "generator": "tools/frame-pipeline-synth.mjs and js/measure/frameSource.js, which makes each frame with the detector kernel's simulateFrame and, with no pointing change, the very frames simulateSeries makes",
+    "seedPrefix": "fp",
+    "ensemble": 100,
+    "ensembleSeeds": "fp-ens-0 to fp-ens-99 (one sequence and its calibration set each)"
+  },
+  "checks": {
+    "a1.recovery": {
+      "what": "the injected amplitude (0.05 mag) and period (0.12 d) recovered end to end on the 100 ensemble sequences, the default pipeline (detect, register, comparison by stability, light curve). Pulls (fit - truth) / stated sigma: mean within 4.5 / sqrt(100) of 0, standard deviation within 4.5 / sqrt(200) of 1; no amplitude more than 5 sigma from the truth; no period more than 2 percent from the truth.",
+      "bounds": {
+        "pullMeanWithin": 0.45,
+        "pullSdWithin": 0.318,
+        "worstAmplitudeSigma": 5,
+        "worstPeriodRelative": 0.02
+      }
+    },
+    "a2.uncertainty": {
+      "what": "the stated uncertainties agree with the scatter of constant stars. On the ensemble, with the comparison set fixed to C1 to C4 and C5 as the check star: the pooled ratio sqrt(mean over sequences of the check's sample variance / mean over sequences of its mean squared propagated sigma) lies in the interval; and the target's raw magnitudes (no differential) are at least 5 times noisier than the check star (the differential step does its work).",
+      "bounds": {
+        "pooledRatio": [0.9, 1.1],
+        "rawOverCheckAtLeast": 5
+      }
+    },
+    "a3.lab": {
+      "what": "nothing is reimplemented. With marks given as the true positions, registration off, no recentring, centre weighting, the lab's aperture (5, 8, 13), one comparison star (C1) and the lab's series (js/kernels/detector/lab.js labSeries, draws 1 to 3), the light curve's dm and sigma are those of js/kernels/detector/pipeline.js reduceSeries, to 1e-9 in magnitudes and the masters' extra variance is its mastersVariance exactly.",
+      "bounds": {
+        "dmWithin": 1e-9,
+        "sigmaWithin": 1e-9,
+        "extraVariance": "exactly equal"
+      }
+    },
+    "a4.calibration": {
+      "what": "the calibrated frame is the kernel's calibrate, pixel for pixel, for every frame of one sequence (the identity check), and the sidecar it carries says what was done: state calibrated, unit electron, three masters named",
+      "bound": "0 difference over every pixel of every frame (before the cosmic-ray mask)"
+    },
+    "a5.registration": {
+      "what": "the registration recovers the pointing the generator drew. On the ensemble, the position of V in each frame mapped from the reference through the registration, against the truth manifest's position: root mean square at most 0.15 pixel, the 99th percentile at most 0.4 pixel; at most 0.1 percent of frames refused for registration.",
+      "bounds": {
+        "rmsPix": 0.15,
+        "p99Pix": 0.4,
+        "refusedFractionAtMost": 0.001
+      }
+    },
+    "b1.oraclePhotometry": {
+      "what": "an independent pipeline on the same sequence (seed fp-b-1, 48 frames): the oracle (numpy, scipy, astropy 6.1.7, photutils 2.0.2) reads the raw frames and the calibration set as whole counts, makes its own masters (numpy median, median of the bias-subtracted darks, normalised mean flat), calibrates, finds each frame's shift by an FFT cross-correlation of the star field against the reference with a parabolic sub-pixel peak (scipy), measures the same stars at the same aperture radii by photutils CircularAperture with method 'exact' and a sigma-clipped (3 sigma, 5 iterations) mean sky from a CircularAnnulus (ApertureStats), and forms the target's differential magnitude against C1 to C4 summed. Its CCD-equation sigma is not used: the comparison is in units of Gravitas's propagated sigma. Per frame d = dm_Gravitas - dm_oracle: rms(d) / rms(sigma) at most 0.5; the 95th percentile of |d| / sigma at most 1.0; the largest |d| / sigma at most 2.0.",
+      "bounds": {
+        "rmsOverSigma": 0.5,
+        "p95OverSigma": 1.0,
+        "maxOverSigma": 2.0
+      }
+    },
+    "b2.oracleCalibration": {
+      "what": "the oracle's calibrated frames (counts to electrons by the same gain) against Gravitas's before the cosmic-ray mask, frames 0, 17 and 47 pinned: the largest difference in electrons over the frame's rms noise.",
+      "bound": 1e-9
+    },
+    "b3.oracleFit": {
+      "what": "the oracle fits its own light curve with astropy LombScargle (weighted, floating mean, the same period limits) and Gravitas fits its own: the period and the amplitude agree within half of Gravitas's stated sigma each.",
+      "bounds": {
+        "periodSigmas": 0.5,
+        "amplitudeSigmas": 0.5
+      }
+    },
+    "b4.oracleShifts": {
+      "what": "the pointing of the sequence: the position of V in each frame by Gravitas's registration against the oracle's cross-correlation shift applied to the same reference position: root mean square at most 0.25 pixel, largest at most 0.6 pixel.",
+      "bounds": {
+        "rmsPix": 0.25,
+        "maxPix": 0.6
+      }
+    },
+    "c1.coverage": {
+      "what": "the stated uncertainties cover the truth at the stated rate on the 100 ensemble sequences: the share of amplitudes within 1 sigma and within 2 sigma of 0.05, and of periods within 1 sigma and within 2 sigma of 0.12 (sigma as stated: the amplitude's covariance sigma scaled, the period's asymptotic one); the levels are 68.27 and 95.45 percent and the bounds are 4.5 standard errors of a binomial at 100 draws.",
+      "bounds": {
+        "amplitude": {
+          "oneSigma": [0.474, 0.892],
+          "twoSigma": [0.86, 1.0]
+        },
+        "period": {
+          "oneSigma": [0.474, 0.892],
+          "twoSigma": [0.86, 1.0]
+        }
+      }
+    },
+    "d1.registrationRefusal": {
+      "what": "a sequence whose frames fail registration refuses the light curve and says which. Ten seeded sequences (fp-d1-0 to fp-d1-9): frames 10 and 11 are the field turned a quarter turn about the frame centre (the pointing was lost) and frame 20 is clouded to 3 percent of the light. The run is refused with code registration and the named frames are exactly 10, 11 and 20, with no light curve returned; excluding those three frames by name gives a light curve of 45 points whose record lists them as excluded. No frame outside the three is named, in any of the ten.",
+      "bound": "10 of 10 refused with exactly [10, 11, 20]; 10 of 10 completed with exclusion and 45 points"
+    },
+    "d2.stability": {
+      "what": "a comparison star that varies is flagged. (i) 40 seeded sequences (fp-d2v-0 to 39) in which C2 varies with amplitude 0.06 mag and period 0.2 d: the default pipeline flags C2 and no other star in at least 95 percent of them, and the light curve it returns does not use C2; (ii) 40 constant-comparison sequences (fp-d2c-0 to 39, every comparison constant): at most 2 stars flagged over the 5 stars of all 40 (200 star tests). With the manual override naming C2 the node warns unstable and the flag is kept.",
+      "bounds": {
+        "variableFlaggedAtLeast": 0.95,
+        "falseFlagsAtMost": 2
+      }
+    },
+    "d3.refusals": {
+      "what": "pre-flight and structural refusals, each with its own code, the frame provider asked for no more frames than the check needs and the input frames unchanged: too-many-frames (257 frames, provider asked for 0), too-large (a frame whose planes do not fit 64 MiB, provider asked for at most 1), no-masters (a raw sequence with no calibration set), frame-shape (frame 7 of another size, named), too-few-frames (4 usable frames), target-not-found (a target 10 pixels from every mark), no-comparison (the only candidate flagged or every candidate under the signal-to-noise floor), saturated-target (frame 5's target aperture holds a saturated pixel: refused naming frame 5 under code photometry), a parameter outside its limit (bad-parameter: the period limits reversed, a minimum period under twice the cadence). No refusal carries a number.",
+      "bound": "every case refused with its code, the named frames exact, the provider's request counts as stated"
+    },
+    "d4.constantStar": {
+      "what": "a sequence with no variable must not claim one. 60 seeded sequences (fp-d4-0 to 59) with the target constant: the variability test says 'variable' in at most 2, and the fitted amplitude is under 5 of its stated sigmas in at least 98 percent.",
+      "bounds": {
+        "claimedVariableAtMost": 2,
+        "amplitudeUnder5SigmaAtLeast": 0.98
+      }
+    },
+    "d5.memory": {
+      "what": "the frames are read one at a time. The frame provider is told when the pipeline has finished with each frame; over a 256-frame run (the scene's frames) the number of frames handed out and not yet released never exceeds 1 at a request; the working set the pipeline declares (planes of the three masters, the raw, calibrated and electrons frames, 8 bytes a pixel) equals 6 planes and is within Prompt 157's decoded-memory bound for 1,398,101 pixels and refused above it; 256 frames run, 257 are refused.",
+      "bound": "peak frames in flight 1; 6 planes; 256 accepted, 257 refused, 1,398,101 accepted and 1,398,102 refused"
+    },
+    "e1.reproducible": {
+      "what": "a run is reproducible by its seed. The same sequence twice gives the identical light curve and uncertainties (Object.is, one process); a record replayed from its saved form on the same sequence reports every node identical; another seed differs; the frame generator with no pointing change gives the very frames of js/kernels/detector/frame.js simulateSeries. Counts (marks found in the reference of seed fp-e1, the frames named in d1) are pinned as integers; nothing that passes through exp, log, pow or a trigonometric function is pinned across Node versions.",
+      "bound": "identity, replay identical, difference, equality with simulateSeries, pinned integers"
+    },
+    "f1.lesson": {
+      "what": "the lesson 'A Variable Star From Frames' at its upper depth. (i) the full pipeline (detect, register, comparison, light curve) on the lesson's own series for draws 1 to 3 (labSeries: 40 frames of 48 by 48, V, C1 and C2) recovers the period within the lesson's own tolerance of 0.004 day of 0.12 and the amplitude within 4.5 of its stated sigma of 0.04; (ii) every step of the lesson at the core, quantitative and advanced depths that existed before this prompt has the same sid, kind, prompt, answer, tolerance and tool values as at v3 (27e4db69), and the lesson's grading of those steps with the answers the kernel gives is unchanged (tests/calibrationLessons.test.js passes unedited).",
+      "bound": "3 of 3 draws within tolerance; every earlier step identical"
+    },
+    "g1.authentic": {
+      "what": "a light curve from an authentic frame sequence of Prompt 189 against the published or independently reduced values. NOT RUN until Prompt 189 has landed an authentic sequence: nothing was downloaded and nothing was fabricated for this leg.",
+      "bound": "not run"
+    }
+  },
+  "corrections": [
+    {
+      "n": 1,
+      "what": "The scene's frame and star positions. The first layout (64 by 64 pixels, stars 12 to 25 pixels apart) was found, on the first run of Prompt 183's detector on frame 0 of a smoke sequence and before any light curve, pull, ratio, coverage or oracle number existed, to be crowded under Prompt 180's rule (another source nearer than the outer annulus plus the aperture radius, 19.5 pixels at FWHM 3): every star was flagged crowded and so would have been left out of the marks by the committed algorithm. The frame is 96 by 96 and the eight stars are at least 24 pixels apart (positions above). No bound, rule or constant of the algorithm changed; the generator's pointing turns about (47.5, 47.5). The first layout and its reason stay in the history of this file."
+    }
+  ]
+}

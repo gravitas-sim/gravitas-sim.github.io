@@ -453,7 +453,9 @@ export function measure(a, s) {
     if (a.mask?.[i] || !Number.isFinite(image.values[i])) masked++;
     else if (image.values[i] >= a.limit) hot++;
   }
-  if (masked) return refuse('masked', { pixels: masked });
+  // A caller that has repaired its masked pixels (Prompt 185's cosmic-ray
+  // replacement) may measure through them and be told how many there were.
+  if (masked && !s.maskedOk) return refuse('masked', { pixels: masked });
   if (hot) return refuse('saturated', { pixels: hot });
   let plane = null;
   if (out.background === 'plane') {
@@ -477,6 +479,8 @@ export function measure(a, s) {
     mask: a.mask,
     weights: cover,
     background: plane,
+    darkPerPixel: s.darkPerPixel,
+    extraVariance: s.extraVariance,
   });
   const bg = p.background;
   if (!(bg.n >= 20)) return refuse('annulus', { pixels: bg.n });
@@ -506,6 +510,7 @@ export function measure(a, s) {
     skySigma: bg.scatter / Math.sqrt(bg.n),
     skyScatter: bg.scatter,
     skyPixels: bg.n,
+    maskedPixels: masked,
     area: p.npix,
     terms: p.terms,
     detected,
