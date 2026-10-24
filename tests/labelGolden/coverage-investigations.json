@@ -6,7 +6,7 @@
   "js/observatory/fitPanel.js:557:62",
   "js/observatory/guidePanel.js:330:53",
   "js/observatory/measurePanel.js:491:29",
-  "js/observatoryPage.js:480:50"
+  "js/observatoryPage.js:491:50"
  ],
  "hazards": {
   "js/investigations/stepView.js:1194:13": [

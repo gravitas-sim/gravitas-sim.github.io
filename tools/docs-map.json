@@ -359,6 +359,13 @@
       "student": true
     },
     {
+      "file": "INJECTION.md",
+      "kind": "feature",
+      "purpose": "Completeness by injection: synthetic sources added to a copy of a frame and found again, the curve with exact intervals, the selection function, the oracle and the validation (Prompt 184).",
+      "owner": 184,
+      "student": false
+    },
+    {
       "file": "INSTRUCTOR_FLOW.md",
       "kind": "guide",
       "purpose": "Activity, course, kit and review for instructors.",

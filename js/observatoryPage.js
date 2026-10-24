@@ -253,6 +253,15 @@ $('obsDetectPanel').addEventListener('toggle', () => {
       () => (detect = null)
     );
 });
+// Completeness by injection (INJECTION.md): loaded when first opened.
+let inject = null;
+$('obsInjectPanel').addEventListener('toggle', () => {
+  if ($('obsInjectPanel').open && state.view)
+    inject ??= import('./observatory/imageInject.js').then(
+      m => m.mountInject($('obsInjectBody'), { ...lent, state }),
+      () => (inject = null)
+    );
+});
 // The archive import (ARCHIVE_IMPORT.md): loaded when first opened.
 let archive = null;
 $('obsArchivePanel').addEventListener('toggle', () => {
@@ -385,6 +394,7 @@ function renderAll() {
     'obsMarksPanel',
     'obsPhotoPanel',
     'obsDetectPanel',
+    'obsInjectPanel',
   ])
     $(id).hidden = !isImage;
   let drawn = null;
@@ -430,6 +440,7 @@ function renderAll() {
   measure?.then(p => p.update());
   photo?.then(p => p.update());
   detect?.then(p => p.update());
+  inject?.then(p => p.update());
   guide?.then(p => p.update());
   renderSelectionBar();
   $('obsUndo').disabled = !state.history.canUndo();

@@ -42,6 +42,7 @@ const SURFACE = {
   'image-calibration': 'observatory',
   'image-photometry': 'observatory',
   'image-detection': 'observatory',
+  'image-injection': 'observatory',
   'sweep-analysis': 'experiments',
   'experiment-result': 'experiments',
   lab3d: 'lab3d',
