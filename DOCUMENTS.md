@@ -18,7 +18,7 @@ catalogue refers to it, so a change to it can reach a student.
 | [AI_ASSISTANCE_GATE.md](AI_ASSISTANCE_GATE.md) | Instructor-side AI assistance gate. | gate | unassigned | written | no |
 | [ANALYSIS_LAB.md](ANALYSIS_LAB.md) | The analysis laboratory. | feature | unassigned | written | no |
 | [ARCHIVE_IMPORT.md](ARCHIVE_IMPORT.md) | Importing from an archive. | feature | unassigned | written | no |
-| [ASTROMETRY.md](ASTROMETRY.md) | Sky coordinates for an image: WCS-lite, registration and their validation (Prompt 181). | feature | P181 | written | no |
+| [ASTROMETRY.md](ASTROMETRY.md) | Sky coordinates for an image (WCS-lite, registration; Prompt 181) and astrometric time series, motion and well-sampled parallax (Prompt 186), with their validation. | feature | P181 | written | no |
 | [BRANCHING.md](BRANCHING.md) | Branches, the publish rule and the table of generated artifacts. | process | unassigned | regions (docs) | no |
 | [CALIBRATION_LAB.md](CALIBRATION_LAB.md) | The calibration lab. | feature | P86 | written | yes |
 | [CAPABILITY_RUNTIME.md](CAPABILITY_RUNTIME.md) | The capability runtime, the first slice of the platform package. | design | unassigned | written | no |

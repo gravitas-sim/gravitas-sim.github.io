@@ -433,8 +433,8 @@ second implementation on the same series", not "agrees with a published solution
 
 `npm run astrometric-series:validate` runs every row below (Node 22.23.4 and
 24.4.0 give the same rows); the bound is the one committed before the module
-existed (`thresholds.json`). 62 judged rows, 61 pass, 1 FAILS as committed, 1 not
-run (b6); 4 evidence rows.
+existed (`thresholds.json`). 69 judged rows, 68 pass, 1 FAILS as committed, 1 not
+run (b6); 6 evidence rows.
 
 | Check | Measured | Bound | Verdict |
 | --- | --- | --- | --- |
