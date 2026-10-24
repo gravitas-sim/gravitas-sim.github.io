@@ -1,0 +1,2010 @@
+{
+  "format": "gravitas.image-packs-authentic-provenance/1",
+  "prompt": 189,
+  "part": 3,
+  "retrieved": "2026-10-24",
+  "authorization": "Carl, chat 2026-10-24: \"Yes go ahead with the four requests, R1 to R4\" (relayed by the coordinator); under his earlier ruling, rights-checked public archive files only. Terms were read before each download and are quoted below.",
+  "tessFfi": {
+    "what": "84 consecutive TESS 200-second calibrated full-frame images (ffic) of camera 1, CCD 2, sector 56, 2022-09-04 04:15 to 08:52 UTC, around the transit of HD 209458 b at BTJD 2826.78; an 81 by 81 pixel cutout of each about HD 209458",
+    "source": "https://stpubdata.s3.amazonaws.com/tess/public/ffi/s0056/2022/247/1-2/<name>_ffic.fits (STScI public dataset on AWS, which mirrors MAST; accepted as MAST by Carl, chat 2026-10-24)",
+    "readAs": "two byte ranges per file: the headers (bytes 0 to 14,399) and 81 rows of the calibrated image (the cal extension starts at byte 14,400; rows of 2,136 big-endian float32 pixels, 8,544 bytes each): 692,064 bytes. 84 files, 59,342,976 bytes read in all; nothing else of the files was read.",
+    "terms": "MAST data use policy (https://archive.stsci.edu/publishing/data-use, read 2026-10-24): \"Most data hosted at MAST are in the public domain ... and therefore do not have restrictions on use\"; the originating mission and STScI are to be acknowledged. TESS mission data have no proprietary period.",
+    "decision": "admitted, public domain; the cutout is committed (2,204,496 bytes)",
+    "cutout": {
+      "shape": [84, 81, 81],
+      "dtype": "float32-le",
+      "order": "frame, row, column",
+      "columns": [1130, 1210],
+      "rows": [316, 396],
+      "origin": "zero-based array indices of the FFI image, so the first pixel of each frame is column 1130, row 316",
+      "bytes": 2204496,
+      "sha256": "6b2111ad8a8f406287b37c94af30bf9d45b85cad45211a99fe3baf82a0f2892c"
+    },
+    "cutoutFile": "tests/fixtures/imagePacks/authentic/ffi-cutout-s56-1-2.f32",
+    "units": "electrons/s, calibrated (bias, dark, flat, smear, vignetting and dead time applied; BACKAPP false: the background is NOT subtracted), as the archive writes them",
+    "noSkyWcs": "the FFI headers carry only a physical WCS (RAWX, RAWY) and no sky WCS",
+    "anchor": "the frames are placed by the pack tess-hd209458-s56-frame: the zero-based pixel of the FFI array is that pack pixel plus (1165, 352), found by normalised cross-correlation of the pack frame (11 by 13) with the FFI stripe (0.998 at that offset, every flip and transpose lower: 0.987 at best), and the pack WCS carried to the cutout by adding (35, 36) to CRPIX. It is an anchor for matching stars, not a solution: the legs fit their own.",
+    "gainAndReadNoise": "the TPF header values of the pack (gain 5.19, read noise 9.5496, CCD output D), as the pack uses them; the FFI header gives 5.11 and 7.358 (output C) for the columns the cutout lies in by the array coordinates. The two sources disagree on the output, which this record does not resolve; the effect on the bright stars is below the contract bounds.",
+    "frames": [
+      {
+        "name": "tess2022247041525-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247041525-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "c32c10f556febb8c576982874b450228207d33e8b6ed97a280ec5a4ec7c2fe4b"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "55828ef6b6429f30f781cc766ba3a3477233b6f9d7d049bf0993323b42ba0e69"
+        },
+        "tstartBtjd": 2826.683362856153,
+        "tstopBtjd": 2826.685677438416,
+        "exposureDays": 0.001833332486,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T04:22:53.367",
+        "dateEnd": "2022-09-04T04:26:13.347",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247041845-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247041845-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "2a28952dceae3ab1f311ff03c07dfc45294a91ed0d1b8ae3c346fe74679495e9"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "f9741865580a295f1d92c73a2917377195a5fe1bd582e5c90ab51a4746fd7910"
+        },
+        "tstartBtjd": 2826.685677680608,
+        "tstopBtjd": 2826.687992262871,
+        "exposureDays": 0.001833332485,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T04:26:13.368",
+        "dateEnd": "2022-09-04T04:29:33.348",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247042205-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247042205-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "4d3780ee03265df091594ab2a11fe3c6924d20872f2f681e67fe0b3fb386c4be"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "225825a083452b6aa027873a0d967b64701eee1865d2168e3cca8f6239362115"
+        },
+        "tstartBtjd": 2826.687992505063,
+        "tstopBtjd": 2826.690307087327,
+        "exposureDays": 0.001833332487,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T04:29:33.368",
+        "dateEnd": "2022-09-04T04:32:53.348",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247042525-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247042525-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "c84fde9c317372fdd42843e4e4a61a5984e6ae75d8dd652f99fbaa83ba08de9b"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "6af9b406d3a50132f49d7c599f8e0803b6d3d8c5b566e6e3dc3d04883ba6aac8"
+        },
+        "tstartBtjd": 2826.690307329518,
+        "tstopBtjd": 2826.692621911781,
+        "exposureDays": 0.001833332485,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T04:32:53.369",
+        "dateEnd": "2022-09-04T04:36:13.349",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247042845-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247042845-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "71ead2fb5c5e18edaa84bc83a4b0447f52e455c6faca46ff279850ee89a8cc50"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "63f00be748e7225d6ac43b427549934c74f81a77c9dffd2ace15b575c89a8f09"
+        },
+        "tstartBtjd": 2826.692622153973,
+        "tstopBtjd": 2826.694936736237,
+        "exposureDays": 0.001833332487,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T04:36:13.370",
+        "dateEnd": "2022-09-04T04:39:33.350",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247043205-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247043205-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "47f7c5a229b6c72b2d8c821bc40fc4d4be8067201db750091e096b726d2178b2"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "2ba1deb885ccc1e4ab798c065d266b37fb2b91b0b31747d2787565fc86a21bf3"
+        },
+        "tstartBtjd": 2826.694936977963,
+        "tstopBtjd": 2826.697251560227,
+        "exposureDays": 0.001833332487,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T04:39:33.371",
+        "dateEnd": "2022-09-04T04:42:53.351",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247043525-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247043525-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "596daf9669bf5f528c2eb6dbca4f9cefbb2b78d6955037e0c403cb1279f0760a"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "83c8b5d56fa2f37db71ac52d6be0f8d1d7d29fb4cd04ce19944a7c826ff96b87"
+        },
+        "tstartBtjd": 2826.697251802419,
+        "tstopBtjd": 2826.699566384681,
+        "exposureDays": 0.001833332485,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T04:42:53.372",
+        "dateEnd": "2022-09-04T04:46:13.352",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247043845-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247043845-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "2e7f71fdcd123d32e1ba81f0bb8dc97b96043b07d456fd0fc87caceed8a06059"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "d228e3babc33f7b78ae5bc71e38dea5d34f1bd014f400a9038d442c589a77c4c"
+        },
+        "tstartBtjd": 2826.699566626873,
+        "tstopBtjd": 2826.701881209137,
+        "exposureDays": 0.001833332487,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T04:46:13.373",
+        "dateEnd": "2022-09-04T04:49:33.352",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247044205-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247044205-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "3cc7ba835469767238e60d54f724a62d94c055ab441b2fac848b09cb3b77b396"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "e0c1e269efc17b70137e87e1cb6ec1929f3170ad547db9a364fdd9aff1d76ca3"
+        },
+        "tstartBtjd": 2826.701881451329,
+        "tstopBtjd": 2826.704196033593,
+        "exposureDays": 0.001833332487,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T04:49:33.373",
+        "dateEnd": "2022-09-04T04:52:53.353",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247044525-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247044525-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "0904c244ac713e359321ecadbe4ad33065c24a25f5c3fe2a789292844332cbc7"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "e958d727f43d35af97ee86d9d4f26d91a052cc8e025863b1d9222acd18e5f105"
+        },
+        "tstartBtjd": 2826.704196275319,
+        "tstopBtjd": 2826.706510857583,
+        "exposureDays": 0.001833332486,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T04:52:53.374",
+        "dateEnd": "2022-09-04T04:56:13.354",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247044845-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247044845-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "83c35dd4fc2d7ff49e2fc9d8ad9838ecb899d2b7c405c30e8d58005e1c776779"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "6ed4ddd5b00d5010e15613947555aa5830fab68daca1a82d23ee477cfccc0560"
+        },
+        "tstartBtjd": 2826.706511099774,
+        "tstopBtjd": 2826.708825682036,
+        "exposureDays": 0.001833332484,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T04:56:13.375",
+        "dateEnd": "2022-09-04T04:59:33.355",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247045205-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247045205-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "fe3413a45f3e905c44f21e5fb2e9faee0fcabfe2279ea1c1b972030d785da15d"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "b1805996f7b6c252caa2abb5e406c380bda2d4b4c670713b217b6744eeed2b5f"
+        },
+        "tstartBtjd": 2826.708825924227,
+        "tstopBtjd": 2826.711140506492,
+        "exposureDays": 0.001833332487,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T04:59:33.376",
+        "dateEnd": "2022-09-04T05:02:53.356",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247045525-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247045525-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "bce1cfea8cdd4889109cc606c8e7769f4581d73d1f2a6f89337e673ef1eb883f"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "369e00971eb3bd590ce7752aa289500dd098376a01ce3b1c8a14bf8c17d0f6c7"
+        },
+        "tstartBtjd": 2826.711140748218,
+        "tstopBtjd": 2826.713455330481,
+        "exposureDays": 0.001833332486,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T05:02:53.377",
+        "dateEnd": "2022-09-04T05:06:13.357",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247045845-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247045845-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "e8fceb5d9587d8609cd81bfd76a1cc5a2f0694593931108e25872363c34cf641"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "8953501213989a203a241170a791c29706e0562f55ee3cdfc177e723d9ec65d2"
+        },
+        "tstartBtjd": 2826.713455572673,
+        "tstopBtjd": 2826.715770154936,
+        "exposureDays": 0.001833332485,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T05:06:13.377",
+        "dateEnd": "2022-09-04T05:09:33.357",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247050205-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247050205-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "2b94bd6cbe80e49e086d0ae725e3a9cbfdedd212d00019cc51474b319797be52"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "ac6c171a246ee4fb10d6af17b2422ac330a42d4e653fa351852451595246927e"
+        },
+        "tstartBtjd": 2826.715770397128,
+        "tstopBtjd": 2826.718084979392,
+        "exposureDays": 0.001833332487,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T05:09:33.378",
+        "dateEnd": "2022-09-04T05:12:53.358",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247050525-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247050525-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "11950edc421cdb0231852e79e84e1f83b0e78609cb8fd9ef38fe99a80a35bc58"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "2a84775232411f33b8efb28d94dafdb0acf610d9dd6b1425b77f00459a4f1998"
+        },
+        "tstartBtjd": 2826.718085221118,
+        "tstopBtjd": 2826.720399803382,
+        "exposureDays": 0.001833332486,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T05:12:53.379",
+        "dateEnd": "2022-09-04T05:16:13.359",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247050845-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247050845-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "e6c53a5273280ac004aa55ecf5e67aeaedbec67be522d67fe35eabb91c6feb78"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "b321960c0470ae9db59e56ec4715f879dd5d9bb29ac6a5dedd9cb00e59ba8b00"
+        },
+        "tstartBtjd": 2826.720400045573,
+        "tstopBtjd": 2826.722714627837,
+        "exposureDays": 0.001833332487,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T05:16:13.380",
+        "dateEnd": "2022-09-04T05:19:33.360",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247051205-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247051205-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "ec2e21a46bb670d77a21a85ecb0cf16f132209ca683d3f0b79c76eb278844aa6"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "b97a2fd2ef73fba5c6d828a4e961ea11461680caf70d88f75436f29a156b6ade"
+        },
+        "tstartBtjd": 2826.722714869563,
+        "tstopBtjd": 2826.725029451826,
+        "exposureDays": 0.001833332485,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T05:19:33.381",
+        "dateEnd": "2022-09-04T05:22:53.361",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247051525-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247051525-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "e96fe0344c3cb7fa6f15dc5b7d54ad7fef7a6d294536c6d993716185b689d0ed"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "008622c2483cbacae213d3f00bc1910de775932a9a0d7ed14e15ab8aa1a8a0b9"
+        },
+        "tstartBtjd": 2826.725029693552,
+        "tstopBtjd": 2826.727344275816,
+        "exposureDays": 0.001833332486,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T05:22:53.382",
+        "dateEnd": "2022-09-04T05:26:13.361",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247051845-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247051845-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "8c8c4b113ed2db6a571194b09205b0e56da131e45baa264c50a3152d44fb6a1a"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "a209d6921df307a897d4e5f4a56b64b93c672a374de53a29b4357a55b834de48"
+        },
+        "tstartBtjd": 2826.727344518008,
+        "tstopBtjd": 2826.729659100271,
+        "exposureDays": 0.001833332485,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T05:26:13.382",
+        "dateEnd": "2022-09-04T05:29:33.362",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247052205-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247052205-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "9fbe76e46f104fcdf2b5b0b2c0dd5b721ebf1b3e2a6157801655f6215cd54386"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "1b9c41466a47ebdb7eebbb60ee9b4707af336be3d4b26938a02ffb249ec92980"
+        },
+        "tstartBtjd": 2826.729659341997,
+        "tstopBtjd": 2826.731973924259,
+        "exposureDays": 0.001833332485,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T05:29:33.383",
+        "dateEnd": "2022-09-04T05:32:53.363",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247052525-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247052525-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "b12ab05fec7ec5e9e2d5def190c210de5658d8fcba29012b99d613ce05cfce21"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "13c8c614d9e73475dd7bf09e4ab1556c8b8fa09fbb16ea7580dd958ae5cce24d"
+        },
+        "tstartBtjd": 2826.731974166451,
+        "tstopBtjd": 2826.734288748715,
+        "exposureDays": 0.001833332486,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T05:32:53.384",
+        "dateEnd": "2022-09-04T05:36:13.364",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247052845-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247052845-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "3b507cdabed98c9be9b6e0cd803f529864d76a446adb4b9cfd56851e38694d75"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "cdeb9e80b7043c43a0e9ebcffdb5e64a905264ca0eb806a19555a972ca3424f1"
+        },
+        "tstartBtjd": 2826.734288990441,
+        "tstopBtjd": 2826.736603572705,
+        "exposureDays": 0.001833332487,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T05:36:13.385",
+        "dateEnd": "2022-09-04T05:39:33.365",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247053205-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247053205-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "e5cdaac4392acf6fc1ff1fb1d77e8ea97be6441cfc51e6b45eef88b3defe212f"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "e357a4b52a3892b6222700904a13e9066d155a41896db8ee9ec0c535fce960e2"
+        },
+        "tstartBtjd": 2826.736603814431,
+        "tstopBtjd": 2826.738918396695,
+        "exposureDays": 0.001833332487,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T05:39:33.386",
+        "dateEnd": "2022-09-04T05:42:53.365",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247053525-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247053525-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "9a316932179fb96e1ff756de9902409bcf4ccb0ad1abbc65ceed2415a35b6a21"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "8d277b9321e2a982561e35434e42fb3c869f0f5dd37b865b08327907ced95f30"
+        },
+        "tstartBtjd": 2826.738918638887,
+        "tstopBtjd": 2826.741233221149,
+        "exposureDays": 0.001833332485,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T05:42:53.386",
+        "dateEnd": "2022-09-04T05:46:13.366",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247053845-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247053845-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "a77dc49cfb1f7688e20b52ac86b7c3c150bb7e93f713cce3fc152fc69d3f67ab"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "b31a03c648968a62cbbfbe2c5a14bad2cf396b399b39a8d2e1bd03dcff143c53"
+        },
+        "tstartBtjd": 2826.741233462875,
+        "tstopBtjd": 2826.74354804514,
+        "exposureDays": 0.001833332487,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T05:46:13.387",
+        "dateEnd": "2022-09-04T05:49:33.367",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247054205-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247054205-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "f6dd7ef48be2fb4f4eead967d1e4dd2aae542a3c1042a926110bfd9fb1b408d4"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "fbf76822ec8aa089078da395dd425ebd274453aa472dfc1f7175b24002a7f6ef"
+        },
+        "tstartBtjd": 2826.743548286866,
+        "tstopBtjd": 2826.745862869129,
+        "exposureDays": 0.001833332486,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T05:49:33.388",
+        "dateEnd": "2022-09-04T05:52:53.368",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247054525-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247054525-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "fbaa4ae896ce78ed5de6905247d64508cedefb3bba391e77188a56eaaa12adca"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "a390b2d9904b80428c76253bc6420011279ef306a1d1e4dab42a00bac64f4ab1"
+        },
+        "tstartBtjd": 2826.745863110855,
+        "tstopBtjd": 2826.748177693118,
+        "exposureDays": 0.001833332485,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T05:52:53.389",
+        "dateEnd": "2022-09-04T05:56:13.369",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247054845-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247054845-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "6c4ef86cb401e07a210c5d901ecaae6b5796f5ef8dfb8650ee79ce6d0cba45a3"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "0de757e40ff44141774e4c3c083fa5530fa2f4ed73e4822c3c5bea1c1b2823c7"
+        },
+        "tstartBtjd": 2826.748177934844,
+        "tstopBtjd": 2826.750492517108,
+        "exposureDays": 0.001833332487,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T05:56:13.390",
+        "dateEnd": "2022-09-04T05:59:33.369",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247055205-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247055205-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "6401438cf1537fb127f7daab94950af60b9adb3aeaf51894954dfebf8c868e52"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "8c853fc682b4fa40711e8df75243e2a738543be29288c12893d90e8ffab5afd2"
+        },
+        "tstartBtjd": 2826.750492758834,
+        "tstopBtjd": 2826.752807341097,
+        "exposureDays": 0.001833332485,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T05:59:33.390",
+        "dateEnd": "2022-09-04T06:02:53.370",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247055525-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247055525-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "2ceafff8020d6be8487775d52ea70f396e5ec091035e1544542c8b696a9243c0"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "c25ca007cafbb1263d6131bd73bf062f4d58766be77fca305e4b5287e635e167"
+        },
+        "tstartBtjd": 2826.752807583288,
+        "tstopBtjd": 2826.755122165553,
+        "exposureDays": 0.001833332487,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T06:02:53.391",
+        "dateEnd": "2022-09-04T06:06:13.371",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247055845-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247055845-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "274b2e0cf0d118acaa5890f65394fa9600b9994d291362f41714fe1cbfca651e"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "2cb9db88596c9c57fcf2a238eef6d4b55693c46f17850eb6ace9622a49968e2a"
+        },
+        "tstartBtjd": 2826.755122407279,
+        "tstopBtjd": 2826.757436989542,
+        "exposureDays": 0.001833332485,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T06:06:13.392",
+        "dateEnd": "2022-09-04T06:09:33.372",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247060205-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247060205-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "73f61890f4f77a58ef4540d4bffdc768017c13ab1d2fd45615f119075d0f5fee"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "80a6d54b36b8558e580525ed1c388ad4e7a8f52503030a4ab5b78163a9a6f17f"
+        },
+        "tstartBtjd": 2826.757437231267,
+        "tstopBtjd": 2826.759751813531,
+        "exposureDays": 0.001833332486,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T06:09:33.393",
+        "dateEnd": "2022-09-04T06:12:53.373",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247060525-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247060525-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "61ec8f0e3db06b4ced416f06870afebd2eeb427614982425b7923c0727fa8e7c"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "02f885745608335fe65cba4ad2ecf313134901e8869541eed6a5dd42f8eb0cc6"
+        },
+        "tstartBtjd": 2826.759752055257,
+        "tstopBtjd": 2826.762066637522,
+        "exposureDays": 0.001833332487,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T06:12:53.394",
+        "dateEnd": "2022-09-04T06:16:13.373",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247060845-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247060845-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "b2624a968cf571e11157d85b09ccd705f9ec37b4dc68da1aa98a35a751e01f77"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "156f240573d2e9482c97371a5482fae808e2d55a8a025f6b5379a7ae18bef938"
+        },
+        "tstartBtjd": 2826.762066879247,
+        "tstopBtjd": 2826.764381461512,
+        "exposureDays": 0.001833332487,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T06:16:13.394",
+        "dateEnd": "2022-09-04T06:19:33.374",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247061205-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247061205-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "c05213d0a311d45e0b763427fd2bb3d27f0b038427f92256b66dbe56f864592d"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "cbba575c391d0667777aa94afe5a81e63c1ee0cee4afc1a9dcfeddb136af6e8a"
+        },
+        "tstartBtjd": 2826.764381703238,
+        "tstopBtjd": 2826.7666962855,
+        "exposureDays": 0.001833332485,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T06:19:33.395",
+        "dateEnd": "2022-09-04T06:22:53.375",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247061525-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247061525-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "d04ff3822a0505e9b6361af077fa2e3fcbbe0d548e84646bde529ea3068e499c"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "6140320f8d24f9a648786d7549c5a6548ce52f2455db625b5e74762e5d61f2a4"
+        },
+        "tstartBtjd": 2826.766696527226,
+        "tstopBtjd": 2826.76901110949,
+        "exposureDays": 0.001833332487,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T06:22:53.396",
+        "dateEnd": "2022-09-04T06:26:13.376",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247061845-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247061845-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "1cb2592c7e2b767ee0aa7176b83a34bf7d1050acc686870f0f00edfdc8ebc4f2"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "59d271b62d0bae3a861a9cab98a7dabb799cb60925bb941dd2e4318d029c36f1"
+        },
+        "tstartBtjd": 2826.769011350751,
+        "tstopBtjd": 2826.771325933015,
+        "exposureDays": 0.001833332487,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T06:26:13.397",
+        "dateEnd": "2022-09-04T06:29:33.377",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247062205-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247062205-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "c16f177fd82c915f11bc8ecc187bf1c80329194f4b4fedd44d4442e346dbedb9"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "8a51650dc38db7913c1124ac0ef79b12b297cdda5991df8176d313ce53da8d8e"
+        },
+        "tstartBtjd": 2826.771326174741,
+        "tstopBtjd": 2826.773640757002,
+        "exposureDays": 0.001833332484,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T06:29:33.397",
+        "dateEnd": "2022-09-04T06:32:53.377",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247062525-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247062525-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "fb0f55c30eca4b7d8f7009868a669f7db0aff27a1062a57d1f69edc25e434bcf"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "53703964e9682368769e7defdf57cf1a18a551e87133f2f72395a8bca666d143"
+        },
+        "tstartBtjd": 2826.773640998728,
+        "tstopBtjd": 2826.775955580992,
+        "exposureDays": 0.001833332487,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T06:32:53.398",
+        "dateEnd": "2022-09-04T06:36:13.378",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247062845-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247062845-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "782d6c82145475a8df725c67eb2c2bd59557a9dfd349208867b945972d6d9fe3"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "e8f2df50ea2492c0d5335b00ad321c3b8fa89a6251568190d1094912eb886176"
+        },
+        "tstartBtjd": 2826.775955822718,
+        "tstopBtjd": 2826.778270404982,
+        "exposureDays": 0.001833332487,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T06:36:13.399",
+        "dateEnd": "2022-09-04T06:39:33.379",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247063205-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247063205-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "609227fc5be10327b4824f6c33b111c0174aa7a4d3f2d08600f22ae57f88d71b"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "a6bee83aed02b4e370492b2d858f374a1fac63a757a7fcfcc418f5dd68b4c4af"
+        },
+        "tstartBtjd": 2826.778270646708,
+        "tstopBtjd": 2826.780585228972,
+        "exposureDays": 0.001833332486,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T06:39:33.400",
+        "dateEnd": "2022-09-04T06:42:53.380",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247063525-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247063525-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "8c16c4666a2a2cdda9146e699d78fb6d222411a5ef6cd2786c7c75ce4bf631a5"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "2b326155ec01e6b5efe7b6f32253b3481c907f966b99991174a3a664559b9f10"
+        },
+        "tstartBtjd": 2826.780585470232,
+        "tstopBtjd": 2826.782900052495,
+        "exposureDays": 0.001833332485,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T06:42:53.401",
+        "dateEnd": "2022-09-04T06:46:13.381",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247063845-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247063845-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "720c55c402307b21fb8dabd1e2171783dd3b5cd9e10ff5e96382087ecc19dac7"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "301a18fa7eaa8d727f897e11c05d270f273e60576ca0a3110f7ad7e472aa03a3"
+        },
+        "tstartBtjd": 2826.782900294221,
+        "tstopBtjd": 2826.785214876486,
+        "exposureDays": 0.001833332487,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T06:46:13.401",
+        "dateEnd": "2022-09-04T06:49:33.381",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247064205-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247064205-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "1b992d80e428a92dbb0cbb669039465f3ddd14adcfe5323ec4abaccbcd8c52f3"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "95a0b620b07c213dbc092ceabfb29a6e5267e583688f7a13cadb5dea3775d41b"
+        },
+        "tstartBtjd": 2826.785215118212,
+        "tstopBtjd": 2826.787529700475,
+        "exposureDays": 0.001833332486,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T06:49:33.402",
+        "dateEnd": "2022-09-04T06:52:53.382",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247064525-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247064525-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "8b6dd5a9a44cd9174904b8f6b1be3e561f3cc6c243065dc5d552258356c78130"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "eab98913559996519e24e9f4e12392287243de95361605905fb61cc32d03aae3"
+        },
+        "tstartBtjd": 2826.787529941736,
+        "tstopBtjd": 2826.789844523999,
+        "exposureDays": 0.001833332485,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T06:52:53.403",
+        "dateEnd": "2022-09-04T06:56:13.383",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247064845-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247064845-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "644f7fe39728a72f34e5c63e96eaf5350340e7d1bd534ffe60af759c3560d08f"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "b0938168ccf7d3c9921f997b3846c77753f166228a36f2953184b8566a419261"
+        },
+        "tstartBtjd": 2826.789844765724,
+        "tstopBtjd": 2826.792159347989,
+        "exposureDays": 0.001833332487,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T06:56:13.404",
+        "dateEnd": "2022-09-04T06:59:33.384",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247065205-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247065205-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "2f29404118dcb87b866c9b85fe5f2d0e6b549df5b63adf52d56487feaa3dfe3e"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "bf46e1d5966b38656b9ab300e9ebc5c2e96aaed90085709ca958871c2365d07c"
+        },
+        "tstartBtjd": 2826.792159589715,
+        "tstopBtjd": 2826.794474171977,
+        "exposureDays": 0.001833332485,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T06:59:33.405",
+        "dateEnd": "2022-09-04T07:02:53.384",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247065525-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247065525-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "cb4026bb9004bb152343d7a6acfa6d689edd50e8882354e31ac63b806c538aaa"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "634964e9f246d142e021e7fe002f680408153e5b3ff9458574d798929f1c6641"
+        },
+        "tstartBtjd": 2826.794474413237,
+        "tstopBtjd": 2826.796788995502,
+        "exposureDays": 0.001833332487,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T07:02:53.405",
+        "dateEnd": "2022-09-04T07:06:13.385",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247065845-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247065845-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "18b940b49e25900bc8737e232eff3199028b9297cf0b9d5f2b620abbd6563c4f"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "4b2d2b57f0382bcd74df615c50d3a5a3c1fb40199107036857e8833862c66964"
+        },
+        "tstartBtjd": 2826.796789237228,
+        "tstopBtjd": 2826.79910381949,
+        "exposureDays": 0.001833332485,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T07:06:13.406",
+        "dateEnd": "2022-09-04T07:09:33.386",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247070205-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247070205-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "69ee346d10a7f770f9a3a60077325ef57841a0c2363753963b36e754bd0ee347"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "a016d1ac18ba53c9a0f9b88753e804f6bca9909fb1845e92a2a83b28cd9e52b1"
+        },
+        "tstartBtjd": 2826.79910406075,
+        "tstopBtjd": 2826.801418643015,
+        "exposureDays": 0.001833332487,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T07:09:33.407",
+        "dateEnd": "2022-09-04T07:12:53.387",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247070525-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247070525-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "25473dc859c11a4aae74370e6c36c24c4a574d51f4143f4db836ffb043892c3e"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "f8274e9805e3293831baee081f42a174008f1b989d0edf2dd7b77f32cac05530"
+        },
+        "tstartBtjd": 2826.801418884741,
+        "tstopBtjd": 2826.803733467005,
+        "exposureDays": 0.001833332487,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T07:12:53.408",
+        "dateEnd": "2022-09-04T07:16:13.388",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247070845-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247070845-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "5752fa3db549e5230a12f2ed9c8923182d0a5958851e4c722b74da807d621a83"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "0a8569f604e0ee7353289fadc7b31eccfb32474cbd616951da49d2b960325306"
+        },
+        "tstartBtjd": 2826.803733708265,
+        "tstopBtjd": 2826.806048290528,
+        "exposureDays": 0.001833332485,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T07:16:13.408",
+        "dateEnd": "2022-09-04T07:19:33.388",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247071205-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247071205-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "bf2d13ca816523b9caf7f0eea702a736a33ed317fb5f6e6af74843b97abfde2c"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "9662b772537fc1069810c263649a3beed7fec9fecdc8f9c9fa8136a1ec355079"
+        },
+        "tstartBtjd": 2826.806048532254,
+        "tstopBtjd": 2826.808363114518,
+        "exposureDays": 0.001833332487,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T07:19:33.409",
+        "dateEnd": "2022-09-04T07:22:53.389",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247071525-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247071525-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "7f2c4bb5db28b2331b18bd0ac40cf0b4af344cec3157836209ef0369b0f7ed85"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "fdfc2221d8df202b94483ea6e29d8c2d915a79a7b39e2642f3d1ae9d19d71002"
+        },
+        "tstartBtjd": 2826.808363355778,
+        "tstopBtjd": 2826.810677938042,
+        "exposureDays": 0.001833332487,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T07:22:53.410",
+        "dateEnd": "2022-09-04T07:26:13.390",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247071845-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247071845-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "02a7595db5805c7d91118c63420e6eda31c6ff6ae7068f20f42df1b725318d63"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "cd4df8879781e44822ce8e104a8e642dc8ae9c6d6f74bd83535b31b51424130e"
+        },
+        "tstartBtjd": 2826.810678179768,
+        "tstopBtjd": 2826.812992762032,
+        "exposureDays": 0.001833332486,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T07:26:13.411",
+        "dateEnd": "2022-09-04T07:29:33.391",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247072205-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247072205-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "ff59086bd4211a8d3c6a424513bfe35bdeff52414bab34be520b829682a9b70d"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "66860b8398ac1c77ac1cca5d4f4e50400c1503322d96345e2490aa64041736a1"
+        },
+        "tstartBtjd": 2826.812993003292,
+        "tstopBtjd": 2826.815307585554,
+        "exposureDays": 0.001833332484,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T07:29:33.411",
+        "dateEnd": "2022-09-04T07:32:53.391",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247072525-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247072525-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "084db35ee1fa19e53600a534570822b73fae4285f48a8fa8ffcf7f44509869ff"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "89b2a57c7b35deae4c3d4098b32aca91d2410e2f4a43cfd548999bbbf13d6a31"
+        },
+        "tstartBtjd": 2826.815307826814,
+        "tstopBtjd": 2826.817622409079,
+        "exposureDays": 0.001833332487,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T07:32:53.412",
+        "dateEnd": "2022-09-04T07:36:13.392",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247072845-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247072845-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "0d64800faa0d26d8dbe0d7c5658a7fff8dd7ff49f59bef7f9822ec9e1e247026"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "2ba744ad56de72ee90fe97c3f5ec71514163895ad2fd3212af42af5dd90fc00b"
+        },
+        "tstartBtjd": 2826.817622650339,
+        "tstopBtjd": 2826.819937232603,
+        "exposureDays": 0.001833332486,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T07:36:13.413",
+        "dateEnd": "2022-09-04T07:39:33.393",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247073205-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247073205-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "9d9c4f1045cd3f6daf14a4c4b4f8c6170fb0259e0da920d091930604426251eb"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "4d83dce369ce3c1206d9ec51037dfff749a5365b15760c0a61535776c5277d46"
+        },
+        "tstartBtjd": 2826.819937474329,
+        "tstopBtjd": 2826.822252056591,
+        "exposureDays": 0.001833332485,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T07:39:33.414",
+        "dateEnd": "2022-09-04T07:42:53.394",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247073525-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247073525-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "67d1229741934754b3da7ee7f3ebf4ecbe3189b4eb3b74e8ec0e92eb865106c3"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "eaed22d06fa91ba1a61d77683dbab1b8cebc4a5903ddb01a5e28db4e68a88c54"
+        },
+        "tstartBtjd": 2826.822252297852,
+        "tstopBtjd": 2826.824566880116,
+        "exposureDays": 0.001833332487,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T07:42:53.415",
+        "dateEnd": "2022-09-04T07:46:13.394",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247073845-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247073845-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "c2b70d08abbeedfdbec6a50ee2f3c573a416572700c54516cd7f46e5d25b93bf"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "cc06765b2db7026d7989ca79bfa1345f87502345f0a334b80e9a432688a37bcb"
+        },
+        "tstartBtjd": 2826.824567121376,
+        "tstopBtjd": 2826.82688170364,
+        "exposureDays": 0.001833332486,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T07:46:13.415",
+        "dateEnd": "2022-09-04T07:49:33.395",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247074205-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247074205-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "d0d382137f4a6f5999940ad8c35581c9c5c801c209052a4a99a04a474d2df6da"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "9cc6524677914a107a5522ae25a715608983e695d240ff6fd4e11a56f8803c03"
+        },
+        "tstartBtjd": 2826.8268819449,
+        "tstopBtjd": 2826.829196527165,
+        "exposureDays": 0.001833332487,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T07:49:33.416",
+        "dateEnd": "2022-09-04T07:52:53.396",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247074525-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247074525-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "4807f9655ebf4f6a80c2e72a4fa25398b7930b125e9f02abee18b2a2c7e48765"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "897f228b8c6369b0ed8573e9462e0e55a68652826996439006b1f28a0a9eb0c7"
+        },
+        "tstartBtjd": 2826.829196768425,
+        "tstopBtjd": 2826.831511350688,
+        "exposureDays": 0.001833332485,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T07:52:53.417",
+        "dateEnd": "2022-09-04T07:56:13.397",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247074845-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247074845-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "85f897aaec858cae1e0a771b9b0dafb75729ce08b2d06b8f6071e5da8590dc15"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "a6d223e1afb92c06b7c30f24803cd0a15d26feb39c5220b3c344e266f4e5d326"
+        },
+        "tstartBtjd": 2826.831511592414,
+        "tstopBtjd": 2826.833826174678,
+        "exposureDays": 0.001833332486,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T07:56:13.418",
+        "dateEnd": "2022-09-04T07:59:33.397",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247075205-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247075205-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "37f7a5b4ef9d22f6ef52cf1d8b13d424ffdefce16dac655c39372b3318166359"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "a6b065a495e7912773b1c620ebaa17c97177c18d651e12de7fb02edd39bfdec0"
+        },
+        "tstartBtjd": 2826.833826415938,
+        "tstopBtjd": 2826.836140998202,
+        "exposureDays": 0.001833332487,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T07:59:33.418",
+        "dateEnd": "2022-09-04T08:02:53.398",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247075525-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247075525-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "32dff68ba5ef3c8337f9096fe9538df3e2493a4bf3ea217e3a1f0f502efffc5f"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "b22bff178794d77a45087484d7dbd168895c39e044b0b6c279e667ddabcab074"
+        },
+        "tstartBtjd": 2826.836141239462,
+        "tstopBtjd": 2826.838455821725,
+        "exposureDays": 0.001833332485,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T08:02:53.419",
+        "dateEnd": "2022-09-04T08:06:13.399",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247075845-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247075845-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "a3f4da8697639b8afa6583c3b148b9b1d38c29e468c9745946528f1dff0521c5"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "e9cad4d0c84cf565b246c6c32ad74d25686ec7c7e5d4345627248d9e891f3219"
+        },
+        "tstartBtjd": 2826.838456062986,
+        "tstopBtjd": 2826.840770645248,
+        "exposureDays": 0.001833332485,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T08:06:13.420",
+        "dateEnd": "2022-09-04T08:09:33.400",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247080205-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247080205-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "f48f43134a9407d548bafcacf487542bb181b10e7a63d835288ddd7fbc672441"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "2342c3c5aa7abbccfcee21a5d9307afa610e0b1398951113d6957bfc957352f4"
+        },
+        "tstartBtjd": 2826.840770886508,
+        "tstopBtjd": 2826.843085468773,
+        "exposureDays": 0.001833332487,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T08:09:33.421",
+        "dateEnd": "2022-09-04T08:12:53.401",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247080525-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247080525-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "15c5a80783656324fe72fe773f1d3147d470112cbc7703ef12f6d6f87ce3b04f"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "b9a9edc317b783eb36826b94ff992122ecc900603d14c1486469489ab78af97f"
+        },
+        "tstartBtjd": 2826.843085710033,
+        "tstopBtjd": 2826.845400292297,
+        "exposureDays": 0.001833332487,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T08:12:53.421",
+        "dateEnd": "2022-09-04T08:16:13.401",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247080845-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247080845-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "485eff7892c4d7d6010db72783eba2284021f435f519bf40f5d9da903a30bf32"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "27ca39f232c83b6dd2808af3293a511e021c865b93e320210a720c87602e0f28"
+        },
+        "tstartBtjd": 2826.845400533558,
+        "tstopBtjd": 2826.84771511582,
+        "exposureDays": 0.001833332485,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T08:16:13.422",
+        "dateEnd": "2022-09-04T08:19:33.402",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247081205-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247081205-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "c55903d3b166bfc403d1c88fab374bb0f94804c3604c39c710cc5f04403fb9f8"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "bb2f460e5eb3f06d8e79ab7205831e31bb0aa13527dcb2c293410168c1b3f4ab"
+        },
+        "tstartBtjd": 2826.84771535708,
+        "tstopBtjd": 2826.850029939345,
+        "exposureDays": 0.001833332487,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T08:19:33.423",
+        "dateEnd": "2022-09-04T08:22:53.403",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247081525-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247081525-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "9a6acf9d4fda861421d7015dac567063870eb99e66925d82e4314dd3001a6654"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "71838c94f648fc77b423da8f4dc259ef021e88fd01a145d0248236d26ca683ed"
+        },
+        "tstartBtjd": 2826.850030180139,
+        "tstopBtjd": 2826.852344762403,
+        "exposureDays": 0.001833332487,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T08:22:53.424",
+        "dateEnd": "2022-09-04T08:26:13.403",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247081845-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247081845-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "03a10360f27514bb0d5820f799b37a58e6e1a04bd89c8845ec4e04fb6d29f266"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "b14ebfdb578aabbcebda960a463fad42333a1a6470309f19b639b3c6940e0f04"
+        },
+        "tstartBtjd": 2826.852345003664,
+        "tstopBtjd": 2826.854659585928,
+        "exposureDays": 0.001833332486,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T08:26:13.424",
+        "dateEnd": "2022-09-04T08:29:33.404",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247082205-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247082205-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "9303ea65466915181375d2e01cd1c86f483c570415827ebd224a1812475a06f0"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "a2f85e3fe849c1e63f2310ef9300e55bd92b873ade79e91c3341ad131845ea39"
+        },
+        "tstartBtjd": 2826.854659827188,
+        "tstopBtjd": 2826.856974409451,
+        "exposureDays": 0.001833332485,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T08:29:33.425",
+        "dateEnd": "2022-09-04T08:32:53.405",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247082525-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247082525-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "45b9d64630e7068a02f67037e8304b25fe3d41bfb90bfae04f457b7d9b85cb07"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "269f8cc6aeacbfc1f5a6c68852cde07530f43353ffccedafaba21a15575dc8ee"
+        },
+        "tstartBtjd": 2826.856974650711,
+        "tstopBtjd": 2826.859289232973,
+        "exposureDays": 0.001833332485,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T08:32:53.426",
+        "dateEnd": "2022-09-04T08:36:13.406",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247082845-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247082845-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "e96a96d1a5d7824a86dfd625ff35f4f787241fb3b98d10eca1814ce23ce2c707"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "8c6b418c58cec61588e36dbf849c900191096027d2d644fe648a81f40fddcac8"
+        },
+        "tstartBtjd": 2826.859289474234,
+        "tstopBtjd": 2826.861604056498,
+        "exposureDays": 0.001833332487,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T08:36:13.427",
+        "dateEnd": "2022-09-04T08:39:33.406",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247083205-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247083205-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "b4c3988eab42ca9a437695dae56f5c0a399245bc91eb152f39dbf7c2de97c3ec"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "fd7ad74720750b05a998bf81a076803f3374a9c887cd9ac4062a4d616614f14f"
+        },
+        "tstartBtjd": 2826.861604297293,
+        "tstopBtjd": 2826.863918879556,
+        "exposureDays": 0.001833332485,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T08:39:33.427",
+        "dateEnd": "2022-09-04T08:42:53.407",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247083525-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247083525-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "57fad3be51d095de29ba16c6e39dc52f5997e2026319640cae8e254d16ff0a79"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "a8b75372e2e188400416e941ab8f279995e9810a674279849f6c39ed1c543032"
+        },
+        "tstartBtjd": 2826.863919120816,
+        "tstopBtjd": 2826.86623370308,
+        "exposureDays": 0.001833332486,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T08:42:53.428",
+        "dateEnd": "2022-09-04T08:46:13.408",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247083845-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247083845-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "03750c1194f21433522a03d4f6eef1a8a529fba3b1577fc718017ae37d0b6e1f"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "a834b883b1d7cc9f0f8f6a9718972c514960263f7e13792fc1491e90087e1777"
+        },
+        "tstartBtjd": 2826.86623394434,
+        "tstopBtjd": 2826.868548526604,
+        "exposureDays": 0.001833332487,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T08:46:13.429",
+        "dateEnd": "2022-09-04T08:49:33.409",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247084205-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247084205-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "d67b45409a2aaafcd530ee158e9c4377a069af4e99964f15c908b346f5b43092"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "0b9bfccd8aa1e4296aa2b302989e89a5926b3a9c5805c6a5520aa9923348df4e"
+        },
+        "tstartBtjd": 2826.868548767865,
+        "tstopBtjd": 2826.870863350129,
+        "exposureDays": 0.001833332487,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T08:49:33.430",
+        "dateEnd": "2022-09-04T08:52:53.409",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247084525-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247084525-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "85a20d91d7603d2aa6cf2ec5225cbb7ffa4e3d0da5a57192f5b5f9c38b18592c"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "dd6384355bf8b4712c9e7e59be5fbfcc69aaa4c5270643a83ef0f64ca797859d"
+        },
+        "tstartBtjd": 2826.870863590923,
+        "tstopBtjd": 2826.873178173186,
+        "exposureDays": 0.001833332485,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T08:52:53.430",
+        "dateEnd": "2022-09-04T08:56:13.410",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247084845-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247084845-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "088001255ee90471696906e1894e777a112f7cd64aac9a16b653902fefe62db3"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "6ee0216617ea2bba72a4c707bf419b6752ec7f2d56c06d0adb62f62442da65f8"
+        },
+        "tstartBtjd": 2826.873178414446,
+        "tstopBtjd": 2826.87549299671,
+        "exposureDays": 0.001833332487,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T08:56:13.431",
+        "dateEnd": "2022-09-04T08:59:33.411",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      },
+      {
+        "name": "tess2022247085205-s0056-1-2-0243-s_ffic",
+        "key": "tess/public/ffi/s0056/2022/247/1-2/tess2022247085205-s0056-1-2-0243-s_ffic.fits",
+        "head": {
+          "range": [0, 14399],
+          "bytes": 14400,
+          "sha256": "72dd8e28d5f6ee5e1f5e065773f39cc48e7429f7eca783ea35cd7d481625d7a2"
+        },
+        "stripe": {
+          "range": [2714304, 3406367],
+          "bytes": 692064,
+          "sha256": "0ef28fb1b3d592cd3fd5f3b446120abcd7974df571cdc83820739ce8856c3b71"
+        },
+        "tstartBtjd": 2826.875493235177,
+        "tstopBtjd": 2826.877807817441,
+        "exposureDays": 0.001833332487,
+        "deadc": 0.792,
+        "dateObs": "2022-09-04T08:59:33.432",
+        "dateEnd": "2022-09-04T09:02:53.411",
+        "bunit": "electrons/s",
+        "camera": 1,
+        "ccd": 2
+      }
+    ]
+  },
+  "gaia": {
+    "what": "Gaia DR3 sources of the field of HD 209458",
+    "source": "CDS VizieR TAP, table I/355/gaiadr3",
+    "query": "SELECT Source, RA_ICRS, DE_ICRS, e_RA_ICRS, e_DE_ICRS, Plx, e_Plx, pmRA, pmDE, e_pmRA, e_pmDE, RUWE, Gmag, BPmag, RPmag FROM \"I/355/gaiadr3\" WHERE 1=CONTAINS(POINT('ICRS',RA_ICRS,DE_ICRS),CIRCLE('ICRS',330.7951,18.8842,0.3)) AND Gmag<17 ORDER BY Gmag",
+    "url": "https://tapvizier.cds.unistra.fr/TAPVizieR/tap/sync?REQUEST=doQuery&LANG=ADQL&FORMAT=csv&QUERY=SELECT+Source%2C+RA_ICRS%2C+DE_ICRS%2C+e_RA_ICRS%2C+e_DE_ICRS%2C+Plx%2C+e_Plx%2C+pmRA%2C+pmDE%2C+e_pmRA%2C+e_pmDE%2C+RUWE%2C+Gmag%2C+BPmag%2C+RPmag+FROM+%22I%2F355%2Fgaiadr3%22+WHERE+1%3DCONTAINS%28POINT%28%27ICRS%27%2CRA_ICRS%2CDE_ICRS%29%2CCIRCLE%28%27ICRS%27%2C330.7951%2C18.8842%2C0.3%29%29+AND+Gmag%3C17+ORDER+BY+Gmag",
+    "retrieved": "2026-10-24 (server date Sat, 24 Oct 2026 18:59:12 GMT)",
+    "answer": {
+      "bytes": 75165,
+      "sha256": "6eda8ab955c2025bc2e9a0181516d9930703bbf778be3256918dc9ee869d6efb",
+      "rows": 541,
+      "file": "not committed: the whole cone is kept out of the repository"
+    },
+    "subset": {
+      "file": "tests/fixtures/imagePacks/authentic/gaia-dr3-window.csv",
+      "rows": 222,
+      "bytes": 30897,
+      "sha256": "1a5c8c95c7f2c83c8a462c7600789323571170d9f141511169467ccf1ff6d00a",
+      "rule": "rows of the answer whose pixel falls within 1.5 pixels of the cutout by the anchor WCS, with Gmag 16 or brighter"
+    },
+    "terms": "ESA Gaia data licence (https://www.cosmos.esa.int/web/gaia-users/license, read 2026-10-24): \"Gaia data are distributed under the CC BY-NC 3.0 IGO license.\" The ESA space science archives terms (https://www.cosmos.esa.int/web/esdc/terms-and-conditions, read 2026-10-24): data are \"open and free to use ... subject to proper acknowledgment\"; commercial use needs ESA authorisation. VizieR (https://cds.unistra.fr/vizier-org/licences_vizier.html): free for scientific use, cite the catalogue, the copyright follows the data origin.",
+    "decision": "redistribution is allowed with credit and non-commercially, so it does not forbid committing; the repository already keeps one non-commercial Gaia fixture (LICENSES.md, NOTICE, OWNER_ACTIONS.md). Only the 222-row subset is committed, flagged non-commercial, with the credit line; the owner question of whether a non-commercial fixture belongs in an archive at all (OWNER_ACTIONS.md) now covers this file too.",
+    "credit": "This work has made use of data from the European Space Agency (ESA) mission Gaia (https://www.cosmos.esa.int/gaia), processed by the Gaia Data Processing and Analysis Consortium (DPAC). Gaia Collaboration, Vallenari et al. (2023), A&A 674, A1."
+  },
+  "hipparcos": {
+    "what": "the Hipparcos new reduction row of HD 209458 (HIP 108859)",
+    "source": "CDS VizieR TAP, table I/311/hip2 (van Leeuwen 2007, A&A 474, 653)",
+    "query": "SELECT * FROM \"I/311/hip2\" WHERE HIP=108859",
+    "url": "https://tapvizier.cds.unistra.fr/TAPVizieR/tap/sync?REQUEST=doQuery&LANG=ADQL&FORMAT=csv&QUERY=SELECT+%2A+FROM+%22I%2F311%2Fhip2%22+WHERE+HIP%3D108859",
+    "retrieved": "2026-10-24 (server date Sat, 24 Oct 2026 19:00:00 GMT)",
+    "answer": {
+      "bytes": 278,
+      "sha256": "9a8cc0eb61c446cfab74ac1998d50316f2b3702f1e6a44681d58e4f77ccd1c89",
+      "file": "tests/fixtures/imagePacks/authentic/hip2-hd209458.csv"
+    },
+    "terms": "ESA space science archives terms (https://www.cosmos.esa.int/web/esdc/terms-and-conditions, read 2026-10-24): CC BY-NC 3.0 IGO, \"open and free to use ... subject to proper acknowledgment\". The ESA Hipparcos pages and the VizieR ReadMe of I/311 carry no separate licence text.",
+    "decision": "one catalogue row, committed, flagged non-commercial with the credit line (van Leeuwen 2007; ESA Hipparcos)"
+  },
+  "jplSmallBodies": {
+    "what": "three JPL small-body identification answers for the field of HD 209458 at the start, middle and end of the frames, V 19 or brighter, geocentric, a 0.6 degree square",
+    "source": "https://ssd-api.jpl.nasa.gov/sb_ident.api (JPL SSD API, small-body identification)",
+    "urlPattern": "https://ssd-api.jpl.nasa.gov/sb_ident.api?sb-kind=a&mpc-code=500&obs-time=2022-09-04_<hh:mm:ss>&fov-ra-center=22-03-10.8&fov-dec-center=18-53-03&fov-ra-hwidth=0.3&fov-dec-hwidth=0.3&vmag-lim=19",
+    "retrieved": "2026-10-24",
+    "file": "tests/fixtures/imagePacks/authentic/jpl-sb-ident-hd209458-field.json",
+    "sha256": "3a84582bf073deb6871e64777f7cb6414af6efc25e14a94f85d1971427f818c5",
+    "terms": "the API documentation (https://ssd-api.jpl.nasa.gov/doc/sb_ident.html, read 2026-10-24) carries no licence text; JPL small-body data are a NASA/JPL (United States Government) product. No licence was found, so this record is committed only as the evidence of a negative search (object names, magnitudes and offsets) and is flagged.",
+    "alsoTried": "IMCCE SkyBoT cone search (http://vo.imcce.fr/webservices/skybot/skybotconesearch_query.php and https://ssp.imcce.fr/webservices/skybot/api/conesearch.php): HTTP 403 and 502; nothing was retried or worked around."
+  }
+}
