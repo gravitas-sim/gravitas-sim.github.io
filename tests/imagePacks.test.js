@@ -34,6 +34,7 @@ if (!globalThis.crypto?.subtle)
 const ROOT = path.resolve(import.meta.dirname, '..');
 const json = rel => JSON.parse(readFileSync(path.join(ROOT, rel), 'utf8'));
 const CONTRACT = json('tests/fixtures/imagePacks/analysis-contract.json');
+const CONTRACT2 = json('tests/fixtures/imagePacks/analysis-contract-2.json');
 const FAILED = json('tests/fixtures/imagePacks/failed-legs.json').legs;
 
 const PACKS = [
@@ -175,6 +176,47 @@ describe('the authentic-frame legs, against the contract committed first', () =>
       expect(r.pass).toBeNull();
       expect(r.note).toMatch(/^NOT RUN/);
     }
+  });
+
+  test("part 2 of the contract: the earlier prompts' legs the one frame runs have rows and pass, and the rest say why they do not run", () => {
+    const ran = [
+      'astrometry.b4.pack',
+      'astrometry.e1.single',
+      'overlay.b5.pack.pixels',
+      'overlay.b5.pack.list',
+      'framepipeline.g1.refusal',
+      'framepipeline.g1.cosmic',
+      'series.b6.refusal',
+    ];
+    for (const id of ran) {
+      const r = rows.find(q => q.id === id);
+      expect({ id, pass: r?.pass }).toEqual({ id, pass: true });
+    }
+    for (const [id, leg] of Object.entries(CONTRACT2.legs)) {
+      if (!leg.status) continue;
+      const r = rows.find(q => q.id === id);
+      expect(r.pass).toBeNull();
+      expect(r.note).toMatch(/^NOT RUN/);
+    }
+    // the bounds of the earlier prompts are read, not restated
+    const b4 = json('tests/fixtures/astrometry/thresholds.json').checks[
+      'b4.oracleAuthenticHeader'
+    ].boundDeg;
+    expect(rows.find(q => q.id === 'astrometry.b4.pack').bound).toBe(b4);
+    const pix = json('tests/fixtures/overlay/thresholds.json').checks[
+      'b4.oracleSkyMap'
+    ].boundPix;
+    expect(rows.find(q => q.id === 'overlay.b5.pack.pixels').bound).toBe(pix);
+    // the single-star leg is judged against the bound the contract states
+    expect(rows.find(q => q.id === 'astrometry.e1.single').bound).toBe(
+      CONTRACT2.legs['astrometry.e1.single'].bounds.separationPix
+    );
+    // the oracle's sky results were run on the header the pack holds
+    const inputs = json('tests/fixtures/imagePacks/oracle-inputs.json');
+    const wcs = JSON.parse(
+      readFileSync(path.join(ROOT, 'data-packs/tess-hd209458-s56-frame.json'))
+    ).image.sidecar.wcs;
+    expect(inputs.astrometry.wcs).toEqual(wcs);
   });
 
   test('the bounds are read from the earlier prompts, not restated: the contract names the files', () => {

@@ -112,8 +112,28 @@ and results are `oracle-inputs.json` and `oracle-results.json`).
 | `detection.e2` (Prompt 183) | pass: background mesh, smoothed image, one source with the same segmentation pixels, area, moments, peak and flux as photutils; Gaussian FWHM 1.7741 pixels against `fit_fwhm`, relative 3.9e-6 (bound 3e-4). One source found: a 143-pixel frame has one dominant star |
 | `injection.g1` (Prompt 184) | the kernel refuses, with the stable code `no-room`: a margin of 3 FWHM from the border cannot be placed in an 11 by 13 frame. (Before the rate-unit fix below it refused with `unit`, because the frame was measured in electron/s.) A refusal is the result the contract names; no completeness was measured |
 | `import.hostilePng` (Prompt 188) | 14 of 17 variants as the contract says. THREE differ, each recorded in `failed-legs.json` with its cause, none moved: (1) a PNG with bytes after IEND, which the contract said is read and Prompt 188's structural reader refuses (`png-malformed`); (2) and (3) the IDAT that inflates past the declared size and the IDAT of zeros that inflates to 64 MiB, which the contract said are refused and Chromium's decoder READS as the intact picture (it stops after the image's rows), in time and holding nothing. Pixel-stage variants are judged in the page by `e2e/imagePacks.spec.js`; Carl rules (D-R10-65) |
-| astrometry (Prompt 181), overlay (182) | NOT RUN: no authentic frame with three or more catalogued stars and a redistributable catalogue was obtained; the TESS frame holds one catalogued star |
-| frame pipeline (185), series (186) | NOT RUN: their modules are in PRs #433 and #434, not in v3; the pack holds one cadence |
+| `astrometry.b4.pack` (Prompt 181, contract part 2) | pass: the pack's WCS read by `fromHeader` against astropy.wcs `all_pix2world` on all 143 pixels, largest separation 1.1e-13 degree (bound 1e-9 degree, read from 181's `b4.oracleAuthenticHeader`) |
+| `astrometry.e1.single` (181) | pass: the archive's own reference position of the target (CRVAL) lands 0.167 pixel (3.25 arcseconds) from the star's measured centroid (bound 0.5 pixel, stated in part 2 with its derivation). CRVAL is not an independent catalogue, so this is the WCS against the star's light, not a fit |
+| `astrometry.b5.fit` (181) | NOT RUN: a fit needs three or more catalogue stars matched to measured centroids; the frame has one source above the detection threshold and the repository holds no catalogue of its neighbours (request R2) |
+| `overlay.b5.pack` (Prompt 182) | pass: the 37 bright-star-pack stars within 25 degrees of the field centre go through `pixelOf` to 1.1e-11 pixel of astropy.wcs `all_world2pix` (bound 1e-6 pixel, read from 182's `b4.oracleSkyMap`); the list of pack stars in the frame is empty and equals astropy's (the target is V 7.6, the pack stops at V 4.5). An empty list is the result; it is not a positive catalogue match |
+| `overlay.e1.pair` (182) | NOT RUN: an authentic calibrated pair with a moving object needs two authentic frames of one field |
+| `framepipeline.g1.refusal` (Prompt 185) | pass: the frame as a sequence of one is refused with `too-few-frames` (used 1, need 5), with the measured star as the target and every other parameter at its default (the first run refused with `bad-parameter` `target`, because the harness gave no target: a harness defect, fixed; no bound moved) |
+| `framepipeline.g1.cosmic` (185) | pass: the one-frame stage (`reduceOne`, electrons) flags none of the 23 optimal-aperture pixels as cosmic rays (0 of 143 pixels flagged in all) |
+| `framepipeline.g1.sequence` (185) | NOT RUN: five authentic frames of one field are the least it accepts, and it needs three comparison candidates and three matched stars to register; a sequence of this field's own cadences would be refused for want of comparison stars (request R1) |
+| `series.b6.refusal` (Prompt 186) | pass: the one authentic epoch (the centroid carried to the sky, at the frame's TDB time) is refused by `fitMotion` with `too-few-epochs` (n 1, min 2) |
+| `series.b6.series` (186) | NOT RUN: an authentic series needs two epochs for a motion and eight over nearly a year for a parallax; the packs hold one (request R3) |
+| calibration (the detector lab, Prompt 179 onward) | NOT RUN: the TESS frame is calibrated by the archive and no bias, dark or flat frame of it is in the packs, so there is nothing authentic for the lab's `calibrate` to reduce (D-CALIB-01 stands) |
+
+These rows are part 2 of the contract, `tests/fixtures/imagePacks/analysis-contract-2.json`, committed (b277b1a2) after Prompts 185 and 186 reached v3 and before any of them ran; the oracle for the sky rows is astropy.wcs, pinned in `oracle-results.json` under `astrometry`, run on the pack's own header values and on `sky/bright-stars.json` (SHA-256 recorded). The four part 1 placeholders for 181, 182, 185 and 186 remain in the first contract as committed and are marked superseded in the output.
+
+### Requests to Carl (nothing below was downloaded)
+
+The legs that cannot run need authentic files this PR does not hold. Each is a rights-checked public archive file; none is fetched until Carl says so.
+
+- R1 (`framepipeline.g1.sequence`): a frame sequence needs a field with at least five stars bright enough to measure, observed at five or more epochs. The cadences of the same TPF (`https://stpubdata.s3.amazonaws.com/tess/public/tid/s0056/0000/0004/2081/4525/tess2022244194134-s0056-0000000420814525-0243-s_tp.fits`, public domain as MAST data) would add only more frames of the same field, which has one dominant star, so the pipeline would still refuse it. What would run it is a larger field: a TESS full-frame calibrated image (MAST `ffic`, public domain; I have not measured the size, expect tens of megabytes each, five or more needed) or a TESScut cube of about 30 by 30 pixels over a few hundred cadences (a MAST service answer, a few megabytes; I have not checked that its output may be redistributed unchanged). Which one, and which field, is Carl's choice.
+- R2 (`astrometry.b5.fit`, `overlay.b5`): three or more catalogue stars with positions in the frame's field, from the Gaia DR3 catalogue through CDS VizieR (a cone of 0.1 degree about 330.795, +18.884, a few kilobytes; ESA's Gaia terms to be read before the download), plus a frame where three of them are measurable (the frame of R1 would do; this 11 by 13 frame has one star above four sigma).
+- R3 (`series.b6.series`): one authentic astrometric series: Gaia DR3 epoch astrometry for one source that has it, from ESA's Gaia archive (CC BY-SA 3.0 IGO to be confirmed), or published positions of one nearby star at dated epochs from a CDS table. I have not verified that a given source has either; Carl or a later session names the source first.
+- R4 (`overlay.e1.pair`): two calibrated authentic frames of one field with a known moving object, such as a minor planet with an ephemeris: two TESS full-frame images of one sector in which one is known to pass would be enough; the object and the pair need choosing, and this PR has none.
 
 Carl ruled on the three differing variants: asked how #436 should proceed on those three legs, he chose "Leave failing, labelled (Recommended)" = "Keep the committed contract, record the three as known failed legs with their causes (tests pin them), take #436 out of draft and merge once the other items are settled; no threshold moved." (Carl, chat 2026-10-24). The three stay recorded in `failed-legs.json`, pinned by tests; no bound moved.
 
@@ -127,8 +147,9 @@ magnitude is -13.33. `adapt()` now converts a rate to electrons as the CCD route
 does (pixels times the exposure, variance times its square). No committed
 threshold or result of Prompt 180 moved; the legs above compare Gravitas in
 electrons with the oracle's rate times the exposure, exactly. See `PHOTOMETRY.md`
-and `tests/imagePacks.test.js`. Prompts 185 and 186's authentic legs stay NOT RUN
-until #433 and #434 land in v3.
+and `tests/imagePacks.test.js`. #433 and #434 have since landed in v3, and the
+legs of Prompts 181, 182, 185 and 186 that this one frame can run are in the
+table above (contract part 2).
 
 ## Budgets
 

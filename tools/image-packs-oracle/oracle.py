@@ -1,6 +1,6 @@
 """
-The independent oracle for Prompt 189's authentic-frame legs (Prompts 180 and
-183 on one TESS frame), run offline, never by Gravitas.
+The independent oracle for Prompt 189's authentic-frame legs (Prompts 180, 183
+and, in part 2, 181 and 182 on one TESS frame), run offline, never by Gravitas.
 
     python -I oracle.py <repository root> inputs.json results.json
 
@@ -40,6 +40,7 @@ import sys
 import numpy as np
 from astropy.convolution import Gaussian2DKernel, convolve
 from astropy.stats import SigmaClip, sigma_clip
+from astropy.wcs import WCS
 from photutils.aperture import CircularAnnulus, CircularAperture, aperture_photometry
 from photutils.background import Background2D, MedianBackground, StdBackgroundRMS
 from photutils.centroids import centroid_com
@@ -218,7 +219,47 @@ if segm is not None:
             rec["fits"].append({"source": rec["sources"].index(b), "half": R, "fwhm": fw})
 out["detection"] = rec
 
+# ---- astrometry and overlay (contract part 2) ----------------------------------
+# The world coordinate system of the pack's sidecar through astropy.wcs (wcslib),
+# given the same header values, FITS pixels (1 is the centre of the first pixel):
+# pixel to sky on every pixel, and sky to pixel for the stars of the bright-star
+# pack within 25 degrees of the reference position.
+A = inputs.get("astrometry")
+if A is not None:
+    wc = A["wcs"]
+    w = WCS(naxis=2)
+    w.wcs.ctype = wc["ctype"]
+    w.wcs.crpix = wc["crpix"]
+    w.wcs.crval = wc["crval"]
+    w.wcs.cdelt = wc["cdelt"]
+    w.wcs.pc = wc["pc"]
+    px = [(i, j) for j in range(1, H + 1) for i in range(1, W + 1)]
+    ra, dec = w.all_pix2world([p[0] for p in px], [p[1] for p in px], 1)
+    sky = [[float(a), float(b)] for a, b in zip(ra, dec)]
+    sraw = open(root + A["stars"]["file"], "rb").read()
+    assert hashlib.sha256(sraw).hexdigest() == A["stars"]["sha256"], "the star file is not the one the inputs name"
+    stars = json.loads(sraw)["stars"]
+    c0 = np.radians(wc["crval"])
+    near = []
+    for r in stars:
+        sra, sde = r[1] / 1e4, r[2] / 1e4
+        a, b = np.radians(sra), np.radians(sde)
+        cosd = np.sin(c0[1]) * np.sin(b) + np.cos(c0[1]) * np.cos(b) * np.cos(a - c0[0])
+        if math.degrees(math.acos(max(-1.0, min(1.0, cosd)))) <= 25.0:
+            near.append((r[0], sra, sde))
+    pix = []
+    if near:
+        xs_, ys_ = w.all_world2pix([n[1] for n in near], [n[2] for n in near], 1)
+        pix = [{"hr": int(n[0]), "x": float(x_), "y": float(y_)} for n, x_, y_ in zip(near, xs_, ys_)]
+    out["astrometry"] = {
+        "pixelsToSky": {"order": "row by row from (1, 1), x fastest", "sky": sky},
+        "stars": pix,
+        "inFrame": [s["hr"] for s in pix if 0.5 <= s["x"] <= W + 0.5 and 0.5 <= s["y"] <= H + 0.5],
+        "nearCount": len(near),
+    }
+
+
 with open(sys.argv[3], "w") as fh:
     json.dump(out, fh)
     fh.write("\n")
-print("wrote", sys.argv[3], "sources", len(rec["sources"]), "convolve agreement", agree)
+print("wrote", sys.argv[3], "sources", len(rec["sources"]), "convolve agreement", agree, "stars near", out.get("astrometry", {}).get("nearCount"))

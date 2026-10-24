@@ -35,6 +35,15 @@ import {
 } from '../js/measure/photometry.js';
 import { detectIn, fitStar, meshMap } from '../js/measure/detect.js';
 import { start } from '../js/measure/inject.js';
+import {
+  fromHeader,
+  pixelOf,
+  separation,
+  skyOf,
+} from '../js/measure/astrometry.js';
+import { starOfRow, starsIn } from '../js/measure/overlay.js';
+import { checkSequence, reduceOne } from '../js/measure/frameSeries.js';
+import { fitMotion } from '../js/measure/astrometric-series.js';
 import { planRasterRead } from '../js/dataKinds/rasterJob.js';
 import { BOUNDS, REFUSAL_CODES } from './image-import-cases.mjs';
 import { variants } from './image-packs-hostile.mjs';
@@ -46,6 +55,12 @@ const json = rel => JSON.parse(readFileSync(path.join(ROOT, rel), 'utf8'));
 export const CONTRACT = json(
   'tests/fixtures/imagePacks/analysis-contract.json'
 );
+/** Part 2: the earlier prompts' authentic legs one frame can run (analysis-contract-2.json). */
+export const CONTRACT2 = json(
+  'tests/fixtures/imagePacks/analysis-contract-2.json'
+);
+const ASTRO = json('tests/fixtures/astrometry/thresholds.json').checks;
+const OVER = json('tests/fixtures/overlay/thresholds.json').checks;
 // Legs that fail as committed, recorded with their cause (failed-legs.json).
 const RECORDED = json('tests/fixtures/imagePacks/failed-legs.json').legs;
 const PHOT = json('tests/fixtures/photometry/thresholds.json').checks;
@@ -491,10 +506,174 @@ function hostile() {
   void L;
 }
 
+// ---- contract part 2: Prompts 181, 182, 185 and 186 on the one frame -------------
+
+/**
+ * What the single authentic frame can run of the legs those prompts left
+ * NOT RUN until an image pack landed (tests/fixtures/imagePacks/analysis-
+ * contract-2.json, committed before any of this ran). The sky legs compare
+ * Gravitas with astropy.wcs (oracle-results.json, "astrometry"); the pipeline
+ * and series legs are refusals with stable codes, which that file names as
+ * their result.
+ */
+function earlier(ctx, res) {
+  const L = CONTRACT2.legs;
+  const side = ctx.mod.PACK.image.sidecar;
+  const W = ctx.mod.PACK.image.width;
+  const H = ctx.mod.PACK.image.height;
+  const O = res.astrometry;
+  const h = fromHeader(side.wcs);
+  if (!h.ok) {
+    add('astrometry.b4.pack', null, false, {
+      note: `fromHeader refused the pack's world coordinates with '${h.code}'`,
+    });
+    return;
+  }
+  // astrometry.b4.pack: pixel to sky on every pixel against astropy.wcs
+  const bound = ASTRO['b4.oracleAuthenticHeader'].boundDeg;
+  let worst = 0;
+  let k = 0;
+  for (let j = 1; j <= H; j++)
+    for (let i = 1; i <= W; i++) {
+      const g = skyOf(h.wcs, i, j);
+      const o = O.pixelsToSky.sky[k++];
+      worst = Math.max(worst, separation(g, { ra: o[0], dec: o[1] }));
+    }
+  add('astrometry.b4.pack', worst, worst <= bound, {
+    bound,
+    note: `${W * H} pixels, the largest sky separation from astropy.wcs all_pix2world (degrees; bound read from Prompt 181's b4.oracleAuthenticHeader)`,
+  });
+  // astrometry.e1.single: the archive's reference position against the star's centroid
+  const m = ctx.plan.m;
+  const ref = pixelOf(h.wcs, side.wcs.crval[0], side.wcs.crval[1]);
+  const sep = Math.hypot(ref.x - (m.x + 1), ref.y - (m.y + 1));
+  const sepBound = L['astrometry.e1.single'].bounds.separationPix;
+  add('astrometry.e1.single', sep, sep <= sepBound, {
+    bound: sepBound,
+    note: `the pixel of CRVAL (${ref.x.toFixed(3)}, ${ref.y.toFixed(3)} FITS) against the recentred centroid (${(m.x + 1).toFixed(3)}, ${(m.y + 1).toFixed(3)}): ${(sep * side.scale.arcsecPerPixel).toFixed(2)} arcseconds; CRVAL is the archive's own position of the target, not an independent catalogue`,
+  });
+  // overlay.b5.pack: the bright-star pack over the frame, against astropy
+  const stars = JSON.parse(
+    readFileSync(path.join(ROOT, 'sky/bright-stars.json'), 'utf8')
+  ).stars.map(starOfRow);
+  const byHr = new Map(stars.map(s => [s.hr, s]));
+  let px = 0;
+  for (const q of O.stars) {
+    const p = pixelOf(h.wcs, byHr.get(q.hr).raDeg, byHr.get(q.hr).decDeg);
+    px = Math.max(px, Math.hypot(p.x - q.x, p.y - q.y));
+  }
+  const pxBound = OVER['b4.oracleSkyMap'].boundPix;
+  add('overlay.b5.pack.pixels', px, px <= pxBound, {
+    bound: pxBound,
+    note: `${O.stars.length} stars within 25 degrees of the field centre, the largest pixel difference from astropy.wcs all_world2pix (pixels; bound read from Prompt 182's b4.oracleSkyMap)`,
+  });
+  const listed = starsIn(
+    stars,
+    h.wcs,
+    { width: W, height: H },
+    { magnitude: 99 }
+  )
+    .entries.map(e => e.hr)
+    .sort((a, b) => a - b);
+  const theirs = O.inFrame.slice().sort((a, b) => a - b);
+  add(
+    'overlay.b5.pack.list',
+    listed.length,
+    JSON.stringify(listed) === JSON.stringify(theirs),
+    {
+      note: `${listed.length} bright-star pack stars in the frame (astropy: ${theirs.length}); the target is V 7.6, fainter than the pack's V 4.5`,
+    }
+  );
+  // framepipeline.g1.refusal: one authentic frame as a sequence of one
+  const seqOf = () => ({
+    id: ctx.mod.PACK.id,
+    count: 1,
+    width: W,
+    height: H,
+    calibration: 'electrons',
+    gain: side.pixels.gain.value,
+    readNoise: side.pixels.readNoise.value,
+    exposure: side.exposure.seconds,
+    times: [side.time.value],
+  });
+  const seqRes = checkSequence(seqOf(), { target: { x: m.x, y: m.y } });
+  const B1 = L['framepipeline.g1.refusal'].bounds;
+  add(
+    'framepipeline.g1.refusal',
+    seqRes.ok ? 0 : 1,
+    !seqRes.ok &&
+      seqRes.code === B1.code &&
+      seqRes.used === B1.used &&
+      seqRes.need === B1.need,
+    {
+      note: seqRes.ok
+        ? 'the pipeline accepted a sequence of one frame'
+        : `the pipeline refused with '${seqRes.code}' (used ${seqRes.used}, need ${seqRes.need}), with the measured star as the target and every other parameter at its default`,
+    }
+  );
+  // framepipeline.g1.cosmic: the one-frame stage's cosmic-ray mask on the aperture
+  const t = side.exposure.seconds;
+  const red = reduceOne(seqOf(), {
+    width: W,
+    height: H,
+    exposure: t,
+    values: Float64Array.from(ctx.frame.data, v => v * t),
+  });
+  const inAp = ctx.mod.PACK.image.optimalAperture.filter(i => red.mask[i]);
+  add('framepipeline.g1.cosmic', inAp.length, inAp.length === 0, {
+    bound: L['framepipeline.g1.cosmic'].bounds.flaggedInAperture,
+    note: `${red.cosmic} pixels of ${W * H} flagged by the mask in all, ${inAp.length} of the ${ctx.mod.PACK.image.optimalAperture.length} aperture pixels`,
+  });
+  // series.b6.refusal: the one authentic epoch
+  const at = skyOf(h.wcs, m.x + 1, m.y + 1);
+  const fit = fitMotion({
+    epochs: [
+      {
+        time: { ...side.time },
+        ra: at.ra,
+        dec: at.dec,
+        sigma: 0.1 * side.scale.arcsecPerPixel,
+      },
+    ],
+  });
+  const B6 = L['series.b6.refusal'].bounds;
+  add(
+    'series.b6.refusal',
+    fit.ok ? 0 : 1,
+    !fit.ok &&
+      fit.code === B6.code &&
+      fit.data?.n === B6.n &&
+      fit.data?.min === B6.min,
+    {
+      note: fit.ok
+        ? 'a fit of one epoch was accepted'
+        : `fitMotion refused with '${fit.code}' (n ${fit.data?.n}, min ${fit.data?.min})`,
+    }
+  );
+}
+
 // ---- the rest of the contract's legs --------------------------------------------
 
 function notRun() {
+  // Part 1's four placeholders for Prompts 181, 182, 185 and 186 are superseded
+  // by part 2, which runs what the frame can and says why for the rest.
+  const older = new Set([
+    'astrometry.b5.e1',
+    'overlay.b5.e1',
+    'framepipeline.g1',
+    'series.b6',
+  ]);
   for (const [id, leg] of Object.entries(CONTRACT.legs))
+    if (leg.status)
+      rows.push({
+        id,
+        measured: null,
+        pass: null,
+        note: older.has(id)
+          ? `${leg.status} Superseded by contract part 2 (the astrometry.*, overlay.*, framepipeline.* and series.* rows).`
+          : leg.status,
+      });
+  for (const [id, leg] of Object.entries(CONTRACT2.legs))
     if (leg.status)
       rows.push({ id, measured: null, pass: null, note: leg.status });
 }
@@ -517,6 +696,7 @@ export async function runValidation() {
     detection(ctx, res);
     injection(ctx);
     hostile();
+    earlier(ctx, res);
   }
   notRun();
   return rows.slice();

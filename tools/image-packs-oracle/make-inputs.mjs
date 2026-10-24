@@ -24,6 +24,7 @@ import {
   plan,
 } from '../image-packs-validate.mjs';
 
+const STARS = 'sky/bright-stars.json';
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const { mod, a } = await openFrame();
 const p = plan(a);
@@ -57,5 +58,15 @@ const inputs = {
     why: 'the contract’s centroid window: the largest square the 11 by 13 frame holds about the star',
   },
   fwhm: FRAME_FWHM,
+  astrometry: {
+    contract: 'tests/fixtures/imagePacks/analysis-contract-2.json',
+    wcs: mod.PACK.image.sidecar.wcs,
+    stars: {
+      file: STARS,
+      sha256: createHash('sha256')
+        .update(readFileSync(path.join(ROOT, STARS)))
+        .digest('hex'),
+    },
+  },
 };
 process.stdout.write(JSON.stringify(inputs));

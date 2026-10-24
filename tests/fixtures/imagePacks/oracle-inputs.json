@@ -1,1 +1,44 @@
-{"format":"gravitas.image-packs-oracle-inputs/1","prompt":189,"contract":"tests/fixtures/imagePacks/analysis-contract.json","frame":{"pack":"tess-hd209458-s56-frame","file":"frames/tess-hd209458-s56-frame.json","sha256":"6c33072c982e8db07bb4ac3c55cfbc648dd622c63a02b5a259b35e8677a904fa","width":11,"height":13,"unit":"electron/s"},"detection":{"box":16,"fwhm":2,"sigma":4,"minArea":5},"photometry":{"x":5.128158293710813,"y":5.639655547316996,"r":3,"rIn":6,"rOut":10,"start":{"x0":5.1608407961799685,"y0":5.63660988890458,"half":4}},"fwhmFit":{"half":4,"why":"the contract’s centroid window: the largest square the 11 by 13 frame holds about the star"},"fwhm":2}
+{
+  "format": "gravitas.image-packs-oracle-inputs/1",
+  "prompt": 189,
+  "contract": "tests/fixtures/imagePacks/analysis-contract.json",
+  "frame": {
+    "pack": "tess-hd209458-s56-frame",
+    "file": "frames/tess-hd209458-s56-frame.json",
+    "sha256": "6c33072c982e8db07bb4ac3c55cfbc648dd622c63a02b5a259b35e8677a904fa",
+    "width": 11,
+    "height": 13,
+    "unit": "electron/s"
+  },
+  "detection": { "box": 16, "fwhm": 2, "sigma": 4, "minArea": 5 },
+  "photometry": {
+    "x": 5.128158293710813,
+    "y": 5.639655547316996,
+    "r": 3,
+    "rIn": 6,
+    "rOut": 10,
+    "start": { "x0": 5.1608407961799685, "y0": 5.63660988890458, "half": 4 }
+  },
+  "fwhmFit": {
+    "half": 4,
+    "why": "the contract\u2019s centroid window: the largest square the 11 by 13 frame holds about the star"
+  },
+  "fwhm": 2,
+  "astrometry": {
+    "contract": "tests/fixtures/imagePacks/analysis-contract-2.json",
+    "wcs": {
+      "ctype": ["RA---TAN", "DEC--TAN"],
+      "crpix": [6.254819344476573, 6.530449812067786],
+      "crval": [330.7950845247853, 18.884206107937736],
+      "cdelt": [-0.005395091119529, 0.005395091119528831],
+      "pc": [
+        [0.8513512737077913, -0.46043911374994434],
+        [-0.5219565893104138, -0.8923117801814796]
+      ]
+    },
+    "stars": {
+      "file": "sky/bright-stars.json",
+      "sha256": "da12c3290b40c6fce365666084a7232f7db6d4efc4e1e3f6509cf1164611f577"
+    }
+  }
+}
