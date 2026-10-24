@@ -46,7 +46,7 @@ export const STARS = SCENE.stars.map(({ id, x, y, rate }) => ({
 export function sceneSequence(seed, o = {}) {
   return syntheticSequence({
     seed,
-    detector: { width: 64, height: 64, cosmicRate: 0 },
+    detector: { width: 96, height: 96, cosmicRate: 0 },
     exposure: SCENE.exposure,
     sky: SCENE.sky,
     stars: STARS,

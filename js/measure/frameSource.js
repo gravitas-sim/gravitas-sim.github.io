@@ -22,6 +22,7 @@ import {
 } from '../kernels/detector/frame.js';
 import { buildMasters } from '../kernels/detector/pipeline.js';
 import { stream } from '../random/streams.js';
+import { sha256Hex } from '../hash.js';
 
 const { Math, Float64Array } = globalThis;
 
@@ -59,7 +60,7 @@ export const CALIBRATION = Object.freeze({
  * @param {number} [spec.cloud=0.1] - rms of the common transparency
  * @param {number} [spec.jitter=0] - rms shift of the pointing, pixels, each axis
  * @param {number} [spec.rotationDeg=0] - rms turn of the field, degrees
- * @param {Object<number, 'turn'|'cloud'>} [spec.replace] - frames that go wrong, by index
+ * @param {Object<number, 'turn'|'cloud'|'blind'>} [spec.replace] - turn: the field a quarter turn; cloud: 3 percent of the light; blind: 0.3 percent - frames that go wrong, by index
  * @param {object} [spec.calibration] - frames of each kind
  */
 export function syntheticSequence(spec) {
@@ -109,6 +110,7 @@ export function syntheticSequence(spec) {
   }
   for (const [k, what] of Object.entries(replace))
     if (what === 'cloud') transparency[k] = 0.03;
+    else if (what === 'blind') transparency[k] = 0.003;
 
   /** Where star `s` is in frame k, truth. */
   const placed = (s, k) => {
@@ -198,3 +200,7 @@ export function syntheticSequence(spec) {
   };
   return out;
 }
+
+/** The identity of a synthetic sequence: its frames are a pure function of its spec. */
+export const digestOf = async seq =>
+  sha256Hex(JSON.stringify({ v: VERSION, kind: seq.kind, spec: seq.spec }));

@@ -927,6 +927,9 @@ function assemble(seq, params, s) {
   );
   out.nodes = nodes;
   out.gaps = gaps;
+  out.series = Object.fromEntries(
+    complete.map(id => [id, { net: net[id], sigma: sig[id] }])
+  );
   if (phRefused.length)
     return {
       ...out,
