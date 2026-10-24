@@ -192,7 +192,7 @@ scene's size, `858bd3c0`, before any validation number).
 | e1 identity, replay, sequence-changed, other seed, `simulateSeries` | all | all | pass |
 | f1 lab draws 1 to 3: period error (d) / amplitude (sigma) | 0.0015, 0.0006, 0.0010 / 0.44, 0.48, 1.47 | 0.004 / 4.5 | pass |
 | f1 the lesson's new step answer (h) | 2.884 | 2.88 within 0.1 | pass |
-| g1 authentic frame sequence | NOT RUN (189 ran its refusal and one-frame stage, both pass; the sequence needs a larger field, R1) | | not run |
+| g1 authentic frame sequence | 189 (authentic data, `IMAGE_PACKS.md`): 84 TESS full-frame images; the default run refuses (`no-marks`); with the catalogue stars given as marks and the comparison stars named it passes complete, photutils to 8.6e-16, transit depth 1.511 percent against SPOC's 1.566 (0.001 asked), noise ratio 1.94 (0.5 to 2); the stability test flags 14 of 16 candidates on real data (recorded failed legs) | as g1 | partly failed, recorded |
 
 **d1 fails as committed, and no bound was moved.** The leg's premise was that a
 frame at 3 percent of the light leaves nothing to detect. It leaves the four

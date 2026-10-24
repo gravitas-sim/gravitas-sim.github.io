@@ -1,0 +1,19 @@
+{
+  "format": "gravitas.image-packs-analysis-contract/1",
+  "prompt": 189,
+  "part": 6,
+  "committedBefore": "the v4 legs below were run. What was seen of v3 (contract part 5) before this file, from a run without an oracle: the catalogue rule left 17 reference stars measured (G 7.5 to 13.7, each centroid within 0.14 pixel of its anchor-predicted pixel); the fit was solved, verdict consistent, residual rms 0.038 pixel; the pipeline completed on the 84 frames with 17 given marks, and its stability test flagged 14 of the 16 candidates unstable (reduced chi-square 1.8 to 9.0) and left two untested, so it chose two comparison stars, against the three the contract asks for. Nothing of the light curve itself (depth, centre, scatter) and nothing from any oracle was seen.",
+  "why": "The stability test (Prompt 185: sequential elimination of comparison candidates on a chi-square against a constant, alpha 0.001) assumes white noise. Real 200-second photometry of a crowded field carries correlated noise (pointing jitter, scattered light, a sky that is not flat) the stated uncertainties do not hold, so the test calls almost every star unstable. Prompt 185 gives the user an override for exactly this: the comparison stars can be named, and the run then warns that the named stars were flagged unstable. v4 uses the override, so the light curve of the transit can be judged against the independent reduction at all; the committed legs (parts 3, 4, 5) keep their results, including the failures.",
+  "rule": "The same as parts 3 to 5.",
+  "variant": {
+    "name": "v4",
+    "what": "part 5's v3 in every respect (the reference stars, the marks, the target, fwhm 2, register false) with the comparison stars named: the five brightest by Gaia G of the reference stars other than HD 209458, given as params.comparison.ids",
+    "ids": [
+      "framepipeline.g1.complete.v4",
+      "framepipeline.g1.oracle.v4",
+      "framepipeline.g1.transit.v4",
+      "framepipeline.g1.noise.v4"
+    ],
+    "bounds": "those of framepipeline.g1.complete, .oracle, .transit and .noise in part 3, unchanged; 'complete' asks for at least three comparison stars chosen, and five are named"
+  }
+}

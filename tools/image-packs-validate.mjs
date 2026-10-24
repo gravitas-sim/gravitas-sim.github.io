@@ -47,6 +47,7 @@ import { fitMotion } from '../js/measure/astrometric-series.js';
 import { planRasterRead } from '../js/dataKinds/rasterJob.js';
 import { BOUNDS, REFUSAL_CODES } from './image-import-cases.mjs';
 import { variants } from './image-packs-hostile.mjs';
+import { authenticRows } from './image-packs-authentic.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(HERE, '..');
@@ -670,11 +671,20 @@ function notRun() {
         measured: null,
         pass: null,
         note: older.has(id)
-          ? `${leg.status} Superseded by contract part 2 (the astrometry.*, overlay.*, framepipeline.* and series.* rows).`
+          ? `${leg.status} Superseded by contract parts 2 and 3 (the astrometry.*, overlay.*, framepipeline.* and series.* rows).`
           : leg.status,
       });
+  // Part 3 (tools/image-packs-authentic.mjs) runs these five on the 84 full-frame
+  // images, and reports the ones it still cannot; its rows replace part 2's.
+  const part3 = new Set([
+    'astrometry.b5.fit',
+    'overlay.e1.pair',
+    'framepipeline.g1.sequence',
+    'series.b6.series',
+    'calibration.authentic',
+  ]);
   for (const [id, leg] of Object.entries(CONTRACT2.legs))
-    if (leg.status)
+    if (leg.status && !part3.has(id))
       rows.push({ id, measured: null, pass: null, note: leg.status });
 }
 
@@ -698,6 +708,11 @@ export async function runValidation() {
     hostile();
     earlier(ctx, res);
   }
+  // The authentic full-frame legs (contract part 3, with its variants 4 to 6).
+  const oracleAuth = JSON.parse(
+    readFileSync(path.join(FIX, 'authentic/oracle-results.json'), 'utf8')
+  );
+  rows.push(...(await authenticRows(oracleAuth)).rows);
   notRun();
   return rows.slice();
 }
