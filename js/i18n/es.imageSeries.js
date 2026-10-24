@@ -50,7 +50,7 @@ export const ES_IMAGESERIES = {
   'obs.ser.csv': 'Guardar los residuos como CSV',
   'obs.ser.keep': 'Guardar en el registro',
   'obs.ser.limits':
-    'Límites: un movimiento en línea recta a ritmo constante; sin movimiento orbital, sin términos relativistas, sin aberración ni desviación de la luz; las incertidumbres se toman como independientes. Un paralaje medido contra las estrellas de referencia es relativo, no absoluto.',
+    'Límites: un movimiento en línea recta a ritmo constante; sin movimiento orbital, sin términos relativistas, sin aberración ni desviación de la luz; las incertidumbres se toman como independientes. Un paralaje medido contra las estrellas de referencia es relativo, no absoluto. Una escala de tiempo u origen de las épocas equivocados que desplace todas las épocas medio año convierte el paralaje en su negativo y el ajuste no lo distingue; solo se detecta donde el paralaje es significativo.',
   'obs.ser.no.row':
     'La fila {index} no es una posición completa: necesita un número para la época, una ascensión recta, una declinación y una incertidumbre positiva.',
   'obs.ser.no.needTwo':

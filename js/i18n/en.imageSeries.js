@@ -49,7 +49,7 @@ export const EN_IMAGESERIES = {
   'obs.ser.csv': 'Save residuals as CSV',
   'obs.ser.keep': 'Keep in the ledger',
   'obs.ser.limits':
-    'Limits: a straight-line motion at a constant rate; no orbital motion, no relativistic terms, no aberration or light deflection; the uncertainties are taken as independent. A parallax measured against the reference stars is relative, not absolute.',
+    'Limits: a straight-line motion at a constant rate; no orbital motion, no relativistic terms, no aberration or light deflection; the uncertainties are taken as independent. A parallax measured against the reference stars is relative, not absolute. A wrong epoch time scale or origin that shifts every epoch by half a year turns the parallax into its negative and the fit cannot tell; it is caught only where the parallax is significant.',
   'obs.ser.no.row':
     'Row {index} is not a complete position: it needs a number for the epoch, a right ascension, a declination and a positive uncertainty.',
   'obs.ser.no.needTwo': 'A two-epoch shift needs exactly two rows.',

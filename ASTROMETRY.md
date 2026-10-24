@@ -407,7 +407,8 @@ parallax, whose uncertainty is the two in quadrature.
   exception.** A shift of the epochs by a quarter year or by a few weeks fails the
   test (d3); a shift of half a year turns the parallax into its negative and the
   residuals cannot tell (see below), so a parallax negative by more than 3 sigma is
-  flagged, no distance is presented, and the epoch time scale is named.
+  flagged, no distance is presented, and the epoch time scale is named. The panel states this limit in both languages
+  (the `obs.ser.limits` words).
 - **Interval, not value.** A distance is 1/p of an estimate: biased, and unbounded
   above where the parallax interval reaches zero. It is always shown with its
   intervals, its method and its frame statement; with an inconsistent test or a
@@ -479,7 +480,9 @@ eccentricity (1.7 percent), and a fit with the negative parallax matches the dat
 The module gives `p = -0.150` arcsec at a high significance with a consistent
 verdict. **The leg is left failing as committed and is not restated.** The contract
 could not have been met by any residual test; it needs either a different
-detection (below) or a different statement, which is Carl's to rule.
+detection (below) or a different statement, which was Carl's to rule.
+
+**Ruling.** Carl, chat 2026-10-24, asked "Prompt 186 (PR #434, draft) passes 68 of 69 judged legs against the astropy/ERFA/scipy oracle, but d3 fails as committed: a half-year (182.6 day) epoch shift flips the parallax sign, because the parallax factors are annual sinusoids, so the residual test cannot see it (1 of 200 caught vs 0.99). A negative-parallax warning was added afterwards as evidence only. How should #434 proceed?", chose "Leave failing, labelled (Recommended)": "As for 180/182/183: keep the committed bound, record d3 as a known failed leg with its cause (tests pin it; the sign-flip limit stated in the doc and the panel), take #434 out of draft and merge; no threshold moved." No threshold moved; the tests pin d3 at 182.6 days as the known failed leg, and the sign-flip limit is stated here and in the panel (English and Spanish).
 
 What was added after the measurement, labelled as such: a parallax negative by more
 than 3 sigma (no source can have one) now sets `warnings: ['negative-parallax']`,
