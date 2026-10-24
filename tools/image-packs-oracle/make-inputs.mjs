@@ -52,7 +52,10 @@ const inputs = {
         start: { x0: p.brightest.x, y0: p.brightest.y, half: p.ap.half },
       }
     : null,
-  fwhmFit: { half: p.ap.half, why: 'the contract’s centroid window: the largest square the 11 by 13 frame holds about the star' },
+  fwhmFit: {
+    half: p.ap.half,
+    why: 'the contract’s centroid window: the largest square the 11 by 13 frame holds about the star',
+  },
   fwhm: FRAME_FWHM,
 };
 process.stdout.write(JSON.stringify(inputs));

@@ -1,0 +1,13 @@
+{
+  "format": "gravitas.image-packs-failed-legs/1",
+  "prompt": 189,
+  "note": "Legs of tests/fixtures/imagePacks/analysis-contract.json that fail as committed, recorded with their cause. The bound is not moved and the contract is not edited after the result was seen; only Carl rules on which side changes (DECISION_REGISTER.md D-R10-65). tests/imagePacks.test.js asserts each still fails, so a silent fix is a failing test.",
+  "legs": {
+    "import.hostilePng.extra-bytes-after-IEND": {
+      "contract": "the contract's variant list says '(accepted: the picture is intact)' for a PNG with extra bytes after IEND",
+      "found": "js/dataKinds/raster.js readPngHeader refuses it with png-malformed ('N bytes follow the IEND chunk'), by Prompt 188's committed design, before any decoder sees the file",
+      "cause": "the contract (written in this prompt) assumed the lenient behaviour of browser decoders; Prompt 188's reader is deliberately strict about the end of the file. The two disagree and nothing in the pack is wrong",
+      "ruling": "Carl: either the contract's expectation is wrong (the strict refusal stands, and this row becomes a refusal), or the reader should accept trailing bytes (a change to Prompt 188's committed corpus)"
+    }
+  }
+}
