@@ -64,8 +64,8 @@ The first Gravitas is frozen (Prompt 165 follow-up, D-R10-51, visible, train v3)
 
 **Gravitas 2.0.0.** Gravitas grows from a gravity sandbox with 22 guided
 investigations into a browser laboratory: <!--fact:scenarios-->59<!--/fact-->
-sandbox scenarios, <!--fact:libraryInvestigations-->77<!--/fact--> guided
-investigations (<!--fact:investigations-->60<!--/fact--> that run in the
+sandbox scenarios, <!--fact:libraryInvestigations-->80<!--/fact--> guided
+investigations (<!--fact:investigations-->63<!--/fact--> that run in the
 simulation and <!--fact:guidedInvestigations-->17<!--/fact--> in the
 Observatory, the 3-D lab and the mission lab), a shared shell, a Library, a
 workspace for each student's own work, an instructor path from adoption page to
@@ -1789,7 +1789,7 @@ listed here because this is the release that first carries it.
   uncertainty, the target and the observing configuration.
 - **Offline support.** A service worker precaches the application shell, the
   <!--fact:scenarios-->59<!--/fact--> scenario thumbnails and all
-  <!--fact:investigations-->60<!--/fact--> English lessons, so a class keeps
+  <!--fact:investigations-->63<!--/fact--> English lessons, so a class keeps
   working when the room's wifi drops. The cache name is a content hash, so a
   build invalidates it. See [OFFLINE_AND_LOW_END.md](OFFLINE_AND_LOW_END.md).
 - **A measured low-end quality tier.** Chosen from the frame rate the machine
@@ -1798,7 +1798,7 @@ listed here because this is the release that first carries it.
   off.
 - **An investigation authoring toolchain.** `npm run author:check` validates
   every lesson and every one of the
-  <!--fact:investigationSteps-->1024<!--/fact--> steps; `npm run author:new`
+  <!--fact:investigationSteps-->1062<!--/fact--> steps; `npm run author:new`
   scaffolds a lesson with its translation shadow and instructor stub;
   `?author=<lesson>&step=<n>` opens any step with diagnostics without touching
   a student's saved progress; and a browser walker exercises every step of
