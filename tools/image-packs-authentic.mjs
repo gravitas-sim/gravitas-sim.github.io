@@ -156,6 +156,14 @@ export const VARIANTS = {
     matchG: 14,
     params: { target: TARGET, fwhm: 2, register: false },
   },
+  // contract part 6: v3 with the comparison stars named (the five brightest
+  // reference stars but the target)
+  v4: {
+    forced: true,
+    matchG: 14,
+    nameComparison: 5,
+    params: { target: TARGET, fwhm: 2, register: false },
+  },
 };
 
 export async function decide(A, opts = VARIANTS.main) {
@@ -291,15 +299,20 @@ export async function decide(A, opts = VARIANTS.main) {
     const list = refs.slice();
     if (tgt && !list.includes(tgt)) list.push(tgt);
     list.sort((p, q) => p.s.v - q.s.v);
-    opts = {
-      ...opts,
-      params: {
-        ...opts.params,
-        marks: list
-          .slice(0, 20)
-          .map(m => ({ id: `g${m.s.hr}`, x: m.x - 1, y: m.y - 1 })),
-      },
+    const params = {
+      ...opts.params,
+      marks: list
+        .slice(0, 20)
+        .map(m => ({ id: `g${m.s.hr}`, x: m.x - 1, y: m.y - 1 })),
     };
+    if (opts.nameComparison)
+      params.comparison = {
+        ids: list
+          .filter(m => m !== tgt)
+          .slice(0, opts.nameComparison)
+          .map(m => `g${m.s.hr}`),
+      };
+    opts = { ...opts, params };
     out.opts = opts;
   } else {
     for (const d of good) {
@@ -498,10 +511,16 @@ async function spoc() {
 /** Depth and centre of the SPOC curve, then of the pipeline's, by the contract's windows. */
 export async function transit(D) {
   const { A, res } = D;
-  const S = await spoc();
+  const S0 = await spoc();
   const t0 = A.times[0];
   const t1 = A.times[A.times.length - 1];
   const mid = (t0 + t1) / 2; // the window's own middle
+  // the SPOC curve of the sector holds a transit every 3.5 days: only the one in the window
+  const [St, Sf] = [
+    pick(S0.t, S0.f, x => Math.abs(x - mid) <= 0.3),
+    pick(S0.t, S0.f, x => Math.abs(x - mid) <= 0.3),
+  ];
+  const S = { t: St[0], f: Sf[1] };
   // SPOC: normalise by the far baseline, find the centre, then the depth about it
   const far = pick(
     S.t,
@@ -556,13 +575,15 @@ export async function transit(D) {
 // ---- the legs --------------------------------------------------------------------------
 
 /** The fit, overlay and pipeline legs of one run; `sfx` is '' for the contract's own and '.v2' for the variant. */
-async function runLegs(A, D, O, sfx, add, rows) {
+async function runLegs(A, D, O, sfx, add, rows, o = {}) {
   const tag = sfx
-    ? ` (variant ${sfx.slice(1)}: contract part ${sfx === '.v2' ? 4 : 5})`
+    ? ` (variant ${sfx.slice(1)}: contract part ${{ '.v2': 4, '.v3': 5, '.v4': 6 }[sfx]})`
     : '';
   const fit = D.fit;
   const B5 = L['astrometry.b5.fit'];
-  if (!fit?.ok || D.pairs.length < MATCH.minMatched) {
+  if (o.pipelineOnly) {
+    // the astrometry legs of this variant are the previous variant's
+  } else if (!fit?.ok || D.pairs.length < MATCH.minMatched) {
     add(`astrometry.b5.fit${sfx}`, D.pairs.length, false, {
       bound: B5.bounds,
       note: `${D.pairs.length} stars matched of ${D.det.sources?.length ?? 0} detections (the leg needs ${MATCH.minMatched})${fit && !fit.ok ? `; the fit refused with '${fit.code}'` : ''}${tag}`,
@@ -723,6 +744,7 @@ export async function authenticRows(oracle, cache = {}) {
     main: cache.main ?? (await decide(A, VARIANTS.main)),
     v2: cache.v2 ?? (await decide(A, VARIANTS.v2)),
     v3: cache.v3 ?? (await decide(A, VARIANTS.v3)),
+    v4: cache.v4 ?? (await decide(A, VARIANTS.v4)),
   };
   // integrity
   {
@@ -764,6 +786,9 @@ export async function authenticRows(oracle, cache = {}) {
   });
   await runLegs(A, Ds.v2, oracle?.sections?.v2, '.v2', add, rows);
   await runLegs(A, Ds.v3, oracle?.sections?.v3, '.v3', add, rows);
+  await runLegs(A, Ds.v4, oracle?.sections?.v4, '.v4', add, rows, {
+    pipelineOnly: true,
+  });
   // 186: the motion
   {
     const SB = L['series.b6.motion'].bounds;

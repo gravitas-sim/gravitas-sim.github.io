@@ -192,8 +192,16 @@ describe('the authentic-frame legs, against the contract committed first', () =>
       const r = rows.find(q => q.id === id);
       expect({ id, pass: r?.pass }).toEqual({ id, pass: true });
     }
+    // (the five legs the 84 full-frame images run are judged by contract part 3, below)
+    const part3 = [
+      'astrometry.b5.fit',
+      'overlay.e1.pair',
+      'framepipeline.g1.sequence',
+      'series.b6.series',
+      'calibration.authentic',
+    ];
     for (const [id, leg] of Object.entries(CONTRACT2.legs)) {
-      if (!leg.status) continue;
+      if (!leg.status || part3.includes(id)) continue;
       const r = rows.find(q => q.id === id);
       expect(r.pass).toBeNull();
       expect(r.note).toMatch(/^NOT RUN/);
@@ -217,6 +225,84 @@ describe('the authentic-frame legs, against the contract committed first', () =>
       readFileSync(path.join(ROOT, 'data-packs/tess-hd209458-s56-frame.json'))
     ).image.sidecar.wcs;
     expect(inputs.astrometry.wcs).toEqual(wcs);
+  });
+
+  test('contract parts 3 to 6 (authentic full-frame data): each leg has its row, the ones that pass pass, the failures are the recorded ones, and the three that cannot run say why', () => {
+    const byId = id => rows.find(q => q.id === id);
+    const passes = [
+      'authentic.integrity',
+      'astrometry.b5.fit.v3',
+      'astrometry.e1.frame.v3',
+      'overlay.b5.gaia.v3',
+      'framepipeline.g1.transit.v3',
+      'framepipeline.g1.noise.v3',
+      'framepipeline.g1.oracle.v2',
+      'framepipeline.g1.complete.v4',
+      'framepipeline.g1.oracle.v4',
+      'framepipeline.g1.transit.v4',
+      'framepipeline.g1.noise.v4',
+      'series.b6.motion',
+    ];
+    for (const id of passes)
+      expect({ id, pass: byId(id)?.pass }).toEqual({ id, pass: true });
+    // the failures of parts 3 to 5 are the recorded ones, with a measured cause, and no more
+    const failing = rows
+      .filter(
+        r =>
+          r.pass === false &&
+          /^(astrometry\.(b5|e1)|overlay\.b5\.gaia|framepipeline\.g1\.(complete|oracle|transit|noise))/.test(
+            r.id
+          )
+      )
+      .map(r => r.id)
+      .sort();
+    expect(failing).toEqual(
+      Object.keys(FAILED)
+        .filter(id => !id.startsWith('import.'))
+        .sort()
+    );
+    for (const id of [
+      'overlay.e1.pair',
+      'series.b6.series',
+      'calibration.authentic',
+    ]) {
+      expect(byId(id).pass).toBeNull();
+      expect(byId(id).note).toMatch(/^NOT RUN/);
+    }
+    // nothing the contracts ask for was moved: the v3 fit and overlay are judged by part 3's bounds
+    expect(byId('astrometry.b5.fit.v3').bound).toBe(
+      json('tests/fixtures/astrometry/thresholds.json').checks['b2.oracleFit']
+        .boundPix
+    );
+    expect(byId('astrometry.b5.fit.v3').measured).toBeLessThan(0.01);
+    expect(byId('astrometry.e1.frame.v3').measured).toBeLessThan(0.2);
+    // the proper motion and the separation from two authentic epochs
+    expect(byId('series.b6.motion').measured).toBeLessThan(0.1);
+  });
+
+  test('the authentic data is the data the provenance records, and the oracle was run on it', () => {
+    const inputs = json(
+      `${'tests/fixtures/imagePacks/authentic'}/oracle-inputs.json`
+    );
+    const cube = readFileSync(path.join(ROOT, inputs.cube.file));
+    expect(createHash('sha256').update(cube).digest('hex')).toBe(
+      inputs.cube.sha256
+    );
+    expect(cube.length).toBe(
+      inputs.cube.shape[0] * inputs.cube.shape[1] * inputs.cube.shape[2] * 4
+    );
+    const prov = json('tests/fixtures/imagePacks/authentic/provenance.json');
+    expect(JSON.stringify(prov)).toContain(inputs.cube.sha256);
+    for (const n of [3, 4, 5, 6]) {
+      const c = json(`tests/fixtures/imagePacks/analysis-contract-${n}.json`);
+      expect(c.part).toBe(n);
+      expect(c.committedBefore).toMatch(/\S/);
+    }
+    // the oracle's sections cover the variants the legs judge
+    const res = json('tests/fixtures/imagePacks/authentic/oracle-results.json');
+    for (const k of ['main', 'v2', 'v3', 'v4'])
+      expect(res.sections[k]).toBeTruthy();
+    expect(res.series.separationArcsec).toBeGreaterThan(0);
   });
 
   test('the bounds are read from the earlier prompts, not restated: the contract names the files', () => {
