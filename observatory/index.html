@@ -118,6 +118,7 @@
       .dt-pic { display: block; width: 100%; max-width: 480px; height: auto; margin: var(--space-2) 0; border-radius: var(--radius-sm) }
       #obsDetectBody input[type='checkbox'] { flex: none; width: 24px; height: 24px }
       #obsDetectBody .ow-plot { max-width: 720px }
+      #obsInjectBody .ow-plot { max-width: 720px }
       .ov-pic { display: block; width: 100%; max-width: 480px; height: auto; margin: var(--space-2) 0; border-radius: var(--radius-sm); cursor: crosshair; touch-action: manipulation }
       .ov-pair { display: flex; flex-wrap: wrap; gap: var(--space-3) }
       .ov-pair .ov-pic { flex: 1 1 240px }
@@ -125,7 +126,7 @@
       #obsOverlayBody input[type='checkbox'] { flex: none; width: 24px; height: 24px }
       /* Touch measurement: 44 px handles on a touch screen. */
       @media (pointer: coarse) {
-        :is(#obsMarksBody, #obsPhotoBody, #obsDetectBody, #obsOverlayBody) :is(button, select, input) {
+        :is(#obsMarksBody, #obsPhotoBody, #obsDetectBody, #obsInjectBody, #obsOverlayBody) :is(button, select, input) {
           min-height: 44px;
           min-width: 44px;
         }
@@ -705,6 +706,11 @@ try {
         <details id="obsDetectPanel" class="ui-card ui-disclosure ow-panel" hidden>
           <summary data-i18n="obs.dt.title">Sources and the width of the stars</summary>
           <div id="obsDetectBody"><p data-i18n="obs.dt.offline"></p></div>
+        </details>
+
+        <details id="obsInjectPanel" class="ui-card ui-disclosure ow-panel" hidden>
+          <summary data-i18n="obs.inj.title">Completeness: what the detector misses</summary>
+          <div id="obsInjectBody"><p data-i18n="obs.inj.offline"></p></div>
         </details>
 
         <details id="obsOverlayPanel" class="ui-card ui-disclosure ow-panel" hidden>

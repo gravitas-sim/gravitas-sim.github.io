@@ -253,6 +253,15 @@ $('obsDetectPanel').addEventListener('toggle', () => {
       () => (detect = null)
     );
 });
+// Completeness by injection (INJECTION.md): loaded when first opened.
+let inject = null;
+$('obsInjectPanel').addEventListener('toggle', () => {
+  if ($('obsInjectPanel').open && state.view)
+    inject ??= import('./observatory/imageInject.js').then(
+      m => m.mountInject($('obsInjectBody'), { ...lent, state }),
+      () => (inject = null)
+    );
+});
 // Catalog overlays, blink and compare (OVERLAYS.md): loaded when first opened.
 let overlay = null;
 $('obsOverlayPanel').addEventListener('toggle', () => {
@@ -394,6 +403,7 @@ function renderAll() {
     'obsMarksPanel',
     'obsPhotoPanel',
     'obsDetectPanel',
+    'obsInjectPanel',
     'obsOverlayPanel',
   ])
     $(id).hidden = !isImage;
@@ -440,6 +450,7 @@ function renderAll() {
   measure?.then(p => p.update());
   photo?.then(p => p.update());
   detect?.then(p => p.update());
+  inject?.then(p => p.update());
   overlay?.then(p => p.update());
   guide?.then(p => p.update());
   renderSelectionBar();

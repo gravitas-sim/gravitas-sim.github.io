@@ -369,7 +369,6 @@ export const ES_DEFERRED = {
     'Dos pasadas de {duration} unidades simuladas tardaron {seconds}s: {coarseSub} subpasos por fotograma y luego {fineSub}.',
   'reliability.steps': 'Paso {coarse} frente a {fine}',
   'reliability.export': 'Exportar esta comprobacion',
-
   'reliability.verdict.converging':
     'Reducir el paso a la mitad no movio este resultado.',
   'reliability.verdict.unresolved':
@@ -3629,6 +3628,7 @@ export const ES_DEFERRED = {
   'nb.source.image-calibration': 'Coordenadas celestes de una imagen',
   'nb.source.image-photometry': 'Fotometría de una imagen',
   'nb.source.image-detection': 'Función de dispersión de punto de una imagen',
+  'nb.source.image-injection': 'Completitud de una imagen',
   'nb.flag.missionModel':
     'impulsos instantáneos, cónicas empalmadas y masas puntuales: un modelo didáctico de una misión',
   'nb.flag.notOperational':

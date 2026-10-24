@@ -367,7 +367,6 @@ export const EN_DEFERRED = {
     'Two runs of {duration} simulated units took {seconds}s: {coarseSub} substeps per frame, then {fineSub}.',
   'reliability.steps': 'Step {coarse} against {fine}',
   'reliability.export': 'Export this check',
-
   'reliability.verdict.converging':
     'Halving the step did not move this result.',
   'reliability.verdict.unresolved':
@@ -3718,6 +3717,7 @@ export const EN_DEFERRED = {
   'nb.source.image-calibration': 'Sky coordinates for an image',
   'nb.source.image-photometry': 'Photometry on an image',
   'nb.source.image-detection': 'Point-spread function of an image',
+  'nb.source.image-injection': 'Completeness of an image',
   'nb.flag.missionModel':
     'impulsive burns, patched conics and point masses: a teaching model of a mission',
   'nb.flag.notOperational': 'not for operational mission design or navigation',

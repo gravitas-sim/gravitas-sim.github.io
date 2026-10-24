@@ -149,6 +149,7 @@
     "photometry:validate": "node tools/photometry-validate.mjs",
     "detection:validate": "node tools/detection-validate.mjs",
     "overlay:validate": "node tools/overlay-validate.mjs",
+    "injection:validate": "node tools/injection-validate.mjs",
     "i18n:freshness": "node tools/i18n-freshness.mjs",
     "author:check": "node tools/author-check.mjs",
     "author:strict": "node tools/author-check.mjs --warnings",

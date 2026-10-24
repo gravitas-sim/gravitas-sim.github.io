@@ -105,6 +105,11 @@ export const SOURCE = Object.freeze({
   // record, and the request that runs it again
   // (js/observatory/imageDetect.js, js/measure/detect.js).
   IMAGE_DETECTION: 'image-detection',
+  // The completeness of an image by injection: the magnitudes at half and nine
+  // tenths completeness and each bin's share with its exact interval, and the
+  // request that runs it again (js/observatory/imageInject.js,
+  // js/measure/inject.js).
+  IMAGE_INJECTION: 'image-injection',
 });
 
 /** The sources this build can capture from. */
@@ -130,6 +135,7 @@ export const SOURCES = [
   SOURCE.IMAGE_CALIBRATION,
   SOURCE.IMAGE_PHOTOMETRY,
   SOURCE.IMAGE_DETECTION,
+  SOURCE.IMAGE_INJECTION,
 ];
 
 /** How long a student's prose may be, per field. */

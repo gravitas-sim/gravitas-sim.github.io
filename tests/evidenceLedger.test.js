@@ -336,6 +336,47 @@ const every = () => [
       },
     }),
   }),
+  // The completeness of an image (js/measure/inject.js, Prompt 184): its replay
+  // and the tool are covered in tests/injection.test.js; here only that it is an
+  // envelope the ledger can hold, with interval uncertainties in it.
+  artifactEntry({
+    source: SOURCE.IMAGE_INJECTION,
+    title: 'Completeness',
+    capturedAt: at,
+    context: { page: 'observatory' },
+    envelope: artifact({
+      id: 'image-injection-1',
+      source: { kind: 'observation', id: 'frame', digest },
+      quantities: [
+        {
+          id: 'completeness.m50',
+          value: -2.45,
+          unit: 'mag',
+          uncertainty: {
+            kind: 'interval',
+            lo: -2.52,
+            hi: -2.38,
+            level: 0.6827,
+            basis: 'data',
+          },
+          origin: 'derived',
+        },
+        {
+          id: 'completeness.bin.0',
+          value: 0.9,
+          unit: '',
+          uncertainty: {
+            kind: 'interval',
+            lo: 0.8,
+            hi: 0.96,
+            level: 0.6827,
+            basis: 'data',
+          },
+          origin: 'derived',
+        },
+      ],
+    }),
+  }),
   // A sweep's analysis and an experiment's result, which js/experiments/
   // analysisPanel.js keeps as envelopes (P75 R-5: the list used to omit them).
   ...[
@@ -616,13 +657,14 @@ describe('the submission token carries the ledger', () => {
       studentName: 'A Student',
     });
   // Every source's entry together holds more rows than a token carries
-  // (TOKEN_ROWS), so these leave out the calibration's and the PSF's one row
-  // each; the cut to the limit is tested on its own below.
+  // (TOKEN_ROWS), so these leave out the calibration's, the PSF's and the completeness's
+  // one row each; the cut to the limit is tested on its own below.
   const withLedger = async (
     entries = every().filter(
       e =>
         e.source !== SOURCE.IMAGE_CALIBRATION &&
-        e.source !== SOURCE.IMAGE_DETECTION
+        e.source !== SOURCE.IMAGE_DETECTION &&
+        e.source !== SOURCE.IMAGE_INJECTION
     )
   ) => {
     const record = ledgerRecord(entries);
