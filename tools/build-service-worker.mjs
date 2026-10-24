@@ -298,6 +298,13 @@ export const NEVER_PRECACHED = [
   // not cover, so none of the files is installed and the panel says it needs the
   // network the first time. D-R10-62.
   /^(js\/measure\/inject\.js|js\/observatory\/imageInject\.js|js\/i18n\/(en|es)\.imageInject\.js)$/,
+  // Frames to a light curve (Prompt 185, FRAME_PIPELINE.md): the pipeline over
+  // the calibration lab's reduction, the synthetic sequence it reads, the panel
+  // and its words, fetched when a reader opens the Observatory's frame panel.
+  // Not installed, for the reason of the four above: the idle tier has no room
+  // under a data-budget ceiling the standing size approval does not cover, so the
+  // panel says it needs the network the first time. D-R10-63.
+  /^(js\/measure\/frameSeries\.js|js\/measure\/frameSource\.js|js\/observatory\/imageSequence\.js|js\/i18n\/(en|es)\.imageSequence\.js)$/,
   // The image import (Prompt 188, IMAGE_IMPORT.md): the panel and its words,
   // fetched when a reader first chooses a FITS image, a PNG or a JPEG in the
   // Observatory's file box. Not installed, for the reason of the photometry

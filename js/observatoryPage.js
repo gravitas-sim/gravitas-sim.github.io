@@ -262,6 +262,15 @@ $('obsInjectPanel').addEventListener('toggle', () => {
       () => (inject = null)
     );
 });
+// Frames to a light curve (FRAME_PIPELINE.md): loaded when first opened.
+let seqPanel = null;
+$('obsSeqPanel').addEventListener('toggle', () => {
+  if ($('obsSeqPanel').open)
+    seqPanel ??= import('./observatory/imageSequence.js').then(
+      m => m.mountSequence($('obsSeqBody'), { ...lent, open }),
+      () => (seqPanel = null)
+    );
+});
 // The archive import (ARCHIVE_IMPORT.md): loaded when first opened.
 let archive = null;
 $('obsArchivePanel').addEventListener('toggle', () => {

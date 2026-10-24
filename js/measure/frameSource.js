@@ -204,3 +204,62 @@ export function syntheticSequence(spec) {
 /** The identity of a synthetic sequence: its frames are a pure function of its spec. */
 export const digestOf = async seq =>
   sha256Hex(JSON.stringify({ v: VERSION, kind: seq.kind, spec: seq.spec }));
+
+/**
+ * The field the panel and the checks share (FRAME_PIPELINE.md, "the scene"):
+ * eight stars at least 24 pixels apart in a 96 by 96 detector, the variable
+ * first. tests/framePipeline.test.js holds these numbers equal to the
+ * committed thresholds file.
+ */
+export const DEMO = Object.freeze({
+  detector: Object.freeze({ width: 96, height: 96, cosmicRate: 0 }),
+  exposure: 60,
+  sky: 3,
+  count: 48,
+  cadence: 0.01,
+  period: 0.12,
+  amplitude: 0.05,
+  cloud: 0.1,
+  jitter: 1.5,
+  rotationDeg: 0.2,
+  stars: Object.freeze([
+    { id: 'V', x: 47.3, y: 28.6, rate: 900 },
+    { id: 'C1', x: 20.2, y: 62.7, rate: 1400 },
+    { id: 'C2', x: 74.8, y: 66.1, rate: 1000 },
+    { id: 'C3', x: 76.6, y: 22.9, rate: 700 },
+    { id: 'C4', x: 21.4, y: 20.2, rate: 1200 },
+    { id: 'C5', x: 50.9, y: 79.5, rate: 800 },
+    { id: 'F1', x: 8.7, y: 41.3, rate: 120 },
+    { id: 'F2', x: 88.2, y: 44.8, rate: 90 },
+  ]),
+});
+
+/**
+ * The shared field's sequence for a seed.
+ * @param {string} seed
+ * @param {object} [o] - count, amplitude, period, jitter, rotationDeg, replace, variables
+ */
+export function demoSequence(seed, o = {}) {
+  return syntheticSequence({
+    seed,
+    detector: DEMO.detector,
+    exposure: DEMO.exposure,
+    sky: DEMO.sky,
+    stars: DEMO.stars.map(s => ({ ...s })),
+    count: o.count ?? DEMO.count,
+    cadence: DEMO.cadence,
+    cloud: DEMO.cloud,
+    jitter: o.jitter ?? DEMO.jitter,
+    rotationDeg: o.rotationDeg ?? DEMO.rotationDeg,
+    replace: o.replace,
+    variables: [
+      {
+        id: 'V',
+        period: o.period ?? DEMO.period,
+        amplitude: o.amplitude ?? DEMO.amplitude,
+        phase: 'seed',
+      },
+      ...(o.variables ?? []),
+    ],
+  });
+}

@@ -119,9 +119,12 @@
       #obsDetectBody input[type='checkbox'] { flex: none; width: 24px; height: 24px }
       #obsDetectBody .ow-plot { max-width: 720px }
       #obsInjectBody .ow-plot { max-width: 720px }
+      #obsSeqBody .ow-plot { max-width: 720px }
+      #obsSeqBody input[type='checkbox'] { flex: none; width: 24px; height: 24px }
+      #obsSeqBody .im-tablewrap { max-height: 360px }
       /* Touch measurement: 44 px handles on a touch screen. */
       @media (pointer: coarse) {
-        :is(#obsMarksBody, #obsPhotoBody, #obsDetectBody, #obsInjectBody) :is(button, select, input) {
+        :is(#obsMarksBody, #obsPhotoBody, #obsDetectBody, #obsInjectBody, #obsSeqBody) :is(button, select, input) {
           min-height: 44px;
           min-width: 44px;
         }
@@ -320,6 +323,10 @@ try {
           <summary data-i18n="obs.arc.title">
             Or find a star's Gaia epochs at CDS (live, opt-in)
           </summary>
+        </details>
+        <details id="obsSeqPanel" class="ui-disclosure" style="margin-top: var(--space-4)">
+          <summary data-i18n="obs.sq.title">Frames to a light curve</summary>
+          <div id="obsSeqBody"><p data-i18n="obs.sq.offline"></p></div>
         </details>
       </section>
 

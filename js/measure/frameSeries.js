@@ -38,7 +38,10 @@ import {
 } from '../kernels/detector/reduce.js';
 import { mastersVariance } from '../kernels/detector/pipeline.js';
 import { scanPeriod } from '../kernels/detector/lightcurve.js';
+import { IMAGE_FORMAT } from '../dataKinds/contract.js';
 import { LIMITS } from '../dataKinds/limits.js';
+import { ID_OBSERVING_SETUP } from '../names.js';
+import { syntheticObservation } from '../forward/observation.js';
 import { adapt, apertureFor, measure } from './photometry.js';
 import { detectIn, measurePsf, selectStars } from './detect.js';
 import { applyRegistration, chi2Survival, register } from './astrometry.js';
@@ -211,7 +214,7 @@ function medianCadence(seq) {
 export function sidecarOf(seq, k, extra = {}) {
   const masters = seq.calibration === 'raw';
   return {
-    format: 'gravitas.image',
+    format: IMAGE_FORMAT,
     formatVersion: 1,
     id: `${seq.id}#${k}`,
     use: 'quantitative',
@@ -502,6 +505,8 @@ export function fitCurve(t, dm, sigma, limits = {}) {
     amplitude: fit.amplitude,
     sigmaAmplitude: fit.sigmaAmplitude * scale,
     sigmaAmplitudeFormal: fit.sigmaAmplitude,
+    a: fit.a,
+    b: fit.b,
     mean: fit.c,
     sigmaMean: fit.sigmaC * scale,
     chi2: fit.chi2,
@@ -1224,4 +1229,114 @@ export function csvRows(res, header, num) {
       num(res.ensNet[i]),
     ]),
   ];
+}
+
+// ---- the pipeline's nodes: one tool a stage (js/measure/pipeline.js TOOLS) ------------------
+
+/** A sequence as the measurement pipeline sees it: an observation-like view of kind image-sequence. */
+export const viewOf = (seq, digest) => ({
+  kind: 'image-sequence',
+  id: seq.id,
+  sequence: seq,
+  digest: () => digest(seq),
+  cache: new Map(),
+});
+
+/**
+ * One stage as a pipeline node's result. The whole run is made once for a view
+ * and a set of parameters (the stages share it) and each node reads its own.
+ * @returns {Promise<{raw: object, quantities: object[], warnings: object[]}>}
+ */
+export async function runStage(view, stage, params, hooks = {}) {
+  const key = JSON.stringify(params);
+  let run = view.cache.get(key);
+  if (!run) {
+    const check =
+      hooks.check ?? (await import('../dataKinds/contract.js')).permits;
+    run = await runSequence(view.sequence, params, { ...hooks, check });
+    view.cache.set(key, run);
+  }
+  const n = run.nodes?.find(x => x.id === `frames-${stage}`);
+  if (!n)
+    throw Object.assign(new Error(run.code ?? 'cancelled'), {
+      code: run.code ?? 'canceled',
+      detail: { frames: run.frames ?? [], reasons: run.reasons ?? {} },
+    });
+  const { quantities, warnings, ...raw } = n;
+  return { raw, quantities, warnings };
+}
+
+/**
+ * The light curve as an observation of the Observatory (gravitas.observation/1,
+ * a time series with its uncertainty column), so the period tool, the fit panel
+ * and the variables kernel read it like any other. A synthetic sequence gives a
+ * synthetic observation whose truth manifest holds the variable's period and
+ * semi-amplitude.
+ * @param {object} res - a finished run
+ * @param {object} seq
+ * @param {{title: string, names: {time: string, dm: string, sigma: string}}} o
+ */
+export function observationOf(res, seq, { title, names }) {
+  const v = seq.truth?.variables?.find(x => x.id === res.target);
+  return syntheticObservation({
+    model: 'ccd-sequence',
+    version: String(VERSION),
+    setup: {
+      format: ID_OBSERVING_SETUP,
+      formatVersion: 1,
+      seed: String(seq.seed ?? seq.id),
+      instrument: { kind: 'imager' },
+    },
+    kind: 'time-series',
+    title,
+    columns: [
+      {
+        id: 'time',
+        name: names.time,
+        unit: 'd',
+        role: 'x',
+        values: Array.from(res.times),
+      },
+      {
+        id: 'dm',
+        name: names.dm,
+        unit: 'mag',
+        role: 'value',
+        values: Array.from(res.dm),
+      },
+      {
+        id: 'dm-sigma',
+        name: names.sigma,
+        unit: 'mag',
+        role: 'uncertainty',
+        of: 'dm',
+        values: Array.from(res.dmSigma),
+      },
+    ],
+    axes: { x: 'time', y: 'dm' },
+    truth: {
+      parameters: v
+        ? [
+            { id: 'period', name: 'period', value: v.period, unit: 'd' },
+            {
+              id: 'amplitude',
+              name: 'semi-amplitude',
+              value: v.amplitude,
+              unit: 'mag',
+            },
+          ]
+        : [],
+      injected: {
+        whiteSigma: null,
+        redSigma: null,
+        offset: null,
+        trend: null,
+        outlierRows: [],
+      },
+      notes: [
+        'a differential light curve from synthetic frames (js/measure/frameSeries.js): the noise is the detector kernel’s, not injected into the curve',
+      ],
+    },
+    extra: { time: { column: 'time', format: 'relative', scale: 'unknown' } },
+  });
 }

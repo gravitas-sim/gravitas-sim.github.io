@@ -11,7 +11,7 @@
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { syntheticSequence } from '../js/measure/frameSource.js';
+import { demoSequence } from '../js/measure/frameSource.js';
 import { permits } from '../js/dataKinds/contract.js';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
@@ -33,40 +33,11 @@ export const STARS = SCENE.stars.map(({ id, x, y, rate }) => ({
 }));
 
 /**
- * The scene's sequence for a seed.
+ * The scene's sequence for a seed (js/measure/frameSource.js demoSequence).
  * @param {string} seed
- * @param {object} [o]
- * @param {number} [o.amplitude] - the target's semi-amplitude, magnitudes
- * @param {Array<object>} [o.variables] - more variables (a varying comparison star)
- * @param {object} [o.replace] - frames that go wrong, by index
- * @param {number} [o.count]
- * @param {number} [o.jitter]
- * @param {number} [o.rotationDeg]
+ * @param {object} [o] - count, amplitude, jitter, rotationDeg, replace, variables
  */
-export function sceneSequence(seed, o = {}) {
-  return syntheticSequence({
-    seed,
-    detector: { width: 96, height: 96, cosmicRate: 0 },
-    exposure: SCENE.exposure,
-    sky: SCENE.sky,
-    stars: STARS,
-    count: o.count ?? SCENE.frames,
-    cadence: SCENE.cadenceDays,
-    cloud: 0.1,
-    jitter: o.jitter ?? 1.5,
-    rotationDeg: o.rotationDeg ?? 0.2,
-    replace: o.replace,
-    variables: [
-      {
-        id: 'V',
-        period: SCENE.variable.period,
-        amplitude: o.amplitude ?? SCENE.variable.amplitude,
-        phase: 'seed',
-      },
-      ...(o.variables ?? []),
-    ],
-  });
-}
+export const sceneSequence = (seed, o = {}) => demoSequence(seed, o);
 
 /** The default parameters of a scene run: the target is the variable. */
 export const sceneParams = (over = {}) => ({

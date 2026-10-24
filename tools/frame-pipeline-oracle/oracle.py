@@ -19,7 +19,7 @@ Astronomy) without any Gravitas code:
     fftconvolve, scipy.ndimage.gaussian_filter) with a parabolic sub-pixel peak;
     a translation only, so the field's small turn is not modelled
   * photometry: photutils CircularAperture with method 'exact', and a sky from a
-    CircularAnnulus through ApertureStats (method 'center', a 3 sigma clip,
+    CircularAnnulus through ApertureStats (sum_method center, a 3 sigma clip,
     5 iterations, astropy SigmaClip, the mean of what remains); net electrons =
     aperture sum - sky x the exact area; the stars at their true reference
     positions plus the shift
@@ -108,7 +108,7 @@ def net_flux(data, pos):
     aperture = CircularAperture([pos], r=ap["r"])
     annulus = CircularAnnulus([pos], r_in=ap["rIn"], r_out=ap["rOut"])
     total = aperture_photometry(data, aperture, method="exact")["aperture_sum"][0]
-    sky = ApertureStats(data, annulus, method="center", sigma_clip=clip).mean[0]
+    sky = ApertureStats(data, annulus, sum_method="center", sigma_clip=clip).mean[0]
     return float(total - sky * aperture.area)
 
 

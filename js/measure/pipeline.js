@@ -153,11 +153,57 @@ const q = (id, value, unit, kind, extra = {}) => ({
 /** The kind for a unit of js/units/registry.js, or null. */
 const NULLABLE_UNIT = '?u';
 
+// The frame-sequence nodes (FRAME_PIPELINE.md): one tool a stage of the
+// frames-to-light-curve chain, over a sequence view (js/measure/frameSeries.js
+// viewOf). The code is loaded when a node first runs; its version is
+// frameSeries.js VERSION (a test holds them equal).
+const FRAME_PARAMS = {
+  target: 'o',
+  reference: 'i',
+  marks: ['o', 1, 20],
+  fwhm: 'n',
+  aperture: 'o',
+  weighting: 's',
+  recentre: 'b',
+  register: 'b',
+  comparison: 'o',
+  period: 'o',
+  exclude: ['i', 0, 256],
+};
+const frameTools = Object.fromEntries(
+  [
+    'calibrate',
+    'marks',
+    'register',
+    'photometry',
+    'comparison',
+    'lightcurve',
+  ].map(stage => [
+    `frames-${stage}`,
+    {
+      kinds: ['image-sequence'],
+      version: 1,
+      params: FRAME_PARAMS,
+      expensive: true,
+      digest: view => view.digest(),
+      async run(view, p, hooks) {
+        return (await import('./frameSeries.js')).runStage(
+          view,
+          stage,
+          p,
+          hooks
+        );
+      },
+    },
+  ])
+);
+
 /**
  * The tools. Each: which kinds of observation it measures, its version, how
  * it checks and runs, and the quantities it gives, each with its kind.
  */
 export const TOOLS = Object.freeze({
+  ...frameTools,
   period: {
     kinds: ['time-series'],
     version: PERIOD_VERSION,
@@ -790,7 +836,7 @@ export async function runNode(view, spec, hooks = {}) {
       'kind',
       `${spec.tool} measures ${tool.kinds.join(', ')}; this is ${view.kind}`
     );
-  const digest = await contentDigest(view);
+  const digest = await (tool.digest ?? contentDigest)(view);
   const node = {
     id: spec.id,
     tool: spec.tool,

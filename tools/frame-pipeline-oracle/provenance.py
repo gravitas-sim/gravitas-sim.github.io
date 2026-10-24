@@ -39,7 +39,7 @@ rec = {
         "masters": "bias = numpy.median over the bias frames; dark = numpy.median over (dark - bias); flat = mean over (flat - bias - 5/120 dark) divided by its own mean",
         "calibration": "(raw - bias - (60 / 120) dark) / flat, in counts, times the gain 1.5",
         "shift": "scipy.signal.fftconvolve of the star field smoothed by gaussian_filter(sigma 1.5, the median removed) with the reference, the integer peak and a parabolic refinement on each axis; a translation only",
-        "aperture": "CircularAperture r and CircularAnnulus r_in, r_out as Gravitas's marks stage chose them (recorded in the inputs), aperture_photometry method exact; sky = ApertureStats(annulus, method center, SigmaClip(sigma 3, maxiters 5)).mean; net = sum - sky x exact area",
+        "aperture": "CircularAperture r and CircularAnnulus r_in, r_out as Gravitas's marks stage chose them (recorded in the inputs), aperture_photometry method exact; sky = ApertureStats(annulus, sum_method center, SigmaClip(sigma 3, maxiters 5)).mean; net = sum - sky x exact area",
         "sinusoid": "LombScargle(t, dm) (floating mean, unweighted) over frequencies from 1/(baseline/2) to 1/(4 median cadences), 400001 samples; model_parameters at the highest power",
     },
     "conventions": "pixel (0, 0) is the centre of the first pixel; electrons are counts times the gain 1.5 after calibration",

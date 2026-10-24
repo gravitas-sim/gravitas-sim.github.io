@@ -377,6 +377,35 @@ const every = () => [
       ],
     }),
   }),
+  // A light curve from frames (js/measure/frameSeries.js, Prompt 185): its replay
+  // and the tool are covered in tests/framePipeline.test.js; here only that it is
+  // an envelope the ledger can hold, with sigma uncertainties in it.
+  artifactEntry({
+    source: SOURCE.IMAGE_SEQUENCE,
+    title: 'Light curve from frames',
+    capturedAt: at,
+    context: { page: 'observatory' },
+    envelope: artifact({
+      id: 'image-sequence-1',
+      source: { kind: 'observation', id: 'sequence', digest },
+      quantities: [
+        {
+          id: 'lc.period',
+          value: 0.1199,
+          unit: 'd',
+          uncertainty: { kind: 'sigma', sigma: 0.0004, basis: 'derived' },
+          origin: 'measured',
+        },
+        {
+          id: 'lc.amplitude',
+          value: 0.051,
+          unit: 'mag',
+          uncertainty: { kind: 'sigma', sigma: 0.0012, basis: 'derived' },
+          origin: 'measured',
+        },
+      ],
+    }),
+  }),
   // A sweep's analysis and an experiment's result, which js/experiments/
   // analysisPanel.js keeps as envelopes (P75 R-5: the list used to omit them).
   ...[
@@ -657,14 +686,15 @@ describe('the submission token carries the ledger', () => {
       studentName: 'A Student',
     });
   // Every source's entry together holds more rows than a token carries
-  // (TOKEN_ROWS), so these leave out the calibration's, the PSF's and the completeness's
+  // (TOKEN_ROWS), so these leave out the calibration's, the PSF's, the completeness's and the light curve's
   // one row each; the cut to the limit is tested on its own below.
   const withLedger = async (
     entries = every().filter(
       e =>
         e.source !== SOURCE.IMAGE_CALIBRATION &&
         e.source !== SOURCE.IMAGE_DETECTION &&
-        e.source !== SOURCE.IMAGE_INJECTION
+        e.source !== SOURCE.IMAGE_INJECTION &&
+        e.source !== SOURCE.IMAGE_SEQUENCE
     )
   ) => {
     const record = ledgerRecord(entries);

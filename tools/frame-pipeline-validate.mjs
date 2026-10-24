@@ -47,9 +47,14 @@ import {
   labCalibration,
   labSeries,
 } from '../js/kernels/detector/lab.js';
+import VAR_DEEP from '../js/data/investigations/depth/a-variable-star-from-frames.js';
 import { chi2Survival } from '../js/measure/astrometry.js';
 import { applyRegistration } from '../js/measure/astrometry.js';
-import { digestOf, syntheticSequence } from '../js/measure/frameSource.js';
+import {
+  demoSequence,
+  digestOf,
+  syntheticSequence,
+} from '../js/measure/frameSource.js';
 import {
   RULES,
   checkSequence,
@@ -832,7 +837,7 @@ async function legE1() {
   add('e1.otherSeed', differs, differs);
   add('e1.simulateSeries', sameFrames, sameFrames);
   add('e1.pinned', `${marksN} marks, frames ${d1.frames}`, pinned, {
-    bound: '8 marks, frames 10,11,20',
+    bound: '8 marks, frames 10,11 (pinned at the first run)',
   });
   // the 150 record: every uncertainty is a kind the envelope knows
   const qs = quantitiesOf(a);
@@ -915,7 +920,7 @@ async function legB() {
   const pinnedFrames = res.calibratedFrames;
   const diffs = [];
   const r = must(
-    await runSequence(seq, sceneParams({ comparison: { ids: null } }), {
+    await runSequence(seq, sceneParams(), {
       ...hooks,
       onFrame: (k, red) => {
         if (!(k in pinnedFrames)) return;
@@ -1006,6 +1011,58 @@ const mean2 = (a, g) => {
   return (s / a.length) * g;
 };
 
+// ---- f1: the lesson's own series through the whole pipeline ----------------------------------------
+
+async function legF1() {
+  for (const draw of [1, 2, 3]) {
+    const series = labSeries(draw);
+    const d = normalizeDetector({ cosmicRate: 0 });
+    const masters = buildMasters(labCalibration(draw), { gain: d.gain });
+    const seq = {
+      id: `lab:${draw}`,
+      count: series.frames.length,
+      width: d.width,
+      height: d.height,
+      exposure: SERIES_FIELD.exposure,
+      times: series.times,
+      gain: d.gain,
+      readNoise: d.readNoise,
+      darkRate: d.darkRate,
+      fullWell: d.fullWell,
+      calibration: 'raw',
+      masters,
+      frameAt: k => series.frames[k],
+    };
+    const v = SERIES_FIELD.sources[0];
+    const r = await run(seq, { target: { x: v.x, y: v.y } });
+    if (!r.ok) {
+      add(`f1.draw${draw}`, r.code, false);
+      continue;
+    }
+    const dp = Math.abs(r.fit.period - SERIES_FIELD.series.period);
+    const da = Math.abs(r.fit.amplitude - SERIES_FIELD.series.amplitude);
+    add(`f1.draw${draw}.period`, dp, dp <= 0.004, { bound: 0.004 });
+    add(
+      `f1.draw${draw}.amplitude`,
+      da / r.fit.sigmaAmplitude,
+      da <= 4.5 * r.fit.sigmaAmplitude,
+      { bound: '4.5 sigma' }
+    );
+  }
+}
+
+// ---- f1: the lesson's step asks for the number the pipeline gives ------------------------------------
+
+async function legF1Step() {
+  const step = VAR_DEEP.steps.find(x => x.sid === 'the-whole-pipeline');
+  const r = must(await run(demoSequence('1'), sceneParams()));
+  const hours = r.fit.period * 24;
+  add('f1.stepAnswer', hours, Math.abs(hours - step.answer) <= step.tolerance, {
+    bound: `${step.answer} within ${step.tolerance}`,
+    note: 'seed 1, the panel’s defaults',
+  });
+}
+
 // ---- the run ---------------------------------------------------------------------------------------------------------------------
 
 const t0 = Date.now();
@@ -1025,6 +1082,10 @@ if (wants('d3')) await legD3();
 if (wants('d4')) await legD4();
 if (wants('d5')) await legD5();
 if (wants('e1')) await legE1();
+if (wants('f1')) {
+  await legF1();
+  await legF1Step();
+}
 if (wants('g1'))
   rows.push({
     id: 'g1.authentic',

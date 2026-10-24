@@ -108,5 +108,31 @@ export default {
       },
       tool: DIFF({ mode: 2, reduction: 0, truth: 1 }),
     },
+    {
+      sid: 'the-whole-pipeline',
+      after: 'is-it-real',
+      depth: 'advanced',
+      type: 'question',
+      kind: 'numeric',
+      title: 'The whole pipeline, from the frames',
+      body: `This lesson has used the lab’s reduction on one tidy night. The Observatory’s “Frames to a light curve” panel (Prompt 185) runs every step from the raw frames of a made-up sequence: it calibrates, marks the stars once, lines each frame up with the first (the telescope wanders), measures every star, chooses comparison stars by how bright and how steady they are, and makes the light curve with its errors. Open it, leave the seed at 1 and every setting as it is, press “Run the pipeline”, and step through to the light curve.`,
+      prompt: 'The period the pipeline finds for seed 1, in hours',
+      unit: 'h',
+      answer: 2.88,
+      tolerance: 0.1,
+      hints: [
+        'The last step gives the period in days, with its error. Multiply by 24.',
+      ],
+      worked:
+        'About 0.1202 × 24 = 2.88 hours, with an error of 0.0004 day (0.01 hour) and a semi-amplitude of 0.0502 ± 0.0012 magnitude. The data were made with a period of 0.12 day, 2.88 hours, and a semi-amplitude of 0.05 magnitude: the pipeline gets both back from raw frames, though no frame was pointed alike and the cloud dimmed every star by a tenth. A second star of the field varies only if you ask: tick “Make comparison star C2 vary too”, run again, and the comparison step flags it and leaves it out.',
+      feedback: {
+        close:
+          'Close. Read the period in days from the last step and multiply by 24.',
+        'wrong-order-of-magnitude':
+          'A power of ten out: a tenth of a day is a couple of hours.',
+        off: 'days × 24.',
+      },
+      tool: DIFF({ mode: 2 }),
+    },
   ],
 };

@@ -729,6 +729,7 @@ describe('every CSV the application writes', () => {
     'js/observatory/measurePanel.js': 'imports csv.js (toCsv)',
     'js/observatory/imageDetect.js': 'imports csv.js (toCsv)',
     'js/observatory/imageInject.js': 'imports csv.js (toCsv)',
+    'js/observatory/imageSequence.js': 'imports csv.js (toCsv)',
     'js/observatory/imagePhotometry.js': 'imports csv.js (toCsv)',
     'js/experiments/analysisPanel.js': 'ctx.toCsv, which is toCsv from csv.js',
     'js/experiments/panel.js': 'text from js/experiments/exports.js',
