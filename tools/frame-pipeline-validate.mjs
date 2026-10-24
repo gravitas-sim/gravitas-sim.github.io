@@ -80,7 +80,6 @@ const C = THRESHOLDS.checks;
 const SCENE = THRESHOLDS.scene;
 const TRUE_PERIOD = SCENE.variable.period;
 const TRUE_AMPLITUDE = SCENE.variable.amplitude;
-const NOMINAL = Object.fromEntries(STARS.map(s => [s.id, s]));
 
 const argv = process.argv.slice(2);
 const only = (
@@ -604,7 +603,7 @@ async function legD3() {
     { target: { x: 47.3, y: 5.0 } },
     1
   );
-  const bright = c =>
+  const bright = () =>
     counted({
       frameAt: (k, b) => {
         const f = b.frameAt(k);

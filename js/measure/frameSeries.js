@@ -46,7 +46,7 @@ import { adapt, apertureFor, measure } from './photometry.js';
 import { detectIn, measurePsf, selectStars } from './detect.js';
 import { applyRegistration, chi2Survival, register } from './astrometry.js';
 
-const { Math, Float64Array, Uint8Array } = globalThis;
+const { Math, Float64Array } = globalThis;
 
 export const VERSION = 1;
 export const STAGES = Object.freeze([

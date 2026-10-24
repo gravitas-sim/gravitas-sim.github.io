@@ -59,6 +59,9 @@ const el = (tag, props = {}, ...kids) => {
   n.append(...kids);
   return n;
 };
+/** A table in its own scrolling box, so a wide table never widens the page. */
+const wrapTable = (...args) =>
+  el('div', { className: 'im-tablewrap' }, el(...args));
 const settle = () => new Promise(r => setTimeout(r, 0));
 const median = a => {
   const s = Array.from(a).sort((x, y) => x - y);
@@ -362,7 +365,7 @@ export async function mountSequence(box, ctx) {
     });
     prev.disabled = step === 0;
     next.disabled = step === STEPS.length - 1;
-    const head = el('h4', {
+    const head = el('h3', {
       textContent: t('obs.sq.stepOf', {
         k: step + 1,
         n: STEPS.length,
@@ -382,7 +385,7 @@ export async function mountSequence(box, ctx) {
     stepBox.replaceChildren(
       head,
       el('p', { textContent: t(`obs.sq.what.${STEPS[step]}`) }),
-      el(
+      wrapTable(
         'table',
         { className: 'im-table' },
         el('caption', { textContent: t('obs.sq.quantities') }),
@@ -681,7 +684,7 @@ export async function mountSequence(box, ctx) {
   // ---- the lists, the observation and the ledger -----------------------------------------------------
   const download = (text, name) => {
     const url = URL.createObjectURL(
-      new Blob([`﻿${text}`], { type: 'text/csv;charset=utf-8' })
+      new Blob([`\uFEFF${text}`], { type: 'text/csv;charset=utf-8' })
     );
     const a = el('a', { href: url, download: name });
     document.body.append(a);

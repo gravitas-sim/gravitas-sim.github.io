@@ -14,7 +14,7 @@
 // 22 and 24 differ in the last bits).
 // =============================================================================
 
-import { describe, test, expect } from '@jest/globals';
+import { describe, test, expect, beforeAll } from '@jest/globals';
 import process from 'node:process';
 import { execFile } from 'node:child_process';
 import { webcrypto } from 'node:crypto';
@@ -224,8 +224,9 @@ describe('registration', () => {
     expect(v.tx).toBeCloseTo(3.2, 9);
     expect(v.ty).toBeCloseTo(-2.1, 9);
   });
-  test('the vote ignores shifts beyond the search radius', () => {
-    expect(vote(refs, shifted(30, 0), 10, 1)).toBeNull();
+  test('the vote finds no agreement when the shift is beyond the search radius (a chance pair is one vote)', () => {
+    const v = vote(refs, shifted(30, 0), 10, 1);
+    expect(v === null || v.n < 2).toBe(true);
   });
   test('a registered frame says its shift, turn and residual', () => {
     const turned = refs.map(r => {

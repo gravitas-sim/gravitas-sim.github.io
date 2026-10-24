@@ -35,10 +35,7 @@ const pack = values => {
   for (let i = 0; i < values.length; i++) b.writeUInt16LE(values[i], 2 * i);
   return deflateSync(b, { level: 9 }).toString('base64');
 };
-const set = calibrationSet(
-  { seed, detector: seq.spec.detector },
-  CALIBRATION
-);
+const set = calibrationSet({ seed, detector: seq.spec.detector }, CALIBRATION);
 const run = await runSequence(seq, sceneParams(), {
   check,
   yieldNow: async () => {},
