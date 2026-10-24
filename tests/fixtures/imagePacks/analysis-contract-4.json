@@ -1,0 +1,29 @@
+{
+  "format": "gravitas.image-packs-analysis-contract/1",
+  "prompt": 189,
+  "part": 4,
+  "committedBefore": "the variant legs below were run. It was written after the contract's own legs (part 3) were run once without an oracle and two of them were seen to fail for a reason of the field and not of the modules, so what is read before this file is: (1) the default run of the pipeline on the 84 frames refused with 'no-marks'; (2) the part 3 matching rule matched ONE star (a Gaia G 13.2 star) in frame 42; (3) the detection list of that frame (40 sources at sigma 4: 13 flagged edge, 32 flagged crowded, the brightest at the pack's target position, and several more bright stars with fluxes of 2e5 to 1.4e7 electrons), and its relation to the anchor WCS (the nearest Gaia star to each of the twelve brightest detections is 0.1 to 6.1 pixels away, the largest two for zero-flux edge detections); (4) the list of sources the pipeline marks at FWHM 2 in frame 0 (the target and at least three further stars of 5e4 to 2e6 electrons, none flagged crowded) and none at its default FWHM of 3. Nothing the variant legs compute was seen.",
+  "why": "The legs of part 3 stand as committed and keep their results, failures included (nothing in them is changed, restated or re-run with other parameters). The field is crowded for the modules' own rules: both the pipeline's default aperture (rOut 15 pixels at the fallback FWHM of 3) and the detector's 'crowded' flag (another source inside the annulus) mark nearly every one of the 40 detections in an 81 by 81 frame, so the committed rule of matching only unflagged detections leaves one star and the default pipeline finds no mark. The legs below ask the same questions with the two smallest changes that remove that reason, so that the modules are tried on the authentic data at all. They are variants, labelled so, and they do not replace the committed legs.",
+  "rule": "The same as part 3: bounds are read from the thresholds files or stated with their derivations; none is changed after a result is seen; a variant that fails is reported with its value.",
+  "variants": {
+    "astrometry": {
+      "changes": "(a) a detection is dropped for the flags saturated, edge and masked only, so 'crowded' no longer excludes it (a faint neighbour ten pixels away does not move a bright star's centroid, and the module computes the centroid from the star's own pixels); (b) the Gaia stars offered for matching, and for the isolation rule, are those of G 14 or brighter (a fainter star is a chance coincidence within two pixels about one time in ten at this density, which the mutual-nearest rule alone would not remove); everything else of astrometry.b5.fit is unchanged: frame 42, detectIn with box 16, fwhm 2, sigma 4, minArea 5, matching radius 2 pixels, one star to one detection both ways, no other offered Gaia star within 4 pixels, at least eight matched stars, fitWcs affine with equal sigma and the stars' mean direction, the 25-pixel grid against astropy fit_wcs_from_points, bound 0.01 pixel (b2.oracleFit)",
+      "ids": [
+        "astrometry.b5.fit.v2",
+        "astrometry.e1.frame.v2",
+        "overlay.b5.gaia.v2"
+      ],
+      "bounds": "those of astrometry.b5.fit, astrometry.e1.frame and overlay.b5.gaia in part 3, unchanged (0.01 pixel; 0.2 pixel rms and the verdict consistent; 1e-5 pixel and the same list), and at least eight matched stars"
+    },
+    "pipeline": {
+      "changes": "the pipeline is given the FWHM of 2 pixels that part 1 states for TESS (its documented blur of one pixel makes a Gaussian FWHM of about 2 pixels), so its aperture is 3, 6 and 10 pixels and its marks are found at that width; every other parameter at its default, the target as in part 3",
+      "ids": [
+        "framepipeline.g1.complete.v2",
+        "framepipeline.g1.oracle.v2",
+        "framepipeline.g1.transit.v2",
+        "framepipeline.g1.noise.v2"
+      ],
+      "bounds": "those of framepipeline.g1.complete, .oracle, .transit and .noise in part 3, unchanged"
+    }
+  }
+}
