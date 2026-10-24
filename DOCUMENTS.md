@@ -18,7 +18,7 @@ catalogue refers to it, so a change to it can reach a student.
 | [AI_ASSISTANCE_GATE.md](AI_ASSISTANCE_GATE.md) | Instructor-side AI assistance gate. | gate | unassigned | written | no |
 | [ANALYSIS_LAB.md](ANALYSIS_LAB.md) | The analysis laboratory. | feature | unassigned | written | no |
 | [ARCHIVE_IMPORT.md](ARCHIVE_IMPORT.md) | Importing from an archive. | feature | unassigned | written | no |
-| [ASTROMETRY.md](ASTROMETRY.md) | Sky coordinates for an image (WCS-lite, registration; Prompt 181) and astrometric time series, motion and well-sampled parallax (Prompt 186), with their validation. | feature | P181 | written | no |
+| [ASTROMETRY.md](ASTROMETRY.md) | Sky coordinates for an image (Prompt 181), astrometric time series (Prompt 186) and orbit fitting with a moving-object track (Prompt 187), with their validation. | feature | P181 | written | no |
 | [BRANCHING.md](BRANCHING.md) | Branches, the publish rule and the table of generated artifacts. | process | unassigned | regions (docs) | no |
 | [CALIBRATION_LAB.md](CALIBRATION_LAB.md) | The calibration lab. | feature | P86 | written | yes |
 | [CAPABILITY_RUNTIME.md](CAPABILITY_RUNTIME.md) | The capability runtime, the first slice of the platform package. | design | unassigned | written | no |
@@ -96,6 +96,7 @@ catalogue refers to it, so a change to it can reach a student.
 | [ONBOARDING.md](ONBOARDING.md) | The student first-run path and what-next guidance. | feature | P73 | written | no |
 | [ORBITAL_LAYER.md](ORBITAL_LAYER.md) | The orbital layer: elements and state vectors with units, frames and time scales named. | feature | P148 | written | no |
 | [ORBITAL_SYSTEM_BUILDER.md](ORBITAL_SYSTEM_BUILDER.md) | The Orbital System Builder. | feature | unassigned | written | no |
+| [ORBIT_FIT_GATE.md](ORBIT_FIT_GATE.md) | The orbit-fit gate: the identifiability criterion and test set, committed before any fit was run, and the verdict (Prompt 187). | gate | P187 | written | no |
 | [OVERLAYS.md](OVERLAYS.md) | Catalogue overlays, blink and compare on an image: what is drawn where, how a second frame is tied to the first, when the two may be subtracted, the oracle and the validation (Prompt 182). | feature | P182 | written | no |
 | [OWNER_ACTIONS.md](OWNER_ACTIONS.md) | Decisions, credentials and accounts only the owner can supply. | process | P122 | written | no |
 | [PERFORMANCE_OPTIMIZATIONS_SUMMARY.md](PERFORMANCE_OPTIMIZATIONS_SUMMARY.md) | Historical record of a rendering and memory round. | record | unassigned | written | no |

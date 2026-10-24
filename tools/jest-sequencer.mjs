@@ -38,6 +38,8 @@ export const SLOWEST_FIRST = [
   'labelGoldenWidgetsEngineMath.test.js', // 66
   'labelGoldenWidgetsStellar.test.js', // 56
   'injection.test.js', // 52
+  // One child process of about 55 s locally (tools/orbit-fit-validate.mjs).
+  'orbitFit.test.js', // 55
   'statisticsKernel.test.js', // 50
   'labelGoldenWidgetsGw.test.js', // 47
   'labelGoldenWidgetsSurvey.test.js', // 45

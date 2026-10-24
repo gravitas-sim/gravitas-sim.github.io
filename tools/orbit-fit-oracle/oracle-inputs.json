@@ -1,0 +1,228 @@
+{
+  "format": "gravitas.orbit-fit-oracle-inputs/1",
+  "prompt": 187,
+  "note": "Written by hand before the oracle ran and before the production rules of js/measure/orbit-fit.js or js/measure/mover-track.js existed. The oracle reads this file and writes tests/fixtures/orbit-fit/oracle-results.json.",
+  "orbits": [
+    {
+      "id": "E1",
+      "kind": "elliptical",
+      "truth": {
+        "a": 1.0,
+        "e": 0.55,
+        "i": 62.0,
+        "Omega": 40.0,
+        "omega": 110.0,
+        "P": 12.0,
+        "T": 2003.2
+      },
+      "startYear": 2000.0,
+      "arc": 1.1,
+      "n": 12,
+      "jitter": 0.3,
+      "sigma": 0.02,
+      "noiseSeed": 1871
+    },
+    {
+      "id": "E2",
+      "kind": "elliptical",
+      "truth": {
+        "a": 0.72,
+        "e": 0.3,
+        "i": 120.0,
+        "Omega": 150.0,
+        "omega": 20.0,
+        "P": 25.0,
+        "T": 1995.5
+      },
+      "startYear": 1980.0,
+      "arc": 1.2,
+      "n": 14,
+      "jitter": 0.3,
+      "sigma": 0.015,
+      "noiseSeed": 1872
+    },
+    {
+      "id": "E3",
+      "kind": "elliptical",
+      "truth": {
+        "a": 1.6,
+        "e": 0.75,
+        "i": 35.0,
+        "Omega": 80.0,
+        "omega": 250.0,
+        "P": 8.0,
+        "T": 2001.1
+      },
+      "startYear": 2000.0,
+      "arc": 1.1,
+      "n": 12,
+      "jitter": 0.3,
+      "sigma": 0.03,
+      "noiseSeed": 1873
+    },
+    {
+      "id": "E4",
+      "kind": "elliptical",
+      "truth": {
+        "a": 1.0,
+        "e": 0.2,
+        "i": 100.0,
+        "Omega": 10.0,
+        "omega": 300.0,
+        "P": 10.0,
+        "T": 2002.0
+      },
+      "startYear": 2000.0,
+      "arc": 1.5,
+      "n": 16,
+      "jitter": 0.3,
+      "sigma": 0.02,
+      "noiseSeed": 1874
+    },
+    {
+      "id": "E5",
+      "kind": "elliptical",
+      "truth": {
+        "a": 0.5,
+        "e": 0.65,
+        "i": 75.0,
+        "Omega": 120.0,
+        "omega": 190.0,
+        "P": 15.0,
+        "T": 2010.0
+      },
+      "startYear": 2005.0,
+      "arc": 1.1,
+      "n": 12,
+      "jitter": 0.3,
+      "sigma": 0.01,
+      "noiseSeed": 1875
+    },
+    {
+      "id": "C1",
+      "kind": "circular",
+      "truth": { "a": 1.0, "i": 55.0, "Omega": 70.0, "P": 9.0, "phase": 40.0 },
+      "startYear": 2000.0,
+      "arc": 1.1,
+      "n": 12,
+      "jitter": 0.3,
+      "sigma": 0.02,
+      "noiseSeed": 1881
+    },
+    {
+      "id": "C2",
+      "kind": "circular",
+      "truth": {
+        "a": 0.8,
+        "i": 130.0,
+        "Omega": 160.0,
+        "P": 14.0,
+        "phase": 200.0
+      },
+      "startYear": 1990.0,
+      "arc": 0.8,
+      "n": 12,
+      "jitter": 0.3,
+      "sigma": 0.015,
+      "noiseSeed": 1882
+    },
+    {
+      "id": "C3",
+      "kind": "circular",
+      "truth": { "a": 1.2, "i": 30.0, "Omega": 15.0, "P": 6.0, "phase": 310.0 },
+      "startYear": 2010.0,
+      "arc": 1.3,
+      "n": 14,
+      "jitter": 0.3,
+      "sigma": 0.02,
+      "noiseSeed": 1883
+    }
+  ],
+  "tracks": [
+    {
+      "id": "T1",
+      "tangent": [150.0, 20.0],
+      "startJd": 2460400.5,
+      "frames": 6,
+      "stepHours": 0.5,
+      "statics": 8,
+      "fieldArcsec": 120.0,
+      "mover": {
+        "x0": 10.0,
+        "y0": -5.0,
+        "rateArcsecPerHour": 0.9,
+        "paDeg": 35.0
+      },
+      "sigma": 0.05,
+      "noiseSeed": 1891
+    },
+    {
+      "id": "T2",
+      "tangent": [10.0, -40.0],
+      "startJd": 2460500.5,
+      "frames": 5,
+      "stepHours": 1.0,
+      "statics": 12,
+      "fieldArcsec": 200.0,
+      "mover": {
+        "x0": -30.0,
+        "y0": 20.0,
+        "rateArcsecPerHour": 2.5,
+        "paDeg": 200.0
+      },
+      "sigma": 0.08,
+      "noiseSeed": 1892
+    },
+    {
+      "id": "T3",
+      "tangent": [265.0, 62.0],
+      "startJd": 2460600.5,
+      "frames": 8,
+      "stepHours": 0.25,
+      "statics": 6,
+      "fieldArcsec": 90.0,
+      "mover": {
+        "x0": 0.0,
+        "y0": 0.0,
+        "rateArcsecPerHour": 1.4,
+        "paDeg": 310.0
+      },
+      "sigma": 0.04,
+      "noiseSeed": 1893
+    },
+    {
+      "id": "T4",
+      "tangent": [45.0, 5.0],
+      "startJd": 2460700.5,
+      "frames": 5,
+      "stepHours": 2.0,
+      "statics": 10,
+      "fieldArcsec": 300.0,
+      "mover": {
+        "x0": 50.0,
+        "y0": 60.0,
+        "rateArcsecPerHour": 4.0,
+        "paDeg": 95.0
+      },
+      "sigma": 0.1,
+      "noiseSeed": 1894
+    },
+    {
+      "id": "T5",
+      "tangent": [200.0, -10.0],
+      "startJd": 2460800.5,
+      "frames": 7,
+      "stepHours": 0.4,
+      "statics": 9,
+      "fieldArcsec": 150.0,
+      "mover": {
+        "x0": -20.0,
+        "y0": -40.0,
+        "rateArcsecPerHour": 0.6,
+        "paDeg": 5.0
+      },
+      "sigma": 0.03,
+      "noiseSeed": 1895
+    }
+  ]
+}

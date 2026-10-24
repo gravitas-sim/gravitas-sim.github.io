@@ -60,7 +60,7 @@
     {
       "file": "ASTROMETRY.md",
       "kind": "feature",
-      "purpose": "Sky coordinates for an image (WCS-lite, registration; Prompt 181) and astrometric time series, motion and well-sampled parallax (Prompt 186), with their validation.",
+      "purpose": "Sky coordinates for an image (Prompt 181), astrometric time series (Prompt 186) and orbit fitting with a moving-object track (Prompt 187), with their validation.",
       "owner": 181,
       "student": false
     },
@@ -601,6 +601,13 @@
       "kind": "feature",
       "purpose": "The Orbital System Builder.",
       "owner": null,
+      "student": false
+    },
+    {
+      "file": "ORBIT_FIT_GATE.md",
+      "kind": "gate",
+      "purpose": "The orbit-fit gate: the identifiability criterion and test set, committed before any fit was run, and the verdict (Prompt 187).",
+      "owner": 187,
       "student": false
     },
     {

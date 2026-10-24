@@ -76,7 +76,7 @@ Three tiers, and a page promises offline only what its tier delivers. The
 **first-visit install** (core and optional) is what a reader waits for and what
 decides whether a version activates; it has a committed ceiling in
 `tools/data-budget.json` that `tests/offlineTiers.test.js` enforces in every
-budget-policy mode. The idle install has one too (`precacheIdleGzipBytes`, 1,549,312 B, raised for the activity builder group, D-R10-49, and for the activity list, D-R10-55): both are CI's figures, measured under Node 22, so on a Mac under Node 24, whose gzip reads a few KB larger, the idle-tier tests can fail by design (2,644 B at the time of writing) and pass in CI. The **idle install** is fetched after activation, when the
+budget-policy mode. The idle install has one too (`precacheIdleGzipBytes`, 1,550,336 B, raised for the activity builder group, D-R10-49, for the activity list, D-R10-55, and for the three Library entries of the measurement investigations, D-R10-67): both are CI's figures, measured under Node 22, so on a Mac under Node 24, whose gzip reads a few KB larger, the idle-tier tests can fail by design (2,644 B at the time of writing) and pass in CI. The **idle install** is fetched after activation, when the
 page has gone idle, by an `install-idle` message to the worker: the instructor
 modules, three.js, the 3-D lab, the mission lab, the Sky Lab, the Library, the
 activity builder and the data tables. It fetches only what the cache lacks, so a run cut short is

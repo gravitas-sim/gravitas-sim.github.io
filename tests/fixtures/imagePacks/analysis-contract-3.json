@@ -1,0 +1,107 @@
+{
+  "format": "gravitas.image-packs-analysis-contract/1",
+  "prompt": 189,
+  "part": 3,
+  "committedBefore": "any leg below was run, the oracle was extended to it, or any measurement of the new data was read. What was read of the data before this file: the file names and sizes of the archive's listing; the headers of the first full-frame image and of one probe stripe (to find the target: the normalised cross-correlation of the pack frame with the stripe, and the peak counts of the brightest stars near it); the number of Gaia rows in the field; the Hipparcos row (so its error columns could be named below); the three JPL small-body answers; and the repository's own 20-minute SPOC light curve of the same sector, read only to see that the transit of 2022-09-04 lies in the window and where the window's baseline is. Nothing the legs below compute was seen.",
+  "why": "Carl, chat 2026-10-24: \"Yes go ahead with the four requests, R1 to R4\" (relayed by the coordinator), under his earlier ruling (rights-checked public archive files only). Part 2 left the legs of Prompts 181, 182, 185 and 186 that need more than one 11 by 13 frame NOT RUN, and listed what they need. This file fixes, before any result, what the new data runs of them, against which bounds, and which legs cannot run and why. Part 2 is unchanged and its bounds are not touched.",
+  "rule": "Bounds that exist in a committed thresholds file are referenced by file and check id and read from it by the test. A bound stated here is stated with its derivation. A leg that fails is reported with its value; no bound in this file or in any referenced file is changed after a result is seen. A refusal with a stable code is a result where the leg says so. Nothing is simulated, and nothing is tuned to the data: every choice below (frame, window, radii, thresholds) is fixed here.",
+  "data": {
+    "provenance": "tests/fixtures/imagePacks/authentic/provenance.json",
+    "ffi": "84 consecutive 200-second TESS calibrated full-frame images, camera 1, CCD 2, sector 56, 2022-09-04 04:15 to 08:52 UTC (BTJD 2826.683 to 2826.878), an 81 by 81 pixel cutout of each about HD 209458 (tests/fixtures/imagePacks/authentic/ffi-cutout-s56-1-2.f32: float32 little-endian, frame by row by column, 2,204,496 bytes), in electrons per second as the archive writes them (calibrated, background NOT subtracted, exposure 158.4 s of live time per frame)",
+    "gaia": "tests/fixtures/imagePacks/authentic/gaia-dr3-window.csv: 222 Gaia DR3 sources, G 16 or brighter, within 1.5 pixels of the cutout by the anchor WCS (positions at epoch 2016.0, proper motions, parallaxes, ICRS)",
+    "hipparcos": "tests/fixtures/imagePacks/authentic/hip2-hd209458.csv: the Hipparcos new reduction row of HD 209458 (HIP 108859), position at epoch 1991.25",
+    "anchor": "the sky is not in the FFI headers. The pack frame tess-hd209458-s56-frame places the cutout: zero-based FFI array pixel = pack pixel + (1165, 352); the pack's WCS with CRPIX moved by (35, 36) is the anchor WCS, used ONLY to find which detection is which Gaia star (matching radius below). Every sky solution below is fitted from the matched stars, never taken from the anchor.",
+    "units": "frame k in electrons = rate x 158.4 s; time = the middle of TSTART and TSTOP, BTJD + 2457000 as a TDB Julian date; gain 5.19 electron/adu and read noise 9.5496 electrons (the pack's, from the target pixel file header); full well = the pack's saturation rate 101,010 electron/s x 158.4 s"
+  },
+  "legs": {
+    "authentic.integrity": {
+      "what": "the cutout file is the one the provenance names (SHA-256), holds 84 finite frames of 81 by 81, the frame times increase by 200 s within 0.01 s, every pixel is under the saturation rate of the pack (101,010 electron/s), and the Gaia subset and the Hipparcos row are the files the provenance names (SHA-256)",
+      "bounds": {
+        "frames": 84,
+        "spacingSecondsWithin": 0.01,
+        "peakBelowSaturation": true,
+        "hashes": true
+      }
+    },
+    "astrometry.b5.fit": {
+      "prompt": 181,
+      "references": "tests/fixtures/astrometry/thresholds.json, check b2.oracleFit (boundPix)",
+      "what": "one authentic frame (frame 42 of 84, the middle one, by index, chosen here) with reference stars: detections by js/measure/detect.js detectIn with the part 1 contract's parameters (box 16, fwhm 2, sigma 4, minArea 5) on the electrons frame (flags saturated, edge, masked and crowded dropped); each detection matched to the Gaia star whose position at the frame's epoch (proper motion applied to the epoch 2016.0 position) lies nearest it by the anchor WCS, within 2 pixels, one star to one detection both ways, and with no other Gaia star of G 16 or brighter within 4 pixels of that star; the matched stars solved by js/measure/astrometry.js fitWcs (affine model, equal pixel sigma, the stars' mean direction as the tangent point, Gaia positions without a catalogue error); the pixel of each point of a 5 by 5 grid of pixels across the frame (from the solution) under the solution of astropy.wcs.utils.fit_wcs_from_points (TAN, no SIP) given the same stars and the same tangent point, largest difference in pixels. Fewer than eight matched stars is a failed leg, not a smaller test.",
+      "bounds": {
+        "boundPix": "read from the referenced check (0.01)",
+        "minMatched": 8
+      },
+      "why8": "an affine WCS has six parameters; eight stars give ten degrees of freedom to judge the residuals by"
+    },
+    "astrometry.e1.frame": {
+      "prompt": 181,
+      "what": "the same solution judged on its own: the root mean square of its residuals over the matched stars, and its verdict",
+      "bounds": { "rmsPix": 0.2, "verdict": "consistent" },
+      "why0.2": "the centroid of a bright, isolated star in a 21 arcsecond pixel is good to about 0.05 pixel, and the TESS pixel response and the distortion over 81 pixels leave an affine model about 0.1 pixel; 0.2 pixel (4 arcseconds) is twice that, tight enough that a wrong match or a wrong model shows"
+    },
+    "overlay.b5.gaia": {
+      "prompt": 182,
+      "references": "tests/fixtures/overlay/thresholds.json, check b4.oracleSkyMap (boundPix) and the proper-motion bound of its analytic cases (1e-4 arcsec)",
+      "what": "the Gaia subset as the catalogue over the frame of the leg above, under the solution of the leg above, at the frame's epoch: js/measure/overlay.js starsIn lists the stars that fall in the frame (G 16 or brighter, the cap of 500 not reached); the pixel of every listed star against astropy.wcs all_world2pix given the same solution (CRPIX, CRVAL, CD) and the positions that astropy.coordinates SkyCoord.apply_space_motion gives from the epoch 2016.0 to the frame's time, largest difference in pixels. The two lists of stars in the frame must be the same set.",
+      "bounds": { "boundPix": 1e-5, "list": "the same set" },
+      "why1e-5": "1e-6 pixel is b4's bound for the projection alone; the proper motion adds the 1e-4 arcsec the analytic cases of Prompt 182 allow between the two motion formulas, which is 5e-6 pixel at 19.4 arcseconds a pixel; 1e-5 pixel holds both with a factor of two"
+    },
+    "overlay.e1.pair": {
+      "prompt": 182,
+      "status": "NOT RUN: an authentic calibrated pair with a moving object needs a field with a detectable moving object. The JPL small-body identification at the start, middle and end of the 84 frames lists no asteroid inside the 0.6 degree square about HD 209458 (all candidates are fainter than V 17.6 and more than 0.3 degree away: tests/fixtures/imagePacks/authentic/jpl-sb-ident-hd209458-field.json); the nearest planet (Neptune) is 32.7 degrees from the field on that date (astropy, built-in ephemeris), and the camera's field is 24 degrees across; the FFIs carry no sky WCS, so another part of the CCD cannot be searched without a blind solution. IMCCE SkyBoT answered 403 and 502 and was not retried or worked around."
+    },
+    "framepipeline.g1.complete": {
+      "prompt": 185,
+      "what": "js/measure/frameSeries.js runSequence on the 84 frames (calibration electrons, no masters; target the HD 209458 mark within 2 pixels of the pack's measured centroid carried to the cutout, (40.13, 41.64); every other parameter at its default): the run completes (ok) with all 84 frames registered and a light curve of 84 points, with at least three comparison stars chosen.",
+      "bounds": {
+        "ok": true,
+        "points": 84,
+        "refusedFrames": 0,
+        "comparisonAtLeast": 3
+      },
+      "why3": "the stability test needs three candidates (RULES.comparison.minTest)"
+    },
+    "framepipeline.g1.oracle": {
+      "prompt": 185,
+      "references": "tests/fixtures/photometry/thresholds.json check b1.apertureSumExact (relative) for the net of each star in each frame, and tests/fixtures/framepipeline/thresholds.json check a3.lab (dmWithin) for the differential magnitude",
+      "what": "an independent reduction of the same pixels: for the target and every chosen comparison star in every frame, at the position, radius and annulus the pipeline measured, photutils aperture_photometry (method exact) and the sigma-clipped annulus mean (astropy sigma_clip, median centre, mad_std, 3 sigma, 4 iterations, centre-method annulus mask) give the net; the differential magnitude is formed from those nets by numpy (the target against the sum of the chosen comparison stars). Largest relative difference of a net, and largest absolute difference of a differential magnitude, over the whole sequence.",
+      "bounds": {
+        "netRelative": "read from the referenced check (1e-9)",
+        "dmMag": "read from the referenced check (1e-9)"
+      }
+    },
+    "framepipeline.g1.transit": {
+      "prompt": 185,
+      "references": "js/data/observations/tessHd209458S56.js (the SPOC PDCSAP light curve of the same sector, 20-minute bins, in the repository)",
+      "what": "the light curve against the independently reduced one. The normalised flux is 10^(-0.4 (dm - median dm out of transit)). The transit centre of the SPOC series is the midpoint of the two times at which its flux crosses the half-depth level (linear interpolation between neighbouring bins), the depth is 1 minus the median flux of the bins within 0.04 day of that centre over the median of the bins 0.075 to 0.30 day from it. The same estimators (the same windows about the SPOC centre, the crossing method, the flux of the frames in place of the bins; the out-of-transit frames are those 0.075 day or more from the SPOC centre, which the 84 frames reach on both sides) are applied to the pipeline's light curve. Depth and centre are compared.",
+      "bounds": { "depthDifference": 0.001, "centreMinutes": 8 },
+      "whyDepth": "a transit of 1.6 percent: 0.1 percentage point is a sixteenth of it; the 200-second differential points are good to a few hundred ppm and the median of about forty in-transit points to under 100 ppm; the SPOC curve has its own aperture, crowding correction and detrending, and a tenth of a percentage point is what an aperture that loses a few percent of the light differently, or a comparison star that varies, would show",
+      "whyCentre": "the SPOC bins are 20 minutes wide (the interpolated crossing is good to a quarter of that, 5 minutes) and the frames' crossings to a few minutes at most; 8 minutes holds both"
+    },
+    "framepipeline.g1.noise": {
+      "prompt": 185,
+      "what": "the stated uncertainties against the scatter of real data: over the out-of-transit frames of the leg above, the root mean square of (dm - median dm) over the median stated differential-magnitude uncertainty",
+      "bounds": { "ratioWithin": [0.5, 2.0] },
+      "why": "Prompt 185's synthetic a2 holds the ratio to 0.9 to 1.1 for white noise; real frames add pointing jitter, scattered light and red noise the stated uncertainty does not carry, so a factor of two either way is what this leg asks: tighter would claim the uncertainty is complete, looser would let it be off by an order of magnitude"
+    },
+    "series.b6.motion": {
+      "prompt": 186,
+      "what": "an authentic two-epoch series of the target: the Hipparcos new reduction position at epoch 1991.25 (TT, JD 2448349.0625; sigma 0.64 and 0.66 mas per axis, the catalogue's errors in RA*cos(dec) and Dec) and the Gaia DR3 position at epoch 2016.0 (JD 2457389.0; sigma 0.0213 and 0.0227 mas, the catalogue's errors in the same quantities; the star is Gaia DR3 1779546757669063552, matched by position, G 7.52): js/measure/astrometric-series.js fitMotion on the two epochs, each component of the proper motion (arcsec per year) against Gaia DR3's own pmRA and pmDE (29.766 and -17.976 mas/yr); and twoEpochShift's separation against astropy SkyCoord.separation of the same two positions. The label of the two-epoch shift (no parallax, no distance) must be on the result.",
+      "bounds": {
+        "pmComponentMasPerYr": 0.5,
+        "separationArcsec": 1e-6,
+        "label": true
+      },
+      "why0.5": "both positions are barycentric catalogue positions, so the parallax cancels; the two-epoch fit's own uncertainty is 0.026 mas/yr (0.64 mas over 24.75 years); the frame of Hipparcos is tied to the ICRS to 0.1 to 0.2 mas/yr, and Gaia's own motion is a fit over 34 months; 0.5 mas/yr is two to five times those",
+      "why1e-6": "the tangent-plane displacement and the great-circle separation of two positions 0.74 arcsecond apart differ at the order of the cube of the separation (about 1e-11 arcsecond); 1e-6 arcsecond is the floor of the catalogue positions' decimal places"
+    },
+    "series.b6.series": {
+      "prompt": 186,
+      "status": "NOT RUN: a parallax needs at least eight epochs over nearly a year (RULES.jointMinEpochs, jointMinSpanYears) and the data the series module takes is a two-dimensional position per epoch. The repository holds one position per catalogue and no dated multi-epoch positions of one source; Gaia DR3's per-epoch astrometry is one-dimensional along-scan data for a selected subset of sources, which the series module cannot take, and no other multi-epoch source was found in the permitted search: the 84 frames span 4.6 hours, too short to show a motion of tens of milliarcseconds a year or a parallax at a 21 arcsecond pixel. The two-epoch motion above is the authentic series this PR can run."
+    },
+    "calibration.authentic": {
+      "prompt": "179 onward (the detector lab's calibrate)",
+      "status": "NOT RUN, as in part 2: the full-frame images are calibrated by the archive (SPOC) and no bias, dark or flat frame of them was fetched, so there is nothing authentic for the lab's calibrate to reduce."
+    }
+  }
+}

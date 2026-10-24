@@ -81,6 +81,9 @@ Not mine to license. Each keeps its own, and the license text ships with it.
 | `tests/fixtures/fits/*.headers.txt` | the headers of two TESS light curves served by MAST, kept for tests | public domain (NASA); acknowledge TESS and MAST, see NOTICE |
 | `tests/fixtures/archive/gaia-epphot-su-dra.vot` | one Gaia DR3 epoch-photometry answer from CDS VizieR, kept for tests | CC BY-NC 3.0 IGO; credit ESA/Gaia/DPAC, see NOTICE |
 | `tests/fixtures/archive/sesame-su-dra.xml` | one CDS Sesame answer, kept for tests | a position and names from SIMBAD; acknowledge CDS, see NOTICE |
+| `tests/fixtures/imagePacks/authentic/ffi-cutout-s56-1-2.f32` | an 81 by 81 pixel cutout of 84 TESS calibrated full-frame images (sector 56, camera 1, CCD 2) about HD 209458, served by MAST, kept for tests | public domain (NASA); acknowledge TESS and MAST, see NOTICE |
+| `tests/fixtures/imagePacks/authentic/gaia-dr3-window.csv` | 222 Gaia DR3 sources (G 16 or brighter) in the field of HD 209458 from CDS VizieR, kept for tests | CC BY-NC 3.0 IGO; credit ESA/Gaia/DPAC, see NOTICE |
+| `tests/fixtures/imagePacks/authentic/hip2-hd209458.csv` | the Hipparcos new reduction row of HD 209458 from CDS VizieR, kept for tests | CC BY-NC 3.0 IGO (ESA space science archives terms); credit ESA, see NOTICE |
 
 ### Data packs
 
@@ -131,7 +134,9 @@ say something different from them; NOTICE lists what each one cites.
 The repository's own licenses (MIT for the code, CC BY 4.0 for the content)
 cover only what is Gravitas's to license. The files in the table above keep
 theirs wherever the repository goes, its release archives included. The one
-non-commercial file among them is the Gaia test fixture: it is in the
+non-commercial files among them are the Gaia and Hipparcos test fixtures (one
+Gaia epoch-photometry answer; and, from Prompt 189, a 222-row Gaia subset and a
+Hipparcos row for the authentic legs): they are in the
 repository and its archives, and not on the site, which does not serve
 `tests/`. Whether a non-commercial fixture belongs in an archive at all is
 the owner's question, in [`OWNER_ACTIONS.md`](OWNER_ACTIONS.md).

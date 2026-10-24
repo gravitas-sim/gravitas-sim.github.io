@@ -287,6 +287,37 @@ and of SU Dra's sector 15 light curve (TIC 142848794), so the FITS reader's
 tests can run on real headers without the files.
 
 ===============================================================================
+Authentic-frame legs of Prompt 189 (TESS full-frame images, Gaia DR3, Hipparcos)
+-------------------------------------------------------------------------------
+tests/fixtures/imagePacks/authentic/ffi-cutout-s56-1-2.f32
+An 81 by 81 pixel cutout of each of 84 TESS 200-second calibrated full-frame
+images (sector 56, camera 1, CCD 2, 2022-09-04), read by byte range from
+STScI's public dataset on AWS, which mirrors MAST. TESS mission data are in the
+public domain (MAST data use policy); acknowledge the TESS mission and MAST,
+STScI (doi:10.17909/t9-nmc8-f686 for the target pixel files; the full-frame
+images are the mission's calibrated products of the same sector).
+
+tests/fixtures/imagePacks/authentic/gaia-dr3-window.csv
+Gaia DR3 sources (G 16 or brighter) within the field of HD 209458, from CDS
+VizieR (table I/355/gaiadr3), retrieved 2026-10-24. Gaia data are licensed
+CC BY-NC 3.0 IGO: https://www.cosmos.esa.int/web/gaia-users/license . This work
+has made use of data from the European Space Agency (ESA) mission Gaia
+(https://www.cosmos.esa.int/gaia), processed by the Gaia Data Processing and
+Analysis Consortium (DPAC, https://www.cosmos.esa.int/web/gaia/dpac/consortium).
+  Gaia Collaboration, Vallenari et al. (2023), A&A 674, A1,
+  doi:10.1051/0004-6361/202243940
+
+tests/fixtures/imagePacks/authentic/hip2-hd209458.csv
+The Hipparcos new reduction row of HD 209458 (HIP 108859), from CDS VizieR
+(table I/311/hip2), retrieved 2026-10-24. Data in the ESA space science
+archives are distributed under the CC BY-NC 3.0 IGO licence
+(https://www.cosmos.esa.int/web/esdc/terms-and-conditions); credit ESA.
+  van Leeuwen (2007), A&A 474, 653, doi:10.1051/0004-6361:20078357
+
+The VizieR service: this research has made use of the VizieR catalogue access
+tool, CDS, Strasbourg Astronomical Observatory, France (doi:10.26093/cds/vizier).
+
+===============================================================================
 Gaia DR3 epoch photometry
 -------------------------------------------------------------------------------
 tests/fixtures/archive/gaia-epphot-su-dra.vot

@@ -106,6 +106,7 @@ current, and the orchestrator checks it.
 | `image-marks-bytes.mjs` | The marks instrument's bytes and requests against the gate (Prompt 179) | `npm run image-marks:bytes` |
 | `image-marks-validate.mjs` | The marks instrument against the gate's thresholds (Prompt 179) | `npm run image-marks:validate` |
 | `image-measure-gate.mjs` | The image-measurement gate: thresholds, slices, consumers and one decision | `npm run image-gate:check`, `npm run image-gate:report`, `npm run image-gate:measure` |
+| `image-packs-authentic.mjs` | The authentic legs of Prompts 181, 182, 185 and 186 on the new data (Prompt 189, contract part 3) |  |
 | `image-packs-hostile.mjs` | Hostile PNGs made from an authentic frame (Prompt 189, leg import.hostilePng) |  |
 | `image-packs-validate.mjs` | The authentic-frame legs of Prompts 180 and 183, and the pack's own check | `npm run imagepacks:validate` |
 | `import-cancel-probe.mjs` | npm run probe:import-cancel - what a cancelled decode leaves behind | `npm run probe:import-cancel` |
@@ -147,6 +148,8 @@ current, and the orchestrator checks it.
 | `numeric-cases.mjs` | The numerical routines' validation group (Prompt 152) |  |
 | `numeric-validate.mjs` | npm run validate:numeric - the numerical routines' validation group | `npm run validate:numeric` |
 | `observatory-bench.mjs` | npm run bench:observatory - what the observatory costs a reader | `npm run bench:observatory` |
+| `orbit-fit-synth.mjs` | Synthetic visual-binary series with a truth manifest (Prompt 187, ORBIT_FIT_GATE.md) |  |
+| `orbit-fit-validate.mjs` | Orbit fitting and moving-object tracks against their committed thresholds (Prompt 187) | `npm run orbit-fit:validate` |
 | `orbital-cases.mjs` | The orbital layer's validation group (Prompt 148) |  |
 | `orbital-validate.mjs` | npm run validate:orbital - the orbital layer's validation group | `npm run validate:orbital` |
 | `output-excerpt.mjs` | The part of a failing command's output worth printing |  |
