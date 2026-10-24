@@ -1,0 +1,249 @@
+{
+  "format": "gravitas.overlay-thresholds/1",
+  "prompt": 182,
+  "committed": "Before any implementation output was inspected: this file and the validation contract in OVERLAYS.md were committed ahead of js/measure/overlay.js, the oracle's inputs and results and every measurement. A check that a measurement crosses is a failed check, not a reason to move the bound; no bound is multiplied or relaxed after a result is seen; only Carl resets one, with a register row.",
+  "conventions": {
+    "pixels": "FITS: 1 is the centre of the first pixel, x along a row, y up; a pixel position is inside a frame of w by h when 0.5 <= x <= w + 0.5 and 0.5 <= y <= h + 0.5",
+    "projection": "the TAN projection and WCS of js/measure/astrometry.js (Prompt 181), a CD matrix in degrees per pixel; no distortion terms; no aberration, no precession, no parallax: a catalogue position is a J2000 (ICRS-aligned) direction moved by proper motion alone",
+    "properMotion": "linear in the J2000 unit vector from the catalogue's pmra (which carries cos dec) and pmde, radial velocity and parallax neglected: js/kernels/sky/stars.js starAtEpoch, whose own stated error against ERFA's pmsafe is at most 0.016 arcmin over 1900-2100",
+    "planets": "geometric, geocentric, no light-time, J2000 mean equator, from Standish's elements (js/kernels/sky/planets.js geocentricEquatorial), position bound planetProvenance(null, body, jd).boundDeg = 0.2 degree; Mercury to Saturn",
+    "time": "a frame's time moved to TT: UTC and UT1 by js/kernels/sky/time.js ttFromUt (UTC taken as UT1, at most 0.9 s apart by the definition of UTC), TAI by +32.184 s, TT as it is, TDB less tdbMinusTt (at most 1.7 ms); TCB and local refuse; the instant is the middle of the exposure when the sidecar says the time is its start or its end and gives the exposure"
+  },
+  "rules": {
+    "maxEntries": 500,
+    "magnitudeLimitDefault": 4.5,
+    "planets": ["mercury", "venus", "mars", "jupiter", "saturn"],
+    "blinkRatesPerSecond": [0.5, 1, 2, 4],
+    "blinkRateDefault": 1,
+    "differenceNeedsResidentFrames": 4,
+    "differenceRefusals": [
+      "display-only",
+      "incomplete-contract",
+      "not-flux",
+      "calibration-state",
+      "unit",
+      "exposure",
+      "shape",
+      "too-large",
+      "registration"
+    ],
+    "exposureRule": "frames in a count unit (adu, count, electron, photon) must have equal exposures; a rate unit (per second) needs none",
+    "resampling": "bilinear: an output pixel is NaN when any of its four neighbours in the second frame is outside it or is NaN; the difference is second-frame-resampled minus first-frame, NaN where either is NaN, and is a picture for the eye, never a measurement and never stored"
+  },
+  "scenes": {
+    "orion": {
+      "what": "The bright-star pack (sky/bright-stars.json, 904 stars, J2000.0 as the pack rounds them) over a 1024 by 1024 frame whose truth WCS is the one of Prompt 181's orion scene, at a time of 2026-01-01T00:00:00 UTC",
+      "width": 1024,
+      "height": 1024,
+      "truth": {
+        "crval": [83.5, -0.5],
+        "crpix": [512.5, 512.5],
+        "scaleArcsec": 90,
+        "positionAngleDeg": 17,
+        "parity": -1
+      },
+      "time": {
+        "value": "2026-01-01T00:00:00",
+        "scale": "UTC",
+        "format": "iso",
+        "reference": "mid"
+      },
+      "edgeGuardPix": 0.001
+    },
+    "planets": {
+      "what": "Five planets at five instants given as TT Julian dates",
+      "jdTt": [2451545.0, 2455197.5, 2458849.5, 2461041.5, 2466154.5]
+    },
+    "resample": {
+      "what": "A seeded 96 by 72 frame of values uniform in [0, 1000), carried onto a 96 by 72 first-frame grid by a rotation of 2.5 degrees about the frame centre and a shift",
+      "width": 96,
+      "height": 72,
+      "rotationDeg": 2.5,
+      "about": [48.5, 36.5],
+      "shift": [2.37, -1.81],
+      "seed": 182001,
+      "integerShift": [3, -2]
+    },
+    "centroid": {
+      "what": "A Gaussian star (sigma 2 pixels, amplitude 1000) on a flat sky in a 64 by 64 first frame and, moved by a known rotation and shift, in a second frame; the second carried onto the first",
+      "size": 64,
+      "sigma": 2,
+      "amplitude": 1000,
+      "position": [30.3, 33.7],
+      "rotationDeg": 5,
+      "about": [32.5, 32.5],
+      "shift": [4.3, -7.1]
+    },
+    "skyMap": {
+      "what": "A first frame and a second frame with their own TAN WCS (a different reference position, rotation and scale); a first-frame pixel carried to the second through the sky",
+      "width": 1024,
+      "height": 1024,
+      "first": {
+        "crval": [83.5, -0.5],
+        "crpix": [512.5, 512.5],
+        "scaleArcsec": 90,
+        "positionAngleDeg": 17,
+        "parity": -1
+      },
+      "second": {
+        "crval": [83.8, -0.3],
+        "crpix": [510.5, 515.5],
+        "scaleArcsec": 90.2,
+        "positionAngleDeg": 19,
+        "parity": -1
+      },
+      "grid": { "n": 5, "from": 50, "to": 975 }
+    },
+    "ensemble": {
+      "what": "Random truth per trial, as Prompt 181's ensemble: reference sky position RA uniform 0 to 360 and Dec uniform -60 to 60 degrees, scale log-uniform 0.5 to 60 arcsec per pixel, position angle uniform, parity at random (the affine truth also has an axis ratio within 0.5 percent and a skew within 0.2 degree); 5 to 8 fit stars uniform over [50, 974] squared at least 100 pixels apart, their pixels with Gaussian noise of 0.15 pixel on each axis; the catalogue positions of the five test pixels are exact, and the question is where the fitted WCS puts them",
+      "width": 1024,
+      "height": 1024,
+      "trials": 3000,
+      "stars": [5, 8],
+      "sigmaPix": 0.15,
+      "testPixels": [
+        [100, 100],
+        [924, 100],
+        [100, 924],
+        [924, 924],
+        [512.5, 512.5]
+      ],
+      "seedPrefix": 182100
+    },
+    "mismatch": {
+      "what": "Matched ensemble trials (affine) whose registration pairs have two pairs swapped, 300 trials, 12 sources over [50, 974] squared, noise 0.05 pixel, a shift of 3.37, -5.81 and a rotation of 0.35 degree",
+      "trials": 300,
+      "seedPrefix": 182200
+    },
+    "timing": {
+      "what": "The whole pack over a 1024 by 1024 frame; a 1024 by 1024 frame carried by a registration and differenced against another",
+      "width": 1024,
+      "height": 1024
+    }
+  },
+  "checks": {
+    "a1.tangentPoint": {
+      "what": "A catalogue star at the reference position of a WCS lands at CRPIX",
+      "boundPix": 1e-9
+    },
+    "a1.roundTrip": {
+      "what": "For a 21 by 21 grid of pixels of the orion truth WCS, a synthetic star pack with a star at each pixel's sky position (no proper motion) comes back from the overlay at that pixel",
+      "boundPix": 1e-7
+    },
+    "a2.properMotion": {
+      "what": "A star with pmra 1000 mas/yr (cos dec carried) and pmde 0 at declinations 0, 30, 60 and 80 degrees, ten Julian years after J2000.0: its angular displacement from its catalogue position is 10 arcsec, directed east; and a star with pmra = pmde = 0 does not move",
+      "boundArcsec": 1e-4,
+      "boundBearingDeg": 0.01,
+      "boundStaticDeg": 1e-12
+    },
+    "a3.timeScales": {
+      "what": "UTC 2026-01-01T00:00:00 to TT is 69.184 s later (37 leap seconds and 32.184 s) within 1.0 s; TAI to TT is +32.184 s; TT is itself; TDB differs from TT by tdbMinusTt; the ISO, MJD and JD forms of one instant agree; 'start' with a 100 s exposure moves to the middle by +50 s and 'end' by -50 s",
+      "boundUtcSec": 1.0,
+      "boundExactSec": 1e-6,
+      "boundFormatsDay": 1e-9
+    },
+    "a4.frameEdge": {
+      "what": "A star at pixel 0.5001 is listed and one at 0.4999 is not, in x and in y, and the same at the far edge (w + 0.4999 listed, w + 0.5001 not); no listed entry of the orion scene lies outside the frame",
+      "required": true
+    },
+    "a5.cap": {
+      "what": "A synthetic pack of 800 stars all inside the frame, with the limit of 500: exactly the 500 brightest are listed, the count of those left out (300) is reported, and they are in magnitude order",
+      "listed": 500,
+      "leftOut": 300
+    },
+    "a6.planetOverlay": {
+      "what": "Each planet entry lies at pixelOf(wcs, the kernel's geocentricEquatorial RA and Dec); its bound in degrees is planetProvenance's and its radius in pixels is the bound over the scale",
+      "boundPix": 1e-9
+    },
+    "a7.resampleIdentity": {
+      "what": "The identity registration carries a frame onto itself unchanged (a pixel is the same bits wherever all four neighbours exist, which is everywhere), and an integer shift is exact where defined",
+      "boundValue": 1e-12
+    },
+    "a8.rotationCentroid": {
+      "what": "The centroid scene: the intensity-weighted centroid of the star in the second frame carried onto the first lies within the bound of the first frame's centroid",
+      "boundPix": 0.02
+    },
+    "a9.difference": {
+      "what": "The difference of identical frames is zero where defined; of a frame and the same plus a constant of 3 it is 3 on every defined pixel; of a frame and the same plus a point source of known amplitude (integer-shifted second frame) its peak is the amplitude",
+      "boundValue": 1e-9
+    },
+    "a10.blinkPlan": {
+      "what": "The blink interval is 1000 / rate milliseconds for the rates 0.5, 1, 2 and 4 per second; any other rate is refused; with reduced motion there is no timer and the toggle is manual",
+      "required": true
+    },
+    "b1.oracleStarsJ2000": {
+      "what": "All 904 stars of the pack projected through the orion truth WCS with the epoch at J2000.0 (no proper motion), against astropy.wcs (wcslib) world_to_pixel, pinned: the set of stars inside the frame is the same (stars within 0.001 pixel of the edge excluded and listed) and every pixel position agrees",
+      "boundPix": 1e-6
+    },
+    "b1.oracleStarsEpoch": {
+      "what": "The same at 2026-01-01T00:00:00 UTC: astropy SkyCoord.apply_space_motion (rigorous, no parallax, no radial velocity) from J2000.0 to the astropy UTC to TT instant, then wcslib; same set, every pixel position. The bound is 0.18 arcsec at the scene's 90 arcsec a pixel: the proper-motion linearization of 0.1 arcsec stated for the pack's fastest stars and the 1 s of time",
+      "boundPix": 0.002
+    },
+    "b1.oracleTime": {
+      "what": "The kernel's UTC to TT of 2026-01-01T00:00:00 against astropy Time (leap seconds and 32.184 s, no IERS file), pinned, in seconds",
+      "boundSec": 1.0
+    },
+    "b2.oraclePlanets": {
+      "what": "Mercury, Venus, Mars, Jupiter and Saturn at the five instants: the angular separation between the kernel's geocentric position and astropy's get_body with the builtin ephemeris (ERFA plan94) in GCRS, pinned. The bound is the kernel's own stated planet bound, read from planetProvenance, 0.2 degree",
+      "boundDeg": 0.2
+    },
+    "b3.oracleResample": {
+      "what": "The seeded 96 by 72 frame carried by the rotation and shift against scipy.ndimage.map_coordinates (order 1, bilinear, 0-based coordinates), pinned: the same defined pixels and values on every pixel whose four neighbours exist",
+      "boundValue": 1e-9
+    },
+    "b4.oracleSkyMap": {
+      "what": "A first-frame pixel carried to the second frame through the two WCS (first pixel to sky, sky to second pixel) at 25 grid pixels against astropy.wcs (wcslib) all_pix2world and all_world2pix, pinned, in pixels",
+      "boundPix": 1e-6
+    },
+    "b5.oracleAuthentic": {
+      "what": "An authentic frame with catalogue stars: the overlay's pixel for each catalogue star against astropy.wcs given the same solution",
+      "status": "NOT RUN until Prompt 189 lands an authentic image pack with a catalogue match; nothing was downloaded and nothing fabricated for this leg"
+    },
+    "c1.coveragePredictionAffine": {
+      "what": "The affine ensemble: z = (fitted pixel of a test star's exact position - its true pixel) / stated sigma of the prediction (the fit's covariance carried to that star's pixel), per axis, at the five test pixels; fraction with |z| < 1 and with |z| < 1.96",
+      "oneSigma": [0.64, 0.72],
+      "twoSigma": [0.935, 0.975]
+    },
+    "c2.coveragePredictionSimilarity": {
+      "what": "The same for a truth that is a similarity and the similarity model",
+      "oneSigma": [0.64, 0.72],
+      "twoSigma": [0.935, 0.975]
+    },
+    "d1.noTimeNoScale": {
+      "what": "A frame with no time: the planets are refused with the code no-time, the stars are listed at the catalogue epoch with the treatment not-moved; a frame whose time scale is TCB or local: the planets are refused with the code time-scale and the stars not moved; a time that does not parse refuses with the code time",
+      "refused": 1
+    },
+    "d2.noSky": {
+      "what": "A sidecar marked display-only refuses the overlay with the contract's own words and the code display-only; an image with neither a usable header WCS nor a solved calibration refuses with no-wcs; a SIN or SIP header is refused by name by fromHeader, with its code",
+      "refused": 1
+    },
+    "d3.differenceRefusals": {
+      "what": "Nine constructed pairs, one per code in rules.differenceRefusals, each refused with exactly its code and a reason in words; a quantitative pair of one calibration state, one unit and equal exposures is accepted; a pair in a per-second unit with different exposures is accepted",
+      "refused": 1
+    },
+    "d4.mismatchedPairs": {
+      "what": "Registration with two pairs swapped: the verdict is inconsistent, and the difference is refused with the code registration, in at least this fraction of the trials",
+      "detectedMin": 0.99
+    },
+    "d5.decodedMemory": {
+      "what": "The difference holds four planes (the two frames, the carried frame and the result): 1024 by 1024 is accepted and 2048 by 2048 refused with too-large, by js/dataKinds/limits.js residentFrames; a second frame of another size than the first is refused for the identity tie with the code shape",
+      "required": true
+    },
+    "d6.registrationInherited": {
+      "what": "Fewer than three matched pairs refuse with the kernel's code too-few and no blink alignment is made; pairs whose registration is degenerate refuse with degenerate",
+      "refused": 1
+    },
+    "e1.authenticFrame": {
+      "what": "An authentic calibrated frame pair with catalogue stars and a moving object, blinked and overlaid under a fixed analysis contract",
+      "status": "NOT RUN until Prompt 189; no frame fetched, none simulated"
+    },
+    "f1.timePack": {
+      "what": "The overlay of the whole pack over the 1024 by 1024 orion frame, in plain Node, milliseconds (a loaded machine runs slow; the bound is generous)",
+      "boundMs": 250
+    },
+    "f2.timeResample": {
+      "what": "The 1024 by 1024 second frame carried by the registration and the difference, in plain Node, milliseconds",
+      "boundMs": 1500
+    }
+  }
+}

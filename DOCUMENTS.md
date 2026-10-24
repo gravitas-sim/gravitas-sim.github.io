@@ -94,6 +94,7 @@ catalogue refers to it, so a change to it can reach a student.
 | [ONBOARDING.md](ONBOARDING.md) | The student first-run path and what-next guidance. | feature | P73 | written | no |
 | [ORBITAL_LAYER.md](ORBITAL_LAYER.md) | The orbital layer: elements and state vectors with units, frames and time scales named. | feature | P148 | written | no |
 | [ORBITAL_SYSTEM_BUILDER.md](ORBITAL_SYSTEM_BUILDER.md) | The Orbital System Builder. | feature | unassigned | written | no |
+| [OVERLAYS.md](OVERLAYS.md) | Catalogue overlays, blink and compare on an image: what is drawn where, how a second frame is tied to the first, when the two may be subtracted, the oracle and the validation (Prompt 182). | feature | P182 | written | no |
 | [OWNER_ACTIONS.md](OWNER_ACTIONS.md) | Decisions, credentials and accounts only the owner can supply. | process | P122 | written | no |
 | [PERFORMANCE_OPTIMIZATIONS_SUMMARY.md](PERFORMANCE_OPTIMIZATIONS_SUMMARY.md) | Historical record of a rendering and memory round. | record | unassigned | written | no |
 | [PERFORMANCE_PROFILING_GUIDE.md](PERFORMANCE_PROFILING_GUIDE.md) | How to profile the simulation. | guide | unassigned | written | no |

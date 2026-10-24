@@ -298,6 +298,9 @@ export const ES_OBSERVATORY = {
   'obs.cal.offline':
     'La herramienta de coordenadas celestes se está cargando. Se descarga al abrirla por primera vez, así que necesita la red esa primera vez.',
   'obs.ph.title': 'Fotometría en la imagen',
+  'obs.ov.title': 'Catálogos, parpadeo y comparación',
+  'obs.ov.offline':
+    'La herramienta de superposición y parpadeo se está cargando. Se descarga al abrirla por primera vez, así que necesita la red esa primera vez.',
   'obs.dt.title': 'Fuentes y ancho de las estrellas',
   'obs.dt.offline':
     'La herramienta de búsqueda de fuentes se está cargando. Se descarga al abrirla por primera vez, así que necesita la red esa primera vez.',
