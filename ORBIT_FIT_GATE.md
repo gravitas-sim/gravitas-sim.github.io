@@ -159,3 +159,60 @@ unknown distance error, more than two bodies, light-travel and proper-motion
 terms in the relative orbit, and an authentic orbit (no authentic arc pack
 exists; nothing was fetched). Part B's validation contract (committed after this
 verdict and before its module) covers some of these; the rest are limits.
+
+## Results
+
+The test set was run **once** on its committed stream (`orbit-fit-gate-187`,
+400 trials in each of ten cells: two models by four arcs, the circular model on
+eccentric truths, the elliptical model on circular truths; 115 seconds, Node
+24.4). The prototype is `js/measure/orbit-fit.js` on `spike/orbit-fit-gate`
+(never merged); the tool is `tools/orbit-fit-gate.mjs` on the same branch; the
+numbers are in `tests/fixtures/orbit-fit/gate-results.json`. Before that run the
+prototype's global search was changed twice on a development stream (`dev187`,
+no gate stream, no leg read): the first search polished only the circular scan's
+minima and lost the period of eccentric and edge-on orbits (about one trial in
+ten at 110 percent); the final one scans frequency with thirteen
+eccentricity-vector seeds and polishes the best eight minima of the envelope.
+The criterion and every bound are as committed; amendment A1 above is the only
+change to the contract.
+
+| Model, arc | Accepted | Refused for | 68 percent coverage of P, a, a^3/P^2 | Median `|dP|/P`, `|da|/a` |
+| --- | --- | --- | --- | --- |
+| circular, 10 percent | 0.000 | coverage 369, inconsistent 31 | none accepted | none |
+| circular, 30 percent | 0.000 | coverage 400 | none accepted | none |
+| circular, 60 percent | 1.000 | none | 0.660, 0.645, 0.690 | 0.004, 0.006 |
+| circular, 110 percent | 0.995 | inconsistent 2 | 0.681, 0.693, 0.686 | 0.002, 0.006 |
+| elliptical, 10 percent | 0.000 | coverage 350, inconsistent 40, conditioning 10 | none accepted | none |
+| elliptical, 30 percent | 0.000 | coverage 400 | none accepted | none |
+| elliptical, 60 percent | 0.685 | coverage 123, conditioning 2, inconsistent 1 | 0.708, 0.712, 0.686 | 0.021, 0.011 |
+| elliptical, 110 percent | 1.000 | none | 0.690, 0.670, 0.670 | 0.003, 0.007 |
+
+The 95 percent coverages of the same quantities were 0.940 to 0.957 (bound 0.90
+to 0.99). The circular model refused every one of the 400 eccentric truths
+(`e` 0.4 to 0.8) at 110 percent (373 as inconsistent, 27 on coverage). The
+elliptical model reported a detected eccentricity in none of the 400 circular
+truths (399 accepted).
+
+| Leg | Circular | Elliptical |
+| --- | --- | --- |
+| G1 short arcs refuse (0.99, 0.95) | pass (1.000, 1.000) | pass (1.000, 1.000) |
+| G2 not vacuous (0.80 at 110 percent) | pass (0.995) | pass (1.000) |
+| G3 calibrated where accepted | pass | pass (274 accepted at 60 percent) |
+| G4 recovered (0.05, 0.10) | pass (0.002, 0.006) | pass (0.003, 0.007) |
+| G5 misspecified refused (0.95) | pass (1.000) | not applicable |
+| G6 nested, false eccentricity (0.01) | not applicable | pass (0 of 400) |
+
+**Verdict A.** The criterion holds on the tested design: the 10 and 30 percent
+arcs refuse (every trial), the 60 percent arc is accepted by the elliptical
+model only when its period is constrained (68.5 percent of trials) and by the
+circular model on circular truths, and where either model returns elements their
+stated intervals cover the truth at the stated rate. Part B builds both depths
+under the criterion as committed.
+
+What the verdict does not say: it holds for 12 jittered epochs, 2 percent noise
+and the stated orbit distribution (the circular model on circular orbits only for
+its own legs; a circular model that is accepted on an eccentric orbit is refused
+by the consistency test for `e` of 0.4 or more at this noise, not for smaller
+eccentricities, where it returns a circular orbit that fits). The exactly regular
+cadence aliases the period and is handled by Part B's `period-ambiguous` rule,
+which is not part of the verdict.
