@@ -319,6 +319,13 @@ export const NEVER_PRECACHED = [
   // size approval does not cover, so none of the files is installed and the
   // panel says it needs the network the first time. D-R10-64.
   /^(js\/measure\/astrometric-series\.js|js\/observatory\/imageSeries\.js|js\/i18n\/(en|es)\.imageSeries\.js)$/,
+  // Orbit fitting and moving-object tracks (Prompt 187, ASTROMETRY.md): the two
+  // kernels, the panel and its words, fetched when a reader opens the orbit
+  // disclosure inside the sky-coordinates panel. Same reason as the series files
+  // above: the idle tier has no room under a ceiling the standing size approval
+  // does not cover, so none is installed and the panel says it needs the network
+  // the first time. D-R10-66.
+  /^(js\/measure\/(orbit-fit|mover-track)\.js|js\/observatory\/imageOrbit\.js|js\/i18n\/(en|es)\.imageOrbit\.js)$/,
   // The image import (Prompt 188, IMAGE_IMPORT.md): the panel and its words,
   // fetched when a reader first chooses a FITS image, a PNG or a JPEG in the
   // Observatory's file box. Not installed, for the reason of the photometry

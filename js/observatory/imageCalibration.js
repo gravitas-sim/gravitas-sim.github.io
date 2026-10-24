@@ -864,6 +864,27 @@ export async function mountCalibration(box, ctx) {
         () => (series = null)
       );
   });
+  // Binary-star orbit fitting and moving-object tracks (Prompt 187): its own lazy chunk.
+  const orbitTitle = el('summary', { textContent: t('obs.orb.title') });
+  const orbitWait = el('p', { textContent: t('obs.orb.offline') });
+  const orbitBody = el('div', {}, orbitWait);
+  const orbitBox = el(
+    'details',
+    { className: 'ui-disclosure', id: 'obsOrbitPanel' },
+    orbitTitle,
+    orbitBody
+  );
+  labelled.push([orbitTitle, 'obs.orb.title', 'textContent']);
+  labelled.push([orbitWait, 'obs.orb.offline', 'textContent']);
+  box.append(orbitBox);
+  let orbit = null;
+  orbitBox.addEventListener('toggle', () => {
+    if (orbitBox.open)
+      orbit ??= import('./imageOrbit.js').then(
+        m => m.mountOrbit(orbitBody, ctx),
+        () => (orbit = null)
+      );
+  });
   /** The sky position of a pixel under the calibration in use, with its scale and uncertainty, or null. */
   const sky = (x, y) => {
     const w = wcsNow();

@@ -1,0 +1,453 @@
+{
+  "cells": {
+    "circular": {
+      "0.1": {
+        "depth": "circular",
+        "arc": 0.1,
+        "trials": 400,
+        "accepted": 0,
+        "refused": {
+          "coverage": 369,
+          "inconsistent": 31
+        },
+        "detected": 0,
+        "cover": {
+          "P": [0, 0],
+          "a": [0, 0],
+          "a3overP2": [0, 0]
+        },
+        "refusalRate": 1,
+        "acceptRate": 0,
+        "coverage": {
+          "P": null,
+          "a": null,
+          "a3overP2": null
+        },
+        "medianRelP": null,
+        "medianRelA": null
+      },
+      "0.3": {
+        "depth": "circular",
+        "arc": 0.3,
+        "trials": 400,
+        "accepted": 0,
+        "refused": {
+          "coverage": 400
+        },
+        "detected": 0,
+        "cover": {
+          "P": [0, 0],
+          "a": [0, 0],
+          "a3overP2": [0, 0]
+        },
+        "refusalRate": 1,
+        "acceptRate": 0,
+        "coverage": {
+          "P": null,
+          "a": null,
+          "a3overP2": null
+        },
+        "medianRelP": null,
+        "medianRelA": null
+      },
+      "0.6": {
+        "depth": "circular",
+        "arc": 0.6,
+        "trials": 400,
+        "accepted": 400,
+        "refused": {},
+        "detected": 0,
+        "cover": {
+          "P": [264, 376],
+          "a": [258, 381],
+          "a3overP2": [276, 379]
+        },
+        "refusalRate": 0,
+        "acceptRate": 1,
+        "coverage": {
+          "P": {
+            "s1": 0.66,
+            "s95": 0.94
+          },
+          "a": {
+            "s1": 0.645,
+            "s95": 0.9525
+          },
+          "a3overP2": {
+            "s1": 0.69,
+            "s95": 0.9475
+          }
+        },
+        "medianRelP": 0.004311310938800617,
+        "medianRelA": 0.005611354645883582
+      },
+      "1.1": {
+        "depth": "circular",
+        "arc": 1.1,
+        "trials": 400,
+        "accepted": 398,
+        "refused": {
+          "inconsistent": 2
+        },
+        "detected": 0,
+        "cover": {
+          "P": [271, 375],
+          "a": [276, 379],
+          "a3overP2": [273, 378]
+        },
+        "refusalRate": 0.005,
+        "acceptRate": 0.995,
+        "coverage": {
+          "P": {
+            "s1": 0.6809045226130653,
+            "s95": 0.9422110552763819
+          },
+          "a": {
+            "s1": 0.6934673366834171,
+            "s95": 0.9522613065326633
+          },
+          "a3overP2": {
+            "s1": 0.6859296482412061,
+            "s95": 0.949748743718593
+          }
+        },
+        "medianRelP": 0.002323053013673615,
+        "medianRelA": 0.005775778799341547
+      }
+    },
+    "elliptical": {
+      "0.1": {
+        "depth": "elliptical",
+        "arc": 0.1,
+        "trials": 400,
+        "accepted": 0,
+        "refused": {
+          "coverage": 350,
+          "conditioning": 10,
+          "inconsistent": 40
+        },
+        "detected": 0,
+        "cover": {
+          "P": [0, 0],
+          "a": [0, 0],
+          "a3overP2": [0, 0]
+        },
+        "refusalRate": 1,
+        "acceptRate": 0,
+        "coverage": {
+          "P": null,
+          "a": null,
+          "a3overP2": null
+        },
+        "medianRelP": null,
+        "medianRelA": null
+      },
+      "0.3": {
+        "depth": "elliptical",
+        "arc": 0.3,
+        "trials": 400,
+        "accepted": 0,
+        "refused": {
+          "coverage": 400
+        },
+        "detected": 0,
+        "cover": {
+          "P": [0, 0],
+          "a": [0, 0],
+          "a3overP2": [0, 0]
+        },
+        "refusalRate": 1,
+        "acceptRate": 0,
+        "coverage": {
+          "P": null,
+          "a": null,
+          "a3overP2": null
+        },
+        "medianRelP": null,
+        "medianRelA": null
+      },
+      "0.6": {
+        "depth": "elliptical",
+        "arc": 0.6,
+        "trials": 400,
+        "accepted": 274,
+        "refused": {
+          "coverage": 123,
+          "conditioning": 2,
+          "inconsistent": 1
+        },
+        "detected": 268,
+        "cover": {
+          "P": [194, 262],
+          "a": [195, 260],
+          "a3overP2": [188, 262]
+        },
+        "refusalRate": 0.315,
+        "acceptRate": 0.685,
+        "coverage": {
+          "P": {
+            "s1": 0.708029197080292,
+            "s95": 0.9562043795620438
+          },
+          "a": {
+            "s1": 0.7116788321167883,
+            "s95": 0.948905109489051
+          },
+          "a3overP2": {
+            "s1": 0.6861313868613139,
+            "s95": 0.9562043795620438
+          }
+        },
+        "medianRelP": 0.021452385956576947,
+        "medianRelA": 0.011020602385380274
+      },
+      "1.1": {
+        "depth": "elliptical",
+        "arc": 1.1,
+        "trials": 400,
+        "accepted": 400,
+        "refused": {},
+        "detected": 400,
+        "cover": {
+          "P": [276, 382],
+          "a": [268, 380],
+          "a3overP2": [268, 383]
+        },
+        "refusalRate": 0,
+        "acceptRate": 1,
+        "coverage": {
+          "P": {
+            "s1": 0.69,
+            "s95": 0.955
+          },
+          "a": {
+            "s1": 0.67,
+            "s95": 0.95
+          },
+          "a3overP2": {
+            "s1": 0.67,
+            "s95": 0.9575
+          }
+        },
+        "medianRelP": 0.0029726509176407844,
+        "medianRelA": 0.006881291015117474
+      }
+    }
+  },
+  "g5": {
+    "depth": "circular",
+    "arc": 1.1,
+    "trials": 400,
+    "accepted": 0,
+    "refused": {
+      "inconsistent": 373,
+      "coverage": 27
+    },
+    "detected": 0,
+    "cover": {
+      "P": [0, 0],
+      "a": [0, 0],
+      "a3overP2": [0, 0]
+    },
+    "refusalRate": 1,
+    "acceptRate": 0,
+    "coverage": {
+      "P": null,
+      "a": null,
+      "a3overP2": null
+    },
+    "medianRelP": null,
+    "medianRelA": null
+  },
+  "g6": {
+    "depth": "elliptical",
+    "arc": 1.1,
+    "trials": 400,
+    "accepted": 399,
+    "refused": {
+      "inconsistent": 1
+    },
+    "detected": 0,
+    "cover": {
+      "P": [281, 382],
+      "a": [267, 384],
+      "a3overP2": [264, 382]
+    },
+    "refusalRate": 0.0025,
+    "acceptRate": 0.9975,
+    "coverage": {
+      "P": {
+        "s1": 0.7042606516290727,
+        "s95": 0.9573934837092731
+      },
+      "a": {
+        "s1": 0.6691729323308271,
+        "s95": 0.9624060150375939
+      },
+      "a3overP2": {
+        "s1": 0.6616541353383458,
+        "s95": 0.9573934837092731
+      }
+    },
+    "medianRelP": 0.0022266748875953367,
+    "medianRelA": 0.005596736270265801
+  },
+  "legs": {
+    "circular": {
+      "G1": {
+        "measured": {
+          "0.1": 1,
+          "0.3": 1
+        },
+        "pass": true
+      },
+      "G2": {
+        "measured": {
+          "1.1": 0.995
+        },
+        "pass": true
+      },
+      "G3": {
+        "measured": {
+          "0.6": {
+            "accepted": 400,
+            "P": {
+              "s1": 0.66,
+              "s95": 0.94,
+              "pass": true
+            },
+            "a": {
+              "s1": 0.645,
+              "s95": 0.9525,
+              "pass": true
+            },
+            "a3overP2": {
+              "s1": 0.69,
+              "s95": 0.9475,
+              "pass": true
+            }
+          },
+          "1.1": {
+            "accepted": 398,
+            "P": {
+              "s1": 0.6809045226130653,
+              "s95": 0.9422110552763819,
+              "pass": true
+            },
+            "a": {
+              "s1": 0.6934673366834171,
+              "s95": 0.9522613065326633,
+              "pass": true
+            },
+            "a3overP2": {
+              "s1": 0.6859296482412061,
+              "s95": 0.949748743718593,
+              "pass": true
+            }
+          }
+        },
+        "pass": true
+      },
+      "G4": {
+        "measured": {
+          "medianRelP": 0.002323053013673615,
+          "medianRelA": 0.005775778799341547
+        },
+        "pass": true
+      },
+      "G5": {
+        "measured": 1,
+        "pass": true
+      }
+    },
+    "elliptical": {
+      "G1": {
+        "measured": {
+          "0.1": 1,
+          "0.3": 1
+        },
+        "pass": true
+      },
+      "G2": {
+        "measured": {
+          "1.1": 1
+        },
+        "pass": true
+      },
+      "G3": {
+        "measured": {
+          "0.6": {
+            "accepted": 274,
+            "P": {
+              "s1": 0.708029197080292,
+              "s95": 0.9562043795620438,
+              "pass": true
+            },
+            "a": {
+              "s1": 0.7116788321167883,
+              "s95": 0.948905109489051,
+              "pass": true
+            },
+            "a3overP2": {
+              "s1": 0.6861313868613139,
+              "s95": 0.9562043795620438,
+              "pass": true
+            }
+          },
+          "1.1": {
+            "accepted": 400,
+            "P": {
+              "s1": 0.69,
+              "s95": 0.955,
+              "pass": true
+            },
+            "a": {
+              "s1": 0.67,
+              "s95": 0.95,
+              "pass": true
+            },
+            "a3overP2": {
+              "s1": 0.67,
+              "s95": 0.9575,
+              "pass": true
+            }
+          }
+        },
+        "pass": true
+      },
+      "G4": {
+        "measured": {
+          "medianRelP": 0.0029726509176407844,
+          "medianRelA": 0.006881291015117474
+        },
+        "pass": true
+      },
+      "G6": {
+        "measured": 0,
+        "pass": true
+      }
+    }
+  },
+  "verdict": "A",
+  "detail": "elliptical and circular both ship",
+  "trials": 400,
+  "tag": "gate",
+  "criterion": {
+    "minEpochs": {
+      "circular": 6,
+      "elliptical": 8
+    },
+    "coverageFraction": {
+      "circular": 0.4,
+      "elliptical": 0.5
+    },
+    "coverageSigmas": 2,
+    "maxConditionNumber": 1000000,
+    "periodLow": 0.05,
+    "periodHigh": 100,
+    "profileDeltaChi2": 1,
+    "consistentPValue": 0.001,
+    "eccentricityDeltaChi2": 11.83
+  },
+  "seconds": 114.709
+}
