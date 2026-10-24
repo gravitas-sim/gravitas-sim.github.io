@@ -534,7 +534,7 @@ describe('the frame-sequence nodes of the measurement pipeline', () => {
   test('each stage is a registered tool of the image-sequence kind, at the module’s version', () => {
     for (const id of ids) {
       expect(TOOLS[id].kinds).toEqual(['image-sequence']);
-      expect(TOOLS[id].version).toBe(VERSION);
+      expect(TOOLS[id].version).toBe(`${VERSION}.0.0`);
     }
   });
   test('a node runs, is replayable and says the same twice', async () => {

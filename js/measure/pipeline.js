@@ -182,7 +182,7 @@ const frameTools = Object.fromEntries(
     `frames-${stage}`,
     {
       kinds: ['image-sequence'],
-      version: 1,
+      version: '1.0.0',
       params: FRAME_PARAMS,
       expensive: true,
       digest: view => view.digest(),

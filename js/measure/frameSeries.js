@@ -535,7 +535,7 @@ const q = (id, value, unit, kind, extra = {}) => ({
 const node = (stage, params, quantities, warnings = [], extra = {}) => ({
   id: `frames-${stage}`,
   tool: `frames-${stage}`,
-  version: VERSION,
+  version: `${VERSION}.0.0`,
   params,
   quantities,
   warnings,
