@@ -202,7 +202,7 @@ match) in 10 of 10 sequences and names them, and excluding 10, 11 and 20 complet
 `x.d1.blindFrame`, evidence and not a committed leg) the pipeline refuses exactly
 10, 11 and 20 in 10 of 10. The failure is recorded in
 `tests/fixtures/framepipeline/failed-legs.json` and the test holds it: it must keep
-failing until Carl rules (D-R10-63).
+failing until Carl reopens it (D-R10-63). Ruling: Carl, chat 2026-10-24, asked "Prompt 185 (PR #433, draft) passes 57 of 58 rows, but d1 fails as committed: frames 10, 11 and 20 should all be refused, but frame 20 (3% of the light) still detects the four brightest stars, so only 10 and 11 are refused in 10 of 10 sequences (bound: all three). With frame 20 at 0.3% of the light the pipeline refuses exactly 10, 11 and 20 in 10 of 10 (recorded as evidence only). How should #433 proceed?", chose "Leave failing, labelled (Recommended)": "Keep the committed d1 stimulus and bound, record the failure with its cause (tests pin it) and the 0.3% case as evidence, take #433 out of draft and merge; no threshold moved." It stays a known failed leg.
 
 ## Corrections made after the kernel existed
 
