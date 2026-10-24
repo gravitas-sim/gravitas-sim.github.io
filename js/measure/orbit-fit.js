@@ -89,7 +89,7 @@ export const RULES = Object.freeze({
 const DELTA95 = 3.841458820694124;
 
 /** Solar masses from (a / parallax)^3 / P^2 with a and the parallax in one unit and P in Julian years. */
-const GM_SUN = 1.32712440041e20;
+const GM_SUN = 1.3271244e20;
 const AU = 149597870700;
 const JULIAN_YEAR_S = 365.25 * 86400;
 export const KEPLER_K =
@@ -196,9 +196,16 @@ export function prepare(series) {
           `epoch ${i + 1} needs positive uncertainties`,
           { row: i + 1 }
         );
+      const rxy = Number(e?.rxy ?? 0);
+      if (!(finite(rxy) && Math.abs(rxy) < 1))
+        return refuse(
+          'bad-sigma',
+          `epoch ${i + 1} has a correlation that is not between -1 and 1`,
+          { row: i + 1 }
+        );
       sxx = sx * sx;
       syy = sy * sy;
-      sxy = 0;
+      sxy = rxy * sx * sy;
     }
     if (Math.hypot(x, y) > LIMITS.maxOffsetArcsec)
       return refuse(
@@ -468,6 +475,13 @@ function circularScan(S) {
   return refined;
 }
 
+const THOROUGH_SEEDS = [[0, 0]];
+for (const e of [0.25, 0.55, 0.85])
+  for (let q = 0; q < 8; q++)
+    THOROUGH_SEEDS.push([
+      e * Math.cos((q * Math.PI) / 4),
+      e * Math.sin((q * Math.PI) / 4),
+    ]);
 const SEEDS = [[0, 0]];
 for (const e of [0.4, 0.8])
   for (let q = 0; q < 6; q++)
@@ -480,14 +494,15 @@ for (const e of [0.4, 0.8])
  * Chi-squared over frequency, the best of thirteen eccentricity-vector seeds at
  * each frequency, and the local minima of that envelope (the best `count`).
  */
-function eccentricScan(S, count = 8) {
+function eccentricScan(S, count = 8, thorough = false) {
+  const seeds = thorough ? THOROUGH_SEEDS : SEEDS;
   const lo = 1 / (S.span * CRITERION.periodHigh);
   const hi = 1 / (S.span * CRITERION.periodLow);
-  const dnu = 0.1 / S.span;
+  const dnu = (thorough ? 0.04 : 0.1) / S.span;
   const nodes = [];
   for (let nu = lo; nu <= hi; nu += dnu) {
-    let best = { chi2: Infinity, seed: SEEDS[0] };
-    for (const seed of SEEDS) {
+    let best = { chi2: Infinity, seed: seeds[0] };
+    for (const seed of seeds) {
       const p = projected(S, [-Math.log(nu), seed[0], seed[1]]);
       if (p && p.chi2 < best.chi2) best = { chi2: p.chi2, seed };
     }
@@ -511,7 +526,7 @@ function eccentricScan(S, count = 8) {
  * the period can fit an eccentric orbit better, as a circle, than its own period
  * does) and polishes the eight best minima of the envelope.
  */
-function search(S, depth) {
+function search(S, depth, thorough = false) {
   const minima = circularScan(S);
   if (!minima.length) return null;
   const circ = lm(S, [minima[0].lnP], [0]);
@@ -531,7 +546,8 @@ function search(S, depth) {
     if (!best || r.chi2 < best.chi2) best = r;
   };
   for (const m of minima.slice(0, 2)) take(lm(S, [m.lnP, 0, 0], [0, 1, 2]));
-  for (const start of eccentricScan(S)) take(lm(S, start.x, [0, 1, 2]));
+  for (const start of eccentricScan(S, thorough ? 20 : 8, thorough))
+    take(lm(S, start.x, [0, 1, 2]));
   return {
     fit: best,
     circular: circ,
@@ -655,6 +671,43 @@ function elementsOf(v, nl, tRef) {
   };
 }
 
+/** The Thiele-Innes constants (A, B, F, G) of elements a (arcsec), i, Omega, omega (degrees). */
+export function thieleInnesOf(el) {
+  const [i, O, w] = [el.i * RAD, el.Omega * RAD, el.omega * RAD];
+  const a = el.a;
+  return {
+    A:
+      a * (Math.cos(w) * Math.cos(O) - Math.sin(w) * Math.sin(O) * Math.cos(i)),
+    B:
+      a * (Math.cos(w) * Math.sin(O) + Math.sin(w) * Math.cos(O) * Math.cos(i)),
+    F:
+      a *
+      (-Math.sin(w) * Math.cos(O) - Math.cos(w) * Math.sin(O) * Math.cos(i)),
+    G:
+      a *
+      (-Math.sin(w) * Math.sin(O) + Math.cos(w) * Math.cos(O) * Math.cos(i)),
+  };
+}
+
+/**
+ * The elements the constants give, the node in [0, 180) degrees and omega shifted
+ * to match (astrometry alone cannot tell the node from the opposite one):
+ * a (1 + cos i) = hypot(A + G, B - F), a (1 - cos i) = hypot(A - G, B + F).
+ */
+export function elementsFromThieleInnes({ A, B, F, G }) {
+  const pp = Math.hypot(A + G, B - F);
+  const qq = Math.hypot(A - G, B + F);
+  const sumA = Math.atan2(B - F, A + G);
+  const difA = Math.atan2(-(B + F), A - G);
+  const Omega = ((((sumA - difA) / 2) % Math.PI) + Math.PI) % Math.PI;
+  return {
+    a: (pp + qq) / 2,
+    i: Math.acos(Math.max(-1, Math.min(1, (pp - qq) / (pp + qq)))) / RAD,
+    Omega: Omega / RAD,
+    omega: ((((sumA - Omega) / RAD) % 360) + 360) % 360,
+  };
+}
+
 const DERIVED = ['P', 'a', 'i', 'Omega', 'omega', 'e', 'T', 'lnK3'];
 const ANGLES = new Set(['i', 'Omega', 'omega']);
 /** Standard deviations of the derived elements by central differences through the covariance. */
@@ -742,7 +795,16 @@ export function fitOrbit(series, opts = {}) {
       `a ${depth} orbit needs at least ${need} epochs; ${S.n} given`,
       { epochs: S.n, need, depth }
     );
-  const found = search(S, depth);
+  let found = search(S, depth);
+  // A fit the data reject may be a poor local minimum (a nearly edge-on, very
+  // eccentric orbit hides its basin from a coarse scan): search again, finer.
+  if (depth === 'elliptical' && found?.fit) {
+    const pFit = chi2Survival(found.fit.chi2, 2 * S.n - 7);
+    if (!(pFit >= CRITERION.consistentPValue)) {
+      const again = search(S, depth, true);
+      if (again?.fit && again.fit.chi2 < found.fit.chi2) found = again;
+    }
+  }
   if (!found || !found.fit)
     return refuse('conditioning', 'no orbit could be fitted to these epochs', {
       depth,
