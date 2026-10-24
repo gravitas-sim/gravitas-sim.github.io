@@ -79,7 +79,7 @@ set of stars in the frame; the kernel's UTC to TT against astropy's to 1 s; the
 five planets at five dates against plan94 to the kernel's stated 0.2 degree;
 the resampling against `map_coordinates` order 1 to 1e-9; a first-frame pixel
 carried to a second frame through two WCS against wcslib to 1e-6 pixel. **Not
-run until Prompt 189:** an authentic frame with catalogue stars (b5, e1).
+run until Prompt 189:** an authentic frame with catalogue stars (b5, e1). Prompt 189 ran the pack stars over its one frame (`IMAGE_PACKS.md`, contract part 2): 37 stars to 1.1e-11 pixel of astropy, and none in the frame; b5 and e1 proper stay not run.
 
 **(c) Coverage.** On a fixed seeded ensemble (3,000 trials, 5 to 8 fit stars
 with 0.15 pixel noise, random truth), the stated sigma of the pixel predicted
@@ -153,7 +153,7 @@ gives the rows. Measured here, bounds as committed in `thresholds.json`.
 | c1, c2 coverage of the predicted pixel, 30,000 per model | 1 sigma 64 to 72 %; 1.96 sigma 93.5 to 97.5 % | affine 69.0 / 95.3 %; similarity 68.9 / 95.3 % | pass |
 | d1 to d6 refusals (no time, display-only, nine difference reasons, 300 swapped-pair trials, decoded memory, fewer than three pairs) | as committed | 300 of 300 refused; every reason named | pass |
 | f1 pack over 1,024 by 1,024; f2 carry and difference | 250 ms; 1,500 ms | 1.9 ms; 244 ms (Node, this Mac) | pass |
-| b5, e1 an authentic frame with catalogue stars; one authentic pair blinked | | | **NOT RUN until Prompt 189** |
+| b5, e1 an authentic frame with catalogue stars; one authentic pair blinked | 189: pack stars through the frame's WCS to 1.1e-11 px, none in frame | 1e-6 px | pixels pass; the catalogue match and the pair are **NOT RUN** (R2, R4) |
 
 The oracle is astropy 6.1.7 (wcslib, ERFA 2.0.1.5) with scipy 1.15.3 and numpy
 2.2.6, run once in the scratch environment Prompt 180 made, nothing installed,
@@ -206,7 +206,10 @@ An authentic frame with catalogue stars (b5), and an authentic calibrated pair
 with a moving object blinked and overlaid (e1). Nothing was downloaded and no
 frame was simulated for either; the panel was driven in e2e by synthetic frames
 built from the pack's own stars at the pixels the truth WCS gives, which tests
-the panel and the arithmetic against the oracle, not the sky.
+the panel and the arithmetic against the oracle, not the sky. Update: Prompt 189's
+one authentic frame holds none of the pack's stars (the pack stops at V 4.5), so the
+pack's pixels for it were checked against astropy and b5 and e1 stay not run
+(`IMAGE_PACKS.md`, requests R2 and R4).
 
 ## Where things are
 

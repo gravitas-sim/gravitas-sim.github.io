@@ -221,6 +221,24 @@ place; the adapters are pure and move to a Worker without change.
 `tests/fixtures/photometry/`. The kernel golden is regenerated only by
 `node tools/photometry-fixtures.mjs golden`, and only on purpose.
 
+## What the authentic frame found (Prompt 189)
+
+The leg e2 above stays as committed (its bounds, in `thresholds.json`, are unchanged
+and every verdict of this prompt's own legs is the same). Running the panel on the
+TESS frame of Prompt 189, whose pixels are in a rate (`electron/s`) with a variance
+plane, exposed a defect the synthetic frames could not: on the variance route
+`adapt()` kept the data's unit, while `measure()` divides the net by the exposure for
+the instrumental magnitude and the panel's words say "electrons". The panel read the
+rate as electrons and the magnitude as -8.387, where the magnitude of the rate is
+-13.33. `adapt()` now measures a rate (`electron/s`, `count/s`, `adu/s` with a gain)
+in electrons, as the CCD route does, scaling the pixels by the exposure and the
+variance plane by its square; a frame already in electrons or counts is returned
+untouched. No number of this prompt's committed results moved. The test is in
+`tests/imagePacks.test.js` (the magnitude against photutils' own sum and annulus mean
+of the archive's rate, and the unit), and `tools/image-packs-validate.mjs` carries the
+row `photometry.e2.magnitude`. Carl's decision was not needed (a defect, no threshold
+moved); it is recorded in `DECISION_REGISTER.md` D-R10-65.
+
 ## References
 
 Merline, W. J. and Howell, S. B. 1995, Experimental Astronomy 6, 163 (the CCD

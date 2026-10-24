@@ -234,11 +234,11 @@
         "catalogs": ["observatory"]
       },
       "cost": {
-        "lines": 30080,
-        "testFiles": 74,
+        "lines": 41146,
+        "testFiles": 87,
         "generated": 0,
-        "strings": 234,
-        "precacheKb": 367.9,
+        "strings": 246,
+        "precacheKb": 371.1,
         "axeRows": 1
       },
       "use": { "shippedLinks": 0, "libraryEntries": 23 },
@@ -420,7 +420,7 @@
       "exposure": { "links": [], "records": [], "stateLinks": [] },
       "measure": { "pages": ["my-work/index.html"], "routes": ["/my-work/"] },
       "cost": {
-        "lines": 2603,
+        "lines": 2605,
         "testFiles": 25,
         "generated": 0,
         "strings": 0,
@@ -832,7 +832,7 @@
       "exposure": { "links": [], "records": [], "stateLinks": [] },
       "measure": { "pages": ["model/index.html"], "routes": ["/model/"] },
       "cost": {
-        "lines": 3414,
+        "lines": 3438,
         "testFiles": 7,
         "generated": 0,
         "strings": 0,
@@ -1704,7 +1704,7 @@
         "precacheKb": 0,
         "axeRows": 0
       },
-      "use": { "shippedLinks": 13, "libraryEntries": 0 },
+      "use": { "shippedLinks": 15, "libraryEntries": 0 },
       "cited": [],
       "referrer": "UNKNOWN",
       "verdict": "KEEP",
@@ -1770,7 +1770,7 @@
         "precacheKb": 0,
         "axeRows": 0
       },
-      "use": { "shippedLinks": 17, "libraryEntries": 0 },
+      "use": { "shippedLinks": 19, "libraryEntries": 0 },
       "cited": [],
       "referrer": "UNKNOWN",
       "verdict": "KEEP",
@@ -2061,7 +2061,7 @@
       "consequence": "Keep; written only when marks exist; a schema in Prompt 290.",
       "cost": {
         "lines": 0,
-        "testFiles": 3,
+        "testFiles": 4,
         "generated": 0,
         "strings": 0,
         "precacheKb": 0,
@@ -2104,6 +2104,39 @@
         "axeRows": 0
       },
       "use": { "shippedLinks": 3, "libraryEntries": 0 },
+      "cited": [],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
+      "id": "format-gravitas-image-pack-planes",
+      "name": "gravitas.image-pack-planes",
+      "kind": "stored-format",
+      "unique": "yes",
+      "replacement": null,
+      "why": "repository, fetched when an image pack is opened; owner js/observatory/imagePacks.js readFrames.",
+      "exposure": {
+        "links": [],
+        "records": ["gravitas.image-pack-planes"],
+        "stateLinks": []
+      },
+      "persisted": "repository (frames/), fetched when an image pack is opened",
+      "measure": {
+        "ownerFiles": ["js/observatory/imagePacks.js"],
+        "testNames": ["gravitas.image-pack-planes"]
+      },
+      "consequence": "Keep; the pixels of four image packs, checked against the pack's own SHA-256; a schema in Prompt 290.",
+      "cost": {
+        "lines": 0,
+        "testFiles": 0,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 0,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 1, "libraryEntries": 0 },
       "cited": [],
       "referrer": "UNKNOWN",
       "verdict": "KEEP",

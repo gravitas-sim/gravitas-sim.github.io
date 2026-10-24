@@ -1,0 +1,286 @@
+{
+  "format": "gravitas.observation-data-pack",
+  "formatVersion": 1,
+  "id": "tess-hd209458-s56-frame",
+  "version": "1.0.0",
+  "title": "HD 209458, TESS sector 56, one 2-minute cadence: calibrated flux and its error",
+  "object": {
+    "name": "HD 209458",
+    "identifiers": [
+      "TIC 420814525"
+    ],
+    "ra": 330.794887332661,
+    "dec": 18.8843189579296,
+    "frame": "ICRS, epoch J2000",
+    "tessMagnitude": 7.12739992
+  },
+  "facility": {
+    "observatory": "TESS (NASA)",
+    "instrument": "camera 1, CCD 2, output D, 2-minute cadence",
+    "pipeline": "SPOC spoc-5.0.96-20230729, target pixel file"
+  },
+  "dataType": "image",
+  "origin": "observed",
+  "credit": "TESS, sector 56 (NASA; SPOC target pixel file from MAST)",
+  "license": {
+    "status": "public-domain",
+    "statement": "MAST (https://archive.stsci.edu/publishing/data-use, read 2026-10-24): \"most data hosted at MAST are in the public domain\"; acknowledge the mission and STScI. Read by byte range from STScI’s public dataset on AWS, which mirrors MAST’s TESS products."
+  },
+  "retrieved": "2026-10-24",
+  "columns": [
+    {
+      "name": "flux",
+      "unit": "electron/s",
+      "description": "calibrated, background-subtracted flux of each pixel (FLUX), electrons per second"
+    }
+  ],
+  "masks": [],
+  "reductions": [],
+  "image": {
+    "width": 11,
+    "height": 13,
+    "optimalAperture": [
+      47,
+      48,
+      49,
+      50,
+      51,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      69,
+      70,
+      71,
+      72,
+      73,
+      80,
+      81,
+      82,
+      83,
+      84,
+      93,
+      94
+    ],
+    "sidecar": {
+      "format": "gravitas.image",
+      "formatVersion": 1,
+      "id": "tess-hd209458-s56-frame",
+      "title": "HD 209458, TESS sector 56, one 2-minute cadence: calibrated flux and its error",
+      "use": "quantitative",
+      "width": 11,
+      "height": 13,
+      "pixels": {
+        "unit": "electron/s",
+        "linearity": {
+          "status": "corrected",
+          "limit": 101010,
+          "source": "SPOC pixel calibration applies a linearity model (TESS Data Release Notes, Sector 10, DR14, section 3.2); the notes give the two models as differing by 1 to 2 percent near saturation, so the limit is the saturation level and a pixel near it is uncertain to that much"
+        },
+        "saturation": {
+          "level": 101010,
+          "source": "full well about 200,000 electrons a pixel in a 1.98 s frame, varying with the CCD output (Fausnaugh et al. 2021, The TESS Mission Target Selection Procedure, citing Vanderspek et al. 2018, fig. 4.2); the rate form is 200,000 / 1.98 s"
+        },
+        "gain": {
+          "value": 5.190000057220459,
+          "unit": "electron/adu",
+          "source": "header"
+        },
+        "readNoise": {
+          "value": 9.549600601196289,
+          "unit": "electron",
+          "source": "header"
+        }
+      },
+      "planes": {
+        "data": {
+          "encoding": "float32-le"
+        },
+        "variance": {
+          "encoding": "float32-le",
+          "unit": "(electron/s)^2",
+          "source": "FLUX_ERR squared: the SPOC propagated 1-sigma uncertainty of each pixel"
+        }
+      },
+      "time": {
+        "value": 2459836.390293572,
+        "scale": "TDB",
+        "format": "jd",
+        "reference": "mid"
+      },
+      "exposure": {
+        "seconds": 95.04,
+        "kind": "effective"
+      },
+      "scale": {
+        "arcsecPerPixel": 19.422328
+      },
+      "wcs": {
+        "ctype": [
+          "RA---TAN",
+          "DEC--TAN"
+        ],
+        "crpix": [
+          6.254819344476573,
+          6.530449812067786
+        ],
+        "crval": [
+          330.7950845247853,
+          18.884206107937736
+        ],
+        "cdelt": [
+          -0.005395091119529,
+          0.005395091119528831
+        ],
+        "pc": [
+          [
+            0.8513512737077913,
+            -0.46043911374994434
+          ],
+          [
+            -0.5219565893104138,
+            -0.8923117801814796
+          ]
+        ]
+      },
+      "calibration": {
+        "state": "calibrated"
+      },
+      "history": [
+        {
+          "step": "calibrate",
+          "tool": "TESS SPOC",
+          "version": "spoc-5.0.96-20230729",
+          "lossy": false,
+          "note": "calibrated and background-subtracted by the archive"
+        },
+        {
+          "step": "crop",
+          "tool": "TESS SPOC",
+          "version": "spoc-5.0.96-20230729",
+          "lossy": false,
+          "wcsUpdated": true,
+          "note": "the 11 by 13 pixels the spacecraft kept"
+        },
+        {
+          "step": "decode",
+          "tool": "image-packs.mjs",
+          "version": "1.0.0",
+          "lossy": false,
+          "note": "row 8016 (cadence 1158430); values unchanged; variance is FLUX_ERR squared"
+        }
+      ],
+      "source": {
+        "kind": "pack"
+      }
+    }
+  },
+  "source": {
+    "archive": "MAST (Barbara A. Mikulski Archive for Space Telescopes), read from the STScI public dataset on AWS",
+    "urls": [
+      "https://stpubdata.s3.amazonaws.com/tess/public/tid/s0056/0000/0004/2081/4525/tess2022244194134-s0056-0000000420814525-0243-s_tp.fits"
+    ],
+    "citations": [
+      {
+        "text": "TESS Target Pixel Files, STScI/MAST",
+        "doi": "10.17909/t9-nmc8-f686"
+      },
+      {
+        "text": "TESS Data Release Notes: Sector 10, DR14, section 3.2 (linearity)",
+        "url": "https://archive.stsci.edu/missions/tess/doc/tess_drn/tess_sector_10_drn14_v02.pdf"
+      },
+      {
+        "text": "Fausnaugh et al. 2021, The TESS Mission Target Selection Procedure (saturation)",
+        "url": "https://arxiv.org/abs/2109.02665"
+      }
+    ]
+  },
+  "raw": [
+    {
+      "file": "tess2022244194134-s0056-0000000420814525-0243-s_tp.fits.head-0-25919",
+      "url": "https://stpubdata.s3.amazonaws.com/tess/public/tid/s0056/0000/0004/2081/4525/tess2022244194134-s0056-0000000420814525-0243-s_tp.fits",
+      "bytes": 25920,
+      "sha256": "1faeffc2d65d4b82b4367a8093b8083f33b73e9e9cdfa79c5980add3d3a6b11f",
+      "range": "0-25919"
+    },
+    {
+      "file": "tess2022244194134-s0056-0000000420814525-0243-s_tp.fits.row-8016",
+      "url": "https://stpubdata.s3.amazonaws.com/tess/public/tid/s0056/0000/0004/2081/4525/tess2022244194134-s0056-0000000420814525-0243-s_tp.fits",
+      "bytes": 2888,
+      "sha256": "82c026a7a7cd4440773251c29f719895ebdca87723e1a37ce53c0dadf9abcb15",
+      "range": "23176128-23179015"
+    },
+    {
+      "file": "tess2022244194134-s0056-0000000420814525-0243-s_tp.fits.aperture-ext",
+      "url": "https://stpubdata.s3.amazonaws.com/tess/public/tid/s0056/0000/0004/2081/4525/tess2022244194134-s0056-0000000420814525-0243-s_tp.fits",
+      "bytes": 11520,
+      "sha256": "ac1f2429174ad7ea9c3ffafc3e73feffb8a7937ff4c78e6b10c1bb8dd4f70aac",
+      "range": "58014720-58026239"
+    }
+  ],
+  "transformation": {
+    "script": "tools/data-packs/image-packs.mjs",
+    "version": "1.0.0",
+    "options": {
+      "row": 8016
+    },
+    "steps": [
+      "Read by byte range: the headers (bytes 0 to 25,919), row 8016 of the PIXELS table, and the aperture extension.",
+      "Check the object, sector, units, time system, cadence and QUALITY; keep FLUX and FLUX_ERR squared, big-endian to little-endian float32, with the TAN world coordinates, the optimal aperture (bit 2) and the gain and read noise of the CCD output."
+    ],
+    "record": {
+      "file": {
+        "bytes": 58026240,
+        "etag": "6d1885f6c555346374e20e6f762d8e5e"
+      },
+      "row": 8016,
+      "cadenceNo": 1158430,
+      "timeBtjd": 2836.3902935721053,
+      "quality": 0,
+      "output": "D",
+      "effectiveExposureSeconds": 95.04,
+      "npixsap": 23,
+      "crowdsap": 0.99778908,
+      "flfrcsap": 0.95060998,
+      "peakFlux": 42971
+    }
+  },
+  "assumptions": [
+    "No documented number gives the highest linear pixel: the limit is the saturation level, with the 1 to 2 percent of the release notes as the uncertainty near it. The frame’s peak is 42 percent of it.",
+    "FLUX_ERR is the SPOC’s 1-sigma noise, not recomputed from gain and read noise."
+  ],
+  "compatible": {
+    "widgets": [],
+    "investigations": []
+  },
+  "offline": "none",
+  "derived": {
+    "file": "js/data/observations/tessHd209458S56Frame.js",
+    "bytes": 6404,
+    "sha256": "f3fa118f5e003ee95f8acc0c4df65f3577b2a84767f6b0cc855bc206e72ac03e",
+    "sidecar": {
+      "file": "frames/tess-hd209458-s56-frame.json",
+      "bytes": 1745,
+      "sha256": "6c33072c982e8db07bb4ac3c55cfbc648dd622c63a02b5a259b35e8677a904fa"
+    }
+  },
+  "validation": {
+    "check": "the sum of the frame’s flux over the pixels of the SPOC optimal aperture equals the light curve’s SAP_FLUX for the same cadence (relative 1e-5), and the peak pixel is below the saturation level",
+    "against": [
+      {
+        "quantity": "SAP_FLUX (electron/s)",
+        "value": 214537.7,
+        "unit": "electron/s",
+        "ref": "SAP_FLUX, CADENCENO 1158430, tess2022244194134-s0056-0000000420814525-0243-s_lc.fits (SHA-256 1b76b4a4b73e24954fa6e29a7e28a174685113ecdbad1bf10ef0e7b766ce99e9)"
+      }
+    ],
+    "result": {
+      "apertureSum": 214537.7,
+      "relativeDifference": 5.8e-8,
+      "peak": 42971,
+      "saturationLevel": 101010
+    }
+  }
+}

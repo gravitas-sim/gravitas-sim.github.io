@@ -149,6 +149,7 @@
     "photometry:validate": "node tools/photometry-validate.mjs",
     "detection:validate": "node tools/detection-validate.mjs",
     "overlay:validate": "node tools/overlay-validate.mjs",
+    "imagepacks:validate": "node tools/image-packs-validate.mjs",
     "injection:validate": "node tools/injection-validate.mjs",
     "frame-pipeline:validate": "node tools/frame-pipeline-validate.mjs",
     "astrometric-series:validate": "node tools/astrometric-series-validate.mjs",

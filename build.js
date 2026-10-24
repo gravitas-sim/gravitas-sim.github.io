@@ -50,6 +50,10 @@ const STATIC_FILES = [
   'gaia/solar-neighbourhood.json',
   'gaia/ngc2420.json',
   'gaia/milky-way-rotation-curve.json',
+  'frames/tess-hd209458-s56-frame.json',
+  'frames/sdo-hmi-continuum-20240510.json',
+  'frames/galileo-moon-19921207.json',
+  'frames/hirise-cerberus-fossae.json',
   // The variable-star tables' rows (data-packs/tess-su-dra-s15.json and two
   // more, Roadmap II Prompt 96), fetched by the variable-star instruments.
   'variables/tess-su-dra-s15.json',

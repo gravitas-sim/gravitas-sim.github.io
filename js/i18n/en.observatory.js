@@ -32,6 +32,14 @@ export const EN_OBSERVATORY = {
   'obs.fixture.sdss-m': 'SDSS DR18: an M star',
   'obs.fixture.gwosc-events': 'Five gravitational-wave events (GWOSC)',
   'obs.fixture.tess-aperture': 'HD 209458: the TESS aperture mask',
+  'obs.fixture.tess-frame':
+    'HD 209458: one TESS frame, calibrated flux and error',
+  'obs.fixture.sdo-hmi-sun':
+    'The Sun in HMI continuum light (a picture, for marking only)',
+  'obs.fixture.galileo-moon':
+    'The Moon from Galileo (a picture, for marking only)',
+  'obs.fixture.hirise-cerberus-fossae':
+    'Mars from HiRISE: Cerberus Fossae (a picture, for marking only)',
 
   'obs.fixture.ngc2420-photometry':
     'NGC 2420: SDSS photometry (a cluster and its field)',

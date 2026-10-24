@@ -50,7 +50,9 @@ noisy five-star fit against astropy's on the same stars and tangent point to
 the authentic TESS header of the repository (a TAN header of CDELT and PC) read
 by `fromHeader` against astropy on every pixel to 1e-9 degree. **Not run until
 Prompt 189:** a pinned astropy solution on an authentic frame with matched
-reference stars (b5, e1): nothing was downloaded and nothing fabricated.
+reference stars (b5, e1): Prompt 189 ran the header leg on its frame and one
+star's consistency, and b5 stays not run (one catalogued star in its frame; see
+`IMAGE_PACKS.md`, contract part 2).
 
 **(c) Coverage.** On a fixed seeded ensemble (3,000 trials, 5 to 8 stars, random
 truth), the stated sigma covers the truth at 64 to 72 percent for one sigma and
@@ -177,7 +179,7 @@ not run, 0 failed.
 | b2 oracle fit | 0.0018 px | 0.01 | pass |
 | b3 oracle registration | 3.3e-17 rad, 3.4e-13 px | 1e-9, 1e-8 | pass |
 | b4 oracle on the authentic TESS header | 1.1e-13 deg over 1,023 px | 1e-9 | pass |
-| b5 oracle on an authentic fit | | | NOT RUN until 189 |
+| b5 oracle on an authentic fit | | | NOT RUN (189's frame has one star; request R2) |
 | c1 coverage, affine (1 sigma, 1.96 sigma) | 0.693, 0.953 | 0.64-0.72, 0.935-0.975 | pass |
 | c2 coverage, similarity | 0.693, 0.953 | same | pass |
 | c3 coverage, with catalogue noise | 0.684, 0.952 | same | pass |
@@ -191,7 +193,7 @@ not run, 0 failed.
 | d7 malformed input | 5 of 5 refused with the right code | all | pass |
 | d8 registration refusals | 500 of 500 flagged | 0.99 | pass |
 | d9 residuals always present | yes | yes | pass |
-| e1 authentic frame under a fixed contract | | | NOT RUN until 189 |
+| e1 authentic frame under a fixed contract | 189: header 1.1e-13 deg over 143 px, reference star 0.17 px from its centroid (no fit) | 1e-9 deg, 0.5 px | pass; the fit is not run (R2) |
 
 **A defect in the harness, found on the first run.** The first run of d7 failed:
 the duplicate-pixel case replaced the wrong star, so the case under test was
@@ -205,6 +207,10 @@ b5 (a pinned astropy solution on an authentic frame with matched reference
 stars) and e1 (one authentic frame under a fixed analysis contract) need an
 authentic frame with a catalogue match, which Prompt 189 lands. No frame was
 fetched, none was simulated, and the numbers above do not stand in for them.
+Update: Prompt 189 landed one authentic frame (11 by 13 pixels, one dominant star)
+and ran the header leg and a one-star consistency on it, both passing; b5 and e1
+as written stay not run for want of three catalogued stars (`IMAGE_PACKS.md`,
+request R2).
 The Spanish text of the panel was written without a fluent reader and is
 unread by one.
 
@@ -451,7 +457,7 @@ run (b6); 6 evidence rows.
 | b3 joint fit against scipy's nonlinear fit (3 series) | 0.0048 sigma; sigma_p 7.8e-6; chi2 7.1e-7 | 0.1; 2e-3; 5e-3 | pass |
 | b4 proper motion against `curve_fit` (4 series) | 8.8e-11, 9.5e-12, covariance 2.4e-16 | 1e-8 | pass |
 | b5 UTC to TT and TDB against astropy (40 dates) | 2.6e-12 s; 2.8e-5 s | 1e-6; 1e-4 | pass |
-| b6 an authentic series under a fixed contract | | | NOT RUN until 189 |
+| b6 an authentic series under a fixed contract | 189: one epoch refused, `too-few-epochs` | | the series is not run (R3) |
 | c1 joint coverage, p, mux, muy (3,000) | 1 sigma 0.687, 0.695, 0.689; 1.96 sigma 0.951, 0.944, 0.951 | 0.64-0.72; 0.935-0.975 | pass |
 | c2 distance interval, symmetric regime, never open | 0.671, 0.955; open 0 | same; 0 | pass |
 | c3 distance interval, p = 2.5 sigma, open ones counted | 0.675, 0.942; arm ratio 7.5; open above 7.2% (68.27%) | same; at least 1.5 | pass |
@@ -516,7 +522,9 @@ a year gives a parallax within 3 sigma of zero, which nothing here can flag.
 
 b6 and the roadmap's tier (e): an authentic series under a fixed analysis contract.
 No series was fetched, none was simulated, and the numbers above do not stand in for
-it. The arrangement for the ellipse drawn **over the frame** is not built: the path
+it. Update: Prompt 189's one authentic epoch is refused by `fitMotion` with
+`too-few-epochs`, as it should be; an authentic series stays not run
+(`IMAGE_PACKS.md`, request R3). The arrangement for the ellipse drawn **over the frame** is not built: the path
 and the residuals are drawn through the plot component, beside the frame, and the
 frame itself is not annotated. The panel's Spanish was written without a fluent
 reader and is unread by one.

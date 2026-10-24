@@ -333,6 +333,13 @@ export const NEVER_PRECACHED = [
   // approval does not cover); until it has been fetched once the page says the
   // import needs the network. D-R10-59.
   /^(js\/observatory\/imageImport\.js|js\/i18n\/(en|es)\.imageImport\.js)$/,
+  // The image packs (Prompt 189, IMAGE_PACKS.md): the four records, the loader
+  // that checks and decodes their frames files, fetched when a reader opens
+  // one of the four images in the Observatory. The frames files (frames/) are
+  // not in any list: they are pictures, fetched at run time and kept by the
+  // service worker after their first online use. Nothing here is installed, so
+  // no precache tier grows. D-R10-65.
+  /^(js\/observatory\/imagePacks\.js|js\/data\/observations\/(tessHd209458S56Frame|sdoHmiContinuum20240510|galileoMoon19921207|hiriseCerberusFossae)\.js)$/,
   // The validation suite's groups and harness: fetched when the suite runs,
   // like physicsChecks.js itself (ON_DEMAND_ONLY below).
   /^js\/validation\/(groups\/|harness\.js$)/,

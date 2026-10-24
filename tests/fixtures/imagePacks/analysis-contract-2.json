@@ -1,0 +1,70 @@
+{
+  "format": "gravitas.image-packs-analysis-contract/1",
+  "prompt": 189,
+  "part": 2,
+  "committedBefore": "any of the legs below was run, and before the oracle was extended to them. Nothing of the legs below was read before this file: the numbers known are the header keys the pack's manifest records (CRPIX, CRVAL, CDELT, PC) and the contents of the committed first contract. Part 1 is tests/fixtures/imagePacks/analysis-contract.json (commit 33e2a8c5), which this file does not change.",
+  "why": "Pull requests #433 (Prompt 185) and #434 (Prompt 186) are in v3, and Prompts 181 and 182 left their authentic legs NOT RUN until an image pack landed. The pack of this PR holds ONE authentic frame (the TESS cadence of tess-hd209458-s56-frame, 11 by 13 pixels, one dominant star). This file says, before any result, which of the earlier legs that frame can run, what each is judged against, and which cannot run and why. Nothing was downloaded for them and nothing was simulated.",
+  "rule": "Bounds that exist in a committed thresholds file are referenced by file and check id and read from it by the test. A bound stated here is stated with its derivation. A leg that fails is reported with its value; no bound in this file or in any referenced file is changed after a result is seen. A refusal with a stable code is a result where the leg says so.",
+  "frame": {
+    "pack": "tess-hd209458-s56-frame",
+    "same": "the frame, the plan (brightest detection, aperture, recentred position) and the oracle of part 1"
+  },
+  "legs": {
+    "astrometry.b4.pack": {
+      "prompt": 181,
+      "references": "tests/fixtures/astrometry/thresholds.json, check b4.oracleAuthenticHeader (boundDeg)",
+      "what": "the world coordinate system of the pack's sidecar (CRPIX, CRVAL, CDELT, PC, RA---TAN and DEC--TAN) read by js/measure/astrometry.js fromHeader, pixel to sky on every pixel of the 11 by 13 frame, against astropy.wcs (wcslib) all_pix2world given the same header values, in degrees. This is Prompt 181's b4 leg on the header the panel receives from the pack, not the b5 fit.",
+      "bounds": { "boundDeg": "read from the referenced check" }
+    },
+    "astrometry.e1.single": {
+      "prompt": 181,
+      "what": "the one star the frame can be tied to: the SPOC reference position of the target (CRVAL) carried to a pixel by the pack's WCS (pixelOf, FITS pixels, 1 is the centre of the first pixel) against the star's measured recentred centroid of part 1 (photometry.e2, plus one for the FITS convention). CRVAL is the archive's own position of the target, not an independent catalogue, so this tests the WCS against the star's light and nothing about a fit.",
+      "bounds": { "separationPix": 0.5 },
+      "why0.5": "half a pixel (10 arcseconds): within it the WCS names the pixel the star's light is in; a tighter bound would claim an accuracy of the SPOC pointing model that this PR cannot cite, and a looser one would not tell the target from its neighbour pixel"
+    },
+    "astrometry.b5.fit": {
+      "prompt": 181,
+      "status": "NOT RUN: a fit needs at least three catalogue stars matched to measured centroids (Prompt 181's minStars); the frame has one source above the contract's detection threshold and no catalogue of its neighbours is in the repository. See the request in IMAGE_PACKS.md."
+    },
+    "overlay.b5.pack": {
+      "prompt": 182,
+      "references": "tests/fixtures/overlay/thresholds.json, check b4.oracleSkyMap (boundPix)",
+      "what": "the repository's only star catalogue, the bright-star pack (sky/bright-stars.json, 904 stars to V 4.5, J2000.0, as the overlay reads it) laid over the authentic frame: js/measure/overlay.js starsIn lists the stars that fall in the frame, and the pixel of every pack star within 25 degrees of the frame centre (js/measure/astrometry.js pixelOf, the function the overlay uses) is compared with astropy.wcs all_world2pix given the same header values, in pixels. The list must equal the oracle's list of the stars whose astropy pixel lies in the frame. An empty list is a result: the target is V 7.6.",
+      "bounds": {
+        "boundPix": "read from the referenced check",
+        "list": "equal to the oracle's"
+      }
+    },
+    "overlay.e1.pair": {
+      "prompt": 182,
+      "status": "NOT RUN: an authentic calibrated pair with a moving object needs two authentic frames of one field; the packs hold one authentic frame of a field with a WCS."
+    },
+    "framepipeline.g1.refusal": {
+      "prompt": 185,
+      "what": "the authentic frame as a sequence of one (frameAt, the electrons of the pack's pixels, its time) given to js/measure/frameSeries.js checkSequence under the lesson's parameters: the pipeline refuses it with the stable code 'too-few-frames' and states used 1 and need 5 (RULES.minFrames). A refusal is the result.",
+      "bounds": { "code": "too-few-frames", "used": 1, "need": 5 }
+    },
+    "framepipeline.g1.cosmic": {
+      "prompt": 185,
+      "what": "the pipeline's one-frame stage on the authentic frame, reduceOne with calibration 'electrons' (no masters, the pack's gain and read noise): its cosmic-ray mask flags none of the 23 pixels of the SPOC optimal aperture. A pixel of a smooth stellar core flagged as a cosmic ray would be a false positive the pipeline then replaces by a median. The pixels flagged outside the aperture are reported, not judged.",
+      "bounds": { "flaggedInAperture": 0 }
+    },
+    "framepipeline.g1.sequence": {
+      "prompt": 185,
+      "status": "NOT RUN: a frame sequence needs at least five authentic frames of one field (RULES.minFrames), and the run needs at least three comparison candidates, three matched stars to register (RULES.register.minMatches) and the marks a detection finds. The pack holds one cadence of a field with one dominant star: even a sequence of its cadences would be refused for want of comparison stars. See the request in IMAGE_PACKS.md."
+    },
+    "series.b6.refusal": {
+      "prompt": 186,
+      "what": "the one authentic epoch (the measured centroid carried to the sky by the pack's WCS, at the frame's TDB time, with a stated sigma of 0.1 pixel of the plate scale) given to js/measure/astrometric-series.js fitMotion: it refuses with the stable code 'too-few-epochs' (n 1, min 2). A refusal is the result.",
+      "bounds": { "code": "too-few-epochs", "n": 1, "min": 2 }
+    },
+    "series.b6.series": {
+      "prompt": 186,
+      "status": "NOT RUN: an authentic series needs at least two epochs for a motion and eight over nearly a year for a parallax (RULES). The packs hold one epoch. See the request in IMAGE_PACKS.md."
+    },
+    "calibration.authentic": {
+      "prompt": "181 as the coordinator named it (calibration); the detector lab's calibration is Prompt 179 onward and D-CALIB-01",
+      "status": "NOT RUN: the TESS frame is calibrated by the archive (SPOC), and no bias, dark or flat frame of it is in the packs, so the lab's calibrate has nothing authentic to reduce. The run condition of D-CALIB-01 (no authentic calibration frames ship) stands."
+    }
+  }
+}

@@ -25,8 +25,15 @@ export function galacticPack(name) {
 export const diskFetch = async url => {
   const file = new URL(`.${url}`, ROOT);
   try {
-    const text = readFileSync(file, 'utf8');
-    return { ok: true, status: 200, json: async () => JSON.parse(text) };
+    const bytes = readFileSync(file);
+    return {
+      ok: true,
+      status: 200,
+      json: async () => JSON.parse(bytes.toString('utf8')),
+      // The image packs' frames files are checked byte for byte (Prompt 189).
+      arrayBuffer: async () =>
+        bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.length),
+    };
   } catch {
     return { ok: false, status: 404, json: async () => ({}) };
   }
