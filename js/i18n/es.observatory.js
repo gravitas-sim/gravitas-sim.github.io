@@ -313,6 +313,10 @@ export const ES_OBSERVATORY = {
   'obs.ser.title': 'Movimiento y paralaje en el tiempo',
   'obs.ser.offline':
     'La herramienta de movimiento y paralaje se está cargando. Se descarga al abrirla por primera vez, así que necesita la red esa primera vez.',
+  'obs.orb.title':
+    'Órbita de una estrella binaria y trayectoria de un objeto en movimiento',
+  'obs.orb.offline':
+    'Las herramientas de órbita y trayectoria se están cargando. Se descargan al abrirlas por primera vez, así que necesitan la red la primera vez.',
   'obs.ph.offline':
     'La herramienta de fotometría se está cargando. Se descarga al abrirla por primera vez, así que necesita la red esa primera vez.',
   'obs.gd.title': 'Investigaciones guiadas',

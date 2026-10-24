@@ -308,6 +308,9 @@ export const EN_OBSERVATORY = {
   'obs.ser.title': 'Motion and parallax over time',
   'obs.ser.offline':
     'The motion and parallax tool is loading. It is fetched when first opened, so it needs the network the first time.',
+  'obs.orb.title': 'Orbit of a binary star and track of a moving object',
+  'obs.orb.offline':
+    'The orbit and track tools are loading. They are fetched when first opened, so they need the network the first time.',
   'obs.ph.offline':
     'The photometry tool is loading. It is fetched when first opened, so it needs the network the first time.',
   'obs.gd.title': 'Guided investigations',
