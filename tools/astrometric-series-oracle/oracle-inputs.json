@@ -1,0 +1,72 @@
+{
+  "format": "gravitas.astrometric-series-oracle-inputs/1",
+  "prompt": 186,
+  "note": "Written by hand before the oracle ran and before js/measure/astrometric-series.js existed. The oracle reads this file and writes tests/fixtures/astrometric-series/oracle-results.json.",
+  "earthGrid": { "startJd": 2460680.5, "stepDays": 20, "count": 365 },
+  "timeCases": { "startJdUtc": 2460680.5, "stepDays": 184.3, "count": 40 },
+  "cases": [
+    {
+      "id": "A",
+      "ra": 265.0,
+      "dec": 62.0,
+      "parallax": 0.12,
+      "mu": [0.35, -0.18],
+      "sigma": 0.004,
+      "epochs": {
+        "kind": "even",
+        "startJd": 2461045.5,
+        "spanDays": 365,
+        "n": 24
+      },
+      "noiseSeed": 101
+    },
+    {
+      "id": "B",
+      "ra": 75.0,
+      "dec": 22.0,
+      "parallax": 0.045,
+      "mu": [-0.08, 0.06],
+      "sigma": 0.006,
+      "epochs": {
+        "kind": "random",
+        "startJd": 2461465.5,
+        "spanDays": 356,
+        "n": 16,
+        "seed": 202
+      },
+      "noiseSeed": 102
+    },
+    {
+      "id": "C",
+      "ra": 150.0,
+      "dec": -35.0,
+      "parallax": 0.03,
+      "mu": [1.2, -0.8],
+      "sigma": 0.008,
+      "epochs": {
+        "kind": "random",
+        "startJd": 2461100.5,
+        "spanDays": 1095,
+        "n": 40,
+        "seed": 303
+      },
+      "noiseSeed": 103
+    },
+    {
+      "id": "D",
+      "ra": 210.0,
+      "dec": 10.0,
+      "parallax": 1e-6,
+      "mu": [0.5, -0.3],
+      "sigma": 0.02,
+      "epochs": {
+        "kind": "even",
+        "startJd": 2461041.5,
+        "spanDays": 1461,
+        "n": 6
+      },
+      "noiseSeed": 104
+    }
+  ],
+  "noiseFree": ["A", "B"]
+}
