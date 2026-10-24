@@ -149,6 +149,7 @@
     "photometry:validate": "node tools/photometry-validate.mjs",
     "detection:validate": "node tools/detection-validate.mjs",
     "injection:validate": "node tools/injection-validate.mjs",
+    "astrometric-series:validate": "node tools/astrometric-series-validate.mjs",
     "i18n:freshness": "node tools/i18n-freshness.mjs",
     "author:check": "node tools/author-check.mjs",
     "author:strict": "node tools/author-check.mjs --warnings",

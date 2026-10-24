@@ -298,6 +298,13 @@ export const NEVER_PRECACHED = [
   // not cover, so none of the files is installed and the panel says it needs the
   // network the first time. D-R10-62.
   /^(js\/measure\/inject\.js|js\/observatory\/imageInject\.js|js\/i18n\/(en|es)\.imageInject\.js)$/,
+  // Motion and parallax over time (Prompt 186, ASTROMETRY.md): the astrometric
+  // series kernel, the panel and its words, fetched when a reader opens the
+  // series disclosure inside the sky-coordinates panel. Same reason as the four
+  // above: the idle tier has no room under a data-budget ceiling the standing
+  // size approval does not cover, so none of the files is installed and the
+  // panel says it needs the network the first time. D-R10-64.
+  /^(js\/measure\/astrometric-series\.js|js\/observatory\/imageSeries\.js|js\/i18n\/(en|es)\.imageSeries\.js)$/,
   // The image import (Prompt 188, IMAGE_IMPORT.md): the panel and its words,
   // fetched when a reader first chooses a FITS image, a PNG or a JPEG in the
   // Observatory's file box. Not installed, for the reason of the photometry

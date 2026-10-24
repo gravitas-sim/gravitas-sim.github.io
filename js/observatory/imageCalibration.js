@@ -836,13 +836,46 @@ export async function mountCalibration(box, ctx) {
     obs = o;
     showHeader();
     if (saved) restore(saved);
+    series?.then(p => p?.update());
   }
   new MutationObserver(label).observe(document.documentElement, {
     attributes: true,
     attributeFilter: ['lang'],
   });
   label();
-  ctx.marks.cal = { block, update };
+  // Motion and parallax over time (ASTROMETRY.md): its own lazy chunk, opened from here.
+  const seriesTitle = el('summary', { textContent: t('obs.ser.title') });
+  const seriesWait = el('p', { textContent: t('obs.ser.offline') });
+  const seriesBody = el('div', {}, seriesWait);
+  const seriesBox = el(
+    'details',
+    { className: 'ui-disclosure', id: 'obsSeriesPanel' },
+    seriesTitle,
+    seriesBody
+  );
+  labelled.push([seriesTitle, 'obs.ser.title', 'textContent']);
+  labelled.push([seriesWait, 'obs.ser.offline', 'textContent']);
+  box.append(seriesBox);
+  let series = null;
+  seriesBox.addEventListener('toggle', () => {
+    if (seriesBox.open)
+      series ??= import('./imageSeries.js').then(
+        m => m.mountSeries(seriesBody, ctx),
+        () => (series = null)
+      );
+  });
+  /** The sky position of a pixel under the calibration in use, with its scale and uncertainty, or null. */
+  const sky = (x, y) => {
+    const w = wcsNow();
+    if (!w) return null;
+    const u = chosen === 'fit' ? uncertaintyAt(fit, x, y) : null;
+    return {
+      ...skyOf(w, x, y),
+      scale: describeWcs(w).scale,
+      sigma: u ? [u.east, u.north] : null,
+    };
+  };
+  ctx.marks.cal = { block, update, sky };
   update();
   if (!tbody.rows.length && !saved) addRow();
   return { update };

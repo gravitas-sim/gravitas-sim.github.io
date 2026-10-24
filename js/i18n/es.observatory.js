@@ -304,6 +304,9 @@ export const ES_OBSERVATORY = {
   'obs.inj.title': 'Completitud: lo que el detector no ve',
   'obs.inj.offline':
     'La herramienta de completitud se está cargando. Se descarga al abrirla por primera vez, así que necesita la red esa primera vez.',
+  'obs.ser.title': 'Movimiento y paralaje en el tiempo',
+  'obs.ser.offline':
+    'La herramienta de movimiento y paralaje se está cargando. Se descarga al abrirla por primera vez, así que necesita la red esa primera vez.',
   'obs.ph.offline':
     'La herramienta de fotometría se está cargando. Se descarga al abrirla por primera vez, así que necesita la red esa primera vez.',
   'obs.gd.title': 'Investigaciones guiadas',

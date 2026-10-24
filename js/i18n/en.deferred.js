@@ -3718,6 +3718,7 @@ export const EN_DEFERRED = {
   'nb.source.image-photometry': 'Photometry on an image',
   'nb.source.image-detection': 'Point-spread function of an image',
   'nb.source.image-injection': 'Completeness of an image',
+  'nb.source.image-series': 'Motion and parallax of a source',
   'nb.flag.missionModel':
     'impulsive burns, patched conics and point masses: a teaching model of a mission',
   'nb.flag.notOperational': 'not for operational mission design or navigation',

@@ -110,6 +110,10 @@ export const SOURCE = Object.freeze({
   // request that runs it again (js/observatory/imageInject.js,
   // js/measure/inject.js).
   IMAGE_INJECTION: 'image-injection',
+  // The motion and parallax of one source over time: a proper motion or a joint
+  // fit with its frame statement and distance interval, and the request that
+  // runs it again (js/observatory/imageSeries.js, js/measure/astrometric-series.js).
+  IMAGE_SERIES: 'image-series',
 });
 
 /** The sources this build can capture from. */
@@ -136,6 +140,7 @@ export const SOURCES = [
   SOURCE.IMAGE_PHOTOMETRY,
   SOURCE.IMAGE_DETECTION,
   SOURCE.IMAGE_INJECTION,
+  SOURCE.IMAGE_SERIES,
 ];
 
 /** How long a student's prose may be, per field. */
