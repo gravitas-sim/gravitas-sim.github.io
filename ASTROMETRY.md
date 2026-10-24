@@ -520,3 +520,101 @@ it. The arrangement for the ellipse drawn **over the frame** is not built: the p
 and the residuals are drawn through the plot component, beside the frame, and the
 frame itself is not annotated. The panel's Spanish was written without a fluent
 reader and is unread by one.
+
+# Orbit fitting and moving-object tracks (Prompt 187)
+
+Roadmap III, Prompt 187. Part A (`ORBIT_FIT_GATE.md`) committed the
+identifiability criterion and its synthetic test set before any fit and gave
+**verdict A**: the criterion holds, short arcs refuse, and both depths ship. This
+part is written in the order the work was done: the validation contract first
+(below), and the rest after the measurements.
+
+## The validation contract for orbit fitting (committed)
+
+The bounds are in `tests/fixtures/orbit-fit/thresholds.json` (the gate's are in
+`gate-thresholds.json`) and were committed, with this section, after the gate's
+verdict and before the production module's added rules, the track module, the
+oracle's inputs, script and results, the validation tool, the tests and the panel
+existed (the branch history shows the order). A check a measurement crosses is a
+failed check, not a reason to move its bound; only Carl resets one. The checks
+follow the roadmap's section 7.5.8.
+
+**The model and the criterion** are those of `ORBIT_FIT_GATE.md`: a circular
+apparent orbit (5 parameters) and the Thiele-Innes model through the
+eccentricity vector `(h, k)` (7 parameters), weighted least squares with each
+epoch's stated covariance (separation and position angle are converted with their
+covariance), a refusal below the committed criterion, the node in `[0, 180)`.
+Part B adds two things to the criterion, both stricter and neither part of the
+gate's measurement: **`period-ambiguous`** (another polished local minimum whose
+period differs by more than `max(0.02, 6 sigma)` in the logarithm and whose
+chi-squared is within 4 of the best: the data cannot choose the period, as an
+exactly regular cadence cannot) and the mass sum's own refusals (a parallax of
+less than 3 times its uncertainty, no frame statement, an absolute parallax with
+no source).
+
+**The mass sum** `M = K (a / parallax)^3 / P^2` solar masses (`K` from the IAU
+nominal `GM_sun`, the au and the Julian year: 1.0000349...), `a` and the parallax
+in one unit, `P` in Julian years. The orbit's `ln(a^3 / P^2)` is a log-normal from
+the fit's covariance and the parallax a normal truncated above zero (the
+parallax profile of Prompt 186 is exactly a parabola), 20,000 seeded draws, and
+the 0.6827 and 0.95 percentile intervals; the frame statement of the parallax
+(relative to the reference stars, or absolute with its source) is always printed
+with the mass sum.
+
+**The moving-object track.** Sources at several frames, each a sky position with
+its uncertainty and the frame's time; the mover is the source whose positions
+make a straight line in the tangent plane at a rate more than 5 sigma from zero
+while the static sources stay within 3 sigma of none: candidate tracks are built
+from every pair of detections in two frames, a middle detection joins within 4
+sigma of the line, a track needs 3 detections (at least 3 frames), a straight
+line is fitted by weighted least squares with its chi-squared and covariance, and
+a track that shares a detection with a better one is dropped. The result is the
+rate in arcseconds per hour and the position angle (north through east) with
+their uncertainties; two movers are reported as `several-movers` and one is
+never chosen; no mover is `no-mover`; fewer than 3 frames is `too-few-frames`. A
+track is a rate and an angle and nothing more: three positions on a short arc do
+not give an orbit (Prompt 197's gate is where that is decided).
+
+**(a) Analytic and synthetic recovery.** The Thiele-Innes closed form against the
+3-D kernel's elements-to-state conversion (`js/lab3d/elements.js`, its own Kepler
+solver and rotation) over 300 element sets (`e` up to 0.95, every inclination)
+to 1e-9 arcseconds at `a = 1`; the same against Prompt 148's layer (3-D, sky
+units) over 100 sets to 1e-9; the constants to elements and back to 1e-10;
+noise-free 120 percent arcs of 50 seeded eccentric orbits recovered (period and
+`a` 1e-5 relative, `e` 1e-5, angles 1e-3 degree, periastron epoch 1e-4 year) and
+of 50 circular orbits (1e-6 relative, 1e-4 degree); Kepler's third law for
+1 au and 1 Julian year against astropy's `G`, `M_sun` and au to 1e-9.
+
+**(b) The independent oracles.** The 3-D kernel's reference corpus: problem R1 (a
+two-body orbit, `e` 0.6, inclination 40, node 30, argument of periapsis 60
+degrees) integrated by the kernel itself for 1.2 periods, projected on the sky at
+16 epochs, and its elements recovered (1e-6 relative, 1e-4 degree). `scipy`
+(`optimize.least_squares`, trf, an independent Kepler solver) on five noisy
+elliptical and three circular series made in Python: `P`, `a` and `e` each within
+0.1 formal sigma of this fit and chi-squared within 1e-4, the formal sigmas of `P`
+and `a` within 1 percent of the oracle's `(J^T J)^-1`; five pinned mover tracks
+against scipy's weighted line and astropy's position angle (rate 1e-6 relative,
+angle 1e-3 degree); Kepler's constant against astropy's. The oracle is Prompt
+180's virtual environment (numpy, scipy, astropy, photutils; nothing added), run
+offline under `python -I`, with no Gravitas code.
+
+**(c) Coverage on seeded ensembles.** Elliptical fits of 250 gate-style orbits at
+110 percent: the 0.6827 and 0.95 intervals cover the truth of `P` (profile), `a` and
+`a^3/P^2` at 0.60 to 0.76 and 0.90 to 0.99; the same for the circular model on 250
+circular truths; the mass sum's intervals at parallax S/N 10 and 4 (250 trials
+each, the S/N 4 interval asymmetric by at least 1.3); the track's rate and angle
+over 300 fields.
+
+**(d) Refusals.** 10 and 30 percent arcs refuse (0.99 and 0.95, both depths, a
+fresh stream); five epochs (elliptical) and four (circular) and malformed rows are
+refused with their codes; an exactly regular cadence is refused `period-ambiguous`
+in at least 0.95 of 100 series and the jittered cell false-alarms at most 0.02;
+the circular model refuses eccentric orbits (0.95); uncertainties 0.3 of the true
+noise are refused `inconsistent` (0.99); separation and angle agree with offsets
+to 1e-8; the mass sum's refusals; the node always in `[0, 180)` with the ambiguity
+stated; a static field returns `no-mover` (at most 0.01 false alarms in 300), the
+mover is identified among 30 static sources in at least 0.99 of 500 fields, and
+two frames, a slow mover and two movers get their codes.
+
+**(e) Authentic data.** Not run: no authentic visual-binary arc or asteroid track
+exists in the repository and nothing was fetched.
