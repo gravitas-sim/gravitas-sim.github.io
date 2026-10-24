@@ -57,6 +57,13 @@ export const FRAME_FWHM =
 export const DETECTION = CONTRACT.legs['detection.e2'].contract.parameters;
 /** The SAP_FLUX of the same cadence in the pinned light-curve file (the contract's pack.integrity). */
 export const SAP_FLUX = 214537.7;
+/**
+ * The adapter measures a rate in electrons (js/measure/photometry.js adapt, the
+ * defect this frame found): the oracle ran on the pixels as the archive has
+ * them, in electron/s, so its dimensional results are multiplied by the
+ * exposure, exactly, before they are compared.
+ */
+const secondsOf = ctx => ctx.mod.PACK.image.sidecar.exposure.seconds;
 
 /** The pack as the Observatory opens it, from the committed files. */
 export async function openFrame() {
@@ -176,12 +183,13 @@ function photometry(ctx, res) {
     });
     return;
   }
+  const t = secondsOf(ctx);
   const w = {
-    sum: rel(me.net + me.area * me.sky, P.sum_exact),
-    level: rel(me.sky, P.annulus.level),
-    scatter: rel(me.skyScatter, P.annulus.scatter),
+    sum: rel(me.net + me.area * me.sky, P.sum_exact * t),
+    level: rel(me.sky, P.annulus.level * t),
+    scatter: rel(me.skyScatter, P.annulus.scatter * t),
     n: Math.abs(me.skyPixels - P.annulus.n),
-    variance: rel(me.sourceVariance, P.err_exact ** 2),
+    variance: rel(me.sourceVariance, (P.err_exact * t) ** 2),
   };
   const T = k => PHOT[k].bound ?? PHOT[k].boundRelative;
   add(
@@ -229,7 +237,7 @@ function photometry(ctx, res) {
     x: P.centroid.case.x0,
     y: P.centroid.case.y0,
     half: ap_half(),
-    sky: q.background,
+    sky: q.background * t,
     variance: a.variance,
   });
   const d = c.ok ? Math.hypot(c.x - q.flux.x, c.y - q.flux.y) : Infinity;
@@ -243,17 +251,32 @@ function photometry(ctx, res) {
     }
   );
   // the stated applicability limit of the contract, not a precision claim
-  const sap = me.net / SAP_FLUX - 1;
+  const sap = me.net / t / SAP_FLUX - 1;
   const lim = L.bounds.netOverSap.value;
   add('photometry.e2.netOverSap', Math.abs(sap), Math.abs(sap) <= lim, {
     bound: lim,
-    note: `net ${me.net.toFixed(1)} electron/s of the circular aperture against SAP_FLUX ${SAP_FLUX} (signed ${sap.toExponential(2)})`,
+    note: `net ${(me.net / t).toFixed(1)} electron/s of the circular aperture against SAP_FLUX ${SAP_FLUX} (signed ${sap.toExponential(2)})`,
   });
+  // The unit and the magnitude (Prompt 189's finding): the net is in electrons,
+  // and the instrumental magnitude is that of the rate, against photutils' own
+  // sum and annulus mean on the archive's pixels (electron/s), at b1's bound.
+  const rateNet = P.sum_exact - Math.PI * r * r * P.annulus.level;
+  const magOracle = -2.5 * Math.log10(rateNet);
+  const dm = Math.abs(me.mag - magOracle);
+  add(
+    'photometry.e2.magnitude',
+    dm,
+    me.unit === 'electron' && dm <= T('b1.apertureSumExact'),
+    {
+      bound: T('b1.apertureSumExact'),
+      note: `unit ${me.unit}; instrumental magnitude ${me.mag.toFixed(4)} against ${magOracle.toFixed(4)} from photutils' sum and annulus mean of the rate`,
+    }
+  );
   rows.push({
     id: 'photometry.e2.reported',
     measured: null,
     pass: null,
-    note: `net ${me.net.toFixed(1)} +/- ${me.sigma.toFixed(1)} electron/s, SNR ${me.snr.toFixed(0)}, sky ${me.sky.toFixed(2)} electron/s per pixel over ${me.skyPixels} pixels`,
+    note: `net ${me.net.toFixed(1)} +/- ${me.sigma.toFixed(1)} electrons (${(me.net / t).toFixed(1)} electron/s), SNR ${me.snr.toFixed(0)}, sky ${me.sky.toFixed(2)} electrons per pixel over ${me.skyPixels} pixels`,
   });
 }
 const ap_half = () => apertureFor(FRAME_FWHM).half;
@@ -263,6 +286,7 @@ const ap_half = () => apertureFor(FRAME_FWHM).half;
 function detection(ctx, res) {
   const { a, plan: p } = ctx;
   const D = res.detection;
+  const t = secondsOf(ctx);
   const d = p.det;
   const T1 = DET['b1.mesh'].bound;
   const T2 = DET['b2.segmentation'];
@@ -271,8 +295,8 @@ function detection(ctx, res) {
   d.mesh.level.forEach((v, i) => {
     mesh = Math.max(
       mesh,
-      rel(v, flat(D.levelMesh)[i]),
-      rel(d.mesh.noise[i], flat(D.noiseMesh)[i])
+      rel(v, flat(D.levelMesh)[i] * t),
+      rel(d.mesh.noise[i], flat(D.noiseMesh)[i] * t)
     );
   });
   add('detection.e2.mesh', mesh, mesh <= T1, {
@@ -284,7 +308,11 @@ function detection(ctx, res) {
   const noi = meshMap(d.mesh, 'noise', W, H);
   let maps = 0;
   D.sampleIndices.forEach((k, i) => {
-    maps = Math.max(maps, rel(lvl[k], D.level[i]), rel(noi[k], D.noise[i]));
+    maps = Math.max(
+      maps,
+      rel(lvl[k], D.level[i] * t),
+      rel(noi[k], D.noise[i] * t)
+    );
   });
   add('detection.e2.maps', maps, maps <= T1, { bound: T1 });
   const pix = [];
@@ -324,8 +352,8 @@ function detection(ctx, res) {
       [s.semimajor, q.semimajor],
       [s.semiminor, q.semiminor],
       [s.ellipticity, q.ellipticity],
-      [s.peak, q.peak],
-      [s.segmentFlux, q.flux],
+      [s.peak, q.peak * t],
+      [s.segmentFlux, q.flux * t],
     ])
       prop = Math.max(prop, rel(x, y));
     orient = Math.max(orient, angleDiff(s.orientation, q.orientation));

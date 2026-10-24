@@ -78,8 +78,12 @@ export function adapt(frame, check) {
   if (route === 'ccd' && !(p.gain && p.readNoise))
     return refuse('incomplete-contract', { missing: ['planes.variance'] });
   const seconds = side.exposure.seconds;
-  // The variance route stays in the data's own unit; the CCD route needs electrons.
-  const f = route === 'ccd' ? toElectrons(side, p.gain?.value) : 1;
+  // The CCD route needs electrons. The variance route keeps the data's own unit,
+  // except a rate (electron/s, count/s, adu/s with a gain): measured in electrons
+  // like the CCD route, because the magnitude divides the net by the exposure.
+  const rate = ['electron/s', 'count/s', 'adu/s'].includes(p.unit);
+  const toE = route === 'ccd' || (rate && (p.unit !== 'adu/s' || p.gain));
+  const f = toE ? toElectrons(side, p.gain?.value) : 1;
   const limits = [p.linearity.limit, p.saturation.level].filter(
     Number.isFinite
   );
@@ -89,10 +93,15 @@ export function adapt(frame, check) {
     route,
     exposure: seconds,
     readNoise: p.readNoise?.value ?? 0,
-    unit: route === 'ccd' ? 'electron' : p.unit,
+    unit: toE ? 'electron' : p.unit,
     limit,
     mask: frame.mask ?? null,
-    variance: route === 'variance' ? frame.variance : null,
+    variance:
+      route !== 'variance'
+        ? null
+        : f === 1
+          ? frame.variance
+          : Float64Array.from(frame.variance, v => v * f * f),
     image: {
       width: frame.width,
       height: frame.height,

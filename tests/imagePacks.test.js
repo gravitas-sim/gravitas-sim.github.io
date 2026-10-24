@@ -16,6 +16,8 @@ import { createHash, webcrypto } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { permits } from '../js/dataKinds/contract.js';
+import { adapt, measure } from '../js/measure/photometry.js';
+import { framesOf } from '../js/observatory/imageMarks.js';
 import {
   imagePackObservation,
   readFrames,
@@ -188,5 +190,75 @@ describe('the authentic-frame legs, against the contract committed first', () =>
     );
     const results = json('tests/fixtures/imagePacks/oracle-results.json');
     expect(results.detection.convolveAgreement).toBeLessThan(1e-9);
+  });
+});
+
+describe('a rate in the pack is measured in electrons (the defect the authentic frame found)', () => {
+  test('the TESS frame is adapted in electrons, and its magnitude is the rate magnitude photutils gives', async () => {
+    const m = await mod('tessHd209458S56Frame');
+    const o = await imagePackObservation(m, { bytes: bytesOf(m.SIDECAR.file) });
+    const [frame] = framesOf(o);
+    expect(m.PACK.image.sidecar.pixels.unit).toBe('electron/s');
+    const a = adapt(frame, permits);
+    const t = m.PACK.image.sidecar.exposure.seconds;
+    expect([a.ok, a.unit, a.route]).toEqual([true, 'electron', 'variance']);
+    // the pixels and their variance are the archive's, times t and t squared
+    expect(a.image.values[60]).toBeCloseTo(frame.data[60] * t, 6);
+    expect(a.variance[60] / (frame.variance[60] * t * t)).toBeCloseTo(1, 12);
+    // the same measurement the leg makes, against photutils' sum and annulus mean of the rate
+    const res = json(
+      'tests/fixtures/imagePacks/oracle-results.json'
+    ).photometry;
+    const { x, y, r, rIn, rOut } = res.case;
+    const me = measure(a, { x, y, r, rIn, rOut, weighting: 'exact' });
+    expect(me.ok).toBe(true);
+    expect(me.unit).toBe('electron');
+    const rateNet = res.sum_exact - Math.PI * r * r * res.annulus.level;
+    // not exact floats through log10: a tolerance (the old behaviour read -8.387)
+    expect(Math.abs(me.mag - -2.5 * Math.log10(rateNet))).toBeLessThan(1e-9);
+    expect(me.mag).toBeLessThan(-13);
+    expect(Math.abs(me.net / t / rateNet - 1)).toBeLessThan(1e-9);
+  });
+
+  test('a frame in electrons, and one whose variance plane is in electrons, are as they were', () => {
+    const side = {
+      format: 'gravitas.image',
+      formatVersion: 1,
+      id: 'u',
+      use: 'quantitative',
+      width: 2,
+      height: 2,
+      planes: {
+        data: { encoding: 'float64-le' },
+        variance: { encoding: 'float64-le', unit: 'electron^2', source: 's' },
+      },
+      pixels: {
+        unit: 'electron',
+        linearity: { status: 'linear', limit: 1000, source: 's' },
+        saturation: { level: 1000, source: 's' },
+      },
+      time: {
+        value: '2026-01-01T00:00:00Z',
+        scale: 'UTC',
+        format: 'iso',
+        reference: 'mid',
+      },
+      exposure: { seconds: 10, kind: 'effective' },
+      calibration: { state: 'calibrated' },
+      history: [],
+    };
+    const frame = {
+      width: 2,
+      height: 2,
+      data: Float64Array.of(1, 2, 3, 4),
+      variance: Float64Array.of(1, 1, 1, 1),
+      sidecar: side,
+    };
+    const a = adapt(frame, () => ({ ok: true }));
+    expect([
+      a.unit,
+      a.image.values === frame.data,
+      a.variance === frame.variance,
+    ]).toEqual(['electron', true, true]);
   });
 });

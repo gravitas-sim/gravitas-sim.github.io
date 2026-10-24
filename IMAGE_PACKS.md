@@ -54,9 +54,10 @@ The frames files (the transform's output, which the modules' `SIDECAR` pin):
 | `frames/tess-hd209458-s56-frame.json` | 1,745 | `6c33072c982e8db07bb4ac3c55cfbc648dd622c63a02b5a259b35e8677a904fa` |
 
 The TESS file is read from STScI's public dataset on AWS, which mirrors MAST's
-TESS products. That host is not literally on the list of archives Carl named
-(MAST, NOIRLab, ESA, SkyView-class); it is a mirror of MAST's own files, served
-without an account, and Carl should confirm that reading.
+TESS products; the host (`stpubdata.s3.amazonaws.com`) is not literally on the list
+of archives Carl named. Carl ruled on it: asked whether to accept the stpubdata AWS
+bucket (STScI's public MAST mirror) as the TESS source, he chose "Accept, it is
+MAST (Recommended)" = "stpubdata is MAST's own public AWS mirror of TESS products; the rights decision (public domain) and URL, size and SHA-256 are recorded." (Carl, chat 2026-10-24).
 
 ### Sources dropped, and why
 
@@ -107,12 +108,27 @@ and results are `oracle-inputs.json` and `oracle-results.json`).
 | Leg | Result |
 | --- | --- |
 | `pack.integrity` | pass: the sum of FLUX over the 23 optimal-aperture pixels equals SAP_FLUX of the same cadence to 5.8e-8 (bound 1e-5); peak 42,971 below 101,010; both `permits(photometry)` and `permits(astrometry)` are ok |
-| `photometry.e2` (Prompt 180) | pass: exact aperture sum, annulus mean and scatter, source variance, and the flux-weighted centroid each equal photutils to the bounds of Prompt 180's `thresholds.json` (b1, b2, b5, b4); net 215,249.5 +/- 50.8 electron/s is 0.33 percent above SAP_FLUX (bound 10 percent) |
+| `photometry.e2` (Prompt 180) | pass (all rows in electrons, see below): exact aperture sum, annulus mean and scatter, source variance, and the flux-weighted centroid each equal photutils to the bounds of Prompt 180's `thresholds.json` (b1, b2, b5, b4); net 20,457,316 +/- 4,830 electrons (215,249.5 electron/s over the 95.04 s exposure) is 0.33 percent above SAP_FLUX (bound 10 percent); the instrumental magnitude -13.3324 equals photutils' to 1e-9 |
 | `detection.e2` (Prompt 183) | pass: background mesh, smoothed image, one source with the same segmentation pixels, area, moments, peak and flux as photutils; Gaussian FWHM 1.7741 pixels against `fit_fwhm`, relative 3.9e-6 (bound 3e-4). One source found: a 143-pixel frame has one dominant star |
-| `injection.g1` (Prompt 184) | the kernel refuses, with the stable code `unit`: the variance route is in electron/s, which it does not inject into. On the CCD route it would refuse `no-room`: a margin of 3 FWHM from the border cannot be placed in an 11 by 13 frame. A refusal is the result the contract names; no completeness was measured |
+| `injection.g1` (Prompt 184) | the kernel refuses, with the stable code `no-room`: a margin of 3 FWHM from the border cannot be placed in an 11 by 13 frame. (Before the rate-unit fix below it refused with `unit`, because the frame was measured in electron/s.) A refusal is the result the contract names; no completeness was measured |
 | `import.hostilePng` (Prompt 188) | 14 of 17 variants as the contract says. THREE differ, each recorded in `failed-legs.json` with its cause, none moved: (1) a PNG with bytes after IEND, which the contract said is read and Prompt 188's structural reader refuses (`png-malformed`); (2) and (3) the IDAT that inflates past the declared size and the IDAT of zeros that inflates to 64 MiB, which the contract said are refused and Chromium's decoder READS as the intact picture (it stops after the image's rows), in time and holding nothing. Pixel-stage variants are judged in the page by `e2e/imagePacks.spec.js`; Carl rules (D-R10-65) |
 | astrometry (Prompt 181), overlay (182) | NOT RUN: no authentic frame with three or more catalogued stars and a redistributable catalogue was obtained; the TESS frame holds one catalogued star |
 | frame pipeline (185), series (186) | NOT RUN: their modules are in PRs #433 and #434, not in v3; the pack holds one cadence |
+
+Carl ruled on the three differing variants: asked how #436 should proceed on those three legs, he chose "Leave failing, labelled (Recommended)" = "Keep the committed contract, record the three as known failed legs with their causes (tests pin them), take #436 out of draft and merge once the other items are settled; no threshold moved." (Carl, chat 2026-10-24). The three stay recorded in `failed-legs.json`, pinned by tests; no bound moved.
+
+## A defect the frame found, and fixed
+
+The quantitative frame is in a rate (`electron/s`). On the variance route
+`js/measure/photometry.js` `adapt()` kept that unit while `measure()` divides the
+net by the exposure for the magnitude, and the panel says "electrons": a student
+would read net light 215,100 "electrons" and magnitude -8.387, where the rate
+magnitude is -13.33. `adapt()` now converts a rate to electrons as the CCD route
+does (pixels times the exposure, variance times its square). No committed
+threshold or result of Prompt 180 moved; the legs above compare Gravitas in
+electrons with the oracle's rate times the exposure, exactly. See `PHOTOMETRY.md`
+and `tests/imagePacks.test.js`. Prompts 185 and 186's authentic legs stay NOT RUN
+until #433 and #434 land in v3.
 
 ## Budgets
 
