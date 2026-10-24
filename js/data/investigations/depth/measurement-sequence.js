@@ -489,6 +489,10 @@ export const INSTRUCTOR = {
           text: 'A synthetic 64 by 64 pixel frame with a blurred star, the first marks of a fixed seeded sequence (up to 30), the width of the star, an optional offset of every mark and a switch that shows the true position. The readout lists every mark, the mean, the spread and the standard error on both axes, and (with the truth shown) the error of the mean.',
         },
         {
+          name: 'The synthetic truth',
+          text: 'The star’s true position is set by the lesson and shown only after the prediction before it, so a student can see how near the mean lands. A real frame has no such answer; the lesson says so and uses no authentic data.',
+        },
+        {
           name: 'Depth',
           text: 'Quantitative: the position with its error bar, and the number of marks for a standard error of 0.1 pixel (64). Advanced: an offset of 1.0 pixel, 30 marks, 6.2 standard errors from the truth, and what the plus-or-minus is a statement about.',
         },
@@ -564,6 +568,10 @@ export const INSTRUCTOR = {
         {
           name: 'Coverage-repeats instrument (claim family)',
           text: 'A seeded ensemble of up to 4000 repeats of four cases (an honest instrument, a biased one, a parallax turned into a distance, a Poisson count with an upper limit), with the half-width in sigmas, the number of repeats, the form of the distance interval and the true rate. The picture shows the first 40 intervals, the readout counts them all with the binomial uncertainty of the coverage.',
+        },
+        {
+          name: 'The synthetic truth',
+          text: 'Every repeat is a seeded draw from a distribution whose true value is known, so a claim can be counted. The picture shows the first 40 repeats; the readout counts them all and gives the binomial uncertainty of the count.',
         },
         {
           name: 'Depth',
@@ -642,6 +650,10 @@ export const INSTRUCTOR = {
         {
           name: 'Profile-refusal instrument (claim family)',
           text: 'Two cases. The product case shows the profile of the chi-square against a trial mass (log axis, lines at 1 and 3.84), the best tilt and the chi-square at the trial mass, and the lower bounds. The line case shows six points with error bars, the fitted line or parabola, the slope with its formal uncertainty, the degrees of freedom, the chi-square, the reduced chi-square and the p-value.',
+        },
+        {
+          name: 'The synthetic truth',
+          text: 'Both data sets are made for the lesson with the truth built in: a product of two parameters, and six points from a curve with seeded errors. No authentic data are used, so every refusal is the method’s own and not a limit of the data.',
         },
         {
           name: 'Depth',

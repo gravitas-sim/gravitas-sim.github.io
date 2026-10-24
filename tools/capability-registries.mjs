@@ -196,7 +196,8 @@ export function lessonEntries(root = REPO) {
     // One module of several lessons (D-R10-67: the instructor bundle's closure
     // is capped by file count): its default export is the array of them, and
     // the catalog spreads it. The ids are the lesson objects' own `id` lines.
-    const text = read(root, `${dir}/${id}.js`);
+    const file = path.join(root, dir, `${id}.js`);
+    const text = existsSync(file) ? read(root, `${dir}/${id}.js`) : '';
     if (/^export default \[$/m.test(text))
       sharedIds.set(
         def.local.name,

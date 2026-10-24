@@ -1,14 +1,13 @@
 // =============================================================================
 // Every lesson in Spanish, at once, for the documents
 // -----------------------------------------------------------------------------
-// Prompt 79. The Spanish guides and keys read the lesson as a Spanish student
-// does: the lesson's shadow (data/investigations/es) laid over the English by
-// mergeTranslation, and the deeper steps (data/investigations/depth) laid in
-// with their own shadow (depth/es). The application loads these one at a time
-// and on demand (registry.js, depth.js); the documents want all of them and
-// cannot await anything, so this is the static door, as depthAll.js is for the
-// English deeper steps. Static imports, so the digest of what a build was made
-// from (tools/instructor-freshness.mjs) follows every file.
+// Prompt 79. The Spanish guides and keys read each lesson as a Spanish student
+// does: the shadow (data/investigations/es) laid over the English by
+// mergeTranslation, the deeper steps (depth) laid in with theirs (depth/es).
+// The application loads these one at a time (registry.js, depth.js); the
+// documents want all of them and cannot await, so this is the static door, as
+// depthAll.js is for the English deeper steps. Static imports, so the digest
+// (tools/instructor-freshness.mjs) follows every file.
 //
 // Not imported by any route: the build and the tests read it.
 // =============================================================================

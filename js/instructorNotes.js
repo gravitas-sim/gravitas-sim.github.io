@@ -41,7 +41,7 @@ import { withAllDepths } from './investigations/depthAll.js';
  * FNV-1a as eight hex digits: the ledger's digest (js/composer/compile.js
  * `digest`, js/hash.js `fnvHex8`), written out again because importing either
  * adds files to the instructor bundle's source closure, which the digest test
- * holds under 270 files (269 are in use; D-R10-43, and KEPT in
+ * holds under 274 files (273 are in use; D-R10-67, and KEPT in
  * tests/sharedHelpers.test.js). tests/instructorNotes.test.js holds this
  * equal to the original on every text the notes print.
  *

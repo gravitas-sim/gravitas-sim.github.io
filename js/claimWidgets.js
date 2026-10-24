@@ -30,6 +30,7 @@ import { EN_CLAIM } from './i18n/en.claim.js';
 import { ES_CLAIM } from './i18n/es.claim.js';
 import { withUnit } from './format.js';
 import { mulberry32 } from './rng.js';
+import { fnv1a32 } from './hash.js';
 import {
   surface,
   responsiveHeight,
@@ -48,19 +49,9 @@ const isOn = x => x >= 0.5;
 // A fixed stream of normal and uniform draws
 // -----------------------------------------------------------------------------
 
-/** FNV-1a, 32 bits: a string seed to a number. */
-function hashSeed(text) {
-  let h = 0x811c9dc5;
-  for (let i = 0; i < text.length; i++) {
-    h ^= text.charCodeAt(i);
-    h = Math.imul(h, 0x01000193);
-  }
-  return h >>> 0;
-}
-
 /** `count` uniforms in (0, 1) from a string seed. */
 export function uniforms(seed, count) {
-  const next = mulberry32(hashSeed(seed));
+  const next = mulberry32(fnv1a32(seed));
   return Float64Array.from({ length: count }, () => next() || 1e-12);
 }
 

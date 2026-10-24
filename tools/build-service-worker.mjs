@@ -319,6 +319,17 @@ export const NEVER_PRECACHED = [
   // size approval does not cover, so none of the files is installed and the
   // panel says it needs the network the first time. D-R10-64.
   /^(js\/measure\/astrometric-series\.js|js\/observatory\/imageSeries\.js|js\/i18n\/(en|es)\.imageSeries\.js)$/,
+  // The measurement and claim investigations (Prompt 190, MEASUREMENT_CLAIMS.md):
+  // three lessons with their Spanish, deeper steps, instructor guides and
+  // per-lesson paths, the claim instrument family and its words. Installed, they
+  // would take the first-visit tier 28.6 KB over its data-budget ceiling (45.4
+  // KB of gzip against 16.8 KB of room, Node 22), a ceiling the standing size
+  // approval does not cover, and the idle tier has no room either. So none of
+  // the files is installed: the service worker keeps each after its first online
+  // use, and until then the three investigations and the pages that import every
+  // lesson (the instructors' portal) need the network. D-R10-67.
+  /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(measurement-sequence|what-is-a-measurement|what-does-plus-minus-claim|when-the-method-must-refuse)\.js$/,
+  /^(js\/claimWidgets\.js|js\/i18n\/(en|es)\.claim\.js)$/,
   // The image import (Prompt 188, IMAGE_IMPORT.md): the panel and its words,
   // fetched when a reader first chooses a FITS image, a PNG or a JPEG in the
   // Observatory's file box. Not installed, for the reason of the photometry
