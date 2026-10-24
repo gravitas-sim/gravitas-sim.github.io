@@ -1998,13 +1998,14 @@
     "decision": "one catalogue row, committed, flagged non-commercial with the credit line (van Leeuwen 2007; ESA Hipparcos)"
   },
   "jplSmallBodies": {
-    "what": "three JPL small-body identification answers for the field of HD 209458 at the start, middle and end of the frames, V 19 or brighter, geocentric, a 0.6 degree square",
+    "what": "three JPL small-body identification answers for the field of HD 209458 at the start, middle and end of the frames (04:15:00, 06:33:00 and 08:52:00 UTC on 2022-09-04), V 19 or brighter, geocentric, a 0.6 degree square",
     "source": "https://ssd-api.jpl.nasa.gov/sb_ident.api (JPL SSD API, small-body identification)",
     "urlPattern": "https://ssd-api.jpl.nasa.gov/sb_ident.api?sb-kind=a&mpc-code=500&obs-time=2022-09-04_<hh:mm:ss>&fov-ra-center=22-03-10.8&fov-dec-center=18-53-03&fov-ra-hwidth=0.3&fov-dec-hwidth=0.3&vmag-lim=19",
     "retrieved": "2026-10-24",
-    "file": "tests/fixtures/imagePacks/authentic/jpl-sb-ident-hd209458-field.json",
+    "file": "not in the repository: removed on Carl's ruling (chat 2026-10-24, \"Go with your recommendation on each\"); only this record is kept",
     "sha256": "3a84582bf073deb6871e64777f7cb6414af6efc25e14a94f85d1971427f818c5",
-    "terms": "the API documentation (https://ssd-api.jpl.nasa.gov/doc/sb_ident.html, read 2026-10-24) carries no licence text; JPL small-body data are a NASA/JPL (United States Government) product. No licence was found, so this record is committed only as the evidence of a negative search (object names, magnitudes and offsets) and is flagged.",
+    "negativeSearch": "no asteroid inside the 0.6 degree square about HD 209458 at any of the three times: every candidate is fainter than V 17.6 and more than 0.3 degree away; the nearest planet (Neptune) is 32.7 degrees away (astropy built-in ephemeris)",
+    "terms": "the API documentation (https://ssd-api.jpl.nasa.gov/doc/sb_ident.html, read 2026-10-24) carries no licence text; JPL small-body data are a NASA/JPL (United States Government) product. No licence was found, so the answers are not kept in the repository: this record keeps the URL pattern, the retrieval date, the SHA-256 of the three answers as retrieved (the file is gone) and the result of the search.",
     "alsoTried": "IMCCE SkyBoT cone search (http://vo.imcce.fr/webservices/skybot/skybotconesearch_query.php and https://ssp.imcce.fr/webservices/skybot/api/conesearch.php): HTTP 403 and 502; nothing was retried or worked around."
   }
 }

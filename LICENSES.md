@@ -84,7 +84,6 @@ Not mine to license. Each keeps its own, and the license text ships with it.
 | `tests/fixtures/imagePacks/authentic/ffi-cutout-s56-1-2.f32` | an 81 by 81 pixel cutout of 84 TESS calibrated full-frame images (sector 56, camera 1, CCD 2) about HD 209458, served by MAST, kept for tests | public domain (NASA); acknowledge TESS and MAST, see NOTICE |
 | `tests/fixtures/imagePacks/authentic/gaia-dr3-window.csv` | 222 Gaia DR3 sources (G 16 or brighter) in the field of HD 209458 from CDS VizieR, kept for tests | CC BY-NC 3.0 IGO; credit ESA/Gaia/DPAC, see NOTICE |
 | `tests/fixtures/imagePacks/authentic/hip2-hd209458.csv` | the Hipparcos new reduction row of HD 209458 from CDS VizieR, kept for tests | CC BY-NC 3.0 IGO (ESA space science archives terms); credit ESA, see NOTICE |
-| `tests/fixtures/imagePacks/authentic/jpl-sb-ident-hd209458-field.json` | three JPL small-body identification answers for the field of HD 209458, kept for tests | no licence stated (a NASA/JPL product); see NOTICE |
 
 ### Data packs
 

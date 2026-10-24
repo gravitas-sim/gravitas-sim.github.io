@@ -314,11 +314,6 @@ archives are distributed under the CC BY-NC 3.0 IGO licence
 (https://www.cosmos.esa.int/web/esdc/terms-and-conditions); credit ESA.
   van Leeuwen (2007), A&A 474, 653, doi:10.1051/0004-6361:20078357
 
-tests/fixtures/imagePacks/authentic/jpl-sb-ident-hd209458-field.json
-Three answers of the JPL small-body identification API
-(https://ssd-api.jpl.nasa.gov/sb_ident.api), retrieved 2026-10-24, kept as the
-record of a negative search. A NASA/JPL product; no licence text was found.
-
 The VizieR service: this research has made use of the VizieR catalogue access
 tool, CDS, Strasbourg Astronomical Observatory, France (doi:10.26093/cds/vizier).
 
