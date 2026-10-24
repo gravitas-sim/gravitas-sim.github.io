@@ -253,13 +253,20 @@ $('obsDetectPanel').addEventListener('toggle', () => {
       () => (detect = null)
     );
 });
-// Completeness by injection (INJECTION.md): loaded when first opened.
-let inject = null;
+let inject = null; // completeness (INJECTION.md): loaded when first opened
+let overlay = null; // catalog overlays (OVERLAYS.md): loaded when first opened
 $('obsInjectPanel').addEventListener('toggle', () => {
   if ($('obsInjectPanel').open && state.view)
     inject ??= import('./observatory/imageInject.js').then(
       m => m.mountInject($('obsInjectBody'), { ...lent, state }),
       () => (inject = null)
+    );
+});
+$('obsOverlayPanel').addEventListener('toggle', () => {
+  if ($('obsOverlayPanel').open && state.view)
+    overlay ??= import('./observatory/imageOverlay.js').then(
+      m => m.mountOverlay($('obsOverlayBody'), { ...lent, marks, state }),
+      () => (overlay = null)
     );
 });
 // The archive import (ARCHIVE_IMPORT.md): loaded when first opened.
@@ -395,6 +402,7 @@ function renderAll() {
     'obsPhotoPanel',
     'obsDetectPanel',
     'obsInjectPanel',
+    'obsOverlayPanel',
   ])
     $(id).hidden = !isImage;
   let drawn = null;
@@ -441,6 +449,7 @@ function renderAll() {
   photo?.then(p => p.update());
   detect?.then(p => p.update());
   inject?.then(p => p.update());
+  overlay?.then(p => p.update());
   guide?.then(p => p.update());
   renderSelectionBar();
   $('obsUndo').disabled = !state.history.canUndo();
@@ -1026,6 +1035,7 @@ $('obsNextPage').addEventListener('click', () => table.turn(1));
 // --- Opening ----------------------------------------------------------------------
 
 function open(o, changes = []) {
+  if (marks.take?.(o)) return; // the overlay panel's second frame
   state.source = o;
   state.history.reset(changes);
   state.selection = null;

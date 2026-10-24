@@ -298,9 +298,16 @@ export const NEVER_PRECACHED = [
   // not cover, so none of the files is installed and the panel says it needs the
   // network the first time. D-R10-62.
   /^(js\/measure\/inject\.js|js\/observatory\/imageInject\.js|js\/i18n\/(en|es)\.imageInject\.js)$/,
+  // Catalog overlays, blink and compare (Prompt 182, OVERLAYS.md): the overlay
+  // kernel, the panel and its words, fetched when a reader opens the
+  // Observatory's overlay panel on an image. Same reason as the three above:
+  // the idle tier has no room under a data-budget ceiling the standing size
+  // approval does not cover, so none of the files is installed and the panel
+  // says it needs the network the first time. D-R10-61.
+  /^(js\/measure\/overlay\.js|js\/observatory\/imageOverlay\.js|js\/i18n\/(en|es)\.imageOverlay\.js)$/,
   // Motion and parallax over time (Prompt 186, ASTROMETRY.md): the astrometric
   // series kernel, the panel and its words, fetched when a reader opens the
-  // series disclosure inside the sky-coordinates panel. Same reason as the four
+  // series disclosure inside the sky-coordinates panel. Same reason as the five
   // above: the idle tier has no room under a data-budget ceiling the standing
   // size approval does not cover, so none of the files is installed and the
   // panel says it needs the network the first time. D-R10-64.

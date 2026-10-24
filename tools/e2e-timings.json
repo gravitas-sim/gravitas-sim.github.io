@@ -2792,5 +2792,18 @@
   "[chromium] › imageDetect.spec.js › sources: refusals and settings › a setting out of range is refused by name, and a search that finds nothing says so aloud": 1.4,
   "[chromium] › imageDetect.spec.js › sources: both languages, axe, and every control › axe with a result, and 24 px targets at 1280 and 390, en": 3.1,
   "[chromium] › imageDetect.spec.js › sources: both languages, axe, and every control › axe with a result, and 24 px targets at 1280 and 390, es": 3.2,
-  "[chromium] › imageDetect.spec.js › sources: both languages, axe, and every control › the page changing language re-words the open panel and keeps its result": 1.0
+  "[chromium] › imageDetect.spec.js › sources: both languages, axe, and every control › the page changing language re-words the open panel and keeps its result": 1.0,
+  "[chromium] › imageOverlay.spec.js › overlay: keyboard alone › the bright stars are drawn at the pixels their sky positions give, as read-only rows, with no pointer event": 0.8,
+  "[chromium] › imageOverlay.spec.js › overlay: keyboard alone › a planet is drawn where the planet kernel puts it, with its bound, and a star list left out by a magnitude limit says so": 0.9,
+  "[chromium] › imageOverlay.spec.js › overlay: keyboard alone › a frame with no time leaves the stars unmoved and the planets undrawn, and says why": 0.8,
+  "[chromium] › imageOverlay.spec.js › overlay: keyboard alone › a display-only image and an image with no sky coordinates are refused in words, and nothing is drawn or listed": 0.8,
+  "[chromium] › imageOverlay.spec.js › blink and compare: keyboard alone › a second frame is held, tied through the sky, blinked at each rate and shown by hand": 3.0,
+  "[chromium] › imageOverlay.spec.js › blink and compare: keyboard alone › with reduced motion the frames do not blink by themselves and the button shows the other": 0.9,
+  "[chromium] › imageOverlay.spec.js › blink and compare: keyboard alone › side by side: each cursor is linked through the tie, moved by the arrow keys, Alt and Shift, and by buttons": 1.4,
+  "[chromium] › imageOverlay.spec.js › blink and compare: keyboard alone › matched stars tie two frames that have no sky coordinates, and say how well": 2.2,
+  "[chromium] › imageOverlay.spec.js › blink and compare: keyboard alone › the difference of two calibrated frames shows what only the second has, and is labeled a picture, not a measurement": 0.9,
+  "[chromium] › imageOverlay.spec.js › blink and compare: keyboard alone › a difference is refused with the reason: another calibration state, another unit, another exposure, a display-only frame": 1.9,
+  "[chromium] › imageOverlay.spec.js › overlay and blink: both languages, axe, and every control › axe with a result, and 24 px targets at 1280 and 390, en": 3.5,
+  "[chromium] › imageOverlay.spec.js › overlay and blink: both languages, axe, and every control › axe with a result, and 24 px targets at 1280 and 390, es": 3.7,
+  "[chromium] › imageOverlay.spec.js › overlay and blink: both languages, axe, and every control › the page changing language re-words the open panel and keeps its table and its tie": 1.7
 }

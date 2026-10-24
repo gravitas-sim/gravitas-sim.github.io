@@ -1,0 +1,43 @@
+{
+  "format": "gravitas.overlay-oracle-provenance/1",
+  "prompt": 182,
+  "oracle": "astropy 6.1.7 (wcslib, ERFA 2.0.1.5), with scipy 1.15.3 and numpy 2.2.6",
+  "identity": "Independent, cited implementations; no Gravitas code ran: astropy.wcs.WCS (wcslib: all_pix2world, all_world2pix), astropy.coordinates SkyCoord.apply_space_motion and get_body (builtin ephemeris, ERFA plan94), astropy.time.Time, scipy.ndimage.map_coordinates.",
+  "retrieved": "2026-10-23",
+  "index": "https://pypi.org/simple (pip default index; no mirror, no pip.conf, no PIP_* variable); the venv is the one Prompt 180 made for its oracle (numpy, scipy, astropy, photutils and what they pull in), reused, nothing added",
+  "python": "3.10.12 (macOS-26.6.2-x86_64-i386-64bit, x86_64)",
+  "packages": {
+    "astropy": "6.1.7",
+    "numpy": "2.2.6",
+    "scipy": "1.15.3",
+    "pyerfa": "2.0.1.5",
+    "astropy-iers-data": "0.2026.10.19.0.52.1",
+    "photutils": "2.0.2",
+    "PyYAML": "6.0.3",
+    "packaging": "26.3"
+  },
+  "install": "python3.10 -m venv <scratchpad>/oracle180; <venv>/bin/python -m pip install --only-binary :all: numpy scipy astropy photutils (the resolved versions above); the venv is not committed and no package is",
+  "run": "cd <empty scratchpad directory>; <venv>/bin/python -I tools/overlay-oracle/oracle.py tests/fixtures/overlay/oracle-inputs.json tests/fixtures/overlay/oracle-results.json; then Prettier",
+  "inputsFrom": "node tools/overlay-oracle/make-inputs.mjs (the scenes of thresholds.json, built by tools/overlay-validate.mjs), then Prettier",
+  "parameters": {
+    "stars": "WCS(naxis=2) with ctype RA---TAN, DEC--TAN, the truth's CRPIX, CRVAL and CD; SkyCoord(ra, dec, pm_ra_cosdec, pm_dec, icrs, obstime=J2000.0 TT) with no distance and no radial velocity; apply_space_motion(new_obstime=Time('2026-01-01T00:00:00', scale='utc').tt); all_world2pix(ra, dec, 1)",
+    "time": "Time('2026-01-01T00:00:00', scale='utc').tt, no IERS file (iers.conf.auto_download = False)",
+    "planets": "get_body(name, Time(jd, format='jd', scale='tt'), ephemeris='builtin'): geocentric GCRS, the apparent direction from the Earth's center, ERFA plan94",
+    "resample": "scipy.ndimage.map_coordinates(frame, [y - 1, x - 1], order=1, mode='constant', cval=nan) at the coordinates R(theta)(a - about) + about + shift, 1-based, converted to 0-based",
+    "skyMap": "all_pix2world(x, y, 1) of the first WCS then all_world2pix(ra, dec, 1) of the second"
+  },
+  "conventions": "pixels are FITS (origin 1) except as map_coordinates requires; positions in degrees",
+  "warnings": "ERFA said, and the run kept: pmsafe 'distance overridden (Note 6)' for all 904 stars (no distance was given, so ERFA takes a negligible parallax), and taiutc 'dubious year (Note 4)' for the 2026 instant (UTC to TAI beyond the leap-second table's last announced entry, taken as 37 s). Neither reaches the bounds: the proper motion is rigorous on the sphere without parallax, and the 0.056 s the kernel differs by is its delta-T for 2026.",
+  "files": {
+    "tests/fixtures/overlay/oracle-inputs.json": "7035677f6babca0ea3fce3239689bf398cbdb70d9d8f8d74eb1a698a92aaa67c",
+    "tests/fixtures/overlay/oracle-results.json": "b22253e5eb225556a8a49aec6ee07890c2b24735558bf672d2160b6504c56dc4",
+    "tools/overlay-oracle/oracle.py": "a3d4be88d3b17a14a05e38fdb9c9151742f02d4fed6faba97fd848cf32e0b27f",
+    "tools/overlay-oracle/make-inputs.mjs": "1fecbeca06676186e86179942c8c236000206f9a4b017c979cbee9b72518f54b"
+  },
+  "references": [
+    "Astropy Collaboration 2022, ApJ 935, 167",
+    "Calabretta, M. R. and Greisen, E. W. 2002, A&A 395, 1077 (the WCS papers wcslib implements)",
+    "Harris, C. R. et al. 2020, Nature 585, 357 (numpy)",
+    "Virtanen, P. et al. 2020, Nature Methods 17, 261 (scipy)"
+  ]
+}
