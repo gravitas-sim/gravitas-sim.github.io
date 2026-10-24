@@ -1,0 +1,30 @@
+{
+  "format": "gravitas.image-packs-analysis-contract/1",
+  "prompt": 189,
+  "part": 5,
+  "committedBefore": "the legs below were run. Parts 3 and 4 were run (with no oracle) and their results are recorded as they are: part 3: 1 star matched, the pipeline refused with 'no-marks'; part 4 (variant v2): 3 stars matched (G 10.7, 13.2 and 7.5), a fit with no degree of freedom, and a pipeline run that completed with 84 points but chose 2 comparison stars (the stability test flagged one of three candidates unstable, at a reduced chi-square of 5.1, and left the other two 'untested' at 4.0 and 3.7), against the three the contract asks for. What else is read before this file: the detection list of frame 42 (40 sources, areas up to 239 pixels: the 4 sigma segments of the bright stars merge with their wings and neighbours, so the moments centroid of a source can lie 1.3 to 6 pixels from the star's peak, and a G 11 star at (60, 53) has no source of its own; zero-flux 'crowded' sources fill the rest), the observed distance of the anchor WCS from the stars (0 to 1.3 pixels over 40 pixels from the target), and the counts of stars a catalogue-only selection rule leaves in the frame (18 for the rule below; no measurement of those stars was read). Nothing the legs below compute was seen.",
+  "why": "Parts 3 and 4 ask the modules to find the reference stars and the marks by their own detection. On this field that fails for a reason that is itself the finding: detectIn at 4 to 5 sigma on a 21 arcsecond pixel segments each bright star together with its wings and the stars beside it, so the detections are blends and the 'crowded' flag removes almost all. Real reductions do not centroid blends: they put the catalogue's stars where they are predicted and measure there. Both modules already take their stars from outside: fitWcs takes any matched list, and runSequence takes `marks` (and registers off) when given. The legs below do exactly that and nothing else; they are variants (v3) and do not replace parts 3 and 4, whose results stand.",
+  "rule": "The same as parts 3 and 4: bounds are read from the thresholds files or stated with their derivations in part 3; none is changed after a result is seen; a variant that fails is reported with its value.",
+  "variant": {
+    "name": "v3",
+    "stars": "the reference stars are chosen from the Gaia subset alone, before any pixel is measured: G 14 or brighter, whose anchor-predicted pixel (proper motion applied to the frame's epoch, as in part 3) lies at least 6 pixels from every border of the 81 by 81 frame (the aperture and the centroid window must be inside the frame), and with no other Gaia star (G 16 or brighter, the whole subset) within 4 pixels of it that is within 2.5 magnitudes of it (a neighbour fainter than that carries under a tenth of its light)",
+    "centroids": "each reference star is measured by js/measure/photometry.js measure at its anchor-predicted pixel with the aperture of part 4's FWHM of 2 (r 3, rIn 6, rOut 10), exact weighting, and the centroid window of half 4 pixels (recentre), on the electrons frame; a star whose measurement is refused, whose centroid lies more than 2 pixels from the start, or whose signal-to-noise is under 20, is dropped",
+    "astrometry": {
+      "ids": [
+        "astrometry.b5.fit.v3",
+        "astrometry.e1.frame.v3",
+        "overlay.b5.gaia.v3"
+      ],
+      "what": "frame 42; the matched pairs are the measured centroids (FITS pixel = centroid + 1) and the Gaia positions at the frame's epoch; everything after the matching is part 3's astrometry.b5.fit, astrometry.e1.frame and overlay.b5.gaia, with their bounds unchanged and at least eight stars kept"
+    },
+    "pipeline": {
+      "ids": [
+        "framepipeline.g1.complete.v3",
+        "framepipeline.g1.oracle.v3",
+        "framepipeline.g1.transit.v3",
+        "framepipeline.g1.noise.v3"
+      ],
+      "what": "runSequence on the 84 frames with `marks` given: the reference stars above and HD 209458 (the Gaia star 1779546757669063552, whose predicted pixel is the target; added if the rule left it out), each at its anchor-predicted pixel, at most 20; fwhm 2; register false (the frames' pointing moves by a fraction of a pixel in 4.6 hours and every mark is recentred in every frame); target (40.13, 41.64) as before; every other parameter at its default; the four legs with part 3's bounds unchanged"
+    }
+  }
+}
