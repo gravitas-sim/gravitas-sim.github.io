@@ -36,6 +36,10 @@ D-CALIB-01: no authentic calibration or science frames ship. No public teaching 
 
 What a CCD Records, Signal, Noise and Exposure, and A Variable Star From Frames (`js/data/investigations/`), each in English, Spanish and quantitative and advanced depth (the advanced steps compare with the truth manifest of the synthetic set), with instructor content, acceptance entries and `tests/calibrationLessons.test.js`, which recomputes every number a lesson states from the kernel. They are in the observing-and-measuring sequence.
 
+## Frames to a light curve (Prompt 185)
+
+The reduction nodes are now `TOOLS` of the measurement pipeline for a whole sequence (`frames-calibrate` to `frames-lightcurve`, lazy), run over the lab's own calibration and photometry by `js/measure/frameSeries.js` and shown in the Observatory's frame panel; `FRAME_PIPELINE.md` has the algorithm, the limits, the oracle and the validation. The lab's calibration physics is unchanged.
+
 ## Not done
 
-Registering the reduction nodes as `TOOLS` of the measurement pipeline (js/measure/pipeline.js is on the Observatory route, which has no room and no page calls them); wiring the instruments into the Observatory menu; authentic frames (D-CALIB-01).
+Wiring the instruments into the Observatory menu; authentic frames (D-CALIB-01).

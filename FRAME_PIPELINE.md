@@ -92,3 +92,128 @@ before this prompt is unchanged.
 
 **(g) Authentic data.** **NOT RUN until Prompt 189.** Nothing was downloaded and
 nothing was fabricated for this leg.
+
+## What was built
+
+- `js/measure/frameSeries.js` (lazy): the kernel. `runSequence` reads the frames
+  one at a time through a provider (`frameAt(k)`, `release(k)`), calibrates each
+  (the lab's `calibrate`, masters from `buildMasters`, electrons, the cosmic-ray
+  mask), detects the marks once on a reference frame (Prompt 183) and carries them,
+  registers every frame (a translation vote, then Prompt 181's `register`),
+  photometers every mark in every frame (Prompt 180's `measure`, with the dark's
+  and the masters' variance added through three additive options), tests the
+  comparison candidates for steadiness (sequential elimination, alpha 0.001, at
+  least three candidates, brightest first, with an override by name), forms the
+  ensemble, the differential magnitude (the kernel's `differentialMagnitude`) and
+  the sinusoid (the lab's `scanPeriod`), and states each uncertainty scaled by the
+  square root of max(1, reduced chi-square). `observationOf` writes the light curve
+  as an ordinary `gravitas.observation/1` time series (model `ccd-sequence`) that
+  the Observatory's period tool reads; `quantitiesOf` and `reductionOf` write the
+  ledger's quantities (measured, derived and assumed kinds, and `none` for a value
+  with no stated error) and a replayable reduction; `replay` runs it again.
+- `js/measure/pipeline.js`: the six nodes are registered `TOOLS` of kind
+  `image-sequence` (`frames-calibrate` to `frames-lightcurve`), lazy, each a record
+  of its own numbers, with the sequence's digest as the node's input identity.
+- `js/measure/frameSource.js` (lazy): the synthetic sequence, the lab's detector
+  frames with a chosen variable, a common transparency, a pointing that jitters and
+  turns, and frames that go wrong; with no pointing change it is `simulateSeries`'s
+  data frame for frame. Its truth manifest is not read by the pipeline.
+- `js/observatory/imageSequence.js` (lazy, `#obsSeqPanel` in the Observatory):
+  one node at a time (a stepper of six), the comparison-star chooser (a table of
+  the candidates with brightness, signal to noise and steadiness, a checkbox each
+  and a button that runs again with the ticked stars), the light curve as a plot
+  with its table, the fitted sinusoid, a CSV, Keep in the ledger (source
+  `image-sequence`) and Open in the Observatory, a refusal that names the frames and
+  a button that leaves them out. The frame limit is stated in the panel.
+- The lesson "A Variable Star From Frames" gained one advanced step, `the-whole-pipeline`
+  (answer 2.88 hours, tolerance 0.1), after the existing ones; every step that
+  existed before is unchanged, and `tests/framePipeline.test.js` pins their graded
+  fields as they were at v3 27e4db69.
+- `tools/frame-pipeline-validate.mjs` (`npm run frame-pipeline:validate`) runs every
+  leg against the committed thresholds; `tools/frame-pipeline-oracle/` is the oracle.
+
+## Limits
+
+At most 256 frames, read one at a time; at most 1,398,101 pixels a frame
+(Prompt 157's bound: 64 MiB over 48 bytes for the six planes held at once, the
+raw frame, the calibrated frame, the working copy and three masters). A frame
+the pointing of which cannot be found is refused by number, never silently
+dropped: the whole run refuses and names the frames, and the reader leaves them
+out by name. One target, one aperture for every frame, a translation vote that
+searches 10 pixels, no differential refraction, no colour term, no time-varying
+point-spread function. The stated period error is the asymptotic one for a sinusoid
+and is a fair guide only when the amplitude is several times its own error (the
+panel says so). The frames in the panel are synthetic.
+
+## The oracle
+
+numpy 2.2.6, scipy 1.15.3, astropy 6.1.7 and photutils 2.0.2 in Prompt 180's
+throwaway environment (nothing was added), run with `python -I` offline on
+`tests/fixtures/framepipeline/oracle-inputs.json` (48 raw frames, seed `fp-b-1`,
+and the calibration set, as deflated uint16). `oracle.py` recalibrates with numpy,
+finds each frame's shift by an FFT cross-correlation, measures with photutils'
+exact circular apertures and a sigma-clipped annulus (`ApertureStats`), and fits
+astropy's `LombScargle`. The results and the packages' versions and the scripts'
+SHA-256 are committed (`oracle-results.json`, `oracle-provenance.json`); no
+Gravitas code ran in them and tests never run Python.
+
+## Validation results
+
+`npm run frame-pipeline:validate` (Node 24.4.0, 301 s; `tests/framePipeline.test.js`
+runs the same rows and asserts each against the bounds read from
+`thresholds.json`). **57 of 58 rows pass; one committed leg fails and one is not
+run.** The bounds are those committed first (`725efc56`; the one correction, the
+scene's size, `858bd3c0`, before any validation number).
+
+| Leg | Measured | Committed bound | Verdict |
+| --- | --- | --- | --- |
+| a1 amplitude pull mean / sd | -0.016 / 0.899 | 0.45 / 0.682 to 1.318 | pass |
+| a1 period pull mean / sd | -0.064 / 1.009 | same | pass |
+| a1 worst amplitude (sigma) / worst period (relative) | 2.40 / 0.0094 | 5 / 0.02 | pass |
+| a2 pooled ratio, check star | 0.970 | 0.9 to 1.1 | pass |
+| a2 star alone over check | 17.9 | at least 5 | pass |
+| a3 against `reduceSeries` (dm, sigma) | 0, 0 | 1e-9 | pass |
+| a4 calibrated pixels against `calibrate` | 0 | 0 | pass |
+| a5 shift rms / p99 / refused | 0.019 / 0.041 px / 0 of 4800 | 0.15 / 0.4 / 0.001 | pass |
+| b1 oracle light curve, rms / p95 / max over sigma | 0.039 / 0.086 / 0.113 | 0.5 / 1 / 2 | pass |
+| b2 calibrated frames against numpy | 1.4e-14 | 1e-9 | pass |
+| b3 oracle period / amplitude, in stated sigma | 0.0008 / 0.135 | 0.5 | pass |
+| b4 shifts against the FFT, rms / max | 0.066 / 0.16 px | 0.25 / 0.6 | pass |
+| c1 amplitude coverage 1 and 2 sigma | 0.74 / 0.96 | 0.474 to 0.892 / 0.86 to 1 | pass |
+| c1 period coverage 1 and 2 sigma | 0.68 / 0.93 | same | pass |
+| **d1 refuses frames 10, 11 and 20** | **0 of 10** | 10 | **FAIL** |
+| d1 excluding them by name completes (45 points) | 10 of 10 | 10 | pass |
+| d2 varying comparison flagged / never used / false flags | 0.975 / 40 of 40 / 0 of 239 | 0.95 / all / 2 | pass |
+| d3 structural refusals, each with its code | 10 of 10 | 10 of 10 | pass |
+| d4 constant target called variable / amplitude under 5 sigma | 0 of 60 / 1.0 | 2 / 0.98 | pass |
+| d5 peak frames in flight / planes / pixel bound / frame limit | 1 / 6 / ok / ok | 1 / 6 / ok / ok | pass |
+| e1 identity, replay, sequence-changed, other seed, `simulateSeries` | all | all | pass |
+| f1 lab draws 1 to 3: period error (d) / amplitude (sigma) | 0.0015, 0.0006, 0.0010 / 0.44, 0.48, 1.47 | 0.004 / 4.5 | pass |
+| f1 the lesson's new step answer (h) | 2.884 | 2.88 within 0.1 | pass |
+| g1 authentic frame sequence | NOT RUN until Prompt 189 | | not run |
+
+**d1 fails as committed, and no bound was moved.** The leg's premise was that a
+frame at 3 percent of the light leaves nothing to detect. It leaves the four
+brightest stars (1,600 to 2,500 electrons in the frame), more than half the
+marks, and the frame registers: a dim frame is what differential photometry
+handles. The pipeline refuses frames 10 and 11 (a quarter-turned field, no stars
+match) in 10 of 10 sequences and names them, and excluding 10, 11 and 20 completes a
+45-point curve in 10 of 10. With frame 20 at 0.3 percent of the light (row
+`x.d1.blindFrame`, evidence and not a committed leg) the pipeline refuses exactly
+10, 11 and 20 in 10 of 10. The failure is recorded in
+`tests/fixtures/framepipeline/failed-legs.json` and the test holds it: it must keep
+failing until Carl rules (D-R10-63).
+
+## Corrections made after the kernel existed
+
+None to any bound. The e1 row pins the first run's frames (10 and 11, the d1
+finding); the d3 saturated-target case saturates a 3 by 3 core, because a lone
+hot pixel is repaired as a cosmic ray (the lab's own mask); the lesson step's
+answer is the pipeline's period for the panel's default seed in hours (row
+`f1.stepAnswer`).
+
+## References
+
+Kernel and lab: `CALIBRATION_LAB.md`; registration and sky coordinates
+`ASTROMETRY.md`; photometry `PHOTOMETRY.md`; detection `DETECTION.md`; the oracle's packages are cited in
+`oracle-provenance.json`.
