@@ -170,7 +170,9 @@ moved, and `tests/fixtures/overlay/failed-legs.json` holds it with its cause;
 `tests/overlay.test.js` holds the measurement to that record, so a change that
 fixes or worsens it cannot pass unnoticed. A second row, `x.a3.timeScalesAtResolution`,
 states the same errors against one spacing of the doubles (all below it) as
-evidence, not as a replacement for the failed leg. Carl may rule on the bound.
+evidence, not as a replacement for the failed leg.
+
+Ruling: Carl, chat 2026-10-23 (chose "Leave failing, labelled (Recommended)" = "Keep the committed 1e-6 s, record a3 as a known failed leg with its cause (tests pin it), take #431 out of draft and merge; no threshold moved.") The leg is therefore a known failed leg, left failing and labelled: the committed 1e-6 s bound is untouched, the cause is above, and the page effect is the 5e-10 degree below.
 Nothing in the page depends on it: a time off by one spacing moves the
 fastest planet (about a degree a day) by 5e-10 degree, against its 0.2 degree
 bound.
