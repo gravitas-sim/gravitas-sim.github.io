@@ -1,0 +1,177 @@
+{
+  "format": "gravitas.observation-data-pack",
+  "formatVersion": 1,
+  "id": "galileo-moon-19921207",
+  "version": "1.0.0",
+  "title": "The Moon from Galileo, 7 December 1992 (three filters, enhanced color)",
+  "object": {
+    "name": "Moon"
+  },
+  "facility": {
+    "observatory": "Galileo spacecraft (NASA)",
+    "instrument": "Solid State Imaging camera, violet, 756 nm and 968 nm filters",
+    "pipeline": "NASA/JPL Photojournal PIA00405, enhanced color composite"
+  },
+  "dataType": "image",
+  "origin": "observed",
+  "credit": "NASA/JPL/USGS",
+  "license": {
+    "status": "public-domain",
+    "statement": "NASA Images and Media Usage Guidelines (https://www.nasa.gov/nasa-brand-center/images-and-media/, read 2026-10-24): NASA content \"generally are not subject to copyright in the United States\"; acknowledge NASA. The PIA00405 page (science.nasa.gov/photojournal/earths-moon) credits NASA/JPL/USGS, no other restriction."
+  },
+  "retrieved": "2026-10-24",
+  "columns": [
+    {
+      "name": "display level",
+      "unit": "",
+      "description": "0 to 255, the gray of the colour picture: for the eye, not a measure of light"
+    }
+  ],
+  "masks": [],
+  "reductions": [],
+  "image": {
+    "width": 496,
+    "height": 496,
+    "sidecar": {
+      "format": "gravitas.image",
+      "formatVersion": 1,
+      "id": "galileo-moon-19921207",
+      "title": "The Moon from Galileo, 7 December 1992 (three filters, enhanced color)",
+      "use": "display-only",
+      "width": 496,
+      "height": 496,
+      "pixels": {
+        "unit": "display"
+      },
+      "planes": {
+        "data": {
+          "encoding": "uint8"
+        }
+      },
+      "history": [
+        {
+          "step": "decode",
+          "tool": "image-decode.py (Pillow)",
+          "version": "11.2.1",
+          "lossy": false
+        },
+        {
+          "step": "reencode",
+          "tool": "image-packs.mjs",
+          "version": "1.0.0",
+          "lossy": true,
+          "note": "gray of the colour (0.299, 0.587, 0.114): display levels, not light"
+        },
+        {
+          "step": "crop",
+          "tool": "image-packs.mjs",
+          "version": "1.0.0",
+          "lossy": true,
+          "wcsUpdated": false,
+          "note": "columns 1 to 1984, rows 1 to 1984 from the top left: one column and one row off each edge, so that the picture is a whole number of 4-pixel blocks"
+        },
+        {
+          "step": "resample",
+          "tool": "image-packs.mjs",
+          "version": "1.0.0",
+          "lossy": true,
+          "wcsUpdated": false,
+          "fluxConserving": false,
+          "note": "mean of 4 by 4 pixels"
+        },
+        {
+          "step": "flip",
+          "tool": "image-packs.mjs",
+          "version": "1.0.0",
+          "lossy": false,
+          "wcsUpdated": false,
+          "note": "row 1 is the bottom, as in FITS"
+        }
+      ],
+      "source": {
+        "kind": "pack"
+      }
+    }
+  },
+  "source": {
+    "archive": "NASA/JPL Photojournal (science.nasa.gov/photojournal)",
+    "urls": [
+      "https://assets.science.nasa.gov/content/dam/science/psd/photojournal/pia/pia00/pia00405/PIA00405.jpg"
+    ],
+    "citations": [
+      {
+        "text": "Galileo image of the Moon, 7 December 1992, PIA00405, NASA/JPL/USGS",
+        "url": "https://science.nasa.gov/photojournal/earths-moon/"
+      }
+    ]
+  },
+  "raw": [
+    {
+      "file": "PIA00405.jpg",
+      "url": "https://assets.science.nasa.gov/content/dam/science/psd/photojournal/pia/pia00/pia00405/PIA00405.jpg",
+      "bytes": 403335,
+      "sha256": "e13ec17cfd0b6e952ebe1cb15a941d6195da0d691122ffe4bb9579d162bcadf4"
+    }
+  ],
+  "transformation": {
+    "script": "tools/data-packs/image-packs.mjs",
+    "version": "1.0.0",
+    "options": {
+      "crop": [
+        1,
+        1,
+        1985,
+        1985
+      ],
+      "block": 4
+    },
+    "steps": [
+      "Decode the JPEG (image-decode.py, Pillow 11.2.1 (libjpeg 6.2)); gray; crop; block mean; rows from the bottom; base64 in the sidecar. Each step is in image.sidecar.history."
+    ],
+    "record": {
+      "source": {
+        "width": 1986,
+        "height": 1986
+      },
+      "decoder": {
+        "pillow": "11.2.1",
+        "libjpeg": "6.2"
+      }
+    }
+  },
+  "assumptions": [
+    "The caption’s date is the only time given; none is stated.",
+    "No pixel scale is stated or assumed: a lesson uses the Moon’s known diameter."
+  ],
+  "compatible": {
+    "widgets": [],
+    "investigations": []
+  },
+  "offline": "none",
+  "derived": {
+    "file": "js/data/observations/galileoMoon19921207.js",
+    "bytes": 4276,
+    "sha256": "6e9760d5b7776b267089f266517f10c0973c1b78aabce5c03d7be939cf1797ae",
+    "sidecar": {
+      "file": "frames/galileo-moon-19921207.json",
+      "bytes": 328187,
+      "sha256": "0e2a1fe20d1e5435c7bebf1ad43e88b285a8658292bb1a980a9df19dfa7cc4d0"
+    }
+  },
+  "validation": {
+    "check": "the frame holds one disc of about the expected size, centred: the pixels at 30 or above fill a disc whose equivalent radius is within the stated fraction of the width, with its centre within 2 percent of the middle",
+    "against": [
+      {
+        "quantity": "equivalent disc radius over the width",
+        "min": 0.4,
+        "max": 0.5,
+        "ref": "the lunar disc nearly fills the picture; its limb is close to the edges"
+      }
+    ],
+    "result": {
+      "discRadiusOverWidth": 0.494,
+      "centreOffsetX": 0.005,
+      "centreOffsetY": -0.009
+    }
+  }
+}

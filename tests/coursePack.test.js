@@ -998,8 +998,9 @@ describe('links', () => {
 describe('what the builder and course home copy, and where they are registered', () => {
   test("the datasets are the Observatory's fixtures, with its titles", async () => {
     const { FIXTURES } = await import('../js/observatory/fixtures.js');
+    // (the image packs, `library: false`, are not course datasets either: D-R10-65)
     expect(DATASETS.map(d => [d.id, d.kind])).toEqual(
-      FIXTURES.map(f => [f.id, f.kind])
+      FIXTURES.filter(f => f.library !== false).map(f => [f.id, f.kind])
     );
     for (const d of DATASETS) {
       expect(d.title.en).toBe(EN_OBSERVATORY[`obs.fixture.${d.id}`]);

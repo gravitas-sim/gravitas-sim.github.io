@@ -1,0 +1,185 @@
+{
+  "format": "gravitas.observation-data-pack",
+  "formatVersion": 1,
+  "id": "sdo-hmi-continuum-20240510",
+  "version": "1.0.0",
+  "title": "The Sun in HMI continuum light, 10 May 2024 (browse image)",
+  "object": {
+    "name": "Sun"
+  },
+  "facility": {
+    "observatory": "Solar Dynamics Observatory (NASA)",
+    "instrument": "Helioseismic and Magnetic Imager (HMI), continuum intensitygram",
+    "pipeline": "SDO browse product HMIIC, 1,024 pixels, orange colour table"
+  },
+  "dataType": "image",
+  "origin": "observed",
+  "credit": "Courtesy of NASA/SDO and the AIA, EVE, and HMI science teams",
+  "license": {
+    "status": "public-domain",
+    "statement": "SDO data rules (https://sdo.gsfc.nasa.gov/data/rules.php, read 2026-10-24): images and movies are \"not copyrighted unless explicitly noted\"; credit as above. Browse products are \"not intended for science analysis or publication\" without the PI's consent, so the pack is display-only."
+  },
+  "retrieved": "2026-10-24",
+  "columns": [
+    {
+      "name": "display level",
+      "unit": "",
+      "description": "0 to 255, the gray of the colour picture: for the eye, not a measure of light"
+    }
+  ],
+  "masks": [],
+  "reductions": [],
+  "image": {
+    "width": 512,
+    "height": 496,
+    "sidecar": {
+      "format": "gravitas.image",
+      "formatVersion": 1,
+      "id": "sdo-hmi-continuum-20240510",
+      "title": "The Sun in HMI continuum light, 10 May 2024 (browse image)",
+      "use": "display-only",
+      "width": 512,
+      "height": 496,
+      "pixels": {
+        "unit": "display"
+      },
+      "planes": {
+        "data": {
+          "encoding": "uint8"
+        }
+      },
+      "history": [
+        {
+          "step": "decode",
+          "tool": "image-decode.py (Pillow)",
+          "version": "11.2.1",
+          "lossy": false
+        },
+        {
+          "step": "reencode",
+          "tool": "image-packs.mjs",
+          "version": "1.0.0",
+          "lossy": true,
+          "note": "gray of the colour (0.299, 0.587, 0.114): display levels, not light"
+        },
+        {
+          "step": "crop",
+          "tool": "image-packs.mjs",
+          "version": "1.0.0",
+          "lossy": true,
+          "wcsUpdated": false,
+          "note": "columns 0 to 1023, rows 0 to 991 from the top left: the bottom 32 rows hold a text label (\"SDO/HMI Quick-Look Continuum: 20240510_120000\") burned into the picture"
+        },
+        {
+          "step": "resample",
+          "tool": "image-packs.mjs",
+          "version": "1.0.0",
+          "lossy": true,
+          "wcsUpdated": false,
+          "fluxConserving": false,
+          "note": "mean of 2 by 2 pixels"
+        },
+        {
+          "step": "flip",
+          "tool": "image-packs.mjs",
+          "version": "1.0.0",
+          "lossy": false,
+          "wcsUpdated": false,
+          "note": "row 1 is the bottom, as in FITS"
+        }
+      ],
+      "source": {
+        "kind": "pack"
+      }
+    }
+  },
+  "source": {
+    "archive": "SDO, NASA Goddard Space Flight Center (sdo.gsfc.nasa.gov)",
+    "urls": [
+      "https://sdo.gsfc.nasa.gov/assets/img/browse/2024/05/10/20240510_120000_1024_HMIIC.jpg"
+    ],
+    "citations": [
+      {
+        "text": "Pesnell, Thompson and Chamberlin 2012, Solar Physics 275, 3 (SDO)",
+        "doi": "10.1007/s11207-011-9841-3"
+      },
+      {
+        "text": "Scherrer et al. 2012, Solar Physics 275, 207 (HMI)",
+        "doi": "10.1007/s11207-011-9834-2"
+      },
+      {
+        "text": "SDO data rules, NASA/GSFC",
+        "url": "https://sdo.gsfc.nasa.gov/data/rules.php"
+      }
+    ]
+  },
+  "raw": [
+    {
+      "file": "20240510_120000_1024_HMIIC.jpg",
+      "url": "https://sdo.gsfc.nasa.gov/assets/img/browse/2024/05/10/20240510_120000_1024_HMIIC.jpg",
+      "bytes": 216427,
+      "sha256": "8623c25e7dae624efdabf635823ef602182641548315422dc50b9f24f4f3feb9"
+    }
+  ],
+  "transformation": {
+    "script": "tools/data-packs/image-packs.mjs",
+    "version": "1.0.0",
+    "options": {
+      "crop": [
+        0,
+        0,
+        1024,
+        992
+      ],
+      "block": 2
+    },
+    "steps": [
+      "Decode the JPEG (image-decode.py, Pillow 11.2.1 (libjpeg 6.2)); gray; crop; block mean; rows from the bottom; base64 in the sidecar. Each step is in image.sidecar.history."
+    ],
+    "record": {
+      "source": {
+        "width": 1024,
+        "height": 1024
+      },
+      "decoder": {
+        "pillow": "11.2.1",
+        "libjpeg": "6.2"
+      }
+    }
+  },
+  "assumptions": [
+    "The colour table is taken as monotonic in intensity; nothing here says how.",
+    "The date is the label’s; no time within its minute is used."
+  ],
+  "compatible": {
+    "widgets": [],
+    "investigations": []
+  },
+  "offline": "none",
+  "derived": {
+    "file": "js/data/observations/sdoHmiContinuum20240510.js",
+    "bytes": 4521,
+    "sha256": "5d4ac9a14d3f0e336e5c42e85e35c85c06cce8b9610f0a8cf56dde0c1b36b72a",
+    "sidecar": {
+      "file": "frames/sdo-hmi-continuum-20240510.json",
+      "bytes": 338772,
+      "sha256": "683c9c23d608a9e133032d42253075f3dd40bff31a890482d9e7aa6b39df95be"
+    }
+  },
+  "validation": {
+    "check": "the frame holds one disc of about the expected size, centred: the pixels at 30 or above fill a disc whose equivalent radius is within the stated fraction of the width, with its centre within 2 percent of the middle",
+    "against": [
+      {
+        "quantity": "equivalent disc radius over the width",
+        "min": 0.4,
+        "max": 0.5,
+        "ref": "the disc of the Sun fills about 92 percent of the width of the archive’s browse picture"
+      }
+    ],
+    "result": {
+      "discRadiusOverWidth": 0.46,
+      "centreOffsetX": -0.001,
+      "centreOffsetY": -0.017
+    }
+  }
+}

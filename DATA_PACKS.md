@@ -238,6 +238,19 @@ An example of each kind from material the repository already holds is in
 CCD model, MIST isochrones as a keyed grid), written by
 `tools/data-kinds-examples.mjs`, judged by `tests/dataKindsExamples.test.js`.
 
+## Image packs (Prompt 189)
+
+Four packs hold real images: `tess-hd209458-s56-frame` (quantitative) and
+`sdo-hmi-continuum-20240510`, `galileo-moon-19921207` and
+`hirise-cerberus-fossae` (display-only). A pack's pixels are a sidecar file
+under `frames/` (base64 planes in a JSON file, `gravitas.image-pack-planes`),
+not module text, so the JavaScript budgets do not count a picture; the module
+records its size and SHA-256 and the loader refuses any other file. The raw
+products are pinned by URL, size and SHA-256, a TESS file by three byte ranges
+(`range` in a `raw` entry). `offline: none` means the pack is in no precache
+tier. The rights decision for each source, the contracts and the legs run on
+the frame are in [IMAGE_PACKS.md](IMAGE_PACKS.md).
+
 ## Series encodings
 
 `js/observation.js` decodes every pack's series, in the browser and in Node

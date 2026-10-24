@@ -172,6 +172,16 @@ export const FORMATS = Object.freeze([
     schema: 'image-sequence-1.schema.json',
   },
   {
+    name: 'gravitas.image-pack-planes',
+    fields: 'format, formatVersion',
+    version: 1,
+    const: ['js/observatory/imagePacks.js', 'PLANES_VERSION'],
+    owner: 'js/observatory/imagePacks.js readFrames',
+    persisted: 'repository (frames/), fetched when an image pack is opened',
+    older: 'v1 only',
+    newer: 'refused: "not the frames of" the pack',
+  },
+  {
     name: 'gravitas.grid',
     fields: 'format, formatVersion',
     version: 1,

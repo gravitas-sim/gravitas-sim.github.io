@@ -155,6 +155,11 @@ const PARSES = {
     'none',
     'a link, capped at 8000 characters and 256 KiB inflated before it is parsed; the lab then validates what it holds',
   ],
+  'js/observatory/imagePacks.js': [
+    1,
+    'sha256Hex',
+    'a frames file of the repository, parsed only after its byte count and SHA-256 matched the pack that names it',
+  ],
   'js/observatory/comparePanel.js': [
     1,
     'none',
