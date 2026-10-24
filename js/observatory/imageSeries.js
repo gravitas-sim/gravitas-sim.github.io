@@ -415,8 +415,7 @@ export async function mountSeries(box, ctx) {
     };
     if (!m) return fail('noMark');
     const time = o?.image?.time;
-    if (!time?.scale || !Number.isFinite(Number(time.value)))
-      return fail('noTime');
+    if (!time?.scale || !Number.isFinite(+time.value)) return fail('noTime');
     const sky = ctx.marks.cal?.sky?.(m.pts[0][0], m.pts[0][1]);
     if (!sky) return fail('noWcs');
     const format = String(time.format ?? 'mjd').toLowerCase();

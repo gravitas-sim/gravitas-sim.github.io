@@ -181,6 +181,7 @@ export const ES_IMAGESERIES = {
   'obs.ser.axis.y': 'Desplazamiento norte',
   'obs.ser.axis.t': 'Días desde la primera época',
   'obs.ser.axis.dx': 'Residuo este',
+  'obs.ser.axis.dy': 'Residuo norte',
   'obs.ser.model': 'Trayectoria ajustada',
   'obs.ser.plot.path':
     'Las posiciones en cada época como desplazamientos al este y al norte en segundos de arco, con la trayectoria ajustada',

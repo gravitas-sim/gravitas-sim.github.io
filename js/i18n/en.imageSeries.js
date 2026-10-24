@@ -175,6 +175,7 @@ export const EN_IMAGESERIES = {
   'obs.ser.axis.y': 'North offset',
   'obs.ser.axis.t': 'Days since the first epoch',
   'obs.ser.axis.dx': 'Residual east',
+  'obs.ser.axis.dy': 'Residual north',
   'obs.ser.model': 'Fitted path',
   'obs.ser.plot.path':
     'The positions at each epoch as offsets east and north in arcseconds, with the fitted path',

@@ -27,6 +27,7 @@
 // to say it in another language.
 // =============================================================================
 
+import { fixed } from '../format.js';
 import { invertSpd } from '../numeric/linalg.js';
 import { chi2Survival } from './astrometry.js';
 import { profileInterval, METHODS } from '../kernels/statistics/intervals.js';
@@ -94,6 +95,9 @@ export function offsetToTdb(jd, scale) {
   return base + tdbMinusTt(tt);
 }
 
+/** A number a record holds, or the digits of one a header kept as text. */
+const recordNumber = v => (typeof v === 'string' ? Number(v) : v);
+
 /**
  * An epoch as a TDB Julian date.
  * @param {{value: number, format?: string, scale?: string}} time - format jd or mjd, scale utc, tt or tdb (any case)
@@ -102,7 +106,7 @@ export function offsetToTdb(jd, scale) {
 export function epochJd(time, { utcBefore2017 = 'refuse' } = {}) {
   const format = String(time?.format ?? 'jd').toLowerCase();
   const scale = String(time?.scale ?? '').toLowerCase();
-  if (!['jd', 'mjd'].includes(format) || !finite(Number(time?.value)))
+  if (!['jd', 'mjd'].includes(format) || !finite(recordNumber(time?.value)))
     return refuse(
       'bad-epoch',
       'an epoch needs a number and a format, jd or mjd',
@@ -114,7 +118,7 @@ export function epochJd(time, { utcBefore2017 = 'refuse' } = {}) {
     return refuse('bad-epoch', 'an epoch needs a time scale: utc, tt or tdb', {
       scale: time?.scale ?? null,
     });
-  const jd = Number(time.value) + (format === 'mjd' ? 2400000.5 : 0);
+  const jd = recordNumber(time.value) + (format === 'mjd' ? 2400000.5 : 0);
   if (scale === 'utc' && jd < JD_UTC_37) {
     if (utcBefore2017 === 'keep') return { ok: true, jd, format, scale };
     return refuse(
@@ -442,7 +446,7 @@ function judge(rows, resX, resY, chi2, k) {
 }
 
 const inconsistentMessage = j =>
-  `The residuals are larger than the stated uncertainties allow (chi-squared ${j.chi2.toFixed(1)} on ${j.dof} degrees of freedom, p = ${j.p.toExponential(1)}). Check the epoch time scale and origin, the stated uncertainties, and whether the source moves in a straight line.`;
+  `The residuals are larger than the stated uncertainties allow (chi-squared ${fixed(j.chi2, 1, 'en')} on ${j.dof} degrees of freedom, p = ${j.p.toExponential(1)}). Check the epoch time scale and origin, the stated uncertainties, and whether the source moves in a straight line.`;
 
 const bundle = (kind, prep, fit, names, units, j, extra = {}) => {
   const params = {};
@@ -732,7 +736,7 @@ export function fitJoint(series, earth, opts = {}) {
   if (prep.spanDays / YEAR < RULES.jointMinSpanYears)
     return refuse(
       'span',
-      `a parallax needs epochs over at least ${RULES.jointMinSpanYears} year; these span ${(prep.spanDays / YEAR).toFixed(2)}`,
+      `a parallax needs epochs over at least ${RULES.jointMinSpanYears} year; these span ${fixed(prep.spanDays / YEAR, 2, 'en')}`,
       { spanYears: prep.spanDays / YEAR, min: RULES.jointMinSpanYears }
     );
   const range = earth.range ?? null;

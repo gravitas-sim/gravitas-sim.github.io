@@ -451,6 +451,28 @@ const every = () => [
       ],
     }),
   }),
+  // An astrometric time series (js/measure/astrometric-series.js, Prompt 186):
+  // its fit and replay are covered in tests/astrometricSeries.test.js; here
+  // only that it is an envelope the ledger can hold.
+  artifactEntry({
+    source: SOURCE.IMAGE_SERIES,
+    title: 'Motion and parallax',
+    capturedAt: at,
+    context: { page: 'observatory' },
+    envelope: artifact({
+      id: 'image-series-1',
+      source: { kind: 'observation', id: 'series', digest },
+      quantities: [
+        {
+          id: 'parallax',
+          value: 12.4,
+          unit: 'mas',
+          uncertainty: { kind: 'sigma', sigma: 0.3, basis: 'data' },
+          origin: 'measured',
+        },
+      ],
+    }),
+  }),
   // A mission lab result (js/mission/evidence.js, Prompt 106): its envelopes
   // are covered in tests/missionEvidence.test.js; here only that the ledger
   // holds one.
@@ -657,14 +679,15 @@ describe('the submission token carries the ledger', () => {
       studentName: 'A Student',
     });
   // Every source's entry together holds more rows than a token carries
-  // (TOKEN_ROWS), so these leave out the calibration's, the PSF's and the completeness's
-  // one row each; the cut to the limit is tested on its own below.
+  // (TOKEN_ROWS), so these leave out the calibration's, the PSF's, the completeness's and
+  // the astrometric series' one row each; the cut to the limit is tested on its own below.
   const withLedger = async (
     entries = every().filter(
       e =>
         e.source !== SOURCE.IMAGE_CALIBRATION &&
         e.source !== SOURCE.IMAGE_DETECTION &&
-        e.source !== SOURCE.IMAGE_INJECTION
+        e.source !== SOURCE.IMAGE_INJECTION &&
+        e.source !== SOURCE.IMAGE_SERIES
     )
   ) => {
     const record = ledgerRecord(entries);
