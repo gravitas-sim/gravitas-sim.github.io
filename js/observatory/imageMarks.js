@@ -84,12 +84,17 @@ export function framesOf(o) {
   if (o?.kind !== 'image') return null;
   const { width, height, value, sidecar } = o.image;
   const v = columnOf(o, value).values;
+  // An archive's own variance for every pixel (an image pack's), when it gave one.
+  const variance = o.image.variance
+    ? columnOf(o, o.image.variance).values
+    : null;
   return [
     {
       id: o.id,
       width,
       height,
       data: v instanceof Float64Array ? v : Float64Array.from(v),
+      ...(variance ? { variance } : {}),
       ...(o.image.time ? { time: o.image.time } : {}),
       ...(sidecar ? { sidecar } : {}),
     },

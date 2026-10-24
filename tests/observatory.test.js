@@ -1,4 +1,5 @@
 import './galacticFetch.js';
+import { webcrypto } from 'node:crypto';
 import { describe, test, expect } from '@jest/globals';
 import { readFileSync } from 'node:fs';
 
@@ -38,6 +39,13 @@ import {
 } from '../js/observatory/schema.js';
 import { OPS, replay, whyNot } from '../js/observatory/transforms.js';
 import { createHistory } from '../js/observatory/history.js';
+
+// The image packs' frames files are checked by SHA-256 (js/observatory/imagePacks.js).
+if (!globalThis.crypto?.subtle)
+  Object.defineProperty(globalThis, 'crypto', {
+    value: webcrypto,
+    configurable: true,
+  });
 import { createSelection } from '../js/plot/select.js';
 import { build, read, LIMITS } from '../js/observatory/import.js';
 import {

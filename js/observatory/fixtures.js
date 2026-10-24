@@ -477,6 +477,20 @@ async function tessAperture() {
 }
 
 /**
+ * An image pack: its record and its fetched, checksummed frames, as an image
+ * observation (./imagePacks.js; IMAGE_PACKS.md). Both arrive when it is opened.
+ */
+const imagePack = load => async () => {
+  const [mod, { imagePackObservation }] = await Promise.all([
+    load(),
+    import('./imagePacks.js'),
+  ]);
+  return imagePackObservation(mod, {
+    citations: linkedCitations(mod.PACK.citations),
+  });
+};
+
+/**
  * Every fixture, in the order the page offers them. `tags` are subjects from
  * the lessons' vocabulary (js/data/investigations/browseData.js), which the
  * Library files each one under (LIBRARY.md).
@@ -523,6 +537,38 @@ export const FIXTURES = Object.freeze([
     kind: 'image',
     tags: ['exoplanets', 'observing'],
     load: tessAperture,
+  },
+  {
+    id: 'tess-frame',
+    kind: 'image',
+    tags: ['exoplanets', 'observing'],
+    load: imagePack(
+      () => import('../data/observations/tessHd209458S56Frame.js')
+    ),
+  },
+  {
+    id: 'sdo-hmi-sun',
+    kind: 'image',
+    tags: ['observing', 'solar-system'],
+    load: imagePack(
+      () => import('../data/observations/sdoHmiContinuum20240510.js')
+    ),
+  },
+  {
+    id: 'galileo-moon',
+    kind: 'image',
+    tags: ['observing', 'solar-system'],
+    load: imagePack(
+      () => import('../data/observations/galileoMoon19921207.js')
+    ),
+  },
+  {
+    id: 'hirise-cerberus-fossae',
+    kind: 'image',
+    tags: ['observing', 'solar-system'],
+    load: imagePack(
+      () => import('../data/observations/hiriseCerberusFossae.js')
+    ),
   },
   {
     id: 'ngc2420-photometry',

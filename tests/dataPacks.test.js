@@ -394,6 +394,8 @@ function copyForCheck() {
     'js/kernels/radiation',
     // The galactic packs' rows are sidecar files.
     'gaia',
+    // The image packs' pixel planes are sidecar files (Prompt 189).
+    'frames',
     // The galactic packs' checks run the galactic kernel.
     'js/kernels/galactic',
     // The cosmology packs' rows are sidecar files and their checks run the kernel.
@@ -782,8 +784,10 @@ describe('what a pack owes, and where it goes', () => {
       const offline = json(pack.manifest).offline;
       expect({ pack: pack.id, offline }).toEqual({
         pack: pack.id,
-        offline: expect.stringMatching(/^(core|optional|idle)$/),
+        offline: expect.stringMatching(/^(core|optional|idle|none)$/),
       });
+      // `none` (the image packs, Prompt 189) is in no tier: fetched when the
+      // frame is opened, and kept by the service worker after that.
       for (const [name, list] of Object.entries(tiers))
         if (name === offline) expect(list).toContain(pack.module);
         else expect(list).not.toContain(pack.module);
