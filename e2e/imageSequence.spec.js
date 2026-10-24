@@ -1,3 +1,4 @@
+/* global MutationObserver */
 // =============================================================================
 // Frames to a light curve, in a browser (Prompt 185)
 // -----------------------------------------------------------------------------
@@ -177,7 +178,10 @@ test.describe('frames to a light curve: single pointer alone', () => {
     const text = await (
       await import('node:fs/promises')
     ).readFile(await download.path(), 'utf8');
-    const lines = text.replace(/^﻿/, '').trim().split(/\r?\n/);
+    const lines = text
+      .replace(/^\uFEFF/, '')
+      .trim()
+      .split(/\r?\n/);
     expect(lines).toHaveLength(49);
     expect(lines[0]).toContain('Differential magnitude');
     await btn(page, 'Keep in the ledger').click();
