@@ -478,6 +478,13 @@
       "student": false
     },
     {
+      "file": "MEASUREMENT_CLAIMS.md",
+      "kind": "feature",
+      "purpose": "The measurement, uncertainty and claim-limits investigations: what each claims on synthetic truth, where it stops, and where the files live (Prompt 190).",
+      "owner": 190,
+      "student": true
+    },
+    {
       "file": "MEASUREMENT_PIPELINE.md",
       "kind": "feature",
       "purpose": "The measurement pipeline.",

@@ -57,7 +57,7 @@ export const WHAT_IS_A_MEASUREMENT = {
   depths: ['core', 'quantitative', 'advanced'],
   mathematics: 'arithmetic',
   prerequisites: [],
-  tags: ['observing', 'statistics'],
+  tags: ['observing'],
   lock: { placement: true, inspector: true },
   objectives: [
     'Say why five marks of one star are five different numbers, and that the spread belongs to the marking and is not a mistake',
@@ -418,7 +418,7 @@ export const WHAT_DOES_PLUS_MINUS_CLAIM = {
   depths: ['core', 'quantitative', 'advanced'],
   mathematics: 'algebra',
   prerequisites: ['what-is-a-measurement'],
-  tags: ['observing', 'statistics'],
+  tags: ['observing'],
   lock: { placement: true, inspector: true },
   objectives: [
     'Say what coverage means: of many repeats of a measurement, the share whose stated interval holds the true value',
@@ -850,7 +850,7 @@ export const WHEN_THE_METHOD_MUST_REFUSE = {
   depths: ['core', 'quantitative', 'advanced'],
   mathematics: 'algebra',
   prerequisites: ['what-does-plus-minus-claim'],
-  tags: ['observing', 'statistics'],
+  tags: ['observing'],
   lock: { placement: true, inspector: true },
   objectives: [
     'Say what a profile is: the best fit left when one parameter is held at each trial value',

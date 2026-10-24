@@ -113,7 +113,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 2044.4,
+    limit: 2045.0,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -668,7 +668,8 @@ const BUDGETS = [
       '\n\nPrompt 107 step 2b slice 2 (the planet, gas giant, asteroid, debris, comet and black hole drawers moved out of js/physics.js into js/bodyDraw.js; the spatial hash folded into js/physics.js), measured on v2 at 5cb03b4, took it from 2034.2 to 2034.3 KB gzipped (5542.4 KB raw, measured 2034.263 on Node 24 after a fresh node build.js on the branch merged with v2; v2 itself measures 2034.110; CI on Node 20 reads lower), 0.1 KB (D-DECOMP-11, the standing size-budget approval in the project CLAUDE.md). The initial download is 792.7 KB of 830.0; no request ceiling moved.' +
       "\n\nPrompt 108, slice 7 (the tidal disruption's stub as a place rule, the Studio group's reworded label and caution in both languages), measured on v2 at 2bea147, took it from 2034.3 to 2034.4 KB gzipped (5542.5 KB raw, measured 2034.365 on Node 24 after a fresh node build.js on the branch merged with v2; v2 itself measures 2034.266; CI on Node 20 reads lower), 0.1 KB (D-BUDGET-GEOM-07, the standing size-budget approval in the project CLAUDE.md). The initial download is 793.0 KB of 830.0; no request ceiling moved." +
       '\n\nPlot stage 3b (the energy chart, the light curve and the radial-velocity trace ported to js/plot/chart.js, D-PLOT-02), measured on v2 at 93737a56, took it from 2034.4 to 2041.0 KB gzipped (the CI build, on Node 22, measures 2,089,945 bytes gzipped, 2040.962 KB, an overrun of 6.6 KB rounded up to 0.1; the local Node 24 build, which compresses larger, measured 2042.244 KB, 5560.0 KB raw, after merging v2; v2 itself measures 2034.2) (D-PLOT-04, the standing size-budget approval in the project CLAUDE.md): the series chart (js/plot/chart.js, 6.2 KB gzipped), its words (js/i18n/en.chart.js and es.chart.js, registered by js/plot/mount.js in one chunk with the chart) and its PNG (js/plot/export.js, 1.3) are lazy chunks fetched when a chart is built, and the mount is the rest. Chart.js is still shipped for the bench charts, so nothing came back yet; stage 4 removes it. The initial download fell, 793.7 to 791.4 KB of 830.0; no request ceiling moved.' +
-      '\n\nPrompt 127 (the accessible HTML report builder, js/htmlReport.js, and its download button), measured on CI Node 22 at run 39035194510, took it from 2041.0 KB to 2044.395 KB gzipped (2,093,460 bytes), an overrun of 3,476 bytes; the limit is raised to 2044.4 KB under the standing approval for size budgets (D-R9-09).',
+      '\n\nPrompt 127 (the accessible HTML report builder, js/htmlReport.js, and its download button), measured on CI Node 22 at run 39035194510, took it from 2041.0 KB to 2044.395 KB gzipped (2,093,460 bytes), an overrun of 3,476 bytes; the limit is raised to 2044.4 KB under the standing approval for size budgets (D-R9-09).' +
+      '\n\nPrompt 190 (the claim instrument family, js/claimWidgets.js and its words, and the three measurement investigations in four shared files), measured on a Node 22 scratchpad copy of the branch merged with v3 at d61da28b, took it from 2044.4 to 2044.979 KB gzipped (2,094,059 bytes, 5562.1 KB raw), an overrun of 593 bytes over the 2044.4 KB ceiling; the limit is raised to 2045.0 KB under the standing approval for size budgets (D-R10-67). The initial download is unchanged at 817,209 bytes; no request ceiling moved.',
   },
 ];
 
