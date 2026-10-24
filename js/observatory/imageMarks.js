@@ -2,22 +2,20 @@
 // The image marks instrument (Prompt 179)
 // -----------------------------------------------------------------------------
 // A picture, its marks and a table that says the same in words, ported from the
-// gate's prototype (IMAGE_MEASUREMENT_GATE.md, D-R10-48) on js/measure/. The
-// picture is a canvas at js/dataKinds/limits.js displayPlan; marks are drawn on a
-// second canvas above it, in full-resolution coordinates. Every mark is a table
-// row with typeable coordinates, so nothing in the picture is picture-only.
+// gate's prototype (IMAGE_MEASUREMENT_GATE.md) on js/measure/. The picture is a
+// canvas at js/dataKinds/limits.js displayPlan; marks are drawn on a second
+// canvas above it, in full-resolution coordinates. Every mark is a table row
+// with typeable coordinates, so nothing in the picture is picture-only.
 //   keyboard  arrows nudge (Alt a quarter pixel, one, Shift four: INTERACTION.md),
 //             PageUp and PageDown fifty, Enter places at the aim, Escape cancels,
 //             Delete, Ctrl or Cmd+Z undoes; everything else is a button
 //   pointer   a click places; a tap sets a draft (with a loupe), the pad moves
-//             it, Place confirms: no drag, no second finger (DESIGN_SYSTEM.md)
-//   announce  one polite message per commit; a run of nudges is one commit,
-//             said when the pressing stops
-// Loaded when the panel is first opened, with the image kind: nothing here is on
-// the Observatory's route. It imports nothing that pulls the interface catalogs
-// (js/interaction.js and js/notify.js do, 81 KiB), so the settle rule and nudge
-// sizes are written out below, held to the registry by a test. One panel serves
-// the page's life and shows whichever image is open (`update`).
+//             it, Place confirms: no drag, no second finger
+//   announce  one polite message per commit, a run of nudges being one
+// Loaded when the panel is first opened, with the image kind. It imports nothing
+// that pulls the interface catalogs (js/interaction.js and js/notify.js do), so
+// the settle rule and nudge sizes are written out below, held to the registry by
+// a test. One panel serves the page's life and shows whichever image is open.
 // =============================================================================
 
 import { columnOf } from './schema.js';

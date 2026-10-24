@@ -493,7 +493,8 @@ const imagePack = load => async () => {
 /**
  * Every fixture, in the order the page offers them. `tags` are subjects from
  * the lessons' vocabulary (js/data/investigations/browseData.js), which the
- * Library files each one under (LIBRARY.md).
+ * Library files each one under (LIBRARY.md). `library: false` keeps one out
+ * of the Library (the image packs: its index is an idle file with 11 B of room).
  */
 export const FIXTURES = Object.freeze([
   {
@@ -541,6 +542,7 @@ export const FIXTURES = Object.freeze([
   {
     id: 'tess-frame',
     kind: 'image',
+    library: false,
     tags: ['exoplanets', 'observing'],
     load: imagePack(
       () => import('../data/observations/tessHd209458S56Frame.js')
@@ -549,6 +551,7 @@ export const FIXTURES = Object.freeze([
   {
     id: 'sdo-hmi-sun',
     kind: 'image',
+    library: false,
     tags: ['observing', 'solar-system'],
     load: imagePack(
       () => import('../data/observations/sdoHmiContinuum20240510.js')
@@ -557,6 +560,7 @@ export const FIXTURES = Object.freeze([
   {
     id: 'galileo-moon',
     kind: 'image',
+    library: false,
     tags: ['observing', 'solar-system'],
     load: imagePack(
       () => import('../data/observations/galileoMoon19921207.js')
@@ -565,6 +569,7 @@ export const FIXTURES = Object.freeze([
   {
     id: 'hirise-cerberus-fossae',
     kind: 'image',
+    library: false,
     tags: ['observing', 'solar-system'],
     load: imagePack(
       () => import('../data/observations/hiriseCerberusFossae.js')

@@ -57,66 +57,6 @@
       "prerequisites": [],
       "pack": "tess-hd209458-s56-aperture"
     },
-    "tess-frame": {
-      "kind": "image",
-      "summary": {
-        "en": "One 2-minute TESS frame of HD 209458 in electrons per second, with the archive's own error for every pixel: a frame that photometry, source detection and completeness may use, with its saturation level and linearity stated.",
-        "es": "Un cuadro de TESS de HD 209458 de dos minutos, en electrones por segundo, con el error que el archivo da para cada píxel: un cuadro que la fotometría, la detección de fuentes y la completitud pueden usar, con su nivel de saturación y su linealidad declarados."
-      },
-      "level": "intermediate",
-      "duration": {
-        "min": 10,
-        "max": 20
-      },
-      "mathematics": "arithmetic",
-      "prerequisites": [],
-      "pack": "tess-hd209458-s56-frame"
-    },
-    "sdo-hmi-sun": {
-      "kind": "image",
-      "summary": {
-        "en": "The Sun's visible disk in HMI continuum light, as a picture for marking only: it is a display image, so no brightness is measured from it.",
-        "es": "El disco visible del Sol en luz continua de HMI, como imagen para marcar solamente: es una imagen de visualización, así que no se mide brillo con ella."
-      },
-      "level": "intro",
-      "duration": {
-        "min": 5,
-        "max": 10
-      },
-      "mathematics": "none",
-      "prerequisites": [],
-      "pack": "sdo-hmi-continuum-20240510"
-    },
-    "galileo-moon": {
-      "kind": "image",
-      "summary": {
-        "en": "The Moon as Galileo saw it on its way to Jupiter, in enhanced colour, as a picture for marking only: the colours are chosen to show rock types, not measured.",
-        "es": "La Luna tal como la vio Galileo camino de Júpiter, en color realzado, como imagen para marcar solamente: los colores se eligen para mostrar tipos de roca, no se miden."
-      },
-      "level": "intro",
-      "duration": {
-        "min": 5,
-        "max": 10
-      },
-      "mathematics": "none",
-      "prerequisites": [],
-      "pack": "galileo-moon-19921207"
-    },
-    "hirise-cerberus-fossae": {
-      "kind": "image",
-      "summary": {
-        "en": "A HiRISE strip of Cerberus Fossae and a lava flow on Mars, as a picture for marking only: a display image, with no measurement of light.",
-        "es": "Una franja de HiRISE de Cerberus Fossae y un flujo de lava en Marte, como imagen para marcar solamente: una imagen de visualización, sin medida de luz."
-      },
-      "level": "intro",
-      "duration": {
-        "min": 5,
-        "max": 10
-      },
-      "mathematics": "none",
-      "prerequisites": [],
-      "pack": "hirise-cerberus-fossae"
-    },
     "sdss-a": {
       "kind": "spectrum",
       "summary": {

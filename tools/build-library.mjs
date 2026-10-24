@@ -511,7 +511,7 @@ export async function buildLibrary() {
       ...(c.subjects ? { subjects: c.subjects } : {}),
     };
   };
-  for (const f of FIXTURES) {
+  for (const f of FIXTURES.filter(f => f.library !== false)) {
     entries.push(
       entry({
         id: `dataset:${f.id}`,

@@ -98,8 +98,10 @@ say something different from them; NOTICE lists what each one cites.
 | `js/data/exoplanetSystems.js` | HD 209458 and the Sun and Jupiter: parameters compiled from the literature (`exoplanet-systems`) | compilation | no license; attribution requested; see NOTICE |
 | `js/data/observations/gaiaNgc2420.js` | NGC 2420: Gaia DR3 astrometry (`gaia-dr3-ngc2420`) | observed | CC BY-NC 3.0 IGO (non-commercial use only); see NOTICE |
 | `js/data/observations/gaiaSolarNeighbourhood.js` | The solar neighbourhood: 1,570 Gaia DR3 stars with radial velocities (`gaia-dr3-solar-neighbourhood`) | observed | CC BY-NC 3.0 IGO (non-commercial use only); see NOTICE |
+| `js/data/observations/galileoMoon19921207.js` | The Moon from Galileo, 7 December 1992 (three filters, enhanced colour) (`galileo-moon-19921207`) | observed | public domain; see NOTICE |
 | `js/data/gw/gw150914.js` | GW150914: the published figure data (`gw150914-figure-data`) | observed | CC BY 4.0; see NOTICE |
 | `js/data/gw/gwoscEvents.js` | Five gravitational-wave events: whitened GWOSC strain (`gwosc-five-events`) | observed | CC BY 4.0; see NOTICE |
+| `js/data/observations/hiriseCerberusFossae.js` | Mars from HiRISE: Cerberus Fossae and a lava flow (ESP_069637_1915) (`hirise-cerberus-fossae`) | observed | public domain; see NOTICE |
 | `js/data/observations/hubble1929Table1.js` | Hubble's 1929 distances and velocities of 24 nebulae (Table 1) (`hubble-1929-table1`) | compilation | public domain; see NOTICE |
 | `js/data/observations/milkyWayRotationCurve.js` | The Milky Way's rotation curve (Bhattacharjee, Chaudhury and Kundu 2014) (`milky-way-rotation-curve`) | compilation | no license stated; see NOTICE |
 | `js/data/observations/mistSdssIsochrones.js` | MIST v1.2 isochrones in the SDSS bands (a model) (`mist-sdss-isochrones`) | model | no license stated; see NOTICE |
@@ -111,6 +113,7 @@ say something different from them; NOTICE lists what each one cites.
 | `js/data/radiation/extinction.js` | The Cardelli, Clayton & Mathis (1989) interstellar extinction law: coefficients (`radiation-extinction`) | compilation | no license; attribution requested; see NOTICE |
 | `js/data/radiation/gaiaBandpasses.js` | Gaia (E)DR3 G, G_BP and G_RP passbands and zero points (non-commercial license) (`radiation-gaia-bandpasses`) | compilation | CC BY-NC 3.0 IGO (non-commercial use only); see NOTICE |
 | `js/data/radiation/lines.js` | The strongest optical spectral lines: rest wavelengths in air and vacuum (`radiation-lines`) | compilation | public domain; see NOTICE |
+| `js/data/observations/sdoHmiContinuum20240510.js` | The Sun in HMI continuum light, 10 May 2024 (browse image) (`sdo-hmi-continuum-20240510`) | observed | public domain; see NOTICE |
 | `js/data/observations/sdssNgc2420Photometry.js` | NGC 2420: SDSS DR18 photometry (`sdss-dr18-ngc2420-photometry`) | observed | public domain; see NOTICE |
 | `js/data/observations/sdssNgc2420Segue.js` | NGC 2420: SEGUE stellar parameters (`sdss-dr18-ngc2420-segue`) | observed | public domain; see NOTICE |
 | `js/data/observations/sdssDr18RedshiftSlice.js` | SDSS DR18 galaxy redshifts in a 120 to 240 degree strip at declination 0 to 0.5 degrees (a wedge) (`sdss-dr18-redshift-slice`) | observed | public domain; see NOTICE |
@@ -119,6 +122,7 @@ say something different from them; NOTICE lists what each one cites.
 | `js/data/sky/brightStars.js` | Bright stars to V 4.5 for the Sky Lab: the Yale Bright Star Catalogue (5th revised edition) (`sky-bright-stars`) | compilation | no license stated; see NOTICE |
 | `js/data/observations/tessEtaAqlS81.js` | Eta Aquilae: TESS sector 81 light curve (a classical Cepheid) (`tess-eta-aql-s81`) | observed | public domain; see NOTICE |
 | `js/data/observations/tessHd209458S56Aperture.js` | HD 209458: TESS sector 56 aperture mask (`tess-hd209458-s56-aperture`) | observed | public domain; see NOTICE |
+| `js/data/observations/tessHd209458S56Frame.js` | HD 209458, TESS sector 56, one 2-minute cadence: calibrated flux and its error (`tess-hd209458-s56-frame`) | observed | public domain; see NOTICE |
 | `js/data/observations/tessHd209458S56.js` | HD 209458: TESS sector 56 light curve (`tess-hd209458-s56-lc`) | observed | public domain; see NOTICE |
 | `js/data/observations/tessSuDraS15.js` | SU Draconis: TESS sector 15 light curve (an RR Lyrae star) (`tess-su-dra-s15`) | observed | public domain; see NOTICE |
 | `js/data/trappist1.js` | TRAPPIST-1: the star and its seven planets, compiled from the literature (`trappist-1-system`) | compilation | no license; attribution requested; see NOTICE |
