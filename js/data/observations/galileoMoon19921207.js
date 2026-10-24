@@ -1,5 +1,5 @@
 // =============================================================================
-// The Moon from Galileo, 7 December 1992 (three filters, enhanced colour)
+// The Moon from Galileo, 7 December 1992 (three filters, enhanced color)
 // -----------------------------------------------------------------------------
 // GENERATED FILE. Do not edit. Written by tools/build-data-packs.mjs
 // (tools/data-packs/image-packs.mjs) from PIA00405.jpg;
@@ -18,14 +18,14 @@ export const PACK = {
   id: 'galileo-moon-19921207',
   version: '1.0.0',
   title:
-    'The Moon from Galileo, 7 December 1992 (three filters, enhanced colour)',
+    'The Moon from Galileo, 7 December 1992 (three filters, enhanced color)',
   object: {
     name: 'Moon',
   },
   facility: {
     observatory: 'Galileo spacecraft (NASA)',
     instrument: 'Solid State Imaging camera, violet, 756 nm and 968 nm filters',
-    pipeline: 'NASA/JPL Photojournal PIA00405, enhanced colour composite',
+    pipeline: 'NASA/JPL Photojournal PIA00405, enhanced color composite',
   },
   dataType: 'image',
   origin: 'observed',
@@ -54,7 +54,7 @@ export const PACK = {
       formatVersion: 1,
       id: 'galileo-moon-19921207',
       title:
-        'The Moon from Galileo, 7 December 1992 (three filters, enhanced colour)',
+        'The Moon from Galileo, 7 December 1992 (three filters, enhanced color)',
       use: 'display-only',
       width: 496,
       height: 496,

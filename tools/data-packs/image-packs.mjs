@@ -505,12 +505,12 @@ export const GALILEO_MOON = displayPack({
   id: 'galileo-moon-19921207',
   name: 'galileoMoon19921207',
   title:
-    'The Moon from Galileo, 7 December 1992 (three filters, enhanced colour)',
+    'The Moon from Galileo, 7 December 1992 (three filters, enhanced color)',
   object: { name: 'Moon' },
   facility: {
     observatory: 'Galileo spacecraft (NASA)',
     instrument: 'Solid State Imaging camera, violet, 756 nm and 968 nm filters',
-    pipeline: 'NASA/JPL Photojournal PIA00405, enhanced colour composite',
+    pipeline: 'NASA/JPL Photojournal PIA00405, enhanced color composite',
   },
   credit: 'NASA/JPL/USGS',
   license: {

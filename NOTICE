@@ -398,7 +398,7 @@ gaia-dr3-solar-neighbourhood: The solar neighbourhood: 1,570 Gaia DR3 stars with
     Katz et al. 2023, A&A 674, A5 (Gaia DR3: properties and validation of the radial velocities), doi:10.1051/0004-6361/202244220
     Lindegren et al. 2021, A&A 649, A2 (Gaia EDR3: astrometric solution; the RUWE statistic and the parallax zero-point), doi:10.1051/0004-6361/202039709
 
-galileo-moon-19921207: The Moon from Galileo, 7 December 1992 (three filters, enhanced colour)
+galileo-moon-19921207: The Moon from Galileo, 7 December 1992 (three filters, enhanced color)
   File: js/data/observations/galileoMoon19921207.js (observed)
   Licence: public domain. NASA Images and Media Usage Guidelines (https://www.nasa.gov/nasa-brand-center/images-and-media/, read 2026-10-24): NASA content "generally are not subject to copyright in the United States"; acknowledge NASA. The PIA00405 page (science.nasa.gov/photojournal/earths-moon) credits NASA/JPL/USGS, no other restriction.
   Cite:

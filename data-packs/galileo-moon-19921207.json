@@ -3,14 +3,14 @@
   "formatVersion": 1,
   "id": "galileo-moon-19921207",
   "version": "1.0.0",
-  "title": "The Moon from Galileo, 7 December 1992 (three filters, enhanced colour)",
+  "title": "The Moon from Galileo, 7 December 1992 (three filters, enhanced color)",
   "object": {
     "name": "Moon"
   },
   "facility": {
     "observatory": "Galileo spacecraft (NASA)",
     "instrument": "Solid State Imaging camera, violet, 756 nm and 968 nm filters",
-    "pipeline": "NASA/JPL Photojournal PIA00405, enhanced colour composite"
+    "pipeline": "NASA/JPL Photojournal PIA00405, enhanced color composite"
   },
   "dataType": "image",
   "origin": "observed",
@@ -36,7 +36,7 @@
       "format": "gravitas.image",
       "formatVersion": 1,
       "id": "galileo-moon-19921207",
-      "title": "The Moon from Galileo, 7 December 1992 (three filters, enhanced colour)",
+      "title": "The Moon from Galileo, 7 December 1992 (three filters, enhanced color)",
       "use": "display-only",
       "width": 496,
       "height": 496,
@@ -150,8 +150,8 @@
   "offline": "none",
   "derived": {
     "file": "js/data/observations/galileoMoon19921207.js",
-    "bytes": 4280,
-    "sha256": "fed8f481aa72b460c227155ae4608d18bd0e0ed94cee35adc4448777a051c6ee",
+    "bytes": 4276,
+    "sha256": "6e9760d5b7776b267089f266517f10c0973c1b78aabce5c03d7be939cf1797ae",
     "sidecar": {
       "file": "frames/galileo-moon-19921207.json",
       "bytes": 328187,
