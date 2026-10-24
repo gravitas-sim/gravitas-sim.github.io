@@ -253,8 +253,8 @@ $('obsDetectPanel').addEventListener('toggle', () => {
       () => (detect = null)
     );
 });
-// Completeness by injection (INJECTION.md): loaded when first opened.
-let inject = null;
+let inject = null; // completeness (INJECTION.md): loaded when first opened
+let overlay = null; // catalog overlays (OVERLAYS.md): loaded when first opened
 $('obsInjectPanel').addEventListener('toggle', () => {
   if ($('obsInjectPanel').open && state.view)
     inject ??= import('./observatory/imageInject.js').then(
@@ -262,8 +262,6 @@ $('obsInjectPanel').addEventListener('toggle', () => {
       () => (inject = null)
     );
 });
-// Catalog overlays, blink and compare (OVERLAYS.md): loaded when first opened.
-let overlay = null;
 $('obsOverlayPanel').addEventListener('toggle', () => {
   if ($('obsOverlayPanel').open && state.view)
     overlay ??= import('./observatory/imageOverlay.js').then(
@@ -1037,8 +1035,7 @@ $('obsNextPage').addEventListener('click', () => table.turn(1));
 // --- Opening ----------------------------------------------------------------------
 
 function open(o, changes = []) {
-  // The overlay panel can ask to hold the next image as its second frame.
-  if (marks.take?.(o)) return;
+  if (marks.take?.(o)) return; // the overlay panel's second frame
   state.source = o;
   state.history.reset(changes);
   state.selection = null;
