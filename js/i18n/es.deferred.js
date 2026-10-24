@@ -377,7 +377,6 @@ export const ES_DEFERRED = {
     'Las dos pasadas no miden lo mismo, asi que la diferencia no permite concluir nada.',
   'reliability.verdict.diverged':
     'Las dos trayectorias se separaron, pero las medidas agregadas se mantuvieron.',
-
   'reliability.reason.missingRun': 'Falta una de las dos pasadas.',
   'reliability.reason.noDuration':
     'Una pasada no cubrio tiempo simulado alguno.',

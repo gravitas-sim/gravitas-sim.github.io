@@ -306,3 +306,214 @@ leaves the 0.6827 distance interval open above in 80 to 88 percent of series
 (0.841 expected).
 
 **(e) Authentic data.** Not run until Prompt 189.
+
+## What was built for the time series
+
+- `js/measure/astrometric-series.js`: `twoEpochShift`, `fitMotion`, `fitJoint`,
+  the Earth provider `createEarth`, the epoch converter `epochJd`, the parallax
+  factors, the distance interval, the Prompt 150 quantities and fit-result record,
+  a replayable reduction and CSV rows. Its only imports are Prompt 152's linear
+  algebra, `chi2Survival` of the calibration kernel above and Prompt 154's
+  `profileInterval`; the Earth's position is a provider handed in, so the module
+  imports no ephemeris. A refusal is `{ ok: false, status: 'not-constrained',
+  code, message, data }`.
+- `js/observatory/imageSeries.js` (with `js/i18n/{en,es}.imageSeries.js`): a lazy
+  disclosure inside the sky-coordinates panel (`#obsSeriesPanel`). A table of
+  epochs the reader types, pastes, or fills from the point mark of the open image
+  (its tag, the frame's time with its scale, and the sky position and uncertainty
+  from the calibration above: `ctx.marks.cal.sky`); a choice of two-epoch shift,
+  proper motion, or parallax with proper motion; an optional reference-frame name
+  and correction to absolute parallax (with its uncertainty and its required
+  source); the parameters, the verdict, the distance with both intervals and the
+  frame statement, the path and the residuals through the plot component with their
+  tables, the residuals as CSV, and Keep in the ledger (notebook source
+  `image-series`, a Prompt 150 fit-result record, the reduction that runs again).
+  The ephemeris the joint fit needs is the repository's own sidecar
+  (`/sky/ephemeris.json`), fetched when a joint fit is first asked for.
+- `tools/astrometric-series-synth.mjs` (the synthetic series with a truth
+  manifest), `tools/astrometric-series-validate.mjs` (`npm run
+  astrometric-series:validate`), `tools/astrometric-series-oracle/` (the offline
+  oracle) and the pinned fixtures in `tests/fixtures/astrometric-series/`.
+
+## The equations
+
+With `p` the parallax in arcseconds, `(a, d)` the reference direction and
+`(X, Y, Z)` the Earth's barycentric position in au (equatorial, ICRS-aligned), the
+apparent displacement in standard coordinates is `xi = x0 + mux t + p fx(t)` and
+`eta = y0 + muy t + p fy(t)`, with
+
+    fx = X sin a - Y cos a
+    fy = X cos a sin d + Y sin a sin d - Z cos d
+
+(the minus sign of a source seen from a moving Earth is in the factors: an Earth
+on the +X axis shifts a source at a = 0 towards -Y, so `fx` is `-Y`). `t` is the
+epoch less the weighted mean epoch in Julian years. The five parameters are fitted
+by the normal equations on columns scaled to unit rms (`invertSpd`), with weights
+`1/sigma^2` per axis; the covariance is the inverse of the normal matrix. The
+profile of `p` is therefore exactly a parabola, `chi2(p) = chi2min + ((p - phat) /
+sigma_p)^2`, and the interval is Prompt 154's `profileInterval` of that profile at
+0.6827 and 0.95; the distance interval is `[1 / p_hi, 1 / p_lo]` in parsecs, open
+above when `p_lo <= 0` and empty when `p_hi <= 0`. The reference direction is the
+normalised mean of the positions' unit vectors, the factors are taken there, and the
+linear model differs from the exact spherical geometry by a term of order `p` times
+the offset (below a micro-arcsecond for the cases here: a5 recovers the truth to
+5e-8 arcsec).
+
+**The Earth.** The repository's ephemeris pack (Earth, Venus, Mars and the Jupiter
+system, heliocentric, DE441 derived, 2025 to 2045 TDB) gives the Earth's
+heliocentric position; the Sun's offset from the solar-system barycentre is the
+mass-weighted mean of the planets' heliocentric positions (the DE440 mass ratios;
+Saturn, Uranus and Neptune from the sky kernel's Standish elements; Mercury left
+out, 1.7e-7 of the Sun's mass), subtracted. Against ERFA's barycentric Earth at
+365 dates the largest difference is 7.1e-6 au. A joint fit outside 2025 to 2045 is
+refused (`epoch-range`); a proper motion needs no ephemeris and has no range.
+
+**Time.** An epoch is a number with a format (JD or MJD) and a scale (UTC, TT or
+TDB). TT = UTC + 69.184 s (TAI - UTC = 37 s, so UTC before 2017-01-01 is refused
+for a joint fit and kept as given for a proper motion, where a leap second moves
+nothing measurable) and TDB = TT + 0.001657 sin g + 0.000014 sin 2g seconds. No
+leap second after 2016 is assumed; a later one moves an epoch by one second, 3e-8 of
+a year.
+
+## The reference-frame statement
+
+A parallax fitted to positions measured against the reference stars of a
+calibration is **relative**: the reference stars' own parallaxes are in the frame.
+It is smaller than the absolute parallax by their mean parallax, so the distance it
+gives is never smaller than the true distance if that mean parallax is positive. The
+result says so beside every distance. A correction to absolute is applied only when
+the reader gives its size, its uncertainty and its **source**; there is no default
+and no universal value (the mean parallax of faint reference stars depends on the
+field and the magnitude range, and the tool does not model it). With a correction,
+the page shows the relative parallax, the correction, its source and the absolute
+parallax, whose uncertainty is the two in quadrature.
+
+## Limits, said on the page
+
+- **Two epochs teach a shift.** A two-epoch result carries the label "shift under a
+  fixed-motion assumption; not a parallax" and has no parallax or distance field. It
+  also says how much of a parallax the shift could hide (the difference of the
+  parallax factors of the two epochs).
+- **A parallax needs the ellipse sampled.** At least 8 epochs, 0.9 year, and 3 of the
+  4 quarters of the Earth's orbit (by ecliptic longitude): fewer is `not-constrained`
+  with the code and the numbers. The rules say nothing of the noise: a series that
+  meets them can still give a parallax of no significance, and the interval says so
+  (open above, a low-significance note under 5 sigma).
+- **Independent uncertainties and a straight line.** No orbital motion (a binary's
+  orbit looks like a parallax), no perspective acceleration, no relativistic terms,
+  no aberration or light deflection (common to the reference stars and removed by the
+  relative measurement), and the calibration's common error is not modelled.
+- **A wrong epoch scale or origin shows as a failed residual test, with one
+  exception.** A shift of the epochs by a quarter year or by a few weeks fails the
+  test (d3); a shift of half a year turns the parallax into its negative and the
+  residuals cannot tell (see below), so a parallax negative by more than 3 sigma is
+  flagged, no distance is presented, and the epoch time scale is named.
+- **Interval, not value.** A distance is 1/p of an estimate: biased, and unbounded
+  above where the parallax interval reaches zero. It is always shown with its
+  intervals, its method and its frame statement; with an inconsistent test or a
+  parallax negative by more than 3 sigma no distance is presented.
+
+## The independent oracle
+
+`astropy.coordinates.get_body_barycentric` and `astropy.time` (ERFA: epv00, the
+leap-second table), `scipy.optimize.least_squares` (method trf, three-point
+differences) on the exact spherical model and `scipy.optimize.curve_fit` with
+absolute sigmas: astropy 6.1.7, scipy 1.15.3, numpy 2.2.6, pyerfa 2.0.1.5, Python
+3.10.12, retrieved 2026-10-23 in a throwaway virtual environment (the one Prompt 180
+made, reused, nothing added) and run with `-I` from an empty directory. No Gravitas
+code ran in it. The cases are in `tools/astrometric-series-oracle/oracle-inputs.json`,
+the series and the fits in `tests/fixtures/astrometric-series/oracle-results.json`,
+and `oracle-provenance.json` carries the versions, the parameters, the command and
+the digests. It is an independent implementation of the standard five-parameter
+astrometric model (Lindegren et al. 2012) with an independent Earth, not a fit by
+a published astrometric pipeline such as Gaia's: the claim is "agrees with a
+second implementation on the same series", not "agrees with a published solution".
+
+## Validation results
+
+`npm run astrometric-series:validate` runs every row below (Node 22.23.4 and
+24.4.0 give the same rows); the bound is the one committed before the module
+existed (`thresholds.json`). 62 judged rows, 61 pass, 1 FAILS as committed, 1 not
+run (b6); 4 evidence rows.
+
+| Check | Measured | Bound | Verdict |
+| --- | --- | --- | --- |
+| a1 proper motion, noise-free, in a named plane | 1.4e-11 arcsec, 4.2e-11 arcsec/yr; sigma 1e-16 | 1e-9 | pass |
+| a2 three epochs, unequal weights, by hand | 2.0e-11 relative | 1e-10 | pass |
+| a3 two-epoch displacement and sigma; label, no parallax field, joint refused | 2.2e-11 arcsec; exact | 1e-9; 1e-12 | pass |
+| a4 parallax factors on a circular orbit (pole, ecliptic, latitude 30) | 3.3e-16 | 1e-12 | pass |
+| a5 one-year noise-free joint fit, two sky positions | p 4.5e-8, mu 5.6e-7, rms 2.8e-8 | 1e-5 | pass |
+| a6 time scales (TT - UTC, TDB - TT, MJD, UTC before 2017) | 0, 1.657 ms, 0; refused | 1e-6 s, 1.7 ms, 1e-9 d | pass |
+| a7 profile by refitting equals the quadratic; interval equals p +- sigma | 6.5e-15; 2.2e-5 sigma | 1e-9; 1e-3 | pass |
+| b1 Earth against ERFA | max 7.1e-6 au; line-removed 2.4e-7 au | 1.5e-4; 5e-5 | pass |
+| b2 noise-free series with ERFA's Earth, fitted with the pack's | p 2.4e-8 relative; mu 5.6e-7 | 5e-4; 5e-5 | pass |
+| b3 joint fit against scipy's nonlinear fit (3 series) | 0.0048 sigma; sigma_p 7.8e-6; chi2 7.1e-7 | 0.1; 2e-3; 5e-3 | pass |
+| b4 proper motion against `curve_fit` (4 series) | 8.8e-11, 9.5e-12, covariance 2.4e-16 | 1e-8 | pass |
+| b5 UTC to TT and TDB against astropy (40 dates) | 2.6e-12 s; 2.8e-5 s | 1e-6; 1e-4 | pass |
+| b6 an authentic series under a fixed contract | | | NOT RUN until 189 |
+| c1 joint coverage, p, mux, muy (3,000) | 1 sigma 0.687, 0.695, 0.689; 1.96 sigma 0.951, 0.944, 0.951 | 0.64-0.72; 0.935-0.975 | pass |
+| c2 distance interval, symmetric regime, never open | 0.671, 0.955; open 0 | same; 0 | pass |
+| c3 distance interval, p = 2.5 sigma, open ones counted | 0.675, 0.942; arm ratio 7.5; open above 7.2% (68.27%) | same; at least 1.5 | pass |
+| c4 proper-motion coverage, mux, muy (3,000) | 0.670, 0.693; 0.946, 0.952 | same | pass |
+| c5 false alarm of the consistency test (joint, proper motion) | 0.0013 | 0.004 | pass |
+| c6 two-epoch displacement coverage (3,000) | 0.677, 0.677; 0.948, 0.946 | same | pass |
+| d1 five refusals with codes and numbers; a series that meets the rules solves | all right | all | pass |
+| d2 the label on 200 of 200 two-epoch results | 200 of 200 | 1 | pass |
+| d3 wrong epoch scale by 45, 91.3, 273.9 days (200 each): fails the test and says time scale | 1.000 each; 200 of 200 name it | 0.99 | pass |
+| **d3 wrong epoch scale by 182.6 days** | **0.005** | **0.99** | **FAIL** |
+| d4 JD declared MJD and the reverse: `epoch-range`; proper motion not refused | right | all | pass |
+| d5 2010 series: `epoch-range` with the pack's range; proper motion works | right | all | pass |
+| d6 nine malformed inputs, each its code | right | all | pass |
+| d7 a 12-sigma outlier fails the test and is found (200) | 1.000, 1.000 | 0.99; 0.95 | pass |
+| d8 frame statement on 200 of 200; a correction needs its source; absolute = relative + correction | 200 of 200; right | 1 | pass |
+| d9 true parallax 0: 0.6827 distance interval open above, no distance for a non-positive estimate | 0.832; 0 shown | 0.80-0.88 | pass |
+
+### The failed leg, d3 at 182.6 days
+
+The contract said that shifting a well-sampled year's epochs by 45, 91.3, 182.6 and
+273.9 days fails the consistency test in at least 99 percent of 200 series each. It
+does for three of the four and does not for half a year: 1 of 200. The cause is the
+physics, not the arithmetic: the parallax factors are annual sinusoids, so an epoch
+shift of half a year is a sign change, `f(t + 182.6 d) = -f(t)` to the Earth's
+eccentricity (1.7 percent), and a fit with the negative parallax matches the data.
+The module gives `p = -0.150` arcsec at a high significance with a consistent
+verdict. **The leg is left failing as committed and is not restated.** The contract
+could not have been met by any residual test; it needs either a different
+detection (below) or a different statement, which is Carl's to rule.
+
+What was added after the measurement, labelled as such: a parallax negative by more
+than 3 sigma (no source can have one) now sets `warnings: ['negative-parallax']`,
+the hints and message that name the epoch time scale and origin, and withholds the
+distance. The evidence rows `d3.wrongTimeScale.shift*.flaggedWithNegativeParallaxWarning`
+show 1.000 of 200 flagged for each of the four shifts. That is not a pass of the
+committed leg. It covers the half-year case only where the true parallax is
+significant: a series whose true parallax is within 3 sigma of zero shifted by half
+a year gives a parallax within 3 sigma of zero, which nothing here can flag.
+
+### Corrections made on the way, none to a bound
+
+1. **The oracle's first nonlinear fit was wrong.** It used `least_squares` method
+   `lm`, whose two-point difference step (1.5e-8) is below what a double holds of an
+   angle of order one radian, and stopped short of the minimum (chi-squared 48.324
+   against the minimum 48.2985). It was found because the module's first fit
+   disagreed with it by 0.11 sigma in one proper-motion component, against the
+   bound 0.1; the oracle was wrong and the module was right (method trf with
+   three-point differences reaches 48.29854, the module's 48.29853). The oracle was
+   re-run with method trf and the first results were never committed; the bound, the
+   cases and the inputs did not change (`thresholds.json` `corrections`).
+2. **A harness case was wrong.** d6's "too wide" case first displaced one of five
+   positions by 1.2 degrees, which is 0.96 degree from the mean direction, and the
+   module measures from the reference direction; the case now displaces it by 3
+   degrees. No bound moved. The contract's phrase "more than 3600 arcseconds from
+   the others" is, in the module, "from the reference direction".
+3. **The "exactly meets the rules" case** (d1) has a span of 0.9 year plus 15
+   minutes, because a span of exactly 0.9 year is a floating-point coin toss.
+
+## Not run until Prompt 189
+
+b6 and the roadmap's tier (e): an authentic series under a fixed analysis contract.
+No series was fetched, none was simulated, and the numbers above do not stand in for
+it. The arrangement for the ellipse drawn **over the frame** is not built: the path
+and the residuals are drawn through the plot component, beside the frame, and the
+frame itself is not annotated. The panel's Spanish was written without a fluent
+reader and is unread by one.

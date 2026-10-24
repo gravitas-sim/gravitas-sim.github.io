@@ -182,7 +182,7 @@ export async function mountSeries(box, ctx) {
       invalidate();
     };
     tr.append(el('td', {}, rm));
-    tr.addEventListener('input', invalidate);
+    tr.oninput = invalidate;
     rowsBody.append(tr);
     rowNumbers();
     return tr;

@@ -375,7 +375,6 @@ export const EN_DEFERRED = {
     'These two runs are not measurements of the same thing, so nothing can be concluded from the difference.',
   'reliability.verdict.diverged':
     'The two paths separated, but the aggregate measurements held.',
-
   'reliability.reason.missingRun': 'One of the two runs is missing.',
   'reliability.reason.noDuration': 'A run covered no simulated time.',
   'reliability.reason.differentDurations':
