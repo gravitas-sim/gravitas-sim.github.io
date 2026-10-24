@@ -115,7 +115,7 @@ export default {
       type: 'question',
       kind: 'numeric',
       title: 'The whole pipeline, from the frames',
-      body: `This lesson has used the lab’s reduction on one tidy night. The Observatory’s “Frames to a light curve” panel (Prompt 185) runs every step from the raw frames of a made-up sequence: it calibrates, marks the stars once, lines each frame up with the first (the telescope wanders), measures every star, chooses comparison stars by how bright and how steady they are, and makes the light curve with its errors. Open it, leave the seed at 1 and every setting as it is, press “Run the pipeline”, and step through to the light curve.`,
+      body: `This investigation has used the lab’s reduction on one tidy night. The Observatory’s “Frames to a light curve” panel runs every step from the raw frames of a made-up sequence: it calibrates, marks the stars once, lines each frame up with the first (the telescope wanders), measures every star, chooses comparison stars by how bright and how steady they are, and makes the light curve with its errors. Open it, leave the seed at 1 and every setting as it is, press “Run the pipeline”, and step through to the light curve.`,
       prompt: 'The period the pipeline finds for seed 1, in hours',
       unit: 'h',
       answer: 2.88,

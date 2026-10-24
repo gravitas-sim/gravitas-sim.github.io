@@ -48,6 +48,10 @@ import { applyRegistration, chi2Survival, register } from './astrometry.js';
 
 const { Math, Float64Array } = globalThis;
 
+// The sidecar's own words for the unit of a pixel and of the gain (the data-kinds contract's).
+const ELECTRON = 'electron';
+const GAIN_UNIT = 'electron/adu';
+
 export const VERSION = 1;
 export const STAGES = Object.freeze([
   'calibrate',
@@ -222,7 +226,7 @@ export function sidecarOf(seq, k, extra = {}) {
     height: seq.height,
     planes: { data: { encoding: 'float64-le' } },
     pixels: {
-      unit: 'electron',
+      unit: ELECTRON,
       linearity: {
         status: 'linear',
         limit: seq.fullWell ?? 1e9,
@@ -232,8 +236,8 @@ export function sidecarOf(seq, k, extra = {}) {
         level: seq.fullWell ?? 1e9,
         source: 'the full well',
       },
-      gain: { value: seq.gain, unit: 'electron/adu', source: 'header' },
-      readNoise: { value: seq.readNoise, unit: 'electron', source: 'header' },
+      gain: { value: seq.gain, unit: GAIN_UNIT, source: 'header' },
+      readNoise: { value: seq.readNoise, unit: ELECTRON, source: 'header' },
     },
     time: {
       value: '2026-01-01T00:00:00Z',

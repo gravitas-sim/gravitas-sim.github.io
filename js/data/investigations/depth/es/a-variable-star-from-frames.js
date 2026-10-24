@@ -60,7 +60,7 @@ export default {
     },
     {
       title: 'Todo el proceso, desde las imágenes',
-      body: `Esta lección ha usado la reducción del laboratorio en una noche ordenada. El panel «De imágenes a una curva de luz» del Observatorio (Prompt 185) hace cada paso desde las imágenes en bruto de una secuencia inventada: calibra, marca las estrellas una sola vez, alinea cada imagen con la primera (el telescopio se mueve), mide todas las estrellas, elige las estrellas de comparación por su brillo y su constancia, y hace la curva de luz con sus errores. Ábrelo, deja la semilla en 1 y cada ajuste como está, pulsa «Ejecutar el proceso» y avanza hasta la curva de luz.`,
+      body: `Esta investigación ha usado la reducción del laboratorio en una noche ordenada. El panel «De imágenes a una curva de luz» del Observatorio hace cada paso desde las imágenes en bruto de una secuencia inventada: calibra, marca las estrellas una sola vez, alinea cada imagen con la primera (el telescopio se mueve), mide todas las estrellas, elige las estrellas de comparación por su brillo y su constancia, y hace la curva de luz con sus errores. Ábrelo, deja la semilla en 1 y cada ajuste como está, pulsa «Ejecutar el proceso» y avanza hasta la curva de luz.`,
       prompt: 'El periodo que encuentra el proceso para la semilla 1, en horas',
       hints: [
         'El último paso da el periodo en días, con su error. Multiplica por 24.',

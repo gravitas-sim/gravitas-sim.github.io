@@ -168,7 +168,7 @@ export const ES_IMAGESEQUENCE = {
     'Chi cuadrado reducido de la sinusoide {chi2red}; probabilidad de que una estrella constante se disperse tanto, {p}.',
   'obs.sq.comparisonUsed': 'Estrellas de comparación usadas: {stars}.',
   'obs.sq.asymptotic':
-    'El error del periodo es el asintótico de una sinusoide, y solo es una buena guía cuando la amplitud es varias veces su propio error.',
+    'El error del periodo es el asintótico de una sinusoide, y solo es una buena estimación cuando la amplitud es varias veces su propio error.',
   'obs.sq.said.done':
     'Curva de luz de {points} imágenes: periodo {period} ± {sigmaPeriod} días, semiamplitud {amplitude} ± {sigmaAmplitude} magnitudes.',
   'obs.sq.said.constant':

@@ -203,7 +203,6 @@ const frameTools = Object.fromEntries(
  * it checks and runs, and the quantities it gives, each with its kind.
  */
 export const TOOLS = Object.freeze({
-  ...frameTools,
   period: {
     kinds: ['time-series'],
     version: PERIOD_VERSION,
@@ -678,6 +677,7 @@ export const TOOLS = Object.freeze({
       };
     },
   },
+  ...frameTools,
 });
 
 const KIND_WORDS = {

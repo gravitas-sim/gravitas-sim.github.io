@@ -39,7 +39,7 @@ export const EN_IMAGESEQUENCE = {
   'obs.sq.notReached':
     'The pipeline stopped before this step, for the reason above.',
   'obs.sq.what.calibrate':
-    'Each frame has the bias taken off, the dark (scaled to its exposure) taken off and is divided by the flat, with masters made once from the calibration frames; counts become electrons, and a pixel that stands far above its neighbours alone (a cosmic ray) is replaced. This is the calibration lab’s own reduction, not a new one.',
+    'Each frame has the bias taken off, the dark (scaled to its exposure) taken off and is divided by the flat, with masters made once from the calibration frames; counts become electrons, and a pixel that stands far above its neighbors alone (a cosmic ray) is replaced. This is the calibration lab’s own reduction, not a new one.',
   'obs.sq.what.marks':
     'Stars are found once, in the first frame, with the source finder; the width of a star is measured from the brightest, and the aperture and the sky ring follow from it. The variable star is the one you are measuring; the others are marks the later steps carry from frame to frame.',
   'obs.sq.what.register':
@@ -163,7 +163,7 @@ export const EN_IMAGESEQUENCE = {
     'Reduced chi-square of the sinusoid {chi2red}; the chance a steady star scatters this much, {p}.',
   'obs.sq.comparisonUsed': 'Comparison stars used: {stars}.',
   'obs.sq.asymptotic':
-    'The error of the period is the asymptotic one for a sinusoid, and is a fair guide only when the amplitude is several times its own error.',
+    'The error of the period is the asymptotic one for a sinusoid, and is a fair estimate only when the amplitude is several times its own error.',
   'obs.sq.said.done':
     'Light curve of {points} frames: period {period} ± {sigmaPeriod} days, semi-amplitude {amplitude} ± {sigmaAmplitude} magnitude.',
   'obs.sq.said.constant':
