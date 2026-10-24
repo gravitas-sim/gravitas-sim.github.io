@@ -126,9 +126,44 @@ and results are `oracle-inputs.json` and `oracle-results.json`).
 
 These rows are part 2 of the contract, `tests/fixtures/imagePacks/analysis-contract-2.json`, committed (b277b1a2) after Prompts 185 and 186 reached v3 and before any of them ran; the oracle for the sky rows is astropy.wcs, pinned in `oracle-results.json` under `astrometry`, run on the pack's own header values and on `sky/bright-stars.json` (SHA-256 recorded). The four part 1 placeholders for 181, 182, 185 and 186 remain in the first contract as committed and are marked superseded in the output.
 
-### Requests to Carl (nothing below was downloaded)
+### Authentic data for the legs that were NOT RUN (Carl, chat 2026-10-24: "Yes go ahead with the four requests, R1 to R4")
 
-The legs that cannot run need authentic files this PR does not hold. Each is a rights-checked public archive file; none is fetched until Carl says so.
+The four requests below were granted under Carl's earlier ruling (rights-checked public archive files only; the STScI mirror accepted as MAST). The data is a set of TEST FIXTURES in `tests/fixtures/imagePacks/authentic/`, not an app pack: a pack's manifest counts against the data budget, which has about 781 B of gzip room, and the idle tier has 18 B. Nothing is added to the precache, `tools/data-budget.json` is not edited, no closure file changes. `provenance.json` records each source's URL, byte ranges, size, SHA-256, the terms quoted on 2026-10-24 and the decision.
+
+| Request | Data | Terms and decision |
+| --- | --- | --- |
+| R1 (185), R2 (181, 182) | 84 consecutive TESS 200 s calibrated full-frame images (ffic, sector 56, camera 1 CCD 2, 04:15 to 08:52 UTC on 2022-09-04, the transit of HD 209458 b), an 81 by 81 cutout of each, 2,204,496 B committed (`ffi-cutout-s56-1-2.f32`, SHA-256 6b2111ad...); 59.3 MB of byte ranges were read, nothing else kept | MAST data use policy: public domain, acknowledge MAST and TESS; committed |
+| R2 (181, 182) | Gaia DR3 sources of the field through CDS VizieR TAP (I/355/gaiadr3, G < 17, 541 rows, 75,165 B, not committed); the 222 rows with G 16 or brighter in the cutout are committed | ESA Gaia licence CC BY-NC 3.0 IGO: redistribution allowed with credit, non-commercially. Committed flagged non-commercial; the NC owner question in `OWNER_ACTIONS.md` now covers it |
+| R3 (186) | the Hipparcos new reduction row of HD 209458 (VizieR I/311/hip2, 278 B) | ESA terms, CC BY-NC 3.0 IGO; committed flagged non-commercial |
+| R4 (182) | JPL small-body identification (`sb_ident`) answers for the field at three times; SkyBoT (IMCCE) answered 403 and 502 and was not retried | the API page carries no licence text (a US Government product); committed only as the evidence of a negative search |
+
+The frames carry no sky WCS (only a physical one). The anchor is the pack's own WCS shifted by the offset found by cross-correlating the pack frame with the stripe (0.998), used only to match stars and never as a solution. Contract parts 3 to 6 (`analysis-contract-3.json` to `-6.json`) were each committed before the legs they govern ran; parts 4 to 6 are variants that were committed after the earlier part's result had been read, each saying what was read first, and none replaces the legs before it. `tools/image-packs-authentic.mjs` runs them, `tools/image-packs-oracle/oracle-authentic.py` is the offline oracle (astropy `fit_wcs_from_points`, `apply_space_motion`, `all_world2pix`, photutils exact apertures with the sigma-clipped annulus, `SkyCoord.separation`; `python -I`), and no bound was moved.
+
+| Leg | Committed rule (part 3) | Variant v2 (part 4) | Variant v3 (part 5) | Variant v4 (part 6) |
+| --- | --- | --- | --- | --- |
+| `astrometry.b5.fit` (181) | FAIL: 1 star matched | FAIL: 3 matched | pass: 17 stars, 1.8e-4 px from astropy (bound 0.01) | |
+| `astrometry.e1.frame` (181) | FAIL: no fit | FAIL | pass: rms 0.038 px (0.2), consistent | |
+| `overlay.b5.gaia` (182) | FAIL: no solution | FAIL | pass: 214 Gaia stars listed, 2.1e-11 px from astropy (1e-5) | |
+| `framepipeline.g1.complete` (185) | FAIL: refused `no-marks` | FAIL: 2 comparison stars (3 asked) | FAIL: 2 of 16 (14 flagged unstable) | pass: 5 named |
+| `framepipeline.g1.oracle` (185) | FAIL: no light curve | pass: 1.2e-14 | FAIL: 7.4e-4 in one of 252 star-frames (bound 1e-9) | pass: 8.6e-16 |
+| `framepipeline.g1.transit` (185) | FAIL: no light curve | FAIL: depth 1.705 percent against SPOC's 1.566 | pass: 1.578 percent, 0.37 min | pass: 1.511 percent, 0.39 min (bound: depth 0.001, centre 8 min) |
+| `framepipeline.g1.noise` (185) | FAIL: no light curve | FAIL: ratio 4.4 | pass: 1.07 | pass: 1.94 (bound 0.5 to 2) |
+| `series.b6.motion` (186) | pass: Hipparcos 1991.25 and Gaia 2016.0 give the proper motion of HD 209458 within 0.040 mas/yr of Gaia's, the separation within 1.1e-10 arcsec of astropy's, with the label | | | |
+| `overlay.e1.pair` (182) | NOT RUN: the JPL search found no object in the field and SkyBoT was unreachable; nothing was simulated | | | |
+| `series.b6.series` (186) | NOT RUN: a parallax needs eight positions over a year; Gaia's epoch astrometry is one-dimensional along-scan and is not a set of 2-D positions | | | |
+| `calibration.authentic` | NOT RUN: the images are SPOC-calibrated, no bias, dark or flat is public with them | | | |
+
+The failures are recorded in `failed-legs.json` with their causes, and `tests/imagePacks.test.js` asserts each still fails. What they say is about the modules on this field, not about the data:
+
+- `detectIn` at 4 sigma on a 21-arcsecond pixel field segments each bright star with its wings and neighbours (areas to 239 pixels), so detected centroids are blends and the `crowded` flag removes most of them. The matching rule that uses the detector's own centroids keeps one star. Real reductions place the catalogue stars and measure there; v3 does that through `photometry.measure` with `recentre`, and the fit, the frame check and the overlay then pass.
+- Prompt 185's stability test (a chi-square against a constant at alpha 0.001) assumes white noise. Real 200 s photometry of a crowded field has correlated noise, so 14 of 16 candidates are flagged. The module's own override (naming the comparison stars) is v4; its noise ratio of 1.94 is inside the bound by 0.06.
+- The v3 oracle failure is the annulus clip. Prompt 180's clip (`js/measure/photometry.js`) is monotone: a pixel once cut stays out. astropy's `sigma_clip` re-tests every pixel against the refitted bounds at each round, so a pixel at 3.00 sigma can come back, the rounds alternate (152, 153, 152, 153 of 199) and `maxiters=4` stops on 153. One pixel changes the sky by 9 electrons per pixel and that one star-frame by 7.4e-4; the other 251 agree to 1e-15. The two MAD constants (1.4826 and astropy's) give the same pixels here, so the constant, which differs in the detector kernel, is not the cause. Either Prompt 180's clip changes (a change to committed code) or the oracle is the monotone one; Carl rules (D-R10-68).
+
+The Gaia and Hipparcos files are non-commercial, as the owner question already covers. No student-facing string was added in this part, so there is no new Spanish; the earlier Spanish of the packs stays unread by a fluent reader.
+
+### Requests to Carl (all four were granted on 2026-10-24; the results are in the section above)
+
+The legs that cannot run need authentic files this PR does not hold. Each is a rights-checked public archive file; none was fetched until Carl said so (2026-10-24).
 
 - R1 (`framepipeline.g1.sequence`): a frame sequence needs a field with at least five stars bright enough to measure, observed at five or more epochs. The cadences of the same TPF (`https://stpubdata.s3.amazonaws.com/tess/public/tid/s0056/0000/0004/2081/4525/tess2022244194134-s0056-0000000420814525-0243-s_tp.fits`, public domain as MAST data) would add only more frames of the same field, which has one dominant star, so the pipeline would still refuse it. What would run it is a larger field: a TESS full-frame calibrated image (MAST `ffic`, public domain; I have not measured the size, expect tens of megabytes each, five or more needed) or a TESScut cube of about 30 by 30 pixels over a few hundred cadences (a MAST service answer, a few megabytes; I have not checked that its output may be redistributed unchanged). Which one, and which field, is Carl's choice.
 - R2 (`astrometry.b5.fit`, `overlay.b5`): three or more catalogue stars with positions in the frame's field, from the Gaia DR3 catalogue through CDS VizieR (a cone of 0.1 degree about 330.795, +18.884, a few kilobytes; ESA's Gaia terms to be read before the download), plus a frame where three of them are measurable (the frame of R1 would do; this 11 by 13 frame has one star above four sigma).

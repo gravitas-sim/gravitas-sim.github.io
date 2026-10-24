@@ -179,7 +179,7 @@ not run, 0 failed.
 | b2 oracle fit | 0.0018 px | 0.01 | pass |
 | b3 oracle registration | 3.3e-17 rad, 3.4e-13 px | 1e-9, 1e-8 | pass |
 | b4 oracle on the authentic TESS header | 1.1e-13 deg over 1,023 px | 1e-9 | pass |
-| b5 oracle on an authentic fit | | | NOT RUN (189's frame has one star; request R2) |
+| b5 oracle on an authentic fit | 189 (authentic data): 17 Gaia stars measured at their predicted pixels in a TESS full-frame cutout, grid 1.8e-4 px from astropy | 0.01 px | pass for the variant that places the stars; the committed rule (detector centroids) matched 1 star and fails, recorded |
 | c1 coverage, affine (1 sigma, 1.96 sigma) | 0.693, 0.953 | 0.64-0.72, 0.935-0.975 | pass |
 | c2 coverage, similarity | 0.693, 0.953 | same | pass |
 | c3 coverage, with catalogue noise | 0.684, 0.952 | same | pass |
@@ -457,7 +457,7 @@ run (b6); 6 evidence rows.
 | b3 joint fit against scipy's nonlinear fit (3 series) | 0.0048 sigma; sigma_p 7.8e-6; chi2 7.1e-7 | 0.1; 2e-3; 5e-3 | pass |
 | b4 proper motion against `curve_fit` (4 series) | 8.8e-11, 9.5e-12, covariance 2.4e-16 | 1e-8 | pass |
 | b5 UTC to TT and TDB against astropy (40 dates) | 2.6e-12 s; 2.8e-5 s | 1e-6; 1e-4 | pass |
-| b6 an authentic series under a fixed contract | 189: one epoch refused, `too-few-epochs` | | the series is not run (R3) |
+| b6 an authentic series under a fixed contract | 189: one epoch refused, `too-few-epochs`; two authentic epochs (Hipparcos 1991.25, Gaia 2016.0) give the proper motion of HD 209458 within 0.040 mas/yr of Gaia's and the separation within 1.1e-10 arcsec of astropy's | 0.1 mas/yr, 1e-9 arcsec | pass; the eight-epoch parallax is not run (no authentic 2-D positions) |
 | c1 joint coverage, p, mux, muy (3,000) | 1 sigma 0.687, 0.695, 0.689; 1.96 sigma 0.951, 0.944, 0.951 | 0.64-0.72; 0.935-0.975 | pass |
 | c2 distance interval, symmetric regime, never open | 0.671, 0.955; open 0 | same; 0 | pass |
 | c3 distance interval, p = 2.5 sigma, open ones counted | 0.675, 0.942; arm ratio 7.5; open above 7.2% (68.27%) | same; at least 1.5 | pass |
