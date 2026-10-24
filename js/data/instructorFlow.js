@@ -4,11 +4,8 @@
 // Each block runs from one step sid to another, so inserting or moving a step
 // cannot slide a block onto the wrong screens (the old key was a range of
 // 1-based numbers, "18-22"). js/instructorFlow.js reads it through
-// readVersioned, still reads the number-keyed /1 form, and works out the
-// printed range from the lesson as it is. Not imported by any route. Generated
-// once from instructorContent.js by tools/migrate-flow.mjs; edited by hand
-// since, and tests/instructorDocs.test.js holds every lesson's flow to
-// covering each step once.
+// readVersioned (the /1 form too). Not imported by any route. Generated once
+// from instructorContent.js (tools/migrate-flow.mjs), edited by hand since.
 // =============================================================================
 
 import { INSTRUCTOR as MEASUREMENT } from './investigations/depth/measurement-sequence.js';

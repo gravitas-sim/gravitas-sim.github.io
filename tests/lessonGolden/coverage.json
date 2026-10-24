@@ -9,7 +9,7 @@
     "binary-star-planets",
     "black-holes",
     "weighing-stars",
-    "a-lens-passing-by",
+    "what-is-a-measurement",
     "a-universe-of-stars",
     "detect-this-planet",
     "extending-an-experiment",
@@ -170,8 +170,9 @@
       "key:explore.showBarycenter",
       "key:read.showBarycenter"
     ],
-    "a-lens-passing-by": [
-      "key:predict.hints"
+    "what-is-a-measurement": [
+      "key:predict.hints",
+      "key:question.maxUncertainty"
     ],
     "a-universe-of-stars": [
       "key:measure.checklist"
@@ -263,17 +264,17 @@
     "pin:unpinned"
   ],
   "totals": {
-    "investigations": 60,
-    "steps": 1160,
+    "investigations": 63,
+    "steps": 1212,
     "activityCuts": 6,
-    "lessonTokens": 141,
+    "lessonTokens": 142,
     "activityTokens": 29,
     "stepTypes": {
-      "read": 228,
-      "predict": 130,
+      "read": 234,
+      "predict": 138,
       "ellipse": 1,
-      "question": 421,
-      "measure": 236,
+      "question": 441,
+      "measure": 254,
       "explore": 143,
       "wedges": 1
     }

@@ -10,7 +10,7 @@ export const EN_CLAIM = {
   'claimW.row.how': 'What is left out',
   'claimW.m.title': 'Marking a star',
   'claimW.m.note':
-    'A synthetic frame with one blurred star. Each cross is one mark, the place a careful person would put its centre; the ring is the mean of the marks. The star’s true position was set when the frame was made.',
+    'A synthetic frame with one blurred star. Each cross is one mark, the place a careful person would put its center; the ring is the mean of the marks. The star’s true position was set when the frame was made.',
   'claimW.m.legend': 'marks · mean · true position',
   'claimW.m.control.n': 'How many marks',
   'claimW.m.control.blur': 'Width of the star',
@@ -21,7 +21,7 @@ export const EN_CLAIM = {
   'claimW.m.preset.five': 'Five marks',
   'claimW.m.preset.twenty': 'Twenty marks',
   'claimW.m.value.source':
-    'Synthetic: a blurred star at a position the lesson chose, marked by a model of a careful person',
+    'Synthetic: a blurred star at a position the investigation chose, marked by a model of a careful person',
   'claimW.m.row.n': 'Marks made',
   'claimW.m.row.marks': 'The marks, (x, y) in pixels',
   'claimW.m.row.meanX': 'Mean x position',
@@ -34,7 +34,7 @@ export const EN_CLAIM = {
   'claimW.m.row.errX': 'Error of the mean in x',
   'claimW.m.row.errSe': 'That error in standard errors',
   'claimW.m.value.how':
-    'Marks scatter at random about one centre, with no offset unless one is set; the sky noise is for the picture only',
+    'Marks scatter at random about one center, with no offset unless one is set; the sky noise is for the picture only',
   'claimW.c.title': 'Checking a claim by repeating it',
   'claimW.c.note':
     'A seeded ensemble of repeats of one measurement whose true value is known. Each bar is the interval one repeat states; bars that miss the truth are dashed. The readout counts them all.',

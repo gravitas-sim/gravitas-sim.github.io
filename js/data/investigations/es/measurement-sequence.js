@@ -26,11 +26,6 @@ export const WHAT_IS_A_MEASUREMENT = {
         'dispersas solo porque algunas marcas son errores',
         'dispersas solo si el cuadro es malo',
       ],
-      misconceptions: [
-        {
-          say: 'Una mancha borrosa no tiene un borde único donde poner la cruz. Dos marcas cuidadosas difieren en una fracción de píxel, y lo mismo harían dos marcas cuidadosas de una misma persona.',
-        },
-      ],
       hints: ['Mira dónde están las cruces sobre la mancha borrosa.'],
       because:
         'Algo dispersas. La estrella es una mancha de varios píxeles de ancho, así que incluso una marca cuidadosa cae un poco a un lado u otro, y ninguna marca es la verdad. La dispersión es una propiedad del marcado. El paso siguiente la mide.',
@@ -61,11 +56,6 @@ export const WHAT_IS_A_MEASUREMENT = {
         'bajará a más o menos una cuarta parte',
         'bajará a cero, con suficientes marcas',
       ],
-      misconceptions: [
-        {
-          say: 'El error estándar disminuye con la raíz cuadrada del número de marcas, así que sigue bajando y nunca llega a cero. Reducirlo a la mitad cuesta cuatro veces las marcas.',
-        },
-      ],
       hints: [
         'El error estándar es la dispersión dividida entre la raíz cuadrada del número de marcas.',
       ],
@@ -89,11 +79,6 @@ export const WHAT_IS_A_MEASUREMENT = {
         'cerca de la media, típicamente a menos de uno o dos errores estándar de ella, pero no exactamente sobre ella',
         'en la primera marca, que se hizo antes de que las demás pudieran influir',
         'en cualquier lugar del cuadro, porque cinco marcas no dicen nada de ella',
-      ],
-      misconceptions: [
-        {
-          say: 'La media es la mejor estimación que dan las marcas, no la verdad. Queda cerca de la verdad a más o menos un error estándar, que es el número que acabas de medir.',
-        },
       ],
       hints: ['¿Qué dijo el error estándar sobre cuánto se desvía la media?'],
       because:
@@ -132,6 +117,8 @@ export const WHAT_IS_A_MEASUREMENT = {
         'La dispersión viene de cuán precisamente se puede colocar una marca sobre la imagen. Una estrella más ancha es más difícil de colocar, así que la dispersión es mayor y la media del mismo número de marcas se conoce peor. Una incertidumbre pertenece a la medición y a la imagen de la que salió.',
     },
     {
+      rubric:
+        'Crédito completo por informar la media de las marcas (unos 31,1 píxeles) con su error estándar (unos 0,36 píxeles, la dispersión dividida entre la raíz del número de marcas), y por decir que una marca es una extracción de la dispersión, de modo que la siguiente difiere. También se acredita decir que el error estándar deja fuera un desplazamiento constante. No se acredita informar solo la primera marca, ni decir que las marcas son errores que hay que descartar.',
       title: '¿Qué informarías?',
       body: 'Marcaste una estrella cinco veces y viste que las marcas difieren.',
       prompt:
@@ -167,11 +154,6 @@ export const WHAT_DOES_PLUS_MINUS_CLAIM = {
         'diecinueve de cada veinte (95 por ciento)',
         'todas, porque la afirmación es honesta',
         'la mitad (50 por ciento)',
-      ],
-      misconceptions: [
-        {
-          say: 'Un intervalo de una sigma está hecho para contener la verdad solo unas dos veces de cada tres. Una afirmación honesta es aquella cuya cobertura coincide con lo que dice, no la que nunca falla.',
-        },
       ],
       hints: [
         'Piensa en la curva normal: ¿cuánta de ella queda a menos de una sigma del centro?',
@@ -277,6 +259,8 @@ export const WHAT_DOES_PLUS_MINUS_CLAIM = {
       ],
     },
     {
+      rubric:
+        'Crédito completo por decir que la afirmación 4,2 ± 0,3 (1σ) trata de repeticiones: un intervalo construido así contiene el valor verdadero en unas dos de cada tres repeticiones (68 por ciento); que la comprobación es repetir la medición muchas veces, o simularla con una verdad conocida, y contar cuántas veces el intervalo contiene la verdad; y que la afirmación es falsa si esa proporción está lejos del 68 por ciento más allá de su propia incertidumbre de conteo (por ejemplo, cerca del 36 por ciento para un instrumento sesgado). No se acredita decir que el valor verdadero está en este intervalo con probabilidad del 68 por ciento, ni que un ± pequeño significa que el valor es correcto.',
       title: '¿Qué la demostraría errónea?',
       body: 'Un artículo informa un valor como «4,2 ± 0,3 (1σ)».',
       prompt:
@@ -313,11 +297,6 @@ export const WHEN_THE_METHOD_MUST_REFUSE = {
         'al menos algo menos de 0,85 masas de Júpiter, y podría ser mucho mayor',
         'entre unas 0,79 y 0,91 masas de Júpiter',
         'cualquier valor: los datos no dicen nada de ella',
-      ],
-      misconceptions: [
-        {
-          say: 'Ese es el producto, m por s. La masa sola es ese número dividido entre s, y s es como mucho 1, así que la masa es al menos el producto, y la inclinación no se mide.',
-        },
       ],
       hints: ['Si s puede valer hasta 1, ¿qué le pasa a m = 0,85 ÷ s?'],
       because:
@@ -449,6 +428,8 @@ export const WHEN_THE_METHOD_MUST_REFUSE = {
       ],
     },
     {
+      rubric:
+        'Crédito completo por decir que, para un parámetro que los datos no fijan (solo se acota un producto de dos), el análisis informa una cota o no acotado, con la combinación que sí se fija, en lugar de un valor; que, para un modelo que los datos rechazan (un chi cuadrado reducido muy superior a 1 y un valor p diminuto), dice que el modelo no ajusta y no da pendiente; y por nombrar la comprobación: el perfil de chi cuadrado frente al parámetro, y el chi cuadrado reducido y el valor p del ajuste. No se acredita citar el mejor ajuste con su error formal.',
       title: '¿Qué rechazarías?',
       body: 'Has visto dos maneras en que un método puede no tener nada honesto que dar: un parámetro que los datos no fijan, y un modelo que los datos rechazan.',
       prompt:

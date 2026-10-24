@@ -28,7 +28,7 @@ import './instrumentStartup.js';
 import { t, registerMessages } from './i18n/index.js';
 import { EN_CLAIM } from './i18n/en.claim.js';
 import { ES_CLAIM } from './i18n/es.claim.js';
-import { withUnit } from './format.js';
+import { fixed, withUnit } from './format.js';
 import { mulberry32 } from './rng.js';
 import { fnv1a32 } from './hash.js';
 import {
@@ -42,7 +42,7 @@ import {
 registerMessages('en', EN_CLAIM);
 registerMessages('es', ES_CLAIM);
 
-const fix = (v, d = 2) => (Number.isFinite(v) ? v.toFixed(d) : '-');
+const fix = (v, d = 2) => (Number.isFinite(v) ? fixed(v, d) : '-');
 const isOn = x => x >= 0.5;
 
 // -----------------------------------------------------------------------------
@@ -153,7 +153,7 @@ function drawFrame(canvas, v) {
         1,
         0.9 * Math.exp(-r2 / (2 * sigma * sigma)) + 0.08 * noise[j * S + i]
       );
-      g.fillStyle = `rgba(235,240,255,${a.toFixed(3)})`;
+      g.fillStyle = `rgba(235,240,255,${Math.round(a * 1000) / 1000})`;
       g.fillRect(X(i), Y(j), k + 0.5, k + 0.5);
     }
   }

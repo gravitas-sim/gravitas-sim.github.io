@@ -621,6 +621,7 @@ then the optional list in the same install, 1,004 files and 17.7 MB raw, about
 missing file and the version does not activate); optional is tolerated; the
 Spanish lesson bodies are not precached and are warmed when the interface
 language is switched; some paths are never precached.
+The three measurement and claim investigations of Prompt 190 (`js/data/investigations/**/measurement-sequence.js`, the per-id files that re-export them, `js/claimWidgets.js` and its words) are among them (D-R10-67): they open offline only after one online use, and the instructors' portal, which imports the lesson barrel, needs the network until those files have been fetched once.
 
 What a visit touches, from `node tools/precache-tour.mjs` (service workers
 blocked, six short tours; gzipped):

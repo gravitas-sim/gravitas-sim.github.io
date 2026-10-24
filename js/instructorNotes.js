@@ -3,29 +3,27 @@
 // -----------------------------------------------------------------------------
 // Prompt 170. The instructor guides and answer keys are written in English and
 // their Spanish copies still carry that prose in English (js/instructorSource.js
-// counts it). D-ADOPT-03 declined a Spanish user manual. These notes are neither:
-// one short page per investigation, made entirely from the lesson's structured
-// fields and the Spanish that exists for them, so a Spanish-speaking instructor
-// can see what an investigation is for, what it asks, which steps are marked and
-// which wrong answers it names, without anyone writing or translating a word.
+// counts it). D-ADOPT-03 declined a Spanish user manual. These notes are
+// neither: one short page per investigation, made entirely from the lesson's
+// structured fields and the Spanish that exists for them, so a Spanish-speaking
+// instructor can see what an investigation is for, what it asks, which steps are
+// marked and which wrong answers it names, with no word written or translated.
 //
-//   from the lesson         objectives, title, time band, student level, the
-//                           step titles, the kind of each step, the marking it
-//                           carries, the named misconceptions
-//   from the Library facts  course level, textbook chapter, mathematics, the
-//                           prerequisites, the depths, the version
+//   from the lesson         objectives, title, time band, student level, step
+//                           titles and kinds, the marking, named misconceptions
+//   from the Library facts  course level, textbook chapter, mathematics,
+//                           prerequisites, depths, the version
 //   from the shadows        the Spanish of those words (js/instructorLocale.js);
 //                           a text with no Spanish prints in English with [EN]
 //
 // Nothing here is machine-translated. The Spanish labels around the generated
 // text (js/data/instructorLabels.js) are short fixed phrases that no fluent
-// reader has read, and the page says so. The hand-written guide prose and every
-// answer key stay English, and the first line of each page says that.
+// reader has read, and the page says so. The guide prose and every answer key
+// stay English, and the first line of each page says that.
 //
 // Freshness: the page prints two digests, of the English texts it was made from
-// and of the Spanish it printed, with the function the translation-freshness
-// ledger uses (js/composer/compile.js digest, repeated below), so the same pair
-// can be compared.
+// and of the Spanish it printed, with the ledger's function (js/composer/
+// compile.js digest, repeated below), so the same pair can be compared.
 //
 // Not imported by any route: the build and the tests read it.
 // =============================================================================

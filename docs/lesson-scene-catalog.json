@@ -79827,7 +79827,7 @@
       "choice": false,
       "numeric": false,
       "short": true,
-      "rubric": false,
+      "rubric": true,
       "validated": false
      },
      "worldRunning": "inherited",
@@ -79840,10 +79840,11 @@
       "declared": "interpret",
       "actual": [
        "experiment",
-       "measure"
+       "measure",
+       "interpret"
       ],
       "handTranscribed": false,
-      "mismatch": "typed question but no answer, rubric or validate to check it"
+      "mismatch": null
      },
      "scene": {
       "nameMatches": [],
@@ -80025,7 +80026,7 @@
     "computation": 0,
     "declaredButInert": 12,
     "prose": 0,
-    "mismatched": 1,
+    "mismatched": 0,
     "rebuilds": 0
    }
   },
@@ -80899,7 +80900,7 @@
       "choice": false,
       "numeric": false,
       "short": true,
-      "rubric": false,
+      "rubric": true,
       "validated": false
      },
      "worldRunning": "inherited",
@@ -80912,10 +80913,11 @@
       "declared": "interpret",
       "actual": [
        "experiment",
-       "measure"
+       "measure",
+       "interpret"
       ],
       "handTranscribed": false,
-      "mismatch": "typed question but no answer, rubric or validate to check it"
+      "mismatch": null
      },
      "scene": {
       "nameMatches": [],
@@ -81099,7 +81101,7 @@
     "computation": 0,
     "declaredButInert": 13,
     "prose": 0,
-    "mismatched": 1,
+    "mismatched": 0,
     "rebuilds": 0
    }
   },
@@ -81968,7 +81970,7 @@
       "choice": false,
       "numeric": false,
       "short": true,
-      "rubric": false,
+      "rubric": true,
       "validated": false
      },
      "worldRunning": "inherited",
@@ -81981,10 +81983,11 @@
       "declared": "interpret",
       "actual": [
        "experiment",
-       "measure"
+       "measure",
+       "interpret"
       ],
       "handTranscribed": false,
-      "mismatch": "typed question but no answer, rubric or validate to check it"
+      "mismatch": null
      },
      "scene": {
       "nameMatches": [],
@@ -82152,7 +82155,7 @@
     "computation": 0,
     "declaredButInert": 13,
     "prose": 0,
-    "mismatched": 1,
+    "mismatched": 0,
     "rebuilds": 0
    }
   }
@@ -82169,7 +82172,7 @@
   "computation": 14,
   "declaredButInert": 815,
   "prose": 56,
-  "mismatched": 3,
+  "mismatched": 0,
   "rebuilds": 76,
   "lessons": 63,
   "loops": 138,

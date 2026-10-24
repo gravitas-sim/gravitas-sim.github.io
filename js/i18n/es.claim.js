@@ -22,7 +22,7 @@ export const ES_CLAIM = {
   'claimW.m.preset.five': 'Cinco marcas',
   'claimW.m.preset.twenty': 'Veinte marcas',
   'claimW.m.value.source':
-    'Sintético: una estrella desenfocada en una posición que eligió la lección, marcada por un modelo de persona cuidadosa',
+    'Sintético: una estrella desenfocada en una posición que eligió la investigación, marcada por un modelo de persona cuidadosa',
   'claimW.m.row.n': 'Marcas hechas',
   'claimW.m.row.marks': 'Las marcas, (x, y) en píxeles',
   'claimW.m.row.meanX': 'Posición x media',

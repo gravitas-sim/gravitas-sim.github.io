@@ -75,7 +75,7 @@ export const WHAT_IS_A_MEASUREMENT = {
              The frame below is <strong>synthetic</strong>: a star was put at a
              position we chose, blurred the way a telescope blurs it, and given
              a little sky noise. Each cross is one mark, the place a careful
-             person would put the centre of the blurred spot.
+             person would put the center of the blurred spot.
              \n\nBecause we made the frame, we know where the star really is.
              A real frame never tells you that. The truth is hidden for now.
              Five marks are shown, each as its position in pixels (x, y) in the
@@ -93,18 +93,11 @@ export const WHAT_IS_A_MEASUREMENT = {
       prompt: 'The five positions will be&hellip;',
       options: [
         'all the same, if the marking is done carefully enough',
-        'scattered a little around a centre, even when each mark is careful',
+        'scattered a little around a center, even when each mark is careful',
         'scattered only because some of the marks are mistakes',
         'scattered only if the frame is poor',
       ],
       answer: 1,
-      misconceptions: [
-        {
-          id: 'careful-means-identical',
-          option: 0,
-          say: 'A blurred spot has no single edge to put a cross on. Two careful marks differ by a fraction of a pixel, and so would two careful marks by the same person.',
-        },
-      ],
       hints: ['Look at where the crosses sit on the blurred spot.'],
       because:
         'Scattered a little. The star is a blur several pixels wide, so even a careful mark lands a little to one side or the other, and no single mark is the truth. The spread is a property of the marking. The next step measures it.',
@@ -191,13 +184,6 @@ export const WHAT_IS_A_MEASUREMENT = {
         'fall to zero, given enough marks',
       ],
       answer: 1,
-      misconceptions: [
-        {
-          id: 'enough-marks-reach-zero',
-          option: 3,
-          say: 'The standard error shrinks with the square root of the number of marks, so it keeps falling and never reaches zero. Halving it takes four times the marks.',
-        },
-      ],
       hints: [
         'The standard error is the spread divided by the square root of the number of marks.',
       ],
@@ -260,13 +246,6 @@ export const WHAT_IS_A_MEASUREMENT = {
         'anywhere in the frame, because five marks say nothing about it',
       ],
       answer: 1,
-      misconceptions: [
-        {
-          id: 'mean-is-truth',
-          option: 0,
-          say: 'The mean is the best estimate the marks give, not the truth. It lies near the truth by about one standard error, which is the number you just measured.',
-        },
-      ],
       hints: [
         'What did the standard error say about how far the mean wanders?',
       ],
@@ -376,7 +355,8 @@ export const WHAT_IS_A_MEASUREMENT = {
       stage: STAGE,
       type: 'question',
       kind: 'short',
-      reflect: true,
+      rubric:
+        'Full credit for reporting the mean of the marks (about 31.1 pixels) with its standard error (about 0.36 pixel, the spread divided by the square root of the number of marks), and for saying that one mark is one draw from the scatter, so the next mark differs. Credit also saying that the standard error leaves out a constant offset. Do not credit reporting only the first mark, or saying the marks are mistakes to be thrown away.',
       title: 'What would you report?',
       body: `You marked a star five times and found the marks differ.`,
       prompt:
@@ -461,15 +441,8 @@ export const WHAT_DOES_PLUS_MINUS_CLAIM = {
         'half (50 percent)',
       ],
       answer: 0,
-      misconceptions: [
-        {
-          id: 'honest-means-always',
-          option: 2,
-          say: 'A one-sigma interval is built to hold the truth only about two times in three. An honest claim is one whose coverage matches what it says, not one that is never wrong.',
-        },
-      ],
       hints: [
-        'Think of the normal curve: how much of it lies within one sigma of the centre?',
+        'Think of the normal curve: how much of it lies within one sigma of the center?',
       ],
       because:
         'About two thirds. An interval of one sigma either side holds the truth for 68 percent of repeats when the stated sigma is the real scatter. The next step counts them.',
@@ -805,7 +778,8 @@ export const WHAT_DOES_PLUS_MINUS_CLAIM = {
       stage: STAGE,
       type: 'question',
       kind: 'short',
-      reflect: true,
+      rubric:
+        'Full credit for saying that the claim 4.2 ± 0.3 (1σ) is about repeats: an interval built this way holds the true value in about two of every three repeats (68 percent); that the check is to repeat the measurement many times, or simulate it with a known truth, and count how often the interval holds the truth; and that the claim is wrong if that share is far from 68 percent beyond its own counting uncertainty (for example about 36 percent for a biased instrument). Do not credit saying that the true value lies in this one interval with 68 percent probability, or that a small ± means the value is right.',
       title: 'What would prove it wrong?',
       body: `A paper reports a value as “4.2 ± 0.3 (1σ)”.`,
       prompt:
@@ -892,13 +866,6 @@ export const WHEN_THE_METHOD_MUST_REFUSE = {
         'anything at all: the data say nothing about it',
       ],
       answer: 1,
-      misconceptions: [
-        {
-          id: 'product-is-mass',
-          option: 0,
-          say: 'That is the product, m times s. The mass alone is that number divided by s, and s is at most 1, so the mass is at least the product, and the tilt is not measured.',
-        },
-      ],
       hints: [
         'If s can be anything up to 1, what does that do to m = 0.85 ÷ s?',
       ],
@@ -1203,7 +1170,8 @@ export const WHEN_THE_METHOD_MUST_REFUSE = {
       stage: STAGE,
       type: 'question',
       kind: 'short',
-      reflect: true,
+      rubric:
+        'Full credit for saying that for a parameter the data do not fix (only a product of two is constrained) the analysis reports a bound or not constrained, with the combination that is fixed, instead of one value; that for a model the data reject (a reduced chi-square far above 1 and a tiny p-value) it says the model does not fit and quotes no slope; and for naming the check: the profile of chi-square against the parameter, and the reduced chi-square and p-value of the fit. Do not credit quoting the best fit with its formal error.',
       title: 'What would you refuse?',
       body: `You have seen two ways a method can have nothing honest to quote: a
              parameter the data do not fix, and a model the data reject.`,

@@ -131,7 +131,7 @@ export const WHAT_IS_A_MEASUREMENT_DEEPER = {
              marks.`,
       prompt: 'What does the ± 0.14 describe?',
       options: [
-        'How the mean of these marks would scatter if the marking were repeated, assuming the marks scatter at random about one centre',
+        'How the mean of these marks would scatter if the marking were repeated, assuming the marks scatter at random about one center',
         'How far the mean is from the true position',
         'How well the instrument has been calibrated',
         'The size of every error in the measurement, random and systematic together',
@@ -226,7 +226,7 @@ export const WHAT_DOES_PLUS_MINUS_CLAIM_DEEPER = {
       title: 'The biased coverage, by hand',
       body: `Each reading is the truth plus 0.4 plus a random error of scatter 0.3. A
              ±0.3 interval holds the truth when that random error lies between −0.7 and
-             −0.1 about the centre, that is between −2.33 and −0.33 scatters. The
+             −0.1 about the center, that is between −2.33 and −0.33 scatters. The
              normal curve has 0.0099 of its area below −2.33 and 0.3707 below
              −0.33.`,
       prompt: 'The share of intervals that hold the truth, in percent',
@@ -463,7 +463,7 @@ export const INSTRUCTOR = {
       placement:
         'First of three. It needs only arithmetic and the idea of a position on a picture, and can open any course that will later quote an uncertainty. It supports OpenStax Astronomy 2e chapter 6 on how astronomers observe, and it is the first investigation of the observing-and-measuring sequence.',
       overview:
-        'Students look at five marks of one synthetic star: a blurred spot at a position the lesson chose, 31.4 and 27.9 pixels, marked by a model of a careful person with a scatter of 0.8 pixel. They predict that careful marks differ, read the mean x (31.10) and spread (0.80) and the standard error (0.36), predict and measure what twenty marks buy (0.17, a factor of 2.06), predict where the truth lies and then see the mean 0.30 pixel from it (0.84 standard errors), and meet a star twice as wide (spread 1.60, error 0.71). The quantitative depth reports a position with its error bar and asks how many marks give a tenth of a pixel (64). The advanced depth adds an offset the same in every mark and shows that the standard error falls while the error does not: six standard errors with 30 marks.',
+        'Students look at five marks of one synthetic star: a blurred spot at a position the investigation chose, 31.4 and 27.9 pixels, marked by a model of a careful person with a scatter of 0.8 pixel. They predict that careful marks differ, read the mean x (31.10) and spread (0.80) and the standard error (0.36), predict and measure what twenty marks buy (0.17, a factor of 2.06), predict where the truth lies and then see the mean 0.30 pixel from it (0.84 standard errors), and meet a star twice as wide (spread 1.60, error 0.71). The quantitative depth reports a position with its error bar and asks how many marks give a tenth of a pixel (64). The advanced depth adds an offset the same in every mark and shows that the standard error falls while the error does not: six standard errors with 30 marks.',
       priorKnowledge: [
         'A position on a picture in pixels',
         'The mean of a few numbers',
@@ -490,7 +490,7 @@ export const INSTRUCTOR = {
         },
         {
           name: 'The synthetic truth',
-          text: 'The star’s true position is set by the lesson and shown only after the prediction before it, so a student can see how near the mean lands. A real frame has no such answer; the lesson says so and uses no authentic data.',
+          text: 'The star’s true position is set by the investigation and shown only after the prediction before it, so a student can see how near the mean lands. A real frame has no such answer; the investigation says so and uses no authentic data.',
         },
         {
           name: 'Depth',
@@ -653,7 +653,7 @@ export const INSTRUCTOR = {
         },
         {
           name: 'The synthetic truth',
-          text: 'Both data sets are made for the lesson with the truth built in: a product of two parameters, and six points from a curve with seeded errors. No authentic data are used, so every refusal is the method’s own and not a limit of the data.',
+          text: 'Both data sets are made for the investigation with the truth built in: a product of two parameters, and six points from a curve with seeded errors. No authentic data are used, so every refusal is the method’s own and not a limit of the data.',
         },
         {
           name: 'Depth',
@@ -842,18 +842,18 @@ export const INSTRUCTOR = {
   },
   bands: {
     'what-is-a-measurement': {
-      core: 'short',
-      quantitative: 'short',
+      core: 'medium',
+      quantitative: 'medium',
       advanced: 'medium',
     },
     'what-does-plus-minus-claim': {
       core: 'medium',
-      quantitative: 'medium',
-      advanced: 'medium',
+      quantitative: 'long',
+      advanced: 'long',
     },
     'when-the-method-must-refuse': {
       core: 'medium',
-      quantitative: 'medium',
+      quantitative: 'long',
       advanced: 'long',
     },
   },

@@ -1,21 +1,14 @@
 // =============================================================================
 // Messages that arrive with the chunk that needs them
 // -----------------------------------------------------------------------------
-// Strings for panels nobody sees on a first visit: the two scenario-specific
-// instruments, the radial velocity analysis workspace, and the transit noise
-// budget. Together they are about twelve kilobytes of prose, and every visitor
-// was downloading all of it at start-up so that four scenarios and one lesson
-// widget could have their labels.
+// Strings for panels nobody sees on a first visit (the scenario-specific
+// instruments, the radial velocity workspace, the transit noise budget), about
+// twelve kilobytes of prose that every visitor was downloading at start-up.
 //
-// They are a separate catalog rather than part of js/i18n/es.js because a
-// single object cannot be code-split: esbuild follows the static import and
-// the whole thing lands in the entry graph. The bridges that load those panels
-// register these through registerMessages() at the same moment, so a reader
-// who opens one gets the strings and a reader who does not never fetches them.
-//
-// Everything else about them is normal. The audit and the i18n tests merge
-// both halves, so coverage, placeholder and length checks still see one
-// catalog.
+// A separate catalog rather than part of js/i18n/es.js because one object
+// cannot be code-split. The bridges that load those panels register these
+// through registerMessages() at the same moment. The audit and the i18n tests
+// merge both halves, so coverage, placeholder and length checks see one catalog.
 // =============================================================================
 
 export const ES_DEFERRED = {

@@ -307,7 +307,10 @@ describe('the service worker manifest is current', () => {
           p
         )
     );
-    expect(bodies.length).toBe(MANIFEST.length);
+    // The three measurement and claim lessons are never precached (D-R10-67):
+    // they open offline after one online use, like the other lazy families.
+    const NEVER_PRECACHED_LESSONS = 3;
+    expect(bodies.length + NEVER_PRECACHED_LESSONS).toBe(MANIFEST.length);
   });
 
   test('it does not precache the Spanish shadows, which are warmed on demand', async () => {
@@ -321,7 +324,7 @@ describe('the service worker manifest is current', () => {
     expect(manifest).toContain('__GRAVITAS_LOCALE_WARM');
     expect(
       (manifest.match(/investigations\/es\/[a-z0-9-]+\.js/g) || []).length
-    ).toBe(MANIFEST.length);
+    ).toBe(MANIFEST.length + 1); // plus the shared Spanish file (D-R10-67)
   });
 
   test('it leaves out the downloads and the document pages', async () => {

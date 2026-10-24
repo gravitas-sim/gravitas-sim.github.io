@@ -3,20 +3,18 @@
 // -----------------------------------------------------------------------------
 // How long an investigation takes, as a band, authored by the project: short,
 // medium or long, each with a range of minutes, for each investigation and each
-// depth it offers. These are estimates reasoned from the lessons' own declared
+// depth it offers. They are estimates reasoned from the lessons' declared
 // durations and step counts; nobody timed a class with them, and every page that
 // shows a band says so in the words of STATEMENT until the evidence-status record
 // holds an observed value (the `timing-estimates` claim in
 // tools/evidence-status.json; tests/timeBands.test.js holds OBSERVED to it). No
-// median from an automated or test walk is used here or anywhere: a script
-// clicks faster than a student reads.
+// median from an automated walk is used: a script clicks faster than a student
+// reads.
 //
-// One table, read by: the printable activity list (js/instructorPlan.js), the
-// adoption pages (tools/build-adoption-pages.mjs) and the Library's length
-// facet (tools/build-library.mjs), so a duration cannot be one thing on a page
-// and another in the filter. The band ranges' upper bounds are the lesson
-// browser's own cut-offs (js/data/investigations/sequences.js DEMO_MINUTES and
-// PERIOD_MINUTES, held equal by a test).
+// One table, read by the printable activity list (js/instructorPlan.js), the
+// adoption pages and the Library's length facet (tools/build-adoption-pages.mjs,
+// tools/build-library.mjs). The upper bounds are the lesson browser's own
+// cut-offs (js/data/investigations/sequences.js, held equal by a test).
 //
 // How an entry was made, so a reviewer can redo it. The core depth takes the
 // band of the upper bound of the minutes the lesson declares. A deeper depth
@@ -26,8 +24,8 @@
 // steps are fits, uncertainties and predictions, which take longer than a
 // reading step; "twice" is a judgement, not a measurement.
 //
-// This file lives with the instructor modules (the idle precache group): a
-// student never needs it, and no closure file of the instructor bundle imports it.
+// Lives with the instructor modules (the idle precache group); no closure file
+// of the instructor bundle imports it.
 // =============================================================================
 
 /** The bands, shortest first, with their ranges in minutes. */
