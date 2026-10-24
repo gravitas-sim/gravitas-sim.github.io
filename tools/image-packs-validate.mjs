@@ -404,7 +404,8 @@ function injection(ctx) {
   });
   // For the record, not a bound: the same spec on the CCD route (no variance
   // plane), where the unit is electrons.
-  const { variance, ...rest } = ctx.frame;
+  const rest = { ...ctx.frame };
+  delete rest.variance;
   const ccd = start(adapt(rest, permits), spec);
   rows.push({
     id: 'injection.g1.reported',
