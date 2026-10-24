@@ -1,0 +1,179 @@
+{
+  "format": "gravitas.observation-data-pack",
+  "formatVersion": 1,
+  "id": "hirise-cerberus-fossae",
+  "version": "1.0.0",
+  "title": "Mars from HiRISE: Cerberus Fossae and a lava flow (ESP_069637_1915)",
+  "object": {
+    "name": "Mars: Cerberus Fossae"
+  },
+  "facility": {
+    "observatory": "Mars Reconnaissance Orbiter (NASA)",
+    "instrument": "HiRISE, black-and-white browse image",
+    "pipeline": "HiRISE image of the day, observation ESP_069637_1915, 4 June 2021"
+  },
+  "dataType": "image",
+  "origin": "observed",
+  "credit": "NASA/JPL-Caltech/University of Arizona",
+  "license": {
+    "status": "public-domain",
+    "statement": "HiRISE image usage policy (https://uahirise.org/media/usage.php, read 2026-10-24): \"there is no copyright restriction\"; the images are \"within the public domain\"; credit asked \"where possible\"."
+  },
+  "retrieved": "2026-10-24",
+  "columns": [
+    {
+      "name": "display level",
+      "unit": "",
+      "description": "0 to 255, the gray of the colour picture: for the eye, not a measure of light"
+    }
+  ],
+  "masks": [],
+  "reductions": [],
+  "image": {
+    "width": 640,
+    "height": 480,
+    "sidecar": {
+      "format": "gravitas.image",
+      "formatVersion": 1,
+      "id": "hirise-cerberus-fossae",
+      "title": "Mars from HiRISE: Cerberus Fossae and a lava flow (ESP_069637_1915)",
+      "use": "display-only",
+      "width": 640,
+      "height": 480,
+      "pixels": {
+        "unit": "display"
+      },
+      "planes": {
+        "data": {
+          "encoding": "uint8"
+        }
+      },
+      "history": [
+        {
+          "step": "decode",
+          "tool": "image-decode.py (Pillow)",
+          "version": "11.2.1",
+          "lossy": false
+        },
+        {
+          "step": "reencode",
+          "tool": "image-packs.mjs",
+          "version": "1.0.0",
+          "lossy": true,
+          "note": "gray of the colour (0.299, 0.587, 0.114): display levels, not light"
+        },
+        {
+          "step": "crop",
+          "tool": "image-packs.mjs",
+          "version": "1.0.0",
+          "lossy": true,
+          "wcsUpdated": false,
+          "note": "columns 0 to 2559, rows 0 to 1919 from the top left"
+        },
+        {
+          "step": "resample",
+          "tool": "image-packs.mjs",
+          "version": "1.0.0",
+          "lossy": true,
+          "wcsUpdated": false,
+          "fluxConserving": false,
+          "note": "mean of 4 by 4 pixels"
+        },
+        {
+          "step": "flip",
+          "tool": "image-packs.mjs",
+          "version": "1.0.0",
+          "lossy": false,
+          "wcsUpdated": false,
+          "note": "row 1 is the bottom, as in FITS"
+        }
+      ],
+      "source": {
+        "kind": "pack"
+      }
+    }
+  },
+  "source": {
+    "archive": "HiRISE, Lunar and Planetary Laboratory, University of Arizona (uahirise.org)",
+    "urls": [
+      "https://static.uahirise.org/hipod/ESP_069637_1915.jpg"
+    ],
+    "citations": [
+      {
+        "text": "McEwen et al. 2007, J. Geophys. Res. 112, E05S02 (HiRISE)",
+        "doi": "10.1029/2005JE002605"
+      },
+      {
+        "text": "HiRISE image of the day, ESP_069637_1915",
+        "url": "https://uahirise.org/hipod/ESP_069637_1915"
+      }
+    ]
+  },
+  "raw": [
+    {
+      "file": "ESP_069637_1915.jpg",
+      "url": "https://static.uahirise.org/hipod/ESP_069637_1915.jpg",
+      "bytes": 1904465,
+      "sha256": "0c7f3f4794fa8a7eae4ebf338c90c41cc0d3c8be9c05c4e65235789fe16595ea"
+    }
+  ],
+  "transformation": {
+    "script": "tools/data-packs/image-packs.mjs",
+    "version": "1.0.0",
+    "options": {
+      "crop": [
+        0,
+        0,
+        2560,
+        1920
+      ],
+      "block": 4
+    },
+    "steps": [
+      "Decode the JPEG (image-decode.py, Pillow 11.2.1 (libjpeg 6.2)); gray; crop; block mean; rows from the bottom; base64 in the sidecar. Each step is in image.sidecar.history."
+    ],
+    "record": {
+      "source": {
+        "width": 2560,
+        "height": 1920
+      },
+      "decoder": {
+        "pillow": "11.2.1",
+        "libjpeg": "6.2"
+      }
+    }
+  },
+  "assumptions": [
+    "No pixel scale is stated or assumed: craters are compared in pixels."
+  ],
+  "compatible": {
+    "widgets": [],
+    "investigations": []
+  },
+  "offline": "none",
+  "derived": {
+    "file": "js/data/observations/hiriseCerberusFossae.js",
+    "bytes": 4184,
+    "sha256": "faf82b6586e34e6a57111c9b1095604c87143f45ef3af981b68606e51425dd60",
+    "sidecar": {
+      "file": "frames/hirise-cerberus-fossae.json",
+      "bytes": 409764,
+      "sha256": "c75c11f765e394216d972ec79486258732dc298a70ecedfb3045f6683e533aa6"
+    }
+  },
+  "validation": {
+    "check": "the frame is a picture with structure and not a clipped one: at least 90 percent of the pixels are between 20 and 235, and the levels differ (standard deviation above 20)",
+    "against": [
+      {
+        "quantity": "pixels between 20 and 235",
+        "min": 0.9
+      }
+    ],
+    "result": {
+      "width": 640,
+      "height": 480,
+      "fractionInside": 0.962,
+      "standardDeviation": 50.2
+    }
+  }
+}
