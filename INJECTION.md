@@ -126,6 +126,23 @@ and the smoke numbers were not used to choose anything.)
    spacing (about 58 fit); the a2 frame is a blank 512 by 512 frame, whose pixels the
    stand-in detector ignores.
 
+**Correction 2 was a bound widened after the oracle was computed, and Carl ruled on it.**
+The 0.06 of a5 (iii) was committed in `b2dc6737`. The independent computation quoted
+above is the oracle work of commit `17fcc8d2` (scipy `beta.ppf` and `binom`), and the
+bound was widened to 0.25 and 0.10 in `24376f10`, which comes after that commit and
+before `js/measure/inject.js` existed. So the widening was made after an oracle
+number had been seen, though before any number of this module's own was computed.
+The original 0.06 and its reason stay on record in `thresholds.json` (`corrections`,
+entry 2: "first said the mean coverage of the exact interval exceeds the level by at
+most 0.06") and in the history of that file, and in item 2 above. Carl, chat
+2026-10-23, asked "Prompt 184's committed bound on the mean over-coverage of the exact
+Clopper-Pearson interval (a5(iii), 0.06) is mathematically unreachable at small n
+(scipy itself gives 0.894 at n=5, 68%). It was widened to 0.25 (68%) / 0.10 (95%) after
+the oracle was computed but before the module existed. Accept the correction?", chose
+"Accept the correction (Recommended)": "Keep 0.25/0.10, recorded in D-R10-62 and
+INJECTION.md as widened after seeing the oracle, quoting your answer; the original 0.06
+and the reason stay visible."
+
 ## What was built
 
 `js/measure/inject.js` is a pure module (no DOM) over the adapter of Prompt 180
