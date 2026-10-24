@@ -60,7 +60,7 @@
     {
       "file": "ASTROMETRY.md",
       "kind": "feature",
-      "purpose": "Sky coordinates for an image: WCS-lite, registration and their validation (Prompt 181).",
+      "purpose": "Sky coordinates for an image (WCS-lite, registration; Prompt 181) and astrometric time series, motion and well-sampled parallax (Prompt 186), with their validation.",
       "owner": 181,
       "student": false
     },
