@@ -22,28 +22,41 @@
 import Sequencer from '@jest/test-sequencer';
 import path from 'node:path';
 
-/** Longest first, from the 2026-10 measurement. */
+/**
+ * Longest first, from the CI run of 2026-10-24 (b4656619, per-suite seconds in
+ * brackets, three workers). detection.test.js was missing from this list and
+ * started at about 270 s of a 650 s run, so the longest suite of all finished
+ * last; it is first now.
+ */
 export const SLOWEST_FIRST = [
-  'physicsValidation.test.js',
-  'powerLawGravity.test.js',
-  'instructorFixture.test.js',
-  'effectsRealm.test.js',
-  'shardInventory.test.js',
-  'calibrationKernel.test.js',
-  'irreversibility.test.js',
+  'detection.test.js', // 383
+  'physicsValidation.test.js', // 155
+  // The instrument-widget label golden, in parts of about 30 s each locally.
+  'labelGoldenWidgetsPowerLaw.test.js', // 70
+  'labelGoldenWidgetsEngineMath.test.js', // 66
+  'labelGoldenWidgetsStellar.test.js', // 56
+  'injection.test.js', // 52
+  'statisticsKernel.test.js', // 50
+  'labelGoldenWidgetsGw.test.js', // 47
+  'labelGoldenWidgetsSurvey.test.js', // 45
+  'labelGoldenWidgetsDetector.test.js', // 44
+  'shardInventory.test.js', // 43
+  'calibrationKernel.test.js', // 38
+  'labelGoldenWidgetsRest.test.js', // 33
+  'imageMeasure.test.js', // 31
+  'i18nFreshness.test.js', // 30
+  'docsFactsScope.test.js', // 30
+  'lab3dGuides.test.js', // 26
+  'effectsRealm.test.js', // 26
+  'powerLawGravity.test.js', // 23
+  'irreversibility.test.js', // 20
+  'matrix.test.js', // 19
+  'imageMeasureGate.test.js', // 19
+  'missionEvidence.test.js', // 19
+  'gwAudio.test.js', // 19
+  'instructorFixture.test.js', // 18
   'deployRehearsal.test.js',
-  'lab3dGuides.test.js',
-  'docsFactsScope.test.js',
-  'missionEvidence.test.js',
   'rvMonteCarlo.test.js',
-  // The instrument-widget label golden, in parts of about 30 s each.
-  'labelGoldenWidgetsGw.test.js',
-  'labelGoldenWidgetsStellar.test.js',
-  'labelGoldenWidgetsSurvey.test.js',
-  'labelGoldenWidgetsDetector.test.js',
-  'labelGoldenWidgetsRest.test.js',
-  'labelGoldenWidgetsPowerLaw.test.js',
-  'labelGoldenWidgetsEngineMath.test.js',
 ];
 
 export default class SlowestFirstSequencer extends Sequencer {
