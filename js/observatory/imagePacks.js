@@ -24,6 +24,7 @@ import { FORMAT, FORMAT_VERSION } from './schema.js';
 
 /** The frames files' format name, as tools/data-packs/image-packs.mjs writes it. */
 export const PLANES_FORMAT = 'gravitas.image-pack-planes';
+export const PLANES_VERSION = 1;
 
 const text = bytes => new TextDecoder().decode(bytes);
 
@@ -63,6 +64,7 @@ export async function readFrames(bytes, side, pack) {
   const { width, height } = pack.image;
   if (
     doc.format !== PLANES_FORMAT ||
+    doc.formatVersion !== PLANES_VERSION ||
     doc.id !== pack.id ||
     doc.width !== width ||
     doc.height !== height

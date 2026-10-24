@@ -152,8 +152,10 @@ describe('the authentic-frame legs, against the contract committed first', () =>
         expect({ id: r.id, pass: r.pass }).toEqual({ id: r.id, pass: false });
       else expect({ id: r.id, pass: r.pass }).toEqual({ id: r.id, pass: true });
     }
+    // (the page-stage failures are judged in the browser, by e2e/imagePacks.spec.js)
     for (const id of Object.keys(FAILED))
-      expect(rows.some(r => r.id === id)).toBe(true);
+      if (!id.includes('.page.'))
+        expect(rows.some(r => r.id === id)).toBe(true);
   });
 
   test('every leg of the contract has rows, and the legs not run say why', () => {

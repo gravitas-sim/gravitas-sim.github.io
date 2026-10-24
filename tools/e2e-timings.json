@@ -2794,5 +2794,15 @@
   "[chromium] › imageOverlay.spec.js › blink and compare: keyboard alone › a difference is refused with the reason: another calibration state, another unit, another exposure, a display-only frame": 1.9,
   "[chromium] › imageOverlay.spec.js › overlay and blink: both languages, axe, and every control › axe with a result, and 24 px targets at 1280 and 390, en": 3.5,
   "[chromium] › imageOverlay.spec.js › overlay and blink: both languages, axe, and every control › axe with a result, and 24 px targets at 1280 and 390, es": 3.7,
-  "[chromium] › imageOverlay.spec.js › overlay and blink: both languages, axe, and every control › the page changing language re-words the open panel and keeps its table and its tie": 1.7
+  "[chromium] › imageOverlay.spec.js › overlay and blink: both languages, axe, and every control › the page changing language re-words the open panel and keeps its table and its tie": 1.7,
+  "[chromium] › imagePacks.spec.js › the four packs › each opens with its frames file fetched only then, credited and licensed, en": 1.8,
+  "[chromium] › imagePacks.spec.js › the four packs › each opens with its frames file fetched only then, credited and licensed, es": 1.9,
+  "[chromium] › imagePacks.spec.js › the four packs › a frames file that is not the one the pack records is refused, and the page says so": 0.5,
+  "[chromium] › imagePacks.spec.js › what each pack allows › tess-frame: the photometry panel is offered": 0.6,
+  "[chromium] › imagePacks.spec.js › what each pack allows › sdo-hmi-sun: the photometry panel is refused in words": 0.9,
+  "[chromium] › imagePacks.spec.js › what each pack allows › galileo-moon: the photometry panel is refused in words": 0.9,
+  "[chromium] › imagePacks.spec.js › what each pack allows › hirise-cerberus-fossae: the photometry panel is refused in words": 1.1,
+  "[chromium] › imagePacks.spec.js › controls › every control of the opened TESS frame is at least 24 px at 1280": 0.7,
+  "[chromium] › imagePacks.spec.js › controls › every control of the opened TESS frame is at least 24 px at 390": 0.6,
+  "[chromium] › imagePacks.spec.js › the hostile PNG leg, pixel stage › every variant made from the authentic Galileo frame is refused with a stable code in time, or read where the contract says so": 1.6
 }

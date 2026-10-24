@@ -345,6 +345,13 @@
       "student": false
     },
     {
+      "file": "IMAGE_PACKS.md",
+      "kind": "feature",
+      "purpose": "The four image packs of the first slice: rights decision per source, contracts, the authentic-frame legs and what was not run (Prompt 189).",
+      "owner": 189,
+      "student": false
+    },
+    {
       "file": "INDEX_DECOMPOSITION.md",
       "kind": "design",
       "purpose": "How index.html was decomposed into fragments.",

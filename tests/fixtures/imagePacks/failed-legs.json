@@ -8,6 +8,18 @@
       "found": "js/dataKinds/raster.js readPngHeader refuses it with png-malformed ('N bytes follow the IEND chunk'), by Prompt 188's committed design, before any decoder sees the file",
       "cause": "the contract (written in this prompt) assumed the lenient behaviour of browser decoders; Prompt 188's reader is deliberately strict about the end of the file. The two disagree and nothing in the pack is wrong",
       "ruling": "Carl: either the contract's expectation is wrong (the strict refusal stands, and this row becomes a refusal), or the reader should accept trailing bytes (a change to Prompt 188's committed corpus)"
+    },
+    "import.hostilePng.page.IDAT-that-inflates-past-the-declared-size": {
+      "contract": "the contract's variant list says this variant is refused with a stable code",
+      "found": "in Chromium (the page's decoder, e2e/imagePacks.spec.js) the file is READ as the intact picture: libpng stops after the image's rows and discards the surplus compressed data; nothing is held and the time is inside the 2,000 ms bound",
+      "cause": "the contract assumed a decoder refuses a stream that inflates past the declared size; the browser's decoder ignores it. The page's own structural reader (js/dataKinds/raster.js) cannot see inside the compressed data, so this is a property of the decoder, not of Prompt 188's code or of the pack",
+      "ruling": "Carl: either accept that a decoder-tolerated surplus is read (the contract's expectation is wrong), or ask Prompt 188's reader to bound the inflated size itself (a change to its committed corpus)"
+    },
+    "import.hostilePng.page.IDAT-of-zeros-that-inflates-to-64-MiB": {
+      "contract": "the contract's variant list says this variant is refused with a stable code",
+      "found": "in Chromium (the page's decoder, e2e/imagePacks.spec.js) the file is READ as the intact picture: libpng stops after the image's rows and discards the surplus compressed data; nothing is held and the time is inside the 2,000 ms bound",
+      "cause": "the contract assumed a decoder refuses a stream that inflates past the declared size; the browser's decoder ignores it. The page's own structural reader (js/dataKinds/raster.js) cannot see inside the compressed data, so this is a property of the decoder, not of Prompt 188's code or of the pack",
+      "ruling": "Carl: either accept that a decoder-tolerated surplus is read (the contract's expectation is wrong), or ask Prompt 188's reader to bound the inflated size itself (a change to its committed corpus)"
     }
   }
 }
