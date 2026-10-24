@@ -38,7 +38,7 @@ rec = {
         "model": "x(t) = D (p0 + m (t - t0)) with D = 648000 / (pi parallax) au, p0 the unit vector of (ra, dec), m = mu_a* e_alpha + mu_d e_delta in radians per Julian year, t0 the first epoch; the apparent direction is (x - r_Earth) normalised, r_Earth the barycentric position in au from astropy; no aberration, no light deflection, no light time",
         "noise": "numpy.random.default_rng(noiseSeed): sigma-scaled normals, first the n right ascension offsets (divided by cos dec) and then the n declination offsets, in arcseconds",
         "sphericalFit": "scipy.optimize.least_squares(method='lm', x_scale='jac', xtol=ftol=gtol=1e-15), parameters the offsets in arcseconds of the first-epoch position from the truth, mu_a*, mu_d and the parallax, started at 1.05, 0.95 and 1.1 times the truth; residuals in sigma units; covariance inv(J^T J)",
-        "lineFit": "xi and eta (arcsec) of a gnomonic projection about the normalised mean of the unit vectors; the weighted mean epoch as reference; scipy.optimize.curve_fit(absolute_sigma=True)",
+        "lineFit": "xi and eta (arcsec) of a gnomonic projection about the normalised mean of the unit vectors; the weighted mean epoch as reference; scipy.optimize.curve_fit(absolute_sigma=True, an analytic Jacobian, started at 0.1 and 0.1)",
         "times": "astropy.time.Time(jd, format='jd', scale='utc'), .tt and .tdb; offsets in seconds from the two-part Julian dates",
     },
     "conventions": "angles in degrees, epochs TDB Julian dates, positions in au in the ICRS-aligned equatorial frame, proper motion mu_a* in arcseconds per Julian year (the right-ascension rate times cos dec)",

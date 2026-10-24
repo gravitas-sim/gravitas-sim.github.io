@@ -1,0 +1,40 @@
+{
+  "format": "gravitas.astrometric-series-oracle-provenance/1",
+  "prompt": 186,
+  "oracle": "astropy 6.1.7 (coordinates.get_body_barycentric, time) with numpy 2.2.6 and scipy 1.15.3",
+  "identity": "Independent, cited implementations; no Gravitas code ran: astropy.coordinates.get_body_barycentric('earth') with the built-in ephemeris (ERFA epv00 of pyerfa 2.0.1.5, nothing downloaded), astropy.time (ERFA time-scale conversions, leap-second table), scipy.optimize.least_squares (method lm, the exact spherical five-parameter astrometric model of a source with constant barycentric velocity, the normalised vector from the Earth to the source), scipy.optimize.curve_fit with absolute sigmas (straight lines in the tangent plane), numpy.random.default_rng (the noise).",
+  "retrieved": "2026-10-23",
+  "index": "https://pypi.org/simple (pip default index; no mirror, no pip.conf, no PIP_* variable); the virtual environment is Prompt 180's, in which nothing was added for this prompt",
+  "python": "3.10.12 (macOS-26.6.2-x86_64-i386-64bit, x86_64)",
+  "packages": {
+    "astropy": "6.1.7",
+    "numpy": "2.2.6",
+    "scipy": "1.15.3",
+    "pyerfa": "2.0.1.5",
+    "astropy-iers-data": "0.2026.10.19.0.52.1",
+    "photutils": "2.0.2"
+  },
+  "install": "python3.10 -m venv <scratchpad>/oracle180; <venv>/bin/python -m pip install --only-binary :all: numpy scipy astropy photutils (the resolved versions above); the venv is not committed and no package is",
+  "run": "cd <empty scratchpad directory>; <venv>/bin/python -I tools/astrometric-series-oracle/oracle.py tools/astrometric-series-oracle/oracle-inputs.json tests/fixtures/astrometric-series/oracle-results.json; then Prettier",
+  "committedBefore": "thresholds.json and ASTROMETRY.md's contract were committed before the oracle's inputs and script existed, and the oracle's inputs, script and results were committed before js/measure/astrometric-series.js existed",
+  "parameters": {
+    "model": "x(t) = D (p0 + m (t - t0)) with D = 648000 / (pi parallax) au, p0 the unit vector of (ra, dec), m = mu_a* e_alpha + mu_d e_delta in radians per Julian year, t0 the first epoch; the apparent direction is (x - r_Earth) normalised, r_Earth the barycentric position in au from astropy; no aberration, no light deflection, no light time",
+    "noise": "numpy.random.default_rng(noiseSeed): sigma-scaled normals, first the n right ascension offsets (divided by cos dec) and then the n declination offsets, in arcseconds",
+    "sphericalFit": "scipy.optimize.least_squares(method='lm', x_scale='jac', xtol=ftol=gtol=1e-15), parameters the offsets in arcseconds of the first-epoch position from the truth, mu_a*, mu_d and the parallax, started at 1.05, 0.95 and 1.1 times the truth; residuals in sigma units; covariance inv(J^T J)",
+    "lineFit": "xi and eta (arcsec) of a gnomonic projection about the normalised mean of the unit vectors; the weighted mean epoch as reference; scipy.optimize.curve_fit(absolute_sigma=True, an analytic Jacobian, started at 0.1 and 0.1)",
+    "times": "astropy.time.Time(jd, format='jd', scale='utc'), .tt and .tdb; offsets in seconds from the two-part Julian dates"
+  },
+  "conventions": "angles in degrees, epochs TDB Julian dates, positions in au in the ICRS-aligned equatorial frame, proper motion mu_a* in arcseconds per Julian year (the right-ascension rate times cos dec)",
+  "files": {
+    "tools/astrometric-series-oracle/oracle-inputs.json": "6529b3801d239a09627e4c287c483b0f5d66bda076fe1aa5a7272addbe6334da",
+    "tools/astrometric-series-oracle/oracle.py": "a6d0135cb310b71fd0a7f0baa4165ed9067ce4e225d17584b08747458f6a7d6a",
+    "tests/fixtures/astrometric-series/oracle-results.json": "38d9c2f6190975a94af92edd6f42d3041ce67ecabd1a988018ef561777cc822d"
+  },
+  "references": [
+    "Astropy Collaboration 2022, ApJ 935, 167",
+    "Harris, C. R. et al. 2020, Nature 585, 357 (numpy)",
+    "Virtanen, P. et al. 2020, Nature Methods 17, 261 (scipy)",
+    "Wallace, P. T. and Capitaine, N. 2006, A&A 459, 981; SOFA/ERFA epv00 (the Earth's barycentric ephemeris)",
+    "Lindegren, L. et al. 2012, A&A 538, A78 (the standard astrometric model of a single star)"
+  ]
+}
