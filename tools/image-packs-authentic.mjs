@@ -17,7 +17,7 @@ import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { permits } from '../js/dataKinds/contract.js';
-import { adapt } from '../js/measure/photometry.js';
+import { adapt, apertureFor, measure } from '../js/measure/photometry.js';
 import { detectIn } from '../js/measure/detect.js';
 import {
   fitWcs,
@@ -61,6 +61,7 @@ const GAIA_G = 16;
 const MATCH = { radius: 2, isolation: 4, minMatched: 8 };
 /** The target's measured centroid of the pack, carried to the cutout (the contract's (40.13, 41.64)). */
 const TARGET = { x: 40.13, y: 41.64 };
+const TARGET_SOURCE = '1779546757669063552';
 
 const csv = text => {
   const [head, ...lines] = text.trim().split('\n');
@@ -148,6 +149,13 @@ export const VARIANTS = {
     matchG: 14,
     params: { target: TARGET, fwhm: 2 },
   },
+  // contract part 5: the stars are chosen from the catalogue and measured where
+  // they are predicted; the pipeline is given them as marks
+  v3: {
+    forced: true,
+    matchG: 14,
+    params: { target: TARGET, fwhm: 2, register: false },
+  },
 };
 
 export async function decide(A, opts = VARIANTS.main) {
@@ -229,25 +237,93 @@ export async function decide(A, opts = VARIANTS.main) {
     return best;
   };
   const pairs = [];
-  for (const d of good) {
-    const b = nearestStar(d.x, d.y);
-    if (!b || b.d > MATCH.radius) continue;
-    const back = nearestDet(b.p, dets);
-    if (back.s !== d) continue;
-    const crowded = pred.some(
-      q =>
-        q && q !== b.p && Math.hypot(q.x - b.p.x, q.y - b.p.y) < MATCH.isolation
-    );
-    if (crowded) continue;
-    pairs.push({
-      id: b.p.s.source,
-      x: d.x + 1,
-      y: d.y + 1,
-      ra: b.p.at.ra,
-      dec: b.p.at.dec,
-      g: b.p.s.v,
-      dist: b.d,
+  if (opts.forced) {
+    // part 5: choose the stars from the catalogue alone, then measure each where it is predicted
+    const all = moved.map(m => {
+      const p = pixelOf(anchor, m.at.ra, m.at.dec);
+      return p ? { ...m, x: p.x, y: p.y } : null;
     });
+    const refs = all.filter(
+      m =>
+        m &&
+        m.s.v <= opts.matchG &&
+        m.x - 1 >= 6 &&
+        m.x - 1 <= seq.width - 1 - 6 &&
+        m.y - 1 >= 6 &&
+        m.y - 1 <= seq.height - 1 - 6 &&
+        !all.some(
+          q =>
+            q &&
+            q !== m &&
+            q.s.v <= m.s.v + 2.5 &&
+            Math.hypot(q.x - m.x, q.y - m.y) < 4
+        )
+    );
+    out.refs = refs.length;
+    const ap = apertureFor(2);
+    for (const m of refs) {
+      const r = measure(a, {
+        x: m.x - 1,
+        y: m.y - 1,
+        r: ap.r,
+        rIn: ap.rIn,
+        rOut: ap.rOut,
+        weighting: 'exact',
+        recentre: { half: ap.half, sigmaW: ap.sigmaW },
+      });
+      if (!r.ok) continue;
+      const d = Math.hypot(r.x - (m.x - 1), r.y - (m.y - 1));
+      if (d > 2 || !(r.snr >= 20)) continue;
+      pairs.push({
+        id: m.s.source,
+        x: r.x + 1,
+        y: r.y + 1,
+        ra: m.at.ra,
+        dec: m.at.dec,
+        g: m.s.v,
+        dist: d,
+        start: [m.x - 1, m.y - 1],
+        hr: m.s.hr,
+      });
+    }
+    // the pipeline's marks: these stars and the target, at the predicted pixels
+    const tgt = all.find(m => m && m.s.source === TARGET_SOURCE);
+    const list = refs.slice();
+    if (tgt && !list.includes(tgt)) list.push(tgt);
+    list.sort((p, q) => p.s.v - q.s.v);
+    opts = {
+      ...opts,
+      params: {
+        ...opts.params,
+        marks: list
+          .slice(0, 20)
+          .map(m => ({ id: `g${m.s.hr}`, x: m.x - 1, y: m.y - 1 })),
+      },
+    };
+    out.opts = opts;
+  } else {
+    for (const d of good) {
+      const b = nearestStar(d.x, d.y);
+      if (!b || b.d > MATCH.radius) continue;
+      const back = nearestDet(b.p, dets);
+      if (back.s !== d) continue;
+      const crowded = pred.some(
+        q =>
+          q &&
+          q !== b.p &&
+          Math.hypot(q.x - b.p.x, q.y - b.p.y) < MATCH.isolation
+      );
+      if (crowded) continue;
+      pairs.push({
+        id: b.p.s.source,
+        x: d.x + 1,
+        y: d.y + 1,
+        ra: b.p.at.ra,
+        dec: b.p.at.dec,
+        g: b.p.s.v,
+        dist: b.d,
+      });
+    }
   }
   out.pairs = pairs;
   out.fit =
@@ -481,7 +557,9 @@ export async function transit(D) {
 
 /** The fit, overlay and pipeline legs of one run; `sfx` is '' for the contract's own and '.v2' for the variant. */
 async function runLegs(A, D, O, sfx, add, rows) {
-  const tag = sfx ? ' (variant: contract part 4)' : '';
+  const tag = sfx
+    ? ` (variant ${sfx.slice(1)}: contract part ${sfx === '.v2' ? 4 : 5})`
+    : '';
   const fit = D.fit;
   const B5 = L['astrometry.b5.fit'];
   if (!fit?.ok || D.pairs.length < MATCH.minMatched) {
@@ -644,6 +722,7 @@ export async function authenticRows(oracle, cache = {}) {
   const Ds = {
     main: cache.main ?? (await decide(A, VARIANTS.main)),
     v2: cache.v2 ?? (await decide(A, VARIANTS.v2)),
+    v3: cache.v3 ?? (await decide(A, VARIANTS.v3)),
   };
   // integrity
   {
@@ -684,6 +763,7 @@ export async function authenticRows(oracle, cache = {}) {
     note: L['overlay.e1.pair'].status,
   });
   await runLegs(A, Ds.v2, oracle?.sections?.v2, '.v2', add, rows);
+  await runLegs(A, Ds.v3, oracle?.sections?.v3, '.v3', add, rows);
   // 186: the motion
   {
     const SB = L['series.b6.motion'].bounds;
