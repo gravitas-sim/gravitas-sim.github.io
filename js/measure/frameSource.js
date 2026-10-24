@@ -48,6 +48,29 @@ export const CALIBRATION = Object.freeze({
 });
 
 /**
+ * The masters of a calibration set are a pure function of the seed, the
+ * detector and the frames taken, so sequences of one seed (a run with and
+ * without frames left out, say) make them once. Kept for the last few only.
+ */
+const MASTERS = new Map();
+function mastersOf(seed, detectorSpec, calibration, gain) {
+  const key = JSON.stringify([seed, detectorSpec ?? null, calibration, gain]);
+  if (!MASTERS.has(key)) {
+    if (MASTERS.size >= 8) MASTERS.delete(MASTERS.keys().next().value);
+    MASTERS.set(
+      key,
+      buildMasters(
+        calibrationSet({ seed, detector: detectorSpec }, calibration),
+        {
+          gain,
+        }
+      )
+    );
+  }
+  return MASTERS.get(key);
+}
+
+/**
  * @param {object} spec
  * @param {string} spec.seed
  * @param {Array<{id: string, x: number, y: number, rate: number}>} spec.stars - electrons per second
@@ -150,10 +173,7 @@ export function syntheticSequence(spec) {
     spec,
     /** The three masters, made once from the calibration set of the same seed. */
     get masters() {
-      masters ??= buildMasters(
-        calibrationSet({ seed, detector: spec.detector }, calibration),
-        { gain: detector.gain }
-      );
+      masters ??= mastersOf(seed, spec.detector, calibration, detector.gain);
       return masters;
     },
     /** Frame k, raw counts. */

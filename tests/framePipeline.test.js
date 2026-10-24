@@ -96,9 +96,13 @@ const runTool = legs =>
 describe('the committed thresholds hold for the production module', () => {
   let rows = [];
   beforeAll(async () => {
+    // Four processes, grouped by cost (the ensemble legs, d2, d4 with d1, and the
+    // rest, in seconds about 100, 130, 120 and 25): the same rows as one run.
     const parts = await Promise.all([
-      runTool('a1,a2,a5,c1,a3,a4,d4,d5,e1,f1,g1'),
-      runTool('b,d1,d2,d3'),
+      runTool('a1,a2,a5,c1'),
+      runTool('d2'),
+      runTool('d4,d1'),
+      runTool('a3,a4,b,d3,d5,e1,f1,g1'),
     ]);
     rows = parts.flat();
   }, 1_500_000);
