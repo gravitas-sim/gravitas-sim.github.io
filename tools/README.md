@@ -144,6 +144,7 @@ current, and the orchestrator checks it.
 | `orbital-cases.mjs` | The orbital layer's validation group (Prompt 148) |  |
 | `orbital-validate.mjs` | npm run validate:orbital - the orbital layer's validation group | `npm run validate:orbital` |
 | `output-excerpt.mjs` | The part of a failing command's output worth printing |  |
+| `overlay-validate.mjs` | Catalogue overlays, blink and compare against their committed thresholds (Prompt 182) | `npm run overlay:validate` |
 | `pending-acceptance.mjs` | Acceptance checks for features that are not built yet |  |
 | `perf-probe.mjs` | Frame-time probe | `npm run perf` |
 | `perf-trace.mjs` | Compositor measurement: what a Chromium trace says about where a frame went |  |

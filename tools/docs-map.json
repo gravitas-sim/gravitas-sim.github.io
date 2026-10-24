@@ -583,6 +583,13 @@
       "student": false
     },
     {
+      "file": "OVERLAYS.md",
+      "kind": "feature",
+      "purpose": "Catalogue overlays, blink and compare on an image: what is drawn where, how a second frame is tied to the first, when the two may be subtracted, the oracle and the validation (Prompt 182).",
+      "owner": 182,
+      "student": false
+    },
+    {
       "file": "OWNER_ACTIONS.md",
       "kind": "process",
       "purpose": "Decisions, credentials and accounts only the owner can supply.",
