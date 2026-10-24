@@ -27,8 +27,8 @@ const CASES = [
   {
     id: 'what-does-plus-minus-claim',
     sid: 'coverage-at-one-sigma',
-    row: /^Coverage/i,
-    rowEs: /^Cobertura/i,
+    row: /Coverage/i,
+    rowEs: /Cobertura/i,
   },
   {
     id: 'when-the-method-must-refuse',
