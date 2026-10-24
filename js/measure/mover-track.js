@@ -416,7 +416,7 @@ export function findMover(frames, opts = {}) {
     rate: {
       value: tr.motion.rate,
       sigma: tr.motion.sRate,
-      unit: 'arcsec/hour',
+      per: 'arcsec/hour',
     },
     positionAngle: {
       value: P.sky

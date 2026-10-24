@@ -157,7 +157,7 @@ export const ES_IMAGEORBIT = {
   'obs.orb.no.bad-sigma':
     'La fila {row} necesita incertidumbres positivas (y una correlación entre -1 y 1).',
   'obs.orb.no.bad-source':
-    'Una fuente no tiene una posición utilizable o está demasiado lejos del centro del campo.',
+    'Una fuente no tiene una posición utilizable o queda demasiado lejos del centro del campo.',
   'obs.orb.no.span': 'Las épocas deben abarcar al menos un día.',
   'obs.orb.no.depth': 'Elige una órbita circular o una elíptica.',
   'obs.orb.no.too-many': 'La tabla es demasiado grande.',

@@ -156,7 +156,7 @@ export const EN_IMAGEORBIT = {
   'obs.orb.no.bad-sigma':
     'Row {row} needs positive uncertainties (and a correlation between -1 and 1).',
   'obs.orb.no.bad-source':
-    'A source has no usable position or sits too far from the field centre.',
+    'A source has no usable position or sits too far from the field center.',
   'obs.orb.no.span': 'The epochs must span at least one day.',
   'obs.orb.no.depth': 'Choose a circular or an elliptical orbit.',
   'obs.orb.no.too-many': 'The table is too large.',

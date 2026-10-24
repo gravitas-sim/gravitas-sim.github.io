@@ -34,6 +34,7 @@ import { solveSpd, invertSpd, eigenSymmetric } from '../numeric/linalg.js';
 import { chi2Survival } from './astrometry.js';
 import { profileInterval } from '../kernels/statistics/intervals.js';
 import { stream, gaussian } from '../random/streams.js';
+import { fixed } from '../format.js';
 import {
   angle,
   dimensionless,
@@ -109,7 +110,7 @@ const refuse = (code, message, data = {}) => ({
 /** An epoch as decimal Julian years: year, byear (Besselian), jd or mjd. */
 export function epochYear(time) {
   const format = String(time?.format ?? 'year').toLowerCase();
-  const v = typeof time?.value === 'string' ? Number(time.value) : time?.value;
+  const v = time?.value;
   if (!finite(v)) return null;
   switch (format) {
     case 'year':
@@ -1007,7 +1008,7 @@ function assess(S, fit, depth, candidates) {
   };
 }
 
-const fixedNum = (v, d) => (finite(v) ? v.toFixed(d) : 'n/a');
+const fixedNum = (v, d) => (finite(v) ? fixed(v, d) : 'n/a');
 
 // ---- predicting ----------------------------------------------------------------------
 
@@ -1087,7 +1088,7 @@ export function massSum(fit, parallax) {
     return refuse('no-orbit', 'there is no orbit to give a mass sum', {});
   const unit = parallax?.unit ?? 'mas';
   const scale = unit === 'arcsec' ? 1 : unit === 'mas' ? 1e-3 : null;
-  const p0 = Number(parallax?.value) * (scale ?? NaN);
+  const p0 = parallax?.value * (scale ?? NaN);
   const sp = Number(parallax?.sigma) * (scale ?? NaN);
   if (!finite(p0) || !finite(sp) || !(p0 > 0) || !(sp > 0))
     return refuse(
