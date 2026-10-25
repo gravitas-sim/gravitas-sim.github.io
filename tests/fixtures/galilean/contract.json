@@ -4,12 +4,21 @@
   "window": {
     "firstNightJdUt": 2461000.5,
     "nights": 39,
-    "hourlyNightsJdUt": [2461014.5, 2461015.5, 2461016.5],
-    "nightlyUtHours": 5,
+    "hourlyNightsJdUt": [
+      2461014.5,
+      2461015.5,
+      2461016.5
+    ],
+    "nightlyUtHours": 8,
     "lostNights": 6,
     "lostNightsSeed": 193,
     "minAltitudeDeg": 25,
-    "observatory": { "name": "Kitt Peak, Arizona (a stated example site)", "latDeg": 31.9583, "lonDeg": -111.5997 }
+    "observatory": {
+      "name": "Kitt Peak, Arizona (a stated example site)",
+      "latDeg": 31.9583,
+      "lonDeg": -111.5997
+    },
+    "amendment": "nightlyUtHours was 5 in the first commit; the design rule's own altitude limit (25 degrees) is not met by Jupiter at 05:00 UT on these nights (it clears 25 degrees from about 06:00 UT, three weeks before opposition on 2026-01-10), so the nightly sample moves to 08:00 UT (01:00 local), where it does. Corrected before any candidate output was inspected; no threshold changed."
   },
   "legs": {
     "a1.packVsHorizons": {
@@ -66,7 +75,7 @@
     "e1.oracleFit": {
       "claim": "the sinusoid fit is the least-squares fit",
       "bound": "scipy curve_fit on the committed truth marks gives the same period and amplitude within 1e-5 relative",
-      "relative": 1e-5
+      "relative": 1e-05
     },
     "e2.inferenceCore": {
       "claim": "the inference core's rv-keplerian fit of the same marks (a different code path) agrees on period and amplitude",
