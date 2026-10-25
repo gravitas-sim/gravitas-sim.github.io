@@ -19,6 +19,7 @@ catalogue refers to it, so a change to it can reach a student.
 | [ANALYSIS_LAB.md](ANALYSIS_LAB.md) | The analysis laboratory. | feature | unassigned | written | no |
 | [ARCHIVE_IMPORT.md](ARCHIVE_IMPORT.md) | Importing from an archive. | feature | unassigned | written | no |
 | [ASTROMETRY.md](ASTROMETRY.md) | Sky coordinates for an image (Prompt 181), astrometric time series (Prompt 186) and orbit fitting with a moving-object track (Prompt 187), with their validation. | feature | P181 | written | yes |
+| [ATMOSPHERES_GATE_I.md](ATMOSPHERES_GATE_I.md) | Atmospheres gate I: the family and its limits, thresholds committed first, the rights rule, the measured checks and the verdict (Prompt 199). | gate | P199 | written | no |
 | [BRANCHING.md](BRANCHING.md) | Branches, the publish rule and the table of generated artifacts. | process | unassigned | regions (docs) | no |
 | [CALIBRATION_LAB.md](CALIBRATION_LAB.md) | The calibration lab. | feature | P86 | written | yes |
 | [CAPABILITY_RUNTIME.md](CAPABILITY_RUNTIME.md) | The capability runtime, the first slice of the platform package. | design | unassigned | written | no |
