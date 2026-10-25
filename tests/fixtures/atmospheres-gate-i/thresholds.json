@@ -240,7 +240,12 @@
       "source": "Carl, AskUserQuestion to the merge-queue session, 2026-10-25",
       "words": "Reset both bounds to B",
       "meaning": "T1.tier first-visit bound set to the measured +46 B; T1.routes set to 77 requests on the transit route (the lesson with its instrument open); the original bounds and the measured values stay on the rows",
-      "effect": "the decision function gives B"
+      "effect": "the decision function gives B",
+      "confirmedAlso": {
+        "source": "Carl, AskUserQuestion to the merge-queue session, 2026-10-25",
+        "words": "Yes, 77 requests and 0.3 KB (Recommended)",
+        "meaning": "This row only; every other route keeps its 0.2 KB and 0-request bounds; the verdict stays B."
+      }
     }
   ]
 }

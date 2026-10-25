@@ -154,6 +154,7 @@
     "frame-pipeline:validate": "node tools/frame-pipeline-validate.mjs",
     "astrometric-series:validate": "node tools/astrometric-series-validate.mjs",
     "orbit-fit:validate": "node tools/orbit-fit-validate.mjs",
+    "craters:validate": "node tools/craters-validate.mjs",
     "i18n:freshness": "node tools/i18n-freshness.mjs",
     "author:check": "node tools/author-check.mjs",
     "author:strict": "node tools/author-check.mjs --warnings",
