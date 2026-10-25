@@ -1,0 +1,91 @@
+{
+  "format": "gravitas.tidal-torque-gate-thresholds/1",
+  "prompt": 204,
+  "part": "B",
+  "committed": "Before any prototype existed: the seam's contract, the harness configuration, every bound, the decision function and the slices were committed in this file and in TIDAL_TORQUE_GATE.md ahead of the spike branch spike/tidal-torque-gate. The spike is never merged; production code is built afterwards, within the verdict only.",
+  "seam": {
+    "where": "js/engine/forces.js computeAccelerations, after the gravity sum and the MOND step, as a registered list of tidal pairs; every scheme (symplectic Euler, Velocity Verlet, RK4) reaches it, because every stage's acceleration comes from that function. Nothing else in the engine changes. A step with no registered pair executes one length test.",
+    "law": "a dissipative acceleration along the azimuthal unit vector of the pair's separation, equal and opposite on the two bodies in momentum (the force F = mu a_t on the moon, -F on the planet), with a relative magnitude a_t(r) = s lambda eps0 [G (M + m) / a0^2] (a0 / r)^7 and s = sgn(omega - n_inst); eps0 = (3/2) (k2/Q) (m/M) (R/a0)^5 is the kernel's constant-Q ratio of the tidal to the central acceleration at the starting separation a0 and lambda a stated rate multiplier that makes the secular change visible in a short run (the physical ratio is about 6e-13 for the Earth and the Moon)",
+    "spin": "the planet's spin omega is a side variable of the seam (the engine's bodies have none); it fixes the sign and carries the angular-momentum account: I domega/dt = -(r x F)_z on the moon, I = alpha M R^2",
+    "conserved": "linear momentum of the pair exactly (equal and opposite); the sum L_orbit + I omega to the quadrature of the torque; the total energy E_orbit + I omega^2 / 2 is NOT conserved: it falls by the dissipation D = integral of N (omega - Omega) dt >= 0 while omega > Omega, and the seam may never raise it",
+    "notModelled": "the conservative radial part of the tide (apsidal precession), eccentricity tides, spin-orbit resonances, the planet's finite size in the gravity, a variable Q; the law is stated for near-circular orbits with the spin ahead of the orbit"
+  },
+  "harness": {
+    "units": "the engine's own: G read from physicsSettings.gravitational_constant as the engine holds it; M = 1000, m = 10 (mass units), a0 = 100 (length units), a circular start about the centre of mass; R and k2/Q enter only through eps0",
+    "eps0": 0.0002,
+    "orbits": 20,
+    "omega": "1.5 n0 (spin ahead of the orbit); alpha 0.33",
+    "stepsPerOrbit": {
+      "Symplectic Euler": [100, 200, 400],
+      "Velocity Verlet": [50, 100, 200],
+      "RK4": [24, 48, 96]
+    },
+    "reference": "the same relative-orbit equations of motion integrated by scipy.integrate.solve_ivp (DOP853, rtol 1e-13, atol 1e-15) in the independent oracle venv; the semi-major axis a(T) at T = 20 initial periods from the vis-viva relation of the relative state; the kernel's closed form a(t)^(13/2) = a0^(13/2) + (13/2) s lambda C t is the second reference",
+    "measure": "err(N) = |a_N(T) - a_ref(T)| / a0 at the end of the run, from the engine's own bodies; the slope is the least-squares fit of log err against log dt over the three step sizes"
+  },
+  "bounds": {
+    "G1.off.identity": {
+      "what": "with no pair registered, computeAccelerations returns bit-identical arrays and a seeded multi-step run of three scenarios (a binary, the Solar System at three bodies, a ring of twelve) is bit-identical to base; the world golden and the seeded-step equivalence tests pass unchanged",
+      "bounds": { "differingBits": 0 }
+    },
+    "G2.zero.strength": {
+      "what": "a pair registered with lambda = 0 gives a trajectory bit-identical to the pair absent, under all three schemes",
+      "bounds": { "differingBits": 0 }
+    },
+    "G3.closed.form": {
+      "what": "the change in the semi-major axis over the run, from the engine's bodies at the finest step, against the kernel's closed form",
+      "bounds": {
+        "Symplectic Euler": 0.01,
+        "Velocity Verlet": 0.001,
+        "RK4": 0.001,
+        "unit": "relative to the closed form's change in a"
+      }
+    },
+    "G4.order": {
+      "what": "the measured slope of the error against the oracle's a(T)",
+      "bounds": {
+        "Symplectic Euler": [0.8, 1.2],
+        "Velocity Verlet": [1.8, 2.2],
+        "RK4": [3.5, 4.5]
+      }
+    },
+    "G5.momentum": {
+      "what": "total linear momentum of the pair after the run, relative to m times the orbital speed, in the centre-of-mass frame the run starts in",
+      "bounds": { "relative": 1e-11 }
+    },
+    "G6.budget": {
+      "what": "the account: |DeltaL_orbit - integral of the torque| and |DeltaE_orbit - integral of F.v| over the run, each relative to the change itself, at the finest step, the integrals by the trapezoid rule on the step-end states",
+      "bounds": {
+        "Symplectic Euler": 0.01,
+        "Velocity Verlet": 0.001,
+        "RK4": 0.001
+      }
+    },
+    "G7.dissipation": {
+      "what": "the total energy (orbit plus I omega^2 / 2, with omega from the angular-momentum account) never rises between consecutive samples during the run while omega > n, and its fall over the run is within 1 percent of the closed-form dissipation of the kernel",
+      "bounds": { "rise": 0, "dissipationRelative": 0.01 }
+    },
+    "G8.overhead": {
+      "what": "the cost of the seam with an empty registry: the minimum over 7 interleaved repeats of 2e4 calls to computeAccelerations at 50 bodies, head against base, in one process",
+      "bounds": { "relative": 0.05 }
+    }
+  },
+  "decision": {
+    "A": "G1 and G2 pass and G3 to G8 pass for all three schemes: the tidally evolving binary scenario ships with its proofs as tests",
+    "B": "G1 and G2 pass and at least one of G3 to G8 fails: a precomputed trajectory from the kernel is displayed, no force in the engine; the seam is not merged",
+    "C": "G1 or G2 fails (the seam cannot be made inert): no scenario; the kernel's plots stand",
+    "rule": "the first match from the top; a bound that proves unmeasurable fails the leg that holds it; only Carl resets a bound; a failed leg is reported and left failing, never moved, restated or widened"
+  },
+  "slices": {
+    "A": [
+      "the seam in js/engine/forces.js behind a registered list",
+      "one built-in scenario, a tidally evolving binary, declared through the geometry table with its pair registered by the scenario's own rule",
+      "the proofs of G1 to G7 as tests in the suite"
+    ],
+    "B": [
+      "the kernel's evolveCircular trajectory sampled into a table and displayed as a plot and as a prescribed body pair (model_owned), no engine force",
+      "no seam"
+    ],
+    "C": ["the kernel's plots only"]
+  }
+}
