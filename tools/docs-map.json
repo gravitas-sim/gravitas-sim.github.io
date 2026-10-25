@@ -884,6 +884,13 @@
       "student": false
     },
     {
+      "file": "SUN_KERNEL.md",
+      "kind": "feature",
+      "purpose": "The Sun as a measurement: disc geometry, rotation from tracked spots bounded by a reference law, and the solar constant to luminosity and temperature, with their validation (Prompt 194).",
+      "owner": 194,
+      "student": false
+    },
+    {
       "file": "SUPPORT.md",
       "kind": "policy",
       "purpose": "How to get help, and the supported browsers and versions.",
