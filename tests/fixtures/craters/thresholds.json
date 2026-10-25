@@ -1,0 +1,105 @@
+{
+  "format": "gravitas.craters-thresholds/1",
+  "prompt": 195,
+  "committed": "Before any implementation output was inspected: this file and the validation contract in CRATER_COUNTING.md were committed ahead of js/measure/craters.js, the validation tool, the oracle's inputs, script and results, and every test. A check that a measurement crosses is a failed check, not a reason to move the bound; only Carl resets a threshold, with a register row. Where a bound rests on a Monte Carlo ensemble, it is the nominal value less three binomial standard errors of the ensemble size, fixed before any ensemble ran.",
+  "definition": {
+    "what": "Crater counting as a measurement: a circle mark on a map-scaled frame gives a diameter with an uncertainty budget; a list of diameters over a stated area gives the cumulative size-frequency distribution N(>=D) with Poisson intervals; two such lists give a relative age as a density ratio above a stated diameter with an interval; a list gives the cumulative power-law index with an interval. No absolute age is computed anywhere (Prompt 196's gate), and nothing here corrects for incompleteness, saturation, resurfacing or secondaries: each is a stated input or a refusal.",
+    "diameter": "D = 2 r s f(theta, cosE) with r the circle mark's radius in pixels (js/measure/scale.js lengthOf), s the scale in km per pixel (a scale in metres per pixel is converted; a scale in arcseconds per pixel is refused: it needs a distance), f the foreshortening factor sqrt(cos^2(theta) / cosE^2 + sin^2(theta)) with theta the angle between the radius direction and the image axis along which the view is compressed by cosE (cosE = 1 is a view straight down, f = 1). The relative uncertainty is the quadrature sum of the scale's relative sigma, the fit's (the radius's sigma sqrt(2) sigma_point over r), the recognition (a stated fraction of D: where the rim is, not where the pen was) and the foreshortening's (sigma_cosE cos^2(theta) / (cosE^3 f^2)). The budget is reported component by component.",
+    "area": "A region's surface area in km^2 is a stated input with an optional relative sigma, or is made from the footprint: pixels s^2 / cosE with the relative sigma 2 sigma_s / s in quadrature with the stated sigma of cosE. A flat surface is assumed (a curved one is the caller's input).",
+    "cumulative": "N(>=D_k) is the number of listed diameters of at least D_k, at thresholds D_k the caller names (default: sqrt(2) steps upward from dMin); density = N / area; the interval is Prompt 154's poissonInterval (Garwood, exposure = the area) at the stated level, which is a statement about counting error only; the diameter budget's effect on N is reported separately as expected count sum Phi((D_i - D_k) / sigma_i) and its standard deviation sqrt(sum p (1 - p)), never added to the Poisson interval. The area's relative sigma is reported beside the density and is not in the interval.",
+    "relativeAge": "Above dMin, counts na and nb in areas Aa and Ab. Conditional on n = na + nb, na is binomial(n, p) with p = la Aa / (la Aa + lb Ab); the exact Clopper-Pearson interval of p at the stated level maps to the density ratio R = la / lb = p (1 - p)^-1 Ab / Aa. The verdict is 'a older', 'b older' or 'no significant difference' (the interval contains 1), and 'not constrained' when n = 0. A larger density at the same dMin reads as an older surface only if both surfaces share a production function, a saturation state and a completeness limit below dMin; those are stated assumptions, not tested ones (CRATER_COUNTING.md), and dMin must lie at or above each region's stated completeness limit and at least minPixels pixels across or the call refuses.",
+    "powerLaw": "The cumulative index b of N(>=D) proportional to D^-b above dMin, from the n diameters at least dMin: the maximum-likelihood estimate n / S with S = sum ln(D_i / dMin) (Pareto, Clauset, Shalizi and Newman 2009), exactly the estimate whose 2 b S follows chi-square on 2n degrees; the exact interval at the stated level is chi2Quantile(alpha/2, 2n) / (2 S) to chi2Quantile(1 - alpha/2, 2n) / (2 S); the unbiased estimate (n - 1) / S is reported beside it. A constancy check refits above 2 dMin and flags 'slope-not-constant' when the two indices differ by more than two standard errors of the difference sqrt(se2^2 - se1^2). Requires n >= 5 above dMin and n >= 5 above 2 dMin for the check, else the check is 'not-run'.",
+    "oracle": "scipy 1.15.3 (stats.chi2.ppf for Garwood and the index interval, stats.beta.ppf for Clopper-Pearson, stats.pareto.fit with the location and scale fixed for the index) and numpy 2.2.6 (default_rng for the pinned list), run offline with python -I in Prompt 180's scratch virtual environment; no Gravitas code. It is an independent implementation of the statistics, not a crater-statistics tool: a pin of a cited crater-statistics tool's output (craterstats, Michael and Neukum) is not available offline and installs nothing here, so tier b is met only as stated and the craterstats pin is recorded NOT RUN.",
+    "seed": "craters-195; every ensemble draws from named streams of js/random/streams.js ('noise', the seed, the check id); a trial count is the figure given in the check"
+  },
+  "rules": {
+    "level": 0.95,
+    "ensembleTrials": 4000,
+    "minPixels": 8,
+    "refusalCodes": ["counts", "diameter", "area", "level", "scale", "scale-unit", "foreshortening", "foreshortening-axis", "below-completeness", "below-resolution", "not-constrained", "dMin", "too-few"],
+    "noAbsoluteAge": "no result carries a field named age, ageGa, ageMa or absolute; relative age is a density ratio"
+  },
+  "checks": {
+    "a1.garwood.closed": {
+      "what": "Poisson intervals against their closed forms: zero counts, hi = -ln((1 - level) / 2) per unit area; one count, lo = -ln(1 - (1 - level) / 2); the defining equations P(X <= N | hi) = (1 - level) / 2 for N = 1, 2, 5, 20 and P(X >= N | lo) = (1 - level) / 2 for N = 2, 5, 20 by direct summation of the Poisson probabilities, at levels 0.6827 and 0.95, area 1 and area 250 (the interval per square kilometre is the interval of the count over the area)",
+      "bounds": { "relative": 1e-9, "equationResidualAbsolute": 1e-9 }
+    },
+    "a2.cumulative.hand": {
+      "what": "the diameters 30, 20, 20, 15, 10, 10, 10, 8, 5 km over 100 km^2 at thresholds 5, 10, 15, 20, 30: counts 9, 7, 3, 3, 1 exactly, densities N / 100 exactly; thresholds above the largest give 0 with a lower end of 0; a diameter equal to a threshold is counted (>=)",
+      "bounds": { "countsExact": 0, "densityRelative": 1e-15 }
+    },
+    "a3.diameter.budget": {
+      "what": "a circle with centre (100, 200) and rim point (130, 240) (radius 50 px), scale 0.5 +/- 0.01 km/px, placement sigma 0.3 px per point, recognition 0.05, cosE 1: D = 50 km, relative sigma sqrt(0.02^2 + (sqrt(2) 0.3 / 50)^2 + 0.05^2) and every component reported; a scale in m/px gives the same diameter in km; a scale in arcsec/pix refuses with scale-unit",
+      "bounds": { "diameterRelative": 1e-12, "sigmaRelative": 1e-12 }
+    },
+    "a4.foreshortening": {
+      "what": "cosE 0.5 with the compressed axis along +x: a radius along x (theta 0) is lengthened by 1 / cosE = 2, a radius along y (theta 90 degrees) is not, a radius at 45 degrees by sqrt(0.5 / 0.25 + 0.5) = sqrt(2.5); cosE 1 is the identity for every theta; the sigma of cosE contributes sigma_cosE cos^2(theta) / (cosE^3 f^2) in relative terms; a region footprint of 400 px^2 at 0.5 km/px and cosE 0.5 has area 400 * 0.25 / 0.5 = 200 km^2 with relative sigma 2 * 0.01 / 0.5 in quadrature with the stated sigma of cosE; cosE below or equal to 0 or above 1, and a cosE under 1 with no axis, refuse",
+      "bounds": { "factorRelative": 1e-12, "areaRelative": 1e-12, "sigmaRelative": 1e-12 }
+    },
+    "a5.ratio.exact": {
+      "what": "counts 30 and 10 in equal areas give R = 3; areas 2:1 (a twice b) give R = 1.5; counts 0 and 0 give 'not constrained'; 10 and 0 give an interval open above (hi = null) with lo > 1 and the verdict 'a older'; the Clopper-Pearson defining equations hold at the ends (P(X >= k | p_lo) = alpha/2 and P(X <= k | p_hi) = alpha/2 by direct binomial summation) for (n, k) = (40, 30), (12, 3), (100, 50)",
+      "bounds": { "ratioRelative": 1e-12, "equationResidualAbsolute": 1e-9 }
+    },
+    "a6.slope.closed": {
+      "what": "dMin 1 km and the diameters 1.5, 2, 3, 4, 8, 16 (S = sum ln D_i, n = 6): b = n / S exactly, the unbiased (n - 1) / S exactly, the interval from the chi-square quantiles of 2n = 12 degrees of freedom; fewer than 5 diameters refuse with too-few",
+      "bounds": { "relative": 1e-12 }
+    },
+    "b1.curve": {
+      "what": "the pinned list of 300 diameters (numpy default_rng(195), Pareto index 1.8 above 1 km, in tests/fixtures/craters/oracle-inputs.json) over 5000 km^2 at 20 geometric thresholds from 1 km (factor 2^(1/4)), levels 0.6827 and 0.95: N, density, lo and hi against scipy.stats.chi2.ppf (Garwood)",
+      "bounds": { "countsExact": 0, "densityRelative": 1e-8, "intervalRelative": 1e-8 }
+    },
+    "b2.ratio": {
+      "what": "12 pinned (na, nb, Aa, Ab, level) cases, counts from 0 to 400 and area ratios 1/3 to 4: the Clopper-Pearson interval of p against scipy.stats.beta.ppf and the ratio interval derived from it",
+      "bounds": { "intervalRelative": 1e-8 }
+    },
+    "b3.slope": {
+      "what": "the pinned list at dMin 1 and 2 km: the index against scipy.stats.pareto.fit (floc 0, fscale dMin), its exact interval against scipy.stats.chi2.ppf at levels 0.6827 and 0.95",
+      "bounds": { "indexRelative": 1e-6, "intervalRelative": 1e-8 }
+    },
+    "b4.crater-tool": {
+      "what": "a pinned N(>=D) curve from a cited independent crater-statistics tool (craterstats) on the same list",
+      "bounds": {}
+    },
+    "c1.poisson.coverage": {
+      "what": "4000 synthetic Poisson counts at each true expected count 3, 10, 30 and 100 over an area of 100 km^2: the fraction of 95 percent intervals (Garwood, through the cumulative function at one threshold) that contain the true density",
+      "bounds": { "coverageMin": 0.94 }
+    },
+    "c2.ratio.coverage": {
+      "what": "4000 pairs of Poisson counts with true density ratios 1, 2 and 5, areas 100 and 200 km^2 and expected totals 10, 40 and 150: the fraction of 95 percent ratio intervals that contain the true ratio (conservative by construction: not an upper bound on over-coverage)",
+      "bounds": { "coverageMin": 0.94 }
+    },
+    "c3.slope.coverage": {
+      "what": "4000 Pareto samples (index 2, dMin 1 km) of n = 10, 30 and 100: the fraction of exact 95 percent index intervals containing 2",
+      "bounds": { "coverageBand": [0.935, 0.965] }
+    },
+    "c4.diameter.coverage": {
+      "what": "4000 placements of a circle of true radius 40 px at scale 0.5 km/px with the scale perturbed by a Gaussian of sigma 2 percent, the radius by a Gaussian of 0.3 px per point (radius sigma sqrt(2) 0.3 px) and a recognition of 3 percent of D: the fraction of the measured diameters within one budgeted sigma of the truth",
+      "bounds": { "coverageBand": [0.66, 0.706] }
+    },
+    "d1.nodifference": {
+      "what": "4000 pairs of regions with the same true density (expected 40 craters each, equal areas): the fraction returned as 'no significant difference' at 95 percent",
+      "bounds": { "fractionMin": 0.94 }
+    },
+    "d2.detects": {
+      "what": "4000 pairs with a true density ratio of 3 (expected 45 and 15 in equal areas): the fraction returned 'a older' at least 0.95, and the fraction returned 'b older' (the wrong way) at most 0.005",
+      "bounds": { "rightMin": 0.95, "wrongMax": 0.005 }
+    },
+    "d3.refusals": {
+      "what": "each of the following is refused with its stable code and nothing computed: an empty list (counts); a negative or non-finite diameter (diameter); zero or negative area (area); level 0 or 1 (level); dMin below a stated completeness limit (below-completeness); dMin below minPixels times the scale (below-resolution); a missing or non-positive dMin (dMin); a list of fewer than 5 for the index (too-few); every result of a refused call has no numeric result field; a result of a successful call has no field named age, ageGa, ageMa or absolute",
+      "bounds": { "refusedAll": true }
+    },
+    "d4.rolloff": {
+      "what": "500 trials of 600 Pareto draws (index 2, above 1 km) kept with probability 1 for D >= 3 and (D / 3)^2 below (a roll-off in the counts that the index fit does not know about) and, as a control, 500 trials of the pure Pareto: 'slope-not-constant' is flagged in at least 0.95 of the rolled-off trials and in at most 0.08 of the control trials (a two-sided 2-sigma test on nested estimates)",
+      "bounds": { "flaggedRolloffMin": 0.95, "flaggedControlMax": 0.08 }
+    },
+    "e1.authentic": {
+      "what": "the reference regions' published diameters counted into N(>=D) and compared with the published counts, within tolerances committed with the reference table",
+      "bounds": {}
+    }
+  },
+  "notRun": {
+    "b4.crater-tool": "needs the output of a cited independent crater-statistics tool (craterstats) on a pinned list; the tool is not installed in the oracle environment and nothing may be installed or fetched (Carl, 2026-10-25)",
+    "e1.authentic": "needs the two lunar regions and the Martian region with their published crater diameter lists, areas, pixel scales and citations, and the frames they refer to; none is in the repository and nothing may be fetched; the existing Galileo and HiRISE packs are display-only with no stated scale, and the Clementine fixture carries no published counts",
+    "packs": "Prompt 195 item 1 (the packs with sidecars and the reference table of published counts) and items 3 and 4 (the investigations and the model page section, which need those regions) are not built for the same reason"
+  }
+}
