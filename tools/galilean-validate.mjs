@@ -498,7 +498,6 @@ export function runLegs(model = loadModel()) {
   }
   // g1: the synthetic frames.
   {
-    const b = L['g1.frames'];
     let worstPx = 0;
     let measured = 0;
     let skipped = 0;

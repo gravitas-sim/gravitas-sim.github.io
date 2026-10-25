@@ -133,13 +133,19 @@ export function fitSinusoid(t, x, sigma = null, opts = {}) {
       `Only ${n} marks: a period needs at least ${FIT_LIMITS.minMarks}.`
     );
   if (n > FIT_LIMITS.maxMarks)
-    throw new FitRefusal('too-many-marks', `More than ${FIT_LIMITS.maxMarks} marks.`);
+    throw new FitRefusal(
+      'too-many-marks',
+      `More than ${FIT_LIMITS.maxMarks} marks.`
+    );
   let tMin = Infinity;
   let tMax = -Infinity;
   let tSum = 0;
   for (let i = 0; i < n; i++) {
     if (!Number.isFinite(t[i]) || !Number.isFinite(x[i]))
-      throw new FitRefusal('not-finite', 'A time or a position is not a number.');
+      throw new FitRefusal(
+        'not-finite',
+        'A time or a position is not a number.'
+      );
     tMin = Math.min(tMin, t[i]);
     tMax = Math.max(tMax, t[i]);
     tSum += t[i];
@@ -149,7 +155,8 @@ export function fitSinusoid(t, x, sigma = null, opts = {}) {
   const w = Float64Array.from({ length: n }, (_, i) => {
     if (!weighted) return 1;
     const s = typeof sigma === 'number' ? sigma : sigma[i];
-    if (!(s > 0)) throw new FitRefusal('bad-sigma', 'An uncertainty is not positive.');
+    if (!(s > 0))
+      throw new FitRefusal('bad-sigma', 'An uncertainty is not positive.');
     return 1 / (s * s);
   });
   const t0 = tSum / n;
@@ -271,7 +278,12 @@ export function fitSinusoid(t, x, sigma = null, opts = {}) {
  * @returns {{gm: number, sigmaGm: number, massKg: number, sigmaMassKg: number, aKm: number, relative: number}}
  *   gm in km^3/s^2.
  */
-export function kepler({ periodDays, sigmaPeriodDays, amplitude, sigmaAmplitude }) {
+export function kepler({
+  periodDays,
+  sigmaPeriodDays,
+  amplitude,
+  sigmaAmplitude,
+}) {
   const aKm = amplitude * R_JUPITER_KM;
   const P = periodDays * 86400;
   const gm = (4 * Math.PI * Math.PI * aKm ** 3) / (P * P);
