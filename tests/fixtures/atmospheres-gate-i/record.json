@@ -1,0 +1,391 @@
+{
+  "prompt": 199,
+  "thresholdsCommit": "1eeedc93",
+  "base": "5a4bd68335afc4ab2a90c4899121e34b60352750",
+  "spike": {
+    "branch": "spike/atmospheres-gate-i",
+    "sha": "2196ac7eba8f59a08c569c6fe5a7753dee367459",
+    "mergedNever": true
+  },
+  "environment": {
+    "bytesNode": "22.23.4",
+    "judgeNode": "24.4.0",
+    "oracle": "python -I in the scratch venv: numpy 2.2.6, scipy 1.15.3, astropy 6.1.7 (astropy.constants CODATA 2018)",
+    "seed": 199
+  },
+  "checks": {
+    "A1.equilibrium": {
+      "status": "pass",
+      "measured": {
+        "relErrMax": 0,
+        "points": 2000
+      }
+    },
+    "A2.anchors": {
+      "status": "pass",
+      "measured": {
+        "rows": [
+          {
+            "body": "Venus",
+            "model": 229.0943111392712,
+            "published": 227,
+            "rel": 0.009226040261106664,
+            "tol": 0.02
+          },
+          {
+            "body": "Earth",
+            "model": 254.02152021550714,
+            "published": 255,
+            "rel": 0.0038371756254622033,
+            "tol": 0.02
+          },
+          {
+            "body": "Mars",
+            "model": 209.79902980289685,
+            "published": 210,
+            "rel": 0.00095700093858641,
+            "tol": 0.02
+          },
+          {
+            "body": "Jupiter",
+            "model": 109.83818341487536,
+            "published": 109.46401381911186,
+            "rel": 0.0034181972934211593,
+            "tol": 0.01,
+            "teff": 124.4,
+            "ratioPublished": 1.668,
+            "ratioModel": 1.645387353570852
+          },
+          {
+            "body": "Uranus",
+            "model": 58.110732578010165,
+            "published": 58.24531717571873,
+            "rel": 0.00231065095417959,
+            "tol": 0.01,
+            "teff": 59.1,
+            "ratioPublished": 1.06,
+            "ratioModel": 1.0698540171907096
+          },
+          {
+            "body": "Neptune",
+            "model": 46.588477311831234,
+            "published": 46.6546103383228,
+            "rel": 0.0014175024935797337,
+            "tol": 0.01,
+            "teff": 59.3,
+            "ratioPublished": 2.61,
+            "ratioModel": 2.624851318156643
+          },
+          {
+            "body": "HD 209458 b",
+            "model": 1442.7385169636898,
+            "lesson": 1442.7385169636898,
+            "relToLesson": 0,
+            "bandK": [1400, 1500],
+            "withIauConstants": 1442.598509973148,
+            "relConstants": 9.704252634519646e-5
+          }
+        ]
+      },
+      "note": "published values typed from the cited publications, not re-read this session (checked: false)"
+    },
+    "A3.onelayer": {
+      "status": "pass",
+      "measured": {
+        "relErrMax": 3.5869797104485106e-16,
+        "eps0": 255,
+        "eps1RelToTwoQuarter": 0,
+        "monotone": true
+      }
+    },
+    "A4.grey": {
+      "status": "pass",
+      "measured": {
+        "closedRelErrMax": 0,
+        "odeRelErrMax": 2.1822596994691085e-16,
+        "odeSolutions": 60
+      }
+    },
+    "A5.eddington": {
+      "status": "pass",
+      "measured": {
+        "worstRelT": 0.036566513387037425,
+        "atTau": 0,
+        "oracleQ0": 0.5774575209956623,
+        "oracleQinfAtTau20": 0.7104048005248575,
+        "oracleSelfTestPass": true,
+        "gridPoints": 401
+      }
+    },
+    "A6.report": {
+      "status": "pass",
+      "measured": {
+        "report": [
+          {
+            "body": "Venus",
+            "teq": 229.0943111392712,
+            "ground": 737,
+            "ratio": 3.2170157187009427,
+            "oneLayerEmissivity": null,
+            "oneLayerRefusal": "no emissivity in [0, 1] reaches this ratio: one layer is at most 2^(1/4)",
+            "oneLayerModel": "one-layer greenhouse",
+            "greyTauSurface": 141.4743152497593,
+            "greyModel": "grey radiative equilibrium (Eddington)",
+            "reproducesGround": {
+              "oneLayer": null,
+              "grey": 737
+            }
+          },
+          {
+            "body": "Earth",
+            "teq": 254.02152021550714,
+            "ground": 288,
+            "ratio": 1.1337622094209425,
+            "oneLayerEmissivity": 0.7895632864691937,
+            "oneLayerRefusal": null,
+            "oneLayerModel": "one-layer greenhouse",
+            "greyTauSurface": 0.8697282863758728,
+            "greyModel": "grey radiative equilibrium (Eddington)",
+            "reproducesGround": {
+              "oneLayer": 288,
+              "grey": 288
+            }
+          },
+          {
+            "body": "Mars",
+            "teq": 209.79902980289685,
+            "ground": 210,
+            "ratio": 1.0009579176666925,
+            "oneLayerEmissivity": 0.007645024309216986,
+            "oneLayerRefusal": null,
+            "oneLayerModel": "one-layer greenhouse",
+            "greyTauSurface": 0.005116239761485453,
+            "greyModel": "grey radiative equilibrium (Eddington)",
+            "reproducesGround": {
+              "oneLayer": 210,
+              "grey": 210
+            }
+          }
+        ],
+        "differ": [
+          {
+            "tau": 0.5,
+            "oneLayer": 269.3552375958379,
+            "grey": 276.1314382601692
+          },
+          {
+            "tau": 1,
+            "oneLayer": 280.4049808618995,
+            "grey": 293.29164580837875
+          },
+          {
+            "tau": 2,
+            "oneLayer": 293.7762248438503,
+            "grey": 320.64552456914856
+          },
+          {
+            "tau": 4,
+            "oneLayer": 301.87494986222623,
+            "grey": 360.62445840513925
+          }
+        ]
+      }
+    },
+    "A7.refusals": {
+      "status": "pass",
+      "measured": {
+        "hostileInputs": 24,
+        "refusedWithReason": 24,
+        "everyResultNamesModelAndAssumes": true
+      }
+    },
+    "S1.scale": {
+      "status": "pass",
+      "measured": {
+        "relErrMax": 0,
+        "efoldRelErrMax": 3.053010755471049e-15,
+        "points": 1000,
+        "efoldChecked": 50
+      }
+    },
+    "S2.anchors": {
+      "status": "pass",
+      "measured": {
+        "rows": [
+          {
+            "body": "Venus",
+            "modelKm": 15.899675926784303,
+            "publishedKm": 15.9,
+            "rel": 2.0381963251414823e-5
+          },
+          {
+            "body": "Earth",
+            "modelKm": 8.4257616665405,
+            "publishedKm": 8.5,
+            "rel": 0.008733921583470514
+          },
+          {
+            "body": "Mars",
+            "modelKm": 10.859020758669763,
+            "publishedKm": 11.1,
+            "rel": 0.02170984156128261
+          }
+        ]
+      },
+      "note": "fact-sheet values typed, not re-read this session (checked: false)"
+    },
+    "J1.arith": {
+      "status": "pass",
+      "measured": {
+        "relErrMax": 2.839846570999939e-15,
+        "points": 1000
+      }
+    },
+    "J2.vocabulary": {
+      "status": "pass",
+      "measured": {
+        "exports": [
+          "jeansFluxPerDensity",
+          "jeansParameter",
+          "lambdaMin",
+          "retentionBound"
+        ],
+        "resultFields": [
+          "model",
+          "assumes",
+          "requires",
+          "lambda",
+          "canRetainOnlyIf",
+          "meetsNecessaryCondition"
+        ]
+      }
+    },
+    "J3.published": {
+      "status": "not-measured",
+      "measured": null,
+      "note": "no published table of Jeans parameters at sourced exobase conditions exists in the repository, none was fetched, and no rights decision exists for one"
+    },
+    "J4.sources": {
+      "status": "not-measured",
+      "measured": null,
+      "note": "no source for the exobase temperature and radius of Venus, Earth, Mars and Titan exists in the repository or was read; no per-source rights decision exists"
+    },
+    "P1.plot": {
+      "status": "pass",
+      "measured": {
+        "plots": [
+          {
+            "widget": "atmosphere-balance",
+            "paths": 1,
+            "dots": 3,
+            "legendButtons": 2,
+            "vertexWorstXPx": 0.08666666666670153,
+            "vertexWorstYPx": 0.0953801876127045,
+            "spoken": "2.45. Equilibrium temperature, Bond albedo as set: 163. Published emission temperature: 210",
+            "toggled": true
+          },
+          {
+            "widget": "atmosphere-profile",
+            "paths": 2,
+            "dots": 1,
+            "legendButtons": 3,
+            "vertexWorstXPx": 5.684341886080802e-14,
+            "vertexWorstYPx": 0.05893732128095053,
+            "spoken": "1.00. Eddington: 270. Exact grey: 271. One layer: the ground: 293",
+            "toggled": true
+          },
+          {
+            "widget": "atmosphere-escape",
+            "paths": 3,
+            "dots": 0,
+            "legendButtons": 3,
+            "vertexWorstXPx": 0.06800000000001205,
+            "vertexWorstYPx": 0.06345961076277717,
+            "spoken": "3000. Hydrogen: 2.33. Helium: 9.27. Nitrogen: 64.88",
+            "toggled": true
+          }
+        ],
+        "worstVertexPx": 0.0953801876127045,
+        "noOwnDrawing": true
+      },
+      "note": "jsdom on the real component, the host seam is a chart div beside the lesson tool canvas (hidden); not run in a lesson page"
+    },
+    "T1.noescape.deferred": {
+      "status": "pass",
+      "measured": {
+        "deferredAddedGzipB": 4724,
+        "kernelAloneGzipB": 1488,
+        "baseDeferredGzipB": 2155187
+      },
+      "note": "app build deferred figure, Node 22.23.4 copy, spike against the tree at 5a4bd683; the Spanish words are a rot13 size stand-in"
+    },
+    "T1.requests": {
+      "status": "pass",
+      "measured": {
+        "chunksAddedWhole": 2,
+        "chunksAddedNoEscape": 2,
+        "baseChunks": 468
+      }
+    },
+    "T1.tier": {
+      "status": "pass-under-ruling",
+      "measured": {
+        "firstVisitAddedB": 46,
+        "idleAddedB": 0,
+        "firstVisitRoomB": 810
+      },
+      "note": "the 46 B is the family registry entry in js/widgets.js (a first-visit file; 202 B raw, 46 B gzip). The family sources themselves add 0 B: they are NEVER_PRECACHED. The committed bound of 0 B cannot be met by any widget family under the present registry",
+      "ruling": "R1"
+    },
+    "T1.routes": {
+      "status": "pass-under-ruling",
+      "measured": {
+        "sourcesRiseKb": 0.2,
+        "buildRiseKbMax": 0.3,
+        "requestsAdded": 1,
+        "which": "sources +0.2 KB on kepler, transit, power-law and largest-lesson; build +0.2 KB on the same, +0.3 KB and 76 to 77 requests on transit with an instrument opened; every other route identical",
+        "cause": "202 B of registry text in js/widgets.js; the extra request is esbuild splitting a module the new family shares with the transit instrument family (the entry-set rule)",
+        "otherRoutes": {
+          "buildRiseKbMax": 0.2,
+          "sourcesRiseKbMax": 0.2,
+          "requestsAdded": 0
+        },
+        "transitInstrument": {
+          "baseRequests": 76,
+          "requests": 77,
+          "buildRiseKb": 0.3
+        }
+      },
+      "ruling": "R1"
+    },
+    "T1.whole.deferred": {
+      "status": "pass",
+      "measured": {
+        "deferredAddedGzipB": 5585,
+        "escapeModuleAloneGzipB": 838
+      }
+    }
+  },
+  "verdict": "B",
+  "iterations": [
+    "the oracle for A5 first discretised the Milne equation on 900 geometric cells to tau 400 and failed its own self-test (q(0) 1.26 against 0.5774); the cells were refined (geometric to 0.5, then 0.02 wide, to tau 30) before any comparison with the kernel, whose Eddington formula was not touched; no bound moved"
+  ],
+  "originalVerdict": {
+    "verdict": "C",
+    "function": "the decision function on the bounds as committed in 1eeedc93",
+    "at": "3fbb1ef4"
+  },
+  "ruling": {
+    "id": "R1",
+    "date": "2026-10-25",
+    "source": "Carl, AskUserQuestion to the merge-queue session, 2026-10-25",
+    "words": "Reset both bounds to B",
+    "meaning": "T1.tier first-visit bound set to the measured +46 B; T1.routes set to 77 requests on the transit route (the lesson with its instrument open); the original bounds and the measured values stay on the rows",
+    "effect": "the decision function gives B",
+    "confirmedAlso": {
+      "source": "Carl, AskUserQuestion to the merge-queue session, 2026-10-25",
+      "words": "Yes, 77 requests and 0.3 KB (Recommended)",
+      "meaning": "This row only; every other route keeps its 0.2 KB and 0-request bounds; the verdict stays B."
+    }
+  }
+}
