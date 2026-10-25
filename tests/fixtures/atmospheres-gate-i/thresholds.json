@@ -1,0 +1,251 @@
+{
+  "prompt": 199,
+  "document": "ATMOSPHERES_GATE_I.md",
+  "committed": "before any spike code, any measurement and any oracle output existed",
+  "seed": 199,
+  "groups": {
+    "core": "everything Prompt 200 needs without the escape panel",
+    "escape": "the Jeans parameter and the thermal-escape bound (the escape panel)"
+  },
+  "decision": {
+    "order": [
+      "a core check that is not a pass (or a pass under a ruling): C",
+      "else an escape check that is not a pass: B",
+      "else A"
+    ],
+    "rule": "a check that was not measured is never a pass; a check recorded as pass-under-ruling counts as a pass and its row carries the ruling"
+  },
+  "checks": [
+    {
+      "id": "A1.equilibrium",
+      "group": "core",
+      "bound": "kernel equilibrium temperature against an independent numpy/astropy evaluation of the same closed form on 2,000 seeded (S, A, redistribution) points: relative error at most 1e-12",
+      "limits": {
+        "relErrMax": 1e-12,
+        "points": 2000
+      }
+    },
+    {
+      "id": "A2.anchors",
+      "group": "core",
+      "bound": "six Solar System bodies and one hot Jupiter against published emission temperatures: Venus 227 K, Earth 255 K, Mars 210 K within 2 percent; Jupiter, Uranus and Neptune within 1 percent of the equilibrium temperature implied by their published effective temperature and emitted-to-absorbed power ratio; HD 209458 b (A = 0, full redistribution) inside 1,400 to 1,500 K and equal to the lesson's own formula to 1e-12",
+      "limits": {
+        "terrestrialRelMax": 0.02,
+        "giantRelMax": 0.01,
+        "hotJupiterBandK": [1400, 1500],
+        "lessonFormulaRelMax": 1e-12
+      }
+    },
+    {
+      "id": "A3.onelayer",
+      "group": "core",
+      "bound": "one-layer greenhouse surface temperature T_s = T_e (2 / (2 - eps))^(1/4) against an independent evaluation to 1e-12 on 1,000 seeded points, the layer temperature T_s / 2^(1/4), the limits eps = 0 (T_s = T_e) and eps = 1 (2^(1/4) T_e), and monotonicity in eps",
+      "limits": {
+        "relErrMax": 1e-12,
+        "points": 1000
+      }
+    },
+    {
+      "id": "A4.grey",
+      "group": "core",
+      "bound": "grey Eddington profile T^4(tau) = (3/4) T_e^4 (tau + 2/3) and ground temperature T_g^4 = T_e^4 (1 + 3 tau_s / 4): against an independent evaluation of the closed forms to 1e-12 on 1,000 seeded points, and against a numerical solution of the grey two-stream moment equations (scipy solve_ivp, rtol 1e-12) with the stated boundary conditions to a relative error in T of at most 1e-6 for tau_s from 0.01 to 200",
+      "limits": {
+        "closedRelErrMax": 1e-12,
+        "odeRelErrMax": 1e-6,
+        "tauRange": [0.01, 200]
+      }
+    },
+    {
+      "id": "A5.eddington",
+      "group": "core",
+      "bound": "the Eddington profile against a numerically exact grey radiative-equilibrium solution (the Milne equation solved by an independent scipy program, with its own self-test that it returns the Hopf values q(0) = 0.5774 and q(infinity) = 0.7104 to 1 percent): the relative difference in temperature is at most 4.0 percent for every depth tau from 0 to 100 (the bound is the model's stated error, to be shown, not minimized)",
+      "limits": {
+        "tRelMax": 0.04,
+        "tauRange": [0, 100],
+        "oracleSelfTestRel": 0.01
+      }
+    },
+    {
+      "id": "A6.report",
+      "group": "core",
+      "bound": "the kernel returns, for Venus, Earth and Mars, the one-layer emissivity and the grey optical depth that reproduce the observed surface temperature (737, 288 and 210 K), each result carrying its model name; the two models' values are shown side by side; the one-layer model returns a structured refusal (not a number) for Venus, whose surface-to-emission ratio exceeds the model's maximum of 2^(1/4); the values themselves are reported and never asserted against a published optical depth",
+      "limits": {
+        "bodies": ["Venus", "Earth", "Mars"],
+        "onelayerRefusals": ["Venus"]
+      }
+    },
+    {
+      "id": "A7.refusals",
+      "group": "core",
+      "bound": "every one of 24 hostile inputs refuses with a named reason and no number: albedo outside [0, 1], emissivity outside [0, 1], redistribution outside [0, 1], negative or non-finite flux, optical depth below 0, non-positive temperature, mean molecular weight or gravity; and every returned result carries `model` and `assumes` fields naming its limits (no convection, no clouds, grey opacity, isothermal, hydrostatic)",
+      "limits": {
+        "hostileInputs": 24
+      }
+    },
+    {
+      "id": "S1.scale",
+      "group": "core",
+      "bound": "isothermal scale height H = k T / (mu m_u g) against an independent astropy-constants evaluation to 1e-12 on 1,000 seeded points, and its use as an e-folding length verified: a hydrostatic column built numerically with scipy has pressure ratio e at height H to 1e-6",
+      "limits": {
+        "relErrMax": 1e-12,
+        "points": 1000,
+        "efoldRelMax": 1e-6
+      }
+    },
+    {
+      "id": "S2.anchors",
+      "group": "core",
+      "bound": "scale heights at the surface temperatures and gravities the application already holds (Venus 737 K, Earth 288 K, Mars 210 K) within 5 percent of the published fact-sheet values 15.9, 8.5 and 11.1 km",
+      "limits": {
+        "relMax": 0.05,
+        "bodies": ["Venus", "Earth", "Mars"]
+      }
+    },
+    {
+      "id": "P1.plot",
+      "group": "core",
+      "bound": "the three plots the family draws (the temperature profile with the Eddington curve, the numerically exact curve and the one-layer value; the equilibrium-temperature comparison; the Jeans-parameter curves) are drawn by js/plot/chart.js with no drawing code of the family's own: the drawn path vertices are where the data is to 0.1 px, the legend toggles from the keyboard, the keyboard readout is spoken in words, the axis titles carry units, and no module under js/ outside js/plot draws an axis",
+      "limits": {
+        "vertexPxMax": 0.1,
+        "plots": 3
+      }
+    },
+    {
+      "id": "T1.noescape.deferred",
+      "group": "core",
+      "bound": "kernel without the escape module, the family widget module and the English words plus a rot13 size stand-in for the Spanish words (not a translation): at most 14,336 B (14.0 KiB) of added deferred JavaScript, minified and gzipped the way build.js counts, measured as the difference of the app build's deferred figure on a Node 22 copy, with the kernel alone at most 5,120 B",
+      "limits": {
+        "deferredGzipMax": 14336,
+        "kernelGzipMax": 5120
+      }
+    },
+    {
+      "id": "T1.requests",
+      "group": "core",
+      "bound": "at most 3 lazy chunks added to the app build, and none on any route that does not open an atmosphere instrument",
+      "limits": {
+        "chunksMax": 3
+      }
+    },
+    {
+      "id": "T1.tier",
+      "group": "core",
+      "bound": "0 B added to the first-visit precache and at most 274 B (the idle room Carl's data budget leaves) to the idle precache: the family's sources are kept out of both by NEVER_PRECACHED (offline use only after one online visit, named as the cost), proved by building the service-worker manifest on the spike and on the base",
+      "limits": {
+        "firstVisitAddedMax": 46,
+        "idleAddedMax": 274
+      },
+      "ruling": {
+        "originalLimits": {
+          "firstVisitAddedMax": 0
+        },
+        "measured": {
+          "firstVisitAddedB": 46
+        },
+        "newBound": {
+          "firstVisitAddedMax": 46
+        },
+        "source": "Carl, AskUserQuestion to the merge-queue session, 2026-10-25",
+        "words": "Reset both bounds to B",
+        "note": "relayed to this session by the coordinator, who read it in that session's transcript"
+      }
+    },
+    {
+      "id": "T1.routes",
+      "group": "core",
+      "bound": "no existing route's sources or build figure rises by more than 0.2 KB and none gains a request, by tools/route-budget.mjs on the spike against the base, with the family registered through js/widgets.js's lazy-family seam",
+      "limits": {
+        "routeRiseKbMax": 0.2,
+        "requestsAddedMax": 0,
+        "transitInstrumentRequestsMax": 77,
+        "transitInstrumentRiseKbMax": 0.3
+      },
+      "ruling": {
+        "originalLimits": {
+          "requestsAddedMax": 0,
+          "routeRiseKbMax": 0.2
+        },
+        "measured": {
+          "transitInstrumentRequests": 77,
+          "transitInstrumentBaseRequests": 76,
+          "transitInstrumentBuildRiseKb": 0.3
+        },
+        "newBound": {
+          "transitInstrumentRequestsMax": 77
+        },
+        "source": "Carl, AskUserQuestion to the merge-queue session, 2026-10-25",
+        "words": "Reset both bounds to B",
+        "note": "the ruling names 77 requests on the transit route (the lesson with its instrument open); Carl confirmed the same row's 0.3 KB build rise is part of it (see confirmation); every other route keeps the original bounds",
+        "confirmation": {
+          "source": "Carl, AskUserQuestion to the merge-queue session, 2026-10-25",
+          "words": "Yes, 77 requests and 0.3 KB (Recommended)",
+          "meaning": "This row only; every other route keeps its 0.2 KB and 0-request bounds; the verdict stays B.",
+          "question": "whether the 0.3 KB build rise of the transit-with-instrument row is part of the ruling",
+          "note": "relayed by the coordinator, who verified it in that transcript"
+        }
+      }
+    },
+    {
+      "id": "J1.arith",
+      "group": "escape",
+      "bound": "Jeans parameter lambda = G M m / (k T r), most probable speed v0 = sqrt(2 k T / m), Jeans flux per unit exobase density v0 (1 + lambda) exp(-lambda) / (2 sqrt(pi)) and the smallest lambda that keeps a column ratio L through a time t (the root of eta (1 + lambda) exp(-lambda) = 2 sqrt(pi) with eta = v0 t / L) against an independent scipy/astropy evaluation (brentq for the root): relative error at most 1e-9 on 1,000 seeded points",
+      "limits": {
+        "relErrMax": 1e-9,
+        "points": 1000
+      }
+    },
+    {
+      "id": "J2.vocabulary",
+      "group": "escape",
+      "bound": "a Jeans result is typed a bound: it carries `canRetainOnlyIf` with the lambda threshold, the time and the column ratio it assumed, it carries the list of exobase conditions it requires, it refuses without an exobase temperature and radius, and the kernel exports no function and no field that returns retained, lost or a retention time as a prediction",
+      "limits": {
+        "requiredConditions": ["exobase temperature", "exobase radius"]
+      }
+    },
+    {
+      "id": "J3.published",
+      "group": "escape",
+      "bound": "Jeans parameters against a published table at the table's own exobase conditions: at least 8 (body, species) rows read from one named table, each within 2 percent (the table's own rounding allowing), the table's source, edition and rights basis recorded",
+      "limits": {
+        "rowsMin": 8,
+        "relMax": 0.02
+      }
+    },
+    {
+      "id": "J4.sources",
+      "group": "escape",
+      "bound": "the exobase temperature and radius of each body the panel offers (at least Venus, Earth, Mars and Titan) sourced per body, each with its own rights decision (7.5.4): the product and version, the terms as read with a retrieval date, the basis accepted, the transformation and attribution, the fallback and the affected lessons",
+      "limits": {
+        "bodiesMin": 4
+      }
+    },
+    {
+      "id": "T1.whole.deferred",
+      "group": "escape",
+      "bound": "the whole family, escape module included, at most 16,384 B (16.0 KiB) of added deferred JavaScript on the same measure",
+      "limits": {
+        "deferredGzipMax": 16384
+      }
+    }
+  ],
+  "slices": {
+    "A": "Prompt 200 whole: energy balance, the one-layer and grey models, the scale height and the bounded escape parameter",
+    "B": "Prompt 200 without the escape panel (a published table replaces the calculation); 205 without the escape bar",
+    "C": "stop and record: 200, 201 and 202 are not run; 203 builds the parameter table itself; 205's atmosphere items are removed and the Goldilocks lesson keeps its step; 231's atmosphere item becomes a reading step"
+  },
+  "rulings": [
+    {
+      "id": "R1",
+      "date": "2026-10-25",
+      "source": "Carl, AskUserQuestion to the merge-queue session, 2026-10-25",
+      "words": "Reset both bounds to B",
+      "meaning": "T1.tier first-visit bound set to the measured +46 B; T1.routes set to 77 requests on the transit route (the lesson with its instrument open); the original bounds and the measured values stay on the rows",
+      "effect": "the decision function gives B",
+      "confirmedAlso": {
+        "source": "Carl, AskUserQuestion to the merge-queue session, 2026-10-25",
+        "words": "Yes, 77 requests and 0.3 KB (Recommended)",
+        "meaning": "This row only; every other route keeps its 0.2 KB and 0-request bounds; the verdict stays B."
+      }
+    }
+  ]
+}

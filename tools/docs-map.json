@@ -65,6 +65,13 @@
       "student": true
     },
     {
+      "file": "ATMOSPHERES_GATE_I.md",
+      "kind": "gate",
+      "purpose": "Atmospheres gate I: the family and its limits, thresholds committed first, the rights rule, the measured checks and the verdict (Prompt 199).",
+      "owner": 199,
+      "student": false
+    },
+    {
       "file": "BRANCHING.md",
       "kind": "process",
       "purpose": "Branches, the publish rule and the table of generated artifacts.",
@@ -182,6 +189,13 @@
       "purpose": "Course packs: a course as a file.",
       "owner": null,
       "student": true
+    },
+    {
+      "file": "CRATER_COUNTING.md",
+      "kind": "feature",
+      "purpose": "Crater counting: diameters with an uncertainty budget, the cumulative size-frequency distribution, relative ages as density ratios and the cumulative index, with their validation (Prompt 195).",
+      "owner": 195,
+      "student": false
     },
     {
       "file": "DARK_MATTER.md",
