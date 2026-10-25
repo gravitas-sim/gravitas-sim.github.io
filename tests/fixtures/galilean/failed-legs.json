@@ -1,5 +1,10 @@
 {
   "note": "Legs of tests/fixtures/galilean/contract.json that fail as committed on this tree, left failing and labelled (Prompt 193). No bound was moved. tests/galileanMoons.test.js holds the failing set to exactly this record, so a change that fixes or breaks one shows up.",
+  "ruling": {
+    "decision": "Leave failing, labelled: keep every committed bound, record the four as known failed legs with their causes, and merge into v3, as for 180, 182, 186 and 189.",
+    "source": "Carl, AskUserQuestion to the merge-queue session, 2026-10-25, relayed by the merge-queue session (answer 'Leave failing, labelled (Recommended)'); consistent with the main session's own earlier recommendation.",
+    "reopening": "Re-specifying b2, c1, c2 or d1 (the committed bounds ignored the sky frame's 0.083 degrees a day rotation) is a new contract and Carl's to order; no bound here is widened."
+  },
   "legs": {
     "b2.aliasDesigned": {
       "failedChecks": [

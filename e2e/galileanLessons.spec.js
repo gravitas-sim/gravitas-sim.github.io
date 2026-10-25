@@ -1,11 +1,11 @@
 // =============================================================================
 // Weighing Jupiter From Its Moons, in two languages
 // -----------------------------------------------------------------------------
-// Roadmap III, Prompt 193. Checked here: two of the three instruments (the
-// synthetic frame with its ephemeris overlay and one moon's sinusoid; the
-// weighing sits on depth steps this walk does not reach, and is held by
-// tests/galileanMoons.test.js) paint and lists its numbers (the readout is the text equivalent
-// of the canvas), the Spanish lesson shows its own words, and the panel passes
+// Roadmap III, Prompt 193. Checked here: each of the three instruments (the
+// synthetic frame with its ephemeris overlay, one moon's sinusoid, and the
+// weighing, which sits on the advanced steps and is reached by a link at that
+// depth) paints and lists its numbers (the readout is the text equivalent of
+// the canvas), the Spanish lesson shows its own words, and the panel passes
 // axe and keeps every control and link at least 24 px square at 1280 and 390
 // px wide, in the dark and the light theme. The numbers themselves are held by
 // centralExperiments.spec.js and tests/galileanMoons.test.js.
@@ -18,6 +18,54 @@ import {
   openInvestigation,
   walkToSid,
 } from './centralExperiment.js';
+
+/** The plan with every depth, in the page's language, as a link at the advanced depth walks it. */
+const deepPlan = (page, id) =>
+  page.evaluate(async lessonId => {
+    const reg = await import('/js/data/investigations/registry.js');
+    const i18n = await import('/js/i18n/index.js');
+    const depth = await import('/js/investigations/depth.js');
+    const locale = i18n.getLocale();
+    const lesson = await depth.withDepth(
+      await reg.loadInvestigation(lessonId, locale),
+      locale
+    );
+    return lesson.steps.map((s, index) => ({
+      index,
+      sid: s.sid,
+      type: s.type,
+      title: s.title,
+      reveal: s.reveal ?? null,
+      answer: s.answer,
+      options: s.options?.length ?? 0,
+      fields: (s.fields || []).map(f => f.id),
+      tool: s.tool?.id ?? null,
+    }));
+  }, id);
+
+/** Two frames, then every finite animation finished: the panel has stopped moving. */
+const settled = page =>
+  page.evaluate(async () => {
+    const frames = () =>
+      new Promise(resolve =>
+        window.requestAnimationFrame(() =>
+          window.requestAnimationFrame(resolve)
+        )
+      );
+    await frames();
+    const finite = document
+      .getAnimations()
+      .filter(
+        a =>
+          a.playState === 'running' &&
+          Number.isFinite(a.effect?.getComputedTiming().endTime)
+      );
+    await Promise.race([
+      Promise.all(finite.map(a => a.finished.catch(() => {}))),
+      new Promise(resolve => window.setTimeout(resolve, 3000)),
+    ]);
+    await frames();
+  });
 
 const CASES = [
   {
@@ -32,6 +80,13 @@ const CASES = [
     row: /^Period/im,
     rowEs: /^Período/im,
   },
+  {
+    id: 'weighing-jupiter',
+    depth: 'advanced',
+    sid: 'weigh-again-corrected',
+    row: /Weighted mean of the four/i,
+    rowEs: /Media ponderada de las cuatro/i,
+  },
 ];
 
 const THEMES = ['midnight', 'daylight'];
@@ -40,8 +95,8 @@ const SIZES = [
   { width: 390, height: 844 },
 ];
 
-async function open(page, app, id, locale) {
-  await openInvestigation(page, app, id);
+async function open(page, app, id, locale, depth) {
+  await openInvestigation(page, app, depth ? `${id}/${depth}` : id);
   if (locale) {
     await page.evaluate(async l => {
       const i18n = await import('/js/i18n/index.js');
@@ -86,8 +141,10 @@ for (const c of CASES) {
       app,
     }) => {
       test.slow();
-      await open(page, app, c.id, locale === 'es' ? 'es' : null);
-      const plan = await lessonPlan(page, c.id);
+      await open(page, app, c.id, locale === 'es' ? 'es' : null, c.depth);
+      const plan = c.depth
+        ? await deepPlan(page, c.id)
+        : await lessonPlan(page, c.id);
       await walkToSid(page, plan, c.sid);
 
       const readout = page.locator('#investigationToolReadout');
@@ -112,12 +169,14 @@ for (const c of CASES) {
           const m = await import('/js/theme.js');
           m.setTheme(id);
         }, theme);
+        await settled(page);
         const results = await axeOf(page);
         expect(
           results.violations.map(v => `${theme} ${v.id}: ${v.nodes[0]?.target}`)
         ).toEqual([]);
         for (const size of SIZES) {
           await page.setViewportSize(size);
+          await settled(page);
           await expect(page.locator('#investigationTool')).toBeVisible();
           expect(
             await undersized(page),

@@ -1220,6 +1220,8 @@
   "[chromium] › galileanLessons.spec.js › weighing-jupiter io-period-and-radius: the instrument paints, lists its numbers, passes axe and keeps its controls large enough in both themes and sizes (es)": 13.5,
   "[chromium] › galileanLessons.spec.js › weighing-jupiter which-moon-is-farthest: the instrument paints, lists its numbers, passes axe and keeps its controls large enough in both themes and sizes (en)": 12.5,
   "[chromium] › galileanLessons.spec.js › weighing-jupiter which-moon-is-farthest: the instrument paints, lists its numbers, passes axe and keeps its controls large enough in both themes and sizes (es)": 12.5,
+  "[chromium] › galileanLessons.spec.js › weighing-jupiter weigh-again-corrected: the instrument paints, lists its numbers, passes axe and keeps its controls large enough in both themes and sizes (en)": 20.0,
+  "[chromium] › galileanLessons.spec.js › weighing-jupiter weigh-again-corrected: the instrument paints, lists its numbers, passes axe and keeps its controls large enough in both themes and sizes (es)": 20.0,
   "[chromium] › inference.spec.js › the inference core › a cancel stops every realm it started": 5,
   "[chromium] › inference.spec.js › the inference core › a change to the data clears a result that no longer describes it, and none has axe violations": 9.9,
   "[chromium] › inference.spec.js › the inference core › fits in Workers, leaves the page as it was, and exports its manifest": 6.8,
