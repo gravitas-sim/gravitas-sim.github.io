@@ -85,6 +85,7 @@ current, and the orchestrator checks it.
 | `formula-size.mjs` | node tools/formula-size.mjs |  |
 | `frame-pipeline-synth.mjs` | The committed scene of the frame-pipeline checks (Prompt 185, FRAME_PIPELINE.md) |  |
 | `frame-pipeline-validate.mjs` | The frame pipeline against its committed thresholds (Prompt 185) | `npm run frame-pipeline:validate` |
+| `galilean-validate.mjs` | Validation of the Galilean-moon kernel (Prompt 193, SATELLITE_EPHEMERIS.md) |  |
 | `generate-graph.mjs` | Every generated artifact, what it is made from, and what it must follow |  |
 | `generate-lesson-cards.mjs` | A card picture for a lesson that stages its own scene | `npm run cards` |
 | `generate-scenario-thumbnails.mjs` | Scenario thumbnail generator | `npm run thumbnails` |

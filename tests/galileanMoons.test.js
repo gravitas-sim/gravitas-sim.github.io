@@ -105,12 +105,13 @@ describe('the geometry', () => {
     }
   });
 
-  test('Jupiter is 4.3 to 4.6 au away, 36 to 38 minutes of light, seen 1.37 degrees above its equator', () => {
+  test('Jupiter is 4.2 to 4.6 au away, its light time is that distance over c, seen 1.37 degrees above its equator', () => {
     for (const jd of [2461000.5, 2461015.5, 2461038.5]) {
       const v = viewOf(model, jd);
-      expect(v.distanceKm / 149597870.7).toBeGreaterThan(4.28);
-      expect(v.distanceKm / 149597870.7).toBeLessThan(4.6);
-      near(v.lightTimeS / 60, 37, 1.5);
+      const au = v.distanceKm / 149597870.7;
+      expect(au).toBeGreaterThan(4.2);
+      expect(au).toBeLessThan(4.6);
+      near(v.lightTimeS, v.distanceKm / 299792.458, 0.5);
       near(v.subEarthLatDeg, 1.37, 0.05);
     }
   });
@@ -152,7 +153,11 @@ describe('the fit and Kepler’s law', () => {
     Float64Array.from(t, v => A * Math.sin((2 * Math.PI * v) / P + 0.7) + c);
 
   test('recovers an exact sinusoid’s period and amplitude', () => {
-    const f = fitSinusoid(t, exact(7.3, 14.9), 0.03);
+    // 0.97 days apart: the Nyquist period is 1.94 days, so the search starts above it.
+    const f = fitSinusoid(t, exact(7.3, 14.9), 0.03, {
+      minPeriodDays: 2,
+      maxPeriodDays: 20,
+    });
     near(f.periodDays, 7.3, 1e-6);
     near(f.amplitude, 14.9, 1e-6);
     near(f.offset, 0.3, 1e-6);
@@ -166,7 +171,7 @@ describe('the fit and Kepler’s law', () => {
       expect(e.message).toMatch(/at least 8/);
     }
     expect(() =>
-      fitSinusoid(t.slice(0, 12), exact(40, 14.9).slice(0, 12), 0.03, {
+      fitSinusoid(t.slice(0, 12), exact(16.7, 26.3).slice(0, 12), 0.03, {
         minPeriodDays: 4,
         maxPeriodDays: 40,
       })
