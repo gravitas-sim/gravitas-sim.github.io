@@ -88,7 +88,8 @@ const undersized = page =>
  */
 const settled = page =>
   page.evaluate(async () => {
-    const frame = () => new Promise(r => requestAnimationFrame(() => r()));
+    const frame = () =>
+      new Promise(r => window.requestAnimationFrame(() => r()));
     for (let pass = 0; pass < 5; pass++) {
       await frame();
       await frame();
