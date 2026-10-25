@@ -77,6 +77,36 @@ const undersized = page =>
     return small;
   });
 
+/**
+ * Wait until nothing finite is still animating, and the layout has had a frame
+ * to follow. A control measured while the panel is still sliding to its new
+ * width reads 2 px wide, and a contrast check taken in a theme fade measures a
+ * blend; both made this spec fail on a loaded runner and pass on retry.
+ * getAnimations() covers CSS transitions and animations both, so this waits
+ * for the settled state rather than guessing a time. The simulation's own
+ * decorative loops never finish and are not waited on.
+ */
+const settled = page =>
+  page.evaluate(async () => {
+    const frame = () => new Promise(r => requestAnimationFrame(() => r()));
+    for (let pass = 0; pass < 5; pass++) {
+      await frame();
+      await frame();
+      const finite = document
+        .getAnimations()
+        .filter(
+          a =>
+            a.playState === 'running' &&
+            (a.effect?.getTiming?.().iterations ?? 1) !== Infinity
+        );
+      if (!finite.length) return;
+      await Promise.race([
+        Promise.all(finite.map(a => a.finished.catch(() => {}))),
+        new Promise(r => setTimeout(r, 3000)),
+      ]);
+    }
+  });
+
 const axeOf = page =>
   new AxeBuilder({ page })
     .include('#investigationTool')
@@ -116,6 +146,7 @@ for (const c of CASES) {
           const m = await import('/js/theme.js');
           m.setTheme(id);
         }, theme);
+        await settled(page);
         const results = await axeOf(page);
         expect(
           results.violations.map(v => `${theme} ${v.id}: ${v.nodes[0]?.target}`)
@@ -123,6 +154,7 @@ for (const c of CASES) {
         for (const size of SIZES) {
           await page.setViewportSize(size);
           await expect(page.locator('#investigationTool')).toBeVisible();
+          await settled(page);
           expect(
             await undersized(page),
             `${theme} ${size.width}px controls under 24 px`
