@@ -184,6 +184,13 @@
       "student": true
     },
     {
+      "file": "CRATER_COUNTING.md",
+      "kind": "feature",
+      "purpose": "Crater counting: diameters with an uncertainty budget, the cumulative size-frequency distribution, relative ages as density ratios and the cumulative index, with their validation (Prompt 195).",
+      "owner": 195,
+      "student": false
+    },
+    {
       "file": "DARK_MATTER.md",
       "kind": "feature",
       "purpose": "Rotation curves and the missing mass.",
