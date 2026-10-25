@@ -30,7 +30,7 @@ kernel or the tool had run; the diameters, areas, thresholds and tolerance are
 unchanged. d4 (the roll-off) was committed without naming the fit's `dMin`; the tool
 uses 1 km, the Pareto minimum, the only value at which the draws are a power law.
 
-## What is built, and what is not
+## What is built, and what is not (as of part 1; part 2 below supersedes items 1, b4 and e)
 
 Built: the kernel (item 2 of the prompt), its validation and its documentation.
 Not built, because each needs data the repository does not hold and nothing may be
@@ -51,7 +51,7 @@ fetched without Carl's word per request:
   misconceptions and the model page's section: they count craters in those regions, so
   they wait for them. Nothing student-facing was added; no Spanish, no closure file.
 
-### What would unblock the rest (a request, not made)
+### What would unblock the rest (part 1's request; Carl granted it on 2026-10-25, see Part 2)
 
 | Need | Source | Licence | Size |
 | --- | --- | --- | --- |
@@ -140,7 +140,8 @@ estimates); with fewer than 5 above `2 dMin` it is `not-run`.
 ## The validation, as measured (`npm run craters:validate`, Node 24 and Node 22)
 
 Thresholds committed first (33f9c8f2); the oracle's inputs, script and results before the
-kernel; the kernel and the tool after. 127 rows pass, 0 fail, 2 NOT RUN.
+kernel; the kernel and the tool after. 127 rows pass, 0 fail, 2 NOT RUN (part 1; part 2's
+rows are below).
 
 | Check | Bound (committed) | Measured |
 | --- | --- | --- |
@@ -171,6 +172,90 @@ as not constrained, which says nothing false. The oracle is scipy 1.15.3 with nu
 `oracle-results.json`, its provenance `oracle-provenance.json`). It is an independent
 implementation of the statistics, not a crater-statistics tool. `tests/craters.test.js`
 asserts every row.
+
+## Part 2: four regions, tier b4 as a published formula, tier e on the catalogues
+
+Carl approved the data on 2026-10-25 ("Download the data needed for 195"); the main
+session retrieved it (RETRIEVAL.md in the session scratchpad; URLs, byte counts,
+SHA-256 and terms are copied into `tests/fixtures/craters/regions-provenance.json`).
+`tests/fixtures/craters/regions-thresholds.json` fixed the four regions, the cut, the
+projections, the legs and their bounds before any list was cut or any leg run
+(`47e48a33`); `tools/craters-oracle/regions.py` (standard library and Pillow, no
+Gravitas code) then cut the data and wrote the oracle's counts.
+
+| Region | Box (lon E, lat) | Frame | Scale | Craters at or above 20 km | Area |
+| --- | --- | --- | --- | --- | --- |
+| `moon-highland` | -10 to 15, -35 to -20 | Clementine nearside (repository fixture), crop 350 x 200 px | 2.0214 +/- 0.0012 km/px at the disc centre, orthographic | 72 (LU78287GT) | 304,982 km^2 |
+| `moon-mare` | 20 to 45, 0 to 15 | the same, crop 325 x 223 px | the same | 21 | 340,889 km^2 |
+| `mars-highland` | 41 to 53, 1 to 13 | MDIM 2.1 colourised, 1 km/px, crop 713 x 712 px | 1.0000 km/px, east-west compressed by cos(lat) | 91 (Robbins V1) | 501,254 km^2 (sigma 0.3 percent) |
+| `mars-plains` | 166 to 178, 1 to 13 | the same, crop 712 x 712 px | the same | 14 | 501,254 km^2 |
+
+`frames/craters-regions.json` holds, per region, the area, the geometry, the stated
+completeness limit (30 km on the Moon, 20 km on Mars) and the list of diameter, longitude
+and latitude (nothing else). The four frames are `frames/craters-<region>.json`, the
+display plane in Prompt 189's `gravitas.image-pack-planes/1` form, rows from the bottom as in
+FITS, gray of red, green and blue as `displayPlane` computes it; display-only, so marks are
+permitted and photometry and astrometry are refused. They are in no precache tier and in no
+data pack (`tools/data-budget.json` is untouched); `build.js` copies them to `dist/`.
+
+**Geometry for the kernel.** On the Moon the orthographic view compresses the radial
+direction by cos E = sqrt(1 - (rho / R)^2) at distance rho from the disc centre, so a mark's
+`foreshortening` is `{ cosE, axis }` with the axis the radial direction at that place. On Mars
+the map is equirectangular: use `scale = s cos(lat)` and `cosE = cos(lat)` with the
+compressed axis along y. The area is the spherical rectangle `R^2 (lon_hi - lon_lo)
+(sin lat_hi - sin lat_lo)`, stated, not derived from pixels.
+
+### Results (`npm run craters:validate`; 21 more rows, all pass or are NOT RUN)
+
+| Leg | Committed bound | Measured |
+| --- | --- | --- |
+| b4 formula: density equals N / A of the Crater Analysis Techniques Working Group | 1e-15 | 0 |
+| b4 formula: Garwood half-width against sqrt(N) / A, N at least 100 | 0.10 | 0.051 |
+| b4 formula: the same, 30 to 99 | 0.20 | 0.086 |
+| b4 formula: below 30 | reported | 0.56 |
+| b4 craterstats pin | | NOT RUN (not installed) |
+| e1 counts: the kernel on the committed list against an independent count from the raw catalogue, four regions | exact | exact |
+| e1 area: the spherical rectangle against the script's | 1e-12 | 0 |
+| e2 verdict, Moon: highland against mare above 30 km | `a older`, lower end above 1 | `a older`, R 6.39 (2.83 to 16.9), 40 and 7 craters |
+| e2 verdict, Mars: highland against plains above 20 km | the same | `a older`, R 6.50 (3.68 to 12.4), 91 and 14 |
+| e3 index in 1.0 to 3.5, above the completeness limit | band | highland 1.71 (n 40), mare 3.47 (n 7, 1.4 to 6.5), Mars highland 1.72 (n 91), plains 1.55 (n 14) |
+| e4 the committed frames, lists and recorded sources are the ones in the provenance file | 0 mismatches | 0 |
+| tier e against Head et al. 2010, a second lunar catalogue | | NOT RUN (the host refused connections) |
+| tier e on the frames themselves (marks on them) | | NOT RUN (no person's marks exist; none simulated) |
+
+Read these plainly. Tier e here is one catalogue per body: it checks that the committed
+data are the catalogue's, that the kernel counts and bounds them as an independent script
+does, and that the physically expected verdict (highlands older than maria and plains)
+comes out with an interval excluding 1; it is not a cross-catalogue comparison and no one
+has counted craters on these frames. The Moon's mare index sits 0.03 under the top of its
+committed band on seven craters (its interval runs from 1.4 to 6.5): the leg passes, and
+says almost nothing. The highland box takes in an edge of Mare Nubium (visible at the
+left of its frame), which lowers its density and so works against the verdict, not for it.
+The Moon's catalogue integrates Head's list and completes to about 8 km; a 20 km crater is
+10 pixels on the Clementine frame, which is why the stated completeness is 30 km there.
+
+### Rights
+
+The Clementine frame is NASA/JPL/USGS (fixture provenance). The Mars frame is USGS
+Astropedia, "Access constraints: Public domain", "Use constraints: None". The Moon's
+catalogue is LU78287GT on USGS Astropedia, "Access Constraints: None", "Use Constraints:
+Please cite authors" (cited in the file). The Mars catalogue states no licence on the
+USGS collection page or on its author's page: only the regional diameter, longitude and
+latitude at or above 20 km are committed, with credit, as a recorded "no licence stated,
+credited" decision under Roadmap III 7.5.4 (D-R10-77; Carl: go with my recommendation).
+The full files (the Mars JPEG, the Salamuniccar zip, both Robbins answers) are not in the
+repository; their size and SHA-256 are.
+
+### Still not built (items 3 and 4)
+
+The three investigations (survey, majors, upper depth), their instructor materials and
+Spanish, the misconceptions and the model page's section are not built: they need the
+whole lesson family of Prompt 191's footprint (a lesson trio appended to the four shared
+`measurement-sequence.js` files, twelve per-id re-exports, an instrument family with its
+words, thumbnails, Library, catalogue, sitemap, alignment, golden fixtures, the nine
+regenerated artifacts, an e2e spec and the manual), which does not fit what is left of this
+session. They would append to files already in the instructor closure (273 of 274 stays);
+no new closure file is needed for them. The data and the kernel they consume are ready.
 
 ## References
 

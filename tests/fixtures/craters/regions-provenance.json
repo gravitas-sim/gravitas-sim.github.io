@@ -1,0 +1,82 @@
+{
+  "format": "gravitas.craters-regions-provenance/1",
+  "prompt": 195,
+  "retrieved": "2026-10-25, by the main session with Carl's consent (chat to the main session: \"Download the data needed for  195\")",
+  "script": "tools/craters-oracle/regions.py",
+  "sources": {
+    "mars-frame": {
+      "file": "mars_viking_mdim21_clrmosaic_1km.jpg",
+      "url": "https://astrogeology.usgs.gov/ckan/dataset/7131d503-cdc9-45a5-8f83-5126c0fd397e/resource/5ea881c6-01b3-41fa-a7af-42d2131b54f1/download/mars_viking_mdim21_clrmosaic_1km.jpg",
+      "page": "https://astrogeology.usgs.gov/search/map/mars_viking_colorized_global_mosaic_232m",
+      "bytes": 36708552,
+      "sha256": "fdfcd335559c3dc67052b7e8a9565d850e336ac0d1f3ea7f5eb7826ffb44ecb2",
+      "pixels": [21339, 10670],
+      "terms": "USGS Astropedia dataset page, read 2026-10-25: Access constraints: \"Public domain\"; Use constraints: \"None\"; publisher USGS Astrogeology Science Center; originators NASA AMES; the page carries no separate licence text",
+      "committed": false
+    },
+    "moon-catalogue": {
+      "file": "goransalamuniccar_mooncraters.zip",
+      "url": "https://astrogeology.usgs.gov/ckan/dataset/144c1f05-de7f-4e45-aa6d-5ca04622bcb1/resource/fd47a9d8-046b-406c-b160-e416fd32f5fa/download/goransalamuniccar_mooncraters.zip",
+      "page": "https://astrogeology.usgs.gov/search/map/moon_crater_database_v1_salamuni_car",
+      "bytes": 26224618,
+      "sha256": "b9ac25611f3dc8f7e8ccb2b6488d4451476439ab05164b006996b0f345ab21b3",
+      "terms": "USGS Astropedia dataset page, read 2026-10-25: Access Constraints: \"None\"; Use Constraints: \"Please cite authors\"; no named licence",
+      "craters": 78287,
+      "committed": false
+    },
+    "mars-catalogue-plains": {
+      "file": "plains.json",
+      "url": "https://astrogeology.usgs.gov/pygeoapi/collections/mars/robbinsv1/items?f=json&bbox=165,0,180,15&limit=10000",
+      "bytes": 315539,
+      "sha256": "d33176558c69203585bef558ba2be0e4ace8e2203f20680f49e4e170e01fa8c4",
+      "terms": "collection page https://astrogeology.usgs.gov/pygeoapi/collections/mars/robbinsv1 read 2026-10-25: no licence, rights or terms field; the author's page https://craters.sjrdesign.net/ states none, funding by NASA awards NESSF NNX07AU85H and ROSES NNX10AL65G, and asks for citation of Robbins and Hynek (2012)",
+      "committed": false
+    },
+    "mars-catalogue-highlands": {
+      "file": "highlands.json",
+      "url": "https://astrogeology.usgs.gov/pygeoapi/collections/mars/robbinsv1/items?f=json&bbox=40,0,55,15&limit=10000",
+      "bytes": 1293383,
+      "sha256": "34e14fde28a69c6c45129ac58dc2708d09aac44f466c04943e49a8094ba271cb",
+      "terms": "as for the plains answer",
+      "committed": false
+    },
+    "moon-frame": {
+      "file": "tests/fixtures/lunar/PIA00302-clementine-nearside.jpg",
+      "bytes": 265438,
+      "sha256": "c5bb394a48613440f24c59deb5e7cda253b14a18696e54f6f2cf4e37fbf92904",
+      "terms": "NASA/JPL/USGS, see tests/fixtures/lunar/provenance.json",
+      "committed": true
+    }
+  },
+  "outputs": {
+    "frames": {
+      "moon-highland": {
+        "file": "frames/craters-moon-highland.json",
+        "bytes": 93502,
+        "sha256": "fed6b2881ab9395fb8b77afd7e7490d1bb0908902ca3c0d6e9a5a14059447594"
+      },
+      "moon-mare": {
+        "file": "frames/craters-moon-mare.json",
+        "bytes": 96798,
+        "sha256": "efc5ef7e205fe50509edf3a6f825f5285db3334fc5e23a189c69fc3beff365c3"
+      },
+      "mars-highland": {
+        "file": "frames/craters-mars-highland.json",
+        "bytes": 677042,
+        "sha256": "36f1ede6601980aa673ba3bad6cbb2f8333a4575eafcaa6937ea29f8d0db9dde"
+      },
+      "mars-plains": {
+        "file": "frames/craters-mars-plains.json",
+        "bytes": 676092,
+        "sha256": "354d2a01e106630d74d6e9708ed5a1f6c43408a7c8a6352a7ecd98b9f811c0f8"
+      }
+    },
+    "regions": {
+      "file": "frames/craters-regions.json",
+      "bytes": 8592,
+      "sha256": "53aeab47f726ad433a00b510f5a094bc5fe4a734f1ac60b034d4a160a518c609"
+    }
+  },
+  "decoder": "Pillow 11.2.1; python 3.9.6",
+  "decision": "Robbins' lists state no licence: only the regional diameter, longitude and latitude, cut at 20 km, are committed, with credit, as a recorded 'no licence stated, credited' decision under Roadmap III 7.5.4 (D-R10-77, Carl: go with my recommendation). The full files and answers stay in the scratchpad with their SHA-256."
+}
