@@ -1788,7 +1788,7 @@ export const INSTRUCTOR = {
         'Continue with the resonance investigation, where the moons’ periods meet 1 : 2 : 4.',
       ],
       modelNotes:
-        'js/jovianWidgets.js (sequenceOf, fitMoon, weighAll): the data file of ephemeris-packs/galilean-2025-11.json read by js/satellites/galilean.js, the plan and alias analysis of cadence.js, the frames of sequence.js through js/forward/models/ccd.js, the fit and Kepler law of weigh.js. See SATELLITE_EPHEMERIS.md for the validation contract and the failing legs.',
+        'js/jovianWidgets.js (sequenceOf, fitMoon, weighAll): the data file made by the galilean-2025-11 manifest read by js/satellites/galilean.js, the plan and alias analysis of cadence.js, the frames of sequence.js through js/forward/models/ccd.js, the fit and Kepler law of weigh.js. See SATELLITE_EPHEMERIS.md for the validation contract and the failing legs.',
     },
   },
   flow: {

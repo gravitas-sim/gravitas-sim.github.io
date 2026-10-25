@@ -79,8 +79,8 @@
   "en": {
    "static": {
     "title": "A sinusoid for one moon",
-    "note": "The measured distance of one moon east of Jupiter against time, with the sinusoid that fits best. Choose the moon and how the nights were sampled: once a night, or the designed sequence with three hourly nights.",
-    "controls": [{"id":"moon","label":"Moon (1 Io, 2 Europa, 3 Ganymede, 4 Callisto)","unit":null,"min":1,"max":4,"step":1,"value":1,"decimals":0},{"id":"cadence","label":"Sampling (0 once a night, 1 designed)","unit":null,"min":0,"max":1,"step":1,"value":1,"decimals":0}],
+    "note": "The measured distance of one moon east of Jupiter against time, with the sinusoid that fits best. Moon: 1 Io, 2 Europa, 3 Ganymede, 4 Callisto. Sampling: 0 once a night, 1 the designed sequence with three hourly nights.",
+    "controls": [{"id":"moon","label":"Moon (1 to 4)","unit":null,"min":1,"max":4,"step":1,"value":1,"decimals":0},{"id":"cadence","label":"Sampling (0 or 1)","unit":null,"min":0,"max":1,"step":1,"value":1,"decimals":0}],
     "presets": [],
     "actions": [],
     "defaults": {"moon":"1","cadence":"1"}
@@ -116,8 +116,8 @@
   "es": {
    "static": {
     "title": "Una sinusoide para una luna",
-    "note": "La distancia medida de una luna al este de Júpiter frente al tiempo, con la sinusoide que mejor se ajusta. Elige la luna y cómo se muestrearon las noches: una vez por noche, o la secuencia diseñada con tres noches horarias.",
-    "controls": [{"id":"moon","label":"Luna (1 Ío, 2 Europa, 3 Ganímedes, 4 Calisto)","unit":null,"min":1,"max":4,"step":1,"value":1,"decimals":0},{"id":"cadence","label":"Muestreo (0 una vez por noche, 1 diseñado)","unit":null,"min":0,"max":1,"step":1,"value":1,"decimals":0}],
+    "note": "La distancia medida de una luna al este de Júpiter frente al tiempo, con la sinusoide que mejor se ajusta. Luna: 1 Ío, 2 Europa, 3 Ganímedes, 4 Calisto. Muestreo: 0 una vez por noche, 1 la secuencia diseñada con tres noches horarias.",
+    "controls": [{"id":"moon","label":"Luna (1 a 4)","unit":null,"min":1,"max":4,"step":1,"value":1,"decimals":0},{"id":"cadence","label":"Muestreo (0 o 1)","unit":null,"min":0,"max":1,"step":1,"value":1,"decimals":0}],
     "presets": [],
     "actions": [],
     "defaults": {"moon":"1","cadence":"1"}
@@ -155,8 +155,8 @@
   "en": {
    "static": {
     "title": "Weighing Jupiter",
-    "note": "Kepler’s third law on the fitted period and orbit radius of a moon gives Jupiter’s GM (its mass times the gravitational constant). Choose a moon, or all four, and whether to correct the period for the Earth’s motion.",
-    "controls": [{"id":"moon","label":"Moon (0 all four, 1 Io, 2 Europa, 3 Ganymede, 4 Callisto)","unit":null,"min":0,"max":4,"step":1,"value":0,"decimals":0},{"id":"correct","label":"Correct for the Earth’s motion (0 no, 1 yes)","unit":null,"min":0,"max":1,"step":1,"value":0,"decimals":0}],
+    "note": "Kepler’s third law on the fitted period and orbit radius of a moon gives Jupiter’s GM (its mass times the gravitational constant). Moon: 0 all four, 1 Io, 2 Europa, 3 Ganymede, 4 Callisto. Correct: 1 corrects the period for the Earth’s motion, 0 does not.",
+    "controls": [{"id":"moon","label":"Moon (0 to 4)","unit":null,"min":0,"max":4,"step":1,"value":0,"decimals":0},{"id":"correct","label":"Correct (0 or 1)","unit":null,"min":0,"max":1,"step":1,"value":0,"decimals":0}],
     "presets": [],
     "actions": [],
     "defaults": {"moon":"0","correct":"0"}
@@ -192,8 +192,8 @@
   "es": {
    "static": {
     "title": "Pesar Júpiter",
-    "note": "La tercera ley de Kepler con el período y el radio de órbita ajustados de una luna da el GM de Júpiter (su masa por la constante gravitatoria). Elige una luna, o las cuatro, y si corregir el período por el movimiento de la Tierra.",
-    "controls": [{"id":"moon","label":"Luna (0 las cuatro, 1 Ío, 2 Europa, 3 Ganímedes, 4 Calisto)","unit":null,"min":0,"max":4,"step":1,"value":0,"decimals":0},{"id":"correct","label":"Corregir por el movimiento de la Tierra (0 no, 1 sí)","unit":null,"min":0,"max":1,"step":1,"value":0,"decimals":0}],
+    "note": "La tercera ley de Kepler con el período y el radio de órbita ajustados de una luna da el GM de Júpiter (su masa por la constante gravitatoria). Luna: 0 las cuatro, 1 Ío, 2 Europa, 3 Ganímedes, 4 Calisto. Corregir: 1 corrige el período por el movimiento de la Tierra, 0 no.",
+    "controls": [{"id":"moon","label":"Luna (0 a 4)","unit":null,"min":0,"max":4,"step":1,"value":0,"decimals":0},{"id":"correct","label":"Corregir (0 o 1)","unit":null,"min":0,"max":1,"step":1,"value":0,"decimals":0}],
     "presets": [],
     "actions": [],
     "defaults": {"moon":"0","correct":"0"}

@@ -41,9 +41,9 @@ export const EN_JOVIAN = {
     'These frames are synthetic, made for this investigation from JPL Horizons positions (JUP365): no picture of Jupiter was observed. The positions are read from each frame’s brightest pixels, near where the overlay predicts them, not typed in.',
   'jovW.p.title': 'A sinusoid for one moon',
   'jovW.p.note':
-    'The measured distance of one moon east of Jupiter against time, with the sinusoid that fits best. Choose the moon and how the nights were sampled: once a night, or the designed sequence with three hourly nights.',
-  'jovW.p.control.moon': 'Moon (1 Io, 2 Europa, 3 Ganymede, 4 Callisto)',
-  'jovW.p.control.cadence': 'Sampling (0 once a night, 1 designed)',
+    'The measured distance of one moon east of Jupiter against time, with the sinusoid that fits best. Moon: 1 Io, 2 Europa, 3 Ganymede, 4 Callisto. Sampling: 0 once a night, 1 the designed sequence with three hourly nights.',
+  'jovW.p.control.moon': 'Moon (1 to 4)',
+  'jovW.p.control.cadence': 'Sampling (0 or 1)',
   'jovW.p.legend': 'measured · fitted sinusoid · days from the first frame',
   'jovW.p.row.marks': 'Measured points used',
   'jovW.p.row.period': 'Period',
@@ -70,10 +70,9 @@ export const EN_JOVIAN = {
     'The period is the one the Earth sees (the Earth and Jupiter move), within 0.4 percent of the moon’s orbital period; the uncertainty includes the model’s misfit, not only the noise; each point is read with an assumed 0.03 Jupiter radii.',
   'jovW.w.title': 'Weighing Jupiter',
   'jovW.w.note':
-    'Kepler’s third law on the fitted period and orbit radius of a moon gives Jupiter’s GM (its mass times the gravitational constant). Choose a moon, or all four, and whether to correct the period for the Earth’s motion.',
-  'jovW.w.control.moon':
-    'Moon (0 all four, 1 Io, 2 Europa, 3 Ganymede, 4 Callisto)',
-  'jovW.w.control.correct': 'Correct for the Earth’s motion (0 no, 1 yes)',
+    'Kepler’s third law on the fitted period and orbit radius of a moon gives Jupiter’s GM (its mass times the gravitational constant). Moon: 0 all four, 1 Io, 2 Europa, 3 Ganymede, 4 Callisto. Correct: 1 corrects the period for the Earth’s motion, 0 does not.',
+  'jovW.w.control.moon': 'Moon (0 to 4)',
+  'jovW.w.control.correct': 'Correct (0 or 1)',
   'jovW.w.legend': 'GM from each moon · reference · km³/s²',
   'jovW.w.row.period': 'Period used',
   'jovW.w.row.a': 'Orbit radius',

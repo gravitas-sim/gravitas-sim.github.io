@@ -41,9 +41,9 @@ export const ES_JOVIAN = {
     'Estas imágenes son sintéticas, hechas para esta investigación con posiciones de JPL Horizons (JUP365): no se observó ninguna imagen de Júpiter. Las posiciones se leen en los píxeles más brillantes de cada imagen, cerca de donde las predice la superposición, no se escriben a mano.',
   'jovW.p.title': 'Una sinusoide para una luna',
   'jovW.p.note':
-    'La distancia medida de una luna al este de Júpiter frente al tiempo, con la sinusoide que mejor se ajusta. Elige la luna y cómo se muestrearon las noches: una vez por noche, o la secuencia diseñada con tres noches horarias.',
-  'jovW.p.control.moon': 'Luna (1 Ío, 2 Europa, 3 Ganímedes, 4 Calisto)',
-  'jovW.p.control.cadence': 'Muestreo (0 una vez por noche, 1 diseñado)',
+    'La distancia medida de una luna al este de Júpiter frente al tiempo, con la sinusoide que mejor se ajusta. Luna: 1 Ío, 2 Europa, 3 Ganímedes, 4 Calisto. Muestreo: 0 una vez por noche, 1 la secuencia diseñada con tres noches horarias.',
+  'jovW.p.control.moon': 'Luna (1 a 4)',
+  'jovW.p.control.cadence': 'Muestreo (0 o 1)',
   'jovW.p.legend': 'medido · sinusoide ajustada · días desde la primera imagen',
   'jovW.p.row.marks': 'Puntos medidos usados',
   'jovW.p.row.period': 'Período',
@@ -71,11 +71,9 @@ export const ES_JOVIAN = {
     'El período es el que ve la Tierra (la Tierra y Júpiter se mueven), a menos del 0,4 por ciento del período orbital de la luna; la incertidumbre incluye el desajuste del modelo, no solo el ruido; cada punto se lee con 0,03 radios de Júpiter supuestos.',
   'jovW.w.title': 'Pesar Júpiter',
   'jovW.w.note':
-    'La tercera ley de Kepler con el período y el radio de órbita ajustados de una luna da el GM de Júpiter (su masa por la constante gravitatoria). Elige una luna, o las cuatro, y si corregir el período por el movimiento de la Tierra.',
-  'jovW.w.control.moon':
-    'Luna (0 las cuatro, 1 Ío, 2 Europa, 3 Ganímedes, 4 Calisto)',
-  'jovW.w.control.correct':
-    'Corregir por el movimiento de la Tierra (0 no, 1 sí)',
+    'La tercera ley de Kepler con el período y el radio de órbita ajustados de una luna da el GM de Júpiter (su masa por la constante gravitatoria). Luna: 0 las cuatro, 1 Ío, 2 Europa, 3 Ganímedes, 4 Calisto. Corregir: 1 corrige el período por el movimiento de la Tierra, 0 no.',
+  'jovW.w.control.moon': 'Luna (0 a 4)',
+  'jovW.w.control.correct': 'Corregir (0 o 1)',
   'jovW.w.legend': 'GM de cada luna · referencia · km³/s²',
   'jovW.w.row.period': 'Período usado',
   'jovW.w.row.a': 'Radio de la órbita',

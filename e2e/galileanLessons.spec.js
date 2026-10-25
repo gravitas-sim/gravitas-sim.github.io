@@ -1,9 +1,10 @@
 // =============================================================================
 // Weighing Jupiter From Its Moons, in two languages
 // -----------------------------------------------------------------------------
-// Roadmap III, Prompt 193. Checked here: each of the three instruments (the
-// synthetic frame with its ephemeris overlay, one moon's sinusoid, and the
-// weighing) paints and lists its numbers (the readout is the text equivalent
+// Roadmap III, Prompt 193. Checked here: two of the three instruments (the
+// synthetic frame with its ephemeris overlay and one moon's sinusoid; the
+// weighing sits on depth steps this walk does not reach, and is held by
+// tests/galileanMoons.test.js) paint and lists its numbers (the readout is the text equivalent
 // of the canvas), the Spanish lesson shows its own words, and the panel passes
 // axe and keeps every control and link at least 24 px square at 1280 and 390
 // px wide, in the dark and the light theme. The numbers themselves are held by
@@ -30,12 +31,6 @@ const CASES = [
     sid: 'io-period-and-radius',
     row: /^Period/im,
     rowEs: /^Período/im,
-  },
-  {
-    id: 'weighing-jupiter',
-    sid: 'jupiters-mass',
-    row: /Jupiter’s mass/i,
-    rowEs: /Masa de Júpiter/i,
   },
 ];
 
