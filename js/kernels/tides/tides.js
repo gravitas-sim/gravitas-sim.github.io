@@ -177,12 +177,17 @@ function orbitOf(p) {
   }
   const k2OverQ = dissipation(p);
   const alpha = alphaOf(p);
+  // The caller's own units (an engine's G) and a stated rate multiplier: the
+  // real tide is about 1e-12 of the central pull, so a scenario that shows it
+  // within minutes says how many times faster it runs.
+  const G = p.G === undefined ? G_SI : positive(p.G, 'G');
+  const rate = p.rate === undefined ? 1 : positive(p.rate, 'rate');
   const mu = (M * m) / (M + m);
-  const muTot = G_SI * (M + m);
+  const muTot = G * (M + m);
   const I = alpha * M * R * R;
   const n0 = Math.sqrt(muTot / (a0 * a0 * a0));
-  const C = 3 * k2OverQ * (m / M) * R ** 5 * Math.sqrt(muTot);
-  return { M, R, m, a0, spin, k2OverQ, mu, muTot, I, n0, C, alpha };
+  const C = rate * 3 * k2OverQ * (m / M) * R ** 5 * Math.sqrt(muTot);
+  return { M, R, m, a0, spin, k2OverQ, mu, muTot, I, n0, C, alpha, G, rate };
 }
 
 const orbitalL = (o, a) => o.mu * Math.sqrt(o.muTot * a);
@@ -196,7 +201,8 @@ const orbitalL = (o, a) => o.mu * Math.sqrt(o.muTot * a);
 export function recession(p) {
   const o = orbitOf(p);
   const sign = Math.sign(o.spin - o.n0);
-  const torque = (1.5 * o.k2OverQ * G_SI * o.m * o.m * o.R ** 5) / o.a0 ** 6;
+  const torque =
+    (o.rate * 1.5 * o.k2OverQ * o.G * o.m * o.m * o.R ** 5) / o.a0 ** 6;
   const dadt = sign * o.C * o.a0 ** -5.5;
   const dLdt = (0.5 * orbitalL(o, o.a0) * dadt) / o.a0;
   return {
@@ -286,7 +292,7 @@ export function evolveCircular(p) {
     sign,
     orbitalAngularMomentum: L,
     totalAngularMomentum: L + o.I * end.spin,
-    energy: (-G_SI * o.M * o.m) / (2 * end.a) + 0.5 * o.I * end.spin * end.spin,
+    energy: (-o.G * o.M * o.m) / (2 * end.a) + 0.5 * o.I * end.spin * end.spin,
   };
 }
 
