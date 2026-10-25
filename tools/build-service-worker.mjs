@@ -363,6 +363,11 @@ export const NEVER_PRECACHED = [
   // service worker after their first online use. Nothing here is installed, so
   // no precache tier grows. D-R10-65.
   /^(js\/observatory\/imagePacks\.js|js\/data\/observations\/(tessHd209458S56Frame|sdoHmiContinuum20240510|galileoMoon19921207|hiriseCerberusFossae)\.js)$/,
+  // The tides kernel (Prompt 204, TIDAL_KERNEL.md): closed forms, imported by no
+  // page until the investigations that use it are built. Listed so that a later
+  // instrument that imports it installs nothing; the idle tier has no room under
+  // a ceiling the standing size approval does not cover. D-R10-78.
+  /^js\/kernels\/tides\//,
   // The validation suite's groups and harness: fetched when the suite runs,
   // like physicsChecks.js itself (ON_DEMAND_ONLY below).
   /^js\/validation\/(groups\/|harness\.js$)/,

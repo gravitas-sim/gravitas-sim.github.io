@@ -877,6 +877,20 @@
       "student": false
     },
     {
+      "file": "TIDAL_KERNEL.md",
+      "kind": "feature",
+      "purpose": "Rings, Roche limits and analytic tides: the constant-Q kernel, its equations, limits and validation (Prompt 204, part A).",
+      "owner": 204,
+      "student": false
+    },
+    {
+      "file": "TIDAL_TORQUE_GATE.md",
+      "kind": "gate",
+      "purpose": "The tidal-torque gate: whether an engine scenario may apply a tidal torque as an extra force (Prompt 204, part B).",
+      "owner": 204,
+      "student": false
+    },
+    {
       "file": "TIME_DOMAIN_LADDER.md",
       "kind": "feature",
       "purpose": "Time-domain astronomy and the first distance-ladder rung.",
