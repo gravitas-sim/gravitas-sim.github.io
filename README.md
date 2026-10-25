@@ -341,7 +341,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->15222<!--/fact--> tests across <!--fact:jestSuites-->459<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->14927<!--/fact--> tests across <!--fact:jestSuites-->459<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
@@ -367,7 +367,7 @@ reports what the browser downloads at start-up separately from what is deferred:
 | ---------------------- | ------------------------------------------------------ | --------------------------------------------- |
 | CSS                    | <!--fact:buildCss-->209<!--/fact--> KB                 | 1                                             |
 | JavaScript at start-up | <!--fact:buildStartupJs-->589<!--/fact--> KB           | <!--fact:buildStartupFiles-->53<!--/fact-->   |
-| JavaScript on demand   | <!--fact:buildDeferredJs-->5562<!--/fact--> KB         | <!--fact:buildDeferredChunks-->448<!--/fact--> |
+| JavaScript on demand   | <!--fact:buildDeferredJs-->5563<!--/fact--> KB         | <!--fact:buildDeferredChunks-->448<!--/fact--> |
 | **Initial download**   | **<!--fact:buildInitialDownload-->798<!--/fact--> KB** |                                               |
 
 Those figures are the last build's, to the nearest kilobyte, and are written
@@ -586,7 +586,7 @@ broke Newton's third law, and a scenario that turned out to have no gravity in i
 
 ## Instructor resources
 
-All <!--fact:instructorDocuments-->540<!--/fact--> documents are generated from
+All <!--fact:instructorDocuments-->573<!--/fact--> documents are generated from
 the investigations at build time and live at
 [gravitas-sim.online/instructors/](https://gravitas-sim.online/instructors/):
 
