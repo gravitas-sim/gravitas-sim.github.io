@@ -14,6 +14,7 @@ import { test, expect } from './fixtures.js';
 import {
   lessonPlan,
   openInvestigation,
+  settled,
   walkToSid,
 } from './centralExperiment.js';
 
@@ -116,6 +117,7 @@ for (const c of CASES) {
           const m = await import('/js/theme.js');
           m.setTheme(id);
         }, theme);
+        await settled(page);
         const results = await axeOf(page);
         expect(
           results.violations.map(v => `${theme} ${v.id}: ${v.nodes[0]?.target}`)
@@ -123,6 +125,7 @@ for (const c of CASES) {
         for (const size of SIZES) {
           await page.setViewportSize(size);
           await expect(page.locator('#investigationTool')).toBeVisible();
+          await settled(page);
           expect(
             await undersized(page),
             `${theme} ${size.width}px controls under 24 px`
