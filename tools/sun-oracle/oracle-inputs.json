@@ -1,0 +1,41 @@
+{
+  "format": "gravitas.sun-oracle-inputs/1",
+  "prompt": 194,
+  "disk": {
+    "cx": 256,
+    "cy": 248,
+    "radiusPx": 235,
+    "pDeg": -15.3,
+    "b0Deg": -3.7,
+    "l0Deg": 221.4,
+    "distanceAu": 1.0123
+  },
+  "pixels": [
+    [270.5, 230.2],
+    [140.0, 330.0],
+    [300.0, 150.0],
+    [440.0, 290.0],
+    [435.0, 122.6]
+  ],
+  "ephemerisInstantsJdUt": [
+    2460441.0,
+    2459947.5,
+    2459765.0,
+    2460754.75,
+    2461338.5,
+    2458819.5
+  ],
+  "rateWindowsJdUt": [
+    [2460310.5, 2460324.5],
+    [2459765.0, 2459779.0],
+    [2460500.0, 2460514.0]
+  ],
+  "irradiance": [
+    { "fluxWm2": 1361.0, "distanceAu": 1.0 },
+    { "fluxWm2": 1361.5, "distanceAu": 0.9833 },
+    { "fluxWm2": 1360.8, "distanceAu": 1.0167 },
+    { "fluxWm2": 1362.3, "distanceAu": 0.9847 },
+    { "fluxWm2": 1359.9, "distanceAu": 1.014 }
+  ],
+  "rSunM": 6.957e8
+}

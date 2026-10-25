@@ -1,0 +1,15 @@
+{
+  "format": "gravitas.sun-failed-legs/1",
+  "prompt": 194,
+  "what": "Legs that fail as committed in thresholds.json and are left failing, each with its cause. No bound was moved, multiplied or restated. tests/sun.test.js holds each to this record, so a change that fixes or worsens one cannot pass unnoticed. Carl may rule on each later.",
+  "legs": {
+    "a7.noiseFree.synodicRoute": {
+      "bound": {
+        "noiseFreeSynodicRouteDegPerDay": 0.002
+      },
+      "cause": "The committed route adds the Earth's ecliptic rate (the change of the apparent Sun's longitude) to the Stonyhurst synodic rate. A feature's Stonyhurst longitude actually loses the sub-Earth point's rate along the SOLAR EQUATOR, dL0/dt plus 360 / 25.38, and the equator is inclined 7.25 degrees to the ecliptic, so the two rates differ by up to 1 / cos(7.25 degrees) - 1 = 0.8 percent of a degree a day (up to 0.008 degree a day), with a sign that follows the Earth's phase against the node. Measured, noise-free, twelve cases (three latitudes, four start dates): 0.008035 degree a day worst, 0.0075 to 0.0080 at 15 degrees across the four dates, signs alternating with the season; the error is the same weighted and unweighted (0.00799 against 0.00793 in March), so it is not the weights. The leg was committed with a bound set by a guess about curvature, not by this term. Left as committed and measured through the committed route. The kernel's own sidereal rate now corrects with the rate along the solar equator, and two rows ADDED after this one failed hold that (a7.noiseFree.equatorRoute 8.0e-5, under the same 0.002; b2.rateEquator 2.4e-4 against the oracle's daily L0 steps, under the committed 5e-4); neither stands in for the committed leg. Restating this leg to the equator route is Carl's.",
+      "measuredRange": [0.0079, 0.0081],
+      "ruling": "Relayed by the merge-queue session (Carl, AskUserQuestion to the merge-queue session, 2026-10-25); quoted verbatim: \"Leave failing, labelled (Recommended)\" = \"Keep the committed bound, record a7 with its cause, and merge into v3, as for the earlier legs.\""
+    }
+  }
+}

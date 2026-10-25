@@ -1,0 +1,206 @@
+{
+  "format": "gravitas.sun-thresholds/1",
+  "prompt": 194,
+  "committed": "Before any implementation output was inspected: this file was committed ahead of js/kernels/sun/, the validation tool, the oracle's inputs, script and results, and every test (Roadmap III, 7.5.8). A check that a measurement crosses is a failed check, reported and left failing; only Carl resets a bound. The reference differential-rotation coefficients below are typed from the cited publications by the session that wrote this file and were not re-read at their source (checked: false); they define the reference line, and a coefficient error moves the reference line, not the kernel's recovery of a rate, which is tested against whatever law is supplied.",
+  "corrections": [
+    "The degrees-per-day figures quoted for the primary law in definition.law (14.3267, -2.1188, -1.8317) are rounded by hand and wrong in the fourth decimal; the typed values are the microradians per second, and 1 microradian per second is 86400e-6 * 180 / pi = 4.950355 degrees per day, which gives 14.3263, -2.1188, -1.8316. Found by computing the conversion before any kernel code existed; no bound, coefficient or check depends on the rounded text."
+  ],
+  "definition": {
+    "what": "The Sun as a measurement: a pixel on a solar disc image becomes a heliographic latitude and longitude from the standard disc geometry (P, B0, L0 and the disc's centre and radius); tracked longitudes give a synodic rate, a sidereal rate and a period with an uncertainty; rates at stated latitudes are compared with a fixed-form reference law, of which only the equatorial term may be fitted and never more coefficients than there are distinct latitudes; a measured flux gives the Sun's luminosity and effective temperature through the radiation kernel. No result is an unrestricted latitude law.",
+    "geometry": "Thompson (2006, A&A 449, 791, 'Coordinate systems for solar image data', section 2 and the heliographic section) and Meeus (Astronomical Algorithms, 2nd ed., ch. 29). An image has sky orientation, north up, east left; pixel rows increase downward. dx = x - cx (to the right, solar west), dy = cy - y (up, solar north). The solar north pole is at position angle P, counterclockwise from image up. Normalised offsets (X, Y) = (dx, dy) / radiusPx are rotated by -P: x' = X cos P + Y sin P, y' = -X sin P + Y cos P. With no distance given the projection is orthographic (the observer at infinity): z' = sqrt(1 - x'^2 - y'^2), sin(lat) = y' cos B0 + z' sin B0, Stonyhurst longitude (positive west) = atan2(x', z' cos B0 - y' sin B0), Carrington longitude = L0 + Stonyhurst longitude. With distanceAu given the observer is at finite distance D = d / R_sun (R_sun the IAU 2015 B3 nominal 6.957e8 m, the AU exact): the apparent angular radius is theta_sun = asin(1 / D); the normalised radius r = hypot(X, Y) is linear in angle, theta = r theta_sun; the heliocentric angle from the sub-observer point is rho = asin(sin(theta) / sin(theta_sun)) - theta, in the image direction atan2(y', x'); the unit vector (sin rho cos a, sin rho sin a, cos rho) then goes through the same B0 relations. mu = cos of the angle between the surface normal and the line of sight: orthographic z'; perspective (z D - 1) / sqrt(D^2 - 2 z D + 1) in the observer frame. The inverse (heliographic to pixel) tilts (cos lat sin lon, sin lat, cos lat cos lon) by B0 (y_o = y cos B0 - z sin B0, z_o = z cos B0 + y sin B0), projects along the ray, rotates by +P and returns pixels; a point is on the visible side if z_o > 1 / D (orthographic: z_o > 0). A pixel with r > 1 is off the disc and is refused.",
+    "uncertainty": "A point's sigma in pixels (default 1.0, the placement of a click on a 512 to 1,024 pixel frame) goes to a longitude and latitude sigma by the secant: the half difference of the position at +sigma and -sigma along image x and along image y, in quadrature, with a displaced point that falls outside the disc clamped to r = 1. Near the limb the secant is large and one-sided: that is the foreshortening, not a defect.",
+    "law": "The fixed-form reference law is omega(phi) = A + B sin^2(phi) + C sin^4(phi), sidereal degrees per day, with the coefficients and citation carried as data. Primary: Howard, Harvey and Forgach (1990, Sol. Phys. 130, 295), A = 2.894, B = -0.428, C = -0.370 microradians per second, i.e. 14.3265, -2.1190, -1.8318 degrees per day (1 microradian per second = 4.95 degrees per day, exactly 180 / pi * 86400e-6). Second law, for the tracer systematic only: Snodgrass and Ulrich (1990, ApJ 351, 309), 2.851, -0.343, -0.474 microradians per second. Both have checked: false. Carrington's sidereal rate is 360 / 25.38 = 14.1844 degrees per day (Meeus ch. 29), its synodic period 27.2753 days.",
+    "sidereal": "The Carrington frame turns at 14.1844 degrees per day sidereal; the Stonyhurst longitude of a feature changes at the synodic rate omega_syn = omega_sid - omega_E, with omega_E the Earth's mean heliocentric rate over the window (the change of the apparent Sun's longitude from js/kernels/sky/solar.js, unwrapped, divided by the interval, minus the precession in longitude 50.29 arcseconds per Julian year, so that a sidereal year gives 360 / 365.25636 = 0.985609 degrees per day). The Carrington longitude of a feature (Stonyhurst + L0 of its frame) changes at omega_sid - 14.1844, a second route that needs no Earth rate and serves as a self-consistency check.",
+    "track": "A track is a list of {jd, x, y, sigmaPx?, disk} (disk: cx, cy, radiusPx, pDeg, b0Deg, l0Deg, distanceAu?). The fit is the weighted least-squares line of Stonyhurst longitude against time with weights 1 / sigma_lon^2; the reported sigma of the rate is sqrt(1 / sum w (t - tbar)^2) times sqrt(max(1, chi2 / dof)) (inflated by the Birge ratio, never reduced below the stated sigma; dof = n - 2). A point with mu below muWarn (0.35) adds the warning 'foreshortening' and the result is not precise; a point with mu below muMin (0.1) is refused 'limb'. Fewer than three usable points, or a rate whose sigma exceeds half its magnitude, is refused ('too-few', 'not-constrained'). The latitude is the weighted mean of the points' latitudes with the sample standard deviation reported.",
+    "lawFit": "Given tracers {latDeg, rate, sigma} (sidereal degrees per day) and a law, the free coefficients (a subset of A, B, C; default only A) are fitted by weighted least squares with the others held at the law's values: for A alone A = sum w (omega - B s^2 - C s^4) / sum w and sigma_A = sqrt(1 / sum w), s = sin(lat), inflated by sqrt(max(1, chi2 / dof)) when dof > 0. The fit is refused ('under-determined') when more coefficients are free than there are distinct latitudes (distinct: sin^2 differing by more than 1e-3); when the number free equals the number of latitudes the fit is exact, dof = 0, and the result says so (zeroDof) and carries no goodness of fit. The comparison against the law (no fit) gives the predicted rate, the difference, and its z with the tracer sigma and a stated floor of 0.3 degrees per day for group-to-group scatter.",
+    "irradiance": "A flux S measured at distance d (AU) is corrected to 1 AU, S1 = S d^2; L = 4 pi AU^2 S1 (AU exact, IAU 2012 B2); Teff = (L / (4 pi R^2 sigma_SB))^(1/4) through js/kernels/radiation/planck.js's effectiveTemperature, R = 6.957e8 m. Sigma: dL/L = sqrt((dS/S)^2 + (2 dd/d)^2), dTeff/Teff = (1/4) sqrt((dL/L)^2 + (2 dR/R)^2). A series summary is the mean and the standard error of the AU-corrected values with the sample scatter, the instrument named by the caller.",
+    "ephemeris": "The sub-Earth heliographic point from Meeus ch. 29 with the apparent Sun of js/kernels/sky/solar.js: theta = (JD - 2398220) 360 / 25.38; I = 7.25 degrees; K = 73.6667 + 1.3958333 (JD - 2396758) / 36525 degrees; lambda the Sun's true longitude of the mean equinox of date (the apparent longitude minus the nutation in longitude plus the aberration), lambda' the apparent longitude; tan x = -cos lambda' tan epsilon (epsilon the true obliquity); tan y = -cos(lambda - K) tan I; P = x + y; sin B0 = sin(lambda - K) sin I; tan eta = -sin(lambda - K) cos I / -cos(lambda - K); L0 = eta - theta (mod 360). A pack built from Horizons' sub-Earth coordinates carries its own pinned values; this module is the check and the fallback.",
+    "oracle": "numpy 2.2.6 (ray tracing: the observer, the ray through the pixel, its intersection with the sphere, and rotation matrices by B0 and P; no Gravitas code and not the closed forms above), astropy 6.1.7 (get_sun in the true ecliptic of date for the Sun's direction; the solar pole and node from Carrington's elements as vectors; P, B0, L0 as angles between vectors) and scipy 1.15.3 (constants sigma and au), run offline with python -I in the scratch venv oracle180; nothing installed. A cited solar-coordinates package (sunpy, or the SolarSoft routines) is not installed and was not used: tier b4 is NOT RUN.",
+    "seed": "sun-194; every ensemble draws from named streams of js/random/streams.js ('noise', the seed, the check id); a trial count is the figure given in the check"
+  },
+  "rules": {
+    "level": 0.95,
+    "z": 1.959964,
+    "ensembleTrials": 2000,
+    "defaultSigmaPx": 1.0,
+    "muWarn": 0.35,
+    "muMin": 0.1,
+    "minPoints": 3,
+    "relativeSigmaRefuse": 0.5,
+    "groupScatterFloorDegPerDay": 0.3,
+    "standardDisk": {
+      "cx": 256,
+      "cy": 248,
+      "radiusPx": 235
+    },
+    "refusalCodes": [
+      "too-few",
+      "off-disc",
+      "limb",
+      "bad-disk",
+      "bad-time",
+      "bad-sigma",
+      "not-constrained",
+      "under-determined",
+      "bad-law",
+      "bad-free",
+      "flux",
+      "distance",
+      "empty"
+    ],
+    "noUnrestrictedLaw": "no function fits more than the law's coefficients that the number of distinct latitudes allows, and none returns B or C without being told they are free"
+  },
+  "checks": {
+    "a1.roundtrip.geometry": {
+      "what": "four disk configurations (P, B0, distance) = (0, 0, none), (-20, 6.5, 1.0167 AU), (24, -7, 0.9833 AU), (12.5, 3.2, none) on the standard disk, 1000 positions each with latitude uniform in +/-75 degrees and Stonyhurst longitude uniform in +/-85 degrees, kept if mu >= 0.05: heliographic to pixel to heliographic, and pixel to heliographic to pixel",
+      "bounds": {
+        "degrees": 1e-08,
+        "pixels": 1e-06
+      }
+    },
+    "a2.geometry.special": {
+      "what": "closed forms: the disc centre is (lat B0, Stonyhurst 0, Carrington L0, mu 1); with P = 0 and B0 = 0 (orthographic) the top limb is latitude 90 and the east and west limbs Stonyhurst -90 and +90; with P = 90 the left limb is latitude 90; with B0 = 7.25 the pixel straight up at r = cos B0 is latitude 90 with mu = sin B0; mu = sqrt(1 - r^2) in the orthographic case; with distanceAu 1 the west limb (r = 1) is Stonyhurst 90 - asin(R_sun / AU) degrees; longitude increases strictly with x; r > 1 is refused off-disc",
+      "bounds": {
+        "degrees": 1e-09,
+        "muRelative": 1e-12
+      }
+    },
+    "a3.rotation.law": {
+      "what": "the law at 0, 30 and 60 degrees from its closed form with the typed coefficients; 360 / 25.38 = 14.1844 degrees per day; the Carrington synodic period 360 / (360 / 25.38 - 360 / 365.25636) = 27.2753 days; the Howard and Snodgrass laws differ by at most the stated group scatter floor (0.3 degrees per day) at 0, 15, 30, 45 and 60 degrees",
+      "bounds": {
+        "lawRelative": 1e-12,
+        "carringtonDegPerDay": 0.0001,
+        "synodicPeriodDays": 0.0005,
+        "tracerSpreadDegPerDay": 0.3
+      }
+    },
+    "a4.sidereal": {
+      "what": "the Earth's rate from the kernel's Sun over a one-day window at perihelion (2024-01-03 00:38 UT) and aphelion (2024-07-05 05:06 UT) against the closed form 0.985609 (1 + e cos nu)^2 / (1 - e^2)^(3/2) with e = 0.016709 (nu = 0 and 180 degrees): 1.0192 and 0.9534; the mean over a sidereal year (365.25636 days from 2024-01-01 00:00 UT) against 360 / 365.25636; synodic from sidereal and back is the identity",
+      "bounds": {
+        "extremaDegPerDay": 0.001,
+        "yearDegPerDay": 0.0001,
+        "identityAbsolute": 1e-12
+      }
+    },
+    "a5.sigma.secant": {
+      "what": "at the disc centre (P = 0, B0 = 0, orthographic) the secant sigma of longitude and latitude for a 0.3 px sigma against the analytic (sigma / R) in degrees; along a radial sweep r = 0, 0.2, 0.4, 0.6, 0.8, 0.9, 0.95, 0.98 the longitude sigma does not decrease; at mu about 0.2 it is at least 3 times the centre value",
+      "bounds": {
+        "centreRelative": 1e-06,
+        "limbRatioMin": 3
+      }
+    },
+    "a6.irradiance": {
+      "what": "1361 W/m2 at 1 AU gives L within 5e-4 of the IAU 2015 B3 nominal 3.828e26 W and Teff within 0.5 K of the nominal 5772 K; L to S to L is the identity; the same L from S at 0.9833 AU as from S / 0.9833^2 at 1 AU; the closed-form sigma of L and Teff for dS = 0.5 W/m2, dd = 0.0005 AU, dR = 0 and dR/R = 1e-4; a hand-made 14-value series: mean and standard error exactly",
+      "bounds": {
+        "luminosityRelativeToIau": 0.0005,
+        "teffKelvinToIau": 0.5,
+        "identityRelative": 1e-12,
+        "sigmaRelative": 1e-12
+      }
+    },
+    "a7.track.recovery": {
+      "what": "a synthetic spot at latitude 0, 15 and 30 degrees rotating at the primary law's sidereal rate, seen eight times a day apart at 12:00 UT from the Stonyhurst longitude -50 degrees, on four start dates (2024-03-06, 2024-06-09, 2024-09-10, 2024-12-07; P, B0, L0 per frame from this kernel's ephemeris), pixels made by the inverse geometry: noise-free, the sidereal rate by the synodic route plus the Earth's rate is within the stated bound and by the Carrington route within the tight one; with a 0.5 px Gaussian placement noise (named stream, one draw per case) the synodic route is within 4 reported sigma and below 0.05 degrees per day",
+      "bounds": {
+        "noiseFreeSynodicRouteDegPerDay": 0.002,
+        "noiseFreeCarringtonRouteDegPerDay": 1e-08,
+        "noisySigmas": 4,
+        "noisyAbsoluteDegPerDay": 0.05
+      }
+    },
+    "a8.fit.law": {
+      "what": "three tracers at 10, 20 and 30 degrees with rates exactly the primary law plus 0.12 degrees per day and equal sigmas: the A-only fit returns A + 0.12, sigma_A = sigma / sqrt(3) and zero chi-square; the closed form A = sum w (omega - B s^2 - C s^4) / sum w on unequal sigmas",
+      "bounds": {
+        "parameterAbsolute": 1e-10,
+        "sigmaRelative": 1e-12
+      }
+    },
+    "b1.pixels": {
+      "what": "five pinned pixel positions on a pinned disk (centre 256, 248; radius 235 px; P -15.3, B0 -3.7, L0 221.4 degrees; distance 1.0123 AU), including one at r = 0.93, through the production module against the oracle's ray-traced latitude, Stonyhurst and Carrington longitude, and mu",
+      "bounds": {
+        "degrees": 1e-07,
+        "mu": 1e-09
+      }
+    },
+    "b2.ephemeris": {
+      "what": "six pinned instants (2024-05-10 12:00, 2023-01-03 00:00, 2022-07-04 12:00, 2025-03-20 06:00, 2026-10-25 00:00 and 2019-12-01 00:00 UT) P, B0 and L0 of this kernel against the oracle's vector construction from astropy's Sun and Carrington's elements; and the Earth's mean rate over three 14-day windows against astropy's longitude change",
+      "bounds": {
+        "pB0L0Degrees": 0.02,
+        "rateDegPerDay": 0.0005
+      }
+    },
+    "b3.irradiance": {
+      "what": "five pinned (flux, distance) pairs: S1, L and Teff against numpy and scipy.constants (sigma, au) with R = 6.957e8 m",
+      "bounds": {
+        "relative": 1e-09
+      }
+    },
+    "b4.package": {
+      "what": "five pixel positions against a cited independent solar-coordinates package (sunpy's heliographic frames or SolarSoft's wcs_get_coord)",
+      "bounds": {}
+    },
+    "c1.rate.coverage": {
+      "what": "2000 synthetic tracks (latitude drawn from 5, 15, 25 degrees; start date drawn across a year; eight daily points from -50 degrees; Gaussian placement noise of the declared 1.0 px per point): the fraction of 95 percent intervals on the sidereal rate that contain the true rate",
+      "bounds": {
+        "coverageBand": [
+          0.93,
+          0.985
+        ]
+      }
+    },
+    "c2.law.coverage": {
+      "what": "2000 draws of three tracers at 10, 20, 30 degrees with Gaussian rate noise of the declared 0.05 degrees per day around the law with the equatorial term shifted by a draw in +/-0.3: the fraction of 95 percent intervals on A that contain the true A",
+      "bounds": {
+        "coverageBand": [
+          0.93,
+          0.985
+        ]
+      }
+    },
+    "c3.luminosity.coverage": {
+      "what": "2000 draws of a flux (true 1361, Gaussian 0.5 W/m2) at a distance (true 0.9833, Gaussian 0.0005 AU, a flux that scales as 1 / d^2): the fraction of 95 percent intervals on L that contain the true L",
+      "bounds": {
+        "coverageBand": [
+          0.935,
+          0.965
+        ]
+      }
+    },
+    "d1.limb.widened": {
+      "what": "the same three-point daily track at latitude 10 degrees at Stonyhurst longitudes 56, 69.4 and 82.8 degrees (a limb track, mu from 0.56 to 0.12) against the same at -13.4, 0 and 13.4 (a disc track), identical 1.0 px noise: the limb track returns the warning 'foreshortening', precise false, and a rate sigma at least 3 times the disc track's; the disc track returns no warning and precise true",
+      "bounds": {
+        "sigmaRatioMin": 3
+      }
+    },
+    "d2.limb.coverage": {
+      "what": "2000 noisy limb tracks as in d1 (trials with a point displaced outside the disc are redrawn and counted): the fraction of 95 percent intervals that contain the true rate: widening must not make the interval dishonest",
+      "bounds": {
+        "coverageMin": 0.9
+      }
+    },
+    "d3.refusals": {
+      "what": "hostile inputs each return a refusal with a stable code and never throw or return NaN: fewer than three points; a pixel outside the disc; a point at mu below 0.1; a zero radius, a non-finite centre, a P above 360; equal times for all points; a non-positive sigma; a track whose sigma exceeds half its rate; a flux of zero, negative or NaN; a distance of zero or negative; an empty series; a law with a missing coefficient",
+      "bounds": {
+        "refusedAll": true
+      }
+    },
+    "d4.underdetermined": {
+      "what": "three coefficients free with two distinct latitudes is refused 'under-determined' with the numbers named; two free with two latitudes returns an exact solution with zeroDof true and no chi-square; only A free with a single latitude works; free coefficients that are not a subset of A, B, C are refused 'bad-free'; two tracers at the same latitude count as one",
+      "bounds": {
+        "refusedAll": true
+      }
+    },
+    "e1.authentic": {
+      "what": "a 14-day daily sequence of HMI continuum frames with a tracked spot group at two latitudes: each rate within 2 sigma of the primary law at its latitude, with sigma the fit's sigma and the 0.3 degrees per day group scatter in quadrature",
+      "bounds": {
+        "sigmas": 2
+      }
+    },
+    "e2.irradiance": {
+      "what": "the mean of a measured 14-day daily total-solar-irradiance series, AU-corrected: L within 0.5 percent of the IAU 2015 B3 nominal and Teff within 15 K of 5772 K",
+      "bounds": {
+        "luminosityRelative": 0.005,
+        "teffKelvin": 15
+      }
+    }
+  }
+}

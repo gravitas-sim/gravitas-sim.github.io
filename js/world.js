@@ -11,29 +11,22 @@
 //   pendingSettingsOverride  settings from a link, waiting for the next build
 //   (allBodies               a function of the physics lists, not state)
 //
-// There is no context object. The state moved with the code that owns it, so
-// js/ui.js hands nothing in; it reaches two of the pieces it still writes
-// through setBuiltSystem() (Blank Simulation) and setPendingSettings() (Apply),
-// and marks the world touched through markWorldTouched(). Module level `let`s,
-// not an object, because the physics lists the rest of the world reads are
-// module-level bindings too and a second holder would be a second truth.
+// No context object: js/ui.js reaches the pieces it still writes through
+// setBuiltSystem() (Blank Simulation), setPendingSettings() (Apply) and
+// markWorldTouched(). Module-level `let`s, because the physics lists are
+// module-level bindings and a second holder would be a second truth.
 //
-// Nothing runs at import: initWorld() wires the listeners and is called by
-// js/ui.js where those statements ran. World construction stays synchronous
-// and seeded (initialize_simulation -> withSeed -> js/world/build.js).
+// Nothing runs at import: initWorld() wires the listeners. World construction
+// stays synchronous and seeded (initialize_simulation -> withSeed ->
+// js/world/build.js). The embed shell is folded in (it was js/embed.js): its
+// ready signal waits on the first world, and no route gains a request.
 //
-// The embed shell is folded in (it was js/embed.js) because its ready signal
-// waits on the first world, and to pay for this module's request: no route
-// gains one.
-//
-// Embed mode (`?embed=1`) turns any Gravitas URL into an interactive figure for
-// an iframe in a course page. It is a query parameter and a share payload is a
-// fragment (`#3z...`), so the two cannot collide and any share link becomes
-// embeddable by adding one parameter; js/shareState.js is untouched. The
-// presentation shell (js/presentation.js) sets body.presentation-embed and CSS
-// takes the rail, readout, footer and front door off the screen. What stays is
-// the canvas, play/pause, speed, reset view and the inspector; one affordance
-// is added, an "Open in Gravitas" link to the same state without embed=1.
+// Embed mode (`?embed=1`) turns any Gravitas URL into an interactive figure
+// for an iframe. A query parameter cannot collide with a share fragment, so
+// any share link becomes embeddable; js/presentation.js sets
+// body.presentation-embed and CSS takes the rail, readout, footer and front
+// door off. What stays is the canvas, play/pause, speed, reset view, the
+// inspector and an "Open in Gravitas" link to the same state without embed=1.
 // =============================================================================
 
 import {

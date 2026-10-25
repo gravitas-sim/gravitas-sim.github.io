@@ -2471,6 +2471,17 @@ test.describe('the central experiment of each investigation', () => {
         [80, 7.33, 0.05],
       ],
     },
+    // ---- Weighing Jupiter From Its Moons (Roadmap III, Prompt 193) -------------
+    {
+      id: 'weighing-jupiter',
+      title:
+        'weighing-jupiter: sampled once a night, Io gives a clean wrong period and the slower moons their own @accepts:ce.weighing-jupiter',
+      row: /^Period$/i,
+      values: [
+        [1, 2.3017, 0.02],
+        [3, 7.1415, 0.03],
+      ],
+    },
   ];
   for (const c of SURVEY) {
     test(c.title, async ({ page, app }) => {

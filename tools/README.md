@@ -86,6 +86,7 @@ current, and the orchestrator checks it.
 | `formula-size.mjs` | node tools/formula-size.mjs |  |
 | `frame-pipeline-synth.mjs` | The committed scene of the frame-pipeline checks (Prompt 185, FRAME_PIPELINE.md) |  |
 | `frame-pipeline-validate.mjs` | The frame pipeline against its committed thresholds (Prompt 185) | `npm run frame-pipeline:validate` |
+| `galilean-validate.mjs` | Validation of the Galilean-moon kernel (Prompt 193, SATELLITE_EPHEMERIS.md) |  |
 | `generate-graph.mjs` | Every generated artifact, what it is made from, and what it must follow |  |
 | `generate-lesson-cards.mjs` | A card picture for a lesson that stages its own scene | `npm run cards` |
 | `generate-scenario-thumbnails.mjs` | Scenario thumbnail generator | `npm run thumbnails` |
@@ -186,6 +187,7 @@ current, and the orchestrator checks it.
 | `stellar-shots.mjs` | Captures of the Stellar Lab |  |
 | `storage-matrix.mjs` | npm run storage:matrix | `npm run storage:matrix` |
 | `storage-profile.mjs` | npm run storage:profile -- --capture | `npm run storage:profile` |
+| `sun-validate.mjs` | The solar kernel against its committed thresholds (Prompt 194) | `npm run sun:validate` |
 | `surface-gate.mjs` | The surface gate: one decision function, the same for every surface | `npm run surface:check`, `npm run surface:measure`, `npm run surface:write`, `npm run surface:report` |
 | `three-shaders.mjs` | three.js shaders in the bundle: pruned to what the 3-D view can reach, then |  |
 | `thumbnail-config.mjs` | Thumbnail capture settings |  |

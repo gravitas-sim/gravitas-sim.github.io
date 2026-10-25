@@ -168,6 +168,7 @@ const LOADERS = {
   'measuring-the-moon': () => import('./measuring-the-moon.js'),
   'how-far-is-that-star': () => import('./how-far-is-that-star.js'),
   'a-binary-stars-orbit': () => import('./a-binary-stars-orbit.js'),
+  'weighing-jupiter': () => import('./weighing-jupiter.js'),
 };
 // </generated:loaders>
 
@@ -253,6 +254,7 @@ const TRANSLATIONS = {
     'measuring-the-moon': () => import('./es/measuring-the-moon.js'),
     'how-far-is-that-star': () => import('./es/how-far-is-that-star.js'),
     'a-binary-stars-orbit': () => import('./es/a-binary-stars-orbit.js'),
+    'weighing-jupiter': () => import('./es/weighing-jupiter.js'),
   },
 };
 // </generated:translations>

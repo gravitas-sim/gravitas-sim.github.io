@@ -44,6 +44,9 @@ const STATIC_FILES = [
   // The Sky Lab's planet positions (ephemeris-packs/solar-system-2025-2045.json,
   // Prompt 106): the mission lab's pack as a JSON copy, fetched by /sky/.
   'sky/ephemeris.json',
+  // Jupiter's moons (ephemeris-packs/galilean-2025-11.json, Prompt 193): the
+  // pack the moon instruments fetch when a Jupiter lesson opens, never precached.
+  'sky/galilean-moons.json',
   // The galactic tables' rows (data-packs/gaia-dr3-*.json and
   // milky-way-rotation-curve.json), fetched by the galactic instruments and
   // the Observatory.
@@ -54,6 +57,13 @@ const STATIC_FILES = [
   'frames/sdo-hmi-continuum-20240510.json',
   'frames/galileo-moon-19921207.json',
   'frames/hirise-cerberus-fossae.json',
+  // The crater regions (Prompt 195 part 2, CRATER_COUNTING.md): four cropped
+  // display frames and the regional lists, fetched on demand; in no precache tier.
+  'frames/craters-moon-highland.json',
+  'frames/craters-moon-mare.json',
+  'frames/craters-mars-highland.json',
+  'frames/craters-mars-plains.json',
+  'frames/craters-regions.json',
   // The variable-star tables' rows (data-packs/tess-su-dra-s15.json and two
   // more, Roadmap II Prompt 96), fetched by the variable-star instruments.
   'variables/tess-su-dra-s15.json',

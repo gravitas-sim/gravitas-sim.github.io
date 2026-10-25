@@ -65,6 +65,13 @@
       "student": true
     },
     {
+      "file": "ATMOSPHERES_GATE_I.md",
+      "kind": "gate",
+      "purpose": "Atmospheres gate I: the family and its limits, thresholds committed first, the rights rule, the measured checks and the verdict (Prompt 199).",
+      "owner": 199,
+      "student": false
+    },
+    {
       "file": "BRANCHING.md",
       "kind": "process",
       "purpose": "Branches, the publish rule and the table of generated artifacts.",
@@ -765,6 +772,13 @@
       "student": false
     },
     {
+      "file": "SATELLITE_EPHEMERIS.md",
+      "kind": "feature",
+      "purpose": "Jupiter's moons from Horizons: the pack, the cadence, the weighing and the validation table.",
+      "owner": 193,
+      "student": true
+    },
+    {
       "file": "SCAFFOLDING.md",
       "kind": "feature",
       "purpose": "Hints, explainers and feedback.",
@@ -867,6 +881,13 @@
       "kind": "gate",
       "purpose": "Studio round-trip architecture gate.",
       "owner": null,
+      "student": false
+    },
+    {
+      "file": "SUN_KERNEL.md",
+      "kind": "feature",
+      "purpose": "The Sun as a measurement: disc geometry, rotation from tracked spots bounded by a reference law, and the solar constant to luminosity and temperature, with their validation (Prompt 194).",
+      "owner": 194,
       "student": false
     },
     {
