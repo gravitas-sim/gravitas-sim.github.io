@@ -369,6 +369,10 @@ export const NEVER_PRECACHED = [
   // idle tier has no room under a ceiling the standing size approval does not
   // cover. D-R10-76.
   /^js\/measure\/craters\.js$/,
+  // The solar kernel (Prompt 194, SUN_KERNEL.md): imported by no page yet (the
+  // investigations that will use it wait for the frames and the irradiance series).
+  // Listed so that a later panel that imports it installs nothing. D-R10-79.
+  /^js\/kernels\/sun\//,
   // The validation suite's groups and harness: fetched when the suite runs,
   // like physicsChecks.js itself (ON_DEMAND_ONLY below).
   /^js\/validation\/(groups\/|harness\.js$)/,
