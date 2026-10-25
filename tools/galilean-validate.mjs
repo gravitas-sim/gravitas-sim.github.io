@@ -38,6 +38,11 @@ import {
   truthMarks,
 } from '../js/satellites/cadence.js';
 import { fitSinusoid, kepler, FitRefusal } from '../js/satellites/weigh.js';
+import {
+  frameDigest,
+  measureFrame,
+  renderFrame,
+} from '../js/satellites/sequence.js';
 import { createEphemeris } from '../js/mission/ephemeris.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -488,6 +493,47 @@ export function runLegs(model = loadModel()) {
         'refuses too few marks and a span shorter than the period',
         rows,
         few && short
+      )
+    );
+  }
+  // g1: the synthetic frames.
+  {
+    const b = L['g1.frames'];
+    let worstPx = 0;
+    let measured = 0;
+    let skipped = 0;
+    let stable = true;
+    epochs.forEach((e, i) => {
+      const f = renderFrame(model, e, i);
+      if (
+        i % 10 === 0 &&
+        frameDigest(f) !== frameDigest(renderFrame(model, e, i))
+      )
+        stable = false;
+      const r = measureFrame(model, e, f);
+      for (const id of MOON_IDS) {
+        if (!r.moons[id]) {
+          skipped++;
+          continue;
+        }
+        measured++;
+        const tr = f.truth[id];
+        const dx = (r.moons[id].x - tr.x) * r.pixelsPerRj;
+        const dy = (r.moons[id].y - tr.y) * r.pixelsPerRj;
+        worstPx = Math.max(worstPx, Math.hypot(dx, dy));
+      }
+    });
+    out.push(
+      leg(
+        'g1.frames',
+        'centroid within 0.15 pixel of the rendered position; digest stable',
+        {
+          worstPixel: worstPx,
+          measured,
+          notMeasuredBlendedOrOnTheDisk: skipped,
+          digestStable: stable,
+        },
+        worstPx <= 0.15 && stable
       )
     );
   }
