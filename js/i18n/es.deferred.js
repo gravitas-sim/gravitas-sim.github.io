@@ -1,21 +1,14 @@
 // =============================================================================
 // Messages that arrive with the chunk that needs them
 // -----------------------------------------------------------------------------
-// Strings for panels nobody sees on a first visit: the two scenario-specific
-// instruments, the radial velocity analysis workspace, and the transit noise
-// budget. Together they are about twelve kilobytes of prose, and every visitor
-// was downloading all of it at start-up so that four scenarios and one lesson
-// widget could have their labels.
+// Strings for panels nobody sees on a first visit (the scenario-specific
+// instruments, the radial velocity workspace, the transit noise budget), about
+// twelve kilobytes of prose that every visitor was downloading at start-up.
 //
-// They are a separate catalog rather than part of js/i18n/es.js because a
-// single object cannot be code-split: esbuild follows the static import and
-// the whole thing lands in the entry graph. The bridges that load those panels
-// register these through registerMessages() at the same moment, so a reader
-// who opens one gets the strings and a reader who does not never fetches them.
-//
-// Everything else about them is normal. The audit and the i18n tests merge
-// both halves, so coverage, placeholder and length checks still see one
-// catalog.
+// A separate catalog rather than part of js/i18n/es.js because one object
+// cannot be code-split. The bridges that load those panels register these
+// through registerMessages() at the same moment. The audit and the i18n tests
+// merge both halves, so coverage, placeholder and length checks see one catalog.
 // =============================================================================
 
 export const ES_DEFERRED = {
@@ -1936,9 +1929,15 @@ export const ES_DEFERRED = {
 
   'inv.seq.observing.title': 'Observar y medir',
   'inv.seq.observing.blurb':
-    'Cómo aprender algo cierto con un telescopio: elegir objetivos, programar una sesión, medir espectros y curvas de luz y preguntar qué deja fuera un sondeo. Usa la profundidad cuantitativa donde la hay. Mejor después de El cielo.',
+    'Cómo aprender algo cierto con un telescopio: qué afirman una medición y su incertidumbre, elegir objetivos, programar una sesión, medir espectros y curvas de luz y preguntar qué deja fuera un sondeo. Usa la profundidad cuantitativa donde la hay. Mejor después de El cielo.',
+  'inv.seq.observing.what-is-a-measurement':
+    'Empieza aquí: marca una estrella sintética una y otra vez, y lee la media, su error estándar y lo que compran más marcas.',
+  'inv.seq.observing.what-does-plus-minus-claim':
+    'Cuenta con qué frecuencia un más-menos declarado contiene la verdad, y por qué un instrumento preciso y sesgado se equivoca con seguridad.',
+  'inv.seq.observing.when-the-method-must-refuse':
+    'Datos que solo fijan un producto de dos parámetros, y un modelo que no describe los datos: qué informa un análisis honesto en lugar de un número.',
   'inv.seq.observing.plan-a-night':
-    'Empieza aquí: elige objetivos para una noche en un telescopio, con la hora y el lugar del Laboratorio del cielo.',
+    'Elige objetivos para una noche en un telescopio, con la hora y el lugar del Laboratorio del cielo.',
   'inv.seq.observing.twelve-nights':
     'Una campaña real de doce noches: el clima, la Luna y lo que te cuesta el calendario.',
   'inv.seq.observing.what-a-spectrum-is-made-of':

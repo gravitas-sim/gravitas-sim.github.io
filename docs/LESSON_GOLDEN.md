@@ -89,7 +89,7 @@ The browser half takes about seven minutes on the private port.
 | 7 | `binary-star-planets` | 2: `key:explore.requires`, `lock:{"placement":true}` |
 | 8 | `black-holes` | 2: `key:question.checklist`, `key:read.explainView` |
 | 9 | `weighing-stars` | 2: `key:explore.showBarycenter`, `key:read.showBarycenter` |
-| 10 | `a-lens-passing-by` | 1: `key:predict.hints` |
+| 10 | `what-is-a-measurement` | 2: `key:predict.hints`, `key:question.maxUncertainty` |
 | 11 | `a-universe-of-stars` | 1: `key:measure.checklist` |
 | 12 | `detect-this-planet` | 1: `key:read.allowInspector` |
 | 13 | `extending-an-experiment` | 1: `key:measure.compute` |

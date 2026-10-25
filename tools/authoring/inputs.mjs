@@ -50,6 +50,11 @@ export async function loadAuthoringInputs() {
       if (!name.endsWith('.js')) continue;
       const id = name.replace(/\.js$/, '');
       const mod = await import(`../../${dir}/${name}`);
+      // A file that holds several lessons' shadows, keyed by lesson id
+      // (D-R10-67), is read through the per-lesson re-exports beside it.
+      const keys = Object.keys(mod.default ?? {});
+      if (keys.length && keys.every(k => INVESTIGATIONS.some(i => i.id === k)))
+        continue;
       translations[locale][id] = { data: mod.default, file: `${dir}/${name}` };
     }
   }

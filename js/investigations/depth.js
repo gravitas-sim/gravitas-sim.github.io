@@ -106,6 +106,12 @@ const EXTENSIONS = {
     import('../data/investigations/depth/why-the-bright-ones-win.js'),
   'the-completeness-curve': () =>
     import('../data/investigations/depth/the-completeness-curve.js'),
+  'what-is-a-measurement': () =>
+    import('../data/investigations/depth/what-is-a-measurement.js'),
+  'what-does-plus-minus-claim': () =>
+    import('../data/investigations/depth/what-does-plus-minus-claim.js'),
+  'when-the-method-must-refuse': () =>
+    import('../data/investigations/depth/when-the-method-must-refuse.js'),
 };
 
 /** Their Spanish, loaded only for a Spanish reader. */
@@ -168,6 +174,12 @@ const WORDS = {
       import('../data/investigations/depth/es/why-the-bright-ones-win.js'),
     'the-completeness-curve': () =>
       import('../data/investigations/depth/es/the-completeness-curve.js'),
+    'what-is-a-measurement': () =>
+      import('../data/investigations/depth/es/what-is-a-measurement.js'),
+    'what-does-plus-minus-claim': () =>
+      import('../data/investigations/depth/es/what-does-plus-minus-claim.js'),
+    'when-the-method-must-refuse': () =>
+      import('../data/investigations/depth/es/when-the-method-must-refuse.js'),
     'missing-mass': () =>
       import('../data/investigations/depth/es/missing-mass.js'),
     'the-turning-sky': () =>

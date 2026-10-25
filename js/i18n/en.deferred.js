@@ -1,21 +1,14 @@
 // =============================================================================
 // Messages that arrive with the chunk that needs them
 // -----------------------------------------------------------------------------
-// Strings for panels nobody sees on a first visit: the two scenario-specific
-// instruments, the radial velocity analysis workspace, and the transit noise
-// budget. Together they are about twelve kilobytes of prose, and every visitor
-// was downloading all of it at start-up so that four scenarios and one lesson
-// widget could have their labels.
+// Strings for panels nobody sees on a first visit (the scenario-specific
+// instruments, the radial velocity workspace, the transit noise budget), about
+// twelve kilobytes of prose that every visitor was downloading at start-up.
 //
-// They are a separate catalog rather than part of js/i18n/en.js because a
-// single object cannot be code-split: esbuild follows the static import and
-// the whole thing lands in the entry graph. The bridges that load those panels
-// register these through registerMessages() at the same moment, so a reader
-// who opens one gets the strings and a reader who does not never fetches them.
-//
-// Everything else about them is normal. The audit and the i18n tests merge
-// both halves, so coverage, placeholder and length checks still see one
-// catalog.
+// A separate catalog rather than part of js/i18n/en.js because one object
+// cannot be code-split. The bridges that load those panels register these
+// through registerMessages() at the same moment. The audit and the i18n tests
+// merge both halves, so coverage, placeholder and length checks see one catalog.
 // =============================================================================
 
 export const EN_DEFERRED = {
@@ -1915,9 +1908,15 @@ export const EN_DEFERRED = {
 
   'inv.seq.observing.title': 'Observing and measuring',
   'inv.seq.observing.blurb':
-    'How to learn something true from a telescope: choose targets, schedule a run, measure spectra and light curves, and ask what a survey leaves out. Uses the quantitative depth where there is one. Better after The sky.',
+    'How to learn something true from a telescope: what a measurement and its uncertainty claim, choose targets, schedule a run, measure spectra and light curves, and ask what a survey leaves out. Uses the quantitative depth where there is one. Better after The sky.',
+  'inv.seq.observing.what-is-a-measurement':
+    'Start here: mark one synthetic star again and again, and read the mean, its standard error and what more marks buy.',
+  'inv.seq.observing.what-does-plus-minus-claim':
+    'Count how often a stated plus-or-minus holds the truth, and why a precise, biased instrument is confidently wrong.',
+  'inv.seq.observing.when-the-method-must-refuse':
+    'Data that fix only a product of two parameters, and a model that does not describe the data: what an honest analysis reports instead of a number.',
   'inv.seq.observing.plan-a-night':
-    'Start here: choose targets for a night at a telescope, with the Sky Lab’s time and place.',
+    'Choose targets for a night at a telescope, with the Sky Lab’s time and place.',
   'inv.seq.observing.twelve-nights':
     'A real run of twelve nights: weather, the Moon and what the schedule costs you.',
   'inv.seq.observing.what-a-spectrum-is-made-of':

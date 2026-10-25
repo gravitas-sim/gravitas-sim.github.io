@@ -214,6 +214,8 @@ export const ALIASES = new Map(
     m_earth: 'Mearth',
     'm⊕': 'Mearth',
     m_jup: 'MJup',
+    m_j: 'MJup',
+    px: 'pix',
     'g/cm³': 'g/cm3',
     'g/cc': 'g/cm3',
     'kg/m³': 'kg/m3',

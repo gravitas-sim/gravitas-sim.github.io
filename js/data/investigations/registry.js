@@ -161,6 +161,10 @@ const LOADERS = {
   'refitting-a-transit': () => import('./refitting-a-transit.js'),
   'two-periodograms': () => import('./two-periodograms.js'),
   'sampling-a-posterior': () => import('./sampling-a-posterior.js'),
+  'what-is-a-measurement': () => import('./what-is-a-measurement.js'),
+  'what-does-plus-minus-claim': () => import('./what-does-plus-minus-claim.js'),
+  'when-the-method-must-refuse': () =>
+    import('./when-the-method-must-refuse.js'),
 };
 // </generated:loaders>
 
@@ -238,6 +242,11 @@ const TRANSLATIONS = {
     'refitting-a-transit': () => import('./es/refitting-a-transit.js'),
     'two-periodograms': () => import('./es/two-periodograms.js'),
     'sampling-a-posterior': () => import('./es/sampling-a-posterior.js'),
+    'what-is-a-measurement': () => import('./es/what-is-a-measurement.js'),
+    'what-does-plus-minus-claim': () =>
+      import('./es/what-does-plus-minus-claim.js'),
+    'when-the-method-must-refuse': () =>
+      import('./es/when-the-method-must-refuse.js'),
   },
 };
 // </generated:translations>

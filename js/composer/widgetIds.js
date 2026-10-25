@@ -96,6 +96,7 @@ export const WIDGET_FAMILIES = Object.freeze({
   ],
   compare: ['compare-transit'],
   gwEvents: ['gw-events'],
+  claim: ['frame-marks', 'coverage-repeats', 'profile-refusal'],
 });
 
 /** Every instrument id, in the registry’s order. */

@@ -1,0 +1,103 @@
+{
+ "id": "what-does-plus-minus-claim",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.coverage-at-one-sigma.fields.0.unit",""],
+    ["steps.coverage-at-one-sigma.fields.1.unit","%"],
+    ["steps.coverage-at-two-sigma.fields.0.unit",""],
+    ["steps.coverage-at-two-sigma.fields.1.unit","%"],
+    ["steps.the-ensemble-wobbles.fields.0.unit","%"],
+    ["steps.the-ensemble-wobbles.fields.1.unit","%"],
+    ["steps.the-binomial-by-hand.unit","%"],
+    ["steps.biased-coverage.fields.0.unit","%"],
+    ["steps.biased-coverage.fields.1.unit","%"],
+    ["steps.the-bias-by-hand.unit","%"],
+    ["steps.an-asymmetric-interval.fields.0.unit","%"],
+    ["steps.an-asymmetric-interval.fields.1.unit",""],
+    ["steps.the-symmetric-shortcut.fields.0.unit","%"],
+    ["steps.upper-limit-coverage.fields.0.unit","%"],
+    ["steps.upper-limit-coverage.fields.1.unit","%"],
+    ["steps.the-zero-count-limit.unit",""]
+   ],
+   "numbered": [
+    ["steps.coverage-at-one-sigma.fields.0.hint","1361"],
+    ["steps.coverage-at-one-sigma.fields.1.hint","68.0"],
+    ["steps.coverage-at-two-sigma.fields.0.hint","1901"],
+    ["steps.coverage-at-two-sigma.fields.1.hint","95.0"],
+    ["steps.the-ensemble-wobbles.fields.0.hint","70.0"],
+    ["steps.the-ensemble-wobbles.fields.1.hint","4.6"],
+    ["steps.biased-coverage.fields.0.label","Share at ±1 σ"],
+    ["steps.biased-coverage.fields.0.hint","36.3"],
+    ["steps.biased-coverage.fields.1.label","Share at ±2 σ"],
+    ["steps.biased-coverage.fields.1.hint","74.4"],
+    ["steps.an-asymmetric-interval.fields.0.hint","68.0"],
+    ["steps.an-asymmetric-interval.fields.1.hint","17"],
+    ["steps.the-symmetric-shortcut.fields.0.hint","78.3"],
+    ["steps.upper-limit-coverage.fields.0.label","Share that hold the rate at 3.0"],
+    ["steps.upper-limit-coverage.fields.0.hint","95.6"],
+    ["steps.upper-limit-coverage.fields.1.label","Share that hold the rate at 4.0"],
+    ["steps.upper-limit-coverage.fields.1.hint","98.7"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.biased-coverage.fields.0.label","Parte con ±1 σ"],
+    ["steps.biased-coverage.fields.1.label","Parte con ±2 σ"],
+    ["steps.upper-limit-coverage.fields.0.label","Parte que contiene la tasa en 3,0"],
+    ["steps.upper-limit-coverage.fields.1.label","Parte que contiene la tasa en 4,0"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "the-binomial-by-hand",
+    "answer": "1.04",
+    "tolerance": "0.1",
+    "unit": "%"
+   },
+   {
+    "sid": "the-bias-by-hand",
+    "answer": "36.1",
+    "tolerance": "1.5",
+    "unit": "%"
+   },
+   {
+    "sid": "the-zero-count-limit",
+    "answer": "3",
+    "tolerance": "0.05",
+    "unit": ""
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "coverage-at-one-sigma": {
+    "validate": {"calls":232,"distinct":2,"digest":"5ecc4cb9f3b714fb","samples":[null,{"level":"error","message":"Set the interval to ±1 σ with 2000 repeats, then read “Intervals that hold the truth” and “Coverage”."}]}
+   },
+   "coverage-at-two-sigma": {
+    "validate": {"calls":232,"distinct":2,"digest":"41eb107957d1b784","samples":[null,{"level":"error","message":"Set the interval to ±2 σ and read the same two rows."}]}
+   },
+   "the-ensemble-wobbles": {
+    "validate": {"calls":232,"distinct":2,"digest":"40fc4aae4cf8524e","samples":[null,{"level":"error","message":"Set “Repeats” to 100 and the interval to ±1 σ, then read “Coverage” and its uncertainty."}]}
+   },
+   "biased-coverage": {
+    "validate": {"calls":232,"distinct":2,"digest":"89bf60b92ad59a45","samples":[null,{"level":"error","message":"Use the biased instrument, then read “Coverage” at ±1 σ and at ±2 σ."}]}
+   },
+   "an-asymmetric-interval": {
+    "validate": {"calls":232,"distinct":2,"digest":"eb960c30fbb87e61","samples":[null,{"level":"error","message":"Choose the third case with the asymmetric form at ±1 σ and read “Coverage” and “No upper end”."}]}
+   },
+   "the-symmetric-shortcut": {
+    "validate": {"calls":97,"distinct":2,"digest":"81fadd033bda4e78","samples":[null,{"level":"error","message":"Choose the symmetric form at ±1 σ and read “Coverage”."}]}
+   },
+   "upper-limit-coverage": {
+    "validate": {"calls":232,"distinct":2,"digest":"b6c419dc1e854c2d","samples":[null,{"level":"error","message":"Read “Coverage” at the rate 3.0 and again at 4.0."}]}
+   }
+  },
+  "es": "same"
+ }
+}

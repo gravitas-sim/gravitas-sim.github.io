@@ -807,6 +807,45 @@
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["how-wide", "the-draws", "did-it-converge"],
       "evidenceFrom": "computation"
+    },
+    "what-is-a-measurement": {
+      "centralExperimentId": "ce.what-is-a-measurement",
+      "object": "panel:frame-marks",
+      "control": "frame-marks/n",
+      "quantity": "the standard error of the mean of the marks of one star, which falls as the number of marks grows",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "predict-more-marks",
+        "twenty-marks"
+      ],
+      "evidenceFrom": "model"
+    },
+    "what-does-plus-minus-claim": {
+      "centralExperimentId": "ce.what-does-plus-minus-claim",
+      "object": "panel:coverage-repeats",
+      "control": "coverage-repeats/k",
+      "quantity": "the share of seeded repeats whose stated interval holds the true value, at one and at two sigma",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "predict-one-sigma",
+        "coverage-at-one-sigma"
+      ],
+      "evidenceFrom": "model"
+    },
+    "when-the-method-must-refuse": {
+      "centralExperimentId": "ce.when-the-method-must-refuse",
+      "object": "panel:profile-refusal",
+      "control": "profile-refusal/mass",
+      "quantity": "the chi-square of the best fit at a trial mass, which is zero above the product and rises below it",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "predict-the-mass",
+        "try-a-mass"
+      ],
+      "evidenceFrom": "model"
     }
   }
 }

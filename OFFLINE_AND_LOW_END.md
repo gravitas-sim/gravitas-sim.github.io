@@ -52,15 +52,15 @@ Measured from the committed `sw-manifest.js` and the files it lists, by
 | | Files | Raw |
 | --- | ---: | ---: |
 | JavaScript | 952 | 15.2 MB |
-| Images | 99 | 860 KB |
+| Images | 102 | 870 KB |
 | Stylesheets | 10 | 500 KB |
 | Fonts | 9 | 140 KB |
 | Panel markup | 10 | 60 KB |
 | Pages | 12 | 320 KB |
 | Other | 16 | 700 KB |
-| **Total** | **1108** | **17.7 MB** |
+| **Total** | **1111** | **17.7 MB** |
 
-Of those, 803 are core (the install fails without them), 107 optional (installed with them; a missing one is reported and costs nothing) and 198 idle (installed after activation, when the browser is idle; a missing one costs that page its offline copy and is fetched again on the next open). The first-visit install is the core and the optional files: 910 files.
+Of those, 803 are core (the install fails without them), 110 optional (installed with them; a missing one is reported and costs nothing) and 198 idle (installed after activation, when the browser is idle; a missing one costs that page its offline copy and is fetched again on the next open). The first-visit install is the core and the optional files: 913 files.
 
 Gzipped, as Pages serves it, the whole is about 6 MB.
 
@@ -76,7 +76,7 @@ Three tiers, and a page promises offline only what its tier delivers. The
 **first-visit install** (core and optional) is what a reader waits for and what
 decides whether a version activates; it has a committed ceiling in
 `tools/data-budget.json` that `tests/offlineTiers.test.js` enforces in every
-budget-policy mode. The idle install has one too (`precacheIdleGzipBytes`, 1,549,312 B, raised for the activity builder group, D-R10-49, and for the activity list, D-R10-55): both are CI's figures, measured under Node 22, so on a Mac under Node 24, whose gzip reads a few KB larger, the idle-tier tests can fail by design (2,644 B at the time of writing) and pass in CI. The **idle install** is fetched after activation, when the
+budget-policy mode. The idle install has one too (`precacheIdleGzipBytes`, 1,550,336 B, raised for the activity builder group, D-R10-49, for the activity list, D-R10-55, and for the three Library entries of the measurement investigations, D-R10-67): both are CI's figures, measured under Node 22, so on a Mac under Node 24, whose gzip reads a few KB larger, the idle-tier tests can fail by design (2,644 B at the time of writing) and pass in CI. The **idle install** is fetched after activation, when the
 page has gone idle, by an `install-idle` message to the worker: the instructor
 modules, three.js, the 3-D lab, the mission lab, the Sky Lab, the Library, the
 activity builder and the data tables. It fetches only what the cache lacks, so a run cut short is
@@ -135,11 +135,12 @@ catalog, the course home and the two labs (`model/`, `instructors/`,
 the `/validation/` page runs on demand; and `social-card.png` (only ever
 fetched by a link unfurler).
 
-### Which of the <!--fact:investigations-->60<!--/fact--> lessons
+### Which of the <!--fact:investigations-->63<!--/fact--> lessons
 
 Each lesson is one dynamically imported file, so this is a real decision.
 
-**All <!--fact:investigations-->60<!--/fact--> English bodies are precached**, about a tenth of the
+**All but three of the <!--fact:investigations-->63<!--/fact--> English bodies are precached** (the
+three are the measurement and claim investigations, D-R10-67), about a tenth of the
 payload. The reasoning: the lesson a class is already in when the wifi dies is
 by definition already fetched, so precaching buys nothing there. What it buys is
 the teacher who *switches lesson after the drop*, which is exactly the moment a
@@ -147,7 +148,7 @@ runtime cache has nothing. A tenth of the payload to remove that cliff is worth
 it, and picking a favorite subset would be guessing which lesson a class is
 about to want.
 
-**The <!--fact:spanishShadows-->60<!--/fact--> Spanish shadows are not**: they are only ever fetched
+**The <!--fact:spanishShadows-->64<!--/fact--> Spanish shadows are not**: they are only ever fetched
 when the interface is in Spanish. They are runtime-cached on first use, and
 `js/offline.js` asks the worker to warm all of them the moment the language is
 switched. A Spanish classroom is therefore covered from when it chooses
@@ -621,6 +622,7 @@ then the optional list in the same install, 1,004 files and 17.7 MB raw, about
 missing file and the version does not activate); optional is tolerated; the
 Spanish lesson bodies are not precached and are warmed when the interface
 language is switched; some paths are never precached.
+The three measurement and claim investigations of Prompt 190 (`js/data/investigations/**/measurement-sequence.js`, the per-id files that re-export them, `js/claimWidgets.js` and its words) are among them (D-R10-67): they open offline only after one online use, and the instructors' portal, which imports the lesson barrel, needs the network until those files have been fetched once.
 
 What a visit touches, from `node tools/precache-tour.mjs` (service workers
 blocked, six short tours; gzipped):

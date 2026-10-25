@@ -88,6 +88,7 @@ import EXTENDING_AN_EXPERIMENT from './investigations/extending-an-experiment.js
 import REFITTING_A_TRANSIT from './investigations/refitting-a-transit.js';
 import TWO_PERIODOGRAMS from './investigations/two-periodograms.js';
 import SAMPLING_A_POSTERIOR from './investigations/sampling-a-posterior.js';
+import MEASUREMENT_LESSONS from './investigations/measurement-sequence.js';
 import { gradedSteps, positionIn } from './investigations/catalog.js';
 import { SUMMARIES } from './investigations/summaries.js';
 import INSIDE_A_STAR from './investigations/inside-a-star.js';
@@ -190,6 +191,7 @@ export const INVESTIGATIONS = [
   REFITTING_A_TRANSIT,
   TWO_PERIODOGRAMS,
   SAMPLING_A_POSTERIOR,
+  ...MEASUREMENT_LESSONS,
 ];
 
 // The lessons carry no card summary; it is written once in summaries.js and

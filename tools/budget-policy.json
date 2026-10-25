@@ -25,9 +25,9 @@
     }
   },
   "allowance": {
-    "note": "PROPOSAL. deferredCoreKb + capCumulativeKb is exactly today's deferred ceiling (2044.4 KB), so adopting the policy raises nothing; the 58.6 KB is what Prompt 131 and 132 freed. Nothing is granted until Carl grants it per release.",
+    "note": "PROPOSAL. deferredCoreKb + capCumulativeKb is exactly today's deferred ceiling (2045.4 KB after Prompt 190's raise under the standing approval, D-R10-67), so adopting the policy raises nothing; the 59.6 KB is what Prompt 131 and 132 freed plus that 1.0 KB. Nothing is granted until Carl grants it per release.",
     "capPerReleaseKb": 20.0,
-    "capCumulativeKb": 58.6,
+    "capCumulativeKb": 59.6,
     "grantedKb": 0.0
   },
   "allocation": {

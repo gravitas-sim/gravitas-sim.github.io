@@ -161,6 +161,9 @@ describe('the manifest', () => {
   });
 });
 
+/** Files that hold several lessons (the shared files of D-R10-67). */
+const SHARED = ['measurement-sequence.js'];
+
 describe('loading a lesson', () => {
   test('there is one file per lesson and no strays', () => {
     const files = readdirSync(DIR)
@@ -192,6 +195,10 @@ describe('loading a lesson', () => {
         // The card paragraph of every lesson, written once; the lesson and
         // the registry's catalog both read it.
         'summaries.js',
+        // One file for several lessons (D-R10-67: the instructor bundle's
+        // closure is capped by file count); each lesson's own file beside it
+        // is a one-line re-export of a named export here.
+        ...SHARED,
       ].sort()
     );
   });
@@ -205,7 +212,9 @@ describe('loading a lesson', () => {
       const files = readdirSync(path.join(DIR, locale))
         .filter(f => f.endsWith('.js'))
         .sort();
-      expect(files).toEqual(INVESTIGATIONS.map(i => `${i.id}.js`).sort());
+      expect(files).toEqual(
+        [...INVESTIGATIONS.map(i => `${i.id}.js`), ...SHARED].sort()
+      );
     }
   });
 
@@ -280,7 +289,10 @@ describe('the split itself', () => {
     for (const inv of INVESTIGATIONS) {
       const src = readFileSync(path.join(DIR, `${inv.id}.js`), 'utf8');
       expect(src).not.toMatch(/^\s*import\s/m);
-      expect(src).toMatch(/\nexport default [A-Z_]+;\n$/);
+      // Its own content, or a re-export of a named lesson in a shared file.
+      expect(src).toMatch(
+        /\nexport default [A-Z_]+;\n$|\nexport \{ [A-Z_]+ as default \} from '\.\/[a-z-]+\.js';\n$/
+      );
     }
   });
 

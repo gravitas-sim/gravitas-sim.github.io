@@ -620,4 +620,34 @@ export const DISCOVERY = {
     },
     courseLevel: 'upper',
   },
+  'what-is-a-measurement': {
+    audience: 'intro',
+    mathematics: 'arithmetic',
+    prerequisites: [],
+    textbook: {
+      chapter: 6,
+      section: null,
+    },
+    courseLevel: 'survey',
+  },
+  'what-does-plus-minus-claim': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['what-is-a-measurement'],
+    textbook: {
+      chapter: 6,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
+  'when-the-method-must-refuse': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['what-does-plus-minus-claim'],
+    textbook: {
+      chapter: 6,
+      section: null,
+    },
+    courseLevel: 'upper',
+  },
 };
