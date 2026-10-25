@@ -1927,6 +1927,8 @@ export const EN_DEFERRED = {
     'A shift, a motion and a parallax from fourteen positions of one star: a distance with an interval.',
   'inv.seq.observing.a-binary-stars-orbit':
     'Positions over sixteen years fix an orbit and the mass of the pair, and leave the rest open.',
+  'inv.seq.observing.weighing-jupiter':
+    'Weigh Jupiter from four moons: a cadence that can measure Io, a sinusoid for each, and Kepler’s third law with an uncertainty.',
   'inv.seq.observing.transit-photometry':
     'Measure depth, duration and noise on a light curve: the photometry the rest relies on.',
   'inv.seq.observing.design-the-schedule':

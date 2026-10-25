@@ -257,6 +257,7 @@ export const SEQUENCES = [
       ['measuring-the-moon', 'core', ['what-is-a-measurement']],
       ['how-far-is-that-star', 'quantitative', ['what-does-plus-minus-claim']],
       ['a-binary-stars-orbit', 'quantitative', ['how-far-is-that-star']],
+      ['weighing-jupiter', 'quantitative', ['a-binary-stars-orbit']],
       ['transit-photometry', 'quantitative'],
       ['design-the-schedule', 'core'],
       ['who-gets-counted', 'core'],

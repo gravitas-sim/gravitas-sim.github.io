@@ -342,6 +342,16 @@ export const NEVER_PRECACHED = [
   // has about 2.5 KB of room, so the cards show no picture until one online
   // visit has kept them. D-R10-72.
   /^images\/investigations\/(measuring-the-moon|how-far-is-that-star|a-binary-stars-orbit)\.webp$/,
+  // Weighing Jupiter (Prompt 193, SATELLITE_EPHEMERIS.md, D-R10-74): the lesson
+  // and its instruments, the satellite kernel, the moons' pack and the
+  // thumbnail. The first-visit and idle tiers have a few hundred bytes of room
+  // under a data-budget ceiling the standing size approval does not cover, so
+  // none is installed: the service worker keeps each after its first online use
+  // and the lesson says it needs the network the first time.
+  /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?weighing-jupiter\.js$/,
+  /^(js\/jovianWidgets\.js|js\/i18n\/(en|es)\.jovian\.js)$/,
+  /^js\/satellites\//,
+  /^(sky\/galilean-moons\.json|images\/investigations\/weighing-jupiter\.webp)$/,
   // Orbit fitting and moving-object tracks (Prompt 187, ASTROMETRY.md): the two
   // kernels, the panel and its words, fetched when a reader opens the orbit
   // disclosure inside the sky-coordinates panel. Same reason as the series files

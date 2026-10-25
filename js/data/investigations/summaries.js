@@ -129,4 +129,5 @@ export const SUMMARIES = {
   'measuring-the-moon': `A picture has no scale of its own. You will give a real picture of the Moon a scale, measure a dark plain in kilometers, and say what the stated uncertainty includes and leaves out.`,
   'how-far-is-that-star': `Two positions of a star do not give its distance. You will fit fourteen positions of a synthetic star, see a straight line rejected, and read a parallax and a distance with an interval.`,
   'a-binary-stars-orbit': `Positions over sixteen years fix a binary star's orbit. You will fit the ellipse and turn it into a mass sum by Kepler's third law, with an interval and what it leaves open.`,
+  'weighing-jupiter': `A moon's distance from Jupiter swings like a sinusoid, and its period and radius weigh the planet. You will tell who is who in synthetic frames, see why one frame a night gives Io a clean wrong period, and weigh Jupiter with Kepler's third law and an uncertainty.`,
 };

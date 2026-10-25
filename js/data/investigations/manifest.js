@@ -828,4 +828,17 @@ export const MANIFEST = [
     gradedCount: 7,
     objectiveCount: 4,
   },
+  {
+    id: 'weighing-jupiter',
+    title: 'Weighing Jupiter From Its Moons',
+    subtitle:
+      'Four moons, a cadence that can measure them, and Kepler’s third law',
+    duration: '25-40 min',
+    level: 'Introductory to upper-level astronomy',
+    thumbnail: 'images/investigations/weighing-jupiter.webp',
+    depths: 3,
+    stepCount: 7,
+    gradedCount: 5,
+    objectiveCount: 4,
+  },
 ];

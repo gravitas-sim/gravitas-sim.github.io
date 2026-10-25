@@ -680,4 +680,14 @@ export const DISCOVERY = {
     },
     courseLevel: 'upper',
   },
+  'weighing-jupiter': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['a-binary-stars-orbit'],
+    textbook: {
+      chapter: 12,
+      section: '12.2',
+    },
+    courseLevel: 'majors',
+  },
 };
