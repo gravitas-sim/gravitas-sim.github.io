@@ -76,7 +76,7 @@ function foreshortening(f) {
   return { cosE, axis, sigmaCosE };
 }
 
-/** A scale { value, sigma, unit: 'km/pix' or 'm/pix' } in km per pixel, or a refusal. */
+/** A scale (value, sigma and a unit, km/pix or m/pix) in km per pixel, or a refusal. */
 function kmScale(scale) {
   if (!scale || !(scale.value > 0))
     return refused('scale', 'there is no scale: mark a reference pair first');
@@ -136,7 +136,7 @@ export function diameterOf(
     relative,
     budget,
     factor,
-    unit: 'km',
+    lengthUnit: 'km',
   };
 }
 

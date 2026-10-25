@@ -124,7 +124,7 @@ describe('marks to a crater list', () => {
       'foreshortening',
     ]);
     expect(d.relative).toBeCloseTo(Math.hypot(...Object.values(d.budget)), 12);
-    expect(d.unit).toBe('km');
+    expect(d.lengthUnit).toBe('km');
   });
 });
 
