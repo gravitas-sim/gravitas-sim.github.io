@@ -1767,9 +1767,9 @@ export const INSTRUCTOR = {
             'Ganymede’s GM is 2.9 stated uncertainties from JPL’s before the correction: the uncertainty counted the scatter and not the Earth’s motion.',
         },
         {
-          claim: 'Moons that are brighter or bigger stand farther from Jupiter.',
+          claim: 'The brightest moon stands farthest out.',
           response:
-            'Ganymede is the brightest and largest, and Callisto, the outermost, stands farthest. The overlay and the measured distances say who is who, not the brightness.',
+            'Ganymede is brightest, Callisto stands farthest: the overlay says who is who.',
         },
       ],
       teachingNotes: [
@@ -1973,7 +1973,7 @@ export const INSTRUCTOR = {
       {
         from: 'what-you-worked-out',
         to: 'what-you-worked-out',
-        text: 'The close: what the cadence and the frames showed.',
+        text: 'The close: what the cadence showed.',
       },
     ],
   },

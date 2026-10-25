@@ -129,5 +129,5 @@ export const SUMMARIES_ES = {
   'measuring-the-moon': `Una imagen no tiene escala propia. Le darás escala a una imagen real de la Luna, medirás una llanura oscura en kilómetros y dirás qué incluye y qué deja fuera la incertidumbre indicada.`,
   'how-far-is-that-star': `Dos posiciones de una estrella no dan su distancia. Ajustarás catorce posiciones de una estrella sintética, verás rechazada una recta y leerás un paralaje y una distancia con un intervalo.`,
   'a-binary-stars-orbit': `Las posiciones durante dieciséis años fijan la órbita de una estrella binaria. Ajustarás la elipse y la convertirás en una suma de masas por la tercera ley de Kepler, con un intervalo y lo que deja abierto.`,
-  'weighing-jupiter': `La distancia de una luna a Júpiter oscila como una sinusoide, y su período y su radio pesan el planeta. Distinguirás quién es quién en imágenes sintéticas, verás por qué una imagen por noche da a Ío un período limpio pero falso, y pesarás Júpiter con la tercera ley de Kepler y una incertidumbre.`,
+  'weighing-jupiter': `La distancia de una luna a Júpiter oscila como una sinusoide, y su período y su radio pesan el planeta. Por qué una imagen por noche da a Ío un período falso, y la tercera ley de Kepler.`,
 };
