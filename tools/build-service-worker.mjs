@@ -363,6 +363,12 @@ export const NEVER_PRECACHED = [
   // service worker after their first online use. Nothing here is installed, so
   // no precache tier grows. D-R10-65.
   /^(js\/observatory\/imagePacks\.js|js\/data\/observations\/(tessHd209458S56Frame|sdoHmiContinuum20240510|galileoMoon19921207|hiriseCerberusFossae)\.js)$/,
+  // Crater counting (Prompt 195, CRATER_COUNTING.md): the kernel, imported by no
+  // page yet (the investigations that will use it wait for the reference regions'
+  // data). Listed so that a later panel that imports it installs nothing; the
+  // idle tier has no room under a ceiling the standing size approval does not
+  // cover. D-R10-76.
+  /^js\/measure\/craters\.js$/,
   // The validation suite's groups and harness: fetched when the suite runs,
   // like physicsChecks.js itself (ON_DEMAND_ONLY below).
   /^js\/validation\/(groups\/|harness\.js$)/,
