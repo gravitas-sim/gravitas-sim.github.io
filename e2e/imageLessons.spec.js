@@ -14,6 +14,7 @@ import { test, expect } from './fixtures.js';
 import {
   lessonPlan,
   openInvestigation,
+  settled,
   walkToSid,
 } from './centralExperiment.js';
 
@@ -75,37 +76,6 @@ const undersized = page =>
       }
     }
     return small;
-  });
-
-/**
- * Wait until nothing finite is still animating, and the layout has had a frame
- * to follow. A control measured while the panel is still sliding to its new
- * width reads 2 px wide, and a contrast check taken in a theme fade measures a
- * blend; both made this spec fail on a loaded runner and pass on retry.
- * getAnimations() covers CSS transitions and animations both, so this waits
- * for the settled state rather than guessing a time. The simulation's own
- * decorative loops never finish and are not waited on.
- */
-const settled = page =>
-  page.evaluate(async () => {
-    const frame = () =>
-      new Promise(r => window.requestAnimationFrame(() => r()));
-    for (let pass = 0; pass < 5; pass++) {
-      await frame();
-      await frame();
-      const finite = document
-        .getAnimations()
-        .filter(
-          a =>
-            a.playState === 'running' &&
-            (a.effect?.getTiming?.().iterations ?? 1) !== Infinity
-        );
-      if (!finite.length) return;
-      await Promise.race([
-        Promise.all(finite.map(a => a.finished.catch(() => {}))),
-        new Promise(r => setTimeout(r, 3000)),
-      ]);
-    }
   });
 
 const axeOf = page =>
