@@ -54,6 +54,13 @@ const STATIC_FILES = [
   'frames/sdo-hmi-continuum-20240510.json',
   'frames/galileo-moon-19921207.json',
   'frames/hirise-cerberus-fossae.json',
+  // The crater regions (Prompt 195 part 2, CRATER_COUNTING.md): four cropped
+  // display frames and the regional lists, fetched on demand; in no precache tier.
+  'frames/craters-moon-highland.json',
+  'frames/craters-moon-mare.json',
+  'frames/craters-mars-highland.json',
+  'frames/craters-mars-plains.json',
+  'frames/craters-regions.json',
   // The variable-star tables' rows (data-packs/tess-su-dra-s15.json and two
   // more, Roadmap II Prompt 96), fetched by the variable-star instruments.
   'variables/tess-su-dra-s15.json',
