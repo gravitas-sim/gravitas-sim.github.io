@@ -1077,9 +1077,17 @@ jobs:
   # decides. The labels are read from the API when the job runs, not from the
   # event payload, which a re-run would replay unchanged; the merge queue
   # re-runs this job before it merges.
+  #
+  # The job itself runs on every event and its steps run only for a pull
+  # request. A job skipped at the job level on a push counts against `deploy`:
+  # `deploy` has the implicit success() and `ci` (always()) sits between them,
+  # and GitHub treats a skipped job anywhere in the `needs` chain as not-success
+  # for it. That skipped every deploy from the first main push after this job
+  # was added (the 2.1.0 release, 2026-10-25). With the steps skipped instead,
+  # the job succeeds on a push, `ci` reads it as `optional`, and deploy runs.
   pr-class:
     name: Pull-request class
-    if: ${{ always() && github.event_name == 'pull_request' }}
+    if: ${{ always() }}
     needs: [checks]
     runs-on: ubuntu-24.04
     timeout-minutes: 5
@@ -1087,11 +1095,14 @@ jobs:
       contents: read
       pull-requests: read
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
+      - if: ${{ github.event_name == 'pull_request' }}
+        uses: actions/checkout@v7
+      - if: ${{ github.event_name == 'pull_request' }}
+        uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
       - name: Class, target and window
+        if: ${{ github.event_name == 'pull_request' }}
         env:
           GH_TOKEN: ${{ github.token }}
           PR_BASE: ${{ github.base_ref }}

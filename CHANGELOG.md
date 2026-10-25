@@ -13,13 +13,37 @@ the release rather than in the tag.
 
 ## [Unreleased]
 
-### 3.0.0 (planned; Prompt 176, the format version boundary)
+### Added
+
+- Three investigations on measurement, uncertainty and claim-limits, first in the Observing-and-measuring sequence, each in English and Spanish with instructor materials: What Is a Measurement? (survey), What Does ± Claim? (majors) and When the Method Must Refuse (upper), on synthetic data with a known truth, with one new instrument family (`js/claimWidgets.js`). They open offline only after one online use (D-R10-67, `MEASUREMENT_CLAIMS.md`).
+
+## [2.1.0] - 2026-10-24
+
+**Gravitas 2.1.0** promotes the `v3` staging branch (frozen at `e0f4df4b`, its
+push CI run 40144810683 green) to `main`. `v3` stays open and keeps taking pull
+requests; this is a release of its tip, not the end of the train.
+
+**Version number, plainly.** Released as 2.1.0 on Carl's direction (chat,
+2026-10-24: "Make it the new v2.1"); the format boundary note in
+[RELEASING.md](RELEASING.md) and [FORMATS.md](FORMATS.md) names 3.0.0, because a
+2.0.0 build refuses some of what this version writes. The refusals are the ones
+FORMATS.md lists, by version number and in words the old build already has, and
+a file that needs nothing new is still the bytes 2.0.0 wrote. Nothing is
+converted in place.
+
+**No new DOI.** Carl's decision (chat, 2026-10-24: "Let's wait til v3.0 to
+mint the doi"): no GitHub release and no Zenodo deposit for 2.1.0, so it has no
+version DOI. `RELEASE.doi` is null, so `CITATION.cff` and `.zenodo.json` name
+the 2.1.0 tag and the concept DOI and claim no version DOI for it; the 2.0.0
+archive and its DOI are unchanged. The tag `v2.1.0` is a plain git tag.
+
+### Format version boundary (Prompt 176; FORMATS.md names 3.0.0)
 
 - The saved formats a 2.0.0 build refuses or misreads now carry a version number it refuses by, in words it already has. A course package that carries a collection profile, a term or outcomes is `gravitas.course-pack/3` (a course link for it is `c3`); a result envelope with an uncertainty state beyond sigma, interval and none, a failed quantity, a correlation or a fit record is `gravitas.artifact/2`; an investigation pack or question bank whose rubric criterion sets a kind, a depth or a weight is `/2` (its link is `i2`). Every other file and link is written as 2.0.0 wrote it (the lowest version that carries the payload), so it opens in 2.0.0 and in 3.0.0 alike. Readers for every earlier version stay; no support period starts. A 2.0.0 build refuses a newer file as made by a newer version of Gravitas, and refuses an Observatory workspace with image marks as nested too deep (it checks nesting before the version, so no version could name it). FORMATS.md records every refusal message and the rollback rehearsal (`tests/compat/`), and the paragraph for the release notes is generated there. RELEASING.md names 3.0.0 as the version this boundary asks for.
 
 - The Observatory has a panel, "Frames to a light curve", that turns a stack of synthetic frames into a differential light curve one step at a time (calibrate, mark, register, photometry, comparison stars, light curve), with a table to choose the comparison stars, the plot with its table, a CSV, a ledger entry and the frame limit stated; "A Variable Star From Frames" gains an advanced step that runs it, and the grading of every earlier step is unchanged (Prompt 185, `FRAME_PIPELINE.md`).
 
-### 2.0.1 (planned; Prompt 123, byte-neutral)
+### Earlier entries from the same train (Prompts 122 to 169)
 
 - While an investigation is open, the frosted panels are drawn solid (the same opaque surfaces `prefers-reduced-transparency` already gives), and frosted again when it closes. Linux software WebKit stopped producing frames once the lesson panel opened over the stack of blurs; removing all of them restored the frames, removing only the panel's own did not.
 
@@ -1864,6 +1888,7 @@ listed here because this is the release that first carries it.
 - `aria-hidden="true"` from the 3-D viewport, which had been hiding two
   focusable buttons from assistive technology.
 
-[Unreleased]: https://github.com/gravitas-sim/gravitas-sim.github.io/compare/v2.0.0...HEAD
+[Unreleased]: https://github.com/gravitas-sim/gravitas-sim.github.io/compare/v2.1.0...HEAD
+[2.1.0]: https://github.com/gravitas-sim/gravitas-sim.github.io/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/gravitas-sim/gravitas-sim.github.io/compare/v1.0.0...v2.0.0
 [1.0.0]: https://github.com/gravitas-sim/gravitas-sim.github.io/releases/tag/v1.0.0

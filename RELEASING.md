@@ -158,6 +158,12 @@ release notes). This does not set the version: Carl still edits `RELEASE` in
 new refusal does not move it. Had the corpus found nothing, the next release
 would have been 2.2.0 and this paragraph would say so.
 
+**What was released.** The promotion of `v3` at `e0f4df4b` on 2026-10-24 was
+released as **2.1.0**, on Carl's direction (chat, 2026-10-24: "Make it the new
+v2.1"), although the boundary above asks for 3.0.0. The mismatch is recorded
+here, in the changelog's 2.1.0 section and in the release pull request; no
+format changed because of it, and the refusals the boundary lists are the same.
+
 **The changelog.** `CHANGELOG.md`'s `[Unreleased]` section collects entries as
 pull requests land. It is cut into a dated, versioned section **by the release,
 not by feature pull requests**. A feature pull request adds its entry under
