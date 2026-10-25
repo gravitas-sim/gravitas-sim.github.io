@@ -370,6 +370,55 @@ const growIntegratorScratch = n => {
   intKy = new Float64Array(size);
 };
 
+// ---------------------------------------------------------------------------
+// The tidal seam (SPIKE, Prompt 204 part B): a registered list of tidal pairs.
+// Each pair is {planetId, moonId, eps0, a0, rate, spin}: a dissipative
+// acceleration along the azimuthal direction of the separation, equal and
+// opposite in momentum, a_t(r) = s eps0 [G (M + m) / a0^2] (a0 / r)^7 with
+// s = sgn(spin - n_kepler(r)). Position-only, so every stage of every scheme
+// sees the same law. An empty list costs one length test.
+// ---------------------------------------------------------------------------
+export const tidalPairs = [];
+
+/** Torque on the orbit of a pair at its current separation, for the account. */
+export const tidalPairTerms = (pair, planet, moon, G) => {
+  const rx = moon.pos.x - planet.pos.x;
+  const ry = moon.pos.y - planet.pos.y;
+  const d = Math.sqrt(rx * rx + ry * ry);
+  const muTot = G * (planet.mass + moon.mass);
+  const s = Math.sign(pair.spin - Math.sqrt(muTot / (d * d * d)));
+  const aT = s * pair.eps0 * (muTot / (pair.a0 * pair.a0)) * (pair.a0 / d) ** 7;
+  const mu = (planet.mass * moon.mass) / (planet.mass + moon.mass);
+  return { rx, ry, d, s, aT, mu, force: mu * aT, torque: mu * aT * d };
+};
+
+const applyTidalPairs = (objs, count, axOut, ayOut) => {
+  const G = physicsSettings.gravitational_constant;
+  for (const pair of tidalPairs) {
+    let planet = null;
+    let moon = null;
+    let ip = -1;
+    let iq = -1;
+    for (let i = 0; i < count; i++) {
+      if (objs[i].id === pair.planetId) {
+        planet = objs[i];
+        ip = i;
+      } else if (objs[i].id === pair.moonId) {
+        moon = objs[i];
+        iq = i;
+      }
+    }
+    if (!planet || !moon || !planet.alive || !moon.alive) continue;
+    const t = tidalPairTerms(pair, planet, moon, G);
+    const tx = -t.ry / t.d;
+    const ty = t.rx / t.d;
+    axOut[iq] += (t.force / moon.mass) * tx;
+    ayOut[iq] += (t.force / moon.mass) * ty;
+    axOut[ip] -= (t.force / planet.mass) * tx;
+    ayOut[ip] -= (t.force / planet.mass) * ty;
+  }
+};
+
 /**
  * Fill `axOut`/`ayOut` with the acceleration on every body at its current
  * position.
@@ -450,6 +499,7 @@ export const computeAccelerations = (
       ayOut[i] = m.ay;
     }
   }
+  if (tidalPairs.length) applyTidalPairs(objs, count, axOut, ayOut);
 };
 
 /**
