@@ -185,10 +185,10 @@ export default {
     'The Moon is a display picture whose gray levels are not light; the star and the binary are synthetic with the truth withheld, and a fit that is refused is the answer, not a failure.',
   ],
   jovian: [
-    'Synthetic frames of Jupiter and its four moons, one moon’s measured distance from Jupiter against time with its best sinusoid, or Kepler’s third law on a fitted period and orbit radius.',
-    'Where each moon is night by night against the ephemeris overlay, which period and orbit radius the points fix, and the mass of Jupiter with its uncertainty from each moon and from the four together.',
-    'Why a frame once a night cannot give Io’s period, why the period the Earth sees is not quite the orbital one, and what a consistency test between four moons can and cannot show.',
-    'The frames are synthetic, made from JPL Horizons positions through a detector model; no picture of Jupiter was observed. The weighed mass is the planet’s alone and leaves out its oblateness.',
+    'Synthetic frames of Jupiter and its moons, one moon’s distance against time with a sinusoid, or Kepler’s third law on a fitted period and radius.',
+    'Who is who against the ephemeris, which period and radius the points fix, and Jupiter’s mass with its uncertainty.',
+    'Why one frame a night cannot give Io’s period, and why the period the Earth sees is not quite the orbital one.',
+    'The frames are synthetic, made from JPL Horizons positions; the mass is the planet’s alone and leaves out its oblateness.',
   ],
   'plot-measure': [
     'Your own measurements, one point each, with the quantities named on the axes.',

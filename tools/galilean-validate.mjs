@@ -77,7 +77,7 @@ export function fitAll(t, x, sigma) {
   );
 }
 
-export function runLegs(model = loadModel()) {
+export function runLegs(model = loadModel(), opts = {}) {
   const out = [];
   const epochs = designEpochs(model);
   const { t, x } = marksOf(model, epochs);
@@ -346,7 +346,8 @@ export function runLegs(model = loadModel()) {
     const hitsP = Object.fromEntries(MOON_IDS.map(id => [id, 0]));
     const hitsA = Object.fromEntries(MOON_IDS.map(id => [id, 0]));
     const hitsM = Object.fromEntries(MOON_IDS.map(id => [id, 0]));
-    for (let s = 0; s < b.seeds; s++) {
+    const seeds = opts.seeds ?? b.seeds;
+    for (let s = 0; s < seeds; s++) {
       const noise = gaussian(`galilean-${s}`);
       for (const id of MOON_IDS) {
         const xs = Float64Array.from(x[id], v => v + b.sigmaRj * noise());
@@ -364,7 +365,7 @@ export function runLegs(model = loadModel()) {
       }
     }
     const frac = o =>
-      Object.fromEntries(Object.entries(o).map(([k, v]) => [k, v / b.seeds]));
+      Object.fromEntries(Object.entries(o).map(([k, v]) => [k, v / seeds]));
     const cp = frac(hitsP);
     const ca = frac(hitsA);
     const cm = frac(hitsM);

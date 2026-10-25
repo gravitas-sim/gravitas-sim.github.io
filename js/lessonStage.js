@@ -1,37 +1,22 @@
 // =============================================================================
 // The main canvas as a comparison workspace
 // -----------------------------------------------------------------------------
-// A lesson step that says "these three stars" now puts those three stars on
-// the canvas, where they can be clicked, inspected, plotted and measured, in
-// the same places every time. This is the half that knows about the stellar
-// model and the body classes; js/lesson/stage.js is the arithmetic, and it is
-// pure.
+// A lesson step that names three stars puts them on the canvas, where they can
+// be clicked, inspected, plotted and measured, in the same places every time.
+// This is the half that knows the stellar model and the body classes;
+// js/lesson/stage.js is the pure arithmetic.
 //
-// What a stage is, and is not
-// -----------------------------------------------------------------------------
-// It is a display. The stars stand still, they are not orbiting one another,
-// and nothing about their arrangement is a claim: a row of eight stars spaced
-// ninety units apart is a shelf, not a cluster. Saying so matters, because the
-// application's whole premise is that what is on the canvas is being
-// integrated - so a lesson that borrows the canvas for a display has to be
-// explicit that this bit is not.
+// A stage is a display. The stars stand still and their arrangement is no
+// claim: a row of eight stars ninety units apart is a shelf, not a cluster.
+// Each is handed to the stellar model, which owns its state, and the
+// integrator leaves it alone (js/lessonScene.js): it keeps its mass and pulls
+// on others, but no force is computed for it, so a hundred display stars cost
+// a hundred sources and no targets.
 //
-// The mechanism that makes it honest is the one from js/lessonScene.js: every
-// staged star is handed to the stellar model, which owns its state, and the
-// integrator is told to leave it alone. It still has mass and still pulls on
-// anything else in the scene; it is simply not pushed back, and no force is
-// computed for it at all, so a hundred display stars cost a hundred sources
-// and no targets rather than ten thousand pair terms a frame.
-//
-// Determinism
-// -----------------------------------------------------------------------------
-// Every position, every property and every subsample is arithmetic over the
-// step's own declaration and a named seed. Nothing here draws from the global
-// generator - which js/rng.js patches while a world is being built, so a stage
-// that consumed from it would move the bodies a seed produces. The population
-// steps take a bounded, evenly-strided subsample of the seeded population, and
-// the readout says how many of how many are on screen, because a subsample
-// presented as a population is a lie about what a survey sees.
+// Determinism: every position, property and subsample is arithmetic over the
+// step's declaration and a named seed, never the global generator that
+// js/rng.js patches while a world is built. Population steps take an evenly
+// strided subsample and the readout says how many of how many are shown.
 // =============================================================================
 
 import { SCALE, displayRadius, fitCamera, rowLayout } from './lesson/stage.js';
