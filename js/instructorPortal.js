@@ -5,19 +5,12 @@
 // password against, so the materials are not gated by a check: they are
 // encrypted, and the passphrase is the decryption key.
 //
-// What that means in practice:
-//
-//   - instructors/materials.enc.json is public and downloadable. It is
-//     ciphertext. Reading it tells an attacker nothing.
-//   - The passphrase never appears in this repository, in this file, or in any
-//     response the server sends. It exists only in the instructor's head and in
-//     the build environment.
-//   - A wrong passphrase does not fail a comparison that could be patched out
-//     in the debugger. It derives the wrong key, and AES-GCM refuses to
-//     authenticate the ciphertext.
-//   - The honest limit: the ciphertext is public, so the security is exactly
-//     the strength of the passphrase against an offline attack. The key
-//     derivation is deliberately slow to make each guess expensive.
+// So instructors/materials.enc.json is public ciphertext, the passphrase is
+// never in this repository or in any response (it lives in the instructor's
+// head and the build environment), and a wrong passphrase derives the wrong
+// key, which AES-GCM refuses to authenticate. The honest limit: security is
+// exactly the passphrase's strength against an offline attack, so the key
+// derivation is deliberately slow.
 //
 // The whole authentication surface is this file plus the build script. Swapping
 // it for a real server-side gate later means replacing unlock() and fetching

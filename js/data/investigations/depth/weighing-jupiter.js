@@ -1,2 +1,2 @@
 // The deeper steps of weighing-jupiter: the loaders' path for it, a re-export from this directory's one shared file (D-R10-74).
-export { WEIGHING_JUPITER_DEEPER as default } from './measurement-sequence.js';
+export { WEIGHING_JUPITER_DEEPER as default } from './satellite-sequence.js';

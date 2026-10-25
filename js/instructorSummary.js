@@ -7,14 +7,11 @@
 // leaves the page only as the one CSV the instructor asks for (classSummaryCsv)
 // or as the page printed.
 //
-// Per investigation handed in it says: how far each report got, and per step
-// how many answered and how many were right of what Gravitas can check, with
-// the instructor's marks for written answers (a step nobody marked says so);
-// the rubric criteria of the written steps (Prompt 172's kinds); the wrong
-// answers given most often, with the misconception only where the author named
-// it (js/answerFeedback.js); the time a report records, first opening to last
-// save, every hour away included; and each measured quantity the evidence
-// tables carry, one value per report with its uncertainty (Prompt 150).
+// Per investigation handed in it says how far each report got; per step how many
+// answered and how many were right, with the instructor's marks for written
+// answers; the rubric criteria of written steps; the wrong answers given most
+// often, with the misconception where the author named it; the time a report
+// records; and each measured quantity the evidence tables carry.
 //
 // What it does not say: who. A report is counted once, an exact duplicate not
 // at all, and no name, roster id or file name appears in the summary or its

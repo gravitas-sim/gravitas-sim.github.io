@@ -11,10 +11,10 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { INVESTIGATIONS } from '../js/data/investigations.js';
 import { withAllDepths } from '../js/investigations/depthAll.js';
-import * as EN from '../js/data/investigations/measurement-sequence.js';
-import * as ES from '../js/data/investigations/es/measurement-sequence.js';
-import * as DEEP from '../js/data/investigations/depth/measurement-sequence.js';
-import * as DEEP_ES from '../js/data/investigations/depth/es/measurement-sequence.js';
+import * as EN from '../js/data/investigations/satellite-sequence.js';
+import * as ES from '../js/data/investigations/es/satellite-sequence.js';
+import * as DEEP from '../js/data/investigations/depth/satellite-sequence.js';
+import * as DEEP_ES from '../js/data/investigations/depth/es/satellite-sequence.js';
 import {
   GM_JUPITER,
   MOON_IDS,

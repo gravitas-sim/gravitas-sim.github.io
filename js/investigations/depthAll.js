@@ -37,6 +37,7 @@ import WHO_GETS_COUNTED_DEEPER from '../data/investigations/depth/who-gets-count
 import WHY_THE_BRIGHT_ONES_WIN_DEEPER from '../data/investigations/depth/why-the-bright-ones-win.js';
 import THE_COMPLETENESS_CURVE_DEEPER from '../data/investigations/depth/the-completeness-curve.js';
 import MEASUREMENT_DEEPER from '../data/investigations/depth/measurement-sequence.js';
+import SATELLITE_DEEPER from '../data/investigations/depth/satellite-sequence.js';
 import MISSING_MASS_DEEPER from '../data/investigations/depth/missing-mass.js';
 import THE_TURNING_SKY_DEEPER from '../data/investigations/depth/the-turning-sky.js';
 import THE_SUN_THROUGH_THE_YEAR_DEEPER from '../data/investigations/depth/the-sun-through-the-year.js';
@@ -83,6 +84,7 @@ export const DEEPER = Object.freeze({
   [WHY_THE_BRIGHT_ONES_WIN_DEEPER.id]: WHY_THE_BRIGHT_ONES_WIN_DEEPER.steps,
   [THE_COMPLETENESS_CURVE_DEEPER.id]: THE_COMPLETENESS_CURVE_DEEPER.steps,
   ...MEASUREMENT_DEEPER,
+  ...SATELLITE_DEEPER,
 });
 
 /** A lesson with every depth laid in; one without deeper steps as it is. */

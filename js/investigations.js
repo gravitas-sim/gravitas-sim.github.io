@@ -5,17 +5,11 @@
 // student can work through beside a live simulation, and collects what they
 // write down.
 //
-// Two deliberate choices about assessment:
-//
-//   Nothing blocks on a correct answer. A student who cannot get a numeric
-//   question right should still reach the end of the lesson; being stuck on
-//   step 6 forever teaches nothing. Answers are checked and shown, attempts are
-//   counted, and the count goes in the report: an instructor can see who
-//   struggled without the software refusing to continue.
-//
-//   Predictions are recorded before the answer is revealed and are never
-//   marked wrong in the report. Their value is the commitment, not the
-//   correctness; grading them would teach students to skip ahead and look.
+// Two deliberate choices about assessment. Nothing blocks on a correct answer:
+// a student stuck on step 6 should still reach the end; answers are checked and
+// shown, attempts are counted and go in the report. Predictions are recorded
+// before the answer is revealed and never marked wrong: their value is the
+// commitment, and grading them would teach students to skip ahead and look.
 //
 // Progress lives in localStorage, because the lesson outlives any one page load
 //: a rebuild wipes the simulation, and a student will close the tab.

@@ -348,7 +348,7 @@ export const NEVER_PRECACHED = [
   // under a data-budget ceiling the standing size approval does not cover, so
   // none is installed: the service worker keeps each after its first online use
   // and the lesson says it needs the network the first time.
-  /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?weighing-jupiter\.js$/,
+  /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(weighing-jupiter|satellite-sequence)\.js$/,
   /^(js\/jovianWidgets\.js|js\/i18n\/(en|es)\.jovian\.js)$/,
   /^js\/satellites\//,
   /^(sky\/galilean-moons\.json|images\/investigations\/weighing-jupiter\.webp)$/,
