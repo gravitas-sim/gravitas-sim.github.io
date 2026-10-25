@@ -1,0 +1,67 @@
+{
+  "note": "Legs of tests/fixtures/galilean/contract.json that fail as committed on this tree, left failing and labelled (Prompt 193). No bound was moved. tests/galileanMoons.test.js holds the failing set to exactly this record, so a change that fixes or breaks one shows up.",
+  "ruling": {
+    "source": "Carl, AskUserQuestion to the merge-queue session, 2026-10-25, relayed by the merge-queue session",
+    "answer": "Leave failing, labelled (Recommended)",
+    "meaning": "As for 180, 182, 186 and 189: keep every committed bound, record the four as known failed legs with their causes, and merge into v3.",
+    "consistentWith": "the main session's own earlier recommendation",
+    "reopening": "Re-specifying b2, c1, c2 or d1 (the committed bounds ignored the sky frame's 0.083 degrees a day rotation) is a new contract and Carl's to order; no bound here is widened."
+  },
+  "legs": {
+    "b2.aliasDesigned": {
+      "failedChecks": [
+        "callisto: the apparent period is 0.00404 of the reference sidereal period, over the 0.003 bound"
+      ],
+      "measured": {
+        "callisto": 0.004044940753872116
+      },
+      "passedChecks": "every rival period is beaten by a chi-square difference of at least 63,000 (bound 100); Io, Europa and Ganymede are within 0.3 percent",
+      "cause": "The bound was written without the 1/n scaling: the sky frame the elongations are read in turns at about 0.083 degrees a day (the Earth's and Jupiter's motion), so a moon's apparent period differs from its orbital one by rate/n, 0.05 percent for Io and 0.4 percent for Callisto. The diagnostic x1.syncheck (added after the failure, replacing nothing) shows the fitted apparent period within 1e-4 to 2.3e-4 of that prediction for all four moons."
+    },
+    "c1.periodAmplitude": {
+      "failedChecks": [
+        "callisto: apparent period 0.00404 of the reference, over the 0.0025 bound"
+      ],
+      "measured": {
+        "callisto": 0.004044940753872116
+      },
+      "passedChecks": "every moon's semi-major axis is within 0.11 percent of the reference mean element (bound 1 percent); every corrected period is within 0.023 percent (bound 0.05 percent)",
+      "cause": "The same: the apparent-period bound did not scale as 1/n. The corrected periods meet their bound."
+    },
+    "c2.mass": {
+      "failedChecks": [
+        "callisto: GM uncorrected for the Earth's motion is 1.15 percent from the planet's (bound 1.0)",
+        "the moon-to-moon scatter of the corrected GM is 0.62 percent (bound 0.3)"
+      ],
+      "measured": {
+        "callisto": 0.011509485827769735,
+        "scatter": 0.006184624387908324
+      },
+      "passedChecks": "every corrected GM is within 0.38 percent of the planet's GM (bound 0.5); every other uncorrected GM is within 0.28 percent",
+      "cause": "Callisto's apparent period carries the 0.4 percent frame effect, doubled in GM; and the amplitude of x(t) is the semi-major axis only to about 0.1 percent (Europa's and Callisto's differ from the mean elements by 0.10 and 0.10 percent), which tripled is 0.3 percent in GM, so the scatter between moons cannot be below it. The corrected GM of each moon still holds the planet's within 3 stated sigma on the ensemble (d2)."
+    },
+    "d1.coverage": {
+      "failedChecks": [
+        "europa: period 0.875, amplitude 0.87",
+        "ganymede: amplitude 0.825",
+        "callisto: period 0.99, amplitude 1.0 (bound 0.58 to 0.78)"
+      ],
+      "measured": {
+        "period": {
+          "io": 0.735,
+          "europa": 0.875,
+          "ganymede": 0.775,
+          "callisto": 0.99
+        },
+        "amplitude": {
+          "io": 0.705,
+          "europa": 0.87,
+          "ganymede": 0.825,
+          "callisto": 1
+        }
+      },
+      "passedChecks": "Io's period and amplitude, and Ganymede's period",
+      "cause": "The stated uncertainty is scaled by the reduced chi-square when it exceeds 1. A sinusoid is not the whole of x(t) (the frame's turning chirps it), so for the slower moons the misfit dominates the 0.03 R_J noise, the reduced chi-square is large and the interval is wider than the noise alone needs: the intervals are conservative (over-covering), not too narrow. The leg wanted an interval that holds the noise-free fit's value about 68 percent of the time and is not met by an interval that includes the model misfit."
+    }
+  }
+}

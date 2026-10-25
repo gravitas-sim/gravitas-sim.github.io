@@ -1,0 +1,101 @@
+{
+ "id": "weighing-jupiter",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.how-fast-does-ganymede-move.fields.0.unit","RJup"],
+    ["steps.how-fast-does-ganymede-move.fields.1.unit","RJup"],
+    ["steps.io-period-and-radius.fields.0.unit","d"],
+    ["steps.io-period-and-radius.fields.1.unit","RJup"],
+    ["steps.try-once-a-night.fields.0.unit","d"],
+    ["steps.ganymede-period-and-radius.fields.0.unit","d"],
+    ["steps.ganymede-period-and-radius.fields.1.unit","RJup"],
+    ["steps.keplers-third-law.unit",""],
+    ["steps.jupiters-mass.unit",""],
+    ["steps.the-sky-frame-turns.unit","%"],
+    ["steps.weigh-again-corrected.fields.0.unit",""],
+    ["steps.weigh-again-corrected.fields.1.unit",""],
+    ["steps.projection-and-light-time.unit","RJup"],
+    ["steps.the-alias-exercise.unit","d"]
+   ],
+   "numbered": [
+    ["steps.how-fast-does-ganymede-move.fields.0.label","Ganymede’s distance from Jupiter in frame 14"],
+    ["steps.how-fast-does-ganymede-move.fields.0.hint","9.7"],
+    ["steps.how-fast-does-ganymede-move.fields.1.label","How far it moved between frame 14 and frame 16"],
+    ["steps.how-fast-does-ganymede-move.fields.1.hint","0.9"],
+    ["steps.io-period-and-radius.fields.0.hint","1.77"],
+    ["steps.io-period-and-radius.fields.1.hint","5.9"],
+    ["steps.try-once-a-night.fields.0.hint","2.30"],
+    ["steps.ganymede-period-and-radius.fields.0.hint","7.14"],
+    ["steps.ganymede-period-and-radius.fields.1.hint","15.0"],
+    ["steps.jupiters-mass.placeholder","e.g. 1.5 ± 0.05"],
+    ["steps.weigh-again-corrected.fields.0.hint","126.9"],
+    ["steps.weigh-again-corrected.fields.1.hint","6.1"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.how-fast-does-ganymede-move.fields.0.label","Distancia de Ganímedes a Júpiter en la imagen 14"],
+    ["steps.how-fast-does-ganymede-move.fields.1.label","Cuánto se movió entre la imagen 14 y la imagen 16"],
+    ["steps.jupiters-mass.placeholder","p. ej. 1,5 ± 0,05"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "keplers-third-law",
+    "answer": "127.2",
+    "tolerance": "1",
+    "unit": ""
+   },
+   {
+    "sid": "jupiters-mass",
+    "answer": "1.905",
+    "tolerance": "0.02",
+    "unit": ""
+   },
+   {
+    "sid": "the-sky-frame-turns",
+    "answer": "0.38",
+    "tolerance": "0.05",
+    "unit": "%"
+   },
+   {
+    "sid": "projection-and-light-time",
+    "answer": "0.63",
+    "tolerance": "0.1",
+    "unit": "RJup"
+   },
+   {
+    "sid": "the-alias-exercise",
+    "answer": "2.3",
+    "tolerance": "0.02",
+    "unit": "d"
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "how-fast-does-ganymede-move": {
+    "validate": {"calls":232,"distinct":2,"digest":"f458e499b730354a","samples":[null,{"level":"error","message":"Set the frame to 14, read the distance in the Ganymede row, then set the frame to 16 and subtract."}]}
+   },
+   "io-period-and-radius": {
+    "validate": {"calls":232,"distinct":2,"digest":"58e94d5746c1319e","samples":[null,{"level":"error","message":"Choose Io (1) with the designed sampling (1), then read “Period” and “Amplitude”."}]}
+   },
+   "try-once-a-night": {
+    "validate": {"calls":97,"distinct":2,"digest":"37ccd874fcc9988e","samples":[null,{"level":"error","message":"Choose Io (1), set the sampling to 0, then read “Period”."}]}
+   },
+   "ganymede-period-and-radius": {
+    "validate": {"calls":232,"distinct":2,"digest":"de0398ea5cbb9880","samples":[null,{"level":"error","message":"Choose Ganymede (3) with the designed sampling (1), then read “Period” and “Amplitude”."}]}
+   },
+   "weigh-again-corrected": {
+    "validate": {"calls":232,"distinct":2,"digest":"6b4ca7ca711ea04e","samples":[null,{"level":"error","message":"Choose all four (0), turn the correction on (1), then read “Weighted mean of the four” and the chi-square in “Do the four agree?”."}]}
+   }
+  },
+  "es": "same"
+ }
+}

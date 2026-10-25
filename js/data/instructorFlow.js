@@ -1,20 +1,20 @@
 // =============================================================================
 // What students do, screen by screen: the flow table of each instructor guide
 // -----------------------------------------------------------------------------
-// Each block runs from one step sid to another, so inserting or moving a step
-// cannot slide a block onto the wrong screens (the old key was a range of
-// 1-based numbers, "18-22"). js/instructorFlow.js reads it through
-// readVersioned (the /1 form too). Not imported by any route. Generated once
-// from instructorContent.js (tools/migrate-flow.mjs), edited by hand since.
+// Each block runs from one step sid to another, so moving a step cannot slide a
+// block onto the wrong screens. Read by js/instructorFlow.js through readVersioned
+// (the /1 form too); not imported by any route; from tools/migrate-flow.mjs.
 // =============================================================================
 
 import { INSTRUCTOR as MEASUREMENT } from './investigations/depth/measurement-sequence.js';
+import { INSTRUCTOR as SATELLITE } from './investigations/depth/satellite-sequence.js';
 
 export default {
   format: 'gravitas.instructor-flow',
   formatVersion: 2,
   lessons: {
     ...MEASUREMENT.flow,
+    ...SATELLITE.flow,
     'the-suns-motion': [
       {
         from: 'from-stars-to-velocities',

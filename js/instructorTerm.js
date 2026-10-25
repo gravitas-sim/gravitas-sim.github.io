@@ -6,18 +6,15 @@
 // what Gravitas changed underneath in between. Everything here is pure: it
 // takes a file and returns a new one, and never changes the one it was given.
 //
-// What "fresh keys" means here (the two keys a submission is known by)
-// -----------------------------------------------------------------------------
-// - The assignment id (`i`) is what a report carries and what the review page
-//   groups by. It is dated and derived (js/assignments/assignment.js
-//   assignmentIdFor), so a new term, on another day or with another title, has a
-//   new one and last term's reports never join this term's.
-// - The place a student's answers are kept in their browser is a hash of the
-//   lesson, the steps and the title (js/investigations/stepView.js
-//   keyForAssignment). That rule is unchanged: "a new title is a new activity
-//   and re-keys on purpose". So the term is written into the title, in both
-//   languages, and a student opening this term's link in the browser they used
-//   last term starts clean and keeps last term's answers where they were.
+// What "fresh keys" means here (the two keys a submission is known by): the
+// assignment id (`i`) is what a report carries and the review page groups by;
+// it is dated and derived (js/assignments/assignment.js assignmentIdFor), so a
+// new term has a new one and last term's reports never join this term's. The
+// place a student's answers are kept in their browser is a hash of the lesson,
+// the steps and the title (js/investigations/stepView.js keyForAssignment),
+// unchanged: "a new title is a new activity and re-keys on purpose". So the term
+// is written into the title, in both languages, and a student opening this
+// term's link in the browser they used last term starts clean.
 //
 // What is not done
 // -----------------------------------------------------------------------------

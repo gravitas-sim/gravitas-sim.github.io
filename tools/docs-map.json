@@ -65,6 +65,13 @@
       "student": true
     },
     {
+      "file": "ATMOSPHERES_GATE_I.md",
+      "kind": "gate",
+      "purpose": "Atmospheres gate I: the family and its limits, thresholds committed first, the rights rule, the measured checks and the verdict (Prompt 199).",
+      "owner": 199,
+      "student": false
+    },
+    {
       "file": "BRANCHING.md",
       "kind": "process",
       "purpose": "Branches, the publish rule and the table of generated artifacts.",
@@ -763,6 +770,13 @@
       "purpose": "Instruments in the sandbox.",
       "owner": null,
       "student": false
+    },
+    {
+      "file": "SATELLITE_EPHEMERIS.md",
+      "kind": "feature",
+      "purpose": "Jupiter's moons from Horizons: the pack, the cadence, the weighing and the validation table.",
+      "owner": 193,
+      "student": true
     },
     {
       "file": "SCAFFOLDING.md",

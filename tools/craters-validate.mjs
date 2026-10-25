@@ -19,6 +19,7 @@
 // value that passes through a trigonometric function.
 // =============================================================================
 
+import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
@@ -42,6 +43,10 @@ export const THRESHOLDS = read('thresholds.json');
 const C = THRESHOLDS.checks;
 const R = THRESHOLDS.rules;
 const ORACLE = read('oracle-results.json');
+const T2 = read('regions-thresholds.json');
+const ROOT = path.join(HERE, '..');
+const readRoot = rel => readFileSync(path.join(ROOT, rel));
+const sha256 = b => createHash('sha256').update(b).digest('hex');
 const SEED = 'craters-195';
 const TRIALS = R.ensembleTrials;
 
@@ -657,6 +662,183 @@ function refusals() {
   );
 }
 
+// ---- part 2: tier b4 (published formula) and tier e (the four regions) ----------------
+
+/** The regions' spherical-rectangle area, as the thresholds define it. */
+const boxArea = (R, lon, lat) =>
+  R *
+  R *
+  (((lon[1] - lon[0]) * Math.PI) / 180) *
+  (Math.sin((lat[1] * Math.PI) / 180) - Math.sin((lat[0] * Math.PI) / 180));
+
+function formulaTier() {
+  const b4 = T2.checks['b4.formula'].bounds;
+  const D = ORACLE.diametersKm;
+  const ts = ORACLE.curve.map(r => r.D);
+  const rows1 = cumulative(D, {
+    area: ORACLE.areaKm2,
+    thresholds: ts,
+    level: 0.6827,
+  }).rows;
+  let dens = 0;
+  let near100 = 0;
+  let near30 = 0;
+  let evidenceSmall = 0;
+  rows1.forEach(r => {
+    // the working group's N and N / A, written out here from the definition
+    const N = D.filter(d => d >= r.D).length;
+    dens = Math.max(dens, relOrAbs(r.density, N / ORACLE.areaKm2));
+    if (N === 0) return;
+    const half = (r.hi - r.lo) / 2;
+    const gauss = Math.sqrt(N) / ORACLE.areaKm2;
+    const e = Math.abs(half - gauss) / gauss;
+    if (N >= 100) near100 = Math.max(near100, e);
+    else if (N >= 30) near30 = Math.max(near30, e);
+    else evidenceSmall = Math.max(evidenceSmall, e);
+  });
+  within('b4.formula.density', dens, b4.densityRelative);
+  within('b4.formula.halfWidth.N100', near100, b4.halfWidthRelativeN100);
+  within('b4.formula.halfWidth.N30', near30, b4.halfWidthRelativeN30);
+  rows.push({
+    id: 'b4.formula.halfWidth.small',
+    measured: evidenceSmall,
+    evidence: true,
+    pass: true,
+    note: 'N below 30, reported not judged',
+  });
+  notRun('b4.craterstats', T2.notRun['b4.craterstats']);
+}
+
+function regionTier() {
+  const doc = JSON.parse(readRoot('frames/craters-regions.json'));
+  const orc = read('regions-oracle.json').regions;
+  const prov = read('regions-provenance.json');
+  const dMinOf = body => (body === 'moon' ? 30 : 20);
+  const regionOf = id => {
+    const r = doc.regions[id];
+    return {
+      craters: r.craters.map(c => ({ D: c[0] })),
+      area: { km2: r.areaKm2, relSigma: r.areaRelSigma },
+      completeFrom: r.completeFromKm,
+    };
+  };
+  const e1 = T2.checks['e1.regionCounts'].bounds;
+  for (const [id, o] of Object.entries(orc)) {
+    const r = doc.regions[id];
+    const ds = r.craters.map(c => c[0]);
+    const sfd = cumulative(ds, {
+      area: { km2: r.areaKm2, relSigma: r.areaRelSigma },
+      thresholds: o.thresholdsKm,
+    });
+    within(
+      `e1.counts.${id}`,
+      sfd.rows.reduce((s, x, i) => s + Math.abs(x.n - o.counts[i]), 0),
+      e1.countsExact
+    );
+    const R = r.body === 'moon' ? 1737.4 : 3396.19;
+    within(
+      `e1.area.${id}`,
+      rel(boxArea(R, r.lonE, r.lat), o.areaKm2),
+      e1.areaRelative
+    );
+    row(`e1.listSize.${id}`, ds.length, o.n, ds.length === o.n);
+  }
+  const e2 = T2.checks['e2.verdict'].bounds;
+  for (const [a, b, body] of [
+    ['moon-highland', 'moon-mare', 'moon'],
+    ['mars-highland', 'mars-plains', 'mars'],
+  ]) {
+    const v = relativeAge(regionOf(a), regionOf(b), { dMin: dMinOf(body) });
+    row(
+      `e2.verdict.${body}`,
+      v.status === 'ok'
+        ? `${v.verdict}, R ${v.ratio?.toPrecision(3)} (${v.lo?.toPrecision(3)} to ${v.hi?.toPrecision(3)}), na ${v.na}, nb ${v.nb}`
+        : v.code,
+      e2.verdict,
+      v.status === 'ok' && v.verdict === e2.verdict && v.lo > e2.ratioLowerAbove
+    );
+  }
+  const e3 = T2.checks['e3.index'].bounds;
+  for (const [id, r] of Object.entries(doc.regions)) {
+    const p = powerLaw(
+      r.craters.map(c => c[0]),
+      { dMin: dMinOf(r.body) }
+    );
+    if (p.status !== 'ok') {
+      row(`e3.index.${id}`, p.code, e3.indexBand, false, p.why);
+      continue;
+    }
+    inBand(
+      `e3.index.${id}`,
+      p.index,
+      e3.indexBand,
+      `n ${p.n}, ${p.lo.toPrecision(3)} to ${p.hi.toPrecision(3)}`
+    );
+    rows.push({
+      id: `e3.constancy.${id}`,
+      measured: p.constancy.z ?? null,
+      evidence: true,
+      pass: true,
+      note: String(p.constancy.flag ?? p.constancy.status),
+    });
+  }
+  // e4: the committed data are the recorded ones
+  let bad = 0;
+  const same = (what, a, b) => {
+    if (a !== b) {
+      bad++;
+      rows.push({
+        id: `e4.mismatch.${what}`,
+        measured: a,
+        bound: b,
+        pass: false,
+      });
+    }
+  };
+  for (const [id, f] of Object.entries(prov.outputs.frames)) {
+    const buf = readRoot(f.file);
+    same(`${id}.bytes`, buf.length, f.bytes);
+    same(`${id}.sha256`, sha256(buf), f.sha256);
+    same(`${id}.recordedInRegions`, doc.regions[id].frame.sha256, f.sha256);
+  }
+  const rb = readRoot(prov.outputs.regions.file);
+  same('regions.bytes', rb.length, prov.outputs.regions.bytes);
+  same('regions.sha256', sha256(rb), prov.outputs.regions.sha256);
+  const expect = {
+    'mars-frame': [
+      36708552,
+      'fdfcd335559c3dc67052b7e8a9565d850e336ac0d1f3ea7f5eb7826ffb44ecb2',
+    ],
+    'moon-catalogue': [
+      26224618,
+      'b9ac25611f3dc8f7e8ccb2b6488d4451476439ab05164b006996b0f345ab21b3',
+    ],
+    'mars-catalogue-plains': [
+      315539,
+      'd33176558c69203585bef558ba2be0e4ace8e2203f20680f49e4e170e01fa8c4',
+    ],
+    'mars-catalogue-highlands': [
+      1293383,
+      '34e14fde28a69c6c45129ac58dc2708d09aac44f466c04943e49a8094ba271cb',
+    ],
+    'moon-frame': [
+      265438,
+      'c5bb394a48613440f24c59deb5e7cda253b14a18696e54f6f2cf4e37fbf92904',
+    ],
+  };
+  for (const [k, [bytes, h]] of Object.entries(expect)) {
+    same(`${k}.sourceBytes`, prov.sources[k].bytes, bytes);
+    same(`${k}.sourceSha`, prov.sources[k].sha256, h);
+  }
+  within(
+    'e4.provenance.mismatches',
+    bad,
+    T2.checks['e4.provenance'].bounds.mismatches
+  );
+  notRun('e.published', T2.notRun['e.published']);
+  notRun('e.frames', T2.notRun['e.frames']);
+}
+
 /** Every row, as the tests and the command line read them. */
 export function runValidation() {
   rows.length = 0;
@@ -664,7 +846,8 @@ export function runValidation() {
   oracle();
   coverage();
   refusals();
-  notRun('e1.authentic', THRESHOLDS.notRun['e1.authentic']);
+  formulaTier();
+  regionTier();
   return rows.slice();
 }
 
@@ -675,7 +858,12 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     process.stdout.write(`${JSON.stringify(out, null, 1)}\n`);
   else {
     for (const r of out) {
-      const v = r.measured === null ? '' : Number(r.measured).toPrecision(4);
+      const v =
+        r.measured === null
+          ? ''
+          : typeof r.measured === 'string'
+            ? r.measured
+            : Number(r.measured).toPrecision(4);
       const b = r.bound === undefined ? '' : JSON.stringify(r.bound);
       const tag = r.pass === null ? 'NOT RUN' : r.pass ? 'pass' : 'FAIL';
       process.stdout.write(

@@ -4,11 +4,9 @@
 // Strings for panels nobody sees on a first visit (the scenario-specific
 // instruments, the radial velocity workspace, the transit noise budget), about
 // twelve kilobytes of prose that every visitor was downloading at start-up.
-//
 // A separate catalog rather than part of js/i18n/es.js because one object
-// cannot be code-split. The bridges that load those panels register these
-// through registerMessages() at the same moment. The audit and the i18n tests
-// merge both halves, so coverage, placeholder and length checks see one catalog.
+// cannot be code-split: the bridges that load those panels register these
+// through registerMessages(), and the audit and i18n tests merge both halves.
 // =============================================================================
 
 export const ES_DEFERRED = {
@@ -1948,6 +1946,8 @@ export const ES_DEFERRED = {
     'Un desplazamiento, un movimiento y un paralaje a partir de catorce posiciones de una estrella: una distancia con un intervalo.',
   'inv.seq.observing.a-binary-stars-orbit':
     'Las posiciones durante dieciséis años fijan una órbita y la masa del par, y dejan abierto lo demás.',
+  'inv.seq.observing.weighing-jupiter':
+    'Pesa Júpiter con cuatro lunas: un ritmo de observación que puede medir a Ío, una sinusoide para cada una y la tercera ley de Kepler con una incertidumbre.',
   'inv.seq.observing.transit-photometry':
     'Mide profundidad, duración y ruido en una curva de luz: la fotometría de la que depende lo demás.',
   'inv.seq.observing.design-the-schedule':

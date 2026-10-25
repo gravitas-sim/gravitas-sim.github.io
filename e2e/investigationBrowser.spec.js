@@ -247,9 +247,10 @@ test.describe('filtering', () => {
     // Integrators in Practice (Prompt 102) runs on the Kepler-16 system, which
     // its summary names, so it legitimately matches; so does A Binary Star's
     // Orbit (Prompt 191), whose summary turns an orbit into a mass sum by
-    // Kepler's third law.
+    // Kepler's third law, and so does Weighing Jupiter From Its Moons
+    // (Prompt 193), whose summary weighs a planet by it.
     await search.fill('kepler');
-    await expect(page.locator('#investigationList .inv-card')).toHaveCount(4);
+    await expect(page.locator('#investigationList .inv-card')).toHaveCount(5);
     await expect
       .poll(() => shownIds(page))
 
@@ -258,6 +259,7 @@ test.describe('filtering', () => {
         'weighing-stars',
         'integrators-in-practice',
         'a-binary-stars-orbit',
+        'weighing-jupiter',
       ]);
 
     // A tag nobody prints on a card is still searchable.

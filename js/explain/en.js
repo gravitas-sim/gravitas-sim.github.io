@@ -184,6 +184,12 @@ export default {
     'What a mark on a picture can and cannot measure, what a distance from a parallax claims and its zero point, and what the positions of a binary fix.',
     'The Moon is a display picture whose gray levels are not light; the star and the binary are synthetic with the truth withheld, and a fit that is refused is the answer, not a failure.',
   ],
+  jovian: [
+    'Synthetic frames of Jupiter and its moons, one moon’s distance against time with a sinusoid, or Kepler’s third law on a fitted period and radius.',
+    'Who is who against the ephemeris, which period and radius the points fix, and Jupiter’s mass with its uncertainty.',
+    'Why one frame a night cannot give Io’s period, and why the period the Earth sees is not quite the orbital one.',
+    'The frames are synthetic, made from JPL Horizons positions; the mass is the planet’s alone and leaves out its oblateness.',
+  ],
   'plot-measure': [
     'Your own measurements, one point each, with the quantities named on the axes.',
     'A straight line of points means the two quantities are proportional, or after a transform, a power law.',

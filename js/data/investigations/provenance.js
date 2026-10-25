@@ -66,6 +66,7 @@ export const EVIDENCE_FROM = Object.freeze({
   'twelve-nights': 'model',
   'two-periodograms': 'computation',
   'wanderers-on-the-sky': 'model',
+  'weighing-jupiter': 'model',
   'weighing-stars': 'engine',
   'what-a-ccd-records': 'model',
   'what-a-spectrum-is-made-of': 'model',

@@ -837,4 +837,17 @@ export const MANIFEST = [
     gradedCount: 7,
     objectiveCount: 4,
   },
+  {
+    id: 'weighing-jupiter',
+    title: 'Pesar Júpiter con sus lunas',
+    subtitle:
+      'Cuatro lunas, un ritmo de observación que puede medirlas y la tercera ley de Kepler',
+    duration: '25-40 min',
+    level: 'Introductory to upper-level astronomy',
+    thumbnail: 'images/investigations/weighing-jupiter.webp',
+    depths: 3,
+    stepCount: 7,
+    gradedCount: 5,
+    objectiveCount: 4,
+  },
 ];

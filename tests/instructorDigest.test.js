@@ -193,7 +193,11 @@ describe('the digest the derived closure produces', () => {
     // 274 after the three measurement investigations (Prompt 190, D-R10-67: Carl
     // raised the cap by four on 2026-10-24, for four files, one shared file for
     // each kind of file the three investigations need).
-    expect(current.length).toBeLessThan(274);
+    // 278 after the Jupiter investigation (Prompt 193, D-R10-74: the cap raised
+    // by four under Carl's standing words of 2026-10-24, for four files, one
+    // satellite-sequence file for each kind of file the lesson needs, because the
+    // measurement files are at their line ceilings); pending Carl's ratification.
+    expect(current.length).toBeLessThan(278);
     // 230 after the four variable-star investigations (Prompt 96): their shadows, deeper shadows and depth files;
     // 246 after the four cosmology investigations (Prompt 91).
     // 258 after the three calibration investigations (Prompt 86).
