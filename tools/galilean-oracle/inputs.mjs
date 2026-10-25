@@ -2,6 +2,7 @@
 // The inputs of the independent oracle (oracle.py): 48 epochs of the observing
 // plan and the truth marks of every moon at the plan's epochs. Writes
 // tests/fixtures/galilean/oracle-inputs.json. Nothing here is a result.
+import process from 'node:process';
 import { writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -31,6 +32,6 @@ writeFileSync(
   path.join(ROOT, 'tests/fixtures/galilean/oracle-inputs.json'),
   `${JSON.stringify(out)}\n`
 );
-console.log(
-  `${out.geometryEpochsJdTt.length} geometry epochs, ${t.length} marks`
+process.stdout.write(
+  `${out.geometryEpochsJdTt.length} geometry epochs, ${t.length} marks\n`
 );

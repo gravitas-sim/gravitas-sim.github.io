@@ -84,7 +84,8 @@ describe('the pack', () => {
   });
 
   test('is never precached', async () => {
-    const { NEVER_PRECACHED } = await import('../tools/build-service-worker.mjs');
+    const { NEVER_PRECACHED } =
+      await import('../tools/build-service-worker.mjs');
     for (const f of [
       'sky/galilean-moons.json',
       'js/jovianWidgets.js',
@@ -101,7 +102,11 @@ describe('the geometry', () => {
       let max = 0;
       for (let jd = 2461000; jd < 2461039; jd += 0.1)
         max = Math.max(max, Math.abs(moonsAt(model, jd).moons[id].x));
-      near(max, REFERENCE[id].aKm / R_JUPITER_KM, 0.015 * (REFERENCE[id].aKm / R_JUPITER_KM));
+      near(
+        max,
+        REFERENCE[id].aKm / R_JUPITER_KM,
+        0.015 * (REFERENCE[id].aKm / R_JUPITER_KM)
+      );
     }
   });
 
@@ -123,7 +128,9 @@ describe('the cadence', () => {
     expect(e.length).toBe(51);
     expect(e.filter(x => x.kind === 'hourly').length).toBe(21);
     expect(e.filter(x => x.kind === 'nightly').length).toBe(30);
-    expect(new Set(e.filter(x => x.kind === 'hourly').map(x => x.night)).size).toBe(3);
+    expect(
+      new Set(e.filter(x => x.kind === 'hourly').map(x => x.night)).size
+    ).toBe(3);
   });
 
   test('once-nightly sampling is exactly a day apart, and Io is the only moon aliased', () => {
@@ -143,7 +150,11 @@ describe('the cadence', () => {
 
   test('the alias formula is 1 / (1 - 1/P) for P below the Nyquist period', () => {
     const a = aliasAnalysis(1.769, 1);
-    near(a.aliases.find(x => x.belowNyquist).periodDays, 1 / (1 - 1 / 1.769), 1e-9);
+    near(
+      a.aliases.find(x => x.belowNyquist).periodDays,
+      1 / (1 - 1 / 1.769),
+      1e-9
+    );
   });
 });
 
@@ -164,7 +175,9 @@ describe('the fit and Kepler’s law', () => {
   });
 
   test('refuses too few marks and a span shorter than the period, in words', () => {
-    expect(() => fitSinusoid(t.slice(0, 5), exact(7.3, 14.9).slice(0, 5), 0.03)).toThrow(FitRefusal);
+    expect(() =>
+      fitSinusoid(t.slice(0, 5), exact(7.3, 14.9).slice(0, 5), 0.03)
+    ).toThrow(FitRefusal);
     try {
       fitSinusoid(t.slice(0, 5), exact(7.3, 14.9).slice(0, 5), 0.03);
     } catch (e) {
@@ -188,7 +201,11 @@ describe('the fit and Kepler’s law', () => {
     const a = 14.972 * R_JUPITER_KM;
     const P = 7.1413 * 86400;
     near(k.gm, (4 * Math.PI ** 2 * a ** 3) / P ** 2, 1);
-    near(k.relative, Math.hypot((3 * 0.007) / 14.972, (2 * 0.0005) / 7.1413), 1e-12);
+    near(
+      k.relative,
+      Math.hypot((3 * 0.007) / 14.972, (2 * 0.0005) / 7.1413),
+      1e-12
+    );
     near(k.massKg, (k.gm * 1e9) / 6.6743e-11, 1e18);
   });
 
@@ -226,18 +243,25 @@ describe('the contract’s legs, against the record of the ones that fail', () =
     expect(c1.callisto.apparentRelative).toBeGreaterThan(0.0025);
     for (const id of ['io', 'europa', 'ganymede'])
       expect(c1[id].apparentRelative).toBeLessThanOrEqual(0.0025);
-    for (const id of MOON_IDS) expect(c1[id].correctedRelative).toBeLessThanOrEqual(0.0005);
-    expect(byId['c2.mass'].measured.rows.callisto.uncorrectedRelative).toBeGreaterThan(0.01);
+    for (const id of MOON_IDS)
+      expect(c1[id].correctedRelative).toBeLessThanOrEqual(0.0005);
+    expect(
+      byId['c2.mass'].measured.rows.callisto.uncorrectedRelative
+    ).toBeGreaterThan(0.01);
     // The ensemble: Callisto's interval over-covers, as the record says.
     expect(byId['d1.coverage'].measured.period.callisto).toBeGreaterThan(0.85);
     expect(byId['b1.aliasNightly'].measured.io.deltaChi2).toBeLessThan(1);
-    expect(byId['b2.aliasDesigned'].measured.io.nearestRivalDeltaChi2).toBeGreaterThan(100);
+    expect(
+      byId['b2.aliasDesigned'].measured.io.nearestRivalDeltaChi2
+    ).toBeGreaterThan(100);
   }, 240000);
 
   test('the contract was committed before its legs ran, and the amendment is on record', () => {
     const c = read('tests/fixtures/galilean/contract.json');
     expect(c.committedFirst).toBe(true);
-    expect(c.window.amendment).toMatch(/before any candidate output was inspected/);
+    expect(c.window.amendment).toMatch(
+      /before any candidate output was inspected/
+    );
     expect(Object.keys(c.legs).length).toBe(12);
   });
 });
@@ -257,13 +281,21 @@ describe('the lesson and the instruments', () => {
   test('a lesson, its Spanish and its deeper steps come from the shared files', async () => {
     const dir = '../js/data/investigations';
     expect((await import(`${dir}/${ID}.js`)).default).toBe(EN.WEIGHING_JUPITER);
-    expect((await import(`${dir}/es/${ID}.js`)).default).toBe(ES.WEIGHING_JUPITER);
-    expect((await import(`${dir}/depth/${ID}.js`)).default).toBe(DEEP.WEIGHING_JUPITER_DEEPER);
-    expect((await import(`${dir}/depth/es/${ID}.js`)).default).toBe(DEEP_ES.WEIGHING_JUPITER_DEEPER);
+    expect((await import(`${dir}/es/${ID}.js`)).default).toBe(
+      ES.WEIGHING_JUPITER
+    );
+    expect((await import(`${dir}/depth/${ID}.js`)).default).toBe(
+      DEEP.WEIGHING_JUPITER_DEEPER
+    );
+    expect((await import(`${dir}/depth/es/${ID}.js`)).default).toBe(
+      DEEP_ES.WEIGHING_JUPITER_DEEPER
+    );
   });
 
   test('the Spanish shadow has the English steps, index for index', () => {
-    expect(ES.WEIGHING_JUPITER.steps.length).toBe(EN.WEIGHING_JUPITER.steps.length);
+    expect(ES.WEIGHING_JUPITER.steps.length).toBe(
+      EN.WEIGHING_JUPITER.steps.length
+    );
     expect(DEEP_ES.WEIGHING_JUPITER_DEEPER.steps.length).toBe(
       DEEP.WEIGHING_JUPITER_DEEPER.steps.length
     );
@@ -272,7 +304,9 @@ describe('the lesson and the instruments', () => {
   test('the instrument words have the same keys in both languages', async () => {
     const { EN_JOVIAN } = await import('../js/i18n/en.jovian.js');
     const { ES_JOVIAN } = await import('../js/i18n/es.jovian.js');
-    expect(Object.keys(ES_JOVIAN).sort()).toEqual(Object.keys(EN_JOVIAN).sort());
+    expect(Object.keys(ES_JOVIAN).sort()).toEqual(
+      Object.keys(EN_JOVIAN).sort()
+    );
   });
 
   test('moon-frames: frame 13 puts Callisto farthest, 26.3 radii east, and the overlay agrees', () => {
@@ -285,7 +319,8 @@ describe('the lesson and the instruments', () => {
   });
 
   test('moon-frames: Ganymede is 9.66 radii from Jupiter in frame 14 and 0.89 closer in frame 16', () => {
-    const g = n => Math.abs(W.framesView({ frame: n }, seq).meas.moons.ganymede.x);
+    const g = n =>
+      Math.abs(W.framesView({ frame: n }, seq).meas.moons.ganymede.x);
     near(g(14), 9.66, 0.1);
     near(g(14) - g(16), 0.89, 0.12);
   });
@@ -315,7 +350,12 @@ describe('the lesson and the instruments', () => {
 
   test('every readout is text and never throws, in every setting', () => {
     for (const w of W.JOVIAN_WIDGETS) {
-      const settings = [{}, { frame: 20, overlay: 1 }, { moon: 2, cadence: 0 }, { moon: 0, correct: 1 }];
+      const settings = [
+        {},
+        { frame: 20, overlay: 1 },
+        { moon: 2, cadence: 0 },
+        { moon: 0, correct: 1 },
+      ];
       for (const v of settings) {
         const rows = w.readout(v);
         expect(rows.length).toBeGreaterThan(1);
@@ -326,21 +366,47 @@ describe('the lesson and the instruments', () => {
 
   test('the lesson’s validators accept what the instruments read and refuse a wrong value', () => {
     const val = (sid, v) => step(ID, sid).validate(v);
-    const d14 = Math.abs(W.framesView({ frame: 14 }, seq).meas.moons.ganymede.x);
-    const d16 = Math.abs(W.framesView({ frame: 16 }, seq).meas.moons.ganymede.x);
-    expect(val('how-fast-does-ganymede-move', { d14, move: d14 - d16 }).level).toBe('ok');
-    expect(val('how-fast-does-ganymede-move', { d14: 5, move: 0.1 }).level).toBe('error');
+    const d14 = Math.abs(
+      W.framesView({ frame: 14 }, seq).meas.moons.ganymede.x
+    );
+    const d16 = Math.abs(
+      W.framesView({ frame: 16 }, seq).meas.moons.ganymede.x
+    );
+    expect(
+      val('how-fast-does-ganymede-move', { d14, move: d14 - d16 }).level
+    ).toBe('ok');
+    expect(
+      val('how-fast-does-ganymede-move', { d14: 5, move: 0.1 }).level
+    ).toBe('error');
     const io = W.fitView({ moon: 1, cadence: 1 }, seq).result.fit;
-    expect(val('io-period-and-radius', { period: io.periodDays, radius: io.amplitude }).level).toBe('ok');
-    expect(val('io-period-and-radius', { period: 2.3, radius: io.amplitude }).level).toBe('error');
+    expect(
+      val('io-period-and-radius', {
+        period: io.periodDays,
+        radius: io.amplitude,
+      }).level
+    ).toBe('ok');
+    expect(
+      val('io-period-and-radius', { period: 2.3, radius: io.amplitude }).level
+    ).toBe('error');
     const ion = W.fitView({ moon: 1, cadence: 0 }, seq).result.fit;
-    expect(val('try-once-a-night', { period: ion.periodDays }).level).toBe('ok');
+    expect(val('try-once-a-night', { period: ion.periodDays }).level).toBe(
+      'ok'
+    );
     expect(val('try-once-a-night', { period: 1.77 }).level).toBe('error');
     const ga = W.fitView({ moon: 3, cadence: 1 }, seq).result.fit;
-    expect(val('ganymede-period-and-radius', { period: ga.periodDays, radius: ga.amplitude }).level).toBe('ok');
+    expect(
+      val('ganymede-period-and-radius', {
+        period: ga.periodDays,
+        radius: ga.amplitude,
+      }).level
+    ).toBe('ok');
     const c = W.weighView({ moon: 0, correct: 1 }, seq).combined;
-    expect(val('weigh-again-corrected', { gm: c.gm / 1e6, chi2: c.chi2 }).level).toBe('ok');
-    expect(val('weigh-again-corrected', { gm: 127.4, chi2: 21.3 }).level).toBe('error');
+    expect(
+      val('weigh-again-corrected', { gm: c.gm / 1e6, chi2: c.chi2 }).level
+    ).toBe('ok');
+    expect(val('weigh-again-corrected', { gm: 127.4, chi2: 21.3 }).level).toBe(
+      'error'
+    );
   });
 
   test('the numeric answers are what the physics gives', () => {
@@ -348,13 +414,33 @@ describe('the lesson and the instruments', () => {
     near(step(ID, 'keplers-third-law').answer, 127.2, 0.01);
     const a = 14.97 * R_JUPITER_KM;
     const P = 7.141 * 86400;
-    near((4 * Math.PI ** 2 * a ** 3) / P ** 2 / 1e6, step(ID, 'keplers-third-law').answer, step(ID, 'keplers-third-law').tolerance / 2);
-    near(((4 * Math.PI ** 2 * a ** 3) / P ** 2 * 1e9) / 6.6743e-11 / 1e27, step(ID, 'jupiters-mass').answer, 0.01);
+    near(
+      (4 * Math.PI ** 2 * a ** 3) / P ** 2 / 1e6,
+      step(ID, 'keplers-third-law').answer,
+      step(ID, 'keplers-third-law').tolerance / 2
+    );
+    near(
+      (((4 * Math.PI ** 2 * a ** 3) / P ** 2) * 1e9) / 6.6743e-11 / 1e27,
+      step(ID, 'jupiters-mass').answer,
+      0.01
+    );
     // The frame effect on Callisto, 0.083 degrees a day over 360 / 16.689.
-    near((0.0826 / (360 / REFERENCE.callisto.periodDays)) * 100, step(ID, 'the-sky-frame-turns').answer, 0.02);
+    near(
+      (0.0826 / (360 / REFERENCE.callisto.periodDays)) * 100,
+      step(ID, 'the-sky-frame-turns').answer,
+      0.02
+    );
     // The north-south offset at 1.37 degrees.
-    near(26.4 * Math.sin((1.37 * Math.PI) / 180), step(ID, 'projection-and-light-time').answer, 0.01);
+    near(
+      26.4 * Math.sin((1.37 * Math.PI) / 180),
+      step(ID, 'projection-and-light-time').answer,
+      0.01
+    );
     // The alias, by hand.
-    near(1 / (1 - 1 / REFERENCE.io.periodDays), step(ID, 'the-alias-exercise').answer, 0.005);
+    near(
+      1 / (1 - 1 / REFERENCE.io.periodDays),
+      step(ID, 'the-alias-exercise').answer,
+      0.005
+    );
   });
 });
