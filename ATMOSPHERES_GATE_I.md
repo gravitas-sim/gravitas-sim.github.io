@@ -152,10 +152,7 @@ applied as the coordinator stated it:
 
 The original bounds and the measured values stay in `thresholds.json` (each row's `ruling` object) and in the
 record, so nothing is silently moved; the two rows read **pass under ruling** and the decision function counts a pass
-under a ruling as a pass. **One interpretation is mine and is flagged:** the ruling names 77 requests; the 0.3 KB
-build rise of that same row is the one added chunk, and I read it as part of the same ruling (limit 0.3 KB on that
-row only; every other route keeps 0.2 KB and 0 requests). If Carl meant the requests alone, `T1.routes` still fails on
-that 0.3 KB and the function gives C again. No other bound was touched.
+under a ruling as a pass. **Confirmed by Carl:** asked whether the 0.3 KB build rise of the transit row is part of the ruling, Carl answered (AskUserQuestion to the merge-queue session, 2026-10-25, relayed by the coordinator, who verified it in that transcript): "Yes, 77 requests and 0.3 KB (Recommended)", meaning "This row only; every other route keeps its 0.2 KB and 0-request bounds; the verdict stays B." So the limit of 0.3 KB applies to that one row only. No other bound was touched.
 
 ### The checks
 

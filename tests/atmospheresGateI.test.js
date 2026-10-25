@@ -177,6 +177,13 @@ describe('the recorded result', () => {
     });
     expect(routes.ruling.measured.transitInstrumentRequests).toBe(77);
     expect(routes.limits.transitInstrumentRequestsMax).toBe(77);
+    expect(routes.limits.transitInstrumentRiseKbMax).toBe(0.3);
+    expect(routes.ruling.confirmation.source).toBe(SOURCE);
+    expect(routes.ruling.confirmation.words).toBe(
+      'Yes, 77 requests and 0.3 KB (Recommended)'
+    );
+    expect(doc).toContain('Yes, 77 requests and 0.3 KB (Recommended)');
+    expect(doc).not.toMatch(/interpretation is mine/);
     // every other route keeps the original bounds
     expect(routes.limits.requestsAddedMax).toBe(0);
     expect(routes.limits.routeRiseKbMax).toBe(0.2);
