@@ -16,7 +16,21 @@
     "level": 0.95,
     "ensembleTrials": 4000,
     "minPixels": 8,
-    "refusalCodes": ["counts", "diameter", "area", "level", "scale", "scale-unit", "foreshortening", "foreshortening-axis", "below-completeness", "below-resolution", "not-constrained", "dMin", "too-few"],
+    "refusalCodes": [
+      "counts",
+      "diameter",
+      "area",
+      "level",
+      "scale",
+      "scale-unit",
+      "foreshortening",
+      "foreshortening-axis",
+      "below-completeness",
+      "below-resolution",
+      "not-constrained",
+      "dMin",
+      "too-few"
+    ],
     "noAbsoluteAge": "no result carries a field named age, ageGa, ageMa or absolute; relative age is a density ratio"
   },
   "checks": {
@@ -34,7 +48,11 @@
     },
     "a4.foreshortening": {
       "what": "cosE 0.5 with the compressed axis along +x: a radius along x (theta 0) is lengthened by 1 / cosE = 2, a radius along y (theta 90 degrees) is not, a radius at 45 degrees by sqrt(0.5 / 0.25 + 0.5) = sqrt(2.5); cosE 1 is the identity for every theta; the sigma of cosE contributes sigma_cosE cos^2(theta) / (cosE^3 f^2) in relative terms; a region footprint of 400 px^2 at 0.5 km/px and cosE 0.5 has area 400 * 0.25 / 0.5 = 200 km^2 with relative sigma 2 * 0.01 / 0.5 in quadrature with the stated sigma of cosE; cosE below or equal to 0 or above 1, and a cosE under 1 with no axis, refuse",
-      "bounds": { "factorRelative": 1e-12, "areaRelative": 1e-12, "sigmaRelative": 1e-12 }
+      "bounds": {
+        "factorRelative": 1e-12,
+        "areaRelative": 1e-12,
+        "sigmaRelative": 1e-12
+      }
     },
     "a5.ratio.exact": {
       "what": "counts 30 and 10 in equal areas give R = 3; areas 2:1 (a twice b) give R = 1.5; counts 0 and 0 give 'not constrained'; 10 and 0 give an interval open above (hi = null) with lo > 1 and the verdict 'a older'; the Clopper-Pearson defining equations hold at the ends (P(X >= k | p_lo) = alpha/2 and P(X <= k | p_hi) = alpha/2 by direct binomial summation) for (n, k) = (40, 30), (12, 3), (100, 50)",
@@ -46,7 +64,11 @@
     },
     "b1.curve": {
       "what": "the pinned list of 300 diameters (numpy default_rng(195), Pareto index 1.8 above 1 km, in tests/fixtures/craters/oracle-inputs.json) over 5000 km^2 at 20 geometric thresholds from 1 km (factor 2^(1/4)), levels 0.6827 and 0.95: N, density, lo and hi against scipy.stats.chi2.ppf (Garwood)",
-      "bounds": { "countsExact": 0, "densityRelative": 1e-8, "intervalRelative": 1e-8 }
+      "bounds": {
+        "countsExact": 0,
+        "densityRelative": 1e-8,
+        "intervalRelative": 1e-8
+      }
     },
     "b2.ratio": {
       "what": "12 pinned (na, nb, Aa, Ab, level) cases, counts from 0 to 400 and area ratios 1/3 to 4: the Clopper-Pearson interval of p against scipy.stats.beta.ppf and the ratio interval derived from it",
