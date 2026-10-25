@@ -8,7 +8,7 @@
     "astropy": "6.1.7",
     "pyerfa": "2.0.1.5",
     "inputsSha256": "383e51a4ecaaff21c18c1710ad1e044e721874524b77ba84130822194f05af19",
-    "scriptSha256": "b812cfd21c439aa7cdaa43ac05355af5801c7a9a9317d1382399b88b7d080537",
+    "scriptSha256": "482b73b9cefa96680f4dfa6dd1a06c00932cfd5c75c0639a8abba758c2d33a8c",
     "offline": true,
     "installed": "nothing"
   },
@@ -96,17 +96,20 @@
     {
       "jd0": 2460310.5,
       "jd1": 2460324.5,
-      "degPerDay": 1.019250456971999
+      "degPerDay": 1.019250456971999,
+      "equatorDegPerDay": 1.015454595619019
     },
     {
       "jd0": 2459765.0,
       "jd1": 2459779.0,
-      "degPerDay": 0.9533688504299432
+      "degPerDay": 0.9533688504299432,
+      "equatorDegPerDay": 0.9502913153280019
     },
     {
       "jd0": 2460500.0,
       "jd1": 2460514.0,
-      "degPerDay": 0.9538462132119362
+      "degPerDay": 0.9538462132119362,
+      "equatorDegPerDay": 0.9518285380924567
     }
   ],
   "irradiance": [

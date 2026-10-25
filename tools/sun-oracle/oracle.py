@@ -107,6 +107,17 @@ def earth_rate_sidereal(jd0, jd1):
     return float(d / (jd1 - jd0))
 
 
+def earth_rate_equator(jd0, jd1):
+    """Mean rate of the sub-Earth point along the solar equator from the node,
+    deg/day: daily steps of L0 from the vector construction (each step is about
+    -13 degrees, so it cannot alias), plus Carrington's 360 / 25.38."""
+    n = int(np.ceil(jd1 - jd0))
+    jds = [jd0 + (jd1 - jd0) * i / n for i in range(n + 1)]
+    l0 = [sub_earth(j)["l0Deg"] for j in jds]
+    total = sum(((b - a + 540.0) % 360.0) - 180.0 for a, b in zip(l0[:-1], l0[1:]))
+    return float(total / (jd1 - jd0) + 360.0 / 25.38)
+
+
 def irradiance(S, d, R=6.957e8):
     S1 = S * d * d
     L = 4 * np.pi * sc.au**2 * S1
@@ -137,7 +148,12 @@ def main(path):
         ],
         "ephemeris": [sub_earth(j) for j in inp["ephemerisInstantsJdUt"]],
         "rates": [
-            {"jd0": a, "jd1": b, "degPerDay": earth_rate_sidereal(a, b)}
+            {
+                "jd0": a,
+                "jd1": b,
+                "degPerDay": earth_rate_sidereal(a, b),
+                "equatorDegPerDay": earth_rate_equator(a, b),
+            }
             for a, b in inp["rateWindowsJdUt"]
         ],
         "irradiance": [
