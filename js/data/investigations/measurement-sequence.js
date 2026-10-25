@@ -1453,7 +1453,7 @@ export const HOW_FAR_IS_THAT_STAR = {
   courseLevel: 'majors',
   depths: ['core', 'quantitative', 'advanced'],
   mathematics: 'algebra',
-  prerequisites: ['what-is-a-measurement'],
+  prerequisites: ['what-does-plus-minus-claim'],
   tags: ['observing'],
   lock: { placement: true, inspector: true },
   objectives: [

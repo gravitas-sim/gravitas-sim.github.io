@@ -1290,6 +1290,7 @@ export const INSTRUCTOR = {
         'The epochs are evenly spaced at 53.8 days from JD 2461045.5; the ephemeris is the project’s own (sky/ephemeris.json), and the series was made with the exact geometry, not the linear model the fit uses.',
         'The first eight epochs cover 1.03 years and give 61.4 ± 2.2 mas; the first six cover 0.74 and are refused; the correction in the advanced depth is an assumption the lesson states, not a measurement of any frame.',
         'A one-sigma interval holding the truth about two times in three is the claim from What Does ± Claim?; here the star was made at 60 mas and the interval 60.3 ± 1.5 holds it.',
+        'The distance is the inverse of the parallax, so the lesson states the interval on the parallax first and inverts its ends; the symmetric reading of the distance would only be safe if the parallax were many sigma from zero.',
       ],
       discussion: [
         'Why would a star at ten times the distance need much better positions?',
@@ -1374,6 +1375,7 @@ export const INSTRUCTOR = {
         'The table is the one the Observatory’s orbit panel loads with its example button; the instrument and the panel use the same module.',
         'The mass sum is a seeded Monte Carlo of 20,000 draws in the module, so it is the same for every student; the parallax is relative, which the tool says beside the mass.',
         'The parallax control runs from 40 to 160 mas; at a very small parallax the module refuses a mass sum whose parallax is under a few times its uncertainty.',
+        'The circular model is offered so that it can be refused: the fit still finds a period, but its residuals are far larger than the stated errors, and the tool reports the result as inconsistent and not constrained rather than printing a number from it.',
       ],
       discussion: [
         'What would you need to split the sum into two masses?',
@@ -1596,12 +1598,6 @@ export const INSTRUCTOR = {
         'Pair length 493 px (within 3) and a scale of 7.05 km per pixel (within 0.05), with the left end at 3 and the right end at 496.',
       'measure-the-plain':
         'A circle centered at (289, 306) with a radius of about 45 px gives a diameter of 634 km (the validator accepts within 45 km), with the tool stating ± 6 km.',
-      'a-pixel-at-each-end':
-        'Two pixels at 7.05 km each: 14.1 km (within 0.4).',
-      'a-diameter-with-an-error-bar':
-        'A diameter of 634 km (within 40), with an uncertainty no wider than 60 km; 20 to 40 km is defensible.',
-      'near-the-limb':
-        'At (470, 245): 0.89 disc radii (within 0.02) and a width of 45 percent along the radius (within 2).',
     },
     'how-far-is-that-star': {
       'the-shift':
@@ -1610,11 +1606,6 @@ export const INSTRUCTOR = {
         'Proper motion alone, 14 epochs: chi-square 1576 (within 12) for 24 degrees of freedom.',
       'the-parallax':
         'Parallax 60.3 mas (within 0.5), uncertainty 1.53 mas (within 0.1), distance 16.6 pc (within 0.15), chi-square 13.2 for 23 degrees of freedom.',
-      'the-distance-by-hand': '1000 ÷ 60.29 = 16.59 pc (within 0.05).',
-      'how-many-sigma': '60.29 ÷ 1.53, 39.5 (within 1).',
-      'fewer-epochs-wider': 'With 8 epochs the uncertainty is 2.25 mas, 1.47 times larger (within 0.07).',
-      'a-zero-point':
-        'With a correction of 1.0 mas: absolute parallax 61.3 mas (within 0.3) and distance 16.32 pc (within 0.1).',
     },
     'a-binary-stars-orbit': {
       'the-elliptical-fit':
@@ -1622,9 +1613,6 @@ export const INSTRUCTOR = {
       'from-arcseconds-to-au': '0.908 ÷ 0.100 = 9.08 au (within 0.1).',
       'the-mass-sum':
         'Mass sum 3.76 solar masses (within 0.06), with a 68 percent interval of 3.33 (within 0.08) to 4.25 (within 0.1).',
-      'the-mass-by-hand': '9.08³ ÷ 14.13² = 3.75 solar masses (within 0.1).',
-      'a-nearer-star': 'At 80 mas the mass sum is 7.3 solar masses (within 0.4).',
-      'eight-epochs': 'The period’s uncertainty with 8 epochs is 0.16 yr against 0.06: a factor of 2.5 (within 0.3).',
     },
   },
   bands: {

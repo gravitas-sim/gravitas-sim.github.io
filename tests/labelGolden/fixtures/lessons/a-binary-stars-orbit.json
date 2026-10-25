@@ -1,0 +1,77 @@
+{
+ "id": "a-binary-stars-orbit",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.the-elliptical-fit.fields.0.unit","yr"],
+    ["steps.the-elliptical-fit.fields.1.unit","arcsec"],
+    ["steps.the-elliptical-fit.fields.2.unit",""],
+    ["steps.from-arcseconds-to-au.unit","AU"],
+    ["steps.the-mass-sum.fields.0.unit","M_sun"],
+    ["steps.the-mass-sum.fields.1.unit","M_sun"],
+    ["steps.the-mass-sum.fields.2.unit","M_sun"],
+    ["steps.the-mass-by-hand.unit","M_sun"],
+    ["steps.a-nearer-star.unit","M_sun"],
+    ["steps.eight-epochs.unit",""]
+   ],
+   "numbered": [
+    ["steps.the-elliptical-fit.fields.0.hint","14.13"],
+    ["steps.the-elliptical-fit.fields.1.hint","0.908"],
+    ["steps.the-elliptical-fit.fields.2.hint","0.443"],
+    ["steps.the-mass-sum.fields.0.hint","3.76"],
+    ["steps.the-mass-sum.fields.1.label","Mass sum, low end of the 68 percent interval"],
+    ["steps.the-mass-sum.fields.1.hint","3.33"],
+    ["steps.the-mass-sum.fields.2.label","Mass sum, high end of the 68 percent interval"],
+    ["steps.the-mass-sum.fields.2.hint","4.25"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.the-mass-sum.fields.1.label","Suma de masas, extremo bajo del intervalo del 68 por ciento"],
+    ["steps.the-mass-sum.fields.2.label","Suma de masas, extremo alto del intervalo del 68 por ciento"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "from-arcseconds-to-au",
+    "answer": "9.08",
+    "tolerance": "0.1",
+    "unit": "AU"
+   },
+   {
+    "sid": "the-mass-by-hand",
+    "answer": "3.75",
+    "tolerance": "0.1",
+    "unit": "M_sun"
+   },
+   {
+    "sid": "a-nearer-star",
+    "answer": "7.3",
+    "tolerance": "0.4",
+    "unit": "M_sun"
+   },
+   {
+    "sid": "eight-epochs",
+    "answer": "2.5",
+    "tolerance": "0.3",
+    "unit": ""
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "the-elliptical-fit": {
+    "validate": {"calls":242,"distinct":2,"digest":"5d6df1e19fcb6a4b","samples":[null,{"level":"error","message":"Choose the elliptical orbit with 12 epochs, then read “Period”, “Semi-major axis” and “Eccentricity”."}]}
+   },
+   "the-mass-sum": {
+    "validate": {"calls":242,"distinct":2,"digest":"587fda1741ec389c","samples":[null,{"level":"error","message":"Use the elliptical orbit with 12 epochs and the parallax at 100 mas, then read “Mass sum” and its 68 percent interval."}]}
+   }
+  },
+  "es": "same"
+ }
+}

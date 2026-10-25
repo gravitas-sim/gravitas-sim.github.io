@@ -663,7 +663,7 @@ export const DISCOVERY = {
   'how-far-is-that-star': {
     audience: 'intro',
     mathematics: 'algebra',
-    prerequisites: ['what-is-a-measurement'],
+    prerequisites: ['what-does-plus-minus-claim'],
     textbook: {
       chapter: 19,
       section: '19.1',

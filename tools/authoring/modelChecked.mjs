@@ -213,6 +213,15 @@ export const MODELS = {
   ...LIGHT_MODELS,
   ...SKY_MODELS,
   ...forwardModels(),
+  'a-binary-stars-orbit/from-arcseconds-to-au': {
+    via: 'js/imagingWidgets.js orbitView (js/measure/orbit-fit.js fitOrbit): the fitted semi-major axis in arcseconds over the stated parallax of 0.100 arcsec',
+    value: async () =>
+      (await import('../../js/imagingWidgets.js')).orbitView({
+        n: 12,
+        model: 0,
+        plx: 100,
+      }).fit.elements.a.value / 0.1,
+  },
   'keplers-laws/use-the-law': {
     via: "js/tidalPhysics.js (G, solar mass, AU): Newton's form of the third law",
     value: () => periodAboutSun(4) / YEAR_S,
