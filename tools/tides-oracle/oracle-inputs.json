@@ -1,0 +1,274 @@
+{
+  "G": 6.6743e-11,
+  "year": 31557600,
+  "bulge": [
+    {
+      "id": "earth-moon",
+      "perturberMass": 7.342e22,
+      "distance": 3.844e8,
+      "bodyMass": 5.9722e24,
+      "bodyRadius": 6.3781e6,
+      "h2": 1
+    },
+    {
+      "id": "earth-solid",
+      "perturberMass": 7.342e22,
+      "distance": 3.844e8,
+      "bodyMass": 5.9722e24,
+      "bodyRadius": 6.3781e6,
+      "h2": 0.6
+    },
+    {
+      "id": "earth-sun",
+      "perturberMass": 1.98847e30,
+      "distance": 1.495978707e11,
+      "bodyMass": 5.9722e24,
+      "bodyRadius": 6.3781e6,
+      "h2": 1
+    },
+    {
+      "id": "io-jupiter",
+      "perturberMass": 1.8982e27,
+      "distance": 4.217e8,
+      "bodyMass": 8.932e22,
+      "bodyRadius": 1.8216e6,
+      "h2": 2.5
+    }
+  ],
+  "roche": [
+    {
+      "id": "mars-phobos",
+      "primaryRadius": 3.3895e6,
+      "primaryDensity": 3933,
+      "satelliteDensity": 1876
+    },
+    {
+      "id": "saturn-ice",
+      "primaryRadius": 6.0268e7,
+      "primaryDensity": 687.3,
+      "satelliteDensity": 900
+    },
+    {
+      "id": "equal",
+      "primaryRadius": 1e6,
+      "primaryDensity": 3000,
+      "satelliteDensity": 3000
+    },
+    {
+      "id": "denser-satellite",
+      "primaryRadius": 1e6,
+      "primaryDensity": 1000,
+      "satelliteDensity": 8000
+    }
+  ],
+  "heating": [
+    {
+      "id": "io",
+      "primaryMass": 1.8982e27,
+      "satelliteRadius": 1.8216e6,
+      "semiMajorAxis": 4.217e8,
+      "eccentricity": 0.0041,
+      "k2": 1.5,
+      "Q": 100
+    },
+    {
+      "id": "io-low",
+      "primaryMass": 1.8982e27,
+      "satelliteRadius": 1.8216e6,
+      "semiMajorAxis": 4.217e8,
+      "eccentricity": 0.0041,
+      "k2": 0.03,
+      "Q": 100
+    },
+    {
+      "id": "europa",
+      "primaryMass": 1.8982e27,
+      "satelliteRadius": 1.5608e6,
+      "semiMajorAxis": 6.711e8,
+      "eccentricity": 0.0094,
+      "k2": 0.25,
+      "Q": 100
+    },
+    {
+      "id": "enceladus",
+      "primaryMass": 5.683e26,
+      "satelliteRadius": 2.521e5,
+      "semiMajorAxis": 2.3802e8,
+      "eccentricity": 0.0047,
+      "k2": 0.02,
+      "Q": 20
+    },
+    {
+      "id": "hot",
+      "primaryMass": 1.0e27,
+      "satelliteRadius": 2.0e6,
+      "semiMajorAxis": 1.0e9,
+      "eccentricity": 0.1,
+      "k2": 0.5,
+      "Q": 5
+    },
+    {
+      "id": "massive-satellite",
+      "primaryMass": 5.9722e24,
+      "satelliteRadius": 1.7374e6,
+      "semiMajorAxis": 3.844e8,
+      "eccentricity": 0.0549,
+      "k2": 0.024,
+      "Q": 100,
+      "satelliteMass": 7.342e22
+    }
+  ],
+  "evolution": [
+    {
+      "id": "earth-moon",
+      "primaryMass": 5.9722e24,
+      "primaryRadius": 6.3781e6,
+      "satelliteMass": 7.342e22,
+      "semiMajorAxis": 3.844e8,
+      "k2": 0.3,
+      "Q": 12,
+      "spin": 7.2921159e-5,
+      "alpha": 0.3307,
+      "years": 1.0e9
+    },
+    {
+      "id": "earth-moon-q100",
+      "primaryMass": 5.9722e24,
+      "primaryRadius": 6.3781e6,
+      "satelliteMass": 7.342e22,
+      "semiMajorAxis": 3.844e8,
+      "k2": 0.3,
+      "Q": 100,
+      "spin": 7.2921159e-5,
+      "alpha": 0.3307,
+      "years": 1.0e9
+    },
+    {
+      "id": "mars-phobos",
+      "primaryMass": 6.4171e23,
+      "primaryRadius": 3.3895e6,
+      "satelliteMass": 1.0659e16,
+      "semiMajorAxis": 9.376e6,
+      "k2": 0.17,
+      "Q": 100,
+      "spin": 7.0882e-5,
+      "alpha": 0.3644,
+      "years": 3.0e7
+    },
+    {
+      "id": "jupiter-io",
+      "primaryMass": 1.8982e27,
+      "primaryRadius": 7.1492e7,
+      "satelliteMass": 8.932e22,
+      "semiMajorAxis": 4.217e8,
+      "k2": 0.38,
+      "Q": 30000,
+      "spin": 1.7585e-4,
+      "alpha": 0.254,
+      "years": 1.0e9
+    },
+    {
+      "id": "saturn-mimas",
+      "primaryMass": 5.683e26,
+      "primaryRadius": 6.0268e7,
+      "satelliteMass": 3.7493e19,
+      "semiMajorAxis": 1.8552e8,
+      "k2": 0.34,
+      "Q": 2000,
+      "spin": 1.6379e-4,
+      "alpha": 0.22,
+      "years": 1.0e9
+    },
+    {
+      "id": "equal-masses",
+      "primaryMass": 1.0e24,
+      "primaryRadius": 1.0e6,
+      "satelliteMass": 1.0e24,
+      "semiMajorAxis": 1.0e7,
+      "k2": 0.5,
+      "Q": 50,
+      "spin": 1.0e-3,
+      "alpha": 0.33,
+      "years": 1.0e3
+    }
+  ],
+  "locking": [
+    {
+      "id": "moon",
+      "perturberMass": 5.9722e24,
+      "satelliteMass": 7.342e22,
+      "satelliteRadius": 1.7374e6,
+      "semiMajorAxis": 3.844e8,
+      "k2": 0.024,
+      "Q": 100,
+      "spin": 1.7453292519943296e-4,
+      "alpha": 0.393
+    },
+    {
+      "id": "io",
+      "perturberMass": 1.8982e27,
+      "satelliteMass": 8.932e22,
+      "satelliteRadius": 1.8216e6,
+      "semiMajorAxis": 4.217e8,
+      "k2": 1.5,
+      "Q": 100,
+      "spin": 1.7453292519943296e-4,
+      "alpha": 0.38
+    },
+    {
+      "id": "earth-by-moon",
+      "perturberMass": 7.342e22,
+      "satelliteMass": 5.9722e24,
+      "satelliteRadius": 6.3781e6,
+      "semiMajorAxis": 3.844e8,
+      "k2": 0.3,
+      "Q": 12,
+      "spin": 7.2921159e-5,
+      "alpha": 0.3307
+    },
+    {
+      "id": "generic",
+      "perturberMass": 2.0e30,
+      "satelliteMass": 3.0e23,
+      "satelliteRadius": 2.4e6,
+      "semiMajorAxis": 5.8e10,
+      "k2": 0.3,
+      "Q": 100,
+      "spin": 1.2e-5,
+      "alpha": 0.33
+    }
+  ],
+  "resonance": [
+    { "id": "mimas-2-1", "semiMajorAxis": 1.8552e8, "p": 2, "q": 1 },
+    { "id": "3-2", "semiMajorAxis": 1.0e8, "p": 3, "q": 2 },
+    { "id": "4-3", "semiMajorAxis": 1.0e8, "p": 4, "q": 3 },
+    { "id": "5-3", "semiMajorAxis": 2.5e8, "p": 5, "q": 3 },
+    { "id": "7-6", "semiMajorAxis": 1.5145e8, "p": 7, "q": 6 }
+  ],
+  "toomre": [
+    {
+      "id": "b-ring",
+      "primaryMass": 5.683e26,
+      "radius": 1.0e8,
+      "velocityDispersion": 0.5,
+      "surfaceDensity": 500,
+      "kind": "particles"
+    },
+    {
+      "id": "fluid",
+      "primaryMass": 5.683e26,
+      "radius": 1.0e8,
+      "velocityDispersion": 0.5,
+      "surfaceDensity": 500,
+      "kind": "fluid"
+    },
+    {
+      "id": "thin",
+      "primaryMass": 1.0e27,
+      "radius": 2.0e8,
+      "velocityDispersion": 2.0,
+      "surfaceDensity": 50,
+      "kind": "particles"
+    }
+  ]
+}

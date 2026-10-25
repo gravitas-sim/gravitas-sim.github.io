@@ -1,0 +1,20 @@
+{
+  "format": "gravitas.tides-oracle-provenance/1",
+  "prompt": 204,
+  "oracle": "numpy 2.2.6 and scipy 1.15.3 (integrate.solve_ivp, DOP853, rtol 1e-12)",
+  "identity": "An independent implementation of the closed forms from their definitions in Python floats, and a numerical integration of the constant-Q recession da/dt = C a^(-11/2) that does not use the closed-form solution the kernel uses; no Gravitas code ran.",
+  "retrieved": "2026-10-25",
+  "index": "none: Prompt 180's scratch virtual environment as it was; nothing was added for this prompt",
+  "python": "3.10.12 (macOS-26.6.2-x86_64-i386-64bit, x86_64)",
+  "packages": {
+    "numpy": "2.2.6",
+    "scipy": "1.15.3"
+  },
+  "run": "cd <empty scratchpad directory>; <venv>/bin/python -I tools/tides-oracle/oracle.py tools/tides-oracle/oracle-inputs.json tests/fixtures/tides/oracle-results.json; then Prettier",
+  "committedBefore": "thresholds.json and TIDAL_KERNEL.md's contract were committed (58ea49ab) before the oracle's inputs and script existed; the oracle's results were committed before js/kernels/tides/, the validation tool and the tests existed",
+  "files": {
+    "tools/tides-oracle/oracle-inputs.json": "127a5cee2c4118f7a10bb097b2bbd6b349426e10ee67793e034bc83165d9fa94",
+    "tools/tides-oracle/oracle.py": "93607ec6aba92387f79967505c859bc0559e469542d6eade2a97757d737213f6",
+    "tests/fixtures/tides/oracle-results.json": "f5dc2458e0c37c857d942151a686142ec97a3fd0c8eff98c3d99a06dcb0254af"
+  }
+}
