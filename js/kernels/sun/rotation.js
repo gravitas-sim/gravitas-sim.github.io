@@ -43,7 +43,7 @@ export const LAWS = Object.freeze({
     A: 2.894 * URAD_S,
     B: -0.428 * URAD_S,
     C: -0.37 * URAD_S,
-    unit: 'degree/day, sidereal',
+    rateUnit: 'degree/day, sidereal',
     tracer: 'small magnetic features, not sunspots (a few percent apart)',
     citation:
       'Howard, Harvey and Forgach 1990, Solar Physics 130, 295: 2.894, -0.428, -0.370 microradian/s',
@@ -54,7 +54,7 @@ export const LAWS = Object.freeze({
     A: 2.851 * URAD_S,
     B: -0.343 * URAD_S,
     C: -0.474 * URAD_S,
-    unit: 'degree/day, sidereal',
+    rateUnit: 'degree/day, sidereal',
     tracer: 'Doppler features in the photosphere',
     citation:
       'Snodgrass and Ulrich 1990, Astrophysical Journal 351, 309: 2.851, -0.343, -0.474 microradian/s',
