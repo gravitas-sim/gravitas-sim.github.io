@@ -758,6 +758,13 @@
       "student": false
     },
     {
+      "file": "SATELLITE_EPHEMERIS.md",
+      "kind": "feature",
+      "purpose": "Jupiter's moons from Horizons: the pack, the cadence, the weighing and the validation table.",
+      "owner": 193,
+      "student": true
+    },
+    {
       "file": "SCAFFOLDING.md",
       "kind": "feature",
       "purpose": "Hints, explainers and feedback.",

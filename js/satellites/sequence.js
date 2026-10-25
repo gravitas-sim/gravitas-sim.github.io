@@ -18,6 +18,8 @@
 // Pure: no DOM.
 // =============================================================================
 
+import { fnvHex8 } from '../hash.js';
+import { ID_OBSERVING_SETUP } from '../names.js';
 import { run as runCcd } from '../forward/models/ccd.js';
 import { gaussian as normals, stream } from '../random/streams.js';
 import { MOON_IDS, moonsAt } from './galilean.js';
@@ -114,7 +116,7 @@ export function renderFrame(model, epoch, index) {
     sources.push({ x: p.px, y: p.py, rate: rate(SEQUENCE.magnitudes[id]) });
   }
   const setup = {
-    format: 'gravitas.observing-setup',
+    format: ID_OBSERVING_SETUP,
     formatVersion: 1,
     seed: `${SEQUENCE.seed}-${index}`,
     instrument: {
@@ -275,12 +277,10 @@ export function measureFrame(model, epoch, frame) {
   };
 }
 
-/** A short digest of the pixels (FNV-1a over the rounded counts), 8 hex digits. */
+/** A short digest of the pixels (js/hash.js over every seventh rounded count), 8 hex digits. */
 export function frameDigest(frame) {
-  let h = 0x811c9dc5;
-  for (let i = 0; i < frame.counts.length; i += 7) {
-    h ^= Math.round(frame.counts[i]) & 0xffff;
-    h = Math.imul(h, 0x01000193) >>> 0;
-  }
-  return h.toString(16).padStart(8, '0');
+  const sample = [];
+  for (let i = 0; i < frame.counts.length; i += 7)
+    sample.push(Math.round(frame.counts[i]) & 0xffff);
+  return fnvHex8(sample.join(','));
 }

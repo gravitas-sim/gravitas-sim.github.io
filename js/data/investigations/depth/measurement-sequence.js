@@ -950,7 +950,7 @@ export const WEIGHING_JUPITER_DEEPER = {
         {
           id: 'radius',
           label: 'Ganymede’s orbit radius',
-          unit: 'R',
+          unit: 'RJup',
           hint: '15.0',
         },
       ],
@@ -978,12 +978,12 @@ export const WEIGHING_JUPITER_DEEPER = {
       type: 'question',
       kind: 'numeric',
       title: 'Kepler’s third law on a moon',
-      body: `For a small moon around a heavy planet, GM = 4&pi;&sup2;a&sup3;/P&sup2;, with
+      body: `For a small moon around a heavy planet, GM = 4π²a&sup3;/P&sup2;, with
              a the orbit radius in kilometers and P the period in seconds. G is the
              gravitational constant and M Jupiter&rsquo;s mass. Use the radius and period
              you just read: a = 14.97 &times; 71,492 km and P = 7.141 days.`,
       prompt: 'What is Jupiter’s GM from Ganymede, in millions of km³/s²?',
-      unit: 'million km³/s²',
+      unit: '',
       answer: 127.2,
       tolerance: 1.0,
       hints: [
@@ -1014,7 +1014,7 @@ export const WEIGHING_JUPITER_DEEPER = {
              times the radius&rsquo;s relative uncertainty and twice the period&rsquo;s.`,
       prompt:
         'Report Jupiter’s mass from Ganymede as value ± uncertainty, in units of 10²⁷ kg.',
-      unit: '10²⁷ kg',
+      unit: '',
       answer: 1.905,
       tolerance: 0.02,
       maxUncertainty: 0.04,
@@ -1105,8 +1105,8 @@ export const WEIGHING_JUPITER_DEEPER = {
       fields: [
         {
           id: 'gm',
-          label: 'Weighted mean GM, corrected',
-          unit: '10⁶ km³/s²',
+          label: 'Weighted mean GM, corrected (millions of km³/s²)',
+          unit: '',
           hint: '126.9',
         },
         {
@@ -1148,7 +1148,7 @@ export const WEIGHING_JUPITER_DEEPER = {
              frames and the ephemeris both take into account.)`,
       prompt:
         'What is Callisto’s greatest north-south offset from Jupiter, in Jupiter radii?',
-      unit: 'R',
+      unit: 'RJup',
       answer: 0.63,
       tolerance: 0.1,
       hints: [
@@ -1742,7 +1742,7 @@ export const INSTRUCTOR = {
         },
         {
           name: 'Synthetic frames, real positions',
-          text: 'The positions are JPL Horizons (JUP365) through a Chebyshev pack (sky/galilean-moons.json, lazily fetched, never precached); the frames are rendered by the CCD forward model with seeing and noise and are labelled synthetic. The lesson links NASA’s Jupiter moons page for a real picture.',
+          text: 'The positions are JPL Horizons (JUP365) through a Chebyshev data file (sky/galilean-moons.json, lazily fetched, never precached); the frames are rendered by the CCD forward model with seeing and noise and are labeled synthetic. The investigation links NASA’s Jupiter moons page for a real picture.',
         },
         {
           name: 'Depth',
@@ -1773,7 +1773,7 @@ export const INSTRUCTOR = {
         },
       ],
       teachingNotes: [
-        'The frames are synthetic on purpose: the moons are at their real positions on those nights, and the truth is known. The lesson says so in the first step and links a real picture.',
+        'The frames are synthetic on purpose: the moons are at their real positions on those nights, and the truth is known. The investigation says so in the first step and links a real picture.',
         'Marks are the centroids of the moons near where the overlay predicts them; a moon on the disk or blended with another is not measured, so a fit has fewer than 51 points. Each point carries an assumed 0.03 Jupiter radii of seeing.',
         'Planet GM here is the planet alone, 126,686,534 km³/s² (the value js/mission/bodies.js states); Jupiter’s oblateness and a moon’s own mass are not removed and are named.',
         'Inherited limits: nothing here claims astrometry on authentic frames or a moving object; the sinusoid is not the whole of the moon’s motion and the stated uncertainty includes that misfit.',
@@ -1788,7 +1788,7 @@ export const INSTRUCTOR = {
         'Continue with the resonance investigation, where the moons’ periods meet 1 : 2 : 4.',
       ],
       modelNotes:
-        'js/jovianWidgets.js (sequenceOf, fitMoon, weighAll): the pack of ephemeris-packs/galilean-2025-11.json read by js/satellites/galilean.js, the plan and alias analysis of cadence.js, the frames of sequence.js through js/forward/models/ccd.js, the fit and Kepler law of weigh.js. See SATELLITE_EPHEMERIS.md for the validation contract and the failing legs.',
+        'js/jovianWidgets.js (sequenceOf, fitMoon, weighAll): the data file of ephemeris-packs/galilean-2025-11.json read by js/satellites/galilean.js, the plan and alias analysis of cadence.js, the frames of sequence.js through js/forward/models/ccd.js, the fit and Kepler law of weigh.js. See SATELLITE_EPHEMERIS.md for the validation contract and the failing legs.',
     },
   },
   flow: {
@@ -2079,7 +2079,7 @@ export const INSTRUCTOR = {
     },
     'weighing-jupiter': {
       core: 'medium',
-      quantitative: 'medium',
+      quantitative: 'long',
       advanced: 'long',
     },
   },

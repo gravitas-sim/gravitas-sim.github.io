@@ -38,7 +38,7 @@ export const ES_JOVIAN = {
   'jovW.f.value.frames':
     '{n}: {hourly} horarias en tres noches, {nightly} una por noche',
   'jovW.f.value.how':
-    'Estas imágenes son sintéticas, hechas para esta lección con posiciones de JPL Horizons (JUP365): no se observó ninguna imagen de Júpiter. Las posiciones se leen en los píxeles más brillantes de cada imagen, cerca de donde las predice la superposición, no se escriben a mano.',
+    'Estas imágenes son sintéticas, hechas para esta investigación con posiciones de JPL Horizons (JUP365): no se observó ninguna imagen de Júpiter. Las posiciones se leen en los píxeles más brillantes de cada imagen, cerca de donde las predice la superposición, no se escriben a mano.',
   'jovW.p.title': 'Una sinusoide para una luna',
   'jovW.p.note':
     'La distancia medida de una luna al este de Júpiter frente al tiempo, con la sinusoide que mejor se ajusta. Elige la luna y cómo se muestrearon las noches: una vez por noche, o la secuencia diseñada con tres noches horarias.',

@@ -2052,7 +2052,7 @@ export const WEIGHING_JUPITER = {
       body: `Through binoculars Jupiter has four small companions in a line: Io, Europa,
              Ganymede and Callisto, the moons Galileo saw in January 1610. This
              investigation measures them. The frames here are <strong>synthetic</strong>: no
-             picture of Jupiter was observed for this lesson. Each was made from the
+             picture of Jupiter was observed for this investigation. Each was made from the
              moons&rsquo; real positions on the nights of 20 November to 30 December 2025
              (JPL Horizons, satellite ephemeris JUP365), then given Jupiter&rsquo;s disk, the
              moons&rsquo; brightness, atmospheric blur and detector noise. For a real picture
@@ -2101,13 +2101,13 @@ export const WEIGHING_JUPITER = {
         {
           id: 'd14',
           label: 'Ganymede’s distance from Jupiter in frame 14',
-          unit: 'R',
+          unit: 'RJup',
           hint: '9.7',
         },
         {
           id: 'move',
           label: 'How far it moved between frame 14 and frame 16',
-          unit: 'R',
+          unit: 'RJup',
           hint: '0.9',
         },
       ],
@@ -2145,7 +2145,7 @@ export const WEIGHING_JUPITER = {
         {
           id: 'radius',
           label: 'Io’s orbit radius',
-          unit: 'R',
+          unit: 'RJup',
           hint: '5.9',
         },
       ],

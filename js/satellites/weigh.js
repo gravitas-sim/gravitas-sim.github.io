@@ -22,6 +22,7 @@
 // =============================================================================
 
 import { chiSquareSf } from '../analysis/stats.js';
+import { fixed } from '../format.js';
 import { GM_JUPITER, R_JUPITER_KM } from './galilean.js';
 
 export const G_SI = 6.6743e-11;
@@ -223,7 +224,7 @@ export function fitSinusoid(t, x, sigma = null, opts = {}) {
   if (P > span)
     throw new FitRefusal(
       'span-shorter-than-period',
-      `The marks cover ${span.toFixed(2)} days and the best period is ${P.toFixed(2)} days: less than one cycle is not a period.`
+      `The marks cover ${fixed(span, 2)} days and the best period is ${fixed(P, 2)} days: less than one cycle is not a period.`
     );
   // Jacobian at the best fit: a, b, c, f.
   const w2 = 2 * Math.PI * best.f;

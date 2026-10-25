@@ -38,7 +38,7 @@ export const EN_JOVIAN = {
   'jovW.f.value.frames':
     '{n}: {hourly} hourly over three nights, {nightly} once a night',
   'jovW.f.value.how':
-    'These frames are synthetic, made for this lesson from JPL Horizons positions (JUP365): no picture of Jupiter was observed. The positions are read from each frame’s brightest pixels, near where the overlay predicts them, not typed in.',
+    'These frames are synthetic, made for this investigation from JPL Horizons positions (JUP365): no picture of Jupiter was observed. The positions are read from each frame’s brightest pixels, near where the overlay predicts them, not typed in.',
   'jovW.p.title': 'A sinusoid for one moon',
   'jovW.p.note':
     'The measured distance of one moon east of Jupiter against time, with the sinusoid that fits best. Choose the moon and how the nights were sampled: once a night, or the designed sequence with three hourly nights.',

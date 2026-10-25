@@ -479,7 +479,7 @@ export const WEIGHING_JUPITER_DEEPER = {
     },
     {
       title: 'La tercera ley de Kepler con una luna',
-      body: 'Para una luna pequeña alrededor de un planeta pesado, GM = 4&pi;&sup2;a&sup3;/P&sup2;, con a el radio de órbita en kilómetros y P el período en segundos. G es la constante gravitatoria y M la masa de Júpiter. Usa el radio y el período que acabas de leer: a = 14,97 &times; 71 492 km y P = 7,141 días.',
+      body: 'Para una luna pequeña alrededor de un planeta pesado, GM = 4π²a&sup3;/P&sup2;, con a el radio de órbita en kilómetros y P el período en segundos. G es la constante gravitatoria y M la masa de Júpiter. Usa el radio y el período que acabas de leer: a = 14,97 &times; 71 492 km y P = 7,141 días.',
       prompt:
         '¿Cuál es el GM de Júpiter según Ganímedes, en millones de km³/s²?',
       hints: [
@@ -551,7 +551,7 @@ export const WEIGHING_JUPITER_DEEPER = {
       title: 'Cuatro lunas, corregidas',
       body: 'Elige <strong>las cuatro</strong> (0) y pon la corrección en <strong>1</strong>. El instrumento convierte cada período aparente en el orbital con el giro del marco, pesa Júpiter con cada luna y combina las cuatro, con una prueba de chi cuadrado de cuán bien concuerdan. Sin la corrección las cuatro discrepan mucho (chi cuadrado 21 con 3 grados de libertad); lee la media ponderada corregida y el chi cuadrado.',
       fields: [
-        { label: 'GM medio ponderado, corregido' },
+        { label: 'GM medio ponderado, corregido (millones de km³/s²)' },
         { label: 'Chi cuadrado de las cuatro, corregido' },
       ],
     },

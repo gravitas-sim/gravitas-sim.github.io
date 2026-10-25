@@ -278,6 +278,6 @@ export const BROWSE_META = {
   },
   'weighing-jupiter': {
     tags: ['observing'],
-    numericCount: 5,
+    numericCount: 0,
   },
 };
