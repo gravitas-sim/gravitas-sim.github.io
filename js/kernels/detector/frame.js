@@ -37,7 +37,7 @@
 // spec, so the same spec is the same frame.
 // =============================================================================
 
-import { mulberry32, normalizeSeed } from '../../rng.js';
+import { stream } from '../../random/streams.js';
 
 // Free globals are slow under Jest's vm; the local names are not.
 const { Math, Float64Array, Int32Array } = globalThis;
@@ -135,7 +135,7 @@ function poisson(rng, lambda) {
 }
 
 /** A fresh stream keyed by the seed and a label. */
-const streamOf = (seed, label) => mulberry32(normalizeSeed(`${seed}:${label}`));
+const streamOf = (seed, label) => stream('noise', seed, label);
 
 /** The detector, completed with defaults and checked. */
 export function normalizeDetector(d = {}) {

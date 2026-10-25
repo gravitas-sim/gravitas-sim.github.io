@@ -68,7 +68,15 @@ describe('the production build preserves what the physics reads', () => {
   // saved states have always carried), nothing reads a name from the
   // constructor, and no bundle needs keepNames. These hold that.
   const code = f => read(f).replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, '');
-  const physics = read('js/physics.js');
+  // The engine's code is in five files since slice S7.
+  const ENGINE = [
+    'js/physics.js',
+    'js/engine/bodies.js',
+    'js/engine/blackHole.js',
+    'js/engine/collisions.js',
+    'js/engine/step.js',
+  ];
+  const physics = ENGINE.map(read).join('\n');
   const BODY_CLASSES = [
     'Planet',
     'GasGiant',
@@ -108,13 +116,13 @@ describe('the production build preserves what the physics reads', () => {
     // constructor: { name: 'BlackHole' }, which a name comparison accepted and
     // an identity one does not; the loop then merged two holes forever. A
     // wrapper carries the kind the class carries.
-    expect(code('js/physics.js')).not.toMatch(/\bconstructor:/);
-    expect(code('js/physics.js')).toMatch(/kind: 'BlackHole',/);
+    for (const f of ENGINE) expect(code(f)).not.toMatch(/\bconstructor:/);
+    expect(code('js/engine/collisions.js')).toMatch(/kind: 'BlackHole',/);
   });
 
   test('every body class has a kind equal to its own name', () => {
     const bodies = [
-      ...physics.matchAll(/^class (\w+) extends PhysicsObject\b/gm),
+      ...physics.matchAll(/^(?:export )?class (\w+) extends PhysicsObject\b/gm),
     ].map(m => m[1]);
     // The black hole stands alone and carries its own accessor.
     expect(physics).toMatch(
@@ -399,6 +407,12 @@ describe('the deploy sequence keeps its artifacts describing one candidate', () 
       new URL('../js/notebookBridge.js', import.meta.url),
       'utf8'
     );
-    expect(bridge).toContain("meta('gravitas-revision')");
+    // The name is spelled once, in the registry, and the bridge reads it there.
+    expect(bridge).toContain('meta(KEY_META_REVISION)');
+    const registry = readFileSync(
+      new URL('../js/names.js', import.meta.url),
+      'utf8'
+    );
+    expect(registry).toMatch(/KEY_META_REVISION =\s*'gravitas-revision'/);
   });
 });

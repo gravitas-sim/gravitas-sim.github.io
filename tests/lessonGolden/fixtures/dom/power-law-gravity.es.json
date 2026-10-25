@@ -1,0 +1,62 @@
+[
+ {
+  "depth": "core",
+  "role": "first",
+  "sid": "the-exactly",
+  "position": [
+   1,
+   21
+  ],
+  "title": "¿Y si la gravedad no fuera inversa al cuadrado?",
+  "subtitle": "Cambia el exponente y descubre qué dependía de él",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 21 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">La palabra «exactamente»</h3><div class=\"inv-step-body\"><p>La ley de gravitación de Newton dice que la atracción entre dos masas decae como uno partido por el cuadrado de la distancia que las separa. Todas las órbitas que has visto en Gravitas la han obedecido.</p><p>El número 2 de esa ley hace muchísimo trabajo, y es fácil pasarlo por alto. No es 2 porque dos sea un número cómodo. Es 2 porque eso es lo que hace el Sistema Solar, con una precisión de una parte entre mil millones, y buena parte de lo que sabes sobre órbitas se sigue de que sea 2 y no 1,9 o 2,1.</p><p>Esta investigación toma ese número y lo mueve. Todo lo demás —las masas, las posiciones iniciales, las velocidades, el integrador— se mantiene fijo. Luego mides qué ha cambiado.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> La simulación está en pausa. No se moverá nada hasta que la dejes correr.</p>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "graded",
+  "sid": "predict-does-small-matter",
+  "position": [
+   3,
+   21
+  ],
+  "title": "¿Y si la gravedad no fuera inversa al cuadrado?",
+  "subtitle": "Cambia el exponente y descubre qué dependía de él",
+  "body": "<p class=\"inv-step-count\">Paso 3 de 21 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">¿Importa un cambio pequeño?</h3><div class=\"inv-step-body\"><p>Vas a poner un planeta en una órbita ligeramente elíptica y a cambiar el exponente de 2 a 2,05: un cambio del dos y medio por ciento, a una distancia donde la intensidad de la gravedad está anclada y no puede cambiar en absoluto.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Decide antes de ejecutarlo. Lo valioso de predecir es el compromiso, no el acierto.</p><p class=\"inv-prompt\" id=\"invChoicePrompt\">Cambiar n de 2 a 2,05…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>no hará casi nada: dos y medio por ciento es un cambio pequeño</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>cambiará la órbita de forma apreciable en unas pocas vueltas</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>expulsará al planeta del sistema de inmediato</span></button></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "marked",
+  "sid": "predict-does-small-matter",
+  "position": [
+   3,
+   21
+  ],
+  "title": "¿Y si la gravedad no fuera inversa al cuadrado?",
+  "subtitle": "Cambia el exponente y descubre qué dependía de él",
+  "body": "<p class=\"inv-step-count\">Paso 3 de 21 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">¿Importa un cambio pequeño?</h3><div class=\"inv-step-body\"><p>Vas a poner un planeta en una órbita ligeramente elíptica y a cambiar el exponente de 2 a 2,05: un cambio del dos y medio por ciento, a una distancia donde la intensidad de la gravedad está anclada y no puede cambiar en absoluto.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Decide antes de ejecutarlo. Lo valioso de predecir es el compromiso, no el acierto.</p><p class=\"inv-prompt\" id=\"invChoicePrompt\">Cambiar n de 2 a 2,05…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>no hará casi nada: dos y medio por ciento es un cambio pequeño</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>cambiará la órbita de forma apreciable en unas pocas vueltas</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>expulsará al planeta del sistema de inmediato</span></button></div><p class=\"inv-held\">Tu respuesta queda registrada. No se corrige hasta que llegues a «¿Se cierra la elipse?», para que la decida el experimento y no la clave de respuestas.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Cambiar respuesta</button>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "last",
+  "sid": "the-honest-caveat",
+  "position": [
+   21,
+   21
+  ],
+  "title": "¿Y si la gravedad no fuera inversa al cuadrado?",
+  "subtitle": "Cambia el exponente y descubre qué dependía de él",
+  "body": "<p class=\"inv-step-count\">Paso 21 de 21 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Qué ha sido esto y qué no</h3><div class=\"inv-step-body\"><p>Una última puntualización, porque sería fácil marcharse con una conclusión mayor de la que sostienen las pruebas.</p><p>Esto ha sido un <strong>experimento controlado dentro de una simulación</strong>, no una teoría de la gravedad. La ley de potencias con radio de referencia no es algo que nadie proponga como descripción del universo; es un mando deliberadamente simple, elegido porque girarlo aísla una pregunta. Las alternativas reales a la gravedad newtoniana no se parecen a esto.</p><p>Las órbitas del Sistema Solar real <em>sí</em> precesan: la de Mercurio de manera célebre, 43 segundos de arco por siglo más de lo que puede explicar la gravedad newtoniana con todos los demás planetas incluidos. Eso lo explicó en 1915 la relatividad general, que no es un cambio del exponente y no es lo que hace este modelo. El parecido merece notarse y la explicación no es la misma.</p><p>Lo que sí puedes llevarte es el método. Cuando un resultado cambie, pregunta de qué dependía; cuando no cambie, pregunta por qué no; y cuando una simulación te diga algo sorprendente, cambia el paso temporal antes de creértelo.</p></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ }
+]

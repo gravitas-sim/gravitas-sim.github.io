@@ -2,6 +2,33 @@ import js from '@eslint/js';
 import prettier from 'eslint-plugin-prettier';
 import prettierConfig from 'eslint-config-prettier';
 
+// Math.random outside js/random/ (Prompt 149, docs/SEEDING.md). A seeded draw
+// comes from a named stream there; the files below are the ones that may still
+// call Math.random, each for a stated reason, and every one is a wait in the
+// stream table, not a decision that it stays.
+const MATH_RANDOM_ALLOWED = [
+  // The engine's stream: withSeed() swaps Math.random for the seeded stream
+  // while a world is built, and the world, the collisions and the thirteen
+  // particle bursts draw from it. js/random/streams.js wraps it as `engine`.
+  'js/rng.js',
+  'js/world/build.js',
+  'js/scenarios.js',
+  'js/placement.js',
+  'js/engine/bodies.js',
+  'js/engine/blackHole.js',
+  'js/engine/collisions.js',
+  'js/engine/step.js',
+  // Not seeded on purpose: nothing to reproduce.
+  'js/main.js',
+  'js/audio.js',
+  'js/captureMeasure.js',
+  'js/evaluationKit.js',
+  // A random suffix that keeps two record ids from colliding.
+  'js/myWork/made.js',
+  'js/experiments/store.js',
+  'js/notebook/entry.js',
+];
+
 export default [
   js.configs.recommended,
   {
@@ -146,6 +173,7 @@ export default [
       'js/mission/worker.js',
       'js/mission/labWorker.js',
       'js/kernels/stellar/worker.js',
+      'js/dataKinds/fitsWorker.js',
     ],
     languageOptions: {
       ecmaVersion: 2021,
@@ -278,6 +306,21 @@ export default [
       'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
       'no-console': 'off',
       'prettier/prettier': 'error',
+    },
+  },
+  {
+    files: ['js/**/*.js'],
+    ignores: ['js/random/**', ...MATH_RANDOM_ALLOWED],
+    rules: {
+      'no-restricted-properties': [
+        'error',
+        {
+          object: 'Math',
+          property: 'random',
+          message:
+            'Draw from a named stream in js/random/streams.js; the files that may still call Math.random are listed in eslint.config.js (MATH_RANDOM_ALLOWED).',
+        },
+      ],
     },
   },
 ];

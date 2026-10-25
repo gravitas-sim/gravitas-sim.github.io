@@ -29,7 +29,7 @@ import {
   profile,
   crossing,
 } from '../../inference/fit.js';
-import { mulberry32, normalizeSeed } from '../../rng.js';
+import { gaussian, stream } from '../../random/streams.js';
 import { createCosmology, C_KMS } from './flrw.js';
 
 const { Math, Float64Array } = globalThis;
@@ -216,26 +216,6 @@ export function h0Degeneracy(data, values = [50, 60, 70, 80, 90]) {
   return { points: pts, range: Math.max(...chis) - Math.min(...chis) };
 }
 
-/** One standard normal at a time, Box-Muller over the shared seeded generator. */
-function normals(seed) {
-  const u = mulberry32(normalizeSeed(String(seed)));
-  let spare = null;
-  return () => {
-    if (spare !== null) {
-      const s = spare;
-      spare = null;
-      return s;
-    }
-    let a;
-    do a = u();
-    while (a <= 1e-12);
-    const b = u();
-    const r = Math.sqrt(-2 * Math.log(a));
-    spare = r * Math.sin(2 * Math.PI * b);
-    return r * Math.cos(2 * Math.PI * b);
-  };
-}
-
 /**
  * A synthetic Hubble diagram: redshifts spread as a survey spreads them (the
  * square of a uniform draw, thick at low z), distance moduli from the model,
@@ -254,8 +234,8 @@ export function syntheticHubbleDiagram(p = {}) {
     offset = 0,
     seed = 'hubble',
   } = p;
-  const u = mulberry32(normalizeSeed(`${seed}:z`));
-  const g = normals(`${seed}:noise`);
+  const u = stream('injection', seed, 'z');
+  const g = gaussian(stream('noise', seed, 'noise'));
   const cos = createCosmology(cosmology);
   const z = Float64Array.from({ length: n }, () => {
     const r = u();

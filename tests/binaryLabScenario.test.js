@@ -1,5 +1,6 @@
 import { applyPreset, resetPresetMemory } from '../js/scenarios.js';
 import { DEFAULT_SETTINGS } from '../js/appState.js';
+import { pristineSettingsFor } from '../js/shareState.js';
 
 // =============================================================================
 // The investigation's independent variables have to survive a rebuild.
@@ -80,6 +81,34 @@ describe('re-running a lab', () => {
     expect(s.show_trails).toBe(true);
     expect(s.integrator).toBe('Velocity Verlet');
     expect(s.binary_lab_eccentricity).toBe(0.4);
+  });
+});
+
+describe('a baseline read in the middle of a sweep', () => {
+  // The experiment panel draws a diff against the scenario's own settings
+  // (pristineSettingsFor) whenever it redraws, which it does on a timer. That
+  // probe runs applyPreset on a scratch object, and applyPreset remembers the
+  // scenario it set up: the sweep's next rebuild then found the memory naming
+  // another scenario, carried nothing, and read back "asked 0.35, got 0.15".
+  // It showed as a chart with one point in e2e/chartParity.spec.js.
+  test('does not make the next rebuild forget the value it was given', () => {
+    const s = load(fresh(), 'Binary Planet Lab');
+    s.binary_lab_planet_a = 0.2;
+    load(s, 'Binary Planet Lab');
+    pristineSettingsFor('binary-bh', DEFAULT_SETTINGS);
+    s.binary_lab_planet_a = 0.35;
+    load(s, 'Binary Planet Lab');
+    expect(s.binary_lab_planet_a).toBe(0.35);
+  });
+
+  test('and leaves the memory as it found it, in both directions', () => {
+    expect(resetPresetMemory(null)).toBe(null);
+    load(fresh(), 'Binary Planet Lab');
+    pristineSettingsFor('Circumbinary Planet Lab', DEFAULT_SETTINGS);
+    const was = resetPresetMemory(null);
+    expect(was).toBe('binary-planet-lab');
+    expect(resetPresetMemory('x')).toBe(null);
+    expect(resetPresetMemory(null)).toBe('x');
   });
 });
 

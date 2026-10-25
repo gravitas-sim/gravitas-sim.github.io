@@ -1,0 +1,1068 @@
+{
+ "id": "detect-this-planet",
+ "locale": "es",
+ "title": "¿Puedes detectar este planeta?",
+ "steps": 26,
+ "depths": [
+  [
+   "core",
+   26
+  ]
+ ],
+ "grading": [
+  {
+   "sid": "what-decides-whether-you-find",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "what-have-you-established",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "schedule-b-twelve-nights-thirty",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "why-it-failed",
+   "type": "question",
+   "kind": "numeric",
+   "tolerance": 0.06,
+   "grades": [
+    [
+     "1",
+     true,
+     "correct",
+     1,
+     null,
+     false,
+     null
+    ],
+    [
+     "1,03",
+     true,
+     "correct",
+     1.03,
+     null,
+     false,
+     null
+    ],
+    [
+     "1,18",
+     false,
+     "incorrect",
+     1.18,
+     null,
+     false,
+     null
+    ],
+    [
+     "1 orbits",
+     true,
+     "correct",
+     1,
+     "orbits",
+     false,
+     null
+    ],
+    [
+     "not a number",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "notANumber"
+    ],
+    [
+     "",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "blank"
+    ]
+   ]
+  },
+  {
+   "sid": "ambiguous-evidence",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "the-limits-of-finding-nothing",
+   "type": "question",
+   "kind": "short",
+   "grades": [
+    [
+     "ungraded",
+     null
+    ]
+   ]
+  },
+  {
+   "sid": "how-deep-is-an-earth",
+   "type": "question",
+   "kind": "numeric",
+   "tolerance": 6,
+   "grades": [
+    [
+     "84",
+     true,
+     "correct",
+     84,
+     null,
+     false,
+     null
+    ],
+    [
+     "87",
+     true,
+     "correct",
+     87,
+     null,
+     false,
+     null
+    ],
+    [
+     "102",
+     false,
+     "incorrect",
+     102,
+     null,
+     false,
+     null
+    ],
+    [
+     "84 ppm",
+     true,
+     "correct",
+     84,
+     "ppm",
+     false,
+     null
+    ],
+    [
+     "not a number",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "notANumber"
+    ],
+    [
+     "",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "blank"
+    ]
+   ]
+  },
+  {
+   "sid": "the-same-planet-from-the-ground",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "why-more-nights-do-not-help",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "what-would-it-take",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  }
+ ],
+ "progress": {
+  "record": {
+   "schema": 2,
+   "lesson": "detect-this-planet",
+   "stepSid": "what-you-decided-before-you",
+   "responses": {
+    "detect-this-planet:what-decides-whether-you-find": 1,
+    "detect-this-planet:what-have-you-established": 2,
+    "detect-this-planet:schedule-b-twelve-nights-thirty": 2,
+    "detect-this-planet:why-it-failed": "1",
+    "detect-this-planet:why-it-failed:locale": "es",
+    "detect-this-planet:ambiguous-evidence": 2,
+    "detect-this-planet:the-limits-of-finding-nothing": "A fixed sentence for the golden.",
+    "detect-this-planet:how-deep-is-an-earth": "84",
+    "detect-this-planet:how-deep-is-an-earth:locale": "es",
+    "detect-this-planet:the-same-planet-from-the-ground": 2,
+    "detect-this-planet:why-more-nights-do-not-help": 1,
+    "detect-this-planet:what-would-it-take": 2
+   },
+   "attempts": {
+    "detect-this-planet:what-decides-whether-you-find": 1,
+    "detect-this-planet:what-have-you-established": 1,
+    "detect-this-planet:schedule-b-twelve-nights-thirty": 1,
+    "detect-this-planet:why-it-failed": 1,
+    "detect-this-planet:ambiguous-evidence": 1,
+    "detect-this-planet:how-deep-is-an-earth": 1,
+    "detect-this-planet:the-same-planet-from-the-ground": 1,
+    "detect-this-planet:why-more-nights-do-not-help": 1,
+    "detect-this-planet:what-would-it-take": 1
+   },
+   "visited": [
+    "twelve-nights",
+    "what-decides-whether-you-find",
+    "schedule-a-twelve-nights-one",
+    "write-down-what-schedule-a",
+    "what-have-you-established",
+    "schedule-b-twelve-nights-thirty",
+    "the-same-planet-invisible",
+    "write-down-what-schedule-b",
+    "why-it-failed",
+    "the-third-knob",
+    "ambiguous-evidence",
+    "do-it-to-the-real",
+    "take-the-data-with-you",
+    "the-limits-of-finding-nothing",
+    "the-other-way-to-find-one",
+    "how-deep-is-an-earth",
+    "the-noise-budget",
+    "the-same-planet-from-the-ground",
+    "the-floor",
+    "white-noise-and-red-noise",
+    "assumptions-of-the-model",
+    "read-two-budgets",
+    "why-more-nights-do-not-help",
+    "the-edge-of-what-tess-can-do",
+    "what-would-it-take",
+    "what-you-decided-before-you"
+   ],
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "depth": "core",
+   "spent": 600
+  },
+  "read": {
+   "responses": {
+    "detect-this-planet:what-decides-whether-you-find": 1,
+    "detect-this-planet:what-have-you-established": 2,
+    "detect-this-planet:schedule-b-twelve-nights-thirty": 2,
+    "detect-this-planet:why-it-failed": "1",
+    "detect-this-planet:why-it-failed:locale": "es",
+    "detect-this-planet:ambiguous-evidence": 2,
+    "detect-this-planet:the-limits-of-finding-nothing": "A fixed sentence for the golden.",
+    "detect-this-planet:how-deep-is-an-earth": "84",
+    "detect-this-planet:how-deep-is-an-earth:locale": "es",
+    "detect-this-planet:the-same-planet-from-the-ground": 2,
+    "detect-this-planet:why-more-nights-do-not-help": 1,
+    "detect-this-planet:what-would-it-take": 2
+   },
+   "attempts": {
+    "detect-this-planet:what-decides-whether-you-find": 1,
+    "detect-this-planet:what-have-you-established": 1,
+    "detect-this-planet:schedule-b-twelve-nights-thirty": 1,
+    "detect-this-planet:why-it-failed": 1,
+    "detect-this-planet:ambiguous-evidence": 1,
+    "detect-this-planet:how-deep-is-an-earth": 1,
+    "detect-this-planet:the-same-planet-from-the-ground": 1,
+    "detect-this-planet:why-more-nights-do-not-help": 1,
+    "detect-this-planet:what-would-it-take": 1
+   },
+   "visited": [
+    "ambiguous-evidence",
+    "assumptions-of-the-model",
+    "do-it-to-the-real",
+    "how-deep-is-an-earth",
+    "read-two-budgets",
+    "schedule-a-twelve-nights-one",
+    "schedule-b-twelve-nights-thirty",
+    "take-the-data-with-you",
+    "the-edge-of-what-tess-can-do",
+    "the-floor",
+    "the-limits-of-finding-nothing",
+    "the-noise-budget",
+    "the-other-way-to-find-one",
+    "the-same-planet-from-the-ground",
+    "the-same-planet-invisible",
+    "the-third-knob",
+    "twelve-nights",
+    "what-decides-whether-you-find",
+    "what-have-you-established",
+    "what-would-it-take",
+    "what-you-decided-before-you",
+    "white-noise-and-red-noise",
+    "why-it-failed",
+    "why-more-nights-do-not-help",
+    "write-down-what-schedule-a",
+    "write-down-what-schedule-b"
+   ],
+   "stepSid": "what-you-decided-before-you",
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "depth": "core",
+   "deepest": null,
+   "spent": 600,
+   "schema": 2,
+   "migrated": false,
+   "notes": []
+  }
+ },
+ "backup": {
+  "backup": {
+   "kind": "gravitas.investigation.progress",
+   "version": 2,
+   "savedAt": "2026-01-02T04:05:06.000Z",
+   "lesson": {
+    "id": "detect-this-planet",
+    "title": "¿Puedes detectar este planeta?",
+    "stepCount": 26
+   },
+   "student": null,
+   "progress": {
+    "stepSid": "what-you-decided-before-you",
+    "startedAt": "2026-01-02T03:04:05.000Z",
+    "visited": [
+     "twelve-nights",
+     "what-decides-whether-you-find",
+     "schedule-a-twelve-nights-one",
+     "write-down-what-schedule-a",
+     "what-have-you-established",
+     "schedule-b-twelve-nights-thirty",
+     "the-same-planet-invisible",
+     "write-down-what-schedule-b",
+     "why-it-failed",
+     "the-third-knob",
+     "ambiguous-evidence",
+     "do-it-to-the-real",
+     "take-the-data-with-you",
+     "the-limits-of-finding-nothing",
+     "the-other-way-to-find-one",
+     "how-deep-is-an-earth",
+     "the-noise-budget",
+     "the-same-planet-from-the-ground",
+     "the-floor",
+     "white-noise-and-red-noise",
+     "assumptions-of-the-model",
+     "read-two-budgets",
+     "why-more-nights-do-not-help",
+     "the-edge-of-what-tess-can-do",
+     "what-would-it-take",
+     "what-you-decided-before-you"
+    ],
+    "responses": {
+     "detect-this-planet:what-decides-whether-you-find": 1,
+     "detect-this-planet:what-have-you-established": 2,
+     "detect-this-planet:schedule-b-twelve-nights-thirty": 2,
+     "detect-this-planet:why-it-failed": "1",
+     "detect-this-planet:why-it-failed:locale": "es",
+     "detect-this-planet:ambiguous-evidence": 2,
+     "detect-this-planet:the-limits-of-finding-nothing": "A fixed sentence for the golden.",
+     "detect-this-planet:how-deep-is-an-earth": "84",
+     "detect-this-planet:how-deep-is-an-earth:locale": "es",
+     "detect-this-planet:the-same-planet-from-the-ground": 2,
+     "detect-this-planet:why-more-nights-do-not-help": 1,
+     "detect-this-planet:what-would-it-take": 2
+    },
+    "attempts": {
+     "detect-this-planet:what-decides-whether-you-find": 1,
+     "detect-this-planet:what-have-you-established": 1,
+     "detect-this-planet:schedule-b-twelve-nights-thirty": 1,
+     "detect-this-planet:why-it-failed": 1,
+     "detect-this-planet:ambiguous-evidence": 1,
+     "detect-this-planet:how-deep-is-an-earth": 1,
+     "detect-this-planet:the-same-planet-from-the-ground": 1,
+     "detect-this-planet:why-more-nights-do-not-help": 1,
+     "detect-this-planet:what-would-it-take": 1
+    }
+   },
+   "steps": [
+    {
+     "index": 0,
+     "sid": "twelve-nights",
+     "fingerprint": "read|-|-|Exoplanet Characterization Lab|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 1,
+     "sid": "what-decides-whether-you-find",
+     "fingerprint": "predict|-|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 2,
+     "sid": "schedule-a-twelve-nights-one",
+     "fingerprint": "explore|-|survey-schedule|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 3,
+     "sid": "write-down-what-schedule-a",
+     "fingerprint": "measure|-|survey-schedule|-|coverageA+scatterA+chiA|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 4,
+     "sid": "what-have-you-established",
+     "fingerprint": "question|choice|-|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 5,
+     "sid": "schedule-b-twelve-nights-thirty",
+     "fingerprint": "predict|-|-|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 6,
+     "sid": "the-same-planet-invisible",
+     "fingerprint": "explore|-|survey-schedule|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 7,
+     "sid": "write-down-what-schedule-b",
+     "fingerprint": "measure|-|survey-schedule|-|coverageB+scatterB+chiB|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 8,
+     "sid": "why-it-failed",
+     "fingerprint": "question|numeric|-|-|-|-|a=1;t=0.06;u=orbits",
+     "optionCount": null
+    },
+    {
+     "index": 9,
+     "sid": "the-third-knob",
+     "fingerprint": "explore|-|survey-schedule|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 10,
+     "sid": "ambiguous-evidence",
+     "fingerprint": "question|choice|-|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 11,
+     "sid": "do-it-to-the-real",
+     "fingerprint": "explore|-|-|Exoplanet Characterization Lab|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 12,
+     "sid": "take-the-data-with-you",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 13,
+     "sid": "the-limits-of-finding-nothing",
+     "fingerprint": "question|short|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 14,
+     "sid": "the-other-way-to-find-one",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 15,
+     "sid": "how-deep-is-an-earth",
+     "fingerprint": "question|numeric|-|-|-|-|a=84;t=6;u=ppm",
+     "optionCount": null
+    },
+    {
+     "index": 16,
+     "sid": "the-noise-budget",
+     "fingerprint": "explore|-|transit-noise|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 17,
+     "sid": "the-same-planet-from-the-ground",
+     "fingerprint": "predict|-|-|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 18,
+     "sid": "the-floor",
+     "fingerprint": "explore|-|transit-noise|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 19,
+     "sid": "white-noise-and-red-noise",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 20,
+     "sid": "assumptions-of-the-model",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 21,
+     "sid": "read-two-budgets",
+     "fingerprint": "measure|-|transit-noise|-|keplerRatio+groundRatio+groundWorst|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 22,
+     "sid": "why-more-nights-do-not-help",
+     "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 23,
+     "sid": "the-edge-of-what-tess-can-do",
+     "fingerprint": "explore|-|transit-noise|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 24,
+     "sid": "what-would-it-take",
+     "fingerprint": "question|choice|-|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 25,
+     "sid": "what-you-decided-before-you",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    }
+   ]
+  },
+  "verdict": {
+   "ok": true
+  },
+  "restored": {
+   "responses": {
+    "detect-this-planet:what-decides-whether-you-find": 1,
+    "detect-this-planet:what-have-you-established": 2,
+    "detect-this-planet:schedule-b-twelve-nights-thirty": 2,
+    "detect-this-planet:why-it-failed": "1",
+    "detect-this-planet:why-it-failed:locale": "es",
+    "detect-this-planet:ambiguous-evidence": 2,
+    "detect-this-planet:the-limits-of-finding-nothing": "A fixed sentence for the golden.",
+    "detect-this-planet:how-deep-is-an-earth": "84",
+    "detect-this-planet:how-deep-is-an-earth:locale": "es",
+    "detect-this-planet:the-same-planet-from-the-ground": 2,
+    "detect-this-planet:why-more-nights-do-not-help": 1,
+    "detect-this-planet:what-would-it-take": 2
+   },
+   "attempts": {
+    "detect-this-planet:what-decides-whether-you-find": 1,
+    "detect-this-planet:what-have-you-established": 1,
+    "detect-this-planet:schedule-b-twelve-nights-thirty": 1,
+    "detect-this-planet:why-it-failed": 1,
+    "detect-this-planet:ambiguous-evidence": 1,
+    "detect-this-planet:how-deep-is-an-earth": 1,
+    "detect-this-planet:the-same-planet-from-the-ground": 1,
+    "detect-this-planet:why-more-nights-do-not-help": 1,
+    "detect-this-planet:what-would-it-take": 1
+   },
+   "visited": [
+    "ambiguous-evidence",
+    "assumptions-of-the-model",
+    "do-it-to-the-real",
+    "how-deep-is-an-earth",
+    "read-two-budgets",
+    "schedule-a-twelve-nights-one",
+    "schedule-b-twelve-nights-thirty",
+    "take-the-data-with-you",
+    "the-edge-of-what-tess-can-do",
+    "the-floor",
+    "the-limits-of-finding-nothing",
+    "the-noise-budget",
+    "the-other-way-to-find-one",
+    "the-same-planet-from-the-ground",
+    "the-same-planet-invisible",
+    "the-third-knob",
+    "twelve-nights",
+    "what-decides-whether-you-find",
+    "what-have-you-established",
+    "what-would-it-take",
+    "what-you-decided-before-you",
+    "white-noise-and-red-noise",
+    "why-it-failed",
+    "why-more-nights-do-not-help",
+    "write-down-what-schedule-a",
+    "write-down-what-schedule-b"
+   ],
+   "stepIndex": 25,
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "moved": [],
+   "dropped": [],
+   "quarantined": {},
+   "uncertain": 0,
+   "discardedKeys": 0,
+   "byPosition": false
+  }
+ },
+ "ledger": {
+  "entry": "golden-detect-this-planet",
+  "record": {
+   "ids": [
+    "golden-detect-this-planet"
+   ],
+   "rows": [
+    [
+     "golden-detect-this-planet",
+     "q1",
+     3.5247,
+     "d",
+     0.0012,
+     "measured",
+     "simulation",
+     "rv-fit",
+     null,
+     [
+      "s",
+      "d"
+     ]
+    ]
+   ],
+   "total": 1
+  },
+  "digest": "95c8723ccee252ef04eba6e395015a0407527a7f79ec925ba0f6d6847e4f9f6d"
+ },
+ "tokens": {
+  "plain": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "a": null,
+    "r": null,
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "what-decides-whether-you-find",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "what-have-you-established",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "schedule-b-twelve-nights-thirty",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "why-it-failed",
+     "value": "1",
+     "locale": "es"
+    },
+    {
+     "sid": "ambiguous-evidence",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "the-limits-of-finding-nothing",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    },
+    {
+     "sid": "how-deep-is-an-earth",
+     "value": "84",
+     "locale": "es"
+    },
+    {
+     "sid": "the-same-planet-from-the-ground",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "why-more-nights-do-not-help",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "what-would-it-take",
+     "value": 2,
+     "locale": "es"
+    }
+   ]
+  },
+  "assignment": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "a": "golden-assignment",
+    "r": "roster-1",
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "what-decides-whether-you-find",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "what-have-you-established",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "schedule-b-twelve-nights-thirty",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "why-it-failed",
+     "value": "1",
+     "locale": "es"
+    },
+    {
+     "sid": "ambiguous-evidence",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "the-limits-of-finding-nothing",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    },
+    {
+     "sid": "how-deep-is-an-earth",
+     "value": "84",
+     "locale": "es"
+    },
+    {
+     "sid": "the-same-planet-from-the-ground",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "why-more-nights-do-not-help",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "what-would-it-take",
+     "value": 2,
+     "locale": "es"
+    }
+   ]
+  },
+  "evidence": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "ev": {
+     "d": "95c8723ccee252ef04eba6e395015a0407527a7f79ec925ba0f6d6847e4f9f6d",
+     "i": [
+      "golden-detect-this-planet"
+     ],
+     "n": 1,
+     "r": [
+      [
+       "golden-detect-this-planet",
+       "q1",
+       3.5247,
+       "d",
+       0.0012,
+       "measured",
+       "simulation",
+       "rv-fit",
+       null,
+       [
+        "s",
+        "d"
+       ]
+      ]
+     ]
+    },
+    "a": null,
+    "r": null,
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "what-decides-whether-you-find",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "what-have-you-established",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "schedule-b-twelve-nights-thirty",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "why-it-failed",
+     "value": "1",
+     "locale": "es"
+    },
+    {
+     "sid": "ambiguous-evidence",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "the-limits-of-finding-nothing",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    },
+    {
+     "sid": "how-deep-is-an-earth",
+     "value": "84",
+     "locale": "es"
+    },
+    {
+     "sid": "the-same-planet-from-the-ground",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "why-more-nights-do-not-help",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "what-would-it-take",
+     "value": 2,
+     "locale": "es"
+    }
+   ]
+  },
+  "depth": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "dp": "core",
+    "a": null,
+    "r": null,
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "what-decides-whether-you-find",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "what-have-you-established",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "schedule-b-twelve-nights-thirty",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "why-it-failed",
+     "value": "1",
+     "locale": "es"
+    },
+    {
+     "sid": "ambiguous-evidence",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "the-limits-of-finding-nothing",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    },
+    {
+     "sid": "how-deep-is-an-earth",
+     "value": "84",
+     "locale": "es"
+    },
+    {
+     "sid": "the-same-planet-from-the-ground",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "why-more-nights-do-not-help",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "what-would-it-take",
+     "value": 2,
+     "locale": "es"
+    }
+   ]
+  }
+ }
+}

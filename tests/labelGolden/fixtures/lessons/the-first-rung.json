@@ -1,0 +1,89 @@
+{
+ "id": "the-first-rung",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.a-maser-galaxy.fields.0.unit","mag"],
+    ["steps.a-maser-galaxy.fields.1.unit","Mpc"],
+    ["steps.from-modulus-to-distance.unit","Mpc"],
+    ["steps.the-maser-check.fields.0.unit","mag"],
+    ["steps.the-maser-check.fields.1.unit","mag"],
+    ["steps.the-budget.fields.0.unit","mag"],
+    ["steps.the-budget.fields.1.unit","mag"],
+    ["steps.the-budget-in-quadrature.unit","mag"],
+    ["steps.the-error-in-percent.unit","%"],
+    ["steps.from-the-rung-to-the-hubble-constant.unit","km/s/Mpc"],
+    ["steps.another-galaxy.fields.0.unit","mag"],
+    ["steps.another-galaxy.fields.1.unit","Mpc"],
+    ["steps.ten-hosts.unit","mag"]
+   ],
+   "numbered": [
+    ["steps.a-maser-galaxy.fields.0.hint","29.40"],
+    ["steps.a-maser-galaxy.fields.1.hint","7.59"],
+    ["steps.the-maser-check.fields.0.hint","29.40"],
+    ["steps.the-maser-check.fields.1.hint","0.032"],
+    ["steps.the-budget.fields.0.hint","0.043"],
+    ["steps.the-budget.fields.1.hint","0.026"],
+    ["steps.another-galaxy.fields.0.hint","29.21"],
+    ["steps.another-galaxy.fields.1.hint","6.95"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": []
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "from-modulus-to-distance",
+    "answer": "7.59",
+    "tolerance": "0.05",
+    "unit": "Mpc"
+   },
+   {
+    "sid": "the-budget-in-quadrature",
+    "answer": "0.0505",
+    "tolerance": "0.0015",
+    "unit": "mag"
+   },
+   {
+    "sid": "the-error-in-percent",
+    "answer": "2.35",
+    "tolerance": "0.1",
+    "unit": "%"
+   },
+   {
+    "sid": "from-the-rung-to-the-hubble-constant",
+    "answer": "1.64",
+    "tolerance": "0.05",
+    "unit": "km/s/Mpc"
+   },
+   {
+    "sid": "ten-hosts",
+    "answer": "0.0297",
+    "tolerance": "0.002",
+    "unit": "mag"
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "a-maser-galaxy": {
+    "validate": {"calls":232,"distinct":2,"digest":"1f990c625920e511","samples":[null,{"level":"error","message":"Pick “NGC 4258” and read “Distance modulus” (magnitudes) and “Distance” (megaparsecs)."}]}
+   },
+   "the-maser-check": {
+    "validate": {"calls":232,"distinct":2,"digest":"a59b0c998035c32b","samples":[null,{"level":"error","message":"With “NGC 4258” chosen, read “Distance modulus from water masers” and the error that follows it."}]}
+   },
+   "the-budget": {
+    "validate": {"calls":232,"distinct":2,"digest":"73e94821e30b7295","samples":[null,{"level":"error","message":"Read “Error from this galaxy’s scatter” and “Error in the Magellanic Cloud’s distance”, both in magnitudes, with NGC 4258 chosen."}]}
+   },
+   "another-galaxy": {
+    "validate": {"calls":232,"distinct":2,"digest":"9adac69046476185","samples":[null,{"level":"error","message":"Pick “M101” and read “Distance modulus” (magnitudes) and “Distance” (megaparsecs)."}]}
+   }
+  },
+  "es": "same"
+ }
+}

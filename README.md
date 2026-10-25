@@ -94,7 +94,7 @@ model page sets out the four different radii a body has under _Displayed
 sizes_.
 
 **A validation suite.** `npm run validate:physics` prints a PASS/FAIL table
-of <!--fact:physicsChecks-->304<!--/fact--> checks with measured error against a
+of <!--fact:physicsChecks-->332<!--/fact--> checks with measured error against a
 stated tolerance: orbital periods and Kepler's laws, conservation of momentum,
 angular momentum and energy, the convergence order of each selectable
 integrator, escape velocity, transit depth, radial-velocity semi-amplitude,
@@ -306,7 +306,7 @@ service and works offline ([MISSION_LAB.md](MISSION_LAB.md)).
 
 **Spanish.** The interface ships in <!--fact:locales-->2<!--/fact--> languages
 — <!--fact:localeNames-->English, Español<!--/fact--> — from a catalog
-of <!--fact:uiStrings-->9505<!--/fact--> strings, and
+of <!--fact:uiStrings-->10966<!--/fact--> strings, and
 all <!--fact:investigations-->60<!--/fact--> investigations are translated. A
 translation carries only words: no scenario name, no seed, no widget id and no
 numeric answer can be reached from a locale file, so a mistranslation cannot
@@ -341,7 +341,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->12890<!--/fact--> tests across <!--fact:jestSuites-->368<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->15060<!--/fact--> tests across <!--fact:jestSuites-->458<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
@@ -365,10 +365,10 @@ reports what the browser downloads at start-up separately from what is deferred:
 
 | What                   | Size                                                   | Files / chunks                                |
 | ---------------------- | ------------------------------------------------------ | --------------------------------------------- |
-| CSS                    | <!--fact:buildCss-->208<!--/fact--> KB                 | 1                                             |
-| JavaScript at start-up | <!--fact:buildStartupJs-->584<!--/fact--> KB           | <!--fact:buildStartupFiles-->53<!--/fact-->   |
-| JavaScript on demand   | <!--fact:buildDeferredJs-->5560<!--/fact--> KB         | <!--fact:buildDeferredChunks-->420<!--/fact--> |
-| **Initial download**   | **<!--fact:buildInitialDownload-->791<!--/fact--> KB** |                                               |
+| CSS                    | <!--fact:buildCss-->209<!--/fact--> KB                 | 1                                             |
+| JavaScript at start-up | <!--fact:buildStartupJs-->589<!--/fact--> KB           | <!--fact:buildStartupFiles-->53<!--/fact-->   |
+| JavaScript on demand   | <!--fact:buildDeferredJs-->5446<!--/fact--> KB         | <!--fact:buildDeferredChunks-->431<!--/fact--> |
+| **Initial download**   | **<!--fact:buildInitialDownload-->798<!--/fact--> KB** |                                               |
 
 Those figures are the last build's, to the nearest kilobyte, and are written
 into the page by `npm run docs:sync` from `dist/build-summary.json` rather than
@@ -433,7 +433,7 @@ data-packs/         observation data-pack manifests (pinned sources)
 ephemeris-packs/    the ephemeris pack's manifest (pinned JPL Horizons answers)
 sdk/                the extension SDK: a command line, a library, four schemas
 extensions/         extensions built with the SDK outside the core
-vendor/             three.js, Chart.js and the fonts, vendored
+vendor/             three.js and the fonts, vendored
 history/            the first Gravitas, kept as it was
 docs/               generated inventories (capabilities, lesson scenes)
 manual/             LaTeX source for the user manual PDF
@@ -462,8 +462,8 @@ overrides`. Component rules win on layer order alone, which is why they need
   and not the other fails `npm test`.
 
 The guided-investigation system is roughly half the application by weight and loads only
-when someone asks for it; so do Three.js and Chart.js, which back the spacetime
-view and the chart panels.
+when someone asks for it; so does Three.js, which backs the spacetime
+view. The charts are one component, `js/plot/chart.js`, fetched on first use.
 
 ---
 
@@ -486,8 +486,8 @@ npm run e2e:ui                    # the Playwright inspector
 npm run e2e:report                # open the last HTML report
 ```
 
-The suite is <!--fact:e2eTests-->2360<!--/fact--> tests
-in <!--fact:e2eFiles-->175<!--/fact--> files and takes several minutes in
+The suite is <!--fact:e2eTests-->2855<!--/fact--> tests
+in <!--fact:e2eFiles-->201<!--/fact--> files and takes several minutes in
 Chromium.
 
 Some notes on how it is put together, because two of the choices are not
@@ -558,7 +558,7 @@ and against what.
 npm run validate:physics
 ```
 
-That is <!--fact:physicsChecks-->304<!--/fact--> deterministic checks, about
+That is <!--fact:physicsChecks-->332<!--/fact--> deterministic checks, about
 two minutes, printed as a table of measured value, expected value, error and
 tolerance. Five kinds, and the table labels each: closed-form arithmetic,
 quantities measured by running the N-body engine, literature values with their
@@ -586,7 +586,7 @@ broke Newton's third law, and a scenario that turned out to have no gravity in i
 
 ## Instructor resources
 
-All <!--fact:instructorDocuments-->480<!--/fact--> documents are generated from
+All <!--fact:instructorDocuments-->540<!--/fact--> documents are generated from
 the investigations at build time and live at
 [gravitas-sim.online/instructors/](https://gravitas-sim.online/instructors/):
 
@@ -622,6 +622,10 @@ using the simulation rather than building it: the interface, the instruments, th
 investigations, the scenario catalog and what the model does and does not claim.
 It is written in LaTeX in [`manual/`](manual/) and rebuilt with `npm run manual`;
 its counts come from the same source as this page's.
+
+[`DOCUMENTS.md`](DOCUMENTS.md) maps every document in the repository root and every
+generated artifact; a second maintainer starts at
+[`MAINTAINER_ONBOARDING.md`](MAINTAINER_ONBOARDING.md).
 
 Topic documents, each about one part of the application and written when that
 part was built:
@@ -704,13 +708,12 @@ If you use Gravitas in teaching or research, please cite it. Every release is
 archived on Zenodo.
 
 <!--fact-block:citation-->
-> Ziegler, C. (2026). *Gravitas: an interactive astrophysics sandbox for teaching*
-> (Version 2.0.0) [Computer software]. Zenodo.
-> <https://doi.org/10.5281/zenodo.23425533>
+Version 2.1.0 has no version DOI yet. Zenodo mints it when the release is published,
+and it is recorded here afterwards (see [RELEASING.md](RELEASING.md)). Until then,
+cite the concept DOI and name the version you used.
 
 | | |
 | --- | --- |
-| **This version (2.0.0)** | [10.5281/zenodo.23425533](https://doi.org/10.5281/zenodo.23425533) |
 | **All versions** | [10.5281/zenodo.22800609](https://doi.org/10.5281/zenodo.22800609) |
 
 The paper describing Gravitas is *Gravitas: A Browser-Based Astrophysics Laboratory for Prediction, Measurement, and Discovery*
@@ -751,7 +754,7 @@ Two licenses, because this is two kinds of work.
 [`LICENSES.md`](LICENSES.md) says exactly which files each one covers.
 [`NOTICE`](NOTICE) carries the third-party attributions, each under its own
 license:
-- three.js, Chart.js and three font families;
+- three.js and three font families;
 - the Transit of Venus photograph;
 - the GWOSC strain data;
 - the MIST tracks and isochrones;

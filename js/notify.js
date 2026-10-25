@@ -11,24 +11,35 @@
 // =============================================================================
 
 import { t } from './i18n/index.js';
+import { DOM_TOAST } from './names.js';
 
 // --- Screen-reader announcements ---------------------------------------------
 // The canvas is opaque to assistive technology, so anything that only shows up
 // visually gets mirrored into a polite live region.
 
 /**
- * Announce a state change to screen readers.
- *
- * The same words again are not read, so a repeat gains or drops a trailing
- * no-break space. A caller that can fire unprompted passes `again` false.
+ * Announce a state change to screen readers. The same words again gain or drop
+ * a trailing no-break space, so they are read again; `again` false drops a
+ * repeat instead. An empty message clears. `region` (an element or id) is the
+ * page's own live region, the shared #srStatus when omitted; one that is not
+ * there says nothing.
  *
  * @param {string} message - Text to announce
  * @param {boolean} [again=true] - Say it even if it is what was said last
+ * @param {Element|string} [region] - Where to say it
  */
-export function announce(message, again = true) {
-  const el = document.getElementById('srStatus');
-  if (!el || (!again && el.textContent.trim() === message)) return;
-  el.textContent = el.textContent === message ? `${message}\u00a0` : message;
+export function announce(message, again = true, region) {
+  const live =
+    region === undefined
+      ? document.getElementById('srStatus')
+      : typeof region === 'string'
+        ? document.getElementById(region)
+        : region;
+  if (!live) return;
+  const said = live.textContent;
+  if (!message) live.textContent = '';
+  else if (again || said.trim() !== message)
+    live.textContent = said === message ? `${message}\u00a0` : message;
 }
 
 // --- Toasts -------------------------------------------------------------------
@@ -40,10 +51,10 @@ let toastTimer = null;
  * @param {{label: string, run: Function}} [action] - A button to offer
  */
 export function toast(message, action) {
-  let el = document.getElementById('gravitasToast');
+  let el = document.getElementById(DOM_TOAST);
   if (!el) {
     el = document.createElement('div');
-    el.id = 'gravitasToast';
+    el.id = DOM_TOAST;
     el.className = 'toast';
     el.setAttribute('role', 'status');
     el.setAttribute('aria-live', 'polite');

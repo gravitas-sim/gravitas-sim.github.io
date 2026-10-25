@@ -12,8 +12,9 @@
 // =============================================================================
 
 import { EN_CATALOG } from '../i18n/en.catalog.js';
+import { KEY_LOCALE } from '../names.js';
 
-const STORAGE_KEY = 'gravitas_locale';
+const STORAGE_KEY = KEY_LOCALE;
 
 /** The languages this page is written in, in the order the switch offers them. */
 export const LANGUAGES = Object.freeze([

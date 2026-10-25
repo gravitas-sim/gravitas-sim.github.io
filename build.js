@@ -50,6 +50,10 @@ const STATIC_FILES = [
   'gaia/solar-neighbourhood.json',
   'gaia/ngc2420.json',
   'gaia/milky-way-rotation-curve.json',
+  'frames/tess-hd209458-s56-frame.json',
+  'frames/sdo-hmi-continuum-20240510.json',
+  'frames/galileo-moon-19921207.json',
+  'frames/hirise-cerberus-fossae.json',
   // The variable-star tables' rows (data-packs/tess-su-dra-s15.json and two
   // more, Roadmap II Prompt 96), fetched by the variable-star instruments.
   'variables/tess-su-dra-s15.json',
@@ -267,9 +271,9 @@ async function buildJs() {
     charset: 'utf8',
     // Message catalogs write a shared key prefix once (tools/key-groups.mjs).
     plugins: [keyGroupsPlugin(), proseWhitespacePlugin(), threeShadersPlugin()],
-    // NOTE: three and chart.js are no longer external. They are imported by
-    // relative path from vendor/, so esbuild follows them into the deferred
-    // chunks for the 3-D view and the charts. See tools/vendor-deps.mjs.
+    // NOTE: three is not external. It is imported by relative path from
+    // vendor/, so esbuild follows it into the deferred chunks for the 3-D
+    // view. See tools/vendor-deps.mjs.
     legalComments: 'none',
   });
 
@@ -292,6 +296,8 @@ async function buildJs() {
       'js/lab3d/worker.js',
       'js/mission/worker.js',
       'js/mission/labWorker.js',
+      // The image reader (Prompt 188): started by the Observatory's import.
+      'js/dataKinds/fitsWorker.js',
     ],
     bundle: true,
     minify: true,

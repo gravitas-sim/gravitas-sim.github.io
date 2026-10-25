@@ -1,0 +1,55 @@
+{
+ "id": "extending-an-experiment",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.the-fit.fields.0.unit",""],
+    ["steps.the-fit.fields.1.unit",""],
+    ["steps.the-fit.fields.2.unit",""],
+    ["steps.the-fit.fields.3.unit",""],
+    ["steps.a-uniform-population.fields.0.unit",""],
+    ["steps.a-uniform-population.fields.1.unit",""],
+    ["steps.move-the-definition.fields.0.unit",""],
+    ["steps.move-the-definition.fields.1.unit",""]
+   ],
+   "numbered": [
+    ["steps.the-fit.fields.0.hint","0.255"],
+    ["steps.the-fit.fields.1.hint","0.0243"],
+    ["steps.the-fit.fields.2.hint","0.6"],
+    ["steps.the-fit.fields.3.hint","0.596"],
+    ["steps.a-uniform-population.fields.0.hint","0.451"],
+    ["steps.a-uniform-population.fields.1.hint","0.149"],
+    ["steps.move-the-definition.fields.0.label","Half-way distance, cutoff 6"],
+    ["steps.move-the-definition.fields.0.hint","0.289"],
+    ["steps.move-the-definition.fields.1.label","Fraction bound, cutoff 6"],
+    ["steps.move-the-definition.fields.1.hint","0.701"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.move-the-definition.fields.0.label","Distancia a medio camino, umbral 6"],
+    ["steps.move-the-definition.fields.1.label","Fracción ligada, umbral 6"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "the-fit": {
+    "validate": {"calls":242,"distinct":2,"digest":"6f1aa87c34b9244d","samples":[null,{"level":"error","message":"Check the settings (slope 1, 200,000 planets, cutoff 3) and read the edge, its uncertainty, and the two fractions from the page."}]}
+   },
+   "a-uniform-population": {
+    "validate": {"calls":232,"distinct":2,"digest":"9513a86f86a3180e","samples":[null,{"level":"error","message":"Set the slope to 0, keep the other two settings, run, read the fraction in the synthetic population, and subtract it from 0.6."}]}
+   },
+   "move-the-definition": {
+    "validate": {"calls":232,"distinct":2,"digest":"5595944ee07b7390","samples":[null,{"level":"error","message":"Set the slope to 1 and the cutoff to 6, keep 200,000 planets, run, and read the half-way distance and the fraction in the synthetic population."}]}
+   }
+  },
+  "es": "same"
+ }
+}

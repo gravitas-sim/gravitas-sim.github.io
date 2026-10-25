@@ -1,0 +1,100 @@
+{
+  "sampling": "The realm answers Runtime.getHeapUsage every 10 ms while it works; a read lasts tens of milliseconds, so each peak is the largest of a few samples and a lower bound on the true peak (realmSamples says how few). The 1.25 acceptance is judged on the samples.",
+  "note": "Recorded by tools/decoded-memory-probe.mjs (npm run probe:decoded). A measurement on one machine in headless Chromium, not a gate. The realm peaks are the measurements; residentDecodedBytes is the bound read back (two planes at the ceiling by construction), and tools/data-budget.mjs does not read this file, so decodedImageBytesPerPage stays not measured until a shipped route decodes images.",
+  "measuredAt": "35b2372d",
+  "date": "2026-10-21",
+  "environment": {
+    "chromium": "156.0.8078.4",
+    "node": "v24.4.0",
+    "platform": "darwin x64",
+    "load1": 1.6
+  },
+  "acceptance": {
+    "realmPeakOverFileAndPlane": 1.25
+  },
+  "profiles": {
+    "low-end": {
+      "cases": [
+        {
+          "file": "2048 x 2048, BITPIX -64 (the largest file)",
+          "ok": true,
+          "fileBytes": 33557760,
+          "planeBytes": 33554432,
+          "ms": 52,
+          "ledgerAfter": 0,
+          "declared": 67112192,
+          "realmPeakHeldBytes": 67721570,
+          "realmSamples": 3,
+          "peakOverFileAndPlane": 1.009
+        },
+        {
+          "file": "2048 x 2048, BITPIX 16",
+          "ok": true,
+          "fileBytes": 8392320,
+          "planeBytes": 33554432,
+          "ms": 34,
+          "ledgerAfter": 0,
+          "declared": 41946752,
+          "realmPeakHeldBytes": 42431910,
+          "realmSamples": 2,
+          "peakOverFileAndPlane": 1.012
+        },
+        {
+          "file": "1024 x 1024, BITPIX -32",
+          "ok": true,
+          "fileBytes": 4199040,
+          "planeBytes": 8388608,
+          "ms": 23,
+          "ledgerAfter": 0,
+          "declared": 12587648,
+          "realmPeakHeldBytes": 13906062,
+          "realmSamples": 2,
+          "peakOverFileAndPlane": 1.105
+        }
+      ],
+      "residentDecodedBytes": 67108864
+    },
+    "desktop": {
+      "cases": [
+        {
+          "file": "2048 x 2048, BITPIX -64 (the largest file)",
+          "ok": true,
+          "fileBytes": 33557760,
+          "planeBytes": 33554432,
+          "ms": 42,
+          "ledgerAfter": 0,
+          "declared": 67112192,
+          "realmPeakHeldBytes": 67701802,
+          "realmSamples": 3,
+          "peakOverFileAndPlane": 1.009
+        },
+        {
+          "file": "2048 x 2048, BITPIX 16",
+          "ok": true,
+          "fileBytes": 8392320,
+          "planeBytes": 33554432,
+          "ms": 31,
+          "ledgerAfter": 0,
+          "declared": 41946752,
+          "realmPeakHeldBytes": 42438378,
+          "realmSamples": 3,
+          "peakOverFileAndPlane": 1.012
+        },
+        {
+          "file": "1024 x 1024, BITPIX -32",
+          "ok": true,
+          "fileBytes": 4199040,
+          "planeBytes": 8388608,
+          "ms": 20,
+          "ledgerAfter": 0,
+          "declared": 12587648,
+          "realmPeakHeldBytes": 13872906,
+          "realmSamples": 2,
+          "peakOverFileAndPlane": 1.102
+        }
+      ],
+      "residentDecodedBytes": 67108864
+    }
+  },
+  "within": true
+}

@@ -55,11 +55,15 @@ export const WORDS = {
   lang: ['Language', 'Idioma'],
   theme: ['Theme', 'Tema'],
   skip: ['Skip to content', 'Saltar al contenido'],
+  explore: ['Explore', 'Explorar'],
   learn: ['Learn', 'Aprender'],
-  labs: ['Labs', 'Laboratorios'],
-  make: ['Make', 'Crear'],
+  observe: ['Observe', 'Observar'],
   teach: ['Teach', 'Enseñar'],
-  about: ['About', 'Acerca de'],
+  crumbs: ['Breadcrumb', 'Ruta de navegación'],
+  alsoLearn: ['Also in Learn', 'También en Aprender'],
+  alsoObserve: ['Also in Observe', 'También en Observar'],
+  alsoTeach: ['Also in Teach', 'También en Enseñar'],
+  documents: ['Documents', 'Documentos'],
   library: ['Library', 'Biblioteca'],
   skyLab: ['Sky Lab', 'Laboratorio del cielo'],
   myWork: ['My work', 'Mi trabajo'],
@@ -67,13 +71,20 @@ export const WORDS = {
   courses: ['Courses', 'Cursos'],
   observatory: ['Observatory', 'Observatorio'],
   experiments: ['Experiments', 'Experimentos'],
+  compute: ['Compute page', 'Página de cómputo'],
   sandbox: ['Sandbox', 'Simulación libre'],
   lab3d: ['3-D lab', 'Laboratorio 3-D'],
   missionLab: ['Mission lab', 'Laboratorio de misiones'],
   studio: ['Scenario Studio', 'Estudio de escenarios'],
   composer: ['Investigation Composer', 'Compositor de investigaciones'],
-  courseBuilder: ['Course builder', 'Creador de cursos'],
-  figure: ['Figure builder', 'Creador de figuras'],
+  courseBuilder: ['Course-package builder', 'Creador de paquetes de curso'],
+  packs: ['Investigations in a course', 'Investigaciones en un curso'],
+  find: ['Find content to teach', 'Encontrar contenido para enseñar'],
+  adopt: ['Adopter’s guide', 'Guía de adopción'],
+  alignment: ['Textbook alignment', 'Alineación con libros de texto'],
+  kit: ['Distribution kit', 'Kit de distribución'],
+  adoption: ['Adoption page', 'Página de adopción'],
+  figure: ['Figure builder', 'Constructor de figuras'],
   catalog: ['Catalog', 'Catálogo'],
   teaching: ['Teaching with Gravitas', 'Enseñar con Gravitas'],
   instructors: ['Instructor resources', 'Recursos para docentes'],
@@ -100,59 +111,122 @@ export const WORDS = {
   dismiss: ['Dismiss', 'Cerrar'],
 };
 
-/** The five groups and their links: every entry page, and nothing twice. */
-export const NAV = [
-  [
+/**
+ * Page titles in Spanish, for pages whose own script does not set one. The
+ * stamped title script swaps document.title with the locale, so a Spanish
+ * reader's tab and history read in Spanish. A page that sets its title from
+ * its own catalog is not listed.
+ */
+export const TITLES_ES = {
+  'my-work/index.html': 'Mi trabajo | Gravitas',
+  'glossary/index.html': 'Glosario | Gravitas',
+  'sky/index.html': 'Laboratorio del cielo | Gravitas',
+  'studio/index.html': 'Estudio de escenarios | Gravitas',
+  'studio/lesson/index.html': 'Compositor de investigaciones | Gravitas',
+  'studio/course/index.html': 'Creador de paquetes de curso | Gravitas',
+  '3d/index.html': 'El laboratorio 3-D | Gravitas',
+  'teaching/adopt/index.html': 'Guía de adopción | Gravitas',
+  'teaching/alignment/index.html': 'Alineación con libros de texto | Gravitas',
+  'teaching/find/index.html': 'Encontrar contenido para enseñar | Gravitas',
+};
+
+/**
+ * The five destinations of the navigation model (NAVIGATION.md, Prompt 162):
+ * the shell's whole navigation, in the model's order. Each is [word key, the
+ * destination's own page, the inventory's destination id]. Nothing else is a
+ * menu entry: every other surface is reached from its destination's page, from
+ * the places block that page carries (PLACES) or from context.
+ */
+export const DESTINATIONS = [
+  ['explore', '/', 'explore'],
+  ['learn', '/library/', 'learn'],
+  ['observe', '/observatory/', 'observe'],
+  ['myWork', '/my-work/', 'my-work'],
+  ['teach', '/teaching/', 'teach'],
+];
+
+/**
+ * The places a destination's page offers below its content: what used to be a
+ * menu entry and is not a destination. `<!-- shell:places -->` in a page asks
+ * for its block; Home's Explore card carries its own (js/fragments/home.html),
+ * which tests/shell.test.js holds to the first entry here.
+ */
+export const PLACES = {
+  '/': [
+    'explore',
+    [
+      [
+        null,
+        [
+          ['lab3d', '/3d/'],
+          ['missionLab', '/mission/lab/'],
+          ['studio', '/studio/'],
+        ],
+      ],
+    ],
+  ],
+  '/library/': [
     'learn',
     [
-      ['library', '/library/'],
-      ['myWork', '/my-work/'],
-      ['investigations', '/#investigations'],
-      ['courses', '/course/'],
-      ['observatory', '/observatory/'],
-      ['experiments', '/experiments/'],
+      [
+        null,
+        [
+          ['courses', '/course/'],
+          ['investigations', '/#investigations'],
+        ],
+      ],
     ],
   ],
-  [
-    'labs',
+  '/observatory/': [
+    'observe',
     [
-      ['sandbox', '/'],
-      ['lab3d', '/3d/'],
-      ['missionLab', '/mission/lab/'],
-      ['skyLab', '/sky/'],
+      [
+        null,
+        [
+          ['experiments', '/experiments/'],
+          ['skyLab', '/sky/'],
+          ['catalog', '/catalog/'],
+          ['figure', '/figure/'],
+        ],
+      ],
     ],
   ],
-  [
-    'make',
-    [
-      ['studio', '/studio/'],
-      ['composer', '/studio/lesson/'],
-      ['courseBuilder', '/studio/course/'],
-      ['figure', '/figure/'],
-      ['catalog', '/catalog/'],
-    ],
-  ],
-  [
+  '/teaching/': [
     'teach',
     [
-      ['teaching', '/teaching/'],
-      ['instructors', '/instructors/'],
-      ['submissions', '/instructors/submissions/'],
-      ['evaluation', '/evaluation/'],
+      [
+        null,
+        [
+          ['instructors', '/instructors/'],
+          ['submissions', '/instructors/submissions/'],
+          ['evaluation', '/evaluation/'],
+          ['composer', '/studio/lesson/'],
+          ['courseBuilder', '/studio/course/'],
+        ],
+      ],
+      [
+        'documents',
+        [
+          ['model', '/model/'],
+          ['validation', '/validation/'],
+          ['glossary', '/glossary/'],
+          ['manual', '/Gravitas_User_Manual.pdf'],
+        ],
+      ],
     ],
   ],
-  [
-    'about',
-    [
-      ['model', '/model/'],
-      ['validation', '/validation/'],
-      ['glossary', '/glossary/'],
-      ['kernel', '/lab3d/'],
-      ['mission', '/mission/'],
-      ['manual', '/Gravitas_User_Manual.pdf'],
-    ],
-  ],
-];
+};
+
+/** The inventory rows (NAVIGATION.md): which destination a page belongs to, and its name. */
+const INVENTORY = JSON.parse(
+  readFileSync(path.join(ROOT, 'tools/navigation-inventory.json'), 'utf8')
+);
+const covering = here =>
+  INVENTORY.surfaces.find(r =>
+    r.path.endsWith('*')
+      ? here.startsWith(r.path.slice(0, -1))
+      : r.path === here
+  );
 
 /** The four themes, as js/theme.js names them, and their labels. */
 export const THEMES = [
@@ -192,10 +266,24 @@ export function precachedPages() {
   );
 }
 
+/**
+ * The page's title in the reader's language, as a small inline script rather
+ * than js/shell.js, so no route pays for it in JavaScript. The English title is
+ * the one the page carries; the script follows <html lang>, as the shell's own
+ * labels do. tools/csp.mjs hashes it.
+ */
+const titleScript = es =>
+  `<script>(function(){var r=document.documentElement,en=document.title,es=${JSON.stringify(es)};function s(){document.title=r.lang.indexOf('es')==0?es:en}s();new MutationObserver(s).observe(r,{attributeFilter:['lang']});})();</script>`;
+
 /** The offline note: inert until the head script shows it, once, when offline. */
 function offlineNote() {
   const saved = precachedPages();
-  const links = NAV.flatMap(([, items]) => items)
+  const links = [
+    ...DESTINATIONS.map(([key, href]) => [key, href]),
+    ...Object.values(PLACES).flatMap(([, blocks]) =>
+      blocks.flatMap(([, items]) => items)
+    ),
+  ]
     .filter(([, href]) => saved.has(href))
     .map(([key, href]) => `<a href="${href}">${say(key)}</a>`)
     .join(', ');
@@ -212,6 +300,65 @@ export const pathOf = page =>
   '/' + page.replace(/(^|\/)index\.html$/, '$1').replace(/^\/$/, '');
 
 /**
+ * Where a page sits, as a breadcrumb: its destination, then its own name.
+ * The destination is plain text on its own page and a link elsewhere; a name
+ * that repeats the destination's word is left out. A page the model leaves
+ * outside every destination (a document) shows Gravitas and its name.
+ */
+function crumbsFor(here) {
+  const row = covering(here);
+  if (!row) return '';
+  const own = DESTINATIONS.find(d => d[2] === row.destination);
+  // The brand link above is already the way to Home; the trail starts at the
+  // destination, and names Gravitas only where there is no destination.
+  const items = own ? [] : [`<li><a href="/#home">GRAVITAS</a></li>`];
+  if (own)
+    items.push(
+      own[1] === here
+        ? `<li>${say(own[0])}</li>`
+        : `<li><a href="${own[1]}">${say(own[0])}</a></li>`
+    );
+  if (row.crumb && !(own && row.crumb === own[0]))
+    items.push(`<li aria-current="page">${say(row.crumb)}</li>`);
+  else
+    items[items.length - 1] = items
+      .at(-1)
+      .replace('<li>', '<li aria-current="page">');
+  return [
+    `<nav class="gs-crumbs" aria-labelledby="gs-crumbs-name">`,
+    `<span id="gs-crumbs-name" class="gs-vh">${say('crumbs')}</span>`,
+    `<ol>${items.join('')}</ol>`,
+    `</nav>`,
+  ].join('');
+}
+
+/** The places block of a destination's page (`<!-- shell:places -->`). */
+export function placesFor(page) {
+  const entry = PLACES[pathOf(page)];
+  if (!entry) return '';
+  const [dest, blocks] = entry;
+  const title = {
+    learn: 'alsoLearn',
+    observe: 'alsoObserve',
+    teach: 'alsoTeach',
+  }[dest];
+  const lists = blocks
+    .map(
+      ([name, links]) =>
+        `${name ? `<h3 class="gs-places-sub">${say(name)}</h3>` : ''}<ul>${links
+          .map(([key, href]) => `<li><a href="${href}">${say(key)}</a></li>`)
+          .join('')}</ul>`
+    )
+    .join('');
+  return [
+    `<nav class="gs-places" aria-labelledby="gs-places-name">`,
+    `<h2 id="gs-places-name" class="gs-places-title">${say(title)}</h2>`,
+    lists,
+    `</nav>`,
+  ].join('');
+}
+
+/**
  * The shell for one page.
  * @param {string} page - Its path, as `git ls-files` writes it
  * @param {{main: string}} opts - The id of the page's main content
@@ -219,15 +366,15 @@ export const pathOf = page =>
  */
 export function shellFor(page, { main }) {
   const here = pathOf(page);
-  const groups = NAV.map(([group, links]) => {
-    const items = links
-      .map(([key, href]) => {
-        const current = href === here ? ' aria-current="page"' : '';
-        return `<li><a href="${href}"${current}>${say(key)}</a></li>`;
-      })
-      .join('');
-    const holds = links.some(([, href]) => href === here);
-    return `<li><details class="gs-group"${holds ? ' data-here' : ''}><summary>${say(group)}</summary><ul>${items}</ul></details></li>`;
+  const dest = covering(here)?.destination ?? null;
+  const items = DESTINATIONS.map(([key, href, id]) => {
+    const current =
+      href === here
+        ? ' aria-current="page"'
+        : id === dest
+          ? ' aria-current="true"'
+          : '';
+    return `<li><a href="${href}" data-dest="${id}"${current}>${say(key)}</a></li>`;
   }).join('');
   const themes = THEMES.map(
     ([id, en, es]) => `<option value="${id}" data-es="${es}">${en}</option>`
@@ -238,13 +385,14 @@ export function shellFor(page, { main }) {
     `<header class="gs-shell${app ? ' gs-app' : ''}">`,
     `<a class="gs-brand" href="/#home"><span class="gs-vh">${say('home')}</span><span aria-hidden="true">GRAVITAS</span></a>`,
     `<button type="button" class="gs-toggle" aria-expanded="false" aria-controls="gs-nav" hidden>${say('menu')}</button>`,
-    `<nav id="gs-nav" class="gs-nav" aria-label="${WORDS.nav[0]}"><ul>${groups}</ul></nav>`,
+    `<nav id="gs-nav" class="gs-nav" aria-label="${WORDS.nav[0]}"><ul>${items}</ul></nav>`,
     `<div class="gs-controls" hidden>`,
     `<label><span class="gs-vh">${say('lang')}</span><select data-gs-lang><option value="en" lang="en">English</option><option value="es" lang="es">Español</option></select></label>`,
     `<label><span class="gs-vh">${say('theme')}</span><select data-gs-theme>${themes}</select></label>`,
     `</div>`,
     `</header>`,
-    ...(app ? [] : [offlineNote()]),
+    ...(app ? [] : [crumbsFor(here), offlineNote()]),
+    ...(TITLES_ES[page] ? [titleScript(TITLES_ES[page])] : []),
   ].join('\n');
   const footer = [
     `<footer class="gs-foot">`,
@@ -303,6 +451,7 @@ const TOP = /<!-- shell:head -->[\s\S]*?<!-- \/shell:head -->/;
 const OPEN =
   /<!-- shell:header(?: main=([\w-]+))? -->[\s\S]*?<!-- \/shell:header -->/;
 const FOOT = /<!-- shell:footer -->[\s\S]*?<!-- \/shell:footer -->/;
+const PLACES_BLOCK = /<!-- shell:places -->[\s\S]*?<!-- \/shell:places -->/;
 
 /** Whether a page carries the shell's markers. */
 export const hasShell = (html, page) =>
@@ -329,6 +478,10 @@ export function withShell(page, html) {
     .replace(
       FOOT,
       () => `<!-- shell:footer -->\n${footer}\n<!-- /shell:footer -->`
+    )
+    .replace(
+      PLACES_BLOCK,
+      () => `<!-- shell:places -->\n${placesFor(page)}\n<!-- /shell:places -->`
     );
 }
 

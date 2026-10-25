@@ -1,0 +1,281 @@
+{
+  "lessons": [
+    "keplers-laws",
+    "goldilocks-question",
+    "transit-photometry",
+    "what-is-a-gravitational-wave",
+    "missing-mass",
+    "butterfly-effect",
+    "binary-star-planets",
+    "black-holes",
+    "weighing-stars",
+    "a-lens-passing-by",
+    "a-universe-of-stars",
+    "detect-this-planet",
+    "extending-an-experiment",
+    "orbital-energy",
+    "power-law-gravity",
+    "radial-velocity",
+    "retrograde-motion"
+  ],
+  "lessonGain": {
+    "keplers-laws": [
+      "audience:intro",
+      "check:choice/number",
+      "check:numeric/number+tolerance+unit",
+      "check:short/undefined",
+      "depth-step:advanced/question",
+      "depth-step:quantitative/measure",
+      "depth-step:quantitative/question",
+      "depth:advanced",
+      "depth:core",
+      "depth:quantitative",
+      "key:ellipse.bind",
+      "key:ellipse.presets",
+      "key:ellipse.start",
+      "key:ellipse.type",
+      "key:explore.bind",
+      "key:explore.checklist",
+      "key:explore.probe",
+      "key:explore.showAreaSweep",
+      "key:explore.type",
+      "key:measure.after",
+      "key:measure.bind",
+      "key:measure.depth",
+      "key:measure.fields",
+      "key:measure.importFromSelection",
+      "key:measure.importGroups",
+      "key:measure.importLabel",
+      "key:measure.pauseAt",
+      "key:measure.plot",
+      "key:measure.probe",
+      "key:measure.requires",
+      "key:measure.tip",
+      "key:measure.type",
+      "key:measure.validate",
+      "key:predict.answer",
+      "key:predict.because",
+      "key:predict.bind",
+      "key:predict.options",
+      "key:predict.prompt",
+      "key:predict.reveal",
+      "key:predict.type",
+      "key:question.after",
+      "key:question.answer",
+      "key:question.because",
+      "key:question.bind",
+      "key:question.depth",
+      "key:question.expect",
+      "key:question.feedback",
+      "key:question.hints",
+      "key:question.kind",
+      "key:question.misconceptions",
+      "key:question.options",
+      "key:question.placeholder",
+      "key:question.prompt",
+      "key:question.restates",
+      "key:question.rubric",
+      "key:question.tolerance",
+      "key:question.type",
+      "key:question.uncertainty",
+      "key:question.unit",
+      "key:question.worked",
+      "key:read.bind",
+      "key:read.quote",
+      "key:read.setup",
+      "key:read.tip",
+      "key:read.type",
+      "key:wedges.bind",
+      "key:wedges.tip",
+      "key:wedges.type",
+      "kind:question/choice",
+      "kind:question/numeric",
+      "kind:question/short",
+      "locale:en",
+      "locale:es",
+      "lock:{\"placement\":true,\"inspector\":true}",
+      "math:logarithms",
+      "prereq:no",
+      "setup:scenario",
+      "type:ellipse",
+      "type:explore",
+      "type:measure",
+      "type:predict",
+      "type:question",
+      "type:read",
+      "type:wedges"
+    ],
+    "goldilocks-question": [
+      "key:explore.allowInspector",
+      "key:explore.pauseAt",
+      "key:explore.setup",
+      "key:explore.stage",
+      "key:explore.tip",
+      "key:explore.tool",
+      "key:measure.allowInspector",
+      "key:measure.tool",
+      "key:predict.setup",
+      "key:question.probe",
+      "key:question.requires",
+      "key:question.stage",
+      "key:question.tip",
+      "key:read.tool",
+      "lock:{\"placement\":true,\"inspector\":true,\"areaSweep\":false}",
+      "math:algebra",
+      "prereq:yes"
+    ],
+    "transit-photometry": [
+      "check:numeric/number+tolerance",
+      "key:explore.clearLightCurve",
+      "key:explore.lightCurve",
+      "key:explore.observerAngle",
+      "key:measure.lightCurve",
+      "key:question.agrees",
+      "key:question.tool",
+      "key:read.figure",
+      "key:read.pauseAt",
+      "key:read.probe"
+    ],
+    "what-is-a-gravitational-wave": [
+      "audience:beginner",
+      "key:measure.stage",
+      "key:predict.stage",
+      "key:predict.tip",
+      "key:predict.tool",
+      "key:read.checklist",
+      "key:read.stage",
+      "lock:{\"placement\":true,\"inspector\":false,\"areaSweep\":false}",
+      "math:arithmetic"
+    ],
+    "missing-mass": [
+      "depth-step:advanced/measure",
+      "depth-step:advanced/read",
+      "key:read.after",
+      "key:read.depth"
+    ],
+    "butterfly-effect": [
+      "key:explore.rubric",
+      "key:predict.requires",
+      "lock:null"
+    ],
+    "binary-star-planets": [
+      "key:explore.requires",
+      "lock:{\"placement\":true}"
+    ],
+    "black-holes": [
+      "key:question.checklist",
+      "key:read.explainView"
+    ],
+    "weighing-stars": [
+      "key:explore.showBarycenter",
+      "key:read.showBarycenter"
+    ],
+    "a-lens-passing-by": [
+      "key:predict.hints"
+    ],
+    "a-universe-of-stars": [
+      "key:measure.checklist"
+    ],
+    "detect-this-planet": [
+      "key:read.allowInspector"
+    ],
+    "extending-an-experiment": [
+      "key:measure.compute"
+    ],
+    "orbital-energy": [
+      "key:question.rubricCriteria"
+    ],
+    "power-law-gravity": [
+      "key:question.explain"
+    ],
+    "radial-velocity": [
+      "key:measure.setup"
+    ],
+    "retrograde-motion": [
+      "lock:{\"placement\":true,\"inspector\":false}"
+    ]
+  },
+  "activities": [
+    "orbital-speed/lab",
+    "binary-planets/route",
+    "orbital-speed/demonstration",
+    "star-sizes/route",
+    "orbital-speed/guided"
+  ],
+  "activityGain": {
+    "orbital-speed/lab": [
+      "assignment:cut",
+      "assignment:resolver-added",
+      "context:lab",
+      "cut-depth:core",
+      "cut-first:read",
+      "cut-kind:question/choice",
+      "cut-kind:question/short",
+      "cut-last:question",
+      "cut-type:ellipse",
+      "cut-type:explore",
+      "cut-type:measure",
+      "cut-type:predict",
+      "cut-type:question",
+      "cut-type:read",
+      "cut-type:wedges",
+      "format:lab",
+      "lecture:no",
+      "lesson-lock:{\"placement\":true,\"inspector\":true}"
+    ],
+    "binary-planets/route": [
+      "context:individual",
+      "cut-first:explore",
+      "format:route",
+      "lesson-lock:{\"placement\":true}"
+    ],
+    "orbital-speed/demonstration": [
+      "context:projection",
+      "cut-last:wedges",
+      "format:demonstration",
+      "lecture:yes"
+    ],
+    "star-sizes/route": [
+      "cut-first:predict",
+      "lesson-lock:{\"placement\":true,\"inspector\":false,\"areaSweep\":false}"
+    ],
+    "orbital-speed/guided": [
+      "format:guided"
+    ]
+  },
+  "enginePaths": [
+    "token:plain",
+    "token:assignment",
+    "token:with-evidence",
+    "token:with-depth",
+    "progress:v2-record",
+    "progress:resume-at-sid",
+    "backup:build",
+    "backup:restore-same-lesson",
+    "report:ledger-entries",
+    "author-bar:clean-step",
+    "author-bar:step-jump",
+    "pin:none",
+    "pin:same",
+    "pin:compatible",
+    "pin:major",
+    "pin:moved",
+    "pin:unpinned"
+  ],
+  "totals": {
+    "investigations": 60,
+    "steps": 1160,
+    "activityCuts": 6,
+    "lessonTokens": 141,
+    "activityTokens": 29,
+    "stepTypes": {
+      "read": 228,
+      "predict": 130,
+      "ellipse": 1,
+      "question": 421,
+      "measure": 236,
+      "explore": 143,
+      "wedges": 1
+    }
+  }
+}

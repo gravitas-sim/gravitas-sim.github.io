@@ -69,9 +69,9 @@ import {
   NeutronStar,
   WhiteDwarf,
   Galaxy,
-  updatePhysicsSettings,
   particlePool,
   clearAllEnergyHistory,
+  updatePhysicsSettings,
 } from './physics.js';
 import { debugLog } from './utils.js';
 import { setFrame, resetFrame, frameState } from './referenceFrame.js';
@@ -108,6 +108,7 @@ import {
   packBody,
   payloadSeed,
   chooseKind,
+  migrateSettings,
 } from './shareState.js';
 import { generateStarfield } from './render.js';
 import { stopSignalAudio } from './soundPanel.js';
@@ -127,7 +128,8 @@ import {
   state,
   SETTINGS,
   DEFAULT_SETTINGS,
-  withCurrentSettingNames,
+  commitSettings,
+  registerSettingsReceiver,
   setSettings,
   current_scenario_name,
   setScenarioName as setCurrentScenarioName,
@@ -139,9 +141,16 @@ import {
 } from './presentation.js';
 import { fixTheme, forgetThemes } from './theme.js';
 import { reduceMotion } from './quality.js';
+import {
+  EV_GALAXY_GRAVITY_CHANGED,
+  EV_OBJECT_PLACED,
+  EV_REQUEST_REBUILD,
+  EV_SIMULATION_RESET,
+  KEY_SIMULATION_SAVE,
+} from './names.js';
 
 // Where Save and Load keep the world, in localStorage.
-const SAVE_KEY = 'gravitas_simulation_save';
+const SAVE_KEY = KEY_SIMULATION_SAVE;
 
 /**
  * Apply the selected preset scenario to the live settings.
@@ -350,12 +359,17 @@ const markWorldTouched = () => {
 // Settings from a shared link, waiting for the next build to apply them.
 let pendingSettingsOverride = null;
 
+// The page's writers (SETTINGS_WRITERS) reach the engine through commitSettings();
+// this file holds both ends, so it says who takes them.
+registerSettingsReceiver(updatePhysicsSettings);
+
 // World construction lives in js/world/build.js. What stays here is the wiring:
 // the settings object, the mutable bindings it reads and writes, and the four
 // pieces of user interface it has to touch on the way through.
 const build_simulation = () =>
   buildWorld({
     settings: SETTINGS,
+    pushSettings: () => commitSettings('world-build'),
     state,
     applyPreset: apply_preset,
     takePendingSettings: () => {
@@ -516,19 +530,19 @@ const load_simulation_state = () => {
   try {
     const loadedState = JSON.parse(savedJSON);
     setSettings(
-      withCurrentSettingNames(loadedState.settings) || { ...DEFAULT_SETTINGS }
+      migrateSettings(loadedState.settings) || { ...DEFAULT_SETTINGS }
     );
     const view = loadedState.view || { zoom: 1.5, pan: { x: 0, y: 0 } };
     state.zoom = view.zoom;
     state.pan = view.pan;
-    updatePhysicsSettings(SETTINGS);
+    commitSettings('saved-world');
     rebuildWorldFromStates(loadedState.objects);
     builtSystem = null;
     resetConservationBaseline();
     // A restored save is a hand-made world by definition: no seed regenerates
     // it, so sharing it has to carry the bodies themselves.
     markWorldTouched();
-    window.dispatchEvent(new CustomEvent('gravitasSimulationReset'));
+    window.dispatchEvent(new CustomEvent(EV_SIMULATION_RESET));
     toast(t('state.loaded'));
     state.paused = false;
     updateSpeedDisplay();
@@ -696,9 +710,7 @@ const applyShareState = payload => {
   // Held for build_simulation() to apply. Settings cannot simply be assigned
   // here: apply_preset() runs first inside the build and resets everything to
   // the scenario's own defaults, which would discard them.
-  pendingSettingsOverride = payload.d
-    ? withCurrentSettingNames(payload.d)
-    : null;
+  pendingSettingsOverride = payload.d ? payload.d : null;
 
   const seed = payloadSeed(payload);
 
@@ -708,7 +720,7 @@ const applyShareState = payload => {
     // the bodies with the ones the link actually carries.
     initialize_simulation({ seed });
     rebuildWorldFromStates(payload.b);
-    updatePhysicsSettings(SETTINGS);
+    commitSettings('share-link');
     // The baseline was taken over the world these bodies just replaced.
     resetConservationBaseline();
     markWorldTouched();
@@ -721,8 +733,8 @@ const applyShareState = payload => {
   // the same order they happened, so live-applied values like gravity land on
   // an already-generated system rather than shaping the generation itself.
   if (payload.a) {
-    Object.assign(SETTINGS, withCurrentSettingNames(payload.a));
-    updatePhysicsSettings(SETTINGS);
+    Object.assign(SETTINGS, payload.a);
+    commitSettings('share-link-delta');
   }
 
   if (Array.isArray(payload.c) && payload.c.length === 3) {
@@ -943,7 +955,7 @@ const validateScenarioData = () => {
 export function initWorld() {
   // Placing anything by hand puts the world beyond what its seed rebuilds, so
   // from here on a link has to carry the bodies themselves.
-  window.addEventListener('gravitasObjectPlaced', markWorldTouched);
+  window.addEventListener(EV_OBJECT_PLACED, markWorldTouched);
 
   // What just happened, said once, without taking the canvas away.
   //
@@ -952,7 +964,7 @@ export function initWorld() {
   // purpose. This is a brief line plus a polite live-region announcement, which
   // is what makes the creation perceivable to somebody who cannot see the canvas
   // it happened on.
-  window.addEventListener('gravitasObjectPlaced', event => {
+  window.addEventListener(EV_OBJECT_PLACED, event => {
     const type = typeKeyOf(event.detail?.object);
     if (type) toast(t('placement.added', { type: typeName(type) }));
   });
@@ -967,7 +979,7 @@ export function initWorld() {
   // Done by event rather than by importing the panel, so the dependency runs one
   // way: the panel already announces the change for the listeners that predate
   // three modes.
-  window.addEventListener('gravitasGalaxyGravityChanged', event => {
+  window.addEventListener(EV_GALAXY_GRAVITY_CHANGED, event => {
     const mode = event?.detail?.mode;
     if (mode !== 'newtonian' && mode !== 'halo' && mode !== 'mond') return;
     SETTINGS.galaxy_gravity = mode;
@@ -980,7 +992,7 @@ export function initWorld() {
   // the binary planet lab does, because changing where a planet starts means
   // starting over rather than teleporting it mid-flight - has to be able to say
   // so without acquiring an edge back up to this module.
-  window.addEventListener('gravitasRequestRebuild', () => {
+  window.addEventListener(EV_REQUEST_REBUILD, () => {
     if (rebuildBuiltSystem()) return;
     SETTINGS.preset_scenario =
       current_scenario_name || SETTINGS.preset_scenario;

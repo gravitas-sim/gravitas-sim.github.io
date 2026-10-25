@@ -14,9 +14,8 @@
 // =============================================================================
 
 import { t, onLocaleChange } from '../i18n/index.js';
-import { ensureChartJs } from '../chartjs.js';
 import { formatNumber } from '../format.js';
-import { chartColors } from '../observationChart.js';
+import { chartColor, chartTick, mountChart } from '../observationChart.js';
 import {
   requestObservationLayout,
   noteObservationPanelUsed,
@@ -28,8 +27,8 @@ import { SWEEPABLE, parameterFor, sweepableScenarios } from './sweep.js';
 import { describeDiff } from './canonicalState.js';
 import { describePerturbation, systemExtent } from './perturbation.js';
 import * as CHAOS from './chaosPair.js';
-import { SETTINGS } from '../appState.js';
-import { state, onPhysicsStep, updatePhysicsSettings } from '../physics.js';
+import { SETTINGS, commitSettings } from '../appState.js';
+import { state, onPhysicsStep } from '../physics.js';
 import { getSimClock } from '../timeline.js';
 import { captureToNotebook, snapshot } from '../notebookBridge.js';
 import { frameAdvance } from '../timestep.js';
@@ -38,10 +37,21 @@ import { DT } from '../physics.js';
 const PANEL_ID = 'experimentPanel';
 
 let root = null;
-let chart = null;
-let chartCanvas = null;
-/** The sweep's own chart, kept apart so the two do not fight over one canvas. */
-let sweepChart = null;
+/**
+ * The bench's two charts (js/plot/chart.js, D-PLOT-02 stage 3c; they were
+ * Chart.js), by key: the host each was built in and the promise of the chart.
+ * A chart is built once per host. The panel rebuilds its markup on a language
+ * change, which replaces the hosts, and a chart left drawing into a host that
+ * is no longer on the page would leave the new one blank.
+ */
+const benchCharts = new Map();
+
+/** The comparison chart as data (axes, legend, series as drawn), for tests. */
+export const benchComparisonParts = () =>
+  benchCharts.get('compare')?.chart?.parts() ?? null;
+/** The sweep chart as data, for tests. */
+export const benchSweepParts = () =>
+  benchCharts.get('sweep')?.chart?.parts() ?? null;
 let statusTimer = 0;
 let onShareRequest = null;
 
@@ -140,7 +150,7 @@ export function ensurePanel() {
           <label class="experiment-label" for="benchChartMetric">${esc(t('bench.field.chart'))}</label>
           <select id="benchChartMetric" class="experiment-input"></select>
         </div>
-        <canvas id="benchChart" height="150" aria-label="${esc(t('bench.chart.label'))}"></canvas>
+        <div id="benchChart" class="plot-host"></div>
       </div>
 
       <div id="benchResults" class="experiment-results"></div>
@@ -212,7 +222,7 @@ export function ensurePanel() {
             <label class="experiment-label" for="benchSweepMetric">${esc(t('bench.field.chart'))}</label>
             <select id="benchSweepMetric" class="experiment-input"></select>
           </div>
-          <canvas id="benchSweepChart" height="150" aria-label="${esc(t('sweep.title'))}"></canvas>
+          <div id="benchSweepChart" class="plot-host"></div>
         </div>
         <div id="benchSweepResults" class="experiment-results"></div>
 
@@ -289,6 +299,7 @@ function subscribeToLocaleOnce() {
   onLocaleChange(() => {
     if (!root) return;
     const wasOpen = isOpen();
+    releaseBenchCharts();
     root.remove();
     root = null;
     if (wasOpen) {
@@ -851,7 +862,7 @@ async function runChaosPair(opts = {}) {
       console.warn('[bench] could not restore after the chaos pair:', err);
     }
     Object.assign(SETTINGS, savedSettings);
-    updatePhysicsSettings(SETTINGS);
+    commitSettings('bench-chaos');
     state.paused = savedPaused;
     chaosRunning = false;
     for (const id of ['benchChaosRun', 'benchChaosSame', 'benchChaosControl']) {
@@ -910,7 +921,7 @@ function pinStepAndHurry() {
   const before = { step: SETTINGS.max_timestep, simSpeed: SETTINGS.sim_speed };
   SETTINGS.max_timestep = cap;
   SETTINGS.sim_speed = SETTINGS.sim_speed * HURRY;
-  updatePhysicsSettings(SETTINGS);
+  commitSettings('bench-hurry');
   return { ...before, pinnedStep: cap, factor: HURRY };
 }
 
@@ -944,7 +955,7 @@ function applyChaosControl(control, baseline) {
     const next = CHAOS.alternateIntegrator(settings.integrator);
     if (next) settings.integrator = next;
   }
-  updatePhysicsSettings(settings);
+  commitSettings('bench-chaos');
 }
 
 /** Draw the chaos section: what ran, over what, and whether it is resolved. */
@@ -1259,9 +1270,6 @@ async function renderSweepChart(sweep) {
   }
   const metric = picker.value || plottable[0];
 
-  const Chart = await ensureChartJs();
-  if (!Chart) return;
-  const colors = chartColors();
   // Only the trials that measured. A failed trial is not a zero, and joining
   // the line across it would draw a value nobody observed.
   const points = sweep.trials
@@ -1269,57 +1277,35 @@ async function renderSweepChart(sweep) {
     .map(tr => ({ x: tr.value, y: tr.results[metric] }))
     .sort((a, b) => a.x - b.x);
 
-  const data = {
-    datasets: [
-      {
-        label: bench.metricLabel(metric),
-        data: points,
-        borderColor: colors.cool,
-        backgroundColor: colors.cool,
-        borderWidth: 2,
-        pointRadius: 3,
-        showLine: true,
-      },
-    ],
-  };
   const def = parameterFor(sweep.scenario, sweep.parameter);
   const xTitle = def
     ? `${t(def.labelKey)} (${t(def.unitKey)})`
     : sweep.parameter;
 
-  if (sweepChart) {
-    sweepChart.data = data;
-    sweepChart.options.scales.x.title.text = xTitle;
-    sweepChart.options.scales.y.title.text = bench.metricLabel(metric);
-    sweepChart.update('none');
-    return;
-  }
-  sweepChart = new Chart($('benchSweepChart'), {
-    type: 'scatter',
-    data,
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      animation: false,
-      plugins: { legend: { labels: { color: colors.label } } },
-      scales: {
-        x: {
-          type: 'linear',
-          title: { display: true, text: xTitle, color: colors.label },
-          ticks: { color: colors.tick, maxTicksLimit: 8 },
-          grid: { color: colors.grid },
-        },
-        y: {
-          title: {
-            display: true,
-            text: bench.metricLabel(metric),
-            color: colors.label,
-          },
-          ticks: { color: colors.tick },
-          grid: { color: colors.grid },
-        },
+  // A little room at either end, so the first and last trials' markers are
+  // whole and not half behind the frame.
+  const lo = points[0]?.x;
+  const hi = points[points.length - 1]?.x;
+  const pad = (hi - lo) * 0.03;
+  const drawn = await benchChartIn('sweep', $('benchSweepChart'));
+  drawn?.draw({
+    label: t('sweep.title'),
+    xTitle,
+    xRange: pad > 0 ? [lo - pad, hi + pad] : undefined,
+    yTitle: bench.metricLabel(metric),
+    legend: true,
+    series: [
+      {
+        id: 'sweep',
+        label: bench.metricLabel(metric),
+        x: points.map(p => p.x),
+        y: points.map(p => p.y),
+        color: () => chartColor('cool'),
+        width: 2,
+        mode: 'both',
+        radius: 3,
       },
-    },
+    ],
   });
 }
 
@@ -1609,69 +1595,75 @@ async function renderChart(exp, comparison) {
   const aligned = comparison.aligned[metric];
   if (!aligned || !aligned.rows.length) return;
 
-  const Chart = await ensureChartJs();
-  if (!Chart) return;
-  chartCanvas = $('benchChart');
-  const colors = chartColors();
-  const data = {
-    labels: aligned.rows.map(r => Number(r.t.toPrecision(6))),
-    datasets: [
+  const times = aligned.rows.map(r => Number(r.t.toPrecision(6)));
+  const drawn = await benchChartIn('compare', $('benchChart'));
+  drawn?.draw({
+    label: t('bench.chart.label'),
+    xTitle: t('bench.chart.time'),
+    yTitle: `${bench.metricLabel(metric)} (${bench.metricUnit(metric)})`,
+    legend: true,
+    series: [
       {
+        id: 'a',
         label: t('bench.run.a'),
-        data: aligned.rows.map(r => r.a),
-        borderColor: colors.cool,
-        backgroundColor: 'transparent',
-        borderWidth: 2,
-        pointRadius: 0,
+        x: times,
+        y: aligned.rows.map(r => r.a),
+        color: () => chartColor('cool'),
+        width: 2,
       },
       {
+        id: 'b',
         label: t('bench.run.b'),
-        data: aligned.rows.map(r => r.b),
-        borderColor: colors.warm,
-        backgroundColor: 'transparent',
-        borderWidth: 2,
-        borderDash: [5, 3],
-        pointRadius: 0,
+        x: times,
+        y: aligned.rows.map(r => r.b),
+        color: () => chartColor('warm'),
+        width: 2,
+        dash: [5, 3],
       },
     ],
-  };
-  if (chart) {
-    chart.data = data;
-    chart.options.scales.y.title.text = `${bench.metricLabel(metric)} (${bench.metricUnit(metric)})`;
-    chart.update('none');
-    return;
-  }
-  chart = new Chart(chartCanvas, {
-    type: 'line',
-    data,
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      animation: false,
-      interaction: { mode: 'nearest', intersect: false },
-      plugins: { legend: { labels: { color: colors.label } } },
-      scales: {
-        x: {
-          title: {
-            display: true,
-            text: t('bench.chart.time'),
-            color: colors.label,
-          },
-          ticks: { color: colors.tick, maxTicksLimit: 8 },
-          grid: { color: colors.grid },
-        },
-        y: {
-          title: {
-            display: true,
-            text: `${bench.metricLabel(metric)} (${bench.metricUnit(metric)})`,
-            color: colors.label,
-          },
-          ticks: { color: colors.tick },
-          grid: { color: colors.grid },
-        },
-      },
-    },
   });
+}
+
+/**
+ * The chart for one of the bench's two figures, in its host.
+ *
+ * Built on the first call for a host and reused after it; a host that is not
+ * the one it was built in (the panel was rebuilt) gets the old chart
+ * destroyed and a new one. Resolves to null if the component could not be
+ * fetched: a panel without its chart is a worse panel, not a broken one.
+ *
+ * @param {'compare'|'sweep'} key - Which figure
+ * @param {HTMLElement} host - Where it draws
+ * @returns {Promise<object|null>} The chart
+ */
+function benchChartIn(key, host) {
+  const held = benchCharts.get(key);
+  if (held?.host === host) return held.made;
+  held?.made.then(c => c?.destroy());
+  const entry = { host, made: null, chart: null };
+  entry.made = mountChart(host, {
+    height: 'fill',
+    maxTicks: 8,
+    number: chartTick,
+    tooltip: {
+      mode: 'nearest',
+      title: num,
+      format: ({ label, y }) => `${label}: ${num(y)}`,
+    },
+  })
+    .then(made => (entry.chart = made))
+    .catch(error => {
+      console.error('The bench chart could not be built.', error);
+      return null;
+    });
+  benchCharts.set(key, entry);
+  return entry.made;
+}
+
+/** Destroy both charts (the panel's markup is about to be replaced). */
+function releaseBenchCharts() {
+  for (const { made } of benchCharts.values()) made.then(c => c?.destroy());
+  benchCharts.clear();
 }
 
 function renderSaved() {

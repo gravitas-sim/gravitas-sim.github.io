@@ -9,8 +9,9 @@
 // =============================================================================
 
 import { EN_LAB3D } from '../i18n/en.lab3d.js';
+import { KEY_LOCALE } from '../names.js';
 
-const STORAGE_KEY = 'gravitas_locale';
+const STORAGE_KEY = KEY_LOCALE;
 
 export const LANGUAGES = Object.freeze([
   { id: 'en', endonym: 'English' },

@@ -42,11 +42,14 @@ import {
   GUIDE_DEPTHS,
   LEVEL_DEPTH,
   guideRoute,
+  packVersion,
+  withVersion,
 } from './pack.js';
+import { KEY_COURSE_PREVIEW } from '../names.js';
 
 export { COMFORTABLE_URL_LENGTH };
 /** Where the builder leaves the draft the course home previews (?draft=1). */
-export const PREVIEW_KEY = 'gravitas_course_preview';
+export const PREVIEW_KEY = KEY_COURSE_PREVIEW;
 /** The tag of a course home fragment: a world starts with a digit, an assignment with 'a'. */
 export const COURSE_TAG = 'c';
 
@@ -146,9 +149,13 @@ export async function itemLink(item, { root, locale = 'en', level }) {
   return null;
 }
 
-/** The course home's link for a pack, and whether it is a comfortable length. */
+/**
+ * The course home's link for a pack, and whether it is a comfortable length.
+ * The prefix is the pack's lowest version (c2, or c3 for a collection, a term
+ * or outcomes), so a 2.0.0 course home opens every link it could before.
+ */
 export async function courseLink(pack, { root }) {
-  const url = `${root}course/#${await encodeTagged(COURSE_TAG, FORMAT_VERSION, pack)}`;
+  const url = `${root}course/#${await encodeTagged(COURSE_TAG, packVersion(pack), withVersion(pack))}`;
   return {
     url,
     length: url.length,

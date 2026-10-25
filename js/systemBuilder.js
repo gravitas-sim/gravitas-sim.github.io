@@ -34,13 +34,10 @@ import {
   SETTINGS,
   DEFAULT_SETTINGS,
   setSettings,
+  commitSettings,
   setScenarioName,
 } from './appState.js';
-import {
-  bumpWorldGeneration,
-  updatePhysicsSettings,
-  resetConservationBaseline,
-} from './physics.js';
+import { bumpWorldGeneration, resetConservationBaseline } from './physics.js';
 import { withSeed } from './rng.js';
 import {
   BUILDER_TYPES,
@@ -55,6 +52,7 @@ import {
   systemFromFile,
   initialStateMatches,
 } from './systemSpec.js';
+import { EV_SIMULATION_RESET } from './names.js';
 
 /**
  * Bring in this panel's strings, for the locale in use.
@@ -770,8 +768,7 @@ const scheduleRefresh = () => {
 };
 
 function setStatus(message) {
-  const status = $('systemBuilderStatus');
-  if (status) status.textContent = message;
+  announce(message, true, 'systemBuilderStatus');
 }
 
 // --- Actions ------------------------------------------------------------------
@@ -976,7 +973,7 @@ export function installSystem(system, kit) {
     }
   });
   bumpWorldGeneration();
-  updatePhysicsSettings(SETTINGS);
+  commitSettings('system-builder');
   resetConservationBaseline();
 
   const canvas = $('simulationCanvas');
@@ -985,7 +982,7 @@ export function installSystem(system, kit) {
   state.pan = { x: 0, y: 0 };
   state.paused = false;
   kit.finish(system);
-  window.dispatchEvent(new CustomEvent('gravitasSimulationReset'));
+  window.dispatchEvent(new CustomEvent(EV_SIMULATION_RESET));
   return count;
 }
 

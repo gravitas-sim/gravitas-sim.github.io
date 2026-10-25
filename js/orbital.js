@@ -1,33 +1,48 @@
 // =============================================================================
-// Two-body orbital elements
+// Two-body orbital elements, and Kepler's equation
 // -----------------------------------------------------------------------------
 // What an investigation asks a student to measure comes from here. The
 // inspector's "Orbital Period" assumes a central mass of 1000 whatever the
 // parent is; these solve the real two-body problem. Pure: no DOM, no imports.
+//
+// Kepler's equation has one solver, solveKepler below (Prompt 142): M any real,
+// e in [0, 1), E on M's own turn. Its contract and its fixture grid are in
+// tests/keplerSolver.test.js. Three modules keep their own: js/lab3d/elements.js (an
+// instructor-bundle source, held bit-identical), js/kernels/sky/planets.js (the
+// Sky Lab's weight gate) and js/resonance/systems.js (a bit-for-bit world golden).
 // =============================================================================
 
-// --- Kepler's equation: one Newton, each caller keeps its own domain ----------
-//   caller                      start E0                  tol    cap
-//   ui.js wedges                e < 0.8 ? M : pi          1e-13  40
-//   systemSpec.js               e > 0.8 ? pi sign(M) : M  1e-15  60
-// A start at pi is tested over M in [-6, 7] at e = 0.8, 0.9 and 0.95 and
-// converged each time, but convergence from pi is not guaranteed for M outside
-// [0, 2 pi] (ui.js can pass M < 0 with e up to 0.999). Kept as it was.
-// habitability.js and binaryWidgets.js (e < 0.8 ? M : pi, 1e-12, 60 and 40),
-// inference/rv.js (M + e sin M, 1e-13, 50), resonance/systems.js (M, 1e-14, 100)
-// and lab3d/elements.js (bracketed, hyperbolic) keep their own: the routes that
-// load them do not load this module and each would pay its 6.7 KB;
-// js/mission/twobody.js is universal-variable.
+// Bound once: free globals are 8-25x slower in Jest's vm context.
+const { Math } = globalThis;
 
-/** Newton on E - e sin E = M, 0 <= e < 1; the last step is applied. */
-export function keplerNewton(M, e, E0, tol, maxIter) {
-  let E = E0;
-  for (let i = 0; i < maxIter; i++) {
-    const step = (E - e * Math.sin(E) - M) / (1 - e * Math.cos(E));
-    E -= step;
-    if (Math.abs(step) < tol) break;
+/**
+ * Kepler's equation E - e sin E = M, for 0 <= e < 1. Newton's method from
+ * Danby's starting value, kept inside the bracket [M - e, M + e] that always
+ * holds the root, with a bisection whenever a step would leave it: started
+ * at pi, plain Newton wanders at high eccentricity (e = 0.95, M = -1.74
+ * never converged).
+ * @param {number} M - Mean anomaly, radians, any turn
+ * @param {number} e - Eccentricity, [0, 1)
+ * @returns {number} The eccentric anomaly on M's own turn, radians
+ */
+export function solveKepler(M, e) {
+  const wrapped = M - 2 * Math.PI * Math.round(M / (2 * Math.PI));
+  let lo = wrapped - e;
+  let hi = wrapped + e;
+  let E = wrapped + 0.85 * e * Math.sign(Math.sin(wrapped) || 1);
+  for (let k = 0; k < 200; k++) {
+    const f = E - e * Math.sin(E) - wrapped;
+    if (f > 0) hi = E;
+    else lo = E;
+    let next = E - f / (1 - e * Math.cos(E));
+    if (!(next > lo && next < hi)) next = (lo + hi) / 2;
+    if (Math.abs(next - E) <= 1e-16 * (1 + Math.abs(E))) {
+      E = next;
+      break;
+    }
+    E = next;
   }
-  return E;
+  return E + (M - wrapped);
 }
 
 /**

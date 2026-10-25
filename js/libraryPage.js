@@ -1,29 +1,39 @@
 // =============================================================================
 // /library/: everything a student or instructor can open, in one place
 // -----------------------------------------------------------------------------
-// Roadmap II Prompt 54 (LIBRARY.md). The page reads library/library.json,
-// which tools/build-library.mjs writes from the sources that own each thing,
-// and filters it with the functions the lesson browser inside the application
-// uses (js/data/investigations/browse.js): the same search, the same subject,
-// time, arithmetic and progress filters, and the Library's own kind, format
-// and level. Every card links to the page that runs its entry.
+// Roadmap II Prompt 54 (LIBRARY.md), made to answer questions at scale by
+// Roadmap III Prompt 163. The page reads library/library.json, which
+// tools/build-library.mjs writes from the sources that own each thing.
 //
-// The filters live in the address (?q=, ?kind=, ...), so a link can open the
-// Library already narrowed: Home's "see all" links do. Nothing is stored; the
-// progress badges are read from what each surface saved (js/library/progress.js).
-// Its own bundle, like /catalog/: nothing in the simulation imports it.
+// Four views, one page, no new destination:
+//
+//   start    the default: where you left off (from the one resume record), where
+//            to start (a committed handful per audience and level), the
+//            sequences and courses as pathways, and the subjects as topics with
+//            their counts. No grid of everything.
+//   browse   "Browse everything", or any filter or search: the full catalog with
+//            four facets (subject, level, time, kind as a student sees it) and
+//            the rest behind "More filters", a count on every option, and a
+//            search that says why each result matched (js/library/search.js,
+//            fetched on the first query).
+//   topic    ?topic=<subject>: that subject's paragraph, sequences, courses,
+//            investigations by level, datasets and scenarios (js/library/views.js).
+//   item     ?item=<id>: what comes before, what comes next, what goes with it.
+//
+// The filters live in the address (?q=, ?kind=, ?subject=, ...), so a link can
+// open the Library already narrowed. Nothing is stored but the one resume
+// record (js/storage/local.js); progress badges are read from what each surface
+// saved (js/library/progress.js). Its own bundle, like /catalog/.
 // =============================================================================
 
 import {
   NO_FILTERS,
   PROGRESSES,
-  filterCatalog,
-  isFiltered,
-  loosening,
+  progressBucket,
 } from './data/investigations/browse.js';
 import { LENGTHS, CALCULATIONS } from './data/investigations/sequences.js';
 import { libraryCardHtml } from './library/card.js';
-import { checkLibrary } from './library/format.js';
+import { checkLibrary, entryIdOfItem, previewRoute } from './library/format.js';
 import { progressOf } from './library/progress.js';
 import {
   pick,
@@ -34,23 +44,58 @@ import {
   translatePage,
 } from './library/i18n.js';
 import { mountShell } from './shell.js';
+import { ID_COURSE_PACK, KEY_COLLECTIONS, KEY_NEXT_CONTEXT } from './names.js';
+import {
+  get,
+  noteResume,
+  put,
+  readJson,
+  readResume,
+  writeJson,
+} from './storage/local.js';
 
 const $ = id => document.getElementById(id);
 const LEVELS = ['beginner', 'intro'];
+/** How many cards the list draws at once, then in each following task. */
+const FIRST_CARDS = 48;
+const CHUNK = 96;
+const MATHEMATICS = ['none', 'arithmetic', 'algebra', 'logarithms'];
 const GROUPS = ['all', 'subject', 'level', 'sequence'];
+/** The filters the default row offers, then the ones behind "More filters". */
+const EXTRA = ['mathematics', 'data', 'depth', 'prereq', 'sequence'];
+const EMPTY = Object.freeze({
+  ...NO_FILTERS,
+  ...Object.fromEntries(EXTRA.map(k => [k, ''])),
+});
 /** The filters, in the address's words. `q` is the search box. */
 const PARAMS = {
   q: 'query',
   ...Object.fromEntries(
-    Object.keys(NO_FILTERS)
+    Object.keys(EMPTY)
       .filter(k => k !== 'query')
       .map(k => [k, k])
   ),
 };
 
-const state = { library: null, filters: { ...NO_FILTERS }, group: 'all' };
+const state = {
+  library: null,
+  filters: { ...EMPTY },
+  group: 'all',
+  browse: false,
+  topic: '',
+  item: '',
+  path: '',
+};
 let byId = new Map();
 let localized = [];
+let shown = {};
+let students = [];
+let progressCache = new Map();
+/** The search's matches for the current query: id to {score, why}. */
+let hits = null;
+let searchModule = null;
+let objectives = null;
+let crumbsOriginal = null;
 
 const escape = s =>
   String(s ?? '')
@@ -59,24 +104,44 @@ const escape = s =>
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
 
-/** Read the filters a link opened the page with. */
+/** Read what a link opened the page with. */
 function readAddress() {
   const params = new URLSearchParams(location.search);
   for (const [param, key] of Object.entries(PARAMS))
     if (params.has(param)) state.filters[key] = params.get(param).trim();
   const group = params.get('group');
   if (GROUPS.includes(group)) state.group = group;
+  state.browse = params.get('browse') === '1';
+  state.topic = params.get('topic') || '';
+  state.item = params.get('item') || '';
+  state.path = params.get('path') || '';
 }
 
-/** Write them back, so the address is always a link to what is on screen. */
+/** Write it back, so the address is always a link to what is on screen. */
 function writeAddress() {
   const params = new URLSearchParams();
   for (const [param, key] of Object.entries(PARAMS))
     if (state.filters[key]) params.set(param, state.filters[key]);
   if (state.group !== 'all') params.set('group', state.group);
+  if (state.browse) params.set('browse', '1');
+  if (state.topic) params.set('topic', state.topic);
+  if (state.item) params.set('item', state.item);
+  if (state.path) params.set('path', state.path);
   const query = params.toString();
   history.replaceState(null, '', query ? `?${query}` : location.pathname);
 }
+
+const narrowed = () => Object.values(state.filters).some(v => v !== '');
+
+/** Which view the address asks for. */
+const viewOf = () =>
+  state.topic
+    ? 'topic'
+    : state.item
+      ? 'item'
+      : state.browse || narrowed()
+        ? 'browse'
+        : 'start';
 
 /** The entries in the reader's language: what the search looks through. */
 function localize() {
@@ -87,13 +152,113 @@ function localize() {
   }));
 }
 
-const progressFor = id => progressOf(byId.get(id));
+function progressFor(id) {
+  if (!progressCache.has(id)) progressCache.set(id, progressOf(byId.get(id)));
+  return progressCache.get(id);
+}
+const finished = id => progressBucket(progressFor(id)) === 'done';
 
-function fillSelect(select, values, labelOf, anyLabel, current) {
+/** The sequences each entry is in, for the sequence facet. */
+let inSequences = new Map();
+
+/** The facets, in the order the page offers them. */
+const FACET_KEYS = [
+  'subject',
+  'level',
+  'length',
+  'kind',
+  'mathematics',
+  'calculation',
+  'data',
+  'depth',
+  'prereq',
+  'sequence',
+  'progress',
+];
+
+/** What an entry is, as each facet reads it: the values it can be filed under. */
+function valuesOf(entry, key) {
+  switch (key) {
+    case 'subject':
+      return entry.subjects ?? [];
+    case 'kind':
+      return [shown[entry.kind] ?? entry.kind, entry.kind];
+    case 'depth':
+      return (entry.depths ?? 0) >= 2 ? ['deeper'] : [];
+    case 'prereq':
+      return (entry.rel?.pre ?? []).every(finished) ? ['met'] : [];
+    case 'sequence':
+      return inSequences.get(entry.id) ?? [];
+    case 'progress':
+      return [progressBucket(progressFor(entry.id))];
+    default:
+      return entry[key] ? [entry[key]] : [];
+  }
+}
+
+/** Whether an entry passes what is not a facet: the search and a hidden format. */
+const passesQuery = (entry, f) =>
+  (!f.query || !hits || hits.has(entry.id)) &&
+  (!f.format || entry.format === f.format);
+
+/**
+ * The rows a filter set leaves, ranked by the search when there is a query.
+ * Each carries the progress the card shows and the fields the search matched.
+ */
+function match(f) {
+  const rows = [];
+  for (const entry of localized) {
+    if (!passesQuery(entry, f)) continue;
+    if (FACET_KEYS.some(k => f[k] && !valuesOf(entry, k).includes(f[k])))
+      continue;
+    rows.push({
+      entry,
+      progress: progressBucket(progressFor(entry.id)),
+      ...(f.query && hits ? { why: hits.get(entry.id).why } : {}),
+    });
+  }
+  if (f.query && hits)
+    rows.sort(
+      (a, b) => hits.get(b.entry.id).score - hits.get(a.entry.id).score
+    );
+  return rows;
+}
+
+/**
+ * How many entries each option of each facet would leave, in one pass: an
+ * entry counts toward every facet when it passes them all, and toward the one
+ * facet it fails when it fails just that one (so an option shows what choosing
+ * it would give, the other choices held).
+ */
+function facetCounts(f) {
+  const out = Object.fromEntries(FACET_KEYS.map(k => [k, new Map()]));
+  for (const entry of localized) {
+    if (!passesQuery(entry, f)) continue;
+    const failing = FACET_KEYS.filter(
+      k => f[k] && !valuesOf(entry, k).includes(f[k])
+    );
+    if (failing.length > 1) continue;
+    for (const k of failing.length ? failing : FACET_KEYS)
+      for (const v of valuesOf(entry, k))
+        out[k].set(v, (out[k].get(v) ?? 0) + 1);
+  }
+  return out;
+}
+
+function fillSelect(id, key, values, labelOf, anyLabel, counts) {
+  const select = $(id);
+  if (!select) return;
+  const current = state.filters[key];
   select.innerHTML = [
     `<option value="">${escape(anyLabel)}</option>`,
     ...values.map(
-      v => `<option value="${escape(v)}">${escape(labelOf(v))}</option>`
+      v =>
+        `<option value="${escape(v)}">${escape(
+          t('lib.filter.option', {
+            label: labelOf(v),
+            n: counts[key].get(v) ?? 0,
+          })
+        )}</option>`
     ),
   ].join('');
   select.value = values.includes(current) ? current : '';
@@ -101,63 +266,95 @@ function fillSelect(select, values, labelOf, anyLabel, current) {
 
 function fillMenus() {
   const lib = state.library;
-  const f = state.filters;
-  const formats = [...new Set(lib.entries.map(e => e.format))];
-  const kinds = lib.kinds.filter(k => lib.entries.some(e => e.kind === k));
+  const counts = facetCounts(state.filters);
+  const word = prefix => v => t(`lib.${prefix}.${v}`);
   fillSelect(
-    $('libKind'),
-    kinds,
-    k => t(`lib.kind.${k}`),
-    t('lib.filter.kind.any'),
-    f.kind
-  );
-  fillSelect(
-    $('libFormat'),
-    formats,
-    v => t(`lib.format.${v}`),
-    t('lib.filter.format.any'),
-    f.format
-  );
-  fillSelect(
-    $('libSubject'),
+    'libSubject',
+    'subject',
     lib.subjects.map(s => s.id),
-    id => {
-      const s = lib.subjects.find(x => x.id === id);
-      return t('lib.filter.subject.option', {
-        subject: pick(s.label),
-        n: s.count,
-      });
-    },
+    id => pick(lib.subjects.find(s => s.id === id).label),
     t('lib.filter.subject.any'),
-    f.subject
+    counts
   );
   fillSelect(
-    $('libLength'),
-    LENGTHS,
-    v => t(`lib.length.${v}`),
-    t('lib.filter.length.any'),
-    f.length
-  );
-  fillSelect(
-    $('libCalculation'),
-    CALCULATIONS,
-    v => t(`lib.calculation.${v}`),
-    t('lib.filter.calculation.any'),
-    f.calculation
-  );
-  fillSelect(
-    $('libLevel'),
+    'libLevel',
+    'level',
     LEVELS,
-    v => t(`lib.level.${v}`),
+    word('level'),
     t('lib.filter.level.any'),
-    f.level
+    counts
   );
   fillSelect(
-    $('libProgress'),
+    'libLength',
+    'length',
+    LENGTHS,
+    word('length'),
+    t('lib.filter.length.any'),
+    counts
+  );
+  fillSelect(
+    'libKind',
+    'kind',
+    students,
+    word('kind'),
+    t('lib.filter.kind.any'),
+    counts
+  );
+  fillSelect(
+    'libMathematics',
+    'mathematics',
+    MATHEMATICS,
+    word('mathematics'),
+    t('lib.filter.mathematics.any'),
+    counts
+  );
+  fillSelect(
+    'libCalculation',
+    'calculation',
+    CALCULATIONS,
+    word('calculation'),
+    t('lib.filter.calculation.any'),
+    counts
+  );
+  fillSelect(
+    'libData',
+    'data',
+    ['authentic', 'synthetic'],
+    word('data'),
+    t('lib.filter.data.any'),
+    counts
+  );
+  fillSelect(
+    'libDepth',
+    'depth',
+    ['deeper'],
+    word('depth'),
+    t('lib.filter.depth.any'),
+    counts
+  );
+  fillSelect(
+    'libPrereq',
+    'prereq',
+    ['met'],
+    word('prereq'),
+    t('lib.filter.prereq.any'),
+    counts
+  );
+  fillSelect(
+    'libSequence',
+    'sequence',
+    lib.sequences.map(s => s.id),
+    id => pick(lib.sequences.find(s => s.id === id).title),
+    t('lib.filter.sequence.any'),
+    counts
+  );
+  fillSelect(
+    'libProgress',
+    'progress',
     PROGRESSES,
-    v => t(`lib.progress.${v}`),
+    word('progress'),
     t('lib.filter.progress.any'),
-    f.progress
+    counts
   );
   const group = $('libGroup');
   group.innerHTML = GROUPS.map(
@@ -166,13 +363,24 @@ function fillMenus() {
   group.value = state.group;
 }
 
-const cards = rows =>
+const whyText = row =>
+  row.why?.length
+    ? t('lib.why', {
+        fields: row.why.map(f => t(`lib.why.${f}`)).join(', '),
+      })
+    : '';
+
+const cards = (rows, extra = {}) =>
   rows
     .map(row =>
       libraryCardHtml(byId.get(row.entry.id), {
         t,
         pick,
+        shown,
         progress: row.progress,
+        why: whyText(row),
+        details: true,
+        ...extra,
       })
     )
     .join('');
@@ -182,7 +390,10 @@ function section(title, blurb, rows, ordered = false, seq = '') {
   const tag = ordered ? 'ol' : 'ul';
   return `<section class="lib-group"><h2>${escape(title)}</h2>${
     blurb ? `<p class="ui-note">${escape(blurb)}</p>` : ''
-  }<${tag} class="lib-list"${seq ? ` data-seq="${escape(seq)}"` : ''}>${cards(rows)}</${tag}></section>`;
+  }<${tag} class="lib-list"${seq ? ` data-seq="${escape(seq)}"` : ''}>${cards(
+    rows,
+    seq ? { path: `seq:${seq}` } : {}
+  )}</${tag}></section>`;
 }
 
 function grouped(rows) {
@@ -208,9 +419,9 @@ function grouped(rows) {
     return out.join('');
   }
   if (state.group === 'sequence') {
-    const shown = new Map(rows.map(r => [r.entry.id, r]));
+    const shownRows = new Map(rows.map(r => [r.entry.id, r]));
     const out = lib.sequences
-      .map(s => [s, s.entries.map(id => shown.get(id)).filter(Boolean)])
+      .map(s => [s, s.entries.map(id => shownRows.get(id)).filter(Boolean)])
       .filter(([, list]) => list.length)
       .map(([s, list]) =>
         section(pick(s.title), pick(s.blurb), list, true, s.id)
@@ -222,82 +433,366 @@ function grouped(rows) {
   return `<ul class="lib-list">${cards(rows)}</ul>`;
 }
 
-/** The lessons begun and not finished, from the records My work lists too. */
+// --- The default view ---------------------------------------------------------
+
+/** What an entry is called, from the index or, failing that, from the record. */
+const titleOf = item => {
+  const e = byId.get(item.id);
+  return e
+    ? pick(e.title)
+    : item.title?.[document.documentElement.lang] || item.title?.en || '';
+};
+
+/**
+ * Where you left off: the newest item of the one resume record, then the two
+ * before it. A reader with no record yet but lessons begun still sees them,
+ * from the progress records themselves.
+ */
 function fillContinue() {
-  const going = localized
-    .map(e => ({ e, p: progressFor(e.id) }))
-    .filter(
-      ({ e, p }) => e.format === 'lesson' && p.started && p.done < p.total
-    )
-    .slice(0, 3);
-  $('libContinue').hidden = going.length === 0;
-  $('libContinueList').innerHTML = going
-    .map(
-      ({ e, p }) =>
-        `<li><a href="${escape(e.route)}">${escape(e.title)}</a> ${escape(
-          t('lib.continue.of', { n: p.done, total: p.total })
-        )}</li>`
-    )
+  const items = readResume()
+    .map(item => ({ item, title: titleOf(item) }))
+    .filter(x => x.title);
+  const link = ({ item, title }, label) => {
+    const p = byId.has(item.id) ? progressFor(item.id) : null;
+    const seen =
+      p?.total && p.started && p.done < p.total
+        ? ` <span class="ui-note">${escape(t('lib.continue.of', { n: p.done, total: p.total }))}</span>`
+        : '';
+    return `<li><a class="lib-resume" data-entry="${escape(item.id)}" href="${escape(item.route)}">${escape(label ?? title)}</a>${seen}</li>`;
+  };
+  let html = '';
+  if (items.length) {
+    const [last, ...recent] = items;
+    html = `<ul id="libContinueList">${link(last, t('lib.continue.last', { title: last.title }))}</ul>${
+      recent.length
+        ? `<h3>${escape(t('lib.recent.title'))}</h3><ul>${recent
+            .slice(0, 2)
+            .map(x => link(x))
+            .join('')}</ul>`
+        : ''
+    }`;
+  } else {
+    const going = localized
+      .map(e => ({ e, p: progressFor(e.id) }))
+      .filter(
+        ({ e, p }) => e.format === 'lesson' && p.started && p.done < p.total
+      )
+      .slice(0, 3);
+    if (going.length)
+      html = `<ul id="libContinueList">${going
+        .map(
+          ({ e, p }) =>
+            `<li><a class="lib-resume" data-entry="${escape(e.id)}" href="${escape(e.route)}">${escape(e.title)}</a> ${escape(t('lib.continue.of', { n: p.done, total: p.total }))}</li>`
+        )
+        .join('')}</ul>`;
+  }
+  $('libContinue').hidden = !html;
+  $('libContinueBody').innerHTML = html;
+}
+
+/**
+ * What the lazy collection code is handed (js/library/collections.js says why
+ * it imports none of this itself).
+ */
+const collectionDeps = {
+  read: () => readJson(KEY_COLLECTIONS, null),
+  write: record => writeJson(KEY_COLLECTIONS, record, 'courses'),
+  entryIdOfItem,
+  format: ID_COURSE_PACK,
+};
+
+/**
+ * The collections the student saved or kept (Prompt 164). The module that
+ * draws them loads only when the record exists.
+ */
+async function fillCollections() {
+  const box = $('libCollections');
+  let any = false;
+  try {
+    any = get(KEY_COLLECTIONS) !== null;
+  } catch {
+    /* no storage: nothing is kept */
+  }
+  if (!any) {
+    box.hidden = true;
+    return;
+  }
+  const { bindCollections, drawCollections } =
+    await import('./library/views.js');
+  bindCollections(collectionDeps);
+  const n = drawCollections($('libCollectionsBody'), {
+    t,
+    pick,
+    byId,
+    redraw: fillCollections,
+  });
+  box.hidden = viewOf() !== 'start' || !n;
+}
+
+function startHtml() {
+  const lib = state.library;
+  const groups = lib.starts
+    .map(g => {
+      // A start that is a collection (Prompt 164) is drawn from its items.
+      const ids = g.collection
+        ? g.collection.units[0].items.map(entryIdOfItem)
+        : g.entries;
+      const rows = ids
+        .map(id => byId.get(id))
+        .filter(Boolean)
+        .map(e =>
+          libraryCardHtml(e, {
+            t,
+            pick,
+            shown,
+            progress: progressBucket(progressFor(e.id)),
+            compact: true,
+          })
+        );
+      return `<div class="lib-start-group"><h3>${escape(pick(g.audience))}</h3><ul class="lib-list">${rows.join('')}</ul></div>`;
+    })
     .join('');
+  const seqs = lib.sequences
+    .filter(s => !s.id.startsWith('observatory-'))
+    .map(
+      s =>
+        `<li><a href="?sequence=${escape(s.id)}&amp;group=sequence">${escape(pick(s.title))}</a> <span class="ui-note">${escape(t('lib.pathway.seq', { n: s.entries.length }))}</span></li>`
+    );
+  const courses = lib.entries
+    .filter(e => e.kind === 'course')
+    .map(
+      e =>
+        `<li class="lib-pathway-course" data-entry="${escape(e.id)}"><a class="lib-link" href="${escape(e.route)}">${escape(pick(e.title))}</a> <span class="ui-note">${escape(t('lib.pathway.course'))}</span></li>`
+    );
+  const topics = lib.subjects.map(
+    s =>
+      `<li><a href="?topic=${escape(s.id)}">${escape(pick(s.label))}</a> <span class="ui-note">${s.count}</span></li>`
+  );
+  return `<section class="lib-start" aria-labelledby="libStartTitle"><h2 id="libStartTitle">${escape(t('lib.start.title'))}</h2><p class="ui-note">${escape(t('lib.start.note'))}</p><div class="lib-start-grid">${groups}</div></section>
+<section class="lib-pathways" aria-labelledby="libPathTitle"><h2 id="libPathTitle">${escape(t('lib.pathways.title'))}</h2><p class="ui-note">${escape(t('lib.pathways.note'))}</p><ul class="lib-links">${seqs.join('')}${courses.join('')}</ul></section>
+<section class="lib-topics" aria-labelledby="libTopicsTitle"><h2 id="libTopicsTitle">${escape(t('lib.topics.title'))}</h2><p class="ui-note">${escape(t('lib.topics.note'))}</p><ul class="lib-links">${topics.join('')}</ul></section>`;
+}
+
+// --- Breadcrumb ---------------------------------------------------------------
+
+/** The shell's breadcrumb, with the topic or the pathway and item appended. */
+function setCrumbs(extra) {
+  const ol = document.querySelector('.gs-crumbs ol');
+  if (!ol) return;
+  crumbsOriginal ??= ol.innerHTML;
+  ol.innerHTML = crumbsOriginal;
+  if (!extra.length) return;
+  const here = ol.lastElementChild;
+  here.removeAttribute('aria-current');
+  here.innerHTML = `<a href="${escape(location.pathname)}">${here.innerHTML}</a>`;
+  extra.forEach((x, i) => {
+    const li = document.createElement('li');
+    if (i === extra.length - 1) {
+      li.setAttribute('aria-current', 'page');
+      li.textContent = x.label;
+    } else li.innerHTML = `<a href="${escape(x.href)}">${escape(x.label)}</a>`;
+    ol.append(li);
+  });
+}
+
+// --- Render -------------------------------------------------------------------
+
+let drawn = 0;
+
+async function renderDetail(kind) {
+  const mine = ++drawn;
+  const { topicView, itemView, mountSave, bindCollections } =
+    await import('./library/views.js');
+  if (mine !== drawn) return;
+  const c = { t, pick, shown, byId, path: state.path, preview: previewRoute };
+  const lib = state.library;
+  const out =
+    kind === 'topic'
+      ? topicView(lib, state.topic, c)
+      : itemView(lib, state.item, c);
+  const box = $('libDetail');
+  if (!out) {
+    box.innerHTML = `<p class="ui-state is-empty">${escape(t(kind === 'topic' ? 'lib.topic.unknown' : 'lib.item.unknown'))}</p>`;
+    setCrumbs([]);
+    return;
+  }
+  box.innerHTML = out.html;
+  if (kind === 'item') {
+    bindCollections(collectionDeps);
+    mountSave(box, byId.get(state.item), { t });
+  }
+  document.title = `${out.title} | ${t('lib.doc.title')}`;
+  setCrumbs(
+    kind === 'topic'
+      ? [{ label: out.title }]
+      : [
+          ...(out.pathway
+            ? [{ label: out.pathway.title, href: out.pathway.href }]
+            : []),
+          { label: out.title },
+        ]
+  );
+}
+
+let listToken = 0;
+
+/**
+ * The one list of cards, drawn in pieces: the first screenful at once, the
+ * rest in the tasks that follow, so a catalog of any size answers a filter
+ * before it has finished drawing (the scale test holds it to a budget).
+ */
+function drawList(rows) {
+  const mine = ++listToken;
+  const box = $('libResults');
+  box.innerHTML = `<ul class="lib-list">${cards(rows.slice(0, FIRST_CARDS))}</ul>`;
+  const list = box.firstElementChild;
+  let at = FIRST_CARDS;
+  const more = () => {
+    if (mine !== listToken || at >= rows.length) return;
+    list.insertAdjacentHTML('beforeend', cards(rows.slice(at, at + CHUNK)));
+    at += CHUNK;
+    setTimeout(more, 0);
+  };
+  setTimeout(more, 0);
 }
 
 function render() {
   if (!state.library) return;
   translatePage();
   localize();
+  progressCache = new Map();
   fillContinue();
+  fillCollections();
   fillMenus();
+  const view = viewOf();
   const f = state.filters;
-  const narrowed = isFiltered(f);
-  const rows = filterCatalog(localized, f, progressFor);
-  const total = localized.length;
-  $('libCount').textContent = narrowed
-    ? t('lib.count', { n: rows.length, total })
-    : t('lib.count.all', { total });
-  $('libClear').hidden = !narrowed;
-  $('libResults').innerHTML = rows.length ? grouped(rows) : '';
+  document.documentElement.dataset.view = view;
+  $('libStart').hidden = view !== 'start';
+  $('libFind').hidden = view === 'topic' || view === 'item';
+  $('libDetail').hidden = view !== 'topic' && view !== 'item';
+  $('libContinue').hidden = view !== 'start' || !$('libContinueBody').innerHTML;
+  $('libMore').hidden = view !== 'browse';
+  $('libBrowse').textContent = t(
+    view === 'start' ? 'lib.browse' : 'lib.browse.back'
+  );
+  $('libClear').hidden = !narrowed();
+  setCrumbs([]);
+  listToken++;
+  $('libResults').innerHTML = '';
+  $('libDetail').innerHTML = '';
+  $('libEmpty').hidden = true;
+  $('libCount').textContent = '';
 
-  const empty = $('libEmpty');
-  empty.hidden = rows.length > 0;
-  if (!rows.length) {
-    $('libEmptyText').textContent = f.query
-      ? t('lib.empty.search', { query: f.query })
-      : t('lib.empty.filters');
-    const relax = loosening(localized, f, progressFor);
-    const button = $('libRelax');
-    button.hidden = !relax;
-    if (relax) {
-      button.dataset.relax = relax.key;
-      button.textContent = t('lib.empty.relax', {
-        filter: t(`lib.filter.${relax.key}`),
-        n: relax.count,
-      });
+  if (view !== 'start') $('libStart').innerHTML = '';
+  if (view === 'start') {
+    $('libStart').innerHTML = startHtml();
+  } else if (view === 'browse') {
+    const rows = match(f);
+    const total = localized.length;
+    $('libCount').textContent = narrowed()
+      ? t('lib.count', { n: rows.length, total })
+      : t('lib.count.all', { total });
+    if (state.group === 'all' && rows.length) drawList(rows);
+    else $('libResults').innerHTML = rows.length ? grouped(rows) : '';
+    $('libEmpty').hidden = rows.length > 0;
+    if (!rows.length) {
+      $('libEmptyText').textContent = f.query
+        ? t('lib.empty.search', { query: f.query })
+        : t('lib.empty.filters');
+      const relax = looseningOf(f);
+      const button = $('libRelax');
+      button.hidden = !relax;
+      if (relax) {
+        button.dataset.relax = relax.key;
+        button.textContent = t('lib.empty.relax', {
+          filter: t(`lib.filter.${relax.key}`),
+          n: relax.count,
+        });
+      }
     }
+  } else {
+    renderDetail(view);
   }
   writeAddress();
 }
 
-function setFilter(key, value) {
+/** A filter to drop that brings something back: browse.js's, over this file's rows. */
+function looseningOf(f) {
+  const keys = Object.keys(f).filter(k => f[k] && k !== 'format');
+  let best = null;
+  for (const key of keys) {
+    const n = match({ ...f, [key]: '' }).length;
+    if (n && (!best || n > best.count)) best = { key, count: n };
+  }
+  return best;
+}
+
+async function setFilter(key, value) {
   state.filters = { ...state.filters, [key]: value };
+  if (key === 'query') await refreshHits();
   render();
+}
+
+/** Load the search the first time a query needs it, and rank for the query. */
+async function refreshHits() {
+  const q = state.filters.query;
+  if (!q) {
+    hits = null;
+    return;
+  }
+  searchModule ??= await import('./library/search.js');
+  objectives ??= await fetch(new URL('search-index.json', document.baseURI))
+    .then(r => (r.ok ? r.json() : { objectives: {} }))
+    .then(j => j.objectives)
+    .catch(() => ({}));
+  const lang = document.documentElement.lang === 'es' ? 'es' : 'en';
+  const lib = state.library;
+  localize();
+  hits = searchModule.rank(localized, q, {
+    subjects: e =>
+      (e.subjects ?? []).map(id =>
+        pick(lib.subjects.find(s => s.id === id)?.label)
+      ),
+    facts: e =>
+      [
+        t(`lib.badge.${shown[e.kind] ?? e.kind}`),
+        e.level && t(`lib.level.${e.level}`),
+        e.length && t(`lib.length.${e.length}`),
+        e.mathematics && t(`lib.mathematics.${e.mathematics}`),
+        e.data && t(`lib.data.${e.data}`),
+      ].filter(Boolean),
+    objectives: id => (objectives[id]?.[lang] ?? []).join(' '),
+  });
 }
 
 function wire() {
   const search = $('libSearch');
   search.value = state.filters.query;
   let timer = null;
-  // A lesson opened from a sequence remembers which, so finishing it can offer
-  // the next one (js/investigations/next.js).
-  $('libResults').addEventListener('click', e => {
-    const seq = e.target.closest('.lib-link')?.closest('[data-seq]');
+  // An item opened from the Library is the one to continue from, and one
+  // opened from a sequence remembers which, so finishing it can offer the next
+  // (js/investigations/next.js).
+  document.addEventListener('click', e => {
+    const link = e.target.closest('.lib-link, .lib-resume');
+    const row = link?.closest('[data-entry]');
+    const entry = row && byId.get(row.dataset.entry);
+    if (!entry) return;
+    const seq = link.closest('[data-seq]')?.dataset.seq;
     try {
+      noteResume({
+        id: entry.id,
+        route: entry.route,
+        title: entry.title,
+        ...(seq ? { path: { k: 'seq', id: seq } } : {}),
+      });
       if (seq)
-        localStorage.setItem(
-          'gravitas_next_context',
-          JSON.stringify({ k: 'seq', id: seq.dataset.seq })
+        put(
+          KEY_NEXT_CONTEXT,
+          JSON.stringify({ k: 'seq', id: seq }),
+          'preferences'
         );
     } catch {
-      /* no storage: no next offered */
+      /* no storage: nothing to resume, no next offered */
     }
   });
   search.addEventListener('input', () => {
@@ -313,11 +808,15 @@ function wire() {
   });
   for (const [id, key] of [
     ['libKind', 'kind'],
-    ['libFormat', 'format'],
     ['libSubject', 'subject'],
     ['libLength', 'length'],
-    ['libCalculation', 'calculation'],
     ['libLevel', 'level'],
+    ['libMathematics', 'mathematics'],
+    ['libCalculation', 'calculation'],
+    ['libData', 'data'],
+    ['libDepth', 'depth'],
+    ['libPrereq', 'prereq'],
+    ['libSequence', 'sequence'],
     ['libProgress', 'progress'],
   ])
     $(id).addEventListener('change', e => setFilter(key, e.target.value));
@@ -325,17 +824,30 @@ function wire() {
     state.group = e.target.value;
     render();
   });
+  $('libBrowse').addEventListener('click', () => {
+    if (viewOf() === 'start') state.browse = true;
+    else {
+      state.browse = false;
+      state.filters = { ...EMPTY };
+      state.group = 'all';
+      search.value = '';
+      hits = null;
+    }
+    render();
+    $('libBrowse').focus();
+  });
   $('libClear').addEventListener('click', () => {
     clearTimeout(timer);
     search.value = '';
-    state.filters = { ...NO_FILTERS };
+    hits = null;
+    state.filters = { ...EMPTY };
     render();
     search.focus();
   });
-  $('libRelax').addEventListener('click', e => {
+  $('libRelax').addEventListener('click', async e => {
     const key = e.currentTarget.dataset.relax;
     if (key === 'query') search.value = '';
-    setFilter(key, '');
+    await setFilter(key, '');
     search.focus();
   });
 }
@@ -357,6 +869,7 @@ async function start() {
       await loadLanguage(lang);
       setLanguage(lang);
       translatePage();
+      await refreshHits();
       render();
     },
   });
@@ -375,7 +888,14 @@ async function start() {
   status.hidden = true;
   $('main').removeAttribute('aria-busy');
   byId = new Map(state.library.entries.map(e => [e.id, e]));
+  shown = state.library.kindShown ?? {};
+  inSequences = new Map();
+  for (const sq of state.library.sequences)
+    for (const id of sq.entries)
+      inSequences.set(id, [...(inSequences.get(id) ?? []), sq.id]);
+  students = [...new Set(state.library.kinds.map(k => shown[k] ?? k))];
   wire();
+  await refreshHits();
   render();
   document.documentElement.dataset.ready = 'true';
 }

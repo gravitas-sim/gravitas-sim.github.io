@@ -25,6 +25,7 @@ import {
 } from './i18n/scenario.js';
 import { t, onLocaleChange } from './i18n/index.js';
 import { mountFragment } from './i18n/deferredMessages.js';
+import { EV_ESCAPE } from './names.js';
 
 /**
  * The scenario gallery, inserted at its host in index.html by initScenarioBrowser() before
@@ -503,7 +504,7 @@ export function initScenarioBrowser({ onScenarioSelected } = {}) {
 
   // js/dialog.js takes an Escape pressed inside the gallery. This is the one
   // pressed with focus on <body>, where a chip that redrew itself leaves it.
-  window.addEventListener('gravitasEscape', () => {
+  window.addEventListener(EV_ESCAPE, () => {
     if (isScenarioBrowserOpen()) closeScenarioBrowser();
   });
 }

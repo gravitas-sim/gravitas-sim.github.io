@@ -131,7 +131,18 @@ describe('a push, and only a push, moves the copy', () => {
     physics.updatePhysicsSettings({ not_a_setting_here: 41 });
     physics.updatePhysicsSettings({ ...DEFAULT_SETTINGS });
     expect(physics.physicsSettings.not_a_setting_here).toBe(41);
-    delete physics.physicsSettings.not_a_setting_here;
+  });
+
+  // Prompt 140: the copy is a projection, read-only to everyone. A push makes a
+  // new frozen object; nothing edits one in place.
+  test('the copy is frozen, and a write to it throws', () => {
+    expect(Object.isFrozen(physics.physicsSettings)).toBe(true);
+    expect(() => {
+      physics.physicsSettings.gravitational_constant = 9;
+    }).toThrow(TypeError);
+    expect(() => {
+      delete physics.physicsSettings.not_a_setting_here;
+    }).toThrow(TypeError);
   });
 
   test('a push hands G to the units module', () => {

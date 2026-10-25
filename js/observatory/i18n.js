@@ -16,8 +16,9 @@
 // =============================================================================
 
 import { EN_OBSERVATORY } from '../i18n/en.observatory.js';
+import { KEY_LOCALE } from '../names.js';
 
-const STORAGE_KEY = 'gravitas_locale';
+const STORAGE_KEY = KEY_LOCALE;
 
 const CATALOGS = { en: { ...EN_OBSERVATORY }, es: {} };
 const LOADERS = {
@@ -122,3 +123,7 @@ export function translatePage(root = document) {
   }
   document.title = t('obs.doc.title');
 }
+
+// The preview banner (Prompt 175); here because the page is at its line ceiling.
+if (globalThis.location?.search.includes('preview=student'))
+  import('../storage/banner.js');

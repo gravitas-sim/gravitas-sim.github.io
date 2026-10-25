@@ -441,7 +441,14 @@ test.describe('a page cleans up its panels', () => {
 // =============================================================================
 
 /**
- * Force a collection so a detached node is gone if nothing holds it.
+ * Force collections so a detached node is gone if nothing holds it.
+ *
+ * Three passes, not one. A collection that finishes a marking cycle begun
+ * earlier keeps everything allocated while that cycle ran (floating garbage),
+ * and on a loaded machine the cycle runs long enough to take in the last panel
+ * built and thrown away: that panel read as held, listeners and all, and one
+ * pass later it was gone with nothing changed. What something really holds is
+ * still there after every pass.
  *
  * A DevTools command, so Chromium only: the other engines return false and the
  * memory-side check is left to Chromium, while the listener census still runs.
@@ -449,7 +456,8 @@ test.describe('a page cleans up its panels', () => {
 async function collect(page) {
   try {
     const cdp = await page.context().newCDPSession(page);
-    await cdp.send('HeapProfiler.collectGarbage');
+    for (let pass = 0; pass < 3; pass++)
+      await cdp.send('HeapProfiler.collectGarbage');
     await cdp.detach();
     return true;
   } catch {
@@ -647,6 +655,50 @@ test.describe('the application cleans up its panels', () => {
       });
     });
   }
+
+  // A callback waiting on a lazy file holds whatever scope it was made in until
+  // the file arrives. Settings makes one per build for its Motion row, and the
+  // first visit fetches the two files that row needs: on a loaded machine they
+  // can arrive after several panels have been built and thrown away, and every
+  // one of those was held, Advanced section and listeners included. The files
+  // are held back here, by the test and not by a timer, so the case does not
+  // depend on how slow a machine is.
+  test('settings: panels built while the Motion row waits for its files are not held', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    await page.addInitScript(INSTRUMENT);
+    let release;
+    const gate = new Promise(resolve => {
+      release = resolve;
+    });
+    await page.route(/\/(motionControl|en\.interaction)\.js$/, async route => {
+      await gate;
+      await route.continue();
+    });
+    try {
+      await app.boot({ url: '/' });
+      await settled(page);
+      for (let i = 0; i < 6; i++) {
+        await PANELS.settings.open(page, app);
+        await PANELS.settings.close(page, app);
+      }
+      const held = (await collect(page))
+        ? await page.evaluate(() => window.__detachedHeld())
+        : 0;
+      expect(
+        held,
+        'detached listener targets held while the Motion row waits'
+      ).toBeLessThanOrEqual(4);
+    } finally {
+      release();
+    }
+    // Released, the row still fills in the panel that is open by then.
+    await PANELS.settings.open(page, app);
+    await expect(page.locator('#settingsMotion')).toBeVisible();
+    await PANELS.settings.close(page, app);
+  });
 
   test('the check sees a removed panel that something still holds, and lets go of one that nothing does', async ({
     page,

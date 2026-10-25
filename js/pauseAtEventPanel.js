@@ -44,6 +44,7 @@ import {
   noteObservationPanelUsed,
 } from './observationLayout.js';
 import { t } from './i18n/index.js';
+import { EV_SIMULATION_RESET } from './names.js';
 
 let enabled = false;
 let els = null;
@@ -524,7 +525,7 @@ export function initPauseAtEvent({ signal } = {}) {
   // A rebuilt world reuses body ids for different objects, so a watch that
   // survived would be watching something else under the same name.
   window.addEventListener(
-    'gravitasSimulationReset',
+    EV_SIMULATION_RESET,
     () => {
       resetPauseAtEvent();
       if (enabled) {

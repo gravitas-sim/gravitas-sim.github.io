@@ -1,0 +1,152 @@
+{
+  "format": "gravitas.orbit-fit-thresholds/1",
+  "prompt": 187,
+  "committed": "Part B's validation contract, committed after the gate's verdict (A) and before js/measure/orbit-fit.js was extended with the production rules, js/measure/mover-track.js, the oracle's inputs, script and results, the validation tool, the tests and the panel. A check that a measurement crosses is a failed check, not a reason to move its bound; only Carl resets one. The criterion's own constants are gate-thresholds.json's and are not repeated here.",
+  "rules": {
+    "ambiguityDeltaChi2": 4,
+    "ambiguityMinLogPeriodGap": 0.02,
+    "ambiguitySigmas": 6,
+    "massMinSnr": 3,
+    "massDraws": 20000,
+    "moverMinFrames": 3,
+    "moverMinDetections": 3,
+    "moverSignificance": 5,
+    "moverStaticSigmas": 3,
+    "moverMatchSigmas": 4,
+    "moverConsistentPValue": 0.001,
+    "maxFrames": 200,
+    "maxSourcesPerFrame": 400
+  },
+  "checks": {
+    "a1.forward": {
+      "what": "Thiele-Innes closed form against the 3-D kernel's elements-to-state (x, y), 300 element sets, e up to 0.95, every inclination, 12 epochs each",
+      "bound": 1e-9,
+      "unit": "arcsec at a = 1"
+    },
+    "a2.layer": {
+      "what": "the same against Prompt 148's layer (3-D, sky units: arcsec, years), 100 sets",
+      "bound": 1e-9,
+      "unit": "arcsec at a = 1"
+    },
+    "a3.inverse": {
+      "what": "Thiele-Innes constants to elements and back, 300 sets",
+      "bound": 1e-10,
+      "unit": "relative to a"
+    },
+    "a4.recover": {
+      "what": "noise-free (stated sigma 1e-6) 120 percent arcs of 50 seeded eccentric orbits (e 0.1 to 0.8): every element recovered",
+      "bounds": {
+        "P": 1e-5,
+        "a": 1e-5,
+        "e": 1e-5,
+        "iDeg": 1e-3,
+        "OmegaDeg": 1e-3,
+        "omegaDeg": 1e-3,
+        "T": 1e-4
+      },
+      "unit": "relative for P and a; absolute for e, degrees, years"
+    },
+    "a5.circular": {
+      "what": "noise-free circular orbits, 120 percent arcs, 50 seeded: P and a relative, i and the node in degrees",
+      "bounds": { "P": 1e-6, "a": 1e-6, "iDeg": 1e-4, "OmegaDeg": 1e-4 }
+    },
+    "a6.kepler": {
+      "what": "the mass sum of a = 1 au, P = 1 Julian year",
+      "bound": 1e-9,
+      "unit": "relative to astropy's G, M_sun, au"
+    },
+    "b1.corpus": {
+      "what": "the 3-D kernel's reference problem R1 (e 0.6, i 40, node 30, omega 60), integrated by the kernel (Yoshida) for 1.2 periods, projected, 16 epochs, stated sigma 1e-6: its elements recovered",
+      "bounds": {
+        "P": 1e-6,
+        "a": 1e-6,
+        "e": 1e-6,
+        "iDeg": 1e-4,
+        "OmegaDeg": 1e-4,
+        "omegaDeg": 1e-4
+      }
+    },
+    "b2.scipy": {
+      "what": "five noisy elliptical and three circular series made in Python (an independent Kepler solver) and fitted by scipy.optimize.least_squares: P, a and e each within 0.1 formal sigma of the Gravitas fit, chi-squared within 1e-4 relative",
+      "sigmas": 0.1,
+      "chi2Relative": 1e-4
+    },
+    "b3.sigma": {
+      "what": "the formal sigma of P and a against the same oracle's covariance (J^T J)^-1",
+      "bound": 0.01,
+      "unit": "relative"
+    },
+    "b4.track": {
+      "what": "five pinned mover tracks against scipy's weighted linear fit and astropy's position angle: rate (relative) and angle (degrees)",
+      "bounds": { "rate": 1e-6, "angleDeg": 1e-3 }
+    },
+    "c1.coverage": {
+      "what": "elliptical fits of 250 seeded gate-style orbits at 110 percent: the 0.6827 interval covers the truth of P (profile), a and a^3/P^2 in this band, the 0.95 interval in the other",
+      "band68": [0.6, 0.76],
+      "band95": [0.9, 0.99],
+      "trials": 250
+    },
+    "c2.circular": {
+      "what": "the same for the circular model on 250 circular truths",
+      "band68": [0.6, 0.76],
+      "band95": [0.9, 0.99],
+      "trials": 250
+    },
+    "c3.mass": {
+      "what": "the mass sum's intervals cover the true mass sum for parallax S/N 10 and S/N 4 (250 trials each); at S/N 4 the interval is asymmetric: mean upper arm over lower arm at least 1.3",
+      "band68": [0.6, 0.76],
+      "band95": [0.9, 0.99],
+      "asymmetry": 1.3
+    },
+    "c4.track": {
+      "what": "the mover's rate and angle cover the truth, 300 seeded fields of 30 static sources",
+      "band68": [0.6, 0.76],
+      "band95": [0.9, 0.99]
+    },
+    "d1.short": {
+      "what": "10 and 30 percent arcs refuse (both depths, 80 trials each, a fresh stream)",
+      "refuseAt": { "0.1": 0.99, "0.3": 0.95 }
+    },
+    "d2.epochs": {
+      "what": "five epochs (elliptical) and four (circular) are refused with code epochs; so are malformed rows with their codes (bad-epoch, bad-position, bad-sigma, span)"
+    },
+    "d3.alias": {
+      "what": "an exactly regular cadence aliases the period: 100 seeded orbits observed at 12 epochs a year apart over 11 years with P = 10 years are refused period-ambiguous at least this often, and the jittered gate cell (200 trials) false-alarms at most this often",
+      "refuseAtLeast": 0.95,
+      "falseAlarmAtMost": 0.02
+    },
+    "d4.misfit": {
+      "what": "the circular model refuses eccentric orbits (e 0.5 to 0.8, 110 percent, 80 trials)",
+      "refuseAtLeast": 0.95
+    },
+    "d5.small": {
+      "what": "stated uncertainties 0.3 of the true noise: refused inconsistent on 50 full-period series",
+      "refuseAtLeast": 0.99
+    },
+    "d6.polar": {
+      "what": "a series given as separation and position angle with their uncertainties gives the fit of the same series given as offsets with the full covariance, P and a relative",
+      "bound": 1e-8
+    },
+    "d7.mass": {
+      "what": "the mass sum refuses: no parallax, a parallax of S/N 2.9, a missing frame statement, an absolute parallax with no source, no orbit; and always carries the frame statement"
+    },
+    "d8.node": {
+      "what": "every accepted node lies in [0, 180) degrees and the result states the ambiguity (300 trials)"
+    },
+    "d9.static": {
+      "what": "a static field (30 sources, 5 frames) returns no-mover (300 trials)",
+      "falseAlarmAtMost": 0.01
+    },
+    "d10.mover": {
+      "what": "the mover is identified among 30 static sources in this fraction of 500 seeded fields (5 frames, a rate of 20 sigma over the arc)",
+      "identifyAtLeast": 0.99
+    },
+    "d11.track": {
+      "what": "two frames, a mover that moves less than 3 sigma over the arc, and two movers are each answered with the stated code (too-few-frames, no-mover, several-movers)"
+    },
+    "e1.authentic": {
+      "what": "an authentic visual-binary arc or asteroid track under a fixed contract",
+      "status": "NOT RUN: no authentic arc pack exists; nothing was fetched or simulated"
+    }
+  }
+}

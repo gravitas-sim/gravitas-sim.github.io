@@ -27,7 +27,7 @@
 // scenarios.js takes its settings object as a parameter.
 // =============================================================================
 
-import { applyPreset, scenarioId } from './scenarios.js';
+import { applyPreset, resetPresetMemory, scenarioId } from './scenarios.js';
 import { formatSeed, parseSeed } from './rng.js';
 
 /** 2 names a scenario by id, 1 by its English name; both are read. */
@@ -185,11 +185,14 @@ export function pristineSettingsFor(scenario, DEFAULT_SETTINGS) {
   scratch.preset_scenario = scenario;
   // A scratch view object, so probing the preset cannot move the real camera.
   const scratchView = { zoom: 1, pan: { x: 0, y: 0 } };
+  // A probe is nobody's rebuild: it must not change what applyPreset carries.
+  const remembered = resetPresetMemory();
   try {
     applyPreset(scratch, DEFAULT_SETTINGS, scratchView);
   } catch (err) {
     console.warn('Could not derive baseline settings for', scenario, err);
   }
+  resetPresetMemory(remembered);
   // applyPreset signs off by setting preset_scenario to 'None', a sentinel that
   // stops the preset re-applying on every later settings change. Left alone it
   // would make this baseline claim to be a different scenario than the one it
@@ -503,6 +506,32 @@ export async function decodeTagged(tag, fragment, maxVersion) {
   return { version, payload };
 }
 
+// Settings renamed since a link or a save was written (neither carried a
+// version for it, so every record is read through migrateSettings): the
+// American-spelling pass, and two misspellings it deployed.
+const RENAMED_SETTINGS = Object.freeze({
+  trail_colour_mode: 'trail_color_mode',
+  realiztic_disk_physics: 'realistic_disk_physics',
+  habitable_zone_optimizm: 'habitable_zone_optimism',
+});
+
+/**
+ * Rewrite old setting names in settings a link or a save carried.
+ *
+ * @param {object} stored - Settings as stored
+ * @returns {object} The same settings under the names the code reads
+ */
+export function migrateSettings(stored) {
+  if (!stored || typeof stored !== 'object') return stored;
+  const out = { ...stored };
+  for (const [was, now] of Object.entries(RENAMED_SETTINGS)) {
+    if (!(was in out)) continue;
+    if (!(now in out)) out[now] = out[was];
+    delete out[was];
+  }
+  return out;
+}
+
 /**
  * Decode a fragment back to a payload.
  *
@@ -560,6 +589,8 @@ export async function decodePayload(fragment) {
     }
     payload.s = id;
   }
+  if (payload.a) payload.a = migrateSettings(payload.a);
+  if (payload.d) payload.d = migrateSettings(payload.d);
   return payload;
 }
 

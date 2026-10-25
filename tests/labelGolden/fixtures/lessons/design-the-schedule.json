@@ -1,0 +1,51 @@
+{
+ "id": "design-the-schedule",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.read-the-comparison.fields.0.unit","d"],
+    ["steps.read-the-comparison.fields.1.unit","m/s"],
+    ["steps.read-the-comparison.fields.2.unit","d"],
+    ["steps.read-the-comparison.fields.3.unit","m/s"]
+   ],
+   "numbered": [
+    ["steps.read-the-comparison.fields.0.hint","0.28"],
+    ["steps.read-the-comparison.fields.1.hint","7"],
+    ["steps.read-the-comparison.fields.2.hint","3.52"],
+    ["steps.read-the-comparison.fields.3.hint","105"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": []
+  }
+ },
+ "numeric": {
+  "answers": [],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "set-the-run-up": {
+    "probe": [[{"label":"On the canvas","value":"nothing bound yet"},{"label":"Last run","value":"none yet"}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"Sweep of the planet’s starting distance"},{"label":"Does it still describe this scene?","value":"yes","emphasis":false}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"unnamed"},{"label":"Does it still describe this scene?","value":"NO — the scene has been rebuilt since, so re-run before comparing","emphasis":true}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"none yet"}]]
+   },
+   "run-both-schedules": {
+    "probe": [[{"label":"On the canvas","value":"nothing bound yet"},{"label":"Last run","value":"none yet"}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"Sweep of the planet’s starting distance"},{"label":"Does it still describe this scene?","value":"yes","emphasis":false}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"unnamed"},{"label":"Does it still describe this scene?","value":"NO — the scene has been rebuilt since, so re-run before comparing","emphasis":true}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"none yet"}]]
+   },
+   "read-the-comparison": {
+    "validate": {"calls":242,"distinct":2,"digest":"2f983f3d90d892e0","samples":[null,{"level":"warn","message":"The irregular arm should land near 3.5 days. Check the second schedule is Irregular with scatter 0.45, and that both arms finished all eight observations."}]}
+   },
+   "break-your-own-result": {
+    "probe": [[{"label":"On the canvas","value":"nothing bound yet"},{"label":"Last run","value":"none yet"}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"Sweep of the planet’s starting distance"},{"label":"Does it still describe this scene?","value":"yes","emphasis":false}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"unnamed"},{"label":"Does it still describe this scene?","value":"NO — the scene has been rebuilt since, so re-run before comparing","emphasis":true}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"none yet"}]]
+   },
+   "lose-a-fortnight": {
+    "probe": [[{"label":"On the canvas","value":"nothing bound yet"},{"label":"Last run","value":"none yet"}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"Sweep of the planet’s starting distance"},{"label":"Does it still describe this scene?","value":"yes","emphasis":false}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"unnamed"},{"label":"Does it still describe this scene?","value":"NO — the scene has been rebuilt since, so re-run before comparing","emphasis":true}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"none yet"}]]
+   },
+   "type-the-dates": {
+    "probe": [[{"label":"On the canvas","value":"nothing bound yet"},{"label":"Last run","value":"none yet"}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"Sweep of the planet’s starting distance"},{"label":"Does it still describe this scene?","value":"yes","emphasis":false}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"unnamed"},{"label":"Does it still describe this scene?","value":"NO — the scene has been rebuilt since, so re-run before comparing","emphasis":true}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"none yet"}]]
+   }
+  },
+  "es": "same"
+ }
+}

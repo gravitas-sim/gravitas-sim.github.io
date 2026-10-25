@@ -1,0 +1,512 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/image-1.schema.json",
+  "title": "gravitas.image/1",
+  "description": "One frame and its sidecar: the pixel contract (what the numbers mean), the time, the exposure, the world coordinates and every transform. The structure only; js/dataKinds/contract.js validateImage() is the authority (it holds the size to the page's decoded-memory bound, the time to its format, and a flags image to its bit meanings). DATA_PACKS.md. FORMATS.md lists it.",
+  "type": "object",
+  "required": [
+    "format",
+    "formatVersion",
+    "id",
+    "use",
+    "width",
+    "height",
+    "pixels",
+    "planes",
+    "history",
+    "source"
+  ],
+  "properties": {
+    "format": {
+      "const": "gravitas.image"
+    },
+    "formatVersion": {
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "title": {
+      "type": "string"
+    },
+    "use": {
+      "enum": [
+        "quantitative",
+        "display-only"
+      ]
+    },
+    "width": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 8192
+    },
+    "height": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 8192
+    },
+    "pixels": {
+      "$ref": "#/$defs/pixels"
+    },
+    "planes": {
+      "$ref": "#/$defs/planes"
+    },
+    "scale": {
+      "type": "object",
+      "required": [
+        "arcsecPerPixel"
+      ],
+      "properties": {
+        "arcsecPerPixel": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      }
+    },
+    "wcs": {
+      "$ref": "#/$defs/wcs"
+    },
+    "calibration": {
+      "type": "object",
+      "required": [
+        "state"
+      ],
+      "properties": {
+        "state": {
+          "enum": [
+            "raw",
+            "bias-subtracted",
+            "dark-subtracted",
+            "flat-fielded",
+            "calibrated"
+          ]
+        },
+        "steps": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "history": {
+      "$ref": "#/$defs/history"
+    },
+    "source": {
+      "$ref": "#/$defs/source"
+    },
+    "time": {
+      "$ref": "#/$defs/time"
+    },
+    "exposure": {
+      "$ref": "#/$defs/exposure"
+    }
+  },
+  "$defs": {
+    "time": {
+      "description": "A time with its scale and which instant of the exposure it is. The validator also holds the value to its format (an ISO 8601 date and time, or a finite number of days).",
+      "type": "object",
+      "required": [
+        "value",
+        "scale",
+        "format",
+        "reference"
+      ],
+      "properties": {
+        "value": {
+          "type": [
+            "string",
+            "number"
+          ]
+        },
+        "scale": {
+          "enum": [
+            "UTC",
+            "TAI",
+            "TT",
+            "TDB",
+            "TCB",
+            "UT1",
+            "local"
+          ]
+        },
+        "format": {
+          "enum": [
+            "iso",
+            "mjd",
+            "jd"
+          ]
+        },
+        "reference": {
+          "enum": [
+            "start",
+            "mid",
+            "end"
+          ]
+        }
+      }
+    },
+    "exposure": {
+      "type": "object",
+      "required": [
+        "seconds",
+        "kind"
+      ],
+      "properties": {
+        "seconds": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "kind": {
+          "enum": [
+            "effective",
+            "nominal"
+          ]
+        }
+      }
+    },
+    "noiseTerm": {
+      "description": "A gain or a read noise with where it came from; an assumed one says why in `note`.",
+      "type": "object",
+      "required": [
+        "value",
+        "unit",
+        "source"
+      ],
+      "properties": {
+        "value": {
+          "type": "number"
+        },
+        "unit": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source": {
+          "enum": [
+            "header",
+            "measured",
+            "calibration",
+            "model",
+            "assumed"
+          ]
+        },
+        "note": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "pixels": {
+      "description": "The pixel contract: what the numbers mean. Photometry needs it complete (js/dataKinds/contract.js permits()).",
+      "type": "object",
+      "required": [
+        "unit"
+      ],
+      "properties": {
+        "unit": {
+          "enum": [
+            "adu",
+            "adu/s",
+            "electron",
+            "electron/s",
+            "count",
+            "count/s",
+            "flags",
+            "display",
+            "unknown"
+          ]
+        },
+        "linearity": {
+          "type": "object",
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "linear",
+                "corrected",
+                "nonlinear",
+                "unknown"
+              ]
+            },
+            "limit": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "source": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "saturation": {
+          "anyOf": [
+            {
+              "type": "object",
+              "required": [
+                "level",
+                "source"
+              ],
+              "properties": {
+                "level": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "source": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            {
+              "type": "object",
+              "required": [
+                "level",
+                "reason"
+              ],
+              "properties": {
+                "level": {
+                  "type": "null"
+                },
+                "reason": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          ]
+        },
+        "gain": {
+          "$ref": "#/$defs/noiseTerm"
+        },
+        "readNoise": {
+          "$ref": "#/$defs/noiseTerm"
+        },
+        "bits": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": [
+              "value",
+              "meaning"
+            ],
+            "properties": {
+              "value": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "meaning": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "bitsSource": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "planes": {
+      "type": "object",
+      "required": [
+        "data"
+      ],
+      "properties": {
+        "data": {
+          "type": "object",
+          "required": [
+            "encoding"
+          ],
+          "properties": {
+            "encoding": {
+              "enum": [
+                "uint8",
+                "uint16-le",
+                "int16-le",
+                "uint32-le",
+                "int32-le",
+                "float32-le",
+                "float64-le"
+              ]
+            }
+          }
+        },
+        "variance": {
+          "type": "object",
+          "required": [
+            "encoding",
+            "unit",
+            "source"
+          ],
+          "properties": {
+            "encoding": {
+              "enum": [
+                "uint8",
+                "uint16-le",
+                "int16-le",
+                "uint32-le",
+                "int32-le",
+                "float32-le",
+                "float64-le"
+              ]
+            },
+            "unit": {
+              "type": "string",
+              "minLength": 1
+            },
+            "source": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "mask": {
+          "type": "object",
+          "required": [
+            "encoding",
+            "bits",
+            "bitsSource"
+          ],
+          "properties": {
+            "encoding": {
+              "enum": [
+                "uint8",
+                "uint16-le",
+                "int16-le",
+                "uint32-le",
+                "int32-le"
+              ]
+            },
+            "bits": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "required": [
+                  "value",
+                  "meaning"
+                ],
+                "properties": {
+                  "value": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "meaning": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            },
+            "bitsSource": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    },
+    "history": {
+      "description": "Every transform the pixels went through, in order. A step that is not light-preserving (a stretch, a lossy re-encode, a resample that does not conserve flux) keeps photometry from running; a geometric step says whether the world coordinates followed.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "step",
+          "tool",
+          "version",
+          "lossy"
+        ],
+        "properties": {
+          "step": {
+            "enum": [
+              "decode",
+              "crop",
+              "resample",
+              "rotate",
+              "flip",
+              "stretch",
+              "reencode",
+              "calibrate",
+              "stack",
+              "mask"
+            ]
+          },
+          "tool": {
+            "type": "string",
+            "minLength": 1
+          },
+          "version": {
+            "type": "string",
+            "minLength": 1
+          },
+          "lossy": {
+            "type": "boolean"
+          },
+          "wcsUpdated": {
+            "type": "boolean"
+          },
+          "fluxConserving": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "required": [
+        "kind"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "pack",
+            "fits",
+            "upload",
+            "synthetic"
+          ]
+        },
+        "model": {
+          "type": "object",
+          "required": [
+            "name",
+            "parameters"
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "parameters": {
+              "type": "object"
+            }
+          }
+        }
+      }
+    },
+    "wcs": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "required": [
+        "ctype"
+      ],
+      "properties": {
+        "ctype": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

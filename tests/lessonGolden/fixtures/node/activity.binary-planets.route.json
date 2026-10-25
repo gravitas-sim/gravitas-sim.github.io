@@ -1,0 +1,53 @@
+{
+ "cut": "binary-planets/route",
+ "lesson": "binary-star-planets",
+ "ok": true,
+ "reason": null,
+ "assignment": {
+  "k": "gravitas.assignment",
+  "v": 2,
+  "i": "act-binary-planets-route",
+  "l": "binary-star-planets",
+  "t": "binary-planets",
+  "n": "Golden intro",
+  "s": [
+   "run-the-default",
+   "move-it-out",
+   "run-it-at-030",
+   "when-did-it-leave",
+   "ejected-means-what"
+  ],
+  "f": [
+   "899a4975",
+   "4464dc17",
+   "899a4975",
+   "47530e12",
+   "ab141f5e"
+  ],
+  "c": "2026-01-02",
+  "p": [
+   "golden-pack",
+   "1.2.0"
+  ]
+ },
+ "sids": [
+  "run-the-default",
+  "move-it-out",
+  "run-it-at-030",
+  "when-did-it-leave",
+  "ejected-means-what"
+ ],
+ "added": [
+  "run-the-default"
+ ],
+ "unknown": [],
+ "valid": false,
+ "pins": {
+  "none": "none",
+  "same": "same",
+  "compatible": "compatible",
+  "major": "major",
+  "moved": "moved",
+  "unpinned": "unpinned"
+ }
+}

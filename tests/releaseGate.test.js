@@ -887,6 +887,7 @@ describe('the checks a release is asked for and a branch is not', () => {
       'e2e',
       'e2e-build',
       'e2e-coverage',
+      'pr-class',
     ]);
     const step = find('npm run instructors:check');
     expect(step.job).toBe('checks');

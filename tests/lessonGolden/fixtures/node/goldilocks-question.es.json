@@ -1,0 +1,1563 @@
+{
+ "id": "goldilocks-question",
+ "locale": "es",
+ "title": "La cuestión de Ricitos de Oro",
+ "steps": 37,
+ "depths": [
+  [
+   "core",
+   37
+  ]
+ ],
+ "grading": [
+  {
+   "sid": "move-it-twice-as-far",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "what-the-graph-says",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "writing-it-down-then-using",
+   "type": "question",
+   "kind": "numeric",
+   "tolerance": 0.02,
+   "grades": [
+    [
+     "0,111",
+     true,
+     "correct",
+     0.111,
+     null,
+     false,
+     null
+    ],
+    [
+     "0,121",
+     true,
+     "correct",
+     0.121,
+     null,
+     false,
+     null
+    ],
+    [
+     "0,171",
+     false,
+     "incorrect",
+     0.171,
+     null,
+     false,
+     null
+    ],
+    [
+     "0,111 Earths",
+     true,
+     "correct",
+     0.111,
+     "Earths",
+     false,
+     null
+    ],
+    [
+     "not a number",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "notANumber"
+    ],
+    [
+     "",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "blank"
+    ]
+   ]
+  },
+  {
+   "sid": "leave-the-planet-change-the",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "what-luminosity-does",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "dim-stars-close-bands",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     true,
+     "correct"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "reading-the-real-solar-system",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "the-mars-problem",
+   "type": "question",
+   "kind": "short",
+   "grades": [
+    [
+     "ungraded",
+     null
+    ]
+   ]
+  },
+  {
+   "sid": "what-actually-changed",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "what-the-wider-band-bought",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "venus-by-the-rule-you",
+   "type": "question",
+   "kind": "numeric",
+   "tolerance": 0.12,
+   "grades": [
+    [
+     "1,92",
+     true,
+     "correct",
+     1.92,
+     null,
+     false,
+     null
+    ],
+    [
+     "1,98",
+     true,
+     "correct",
+     1.98,
+     null,
+     false,
+     null
+    ],
+    [
+     "2,28",
+     false,
+     "incorrect",
+     2.28,
+     null,
+     false,
+     null
+    ],
+    [
+     "1,92 Earths",
+     true,
+     "correct",
+     1.92,
+     "Earths",
+     false,
+     null
+    ],
+    [
+     "not a number",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "notANumber"
+    ],
+    [
+     "",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "blank"
+    ]
+   ]
+  },
+  {
+   "sid": "now-stretch-the-orbit",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "reading-the-fraction",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "a-real-system-forty-light",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "the-question-the-name-invites",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "which-one-would-you-observe",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "one-more-and-then-you",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  }
+ ],
+ "progress": {
+  "record": {
+   "schema": 2,
+   "lesson": "goldilocks-question",
+   "stepSid": "what-you-worked-out",
+   "responses": {
+    "goldilocks-question:move-it-twice-as-far": 2,
+    "goldilocks-question:what-the-graph-says": 1,
+    "goldilocks-question:writing-it-down-then-using": "0,111",
+    "goldilocks-question:writing-it-down-then-using:locale": "es",
+    "goldilocks-question:leave-the-planet-change-the": 2,
+    "goldilocks-question:what-luminosity-does": 1,
+    "goldilocks-question:dim-stars-close-bands": 0,
+    "goldilocks-question:reading-the-real-solar-system": 1,
+    "goldilocks-question:the-mars-problem": "A fixed sentence for the golden.",
+    "goldilocks-question:what-actually-changed": 1,
+    "goldilocks-question:what-the-wider-band-bought": 2,
+    "goldilocks-question:venus-by-the-rule-you": "1,92",
+    "goldilocks-question:venus-by-the-rule-you:locale": "es",
+    "goldilocks-question:now-stretch-the-orbit": 1,
+    "goldilocks-question:reading-the-fraction": 2,
+    "goldilocks-question:a-real-system-forty-light": 2,
+    "goldilocks-question:the-question-the-name-invites": 2,
+    "goldilocks-question:which-one-would-you-observe": 1,
+    "goldilocks-question:one-more-and-then-you": 2
+   },
+   "attempts": {
+    "goldilocks-question:move-it-twice-as-far": 1,
+    "goldilocks-question:what-the-graph-says": 1,
+    "goldilocks-question:writing-it-down-then-using": 1,
+    "goldilocks-question:leave-the-planet-change-the": 1,
+    "goldilocks-question:what-luminosity-does": 1,
+    "goldilocks-question:dim-stars-close-bands": 1,
+    "goldilocks-question:reading-the-real-solar-system": 1,
+    "goldilocks-question:what-actually-changed": 1,
+    "goldilocks-question:what-the-wider-band-bought": 1,
+    "goldilocks-question:venus-by-the-rule-you": 1,
+    "goldilocks-question:now-stretch-the-orbit": 1,
+    "goldilocks-question:reading-the-fraction": 1,
+    "goldilocks-question:a-real-system-forty-light": 1,
+    "goldilocks-question:the-question-the-name-invites": 1,
+    "goldilocks-question:which-one-would-you-observe": 1,
+    "goldilocks-question:one-more-and-then-you": 1
+   },
+   "visited": [
+    "what-does-earth-get-from",
+    "one-earth-of-starlight",
+    "move-it-twice-as-far",
+    "three-distances",
+    "write-the-three-down",
+    "what-the-graph-says",
+    "the-star-is-not-running",
+    "writing-it-down-then-using",
+    "leave-the-planet-change-the",
+    "four-stars-one-planet",
+    "what-luminosity-does",
+    "so-where-would-a-planet",
+    "dim-stars-close-bands",
+    "saying-it-carefully",
+    "now-put-it-round-the",
+    "reading-the-real-solar-system",
+    "the-mars-problem",
+    "the-two-edges",
+    "two-definitions-of-the-same",
+    "what-actually-changed",
+    "the-wider-definition-on-the",
+    "what-the-wider-band-bought",
+    "venus-by-the-rule-you",
+    "a-year-on-a-circular",
+    "now-stretch-the-orbit",
+    "run-an-eccentric-year",
+    "crossing-the-edges",
+    "reading-the-fraction",
+    "a-real-system-forty-light",
+    "all-seven-planets",
+    "watch-it-run",
+    "take-the-readings-yourself",
+    "the-question-the-name-invites",
+    "three-planets-that-all-look",
+    "which-one-would-you-observe",
+    "one-more-and-then-you",
+    "what-you-worked-out"
+   ],
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "depth": "core",
+   "spent": 600
+  },
+  "read": {
+   "responses": {
+    "goldilocks-question:move-it-twice-as-far": 2,
+    "goldilocks-question:what-the-graph-says": 1,
+    "goldilocks-question:writing-it-down-then-using": "0,111",
+    "goldilocks-question:writing-it-down-then-using:locale": "es",
+    "goldilocks-question:leave-the-planet-change-the": 2,
+    "goldilocks-question:what-luminosity-does": 1,
+    "goldilocks-question:dim-stars-close-bands": 0,
+    "goldilocks-question:reading-the-real-solar-system": 1,
+    "goldilocks-question:the-mars-problem": "A fixed sentence for the golden.",
+    "goldilocks-question:what-actually-changed": 1,
+    "goldilocks-question:what-the-wider-band-bought": 2,
+    "goldilocks-question:venus-by-the-rule-you": "1,92",
+    "goldilocks-question:venus-by-the-rule-you:locale": "es",
+    "goldilocks-question:now-stretch-the-orbit": 1,
+    "goldilocks-question:reading-the-fraction": 2,
+    "goldilocks-question:a-real-system-forty-light": 2,
+    "goldilocks-question:the-question-the-name-invites": 2,
+    "goldilocks-question:which-one-would-you-observe": 1,
+    "goldilocks-question:one-more-and-then-you": 2
+   },
+   "attempts": {
+    "goldilocks-question:move-it-twice-as-far": 1,
+    "goldilocks-question:what-the-graph-says": 1,
+    "goldilocks-question:writing-it-down-then-using": 1,
+    "goldilocks-question:leave-the-planet-change-the": 1,
+    "goldilocks-question:what-luminosity-does": 1,
+    "goldilocks-question:dim-stars-close-bands": 1,
+    "goldilocks-question:reading-the-real-solar-system": 1,
+    "goldilocks-question:what-actually-changed": 1,
+    "goldilocks-question:what-the-wider-band-bought": 1,
+    "goldilocks-question:venus-by-the-rule-you": 1,
+    "goldilocks-question:now-stretch-the-orbit": 1,
+    "goldilocks-question:reading-the-fraction": 1,
+    "goldilocks-question:a-real-system-forty-light": 1,
+    "goldilocks-question:the-question-the-name-invites": 1,
+    "goldilocks-question:which-one-would-you-observe": 1,
+    "goldilocks-question:one-more-and-then-you": 1
+   },
+   "visited": [
+    "a-real-system-forty-light",
+    "a-year-on-a-circular",
+    "all-seven-planets",
+    "crossing-the-edges",
+    "dim-stars-close-bands",
+    "four-stars-one-planet",
+    "leave-the-planet-change-the",
+    "move-it-twice-as-far",
+    "now-put-it-round-the",
+    "now-stretch-the-orbit",
+    "one-earth-of-starlight",
+    "one-more-and-then-you",
+    "reading-the-fraction",
+    "reading-the-real-solar-system",
+    "run-an-eccentric-year",
+    "saying-it-carefully",
+    "so-where-would-a-planet",
+    "take-the-readings-yourself",
+    "the-mars-problem",
+    "the-question-the-name-invites",
+    "the-star-is-not-running",
+    "the-two-edges",
+    "the-wider-definition-on-the",
+    "three-distances",
+    "three-planets-that-all-look",
+    "two-definitions-of-the-same",
+    "venus-by-the-rule-you",
+    "watch-it-run",
+    "what-actually-changed",
+    "what-does-earth-get-from",
+    "what-luminosity-does",
+    "what-the-graph-says",
+    "what-the-wider-band-bought",
+    "what-you-worked-out",
+    "which-one-would-you-observe",
+    "write-the-three-down",
+    "writing-it-down-then-using"
+   ],
+   "stepSid": "what-you-worked-out",
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "depth": "core",
+   "deepest": null,
+   "spent": 600,
+   "schema": 2,
+   "migrated": false,
+   "notes": []
+  }
+ },
+ "backup": {
+  "backup": {
+   "kind": "gravitas.investigation.progress",
+   "version": 2,
+   "savedAt": "2026-01-02T04:05:06.000Z",
+   "lesson": {
+    "id": "goldilocks-question",
+    "title": "La cuestión de Ricitos de Oro",
+    "stepCount": 37
+   },
+   "student": null,
+   "progress": {
+    "stepSid": "what-you-worked-out",
+    "startedAt": "2026-01-02T03:04:05.000Z",
+    "visited": [
+     "what-does-earth-get-from",
+     "one-earth-of-starlight",
+     "move-it-twice-as-far",
+     "three-distances",
+     "write-the-three-down",
+     "what-the-graph-says",
+     "the-star-is-not-running",
+     "writing-it-down-then-using",
+     "leave-the-planet-change-the",
+     "four-stars-one-planet",
+     "what-luminosity-does",
+     "so-where-would-a-planet",
+     "dim-stars-close-bands",
+     "saying-it-carefully",
+     "now-put-it-round-the",
+     "reading-the-real-solar-system",
+     "the-mars-problem",
+     "the-two-edges",
+     "two-definitions-of-the-same",
+     "what-actually-changed",
+     "the-wider-definition-on-the",
+     "what-the-wider-band-bought",
+     "venus-by-the-rule-you",
+     "a-year-on-a-circular",
+     "now-stretch-the-orbit",
+     "run-an-eccentric-year",
+     "crossing-the-edges",
+     "reading-the-fraction",
+     "a-real-system-forty-light",
+     "all-seven-planets",
+     "watch-it-run",
+     "take-the-readings-yourself",
+     "the-question-the-name-invites",
+     "three-planets-that-all-look",
+     "which-one-would-you-observe",
+     "one-more-and-then-you",
+     "what-you-worked-out"
+    ],
+    "responses": {
+     "goldilocks-question:move-it-twice-as-far": 2,
+     "goldilocks-question:what-the-graph-says": 1,
+     "goldilocks-question:writing-it-down-then-using": "0,111",
+     "goldilocks-question:writing-it-down-then-using:locale": "es",
+     "goldilocks-question:leave-the-planet-change-the": 2,
+     "goldilocks-question:what-luminosity-does": 1,
+     "goldilocks-question:dim-stars-close-bands": 0,
+     "goldilocks-question:reading-the-real-solar-system": 1,
+     "goldilocks-question:the-mars-problem": "A fixed sentence for the golden.",
+     "goldilocks-question:what-actually-changed": 1,
+     "goldilocks-question:what-the-wider-band-bought": 2,
+     "goldilocks-question:venus-by-the-rule-you": "1,92",
+     "goldilocks-question:venus-by-the-rule-you:locale": "es",
+     "goldilocks-question:now-stretch-the-orbit": 1,
+     "goldilocks-question:reading-the-fraction": 2,
+     "goldilocks-question:a-real-system-forty-light": 2,
+     "goldilocks-question:the-question-the-name-invites": 2,
+     "goldilocks-question:which-one-would-you-observe": 1,
+     "goldilocks-question:one-more-and-then-you": 2
+    },
+    "attempts": {
+     "goldilocks-question:move-it-twice-as-far": 1,
+     "goldilocks-question:what-the-graph-says": 1,
+     "goldilocks-question:writing-it-down-then-using": 1,
+     "goldilocks-question:leave-the-planet-change-the": 1,
+     "goldilocks-question:what-luminosity-does": 1,
+     "goldilocks-question:dim-stars-close-bands": 1,
+     "goldilocks-question:reading-the-real-solar-system": 1,
+     "goldilocks-question:what-actually-changed": 1,
+     "goldilocks-question:what-the-wider-band-bought": 1,
+     "goldilocks-question:venus-by-the-rule-you": 1,
+     "goldilocks-question:now-stretch-the-orbit": 1,
+     "goldilocks-question:reading-the-fraction": 1,
+     "goldilocks-question:a-real-system-forty-light": 1,
+     "goldilocks-question:the-question-the-name-invites": 1,
+     "goldilocks-question:which-one-would-you-observe": 1,
+     "goldilocks-question:one-more-and-then-you": 1
+    }
+   },
+   "steps": [
+    {
+     "index": 0,
+     "sid": "what-does-earth-get-from",
+     "fingerprint": "read|-|-|Solar System|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 1,
+     "sid": "one-earth-of-starlight",
+     "fingerprint": "read|-|hz-insolation|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 2,
+     "sid": "move-it-twice-as-far",
+     "fingerprint": "predict|-|-|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 3,
+     "sid": "three-distances",
+     "fingerprint": "explore|-|hz-insolation|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 4,
+     "sid": "write-the-three-down",
+     "fingerprint": "measure|-|hz-insolation|-|d1+s1+d2+s2+d3+s3|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 5,
+     "sid": "what-the-graph-says",
+     "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 6,
+     "sid": "the-star-is-not-running",
+     "fingerprint": "explore|-|hz-spreading|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 7,
+     "sid": "writing-it-down-then-using",
+     "fingerprint": "question|numeric|-|-|-|-|a=0.111;t=0.02;u=Earths",
+     "optionCount": null
+    },
+    {
+     "index": 8,
+     "sid": "leave-the-planet-change-the",
+     "fingerprint": "predict|-|-|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 9,
+     "sid": "four-stars-one-planet",
+     "fingerprint": "explore|-|hz-star|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 10,
+     "sid": "what-luminosity-does",
+     "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 11,
+     "sid": "so-where-would-a-planet",
+     "fingerprint": "explore|-|hz-star|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 12,
+     "sid": "dim-stars-close-bands",
+     "fingerprint": "question|choice|-|-|-|4|a=0;c=0",
+     "optionCount": 4
+    },
+    {
+     "index": 13,
+     "sid": "saying-it-carefully",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 14,
+     "sid": "now-put-it-round-the",
+     "fingerprint": "explore|-|-|Habitable Zone Lab|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 15,
+     "sid": "reading-the-real-solar-system",
+     "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 16,
+     "sid": "the-mars-problem",
+     "fingerprint": "question|short|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 17,
+     "sid": "the-two-edges",
+     "fingerprint": "read|-|hz-boundaries|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 18,
+     "sid": "two-definitions-of-the-same",
+     "fingerprint": "explore|-|hz-boundaries|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 19,
+     "sid": "what-actually-changed",
+     "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 20,
+     "sid": "the-wider-definition-on-the",
+     "fingerprint": "explore|-|-|Habitable Zone Lab|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 21,
+     "sid": "what-the-wider-band-bought",
+     "fingerprint": "question|choice|-|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 22,
+     "sid": "venus-by-the-rule-you",
+     "fingerprint": "question|numeric|-|-|-|-|a=1.92;t=0.12;u=Earths",
+     "optionCount": null
+    },
+    {
+     "index": 23,
+     "sid": "a-year-on-a-circular",
+     "fingerprint": "read|-|hz-orbit|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 24,
+     "sid": "now-stretch-the-orbit",
+     "fingerprint": "predict|-|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 25,
+     "sid": "run-an-eccentric-year",
+     "fingerprint": "explore|-|hz-orbit|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 26,
+     "sid": "crossing-the-edges",
+     "fingerprint": "explore|-|hz-orbit|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 27,
+     "sid": "reading-the-fraction",
+     "fingerprint": "question|choice|-|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 28,
+     "sid": "a-real-system-forty-light",
+     "fingerprint": "predict|-|-|TRAPPIST-1 System|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 29,
+     "sid": "all-seven-planets",
+     "fingerprint": "explore|-|hz-trappist|TRAPPIST-1 System|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 30,
+     "sid": "watch-it-run",
+     "fingerprint": "explore|-|-|TRAPPIST-1 System|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 31,
+     "sid": "take-the-readings-yourself",
+     "fingerprint": "measure|-|hz-trappist|-|e+f+g+inner+outer|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 32,
+     "sid": "the-question-the-name-invites",
+     "fingerprint": "question|choice|-|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 33,
+     "sid": "three-planets-that-all-look",
+     "fingerprint": "explore|-|hz-candidates|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 34,
+     "sid": "which-one-would-you-observe",
+     "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 35,
+     "sid": "one-more-and-then-you",
+     "fingerprint": "question|choice|-|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 36,
+     "sid": "what-you-worked-out",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    }
+   ]
+  },
+  "verdict": {
+   "ok": true
+  },
+  "restored": {
+   "responses": {
+    "goldilocks-question:move-it-twice-as-far": 2,
+    "goldilocks-question:what-the-graph-says": 1,
+    "goldilocks-question:writing-it-down-then-using": "0,111",
+    "goldilocks-question:writing-it-down-then-using:locale": "es",
+    "goldilocks-question:leave-the-planet-change-the": 2,
+    "goldilocks-question:what-luminosity-does": 1,
+    "goldilocks-question:dim-stars-close-bands": 0,
+    "goldilocks-question:reading-the-real-solar-system": 1,
+    "goldilocks-question:the-mars-problem": "A fixed sentence for the golden.",
+    "goldilocks-question:what-actually-changed": 1,
+    "goldilocks-question:what-the-wider-band-bought": 2,
+    "goldilocks-question:venus-by-the-rule-you": "1,92",
+    "goldilocks-question:venus-by-the-rule-you:locale": "es",
+    "goldilocks-question:now-stretch-the-orbit": 1,
+    "goldilocks-question:reading-the-fraction": 2,
+    "goldilocks-question:a-real-system-forty-light": 2,
+    "goldilocks-question:the-question-the-name-invites": 2,
+    "goldilocks-question:which-one-would-you-observe": 1,
+    "goldilocks-question:one-more-and-then-you": 2
+   },
+   "attempts": {
+    "goldilocks-question:move-it-twice-as-far": 1,
+    "goldilocks-question:what-the-graph-says": 1,
+    "goldilocks-question:writing-it-down-then-using": 1,
+    "goldilocks-question:leave-the-planet-change-the": 1,
+    "goldilocks-question:what-luminosity-does": 1,
+    "goldilocks-question:dim-stars-close-bands": 1,
+    "goldilocks-question:reading-the-real-solar-system": 1,
+    "goldilocks-question:what-actually-changed": 1,
+    "goldilocks-question:what-the-wider-band-bought": 1,
+    "goldilocks-question:venus-by-the-rule-you": 1,
+    "goldilocks-question:now-stretch-the-orbit": 1,
+    "goldilocks-question:reading-the-fraction": 1,
+    "goldilocks-question:a-real-system-forty-light": 1,
+    "goldilocks-question:the-question-the-name-invites": 1,
+    "goldilocks-question:which-one-would-you-observe": 1,
+    "goldilocks-question:one-more-and-then-you": 1
+   },
+   "visited": [
+    "a-real-system-forty-light",
+    "a-year-on-a-circular",
+    "all-seven-planets",
+    "crossing-the-edges",
+    "dim-stars-close-bands",
+    "four-stars-one-planet",
+    "leave-the-planet-change-the",
+    "move-it-twice-as-far",
+    "now-put-it-round-the",
+    "now-stretch-the-orbit",
+    "one-earth-of-starlight",
+    "one-more-and-then-you",
+    "reading-the-fraction",
+    "reading-the-real-solar-system",
+    "run-an-eccentric-year",
+    "saying-it-carefully",
+    "so-where-would-a-planet",
+    "take-the-readings-yourself",
+    "the-mars-problem",
+    "the-question-the-name-invites",
+    "the-star-is-not-running",
+    "the-two-edges",
+    "the-wider-definition-on-the",
+    "three-distances",
+    "three-planets-that-all-look",
+    "two-definitions-of-the-same",
+    "venus-by-the-rule-you",
+    "watch-it-run",
+    "what-actually-changed",
+    "what-does-earth-get-from",
+    "what-luminosity-does",
+    "what-the-graph-says",
+    "what-the-wider-band-bought",
+    "what-you-worked-out",
+    "which-one-would-you-observe",
+    "write-the-three-down",
+    "writing-it-down-then-using"
+   ],
+   "stepIndex": 36,
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "moved": [],
+   "dropped": [],
+   "quarantined": {},
+   "uncertain": 0,
+   "discardedKeys": 0,
+   "byPosition": false
+  }
+ },
+ "ledger": {
+  "entry": "golden-goldilocks-question",
+  "record": {
+   "ids": [
+    "golden-goldilocks-question"
+   ],
+   "rows": [
+    [
+     "golden-goldilocks-question",
+     "q1",
+     3.5247,
+     "d",
+     0.0012,
+     "measured",
+     "simulation",
+     "rv-fit",
+     null,
+     [
+      "s",
+      "d"
+     ]
+    ]
+   ],
+   "total": 1
+  },
+  "digest": "8e44abe159e9293abccdbcdab1dc911a9efe1d963263a9d9a8e319ccac839d1e"
+ },
+ "tokens": {
+  "plain": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "a": null,
+    "r": null,
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "move-it-twice-as-far",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "what-the-graph-says",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "writing-it-down-then-using",
+     "value": "0,111",
+     "locale": "es"
+    },
+    {
+     "sid": "leave-the-planet-change-the",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "what-luminosity-does",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "dim-stars-close-bands",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "reading-the-real-solar-system",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "the-mars-problem",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    },
+    {
+     "sid": "what-actually-changed",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "what-the-wider-band-bought",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "venus-by-the-rule-you",
+     "value": "1,92",
+     "locale": "es"
+    },
+    {
+     "sid": "now-stretch-the-orbit",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "reading-the-fraction",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "a-real-system-forty-light",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "the-question-the-name-invites",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "which-one-would-you-observe",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "one-more-and-then-you",
+     "value": 2,
+     "locale": "es"
+    }
+   ]
+  },
+  "assignment": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "a": "golden-assignment",
+    "r": "roster-1",
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "move-it-twice-as-far",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "what-the-graph-says",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "writing-it-down-then-using",
+     "value": "0,111",
+     "locale": "es"
+    },
+    {
+     "sid": "leave-the-planet-change-the",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "what-luminosity-does",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "dim-stars-close-bands",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "reading-the-real-solar-system",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "the-mars-problem",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    },
+    {
+     "sid": "what-actually-changed",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "what-the-wider-band-bought",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "venus-by-the-rule-you",
+     "value": "1,92",
+     "locale": "es"
+    },
+    {
+     "sid": "now-stretch-the-orbit",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "reading-the-fraction",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "a-real-system-forty-light",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "the-question-the-name-invites",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "which-one-would-you-observe",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "one-more-and-then-you",
+     "value": 2,
+     "locale": "es"
+    }
+   ]
+  },
+  "evidence": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "ev": {
+     "d": "8e44abe159e9293abccdbcdab1dc911a9efe1d963263a9d9a8e319ccac839d1e",
+     "i": [
+      "golden-goldilocks-question"
+     ],
+     "n": 1,
+     "r": [
+      [
+       "golden-goldilocks-question",
+       "q1",
+       3.5247,
+       "d",
+       0.0012,
+       "measured",
+       "simulation",
+       "rv-fit",
+       null,
+       [
+        "s",
+        "d"
+       ]
+      ]
+     ]
+    },
+    "a": null,
+    "r": null,
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "move-it-twice-as-far",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "what-the-graph-says",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "writing-it-down-then-using",
+     "value": "0,111",
+     "locale": "es"
+    },
+    {
+     "sid": "leave-the-planet-change-the",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "what-luminosity-does",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "dim-stars-close-bands",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "reading-the-real-solar-system",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "the-mars-problem",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    },
+    {
+     "sid": "what-actually-changed",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "what-the-wider-band-bought",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "venus-by-the-rule-you",
+     "value": "1,92",
+     "locale": "es"
+    },
+    {
+     "sid": "now-stretch-the-orbit",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "reading-the-fraction",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "a-real-system-forty-light",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "the-question-the-name-invites",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "which-one-would-you-observe",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "one-more-and-then-you",
+     "value": 2,
+     "locale": "es"
+    }
+   ]
+  },
+  "depth": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "dp": "core",
+    "a": null,
+    "r": null,
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "move-it-twice-as-far",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "what-the-graph-says",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "writing-it-down-then-using",
+     "value": "0,111",
+     "locale": "es"
+    },
+    {
+     "sid": "leave-the-planet-change-the",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "what-luminosity-does",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "dim-stars-close-bands",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "reading-the-real-solar-system",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "the-mars-problem",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    },
+    {
+     "sid": "what-actually-changed",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "what-the-wider-band-bought",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "venus-by-the-rule-you",
+     "value": "1,92",
+     "locale": "es"
+    },
+    {
+     "sid": "now-stretch-the-orbit",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "reading-the-fraction",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "a-real-system-forty-light",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "the-question-the-name-invites",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "which-one-would-you-observe",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "one-more-and-then-you",
+     "value": 2,
+     "locale": "es"
+    }
+   ]
+  }
+ }
+}

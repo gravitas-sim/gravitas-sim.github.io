@@ -4,11 +4,13 @@ Gravitas targets **WCAG 2.2 Level AA**. This is what has been done, what is
 checked automatically, and — the part worth reading — what the visual
 simulation cannot offer regardless of effort.
 
+The scoped conformance report, a status for each WCAG 2.1 and 2.2 A and AA criterion with the method behind it, is [ACCESSIBILITY_CONFORMANCE.md](ACCESSIBILITY_CONFORMANCE.md). It is generated from `tools/conformance/*.json`, is the project's own evaluation rather than an external audit, and `tests/conformance.test.js` fails when its list of limitations and the one below disagree.
+
 ## What is checked, on every run
 
 | Check | Covers |
 | --- | --- |
-| `e2e/accessibility.spec.js` | axe-core over <!--fact:axeSurfaces-->36<!--/fact--> surfaces × <!--fact:locales-->2<!--/fact--> languages: the <!--fact:axeShellSurfaces-->24<!--/fact--> pages with the shared shell in all <!--fact:axeAllThemes-->4<!--/fact--> themes, the application's surfaces in <!--fact:axeThemes-->2<!--/fact--> — <!--fact:axeRuns-->240<!--/fact--> runs |
+| `e2e/accessibility.spec.js` | axe-core over <!--fact:axeSurfaces-->48<!--/fact--> surfaces × <!--fact:locales-->2<!--/fact--> languages: the <!--fact:axeShellSurfaces-->36<!--/fact--> pages with the shared shell in all <!--fact:axeAllThemes-->4<!--/fact--> themes, the application's surfaces in <!--fact:axeThemes-->2<!--/fact--> — <!--fact:axeRuns-->336<!--/fact--> runs |
 | `e2e/accessibilityManual.spec.js` | Focus order, focus traps, Escape, focus restoration, heading order, landmarks, reflow, reduced motion, and the canvas description |
 
 Both run in CI. The axe run uses the `wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa`,
@@ -21,9 +23,11 @@ scenario gallery, object inspector, investigations browser, active
 investigation, lesson measurement screen, share dialog, A/B bench, observing
 panels, lecture mode, model page, instructor portal, teaching page, figure
 builder, evaluation kit, glossary, validation report, observatory, catalog, library,
-library by sequence, my work, experiment runner, scenario studio, investigation composer, course builder,
+library by sequence, library browse, all filters, library topic, library item, my work, experiment runner, scenario studio, investigation composer, course builder,
 investigations in a course, course home, 3-D kernel diagnostics, 3-D lab, 3-D lab guide, mission
-diagnostics, mission lab, submission review. (The figure builder is checked
+diagnostics, mission lab, submission review, the two term surfaces of Prompt 168:
+course builder, a course as it comes (Prompt 168), distribution kit, a new term (Prompt 168), and the three
+surfaces of Prompt 164: library, your collections; kit, the collection editor; course home, a collection, and the two Common Cartridge panels of Prompt 169: course builder, the Common Cartridge panel (Prompt 169), distribution kit, the Common Cartridge panel (Prompt 169), and the two activity list panels of Prompt 174: course builder, the activity list panel with its outcomes (Prompt 174), distribution kit, the activity list panel (Prompt 174). (The figure builder is checked
 without its live preview, which is the application in a frame and is
 checked as the surfaces above.) That list
 and the count above both come from the `SURFACES` array in the spec — the count through `npm run docs:sync`, the names by hand,
@@ -138,6 +142,35 @@ only if opened before, and goes when the connection returns. Its Dismiss button
 and Escape close it. `e2e/offlineStates.spec.js` and `e2e/emptyStates.spec.js`
 induce each state; `e2e/accessibility.spec.js` covers the touched pages.
 
+## Startup: one splash per genuine startup (Prompt 124)
+
+The splash is a startup event, not a page event. Six outcomes, then the
+mechanism that produces them.
+
+**Semantics.**
+- (a) The first full load of the site in a browsing context that has not shown the splash in this visit: the splash.
+- (b) Any other full load reached from inside the site, including returning to the sandbox, back and forward with or without a bfcache restore, and a deep link followed from inside: no splash.
+- (c) A reload of a page that already showed it: no splash.
+- (d) A new tab the reader opens from outside (a typed address, a bookmark, an external link): a genuine startup.
+- (e) A tab duplicated, or opened by the site itself: not a genuine startup.
+- (f) A script that fails, or a splash that never finishes: a visible, usable shell within six seconds, no spinner, nothing hidden for ever.
+
+**What distinguishes them.** Four signals were weighed:
+- The navigation type (`performance.getEntriesByType('navigation')`) separates reloads and back or forward from a fresh navigation, and cannot tell a typed address from a link.
+- The referrer separates an internal link (the site's own origin) from a typed address (empty) or an external link, and is empty for a duplicated tab and absent when a browser trims it.
+- A per-tab token in `sessionStorage` survives a reload and is copied into a duplicated tab, which is exactly (c) and (e), and is absent in a new tab, which is (d); on its own it would also treat a tab that left for another site and came back by typing as the same visit, and it is unavailable when storage is blocked.
+- `pageshow.persisted` matters only for a bfcache restore, which runs no script at all: the page returns as it was left, so (b) holds without reading it.
+
+No one signal gets all six right, so the rule is their conjunction: a startup is a `navigate`-type load, with no own-origin referrer, and no token. Any other load skips. Storage blocked: the type and referrer decide alone.
+
+**Mechanism.** An inline script in `index.html`'s head decides before the first paint and writes `html[data-startup]`: `splash`, `skip`, or `failsafe`. While the attribute is `splash` and the splash is in the page, the shell is hidden (`css/styles.css`), so the navigation is never seen ahead of the splash. Every other load runs the same one reveal path with no time: the animation is cut to nothing and `animationend` is sent once the page has booted, so `window.splashScreenEnded`, the welcome gate and the orientation keep their flags and their order. A timer in the same inline script, independent of `main.js`, sets `failsafe` after six seconds if the sequence has not ended; the splash is then removed from view and the shell shown. The six seconds is a bound on failure, not a duration the sequence depends on.
+
+**Reduced motion.** The splash's delays are cut to nothing and the sequence reveals the shell at once; nothing moves. The branding appears for a frame at most.
+
+A frame loaded with `?embed=` is always a startup: it is a document inside someone else's page, the Figure builder's preview among them, and its own start must not depend on the host's visit.
+
+`e2e/startupLifecycle.spec.js` asserts each outcome as the reader sees it, in Chromium, and the bfcache-sensitive ones in Firefox and WebKit. A duplicated tab cannot be made from a browser driver, so the inherited `sessionStorage` token is what is simulated.
+
 ## The canvas
 
 The simulation canvas has an accessible name and points, through
@@ -218,7 +251,7 @@ What is actually established, and the limit of each:
 
 | claim | evidence | what it does not show |
 | --- | --- | --- |
-| The period-to-pitch encoding preserves the quantity | 5 checks in `js/validation/physicsChecks.js`, "Sonification law" | Nothing about the audible sound, which is quantized and lossy |
+| The period-to-pitch encoding preserves the quantity | 5 checks in `js/validation/groups/sonification-law.js`, "Sonification law" | Nothing about the audible sound, which is quantized and lossy |
 | A non-audio path to the same facts exists | `e2e/sonifyTextEquivalent.spec.js` | Nothing about whether it is findable, readable or useful |
 | The panel has no machine-detectable violation | axe-core, no rules disabled | Nothing about whether a screen reader user can operate it |
 
@@ -268,10 +301,17 @@ properties as text in the inspector, and work through an investigation.
 the content, not decoration; a planetarium that will not move is a picture.
 Every decorative animation stops, and the simulation can be paused from the
 transport bar or the space bar — a real control rather than a media query.
+Settings has a Motion choice for a reader who wants more: Reduced applies the
+same stop on a device that did not ask for it, and Step by step also starts the
+simulation paused, so nothing moves until the reader steps it or presses play
+(INTERACTION.md, "Reduced motion").
 
-**The shape of a curve is not narrated.** The light curve, the rotation curve
-and the radial-velocity trace are drawn to a canvas. Their numbers are no
-longer only available by reading it: the export dialog offers each series as a
+**The shape of a curve is not narrated.** The light curve, the radial-velocity
+trace, the energy chart and the bench's two charts are one component
+(`js/plot/chart.js`): a named, focusable group with the values by arrow keys,
+a legend of real buttons and a text alternative. The rotation curve is still
+drawn to a canvas. Their numbers are no longer only available by reading the
+picture: the export dialog offers each series as a
 table — proper column headings with units, the independent variable as a row
 header, reachable and scrollable from a keyboard — beside the CSV download that
 was already there. Every table is rendered from the bytes the exporter writes,
@@ -315,11 +355,17 @@ What remains is the gesture itself. Dragging to *feel* how fast a throw is,
 and seeing the velocity arrow grow as you drag, has no keyboard equivalent and
 will not get one; the form gives you the number instead of the feel.
 
+[INTERACTION.md](INTERACTION.md) is the rule for every drag now: each needs a
+single-pointer alternative, and a test that a typed launch equals a recorded
+drag holds this one to it. The drags that still have none (panning the view,
+the 3-D camera's free orbit, the observer's handle, moving a pinned card) are
+listed there and run as pending acceptance checks.
+
 **The attribution links in the footer are under 24×24.** They are inline text
 links in a sentence, which WCAG 2.5.8 explicitly exempts. Enlarging them would
 mean changing a line of running text into a row of buttons.
 
-**Automated checks are a floor, not a ceiling.** <!--fact:axeRuns-->240<!--/fact--> clean axe runs mean no
+**Automated checks are a floor, not a ceiling.** <!--fact:axeRuns-->336<!--/fact--> clean axe runs mean no
 machine-detectable violation on those surfaces in those states. They do not
 mean the application is pleasant to use with a screen reader, and nothing here
 substitutes for testing with one. Nothing in this pass was made to pass by
@@ -355,6 +401,8 @@ the files *claim* a reading order they had not earned. `tests/instructorMaterial
 holds this section to what the files actually contain, so the day tagging is
 added the test fails and this text has to be updated with it.
 
+**The student's own reports are different.** The lab report and the evidence report are written as tagged PDFs (headings, lists, tables and figures with alternative text), and the lab report is also offered as an accessible web page from the finish dialog (Prompt 127): one document with its headings in order, a table of the numbers behind every plot, a text alternative on every figure, no script, and a print stylesheet. `e2e/htmlReport.spec.js` downloads it and runs axe on the file itself. No PDF/UA validator has been run on the tagged PDFs, so their conformance is not claimed; the instructor documents stay untagged, as above.
+
 **If a tagged document is needed today**, the same content is on the web in HTML,
 which is tagged by construction: the investigations at
 [gravitas-sim.online](https://gravitas-sim.online), and the public teaching and
@@ -365,6 +413,6 @@ only route to the material.
 
 ```bash
 npm run a11y            # both suites
-npm run a11y:axe        # axe only, all <!--fact:axeRuns-->240<!--/fact--> combinations
+npm run a11y:axe        # axe only, all <!--fact:axeRuns-->336<!--/fact--> combinations
 npm run a11y:manual     # keyboard, focus, reflow, reduced motion, the canvas
 ```

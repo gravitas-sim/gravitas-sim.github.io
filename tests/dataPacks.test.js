@@ -382,10 +382,20 @@ function copyForCheck() {
     'js/stellar/spectrumIndex.js',
     'js/gw',
     'js/rng.js',
+    'js/random',
+    'js/numeric',
+    // A manifest of an image, a sequence or a grid is held to the data kinds'
+    // validators (Prompt 157), which check a part against the offline contract.
+    'js/dataKinds',
+    'js/offlineParts.js',
+    'js/archive/net.js',
+    'js/names.js',
     // The radiation packs' checks run the kernel they are measured with.
     'js/kernels/radiation',
     // The galactic packs' rows are sidecar files.
     'gaia',
+    // The image packs' pixel planes are sidecar files (Prompt 189).
+    'frames',
     // The galactic packs' checks run the galactic kernel.
     'js/kernels/galactic',
     // The cosmology packs' rows are sidecar files and their checks run the kernel.
@@ -536,7 +546,7 @@ describe('a pack changed after it was built is caught', () => {
     pkg.assets[0].offline = 'core';
     writeFileSync(file, JSON.stringify(pkg, null, 2));
     expect(runCheck(dir).out).toContain(
-      'offline is optional; gravitas.tess-hd209458-s56 says core'
+      'offline is idle; gravitas.tess-hd209458-s56 says core'
     );
   });
 });
@@ -768,18 +778,20 @@ describe('what a pack owes, and where it goes', () => {
   });
 
   test('the pack is precached as its manifest says, and its record is not precached at all', async () => {
-    const { core, optional } = await precacheLists();
+    const { core, optional, idle } = await precacheLists();
+    const tiers = { core, optional, idle };
     for (const pack of PACKS) {
       const offline = json(pack.manifest).offline;
       expect({ pack: pack.id, offline }).toEqual({
         pack: pack.id,
-        offline: expect.stringMatching(/^(core|optional)$/),
+        offline: expect.stringMatching(/^(core|optional|idle|none)$/),
       });
-      expect(offline === 'optional' ? optional : core).toContain(pack.module);
-      expect(offline === 'optional' ? core : optional).not.toContain(
-        pack.module
-      );
-      expect([...core, ...optional]).not.toContain(pack.manifest);
+      // `none` (the image packs, Prompt 189) is in no tier: fetched when the
+      // frame is opened, and kept by the service worker after that.
+      for (const [name, list] of Object.entries(tiers))
+        if (name === offline) expect(list).toContain(pack.module);
+        else expect(list).not.toContain(pack.module);
+      expect([...core, ...optional, ...idle]).not.toContain(pack.manifest);
     }
   });
 });

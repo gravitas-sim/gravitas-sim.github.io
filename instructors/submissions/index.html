@@ -81,6 +81,53 @@
       .sr-response {
         white-space: pre-wrap;
       }
+      /* The class summary (Prompt 173): tables of words as well as numbers, and
+         a plot beside the table of the same values. */
+      .sr-summary {
+        margin-top: var(--space-8);
+      }
+      .sr-sum-table td:nth-child(n + 2) {
+        text-align: left;
+        font-variant-numeric: tabular-nums;
+      }
+      .sr-sum-table th {
+        overflow-wrap: normal;
+      }
+      .sr-fig {
+        margin: var(--space-4) 0;
+      }
+      /* Printing the summary alone: the button puts this class on the body. The
+         page prints in the light scheme whatever its theme, in system colors. */
+      @media print {
+        body.sr-print-summary {
+          color-scheme: light;
+          background: Canvas;
+          color: CanvasText;
+        }
+        body.sr-print-summary > :not(main),
+        body.sr-print-summary main > :not(.sr-summary),
+        .sr-summary .sr-noprint {
+          display: none;
+        }
+        body.sr-print-summary .sr-summary .ow-plot {
+          background: none;
+          color: CanvasText;
+        }
+        body.sr-print-summary .sr-summary .ow-axes line,
+        body.sr-print-summary .sr-summary .ow-bars line {
+          stroke: currentColor;
+        }
+        body.sr-print-summary .sr-summary .ow-pt {
+          fill: currentColor;
+        }
+        body.sr-print-summary .sr-summary .ui-table-wrap {
+          overflow: visible;
+        }
+        body.sr-print-summary .sr-summary figure,
+        body.sr-print-summary .sr-summary .ui-table-wrap {
+          break-inside: avoid;
+        }
+      }
     </style>
     <!-- shell:head -->
 <link rel="stylesheet" href="/css/shell.css" />
@@ -124,14 +171,15 @@ try {
 <header class="gs-shell">
 <a class="gs-brand" href="/#home"><span class="gs-vh"><span class="gs-en">Gravitas home</span><span class="gs-es" lang="es">Inicio de Gravitas</span></span><span aria-hidden="true">GRAVITAS</span></a>
 <button type="button" class="gs-toggle" aria-expanded="false" aria-controls="gs-nav" hidden><span class="gs-en">Menu</span><span class="gs-es" lang="es">Menú</span></button>
-<nav id="gs-nav" class="gs-nav" aria-label="Gravitas"><ul><li><details class="gs-group"><summary><span class="gs-en">Learn</span><span class="gs-es" lang="es">Aprender</span></summary><ul><li><a href="/library/"><span class="gs-en">Library</span><span class="gs-es" lang="es">Biblioteca</span></a></li><li><a href="/my-work/"><span class="gs-en">My work</span><span class="gs-es" lang="es">Mi trabajo</span></a></li><li><a href="/#investigations"><span class="gs-en">Investigations</span><span class="gs-es" lang="es">Investigaciones</span></a></li><li><a href="/course/"><span class="gs-en">Courses</span><span class="gs-es" lang="es">Cursos</span></a></li><li><a href="/observatory/"><span class="gs-en">Observatory</span><span class="gs-es" lang="es">Observatorio</span></a></li><li><a href="/experiments/"><span class="gs-en">Experiments</span><span class="gs-es" lang="es">Experimentos</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Labs</span><span class="gs-es" lang="es">Laboratorios</span></summary><ul><li><a href="/"><span class="gs-en">Sandbox</span><span class="gs-es" lang="es">Simulación libre</span></a></li><li><a href="/3d/"><span class="gs-en">3-D lab</span><span class="gs-es" lang="es">Laboratorio 3-D</span></a></li><li><a href="/mission/lab/"><span class="gs-en">Mission lab</span><span class="gs-es" lang="es">Laboratorio de misiones</span></a></li><li><a href="/sky/"><span class="gs-en">Sky Lab</span><span class="gs-es" lang="es">Laboratorio del cielo</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Make</span><span class="gs-es" lang="es">Crear</span></summary><ul><li><a href="/studio/"><span class="gs-en">Scenario Studio</span><span class="gs-es" lang="es">Estudio de escenarios</span></a></li><li><a href="/studio/lesson/"><span class="gs-en">Investigation Composer</span><span class="gs-es" lang="es">Compositor de investigaciones</span></a></li><li><a href="/studio/course/"><span class="gs-en">Course builder</span><span class="gs-es" lang="es">Creador de cursos</span></a></li><li><a href="/figure/"><span class="gs-en">Figure builder</span><span class="gs-es" lang="es">Creador de figuras</span></a></li><li><a href="/catalog/"><span class="gs-en">Catalog</span><span class="gs-es" lang="es">Catálogo</span></a></li></ul></details></li><li><details class="gs-group" data-here><summary><span class="gs-en">Teach</span><span class="gs-es" lang="es">Enseñar</span></summary><ul><li><a href="/teaching/"><span class="gs-en">Teaching with Gravitas</span><span class="gs-es" lang="es">Enseñar con Gravitas</span></a></li><li><a href="/instructors/"><span class="gs-en">Instructor resources</span><span class="gs-es" lang="es">Recursos para docentes</span></a></li><li><a href="/instructors/submissions/" aria-current="page"><span class="gs-en">Submission review</span><span class="gs-es" lang="es">Revisión de entregas</span></a></li><li><a href="/evaluation/"><span class="gs-en">Classroom evidence kit</span><span class="gs-es" lang="es">Kit de evidencias de aula</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">About</span><span class="gs-es" lang="es">Acerca de</span></summary><ul><li><a href="/model/"><span class="gs-en">How the model works</span><span class="gs-es" lang="es">Cómo funciona el modelo</span></a></li><li><a href="/validation/"><span class="gs-en">Physics validation</span><span class="gs-es" lang="es">Validación física</span></a></li><li><a href="/glossary/"><span class="gs-en">Glossary</span><span class="gs-es" lang="es">Glosario</span></a></li><li><a href="/lab3d/"><span class="gs-en">3-D kernel diagnostics</span><span class="gs-es" lang="es">Diagnóstico del núcleo 3-D</span></a></li><li><a href="/mission/"><span class="gs-en">Mission core diagnostics</span><span class="gs-es" lang="es">Diagnóstico de misiones</span></a></li><li><a href="/Gravitas_User_Manual.pdf"><span class="gs-en">User manual (PDF)</span><span class="gs-es" lang="es">Manual de usuario (PDF)</span></a></li></ul></details></li></ul></nav>
+<nav id="gs-nav" class="gs-nav" aria-label="Gravitas"><ul><li><a href="/" data-dest="explore"><span class="gs-en">Explore</span><span class="gs-es" lang="es">Explorar</span></a></li><li><a href="/library/" data-dest="learn"><span class="gs-en">Learn</span><span class="gs-es" lang="es">Aprender</span></a></li><li><a href="/observatory/" data-dest="observe"><span class="gs-en">Observe</span><span class="gs-es" lang="es">Observar</span></a></li><li><a href="/my-work/" data-dest="my-work"><span class="gs-en">My work</span><span class="gs-es" lang="es">Mi trabajo</span></a></li><li><a href="/teaching/" data-dest="teach" aria-current="true"><span class="gs-en">Teach</span><span class="gs-es" lang="es">Enseñar</span></a></li></ul></nav>
 <div class="gs-controls" hidden>
 <label><span class="gs-vh"><span class="gs-en">Language</span><span class="gs-es" lang="es">Idioma</span></span><select data-gs-lang><option value="en" lang="en">English</option><option value="es" lang="es">Español</option></select></label>
 <label><span class="gs-vh"><span class="gs-en">Theme</span><span class="gs-es" lang="es">Tema</span></span><select data-gs-theme><option value="midnight" data-es="Medianoche">Midnight</option><option value="deep" data-es="Espacio profundo">Deep space</option><option value="observatory" data-es="Rojo de observatorio">Observatory red</option><option value="daylight" data-es="Luz de día">Daylight</option></select></label>
 </div>
 </header>
+<nav class="gs-crumbs" aria-labelledby="gs-crumbs-name"><span id="gs-crumbs-name" class="gs-vh"><span class="gs-en">Breadcrumb</span><span class="gs-es" lang="es">Ruta de navegación</span></span><ol><li><a href="/teaching/"><span class="gs-en">Teach</span><span class="gs-es" lang="es">Enseñar</span></a></li><li aria-current="page"><span class="gs-en">Submission review</span><span class="gs-es" lang="es">Revisión de entregas</span></li></ol></nav>
 <div class="gs-offline" role="status"><template><div class="gs-offline-box">
-<p><strong><span class="gs-en">You are offline.</span><span class="gs-es" lang="es">Estás sin conexión.</span></strong> <span class="gs-en">These pages are saved on this device:</span><span class="gs-es" lang="es">Estas páginas están guardadas en este dispositivo:</span> <a href="/library/"><span class="gs-en">Library</span><span class="gs-es" lang="es">Biblioteca</span></a>, <a href="/my-work/"><span class="gs-en">My work</span><span class="gs-es" lang="es">Mi trabajo</span></a>, <a href="/course/"><span class="gs-en">Courses</span><span class="gs-es" lang="es">Cursos</span></a>, <a href="/observatory/"><span class="gs-en">Observatory</span><span class="gs-es" lang="es">Observatorio</span></a>, <a href="/"><span class="gs-en">Sandbox</span><span class="gs-es" lang="es">Simulación libre</span></a>, <a href="/3d/"><span class="gs-en">3-D lab</span><span class="gs-es" lang="es">Laboratorio 3-D</span></a>, <a href="/mission/lab/"><span class="gs-en">Mission lab</span><span class="gs-es" lang="es">Laboratorio de misiones</span></a>, <a href="/sky/"><span class="gs-en">Sky Lab</span><span class="gs-es" lang="es">Laboratorio del cielo</span></a>, <a href="/catalog/"><span class="gs-en">Catalog</span><span class="gs-es" lang="es">Catálogo</span></a>. <span class="gs-en">Any other page works only if you have opened it before, and whatever needs the network, such as catalog downloads, waits until you are back online.</span><span class="gs-es" lang="es">Cualquier otra página funciona solo si ya la abriste, y lo que necesita la red, como las descargas del catálogo, espera hasta que vuelvas a conectarte.</span></p>
+<p><strong><span class="gs-en">You are offline.</span><span class="gs-es" lang="es">Estás sin conexión.</span></strong> <span class="gs-en">These pages are saved on this device:</span><span class="gs-es" lang="es">Estas páginas están guardadas en este dispositivo:</span> <a href="/"><span class="gs-en">Explore</span><span class="gs-es" lang="es">Explorar</span></a>, <a href="/library/"><span class="gs-en">Learn</span><span class="gs-es" lang="es">Aprender</span></a>, <a href="/observatory/"><span class="gs-en">Observe</span><span class="gs-es" lang="es">Observar</span></a>, <a href="/my-work/"><span class="gs-en">My work</span><span class="gs-es" lang="es">Mi trabajo</span></a>, <a href="/3d/"><span class="gs-en">3-D lab</span><span class="gs-es" lang="es">Laboratorio 3-D</span></a>, <a href="/mission/lab/"><span class="gs-en">Mission lab</span><span class="gs-es" lang="es">Laboratorio de misiones</span></a>, <a href="/studio/"><span class="gs-en">Scenario Studio</span><span class="gs-es" lang="es">Estudio de escenarios</span></a>, <a href="/course/"><span class="gs-en">Courses</span><span class="gs-es" lang="es">Cursos</span></a>, <a href="/sky/"><span class="gs-en">Sky Lab</span><span class="gs-es" lang="es">Laboratorio del cielo</span></a>, <a href="/catalog/"><span class="gs-en">Catalog</span><span class="gs-es" lang="es">Catálogo</span></a>, <a href="/studio/lesson/"><span class="gs-en">Investigation Composer</span><span class="gs-es" lang="es">Compositor de investigaciones</span></a>, <a href="/studio/course/"><span class="gs-en">Course-package builder</span><span class="gs-es" lang="es">Creador de paquetes de curso</span></a>. <span class="gs-en">Any other page works only if you have opened it before, and whatever needs the network, such as catalog downloads, waits until you are back online.</span><span class="gs-es" lang="es">Cualquier otra página funciona solo si ya la abriste, y lo que necesita la red, como las descargas del catálogo, espera hasta que vuelvas a conectarte.</span></p>
 <button type="button" class="ui-button"><span class="gs-en">Dismiss</span><span class="gs-es" lang="es">Cerrar</span></button>
 </div></template></div>
 <!-- /shell:header -->
@@ -197,6 +245,7 @@ try {
       </div>
       <div id="context"></div>
       <div id="byActivity"></div>
+      <section id="summary" class="sr-summary" aria-labelledby="sumTitle"></section>
       <h2 data-i18n="sub.rates.title">Per-question failure rate</h2>
       <p class="ui-note" data-i18n="sub.rates.note">
         Hardest first. &ldquo;Marked&rdquo; counts only the answers Gravitas can
@@ -427,6 +476,39 @@ try {
             accept=".csv,text/csv,text/plain"
           />
         </div>
+      </section>
+      <section class="sr-export" aria-labelledby="archTitle">
+        <h2 id="archTitle">
+          <span class="gs-en">Archive this term</span
+          ><span class="gs-es" lang="es">Archivar este periodo</span>
+        </h2>
+        <p class="ui-note">
+          <span class="gs-en"
+            >When the term is over, save everything on this page as one file: the
+            reports as they were handed in, the names they were grouped under and
+            your marks. The page is then cleared. Open the file here, like any
+            report, to bring it all back. Nothing leaves your browser, and nothing
+            a student holds is touched.</span
+          ><span class="gs-es" lang="es"
+            >Cuando termine el periodo, guarda todo lo de esta página en un solo
+            archivo: las entregas tal como llegaron, los nombres con que se
+            agruparon y tus notas. Después se limpia la página. Abre el archivo
+            aquí, como cualquier entrega, para recuperarlo todo. Nada sale de tu
+            navegador y no se toca nada de lo que guardan los estudiantes.</span
+          >
+        </p>
+        <div class="sr-gb-row">
+          <button id="archiveSave" type="button" class="ui-button" disabled>
+            <span class="gs-en">Archive and clear</span
+            ><span class="gs-es" lang="es">Archivar y limpiar</span>
+          </button>
+        </div>
+        <p
+          id="archiveStatus"
+          class="ui-note"
+          role="status"
+          aria-live="polite"
+        ></p>
       </section>
       <hr />
       <p class="ui-note" data-i18n="sub.notice">

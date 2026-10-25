@@ -1,0 +1,1030 @@
+{
+  "prompt": 178,
+  "thresholdsCommit": "ede242a22328cb2d9f4b4aa4519042d5b3862563",
+  "prototypeDigest": "dd6fd9db74d50613",
+  "measuredAt": "17fd3874a136ee0cff899e5d6b465d42033ff875",
+  "started": "2026-10-22T06:48:37.396Z",
+  "finished": "2026-10-22T06:50:06.881Z",
+  "environment": {
+    "node": "v24.4.0",
+    "chromium": "156.0.8078.4",
+    "platform": "darwin x64",
+    "load1AtTimings": 4.67
+  },
+  "verdict": "A",
+  "notPassing": [],
+  "checks": {
+    "T1.route": {
+      "status": "pass",
+      "why": "sources +0.2 KB, 0 requests; build +0.1 KB, 0 requests (bounds +0.2 KB, +0)"
+    },
+    "T1.deferred": {
+      "status": "pass",
+      "why": "24080 B gzipped of 25600"
+    },
+    "T1.requests": {
+      "status": "pass",
+      "why": "3 lazy requests of 3 in the build"
+    },
+    "T1.tier": {
+      "status": "pass",
+      "why": "first visit +0 B; idle tier 34976 B of 138331"
+    },
+    "T2.point": {
+      "status": "pass",
+      "why": "p95 0.07201 px of 0.5, 300 sources, 0 refused kinds"
+    },
+    "T2.circle": {
+      "status": "pass",
+      "why": "p95 0.002906 of 0.02, 150 discs (refusals count as infinite error)"
+    },
+    "T2.keyboard": {
+      "status": "pass",
+      "why": "worst point 0.05259 px, worst circle 0.002776, 0 refusals over 12 and 6 trials"
+    },
+    "T2.pointer": {
+      "status": "pass",
+      "why": "worst point 0.05271 px, worst circle 0.002727, 0 refusals over 12 and 6 trials"
+    },
+    "T3.keyboard": {
+      "status": "pass",
+      "why": "0 failures, 0 pointer events, 6 of 6 kinds"
+    },
+    "T3.pointer": {
+      "status": "pass",
+      "why": "0 failures, 0 key events"
+    },
+    "T3.announce": {
+      "status": "pass",
+      "why": "85 commits and 123 actions, 0 with the wrong number of messages, 0 lost focus, axe serious or critical: 0"
+    },
+    "T3.sequence": {
+      "status": "pass",
+      "why": "keyboard 0 failures, pointer 0"
+    },
+    "T4.record": {
+      "status": "pass",
+      "why": "0 validateArtifact problems, 31 quantities"
+    },
+    "T4.replay": {
+      "status": "pass",
+      "why": "same marks true, bit-identical true, refuses a changed image: image-changed"
+    },
+    "T4.sequence": {
+      "status": "pass",
+      "why": "2 frames, time scale UTC"
+    },
+    "T5.undo": {
+      "status": "pass",
+      "why": "0 failures in 8840 state comparisons over 200 sequences"
+    },
+    "T5.determinism": {
+      "status": "pass",
+      "why": "0 mismatches"
+    },
+    "T6.interaction": {
+      "status": "pass",
+      "why": "key 1.1/15 ms, paint 35.5/100; place 2.3/28 ms, paint 35.3/100; edit 1.8/90 ms, paint 33.6/100; del 1.7/90 ms, paint 34.1/100; undo 2.4/104 ms, paint 35.1/100; load 4.67 to 4.39"
+    },
+    "T6.sequence": {
+      "status": "pass",
+      "why": "frame change 152.3/500 ms (paint 173.5)"
+    },
+    "T7.time": {
+      "status": "pass",
+      "why": "decode 19.3 ms x 4 + draw 252.7 ms = 329.9 ms of 2000"
+    },
+    "T7.memory": {
+      "status": "pass",
+      "why": "counted 37748736 B, page peak 49415427 B over its start, bound 67108864; the probe's realm peaks within 1.25 x file plus plane: true"
+    }
+  },
+  "authentic": {
+    "lunar": {
+      "status": "measured",
+      "measuredOn": "2026-10-22",
+      "fixture": {
+        "path": "tests/fixtures/lunar/PIA00302-clementine-nearside.jpg",
+        "bytes": 265438,
+        "sha256": "c5bb394a48613440f24c59deb5e7cda253b14a18696e54f6f2cf4e37fbf92904",
+        "width": 1719,
+        "height": 1719,
+        "what": "A mosaic of about 50,000 Clementine frames in an orthographic projection, not one exposure: the albedo at 750 nm, with the disc filling the frame (the limb touches its four edges), maria and craters, and no photon-noise floor a CCD frame has. It carries no pixel-unit, gain, linearity or saturation documentation, so it is a display image and a real-data test of decode, draw and repeatability, never a calibrated measurement."
+      },
+      "environment": {
+        "node": "v24.4.0",
+        "chromium": "156.0.8078.4",
+        "platform": "darwin x64",
+        "loadAtStart": 4.56,
+        "loadBeforeThrottled": 4.56,
+        "loadAfterThrottled": 4.56,
+        "commit": "6c4dd662fcdfbe71bc6f56176a5785c510e339ff"
+      },
+      "decodeAndDraw": {
+        "throttle": 4,
+        "decodeMsRuns": [31.4, 32.6, 32.6, 34.8, 30],
+        "decodeMsMedian": 32.6,
+        "planeBuildMsThrottled": [61.5, 65.9, 62.9, 59, 56.2],
+        "drawMsThrottled": [202.8, 188.5, 168.9, 197.7, 167.4],
+        "displayFactor": 2,
+        "totalMs": 380.4,
+        "totalFormula": "throttle x median decode + median plane build + median draw",
+        "referenceBoundMs": 2000,
+        "countedBytes": 26598088,
+        "pageHeapPeakDeltaBytes": 84579476,
+        "maxDecodedBytes": 67108864,
+        "note": "the 2,048-pixel tier bounds are quoted for reference only; no bound was committed for this leg, so it is reported, not judged"
+      },
+      "disc": {
+        "backgroundLevel": 0,
+        "halfMaxThreshold": 17.5,
+        "centroidX": 859.937,
+        "centroidY": 859.756,
+        "equivalentRadiusPx": 860.159
+      },
+      "repeatability": {
+        "trialsPerAngle": 100,
+        "angles": [0, 45, 90, 135, 180, 225, 270, 315],
+        "seed": 2210,
+        "capturePx": 3,
+        "asSupplied": {
+          "condition": "frame as supplied",
+          "frame": "1719 x 1719",
+          "frameNoiseAdu": 1.048,
+          "trials": 800,
+          "refined": 0,
+          "refused": {
+            "no-edge": 800
+          },
+          "perAngle": [
+            {
+              "angleDeg": 0,
+              "refined": 0,
+              "trials": 100,
+              "medianX": null,
+              "medianY": null,
+              "medianR": null
+            },
+            {
+              "angleDeg": 45,
+              "refined": 0,
+              "trials": 100,
+              "medianX": null,
+              "medianY": null,
+              "medianR": null
+            },
+            {
+              "angleDeg": 90,
+              "refined": 0,
+              "trials": 100,
+              "medianX": null,
+              "medianY": null,
+              "medianR": null
+            },
+            {
+              "angleDeg": 135,
+              "refined": 0,
+              "trials": 100,
+              "medianX": null,
+              "medianY": null,
+              "medianR": null
+            },
+            {
+              "angleDeg": 180,
+              "refined": 0,
+              "trials": 100,
+              "medianX": null,
+              "medianY": null,
+              "medianR": null
+            },
+            {
+              "angleDeg": 225,
+              "refined": 0,
+              "trials": 100,
+              "medianX": null,
+              "medianY": null,
+              "medianR": null
+            },
+            {
+              "angleDeg": 270,
+              "refined": 0,
+              "trials": 100,
+              "medianX": null,
+              "medianY": null,
+              "medianR": null
+            },
+            {
+              "angleDeg": 315,
+              "refined": 0,
+              "trials": 100,
+              "medianX": null,
+              "medianY": null,
+              "medianR": null
+            }
+          ]
+        },
+        "padded": {
+          "condition": "frame padded with a 160-pixel border at the background level 0",
+          "frame": "2039 x 2039",
+          "frameNoiseAdu": 0,
+          "trials": 800,
+          "refined": 718,
+          "refused": {
+            "not-circular": 82
+          },
+          "perAngle": [
+            {
+              "angleDeg": 0,
+              "refined": 93,
+              "trials": 100,
+              "medianX": 1019.8273,
+              "medianY": 1019.8462,
+              "medianR": 860.09571
+            },
+            {
+              "angleDeg": 45,
+              "refined": 88,
+              "trials": 100,
+              "medianX": 1019.8258,
+              "medianY": 1019.8474,
+              "medianR": 860.09586
+            },
+            {
+              "angleDeg": 90,
+              "refined": 89,
+              "trials": 100,
+              "medianX": 1019.8267,
+              "medianY": 1019.8459,
+              "medianR": 860.09525
+            },
+            {
+              "angleDeg": 135,
+              "refined": 90,
+              "trials": 100,
+              "medianX": 1019.8275,
+              "medianY": 1019.8453,
+              "medianR": 860.0963
+            },
+            {
+              "angleDeg": 180,
+              "refined": 88,
+              "trials": 100,
+              "medianX": 1019.8308,
+              "medianY": 1019.8463,
+              "medianR": 860.09546
+            },
+            {
+              "angleDeg": 225,
+              "refined": 91,
+              "trials": 100,
+              "medianX": 1019.828,
+              "medianY": 1019.8455,
+              "medianR": 860.09581
+            },
+            {
+              "angleDeg": 270,
+              "refined": 91,
+              "trials": 100,
+              "medianX": 1019.8264,
+              "medianY": 1019.8462,
+              "medianR": 860.09596
+            },
+            {
+              "angleDeg": 315,
+              "refined": 88,
+              "trials": 100,
+              "medianX": 1019.8278,
+              "medianY": 1019.8464,
+              "medianR": 860.09584
+            }
+          ],
+          "fit": {
+            "medianX": 1019.83,
+            "medianY": 1019.85,
+            "medianR": 860.096,
+            "sdX": 0.01012,
+            "sdY": 0.0127,
+            "sdR": 0.006096,
+            "radiusP95RelativeToMedian": 0.00001428,
+            "centreP95OffsetPx": 0.03778,
+            "angleMedianRangeR": 0.00105,
+            "angleMedianRangeCentre": 0.003568
+          }
+        }
+      },
+      "scale": {
+        "knownLengthKm": 3474.8,
+        "fittedDiameterPx": 1720.19,
+        "kmPerPixel": 2.02001,
+        "kmPerPixelHalfMaxCrossCheck": 2.01986,
+        "relativeDifferenceFitVsHalfMax": 0.00007364,
+        "note": "the half-maximum radius is an independent cross-check, not truth: a mosaic limb is not an exact circle"
+      },
+      "readByVerdict": false
+    }
+  },
+  "firstRun": {
+    "what": "the first run of T6 on the prototype as first written: every change rebuilt all 50 table rows",
+    "place": {
+      "handlerP95Ms": 29.7,
+      "budgetMs": 28,
+      "paintP95Ms": 249.4
+    },
+    "delete": {
+      "handlerP95Ms": 15.1,
+      "paintP95Ms": 113.9
+    },
+    "undo": {
+      "handlerP95Ms": 18.6,
+      "paintP95Ms": 108.6
+    },
+    "frameChange": {
+      "handlerP95Ms": 184.9,
+      "paintP95Ms": 215.6
+    },
+    "load": "4.7 to 5.3",
+    "change": "renderTable keeps a row for each mark that did not change (a Map keyed by id, the immutable mark object as the test), so a placement adds one row and a deletion removes one; the table is fixed-layout. No threshold moved; the instrument was made to meet the committed budget and was measured again."
+  },
+  "evidence": {
+    "core": {
+      "point": {
+        "status": "pass",
+        "bound": {
+          "p95": 0.5,
+          "allRefined": true
+        },
+        "n": 300,
+        "refused": {},
+        "median": 0.02618,
+        "p95": 0.07201,
+        "p99": 0.1002,
+        "max": 0.1481,
+        "bySnr": [
+          {
+            "snr": "20 to 40",
+            "n": 103,
+            "p95": 0.09121
+          },
+          {
+            "snr": "40 to 80",
+            "n": 75,
+            "p95": 0.05479
+          },
+          {
+            "snr": "80 to 200",
+            "n": 122,
+            "p95": 0.03206
+          }
+        ],
+        "sigmaCoverage": {
+          "within1": 0.7033,
+          "within2": 0.97,
+          "expected": [0.683, 0.954]
+        },
+        "generated": "image-measure-gate frames 1, seed 178"
+      },
+      "circle": {
+        "status": "pass",
+        "bound": {
+          "p95": 0.02
+        },
+        "n": 150,
+        "refused": {
+          "too-small": 1,
+          "no-edge": 1
+        },
+        "median": 0.000299,
+        "p95": 0.002906,
+        "max": 0.0119,
+        "centreP95Px": 0.2223,
+        "radiusWithin2Sigma": 0.9459
+      },
+      "negative": {
+        "faint (peak S/N 3 to 8)": {
+          "n": 40,
+          "refused": 40,
+          "withinBound": 0,
+          "confidentlyWrong": 0
+        },
+        "blended pair (separation under one FWHM)": {
+          "n": 40,
+          "refused": 0,
+          "withinBound": 40,
+          "confidentlyWrong": 0
+        },
+        "cosmic-ray spike (one pixel)": {
+          "n": 40,
+          "refused": 40,
+          "withinBound": 0,
+          "confidentlyWrong": 0
+        },
+        "on the frame edge": {
+          "n": 40,
+          "refused": 40,
+          "withinBound": 0,
+          "confidentlyWrong": 0
+        },
+        "click beyond the capture radius (4 to 12 px)": {
+          "n": 40,
+          "refused": 40,
+          "withinBound": 0,
+          "confidentlyWrong": 0
+        }
+      },
+      "undo": {
+        "status": "pass",
+        "bound": {
+          "failures": 0
+        },
+        "sequences": 200,
+        "operations": 4420,
+        "stateComparisons": 8840,
+        "failures": 0
+      },
+      "determinism": {
+        "status": "pass",
+        "bound": {
+          "mismatches": 0
+        },
+        "repeats": 10,
+        "sources": 40,
+        "discs": 6,
+        "freshModuleInstance": true,
+        "mismatches": 0
+      },
+      "record": {
+        "status": "pass",
+        "validateArtifactProblems": 0,
+        "quantities": 31,
+        "uncertaintyKinds": ["assumed", "sigma"],
+        "scale": {
+          "value": 7.897,
+          "sigma": 0.007327,
+          "truth": 7.897
+        },
+        "imageIdentity": "d28027e96bf9",
+        "jsonBytes": 9487
+      },
+      "replay": {
+        "status": "pass",
+        "sameMarks": true,
+        "refinementBitIdentical": true,
+        "differ": [],
+        "refusesChangedImage": "image-changed"
+      },
+      "sequence": {
+        "status": "pass",
+        "frames": 2,
+        "timeScale": "UTC"
+      }
+    },
+    "bytes": {
+      "eagerModules": 17,
+      "chunks": [
+        {
+          "file": "kind.js",
+          "gz": 9526,
+          "raw": 25177
+        },
+        {
+          "file": "instrument.js",
+          "gz": 13419,
+          "raw": 33802
+        },
+        {
+          "file": "chunk-LWCN5NPJ.js",
+          "gz": 1135,
+          "raw": 2221
+        }
+      ],
+      "deferredGzipBytes": 24080,
+      "deferredGzipKiB": 23.52,
+      "lazyRequestsBuild": 3,
+      "parts": {
+        "kindAloneGzip": 10355,
+        "instrumentAloneGzip": 13746,
+        "kindAloneRequests": 1,
+        "instrumentAloneRequests": 1
+      },
+      "fitsReaderBesideGzip": 6378,
+      "treeModules": {
+        "lazyModuleRequestsInTheTree": 13,
+        "modules": [
+          "js/dataKinds/contract.js",
+          "js/offlineParts.js",
+          "js/dataKinds/planes.js",
+          "js/observation.js",
+          "js/dataKinds/grid.js",
+          "js/dataKinds/draft.js",
+          "tools/image-measure-gate/entries/kind.js",
+          "tools/image-measure-gate/marks.js",
+          "js/platform/artifact.js",
+          "js/hash.js",
+          "tools/image-measure-gate/record.js",
+          "tools/image-measure-gate/panel.js",
+          "js/dataKinds/limits.js"
+        ]
+      },
+      "tier": {
+        "closureSourcesNotOnFirstVisit": 9,
+        "idleSourceGzipBytes": 34976,
+        "alreadyInstalledOnFirstVisit": [
+          "js/offlineParts.js",
+          "js/observation.js",
+          "js/platform/artifact.js",
+          "js/hash.js"
+        ],
+        "alreadyIdle": [],
+        "needAnIdleGroup": [
+          "js/dataKinds/contract.js",
+          "js/dataKinds/planes.js",
+          "js/dataKinds/grid.js",
+          "js/dataKinds/draft.js",
+          "js/dataKinds/limits.js"
+        ],
+        "firstVisitBytesAdded": 0,
+        "why": "no file under js/ imports any of them and tools/ is in no precache tree; a production prompt adds one IDLE_TIER group \"image measurement\" for the files listed in needAnIdleGroup"
+      }
+    },
+    "route": {
+      "base": {
+        "sources": {
+          "kb": 186.7,
+          "requests": 17
+        },
+        "build": {
+          "kb": 88,
+          "requests": 5
+        }
+      },
+      "wired": {
+        "sources": {
+          "kb": 186.9,
+          "requests": 17
+        },
+        "build": {
+          "kb": 88.1,
+          "requests": 5
+        }
+      },
+      "delta": {
+        "sources": {
+          "kb": 0.2,
+          "requests": 0
+        },
+        "build": {
+          "kb": 0.1,
+          "requests": 0
+        }
+      },
+      "distJsGzipBytes": {
+        "base": 10485828,
+        "wired": 10497695,
+        "added": 11867
+      }
+    },
+    "probe": {
+      "sampling": "The realm answers Runtime.getHeapUsage every 10 ms while it works; a read lasts tens of milliseconds, so each peak is the largest of a few samples and a lower bound on the true peak (realmSamples says how few). The 1.25 acceptance is judged on the samples.",
+      "note": "Recorded by tools/decoded-memory-probe.mjs (npm run probe:decoded). A measurement on one machine in headless Chromium, not a gate. The realm peaks are the measurements; residentDecodedBytes is the bound read back (two planes at the ceiling by construction), and tools/data-budget.mjs does not read this file, so decodedImageBytesPerPage stays not measured until a shipped route decodes images.",
+      "measuredAt": "17fd3874",
+      "date": "2026-10-22",
+      "environment": {
+        "chromium": "156.0.8078.4",
+        "node": "v24.4.0",
+        "platform": "darwin x64",
+        "load1": 4.5
+      },
+      "acceptance": {
+        "realmPeakOverFileAndPlane": 1.25
+      },
+      "profiles": {
+        "low-end": {
+          "cases": [
+            {
+              "file": "2048 x 2048, BITPIX -64 (the largest file)",
+              "ok": true,
+              "fileBytes": 33557760,
+              "planeBytes": 33554432,
+              "ms": 61,
+              "ledgerAfter": 0,
+              "declared": 67112192,
+              "realmPeakHeldBytes": 67732906,
+              "realmSamples": 4,
+              "peakOverFileAndPlane": 1.009
+            },
+            {
+              "file": "2048 x 2048, BITPIX 16",
+              "ok": true,
+              "fileBytes": 8392320,
+              "planeBytes": 33554432,
+              "ms": 38,
+              "ledgerAfter": 0,
+              "declared": 41946752,
+              "realmPeakHeldBytes": 42426814,
+              "realmSamples": 3,
+              "peakOverFileAndPlane": 1.011
+            },
+            {
+              "file": "1024 x 1024, BITPIX -32",
+              "ok": true,
+              "fileBytes": 4199040,
+              "planeBytes": 8388608,
+              "ms": 20,
+              "ledgerAfter": 0,
+              "declared": 12587648,
+              "realmPeakHeldBytes": 13264326,
+              "realmSamples": 2,
+              "peakOverFileAndPlane": 1.054
+            }
+          ],
+          "residentDecodedBytes": 67108864
+        },
+        "desktop": {
+          "cases": [
+            {
+              "file": "2048 x 2048, BITPIX -64 (the largest file)",
+              "ok": true,
+              "fileBytes": 33557760,
+              "planeBytes": 33554432,
+              "ms": 44,
+              "ledgerAfter": 0,
+              "declared": 67112192,
+              "realmPeakHeldBytes": 67696810,
+              "realmSamples": 3,
+              "peakOverFileAndPlane": 1.009
+            },
+            {
+              "file": "2048 x 2048, BITPIX 16",
+              "ok": true,
+              "fileBytes": 8392320,
+              "planeBytes": 33554432,
+              "ms": 33,
+              "ledgerAfter": 0,
+              "declared": 41946752,
+              "realmPeakHeldBytes": 42432066,
+              "realmSamples": 2,
+              "peakOverFileAndPlane": 1.012
+            },
+            {
+              "file": "1024 x 1024, BITPIX -32",
+              "ok": true,
+              "fileBytes": 4199040,
+              "planeBytes": 8388608,
+              "ms": 20,
+              "ledgerAfter": 0,
+              "declared": 12587648,
+              "realmPeakHeldBytes": 13138694,
+              "realmSamples": 1,
+              "peakOverFileAndPlane": 1.044
+            }
+          ],
+          "residentDecodedBytes": 67108864
+        }
+      },
+      "within": true
+    },
+    "browser": {
+      "chromium": "156.0.8078.4",
+      "keyboard": {
+        "failures": [],
+        "stray": {
+          "pointer": 0,
+          "key": 3860
+        },
+        "errors": [],
+        "announce": {
+          "actions": 55,
+          "commits": 38,
+          "badCount": [],
+          "badFocus": []
+        },
+        "axe": {
+          "violations": [],
+          "seriousOrCritical": []
+        },
+        "kindsDone": [
+          "point",
+          "segment",
+          "circle",
+          "polygon",
+          "count",
+          "reference-pair"
+        ]
+      },
+      "pointer": {
+        "failures": [],
+        "stray": {
+          "pointer": 528,
+          "key": 0
+        },
+        "errors": [],
+        "announce": {
+          "actions": 68,
+          "commits": 47,
+          "badCount": [],
+          "badFocus": []
+        }
+      },
+      "sequence": {
+        "keyboard": {
+          "failures": [],
+          "announce": {
+            "actions": 8,
+            "commits": 7,
+            "badCount": [],
+            "badFocus": []
+          }
+        },
+        "pointer": {
+          "failures": [],
+          "announce": {
+            "actions": 8,
+            "commits": 7,
+            "badCount": [],
+            "badFocus": []
+          }
+        }
+      },
+      "precision": {
+        "keyboard": {
+          "status": "pass",
+          "bound": {
+            "point": 0.5,
+            "circle": 0.02
+          },
+          "trials": {
+            "points": 12,
+            "circles": 6
+          },
+          "worstPointPx": 0.05259,
+          "worstCircleRel": 0.002776,
+          "placedErrorPx": {
+            "max": 0.943
+          },
+          "refusals": [],
+          "points": [
+            {
+              "placedError": 0.8182,
+              "error": 0.05259
+            },
+            {
+              "placedError": 0.07586,
+              "error": 0.01652
+            },
+            {
+              "placedError": 0.8701,
+              "error": 0.0142
+            },
+            {
+              "placedError": 0.6519,
+              "error": 0.02885
+            },
+            {
+              "placedError": 0.7788,
+              "error": 0.02857
+            },
+            {
+              "placedError": 0.8384,
+              "error": 0.03404
+            },
+            {
+              "placedError": 0.943,
+              "error": 0.02391
+            },
+            {
+              "placedError": 0.1547,
+              "error": 0.01232
+            },
+            {
+              "placedError": 0.3928,
+              "error": 0.01676
+            },
+            {
+              "placedError": 0.7406,
+              "error": 0.01281
+            },
+            {
+              "placedError": 0.8701,
+              "error": 0.036
+            },
+            {
+              "placedError": 0.7736,
+              "error": 0.02722
+            }
+          ],
+          "circles": [
+            {
+              "radius": 162.4,
+              "relError": 0.0001084
+            },
+            {
+              "radius": 203.9,
+              "relError": 0.00007991
+            },
+            {
+              "radius": 24.04,
+              "relError": 0.001646
+            },
+            {
+              "radius": 257.2,
+              "relError": 0.00007224
+            },
+            {
+              "radius": 18.62,
+              "relError": 0.002776
+            },
+            {
+              "radius": 91.98,
+              "relError": 0.0001239
+            }
+          ]
+        },
+        "pointer": {
+          "status": "pass",
+          "bound": {
+            "point": 0.5,
+            "circle": 0.02
+          },
+          "trials": {
+            "points": 12,
+            "circles": 6
+          },
+          "worstPointPx": 0.05271,
+          "worstCircleRel": 0.002727,
+          "placedErrorPx": {
+            "max": 0.9759
+          },
+          "refusals": [],
+          "points": [
+            {
+              "placedError": 0.4369,
+              "error": 0.05271
+            },
+            {
+              "placedError": 0.2477,
+              "error": 0.01647
+            },
+            {
+              "placedError": 0.9343,
+              "error": 0.01413
+            },
+            {
+              "placedError": 0.3249,
+              "error": 0.02885
+            },
+            {
+              "placedError": 0.7486,
+              "error": 0.02907
+            },
+            {
+              "placedError": 0.7652,
+              "error": 0.03404
+            },
+            {
+              "placedError": 0.9284,
+              "error": 0.02388
+            },
+            {
+              "placedError": 0.195,
+              "error": 0.01232
+            },
+            {
+              "placedError": 0.4145,
+              "error": 0.01682
+            },
+            {
+              "placedError": 0.9759,
+              "error": 0.01281
+            },
+            {
+              "placedError": 0.8986,
+              "error": 0.036
+            },
+            {
+              "placedError": 0.3966,
+              "error": 0.02722
+            }
+          ],
+          "circles": [
+            {
+              "radius": 162.4,
+              "relError": 0.0003511
+            },
+            {
+              "radius": 203.9,
+              "relError": 0.00008056
+            },
+            {
+              "radius": 24.04,
+              "relError": 0.001865
+            },
+            {
+              "radius": 257.2,
+              "relError": 0.00006627
+            },
+            {
+              "radius": 18.62,
+              "relError": 0.002727
+            },
+            {
+              "radius": 91.98,
+              "relError": 0.0001292
+            }
+          ]
+        }
+      },
+      "interaction": {
+        "throttle": 4,
+        "viewport": [375, 812],
+        "frame": 1024,
+        "marks": 50,
+        "repeats": 20,
+        "loadBefore": 4.67,
+        "loadAfter": 4.39,
+        "valid": true,
+        "interactions": {
+          "key": {
+            "budgetMs": 15,
+            "handlerP95": 1.1,
+            "handlerMedian": 0.6,
+            "handlerMax": 1.2,
+            "paintP95": 35.5,
+            "paintBudgetMs": 100,
+            "coldFirstMs": 3.2,
+            "pass": true
+          },
+          "place": {
+            "budgetMs": 28,
+            "handlerP95": 2.3,
+            "handlerMedian": 1.7,
+            "handlerMax": 2.5,
+            "paintP95": 35.3,
+            "paintBudgetMs": 100,
+            "coldFirstMs": 4.7,
+            "pass": true
+          },
+          "edit": {
+            "budgetMs": 90,
+            "handlerP95": 1.8,
+            "handlerMedian": 0.9,
+            "handlerMax": 1.9,
+            "paintP95": 33.6,
+            "paintBudgetMs": 100,
+            "coldFirstMs": 1.8,
+            "pass": true
+          },
+          "del": {
+            "budgetMs": 90,
+            "handlerP95": 1.7,
+            "handlerMedian": 1.2,
+            "handlerMax": 2.5,
+            "paintP95": 34.1,
+            "paintBudgetMs": 100,
+            "coldFirstMs": 1.8,
+            "pass": true
+          },
+          "undo": {
+            "budgetMs": 104,
+            "handlerP95": 2.4,
+            "handlerMedian": 1.6,
+            "handlerMax": 2.5,
+            "paintP95": 35.1,
+            "paintBudgetMs": 100,
+            "coldFirstMs": 2.4,
+            "pass": true
+          }
+        },
+        "sequence": {
+          "budgetMs": 500,
+          "handlerP95": 152.3,
+          "handlerMedian": 125.8,
+          "handlerMax": 159.7,
+          "paintP95": 173.5,
+          "pass": true
+        }
+      },
+      "large": {
+        "workerDecodeMs": {
+          "runs": [19.3, 20.1, 19.3, 17.7, 19.7],
+          "median": 19.3,
+          "max": 20.1
+        },
+        "drawMsThrottled": 252.7,
+        "displayFactor": 2,
+        "totalMs": 329.9,
+        "bound": 2000,
+        "load": {
+          "before": 4.6,
+          "after": 4.6
+        },
+        "countedBytes": 37748736,
+        "planeBytes": 33554432,
+        "maxDecodedBytes": 67108864,
+        "pageHeapDeltaBytes": {
+          "afterDecode": 33582031,
+          "peakDuringDraw": 49415427
+        }
+      }
+    }
+  }
+}

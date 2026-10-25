@@ -37,8 +37,8 @@ import {
   white_dwarfs,
   galaxies,
   getPhysicsSetting,
-  updatePhysicsSettings,
 } from './physics.js';
+import { commitSettings } from './appState.js';
 import {
   massCenter,
   rotationCurvePoints,
@@ -66,6 +66,7 @@ import {
   layoutObservationPanels,
   noteObservationPanelUsed,
 } from './observationLayout.js';
+import { EV_GALAXY_GRAVITY_CHANGED, EV_SIMULATION_RESET } from './names.js';
 
 let enabled = false;
 let els = null;
@@ -762,11 +763,11 @@ export function setGalaxyGravity(mode) {
   const wanted = ['newtonian', 'halo', 'mond'].includes(mode)
     ? mode
     : 'newtonian';
-  updatePhysicsSettings({ galaxy_gravity: wanted });
+  commitSettings('rotation-curve', { galaxy_gravity: wanted });
   const actual = galaxyGravityMode();
 
   window.dispatchEvent(
-    new CustomEvent('gravitasGalaxyGravityChanged', {
+    new CustomEvent(EV_GALAXY_GRAVITY_CHANGED, {
       detail: { mode: actual, requested: wanted },
     })
   );
@@ -793,16 +794,18 @@ export function initRotationCurve() {
   e.modeMond?.addEventListener('click', () => setGalaxyGravity('mond'));
 
   e.vFlat?.addEventListener('input', () => {
-    updatePhysicsSettings({ halo_v_flat: e.vFlat.valueAsNumber });
+    commitSettings('rotation-curve', { halo_v_flat: e.vFlat.valueAsNumber });
     updateRotationCurve();
   });
   e.core?.addEventListener('input', () => {
-    updatePhysicsSettings({ halo_core_radius: e.core.valueAsNumber });
+    commitSettings('rotation-curve', {
+      halo_core_radius: e.core.valueAsNumber,
+    });
     updateRotationCurve();
   });
 
   // A new world is a new set of bodies, so nothing about the old fit applies.
-  window.addEventListener('gravitasSimulationReset', () => {
+  window.addEventListener(EV_SIMULATION_RESET, () => {
     lastFit = null;
     syncControls();
   });

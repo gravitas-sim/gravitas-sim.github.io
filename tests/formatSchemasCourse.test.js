@@ -45,7 +45,7 @@ describe('the course pack /2 schema', () => {
     isItsRow(
       'course-pack-2',
       'gravitas.course-pack',
-      CP.FORMAT_VERSION,
+      CP.BASE_VERSION,
       'gravitas.course-pack (builder form)'
     );
   });
@@ -82,7 +82,10 @@ describe('the course pack /2 schema', () => {
     const cases = [
       ['both', 'the wrong format', d => (d.format = 'gravitas.course')],
       ['both', 'version 1', d => (d.formatVersion = 1)],
-      ['both', 'version 3', d => (d.formatVersion = 3)],
+      // /3 is /2 with fields only a 3.0.0 reader knows (Prompt 176): the reader
+      // reads it, and this schema, the form 2.0.0 reads, does not.
+      ['lenient', 'version 3', d => (d.formatVersion = 3)],
+      ['both', 'version 4', d => (d.formatVersion = 4)],
       ['both', 'an id that is not public', d => (d.id = 'Intro Astronomy')],
       ['both', 'a version that is not one', d => (d.version = '1.0')],
       ['both', 'no platform', d => delete d.gravitas],
@@ -461,7 +464,7 @@ describe('the course pack /2 schema', () => {
     const src = read('js/course/pack.js');
     const literals = (text, re) => [...text.matchAll(re)].map(m => m[1]);
     expect(s.properties.format.const).toBe(CP.FORMAT);
-    expect(s.properties.formatVersion.const).toBe(CP.FORMAT_VERSION);
+    expect(s.properties.formatVersion.const).toBe(CP.BASE_VERSION);
     expect(s.properties.locales.items.enum).toEqual(api.locales);
     expect(s.properties.pinning.enum).toEqual([...CP.PINNING]);
     expect(s.$defs.lesson.enum).toEqual(api.lessons);
@@ -476,7 +479,14 @@ describe('the course pack /2 schema', () => {
     const fields = src.match(
       /const PACK_FIELDS = new Set\(\[([\s\S]*?)\]\)/
     )[1];
+    // /2 is 2.0.0's form: every field but the three only /3 carries.
+    const NEW_IN_3 = ['outcomes', 'profile', 'term'];
     expect(Object.keys(s.properties).sort()).toEqual(
+      literals(fields, /'([a-zA-Z]+)'/g)
+        .filter(k => !NEW_IN_3.includes(k))
+        .sort()
+    );
+    expect(Object.keys(schema('course-pack-3').properties).sort()).toEqual(
       literals(fields, /'([a-zA-Z]+)'/g).sort()
     );
     const common = literals(

@@ -24,9 +24,11 @@ import {
   encodeTagged,
 } from '../shareState.js';
 import { remixDelta } from '../platform/remix.js';
+import { packVersion, withVersion } from '../platform/investigation.js';
 
 export const PACK_TAG = 'i';
-export const PACK_LINK_VERSION = 1;
+/** The newest link version read: i2 carries a /2 pack (Prompt 176); a pack that needs none of /2 is still i1. */
+export const PACK_LINK_VERSION = 2;
 /** A catalog package id (js/platform/manifest.js ID). */
 export const PACKAGE_KEY = /^[a-z0-9]+(\.[a-z0-9]+(-[a-z0-9]+)*)+$/;
 
@@ -47,8 +49,8 @@ export const isPackFragment = hash => /^#?i\d+[zr]./.test(String(hash || ''));
 export async function packLink(pack, { root, base = null }) {
   const form = pack.derivedFrom && base ? 'delta' : 'pack';
   const payload =
-    form === 'delta' ? { d: remixDelta(pack, base) } : { p: pack };
-  const fragment = await encodeTagged(PACK_TAG, PACK_LINK_VERSION, payload);
+    form === 'delta' ? { d: remixDelta(pack, base) } : { p: withVersion(pack) };
+  const fragment = await encodeTagged(PACK_TAG, packVersion(pack), payload);
   const url = `${root}#${fragment}`;
   return {
     url,

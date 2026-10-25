@@ -1,0 +1,62 @@
+[
+ {
+  "depth": "core",
+  "role": "first",
+  "sid": "the-exactly",
+  "position": [
+   1,
+   21
+  ],
+  "title": "What If Gravity Were Not Inverse Square?",
+  "subtitle": "Change the exponent, and find out what depended on it",
+  "body": "<p class=\"inv-step-count\">Step 1 of 21 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">The word \"exactly\"</h3><div class=\"inv-step-body\"><p>Newton's law of gravitation says the pull between two masses falls off as one over the square of the distance between them. Every orbit you have looked at in Gravitas has obeyed it.</p><p>The number 2 in that law is doing an enormous amount of work, and it is easy to read past. It is not 2 because two is a tidy number. It is 2 because that is what the Solar System does, to about one part in a billion, and a great deal of what you know about orbits follows from it being 2 rather than 1.9 or 2.1.</p><p>This investigation takes that number and moves it. Everything else — the masses, the starting positions, the speeds, the integrator — is held still. Then you measure what changed.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> The simulation is paused. Nothing moves until you let it.</p>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "graded",
+  "sid": "predict-does-small-matter",
+  "position": [
+   3,
+   21
+  ],
+  "title": "What If Gravity Were Not Inverse Square?",
+  "subtitle": "Change the exponent, and find out what depended on it",
+  "body": "<p class=\"inv-step-count\">Step 3 of 21 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">Does a small change matter?</h3><div class=\"inv-step-body\"><p>You are about to put a planet on a mildly elliptical orbit and change the exponent from 2 to 2.05 — a change of two and a half percent, at a distance where the strength of gravity is pinned and cannot change at all.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Commit before you run it. The point of predicting is the commitment, not the score.</p><p class=\"inv-prompt\" id=\"invChoicePrompt\">Changing n from 2 to 2.05 will…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>do almost nothing — two and a half percent is a small change</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>change the orbit noticeably within a few trips around</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>throw the planet out of the system immediately</span></button></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "marked",
+  "sid": "predict-does-small-matter",
+  "position": [
+   3,
+   21
+  ],
+  "title": "What If Gravity Were Not Inverse Square?",
+  "subtitle": "Change the exponent, and find out what depended on it",
+  "body": "<p class=\"inv-step-count\">Step 3 of 21 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">Does a small change matter?</h3><div class=\"inv-step-body\"><p>You are about to put a planet on a mildly elliptical orbit and change the exponent from 2 to 2.05 — a change of two and a half percent, at a distance where the strength of gravity is pinned and cannot change at all.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Commit before you run it. The point of predicting is the commitment, not the score.</p><p class=\"inv-prompt\" id=\"invChoicePrompt\">Changing n from 2 to 2.05 will…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>do almost nothing — two and a half percent is a small change</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>change the orbit noticeably within a few trips around</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>throw the planet out of the system immediately</span></button></div><p class=\"inv-held\">Your answer is recorded. It stays unmarked until you reach “Does the ellipse close?”, so the experiment settles it rather than the answer key.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Change answer</button>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "last",
+  "sid": "the-honest-caveat",
+  "position": [
+   21,
+   21
+  ],
+  "title": "What If Gravity Were Not Inverse Square?",
+  "subtitle": "Change the exponent, and find out what depended on it",
+  "body": "<p class=\"inv-step-count\">Step 21 of 21 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">What this was and was not</h3><div class=\"inv-step-body\"><p>A last piece of bookkeeping, because it would be easy to leave with a bigger conclusion than the evidence supports.</p><p>This was a <strong>controlled experiment in a simulation</strong>, not a theory of gravity. The power law with a reference radius is not something anyone proposes as a description of the universe; it is a deliberately simple knob, chosen because turning it isolates one question. Real alternatives to Newtonian gravity do not look like this.</p><p>Orbits in the real Solar System <em>do</em> precess — Mercury's famously, by 43 arcseconds per century more than Newtonian gravity with all the other planets included can account for. That was explained in 1915 by general relativity, which is not a change to the exponent and is not what this model does. The resemblance is worth noticing and the explanation is not the same one.</p><p>What you can take away is the method. When a result changes, ask what it depended on; when it does not, ask why not; and when a simulation tells you something surprising, change the timestep before you believe it.</p></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ }
+]

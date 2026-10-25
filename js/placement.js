@@ -40,7 +40,7 @@ import {
 import { SETTINGS, state, current_scenario_name } from './appState.js';
 import { announce } from './notify.js';
 import { t, onLocaleChange } from './i18n/index.js';
-import { registerShortcut } from './shortcuts.js';
+import { registerShortcut, nudgeScale } from './shortcuts.js';
 import { glyphMarkup } from './inspectorView.js';
 import {
   toolsPointerDown,
@@ -61,6 +61,7 @@ import {
   mountFragment,
   unmountFragment,
 } from './i18n/deferredMessages.js';
+import { EV_OBJECT_PLACED, EV_SIMULATION_RESET } from './names.js';
 
 let canvas = null; // set by initPlacement(ctx)
 
@@ -167,11 +168,11 @@ export function updateOrbitHelper(shiftSnap) {
 // with the same velocity scale as the mouse.
 // =============================================================================
 
-/** How far one arrow press moves the aim, in canvas pixels. */
+/**
+ * How far one arrow press moves the aim, in canvas pixels. Shift for a bigger
+ * stride, Alt for a finer one: the three sizes are js/shortcuts.js's.
+ */
 const AIM_STEP = 24;
-/** Shift for a bigger stride, Alt for a finer one. */
-const AIM_COARSE = 4;
-const AIM_FINE = 0.25;
 
 /** Null when the keyboard is not placing anything. */
 let keyboardAim = null;
@@ -255,11 +256,11 @@ export function commitKeyboardPlacement() {
  *
  * @param {number} dx - Horizontal, in steps
  * @param {number} dy - Vertical, in steps
- * @param {object} [opts] - {coarse, fine}
+ * @param {number} [scale] - Multiplier of one step, from nudgeScale()
  */
-function moveKeyboardAim(dx, dy, { coarse = false, fine = false } = {}) {
+function moveKeyboardAim(dx, dy, scale = 1) {
   if (!keyboardAim) return;
-  const step = AIM_STEP * (coarse ? AIM_COARSE : fine ? AIM_FINE : 1);
+  const step = AIM_STEP * scale;
   // Canvas pixels, like state.mouse, not the CSS box.
   const { width, height } = canvas;
   state.mouse.x = Math.max(0, Math.min(width, state.mouse.x + dx * step));
@@ -309,7 +310,7 @@ export function placeBody(
   // and a direct call back would close an import cycle. The undo stack and the
   // double-tap guard both listen.
   window.dispatchEvent(
-    new CustomEvent('gravitasObjectPlaced', { detail: { object: obj } })
+    new CustomEvent(EV_OBJECT_PLACED, { detail: { object: obj } })
   );
   return obj;
 }
@@ -837,7 +838,7 @@ export function initPlacement(ctx) {
       };
       if (arrows[e.key]) {
         const [dx, dy] = arrows[e.key];
-        moveKeyboardAim(dx, dy, { coarse: e.shiftKey, fine: e.altKey });
+        moveKeyboardAim(dx, dy, nudgeScale(e));
         e.preventDefault();
         e.stopPropagation();
         return;
@@ -1351,7 +1352,7 @@ export async function unmountScenarioPanel(host) {
 
 /** Start watching for scenarios that bring their own instrument. */
 export function initScenarioPanels() {
-  window.addEventListener('gravitasSimulationReset', () => {
+  window.addEventListener(EV_SIMULATION_RESET, () => {
     // Errors here must not stop the other reset listeners: a panel that fails
     // to load is a missing readout, not a broken simulation.
     loadForScenario().catch(err =>

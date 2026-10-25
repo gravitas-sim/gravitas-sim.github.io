@@ -1,0 +1,1508 @@
+{
+ "id": "binary-star-planets",
+ "locale": "es",
+ "title": "Planetas en estrellas binarias",
+ "steps": 37,
+ "depths": [
+  [
+   "core",
+   37
+  ]
+ ],
+ "grading": [
+  {
+   "sid": "before-you-run-anything",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "why-so-quiet",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "move-it-out",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "ejected-means-what",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "work-out-the-boundary",
+   "type": "question",
+   "kind": "numeric",
+   "tolerance": 0.012,
+   "grades": [
+    [
+     "0,177",
+     true,
+     "correct",
+     0.177,
+     null,
+     false,
+     null
+    ],
+    [
+     "0,183",
+     true,
+     "correct",
+     0.183,
+     null,
+     false,
+     null
+    ],
+    [
+     "0,213",
+     false,
+     "incorrect",
+     0.213,
+     null,
+     false,
+     null
+    ],
+    [
+     "0,177",
+     true,
+     "correct",
+     0.177,
+     null,
+     false,
+     null
+    ],
+    [
+     "not a number",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "notANumber"
+    ],
+    [
+     "",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "blank"
+    ]
+   ]
+  },
+  {
+   "sid": "what-the-fit-assumes",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "predict-the-sweep",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "what-the-sweep-shows",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "is-it-resolved",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "which-answer-is-right",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "report-it",
+   "type": "question",
+   "kind": "short",
+   "grades": [
+    [
+     "ungraded",
+     null
+    ]
+   ]
+  },
+  {
+   "sid": "which-way-round",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "how-without-a-pass",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "circumbinary-boundary",
+   "type": "question",
+   "kind": "numeric",
+   "tolerance": 0.12,
+   "grades": [
+    [
+     "3,605",
+     true,
+     "correct",
+     3.605,
+     null,
+     false,
+     null
+    ],
+    [
+     "3,665",
+     true,
+     "correct",
+     3.665,
+     null,
+     false,
+     null
+    ],
+    [
+     "3,965",
+     false,
+     "incorrect",
+     3.965,
+     null,
+     false,
+     null
+    ],
+    [
+     "3,605",
+     true,
+     "correct",
+     3.605,
+     null,
+     false,
+     null
+    ],
+    [
+     "not a number",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "notANumber"
+    ],
+    [
+     "",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "blank"
+    ]
+   ]
+  },
+  {
+   "sid": "who-is-wrong",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "the-strongest-claim",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  }
+ ],
+ "progress": {
+  "record": {
+   "schema": 2,
+   "lesson": "binary-star-planets",
+   "stepSid": "what-you-can-say",
+   "responses": {
+    "binary-star-planets:before-you-run-anything": 2,
+    "binary-star-planets:why-so-quiet": 1,
+    "binary-star-planets:move-it-out": 2,
+    "binary-star-planets:ejected-means-what": 1,
+    "binary-star-planets:work-out-the-boundary": "0,177",
+    "binary-star-planets:work-out-the-boundary:locale": "es",
+    "binary-star-planets:what-the-fit-assumes": 1,
+    "binary-star-planets:predict-the-sweep": 1,
+    "binary-star-planets:what-the-sweep-shows": 1,
+    "binary-star-planets:is-it-resolved": 1,
+    "binary-star-planets:which-answer-is-right": 2,
+    "binary-star-planets:report-it": "A fixed sentence for the golden.",
+    "binary-star-planets:which-way-round": 1,
+    "binary-star-planets:how-without-a-pass": 1,
+    "binary-star-planets:circumbinary-boundary": "3,605",
+    "binary-star-planets:circumbinary-boundary:locale": "es",
+    "binary-star-planets:who-is-wrong": 2,
+    "binary-star-planets:the-strongest-claim": 1
+   },
+   "attempts": {
+    "binary-star-planets:before-you-run-anything": 1,
+    "binary-star-planets:why-so-quiet": 1,
+    "binary-star-planets:move-it-out": 1,
+    "binary-star-planets:ejected-means-what": 1,
+    "binary-star-planets:work-out-the-boundary": 1,
+    "binary-star-planets:what-the-fit-assumes": 1,
+    "binary-star-planets:predict-the-sweep": 1,
+    "binary-star-planets:what-the-sweep-shows": 1,
+    "binary-star-planets:is-it-resolved": 1,
+    "binary-star-planets:which-answer-is-right": 1,
+    "binary-star-planets:which-way-round": 1,
+    "binary-star-planets:how-without-a-pass": 1,
+    "binary-star-planets:circumbinary-boundary": 1,
+    "binary-star-planets:who-is-wrong": 1,
+    "binary-star-planets:the-strongest-claim": 1
+   },
+   "visited": [
+    "two-suns",
+    "nothing-here-is-random",
+    "before-you-run-anything",
+    "what-survived-will-mean",
+    "run-the-default",
+    "what-the-quiet-run-did",
+    "why-so-quiet",
+    "move-it-out",
+    "run-it-at-030",
+    "when-did-it-leave",
+    "ejected-means-what",
+    "work-out-the-boundary",
+    "what-the-fit-assumes",
+    "predict-the-sweep",
+    "run-the-sweep",
+    "read-the-sweep",
+    "what-the-sweep-shows",
+    "resolve-the-edge",
+    "is-it-resolved",
+    "a-harder-question",
+    "energy-drift-as-a-screen",
+    "the-case-that-matters",
+    "the-drift-was-tiny",
+    "which-answer-is-right",
+    "convergence-is-the-test",
+    "report-it",
+    "around-both",
+    "which-way-round",
+    "run-the-circumbinary",
+    "no-encounter-at-all",
+    "how-without-a-pass",
+    "circumbinary-boundary",
+    "sweep-the-circumbinary",
+    "where-the-fit-disagrees",
+    "who-is-wrong",
+    "the-strongest-claim",
+    "what-you-can-say"
+   ],
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "depth": "core",
+   "spent": 600
+  },
+  "read": {
+   "responses": {
+    "binary-star-planets:before-you-run-anything": 2,
+    "binary-star-planets:why-so-quiet": 1,
+    "binary-star-planets:move-it-out": 2,
+    "binary-star-planets:ejected-means-what": 1,
+    "binary-star-planets:work-out-the-boundary": "0,177",
+    "binary-star-planets:work-out-the-boundary:locale": "es",
+    "binary-star-planets:what-the-fit-assumes": 1,
+    "binary-star-planets:predict-the-sweep": 1,
+    "binary-star-planets:what-the-sweep-shows": 1,
+    "binary-star-planets:is-it-resolved": 1,
+    "binary-star-planets:which-answer-is-right": 2,
+    "binary-star-planets:report-it": "A fixed sentence for the golden.",
+    "binary-star-planets:which-way-round": 1,
+    "binary-star-planets:how-without-a-pass": 1,
+    "binary-star-planets:circumbinary-boundary": "3,605",
+    "binary-star-planets:circumbinary-boundary:locale": "es",
+    "binary-star-planets:who-is-wrong": 2,
+    "binary-star-planets:the-strongest-claim": 1
+   },
+   "attempts": {
+    "binary-star-planets:before-you-run-anything": 1,
+    "binary-star-planets:why-so-quiet": 1,
+    "binary-star-planets:move-it-out": 1,
+    "binary-star-planets:ejected-means-what": 1,
+    "binary-star-planets:work-out-the-boundary": 1,
+    "binary-star-planets:what-the-fit-assumes": 1,
+    "binary-star-planets:predict-the-sweep": 1,
+    "binary-star-planets:what-the-sweep-shows": 1,
+    "binary-star-planets:is-it-resolved": 1,
+    "binary-star-planets:which-answer-is-right": 1,
+    "binary-star-planets:which-way-round": 1,
+    "binary-star-planets:how-without-a-pass": 1,
+    "binary-star-planets:circumbinary-boundary": 1,
+    "binary-star-planets:who-is-wrong": 1,
+    "binary-star-planets:the-strongest-claim": 1
+   },
+   "visited": [
+    "a-harder-question",
+    "around-both",
+    "before-you-run-anything",
+    "circumbinary-boundary",
+    "convergence-is-the-test",
+    "ejected-means-what",
+    "energy-drift-as-a-screen",
+    "how-without-a-pass",
+    "is-it-resolved",
+    "move-it-out",
+    "no-encounter-at-all",
+    "nothing-here-is-random",
+    "predict-the-sweep",
+    "read-the-sweep",
+    "report-it",
+    "resolve-the-edge",
+    "run-it-at-030",
+    "run-the-circumbinary",
+    "run-the-default",
+    "run-the-sweep",
+    "sweep-the-circumbinary",
+    "the-case-that-matters",
+    "the-drift-was-tiny",
+    "the-strongest-claim",
+    "two-suns",
+    "what-survived-will-mean",
+    "what-the-fit-assumes",
+    "what-the-quiet-run-did",
+    "what-the-sweep-shows",
+    "what-you-can-say",
+    "when-did-it-leave",
+    "where-the-fit-disagrees",
+    "which-answer-is-right",
+    "which-way-round",
+    "who-is-wrong",
+    "why-so-quiet",
+    "work-out-the-boundary"
+   ],
+   "stepSid": "what-you-can-say",
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "depth": "core",
+   "deepest": null,
+   "spent": 600,
+   "schema": 2,
+   "migrated": false,
+   "notes": []
+  }
+ },
+ "backup": {
+  "backup": {
+   "kind": "gravitas.investigation.progress",
+   "version": 2,
+   "savedAt": "2026-01-02T04:05:06.000Z",
+   "lesson": {
+    "id": "binary-star-planets",
+    "title": "Planetas en estrellas binarias",
+    "stepCount": 37
+   },
+   "student": null,
+   "progress": {
+    "stepSid": "what-you-can-say",
+    "startedAt": "2026-01-02T03:04:05.000Z",
+    "visited": [
+     "two-suns",
+     "nothing-here-is-random",
+     "before-you-run-anything",
+     "what-survived-will-mean",
+     "run-the-default",
+     "what-the-quiet-run-did",
+     "why-so-quiet",
+     "move-it-out",
+     "run-it-at-030",
+     "when-did-it-leave",
+     "ejected-means-what",
+     "work-out-the-boundary",
+     "what-the-fit-assumes",
+     "predict-the-sweep",
+     "run-the-sweep",
+     "read-the-sweep",
+     "what-the-sweep-shows",
+     "resolve-the-edge",
+     "is-it-resolved",
+     "a-harder-question",
+     "energy-drift-as-a-screen",
+     "the-case-that-matters",
+     "the-drift-was-tiny",
+     "which-answer-is-right",
+     "convergence-is-the-test",
+     "report-it",
+     "around-both",
+     "which-way-round",
+     "run-the-circumbinary",
+     "no-encounter-at-all",
+     "how-without-a-pass",
+     "circumbinary-boundary",
+     "sweep-the-circumbinary",
+     "where-the-fit-disagrees",
+     "who-is-wrong",
+     "the-strongest-claim",
+     "what-you-can-say"
+    ],
+    "responses": {
+     "binary-star-planets:before-you-run-anything": 2,
+     "binary-star-planets:why-so-quiet": 1,
+     "binary-star-planets:move-it-out": 2,
+     "binary-star-planets:ejected-means-what": 1,
+     "binary-star-planets:work-out-the-boundary": "0,177",
+     "binary-star-planets:work-out-the-boundary:locale": "es",
+     "binary-star-planets:what-the-fit-assumes": 1,
+     "binary-star-planets:predict-the-sweep": 1,
+     "binary-star-planets:what-the-sweep-shows": 1,
+     "binary-star-planets:is-it-resolved": 1,
+     "binary-star-planets:which-answer-is-right": 2,
+     "binary-star-planets:report-it": "A fixed sentence for the golden.",
+     "binary-star-planets:which-way-round": 1,
+     "binary-star-planets:how-without-a-pass": 1,
+     "binary-star-planets:circumbinary-boundary": "3,605",
+     "binary-star-planets:circumbinary-boundary:locale": "es",
+     "binary-star-planets:who-is-wrong": 2,
+     "binary-star-planets:the-strongest-claim": 1
+    },
+    "attempts": {
+     "binary-star-planets:before-you-run-anything": 1,
+     "binary-star-planets:why-so-quiet": 1,
+     "binary-star-planets:move-it-out": 1,
+     "binary-star-planets:ejected-means-what": 1,
+     "binary-star-planets:work-out-the-boundary": 1,
+     "binary-star-planets:what-the-fit-assumes": 1,
+     "binary-star-planets:predict-the-sweep": 1,
+     "binary-star-planets:what-the-sweep-shows": 1,
+     "binary-star-planets:is-it-resolved": 1,
+     "binary-star-planets:which-answer-is-right": 1,
+     "binary-star-planets:which-way-round": 1,
+     "binary-star-planets:how-without-a-pass": 1,
+     "binary-star-planets:circumbinary-boundary": 1,
+     "binary-star-planets:who-is-wrong": 1,
+     "binary-star-planets:the-strongest-claim": 1
+    }
+   },
+   "steps": [
+    {
+     "index": 0,
+     "sid": "two-suns",
+     "fingerprint": "read|-|-|Binary Planet Lab|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 1,
+     "sid": "nothing-here-is-random",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 2,
+     "sid": "before-you-run-anything",
+     "fingerprint": "predict|-|-|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 3,
+     "sid": "what-survived-will-mean",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 4,
+     "sid": "run-the-default",
+     "fingerprint": "explore|-|-|Binary Planet Lab|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 5,
+     "sid": "what-the-quiet-run-did",
+     "fingerprint": "measure|-|-|-|periods+farthest+encounters+drift|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 6,
+     "sid": "why-so-quiet",
+     "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 7,
+     "sid": "move-it-out",
+     "fingerprint": "predict|-|-|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 8,
+     "sid": "run-it-at-030",
+     "fingerprint": "explore|-|-|Binary Planet Lab|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 9,
+     "sid": "when-did-it-leave",
+     "fingerprint": "measure|-|-|-|ejectAt+ejectEnc|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 10,
+     "sid": "ejected-means-what",
+     "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 11,
+     "sid": "work-out-the-boundary",
+     "fingerprint": "question|numeric|-|-|-|-|a=0.177;t=0.012",
+     "optionCount": null
+    },
+    {
+     "index": 12,
+     "sid": "what-the-fit-assumes",
+     "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 13,
+     "sid": "predict-the-sweep",
+     "fingerprint": "predict|-|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 14,
+     "sid": "run-the-sweep",
+     "fingerprint": "explore|-|-|Binary Planet Lab|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 15,
+     "sid": "read-the-sweep",
+     "fingerprint": "measure|-|-|-|sweep_survived+sweep_last_survivor+sweep_first_loss|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 16,
+     "sid": "what-the-sweep-shows",
+     "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 17,
+     "sid": "resolve-the-edge",
+     "fingerprint": "explore|-|-|Binary Planet Lab|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 18,
+     "sid": "is-it-resolved",
+     "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 19,
+     "sid": "a-harder-question",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 20,
+     "sid": "energy-drift-as-a-screen",
+     "fingerprint": "explore|-|-|Binary Planet Lab|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 21,
+     "sid": "the-case-that-matters",
+     "fingerprint": "explore|-|-|Binary Planet Lab|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 22,
+     "sid": "the-drift-was-tiny",
+     "fingerprint": "measure|-|-|-|coarseDrift+fineDrift+agree|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 23,
+     "sid": "which-answer-is-right",
+     "fingerprint": "question|choice|-|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 24,
+     "sid": "convergence-is-the-test",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 25,
+     "sid": "report-it",
+     "fingerprint": "question|short|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 26,
+     "sid": "around-both",
+     "fingerprint": "read|-|-|Circumbinary Planet Lab|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 27,
+     "sid": "which-way-round",
+     "fingerprint": "predict|-|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 28,
+     "sid": "run-the-circumbinary",
+     "fingerprint": "explore|-|-|Circumbinary Planet Lab|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 29,
+     "sid": "no-encounter-at-all",
+     "fingerprint": "measure|-|-|-|pEjectAt+pEnc+pDrift|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 30,
+     "sid": "how-without-a-pass",
+     "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 31,
+     "sid": "circumbinary-boundary",
+     "fingerprint": "question|numeric|-|-|-|-|a=3.605;t=0.12",
+     "optionCount": null
+    },
+    {
+     "index": 32,
+     "sid": "sweep-the-circumbinary",
+     "fingerprint": "explore|-|-|Circumbinary Planet Lab|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 33,
+     "sid": "where-the-fit-disagrees",
+     "fingerprint": "explore|-|-|Circumbinary Planet Lab|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 34,
+     "sid": "who-is-wrong",
+     "fingerprint": "question|choice|-|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 35,
+     "sid": "the-strongest-claim",
+     "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 36,
+     "sid": "what-you-can-say",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    }
+   ]
+  },
+  "verdict": {
+   "ok": true
+  },
+  "restored": {
+   "responses": {
+    "binary-star-planets:before-you-run-anything": 2,
+    "binary-star-planets:why-so-quiet": 1,
+    "binary-star-planets:move-it-out": 2,
+    "binary-star-planets:ejected-means-what": 1,
+    "binary-star-planets:work-out-the-boundary": "0,177",
+    "binary-star-planets:work-out-the-boundary:locale": "es",
+    "binary-star-planets:what-the-fit-assumes": 1,
+    "binary-star-planets:predict-the-sweep": 1,
+    "binary-star-planets:what-the-sweep-shows": 1,
+    "binary-star-planets:is-it-resolved": 1,
+    "binary-star-planets:which-answer-is-right": 2,
+    "binary-star-planets:report-it": "A fixed sentence for the golden.",
+    "binary-star-planets:which-way-round": 1,
+    "binary-star-planets:how-without-a-pass": 1,
+    "binary-star-planets:circumbinary-boundary": "3,605",
+    "binary-star-planets:circumbinary-boundary:locale": "es",
+    "binary-star-planets:who-is-wrong": 2,
+    "binary-star-planets:the-strongest-claim": 1
+   },
+   "attempts": {
+    "binary-star-planets:before-you-run-anything": 1,
+    "binary-star-planets:why-so-quiet": 1,
+    "binary-star-planets:move-it-out": 1,
+    "binary-star-planets:ejected-means-what": 1,
+    "binary-star-planets:work-out-the-boundary": 1,
+    "binary-star-planets:what-the-fit-assumes": 1,
+    "binary-star-planets:predict-the-sweep": 1,
+    "binary-star-planets:what-the-sweep-shows": 1,
+    "binary-star-planets:is-it-resolved": 1,
+    "binary-star-planets:which-answer-is-right": 1,
+    "binary-star-planets:which-way-round": 1,
+    "binary-star-planets:how-without-a-pass": 1,
+    "binary-star-planets:circumbinary-boundary": 1,
+    "binary-star-planets:who-is-wrong": 1,
+    "binary-star-planets:the-strongest-claim": 1
+   },
+   "visited": [
+    "a-harder-question",
+    "around-both",
+    "before-you-run-anything",
+    "circumbinary-boundary",
+    "convergence-is-the-test",
+    "ejected-means-what",
+    "energy-drift-as-a-screen",
+    "how-without-a-pass",
+    "is-it-resolved",
+    "move-it-out",
+    "no-encounter-at-all",
+    "nothing-here-is-random",
+    "predict-the-sweep",
+    "read-the-sweep",
+    "report-it",
+    "resolve-the-edge",
+    "run-it-at-030",
+    "run-the-circumbinary",
+    "run-the-default",
+    "run-the-sweep",
+    "sweep-the-circumbinary",
+    "the-case-that-matters",
+    "the-drift-was-tiny",
+    "the-strongest-claim",
+    "two-suns",
+    "what-survived-will-mean",
+    "what-the-fit-assumes",
+    "what-the-quiet-run-did",
+    "what-the-sweep-shows",
+    "what-you-can-say",
+    "when-did-it-leave",
+    "where-the-fit-disagrees",
+    "which-answer-is-right",
+    "which-way-round",
+    "who-is-wrong",
+    "why-so-quiet",
+    "work-out-the-boundary"
+   ],
+   "stepIndex": 36,
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "moved": [],
+   "dropped": [],
+   "quarantined": {},
+   "uncertain": 0,
+   "discardedKeys": 0,
+   "byPosition": false
+  }
+ },
+ "ledger": {
+  "entry": "golden-binary-star-planets",
+  "record": {
+   "ids": [
+    "golden-binary-star-planets"
+   ],
+   "rows": [
+    [
+     "golden-binary-star-planets",
+     "q1",
+     3.5247,
+     "d",
+     0.0012,
+     "measured",
+     "simulation",
+     "rv-fit",
+     null,
+     [
+      "s",
+      "d"
+     ]
+    ]
+   ],
+   "total": 1
+  },
+  "digest": "ea045d8e02eb71cb8f0499943c5f872d590e1bc8121f9e1276f04133de8157b2"
+ },
+ "tokens": {
+  "plain": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "a": null,
+    "r": null,
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "before-you-run-anything",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "why-so-quiet",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "move-it-out",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "ejected-means-what",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "work-out-the-boundary",
+     "value": "0,177",
+     "locale": "es"
+    },
+    {
+     "sid": "what-the-fit-assumes",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "predict-the-sweep",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "what-the-sweep-shows",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "is-it-resolved",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "which-answer-is-right",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "report-it",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    },
+    {
+     "sid": "which-way-round",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "how-without-a-pass",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "circumbinary-boundary",
+     "value": "3,605",
+     "locale": "es"
+    },
+    {
+     "sid": "who-is-wrong",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "the-strongest-claim",
+     "value": 1,
+     "locale": "es"
+    }
+   ]
+  },
+  "assignment": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "a": "golden-assignment",
+    "r": "roster-1",
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "before-you-run-anything",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "why-so-quiet",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "move-it-out",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "ejected-means-what",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "work-out-the-boundary",
+     "value": "0,177",
+     "locale": "es"
+    },
+    {
+     "sid": "what-the-fit-assumes",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "predict-the-sweep",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "what-the-sweep-shows",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "is-it-resolved",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "which-answer-is-right",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "report-it",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    },
+    {
+     "sid": "which-way-round",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "how-without-a-pass",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "circumbinary-boundary",
+     "value": "3,605",
+     "locale": "es"
+    },
+    {
+     "sid": "who-is-wrong",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "the-strongest-claim",
+     "value": 1,
+     "locale": "es"
+    }
+   ]
+  },
+  "evidence": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "ev": {
+     "d": "ea045d8e02eb71cb8f0499943c5f872d590e1bc8121f9e1276f04133de8157b2",
+     "i": [
+      "golden-binary-star-planets"
+     ],
+     "n": 1,
+     "r": [
+      [
+       "golden-binary-star-planets",
+       "q1",
+       3.5247,
+       "d",
+       0.0012,
+       "measured",
+       "simulation",
+       "rv-fit",
+       null,
+       [
+        "s",
+        "d"
+       ]
+      ]
+     ]
+    },
+    "a": null,
+    "r": null,
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "before-you-run-anything",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "why-so-quiet",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "move-it-out",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "ejected-means-what",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "work-out-the-boundary",
+     "value": "0,177",
+     "locale": "es"
+    },
+    {
+     "sid": "what-the-fit-assumes",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "predict-the-sweep",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "what-the-sweep-shows",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "is-it-resolved",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "which-answer-is-right",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "report-it",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    },
+    {
+     "sid": "which-way-round",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "how-without-a-pass",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "circumbinary-boundary",
+     "value": "3,605",
+     "locale": "es"
+    },
+    {
+     "sid": "who-is-wrong",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "the-strongest-claim",
+     "value": 1,
+     "locale": "es"
+    }
+   ]
+  },
+  "depth": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "dp": "core",
+    "a": null,
+    "r": null,
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "before-you-run-anything",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "why-so-quiet",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "move-it-out",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "ejected-means-what",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "work-out-the-boundary",
+     "value": "0,177",
+     "locale": "es"
+    },
+    {
+     "sid": "what-the-fit-assumes",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "predict-the-sweep",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "what-the-sweep-shows",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "is-it-resolved",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "which-answer-is-right",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "report-it",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    },
+    {
+     "sid": "which-way-round",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "how-without-a-pass",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "circumbinary-boundary",
+     "value": "3,605",
+     "locale": "es"
+    },
+    {
+     "sid": "who-is-wrong",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "the-strongest-claim",
+     "value": 1,
+     "locale": "es"
+    }
+   ]
+  }
+ }
+}

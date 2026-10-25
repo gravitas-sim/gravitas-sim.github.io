@@ -1,0 +1,76 @@
+{
+ "id": "the-rotating-disk",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.measure-a-and-b.fields.0.unit","km/s/kpc"],
+    ["steps.measure-a-and-b.fields.1.unit","km/s/kpc"],
+    ["steps.speed-at-the-sun.fields.0.unit","km/s"],
+    ["steps.v0-by-hand.unit","km/s"],
+    ["steps.enclosed-mass.unit",""],
+    ["steps.fit-stars-only.fields.0.unit",""],
+    ["steps.fit-stars-only.fields.1.unit",""],
+    ["steps.fit-with-a-halo.fields.0.unit",""],
+    ["steps.fit-with-a-halo.fields.1.unit","km/s"],
+    ["steps.halo-share.unit","%"]
+   ],
+   "numbered": [
+    ["steps.measure-a-and-b.fields.0.hint","13"],
+    ["steps.measure-a-and-b.fields.1.hint","-14"],
+    ["steps.speed-at-the-sun.fields.0.hint","226"],
+    ["steps.fit-stars-only.fields.0.hint","50"],
+    ["steps.fit-stars-only.fields.1.label","Disk mass, in 10¹⁰ solar masses"],
+    ["steps.fit-stars-only.fields.1.hint","8"],
+    ["steps.fit-with-a-halo.fields.0.hint","4.8"],
+    ["steps.fit-with-a-halo.fields.1.hint","250"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.fit-stars-only.fields.1.label","Masa del disco, en 10¹⁰ masas solares"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "v0-by-hand",
+    "answer": "226",
+    "tolerance": "5",
+    "unit": "km/s"
+   },
+   {
+    "sid": "enclosed-mass",
+    "answer": "11.5",
+    "tolerance": "0.5",
+    "unit": ""
+   },
+   {
+    "sid": "halo-share",
+    "answer": "43.5",
+    "tolerance": "2",
+    "unit": "%"
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "measure-a-and-b": {
+    "validate": {"calls":232,"distinct":2,"digest":"e5763ae19bf6bd97","samples":[null,{"level":"error","message":"Set the picture to the Oort constants and the fit to weight stars by distance, then read the rows “Oort A” and “Oort B”. B is negative."}]}
+   },
+   "speed-at-the-sun": {
+    "validate": {"calls":97,"distinct":2,"digest":"fd5682f8928cb3cf","samples":[null,{"level":"error","message":"Switch the fit back to weight by distance, then read the row “Circular speed at the Sun”. It is (A − B) × 8.3 kpc."}]}
+   },
+   "fit-stars-only": {
+    "validate": {"calls":232,"distinct":2,"digest":"5346637ff7031623","samples":[null,{"level":"error","message":"Choose “best fit, stars only (no halo)”, then read “Reduced χ²” and “Disk mass” (in units of 10¹⁰)."}]}
+   },
+   "fit-with-a-halo": {
+    "validate": {"calls":232,"distinct":2,"digest":"b8e19a650105e1ff","samples":[null,{"level":"error","message":"Choose “best fit, with a halo”, then read “Reduced χ²” and “Halo speed, far out”."}]}
+   }
+  },
+  "es": "same"
+ }
+}

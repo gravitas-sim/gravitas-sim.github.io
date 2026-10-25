@@ -101,7 +101,7 @@ const node = {
       error: 0.16,
       errorKind: 'assumed',
     },
-    { id: 'rest', value: 6564.61, unit: 'Angstrom', kind: 'assumed' },
+    { id: 'rest', value: 6564.6, unit: 'Angstrom', kind: 'assumed' },
     {
       id: 'velocity',
       value: -241,
@@ -216,6 +216,196 @@ const every = () => [
       ],
     }),
   }),
+  // The marks on an image (js/measure/imageRecord.js, Prompt 179): replay and
+  // the instrument are covered in tests/imageMeasure.test.js; here only that
+  // it is an envelope the ledger can hold.
+  artifactEntry({
+    source: SOURCE.IMAGE_MARKS,
+    title: 'Marks',
+    capturedAt: at,
+    context: { page: 'observatory' },
+    envelope: artifact({
+      id: 'image-marks-1',
+      source: { kind: 'observation', id: 'frame', digest },
+      quantities: [
+        {
+          id: 'm1.x',
+          value: 30.2,
+          unit: 'pix',
+          uncertainty: { kind: 'sigma', sigma: 0.07, basis: 'data' },
+          origin: 'measured',
+        },
+      ],
+    }),
+  }),
+  // Photometry on an image (js/measure/photometry.js, Prompt 180): its replay
+  // and the tool are covered in tests/photometry.test.js; here only that it is
+  // an envelope the ledger can hold, with a limit and a failed quantity in it.
+  artifactEntry({
+    source: SOURCE.IMAGE_PHOTOMETRY,
+    title: 'Photometry',
+    capturedAt: at,
+    context: { page: 'observatory' },
+    envelope: artifact({
+      id: 'image-photometry-1',
+      source: { kind: 'observation', id: 'frame', digest },
+      quantities: [
+        {
+          id: 'm1.net',
+          value: 15012,
+          unit: 'count',
+          uncertainty: { kind: 'sigma', sigma: 158, basis: 'derived' },
+          origin: 'measured',
+        },
+        {
+          id: 'm2.net',
+          value: 420,
+          unit: 'count',
+          uncertainty: {
+            kind: 'limit',
+            bound: 'upper',
+            basis: 'derived',
+            level: 0.99865,
+          },
+          origin: 'measured',
+        },
+        {
+          id: 'm3.net',
+          value: null,
+          unit: 'count',
+          uncertainty: { kind: 'failed', reason: 'saturated' },
+          origin: 'measured',
+        },
+      ],
+    }),
+  }),
+  // The calibration of an image (js/measure/calibrationRecord.js, Prompt 181):
+  // the fit and its replay are covered in tests/astrometry.test.js; here only
+  // that it is an envelope the ledger can hold.
+  artifactEntry({
+    source: SOURCE.IMAGE_CALIBRATION,
+    title: 'Sky coordinates',
+    capturedAt: at,
+    context: { page: 'observatory' },
+    envelope: artifact({
+      id: 'image-calibration-1',
+      source: { kind: 'observation', id: 'frame', digest },
+      quantities: [
+        {
+          id: 'scale',
+          value: 60.1,
+          unit: 'arcsec',
+          uncertainty: { kind: 'sigma', sigma: 0.2, basis: 'data' },
+          origin: 'fitted',
+        },
+      ],
+    }),
+  }),
+  // The PSF of an image (js/measure/detect.js, Prompt 183): its replay and the
+  // tool are covered in tests/detection.test.js; here only that it is an
+  // envelope the ledger can hold, with a fit-result record in it.
+  artifactEntry({
+    source: SOURCE.IMAGE_DETECTION,
+    title: 'PSF',
+    capturedAt: at,
+    context: { page: 'observatory' },
+    envelope: artifact({
+      id: 'image-psf-1',
+      source: { kind: 'observation', id: 'frame', digest },
+      quantities: [
+        {
+          id: 'psf.fwhm',
+          value: 3.02,
+          unit: 'pix',
+          uncertainty: { kind: 'sigma', sigma: 0.03, basis: 'data' },
+          origin: 'fitted',
+        },
+      ],
+      fit: {
+        model: { id: 'psf-gaussian-mean', version: '1' },
+        parameters: ['psf.fwhm'],
+        covariance: {
+          order: ['psf.fwhm'],
+          values: [[0.0009]],
+          units: ['pix'],
+        },
+        statistic: { name: 'chi2', value: 10.4, dof: 11 },
+        residuals: { n: 12, rms: 0.04 },
+        convergence: { converged: true },
+        rank: { free: 1, rank: 1, status: 'full', notConstrained: [] },
+      },
+    }),
+  }),
+  // The completeness of an image (js/measure/inject.js, Prompt 184): its replay
+  // and the tool are covered in tests/injection.test.js; here only that it is an
+  // envelope the ledger can hold, with interval uncertainties in it.
+  artifactEntry({
+    source: SOURCE.IMAGE_INJECTION,
+    title: 'Completeness',
+    capturedAt: at,
+    context: { page: 'observatory' },
+    envelope: artifact({
+      id: 'image-injection-1',
+      source: { kind: 'observation', id: 'frame', digest },
+      quantities: [
+        {
+          id: 'completeness.m50',
+          value: -2.45,
+          unit: 'mag',
+          uncertainty: {
+            kind: 'interval',
+            lo: -2.52,
+            hi: -2.38,
+            level: 0.6827,
+            basis: 'data',
+          },
+          origin: 'derived',
+        },
+        {
+          id: 'completeness.bin.0',
+          value: 0.9,
+          unit: '',
+          uncertainty: {
+            kind: 'interval',
+            lo: 0.8,
+            hi: 0.96,
+            level: 0.6827,
+            basis: 'data',
+          },
+          origin: 'derived',
+        },
+      ],
+    }),
+  }),
+  // A light curve from frames (js/measure/frameSeries.js, Prompt 185): its replay
+  // and the tool are covered in tests/framePipeline.test.js; here only that it is
+  // an envelope the ledger can hold, with sigma uncertainties in it.
+  artifactEntry({
+    source: SOURCE.IMAGE_SEQUENCE,
+    title: 'Light curve from frames',
+    capturedAt: at,
+    context: { page: 'observatory' },
+    envelope: artifact({
+      id: 'image-sequence-1',
+      source: { kind: 'observation', id: 'sequence', digest },
+      quantities: [
+        {
+          id: 'lc.period',
+          value: 0.1199,
+          unit: 'd',
+          uncertainty: { kind: 'sigma', sigma: 0.0004, basis: 'derived' },
+          origin: 'measured',
+        },
+        {
+          id: 'lc.amplitude',
+          value: 0.051,
+          unit: 'mag',
+          uncertainty: { kind: 'sigma', sigma: 0.0012, basis: 'derived' },
+          origin: 'measured',
+        },
+      ],
+    }),
+  }),
   // A sweep's analysis and an experiment's result, which js/experiments/
   // analysisPanel.js keeps as envelopes (P75 R-5: the list used to omit them).
   ...[
@@ -286,6 +476,28 @@ const every = () => [
           unit: 'deg',
           uncertainty: { kind: 'none' },
           origin: 'derived',
+        },
+      ],
+    }),
+  }),
+  // An astrometric time series (js/measure/astrometric-series.js, Prompt 186):
+  // its fit and replay are covered in tests/astrometricSeries.test.js; here
+  // only that it is an envelope the ledger can hold.
+  artifactEntry({
+    source: SOURCE.IMAGE_SERIES,
+    title: 'Motion and parallax',
+    capturedAt: at,
+    context: { page: 'observatory' },
+    envelope: artifact({
+      id: 'image-series-1',
+      source: { kind: 'observation', id: 'series', digest },
+      quantities: [
+        {
+          id: 'parallax',
+          value: 12.4,
+          unit: 'mas',
+          uncertainty: { kind: 'sigma', sigma: 0.3, basis: 'data' },
+          origin: 'measured',
         },
       ],
     }),
@@ -495,8 +707,20 @@ describe('the submission token carries the ledger', () => {
       startedAt: '2026-09-01T10:00:00.000Z',
       studentName: 'A Student',
     });
-  const withLedger = async () => {
-    const record = ledgerRecord(every());
+  // Every source's entry together holds more rows than a token carries
+  // (TOKEN_ROWS), so these leave out the calibration's, the PSF's, the completeness's, the light curve's and
+  // the astrometric series' one row each; the cut to the limit is tested on its own below.
+  const withLedger = async (
+    entries = every().filter(
+      e =>
+        e.source !== SOURCE.IMAGE_CALIBRATION &&
+        e.source !== SOURCE.IMAGE_DETECTION &&
+        e.source !== SOURCE.IMAGE_INJECTION &&
+        e.source !== SOURCE.IMAGE_SEQUENCE &&
+        e.source !== SOURCE.IMAGE_SERIES
+    )
+  ) => {
+    const record = ledgerRecord(entries);
     const digest = await ledgerDigest(record);
     return {
       record,

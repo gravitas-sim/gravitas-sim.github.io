@@ -1,3 +1,4 @@
+import { ID_OBSERVATION } from '../names.js';
 // =============================================================================
 // Gaia DR3 epoch photometry, from VizieR, as a gravitas.observation/1
 // -----------------------------------------------------------------------------
@@ -124,7 +125,7 @@ export function toObservation(answer, { source, band = 'G', object = null }) {
   const date = answer.retrieved.slice(0, 10);
 
   return {
-    format: 'gravitas.observation',
+    format: ID_OBSERVATION,
     formatVersion: 1,
     kind: 'time-series',
     id: `import:gaia-dr3-${source}-${band}@${answer.contentSha256.slice(0, 12)}`,

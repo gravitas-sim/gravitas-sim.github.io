@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self' 'sha256-WGSiPeg0IKdUHjXOqO3l/MP3FGi7B2daRSzMyDfaQCs='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' blob:; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
+      content="default-src 'self'; script-src 'self' 'sha256-awYtDweaaCcmXqy0FIz/SrY8GCiiaI1Gxuo160Iel58=' 'sha256-WGSiPeg0IKdUHjXOqO3l/MP3FGi7B2daRSzMyDfaQCs='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' blob:; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
     />
     <meta
       name="viewport"
@@ -85,6 +85,18 @@
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="favicon.png" />
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <!-- Startup lifecycle (ACCESSIBILITY.md, "Startup"): decided before first paint -->
+    <script>
+      (function(d,r,m){try{var n=performance.getEntriesByType('navigation')[0],s=sessionStorage;
+      if(!/embed=/.test(location.search)&&((n&&n.type!='navigate')||(d.referrer&&new URL(d.referrer).origin==location.origin)||s.getItem('gravitas_visit')))m='skip';
+      s.setItem('gravitas_visit',1)}catch(e){}
+      r.dataset.startup=m;
+      if(m=='skip'||matchMedia('(prefers-reduced-motion:reduce)').matches)
+      addEventListener('DOMContentLoaded',function(){setTimeout(function(){var p=d.getElementById('splash');
+      p&&p.dispatchEvent(new AnimationEvent('animationend',{animationName:'splashFadeOut'}))})});
+      if(m=='splash')setTimeout(function(){window.splashScreenEnded||(r.dataset.startup='failsafe')},6e3)
+      })(document,document.documentElement,'splash');
+    </script>
     <!-- shell:head -->
 <link rel="stylesheet" href="/css/shell.css" />
 <script>
@@ -129,7 +141,7 @@ try {
 <header class="gs-shell gs-app">
 <a class="gs-brand" href="/#home"><span class="gs-vh"><span class="gs-en">Gravitas home</span><span class="gs-es" lang="es">Inicio de Gravitas</span></span><span aria-hidden="true">GRAVITAS</span></a>
 <button type="button" class="gs-toggle" aria-expanded="false" aria-controls="gs-nav" hidden><span class="gs-en">Menu</span><span class="gs-es" lang="es">Menú</span></button>
-<nav id="gs-nav" class="gs-nav" aria-label="Gravitas"><ul><li><details class="gs-group"><summary><span class="gs-en">Learn</span><span class="gs-es" lang="es">Aprender</span></summary><ul><li><a href="/library/"><span class="gs-en">Library</span><span class="gs-es" lang="es">Biblioteca</span></a></li><li><a href="/my-work/"><span class="gs-en">My work</span><span class="gs-es" lang="es">Mi trabajo</span></a></li><li><a href="/#investigations"><span class="gs-en">Investigations</span><span class="gs-es" lang="es">Investigaciones</span></a></li><li><a href="/course/"><span class="gs-en">Courses</span><span class="gs-es" lang="es">Cursos</span></a></li><li><a href="/observatory/"><span class="gs-en">Observatory</span><span class="gs-es" lang="es">Observatorio</span></a></li><li><a href="/experiments/"><span class="gs-en">Experiments</span><span class="gs-es" lang="es">Experimentos</span></a></li></ul></details></li><li><details class="gs-group" data-here><summary><span class="gs-en">Labs</span><span class="gs-es" lang="es">Laboratorios</span></summary><ul><li><a href="/" aria-current="page"><span class="gs-en">Sandbox</span><span class="gs-es" lang="es">Simulación libre</span></a></li><li><a href="/3d/"><span class="gs-en">3-D lab</span><span class="gs-es" lang="es">Laboratorio 3-D</span></a></li><li><a href="/mission/lab/"><span class="gs-en">Mission lab</span><span class="gs-es" lang="es">Laboratorio de misiones</span></a></li><li><a href="/sky/"><span class="gs-en">Sky Lab</span><span class="gs-es" lang="es">Laboratorio del cielo</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Make</span><span class="gs-es" lang="es">Crear</span></summary><ul><li><a href="/studio/"><span class="gs-en">Scenario Studio</span><span class="gs-es" lang="es">Estudio de escenarios</span></a></li><li><a href="/studio/lesson/"><span class="gs-en">Investigation Composer</span><span class="gs-es" lang="es">Compositor de investigaciones</span></a></li><li><a href="/studio/course/"><span class="gs-en">Course builder</span><span class="gs-es" lang="es">Creador de cursos</span></a></li><li><a href="/figure/"><span class="gs-en">Figure builder</span><span class="gs-es" lang="es">Creador de figuras</span></a></li><li><a href="/catalog/"><span class="gs-en">Catalog</span><span class="gs-es" lang="es">Catálogo</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Teach</span><span class="gs-es" lang="es">Enseñar</span></summary><ul><li><a href="/teaching/"><span class="gs-en">Teaching with Gravitas</span><span class="gs-es" lang="es">Enseñar con Gravitas</span></a></li><li><a href="/instructors/"><span class="gs-en">Instructor resources</span><span class="gs-es" lang="es">Recursos para docentes</span></a></li><li><a href="/instructors/submissions/"><span class="gs-en">Submission review</span><span class="gs-es" lang="es">Revisión de entregas</span></a></li><li><a href="/evaluation/"><span class="gs-en">Classroom evidence kit</span><span class="gs-es" lang="es">Kit de evidencias de aula</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">About</span><span class="gs-es" lang="es">Acerca de</span></summary><ul><li><a href="/model/"><span class="gs-en">How the model works</span><span class="gs-es" lang="es">Cómo funciona el modelo</span></a></li><li><a href="/validation/"><span class="gs-en">Physics validation</span><span class="gs-es" lang="es">Validación física</span></a></li><li><a href="/glossary/"><span class="gs-en">Glossary</span><span class="gs-es" lang="es">Glosario</span></a></li><li><a href="/lab3d/"><span class="gs-en">3-D kernel diagnostics</span><span class="gs-es" lang="es">Diagnóstico del núcleo 3-D</span></a></li><li><a href="/mission/"><span class="gs-en">Mission core diagnostics</span><span class="gs-es" lang="es">Diagnóstico de misiones</span></a></li><li><a href="/Gravitas_User_Manual.pdf"><span class="gs-en">User manual (PDF)</span><span class="gs-es" lang="es">Manual de usuario (PDF)</span></a></li></ul></details></li></ul></nav>
+<nav id="gs-nav" class="gs-nav" aria-label="Gravitas"><ul><li><a href="/" data-dest="explore" aria-current="page"><span class="gs-en">Explore</span><span class="gs-es" lang="es">Explorar</span></a></li><li><a href="/library/" data-dest="learn"><span class="gs-en">Learn</span><span class="gs-es" lang="es">Aprender</span></a></li><li><a href="/observatory/" data-dest="observe"><span class="gs-en">Observe</span><span class="gs-es" lang="es">Observar</span></a></li><li><a href="/my-work/" data-dest="my-work"><span class="gs-en">My work</span><span class="gs-es" lang="es">Mi trabajo</span></a></li><li><a href="/teaching/" data-dest="teach"><span class="gs-en">Teach</span><span class="gs-es" lang="es">Enseñar</span></a></li></ul></nav>
 <div class="gs-controls" hidden>
 <label><span class="gs-vh"><span class="gs-en">Language</span><span class="gs-es" lang="es">Idioma</span></span><select data-gs-lang><option value="en" lang="en">English</option><option value="es" lang="es">Español</option></select></label>
 <label><span class="gs-vh"><span class="gs-en">Theme</span><span class="gs-es" lang="es">Tema</span></span><select data-gs-theme><option value="midnight" data-es="Medianoche">Midnight</option><option value="deep" data-es="Espacio profundo">Deep space</option><option value="observatory" data-es="Rojo de observatorio">Observatory red</option><option value="daylight" data-es="Luz de día">Daylight</option></select></label>
@@ -2563,11 +2575,7 @@ try {
     <template data-host="tutorial"></template>
 
     <!-- JavaScript modules in dependency order -->
-    <!--
-      Chart.js is not loaded here any more. It is 70KB and only the bench's
-      two charts use it, which start closed; js/chartjs.js fetches it the
-      first time one is opened. The live charts are js/plot/chart.js.
-    -->
+    <!-- Every chart is js/plot/chart.js, fetched the first time one is drawn. -->
     <script type="module" src="js/utils.js"></script>
     <script type="module" src="js/physics.js"></script>
     <script type="module" src="js/render.js"></script>
@@ -2620,7 +2628,7 @@ try {
       -->
       <a
         href="/validation/"
-        title="What the physics engine has been checked against: 304 checks with measured error, stated tolerance, and a reason for every tolerance. Runs live in your browser."
+        title="What the physics engine has been checked against: 332 checks with measured error, stated tolerance, and a reason for every tolerance. Runs live in your browser."
         data-i18n-title="footer.attribution.hint.2"
         data-i18n="footer.attribution"
         >Validated</a

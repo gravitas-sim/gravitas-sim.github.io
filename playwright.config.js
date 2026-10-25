@@ -94,7 +94,7 @@ const PRODUCTION_SPEC = /production\.spec\.js/;
  *
  * e2e/selfContained.spec.js asserts that the application reaches no origin but
  * its own, and that has to hold for the sources and for the bundle: the two
- * resolve three.js, Chart.js and the fonts by the same relative paths, and the
+ * resolve three.js and the fonts by the same relative paths, and the
  * whole point is that neither can quietly differ. Written DOM-only for the same
  * reason production.spec.js is - there is no /js/ui.js to import in dist/.
  *

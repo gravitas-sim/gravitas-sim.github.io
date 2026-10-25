@@ -36,6 +36,7 @@ import { simToAu, velocityUnitToMs } from './units.js';
 import { SOLAR_MASS_UNIT as SOLAR_MASS } from './physics.js';
 import { t, onLocaleChange } from './i18n/index.js';
 import { ensureDeferredMessages } from './i18n/deferredMessages.js';
+import { EV_REQUEST_REBUILD, EV_SIMULATION_RESET } from './names.js';
 
 let enabled = false;
 let els = null;
@@ -122,7 +123,7 @@ function beginRun() {
   const e = cacheElements();
   const b = Number(e.impact?.valueAsNumber);
   if (Number.isFinite(b) && b !== 0) SETTINGS.assist_impact_parameter = b;
-  window.dispatchEvent(new CustomEvent('gravitasRequestRebuild'));
+  window.dispatchEvent(new CustomEvent(EV_REQUEST_REBUILD));
 }
 
 /** Send the spacecraft past the other side of the planet. */
@@ -1211,7 +1212,7 @@ export function initAssist({ signal } = {}) {
   // stays out of the way everywhere else. Without this the panel is not
   // reachable at all, which is how the e2e suite found it missing.
   window.addEventListener(
-    'gravitasSimulationReset',
+    EV_SIMULATION_RESET,
     () => {
       stopAssistWatch();
       // A rebuilt world is a new encounter, and the frame pointed at the old

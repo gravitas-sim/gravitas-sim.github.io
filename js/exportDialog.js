@@ -47,6 +47,7 @@ import { openDialog, closeDialog, releaseDialog } from './dialog.js';
 // caller, because nothing in the start-up path can reach this module and a
 // reader who does reach it must not see message ids.
 import { ensureDeferredMessages } from './i18n/deferredMessages.js';
+import { EV_ESCAPE, EV_SIMULATION_RESET } from './names.js';
 
 ensureDeferredMessages().catch(() => {});
 
@@ -405,7 +406,7 @@ export function initExportDialog({ signal } = {}) {
   // js/dialog.js takes an Escape pressed inside the dialog; this is one
   // pressed with focus on <body>.
   window.addEventListener(
-    'gravitasEscape',
+    EV_ESCAPE,
     () => {
       if (isExportDialogOpen()) closeExportDialog();
     },
@@ -414,7 +415,7 @@ export function initExportDialog({ signal } = {}) {
   // A rebuild throws the ring buffer away, so a dialog left open would be
   // offering to export a recording that no longer exists.
   window.addEventListener(
-    'gravitasSimulationReset',
+    EV_SIMULATION_RESET,
     () => {
       if (isExportDialogOpen()) render();
     },

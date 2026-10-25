@@ -164,13 +164,6 @@ for (const m of readFileSync(join(ROOT, 'js/render.js'), 'utf8').matchAll(
 for (const state of ['running', 'paused']) {
   used.add(`readout.status.${state}`);
 }
-// The front door stores message ids in js/data/welcome.js rather than words, so
-// the id is the value of a data field and never appears inside a t() call.
-for (const m of readFileSync(join(ROOT, 'js/data/welcome.js'), 'utf8').matchAll(
-  /'(welcome(?:Card|Audience|Link)\.[A-Za-z.]+)'/g
-)) {
-  used.add(m[1]);
-}
 // A step's kind is looked up as `inv.step.kind.<type>` from the step data, and
 // the object-type button stores its label as an id.
 for (const kind of ['read', 'predict', 'explore', 'measure', 'question']) {
@@ -406,6 +399,68 @@ if (pageProblems.length)
 else console.log('Document pages:    every en/es pair matches');
 
 void relative;
+
+// -----------------------------------------------------------------------------
+// Prompt 156: translations that went out of date, labels that disagree with the
+// glossary, and pages that are English only without anybody deciding it. The
+// first and third can fail; the label check fails; the terminology and accent
+// lists are for a reader and never do (TRANSLATION.md).
+// -----------------------------------------------------------------------------
+const { freshness, render: renderFreshness } =
+  await import('./i18n-freshness.mjs');
+const { checkLabels, terminology, accentVariants } =
+  await import('./i18n-labels.mjs');
+const { checkSurfaces } = await import('./i18n-surfaces.mjs');
+const fresh = await freshness();
+console.log(`\n${renderFreshness(fresh).join('\n')}`);
+const labels = checkLabels(EN, TRANSLATIONS.get('es') ?? {});
+console.log(
+  `Glossary labels:   ${labels.checked} catalog entries held to the table, ` +
+    `${labels.known} known divergences (js/i18n edits, the owner's rebuild)`
+);
+const surfaces = checkSurfaces();
+console.log(
+  `Surfaces:          ${surfaces.pages} pages, ` +
+    `${surfaces.declared} English-only declarations`
+);
+const spanishProse = [...fresh.current.values()].flatMap(rows =>
+  rows.map(r => r.es)
+);
+const informational = terminology(spanishProse).filter(t =>
+  t.variants.some(v => v.count)
+);
+if (informational.length) {
+  console.log('\nTerminology (informational, never failing):');
+  for (const t of informational)
+    console.log(
+      `    ${t.id}: preferred form ${t.preferred}, other forms ` +
+        t.variants
+          .filter(v => v.count)
+          .map(v => `${v.pattern} ${v.count}`)
+          .join(', ')
+    );
+}
+const accents = accentVariants(spanishProse, 8);
+if (accents.length) {
+  console.log('\nAccent marks (informational): words spelled both ways');
+  for (const a of accents)
+    console.log(
+      `    ${a.word} ${a.bare} / ` +
+        Object.entries(a.accented)
+          .map(([w, n]) => `${w} ${n}`)
+          .join(', ')
+    );
+}
+const newProblems = [
+  ...fresh.problems,
+  ...labels.problems,
+  ...surfaces.problems,
+];
+if (newProblems.length) {
+  console.log('\nTRANSLATION CONTRACT (Prompt 156)');
+  for (const p of newProblems) console.log(`    ${p}`);
+  console.log('    See TRANSLATION.md.');
+}
 // An orphan is a typo and fails; an untranslated id is honest work in progress
 // and does not. That asymmetry is the same one the Spanish-only version had.
 // A broken layout fails too: a fragment one loader never registers is not
@@ -415,7 +470,8 @@ process.exit(
   layoutProblems.length ||
     missingInEn.length ||
     orphanTotal ||
-    pageProblems.length
+    pageProblems.length ||
+    newProblems.length
     ? 1
     : 0
 );

@@ -24,12 +24,13 @@
 
 import { parseDocument } from '../platform/common.js';
 import { drop, put } from '../storage/local.js';
+import { KEY_EVIDENCE_NOTEBOOK } from '../names.js';
 
 /** Bumped when the stored envelope changes. */
 export const SCHEMA_VERSION = 1;
 
 /** Where it is kept. */
-export const KEY = 'gravitas_evidence_notebook';
+export const KEY = KEY_EVIDENCE_NOTEBOOK;
 
 /**
  * Caps, in characters of serialized JSON.

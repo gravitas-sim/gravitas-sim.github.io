@@ -25,10 +25,13 @@ menu entry: a menu entry restamps every page and `index.html` has no room
 
 | Claim | Rests on |
 |---|---|
+| The guide leads with one built-in course in fifteen minutes: Teach, use as is, the link, students hand in, review, archive; next term from the saved file (a plan, never timed with a class) | `e2e/minimalInstructorPath.spec.js` performs the walk in both languages and with the CPU throttled; INSTRUCTOR_FLOW.md, "The minimal path and the next term" |
 | Six steps in the first week: choose, preview, build an activity, post the link, collect, review | INSTRUCTOR_FLOW.md and the adoption pages; `e2e/adopterGuide.spec.js` follows the guide's own links through the first five and the review page |
 | A class code names the class, not the student; review matches on the typed name when one code covers several names | `js/submissionReview.js` (P81 R-1 repaired); INSTRUCTOR_FLOW.md, "The roster id" |
 | No accounts, no analytics, nothing uploaded, work stays in the browser | the Teach page's own text (`teach.access.offline.text`) and STORAGE.md |
 | Not an LTI tool; the platform holds a link and receives a PDF | INSTRUCTOR_FLOW.md ("there is no LTI claim") |
+| A course can be exported as a file for a course platform, and no more is claimed: Gravitas exports a Thin Common Cartridge; imports verified on: Canvas, Moodle, D2L, Blackboard (Canvas: VERIFIED, reported 2026-10-22; Moodle: VERIFIED, reported 2026-10-22; D2L: VERIFIED, reported 2026-10-22; Blackboard: VERIFIED, reported 2026-10-22). Reported by Carl in chat on 2026-10-22; the LMS versions, the cartridge imported and what imported were not supplied. | COURSE_PACKS.md ("Common Cartridge"); `tests/commonCartridge.test.js` holds the sentence equal on Teach, in the guide and in the evidence record |
+| A course prints as a plan (units, items, links, depths, time bands, textbook chapters, objectives, what students hand in) in English or Spanish, to print or to paste; the time bands are editorial estimates with no observed class data, and an outcome matrix is the instructor's own mapping, not evidence of attainment | `e2e/activityList.spec.js`; COURSE_PACKS.md, "The printable activity list, the time bands and the outcomes"; `tests/timeBands.test.js` |
 | Times are estimates, none timed with a class; no classroom evaluation is published | the Teach page and SUPPORT.md; `tests/adopterGuide.test.js` fails if the sentence goes |
 | Accessibility: keyboard, live region, text for every number, plots as tables, reduced motion, four themes; a canvas cannot be explored by touch | the Teach page's access section and ACCESSIBILITY.md |
 | Guides and keys exist for the investigations that run in the simulation, keys per activity format, worksheets for activities | `instructors/materials.manifest.json` (`byKind`) |
@@ -116,6 +119,19 @@ person, which is what the test below is for.
    help, and what was changed. A task done without help by one person is one
    observation, not a measure of the guide.
 
+## What your IT office will ask
+
+The documents an institution asks for are in the repository, and each says what it is and is not.
+
+| They ask | The answer | Where |
+|---|---|---|
+| What does it store, and where does student data go? | It stores a student's work in their own browser and sends nothing anywhere. There are no accounts, no analytics and no server of ours. Two optional features, a live archive lookup and the compute page, contact other sites only when a reader presses the control that says so. | [DATA_PROTECTION.md](DATA_PROTECTION.md) (Spanish: [DATA_PROTECTION.es.md](DATA_PROTECTION.es.md)) |
+| Is it accessible? Do you have a VPAT or an ACR? | A scoped conformance report in the ACR form, with a status per WCAG 2.1 and 2.2 A and AA criterion. It is our own evaluation, not an external audit; no assistive-technology user has validated it; and it claims no conformance. | [ACCESSIBILITY_CONFORMANCE.md](ACCESSIBILITY_CONFORMANCE.md) |
+| How is it secured, and how do we report a problem? | A static site with no server to attack; the instructor materials are encrypted files. Reports go to the maintainer. | [SECURITY.md](SECURITY.md) |
+| Does it work offline or on a campus network that blocks things? | Pages work offline once opened, and the site needs only its own address, except the two optional features above. | [OFFLINE_AND_LOW_END.md](OFFLINE_AND_LOW_END.md) |
+| Can a student hand work in without an account? | Yes: a report (PDF or an accessible web page), a submission token or a progress file, which the course's own system collects. | [INSTRUCTOR_FLOW.md](INSTRUCTOR_FLOW.md) |
+| Is there a contract, an SLA or a support line? | No. It is a one-maintainer academic project under an open license; support is described in SUPPORT.md. | [SUPPORT.md](SUPPORT.md) |
+
 ## The listing kit
 
 The kit for Carl is outside the repository, beside the roadmaps, because it
@@ -134,4 +150,6 @@ submitted anywhere, and it claims no review, adopter or endorsement.
 - A "Find content" or "Adopter's guide" entry in the shell menu (M-1 in the P81
   checkpoint).
 - Instructor-note prose in Spanish, which the adoption pages still mark "In
-  English only" (D-ADOPT-01).
+  English only" (D-ADOPT-01). Prompt 170 added generated Spanish structured
+  notes for every investigation (INSTRUCTOR_MATERIALS.md); they are not that
+  prose, and the guide's languages row says what is and is not in Spanish.

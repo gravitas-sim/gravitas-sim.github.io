@@ -1,0 +1,12 @@
+{
+  "format": "gravitas.frame-pipeline-failed-legs/1",
+  "recorded": "After the first full run of the committed thresholds against the production modules (Prompt 185). The leg below FAILS as committed. No bound was moved: tests/fixtures/framepipeline/thresholds.json is as committed first, and only Carl resets a threshold, with a register row (D-R10-63). tests/framePipeline.test.js holds each of these rows to this record: it must still fail, so a change that fixes one cannot pass unnoticed and an unrecorded failure cannot hide.",
+  "node": "v24.4.0",
+  "legs": {
+    "d1.refused": {
+      "measured": 0,
+      "bound": 10,
+      "cause": "The committed leg expects frames 10, 11 and 20 to be refused, with frame 20 clouded to 3 percent of the light. The pipeline refuses frames 10 and 11 (the field turned a quarter turn: no stars match) in 10 of 10 sequences, and registers frame 20: at 3 percent the four brightest stars (900 to 1,400 electrons a second, 1,600 to 2,500 electrons in the frame) are still above the detector's threshold, the marks they match are more than half of the eight, and the frame is a dim but usable one, which differential photometry exists to handle. The premise written into the contract (that 3 percent leaves no star to detect) was wrong, not the pipeline. Evidence, not a committed leg: with frame 20 at 0.3 percent of the light the pipeline refuses exactly 10, 11 and 20 in 10 of 10 (row x.d1.blindFrame), and excluding 10, 11 and 20 by name completes a 45-point light curve in 10 of 10 (row d1.excluded, which passes). A correction of the stimulus to 0.3 percent would need Carl's word, which a run cannot get."
+    }
+  }
+}

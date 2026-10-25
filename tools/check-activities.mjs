@@ -126,6 +126,20 @@ for (const activity of ACTIVITIES) {
     note(where, 'wants two or three observable objectives');
   }
 
+  if (
+    activity.more !== undefined &&
+    activity.more !== 'open' &&
+    activity.more !== 'shut'
+  ) {
+    note(
+      where,
+      "`more` is written only as 'open' or 'shut', and only when set"
+    );
+  }
+  if (activity.markingNote !== undefined && activity.markingNote !== true) {
+    note(where, '`markingNote` is written only as true, and only when set');
+  }
+
   const sids = new Set(lesson.steps.map(s => s.sid));
   const seenFormats = new Set();
 

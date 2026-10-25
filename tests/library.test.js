@@ -357,11 +357,16 @@ describe('what is written beside it', () => {
     for (const r of rows) expect(Object.keys(r.has)).toEqual([...COVERED]);
   });
 
-  test("Home's Library cards are the generator's, one per kind", async () => {
-    const cards = await renderHome(library);
-    expect(read('js/fragments/home.html')).toContain(cards);
-    for (const kind of KINDS)
-      expect(cards).toContain(`href="/library/?kind=${kind}"`);
+  test("Home's first-week start is the generator's, read from the Library", () => {
+    const block = renderHome(library);
+    expect(read('js/fragments/home.html')).toContain(block);
+    // each start that names an entry links to that entry's route
+    const { firstWeek } = JSON.parse(read('tools/navigation-inventory.json'));
+    for (const start of firstWeek.starts.filter(s => s.entry))
+      expect(block).toContain(
+        `href="${library.entries.find(e => e.id === start.entry).route}"`
+      );
+    expect(() => renderHome({ entries: [] })).toThrow(/not in the Library/);
   });
 
   test('the page speaks both languages, id for id', () => {

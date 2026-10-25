@@ -110,6 +110,12 @@ const openDirect = async page => {
   await expect(page.locator(PANEL)).toBeVisible();
 };
 
+/** The science settings are behind Advanced, shut by default (Prompt 167). */
+const openAdvanced = page =>
+  page.locator('#settingsGrid .settings-advanced').evaluate(d => {
+    if (!d.open) d.querySelector(':scope > summary').click();
+  });
+
 test.describe('the settings dialog, closed', () => {
   test('starts hidden, inert and out of the accessibility tree', async ({
     page,
@@ -291,6 +297,7 @@ test.describe('closing does not change things it was not asked to', () => {
     // Settings is sliders, selects and toggle buttons - no checkboxes - so the
     // staged change is made on the control a reader would actually drag.
     await open(page);
+    await openAdvanced(page);
     const slider = page.locator('#sim_speed-slider');
     await expect(slider).toBeVisible();
     const staged = await slider.evaluate(el => {
@@ -521,6 +528,7 @@ test.describe('the black-hole masses, a dialog over Settings', () => {
       SETTINGS.use_individual_bh_masses = true;
     });
     await openDirect(page);
+    await openAdvanced(page);
     const button = page.locator('#indivBHMassBtn');
     await expect(button).toBeVisible();
     await button.focus();

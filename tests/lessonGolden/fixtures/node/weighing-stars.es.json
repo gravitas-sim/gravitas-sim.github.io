@@ -1,0 +1,1602 @@
+{
+ "id": "weighing-stars",
+ "locale": "es",
+ "title": "Pesar las estrellas",
+ "steps": 40,
+ "depths": [
+  [
+   "core",
+   36
+  ],
+  [
+   "quantitative",
+   38
+  ],
+  [
+   "advanced",
+   40
+  ]
+ ],
+ "grading": [
+  {
+   "sid": "how-would-you-do-it",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "two-stars-side-by-side",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     true,
+     "correct"
+    ]
+   ]
+  },
+  {
+   "sid": "what-moved",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "where-does-it-sit",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "make-one-of-them-heavier",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     true,
+     "correct"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "the-rule",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "reading-the-see-saw",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "one-more-to-be-sure",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     true,
+     "correct"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "which-pair-is-quicker",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "why-the-heavy-pair-wins",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "what-do-you-need-to",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "weigh-it-with-an-error-bar",
+   "type": "question",
+   "kind": "numeric",
+   "tolerance": 0.5,
+   "grades": [
+    [
+     "4",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "needsUncertainty"
+    ],
+    [
+     "4,25",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "needsUncertainty"
+    ],
+    [
+     "5,5",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "needsUncertainty"
+    ],
+    [
+     "4 M☉",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "needsUncertainty"
+    ],
+    [
+     "not a number",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "notANumber"
+    ],
+    [
+     "",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "blank"
+    ]
+   ]
+  },
+  {
+   "sid": "which-measurement-limits-you",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "splitting-them-up",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "weigh-one-star-with-an-error-bar",
+   "type": "question",
+   "kind": "numeric",
+   "tolerance": 0.35,
+   "grades": [
+    [
+     "3",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "needsUncertainty"
+    ],
+    [
+     "3,175",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "needsUncertainty"
+    ],
+    [
+     "4,05",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "needsUncertainty"
+    ],
+    [
+     "3 M☉",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "needsUncertainty"
+    ],
+    [
+     "not a number",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "notANumber"
+    ],
+    [
+     "",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "blank"
+    ]
+   ]
+  },
+  {
+   "sid": "and-which-one-is-heavier",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "say-how-the-weighing-worked",
+   "type": "question",
+   "kind": "short",
+   "grades": [
+    [
+     "ungraded",
+     null
+    ]
+   ]
+  }
+ ],
+ "progress": {
+  "record": {
+   "schema": 2,
+   "lesson": "weighing-stars",
+   "stepSid": "what-you-can-now-say",
+   "responses": {
+    "weighing-stars:how-would-you-do-it": 2,
+    "weighing-stars:two-stars-side-by-side": 3,
+    "weighing-stars:what-moved": 2,
+    "weighing-stars:where-does-it-sit": 2,
+    "weighing-stars:make-one-of-them-heavier": 0,
+    "weighing-stars:the-rule": 1,
+    "weighing-stars:reading-the-see-saw": 1,
+    "weighing-stars:one-more-to-be-sure": 0,
+    "weighing-stars:which-pair-is-quicker": 1,
+    "weighing-stars:why-the-heavy-pair-wins": 1,
+    "weighing-stars:what-do-you-need-to": 1,
+    "weighing-stars:weigh-it-with-an-error-bar": "4",
+    "weighing-stars:weigh-it-with-an-error-bar:locale": "es",
+    "weighing-stars:which-measurement-limits-you": 1,
+    "weighing-stars:splitting-them-up": 1,
+    "weighing-stars:weigh-one-star-with-an-error-bar": "3",
+    "weighing-stars:weigh-one-star-with-an-error-bar:locale": "es",
+    "weighing-stars:and-which-one-is-heavier": 1,
+    "weighing-stars:say-how-the-weighing-worked": "A fixed sentence for the golden."
+   },
+   "attempts": {
+    "weighing-stars:how-would-you-do-it": 1,
+    "weighing-stars:two-stars-side-by-side": 1,
+    "weighing-stars:what-moved": 1,
+    "weighing-stars:where-does-it-sit": 1,
+    "weighing-stars:make-one-of-them-heavier": 1,
+    "weighing-stars:the-rule": 1,
+    "weighing-stars:reading-the-see-saw": 1,
+    "weighing-stars:one-more-to-be-sure": 1,
+    "weighing-stars:which-pair-is-quicker": 1,
+    "weighing-stars:why-the-heavy-pair-wins": 1,
+    "weighing-stars:what-do-you-need-to": 1,
+    "weighing-stars:weigh-it-with-an-error-bar": 1,
+    "weighing-stars:which-measurement-limits-you": 1,
+    "weighing-stars:splitting-them-up": 1,
+    "weighing-stars:weigh-one-star-with-an-error-bar": 1,
+    "weighing-stars:and-which-one-is-heavier": 1
+   },
+   "visited": [
+    "you-cannot-put-a-star",
+    "how-would-you-do-it",
+    "two-stars-side-by-side",
+    "watch-them",
+    "what-moved",
+    "what-are-they-going-round",
+    "where-does-it-sit",
+    "make-one-of-them-heavier",
+    "try-it",
+    "the-rule",
+    "put-them-on-a-see",
+    "reading-the-see-saw",
+    "writing-it-down",
+    "one-more-to-be-sure",
+    "what-kepler-found-and-what",
+    "which-pair-is-quicker",
+    "run-them-together",
+    "why-the-heavy-pair-wins",
+    "newton-s-version-and-what",
+    "a-practice-run",
+    "the-mystery-pair",
+    "what-do-you-need-to",
+    "measurement-one-how-big-is",
+    "measurement-two-how-long-does",
+    "weigh-the-pair",
+    "how-sure-is-the-total",
+    "weigh-it-with-an-error-bar",
+    "which-measurement-limits-you",
+    "stop-and-look-at-what",
+    "back-to-the-balance-point",
+    "splitting-them-up",
+    "now-weigh-each-one",
+    "weigh-one-star-with-an-error-bar",
+    "the-answer",
+    "somebody-really-did-this",
+    "and-stars-are-not-the",
+    "one-on-your-own",
+    "and-which-one-is-heavier",
+    "say-how-the-weighing-worked",
+    "what-you-can-now-say"
+   ],
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "depth": "advanced",
+   "deepest": "advanced",
+   "spent": 600
+  },
+  "read": {
+   "responses": {
+    "weighing-stars:how-would-you-do-it": 2,
+    "weighing-stars:two-stars-side-by-side": 3,
+    "weighing-stars:what-moved": 2,
+    "weighing-stars:where-does-it-sit": 2,
+    "weighing-stars:make-one-of-them-heavier": 0,
+    "weighing-stars:the-rule": 1,
+    "weighing-stars:reading-the-see-saw": 1,
+    "weighing-stars:one-more-to-be-sure": 0,
+    "weighing-stars:which-pair-is-quicker": 1,
+    "weighing-stars:why-the-heavy-pair-wins": 1,
+    "weighing-stars:what-do-you-need-to": 1,
+    "weighing-stars:weigh-it-with-an-error-bar": "4",
+    "weighing-stars:weigh-it-with-an-error-bar:locale": "es",
+    "weighing-stars:which-measurement-limits-you": 1,
+    "weighing-stars:splitting-them-up": 1,
+    "weighing-stars:weigh-one-star-with-an-error-bar": "3",
+    "weighing-stars:weigh-one-star-with-an-error-bar:locale": "es",
+    "weighing-stars:and-which-one-is-heavier": 1,
+    "weighing-stars:say-how-the-weighing-worked": "A fixed sentence for the golden."
+   },
+   "attempts": {
+    "weighing-stars:how-would-you-do-it": 1,
+    "weighing-stars:two-stars-side-by-side": 1,
+    "weighing-stars:what-moved": 1,
+    "weighing-stars:where-does-it-sit": 1,
+    "weighing-stars:make-one-of-them-heavier": 1,
+    "weighing-stars:the-rule": 1,
+    "weighing-stars:reading-the-see-saw": 1,
+    "weighing-stars:one-more-to-be-sure": 1,
+    "weighing-stars:which-pair-is-quicker": 1,
+    "weighing-stars:why-the-heavy-pair-wins": 1,
+    "weighing-stars:what-do-you-need-to": 1,
+    "weighing-stars:weigh-it-with-an-error-bar": 1,
+    "weighing-stars:which-measurement-limits-you": 1,
+    "weighing-stars:splitting-them-up": 1,
+    "weighing-stars:weigh-one-star-with-an-error-bar": 1,
+    "weighing-stars:and-which-one-is-heavier": 1
+   },
+   "visited": [
+    "a-practice-run",
+    "and-stars-are-not-the",
+    "and-which-one-is-heavier",
+    "back-to-the-balance-point",
+    "how-sure-is-the-total",
+    "how-would-you-do-it",
+    "make-one-of-them-heavier",
+    "measurement-one-how-big-is",
+    "measurement-two-how-long-does",
+    "newton-s-version-and-what",
+    "now-weigh-each-one",
+    "one-more-to-be-sure",
+    "one-on-your-own",
+    "put-them-on-a-see",
+    "reading-the-see-saw",
+    "run-them-together",
+    "say-how-the-weighing-worked",
+    "somebody-really-did-this",
+    "splitting-them-up",
+    "stop-and-look-at-what",
+    "the-answer",
+    "the-mystery-pair",
+    "the-rule",
+    "try-it",
+    "two-stars-side-by-side",
+    "watch-them",
+    "weigh-it-with-an-error-bar",
+    "weigh-one-star-with-an-error-bar",
+    "weigh-the-pair",
+    "what-are-they-going-round",
+    "what-do-you-need-to",
+    "what-kepler-found-and-what",
+    "what-moved",
+    "what-you-can-now-say",
+    "where-does-it-sit",
+    "which-measurement-limits-you",
+    "which-pair-is-quicker",
+    "why-the-heavy-pair-wins",
+    "writing-it-down",
+    "you-cannot-put-a-star"
+   ],
+   "stepSid": "what-you-can-now-say",
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "depth": "advanced",
+   "deepest": "advanced",
+   "spent": 600,
+   "schema": 2,
+   "migrated": false,
+   "notes": []
+  }
+ },
+ "backup": {
+  "backup": {
+   "kind": "gravitas.investigation.progress",
+   "version": 2,
+   "savedAt": "2026-01-02T04:05:06.000Z",
+   "lesson": {
+    "id": "weighing-stars",
+    "title": "Pesar las estrellas",
+    "stepCount": 40
+   },
+   "student": null,
+   "progress": {
+    "stepSid": "what-you-can-now-say",
+    "startedAt": "2026-01-02T03:04:05.000Z",
+    "visited": [
+     "you-cannot-put-a-star",
+     "how-would-you-do-it",
+     "two-stars-side-by-side",
+     "watch-them",
+     "what-moved",
+     "what-are-they-going-round",
+     "where-does-it-sit",
+     "make-one-of-them-heavier",
+     "try-it",
+     "the-rule",
+     "put-them-on-a-see",
+     "reading-the-see-saw",
+     "writing-it-down",
+     "one-more-to-be-sure",
+     "what-kepler-found-and-what",
+     "which-pair-is-quicker",
+     "run-them-together",
+     "why-the-heavy-pair-wins",
+     "newton-s-version-and-what",
+     "a-practice-run",
+     "the-mystery-pair",
+     "what-do-you-need-to",
+     "measurement-one-how-big-is",
+     "measurement-two-how-long-does",
+     "weigh-the-pair",
+     "how-sure-is-the-total",
+     "weigh-it-with-an-error-bar",
+     "which-measurement-limits-you",
+     "stop-and-look-at-what",
+     "back-to-the-balance-point",
+     "splitting-them-up",
+     "now-weigh-each-one",
+     "weigh-one-star-with-an-error-bar",
+     "the-answer",
+     "somebody-really-did-this",
+     "and-stars-are-not-the",
+     "one-on-your-own",
+     "and-which-one-is-heavier",
+     "say-how-the-weighing-worked",
+     "what-you-can-now-say"
+    ],
+    "responses": {
+     "weighing-stars:how-would-you-do-it": 2,
+     "weighing-stars:two-stars-side-by-side": 3,
+     "weighing-stars:what-moved": 2,
+     "weighing-stars:where-does-it-sit": 2,
+     "weighing-stars:make-one-of-them-heavier": 0,
+     "weighing-stars:the-rule": 1,
+     "weighing-stars:reading-the-see-saw": 1,
+     "weighing-stars:one-more-to-be-sure": 0,
+     "weighing-stars:which-pair-is-quicker": 1,
+     "weighing-stars:why-the-heavy-pair-wins": 1,
+     "weighing-stars:what-do-you-need-to": 1,
+     "weighing-stars:weigh-it-with-an-error-bar": "4",
+     "weighing-stars:weigh-it-with-an-error-bar:locale": "es",
+     "weighing-stars:which-measurement-limits-you": 1,
+     "weighing-stars:splitting-them-up": 1,
+     "weighing-stars:weigh-one-star-with-an-error-bar": "3",
+     "weighing-stars:weigh-one-star-with-an-error-bar:locale": "es",
+     "weighing-stars:and-which-one-is-heavier": 1,
+     "weighing-stars:say-how-the-weighing-worked": "A fixed sentence for the golden."
+    },
+    "attempts": {
+     "weighing-stars:how-would-you-do-it": 1,
+     "weighing-stars:two-stars-side-by-side": 1,
+     "weighing-stars:what-moved": 1,
+     "weighing-stars:where-does-it-sit": 1,
+     "weighing-stars:make-one-of-them-heavier": 1,
+     "weighing-stars:the-rule": 1,
+     "weighing-stars:reading-the-see-saw": 1,
+     "weighing-stars:one-more-to-be-sure": 1,
+     "weighing-stars:which-pair-is-quicker": 1,
+     "weighing-stars:why-the-heavy-pair-wins": 1,
+     "weighing-stars:what-do-you-need-to": 1,
+     "weighing-stars:weigh-it-with-an-error-bar": 1,
+     "weighing-stars:which-measurement-limits-you": 1,
+     "weighing-stars:splitting-them-up": 1,
+     "weighing-stars:weigh-one-star-with-an-error-bar": 1,
+     "weighing-stars:and-which-one-is-heavier": 1
+    }
+   },
+   "steps": [
+    {
+     "index": 0,
+     "sid": "you-cannot-put-a-star",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 1,
+     "sid": "how-would-you-do-it",
+     "fingerprint": "question|choice|-|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 2,
+     "sid": "two-stars-side-by-side",
+     "fingerprint": "predict|-|-|-|-|4|a=3;c=3",
+     "optionCount": 4
+    },
+    {
+     "index": 3,
+     "sid": "watch-them",
+     "fingerprint": "explore|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 4,
+     "sid": "what-moved",
+     "fingerprint": "question|choice|-|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 5,
+     "sid": "what-are-they-going-round",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 6,
+     "sid": "where-does-it-sit",
+     "fingerprint": "question|choice|-|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 7,
+     "sid": "make-one-of-them-heavier",
+     "fingerprint": "predict|-|-|-|-|4|a=0;c=0",
+     "optionCount": 4
+    },
+    {
+     "index": 8,
+     "sid": "try-it",
+     "fingerprint": "explore|-|binary|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 9,
+     "sid": "the-rule",
+     "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 10,
+     "sid": "put-them-on-a-see",
+     "fingerprint": "explore|-|balance|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 11,
+     "sid": "reading-the-see-saw",
+     "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 12,
+     "sid": "writing-it-down",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 13,
+     "sid": "one-more-to-be-sure",
+     "fingerprint": "question|choice|-|-|-|4|a=0;c=0",
+     "optionCount": 4
+    },
+    {
+     "index": 14,
+     "sid": "what-kepler-found-and-what",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 15,
+     "sid": "which-pair-is-quicker",
+     "fingerprint": "predict|-|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 16,
+     "sid": "run-them-together",
+     "fingerprint": "explore|-|binary-compare|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 17,
+     "sid": "why-the-heavy-pair-wins",
+     "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 18,
+     "sid": "newton-s-version-and-what",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 19,
+     "sid": "a-practice-run",
+     "fingerprint": "measure|-|-|-|a+p+a3+p2+total|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 20,
+     "sid": "the-mystery-pair",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 21,
+     "sid": "what-do-you-need-to",
+     "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 22,
+     "sid": "measurement-one-how-big-is",
+     "fingerprint": "explore|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 23,
+     "sid": "measurement-two-how-long-does",
+     "fingerprint": "explore|-|binary|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 24,
+     "sid": "weigh-the-pair",
+     "fingerprint": "measure|-|-|-|a+p+a3+p2+total|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 25,
+     "sid": "how-sure-is-the-total",
+     "fingerprint": "measure|-|-|-|sa+sp+a_in+p_in+m_tot+s_tot|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 26,
+     "sid": "weigh-it-with-an-error-bar",
+     "fingerprint": "question|numeric|-|-|-|-|a=4;t=0.5;u=M☉",
+     "optionCount": null
+    },
+    {
+     "index": 27,
+     "sid": "which-measurement-limits-you",
+     "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 28,
+     "sid": "stop-and-look-at-what",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 29,
+     "sid": "back-to-the-balance-point",
+     "fingerprint": "explore|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 30,
+     "sid": "splitting-them-up",
+     "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 31,
+     "sid": "now-weigh-each-one",
+     "fingerprint": "measure|-|balance|-|ma+mb+sum|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 32,
+     "sid": "weigh-one-star-with-an-error-bar",
+     "fingerprint": "question|numeric|-|-|-|-|a=3;t=0.35;u=M☉",
+     "optionCount": null
+    },
+    {
+     "index": 33,
+     "sid": "the-answer",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 34,
+     "sid": "somebody-really-did-this",
+     "fingerprint": "explore|-|visual-binary|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 35,
+     "sid": "and-stars-are-not-the",
+     "fingerprint": "read|-|binary|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 36,
+     "sid": "one-on-your-own",
+     "fingerprint": "measure|-|-|-|a+p+a3+p2+total|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 37,
+     "sid": "and-which-one-is-heavier",
+     "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 38,
+     "sid": "say-how-the-weighing-worked",
+     "fingerprint": "question|short|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 39,
+     "sid": "what-you-can-now-say",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    }
+   ]
+  },
+  "verdict": {
+   "ok": true
+  },
+  "restored": {
+   "responses": {
+    "weighing-stars:how-would-you-do-it": 2,
+    "weighing-stars:two-stars-side-by-side": 3,
+    "weighing-stars:what-moved": 2,
+    "weighing-stars:where-does-it-sit": 2,
+    "weighing-stars:make-one-of-them-heavier": 0,
+    "weighing-stars:the-rule": 1,
+    "weighing-stars:reading-the-see-saw": 1,
+    "weighing-stars:one-more-to-be-sure": 0,
+    "weighing-stars:which-pair-is-quicker": 1,
+    "weighing-stars:why-the-heavy-pair-wins": 1,
+    "weighing-stars:what-do-you-need-to": 1,
+    "weighing-stars:weigh-it-with-an-error-bar": "4",
+    "weighing-stars:weigh-it-with-an-error-bar:locale": "es",
+    "weighing-stars:which-measurement-limits-you": 1,
+    "weighing-stars:splitting-them-up": 1,
+    "weighing-stars:weigh-one-star-with-an-error-bar": "3",
+    "weighing-stars:weigh-one-star-with-an-error-bar:locale": "es",
+    "weighing-stars:and-which-one-is-heavier": 1,
+    "weighing-stars:say-how-the-weighing-worked": "A fixed sentence for the golden."
+   },
+   "attempts": {
+    "weighing-stars:how-would-you-do-it": 1,
+    "weighing-stars:two-stars-side-by-side": 1,
+    "weighing-stars:what-moved": 1,
+    "weighing-stars:where-does-it-sit": 1,
+    "weighing-stars:make-one-of-them-heavier": 1,
+    "weighing-stars:the-rule": 1,
+    "weighing-stars:reading-the-see-saw": 1,
+    "weighing-stars:one-more-to-be-sure": 1,
+    "weighing-stars:which-pair-is-quicker": 1,
+    "weighing-stars:why-the-heavy-pair-wins": 1,
+    "weighing-stars:what-do-you-need-to": 1,
+    "weighing-stars:weigh-it-with-an-error-bar": 1,
+    "weighing-stars:which-measurement-limits-you": 1,
+    "weighing-stars:splitting-them-up": 1,
+    "weighing-stars:weigh-one-star-with-an-error-bar": 1,
+    "weighing-stars:and-which-one-is-heavier": 1
+   },
+   "visited": [
+    "a-practice-run",
+    "and-stars-are-not-the",
+    "and-which-one-is-heavier",
+    "back-to-the-balance-point",
+    "how-sure-is-the-total",
+    "how-would-you-do-it",
+    "make-one-of-them-heavier",
+    "measurement-one-how-big-is",
+    "measurement-two-how-long-does",
+    "newton-s-version-and-what",
+    "now-weigh-each-one",
+    "one-more-to-be-sure",
+    "one-on-your-own",
+    "put-them-on-a-see",
+    "reading-the-see-saw",
+    "run-them-together",
+    "say-how-the-weighing-worked",
+    "somebody-really-did-this",
+    "splitting-them-up",
+    "stop-and-look-at-what",
+    "the-answer",
+    "the-mystery-pair",
+    "the-rule",
+    "try-it",
+    "two-stars-side-by-side",
+    "watch-them",
+    "weigh-it-with-an-error-bar",
+    "weigh-one-star-with-an-error-bar",
+    "weigh-the-pair",
+    "what-are-they-going-round",
+    "what-do-you-need-to",
+    "what-kepler-found-and-what",
+    "what-moved",
+    "what-you-can-now-say",
+    "where-does-it-sit",
+    "which-measurement-limits-you",
+    "which-pair-is-quicker",
+    "why-the-heavy-pair-wins",
+    "writing-it-down",
+    "you-cannot-put-a-star"
+   ],
+   "stepIndex": 39,
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "moved": [],
+   "dropped": [],
+   "quarantined": {},
+   "uncertain": 0,
+   "discardedKeys": 0,
+   "byPosition": false
+  }
+ },
+ "ledger": {
+  "entry": "golden-weighing-stars",
+  "record": {
+   "ids": [
+    "golden-weighing-stars"
+   ],
+   "rows": [
+    [
+     "golden-weighing-stars",
+     "q1",
+     3.5247,
+     "d",
+     0.0012,
+     "measured",
+     "simulation",
+     "rv-fit",
+     null,
+     [
+      "s",
+      "d"
+     ]
+    ]
+   ],
+   "total": 1
+  },
+  "digest": "147522f438632d0bcaddd6c2d3fc0a40fc4a577d3b93fe25875df965d83387fd"
+ },
+ "tokens": {
+  "plain": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "a": null,
+    "r": null,
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "how-would-you-do-it",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "two-stars-side-by-side",
+     "value": 3,
+     "locale": "es"
+    },
+    {
+     "sid": "what-moved",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "where-does-it-sit",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "make-one-of-them-heavier",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "the-rule",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "reading-the-see-saw",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "one-more-to-be-sure",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "which-pair-is-quicker",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "why-the-heavy-pair-wins",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "what-do-you-need-to",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "weigh-it-with-an-error-bar",
+     "value": "4",
+     "locale": "es"
+    },
+    {
+     "sid": "which-measurement-limits-you",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "splitting-them-up",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "weigh-one-star-with-an-error-bar",
+     "value": "3",
+     "locale": "es"
+    },
+    {
+     "sid": "and-which-one-is-heavier",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "say-how-the-weighing-worked",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    }
+   ]
+  },
+  "assignment": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "a": "golden-assignment",
+    "r": "roster-1",
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "how-would-you-do-it",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "two-stars-side-by-side",
+     "value": 3,
+     "locale": "es"
+    },
+    {
+     "sid": "what-moved",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "where-does-it-sit",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "make-one-of-them-heavier",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "the-rule",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "reading-the-see-saw",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "one-more-to-be-sure",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "which-pair-is-quicker",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "why-the-heavy-pair-wins",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "what-do-you-need-to",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "weigh-it-with-an-error-bar",
+     "value": "4",
+     "locale": "es"
+    },
+    {
+     "sid": "which-measurement-limits-you",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "splitting-them-up",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "weigh-one-star-with-an-error-bar",
+     "value": "3",
+     "locale": "es"
+    },
+    {
+     "sid": "and-which-one-is-heavier",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "say-how-the-weighing-worked",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    }
+   ]
+  },
+  "evidence": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "ev": {
+     "d": "147522f438632d0bcaddd6c2d3fc0a40fc4a577d3b93fe25875df965d83387fd",
+     "i": [
+      "golden-weighing-stars"
+     ],
+     "n": 1,
+     "r": [
+      [
+       "golden-weighing-stars",
+       "q1",
+       3.5247,
+       "d",
+       0.0012,
+       "measured",
+       "simulation",
+       "rv-fit",
+       null,
+       [
+        "s",
+        "d"
+       ]
+      ]
+     ]
+    },
+    "a": null,
+    "r": null,
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "how-would-you-do-it",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "two-stars-side-by-side",
+     "value": 3,
+     "locale": "es"
+    },
+    {
+     "sid": "what-moved",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "where-does-it-sit",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "make-one-of-them-heavier",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "the-rule",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "reading-the-see-saw",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "one-more-to-be-sure",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "which-pair-is-quicker",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "why-the-heavy-pair-wins",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "what-do-you-need-to",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "weigh-it-with-an-error-bar",
+     "value": "4",
+     "locale": "es"
+    },
+    {
+     "sid": "which-measurement-limits-you",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "splitting-them-up",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "weigh-one-star-with-an-error-bar",
+     "value": "3",
+     "locale": "es"
+    },
+    {
+     "sid": "and-which-one-is-heavier",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "say-how-the-weighing-worked",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    }
+   ]
+  },
+  "depth": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "dp": "advanced",
+    "a": null,
+    "r": null,
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "how-would-you-do-it",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "two-stars-side-by-side",
+     "value": 3,
+     "locale": "es"
+    },
+    {
+     "sid": "what-moved",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "where-does-it-sit",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "make-one-of-them-heavier",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "the-rule",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "reading-the-see-saw",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "one-more-to-be-sure",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "which-pair-is-quicker",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "why-the-heavy-pair-wins",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "what-do-you-need-to",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "weigh-it-with-an-error-bar",
+     "value": "4",
+     "locale": "es"
+    },
+    {
+     "sid": "which-measurement-limits-you",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "splitting-them-up",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "weigh-one-star-with-an-error-bar",
+     "value": "3",
+     "locale": "es"
+    },
+    {
+     "sid": "and-which-one-is-heavier",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "say-how-the-weighing-worked",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    }
+   ]
+  }
+ }
+}

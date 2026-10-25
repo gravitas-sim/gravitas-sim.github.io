@@ -37,7 +37,7 @@ import { watchForInvestigations } from './investigationsLoader.js';
 import { shouldShowWelcome } from './welcomeGate.js';
 
 // Failures go to #srStatus too, by js/failures.js, fetched only then.
-for (const type of ['error', 'unhandledrejection', 'gravitasWorkerFailed'])
+for (const type of ['error', 'unhandledrejection', EV_WORKER_FAILED])
   window.addEventListener(type, e =>
     import('./failures.js').then(
       m => m.record(e),
@@ -92,6 +92,17 @@ import {
   embedRequest,
   embedWorldBuilt,
 } from './world.js';
+import { initMotionPreference, stepMotion } from './quality.js';
+import {
+  EV_ESCAPE,
+  EV_OBJECT_PLACED,
+  EV_PLACEMENT_ARMED,
+  EV_WORKER_FAILED,
+} from './names.js';
+
+// The banner of a preview as a student (Prompt 175).
+if (globalThis.location?.search.includes('preview=student'))
+  import('./storage/banner.js');
 
 // Add global flag to track splash screen status
 window.isSplashActive = true;
@@ -101,6 +112,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // anything reads them. initI18n only picks the locale; the markup sweep waits
   // for initI18nDom() below, once the rest of the document is known to exist.
   initI18n();
+  // The reader's own motion override, before anything animates.
+  initMotionPreference();
   // Embed mode has to be entered here rather than after the splash: a rail that
   // appears for one frame and then vanishes reads as a bug in the host page.
   const embedded = initEmbedMode();
@@ -308,7 +321,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     canvas.addEventListener('pointerdown', onTouch);
     // Escape dismisses them like any other overlay.
-    window.addEventListener('gravitasEscape', () => {
+    window.addEventListener(EV_ESCAPE, () => {
       const tips = document.getElementById('mobileInstructions');
       if (tips) tips.style.display = 'none';
     });
@@ -429,8 +442,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Placing a body is an interaction of its own. The long press that arms it is
   // already too long to be a tap, but the release that drops the object must
   // not pair with whatever comes next either.
-  window.addEventListener('gravitasPlacementArmed', () => doubleTap.cancel());
-  window.addEventListener('gravitasObjectPlaced', () => doubleTap.cancel());
+  window.addEventListener(EV_PLACEMENT_ARMED, () => doubleTap.cancel());
+  window.addEventListener(EV_OBJECT_PLACED, () => doubleTap.cancel());
 
   // Initialize with error handling
   try {
@@ -591,6 +604,8 @@ document.addEventListener('DOMContentLoaded', () => {
       initialize_simulation();
       embedWorldBuilt();
     }
+    // 'Step by step' (js/quality.js): the world is built but does not start.
+    if (stepMotion()) setPlaying(false);
     requestAnimationFrame(gameLoop);
 
     // Offline support, after the first frame rather than during boot: the

@@ -1,5 +1,5 @@
 import { describe, test, expect } from '@jest/globals';
-import { readFileSync, readdirSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 
 // =============================================================================
 // The five Chart.js charts: what they are, as data (D-PLOT-02, stage 3a)
@@ -209,21 +209,30 @@ describe('the caps and rates in source', () => {
 });
 
 describe('which charts still load Chart.js', () => {
-  test('only the bench comparison and sweep (A4, A5): the live charts are ported', () => {
-    // D-PLOT-02 stage 3b: the energy chart, the light curve and the radial-
-    // velocity trace draw with js/plot/chart.js, fetched on first use, so the
-    // pages that show them never load the vendored library.
+  test('none: all five draw with js/plot/chart.js, fetched on first use', () => {
+    // D-PLOT-02 stage 3b ported the energy chart, the light curve and the
+    // radial-velocity trace; stage 3c the bench's comparison and sweep; stage 4
+    // (Prompt 132) removed the library, its wrapper and its vendor entry. Each
+    // chart is built through the one mount, which fetches the component on
+    // first use, and nothing in the tree can name the library any more.
     const files = readdirSync('js', { recursive: true })
       .filter(f => f.endsWith('.js'))
       .map(f => `js/${f}`);
-    const loaders = files.filter(f =>
-      /from '(\.\.?\/)+chartjs\.js'/.test(read(f))
+    const reachers = files.filter(f =>
+      /chartjs\.js|vendor\/chartjs|ensureChartJs|window\.Chart\b/.test(read(f))
     );
-    expect(loaders).toEqual(['js/experiments/panel.js']);
+    expect(reachers).toEqual([]);
+    expect(existsSync('js/chartjs.js')).toBe(false);
+    expect(existsSync('vendor/chartjs')).toBe(false);
+    const pkg = JSON.parse(read('package.json'));
+    expect({ ...pkg.dependencies, ...pkg.devDependencies }['chart.js']).toBe(
+      undefined
+    );
     for (const ported of [
       'js/inspectorPanel.js',
       'js/lightCurve.js',
       'js/radialVelocity.js',
+      'js/experiments/panel.js',
     ]) {
       expect(read(ported)).not.toMatch(/window\.Chart|ensureChartJs/);
       // Through the one mount, which fetches the component on first use.
@@ -232,5 +241,38 @@ describe('which charts still load Chart.js', () => {
     expect(read('js/observationChart.js')).toContain(
       "import('./plot/mount.js')"
     );
+  });
+
+  test('the bench charts are div hosts, not canvases, and are torn down with the panel', () => {
+    const panel = read('js/experiments/panel.js');
+    expect(panel).toContain('<div id="benchChart" class="plot-host"></div>');
+    expect(panel).toContain(
+      '<div id="benchSweepChart" class="plot-host"></div>'
+    );
+    expect(panel).not.toContain('<canvas');
+    // A language change replaces the panel's markup and so both hosts: the
+    // charts are released first and rebuilt in the new ones.
+    expect(panel).toMatch(/releaseBenchCharts\(\);\s+root\.remove\(\)/);
+  });
+});
+
+describe("the bench charts' contract", () => {
+  test('each has a text alternative, a title for every metric, and the table beside it', () => {
+    expect(parity.A4.contract).toMatchObject({
+      label: 'Run A against Run B on a shared simulated-time axis',
+      tableBeside: true,
+      dataIsTheAlignedRows: true,
+    });
+    expect(parity.A4.contract.metricTitles.map(([, title]) => title)).toEqual([
+      'Separation (AU)',
+      'Total energy (sim)',
+      'Energy drift (%)',
+    ]);
+    expect(parity.A5.contract).toMatchObject({
+      label: 'Parameter sweep',
+      tableBeside: true,
+      dataIsTheTrialsThatMeasured: true,
+      failedTrialLeftOut: true,
+    });
   });
 });

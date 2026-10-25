@@ -1,0 +1,69 @@
+{
+  "note": "Prompt 188: what a cancelled (and a closed) 2,048 x 2,048 BITPIX -64 FITS read leaves behind, in Chromium, measured by tools/import-cancel-probe.mjs. Bounds from tools/image-import-cases.mjs BOUNDS, written before the run.",
+  "bounds": {
+    "ledgerBytes": 0,
+    "workersEndedWithinMs": 2000,
+    "heapGrowthBytes": 8388608
+  },
+  "machine": {
+    "loadAverageAtStart": 2.77
+  },
+  "rows": [
+    {
+      "profile": "low-end",
+      "mode": "cancel",
+      "baselineBytes": 1706571,
+      "heldInFlight": 67112192,
+      "ledgerAfterCancel": 0,
+      "workers": {
+        "started": 1,
+        "ended": 1
+      },
+      "afterBytes": 2961127,
+      "growthBytes": 1254556,
+      "verdict": "pass"
+    },
+    {
+      "profile": "low-end",
+      "mode": "close",
+      "baselineBytes": 1706571,
+      "readMs": 15463,
+      "ledgerAfterCancel": 0,
+      "workers": {
+        "started": 1,
+        "ended": 1
+      },
+      "afterBytes": 3086705,
+      "growthBytes": 1380134,
+      "verdict": "pass"
+    },
+    {
+      "profile": "desktop",
+      "mode": "cancel",
+      "baselineBytes": 1680723,
+      "heldInFlight": 67112192,
+      "ledgerAfterCancel": 0,
+      "workers": {
+        "started": 1,
+        "ended": 1
+      },
+      "afterBytes": 2931503,
+      "growthBytes": 1250780,
+      "verdict": "pass"
+    },
+    {
+      "profile": "desktop",
+      "mode": "close",
+      "baselineBytes": 1680723,
+      "readMs": 4450,
+      "ledgerAfterCancel": 0,
+      "workers": {
+        "started": 1,
+        "ended": 1
+      },
+      "afterBytes": 3050917,
+      "growthBytes": 1370194,
+      "verdict": "pass"
+    }
+  ]
+}

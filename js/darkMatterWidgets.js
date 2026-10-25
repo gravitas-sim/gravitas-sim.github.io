@@ -51,7 +51,7 @@ import {
   POINTS as NGC3198_POINTS,
 } from './data/ngc3198Synthetic.js';
 import { surface, responsiveHeight, MONO } from './widgetCanvas.js';
-import { scientific, decimal, withUnit } from './format.js';
+import { decimal, fixed, scientific, withUnit } from './format.js';
 import { t } from './i18n/index.js';
 import {
   G_GALACTIC,
@@ -329,7 +329,7 @@ function massLabel(solar) {
  */
 const e10 = solar =>
   Number.isFinite(solar)
-    ? withUnit(`${(solar / 1e10).toFixed(2)}\u00a0×\u00a010¹⁰`, 'M☉')
+    ? withUnit(`${fixed(solar / 1e10, 2)}\u00a0×\u00a010¹⁰`, 'M☉')
     : '—';
 
 // =============================================================================
@@ -514,7 +514,7 @@ const SHAPES = {
         get label() {
           return t('dmW.speedAt30Kpc');
         },
-        value: `${f.vAt30.toFixed(0)} km/s`,
+        value: `${fixed(f.vAt30, 0)} km/s`,
       },
       {
         get label() {
@@ -809,8 +809,8 @@ const ENCLOSED = {
     const f = ENCLOSED.compute(v);
     const rows = [
       {
-        label: `Speed at ${f.r.toFixed(1)} kpc`,
-        value: `${f.speed.toFixed(0)} km/s`,
+        label: `Speed at ${fixed(f.r, 1)} kpc`,
+        value: `${fixed(f.speed, 0)} km/s`,
       },
       {
         get label() {
@@ -826,10 +826,10 @@ const ENCLOSED = {
         },
         value:
           f.growth > 1.6
-            ? `roughly doubles (× ${f.growth.toFixed(2)})`
+            ? `roughly doubles (× ${fixed(f.growth, 2)})`
             : f.growth > 1.15
-              ? `keeps growing (× ${f.growth.toFixed(2)})`
-              : `barely changes (× ${f.growth.toFixed(2)})`,
+              ? `keeps growing (× ${fixed(f.growth, 2)})`
+              : `barely changes (× ${fixed(f.growth, 2)})`,
         emphasis: true,
       });
     }
@@ -839,7 +839,7 @@ const ENCLOSED = {
         get label() {
           return t('dmW.ofWhichTheVisibleDisc');
         },
-        value: `${e10(vis)}  (${((100 * vis) / f.enclosed).toFixed(0)}%)`,
+        value: `${e10(vis)}  (${fixed((100 * vis) / f.enclosed, 0)}%)`,
       });
     }
     return rows;
@@ -1147,7 +1147,7 @@ const FIT = {
         get label() {
           return t('dmW.averageMiss');
         },
-        value: `${f.fit.rms.toFixed(1)} km/s  (data is good to ±${f.meanErr.toFixed(0)})`,
+        value: `${fixed(f.fit.rms, 1)} km/s  (data is good to ±${fixed(f.meanErr, 0)})`,
       },
       {
         get label() {
@@ -1157,8 +1157,8 @@ const FIT = {
         emphasis: true,
       },
       {
-        label: `Worst point, at ${f.fit.worstR.toFixed(0)} kpc`,
-        value: `${f.fit.worst > 0 ? 'model too fast by ' : 'model too slow by '}${Math.abs(f.fit.worst).toFixed(0)} km/s`,
+        label: `Worst point, at ${fixed(f.fit.worstR, 0)} kpc`,
+        value: `${f.fit.worst > 0 ? 'model too fast by ' : 'model too slow by '}${fixed(Math.abs(f.fit.worst), 0)} km/s`,
       },
       {
         get label() {
@@ -1178,7 +1178,7 @@ const FIT = {
         get label() {
           return t('dmW.darkMassForEveryUnit');
         },
-        value: `${f.ratio.toFixed(1)} ×`,
+        value: `${fixed(f.ratio, 1)} ×`,
         emphasis: f.good,
       });
     } else {
@@ -1448,19 +1448,19 @@ const FLYBY = {
         get label() {
           return t('dmW.launchSpeed');
         },
-        value: `${f.launchSpeed.toFixed(0)} km/s`,
+        value: `${fixed(f.launchSpeed, 0)} km/s`,
       },
       {
         get label() {
           return t('dmW.speedTheVisibleDiscAlone');
         },
-        value: `${f.visibleSpeed.toFixed(0)} km/s`,
+        value: `${fixed(f.visibleSpeed, 0)} km/s`,
       },
       {
         get label() {
           return t('dmW.distanceNow');
         },
-        value: `${r.toFixed(1)} kpc  (launched at ${v.radius})`,
+        value: `${fixed(r, 1)} kpc  (launched at ${v.radius})`,
         emphasis: true,
       },
     ];
@@ -1714,7 +1714,7 @@ const VIRIAL = {
         // has not shrunk, it has been arithmetically destroyed.
         value: !Number.isFinite(f.vsBaryons)
           ? '—'
-          : `${f.vsBaryons < 1 ? f.vsBaryons.toPrecision(2) : f.vsBaryons.toFixed(1)} ×`,
+          : `${f.vsBaryons < 1 ? f.vsBaryons.toPrecision(2) : fixed(f.vsBaryons, 1)} ×`,
         emphasis: f.correct,
       },
     ];
@@ -1826,7 +1826,7 @@ const VIRIAL = {
       ctx.font = `bold 12px ${MONO}`;
       halo(
         ctx,
-        `${f.vsBaryons.toFixed(0)}× more than there is`,
+        `${fixed(f.vsBaryons, 0)}× more than there is`,
         bx,
         top + 2 * barH + 62
       );
@@ -1920,7 +1920,7 @@ const BUDGET = {
   },
   readout(v) {
     const f = BUDGET.compute(v);
-    const pct = x => `${(100 * x).toFixed(x < 0.01 ? 2 : 1)}%`;
+    const pct = x => `${fixed(100 * x, x < 0.01 ? 2 : 1)}%`;
     return [
       {
         get label() {
@@ -1951,7 +1951,7 @@ const BUDGET = {
         get label() {
           return t('dmW.darkMatterForEveryUnit');
         },
-        value: `${(f.darkMatter / f.baryons).toFixed(1)} ×`,
+        value: `${fixed(f.darkMatter / f.baryons, 1)} ×`,
       },
     ];
   },
@@ -2051,7 +2051,7 @@ const BUDGET = {
       ctx.textBaseline = 'top';
       halo(
         ctx,
-        `Everything you have ever seen: ${(100 * f.stars).toFixed(2)}%`,
+        `Everything you have ever seen: ${fixed(100 * f.stars, 2)}%`,
         bx,
         y - gap + 8
       );
@@ -2215,19 +2215,19 @@ const MOND_FIT = {
         get label() {
           return t('dmW.mondHaloRow');
         },
-        value: `${f.haloFit.rms.toFixed(1)} km/s — ${quality(f.haloFit)} · ${t('dmW.mondThreeFitted')}`,
+        value: `${fixed(f.haloFit.rms, 1)} km/s — ${quality(f.haloFit)} · ${t('dmW.mondThreeFitted')}`,
       },
       {
         get label() {
           return t('dmW.mondMondRow');
         },
-        value: `${f.mondFit.rms.toFixed(1)} km/s — ${quality(f.mondFit)} · ${t('dmW.mondOneFitted')}`,
+        value: `${fixed(f.mondFit.rms, 1)} km/s — ${quality(f.mondFit)} · ${t('dmW.mondOneFitted')}`,
       },
       {
         get label() {
           return t('dmW.mondPredictedRow');
         },
-        value: `${f.predicted.toFixed(0)} km/s`,
+        value: `${fixed(f.predicted, 0)} km/s`,
       },
       {
         get label() {

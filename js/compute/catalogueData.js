@@ -1,3 +1,8 @@
+import {
+  ID_EXPERIMENT_RESULT,
+  ID_OBSERVATION,
+  ID_ORBITAL_SYSTEM,
+} from '../names.js';
 // =============================================================================
 // What each reviewed notebook reads and returns, written by hand
 // -----------------------------------------------------------------------------
@@ -47,7 +52,7 @@ export const CATALOGUE_DATA = [
     packages: ['numpy', 'matplotlib'],
     input: {
       name: 'observation',
-      format: 'gravitas.observation',
+      format: ID_OBSERVATION,
       version: 1,
       kind: 'time-series',
       example: {
@@ -132,7 +137,7 @@ export const CATALOGUE_DATA = [
     packages: ['numpy'],
     input: {
       name: 'observation',
-      format: 'gravitas.observation',
+      format: ID_OBSERVATION,
       version: 1,
       kind: 'spectrum',
       example: {
@@ -153,7 +158,7 @@ export const CATALOGUE_DATA = [
         min: 1000,
         max: 20000,
         step: 0.01,
-        default: 6564.61,
+        default: 6564.6,
       },
       {
         id: 'halfwidth',
@@ -242,7 +247,7 @@ export const CATALOGUE_DATA = [
     packages: ['numpy', 'matplotlib'],
     input: {
       name: 'system',
-      format: 'gravitas.orbital-system',
+      format: ID_ORBITAL_SYSTEM,
       version: 1,
       example: {
         path: 'compute/inputs/kepler-16.gravitas-system.json',
@@ -361,7 +366,7 @@ export const CATALOGUE_DATA = [
     packages: ['numpy', 'matplotlib'],
     input: {
       name: 'result',
-      format: 'gravitas.experiment-result',
+      format: ID_EXPERIMENT_RESULT,
       version: 1,
       example: {
         path: 'compute/inputs/binary-planet-population.experiment-result.json',
@@ -499,7 +504,7 @@ export const CATALOGUE_DATA = [
     packages: ['numpy', 'scipy'],
     input: {
       name: 'observation',
-      format: 'gravitas.observation',
+      format: ID_OBSERVATION,
       version: 1,
       kind: 'time-series',
       example: {
@@ -636,7 +641,7 @@ export const CATALOGUE_DATA = [
     packages: ['numpy', 'astropy'],
     input: {
       name: 'observation',
-      format: 'gravitas.observation',
+      format: ID_OBSERVATION,
       version: 1,
       kind: 'time-series',
       example: {
@@ -793,7 +798,7 @@ export const CATALOGUE_DATA = [
     packages: ['numpy'],
     input: {
       name: 'observation',
-      format: 'gravitas.observation',
+      format: ID_OBSERVATION,
       version: 1,
       kind: 'time-series',
       example: {

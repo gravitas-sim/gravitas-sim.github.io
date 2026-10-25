@@ -8,6 +8,7 @@
 // =============================================================================
 
 import { PLATFORM_API } from '../platform/catalog.generated.js';
+import { KEY_DASHED_PREFIX } from '../names.js';
 
 const $ = id => document.getElementById(id);
 
@@ -45,7 +46,7 @@ export async function problemNote({ lesson, n, total, depth, link, spent }) {
   let build = 'not installed (no service worker)';
   try {
     const names = (await globalThis.caches.keys()).filter(k =>
-      k.startsWith('gravitas-')
+      k.startsWith(KEY_DASHED_PREFIX)
     );
     if (names.length) build = names[0];
   } catch {

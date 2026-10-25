@@ -1,0 +1,75 @@
+{
+ "cut": "orbital-speed/lab",
+ "lesson": "keplers-laws",
+ "ok": true,
+ "reason": null,
+ "assignment": {
+  "k": "gravitas.assignment",
+  "v": 2,
+  "i": "act-orbital-speed-lab",
+  "l": "keplers-laws",
+  "t": "orbital-speed",
+  "n": "Golden intro",
+  "s": [
+   "eight-minutes-of-arc",
+   "where-is-the-star",
+   "change-the-shape",
+   "what-sits-at-the-other",
+   "measure-the-two-orbits",
+   "where-does-it-move-fastest",
+   "watch-it-happen",
+   "equal-areas-however-you-slice",
+   "fast-and-slow-in-numbers",
+   "why-the-speed-changes",
+   "what-newton-added",
+   "where-kepler-s-version-breaks"
+  ],
+  "f": [
+   "ac4f2f95",
+   "6fe103a3",
+   "589c83e1",
+   "0dc810fa",
+   "b16a192f",
+   "0086f3c7",
+   "5fd14104",
+   "086efbfc",
+   "c4e6d0fa",
+   "36370368",
+   "210c8f94",
+   "0dc810fa"
+  ],
+  "c": "2026-01-02",
+  "p": [
+   "golden-pack",
+   "1.2.0"
+  ]
+ },
+ "sids": [
+  "eight-minutes-of-arc",
+  "where-is-the-star",
+  "change-the-shape",
+  "what-sits-at-the-other",
+  "measure-the-two-orbits",
+  "where-does-it-move-fastest",
+  "watch-it-happen",
+  "equal-areas-however-you-slice",
+  "fast-and-slow-in-numbers",
+  "why-the-speed-changes",
+  "what-newton-added",
+  "where-kepler-s-version-breaks"
+ ],
+ "added": [
+  "eight-minutes-of-arc",
+  "what-newton-added"
+ ],
+ "unknown": [],
+ "valid": false,
+ "pins": {
+  "none": "none",
+  "same": "same",
+  "compatible": "compatible",
+  "major": "major",
+  "moved": "moved",
+  "unpinned": "unpinned"
+ }
+}

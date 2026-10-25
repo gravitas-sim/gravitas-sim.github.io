@@ -142,8 +142,10 @@ export const GRAPH = Object.freeze([
       'extensions',
       'tools/library-curation.json',
       'tools/build-library.mjs',
+      'tools/build-relations.mjs',
+      'tools/navigation-inventory.json',
     ],
-    outputs: ['library/library.json'],
+    outputs: ['library/library.json', 'library/search-index.json'],
     regions: ['LIBRARY.md', 'js/fragments/home.html'],
     after: ['manifest', 'catalog', 'teaching'],
   },
@@ -236,6 +238,20 @@ export const GRAPH = Object.freeze([
     inputs: ['tools', 'package.json'],
     outputs: ['tools/README.md'],
     after: [],
+  },
+  {
+    id: 'docs-map',
+    generate: 'node tools/docs-map.mjs',
+    check: 'node tools/docs-map.mjs --check',
+    inputs: [
+      'tools/docs-map.json',
+      'tools/docs-map.mjs',
+      'tools/generate-graph.mjs',
+    ],
+    outputs: ['DOCUMENTS.md'],
+    after: [],
+    notes:
+      'The table is hand-written (tools/docs-map.json); DOCUMENTS.md is written from it and from the tree. A new root document needs a row; `node tools/docs-map.mjs --seed` fills its student flag.',
   },
   {
     // After everything that rewrites a precached file: the manifest hashes

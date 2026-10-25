@@ -3,8 +3,8 @@
 // -----------------------------------------------------------------------------
 // One unexplained word at the end of /model/'s footer, "origin", opens the
 // original Gravitas - the single index.html of commit a5d08fc, kept as it was
-// but for Save State and Load State, which are drawn and do nothing - at
-// /history/original/. This walks it the way a reader would: find the link,
+// but for Save State and Load State, which are drawn and do nothing, and a
+// freeze notice in two languages (D-R10-51) - at /history/original/. This walks it the way a reader would: find the link,
 // follow it from the keyboard, watch the old simulation start, press the two
 // buttons that no longer work, and come back with Back.
 //
@@ -13,12 +13,12 @@
 // which copies the page through build.js's ARCHIVAL_PAGES. Either could lose
 // it or rewrite it, and the byte comparison below is what would notice.
 //
-// The original asks Google Fonts for its typefaces, which the current
-// application deliberately does not (e2e/selfContained.spec.js). That request
-// is part of the history and stays in the file, but a test must not depend on
-// another origin, so it is answered here with an empty stylesheet and the page
-// draws in its fallback faces - as it would behind a school firewall. It is
-// the page's only request to another origin, and the walk asserts that too.
+// The original used to ask Google Fonts for its typefaces. That one @import
+// line was removed (D-R10-51, option (a)), so the page draws in its own
+// sans-serif and monospace fallbacks and makes no request to another origin.
+// Every other origin is still answered here with an empty body, so that a
+// request which came back would be seen and not depend on the network, and the
+// walk asserts that none was made.
 //
 // DOM only, no module imports: /js/ui.js does not exist in dist/.
 // =============================================================================
@@ -168,11 +168,8 @@ test.describe('the first sketch', () => {
         .poll(async () => (await sampleCanvas(page)).hash, { timeout: 10_000 })
         .not.toBe(first.hash);
 
-      // Its only request to another origin is the Google Fonts stylesheet.
-      expect(seen.foreign.length).toBeGreaterThan(0);
-      for (const url of seen.foreign) {
-        expect(new URL(url).hostname).toBe('fonts.googleapis.com');
-      }
+      // No request to another origin at all: the font import is gone.
+      expect(seen.foreign).toEqual([]);
 
       // Save State and Load State are buttons with nothing behind them. The
       // original's handlers wrote to the key today's application keeps its
@@ -201,6 +198,75 @@ test.describe('the first sketch', () => {
       await expect(
         page.getByRole('link', { name: 'origin', exact: true })
       ).toHaveCount(1);
+    }
+  );
+
+  test(
+    'the freeze notice reads in both languages, offers the way out and blocks nothing',
+    { tag: '@cross-browser' },
+    async ({ page }) => {
+      await watchRequests(page);
+      for (const size of [
+        { width: 1280, height: 720 },
+        { width: 390, height: 844 },
+      ]) {
+        await page.setViewportSize(size);
+        await page.goto(HREF, { waitUntil: 'load' });
+        const notice = page.locator('#freezeNotice');
+        await expect(notice).toBeVisible();
+        await expect(notice).toHaveAttribute('role', 'note');
+
+        // The same words in English and in Spanish, each in its own language.
+        await expect(notice.locator('p[lang="en"]')).toContainText(
+          'This is the first Gravitas, kept as a record'
+        );
+        await expect(notice.locator('p[lang="en"]')).toContainText(
+          'no new features'
+        );
+        await expect(notice.locator('p[lang="es"]')).toContainText(
+          'Este es el primer Gravitas, conservado como registro'
+        );
+        await expect(notice.locator('p[lang="es"]')).toContainText(
+          'nuevas funciones'
+        );
+
+        // Wholly on screen, at the foot, clear of the controls at the top, and
+        // each link to the current Gravitas a target of at least 24 px.
+        const box = await notice.boundingBox();
+        expect(box.x).toBeGreaterThanOrEqual(0);
+        expect(box.x + box.width).toBeLessThanOrEqual(size.width + 0.5);
+        expect(box.y + box.height).toBeLessThanOrEqual(size.height + 0.5);
+        expect(box.y + box.height).toBeGreaterThan(size.height - 1);
+        const controls = await page.locator('.ui-container').boundingBox();
+        expect(controls.y + controls.height).toBeLessThan(box.y);
+        const links = notice.getByRole('link');
+        await expect(links).toHaveCount(2);
+        for (const i of [0, 1]) {
+          await expect(links.nth(i)).toHaveAttribute('href', '/');
+          const b = await links.nth(i).boundingBox();
+          expect(b.height).toBeGreaterThanOrEqual(24);
+          expect(b.width).toBeGreaterThanOrEqual(24);
+          expect(b.x).toBeGreaterThanOrEqual(0);
+          expect(b.x + b.width).toBeLessThanOrEqual(size.width + 0.5);
+        }
+
+        // It adds no layer between a click and the canvas: the strip lets a
+        // click through, and only the links catch one.
+        const hit = await page.evaluate(
+          ({ x, y }) => document.elementFromPoint(x, y)?.id,
+          { x: size.width - 4, y: size.height - 2 }
+        );
+        expect(hit).toBe('simulationCanvas');
+        const [a, b] = await Promise.all([
+          links.nth(0).evaluate(el => getComputedStyle(el).pointerEvents),
+          notice.evaluate(el => getComputedStyle(el).pointerEvents),
+        ]);
+        expect([a, b]).toEqual(['auto', 'none']);
+
+        // The old simulation still runs underneath, and the page is the one
+        // file committed.
+        await expect(page.locator('#overlay')).toContainText('Status: Running');
+      }
     }
   );
 

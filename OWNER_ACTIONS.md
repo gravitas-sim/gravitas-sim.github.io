@@ -39,13 +39,13 @@ box here means the thing is done and verified, not merely decided.
       Documented in [`RELEASING.md`](RELEASING.md), including the consequence:
       the commit that records the DOI is not inside the archived tag.
 
-- [ ] **A non-commercial test fixture in the archive.** One CC BY-NC 3.0 IGO
+- [x] **A non-commercial test fixture in the archive.** One CC BY-NC 3.0 IGO
       Gaia answer, `tests/fixtures/archive/gaia-epphot-su-dra.vot`, is in the
       repository and so in every release archive, under its own license and
-      credited (LICENSES.md, NOTICE). It is no longer on the site. Keep it, as
-      now, or replace it with a synthetic answer of the same shape before the
-      release so the archive carries nothing non-commercial. (Prompt 47 left it
-      as it is: removing test evidence is not a repair.)
+      credited (LICENSES.md, NOTICE). It is no longer on the site. Decided
+      2026-10-17: keep it, as now. It is test evidence, and the 1.0.0 and
+      2.0.0 archives already contain it. A synthetic replacement would only
+      change later archives.
 
 ## Zenodo
 
@@ -135,6 +135,27 @@ are, and each is given here with its exact path.
       beside **About** → Description (the suggested text above) and Topics (the
       suggested list above) → Save changes.
 
+### Settings for Roadmap III (Prompt 122)
+
+Each is Carl's, by hand, and none is done by a session. `v2` no longer exists,
+so the plan above reads without its `v2` clauses.
+
+- [ ] **Create the four labels the class check reads.** Issues → Labels → New
+      label, for each of `invisible`, `visible`, `instructional` and `hotfix`.
+      Without them a pull request cannot be classified and the `Pull-request
+      class` job fails it (INTEGRATION.md, "Enforcement").
+- [ ] **Require the checks on `main`.** In the `main` ruleset above, Require
+      status checks → Add checks → `CI` (it now includes the `Pull-request
+      class` job). Branch protection is what turns the class check from advice
+      into a gate; the repository reports `Branch not protected` until it is set.
+- [ ] **Private vulnerability reporting.** Settings → Advanced Security (Code
+      security) → Private vulnerability reporting → Enable. Still off.
+- [ ] **Description and topics.** On the repository's main page, the gear beside
+      **About**. Both are still empty; the suggested text and list are above.
+- [ ] **When a train exists:** restrict nothing new, but keep the `github-pages`
+      environment's deployment branches to `main` only, so a train can never
+      publish before promotion.
+
 ### Settings status, read from the API (Prompt 111, 2026-10-06)
 
 Read-only `gh api` calls against the repository, restated here so the plan
@@ -182,7 +203,8 @@ exists, not when it is planned.
       `.instructor-password` file on one machine, and whatever else), and who can
       get it. It is also what [`SUPPORT.md`](SUPPORT.md) says to email you for:
       the email address is part of this item. A second holder, or an emergency
-      copy, is the whole point.
+      copy, was the point; Carl decided on 2026-10-21 that there is none (see the
+      Instructor materials section: what that means if he is unavailable).
 - [ ] **Zenodo.** The account that holds the integration and the record's
       ownership, and a second person added as an owner of the record if
       Zenodo's settings allow. Without it nobody else can publish a version to
@@ -264,10 +286,19 @@ The author-facing side is [`CONTRIBUTING_CONTENT.md`](CONTRIBUTING_CONTENT.md).
 
 ## Instructor materials
 
-- [ ] **Decide who gets the instructor passphrase, and how.**
-      [`SUPPORT.md`](SUPPORT.md) says to email you for it. If that does not
-      scale, decide what replaces it before the paper is published rather than
-      after.
+- [ ] **Decide who gets the instructor passphrase, and how.** A policy is
+      written (Prompt 170, D-R10-43, delegated and unreviewed): the request route
+      from an institutional address and its form of words, what you verify, the
+      reply, the turnaround, rotation on a suspected leak, and a department's own
+      passphrase and bundle, all in [`INSTRUCTOR_MATERIALS.md`](INSTRUCTOR_MATERIALS.md)
+      ("Who gets the passphrase, and how"); [`SUPPORT.md`](SUPPORT.md) points to it.
+      Review it, or replace it, before the paper is published. It changes nothing
+      about how the bundle is encrypted.
+- [x] **Say who the second passphrase holder is, or that there is none.** None:
+      Carl is the only holder, decided by him in chat on 2026-10-21 and recorded in
+      the same document ("The second holder"), with what it means if he is
+      unavailable. If that changes, record who (a name and a role), never the
+      passphrase and never where it is kept.
 Standing, not a box to tick: **rebuild and commit the instructor bundle**
 whenever instructional content changes. `npm run instructors:check` says
 whether it is current and needs no passphrase; rebuilding needs the real one.

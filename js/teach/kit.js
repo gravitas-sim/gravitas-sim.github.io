@@ -19,6 +19,7 @@ import {
 } from './handout.js';
 import { tr } from './kitText.js';
 import { NOTES, PLATFORMS } from './lmsNotes.js';
+import { KEY_LOCALE } from '../names.js';
 
 /**
  * Everything that reads a link or a course, fetched when something is given to
@@ -243,10 +244,17 @@ async function build() {
       : text(source.pack.title, loc);
   $('kitRosterRow').hidden = source.kind !== 'activity';
   $('kitReuse').hidden = false;
+  $('kitCc').hidden = source.kind !== 'course';
+  $('kitPlanSection').hidden = source.kind !== 'course';
   $('kitReuseCheck').hidden = source.kind !== 'activity';
   $('kitReuseSave').hidden = source.kind !== 'activity';
   $('kitReuseNote').textContent =
     source.kind === 'course' ? T('reuse.course') : T('reuse.note');
+  $('kitTermNote').textContent = T('term.note', {
+    what: T(`term.what.${source.kind}`),
+  });
+  $('kitTermWasRow').hidden = source.kind !== 'activity';
+  $('kitTermSave').hidden = true;
 
   $('kitLink').value = url.url;
   const comfortable = url.length <= D.LIMIT;
@@ -306,6 +314,118 @@ async function reuse() {
   }
 }
 
+/**
+ * Make the activity or the course for a new term, and build the kit for it
+ * (Prompt 168). The logic is js/instructorTerm.js; nothing here changes the file
+ * that was opened.
+ */
+async function newTerm() {
+  const out = $('kitTermOut');
+  const list = $('kitTermList');
+  list.replaceChildren();
+  const [mod, words, pack, review, api, assignment] = await Promise.all([
+    import('../instructorTerm.js'),
+    import('../instructorTermText.js'),
+    import('../course/pack.js'),
+    import('../course/review.js'),
+    import('../course/api.js'),
+    import('../assignments/assignment.js'),
+  ]);
+  const lib = {
+    STATUS: review.STATUS,
+    itemsOf: pack.itemsOf,
+    reviewCoursePack: review.reviewCoursePack,
+    upgradeCoursePack: review.upgradeCoursePack,
+    shortHash: review.shortHash,
+    newAssignmentId: api.newAssignmentId,
+  };
+  const W = (id, vars) => words.tr(lang(), id, vars);
+  const parsed = mod.termLabel($('kitTerm').value);
+  if (!parsed.ok) {
+    out.textContent = W(`p.term.${parsed.reason}`, { max: 40 });
+    return;
+  }
+  const { term } = parsed;
+  if (source.kind === 'activity') {
+    const was = mod.termLabel($('kitTermWas').value);
+    source = {
+      ok: true,
+      kind: 'activity',
+      activity: mod.startActivityTerm(
+        reissued ?? source.activity,
+        term,
+        new Date(),
+        was.ok ? was.term : null,
+        assignment.assignmentIdFor
+      ),
+    };
+    reissued = null;
+    await build();
+    $('kitTermOut').textContent = T('term.done.activity', { term });
+    return;
+  }
+  out.textContent = T('reuse.loading');
+  try {
+    const facts = await api.courseFacts(source.pack, {
+      load: id => lesson(id, 'en'),
+    });
+    const made = mod.startTerm(source.pack, facts, {
+      term,
+      today: new Date().toISOString().slice(0, 10),
+      lib,
+    });
+    source = { ok: true, kind: 'course', pack: made.pack };
+    await build();
+    const loc = lang();
+    const moved = made.report.items.filter(r => r.result !== 'same');
+    list.replaceChildren(
+      ...moved.map(r => {
+        const item = D.itemsOf(made.pack).find(x => x.item.id === r.id)?.item;
+        const name =
+          text(item?.title, loc) ||
+          (item?.lesson ? cardTitle(item.lesson, loc) : r.id);
+        return Object.assign(document.createElement('li'), {
+          textContent: W('r.item', {
+            name,
+            standing: W(`st.${r.standing}`),
+            steps:
+              (r.changedSteps.length
+                ? W('r.steps.changed', { n: r.changedSteps.length })
+                : '') +
+              (r.missingSteps.length
+                ? W('r.steps.missing', { n: r.missingSteps.length })
+                : ''),
+          }),
+        });
+      })
+    );
+    $('kitTermSave').hidden = false;
+    $('kitTermOut').textContent = `${T('term.done.course', { term })} ${
+      moved.length === 0
+        ? W('r.same')
+        : moved.length === 1
+          ? W('r.changed.one')
+          : W('r.changed.many', { n: moved.length })
+    }`;
+  } catch {
+    out.textContent = T('reuse.failed');
+  }
+}
+
+function saveCourse() {
+  const p = source.pack;
+  const link = Object.assign(document.createElement('a'), {
+    href: URL.createObjectURL(
+      new Blob([`${JSON.stringify(p, null, 2)}\n`], {
+        type: 'application/json',
+      })
+    ),
+    download: `${p.id}.course.json`,
+  });
+  link.click();
+  setTimeout(() => URL.revokeObjectURL(link.href), 10000);
+}
+
 function saveActivity() {
   const a = source.activity;
   const blob = new Blob([`${JSON.stringify(a, null, 2)}\n`], {
@@ -357,6 +477,11 @@ function wire() {
   });
   $('kitReuseCheck').addEventListener('click', reuse);
   $('kitReuseSave').addEventListener('click', saveActivity);
+  $('kitTermGo').addEventListener('click', newTerm);
+  $('kitTermSave').addEventListener('click', saveCourse);
+  $('kitCollOpen').addEventListener('click', openCollections);
+  $('kitCcOpen').addEventListener('click', openCartridge);
+  $('kitPlanOpen').addEventListener('click', openPlan);
   $('kitReuseUse').addEventListener('click', async () => {
     if (!reissued) return;
     source = { ok: true, kind: 'activity', activity: reissued };
@@ -366,11 +491,131 @@ function wire() {
   });
 }
 
+/**
+ * The Common Cartridge panel (Prompt 169): its modules load when it is opened,
+ * and take the page's from here (a lazy import of js/course/manifest.js would
+ * split a chunk the course builder's route then fetches).
+ */
+let cartridge = null;
+async function openCartridge() {
+  const out = $('kitStatus');
+  out.textContent = T('cc.loading');
+  const [view, cc, pack, review, api, links] = await Promise.all([
+    import('../instructorCartridgeView.js'),
+    import('../instructorCartridge.js'),
+    import('../course/pack.js'),
+    import('../course/review.js'),
+    import('../course/api.js'),
+    import('../course/links.js'),
+  ]);
+  const pk = source.pack;
+  const facts = await api.courseFacts(pk, { load: id => lesson(id, 'en') });
+  const made = await cc.linksOf(pk, {
+    itemsOf: pack.itemsOf,
+    itemLink: links.itemLink,
+    courseLink: links.courseLink,
+    root: ROOT,
+  });
+  const manifest = cc.manifestLike(
+    pk,
+    made,
+    review.estimate(pk, facts),
+    pack.itemsOf
+  );
+  out.textContent = '';
+  $('kitCcOpen').setAttribute('aria-expanded', 'true');
+  cartridge = view.openCartridgePanel({
+    host: $('kitCartridge'),
+    level: 3,
+    source: () => pk,
+    manifest: () => manifest,
+    nameOf: (p, id) =>
+      cc.itemTitle(
+        pack.itemsOf(p).find(x => x.item.id === id).item,
+        facts,
+        lang()
+      ),
+    download: (name, bytes, type) => {
+      const a = Object.assign(document.createElement('a'), {
+        href: URL.createObjectURL(new Blob([bytes], { type })),
+        download: name,
+      });
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(a.href), 10000);
+    },
+    locale: lang,
+  });
+}
+
+/**
+ * The activity list panel (Prompt 174): loaded when it is opened, and given the
+ * page's modules from here, as the cartridge panel is. The kit holds a package it
+ * cannot edit, so the panel has no outcomes editor here: a course file that
+ * carries outcomes prints its matrix.
+ */
+let plan = null;
+async function openPlan() {
+  const out = $('kitStatus');
+  out.textContent = T('plan.loading');
+  const [view, cc, pack, review, api, links] = await Promise.all([
+    import('../instructorPlanView.js'),
+    import('../instructorCartridge.js'),
+    import('../course/pack.js'),
+    import('../course/review.js'),
+    import('../course/api.js'),
+    import('../course/links.js'),
+  ]);
+  const pk = source.pack;
+  const facts = await api.courseFacts(pk, { load: id => lesson(id, 'en') });
+  const made = await cc.linksOf(pk, {
+    itemsOf: pack.itemsOf,
+    itemLink: links.itemLink,
+    courseLink: links.courseLink,
+    root: ROOT,
+  });
+  const manifest = cc.manifestLike(
+    pk,
+    made,
+    review.estimate(pk, facts),
+    pack.itemsOf
+  );
+  out.textContent = '';
+  $('kitPlanOpen').setAttribute('aria-expanded', 'true');
+  plan = view.openPlanPanel({
+    host: $('kitPlan'),
+    level: 3,
+    source: () => pk,
+    manifest: () => manifest,
+    facts: async () => facts,
+    lib: { itemsOf: pack.itemsOf },
+    nameOf: (p, id) =>
+      cc.itemTitle(
+        pack.itemsOf(p).find(x => x.item.id === id).item,
+        facts,
+        lang()
+      ),
+    load: (id, loc) => lesson(id, loc),
+    entries: () => view.libraryEntries(ROOT),
+    cards: new Map(api.LESSONS.map(c => [c.id, c])),
+    locale: lang,
+  });
+}
+
+/** The collection editor (Prompt 164): its module loads when the section is opened. */
+async function openCollections() {
+  const host = $('kitCollections');
+  if (!host.hidden) return;
+  host.hidden = false;
+  $('kitCollOpen').setAttribute('aria-expanded', 'true');
+  const { mountMaker } = await import('../instructorCollections.js');
+  await mountMaker(host);
+}
+
 async function init() {
   // P81 L-1: saved choice, else the browser's, as Teach does.
   try {
     document.documentElement.lang = /^es/i.test(
-      localStorage.getItem('gravitas_locale') || navigator.language
+      localStorage.getItem(KEY_LOCALE) || navigator.language
     )
       ? 'es'
       : 'en';
@@ -383,8 +628,11 @@ async function init() {
     onLanguage: () => {
       words();
       if (source) build();
+      cartridge?.refresh();
+      plan?.refresh();
     },
   });
+  if (location.hash === '#collections') openCollections();
   if (/^#[ac]\d/.test(location.hash)) {
     const roster = new URLSearchParams(location.search).get('roster');
     await take(location.hash, roster);

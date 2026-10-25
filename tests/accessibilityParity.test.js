@@ -195,9 +195,9 @@ describe('the precise form and the pointer path are one path', () => {
     // The undo stack listens for this and nothing else. A body added by the
     // form that skipped it would be unremovable by the undo button, which is
     // the "preserve history behaviour" requirement in one assertion.
-    expect(ui).toMatch(/new CustomEvent\('gravitasObjectPlaced'/);
+    expect(ui).toMatch(/new CustomEvent\(EV_OBJECT_PLACED/);
     expect(read('js/controls.js')).toMatch(
-      /addEventListener\('gravitasObjectPlaced'/
+      /addEventListener\(EV_OBJECT_PLACED/
     );
   });
 });

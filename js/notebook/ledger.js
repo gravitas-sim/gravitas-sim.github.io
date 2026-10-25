@@ -29,9 +29,10 @@
 
 import { artifact } from '../platform/artifact.js';
 import { symbolOf, unitIdOf } from '../units/registry.js';
+import { ID_LEDGER } from '../names.js';
 
 /** What a ledger record says it is. */
-export const LEDGER_FORMAT = 'gravitas.ledger';
+export const LEDGER_FORMAT = ID_LEDGER;
 export const LEDGER_VERSION = 1;
 
 const HEX = /^[0-9a-f]{8,64}$/;
@@ -312,12 +313,60 @@ export function evidenceRows(entries, t, locale = 'en') {
   return rows;
 }
 
+const BASIS_CODE = {
+  data: 'd',
+  model: 'm',
+  assumed: 'a',
+  scaled: 's',
+  profile: 'p',
+  derived: 'v',
+};
+
+/**
+ * What an uncertainty says beyond the half-width the row's fifth column holds
+ * (Prompt 151): a short code for its kind and basis, and the numbers the kind
+ * needs, so the review page can print a limit as a limit, a failed fit as
+ * failed and an asymmetric interval as one. Null when nothing is stated, which
+ * leaves the row as it always was (an envelope's sigma always has its basis,
+ * so a sigma has a code).
+ * [kind, basis, ...numbers]: s sigma, i interval (lo, hi, level), l limit
+ * (bound u or l), m model-limited (floor, sigma), a assumed, f failed, c not
+ * constrained; the basis is d data, m model, a assumed, s scaled, p profile,
+ * v derived, or null.
+ * @param {object} u - An envelope quantity's uncertainty
+ * @returns {?Array<*>}
+ */
+export function uncertaintyCode(u) {
+  const b = BASIS_CODE[u.basis] ?? null;
+  switch (u.kind) {
+    case 'sigma':
+      return ['s', b];
+    case 'interval':
+      return ['i', b, u.lo, u.hi, ...(u.level > 0 ? [u.level] : [])];
+    case 'limit':
+      return ['l', b, u.bound === 'lower' ? 'l' : 'u'];
+    case 'model-limited':
+      return ['m', b, u.floor, ...(u.sigma > 0 ? [u.sigma] : [])];
+    case 'assumed':
+      return ['a'];
+    case 'failed':
+      return ['f'];
+    case 'not-constrained':
+      return ['c'];
+    default:
+      return null;
+  }
+}
+
 /**
  * The compact record of a ledger: the envelopes by id with their sources and
  * every row of the evidence table as numbers. A submission token carries it,
  * so the review page can show the table and check it against its digest.
  *
- * Numbers, registry ids and short codes only: nothing in it is a sentence.
+ * Numbers, registry ids and short codes only: nothing in it is a sentence. A
+ * row has nine columns, and a tenth, the uncertainty's code (uncertaintyCode),
+ * when an uncertainty is stated; a reader of nine columns reads every row it
+ * ever did.
  * @param {Array<object>} entries - The notebook, in order
  * @returns {{ids: string[], rows: Array<Array<*>>, total: number}}
  */
@@ -330,6 +379,7 @@ export function ledgerRecord(entries) {
     const s = env.source;
     for (const q of env.quantities) {
       const u = q.uncertainty;
+      const code = uncertaintyCode(u);
       rows.push([
         env.id,
         q.id,
@@ -344,6 +394,7 @@ export function ledgerRecord(entries) {
         s.kind,
         s.id,
         s.digest ? s.digest.slice(0, 16) : null,
+        ...(code ? [code] : []),
       ]);
     }
   }
@@ -381,6 +432,13 @@ export const ARTIFACT_SOURCES = [
   'derived-quantity',
   'lab3d',
   'mission-lab',
+  'image-marks',
+  'image-calibration',
+  'image-photometry',
+  'image-detection',
+  'image-injection',
+  'image-sequence',
+  'image-series',
 ];
 
 /**

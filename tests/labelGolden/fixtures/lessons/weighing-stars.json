@@ -1,0 +1,172 @@
+{
+ "id": "weighing-stars",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.a-practice-run.fields.0.unit","AU"],
+    ["steps.a-practice-run.fields.1.unit","years"],
+    ["steps.a-practice-run.fields.2.unit",""],
+    ["steps.a-practice-run.fields.3.unit",""],
+    ["steps.a-practice-run.fields.4.unit","M☉"],
+    ["steps.weigh-the-pair.fields.0.unit","AU"],
+    ["steps.weigh-the-pair.fields.1.unit","years"],
+    ["steps.weigh-the-pair.fields.2.unit",""],
+    ["steps.weigh-the-pair.fields.3.unit",""],
+    ["steps.weigh-the-pair.fields.4.unit","M☉"],
+    ["steps.how-sure-is-the-total.fields.0.unit","AU"],
+    ["steps.how-sure-is-the-total.fields.1.unit","years"],
+    ["steps.how-sure-is-the-total.fields.2.unit","AU"],
+    ["steps.how-sure-is-the-total.fields.3.unit","years"],
+    ["steps.how-sure-is-the-total.fields.4.unit","M☉"],
+    ["steps.how-sure-is-the-total.fields.5.unit","M☉"],
+    ["steps.weigh-it-with-an-error-bar.unit","M☉"],
+    ["steps.now-weigh-each-one.fields.0.unit","M☉"],
+    ["steps.now-weigh-each-one.fields.1.unit","M☉"],
+    ["steps.now-weigh-each-one.fields.2.unit","M☉"],
+    ["steps.weigh-one-star-with-an-error-bar.unit","M☉"],
+    ["steps.one-on-your-own.fields.0.unit","AU"],
+    ["steps.one-on-your-own.fields.1.unit","years"],
+    ["steps.one-on-your-own.fields.2.unit",""],
+    ["steps.one-on-your-own.fields.3.unit",""],
+    ["steps.one-on-your-own.fields.4.unit","M☉"]
+   ],
+   "numbered": [
+    ["steps.a-practice-run.fields.0.hint","2"],
+    ["steps.a-practice-run.fields.1.hint","2"],
+    ["steps.a-practice-run.fields.2.label","a<sup>3</sup>, that is a × a × a"],
+    ["steps.a-practice-run.fields.3.label","P<sup>2</sup>, that is P × P"],
+    ["steps.a-practice-run.fields.4.label","Total mass, a<sup>3</sup> ÷ P<sup>2</sup>"],
+    ["steps.weigh-the-pair.fields.2.label","a<sup>3</sup>"],
+    ["steps.weigh-the-pair.fields.3.label","P<sup>2</sup>"],
+    ["steps.how-sure-is-the-total.fields.0.hint","0.1"],
+    ["steps.how-sure-is-the-total.fields.1.hint","0.2"],
+    ["steps.weigh-it-with-an-error-bar.placeholder","e.g. 4.0 ± 0.5"],
+    ["steps.weigh-one-star-with-an-error-bar.placeholder","e.g. 3.0 ± 0.3"],
+    ["steps.one-on-your-own.fields.0.hint","3"],
+    ["steps.one-on-your-own.fields.1.hint","3"],
+    ["steps.one-on-your-own.fields.2.label","a<sup>3</sup>"],
+    ["steps.one-on-your-own.fields.3.label","P<sup>2</sup>"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.a-practice-run.fields.2.label","a<sup>3</sup>, es decir a × a × a"],
+    ["steps.a-practice-run.fields.3.label","P<sup>2</sup>, es decir P × P"],
+    ["steps.a-practice-run.fields.4.label","Masa total, a<sup>3</sup> ÷ P<sup>2</sup>"],
+    ["steps.weigh-it-with-an-error-bar.placeholder","p. ej. 4,0 ± 0,5"],
+    ["steps.weigh-one-star-with-an-error-bar.placeholder","p. ej. 3,0 ± 0,3"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "weigh-it-with-an-error-bar",
+    "answer": "4",
+    "tolerance": "0.5",
+    "unit": "M☉"
+   },
+   {
+    "sid": "weigh-one-star-with-an-error-bar",
+    "answer": "3",
+    "tolerance": "0.35",
+    "unit": "M☉"
+   }
+  ],
+  "decimals": [
+   [
+    "a-practice-run.a3",
+    0
+   ],
+   [
+    "a-practice-run.p2",
+    0
+   ],
+   [
+    "a-practice-run.total",
+    2
+   ],
+   [
+    "weigh-the-pair.a3",
+    0
+   ],
+   [
+    "weigh-the-pair.p2",
+    0
+   ],
+   [
+    "weigh-the-pair.total",
+    2
+   ],
+   [
+    "how-sure-is-the-total.a_in",
+    2
+   ],
+   [
+    "how-sure-is-the-total.p_in",
+    2
+   ],
+   [
+    "how-sure-is-the-total.m_tot",
+    2
+   ],
+   [
+    "how-sure-is-the-total.s_tot",
+    2
+   ],
+   [
+    "now-weigh-each-one.sum",
+    1
+   ],
+   [
+    "one-on-your-own.a3",
+    0
+   ],
+   [
+    "one-on-your-own.p2",
+    0
+   ],
+   [
+    "one-on-your-own.total",
+    2
+   ]
+  ]
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "watch-them": {
+    "probe": [[{"label":"The pair","value":"not on the canvas yet"}],[{"label":"Star A, mass","value":"2 M☉"},{"label":"Star B, mass","value":"2 M☉"},{"label":"Star to star","value":"4.00 AU"}],[{"label":"Star A, mass","value":"3 M☉"},{"label":"Star B, mass","value":"1 M☉"},{"label":"Star to star","value":"4.00 AU"}],[{"label":"Star A, mass","value":"1 M☉"},{"label":"Star B, mass","value":"1 M☉"},{"label":"Star to star","value":"0.08 AU"}]]
+   },
+   "what-are-they-going-round": {
+    "probe": [[{"label":"Balance point","value":"no pair on screen"}],[{"label":"Star A to the balance point","value":"1.00 AU"},{"label":"Star B to the balance point","value":"3.00 AU"}],[{"label":"Star A to the balance point","value":"0.04 AU"},{"label":"Star B to the balance point","value":"0.04 AU"}]]
+   },
+   "try-it": {
+    "probe": [[{"label":"The pair","value":"not on the canvas"}],[{"label":"Star A arm","value":"1.00 AU"},{"label":"Star B arm","value":"3.00 AU"},{"label":"B’s arm ÷ A’s arm","value":"3.00"},{"label":"A’s mass ÷ B’s mass","value":"1.00"}],[{"label":"Star A arm","value":"1.00 AU"},{"label":"Star B arm","value":"3.00 AU"},{"label":"B’s arm ÷ A’s arm","value":"3.00"},{"label":"A’s mass ÷ B’s mass","value":"3.00"}],[{"label":"Star A arm","value":"0.04 AU"},{"label":"Star B arm","value":"0.04 AU"},{"label":"B’s arm ÷ A’s arm","value":"1.00"},{"label":"A’s mass ÷ B’s mass","value":"1.00"}]]
+   },
+   "a-practice-run": {
+    "validate": {"calls":242,"distinct":2,"digest":"1b2d230db3e04e5c","samples":[null,{"level":"warn","message":"For this practice run, put 2 in both boxes. You can experiment with other numbers afterwards."}]}
+   },
+   "measurement-one-how-big-is": {
+    "probe": [[{"label":"The pair","value":"not on the canvas"}],[{"label":"Star A to the balance point","value":"1.00 AU"},{"label":"Star B to the balance point","value":"3.00 AU"},{"label":"Star to star (a)","value":"4.00 AU"}],[{"label":"Star A to the balance point","value":"0.04 AU"},{"label":"Star B to the balance point","value":"0.04 AU"},{"label":"Star to star (a)","value":"0.08 AU"}]]
+   },
+   "weigh-the-pair": {
+    "validate": {"calls":254,"distinct":6,"digest":"5fcf6106318bf5e8","samples":[null,{"level":"warn","message":"Check the orbit size against the rings. Star A sits on one ring and Star B on another, and the number you want is the two added together."},{"level":"error","message":"Both measurements have to be positive numbers."},{"level":"ok","message":"64 divided by 16 is 4. The two stars weigh <strong>4.0 solar masses</strong> between them. You measured that by watching, and by nothing else."},{"level":"warn","message":"Check the period. Time Star A from the dotted line all the way round until it crosses the same line again."},{"level":"warn","message":"That looks like one star’s distance from the balance point rather than the whole orbit. The orbit size is measured from one star <em>across to the other</em>: add both distances together."}]}
+   },
+   "how-sure-is-the-total": {
+    "validate": {"calls":242,"distinct":144,"digest":"0710cad114839369","samples":[null,{"level":"ok","message":"The pair weighs 1.00 ± 1.00 solar masses. Quote both: a mass without its uncertainty cannot be compared with anyone else's."},{"level":"ok","message":"The pair weighs 1.77 ± 0.44 solar masses. Quote both: a mass without its uncertainty cannot be compared with anyone else's."},{"level":"ok","message":"The pair weighs 459.20 ± 3818.00 solar masses. Quote both: a mass without its uncertainty cannot be compared with anyone else's."},{"level":"ok","message":"The pair weighs 516.60 ± 4071.00 solar masses. Quote both: a mass without its uncertainty cannot be compared with anyone else's."},{"level":"ok","message":"The pair weighs 3634.00 ± 122.30 solar masses. Quote both: a mass without its uncertainty cannot be compared with anyone else's."},{"level":"ok","message":"The pair weighs 7.38 ± 504.30 solar masses. Quote both: a mass without its uncertainty cannot be compared with anyone else's."},{"level":"ok","message":"The pair weighs 0.03 ± 19.65 solar masses. Quote both: a mass without its uncertainty cannot be compared with anyone else's."},{"level":"ok","message":"The pair weighs 2.36 ± 35.75 solar masses. Quote both: a mass without its uncertainty cannot be compared with anyone else's."},{"level":"ok","message":"The pair weighs 3151.00 ± 1.89 solar masses. Quote both: a mass without its uncertainty cannot be compared with anyone else's."},{"level":"ok","message":"The pair weighs 19.80 ± 2760.00 solar masses. Quote both: a mass without its uncertainty cannot be compared with anyone else's."},{"level":"ok","message":"The pair weighs 35.75 ± 2.54 solar masses. Quote both: a mass without its uncertainty cannot be compared with anyone else's."},{"level":"ok","message":"The pair weighs 35.75 ± 1.00 solar masses. Quote both: a mass without its uncertainty cannot be compared with anyone else's."},{"level":"ok","message":"The pair weighs 35.75 ± 14.05 solar masses. Quote both: a mass without its uncertainty cannot be compared with anyone else's."},{"level":"ok","message":"The pair weighs 40.04 ± 15.74 solar masses. Quote both: a mass without its uncertainty cannot be compared with anyone else's."}]}
+   },
+   "back-to-the-balance-point": {
+    "probe": [[{"label":"The pair","value":"not on the canvas"}],[{"label":"Star A arm","value":"1.00 AU"},{"label":"Star B arm","value":"3.00 AU"},{"label":"How many times further out B is","value":"3.00"}],[{"label":"Star A arm","value":"0.04 AU"},{"label":"Star B arm","value":"0.04 AU"},{"label":"How many times further out B is","value":"1.00"}]]
+   },
+   "now-weigh-each-one": {
+    "validate": {"calls":242,"distinct":86,"digest":"9101ea2c73d1ab96","samples":[null,{"level":"warn","message":"Those two add up to 2.0, and the pair weighs 4 solar masses in total. The two numbers have to add up to the total you measured."},{"level":"warn","message":"Those two add up to 0.0, and the pair weighs 4 solar masses in total. The two numbers have to add up to the total you measured."},{"level":"warn","message":"Those two add up to -3.0, and the pair weighs 4 solar masses in total. The two numbers have to add up to the total you measured."},{"level":"warn","message":"Those two add up to 2301.3, and the pair weighs 4 solar masses in total. The two numbers have to add up to the total you measured."},{"level":"warn","message":"Those two add up to 2646.7, and the pair weighs 4 solar masses in total. The two numbers have to add up to the total you measured."},{"level":"warn","message":"Those two add up to 23.5, and the pair weighs 4 solar masses in total. The two numbers have to add up to the total you measured."},{"level":"warn","message":"Those two add up to 36.7, and the pair weighs 4 solar masses in total. The two numbers have to add up to the total you measured."},{"level":"warn","message":"Those two add up to 539.1, and the pair weighs 4 solar masses in total. The two numbers have to add up to the total you measured."},{"level":"warn","message":"The two add up correctly, but not in a three to one ratio. Count the blocks: three on Star A’s side for every one on Star B’s."},{"level":"warn","message":"You have them the wrong way round. Star A is the one that stays close to the balance point, which makes it the heavier of the two."},{"level":"ok","message":"Three solar masses and one solar mass. You have just weighed two individual stars, separately, using a ruler and a stopwatch."}]}
+   },
+   "one-on-your-own": {
+    "validate": {"calls":242,"distinct":2,"digest":"011aa43567dc707d","samples":[null,{"level":"warn","message":"Put 3 in both boxes: the pair is 3 AU apart with a 3 year period."}]}
+   }
+  },
+  "es": "same"
+ }
+}

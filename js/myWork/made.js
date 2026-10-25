@@ -1,3 +1,9 @@
+import {
+  ID_MADE,
+  ID_MISSION_PLAN,
+  ID_SYSTEM3D,
+  KEY_MADE_PREFIX,
+} from '../names.js';
 // =============================================================================
 // What a student built or ran: scenarios and experiments kept in My work
 // -----------------------------------------------------------------------------
@@ -29,9 +35,9 @@
 // Lazy: nothing on a lesson's path imports this. No DOM.
 // =============================================================================
 
-export const MADE_FORMAT = 'gravitas.made';
+export const MADE_FORMAT = ID_MADE;
 export const MADE_VERSION = 1;
-export const MADE_PREFIX = 'gravitas_made_';
+export const MADE_PREFIX = KEY_MADE_PREFIX;
 export const MADE_COLLECTION = 'made';
 const ITEM_LIMIT = 512 * 1024;
 
@@ -243,7 +249,7 @@ export function readMade(v) {
     const s = v.system3d?.system;
     if (
       !isObj(s) ||
-      s.format !== 'gravitas.system3d' ||
+      s.format !== ID_SYSTEM3D ||
       s.formatVersion !== 1 ||
       !Array.isArray(s.bodies) ||
       s.bodies.length < 2 ||
@@ -270,7 +276,7 @@ export function readMade(v) {
     const f = v.mission?.file;
     if (
       !isObj(f) ||
-      f.format !== 'gravitas.mission-plan' ||
+      f.format !== ID_MISSION_PLAN ||
       f.kind !== 'missionLab' ||
       !isObj(f.inputs)
     )

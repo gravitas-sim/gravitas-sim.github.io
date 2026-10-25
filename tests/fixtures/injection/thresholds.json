@@ -1,0 +1,147 @@
+{
+  "format": "gravitas.injection-thresholds/1",
+  "prompt": 184,
+  "committed": "Before any implementation output was inspected: this file and the validation contract in INJECTION.md were committed ahead of js/measure/inject.js, the validation tool, the oracle's results and every test. A check that a measurement crosses is a failed check, not a reason to move the bound; only Carl resets a threshold, with a register row. Where a bound is derived from an approximation, the approximation is named here and the bound is the width the approximation justifies, fixed before any number existed.",
+  "definition": {
+    "what": "Completeness by injection: synthetic point sources of chosen instrumental magnitudes, at random places, added to a copy of a frame through the pixel-integrated PSF of Prompt 183 with their own shot noise, detected again by Prompt 183's detector under the frame's own settings, and counted by magnitude.",
+    "magnitude": "instrumental, m = -2.5 log10(F / exposure) with F the total electrons of the source, the convention of js/measure/photometry.js, so a source injected at m and measured by Prompt 180's photometry reads m",
+    "streams": "positions and magnitudes from stream('injection', seed, 'plan', trial); each source's shot noise from stream('noise', seed, 'shot', trial); a trial's draws do not depend on how many trials there are",
+    "profile": "the pixel-integrated Gaussian (the difference of two erf over each pixel) or Moffat (5 by 5 sub-pixel midpoints) of detect.js modelPixels, total F electrons; the PSF is the measured one of Prompt 183 or one the reader states, and the result says which",
+    "shotNoise": "the electrons a source adds to a pixel are a Poisson draw of its mean there: exact below 30, a Gaussian of equal mean and variance above (the detector kernel's rule)",
+    "placement": "uniform in position at least 3 FWHM from the border and at least 4 FWHM from every other source of the trial and from every source the frame already holds (detected before injection); 200 attempts a source, then it is counted unplaced",
+    "recovered": "an injected source is recovered when the detector lists a source within the match radius (2 pixels) of its position; each detection answers at most one injected source; a detection that answers none and is not within the match radius of a source the frame already held is extra",
+    "curve": "magnitude bins of the stated width; per bin injected n, recovered k, completeness k/n with the exact (Clopper-Pearson) interval at level 0.6827; m50 and m90 by linear interpolation of bin completeness against bin centre, their intervals from the crossings of the interval's edges",
+    "limits": {
+      "countPerTrial": 500,
+      "trials": 200,
+      "total": 20000,
+      "bins": 60,
+      "fwhm": [0.5, 50]
+    },
+    "memory": "the frame's decoded planes (js/dataKinds/limits.js decodedBytes) plus one Float64 plane for the injected copy must not exceed LIMITS.maxDecodedBytes, 67,108,864",
+    "applies": "a curve is the detection probability only for the PSF and the noise it was measured under: another frame's FWHM must be within 10 percent, its sky noise within 10 percent and its detection settings equal, or the use is refused with the names of what differs"
+  },
+  "corrections": [
+    "1: the count of pinned interval cases is 111, not 105 (the committed enumeration gives 37 pairs of (k, n) and three levels); fixed before any result existed",
+    "2: a5 (iii) first said the mean coverage of the exact interval exceeds the level by at most 0.06. That is wrong for small n: the exact interval over-covers where its edges are discrete (scipy.stats.beta.ppf and scipy.stats.binom, an independent computation, give a mean over p of 0.894, 0.851, 0.805, 0.761 and 0.740 at 68.27 percent for n = 5, 10, 20, 50, 100, and 0.991, 0.982, 0.977, 0.970 and 0.964 at 95 percent). The floor (never below the level) is the exactness claim and is unchanged; the bound on the mean is now 0.25 and 0.10, the width that discreteness justifies, fixed before the module's own coverage was computed. The c1 coverage bounds were set with the larger bin counts in mind and are unchanged",
+    "3: a2 names 60 trials of 100 sources; at 4 FWHM spacing a 128 by 128 frame holds about 58, so the a2 frame is a blank 512 by 512 frame (the stand-in detector ignores its pixels); no count or bound changed"
+  ],
+  "scene": {
+    "from": "tests/fixtures/detection/thresholds.json scene: the detector kernel's clean detector, 128 by 128 pixels, gain 1.5, read noise 8 electrons, a sky of 3 electrons a second for 30 seconds (90 electrons), bias subtracted, whole ADU; frames from tools/detection-synth.mjs makeFrame",
+    "noise": "sqrt(sky 90 + read noise 8^2 + gain^2/12) = 12.416 electrons a pixel",
+    "fwhm": 3,
+    "exposure": 30,
+    "matchRadius": 2,
+    "seedPrefix": "injection-184",
+    "signalToNoise": "the matched-filter signal to noise of a Gaussian source of total F electrons is s = F / (sqrt(4 pi) sigma noise) with sigma = FWHM / 2.3548 and noise the per-pixel noise above: F = 56.07 s electrons at FWHM 3"
+  },
+  "checks": {
+    "a1.completeness": {
+      "what": "the completeness of a synthetic field against the closed form for a known PSF and noise. Sources of fixed matched-filter signal to noise s at 3.0, 4.0, 5.0, 6.0, 7.5 and 10, 1800 at each on a blank frame (150 trials of 12), through the tool. Closed form: a Gaussian source smoothed by the matched kernel is a Gaussian of variance 2 sigma^2, whose area above the 4 sigma threshold is 4 pi sigma^2 ln(s / 4) pixels, so the five-pixel segment rule is met at s_c = 4 exp(5 / (4 pi sigma^2)) = 5.11 at FWHM 3, and the completeness is Phi(s - s_c) (unit noise on the peak). The closed form ignores pixel sampling, the correlation of the smoothed noise between neighbouring pixels and the source's own shot noise, each of which moves the half point by a fraction of a sigma: the bounds are that width.",
+      "bounds": {
+        "pointwise": 0.25,
+        "halfPointWithin": 0.8,
+        "atTen": 0.99,
+        "atThreeAtMost": 0.1,
+        "monotoneSlack": 0.03
+      },
+      "levels": [3.0, 4.0, 5.0, 6.0, 7.5, 10],
+      "trials": 150,
+      "perTrial": 12
+    },
+    "a2.bookkeeping": {
+      "what": "the tool's counting against a detector whose answer is known exactly. A stand-in detector recovers a source with probability p(m) = 1 / (1 + exp((m - m50) / w)), m50 = -2.0, w = 0.1, by its own draw, lists it at the injected position moved by up to 0.5 pixel, and adds on average 0.5 false sources a trial far from every injection. 6000 sources (60 trials of 100) in magnitude from -2.8 to -1.2, bins of 0.1.",
+      "bounds": {
+        "recoveredEqualsStandIn": "exact",
+        "extraEqualsStandIn": "exact",
+        "binZ": 4,
+        "minBinCount": 30,
+        "m50Within": 0.05
+      }
+    },
+    "a3.rendering": {
+      "what": "the injected source against the detector kernel's own rendering of the same source, its conservation and its shot noise. (i) 20 sources of 5000 electrons at random sub-pixel positions noise-free: the largest pixel difference from the kernel's truth.starElectrons for the same sources, as a fraction of the source's electrons; (ii) the sum of a noise-free source over the frame against its electrons; (iii) the sum of the electrons a source adds over its cutout minus its F, in units of sqrt(F), for 1000 sources of F = 2000: mean and rms.",
+      "bounds": {
+        "kernelDifferenceFraction": 2e-6,
+        "conservationRelative": 1e-6,
+        "shotMeanWithin": 0.1,
+        "shotRms": [0.9, 1.1]
+      }
+    },
+    "a4.psfWidth": {
+      "what": "the half point of completeness moves with the PSF width as the closed form says: F50 = s_c sigma sqrt(4 pi) noise, so at the same frame and detection settings matched to each PSF the ratio of the fluxes at half completeness for FWHM 4.5 and FWHM 3 is s_c(4.5) sigma(4.5) / (s_c(3) sigma(3)) = 1.309, a shift of the half-point magnitude by -2.5 log10(1.309) = -0.292. 2000 sources each over a magnitude range that holds both half points, bins of 0.1.",
+      "expectedShift": -0.292,
+      "bound": 0.15
+    },
+    "a5.interval": {
+      "what": "the binomial interval, exactly. (i) the closed ends: k = 0 gives lo = 0 and hi = 1 - (a/2)^(1/n), k = n gives lo = (a/2)^(1/n) and hi = 1, for n = 1, 2, 5, 10, 50 at levels 0.6827 and 0.95, to 1e-9; (ii) Clopper and Pearson's published case, 3 of 10 at 95 percent: 0.0667 to 0.6525, to 5e-5; (iii) the exact coverage, summed over the binomial distribution, of the interval at levels 0.6827 and 0.95 for n in 5, 10, 20, 50, 100 and p from 0.02 to 0.98 in steps of 0.02: at least the level less 1e-9 for every (n, p), and the mean over p at most the level plus 0.25 at 68.27 percent and plus 0.10 at 95 percent (the exact interval over-covers where the counts are small, because its edges are discrete: corrected before any Gravitas coverage was computed, see `corrections`).",
+      "bounds": {
+        "closedEnds": 1e-9,
+        "published": 5e-5,
+        "coverageFloor": 1e-9,
+        "meanExcess": {
+          "level68": 0.25,
+          "level95": 0.1
+        }
+      }
+    },
+    "b0.rendering": {
+      "what": "the oracle renders 40 plan sources noise-free with scipy.special.erf (separable pixel integrals) and returns the pixels of each at fixed indices; the largest difference from js/measure/inject.js noise-free rendering as a fraction of the source's electrons",
+      "bound": 1e-9
+    },
+    "b1.curve": {
+      "what": "an independent injection run on the same frame. The oracle takes the frame (blank, whole ADU) and the plan (positions and fluxes) Gravitas's stream drew, 4000 sources in 400 trials of 10 from s = 12 to s = 2.5, draws its own Poisson noise (numpy), renders by scipy.special.erf, and detects with photutils (Background2D, astropy convolve, detect_sources, SourceCatalog) under the same settings; the curve in bins of 0.1 mag. Gravitas runs the same plan with its own noise. Per bin with at least 50 sources, z = (p_G - p_O) / sqrt(pbar (1 - pbar) 2 / n) treating the two as independent binomials (conservative: the same plan makes them positively correlated).",
+      "bounds": {
+        "binZ": 4,
+        "chi2Level": 0.999,
+        "minBinCount": 50,
+        "m50Within": 0.05,
+        "extraPerTrialAtMost": 0.05
+      }
+    },
+    "b2.interval": {
+      "what": "the interval against scipy.stats.beta.ppf over 111 pinned cases: n in 1, 2, 5, 10, 30, 100, 1000; every k from 0 to n for n up to 10 and k at 0, 1, n/2, n-1, n beyond; levels 0.6827, 0.95, 0.99",
+      "bound": 1e-8
+    },
+    "c1.coverage": {
+      "what": "the coverage of the binomial interval on a seeded ensemble of whole injection runs. 300 runs, each 5 trials of 24 sources uniform in magnitude from s = 9 to s = 3 on the blank frame, bins of 0.2 mag. Truth for a bin is the completeness pooled over the other 299 runs (leave one out). Counted: bins with at least 15 sources whose truth lies between 0.05 and 0.95. The bin's truth is a bin average, since completeness changes across a bin; the interval is binomial in the number injected, which is slightly conservative for that reason, and the bounds say so.",
+      "runs": 300,
+      "trials": 5,
+      "perTrial": 24,
+      "bounds": {
+        "level68": [0.65, 0.84],
+        "level95": [0.935, 0.995],
+        "minBinCount": 15,
+        "truthBetween": [0.05, 0.95]
+      }
+    },
+    "d1.refusals": {
+      "what": "refusals, each with its own code and no result: a display-only image (display-only), a frame with no contract (no-contract), a raw frame (raw-frame), an incomplete contract (incomplete-contract), pixels not in electrons on the variance route (unit), a memory bound (too-large: 2,048 by 2,048 with data and mask planes, which 157's own check admits alone, refused before any array is made and before the detector runs), a parameter outside its limit (bad-parameter: count 0 and 501, trials 0 and 201, total over 20000, magnitude range reversed, bin width not positive or giving more than 60 bins, FWHM 0.4 and 51, a seed that is not text or a number), a source brighter than the linearity limit allows (beyond-linearity, with the brightest allowed magnitude), no room for a single source (no-room: separation larger than the frame); fewer than the requested sources placed is reported as unplaced and is not a refusal. A refusal calls the detector 0 times.",
+      "bound": "every case refused with its code, the detector called 0 times, the input frame's pixels unchanged"
+    },
+    "d2.conditions": {
+      "what": "a completeness curve is not a detection probability for another PSF or background. appliesTo refuses a frame whose FWHM is 4.5 against a curve of FWHM 3 (psf), one whose noise is 1.5 times the curve's (noise), one under a different detection threshold (detection), names every one that differs, and accepts the frame the curve was made on, FWHM within 10 percent and noise within 10 percent. The refusal is not arbitrary: a4 measures the curves differ.",
+      "bound": "3 of 3 refused with their names, 1 of 1 accepted"
+    },
+    "d3.outsideRange": {
+      "what": "the selection function built from a curve refuses a magnitude outside the injected range (code out-of-range) and does not extrapolate; inside the range it is the linear interpolation of the bin values between bin centres, flat within the outer half bins",
+      "bound": "refused 3 of 3 outside, equal to the interpolation inside to 1e-12"
+    },
+    "e1.reproducible": {
+      "what": "an injection run is reproducible by its seed. The same seed twice gives the same plan, the same injected pixels, the same recovered list and the same curve, bit for bit in one process; another seed differs; the first 10 trials of a 20-trial run are the 10 trials of a 10-trial run. The first plan entries of seed 'pin' are pinned as exact numbers (only raw uniform draws and basic arithmetic reach them). Nothing that passes through exp, log, pow or a trigonometric function is pinned: across Node 20, 22 and 24 those differ in the last bits, so counts and bands are what is judged across versions.",
+      "bound": "3 of 3 identities, 1 difference, 5 pinned positions"
+    },
+    "f1.selection": {
+      "what": "the selection-effects suite reads an image completeness curve as a selection function (Prompt 154's object). From a curve measured at the a1 PSF and noise: (i) apply it to 4000 magnitudes uniform over the curve's range with the survey suite's keyed streams: the included count within 4 standard deviations of the sum of the probabilities; (ii) completenessCorrect on the counts in 10 magnitude bins: the total corrected within 4 sigma of 4000; (iii) a logistic completeness fitted to the curve (js/survey/model.js completenessAt): its m50 within 0.05 mag of the curve's, and its summed probability over the same magnitudes within 3 percent of the selection's",
+      "bounds": {
+        "sigmas": 4,
+        "logisticM50": 0.05,
+        "logisticSum": 0.03
+      }
+    },
+    "g1.authentic": {
+      "what": "completeness on one authentic frame from Prompt 189, injected and recovered, against photutils on the same pixels. NOT RUN until Prompt 189 has landed an authentic image pack: nothing was downloaded and nothing was fabricated for this leg.",
+      "bound": "not run"
+    }
+  }
+}

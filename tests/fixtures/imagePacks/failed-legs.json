@@ -1,0 +1,115 @@
+{
+  "format": "gravitas.image-packs-failed-legs/1",
+  "prompt": 189,
+  "note": "Legs of tests/fixtures/imagePacks/analysis-contract.json that fail as committed, recorded with their cause. The bound is not moved and the contract is not edited after the result was seen; only Carl rules on which side changes (DECISION_REGISTER.md D-R10-65). tests/imagePacks.test.js asserts each still fails, so a silent fix is a failing test. Part 3 (Prompt 189, authentic data): the legs that fail on the 84 TESS full-frame images, with the variants the contract committed (parts 4 to 6) before they ran; their causes are findings about the field and the modules, not about the data. Nothing is moved.",
+  "legs": {
+    "import.hostilePng.extra-bytes-after-IEND": {
+      "contract": "the contract's variant list says '(accepted: the picture is intact)' for a PNG with extra bytes after IEND",
+      "found": "js/dataKinds/raster.js readPngHeader refuses it with png-malformed ('N bytes follow the IEND chunk'), by Prompt 188's committed design, before any decoder sees the file",
+      "cause": "the contract (written in this prompt) assumed the lenient behaviour of browser decoders; Prompt 188's reader is deliberately strict about the end of the file. The two disagree and nothing in the pack is wrong",
+      "ruling": "Carl: either the contract's expectation is wrong (the strict refusal stands, and this row becomes a refusal), or the reader should accept trailing bytes (a change to Prompt 188's committed corpus)"
+    },
+    "import.hostilePng.page.IDAT-that-inflates-past-the-declared-size": {
+      "contract": "the contract's variant list says this variant is refused with a stable code",
+      "found": "in Chromium (the page's decoder, e2e/imagePacks.spec.js) the file is READ as the intact picture: libpng stops after the image's rows and discards the surplus compressed data; nothing is held and the time is inside the 2,000 ms bound",
+      "cause": "the contract assumed a decoder refuses a stream that inflates past the declared size; the browser's decoder ignores it. The page's own structural reader (js/dataKinds/raster.js) cannot see inside the compressed data, so this is a property of the decoder, not of Prompt 188's code or of the pack",
+      "ruling": "Carl: either accept that a decoder-tolerated surplus is read (the contract's expectation is wrong), or ask Prompt 188's reader to bound the inflated size itself (a change to its committed corpus)"
+    },
+    "import.hostilePng.page.IDAT-of-zeros-that-inflates-to-64-MiB": {
+      "contract": "the contract's variant list says this variant is refused with a stable code",
+      "found": "in Chromium (the page's decoder, e2e/imagePacks.spec.js) the file is READ as the intact picture: libpng stops after the image's rows and discards the surplus compressed data; nothing is held and the time is inside the 2,000 ms bound",
+      "cause": "the contract assumed a decoder refuses a stream that inflates past the declared size; the browser's decoder ignores it. The page's own structural reader (js/dataKinds/raster.js) cannot see inside the compressed data, so this is a property of the decoder, not of Prompt 188's code or of the pack",
+      "ruling": "Carl: either accept that a decoder-tolerated surplus is read (the contract's expectation is wrong), or ask Prompt 188's reader to bound the inflated size itself (a change to its committed corpus)"
+    },
+    "astrometry.b5.fit": {
+      "contract": "contract part 3: the committed rule (detect, match with the isolation rule, fit, compare with astropy fit_wcs_from_points and the Gaia overlay) on frame 42",
+      "found": "1 of 40 detections matched a Gaia star under the committed rule (the leg needs 8); the pipeline, at its default FWHM of 3, finds no mark and refuses with 'no-marks'",
+      "cause": "detectIn at 4 sigma on a 21-arcsecond pixel field segments each bright star together with its wings and neighbours (areas to 239 pixels), so the detections are blends, the 'crowded' flag removes most of them, and a matching rule that uses the detector's own centroids keeps almost no star",
+      "ruling": "Carl: whether the default rule or the module should change (a change to Prompt 181/182's committed code or to a contract bound) or the finding stands as the result of the leg; D-R10-68 records it and no bound is moved"
+    },
+    "astrometry.e1.frame": {
+      "contract": "contract part 3: the committed rule (detect, match with the isolation rule, fit, compare with astropy fit_wcs_from_points and the Gaia overlay) on frame 42",
+      "found": "no solution, because the fit leg matched 1 star",
+      "cause": "detectIn at 4 sigma on a 21-arcsecond pixel field segments each bright star together with its wings and neighbours (areas to 239 pixels), so the detections are blends, the 'crowded' flag removes most of them, and a matching rule that uses the detector's own centroids keeps almost no star",
+      "ruling": "Carl: whether the default rule or the module should change (a change to Prompt 181/182's committed code or to a contract bound) or the finding stands as the result of the leg; D-R10-68 records it and no bound is moved"
+    },
+    "overlay.b5.gaia": {
+      "contract": "contract part 3: the committed rule (detect, match with the isolation rule, fit, compare with astropy fit_wcs_from_points and the Gaia overlay) on frame 42",
+      "found": "no solution, because the fit leg matched 1 star",
+      "cause": "detectIn at 4 sigma on a 21-arcsecond pixel field segments each bright star together with its wings and neighbours (areas to 239 pixels), so the detections are blends, the 'crowded' flag removes most of them, and a matching rule that uses the detector's own centroids keeps almost no star",
+      "ruling": "Carl: whether the default rule or the module should change (a change to Prompt 181/182's committed code or to a contract bound) or the finding stands as the result of the leg; D-R10-68 records it and no bound is moved"
+    },
+    "framepipeline.g1.complete": {
+      "contract": "contract part 3: runSequence on the 84 frames with its defaults, judged on completion, against photutils, against the SPOC transit and against the stated noise",
+      "found": "1 of 40 detections matched a Gaia star under the committed rule (the leg needs 8); the pipeline, at its default FWHM of 3, finds no mark and refuses with 'no-marks'",
+      "cause": "the default aperture (rOut 15 pixels at the fallback FWHM of 3) and the detector's 'crowded' flag mark nearly every detection of this crowded field: detectIn at 4 sigma on a 21-arcsecond pixel field segments each bright star together with its wings and neighbours (areas to 239 pixels), so the detections are blends, the 'crowded' flag removes most of them, and a matching rule that uses the detector's own centroids keeps almost no star",
+      "ruling": "Carl: whether the default rule or the module should change (a change to Prompt 185's committed code or to a contract bound) or the finding stands as the result of the leg; D-R10-68 records it and no bound is moved"
+    },
+    "framepipeline.g1.oracle": {
+      "contract": "contract part 3: runSequence on the 84 frames with its defaults, judged on completion, against photutils, against the SPOC transit and against the stated noise",
+      "found": "no light curve, because the pipeline refused with 'no-marks'",
+      "cause": "the default aperture (rOut 15 pixels at the fallback FWHM of 3) and the detector's 'crowded' flag mark nearly every detection of this crowded field: detectIn at 4 sigma on a 21-arcsecond pixel field segments each bright star together with its wings and neighbours (areas to 239 pixels), so the detections are blends, the 'crowded' flag removes most of them, and a matching rule that uses the detector's own centroids keeps almost no star",
+      "ruling": "Carl: whether the default rule or the module should change (a change to Prompt 185's committed code or to a contract bound) or the finding stands as the result of the leg; D-R10-68 records it and no bound is moved"
+    },
+    "framepipeline.g1.transit": {
+      "contract": "contract part 3: runSequence on the 84 frames with its defaults, judged on completion, against photutils, against the SPOC transit and against the stated noise",
+      "found": "no light curve, because the pipeline refused with 'no-marks'",
+      "cause": "the default aperture (rOut 15 pixels at the fallback FWHM of 3) and the detector's 'crowded' flag mark nearly every detection of this crowded field: detectIn at 4 sigma on a 21-arcsecond pixel field segments each bright star together with its wings and neighbours (areas to 239 pixels), so the detections are blends, the 'crowded' flag removes most of them, and a matching rule that uses the detector's own centroids keeps almost no star",
+      "ruling": "Carl: whether the default rule or the module should change (a change to Prompt 185's committed code or to a contract bound) or the finding stands as the result of the leg; D-R10-68 records it and no bound is moved"
+    },
+    "framepipeline.g1.noise": {
+      "contract": "contract part 3: runSequence on the 84 frames with its defaults, judged on completion, against photutils, against the SPOC transit and against the stated noise",
+      "found": "no light curve, because the pipeline refused with 'no-marks'",
+      "cause": "the default aperture (rOut 15 pixels at the fallback FWHM of 3) and the detector's 'crowded' flag mark nearly every detection of this crowded field: detectIn at 4 sigma on a 21-arcsecond pixel field segments each bright star together with its wings and neighbours (areas to 239 pixels), so the detections are blends, the 'crowded' flag removes most of them, and a matching rule that uses the detector's own centroids keeps almost no star",
+      "ruling": "Carl: whether the default rule or the module should change (a change to Prompt 185's committed code or to a contract bound) or the finding stands as the result of the leg; D-R10-68 records it and no bound is moved"
+    },
+    "astrometry.b5.fit.v2": {
+      "contract": "contract part 4 (variant v2): 'crowded' no longer excludes a detection, Gaia G 14 or brighter offered, FWHM 2 given to the pipeline",
+      "found": "3 stars matched (the leg needs 8)",
+      "cause": "detectIn at 4 sigma on a 21-arcsecond pixel field segments each bright star together with its wings and neighbours (areas to 239 pixels), so the detections are blends, the 'crowded' flag removes most of them, and a matching rule that uses the detector's own centroids keeps almost no star",
+      "ruling": "Carl: whether the default rule or the module should change (a change to Prompt 181/182's committed code or to a contract bound) or the finding stands as the result of the leg; D-R10-68 records it and no bound is moved"
+    },
+    "astrometry.e1.frame.v2": {
+      "contract": "contract part 4 (variant v2): 'crowded' no longer excludes a detection, Gaia G 14 or brighter offered, FWHM 2 given to the pipeline",
+      "found": "no solution, 3 stars",
+      "cause": "detectIn at 4 sigma on a 21-arcsecond pixel field segments each bright star together with its wings and neighbours (areas to 239 pixels), so the detections are blends, the 'crowded' flag removes most of them, and a matching rule that uses the detector's own centroids keeps almost no star",
+      "ruling": "Carl: whether the default rule or the module should change (a change to Prompt 181/182's committed code or to a contract bound) or the finding stands as the result of the leg; D-R10-68 records it and no bound is moved"
+    },
+    "overlay.b5.gaia.v2": {
+      "contract": "contract part 4 (variant v2): 'crowded' no longer excludes a detection, Gaia G 14 or brighter offered, FWHM 2 given to the pipeline",
+      "found": "no solution, 3 stars",
+      "cause": "detectIn at 4 sigma on a 21-arcsecond pixel field segments each bright star together with its wings and neighbours (areas to 239 pixels), so the detections are blends, the 'crowded' flag removes most of them, and a matching rule that uses the detector's own centroids keeps almost no star",
+      "ruling": "Carl: whether the default rule or the module should change (a change to Prompt 181/182's committed code or to a contract bound) or the finding stands as the result of the leg; D-R10-68 records it and no bound is moved"
+    },
+    "framepipeline.g1.complete.v2": {
+      "contract": "contract part 4 (variant v2): 'crowded' no longer excludes a detection, Gaia G 14 or brighter offered, FWHM 2 given to the pipeline",
+      "found": "2 comparison stars chosen of 3 candidates (the contract asks for 3)",
+      "cause": "the marks are still the detector's blended centroids (areas to 239 pixels), so the apertures sit on blends and move with them; the stability test, which assumes white noise, leaves two comparison stars",
+      "ruling": "Carl: whether the default rule or the module should change (a change to Prompt 185's committed code or to a contract bound) or the finding stands as the result of the leg; D-R10-68 records it and no bound is moved"
+    },
+    "framepipeline.g1.transit.v2": {
+      "contract": "contract part 4 (variant v2): 'crowded' no longer excludes a detection, Gaia G 14 or brighter offered, FWHM 2 given to the pipeline",
+      "found": "depth 1.705 percent against SPOC's 1.566 (difference above the 0.001 bound)",
+      "cause": "the marks are still the detector's blended centroids (areas to 239 pixels), so the apertures sit on blends and move with them; the stability test, which assumes white noise, leaves two comparison stars",
+      "ruling": "Carl: whether the default rule or the module should change (a change to Prompt 185's committed code or to a contract bound) or the finding stands as the result of the leg; D-R10-68 records it and no bound is moved"
+    },
+    "framepipeline.g1.noise.v2": {
+      "contract": "contract part 4 (variant v2): 'crowded' no longer excludes a detection, Gaia G 14 or brighter offered, FWHM 2 given to the pipeline",
+      "found": "out-of-transit scatter 4.4 times the stated per-point uncertainty (the bound is 0.5 to 2)",
+      "cause": "the marks are still the detector's blended centroids (areas to 239 pixels), so the apertures sit on blends and move with them; the stability test, which assumes white noise, leaves two comparison stars",
+      "ruling": "Carl: whether the default rule or the module should change (a change to Prompt 185's committed code or to a contract bound) or the finding stands as the result of the leg; D-R10-68 records it and no bound is moved"
+    },
+    "framepipeline.g1.complete.v3": {
+      "contract": "contract part 5 (variant v3): reference stars chosen from Gaia alone and measured at their predicted pixels with photometry.measure",
+      "found": "2 comparison stars chosen of 16 candidates (the contract asks for 3): the stability test flagged 14 unstable, reduced chi-square 1.8 to 9.0",
+      "cause": "Prompt 185's stability test is a chi-square against a constant at alpha 0.001 and assumes white noise; real 200-second photometry of a crowded field carries correlated noise the stated uncertainties do not hold, so nearly every star is called unstable. Part 6 (v4) names the comparison stars, the override the module offers, and passes",
+      "ruling": "Carl: whether the default rule or the module should change (a change to Prompt 185's committed code or to a contract bound) or the finding stands as the result of the leg; D-R10-68 records it and no bound is moved"
+    },
+    "framepipeline.g1.oracle.v3": {
+      "contract": "contract part 5 (variant v3): reference stars chosen from Gaia alone and measured at their predicted pixels with photometry.measure",
+      "found": "largest relative net difference from photutils 7.4e-4 (bound 1e-9), in ONE of 252 star-frames (g21, frame 46): the other 251 agree to 1e-15; the same test passes at 1e-14 on v2 and 8.6e-16 on v4",
+      "cause": "the annulus clip. Gravitas (js/measure/photometry.js) clips monotonically: a pixel once clipped stays out. astropy's sigma_clip recomputes the mask against the whole annulus at every round, so a pixel at 3.00 sigma that the first rounds cut can be read back in when the bounds are refit on the survivors; the rounds then alternate (here 152, 153, 152, 153 kept of 199 pixels) and maxiters=4 stops on 153. Reproduced offline: astropy with maxiters 3 keeps 152 and Gravitas's sky is that of the 152; maxiters 4 keeps 153. The two MAD constants (1.4826 and 1.482602218505602) give the same pixel sets here, so the constant is not the cause. One borderline pixel in about 200 moves the sky by 9 electrons per pixel and the net of g21 by 7.4e-4",
+      "ruling": "Carl: either Prompt 180's clip is changed to astropy's re-admitting rounds (a change to committed code and its documentation), or the oracle's clip is the monotone one (a change to the oracle inputs, which then judges the same algorithm); D-R10-68 records it, no bound is moved"
+    }
+  }
+}

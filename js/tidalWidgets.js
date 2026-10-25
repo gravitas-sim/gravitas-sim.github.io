@@ -42,7 +42,6 @@ import { awaitDeferredMessages } from './i18n/deferredMessages.js';
 
 /** The load, kept so js/widgets.js can await it. */
 export const messagesReady = awaitDeferredMessages();
-
 import {
   tidalProfile,
   tidalAcceleration,
@@ -69,6 +68,7 @@ import {
   MIMAS_DISTANCE_M,
   MOON_RADIUS_M,
 } from './tidalPhysics.js';
+import { fixed } from './format.js';
 
 // The same fixed dark palette the black hole panels use, and for the same
 // reason: these are pictures of space, and theme-colored ink over them was
@@ -297,7 +297,7 @@ const VECTORS = {
         get label() {
           return t('tideW.nearSideBiggerThanFar');
         },
-        value: `${(100 * (f.near / f.far - 1)).toFixed(1)}%`,
+        value: `${fixed(100 * (f.near / f.far - 1), 1)}%`,
         emphasis: true,
       });
     }
@@ -572,7 +572,7 @@ const STRENGTH = {
         get label() {
           return t('tideW.distance');
         },
-        value: `${v.dist.toFixed(2)} × the Moon’s`,
+        value: `${fixed(v.dist, 2)} × the Moon’s`,
       });
     }
     if (spec.axis !== 'distance') {
@@ -580,14 +580,14 @@ const STRENGTH = {
         get label() {
           return t('tideW.mass');
         },
-        value: `${v.mass.toFixed(2)} × the Moon’s`,
+        value: `${fixed(v.mass, 2)} × the Moon’s`,
       });
     }
     rows.push({
       get label() {
         return t('tideW.tidalStretch');
       },
-      value: `${f.relative.toFixed(2)} × the real lunar tide`,
+      value: `${fixed(f.relative, 2)} × the real lunar tide`,
       emphasis: true,
     });
     rows.push({
@@ -645,7 +645,7 @@ const STRENGTH = {
       ctx.moveTo(px(t), T);
       ctx.lineTo(px(t), B);
       ctx.stroke();
-      ctx.fillText(t.toFixed(t < 1 ? 2 : 0), px(t), B + 5);
+      ctx.fillText(fixed(t, t < 1 ? 2 : 0), px(t), B + 5);
     }
 
     // The curve.
@@ -693,7 +693,7 @@ const STRENGTH = {
       mono(ctx, 11, WARN);
       ctx.textAlign = 'center';
       ctx.textBaseline = 'top';
-      halo(ctx, `${here.toFixed(1)} × — off the top of this graph`, hx, T + 4);
+      halo(ctx, `${fixed(here, 1)} × — off the top of this graph`, hx, T + 4);
     }
 
     // Axis names.
@@ -1016,7 +1016,7 @@ const BALANCE = {
         get label() {
           return t('tideW.theTwoAreEqualAt');
         },
-        value: `${(f.rigid / EARTH_RADIUS_M).toFixed(2)} Earth radii  (${distanceLabel(f.rigid)})`,
+        value: `${fixed(f.rigid / EARTH_RADIUS_M, 2)} Earth radii  (${distanceLabel(f.rigid)})`,
         emphasis: true,
       },
       {
@@ -1246,20 +1246,20 @@ const ROCHE = {
         get label() {
           return t('tideW.rocheLimitBodyWithNo');
         },
-        value: `${f.fluidRadii.toFixed(2)} R_Saturn  (${distanceLabel(f.fluid)})`,
+        value: `${fixed(f.fluidRadii, 2)} R_Saturn  (${distanceLabel(f.fluid)})`,
         emphasis: true,
       },
       {
         get label() {
           return t('tideW.rocheLimitBodyThatKeeps');
         },
-        value: `${f.rigidRadii.toFixed(2)} R_Saturn  (${distanceLabel(f.rigid)})`,
+        value: `${fixed(f.rigidRadii, 2)} R_Saturn  (${distanceLabel(f.rigid)})`,
       },
       {
         get label() {
           return t('tideW.stretchGripWhereYouHave');
         },
-        value: f.ratio.toFixed(2),
+        value: fixed(f.ratio, 2),
       },
       {
         get label() {
@@ -1271,13 +1271,13 @@ const ROCHE = {
         get label() {
           return t('tideW.forComparisonTheARing');
         },
-        value: `${(A_RING_OUTER_M / SATURN_RADIUS_M).toFixed(2)} R_Saturn`,
+        value: `${fixed(A_RING_OUTER_M / SATURN_RADIUS_M, 2)} R_Saturn`,
       },
       {
         get label() {
           return t('tideW.andMimasTheInnermostRound');
         },
-        value: `${(MIMAS_DISTANCE_M / SATURN_RADIUS_M).toFixed(2)} R_Saturn`,
+        value: `${fixed(MIMAS_DISTANCE_M / SATURN_RADIUS_M, 2)} R_Saturn`,
       },
     ];
   },
@@ -1458,8 +1458,8 @@ const DISRUPT = {
       format: x => {
         const m = Math.pow(10, x);
         return m >= 1e6
-          ? `${(m / 1e6).toFixed(m / 1e6 < 10 ? 1 : 0)} million M☉`
-          : `${m < 100 ? m.toFixed(0) : Math.round(m).toLocaleString('en-US')} M☉`;
+          ? `${fixed(m / 1e6, m / 1e6 < 10 ? 1 : 0)} million M☉`
+          : `${m < 100 ? fixed(m, 0) : Math.round(m).toLocaleString('en-US')} M☉`;
       },
     },
   ],
@@ -1621,8 +1621,8 @@ const DISRUPT = {
       fits(
         ctx,
         w,
-        `the two meet at about ${(f.crossover / 1e6).toFixed(0)} million solar masses`,
-        `they meet at ${(f.crossover / 1e6).toFixed(0)} million M☉`
+        `the two meet at about ${fixed(f.crossover / 1e6, 0)} million solar masses`,
+        `they meet at ${fixed(f.crossover / 1e6, 0)} million M☉`
       ),
       cx,
       H - 26

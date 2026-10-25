@@ -39,6 +39,8 @@
 
 // Bound once, not read as globals: in Jest's vm context every free global read
 // goes through the context, which made these loops 8-25x slower than in Node.
+import { solveSpd, invertSpd, eigenSymmetric } from '../numeric/linalg.js';
+
 const { Math, Number, Float64Array } = globalThis;
 
 /** Thrown when hooks.shouldStop() says to stop. */
@@ -51,49 +53,9 @@ export class Canceled extends Error {
 
 const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
 
-/** Solve A x = b for a small symmetric positive-definite A (Cholesky). */
-export function solveSpd(A, b) {
-  const n = b.length;
-  const L = A.map(r => r.slice());
-  for (let i = 0; i < n; i++) {
-    for (let j = 0; j <= i; j++) {
-      let s = L[i][j];
-      for (let k = 0; k < j; k++) s -= L[i][k] * L[j][k];
-      if (i === j) {
-        if (!(s > 0)) return null;
-        L[i][i] = Math.sqrt(s);
-      } else L[i][j] = s / L[j][j];
-    }
-    for (let j = i + 1; j < n; j++) L[i][j] = 0;
-  }
-  const y = new Array(n);
-  for (let i = 0; i < n; i++) {
-    let s = b[i];
-    for (let k = 0; k < i; k++) s -= L[i][k] * y[k];
-    y[i] = s / L[i][i];
-  }
-  const x = new Array(n);
-  for (let i = n - 1; i >= 0; i--) {
-    let s = y[i];
-    for (let k = i + 1; k < n; k++) s -= L[k][i] * x[k];
-    x[i] = s / L[i][i];
-  }
-  return x;
-}
-
-/** The inverse of a small symmetric positive-definite matrix, or null. */
-export function invertSpd(A) {
-  const n = A.length;
-  const out = [];
-  for (let j = 0; j < n; j++) {
-    const e = new Array(n).fill(0);
-    e[j] = 1;
-    const col = solveSpd(A, e);
-    if (!col) return null;
-    out.push(col);
-  }
-  return out[0].map((_, i) => out.map(col => col[i]));
-}
+// The symmetric routines live in js/numeric/linalg.js (Prompt 152), bit for bit
+// what this file held; solveSpd and invertSpd stay exports of it.
+export { solveSpd, invertSpd };
 
 /**
  * A problem: the model, the data, and which parameters are free.
@@ -263,23 +225,27 @@ export function refine(problem, start, opts = {}, hooks = {}) {
   return { theta, best, iterations: k, converged: false, why };
 }
 
-/**
- * The covariance of the free parameters at a point, from J^T W J.
- * @returns {{covariance: number[][]|null, sigma: number[], correlation:
- *   number[][]|null}}
- */
-export function covarianceAt(problem, theta) {
+/** J^T W J for the free parameters at a point (r is already weighted). */
+function fisherAt(problem, theta) {
   const base = problem.evaluate(theta);
   const J = jacobian(problem, theta, base);
   const n = theta.length;
-  const F = Array.from({ length: n }, (_, a) =>
+  return Array.from({ length: n }, (_, a) =>
     Array.from({ length: n }, (_, b) => {
       let s = 0;
       for (let i = 0; i < base.r.length; i++) s += J[a][i] * J[b][i];
       return s;
     })
   );
-  const C = invertSpd(F);
+}
+
+/**
+ * The covariance of the free parameters at a point, from J^T W J.
+ * @returns {{covariance: number[][]|null, sigma: number[], correlation:
+ *   number[][]|null}}
+ */
+export function covarianceAt(problem, theta) {
+  const C = invertSpd(fisherAt(problem, theta));
   if (!C)
     return { covariance: null, sigma: theta.map(() => NaN), correlation: null };
   const sigma = C.map((row, i) => Math.sqrt(Math.max(0, row[i])));
@@ -287,6 +253,55 @@ export function covarianceAt(problem, theta) {
     row.map((v, j) => v / (sigma[i] * sigma[j] || 1))
   );
   return { covariance: C, sigma, correlation };
+}
+
+/**
+ * Whether the data fix every free parameter, and if not which ones they leave
+ * open (Prompt 150). The information matrix is scaled to unit diagonal, so a
+ * parameter's units do not decide the answer, and its eigenvalues are read
+ * against the largest: a direction whose eigenvalue is below `tolerance` of
+ * it is one the data cannot fix, because moving along it leaves the fit
+ * unchanged to the tolerance. A parameter is not constrained when at least
+ * 1% of its own weight lies in such a direction, and a parameter the model
+ * does not depend on at all (a zero column) always is. The covariance of a
+ * fit with such a direction is not usable: `covarianceAt` either returns
+ * null or returns a variance that is the rounding noise of an inversion.
+ *
+ * @param {object} problem - From createProblem
+ * @param {number[]} theta - The free parameters at the fit
+ * @param {{tolerance?: number}} [opts] - Relative eigenvalue floor, 1e-8
+ * @returns {{free: number, rank: number, status: 'full'|'deficient',
+ *   tolerance: number, notConstrained: number[]}} The indices into theta
+ */
+export function rankAt(problem, theta, { tolerance = 1e-8 } = {}) {
+  const n = theta.length;
+  if (!n)
+    return { free: 0, rank: 0, status: 'full', tolerance, notConstrained: [] };
+  const F = fisherAt(problem, theta);
+  const dead = F.map((row, i) => !(row[i] > 0) || !Number.isFinite(row[i]));
+  const scale = F.map((row, i) => (dead[i] ? 1 : Math.sqrt(row[i])));
+  const R = F.map((row, i) =>
+    row.map((v, j) =>
+      i === j ? 1 : dead[i] || dead[j] ? 0 : v / (scale[i] * scale[j])
+    )
+  );
+  const modes = eigenSymmetric(R);
+  const top = modes[0].value;
+  const open = modes.filter(m => !(m.value > tolerance * top));
+  const notConstrained = [];
+  for (let i = 0; i < n; i++) {
+    let weight = dead[i] ? 1 : 0;
+    if (!dead[i]) for (const m of open) weight += m.vector[i] ** 2;
+    if (weight >= 0.01) notConstrained.push(i);
+  }
+  const rank = n - open.length - dead.filter(Boolean).length;
+  return {
+    free: n,
+    rank: Math.max(0, rank),
+    status: notConstrained.length ? 'deficient' : 'full',
+    tolerance,
+    notConstrained,
+  };
 }
 
 /**

@@ -218,16 +218,40 @@ export const DEEPER_SHADOWS = Object.freeze({
 });
 
 /**
+ * The mark spanishLesson() puts in front of every string a shadow supplied,
+ * when asked to. A string that does not start with it is the English that
+ * stands in for a Spanish text nobody has written.
+ */
+export const SHADOW_MARK = '\u0001';
+
+/** A shadow with every string marked: the same shape, so the same merge. */
+const marked = value =>
+  typeof value === 'string'
+    ? SHADOW_MARK + value
+    : Array.isArray(value)
+      ? value.map(marked)
+      : value && typeof value === 'object'
+        ? Object.fromEntries(
+            Object.entries(value).map(([k, v]) => [k, marked(v)])
+          )
+        : value;
+
+/**
  * A lesson as a Spanish student reads it, every depth laid in.
  * @param {id: string} inv - The English lesson (core steps)
+ * @param {boolean} [withDepths] - Lay the deeper steps in (default)
+ * @param {boolean} [mark] - Put SHADOW_MARK before each string a shadow
+ *   supplied, so a caller can say which words are Spanish and which are not.
+ *   For the structured notes; the guides and keys never ask.
  * @returns <class 'object'> The Spanish lesson; the English one where there is no shadow
  */
-export function spanishLesson(inv, withDepths = true) {
-  const shadow = SHADOWS[inv.id];
+export function spanishLesson(inv, withDepths = true, mark = false) {
+  const given = shadow => (mark && shadow ? marked(shadow) : shadow);
+  const shadow = given(SHADOWS[inv.id]);
   const base = shadow ? mergeTranslation(inv, shadow) : inv;
   const deeper = DEEPER[inv.id];
   if (!deeper || !withDepths) return base;
-  const words = DEEPER_SHADOWS[inv.id];
+  const words = given(DEEPER_SHADOWS[inv.id]);
   return layDepth(base, words ? overlay(deeper, words.steps) : deeper);
 }
 

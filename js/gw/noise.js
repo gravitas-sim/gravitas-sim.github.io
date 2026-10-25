@@ -11,7 +11,7 @@
 //   interface and in GRAVITATIONAL_WAVES.md. Real noise is in the real data.
 // =============================================================================
 
-import { mulberry32, normalizeSeed } from '../rng.js';
+import { stream } from '../random/streams.js';
 import { fft, nextPowerOfTwo } from './fft.js';
 
 /**
@@ -86,7 +86,7 @@ export function coloredNoise({
   fLow = 15,
 } = {}) {
   const n = nextPowerOfTwo(Math.max(2, samples));
-  const rand = mulberry32(normalizeSeed(seed));
+  const rand = stream('noise', seed);
   const re = new Float64Array(n);
   const im = new Float64Array(n);
   const df = sampleRate / n;

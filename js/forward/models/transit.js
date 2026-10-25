@@ -20,7 +20,8 @@ export function transitParameters(state, planetIndex = 0) {
   const k =
     (pl.radiusEarth * EARTH_RADIUS_M) / (star.radiusSun * SOLAR_RADIUS_M);
   const b = aRs * Math.abs(g.cosI);
-  const t0 = conjunctionTime(o, g);
+  // Not for an unbound orbit: run() says why the model cannot take it.
+  const t0 = o.e >= 1 ? NaN : conjunctionTime(o, g);
   const { q1, q2 } = star.limb ?? { q1: 0.36, q2: 0.3 };
   return { t0, P: o.periodDays, k, aRs, b, q1, q2, e: o.e };
 }

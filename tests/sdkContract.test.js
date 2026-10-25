@@ -107,9 +107,9 @@ describe('the public surface', () => {
     expect(api.FORMATS).toMatchObject({
       'gravitas.capability-package': 1,
       'gravitas.observation-data-pack': 1,
-      // It reads /1 and /2: the highest it reads.
-      'gravitas.course-pack': 2,
-      'gravitas.investigation-pack': 1,
+      // It reads /1, /2 and /3: the highest it reads.
+      'gravitas.course-pack': 3,
+      'gravitas.investigation-pack': 2,
       'gravitas.scenario-pack': 1,
     });
     expect(Object.keys(api.EXTENSION_TYPES).sort()).toEqual([
@@ -421,8 +421,8 @@ describe('the JSON Schemas describe what the validators accept', () => {
     JSON.parse(readFileSync(`sdk/schemas/${name}.schema.json`, 'utf8'));
 
   test('an artifact the validator accepts fits its schema, and the enums agree', async () => {
-    const a = { ...api, FORMAT: 'gravitas.artifact', FORMAT_VERSION: 1 };
-    const s = schema('artifact-1');
+    const a = { ...api, FORMAT: 'gravitas.artifact', FORMAT_VERSION: 2 };
+    const s = schema('artifact-2');
     const doc = a.artifact({
       id: 'transit-depth',
       source: { kind: 'pipeline', id: 'hd209458-s56', digest: 'a1b2c3d4' },
@@ -450,7 +450,10 @@ describe('the JSON Schemas describe what the validators accept', () => {
       ],
     });
     expect(a.validateArtifact(doc)).toEqual([]);
-    expect(valid(s, doc)).toBe(true);
+    // Only 2.0.0's states: written as /1, and /1's schema is the one it fits.
+    expect(doc.formatVersion).toBe(1);
+    expect(valid(schema('artifact-1'), doc)).toBe(true);
+    expect(valid(s, { ...doc, formatVersion: 2 })).toBe(true);
     const q = s.properties.quantities.items.properties;
     expect(q.origin.enum).toEqual([...a.ORIGINS]);
     expect(q.uncertainty.properties.kind.enum).toEqual([
@@ -796,10 +799,10 @@ describe('course packs /2 and investigation packs, as extensions', () => {
 
   test('an investigation pack from a newer Gravitas, and a file that is no pack, are said so', async () => {
     const newer = edited('reading-an-orbit', 'investigation.json', p => {
-      p.formatVersion = 2;
+      p.formatVersion = 3;
     });
     expect((await findings(newer)).map(f => f.message)).toEqual([
-      'is gravitas.investigation-pack/2; this SDK reads up to /1',
+      'is gravitas.investigation-pack/3; this SDK reads up to /2',
     ]);
     const other = edited('reading-an-orbit', 'investigation.json', p => {
       p.format = 'gravitas.course-pack';

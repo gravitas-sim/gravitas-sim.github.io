@@ -1,3 +1,20 @@
+import {
+  KEY_ASSIGNMENT_PREFIX,
+  KEY_COLLECTIONS,
+  KEY_EVALUATION_DRAFT_PREFIX,
+  KEY_EVIDENCE_NOTEBOOK,
+  KEY_EXPERIMENT_CHECKPOINT_PREFIX,
+  KEY_EXPERIMENT_PREFIX,
+  KEY_GUIDES,
+  KEY_INVESTIGATION_PREFIX,
+  KEY_LAB3D_GUIDE_PREFIX,
+  KEY_MADE_PREFIX,
+  KEY_MISSIONLAB_PREFIX,
+  KEY_SIMULATION_SAVE,
+  KEY_STUDENT_NAME,
+  KEY_TERMS,
+  KEY_TEACHING_NOTES_PREFIX,
+} from '../names.js';
 // =============================================================================
 // What a student has made, read from the records the writers keep
 // -----------------------------------------------------------------------------
@@ -21,6 +38,13 @@ const SURFACE = {
   observatory: 'observatory',
   'inference-fit': 'observatory',
   comparison: 'observatory',
+  'image-marks': 'observatory',
+  'image-calibration': 'observatory',
+  'image-photometry': 'observatory',
+  'image-detection': 'observatory',
+  'image-injection': 'observatory',
+  'image-sequence': 'observatory',
+  'image-series': 'observatory',
   'sweep-analysis': 'experiments',
   'experiment-result': 'experiments',
   lab3d: 'lab3d',
@@ -38,8 +62,8 @@ export const SURFACE_ROUTE = {
 };
 
 const GUIDE_KEYS = [
-  ['gravitas_lab3d_guide_', 'lab3d', '/3d/'],
-  ['gravitas_missionlab_', 'mission', '/mission/lab/'],
+  [KEY_LAB3D_GUIDE_PREFIX, 'lab3d', '/3d/'],
+  [KEY_MISSIONLAB_PREFIX, 'mission', '/mission/lab/'],
 ];
 const isObj = v => v && typeof v === 'object' && !Array.isArray(v);
 const count = v => (Array.isArray(v) ? new Set(v).size : 0);
@@ -96,7 +120,7 @@ export function describe(records, library = new Map()) {
   };
   for (const { id: key, value } of records) {
     let m;
-    if (key.startsWith('gravitas_investigation_') && !key.endsWith(':v1')) {
+    if (key.startsWith(KEY_INVESTIGATION_PREFIX) && !key.endsWith(':v1')) {
       const id = key.slice(23);
       const e = entryOf(id);
       const seen = count(value?.visited);
@@ -115,13 +139,13 @@ export function describe(records, library = new Map()) {
         done: Boolean(e?.steps) && seen >= e.steps,
         since: text(value?.startedAt) || null,
       });
-    } else if (key === 'gravitas_guides' && isObj(value)) {
+    } else if (key === KEY_GUIDES && isObj(value)) {
       for (const [id, rec] of Object.entries(value))
         guide(id, 'observatory', `/observatory/?guide=${id}`, rec, key);
     } else if ((m = GUIDE_KEYS.find(([p]) => key.startsWith(p)))) {
       const id = key.slice(m[0].length).replace(/_(intro|advanced)$/, '');
       guide(id, m[1], `${m[2]}?guide=${id}`, value, key);
-    } else if (key.startsWith('gravitas_assignment_')) {
+    } else if (key.startsWith(KEY_ASSIGNMENT_PREFIX)) {
       const e = entryOf(value?.lesson);
       out.assignments.push({
         key,
@@ -132,7 +156,7 @@ export function describe(records, library = new Map()) {
           : 0,
         since: text(value?.startedAt) || null,
       });
-    } else if (key === 'gravitas_evidence_notebook') {
+    } else if (key === KEY_EVIDENCE_NOTEBOOK) {
       const entries = Array.isArray(value?.entries) ? value.entries : [];
       out.evidence.notebook = { key, count: entries.length };
       for (const x of entries) {
@@ -145,15 +169,15 @@ export function describe(records, library = new Map()) {
         });
       }
     } else if (
-      key.startsWith('gravitas_experiment_') &&
-      !key.startsWith('gravitas_experiment_checkpoint_')
+      key.startsWith(KEY_EXPERIMENT_PREFIX) &&
+      !key.startsWith(KEY_EXPERIMENT_CHECKPOINT_PREFIX)
     ) {
       out.experiments.push({
         key,
         title: text(value?.name) || key.slice(20),
         when: iso(value?.updated),
       });
-    } else if (key.startsWith('gravitas_experiment_checkpoint_')) {
+    } else if (key.startsWith(KEY_EXPERIMENT_CHECKPOINT_PREFIX)) {
       out.drafts.push({
         key,
         kind: 'checkpoint',
@@ -161,7 +185,7 @@ export function describe(records, library = new Map()) {
         when: null,
         href: '/experiments/',
       });
-    } else if (key === 'gravitas_simulation_save') {
+    } else if (key === KEY_SIMULATION_SAVE) {
       out.saved.push({
         key,
         kind: 'world',
@@ -183,7 +207,7 @@ export function describe(records, library = new Map()) {
             course: '/studio/course/',
           }[kind] + `?open=${id}`,
       });
-    } else if (key.startsWith('gravitas_evaluation_draft_')) {
+    } else if (key.startsWith(KEY_EVALUATION_DRAFT_PREFIX)) {
       out.drafts.push({
         key,
         kind: 'evaluation',
@@ -191,7 +215,7 @@ export function describe(records, library = new Map()) {
         when: null,
         href: '/evaluation/',
       });
-    } else if (key.startsWith('gravitas_teaching_notes_')) {
+    } else if (key.startsWith(KEY_TEACHING_NOTES_PREFIX)) {
       out.drafts.push({
         key,
         kind: 'notes',
@@ -199,9 +223,41 @@ export function describe(records, library = new Map()) {
         when: null,
         href: '/teaching/',
       });
-    } else if (key.startsWith('gravitas_made_')) {
+    } else if (key.startsWith(KEY_MADE_PREFIX)) {
       out.made.push({ key, title: text(value?.name) || key });
-    } else if (key === 'gravitas_student_name') {
+    } else if (key === KEY_TERMS) {
+      // The courses opened that name a term (js/instructorCourseTerms.js owns the
+      // record; its route has no room for that module here, so this reads it).
+      for (const c of value?.v === 1 && Array.isArray(value.courses)
+        ? value.courses
+        : []) {
+        if (!isObj(c) || !text(c.id) || !text(c.term)) continue;
+        (out.terms ??= []).push({
+          id: text(c.id),
+          term: text(c.term),
+          title: { en: text(c.title?.en) || text(c.id), es: text(c.title?.es) },
+          when: iso(c.at),
+        });
+      }
+    } else if (key === KEY_COLLECTIONS) {
+      // The saved items and the collections kept (js/library/collections.js
+      // owns the record; this reads its few fields for display).
+      const n = p =>
+        Array.isArray(p?.units?.[0]?.items) ? p.units[0].items.length : 0;
+      out.collections = {
+        saved: n(value?.saved),
+        received: (Array.isArray(value?.received) ? value.received : [])
+          .filter(r => isObj(r?.pack) && text(r.pack.id) && n(r.pack))
+          .map(r => ({
+            id: text(r.pack.id),
+            title: {
+              en: text(r.pack.title?.en) || text(r.pack.id),
+              ...(text(r.pack.title?.es) ? { es: text(r.pack.title.es) } : {}),
+            },
+            n: n(r.pack),
+          })),
+      };
+    } else if (key === KEY_STUDENT_NAME) {
       out.name = text(value) || null;
     }
   }
@@ -229,6 +285,10 @@ export function describe(records, library = new Map()) {
 export const total = d =>
   d.lessons.length +
   d.assignments.length +
+  (d.terms?.length ?? 0) +
+  (d.collections
+    ? (d.collections.saved ? 1 : 0) + d.collections.received.length
+    : 0) +
   d.experiments.length +
   d.saved.length +
   d.drafts.length +

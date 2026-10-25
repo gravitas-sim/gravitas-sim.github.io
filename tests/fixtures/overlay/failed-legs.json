@@ -1,0 +1,17 @@
+{
+  "format": "gravitas.overlay-failed-legs/1",
+  "prompt": 182,
+  "what": "Legs that fail as committed in thresholds.json and are left failing, each with its cause. No bound was moved, multiplied or restated. tests/overlay.test.js holds each to this record, so a change that fixes or worsens one cannot pass unnoticed. Carl may rule on each later.",
+  "legs": {
+    "a3.timeScales": {
+      "bound": {
+        "boundUtcSec": 1,
+        "boundExactSec": 1e-6,
+        "boundFormatsDay": 1e-9
+      },
+      "failingParts": ["tai", "start", "end"],
+      "cause": "The committed exact-conversion bound of 1e-6 s is smaller than the spacing of the doubles that hold a Julian date at this date: a Julian date near 2.46 million is a binary64 whose neighbours are 2^-31 day (4.0e-5 s) apart, so a TAI to TT shift of 32.184 s, or the half-exposure shift of 50 s, cannot be read back from one double to 1e-6 s whatever the arithmetic does. Measured: TAI 1.4e-5 s, start and end 1.0e-5 s (each under one spacing); TT 0 and TDB 6e-7 s pass their part; the UTC part (0.056 s against the 1 s bound) and the format part (0) pass. The leg was committed with a bound the representation cannot meet. Evidence row x.a3.timeScalesAtResolution records the same errors against one spacing and passes; it does not stand in for the leg. Left as committed; the two ways to meet it (a bound at the spacing, 5e-5 s, or a Julian date held as two doubles through the sky kernel) are Carl's.",
+      "measuredRange": [1e-6, 4.1e-5]
+    }
+  }
+}

@@ -52,11 +52,15 @@ definitions:
   cuts (a demonstration, a short route, a guided activity, a full lab).
 - **Embed a figure:** a ready `<iframe>` for each world the investigation uses
   (`EMBEDDING.md`), or the figure builder for one that runs in a lab of its own.
-- **Preview as a student:** `/?author=<id>&view=student`, the authoring preview
-  without its bar. It starts at the first step and reads and writes none of the
-  progress saved in this browser (`e2e/adoption.spec.js` holds it to that).
-  The Observatory, 3-D and mission labs have no such mode; their link opens the
-  investigation, which keeps only the record that it was opened.
+- **Preview as a student:** `/?author=<id>&view=student&preview=student` for a
+  lesson, the authoring preview without its bar; every other kind the Library
+  lists (the Observatory, 3-D and mission guides, activities, courses, datasets,
+  scenarios, experiments) at its own route with `preview=student`. Each starts
+  clean, says it is a preview in a banner, and reads and writes none of the
+  progress saved in this browser (`js/storage/local.js`; `e2e/adoption.spec.js`
+  and `e2e/previewParity.spec.js` hold it to that). Prompt 175 replaced the
+  earlier staging (D-ADOPT-01), where the labs' guides recorded that they were
+  opened.
 - **Instructor materials:** a link to `/instructors/`. The public words are on
   the page; the answers are not (`tests/adoptionPages.test.js` fails if a step's
   explanation, a response or a teaching note appears). This generator never reads

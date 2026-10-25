@@ -38,6 +38,8 @@ export function ensureBench() {
           import('./i18n/deferredMessages.js').then(m =>
             m.ensureDeferredMessages().catch(() => {})
           ),
+          // Its words redraw the panel when they register: before it renders.
+          import('./plot/mount.js'),
         ]);
       bench.initBench({
         captureShareState: app.command('captureShareState'),

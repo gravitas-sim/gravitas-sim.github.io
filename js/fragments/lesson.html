@@ -140,14 +140,6 @@
       data-en="Step {n} of {total}{depth} · {m} min of {planned}"
       data-es="Paso {n} de {total}{depth} · {m} min de {planned}"
     ></p>
-    <button
-      id="investigationHelp"
-      class="ui-button subtle"
-      aria-expanded="false"
-      aria-controls="investigationHelpPanel"
-    >
-      <span class="gs-en">Help</span><span class="gs-es" lang="es">Ayuda</span>
-    </button>
   </div>
   <!-- Authoring preview only: hidden unless ?author= put the panel in it.
        See js/authoring/preview.js. -->
@@ -273,11 +265,46 @@
       aria-live="polite"
       hidden=""
     ></p>
-    <!-- Kept, but out of the way: two full-width buttons under every step
-         for something a reader does once a term. -->
-    <details class="inv-backup">
-      <summary data-i18n="inv.backup.summary">Progress backup</summary>
-      <div class="inv-backup-actions">
+  </div>
+
+  <!-- "More" (Prompt 167, the design system): what a step does not ask about
+       folds here, open by default only at the advanced depth and then as the
+       reader left it. The notebook, the capture and report actions and the
+       step itself stay out; none of these produces a quantity a step names.
+       Native <details>, so the keyboard, the expanded state and find-in-page
+       are the browser's. -->
+  <details id="investigationMore" class="more inv-more" data-more="lesson">
+    <summary>
+      <span class="gs-en">More</span><span class="gs-es" lang="es">Más</span>
+    </summary>
+    <div class="more-body">
+      <button
+        id="investigationHelp"
+        class="ui-button subtle"
+        aria-expanded="false"
+        aria-controls="investigationHelpPanel"
+      >
+        <span class="gs-en">Help</span
+        ><span class="gs-es" lang="es">Ayuda</span>
+      </button>
+      <div id="investigationDepth" class="inv-depth" hidden="">
+        <span id="investigationDepthState"></span>
+        <button
+          id="investigationDeeper"
+          class="ui-button subtle"
+          data-i18n="inv.depth.deeper"
+        >
+          Go deeper
+        </button>
+        <button
+          id="investigationShallower"
+          class="ui-button subtle"
+          data-i18n="inv.depth.shallower"
+        >
+          Fewer steps
+        </button>
+      </div>
+      <div class="inv-backup">
         <button
           id="investigationBackupDownload"
           class="ui-button subtle"
@@ -303,37 +330,19 @@
           hidden=""
         />
       </div>
-    </details>
-  </div>
-
-  <div id="investigationDepth" class="inv-depth" hidden="">
-    <span id="investigationDepthState"></span>
-    <button
-      id="investigationDeeper"
-      class="ui-button subtle"
-      data-i18n="inv.depth.deeper"
-    >
-      Go deeper
-    </button>
-    <button
-      id="investigationShallower"
-      class="ui-button subtle"
-      data-i18n="inv.depth.shallower"
-    >
-      Fewer steps
-    </button>
-  </div>
+      <button
+        id="investigationReset"
+        class="ui-button subtle"
+        title="Clear every answer and start this investigation again"
+        data-i18n-title="inv.action.restart.hint"
+        data-i18n="inv.action.restart"
+      >
+        Restart
+      </button>
+    </div>
+  </details>
 
   <footer class="inv-footer">
-    <button
-      id="investigationReset"
-      class="ui-button subtle"
-      title="Clear every answer and start this investigation again"
-      data-i18n-title="inv.action.restart.hint"
-      data-i18n="inv.action.restart"
-    >
-      Restart
-    </button>
     <div class="inv-footer-nav">
       <button
         id="investigationPrev"
@@ -476,6 +485,18 @@
   <dl id="investigationToolReadout" class="inv-tool-readout"></dl>
   <div id="investigationToolControls" class="inv-tool-controls"></div>
   <div id="investigationToolActions" class="inv-tool-actions" hidden=""></div>
+  <!-- "More" (Prompt 167): the sliders and presets a step does not ask about.
+       widgets.js toolFold decides which; the Explain button stays in the
+       header, so the instrument's explainer is one press away either way. -->
+  <details id="investigationToolMore" class="more" data-more="tool" hidden="">
+    <summary>
+      <span class="gs-en">More</span><span class="gs-es" lang="es">Más</span>
+    </summary>
+    <div
+      id="investigationToolMoreBody"
+      class="more-body inv-tool-controls"
+    ></div>
+  </details>
   <div id="investigationToolPresets" class="inv-presets"></div>
   <p id="investigationToolPresetNote" class="inv-preset-note"></p>
 </aside>

@@ -9,10 +9,8 @@
 // tooltip, the error-bar caps. The caps and rates that live in source
 // constants are pinned by tests/chartParity.test.js.
 //
-//   A4 and A5 (still Chart.js): read through Chart.js's own registry and
-//   compared to the fixture as they always were.
-//
-//   A1, A2 and A3 (ported, stage 3b): read through the component's own
+//   All five charts are ported (A1-A3 in stage 3b, A4 and A5 in stage 3c):
+//   each is read through the component's own
 //   description of the chart (js/plot/chart.js `parts()`, plus the chart's
 //   markup for what it draws: colors as the page resolves them, the error bars
 //   as paths, the tooltip as hovered) and compared to the SAME fixture. A fact
@@ -21,151 +19,17 @@
 //   "Documented equivalents"), so the fixture stays the Chart.js record and the
 //   comparison is strict everywhere else.
 //
-// CHART_PARITY_RECORD=1 rewrites the fixture from the running application
-// instead of comparing, for A4 and A5 only: A1 to A3 would record the
-// component, and the fixture is the Chart.js record they are held to (then
-// `npx prettier --write` the fixture):
-//
-//   CHART_PARITY_RECORD=1 npx playwright test e2e/chartParity.spec.js
+// The fixture was recorded from the running Chart.js charts and is not
+// rewritten: stage 3c added each bench chart's `contract` (its text
+// alternative, the title each metric gives the y axis, which data it draws)
+// by running the same facts against the Chart.js bench before it was ported.
 // =============================================================================
 
-import { readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { test, expect } from './fixtures.js';
 
 const FIXTURE = join(process.cwd(), 'tests', 'fixtures', 'chart-parity.json');
-const RECORD = process.env.CHART_PARITY_RECORD === '1';
-
-/**
- * What a Chart.js chart is, as plain data. Runs in the page.
- * @param {string} canvasId
- * @param {string[]} custom - Axes whose source defines a tick callback
- * @returns {object|null}
- */
-function readChart(canvasId, custom) {
-  const chart = window.Chart?.getChart?.(document.getElementById(canvasId));
-  if (!chart) return null;
-  const tokens = window.__chartTokens;
-  // A color is its design token where one supplies it: the token is the fact,
-  // the resolved value depends on the theme.
-  const color = c => {
-    if (typeof c !== 'string') return c ?? null;
-    const hit = Object.entries(tokens)
-      .filter(([, v]) => v === c)
-      .map(([k]) => k);
-    return hit.length ? `token:${hit.join('|')}` : c;
-  };
-  const o = chart.options;
-  const own = chart.config._config.options;
-  const defaults = window.Chart.defaults;
-  const axis = a => {
-    const s = o.scales[a];
-    return {
-      type: chart.scales[a].type,
-      title: s.title?.display ? s.title.text : null,
-      titleColor: color(s.title?.color),
-      titleSize: s.title?.font?.size ?? null,
-      tickColor: color(s.ticks?.color),
-      tickSize: s.ticks?.font?.size ?? null,
-      maxTicks: s.ticks?.maxTicksLimit ?? null,
-      gridColor: color(s.grid?.color),
-      // Only where the chart's source writes its own tick text: the merged
-      // options always hold the library's formatter, so the source is named.
-      customTickLabels: custom.includes(a)
-        ? [0, 1.5, 123.456, 12345, 1e6, -0.0025].map(v =>
-            String(s.ticks.callback.call(chart.scales[a], v, 0, []))
-          )
-        : null,
-    };
-  };
-  const legend = o.plugins.legend;
-  const tip = o.plugins.tooltip;
-  const datasetIndexes = chart.data.datasets.map((_, i) => i);
-  return {
-    type: chart.config.type,
-    responsive: o.responsive,
-    keepsAspect: o.maintainAspectRatio,
-    animation:
-      o.animation === false || o.animation?.duration === 0 ? 'none' : 'on',
-    parsing: o.parsing === false ? 'objects' : 'default',
-    categoryX: chart.scales.x.type === 'category',
-    series: datasetIndexes.map(i => {
-      const d = chart.data.datasets[i];
-      return {
-        label: String(d.label),
-        color: color(d.borderColor),
-        fillColor: d.fill ? color(d.backgroundColor) : null,
-        width: d.borderWidth ?? null,
-        dash: d.borderDash ?? [],
-        fill: Boolean(d.fill),
-        tension: d.tension ?? 0,
-        pointRadius: d.pointRadius ?? null,
-        line: d.showLine !== false,
-        hidden: Boolean(d.hidden) || chart.getDatasetMeta(i).hidden === true,
-        order: d.order ?? 0,
-      };
-    }),
-    x: axis('x'),
-    y: axis('y'),
-    legend: {
-      shown: legend.display !== false,
-      position: legend.position,
-      textColor: color(own.plugins?.legend?.labels?.color),
-      togglesSeries: legend.onClick === defaults.plugins.legend.onClick,
-    },
-    tooltip: {
-      enabled: tip.enabled !== false,
-      mode: tip.mode ?? o.interaction?.mode ?? null,
-      intersect: tip.intersect ?? o.interaction?.intersect ?? null,
-      custom: typeof own.plugins?.tooltip?.callbacks?.label === 'function',
-    },
-    plugins: (chart.config.plugins || []).map(p => p.id),
-  };
-}
-
-/** Make the design tokens' resolved colors known to readChart(). */
-async function exposeTokens(page) {
-  await page.evaluate(async () => {
-    const { chartColors } = await import('/js/observationChart.js');
-    window.__chartTokens = chartColors();
-    window.__readChart = null;
-  });
-}
-
-const read = (page, canvasId, custom = []) =>
-  page.evaluate(
-    `(${readChart.toString()})(${JSON.stringify(canvasId)}, ${JSON.stringify(custom)})`
-  );
-
-/** Poll until the canvas has a chart, then read it. */
-async function chartOf(page, canvasId, custom = []) {
-  await exposeTokens(page);
-  await expect
-    .poll(async () => (await read(page, canvasId)) !== null, {
-      timeout: 30_000,
-      message: `${canvasId} never got a chart`,
-    })
-    .toBe(true);
-  return read(page, canvasId, custom);
-}
-
-/**
- * Each test checks its own chart against its own key of the fixture, so every
- * test runs alone, in any order, and in any shard. With RECORD set it merges
- * its key into the fixture instead.
- */
-function settle(key, value) {
-  const fixture = JSON.parse(readFileSync(FIXTURE, 'utf8'));
-  if (RECORD) {
-    fixture[key] = value;
-    const sorted = Object.fromEntries(
-      Object.entries(fixture).sort(([a], [b]) => (a < b ? -1 : 1))
-    );
-    writeFileSync(FIXTURE, JSON.stringify(sorted, null, 2) + '\n');
-    return;
-  }
-  expect(value).toEqual(fixture[key]);
-}
 
 /**
  * What a chart drawn by the component is, in the fixture's shape. Runs in the
@@ -177,10 +41,14 @@ function settle(key, value) {
  * @returns {Promise<object|null>}
  */
 async function readComponent({ hostId, mod, accessor }) {
-  const host = document.getElementById(hostId);
-  const parts = (await import(mod))[accessor]();
-  if (!host || !parts) return null;
+  // Both imports first, then everything below runs without a gap. An import
+  // settles in a later task even when its module is loaded, and a chart
+  // redraws on the host's resize (the legend appearing shrinks the host).
+  const read = await import(mod);
   const { chartColors } = await import('/js/observationChart.js');
+  const host = document.getElementById(hostId);
+  let parts = read[accessor]();
+  if (!host || !parts) return null;
   const probe = document.body.appendChild(document.createElement('i'));
   const norm = c => {
     probe.style.color = '';
@@ -248,6 +116,11 @@ async function readComponent({ hostId, mod, accessor }) {
     button.click();
     toggles = before === 'true' && hidden === 'false';
   }
+  // Each click above redraws the chart at the host's size as it is now. When
+  // the host had resized and the chart's own observer had not redrawn yet (a
+  // legend that has just appeared), the ticks taken before the clicks are the
+  // old size's and no longer match the labels in the svg. Take them again.
+  parts = read[accessor]();
 
   // The error bars: the paths the measurements series drew, read against the
   // points beside them.
@@ -343,6 +216,16 @@ const PORTED = {
     hostId: 'rvChart',
     mod: '/js/radialVelocity.js',
     accessor: 'radialVelocityChartParts',
+  },
+  A4: {
+    hostId: 'benchChart',
+    mod: '/js/experiments/panel.js',
+    accessor: 'benchComparisonParts',
+  },
+  A5: {
+    hostId: 'benchSweepChart',
+    mod: '/js/experiments/panel.js',
+    accessor: 'benchSweepParts',
   },
 };
 
@@ -440,6 +323,21 @@ function portedExpectation(f, lineCount) {
   delete e.errorBars;
   delete e.tooltipSample;
   delete e.xLabelIsDays;
+  // The bench charts' own facts are checked apart, from the page and the
+  // fixture's `contract`.
+  for (const k of [
+    'metricChoices',
+    'xValuesAreTimes',
+    'pointsAreXY',
+    'xTitleNamesTheParameter',
+    'contract',
+  ])
+    delete e[k];
+  // A5 was a scatter chart with its line drawn; the component draws the
+  // same marks as a series of points joined by a line, and it finds the
+  // nearest point where Chart.js's scatter default wanted the pointer on one.
+  if (e.type === 'scatter') e.type = 'line';
+  if (e.tooltip.mode === 'point') e.tooltip.mode = 'nearest';
   return e;
 }
 
@@ -484,12 +382,12 @@ function portedFacts(read, f) {
 }
 
 /** The tooltip's line count at the probe's hover, by chart. */
-const TIP_LINES = { A1: 4, A2: 2, A3: 2 };
+const TIP_LINES = { A1: 4, A2: 2, A3: 2, A4: 2, A5: 2 };
 
 /**
  * Compare a ported chart to the fixture: every recorded fact the component can
  * state, with the documented equivalents applied.
- * @param {string} key - A1, A2 or A3
+ * @param {string} key - A1 to A5
  * @param {object} read - What readComponent() returned
  * @param {string} [sub] - A3's 'plain' or 'survey'
  */
@@ -499,7 +397,161 @@ function compareToFixture(key, read, sub) {
   expect(portedFacts(read, f)).toEqual(portedExpectation(f, TIP_LINES[key]));
 }
 
-test.describe('the five Chart.js charts, as they are today', () => {
+/**
+ * What a bench chart draws, in the shape of the fixture's `contract`: its text
+ * alternative, the y-axis title each metric gives it, whether its series are
+ * the bench's own aligned rows (A4) or the trials that measured, sorted by
+ * parameter (A5), and whether the table beside it names every metric. Runs the
+ * metric picker through every choice, as a student does.
+ * @param {import('@playwright/test').Page} page
+ * @param {'A4'|'A5'} which
+ * @returns {Promise<object>}
+ */
+function benchFacts(page, which) {
+  return page.evaluate(async which => {
+    const bench = await import('/js/experiments/bench.js');
+    const panel = await import('/js/experiments/panel.js');
+    const A4 = which === 'A4';
+    const parts = () =>
+      A4 ? panel.benchComparisonParts() : panel.benchSweepParts();
+    const picker = document.getElementById(
+      A4 ? 'benchChartMetric' : 'benchSweepMetric'
+    );
+    const same = (a, b) =>
+      a.length === b.length &&
+      a.every((v, i) =>
+        Number.isFinite(v) || Number.isFinite(b[i]) ? v === b[i] : true
+      );
+    // What the chart should be drawing for a metric, from the bench itself.
+    const wanted = metric => {
+      if (A4) {
+        const rows = bench.compare().aligned[metric].rows;
+        return [
+          rows.map(r => Number(r.t.toPrecision(6))),
+          rows.map(r => r.a),
+          rows.map(r => r.b),
+        ];
+      }
+      const ok = bench
+        .latestSweep()
+        .trials.filter(tr => Number.isFinite(tr.results?.[metric]))
+        .map(tr => [tr.value, tr.results[metric]])
+        .sort((p, q) => p[0] - q[0]);
+      return [ok.map(q => q[0]), ok.map(q => q[1])];
+    };
+    const drawing = metric => {
+      const p = parts();
+      const [x, ...ys] = wanted(metric);
+      const got = p.series;
+      return (
+        same(got[0].x, x) &&
+        ys.every((y, k) => same(got[k].y, y)) &&
+        (A4 || got[0].x.every((v, i, a) => i === 0 || a[i - 1] <= v))
+      );
+    };
+    const titles = [];
+    let matches = true;
+    let dropsFailed = true;
+    for (const opt of [...picker.options]) {
+      picker.value = opt.value;
+      picker.dispatchEvent(new Event('change'));
+      // The draw follows the change a moment later: wait for it to land.
+      for (
+        let i = 0;
+        i < 200 &&
+        !(parts()?.yTitle.startsWith(opt.textContent) && drawing(opt.value));
+        i++
+      )
+        await new Promise(r => setTimeout(r, 25));
+      titles.push([opt.textContent, parts().yTitle]);
+      matches = matches && drawing(opt.value);
+      if (!A4) {
+        // A failed trial is left out, not drawn as a zero: fewer points than
+        // trials, and exactly the ones that measured.
+        const n = parts().series[0].x.length;
+        dropsFailed =
+          dropsFailed &&
+          n === wanted(opt.value)[0].length &&
+          n < bench.latestSweep().trials.length;
+      }
+    }
+    const table = document.querySelector(
+      A4 ? '#benchResults table' : '#benchSweepResults table'
+    );
+    const out = {
+      label: parts().label,
+      metricTitles: titles,
+      tableBeside: [...picker.options].every(o =>
+        table?.textContent.includes(o.textContent)
+      ),
+    };
+    if (A4) out.dataIsTheAlignedRows = matches;
+    else {
+      out.dataIsTheTrialsThatMeasured = matches;
+      out.failedTrialLeftOut = dropsFailed;
+    }
+    return out;
+  }, which);
+}
+
+/**
+ * What the component adds to the bench charts (the Chart.js ones had none of
+ * it): a focusable, named chart whose arrow keys read the values and say them
+ * in a polite status, and a legend whose buttons toggle a series from the
+ * keyboard.
+ * @param {import('@playwright/test').Page} page
+ * @param {object} read - What readComponent() returned
+ * @param {string} hostId
+ */
+async function readsAndSpeaks(page, read, hostId) {
+  expect(read.focusable).toBe(true);
+  expect(read.label).not.toBe('');
+  const svg = page.locator(`#${hostId} svg[role="group"]`);
+  const status = page.locator(`#${hostId} [role="status"]`);
+  await svg.focus();
+  await page.keyboard.press('Home');
+  await expect(status).toContainText(/\S/);
+  const first = await status.textContent();
+  await page.keyboard.press('ArrowRight');
+  await expect.poll(() => status.textContent()).not.toBe(first);
+  await page.keyboard.press('Escape');
+  // The legend: a real button, pressed by the keyboard, hides its series and
+  // says so; pressed again it comes back.
+  const button = page.locator(`#${hostId} button[data-series]`).first();
+  await button.focus();
+  await page.keyboard.press('Enter');
+  await expect(button).toHaveAttribute('aria-pressed', 'false');
+  await expect(status).toContainText(/\S/);
+  await page.keyboard.press('Enter');
+  await expect(button).toHaveAttribute('aria-pressed', 'true');
+}
+
+/**
+ * The export: the chart's picture is a PNG twice the chart's width (the
+ * export's scale), and at least as tall. Chart.js had no export here.
+ * @param {import('@playwright/test').Page} page
+ * @param {'A4'|'A5'} key
+ */
+async function exportsAPicture(page, key) {
+  const out = await page.evaluate(async where => {
+    const parts = (await import(where.mod))[where.accessor]();
+    const { toPNG } = await import('/js/plot/export.js');
+    const blob = await toPNG(parts);
+    const bmp = await window.createImageBitmap(blob);
+    return {
+      type: blob.type,
+      w: bmp.width,
+      h: bmp.height,
+      cw: parts.width,
+      ch: parts.height,
+    };
+  }, PORTED[key]);
+  expect(out.type).toBe('image/png');
+  expect(out.w).toBe(out.cw * 2);
+  expect(out.h).toBeGreaterThanOrEqual(out.ch * 2);
+}
+
+test.describe('the five charts, held to what the Chart.js ones were', () => {
   test('A1: the energy chart in the object inspector (ported)', async ({
     page,
     app,
@@ -736,7 +788,7 @@ test.describe('the five Chart.js charts, as they are today', () => {
     expect(tip[1]).toMatch(/^.+: [+−-]?[\d.,]+ ± 5(?:\.0+)?\s?m\/s$/);
   });
 
-  test('A4: the bench comparison, and A5: the sweep', async ({
+  test('A4: the bench comparison, and A5: the sweep (ported)', async ({
     page,
     app,
   }, testInfo) => {
@@ -782,16 +834,30 @@ test.describe('the five Chart.js charts, as they are today', () => {
         /not recorded/
       );
     }
-    const comparison = await chartOf(page, 'benchChart');
-    comparison.metricChoices = await page
-      .locator('#benchChartMetric option')
-      .evaluateAll(os => os.length > 1);
-    comparison.xValuesAreTimes = await page.evaluate(() => {
-      const c = window.Chart.getChart(document.getElementById('benchChart'));
-      return c.data.labels.every(v => Number.isFinite(v));
-    });
-    settle('A4', comparison);
+    const fixture = JSON.parse(readFileSync(FIXTURE, 'utf8'));
 
+    // --- A4 ---------------------------------------------------------------
+    const comparison = await portedChart(page, 'A4');
+    compareToFixture('A4', comparison);
+    expect(await page.evaluate(() => typeof window.Chart)).toBe('undefined');
+    expect(
+      await page
+        .locator('#benchChartMetric option')
+        .evaluateAll(os => os.length > 1)
+    ).toBe(fixture.A4.metricChoices);
+    expect(
+      await page.evaluate(async () => {
+        const parts = (
+          await import('/js/experiments/panel.js')
+        ).benchComparisonParts();
+        return parts.series.every(v => v.x.every(Number.isFinite));
+      })
+    ).toBe(fixture.A4.xValuesAreTimes);
+    expect(await benchFacts(page, 'A4')).toEqual(fixture.A4.contract);
+    await readsAndSpeaks(page, comparison, 'benchChart');
+    await exportsAPicture(page, 'A4');
+
+    // --- A5 ---------------------------------------------------------------
     // The sweep, through the bench's own entry point, then the panel.
     const swept = await page.evaluate(async () => {
       const bench = await import('/js/experiments/bench.js');
@@ -812,22 +878,71 @@ test.describe('the five Chart.js charts, as they are today', () => {
       panel.render();
       document.getElementById('benchSweepSection').open = true;
     });
-    const sweep = await chartOf(page, 'benchSweepChart');
-    sweep.pointsAreXY = await page.evaluate(() => {
-      const c = window.Chart.getChart(
-        document.getElementById('benchSweepChart')
-      );
-      return c.data.datasets[0].data.every(
-        p => Number.isFinite(p.x) && Number.isFinite(p.y)
-      );
+    const sweep = await portedChart(page, 'A5', 1);
+    compareToFixture('A5', sweep);
+    expect(
+      await page.evaluate(async () => {
+        const parts = (
+          await import('/js/experiments/panel.js')
+        ).benchSweepParts();
+        return parts.series[0].x.every(
+          (x, i) => Number.isFinite(x) && Number.isFinite(parts.series[0].y[i])
+        );
+      })
+    ).toBe(fixture.A5.pointsAreXY);
+    expect(/\(.+\)/.test(sweep.x.title)).toBe(
+      fixture.A5.xTitleNamesTheParameter
+    );
+    // A trial that failed is left out, not drawn as a zero: fail one of the
+    // three and the chart holds only the ones that measured.
+    await page.evaluate(async () => {
+      const bench = await import('/js/experiments/bench.js');
+      const trial = bench.latestSweep().trials[1];
+      trial.results = null;
+      trial.status = 'failed';
+      (await import('/js/experiments/panel.js')).render();
     });
-    sweep.xTitleNamesTheParameter = await page.evaluate(() => {
-      const c = window.Chart.getChart(
-        document.getElementById('benchSweepChart')
-      );
-      return /\(.+\)/.test(c.options.scales.x.title.text);
-    });
-    settle('A5', sweep);
+    expect(await benchFacts(page, 'A5')).toEqual(fixture.A5.contract);
+    await readsAndSpeaks(page, sweep, 'benchSweepChart');
+    await exportsAPicture(page, 'A5');
+
+    // --- Both, after a language change ------------------------------------
+    // The panel is built again in the new language. Each chart was built in a
+    // host that is gone: the new host gets a chart of its own, in the new
+    // words, and the old one is destroyed (one chart in each host, not two).
+    // (Chart.js drew into the detached canvas and left the new one blank.)
+    await page.evaluate(async () =>
+      (await import('/js/i18n/index.js')).setLocale('es')
+    );
+    for (const key of ['A4', 'A5']) {
+      await expect
+        .poll(
+          () =>
+            page.evaluate(
+              async ({ where, labelKey }) => {
+                const parts = (await import(where.mod))[where.accessor]();
+                const host = document.getElementById(where.hostId);
+                const { t, getLocale } = await import('/js/i18n/index.js');
+                return Boolean(
+                  getLocale() === 'es' &&
+                  parts &&
+                  host?.contains(parts.svg) &&
+                  host.querySelectorAll('svg[role="group"]').length === 1 &&
+                  parts.label === t(labelKey)
+                );
+              },
+              {
+                where: PORTED[key],
+                labelKey: key === 'A4' ? 'bench.chart.label' : 'sweep.title',
+              }
+            ),
+          {
+            timeout: 30_000,
+            message: `${key} was not redrawn after the language changed`,
+          }
+        )
+        .toBe(true);
+    }
   });
 
   test('the fixture holds the five charts and nothing else', async () => {

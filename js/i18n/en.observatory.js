@@ -32,6 +32,14 @@ export const EN_OBSERVATORY = {
   'obs.fixture.sdss-m': 'SDSS DR18: an M star',
   'obs.fixture.gwosc-events': 'Five gravitational-wave events (GWOSC)',
   'obs.fixture.tess-aperture': 'HD 209458: the TESS aperture mask',
+  'obs.fixture.tess-frame':
+    'HD 209458: one TESS frame, calibrated flux and error',
+  'obs.fixture.sdo-hmi-sun':
+    'The Sun in HMI continuum light (a picture, for marking only)',
+  'obs.fixture.galileo-moon':
+    'The Moon from Galileo (a picture, for marking only)',
+  'obs.fixture.hirise-cerberus-fossae':
+    'Mars from HiRISE: Cerberus Fossae (a picture, for marking only)',
 
   'obs.fixture.ngc2420-photometry':
     'NGC 2420: SDSS photometry (a cluster and its field)',
@@ -47,7 +55,11 @@ export const EN_OBSERVATORY = {
     'MIST isochrones in the SDSS bands (a model, not an observation)',
   'obs.import.file': 'Or import your own file',
   'obs.import.hint':
-    'CSV, tab- or semicolon-separated text, or JSON, up to 5 MB and 200,000 rows. It stays on this device.',
+    'CSV, tab- or semicolon-separated text, or JSON, up to 5 MB and 200,000 rows; or a FITS image, PNG or JPEG of up to 4,194,304 pixels. It stays on this device.',
+  'obs.import.imageHelp':
+    'Images come in two kinds. A FITS frame can be quantitative: its pixel values measure light, and with the header and what you state about it, marks, photometry and astrometry can be allowed. A PNG or a JPEG is display-only: its numbers are gray levels made for the eye, so you can mark it and measure it in pixels, but photometry and astrometry are refused, because they need pixels that count light and positions tied to the sky.',
+  'obs.imp.offline':
+    'The image reader could not be loaded. It is fetched the first time you choose an image, so it needs the network once.',
   'obs.import.title': 'Check what you are importing',
   'obs.import.summary':
     '{rows} rows and {columns} columns, {delimiter}, {header}.',
@@ -285,5 +297,29 @@ export const EN_OBSERVATORY = {
   'obs.sky.title': 'Sky: Galactic map and proper-motion vectors',
   'obs.arc.title': "Or find a star's Gaia epochs at CDS (live, opt-in)",
   'obs.ms.title': 'Measure, and the pipeline',
+  'obs.cal.title': 'Sky coordinates for the image',
+  'obs.cal.offline':
+    'The sky-coordinates tool is loading. It is fetched when first opened, so it needs the network the first time.',
+  'obs.ph.title': 'Photometry on the image',
+  'obs.ov.title': 'Catalogs, blink and compare',
+  'obs.ov.offline':
+    'The overlay and blink tool is loading. It is fetched when first opened, so it needs the network the first time.',
+  'obs.dt.title': 'Sources and the width of the stars',
+  'obs.dt.offline':
+    'The source-finding tool is loading. It is fetched when first opened, so it needs the network the first time.',
+  'obs.inj.title': 'Completeness: what the detector misses',
+  'obs.inj.offline':
+    'The completeness tool is loading. It is fetched when first opened, so it needs the network the first time.',
+  'obs.sq.title': 'Frames to a light curve',
+  'obs.sq.offline':
+    'The frame pipeline is loading. It is fetched when first opened, so it needs the network the first time.',
+  'obs.ser.title': 'Motion and parallax over time',
+  'obs.ser.offline':
+    'The motion and parallax tool is loading. It is fetched when first opened, so it needs the network the first time.',
+  'obs.orb.title': 'Orbit of a binary star and track of a moving object',
+  'obs.orb.offline':
+    'The orbit and track tools are loading. They are fetched when first opened, so they need the network the first time.',
+  'obs.ph.offline':
+    'The photometry tool is loading. It is fetched when first opened, so it needs the network the first time.',
   'obs.gd.title': 'Guided investigations',
 };

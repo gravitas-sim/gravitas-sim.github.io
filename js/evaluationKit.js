@@ -15,6 +15,7 @@
 // transmitted is worth exactly as much as the check behind it.
 // =============================================================================
 
+import { put, drop } from './storage/local.js';
 import {
   AGREE_POINTS,
   CONCEPT_COLUMNS,
@@ -30,8 +31,9 @@ import {
   USABILITY_RATED,
 } from './data/evaluationShape.js';
 import { csvField } from './csv.js';
+import { KEY_EVALUATION_DRAFT_V1 } from './names.js';
 
-const STORE_KEY = 'gravitas_evaluation_draft_v1';
+const STORE_KEY = KEY_EVALUATION_DRAFT_V1;
 const $ = id => document.getElementById(id);
 
 /** Words a code is built from. Nothing here derives from a person. */
@@ -97,7 +99,7 @@ const readDraft = () => {
 };
 const writeDraft = draft => {
   try {
-    localStorage.setItem(STORE_KEY, JSON.stringify(draft));
+    put(STORE_KEY, JSON.stringify(draft), 'drafts');
   } catch {
     /* a browser with storage disabled still gets working forms and export */
   }
@@ -324,7 +326,7 @@ function wire(draft) {
 
   $('ekClear')?.addEventListener('click', () => {
     try {
-      localStorage.removeItem(STORE_KEY);
+      drop(STORE_KEY);
     } catch {
       /* nothing stored, nothing to remove */
     }

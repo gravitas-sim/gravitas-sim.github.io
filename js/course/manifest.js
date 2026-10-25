@@ -20,8 +20,9 @@ import {
   offlineOf,
   reviewItem,
 } from './review.js';
+import { ID_COURSE_MANIFEST } from '../names.js';
 
-export const MANIFEST_FORMAT = 'gravitas.course-manifest';
+export const MANIFEST_FORMAT = ID_COURSE_MANIFEST;
 export const MANIFEST_FORMAT_VERSION = 1;
 
 const LICENSE_WORDS = {
@@ -118,4 +119,78 @@ export function courseManifest(pack, facts, { links, course }) {
       .filter(f => f.level !== 'error')
       .map(({ level, code, path, vars }) => ({ level, code, path, ...vars })),
   };
+}
+
+// --- A new item of a kind -------------------------------------------------------
+// Kept here, not in js/coursePage.js, whose line ceiling is full, and not in a
+// file of its own, because a module the page imports is a request on the
+// course builder's route (tools/route-budgets.json).
+
+/**
+ * A new item of a kind, pinned to this build when it names a lesson.
+ * @param {string} kind - lesson, assignment, scenario, guide, dataset, pack or reading
+ * @param {object} d - What the page holds: freshId(base), lesson (the first
+ *   lesson's id), today (YYYY-MM-DD) and scenarioTitle(id)
+ * @returns {object} The item
+ */
+export function newCourseItem(kind, d) {
+  const { freshId, lesson, today, scenarioTitle } = d;
+  const base = { kind };
+  switch (kind) {
+    case 'lesson':
+      return { ...base, id: freshId(lesson), lesson };
+    case 'assignment':
+      return {
+        ...base,
+        id: freshId(`${lesson}-assignment`),
+        lesson,
+        steps: [],
+        assignment: { id: 'pending', created: today },
+      };
+    case 'scenario': {
+      const scenario = 'solar-system';
+      return {
+        ...base,
+        id: freshId('solar-system'),
+        minutes: 10,
+        scenario,
+        seed: 'orbit-1',
+        title: { en: scenarioTitle(scenario) },
+      };
+    }
+    case 'guide':
+      return {
+        ...base,
+        id: freshId('l3-planes'),
+        minutes: 20,
+        guide: 'l3-planes',
+        depth: 'core',
+      };
+    case 'dataset':
+      return {
+        ...base,
+        id: freshId('tess-light-curve'),
+        minutes: 15,
+        dataset: 'tess-light-curve',
+      };
+    case 'pack':
+      // Filled when its link is pasted (readPackItem).
+      return {
+        ...base,
+        id: freshId('investigation'),
+        pack: '',
+        version: '1.0.0',
+        link: '',
+      };
+    case 'reading':
+      return {
+        ...base,
+        id: freshId('reading'),
+        minutes: 20,
+        title: { en: '' },
+        cite: { authors: '', year: new Date().getFullYear(), source: '' },
+        access: 'open',
+      };
+  }
+  return base;
 }

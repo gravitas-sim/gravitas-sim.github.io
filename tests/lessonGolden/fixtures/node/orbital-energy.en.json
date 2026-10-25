@@ -1,0 +1,915 @@
+{
+ "id": "orbital-energy",
+ "locale": "en",
+ "title": "Bound, Unbound and Escape",
+ "steps": 24,
+ "depths": [
+  [
+   "core",
+   24
+  ]
+ ],
+ "grading": [
+  {
+   "sid": "load-it-lightly",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "load-it-heavily",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "where-is-the-line",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "reading-the-sign",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     true,
+     "correct"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "what-stays-put",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "a-common-misunderstanding",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "somewhere-else-entirely",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     true,
+     "correct"
+    ]
+   ]
+  },
+  {
+   "sid": "starting-further-out",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "will-it-be-back",
+   "type": "question",
+   "kind": "short",
+   "grades": [
+    [
+     "ungraded",
+     null
+    ]
+   ]
+  }
+ ],
+ "progress": {
+  "record": {
+   "schema": 2,
+   "lesson": "orbital-energy",
+   "stepSid": "what-you-worked-out",
+   "responses": {
+    "orbital-energy:load-it-lightly": 1,
+    "orbital-energy:load-it-heavily": 2,
+    "orbital-energy:where-is-the-line": 1,
+    "orbital-energy:reading-the-sign": 0,
+    "orbital-energy:what-stays-put": 2,
+    "orbital-energy:a-common-misunderstanding": 1,
+    "orbital-energy:somewhere-else-entirely": 3,
+    "orbital-energy:starting-further-out": 1,
+    "orbital-energy:will-it-be-back": "A fixed sentence for the golden."
+   },
+   "attempts": {
+    "orbital-energy:load-it-lightly": 1,
+    "orbital-energy:load-it-heavily": 1,
+    "orbital-energy:where-is-the-line": 1,
+    "orbital-energy:reading-the-sign": 1,
+    "orbital-energy:what-stays-put": 1,
+    "orbital-energy:a-common-misunderstanding": 1,
+    "orbital-energy:somewhere-else-entirely": 1,
+    "orbital-energy:starting-further-out": 1
+   },
+   "visited": [
+    "how-hard-would-you-have",
+    "load-it-lightly",
+    "fire-it",
+    "load-it-heavily",
+    "fire-it-again",
+    "find-the-dividing-line",
+    "write-down-the-dividing-speed",
+    "where-is-the-line",
+    "what-is-actually-deciding-this",
+    "watch-the-total",
+    "reading-the-sign",
+    "around-a-real-orbit",
+    "what-stays-put",
+    "escape-speed",
+    "a-common-misunderstanding",
+    "somewhere-else-entirely",
+    "more-mass-harder-to-leave",
+    "further-out-easier-to-leave",
+    "starting-further-out",
+    "three-shapes-one-law",
+    "something-that-came-from-outside",
+    "check-it-yourself",
+    "will-it-be-back",
+    "what-you-worked-out"
+   ],
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "depth": "core",
+   "spent": 600
+  },
+  "read": {
+   "responses": {
+    "orbital-energy:load-it-lightly": 1,
+    "orbital-energy:load-it-heavily": 2,
+    "orbital-energy:where-is-the-line": 1,
+    "orbital-energy:reading-the-sign": 0,
+    "orbital-energy:what-stays-put": 2,
+    "orbital-energy:a-common-misunderstanding": 1,
+    "orbital-energy:somewhere-else-entirely": 3,
+    "orbital-energy:starting-further-out": 1,
+    "orbital-energy:will-it-be-back": "A fixed sentence for the golden."
+   },
+   "attempts": {
+    "orbital-energy:load-it-lightly": 1,
+    "orbital-energy:load-it-heavily": 1,
+    "orbital-energy:where-is-the-line": 1,
+    "orbital-energy:reading-the-sign": 1,
+    "orbital-energy:what-stays-put": 1,
+    "orbital-energy:a-common-misunderstanding": 1,
+    "orbital-energy:somewhere-else-entirely": 1,
+    "orbital-energy:starting-further-out": 1
+   },
+   "visited": [
+    "a-common-misunderstanding",
+    "around-a-real-orbit",
+    "check-it-yourself",
+    "escape-speed",
+    "find-the-dividing-line",
+    "fire-it",
+    "fire-it-again",
+    "further-out-easier-to-leave",
+    "how-hard-would-you-have",
+    "load-it-heavily",
+    "load-it-lightly",
+    "more-mass-harder-to-leave",
+    "reading-the-sign",
+    "something-that-came-from-outside",
+    "somewhere-else-entirely",
+    "starting-further-out",
+    "three-shapes-one-law",
+    "watch-the-total",
+    "what-is-actually-deciding-this",
+    "what-stays-put",
+    "what-you-worked-out",
+    "where-is-the-line",
+    "will-it-be-back",
+    "write-down-the-dividing-speed"
+   ],
+   "stepSid": "what-you-worked-out",
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "depth": "core",
+   "deepest": null,
+   "spent": 600,
+   "schema": 2,
+   "migrated": false,
+   "notes": []
+  }
+ },
+ "backup": {
+  "backup": {
+   "kind": "gravitas.investigation.progress",
+   "version": 2,
+   "savedAt": "2026-01-02T04:05:06.000Z",
+   "lesson": {
+    "id": "orbital-energy",
+    "title": "Bound, Unbound and Escape",
+    "stepCount": 24
+   },
+   "student": null,
+   "progress": {
+    "stepSid": "what-you-worked-out",
+    "startedAt": "2026-01-02T03:04:05.000Z",
+    "visited": [
+     "how-hard-would-you-have",
+     "load-it-lightly",
+     "fire-it",
+     "load-it-heavily",
+     "fire-it-again",
+     "find-the-dividing-line",
+     "write-down-the-dividing-speed",
+     "where-is-the-line",
+     "what-is-actually-deciding-this",
+     "watch-the-total",
+     "reading-the-sign",
+     "around-a-real-orbit",
+     "what-stays-put",
+     "escape-speed",
+     "a-common-misunderstanding",
+     "somewhere-else-entirely",
+     "more-mass-harder-to-leave",
+     "further-out-easier-to-leave",
+     "starting-further-out",
+     "three-shapes-one-law",
+     "something-that-came-from-outside",
+     "check-it-yourself",
+     "will-it-be-back",
+     "what-you-worked-out"
+    ],
+    "responses": {
+     "orbital-energy:load-it-lightly": 1,
+     "orbital-energy:load-it-heavily": 2,
+     "orbital-energy:where-is-the-line": 1,
+     "orbital-energy:reading-the-sign": 0,
+     "orbital-energy:what-stays-put": 2,
+     "orbital-energy:a-common-misunderstanding": 1,
+     "orbital-energy:somewhere-else-entirely": 3,
+     "orbital-energy:starting-further-out": 1,
+     "orbital-energy:will-it-be-back": "A fixed sentence for the golden."
+    },
+    "attempts": {
+     "orbital-energy:load-it-lightly": 1,
+     "orbital-energy:load-it-heavily": 1,
+     "orbital-energy:where-is-the-line": 1,
+     "orbital-energy:reading-the-sign": 1,
+     "orbital-energy:what-stays-put": 1,
+     "orbital-energy:a-common-misunderstanding": 1,
+     "orbital-energy:somewhere-else-entirely": 1,
+     "orbital-energy:starting-further-out": 1
+    }
+   },
+   "steps": [
+    {
+     "index": 0,
+     "sid": "how-hard-would-you-have",
+     "fingerprint": "read|-|-|Kepler's 2nd Law|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 1,
+     "sid": "load-it-lightly",
+     "fingerprint": "predict|-|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 2,
+     "sid": "fire-it",
+     "fingerprint": "explore|-|launch|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 3,
+     "sid": "load-it-heavily",
+     "fingerprint": "predict|-|-|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 4,
+     "sid": "fire-it-again",
+     "fingerprint": "explore|-|launch|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 5,
+     "sid": "find-the-dividing-line",
+     "fingerprint": "explore|-|launch|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 6,
+     "sid": "write-down-the-dividing-speed",
+     "fingerprint": "measure|-|launch|-|back+gone|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 7,
+     "sid": "where-is-the-line",
+     "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 8,
+     "sid": "what-is-actually-deciding-this",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 9,
+     "sid": "watch-the-total",
+     "fingerprint": "explore|-|launch|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 10,
+     "sid": "reading-the-sign",
+     "fingerprint": "question|choice|-|-|-|4|a=0;c=0",
+     "optionCount": 4
+    },
+    {
+     "index": 11,
+     "sid": "around-a-real-orbit",
+     "fingerprint": "explore|-|live-energy|Kepler's 2nd Law|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 12,
+     "sid": "what-stays-put",
+     "fingerprint": "question|choice|-|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 13,
+     "sid": "escape-speed",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 14,
+     "sid": "a-common-misunderstanding",
+     "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 15,
+     "sid": "somewhere-else-entirely",
+     "fingerprint": "predict|-|-|-|-|4|a=3;c=3",
+     "optionCount": 4
+    },
+    {
+     "index": 16,
+     "sid": "more-mass-harder-to-leave",
+     "fingerprint": "explore|-|escape-compare|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 17,
+     "sid": "further-out-easier-to-leave",
+     "fingerprint": "explore|-|escape-compare|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 18,
+     "sid": "starting-further-out",
+     "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 19,
+     "sid": "three-shapes-one-law",
+     "fingerprint": "explore|-|shapes|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 20,
+     "sid": "something-that-came-from-outside",
+     "fingerprint": "read|-|-|Interstellar Visitor|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 21,
+     "sid": "check-it-yourself",
+     "fingerprint": "explore|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 22,
+     "sid": "will-it-be-back",
+     "fingerprint": "question|short|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 23,
+     "sid": "what-you-worked-out",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    }
+   ]
+  },
+  "verdict": {
+   "ok": true
+  },
+  "restored": {
+   "responses": {
+    "orbital-energy:load-it-lightly": 1,
+    "orbital-energy:load-it-heavily": 2,
+    "orbital-energy:where-is-the-line": 1,
+    "orbital-energy:reading-the-sign": 0,
+    "orbital-energy:what-stays-put": 2,
+    "orbital-energy:a-common-misunderstanding": 1,
+    "orbital-energy:somewhere-else-entirely": 3,
+    "orbital-energy:starting-further-out": 1,
+    "orbital-energy:will-it-be-back": "A fixed sentence for the golden."
+   },
+   "attempts": {
+    "orbital-energy:load-it-lightly": 1,
+    "orbital-energy:load-it-heavily": 1,
+    "orbital-energy:where-is-the-line": 1,
+    "orbital-energy:reading-the-sign": 1,
+    "orbital-energy:what-stays-put": 1,
+    "orbital-energy:a-common-misunderstanding": 1,
+    "orbital-energy:somewhere-else-entirely": 1,
+    "orbital-energy:starting-further-out": 1
+   },
+   "visited": [
+    "a-common-misunderstanding",
+    "around-a-real-orbit",
+    "check-it-yourself",
+    "escape-speed",
+    "find-the-dividing-line",
+    "fire-it",
+    "fire-it-again",
+    "further-out-easier-to-leave",
+    "how-hard-would-you-have",
+    "load-it-heavily",
+    "load-it-lightly",
+    "more-mass-harder-to-leave",
+    "reading-the-sign",
+    "something-that-came-from-outside",
+    "somewhere-else-entirely",
+    "starting-further-out",
+    "three-shapes-one-law",
+    "watch-the-total",
+    "what-is-actually-deciding-this",
+    "what-stays-put",
+    "what-you-worked-out",
+    "where-is-the-line",
+    "will-it-be-back",
+    "write-down-the-dividing-speed"
+   ],
+   "stepIndex": 23,
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "moved": [],
+   "dropped": [],
+   "quarantined": {},
+   "uncertain": 0,
+   "discardedKeys": 0,
+   "byPosition": false
+  }
+ },
+ "ledger": {
+  "entry": "golden-orbital-energy",
+  "record": {
+   "ids": [
+    "golden-orbital-energy"
+   ],
+   "rows": [
+    [
+     "golden-orbital-energy",
+     "q1",
+     3.5247,
+     "d",
+     0.0012,
+     "measured",
+     "simulation",
+     "rv-fit",
+     null,
+     [
+      "s",
+      "d"
+     ]
+    ]
+   ],
+   "total": 1
+  },
+  "digest": "21df793a5cbfa3d0999337955aff8f814d67601580108adbb4055c4039d39a30"
+ },
+ "tokens": {
+  "plain": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "a": null,
+    "r": null,
+    "fl": "en"
+   },
+   "answers": [
+    {
+     "sid": "load-it-lightly",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "load-it-heavily",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "where-is-the-line",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "reading-the-sign",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "what-stays-put",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "a-common-misunderstanding",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "somewhere-else-entirely",
+     "value": 3,
+     "locale": "en"
+    },
+    {
+     "sid": "starting-further-out",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "will-it-be-back",
+     "value": "A fixed sentence for the golden.",
+     "locale": "en"
+    }
+   ]
+  },
+  "assignment": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "a": "golden-assignment",
+    "r": "roster-1",
+    "fl": "en"
+   },
+   "answers": [
+    {
+     "sid": "load-it-lightly",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "load-it-heavily",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "where-is-the-line",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "reading-the-sign",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "what-stays-put",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "a-common-misunderstanding",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "somewhere-else-entirely",
+     "value": 3,
+     "locale": "en"
+    },
+    {
+     "sid": "starting-further-out",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "will-it-be-back",
+     "value": "A fixed sentence for the golden.",
+     "locale": "en"
+    }
+   ]
+  },
+  "evidence": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "ev": {
+     "d": "21df793a5cbfa3d0999337955aff8f814d67601580108adbb4055c4039d39a30",
+     "i": [
+      "golden-orbital-energy"
+     ],
+     "n": 1,
+     "r": [
+      [
+       "golden-orbital-energy",
+       "q1",
+       3.5247,
+       "d",
+       0.0012,
+       "measured",
+       "simulation",
+       "rv-fit",
+       null,
+       [
+        "s",
+        "d"
+       ]
+      ]
+     ]
+    },
+    "a": null,
+    "r": null,
+    "fl": "en"
+   },
+   "answers": [
+    {
+     "sid": "load-it-lightly",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "load-it-heavily",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "where-is-the-line",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "reading-the-sign",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "what-stays-put",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "a-common-misunderstanding",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "somewhere-else-entirely",
+     "value": 3,
+     "locale": "en"
+    },
+    {
+     "sid": "starting-further-out",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "will-it-be-back",
+     "value": "A fixed sentence for the golden.",
+     "locale": "en"
+    }
+   ]
+  },
+  "depth": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "dp": "core",
+    "a": null,
+    "r": null,
+    "fl": "en"
+   },
+   "answers": [
+    {
+     "sid": "load-it-lightly",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "load-it-heavily",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "where-is-the-line",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "reading-the-sign",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "what-stays-put",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "a-common-misunderstanding",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "somewhere-else-entirely",
+     "value": 3,
+     "locale": "en"
+    },
+    {
+     "sid": "starting-further-out",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "will-it-be-back",
+     "value": "A fixed sentence for the golden.",
+     "locale": "en"
+    }
+   ]
+  }
+ }
+}

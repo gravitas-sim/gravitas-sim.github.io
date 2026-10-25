@@ -212,7 +212,6 @@ export const EN_DEFERRED = {
     'UNRESOLVED: the e-folding times span {spread}%, which is more than refinement should move a physical answer. The honest report is that this measurement is numerically unresolved.',
   'bench.chaos.canceled':
     'This was stopped before it finished, so at least one arm is shorter than it was asked to be.',
-
   // --- The Lagrange lesson's controlled pair -------------------------------
   'cr3bp.pair.title': 'Two directions, one accessible region',
   'cr3bp.pair.hint':
@@ -353,7 +352,6 @@ export const EN_DEFERRED = {
   'exoW.preset.earthTwin': 'Earth twin, TESS',
   'exoW.preset.earthTwin.note':
     'An Earth around a Sun, seen by TESS: 84 ppm, a thirteen-hour transit, one transit a year. The longest transit here and the least detectable planet, which is worth sitting with.',
-
   // --- The numerical reliability check ---------------------------------------
   // Deliberately careful wording throughout. There is no string here that says
   // a result is accurate, because a convergence check cannot establish that:
@@ -369,7 +367,6 @@ export const EN_DEFERRED = {
     'Two runs of {duration} simulated units took {seconds}s: {coarseSub} substeps per frame, then {fineSub}.',
   'reliability.steps': 'Step {coarse} against {fine}',
   'reliability.export': 'Export this check',
-
   'reliability.verdict.converging':
     'Halving the step did not move this result.',
   'reliability.verdict.unresolved':
@@ -378,7 +375,6 @@ export const EN_DEFERRED = {
     'These two runs are not measurements of the same thing, so nothing can be concluded from the difference.',
   'reliability.verdict.diverged':
     'The two paths separated, but the aggregate measurements held.',
-
   'reliability.reason.missingRun': 'One of the two runs is missing.',
   'reliability.reason.noDuration': 'A run covered no simulated time.',
   'reliability.reason.differentDurations':
@@ -875,9 +871,9 @@ export const EN_DEFERRED = {
   'inv.predict.wrong': 'What happened instead: {answer}',
   'inv.announce.started': 'Investigation started: {title}',
   'inv.report.building': 'Building…',
-  'inv.report.done': 'Lab report downloaded',
   'inv.report.failed': 'Could not build the report.',
   'inv.report.download': 'Download lab report (PDF)',
+  'inv.report.downloadHtml': 'Download lab report (web page)',
   'inv.finish.title': 'Finished',
   'inv.finish.close': 'Close without downloading',
   'inv.finish.summary':
@@ -1144,7 +1140,6 @@ export const EN_DEFERRED = {
   'rvfit.mc.outcome.partial': '{done} of {total} trials produced a fit.',
   'rvfit.mc.stale':
     'The recording, the fit or the search range has changed since this analysis ran, so its intervals no longer describe what is on screen. Run it again.',
-
   'rvfit.mc.refused.noFit':
     'There is no fit on screen to resample around. Set a period first.',
   'rvfit.mc.refused.tooFewPoints':
@@ -1699,6 +1694,32 @@ export const EN_DEFERRED = {
   'nb.report.figure': 'Figure',
   'nb.report.conditions': 'Conditions it was taken under',
   'nb.report.noValue': 'not recorded',
+  'nb.unc.failed': 'no result',
+  'nb.unc.notConstrained': 'not constrained',
+  'nb.unc.method.data': 'data',
+  'nb.unc.method.data.tip':
+    'The uncertainty is the scatter or the error bars of the measurements.',
+  'nb.unc.method.model': 'model',
+  'nb.unc.method.model.tip':
+    'The uncertainty is the model’s own error, such as an integrator’s, and more data would not shrink it.',
+  'nb.unc.method.scaled': 'rescaled',
+  'nb.unc.method.scaled.tip':
+    'The data uncertainty was rescaled so the model fits as well as the scatter says it can.',
+  'nb.unc.method.profile': 'profile',
+  'nb.unc.method.profile.tip':
+    'The uncertainty is read from how fast the fit gets worse as the value moves, which can be asymmetric.',
+  'nb.unc.method.propagated': 'propagated',
+  'nb.unc.method.propagated.tip':
+    'The uncertainty was carried from the inputs’ own to first order.',
+  'nb.unc.method.stated': 'stated',
+  'nb.unc.method.stated.tip':
+    'The uncertainty was given, not estimated from anything.',
+  'nb.unc.method.limit': 'limit',
+  'nb.unc.method.limit.tip':
+    'Nothing was detected, so the value is a bound, not a measurement.',
+  'nb.unc.method.exact': 'exact',
+  'nb.unc.method.exact.tip':
+    'The analysis took the value as exact: nothing was estimated.',
   'nb.report.notRecorded': 'not recorded',
 
   // --- The browser's search and filters ---------------------------------------
@@ -3187,44 +3208,11 @@ export const EN_DEFERRED = {
     'That activity has no “{id}” format. Choose one from the teaching page.',
   'activity.error.notUsable':
     'That activity could not be opened: the investigation behind it has changed too much. Open the full investigation instead.',
-  'welcome.scenarioGone': 'That scenario is no longer available.',
   'welcome.shownAgain': 'It will be shown again next time',
   'welcome.showAgain': 'Show this again on my next visit',
   'export.viewTable': 'View as table',
   'export.hideTable': 'Hide table',
   'export.downloadCsv': 'Download CSV',
-  'welcomeCard.sandbox.eyebrow': 'Free exploration',
-  'welcomeCard.sandbox.title': 'Sandbox',
-  'welcomeCard.sandbox.text':
-    'Build a system from nothing, or load one of the built-in scenarios and change it. Drag to place an object; the drag sets its velocity.',
-  'welcomeCard.sandbox.cta': 'Enter the sandbox',
-  'welcomeCard.investigations.eyebrow': 'Guided investigations',
-  'welcomeCard.investigations.title': 'Investigations',
-  'welcomeCard.investigations.text':
-    'Structured astronomy activities inside the simulation: predict, experiment, measure, answer, and export a lab report.',
-  'welcomeCard.investigations.cta': 'Browse investigations',
-  'welcomeCard.instructors.eyebrow': 'For teaching',
-  'welcomeCard.instructors.title': 'Instructors',
-  'welcomeCard.instructors.text':
-    'Instructor guides, learning objectives, answer keys and a curriculum map for introductory astronomy courses.',
-  'welcomeCard.instructors.cta': 'Instructor resources',
-  'welcomeAudience.students.title': 'For students',
-  'welcomeAudience.students.text':
-    'See the relationships an equation describes. Move a planet outward and watch its year lengthen; stretch an orbit and watch the starlight swing.',
-  'welcomeAudience.instructors.title': 'For instructors',
-  'welcomeAudience.instructors.text':
-    '60 guided investigations for introductory and general-education astronomy, with instructor guides, answer keys and shareable simulation links.',
-  'welcomeAudience.curious.title': 'For the curious',
-  'welcomeAudience.curious.text':
-    'No account, no install, nothing to read first. Load a black-hole merger and watch it, or start from empty space and see what gravity does.',
-  'welcomeLink.teaching.label': 'Teaching with Gravitas',
-  'welcomeLink.teaching.note':
-    'How it is used in a course, with six demonstrations you can run.',
-  'welcomeLink.model.label': 'How Gravitas models the universe',
-  'welcomeLink.model.note':
-    'What is calculated, what is approximated, and what is only drawn.',
-  'welcomeLink.instructors.note':
-    'Instructor guides, answer keys and a curriculum map.',
   'tideP.moonOnEarth': 'the Moon, on the Earth',
   'tideP.sunOnEarth': 'the Sun, on the Earth',
   'tideP.earthOnMoon': 'the Earth, on the Moon',
@@ -3713,18 +3701,23 @@ export const EN_DEFERRED = {
   'specW.row.limits': 'What four spectra are',
   'specW.value.limits':
     'Four examples, one per letter. Not an atlas, not a survey, and not a representative sample of anything — four stars that happened to be observed.',
-
   // The Stellar Lab's evidence
   'nb.source.stellar-lab': 'Stellar Lab',
   'nb.source.binary-orbit': 'Binary orbit',
   'nb.source.observatory': 'Observatory measurement',
-  // --- A fit, an analysis or an experiment result kept as its envelope -----
   'nb.source.inference-fit': 'Inference-core fit',
   'nb.source.comparison': 'Model against data',
   'nb.source.sweep-analysis': 'Sweep analysis',
   'nb.source.derived-quantity': 'Derived quantity',
   'nb.source.lab3d': '3-D lab measurement',
   'nb.source.mission-lab': 'Mission lab result',
+  'nb.source.image-marks': 'Marks on an image',
+  'nb.source.image-calibration': 'Sky coordinates for an image',
+  'nb.source.image-photometry': 'Photometry on an image',
+  'nb.source.image-detection': 'Point-spread function of an image',
+  'nb.source.image-injection': 'Completeness of an image',
+  'nb.source.image-sequence': 'Light curve from frames',
+  'nb.source.image-series': 'Motion and parallax of a source',
   'nb.flag.missionModel':
     'impulsive burns, patched conics and point masses: a teaching model of a mission',
   'nb.flag.notOperational': 'not for operational mission design or navigation',

@@ -2,19 +2,8 @@
 // /observatory/: open an observation, look at it every way, change it, keep it
 // -----------------------------------------------------------------------------
 // The page around the workspace's contracts (OBSERVATORY_WORKSPACE_DESIGN.md):
-//
-//   state.source     the observation as opened (a fixture, an import, or an
-//                    export read back), never changed
-//   state.history    the list of changes, with undo and redo (./history.js)
-//   state.view       replay(source, changes): what every view shows
-//   state.selection  one set of rows every view shares (./plot/select.js)
-//
-// A change goes through whyNot() first, so the list never holds one that
-// fails, and every view is redrawn from the replay. A change that renumbers
-// the rows (a crop, a bin) starts a new selection; anything else keeps it.
-//
-// Its own bundle, like /experiments/: the simulation never imports it, and it
-// never imports the simulation. Each observation loads only when opened.
+// state.source, history, view = replay(source, changes) and selection. A change
+// goes through whyNot() first and every view is redrawn from the replay.
 // =============================================================================
 
 import {
@@ -60,7 +49,7 @@ import {
   unitId,
 } from './observatory/units.js';
 import { createPlot } from './plot/plot.js';
-import { createImageView, decodeBits } from './observatory/image.js';
+import { createImageView, describeRow } from './observatory/image.js';
 import { createTable } from './plot/table.js';
 
 const $ = id => document.getElementById(id);
@@ -101,59 +90,7 @@ const unitText = c =>
     ? ''
     : formatUnit(parseUnit(c.unit).unit, t('obs.unit.notStated'));
 
-/** What one row is, in words: every column's value and unit. */
-function describe(i) {
-  const o = state.view;
-  if (!o || !(i >= 0)) return '';
-  const n = rowCount(o);
-  if (o.kind === 'image') {
-    const im = o.image;
-    const x = (i % im.width) + 1;
-    const y = Math.floor(i / im.width) + 1;
-    const flags = columnOf(o, im.value);
-    const v = flags.values[i];
-    const meaning = flags.bits
-      ? decodeBits(v, flags.bits).join('; ')
-      : `${number(v)} ${unitText(flags)}`;
-    const ra = columnOf(o, 'ra')?.values[i];
-    const dec = columnOf(o, 'dec')?.values[i];
-    return t('obs.describe.pixel', {
-      x,
-      y,
-      value: number(v),
-      meaning,
-      ra: number(ra),
-      dec: number(dec),
-      masked: maskedRows(o).has(i) ? t('obs.describe.masked') : '',
-    });
-  }
-  const parts = [];
-  for (const c of o.columns) {
-    if (['uncertainty', 'lower', 'upper'].includes(c.role)) continue;
-    const v = c.values[i];
-    if (c.role === 'label') {
-      parts.push(`${c.name} ${v ?? t('obs.table.missing')}`);
-      continue;
-    }
-    if (!Number.isFinite(v)) {
-      parts.push(`${c.name} ${t('obs.table.missing')}`);
-      continue;
-    }
-    const { sigma, lower, upper } = uncertaintyOf(o, c.id);
-    let err = '';
-    if (sigma && Number.isFinite(sigma.values[i]))
-      err = ` ± ${number(sigma.values[i])}`;
-    else if (lower && upper && Number.isFinite(lower.values[i]))
-      err = ` (${number(lower.values[i])}, +${number(upper.values[i])})`;
-    parts.push(`${c.name} ${number(v)}${err} ${unitText(c)}`.trim());
-  }
-  return t('obs.describe.row', {
-    row: i + 1,
-    n,
-    values: parts.join(', '),
-    masked: maskedRows(o).has(i) ? t('obs.describe.masked') : '',
-  });
-}
+const describe = i => describeRow(state.view, i, { t, number, unitText });
 
 function status(text) {
   const s = $('obsStatus');
@@ -253,18 +190,8 @@ function rebuild({ announceChange = null } = {}) {
   if (announceChange) status(announceChange);
 }
 
-/**
- * The fit panel, for an observation a model suits: loaded the first time a
- * reader opens it, so the page itself carries none of the inference core.
- */
 // What the page lends its lazily loaded panels (see js/observatory/fitPanel.js).
-const lent = {
-  t,
-  number,
-  language,
-  registerMessages,
-  createPlot,
-};
+const lent = { t, number, language, registerMessages, createPlot, pixelScale };
 const fit = { panel: null, loading: null, suits: false };
 function mountFit(m) {
   fit.module = m;
@@ -280,6 +207,7 @@ function mountFit(m) {
   });
   return fit.panel;
 }
+// The fit panel (for an observation a model suits): loaded when first opened.
 async function fitPanel() {
   if (fit.panel) return fit.panel;
   fit.loading ??= import('./observatory/fitPanel.js').then(mountFit);
@@ -297,6 +225,35 @@ $('obsSkyPanel').addEventListener('toggle', async () => {
   await sky.loading;
   sky.panel.update(state.view);
 });
+const marks = {};
+// The image panels (ASTROMETRY.md, PHOTOMETRY.md, DETECTION.md, INJECTION.md,
+// OVERLAYS.md, FRAME_PIPELINE.md): each loads its module, whose one mount*
+// export it calls, when first opened; the ones given the page's state wait for
+// an image.
+const lazyPanel = (id, load, args) => {
+  let loaded = null;
+  $(`obs${id}Panel`).addEventListener('toggle', () => {
+    if ($(`obs${id}Panel`).open && (state.view || !args.state))
+      loaded ??= load().then(
+        m =>
+          m[Object.keys(m).find(k => k.startsWith('mount'))](
+            $(`obs${id}Body`),
+            { ...lent, ...args }
+          ),
+        () => (loaded = null)
+      );
+  });
+  return () => loaded;
+};
+const IMG = { marks, state };
+lazyPanel('Cal', () => import('./observatory/imageCalibration.js'), IMG);
+const panels = [
+  lazyPanel('Photo', () => import('./observatory/imagePhotometry.js'), IMG),
+  lazyPanel('Detect', () => import('./observatory/imageDetect.js'), IMG),
+  lazyPanel('Inject', () => import('./observatory/imageInject.js'), { state }),
+  lazyPanel('Overlay', () => import('./observatory/imageOverlay.js'), IMG),
+];
+lazyPanel('Seq', () => import('./observatory/imageSequence.js'), { open });
 // The archive import (ARCHIVE_IMPORT.md): loaded when first opened.
 let archive = null;
 $('obsArchivePanel').addEventListener('toggle', () => {
@@ -424,11 +381,22 @@ function renderAll() {
   renderAxes(o);
   const isImage = o.kind === 'image';
   $('obsPlotBox').hidden = isImage;
-  $('obsImageBox').hidden = !isImage;
+  for (const id of [
+    'obsImageBox',
+    'obsMarksPanel',
+    'obsPhotoPanel',
+    'obsDetectPanel',
+    'obsInjectPanel',
+    'obsOverlayPanel',
+  ])
+    $(id).hidden = !isImage;
   let drawn = null;
   if (isImage) {
     const { legend } = image.draw(o, { selection: state.selection });
     renderLegend(legend);
+    import('./observatory/imageMarks.js').then(m =>
+      m.mount($('obsMarksPanel'), { ...lent, observation: o, marks })
+    );
   } else {
     // Curves a measurement drew, where the axes are the ones it drew them on.
     const overlays = state.overlays.filter(
@@ -460,7 +428,10 @@ function renderAll() {
   renderMarks(o);
   renderChanges(o);
   renderFit(o);
+  $('obsCalPanel').hidden = !isImage;
+  marks.cal?.update();
   measure?.then(p => p.update());
+  for (const get of panels) get()?.then(p => p.update());
   guide?.then(p => p.update());
   renderSelectionBar();
   $('obsUndo').disabled = !state.history.canUndo();
@@ -484,9 +455,8 @@ function onSelection({ source }) {
 function renderSelectionBar() {
   const s = state.selection;
   $('obsSelected').textContent = t('obs.selection.count', { n: s.size });
-  $('obsMask').disabled = !s.size;
-  $('obsNoteGo').disabled = !s.size;
-  $('obsClear').disabled = !s.size;
+  for (const id of ['obsMask', 'obsNoteGo', 'obsClear'])
+    $(id).disabled = !s.size;
 }
 
 // --- The observation's record, and what the reader is seeing ------------------------
@@ -1047,6 +1017,7 @@ $('obsNextPage').addEventListener('click', () => table.turn(1));
 // --- Opening ----------------------------------------------------------------------
 
 function open(o, changes = []) {
+  if (marks.take?.(o)) return; // the overlay panel's second frame
   state.source = o;
   state.history.reset(changes);
   state.selection = null;
@@ -1102,9 +1073,18 @@ const NOT_STATED = '__null';
 let importing = null;
 const importer = () => (importing ??= import('./observatory/import.js'));
 
+// A FITS image, PNG or JPEG goes the other way (IMAGE_IMPORT.md), loaded then.
+const IMAGE_FILE = /\.(fits?|fts|png|jpe?g)$/i;
+const openImage = file =>
+  import('./observatory/imageImport.js').then(
+    m => m.importImage(file, { ...lent, open, status }),
+    () => status(t('obs.imp.offline'))
+  );
+
 $('obsFile').addEventListener('change', async e => {
   const file = e.target.files?.[0];
   if (!file) return;
+  if (IMAGE_FILE.test(file.name)) return openImage(file);
   let text;
   try {
     text = await file.text();
@@ -1141,6 +1121,9 @@ async function readImport() {
     // changes made again to it, so undo reaches back to where it started.
     $('obsImport').hidden = true;
     if (r.changes.some(c => c.op === 'formula')) await formulaReady();
+    marks.saved = r.marks;
+    marks.savedCal = r.calibration;
+    if (r.calibration) $('obsCalPanel').open = true;
     open(r.observation, r.changes);
     const same =
       !r.expected || (await exporter()).sameObservation(state.view, r.expected);
@@ -1405,31 +1388,23 @@ $('obsImportCancel').addEventListener('click', () => {
 
 // --- Exports -----------------------------------------------------------------------
 
-function download(name, text, type) {
-  const url = URL.createObjectURL(new Blob([text], { type }));
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = name;
-  document.body.append(a);
-  a.click();
-  a.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-}
 $('obsExportJson').addEventListener('click', async () => {
   const x = await exporter();
-  download(
+  x.download(
     x.exportName(state.view, 'json'),
     x.observationJson(state.view, {
       source: state.source,
       changes: state.history.changes(),
       digest: await x.openedDigest(state.source),
+      marks: await marks.block?.(state.view),
+      calibration: await marks.cal?.block(state.view),
     }),
     'application/json'
   );
 });
 $('obsExportCsv').addEventListener('click', async () => {
   const x = await exporter();
-  download(
+  x.download(
     x.exportName(state.view, 'csv'),
     x.observationCsv(state.view),
     'text/csv'

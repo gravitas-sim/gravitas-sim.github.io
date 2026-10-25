@@ -1,0 +1,52 @@
+{
+ "id": "butterfly-effect",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.linear-in-numbers.unit","km"],
+    ["steps.write-down-what-you-measured.fields.0.unit","simulated seconds"],
+    ["steps.write-down-what-you-measured.fields.1.unit",""],
+    ["steps.write-down-what-you-measured.fields.2.unit","× the starting separation"],
+    ["steps.how-long-does-a-prediction.unit","simulated seconds"]
+   ],
+   "numbered": [
+    ["steps.write-down-what-you-measured.fields.0.hint","8.3"],
+    ["steps.write-down-what-you-measured.fields.1.hint","0.99"],
+    ["steps.write-down-what-you-measured.fields.2.hint","220"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.write-down-what-you-measured.fields.0.hint","8,3"],
+    ["steps.write-down-what-you-measured.fields.1.hint","0,99"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "linear-in-numbers",
+    "answer": "1000000",
+    "tolerance": "150000",
+    "unit": "km"
+   },
+   {
+    "sid": "how-long-does-a-prediction",
+    "answer": "95",
+    "tolerance": "12",
+    "unit": "simulated seconds"
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "write-down-what-you-measured": {
+    "validate": {"calls":242,"distinct":3,"digest":"c92a6a904fe3cb08","samples":[null,{"level":"warn","message":"That is a long way from what this configuration gives. Check that both runs cover a similar stretch of simulated time — the section reports the interval each one covered."},{"level":"error","message":"An e-folding time is a positive number of seconds."}]}
+   }
+  },
+  "es": "same"
+ }
+}

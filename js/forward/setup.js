@@ -37,13 +37,14 @@
 // Pure and Worker-safe: no DOM, no Math.random, imports only pure modules.
 // =============================================================================
 
-import { mulberry32, normalizeSeed } from '../rng.js';
+import { stream } from '../random/streams.js';
 import { gaussianAt } from '../rvSurvey.js';
 import { planSchedule } from '../rvSchedule.js';
 import { isObject, readVersioned } from '../platform/common.js';
 import { parseUnit, dimensionOf } from '../observatory/units.js';
+import { ID_OBSERVING_SETUP } from '../names.js';
 
-export const FORMAT = 'gravitas.observing-setup';
+export const FORMAT = ID_OBSERVING_SETUP;
 export const FORMAT_VERSION = 1;
 export const EPOCH_KINDS = Object.freeze([
   'regular',
@@ -352,8 +353,7 @@ export function planEpochs(setup) {
 }
 
 /** A uniform in [0, 1) for one epoch of one stream, keyed as the noise is. */
-export const uniformAt = (seed, index) =>
-  mulberry32(normalizeSeed(`${seed}:${index}`))();
+export const uniformAt = (seed, index) => stream('forward', seed, index)();
 
 /**
  * Add a setup's systematics and noise to model values.

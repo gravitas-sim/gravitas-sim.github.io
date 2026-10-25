@@ -169,6 +169,7 @@ const dominantStarFor = pos => dominantLight(pos, luminousSources());
 let reducedMotionQuery = null;
 const prefersReducedMotion = () => {
   if (typeof window === 'undefined' || !window.matchMedia) return false;
+  if (document.documentElement.dataset.motion) return true;
   if (!reducedMotionQuery) {
     try {
       reducedMotionQuery = window.matchMedia(

@@ -1,0 +1,922 @@
+{
+  "version": 1,
+  "documents": [
+    {
+      "file": "AB_EXPERIMENT_BENCH.md",
+      "kind": "feature",
+      "purpose": "The A/B experiment bench.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "ACCESSIBILITY.md",
+      "kind": "policy",
+      "purpose": "Accessibility target, what has been done and what has not.",
+      "owner": 127,
+      "student": true
+    },
+    {
+      "file": "ACCESSIBILITY_CONFORMANCE.md",
+      "kind": "policy",
+      "purpose": "The accessibility conformance report against WCAG 2.2, written by tools/conformance.mjs from tools/conformance/*.json (not yet a node of the generation graph; Prompt 289 decides).",
+      "owner": 127,
+      "student": true
+    },
+    {
+      "file": "ADOPTER_GUIDE.md",
+      "kind": "guide",
+      "purpose": "The instructor adopter's guide and the newcomer docs test.",
+      "owner": 114,
+      "student": false
+    },
+    {
+      "file": "ADOPTION.md",
+      "kind": "guide",
+      "purpose": "The instructor path and the adoption pages.",
+      "owner": 76,
+      "student": true
+    },
+    {
+      "file": "AI_ASSISTANCE_GATE.md",
+      "kind": "gate",
+      "purpose": "Instructor-side AI assistance gate.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "ANALYSIS_LAB.md",
+      "kind": "feature",
+      "purpose": "The analysis laboratory.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "ARCHIVE_IMPORT.md",
+      "kind": "feature",
+      "purpose": "Importing from an archive.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "ASTROMETRY.md",
+      "kind": "feature",
+      "purpose": "Sky coordinates for an image (Prompt 181), astrometric time series (Prompt 186) and orbit fitting with a moving-object track (Prompt 187), with their validation.",
+      "owner": 181,
+      "student": false
+    },
+    {
+      "file": "BRANCHING.md",
+      "kind": "process",
+      "purpose": "Branches, the publish rule and the table of generated artifacts.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "CALIBRATION_LAB.md",
+      "kind": "feature",
+      "purpose": "The calibration lab.",
+      "owner": 86,
+      "student": true
+    },
+    {
+      "file": "CAPABILITY_RUNTIME.md",
+      "kind": "design",
+      "purpose": "The capability runtime, the first slice of the platform package.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "CATALOG.md",
+      "kind": "feature",
+      "purpose": "The curated catalog page.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "CHANGELOG.md",
+      "kind": "process",
+      "purpose": "Notable changes per release.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "CHAOS_INVESTIGATION.md",
+      "kind": "feature",
+      "purpose": "The Butterfly Effect in Space investigation.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "CLASSROOM_SERVICE_GATE.md",
+      "kind": "gate",
+      "purpose": "Classroom services: product, privacy and service-boundary gate.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "CODE_OF_CONDUCT.md",
+      "kind": "policy",
+      "purpose": "Community conduct.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "COMPARE_INSTRUMENT.md",
+      "kind": "feature",
+      "purpose": "The model-versus-data comparison instrument.",
+      "owner": 85,
+      "student": false
+    },
+    {
+      "file": "COMPOSER.md",
+      "kind": "feature",
+      "purpose": "The Investigation Composer.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "COMPUTE.md",
+      "kind": "feature",
+      "purpose": "The compute page and reviewed notebooks.",
+      "owner": 101,
+      "student": true
+    },
+    {
+      "file": "CONTINUITY.md",
+      "kind": "policy",
+      "purpose": "How Gravitas survives its maintainer's absence.",
+      "owner": 128,
+      "student": false
+    },
+    {
+      "file": "CONTRIBUTING.md",
+      "kind": "process",
+      "purpose": "How to contribute code, the checks and the conventions.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "CONTRIBUTING_CONTENT.md",
+      "kind": "process",
+      "purpose": "How an outside instructor or researcher contributes content.",
+      "owner": null,
+      "student": true
+    },
+    {
+      "file": "COSMOLOGY.md",
+      "kind": "feature",
+      "purpose": "The cosmology kernel and Hubble-diagram data.",
+      "owner": 91,
+      "student": true
+    },
+    {
+      "file": "COSMOLOGY_GATE.md",
+      "kind": "gate",
+      "purpose": "Cosmology and extragalactic data gate.",
+      "owner": null,
+      "student": true
+    },
+    {
+      "file": "COURSE_PACKS.md",
+      "kind": "feature",
+      "purpose": "Course packs: a course as a file.",
+      "owner": null,
+      "student": true
+    },
+    {
+      "file": "DARK_MATTER.md",
+      "kind": "feature",
+      "purpose": "Rotation curves and the missing mass.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "DATA_PACKS.md",
+      "kind": "feature",
+      "purpose": "Observation data packs.",
+      "owner": null,
+      "student": true
+    },
+    {
+      "file": "DATA_PROTECTION.es.md",
+      "kind": "policy",
+      "purpose": "What data Gravitas keeps, shares and never collects (Spanish).",
+      "owner": 127,
+      "student": true
+    },
+    {
+      "file": "DATA_PROTECTION.md",
+      "kind": "policy",
+      "purpose": "What data Gravitas keeps, shares and never collects (English).",
+      "owner": 127,
+      "student": true
+    },
+    {
+      "file": "DECISION_REGISTER.md",
+      "kind": "process",
+      "purpose": "The single list of decisions later work may rely on.",
+      "owner": 122,
+      "student": true
+    },
+    {
+      "file": "DEPLOY_MODEL_GATE.md",
+      "kind": "gate",
+      "purpose": "Deploy-model gate: publish the tree or a build.",
+      "owner": 109,
+      "student": false
+    },
+    {
+      "file": "DEPTH.md",
+      "kind": "feature",
+      "purpose": "Progressive depth in investigations.",
+      "owner": 72,
+      "student": true
+    },
+    {
+      "file": "DESIGN_SYSTEM.md",
+      "kind": "design",
+      "purpose": "The component language for controls.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "DETECTION.md",
+      "kind": "feature",
+      "purpose": "Source detection and the point-spread function over the photometry adapter: the algorithm, the limits, the oracle and the validation (Prompt 183).",
+      "owner": 183,
+      "student": false
+    },
+    {
+      "file": "DOCUMENTS.md",
+      "kind": "front-door",
+      "purpose": "The map of every root document and every generated artifact.",
+      "owner": 128,
+      "student": false
+    },
+    {
+      "file": "EMBEDDING.md",
+      "kind": "reference",
+      "purpose": "The gravitas-embed/1 contract for embedding figures.",
+      "owner": null,
+      "student": true
+    },
+    {
+      "file": "EXOPLANET_OBSERVATORY.md",
+      "kind": "feature",
+      "purpose": "The Exoplanet Observatory guides.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "EXOPLANET_OBSERVING.md",
+      "kind": "feature",
+      "purpose": "The exoplanet observing system.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "EXPERIMENTS.md",
+      "kind": "feature",
+      "purpose": "Experiments in Worker realms.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "FORMATS.md",
+      "kind": "reference",
+      "purpose": "Every versioned format Gravitas reads or writes.",
+      "owner": 61,
+      "student": false
+    },
+    {
+      "file": "FORMULA_LANGUAGE.md",
+      "kind": "reference",
+      "purpose": "The closed formula language for derived columns.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "FORWARD_MODELS.md",
+      "kind": "feature",
+      "purpose": "The forward-model loop.",
+      "owner": 84,
+      "student": false
+    },
+    {
+      "file": "FRAME_PIPELINE.md",
+      "kind": "feature",
+      "purpose": "The frame pipeline from a stack of frames to a light curve over the calibration lab, registration, detection and photometry: the algorithm, the limits, the oracle and the validation (Prompt 185).",
+      "owner": 185,
+      "student": false
+    },
+    {
+      "file": "GALACTIC_DYNAMICS.md",
+      "kind": "feature",
+      "purpose": "Galactic dynamics with Gaia.",
+      "owner": 92,
+      "student": true
+    },
+    {
+      "file": "GRAVITATIONAL_LENSING.md",
+      "kind": "feature",
+      "purpose": "Gravitational lensing.",
+      "owner": 94,
+      "student": true
+    },
+    {
+      "file": "GRAVITATIONAL_WAVES.md",
+      "kind": "feature",
+      "purpose": "What the application computes for gravitational waves.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "IMAGE_IMPORT.md",
+      "kind": "feature",
+      "purpose": "Bringing a FITS frame, a PNG or a JPEG into the Observatory: bounds, refusals, what the reader states and what is saved (Prompt 188).",
+      "owner": 188,
+      "student": false
+    },
+    {
+      "file": "IMAGE_MARKS.md",
+      "kind": "feature",
+      "purpose": "The image marks instrument: marks, scale, time and the ledger (Prompt 179).",
+      "owner": 179,
+      "student": false
+    },
+    {
+      "file": "IMAGE_MEASUREMENT_GATE.md",
+      "kind": "gate",
+      "purpose": "The image-measurement gate: the thresholds, the predefined slices and the consumers each serves, and the measured verdict on one marks-and-scale instrument.",
+      "owner": 178,
+      "student": false
+    },
+    {
+      "file": "IMAGE_PACKS.md",
+      "kind": "feature",
+      "purpose": "The four image packs of the first slice: rights decision per source, contracts, the authentic-frame legs and what was not run (Prompt 189).",
+      "owner": 189,
+      "student": false
+    },
+    {
+      "file": "INDEX_DECOMPOSITION.md",
+      "kind": "design",
+      "purpose": "How index.html was decomposed into fragments.",
+      "owner": 53,
+      "student": true
+    },
+    {
+      "file": "INFERENCE_CORE.md",
+      "kind": "feature",
+      "purpose": "The deterministic fitting core.",
+      "owner": null,
+      "student": true
+    },
+    {
+      "file": "INJECTION.md",
+      "kind": "feature",
+      "purpose": "Completeness by injection: synthetic sources added to a copy of a frame and found again, the curve with exact intervals, the selection function, the oracle and the validation (Prompt 184).",
+      "owner": 184,
+      "student": false
+    },
+    {
+      "file": "INSTRUCTOR_FLOW.md",
+      "kind": "guide",
+      "purpose": "Activity, course, kit and review for instructors.",
+      "owner": 77,
+      "student": true
+    },
+    {
+      "file": "INSTRUCTOR_MATERIALS.md",
+      "kind": "guide",
+      "purpose": "The generated guides and answer keys.",
+      "owner": 79,
+      "student": false
+    },
+    {
+      "file": "INTEGRATION.md",
+      "kind": "process",
+      "purpose": "Branch, train and merge protocol and the current integration status.",
+      "owner": 122,
+      "student": false
+    },
+    {
+      "file": "INTERACTION.md",
+      "kind": "policy",
+      "purpose": "The interaction contract: keyboard model, single-pointer rule, focus, announcements and reduced motion.",
+      "owner": 155,
+      "student": false
+    },
+    {
+      "file": "LAB3D.md",
+      "kind": "feature",
+      "purpose": "The 3-D small-N kernel.",
+      "owner": null,
+      "student": true
+    },
+    {
+      "file": "LAB3D_CURRICULUM.md",
+      "kind": "feature",
+      "purpose": "The 3-D lab curriculum.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "LAZY_CAPABILITIES.md",
+      "kind": "design",
+      "purpose": "How instrument families load on demand.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "LAZY_CAPABILITIES_GATE.md",
+      "kind": "gate",
+      "purpose": "Lazy instrument capabilities architecture gate.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "LEARNING_STUDY.md",
+      "kind": "gate",
+      "purpose": "Design and validation plan for a learning-outcome study (no study run).",
+      "owner": null,
+      "student": true
+    },
+    {
+      "file": "LIBRARY.md",
+      "kind": "feature",
+      "purpose": "The Library: one index of everything.",
+      "owner": 54,
+      "student": true
+    },
+    {
+      "file": "LICENSE-CC-BY-4.0.md",
+      "kind": "legal",
+      "purpose": "The CC BY 4.0 text for the educational material.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "LICENSES.md",
+      "kind": "legal",
+      "purpose": "The two licenses and what carries which.",
+      "owner": null,
+      "student": true
+    },
+    {
+      "file": "MAINTAINER_ONBOARDING.md",
+      "kind": "front-door",
+      "purpose": "The entry point for a second maintainer.",
+      "owner": 128,
+      "student": false
+    },
+    {
+      "file": "MASS_UNITS.md",
+      "kind": "reference",
+      "purpose": "The mass scale: 1000 simulation units is a solar mass.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "MEASUREMENT_PIPELINE.md",
+      "kind": "feature",
+      "purpose": "The measurement pipeline.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "MISSION.md",
+      "kind": "feature",
+      "purpose": "The mission-design core.",
+      "owner": null,
+      "student": true
+    },
+    {
+      "file": "MISSION_LAB.md",
+      "kind": "feature",
+      "purpose": "The mission lab: to Mars in 2026.",
+      "owner": null,
+      "student": true
+    },
+    {
+      "file": "MULTI_WORLD_DECISION.md",
+      "kind": "gate",
+      "purpose": "Why the engine is not refactored into multiple instances.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "MY_WORK.md",
+      "kind": "feature",
+      "purpose": "The My work page.",
+      "owner": 69,
+      "student": true
+    },
+    {
+      "file": "NAVIGATION.md",
+      "kind": "design",
+      "purpose": "The navigation model: five destinations, where every surface goes, what students see, the structural checks and what they do not prove.",
+      "owner": 161,
+      "student": false
+    },
+    {
+      "file": "NOTEBOOK_BRIDGE_GATE.md",
+      "kind": "gate",
+      "purpose": "Browser notebook bridge and compute capsules gate.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "NOTEBOOK_STORAGE.md",
+      "kind": "gate",
+      "purpose": "The price of moving the notebook off localStorage (nothing built).",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "NUMBER_TYPOGRAPHY.md",
+      "kind": "design",
+      "purpose": "How numbers are typeset on screen.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "NUMERICS.md",
+      "kind": "feature",
+      "purpose": "Numerical routines: roots, quadrature, interpolation, small linear algebra and a polynomial fit, each with a contract and a consumer.",
+      "owner": 152,
+      "student": false
+    },
+    {
+      "file": "OBJECT_INSPECTOR.md",
+      "kind": "feature",
+      "purpose": "The object inspector.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "OBSERVATION_DATA_PACK_GATE.md",
+      "kind": "gate",
+      "purpose": "Authentic observation data packs gate.",
+      "owner": 10,
+      "student": false
+    },
+    {
+      "file": "OBSERVATORY_WORKSPACE_DESIGN.md",
+      "kind": "design",
+      "purpose": "The observation workspace design.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "OFFLINE_AND_LOW_END.md",
+      "kind": "reference",
+      "purpose": "Offline use and slow machines.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "ONBOARDING.md",
+      "kind": "feature",
+      "purpose": "The student first-run path and what-next guidance.",
+      "owner": 73,
+      "student": false
+    },
+    {
+      "file": "ORBITAL_LAYER.md",
+      "kind": "feature",
+      "purpose": "The orbital layer: elements and state vectors with units, frames and time scales named.",
+      "owner": 148,
+      "student": false
+    },
+    {
+      "file": "ORBITAL_SYSTEM_BUILDER.md",
+      "kind": "feature",
+      "purpose": "The Orbital System Builder.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "ORBIT_FIT_GATE.md",
+      "kind": "gate",
+      "purpose": "The orbit-fit gate: the identifiability criterion and test set, committed before any fit was run, and the verdict (Prompt 187).",
+      "owner": 187,
+      "student": false
+    },
+    {
+      "file": "OVERLAYS.md",
+      "kind": "feature",
+      "purpose": "Catalogue overlays, blink and compare on an image: what is drawn where, how a second frame is tied to the first, when the two may be subtracted, the oracle and the validation (Prompt 182).",
+      "owner": 182,
+      "student": false
+    },
+    {
+      "file": "OWNER_ACTIONS.md",
+      "kind": "process",
+      "purpose": "Decisions, credentials and accounts only the owner can supply.",
+      "owner": 122,
+      "student": false
+    },
+    {
+      "file": "PERFORMANCE_OPTIMIZATIONS_SUMMARY.md",
+      "kind": "record",
+      "purpose": "Historical record of a rendering and memory round.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "PERFORMANCE_PROFILING_GUIDE.md",
+      "kind": "guide",
+      "purpose": "How to profile the simulation.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "PHOTOMETRY.md",
+      "kind": "feature",
+      "purpose": "Photometry on an image over the existing reduction: the equations, the contract, the limits, the oracle and the validation (Prompt 180).",
+      "owner": 180,
+      "student": false
+    },
+    {
+      "file": "PHYSICS_VALIDATION.md",
+      "kind": "reference",
+      "purpose": "What the physics model has been checked against.",
+      "owner": null,
+      "student": true
+    },
+    {
+      "file": "PLATFORM_MODEL.md",
+      "kind": "design",
+      "purpose": "The platform model: one shell, one taxonomy.",
+      "owner": 49,
+      "student": false
+    },
+    {
+      "file": "PLATFORM_PACKAGE_RFC.md",
+      "kind": "gate",
+      "purpose": "Platform package RFC and gate.",
+      "owner": 9,
+      "student": false
+    },
+    {
+      "file": "PLOT_COMPONENT.md",
+      "kind": "design",
+      "purpose": "The one plotting component and its parity thresholds.",
+      "owner": 64,
+      "student": true
+    },
+    {
+      "file": "PROVENANCE.md",
+      "kind": "reference",
+      "purpose": "What kind of number a result is (the artifact envelope).",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "RADIATION.md",
+      "kind": "feature",
+      "purpose": "The radiation and photometry kernel.",
+      "owner": 82,
+      "student": true
+    },
+    {
+      "file": "README.md",
+      "kind": "front-door",
+      "purpose": "The project front page: what Gravitas is, how to run, check and cite it.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "REAL_SPECTRA_EXPERIMENT.md",
+      "kind": "record",
+      "purpose": "Four real spectra: experiment and integration record.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "REFERENCE_FRAMES.md",
+      "kind": "reference",
+      "purpose": "The frame the physics integrates in.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "RELEASE.md",
+      "kind": "process",
+      "purpose": "Release and instructor-materials passphrase procedure.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "RELEASING.md",
+      "kind": "process",
+      "purpose": "The release procedure and its smoke list.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "REMIX.md",
+      "kind": "feature",
+      "purpose": "Remixing investigations and sharing them by link.",
+      "owner": 78,
+      "student": false
+    },
+    {
+      "file": "RESONANCE_INVESTIGATION.md",
+      "kind": "feature",
+      "purpose": "The orbital resonance investigation.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "SAMPLER_GATE.md",
+      "kind": "gate",
+      "purpose": "Posterior-sampling gate.",
+      "owner": null,
+      "student": true
+    },
+    {
+      "file": "SANDBOX_INSTRUMENTS.md",
+      "kind": "feature",
+      "purpose": "Instruments in the sandbox.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "SCAFFOLDING.md",
+      "kind": "feature",
+      "purpose": "Hints, explainers and feedback.",
+      "owner": 71,
+      "student": false
+    },
+    {
+      "file": "SCENARIO_FIXES.md",
+      "kind": "record",
+      "purpose": "Historical record of a scenario fixing pass.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "SCENARIO_GALLERY.md",
+      "kind": "record",
+      "purpose": "Historical record of a scenario-gallery change.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "SCENARIO_GEOMETRY.md",
+      "kind": "reference",
+      "purpose": "Scenario geometry as data.",
+      "owner": 108,
+      "student": false
+    },
+    {
+      "file": "SCIENTIFIC_KERNEL_GATE.md",
+      "kind": "gate",
+      "purpose": "Scientific numerical kernel and WebAssembly gate.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "SECURITY.md",
+      "kind": "policy",
+      "purpose": "Security posture and how to report a vulnerability.",
+      "owner": 127,
+      "student": true
+    },
+    {
+      "file": "SEEDING.md",
+      "kind": "feature",
+      "purpose": "Seeding: named random streams that keep every old sequence.",
+      "owner": 149,
+      "student": false
+    },
+    {
+      "file": "SKY_LAB.md",
+      "kind": "feature",
+      "purpose": "The Sky Lab.",
+      "owner": 88,
+      "student": true
+    },
+    {
+      "file": "SKY_LAB_GATE.md",
+      "kind": "gate",
+      "purpose": "Sky Lab gate: sky, time and coordinates.",
+      "owner": 87,
+      "student": false
+    },
+    {
+      "file": "STATISTICS.md",
+      "kind": "feature",
+      "purpose": "The statistics kernel: labelled intervals, resampling, residual diagnostics, comparison of estimates, the F-test and the selection function, with their limits and validation.",
+      "owner": 154,
+      "student": false
+    },
+    {
+      "file": "STELLAR_POPULATIONS.md",
+      "kind": "feature",
+      "purpose": "Stellar populations guides in the Observatory.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "STELLAR_STRUCTURE.md",
+      "kind": "feature",
+      "purpose": "Stellar structure kernel and investigations.",
+      "owner": 95,
+      "student": true
+    },
+    {
+      "file": "STORAGE.md",
+      "kind": "reference",
+      "purpose": "What Gravitas keeps in the browser.",
+      "owner": 65,
+      "student": false
+    },
+    {
+      "file": "STUDIO.md",
+      "kind": "feature",
+      "purpose": "The Scenario Studio.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "STUDIO_ROUNDTRIP_GATE.md",
+      "kind": "gate",
+      "purpose": "Studio round-trip architecture gate.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "SUPPORT.md",
+      "kind": "policy",
+      "purpose": "How to get help, and the supported browsers and versions.",
+      "owner": 129,
+      "student": true
+    },
+    {
+      "file": "SURFACE_RETIREMENT_GATE.md",
+      "kind": "gate",
+      "purpose": "The surface-retirement and consolidation gate: the decision function, the link-support policy and the verdict on every surface.",
+      "owner": 165,
+      "student": false
+    },
+    {
+      "file": "TIME_DOMAIN_LADDER.md",
+      "kind": "feature",
+      "purpose": "Time-domain astronomy and the first distance-ladder rung.",
+      "owner": 96,
+      "student": true
+    },
+    {
+      "file": "TOOLCHAIN.md",
+      "kind": "process",
+      "purpose": "How versions of the build, test and runtime tools are picked and moved.",
+      "owner": 126,
+      "student": false
+    },
+    {
+      "file": "TRANSLATION.md",
+      "kind": "policy",
+      "purpose": "Translation freshness (the ledger and the packs' esOf), the glossary's labels, the English-only surfaces and the rule for new vocabulary.",
+      "owner": 156,
+      "student": false
+    },
+    {
+      "file": "UI_PERFORMANCE_AUDIT.md",
+      "kind": "record",
+      "purpose": "Historical UI, performance and quality audit.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "VALIDATED_3D_LAB_GATE.md",
+      "kind": "gate",
+      "purpose": "Validated 3-D lab specification and feasibility gate.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "VO_ARCHIVE_GATE.md",
+      "kind": "gate",
+      "purpose": "Astronomy archives and the Virtual Observatory gate.",
+      "owner": null,
+      "student": false
+    },
+    {
+      "file": "WORKER_POOL.md",
+      "kind": "feature",
+      "purpose": "The Worker pool contract: typed jobs, generations, memory and concurrency caps, transfer, deterministic scheduling and per-job random streams.",
+      "owner": 153,
+      "student": false
+    },
+    {
+      "file": "paper.md",
+      "kind": "front-door",
+      "purpose": "The JOSS-style summary paper.",
+      "owner": null,
+      "student": false
+    }
+  ]
+}

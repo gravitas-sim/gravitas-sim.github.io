@@ -89,6 +89,15 @@ const LAYERS = [
       /^js\/format\.js$/,
       /^js\/units\.js$/,
       /^js\/rng\.js$/,
+      // The named random streams (Prompt 149): js/rng.js's algorithm under
+      // stream identities, with nothing else in it, beside js/rng.js.
+      /^js\/random\//,
+      // The numerical routines (Prompt 152): arithmetic over values handed in,
+      // each module importing nothing, beside js/random and js/units.js.
+      /^js\/numeric\//,
+      // The Worker pool (Prompt 153): the contract for background jobs, importing
+      // nothing, so a page and a realm can both hold it.
+      /^js\/workers\//,
       /^js\/theme\.js$/,
       /^js\/i18n\//,
       // Pure geometry over values handed in: the follow camera's arithmetic and
@@ -141,6 +150,9 @@ const LAYERS = [
       'and the unit tests import directly.',
     match: [
       /^js\/orbital\.js$/,
+      // The orbital layer (Prompt 148): elements and state vectors with their
+      // units, frame and clock named. Numbers in, numbers out, beside orbital.js.
+      /^js\/orbital\//,
       /^js\/darkMatter\.js$/,
       /^js\/mond\.js$/,
       /^js\/blackHolePhysics\.js$/,

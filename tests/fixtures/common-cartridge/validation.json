@@ -1,0 +1,276 @@
+{
+  "note": "The verdict of the real CC v1.3 schemas on every built-in course in both languages, written by tools/cartridge-validate.mjs. Digests are of the manifest text and of the web link files (path, newline, text) with their deflated link fragments replaced by a placeholder (versionFree in tools/cartridge-profile.mjs), because the bytes deflate writes differ between Node versions; the fragments are checked by decoding them in tests/commonCartridge.test.js. No digest of an archive is kept. tests/commonCartridge.test.js fails when a cartridge differs from this record: run the tool again with the schemas.",
+  "tool": "tools/cartridge-validate.mjs",
+  "validatedOn": "2026-10-22",
+  "xmllint": "xmllint: using libxml version 20913",
+  "profile": "Thin Common Cartridge Profile v1.0 over Common Cartridge v1.3",
+  "schemas": {
+    "ccv1p3_imscp_v1p2_v1p0.xsd": "ad96ef19dfb66d2d22c20722a46a3c3b37b9ba8a155d496d18b425fa887b035f",
+    "ccv1p3_lommanifest_v1p0.xsd": "b4b92a6780b3f8df2c7bfb42b13bbee24a68a5863dc9b8ba3283a9d304834855",
+    "ccv1p3_lomresource_v1p0.xsd": "ecd1883e727eb1d28d2889bb6843e168fd3147d75cd401889a8f0349f86448a6",
+    "ccv1p3_imswl_v1p3.xsd": "8aa100742d93ed5eff35387d62d767ecd160426a58efc2accb5c6cb7283a761e",
+    "ccv1p3_imsccauth_v1p3.xsd": "b47fd703287a2d1d10bb37f677f9704180abb633e9b41d856eb60985fa6228b9",
+    "ccv1p3_imscsmd_v1p0.xsd": "364e2d5ebc274c03370ea3c5c82ef644bd9880a3499b9656096e48cda2638fb8",
+    "xml.xsd": "1d8a08f612250dcb59b9e4a9568afd764bb5acf0fc52fc5837ae22379f75f630"
+  },
+  "cartridges": [
+    {
+      "id": "intro-astronomy",
+      "locale": "en",
+      "notes": false,
+      "parts": 16,
+      "manifestSha256": "2efe328c1e0d49e3dd92e23faac27b9e77bc51d7197944902f17ccf0f59f5551",
+      "partsSha256": "3c644f4ac7fe2a360917710e2e5f0710ee448dcd18674f67ca8437309ea659a5",
+      "manifestSchema": "valid",
+      "webLinkSchema": "valid",
+      "profile": "valid"
+    },
+    {
+      "id": "intro-astronomy",
+      "locale": "en",
+      "notes": true,
+      "parts": 16,
+      "manifestSha256": "ea5e8839bb07518c4505a8ef14a93c456d7093761330d06c7183a054cb71711f",
+      "partsSha256": "3c644f4ac7fe2a360917710e2e5f0710ee448dcd18674f67ca8437309ea659a5",
+      "manifestSchema": "valid",
+      "webLinkSchema": "valid",
+      "profile": "valid"
+    },
+    {
+      "id": "intro-astronomy",
+      "locale": "es",
+      "notes": false,
+      "parts": 16,
+      "manifestSha256": "163f0ab27a66a6851b7c8b76341c59a7840844f2df906c811fa408d7786eca81",
+      "partsSha256": "99c5fa91593e7d4355ffd7ed357306ceb856c0c937be06ed534e6c5d51ad2801",
+      "manifestSchema": "valid",
+      "webLinkSchema": "valid",
+      "profile": "valid"
+    },
+    {
+      "id": "intro-astronomy",
+      "locale": "es",
+      "notes": true,
+      "parts": 16,
+      "manifestSha256": "6501f5e14e7ed0291034f71c16b975bedcda364896c341229ebea41dac0f4b2d",
+      "partsSha256": "99c5fa91593e7d4355ffd7ed357306ceb856c0c937be06ed534e6c5d51ad2801",
+      "manifestSchema": "valid",
+      "webLinkSchema": "valid",
+      "profile": "valid"
+    },
+    {
+      "id": "astronomy-semester",
+      "locale": "en",
+      "notes": false,
+      "parts": 37,
+      "manifestSha256": "f28768f4c135eb0deaa3cf76a007f69e298c9619542e3beccecb0b32547778dd",
+      "partsSha256": "7b605f69669233ad7a9cb430c4fe20c4cf6439d6bb53c380d6225f4e68135c0d",
+      "manifestSchema": "valid",
+      "webLinkSchema": "valid",
+      "profile": "valid"
+    },
+    {
+      "id": "astronomy-semester",
+      "locale": "en",
+      "notes": true,
+      "parts": 37,
+      "manifestSha256": "465da7ea81e86898b84e376081449de763146fc6646d6776d1aad3dccff064c9",
+      "partsSha256": "7b605f69669233ad7a9cb430c4fe20c4cf6439d6bb53c380d6225f4e68135c0d",
+      "manifestSchema": "valid",
+      "webLinkSchema": "valid",
+      "profile": "valid"
+    },
+    {
+      "id": "astronomy-semester",
+      "locale": "es",
+      "notes": false,
+      "parts": 37,
+      "manifestSha256": "82f7a0c9459b3858799b9ea5acbcdc3da4eb26fb6074a95abb1a3a4e730b5491",
+      "partsSha256": "455a5a4a811bff7b764ac13fffae29cc71205645b061736fa45bd6445ec8f1c1",
+      "manifestSchema": "valid",
+      "webLinkSchema": "valid",
+      "profile": "valid"
+    },
+    {
+      "id": "astronomy-semester",
+      "locale": "es",
+      "notes": true,
+      "parts": 37,
+      "manifestSha256": "f9b87cbdee9acf3ae48aec6ecf0591b76d841ee8a454f33236892ccb7ba6232c",
+      "partsSha256": "455a5a4a811bff7b764ac13fffae29cc71205645b061736fa45bd6445ec8f1c1",
+      "manifestSchema": "valid",
+      "webLinkSchema": "valid",
+      "profile": "valid"
+    },
+    {
+      "id": "observing-lab",
+      "locale": "en",
+      "notes": false,
+      "parts": 28,
+      "manifestSha256": "29f563532321732b9a5afcdcc6c874ba77d20e11c2d8a9dd86f1de2136a93e43",
+      "partsSha256": "7d706908486e9fa5be051dba75241c36ac6dbfb8c909b97cf397baa278691cdb",
+      "manifestSchema": "valid",
+      "webLinkSchema": "valid",
+      "profile": "valid"
+    },
+    {
+      "id": "observing-lab",
+      "locale": "en",
+      "notes": true,
+      "parts": 28,
+      "manifestSha256": "359a2a2b23d3be326c291ddb659ed61e699c0a39d805d10c10811e20e2c7a6f9",
+      "partsSha256": "7d706908486e9fa5be051dba75241c36ac6dbfb8c909b97cf397baa278691cdb",
+      "manifestSchema": "valid",
+      "webLinkSchema": "valid",
+      "profile": "valid"
+    },
+    {
+      "id": "observing-lab",
+      "locale": "es",
+      "notes": false,
+      "parts": 28,
+      "manifestSha256": "de704b2c076b05cf308e419fac823be2fd94ea88996f2b952f369e0ba1bad4e1",
+      "partsSha256": "646d17522a7e0f8291e5dc6a6addf795577d523f79518faf9d5789cf2dd0894b",
+      "manifestSchema": "valid",
+      "webLinkSchema": "valid",
+      "profile": "valid"
+    },
+    {
+      "id": "observing-lab",
+      "locale": "es",
+      "notes": true,
+      "parts": 28,
+      "manifestSha256": "3d1e5abe44e9ea037b4f7064bb09d7216d9205b13d80002909151014c2620890",
+      "partsSha256": "646d17522a7e0f8291e5dc6a6addf795577d523f79518faf9d5789cf2dd0894b",
+      "manifestSchema": "valid",
+      "webLinkSchema": "valid",
+      "profile": "valid"
+    },
+    {
+      "id": "upper-level-modules",
+      "locale": "en",
+      "notes": false,
+      "parts": 49,
+      "manifestSha256": "ff0af1decb6a4ba64e78744a22cc7312263677920f8842b0b01e5f86aa140655",
+      "partsSha256": "9772f8638585f4895ca40eb91bfdfb011110e1923e4c4e81ab49442b261b98c2",
+      "manifestSchema": "valid",
+      "webLinkSchema": "valid",
+      "profile": "valid"
+    },
+    {
+      "id": "upper-level-modules",
+      "locale": "en",
+      "notes": true,
+      "parts": 49,
+      "manifestSha256": "cd17dffca4d687a55e2be1ea4d56648dd1d6b4675f0279e360595ff0a31186db",
+      "partsSha256": "9772f8638585f4895ca40eb91bfdfb011110e1923e4c4e81ab49442b261b98c2",
+      "manifestSchema": "valid",
+      "webLinkSchema": "valid",
+      "profile": "valid"
+    },
+    {
+      "id": "upper-level-modules",
+      "locale": "es",
+      "notes": false,
+      "parts": 49,
+      "manifestSha256": "062caba4d3b4af7fd48fabe29b5bc5a0bdb7854d73faece98b9cb86510c6be0e",
+      "partsSha256": "59041d3ec16635e5a57c08c2a5c2f5b11724ecd7f89811a7c2efdedd7b0a51d1",
+      "manifestSchema": "valid",
+      "webLinkSchema": "valid",
+      "profile": "valid"
+    },
+    {
+      "id": "upper-level-modules",
+      "locale": "es",
+      "notes": true,
+      "parts": 49,
+      "manifestSha256": "d7b630ce87dfde8bb793ee57573fcb16522b58708bea2f4e9e69f65425489d2c",
+      "partsSha256": "59041d3ec16635e5a57c08c2a5c2f5b11724ecd7f89811a7c2efdedd7b0a51d1",
+      "manifestSchema": "valid",
+      "webLinkSchema": "valid",
+      "profile": "valid"
+    }
+  ],
+  "agreement": [
+    {
+      "name": "a Common Cartridge schema name instead of Thin",
+      "xmllint": "valid",
+      "checker": "refused"
+    },
+    {
+      "name": "another schema version",
+      "xmllint": "invalid",
+      "checker": "refused"
+    },
+    {
+      "name": "web content, which a Thin cartridge never holds",
+      "xmllint": "valid",
+      "checker": "refused"
+    },
+    {
+      "name": "an href on a web link resource",
+      "xmllint": "valid",
+      "checker": "refused"
+    },
+    {
+      "name": "a dependency on a web link",
+      "xmllint": "valid",
+      "checker": "refused"
+    },
+    {
+      "name": "two files in one resource",
+      "xmllint": "valid",
+      "checker": "refused"
+    },
+    {
+      "name": "a file that is not in the package",
+      "xmllint": "valid",
+      "checker": "refused"
+    },
+    {
+      "name": "a title on the root item",
+      "xmllint": "invalid",
+      "checker": "refused"
+    },
+    {
+      "name": "a second organization",
+      "xmllint": "invalid",
+      "checker": "refused"
+    },
+    {
+      "name": "a flat structure",
+      "xmllint": "invalid",
+      "checker": "refused"
+    },
+    {
+      "name": "an item that points at nothing",
+      "xmllint": "valid",
+      "checker": "refused"
+    },
+    {
+      "name": "a link item with a child",
+      "xmllint": "invalid",
+      "checker": "refused"
+    },
+    {
+      "name": "a version on the manifest",
+      "xmllint": "invalid",
+      "checker": "refused"
+    },
+    {
+      "name": "a role nobody defined",
+      "xmllint": "valid",
+      "checker": "refused"
+    },
+    {
+      "name": "a schema element inside resource metadata",
+      "xmllint": "valid",
+      "checker": "refused"
+    },
+    {
+      "name": "a resource in no item",
+      "xmllint": "valid",
+      "checker": "refused"
+    }
+  ]
+}

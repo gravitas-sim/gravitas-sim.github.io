@@ -23,7 +23,7 @@ import {
 } from './physics.js';
 import { canRecordClips } from './utils.js';
 import { state, SETTINGS, current_scenario_name, command } from './appState.js';
-import { keplerNewton } from './orbital.js';
+import { solveKepler } from './orbital.js';
 import { t, registerMessages, onLocaleChange } from './i18n/index.js';
 import { scenarioTitle } from './i18n/scenario.js';
 import {
@@ -39,6 +39,7 @@ import { lastEvent } from './pauseAtEventBridge.js';
 import { toast } from './notify.js';
 import { SCENARIO_INFO } from './data/scenarioInfo.js';
 import { resetFollowCamera } from './followCamera.js';
+import { EV_LOCALE_CHANGED } from './names.js';
 
 /** The two canvases, handed in by initCaptureMeasure. */
 let canvas = null;
@@ -189,7 +190,7 @@ export function computeAreaSweep(obj, wedgeCount = areaSweepWedges) {
   const sinW = Math.sin(omega);
 
   const at = M => {
-    const E = keplerNewton(M, e, e < 0.8 ? M : Math.PI, 1e-13, 40);
+    const E = solveKepler(M, e);
     // Perifocal coordinates, then rotated into the simulation frame.
     const xp = a * (Math.cos(E) - e);
     const yp = b * Math.sin(E) * dir;
@@ -956,7 +957,7 @@ export function initBottomDock() {
   // the new text is already in the DOM, and deferring a frame left the bar sized
   // for English beside a Spanish footer (11px gap, not 16, on WebKit at 1700px).
   // The scheduled follow-up stays for a font that loads a frame or two later.
-  window.addEventListener('gravitasLocaleChanged', () => {
+  window.addEventListener(EV_LOCALE_CHANGED, () => {
     measure();
     schedule();
   });

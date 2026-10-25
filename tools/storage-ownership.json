@@ -1,0 +1,537 @@
+{
+  "measuredAt": "v3 c0f21665, 2026-10-18; local.js is 1,425 bytes",
+  "records": [
+    {
+      "prefix": "gravitas_experiment_checkpoint_",
+      "name": "A running experiment's checkpoint",
+      "owner": "js/experimentsPage.js",
+      "migration": "none",
+      "corpus": "experiment-store",
+      "export": "evictable"
+    },
+    {
+      "prefix": "gravitas_experiment",
+      "name": "Saved experiments and their index",
+      "owner": "js/experiments/store.js",
+      "migration": "store v3 reads v1 and v2 records",
+      "corpus": "experiment-store"
+    },
+    {
+      "prefix": "gravitas_investigation_",
+      "name": "A lesson's progress and its :v1 safety copy",
+      "owner": "js/investigations.js",
+      "migration": "progress schema 1 re-keyed to 2 by position, original kept under :v1",
+      "corpus": "progress-store"
+    },
+    {
+      "prefix": "gravitas_guides",
+      "name": "Observatory guide answers",
+      "owner": "js/observatory/guidePanel.js",
+      "migration": "a record of another version is dropped",
+      "corpus": null,
+      "corpusWhy": "no corpus kind yet: Prompt 134 left guide answers to a later row"
+    },
+    {
+      "prefix": "gravitas_lab3d_guide_",
+      "name": "3-D lab guide answers",
+      "owner": "js/lab3d/view/guidePanel.js",
+      "migration": "none",
+      "corpus": null,
+      "corpusWhy": "no corpus kind yet; the guide report is a written-never-read file (report-files)"
+    },
+    {
+      "prefix": "gravitas_missionlab_",
+      "name": "Mission lab answers",
+      "owner": "js/mission/lab/guidePanel.js",
+      "migration": "none",
+      "corpus": null,
+      "corpusWhy": "as 3-D lab guides"
+    },
+    {
+      "prefix": "gravitas_assignment_",
+      "name": "An assignment's progress",
+      "owner": "js/investigations.js",
+      "migration": "moves main's dated key to the hash key on first read",
+      "corpus": "progress-store"
+    },
+    {
+      "prefix": "gravitas_evidence_notebook",
+      "name": "The evidence notebook",
+      "owner": "js/notebook/store.js",
+      "migration": "store 1; entries revived by reviveEntry",
+      "corpus": "ledger-entry"
+    },
+    {
+      "prefix": "gravitas_made_",
+      "name": "A scenario or experiment the student made",
+      "owner": "js/myWork/made.js",
+      "migration": "none yet; a newer record is left out of the list",
+      "corpus": null,
+      "corpusWhy": "gravitas.made/1 has no corpus kind yet"
+    },
+    {
+      "prefix": "gravitas_course_level",
+      "name": "The course level",
+      "owner": "js/settingsSchema.js",
+      "migration": "none",
+      "corpus": null,
+      "corpusWhy": "a one-word preference",
+      "export": "preference"
+    },
+    {
+      "prefix": "gravitas_course_preview",
+      "name": "The course handed to the course home",
+      "owner": "js/course/links.js",
+      "migration": "none",
+      "corpus": "course-home-link",
+      "export": "transient"
+    },
+    {
+      "prefix": "gravitas_next_context",
+      "name": "Where a lesson was opened from",
+      "owner": "js/investigations/next.js",
+      "migration": "none",
+      "corpus": null,
+      "corpusWhy": "a handed-over context",
+      "export": "transient"
+    },
+    {
+      "prefix": "gravitas_resume",
+      "name": "Where a reader was: the items opened last, with pathway and step",
+      "owner": "js/investigations/stepView.js",
+      "migration": "none; a record that is not v1 reads as empty",
+      "corpus": "resume-record"
+    },
+    {
+      "prefix": "gravitas_terms",
+      "name": "The courses opened that name a term, with the term and when",
+      "owner": "js/instructorCourseTerms.js",
+      "migration": "none; a record that is not v1 reads as empty",
+      "corpus": "course-terms"
+    },
+    {
+      "prefix": "gravitas_collections",
+      "name": "The student's saved items and the collections they kept, each a course package with profile collection",
+      "owner": "js/library/collections.js",
+      "migration": "none; a record that is not v1, or a package that does not read as a collection, reads as empty",
+      "corpus": "collections-record"
+    },
+    {
+      "prefix": "gravitas_course_",
+      "name": "Course builder drafts and the last open",
+      "owner": "js/coursePage.js",
+      "migration": "reads course pack 1",
+      "corpus": "course-pack"
+    },
+    {
+      "prefix": "gravitas_composer_preview",
+      "name": "The lesson handed to the Composer preview",
+      "owner": "js/composerPage.js",
+      "migration": "none",
+      "corpus": "investigation-pack",
+      "export": "transient"
+    },
+    {
+      "prefix": "gravitas_composer_",
+      "name": "Composer drafts and the last open",
+      "owner": "js/composerPage.js",
+      "migration": "none",
+      "corpus": "investigation-pack"
+    },
+    {
+      "prefix": "gravitas_studio_",
+      "name": "Studio scenario drafts and the last open",
+      "owner": "js/studio/model.js",
+      "migration": "none recorded",
+      "corpus": null,
+      "corpusWhy": "scenario pack 1 has no corpus kind yet"
+    },
+    {
+      "prefix": "gravitas_simulation_save",
+      "name": "The Sandbox's saved world",
+      "owner": "js/world.js",
+      "migration": "setting names renamed since are rewritten on load",
+      "corpus": "share-link"
+    },
+    {
+      "prefix": "gravitas_evaluation_draft_",
+      "name": "The evaluation kit's unsent draft",
+      "owner": "js/evaluationKit.js",
+      "migration": "none",
+      "corpus": null,
+      "corpusWhy": "evaluation 1 has no corpus kind yet"
+    },
+    {
+      "prefix": "gravitas_teaching_notes_",
+      "name": "A teacher's notes",
+      "owner": "js/teachingPage.js",
+      "migration": "none",
+      "corpus": null,
+      "corpusWhy": "a JSON object with no format name"
+    },
+    {
+      "prefix": "gravitas_student_name",
+      "name": "The name a student gives for reports",
+      "owner": "js/investigations.js",
+      "migration": "none",
+      "corpus": "submission-token"
+    },
+    {
+      "prefix": "gravitas_last_export",
+      "name": "When My work last made a backup",
+      "owner": "js/myWorkPage.js",
+      "migration": "none",
+      "corpus": null,
+      "corpusWhy": "remembers that a file was made",
+      "export": "preference"
+    },
+    {
+      "prefix": "gravitas_capability_versions",
+      "name": "The capability package versions loaded",
+      "owner": "js/platform/resolver.js",
+      "migration": "none",
+      "corpus": "capability-package",
+      "export": "platform"
+    },
+    {
+      "prefix": "gravitas_locale",
+      "name": "The interface language",
+      "owner": "js/i18n/index.js",
+      "migration": "none",
+      "corpus": null,
+      "corpusWhy": "a one-word preference",
+      "export": "preference"
+    },
+    {
+      "prefix": "gravitas_theme",
+      "name": "The theme",
+      "owner": "js/theme.js",
+      "migration": "none",
+      "corpus": null,
+      "corpusWhy": "a one-word preference",
+      "export": "preference"
+    },
+    {
+      "prefix": "gravitas_motion",
+      "name": "The motion override",
+      "owner": "js/quality.js",
+      "migration": "none",
+      "corpus": null,
+      "corpusWhy": "a one-word preference",
+      "export": "preference"
+    },
+    {
+      "prefix": "gravitas_units",
+      "name": "Physical or simulation units",
+      "owner": "js/units.js",
+      "migration": "none",
+      "corpus": null,
+      "corpusWhy": "a one-word preference",
+      "export": "preference"
+    },
+    {
+      "prefix": "gravitas_lesson_objects_open",
+      "name": "Whether the objects list was left open",
+      "owner": "js/investigations.js",
+      "migration": "none",
+      "corpus": null,
+      "corpusWhy": "a flag",
+      "export": "preference"
+    },
+    {
+      "prefix": "gravitas_disclosure",
+      "name": "Which More sections were left open",
+      "owner": "js/settingsSchema.js",
+      "migration": "none",
+      "corpus": null,
+      "corpusWhy": "a map of surface to a flag",
+      "export": "preference"
+    },
+    {
+      "prefix": "gravitas_rail_sections",
+      "name": "Which rail sections are open",
+      "owner": "js/controls.js",
+      "migration": "none",
+      "corpus": null,
+      "corpusWhy": "a list of ids",
+      "export": "preference"
+    },
+    {
+      "prefix": "gravitas_lecture_sequence",
+      "name": "Lecture mode's sequence",
+      "owner": "js/lecture.js",
+      "migration": "none",
+      "corpus": null,
+      "corpusWhy": "a list of links",
+      "export": "preference"
+    },
+    {
+      "prefix": "gravitas_welcome_seen_",
+      "name": "That the welcome was seen",
+      "owner": "js/welcomeGate.js",
+      "migration": "none",
+      "corpus": null,
+      "corpusWhy": "a flag",
+      "export": "preference"
+    },
+    {
+      "prefix": "gravitas_orientation_seen_",
+      "name": "That the introduction on Home was shown",
+      "owner": "js/welcomeGate.js",
+      "migration": "none",
+      "corpus": null,
+      "corpusWhy": "a flag",
+      "export": "preference"
+    },
+    {
+      "prefix": "mobile_instructions_shown",
+      "name": "That the phone instructions were shown",
+      "owner": "js/main.js",
+      "migration": "none",
+      "corpus": null,
+      "corpusWhy": "a flag",
+      "export": "preference"
+    }
+  ],
+  "others": [
+    {
+      "where": "IndexedDB gravitas-catalog",
+      "name": "Installed catalog extensions: their archives' files",
+      "owner": "js/catalog/store.js",
+      "migration": "database version 1; none",
+      "export": "evictable",
+      "corpus": "archive-record",
+      "note": "downloaded again from the Catalog; not in a backup file"
+    },
+    {
+      "where": "IndexedDB gravitas-archive",
+      "name": "The archive import's cached answers",
+      "owner": "js/archive/cache.js",
+      "migration": "rows carry a usedMs beside the answer; a row from before 2.0.1 has none and reads as the least recently used",
+      "export": "evictable",
+      "corpus": null,
+      "corpusWhy": "a cache of public answers, rebuilt on demand; evicted least recently used past 400 answers or 64 MiB (Prompt 147)"
+    },
+    {
+      "where": "IndexedDB gravitas-store",
+      "name": "The storage module's collections (records keyed by collection and name)",
+      "owner": "js/storage/index.js",
+      "migration": "none; nothing writes to it yet",
+      "export": "durable",
+      "corpus": null,
+      "corpusWhy": "empty in 2.0.0 and today"
+    },
+    {
+      "where": "localStorage gravitas_store:<collection>:<name>",
+      "name": "The same records when IndexedDB is unavailable",
+      "owner": "js/storage/index.js",
+      "migration": "none",
+      "export": "durable",
+      "corpus": null,
+      "corpusWhy": "nothing writes it yet"
+    },
+    {
+      "where": "Cache Storage gravitas-<build>",
+      "name": "The service worker's precache",
+      "owner": "sw.js",
+      "migration": "an older build's cache is deleted when a new one activates",
+      "export": "evictable",
+      "corpus": null,
+      "corpusWhy": "generated from the build, never student work"
+    },
+    {
+      "where": "sessionStorage gravitas_instructor_key",
+      "name": "The instructor materials' key, for the session",
+      "owner": "js/instructorPortal.js",
+      "migration": "none",
+      "export": "session",
+      "corpus": null,
+      "corpusWhy": "gone when the tab closes; never exported"
+    }
+  ],
+  "writers": [
+    {
+      "file": "js/studio/model.js",
+      "reason": "writes through the Storage a page hands it (Studio hands a guarded one)",
+      "lacks": null,
+      "student": null
+    },
+    {
+      "file": "js/composerPage.js",
+      "reason": "its route has no room for the module",
+      "lacks": {
+        "kb": 1.4,
+        "requests": 0,
+        "route": "composer"
+      },
+      "student": {
+        "en": "Composer drafts",
+        "es": "los borradores del Compositor"
+      }
+    },
+    {
+      "file": "js/coursePage.js",
+      "reason": "its route has no room for the module",
+      "lacks": {
+        "kb": 1.3,
+        "requests": 0,
+        "route": "course-builder"
+      },
+      "student": {
+        "en": "course drafts",
+        "es": "los borradores de curso"
+      }
+    },
+    {
+      "file": "js/courseHome.js",
+      "reason": "gravitas_next_context, not student work; its route has no room for the module",
+      "lacks": {
+        "kb": 1.4,
+        "requests": 1,
+        "route": "course-home"
+      },
+      "student": null
+    },
+    {
+      "file": "js/world.js",
+      "reason": "reached from the start-up entry: the module there costs the front door and the Sandbox one build request, with 0 free",
+      "lacks": {
+        "kb": 0,
+        "requests": 1,
+        "route": "front-door, sandbox (build)"
+      },
+      "student": {
+        "en": "the saved world",
+        "es": "el mundo guardado"
+      }
+    },
+    {
+      "file": "js/controls.js",
+      "reason": "as world.js",
+      "lacks": {
+        "kb": 0,
+        "requests": 1,
+        "route": "front-door, sandbox (build)"
+      },
+      "student": null
+    },
+    {
+      "file": "js/lecture.js",
+      "reason": "as world.js",
+      "lacks": {
+        "kb": 0,
+        "requests": 1,
+        "route": "front-door, sandbox (build)"
+      },
+      "student": null
+    },
+    {
+      "file": "js/main.js",
+      "reason": "as world.js",
+      "lacks": {
+        "kb": 0,
+        "requests": 1,
+        "route": "front-door, sandbox (build)"
+      },
+      "student": null
+    },
+    {
+      "file": "js/welcomeGate.js",
+      "reason": "as world.js",
+      "lacks": {
+        "kb": 0,
+        "requests": 1,
+        "route": "front-door, sandbox (build)"
+      },
+      "student": null
+    },
+    {
+      "file": "js/settingsSchema.js",
+      "reason": "as world.js",
+      "lacks": {
+        "kb": 0,
+        "requests": 1,
+        "route": "front-door, sandbox (build)"
+      },
+      "student": null
+    },
+    {
+      "file": "js/theme.js",
+      "reason": "a preference on every route, several with no room",
+      "lacks": {
+        "kb": 1.4,
+        "requests": 1,
+        "route": "my-work, sky, course-home and the other routes with 0.0 KB free"
+      },
+      "student": null
+    },
+    {
+      "file": "js/units.js",
+      "reason": "as theme.js",
+      "lacks": {
+        "kb": 1.4,
+        "requests": 1,
+        "route": "as theme.js"
+      },
+      "student": null
+    },
+    {
+      "file": "js/quality.js",
+      "reason": "as theme.js: the motion override is a preference every route reads",
+      "lacks": {
+        "kb": 1.4,
+        "requests": 1,
+        "route": "as theme.js"
+      },
+      "student": null
+    },
+    {
+      "file": "js/shell.js",
+      "reason": "the shell's own theme and language choice, on every route",
+      "lacks": {
+        "kb": 1.4,
+        "requests": 1,
+        "route": "as theme.js"
+      },
+      "student": null
+    },
+    {
+      "file": "js/i18n/index.js",
+      "reason": "the language; each page's catalog loader",
+      "lacks": {
+        "kb": 1.4,
+        "requests": 1,
+        "route": "as theme.js"
+      },
+      "student": null
+    },
+    {
+      "file": "js/myWork/made.js",
+      "reason": "reached from the Sandbox: a second importer would split storage/local.js into a chunk every lesson fetches; it states the collection's record limit itself (512 KB, equal to ITEM.made) and announces a refusal",
+      "lacks": {
+        "kb": 0,
+        "requests": 1,
+        "route": "lesson routes (build)"
+      },
+      "student": null
+    },
+    {
+      "file": "js/platform/resolver.js",
+      "reason": "the platform stamps, not student work",
+      "lacks": null,
+      "student": null
+    },
+    {
+      "file": "js/instructorPortal.js",
+      "reason": "sessionStorage: the instructor key, for the session",
+      "lacks": null,
+      "student": null
+    },
+    {
+      "file": "js/notebook/store.js",
+      "reason": "the availability probe, removed at once",
+      "lacks": null,
+      "student": null
+    }
+  ]
+}

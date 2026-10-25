@@ -30,6 +30,80 @@
       }
       .lib-card {
         display: flex;
+        flex-direction: column;
+      }
+      .lib-card .lib-link {
+        flex: 1;
+      }
+      .lib-details {
+        padding: var(--space-2) var(--space-1) 0;
+        font-size: var(--text-sm);
+      }
+      .lib-why {
+        font-size: var(--text-sm);
+        color: var(--text-accent, var(--text-secondary));
+      }
+      /* Where to start: three groups side by side, each a short stack. */
+      .lib-start-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+        gap: var(--space-4);
+      }
+      .lib-start-group h3 {
+        margin: 0 0 var(--space-2);
+      }
+      .lib-start-group .lib-list {
+        grid-template-columns: 1fr;
+        gap: var(--space-2);
+        margin: 0;
+      }
+      .lib-card.is-compact .lib-body {
+        padding: var(--space-2) var(--space-3);
+        gap: var(--space-1);
+      }
+      .lib-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-2) var(--space-6);
+        margin: 0 0 var(--space-6);
+        padding: 0;
+        list-style: none;
+      }
+      .lib-links a {
+        display: inline-block;
+        padding: var(--space-2) 0;
+      }
+      main a:not(.ui-button):not(.lib-link) {
+        display: inline-block;
+        min-height: 24px;
+        box-sizing: border-box;
+        padding: 2px 0;
+      }
+      .lib-rows {
+        margin: 0 0 var(--space-4);
+        padding-left: var(--space-5);
+      }
+      .lib-rows li {
+        padding: var(--space-1) 0;
+      }
+      .lib-rows a {
+        display: inline-block;
+        padding: var(--space-1) 0;
+      }
+      .lib-row-meta {
+        color: var(--text-secondary);
+        font-size: var(--text-sm);
+      }
+      .lib-more > summary {
+        cursor: pointer;
+        padding: var(--space-2) 0;
+        min-height: 44px;
+        box-sizing: border-box;
+      }
+      .lib-find-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-2);
       }
       .lib-link {
         display: flex;
@@ -95,7 +169,7 @@
       .lib-progress {
         color: var(--text-primary);
       }
-      /* Two menus a row on a phone: nine stacked fill a screen. */
+      /* Two menus a row on a phone: five stacked fill a screen. */
       .lib-find {
         --ui-grid-min: 9rem;
       }
@@ -145,14 +219,15 @@ try {
 <header class="gs-shell">
 <a class="gs-brand" href="/#home"><span class="gs-vh"><span class="gs-en">Gravitas home</span><span class="gs-es" lang="es">Inicio de Gravitas</span></span><span aria-hidden="true">GRAVITAS</span></a>
 <button type="button" class="gs-toggle" aria-expanded="false" aria-controls="gs-nav" hidden><span class="gs-en">Menu</span><span class="gs-es" lang="es">Menú</span></button>
-<nav id="gs-nav" class="gs-nav" aria-label="Gravitas"><ul><li><details class="gs-group" data-here><summary><span class="gs-en">Learn</span><span class="gs-es" lang="es">Aprender</span></summary><ul><li><a href="/library/" aria-current="page"><span class="gs-en">Library</span><span class="gs-es" lang="es">Biblioteca</span></a></li><li><a href="/my-work/"><span class="gs-en">My work</span><span class="gs-es" lang="es">Mi trabajo</span></a></li><li><a href="/#investigations"><span class="gs-en">Investigations</span><span class="gs-es" lang="es">Investigaciones</span></a></li><li><a href="/course/"><span class="gs-en">Courses</span><span class="gs-es" lang="es">Cursos</span></a></li><li><a href="/observatory/"><span class="gs-en">Observatory</span><span class="gs-es" lang="es">Observatorio</span></a></li><li><a href="/experiments/"><span class="gs-en">Experiments</span><span class="gs-es" lang="es">Experimentos</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Labs</span><span class="gs-es" lang="es">Laboratorios</span></summary><ul><li><a href="/"><span class="gs-en">Sandbox</span><span class="gs-es" lang="es">Simulación libre</span></a></li><li><a href="/3d/"><span class="gs-en">3-D lab</span><span class="gs-es" lang="es">Laboratorio 3-D</span></a></li><li><a href="/mission/lab/"><span class="gs-en">Mission lab</span><span class="gs-es" lang="es">Laboratorio de misiones</span></a></li><li><a href="/sky/"><span class="gs-en">Sky Lab</span><span class="gs-es" lang="es">Laboratorio del cielo</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Make</span><span class="gs-es" lang="es">Crear</span></summary><ul><li><a href="/studio/"><span class="gs-en">Scenario Studio</span><span class="gs-es" lang="es">Estudio de escenarios</span></a></li><li><a href="/studio/lesson/"><span class="gs-en">Investigation Composer</span><span class="gs-es" lang="es">Compositor de investigaciones</span></a></li><li><a href="/studio/course/"><span class="gs-en">Course builder</span><span class="gs-es" lang="es">Creador de cursos</span></a></li><li><a href="/figure/"><span class="gs-en">Figure builder</span><span class="gs-es" lang="es">Creador de figuras</span></a></li><li><a href="/catalog/"><span class="gs-en">Catalog</span><span class="gs-es" lang="es">Catálogo</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Teach</span><span class="gs-es" lang="es">Enseñar</span></summary><ul><li><a href="/teaching/"><span class="gs-en">Teaching with Gravitas</span><span class="gs-es" lang="es">Enseñar con Gravitas</span></a></li><li><a href="/instructors/"><span class="gs-en">Instructor resources</span><span class="gs-es" lang="es">Recursos para docentes</span></a></li><li><a href="/instructors/submissions/"><span class="gs-en">Submission review</span><span class="gs-es" lang="es">Revisión de entregas</span></a></li><li><a href="/evaluation/"><span class="gs-en">Classroom evidence kit</span><span class="gs-es" lang="es">Kit de evidencias de aula</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">About</span><span class="gs-es" lang="es">Acerca de</span></summary><ul><li><a href="/model/"><span class="gs-en">How the model works</span><span class="gs-es" lang="es">Cómo funciona el modelo</span></a></li><li><a href="/validation/"><span class="gs-en">Physics validation</span><span class="gs-es" lang="es">Validación física</span></a></li><li><a href="/glossary/"><span class="gs-en">Glossary</span><span class="gs-es" lang="es">Glosario</span></a></li><li><a href="/lab3d/"><span class="gs-en">3-D kernel diagnostics</span><span class="gs-es" lang="es">Diagnóstico del núcleo 3-D</span></a></li><li><a href="/mission/"><span class="gs-en">Mission core diagnostics</span><span class="gs-es" lang="es">Diagnóstico de misiones</span></a></li><li><a href="/Gravitas_User_Manual.pdf"><span class="gs-en">User manual (PDF)</span><span class="gs-es" lang="es">Manual de usuario (PDF)</span></a></li></ul></details></li></ul></nav>
+<nav id="gs-nav" class="gs-nav" aria-label="Gravitas"><ul><li><a href="/" data-dest="explore"><span class="gs-en">Explore</span><span class="gs-es" lang="es">Explorar</span></a></li><li><a href="/library/" data-dest="learn" aria-current="page"><span class="gs-en">Learn</span><span class="gs-es" lang="es">Aprender</span></a></li><li><a href="/observatory/" data-dest="observe"><span class="gs-en">Observe</span><span class="gs-es" lang="es">Observar</span></a></li><li><a href="/my-work/" data-dest="my-work"><span class="gs-en">My work</span><span class="gs-es" lang="es">Mi trabajo</span></a></li><li><a href="/teaching/" data-dest="teach"><span class="gs-en">Teach</span><span class="gs-es" lang="es">Enseñar</span></a></li></ul></nav>
 <div class="gs-controls" hidden>
 <label><span class="gs-vh"><span class="gs-en">Language</span><span class="gs-es" lang="es">Idioma</span></span><select data-gs-lang><option value="en" lang="en">English</option><option value="es" lang="es">Español</option></select></label>
 <label><span class="gs-vh"><span class="gs-en">Theme</span><span class="gs-es" lang="es">Tema</span></span><select data-gs-theme><option value="midnight" data-es="Medianoche">Midnight</option><option value="deep" data-es="Espacio profundo">Deep space</option><option value="observatory" data-es="Rojo de observatorio">Observatory red</option><option value="daylight" data-es="Luz de día">Daylight</option></select></label>
 </div>
 </header>
+<nav class="gs-crumbs" aria-labelledby="gs-crumbs-name"><span id="gs-crumbs-name" class="gs-vh"><span class="gs-en">Breadcrumb</span><span class="gs-es" lang="es">Ruta de navegación</span></span><ol><li><span class="gs-en">Learn</span><span class="gs-es" lang="es">Aprender</span></li><li aria-current="page"><span class="gs-en">Library</span><span class="gs-es" lang="es">Biblioteca</span></li></ol></nav>
 <div class="gs-offline" role="status"><template><div class="gs-offline-box">
-<p><strong><span class="gs-en">You are offline.</span><span class="gs-es" lang="es">Estás sin conexión.</span></strong> <span class="gs-en">These pages are saved on this device:</span><span class="gs-es" lang="es">Estas páginas están guardadas en este dispositivo:</span> <a href="/library/"><span class="gs-en">Library</span><span class="gs-es" lang="es">Biblioteca</span></a>, <a href="/my-work/"><span class="gs-en">My work</span><span class="gs-es" lang="es">Mi trabajo</span></a>, <a href="/course/"><span class="gs-en">Courses</span><span class="gs-es" lang="es">Cursos</span></a>, <a href="/observatory/"><span class="gs-en">Observatory</span><span class="gs-es" lang="es">Observatorio</span></a>, <a href="/"><span class="gs-en">Sandbox</span><span class="gs-es" lang="es">Simulación libre</span></a>, <a href="/3d/"><span class="gs-en">3-D lab</span><span class="gs-es" lang="es">Laboratorio 3-D</span></a>, <a href="/mission/lab/"><span class="gs-en">Mission lab</span><span class="gs-es" lang="es">Laboratorio de misiones</span></a>, <a href="/sky/"><span class="gs-en">Sky Lab</span><span class="gs-es" lang="es">Laboratorio del cielo</span></a>, <a href="/catalog/"><span class="gs-en">Catalog</span><span class="gs-es" lang="es">Catálogo</span></a>. <span class="gs-en">Any other page works only if you have opened it before, and whatever needs the network, such as catalog downloads, waits until you are back online.</span><span class="gs-es" lang="es">Cualquier otra página funciona solo si ya la abriste, y lo que necesita la red, como las descargas del catálogo, espera hasta que vuelvas a conectarte.</span></p>
+<p><strong><span class="gs-en">You are offline.</span><span class="gs-es" lang="es">Estás sin conexión.</span></strong> <span class="gs-en">These pages are saved on this device:</span><span class="gs-es" lang="es">Estas páginas están guardadas en este dispositivo:</span> <a href="/"><span class="gs-en">Explore</span><span class="gs-es" lang="es">Explorar</span></a>, <a href="/library/"><span class="gs-en">Learn</span><span class="gs-es" lang="es">Aprender</span></a>, <a href="/observatory/"><span class="gs-en">Observe</span><span class="gs-es" lang="es">Observar</span></a>, <a href="/my-work/"><span class="gs-en">My work</span><span class="gs-es" lang="es">Mi trabajo</span></a>, <a href="/3d/"><span class="gs-en">3-D lab</span><span class="gs-es" lang="es">Laboratorio 3-D</span></a>, <a href="/mission/lab/"><span class="gs-en">Mission lab</span><span class="gs-es" lang="es">Laboratorio de misiones</span></a>, <a href="/studio/"><span class="gs-en">Scenario Studio</span><span class="gs-es" lang="es">Estudio de escenarios</span></a>, <a href="/course/"><span class="gs-en">Courses</span><span class="gs-es" lang="es">Cursos</span></a>, <a href="/sky/"><span class="gs-en">Sky Lab</span><span class="gs-es" lang="es">Laboratorio del cielo</span></a>, <a href="/catalog/"><span class="gs-en">Catalog</span><span class="gs-es" lang="es">Catálogo</span></a>, <a href="/studio/lesson/"><span class="gs-en">Investigation Composer</span><span class="gs-es" lang="es">Compositor de investigaciones</span></a>, <a href="/studio/course/"><span class="gs-en">Course-package builder</span><span class="gs-es" lang="es">Creador de paquetes de curso</span></a>. <span class="gs-en">Any other page works only if you have opened it before, and whatever needs the network, such as catalog downloads, waits until you are back online.</span><span class="gs-es" lang="es">Cualquier otra página funciona solo si ya la abriste, y lo que necesita la red, como las descargas del catálogo, espera hasta que vuelvas a conectarte.</span></p>
 <button type="button" class="ui-button"><span class="gs-en">Dismiss</span><span class="gs-es" lang="es">Cerrar</span></button>
 </div></template></div>
 <!-- /shell:header -->
@@ -165,18 +240,23 @@ try {
     >
       <h1 data-i18n="lib.title">Library</h1>
       <p data-i18n="lib.intro">
-        Everything you can open in Gravitas, in one place: guided
-        investigations, classroom activities, scenarios, datasets, courses and
-        experiments. Each one opens on the page that runs it.
+        Start somewhere, pick up where you left off, or search for what you
+        need. Each one opens on the page that runs it.
       </p>
 
       <section class="ui-card" id="libContinue" aria-labelledby="libContinueTitle" hidden>
         <h2 id="libContinueTitle" data-i18n="lib.continue.title">Continue where you left off</h2>
-        <ul id="libContinueList"></ul>
+        <div id="libContinueBody"></div>
         <p><a href="/my-work/" data-i18n="lib.continue.all">Everything you have made: My work</a></p>
       </section>
 
-      <section class="ui-card" aria-labelledby="libFindTitle">
+      <section class="ui-card" id="libCollections" aria-labelledby="libCollectionsTitle" hidden>
+        <h2 id="libCollectionsTitle" data-i18n="lib.collections.title">Your collections</h2>
+        <p class="ui-note" data-i18n="lib.collections.note">Kept on this device only. Nothing is sent anywhere.</p>
+        <div id="libCollectionsBody"></div>
+      </section>
+
+      <section class="ui-card" id="libFind" aria-labelledby="libFindTitle">
         <h2 id="libFindTitle" data-i18n="lib.find.title">Find something</h2>
         <div class="ui-grid is-end lib-find">
           <label class="ui-field">
@@ -190,59 +270,82 @@ try {
             />
           </label>
           <label class="ui-field">
-            <span data-i18n="lib.filter.kind">What</span>
-            <select class="ui-select" id="libKind"></select>
-          </label>
-          <label class="ui-field">
-            <span data-i18n="lib.filter.format">Where it runs</span>
-            <select class="ui-select" id="libFormat"></select>
-          </label>
-          <label class="ui-field">
             <span data-i18n="lib.filter.subject">Subject</span>
             <select class="ui-select" id="libSubject"></select>
-          </label>
-          <label class="ui-field">
-            <span data-i18n="lib.filter.length">Time</span>
-            <select class="ui-select" id="libLength"></select>
-          </label>
-          <label class="ui-field">
-            <span data-i18n="lib.filter.calculation">Arithmetic</span>
-            <select class="ui-select" id="libCalculation"></select>
           </label>
           <label class="ui-field">
             <span data-i18n="lib.filter.level">Level</span>
             <select class="ui-select" id="libLevel"></select>
           </label>
           <label class="ui-field">
-            <span data-i18n="lib.filter.progress">Progress</span>
-            <select class="ui-select" id="libProgress"></select>
+            <span data-i18n="lib.filter.length">Time</span>
+            <select class="ui-select" id="libLength"></select>
           </label>
           <label class="ui-field">
-            <span data-i18n="lib.group">Arrange</span>
-            <select class="ui-select" id="libGroup"></select>
+            <span data-i18n="lib.filter.kind">What</span>
+            <select class="ui-select" id="libKind"></select>
           </label>
-          <div>
-            <button
-              type="button"
-              class="ui-button"
-              id="libClear"
-              data-i18n="lib.filter.clear"
-              hidden
-            >
+          <div class="lib-find-actions">
+            <button type="button" class="ui-button" id="libBrowse" data-i18n="lib.browse">
+              Browse everything
+            </button>
+            <button type="button" class="ui-button" id="libClear" data-i18n="lib.filter.clear" hidden>
               Clear filters
             </button>
           </div>
         </div>
+        <details class="lib-more" id="libMore" hidden>
+          <summary data-i18n="lib.more">More filters</summary>
+          <div class="ui-grid is-end lib-find">
+            <label class="ui-field">
+              <span data-i18n="lib.filter.mathematics">Mathematics</span>
+              <select class="ui-select" id="libMathematics"></select>
+            </label>
+            <label class="ui-field">
+              <span data-i18n="lib.filter.calculation">Arithmetic</span>
+              <select class="ui-select" id="libCalculation"></select>
+            </label>
+            <label class="ui-field">
+              <span data-i18n="lib.filter.data">Data</span>
+              <select class="ui-select" id="libData"></select>
+            </label>
+            <label class="ui-field">
+              <span data-i18n="lib.filter.depth">Depth</span>
+              <select class="ui-select" id="libDepth"></select>
+            </label>
+            <label class="ui-field">
+              <span data-i18n="lib.filter.prereq">Prerequisites</span>
+              <select class="ui-select" id="libPrereq"></select>
+            </label>
+            <label class="ui-field">
+              <span data-i18n="lib.filter.sequence">Sequence</span>
+              <select class="ui-select" id="libSequence"></select>
+            </label>
+            <label class="ui-field">
+              <span data-i18n="lib.filter.progress">Progress</span>
+              <select class="ui-select" id="libProgress"></select>
+            </label>
+            <label class="ui-field">
+              <span data-i18n="lib.group">Arrange</span>
+              <select class="ui-select" id="libGroup"></select>
+            </label>
+          </div>
+        </details>
       </section>
 
       <p id="libCount" class="ui-hint" role="status" aria-live="polite"></p>
       <p id="libLoad" class="ui-state is-loading" role="status"></p>
+      <div id="libStart" hidden></div>
+      <div id="libDetail" hidden></div>
       <div id="libEmpty" class="ui-state is-empty" hidden>
         <p id="libEmptyText"></p>
         <button type="button" class="ui-button" id="libRelax" hidden></button>
       </div>
       <div id="libResults"></div>
     </main>
+    <!-- shell:places -->
+<nav class="gs-places" aria-labelledby="gs-places-name"><h2 id="gs-places-name" class="gs-places-title"><span class="gs-en">Also in Learn</span><span class="gs-es" lang="es">También en Aprender</span></h2><ul><li><a href="/course/"><span class="gs-en">Courses</span><span class="gs-es" lang="es">Cursos</span></a></li><li><a href="/#investigations"><span class="gs-en">Investigations</span><span class="gs-es" lang="es">Investigaciones</span></a></li></ul></nav>
+<!-- /shell:places -->
     <!-- shell:footer -->
 <footer class="gs-foot">
 <a href="/validation/"><span class="gs-en">Physics validation</span><span class="gs-es" lang="es">Validación física</span></a>

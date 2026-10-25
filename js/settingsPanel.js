@@ -17,13 +17,22 @@ import { EN } from './i18n/en.js';
 import { scenarioTitle, scenarioSummary } from './i18n/scenario.js';
 import { announce } from './notify.js';
 import {
+  MOTION_MODES,
+  motionPreference,
+  setMotionPreference,
+} from './quality.js';
+import { setPlaying } from './controls.js';
+import {
   COURSE_LEVELS,
   SETTING_SECTIONS,
   courseLevelDefaults,
   getCourseLevel,
   helpId,
   itemsOf,
+  moreOpen,
   sectionLabelId,
+  setMore,
+  wireMore,
 } from './settingsSchema.js';
 import { SETTINGS, DEFAULT_SETTINGS } from './appState.js';
 
@@ -442,6 +451,23 @@ const getSettingTooltip = async (key, label) => {
     : t('settings.tooltip.generic', { label: label.toLowerCase() });
 };
 
+// Motion: filled by its lazy module; its own scope, so a slow file holds only the row.
+const addMotionRow = grid => {
+  const row = document.createElement('div');
+  row.className = 'settings-level';
+  grid.appendChild(row);
+  import('./motionControl.js').then(m =>
+    m.fillMotionRow(row, {
+      getLocale,
+      announce,
+      modes: MOTION_MODES,
+      preference: motionPreference,
+      setPreference: setMotionPreference,
+      pause: () => setPlaying(false),
+    })
+  );
+};
+
 /**
  * Build the Settings panel from js/settingsSchema.js.
  *
@@ -460,9 +486,8 @@ const buildSettingsMenu = ({ keep = false } = {}) => {
       el => el.dataset.section
     )
   );
-  const advancedOpen = Boolean(
-    settingsGrid.querySelector('.settings-advanced')?.open
-  );
+  const advancedWasOpen =
+    settingsGrid.querySelector('.settings-advanced')?.open;
   settingsGrid.innerHTML = '';
   if (!keep) {
     localSettings = JSON.parse(JSON.stringify(SETTINGS));
@@ -511,11 +536,13 @@ const buildSettingsMenu = ({ keep = false } = {}) => {
     localSettings.show_conservation_diagnostics = d.conservation;
     buildSettingsMenu({ keep: true });
     const advancedBox = settingsGrid.querySelector('.settings-advanced');
-    if (advancedBox) advancedBox.open = d.advancedOpen;
+    if (advancedBox) setMore(advancedBox, d.advancedOpen);
     document.getElementById('settingsCourseLevel')?.focus();
   };
   levelRow.append(levelLabel, levelSelect, levelHint);
   settingsGrid.appendChild(levelRow);
+
+  addMotionRow(settingsGrid);
 
   // The sections, in the schema's order. The advanced ones sit together in
   // one disclosure after the rest, closed until it is opened.
@@ -825,12 +852,20 @@ const buildSettingsMenu = ({ keep = false } = {}) => {
     if (isAdvanced) {
       if (!advanced) {
         advanced = document.createElement('details');
-        advanced.className = 'settings-advanced';
-        advanced.open = advancedOpen;
+        advanced.className = 'settings-advanced more';
         const summary = document.createElement('summary');
         summary.textContent = t('settings.section.advanced');
         advanced.appendChild(summary);
         settingsGrid.appendChild(advanced);
+        // What the reader had open survives a rebuild; a first build starts as
+        // the course level's depth says, unless they chose otherwise.
+        wireMore(advanced, 'settings', {
+          open:
+            advancedWasOpen ??
+            moreOpen('settings', courseLevelDefaults(pendingCourseLevel).depth),
+          say: announce,
+          locale: getLocale,
+        });
       }
       advanced.appendChild(sectionDiv);
     } else {
@@ -899,7 +934,7 @@ const wireSettingsFilter = () => {
         section => !section.hidden
       );
       advanced.hidden = Boolean(query) && !hits;
-      if (query && hits) advanced.open = true;
+      if (query && hits) setMore(advanced, true);
     }
 
     if (empty) empty.hidden = !query || shown > 0;

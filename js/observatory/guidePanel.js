@@ -50,6 +50,7 @@ import { EN_GUIDES } from '../i18n/en.guides.js';
 import { ES_GUIDES } from '../i18n/es.guides.js';
 import { EN_CATALOG } from '../i18n/en.catalog.js';
 import { ES_CATALOG } from '../i18n/es.catalog.js';
+import { KEY_GUIDES } from '../names.js';
 
 // The core's pure parts, for the callers that read them from here.
 export {
@@ -60,7 +61,7 @@ export {
 } from './guides/core.js';
 
 export const GUIDE_VERSION = '1.0.0';
-const STORAGE_KEY = 'gravitas_guides';
+const STORAGE_KEY = KEY_GUIDES;
 
 const el = (tag, attrs = {}, ...children) => {
   const node = document.createElement(tag);

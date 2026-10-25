@@ -109,6 +109,10 @@ const TREES = [
   // did - the precise failure the offline support exists to prevent.
   { dir: 'vendor', ext: ['.woff2', '.js'], core: true },
   { dir: 'images/scenarios', ext: ['.webp'], core: false },
+  // The investigation cards the Library, Home and the adoption pages show
+  // (D-PERF-02, change 1): optional pictures, so a first offline visit to a
+  // card list is not a grid of empty boxes.
+  { dir: 'images/investigations', ext: ['.webp'], core: false },
 ];
 
 /** Individually named files. */
@@ -132,6 +136,12 @@ const FILES = [
   { path: 'library/library.json', core: false },
   // My work: the page, to open offline what the student made on this device.
   { path: 'my-work/index.html', core: false },
+  // The authoring pages (D-PERF-02, change 1): Scenario Studio, the
+  // Investigation Composer and the course builder. Their modules are already
+  // core under js/, so these pages are all a first offline visit lacked.
+  { path: 'studio/index.html', core: false },
+  { path: 'studio/lesson/index.html', core: false },
+  { path: 'studio/course/index.html', core: false },
   // The course home: a course link opens offline once Gravitas has been
   // opened, since the pack is in the link and the page's modules are under
   // js/. Optional, as the catalog is. The builder (studio/course/) is not.
@@ -217,17 +227,201 @@ const OBSERVATORY_ONLY = new Set([
  * modules, its notebooks and its example inputs are never precached, so no
  * install downloads them and no offline reader is promised them.
  */
-const NEVER_PRECACHED = [
+export const NEVER_PRECACHED = [
   /^js\/compute\//,
   /^js\/computePage\.js$/,
   /^compute\//,
   /^compute-frame\//,
+  // The numerical routines no shipped module imports yet (Prompt 152,
+  // NUMERICS.md): no page can fetch one, so an install has no use for it, and
+  // the first-visit tier has little room. quadrature.js (flrw.js) and linalg.js
+  // (fit.js) are imported and so installed. Each of these three is deleted from
+  // this list by its first adopter, and tests/numericRoutines.test.js fails
+  // until it is: a module a page imports is installed, and its bytes are that
+  // change's to find.
+  /^js\/numeric\/(roots|interp|polyfit)\.js$/,
+  // The Worker pool (Prompt 153, WORKER_POOL.md): no shipped module imports it
+  // yet, so no page can fetch it and an install has no use for it, and the
+  // first-visit tier has 49 bytes of room (the adoption is a wait: its
+  // measured cost is in D-R10-30). Its first adopter deletes this entry, and
+  // tests/workerPoolAdoption.test.js fails until it is deleted.
+  /^js\/workers\/pool\.js$/,
+  // The data kinds (Prompt 157, DATA_PACKS.md): the image, sequence and grid
+  // contracts, the bounded local FITS reader and its Worker. The first adopter
+  // is the image marks instrument (Prompt 179), which takes the contract and
+  // the limits into the idle group "image measurement" below. The planes, grid
+  // and draft files, the FITS reader, its job and its Worker are imported by no
+  // shipped module yet, so no page can fetch one and an install has no use for
+  // them; the idle tier has no room for them (a data-budget ceiling, not one
+  // the standing size approval covers), and the first-visit tier has 18 bytes.
+  // The adopters (the sequence and grid consumers) delete their entries, and
+  // tests/dataKindsInstall.test.js fails until they do. Local import (Prompt
+  // 188) takes the FITS reader, the picture reader and the Worker through the
+  // import panel below, which is itself never precached, so these stay out
+  // too: the service worker keeps each after its first online use.
+  /^js\/dataKinds\/(fits|fitsJob|fitsWorker|raster|rasterJob|planes|grid|draft)\.js$/,
+  // The statistics kernel (Prompt 154, STATISTICS.md): no shipped module imports
+  // it yet, so no page can fetch it and an install has no use for it, and the
+  // first-visit tier has 21 bytes of room (the adoption is a wait: its measured
+  // cost is in D-R10-31). Its first adopter deletes this entry, and
+  // tests/statisticsKernel.test.js fails until it is deleted.
+  /^js\/kernels\/statistics\//,
+  // Sky coordinates for an image (Prompt 181, ASTROMETRY.md): the WCS-lite and
+  // registration kernel, the calibration record, the panel and its words,
+  // fetched when a reader opens the Observatory's sky-coordinates panel on an
+  // image. The idle tier has no room under a data-budget ceiling the standing
+  // size approval does not cover, so none of the files is installed: the
+  // service worker keeps them after their first online use, and until then the
+  // panel says it needs the network. D-R10-57.
+  /^(js\/measure\/(astrometry|calibrationRecord)\.js|js\/observatory\/imageCalibration\.js|js\/i18n\/(en|es)\.imageCalibration\.js)$/,
+  // Photometry on an image (Prompt 180, PHOTOMETRY.md): the adapters, the
+  // panel and its words, 21.4 KB gzipped as source, fetched when a reader opens
+  // the Observatory's photometry panel on an image. The idle tier has 266 B of
+  // room under a data-budget ceiling the standing size approval does not cover
+  // (Node 22, after #417) and the first-visit tier a few KB, so none of the
+  // files is installed:
+  // the service worker keeps them after their first online use, and until then
+  // the panel says it needs the network (the marks instrument beside it stays
+  // an idle-tier file). D-R10-56.
+  /^(js\/measure\/photometry\.js|js\/observatory\/imagePhotometry\.js|js\/i18n\/(en|es)\.imagePhotometry\.js)$/,
+  // Sources and the width of the stars (Prompt 183, DETECTION.md): the
+  // detection kernel, the panel and its words, fetched when a reader opens the
+  // Observatory's sources panel on an image. Same reason as the two above: the
+  // idle tier has no room under a data-budget ceiling the standing size
+  // approval does not cover, so none of the files is installed and the panel
+  // says it needs the network the first time. D-R10-60.
+  /^(js\/measure\/detect\.js|js\/observatory\/imageDetect\.js|js\/i18n\/(en|es)\.imageDetect\.js)$/,
+  // Completeness by injection (Prompt 184, INJECTION.md): the injection kernel,
+  // the panel and its words, fetched when a reader opens the Observatory's
+  // completeness panel on an image. Same reason as the three above: the idle
+  // tier has no room under a data-budget ceiling the standing size approval does
+  // not cover, so none of the files is installed and the panel says it needs the
+  // network the first time. D-R10-62.
+  /^(js\/measure\/inject\.js|js\/observatory\/imageInject\.js|js\/i18n\/(en|es)\.imageInject\.js)$/,
+  // Catalog overlays, blink and compare (Prompt 182, OVERLAYS.md): the overlay
+  // kernel, the panel and its words, fetched when a reader opens the
+  // Observatory's overlay panel on an image. Same reason as the three above:
+  // the idle tier has no room under a data-budget ceiling the standing size
+  // approval does not cover, so none of the files is installed and the panel
+  // says it needs the network the first time. D-R10-61.
+  /^(js\/measure\/overlay\.js|js\/observatory\/imageOverlay\.js|js\/i18n\/(en|es)\.imageOverlay\.js)$/,
+  // Frames to a light curve (Prompt 185, FRAME_PIPELINE.md): the pipeline over
+  // the calibration lab's reduction, the synthetic sequence it reads, the panel
+  // and its words, fetched when a reader opens the Observatory's frame panel.
+  // Not installed, for the reason of the four above: the idle tier has no room
+  // under a data-budget ceiling the standing size approval does not cover, so the
+  // panel says it needs the network the first time. D-R10-63.
+  /^(js\/measure\/frameSeries\.js|js\/measure\/frameSource\.js|js\/observatory\/imageSequence\.js|js\/i18n\/(en|es)\.imageSequence\.js)$/,
+  // Motion and parallax over time (Prompt 186, ASTROMETRY.md): the astrometric
+  // series kernel, the panel and its words, fetched when a reader opens the
+  // series disclosure inside the sky-coordinates panel. Same reason as the five
+  // above: the idle tier has no room under a data-budget ceiling the standing
+  // size approval does not cover, so none of the files is installed and the
+  // panel says it needs the network the first time. D-R10-64.
+  /^(js\/measure\/astrometric-series\.js|js\/observatory\/imageSeries\.js|js\/i18n\/(en|es)\.imageSeries\.js)$/,
+  // Orbit fitting and moving-object tracks (Prompt 187, ASTROMETRY.md): the two
+  // kernels, the panel and its words, fetched when a reader opens the orbit
+  // disclosure inside the sky-coordinates panel. Same reason as the series files
+  // above: the idle tier has no room under a ceiling the standing size approval
+  // does not cover, so none is installed and the panel says it needs the network
+  // the first time. D-R10-66.
+  /^(js\/measure\/(orbit-fit|mover-track)\.js|js\/observatory\/imageOrbit\.js|js\/i18n\/(en|es)\.imageOrbit\.js)$/,
+  // The image import (Prompt 188, IMAGE_IMPORT.md): the panel and its words,
+  // fetched when a reader first chooses a FITS image, a PNG or a JPEG in the
+  // Observatory's file box. Not installed, for the reason of the photometry
+  // files above (the idle tier has no room under a ceiling the standing size
+  // approval does not cover); until it has been fetched once the page says the
+  // import needs the network. D-R10-59.
+  /^(js\/observatory\/imageImport\.js|js\/i18n\/(en|es)\.imageImport\.js)$/,
+  // The image packs (Prompt 189, IMAGE_PACKS.md): the four records, the loader
+  // that checks and decodes their frames files, fetched when a reader opens
+  // one of the four images in the Observatory. The frames files (frames/) are
+  // not in any list: they are pictures, fetched at run time and kept by the
+  // service worker after their first online use. Nothing here is installed, so
+  // no precache tier grows. D-R10-65.
+  /^(js\/observatory\/imagePacks\.js|js\/data\/observations\/(tessHd209458S56Frame|sdoHmiContinuum20240510|galileoMoon19921207|hiriseCerberusFossae)\.js)$/,
+  // The validation suite's groups and harness: fetched when the suite runs,
+  // like physicsChecks.js itself (ON_DEMAND_ONLY below).
+  /^js\/validation\/(groups\/|harness\.js$)/,
 ];
 
 const ON_DEMAND_ONLY = new Set([
   'js/validation/physicsChecks.js',
   'js/validation/domShim.js',
 ]);
+
+/**
+ * The idle tier (D-PERF-02, change 2; Prompt 147): what is installed after the
+ * worker has activated and the page has gone idle, not during the install.
+ *
+ * The first-visit install is what a reader waits for on a school connection and
+ * what decides whether the version activates at all, so it holds only what the
+ * shell, the Sandbox and an ordinary lesson need. These are the surfaces a
+ * reader reaches after that: the instructor documents, the 3-D view and lab,
+ * the mission lab, the Sky Lab, the Library and the data tables the guided
+ * investigations open. They are installed in the background, on the next open
+ * if this one is cut short, and a file that cannot be fetched costs that
+ * surface its offline copy and nothing else. The cost is stated on the page
+ * (OFFLINE_AND_LOW_END.md): until the idle tier finishes, those surfaces need
+ * the network, which is the trade D-PERF-02 accepted for a smaller install.
+ *
+ * Idle wins over a core walk or an `offline: core` default for the same file,
+ * because it is the later and more specific decision; a capability package
+ * that declares one of these `core` is refused, so a package cannot quietly
+ * pull its files back into the install.
+ */
+export const IDLE_TIER = [
+  [
+    'instructor modules',
+    // The review page's own module (Prompt 172, D-R10-38): an instructor
+    // surface like the documents, read by no first visit. The class summary
+    // (Prompt 173) is js/instructor*.js and its words are one catalog fragment
+    // per language, which only that page reads.
+    /^(js\/authoring\/instructorSchema\.js|js\/instructor[A-Za-z]*\.js|js\/submissionReview\.js|js\/data\/instructor[A-Za-z.]*\.js|js\/i18n\/(en|es)\.classSummary\.js)$/,
+  ],
+  ['three.js', /^vendor\/three\//],
+  [
+    '3-D lab',
+    /^(js\/lab3d\/|js\/lab3d[A-Za-z]*\.js$|js\/forward\/system3d\.js$|js\/i18n\/(en|es)\.lab3d[A-Za-z]*\.js$|3d\/index\.html$)/,
+  ],
+  [
+    'mission lab',
+    /^(js\/mission\/|js\/mission[A-Za-z]*\.js$|js\/i18n\/(en|es)\.mission[A-Za-z]*\.js$|mission\/lab\/index\.html$|js\/data\/ephemeris\/)/,
+  ],
+  [
+    'Sky Lab',
+    /^(js\/kernels\/sky\/|js\/sky\/|js\/sky[A-Za-z]*\.js$|js\/data\/sky\/|sky\/)/,
+  ],
+  ['Library', /^(js\/library\/|js\/libraryPage\.js$|library\/)/],
+  [
+    'activity builder',
+    // The instructor's half of an assignment (Prompt 175): the builder, the
+    // adaptation it checks and the student-side report of what changed under
+    // an activity, with their words. Reached from ?assign=<lesson> and from an
+    // adapted or out-of-date link, and imported only then; each import is
+    // already guarded (a reload prompt for the builder, silence for the
+    // report), so until the idle install finishes an offline first visit
+    // builds and opens activities as before and without these.
+    /^(js\/assignments\/(assignmentBuilder|adapt|adaptText|adapted)\.js|js\/i18n\/(en|es)\.adapt\.js)$/,
+  ],
+  [
+    // The image marks instrument (Prompt 179, IMAGE_MEASUREMENT.md): loaded when
+    // a reader opens the Observatory's marks panel on an image, so no first
+    // visit needs it. Idle wins over the core walk of js/, which would
+    // otherwise carry these files in the install. The kind's other three
+    // files (planes, grid, draft) are not here: nothing imports them yet.
+    'image measurement',
+    /^(js\/dataKinds\/(contract|limits)\.js|js\/measure\/(marks|refine|scale|imageRecord)\.js|js\/observatory\/imageMarks\.js|js\/i18n\/(en|es)\.imageMarks\.js)$/,
+  ],
+  [
+    'data tables',
+    /^((cosmology|gaia|variables)\/.*\.json$|js\/data\/(observations|radiation)\/)/,
+  ],
+];
+
+/** @param {string} p - Repo-relative path @returns {?string} Its idle group, or null */
+export const idleGroupOf = p =>
+  IDLE_TIER.find(([, re]) => re.test(p))?.[0] ?? null;
 
 /**
  * Paths kept out of the precache. Matched against the repo-relative path.
@@ -318,6 +512,16 @@ function applyCapabilityOffline(entries) {
       );
       continue;
     }
+    if (offline === 'core' && idleGroupOf(p)) {
+      problems.push(
+        `${p} is declared core but belongs to the idle tier (${idleGroupOf(p)})`
+      );
+      continue;
+    }
+    if (offline === 'idle' && !idleGroupOf(p)) {
+      problems.push(`${p} is declared idle but matches no idle tier rule`);
+      continue;
+    }
     if (offline === 'none') {
       byPath.delete(p);
     } else if (byPath.has(p)) {
@@ -339,21 +543,21 @@ function applyCapabilityOffline(entries) {
 
 /**
  * The three lists a reader's browser caches, as the worker will receive them.
- * @returns {Promise<{core: string[], optional: string[], localeWarm: Map<string, string[]>}>}
+ * @returns {Promise<{core: string[], optional: string[], idle: string[], localeWarm: Map<string, string[]>}>}
  */
 export async function precacheLists() {
-  const { core, optional } = await buildManifest();
+  const { core, optional, idle } = await buildManifest();
   const onDisk = await shadowsOnDisk();
   const localeWarm = new Map(
     SHADOW_LOCALES.map(id => [id, onDisk.get(id) || []])
   );
-  return { core, optional, localeWarm };
+  return { core, optional, idle, localeWarm };
 }
 
 /**
  * The precache list and the version its contents imply.
  *
- * @returns {Promise<{paths: string[], version: string, bytes: number}>} Manifest
+ * @returns {Promise<{paths: string[], core: string[], optional: string[], idle: string[], version: string, bytes: number}>} Manifest
  */
 export async function buildManifest() {
   const collected = FILES.map(f => ({ path: f.path, core: f.core }));
@@ -374,8 +578,13 @@ export async function buildManifest() {
     )
   ).sort((a, b) => a.path.localeCompare(b.path));
   const paths = kept.map(f => f.path);
-  const core = kept.filter(f => f.core).map(f => f.path);
-  const optional = kept.filter(f => !f.core).map(f => f.path);
+  const idle = kept.filter(f => idleGroupOf(f.path)).map(f => f.path);
+  const core = kept
+    .filter(f => f.core && !idleGroupOf(f.path))
+    .map(f => f.path);
+  const optional = kept
+    .filter(f => !f.core && !idleGroupOf(f.path))
+    .map(f => f.path);
 
   // The version is a hash of what is in the files, not of their names or of
   // the clock. Two builds of an unchanged tree produce the same version, so a
@@ -391,7 +600,7 @@ export async function buildManifest() {
   }
   const version = digest.digest('hex').slice(0, 12);
 
-  return { paths, core, optional, version, bytes };
+  return { paths, core, optional, idle, version, bytes };
 }
 
 /**
@@ -402,7 +611,7 @@ export async function buildManifest() {
  * @returns {string} File contents
  */
 export function renderManifest(
-  { paths, core, optional, version, bytes },
+  { paths, core, optional, idle = [], version, bytes },
   localeWarm
 ) {
   // A Map keyed by locale id. Accepts the older array-of-Spanish-paths shape
@@ -425,13 +634,17 @@ export function renderManifest(
 // it changes when they do and only when they do - which is what makes the old
 // cache safe to delete on activate and safe to keep otherwise.
 //
-// Split two ways, and the split is what install enforces. The ${core.length} core
+// Split three ways, and the split is what install enforces. The ${core.length} core
 // entries are the shell, the modules, the stylesheets and the self-hosted
 // fonts and libraries: if any one of them cannot be fetched the install fails
 // and this version never activates, because a half-cached build is the mixed
 // revision the whole arrangement exists to prevent. The ${optional.length} optional
-// entries are pictures; a missing one is reported and does not cost the reader
-// the version.
+// entries are pictures and small pages; a missing one is reported and does not
+// cost the reader the version. The ${idle.length} idle entries are installed after
+// activation, on idle, by a message from the page (D-PERF-02, change 2): the
+// instructor modules, three.js, the 3-D lab, the mission lab, the Sky Lab, the
+// Library and the data tables. A missing one costs that surface its offline
+// copy, and the next open fetches only what is missing.
 self.__GRAVITAS_CACHE_VERSION = 'gravitas-${version}';
 self.__GRAVITAS_PRECACHE_BYTES = ${bytes};
 self.__GRAVITAS_PRECACHE_CORE = [
@@ -439,6 +652,9 @@ ${core.map(p => `  './${p}',`).join('\n')}
 ];
 self.__GRAVITAS_PRECACHE_OPTIONAL = [
 ${optional.map(p => `  './${p}',`).join('\n')}
+];
+self.__GRAVITAS_PRECACHE_IDLE = [
+${idle.map(p => `  './${p}',`).join('\n')}
 ];
 // The union, in one sorted list, for the fetch handler's "is this precached?"
 // question and for the diagnostics readout.

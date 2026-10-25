@@ -84,7 +84,9 @@
         "system-parameters",
         "rotation-curve",
         "image",
-        "catalog"
+        "catalog",
+        "image-sequence",
+        "grid"
       ]
     },
     "origin": {
@@ -281,6 +283,10 @@
         },
         "bitsSource": {
           "type": "string"
+        },
+        "sidecar": {
+          "description": "The pixel contract of this image, a gravitas.image document (sdk/schemas/image-1.schema.json) of the same size. Optional: a pack without it is display-only for photometry and astrometry.",
+          "type": "object"
         }
       }
     },
@@ -366,6 +372,7 @@
       "enum": [
         "core",
         "optional",
+        "idle",
         "none"
       ]
     },
@@ -387,6 +394,14 @@
           "type": "string"
         }
       }
+    },
+    "sequence": {
+      "description": "For dataType image-sequence: the gravitas.image-sequence document (sdk/schemas/image-sequence-1.schema.json).",
+      "type": "object"
+    },
+    "grid": {
+      "description": "For dataType grid: the gravitas.grid document (sdk/schemas/grid-1.schema.json).",
+      "type": "object"
     }
   }
 }

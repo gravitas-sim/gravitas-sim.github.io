@@ -1,0 +1,47 @@
+{
+  "mode": "exact",
+  "modeNote": "THE SWITCH. \"exact\" is today's behavior and the policy does nothing. \"declared\" turns the policy on: no slice raises any ceiling (it finds a saving or stops), the deferred ceiling is core plus the allowance Carl has granted, and growth is recorded in tools/growth-ledger.json. Only Carl changes this line, in writing, in the same pull request that makes tools/bundle-budget.mjs read its deferred limit from the policy (the check fails in \"declared\" mode until the two agree). Adopting it lowers the deferred ceiling from 2044.4 KB to the core, 1985.8 KB, and growth then needs a granted allowance.",
+  "rules": [
+    "In \"declared\" mode no slice raises a ceiling. A slice that needs room finds a saving or stops.",
+    "A re-baseline of the allowance is a ceiling increase whether or not students get a faster product: it is a reviewed pull request labelled \"ceiling increase\", with the ledger diff, approved by Carl at a checkpoint.",
+    "Workflow ceilings (the front door, the sandbox, each lesson route's first-usable graph, the Observatory with one observation open, the initial download, the deferred core) never move except by Carl's explicit decision. The re-baseline command cannot touch them.",
+    "The allowance is for lazy families and packs only, with a per-release cap and a cumulative cap.",
+    "In \"exact\" mode the standing approval of 2026-10-10 in CLAUDE.md applies (an exact measured overrun, rounded up to 0.1 KB, with a register row), until Carl retires it there.",
+    "Module line ceilings are unchanged (D-DECOMP-22) and are not part of this policy.",
+    "The gate's figures are CI's: the Node major in .nvmrc and the zlib in tools/budget-environment.json. A figure from another environment is advisory and printed as such; there is no tolerance."
+  ],
+  "workflowCeilings": {
+    "note": "PROPOSAL. Each value is today's ceiling, unchanged: classifying them as workflow ceilings moves nothing.",
+    "initialKb": 830.0,
+    "deferredCoreKb": 1985.8,
+    "routes": {
+      "front-door": { "kb": 2121.9, "requests": 107 },
+      "sandbox": { "kb": 2121.9, "requests": 107 },
+      "kepler": { "kb": 3342.9, "requests": 146 },
+      "transit": { "kb": 3354.9, "requests": 146 },
+      "power-law": { "kb": 3320.2, "requests": 146 },
+      "largest-lesson": { "kb": 3452.4, "requests": 148 },
+      "observatory": "the Observatory with one observation open: read from tools/route-budgets.json"
+    }
+  },
+  "allowance": {
+    "note": "PROPOSAL. deferredCoreKb + capCumulativeKb is exactly today's deferred ceiling (2044.4 KB), so adopting the policy raises nothing; the 58.6 KB is what Prompt 131 and 132 freed. Nothing is granted until Carl grants it per release.",
+    "capPerReleaseKb": 20.0,
+    "capCumulativeKb": 58.6,
+    "grantedKb": 0.0
+  },
+  "allocation": {
+    "note": "The table a checkpoint (160) fills. The values below are what is known now; the tranche rows are for 160 to complete, not decisions.",
+    "source": {
+      "netSavingFrom132": "60,033 B of deferred JavaScript between the R9 checkpoint and v3 314ceb0b (PLOT_COMPONENT.md, Stage 4); Chart.js itself was 60,022 B gzipped",
+      "deferredNowBytes": 2033427,
+      "deferredCeilingKb": 2044.4,
+      "engineRequestLedger": "D-R7-02: the authorized remainder per route is read from tools/route-budgets.json against tools/route-budget.mjs at the checkpoint",
+      "foundationsMeasuredCosts": "pending: Prompts 146 to 159 each add a measured cost; 160 reads them"
+    },
+    "tranches": [
+      { "tranche": "T1A", "mayDrawKb": null, "drawnKb": 0 },
+      { "tranche": "T1B", "mayDrawKb": null, "drawnKb": 0 }
+    ]
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "note": "Control counts of the default views Prompt 167 folded, held by e2e/progressiveDisclosure.spec.js. A control is a link, button, form control or disclosure summary that is rendered, not hidden, not inert and not inside a closed disclosure (or a folded settings section), counted in the whole panel whatever the viewport. `before` is v3 at d3355e4f, measured in Chromium on macOS on 2026-10-21; `ceiling` is what the default view may show now. A count that rises fails; a new control goes behind the disclosure unless its decision-register row says why not, and never when the task rule applies (DESIGN_SYSTEM.md, More).",
+  "views": {
+    "lesson-panel": {
+      "what": "The lesson panel on a reading step with no instrument (The Missing Mass, step two-ways-to-weigh-a)",
+      "scope": ["#investigationPanel"],
+      "before": 13,
+      "ceiling": 10
+    },
+    "instrument-reading": {
+      "what": "The lesson panel and the docked lens instrument on a reading step (A Lens Passing By, a-star-brightens): seven sliders, four presets",
+      "scope": ["#investigationPanel", "#investigationTool"],
+      "before": 26,
+      "ceiling": 14
+    },
+    "instrument-listening": {
+      "what": "The lesson panel and the docked gravitational-wave instrument on a reading step (Listening to Spacetime, three-things-called-a-wave): three sliders, three actions",
+      "scope": ["#investigationPanel", "#investigationTool"],
+      "before": 21,
+      "ceiling": 18
+    },
+    "instrument-measuring": {
+      "what": "The lesson panel and the docked lens instrument on a measuring step (A Lens Passing By, the-peak): the task rule keeps every slider and preset, so only the panel folds",
+      "scope": ["#investigationPanel", "#investigationTool"],
+      "before": 28,
+      "ceiling": 25
+    },
+    "settings-dialog": {
+      "what": "The Settings dialog as it opens at the introductory course level",
+      "scope": ["#settingsPanel"],
+      "before": 111,
+      "ceiling": 78
+    }
+  }
+}

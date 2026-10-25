@@ -23,8 +23,9 @@
 // =============================================================================
 
 import { parseRange, parseVersion, satisfies } from './semver.js';
+import { ID_CAPABILITY_PACKAGE } from '../names.js';
 
-export const FORMAT = 'gravitas.capability-package';
+export const FORMAT = ID_CAPABILITY_PACKAGE;
 export const FORMAT_VERSION = 1;
 /** The platform API this build of Gravitas implements. */
 export const PLATFORM_API = '1.0.0';
@@ -71,7 +72,7 @@ export const USES = ['scenarios', 'widgets', 'dataPacks', 'models'];
 const CODE_FIELDS = new Set(['entry', 'pick', 'ready', 'services']);
 const ASSET_ROLES = ['code', 'data', 'provenance', 'translation', 'image'];
 /** A file's offline class: needed, worth having, warmed per locale, never. */
-const OFFLINE = ['core', 'optional', 'locale', 'none'];
+const OFFLINE = ['core', 'optional', 'idle', 'locale', 'none'];
 const POLICIES = ['precache', 'on-demand', 'online-only'];
 const CHECK_REF = /^(registry|jest|e2e):[\w./-]+$/;
 

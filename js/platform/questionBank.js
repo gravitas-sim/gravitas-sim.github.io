@@ -15,6 +15,7 @@
 
 import { RELATIONS, evaluateRelation } from './relations.js';
 import { knownKeys } from './checker.js';
+import { ID_QUESTION_BANK } from '../names.js';
 
 // The same lists as js/answerFeedback.js, written out here because this module
 // serves routes that do not otherwise load the lesson engine's grader, and a
@@ -30,10 +31,54 @@ export const FEEDBACK_CLASSES = Object.freeze([
 ]);
 export const HINT_LIMIT = 3;
 
-export const BANK_FORMAT = 'gravitas.question-bank';
-export const BANK_FORMAT_VERSION = 1;
+export const BANK_FORMAT = ID_QUESTION_BANK;
+/**
+ * The newest version this reader reads. /2 (Prompt 176, the 3.0.0 format
+ * boundary) is /1 plus a criterion's `kind`, `depth` and `weight` (Prompt 172),
+ * which a 2.0.0 reader refuses as an unknown field; a bank, or an
+ * investigation pack, that sets none of them is still written as /1
+ * (needsCriterionSemantics), so every file that opened before opens now.
+ */
+export const BANK_FORMAT_VERSION = 2;
+/** The version of a bank, or a pack, that needs nothing /2 adds. */
+export const BANK_BASE_VERSION = 1;
+
+/**
+ * Whether any of these lists of items or steps has a written answer whose
+ * criteria say what only /2 reads: `kind`, `depth` or `weight`.
+ * @param {Array<?Array<object>>} lists - e.g. [pack.steps, pack.bank?.items]
+ * @returns {boolean}
+ */
+export const needsCriterionSemantics = lists =>
+  lists.some(
+    items =>
+      Array.isArray(items) &&
+      items.some(
+        it =>
+          Array.isArray(it?.rubricCriteria) &&
+          it.rubricCriteria.some(
+            c =>
+              c?.kind !== undefined ||
+              c?.depth !== undefined ||
+              c?.weight !== undefined
+          )
+      )
+  );
+
+/** A bank's lowest version: /2 only for criteria /1 cannot say. */
+export const bankVersion = items =>
+  needsCriterionSemantics([items]) ? BANK_FORMAT_VERSION : BANK_BASE_VERSION;
 
 export const ITEM_KINDS = Object.freeze(['choice', 'numeric', 'short']);
+/** What a criterion claims (Prompt 172: js/instructorRubric.js, held equal by a test). */
+export const CRITERION_KINDS = Object.freeze([
+  'completion',
+  'correctness',
+  'reasoning',
+  'uncertainty',
+]);
+const CRITERION_DEPTHS = Object.freeze(['core', 'quantitative', 'advanced']);
+export const MAX_CRITERION_WEIGHT = 10;
 export const ATTEMPT_RULES = Object.freeze(['first', 'best']);
 export const MAX_ITEMS = 200;
 export const MAX_POINTS = 10;
@@ -92,6 +137,7 @@ export function checkUnitName(unit, path, { need, api }) {
   );
 }
 
+const CRITERION_FIELDS = ['name', 'levels', 'kind', 'depth', 'weight'];
 /** A written answer's rubric criteria (Prompt 79, js/rubric.js): the shape only. */
 function checkCriteria(list, path, { need, text }) {
   if (list === undefined) return;
@@ -104,9 +150,30 @@ function checkCriteria(list, path, { need, text }) {
     then(v);
   };
   (ok ? list : []).forEach((c, i) =>
-    walk(c, `${path}[${i}]`, ['name', 'levels'], () => {
+    walk(c, `${path}[${i}]`, CRITERION_FIELDS, () => {
       const at = `${path}[${i}]`;
       text(c.name, `${at}.name`, true);
+      // Written only when set; a 2.0.0 reader refuses a criterion with one.
+      for (const [field, list] of [
+        ['kind', CRITERION_KINDS],
+        ['depth', CRITERION_DEPTHS],
+      ])
+        need(
+          c[field] === undefined || list.includes(c[field]),
+          `${at}.${field}`,
+          'kind',
+          `one of ${list.join(', ')}`,
+          { options: list.join(', ') }
+        );
+      need(
+        c.weight === undefined ||
+          (typeof c.weight === 'number' &&
+            c.weight > 0 &&
+            c.weight <= MAX_CRITERION_WEIGHT),
+        `${at}.weight`,
+        'number',
+        `a number above 0 and up to ${MAX_CRITERION_WEIGHT}`
+      );
       const lv = Array.isArray(c.levels) ? c.levels : [];
       need(
         lv.length > 1 && lv.length < 6,
@@ -683,10 +750,11 @@ export function validateQuestionBankWith(b, api, makeChecker) {
     `must be "${BANK_FORMAT}"`
   );
   need(
-    b.formatVersion === BANK_FORMAT_VERSION,
+    b.formatVersion === BANK_BASE_VERSION ||
+      b.formatVersion === BANK_FORMAT_VERSION,
     'formatVersion',
     'formatVersion',
-    `must be ${BANK_FORMAT_VERSION}`
+    `must be ${BANK_BASE_VERSION} or ${BANK_FORMAT_VERSION}`
   );
   need(
     typeof b.id === 'string' && PUBLIC_ID.test(b.id),

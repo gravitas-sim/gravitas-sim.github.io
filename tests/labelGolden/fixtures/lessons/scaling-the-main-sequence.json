@@ -1,0 +1,97 @@
+{
+ "id": "scaling-the-main-sequence",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.the-prediction.fields.0.unit",""],
+    ["steps.the-prediction.fields.1.unit",""],
+    ["steps.the-prediction.fields.2.unit","dex"],
+    ["steps.the-ratio-by-hand.unit",""],
+    ["steps.low-mass-stars.fields.0.unit",""],
+    ["steps.low-mass-stars.fields.1.unit",""],
+    ["steps.the-wrong-law.fields.0.unit",""],
+    ["steps.the-wrong-law.fields.1.unit","dex"],
+    ["steps.radius-scaling.fields.0.unit",""],
+    ["steps.radius-scaling.fields.1.unit",""],
+    ["steps.the-effective-exponent.unit",""],
+    ["steps.lifetimes.fields.0.unit",""],
+    ["steps.lifetimes.fields.1.unit",""],
+    ["steps.the-suns-clock.fields.0.unit","Gyr"],
+    ["steps.the-suns-clock.fields.1.unit","Gyr"]
+   ],
+   "numbered": [
+    ["steps.the-prediction.fields.0.hint","3"],
+    ["steps.the-prediction.fields.1.label","Fitted exponent, 2 to 40 M☉"],
+    ["steps.the-prediction.fields.1.hint","3.16"],
+    ["steps.the-prediction.fields.2.label","Scatter, 2 to 40 M☉"],
+    ["steps.the-prediction.fields.2.hint","0.143"],
+    ["steps.low-mass-stars.fields.0.hint","5.46"],
+    ["steps.low-mass-stars.fields.1.label","Fitted exponent, 0.5 to 2 M☉"],
+    ["steps.low-mass-stars.fields.1.hint","4.43"],
+    ["steps.the-wrong-law.fields.0.hint","5.16"],
+    ["steps.the-wrong-law.fields.1.label","Scatter, 2 to 40 M☉"],
+    ["steps.the-wrong-law.fields.1.hint","0.92"],
+    ["steps.radius-scaling.fields.0.hint","0.789"],
+    ["steps.radius-scaling.fields.1.label","Fitted exponent, 2 to 40 M☉"],
+    ["steps.radius-scaling.fields.1.hint","0.546"],
+    ["steps.lifetimes.fields.0.hint","-2"],
+    ["steps.lifetimes.fields.1.label","Fitted exponent, 2 to 40 M☉"],
+    ["steps.lifetimes.fields.1.hint","-1.82"],
+    ["steps.the-suns-clock.fields.0.hint","9.88"],
+    ["steps.the-suns-clock.fields.1.hint","13.9"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.the-prediction.fields.1.label","Exponente ajustado, 2 a 40 M☉"],
+    ["steps.the-prediction.fields.2.label","Dispersión, 2 a 40 M☉"],
+    ["steps.low-mass-stars.fields.1.label","Exponente ajustado, 0,5 a 2 M☉"],
+    ["steps.the-wrong-law.fields.1.label","Dispersión, 2 a 40 M☉"],
+    ["steps.radius-scaling.fields.1.label","Exponente ajustado, 2 a 40 M☉"],
+    ["steps.lifetimes.fields.1.label","Exponente ajustado, 2 a 40 M☉"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "the-ratio-by-hand",
+    "answer": "5.29",
+    "tolerance": "0.08",
+    "unit": ""
+   },
+   {
+    "sid": "the-effective-exponent",
+    "answer": "2.4",
+    "tolerance": "0.04",
+    "unit": ""
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "the-prediction": {
+    "validate": {"calls":242,"distinct":2,"digest":"b4934e2b10956a10","samples":[null,{"level":"error","message":"Use the first preset (“Luminosity of massive stars”), then read “Exponent the scaling predicts”, “Exponent fitted over 2 to 40 solar masses” and the scatter row for the same range."}]}
+   },
+   "low-mass-stars": {
+    "validate": {"calls":232,"distinct":2,"digest":"c7c2fa2b01a5d47a","samples":[null,{"level":"error","message":"Use the second preset (“Luminosity of low-mass stars”), then read “Exponent the scaling predicts” and “Exponent fitted over 0.5 to 2 solar masses”."}]}
+   },
+   "the-wrong-law": {
+    "validate": {"calls":232,"distinct":2,"digest":"51178c54eff15940","samples":[null,{"level":"error","message":"Choose luminosity, “Kramers” for the opacity law and the CNO cycle for the energy source, then read the predicted exponent and the scatter for 2 to 40 solar masses."}]}
+   },
+   "radius-scaling": {
+    "validate": {"calls":232,"distinct":2,"digest":"c9e1e6484859e402","samples":[null,{"level":"error","message":"Use the third preset (“Radius of massive stars”), then read the predicted exponent and the exponent fitted over 2 to 40 solar masses."}]}
+   },
+   "lifetimes": {
+    "validate": {"calls":232,"distinct":2,"digest":"434408319797c562","samples":[null,{"level":"error","message":"Use the fourth preset (“Lifetimes”), then read the predicted exponent and the exponent fitted over 2 to 40 solar masses (both negative)."}]}
+   },
+   "the-suns-clock": {
+    "validate": {"calls":232,"distinct":2,"digest":"680d17fa0b851190","samples":[null,{"level":"error","message":"Select the 1 solar-mass zero-age model, then read “Its main-sequence life (MIST)” and “Nuclear timescale”."}]}
+   }
+  },
+  "es": "same"
+ }
+}

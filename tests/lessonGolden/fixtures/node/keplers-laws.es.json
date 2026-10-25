@@ -1,0 +1,1230 @@
+{
+ "id": "keplers-laws",
+ "locale": "es",
+ "title": "Las leyes de Kepler",
+ "steps": 28,
+ "depths": [
+  [
+   "core",
+   23
+  ],
+  [
+   "quantitative",
+   26
+  ],
+  [
+   "advanced",
+   28
+  ]
+ ],
+ "grading": [
+  {
+   "sid": "where-is-the-star",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "what-sits-at-the-other",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "where-does-it-move-fastest",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     true,
+     "correct"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "why-the-speed-changes",
+   "type": "question",
+   "kind": "short",
+   "grades": [
+    [
+     "ungraded",
+     null
+    ]
+   ]
+  },
+  {
+   "sid": "use-the-law",
+   "type": "question",
+   "kind": "numeric",
+   "tolerance": 0.4,
+   "grades": [
+    [
+     "8",
+     true,
+     "correct",
+     8,
+     null,
+     false,
+     null
+    ],
+    [
+     "8,2",
+     true,
+     "correct",
+     8.2,
+     null,
+     false,
+     null
+    ],
+    [
+     "9,2",
+     false,
+     "incorrect",
+     9.2,
+     null,
+     false,
+     null
+    ],
+    [
+     "8 years",
+     true,
+     "correct",
+     8,
+     "years",
+     false,
+     null
+    ],
+    [
+     "not a number",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "notANumber"
+    ],
+    [
+     "",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "blank"
+    ]
+   ]
+  },
+  {
+   "sid": "predict-with-an-error-bar",
+   "type": "question",
+   "kind": "numeric",
+   "tolerance": 0.4,
+   "grades": [
+    [
+     "8",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "needsUncertainty"
+    ],
+    [
+     "8,2",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "needsUncertainty"
+    ],
+    [
+     "9,2",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "needsUncertainty"
+    ],
+    [
+     "8 years",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "needsUncertainty"
+    ],
+    [
+     "not a number",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "notANumber"
+    ],
+    [
+     "",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "blank"
+    ]
+   ]
+  },
+  {
+   "sid": "weigh-the-host-star",
+   "type": "question",
+   "kind": "numeric",
+   "tolerance": 0.06,
+   "grades": [
+    [
+     "1,15",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "needsUncertainty"
+    ],
+    [
+     "1,18",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "needsUncertainty"
+    ],
+    [
+     "1,33",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "needsUncertainty"
+    ],
+    [
+     "1,15 M☉",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "needsUncertainty"
+    ],
+    [
+     "not a number",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "notANumber"
+    ],
+    [
+     "",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "blank"
+    ]
+   ]
+  },
+  {
+   "sid": "two-methods-one-period",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "what-the-constant-depends-on",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "weighing-another-star",
+   "type": "question",
+   "kind": "numeric",
+   "tolerance": 0.12,
+   "grades": [
+    [
+     "0,91",
+     true,
+     "correct",
+     0.91,
+     null,
+     false,
+     null
+    ],
+    [
+     "0,97",
+     true,
+     "correct",
+     0.97,
+     null,
+     false,
+     null
+    ],
+    [
+     "1,27",
+     false,
+     "incorrect",
+     1.27,
+     null,
+     false,
+     null
+    ],
+    [
+     "0,91 M_sun",
+     true,
+     "correct",
+     0.91,
+     "M_sun",
+     false,
+     null
+    ],
+    [
+     "not a number",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "notANumber"
+    ],
+    [
+     "",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "blank"
+    ]
+   ]
+  },
+  {
+   "sid": "where-kepler-s-version-breaks",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  }
+ ],
+ "progress": {
+  "record": {
+   "schema": 2,
+   "lesson": "keplers-laws",
+   "stepSid": "where-this-leaves-you",
+   "responses": {
+    "keplers-laws:where-is-the-star": 1,
+    "keplers-laws:what-sits-at-the-other": 2,
+    "keplers-laws:where-does-it-move-fastest": 0,
+    "keplers-laws:why-the-speed-changes": "A fixed sentence for the golden.",
+    "keplers-laws:use-the-law": "8",
+    "keplers-laws:use-the-law:locale": "es",
+    "keplers-laws:predict-with-an-error-bar": "8",
+    "keplers-laws:predict-with-an-error-bar:locale": "es",
+    "keplers-laws:weigh-the-host-star": "1,15",
+    "keplers-laws:weigh-the-host-star:locale": "es",
+    "keplers-laws:two-methods-one-period": 1,
+    "keplers-laws:what-the-constant-depends-on": 1,
+    "keplers-laws:weighing-another-star": "0,91",
+    "keplers-laws:weighing-another-star:locale": "es",
+    "keplers-laws:where-kepler-s-version-breaks": 2
+   },
+   "attempts": {
+    "keplers-laws:where-is-the-star": 1,
+    "keplers-laws:what-sits-at-the-other": 1,
+    "keplers-laws:where-does-it-move-fastest": 1,
+    "keplers-laws:use-the-law": 1,
+    "keplers-laws:predict-with-an-error-bar": 1,
+    "keplers-laws:weigh-the-host-star": 1,
+    "keplers-laws:two-methods-one-period": 1,
+    "keplers-laws:what-the-constant-depends-on": 1,
+    "keplers-laws:weighing-another-star": 1,
+    "keplers-laws:where-kepler-s-version-breaks": 1
+   },
+   "visited": [
+    "eight-minutes-of-arc",
+    "what-you-are-looking-at",
+    "where-is-the-star",
+    "the-first-law-and-the",
+    "change-the-shape",
+    "what-sits-at-the-other",
+    "measure-the-two-orbits",
+    "where-does-it-move-fastest",
+    "watch-it-happen",
+    "equal-areas-however-you-slice",
+    "fast-and-slow-in-numbers",
+    "why-the-speed-changes",
+    "kepler-s-third-law",
+    "measure-four-planets",
+    "work-the-law-out-step",
+    "use-the-law",
+    "repeat-the-timing",
+    "weighted-fit",
+    "predict-with-an-error-bar",
+    "weigh-the-host-star",
+    "two-methods-one-period",
+    "what-the-constant-depends-on",
+    "what-newton-added",
+    "the-same-laws-forty-light",
+    "weigh-trappist-1-yourself",
+    "weighing-another-star",
+    "where-kepler-s-version-breaks",
+    "where-this-leaves-you"
+   ],
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "depth": "advanced",
+   "deepest": "advanced",
+   "spent": 600
+  },
+  "read": {
+   "responses": {
+    "keplers-laws:where-is-the-star": 1,
+    "keplers-laws:what-sits-at-the-other": 2,
+    "keplers-laws:where-does-it-move-fastest": 0,
+    "keplers-laws:why-the-speed-changes": "A fixed sentence for the golden.",
+    "keplers-laws:use-the-law": "8",
+    "keplers-laws:use-the-law:locale": "es",
+    "keplers-laws:predict-with-an-error-bar": "8",
+    "keplers-laws:predict-with-an-error-bar:locale": "es",
+    "keplers-laws:weigh-the-host-star": "1,15",
+    "keplers-laws:weigh-the-host-star:locale": "es",
+    "keplers-laws:two-methods-one-period": 1,
+    "keplers-laws:what-the-constant-depends-on": 1,
+    "keplers-laws:weighing-another-star": "0,91",
+    "keplers-laws:weighing-another-star:locale": "es",
+    "keplers-laws:where-kepler-s-version-breaks": 2
+   },
+   "attempts": {
+    "keplers-laws:where-is-the-star": 1,
+    "keplers-laws:what-sits-at-the-other": 1,
+    "keplers-laws:where-does-it-move-fastest": 1,
+    "keplers-laws:use-the-law": 1,
+    "keplers-laws:predict-with-an-error-bar": 1,
+    "keplers-laws:weigh-the-host-star": 1,
+    "keplers-laws:two-methods-one-period": 1,
+    "keplers-laws:what-the-constant-depends-on": 1,
+    "keplers-laws:weighing-another-star": 1,
+    "keplers-laws:where-kepler-s-version-breaks": 1
+   },
+   "visited": [
+    "change-the-shape",
+    "eight-minutes-of-arc",
+    "equal-areas-however-you-slice",
+    "fast-and-slow-in-numbers",
+    "kepler-s-third-law",
+    "measure-four-planets",
+    "measure-the-two-orbits",
+    "predict-with-an-error-bar",
+    "repeat-the-timing",
+    "the-first-law-and-the",
+    "the-same-laws-forty-light",
+    "two-methods-one-period",
+    "use-the-law",
+    "watch-it-happen",
+    "weigh-the-host-star",
+    "weigh-trappist-1-yourself",
+    "weighing-another-star",
+    "weighted-fit",
+    "what-newton-added",
+    "what-sits-at-the-other",
+    "what-the-constant-depends-on",
+    "what-you-are-looking-at",
+    "where-does-it-move-fastest",
+    "where-is-the-star",
+    "where-kepler-s-version-breaks",
+    "where-this-leaves-you",
+    "why-the-speed-changes",
+    "work-the-law-out-step"
+   ],
+   "stepSid": "where-this-leaves-you",
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "depth": "advanced",
+   "deepest": "advanced",
+   "spent": 600,
+   "schema": 2,
+   "migrated": false,
+   "notes": []
+  }
+ },
+ "backup": {
+  "backup": {
+   "kind": "gravitas.investigation.progress",
+   "version": 2,
+   "savedAt": "2026-01-02T04:05:06.000Z",
+   "lesson": {
+    "id": "keplers-laws",
+    "title": "Las leyes de Kepler",
+    "stepCount": 28
+   },
+   "student": null,
+   "progress": {
+    "stepSid": "where-this-leaves-you",
+    "startedAt": "2026-01-02T03:04:05.000Z",
+    "visited": [
+     "eight-minutes-of-arc",
+     "what-you-are-looking-at",
+     "where-is-the-star",
+     "the-first-law-and-the",
+     "change-the-shape",
+     "what-sits-at-the-other",
+     "measure-the-two-orbits",
+     "where-does-it-move-fastest",
+     "watch-it-happen",
+     "equal-areas-however-you-slice",
+     "fast-and-slow-in-numbers",
+     "why-the-speed-changes",
+     "kepler-s-third-law",
+     "measure-four-planets",
+     "work-the-law-out-step",
+     "use-the-law",
+     "repeat-the-timing",
+     "weighted-fit",
+     "predict-with-an-error-bar",
+     "weigh-the-host-star",
+     "two-methods-one-period",
+     "what-the-constant-depends-on",
+     "what-newton-added",
+     "the-same-laws-forty-light",
+     "weigh-trappist-1-yourself",
+     "weighing-another-star",
+     "where-kepler-s-version-breaks",
+     "where-this-leaves-you"
+    ],
+    "responses": {
+     "keplers-laws:where-is-the-star": 1,
+     "keplers-laws:what-sits-at-the-other": 2,
+     "keplers-laws:where-does-it-move-fastest": 0,
+     "keplers-laws:why-the-speed-changes": "A fixed sentence for the golden.",
+     "keplers-laws:use-the-law": "8",
+     "keplers-laws:use-the-law:locale": "es",
+     "keplers-laws:predict-with-an-error-bar": "8",
+     "keplers-laws:predict-with-an-error-bar:locale": "es",
+     "keplers-laws:weigh-the-host-star": "1,15",
+     "keplers-laws:weigh-the-host-star:locale": "es",
+     "keplers-laws:two-methods-one-period": 1,
+     "keplers-laws:what-the-constant-depends-on": 1,
+     "keplers-laws:weighing-another-star": "0,91",
+     "keplers-laws:weighing-another-star:locale": "es",
+     "keplers-laws:where-kepler-s-version-breaks": 2
+    },
+    "attempts": {
+     "keplers-laws:where-is-the-star": 1,
+     "keplers-laws:what-sits-at-the-other": 1,
+     "keplers-laws:where-does-it-move-fastest": 1,
+     "keplers-laws:use-the-law": 1,
+     "keplers-laws:predict-with-an-error-bar": 1,
+     "keplers-laws:weigh-the-host-star": 1,
+     "keplers-laws:two-methods-one-period": 1,
+     "keplers-laws:what-the-constant-depends-on": 1,
+     "keplers-laws:weighing-another-star": 1,
+     "keplers-laws:where-kepler-s-version-breaks": 1
+    }
+   },
+   "steps": [
+    {
+     "index": 0,
+     "sid": "eight-minutes-of-arc",
+     "fingerprint": "read|-|-|Kepler's 2nd Law|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 1,
+     "sid": "what-you-are-looking-at",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 2,
+     "sid": "where-is-the-star",
+     "fingerprint": "predict|-|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 3,
+     "sid": "the-first-law-and-the",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 4,
+     "sid": "change-the-shape",
+     "fingerprint": "ellipse|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 5,
+     "sid": "what-sits-at-the-other",
+     "fingerprint": "question|choice|-|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 6,
+     "sid": "measure-the-two-orbits",
+     "fingerprint": "measure|-|-|-|circ_e+ecc_e+ecc_peri+ecc_apo+ecc_a|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 7,
+     "sid": "where-does-it-move-fastest",
+     "fingerprint": "predict|-|-|-|-|4|a=0;c=0",
+     "optionCount": 4
+    },
+    {
+     "index": 8,
+     "sid": "watch-it-happen",
+     "fingerprint": "explore|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 9,
+     "sid": "equal-areas-however-you-slice",
+     "fingerprint": "wedges|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 10,
+     "sid": "fast-and-slow-in-numbers",
+     "fingerprint": "measure|-|-|-|v_peri+r_peri+v_apo+r_apo+v_ratio|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 11,
+     "sid": "why-the-speed-changes",
+     "fingerprint": "question|short|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 12,
+     "sid": "kepler-s-third-law",
+     "fingerprint": "read|-|-|Solar System|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 13,
+     "sid": "measure-four-planets",
+     "fingerprint": "measure|-|-|-|p1_name+p1_a+p1_P+p2_name+p2_a+p2_P+p3_name+p3_a+p3_P+p4_name+p4_a+p4_P+p5_name+p5_a+p5_P+p6_name+p6_a+p6_P+p7_name+p7_a+p7_P+p8_name+p8_a+p8_P|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 14,
+     "sid": "work-the-law-out-step",
+     "fingerprint": "measure|-|-|-|k_a+k_P+k_a3+k_P2+k_ratio|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 15,
+     "sid": "use-the-law",
+     "fingerprint": "question|numeric|-|-|-|-|a=8;t=0.4;u=years",
+     "optionCount": null
+    },
+    {
+     "index": 16,
+     "sid": "repeat-the-timing",
+     "fingerprint": "measure|-|-|-|t1+t2+t3+mean+sem+frac|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 17,
+     "sid": "weighted-fit",
+     "fingerprint": "measure|-|-|-|n+k_ols+k_w+s_k+p4+s_p4|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 18,
+     "sid": "predict-with-an-error-bar",
+     "fingerprint": "question|numeric|-|-|-|-|a=8;t=0.4;u=years",
+     "optionCount": null
+    },
+    {
+     "index": 19,
+     "sid": "weigh-the-host-star",
+     "fingerprint": "question|numeric|-|-|-|-|a=1.15;t=0.06;u=M☉",
+     "optionCount": null
+    },
+    {
+     "index": 20,
+     "sid": "two-methods-one-period",
+     "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 21,
+     "sid": "what-the-constant-depends-on",
+     "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 22,
+     "sid": "what-newton-added",
+     "fingerprint": "read|-|-|TRAPPIST-1 System|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 23,
+     "sid": "the-same-laws-forty-light",
+     "fingerprint": "explore|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 24,
+     "sid": "weigh-trappist-1-yourself",
+     "fingerprint": "measure|-|-|-|w_name+w_a+w_Pd+w_Py+w_a3+w_P2+w_M|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 25,
+     "sid": "weighing-another-star",
+     "fingerprint": "question|numeric|-|-|-|-|a=0.91;t=0.12;u=M_sun",
+     "optionCount": null
+    },
+    {
+     "index": 26,
+     "sid": "where-kepler-s-version-breaks",
+     "fingerprint": "question|choice|-|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 27,
+     "sid": "where-this-leaves-you",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    }
+   ]
+  },
+  "verdict": {
+   "ok": true
+  },
+  "restored": {
+   "responses": {
+    "keplers-laws:where-is-the-star": 1,
+    "keplers-laws:what-sits-at-the-other": 2,
+    "keplers-laws:where-does-it-move-fastest": 0,
+    "keplers-laws:why-the-speed-changes": "A fixed sentence for the golden.",
+    "keplers-laws:use-the-law": "8",
+    "keplers-laws:use-the-law:locale": "es",
+    "keplers-laws:predict-with-an-error-bar": "8",
+    "keplers-laws:predict-with-an-error-bar:locale": "es",
+    "keplers-laws:weigh-the-host-star": "1,15",
+    "keplers-laws:weigh-the-host-star:locale": "es",
+    "keplers-laws:two-methods-one-period": 1,
+    "keplers-laws:what-the-constant-depends-on": 1,
+    "keplers-laws:weighing-another-star": "0,91",
+    "keplers-laws:weighing-another-star:locale": "es",
+    "keplers-laws:where-kepler-s-version-breaks": 2
+   },
+   "attempts": {
+    "keplers-laws:where-is-the-star": 1,
+    "keplers-laws:what-sits-at-the-other": 1,
+    "keplers-laws:where-does-it-move-fastest": 1,
+    "keplers-laws:use-the-law": 1,
+    "keplers-laws:predict-with-an-error-bar": 1,
+    "keplers-laws:weigh-the-host-star": 1,
+    "keplers-laws:two-methods-one-period": 1,
+    "keplers-laws:what-the-constant-depends-on": 1,
+    "keplers-laws:weighing-another-star": 1,
+    "keplers-laws:where-kepler-s-version-breaks": 1
+   },
+   "visited": [
+    "change-the-shape",
+    "eight-minutes-of-arc",
+    "equal-areas-however-you-slice",
+    "fast-and-slow-in-numbers",
+    "kepler-s-third-law",
+    "measure-four-planets",
+    "measure-the-two-orbits",
+    "predict-with-an-error-bar",
+    "repeat-the-timing",
+    "the-first-law-and-the",
+    "the-same-laws-forty-light",
+    "two-methods-one-period",
+    "use-the-law",
+    "watch-it-happen",
+    "weigh-the-host-star",
+    "weigh-trappist-1-yourself",
+    "weighing-another-star",
+    "weighted-fit",
+    "what-newton-added",
+    "what-sits-at-the-other",
+    "what-the-constant-depends-on",
+    "what-you-are-looking-at",
+    "where-does-it-move-fastest",
+    "where-is-the-star",
+    "where-kepler-s-version-breaks",
+    "where-this-leaves-you",
+    "why-the-speed-changes",
+    "work-the-law-out-step"
+   ],
+   "stepIndex": 27,
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "moved": [],
+   "dropped": [],
+   "quarantined": {},
+   "uncertain": 0,
+   "discardedKeys": 0,
+   "byPosition": false
+  }
+ },
+ "ledger": {
+  "entry": "golden-keplers-laws",
+  "record": {
+   "ids": [
+    "golden-keplers-laws"
+   ],
+   "rows": [
+    [
+     "golden-keplers-laws",
+     "q1",
+     3.5247,
+     "d",
+     0.0012,
+     "measured",
+     "simulation",
+     "rv-fit",
+     null,
+     [
+      "s",
+      "d"
+     ]
+    ]
+   ],
+   "total": 1
+  },
+  "digest": "67772e920bdf0907382ca37ba8af27d3e6db70d675a29118dc04269783ebbc1f"
+ },
+ "tokens": {
+  "plain": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "a": null,
+    "r": null,
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "where-is-the-star",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "what-sits-at-the-other",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "where-does-it-move-fastest",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "why-the-speed-changes",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    },
+    {
+     "sid": "use-the-law",
+     "value": "8",
+     "locale": "es"
+    },
+    {
+     "sid": "predict-with-an-error-bar",
+     "value": "8",
+     "locale": "es"
+    },
+    {
+     "sid": "weigh-the-host-star",
+     "value": "1,15",
+     "locale": "es"
+    },
+    {
+     "sid": "two-methods-one-period",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "what-the-constant-depends-on",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "weighing-another-star",
+     "value": "0,91",
+     "locale": "es"
+    },
+    {
+     "sid": "where-kepler-s-version-breaks",
+     "value": 2,
+     "locale": "es"
+    }
+   ]
+  },
+  "assignment": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "a": "golden-assignment",
+    "r": "roster-1",
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "where-is-the-star",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "what-sits-at-the-other",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "where-does-it-move-fastest",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "why-the-speed-changes",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    },
+    {
+     "sid": "use-the-law",
+     "value": "8",
+     "locale": "es"
+    },
+    {
+     "sid": "predict-with-an-error-bar",
+     "value": "8",
+     "locale": "es"
+    },
+    {
+     "sid": "weigh-the-host-star",
+     "value": "1,15",
+     "locale": "es"
+    },
+    {
+     "sid": "two-methods-one-period",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "what-the-constant-depends-on",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "weighing-another-star",
+     "value": "0,91",
+     "locale": "es"
+    },
+    {
+     "sid": "where-kepler-s-version-breaks",
+     "value": 2,
+     "locale": "es"
+    }
+   ]
+  },
+  "evidence": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "ev": {
+     "d": "67772e920bdf0907382ca37ba8af27d3e6db70d675a29118dc04269783ebbc1f",
+     "i": [
+      "golden-keplers-laws"
+     ],
+     "n": 1,
+     "r": [
+      [
+       "golden-keplers-laws",
+       "q1",
+       3.5247,
+       "d",
+       0.0012,
+       "measured",
+       "simulation",
+       "rv-fit",
+       null,
+       [
+        "s",
+        "d"
+       ]
+      ]
+     ]
+    },
+    "a": null,
+    "r": null,
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "where-is-the-star",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "what-sits-at-the-other",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "where-does-it-move-fastest",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "why-the-speed-changes",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    },
+    {
+     "sid": "use-the-law",
+     "value": "8",
+     "locale": "es"
+    },
+    {
+     "sid": "predict-with-an-error-bar",
+     "value": "8",
+     "locale": "es"
+    },
+    {
+     "sid": "weigh-the-host-star",
+     "value": "1,15",
+     "locale": "es"
+    },
+    {
+     "sid": "two-methods-one-period",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "what-the-constant-depends-on",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "weighing-another-star",
+     "value": "0,91",
+     "locale": "es"
+    },
+    {
+     "sid": "where-kepler-s-version-breaks",
+     "value": 2,
+     "locale": "es"
+    }
+   ]
+  },
+  "depth": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "dp": "advanced",
+    "a": null,
+    "r": null,
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "where-is-the-star",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "what-sits-at-the-other",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "where-does-it-move-fastest",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "why-the-speed-changes",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    },
+    {
+     "sid": "use-the-law",
+     "value": "8",
+     "locale": "es"
+    },
+    {
+     "sid": "predict-with-an-error-bar",
+     "value": "8",
+     "locale": "es"
+    },
+    {
+     "sid": "weigh-the-host-star",
+     "value": "1,15",
+     "locale": "es"
+    },
+    {
+     "sid": "two-methods-one-period",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "what-the-constant-depends-on",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "weighing-another-star",
+     "value": "0,91",
+     "locale": "es"
+    },
+    {
+     "sid": "where-kepler-s-version-breaks",
+     "value": 2,
+     "locale": "es"
+    }
+   ]
+  }
+ }
+}

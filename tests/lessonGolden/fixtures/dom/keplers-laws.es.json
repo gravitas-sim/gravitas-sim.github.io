@@ -1,0 +1,182 @@
+[
+ {
+  "depth": "core",
+  "role": "first",
+  "sid": "eight-minutes-of-arc",
+  "position": [
+   1,
+   23
+  ],
+  "title": "Las leyes de Kepler",
+  "subtitle": "Mide la forma, el ritmo y la duración de órbitas reales",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 23 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Ocho minutos de arco</h3><div class=\"inv-step-body\"><p>Durante casi toda la historia registrada las órbitas fueron círculos. Cuando las observaciones no encajaban, los astrónomos añadían más círculos —epiciclos— hasta que el modelo cuadraba. Copérnico movió el Sol al centro pero mantuvo los círculos, y su modelo no fue más preciso que el que sustituía.</p><p>Lo que rompió el círculo fueron los datos. Tycho Brahe pasó dos décadas midiendo posiciones planetarias con una precisión de un minuto de arco, el límite de lo posible sin telescopio. Cuando Johannes Kepler intentó ajustar las observaciones de Marte de Tycho a una órbita circular, el mejor ajuste que consiguió fallaba por ocho minutos de arco. Podría haber llamado a eso error observacional y haber seguido adelante. En vez de eso confió en las medidas de Tycho por encima de dos mil años de suposiciones, y pasó años averiguando qué curva encajaría.</p><p>La respuesta fue una elipse, con el Sol fuera de su centro.</p></div><figure class=\"inv-quote\"><blockquote>Puesto que estos ocho minutos no podían ignorarse, ellos solos han abierto el camino a la reforma de toda la astronomía.</blockquote><figcaption>Johannes Kepler, Astronomia Nova, 1609</figcaption></figure><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Mientras una investigación está en marcha, pulsar selecciona un objeto sin abrir la ficha del inspector, y la colocación de objetos nuevos queda desactivada para que un clic accidental no altere el sistema que estás midiendo.</p>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "graded",
+  "sid": "where-is-the-star",
+  "position": [
+   3,
+   23
+  ],
+  "title": "Las leyes de Kepler",
+  "subtitle": "Mide la forma, el ritmo y la duración de órbitas reales",
+  "body": "<p class=\"inv-step-count\">Paso 3 de 23 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">¿Dónde está la estrella?</h3><div class=\"inv-step-body\"><p>Una elipse tiene un centro y dos focos. En un círculo los tres coinciden; cuanto más alargada es la elipse, más lejos del centro quedan los focos.</p><p>Mira la trayectoria del cuerpo naranja y dónde se sitúa la estrella dentro de ella. Comprométete con una respuesta antes de medir nada.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">La estrella se sitúa en…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>el centro de la elipse</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>uno de los focos de la elipse, descentrado</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>el punto más cercano de la órbita</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>un punto que se mueve conforme se mueve el planeta</span></button></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "marked",
+  "sid": "where-is-the-star",
+  "position": [
+   3,
+   23
+  ],
+  "title": "Las leyes de Kepler",
+  "subtitle": "Mide la forma, el ritmo y la duración de órbitas reales",
+  "body": "<p class=\"inv-step-count\">Paso 3 de 23 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">¿Dónde está la estrella?</h3><div class=\"inv-step-body\"><p>Una elipse tiene un centro y dos focos. En un círculo los tres coinciden; cuanto más alargada es la elipse, más lejos del centro quedan los focos.</p><p>Mira la trayectoria del cuerpo naranja y dónde se sitúa la estrella dentro de ella. Comprométete con una respuesta antes de medir nada.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">La estrella se sitúa en…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>el centro de la elipse</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>uno de los focos de la elipse, descentrado</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>el punto más cercano de la órbita</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>un punto que se mueve conforme se mueve el planeta</span></button></div><p class=\"inv-held\">Tu respuesta queda registrada. No se corrige hasta que llegues a «Mide las dos órbitas», para que la decida el experimento y no la clave de respuestas.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Cambiar respuesta</button>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "last",
+  "sid": "where-this-leaves-you",
+  "position": [
+   23,
+   23
+  ],
+  "title": "Las leyes de Kepler",
+  "subtitle": "Mide la forma, el ritmo y la duración de órbitas reales",
+  "body": "<p class=\"inv-step-count\">Paso 23 de 23 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Dónde te deja esto</h3><div class=\"inv-step-body\"><p>Has medido la forma de una órbita, has visto a un planeta cambiar velocidad por distancia conservando el momento angular, y has recuperado una ley de potencias a partir de ocho medidas que tomaste tú mismo. Después la has usado para pesar una estrella que nunca visitarás.</p><p>Todo esto salió de posiciones a simple vista registradas antes de que existiera el telescopio, por un observador que se negó a redondear ocho minutos de arco.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Si vas a entregar esto para una calificación, pulsa Terminar para introducir tu nombre y descargar tu informe de laboratorio. Si no, simplemente puedes cerrar el panel.</p>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "quantitative",
+  "role": "first",
+  "sid": "eight-minutes-of-arc",
+  "position": [
+   1,
+   26
+  ],
+  "title": "Las leyes de Kepler",
+  "subtitle": "Mide la forma, el ritmo y la duración de órbitas reales",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 26 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Ocho minutos de arco</h3><div class=\"inv-step-body\"><p>Durante casi toda la historia registrada las órbitas fueron círculos. Cuando las observaciones no encajaban, los astrónomos añadían más círculos —epiciclos— hasta que el modelo cuadraba. Copérnico movió el Sol al centro pero mantuvo los círculos, y su modelo no fue más preciso que el que sustituía.</p><p>Lo que rompió el círculo fueron los datos. Tycho Brahe pasó dos décadas midiendo posiciones planetarias con una precisión de un minuto de arco, el límite de lo posible sin telescopio. Cuando Johannes Kepler intentó ajustar las observaciones de Marte de Tycho a una órbita circular, el mejor ajuste que consiguió fallaba por ocho minutos de arco. Podría haber llamado a eso error observacional y haber seguido adelante. En vez de eso confió en las medidas de Tycho por encima de dos mil años de suposiciones, y pasó años averiguando qué curva encajaría.</p><p>La respuesta fue una elipse, con el Sol fuera de su centro.</p></div><figure class=\"inv-quote\"><blockquote>Puesto que estos ocho minutos no podían ignorarse, ellos solos han abierto el camino a la reforma de toda la astronomía.</blockquote><figcaption>Johannes Kepler, Astronomia Nova, 1609</figcaption></figure><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Mientras una investigación está en marcha, pulsar selecciona un objeto sin abrir la ficha del inspector, y la colocación de objetos nuevos queda desactivada para que un clic accidental no altere el sistema que estás midiendo.</p>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Cuantitativo"
+ },
+ {
+  "depth": "quantitative",
+  "role": "graded",
+  "sid": "where-is-the-star",
+  "position": [
+   3,
+   26
+  ],
+  "title": "Las leyes de Kepler",
+  "subtitle": "Mide la forma, el ritmo y la duración de órbitas reales",
+  "body": "<p class=\"inv-step-count\">Paso 3 de 26 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">¿Dónde está la estrella?</h3><div class=\"inv-step-body\"><p>Una elipse tiene un centro y dos focos. En un círculo los tres coinciden; cuanto más alargada es la elipse, más lejos del centro quedan los focos.</p><p>Mira la trayectoria del cuerpo naranja y dónde se sitúa la estrella dentro de ella. Comprométete con una respuesta antes de medir nada.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">La estrella se sitúa en…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>el centro de la elipse</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>uno de los focos de la elipse, descentrado</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>el punto más cercano de la órbita</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>un punto que se mueve conforme se mueve el planeta</span></button></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Cuantitativo"
+ },
+ {
+  "depth": "quantitative",
+  "role": "marked",
+  "sid": "where-is-the-star",
+  "position": [
+   3,
+   26
+  ],
+  "title": "Las leyes de Kepler",
+  "subtitle": "Mide la forma, el ritmo y la duración de órbitas reales",
+  "body": "<p class=\"inv-step-count\">Paso 3 de 26 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">¿Dónde está la estrella?</h3><div class=\"inv-step-body\"><p>Una elipse tiene un centro y dos focos. En un círculo los tres coinciden; cuanto más alargada es la elipse, más lejos del centro quedan los focos.</p><p>Mira la trayectoria del cuerpo naranja y dónde se sitúa la estrella dentro de ella. Comprométete con una respuesta antes de medir nada.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">La estrella se sitúa en…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>el centro de la elipse</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>uno de los focos de la elipse, descentrado</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>el punto más cercano de la órbita</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>un punto que se mueve conforme se mueve el planeta</span></button></div><p class=\"inv-held\">Tu respuesta queda registrada. No se corrige hasta que llegues a «Mide las dos órbitas», para que la decida el experimento y no la clave de respuestas.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Cambiar respuesta</button>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Cuantitativo"
+ },
+ {
+  "depth": "quantitative",
+  "role": "last",
+  "sid": "where-this-leaves-you",
+  "position": [
+   26,
+   26
+  ],
+  "title": "Las leyes de Kepler",
+  "subtitle": "Mide la forma, el ritmo y la duración de órbitas reales",
+  "body": "<p class=\"inv-step-count\">Paso 26 de 26 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Dónde te deja esto</h3><div class=\"inv-step-body\"><p>Has medido la forma de una órbita, has visto a un planeta cambiar velocidad por distancia conservando el momento angular, y has recuperado una ley de potencias a partir de ocho medidas que tomaste tú mismo. Después la has usado para pesar una estrella que nunca visitarás.</p><p>Todo esto salió de posiciones a simple vista registradas antes de que existiera el telescopio, por un observador que se negó a redondear ocho minutos de arco.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Si vas a entregar esto para una calificación, pulsa Terminar para introducir tu nombre y descargar tu informe de laboratorio. Si no, simplemente puedes cerrar el panel.</p>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Cuantitativo"
+ },
+ {
+  "depth": "advanced",
+  "role": "first",
+  "sid": "eight-minutes-of-arc",
+  "position": [
+   1,
+   28
+  ],
+  "title": "Las leyes de Kepler",
+  "subtitle": "Mide la forma, el ritmo y la duración de órbitas reales",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 28 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Ocho minutos de arco</h3><div class=\"inv-step-body\"><p>Durante casi toda la historia registrada las órbitas fueron círculos. Cuando las observaciones no encajaban, los astrónomos añadían más círculos —epiciclos— hasta que el modelo cuadraba. Copérnico movió el Sol al centro pero mantuvo los círculos, y su modelo no fue más preciso que el que sustituía.</p><p>Lo que rompió el círculo fueron los datos. Tycho Brahe pasó dos décadas midiendo posiciones planetarias con una precisión de un minuto de arco, el límite de lo posible sin telescopio. Cuando Johannes Kepler intentó ajustar las observaciones de Marte de Tycho a una órbita circular, el mejor ajuste que consiguió fallaba por ocho minutos de arco. Podría haber llamado a eso error observacional y haber seguido adelante. En vez de eso confió en las medidas de Tycho por encima de dos mil años de suposiciones, y pasó años averiguando qué curva encajaría.</p><p>La respuesta fue una elipse, con el Sol fuera de su centro.</p></div><figure class=\"inv-quote\"><blockquote>Puesto que estos ocho minutos no podían ignorarse, ellos solos han abierto el camino a la reforma de toda la astronomía.</blockquote><figcaption>Johannes Kepler, Astronomia Nova, 1609</figcaption></figure><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Mientras una investigación está en marcha, pulsar selecciona un objeto sin abrir la ficha del inspector, y la colocación de objetos nuevos queda desactivada para que un clic accidental no altere el sistema que estás midiendo.</p>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Avanzado"
+ },
+ {
+  "depth": "advanced",
+  "role": "graded",
+  "sid": "where-is-the-star",
+  "position": [
+   3,
+   28
+  ],
+  "title": "Las leyes de Kepler",
+  "subtitle": "Mide la forma, el ritmo y la duración de órbitas reales",
+  "body": "<p class=\"inv-step-count\">Paso 3 de 28 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">¿Dónde está la estrella?</h3><div class=\"inv-step-body\"><p>Una elipse tiene un centro y dos focos. En un círculo los tres coinciden; cuanto más alargada es la elipse, más lejos del centro quedan los focos.</p><p>Mira la trayectoria del cuerpo naranja y dónde se sitúa la estrella dentro de ella. Comprométete con una respuesta antes de medir nada.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">La estrella se sitúa en…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>el centro de la elipse</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>uno de los focos de la elipse, descentrado</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>el punto más cercano de la órbita</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>un punto que se mueve conforme se mueve el planeta</span></button></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Avanzado"
+ },
+ {
+  "depth": "advanced",
+  "role": "marked",
+  "sid": "where-is-the-star",
+  "position": [
+   3,
+   28
+  ],
+  "title": "Las leyes de Kepler",
+  "subtitle": "Mide la forma, el ritmo y la duración de órbitas reales",
+  "body": "<p class=\"inv-step-count\">Paso 3 de 28 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">¿Dónde está la estrella?</h3><div class=\"inv-step-body\"><p>Una elipse tiene un centro y dos focos. En un círculo los tres coinciden; cuanto más alargada es la elipse, más lejos del centro quedan los focos.</p><p>Mira la trayectoria del cuerpo naranja y dónde se sitúa la estrella dentro de ella. Comprométete con una respuesta antes de medir nada.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">La estrella se sitúa en…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>el centro de la elipse</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>uno de los focos de la elipse, descentrado</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>el punto más cercano de la órbita</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>un punto que se mueve conforme se mueve el planeta</span></button></div><p class=\"inv-held\">Tu respuesta queda registrada. No se corrige hasta que llegues a «Mide las dos órbitas», para que la decida el experimento y no la clave de respuestas.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Cambiar respuesta</button>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Avanzado"
+ },
+ {
+  "depth": "advanced",
+  "role": "last",
+  "sid": "where-this-leaves-you",
+  "position": [
+   28,
+   28
+  ],
+  "title": "Las leyes de Kepler",
+  "subtitle": "Mide la forma, el ritmo y la duración de órbitas reales",
+  "body": "<p class=\"inv-step-count\">Paso 28 de 28 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Dónde te deja esto</h3><div class=\"inv-step-body\"><p>Has medido la forma de una órbita, has visto a un planeta cambiar velocidad por distancia conservando el momento angular, y has recuperado una ley de potencias a partir de ocho medidas que tomaste tú mismo. Después la has usado para pesar una estrella que nunca visitarás.</p><p>Todo esto salió de posiciones a simple vista registradas antes de que existiera el telescopio, por un observador que se negó a redondear ocho minutos de arco.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Si vas a entregar esto para una calificación, pulsa Terminar para introducir tu nombre y descargar tu informe de laboratorio. Si no, simplemente puedes cerrar el panel.</p>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Avanzado"
+ }
+]

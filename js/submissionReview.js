@@ -55,12 +55,17 @@ import { validateBackup } from './investigations/progressBackup.js';
 import { activitiesOf, fragmentOf, readSource } from './teach/activity.js';
 import { gradebookModel, rosterMerges } from './gradebook/model.js';
 import { ADAPTERS } from './gradebook/index.js';
+import { criteriaPlan } from './instructorRubric.js';
+import { classSummary, classSummaryCsv } from './instructorSummary.js';
+import { drawMeasured, summaryHtml } from './instructorSummaryView.js';
 import {
+  criterionKey,
   marksCsv,
   marksIndex,
   markKey,
   needsJudgment,
   readMarksCsv,
+  setCriterionMark,
   setMark,
 } from './gradebook/marks.js';
 import { MANIFEST } from './data/investigations/manifest.js';
@@ -138,6 +143,7 @@ const deepen = async lesson =>
     ? lesson
     : layDepth(lesson, (await DEEPER[lesson.id]()).default.steps);
 import { mountShell } from './shell.js';
+import { isArchiveText } from './instructorArchive.js';
 
 const $ = id => document.getElementById(id);
 
@@ -153,6 +159,19 @@ const context = new Map();
 const contexts = [];
 /** Marks the instructor entered, by report and step. Never stored. */
 const marks = marksIndex();
+/**
+ * The lesson each report was graded against, by the report's fingerprint: its
+ * depth laid in, or the instructor's own version. The class summary reads the
+ * steps from it (misconceptions, criteria); `lessons` holds the raw lesson.
+ */
+const gradedAgainst = new Map();
+/**
+ * What was handed in, as it was, for the archive (Prompt 168): the token or
+ * backup of each report kept, and the text that named the activities. Never
+ * persisted; the archive file is how a term is kept.
+ */
+const kept = [];
+const keptNames = [];
 /** Whether the instructor has picked how to match students (then it is theirs). */
 let identifierChosen = false;
 
@@ -244,7 +263,10 @@ async function accept(label, thing, kind) {
   // The evidence behind the answers, checked against its digest here: the
   // table in front of the instructor is recomputed, not taken as stated.
   const evidence = await checkEvidence(submission.ev);
-  graded.push(gradeSubmission(submission, lesson, { kind, label, evidence }));
+  const record = gradeSubmission(submission, lesson, { kind, label, evidence });
+  graded.push(record);
+  kept.push({ label, kind, thing });
+  gradedAgainst.set(record.fingerprint, lesson);
   render();
 }
 
@@ -278,9 +300,11 @@ async function takeContext(label, text) {
   }
   const found = activitiesOf(source, language());
   for (const a of found) context.set(a.id, a);
+  keptNames.push({ label, text });
   contexts.push({
     label,
     kind: source.kind,
+    term: source.pack?.term ?? null,
     n: found.length,
     title:
       source.kind === 'course'
@@ -307,6 +331,7 @@ async function takeFile(file) {
   if (text === null) return refuse(name, 'unreadable');
   if (isSubmissionToken(text.trim())) return accept(name, text.trim(), 'token');
   if (isContext(text.trim())) return takeContext(name, text.trim());
+  if (isArchiveText(text)) return openArchive(name, text);
   let parsed;
   try {
     parsed = parseDocument(text);
@@ -426,6 +451,49 @@ const num = v =>
     : v.toLocaleString(language(), { maximumSignificantDigits: 6 });
 
 /**
+ * What a row's uncertainty says, in the page's words (Prompt 151): "± half
+ * (method)", an asymmetric interval as "+p -m", a limit as what kind it is, a
+ * failed or unconstrained quantity as such. A row with no more to say than its
+ * half-width is that number, as it always was.
+ * @param {object} r - An evidence row (js/submission/results.js)
+ * @returns {string}
+ */
+function uncertaintyText(r) {
+  const u = r.uncertainty;
+  if (!u) return num(r.half);
+  if (u.kind === 'failed') return t('sub.evidence.unc.failed');
+  if (u.kind === 'not-constrained') return t('sub.evidence.unc.notConstrained');
+  if (u.kind === 'limit') return t(`sub.evidence.unc.limit.${u.bound}`);
+  const method = {
+    data: 'data',
+    model: 'model',
+    assumed: 'stated',
+    scaled: 'scaled',
+    profile: 'profile',
+    derived: 'propagated',
+  }[u.basis];
+  const how =
+    u.kind === 'assumed'
+      ? 'exact'
+      : u.kind === 'model-limited'
+        ? 'model'
+        : method;
+  const asymmetric =
+    u.kind === 'interval' &&
+    Number.isFinite(u.lo) &&
+    Number.isFinite(u.hi) &&
+    Number.isFinite(r.value) &&
+    Math.abs(u.hi - r.value - (r.value - u.lo)) > 1e-9 * (u.hi - u.lo);
+  const size = asymmetric
+    ? `+${num(u.hi - r.value)} −${num(r.value - u.lo)}`
+    : u.kind === 'assumed'
+      ? ''
+      : `± ${num(u.kind === 'model-limited' ? (u.floor ?? r.half) : r.half)}`;
+  const word = how ? `(${t(`sub.evidence.method.${how}`)})` : '';
+  return [size, word].filter(Boolean).join(' ') || num(r.half);
+}
+
+/**
  * Each report's evidence table, with the verdict of its check against the
  * digest the token states. A table that does not match is open and says so in
  * words; a match says what it does not show.
@@ -468,7 +536,7 @@ function evidenceSections(records) {
             .map(
               r => `<tr><td>${esc(r.envelope)}</td><td>${esc(r.quantity)}</td>
                 <td>${esc(num(r.value))}</td><td>${esc(r.unit)}</td>
-                <td>${esc(num(r.half))}</td><td>${esc(word('origin', r.origin))}</td>
+                <td>${esc(uncertaintyText(r))}</td><td>${esc(word('origin', r.origin))}</td>
                 <td>${esc(`${r.sourceKind} ${r.sourceId}${r.sourceDigest ? ` ${r.sourceDigest}` : ''}`)}</td></tr>`
             )
             .join('')}</tbody></table></div>`
@@ -623,6 +691,25 @@ function byActivity(records) {
     .join('')}</tr></thead><tbody>${rows.join('')}</tbody></table></div>`;
 }
 
+/** A written answer's criteria at the depth read (Prompt 172), names as text. */
+const criteriaFor = (r, q) =>
+  criteriaPlan(
+    lessons.get(r.lessonId)?.steps?.find(x => x.sid === q.sid),
+    r.depth
+  ).map(c => ({ ...c, name: plain(c.name) }));
+
+/** One criterion's mark and comment, nested in its answer's fieldset. */
+const criterionHtml = (r, q, c, i) => {
+  const m = marks.get(criterionKey(r.fingerprint, q.sid, c.n));
+  const data = `data-fp="${esc(r.fingerprint)}" data-sid="${esc(q.sid)}" data-crit="${c.n}"`;
+  return `<fieldset class="sr-mark sr-criterion" data-kind="${c.kind}"><legend>${esc(c.name)} (${esc(t(`sub.judge.kind.${c.kind}`))})</legend>
+        <label for="mk-${i}-${c.n}">${esc(t('sub.judge.mark', { max: c.possible }))}</label>
+        <input id="mk-${i}-${c.n}" class="ui-input is-compact" type="number" min="0" max="${c.possible}" step="0.5" ${data} data-field="mark" value="${esc(m?.points ?? '')}" />
+        <label for="mc-${i}-${c.n}">${esc(t('sub.judge.comment'))}</label>
+        <input id="mc-${i}-${c.n}" class="ui-input" type="text" maxlength="500" ${data} data-field="comment" value="${esc(m?.comment ?? '')}" />
+      </fieldset>`;
+};
+
 /** How many written answers have a mark, of how many there are. */
 const judgedCount = records => {
   const items = needsJudgment(records);
@@ -678,7 +765,12 @@ function judgmentSection(records) {
         <label for="mk-${i}">${esc(t('sub.judge.mark', { max: q.pointsPossible }))}</label>
         <input id="mk-${i}" class="ui-input is-compact" type="number" min="0" max="${q.pointsPossible}" step="0.5" ${data} data-field="mark" value="${esc(m?.points ?? '')}" />
         <label for="mc-${i}">${esc(t('sub.judge.comment'))}</label>
-        <input id="mc-${i}" class="ui-input" type="text" maxlength="500" ${data} data-field="comment" value="${esc(m?.comment ?? '')}" />
+        <input id="mc-${i}" class="ui-input" type="text" maxlength="500" ${data} data-field="comment" value="${esc(m?.comment ?? '')}" />${criteriaFor(
+          r,
+          q
+        )
+          .map(c => criterionHtml(r, q, c, i))
+          .join('')}
       </fieldset>`;
     })
     .join('')}</div>`;
@@ -772,6 +864,41 @@ function renderGradebook(records) {
   }
 }
 
+/** The steps of each lesson a report was graded against, by sid, once. */
+const stepIndexes = new WeakMap();
+
+/** The step a report was graded on, or null if its lesson is not known here. */
+function stepOf(record, sid) {
+  const lesson = gradedAgainst.get(record.fingerprint);
+  if (!lesson) return null;
+  if (!stepIndexes.has(lesson))
+    stepIndexes.set(lesson, new Map((lesson.steps || []).map(x => [x.sid, x])));
+  return stepIndexes.get(lesson).get(sid) ?? null;
+}
+
+/** The class summary of the reports read so far (Prompt 173). */
+const currentSummary = records => classSummary(records, { stepOf, marks });
+
+/** What the summary's markup and plots need from this page. */
+const summaryWords = () => ({
+  t,
+  number: num,
+  date: stamp(),
+  uncertainty: uncertaintyText,
+  origin: id =>
+    has(`sub.evidence.origin.${id}`) ? t(`sub.evidence.origin.${id}`) : id,
+});
+
+/** Draw the class summary, then its plots when the plot component arrives. */
+function renderSummary(records) {
+  const host = $('summary');
+  if (!host) return;
+  const summary = currentSummary(records);
+  const words = summaryWords();
+  host.innerHTML = summaryHtml(summary, words);
+  drawMeasured(host, summary, words);
+}
+
 function render() {
   const records = annotate(graded);
   const n = records.length;
@@ -839,6 +966,7 @@ function render() {
   $('evidence').innerHTML = evidenceSections(records) + systemSections(records);
   $('context').innerHTML = contextList();
   $('byActivity').innerHTML = byActivity(records);
+  renderSummary(records);
   $('judge').innerHTML = judgmentSection(records);
   renderGradebook(records);
 
@@ -866,6 +994,8 @@ function render() {
   }
   const empty = $('exportEmpty');
   if (empty) empty.hidden = n > 0;
+  const save = $('archiveSave');
+  if (save) save.disabled = n === 0;
 }
 
 /**
@@ -968,6 +1098,34 @@ async function exportGradebook(which) {
   }
 }
 
+/** Save the class summary as one CSV (Prompt 173). */
+function saveSummary() {
+  const records = annotate(graded);
+  if (!records.length) return say(t('sub.export.empty'));
+  const file = `gravitas-class-summary-${stamp()}.csv`;
+  download(
+    classSummaryCsv(currentSummary(records)),
+    file,
+    'text/csv;charset=utf-8'
+  );
+  say(t('sub.export.done', { file }));
+}
+
+/**
+ * Print the class summary alone: the page's print rules hide everything else
+ * while this class is on the body, and it comes off when printing ends.
+ */
+function printSummary() {
+  const body = document.body;
+  body.classList.add('sr-print-summary');
+  const done = () => {
+    body.classList.remove('sr-print-summary');
+    window.removeEventListener('afterprint', done);
+  };
+  window.addEventListener('afterprint', done);
+  window.print();
+}
+
 /** Save the instructor's marks as a file of their own. */
 function saveMarks() {
   const records = annotate(graded);
@@ -976,6 +1134,7 @@ function saveMarks() {
   download(
     marksCsv(records, marks, {
       includeWritten: Boolean($('includeWritten')?.checked),
+      criteriaOf: criteriaFor,
     }),
     file,
     'text/csv;charset=utf-8'
@@ -1003,14 +1162,17 @@ async function openMarks(file) {
 /** A mark or a comment changed on the written answers. */
 function judged(e) {
   const el = e.target;
-  const { fp, sid, field } = el.dataset || {};
+  const { fp, sid, field, crit } = el.dataset || {};
   if (!field) return;
-  const current = marks.get(markKey(fp, sid)) || { points: null, comment: '' };
+  const key = crit ? criterionKey(fp, sid, crit) : markKey(fp, sid);
+  const current = marks.get(key) || { points: null, comment: '' };
   const next =
     field === 'mark'
       ? { ...current, points: el.value }
       : { ...current, comment: el.value };
-  const ok = setMark(marks, fp, sid, next, Number(el.max) || Infinity);
+  const ok = crit
+    ? setCriterionMark(marks, fp, sid, crit, next, Number(el.max) || Infinity)
+    : setMark(marks, fp, sid, next, Number(el.max) || Infinity);
   el.setAttribute('aria-invalid', String(!ok));
   if (!ok) {
     say(t('sub.judge.badMark', { max: el.max }));
@@ -1022,9 +1184,101 @@ function judged(e) {
   if (summary)
     summary.textContent = t('sub.judge.summary', judgedCount(records));
   renderGradebook(records);
+  renderSummary(records);
 }
 
 /** Put every string in the chosen language. */
+/** A word of the next-term path, in the page's language (js/instructorTermText.js). */
+const termWords = async (id, vars) =>
+  (await import('./instructorTermText.js')).tr(language(), id, vars);
+
+/**
+ * Save everything read as one file and clear the page (Prompt 168). The page
+ * is cleared only after the file has been handed to the browser; nothing a
+ * student holds is touched.
+ * @returns {Promise<void>}
+ */
+async function archive() {
+  const records = annotate(graded);
+  const status = $('archiveStatus');
+  const say2 = async (id, vars) => {
+    if (status) status.textContent = await termWords(id, vars);
+  };
+  if (!records.length) return say2('archive.none');
+  try {
+    const { archiveName, buildArchive } =
+      await import('./instructorArchive.js');
+    const hasMarks = marks.size > 0;
+    const term = contexts.find(c => c.term)?.term ?? null;
+    const file = archiveName(term, stamp());
+    const n = kept.length;
+    const text = buildArchive({
+      reports: kept,
+      named: keptNames,
+      term,
+      marks: hasMarks
+        ? marksCsv(records, marks, {
+            includeWritten: false,
+            criteriaOf: criteriaFor,
+          })
+        : null,
+    });
+    download(text, file, 'application/json');
+    clearAll();
+    await say2('archive.saved', {
+      file,
+      n,
+      marks: hasMarks ? await termWords('archive.marks') : '',
+    });
+  } catch (err) {
+    await say2('archive.failed', { reason: err?.message || String(err) });
+  }
+}
+
+/**
+ * Read an archive this page saved: its names, then its reports, then its marks.
+ * @param {string} name - The file's name
+ * @param {string} text - The file's text
+ * @returns {Promise<void>}
+ */
+async function openArchive(name, text) {
+  const { readArchive } = await import('./instructorArchive.js');
+  const read = readArchive(text);
+  const status = $('archiveStatus');
+  if (!read.ok) {
+    if (status)
+      status.textContent = `${name}: ${await termWords(`archive.reason.${read.reason}`)}`;
+    return;
+  }
+  const { archive: a } = read;
+  for (const n of a.named) await takeContext(n.label || name, n.text);
+  for (const r of a.reports) await accept(r.label, r.thing, r.kind);
+  let withMarks = false;
+  if (a.marks) withMarks = readMarksCsv(a.marks, marks).ok;
+  render();
+  if (status)
+    status.textContent = await termWords('archive.opened', {
+      file: name,
+      n: a.reports.length,
+      marks: withMarks ? await termWords('archive.marks') : '',
+    });
+}
+
+/** Forget everything read, as the page does on opening. */
+function clearAll() {
+  graded.length = 0;
+  refused.length = 0;
+  context.clear();
+  contexts.length = 0;
+  kept.length = 0;
+  keptNames.length = 0;
+  marks.clear();
+  gradedAgainst.clear();
+  judging = false;
+  say('');
+  render();
+}
+
 function applyLanguage() {
   document.title = t('sub.doc.title');
   applyTranslations();
@@ -1064,16 +1318,8 @@ function wire() {
     else await accept(t('sub.paste.source'), text, 'token');
     $('paste').value = '';
   });
-  $('clear').addEventListener('click', () => {
-    graded.length = 0;
-    refused.length = 0;
-    context.clear();
-    contexts.length = 0;
-    marks.clear();
-    judging = false;
-    say('');
-    render();
-  });
+  $('clear').addEventListener('click', clearAll);
+  $('archiveSave')?.addEventListener('click', archive);
   $('exportSummary')?.addEventListener('click', () => exportResults('summary'));
   $('exportQuestions')?.addEventListener('click', () =>
     exportResults('questions')
@@ -1086,6 +1332,10 @@ function wire() {
   $('exportMoodle')?.addEventListener('click', () => exportGradebook('moodle'));
   $('exportD2l')?.addEventListener('click', () => exportGradebook('d2l'));
   $('marksSave')?.addEventListener('click', saveMarks);
+  $('summary')?.addEventListener('click', e => {
+    if (e.target.closest?.('#sumCsv')) saveSummary();
+    else if (e.target.closest?.('#sumPrint')) printSummary();
+  });
   $('marksOpen')?.addEventListener('change', async e => {
     for (const file of e.target.files || []) await openMarks(file);
     e.target.value = '';

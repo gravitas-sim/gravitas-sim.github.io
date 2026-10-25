@@ -4,7 +4,7 @@
 // -----------------------------------------------------------------------------
 //   node tools/build-library.mjs           write library/library.json, the
 //                                          coverage table in LIBRARY.md and
-//                                          Home's Library cards
+//                                          Home's first-week start
 //   node tools/build-library.mjs --check   fail when either is not what this writes
 //
 // Roadmap II Prompt 54 (LIBRARY.md). Every entry is read from the source that
@@ -35,14 +35,21 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { buildRelations, problems } from './build-relations.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const load = rel => import(pathToFileURL(path.join(ROOT, rel)).href);
 
 export const OUT = 'library/library.json';
+export const SEARCH_OUT = 'library/search-index.json';
 export const DOC = 'LIBRARY.md';
 export { FORMAT, FORMAT_VERSION } from '../js/library/format.js';
 import { FORMAT, FORMAT_VERSION } from '../js/library/format.js';
+import {
+  BAND_LENGTH,
+  bandOfMinutes,
+  lessonBand,
+} from '../js/data/instructorTimeBands.js';
 
 /** The nouns of PLATFORM_MODEL.md the Library holds, in the order it offers them. */
 export const KINDS = Object.freeze([
@@ -212,14 +219,9 @@ export async function buildLibrary() {
   }));
   const { BROWSE_META } = await load('js/data/investigations/browseData.js');
   const { DISCOVERY } = await load('js/data/investigations/discovery.js');
-  const {
-    SEQUENCES,
-    LENGTH,
-    lengthOf,
-    calculationOf,
-    DEMO_MINUTES,
-    PERIOD_MINUTES,
-  } = await load('js/data/investigations/sequences.js');
+  const { SEQUENCES, lengthOf, calculationOf } = await load(
+    'js/data/investigations/sequences.js'
+  );
   const { SEQUENCE_ALIASES } = await load('js/data/sequenceAliases.js');
   const { INVESTIGATIONS } = await load('js/data/investigations.js');
   const curation = JSON.parse(readFileSync(path.join(ROOT, CURATION), 'utf8'));
@@ -240,15 +242,12 @@ export async function buildLibrary() {
   const { EN_DEFERRED } = await load('js/i18n/en.deferred.js');
   const { ES_DEFERRED } = await load('js/i18n/es.deferred.js');
 
-  /** The bucket a number of minutes falls in: lengthOf's rule. */
-  const lengthFor = d =>
-    !d
-      ? null
-      : d.max <= DEMO_MINUTES
-        ? LENGTH.DEMO
-        : d.max <= PERIOD_MINUTES
-          ? LENGTH.PERIOD
-          : LENGTH.LONG;
+  /**
+   * The length facet reads the editorial band table (Prompt 174,
+   * js/data/instructorTimeBands.js): a lesson's band at its default depth, and
+   * the band of an upper bound for everything that declares minutes.
+   */
+  const lengthFor = d => (!d ? null : BAND_LENGTH[bandOfMinutes(d.max)]);
   /**
    * calculationOf's rule (sequences.js), for a count of numbers to work out:
    * that one reads a lesson's count from browseData.js by its id.
@@ -273,7 +272,7 @@ export async function buildLibrary() {
         summary: both(m.summary, e.summary),
         level: d?.audience,
         duration: durationOf(m.duration),
-        length: lengthOf(m),
+        length: BAND_LENGTH[lessonBand(m.id)] ?? lengthOf(m),
         mathematics: d?.mathematics,
         calculation: calculationOf(m),
         subjects: BROWSE_META[m.id]?.tags,
@@ -319,11 +318,15 @@ export async function buildLibrary() {
     },
   ];
   const guideSeries = [];
+  /** What an entry is built on, for tools/build-relations.mjs. */
+  const uses = new Map();
   for (const set of guideSets) {
     const { GUIDES } = await load(set.file);
     const en = Object.values(await load(set.catalog[0]))[0];
     const esCat = Object.values(await load(set.catalog[1]))[0];
     const ids = [];
+    const { TARGETS } =
+      set.format === 'observatory' ? await load(set.file) : {};
     for (const g of GUIDES) {
       const minutes = Object.values(g.minutes || {});
       const duration = minutes.length
@@ -332,6 +335,20 @@ export async function buildLibrary() {
       const id = `investigation:${g.id}`;
       const c = curated('guides', g.id);
       ids.push(id);
+      if (TARGETS) {
+        const opened = new Set(
+          g.steps.map(st => st.go?.open ?? st.check?.target).filter(Boolean)
+        );
+        const data = [...opened].flatMap(t => {
+          const target = TARGETS[t];
+          if (!target) return [];
+          const name = /^installed:([^@]+)@/.exec(target.observation)?.[1];
+          return [
+            name ? `dataset:community.${name}` : `dataset:${target.fixture}`,
+          ];
+        });
+        uses.set(id, [...new Set(data)].sort());
+      }
       entries.push(
         entry({
           id,
@@ -494,7 +511,7 @@ export async function buildLibrary() {
       ...(c.subjects ? { subjects: c.subjects } : {}),
     };
   };
-  for (const f of FIXTURES) {
+  for (const f of FIXTURES.filter(f => f.library !== false)) {
     entries.push(
       entry({
         id: `dataset:${f.id}`,
@@ -694,11 +711,23 @@ export async function buildLibrary() {
   }
 
   // --- The vocabularies --------------------------------------------------------
-  const subjects = sorted(entries.flatMap(e => e.subjects || [])).map(id => ({
-    id,
-    label: words(EN_DEFERRED, ES_DEFERRED, `inv.tag.${id}`),
-    count: entries.filter(e => e.subjects?.includes(id)).length,
-  }));
+  const blurbs = curation.topics?.blurbs ?? {};
+  const subjects = sorted(entries.flatMap(e => e.subjects || [])).map(id => {
+    const blurb = blurbs[id];
+    if (!blurb?.en || !blurb?.es)
+      throw new Error(
+        `${CURATION}: topics.blurbs has no paragraph for "${id}"`
+      );
+    return {
+      id,
+      label: words(EN_DEFERRED, ES_DEFERRED, `inv.tag.${id}`),
+      blurb,
+      count: entries.filter(e => e.subjects?.includes(id)).length,
+    };
+  });
+  for (const id of Object.keys(blurbs))
+    if (!subjects.some(s => s.id === id))
+      throw new Error(`${CURATION}: topics.blurbs/${id} names no subject`);
 
   const sequences = SEQUENCES.map(s => ({
     id: s.id,
@@ -732,16 +761,157 @@ export async function buildLibrary() {
     });
   }
 
-  return {
+  // --- What a student sees, and where to begin (Prompt 163) -------------------
+  const { kinds: shown } = JSON.parse(
+    readFileSync(path.join(ROOT, 'tools/navigation-inventory.json'), 'utf8')
+  );
+  const kindShown = Object.fromEntries(
+    KINDS.map(k => [k, shown.internal[k] ?? k])
+  );
+  for (const k of Object.values(kindShown))
+    if (!shown.students.includes(k))
+      throw new Error(
+        `tools/navigation-inventory.json: "${k}" is not a kind students see`
+      );
+  const have = new Set(entries.map(e => e.id));
+  // The scenarios a lesson's steps open: what the lesson is built on.
+  for (const [id, lesson] of lessons) {
+    const opened = lesson.steps
+      .map(st => st.setup?.scenario)
+      .filter(Boolean)
+      .map(key => `scenario:${slug(key.replace(/['’]/g, ''))}`)
+      .filter(sid => have.has(sid));
+    if (opened.length)
+      uses.set(`investigation:${id}`, [...new Set(opened)].sort());
+  }
+  // Each start whose entries a collection can hold is also written as one
+  // (Prompt 164): a course package with profile `collection`, checked by the
+  // package's own validator, and what the page draws the start from. A start
+  // that names a course has no collection: a course is not an item of one.
+  const { itemOfEntry } = await load('js/library/collections.js');
+  const { validateCoursePack } = await load('js/course/pack.js');
+  const { courseApi } = await load('js/course/api.js');
+  const { shortHash } = await load('js/assignments/assignment.js');
+  const { PLATFORM_API } = await load('js/platform/catalog.generated.js');
+  const byId = new Map(entries.map(e => [e.id, e]));
+  const textOf = (en, es) => ({ en, es, esOf: shortHash(en) });
+  const starts = (curation.starts?.groups ?? []).map(g => {
+    for (const id of g.entries)
+      if (!have.has(id))
+        throw new Error(
+          `${CURATION}: starts/${g.id} names ${id}, which is not in the Library`
+        );
+    const start = {
+      id: g.id,
+      level: g.level,
+      audience: g.audience,
+      entries: g.entries,
+    };
+    const items = g.entries.map(id => itemOfEntry(byId.get(id)));
+    if (items.every(Boolean)) {
+      const collection = {
+        format: 'gravitas.course-pack',
+        formatVersion: 3,
+        id: `start-${g.id}`,
+        version: '1.0.0',
+        gravitas: PLATFORM_API,
+        locales: ['en', 'es'],
+        pinning: 'compatible',
+        profile: 'collection',
+        title: textOf(g.audience.en, g.audience.es),
+        units: [{ id: 'start', title: textOf('Start', 'Inicio'), items }],
+      };
+      const bad = validateCoursePack(collection, courseApi());
+      if (bad.length)
+        throw new Error(
+          `${CURATION}: starts/${g.id} is not a collection: ${bad
+            .map(e => `${e.path} ${e.code}`)
+            .join('; ')}`
+        );
+      start.collection = collection;
+    }
+    return start;
+  });
+  const { firstWeek } = JSON.parse(
+    readFileSync(path.join(ROOT, 'tools/navigation-inventory.json'), 'utf8')
+  );
+  const listed = new Set(starts.flatMap(g => g.entries));
+  for (const start of firstWeek.starts)
+    if (start.entry && !listed.has(start.entry))
+      throw new Error(
+        `Home's first-week start ${start.entry} is in no Library start (${CURATION})`
+      );
+
+  // What the entry is built on: measured observations or the simulation. A
+  // lesson or a course is not filed under either: it can use both.
+  const dataOf = e =>
+    e.kind === 'dataset'
+      ? curation.datasets?.[e.id.replace(/^dataset:/, '')]?.kind === 'model'
+        ? 'synthetic'
+        : 'authentic'
+      : e.format === 'observatory'
+        ? 'authentic'
+        : e.kind === 'scenario' || e.kind === 'experiment'
+          ? 'synthetic'
+          : null;
+  for (const e of entries) {
+    const data = dataOf(e);
+    if (data) e.data = data;
+  }
+
+  const library = {
     format: FORMAT,
     formatVersion: FORMAT_VERSION,
     kinds: [...KINDS],
+    kindShown,
     subjects,
+    starts,
     sequences,
     // Old sequence ids a stored link may still carry, to the current id.
     sequenceAliases: { ...SEQUENCE_ALIASES },
     entries,
   };
+  // The relations (tools/build-relations.mjs) are derived from the rest.
+  const relations = buildRelations(library, { uses });
+  for (const e of entries) e.rel = relations.get(e.id);
+  const bad = problems(library);
+  if (bad.length) throw new Error(`relations:\n  ${bad.join('\n  ')}`);
+  return library;
+}
+
+/**
+ * What the search reads that the index does not carry: each lesson's learning
+ * objectives, in both languages (the Spanish from the lesson's shadow file).
+ * A separate file, fetched on the first search, so the page's first view
+ * does not pay for words only a search looks at.
+ * @param {object} library - The built library
+ * @returns {Promise<object>} A gravitas.library-search/1 document
+ */
+export async function buildSearchIndex(library) {
+  const { INVESTIGATIONS } = await load('js/data/investigations.js');
+  const objectives = {};
+  for (const e of library.entries) {
+    if (e.kind !== 'investigation' || e.format !== 'lesson') continue;
+    const id = e.id.replace(/^investigation:/, '');
+    const lesson = INVESTIGATIONS.find(l => l.id === id);
+    const en = lesson?.objectives ?? [];
+    if (!en.length) continue;
+    const shadow = (await load(`js/data/investigations/es/${id}.js`)).default;
+    // Arrays line up by index with the English; a null keeps the English.
+    objectives[e.id] = {
+      en,
+      es: en.map((line, i) => shadow.objectives?.[i] ?? line),
+    };
+  }
+  return { format: 'gravitas.library-search', formatVersion: 1, objectives };
+}
+
+/** The search index, one lesson a line. */
+export function renderSearchIndex(index) {
+  const rows = Object.entries(index.objectives).map(
+    ([id, words]) => `    ${JSON.stringify(id)}: ${JSON.stringify(words)}`
+  );
+  return `{\n  "format": ${JSON.stringify(index.format)},\n  "formatVersion": ${index.formatVersion},\n  "objectives": {\n${rows.join(',\n')}\n  }\n}\n`;
 }
 
 /**
@@ -801,8 +971,8 @@ export function withCoverage(doc, library) {
 }
 
 const HOME = 'js/fragments/home.html';
-const HOME_START = '<!-- library:home -->';
-const HOME_END = '<!-- /library:home -->';
+const HOME_START = '<!-- first-week:home -->';
+const HOME_END = '<!-- /first-week:home -->';
 const html = s =>
   String(s)
     .replace(/&/g, '&amp;')
@@ -814,35 +984,40 @@ const bilingual = ({ en, es }) =>
   `<span class="gs-en">${html(en)}</span><span class="gs-es" lang="es">${html(es)}</span>`;
 
 /**
- * Home's "In the Library" cards: one per kind, with how many there are and
- * the first two of them, each a link into the Library narrowed to that kind.
+ * Home's recommended start, one per audience (Prompt 162): the committed list
+ * in tools/navigation-inventory.json (`firstWeek`), each entry read from the
+ * Library so no title or route is restated, and each action a button. A list
+ * that names a Library entry that does not exist fails here, not on the page.
  * Static markup in Home's fragment, so Home costs no JavaScript for it.
  */
-export async function renderHome(library) {
-  const { EN_LIBRARY } = await load('js/i18n/en.library.js');
-  const { ES_LIBRARY } = await load('js/i18n/es.library.js');
-  const cards = library.kinds.map(kind => {
-    const of = library.entries.filter(e => e.kind === kind);
-    const label = {
-      en: `${EN_LIBRARY[`lib.kind.${kind}`]} (${of.length})`,
-      es: `${ES_LIBRARY[`lib.kind.${kind}`]} (${of.length})`,
-    };
-    const first = of.slice(0, 2);
-    const note = {
-      en: first.map(e => e.title.en).join(' · '),
-      es: first.map(e => e.title.es).join(' · '),
-    };
-    return `<a class="wel-link" href="/library/?kind=${kind}"><span class="wel-link-label">${bilingual(label)}</span><span class="wel-link-note">${bilingual(note)}</span></a>`;
+export function renderHome(library) {
+  const { firstWeek } = JSON.parse(
+    readFileSync(path.join(ROOT, 'tools/navigation-inventory.json'), 'utf8')
+  );
+  const items = firstWeek.starts.map(start => {
+    const who = `<span class="wel-start-for">${bilingual(start.audience)}</span>`;
+    if (start.action)
+      return `<li class="wel-start-item">${who}<button type="button" class="ui-button wel-start-go" data-action="${start.action}">${bilingual(start.label)}</button></li>`;
+    const entry = library.entries.find(e => e.id === start.entry);
+    if (!entry)
+      throw new Error(
+        `The first-week list names ${start.entry}, which is not in the Library`
+      );
+    const lesson =
+      entry.kind === 'investigation'
+        ? ` data-lesson="${html(entry.id.split(':')[1])}"`
+        : '';
+    return `<li class="wel-start-item">${who}<a class="wel-start-go" href="${html(entry.route)}"${lesson}>${bilingual(entry.title)}</a></li>`;
   });
-  return `<div class="wel-links">\n${cards.join('\n')}\n</div>`;
+  return `<ul class="wel-start">\n${items.join('\n')}\n</ul>`;
 }
 
-/** Home's fragment with its Library cards rewritten. */
-export function withHome(doc, cards) {
+/** Home's fragment with its first-week block rewritten. */
+export function withHome(doc, block) {
   const a = doc.indexOf(HOME_START);
   const b = doc.indexOf(HOME_END);
   if (a < 0 || b < a) throw new Error(`${HOME} has no ${HOME_START} block`);
-  return `${doc.slice(0, a + HOME_START.length)}\n${cards}\n${doc.slice(b)}`;
+  return `${doc.slice(0, a + HOME_START.length)}\n${block}\n${doc.slice(b)}`;
 }
 
 async function main() {
@@ -850,12 +1025,13 @@ async function main() {
   const library = await buildLibrary();
   const outputs = [
     [OUT, renderJson(library)],
+    [SEARCH_OUT, renderSearchIndex(await buildSearchIndex(library))],
     [DOC, withCoverage(readFileSync(path.join(ROOT, DOC), 'utf8'), library)],
     [
       HOME,
       withHome(
         readFileSync(path.join(ROOT, HOME), 'utf8'),
-        await renderHome(library)
+        renderHome(library)
       ),
     ],
   ];

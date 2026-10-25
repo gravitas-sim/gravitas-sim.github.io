@@ -20,9 +20,10 @@
 // The periodic model alone, not the registry: the registry links every forward
 // model, and a Jest family load that races another family over them loses one.
 import { run as runPeriodic } from '../../forward/models/periodic.js';
-import { mulberry32, normalizeSeed } from '../../rng.js';
+import { stream } from '../../random/streams.js';
 import { harmonicFit, curveStats, magnitudesOf } from './fit.js';
 import { findPeriod, refinePeriod } from './period.js';
+import { ID_OBSERVING_SETUP } from '../../names.js';
 
 const { Math } = globalThis;
 
@@ -83,7 +84,7 @@ const drawLog = (rand, [lo, hi]) =>
 
 /** The nights a ground-based run visits: `nights` nights, two or three visits each, seeded. */
 export function nightlyEpochs(seed, nights = 60) {
-  const rand = mulberry32(normalizeSeed(`${seed}:nights`));
+  const rand = stream('forward', seed, 'nights');
   const list = [];
   for (let n = 0; n < nights; n++) {
     if (rand() < 0.2) continue; // weather
@@ -128,7 +129,7 @@ export function drawStar(cls, rand) {
 
 /** The observing setup of the sample: nightly visits, 1 percent white noise. */
 export const sampleSetup = (seed, nights = 60) => ({
-  format: 'gravitas.observing-setup',
+  format: ID_OBSERVING_SETUP,
   formatVersion: 1,
   seed,
   epochs: { kind: 'listed', list: nightlyEpochs(seed, nights), unit: 'd' },
@@ -175,7 +176,7 @@ export function measureLightCurve(
 export function makeSample({ perClass = 24, seed = 'variables-sample' } = {}) {
   const rows = [];
   for (const cls of CLASSES) {
-    const rand = mulberry32(normalizeSeed(`${seed}:${cls.id}`));
+    const rand = stream('injection', seed, cls.id);
     for (let i = 0; i < perClass; i++) {
       const id = `${cls.id}-${i + 1}`;
       const state = drawStar(cls, rand);

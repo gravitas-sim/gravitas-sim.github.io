@@ -351,7 +351,7 @@ describe('the catalog split', () => {
     // JavaScript after ensureDeferredMessages() resolves - the button's own
     // labels, which are read at start-up, stayed in the eager half and are
     // checked for below.
-    // The front door (welcome*, welcomeCard, welcomeAudience, welcomeLink), the
+    // The front door (welcome*), the
     // export dialog, the activity bridge and the tidal-disruption model joined
     // the list when the stellar foundation needed room in the start-up
     // download. All four are loaded on demand and none of them can be reached
@@ -384,7 +384,7 @@ describe('the catalog split', () => {
     // failure.* is read only by js/failures.js, which main.js fetches when
     // something has failed and which awaits this catalog before it speaks.
     const allowed =
-      /^(failure|lessonFn|binaryRun|binarySweep|assist|rvfit|rvsched|rv\.survey|exoW|resW|chaosW|energyW|hzW|binW|tideW|dmW|bhW|transitW|gwW|gwE|sound|reliability|bench|sweep|assign|burn|inv|cr3bp|nb|obsW|export|activity|welcome|welcomeCard|welcomeAudience|welcomeLink|tideP|stelW|stelE|specW|stellar\.phase|summary\.life)\./;
+      /^(failure|lessonFn|binaryRun|binarySweep|assist|rvfit|rvsched|rv\.survey|exoW|resW|chaosW|energyW|hzW|binW|tideW|dmW|bhW|transitW|gwW|gwE|sound|reliability|bench|sweep|assign|burn|inv|cr3bp|nb|obsW|export|activity|welcome|tideP|stelW|stelE|specW|stellar\.phase|summary\.life)\./;
     expect(Object.keys(EN_DEFERRED).filter(k => !allowed.test(k))).toEqual([]);
 
     // The sandbox sentences the summary reads on a first visit stayed eager.

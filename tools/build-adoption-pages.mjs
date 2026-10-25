@@ -42,14 +42,32 @@ import {
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
+import { previewRoute } from '../js/library/format.js';
+import {
+  reportCaveat,
+  statusStatement,
+} from '../js/instructorCartridgeText.js';
 import { withShell } from './shell.mjs';
 import { withPolicy } from './csp.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+/**
+ * The minutes of a duration as numbers: "5" when the bounds are equal and
+ * "5–10" otherwise. The one formatter every generated page that prints a
+ * duration uses, so a single-length activity never prints "5–5". (The Library
+ * card's own wording, js/library/card.js, already handles equal bounds.)
+ */
+export const minutesOf = d =>
+  !d ? '' : d.min === d.max ? `${d.max}` : `${d.min}–${d.max}`;
+
 const load = rel => import(pathToFileURL(path.join(ROOT, rel)).href);
 const readJson = rel => JSON.parse(readFileSync(path.join(ROOT, rel), 'utf8'));
 
 const { shortRoute } = await load('js/assignments/shortRoute.js');
+// The editorial time bands (Prompt 174): the table the Library's length facet
+// and the printable activity list read, so a band cannot be one thing here and
+// another in the filter.
+const TB = await load('js/data/instructorTimeBands.js');
 
 export const BASE = 'teaching';
 export const SITE = 'https://gravitas-sim.online';
@@ -87,6 +105,22 @@ const W = {
   textbook: ['Textbook', 'Libro de texto'],
   time: ['Time', 'Tiempo'],
   minutes: ['minutes', 'minutos'],
+  bandLabel: ['Time band', 'Franja de tiempo'],
+  band_short: ['short', 'corta'],
+  band_medium: ['medium', 'media'],
+  band_long: ['long', 'larga'],
+  depth_core: ['core depth', 'profundidad básica'],
+  depth_quantitative: ['quantitative depth', 'profundidad cuantitativa'],
+  depth_advanced: ['advanced depth', 'profundidad avanzada'],
+  bandStatement: [TB.STATEMENT.en, TB.STATEMENT.es],
+  objectivesMap: [
+    'To map these to your own course outcomes, write them as course objectives in the course builder and add your outcomes there: the printable activity list prints the matrix of outcomes against the items. The mapping is yours; it is not evidence that students attained an outcome.',
+    'Para asociarlos con los resultados de su propio curso, escríbalos como objetivos del curso en el creador de cursos y añada allí sus resultados: la lista de actividades imprimible imprime la matriz de resultados contra los elementos. La asociación es suya; no es evidencia de que el estudiantado alcanzara un resultado.',
+  ],
+  alignOnly: [
+    'OpenStax Astronomy 2e is the only textbook aligned here. Another is added only when it has a public table of contents that can be cited; none has been checked yet.',
+    'OpenStax Astronomy 2e es el único libro de texto alineado aquí. Se añadirá otro solo cuando tenga una tabla de contenidos pública que pueda citarse; todavía no se ha comprobado ninguno.',
+  ],
   math: ['Mathematics asked', 'Matemáticas que se piden'],
   calc: ['Arithmetic', 'Aritmética'],
   subjects: ['Subjects', 'Temas'],
@@ -101,8 +135,8 @@ const W = {
     'La abre limpia, desde el primer paso, y no lee ni escribe nada del progreso guardado en este navegador.',
   ],
   previewGuide: [
-    'This opens it as a student would. It keeps only the record that the investigation was opened, in this browser.',
-    'La abre como la vería un estudiante. Solo guarda en este navegador el registro de que la investigación se abrió.',
+    'This opens it as a student would, with a banner that says it is a preview. It reads none of the progress saved in this browser and writes none.',
+    'La abre como la vería un estudiante, con un aviso de que es una vista previa. No lee ni escribe nada del progreso guardado en este navegador.',
   ],
   objectives: [
     'What students will be able to do',
@@ -308,6 +342,37 @@ const W = {
 };
 const w = key => bi({ en: W[key][0], es: W[key][1] });
 const wt = key => ({ en: W[key][0], es: W[key][1] });
+
+/**
+ * A band in words, with its minutes: "medium, 30–50 min".
+ * @param {string} band - short, medium or long
+ */
+const bandText = band => {
+  const r = TB.BANDS[band];
+  return bi({
+    en: `${W[`band_${band}`][0]}, ${r.lo}–${r.hi} min`,
+    es: `${W[`band_${band}`][1]}, ${r.lo}–${r.hi} min`,
+  });
+};
+
+/**
+ * What an adoption page says of time beyond the declared minutes: the band at
+ * each depth the investigation offers, or the band of an activity or guide's
+ * minutes, and always the statement that it is an editorial estimate.
+ */
+function bandCell(id, entry, lesson) {
+  const row = lesson && TB.LESSON_BANDS[id];
+  const bands = row
+    ? Object.entries(row)
+        .map(
+          ([depth, band]) => `${bi(wt(`depth_${depth}`))}: ${bandText(band)}`
+        )
+        .join('; ')
+    : entry.duration
+      ? bandText(TB.bandOfMinutes(entry.duration.max))
+      : '';
+  return `${bi(wt('bandLabel'))}: ${bands}<br><span class="ad-type" id="ad-band-note">${bi(wt('bandStatement'))}</span>`;
+}
 
 const MATH_KEY = {
   none: 'mathNone',
@@ -785,11 +850,7 @@ function investigationPage(S, entry) {
     .join(', ');
   const fmtWords = lib(S, `lib.format.${entry.format}`);
   const calc = lib(S, `lib.calculation.${entry.calculation}`);
-  const durationText = entry.duration
-    ? entry.duration.min === entry.duration.max
-      ? `${entry.duration.min}`
-      : `${entry.duration.min} to ${entry.duration.max}`
-    : '';
+  const durationText = minutesOf(entry.duration);
   const datasets = datasetsOf(S, entry, lesson, guide);
   const offlineKey = datasets.installs ? 'afterInstall' : OFFLINE[entry.format];
   const instr = instrumentsOf(S, outline);
@@ -801,7 +862,7 @@ function investigationPage(S, entry) {
     rowOf(w('textbook'), tbText),
     rowOf(
       w('time'),
-      `${durationText} ${bi(wt('minutes'))}<br><span class="ad-type">${plain(lib(S, `lib.length.${entry.length}`))}</span>`
+      `${durationText} ${bi(wt('minutes'))}<br><span class="ad-type">${plain(lib(S, `lib.length.${entry.length}`))}</span><br>${bandCell(id, entry, lesson)}`
     ),
     rowOf(w('math'), bi(wt(MATH_KEY[entry.mathematics]))),
     rowOf(w('calc'), plain(calc)),
@@ -813,7 +874,7 @@ function investigationPage(S, entry) {
     rowOf(w('offline'), bi(wt(offlineKey))),
   ].join('\n');
 
-  const previewHref = lesson ? `/?author=${id}&view=student` : entry.route;
+  const previewHref = previewRoute(entry);
   const actions = `<div class="ad-actions">
 <a class="ui-button is-primary" href="${html(entry.route)}">${w('start')}</a>
 <a class="ui-button" href="${html(previewHref)}" data-preview>${w('preview')}</a>
@@ -826,11 +887,11 @@ function investigationPage(S, entry) {
     objectives = section(
       'objectives',
       w('objectives'),
-      list(
+      `${list(
         lesson.objectives.map((o, i) =>
           bi({ en: o, es: es?.objectives?.[i] ?? o })
         )
-      )
+      )}\n<p class="doc-note">${w('objectivesMap')}</p>`
     );
   }
 
@@ -1065,6 +1126,7 @@ ${rowOf(w('actFrom'), `<a href="/${BASE}/investigation/${a.lesson}/">${plain(inv
 </dl>
 ${section('question', w('actQuestion'), `<p>${plain(question)}</p>`)}
 ${section('formats', w('actFormats'), `<div class="doc-table-wrap" tabindex="0"><table class="doc-table"><thead><tr><th scope="col">${w('format')}</th><th scope="col">${w('time')}</th><th scope="col">${w('steps')}</th><th scope="col"><span class="gs-vh">${w('start')}</span></th></tr></thead><tbody>\n${rows}\n</tbody></table></div>`)}
+<p class="doc-note" id="ad-band-note">${w('bandStatement')}</p>
 <p>${w('readMore')}</p>
 <p>${w('actKey')}</p>
 <p><a href="/teaching/find/">${w('back')}</a></p>`;
@@ -1212,7 +1274,7 @@ ${sel('f-offline', w('fOffline'), [opt('yes', wt('fOfflineOnly'))])}
   };
   const table = `<div class="doc-table-wrap" tabindex="0"><table class="doc-table" id="adTable"><thead><tr><th scope="col">${w('fName')}</th><th scope="col">${bi({ en: 'Kind', es: 'Tipo' })}</th><th scope="col">${w('fLevel')}</th><th scope="col">${w('fTime')} (${bi(wt('minutes'))})</th><th scope="col">${w('fMath')}</th></tr></thead><tbody>\n${rows.map(tr).join('\n')}\n</tbody></table></div>
 <p id="adEmpty" class="doc-note" hidden>${w('fEmpty')}</p>`;
-  const body = `${section('filters', w('filterTitle'), filters)}\n${table}`;
+  const body = `${section('filters', w('filterTitle'), filters)}\n${table}\n<p class="doc-note" id="ad-band-note">${w('bandStatement')}</p>\n${topicsLine(S)}`;
   const text = pageHtml({
     file,
     title: {
@@ -1234,13 +1296,19 @@ ${sel('f-offline', w('fOffline'), [opt('yes', wt('fOfflineOnly'))])}
  * Astronomy 2e chapter it declares (Prompt 97). Generated from the same rows
  * the index filters, so a chapter can never be listed that no page declares.
  */
+/** The Library's topic pages (Prompt 163), one link per subject. */
+const topicsLine = S =>
+  `<p>${bi({ en: 'Browse the Library by topic:', es: 'Explore la Biblioteca por tema:' })} ${S.library.subjects
+    .map(s => `<a href="/library/?topic=${html(s.id)}">${plain(s.label)}</a>`)
+    .join(', ')}.</p>`;
+
 function alignmentPage(S, rows) {
   const file = `${BASE}/alignment/index.html`;
   const chapters = [...new Set(rows.map(r => r.chapter).filter(Boolean))].sort(
     (a, b) => a - b
   );
   const one = r =>
-    `<li><a href="${html(r.url)}">${plain(r.title)}</a> (${bi(wt(CL_KEY[r.courseLevel]))}, ${r.duration ? `${r.duration.min}–${r.duration.max} ${bi(wt('minutes'))}` : ''})</li>`;
+    `<li><a href="${html(r.url)}">${plain(r.title)}</a> (${bi(wt(CL_KEY[r.courseLevel]))}, ${r.duration ? `${minutesOf(r.duration)} ${bi(wt('minutes'))}` : ''})</li>`;
   const body = `<p>${bi({ en: 'The chapter is the claim; check it against the edition you teach from (the chapters were matched from the table of contents). Each link opens the investigation’s adoption page.', es: 'El capítulo es la afirmación; compruébelo con la edición que usa (los capítulos se asociaron a partir del índice). Cada enlace abre la página de adopción de la investigación.' })}</p>
 ${chapters
   .map(ch => {
@@ -1252,6 +1320,9 @@ ${chapters
     );
   })
   .join('\n')}
+<p class="doc-note">${w('alignOnly')}</p>
+<p class="doc-note" id="ad-band-note">${w('bandStatement')}</p>
+${topicsLine(S)}
 <p><a href="/teaching/find/">${w('back')}</a></p>`;
   const title = {
     en: 'Textbook alignment',
@@ -1308,6 +1379,11 @@ function guidePage(S) {
   const lead = (en, es) => `<strong>${T(en, es)}</strong>`;
 
   const toc = [
+    [
+      'minimal',
+      'Start here: one course in fifteen minutes',
+      'Empiece aquí: un curso en quince minutos',
+    ],
     ['what', 'What you are adopting', 'Qué va a adoptar'],
     ['week', 'The first week', 'La primera semana'],
     ['semester', 'The first semester', 'El primer semestre'],
@@ -1326,6 +1402,43 @@ function guidePage(S) {
     `<p id="toc-h"><strong>${T('On this page', 'En esta página')}</strong></p>\n<nav class="ad-toc" aria-labelledby="toc-h">${list(
       toc.map(([id, en, es]) => `<a href="#${id}-h">${T(en, es)}</a>`)
     )}</nav>`,
+    section(
+      'minimal',
+      T(
+        'Start here: one course in fifteen minutes',
+        'Empiece aquí: un curso en quince minutos'
+      ),
+      P(
+        'If you have one built-in course and fifteen minutes, you do not have to build anything. The fifteen minutes is a plan, not a measurement from a class.',
+        'Si tiene un curso incluido y quince minutos, no tiene que crear nada. Los quince minutos son un plan, no una medición hecha en una clase.'
+      ) +
+        ol([
+          `${lead('Choose a course and press the button.', 'Elija un curso y pulse el botón.')} ${T(
+            'On the Teach page, “Use as is” opens the course builder with that course. Name the term, and Gravitas pins every investigation to today’s version, gives each activity a fresh code and shows the link for your students, the course file to keep and what, if anything, changed under the course.',
+            'En la página Enseñar, «Usar tal cual» abre el creador de cursos con ese curso. Escriba el periodo y Gravitas fija cada investigación a la versión de hoy, da un código nuevo a cada actividad y muestra el enlace para sus estudiantes, el archivo del curso que debe guardar y qué cambió, si cambió algo, en el curso.'
+          )} ${a('/teaching/#minimal', 'Teach: one course in fifteen minutes', 'Enseñar: un curso en quince minutos')}.`,
+          `${lead('Give students the link.', 'Dé el enlace al estudiantado.')} ${T(
+            'The same panel opens the distribution kit: a code to scan, a handout in English and Spanish, and notes for Canvas, Moodle and Blackboard.',
+            'El mismo panel abre el kit de distribución: un código para escanear, un folleto en español e inglés y notas para Canvas, Moodle y Blackboard.'
+          )}`,
+          `${lead('Students work and hand in.', 'El estudiantado trabaja y entrega.')} ${T(
+            'They open the link, do an investigation and hand in the lab report as a PDF, or its token. Their work stays in their own browsers.',
+            'Abren el enlace, hacen una investigación y entregan el informe de laboratorio en PDF, o su ficha. Su trabajo se queda en sus propios navegadores.'
+          )}`,
+          `${lead('Read the reports.', 'Lea las entregas.')} ${T(
+            'Open submission review, drop in the course file and the reports, mark what needs your judgment, and write the gradebook files.',
+            'Abra la revisión de entregas, suelte el archivo del curso y las entregas, califique lo que necesita su criterio y escriba los archivos de calificaciones.'
+          )} ${a('/instructors/submissions/', 'Submission review', 'Revisión de entregas')}.`,
+        ]) +
+        P(
+          'Next term, open last term’s course file in the course builder and choose Start a new term: fresh codes, today’s investigations and a list of what changed, while last term’s file and links keep working. On the review page, Archive saves last term’s reports and your marks as one file and clears the page. Nothing a student made is deleted.',
+          'El periodo siguiente, abra el archivo del curso del periodo pasado en el creador de cursos y elija Empezar un periodo nuevo: códigos nuevos, las investigaciones de hoy y una lista de lo que cambió, mientras el archivo y los enlaces del periodo pasado siguen funcionando. En la revisión de entregas, Archivar guarda las entregas del periodo pasado y sus calificaciones en un solo archivo y limpia la página. No se borra nada de lo que hizo el estudiantado.'
+        ) +
+        P(
+          `For a course platform, Gravitas ${statusStatement('en')}. ${reportCaveat('en')}`,
+          `Para una plataforma de cursos, Gravitas ${statusStatement('es')}. ${reportCaveat('es')}`
+        )
+    ),
     section(
       'what',
       T('What you are adopting', 'Qué va a adoptar'),
@@ -1351,12 +1464,12 @@ function guidePage(S) {
             'Abra el índice de páginas de adopción y filtre por nivel, tiempo, matemáticas, tema, capítulo del libro o tipo de datos; cada página dice a quién va dirigida la investigación, cuánto dura y qué debería saber antes el estudiantado. La alineación con el libro las enumera por capítulo de OpenStax Astronomy 2e, y la Biblioteca ofrece cursos ya preparados.'
           )} ${a('/teaching/find/', 'Adoption pages', 'Páginas de adopción')}, ${a('/teaching/alignment/', 'Textbook alignment', 'Alineación con el libro')}, ${a('/library/', 'Library', 'Biblioteca')}.`,
           `${lead('Preview it as a student.', 'Véala como estudiante.')} ${T(
-            'On an adoption page, “Preview as a student” opens the investigation clean, from the first step, and neither reads nor writes the progress saved in your browser. The Observatory, 3-D and mission investigations have no such mode: their link keeps only the record that it was opened. Do the investigation once yourself before anyone else does.',
-            'En una página de adopción, «Vista previa como estudiante» abre la investigación limpia, desde el primer paso, y no lee ni escribe el progreso guardado en su navegador. Las investigaciones del Observatorio, 3-D y misiones no tienen ese modo: su enlace solo guarda el registro de que se abrió. Haga usted la investigación una vez antes que nadie.'
+            'On an adoption page, and on every Library item page, “Preview as a student” opens it clean, from the first step, with a banner that says it is a preview, and neither reads nor writes the progress saved in your browser. That holds for every kind the Library lists: investigations (those of the Observatory, the 3-D lab and the mission lab too), activities, courses, datasets, scenarios and experiments. Do it once yourself before anyone else does.',
+            'En una página de adopción, y en cada página de elemento de la Biblioteca, «Vista previa como estudiante» la abre limpia, desde el primer paso, con un aviso de que es una vista previa, y no lee ni escribe el progreso guardado en su navegador. Vale para cada tipo que lista la Biblioteca: investigaciones (también las del Observatorio, el laboratorio 3-D y el de misiones), actividades, cursos, conjuntos de datos, escenarios y experimentos. Hágala usted una vez antes que nadie.'
           )}`,
           `${lead('Build an activity.', 'Cree una actividad.')} ${T(
-            'On the same page, “Make an activity from it” lets you choose the steps, add a note and a class code, and gives you one link. The class code is the same on every student’s link, so it names the class and not the student. The short route is a ready-made cut estimated at 25 minutes or less.',
-            'En la misma página, «Crear una actividad a partir de ella» le permite elegir los pasos, añadir una nota y un código de grupo, y le da un enlace. El código de grupo es el mismo en el enlace de cada estudiante, así que nombra al grupo y no al estudiante. La ruta corta es un corte ya preparado, estimado en 25 minutos o menos.'
+            'On the same page, “Make an activity from it” lets you choose the steps, add a note and a class code, and gives you one link. You can also adapt it without writing a new one: change the order of the steps, say something of your own on a step in English, Spanish or both, say when it is due, choose whether the “More” sections start open and whether the lab report prints the marking note. Every change is checked against the steps the investigation itself depends on before the link is made, and a change that would make a step ask about something else is refused, naming the step it needs. The class code is the same on every student’s link, so it names the class and not the student. The short route is a ready-made cut estimated at 25 minutes or less. If the investigation changes after you made the link, the activity opens with a report of what changed, in words, and offers to keep it as made or update it to the current investigation as a new activity.',
+            'En la misma página, «Crear una actividad a partir de ella» le permite elegir los pasos, añadir una nota y un código de grupo, y le da un enlace. También puede adaptarla sin escribir una nueva: cambiar el orden de los pasos, decir algo propio en un paso en inglés, español o ambos, indicar cuándo se entrega, elegir si las secciones «Más» empiezan abiertas y si el informe de laboratorio imprime la nota de calificación. Cada cambio se comprueba contra los pasos de los que depende la propia investigación antes de crear el enlace, y un cambio que haría que un paso preguntara por otra cosa se rechaza, nombrando el paso que necesita. El código de grupo es el mismo en el enlace de cada estudiante, así que nombra al grupo y no al estudiante. La ruta corta es un corte ya preparado, estimado en 25 minutos o menos. Si la investigación cambia después de crear el enlace, la actividad se abre con un informe de lo que cambió, en palabras, y ofrece conservarla como se creó o actualizarla a la investigación actual como una actividad nueva.'
           )}`,
           `${lead('Post the link.', 'Publique el enlace.')} ${T(
             'The distribution kit turns the link into a code to scan, a one-page handout in English, Spanish or both, markup for a web page, and notes for Canvas, Moodle and Blackboard. The link carries the activity; students need nothing else.',
@@ -1367,8 +1480,8 @@ function guidePage(S) {
             'El estudiantado trabaja en su propio navegador y guarda su informe de laboratorio como PDF, que lleva una ficha. Lo entrega como usted ya recoge los trabajos: su plataforma de aprendizaje, el correo o el papel. Pídales que escriban su usuario o número de estudiante donde el informe pide un nombre; así distingue la revisión a unos estudiantes de otros.'
           )}`,
           `${lead('Review the work.', 'Revise el trabajo.')} ${T(
-            'Drop the PDFs into submission review. It shows which questions the class found hardest, lets you mark written answers (your marks are labeled as yours) and writes gradebook files for Canvas, Moodle and D2L Brightspace. When one class code covers every report, it matches students by the name typed in the report and says so. It keeps nothing and sends nothing.',
-            'Suelte los PDF en la revisión de entregas. Muestra qué preguntas le costaron más al grupo, le permite calificar las respuestas escritas (sus calificaciones se rotulan como suyas) y escribe archivos de calificaciones para Canvas, Moodle y D2L Brightspace. Cuando un solo código de grupo cubre todos los informes, empareja a los estudiantes por el nombre escrito en el informe y lo indica. No guarda nada y no envía nada.'
+            'Drop the PDFs into submission review. It shows which questions the class found hardest, lets you mark written answers (your marks are labeled as yours; a written answer can carry rubric criteria of completion, correctness, reasoning or uncertainty, each marked by you and none added to a score) and writes gradebook files for Canvas, Moodle and D2L Brightspace. When one class code covers every report, it matches students by the name typed in the report and says so. It also draws a picture of the class from the reports you opened: how far they got, how each step and each rubric criterion went, the wrong answers given most often, the time the reports record and each measured quantity with its uncertainties, as one spreadsheet and one printable page that name no student. It keeps nothing and sends nothing.',
+            'Suelte los PDF en la revisión de entregas. Muestra qué preguntas le costaron más al grupo, le permite calificar las respuestas escritas (sus calificaciones se rotulan como suyas; una respuesta escrita puede llevar criterios de rúbrica de completitud, corrección, razonamiento o incertidumbre, que usted califica uno por uno y ninguno se suma a una puntuación) y escribe archivos de calificaciones para Canvas, Moodle y D2L Brightspace. Cuando un solo código de grupo cubre todos los informes, empareja a los estudiantes por el nombre escrito en el informe y lo indica. También dibuja un cuadro de la clase a partir de los informes que abrió: hasta dónde llegaron, cómo fue cada paso y cada criterio de rúbrica, las respuestas incorrectas más frecuentes, el tiempo que registran los informes y cada magnitud medida con sus incertidumbres, en una hoja de cálculo y una página imprimible que no nombran a ningún estudiante. No guarda nada y no envía nada.'
           )} ${a('/instructors/submissions/', 'Submission review', 'Revisión de entregas')}.`,
         ]) +
         P(
@@ -1389,8 +1502,8 @@ function guidePage(S) {
           `${deep} de las ${total} investigaciones tienen tres profundidades: principal, cuantitativa y avanzada. Puede fijar la profundidad en una actividad o en un curso, y el estudiante también puede elegirla. Un paso más profundo nunca cambia el escenario ni el modelo, solo lo que se pregunta.`
         )}`,
         `${lead('Materials.', 'Materiales.')} ${T(
-          'The instructor resources hold an instructor guide and an answer key for each investigation that runs in the simulation, keys cut to each format of a classroom activity, and student worksheets for the activities, in a bundle encrypted in the browser because the site is static. The passphrase is shared with instructors on request: write to the address in the citation file. The public parts (the topic, where it fits in a course, what students should already know and the wrong turns they take) are on each adoption page.',
-          'Los recursos para docentes contienen una guía docente y una clave de respuestas para cada investigación que se ejecuta en la simulación, claves adaptadas a cada formato de una actividad de clase y hojas de trabajo para las actividades, en un paquete cifrado en el navegador porque el sitio es estático. La contraseña se comparte con docentes a petición: escriba a la dirección del archivo de citas. Las partes públicas (el tema, el lugar en el curso, lo que el estudiantado debería saber ya y los errores que comete) están en cada página de adopción.'
+          'The instructor resources hold an instructor guide and an answer key for each investigation that runs in the simulation, keys cut to each format of a classroom activity, and student worksheets for the activities, in a bundle encrypted in the browser because the site is static. The passphrase is shared with instructors on request: write from an address your institution issues to the address in the citation file, and the maintainer replies within a week or two. A department can build a bundle under its own passphrase instead. The public parts (the topic, where it fits in a course, what students should already know and the wrong turns they take) are on each adoption page.',
+          'Los recursos para docentes contienen una guía docente y una clave de respuestas para cada investigación que se ejecuta en la simulación, claves adaptadas a cada formato de una actividad de clase y hojas de trabajo para las actividades, en un paquete cifrado en el navegador porque el sitio es estático. La contraseña se comparte con docentes a petición: escriba, desde una dirección que su institución le haya dado, a la dirección del archivo de citas; la persona responsable responde en una o dos semanas. Un departamento puede construir un paquete con su propia contraseña. Las partes públicas (el tema, el lugar en el curso, lo que el estudiantado debería saber ya y los errores que comete) están en cada página de adopción.'
         )} ${a('/instructors/', 'Instructor resources', 'Recursos para docentes')}.`,
         `${lead('Evaluation.', 'Evaluación.')} ${T(
           'The classroom evidence kit has a fidelity checklist, a twelve-item pilot pre/post assessment, a usability questionnaire and de-identified data templates. They are project-developed and unvalidated, and the kit says so. Research on students usually needs institutional review before any data is collected.',
@@ -1452,8 +1565,8 @@ function guidePage(S) {
         [
           ['Languages', 'Idiomas'],
           T(
-            'Student-facing pages are in English and Spanish. The instructor materials are in English only.',
-            'Las páginas para el estudiantado están en inglés y español. Los materiales docentes están solo en inglés.'
+            'Student-facing pages are in English and Spanish. The instructor guides and answer keys are written in English: their Spanish copies translate the headings and the investigation’s own words, and every investigation also has generated Spanish structured notes (objectives, steps, marked steps, named misconceptions), which a fluent reader has not read.',
+            'Las páginas para el estudiantado están en inglés y español. Las guías docentes y las claves de respuestas están escritas en inglés: sus copias en español traducen los encabezados y las palabras de la propia investigación, y cada investigación tiene además notas estructuradas generadas en español (objetivos, pasos, pasos que se califican, errores conceptuales con nombre), que ninguna persona con dominio pleno del idioma ha leído.'
           ),
         ],
         [

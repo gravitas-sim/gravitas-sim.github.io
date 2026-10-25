@@ -23,6 +23,12 @@ const openSettings = async page => {
   await expect(page.locator(PANEL)).toBeVisible();
 };
 
+/** The science settings are behind Advanced, shut by default (Prompt 167). */
+const openAdvanced = page =>
+  page.locator('#settingsGrid .settings-advanced').evaluate(d => {
+    if (!d.open) d.querySelector(':scope > summary').click();
+  });
+
 const section = (page, id) =>
   page.locator(`#settingsGrid .settings-section[data-section="${id}"]`);
 
@@ -309,6 +315,7 @@ test.describe('help', () => {
     });
     await app.boot();
     await openSettings(page);
+    await openAdvanced(page);
     const expected = await page.evaluate(async () => {
       const { ES_SETTINGSHELP } = await import('/js/i18n/es.settingsHelp.js');
       return ES_SETTINGSHELP['setHelp.gravitational_constant'];

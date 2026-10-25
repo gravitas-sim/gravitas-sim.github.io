@@ -11,7 +11,7 @@
 // answer and a short answer.
 // =============================================================================
 
-import { test, expect } from './fixtures.js';
+import { test, expect, openMore } from './fixtures.js';
 
 const LESSON = 'missing-mass';
 
@@ -418,6 +418,7 @@ test.describe('persistence', () => {
     expect(await stepNumber(page)).toBeGreaterThan(1);
 
     page.once('dialog', d => d.accept());
+    await openMore(page);
     await page.locator('#investigationReset').click();
     await expect.poll(() => stepNumber(page), { timeout: 15_000 }).toBe(1);
   });

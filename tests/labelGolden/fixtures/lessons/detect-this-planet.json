@@ -1,0 +1,78 @@
+{
+ "id": "detect-this-planet",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.write-down-what-schedule-a.fields.0.unit",""],
+    ["steps.write-down-what-schedule-a.fields.1.unit","m/s"],
+    ["steps.write-down-what-schedule-a.fields.2.unit",""],
+    ["steps.write-down-what-schedule-b.fields.0.unit",""],
+    ["steps.write-down-what-schedule-b.fields.1.unit","m/s"],
+    ["steps.write-down-what-schedule-b.fields.2.unit",""],
+    ["steps.why-it-failed.unit","orbits"],
+    ["steps.how-deep-is-an-earth.unit","ppm"],
+    ["steps.read-two-budgets.fields.0.unit",""],
+    ["steps.read-two-budgets.fields.1.unit",""],
+    ["steps.read-two-budgets.fields.2.unit","ppm"]
+   ],
+   "numbered": [
+    ["steps.write-down-what-schedule-a.fields.0.label","Phase bins covered (out of 10)"],
+    ["steps.write-down-what-schedule-a.fields.0.hint","10"],
+    ["steps.write-down-what-schedule-a.fields.1.hint","55.8"],
+    ["steps.write-down-what-schedule-a.fields.2.hint","48.7"],
+    ["steps.write-down-what-schedule-b.fields.0.label","Phase bins covered (out of 10)"],
+    ["steps.write-down-what-schedule-b.fields.0.hint","2"],
+    ["steps.write-down-what-schedule-b.fields.1.hint","11"],
+    ["steps.write-down-what-schedule-b.fields.2.hint","1.9"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.write-down-what-schedule-a.fields.0.label","Intervalos de fase cubiertos (de 10)"],
+    ["steps.write-down-what-schedule-b.fields.0.label","Intervalos de fase cubiertos (de 10)"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "why-it-failed",
+    "answer": "1",
+    "tolerance": "0.06",
+    "unit": "orbits"
+   },
+   {
+    "sid": "how-deep-is-an-earth",
+    "answer": "84",
+    "tolerance": "6",
+    "unit": "ppm"
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "twelve-nights": {
+    "probe": [[{"label":"Target","value":"select the star on the canvas"}],[{"label":"Target","value":"HD 209458"},{"label":"Where it is in its orbit now","value":"212°"},{"label":"What a spectrograph reads now","value":"-57.1 m/s — towards us"}],[{"label":"Target","value":"Star A"},{"label":"Where it is in its orbit now","value":"12°"},{"label":"What a spectrograph reads now","value":"12.0 m/s — away from us"}],[{"label":"Target","value":"Star"},{"label":"Spectrograph","value":"this star is pinned, so there is no reflex motion to measure"}]]
+   },
+   "schedule-a-twelve-nights-one": {
+    "probe": [[{"label":"Target","value":"select the star on the canvas"}],[{"label":"Target","value":"HD 209458"},{"label":"Where it is in its orbit now","value":"212°"},{"label":"What a spectrograph reads now","value":"-57.1 m/s — towards us"}],[{"label":"Target","value":"Star A"},{"label":"Where it is in its orbit now","value":"12°"},{"label":"What a spectrograph reads now","value":"12.0 m/s — away from us"}],[{"label":"Target","value":"Star"},{"label":"Spectrograph","value":"this star is pinned, so there is no reflex motion to measure"}]]
+   },
+   "write-down-what-schedule-a": {
+    "validate": {"calls":242,"distinct":4,"digest":"61a0c0bd6d2943fb","samples":[null,{"level":"warn","message":"That is much lower than this schedule gives. Check the preset is Schedule A and the uncertainty is 8 m/s."},{"level":"ok","message":"Full phase coverage, and a scatter many times larger than the error bars can account for."},{"level":"error","message":"There are only ten bins, so the count cannot exceed ten."}]}
+   },
+   "the-same-planet-invisible": {
+    "probe": [[{"label":"Target","value":"select the star on the canvas"}],[{"label":"Target","value":"HD 209458"},{"label":"Where it is in its orbit now","value":"212°"},{"label":"What a spectrograph reads now","value":"-57.1 m/s — towards us"}],[{"label":"Target","value":"Star A"},{"label":"Where it is in its orbit now","value":"12°"},{"label":"What a spectrograph reads now","value":"12.0 m/s — away from us"}],[{"label":"Target","value":"Star"},{"label":"Spectrograph","value":"this star is pinned, so there is no reflex motion to measure"}]]
+   },
+   "write-down-what-schedule-b": {
+    "validate": {"calls":242,"distinct":3,"digest":"af705d9adecd5774","samples":[null,{"level":"ok","message":"Two bins out of ten, and a χ²/dof a careful person would not publish either way."},{"level":"warn","message":"Schedule B should cover very few bins. Check the cadence is 3.52 days."}]}
+   },
+   "read-two-budgets": {
+    "validate": {"calls":242,"distinct":3,"digest":"b67354f6523e5617","samples":[null,{"level":"ok","message":"A factor of about 150 between them, and the same planet in both. The within-transit bar is what did it — and unlike the persistent one, that bar does come down with more nights."},{"level":"warn","message":"Those look swapped. The space-based figure is the large one — about 587 against about 4."}]}
+   }
+  },
+  "es": "same"
+ }
+}

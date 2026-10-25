@@ -70,9 +70,9 @@ import {
   conservedQuantities,
   conservationDrift,
   resetConservationBaseline,
-  updatePhysicsSettings,
   getWorldGeneration,
 } from '../physics.js';
+import { commitSettings } from '../appState.js';
 import { pristineSettingsFor } from '../shareState.js';
 import { createPhaseSampler } from './phaseSampler.js';
 import { timeUnitSeconds } from '../units.js';
@@ -530,7 +530,7 @@ async function runReliabilityPhase(cfg) {
 
   const settings = host.getSettings();
   settings.max_timestep = cfg.maxTimestep;
-  updatePhysicsSettings(settings);
+  commitSettings('bench');
 
   const state = host.getState?.();
   if (state) state.paused = false;
@@ -728,7 +728,7 @@ export async function runReliabilityCheck(opts = {}) {
     // captured start.
     host.applyShareState(JSON.parse(JSON.stringify(savedWorld)));
     Object.assign(host.getSettings(), savedSettings);
-    updatePhysicsSettings(host.getSettings());
+    commitSettings('bench');
     host.setFixedStep?.(0);
     const state = host.getState?.();
     if (state) state.paused = savedPaused;
@@ -1264,7 +1264,7 @@ export async function runSweep(spec, opts = {}) {
     // The world the reader was looking at, whatever happened above.
     host.applyShareState(JSON.parse(JSON.stringify(savedWorld)));
     Object.assign(host.getSettings(), savedSettings);
-    updatePhysicsSettings(host.getSettings());
+    commitSettings('bench');
     host.setFixedStep?.(0);
     resetConservationBaseline();
     const state = host.getState?.();
@@ -1310,7 +1310,7 @@ export function restoreInitialState({ keepSettings = false } = {}) {
   host.applyShareState(JSON.parse(JSON.stringify(current.initialState)));
   if (keep) {
     Object.assign(host.getSettings(), keep);
-    updatePhysicsSettings(host.getSettings());
+    commitSettings('bench');
   }
   // Hold there. Without this the world resumes the instant it is restored, so
   // by the time the student has changed a setting and reached for Record the

@@ -4,7 +4,7 @@ A course pack is a course as a file: the lessons, assignments, simulations,
 data and readings an instructor sets, in order, in units, with learning
 objectives, prerequisites, time, optional introductory and advanced paths,
 and notes for students and instructors in English and Spanish. It is
-`gravitas.course-pack/2` (`js/course/pack.js`). Two pages use it:
+`gravitas.course-pack/2` (`js/course/pack.js`), or `/3` when it carries a profile, a term or outcomes (see The 3.0.0 version, below). Two pages use it:
 
 - **The course-pack builder**, at `/studio/course/`, the Studio's third page,
   makes one. It checks what the course depends on, pins every lesson it
@@ -30,9 +30,12 @@ manifest, and that is all.
 | `locales` | `["en"]` or `["en", "es"]` |
 | `pinning` | `exact` or `compatible` (see Pins) |
 | `courseLevel` | Optional: `survey`, `majors` or `upper`. A lesson item with no `depth` of its own opens at this level's depth (core, quantitative, advanced); the Library's course filter reads it |
+| `profile` | Optional (Prompt 164): `collection`, written only for a collection (see Collections below) |
+| `term` | Optional (Prompt 168): the term this copy is for, a short plain label such as `Spring 2027` (at most 40 characters), written only when the instructor names one |
 | `title`, `summary`, `audience` | What the course home shows first |
 | `teacherGuide` | How to run the course, for another instructor |
-| `objectives` | Up to 12, each an id and a text |
+| `objectives` | Up to 12, each an id and a text, and optionally `outcomes`: the ids of the instructor's outcomes it is mapped to (Prompt 174) |
+| `outcomes` | Optional (Prompt 174): up to 12 of the instructor's own outcomes, each an id and a text, written only when the instructor enters some (see The printable activity list below) |
 | `prerequisites` | Up to 6: a Gravitas lesson, or a text |
 | `units` | 1 to 20, each an id, a title, an optional summary and 1 to 30 items (120 in all) |
 
@@ -73,6 +76,22 @@ setting them is the instructor's job, in whatever they use to set them.
   that range in proportion to the steps it keeps (never under five minutes),
   unless it declares its minutes. Scenarios, datasets and readings declare
   theirs. A path takes the core's time plus its own items'.
+
+## Collections (Prompt 164)
+
+A collection is a course pack with `profile: "collection"`: a short list rather than a course. It is the same format and the same links (a Gravitas course home link or a file), so there is no second format to read, and what it leaves out is checked:
+
+- exactly one unit, of 1 to 30 items in order;
+- an optional note (`studentNote`, `teacherNote`) on any item, a `depth` on a lesson or a guide, and a pin where the package is exact;
+- no assignment items, no optional paths (every item is core), no `needs`, and no objectives, prerequisites, course level or term.
+
+A collection can hold a lesson, a 3-D or mission guide, a scenario, a dataset, a reading or an investigation carried as a link. The Library's Save button saves the first four. Who uses them:
+
+- **The recommended starts.** `tools/build-library.mjs` writes each start whose entries a collection can hold as one (`starts[].collection` in `library/library.json`, validated by `validateCoursePack` at build time) and the Library's start page draws those starts from them. Two of the four are collections today (new to astronomy, in an astronomy course). "Measure something real" names an Observatory investigation and "Teaching a course" names a course, and neither is an item of a package, so those two stay plain lists until a package can hold them.
+- **A student's saved items**, a collection of their own in one record (`gravitas_collections`: STORAGE.md), and the collections they kept from others. A collection opened from a link is kept only when the student presses Keep on the course home; opening one stores nothing.
+- **An instructor's collection**, made in the distribution kit (`/teaching/kit/#collections`) from what they saved in the Library: order, a sentence for each item, a depth where an item has one, a title, and a link or a file. The Spanish is written, never made up: once any text has Spanish, every text needs it.
+
+**A 2.0.0 build cannot open a collection.** A collection is written as `gravitas.course-pack/3` (see The 3.0.0 version, below), which a 2.0.0 build refuses as made by a newer version of Gravitas (`tests/compat/boundary.mjs`, `collection-profile`), and the release notes say so. No course is changed: a course has no profile and stays /2.
 
 ### 3-D lab investigations (Prompt 105)
 
@@ -140,6 +159,20 @@ The file from before the upgrade is the archive. The upgrade makes a new one.
 | A lesson, scenario or dataset leaves Gravitas | The builder refuses to save or link the course until the item is removed. The course home still opens it and marks the item, so an archived course stays readable |
 | A catalog dataset needs a newer Gravitas | The builder refuses it, naming the version it needs |
 | A /1 course is opened | It becomes a /2 course with the same units and lessons, unpinned; upgrading its lessons pins them |
+
+## A copy for a term (Prompt 168)
+
+`js/instructorTerm.js` makes a copy of a course for a term, or for first use as it comes
+(INSTRUCTOR_FLOW.md): `startTerm(pack, facts, {term, today})` runs the reviewed upgrade on every lesson,
+assignment and pack item (so every pin is the lesson as it is now), gives every assignment a fresh id and
+date and the term in its title (both languages, the Spanish still marked as written from the English), puts
+the term in the public id and sets `term`. It returns the new pack and a report: for each pinned item its
+standing before (`same`, `changed`, `compatible`, `major`, `moved`, `unpinned`, `missing`), the assigned
+steps whose question changed or that are gone, and each assignment's old and new id. The pack passed in is
+not changed, and its links open what they opened. The builder's panel (`/studio/course/?use=<id>` and the
+Start a new term button) and the kit's term step are its two forms. The `term` field is written only when
+a term is named, and a pack that has it is `/3`: a 2.0.0 reader refuses it as made by a newer version
+(`tests/compat/boundary.mjs` `course-term`), and every pack without one reads as before.
 
 ## Checks
 
@@ -316,12 +349,57 @@ and cannot be course items. The catalog still lists /1 courses only, so these
 /2 courses are reached from the course home and the Library, not installed from
 the catalog.
 
+## Common Cartridge (Prompt 169)
+
+An instructor who expects a course to import into Canvas, Moodle, D2L or Blackboard gets a file: the course builder's **Export a Common Cartridge** button and the distribution kit's **Make a Common Cartridge** (for a course) make `<course id>-<en|es>.imscc` in the browser, from the course as it stands. Nothing is uploaded, and the export runs no service, carries nothing about students and promises no grade return. Live tool connection (LTI) is a service and stays out of scope (D-CLASS-04).
+
+**The profile, and why.** The 1EdTech (IMS) **Thin Common Cartridge Profile v1.0** (Final Specification, 1 May 2015) over **Common Cartridge v1.3** (Final, July 2013), manifest schema `imscp_v1p1` of `imsccv1p3`, `schemaversion` 1.3.0, file extension `.imscc`. Thin Common Cartridge carries web links (and LTI links, which this never writes) and nothing else, which is exactly what a Gravitas course is: a list of links that already encode the pin and the depth. The profile's own conformance exceptions let a platform skip inline resource XML, so each link is a stand-alone web link file (the form every platform must read) and the package holds exactly three kinds of file, as the profile says: the one `imsmanifest.xml` and one web link XML file for each link. Version 1.3 over 1.4: the Thin profile was written for CC 1.2 and 1.3, 1.3 is a Final release, and 1.4 is a Candidate Final (September 2021); which versions each platform's importer reads was not checked, because no platform was available. 1.4 has Thin schemas of its own and is the upgrade path if a platform asks for it.
+
+**What it holds, from a course.**
+
+- One folder (a module on most platforms) for each unit, in order, with one web link for each item that has an address: the link the course already makes (`js/course/links.js`), in the cartridge's language, opening the item in Gravitas. A reading with no address cannot be a link and is left out; the panel says which.
+- A first folder with the course home link (the whole course as a page, with its paths, times and notes) and, for a course with a teacher guide, a link to it for instructors.
+- A unit whose items carry notes for instructors gets one link for instructors, to the course home, where the notes are behind the "Notes for instructors" switch. Thin Common Cartridge has no pages (web content is not in the profile), so the notes themselves go into the cartridge only if the instructor ticks the box: they become that link's description, with the role Instructor, and a platform that ignores the role would show them to students, which the box says.
+- A description for each link: its kind, its time, whether it is optional, and the student note. The text of the cartridge follows the language of the page it is made on (the course's own words fall back to English as the course home does); a package in one language gives one cartridge, and the other language is made by changing the page's language and exporting again.
+- A collection (`profile: "collection"`) exports the same way.
+- No date, no student, no random number: the manifest text is the same every time, and the archive is a stored (not deflated) ZIP, valid and the same bytes everywhere. A cartridge is never committed.
+
+**It is an export, and not a Gravitas format.** Gravitas never reads a cartridge back, so there is no reader, no version row in FORMATS.md (that table is for formats Gravitas reads or writes under its own name), no compatibility corpus row and no storage. The course package format is unchanged, and no closure file of the instructor bundle was edited.
+
+**How it was checked.** `tools/cartridge-profile.mjs` holds the profile's rules (from the Thin Common Cartridge guide, the CC v1.3 guide and the schemas' own Schematron rules), and `tests/commonCartridge.test.js` builds a cartridge from every built-in course in both languages, with and without the notes, checks each against them, checks every link against what the item names (a lesson id that exists, an assignment link that decodes to the assigned steps, the course home link that decodes to the pack), reads the archive back with a reader that shares no code with the writer, and refuses sixteen broken manifests rule by rule. The real schemas (`ccv1p3_imscp_v1p2_v1p0.xsd`, the two LOM profiles, the web link schema and what they import) validated all sixteen cartridges and every web link file with xmllint on 2026-10-22; six of the sixteen broken manifests are also refused by the schema, and the rest by the profile alone. **The schemas are not in this repository**: their licence lets a developer redistribute them as is only after registering with 1EdTech, which is an account and an agreement for Carl to make (D-R10-54). `tests/fixtures/common-cartridge/provenance.json` holds each source's address, size, SHA-256 and licence statement; `validation.json` is the verdict, with a digest of each manifest and of each link file (the deflated link fragments in the files replaced by a placeholder, because the bytes deflate writes differ between Node versions, and checked by decoding instead), and the test fails when a cartridge differs from it; `node tools/cartridge-validate.mjs --schemas <dir> --write` runs the schemas again (xmllint is needed; the tool fetches nothing and CI never runs it). The Common Cartridge valid test sets and the conformance testing process are behind a member login and were not read; the specification's own printed examples were. A manifest that validates is not an import.
+
+**Where an import has been checked.** A platform is VERIFIED here on one of two bases: an import recorded here (its date and what appeared), or a report by the owner, which says who reported it, where and when, and what was not supplied. All four rest on the second. Carl reported in chat on 2026-10-22 that imports into Canvas, Moodle, D2L and Blackboard are verified; the LMS versions, the cartridge imported and what imported were not supplied, so none of those, and no date of import, is recorded or implied here, and this project holds no screenshot or other artifact of an import. A schema, a unit test and a specification example are not an import, and a manifest that validates is not one either.
+
+| Platform | Import | Basis |
+|---|---|---|
+| Canvas | VERIFIED | verified by Carl, reported in chat 2026-10-22; LMS versions, the cartridge imported and what imported were not supplied |
+| Moodle | VERIFIED | verified by Carl, reported in chat 2026-10-22; LMS versions, the cartridge imported and what imported were not supplied |
+| D2L | VERIFIED | verified by Carl, reported in chat 2026-10-22; LMS versions, the cartridge imported and what imported were not supplied |
+| Blackboard | VERIFIED | verified by Carl, reported in chat 2026-10-22; LMS versions, the cartridge imported and what imported were not supplied |
+
+Teach, the adopter's guide, the panel and `tools/evidence-status.json` say the same, from one table (`IMPORT_STATUS` in `js/instructorCartridgeText.js`): Gravitas exports a Thin Common Cartridge; imports verified on: Canvas, Moodle, D2L, Blackboard (Canvas: VERIFIED, reported 2026-10-22; Moodle: VERIFIED, reported 2026-10-22; D2L: VERIFIED, reported 2026-10-22; Blackboard: VERIFIED, reported 2026-10-22). Reported by Carl in chat on 2026-10-22; the LMS versions, the cartridge imported and what imported were not supplied.
+To record an import itself, add its date and what appeared to the row there, to the evidence record and to this table; `tests/commonCartridge.test.js` holds the five together, pins that every row says exactly the basis above (nothing invented: no date of import, version or screenshot), and refuses a row that claims a recorded import and lacks its date or what appeared.
+
+## The printable activity list, the time bands and the outcomes (Prompt 174)
+
+A course package becomes a plan to print or to paste into a page of a learning platform: the course builder's **Print the activity list** button and the distribution kit's **Make the activity list** (for a course). It is made in the browser, from the course on the page, by `js/instructorPlan.js` (words in `js/instructorPlanText.js`, the panel in `js/instructorPlanView.js`); nothing is committed, stored or sent.
+
+- **What it holds.** The units and their items in order, each with what it is, its depth, its time band, its link (the link the course already makes), what comes after what (`needs`), what the investigation builds on and its OpenStax Astronomy 2e chapter (both read from the Library when the panel opens), the course objectives the item serves, the investigation's own objectives, and the notes. Then **what students hand in** (a lab report as a PDF, or its token, for an investigation, an activity cut from one and an instructor's investigation; nothing for a simulation, an observation, a guide or a reading, because Gravitas collects nothing there) and the outcome matrix. In English or Spanish, the language of the page it is made on; as a page to print (the list alone is on the page while printing, and the page is back after), as a saved web page, as Markdown to save or copy.
+- **Time bands, and what they are.** A time is a band, short (5 to 25 minutes), medium (30 to 50) or long (55 to 100), from one committed table, `js/data/instructorTimeBands.js`: for each investigation and each depth it offers, authored by the project from the lessons' declared durations and step counts (the table's header gives the rule, and `tests/timeBands.test.js` redoes it). A unit's time is its core items' bands added; optional items are counted apart. Every page that shows a band says **Editorial estimate; no observed class data.** (the plan, the adoption pages, the index and the alignment page) until the evidence-status record's `timing-estimates` claim holds an observed value; the test holds that constant to the record. No median from a test walk is used anywhere: a script reads faster than a student. The Library's length facet reads the same table (`tools/build-library.mjs`), and the lesson browser's cut-offs are the bands' upper bounds, so a duration cannot be one thing on a page and another in the filter.
+- **The instructor's outcomes.** `outcomes` is a list of the instructor's own outcomes (a department's or a syllabus's), free text in both languages like an objective's, and an objective's `outcomes` names the ones it serves. The plan prints the matrix of items against outcomes through the course objectives each item names, lists the objectives' mapping, says which outcome no item serves and which items name no objective (so are left out, not scored as zero). **The mapping is the instructor's claim of what the course intends. It is not evidence that any student attained an outcome**, and the plan says so beside the matrix. The builder's panel is where outcomes are written and mapped (an outcome with no words is a problem the builder lists); a course file that carries them prints the matrix from the kit too. Both fields are written only when entered, and a package that has either is `/3`: a 2.0.0 reader refuses it as made by a newer version (`tests/compat/boundary.mjs` `course-outcomes`), and every package without them reads as before. The adoption pages list each investigation's objectives and say how to map them before a course is built.
+- **A second textbook.** Not added. A second alignment needs a public table of contents that can be cited, and none was checked in this work (nothing was fetched); the alignment page says OpenStax is the only textbook aligned and why. Adding one is a content decision (a register row), not a change here.
+
+## The 3.0.0 version (Prompt 176)
+
+`gravitas.course-pack/3` is `/2` plus the three things only a 3.0.0 reader understands: `profile` (a collection), `term` and `outcomes` (on the course and on an objective). The writer writes the lowest version that carries the pack, so a course that needs none of them is `/2` byte for byte and a 2.0.0 build opens it; `withVersion()` in `js/course/pack.js` is that rule, applied where a pack is saved (`serializePack`) and where a link is made (`courseLink`: `c2`, or `c3` for a `/3` pack). Leave the term, the outcomes or the profile out and the next save is `/2` again. The reader reads `/1` (migrating it), `/2` and `/3`; a version past `/3` is refused in words. A 2.0.0 build that is handed a `/3` file or a `c3` link refuses it, and FORMATS.md records the message and the rollback outcome (the table "The 3.0.0 boundary"), held by `tests/compat/boundary.test.js` and `tests/formatBoundary.test.js`. The schemas are `sdk/schemas/course-pack-2.schema.json` (the form 2.0.0 reads) and `course-pack-3.schema.json`.
+
 ## What authors may ask for that it does not do
 
 These are recorded rather than built in this change:
 
 - **SCORM, LTI, grade passback and rosters.** A learning platform links to or
-  embeds the course home; nothing reports back to it.
+  embeds the course home, or imports a Thin Common Cartridge of its links (above);
+  nothing reports back to it.
 - **Dates, deadlines and release conditions.** The order is the course's;
   when is the instructor's.
 - **The catalog lists /1 courses.** It reads and installs
@@ -357,6 +435,8 @@ These are recorded rather than built in this change:
 | `js/course/api.js` | This build's lessons, scenarios and datasets, and each named lesson's facts |
 | `js/course/links.js` | Every link, and the course fragment |
 | `js/course/manifest.js` | The manifest |
+| `js/instructorCartridge.js`, `js/instructorCartridgeView.js`, `js/instructorCartridgeText.js` | The Common Cartridge export, its panel and its words (instructor modules, built lazily) |
+| `tools/cartridge-profile.mjs`, `tools/cartridge-validate.mjs` | The profile's rules; the run against the real schemas |
 | `js/course/datasets.js` | The built-in observations and the guided lessons, as data |
 | `js/course/i18n.js` | The course home's translator |
 | `js/data/courses/` | The courses Gravitas ships |
@@ -369,3 +449,4 @@ Tests:
   copied data against its sources, the registrations and every word.
 - `e2e/course.spec.js`: both pages, against the sources and dist, in all
   three engines, and the course home offline.
+- `tests/commonCartridge.test.js`, `e2e/commonCartridge.spec.js`: the export, as above.

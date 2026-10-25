@@ -34,7 +34,6 @@ contains. A range here means two builds of one commit can differ.
 | Package | Why exact |
 | --- | --- |
 | `three` | Vendored into `vendor/three/` by `npm run vendor`; the bytes the 3-D views load |
-| `chart.js` | Vendored into `vendor/chartjs/`; stays until the staged plotting migration removes it (D-PLOT-01 in [`DECISION_REGISTER.md`](DECISION_REGISTER.md); its last stage needs Carl) |
 | `@fontsource/inter`, `@fontsource/poppins`, `@fontsource/roboto-mono` | The faces in `vendor/fonts/` are generated from them |
 | `esbuild` | Produces `dist/`, the production bundle every route budget measures |
 | `playwright`, `@playwright/test` | The version selects the browser builds the support statement names ([`SUPPORT.md`](SUPPORT.md)) |
@@ -75,10 +74,14 @@ with its own row in the decision register, not an update.
    run `npm run vendor`, review the regenerated bundles, and run
    `npm run support:sync` if Playwright moved (the browser builds in the
    support statement come from it).
-5. **Vendored code.** Is each vendored dependency still needed? Chart.js is
-   retired only by the staged migration in D-PLOT-01; nothing else is vendored.
+5. **Vendored code.** Is each vendored dependency still needed? Chart.js was
+   retired by Prompt 132 (D-PLOT-01); three.js and the fonts are what is vendored.
 6. **Record it.** A line in `CHANGELOG.md` naming what moved and what was held,
    and why.
+
+**Next checkpoint: the first week of January 2027.** The October 2026 one fell in the 2.0.0 release window and was not run as a pull request; its input is the four open Dependabot pull requests (#330 to #333: lint-and-format, Playwright and axe patch-and-minor groups and acorn, all dev-only, none a security update). `npm run deps:audit` was clean on 2026-10-17 (the only advisory is the ignored sprintf-js one with no patched release; production dependencies have none).
+
+**The Q4 2026 pass (Prompt 129, 2026-10-17).** The four open Dependabot pull requests were read together and carried into `v3` as one change (the lockfile and exact pins; the browser bump is judged by CI). `npm run vendor:check` matches the installed packages; the engines floor (`>=22`), `.nvmrc` (22) and CI's `NODE_VERSION` agree; `npm run deps:audit` is clean except one dev-only exception. The exception now lives in `tools/deps-audit-exceptions.json` with its basis and an expiry date (2027-01-15, the January checkpoint), and an expired exception fails the audit loudly. Security advisories are never held for the quarter: read one and it becomes a prompt the same day. The branch inventory is `npm run branches:inventory`; the owner, not a session, deletes branches.
 
 The monthly Dependabot pull requests are the input to step 3 and nothing more:
 they are read at the checkpoint, not merged as they arrive.

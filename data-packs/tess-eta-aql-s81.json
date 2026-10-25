@@ -172,7 +172,7 @@
     "widgets": [],
     "investigations": []
   },
-  "offline": "optional",
+  "offline": "idle",
   "derived": {
     "file": "js/data/observations/tessEtaAqlS81.js",
     "bytes": 3751,

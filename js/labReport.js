@@ -17,6 +17,7 @@
 // =============================================================================
 
 import { createDocument } from './pdf.js';
+import { fnvBase36 } from './hash.js';
 import { registerMessages } from './i18n/index.js';
 // Depths, shallowest first (as in investigations/progressSchema.js).
 const LEVELS = ['core', 'quantitative', 'advanced'];
@@ -41,12 +42,7 @@ export const reportMessages = () =>
  * @returns {string} Checksum, grouped for reading aloud
  */
 function completionCode(text) {
-  let h = 0x811c9dc5;
-  for (let i = 0; i < text.length; i++) {
-    h ^= text.charCodeAt(i);
-    h = Math.imul(h, 0x01000193);
-  }
-  const base = (h >>> 0).toString(36).toUpperCase().padStart(7, '0');
+  const base = fnvBase36(text);
   return `${base.slice(0, 4)}-${base.slice(4)}`;
 }
 
@@ -125,9 +121,12 @@ const plain = text =>
  * @param {(id: string) => ?{hints: number, revealed: boolean, stages: string[]}} [opts.helpFor] -
  *   How much help a step was given (helpTaken() of js/answerFeedback.js),
  *   passed in so this file does not pull the grader into the report's chunk
+ * @param {Function} [opts.createDoc] - The document builder: js/pdf.js
+ *   createDocument (the default) or js/htmlReport.js createHtmlDocument, which
+ *   has the same interface and makes the accessible HTML report
  * @param {(doc: object) => void} [opts.evidence] - Prints the evidence ledger's
  *   sections (js/notebook/report.js evidenceSections()) after the summary
- * @returns {Uint8Array} PDF bytes
+ * @returns {Uint8Array|string} PDF bytes, or the HTML document as a string
  */
 export function buildLabReport({
   investigation,
@@ -150,6 +149,7 @@ export function buildLabReport({
   meta = [],
   evidence = null,
   helpFor = () => null,
+  createDoc = createDocument,
 }) {
   // At a depth, the steps are those a student reads there, numbered as they
   // see them (DEPTH.md); `stepIdFor` still takes the index in the whole lesson.
@@ -167,7 +167,7 @@ export function buildLabReport({
   // For what the lesson says. What a student wrote goes through plain() as
   // typed: the completion code is computed over it.
   const lessonPlain = text => plain(decodeEntities(text));
-  const doc = createDocument({
+  const doc = createDoc({
     title: `${lessonPlain(inv.title)}: ${name}`,
     footer: `Gravitas - ${lessonPlain(inv.title)}`,
     // The machine-readable copy. See the note beside /Keywords in js/pdf.js
@@ -394,7 +394,10 @@ export function buildLabReport({
           : lessonPlain(step.prompt),
         plain(value)
       );
-      if (step.rubric && !step.reflect) {
+      // The marking note is the instructor's, so the report prints it only
+      // when the activity asked (`m` on the assignment, js/assignments/
+      // assignment.js); the answer key prints it always (F-8).
+      if (assignment?.m === 1 && step.rubric && !step.reflect) {
         doc.paragraph(t('rp.rubric', { note: lessonPlain(step.rubric) }), {
           size: 8.5,
           indent: 10,

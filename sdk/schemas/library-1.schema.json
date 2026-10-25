@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://gravitas-sim.online/sdk/schemas/library-1.schema.json",
   "title": "gravitas.library/1",
-  "description": "The Library (library/library.json): one record for everything a student or instructor can open - investigations (lessons and the guided investigations of the Observatory, the 3-D lab and the mission lab), classroom activities, scenarios, datasets, courses and experiments - with the subjects and sequences it is browsed by. tools/build-library.mjs writes it from the sources that own each thing and --check holds the committed file to what it writes; js/libraryPage.js and the Home page read it. A field a source does not declare is null; LIBRARY.md counts them per kind. route is the canonical link to the surface that runs the entry. LIBRARY.md describes it; FORMATS.md lists it.",
+  "description": "The Library (library/library.json): one record for everything a student or instructor can open - investigations (lessons and the guided investigations of the Observatory, the 3-D lab and the mission lab), classroom activities, scenarios, datasets, courses and experiments - with the subjects and sequences it is browsed by. tools/build-library.mjs writes it from the sources that own each thing and --check holds the committed file to what it writes; js/libraryPage.js and the Home page read it. A field a source does not declare is null; LIBRARY.md counts them per kind. route is the canonical link to the surface that runs the entry. LIBRARY.md describes it; FORMATS.md lists it. Since Prompt 163 it also carries the committed starting points (starts), what students see each kind as (kindShown), a paragraph per subject, what each entry is built on (data) and its relations (rel), all additive: a reader that does not know them ignores them. Since Prompt 164 a start may also carry its collection.",
   "type": "object",
   "required": [
     "format",
@@ -41,7 +41,8 @@
         "required": [
           "id",
           "label",
-          "count"
+          "count",
+          "blurb"
         ],
         "additionalProperties": false,
         "properties": {
@@ -55,6 +56,10 @@
           "count": {
             "type": "integer",
             "minimum": 1
+          },
+          "blurb": {
+            "$ref": "#/$defs/words",
+            "description": "The subject's paragraph, for the topic view."
           }
         }
       }
@@ -125,6 +130,85 @@
       "items": {
         "$ref": "#/$defs/entry"
       }
+    },
+    "kindShown": {
+      "description": "Each internal kind to the kind a student sees (investigation, dataset, scenario or course): an activity or an experiment is an investigation to a student (NAVIGATION.md).",
+      "type": "object",
+      "additionalProperties": {
+        "enum": [
+          "investigation",
+          "dataset",
+          "scenario",
+          "course"
+        ]
+      }
+    },
+    "starts": {
+      "description": "Where to begin, per audience and level: committed in tools/library-curation.json, every id checked against the entries.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "level",
+          "audience",
+          "entries"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$"
+          },
+          "level": {
+            "enum": [
+              "beginner",
+              "intro"
+            ]
+          },
+          "audience": {
+            "$ref": "#/$defs/words"
+          },
+          "entries": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/$defs/id"
+            }
+          },
+          "collection": {
+            "description": "Prompt 164: the start as a collection, a course package with profile `collection` (js/course/pack.js), generated from the same entries and checked by the package's own validator. Present only where every entry can be an item of a collection; the page draws the start from it. A reader that does not know it ignores it.",
+            "type": "object",
+            "required": [
+              "format",
+              "formatVersion",
+              "id",
+              "profile",
+              "units"
+            ],
+            "properties": {
+              "format": {
+                "const": "gravitas.course-pack"
+              },
+              "formatVersion": {
+                "const": 3
+              },
+              "id": {
+                "type": "string",
+                "pattern": "^start-[a-z][a-z0-9-]*$"
+              },
+              "profile": {
+                "const": "collection"
+              },
+              "units": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 1
+              }
+            }
+          }
+        }
+      }
     }
   },
   "$defs": {
@@ -170,7 +254,8 @@
         "courseLevel",
         "steps",
         "thumbnail",
-        "route"
+        "route",
+        "rel"
       ],
       "additionalProperties": false,
       "properties": {
@@ -436,6 +521,95 @@
           "minimum": 2,
           "maximum": 3,
           "description": "How many depths the investigation can be read at (Prompt 72)."
+        },
+        "data": {
+          "description": "What the entry is built on: measured observations (authentic) or the simulation (synthetic). Absent where it can use both.",
+          "enum": [
+            "authentic",
+            "synthetic"
+          ]
+        },
+        "rel": {
+          "description": "Relations derived by tools/build-relations.mjs: prerequisites, next steps (at most 3), related entries (at most 4), what it is built on, the pathways it is in, its instructor page, and, when nothing comes next, why. A field with nothing to say is left out.",
+          "type": "object",
+          "required": [],
+          "additionalProperties": false,
+          "properties": {
+            "pre": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "$ref": "#/$defs/id"
+              },
+              "minItems": 1
+            },
+            "next": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "$ref": "#/$defs/id"
+              },
+              "minItems": 1
+            },
+            "related": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "$ref": "#/$defs/id"
+              },
+              "minItems": 1
+            },
+            "in": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "minItems": 3,
+                "maxItems": 3,
+                "prefixItems": [
+                  {
+                    "enum": [
+                      "seq",
+                      "course"
+                    ]
+                  },
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer",
+                    "minimum": 0
+                  }
+                ]
+              },
+              "minItems": 1
+            },
+            "teach": {
+              "anyOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "type": "string",
+                  "pattern": "^/teaching/"
+                }
+              ]
+            },
+            "why": {
+              "enum": [
+                "last",
+                "standalone"
+              ]
+            },
+            "uses": {
+              "description": "What it is built on: the scenarios a lesson's steps open, the datasets a guide opens.",
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "$ref": "#/$defs/id"
+              },
+              "minItems": 1
+            }
+          }
         }
       }
     }

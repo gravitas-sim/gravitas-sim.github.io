@@ -46,7 +46,11 @@ as you say where it came from.
   demonstrations you can open as embedded figures.
 - [/instructors/](https://gravitas-sim.online/instructors/) has the guides,
   learning objectives and answer keys. It asks for a passphrase, because the
-  answer keys are in it. Email me for it.
+  answer keys are in it. To ask for it, email me from an address your institution
+  issues; the form of words, what I check and how long it takes are in
+  [`INSTRUCTOR_MATERIALS.md`](INSTRUCTOR_MATERIALS.md), "Who gets the
+  passphrase, and how". A department can also build its own bundle under its
+  own passphrase, which I never see (same document).
 - The user manual is [`Gravitas_User_Manual.pdf`](Gravitas_User_Manual.pdf).
 
 If you do use it with a class I would genuinely like to hear how it went,
@@ -110,15 +114,15 @@ locked Playwright's browser builds (`npm run support:sync`), so it cannot drift
 from what CI runs:
 
 <!-- browser-support:begin -->
-Playwright 1.63.0 is locked, and these are the builds it drives:
+Playwright 1.64.0 is locked, and these are the builds it drives:
 
 | Project | Engine build | Profile | Runs | When |
 | --- | --- | --- | --- | --- |
-| `chromium` | Chromium 153 | Desktop Chrome, 1440×900 | The whole suite | Every change |
-| `firefox` | Firefox 155 | Desktop Firefox, 1440×900 | The `@cross-browser` profile | Every push, and weekly |
-| `webkit` | WebKit 26 | Desktop Safari, 1440×900 | The `@cross-browser` profile | Every push, and weekly |
-| `mobile-chrome` | Chromium 153 | Pixel 7 (Chrome on Android), 412×839, touch | The phone layout and every lesson walked | Every change |
-| `tablet` | Chromium 153 | iPad Mini geometry, 768×1024, touch | The tablet layout, and every lesson walked | Layout on every change, the walk weekly |
+| `chromium` | Chromium 156 | Desktop Chrome, 1440×900 | The whole suite | Every change |
+| `firefox` | Firefox 157 | Desktop Firefox, 1440×900 | The `@cross-browser` profile | Every push, and weekly |
+| `webkit` | WebKit 27 | Desktop Safari, 1440×900 | The `@cross-browser` profile | Every push, and weekly |
+| `mobile-chrome` | Chromium 156 | Pixel 7 (Chrome on Android), 412×839, touch | The phone layout and every lesson walked | Every change |
+| `tablet` | Chromium 156 | iPad Mini geometry, 768×1024, touch | The tablet layout, and every lesson walked | Layout on every change, the walk weekly |
 <!-- browser-support:end -->
 
 ### Feature detection
@@ -130,14 +134,14 @@ new use of one of these APIs with no row, fails the build.
 <!-- feature-inventory:begin -->
 | Capability | Used for | Where the code checks | Without it |
 | --- | --- | --- | --- |
-| Web Workers (module Workers) | Barnes–Hut gravity, the chart feed, the validation suite, the experiment runner, the Mission lab, the 3-D lab, the Observatory fitter and the RV workspace. | `js/physics.js`, `js/inspectorPanel.js`, `js/validationPage.js`, `js/experimentsPage.js`, `js/kernels/stellar/client.js`, `js/missionPage.js`, `js/missionLabPage.js`, `js/lab3dPage.js`, `js/lab3dLab.js`, `js/observatory/fitPanel.js`, `js/inference/rvClient.js`, `js/compute/frame/runner.js` | Optional uses degrade: gravity is summed on the main thread, charts update directly, and the validation and experiment pages say they cannot run here. The Mission lab, the 3-D lab, the Observatory fitter and the RV workspace search, fit and Monte Carlo have no main-thread fallback and need module Workers. |
+| Web Workers (module Workers) | Barnes–Hut gravity, the chart feed, the validation suite, the experiment runner, the Mission lab, the 3-D lab, the Observatory fitter and the RV workspace. | `js/engine/step.js`, `js/inspectorPanel.js`, `js/validationPage.js`, `js/experimentsPage.js`, `js/kernels/stellar/client.js`, `js/missionPage.js`, `js/missionLabPage.js`, `js/lab3dPage.js`, `js/lab3dLab.js`, `js/observatory/fitPanel.js`, `js/observatory/imageImport.js`, `js/inference/rvClient.js`, `js/compute/frame/runner.js` | Optional uses degrade: gravity is summed on the main thread, charts update directly, and the validation and experiment pages say they cannot run here. The Mission lab, the 3-D lab, the Observatory fitter and the RV workspace search, fit and Monte Carlo have no main-thread fallback and need module Workers. |
 | IndexedDB | Saved work (the storage layer), the Catalog, and the reader’s cache of archive answers. | `js/storage/index.js`, `js/catalog/store.js`, `js/archive/cache.js`, `js/compute/frame/runner.js` | Saved work falls back to localStorage, then to memory, and says so: work in memory is gone when the tab closes. The Catalog and the archive cache fall back to memory. |
 | WebGL | The 3-D view in the sandbox and the picture in the 3-D lab. | `js/view3d.js`, `js/lab3d/view/scene.js`, `js/lab3dLab.js` | The 3-D views say so and stay empty. Every number is still in the tables, and the 2-D sandbox does not use WebGL. |
-| OffscreenCanvas | Not used. | not used | Nothing to fall back from: Workers send numbers to the page and the page draws, so no canvas is ever transferred. |
+| OffscreenCanvas | Drawing a decoded PNG or JPEG in the import Worker, to read its pixels (the page never draws on a transferred canvas). | `js/dataKinds/rasterJob.js` | The picture is refused in words (no-decoder, a browser that cannot decode a picture in the background); a FITS frame needs no canvas and is read as usual. Nothing is drawn on a transferred canvas: the Worker sends numbers to the page. |
 | Service Workers | The offline copy of the site. | `js/offline.js` | The site works online as usual and offers no offline copy. It is also skipped on file:// and on a page that opted out. |
 | Compression Streams | Shorter share links. | `js/shareState.js`, `js/lab3d/link.js` | A link is made uncompressed (a marker byte says so) and still opens in every browser. Reading a compressed link needs DecompressionStream and says so if it is missing. |
 | MediaRecorder and canvas captureStream | Recording a clip of the simulation. | `js/utils.js`, `js/capture.js`, `js/captureMeasure.js` | The record button is hidden. Nothing else depends on it, and Playwright’s WebKit is one build where it is hidden. |
 | Web Audio | Sonification and the optional sounds. | `js/audio.js`, `js/gwAudio.js` | No sound. Every sonification has a text equivalent on the page. |
 | BroadcastChannel | Telling other tabs that saved work changed. | `js/storage/index.js` | Other open tabs do not hear about a change until they reload; nothing is lost. |
-| Web Crypto (a secure context) | The instructor portal’s decryption and the SHA-256 digests that check downloaded files. | `js/instructorPortal.js`, `js/hash.js`, `js/archive/net.js`, `js/catalog/archive.js`, `js/lab3d/kernel.js`, `js/compute/frame/runner.js` | No fallback is implemented: it needs https or localhost. The student-facing simulations do not depend on it. |
+| Web Crypto (a secure context) | The instructor portal’s decryption and the SHA-256 digests that check downloaded files. | `js/instructorPortal.js`, `js/hash.js`, `js/archive/net.js`, `js/catalog/archive.js`, `js/lab3d/kernel.js`, `js/compute/frame/runner.js`, `js/measure/calibrationRecord.js` | No fallback is implemented: it needs https or localhost. The student-facing simulations do not depend on it. |
 <!-- feature-inventory:end -->

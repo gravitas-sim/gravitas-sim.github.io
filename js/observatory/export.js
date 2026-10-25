@@ -10,7 +10,11 @@
 //   when there are changes, the observation as it was opened. ./import.js
 //   reads it back by making the changes again to that, so the file restores
 //   the whole session, undo included, and checks that it gives the same
-//   observation it holds.
+//   observation it holds. When the reader marked an image, `workspace.marks`
+//   is a gravitas.image-marks/1 block (js/measure/imageRecord.js, Prompt 179),
+//   written only then: a save without marks is the bytes it always was. The
+//   same holds for `workspace.calibration`, a gravitas.image-calibration/1
+//   block (js/measure/calibrationRecord.js, Prompt 181).
 //   Keys are written in a fixed order, numbers as JavaScript writes them
 //   (the shortest string that reads back to the same double), a missing
 //   value as null, and nothing about when or where it was made: no clock, no
@@ -61,12 +65,17 @@ const OBSERVATION_KEYS = [
 /**
  * The observation as it stands, with how it got there.
  * @param {object} o - After the changes (transforms.replay)
- * @param {{source: object, changes: object[], digest?: string}} workspace -
+ * @param {{source: object, changes: object[], digest?: string, marks?: ?object}} workspace -
  *   What it was opened as, and the changes, in order; `digest` is what
- *   ./identity.js observationDigest() gives for the observation as opened
+ *   ./identity.js observationDigest() gives for the observation as opened;
+ *   `marks` is the image marks block, if there is one, and `calibration` the
+ *   sky calibration block (Prompt 181), likewise written only when there is one
  * @returns {string} JSON, two-space indented, with a final newline
  */
-export function observationJson(o, { source, changes, digest }) {
+export function observationJson(
+  o,
+  { source, changes, digest, marks, calibration }
+) {
   const doc = {
     ...plain(o),
     workspace: {
@@ -79,6 +88,8 @@ export function observationJson(o, { source, changes, digest }) {
       // The observation as it was opened, so the file replays: read back,
       // the changes are made again to this, and give the observation above.
       source: changes.length ? plain(source) : null,
+      ...(marks ? { marks } : {}),
+      ...(calibration ? { calibration } : {}),
     },
   };
   return `${JSON.stringify(doc, null, 2)}\n`;
@@ -149,4 +160,16 @@ export function exportName(o, ext) {
     .replace(/[^A-Za-z0-9._-]+/g, '-')
     .replace(/^-+|-+$/g, '');
   return `${base || 'observation'}.${ext}`;
+}
+
+/** Hand a file to the reader's browser to save. */
+export function download(name, text, type) {
+  const url = URL.createObjectURL(new Blob([text], { type }));
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = name;
+  document.body.append(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
 }

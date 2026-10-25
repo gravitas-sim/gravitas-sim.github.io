@@ -1,8 +1,12 @@
 # Continuity
 
 How Gravitas survives its maintainer's absence. It has one maintainer, who also
-teaches, and the field it belongs to has lost tools that had one (NAAP stopped
-development in 2025, JS9 is unmaintained, Trinket shut down in 2026). A teaching
+teaches, and the field it belongs to has lost tools that had one (NAAP's home site
+says development stopped in April 2025, and its Flash simulations now run only
+under the Ruffle emulator; JS9's project site lists 3.8, of 21 June 2022, as its
+maintainer's last release, announcing the end of active development on 1 July
+2022; Trinket announced in March 2026 that it would close and had shut down by
+31 August 2026; all read on 2026-10-17, from the projects' own pages and, for Trinket, a news report). A teaching
 tool an instructor builds a course on has to be able to outlive its author, so
 this file says what keeps working without anyone, what a department can do for
 itself, and how a second maintainer is added.
@@ -22,7 +26,7 @@ usually".
 - **The site needs no service.** It is static files on GitHub Pages: no server
   to run, no database, no account, no tracking. The simulations, the lessons
   and the validation page run from the files alone, offline once loaded
-  ([`OFFLINE_AND_LOW_END.md`](OFFLINE_AND_LOW_END.md)). three.js, Chart.js and
+  ([`OFFLINE_AND_LOW_END.md`](OFFLINE_AND_LOW_END.md)). three.js and
   the fonts are vendored into the repository, not fetched from a CDN. The only
   network use beyond the site's own files is the optional lookup of public
   astronomical archives, and that happens only when the user asks for it.
@@ -54,9 +58,23 @@ Nothing below needs the maintainer, an account on any service, or a build.
    `GRAVITAS_INSTRUCTOR_PASSWORD`, run `npm run build:instructors`, and serve
    the result. The materials are then encrypted under the department's key, and
    nobody outside it holds it. Choose a long passphrase: the ciphertext is
-   public, so its strength is the passphrase's.
+   public, so its strength is the passphrase's. The numbered procedure, with a
+   rehearsal step and the test that a bundle under one passphrase does not open
+   with another, is in [`INSTRUCTOR_MATERIALS.md`](INSTRUCTOR_MATERIALS.md).
 5. Read [`SUPPORT.md`](SUPPORT.md) for the browsers that are tested and the
    features that degrade.
+
+**What has been shown.** On 2026-10-17 the original agent rebuilt Gravitas from
+the 2.0.0 Zenodo archive (checksum checked, served, `npm ci`, `node build.js`, the
+budgets, `release:check --fast`, an instructor bundle under a throwaway
+passphrase opened in the portal) in about twelve minutes, alone, on one machine.
+The steps and the stumbles it found are in [`RELEASING.md`](RELEASING.md),
+"Rehearsing recovery from an archive". It is not independent evidence: nobody
+else has done it. Who besides the owner can administer the Zenodo record is not
+known to the repository. The instructor passphrase has no second holder: Carl
+decided that on 2026-10-21 (INSTRUCTOR_MATERIALS.md, "The second holder"), so if
+he is unavailable nobody can issue or rotate it, the deployed bundle keeps
+opening for current holders, and a department builds its own (step 4 above).
 
 ## Adding a co-maintainer
 
@@ -86,7 +104,7 @@ The project would be better with a second person. The way it happens:
 - **The licenses.** MIT for the software and CC BY 4.0 for the teaching
   material, as [`LICENSES.md`](LICENSES.md) divides them: keep both license
   files, the copyright line, and [`NOTICE`](NOTICE) with every third-party
-  attribution (three.js, Chart.js, the fonts under the SIL Open Font License,
+  attribution (three.js, the fonts under the SIL Open Font License,
   the data packs under their own terms). A file under another license keeps that
   license when it is moved.
 - **Attribution.** CC BY 4.0 asks that the teaching material credit the

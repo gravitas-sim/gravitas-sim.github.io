@@ -88,7 +88,11 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    # `v3` is the Roadmap III integration and staging branch (INTEGRATION.md),
+    # here so every merge into it gets the full suite on the merged tip. It
+    # does NOT make the branch publishable: the deploy job is gated on
+    # `github.ref == 'refs/heads/main'`, so a run on v3 skips it (D-CI-03).
+    branches: [main, v3]
   pull_request:
   schedule:
     # Monday morning, UTC. Catches an engine or dependency change that landed
@@ -132,10 +136,26 @@ env:
 # move is made on purpose in a pull request of its own and not under whichever
 # branch happens to run first that day (Carl, 2026-10-09).
 jobs:
+  # 2026-10-24: this job's limit goes from 15 to 20 minutes. Prompt 185's frame
+  # pipeline adds a Jest suite, tests/framePipeline.test.js, that asserts every
+  # committed validation leg at its committed ensemble size (about 300 seeded
+  # sequences, about 12 CPU-minutes on a runner); with it, Jest took 12.9 minutes
+  # on PR #433's runs (9.6 on v3) and about 2 minutes of other steps follow, so
+  # the job was cancelled at 15 even after the Jest order and the suite's own
+  # processes were rebalanced (#435 and #433). Twenty leaves about five minutes
+  # of margin and keeps every ensemble asserted in CI. Carl, chat 2026-10-24,
+  # asked "PR #433 (Prompt 185) adds a Jest suite that costs about 12 CPU-minutes
+  # on CI (its committed ensembles of ~300 sequences), pushing the lint job past
+  # its 15-minute timeout even after #435. ... How should CI absorb it?", chose
+  # "Raise the lint job timeout (Recommended)": "Edit .github/workflows/ci.yml
+  # timeout-minutes for 'Lint, tests and physics validation' from 15 to the
+  # smallest value that clears (about 20), as #420 did for the apt mirror; keeps
+  # every committed ensemble asserted in CI. A workflow change, with your words
+  # quoted in the commit." (D-R10-63).
   checks:
     name: Lint, tests and physics validation
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       # The whole history, without old file contents: tests/decisionRegister.test.js
       # checks that every decision's source commit is in history, and a
@@ -1047,6 +1067,40 @@ jobs:
   # edited every time a job is added or a matrix entry changes. It fails if any
   # job it needs failed, and tolerates cross-browser being skipped on a pull
   # request.
+  # ---------------------------------------------------------------------------
+  # The pull-request class check (Prompt 122)
+  # ---------------------------------------------------------------------------
+  # `main` deploys on every merge, so what may merge into it depends on the
+  # class of change (INTEGRATION.md): a `visible` pull request belongs on the
+  # active train unless a window is open or it carries `hotfix`, and an
+  # `instructional` one needs the ciphertext current, which the checks job
+  # decides. The labels are read from the API when the job runs, not from the
+  # event payload, which a re-run would replay unchanged; the merge queue
+  # re-runs this job before it merges.
+  pr-class:
+    name: Pull-request class
+    if: ${{ always() && github.event_name == 'pull_request' }}
+    needs: [checks]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Class, target and window
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_BASE: ${{ github.base_ref }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_REPO: ${{ github.repository }}
+          CHECKS_RESULT: ${{ needs.checks.result }}
+        run: node tools/pr-class.mjs --fetch
+
   ci:
     name: CI
     if: ${{ always() }}
@@ -1060,6 +1114,7 @@ jobs:
         accessibility,
         e2e-build,
         cross-browser,
+        pr-class,
       ]
     steps:
       - name: Report
@@ -1077,6 +1132,7 @@ jobs:
           echo "accessibility: ${{ needs.accessibility.result }}"
           echo "e2e-build:     ${{ needs.e2e-build.result }}"
           echo "cross-browser: ${{ needs.cross-browser.result }}"
+          echo "pr-class:      ${{ needs.pr-class.result }}"
           # A skipped job is not a passing job.
           #
           # This accepted `success|skipped` for every job, so anything that did
@@ -1127,11 +1183,63 @@ jobs:
             require  cross-browser "${{ needs.cross-browser.result }}"
           fi
 
+          # The class check exists for pull requests only.
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            require pr-class "${{ needs.pr-class.result }}"
+          else
+            optional pr-class "${{ needs.pr-class.result }}"
+          fi
+
           if [ "$failed" -ne 0 ]; then
             echo "::error::At least one required CI job did not succeed."
             exit 1
           fi
           echo "Every job required for a ${{ github.event_name }} event succeeded."
+
+  # What this run cost (Prompt 145, D-R10-01). Runs after `ci` whatever its
+  # result, turns the run's own job list into queue seconds, wall seconds and
+  # runner-minutes with tools/ci-cost.mjs, and keeps the record for 30 days as
+  # the ci-cost artifact. It is not among `ci`'s needs and nothing needs it, so
+  # which jobs run and what makes CI pass or fail are unchanged; the job is
+  # continue-on-error, so a failure here shows as success and blocks nothing.
+  # Jobs still running when it reads the run (the deploy, on a push to main) are
+  # left out of the record, as tools/ci-cost.mjs leaves out any unfinished job.
+  ci-cost:
+    name: Record the CI cost
+    if: ${{ always() }}
+    needs: [ci]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    continue-on-error: true
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Write the record
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run view "${{ github.run_id }}" --repo "${{ github.repository }}" \
+            --json databaseId,createdAt,startedAt,updatedAt,jobs \
+            | node tools/ci-cost.mjs > ci-cost.json
+          {
+            echo "### CI cost"
+            echo '```json'
+            cat ci-cost.json
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: ci-cost
+          path: ci-cost.json
+          retention-days: 30
 
   # ---------------------------------------------------------------------------
   # Publishing

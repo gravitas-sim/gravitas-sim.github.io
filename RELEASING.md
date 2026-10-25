@@ -141,6 +141,29 @@ reader's side:
   - a new capability package.
 - **Patch:** a fix that changes no stored state and no format.
 
+**The next release is 3.0.0 (Prompt 176).** The compatibility corpus
+(`tests/compat/`) found changes that a 2.0.0 build refuses or misreads: the
+course package's collection profile, term and outcomes, the result envelope's
+extended states, an investigation pack's or question bank's criterion kinds,
+depths and weights, and an Observatory workspace's image marks. By the major
+rule above that is **3.0.0**, and the version this boundary asks for. It is
+carried, not hidden: each format has a reader for every version it ever had, a
+writer that writes the lowest version that carries the payload (so what needs
+nothing new is the bytes 2.0.0 wrote), a refusal a 2.0.0 build gives in words
+that name the version, link prefixes that follow the pack (`c3`, `i2`), and a
+rollback rehearsal recorded per record in [FORMATS.md](FORMATS.md) (the section
+"The 3.0.0 boundary", whose last list is the compatibility paragraph for the
+release notes). This does not set the version: Carl still edits `RELEASE` in
+`tools/project-metadata.mjs` at the release, and a later change that needs no
+new refusal does not move it. Had the corpus found nothing, the next release
+would have been 2.2.0 and this paragraph would say so.
+
+**What was released.** The promotion of `v3` at `e0f4df4b` on 2026-10-24 was
+released as **2.1.0**, on Carl's direction (chat, 2026-10-24: "Make it the new
+v2.1"), although the boundary above asks for 3.0.0. The mismatch is recorded
+here, in the changelog's 2.1.0 section and in the release pull request; no
+format changed because of it, and the refusals the boundary lists are the same.
+
 **The changelog.** `CHANGELOG.md`'s `[Unreleased]` section collects entries as
 pull requests land. It is cut into a dated, versioned section **by the release,
 not by feature pull requests**. A feature pull request adds its entry under
@@ -212,9 +235,16 @@ Then, in order:
    `commit` must be the SHA you are about to tag. If it names an earlier one,
    the deploy has not finished or has not run — [`RELEASE.md`](RELEASE.md) has
    the failure modes.
-3. **The site works.** Open it: the sandbox loads, an investigation opens, the
-   service worker activates, the instructor portal asks for its passphrase and
-   accepts it.
+3. **The site works.** The smoke list, in order:
+   1. the sandbox loads and its canvas is drawn;
+   2. an investigation opens (`/#investigation=transit-photometry` shows step 1);
+   3. the service worker activates (a second load works offline);
+   4. the instructor portal (`/instructors/`) asks for its passphrase, refuses a
+      wrong one and accepts the right one.
+
+   Against an unpacked archive served locally, item 3 depends on the browser and
+   `deployed-revision.json` is absent (the deploy writes it); say so rather than
+   counting either as a failure.
 
 Only once all three hold does the commit deserve a tag.
 
@@ -253,6 +283,45 @@ workflow" above for why, and say so rather than letting a reader discover it.
 Then put the *version* DOI into the papers, not the concept DOI. See the two
 DOIs section for the reason and for the form of the citation.
 
+## Traps that have caught a release
+
+- **`docs:sync` without `--full`** leaves the counts that cost a test run, the
+  manual's facts, `CITATION.cff` and `.zenodo.json` stale, and the gate fails
+  at the end. Always `npm run docs:sync -- --full`.
+- **Sizes differ by Node version.** The gzip budgets and the "initial download"
+  fact are measured on CI's Node 22; a Mac on a later Node writes a different
+  number (791 where CI says 792). After a local `docs:sync`, put the CI value
+  back before committing.
+- **`social-card.png` is rewritten by the build** on some Node versions: restore
+  it with `git checkout social-card.png`; never commit the changed bytes.
+- **Order matters for the service worker.** `sw-manifest.js` hashes every
+  precached file, so it is regenerated after everything else that writes one
+  (`node tools/build-service-worker.mjs`), and a file written after it makes the
+  manifest stale.
+- **The instructor ciphertext conflicts on every merge, by design.** A fresh salt
+  and IV each build; take either side and have the passphrase holder rebuild.
+## Rehearsing recovery from an archive
+
+To prove a release can be rebuilt without the repository: read the file's size and
+md5 from the Zenodo API for the version's record, download it, check the md5,
+unpack it, serve it, walk the smoke list above, then `npm ci`, `node build.js`,
+`npm run budget:check`, `npm run budget:routes` and `npm run release:check -- --fast`.
+Three things differ from a checkout, and none is a defect in the archive:
+
+- An archive is not a git repository. The merge tripwire cannot run `git` and
+  fails; `git init`, `git add -A` and one commit make it say there is no merge to
+  check.
+- Only CI's Node version (22) is authoritative for the gzip budgets. On a later
+  Node the deferred-JavaScript check can report an overrun of a kilobyte or two
+  that is the gzip difference alone.
+- `npm run build:instructors` needs a passphrase; for a rehearsal, set
+  `GRAVITAS_INSTRUCTOR_PASSWORD` to a throwaway one for that command only. Never
+  use the real one.
+
+The first rehearsal (2026-10-17, the original agent alone, on one machine) is
+recorded outside the repository; it is not evidence that someone else could do
+this unaided.
+
 ## What 2.0.0 produced
 
 | | |
@@ -261,7 +330,7 @@ DOIs section for the reason and for the form of the citation.
 | GitHub release | <https://github.com/gravitas-sim/gravitas-sim.github.io/releases/tag/v2.0.0>, published 2026-10-16 |
 | Zenodo record | <https://zenodo.org/records/23425533> |
 | Version DOI | 10.5281/zenodo.23425533 |
-| Archived file | `gravitas-sim/gravitas-sim.github.io-v2.0.0.zip` |
+| Archived file | `gravitas-sim/gravitas-sim.github.io-v2.0.0.zip`, 18,752,641 bytes, md5 `efb6b47c0355afb2d30219e0ae5be842` (from the Zenodo API, 2026-10-17; the unpacked folder is named for the tag object, `940db1d`, not for the commit) |
 
 ## What 1.0.0 produced
 

@@ -71,8 +71,14 @@ const PARSES = {
   'js/lecture.js': [1, 'none', OWN],
   'js/world.js': [1, 'none', OWN],
   'js/settingsPanel.js': [1, 'none', OWN],
+  'js/settingsSchema.js': [1, 'none', OWN],
   'js/controls.js': [1, 'none', OWN],
-  'js/welcome.js': [1, 'none', OWN],
+  'js/welcome.js': [
+    2,
+    'none',
+    OWN +
+      "; the second is the resume record, read inline and held equal to the storage module's reader",
+  ],
   'js/evaluationKit.js': [1, 'none', OWN],
   'js/investigations/next.js': [1, 'none', OWN],
   'js/myWork/made.js': [1, 'none', OWN + '; readMade checks it'],
@@ -97,7 +103,12 @@ const PARSES = {
   ],
   'js/storage/local.js': [1, 'none', 'the storage layer'],
   'js/experiments/store.js': [2, 'none', OWN + '; migrate checks it'],
-  'js/investigations.js': [2, 'none', OWN + ' (progress, twice)'],
+  'js/investigations.js': [
+    1,
+    'none',
+    OWN + ' (the sandbox restore reads progress)',
+  ],
+  'js/investigations/stepView.js': [1, 'none', OWN + ' (load reads progress)'],
   'js/studio/model.js': [
     5,
     'none',
@@ -111,6 +122,11 @@ const PARSES = {
   ],
   'js/observatory/measurePanel.js': [1, 'none', 'its own serialisation'],
   'js/instructorPortal.js': [1, 'none', 'decrypted with the passphrase first'],
+  'js/instructorArchive.js': [
+    1,
+    'none',
+    'a file the instructor keeps; readArchive checks its format, version and shape before anything is used',
+  ],
   // A file a student opens, not yet behind parseDocument: route room.
   'js/composerPage.js': [2, 'none', 'route room: a file and the raw box'],
   'js/compute/capsule.js': [
@@ -138,6 +154,11 @@ const PARSES = {
     1,
     'none',
     'a link, capped at 8000 characters and 256 KiB inflated before it is parsed; the lab then validates what it holds',
+  ],
+  'js/observatory/imagePacks.js': [
+    1,
+    'sha256Hex',
+    'a frames file of the repository, parsed only after its byte count and SHA-256 matched the pack that names it',
   ],
   'js/observatory/comparePanel.js': [
     1,
@@ -190,7 +211,7 @@ describe('a saved document is parsed as plain, bounded data', () => {
       'js/courseHome.js',
       'js/notebookPanel.js',
       'js/notebook/store.js',
-      'js/investigations.js',
+      'js/investigations/finish.js',
       'js/submissionReview.js',
     ])
       expect([file, uses(file, 'parseDocument(')]).toEqual([file, true]);
@@ -219,6 +240,8 @@ const OWN_REFUSAL = {
   'js/investigations/progressBackup.js':
     'route room (every lesson); v1 is read as it is, which needs a migration entry',
   'js/myWork/made.js': 'a record with version 0 is still read',
+  'js/instructorArchive.js':
+    'route room (review page); a newer archive is refused in words by readArchive',
   'js/investigations/progressSchema.js':
     'keeps the payload and says so, as notes',
   'js/assignments/assignment.js': 'route room (every lesson, course home)',

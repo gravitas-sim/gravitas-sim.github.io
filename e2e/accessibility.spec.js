@@ -32,6 +32,30 @@
 
 import { test, expect } from './fixtures.js';
 import AxeBuilder from '@axe-core/playwright';
+import { readFileSync } from 'node:fs';
+import { Buffer } from 'node:buffer';
+import { INTRO_ASTRONOMY } from '../js/data/courses/intro-astronomy.js';
+import { courseLink } from '../js/course/links.js';
+import { itemOfEntry, savedPack } from '../js/library/collections.js';
+import '../js/library/collectionsDeps.js'; // binds what collections.js needs
+
+// What a student who saved two things and kept a collection has (Prompt 164).
+const LIBRARY_INDEX = JSON.parse(readFileSync('library/library.json', 'utf8'));
+const KEPT = LIBRARY_INDEX.starts.find(s => s.collection).collection;
+const COLLECTIONS_RECORD = JSON.stringify({
+  v: 1,
+  saved: savedPack(
+    ['investigation:tides', 'scenario:solar-system'].map(id =>
+      itemOfEntry(LIBRARY_INDEX.entries.find(e => e.id === id))
+    )
+  ),
+  received: [{ at: 1, pack: KEPT }],
+});
+const withCollections = page =>
+  page.addInitScript(
+    r => window.localStorage.setItem('gravitas_collections', r),
+    COLLECTIONS_RECORD
+  );
 
 /**
  * The rule set.
@@ -59,6 +83,14 @@ const TAGS = [
  * have to write the reason next to it.
  */
 const OFF = {};
+
+// The example course as a file, for the distribution kit's file input
+// (Prompt 169). Outside the array: docs:sync counts the surfaces by their keys.
+const COURSE_FILE = {
+  name: 'intro-astronomy.course.json',
+  mimeType: 'application/json',
+  buffer: Buffer.from(JSON.stringify(INTRO_ASTRONOMY)),
+};
 
 /** Surfaces, and how to get to each one. */
 const SURFACES = [
@@ -296,11 +328,75 @@ const SURFACES = [
   {
     name: 'library by sequence',
     open: async ({ page }) => {
-      await page.goto('/library/?group=sequence', {
+      await page.goto('/library/?browse=1&group=sequence', {
         waitUntil: 'domcontentloaded',
       });
     },
     expect: 'html[data-ready="true"] .lib-group',
+    standalone: true,
+  },
+  {
+    // Everything, with "More filters" open: every control labelled.
+    name: 'library browse, all filters',
+    open: async ({ page }) => {
+      await page.goto('/library/?browse=1&q=transit', {
+        waitUntil: 'domcontentloaded',
+      });
+      await page.locator('#libMore summary').click();
+    },
+    expect: 'html[data-ready="true"] .lib-why',
+    standalone: true,
+  },
+  {
+    name: 'library topic',
+    open: async ({ page }) => {
+      await page.goto('/library/?topic=exoplanets', {
+        waitUntil: 'domcontentloaded',
+      });
+    },
+    expect: 'html[data-ready="true"] .lib-topic .lib-rows',
+    standalone: true,
+  },
+  {
+    name: 'library item',
+    open: async ({ page }) => {
+      await page.goto(
+        '/library/?item=investigation:keplers-laws&path=seq:gravity-and-orbits',
+        { waitUntil: 'domcontentloaded' }
+      );
+    },
+    expect: 'html[data-ready="true"] .lib-item .lib-rows',
+    standalone: true,
+  },
+  {
+    name: 'library, your collections',
+    open: async ({ page }) => {
+      await withCollections(page);
+      await page.goto('/library/', { waitUntil: 'domcontentloaded' });
+    },
+    expect: 'html[data-ready="true"] #libCollections .lib-collection',
+    standalone: true,
+  },
+  {
+    name: 'kit, the collection editor',
+    open: async ({ page }) => {
+      await withCollections(page);
+      await page.goto('/teaching/kit/#collections', {
+        waitUntil: 'domcontentloaded',
+      });
+    },
+    expect: '#kitCollections .coll-item',
+    standalone: true,
+  },
+  {
+    name: 'course home, a collection',
+    open: async ({ page }) => {
+      const { url } = await courseLink(KEPT, { root: 'http://localhost/' });
+      await page.goto(url.replace('http://localhost', ''), {
+        waitUntil: 'domcontentloaded',
+      });
+    },
+    expect: '#ch-keep button',
     standalone: true,
   },
   {
@@ -405,6 +501,102 @@ const SURFACES = [
       });
     },
     expect: '#drop',
+    standalone: true,
+  },
+  {
+    name: 'course builder, a course as it comes (Prompt 168)',
+    open: async ({ page }) => {
+      await page.goto('/studio/course/?use=intro-astronomy', {
+        waitUntil: 'domcontentloaded',
+      });
+      await expect(page.locator('#cb-term-go')).toBeVisible({
+        timeout: 60_000,
+      });
+      await page.locator('#cb-term-go').click();
+    },
+    expect: '#cb-term-ready',
+    standalone: true,
+  },
+  {
+    name: 'distribution kit, a new term (Prompt 168)',
+    open: async ({ page }) => {
+      await page.goto('/studio/course/?use=intro-astronomy', {
+        waitUntil: 'domcontentloaded',
+      });
+      await expect(page.locator('#cb-term-go')).toBeVisible({
+        timeout: 60_000,
+      });
+      await page.locator('#cb-term-go').click();
+      await expect(page.locator('#cb-term-kit')).toBeVisible({
+        timeout: 60_000,
+      });
+      await page.goto(await page.locator('#cb-term-kit').getAttribute('href'), {
+        waitUntil: 'domcontentloaded',
+      });
+      await expect(page.locator('#kitTermGo')).toBeVisible({ timeout: 30_000 });
+    },
+    expect: '#kitTermGo',
+    standalone: true,
+  },
+  {
+    name: 'course builder, the Common Cartridge panel (Prompt 169)',
+    open: async ({ page }) => {
+      await page.goto('/studio/course/', { waitUntil: 'domcontentloaded' });
+      await page.locator('#cb-example').click();
+      await page.waitForSelector('body[data-checked]', { timeout: 60_000 });
+      await page.locator('#cb-cartridge').click();
+    },
+    expect: '#cc-go',
+    standalone: true,
+  },
+  {
+    name: 'distribution kit, the Common Cartridge panel (Prompt 169)',
+    open: async ({ page }) => {
+      await page.goto('/teaching/kit/', { waitUntil: 'domcontentloaded' });
+      await page.locator('#kitFile').setInputFiles(COURSE_FILE);
+      await expect(page.locator('#kitCcOpen')).toBeVisible({
+        timeout: 60_000,
+      });
+      await page.locator('#kitCcOpen').click();
+    },
+    expect: '#kitCartridge #cc-go',
+    standalone: true,
+  },
+  {
+    name: 'course builder, the activity list panel with its outcomes (Prompt 174)',
+    open: async ({ page }) => {
+      await page.goto('/studio/course/', { waitUntil: 'domcontentloaded' });
+      await page.locator('#cb-example').click();
+      await page.waitForSelector('body[data-checked]', { timeout: 60_000 });
+      await page.locator('#cb-plan').click();
+      await expect(page.locator('#plan-print')).toBeEnabled({
+        timeout: 60_000,
+      });
+      await page.locator('#plan-out-add').click();
+      await page.locator('#plan-out-0-en').fill('Reason about the sky');
+      await page.locator('#plan-out-0-es').fill('Razonar sobre el cielo');
+      await page.locator('#plan-out-0-es').blur();
+      await expect(page.locator('#plan-print')).toBeEnabled({
+        timeout: 60_000,
+      });
+    },
+    expect: '#plan-preview table',
+    standalone: true,
+  },
+  {
+    name: 'distribution kit, the activity list panel (Prompt 174)',
+    open: async ({ page }) => {
+      await page.goto('/teaching/kit/', { waitUntil: 'domcontentloaded' });
+      await page.locator('#kitFile').setInputFiles(COURSE_FILE);
+      await expect(page.locator('#kitPlanOpen')).toBeVisible({
+        timeout: 60_000,
+      });
+      await page.locator('#kitPlanOpen').click();
+      await expect(page.locator('#kitPlan #plan-print')).toBeEnabled({
+        timeout: 60_000,
+      });
+    },
+    expect: '#kitPlan #plan-preview table',
     standalone: true,
   },
 ];
@@ -567,10 +759,6 @@ for (const surface of SURFACES) {
               timeout: 30_000,
             });
           }
-
-          // With a navigation group open, so its links are checked too.
-          const group = page.locator('.gs-group').first();
-          if (await group.count()) await group.evaluate(d => (d.open = true));
 
           const violations = await analyze(
             page,

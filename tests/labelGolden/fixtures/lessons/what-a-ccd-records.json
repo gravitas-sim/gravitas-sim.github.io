@@ -1,0 +1,99 @@
+{
+ "id": "what-a-ccd-records",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.the-bias.fields.0.unit","count"],
+    ["steps.the-bias.fields.1.unit",""],
+    ["steps.the-dark.fields.0.unit","electron/s"],
+    ["steps.the-dark.fields.1.unit","count"],
+    ["steps.dark-matches-read.unit","s"],
+    ["steps.the-flat.fields.0.unit","%"],
+    ["steps.the-flat.fields.1.unit",""],
+    ["steps.the-bias-in-electrons.unit",""],
+    ["steps.what-the-flat-does.fields.0.unit","count"],
+    ["steps.what-the-flat-does.fields.1.unit","count"],
+    ["steps.the-flats-correction.unit",""],
+    ["steps.cosmic-rays.fields.0.unit","count"],
+    ["steps.cosmic-rays.fields.1.unit","count"],
+    ["steps.the-lost-share.unit","%"],
+    ["steps.the-bars-that-do-not-see.unit",""]
+   ],
+   "numbered": [
+    ["steps.the-bias.fields.0.hint","500.4"],
+    ["steps.the-bias.fields.1.hint","8.05"],
+    ["steps.the-dark.fields.0.hint","0.100"],
+    ["steps.the-dark.fields.1.label","Electrons in 120 seconds (one pixel)"],
+    ["steps.the-dark.fields.1.hint","12"],
+    ["steps.the-flat.fields.0.hint","76.2"],
+    ["steps.the-flat.fields.1.hint","1.52"],
+    ["steps.what-the-flat-does.fields.0.hint","47300"],
+    ["steps.what-the-flat-does.fields.1.hint","54080"],
+    ["steps.cosmic-rays.fields.0.hint","4"],
+    ["steps.cosmic-rays.fields.1.hint","13"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.the-dark.fields.1.label","Electrones en 120 segundos (un píxel)"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "dark-matches-read",
+    "answer": "648",
+    "tolerance": "12",
+    "unit": "s"
+   },
+   {
+    "sid": "the-bias-in-electrons",
+    "answer": "759",
+    "tolerance": "10",
+    "unit": ""
+   },
+   {
+    "sid": "the-flats-correction",
+    "answer": "1.14",
+    "tolerance": "0.02",
+    "unit": ""
+   },
+   {
+    "sid": "the-lost-share",
+    "answer": "39",
+    "tolerance": "1",
+    "unit": "%"
+   },
+   {
+    "sid": "the-bars-that-do-not-see",
+    "answer": "663",
+    "tolerance": "12",
+    "unit": ""
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "the-bias": {
+    "validate": {"calls":232,"distinct":2,"digest":"a17205d0e09d3523","samples":[null,{"level":"error","message":"Choose “A bias frame” and read “Master bias level” in counts and “Read noise” in electrons."}]}
+   },
+   "the-dark": {
+    "validate": {"calls":232,"distinct":2,"digest":"4dd5b4b08d8e117b","samples":[null,{"level":"error","message":"Choose “A dark frame”, read “Dark current (median pixel)” and multiply it by the 120 seconds of the dark frames."}]}
+   },
+   "the-flat": {
+    "validate": {"calls":232,"distinct":2,"digest":"44c62d7e65d30650","samples":[null,{"level":"error","message":"Choose “A flat field” and read “Flat field: corner as a share of the center” in percent and the gain in electrons per count."}]}
+   },
+   "what-the-flat-does": {
+    "validate": {"calls":232,"distinct":2,"digest":"895383b59b8ba9e2","samples":[null,{"level":"error","message":"Read “Star B: net light in the aperture” with the raw picture and again after dividing by the flat, in electrons."}]}
+   },
+   "cosmic-rays": {
+    "validate": {"calls":232,"distinct":2,"digest":"3a319515cf3569ed","samples":[null,{"level":"error","message":"Choose “Cosmic rays masked” and read “Cosmic-ray pixels flagged” and “Saturated pixels in the raw picture”, with the 60 second exposure."}]}
+   }
+  },
+  "es": "same"
+ }
+}

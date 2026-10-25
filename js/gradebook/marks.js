@@ -24,6 +24,9 @@ import { fromCsv, num, toCsv } from '../csv.js';
 /** What the marks file says it is, in its `schema` column. */
 export const MARKS_SCHEMA = 'gravitas.instructor-marks/1';
 
+/** /2: a row per rubric criterion (Prompt 172), written only when there is one. */
+export const MARKS_SCHEMA_RUBRIC = 'gravitas.instructor-marks/2';
+
 /** The columns, in order. */
 export const MARK_COLUMNS = Object.freeze([
   'schema',
@@ -42,6 +45,15 @@ export const MARK_COLUMNS = Object.freeze([
   'comment',
   'response_status',
   'response',
+]);
+
+/** The /2 file's columns: the /1 columns, then the criterion's. */
+export const MARK_COLUMNS_RUBRIC = Object.freeze([
+  ...MARK_COLUMNS,
+  'criterion',
+  'criterion_name',
+  'criterion_kind',
+  'criterion_weight',
 ]);
 
 /** The longest comment kept. */
@@ -79,6 +91,14 @@ export function setMark(marks, fingerprint, sid, value, possible = Infinity) {
   return true;
 }
 
+/** The key of one criterion's mark: a report, a step and a criterion's place. */
+export const criterionKey = (fingerprint, sid, n) =>
+  markKey(fingerprint, `${sid}\u0000c${n}`);
+
+/** setMark for a criterion (js/instructorRubric.js says what one is). */
+export const setCriterionMark = (marks, fingerprint, sid, n, value, possible) =>
+  setMark(marks, fingerprint, `${sid}\u0000c${n}`, value, possible);
+
 /**
  * Whether a question is a written answer an instructor has to read and mark.
  *
@@ -114,19 +134,33 @@ export const needsJudgment = records =>
 
 /**
  * The marks file: a row for every written answer, with its mark if it has one.
+ * A written answer with rubric criteria is followed by a row for each (Prompt
+ * 172); a file with such rows is /2, and one without any is /1.
  *
  * @param {Array<object>} records - From annotate()
  * @param {Map<string, object>} marks - Marks entered so far
  * @param {object} [options] - Options
  * @param {boolean} [options.includeWritten] - Write the answers too (opt-in)
+ * @param {(record: object, question: object) => Array<object>} [options.criteriaOf] -
+ *   criteriaPlan()'s entries for the answer, names as plain text; none if omitted
  * @returns {string} CSV, CRLF, header first
  */
-export function marksCsv(records, marks, { includeWritten = false } = {}) {
-  const rows = [MARK_COLUMNS];
-  for (const { record: r, question: q } of needsJudgment(records)) {
-    const m = marks.get(markKey(r.fingerprint, q.sid));
-    const cells = {
-      schema: MARKS_SCHEMA,
+export function marksCsv(
+  records,
+  marks,
+  { includeWritten = false, criteriaOf = () => [] } = {}
+) {
+  const items = needsJudgment(records).map(({ record, question }) => ({
+    record,
+    question,
+    plan: criteriaOf(record, question) || [],
+  }));
+  const rubric = items.some(i => i.plan.length);
+  const columns = rubric ? MARK_COLUMNS_RUBRIC : MARK_COLUMNS;
+  const rows = [columns];
+  for (const { record: r, question: q, plan } of items) {
+    const base = {
+      schema: rubric ? MARKS_SCHEMA_RUBRIC : MARKS_SCHEMA,
       submission: r.submission,
       fingerprint: r.fingerprint,
       roster_id: r.rosterId,
@@ -137,13 +171,32 @@ export function marksCsv(records, marks, { includeWritten = false } = {}) {
       step_title: q.title,
       auto_verdict: q.verdict,
       entered_by: 'instructor',
-      mark: m && m.points !== null ? num(m.points, 6) : '',
-      points_possible: q.pointsPossible,
-      comment: m?.comment ?? '',
       response_status: includeWritten ? 'written' : 'withheld',
       response: includeWritten ? q.response : null,
     };
-    rows.push(MARK_COLUMNS.map(c => cells[c]));
+    const m = marks.get(markKey(r.fingerprint, q.sid));
+    const put = cells => rows.push(columns.map(c => cells[c] ?? ''));
+    put({
+      ...base,
+      mark: m && m.points !== null ? num(m.points, 6) : '',
+      points_possible: q.pointsPossible,
+      comment: m?.comment ?? '',
+      response: base.response,
+    });
+    for (const c of plan) {
+      const cm = marks.get(criterionKey(r.fingerprint, q.sid, c.n));
+      put({
+        ...base,
+        mark: cm && cm.points !== null ? num(cm.points, 6) : '',
+        points_possible: c.possible,
+        comment: cm?.comment ?? '',
+        response: null,
+        criterion: `c${c.n}`,
+        criterion_name: c.name,
+        criterion_kind: c.kind,
+        criterion_weight: c.weight,
+      });
+    }
   }
   return toCsv(rows);
 }
@@ -166,7 +219,10 @@ export function readMarksCsv(text, into = new Map()) {
   let skipped = 0;
   for (const row of rows.slice(1)) {
     if (row.length === 1 && row[0] === '') continue;
-    if (row[at.schema] !== MARKS_SCHEMA) {
+    if (
+      row[at.schema] !== MARKS_SCHEMA &&
+      row[at.schema] !== MARKS_SCHEMA_RUBRIC
+    ) {
       return {
         ok: false,
         reason: 'wrongSchema',
@@ -179,16 +235,25 @@ export function readMarksCsv(text, into = new Map()) {
     const sid = row[at.step_id];
     const raw = row[at.mark] ?? '';
     const possible = Number(row[at.points_possible]);
+    const entered = {
+      points: raw === '' ? null : raw,
+      comment: row[at.comment],
+    };
+    const room = Number.isFinite(possible) ? possible : Infinity;
+    const place = /^c(\d+)$/.exec(row[at.criterion] ?? '');
     if (
       !fingerprint ||
       !sid ||
-      !setMark(
-        into,
-        fingerprint,
-        sid,
-        { points: raw === '' ? null : raw, comment: row[at.comment] },
-        Number.isFinite(possible) ? possible : Infinity
-      )
+      !(place
+        ? setCriterionMark(
+            into,
+            fingerprint,
+            sid,
+            Number(place[1]),
+            entered,
+            room
+          )
+        : setMark(into, fingerprint, sid, entered, room))
     ) {
       skipped++;
       continue;

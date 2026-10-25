@@ -14,7 +14,7 @@ export const EN_CATALOG = {
   'cat.lang.label': 'Language',
   'cat.title': 'Catalog',
   'cat.intro':
-    'Data, courses and instruments for Gravitas. Everything here was reviewed before it was listed, and none of it runs code. A dataset package or a course you install is kept on this device and works offline.',
+    'Data, courses and instruments for Gravitas. Everything here was reviewed before it was listed, and none of it runs code. A dataset package or a course you install is kept on this device and works offline. A package written outside the Gravitas team is credited to its author; CONTRIBUTING_CONTENT.md in the source repository describes how to submit one.',
   'cat.loading': 'Loading the catalog…',
   'cat.loadFailed': 'The catalog did not load: {why}',
   'cat.retry': 'Try again',
@@ -52,7 +52,8 @@ export const EN_CATALOG = {
   'cat.size.archive': '{download} to download, {unpacked} installed',
   'cat.size.builtIn': '{bytes} when it is used',
   'cat.works': 'Works with',
-  'cat.works.value': 'Gravitas {range} (this is {platform})',
+  'cat.works.value':
+    'Platform API {range} (this is platform API {platform}; it is not the Gravitas release number)',
   'cat.license': 'License',
   'cat.cite': 'Cite',
   'cat.reviewed': 'Reviewed',
@@ -111,11 +112,6 @@ export const EN_CATALOG = {
   'cat.course.student': 'For the student',
   'cat.badge.contributed': 'Contributed',
   'cat.badge.withdrawn': 'Withdrawn',
-  'cat.contributed.title': 'Contributed',
-  'cat.contributed.intro':
-    'Packages written by instructors and researchers outside the Gravitas team. A maintainer reviewed each one against the same checklist as everything else here before it was listed, and it is credited as its author asked.',
-  'cat.contributed.none':
-    'Nothing has been contributed yet. CONTRIBUTING_CONTENT.md in the source repository describes how to submit a package.',
   'cat.contributedBy': 'Contributed by',
   'cat.history': 'History',
   'cat.history.item': 'Version {version}, {date}: {change}',

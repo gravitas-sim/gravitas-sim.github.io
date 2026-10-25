@@ -36,8 +36,14 @@
 
 import { webcrypto as crypto, createHash } from 'node:crypto';
 import { TextEncoder } from 'node:util';
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
-import { dirname, join, resolve } from 'node:path';
+import {
+  readFileSync,
+  writeFileSync,
+  mkdirSync,
+  existsSync,
+  realpathSync,
+} from 'node:fs';
+import { basename, dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import {
@@ -55,6 +61,7 @@ import {
   adoptersGuide,
   curriculumMap,
 } from '../js/instructorDocs.js';
+import { structuredNotes, notesModel } from '../js/instructorNotes.js';
 import { activityGuide, activityWorksheet } from '../js/activityDocs.js';
 import { ACTIVITIES } from '../js/data/activities.js';
 import { EN_TEACHING } from '../js/i18n/en.teaching.js';
@@ -356,6 +363,38 @@ export const FIXTURE_PASSPHRASE = 'gravitas-fixture-not-a-secret';
 /** Where `--fixture` writes unless told otherwise. Gitignored. */
 const FIXTURE_DEFAULT = join(ROOT, '.instructor-fixture', 'materials.enc.json');
 
+/** Where `--rehearse` writes unless told otherwise. Gitignored. */
+const REHEARSAL_DEFAULT = join(
+  ROOT,
+  '.instructor-rehearsal',
+  'materials.enc.json'
+);
+
+/**
+ * Whether two paths name the same file, through symlinked directories too.
+ *
+ * `resolve()` alone compares spellings: a temporary directory reached as
+ * /var/... and as /private/var/... is one place, and a guard that thought them
+ * two would let a rehearsal write over the production bundle.
+ *
+ * @param {string} a - A path, which need not exist
+ * @param {string} b - Another
+ * @returns {boolean} True when writing one would write the other
+ */
+function sameFile(a, b) {
+  // The nearest ancestor that exists is the part a symlink can hide in.
+  const real = p => {
+    let tail = '';
+    let dir = resolve(p);
+    while (!existsSync(dir) && dirname(dir) !== dir) {
+      tail = join(basename(dir), tail);
+      dir = dirname(dir);
+    }
+    return join(realpathSync(dir), tail);
+  };
+  return real(a) === real(b);
+}
+
 /**
  * A one-page PDF standing in for a real document.
  *
@@ -640,6 +679,25 @@ export function renderDocuments(version, { stub = false } = {}) {
             : {}),
         }
       );
+      // The generated Spanish notes (Prompt 170): Spanish only, one per
+      // investigation, made from structured fields and never from the guide's
+      // prose, which stays English.
+      if (locale === 'es') {
+        const lessonOf = id => INVESTIGATIONS.find(i => i.id === id);
+        add(
+          `${base.id}-notes-es`,
+          `${s} - Notas estructuradas.pdf`,
+          'notes',
+          base.id,
+          () => structuredNotes(base, { version, lessonOf }),
+          {
+            ...common,
+            variant: 'notes',
+            label: L('doc.notes', { title }),
+            status: notesModel(base, lessonOf).status,
+          }
+        );
+      }
       if (depths.length > 1)
         for (const depth of depths)
           add(
@@ -878,22 +936,51 @@ export async function main(args) {
   // this tool rather than by a second one so its ids and names cannot drift
   // from the ones the portal looks up.
   const fixtureAt = argv.indexOf('--fixture');
-  const isFixture = fixtureAt >= 0;
+  // A rehearsal is a fixture encrypted under the department's own passphrase
+  // (Prompt 170, INSTRUCTOR_MATERIALS.md "A department's own bundle"): the same
+  // placeholder pages, written beside the real bundle's name but never over it,
+  // so a department can prove its passphrase opens the portal before it spends
+  // the minutes a real build takes. It needs a real passphrase of the
+  // department's own and refuses the published fixture one.
+  const rehearseAt = argv.indexOf('--rehearse');
+  const isRehearsal = rehearseAt >= 0;
+  const isFixture = fixtureAt >= 0 || isRehearsal;
+  const outAt = isRehearsal ? rehearseAt : fixtureAt;
   const fixtureOut =
-    isFixture && argv[fixtureAt + 1] && !argv[fixtureAt + 1].startsWith('--')
-      ? resolve(argv[fixtureAt + 1])
-      : FIXTURE_DEFAULT;
-  if (isFixture && resolve(fixtureOut) === resolve(OUT_FILE)) {
+    isFixture && argv[outAt + 1] && !argv[outAt + 1].startsWith('--')
+      ? resolve(argv[outAt + 1])
+      : isRehearsal
+        ? REHEARSAL_DEFAULT
+        : FIXTURE_DEFAULT;
+  if (isFixture && sameFile(fixtureOut, OUT_FILE)) {
     console.error(
-      '\n  --fixture refuses to write the production bundle.\n' +
-        `  ${OUT_FILE} is the published artifact; a fixture is a placeholder\n` +
-        '  set encrypted with a passphrase that is printed in the source.\n'
+      `\n  --${isRehearsal ? 'rehearse' : 'fixture'} refuses to write the production bundle.\n` +
+        `  ${OUT_FILE} is the published artifact; this is a placeholder\n` +
+        '  set and never a replacement for it.\n'
+    );
+    process.exit(1);
+  }
+  if (isRehearsal && !hasRealSecret()) {
+    console.error(
+      '\n  --rehearse encrypts under your own passphrase, and none was found.\n' +
+        '  Set GRAVITAS_INSTRUCTOR_PASSWORD or write .instructor-password first.\n'
     );
     process.exit(1);
   }
 
   const unpublishable = validate || argv.includes('--unpublishable');
-  const secret = isFixture ? FIXTURE_PASSPHRASE : passphrase(unpublishable);
+  const secret = isRehearsal
+    ? passphrase(false)
+    : isFixture
+      ? FIXTURE_PASSPHRASE
+      : passphrase(unpublishable);
+  if (isRehearsal && secret === FIXTURE_PASSPHRASE) {
+    console.error(
+      '\n  --rehearse refuses the published fixture passphrase: it is printed in\n' +
+        '  the source, so a bundle under it is open to everyone.\n'
+    );
+    process.exit(1);
+  }
   const usedThrowaway = unpublishable && !hasRealSecret();
   const version = versionStamp();
   const keepPlain = argv.includes('--keep-plaintext');
@@ -951,9 +1038,14 @@ export async function main(args) {
     mkdirSync(dirname(fixtureOut), { recursive: true });
     writeFileSync(fixtureOut, JSON.stringify(payload));
     console.log(
-      `\nTest fixture: ${files.length} placeholder documents -> ${rel(fixtureOut)}\n` +
-        '  Encrypted with the published fixture passphrase. Not publishable,\n' +
-        '  not tracked, and never a replacement for the real bundle.'
+      isRehearsal
+        ? `\nRehearsal: ${files.length} placeholder documents -> ${rel(fixtureOut)}\n` +
+            '  Encrypted with the passphrase you supplied (never printed). Serve it as\n' +
+            '  instructors/materials.enc.json to prove that passphrase opens the portal;\n' +
+            '  it holds no real document and is never a replacement for the real build.'
+        : `\nTest fixture: ${files.length} placeholder documents -> ${rel(fixtureOut)}\n` +
+            '  Encrypted with the published fixture passphrase. Not publishable,\n' +
+            '  not tracked, and never a replacement for the real bundle.'
     );
     return;
   }

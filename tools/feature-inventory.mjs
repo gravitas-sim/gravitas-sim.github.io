@@ -41,7 +41,7 @@ export const FEATURES = [
       'Optional uses degrade: gravity is summed on the main thread, charts update directly, and the validation and experiment pages say they cannot run here. The Mission lab, the 3-D lab, the Observatory fitter and the RV workspace search, fit and Monte Carlo have no main-thread fallback and need module Workers.',
     uses: [
       {
-        file: 'js/physics.js',
+        file: 'js/engine/step.js',
         detect: /summing gravity on the main thread/,
         note: 'falls back to the main thread',
       },
@@ -89,6 +89,11 @@ export const FEATURES = [
         file: 'js/observatory/fitPanel.js',
         detect: /new Worker\(/,
         note: 'no fallback',
+      },
+      {
+        file: 'js/observatory/imageImport.js',
+        detect: /new Worker\(/,
+        note: 'no fallback: the read is refused in words (a failed Worker)',
       },
       {
         file: 'js/inference/rvClient.js',
@@ -161,11 +166,18 @@ export const FEATURES = [
   {
     id: 'offscreencanvas',
     name: 'OffscreenCanvas',
-    purpose: 'Not used.',
+    purpose:
+      'Drawing a decoded PNG or JPEG in the import Worker, to read its pixels (the page never draws on a transferred canvas).',
     token: /OffscreenCanvas|transferControlToOffscreen/,
     without:
-      'Nothing to fall back from: Workers send numbers to the page and the page draws, so no canvas is ever transferred.',
-    uses: [],
+      'The picture is refused in words (no-decoder, a browser that cannot decode a picture in the background); a FITS frame needs no canvas and is read as usual. Nothing is drawn on a transferred canvas: the Worker sends numbers to the page.',
+    uses: [
+      {
+        file: 'js/dataKinds/rasterJob.js',
+        detect: /'no-decoder'/,
+        note: 'refuses the picture, in words',
+      },
+    ],
   },
   {
     id: 'serviceworker',
@@ -299,6 +311,11 @@ export const FEATURES = [
         file: 'js/compute/frame/runner.js',
         detect: /crypto\.subtle\.digest/,
         note: 'no fallback (the compute frame, opt-in)',
+      },
+      {
+        file: 'js/measure/calibrationRecord.js',
+        detect: /crypto\.subtle\.digest/,
+        note: 'no fallback (the digest of a frame in a saved calibration)',
       },
     ],
   },

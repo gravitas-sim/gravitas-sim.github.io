@@ -270,6 +270,13 @@ export const ES_COURSE = {
     'Este archivo de curso es de otra versión del formato.',
   'course.error.id': 'Palabras en minúscula unidas por guiones.',
   'course.error.seed': 'Una palabra como orbit-1.',
+  'course.error.profile': 'El perfil es «collection», o se omite el campo.',
+  'course.error.collectionUnits': 'Una colección tiene exactamente una unidad.',
+  'course.error.collectionField': 'Una colección no tiene «{field}».',
+  'course.error.collectionItem':
+    'Una colección contiene elementos en orden: sin actividades, sin rutas opcionales, sin «needs».',
+  'course.error.term':
+    'Una etiqueta corta como Primavera 2027: hasta 40 caracteres, sin marcado.',
   'course.error.tooMany': 'Como mucho {max} elementos.',
   'course.error.access':
     'Libre en línea, a través de una biblioteca o impreso.',
@@ -284,6 +291,8 @@ export const ES_COURSE = {
   'course.error.date': 'Una fecha como 2026-09-28.',
   'course.error.doi': 'Un DOI como 10.1119/1.1234.',
   'course.error.duplicate': '«{id}» ya se usa más arriba.',
+  'course.error.outcome': 'El curso no tiene ningún resultado «{id}».',
+  'course.error.outcomes': 'Una lista de ids de resultados, cada uno una vez.',
   'course.error.entity': 'Solo texto sin formato.',
   'course.error.esOf':
     'El registro de qué inglés traduce el español está dañado.',

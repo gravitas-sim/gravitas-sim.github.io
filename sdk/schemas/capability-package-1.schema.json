@@ -250,6 +250,7 @@
             "enum": [
               "core",
               "optional",
+              "idle",
               "locale",
               "none"
             ]

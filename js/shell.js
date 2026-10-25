@@ -1,6 +1,8 @@
 // The shell's behaviour; its markup is in the page (tools/shell.mjs), and the
 // navigation works without this. Short on purpose: every route counts it.
 
+import { EV_THEME_CHANGED, KEY_LOCALE, KEY_THEME } from './names.js';
+
 const root = document.documentElement;
 const store = (k, v) => {
   try {
@@ -31,24 +33,25 @@ export function mountShell({ onLanguage, onTheme } = {}) {
   const head = document.querySelector('.gs-shell');
   if (!head) return;
   head.classList.add('gs-js');
-  const groups = [...head.querySelectorAll('details')];
   const toggle = head.querySelector('.gs-toggle');
   const controls = head.querySelector('.gs-controls');
   toggle.hidden = controls.hidden = false;
 
-  for (const d of groups)
-    d.addEventListener('toggle', () => {
-      if (d.open) for (const o of groups) if (o !== d) o.open = false;
+  // A lesson is Learn.
+  if (head.classList.contains('gs-app')) {
+    const sync = () => {
+      const l = document.body.classList.contains('investigation-open');
+      for (const a of head.querySelectorAll('.gs-nav a')) {
+        if (a.dataset.dest === (l ? 'learn' : 'explore'))
+          a.setAttribute('aria-current', l ? 'true' : 'page');
+        else a.removeAttribute('aria-current');
+      }
+    };
+    new MutationObserver(sync).observe(document.body, {
+      attributeFilter: ['class'],
     });
-  head.addEventListener('keydown', e => {
-    const d = groups.find(o => o.open);
-    if (e.key !== 'Escape' || !d) return;
-    d.open = false;
-    d.querySelector('summary').focus();
-  });
-  document.addEventListener('click', e => {
-    if (!head.contains(e.target)) for (const d of groups) d.open = false;
-  });
+  }
+
   toggle.addEventListener('click', () => {
     const open = toggle.getAttribute('aria-expanded') !== 'true';
     toggle.setAttribute('aria-expanded', String(open));
@@ -57,10 +60,10 @@ export function mountShell({ onLanguage, onTheme } = {}) {
 
   const lang = head.querySelector('[data-gs-lang]');
   // The stored choice, which an English-only page cannot follow.
-  const want = store('gravitas_locale') || root.lang;
+  const want = store(KEY_LOCALE) || root.lang;
   lang.value = want.startsWith('es') ? 'es' : 'en';
   lang.addEventListener('change', () => {
-    store('gravitas_locale', lang.value);
+    store(KEY_LOCALE, lang.value);
     if (!onLanguage) return location.reload();
     root.lang = lang.value;
     onLanguage(lang.value);
@@ -75,16 +78,16 @@ export function mountShell({ onLanguage, onTheme } = {}) {
   };
   names();
   new MutationObserver(names).observe(root, { attributeFilter: ['lang'] });
-  const saved = store('gravitas_theme');
+  const saved = store(KEY_THEME);
   theme.value = saved || 'midnight';
   if (!theme.value) theme.value = 'midnight';
   if (!onTheme) applyTheme(theme.value);
   theme.addEventListener('change', () => {
     if (onTheme) return onTheme(theme.value);
-    store('gravitas_theme', theme.value);
+    store(KEY_THEME, theme.value);
     applyTheme(theme.value);
   });
-  window.addEventListener('gravitasThemeChanged', e => {
+  window.addEventListener(EV_THEME_CHANGED, e => {
     theme.value = e.detail.theme;
   });
 }

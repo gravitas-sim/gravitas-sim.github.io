@@ -33,7 +33,7 @@ offline after a first visit, and encodes any simulation state into a shareable
 URL.
 
 The distinguishing commitment is that the software says what it is doing. A
-public validation page reports 304 checks of the physics engine against
+public validation page reports 332 checks of the physics engine against
 analytic results, published values and independent integrations, each with its
 measured error and each labelled by the kind of evidence it rests on; a public
 model page states what the simulation represents and, at equal length, what it
@@ -176,8 +176,8 @@ reproducible pipeline.
 # Accessibility, offline use and low-end hardware
 
 The interface targets WCAG 2.2 Level AA. An automated axe-core sweep runs over
-36 surfaces in two languages, the pages with the shared shell in all four
-themes and the rest in two — 240 runs — with no rule disabled,
+48 surfaces in two languages, the pages with the shared shell in all four
+themes and the rest in two — 336 runs — with no rule disabled,
 and a second suite covers focus order, focus traps, Escape handling, focus
 restoration, heading order, landmarks, reflow, reduced motion and the canvas
 description. Automated checks are a floor rather than a ceiling, and the
@@ -194,13 +194,13 @@ has never been raised.
 
 Gravitas is tested at three levels. A unit suite covers the modules. A browser
 suite runs in full in Chromium, against both the sources and the production
-build; a tagged cross-engine subset of it runs in Firefox and WebKit. A physics validation suite runs 304 checks and publishes the
+build; a tagged cross-engine subset of it runs in Firefox and WebKit. A physics validation suite runs 332 checks and publishes the
 result: each check names what it compares, the kind of evidence it rests on —
 analytic, integrated, published, approximation or empirical — and its measured
 error. The public validation page is generated from the suite that ran, not
 transcribed from it.
 
-A release gate runs 59 checks covering formatting, linting, module architecture,
+A release gate runs 64 checks covering formatting, linting, module architecture,
 authoring rules including lesson-quality warnings, internal links, dependency
 audits, the unit and browser suites, the physics validation, bundle budget and
 composition, and the currency of every generated artifact. It additionally

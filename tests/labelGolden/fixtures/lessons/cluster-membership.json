@@ -1,0 +1,79 @@
+{
+ "id": "cluster-membership",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.measure-the-cluster.fields.0.unit","mas/yr"],
+    ["steps.measure-the-cluster.fields.1.unit","mas/yr"],
+    ["steps.measure-the-cluster.fields.2.unit",""],
+    ["steps.move-the-threshold.fields.0.unit",""],
+    ["steps.move-the-threshold.fields.1.unit",""],
+    ["steps.internal-velocity.unit","km/s"],
+    ["steps.expected-field.unit",""],
+    ["steps.read-the-distance.fields.0.unit","mas"],
+    ["steps.read-the-distance.fields.1.unit","kpc"],
+    ["steps.distance-by-hand.unit","kpc"]
+   ],
+   "numbered": [
+    ["steps.measure-the-cluster.fields.0.hint","-1.2"],
+    ["steps.measure-the-cluster.fields.1.hint","-2.0"],
+    ["steps.measure-the-cluster.fields.2.label","Stars above 0.5"],
+    ["steps.measure-the-cluster.fields.2.hint","506"],
+    ["steps.move-the-threshold.fields.0.label","Stars above 0.99"],
+    ["steps.move-the-threshold.fields.0.hint","497"],
+    ["steps.move-the-threshold.fields.1.label","Stars above 0.1"],
+    ["steps.move-the-threshold.fields.1.hint","509"],
+    ["steps.read-the-distance.fields.0.hint","0.385"],
+    ["steps.read-the-distance.fields.1.label","Distance, 1 ÷ parallax"],
+    ["steps.read-the-distance.fields.1.hint","2.6"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.measure-the-cluster.fields.2.label","Estrellas por encima de 0,5"],
+    ["steps.move-the-threshold.fields.0.label","Estrellas por encima de 0,99"],
+    ["steps.move-the-threshold.fields.1.label","Estrellas por encima de 0,1"],
+    ["steps.read-the-distance.fields.1.label","Distancia, 1 ÷ paralaje"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "internal-velocity",
+    "answer": "1",
+    "tolerance": "0.15",
+    "unit": "km/s"
+   },
+   {
+    "sid": "expected-field",
+    "answer": "487",
+    "tolerance": "3",
+    "unit": ""
+   },
+   {
+    "sid": "distance-by-hand",
+    "answer": "2.6",
+    "tolerance": "0.05",
+    "unit": "kpc"
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "measure-the-cluster": {
+    "validate": {"calls":242,"distinct":2,"digest":"db4d6f4785a64f8b","samples":[null,{"level":"error","message":"Use the preset “Proper motions”: the fit with proper motion and parallax, threshold 0.5. Read the “Cluster’s proper motion” row and “Stars above the probability threshold”."}]}
+   },
+   "move-the-threshold": {
+    "validate": {"calls":232,"distinct":2,"digest":"dfa06e39368c5ba7","samples":[null,{"level":"error","message":"Use the fit with proper motion and parallax. Set the threshold to 0.99 and read “Stars above the probability threshold”, then set it to 0.1 and read it again."}]}
+   },
+   "read-the-distance": {
+    "validate": {"calls":232,"distinct":2,"digest":"a42aec9ce19d885d","samples":[null,{"level":"error","message":"Set the threshold to 0.5 and read “Mean parallax of the members” and “Distance from that parallax”. The distance is 1 divided by the parallax."}]}
+   }
+  },
+  "es": "same"
+ }
+}

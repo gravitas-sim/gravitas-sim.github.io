@@ -58,5 +58,22 @@ export default {
         off: 'verdad − media sin calibrar.',
       },
     },
+    {
+      title: 'Todo el proceso, desde las imágenes',
+      body: `Esta investigación ha usado la reducción del laboratorio en una noche ordenada. El panel «De imágenes a una curva de luz» del Observatorio hace cada paso desde las imágenes en bruto de una secuencia inventada: calibra, marca las estrellas una sola vez, alinea cada imagen con la primera (el telescopio se mueve), mide todas las estrellas, elige las estrellas de comparación por su brillo y su constancia, y hace la curva de luz con sus errores. Ábrelo, deja la semilla en 1 y cada ajuste como está, pulsa «Ejecutar el proceso» y avanza hasta la curva de luz.`,
+      prompt: 'El periodo que encuentra el proceso para la semilla 1, en horas',
+      hints: [
+        'El último paso da el periodo en días, con su error. Multiplica por 24.',
+      ],
+      worked:
+        'Cerca de 0,1202 × 24 = 2,88 horas, con un error de 0,0004 días (0,01 horas) y una semiamplitud de 0,0502 ± 0,0012 magnitudes. Los datos se hicieron con un periodo de 0,12 días, 2,88 horas, y una semiamplitud de 0,05 magnitudes: el proceso recupera las dos desde imágenes en bruto, aunque ninguna imagen apunta igual y las nubes atenuaron cada estrella en una décima. Una segunda estrella del campo varía solo si lo pides: marca «Hacer que la estrella de comparación C2 también varíe», ejecuta de nuevo, y el paso de comparación la marca y la deja fuera.',
+      feedback: {
+        close:
+          'Casi. Lee el periodo en días en el último paso y multiplícalo por 24.',
+        'wrong-order-of-magnitude':
+          'Se pasa una potencia de diez: una décima de día son un par de horas.',
+        off: 'días × 24.',
+      },
+    },
   ],
 };

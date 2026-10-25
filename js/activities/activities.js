@@ -78,6 +78,14 @@ export function assignmentForFormat(
     // teaching page, which lists formats and builds nothing, does not load
     // the package catalog to do it.
     provider,
+    // Whether the student's lab report prints a written answer's marking note
+    // (F-8: off unless the activity says `markingNote: true`, which the key
+    // prints whatever it says).
+    markingNote: activity.markingNote === true,
+    // Whether the student's panels start with their "More" sections open or
+    // shut (Prompt 167: `more: 'open'` or `'shut'`; the student can always
+    // open everything, and what they last chose for a surface outranks it).
+    more: activity.more,
   });
 
   return {

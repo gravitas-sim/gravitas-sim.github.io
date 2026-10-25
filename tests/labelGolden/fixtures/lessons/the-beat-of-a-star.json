@@ -1,0 +1,110 @@
+{
+ "id": "the-beat-of-a-star",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.the-first-period.fields.0.unit","d"],
+    ["steps.the-first-period.fields.1.unit","d"],
+    ["steps.the-width-from-the-run.unit","d"],
+    ["steps.fold-it.fields.0.unit","d"],
+    ["steps.fold-it.fields.1.unit","d"],
+    ["steps.fold-it.fields.2.unit","mag"],
+    ["steps.fold-on-twice-the-period.fields.0.unit","d"],
+    ["steps.a-slightly-wrong-period.fields.0.unit","d"],
+    ["steps.the-drift-by-hand.unit",""],
+    ["steps.a-second-star.fields.0.unit","d"],
+    ["steps.a-second-star.fields.1.unit","d"],
+    ["steps.a-second-star.fields.2.unit",""],
+    ["steps.the-honest-error.unit",""],
+    ["steps.the-sigma-count.unit",""],
+    ["steps.once-a-night.fields.0.unit","d"],
+    ["steps.once-a-night.fields.1.unit","d"],
+    ["steps.the-false-periods.fields.0.unit","d"],
+    ["steps.the-false-periods.fields.1.unit","d"],
+    ["steps.the-alias-by-hand.unit","d"]
+   ],
+   "numbered": [
+    ["steps.the-first-period.fields.0.hint","0.6604"],
+    ["steps.the-first-period.fields.1.hint","0.0167"],
+    ["steps.fold-it.fields.0.hint","0.66041"],
+    ["steps.fold-it.fields.1.hint","0.00015"],
+    ["steps.fold-it.fields.2.hint","0.712"],
+    ["steps.fold-on-twice-the-period.fields.0.hint","1.3208"],
+    ["steps.a-slightly-wrong-period.fields.0.hint","0.6736"],
+    ["steps.a-second-star.fields.0.hint","7.226"],
+    ["steps.a-second-star.fields.1.hint","0.030"],
+    ["steps.a-second-star.fields.2.hint","3.68"],
+    ["steps.once-a-night.fields.0.hint","1.972"],
+    ["steps.once-a-night.fields.1.hint","0.212"],
+    ["steps.the-false-periods.fields.0.hint","1.945"],
+    ["steps.the-false-periods.fields.1.hint","0.3977"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": []
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "the-width-from-the-run",
+    "answer": "0.0168",
+    "tolerance": "0.0008",
+    "unit": "d"
+   },
+   {
+    "sid": "the-drift-by-hand",
+    "answer": "0.77",
+    "tolerance": "0.04",
+    "unit": ""
+   },
+   {
+    "sid": "the-honest-error",
+    "answer": "0.13",
+    "tolerance": "0.01",
+    "unit": ""
+   },
+   {
+    "sid": "the-sigma-count",
+    "answer": "1.7",
+    "tolerance": "0.15",
+    "unit": ""
+   },
+   {
+    "sid": "the-alias-by-hand",
+    "answer": "1.945",
+    "tolerance": "0.01",
+    "unit": "d"
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "the-first-period": {
+    "validate": {"calls":232,"distinct":2,"digest":"3b62c3a8455d3930","samples":[null,{"level":"error","message":"Pick “SU Draconis (an RR Lyrae star), the whole run” and “The period search”, then read “Highest peak of the period search” and “Width of that peak (at half power)”, both in days."}]}
+   },
+   "fold-it": {
+    "validate": {"calls":242,"distinct":2,"digest":"352bbb6cd60c3203","samples":[null,{"level":"error","message":"Choose “Folded on a period” (or stay on the search) and read “Period (refined with a Fourier series)”, “Period error (bootstrap)” and “Amplitude, peak to peak”."}]}
+   },
+   "fold-on-twice-the-period": {
+    "validate": {"calls":97,"distinct":2,"digest":"a88c5350c5de05f3","samples":[null,{"level":"error","message":"Set “Fold on” to “twice the period”, with “Folded on a period” as the picture, then read “Period the fold uses”."}]}
+   },
+   "a-slightly-wrong-period": {
+    "validate": {"calls":97,"distinct":2,"digest":"f9d2f82e0a423c49","samples":[null,{"level":"error","message":"Set “Fold on” to “the period”, “Period, above or below the best one” to +2.0 %, and read “Period the fold uses”."}]}
+   },
+   "a-second-star": {
+    "validate": {"calls":242,"distinct":2,"digest":"c0147f81a910cc64","samples":[null,{"level":"error","message":"Choose “Eta Aquilae (a Cepheid), the whole run” and read “Period (refined with a Fourier series)”, “Period error (bootstrap)” and “Cycles in the run”."}]}
+   },
+   "once-a-night": {
+    "validate": {"calls":232,"distinct":2,"digest":"42f6a626cbd01035","samples":[null,{"level":"error","message":"Choose “SU Draconis, seen once a night” and “The period search”, then read “Highest peak of the period search” and “Width of that peak (at half power)”."}]}
+   },
+   "the-false-periods": {
+    "validate": {"calls":232,"distinct":2,"digest":"3e57431abd4f35fe","samples":[null,{"level":"error","message":"Choose “SU Draconis (an RR Lyrae star), the whole run”, then read “First alias, 1 per day longer” and “Second alias, 1 per day shorter”."}]}
+   }
+  },
+  "es": "same"
+ }
+}

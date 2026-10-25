@@ -365,7 +365,7 @@ export const GAIA_SOLAR = {
         "The Sun is at the origin; velocities are heliocentric until a student subtracts the Sun's motion.",
       ],
       compatible: { widgets: [], investigations: [] },
-      offline: 'optional',
+      offline: 'idle',
     };
     return asSidecar(this, { meta, manifestRest, series });
   },
@@ -602,7 +602,7 @@ export const GAIA_NGC2420 = {
         "Parallaxes are not corrected for the zero point (about -0.017 mas on average, Lindegren et al. 2021); at the cluster's 0.3 mas that is a 6 percent effect on its distance, which a lesson that quotes a distance says.",
       ],
       compatible: { widgets: [], investigations: [] },
-      offline: 'optional',
+      offline: 'idle',
     };
     return asSidecar(this, { meta, manifestRest, series });
   },
@@ -841,7 +841,7 @@ export const MILKY_WAY_ROTATION = {
         "The authors' errors are one sigma and are their weighted-average errors, not a spread of independent measurements.",
       ],
       compatible: { widgets: [], investigations: [] },
-      offline: 'optional',
+      offline: 'idle',
     };
     return asSidecar(this, { meta, manifestRest, series });
   },

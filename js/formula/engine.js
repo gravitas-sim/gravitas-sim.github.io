@@ -14,7 +14,11 @@
 //     dimensionless when it is a ratio, or has no registry unit at all (a time
 //     squared per length cubed), which the caller may refuse or write as text.
 //   - Uncertainty is first-order, for uncorrelated inputs with a standard
-//     deviation each: every number carries its partial derivative with respect
+//     deviation each, or for inputs whose correlation coefficients the caller
+//     gives (Prompt 151: `correlations`, from an envelope's `correlatedWith`),
+//     where the cross terms 2 rho gj gk sj sk are added and the rule says so;
+//     with none given the inputs are treated as independent, and the rule says
+//     that: every number carries its partial derivative with respect
 //     to each input, so a quantity used twice (x - x, x * x) is differentiated
 //     once, correctly, and not added in quadrature as two inputs. It is not
 //     propagated, and the result says why, when an input has none, when an
@@ -44,6 +48,14 @@ import {
 } from './units.js';
 
 export const RULE = 'first-order-uncorrelated';
+
+/** The uncertainty states a formula refuses, and the words for each. */
+const REFUSED = {
+  interval: 'interval',
+  'not-constrained': 'notConstrained',
+  failed: 'failed',
+  limit: 'limit',
+};
 
 const MATH = {
   sqrt: [Math.sqrt, v => 0.5 / Math.sqrt(v)],
@@ -93,9 +105,11 @@ const fold = n => ev(n, { cols: {}, aggs: new Map() }, 0)[0];
  *
  * @param {string} source - The formula
  * @param {{inputs: Record<string, {unit: string|null,
- *   uncertainty?: 'sigma'|'interval'|'none'}>}} scope - The names a formula may
+ *   uncertainty?: string}>}} scope - The names a formula may
  *   use: a unit as a registry id or spelling (`''` is dimensionless, null is
- *   not stated and refused) and the kind of uncertainty the input has
+ *   not stated and refused) and the kind of uncertainty the input has: sigma
+ *   propagates, assumed is exact, none leaves the result without one, and an
+ *   interval, a limit, not-constrained or failed is refused in words
  * @param {{locale?: string}} [opts] - 'en' or 'es': how numbers are written
  * @returns {{info: object, run: Function, ast: object}} `info` is the
  *   dimension, unit, inputs and uncertainty rule; `run(data, opts)` computes
@@ -141,8 +155,8 @@ export function compile(source, scope, { locale = 'en' } = {}) {
             ? { dim: ZERO, mult: 1, id: '', scale: 1, text: '', angle: false }
             : parseUnitText(spec.unit);
         if (!u) fail('unit', { unit: spec.unit, name: n.n }, n.s, n.e);
-        if (spec.uncertainty === 'interval')
-          fail('interval', { name: n.n }, n.s, n.e);
+        const refused = REFUSED[spec.uncertainty];
+        if (refused) fail(refused, { name: n.n }, n.s, n.e);
         Object.assign(n, { t: 'ref', d: u.dim, m: u.mult, ang: u.angle });
         Object.assign(n, { u, k: false, in: new Set([n.n]) });
         break;
@@ -277,7 +291,10 @@ export function compile(source, scope, { locale = 'en' } = {}) {
     [...outside].some(x => aggCount[x]) ||
     Object.values(aggCount).some(c => c > 1);
   const used = [...ast.in];
-  const lacking = used.filter(x => scope.inputs[x].uncertainty !== 'sigma');
+  // An input taken as exact adds no variance and leaves the others' theirs.
+  const lacking = used.filter(
+    x => !['sigma', 'assumed'].includes(scope.inputs[x].uncertainty)
+  );
   const rule = !used.length
     ? 'exact'
     : lacking.length
@@ -285,6 +302,14 @@ export function compile(source, scope, { locale = 'en' } = {}) {
       : shared
         ? 'shared'
         : 'first-order';
+  // [j, k, rho] for each coefficient between two inputs the formula reads.
+  // Trusting: js/formula/evidence.js checkCorrelations is the check.
+  const pairs = [];
+  if (rule === 'first-order')
+    for (const { a, b, rho } of scope.correlations ?? []) {
+      const [j, k] = [used.indexOf(a), used.indexOf(b)];
+      if (j >= 0 && k >= 0 && rho) pairs.push([j, k, rho]);
+    }
 
   const r = ast;
   let unit;
@@ -307,12 +332,13 @@ export function compile(source, scope, { locale = 'en' } = {}) {
     angle: r.ang,
     inputs: used,
     rule,
+    correlated: pairs.length > 0,
     lacking: rule === 'none' ? lacking : [],
     aggregates: aggs.length,
   };
 
   const run = (data, { rows, skip } = {}) =>
-    execute({ ast, used, rule, aggs, mult, scope }, data, rows, skip);
+    execute({ ast, used, rule, aggs, mult, scope, pairs }, data, rows, skip);
   return { info, run, ast };
 }
 
@@ -418,10 +444,12 @@ function variance(g, c, i) {
   for (let j = 0; j < c.U; j++) s += (g[j] * c.sg[j][i]) ** 2;
   for (let a = 0; a < c.aggSigma.length; a++)
     s += (g[c.U + a] * c.aggSigma[a]) ** 2;
+  for (const [j, k, rho] of c.pairs)
+    s += 2 * rho * g[j] * g[k] * c.sg[j][i] * c.sg[k][i];
   return s;
 }
 
-function execute({ ast, used, rule, aggs, mult }, data, rows, skip) {
+function execute({ ast, used, rule, aggs, mult, pairs }, data, rows, skip) {
   const first = used.length ? data?.[used[0]]?.values : null;
   const n = rows ?? first?.length ?? 1;
   if (n > LIMITS.rows) fail('rows', { max: LIMITS.rows, rows: n });
@@ -440,6 +468,7 @@ function execute({ ast, used, rule, aggs, mult }, data, rows, skip) {
     cols,
     sg,
     prop,
+    pairs,
     rows: n,
     skip,
     U: used.length,
@@ -466,18 +495,23 @@ function execute({ ast, used, rule, aggs, mult }, data, rows, skip) {
  * notebook entry uses.
  * @param {string} source - The formula
  * @param {Record<string, {value: number, unit: string|null, sigma?: number,
- *   uncertainty?: 'sigma'|'interval'|'none'}>} inputs - By name
- * @param {{locale?: string}} [opts]
+ *   uncertainty?: 'sigma'|'assumed'|'none'}>} inputs - By name
+ * @param {{locale?: string, correlations?: Array<{a: string, b: string,
+ *   rho: number}>}} [opts] - `correlations` are coefficients between inputs,
+ *   by name; absent, the inputs are treated as independent
  * @returns {{value: number, sigma: number|null, info: object}}
  * @throws {FormulaError}
  */
 export function evaluate(source, inputs, opts) {
-  const scope = { inputs: {} };
+  const scope = { inputs: {}, correlations: opts?.correlations };
   const data = {};
   for (const [k, v] of Object.entries(inputs)) {
     const kind = v.uncertainty ?? (Number.isFinite(v.sigma) ? 'sigma' : 'none');
     scope.inputs[k] = { unit: v.unit, uncertainty: kind };
-    data[k] = { values: [v.value], sigma: kind === 'sigma' ? [v.sigma] : null };
+    data[k] = {
+      values: [v.value],
+      sigma: kind === 'sigma' ? [v.sigma] : kind === 'assumed' ? [0] : null,
+    };
   }
   const { info, run } = compile(source, scope, opts);
   const out = run(data, { rows: 1 });

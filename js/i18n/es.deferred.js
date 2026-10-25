@@ -214,7 +214,6 @@ export const ES_DEFERRED = {
     'NO RESUELTO: los tiempos de e-plegado abarcan un {spread}%, mas de lo que el refinamiento deberia mover una respuesta fisica. El informe honesto es que esta medida no esta resuelta numericamente.',
   'bench.chaos.canceled':
     'Esto se detuvo antes de terminar, asi que al menos un brazo es mas corto de lo que se le pidio.',
-
   // --- El par controlado de la leccion de Lagrange -------------------------
   'cr3bp.pair.title': 'Dos direcciones, una misma region accesible',
   'cr3bp.pair.hint':
@@ -359,7 +358,6 @@ export const ES_DEFERRED = {
   'exoW.preset.earthTwin': 'Gemela de la Tierra, TESS',
   'exoW.preset.earthTwin.note':
     'Una Tierra alrededor de un Sol, vista por TESS: 84 ppm, un tránsito de trece horas, un tránsito al año. El tránsito más largo de aquí y el planeta menos detectable, lo que merece una pausa.',
-
   // --- La comprobacion de fiabilidad numerica --------------------------------
   'reliability.title': 'Fiabilidad numerica',
   'reliability.hint':
@@ -371,7 +369,6 @@ export const ES_DEFERRED = {
     'Dos pasadas de {duration} unidades simuladas tardaron {seconds}s: {coarseSub} subpasos por fotograma y luego {fineSub}.',
   'reliability.steps': 'Paso {coarse} frente a {fine}',
   'reliability.export': 'Exportar esta comprobacion',
-
   'reliability.verdict.converging':
     'Reducir el paso a la mitad no movio este resultado.',
   'reliability.verdict.unresolved':
@@ -380,7 +377,6 @@ export const ES_DEFERRED = {
     'Las dos pasadas no miden lo mismo, asi que la diferencia no permite concluir nada.',
   'reliability.verdict.diverged':
     'Las dos trayectorias se separaron, pero las medidas agregadas se mantuvieron.',
-
   'reliability.reason.missingRun': 'Falta una de las dos pasadas.',
   'reliability.reason.noDuration':
     'Una pasada no cubrio tiempo simulado alguno.',
@@ -882,9 +878,9 @@ export const ES_DEFERRED = {
   'inv.predict.wrong': 'Lo que ocurrió en su lugar: {answer}',
   'inv.announce.started': 'Investigación iniciada: {title}',
   'inv.report.building': 'Generando…',
-  'inv.report.done': 'Informe de laboratorio descargado',
   'inv.report.failed': 'No se pudo generar el informe.',
   'inv.report.download': 'Descargar informe de laboratorio (PDF)',
+  'inv.report.downloadHtml': 'Descargar informe de laboratorio (página web)',
   'inv.finish.title': 'Terminado',
   'inv.finish.close': 'Cerrar sin descargar',
   'inv.finish.summary':
@@ -1156,7 +1152,6 @@ export const ES_DEFERRED = {
   'rvfit.mc.outcome.partial': '{done} de {total} pruebas dieron ajuste.',
   'rvfit.mc.stale':
     'La grabación, el ajuste o el rango de búsqueda han cambiado desde que se ejecutó este análisis, así que sus intervalos ya no describen lo que hay en pantalla. Vuelve a ejecutarlo.',
-
   'rvfit.mc.refused.noFit':
     'No hay ningún ajuste en pantalla alrededor del cual remuestrear. Fija primero un período.',
   'rvfit.mc.refused.tooFewPoints':
@@ -1723,6 +1718,32 @@ export const ES_DEFERRED = {
   'nb.report.figure': 'Figura',
   'nb.report.conditions': 'Condiciones en que se tomó',
   'nb.report.noValue': 'no registrado',
+  'nb.unc.failed': 'sin resultado',
+  'nb.unc.notConstrained': 'no acotado',
+  'nb.unc.method.data': 'datos',
+  'nb.unc.method.data.tip':
+    'La incertidumbre es la dispersión o las barras de error de las mediciones.',
+  'nb.unc.method.model': 'modelo',
+  'nb.unc.method.model.tip':
+    'La incertidumbre es el error propio del modelo, como el de un integrador, y más datos no lo reducirían.',
+  'nb.unc.method.scaled': 'reescalada',
+  'nb.unc.method.scaled.tip':
+    'La incertidumbre de los datos se reescaló para que el modelo ajuste tan bien como dice la dispersión que puede.',
+  'nb.unc.method.profile': 'perfil',
+  'nb.unc.method.profile.tip':
+    'La incertidumbre se lee de lo rápido que empeora el ajuste al mover el valor, y puede ser asimétrica.',
+  'nb.unc.method.propagated': 'propagada',
+  'nb.unc.method.propagated.tip':
+    'La incertidumbre se propagó desde las de las entradas a primer orden.',
+  'nb.unc.method.stated': 'dada',
+  'nb.unc.method.stated.tip':
+    'La incertidumbre se dio, no se estimó a partir de nada.',
+  'nb.unc.method.limit': 'límite',
+  'nb.unc.method.limit.tip':
+    'No se detectó nada, así que el valor es una cota, no una medición.',
+  'nb.unc.method.exact': 'exacto',
+  'nb.unc.method.exact.tip':
+    'El análisis tomó el valor como exacto: no se estimó nada.',
   'nb.report.notRecorded': 'no registrado',
 
   // --- Búsqueda y filtros del catálogo ----------------------------------------
@@ -3219,44 +3240,11 @@ export const ES_DEFERRED = {
     'Esa actividad no tiene un formato «{id}». Elige uno en la página de enseñanza.',
   'activity.error.notUsable':
     'No se pudo abrir esa actividad: la investigación en la que se basa ha cambiado demasiado. Abre la investigación completa.',
-  'welcome.scenarioGone': 'Ese escenario ya no está disponible.',
   'welcome.shownAgain': 'Se volverá a mostrar la próxima vez',
   'welcome.showAgain': 'Mostrar esto de nuevo en mi próxima visita',
   'export.viewTable': 'Ver como tabla',
   'export.hideTable': 'Ocultar tabla',
   'export.downloadCsv': 'Descargar CSV',
-  'welcomeCard.sandbox.eyebrow': 'Exploración libre',
-  'welcomeCard.sandbox.title': 'Laboratorio',
-  'welcomeCard.sandbox.text':
-    'Construye un sistema desde cero, o carga uno de los escenarios incluidos y cámbialo. Arrastra para colocar un objeto; el arrastre fija su velocidad.',
-  'welcomeCard.sandbox.cta': 'Entrar en el laboratorio',
-  'welcomeCard.investigations.eyebrow': 'Investigaciones guiadas',
-  'welcomeCard.investigations.title': 'Investigaciones',
-  'welcomeCard.investigations.text':
-    'Actividades de astronomía estructuradas dentro de la simulación: predice, experimenta, mide, responde y exporta un informe de laboratorio.',
-  'welcomeCard.investigations.cta': 'Ver las investigaciones',
-  'welcomeCard.instructors.eyebrow': 'Para enseñar',
-  'welcomeCard.instructors.title': 'Profesorado',
-  'welcomeCard.instructors.text':
-    'Guías docentes, objetivos de aprendizaje, soluciones y un mapa curricular para cursos de astronomía introductoria.',
-  'welcomeCard.instructors.cta': 'Recursos para el profesorado',
-  'welcomeAudience.students.title': 'Para estudiantes',
-  'welcomeAudience.students.text':
-    'Ve las relaciones que describe una ecuación. Aleja un planeta y observa cómo se alarga su año; estira una órbita y observa cómo oscila la luz estelar.',
-  'welcomeAudience.instructors.title': 'Para el profesorado',
-  'welcomeAudience.instructors.text':
-    '60 investigaciones guiadas para astronomía introductoria y de formación general, con guías docentes, soluciones y enlaces de simulación que se pueden compartir.',
-  'welcomeAudience.curious.title': 'Para curiosos',
-  'welcomeAudience.curious.text':
-    'Sin cuenta, sin instalación, sin nada que leer antes. Carga una fusión de agujeros negros y obsérvala, o parte del espacio vacío y mira qué hace la gravedad.',
-  'welcomeLink.teaching.label': 'Enseñar con Gravitas',
-  'welcomeLink.teaching.note':
-    'Cómo se usa en un curso, con seis demostraciones que puede ejecutar.',
-  'welcomeLink.model.label': 'Cómo modela Gravitas el universo',
-  'welcomeLink.model.note':
-    'Qué se calcula, qué se aproxima y qué solo se dibuja.',
-  'welcomeLink.instructors.note':
-    'Guías docentes, soluciones y un mapa curricular.',
   'tideP.moonOnEarth': 'la Luna, sobre la Tierra',
   'tideP.sunOnEarth': 'el Sol, sobre la Tierra',
   'tideP.earthOnMoon': 'la Tierra, sobre la Luna',
@@ -3628,13 +3616,19 @@ export const ES_DEFERRED = {
   'nb.source.stellar-lab': 'Laboratorio estelar',
   'nb.source.binary-orbit': 'Órbita binaria',
   'nb.source.observatory': 'Medida en el Observatorio',
-  // --- Un ajuste, un análisis o un resultado de experimento, con su sobre ---
   'nb.source.inference-fit': 'Ajuste del núcleo de inferencia',
   'nb.source.comparison': 'Modelo frente a datos',
   'nb.source.sweep-analysis': 'Análisis de barrido',
   'nb.source.derived-quantity': 'Cantidad derivada',
   'nb.source.lab3d': 'Medida del laboratorio 3-D',
   'nb.source.mission-lab': 'Resultado del laboratorio de misiones',
+  'nb.source.image-marks': 'Marcas sobre una imagen',
+  'nb.source.image-calibration': 'Coordenadas celestes de una imagen',
+  'nb.source.image-photometry': 'Fotometría de una imagen',
+  'nb.source.image-detection': 'Función de dispersión de punto de una imagen',
+  'nb.source.image-injection': 'Completitud de una imagen',
+  'nb.source.image-sequence': 'Curva de luz a partir de imágenes',
+  'nb.source.image-series': 'Movimiento y paralaje de una fuente',
   'nb.flag.missionModel':
     'impulsos instantáneos, cónicas empalmadas y masas puntuales: un modelo didáctico de una misión',
   'nb.flag.notOperational':
@@ -3736,7 +3730,6 @@ export const ES_DEFERRED = {
     'El final no sale de la traza. Es un resultado publicado citado para una estrella de esta masa: {cite}. Nada en Gravitas lo ha calculado.',
   'nb.stellar.limit.fitted':
     'La comparación se dibujó con cada estrella ajustada a su recuadro, así que los tamaños aparentes no son comparables.',
-
   // --- Words a lesson computes ----------------------------------------------
   // Here rather than in the start-up catalog because js/i18n/lesson.js is
   // the only module that reads them and js/investigations.js is the only

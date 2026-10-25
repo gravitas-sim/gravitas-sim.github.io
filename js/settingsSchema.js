@@ -22,21 +22,24 @@
 
 import { INTEGRATORS } from './physics.js';
 import { setReadoutDigits, setUnitMode } from './units.js';
+import { KEY_COURSE_LEVEL, KEY_DISCLOSURE } from './names.js';
 
 /**
  * The sections, in the panel's order. An `advanced` section sits inside the
- * panel's Advanced disclosure, closed until opened: the numerical method and
- * the performance trade-offs are what a course changes on purpose, and what a
- * newcomer changes by accident.
+ * panel's one "More" disclosure (Prompt 167), closed until opened at the
+ * survey depths and open at the advanced one: the physics a run is built on
+ * (the simulation, the black holes and compact objects), the numerical method
+ * and the performance trade-offs are what a course changes on purpose, and what
+ * a newcomer changes by accident. Every setting stays reachable in two presses.
  */
 export const SETTING_SECTIONS = Object.freeze([
-  { id: 'simulation' },
-  { id: 'black-holes' },
-  { id: 'compact-objects' },
   { id: 'objects' },
   { id: 'visuals' },
   { id: 'ui-control' },
   { id: 'educational' },
+  { id: 'simulation', advanced: true },
+  { id: 'black-holes', advanced: true },
+  { id: 'compact-objects', advanced: true },
   { id: 'accuracy', advanced: true },
   { id: 'performance', advanced: true },
 ]);
@@ -496,7 +499,7 @@ export const COURSE_LEVELS = Object.freeze({
   }),
 });
 
-const LEVEL_KEY = 'gravitas_course_level';
+const LEVEL_KEY = KEY_COURSE_LEVEL;
 let courseLevel = 'introductory';
 
 /** @returns {string} The reader's course level */
@@ -542,4 +545,102 @@ export function initCourseLevel() {
   } catch {
     /* storage unavailable */
   }
+}
+
+// =============================================================================
+// "More": the one disclosure pattern (DESIGN_SYSTEM.md, Prompt 167)
+// -----------------------------------------------------------------------------
+// A native <details class="more"> with a summary that names the section. The
+// browser gives it the keyboard (Enter and Space on the summary), the screen
+// reader's expanded state and find-in-page, so none of that is rebuilt here.
+// What is here is the rule for whether it starts open and the memory of what
+// the reader chose, per surface ('lesson', 'tool', 'plot', 'settings').
+//
+// Here, like the course level above, because the Settings panel and the lesson
+// panel both load it and neither route has a request to spare for a module of
+// its own (tools/route-budgets.json).
+// =============================================================================
+
+/** Open by default at the upper depth only; the survey depths start folded. */
+export const moreDefault = depth => depth === 'advanced';
+
+const readMore = () => {
+  try {
+    const map = JSON.parse(window.localStorage?.getItem(KEY_DISCLOSURE));
+    return map && typeof map === 'object' && !Array.isArray(map) ? map : {};
+  } catch {
+    return {};
+  }
+};
+
+/**
+ * Whether a surface's More starts open. What the reader last chose comes
+ * first, since they can always open everything or fold it again; then what an
+ * activity says (`'open'` or `'shut'`); then the depth's default.
+ * @param {string} surface - 'lesson', 'tool', 'plot' or 'settings'
+ * @param {string} [depth] - 'core', 'quantitative' or 'advanced'
+ * @param {string} [declared] - An activity's `'open'` or `'shut'`
+ * @returns {boolean}
+ */
+export function moreOpen(surface, depth, declared) {
+  const kept = readMore()[surface];
+  if (kept === 0 || kept === 1) return kept === 1;
+  if (declared === 'open' || declared === 'shut') return declared === 'open';
+  return moreDefault(depth);
+}
+
+/** Remember a reader's choice for a surface. */
+export function rememberMore(surface, open) {
+  try {
+    const map = readMore();
+    map[surface] = open ? 1 : 0;
+    window.localStorage?.setItem(KEY_DISCLOSURE, JSON.stringify(map));
+  } catch {
+    /* storage unavailable: it still folds, the choice just does not last */
+  }
+}
+
+/** Said when a More opens or folds, in the one locale in use. */
+const MORE_SAID = {
+  en: { open: '{name} shown.', shut: '{name} hidden.' },
+  es: { open: 'Se muestra: {name}.', shut: 'Se oculta: {name}.' },
+};
+
+const lastMore = new WeakMap();
+
+/** Open or fold a More from code (a search that found something inside it):
+ *  no memory, no announcement, since it was not the reader's own press. */
+export function setMore(details, open) {
+  lastMore.set(details, open);
+  details.open = open;
+}
+
+/**
+ * Open or fold a <details class="more"> as it should start, and keep what the
+ * reader does with it: remembered, and announced once per change through the
+ * page's live region (`say`, js/notify.js announce). Setting the state here
+ * does not announce; only a reader's own press does. Safe to call again for
+ * the same element (a lesson opening at another depth): it sets the state and
+ * adds no second listener.
+ * @param {HTMLDetailsElement} details - The section
+ * @param {string} surface - Its name in the reader's preferences
+ * @param {{open?: boolean, depth?: string, declared?: string, say?: Function, locale?: Function}} [how]
+ */
+export function wireMore(details, surface, how = {}) {
+  const wired = lastMore.has(details);
+  details.open = how.open ?? moreOpen(surface, how.depth, how.declared);
+  lastMore.set(details, details.open);
+  if (wired) return;
+  details.addEventListener('toggle', () => {
+    if (details.open === lastMore.get(details)) return;
+    lastMore.set(details, details.open);
+    rememberMore(surface, details.open);
+    const words = MORE_SAID[how.locale?.() === 'es' ? 'es' : 'en'];
+    const lang = how.locale?.() === 'es' ? 'es' : 'en';
+    const name = (
+      details.querySelector(`summary .gs-${lang}`) ||
+      details.querySelector('summary')
+    ).textContent.trim();
+    how.say?.(words[details.open ? 'open' : 'shut'].replace('{name}', name));
+  });
 }

@@ -19,6 +19,8 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { EN_DEFERRED } from '../js/i18n/en.deferred.js';
+import { ES_DEFERRED } from '../js/i18n/es.deferred.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export const PAGE = 'glossary/index.html';
@@ -138,6 +140,22 @@ export const NOUNS = [
 ];
 
 /**
+ * The method words printed after an uncertainty (Prompt 151): "9.81 ± 0.02
+ * (data)". The words and their sentences are the catalog's own, so the page and
+ * the report cannot disagree.
+ */
+export const METHODS = [
+  'data',
+  'model',
+  'scaled',
+  'profile',
+  'propagated',
+  'stated',
+  'limit',
+  'exact',
+];
+
+/**
  * The words that are retired. `en` and `es` are the patterns the terminology
  * test refuses outside this page; `use` is what to write instead.
  */
@@ -203,6 +221,452 @@ export const STAY = [
   },
 ];
 
+/**
+ * Identifiers and labels (Prompt 156): the names a reader meets as a label, a
+ * page title, a tab, a library kind or a badge, an instrument or a quantity,
+ * in both languages. tools/i18n-labels.mjs holds the catalogs to this table;
+ * it checks labels and identifiers, never prose.
+ *
+ * `en` and `es` are the glossary's words for the term. `ids` are catalog ids
+ * that must carry exactly those words. Every other catalog entry whose English
+ * is exactly `en` must carry `es` (or one of `allow`, a necessary synonym or a
+ * spelling the Academy accepts in both forms). `known` records a divergence
+ * that exists in js/i18n today and is not fixed because js/i18n is an input of
+ * the instructor bundle's source digest (an edit there is the owner's rebuild):
+ * the id and the text it carries now. A known entry that is fixed must be
+ * removed, and a new divergence is a failure, so the list can only shrink.
+ *
+ * kind: navigation (a page, a panel, a tab), library (a kind or badge in the
+ * Library), instrument (a tool the reader uses), quantity (a measured
+ * quantity's name), unit (a unit's name or symbol).
+ */
+export const LABELS = [
+  // --- navigation: the pages and the rail
+  {
+    id: 'library',
+    kind: 'navigation',
+    en: 'Library',
+    es: 'Biblioteca',
+    ids: ['lib.main.label', 'lib.title'],
+  },
+  {
+    id: 'observatory',
+    kind: 'navigation',
+    en: 'Observatory',
+    es: 'Observatorio',
+    ids: ['obs.main.label', 'obs.title'],
+  },
+  {
+    id: 'catalog',
+    kind: 'navigation',
+    en: 'Catalog',
+    es: 'Catálogo',
+    ids: ['cat.main.label', 'cat.title'],
+  },
+  {
+    id: 'scenario-studio',
+    kind: 'navigation',
+    en: 'Scenario Studio',
+    es: 'Estudio de escenarios',
+    ids: ['studio.title'],
+  },
+  {
+    id: 'composer',
+    kind: 'navigation',
+    en: 'Investigation Composer',
+    es: 'Compositor de investigaciones',
+    ids: ['composer.title'],
+  },
+  {
+    id: 'system-builder',
+    kind: 'navigation',
+    en: 'Orbital System Builder',
+    es: 'Constructor de sistemas orbitales',
+    ids: ['rail.systemBuilder', 'builder.title'],
+  },
+  {
+    id: 'figure-builder',
+    kind: 'navigation',
+    en: 'Figure builder',
+    es: 'Constructor de figuras',
+    ids: ['fig.main.label'],
+  },
+  {
+    id: 'course-builder',
+    kind: 'navigation',
+    en: 'Course-package builder',
+    es: 'Creador de paquetes de curso',
+    ids: ['course.title'],
+  },
+  {
+    id: 'notebook',
+    kind: 'navigation',
+    en: 'Evidence notebook',
+    es: 'Cuaderno de pruebas',
+    ids: ['nb.title', 'nb.report.title'],
+  },
+  {
+    id: 'notebook-rail',
+    kind: 'navigation',
+    en: 'Evidence Notebook',
+    es: 'Cuaderno de pruebas',
+    ids: ['rail.toggleNotebook'],
+  },
+  {
+    id: 'lab3d',
+    kind: 'navigation',
+    en: 'The 3-D lab',
+    es: 'El laboratorio 3-D',
+    ids: ['l3.title'],
+  },
+  {
+    id: 'teaching',
+    kind: 'navigation',
+    en: 'Teaching with Gravitas',
+    es: 'Enseñar con Gravitas',
+    ids: ['teach.title'],
+  },
+  {
+    id: 'settings',
+    kind: 'navigation',
+    en: 'Settings',
+    es: 'Ajustes',
+    ids: ['rail.settings'],
+  },
+  {
+    id: 'rail-state',
+    kind: 'navigation',
+    en: 'State',
+    es: 'Estado',
+    ids: ['rail.railState'],
+  },
+  {
+    id: 'rail-tools',
+    kind: 'navigation',
+    en: 'Tools',
+    es: 'Herramientas',
+    ids: ['rail.railTools'],
+  },
+  // --- library: kinds (plural) and badges (singular)
+  {
+    id: 'investigations',
+    kind: 'library',
+    en: 'Investigations',
+    es: 'Investigaciones',
+    ids: ['lib.kind.investigation', 'rail.investigations'],
+  },
+  {
+    id: 'kind-activity',
+    kind: 'library',
+    en: 'Classroom activities',
+    es: 'Actividades de clase',
+    ids: ['lib.kind.activity', 'teach.activities.heading'],
+  },
+  {
+    id: 'kind-scenario',
+    kind: 'library',
+    en: 'Scenarios',
+    es: 'Escenarios',
+    ids: ['lib.kind.scenario'],
+  },
+  {
+    id: 'kind-dataset',
+    kind: 'library',
+    en: 'Datasets',
+    es: 'Conjuntos de datos',
+    ids: ['lib.kind.dataset'],
+  },
+  {
+    id: 'kind-course',
+    kind: 'library',
+    en: 'Courses',
+    es: 'Cursos',
+    ids: ['lib.kind.course'],
+  },
+  {
+    id: 'kind-experiment',
+    kind: 'library',
+    en: 'Experiments',
+    es: 'Experimentos',
+    ids: ['lib.kind.experiment'],
+  },
+  {
+    id: 'badge-investigation',
+    kind: 'library',
+    en: 'Investigation',
+    es: 'Investigación',
+    ids: [
+      'lib.badge.investigation',
+      'cat.type.investigation-pack',
+      'course.kind.lesson',
+    ],
+  },
+  {
+    id: 'badge-activity',
+    kind: 'library',
+    en: 'Activity',
+    es: 'Actividad',
+    ids: ['lib.badge.activity', 'course.kind.assignment'],
+  },
+  {
+    id: 'badge-scenario',
+    kind: 'library',
+    en: 'Scenario',
+    es: 'Escenario',
+    ids: ['lib.badge.scenario'],
+  },
+  {
+    id: 'badge-dataset',
+    kind: 'library',
+    en: 'Dataset',
+    es: 'Conjunto de datos',
+    ids: ['lib.badge.dataset'],
+  },
+  {
+    id: 'badge-course',
+    kind: 'library',
+    en: 'Course',
+    es: 'Curso',
+    ids: ['lib.badge.course'],
+  },
+  {
+    id: 'badge-experiment',
+    kind: 'library',
+    en: 'Experiment',
+    es: 'Experimento',
+    ids: ['lib.badge.experiment'],
+  },
+  // --- instruments
+  {
+    id: 'stopwatch',
+    kind: 'instrument',
+    en: 'Stopwatch',
+    es: 'Cronómetro',
+    ids: ['rail.toggleStopwatch'],
+  },
+  {
+    id: 'ruler',
+    kind: 'instrument',
+    en: 'Ruler',
+    es: 'Regla',
+    ids: ['rail.toggleRuler'],
+  },
+  {
+    id: 'light-curve',
+    kind: 'instrument',
+    en: 'Light Curve',
+    es: 'Curva de luz',
+    ids: ['rail.toggleLightCurve'],
+  },
+  {
+    id: 'periodogram',
+    kind: 'instrument',
+    en: 'Periodogram',
+    es: 'Periodograma',
+    ids: ['obs.ms.periodogram'],
+  },
+  {
+    id: 'spectrum',
+    kind: 'instrument',
+    en: 'Spectrum',
+    es: 'Espectro',
+    ids: [],
+  },
+  {
+    id: 'maneuver-planner',
+    kind: 'instrument',
+    en: 'Maneuver planner',
+    es: 'Planificador de maniobras',
+    ids: ['burn.title'],
+  },
+  // --- quantities, by the word a table column or a readout uses
+  {
+    id: 'mass',
+    kind: 'quantity',
+    en: 'Mass',
+    es: 'Masa',
+    ids: ['inspector.stat.mass'],
+  },
+  {
+    id: 'radius',
+    kind: 'quantity',
+    en: 'Radius',
+    es: 'Radio',
+    ids: ['inspector.stat.radius'],
+  },
+  {
+    id: 'speed',
+    kind: 'quantity',
+    en: 'Speed',
+    es: 'Rapidez',
+    ids: ['inspector.stat.speed'],
+    // Speed is rapidez and velocity is velocidad. The 3-D lab's column header
+    // says Velocidad for the scalar. Fix: es.lab3d.js (a bundle source).
+    known: { 'l3.speed': 'Velocidad' },
+  },
+  {
+    id: 'velocity',
+    kind: 'quantity',
+    en: 'Velocity',
+    es: 'Velocidad',
+    ids: ['inspector.stat.velocity'],
+  },
+  {
+    id: 'distance',
+    kind: 'quantity',
+    en: 'Distance',
+    es: 'Distancia',
+    ids: ['tideW.distance'],
+  },
+  {
+    id: 'period',
+    kind: 'quantity',
+    en: 'Period',
+    es: 'Periodo',
+    allow: ['Período'],
+    ids: ['builder.col.period'],
+  },
+  {
+    id: 'eccentricity',
+    kind: 'quantity',
+    en: 'Eccentricity',
+    es: 'Excentricidad',
+    ids: ['builder.field.e'],
+  },
+  {
+    id: 'inclination',
+    kind: 'quantity',
+    en: 'Inclination',
+    es: 'Inclinación',
+    ids: ['exoW.inclination'],
+    // A missing accent mark. Fix: the Spanish catalog fragment that holds nb.gw.inclination
+    // (a bundle source); the audit's accent report lists the others.
+    known: { 'nb.gw.inclination': 'Inclinacion' },
+  },
+  {
+    id: 'semi-major-axis',
+    kind: 'quantity',
+    en: 'Semi-major axis',
+    es: 'Semieje mayor',
+    ids: ['hzW.semiMajorAxis'],
+  },
+  {
+    id: 'luminosity',
+    kind: 'quantity',
+    en: 'Luminosity',
+    es: 'Luminosidad',
+    ids: ['inspector.stat.luminosity'],
+  },
+  {
+    id: 'temperature',
+    kind: 'quantity',
+    en: 'Temperature',
+    es: 'Temperatura',
+    ids: ['lightW.control.T'],
+  },
+  {
+    id: 'periapsis',
+    kind: 'quantity',
+    en: 'Periapsis',
+    es: 'Periastro',
+    ids: ['burn.periapsis'],
+  },
+  {
+    id: 'apoapsis',
+    kind: 'quantity',
+    en: 'Apoapsis',
+    es: 'Apoastro',
+    ids: ['burn.apoapsis'],
+  },
+  // --- units' names (the symbol is language-neutral and is not translated)
+  {
+    id: 'unit-solar-masses',
+    kind: 'unit',
+    en: 'solar masses',
+    es: 'masas solares',
+    ids: ['builder.mass.suns', 'place.precise.mass.suns'],
+  },
+  {
+    id: 'unit-earth-masses',
+    kind: 'unit',
+    en: 'Earth masses',
+    es: 'masas terrestres',
+    ids: ['builder.mass.earths', 'place.precise.mass.earths'],
+  },
+  {
+    id: 'unit-jupiter-masses',
+    kind: 'unit',
+    en: 'Jupiter masses',
+    es: 'masas de Júpiter',
+    ids: ['builder.mass.jupiters', 'place.precise.mass.jupiters'],
+  },
+  { id: 'unit-au', kind: 'unit', en: 'AU', es: 'UA', ids: ['l3.unit.au'] },
+];
+
+/**
+ * Words prose may vary in, reported and never failing: for each, the form the
+ * glossary prefers and the forms found beside it. A reader of the Spanish (the
+ * reader Appendix A names) decides which is right; this only says where each
+ * occurs. Patterns are tested against Spanish prose; `prefer` is a pattern too.
+ */
+export const TERMINOLOGY = [
+  {
+    id: 'lab-3d',
+    prefer: /laboratorio 3-D/gi,
+    variants: [/laboratorio 3D\b/gi, /laboratorio tridimensional/gi],
+  },
+  {
+    id: 'solar-system',
+    prefer: /Sistema Solar/g,
+    variants: [/sistema solar/g],
+  },
+  {
+    id: 'periapsis',
+    prefer: /periastro/gi,
+    variants: [/pericentro/gi],
+  },
+  {
+    id: 'redshift',
+    prefer: /corrimiento al rojo/gi,
+    variants: [/desplazamiento al rojo/gi],
+  },
+  {
+    id: 'light-curve',
+    prefer: /curva de luz/gi,
+    variants: [/curva de luminosidad/gi, /curva luminosa/gi],
+  },
+  {
+    id: 'black-hole',
+    prefer: /agujeros? negros?/gi,
+    variants: [/hoyos? negros?/gi],
+  },
+  {
+    id: 'dataset',
+    prefer: /conjuntos? de datos/gi,
+    variants: [/\bdatasets?\b/gi, /sets? de datos/gi],
+  },
+  {
+    id: 'semi-major-axis',
+    prefer: /semieje mayor/gi,
+    variants: [/semi-eje/gi, /semieje principal/gi],
+  },
+  {
+    id: 'uncertainty',
+    prefer: /incertidumbre/gi,
+    variants: [/imprecisi[óo]n/gi],
+  },
+  {
+    id: 'teaching-staff',
+    prefer: /docentes?/gi,
+    variants: [/profesorado/gi, /instructor(?:es|a|as)?\b/gi],
+  },
+  {
+    id: 'period-spelling',
+    prefer: /\bperiodos?\b/gi,
+    variants: [/\bperíodos?\b/gi],
+  },
+];
+
 const esc = s =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const both = (en, es, tag = 'span') =>
@@ -243,6 +707,24 @@ export function render() {
     }
     out.push('</dd>');
     out.push('</div>');
+  }
+  out.push('</dl>');
+  out.push('</section>');
+  out.push(`<section id="uncertainty" aria-labelledby="uncertainty-h">`);
+  out.push(
+    `<h2 id="uncertainty-h">${both('Uncertainty, and how it was found', 'La incertidumbre y cómo se obtuvo')}</h2>`
+  );
+  out.push(
+    `<p>${both(
+      'A number a student reads is printed as value ± uncertainty, with one word in brackets that says where the uncertainty comes from. A limit is printed as < or >, and a result the data leave open is printed as not constrained.',
+      'Un número que lee un estudiante se imprime como valor ± incertidumbre, con una palabra entre paréntesis que dice de dónde viene la incertidumbre. Un límite se imprime como < o >, y un resultado que los datos dejan abierto se imprime como no acotado.'
+    )}</p>`
+  );
+  out.push('<dl class="gl-terms">');
+  for (const m of METHODS) {
+    out.push(
+      `<div id="method-${m}"><dt>${both(EN_DEFERRED[`nb.unc.method.${m}`], ES_DEFERRED[`nb.unc.method.${m}`])}</dt><dd>${both(EN_DEFERRED[`nb.unc.method.${m}.tip`], ES_DEFERRED[`nb.unc.method.${m}.tip`])}</dd></div>`
+    );
   }
   out.push('</dl>');
   out.push('</section>');

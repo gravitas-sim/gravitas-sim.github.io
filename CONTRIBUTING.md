@@ -37,7 +37,7 @@ npm run lint              # eslint (prettier runs inside it)
 npm run format:check      # prettier, for the files it owns
 npm run docs:check:full   # every count in the docs matches the source, the test counts too
 npm run check:architecture  # no import cycles, no low-level module importing up
-npm run vendor:check      # vendor/ matches the pinned three.js, Chart.js and fonts
+npm run vendor:check      # vendor/ matches the pinned three.js and fonts
 npm run a11y              # axe over every surface, plus the keyboard checks
 npm run build:ci          # a production bundle must still build (no passphrase)
 ```
@@ -64,8 +64,8 @@ Two things worth knowing before you run the browser suite:
 
 ## The build is self-contained
 
-Nothing the application needs is fetched from another origin. three.js,
-Chart.js and the three font families used to come from jsdelivr and Google
+Nothing the application needs is fetched from another origin. three.js
+and the three font families used to come from jsdelivr and Google
 Fonts; they are now pinned in `package.json`, bundled into `vendor/` by
 `tools/vendor-deps.mjs`, and committed — because GitHub Pages serves the
 repository root, so a generated file that is not committed is a 404 on the live
@@ -86,11 +86,24 @@ Two rules follow from this:
   request and then uses the application, the charts and the 3-D view anyway. It
   runs against the sources *and* the production bundle, because the two have to
   resolve the same files.
-- **Both libraries must stay lazy.** Neither may enter the initial chunk.
+- **Neither three.js nor the plot component may enter the initial chunk.**
   `npm run budget` enforces a ceiling on what a first-time visitor downloads;
   raising it means editing `tools/bundle-budget.mjs` in the same commit and
   saying in its `reason` what was added. Growth is allowed, unexplained growth
   is not.
+- **The budget policy (`tools/budget-policy.json`, `docs/BUDGET_POLICY.md`).**
+  It is switched off (`mode: "exact"`), and while it is, the rule above and the
+  standing size-budget approval apply as before. When the owner switches it to
+  `"declared"`: no slice raises any ceiling (it finds a saving or stops); the
+  workflow ceilings (front door, sandbox, each lesson route's first-usable
+  graph, the Observatory with one observation open, the initial download, the
+  deferred core) never move except by the owner's explicit decision; lazy
+  families and packs draw on a capped allowance recorded in
+  `tools/growth-ledger.json`; and a re-baseline (`node tools/budget-policy.mjs
+  rebaseline`) is a ceiling increase, made in a reviewed pull request labelled
+  "ceiling increase", never automatically. Module line ceilings are separate
+  and unchanged. `tools/data-budget.json` holds the data-plane ceilings (pack
+  bytes, precache tiers, worker caps; browser-probe ones are not measured yet).
 
 Dependabot is configured conservatively in `.github/dependabot.yml`: grouped by
 what breaks together, majors never grouped, and the vendored packages ignored
@@ -158,13 +171,13 @@ their ceilings:
 | Module | Lines | Ceiling |
 | --- | ---: | ---: |
 | `js/data/instructorContent.js` | 6,715 | 6,715 |
-| `js/validation/physicsChecks.js` | 6,621 | 6,621 |
-| `js/physics.js` | 5,320 | 5,320 |
-| `js/investigations.js` | 4,754 | 4,754 |
-| `js/i18n/es.deferred.js` | 4,092 | 4,092 |
-| `js/i18n/en.deferred.js` | 3,845 | 3,845 |
-| `js/render.js` | 3,028 | 3,028 |
+| `js/i18n/es.deferred.js` | 4,085 | 4,085 |
+| `js/i18n/en.deferred.js` | 3,838 | 3,838 |
+| `js/investigations.js` | 3,293 | 3,293 |
+| `js/render.js` | 3,015 | 3,015 |
 | `js/world/build.js` | 2,599 | 2,599 |
+| `js/composerPage.js` | 2,528 | 2,528 |
+| `js/darkMatterWidgets.js` | 2,329 | 2,329 |
 <!--/fact-block-->
 
 | Layer | What lives there | Examples |
@@ -231,20 +244,40 @@ builders stay whole. `tests/effectsMissing.test.js` runs nineteen engine events
 with no module and compares draws, the next draw and the ripples with the
 registered engine.
 
-**The engine split is planned, not begun** (D-DECOMP-18). Target: an engine
-folder inside `js` holding the state, events, conservation and energy, forces, integrator, bodies,
-collisions, mergers and the step, with `js/physics.js` kept as the one facade so
-no importer changes, and a Worker-safe rule (no `document`, `window` or
-`CustomEvent` in that folder except its host module). Order, risks and the
-test that proves each slice are in the register row; the first slice is the
-module that owns the engine's singletons (the 14 body lists, the settings, the
-clocks, the id counter), because nothing else can leave `physics.js` without a
-cycle until it exists. Two things must be decided before the second slice: how
-the sources routes count the new files (each is a request on every route that
-loads the engine, and the request ceilings may not rise), and what replaces two
-live dependencies the engine has today on the page (the canvas size that culls
-off-screen bodies, and the wall clock that a new black hole's grace period
-reads).
+**The engine split is under way** (D-DECOMP-18, Prompts 107 and 135). `js/physics.js`
+stays the one facade, re-exporting every name it ever exported (live, so no
+importer changes), and the engine folder is read downward only: a module in it
+never imports the facade. Where each piece lives so far:
+
+| File | What it owns | Slice |
+|---|---|---|
+| `js/engine/state.js` | the body lists, the settings, the clocks and counters, the registries | S1 |
+| `js/engine/events.js` | simulation events, the step listeners and the bookkeeping every merger ends in (`mergedState`, `mergeAllowed`, `completeMerger`) | S2, S6 |
+| `js/engine/conservation.js` | the absorption ledgers, the conserved totals and the energy history | S3 |
+| `js/engine/forces.js` | the sources a body feels, the dark-matter and MOND terms, softening, direct-sum acceleration and the Velocity Verlet, RK4 and default step schemes | S4 |
+| `js/engine/bodies.js` | the size and mass constants, the bursts, the absorption rule, and every body class from `PhysicsObject` to `Comet` with the accretion-disk tracer and the galaxy helpers, and `syncReportedMass` | S5, S6 |
+| `js/engine/blackHole.js` | the black hole class and its default appearance | S5 |
+| `js/engine/collisions.js` | the broad-phase grid, the collision handlers for each kind of pair, stellar collapse, gas-giant accretion and merging, and the kilonova and white-dwarf explosion builders | S6 |
+| `js/engine/step.js` | the coordinate transforms and the off-screen test, the Barnes-Hut Worker's state and failure path, the cached body arrays, `updatePhysics` (the step and its ordering) and the click hit test | S7 |
+
+`js/physics.js` now holds no model code: it imports the eight engine modules and says
+what the engine exports. Order, risks and the test that proves each slice are
+in the register rows. Two decisions are still open: what replaces the canvas
+size that culls off-screen bodies, and the wall clock a new black hole's grace
+period reads; both moved into `js/engine/step.js` unchanged.
+
+**Settings reach the engine through one door.** The page writes
+`SETTINGS` (`js/appState.js`) and pushes it with `commitSettings(<writer>)`;
+the writers are the named table `SETTINGS_WRITERS`, and
+`tests/settingsWriters.test.js` holds that table equal to the call sites. The
+engine's copy (`physicsSettings`) is frozen, replaced on each push, and never
+written in place. A Worker, a tool or a test calls `updatePhysicsSettings(
+settings, { engineContext: 'headless' })`: G is 2 in the application's context
+and the engine's own 1 in the headless one, and neither falls back to the other
+(PHYSICS_VALIDATION.md, "Two input contexts"). Settings names that changed
+(`trail_colour_mode` and two misspellings) are rewritten by the share-link and
+saved-world readers (`migrateSettings` in `js/shareState.js`), not by the state
+module.
 
 **A module carved out of `ui.js` is handed nothing it can ask for.** The slices
 of Prompt 107 follow one rule: an extracted module never imports `ui.js`, and

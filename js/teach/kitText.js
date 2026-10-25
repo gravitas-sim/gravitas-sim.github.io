@@ -22,6 +22,20 @@ export const WORDS = {
     'start.h': 'Start from',
     'start.note':
       'The activity link you made, or the course link, pasted here; or the activity file or course file you saved. Opening this page from the builder does this for you.',
+    'coll.h': 'A collection of saved items',
+    'coll.note':
+      'Save investigations, scenarios and datasets with the Save button on a Library item page, then order them here, add a sentence to each and make one link or file. Your students can keep it, and it shows in their Library and in My work. An older build of Gravitas, such as 2.0.0, cannot open a collection.',
+    'coll.open': 'Make a link from what I saved',
+    'cc.h': 'A Common Cartridge for a course platform',
+    'cc.note':
+      'A course can go to a course platform as one file: a Thin Common Cartridge of web links, one module for each unit, each link opening an item in Gravitas. It carries nothing about students and no grades come back.',
+    'cc.open': 'Make a Common Cartridge',
+    'cc.loading': 'Reading the course…',
+    'plan.h': 'A printable activity list',
+    'plan.note':
+      'A course can be printed as a plan: its units, items, links, depths, time bands, textbook chapters, objectives and what students hand in, to print or to paste into a page of your platform. The time bands are editorial estimates with no observed class data.',
+    'plan.open': 'Make the activity list',
+    'plan.loading': 'Reading the course…',
     'start.paste': 'Paste an activity link or a course link',
     'start.go': 'Make the kit',
     'start.file': 'or choose an activity file or a course file',
@@ -82,6 +96,19 @@ export const WORDS = {
     'reuse.use': 'Use the new link',
     'reuse.loading': 'Checking…',
     'reuse.failed': 'The investigation could not be loaded.',
+    'term.h': 'Start a new term',
+    'term.note':
+      "Make this {what} for a new term: a fresh code, the term in the title so students who used it before start clean, and a new link. Last term's link and file are not touched.",
+    'term.what.activity': 'activity',
+    'term.what.course': 'course',
+    'term.label': 'Term',
+    'term.was': 'Last term, if it is in the title now (optional)',
+    'term.go': 'Start the new term',
+    'term.save': 'Save the new course file',
+    'term.done.activity':
+      'New term, {term}: the link, the code, the handout and the platform notes above are for it.',
+    'term.done.course':
+      'New term, {term}: the link, the handout and the platform notes above are for it.',
     'handout.open': 'To start',
     'handout.scan': 'Scan the code, or type this address:',
     'handout.do.activity': 'What to do ({steps} steps)',
@@ -114,6 +141,20 @@ export const WORDS = {
     'start.h': 'Empezar desde',
     'start.note':
       'El enlace de actividad que hizo, o el enlace del curso, pegado aquí; o el archivo de actividad o de curso que guardó. Abrir esta página desde el creador lo hace por usted.',
+    'coll.h': 'Una colección de elementos guardados',
+    'coll.note':
+      'Guarde investigaciones, escenarios y conjuntos de datos con el botón Guardar de la página de un elemento de la Biblioteca; luego ordénelos aquí, añada una frase a cada uno y cree un enlace o un archivo. Sus estudiantes pueden conservarla y aparece en su Biblioteca y en Mi trabajo. Una versión anterior de Gravitas, como la 2.0.0, no puede abrir una colección.',
+    'coll.open': 'Crear un enlace con lo que guardé',
+    'cc.h': 'Un Common Cartridge para una plataforma de cursos',
+    'cc.note':
+      'Un curso puede ir a una plataforma de cursos como un solo archivo: un Thin Common Cartridge de enlaces web, un módulo por unidad, cada enlace abre un elemento en Gravitas. No lleva nada sobre los estudiantes y no se devuelven calificaciones.',
+    'cc.open': 'Hacer un Common Cartridge',
+    'cc.loading': 'Leyendo el curso…',
+    'plan.h': 'Una lista de actividades para imprimir',
+    'plan.note':
+      'Un curso puede imprimirse como un plan: sus unidades, elementos, enlaces, profundidades, franjas de tiempo, capítulos del libro de texto, objetivos y qué entregan los estudiantes, para imprimir o para pegar en una página de su plataforma. Las franjas de tiempo son estimaciones editoriales, sin datos observados en clase.',
+    'plan.open': 'Hacer la lista de actividades',
+    'plan.loading': 'Leyendo el curso…',
     'start.paste': 'Pegue un enlace de actividad o de curso',
     'start.go': 'Hacer el kit',
     'start.file': 'o elija un archivo de actividad o de curso',
@@ -175,6 +216,19 @@ export const WORDS = {
     'reuse.use': 'Usar el enlace nuevo',
     'reuse.loading': 'Comprobando…',
     'reuse.failed': 'No se pudo cargar la investigación.',
+    'term.h': 'Empezar un periodo nuevo',
+    'term.note':
+      'Crea esta {what} para un periodo nuevo: un código nuevo, el periodo en el título para que quienes ya la usaron empiecen desde cero, y un enlace nuevo. El enlace y el archivo del periodo pasado no se tocan.',
+    'term.what.activity': 'actividad',
+    'term.what.course': 'curso',
+    'term.label': 'Periodo',
+    'term.was': 'El periodo pasado, si está ahora en el título (opcional)',
+    'term.go': 'Empezar el periodo nuevo',
+    'term.save': 'Guardar el archivo del curso nuevo',
+    'term.done.activity':
+      'Periodo nuevo, {term}: el enlace, el código, la hoja y las notas de plataforma de arriba son para él.',
+    'term.done.course':
+      'Periodo nuevo, {term}: el enlace, la hoja y las notas de plataforma de arriba son para él.',
     'handout.open': 'Para empezar',
     'handout.scan': 'Escanee el código, o escriba esta dirección:',
     'handout.do.activity': 'Qué hacer ({steps} pasos)',

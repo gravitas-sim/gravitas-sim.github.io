@@ -51,16 +51,16 @@ Measured from the committed `sw-manifest.js` and the files it lists, by
 <!--fact-block:precache-->
 | | Files | Raw |
 | --- | ---: | ---: |
-| JavaScript | 896 | 14.7 MB |
-| Images | 62 | 680 KB |
-| Stylesheets | 10 | 490 KB |
+| JavaScript | 952 | 15.2 MB |
+| Images | 99 | 860 KB |
+| Stylesheets | 10 | 500 KB |
 | Fonts | 9 | 140 KB |
 | Panel markup | 10 | 60 KB |
-| Pages | 9 | 280 KB |
-| Other | 16 | 640 KB |
-| **Total** | **1012** | **16.9 MB** |
+| Pages | 12 | 320 KB |
+| Other | 16 | 700 KB |
+| **Total** | **1108** | **17.7 MB** |
 
-Of those, 834 are core (the install fails without them) and 178 optional (a missing one is reported and costs nothing).
+Of those, 803 are core (the install fails without them), 107 optional (installed with them; a missing one is reported and costs nothing) and 198 idle (installed after activation, when the browser is idle; a missing one costs that page its offline copy and is fetched again on the next open). The first-visit install is the core and the optional files: 910 files.
 
 Gzipped, as Pages serves it, the whole is about 6 MB.
 
@@ -70,6 +70,54 @@ Gzipped, as Pages serves it, the whole is about 6 MB.
 | 3 Mbps | ~17 s |
 | 1.5 Mbps | ~34 s |
 <!--/fact-block-->
+### What each page promises offline, and the rule for a new pack
+
+Three tiers, and a page promises offline only what its tier delivers. The
+**first-visit install** (core and optional) is what a reader waits for and what
+decides whether a version activates; it has a committed ceiling in
+`tools/data-budget.json` that `tests/offlineTiers.test.js` enforces in every
+budget-policy mode. The idle install has one too (`precacheIdleGzipBytes`, 1,549,312 B, raised for the activity builder group, D-R10-49, and for the activity list, D-R10-55): both are CI's figures, measured under Node 22, so on a Mac under Node 24, whose gzip reads a few KB larger, the idle-tier tests can fail by design (2,644 B at the time of writing) and pass in CI. The **idle install** is fetched after activation, when the
+page has gone idle, by an `install-idle` message to the worker: the instructor
+modules, three.js, the 3-D lab, the mission lab, the Sky Lab, the Library, the
+activity builder and the data tables. It fetches only what the cache lacks, so a run cut short is
+finished by the next open, and a device that asked for less data (Save-Data) is
+not given it unasked. Until it finishes, those surfaces need the network; that
+is the trade D-PERF-02 accepted for a smaller install. The submission review page's own module (`js/submissionReview.js`) is in the idle tier with the instructor modules (Prompt 172, D-R10-38): it arrives with the idle install, not at the first visit, and its page, like the other `instructors/` pages, is runtime-cached once visited. The activity builder (`js/assignments/assignmentBuilder.js`) and the adaptation it checks, with the report of what changed under an activity and their words, are an idle group of their own (Prompt 175, D-R10-49): until the idle install finishes, an offline first visit asks for a reload when the builder is opened and shows an adapted link without its notes, due line and report, and the activity itself opens as ever. **Parts** are on-demand:
+a reader asks for them, with a storage estimate first (`js/offlineParts.js`).
+
+<!--fact-block:promises-->
+| Package | What it provides | Core | Optional | Idle | Works offline |
+| --- | --- | ---: | ---: | ---: | --- |
+| `gravitas.lab3d` | The 3-D small-N dynamics kernel | 0 | 0 | 32 | after the first visit settles (32 idle files) |
+| `gravitas.mission` | The mission-design core and the mission lab | 0 | 0 | 38 | after the first visit settles (38 idle files) |
+| `gravitas.lesson.power-law-gravity` | What If Gravity Were Not Inverse Square? | 1 | 0 | 0 | from the first visit |
+| `gravitas.power-law-instruments` | Power-law gravity instruments | 3 | 0 | 0 | from the first visit |
+| `gravitas.sdss-dr18-spectra` | Four observed stellar spectra (SDSS DR18) | 1 | 0 | 0 | from the first visit |
+| `gravitas.tess-hd209458-s56` | HD 209458 observed by TESS (sector 56 light curve and aperture mask) | 0 | 0 | 2 | after the first visit settles (2 idle files) |
+
+The idle tier, by surface (gzip level 6, to the nearest 10 KB: Node versions differ by a kilobyte):
+
+| Surface | Files | Gzip |
+| --- | ---: | ---: |
+| 3-D lab | 38 | ~140 KB |
+| data tables | 33 | ~230 KB |
+| activity builder | 6 | ~20 KB |
+| instructor modules | 36 | ~350 KB |
+| mission lab | 40 | ~230 KB |
+| Sky Lab | 22 | ~170 KB |
+| image measurement | 9 | ~40 KB |
+| Library | 12 | ~90 KB |
+| three.js | 2 | ~240 KB |
+<!--/fact-block-->
+
+**The rule for a new pack.** It is core only when a shipped investigation needs
+it at boot. Anything a reader reaches by choosing it (a lab, a data table, a
+survey) is an idle file if it is small and a part if it is not, never core. A
+page that needs a part says so and does not promise offline without it, and a
+capability package cannot declare an idle-tier path `core`; the build refuses.
+
+**Install cost, before and after the 2.0.1 tier change (D-PERF-02, change 1).** The investigation cards (37 images, about 180 KB) and the three authoring pages (Scenario Studio, the Investigation Composer and the course builder) joined the optional tier, so a first offline visit to a card list or to those pages works. Before: 1,012 files, 16.9 MB raw, 834 core and 178 optional. After: 1,052 files, 17.2 MB raw, 834 core and 218 optional. The core install did not change, so an install that cannot fetch the new files still succeeds; the gzipped total stays about 6 MB (WebP does not compress). `e2e/offline.spec.js` fetches a card image and opens the three pages with the network off.
+
 Pages serves gzip, so the real transfer is more than <!--fact:precacheGzipMB-->6<!--/fact--> MB. The images barely
 compress, being WebP already.
 

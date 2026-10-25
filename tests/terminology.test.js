@@ -156,7 +156,6 @@ describe('the lesson prose and the instructor content', () => {
   const files = [
     'js/data/instructorContent.js',
     'js/data/activities.js',
-    'js/data/welcome.js',
     ...dirs.flatMap(function walk(d) {
       return readdirSync(path.join(REPO, d)).flatMap(f => {
         const p = `${d}/${f}`;

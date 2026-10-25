@@ -13,6 +13,73 @@ the release rather than in the tag.
 
 ## [Unreleased]
 
+## [2.1.0] - 2026-10-24
+
+**Gravitas 2.1.0** promotes the `v3` staging branch (frozen at `e0f4df4b`, its
+push CI run 40144810683 green) to `main`. `v3` stays open and keeps taking pull
+requests; this is a release of its tip, not the end of the train.
+
+**Version number, plainly.** Released as 2.1.0 on Carl's direction (chat,
+2026-10-24: "Make it the new v2.1"); the format boundary note in
+[RELEASING.md](RELEASING.md) and [FORMATS.md](FORMATS.md) names 3.0.0, because a
+2.0.0 build refuses some of what this version writes. The refusals are the ones
+FORMATS.md lists, by version number and in words the old build already has, and
+a file that needs nothing new is still the bytes 2.0.0 wrote. Nothing is
+converted in place.
+
+**No new DOI.** Carl's decision (chat, 2026-10-24: "Let's wait til v3.0 to
+mint the doi"): no GitHub release and no Zenodo deposit for 2.1.0, so it has no
+version DOI. `RELEASE.doi` is null, so `CITATION.cff` and `.zenodo.json` name
+the 2.1.0 tag and the concept DOI and claim no version DOI for it; the 2.0.0
+archive and its DOI are unchanged. The tag `v2.1.0` is a plain git tag.
+
+### Format version boundary (Prompt 176; FORMATS.md names 3.0.0)
+
+- The saved formats a 2.0.0 build refuses or misreads now carry a version number it refuses by, in words it already has. A course package that carries a collection profile, a term or outcomes is `gravitas.course-pack/3` (a course link for it is `c3`); a result envelope with an uncertainty state beyond sigma, interval and none, a failed quantity, a correlation or a fit record is `gravitas.artifact/2`; an investigation pack or question bank whose rubric criterion sets a kind, a depth or a weight is `/2` (its link is `i2`). Every other file and link is written as 2.0.0 wrote it (the lowest version that carries the payload), so it opens in 2.0.0 and in 3.0.0 alike. Readers for every earlier version stay; no support period starts. A 2.0.0 build refuses a newer file as made by a newer version of Gravitas, and refuses an Observatory workspace with image marks as nested too deep (it checks nesting before the version, so no version could name it). FORMATS.md records every refusal message and the rollback rehearsal (`tests/compat/`), and the paragraph for the release notes is generated there. RELEASING.md names 3.0.0 as the version this boundary asks for.
+
+- The Observatory has a panel, "Frames to a light curve", that turns a stack of synthetic frames into a differential light curve one step at a time (calibrate, mark, register, photometry, comparison stars, light curve), with a table to choose the comparison stars, the plot with its table, a CSV, a ledger entry and the frame limit stated; "A Variable Star From Frames" gains an advanced step that runs it, and the grading of every earlier step is unchanged (Prompt 185, `FRAME_PIPELINE.md`).
+
+### Earlier entries from the same train (Prompts 122 to 169)
+
+- While an investigation is open, the frosted panels are drawn solid (the same opaque surfaces `prefers-reduced-transparency` already gives), and frosted again when it closes. Linux software WebKit stopped producing frames once the lesson panel opened over the stack of blurs; removing all of them restored the frames, removing only the panel's own did not.
+
+- Chart.js is removed (Prompt 132, D-PLOT-02 stage 4): every chart is the plot component; the dependency, `vendor/chartjs/` and its license lines are gone. No bytes change in the build (the library was already unreachable); the parity record stays in `tests/fixtures/chart-parity.json`.
+
+- The investigation cards and the Scenario Studio, Investigation Composer and course-builder pages are available offline after one visit (D-PERF-02, change 1).
+- Page titles follow the language on ten pages that kept an English title in Spanish.
+- Teach marks its links to English-only documents "(en inglés)" in Spanish.
+- A duration whose bounds are equal reads "5", never "5–5", on the generated pages.
+- The catalog says "platform API" for the number that is not the Gravitas release; a test pins that the two differ and that every community package's range is satisfied.
+- A test counts the "New in 2.0" badges against D-R8-01's nine, in both languages; the evidence record keeps novelty apart from field use.
+- `tools/bundle-budget.mjs` names its reference environment (Node from `.nvmrc`, zlib from a committed record) and prints a figure from another environment as advisory; CI and `--strict` fail.
+- The splash runs once per genuine startup (Prompt 124): not on an internal navigation, a reload, back or forward, or a duplicated tab; the navigation is never painted ahead of it; a failed script leaves a usable shell within six seconds. See ACCESSIBILITY.md, "Startup".
+- Not done, listed for Prompt 133 because each adds bytes to a route with no room: the Library's scoped scenario count, My work's "preferences" label, and "illustrative" on the Coma and NGC 2420 values.
+
+Navigation grouping and approved retirements (Prompt 166, visible, train v3): the surface gate's two RETIRE verdicts are carried out, both presentation. /catalog/ no longer has a "Contributed" section with its empty-state line; every package is in the one list, a package written outside the team keeps its "Contributed" badge and its "Contributed by", review and history rows, and the invitation to submit one (CONTRIBUTING_CONTENT.md) is in the page's intro, in both languages. The Library's "Where it runs" facet was removed by Prompt 163. No route, saved record or link changed; no GROUP, CONSOLIDATE or FREEZE verdict exists; the nine pending-acceptance checks were all active already.
+
+Home and the global navigation (Prompt 162, visible, train v3): the navigation is the five destinations (Explore, Learn, Observe, My work, Teach), one link each, in both languages, the same on every page; the 25 links that were menu entries are places on their destination's page (and Home's Explore entry), nothing was removed; every page but the sandbox has a breadcrumb; Home is what Gravitas is, where to start (an investigation, an observation, the sandbox, a course for an instructor) and the five places, with no counts, scenario cards or feature lists; the introduction is reachable from Home's foot. The Spanish tab title of the adopter's guide reads "Guía de adopción".
+
+Collections and saved items (Prompt 164, invisible by the roadmap's label; visible in practice, so labelled visible, train v3): a course package may carry `profile: "collection"`, a list of one unit of lessons, guides, scenarios, datasets and readings with an optional note and depth on each, no assignments, no optional paths and no `needs` (COURSE_PACKS.md, `validateCoursePack`, the schema). The Library's item page has a Save button and its start page "Your collections", a student's saved items and the collections they chose to keep, in one new record (`gravitas_collections`, a durable record in a backup file, listed in My work); a collection opened from a link is kept only when the student presses Keep on the course home; the distribution kit makes an instructor's collection from what they saved (order, a note and a depth for each, a link or a file) and the Library's recommended starts are written as collections where every entry can be one. **A 2.0.0 build cannot open a collection:** its reader refuses the pack and names the field, so the field is written only for a collection (the first definite boundary on the compatibility corpus's list; no course changed). Spanish text of the new interface has not been read by a fluent reader.
+
+The minimal instructor path (Prompt 168, visible and instructional, train v3): Teach opens with one course in fifteen minutes (choose a built-in course, "use as is", a student link, the review page and the grade export, no authoring); "Start a new term" on the course builder and the distribution kit copies a course or an activity with fresh keys and a new course-home link, re-pins it and lists what changed under it (step digests); the review page's "Archive" saves its reports as one file (`gravitas.submission-archive`, version 1) and clears the page, and reads that file back; a course pack may carry an optional `term` (written only when set), shown on the course home page ("Term: ...") and by My work from a new local record `gravitas_terms` (twelve most recent) so terms do not merge. Last term's links and files open exactly what they opened; nothing a student keeps is deleted; the submission key is unchanged. The adopter's guide leads with the path and the evaluation kit says what comes back. One closure file edited: js/course/pack.js. Route byte ceilings raised by the measured overruns under the standing approval (D-R10-47); no request ceiling moved.
+
+Common Cartridge export (Prompt 169, invisible by the roadmap's label; the button is instructor-visible, train v3): the course builder's "Export a Common Cartridge" and the distribution kit's "Make a Common Cartridge" make a `.imscc` file of a course in the browser: the IMS Thin Common Cartridge Profile v1.0 over Common Cartridge v1.3, one module for each unit and one web link for each item, each opening the item in Gravitas, in English or Spanish, with the notes for instructors only if asked. It runs no service, carries nothing about students and returns no grades; the course package format is unchanged and no closure file was edited. **Imports into Canvas, Moodle, D2L and Blackboard are recorded as VERIFIED on the owner's report only:** Carl reported in chat on 2026-10-22 that they are verified; the LMS versions, the cartridge imported and what imported were not supplied, so no date of import, version or artifact is recorded. The file itself is checked against the specification's schema and rules (all sixteen built-in cartridges validate), which is not an import; Teach and the adopter's guide say exactly what the table says. The schemas are not committed (their licence needs a registration with 1EdTech): COURSE_PACKS.md and D-R10-54.
+
+Governance only (Prompt 122): INTEGRATION.md and BRANCHING.md describe `main` plus trains; a `Pull-request class` CI job enforces labels, windows and the instructor ciphertext rule; `tools/evidence-status.json` records the evidence class of each public claim and generates `docs/evidence-status.md`. No student-facing behavior changes.
+
+Scientific-defect triage (Prompt 125, visible): the model page has a generated known-discrepancies table (a register plus the validation report's per-check status); the extinction ratio of the cluster-fit tool is kept at 3.245 and its difference from the kernel's CCM89 value is explained (RADIATION.md); the Sky Lab and validation pages state that refraction below 5 degrees is not validated, in place of "several arcminutes" (it is up to about 20). No number a student sees changes.
+
+Institution-facing documents and an accessible report (Prompt 127, invisible): ACCESSIBILITY_CONFORMANCE.md, a scoped conformance report in the ACR form generated from tools/conformance/*.json (the project's own evaluation, no conformance claimed); DATA_PROTECTION.md with a Spanish draft; "What your IT office will ask" in the adopter's guide and on the Teach page; and the lab report as an accessible web page beside the PDF in the finish dialog.
+Balmer rest wavelengths (Prompt 125, part 2, visible and instructional): the line tool's H-alpha (air 6562.79, vacuum 6564.60 A) and H-beta vacuum (4862.71 A) follow NIST and Morton 2000, closing a discrepancy of up to 1.7 km/s; the populations guide's H-alpha velocity answer moves from -240.971 to -240.515 km/s.
+
+Toolchain (carried from main into v3, invisible): `acorn` 8.19.0, `prettier` 3.9.10 and `eslint-plugin-prettier` 5.5.7; held as a group: Playwright 1.64.0 with `@axe-core/playwright` 4.13.0 and `axe-core` 4.14.0 (WebKit lesson-card clicks time out on 1.64's browsers, and axe 4.14 finds the gallery chip count's contrast; see D-TOOL-02). The decision to keep the CC BY-NC Gaia test fixture in the archive is recorded in OWNER_ACTIONS.md.
+Maintenance (invisible): `tools/branch-inventory.mjs` lists every remote branch and the commands the owner may run (nothing is deleted by a session); the dependency audit's exceptions moved to `tools/deps-audit-exceptions.json` with a basis and an expiry date, and an expired one fails the audit; the Q4 2026 quarterly checkpoint is recorded in `TOOLCHAIN.md`; the release traps are collected in `RELEASING.md`.
+Documents (invisible): `DOCUMENTS.md`, a generated map of every root document and generated artifact (`tools/docs-map.mjs`, `npm run docs-map:check`), `MAINTAINER_ONBOARDING.md`, two superseded notes archived to `docs/archive/`, the recovery rehearsal's findings in `RELEASING.md`, and `CONTINUITY.md`'s ecosystem sentence dated.
+
+Toolchain (invisible): `@playwright/test` and `playwright` 1.64.0 (supported browser builds move with it, Chromium 153 to 156), `@axe-core/playwright` 4.13.0 and `axe-core` 4.14.0, taken together (D-TOOL-03); the gallery chip counts' contrast raised to what axe 4.14 measures, and one failed-import spec made engine-agnostic.
+
+The first Gravitas is frozen (Prompt 165 follow-up, D-R10-51, visible, train v3): by Carl's ruling of 2026-10-22, `/history/original/` carries a notice in English and Spanish that it is a record, gets no new features, and where to find the current Gravitas. The page itself behaves as before and nothing else on the site changes. The surface gate's own verdict for it is still KEEP; the ruling is recorded beside that verdict (a new optional `ruling` field), not instead of it, and no threshold or rule moved. Separately, the page no longer asks `fonts.googleapis.com` for a stylesheet when it is opened (a third-party request with no opt-in; the one `@import` line is deleted and the page draws in its fallback typefaces, so its lettering differs from before). It still has no content-security policy.
+
 ## [2.0.0] - 2026-10-16
 
 **Gravitas 2.0.0.** Gravitas grows from a gravity sandbox with 22 guided
@@ -22,9 +89,9 @@ investigations (<!--fact:investigations-->60<!--/fact--> that run in the
 simulation and <!--fact:guidedInvestigations-->17<!--/fact--> in the
 Observatory, the 3-D lab and the mission lab), a shared shell, a Library, a
 workspace for each student's own work, an instructor path from adoption page to
-gradebook file, <!--fact:instructorDocuments-->480<!--/fact--> generated
+gradebook file, <!--fact:instructorDocuments-->540<!--/fact--> generated
 instructor documents, a public validation suite
-of <!--fact:physicsChecks-->304<!--/fact--> checks, and authoring tools
+of <!--fact:physicsChecks-->332<!--/fact--> checks, and authoring tools
 (Scenario Studio, Investigation Composer, course packs and an extension SDK).
 The Library lists <!--fact:libraryScenarios-->67<!--/fact--> ready-made
 scenarios: the 59 in the sandbox and <!--fact:systems3dScenarios-->8<!--/fact-->
@@ -1675,7 +1742,7 @@ listed here because this is the release that first carries it.
 - **An instructor portal that explains itself.** `/instructors/` states what is
   behind the passphrase before asking for it, says plainly what client-side
   encryption on a static host can and cannot promise, and presents the
-  <!--fact:instructorDocuments-->480<!--/fact--> documents grouped by investigation
+  <!--fact:instructorDocuments-->540<!--/fact--> documents grouped by investigation
   with their kind and size. A wrong passphrase and a missing bundle now report
   as the different problems they are.
 - **Dual licensing.** The code is MIT; the original educational material is
@@ -1760,7 +1827,7 @@ listed here because this is the release that first carries it.
   cycle or on a low-level module importing a coordinator.
 - **A bundle budget.** `npm run budget` holds the initial download to a written
   ceiling; raising it means saying why in the same commit.
-- **Accessibility checks in CI.** axe-core over <!--fact:axeSurfaces-->36<!--/fact--> surfaces in both
+- **Accessibility checks in CI.** axe-core over <!--fact:axeSurfaces-->48<!--/fact--> surfaces in both
   languages and both themes, plus keyboard, focus-trap, reflow and reduced-motion tests.
   See [ACCESSIBILITY.md](ACCESSIBILITY.md).
 
@@ -1808,7 +1875,7 @@ listed here because this is the release that first carries it.
   the share dialog and the scenario gallery keyboard traps in practice.
 - Three modal dialogs declared `aria-modal="true"` without trapping focus.
 - Stale counts across the documentation: `/model/` claimed 135 physics checks
-  against a suite of <!--fact:physicsChecks-->304<!--/fact-->, and 48 scenarios
+  against a suite of <!--fact:physicsChecks-->332<!--/fact-->, and 48 scenarios
   against a catalog of <!--fact:scenarios-->59<!--/fact-->.
 
 ### Removed
@@ -1817,6 +1884,7 @@ listed here because this is the release that first carries it.
 - `aria-hidden="true"` from the 3-D viewport, which had been hiding two
   focusable buttons from assistive technology.
 
-[Unreleased]: https://github.com/gravitas-sim/gravitas-sim.github.io/compare/v2.0.0...HEAD
+[Unreleased]: https://github.com/gravitas-sim/gravitas-sim.github.io/compare/v2.1.0...HEAD
+[2.1.0]: https://github.com/gravitas-sim/gravitas-sim.github.io/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/gravitas-sim/gravitas-sim.github.io/compare/v1.0.0...v2.0.0
 [1.0.0]: https://github.com/gravitas-sim/gravitas-sim.github.io/releases/tag/v1.0.0

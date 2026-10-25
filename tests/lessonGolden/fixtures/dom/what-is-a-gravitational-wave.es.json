@@ -1,0 +1,62 @@
+[
+ {
+  "depth": "core",
+  "role": "first",
+  "sid": "travel-without-shining",
+  "position": [
+   1,
+   28
+  ],
+  "title": "¿Qué es una onda gravitacional?",
+  "subtitle": "Una primera mirada a qué se mueve, qué viaja y qué siente un detector",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 28 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">Algo puede viajar sin brillar</h3><div class=\"inv-step-body\"><p>Hay dos objetos en el lienzo, girando uno alrededor del otro. Están en pausa y no emiten nada de luz: ni brillo, ni color, nada que un telescopio pudiera fotografiar.</p><p>Comprométete con una respuesta antes de seguir. No se espera que sepas esta.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Los dos discos son un dibujo de dónde dice el modelo que están los objetos. No son una fotografía, y nada en esta investigación lo es.</p><p class=\"inv-prompt\" id=\"invChoicePrompt\">Si estos dos objetos no emiten nada de luz, ¿podríamos aun así averiguar que se mueven?</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>No: sin luz no hay nada que detectar</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>Sí: toda masa curva el espacio, y una masa en movimiento puede mandar esa curvatura hacia fuera como una perturbación que viaja</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>Sí: los oiríamos, porque el sonido viaja por el espacio</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>Solo si algo cercano los iluminara</span></button></div>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "graded",
+  "sid": "travel-without-shining",
+  "position": [
+   1,
+   28
+  ],
+  "title": "¿Qué es una onda gravitacional?",
+  "subtitle": "Una primera mirada a qué se mueve, qué viaja y qué siente un detector",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 28 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">Algo puede viajar sin brillar</h3><div class=\"inv-step-body\"><p>Hay dos objetos en el lienzo, girando uno alrededor del otro. Están en pausa y no emiten nada de luz: ni brillo, ni color, nada que un telescopio pudiera fotografiar.</p><p>Comprométete con una respuesta antes de seguir. No se espera que sepas esta.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Los dos discos son un dibujo de dónde dice el modelo que están los objetos. No son una fotografía, y nada en esta investigación lo es.</p><p class=\"inv-prompt\" id=\"invChoicePrompt\">Si estos dos objetos no emiten nada de luz, ¿podríamos aun así averiguar que se mueven?</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>No: sin luz no hay nada que detectar</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>Sí: toda masa curva el espacio, y una masa en movimiento puede mandar esa curvatura hacia fuera como una perturbación que viaja</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>Sí: los oiríamos, porque el sonido viaja por el espacio</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>Solo si algo cercano los iluminara</span></button></div>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "marked",
+  "sid": "travel-without-shining",
+  "position": [
+   1,
+   28
+  ],
+  "title": "¿Qué es una onda gravitacional?",
+  "subtitle": "Una primera mirada a qué se mueve, qué viaja y qué siente un detector",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 28 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">Algo puede viajar sin brillar</h3><div class=\"inv-step-body\"><p>Hay dos objetos en el lienzo, girando uno alrededor del otro. Están en pausa y no emiten nada de luz: ni brillo, ni color, nada que un telescopio pudiera fotografiar.</p><p>Comprométete con una respuesta antes de seguir. No se espera que sepas esta.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Los dos discos son un dibujo de dónde dice el modelo que están los objetos. No son una fotografía, y nada en esta investigación lo es.</p><p class=\"inv-prompt\" id=\"invChoicePrompt\">Si estos dos objetos no emiten nada de luz, ¿podríamos aun así averiguar que se mueven?</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>No: sin luz no hay nada que detectar</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>Sí: toda masa curva el espacio, y una masa en movimiento puede mandar esa curvatura hacia fuera como una perturbación que viaja</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>Sí: los oiríamos, porque el sonido viaja por el espacio</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>Solo si algo cercano los iluminara</span></button></div><p class=\"inv-held\">Tu respuesta queda registrada. No se corrige hasta que llegues a «Conoce a los dos objetos», para que la decida el experimento y no la clave de respuestas.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Cambiar respuesta</button>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "last",
+  "sid": "what-you-worked-out",
+  "position": [
+   28,
+   28
+  ],
+  "title": "¿Qué es una onda gravitacional?",
+  "subtitle": "Una primera mirada a qué se mueve, qué viaja y qué siente un detector",
+  "body": "<p class=\"inv-step-count\">Paso 28 de 28 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Lo que has establecido</h3><div class=\"inv-step-body\"><p><strong>Una onda gravitacional es un cambio de distancia, no algo que llega.</strong> No te cae nada encima. La separación entre cosas que no se tocan se hace brevemente mayor en una dirección y menor en la perpendicular, y ya está.</p><p><strong>Una fuente tiene que estar cambiando, y tiene que ser asimétrica.</strong> Una masa quieta no radia nada. Una masa que late hacia dentro y hacia fuera tampoco radia nada, por violentamente que lo haga, porque se ve igual desde cualquier dirección. Dos objetos girando uno alrededor del otro no están quietos ni son simétricos, y por eso el binario fue el que funcionó y los otros dos no.</p><p><strong>El estiramiento y la compresión son transversales.</strong> Los dos son perpendiculares al sentido en que viaja la onda, y por eso un anillo de masas de prueba se vuelve un óvalo y no un círculo más grande. No ha crecido nada.</p><p><strong>Una órbita que se encoge produce una señal que sube</strong>, al doble de la frecuencia orbital: más cerca y más rápido significa más agudo y más fuerte, y eso es lo que hace que el patrón de la pantalla 1 sea un chirrido y no un zumbido.</p><p><strong>Un instrumento en forma de L mide una diferencia.</strong> Dos brazos perpendiculares responden de forma opuesta a la misma onda, así que comparar uno con otro convierte un cambio de longitud mucho menor que un protón en algo que se puede registrar.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> A continuación: <strong>Escuchar el espaciotiempo</strong> lleva el mismo instrumento mucho más lejos: qué revela una señal sobre la fuente que la produjo, cómo se compara un modelo con datos reales, y por qué una señal que parece correcta todavía no es una detección.</p>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ }
+]

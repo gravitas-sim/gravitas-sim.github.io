@@ -33,6 +33,7 @@ import {
   readCapsule,
   verifyCapsule,
 } from './compute/capsule.js';
+import { KEY_LOCALE } from './names.js';
 
 const $ = id => document.getElementById(id);
 const es = () => document.documentElement.lang.startsWith('es');
@@ -642,7 +643,7 @@ function render() {
 
 async function init() {
   try {
-    const stored = window.localStorage.getItem('gravitas_locale');
+    const stored = window.localStorage.getItem(KEY_LOCALE);
     if (stored)
       document.documentElement.lang = stored.startsWith('es') ? 'es' : 'en';
   } catch {

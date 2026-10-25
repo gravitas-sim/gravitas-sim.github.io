@@ -26,6 +26,7 @@ import { PLATFORM_API, validateManifest } from '../platform/manifest.js';
 import { parseVersion, satisfies } from '../platform/semver.js';
 import { validateCoursePack } from '../platform/course.js';
 import { checkObservation, observationOf } from '../observation.js';
+import { ID_INVESTIGATION_PACK } from '../names.js';
 
 /** An install refused, with why. */
 export class InstallError extends Error {
@@ -148,7 +149,7 @@ function checkContents(entry, files, catalog) {
       throw new InstallError('content', `${i.file}: ${err.message}`);
     }
     if (
-      pack?.format !== 'gravitas.investigation-pack' ||
+      pack?.format !== ID_INVESTIGATION_PACK ||
       pack.formatVersion !== 1 ||
       pack.id !== i.id
     )

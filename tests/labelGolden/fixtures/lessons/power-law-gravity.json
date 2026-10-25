@@ -1,0 +1,111 @@
+{
+ "id": "power-law-gravity",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.record-the-precession.fields.0.unit","° per orbit"],
+    ["steps.record-the-precession.fields.1.unit","° per orbit"],
+    ["steps.record-the-precession.fields.2.unit","° per orbit"],
+    ["steps.record-the-precession.fields.3.unit","° per orbit"],
+    ["steps.refine-the-timestep.fields.0.unit","°"],
+    ["steps.refine-the-timestep.fields.1.unit","°"],
+    ["steps.measure-the-slope.fields.0.unit",""],
+    ["steps.measure-the-slope.fields.1.unit",""],
+    ["steps.measure-the-slope.fields.2.unit",""],
+    ["steps.measure-the-slope.fields.3.unit",""],
+    ["steps.predict-the-slope.unit",""],
+    ["steps.measure-conservation.fields.0.unit",""],
+    ["steps.measure-conservation.fields.1.unit",""],
+    ["steps.measure-conservation.fields.2.unit",""]
+   ],
+   "numbered": [
+    ["steps.record-the-precession.fields.0.label","n = 1.8"],
+    ["steps.record-the-precession.fields.1.label","n = 2"],
+    ["steps.record-the-precession.fields.2.label","n = 2.05"],
+    ["steps.record-the-precession.fields.3.label","n = 2.2"],
+    ["steps.refine-the-timestep.fields.0.label","n = 2.2: spread across four timesteps"],
+    ["steps.refine-the-timestep.fields.1.label","n = 2.2: the precession itself"],
+    ["steps.measure-the-slope.fields.0.label","n = 1.8: slope"],
+    ["steps.measure-the-slope.fields.1.label","n = 2: slope"],
+    ["steps.measure-the-slope.fields.2.label","n = 2.2: slope"],
+    ["steps.measure-the-slope.fields.3.label","n = 2.5: slope"],
+    ["steps.measure-conservation.fields.0.label","n = 2: momentum drift"],
+    ["steps.measure-conservation.fields.1.label","n = 2.5: momentum drift"],
+    ["steps.measure-conservation.fields.2.label","n = 2.5: angular momentum drift"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.record-the-precession.fields.0.label","n = 1,8"],
+    ["steps.record-the-precession.fields.2.label","n = 2,05"],
+    ["steps.record-the-precession.fields.3.label","n = 2,2"],
+    ["steps.refine-the-timestep.fields.0.label","n = 2,2: dispersión entre los cuatro pasos"],
+    ["steps.refine-the-timestep.fields.1.label","n = 2,2: la precesión en sí"],
+    ["steps.measure-the-slope.fields.0.label","n = 1,8: pendiente"],
+    ["steps.measure-the-slope.fields.1.label","n = 2: pendiente"],
+    ["steps.measure-the-slope.fields.2.label","n = 2,2: pendiente"],
+    ["steps.measure-the-slope.fields.3.label","n = 2,5: pendiente"],
+    ["steps.measure-conservation.fields.0.label","n = 2: desviación del momento lineal"],
+    ["steps.measure-conservation.fields.1.label","n = 2,5: desviación del momento lineal"],
+    ["steps.measure-conservation.fields.2.label","n = 2,5: desviación del momento angular"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "predict-the-slope",
+    "answer": "1.95",
+    "tolerance": "0.03",
+    "unit": ""
+   }
+  ],
+  "decimals": [
+   [
+    "record-the-precession.p_18",
+    2
+   ],
+   [
+    "record-the-precession.p_20",
+    2
+   ],
+   [
+    "record-the-precession.p_205",
+    2
+   ],
+   [
+    "record-the-precession.p_22",
+    2
+   ],
+   [
+    "measure-the-slope.s_18",
+    3
+   ],
+   [
+    "measure-the-slope.s_20",
+    3
+   ],
+   [
+    "measure-the-slope.s_22",
+    3
+   ],
+   [
+    "measure-the-slope.s_25",
+    3
+   ]
+  ]
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "record-the-precession": {
+    "validate": {"calls":242,"distinct":3,"digest":"fa455a538543e4a4","samples":[null,{"level":"warn","message":"The n = 2 reading should be zero to several decimal places. Check you read it at the n = 2 preset."},{"level":"warn","message":"At n = 1.8 the precession is negative. Keep the minus sign — it is the result."}]}
+   },
+   "measure-the-slope": {
+    "validate": {"calls":242,"distinct":2,"digest":"06f7a79d1eb4ab18","samples":[null,{"level":"warn","message":"The n = 2 slope should be 1.5 — that is Kepler’s third law. Check which preset you read."}]}
+   }
+  },
+  "es": "same"
+ }
+}

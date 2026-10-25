@@ -57,6 +57,7 @@ export const EN_COURSEHOME = {
   'courseHome.open.reading': 'Open the reading',
   'courseHome.open.pack': 'Open the investigation',
   'courseHome.openNamed': '{action}: {title}',
+  'courseHome.term': 'Term: {term}',
   'courseHome.progress': '{done} of {total} investigations finished',
   'courseHome.status.going': 'In progress',
   'courseHome.status.done': 'Finished',
@@ -71,6 +72,11 @@ export const EN_COURSEHOME = {
   'courseHome.access.open': 'Free to read online.',
   'courseHome.access.library': 'Through your library.',
   'courseHome.access.print': 'In print.',
+  'courseHome.keep': 'Keep in my collections',
+  'courseHome.keep.done':
+    'Kept on this device. It is in the Library and in My work.',
+  'courseHome.keep.dropped': 'No longer kept.',
+  'courseHome.keep.failed': 'This browser did not keep that.',
   'courseHome.made':
     'Version {version} of this course, made with Gravitas platform {platform}.',
   'courseHome.printNote':

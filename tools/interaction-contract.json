@@ -1,0 +1,511 @@
+{
+  "about": "The interaction contract as data (Prompt 155; INTERACTION.md is the prose). tests/interactionContract.test.js holds every registered surface to it. Prompt 161 folds the surfaces into the navigation inventory; Prompt 278 activates the pending checks.",
+  "version": 1,
+  "keys": {
+    "ArrowLeft": ["nudge", "along"],
+    "ArrowRight": ["nudge", "along"],
+    "ArrowUp": ["nudge", "across"],
+    "ArrowDown": ["nudge", "across"],
+    "PageUp": ["page"],
+    "PageDown": ["page"],
+    "Home": ["first"],
+    "End": ["last"],
+    "Enter": ["confirm"],
+    " ": ["confirm"],
+    "Escape": ["cancel"],
+    "+": ["zoom"],
+    "=": ["zoom"],
+    "-": ["zoom"]
+  },
+  "nudge": {
+    "fine": {
+      "modifier": "Alt",
+      "scale": 0.25
+    },
+    "normal": {
+      "modifier": "",
+      "scale": 1
+    },
+    "coarse": {
+      "modifier": "Shift",
+      "scale": 4
+    }
+  },
+  "actions": {
+    "nudge": "Move a quantity or an aim by one step; Alt is a quarter of a step, Shift is four.",
+    "along": "Previous and next along an ordered set (Left, Right).",
+    "across": "Previous and next across the set's series (Up, Down).",
+    "page": "A surface-declared jump along the set (PageUp, PageDown).",
+    "first": "The first item (Home).",
+    "last": "The last item (End).",
+    "confirm": "Commit what is aimed or toggle the focused item (Enter; Space where the item is a toggle).",
+    "cancel": "Abandon, clear or close the innermost thing (Escape).",
+    "zoom": "Zoom a camera in or out where a surface has one (+ or =, -)."
+  },
+  "noBareKey": {
+    "openTable": "The surface's Table control, reached with Tab. T is the theme everywhere.",
+    "openDisclosure": "Enter or Space on the disclosure's summary, which the browser provides."
+  },
+  "conflicts": [
+    {
+      "id": "K1",
+      "keys": "Shift+Arrow",
+      "meanings": [
+        "coarse nudge (sandbox placement aim)",
+        "extend the selection (plot, image and table selection)",
+        "pan (3-D camera)"
+      ],
+      "status": "declared",
+      "resolution": "Shift is the coarse size on a surface that nudges a number. A selection surface keeps Shift to extend and uses PageUp and PageDown for its coarse step. The 3-D camera keeps Shift to pan; a proposed rename (pan on Ctrl) is a decision for Carl, because it changes a binding students and instructors may have been taught."
+    },
+    {
+      "id": "K2",
+      "keys": "A",
+      "meanings": [
+        "arms keyboard placement (shortcut)",
+        "pans the view left (A, W, S, D beside the arrows)"
+      ],
+      "status": "open",
+      "resolution": "One press of A did both. Measured on 2026-10-19 with a type armed: the view moved 40 px and a keyboard placement began. The rename that removes it (A no longer pans while a type is armed; the arrow keys always pan) is the visible train PR that follows this one."
+    },
+    {
+      "id": "K3",
+      "keys": "- and =",
+      "meanings": [
+        "simulation speed down and up (sandbox)",
+        "zoom out and in (3-D lab)"
+      ],
+      "status": "declared",
+      "resolution": "The two never share a page. The contract assigns + and - to zoom, so the sandbox, which has no keyboard zoom, has a gap (interaction.keyboard.sandbox-zoom); moving speed to another pair is a decision for Carl."
+    }
+  ],
+  "surfaces": [
+    {
+      "id": "sandbox.placement",
+      "name": "The sandbox: placing a body",
+      "source": "js/placement.js",
+      "primaryTask": "Place a body and throw it.",
+      "keys": [
+        {
+          "key": "ArrowLeft",
+          "action": "nudge"
+        },
+        {
+          "key": "ArrowRight",
+          "action": "nudge"
+        },
+        {
+          "key": "ArrowUp",
+          "action": "nudge"
+        },
+        {
+          "key": "ArrowDown",
+          "action": "nudge"
+        },
+        {
+          "key": "Enter",
+          "action": "confirm"
+        },
+        {
+          "key": "Escape",
+          "action": "cancel"
+        }
+      ],
+      "drags": ["sandbox.throw"],
+      "tests": {
+        "keyboard": {
+          "file": "e2e/bodyPlacement.spec.js",
+          "title": "placing a body from the keyboard"
+        },
+        "singlePointer": {
+          "file": "e2e/interactionContract.spec.js",
+          "title": "a typed launch is the recorded drag"
+        },
+        "announcement": {
+          "file": "e2e/bodyPlacement.spec.js",
+          "title": "the aim is announced, and so is the placement"
+        }
+      }
+    },
+    {
+      "id": "sandbox.view",
+      "name": "The sandbox: pan and zoom",
+      "source": "js/placement.js",
+      "primaryTask": "Move the view and change its scale.",
+      "keys": [
+        {
+          "key": "ArrowLeft",
+          "action": "nudge"
+        },
+        {
+          "key": "ArrowRight",
+          "action": "nudge"
+        },
+        {
+          "key": "ArrowUp",
+          "action": "nudge"
+        },
+        {
+          "key": "ArrowDown",
+          "action": "nudge"
+        },
+        {
+          "key": "Home",
+          "action": "first"
+        },
+        {
+          "key": "Escape",
+          "action": "cancel"
+        }
+      ],
+      "drags": ["sandbox.pan"],
+      "tests": {
+        "keyboard": {
+          "file": "e2e/canvasInput.spec.js",
+          "title": "W, A, S, D and the arrows pan"
+        }
+      },
+      "pending": ["interaction.keyboard.sandbox-zoom"],
+      "notApplicable": {
+        "announcement": "Panning moves a picture, not a value: nothing changes that a reader would be told."
+      }
+    },
+    {
+      "id": "plot.cursor",
+      "name": "A plot: the readout cursor",
+      "source": "js/plot/chart.js",
+      "primaryTask": "Read a value off a curve.",
+      "keys": [
+        {
+          "key": "ArrowLeft",
+          "action": "along"
+        },
+        {
+          "key": "ArrowRight",
+          "action": "along"
+        },
+        {
+          "key": "ArrowUp",
+          "action": "across"
+        },
+        {
+          "key": "ArrowDown",
+          "action": "across"
+        },
+        {
+          "key": "PageUp",
+          "action": "page"
+        },
+        {
+          "key": "PageDown",
+          "action": "page"
+        },
+        {
+          "key": "Home",
+          "action": "first"
+        },
+        {
+          "key": "End",
+          "action": "last"
+        },
+        {
+          "key": "Escape",
+          "action": "cancel"
+        }
+      ],
+      "drags": [],
+      "tests": {
+        "keyboard": {
+          "file": "e2e/plotChart.spec.js",
+          "title": "the readout is reachable and operable from the keyboard"
+        },
+        "singlePointer": {
+          "file": "e2e/interactionContract.spec.js",
+          "title": "a plot readout needs no drag"
+        },
+        "announcement": {
+          "file": "e2e/interactionContract.spec.js",
+          "title": "the plot cursor announces where it is"
+        }
+      }
+    },
+    {
+      "id": "observatory.selection",
+      "name": "The Observatory: choosing rows, points and pixels",
+      "source": "js/plot/select.js",
+      "sources": ["js/observatory/image.js", "js/plot/table.js"],
+      "primaryTask": "Select a run of observations.",
+      "keys": [
+        {
+          "key": "ArrowLeft",
+          "action": "along"
+        },
+        {
+          "key": "ArrowRight",
+          "action": "along"
+        },
+        {
+          "key": "PageUp",
+          "action": "page"
+        },
+        {
+          "key": "PageDown",
+          "action": "page"
+        },
+        {
+          "key": "Home",
+          "action": "first"
+        },
+        {
+          "key": "End",
+          "action": "last"
+        },
+        {
+          "key": "Enter",
+          "action": "confirm"
+        },
+        {
+          "key": " ",
+          "action": "confirm"
+        },
+        {
+          "key": "Escape",
+          "action": "cancel"
+        }
+      ],
+      "exceptions": ["K1"],
+      "drags": ["observatory.brush", "observatory.image-box"],
+      "tests": {
+        "keyboard": {
+          "file": "e2e/observatory.spec.js",
+          "title": "the plot answers the keyboard"
+        },
+        "singlePointer": {
+          "file": "e2e/interactionContract.spec.js",
+          "title": "rows are chosen by clicking, without a drag"
+        },
+        "announcement": {
+          "file": "e2e/observatory.spec.js",
+          "title": "a selection in the plot is the selection in the table"
+        }
+      }
+    },
+    {
+      "id": "observatory.marks",
+      "name": "The Observatory: marking an image",
+      "source": "js/observatory/imageMarks.js",
+      "primaryTask": "Place a mark on an image and read its position, size and scale.",
+      "keys": [
+        {
+          "key": "ArrowLeft",
+          "action": "along"
+        },
+        {
+          "key": "ArrowRight",
+          "action": "along"
+        },
+        {
+          "key": "ArrowUp",
+          "action": "across"
+        },
+        {
+          "key": "ArrowDown",
+          "action": "across"
+        },
+        {
+          "key": "PageUp",
+          "action": "page"
+        },
+        {
+          "key": "PageDown",
+          "action": "page"
+        },
+        {
+          "key": "Enter",
+          "action": "confirm"
+        },
+        {
+          "key": "Escape",
+          "action": "cancel"
+        }
+      ],
+      "drags": [],
+      "tests": {
+        "keyboard": {
+          "file": "e2e/imageMarks.spec.js",
+          "title": "every kind is placed, nudged, read, edited and deleted with no pointer event"
+        },
+        "singlePointer": {
+          "file": "e2e/imageMarks.spec.js",
+          "title": "a tap places a draft, the pad moves it, Place confirms, with no key event"
+        },
+        "announcement": {
+          "file": "e2e/imageMarks.spec.js",
+          "title": "a commit is announced once, and a run of nudges is said when it stops"
+        }
+      }
+    },
+    {
+      "id": "lab3d.camera",
+      "name": "The 3-D lab: the camera",
+      "source": "js/lab3dLab.js",
+      "primaryTask": "Look at the system from another side.",
+      "keys": [
+        {
+          "key": "ArrowLeft",
+          "action": "nudge"
+        },
+        {
+          "key": "ArrowRight",
+          "action": "nudge"
+        },
+        {
+          "key": "ArrowUp",
+          "action": "nudge"
+        },
+        {
+          "key": "ArrowDown",
+          "action": "nudge"
+        },
+        {
+          "key": "+",
+          "action": "zoom"
+        },
+        {
+          "key": "=",
+          "action": "zoom"
+        },
+        {
+          "key": "-",
+          "action": "zoom"
+        }
+      ],
+      "exceptions": ["K1", "K3"],
+      "drags": ["lab3d.orbit"],
+      "tests": {
+        "keyboard": {
+          "file": "e2e/lab3dView.spec.js",
+          "title": "the keyboard alone plays, orbits, zooms and picks a look"
+        },
+        "singlePointer": {
+          "file": "e2e/interactionContract.spec.js",
+          "title": "a preset view is chosen without orbiting"
+        }
+      },
+      "pending": ["interaction.single-pointer.lab3d-orbit"],
+      "notApplicable": {
+        "announcement": "An orbit or zoom moves a picture, not a value: the state tables carry the numbers and do not change."
+      }
+    }
+  ],
+  "drags": [
+    {
+      "id": "sandbox.throw",
+      "surface": "sandbox.placement",
+      "gesture": "Press where the body goes and drag to throw it; the length of the drag is its speed.",
+      "alternatives": [
+        "Precise placement: a form that takes the position, velocity and mass as numbers and calls the same placeBody().",
+        "Keyboard aim: A arms it, the arrows aim, Enter commits, with the drag's own velocity expression."
+      ],
+      "status": "met"
+    },
+    {
+      "id": "sandbox.pan",
+      "surface": "sandbox.view",
+      "gesture": "Drag empty space to move the view.",
+      "alternatives": ["The arrow keys and W, A, S, D pan; Home resets."],
+      "status": "gap",
+      "pending": "interaction.single-pointer.sandbox-pan"
+    },
+    {
+      "id": "observatory.brush",
+      "surface": "observatory.selection",
+      "gesture": "Drag across a plot to select the rows under it.",
+      "alternatives": [
+        "Click a row of the table to select it; Shift-click selects the run to another row.",
+        "Click the plot to focus the nearest row."
+      ],
+      "status": "met",
+      "note": "A run without a drag or a held modifier is not offered to a touch reader; interaction.single-pointer.observatory-run records it.",
+      "pending": "interaction.single-pointer.observatory-run"
+    },
+    {
+      "id": "observatory.image-box",
+      "surface": "observatory.selection",
+      "gesture": "Drag across the image to select the pixels in the box.",
+      "alternatives": [
+        "Click a pixel to focus it; the table lists every pixel as a row that a click selects."
+      ],
+      "status": "met"
+    },
+    {
+      "id": "lesson.picker",
+      "surface": null,
+      "gesture": "Drag on a lesson's picture (the H-R diagram, a phase plot) to set the value under the pointer.",
+      "alternatives": [
+        "A click sets the value as the first press of a drag does.",
+        "The arrow keys step the value, following the picture's own axes."
+      ],
+      "status": "met"
+    },
+    {
+      "id": "lab3d.orbit",
+      "surface": "lab3d.camera",
+      "gesture": "Drag the scene to orbit, wheel to zoom.",
+      "alternatives": [
+        "The View select offers named views and the Projection select changes the projection; neither needs a drag.",
+        "Arrow keys orbit, Shift pans, + and - zoom."
+      ],
+      "status": "gap",
+      "pending": "interaction.single-pointer.lab3d-orbit"
+    },
+    {
+      "id": "observer.handle",
+      "surface": null,
+      "gesture": "Drag the observer's handle on the sandbox canvas to change the viewing angle.",
+      "alternatives": [],
+      "status": "gap",
+      "pending": "interaction.single-pointer.observer-handle",
+      "note": "No numeric or keyboard control for the angle was found in index.html or js/lightCurve.js."
+    },
+    {
+      "id": "window.move",
+      "surface": null,
+      "gesture": "Drag the header of a pinned inspector card or the 3-D view window to move it; drag the 3-D window's corner to resize it.",
+      "alternatives": [],
+      "status": "gap",
+      "pending": "interaction.single-pointer.window-move"
+    }
+  ],
+  "unregistered": [
+    "Every other surface in the navigation inventory: Prompt 161 registers them and lists their failures as pending checks."
+  ],
+  "dragSites": {
+    "about": "Every module under js/ that listens for pointermove, mousemove or touchmove, and what it is. A module not listed fails tests/interactionContract.test.js until it is registered here.",
+    "sites": {
+      "js/inspectorWindow.js": ["window.move"],
+      "js/investigations.js": ["lesson.picker"],
+      "js/lecture.js": {
+        "exempt": "Shows the cursor again when the pointer moves; not a gesture."
+      },
+      "js/lightCurve.js": ["observer.handle"],
+      "js/main.js": {
+        "exempt": "The double-tap recognizer: one finger, no path."
+      },
+      "js/observatory/image.js": ["observatory.image-box"],
+      "js/observatory/imageMarks.js": {
+        "exempt": "A touch held on the picture shows the loupe and aims a draft; nothing is committed by it, and a tap, the nudge pad and Place do the same with no path."
+      },
+      "js/placement.js": ["sandbox.throw", "sandbox.pan"],
+      "js/plot/chart.js": {
+        "exempt": "The hover readout; the pointer only points."
+      },
+      "js/plot/select.js": ["observatory.brush"],
+      "js/render.js": {
+        "exempt": "Marks the frame loop busy for a moment; not a gesture."
+      },
+      "js/ui.js": ["sandbox.throw", "sandbox.pan"],
+      "js/view3d.js": ["window.move"]
+    }
+  }
+}

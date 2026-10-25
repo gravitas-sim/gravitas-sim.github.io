@@ -1,0 +1,984 @@
+{
+ "id": "power-law-gravity",
+ "locale": "es",
+ "title": "¿Y si la gravedad no fuera inversa al cuadrado?",
+ "steps": 21,
+ "depths": [
+  [
+   "core",
+   21
+  ]
+ ],
+ "grading": [
+  {
+   "sid": "predict-does-small-matter",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "what-closes-an-orbit",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "predict-is-it-the-computer",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "the-refinement-verdict",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "predict-period-and-distance",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "predict-the-slope",
+   "type": "question",
+   "kind": "numeric",
+   "tolerance": 0.03,
+   "grades": [
+    [
+     "1,95",
+     true,
+     "correct",
+     1.95,
+     null,
+     false,
+     null
+    ],
+    [
+     "1,965",
+     true,
+     "correct",
+     1.965,
+     null,
+     false,
+     null
+    ],
+    [
+     "2,04",
+     false,
+     "incorrect",
+     2.04,
+     null,
+     false,
+     null
+    ],
+    [
+     "1,95",
+     true,
+     "correct",
+     1.95,
+     null,
+     false,
+     null
+    ],
+    [
+     "not a number",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "notANumber"
+    ],
+    [
+     "",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "blank"
+    ]
+   ]
+  },
+  {
+   "sid": "why-the-slope-and-not-something-else",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "predict-what-breaks",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "why-they-survive",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "closing-question",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  }
+ ],
+ "progress": {
+  "record": {
+   "schema": 2,
+   "lesson": "power-law-gravity",
+   "stepSid": "the-honest-caveat",
+   "responses": {
+    "power-law-gravity:predict-does-small-matter": 1,
+    "power-law-gravity:what-closes-an-orbit": 1,
+    "power-law-gravity:predict-is-it-the-computer": 1,
+    "power-law-gravity:the-refinement-verdict": 1,
+    "power-law-gravity:predict-period-and-distance": 1,
+    "power-law-gravity:predict-the-slope": "1,95",
+    "power-law-gravity:predict-the-slope:locale": "es",
+    "power-law-gravity:why-the-slope-and-not-something-else": 1,
+    "power-law-gravity:predict-what-breaks": 1,
+    "power-law-gravity:why-they-survive": 1,
+    "power-law-gravity:closing-question": 1
+   },
+   "attempts": {
+    "power-law-gravity:predict-does-small-matter": 1,
+    "power-law-gravity:what-closes-an-orbit": 1,
+    "power-law-gravity:predict-is-it-the-computer": 1,
+    "power-law-gravity:the-refinement-verdict": 1,
+    "power-law-gravity:predict-period-and-distance": 1,
+    "power-law-gravity:predict-the-slope": 1,
+    "power-law-gravity:why-the-slope-and-not-something-else": 1,
+    "power-law-gravity:predict-what-breaks": 1,
+    "power-law-gravity:why-they-survive": 1,
+    "power-law-gravity:closing-question": 1
+   },
+   "visited": [
+    "the-exactly",
+    "why-there-is-a-reference-distance",
+    "predict-does-small-matter",
+    "first-look-at-the-orbit",
+    "record-the-precession",
+    "what-closes-an-orbit",
+    "predict-is-it-the-computer",
+    "refine-the-timestep",
+    "the-refinement-verdict",
+    "predict-period-and-distance",
+    "measure-the-slope",
+    "predict-the-slope",
+    "why-the-slope-and-not-something-else",
+    "predict-what-breaks",
+    "measure-conservation",
+    "why-they-survive",
+    "and-energy",
+    "two-lists",
+    "near-three",
+    "closing-question",
+    "the-honest-caveat"
+   ],
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "depth": "core",
+   "spent": 600
+  },
+  "read": {
+   "responses": {
+    "power-law-gravity:predict-does-small-matter": 1,
+    "power-law-gravity:what-closes-an-orbit": 1,
+    "power-law-gravity:predict-is-it-the-computer": 1,
+    "power-law-gravity:the-refinement-verdict": 1,
+    "power-law-gravity:predict-period-and-distance": 1,
+    "power-law-gravity:predict-the-slope": "1,95",
+    "power-law-gravity:predict-the-slope:locale": "es",
+    "power-law-gravity:why-the-slope-and-not-something-else": 1,
+    "power-law-gravity:predict-what-breaks": 1,
+    "power-law-gravity:why-they-survive": 1,
+    "power-law-gravity:closing-question": 1
+   },
+   "attempts": {
+    "power-law-gravity:predict-does-small-matter": 1,
+    "power-law-gravity:what-closes-an-orbit": 1,
+    "power-law-gravity:predict-is-it-the-computer": 1,
+    "power-law-gravity:the-refinement-verdict": 1,
+    "power-law-gravity:predict-period-and-distance": 1,
+    "power-law-gravity:predict-the-slope": 1,
+    "power-law-gravity:why-the-slope-and-not-something-else": 1,
+    "power-law-gravity:predict-what-breaks": 1,
+    "power-law-gravity:why-they-survive": 1,
+    "power-law-gravity:closing-question": 1
+   },
+   "visited": [
+    "and-energy",
+    "closing-question",
+    "first-look-at-the-orbit",
+    "measure-conservation",
+    "measure-the-slope",
+    "near-three",
+    "predict-does-small-matter",
+    "predict-is-it-the-computer",
+    "predict-period-and-distance",
+    "predict-the-slope",
+    "predict-what-breaks",
+    "record-the-precession",
+    "refine-the-timestep",
+    "the-exactly",
+    "the-honest-caveat",
+    "the-refinement-verdict",
+    "two-lists",
+    "what-closes-an-orbit",
+    "why-the-slope-and-not-something-else",
+    "why-there-is-a-reference-distance",
+    "why-they-survive"
+   ],
+   "stepSid": "the-honest-caveat",
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "depth": "core",
+   "deepest": null,
+   "spent": 600,
+   "schema": 2,
+   "migrated": false,
+   "notes": []
+  }
+ },
+ "backup": {
+  "backup": {
+   "kind": "gravitas.investigation.progress",
+   "version": 2,
+   "savedAt": "2026-01-02T04:05:06.000Z",
+   "lesson": {
+    "id": "power-law-gravity",
+    "title": "¿Y si la gravedad no fuera inversa al cuadrado?",
+    "stepCount": 21
+   },
+   "student": null,
+   "progress": {
+    "stepSid": "the-honest-caveat",
+    "startedAt": "2026-01-02T03:04:05.000Z",
+    "visited": [
+     "the-exactly",
+     "why-there-is-a-reference-distance",
+     "predict-does-small-matter",
+     "first-look-at-the-orbit",
+     "record-the-precession",
+     "what-closes-an-orbit",
+     "predict-is-it-the-computer",
+     "refine-the-timestep",
+     "the-refinement-verdict",
+     "predict-period-and-distance",
+     "measure-the-slope",
+     "predict-the-slope",
+     "why-the-slope-and-not-something-else",
+     "predict-what-breaks",
+     "measure-conservation",
+     "why-they-survive",
+     "and-energy",
+     "two-lists",
+     "near-three",
+     "closing-question",
+     "the-honest-caveat"
+    ],
+    "responses": {
+     "power-law-gravity:predict-does-small-matter": 1,
+     "power-law-gravity:what-closes-an-orbit": 1,
+     "power-law-gravity:predict-is-it-the-computer": 1,
+     "power-law-gravity:the-refinement-verdict": 1,
+     "power-law-gravity:predict-period-and-distance": 1,
+     "power-law-gravity:predict-the-slope": "1,95",
+     "power-law-gravity:predict-the-slope:locale": "es",
+     "power-law-gravity:why-the-slope-and-not-something-else": 1,
+     "power-law-gravity:predict-what-breaks": 1,
+     "power-law-gravity:why-they-survive": 1,
+     "power-law-gravity:closing-question": 1
+    },
+    "attempts": {
+     "power-law-gravity:predict-does-small-matter": 1,
+     "power-law-gravity:what-closes-an-orbit": 1,
+     "power-law-gravity:predict-is-it-the-computer": 1,
+     "power-law-gravity:the-refinement-verdict": 1,
+     "power-law-gravity:predict-period-and-distance": 1,
+     "power-law-gravity:predict-the-slope": 1,
+     "power-law-gravity:why-the-slope-and-not-something-else": 1,
+     "power-law-gravity:predict-what-breaks": 1,
+     "power-law-gravity:why-they-survive": 1,
+     "power-law-gravity:closing-question": 1
+    }
+   },
+   "steps": [
+    {
+     "index": 0,
+     "sid": "the-exactly",
+     "fingerprint": "read|-|-|Solar System|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 1,
+     "sid": "why-there-is-a-reference-distance",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 2,
+     "sid": "predict-does-small-matter",
+     "fingerprint": "predict|-|-|-|-|3|a=1;c=1",
+     "optionCount": 3
+    },
+    {
+     "index": 3,
+     "sid": "first-look-at-the-orbit",
+     "fingerprint": "explore|-|power-law-precession|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 4,
+     "sid": "record-the-precession",
+     "fingerprint": "measure|-|power-law-precession|-|p_18+p_20+p_205+p_22|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 5,
+     "sid": "what-closes-an-orbit",
+     "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 6,
+     "sid": "predict-is-it-the-computer",
+     "fingerprint": "predict|-|-|-|-|3|a=1;c=1",
+     "optionCount": 3
+    },
+    {
+     "index": 7,
+     "sid": "refine-the-timestep",
+     "fingerprint": "measure|-|power-law-refinement|-|spread_22+val_22|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 8,
+     "sid": "the-refinement-verdict",
+     "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 9,
+     "sid": "predict-period-and-distance",
+     "fingerprint": "predict|-|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 10,
+     "sid": "measure-the-slope",
+     "fingerprint": "measure|-|power-law-kepler|-|s_18+s_20+s_22+s_25|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 11,
+     "sid": "predict-the-slope",
+     "fingerprint": "question|numeric|power-law-kepler|-|-|-|a=1.95;t=0.03",
+     "optionCount": null
+    },
+    {
+     "index": 12,
+     "sid": "why-the-slope-and-not-something-else",
+     "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 13,
+     "sid": "predict-what-breaks",
+     "fingerprint": "predict|-|-|-|-|3|a=1;c=1",
+     "optionCount": 3
+    },
+    {
+     "index": 14,
+     "sid": "measure-conservation",
+     "fingerprint": "measure|-|power-law-conservation|-|mom_20+mom_25+ang_25|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 15,
+     "sid": "why-they-survive",
+     "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 16,
+     "sid": "and-energy",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 17,
+     "sid": "two-lists",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 18,
+     "sid": "near-three",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 19,
+     "sid": "closing-question",
+     "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 20,
+     "sid": "the-honest-caveat",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    }
+   ]
+  },
+  "verdict": {
+   "ok": true
+  },
+  "restored": {
+   "responses": {
+    "power-law-gravity:predict-does-small-matter": 1,
+    "power-law-gravity:what-closes-an-orbit": 1,
+    "power-law-gravity:predict-is-it-the-computer": 1,
+    "power-law-gravity:the-refinement-verdict": 1,
+    "power-law-gravity:predict-period-and-distance": 1,
+    "power-law-gravity:predict-the-slope": "1,95",
+    "power-law-gravity:predict-the-slope:locale": "es",
+    "power-law-gravity:why-the-slope-and-not-something-else": 1,
+    "power-law-gravity:predict-what-breaks": 1,
+    "power-law-gravity:why-they-survive": 1,
+    "power-law-gravity:closing-question": 1
+   },
+   "attempts": {
+    "power-law-gravity:predict-does-small-matter": 1,
+    "power-law-gravity:what-closes-an-orbit": 1,
+    "power-law-gravity:predict-is-it-the-computer": 1,
+    "power-law-gravity:the-refinement-verdict": 1,
+    "power-law-gravity:predict-period-and-distance": 1,
+    "power-law-gravity:predict-the-slope": 1,
+    "power-law-gravity:why-the-slope-and-not-something-else": 1,
+    "power-law-gravity:predict-what-breaks": 1,
+    "power-law-gravity:why-they-survive": 1,
+    "power-law-gravity:closing-question": 1
+   },
+   "visited": [
+    "and-energy",
+    "closing-question",
+    "first-look-at-the-orbit",
+    "measure-conservation",
+    "measure-the-slope",
+    "near-three",
+    "predict-does-small-matter",
+    "predict-is-it-the-computer",
+    "predict-period-and-distance",
+    "predict-the-slope",
+    "predict-what-breaks",
+    "record-the-precession",
+    "refine-the-timestep",
+    "the-exactly",
+    "the-honest-caveat",
+    "the-refinement-verdict",
+    "two-lists",
+    "what-closes-an-orbit",
+    "why-the-slope-and-not-something-else",
+    "why-there-is-a-reference-distance",
+    "why-they-survive"
+   ],
+   "stepIndex": 20,
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "moved": [],
+   "dropped": [],
+   "quarantined": {},
+   "uncertain": 0,
+   "discardedKeys": 0,
+   "byPosition": false
+  }
+ },
+ "ledger": {
+  "entry": "golden-power-law-gravity",
+  "record": {
+   "ids": [
+    "golden-power-law-gravity"
+   ],
+   "rows": [
+    [
+     "golden-power-law-gravity",
+     "q1",
+     3.5247,
+     "d",
+     0.0012,
+     "measured",
+     "simulation",
+     "rv-fit",
+     null,
+     [
+      "s",
+      "d"
+     ]
+    ]
+   ],
+   "total": 1
+  },
+  "digest": "5b5efc3e787ca3bb106c64e033f0f5ea6960830192a68e9997e8be62f500f9a3"
+ },
+ "tokens": {
+  "plain": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "a": null,
+    "r": null,
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "predict-does-small-matter",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "what-closes-an-orbit",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "predict-is-it-the-computer",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "the-refinement-verdict",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "predict-period-and-distance",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "predict-the-slope",
+     "value": "1,95",
+     "locale": "es"
+    },
+    {
+     "sid": "why-the-slope-and-not-something-else",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "predict-what-breaks",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "why-they-survive",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "closing-question",
+     "value": 1,
+     "locale": "es"
+    }
+   ]
+  },
+  "assignment": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "a": "golden-assignment",
+    "r": "roster-1",
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "predict-does-small-matter",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "what-closes-an-orbit",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "predict-is-it-the-computer",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "the-refinement-verdict",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "predict-period-and-distance",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "predict-the-slope",
+     "value": "1,95",
+     "locale": "es"
+    },
+    {
+     "sid": "why-the-slope-and-not-something-else",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "predict-what-breaks",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "why-they-survive",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "closing-question",
+     "value": 1,
+     "locale": "es"
+    }
+   ]
+  },
+  "evidence": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "ev": {
+     "d": "5b5efc3e787ca3bb106c64e033f0f5ea6960830192a68e9997e8be62f500f9a3",
+     "i": [
+      "golden-power-law-gravity"
+     ],
+     "n": 1,
+     "r": [
+      [
+       "golden-power-law-gravity",
+       "q1",
+       3.5247,
+       "d",
+       0.0012,
+       "measured",
+       "simulation",
+       "rv-fit",
+       null,
+       [
+        "s",
+        "d"
+       ]
+      ]
+     ]
+    },
+    "a": null,
+    "r": null,
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "predict-does-small-matter",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "what-closes-an-orbit",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "predict-is-it-the-computer",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "the-refinement-verdict",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "predict-period-and-distance",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "predict-the-slope",
+     "value": "1,95",
+     "locale": "es"
+    },
+    {
+     "sid": "why-the-slope-and-not-something-else",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "predict-what-breaks",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "why-they-survive",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "closing-question",
+     "value": 1,
+     "locale": "es"
+    }
+   ]
+  },
+  "depth": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "dp": "core",
+    "a": null,
+    "r": null,
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "predict-does-small-matter",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "what-closes-an-orbit",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "predict-is-it-the-computer",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "the-refinement-verdict",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "predict-period-and-distance",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "predict-the-slope",
+     "value": "1,95",
+     "locale": "es"
+    },
+    {
+     "sid": "why-the-slope-and-not-something-else",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "predict-what-breaks",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "why-they-survive",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "closing-question",
+     "value": 1,
+     "locale": "es"
+    }
+   ]
+  }
+ }
+}

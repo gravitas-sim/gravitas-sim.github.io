@@ -28,7 +28,7 @@ import {
   requestObservationLayout,
 } from './observationLayout.js';
 import { KIND, annotate } from './notebook/entry.js';
-import { citationRows } from './notebook/artifactEntry.js';
+import { citationRows, quantityText } from './notebook/artifactEntry.js';
 import {
   addEntry,
   backupFilename,
@@ -154,15 +154,27 @@ function statusHtml() {
   )}</span>`;
 }
 
-/** One recorded number. */
-function quantityRow(q) {
+/**
+ * One recorded number. An entry made from an envelope says it in the one
+ * pattern a number is printed in, with its method on hover or focus.
+ */
+function quantityRow(q, envQ) {
+  const said = quantityText(q, envQ, t);
   return `<tr>
       <th scope="row">${esc(q.label)}</th>
-      <td class="nb-value">${esc(
-        q.uncertainty
-          ? `${valueText(q.value, '')} ± ${valueText(q.uncertainty, q.unit)}`
-          : valueText(q.value, q.unit)
-      )}</td>
+      <td class="nb-value">${
+        said
+          ? `${esc(said.value)}${
+              said.label
+                ? ` <abbr class="nb-method" tabindex="0" title="${esc(said.tip)}">(${esc(said.label)})</abbr>`
+                : ''
+            }`
+          : esc(
+              q.uncertainty
+                ? `${valueText(q.value, '')} ± ${valueText(q.uncertainty, q.unit)}`
+                : valueText(q.value, q.unit)
+            )
+      }</td>
       <td><span class="nb-kind is-${esc(q.kind)}">${esc(kindText(q.kind))}</span></td>
       <td class="nb-qnote">${esc(q.note || '')}</td>
     </tr>`;
@@ -331,7 +343,7 @@ function entryHtml(entry, index, total) {
                  <th scope="col">${esc(t('nb.report.colKind'))}</th>
                  <th scope="col">${esc(t('nb.report.colNote'))}</th>
                </tr></thead>
-               <tbody>${snap.quantities.map(quantityRow).join('')}</tbody>
+               <tbody>${snap.quantities.map((q, i) => quantityRow(q, snap.artifact?.quantities?.[i])).join('')}</tbody>
              </table>`
           : ''
       }

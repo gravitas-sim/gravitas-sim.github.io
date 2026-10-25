@@ -1,0 +1,613 @@
+{
+  "format": "gravitas.navigation-inventory/1",
+  "note": "The navigation model (NAVIGATION.md), the mapping of every surface into it, the ceilings the structural checks hold the site to, and the checks it fails today by design. tests/navigationChecks.test.js and e2e/navigation.spec.js read this file. A ceiling is lowered by the prompt that earns it; raising one needs a decision-register row. Nothing here is a user study: it proves structure, labels and reachability, not comprehension.",
+  "hypothesis": "Explore, Learn, Observe, My work, Teach (Prompt 161 kept the working hypothesis of section 9.4: nothing in the audit contradicts it, see NAVIGATION.md).",
+  "destinations": [
+    {
+      "id": "explore",
+      "en": "Explore",
+      "es": "Explorar",
+      "says": {
+        "en": "Build a system, load a scenario and change anything while it runs.",
+        "es": "Construye un sistema, carga un escenario y cambia lo que quieras mientras se ejecuta."
+      },
+      "first": {
+        "en": "Open the sandbox",
+        "es": "Abrir la simulación libre",
+        "path": "/",
+        "selector": "#simulationCanvas"
+      }
+    },
+    {
+      "id": "learn",
+      "en": "Learn",
+      "es": "Aprender",
+      "says": {
+        "en": "Guided investigations, sequences and courses, each ending in a report you can hand in.",
+        "es": "Investigaciones guiadas, secuencias y cursos, cada uno con un informe que puedes entregar."
+      },
+      "first": {
+        "en": "Search the Library",
+        "es": "Buscar en la Biblioteca",
+        "path": "/library/",
+        "selector": "#libSearch"
+      }
+    },
+    {
+      "id": "observe",
+      "en": "Observe",
+      "es": "Observar",
+      "says": {
+        "en": "Measure real and synthetic observations, and run experiments on the model.",
+        "es": "Mide observaciones reales y sintéticas, y ejecuta experimentos con el modelo."
+      },
+      "first": {
+        "en": "Open an observation",
+        "es": "Abrir una observación",
+        "path": "/observatory/",
+        "selector": "#obsOpen"
+      }
+    },
+    {
+      "id": "my-work",
+      "en": "My work",
+      "es": "Mi trabajo",
+      "says": {
+        "en": "Everything you have made, kept on this device: progress, reports and backups.",
+        "es": "Todo lo que has hecho, guardado en este dispositivo: progreso, informes y copias de seguridad."
+      },
+      "first": {
+        "en": "Back up your work",
+        "es": "Hacer una copia de tu trabajo",
+        "path": "/my-work/",
+        "selector": "#mwExport"
+      }
+    },
+    {
+      "id": "teach",
+      "en": "Teach",
+      "es": "Enseñar",
+      "says": {
+        "en": "Run Gravitas in a course: teaching materials, activities, answer keys and a quick start.",
+        "es": "Usa Gravitas en un curso: materiales didácticos, actividades, claves de respuestas y un inicio rápido."
+      },
+      "first": {
+        "en": "Start with the quick start",
+        "es": "Empezar por el inicio rápido",
+        "path": "/teaching/",
+        "selector": "a[href=\"#path-start\"]"
+      }
+    }
+  ],
+  "firstWeek": {
+    "note": "Home's recommended start per audience (Prompt 162): a committed list, validated by tests/navigationChecks.test.js against library/library.json, rendered into js/fragments/home.html by tools/build-library.mjs (the first-week:home block). An entry is a Library entry id (its title and route are read, never restated) or an action. Prompt 277 refines this list; it does not invent a second one.",
+    "starts": [
+      {
+        "id": "student",
+        "audience": {
+          "en": "Student: start here",
+          "es": "Estudiante: empieza aquí"
+        },
+        "entry": "investigation:keplers-laws"
+      },
+      {
+        "id": "observer",
+        "audience": {
+          "en": "Measure something real",
+          "es": "Mide algo real"
+        },
+        "entry": "dataset:tess-light-curve"
+      },
+      {
+        "id": "sandbox",
+        "audience": {
+          "en": "Just play",
+          "es": "Solo jugar"
+        },
+        "action": "enter",
+        "label": {
+          "en": "Open the sandbox",
+          "es": "Abrir la simulación libre"
+        }
+      },
+      {
+        "id": "instructor",
+        "audience": {
+          "en": "Teaching a course",
+          "es": "Para enseñar un curso"
+        },
+        "entry": "course:intro-astronomy"
+      }
+    ]
+  },
+  "kinds": {
+    "students": ["investigation", "dataset", "scenario", "course"],
+    "internal": {
+      "activity": "investigation",
+      "experiment": "investigation"
+    },
+    "why": {
+      "activity": "a shorter classroom form of an investigation (glossary: Activity); a student opens it as one, and Teach keeps the word",
+      "experiment": "a run-and-measure task over the model; a student does it as an investigation, and Observe holds the runner"
+    }
+  },
+  "subsystemWords": {
+    "en": [
+      "sandbox",
+      "3-D lab",
+      "mission lab",
+      "Sky Lab",
+      "Observatory",
+      "Studio",
+      "Composer",
+      "builder",
+      "kernel",
+      "compute"
+    ],
+    "es": [
+      "simulación libre",
+      "laboratorio 3-D",
+      "laboratorio de misiones",
+      "Laboratorio del cielo",
+      "Observatorio",
+      "Estudio",
+      "Compositor",
+      "Creador",
+      "núcleo",
+      "cómputo"
+    ]
+  },
+  "surfaces": [
+    {
+      "id": "sandbox",
+      "en": "Sandbox",
+      "crumb": "sandbox",
+      "path": "/",
+      "role": "destination",
+      "destination": "explore",
+      "from": "Home; the brand link; the global navigation",
+      "menu": "explore"
+    },
+    {
+      "id": "lab3d",
+      "en": "3-D lab",
+      "crumb": "lab3d",
+      "path": "/3d/",
+      "role": "tool",
+      "destination": "explore",
+      "from": "the places block of Home's Explore entry; the Library's 3-D scenario cards",
+      "menu": null
+    },
+    {
+      "id": "mission-lab",
+      "en": "Mission lab",
+      "crumb": "missionLab",
+      "path": "/mission/lab/",
+      "role": "tool",
+      "destination": "explore",
+      "from": "the places block of Home's Explore entry; the Library's mission investigations",
+      "menu": null
+    },
+    {
+      "id": "scenario-studio",
+      "en": "Scenario Studio",
+      "crumb": "studio",
+      "path": "/studio/",
+      "role": "authoring",
+      "destination": "explore",
+      "from": "the places block of Home's Explore entry",
+      "menu": null
+    },
+    {
+      "id": "library",
+      "en": "Library",
+      "crumb": "library",
+      "path": "/library/",
+      "role": "destination",
+      "destination": "learn",
+      "from": "Home; the global navigation",
+      "menu": "learn"
+    },
+    {
+      "id": "investigations",
+      "en": "Investigations",
+      "crumb": "investigations",
+      "path": "/#investigations",
+      "role": "tool",
+      "destination": "learn",
+      "from": "the places block of the Library; the Library's investigation cards; Home's first-week start",
+      "menu": null
+    },
+    {
+      "id": "courses",
+      "en": "Courses",
+      "crumb": "courses",
+      "path": "/course/",
+      "role": "collection",
+      "destination": "learn",
+      "from": "the places block of the Library; the Library's course cards; Home's first-week start",
+      "menu": null
+    },
+    {
+      "id": "observatory",
+      "en": "Observatory",
+      "crumb": "observatory",
+      "path": "/observatory/",
+      "role": "destination",
+      "destination": "observe",
+      "from": "Home; the global navigation",
+      "menu": "observe"
+    },
+    {
+      "id": "experiments",
+      "en": "Experiments",
+      "crumb": "experiments",
+      "path": "/experiments/",
+      "role": "tool",
+      "destination": "observe",
+      "from": "the places block of the Observatory; the Library's experiment cards",
+      "menu": null
+    },
+    {
+      "id": "sky-lab",
+      "en": "Sky Lab",
+      "crumb": "skyLab",
+      "path": "/sky/",
+      "role": "tool",
+      "destination": "observe",
+      "from": "the places block of the Observatory",
+      "menu": null
+    },
+    {
+      "id": "compute",
+      "en": "Compute page",
+      "crumb": "compute",
+      "path": "/compute/",
+      "role": "tool",
+      "destination": "observe",
+      "from": "reached from within: a saved notebook in My work links to it; the Observatory's page body does not, and no destination's page offers it (D-COMPUTE-03, kept as ratified)",
+      "menu": null
+    },
+    {
+      "id": "catalog",
+      "en": "Catalog",
+      "crumb": "catalog",
+      "path": "/catalog/",
+      "role": "collection",
+      "destination": "observe",
+      "from": "the places block of the Observatory (datasets to install); Teach (course packages to install)",
+      "menu": null
+    },
+    {
+      "id": "figure-builder",
+      "en": "Figure builder",
+      "crumb": "figure",
+      "path": "/figure/",
+      "role": "authoring",
+      "destination": "observe",
+      "from": "the places block of the Observatory; the figure action of a plot or an analysis result",
+      "menu": null
+    },
+    {
+      "id": "my-work",
+      "en": "My work",
+      "crumb": "myWork",
+      "path": "/my-work/",
+      "role": "destination",
+      "destination": "my-work",
+      "from": "Home; the global navigation",
+      "menu": "myWork"
+    },
+    {
+      "id": "teaching",
+      "en": "Teaching with Gravitas",
+      "crumb": "teaching",
+      "path": "/teaching/",
+      "role": "destination",
+      "destination": "teach",
+      "from": "Home; the global navigation",
+      "menu": "teach"
+    },
+    {
+      "id": "instructors",
+      "en": "Instructor resources",
+      "crumb": "instructors",
+      "path": "/instructors/",
+      "role": "instructor",
+      "destination": "teach",
+      "from": "the places block of the Teach page",
+      "menu": null
+    },
+    {
+      "id": "submissions",
+      "en": "Submission review",
+      "crumb": "submissions",
+      "path": "/instructors/submissions/",
+      "role": "instructor",
+      "destination": "teach",
+      "from": "the instructor resources",
+      "menu": null
+    },
+    {
+      "id": "evaluation",
+      "en": "Classroom evidence kit",
+      "crumb": "evaluation",
+      "path": "/evaluation/",
+      "role": "instructor",
+      "destination": "teach",
+      "from": "the places block of the Teach page",
+      "menu": null
+    },
+    {
+      "id": "composer",
+      "en": "Investigation Composer",
+      "crumb": "composer",
+      "path": "/studio/lesson/",
+      "role": "authoring",
+      "destination": "teach",
+      "from": "the places block of the Teach page (make an investigation or an activity)",
+      "menu": null
+    },
+    {
+      "id": "course-builder",
+      "en": "Course-package builder",
+      "crumb": "courseBuilder",
+      "path": "/studio/course/",
+      "role": "authoring",
+      "destination": "teach",
+      "from": "the places block of the Teach page (make a course)",
+      "menu": null
+    },
+    {
+      "id": "course-packages",
+      "en": "Investigations in a course",
+      "crumb": "packs",
+      "path": "/studio/course/packs/",
+      "role": "authoring",
+      "destination": "teach",
+      "from": "the course-package builder",
+      "menu": null
+    },
+    {
+      "id": "teaching-find",
+      "en": "Find content to teach",
+      "crumb": "find",
+      "path": "/teaching/find/",
+      "role": "document",
+      "destination": "teach",
+      "from": "the Teach page",
+      "menu": null
+    },
+    {
+      "id": "teaching-adopt",
+      "en": "Adopter's guide",
+      "crumb": "adopt",
+      "path": "/teaching/adopt/",
+      "role": "document",
+      "destination": "teach",
+      "from": "the Teach page",
+      "menu": null
+    },
+    {
+      "id": "teaching-alignment",
+      "en": "Textbook alignment",
+      "crumb": "alignment",
+      "path": "/teaching/alignment/",
+      "role": "document",
+      "destination": "teach",
+      "from": "the Teach page",
+      "menu": null
+    },
+    {
+      "id": "teaching-kit",
+      "en": "Classroom kit",
+      "crumb": "kit",
+      "path": "/teaching/kit/",
+      "role": "document",
+      "destination": "teach",
+      "from": "the Teach page",
+      "menu": null
+    },
+    {
+      "id": "teaching-activities",
+      "en": "Adoption pages: activities",
+      "crumb": "adoption",
+      "path": "/teaching/activity/*",
+      "role": "content",
+      "destination": "teach",
+      "from": "the Teach page; the Library's activity cards",
+      "menu": null
+    },
+    {
+      "id": "teaching-investigations",
+      "en": "Adoption pages: investigations",
+      "crumb": "adoption",
+      "path": "/teaching/investigation/*",
+      "role": "content",
+      "destination": "teach",
+      "from": "the Teach page; the Library's investigation cards",
+      "menu": null
+    },
+    {
+      "id": "model",
+      "en": "How the model works",
+      "crumb": "model",
+      "path": "/model/",
+      "role": "document",
+      "destination": null,
+      "from": "the places block of the Teach page; Home's orientation",
+      "menu": null
+    },
+    {
+      "id": "validation",
+      "en": "Physics validation",
+      "crumb": "validation",
+      "path": "/validation/",
+      "role": "document",
+      "destination": null,
+      "from": "the footer; the places block of the Teach page",
+      "menu": null
+    },
+    {
+      "id": "glossary",
+      "en": "Glossary",
+      "crumb": "glossary",
+      "path": "/glossary/",
+      "role": "document",
+      "destination": null,
+      "from": "a term in context; the places block of the Teach page",
+      "menu": null
+    },
+    {
+      "id": "manual",
+      "en": "User manual (PDF)",
+      "crumb": "manual",
+      "path": "/Gravitas_User_Manual.pdf",
+      "role": "document",
+      "destination": null,
+      "from": "the places block of the Teach page",
+      "menu": null
+    },
+    {
+      "id": "kernel-diagnostics",
+      "en": "3-D kernel diagnostics",
+      "crumb": "kernel",
+      "path": "/lab3d/",
+      "role": "diagnostic",
+      "destination": null,
+      "from": "the 3-D lab's evidence section",
+      "menu": null
+    },
+    {
+      "id": "mission-diagnostics",
+      "en": "Mission core diagnostics",
+      "crumb": "mission",
+      "path": "/mission/",
+      "role": "diagnostic",
+      "destination": null,
+      "from": "the Mission lab's evidence section",
+      "menu": null
+    },
+    {
+      "id": "history-original",
+      "en": "The first Gravitas",
+      "crumb": null,
+      "path": "/history/original/",
+      "role": "document",
+      "destination": null,
+      "from": "one quiet link in the model page's footer",
+      "menu": null
+    }
+  ],
+  "ceilings": {
+    "menu": {
+      "groups": 5,
+      "entries": 5,
+      "distinctPages": 5
+    },
+    "footer": {
+      "links": 3
+    },
+    "home": {
+      "doors": 5,
+      "firstWeekLinks": 4,
+      "countedLinks": 0
+    },
+    "library": {
+      "kinds": 6,
+      "formats": 15,
+      "filters": 4,
+      "moreFilters": 7,
+      "startCards": 7
+    },
+    "reach": {
+      "maxClicksFromHome": 3,
+      "pagesWithoutALinkFromHome": 1
+    },
+    "defaultView": {
+      "home-first-visit": {
+        "desktop": 12,
+        "phone": 6
+      },
+      "home": {
+        "desktop": 14,
+        "phone": 7
+      },
+      "library": {
+        "desktop": 24,
+        "phone": 11
+      },
+      "my-work": {
+        "desktop": 9,
+        "phone": 3
+      },
+      "observatory": {
+        "desktop": 16,
+        "phone": 9
+      },
+      "teaching": {
+        "desktop": 21,
+        "phone": 3
+      }
+    }
+  },
+  "futureAcceptance": [],
+  "labels": {
+    "note": "Each row is one thing named on more than one surface. refs are shell:<key> (tools/shell.mjs WORDS), deferred:/library:/observatory:/teaching:<message id> (js/i18n catalogs) and glossary:<label id> (tools/glossary.mjs LABELS). All must carry the same English and Spanish (a leading article is not a difference). knownDivergences are the rows that do not today; Prompt 162 emptied it, and a new divergence fails.",
+    "sameThing": [
+      {
+        "id": "investigations",
+        "refs": ["shell:investigations", "library:lib.kind.investigation"]
+      },
+      {
+        "id": "courses",
+        "refs": ["shell:courses", "library:lib.kind.course"]
+      },
+      {
+        "id": "experiments",
+        "refs": ["shell:experiments", "library:lib.kind.experiment"]
+      },
+      {
+        "id": "teaching",
+        "refs": ["shell:teaching", "teaching:teach.title", "glossary:teaching"]
+      },
+      {
+        "id": "library",
+        "refs": ["shell:library", "library:lib.title", "glossary:library"]
+      },
+      {
+        "id": "observatory",
+        "refs": [
+          "shell:observatory",
+          "observatory:obs.title",
+          "glossary:observatory"
+        ]
+      },
+      {
+        "id": "catalog",
+        "refs": ["shell:catalog", "glossary:catalog"]
+      },
+      {
+        "id": "scenario-studio",
+        "refs": ["shell:studio", "glossary:scenario-studio"]
+      },
+      {
+        "id": "composer",
+        "refs": ["shell:composer", "glossary:composer"]
+      },
+      {
+        "id": "figure-builder",
+        "refs": ["shell:figure", "glossary:figure-builder"]
+      },
+      {
+        "id": "course-builder",
+        "refs": ["shell:courseBuilder", "glossary:course-builder"]
+      },
+      {
+        "id": "lab3d",
+        "refs": ["shell:lab3d", "glossary:lab3d"]
+      }
+    ],
+    "knownDivergences": []
+  }
+}

@@ -1,0 +1,139 @@
+{
+ "id": "lives-of-stars",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.contraction-luminosity.fields.0.unit","R☉"],
+    ["steps.contraction-luminosity.fields.1.unit","R☉"],
+    ["steps.contraction-luminosity.fields.2.unit","Myr"],
+    ["steps.arriving.fields.0.unit","K"],
+    ["steps.arriving.fields.1.unit","L☉"],
+    ["steps.arriving.fields.2.unit","Myr"],
+    ["steps.the-sun-today.fields.0.unit","K"],
+    ["steps.the-sun-today.fields.1.unit","L☉"],
+    ["steps.the-sun-today.fields.2.unit","R☉"],
+    ["steps.across-the-main-sequence.fields.0.unit","L☉"],
+    ["steps.across-the-main-sequence.fields.1.unit","L☉"],
+    ["steps.across-the-main-sequence.fields.2.unit","×"],
+    ["steps.across-the-main-sequence.fields.3.unit","Gyr"],
+    ["steps.compare-young-and-old.fields.0.unit","R☉"],
+    ["steps.compare-young-and-old.fields.1.unit","R☉"],
+    ["steps.core-in-envelope-out.fields.0.unit","R☉"],
+    ["steps.core-in-envelope-out.fields.1.unit","R☉"],
+    ["steps.core-in-envelope-out.fields.2.unit","K"],
+    ["steps.measure-the-giant.fields.0.unit","K"],
+    ["steps.measure-the-giant.fields.1.unit","L☉"],
+    ["steps.measure-the-giant.fields.2.unit","R☉"],
+    ["steps.measure-the-giant.fields.3.unit","M☉"],
+    ["steps.the-agb-and-the-wind.fields.0.unit","M☉"],
+    ["steps.the-agb-and-the-wind.fields.1.unit","M☉"],
+    ["steps.the-agb-and-the-wind.fields.2.unit","M☉"],
+    ["steps.white-dwarf-cooling.fields.0.unit","K"],
+    ["steps.white-dwarf-cooling.fields.1.unit","L☉"],
+    ["steps.white-dwarf-cooling.fields.2.unit","R☉"],
+    ["steps.how-long-was-each-part.fields.0.unit","Gyr"],
+    ["steps.how-long-was-each-part.fields.1.unit","Gyr"],
+    ["steps.how-long-was-each-part.fields.2.unit","Myr"],
+    ["steps.the-same-age.fields.0.unit","L☉"],
+    ["steps.the-same-age.fields.1.unit","L☉"],
+    ["steps.the-same-age.fields.2.unit","×"],
+    ["steps.massive-versus-sun.fields.0.unit","L☉"],
+    ["steps.massive-versus-sun.fields.1.unit","L☉"],
+    ["steps.massive-versus-sun.fields.2.unit","Gyr"],
+    ["steps.massive-versus-sun.fields.3.unit","Myr"],
+    ["steps.the-neutron-star.fields.0.unit","M☉"],
+    ["steps.the-neutron-star.fields.1.unit","M☉"],
+    ["steps.the-black-hole.fields.0.unit","M☉"],
+    ["steps.the-black-hole.fields.1.unit","M☉"],
+    ["steps.the-black-hole.fields.2.unit","M☉"],
+    ["steps.design-a-comparison.fields.0.unit","M☉"],
+    ["steps.design-a-comparison.fields.1.unit","M☉"],
+    ["steps.design-a-comparison.fields.2.unit","L☉"],
+    ["steps.design-a-comparison.fields.3.unit","L☉"]
+   ],
+   "numbered": [
+    ["steps.the-same-age.fields.0.label","Sun-like star, luminosity at 4.6 Gyr"],
+    ["steps.the-same-age.fields.1.label","0.2 M☉ star, luminosity at 4.6 Gyr"],
+    ["steps.massive-versus-sun.fields.1.label","20 M☉, luminosity"],
+    ["steps.massive-versus-sun.fields.3.label","20 M☉, main sequence"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.the-same-age.fields.0.label","Estrella tipo Sol, luminosidad a 4,6 Gyr"],
+    ["steps.the-same-age.fields.1.label","Estrella de 0,2 M☉, luminosidad a 4,6 Gyr"],
+    ["steps.massive-versus-sun.fields.1.label","20 M☉, luminosidad"],
+    ["steps.massive-versus-sun.fields.3.label","20 M☉, secuencia principal"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [],
+  "decimals": [
+   [
+    "across-the-main-sequence.ratio",
+    2
+   ],
+   [
+    "the-agb-and-the-wind.lost",
+    2
+   ],
+   [
+    "the-same-age.ratio",
+    0
+   ]
+  ]
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "contraction-luminosity": {
+    "validate": {"calls":242,"distinct":3,"digest":"981c2e546c2a7bd5","samples":[{"level":"warn","message":"Three numbers, from the readout."},{"level":"error","message":"It should be getting smaller, not larger. Check which reading you took first — the earlier age goes in the first box."},{"level":"ok","message":"Contracting the whole time, and shining the whole time. It is not yet on the main sequence: the readout will not call it that until hydrogen fusion in the core is steady enough to hold the star up on its own."}]}
+   },
+   "arriving": {
+    "validate": {"calls":242,"distinct":2,"digest":"301f916e674a3a77","samples":[{"level":"warn","message":"All three, from the readout."},{"level":"warn","message":"That is not the arrival point. Press \"Next phase\" until the readout says Main sequence, and read the first values it shows."}]}
+   },
+   "the-sun-today": {
+    "validate": {"calls":242,"distinct":2,"digest":"08ac11b294775a8e","samples":[{"level":"warn","message":"All three, from the readout."},{"level":"warn","message":"Not at 4.6 Gyr yet. The readout&rsquo;s Age row is what to steer by."}]}
+   },
+   "across-the-main-sequence": {
+    "validate": {"calls":242,"distinct":4,"digest":"7efdb8e9903c9d6e","samples":[{"level":"warn","message":"Three numbers, from the readout."},{"level":"error","message":"It brightens. Check which reading went in which box."},{"level":"warn","message":"The end of the main sequence is at about 9.9 billion years for this star. The readout gives the age in Gyr."},{"level":"ok","message":"From 0.80 to 2.28 solar luminosities — nearly three times brighter — over 9.9 billion years, while the surface temperature barely moved. A star does not sit at one point on the diagram for its whole main-sequence life, and it does not slide down the main sequence either: it drifts slowly up and very slightly right."}]}
+   },
+   "compare-young-and-old": {
+    "validate": {"calls":232,"distinct":3,"digest":"40119c2682a606c2","samples":[{"level":"warn","message":"Both radii, from the list."},{"level":"error","message":"The later one is larger. Check the order."},{"level":"ok","message":"About 0.90 to 1.56 solar radii. Hold on to that number: three steps from now the same star is a hundred and seventy times the size of the Sun, and the contrast between those two changes is the point of this part of the investigation."}]}
+   },
+   "core-in-envelope-out": {
+    "validate": {"calls":242,"distinct":4,"digest":"13cb337567950154","samples":[{"level":"warn","message":"Three numbers, from the readout."},{"level":"warn","message":"The tip is much larger than that. Drag the playhead to the end of the red-giant branch — the readout&rsquo;s Radius row climbs into the hundreds."},{"level":"ok","message":"From about 1.6 to about 173 solar radii, and the surface cools from 5,700 K to about 3,100 K on the way. A hundredfold in radius, and it got cooler — which is exactly how something can be far more luminous and far redder at the same time."},{"level":"warn","message":"The tip is cooler than that. Keep going along the branch: the surface temperature falls as the star swells."}]}
+   },
+   "measure-the-giant": {
+    "validate": {"calls":242,"distinct":3,"digest":"beed89028d51a1aa","samples":[{"level":"warn","message":"All four, from the readout."},{"level":"warn","message":"Not at the tip yet. Keep going along the branch until the radius stops climbing."},{"level":"warn","message":"The mass should still be close to one solar mass. Almost nothing has been lost yet — that comes later."}]}
+   },
+   "the-agb-and-the-wind": {
+    "validate": {"calls":242,"distinct":4,"digest":"f2fc41281243bf16","samples":[{"level":"warn","message":"Both masses, from the readout."},{"level":"error","message":"It is losing mass, not gaining it. Check the order."},{"level":"warn","message":"Keep going: most of the loss happens near the end of the asymptotic giant branch. Press \"Next phase\" until the phase changes to the exposed core."},{"level":"ok","message":"It ends with about 0.54 solar masses of the 1.00 it was born with. Nearly half of the star is now expanding away from it as gas — and that gas is the next step."}]}
+   },
+   "white-dwarf-cooling": {
+    "validate": {"calls":242,"distinct":3,"digest":"527755b6c765f944","samples":[{"level":"warn","message":"All three, from the readout."},{"level":"warn","message":"Not at the end of the track yet. Drag the playhead all the way to the right."},{"level":"ok","message":"About 48,000 K, 1.6 solar luminosities, 0.018 solar radii — roughly twice the size of the Earth, holding 0.54 solar masses. It shines because it is hot, and it is hot because it used to be the inside of a star. Nothing is being burned. It will cool for longer than the Universe has existed."}]}
+   },
+   "how-long-was-each-part": {
+    "validate": {"calls":242,"distinct":4,"digest":"02a229b82c98acdd","samples":[{"level":"warn","message":"Three durations, from the readout."},{"level":"warn","message":"The main sequence is about 9.9 billion years — 9.88 Gyr on the readout."},{"level":"warn","message":"The thermally-pulsing stage is measured in millions, not billions. The readout gives it in Myr."},{"level":"ok","message":"Roughly 9.9 billion, 1.4 billion, and 1.4 million years. The last of those is a ten-thousandth of the first, and the playback gives it a third of the playhead. Nothing about how long a stage takes on screen means anything, and the readout says so on every stage."}]}
+   },
+   "the-same-age": {
+    "validate": {"calls":242,"distinct":3,"digest":"514fa02ba1f27500","samples":[{"level":"warn","message":"Both luminosities, from the readout."},{"level":"warn","message":"That is not the ratio the models give. About 1.11 and 0.0048 solar luminosities, both at 4.6 Gyr."},{"level":"ok","message":"About 230 times. And the honest caveat on the trillion-year figure: no 0.2 solar-mass star has ever finished its main sequence, anywhere, because the Universe is a thousandth of that age. It is a model integrated forward, not an observed lifetime, and nothing can check it."}]}
+   },
+   "massive-versus-sun": {
+    "validate": {"calls":242,"distinct":3,"digest":"0334b51f4698c763","samples":[{"level":"warn","message":"Four numbers, all positive."},{"level":"warn","message":"The 20 M☉ figure is in the tens of thousands of solar luminosities."},{"level":"ok","message":"Roughly forty thousand times the light for about a thousandth of the time. Multiply those out and the heavy star gets through about forty times as much fuel in total — which it has, being twenty times the mass and burning a larger fraction of it."}]}
+   },
+   "the-neutron-star": {
+    "validate": {"calls":232,"distinct":4,"digest":"03009aa419e1aa2b","samples":[{"level":"warn","message":"Both masses, from the readout."},{"level":"warn","message":"The \"How this is known\" row gives the mass the track still had when it stopped: about 9.4 solar masses."},{"level":"ok","message":"About 1.4 solar masses left from 9.4 — the rest is ejecta. And the crucial line: that 1.4 is not from the track. It is a published result quoted for a star of this mass, and the readout names the paper. Nothing in Gravitas computed it."},{"level":"warn","message":"The remnant is far lighter than that — the readout gives it as about 1.4 solar masses, with the sources spanning 1.2 to 1.6."}]}
+   },
+   "the-black-hole": {
+    "validate": {"calls":242,"distinct":4,"digest":"fc088a241fa59aa7","samples":[{"level":"warn","message":"Three numbers, from the readout."},{"level":"error","message":"The range runs low to high — check the order."},{"level":"ok","message":"Three admissions: the track stopped earlier here than for any other massive star — during helium ignition, with 35 of the original 40 solar masses still present; the remnant mass is a range spanning a factor of three and not a number; and a bright supernova is not expected. At this mass the likeliest route to a black hole is a failed explosion, where the envelope is not expelled but falls in."},{"level":"warn","message":"The range the readout gives is wider than that: 10 to 35 solar masses."}]}
+   },
+   "design-a-comparison": {
+    "validate": {"calls":242,"distinct":4,"digest":"078fdcf1eea92403","samples":[{"level":"warn","message":"Four numbers, all positive."},{"level":"warn","message":"Two different models, so the comparison has a variable in it."},{"level":"ok","message":"The heavier of your two is the brighter. On the main sequence that is always true and steeply so. If you compared them at the same age rather than the same stage, check whether the heavier one has already left its main sequence — that is where this stops being reliable."},{"level":"ok","message":"Your lighter star is the brighter one — which means you have caught the heavier one somewhere the main-sequence relation does not apply, or the lighter one as a giant. Either is a real result and worth writing down in the notebook entry."}]}
+   }
+  },
+  "es": "same"
+ }
+}

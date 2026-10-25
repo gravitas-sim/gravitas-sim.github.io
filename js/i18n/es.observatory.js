@@ -32,6 +32,14 @@ export const ES_OBSERVATORY = {
   'obs.fixture.sdss-m': 'SDSS DR18: una estrella M',
   'obs.fixture.gwosc-events': 'Cinco eventos de ondas gravitacionales (GWOSC)',
   'obs.fixture.tess-aperture': 'HD 209458: la máscara de apertura de TESS',
+  'obs.fixture.tess-frame':
+    'HD 209458: un cuadro de TESS, flujo calibrado y su error',
+  'obs.fixture.sdo-hmi-sun':
+    'El Sol en luz continua de HMI (una imagen, solo para marcar)',
+  'obs.fixture.galileo-moon':
+    'La Luna vista por Galileo (una imagen, solo para marcar)',
+  'obs.fixture.hirise-cerberus-fossae':
+    'Marte visto por HiRISE: Cerberus Fossae (una imagen, solo para marcar)',
 
   'obs.fixture.ngc2420-photometry':
     'NGC 2420: fotometría de SDSS (un cúmulo y su campo)',
@@ -47,7 +55,11 @@ export const ES_OBSERVATORY = {
     'Isócronas de MIST en las bandas de SDSS (un modelo, no una observación)',
   'obs.import.file': 'O importa tu propio archivo',
   'obs.import.hint':
-    'CSV, texto separado por tabuladores o por punto y coma, o JSON, hasta 5 MB y 200.000 filas. No sale de este dispositivo.',
+    'CSV, texto separado por tabuladores o por punto y coma, o JSON, hasta 5 MB y 200.000 filas; o una imagen FITS, PNG o JPEG de hasta 4.194.304 píxeles. No sale de este dispositivo.',
+  'obs.import.imageHelp':
+    'Las imágenes son de dos clases. Un cuadro FITS puede ser cuantitativo: sus valores de píxel miden luz, y con la cabecera y lo que declares de él se pueden permitir marcas, fotometría y astrometría. Un PNG o un JPEG es solo para mostrar: sus números son niveles de gris hechos para el ojo, así que puedes marcarlo y medirlo en píxeles, pero la fotometría y la astrometría se rechazan, porque necesitan píxeles que cuenten luz y posiciones ligadas al cielo.',
+  'obs.imp.offline':
+    'No se pudo cargar el lector de imágenes. Se descarga la primera vez que eliges una imagen, así que necesita la red una vez.',
   'obs.import.title': 'Revisa lo que vas a importar',
   'obs.import.summary':
     '{rows} filas y {columns} columnas, {delimiter}, {header}.',
@@ -290,5 +302,30 @@ export const ES_OBSERVATORY = {
   'obs.arc.title':
     'O busca las épocas de Gaia de una estrella en el CDS (en vivo, opcional)',
   'obs.ms.title': 'Medir, y el flujo',
+  'obs.cal.title': 'Coordenadas celestes de la imagen',
+  'obs.cal.offline':
+    'La herramienta de coordenadas celestes se está cargando. Se descarga al abrirla por primera vez, así que necesita la red esa primera vez.',
+  'obs.ph.title': 'Fotometría en la imagen',
+  'obs.ov.title': 'Catálogos, parpadeo y comparación',
+  'obs.ov.offline':
+    'La herramienta de superposición y parpadeo se está cargando. Se descarga al abrirla por primera vez, así que necesita la red esa primera vez.',
+  'obs.dt.title': 'Fuentes y ancho de las estrellas',
+  'obs.dt.offline':
+    'La herramienta de búsqueda de fuentes se está cargando. Se descarga al abrirla por primera vez, así que necesita la red esa primera vez.',
+  'obs.inj.title': 'Completitud: lo que el detector no ve',
+  'obs.inj.offline':
+    'La herramienta de completitud se está cargando. Se descarga al abrirla por primera vez, así que necesita la red esa primera vez.',
+  'obs.sq.title': 'De imágenes a una curva de luz',
+  'obs.sq.offline':
+    'El proceso de imágenes se está cargando. Se descarga al abrirlo por primera vez, así que necesita la red esa primera vez.',
+  'obs.ser.title': 'Movimiento y paralaje en el tiempo',
+  'obs.ser.offline':
+    'La herramienta de movimiento y paralaje se está cargando. Se descarga al abrirla por primera vez, así que necesita la red esa primera vez.',
+  'obs.orb.title':
+    'Órbita de una estrella binaria y trayectoria de un objeto en movimiento',
+  'obs.orb.offline':
+    'Las herramientas de órbita y trayectoria se están cargando. Se descargan al abrirlas por primera vez, así que necesitan la red la primera vez.',
+  'obs.ph.offline':
+    'La herramienta de fotometría se está cargando. Se descarga al abrirla por primera vez, así que necesita la red esa primera vez.',
   'obs.gd.title': 'Investigaciones guiadas',
 };

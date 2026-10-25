@@ -265,6 +265,14 @@ export const EN_COURSE = {
     'This course file is from another version of the format.',
   'course.error.id': 'Lower-case words joined by hyphens.',
   'course.error.seed': 'A word such as orbit-1.',
+  'course.error.profile':
+    'The profile is “collection”, or the field is left out.',
+  'course.error.collectionUnits': 'A collection has exactly one unit.',
+  'course.error.collectionField': 'A collection has no “{field}”.',
+  'course.error.collectionItem':
+    'A collection holds items in order: no activities, no optional paths, no “needs”.',
+  'course.error.term':
+    'A short label such as Spring 2027: up to 40 characters, no markup.',
   'course.error.tooMany': 'At most {max} items.',
   'course.error.access': 'Free online, through a library, or in print.',
   'course.error.assignmentId': "The activity's id and the date it was made.",
@@ -277,6 +285,8 @@ export const EN_COURSE = {
   'course.error.date': 'A date such as 2026-09-28.',
   'course.error.doi': 'A DOI such as 10.1119/1.1234.',
   'course.error.duplicate': '“{id}” is used above.',
+  'course.error.outcome': 'The course has no outcome “{id}”.',
+  'course.error.outcomes': 'A list of outcome ids, each once.',
   'course.error.entity': 'Plain text only.',
   'course.error.esOf':
     'The record of which English the Spanish translates is damaged.',

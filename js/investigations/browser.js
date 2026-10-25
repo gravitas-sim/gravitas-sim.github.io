@@ -9,6 +9,7 @@
 // each time the engine mounts or unmounts its markup.
 // =============================================================================
 
+import { put } from '../storage/local.js';
 import { t } from '../i18n/index.js';
 import { escapeHtml as escape, prose } from '../lessonMarkup.js';
 import {
@@ -38,6 +39,7 @@ import {
   wireThumbnailFallbacks,
 } from '../scenarioBrowser.js';
 import { loadFailed } from '../notify.js';
+import { KEY_NEXT_CONTEXT } from '../names.js';
 
 const attr = text => escape(text).replace(/"/g, '&quot;');
 
@@ -398,12 +400,13 @@ function renderSequences() {
   els.sequenceList.querySelectorAll('[data-sequence-lesson]').forEach(btn => {
     btn.addEventListener('click', () => {
       try {
-        localStorage.setItem(
-          'gravitas_next_context',
+        put(
+          KEY_NEXT_CONTEXT,
           JSON.stringify({
             k: 'seq',
             id: btn.closest('[data-seq]').dataset.seq,
-          })
+          }),
+          'preferences'
         );
       } catch {
         /* no storage: no next offered */
@@ -678,7 +681,11 @@ export async function openBrowser() {
     // all. The search box is the right fallback - it is both focusable and
     // the thing they need in order to see any lessons again.
     initialFocus: () => els.list?.querySelector('.inv-card') || els.search,
+    // A class rather than body:has(), so the style recalculation that follows
+    // is one class on one element, not a selector matched on every DOM change.
+    onClose: () => document.body.classList.remove('investigation-browser-open'),
   });
+  document.body.classList.add('investigation-browser-open');
   // Both of them, now that they are laid out. #investigationBrowserScroll is
   // the list, but the element that actually scrolls is
   // #investigationBrowserContent, and resetting only the former left the panel

@@ -42,6 +42,7 @@ import { julianDate, localMidnight, observingRun } from './observingWindow.js';
 import { formatEpochList, spectralWindow } from './rvSchedule.js';
 import { MONO, surface, token, typeAt } from './widgetCanvas.js';
 import { t } from './i18n/index.js';
+import { fixed } from './format.js';
 
 /**
  * La Silla. Chosen because it is where HARPS is and because the target the
@@ -88,7 +89,7 @@ export const SIDEREAL_FREQUENCY = 1 / SIDEREAL_DAY;
  */
 const runCache = new Map();
 function runFor(airmassLimit) {
-  const key = airmassLimit.toFixed(2);
+  const key = fixed(airmassLimit, 2);
   if (!runCache.has(key)) {
     runCache.set(
       key,
@@ -290,25 +291,25 @@ const PLANNER = {
         get label() {
           return t('obsW.usableWindowPerNight');
         },
-        value: `${c.medianWindowHours.toFixed(2)} h`,
+        value: `${fixed(c.medianWindowHours, 2)} h`,
       },
       {
         get label() {
           return t('obsW.theWindowOpensEarlierBy');
         },
-        value: `${c.driftMinutes.toFixed(1)} min / night`,
+        value: `${fixed(c.driftMinutes, 1)} min / night`,
       },
       {
         get label() {
           return t('obsW.baseline');
         },
-        value: `${c.baseline.toFixed(2)} d`,
+        value: `${fixed(c.baseline, 2)} d`,
       },
       {
         get label() {
           return t('obsW.powerAtTheSiderealDay');
         },
-        value: c.atSidereal.toFixed(3),
+        value: fixed(c.atSidereal, 3),
         emphasis: c.atSidereal > 0.5,
       },
       {
@@ -316,7 +317,7 @@ const PLANNER = {
           return t('obsW.strongestAlias');
         },
         value: peak
-          ? `${peak.power.toFixed(3)} at ${peak.period.toFixed(4)} d`
+          ? `${fixed(peak.power, 3)} at ${fixed(peak.period, 4)} d`
           : '—',
       },
       {
@@ -442,7 +443,7 @@ const PLANNER = {
       ctx.fillStyle = warn;
       ctx.textAlign = 'left';
       ctx.fillText(
-        `${t('obsW.siderealDay')} ${SIDEREAL_FREQUENCY.toFixed(5)} c/d`,
+        `${t('obsW.siderealDay')} ${fixed(SIDEREAL_FREQUENCY, 5)} c/d`,
         fx(SIDEREAL_FREQUENCY) + 4,
         gTop + 10
       );
@@ -450,7 +451,7 @@ const PLANNER = {
       ctx.font = `${typeAt(10)}`;
       ctx.textAlign = 'center';
       for (const f of [0, 0.5, 1, 1.5, 2]) {
-        ctx.fillText(f.toFixed(1), fx(f), gBottom + 12);
+        ctx.fillText(fixed(f, 1), fx(f), gBottom + 12);
       }
       ctx.textAlign = 'left';
       ctx.fillText(t('obsW.cyclesPerDay'), left, gBottom + 24);
@@ -458,7 +459,7 @@ const PLANNER = {
       ctx.font = typeAt(10);
       ctx.textAlign = 'right';
       ctx.fillStyle = ink;
-      ctx.fillText(`W = ${c.atSidereal.toFixed(3)}`, right, gTop + 10);
+      ctx.fillText(`W = ${fixed(c.atSidereal, 3)}`, right, gTop + 10);
     }
   },
 };

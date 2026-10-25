@@ -29,6 +29,13 @@ import {
   work,
 } from './myWork/transfer.js';
 import { mountShell } from './shell.js';
+import {
+  ID_INVESTIGATION_PROGRESS,
+  KEY_EXPERIMENT_PREFIX,
+  KEY_GUIDES,
+  KEY_LOCALE,
+  KEY_STUDENT_NAME,
+} from './names.js';
 
 const $ = id => document.getElementById(id);
 const es = () => document.documentElement.lang.startsWith('es');
@@ -196,26 +203,69 @@ function sections() {
       ids: [a.key],
     })
   );
-  out.mwCourses = m.courses.map(c =>
-    item({
-      title: pick(c.title),
-      href: c.href,
-      open: L('Open course', 'Abrir curso'),
-      ids: [],
-      buttons: false,
-      extra: `<ul class="mw-units">${c.units
-        .map(
-          u =>
-            `<li>${esc(pick(u.title))}: ${esc(
+  out.mwCourses = [
+    ...(m.collections?.saved
+      ? [
+          item({
+            title: L('Saved items', 'Elementos guardados'),
+            facts: [
               L(
-                `${u.finished} of ${u.total} finished, ${u.begun} begun`,
-                `${u.finished} de ${u.total} terminadas, ${u.begun} empezadas`
-              )
-            )}</li>`
-        )
-        .join('')}</ul>`,
-    })
-  );
+                `${m.collections.saved} saved`,
+                `${m.collections.saved} guardados`
+              ),
+            ],
+            href: '/library/',
+            open: L('Open in the Library', 'Abrir en la Biblioteca'),
+            ids: [],
+            buttons: false,
+          }),
+        ]
+      : []),
+    ...(m.collections?.received ?? []).map(c =>
+      item({
+        title: pick(c.title) || c.title.en,
+        facts: [
+          L('Collection', 'Colección'),
+          L(`${c.n} items`, `${c.n} elementos`),
+        ],
+        href: '/library/',
+        open: L('Open in the Library', 'Abrir en la Biblioteca'),
+        ids: [],
+        buttons: false,
+      })
+    ),
+    ...(m.terms ?? []).map(c =>
+      item({
+        title: pick(c.title) || c.title.en,
+        facts: [
+          L(`Term: ${c.term}`, `Periodo: ${c.term}`),
+          c.when ? L(`opened ${day(c.when)}`, `abierto el ${day(c.when)}`) : '',
+        ],
+        ids: [],
+        buttons: false,
+      })
+    ),
+    ...m.courses.map(c =>
+      item({
+        title: pick(c.title),
+        href: c.href,
+        open: L('Open course', 'Abrir curso'),
+        ids: [],
+        buttons: false,
+        extra: `<ul class="mw-units">${c.units
+          .map(
+            u =>
+              `<li>${esc(pick(u.title))}: ${esc(
+                L(
+                  `${u.finished} of ${u.total} finished, ${u.begun} begun`,
+                  `${u.finished} de ${u.total} terminadas, ${u.begun} empezadas`
+                )
+              )}</li>`
+          )
+          .join('')}</ul>`,
+      })
+    ),
+  ];
   out.mwExperiments = m.experiments.map(x =>
     item({
       title: x.title,
@@ -455,7 +505,7 @@ const labelOf = (model, key) => {
   if (all) return pick(all.title) || (all.kind && kind(all.kind)) || key;
   if (model.evidence.notebook?.key === key)
     return L('Evidence notebook', 'Cuaderno de evidencia');
-  return key === 'gravitas_student_name' ? L('Your name', 'Tu nombre') : key;
+  return key === KEY_STUDENT_NAME ? L('Your name', 'Tu nombre') : key;
 };
 
 let incoming = null;
@@ -519,7 +569,7 @@ async function readFile(file) {
       )
     );
   }
-  if (data?.kind === 'gravitas.investigation.progress')
+  if (data?.kind === ID_INVESTIGATION_PROGRESS)
     return bad(
       L(
         'That is a backup of one investigation. Restore it from inside that investigation.',
@@ -595,7 +645,7 @@ async function remove({ ids, sub, all }) {
     const rec = s.records.find(r => r.id === key);
     if (!rec) continue;
     const c = store.collection(rec.collection);
-    if (sub && key === 'gravitas_guides') {
+    if (sub && key === KEY_GUIDES) {
       const { [sub]: _gone, ...rest } = rec.value;
       void _gone;
       if (Object.keys(rest).length) await c.put(key, rest);
@@ -603,7 +653,7 @@ async function remove({ ids, sub, all }) {
     } else {
       await c.delete(key);
     }
-    if (key.startsWith('gravitas_experiment_') && !key.includes('checkpoint')) {
+    if (key.startsWith(KEY_EXPERIMENT_PREFIX) && !key.includes('checkpoint')) {
       const index = s.records.find(r => r.id === INDEX_KEY);
       if (index) {
         const items = (index.value.items ?? []).filter(
@@ -709,7 +759,7 @@ const memory = () => {
 
 async function start() {
   try {
-    const stored = getText('gravitas_locale') || navigator.language;
+    const stored = getText(KEY_LOCALE) || navigator.language;
     document.documentElement.lang = stored.startsWith('es') ? 'es' : 'en';
   } catch {
     /* the page's own language stands */

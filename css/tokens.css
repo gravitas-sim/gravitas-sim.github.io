@@ -349,6 +349,14 @@
       --duration-slow: 1ms;
     }
   }
+
+  /* The reader's own override (js/quality.js, INTERACTION.md): the same
+     collapse, asked for on this device rather than by the system. */
+  :root[data-motion] {
+    --duration-fast: 1ms;
+    --duration: 1ms;
+    --duration-slow: 1ms;
+  }
 }
 
 /* =============================================================================
@@ -419,5 +427,70 @@
     .attribution {
       background: var(--surface-0);
     }
+  }
+}
+
+/* =============================================================================
+   While the lesson browser or a lesson is open
+   -----------------------------------------------------------------------------
+   The same solid surfaces as above, for everyone, for as long as the lesson
+   browser or a lesson panel is up (the browser is where the stall begins). Linux software WebKit stops producing frames once the lesson
+   overlay opens over this many stacked backdrop-filter layers (measured in CI
+   with the layers removed one group at a time: only removing all of them
+   brought the frames back), and the lesson is where a student is looking at a
+   moving simulation and reading at once. Nothing moves or resizes; the panels
+   are the opaque token they were blended from. The readout and the attribution
+   chip sit directly on the canvas, carry light text in every theme and have no
+   panel behind them, so they lose the blur and keep their own background.
+   ========================================================================== */
+@layer overrides {
+  :is(body.investigation-open, body.investigation-browser-open) * {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  :is(body.investigation-open, body.investigation-browser-open) .ui-container,
+  :is(body.investigation-open, body.investigation-browser-open) .timeline-bar,
+  :is(body.investigation-open, body.investigation-browser-open) .object-picker,
+  :is(body.investigation-open, body.investigation-browser-open)
+    .placement-status,
+  :is(body.investigation-open, body.investigation-browser-open) .obs-panel,
+  :is(body.investigation-open, body.investigation-browser-open)
+    .light-curve-container,
+  :is(body.investigation-open, body.investigation-browser-open)
+    .sonification-panel,
+  :is(body.investigation-open, body.investigation-browser-open)
+    .scenario-info-content,
+  :is(body.investigation-open, body.investigation-browser-open)
+    .shortcut-overlay,
+  :is(body.investigation-open, body.investigation-browser-open)
+    .transformation-notification,
+  :is(body.investigation-open, body.investigation-browser-open)
+    .recording-badge,
+  :is(body.investigation-open, body.investigation-browser-open) .update-badge,
+  :is(body.investigation-open, body.investigation-browser-open)
+    .mobile-menu-toggle,
+  :is(body.investigation-open, body.investigation-browser-open)
+    .floating-close-chip,
+  :is(body.investigation-open, body.investigation-browser-open) .footer-button,
+  :is(body.investigation-open, body.investigation-browser-open) .insp-pin,
+  :is(body.investigation-open, body.investigation-browser-open) .inv-card-clock,
+  :is(body.investigation-open, body.investigation-browser-open) .gs-shell,
+  :is(body.investigation-open, body.investigation-browser-open)
+    #objectInspector,
+  :is(body.investigation-open, body.investigation-browser-open) #settingsPanel,
+  :is(body.investigation-open, body.investigation-browser-open)
+    #scenarioListModal,
+  :is(body.investigation-open, body.investigation-browser-open)
+    #closeScenarioList,
+  :is(body.investigation-open, body.investigation-browser-open)
+    #investigationBrowser,
+  :is(body.investigation-open, body.investigation-browser-open)
+    #investigationFinish,
+  :is(body.investigation-open, body.investigation-browser-open) #shareModal,
+  :is(body.investigation-open, body.investigation-browser-open) #dataExport,
+  :is(body.investigation-open, body.investigation-browser-open)
+    #mobileInstructions {
+    background: var(--surface-1);
   }
 }

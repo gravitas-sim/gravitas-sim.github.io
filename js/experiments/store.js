@@ -24,6 +24,13 @@
 //   alert that says "failed".
 // =============================================================================
 
+import { put, drop } from '../storage/local.js';
+import {
+  ID_EXPERIMENT_RESULT,
+  KEY_EXPERIMENTS_INDEX,
+  KEY_EXPERIMENT_PREFIX,
+} from '../names.js';
+
 /**
  * A record is a gravitas.experiment-result/1 of kind `comparison`, with `v`
  * kept beside it: `v` is the store's own version, and migrate() reads it, so a
@@ -36,7 +43,7 @@ const refuse = reason => ({ ok: false, record: null, reason });
 const failed = (reason, bytes, limit) => ({ ok: false, reason, bytes, limit });
 
 const STAMP = {
-  format: 'gravitas.experiment-result',
+  format: ID_EXPERIMENT_RESULT,
   formatVersion: 1,
   kind: 'comparison',
 };
@@ -54,9 +61,9 @@ export const SCHEMA_VERSION = 3;
 const MISRECORDED = ['energy_drift', 'angular_drift'];
 
 /** One key per experiment, so a large one cannot slow down reading a small one. */
-export const KEY_PREFIX = 'gravitas_experiment_';
+export const KEY_PREFIX = KEY_EXPERIMENT_PREFIX;
 /** The index, so listing does not have to parse every experiment. */
-export const INDEX_KEY = 'gravitas_experiments_index';
+export const INDEX_KEY = KEY_EXPERIMENTS_INDEX;
 
 /**
  * Caps, in characters of serialized JSON.
@@ -131,7 +138,12 @@ function writeIndex(items) {
   const s = storage();
   if (!s) return false;
   try {
-    s.setItem(INDEX_KEY, JSON.stringify({ v: SCHEMA_VERSION, items }));
+    put(
+      INDEX_KEY,
+      JSON.stringify({ v: SCHEMA_VERSION, items }),
+      'experiments',
+      s
+    );
     return true;
   } catch {
     return false;
@@ -314,7 +326,7 @@ export function saveExperiment(record) {
   }
 
   try {
-    s.setItem(KEY_PREFIX + record.id, text);
+    put(KEY_PREFIX + record.id, text, 'experiments', s);
   } catch (err) {
     // QuotaExceededError, or a private-mode refusal. Either way the caller
     // needs to hear "your browser will not store this", not a stack trace.
@@ -338,7 +350,7 @@ export function saveExperiment(record) {
     // The experiment is stored but unlisted, which is worse than not stored:
     // it occupies the budget and cannot be found. Take it back out.
     try {
-      s.removeItem(KEY_PREFIX + record.id);
+      drop(KEY_PREFIX + record.id, s);
     } catch {
       /* nothing further to try */
     }
@@ -357,7 +369,7 @@ export function deleteExperiment(id) {
   const s = storage();
   if (!s) return false;
   try {
-    s.removeItem(KEY_PREFIX + id);
+    drop(KEY_PREFIX + id, s);
   } catch {
     /* it may already be gone; the index is what listing reads */
   }

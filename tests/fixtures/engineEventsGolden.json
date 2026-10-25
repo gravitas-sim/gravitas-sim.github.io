@@ -173,7 +173,7 @@
         "targetType": "Asteroid"
       }
     },
-    "sha256": "c5a8c09d7c4b358ce890274cf74a61a80d23ead80fff6d4b02041292b15028f2"
+    "sha256": "c044ce250cca0ede985b64be583ba1b339bc496c915411ec10de1d0612af4ad8"
   },
   "supernova-remnant:3": {
     "counts": {
@@ -536,7 +536,7 @@
         "modelOwned": false,
         "position": {
           "x": "217.438087885",
-          "y": "-156.11089999"
+          "y": "-156.110899991"
         },
         "primaryId": "6",
         "resultId": "235",
@@ -552,12 +552,12 @@
           "secondary": "GasGiant"
         },
         "velocity": {
-          "x": "3.40539532996",
-          "y": "2.30468266238"
+          "x": "3.40539532999",
+          "y": "2.30468266231"
         }
       }
     },
-    "sha256": "a65ebfc6cc17d3d3f6860f731274432dcfff4ba592ad822f29e2eae556c94025"
+    "sha256": "cdf848e95c5c7a8e5d81c7115dbf465a040de8c6081cc98a79cfe74e0cff9f84"
   },
   "hungry-hungry-holes:3": {
     "counts": {

@@ -1,0 +1,50 @@
+{
+ "cut": "orbital-speed/demonstration",
+ "lesson": "keplers-laws",
+ "ok": true,
+ "reason": null,
+ "assignment": {
+  "k": "gravitas.assignment",
+  "v": 2,
+  "i": "act-orbital-speed-demo",
+  "l": "keplers-laws",
+  "t": "orbital-speed",
+  "n": "Golden intro",
+  "s": [
+   "eight-minutes-of-arc",
+   "where-does-it-move-fastest",
+   "watch-it-happen",
+   "equal-areas-however-you-slice"
+  ],
+  "f": [
+   "ac4f2f95",
+   "0086f3c7",
+   "5fd14104",
+   "086efbfc"
+  ],
+  "c": "2026-01-02",
+  "p": [
+   "golden-pack",
+   "1.2.0"
+  ]
+ },
+ "sids": [
+  "eight-minutes-of-arc",
+  "where-does-it-move-fastest",
+  "watch-it-happen",
+  "equal-areas-however-you-slice"
+ ],
+ "added": [
+  "eight-minutes-of-arc"
+ ],
+ "unknown": [],
+ "valid": false,
+ "pins": {
+  "none": "none",
+  "same": "same",
+  "compatible": "compatible",
+  "major": "major",
+  "moved": "moved",
+  "unpinned": "unpinned"
+ }
+}

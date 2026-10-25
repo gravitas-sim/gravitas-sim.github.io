@@ -77,23 +77,23 @@ export const COPYRIGHT = { year: 2025, holder: 'Carl Ziegler' };
  */
 export const RELEASE = {
   // Set by RELEASING.md when a tag is cut. `null` means unreleased.
-  version: '2.0.0',
+  version: '2.1.0',
   // ISO date of the GitHub release, not the day the file was edited. If the
   // tag slips past this date, change this and regenerate before tagging: a
   // citation that names the wrong day is a citation nobody can check against
   // the archive.
-  dateReleased: '2026-10-16',
+  dateReleased: '2026-10-24',
   // Minted by Zenodo when the release is archived, and copied from the record
   // rather than composed by hand. It cannot be inside the tag: with the
   // GitHub-Zenodo workflow the identifier does not exist until the release is
   // published, so it is recorded afterwards and the archive does not contain
   // it. That is expected - see RELEASING.md.
   //
-  // The 2.0.0 version DOI, copied from the Zenodo record. The 1.0.0 version DOI
-  // (10.5281/zenodo.22800610) is not this release's and stays out of every file
-  // generated from this constant; RELEASING.md and OWNER_ACTIONS.md record it
-  // as what 1.0.0 produced.
-  doi: '10.5281/zenodo.23425533',
+  // Null until Zenodo mints the 2.1.0 version DOI, so no generated file claims
+  // the 2.0.0 version DOI (10.5281/zenodo.23425533) for 2.1.0. That DOI and the
+  // 1.0.0 one (10.5281/zenodo.22800610) are recorded in RELEASING.md as what
+  // those releases produced.
+  doi: null,
   // The concept DOI, which is stable across versions: it resolves to whichever
   // release is newest. Right for a badge or a "cite the software" link, wrong
   // for citing the version somebody actually ran.
@@ -173,7 +173,7 @@ export const LICENSE_NOTE =
   'guided investigations, the instructor guides and answer keys, the user ' +
   'manual, the documentation and the original figures - is Creative Commons ' +
   'Attribution 4.0 International (CC BY 4.0). Third-party components keep ' +
-  'their own licenses and attribution: three.js and Chart.js (MIT), the Inter, ' +
+  'their own licenses and attribution: three.js (MIT), the Inter, ' +
   'Poppins and Roboto Mono families (SIL OFL 1.1), the Transit of Venus ' +
   'photograph (CC BY 2.5, Brocken Inaglory), gravitational-wave strain from ' +
   'the Gravitational Wave Open Science Center (CC BY 4.0), derived MIST ' +

@@ -1,0 +1,22 @@
+{
+  "format": "gravitas.photometry-failed-legs/1",
+  "recorded": "After the first full run of the committed thresholds against the production modules (Prompt 180). These legs FAIL as committed. No bound was moved: tests/fixtures/photometry/thresholds.json is as committed first, and only Carl resets a threshold, with a register row (D-R10-56). tests/photometry.test.js holds each of these rows to this record: it must still fail, so a change that fixes one cannot pass unnoticed and an unrecorded failure cannot hide.",
+  "node": "v24.4.0",
+  "legs": {
+    "a1.fluxBias.bright": {
+      "measured": -0.5786,
+      "bound": 0.2,
+      "cause": "At 150,000 electrons the statistical error of the aperture (400 electrons) is smaller than the sampling error of the area weights: an edge pixel is counted by the fraction of its area inside the circle, which assumes the flux is uniform across the pixel, and a pixel-sampled Gaussian of 3 pixels FWHM is not. At the committed radius (1.5 FWHM, 3.5 sigma) that leaves 0.16 percent of the flux out of the sum (the noiseless frame gives -1.6e-3 of F), which is 0.6 sigma at this level. It is the method's floor and not an arithmetic error: the same sum agrees with photutils to 1e-15 (b1)."
+    },
+    "c1.coverage68.bright": {
+      "measured": 0.5925,
+      "bound": [0.62, 0.745],
+      "cause": "The same sampling bias (a1.fluxBias.bright) moves every bright-level flux by 0.6 sigma, so fewer fall within one stated sigma. The stated sigma is right (the 95 percent coverage of the same ensemble is inside its bound, and the faint and mid levels cover 68 percent as stated); the aperture is biased."
+    },
+    "a3.curveOfGrowth": {
+      "measured": 0.03703,
+      "bound": 0.004,
+      "cause": "The committed range starts at 0.5 sigma (0.64 pixel), where the aperture is smaller than the pixel the flux is sampled in. There the area weight cannot know where inside the pixel the light fell: the error is 1.4 percent of the flux at 0.5 sigma, 3.4 percent at 1.5 sigma, 3.1 percent at 2 sigma, 1.2 percent at 2.5 sigma, 0.65 percent at 3 sigma, 0.16 percent at 3.5 sigma (the default aperture), 0.03 percent at 4 sigma and below 1e-5 from 5 sigma, against the noiseless frame. The bound holds from 3.5 sigma upward. Centre-in-pixel weights, for comparison, are worse in places (up to 7 percent) and better at one radius by luck."
+    }
+  }
+}

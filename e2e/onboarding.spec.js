@@ -7,7 +7,7 @@
 // deeper depth. Nothing is sent anywhere; every check reads the page.
 // =============================================================================
 
-import { test, expect } from './fixtures.js';
+import { test, expect, openMore } from './fixtures.js';
 
 const CARD = '#scenarioInfoBox';
 const orient = page => page.locator('#welOrient');
@@ -72,7 +72,9 @@ test.describe('first run', () => {
     await app.boot({ firstVisit: true });
     await page.getByRole('button', { name: 'Skip the introduction' }).click();
     await expect(orient(page)).toBeHidden();
-    await expect(page.locator('.wel-hero [data-action="enter"]')).toBeFocused();
+    await expect(
+      page.locator('.wel-start [data-action="enter"]')
+    ).toBeFocused();
     expect(
       await page.evaluate(() =>
         localStorage.getItem('gravitas_orientation_seen_v1')
@@ -154,6 +156,8 @@ test.describe('in a lesson', () => {
     await expect(where).toContainText(/Step \d+ of \d+/);
     await expect(where).toContainText('2 min of 35-45 min');
 
+    await openMore(page);
+
     await page.locator('#investigationHelp').click();
     const panel = page.locator('#investigationHelpPanel');
     await expect(panel).toBeVisible();
@@ -185,12 +189,17 @@ test.describe('in a lesson', () => {
     );
     await page.locator('#investigationNext').click();
     const list = page.locator('#investigationNextList');
-    await expect(list.locator('a')).toHaveCount(1);
-    await expect(list.locator('a')).toContainText('Next in');
-    await expect(list.locator('a')).toHaveAttribute(
+    // The sequence it came from first; the Library's own relations after it
+    // (Prompt 163), never the same lesson twice.
+    await expect(list.locator('a').first()).toContainText('Next in');
+    await expect(list.locator('a').first()).toHaveAttribute(
       'href',
       /investigation=retrograde-motion/
     );
+    await expect(
+      list.locator('a[href*="investigation=retrograde-motion"]')
+    ).toHaveCount(1);
+    await expect(list.locator('a', { hasText: 'Related:' })).toHaveCount(1);
     // The way on to the Library and My work is always there.
     await expect(page.locator('.inv-next a[href="/my-work/"]')).toBeVisible();
   });
@@ -208,11 +217,33 @@ test.describe('in a lesson', () => {
     );
     await page.locator('#investigationNext').click();
     const list = page.locator('#investigationNextList');
-    await expect(list.locator('a')).toHaveCount(1);
-    await expect(list.locator('a')).toHaveAttribute(
+    await expect(list.locator('a').first()).toHaveAttribute(
       'href',
       /investigation=retrograde-motion/
     );
+  });
+
+  test('with no sequence or course to come from, it offers what the Library says comes next and what goes with it', async ({
+    page,
+    app,
+  }) => {
+    await resumeAtEnd(page, app);
+    await page.evaluate(() => localStorage.removeItem('gravitas_next_context'));
+    await page.locator('#investigationNext').click();
+    const list = page.locator('#investigationNextList');
+    await expect(list.locator('a', { hasText: 'Next:' }).first()).toBeVisible();
+    await expect(list.locator('a', { hasText: 'Related:' })).toHaveCount(1);
+    // Following one is noted in the one resume record.
+    const first = list.locator('a', { hasText: 'Next:' }).first();
+    const href = await first.getAttribute('href');
+    await first.evaluate(a =>
+      a.addEventListener('click', e => e.preventDefault(), { once: true })
+    );
+    await first.click();
+    const record = await page.evaluate(() =>
+      JSON.parse(localStorage.getItem('gravitas_resume'))
+    );
+    expect(record.items[0].route).toBe(href);
   });
 
   test('a course item offers the course’s next one, and the deeper depth', async ({

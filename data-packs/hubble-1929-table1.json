@@ -153,7 +153,7 @@
     "widgets": [],
     "investigations": []
   },
-  "offline": "optional",
+  "offline": "idle",
   "derived": {
     "file": "js/data/observations/hubble1929Table1.js",
     "bytes": 3942,

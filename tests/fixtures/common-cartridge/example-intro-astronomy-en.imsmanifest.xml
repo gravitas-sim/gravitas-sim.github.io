@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest identifier="gravitas-intro-astronomy-1.0.0-en" xmlns="http://www.imsglobal.org/xsd/imsccv1p3/imscp_v1p1" xmlns:lomm="http://ltsc.ieee.org/xsd/imsccv1p3/LOM/manifest" xmlns:lomr="http://ltsc.ieee.org/xsd/imsccv1p3/LOM/resource" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.imsglobal.org/xsd/imsccv1p3/imscp_v1p1 http://www.imsglobal.org/profile/cc/ccv1p3/ccv1p3_imscp_v1p2_v1p0.xsd http://ltsc.ieee.org/xsd/imsccv1p3/LOM/manifest http://www.imsglobal.org/profile/cc/ccv1p3/LOM/ccv1p3_lommanifest_v1p0.xsd http://ltsc.ieee.org/xsd/imsccv1p3/LOM/resource http://www.imsglobal.org/profile/cc/ccv1p3/LOM/ccv1p3_lomresource_v1p0.xsd">
+  <metadata>
+    <schema>IMS Thin Common Cartridge</schema>
+    <schemaversion>1.3.0</schemaversion>
+    <lomm:lom>
+      <lomm:general>
+        <lomm:identifier><lomm:catalog>GUID</lomm:catalog><lomm:entry>gravitas-intro-astronomy-1.0.0-en</lomm:entry></lomm:identifier>
+        <lomm:title><lomm:string language="en">Introductory astronomy: gravity, starlight and other worlds</lomm:string></lomm:title>
+        <lomm:language>en</lomm:language>
+        <lomm:description><lomm:string language="en">Four units for a first course in astronomy, built from Gravitas investigations that are already published. Students watch the sky move and explain it, find what decides whether an orbit comes back, read a star's temperature and size from its light, and measure a real planet around another star. Each unit has an optional reading or model for students who want the background first, and an advanced investigation for students who want more.</lomm:string></lomm:description>
+      </lomm:general>
+      <lomm:rights>
+        <lomm:description><lomm:string language="en">Each link opens Gravitas in a browser. Gravitas is MIT-licensed software and its teaching material is CC BY 4.0; readings and data keep the licences shown with them. Nothing about students is carried, and no grades come back.</lomm:string></lomm:description>
+      </lomm:rights>
+    </lomm:lom>
+  </metadata>
+  <organizations>
+    <organization identifier="o-intro-astronomy" structure="rooted-hierarchy">
+      <title>Introductory astronomy: gravity, starlight and other worlds</title>
+      <item identifier="root-intro-astronomy">
+        <item identifier="f-home">
+          <title>Course home</title>
+          <item identifier="i-course-home" identifierref="r-course-home"><title>Course home: Introductory astronomy: gravity, starlight and other worlds</title></item>
+          <item identifier="i-teacher-guide" identifierref="r-teacher-guide"><title>How to run this course (instructors)</title></item>
+        </item>
+        <item identifier="f-unit-motions-in-the-sky">
+          <title>Motions in the sky</title>
+          <item identifier="i-reading-orbits-and-gravity" identifierref="r-reading-orbits-and-gravity"><title>Astronomy 2e, chapter 3: Orbits and Gravity</title></item>
+          <item identifier="i-watch-the-solar-system" identifierref="r-watch-the-solar-system"><title>The Solar System, to explore</title></item>
+          <item identifier="i-keplers-laws" identifierref="r-keplers-laws"><title>Kepler's Laws</title></item>
+          <item identifier="i-retrograde-motion" identifierref="r-retrograde-motion"><title>Why Mars Goes Backwards</title></item>
+          <item identifier="i-notes-motions-in-the-sky" identifierref="r-notes-motions-in-the-sky"><title>Notes for instructors: Motions in the sky</title></item>
+        </item>
+        <item identifier="f-unit-gravity-and-energy">
+          <title>Gravity and energy</title>
+          <item identifier="i-orbital-energy" identifierref="r-orbital-energy"><title>Bound, Unbound and Escape</title></item>
+          <item identifier="i-hohmann-transfer" identifierref="r-hohmann-transfer"><title>Getting There From Here</title></item>
+        </item>
+        <item identifier="f-unit-starlight">
+          <title>What starlight tells us</title>
+          <item identifier="i-a-universe-of-stars" identifierref="r-a-universe-of-stars"><title>A Universe of Stars</title></item>
+          <item identifier="i-a-real-spectrum" identifierref="r-a-real-spectrum"><title>SDSS DR18: a G star</title></item>
+          <item identifier="i-lives-of-stars" identifierref="r-lives-of-stars"><title>Lives of Stars</title></item>
+        </item>
+        <item identifier="f-unit-other-worlds">
+          <title>Other worlds</title>
+          <item identifier="i-a-first-transit" identifierref="r-a-first-transit"><title>A first transit</title></item>
+          <item identifier="i-a-real-light-curve" identifierref="r-a-real-light-curve"><title>HD 209458: TESS light curve, sector 56</title></item>
+          <item identifier="i-goldilocks-question" identifierref="r-goldilocks-question"><title>The Goldilocks Question</title></item>
+          <item identifier="i-notes-other-worlds" identifierref="r-notes-other-worlds"><title>Notes for instructors: Other worlds</title></item>
+        </item>
+      </item>
+    </organization>
+  </organizations>
+  <resources>
+    <resource identifier="r-course-home" type="imswl_xmlv1p3">
+      <metadata>
+        <lomr:lom>
+          <lomr:general>
+            <lomr:identifier><lomr:catalog>GUID</lomr:catalog><lomr:entry>r-course-home</lomr:entry></lomr:identifier>
+            <lomr:title><lomr:string language="en">Course home: Introductory astronomy: gravity, starlight and other worlds</lomr:string></lomr:title>
+            <lomr:description><lomr:string language="en">The whole course as a page, with its paths, times and notes. It opens in Gravitas in a browser tab.</lomr:string></lomr:description>
+          </lomr:general>
+          <lomr:educational>
+            <lomr:intendedEndUserRole><lomr:source>IMSGLC_CC_Rolesv1p2</lomr:source><lomr:value>Learner</lomr:value></lomr:intendedEndUserRole>
+            <lomr:intendedEndUserRole><lomr:source>IMSGLC_CC_Rolesv1p2</lomr:source><lomr:value>Instructor</lomr:value></lomr:intendedEndUserRole>
+          </lomr:educational>
+        </lomr:lom>
+      </metadata>
+      <file href="r-course-home.xml"/>
+    </resource>
+    <resource identifier="r-teacher-guide" type="imswl_xmlv1p3">
+      <metadata>
+        <lomr:lom>
+          <lomr:general>
+            <lomr:identifier><lomr:catalog>GUID</lomr:catalog><lomr:entry>r-teacher-guide</lomr:entry></lomr:identifier>
+            <lomr:title><lomr:string language="en">How to run this course (instructors)</lomr:string></lomr:title>
+            <lomr:description><lomr:string language="en">The course home page, where the instructors’ notes are behind the “Notes for instructors” switch.</lomr:string></lomr:description>
+          </lomr:general>
+          <lomr:educational>
+            <lomr:intendedEndUserRole><lomr:source>IMSGLC_CC_Rolesv1p2</lomr:source><lomr:value>Instructor</lomr:value></lomr:intendedEndUserRole>
+          </lomr:educational>
+        </lomr:lom>
+      </metadata>
+      <file href="r-teacher-guide.xml"/>
+    </resource>
+    <resource identifier="r-reading-orbits-and-gravity" type="imswl_xmlv1p3">
+      <metadata>
+        <lomr:lom>
+          <lomr:general>
+            <lomr:identifier><lomr:catalog>GUID</lomr:catalog><lomr:entry>r-reading-orbits-and-gravity</lomr:entry></lomr:identifier>
+            <lomr:title><lomr:string language="en">Astronomy 2e, chapter 3: Orbits and Gravity</lomr:string></lomr:title>
+            <lomr:description><lomr:string language="en">Reading, 30 min. Optional, introductory. Read sections 3.1 to 3.3 before the first investigation if Kepler's laws are new to you.</lomr:string></lomr:description>
+          </lomr:general>
+          <lomr:educational>
+            <lomr:intendedEndUserRole><lomr:source>IMSGLC_CC_Rolesv1p2</lomr:source><lomr:value>Learner</lomr:value></lomr:intendedEndUserRole>
+            <lomr:intendedEndUserRole><lomr:source>IMSGLC_CC_Rolesv1p2</lomr:source><lomr:value>Instructor</lomr:value></lomr:intendedEndUserRole>
+          </lomr:educational>
+        </lomr:lom>
+      </metadata>
+      <file href="r-reading-orbits-and-gravity.xml"/>
+    </resource>
+    <resource identifier="r-watch-the-solar-system" type="imswl_xmlv1p3">
+      <metadata>
+        <lomr:lom>
+          <lomr:general>
+            <lomr:identifier><lomr:catalog>GUID</lomr:catalog><lomr:entry>r-watch-the-solar-system</lomr:entry></lomr:identifier>
+            <lomr:title><lomr:string language="en">The Solar System, to explore</lomr:string></lomr:title>
+            <lomr:description><lomr:string language="en">Simulation, 10 min. Speed time up until the outer planets move. Which planets go round fastest? Keep your answer for Kepler's Laws.</lomr:string></lomr:description>
+          </lomr:general>
+          <lomr:educational>
+            <lomr:intendedEndUserRole><lomr:source>IMSGLC_CC_Rolesv1p2</lomr:source><lomr:value>Learner</lomr:value></lomr:intendedEndUserRole>
+            <lomr:intendedEndUserRole><lomr:source>IMSGLC_CC_Rolesv1p2</lomr:source><lomr:value>Instructor</lomr:value></lomr:intendedEndUserRole>
+          </lomr:educational>
+        </lomr:lom>
+      </metadata>
+      <file href="r-watch-the-solar-system.xml"/>
+    </resource>
+    <resource identifier="r-keplers-laws" type="imswl_xmlv1p3">
+      <metadata>
+        <lomr:lom>
+          <lomr:general>
+            <lomr:identifier><lomr:catalog>GUID</lomr:catalog><lomr:entry>r-keplers-laws</lomr:entry></lomr:identifier>
+            <lomr:title><lomr:string language="en">Kepler's Laws</lomr:string></lomr:title>
+            <lomr:description><lomr:string language="en">Investigation, 35–45 min.</lomr:string></lomr:description>
+          </lomr:general>
+          <lomr:educational>
+            <lomr:intendedEndUserRole><lomr:source>IMSGLC_CC_Rolesv1p2</lomr:source><lomr:value>Learner</lomr:value></lomr:intendedEndUserRole>
+            <lomr:intendedEndUserRole><lomr:source>IMSGLC_CC_Rolesv1p2</lomr:source><lomr:value>Instructor</lomr:value></lomr:intendedEndUserRole>
+          </lomr:educational>
+        </lomr:lom>
+      </metadata>
+      <file href="r-keplers-laws.xml"/>
+    </resource>
+    <resource identifier="r-retrograde-motion" type="imswl_xmlv1p3">
+      <metadata>
+        <lomr:lom>
+          <lomr:general>
+            <lomr:identifier><lomr:catalog>GUID</lomr:catalog><lomr:entry>r-retrograde-motion</lomr:entry></lomr:identifier>
+            <lomr:title><lomr:string language="en">Why Mars Goes Backwards</lomr:string></lomr:title>
+            <lomr:description><lomr:string language="en">Investigation, 35–45 min.</lomr:string></lomr:description>
+          </lomr:general>
+          <lomr:educational>
+            <lomr:intendedEndUserRole><lomr:source>IMSGLC_CC_Rolesv1p2</lomr:source><lomr:value>Learner</lomr:value></lomr:intendedEndUserRole>
+            <lomr:intendedEndUserRole><lomr:source>IMSGLC_CC_Rolesv1p2</lomr:source><lomr:value>Instructor</lomr:value></lomr:intendedEndUserRole>
+          </lomr:educational>
+        </lomr:lom>
+      </metadata>
+      <file href="r-retrograde-motion.xml"/>
+    </resource>
+    <resource identifier="r-notes-motions-in-the-sky" type="imswl_xmlv1p3">
+      <metadata>
+        <lomr:lom>
+          <lomr:general>
+            <lomr:identifier><lomr:catalog>GUID</lomr:catalog><lomr:entry>r-notes-motions-in-the-sky</lomr:entry></lomr:identifier>
+            <lomr:title><lomr:string language="en">Notes for instructors: Motions in the sky</lomr:string></lomr:title>
+            <lomr:description><lomr:string language="en">The course home page, where this unit’s notes are behind the “Notes for instructors” switch.</lomr:string></lomr:description>
+          </lomr:general>
+          <lomr:educational>
+            <lomr:intendedEndUserRole><lomr:source>IMSGLC_CC_Rolesv1p2</lomr:source><lomr:value>Instructor</lomr:value></lomr:intendedEndUserRole>
+          </lomr:educational>
+        </lomr:lom>
+      </metadata>
+      <file href="r-notes-motions-in-the-sky.xml"/>
+    </resource>
+    <resource identifier="r-orbital-energy" type="imswl_xmlv1p3">
+      <metadata>
+        <lomr:lom>
+          <lomr:general>
+            <lomr:identifier><lomr:catalog>GUID</lomr:catalog><lomr:entry>r-orbital-energy</lomr:entry></lomr:identifier>
+            <lomr:title><lomr:string language="en">Bound, Unbound and Escape</lomr:string></lomr:title>
+            <lomr:description><lomr:string language="en">Investigation, 35–45 min.</lomr:string></lomr:description>
+          </lomr:general>
+          <lomr:educational>
+            <lomr:intendedEndUserRole><lomr:source>IMSGLC_CC_Rolesv1p2</lomr:source><lomr:value>Learner</lomr:value></lomr:intendedEndUserRole>
+            <lomr:intendedEndUserRole><lomr:source>IMSGLC_CC_Rolesv1p2</lomr:source><lomr:value>Instructor</lomr:value></lomr:intendedEndUserRole>
+          </lomr:educational>
+        </lomr:lom>
+      </metadata>
+      <file href="r-orbital-energy.xml"/>
+    </resource>
+    <resource identifier="r-hohmann-transfer" type="imswl_xmlv1p3">
+      <metadata>
+        <lomr:lom>
+          <lomr:general>
+            <lomr:identifier><lomr:catalog>GUID</lomr:catalog><lomr:entry>r-hohmann-transfer</lomr:entry></lomr:identifier>
+            <lomr:title><lomr:string language="en">Getting There From Here</lomr:string></lomr:title>
+            <lomr:description><lomr:string language="en">Investigation, 20–25 min. Optional, advanced. For students who want to use orbital energy to plan a trip to Mars.</lomr:string></lomr:description>
+          </lomr:general>
+          <lomr:educational>
+            <lomr:intendedEndUserRole><lomr:source>IMSGLC_CC_Rolesv1p2</lomr:source><lomr:value>Learner</lomr:value></lomr:intendedEndUserRole>
+            <lomr:intendedEndUserRole><lomr:source>IMSGLC_CC_Rolesv1p2</lomr:source><lomr:value>Instructor</lomr:value></lomr:intendedEndUserRole>
+          </lomr:educational>
+        </lomr:lom>
+      </metadata>
+      <file href="r-hohmann-transfer.xml"/>
+    </resource>
+    <resource identifier="r-a-universe-of-stars" type="imswl_xmlv1p3">
+      <metadata>
+        <lomr:lom>
+          <lomr:general>
+            <lomr:identifier><lomr:catalog>GUID</lomr:catalog><lomr:entry>r-a-universe-of-stars</lomr:entry></lomr:identifier>
+            <lomr:title><lomr:string language="en">A Universe of Stars</lomr:string></lomr:title>
+            <lomr:description><lomr:string language="en">Investigation, 1–1.5 h.</lomr:string></lomr:description>
+          </lomr:general>
+          <lomr:educational>
+            <lomr:intendedEndUserRole><lomr:source>IMSGLC_CC_Rolesv1p2</lomr:source><lomr:value>Learner</lomr:value></lomr:intendedEndUserRole>
+            <lomr:intendedEndUserRole><lomr:source>IMSGLC_CC_Rolesv1p2</lomr:source><lomr:value>Instructor</lomr:value></lomr:intendedEndUserRole>
+          </lomr:educational>
+        </lomr:lom>
+      </metadata>
+      <file href="r-a-universe-of-stars.xml"/>
+    </resource>
+    <resource identifier="r-a-real-spectrum" type="imswl_xmlv1p3">
+      <metadata>
+        <lomr:lom>
+          <lomr:general>
+            <lomr:identifier><lomr:catalog>GUID</lomr:catalog><lomr:entry>r-a-real-spectrum</lomr:entry></lomr:identifier>
+            <lomr:title><lomr:string language="en">SDSS DR18: a G star</lomr:string></lomr:title>
+            <lomr:description><lomr:string language="en">Data, 15 min. A real spectrum of a star like the Sun, from the Sloan Digital Sky Survey. Find the wavelength where it is brightest and estimate the star's temperature from it.</lomr:string></lomr:description>
+          </lomr:general>
+          <lomr:educational>
+            <lomr:intendedEndUserRole><lomr:source>IMSGLC_CC_Rolesv1p2</lomr:source><lomr:value>Learner</lomr:value></lomr:intendedEndUserRole>
+            <lomr:intendedEndUserRole><lomr:source>IMSGLC_CC_Rolesv1p2</lomr:source><lomr:value>Instructor</lomr:value></lomr:intendedEndUserRole>
+          </lomr:educational>
+        </lomr:lom>
+      </metadata>
+      <file href="r-a-real-spectrum.xml"/>
+    </resource>
+    <resource identifier="r-lives-of-stars" type="imswl_xmlv1p3">
+      <metadata>
+        <lomr:lom>
+          <lomr:general>
+            <lomr:identifier><lomr:catalog>GUID</lomr:catalog><lomr:entry>r-lives-of-stars</lomr:entry></lomr:identifier>
+            <lomr:title><lomr:string language="en">Lives of Stars</lomr:string></lomr:title>
+            <lomr:description><lomr:string language="en">Investigation, 1.5 h. Optional, advanced.</lomr:string></lomr:description>
+          </lomr:general>
+          <lomr:educational>
+            <lomr:intendedEndUserRole><lomr:source>IMSGLC_CC_Rolesv1p2</lomr:source><lomr:value>Learner</lomr:value></lomr:intendedEndUserRole>
+            <lomr:intendedEndUserRole><lomr:source>IMSGLC_CC_Rolesv1p2</lomr:source><lomr:value>Instructor</lomr:value></lomr:intendedEndUserRole>
+          </lomr:educational>
+        </lomr:lom>
+      </metadata>
+      <file href="r-lives-of-stars.xml"/>
+    </resource>
+    <resource identifier="r-a-first-transit" type="imswl_xmlv1p3">
+      <metadata>
+        <lomr:lom>
+          <lomr:general>
+            <lomr:identifier><lomr:catalog>GUID</lomr:catalog><lomr:entry>r-a-first-transit</lomr:entry></lomr:identifier>
+            <lomr:title><lomr:string language="en">A first transit</lomr:string></lomr:title>
+            <lomr:description><lomr:string language="en">Activity, 30 min.</lomr:string></lomr:description>
+          </lomr:general>
+          <lomr:educational>
+            <lomr:intendedEndUserRole><lomr:source>IMSGLC_CC_Rolesv1p2</lomr:source><lomr:value>Learner</lomr:value></lomr:intendedEndUserRole>
+            <lomr:intendedEndUserRole><lomr:source>IMSGLC_CC_Rolesv1p2</lomr:source><lomr:value>Instructor</lomr:value></lomr:intendedEndUserRole>
+          </lomr:educational>
+        </lomr:lom>
+      </metadata>
+      <file href="r-a-first-transit.xml"/>
+    </resource>
+    <resource identifier="r-a-real-light-curve" type="imswl_xmlv1p3">
+      <metadata>
+        <lomr:lom>
+          <lomr:general>
+            <lomr:identifier><lomr:catalog>GUID</lomr:catalog><lomr:entry>r-a-real-light-curve</lomr:entry></lomr:identifier>
+            <lomr:title><lomr:string language="en">HD 209458: TESS light curve, sector 56</lomr:string></lomr:title>
+            <lomr:description><lomr:string language="en">Data, 20 min. The same planet, observed by TESS in 2022. Find a transit in the data and measure its depth yourself.</lomr:string></lomr:description>
+          </lomr:general>
+          <lomr:educational>
+            <lomr:intendedEndUserRole><lomr:source>IMSGLC_CC_Rolesv1p2</lomr:source><lomr:value>Learner</lomr:value></lomr:intendedEndUserRole>
+            <lomr:intendedEndUserRole><lomr:source>IMSGLC_CC_Rolesv1p2</lomr:source><lomr:value>Instructor</lomr:value></lomr:intendedEndUserRole>
+          </lomr:educational>
+        </lomr:lom>
+      </metadata>
+      <file href="r-a-real-light-curve.xml"/>
+    </resource>
+    <resource identifier="r-goldilocks-question" type="imswl_xmlv1p3">
+      <metadata>
+        <lomr:lom>
+          <lomr:general>
+            <lomr:identifier><lomr:catalog>GUID</lomr:catalog><lomr:entry>r-goldilocks-question</lomr:entry></lomr:identifier>
+            <lomr:title><lomr:string language="en">The Goldilocks Question</lomr:string></lomr:title>
+            <lomr:description><lomr:string language="en">Investigation, 40–50 min. Optional, advanced.</lomr:string></lomr:description>
+          </lomr:general>
+          <lomr:educational>
+            <lomr:intendedEndUserRole><lomr:source>IMSGLC_CC_Rolesv1p2</lomr:source><lomr:value>Learner</lomr:value></lomr:intendedEndUserRole>
+            <lomr:intendedEndUserRole><lomr:source>IMSGLC_CC_Rolesv1p2</lomr:source><lomr:value>Instructor</lomr:value></lomr:intendedEndUserRole>
+          </lomr:educational>
+        </lomr:lom>
+      </metadata>
+      <file href="r-goldilocks-question.xml"/>
+    </resource>
+    <resource identifier="r-notes-other-worlds" type="imswl_xmlv1p3">
+      <metadata>
+        <lomr:lom>
+          <lomr:general>
+            <lomr:identifier><lomr:catalog>GUID</lomr:catalog><lomr:entry>r-notes-other-worlds</lomr:entry></lomr:identifier>
+            <lomr:title><lomr:string language="en">Notes for instructors: Other worlds</lomr:string></lomr:title>
+            <lomr:description><lomr:string language="en">The course home page, where this unit’s notes are behind the “Notes for instructors” switch.</lomr:string></lomr:description>
+          </lomr:general>
+          <lomr:educational>
+            <lomr:intendedEndUserRole><lomr:source>IMSGLC_CC_Rolesv1p2</lomr:source><lomr:value>Instructor</lomr:value></lomr:intendedEndUserRole>
+          </lomr:educational>
+        </lomr:lom>
+      </metadata>
+      <file href="r-notes-other-worlds.xml"/>
+    </resource>
+  </resources>
+</manifest>

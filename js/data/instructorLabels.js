@@ -183,6 +183,14 @@ const en = {
   'key.rubric.levels': 'Levels',
   'key.rubric.points': '{points} pt',
   'key.rubric.pointsMany': '{points} pts',
+  'key.rubric.kind.completion': 'completion',
+  'key.rubric.kind.correctness': 'correctness',
+  'key.rubric.kind.reasoning': 'reasoning',
+  'key.rubric.kind.uncertainty': 'uncertainty',
+  'key.rubric.weight': 'weight {weight}',
+  'key.rubric.depthFrom': 'from {depth} depth',
+  'key.rubric.kindsNote':
+    'Each criterion says what it claims: completion (an answer is there and speaks to the question), correctness (it agrees with the key within the stated tolerance), reasoning (the explanation is present and sound) or uncertainty (the answer says how well the quantity is known). You judge every one; none adds to or changes the step’s mark. A weight is the criterion’s share of the rubric, and a criterion marked from a depth is read at that depth and deeper.',
   'key.rubricOnReflection':
     'Criteria for reading this reflection. Nothing marks it, and the review page shows them beside the response:',
   'key.fields': 'Fields on this screen:',
@@ -226,6 +234,58 @@ const en = {
   'doc.key': '{title} - Answer Key',
   'doc.keyDepth': '{title} - Answer Key, {depth} depth',
   'doc.keyActivity': '{title} - Answer Key, {activity}',
+  'doc.notes': '{title} - Structured Notes (Spanish)',
+
+  // --- the generated Spanish structured notes (Prompt 170) --------------------
+  'notes.kicker':
+    'Generated Spanish notes | Guide prose and answer keys are in English only',
+  'notes.docTitle': '{title}: Structured Notes',
+  'notes.subject':
+    'Generated Spanish structured notes for the Gravitas investigation "{title}": objectives, prerequisites, level, time, mathematics, the list of steps with the marked ones, and the named misconceptions.',
+  'notes.footer': 'Gravitas Structured Notes  |  {title}',
+  'notes.about':
+    'A program generates these notes from the investigation’s structured fields and from the Spanish text that exists. They are not a guide and not a key: the hand-written guide prose and every answer key are in English only. Nobody fluent in Spanish has read the Spanish in these notes.',
+  'notes.untranslated':
+    'A text marked [EN] has no Spanish yet and is printed in English.',
+  'notes.s.facts': 'The investigation at a glance',
+  'notes.row.marked': 'Steps that are marked',
+  'notes.marked': '{marked} of {total}',
+  'notes.s.objectives': 'Learning objectives',
+  'notes.s.steps': 'The steps, and which are marked',
+  'notes.steps.intro':
+    'Numbered as in the full answer key, every depth included. A step of a deeper depth names its depth.',
+  'notes.col.n': 'No.',
+  'notes.col.step': 'Step',
+  'notes.col.kind': 'Kind',
+  'notes.col.marked': 'Marking',
+  'notes.kind.reading': 'reading',
+  'notes.kind.activity': 'exploration',
+  'notes.kind.measurement': 'measurement',
+  'notes.kind.prediction': 'prediction',
+  'notes.kind.choice': 'multiple choice',
+  'notes.kind.numeric': 'numeric answer',
+  'notes.kind.written': 'written answer',
+  'notes.mark.auto': 'automatic',
+  'notes.mark.held': 'automatic, shown at step {n}',
+  'notes.mark.hand': 'by hand',
+  'notes.mark.criteria': 'by hand, {n} criteria',
+  'notes.mark.reflect': 'not marked (reflection)',
+  'notes.mark.none': '-',
+  'notes.s.misc': 'Named misconceptions',
+  'notes.misc.intro':
+    'A named misconception is a wrong answer the investigation recognizes and answers. The name is the author’s identifier.',
+  'notes.misc.step': 'Step',
+  'notes.misc.name': 'Name',
+  'notes.misc.say': 'What the student is told',
+  'notes.misc.none': 'The steps of this investigation name no misconceptions.',
+  'notes.s.where': 'Where the guide and the key are',
+  'notes.where':
+    'The portal holds a guide and an answer key for this investigation. In English they are complete; in Spanish their headings and the investigation’s own words are translated, and the instructor prose that has no translation yet stays in English. Guide: "{guide}". Key: "{key}".',
+  'notes.s.status': 'Translation status',
+  'notes.status.counts':
+    '{done} of {total} texts printed here have a Spanish version; the other {rest} are marked [EN] and printed in English.',
+  'notes.status.digest':
+    'Check digests, computed as the translation-freshness ledger computes them: English {en}, Spanish {es}. The notes are generated again whenever the bundle is rebuilt.',
 };
 
 const es = {
@@ -388,6 +448,14 @@ const es = {
   'key.rubric.levels': 'Niveles',
   'key.rubric.points': '{points} pt',
   'key.rubric.pointsMany': '{points} pts',
+  'key.rubric.kind.completion': 'completitud',
+  'key.rubric.kind.correctness': 'corrección',
+  'key.rubric.kind.reasoning': 'razonamiento',
+  'key.rubric.kind.uncertainty': 'incertidumbre',
+  'key.rubric.weight': 'peso {weight}',
+  'key.rubric.depthFrom': 'desde la profundidad {depth}',
+  'key.rubric.kindsNote':
+    'Cada criterio dice qué afirma: completitud (hay una respuesta y responde a la pregunta), corrección (coincide con la clave dentro de la tolerancia indicada), razonamiento (la explicación está presente y es sólida) o incertidumbre (la respuesta dice con qué precisión se conoce la cantidad). Usted juzga todos; ninguno suma ni cambia la nota del paso. El peso es la parte del criterio en la rúbrica, y un criterio marcado desde una profundidad se lee en ella y en las más profundas.',
   'key.rubricOnReflection':
     'Criterios para leer esta reflexión. Nada la califica, y la página de revisión los muestra junto a la respuesta:',
   'key.fields': 'Campos de esta pantalla:',
@@ -429,6 +497,59 @@ const es = {
   'doc.key': '{title} - Clave de respuestas',
   'doc.keyDepth': '{title} - Clave de respuestas, profundidad {depth}',
   'doc.keyActivity': '{title} - Clave de respuestas, {activity}',
+  'doc.notes': '{title} - Notas estructuradas',
+
+  // --- notas estructuradas en español, generadas (Prompt 170) -----------------
+  'notes.kicker':
+    'Notas generadas | La prosa de la guía y las claves de respuestas solo están en inglés',
+  'notes.docTitle': '{title}: notas estructuradas',
+  'notes.subject':
+    'Notas estructuradas generadas, en español, de la investigación «{title}» de Gravitas: objetivos, investigaciones previas, nivel, tiempo, matemáticas, lista de pasos con los que se califican y errores conceptuales con nombre.',
+  'notes.footer': 'Notas estructuradas de Gravitas  |  {title}',
+  'notes.about':
+    'Un programa genera estas notas a partir de los campos estructurados de la investigación y del texto en español que existe. No son una guía ni una clave: la prosa de la guía, escrita a mano, y todas las claves de respuestas están solo en inglés. Ninguna persona con dominio pleno del español ha leído el español de estas notas.',
+  'notes.untranslated':
+    'Un texto marcado con [EN] todavía no tiene versión en español y se imprime en inglés.',
+  'notes.s.facts': 'La investigación de un vistazo',
+  'notes.row.marked': 'Pasos que se califican',
+  'notes.marked': '{marked} de {total}',
+  'notes.s.objectives': 'Objetivos de aprendizaje',
+  'notes.s.steps': 'Los pasos y cuáles se califican',
+  'notes.steps.intro':
+    'Numerados como en la clave de respuestas completa, con todas las profundidades. Un paso de una profundidad mayor indica cuál es.',
+  'notes.col.n': 'N.º',
+  'notes.col.step': 'Paso',
+  'notes.col.kind': 'Tipo',
+  'notes.col.marked': 'Calificación',
+  'notes.kind.reading': 'lectura',
+  'notes.kind.activity': 'exploración',
+  'notes.kind.measurement': 'medición',
+  'notes.kind.prediction': 'predicción',
+  'notes.kind.choice': 'opción múltiple',
+  'notes.kind.numeric': 'respuesta numérica',
+  'notes.kind.written': 'respuesta escrita',
+  'notes.mark.auto': 'automática',
+  'notes.mark.held': 'automática, se muestra en el paso {n}',
+  'notes.mark.hand': 'a mano',
+  'notes.mark.criteria': 'a mano, {n} criterios',
+  'notes.mark.reflect': 'no se califica (reflexión)',
+  'notes.mark.none': '-',
+  'notes.s.misc': 'Errores conceptuales con nombre',
+  'notes.misc.intro':
+    'Un error conceptual con nombre es una respuesta equivocada que la investigación reconoce y a la que responde. El nombre es el identificador que le dio la persona autora.',
+  'notes.misc.step': 'Paso',
+  'notes.misc.name': 'Nombre',
+  'notes.misc.say': 'Lo que se le dice al estudiante',
+  'notes.misc.none':
+    'Los pasos de esta investigación no nombran errores conceptuales.',
+  'notes.s.where': 'Dónde están la guía y la clave',
+  'notes.where':
+    'El portal tiene una guía y una clave de respuestas de esta investigación. En inglés están completas; en español tienen traducidos los encabezados y las palabras de la propia investigación, y la prosa docente que aún no tiene traducción sigue en inglés. Guía: «{guide}». Clave: «{key}».',
+  'notes.s.status': 'Estado de la traducción',
+  'notes.status.counts':
+    '{done} de {total} textos impresos aquí tienen versión en español; los otros {rest} llevan [EN] y se imprimen en inglés.',
+  'notes.status.digest':
+    'Resúmenes de control, calculados como los calcula el registro de frescura de la traducción: inglés {en}, español {es}. Las notas se generan de nuevo cada vez que se reconstruye el paquete.',
 };
 
 export const LABELS = Object.freeze({ en, es });

@@ -11,11 +11,17 @@ current, and the orchestrator checks it.
 | `analysis-validate.mjs` | The analysis laboratory's recovery, coverage and error-rate tables | `npm run analysis:validate` |
 | `archive-check.mjs` | Can somebody who only has the archive rebuild this? | `npm run archive:check` |
 | `archive-live-check.mjs` | Does CDS still answer the way the archive import was built for? | `npm run archive:live` |
+| `astrometric-series-synth.mjs` | Synthetic astrometric series with a truth manifest (Prompt 186, ASTROMETRY.md) |  |
+| `astrometric-series-validate.mjs` | Astrometric time series against its committed thresholds (Prompt 186) | `npm run astrometric-series:validate` |
+| `astrometry-validate.mjs` | WCS-lite and registration against their committed thresholds (Prompt 181) | `npm run astrometry:validate` |
 | `author-check.mjs` | npm run author:check | `npm run author:check`, `npm run author:strict`, `npm run author:rules` |
 | `blackhole-profile.mjs` | What a black hole costs to draw |  |
 | `blackhole-shots.mjs` | Captures of the black holes |  |
 | `body-shots.mjs` | Reference captures of the bodies, for a before-and-after on their drawing |  |
+| `branch-inventory.mjs` | Every remote branch, its state, and the commands the owner may run | `npm run branches:inventory` |
 | `browser-support.mjs` | The supported-browser statement, generated (Prompt 111) | `npm run support:sync`, `npm run support:check` |
+| `budget-environment.mjs` | The reference environment of the size budgets |  |
+| `budget-policy.mjs` | The budget policy: workflow ceilings, an optional-growth allowance, a ledger | `npm run budget:policy` |
 | `build-adoption-pages.mjs` | The adoption pages: one for every investigation and activity |  |
 | `build-data-packs.mjs` | Observation data packs: build, check, reproduce | `npm run packs:data`, `npm run packs:provenance`, `npm run packs:check` |
 | `build-ephemeris.mjs` | The educational ephemeris pack, from JPL Horizons | `npm run ephemeris:data`, `npm run ephemeris:check`, `npm run ephemeris:provenance` |
@@ -27,6 +33,7 @@ current, and the orchestrator checks it.
 | `build-lesson-translation-skeleton.mjs` | Skeleton for a lesson translation |  |
 | `build-library.mjs` | The Library: one index of everything a student or instructor can open |  |
 | `build-manual.mjs` | Build the user manual | `npm run manual` |
+| `build-relations.mjs` | Relations: what comes before, what comes next, what goes with it |  |
 | `build-sdss-spectra.mjs` | The four SDSS DR18 spectra, as a data pack | `npm run spectra:data`, `npm run spectra:provenance`, `npm run spectra:check` |
 | `build-service-worker.mjs` | Generate the service worker's precache manifest. | `npm run build`, `npm run build:ci`, `npm run sw:manifest` |
 | `build-stellar-tracks.mjs` | The MIST v1.2 tracks, as a data pack | `npm run stellar:data`, `npm run stellar:provenance`, `npm run stellar:check` |
@@ -37,6 +44,8 @@ current, and the orchestrator checks it.
 | `bundle-composition.mjs` | What is in the bundle, module by module | `npm run budget:composition` |
 | `capabilities.mjs` | Capability packages at build time | `npm run capabilities` |
 | `capability-registries.mjs` | The lazy registries, generated from what describes them | `npm run registries` |
+| `cartridge-profile.mjs` | The Thin Common Cartridge profile, checked (Roadmap III Prompt 169) |  |
+| `cartridge-validate.mjs` | Validate the Common Cartridge export against the real schemas | `npm run cartridge:validate` |
 | `catalog-review.mjs` | `sdk review` on the archives a pull request adds to catalog/packages | `npm run catalog:review` |
 | `catalog.mjs` | The curated catalog: generated at release time, checked on every change | `npm run packs:data`, `npm run packs:provenance`, `npm run catalog` |
 | `check-activities.mjs` | Are the classroom activities coherent? | `npm run activities:check` |
@@ -44,30 +53,42 @@ current, and the orchestrator checks it.
 | `check-links.mjs` | Internal link and asset checker | `npm run validate:links`, `npm run validate:links:dist` |
 | `check-test-policy.mjs` | A skip has to be a capability, and it has to be on the record | `npm run test:policy` |
 | `checks.mjs` | One list of what has to pass |  |
+| `ci-cost.mjs` | What one CI run cost |  |
 | `compute-answers.mjs` | The answers the reviewed notebooks gave, as fixtures for the tests |  |
 | `compute-examples.mjs` | The compute page's two Gravitas-made example inputs |  |
 | `compute.mjs` | The compute page's generated files: the frame, its pin, the catalogue's hashes |  |
+| `conformance.mjs` | The scoped accessibility conformance report (Roadmap III, Prompt 127) |  |
 | `conservation-trace.mjs` | The engine's conservation and energy numbers along a seeded run |  |
 | `cosmology-validate.mjs` | (no header) | `npm run cosmology:validate` |
 | `csp.mjs` | A Content-Security-Policy on every page |  |
+| `data-budget.mjs` | The data plane's budget: what Gravitas stores and keeps, not just what it ships | `npm run budget:data` |
+| `data-kinds-cases.mjs` | The data kinds' cases, limits and tolerances (Prompt 157) |  |
+| `data-kinds-examples.mjs` | An example of each data kind, from material Gravitas already has (Prompt 157) |  |
+| `decoded-memory-probe.mjs` | npm run probe:decoded - what decoding an image holds, in a real browser | `npm run probe:decoded` |
 | `deps-audit.mjs` | The dependency audit | `npm run deps:audit` |
 | `design-ratchet.mjs` | Four migrations to the design system that may only go one way |  |
+| `detection-synth.mjs` | Synthetic frames for the detection checks (Prompt 183, DETECTION.md) |  |
+| `detection-validate.mjs` | Detection and the PSF against their committed thresholds (Prompt 183) | `npm run detection:validate` |
 | `docs-facts.mjs` | Documentation facts: derive the numbers, then hold the docs to them | `npm run docs:facts`, `npm run docs:sync`, `npm run docs:check`, `npm run docs:check:tests`, `npm run docs:check:build` |
+| `docs-map.mjs` | DOCUMENTS.md, the map of every root document, from a committed table |  |
 | `draw-trace.mjs` | The canvas calls a body makes, recorded and hashed |  |
 | `e2e-shards.mjs` | Splitting the source browser suite into shards of equal duration |  |
 | `effects-trace.mjs` | The effects an engine event spawns, counted and hashed |  |
 | `empty-world.mjs` | A world with nothing in it |  |
 | `evaluation-summary.mjs` | npm run evaluation:summary -- <files...> | `npm run evaluation:summary` |
 | `events-trace.mjs` | The engine's events, in the order they fire, with their payloads |  |
+| `evidence-status.mjs` | The evidence-status record (Roadmap III, Prompt 122, rule 7.5.10) |  |
 | `exoplanet-reference.mjs` | The Exoplanet Observatory's reference run, and its answer key | `npm run guides:key` |
 | `experiment-bench.mjs` | npm run bench:experiments - how fast experiments run, and what they cost | `npm run bench:experiments` |
 | `feature-inventory.mjs` | The feature-detection inventory (Prompt 111) |  |
 | `formats.mjs` | Every versioned format Gravitas reads or writes, and FORMATS.md from them |  |
 | `formula-size.mjs` | node tools/formula-size.mjs |  |
+| `frame-pipeline-synth.mjs` | The committed scene of the frame-pipeline checks (Prompt 185, FRAME_PIPELINE.md) |  |
+| `frame-pipeline-validate.mjs` | The frame pipeline against its committed thresholds (Prompt 185) | `npm run frame-pipeline:validate` |
 | `generate-graph.mjs` | Every generated artifact, what it is made from, and what it must follow |  |
 | `generate-lesson-cards.mjs` | A card picture for a lesson that stages its own scene | `npm run cards` |
 | `generate-scenario-thumbnails.mjs` | Scenario thumbnail generator | `npm run thumbnails` |
-| `generate.mjs` | Regenerate what is stale, in the order it has to happen | `npm run instructors:check`, `npm run thumbnails:check`, `npm run teaching:check`, `npm run cards:check`, `npm run audit:scene:check`, `npm run audit:irreversible:check`, `npm run docs:check:full`, `npm run manual:check`, `npm run validation:check`, `npm run catalog:check`, `npm run generate`, `npm run generate:check`, `npm run tools:index:check`, `npm run sw:check`, `npm run registries:check`, `npm run capabilities:check` |
+| `generate.mjs` | Regenerate what is stale, in the order it has to happen | `npm run instructors:check`, `npm run thumbnails:check`, `npm run teaching:check`, `npm run cards:check`, `npm run audit:scene:check`, `npm run audit:irreversible:check`, `npm run docs:check:full`, `npm run manual:check`, `npm run validation:check`, `npm run catalog:check`, `npm run generate`, `npm run generate:check`, `npm run docs-map:check`, `npm run tools:index:check`, `npm run sw:check`, `npm run registries:check`, `npm run capabilities:check` |
 | `generated-blocks.mjs` | Generated files and generated regions |  |
 | `generated-tripwire.mjs` | A merge must not drop what one side wrote into a file with generated regions |  |
 | `geometry-fuzz.mjs` | Base-versus-head fuzz of every scenario's world (Roadmap II Prompt 108) |  |
@@ -75,20 +96,43 @@ current, and the orchestrator checks it.
 | `gw-shots.mjs` | Captures of the gravitational-wave lab |  |
 | `i18n-audit.mjs` | Message-catalog audit | `npm run i18n:check` |
 | `i18n-catalog.mjs` | The message catalog, however many files it is split across |  |
+| `i18n-freshness.mjs` | Is every translation still a translation of the English it stands beside? | `npm run i18n:freshness` |
+| `i18n-history.mjs` | Which Spanish catalog entries are probably stale already, from git history? |  |
+| `i18n-labels.mjs` | Do the labels say the same thing every time, in both languages? |  |
+| `i18n-ledger.mjs` | The translation-freshness ledger: what a translation was written against |  |
+| `i18n-sources.mjs` | Where the translations are, read as pairs of English and translated text |  |
+| `i18n-surfaces.mjs` | Which surfaces are English only, and is that a decision or an accident? |  |
+| `image-import-cases.mjs` | The image import's cases, bounds and thresholds (Prompt 188) |  |
+| `image-marks-bytes.mjs` | The marks instrument's bytes and requests against the gate (Prompt 179) | `npm run image-marks:bytes` |
+| `image-marks-validate.mjs` | The marks instrument against the gate's thresholds (Prompt 179) | `npm run image-marks:validate` |
+| `image-measure-gate.mjs` | The image-measurement gate: thresholds, slices, consumers and one decision | `npm run image-gate:check`, `npm run image-gate:report`, `npm run image-gate:measure` |
+| `image-packs-authentic.mjs` | The authentic legs of Prompts 181, 182, 185 and 186 on the new data (Prompt 189, contract part 3) |  |
+| `image-packs-hostile.mjs` | Hostile PNGs made from an authentic frame (Prompt 189, leg import.hostilePng) |  |
+| `image-packs-validate.mjs` | The authentic-frame legs of Prompts 180 and 183, and the pack's own check | `npm run imagepacks:validate` |
+| `import-cancel-probe.mjs` | npm run probe:import-cancel - what a cancelled decode leaves behind | `npm run probe:import-cancel` |
 | `index-fragments.mjs` | The panels index.html no longer carries, and where each one went |  |
 | `inference-bench.mjs` | npm run bench:inference - how long a fit takes in its Workers, and what the | `npm run bench:inference` |
 | `inference-cases.mjs` | The cases the inference core is validated and timed on |  |
 | `inference-validate.mjs` | npm run validate:inference - what the inference core recovers, and how often | `npm run validate:inference` |
+| `injection-validate.mjs` | Completeness by injection against its committed thresholds (Prompt 184) | `npm run injection:validate` |
 | `instructor-digest-audit.mjs` | Prove the freshness digest covers everything the build reads | `npm run instructors:audit` |
 | `instructor-fixture.mjs` | Is the disposable instructor fixture the one these sources would build? |  |
 | `instructor-freshness.mjs` | Was the committed instructor bundle built from these sources? |  |
 | `instrument-families.mjs` | Which instrument families a script the page fetched contains |  |
+| `interaction-contract.mjs` | Is a surface keeping the interaction contract? |  |
 | `jest-sequencer.mjs` | Start the slowest suites first |  |
 | `key-groups-check.mjs` | Key groups: does the rewritten catalog equal its source? |  |
 | `key-groups.mjs` | Key groups: write a shared key prefix once, in the bundle only |  |
+| `key-registry-codemod.mjs` | Move allowlisted 'gravitas*' literals into js/names.js (Prompt 141) |  |
+| `key-registry-free.mjs` | Which modules may import js/names.js without costing a route a request |  |
 | `key-registry-scan.mjs` | Which 'gravitas*' string literals are still loose in js/ (Prompt 107, step 2c) |  |
 | `lab3d-bench.mjs` | The 3-D kernel's throughput, desktop measured and low-end modelled |  |
 | `lab3d-guides-key.mjs` | The 3-D curriculum's answer key: a reference run of every guide | `npm run lab3d:key` |
+| `label-golden-investigations.mjs` | npm run label:golden:investigations [-- --regenerate-label-golden] | `npm run label:golden:investigations` |
+| `label-golden.mjs` | npm run label:golden [-- --regenerate-label-golden] | `npm run label:golden` |
+| `lesson-coverage.mjs` | npm run lesson:coverage | `npm run lesson:coverage` |
+| `lesson-golden-dom.mjs` | npm run lesson:golden:dom -- --regenerate-lesson-golden | `npm run lesson:golden:dom` |
+| `lesson-golden.mjs` | npm run lesson:golden -- --regenerate-lesson-golden | `npm run lesson:golden` |
 | `lesson-scene-audit.mjs` | What every lesson step does with the main scene | `npm run audit:scene` |
 | `library-routes.mjs` | Does a Library route open what it names? |  |
 | `longtask-census.mjs` | Main-thread work above a stated budget (Prompt 112, part 2) |  |
@@ -98,15 +142,27 @@ current, and the orchestrator checks it.
 | `migrate-flow.mjs` | One-off: move the investigation flow out of instructorContent.js into |  |
 | `mission-lab-key.mjs` | The mission lab's answer key: a reference run of every guide | `npm run mission:key` |
 | `module-load-hook.mjs` | Write down every module Node loads |  |
+| `navigation.mjs` | The navigation model, measured: the structural navigation checks' reader | `npm run navigation:check`, `npm run navigation:write`, `npm run navigation:report` |
 | `new-investigation.mjs` | npm run author:new -- --id=<lesson-id> --title="..." | `npm run author:new` |
 | `number-ratchet.mjs` | Three migrations that may only go one way: numbers through the formatter, |  |
+| `numeric-cases.mjs` | The numerical routines' validation group (Prompt 152) |  |
+| `numeric-validate.mjs` | npm run validate:numeric - the numerical routines' validation group | `npm run validate:numeric` |
 | `observatory-bench.mjs` | npm run bench:observatory - what the observatory costs a reader | `npm run bench:observatory` |
+| `orbit-fit-synth.mjs` | Synthetic visual-binary series with a truth manifest (Prompt 187, ORBIT_FIT_GATE.md) |  |
+| `orbit-fit-validate.mjs` | Orbit fitting and moving-object tracks against their committed thresholds (Prompt 187) | `npm run orbit-fit:validate` |
+| `orbital-cases.mjs` | The orbital layer's validation group (Prompt 148) |  |
+| `orbital-validate.mjs` | npm run validate:orbital - the orbital layer's validation group | `npm run validate:orbital` |
 | `output-excerpt.mjs` | The part of a failing command's output worth printing |  |
+| `overlay-validate.mjs` | Catalogue overlays, blink and compare against their committed thresholds (Prompt 182) | `npm run overlay:validate` |
+| `pending-acceptance.mjs` | Acceptance checks for features that are not built yet |  |
 | `perf-probe.mjs` | Frame-time probe | `npm run perf` |
 | `perf-trace.mjs` | Compositor measurement: what a Chromium trace says about where a frame went |  |
+| `photometry-fixtures.mjs` | Photometry fixtures: what is captured, and from what (Prompt 180) |  |
+| `photometry-validate.mjs` | Photometry against its committed thresholds (Prompt 180) | `npm run photometry:validate` |
 | `playwright-cache.mjs` | A Playwright transform cache that no other process is writing |  |
 | `plot-live-bench.mjs` | What a live update of the series chart costs (D-PLOT-02, stage 3a) |  |
 | `populations-reference.mjs` | Stars and their populations: the reference run, and its answer key | `npm run guides:populations-key` |
+| `pr-class.mjs` | The pull-request class check (Roadmap III, Prompt 122) |  |
 | `precache-inventory.mjs` | What the service worker precaches, measured |  |
 | `precache-tour.mjs` | What a visit actually fetches, against what the precache holds (Prompt 112) |  |
 | `prepare-pages.mjs` | Assemble the tree that gets published |  |
@@ -117,13 +173,19 @@ current, and the orchestrator checks it.
 | `route-budget.mjs` | What a fresh visitor downloads, route by route | `npm run budget:routes` |
 | `scenario-stability.mjs` | Scenario stability probe | `npm run validate:scenarios` |
 | `seeded-step.mjs` | A preset world stepped under a seed, every body kept at full precision |  |
+| `seeding-probes.mjs` | The moved seeded call sites, run against v3's own copies of them |  |
 | `shell.mjs` | The shared shell, stamped into every page |  |
 | `sky-horizons-astrometric.mjs` | Reference positions for the Sky Lab's ephemeris source (Prompt 106), from JPL Horizons |  |
 | `small-body-sweep.mjs` | Small-body scenario sweep |  |
 | `source-closure.mjs` | Which files a program actually reads |  |
 | `starfield-probe.mjs` | Starfield phase profile |  |
 | `static-server.mjs` | A static file server with no dependencies | `npm run serve:dist` |
+| `statistics-cases.mjs` | The statistics kernel's validation group (Prompt 154) |  |
+| `statistics-validate.mjs` | npm run validate:statistics - the statistics kernel's validation group | `npm run validate:statistics` |
 | `stellar-shots.mjs` | Captures of the Stellar Lab |  |
+| `storage-matrix.mjs` | npm run storage:matrix | `npm run storage:matrix` |
+| `storage-profile.mjs` | npm run storage:profile -- --capture | `npm run storage:profile` |
+| `surface-gate.mjs` | The surface gate: one decision function, the same for every surface | `npm run surface:check`, `npm run surface:measure`, `npm run surface:write`, `npm run surface:report` |
 | `three-shaders.mjs` | three.js shaders in the bundle: pruned to what the 3-D view can reach, then |  |
 | `thumbnail-config.mjs` | Thumbnail capture settings |  |
 | `ui-shots.mjs` | The interface, at every size and in both languages |  |
@@ -134,3 +196,4 @@ current, and the orchestrator checks it.
 | `variables-sample.mjs` | (no header) |  |
 | `vendor-deps.mjs` | npm run vendor  /  npm run vendor:check | `npm run vendor`, `npm run vendor:check` |
 | `verify-release.mjs` | Is this tree safe to publish? |  |
+| `worker-probe.mjs` | npm run probe:workers - what the page's Workers hold, and what it keeps | `npm run probe:workers` |

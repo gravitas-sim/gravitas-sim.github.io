@@ -18,7 +18,7 @@
 
 import { test, expect, requireScenarioKey } from './fixtures.js';
 
-/* global fetch */
+/* global fetch, navigator, ServiceWorker, requestIdleCallback */
 
 test.use({ serviceWorkers: 'allow' });
 
@@ -158,6 +158,106 @@ test.describe('the application survives the network going away', () => {
       expect(r.ok, `${r.n} was not cached`).toBe(true);
       expect(r.bytes).toBeGreaterThan(1000);
     }
+  });
+
+  test('the investigation cards and the authoring pages are there without a network', async ({
+    page,
+    context,
+    app,
+  }, testInfo) => {
+    testInfo.setTimeout(180_000);
+    await app.boot();
+    await waitForPrecache(page);
+    await context.setOffline(true);
+
+    // D-PERF-02, change 1: a card image, and the three authoring pages, which
+    // used to need a visit made online first. The image is fetched; a page is
+    // navigated to, because the worker answers a directory URL with its
+    // precached index only for a navigation.
+    const image = await page.evaluate(async () => {
+      const r = await fetch('/images/investigations/a-lens-passing-by.webp');
+      return { ok: r.ok, bytes: (await r.blob()).size };
+    });
+    expect(image.ok, 'the card image was not cached').toBe(true);
+    expect(image.bytes).toBeGreaterThan(1000);
+
+    for (const url of ['/studio/', '/studio/lesson/', '/studio/course/']) {
+      const response = await page.goto(url, { waitUntil: 'domcontentloaded' });
+      expect(response?.ok(), `${url} was not cached`).toBe(true);
+      expect(await page.title(), url).not.toBe('');
+      expect(await page.locator('body').innerText()).not.toBe('');
+    }
+  });
+
+  test('the idle tier arrives after the install, and the labs then open with no network', async ({
+    page,
+    context,
+    app,
+  }, testInfo) => {
+    testInfo.setTimeout(180_000);
+    await app.boot();
+    const status = await waitForPrecache(page);
+    // The install itself holds the first-visit tier; the idle files came in
+    // afterwards, on the page's request (Prompt 147).
+    expect(status.idleCount).toBeGreaterThan(100);
+    expect(status.idleCached).toBe(status.idleCount);
+    expect(status.coreComplete).toBe(true);
+    await context.setOffline(true);
+
+    for (const url of ['/3d/', '/mission/lab/', '/sky/', '/library/']) {
+      const response = await page.goto(url, { waitUntil: 'domcontentloaded' });
+      expect(response?.ok(), `${url} was not cached`).toBe(true);
+      expect(await page.locator('body').innerText()).not.toBe('');
+    }
+    const three = await page.evaluate(async () => {
+      const r = await fetch('/vendor/three/three.module.js');
+      return r.ok;
+    });
+    expect(three, 'three.js was not cached').toBe(true);
+  });
+
+  test('a device that asked for less data is not given the idle tier unasked', async ({
+    page,
+    app,
+  }) => {
+    await page.addInitScript(() => {
+      Object.defineProperty(navigator, 'connection', {
+        value: { saveData: true },
+        configurable: true,
+      });
+      window.__idleAsks = 0;
+      const post = ServiceWorker.prototype.postMessage;
+      ServiceWorker.prototype.postMessage = function (m, ...rest) {
+        if (m && m.type === 'install-idle') window.__idleAsks++;
+        return post.call(this, m, ...rest);
+      };
+    });
+    await app.boot();
+    // The worker is controlling and has installed: the same moment the idle
+    // request goes out when Save-Data is off.
+    await expect
+      .poll(
+        () =>
+          page.evaluate(async () => {
+            const m = await import('/js/offline.js');
+            const s = await m.cacheStatus(2000);
+            return Boolean(s && s.coreComplete);
+          }),
+        { timeout: 60_000 }
+      )
+      .toBe(true);
+    // The page's own idle request was queued before this one, so once the
+    // browser has run this callback it has run that one.
+    await page.evaluate(
+      () =>
+        new Promise(r => requestIdleCallback(() => r(), { timeout: 20_000 }))
+    );
+    const { asks, status } = await page.evaluate(async () => {
+      const m = await import('/js/offline.js');
+      return { asks: window.__idleAsks, status: await m.cacheStatus(2000) };
+    });
+    expect(asks).toBe(0);
+    expect(status.idleCached).toBe(0);
   });
 
   test('the cache is named for its contents, so a rebuild can invalidate it', async ({

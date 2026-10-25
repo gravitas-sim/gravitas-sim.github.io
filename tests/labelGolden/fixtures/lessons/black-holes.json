@@ -1,0 +1,44 @@
+{
+ "id": "black-holes",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.where-the-room-comes-from.unit","zeros"]
+   ],
+   "numbered": []
+  },
+  "es": {
+   "units": [],
+   "numbered": []
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "where-the-room-comes-from",
+    "answer": "9",
+    "tolerance": "0.5",
+    "unit": "zeros"
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "the-event-horizon": {
+    "probe": [[{"label":"The hole","value":"not on the canvas"}],[{"label":"Mass","value":"NaN M☉"},{"label":"Schwarzschild radius","value":"NaN km"},{"label":"Right across the horizon","value":"NaN km"}]]
+   },
+   "thirty-kilometers-is-not-very": {
+    "probe": [[{"label":"The hole","value":"not on the canvas"}],[{"label":"Drawn on the canvas","value":"0 world units — a display choice, not a length"},{"label":"Actually, across the horizon","value":"NaN km"},{"label":"The Sun, for comparison","value":"1,392,000 km across"}]]
+   },
+   "three-measurements": {
+    "probe": [[{"label":"The hole","value":"not on the canvas"}],[{"label":"Hole on the canvas","value":"NaN M☉"},{"label":"Its Schwarzschild radius","value":"NaN km"}]]
+   },
+   "the-right-answer-for-the": {
+    "probe": [[{"label":"What differs between the two","value":"only what is at the center"}],[{"label":"Orbiting the black hole","value":"period 3.47 yr"},{"label":"Orbiting the star","value":"period 6.06 yr"},{"label":"What differs between the two","value":"only what is at the center"}]]
+   }
+  },
+  "es": "same"
+ }
+}

@@ -283,41 +283,6 @@ export const DEFAULT_SETTINGS = {
   preview_gravity_boost: 4.0,
 };
 
-/**
- * Setting names that have changed, and what they used to be called.
- *
- * A key in DEFAULT_SETTINGS is the name a saved world and a share link store
- * the value under, and both outlive a rename. `trail_colour_mode` became
- * `trail_color_mode` in the American-spelling pass; a link or a save written
- * before it assigns a property nothing reads, so the trails quietly come back
- * the default color. The other two are not renames anybody intended: the same
- * pass ran `realis -> realiz` and `optimis -> optimiz` inside words, and the
- * wrong names were deployed. The keys are back to what they were, and a link
- * shared in that window still carries the misspelling, so it is mapped here.
- */
-export const RENAMED_SETTINGS = Object.freeze({
-  trail_colour_mode: 'trail_color_mode',
-  realiztic_disk_physics: 'realistic_disk_physics',
-  habitable_zone_optimizm: 'habitable_zone_optimism',
-});
-
-/**
- * Rewrite any old setting names in something that was stored earlier.
- *
- * @param {object} stored - Settings as a save or a link carried them
- * @returns {object} The same settings under the names the code reads
- */
-export function withCurrentSettingNames(stored) {
-  if (!stored || typeof stored !== 'object') return stored;
-  const out = { ...stored };
-  for (const [was, now] of Object.entries(RENAMED_SETTINGS)) {
-    if (!(was in out)) continue;
-    if (!(now in out)) out[now] = out[was];
-    delete out[was];
-  }
-  return out;
-}
-
 /** The view state: zoom, pan, selection, interaction. Mutated in place. */
 export const state = {
   zoom: 1.0,
@@ -461,6 +426,75 @@ export let SETTINGS = { ...DEFAULT_SETTINGS };
 export function setSettings(next) {
   SETTINGS = next;
   return SETTINGS;
+}
+
+/** The named paths that push settings to the engine (tests/settingsWriters.test.js). */
+export const SETTINGS_WRITERS = Object.freeze([
+  'apply-panel',
+  'world-build',
+  'saved-world',
+  'share-link',
+  'share-link-delta',
+  'system-builder',
+  'rotation-curve',
+  'cr3bp-pair',
+  'bench',
+  'bench-chaos',
+  'bench-hurry',
+]);
+
+let receiver = null;
+
+/** Say who takes the settings (js/world.js: the engine's updatePhysicsSettings). */
+export function registerSettingsReceiver(fn) {
+  receiver = fn;
+}
+
+const deepFreeze = o => {
+  for (const v of Object.values(o))
+    if (v && typeof v === 'object' && !Object.isFrozen(v)) deepFreeze(v);
+  return Object.freeze(o);
+};
+
+/**
+ * The one way the page's settings reach the engine: write `patch` into
+ * SETTINGS (refusing what is not a setting), then hand the engine a frozen
+ * copy of all of it, so it never answers with a default of its own.
+ *
+ * @param {string} source - A name from SETTINGS_WRITERS
+ * @param {object} [patch] - Keys to write first
+ * @returns {object} The engine's copy afterwards
+ */
+export function commitSettings(source, patch) {
+  if (!SETTINGS_WRITERS.includes(source) || !receiver)
+    throw new Error(`commitSettings: ${source}`);
+  for (const [k, v] of Object.entries(patch || {})) {
+    if (
+      !(k in DEFAULT_SETTINGS) ||
+      typeof v !== typeof DEFAULT_SETTINGS[k] ||
+      (typeof v === 'number' && !Number.isFinite(v))
+    )
+      console.warn(`[settings] ${source} wrote ${k}=${v}: refused`);
+    else SETTINGS[k] = v;
+  }
+  // The mode and the halo boolean are one fact: a patch naming one carries both.
+  if (patch && 'galaxy_gravity' in patch && !('dark_matter_halo' in patch))
+    SETTINGS.dark_matter_halo = SETTINGS.galaxy_gravity === 'halo';
+  else if (patch && 'dark_matter_halo' in patch && !('galaxy_gravity' in patch))
+    SETTINGS.galaxy_gravity = SETTINGS.dark_matter_halo
+      ? 'halo'
+      : SETTINGS.galaxy_gravity === 'halo'
+        ? 'newtonian'
+        : SETTINGS.galaxy_gravity;
+  const engine = receiver(deepFreeze(JSON.parse(JSON.stringify(SETTINGS))), {
+    engineContext: 'application',
+  });
+  // The engine decides which of the halo and MOND is in force (MOND needs a scale).
+  if (patch && ('galaxy_gravity' in patch || 'dark_matter_halo' in patch)) {
+    SETTINGS.galaxy_gravity = engine.galaxy_gravity;
+    SETTINGS.dark_matter_halo = engine.dark_matter_halo;
+  }
+  return engine;
 }
 
 /** The scenario currently loaded, or null for a hand-built world. */

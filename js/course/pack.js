@@ -1,5 +1,5 @@
 // =============================================================================
-// gravitas.course-pack/2: a course, as data
+// gravitas.course-pack/2 and /3: a course, as data
 // -----------------------------------------------------------------------------
 // A course pack /1 (js/platform/course.js) is an ordering of lessons in units,
 // with notes: what the catalog installs and the SDK validates. /2 is what the
@@ -28,7 +28,39 @@
 import { makeChecker } from '../platform/checker.js';
 
 export const FORMAT = 'gravitas.course-pack';
-export const FORMAT_VERSION = 2;
+/**
+ * The newest version this reader reads. /3 (Prompt 176, the 3.0.0 format
+ * boundary) is /2 plus the three fields only a newer build understands:
+ * `profile`, `term` and `outcomes` (also on an objective). A 2.0.0 builder
+ * refuses a /3 file as made by a newer version, in words that name it; a
+ * pack that needs none of the three is still written as /2 (packVersion), so
+ * every course that opened before opens now.
+ */
+export const FORMAT_VERSION = 3;
+/** The version a pack without those fields is written as, and a /1 pack migrates to. */
+export const BASE_VERSION = 2;
+
+/** The lowest version that carries this pack: /3 only for what /2 cannot say. */
+export const packVersion = p =>
+  p?.profile !== undefined ||
+  p?.term !== undefined ||
+  p?.outcomes !== undefined ||
+  (Array.isArray(p?.objectives) &&
+    p.objectives.some(o => o?.outcomes !== undefined))
+    ? FORMAT_VERSION
+    : BASE_VERSION;
+
+/** A pack as it is written: the same document, at the lowest version that carries it. */
+export const withVersion = p =>
+  p?.format === FORMAT && p.formatVersion >= BASE_VERSION
+    ? p.formatVersion === packVersion(p)
+      ? p
+      : { ...p, formatVersion: packVersion(p) }
+    : p;
+
+/** A file's text: a pack at its lowest version, anything else as it is (what ../studio/model.js serialize does). */
+export const serializePack = doc =>
+  `${JSON.stringify(withVersion(doc), null, 2)}\n`;
 
 // The 3-D lab's guided investigations, as a `guide` item may name them
 // (Prompt 105). Kept here, small, so that no page needs a module of its own for
@@ -84,14 +116,26 @@ export const LEVEL_DEPTH = Object.freeze({
   upper: 'advanced',
 });
 export const ACCESS = Object.freeze(['open', 'library', 'print']);
+/**
+ * The profiles a package may declare (Prompt 164). A collection is a list, not
+ * a course: one unit, items in order, a note and a depth where an item has them,
+ * no assignments, no optional paths and no `needs`. It is written only for a
+ * collection, so every course ever written stays as it was; a 2.0.0 reader
+ * refuses the field in its own words (tests/compat/boundary.mjs).
+ */
+export const PROFILES = Object.freeze(['collection']);
 
 export const MAX_UNITS = 20;
 export const MAX_ITEMS = 120;
 export const MAX_ITEMS_PER_UNIT = 30;
 export const MAX_OBJECTIVES = 12;
+/** The instructor's own outcomes (Prompt 174), as many as the objectives. */
+export const MAX_OUTCOMES = 12;
 export const MAX_PREREQUISITES = 6;
 /** As js/assignments/assignment.js has them. */
 export const MAX_ASSIGNMENT_STEPS = 60;
+/** The longest term label: it is appended to an assignment's title, which has 120. */
+export const MAX_TERM = 40;
 const MAX_ASSIGNMENT_TITLE = 120;
 const MAX_ASSIGNMENT_INTRO = 1200;
 
@@ -120,11 +164,14 @@ const PACK_FIELDS = new Set([
   'locales',
   'pinning',
   'courseLevel',
+  'term',
+  'profile',
   'title',
   'summary',
   'audience',
   'teacherGuide',
   'objectives',
+  'outcomes',
   'prerequisites',
   'units',
 ]);
@@ -255,10 +302,10 @@ export function validateCoursePack(c, api) {
     format: FORMAT,
   });
   need(
-    c.formatVersion === FORMAT_VERSION,
+    c.formatVersion === BASE_VERSION || c.formatVersion === FORMAT_VERSION,
     'formatVersion',
     'formatVersion',
-    `must be ${FORMAT_VERSION}`,
+    `must be ${BASE_VERSION} or ${FORMAT_VERSION}`,
     { version: FORMAT_VERSION }
   );
   need(
@@ -311,10 +358,82 @@ export function validateCoursePack(c, api) {
       'survey, majors or upper'
     );
 
+  // The term a copy of the course is for (Prompt 168): a short plain label,
+  // written only when the instructor names one, so every older file is valid.
+  if (c.term !== undefined)
+    need(
+      typeof c.term === 'string' &&
+        c.term === c.term.trim() &&
+        c.term.length > 0 &&
+        c.term.length <= MAX_TERM &&
+        !MARKUP.test(c.term),
+      'term',
+      'term',
+      `a short plain label such as "Spring 2027", up to ${MAX_TERM} characters`,
+      { max: MAX_TERM }
+    );
+
+  // A collection (Prompt 164): the only profile, and what it leaves out.
+  if (c.profile !== undefined)
+    need(
+      PROFILES.includes(c.profile),
+      'profile',
+      'profile',
+      'a profile is "collection", or the field is left out'
+    );
+  const collection = c.profile === 'collection';
+  if (collection)
+    for (const k of [
+      'objectives',
+      'outcomes',
+      'prerequisites',
+      'courseLevel',
+      'term',
+    ])
+      need(
+        c[k] === undefined,
+        k,
+        'collectionField',
+        `a collection has no "${k}"`,
+        { field: k }
+      );
+
   text(c.title, 'title', true, 120);
   text(c.summary, 'summary', false);
   text(c.audience, 'audience', false, 300);
   text(c.teacherGuide, 'teacherGuide', false, 4000);
+
+  // --- The instructor's outcomes (Prompt 174): free text the instructor's
+  // department or syllabus states, which the course's objectives are mapped to
+  // (`objectives[].outcomes`). Written only when the instructor enters some, so
+  // every older file is valid; a mapping is the instructor's own claim of what
+  // an objective serves and is never evidence that a student attained anything.
+  const outcomeIds = new Set();
+  if (c.outcomes !== undefined) {
+    const list = Array.isArray(c.outcomes) ? c.outcomes : [];
+    need(
+      Array.isArray(c.outcomes) && list.length <= MAX_OUTCOMES,
+      'outcomes',
+      'count',
+      `a list of up to ${MAX_OUTCOMES}`,
+      { max: MAX_OUTCOMES }
+    );
+    list.forEach((o, i) => {
+      const at = `outcomes[${i}]`;
+      if (!isObject(o)) return need(false, at, 'object', 'an object');
+      fields(o, at, ['id', 'text']);
+      need(PUBLIC_ID.test(o.id || ''), `${at}.id`, 'id', 'a public id');
+      need(
+        !outcomeIds.has(o.id),
+        `${at}.id`,
+        'duplicate',
+        `"${o.id}" is used above`,
+        { id: o.id }
+      );
+      outcomeIds.add(o.id);
+      text(o.text, `${at}.text`, true, 300);
+    });
+  }
 
   // --- Objectives and prerequisites
   const objectives = new Set();
@@ -330,8 +449,29 @@ export function validateCoursePack(c, api) {
     list.forEach((o, i) => {
       const at = `objectives[${i}]`;
       if (!isObject(o)) return need(false, at, 'object', 'an object');
-      fields(o, at, ['id', 'text']);
+      fields(o, at, ['id', 'text', 'outcomes']);
       need(PUBLIC_ID.test(o.id || ''), `${at}.id`, 'id', 'a public id');
+      if (o.outcomes !== undefined) {
+        const got = Array.isArray(o.outcomes) ? o.outcomes : [];
+        need(
+          Array.isArray(o.outcomes) &&
+            got.length >= 1 &&
+            got.length <= MAX_OUTCOMES &&
+            new Set(got).size === got.length,
+          `${at}.outcomes`,
+          'outcomes',
+          'a list of outcome ids, each once'
+        );
+        got.forEach((id, k) =>
+          need(
+            outcomeIds.has(id),
+            `${at}.outcomes[${k}]`,
+            'outcome',
+            `the course has no outcome "${id}"`,
+            { id }
+          )
+        );
+      }
       need(
         !objectives.has(o.id),
         `${at}.id`,
@@ -386,6 +526,12 @@ export function validateCoursePack(c, api) {
     'units',
     `from 1 to ${MAX_UNITS} units`,
     { max: MAX_UNITS }
+  );
+  need(
+    !collection || units.length === 1,
+    'units',
+    'collectionUnits',
+    'a collection has exactly one unit'
   );
   const unitIds = new Set();
   units.forEach((u, i) => {
@@ -450,6 +596,13 @@ export function validateCoursePack(c, api) {
     );
     const path = item.path ?? 'core';
     need(PATHS.includes(path), `${at}.path`, 'path', 'core, intro or advanced');
+    if (collection)
+      need(
+        kind !== 'assignment' && path === 'core' && item.needs === undefined,
+        at,
+        'collectionItem',
+        'a collection holds items in order: no assignments, no optional paths, no "needs"'
+      );
     if (item.minutes !== undefined || !DERIVED_TIME.has(kind))
       need(
         Number.isInteger(item.minutes) &&
@@ -842,7 +995,7 @@ export function migrateCoursePack(p, { platform }) {
   const locales = Array.isArray(p.locales) ? [...p.locales] : ['en'];
   const out = {
     format: FORMAT,
-    formatVersion: FORMAT_VERSION,
+    formatVersion: BASE_VERSION,
     id: p.id,
     version: p.version,
     gravitas: platform,

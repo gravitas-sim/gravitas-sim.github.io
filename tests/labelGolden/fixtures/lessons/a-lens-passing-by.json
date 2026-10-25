@@ -1,0 +1,95 @@
+{
+ "id": "a-lens-passing-by",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.the-peak.fields.0.unit",""],
+    ["steps.how-long.fields.0.unit","d"],
+    ["steps.how-long.fields.1.unit","d"],
+    ["steps.the-crossing-time-by-hand.unit","d"],
+    ["steps.the-peak-by-hand.unit",""],
+    ["steps.a-faster-lens.fields.0.unit","d"],
+    ["steps.one-curve-three-lenses.fields.0.unit","solar masses"],
+    ["steps.one-curve-three-lenses.fields.1.unit","solar masses"],
+    ["steps.blended-light.fields.0.unit",""],
+    ["steps.fit-the-event-blend-free.unit","d"],
+    ["steps.the-wrong-blend.unit",""],
+    ["steps.a-star-with-a-size.fields.0.unit",""]
+   ],
+   "numbered": [
+    ["steps.the-peak.fields.0.hint","10"],
+    ["steps.how-long.fields.0.hint","16.6"],
+    ["steps.how-long.fields.1.label","Brighter than 1.34"],
+    ["steps.how-long.fields.1.hint","33"],
+    ["steps.a-faster-lens.fields.0.hint","8.3"],
+    ["steps.one-curve-three-lenses.fields.0.label","At 2 kpc and 100 km/s"],
+    ["steps.one-curve-three-lenses.fields.0.hint","0.075"],
+    ["steps.one-curve-three-lenses.fields.1.label","At 6 kpc and 300 km/s"],
+    ["steps.one-curve-three-lenses.fields.1.hint","0.68"],
+    ["steps.blended-light.fields.0.hint","5.5"],
+    ["steps.a-star-with-a-size.fields.0.hint","20"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.how-long.fields.1.label","Más brillante que 1,34"],
+    ["steps.one-curve-three-lenses.fields.0.label","A 2 kpc y 100 km/s"],
+    ["steps.one-curve-three-lenses.fields.1.label","A 6 kpc y 300 km/s"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "the-crossing-time-by-hand",
+    "answer": "16.6",
+    "tolerance": "0.4",
+    "unit": "d"
+   },
+   {
+    "sid": "the-peak-by-hand",
+    "answer": "2.18",
+    "tolerance": "0.03",
+    "unit": ""
+   },
+   {
+    "sid": "fit-the-event-blend-free",
+    "answer": "25.2",
+    "tolerance": "1.3",
+    "unit": "d"
+   },
+   {
+    "sid": "the-wrong-blend",
+    "answer": "2.13",
+    "tolerance": "0.1",
+    "unit": ""
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "the-peak": {
+    "validate": {"calls":97,"distinct":2,"digest":"30a962a006090569","samples":[null,{"level":"error","message":"Load “A typical bulge event” and read “Peak flux over baseline”."}]}
+   },
+   "how-long": {
+    "validate": {"calls":232,"distinct":2,"digest":"f7e1faab17ff5ad5","samples":[null,{"level":"error","message":"Use the typical event (0.3 solar masses, 6 kpc, 200 km/s, closest approach 0.1), then read “Crossing time tE” and “Time brighter than 1.34 times baseline”."}]}
+   },
+   "a-faster-lens": {
+    "validate": {"calls":97,"distinct":2,"digest":"00ce35eecd1fd158","samples":[null,{"level":"error","message":"Set “Sideways speed of the lens” to 400 km/s with the other values unchanged, then read “Crossing time tE”."}]}
+   },
+   "one-curve-three-lenses": {
+    "validate": {"calls":232,"distinct":2,"digest":"be374d0279a185cb","samples":[null,{"level":"error","message":"Use the typical event and read the rows “Mass for this tE at 2 kpc and 100 km/s” and “Mass for this tE at 6 kpc and 300 km/s”."}]}
+   },
+   "blended-light": {
+    "validate": {"calls":97,"distinct":2,"digest":"e27517767d66ec4e","samples":[null,{"level":"error","message":"Set “Share of the light that is the source’s” to 0.5 with the typical event, then read “Peak flux over baseline”."}]}
+   },
+   "a-star-with-a-size": {
+    "validate": {"calls":97,"distinct":2,"digest":"9bde18d1936001b6","samples":[null,{"level":"error","message":"Set the closest approach to 0.01 and the source radius to 0.1, then read “Peak flux over baseline”."}]}
+   }
+  },
+  "es": "same"
+ }
+}

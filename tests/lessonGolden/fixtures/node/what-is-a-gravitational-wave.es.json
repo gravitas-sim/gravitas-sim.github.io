@@ -1,0 +1,990 @@
+{
+ "id": "what-is-a-gravitational-wave",
+ "locale": "es",
+ "title": "¿Qué es una onda gravitacional?",
+ "steps": 28,
+ "depths": [
+  [
+   "core",
+   28
+  ]
+ ],
+ "grading": [
+  {
+   "sid": "travel-without-shining",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "gravity-is-already-here",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     true,
+     "correct"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "a-sphere-that-breathes",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     true,
+     "correct"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "what-has-to-change",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "the-pattern-repeats",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "stretch-one-way",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "slower-pair-faster-pair",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     true,
+     "correct"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "the-chirp",
+   "type": "question",
+   "kind": "short",
+   "grades": [
+    [
+     "ungraded",
+     null
+    ]
+   ]
+  },
+  {
+   "sid": "where-the-calculation-stops",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "tell-the-story",
+   "type": "question",
+   "kind": "short",
+   "grades": [
+    [
+     "ungraded",
+     null
+    ]
+   ]
+  }
+ ],
+ "progress": {
+  "record": {
+   "schema": 2,
+   "lesson": "what-is-a-gravitational-wave",
+   "stepSid": "what-you-worked-out",
+   "responses": {
+    "what-is-a-gravitational-wave:travel-without-shining": 1,
+    "what-is-a-gravitational-wave:gravity-is-already-here": 0,
+    "what-is-a-gravitational-wave:a-sphere-that-breathes": 0,
+    "what-is-a-gravitational-wave:what-has-to-change": 2,
+    "what-is-a-gravitational-wave:the-pattern-repeats": 1,
+    "what-is-a-gravitational-wave:stretch-one-way": 1,
+    "what-is-a-gravitational-wave:slower-pair-faster-pair": 0,
+    "what-is-a-gravitational-wave:the-chirp": "A fixed sentence for the golden.",
+    "what-is-a-gravitational-wave:where-the-calculation-stops": 1,
+    "what-is-a-gravitational-wave:tell-the-story": "A fixed sentence for the golden."
+   },
+   "attempts": {
+    "what-is-a-gravitational-wave:travel-without-shining": 1,
+    "what-is-a-gravitational-wave:gravity-is-already-here": 1,
+    "what-is-a-gravitational-wave:a-sphere-that-breathes": 1,
+    "what-is-a-gravitational-wave:what-has-to-change": 1,
+    "what-is-a-gravitational-wave:the-pattern-repeats": 1,
+    "what-is-a-gravitational-wave:stretch-one-way": 1,
+    "what-is-a-gravitational-wave:slower-pair-faster-pair": 1,
+    "what-is-a-gravitational-wave:where-the-calculation-stops": 1
+   },
+   "visited": [
+    "travel-without-shining",
+    "meet-the-two-objects",
+    "gravity-is-already-here",
+    "a-sphere-that-breathes",
+    "change-the-shape",
+    "what-has-to-change",
+    "watch-the-pair",
+    "the-pattern-repeats",
+    "follow-a-disturbance-outward",
+    "freely-floating-markers",
+    "stretch-one-way",
+    "now-swap",
+    "markers-not-carried-away",
+    "why-drawn-so-large",
+    "measure-a-change-in-length",
+    "can-space-carry-a-sound",
+    "slower-pair-faster-pair",
+    "count-the-rhythm",
+    "why-an-orbit-shrinks",
+    "the-chirp",
+    "where-the-calculation-stops",
+    "different-compact-pairs",
+    "the-same-source-farther-away",
+    "an-observatory-measures-a-difference",
+    "what-two-observatories-recorded",
+    "design-one-small-experiment",
+    "tell-the-story",
+    "what-you-worked-out"
+   ],
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "depth": "core",
+   "spent": 600
+  },
+  "read": {
+   "responses": {
+    "what-is-a-gravitational-wave:travel-without-shining": 1,
+    "what-is-a-gravitational-wave:gravity-is-already-here": 0,
+    "what-is-a-gravitational-wave:a-sphere-that-breathes": 0,
+    "what-is-a-gravitational-wave:what-has-to-change": 2,
+    "what-is-a-gravitational-wave:the-pattern-repeats": 1,
+    "what-is-a-gravitational-wave:stretch-one-way": 1,
+    "what-is-a-gravitational-wave:slower-pair-faster-pair": 0,
+    "what-is-a-gravitational-wave:the-chirp": "A fixed sentence for the golden.",
+    "what-is-a-gravitational-wave:where-the-calculation-stops": 1,
+    "what-is-a-gravitational-wave:tell-the-story": "A fixed sentence for the golden."
+   },
+   "attempts": {
+    "what-is-a-gravitational-wave:travel-without-shining": 1,
+    "what-is-a-gravitational-wave:gravity-is-already-here": 1,
+    "what-is-a-gravitational-wave:a-sphere-that-breathes": 1,
+    "what-is-a-gravitational-wave:what-has-to-change": 1,
+    "what-is-a-gravitational-wave:the-pattern-repeats": 1,
+    "what-is-a-gravitational-wave:stretch-one-way": 1,
+    "what-is-a-gravitational-wave:slower-pair-faster-pair": 1,
+    "what-is-a-gravitational-wave:where-the-calculation-stops": 1
+   },
+   "visited": [
+    "a-sphere-that-breathes",
+    "an-observatory-measures-a-difference",
+    "can-space-carry-a-sound",
+    "change-the-shape",
+    "count-the-rhythm",
+    "design-one-small-experiment",
+    "different-compact-pairs",
+    "follow-a-disturbance-outward",
+    "freely-floating-markers",
+    "gravity-is-already-here",
+    "markers-not-carried-away",
+    "measure-a-change-in-length",
+    "meet-the-two-objects",
+    "now-swap",
+    "slower-pair-faster-pair",
+    "stretch-one-way",
+    "tell-the-story",
+    "the-chirp",
+    "the-pattern-repeats",
+    "the-same-source-farther-away",
+    "travel-without-shining",
+    "watch-the-pair",
+    "what-has-to-change",
+    "what-two-observatories-recorded",
+    "what-you-worked-out",
+    "where-the-calculation-stops",
+    "why-an-orbit-shrinks",
+    "why-drawn-so-large"
+   ],
+   "stepSid": "what-you-worked-out",
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "depth": "core",
+   "deepest": null,
+   "spent": 600,
+   "schema": 2,
+   "migrated": false,
+   "notes": []
+  }
+ },
+ "backup": {
+  "backup": {
+   "kind": "gravitas.investigation.progress",
+   "version": 2,
+   "savedAt": "2026-01-02T04:05:06.000Z",
+   "lesson": {
+    "id": "what-is-a-gravitational-wave",
+    "title": "¿Qué es una onda gravitacional?",
+    "stepCount": 28
+   },
+   "student": null,
+   "progress": {
+    "stepSid": "what-you-worked-out",
+    "startedAt": "2026-01-02T03:04:05.000Z",
+    "visited": [
+     "travel-without-shining",
+     "meet-the-two-objects",
+     "gravity-is-already-here",
+     "a-sphere-that-breathes",
+     "change-the-shape",
+     "what-has-to-change",
+     "watch-the-pair",
+     "the-pattern-repeats",
+     "follow-a-disturbance-outward",
+     "freely-floating-markers",
+     "stretch-one-way",
+     "now-swap",
+     "markers-not-carried-away",
+     "why-drawn-so-large",
+     "measure-a-change-in-length",
+     "can-space-carry-a-sound",
+     "slower-pair-faster-pair",
+     "count-the-rhythm",
+     "why-an-orbit-shrinks",
+     "the-chirp",
+     "where-the-calculation-stops",
+     "different-compact-pairs",
+     "the-same-source-farther-away",
+     "an-observatory-measures-a-difference",
+     "what-two-observatories-recorded",
+     "design-one-small-experiment",
+     "tell-the-story",
+     "what-you-worked-out"
+    ],
+    "responses": {
+     "what-is-a-gravitational-wave:travel-without-shining": 1,
+     "what-is-a-gravitational-wave:gravity-is-already-here": 0,
+     "what-is-a-gravitational-wave:a-sphere-that-breathes": 0,
+     "what-is-a-gravitational-wave:what-has-to-change": 2,
+     "what-is-a-gravitational-wave:the-pattern-repeats": 1,
+     "what-is-a-gravitational-wave:stretch-one-way": 1,
+     "what-is-a-gravitational-wave:slower-pair-faster-pair": 0,
+     "what-is-a-gravitational-wave:the-chirp": "A fixed sentence for the golden.",
+     "what-is-a-gravitational-wave:where-the-calculation-stops": 1,
+     "what-is-a-gravitational-wave:tell-the-story": "A fixed sentence for the golden."
+    },
+    "attempts": {
+     "what-is-a-gravitational-wave:travel-without-shining": 1,
+     "what-is-a-gravitational-wave:gravity-is-already-here": 1,
+     "what-is-a-gravitational-wave:a-sphere-that-breathes": 1,
+     "what-is-a-gravitational-wave:what-has-to-change": 1,
+     "what-is-a-gravitational-wave:the-pattern-repeats": 1,
+     "what-is-a-gravitational-wave:stretch-one-way": 1,
+     "what-is-a-gravitational-wave:slower-pair-faster-pair": 1,
+     "what-is-a-gravitational-wave:where-the-calculation-stops": 1
+    }
+   },
+   "steps": [
+    {
+     "index": 0,
+     "sid": "travel-without-shining",
+     "fingerprint": "predict|-|gw-lab|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 1,
+     "sid": "meet-the-two-objects",
+     "fingerprint": "explore|-|gw-lab|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 2,
+     "sid": "gravity-is-already-here",
+     "fingerprint": "question|choice|gw-lab|-|-|4|a=0;c=0",
+     "optionCount": 4
+    },
+    {
+     "index": 3,
+     "sid": "a-sphere-that-breathes",
+     "fingerprint": "predict|-|gw-lab|-|-|4|a=0;c=0",
+     "optionCount": 4
+    },
+    {
+     "index": 4,
+     "sid": "change-the-shape",
+     "fingerprint": "explore|-|gw-lab|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 5,
+     "sid": "what-has-to-change",
+     "fingerprint": "predict|-|gw-lab|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 6,
+     "sid": "watch-the-pair",
+     "fingerprint": "explore|-|gw-lab|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 7,
+     "sid": "the-pattern-repeats",
+     "fingerprint": "question|choice|gw-lab|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 8,
+     "sid": "follow-a-disturbance-outward",
+     "fingerprint": "explore|-|gw-lab|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 9,
+     "sid": "freely-floating-markers",
+     "fingerprint": "read|-|gw-lab|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 10,
+     "sid": "stretch-one-way",
+     "fingerprint": "question|choice|gw-lab|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 11,
+     "sid": "now-swap",
+     "fingerprint": "measure|-|gw-lab|-|wide_dir+wide_dir_later|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 12,
+     "sid": "markers-not-carried-away",
+     "fingerprint": "explore|-|gw-lab|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 13,
+     "sid": "why-drawn-so-large",
+     "fingerprint": "read|-|gw-lab|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 14,
+     "sid": "measure-a-change-in-length",
+     "fingerprint": "measure|-|gw-lab|-|toy+real|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 15,
+     "sid": "can-space-carry-a-sound",
+     "fingerprint": "read|-|gw-lab|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 16,
+     "sid": "slower-pair-faster-pair",
+     "fingerprint": "predict|-|gw-lab|-|-|4|a=0;c=0",
+     "optionCount": 4
+    },
+    {
+     "index": 17,
+     "sid": "count-the-rhythm",
+     "fingerprint": "measure|-|gw-lab|-|orbits+peaks+ratio|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 18,
+     "sid": "why-an-orbit-shrinks",
+     "fingerprint": "read|-|gw-lab|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 19,
+     "sid": "the-chirp",
+     "fingerprint": "question|short|gw-lab|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 20,
+     "sid": "where-the-calculation-stops",
+     "fingerprint": "question|choice|gw-lab|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 21,
+     "sid": "different-compact-pairs",
+     "fingerprint": "explore|-|gw-lab|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 22,
+     "sid": "the-same-source-farther-away",
+     "fingerprint": "measure|-|gw-lab|-|a400+a800+a1600|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 23,
+     "sid": "an-observatory-measures-a-difference",
+     "fingerprint": "explore|-|gw-lab|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 24,
+     "sid": "what-two-observatories-recorded",
+     "fingerprint": "read|-|gw-real|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 25,
+     "sid": "design-one-small-experiment",
+     "fingerprint": "measure|-|gw-lab|-|variable+a+b+change|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 26,
+     "sid": "tell-the-story",
+     "fingerprint": "question|short|gw-lab|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 27,
+     "sid": "what-you-worked-out",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    }
+   ]
+  },
+  "verdict": {
+   "ok": true
+  },
+  "restored": {
+   "responses": {
+    "what-is-a-gravitational-wave:travel-without-shining": 1,
+    "what-is-a-gravitational-wave:gravity-is-already-here": 0,
+    "what-is-a-gravitational-wave:a-sphere-that-breathes": 0,
+    "what-is-a-gravitational-wave:what-has-to-change": 2,
+    "what-is-a-gravitational-wave:the-pattern-repeats": 1,
+    "what-is-a-gravitational-wave:stretch-one-way": 1,
+    "what-is-a-gravitational-wave:slower-pair-faster-pair": 0,
+    "what-is-a-gravitational-wave:the-chirp": "A fixed sentence for the golden.",
+    "what-is-a-gravitational-wave:where-the-calculation-stops": 1,
+    "what-is-a-gravitational-wave:tell-the-story": "A fixed sentence for the golden."
+   },
+   "attempts": {
+    "what-is-a-gravitational-wave:travel-without-shining": 1,
+    "what-is-a-gravitational-wave:gravity-is-already-here": 1,
+    "what-is-a-gravitational-wave:a-sphere-that-breathes": 1,
+    "what-is-a-gravitational-wave:what-has-to-change": 1,
+    "what-is-a-gravitational-wave:the-pattern-repeats": 1,
+    "what-is-a-gravitational-wave:stretch-one-way": 1,
+    "what-is-a-gravitational-wave:slower-pair-faster-pair": 1,
+    "what-is-a-gravitational-wave:where-the-calculation-stops": 1
+   },
+   "visited": [
+    "a-sphere-that-breathes",
+    "an-observatory-measures-a-difference",
+    "can-space-carry-a-sound",
+    "change-the-shape",
+    "count-the-rhythm",
+    "design-one-small-experiment",
+    "different-compact-pairs",
+    "follow-a-disturbance-outward",
+    "freely-floating-markers",
+    "gravity-is-already-here",
+    "markers-not-carried-away",
+    "measure-a-change-in-length",
+    "meet-the-two-objects",
+    "now-swap",
+    "slower-pair-faster-pair",
+    "stretch-one-way",
+    "tell-the-story",
+    "the-chirp",
+    "the-pattern-repeats",
+    "the-same-source-farther-away",
+    "travel-without-shining",
+    "watch-the-pair",
+    "what-has-to-change",
+    "what-two-observatories-recorded",
+    "what-you-worked-out",
+    "where-the-calculation-stops",
+    "why-an-orbit-shrinks",
+    "why-drawn-so-large"
+   ],
+   "stepIndex": 27,
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "moved": [],
+   "dropped": [],
+   "quarantined": {},
+   "uncertain": 0,
+   "discardedKeys": 0,
+   "byPosition": false
+  }
+ },
+ "ledger": {
+  "entry": "golden-what-is-a-gravitational-wave",
+  "record": {
+   "ids": [
+    "golden-what-is-a-gravitational-wave"
+   ],
+   "rows": [
+    [
+     "golden-what-is-a-gravitational-wave",
+     "q1",
+     3.5247,
+     "d",
+     0.0012,
+     "measured",
+     "simulation",
+     "rv-fit",
+     null,
+     [
+      "s",
+      "d"
+     ]
+    ]
+   ],
+   "total": 1
+  },
+  "digest": "958cedbaa8361f5ea9da6a4644650c7c268f4540c56d4aa03c8726990bde1f74"
+ },
+ "tokens": {
+  "plain": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "a": null,
+    "r": null,
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "travel-without-shining",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "gravity-is-already-here",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "a-sphere-that-breathes",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "what-has-to-change",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "the-pattern-repeats",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "stretch-one-way",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "slower-pair-faster-pair",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "the-chirp",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    },
+    {
+     "sid": "where-the-calculation-stops",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "tell-the-story",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    }
+   ]
+  },
+  "assignment": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "a": "golden-assignment",
+    "r": "roster-1",
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "travel-without-shining",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "gravity-is-already-here",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "a-sphere-that-breathes",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "what-has-to-change",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "the-pattern-repeats",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "stretch-one-way",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "slower-pair-faster-pair",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "the-chirp",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    },
+    {
+     "sid": "where-the-calculation-stops",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "tell-the-story",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    }
+   ]
+  },
+  "evidence": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "ev": {
+     "d": "958cedbaa8361f5ea9da6a4644650c7c268f4540c56d4aa03c8726990bde1f74",
+     "i": [
+      "golden-what-is-a-gravitational-wave"
+     ],
+     "n": 1,
+     "r": [
+      [
+       "golden-what-is-a-gravitational-wave",
+       "q1",
+       3.5247,
+       "d",
+       0.0012,
+       "measured",
+       "simulation",
+       "rv-fit",
+       null,
+       [
+        "s",
+        "d"
+       ]
+      ]
+     ]
+    },
+    "a": null,
+    "r": null,
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "travel-without-shining",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "gravity-is-already-here",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "a-sphere-that-breathes",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "what-has-to-change",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "the-pattern-repeats",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "stretch-one-way",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "slower-pair-faster-pair",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "the-chirp",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    },
+    {
+     "sid": "where-the-calculation-stops",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "tell-the-story",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    }
+   ]
+  },
+  "depth": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "dp": "core",
+    "a": null,
+    "r": null,
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "travel-without-shining",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "gravity-is-already-here",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "a-sphere-that-breathes",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "what-has-to-change",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "the-pattern-repeats",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "stretch-one-way",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "slower-pair-faster-pair",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "the-chirp",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    },
+    {
+     "sid": "where-the-calculation-stops",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "tell-the-story",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    }
+   ]
+  }
+ }
+}

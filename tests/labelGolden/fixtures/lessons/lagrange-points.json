@@ -1,0 +1,41 @@
+{
+ "id": "lagrange-points",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.l4-distance.unit",""]
+   ],
+   "numbered": []
+  },
+  "es": {
+   "units": [],
+   "numbered": []
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "l4-distance",
+    "answer": "1",
+    "tolerance": "0.02",
+    "unit": ""
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "open-the-neck": {
+    "probe": [[{"label":"The tracer","value":"not on the canvas"}],[{"label":"Tracer to the primary","value":"1.448 separations"},{"label":"Tracer to the secondary","value":"1.100 separations"},{"label":"Which side of the pair it is on","value":"the secondary’s","emphasis":true},{"label":"What crossing would look like","value":"that answer changing while you watch"}]]
+   },
+   "watch-it-not-cross": {
+    "probe": [[{"label":"The tracer","value":"not on the canvas"}],[{"label":"Tracer to the primary","value":"1.448 separations"},{"label":"Tracer to the secondary","value":"1.100 separations"},{"label":"Which side of the pair it is on","value":"the secondary’s","emphasis":true},{"label":"What crossing would look like","value":"that answer changing while you watch"}]]
+   },
+   "break-it": {
+    "probe": [[{"label":"The tracer","value":"not on the canvas"}],[{"label":"Tracer to the primary","value":"1.448 separations"},{"label":"Tracer to the secondary","value":"1.100 separations"},{"label":"Which side of the pair it is on","value":"the secondary’s","emphasis":true},{"label":"What crossing would look like","value":"that answer changing while you watch"}]]
+   }
+  },
+  "es": "same"
+ }
+}

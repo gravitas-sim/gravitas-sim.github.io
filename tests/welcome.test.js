@@ -1,4 +1,4 @@
-import { describe, test, expect, beforeEach, jest } from '@jest/globals';
+import { describe, test, expect, beforeEach } from '@jest/globals';
 
 import {
   WELCOME_SEEN_KEY,
@@ -7,18 +7,9 @@ import {
   resetWelcomePreference,
   hasDeepLinkDestination,
   shouldShowWelcome,
-  cardSummary,
-  featuredScenarios,
-  previewInvestigations,
+  unfinishedLessons,
 } from '../js/welcome.js';
-import {
-  FEATURED_SCENARIO_KEYS,
-  ENTRY_CARDS,
-  AUDIENCES,
-  RESOURCE_LINKS,
-} from '../js/data/welcome.js';
-import { SCENARIO_INFO } from '../js/data/scenarioInfo.js';
-import { INVESTIGATIONS } from '../js/data/investigations.js';
+import { readFileSync } from 'node:fs';
 
 /**
  * Replace window.localStorage for one test.
@@ -178,174 +169,90 @@ describe('deep links are never intercepted', () => {
   });
 });
 
-describe('featured scenarios come from the live catalog', () => {
-  test('every featured key exists in SCENARIO_INFO', () => {
-    // The one way this gallery can rot: a scenario renamed in scenarios.js and
-    // scenarioInfo.js while the front door keeps pointing at the old name.
-    for (const key of FEATURED_SCENARIO_KEYS) {
-      expect(SCENARIO_INFO[key]).toBeTruthy();
-      expect(typeof SCENARIO_INFO[key].title).toBe('string');
-      expect(typeof SCENARIO_INFO[key].summary).toBe('string');
-    }
-  });
+const read = f => readFileSync(new URL(`../${f}`, import.meta.url), 'utf8');
 
-  test('there are six, and no duplicates', () => {
-    expect(FEATURED_SCENARIO_KEYS).toHaveLength(6);
-    expect(new Set(FEATURED_SCENARIO_KEYS).size).toBe(6);
-  });
+describe('Home (Prompt 162): what it says, where to start, and the five places', () => {
+  const home = read('js/fragments/home.html');
+  const inv = JSON.parse(read('tools/navigation-inventory.json'));
 
-  test('every featured scenario shows the catalog thumbnail', () => {
-    // Not its own artwork: the front door and the gallery show one image per
-    // scenario, from one path in the catalog.
-    for (const card of featuredScenarios()) {
-      expect(card.info.thumbnail).toBe(SCENARIO_INFO[card.key].thumbnail);
-      expect(card.info.thumbnail).toMatch(/^images\/scenarios\/.+\.webp$/);
-    }
-  });
-
-  test('titles and summaries are read, not restated', () => {
-    const cards = featuredScenarios();
-    expect(cards).toHaveLength(6);
-    for (const card of cards) {
-      const info = SCENARIO_INFO[card.key];
-      expect(card.title).toBe(info.title);
-      // The card text must be an opening slice of the catalog summary, never a
-      // rewrite: edit scenarioInfo.js and the front door follows. Whitespace is
-      // normalized on both sides because the trim rejoins sentences with a
-      // single space.
-      const flat = t => String(t).replace(/\s+/g, ' ').trim();
-      expect(flat(info.summary).startsWith(flat(card.summary))).toBe(true);
-    }
-  });
-
-  test('a card summary is trimmed to an opening sentence or two', () => {
-    // A short opener reads as a fragment, so it keeps the next sentence.
-    expect(cardSummary('One short thing. Then another. And a third.')).toBe(
-      'One short thing. Then another.'
+  test('its sections are the orientation, where to start, the five places and the foot', () => {
+    const ids = [...home.matchAll(/<section[^>]*?\bid="(wel\w+)"/g)].map(
+      m => m[1]
     );
-    // A long one stands alone.
-    expect(
-      cardSummary(
-        'A sentence long enough that it stands on its own two feet without help. Second.'
-      )
-    ).toBe(
-      'A sentence long enough that it stands on its own two feet without help.'
-    );
-    expect(cardSummary('No terminator here')).toBe('No terminator here');
-    expect(cardSummary('')).toBe('');
-    expect(cardSummary(undefined)).toBe('');
+    expect(ids).toEqual(['welOrient', 'welContinue']);
+    expect(home).toContain('id="welStart"');
+    expect(home).toContain('id="welPlaces"');
   });
 
-  test('a decimal point does not end a sentence', () => {
-    // The catalog is full of "1.4 M_sun" and "0.5 AU". Splitting on a bare
-    // period put "Two neutron stars (1." on the neutron-star card.
-    expect(
-      cardSummary(
-        'Two neutron stars (1.4 M☉ each) spiral toward each other in a death dance. Then more.'
-      )
-    ).toBe(
-      'Two neutron stars (1.4 M☉ each) spiral toward each other in a death dance.'
-    );
-    expect(
-      cardSummary('It sits at 0.72 AU and gets 1.9 Earths of light.')
-    ).toBe('It sits at 0.72 AU and gets 1.9 Earths of light.');
+  test('it shows no count of content and no feature list', () => {
+    expect(home).not.toMatch(/\(\d+\)/);
+    expect(home).not.toContain('data-slot="scenario-count"');
+    expect(home).not.toContain('data-lesson-count');
+    for (const gone of [
+      'wel-triad',
+      'wel-scenarios',
+      'wel-audiences',
+      'wel-links',
+      'welLibrary',
+    ])
+      expect(home).not.toContain(gone);
   });
 
-  test('every card summary is short enough for a card', () => {
-    for (const card of featuredScenarios()) {
-      expect(card.summary.length).toBeGreaterThan(20);
-      expect(card.summary.length).toBeLessThan(240);
+  test('the recommended start is the committed list, one entry per audience, each acting or going somewhere', () => {
+    const block =
+      /<!-- first-week:home -->([\s\S]*?)<!-- \/first-week:home -->/.exec(
+        home
+      )[1];
+    const items = block.match(/<li class="wel-start-item">/g) ?? [];
+    expect(items).toHaveLength(inv.firstWeek.starts.length);
+    for (const start of inv.firstWeek.starts) {
+      expect(block.includes(start.audience.en)).toBe(true);
+      expect(block.includes(start.audience.es)).toBe(true);
+    }
+    // the actions are ones welcome.js runs
+    const source = read('js/welcome.js');
+    for (const [, action] of block.matchAll(/data-action="(\w+)"/g))
+      expect({ action, known: source.includes(`case '${action}'`) }).toEqual({
+        action,
+        known: true,
+      });
+  });
+
+  test('every action Home offers is one the module implements', () => {
+    const source = read('js/welcome.js');
+    for (const [, action] of home.matchAll(/data-action="(\w+)"/g))
+      expect({ action, known: source.includes(`case '${action}'`) }).toEqual({
+        action,
+        known: true,
+      });
+  });
+
+  test('every link in Home goes to a page of this repository, or to the sandbox itself', () => {
+    for (const [, href] of home.matchAll(/href="(\/[^"]*)"/g)) {
+      const path = href.replace(/[#?].*$/, '');
+      if (path === '/' || path.endsWith('.pdf')) continue;
+      expect({
+        href,
+        page:
+          readFileSync(new URL(`..${path}index.html`, import.meta.url), 'utf8')
+            .length > 0,
+      }).toEqual({ href, page: true });
     }
   });
 
-  test('a renamed scenario costs one card, not the gallery', () => {
-    const warn = jest.spyOn(console, 'warn').mockImplementation(() => {});
-    const original = SCENARIO_INFO[FEATURED_SCENARIO_KEYS[0]];
-    delete SCENARIO_INFO[FEATURED_SCENARIO_KEYS[0]];
-    try {
-      const cards = featuredScenarios();
-      expect(cards).toHaveLength(5);
-      expect(warn).toHaveBeenCalled();
-    } finally {
-      SCENARIO_INFO[FEATURED_SCENARIO_KEYS[0]] = original;
-      warn.mockRestore();
-    }
-  });
-});
-
-describe('the routing out of the front door', () => {
-  test('lesson previews come from the real investigation registry', () => {
-    const preview = previewInvestigations(INVESTIGATIONS, 3);
-    expect(preview).toHaveLength(3);
-    preview.forEach((p, i) => {
-      expect(p.title).toBe(INVESTIGATIONS[i].title);
-      expect(p.subtitle).toBe(INVESTIGATIONS[i].subtitle);
-      expect(p.steps).toBe(INVESTIGATIONS[i].steps.length);
-    });
-  });
-
-  test('no second copy of the scenario or lesson catalog exists', async () => {
-    // js/data/welcome.js may carry keys and presentation, never the truth.
-    const source = await import('node:fs').then(fs =>
-      fs.readFileSync(new URL('../js/data/welcome.js', import.meta.url), 'utf8')
-    );
-    for (const key of FEATURED_SCENARIO_KEYS) {
-      // The key appears once, in the featured list and the art map. The
-      // catalog's own title and summary must not.
-      expect(source).not.toContain(SCENARIO_INFO[key].summary);
-    }
-    for (const inv of INVESTIGATIONS) {
-      expect(source).not.toContain(inv.summary);
-    }
-  });
-
-  test('the entry cards route through actions the module implements', () => {
-    // Every card's action must be one welcome.js knows how to run; a typo here
-    // is a button that silently does nothing.
-    const known = new Set([
-      'enter',
-      'investigations',
-      'instructors',
-      'scenarios',
-      'tour',
-      'reset',
-    ]);
-    for (const card of ENTRY_CARDS) {
-      expect(known.has(card.action)).toBe(true);
-      expect(card.cta.length).toBeGreaterThan(3);
-    }
-    // The three doors the brief calls for, in order.
-    expect(ENTRY_CARDS.map(c => c.id)).toEqual([
-      'sandbox',
-      'investigations',
-      'instructors',
-    ]);
-  });
-
-  test('the audience block names students, instructors and everyone else', () => {
-    expect(AUDIENCES).toHaveLength(3);
-    const titles = AUDIENCES.map(a => a.title.toLowerCase()).join(' ');
-    expect(titles).toContain('student');
-    expect(titles).toContain('instructor');
-  });
-});
-
-describe('outbound links point at pages that exist', () => {
-  test('every resource link resolves to a file in this repository', async () => {
-    const fs = await import('node:fs');
-    for (const link of Object.values(RESOURCE_LINKS)) {
-      // "/model/" is served as model/index.html by GitHub Pages.
-      const path = new URL(`..${link.href}index.html`, import.meta.url);
-      expect(fs.existsSync(path)).toBe(true);
-      expect(link.label.length).toBeGreaterThan(3);
-    }
-  });
-
-  test('no link is an invented PDF or an off-site placeholder', () => {
-    for (const link of Object.values(RESOURCE_LINKS)) {
-      expect(link.href).toMatch(/^\/[a-z]+\/$/);
-      expect(link.href).not.toMatch(/\.pdf$/i);
-      expect(link.href).not.toMatch(/^https?:/i);
-    }
+  test('where was I: the lessons started and not finished, most recent first, at most three', () => {
+    const catalog = [1, 2, 3, 4].map(n => ({
+      id: `l${n}`,
+      title: `L${n}`,
+      stepCount: 5,
+    }));
+    const saved = {
+      l1: { seen: 2, at: '2026-10-01' },
+      l2: { seen: 5, at: '2026-10-02' },
+      l3: { seen: 1, at: '2026-10-03' },
+      l4: { seen: 3, at: '2026-10-04' },
+    };
+    const going = unfinishedLessons(catalog, id => saved[id]);
+    expect(going.map(g => g.id)).toEqual(['l4', 'l3', 'l1']);
   });
 });

@@ -49,6 +49,7 @@ import {
   compareModels,
   dataKey,
 } from '../analysis/modelCompare.js';
+import { ID_ANALYSIS } from '../names.js';
 
 // Nothing from the page's own modules - its plot, selection, units and
 // translator - is imported here: they arrive in `ctx`. esbuild puts a module
@@ -788,7 +789,7 @@ export function mountFitPanel(root, ctx) {
     });
     save.addEventListener('click', () => {
       const doc = {
-        format: 'gravitas.analysis',
+        format: ID_ANALYSIS,
         formatVersion: 1,
         kind: 'models',
         tool: MODEL_COMPARISON,

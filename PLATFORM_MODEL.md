@@ -85,7 +85,7 @@ or a verb (assign, install, embed).
 | **Sandbox** | `/` | Unchanged; reached from Home and from every page's Labs group |
 | **Library** | the lesson browser, a dialog in `/` | One Library of Investigations, Activities, Scenarios, Datasets, Courses and Experiments (Prompt 54). The teaching page's activity list and the scenario gallery become filters of it |
 | **Observatory** | `/observatory/` | Stays; its guides become Investigations (section 8.3 of the roadmap) |
-| **Experiments** | `/experiments/`, linked from nowhere | Stays; in the Learn group and the Library |
+| **Experiments** | `/experiments/`, linked from nowhere | Stays; a place on the Observatory's page and in the Library |
 | **Labs** | `/3d/`, `/mission/lab/` and their diagnostic pages | Stay as peers of the Sandbox. The diagnostic pages (`/lab3d/`, `/mission/`) move to About, beside validation |
 | **Courses** | `/course/` | Stays; in Learn and on Home |
 | **My work** | none | New (Prompt 69): Evidence in one place |
@@ -99,17 +99,17 @@ share is the shell.
 
 - **Header:** the product name, linking Home; the primary navigation; the
   locale switch; the theme switch.
-- **Primary navigation:** five groups, each a disclosure button that shows
-  its links: **Learn** (Investigations, Courses, Observatory, Experiments),
-  **Labs** (Sandbox, 3-D lab, Mission lab), **Make** (Scenario Studio,
-  Investigation Composer, Course builder, Figure builder, Catalog), **Teach**
-  (Teaching, Instructor resources, Submission review, Classroom evidence
-  kit), **About** (the model, physics validation, the two diagnostic pages).
-  - One group opens at a time. Escape closes it and returns focus to its
-    button, and a click elsewhere closes it.
-  - The current page is marked `aria-current="page"`.
-  - It is the WAI-ARIA disclosure navigation pattern, not a menu: links stay
-    links, and Tab moves through them.
+- **Primary navigation:** the five destinations of NAVIGATION.md, one link
+  each and nothing nested (Prompt 162; it was five groups of 25 links until
+  then): **Explore** (the sandbox), **Learn** (the Library), **Observe** (the
+  Observatory), **My work** and **Teach**.
+  - The page's own destination is marked `aria-current="page"`; a page under a
+    destination marks that destination `aria-current="true"`.
+  - Everything that was a menu entry is a place on its destination's page
+    (`<!-- shell:places -->`, stamped from `tools/shell.mjs` `PLACES`) or in
+    Home's Explore entry, and every page but the sandbox carries a breadcrumb
+    stamped from the inventory's rows.
+  - Links stay links, and Tab moves through them; nothing opens or closes.
 - **"Back to":** none. Every page has the whole navigation, so no page is a
   dead end, and no link needs to be named after where it goes back to.
 - **Footer:** physics validation, the source code, the citation.

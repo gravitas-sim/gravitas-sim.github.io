@@ -1,0 +1,71 @@
+{
+ "id": "einstein-rings-and-arcs",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.a-star-ring.fields.0.unit","mas"],
+    ["steps.a-galaxy-ring.fields.0.unit","arcsec"],
+    ["steps.a-galaxy-ring.fields.1.unit","kpc"],
+    ["steps.weigh-the-lens.fields.0.unit","10^11 solar masses"],
+    ["steps.mass-by-hand.unit","10^11 solar masses"],
+    ["steps.move-the-source.fields.0.unit",""],
+    ["steps.move-the-source.fields.1.unit",""],
+    ["steps.an-isothermal-galaxy.fields.0.unit",""],
+    ["steps.an-isothermal-galaxy.fields.1.unit",""],
+    ["steps.the-speed-spread.unit","km/s"]
+   ],
+   "numbered": [
+    ["steps.a-star-ring.fields.0.hint","1.0"],
+    ["steps.a-galaxy-ring.fields.0.hint","0.64"],
+    ["steps.a-galaxy-ring.fields.1.hint","3.1"],
+    ["steps.weigh-the-lens.fields.0.hint","2.5"],
+    ["steps.move-the-source.fields.0.hint","1.28"],
+    ["steps.move-the-source.fields.1.hint","2.18"],
+    ["steps.an-isothermal-galaxy.fields.0.hint","1.5"],
+    ["steps.an-isothermal-galaxy.fields.1.hint","4"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": []
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "mass-by-hand",
+    "answer": "2.46",
+    "tolerance": "0.05",
+    "unit": "10^11 solar masses"
+   },
+   {
+    "sid": "the-speed-spread",
+    "answer": "263",
+    "tolerance": "3",
+    "unit": "km/s"
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "a-star-ring": {
+    "validate": {"calls":97,"distinct":3,"digest":"30365f5d5aa4085f","samples":[null,{"level":"ok","message":"About a milliarcsecond: at 4 kiloparsecs that is only 4 astronomical units. No telescope resolves the ring, so a star acts as a lens only by changing brightness."},{"level":"error","message":"Load “A Sun at 4 kpc” (mass 1, distance 4 kpc, offset 0) and read “Einstein radius, in milliarcseconds”."}]}
+   },
+   "a-galaxy-ring": {
+    "validate": {"calls":232,"distinct":2,"digest":"e510d50aa11c92e1","samples":[null,{"level":"error","message":"Load the galaxy preset (mass 10^11, distance 1 Gpc), then read the two rows “Einstein radius, in arcseconds” and “Einstein radius at the lens”."}]}
+   },
+   "weigh-the-lens": {
+    "validate": {"calls":97,"distinct":3,"digest":"028e0852740478b8","samples":[null,{"level":"error","message":"The Einstein radius goes as the square root of the mass. Raise the mass from 10^11 until “Einstein radius, in arcseconds” reads 1.0, then enter that mass in units of 10^11."},{"level":"ok","message":"About 2.5 × 10¹¹ solar masses. The ring grows as the square root of the mass, so a ring 1.6 times larger (1.0 against 0.64) holds 2.5 times the mass. A ring is a scale in the sky for a mass, measured without knowing what makes it up."}]}
+   },
+   "move-the-source": {
+    "validate": {"calls":232,"distinct":2,"digest":"af68904cdc937fd1","samples":[null,{"level":"error","message":"Set “Source offset” to 0.5 with a point mass, then read “Outer image, in Einstein radii” and “Total magnification”."}]}
+   },
+   "an-isothermal-galaxy": {
+    "validate": {"calls":232,"distinct":2,"digest":"17134a6b5ba2e595","samples":[null,{"level":"error","message":"Choose the singular isothermal sphere, offset 0.5, then read the same two rows."}]}
+   }
+  },
+  "es": "same"
+ }
+}

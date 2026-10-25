@@ -21,6 +21,8 @@ import * as physics from '../js/physics.js';
 import * as conservation from '../js/engine/conservation.js';
 import * as engineState from '../js/engine/state.js';
 import { AU_METERS, G_SI } from '../js/constants.js';
+import { absorb_into_star } from '../js/engine/bodies.js';
+import { OUTCOMES } from '../js/validation/engineTolerances.js';
 
 const golden = JSON.parse(
   readFileSync(
@@ -54,7 +56,9 @@ describe('the numbers are the ones the engine gave before the move', () => {
     expect(graveyard[0].totals.energy).toBe('-6517309.37878');
     expect(graveyard[0].totals.angular).toBe('-6505987.4472');
     expect(graveyard[0].drift.energyDrift).toBe('0');
-    expect(graveyard[1].spin).toBe('-0.000393366119608');
+    // Re-recorded for D-R10-23: it was -0.000393366119608 when only a hole
+    // banked spin; a star that absorbs a small body now banks its share too.
+    expect(graveyard[1].spin).toBe('-0.000303633314114');
     expect(graveyard[1].discarded.x).toBe('9.59581497618');
     // A moving hole banks spin, a fixed one discards momentum: both occur.
     expect(Number(graveyard[4].spin)).not.toBe(0);
@@ -296,6 +300,146 @@ describe('absorption ledgers', () => {
     physics.resetAbsorptionAccounting();
     expect(physics.getDiscardedAbsorptionMomentum()).toEqual({ x: 0, y: 0 });
     expect(physics.getAbsorbedSpinAngularMomentum()).toBe(0);
+  });
+});
+
+describe('a star absorbing a small body (D-R10-23), worked by hand', () => {
+  // The hole tests above, with a star in the hole's place: mass 10 at rest at
+  // the origin, a body of mass 2 at (3, 0) moving at (0, 4).
+  const star = (extra = {}) => ({
+    mass: 10,
+    pos: { x: 0, y: 0 },
+    vel: { x: 0, y: 0 },
+    model_owned: false,
+    ...extra,
+  });
+  const prey = () => ({
+    mass: 2,
+    pos: { x: 3, y: 0 },
+    vel: { x: 0, y: 4 },
+  });
+
+  beforeEach(() => {
+    physics.updatePhysicsSettings({
+      mutual_gravity: true,
+      star_only_gravity: false,
+    });
+    physics.resetAbsorptionAccounting();
+  });
+
+  test('a participating star takes the mean state, keeps momentum 8 and banks spin 20', () => {
+    const s = star();
+    absorb_into_star(s, prey());
+    expect(s.mass).toBe(12);
+    // The centre of mass: (10 * 0 + 2 * 3) / 12.
+    expect(s.pos.x).toBeCloseTo(0.5, 12);
+    expect(s.pos.y).toBe(0);
+    // The velocity: 2 * 4 / 12, so the system holds 12 * (8 / 12) = 8 in y, the
+    // 2 * 4 the body carried, as an absolute number and not a ratio.
+    expect(s.vel.x).toBe(0);
+    expect(s.vel.y).toBeCloseTo(8 / 12, 12);
+    expect(s.mass * s.vel.y).toBeCloseTo(8, 12);
+    // mu = 10 * 2 / 12; r_rel x v_rel = 3 * 4 - 0. A star has no spin field.
+    expect(physics.getAbsorbedSpinAngularMomentum()).toBeCloseTo(20, 12);
+    expect('spin_angular_momentum' in s).toBe(false);
+    expect(physics.getDiscardedAbsorptionMomentum()).toEqual({ x: 0, y: 0 });
+  });
+
+  test.each([
+    ['one-way gravity', { mutual_gravity: false }, {}],
+    ['star_only_gravity', { star_only_gravity: true }, {}],
+    ['a model-owned star', {}, { model_owned: true }],
+  ])(
+    '%s: the star keeps its state and the momentum is banked',
+    (_, settings, extra) => {
+      physics.updatePhysicsSettings(settings);
+      const s = star(extra);
+      absorb_into_star(s, { ...prey(), vel: { x: 3, y: 4 } });
+      expect(s.mass).toBe(12);
+      expect(s.pos).toEqual({ x: 0, y: 0 });
+      expect(s.vel).toEqual({ x: 0, y: 0 });
+      // m * v = 2 * (3, 4).
+      expect(physics.getDiscardedAbsorptionMomentum()).toEqual({ x: 6, y: 8 });
+      expect(physics.getAbsorbedSpinAngularMomentum()).toBe(0);
+    }
+  );
+
+  test('through the engine: momentum, centre of mass and the banked spin hold for a real star and planet', () => {
+    for (const l of ['planets', 'stars']) physics[l].length = 0;
+    const sun = new physics.StarObject({ x: 0, y: 0 }, { x: 1.5, y: -0.5 }, 4);
+    sun.model_owned = false;
+    sun.persistent = true;
+    const rock = new physics.Planet({ x: 0, y: 0 }, { x: -3, y: 4 }, 30);
+    rock.pos = { x: sun.radius * 0.5, y: 0 };
+    rock.persistent = true;
+    physics.stars.push(sun);
+    physics.planets.push(rock);
+    physics.bumpWorldGeneration();
+    const m = rock.mass;
+    const rx = rock.pos.x;
+    // Worked out here: M = 4 solar masses = 4000 units, the star at the origin.
+    const px = 4000 * 1.5 + m * -3;
+    const py = 4000 * -0.5 + m * 4;
+    const scale = 4000 * Math.hypot(1.5, 0.5) + m * 5;
+    const mu = (4000 * m) / (4000 + m);
+    const spin = mu * (rx * (4 - -0.5));
+    const L0 = m * (rx * 4);
+    physics.handle_star_object_collisions();
+    expect(rock.alive).toBe(false);
+    expect(sun.mass).toBeCloseTo(4000 + m, 9);
+    const tol = OUTCOMES.momentumScale * scale;
+    expect(Math.abs(sun.mass * sun.vel.x - px)).toBeLessThan(tol);
+    expect(Math.abs(sun.mass * sun.vel.y - py)).toBeLessThan(tol);
+    // The centre of mass: M x_cm = m * rx (the star stood at the origin).
+    expect(Math.abs(sun.mass * sun.pos.x - m * rx)).toBeLessThan(
+      OUTCOMES.momentumScale * m * rx
+    );
+    expect(sun.pos.y).toBe(0);
+    expect(physics.getAbsorbedSpinAngularMomentum()).toBeCloseTo(spin, 9);
+    // What is not kept is what is banked: L before minus L after.
+    const L1 = sun.mass * (sun.pos.x * sun.vel.y - sun.pos.y * sun.vel.x);
+    expect(L0 - L1).toBeCloseTo(spin, 9);
+    for (const l of ['planets', 'stars']) physics[l].length = 0;
+  });
+});
+
+describe('the stellar-absorption event reports the impact, not the merged star', () => {
+  test('relativeSpeed, position and masses are what the event always said', () => {
+    for (const l of ['planets', 'stars']) physics[l].length = 0;
+    physics.updatePhysicsSettings({
+      mutual_gravity: true,
+      star_only_gravity: false,
+    });
+    const sun = new physics.StarObject({ x: 0, y: 0 }, { x: 1.5, y: -0.5 }, 4);
+    sun.model_owned = false;
+    sun.persistent = true;
+    const rock = new physics.Planet({ x: 0, y: 0 }, { x: -3, y: 4 }, 30);
+    rock.pos = { x: sun.radius * 0.5, y: 0 };
+    rock.persistent = true;
+    physics.stars.push(sun);
+    physics.planets.push(rock);
+    physics.bumpWorldGeneration();
+    const heard = [];
+    const fn = e => heard.push(e.detail);
+    window.addEventListener('gravitasCollision', fn);
+    const m = rock.mass;
+    const rx = rock.pos.x;
+    physics.handle_star_object_collisions();
+    window.removeEventListener('gravitasCollision', fn);
+    expect(heard).toHaveLength(1);
+    // Worked by hand: v_rel = (1.5 - -3, -0.5 - 4) = (4.5, -4.5), so the impact
+    // speed is 4.5 * sqrt(2). The merged star moved (its velocity is now the
+    // mass-weighted one), and the event must not say so.
+    expect(heard[0].relativeSpeed).toBeCloseTo(4.5 * Math.SQRT2, 12);
+    expect(sun.vel.x).not.toBe(1.5);
+    expect(heard[0].position.x).toBeCloseTo(rx / 2, 12);
+    expect(heard[0].position.y).toBe(0);
+    // The star's mass after the merge, as before this change.
+    expect(heard[0].masses[0]).toBeCloseTo(4000 + m, 9);
+    expect(heard[0].masses[1]).toBe(m);
+    expect(heard[0].impactType).toBe('stellar-absorption');
+    expect(heard[0].sourceType).toBe('StarObject');
+    for (const l of ['planets', 'stars']) physics[l].length = 0;
   });
 });
 

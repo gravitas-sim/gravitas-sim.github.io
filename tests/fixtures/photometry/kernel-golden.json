@@ -1,0 +1,346 @@
+{
+  "format": "gravitas.photometry-kernel-golden/1",
+  "capturedFrom": "v3 80668d38, node v24.4.0",
+  "frames": [
+    {
+      "seed": "photometry-180-golden-lab",
+      "cases": [
+        {
+          "aperture": {
+            "x": 20.3,
+            "y": 24.6,
+            "r": 5,
+            "rIn": 8,
+            "rOut": 13
+          },
+          "background": {
+            "level": 817.8100303951368,
+            "scatter": 10.82424403090289,
+            "n": 329
+          },
+          "photometry": {
+            "net": 9027.697568389056,
+            "sigma": 311.0084425721456,
+            "snr": 29.027178470548666,
+            "npix": 80,
+            "sky": 817.8100303951368,
+            "terms": {
+              "source": 9027.697568389056,
+              "sky": 81333.56898033092,
+              "dark": 0,
+              "read": 6364.984802431611,
+              "variance": 96726.2513511516,
+              "noise": 311.0084425721456,
+              "snr": 29.027178470548666
+            },
+            "warnings": []
+          },
+          "measureFlux": {
+            "version": "1.0.0",
+            "mode": "flux",
+            "sum": 73240.546875,
+            "area": 78.515625,
+            "background": 817.5,
+            "backgroundScatter": 11.119499999999999,
+            "annulusPixels": 332,
+            "net": 9054.0234375,
+            "netError": 139.10523716396878,
+            "centroid": {
+              "x": 20.390523032319024,
+              "y": 24.590696470405508,
+              "xError": 0.025549930542548775,
+              "yError": 0.025707444891672943
+            },
+            "warnings": [
+              {
+                "code": "noiseModelAssumed",
+                "gain": 1.5
+              }
+            ]
+          }
+        },
+        {
+          "aperture": {
+            "x": 33.8,
+            "y": 15.2,
+            "r": 4.25,
+            "rIn": 7.5,
+            "rOut": 12.5
+          },
+          "background": {
+            "level": 813.9067524115756,
+            "scatter": 11.571488294710893,
+            "n": 311
+          },
+          "photometry": {
+            "net": 2556.221864951767,
+            "sigma": 246.11270113051432,
+            "snr": 10.386387428238395,
+            "npix": 56,
+            "sky": 813.9067524115756,
+            "terms": {
+              "source": 2556.221864951767,
+              "sky": 53785.889310490995,
+              "dark": 0,
+              "read": 4229.3504823151125,
+              "variance": 60571.46165775787,
+              "noise": 246.11270113051432,
+              "snr": 10.386387428238395
+            },
+            "warnings": []
+          },
+          "measureFlux": {
+            "version": "1.0.0",
+            "mode": "flux",
+            "sum": 48697.2890625,
+            "area": 56.6875,
+            "background": 813,
+            "backgroundScatter": 11.119499999999999,
+            "annulusPixels": 315,
+            "net": 2610.3515625,
+            "netError": 103.58852269779543,
+            "centroid": {
+              "x": 33.67107519640853,
+              "y": 15.196202020202021,
+              "xError": 0.06329326717958517,
+              "yError": 0.06321847913393251
+            },
+            "warnings": [
+              {
+                "code": "noiseModelAssumed",
+                "gain": 1.5
+              },
+              {
+                "code": "apertureCut"
+              }
+            ]
+          }
+        },
+        {
+          "aperture": {
+            "x": 31.6,
+            "y": 32.4,
+            "r": 6.1,
+            "rIn": 9.2,
+            "rOut": 15.4
+          },
+          "background": {
+            "level": 812.8608597285067,
+            "scatter": 12.594782859115165,
+            "n": 442
+          },
+          "photometry": {
+            "net": 731.918552036208,
+            "sigma": 363.0765772251728,
+            "snr": 2.0158792881378487,
+            "npix": 118,
+            "sky": 812.8608597285067,
+            "terms": {
+              "source": 731.918552036208,
+              "sky": 121524.53758113059,
+              "dark": 0,
+              "read": 9568.14479638009,
+              "variance": 131824.60092954687,
+              "noise": 363.0765772251728,
+              "snr": 2.0158792881378487
+            },
+            "warnings": []
+          },
+          "measureFlux": {
+            "version": "1.0.0",
+            "mode": "flux",
+            "sum": 95798.671875,
+            "area": 116.953125,
+            "background": 813,
+            "backgroundScatter": 13.343399999999999,
+            "annulusPixels": 471,
+            "net": 715.78125,
+            "netError": 171.52878505584192,
+            "centroid": {
+              "x": 30.850458415193188,
+              "y": 33.1931892599869,
+              "xError": 0.6062114160047424,
+              "yError": 0.6083465383064895
+            },
+            "warnings": [
+              {
+                "code": "noiseModelAssumed",
+                "gain": 1.5
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "seed": "photometry-180-golden-clean",
+      "cases": [
+        {
+          "aperture": {
+            "x": 20.3,
+            "y": 24.6,
+            "r": 5,
+            "rIn": 8,
+            "rOut": 13
+          },
+          "background": {
+            "level": 843.31875,
+            "scatter": 13.046335016653957,
+            "n": 320
+          },
+          "photometry": {
+            "net": 85.5,
+            "sigma": 301.3592125686553,
+            "snr": 0.28371457195960614,
+            "npix": 80,
+            "sky": 843.31875,
+            "terms": {
+              "source": 85.5,
+              "sky": 84331.875,
+              "dark": 0,
+              "read": 6400,
+              "variance": 90817.375,
+              "noise": 301.3592125686553,
+              "snr": 0.28371457195960614
+            },
+            "warnings": []
+          },
+          "measureFlux": {
+            "version": "1.0.0",
+            "mode": "flux",
+            "sum": 66297.890625,
+            "area": 78.515625,
+            "background": 843,
+            "backgroundScatter": 15.5673,
+            "annulusPixels": 332,
+            "net": 109.21875,
+            "netError": 161.76756537585106,
+            "centroid": {
+              "x": 17.28540772532189,
+              "y": 29.721030042918454,
+              "xError": 4.709103410406845,
+              "yError": 6.922010733989761
+            },
+            "warnings": [
+              {
+                "code": "noiseModelAssumed",
+                "gain": 1.5
+              }
+            ]
+          }
+        },
+        {
+          "aperture": {
+            "x": 33.8,
+            "y": 15.2,
+            "r": 4.25,
+            "rIn": 7.5,
+            "rOut": 12.5
+          },
+          "background": {
+            "level": 842.1704180064309,
+            "scatter": 12.177380915194332,
+            "n": 311
+          },
+          "photometry": {
+            "net": 50.956591639871476,
+            "sigma": 244.81413601445107,
+            "snr": 0.20814399229325375,
+            "npix": 56,
+            "sky": 842.1704180064309,
+            "terms": {
+              "source": 50.956591639871476,
+              "sky": 55653.65411854716,
+              "dark": 0,
+              "read": 4229.3504823151125,
+              "variance": 59933.961192502145,
+              "noise": 244.81413601445107,
+              "snr": 0.20814399229325375
+            },
+            "warnings": []
+          },
+          "measureFlux": {
+            "version": "1.0.0",
+            "mode": "flux",
+            "sum": 47782.453125,
+            "area": 56.6875,
+            "background": 841.5,
+            "backgroundScatter": 11.119499999999999,
+            "annulusPixels": 315,
+            "net": 79.921875,
+            "netError": 95.09799634961652,
+            "centroid": {
+              "x": 34.65190615835777,
+              "y": 19.547214076246334,
+              "xError": 2.2448459023165204,
+              "yError": 4.810162524244352
+            },
+            "warnings": [
+              {
+                "code": "noiseModelAssumed",
+                "gain": 1.5
+              },
+              {
+                "code": "apertureCut"
+              }
+            ]
+          }
+        },
+        {
+          "aperture": {
+            "x": 31.6,
+            "y": 32.4,
+            "r": 6.1,
+            "rIn": 9.2,
+            "rOut": 15.4
+          },
+          "background": {
+            "level": 843.5074468085106,
+            "scatter": 12.63205081342805,
+            "n": 470
+          },
+          "photometry": {
+            "net": 14980.621276595746,
+            "sigma": 385.9428595380787,
+            "snr": 38.815645649010115,
+            "npix": 118,
+            "sky": 843.5074468085106,
+            "terms": {
+              "source": 14980.621276595746,
+              "sky": 124523.23550928022,
+              "dark": 0,
+              "read": 9448.034042553192,
+              "variance": 148951.89082842917,
+              "noise": 385.9428595380787,
+              "snr": 38.815645649010115
+            },
+            "warnings": []
+          },
+          "measureFlux": {
+            "version": "1.0.0",
+            "mode": "flux",
+            "sum": 113613.7734375,
+            "area": 116.953125,
+            "background": 843,
+            "backgroundScatter": 13.343399999999999,
+            "annulusPixels": 471,
+            "net": 15022.2890625,
+            "netError": 197.38235984437216,
+            "centroid": {
+              "x": 31.598955302355407,
+              "y": 32.39783540395444,
+              "xError": 0.02802813161072805,
+              "yError": 0.02802819232898528
+            },
+            "warnings": [
+              {
+                "code": "noiseModelAssumed",
+                "gain": 1.5
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -77,6 +77,7 @@ import { COPYRIGHT, RELEASE } from './project-metadata.mjs';
 import {
   precacheInventory,
   precacheTable,
+  promisesTable,
   gzipMB,
 } from './precache-inventory.mjs';
 import { CHECKS } from './checks.mjs';
@@ -276,20 +277,6 @@ const ATTRIBUTE_FACTS = [
     file: 'js/i18n/es.js',
     key: 'physicsChecks',
     pattern: /(comprobado el motor físico: )(\d+)( verificaciones)/,
-  },
-  // The welcome screen's card for instructors. It said "Six guided
-  // investigations" over a manifest of twenty-two, in both languages, for as
-  // long as the lesson set had been growing - the first thing an instructor
-  // reads about the project, understating it by sixteen lessons.
-  {
-    file: 'js/i18n/en.deferred.js',
-    key: 'investigations',
-    pattern: /(')(\d+)( guided investigations for introductory)/,
-  },
-  {
-    file: 'js/i18n/es.deferred.js',
-    key: 'investigations',
-    pattern: /(')(\d+)( investigaciones guiadas para astronomía)/,
   },
 ];
 
@@ -775,7 +762,7 @@ export const FACT_GROUPS = Object.freeze({
       'e2eFiles',
       'physicsChecks',
     ]),
-    blocks: Object.freeze(['physicsCoverage']),
+    blocks: Object.freeze(['physicsCoverage', 'physicsGaps']),
     // CITATION.cff and .zenodo.json quote physicsChecks in their abstract, so
     // they can be judged exactly when that group has been gathered and not
     // before. A cheap run that rewrote them replaced the check total with a
@@ -876,10 +863,23 @@ export async function gatherBlocks({ physics = null } = {}) {
     moduleSizes,
     dataPacks,
     realSystems: await loadRealSystems(),
+    // The registry and the committed report: two JSON files, nothing run.
+    discrepancies: {
+      registry: JSON.parse(
+        readFileSync(join(REPO, 'tools/known-discrepancies.json'), 'utf8')
+      ),
+      report: JSON.parse(
+        readFileSync(join(REPO, 'validation/data.json'), 'utf8')
+      ),
+    },
+    gaps: JSON.parse(
+      readFileSync(join(REPO, 'tools/validation-gaps.json'), 'utf8')
+    ),
     graph: GRAPH,
     manifest: MANIFEST,
     instructor: INSTRUCTOR_CONTENT,
     precache: precacheTable(precacheInventory(REPO)),
+    promises: promisesTable(REPO, precacheInventory(REPO)),
     physics: physics ? physicsInventory(physics) : null,
     // Cheap: reading a generated data module, not running anything. The audit
     // it comes from is itself checked by `npm run audit:irreversible -- --check`.
@@ -1226,7 +1226,14 @@ async function checkModelNoteClaims() {
   const checksPath = join(REPO, 'js', 'validation', 'physicsChecks.js');
   if (!existsSync(checksPath)) return problems;
 
-  const source = readFileSync(checksPath, 'utf8');
+  // The checks live in the registry and in the group files beside it.
+  const groupsDir = join(REPO, 'js', 'validation', 'groups');
+  const source = [
+    readFileSync(checksPath, 'utf8'),
+    ...(existsSync(groupsDir) ? readdirSync(groupsDir).sort() : []).map(f =>
+      readFileSync(join(groupsDir, f), 'utf8')
+    ),
+  ].join('\n');
   const groups = new Map();
   for (const m of source.matchAll(/group:\s*'([^']+)'/g)) {
     groups.set(m[1], (groups.get(m[1]) || 0) + 1);

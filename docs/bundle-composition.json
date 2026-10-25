@@ -1,17 +1,13 @@
 {
- "total": 595135,
+ "total": 593800,
  "modules": [
   {
    "module": "js/i18n/en.js",
    "bytes": 84084
   },
   {
-   "module": "js/physics.js",
-   "bytes": 45849
-  },
-  {
    "module": "js/world/build.js",
-   "bytes": 37102
+   "bytes": 37120
   },
   {
    "module": "js/render.js",
@@ -26,32 +22,40 @@
    "bytes": 19116
   },
   {
-   "module": "js/inspectorPanel.js",
-   "bytes": 15789
-  },
-  {
-   "module": "js/radialVelocity.js",
-   "bytes": 15788
-  },
-  {
    "module": "js/settingsPanel.js",
    "bytes": 15063
   },
   {
+   "module": "js/radialVelocity.js",
+   "bytes": 14943
+  },
+  {
    "module": "js/ui.js",
-   "bytes": 14694
+   "bytes": 14620
+  },
+  {
+   "module": "js/inspectorPanel.js",
+   "bytes": 14364
   },
   {
    "module": "js/placement.js",
-   "bytes": 14190
+   "bytes": 14147
+  },
+  {
+   "module": "js/engine/bodies.js",
+   "bytes": 13767
   },
   {
    "module": "js/inspectorWindow.js",
-   "bytes": 13410
+   "bytes": 13337
   },
   {
    "module": "js/inspectorInfo.js",
    "bytes": 12931
+  },
+  {
+   "module": "js/engine/collisions.js",
+   "bytes": 12438
   },
   {
    "module": "js/bodyDraw.js",
@@ -63,23 +67,27 @@
   },
   {
    "module": "js/world.js",
-   "bytes": 9522
+   "bytes": 9463
+  },
+  {
+   "module": "js/engine/step.js",
+   "bytes": 9203
   },
   {
    "module": "js/captureMeasure.js",
-   "bytes": 9222
+   "bytes": 9201
   },
   {
    "module": "js/lightCurve.js",
-   "bytes": 9112
-  },
-  {
-   "module": "js/controls.js",
-   "bytes": 8172
+   "bytes": 8405
   },
   {
    "module": "js/bodyDrawSky.js",
    "bytes": 8078
+  },
+  {
+   "module": "js/controls.js",
+   "bytes": 7984
   },
   {
    "module": "js/sandboxTools.js",
@@ -87,27 +95,27 @@
   },
   {
    "module": "js/audio.js",
-   "bytes": 7474
+   "bytes": 7448
   },
   {
    "module": "js/scenarioBrowser.js",
-   "bytes": 7330
+   "bytes": 7315
   },
   {
    "module": "js/settingsSchema.js",
-   "bytes": 6567
+   "bytes": 6546
   },
   {
    "module": "js/soundPanel.js",
-   "bytes": 6525
+   "bytes": 6483
   },
   {
-   "module": "js/names.js",
-   "bytes": 6276
+   "module": "js/data/objectNames.js",
+   "bytes": 6197
   },
   {
    "module": "js/astrometry.js",
-   "bytes": 5728
+   "bytes": 5705
   },
   {
    "module": "js/engine/conservation.js",
@@ -115,11 +123,15 @@
   },
   {
    "module": "js/main.js",
-   "bytes": 5515
+   "bytes": 5442
   },
   {
    "module": "js/share.js",
-   "bytes": 5452
+   "bytes": 5369
+  },
+  {
+   "module": "js/shareState.js",
+   "bytes": 5369
   },
   {
    "module": "js/resonance/systems.js",
@@ -127,15 +139,23 @@
   },
   {
    "module": "js/tutorial.js",
-   "bytes": 5075
-  },
-  {
-   "module": "js/shareState.js",
-   "bytes": 5025
+   "bytes": 5060
   },
   {
    "module": "js/bodyVisuals.js",
    "bytes": 4991
+  },
+  {
+   "module": "js/engine/blackHole.js",
+   "bytes": 4836
+  },
+  {
+   "module": "js/engine/forces.js",
+   "bytes": 4573
+  },
+  {
+   "module": "js/appState.js",
+   "bytes": 4550
   },
   {
    "module": "js/vectorOverlay.js",
@@ -154,10 +174,6 @@
    "bytes": 3907
   },
   {
-   "module": "js/appState.js",
-   "bytes": 3828
-  },
-  {
    "module": "js/preview.js",
    "bytes": 3681
   },
@@ -174,12 +190,12 @@
    "bytes": 3300
   },
   {
-   "module": "js/utils.js",
-   "bytes": 2691
+   "module": "js/engine/state.js",
+   "bytes": 2989
   },
   {
-   "module": "js/engine/state.js",
-   "bytes": 2672
+   "module": "js/utils.js",
+   "bytes": 2691
   },
   {
    "module": "js/exoplanetObservables.js",
@@ -206,8 +222,12 @@
    "bytes": 2279
   },
   {
+   "module": "js/engine/events.js",
+   "bytes": 2194
+  },
+  {
    "module": "js/notebookBridge.js",
-   "bytes": 2188
+   "bytes": 2155
   },
   {
    "module": "js/shortcuts.js",
@@ -234,7 +254,7 @@
    "bytes": 1791
   },
   {
-   "module": "js/shell.js",
+   "module": "js/experimentsBridge.js",
    "bytes": 1722
   },
   {
@@ -246,8 +266,8 @@
    "bytes": 1704
   },
   {
-   "module": "js/experimentsBridge.js",
-   "bytes": 1692
+   "module": "js/shell.js",
+   "bytes": 1639
   },
   {
    "module": "js/quality.js",
@@ -270,16 +290,12 @@
    "bytes": 1216
   },
   {
-   "module": "js/engine/events.js",
-   "bytes": 1211
+   "module": "js/names.js",
+   "bytes": 1184
   },
   {
    "module": "js/rng.js",
    "bytes": 1135
-  },
-  {
-   "module": "js/theme.js",
-   "bytes": 1124
   },
   {
    "module": "js/widgetRuntime.js",
@@ -288,6 +304,10 @@
   {
    "module": "js/i18n/dom.js",
    "bytes": 1100
+  },
+  {
+   "module": "js/theme.js",
+   "bytes": 1088
   },
   {
    "module": "js/binaryOrbits.js",
@@ -302,8 +322,12 @@
    "bytes": 1027
   },
   {
+   "module": "js/observationChart.js",
+   "bytes": 995
+  },
+  {
    "module": "js/presentation.js",
-   "bytes": 1001
+   "bytes": 973
   },
   {
    "module": "js/widgetCanvas.js",
@@ -322,20 +346,16 @@
    "bytes": 685
   },
   {
-   "module": "js/welcomeGate.js",
-   "bytes": 638
-  },
-  {
    "module": "js/lesson/barycenter.js",
    "bytes": 636
   },
   {
-   "module": "js/observationChart.js",
-   "bytes": 601
-  },
-  {
    "module": "js/data/trappist1.js",
    "bytes": 593
+  },
+  {
+   "module": "js/welcomeGate.js",
+   "bytes": 584
   },
   {
    "module": "js/exportBridge.js",
@@ -360,10 +380,6 @@
   {
    "module": "js/followCamera.js",
    "bytes": 313
-  },
-  {
-   "module": "js/chartjs.js",
-   "bytes": 299
   },
   {
    "module": "js/sonify/law.js",
@@ -396,6 +412,10 @@
   {
    "module": "js/i18n/scenario.js",
    "bytes": 122
+  },
+  {
+   "module": "js/physics.js",
+   "bytes": 50
   }
  ]
 }

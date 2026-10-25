@@ -1,0 +1,62 @@
+[
+ {
+  "depth": "core",
+  "role": "first",
+  "sid": "two-suns",
+  "position": [
+   1,
+   37
+  ],
+  "title": "Planetas en estrellas binarias",
+  "subtitle": "Qué sobrevive alrededor de dos estrellas, y cómo lo sabrías",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 37 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Dos soles</h3><div class=\"inv-step-body\"><p>Bastante más de la mitad de las estrellas parecidas al Sol de la galaxia tienen al menos una compañera. Los planetas de esos sistemas no son una curiosidad: son el caso normal, y lo que hay que explicar es la soledad del Sol.</p><p>En pantalla hay dos estrellas —una masa solar y media masa solar— separadas diez AU en una órbita de excentricidad 0,4, así que oscilan entre seis y catorce AU la una de la otra cada veintiséis años. La pequeña estela azul es un planeta de una masa terrestre girando alrededor de la más pesada a 1,5 AU.</p><p>La pregunta de los próximos cuarenta minutos es la evidente: <strong>¿dónde puede estar aquí un planeta y quedarse?</strong></p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Alfa Centauri A y B son una versión real de esto: 1,13 y 0,97 masas solares, separadas 23,5 AU, excentricidad 0,52.</p>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "graded",
+  "sid": "before-you-run-anything",
+  "position": [
+   3,
+   37
+  ],
+  "title": "Planetas en estrellas binarias",
+  "subtitle": "Qué sobrevive alrededor de dos estrellas, y cómo lo sabrías",
+  "body": "<p class=\"inv-step-count\">Paso 3 de 37 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">Antes de ejecutar nada</h3><div class=\"inv-step-body\"><p>Las estrellas están separadas diez AU de media y llegan a estar a seis AU la una de la otra en su máximo acercamiento. Un planeta que gire alrededor de la Estrella A tiene que vivir dentro de eso.</p><p>Comprométete ahora con un número. Vas a medir contra él durante el resto de la investigación.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">¿A qué distancia de la Estrella A crees que puede estar un planeta y sobrevivir, como fracción de la separación de 10 AU?</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>Casi toda ella: en cualquier punto dentro de unas 0,9 separaciones</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>Más o menos la mitad</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>Algo así como una quinta parte</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>Solo muy cerca: un pequeño porcentaje</span></button></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "marked",
+  "sid": "before-you-run-anything",
+  "position": [
+   3,
+   37
+  ],
+  "title": "Planetas en estrellas binarias",
+  "subtitle": "Qué sobrevive alrededor de dos estrellas, y cómo lo sabrías",
+  "body": "<p class=\"inv-step-count\">Paso 3 de 37 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">Antes de ejecutar nada</h3><div class=\"inv-step-body\"><p>Las estrellas están separadas diez AU de media y llegan a estar a seis AU la una de la otra en su máximo acercamiento. Un planeta que gire alrededor de la Estrella A tiene que vivir dentro de eso.</p><p>Comprométete ahora con un número. Vas a medir contra él durante el resto de la investigación.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">¿A qué distancia de la Estrella A crees que puede estar un planeta y sobrevivir, como fracción de la separación de 10 AU?</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>Casi toda ella: en cualquier punto dentro de unas 0,9 separaciones</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>Más o menos la mitad</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"2\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>Algo así como una quinta parte</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>Solo muy cerca: un pequeño porcentaje</span></button></div><p class=\"inv-held\">Tu respuesta queda registrada. No se corrige hasta que llegues a «Ejecútalo tal como está», para que la decida el experimento y no la clave de respuestas.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Cambiar respuesta</button>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "last",
+  "sid": "what-you-can-say",
+  "position": [
+   37,
+   37
+  ],
+  "title": "Planetas en estrellas binarias",
+  "subtitle": "Qué sobrevive alrededor de dos estrellas, y cómo lo sabrías",
+  "body": "<p class=\"inv-step-count\">Paso 37 de 37 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Lo que puedes decir, y lo que el modelo deja fuera</h3><div class=\"inv-step-body\"><p>Has medido bastante:</p><p>· Un planeta a 0,15 separaciones alrededor de una estrella sobrevivió veinte periodos binarios sin problemas, y el ajuste publicado coincide en que debería.</p><p>· Un planeta a 0,30 fue expulsado antes de tres periodos, con todos los pasos probados.</p><p>· Un planeta a 0,25 dio respuestas distintas con pasos distintos, así que su destino no lo determinan estas ejecuciones.</p><p>· Un planeta circumbinario a 4,0 mantuvo su órbita cuarenta periodos; uno a 2,0 fue empujado fuera en tres, sin acercarse nunca a una estrella.</p><p>· Dos configuraciones que el ajuste llama inestables sobrevivieron cuarenta periodos, mientras eran lanzadas visiblemente casi fuera del sistema.</p><p>Cada una de esas cosas es una afirmación sobre una integración finita de una configuración concreta. Ninguna es una afirmación sobre estabilidad, y las dos últimas son una buena demostración de por qué vale la pena mantener la distinción.</p><p>Tres límites del propio modelo, antes de que lleves nada de esto a un sistema real.</p><p><strong>Es plano.</strong> Todo lo de aquí —la simulación y el ajuste— es bidimensional. Las órbitas reales están inclinadas, y una órbita inclinada en una binaria puede cambiar su inclinación por excentricidad, lo que desestabiliza órbitas perfectamente seguras en el plano.</p><p><strong>El planeta es una partícula de prueba.</strong> Una masa terrestre frente a una masa solar. Un Júpiter perturbaría a las estrellas de vuelta, y un sistema con varios planetas es otro problema distinto.</p><p><strong>Las estrellas son puntos.</strong> Sin mareas, sin radiación, sin pérdida de masa. Una \"colisión\" aquí significa que el planeta pasó a menos de unas 0,06 AU del centro de una estrella, porque las estrellas se dibujan diez veces más grandes de lo real y la simulación colisiona con lo que dibuja.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> La distancia entre \"mi integración dice X\" y \"la naturaleza hace X\" es donde vive la mayor parte del trabajo en astrofísica computacional.</p>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ }
+]

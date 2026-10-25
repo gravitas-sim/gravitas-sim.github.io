@@ -285,6 +285,21 @@ export const CHECKS = [
     group: 'correctness',
   },
   {
+    // Prompt 156. The translation ledger's age rule: a stale entry that has
+    // been recorded for longer than the grace period. It is release-time only
+    // and must stay out of required CI: age is a function of the calendar, so
+    // a commit that was green would turn red with no change in it. The step CI
+    // runs (`npm run i18n:check`) fails only on what a change itself causes;
+    // tests/releaseGate.test.js holds this entry out of ci.yml.
+    id: 'i18n-age',
+    label: 'no recorded translation is stale past its grace period',
+    command: ['npm', 'run', 'i18n:freshness', '--', '--fail-on-age'],
+    tier: 'slow',
+    ci: null,
+    why: 'Release-time only (D-R10-34, pending Carl): the age of a recorded stale entry changes with the calendar, so required CI reports it (npm run i18n:check) and does not fail on it',
+    group: 'correctness',
+  },
+  {
     id: 'links',
     label: 'internal links and anchors (sources)',
     command: ['npm', 'run', 'validate:links'],
@@ -687,6 +702,54 @@ export const CHECKS = [
     group: 'generated',
   },
   {
+    id: 'storage-matrix',
+    label: 'the storage ownership matrix is current',
+    command: ['npm', 'run', 'storage:matrix', '--', '--check'],
+    tier: 'quick',
+    ci: null,
+    why:
+      'CI runs the same facts in tests/storageMatrix.test.js (the file ' +
+      'against KEYS, the writers and the corpus, and the generated tables ' +
+      'against STORAGE.md and My work) and tests/storageProfile.test.js (a ' +
+      '2.0.0 profile opened on the tip).',
+    group: 'correctness',
+  },
+  {
+    id: 'budget-policy',
+    label: 'the budget policy and the data-plane budget are consistent',
+    command: ['npm', 'run', 'budget:policy'],
+    tier: 'quick',
+    ci: null,
+    why:
+      'CI runs the same facts in tests/budgetPolicy.test.js (the policy file ' +
+      'against the real ceilings, the ledger, the refusals, and the data ' +
+      'budget against what the tree measures).',
+    group: 'correctness',
+  },
+  {
+    id: 'lesson-golden',
+    label: 'the lesson-engine coverage table is current',
+    command: ['npm', 'run', 'lesson:coverage', '--', '--check'],
+    tier: 'quick',
+    ci: null,
+    why:
+      'CI runs the same facts in tests/lessonGolden.test.js (the table ' +
+      'against the lessons and activities, the Node golden against the ' +
+      'engine) and e2e/lessonGolden.spec.js (the rendered screens).',
+    group: 'correctness',
+  },
+  {
+    id: 'docs-map',
+    label: 'DOCUMENTS.md maps every root document',
+    command: ['npm', 'run', 'docs-map:check'],
+    tier: 'quick',
+    ci: null,
+    why:
+      'CI runs the same facts in tests/docsMap.test.js (the table against the ' +
+      'root, and the committed map against what the table and the tree render).',
+    group: 'generated',
+  },
+  {
     id: 'cards',
     label: 'lesson cards',
     command: ['npm', 'run', 'cards:check'],
@@ -921,11 +984,18 @@ export const CI_SETUP_STEPS = [
   // tools/observatory-budgets.json: "a manual instrument, not a registry
   // check". CI runs it on the schedule, report-only.
   'Measure, and compare with the budgets',
+  // The ci-cost job: what the run cost, written as an artifact after `ci` has
+  // decided (D-R10-01). It checks nothing, and tools/ci-cost.mjs has its own
+  // tests.
+  'Write the record',
 ];
 
 /** And the commands that are setup wherever they appear. */
 export const CI_SETUP_COMMANDS = [
   'npm ci',
+  // The pull-request class check reads a pull request's labels and target, which
+  // a local gate run has none of. Its rules are tested in tests/prClass.test.js.
+  'node tools/pr-class.mjs --fetch',
   // Creating the directory the reports are written into. The reports
   // themselves are produced by checks that are in the registry; this is the
   // mkdir in front of them.

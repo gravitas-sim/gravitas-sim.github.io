@@ -60,8 +60,16 @@ import {
   setLanguage,
   tr,
 } from './teaching/i18n.js';
+import { KEY_TEACHING_NOTES_V1 } from './names.js';
 
 const $ = id => document.getElementById(id);
+
+/** Documents that exist in English only, by decision; Spanish links say so. */
+const ENGLISH_ONLY = ['/validation/', '/model/', '/instructors/'];
+const marked = (text, href) =>
+  language() === 'es' && ENGLISH_ONLY.some(p => href.startsWith(p))
+    ? `${text} (en inglés)`
+    : text;
 
 /** The Spanish lesson catalog, fetched with the Spanish strings. */
 let manifestEs = null;
@@ -291,7 +299,10 @@ function renderInstruments() {
       card.append(
         el('p', {
           children: [
-            el('a', { text: tr('teach.instruments.more'), attrs: { href } }),
+            el('a', {
+              text: marked(tr('teach.instruments.more'), href),
+              attrs: { href },
+            }),
           ],
         })
       );
@@ -639,7 +650,7 @@ function activityCard(activity, activeFormat) {
         children: [
           el('a', {
             className: 'ui-button is-quiet',
-            text: tr('teach.activities.instructor'),
+            text: marked(tr('teach.activities.instructor'), '/instructors/'),
             attrs: { href: '/instructors/' },
           }),
           el('a', {
@@ -772,7 +783,7 @@ function renderEvidence() {
           el('h3', {
             children: [
               el('a', {
-                text: tr(`teach.evidence.${id}.name`),
+                text: marked(tr(`teach.evidence.${id}.name`), href),
                 attrs: {
                   href,
                   rel: external ? 'noopener' : null,
@@ -821,7 +832,7 @@ function renderQuickstart() {
       children.push(
         el('a', {
           className: 'teach-more',
-          text: tr('teach.instruments.more'),
+          text: marked(tr('teach.instruments.more'), item.href),
           attrs: { href: item.href },
         })
       );
@@ -883,7 +894,7 @@ function renderFeedbackRoutes() {
 }
 
 /** Where the local notes live. One key, and the reader can empty it. */
-const FEEDBACK_KEY = 'gravitas_teaching_notes_v1';
+const FEEDBACK_KEY = KEY_TEACHING_NOTES_V1;
 
 /** Read the notes, tolerating a browser that refuses storage. */
 const readNotes = () => readJson(FEEDBACK_KEY, {});

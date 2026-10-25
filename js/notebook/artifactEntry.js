@@ -25,6 +25,7 @@
 // =============================================================================
 
 import { validateArtifact } from '../platform/artifact.js';
+import { describeUncertain } from '../platform/uncertain.js';
 import { buildEntry, KIND, LIMITS, provenanceOf } from './entry.js';
 
 /** The marker a trimmed envelope carries in its warnings, then the count. */
@@ -60,6 +61,29 @@ const plusMinus = u =>
     : u?.kind === 'interval'
       ? (u.hi - u.lo) / 2
       : null;
+
+/**
+ * A recorded quantity as its envelope says it, in the one pattern a number is
+ * printed in: "X ± Y unit (method)", "< X unit (limit)", "not
+ * constrained". Null when the entry has no envelope, or the envelope states no
+ * uncertainty, so the caller prints the recorded number as it always did.
+ * @param {object} q - The snapshot's quantity ({unit})
+ * @param {?object} envQ - The envelope's quantity at the same place
+ * @param {(id: string) => string} t - The translator
+ * @param {string} [locale]
+ * @returns {?{text: string, value: string, label: string, tip: string,
+ *   line: string}} `value` is the number with its unit, `line` that and the
+ *   method
+ */
+export function quantityText(q, envQ, t, locale) {
+  if (!envQ || !envQ.uncertainty || envQ.uncertainty.kind === 'none')
+    return null;
+  const d = describeUncertain(envQ, t, { locale });
+  const open = d.state === 'failed' || d.state === 'not-constrained';
+  const unit = q?.unit && !open ? ` ${q.unit}` : '';
+  const value = `${d.text}${unit}`;
+  return { ...d, value, line: `${value}${d.label ? ` (${d.label})` : ''}` };
+}
 
 /**
  * An entry for a result, from its envelope.

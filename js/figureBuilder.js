@@ -39,6 +39,7 @@ import { formatSeed, parseSeed, randomSeed } from './rng.js';
 import { SCENARIO_INFO } from './data/scenarioInfo.js';
 import { readSystemFragment } from './lab3d/link.js';
 import { readPlanFragment } from './mission/link.js';
+import { ID_SYSTEM3D } from './names.js';
 
 const $ = id => document.getElementById(id);
 const els = {};
@@ -87,7 +88,7 @@ async function readLab3d(pasted) {
     : '';
   if (m[2]) {
     const r = await readSystemFragment(m[2]);
-    if (!r.ok || r.system?.format !== 'gravitas.system3d')
+    if (!r.ok || r.system?.format !== ID_SYSTEM3D)
       return { error: t('fig.error.link.unreadable') };
     return {
       path: '3d/',

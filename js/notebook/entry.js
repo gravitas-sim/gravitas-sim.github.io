@@ -33,6 +33,7 @@
 // =============================================================================
 
 import { deriveEnvelope } from './ledger.js';
+import { fnvBase36 } from '../hash.js';
 
 /** Bumped when the entry shape changes. See migrateEntry(). */
 export const SCHEMA_VERSION = 1;
@@ -87,6 +88,36 @@ export const SOURCE = Object.freeze({
   // budget, the patched conic against the propagated flight), kept as its
   // envelope (js/mission/evidence.js).
   MISSION_LAB: 'mission-lab',
+  // The marks, scale and frame times a reader put on an image in the
+  // Observatory, kept as their envelope with the replay that reopens the image
+  // (js/observatory/imageMarks.js, js/measure/imageRecord.js).
+  IMAGE_MARKS: 'image-marks',
+  // The sky calibration of an image: a solved WCS with its residuals and the
+  // reference catalogue's identity, and the reduction that solves it again
+  // (js/observatory/imageCalibration.js, js/measure/calibrationRecord.js).
+  IMAGE_CALIBRATION: 'image-calibration',
+  // Photometry of the sources on an image: net light, sky and position with
+  // their uncertainties, and the request that runs it again
+  // (js/observatory/imagePhotometry.js, js/measure/photometry.js).
+  IMAGE_PHOTOMETRY: 'image-photometry',
+  // The point-spread function measured from the stars on an image: the
+  // combined FWHM (and Moffat beta) with its uncertainty as a fit-result
+  // record, and the request that runs it again
+  // (js/observatory/imageDetect.js, js/measure/detect.js).
+  IMAGE_DETECTION: 'image-detection',
+  // The completeness of an image by injection: the magnitudes at half and nine
+  // tenths completeness and each bin's share with its exact interval, and the
+  // request that runs it again (js/observatory/imageInject.js,
+  // js/measure/inject.js).
+  IMAGE_INJECTION: 'image-injection',
+  // A light curve from a sequence of frames: the period and semi-amplitude, the
+  // comparison stars' steadiness and every point, and the request that runs it
+  // again (js/observatory/imageSequence.js, js/measure/frameSeries.js).
+  IMAGE_SEQUENCE: 'image-sequence',
+  // The motion and parallax of one source over time: a proper motion or a joint
+  // fit with its frame statement and distance interval, and the request that
+  // runs it again (js/observatory/imageSeries.js, js/measure/astrometric-series.js).
+  IMAGE_SERIES: 'image-series',
 });
 
 /** The sources this build can capture from. */
@@ -108,6 +139,13 @@ export const SOURCES = [
   SOURCE.DERIVED_QUANTITY,
   SOURCE.LAB3D,
   SOURCE.MISSION_LAB,
+  SOURCE.IMAGE_MARKS,
+  SOURCE.IMAGE_CALIBRATION,
+  SOURCE.IMAGE_PHOTOMETRY,
+  SOURCE.IMAGE_DETECTION,
+  SOURCE.IMAGE_INJECTION,
+  SOURCE.IMAGE_SEQUENCE,
+  SOURCE.IMAGE_SERIES,
 ];
 
 /** How long a student's prose may be, per field. */
@@ -523,13 +561,7 @@ function canonical(value) {
  * @returns {string} Checksum
  */
 export function snapshotFingerprint(snapshot) {
-  const text_ = canonical(snapshot);
-  let h = 0x811c9dc5;
-  for (let i = 0; i < text_.length; i++) {
-    h ^= text_.charCodeAt(i);
-    h = Math.imul(h, 0x01000193);
-  }
-  return (h >>> 0).toString(36).toUpperCase().padStart(7, '0');
+  return fnvBase36(canonical(snapshot));
 }
 
 /**

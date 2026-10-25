@@ -1,0 +1,291 @@
+{
+  "format": "gravitas.detection-thresholds/1",
+  "prompt": 183,
+  "committed": "Before any implementation output was inspected: this file and the validation contract in DETECTION.md were committed ahead of js/measure/detect.js, the validation tool and the oracle's fixtures. A check that a measurement crosses is a failed check, not a reason to move the bound; only Carl resets a threshold, with a register row.",
+  "algorithm": {
+    "background": {
+      "box": 16,
+      "clip": {
+        "sigma": 3,
+        "maxIterations": 10,
+        "centre": "median",
+        "spread": "std (ddof 0)"
+      },
+      "level": "the clipped median of each box",
+      "noise": "the clipped standard deviation of each box",
+      "interpolation": "bilinear between box centres, and the first and last interval continued linearly to the border (revised before the kernel existed: constant beyond the outer centres leaves a strip about 8 pixels wide whose sky is wrong by the slope times the distance, and a strong gradient filled it with false sources); one box along an axis is constant; the noise map is not allowed below half of the smallest box noise",
+      "masked": "masked, non-finite and saturated pixels are left out of every box"
+    },
+    "smoothing": {
+      "kernel": "Gaussian of the stated FWHM, truncated at 3 sigma (radius ceil(3 sigma)), summing to 1",
+      "edges": "the nearest edge pixel is repeated (astropy boundary 'extend'); a masked pixel is left out and the kernel renormalised over the pixels that remain",
+      "noiseScale": "the smoothed noise of a pixel is sqrt(sum of w^2 times the local noise squared) over the pixels its smoothed value draws on, with w the kernel weights as they land (a repeated edge pixel counts where it is repeated, a masked pixel is removed and the weights renormalised), so the threshold is the same number of sigma at the border and beside a mask as in the open field (revised before the kernel existed: one global sum of squares left the border rows about 1.3 times noisier than their threshold said, and false sources gathered along the edge)"
+    },
+    "detection": {
+      "defaultFwhm": 3,
+      "sigma": 4,
+      "minArea": 5,
+      "connectivity": 8,
+      "rule": "a pixel is above threshold when the smoothed, background-subtracted value is greater than sigma times its smoothed noise; segments are the 8-connected runs of such pixels with at least minArea pixels; deblending is off"
+    },
+    "properties": {
+      "position": "first moment of the unsmoothed background-subtracted values in the segment, negative values set to zero (photutils SourceCatalog)",
+      "shape": "second central moments of the same weights, +1/12 on the diagonal while the determinant is under 1/144 (SourceExtractor's rule, as photutils); semimajor and semiminor sigma, ellipticity 1 - b/a, orientation counter-clockwise from +x in degrees",
+      "flux": "the aperture of Prompt 180 (r = 1.5 FWHM, annulus 3 to 5 FWHM, exact edges) at the segment position, no recentring",
+      "flags": {
+        "saturated": "a pixel of the segment at or above the contract's saturation or linearity limit",
+        "edge": "the segment touches the frame's border",
+        "masked": "a masked pixel is adjacent to the segment (8-neighbourhood)",
+        "crowded": "another source is nearer than the outer annulus radius plus the aperture radius (Prompt 180's rule)",
+        "sharp": "the brightest pixel holds more than half of the segment's flux"
+      }
+    },
+    "psf": {
+      "gaussian": "pixel-integrated circular Gaussian (erf over each pixel), parameters flux, x, y, FWHM",
+      "moffat": "circular Moffat, FWHM = 2 alpha sqrt(2^(1/beta) - 1), integrated over each pixel by 5 by 5 sub-pixel midpoints, parameters flux, x, y, FWHM, beta",
+      "fit": "Levenberg-Marquardt on the background-subtracted pixels of a square of half width ceil(2.5 max(FWHM0, 2.5)); weights 1 / (local noise squared + model counts) refreshed at each step, or none",
+      "selection": "unflagged, signal to noise (Prompt 180) at least 30, ellipticity at most 0.3, at most 25 stars, brightest first",
+      "combination": "inverse-variance mean of the FWHMs, its sigma times the square root of reduced chi-square when that exceeds 1",
+      "modelLimited": "reduced chi-square above 1.5",
+      "profile": "the stacked radial profile: each star's pixels binned by distance from its fitted position in bins of 0.5 pixel, normalised by its fitted flux, averaged over stars, with the standard error of the mean"
+    }
+  },
+  "scene": {
+    "detector": {
+      "width": 128,
+      "height": 128,
+      "gain": 1.5,
+      "readNoise": 8,
+      "biasLevel": 500,
+      "biasColumnSigma": 0,
+      "darkRate": 0,
+      "hotFraction": 0,
+      "qeScatter": 0,
+      "vignette": 0,
+      "dustCount": 0,
+      "cosmicRate": 0,
+      "fullWell": 100000,
+      "fwhm": 3
+    },
+    "exposure": 30,
+    "skyRate": 3,
+    "grid": {
+      "what": "twelve stars per frame, one per cell of a 4 by 3 grid; x in [32 i + 12, 32 i + 20], y in [42 j + 12, 42 j + 30], uniform, so no star is within 24 pixels of another or within 12 of an edge",
+      "cellsX": 4,
+      "cellsY": 3
+    },
+    "contract": {
+      "unit": "adu",
+      "gain": 1.5,
+      "readNoise": 8,
+      "saturationAdu": 33333,
+      "linearLimitAdu": 30000,
+      "calibration": "bias-subtracted"
+    },
+    "depths": {
+      "deep": 6000,
+      "moderate": 1200,
+      "shallow": 600
+    },
+    "matchRadius": 2,
+    "seedPrefix": "detection-183"
+  },
+  "checks": {
+    "a1.falsePositives": {
+      "what": "detections not within 2 pixels of an injected star, per frame, on 300 frames of sky and noise only, on frames carrying twelve stars at each depth (150 each), and (d1) on 150 frames with a strong linear gradient and no stars",
+      "bound": 0.02,
+      "frames": { "blank": 300, "depth": 150, "gradient": 150 },
+      "gradient": {
+        "what": "an added plane of 1.0 ADU per pixel along x and 0.7 along y, which is 192 and 134 electrons across the frame (15 and 11 times the sky noise)",
+        "slopeAduX": 1.0,
+        "slopeAduY": 0.7
+      }
+    },
+    "a1.recovery": {
+      "what": "fraction of injected stars with a detection within 2 pixels, per depth",
+      "bound": 0.99
+    },
+    "a1.position": {
+      "what": "root mean square distance between the detected position and the injected position, per depth, pixels",
+      "bounds": { "deep": 0.1, "moderate": 0.3, "shallow": 0.6 }
+    },
+    "a1.flux": {
+      "what": "mean and root mean square of z = (net - F * EE(r)) / sigma_stated for the flux the list reports, per depth; EE is the analytic encircled energy of the Gaussian at the aperture radius 1.5 FWHM",
+      "meanBound": 0.25,
+      "rmsBounds": [0.88, 1.12]
+    },
+    "a2.shape": {
+      "what": "elliptical Gaussian stars, flux 30000 electrons, sigma 2.2 and 1.2 pixels (ellipticity 0.4545), orientations -75, -30, 15, 45 and 80 degrees, 40 frames of twelve (480 stars): mean error of the ellipticity, mean absolute error of the orientation; and circular stars of the same flux: the fraction with ellipticity at most 0.06",
+      "frames": 40,
+      "ellipticityMeanBound": 0.03,
+      "orientationMeanBoundDegrees": 3,
+      "roundFraction": {
+        "ellipticityMax": 0.06,
+        "fractionMin": 0.95,
+        "frames": 20
+      }
+    },
+    "a3.psfGaussian": {
+      "what": "the Gaussian fit to stars of 20000 electrons on the detector kernel's own point-spread function of FWHM 2.0, 3.0 and 4.5 pixels, 25 frames of twelve (300 stars) each, positions from the detections: relative bias of the mean FWHM, and the largest relative error of a frame's combined FWHM",
+      "fwhm": [2, 3, 4.5],
+      "flux": 20000,
+      "frames": 25,
+      "biasBound": 0.005,
+      "frameBound": 0.015
+    },
+    "a3.psfMoffat": {
+      "what": "the Moffat fit (beta free) to Moffat stars of FWHM 3 and beta 2.5, 20000 electrons, drawn on 15 by 15 sub-pixels, 25 frames of twelve: relative bias of the mean FWHM",
+      "fwhm": 3,
+      "beta": 2.5,
+      "flux": 20000,
+      "frames": 25,
+      "biasBound": 0.025
+    },
+    "a4.profile": {
+      "what": "the stacked radial profile of the stars of a3.psfGaussian at FWHM 3 against the same bins of the noiseless truth image: |z| of every one of the first ten bins at most 4; and the half-maximum width read from the stack against the truth image's, relative",
+      "zBound": 4,
+      "bins": 10,
+      "widthBound": 0.02
+    },
+    "b1.mesh": {
+      "what": "the background and noise meshes (clipped median and clipped standard deviation of each 16 pixel box) against photutils Background2D on the same frames, and the interpolated maps against scipy's bilinear interpolation of that mesh, relative",
+      "bound": 1e-9
+    },
+    "b2.segmentation": {
+      "what": "the smoothed image against astropy.convolution.convolve, the number of sources and every segment's pixel count against photutils detect_sources (connectivity 8) with the same threshold map and the same mask, and each source's area, first moments, second moments, ellipticity, orientation, peak and segment flux against photutils SourceCatalog, on the pinned frames; counts and areas exact, the rest relative",
+      "boundSmoothed": 1e-9,
+      "boundProperties": 1e-9,
+      "boundOrientationDegrees": 1e-7
+    },
+    "b3.fwhmGaussian": {
+      "what": "the unweighted Gaussian fit with the background held at zero against photutils.psf.fit_fwhm (CircularGaussianPRF, the same square of pixels), relative FWHM",
+      "bound": 1e-4
+    },
+    "b4.fwhmMoffat": {
+      "what": "the unweighted Moffat fit against scipy least_squares with photutils.psf.MoffatPSF averaged over the same 5 by 5 sub-pixels, converged to the tolerance of the arithmetic: relative FWHM and relative beta",
+      "boundFwhm": 1e-4,
+      "boundBeta": 1e-3
+    },
+    "c1.coverage68": {
+      "what": "fraction of the ensemble with |FWHM fit - truth| <= 1 stated sigma, Gaussian fit with the weights, one star each, 800 stars per level (frames of twelve), levels 1500, 6000 and 40000 electrons",
+      "levels": { "faint": 1500, "mid": 6000, "bright": 40000 },
+      "stars": 800,
+      "bounds": [0.62, 0.745]
+    },
+    "c1.coverage95": {
+      "what": "the same at 1.96 stated sigma",
+      "bounds": [0.925, 0.985]
+    },
+    "c2.combinedCoverage": {
+      "what": "the FWHM combined over the selected stars of a frame against the truth, 250 frames of twelve stars of 6000 electrons: the fraction within 1 and within 1.96 stated sigma",
+      "frames": 250,
+      "flux": 6000,
+      "bounds68": [0.58, 0.78],
+      "bounds95": [0.9, 0.995]
+    },
+    "d2.saturated": {
+      "what": "a star of 600000 electrons on a detector whose pixels clip at 50000 electrons is flagged 'saturated' in the list, is left out of the selection, and a fit asked for at its position is refused with the code 'saturated' and returns no FWHM",
+      "trials": 50,
+      "flux": 600000,
+      "fullWell": 50000,
+      "flaggedMin": 0.99
+    },
+    "d3.sharp": {
+      "what": "single-pixel events of 8000 electrons on an unmasked pixel (a cosmic ray or a hot pixel) are flagged 'sharp'; stars of 6000 electrons at FWHM 3 and 2 are not",
+      "events": 200,
+      "eventElectrons": 8000,
+      "flaggedMin": 0.95,
+      "starFlaggedMax": 0.02
+    },
+    "d4.masks": {
+      "what": "with masked pixels in the frame: no segment contains a masked pixel (every frame); a star with three pixels masked beside its core is flagged 'masked' (fraction); a masked pixel of 100000 electrons produces no source (fraction)",
+      "frames": 100,
+      "noSegmentOnMaskMin": 1,
+      "maskedFlagMin": 0.99,
+      "hotMaskedNoSourceMin": 1
+    },
+    "d5.contract": {
+      "what": "display-only, no sidecar, light in unknown units, an incomplete contract, a raw frame, a lossy history: each refused with its own code and no source list",
+      "codes": [
+        "display-only",
+        "no-contract",
+        "not-flux",
+        "incomplete-contract",
+        "raw-frame",
+        "lossy-history"
+      ]
+    },
+    "d6.edge": {
+      "what": "a star whose centre is 3 pixels from the border is flagged 'edge'; and a PSF fit asked for within the half width of the border is refused with 'edge' and no number",
+      "trials": 50,
+      "flaggedMin": 1
+    },
+    "d7.noDeblending": {
+      "what": "two stars of 6000 electrons 5 pixels apart come out as one source (50 of 50 frames) that the PSF selection leaves out (at least 0.95); two stars 14 pixels apart come out as two sources both flagged 'crowded' (50 of 50)",
+      "trials": 50,
+      "mergedSeparation": 5,
+      "crowdedSeparation": 14,
+      "excludedMin": 0.95
+    },
+    "d8.modelLimited": {
+      "what": "the Gaussian fit to Moffat stars of beta 2 and 20000 electrons is labelled model-limited (at least 0.95 of 100 stars) and the Gaussian fit to Gaussian stars of 6000 electrons is not (at most 0.02 of 800)",
+      "betaMoffat": 2,
+      "flux": 20000,
+      "moffatStars": 100,
+      "flaggedMin": 0.95,
+      "gaussianStars": 800,
+      "falseFlagMax": 0.02
+    },
+    "e2.authentic": {
+      "what": "one authentic frame from Prompt 189 under a fixed analysis contract: the source list and the FWHM against photutils on the same pixels",
+      "status": "NOT RUN until Prompt 189 lands an authentic image pack; nothing was downloaded or fabricated for this leg"
+    }
+  },
+  "restated": {
+    "what": "Three legs of 'checks' failed their committed bounds and were left failing (failed-legs.json). Carl ruled they be restated. 'checks' above is untouched and is what was committed first (674862d4); this section is what the validation tool and the tests now judge those three legs by, each with the original bound, the measured value that failed it, the new bound and the reason it is principled. A restated leg is labeled restated after measurement wherever it is shown; it is not a leg that passed as committed.",
+    "ruling": {
+      "by": "Carl",
+      "when": "chat 2026-10-23",
+      "via": "AskUserQuestion in the main session, relayed by the coordinating session",
+      "question": "Prompt 183 (source detection, PR #429) passes the independent photutils oracle, but three committed legs fail: [a4.profile.z 4.256 vs 4, b3.fwhmGaussian 1.32e-4 vs 1e-4, d8.modelLimited.moffat 0.01 vs 0.95]. How should #429 proceed?",
+      "answer": "Restate the legs",
+      "answerDescription": "Rewrite the three bounds (Student-t bound, 3e-4, a different model-limited criterion) so they pass. This moves thresholds after seeing the result."
+    },
+    "legs": {
+      "a4.profile.z": {
+        "originalBound": 4,
+        "originalMeasured": 4.256,
+        "restatedBound": {
+          "pTwoSided": 6.334248366635e-5,
+          "ratio": 1
+        },
+        "statistic": "the largest over the 250 values (25 frames, 10 bins) of |z| divided by the Student-t quantile with n-1 degrees of freedom at the two-sided tail probability pTwoSided, n being the number of stars that contribute to that bin; at most 1",
+        "reason": "z is (stack - truth) divided by the standard error of the mean over the n stars that reach the bin, which is Student t with n-1 degrees of freedom, not normal (the innermost bin holds one to six pixels, so only two to five of a frame's twelve stars reach it). pTwoSided is the two-sided tail probability of the committed normal bound 4, 2(1 - Phi(4)), so the restatement changes the distribution and not the level. For n = 2 the bound is about 10,050 sigma: the test says nothing about a bin of two stars, and the leg says so (the evidence rows give the innermost bin's largest z with its n, and the calibration of z against t over all 250 values)."
+      },
+      "b3.fwhmGaussian": {
+        "originalBound": 0.0001,
+        "originalMeasured": 0.0001323,
+        "restatedBound": 0.0003,
+        "reason": "photutils.psf.fit_fwhm runs scipy least_squares at its default tolerances (about 1e-8 on the cost, about 1e-4 on a fitted parameter) and exposes none of them, so the oracle's own convergence is of the order of the committed bound. The same objective by scipy least_squares over the same photutils model at tolerances of 1e-15 agrees with this kernel to 9.7e-9 (evidence row x.b3.fwhmGaussianTight): the kernel is the converged answer and fit_fwhm is the unconverged one. 3e-4 is three times the order of the oracle's default convergence, Carl's figure."
+      },
+      "d8.modelLimited": {
+        "originalBound": {
+          "flaggedMin": 0.95,
+          "falseFlagMax": 0.02,
+          "criterion": "reduced chi-square of the fit above 1.5"
+        },
+        "originalMeasured": {
+          "moffat": 0.01,
+          "gaussian": 0
+        },
+        "restatedBound": {
+          "flaggedMin": 0.95,
+          "falseFlagMax": 0.02,
+          "criterion": "the width disagreement between the two models: a star is model-limited when its reduced chi-square is above 1.5 or when the Moffat fit of the same pixels gives a FWHM that differs from the Gaussian's by more than 3 sigma of the difference",
+          "agreeSigma": 3
+        },
+        "reason": "The reduced chi-square over a cutout does not see a profile error that moves the width by 30 percent, because the Moffat's wings sit under the sky noise (measured median 1.25 against the 1.5 threshold). The width is what the tool reports, so the criterion is the width's own sensitivity to the model. Derivation: if the Gaussian is the true profile it is the efficient estimator and the Moffat (beta free) a consistent one, so Var(FWHM_moffat - FWHM_gaussian) = Var(FWHM_moffat) - Var(FWHM_gaussian) (Hausman 1978) and z = |difference| / sqrt of that is standard normal; 3 is the convention of a three-sigma departure (0.27 percent false rate if the Gaussian is right), fixed before the measurement and not tuned to the frame sets. The chi-square criterion is kept (a star is model-limited by either), the bounds 0.95 and 0.02 are the committed ones. The leg is judged on the same stars as committed (100 Moffat stars of beta 2 and 20000 electrons, 800 Gaussian stars of 6000 electrons)."
+      }
+    }
+  }
+}

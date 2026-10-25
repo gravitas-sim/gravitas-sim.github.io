@@ -33,11 +33,12 @@ import { activityTeachingFor } from './data/activityTeaching.js';
 import { activityHash } from './activities/activityBridge.js';
 import { EN_TEACHING } from './i18n/en.teaching.js';
 import { INSTRUCTOR_CONTENT } from './data/instructorContent.js';
+import { KEY_INSTRUCTOR_KEY } from './names.js';
 
 /** Where the encrypted bundle lives. */
 const PAYLOAD_URL = '/instructors/materials.enc.json';
 /** Per-tab, cleared when the tab closes. Holds the derived key, not the phrase. */
-const SESSION_KEY = 'gravitas_instructor_key';
+const SESSION_KEY = KEY_INSTRUCTOR_KEY;
 
 let manifest = null;
 const objectUrls = [];
@@ -614,11 +615,24 @@ function renderInvestigations() {
       btn.addEventListener('click', () => download(file));
       actions.append(btn);
     }
+    // The generated Spanish structured notes (Prompt 170) sit beside the guide
+    // and the key, where an instructor who reads Spanish looks first. The label
+    // says what they are: generated, and not the guide.
+    const notes = byId(`${inv.id}-notes-es`);
+    if (notes) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'ui-button';
+      btn.textContent = `${inv.title}: Spanish structured notes, generated (PDF)`;
+      btn.addEventListener('click', () => download(notes));
+      actions.append(btn);
+    }
     // Spanish and per-depth documents (Prompt 79), each labelled with what it is.
     const extras = manifest.files.filter(
       f =>
         f.investigation === inv.id &&
         f.kind !== 'worksheet' &&
+        f.kind !== 'notes' &&
         !f.activity &&
         !(f.locale === 'en' && f.variant === 'full')
     );

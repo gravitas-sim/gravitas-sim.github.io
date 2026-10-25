@@ -1,0 +1,80 @@
+{
+  "about": "Acceptance checks for features not built yet. A check listed here runs and is reported under 'pending acceptance'; it does not count as a failure until its prompt sets `activated` to true. See tools/pending-acceptance.mjs.",
+  "checks": [
+    {
+      "id": "interaction.keyboard.sandbox-zoom",
+      "prompt": "278",
+      "activated": false
+    },
+    {
+      "id": "interaction.single-pointer.sandbox-pan",
+      "prompt": "278",
+      "activated": false
+    },
+    {
+      "id": "interaction.single-pointer.lab3d-orbit",
+      "prompt": "278",
+      "activated": false
+    },
+    {
+      "id": "interaction.single-pointer.observer-handle",
+      "prompt": "278",
+      "activated": false
+    },
+    {
+      "id": "interaction.single-pointer.window-move",
+      "prompt": "278",
+      "activated": false
+    },
+    {
+      "id": "interaction.single-pointer.observatory-run",
+      "prompt": "278",
+      "activated": false
+    },
+    {
+      "id": "navigation.global.five-destinations",
+      "prompt": "162",
+      "activated": true
+    },
+    {
+      "id": "navigation.global.menu-follows-model",
+      "prompt": "162",
+      "activated": true
+    },
+    {
+      "id": "navigation.labels.shell-matches-glossary",
+      "prompt": "162",
+      "activated": true
+    },
+    {
+      "id": "navigation.home.entries-are-destinations",
+      "prompt": "162",
+      "activated": true
+    },
+    {
+      "id": "navigation.home.no-count-walls",
+      "prompt": "162",
+      "activated": true
+    },
+    {
+      "id": "navigation.reach.every-page-from-home",
+      "prompt": "162",
+      "activated": true
+    },
+    {
+      "id": "navigation.library.student-kinds-only",
+      "prompt": "163",
+      "activated": true
+    },
+    {
+      "id": "navigation.library.no-where-it-runs",
+      "prompt": "163",
+      "activated": true
+    },
+    {
+      "id": "navigation.library.default-view-is-bounded",
+      "prompt": "163",
+      "activated": true
+    }
+  ]
+}

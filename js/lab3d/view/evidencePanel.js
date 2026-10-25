@@ -605,7 +605,11 @@ export function createEvidencePanel(root, lab) {
     try {
       got = observeSystem3d(system, model, setup, o);
     } catch (err) {
-      return refuse({ code: 'setup', why: err.message });
+      return refuse(
+        err.name === 'OrbitalLayerError'
+          ? { code: 'orbit' }
+          : { code: 'setup', why: err.message }
+      );
     }
     if (!got.ok) return refuse(got);
     const { observation } = got;

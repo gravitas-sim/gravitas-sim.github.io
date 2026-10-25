@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://gravitas-sim.online/sdk/schemas/artifact-1.schema.json",
   "title": "gravitas.artifact/1",
-  "description": "One envelope for a scientific result: what made it, what it was made from, what may be done with it, and each quantity with its value, registry unit, uncertainty and origin. Data, not rendered text. js/platform/artifact.js validateArtifact() is the authority; PROVENANCE.md maps the older vocabularies onto origin and basis.",
+  "description": "One envelope for a scientific result: what made it, what it was made from, what may be done with it, and each quantity with its value, registry unit, uncertainty and origin. Data, not rendered text. js/platform/artifact.js validateArtifact() is the authority; PROVENANCE.md maps the older vocabularies onto origin and basis. This is the form a 2.0.0 build reads and writes. An envelope that needs a state beyond sigma, interval and none, a failed quantity with no value, `correlatedWith` or `fit` is gravitas.artifact/2 (artifact-2.schema.json); a build that reads /1 refuses it by its version (Prompt 176). FORMATS.md lists it.",
   "type": "object",
   "additionalProperties": false,
   "required": [

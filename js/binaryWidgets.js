@@ -14,7 +14,8 @@
 // building towards.
 // =============================================================================
 
-import { withUnit } from './format.js';
+import { fixed, withUnit } from './format.js';
+import { solveKepler } from './orbital.js';
 import {
   surface,
   palette,
@@ -398,13 +399,13 @@ const BINARY = {
         get label() {
           return t('binW.massOfStarA');
         },
-        value: withUnit(f.m1.toFixed(1), 'M☉'),
+        value: withUnit(fixed(f.m1, 1), 'M☉'),
       });
       rows.push({
         get label() {
           return t('binW.massOfStarB');
         },
-        value: withUnit(f.m2.toFixed(1), 'M☉'),
+        value: withUnit(fixed(f.m2, 1), 'M☉'),
       });
     }
     if (has('distances')) {
@@ -412,14 +413,14 @@ const BINARY = {
         get label() {
           return t('binW.starADistanceFromThe');
         },
-        value: withUnit(f.r1.toFixed(2), 'AU'),
+        value: withUnit(fixed(f.r1, 2), 'AU'),
         emphasis: true,
       });
       rows.push({
         get label() {
           return t('binW.starBDistanceFromThe');
         },
-        value: withUnit(f.r2.toFixed(2), 'AU'),
+        value: withUnit(fixed(f.r2, 2), 'AU'),
         emphasis: true,
       });
     }
@@ -428,7 +429,7 @@ const BINARY = {
         get label() {
           return t('binW.distanceBetweenTheTwoStars');
         },
-        value: withUnit(f.sep.toFixed(1), 'AU'),
+        value: withUnit(fixed(f.sep, 1), 'AU'),
       });
     }
     if (has('which')) {
@@ -450,7 +451,7 @@ const BINARY = {
         get label() {
           return t('binW.yearsSinceYouStartedWatching');
         },
-        value: withUnit(bin.years.toFixed(2), 'yr'),
+        value: withUnit(fixed(bin.years, 2), 'yr'),
       });
     }
     if (has('timer')) {
@@ -465,7 +466,7 @@ const BINARY = {
         value:
           elapsed === null
             ? 'press Mark when Star A crosses the line'
-            : `${elapsed.toFixed(2)} years${
+            : `${fixed(elapsed, 2)} years${
                 bin.stoppedAt !== null
                   ? ' (stopped)'
                   : bin.running
@@ -480,7 +481,7 @@ const BINARY = {
         get label() {
           return t('binW.timeForOneFullOrbit');
         },
-        value: withUnit(f.period.toFixed(2), 'years'),
+        value: withUnit(fixed(f.period, 2), 'years'),
       });
     }
     if (has('total')) {
@@ -488,7 +489,7 @@ const BINARY = {
         get label() {
           return t('binW.totalMassOfThePair');
         },
-        value: withUnit(f.total.toFixed(1), 'M☉'),
+        value: withUnit(fixed(f.total, 1), 'M☉'),
       });
     }
     if (has('wobble')) {
@@ -496,13 +497,13 @@ const BINARY = {
         get label() {
           return t('binW.howFarThePlanetMoves');
         },
-        value: withUnit(f.r2.toFixed(2), 'AU'),
+        value: withUnit(fixed(f.r2, 2), 'AU'),
       });
       rows.push({
         get label() {
           return t('binW.howFarTheStarMoves');
         },
-        value: withUnit((f.r1 * 1000).toFixed(1), 'thousandths of an AU'),
+        value: withUnit(fixed(f.r1 * 1000, 1), 'thousandths of an AU'),
         emphasis: true,
       });
       rows.push({
@@ -672,7 +673,7 @@ const BINARY = {
         ctx,
         spec.mystery
           ? 'masses hidden'
-          : `${f.m1.toFixed(1)} + ${f.m2.toFixed(1)} M☉`,
+          : `${fixed(f.m1, 1)} + ${fixed(f.m2, 1)} M☉`,
         box.x + 7,
         box.y + 6
       );
@@ -680,7 +681,7 @@ const BINARY = {
     ctx.textAlign = 'right';
     label(
       ctx,
-      withUnit(bin.years.toFixed(2), 'years'),
+      withUnit(fixed(bin.years, 2), 'years'),
       box.x + box.w - 7,
       box.y + 6
     );
@@ -777,13 +778,13 @@ const BINARY_COMPARE = {
         get label() {
           return t('binW.yearsElapsed');
         },
-        value: withUnit(pair.years.toFixed(2), 'yr'),
+        value: withUnit(fixed(pair.years, 2), 'yr'),
       },
       ...PAIR_SYSTEMS.map(sys => {
         const f = binaryFacts(sys.m1, sys.m2, sys.sep);
         return {
           label: `${sys.label}: laps completed`,
-          value: (pair.years / f.period).toFixed(2),
+          value: fixed(pair.years / f.period, 2),
           emphasis: true,
         };
       }),
@@ -874,7 +875,7 @@ const BINARY_COMPARE = {
       ctx.textBaseline = 'bottom';
       label(
         ctx,
-        withUnit((pair.years / f.period).toFixed(2), 'laps'),
+        withUnit(fixed(pair.years / f.period, 2), 'laps'),
         cx,
         box.y + box.h - 6
       );
@@ -1000,14 +1001,14 @@ const BALANCE = {
         value:
           c.ratio === 1
             ? 'neither: they weigh the same'
-            : `${heavier}, by ${times % 1 === 0 ? times : times.toFixed(2)} times`,
+            : `${heavier}, by ${times % 1 === 0 ? times : fixed(times, 2)} times`,
         emphasis: true,
       },
     ];
     if (c.total) {
       rows.push({
         label: `Splitting ${c.total} M☉ between them`,
-        value: `${c.blocksA.toFixed(0)} M☉ and ${c.blocksB.toFixed(0)} M☉`,
+        value: `${fixed(c.blocksA, 0)} M☉ and ${fixed(c.blocksB, 0)} M☉`,
         emphasis: true,
       });
     }
@@ -1151,21 +1152,10 @@ const BALANCE = {
 // against a measured 3.06. Nothing here is adjusted to make that work.
 const SIRIUS = { period: 50.1, a: 19.8, e: 0.5923, firstEpoch: 1894.13 };
 
-/** Solve M = E - e sin E, so the marked epochs fall where they really would. */
-function eccentricAnomaly(M, e) {
-  let E = e < 0.8 ? M : Math.PI;
-  for (let i = 0; i < 40; i++) {
-    const d = (E - e * Math.sin(E) - M) / (1 - e * Math.cos(E));
-    E -= d;
-    if (Math.abs(d) < 1e-12) break;
-  }
-  return E;
-}
-
 /** Where the companion sits relative to the primary, in AU, at a given date. */
 function siriusAt(year) {
   const M = (2 * Math.PI * (year - SIRIUS.firstEpoch)) / SIRIUS.period;
-  const E = eccentricAnomaly(
+  const E = solveKepler(
     ((M % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI),
     SIRIUS.e
   );
@@ -1256,7 +1246,7 @@ const VISUAL_BINARY = {
         get label() {
           return t('binW.orbitsCompleted');
         },
-        value: c.complete.toFixed(2),
+        value: fixed(c.complete, 2),
         emphasis: true,
       },
       {

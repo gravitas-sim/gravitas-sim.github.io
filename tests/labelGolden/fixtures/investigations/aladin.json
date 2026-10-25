@@ -1,0 +1,45 @@
+{
+ "en": [
+  [
+   "0 0",
+   "https://aladin.cds.unistra.fr/AladinLite/?target=0.00000%20%2B0.00000&fov=0.2"
+  ],
+  [
+   "0 90",
+   "https://aladin.cds.unistra.fr/AladinLite/?target=0.00000%20%2B90.00000&fov=0.2"
+  ],
+  [
+   "0 -90",
+   "https://aladin.cds.unistra.fr/AladinLite/?target=0.00000%20-90.00000&fov=0.2"
+  ],
+  [
+   "0.000001 1e-7",
+   "https://aladin.cds.unistra.fr/AladinLite/?target=0.00000%20%2B0.00000&fov=0.2"
+  ],
+  [
+   "174.48586303 67.32973892",
+   "https://aladin.cds.unistra.fr/AladinLite/?target=174.48586%20%2B67.32974&fov=0.2"
+  ],
+  [
+   "174.48586303 -67.32973892",
+   "https://aladin.cds.unistra.fr/AladinLite/?target=174.48586%20-67.32974&fov=0.2"
+  ],
+  [
+   "210.5 -0.00001",
+   "https://aladin.cds.unistra.fr/AladinLite/?target=210.50000%20-0.00001&fov=0.2"
+  ],
+  [
+   "359.99999 0.5",
+   "https://aladin.cds.unistra.fr/AladinLite/?target=359.99999%20%2B0.50000&fov=0.2"
+  ],
+  [
+   "83.82208 -5.39111",
+   "https://aladin.cds.unistra.fr/AladinLite/?target=83.82208%20-5.39111&fov=0.2"
+  ],
+  [
+   "0.123456789 -89.987654321",
+   "https://aladin.cds.unistra.fr/AladinLite/?target=0.12346%20-89.98765&fov=0.2"
+  ]
+ ],
+ "es": "same"
+}

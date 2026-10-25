@@ -49,7 +49,6 @@ import {
   getPhysicsSetting,
   state,
   onPhysicsStep,
-  updatePhysicsSettings,
   minInteractionDistance,
 } from './physics.js';
 import { getSimClock } from './timeline.js';
@@ -57,7 +56,7 @@ import { captureToNotebook, snapshot } from './notebookBridge.js';
 import * as CHAOS_STEPS from './experiments/chaosPair.js';
 import { a0InSimUnits } from './mond.js';
 import { orbitalElements } from './orbital.js';
-import { SETTINGS, current_scenario_name } from './appState.js';
+import { SETTINGS, current_scenario_name, commitSettings } from './appState.js';
 import { registerOverlay } from './overlays.js';
 import { t, onLocaleChange } from './i18n/index.js';
 import { ensureDeferredMessages } from './i18n/deferredMessages.js';
@@ -72,6 +71,7 @@ import {
   potentialField,
   regimeFor,
 } from './cr3bp.js';
+import { EV_REQUEST_REBUILD, EV_SIMULATION_RESET } from './names.js';
 
 /** Grid resolution of the forbidden-region mask, in cells across. */
 const GRID = 220;
@@ -778,7 +778,7 @@ async function runNeckPair() {
   SETTINGS.lagrange_tracer_y = neck.BASELINE.position.y;
   SETTINGS.lagrange_tracer_vx = 0;
   SETTINGS.lagrange_tracer_vy = 0;
-  window.dispatchEvent(new CustomEvent('gravitasRequestRebuild'));
+  window.dispatchEvent(new CustomEvent(EV_REQUEST_REBUILD));
 
   const rebuilt = readSystem();
   const span = neck.windowFor(rebuilt, SETTINGS.gravitational_constant);
@@ -815,7 +815,7 @@ async function runNeckPair() {
   // than asserted - and well short of the substep ceiling, past which the
   // step WOULD grow.
   SETTINGS.sim_speed = Math.min(savedSpeed * 4, 120);
-  updatePhysicsSettings(SETTINGS);
+  commitSettings('cr3bp-pair');
   let arms = null;
   try {
     bench.captureExperiment(PAIR_EXPERIMENT);
@@ -858,7 +858,7 @@ async function runNeckPair() {
       console.warn('[cr3bp] could not restore after the pair:', err);
     }
     SETTINGS.sim_speed = savedSpeed;
-    updatePhysicsSettings(SETTINGS);
+    commitSettings('cr3bp-pair');
     state.paused = savedPaused;
     pairRunning = false;
     if (run) run.disabled = false;
@@ -1228,7 +1228,7 @@ export function initCr3bp() {
     .catch(() => {});
 
   mount();
-  window.addEventListener('gravitasSimulationReset', () => {
+  window.addEventListener(EV_SIMULATION_RESET, () => {
     // A rebuilt world is a different mu and possibly a different problem. The
     // cached field is discarded and the validity re-tested, which is what
     // stops the overlay describing a system that is no longer on screen.
