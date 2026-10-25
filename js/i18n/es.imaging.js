@@ -22,13 +22,12 @@ export const ES_IMAGING = {
   'imgW.m.control.cx': 'Centro del círculo, x',
   'imgW.m.control.cy': 'Centro del círculo, y',
   'imgW.m.control.r': 'Radio del círculo',
-  'imgW.m.preset.reset': 'Empezar de nuevo',
+  'imgW.m.preset.reset': 'Reiniciar el círculo',
   'imgW.m.value.source':
     'Una imagen real, color realzado de un sobrevuelo de Galileo mostrado en gris: sus niveles de gris son para el ojo y no miden luz, así que el Observatorio la marca como solo para mostrar',
   'imgW.m.row.pair': 'Longitud del par',
   'imgW.m.row.assumed': 'Longitud que se toma que abarca el par',
-  'imgW.m.value.assumed':
-    '{km} km, el diámetro medio de la Luna (supuesto)',
+  'imgW.m.value.assumed': '{km} km, el diámetro medio de la Luna (supuesto)',
   'imgW.m.row.scale': 'Escala a partir del par',
   'imgW.m.row.radius': 'Radio del círculo',
   'imgW.m.row.diameterPx': 'Diámetro del círculo',
@@ -64,12 +63,14 @@ export const ES_IMAGING = {
   'imgW.p.row.dy': 'Desplazamiento al norte',
   'imgW.p.row.sep': 'Tamaño del desplazamiento',
   'imgW.p.row.rate': 'Velocidad si todo fuera movimiento',
-  'imgW.p.row.lever': 'Paralaje que el desplazamiento podría ocultar, por 100 mas',
+  'imgW.p.row.lever':
+    'Paralaje que el desplazamiento podría ocultar, por 100 mas',
   'imgW.p.row.mux': 'Movimiento propio al este',
   'imgW.p.row.muy': 'Movimiento propio al norte',
   'imgW.p.row.chi2': 'Chi cuadrado del ajuste',
   'imgW.p.row.dof': 'Grados de libertad',
-  'imgW.p.row.pValue': 'Probabilidad de un ajuste tan malo si el modelo fuera cierto',
+  'imgW.p.row.pValue':
+    'Probabilidad de un ajuste tan malo si el modelo fuera cierto',
   'imgW.p.row.verdict': 'Residuos',
   'imgW.p.verdict.consistent': 'coherentes con las incertidumbres indicadas',
   'imgW.p.verdict.inconsistent':
@@ -121,7 +122,8 @@ export const ES_IMAGING = {
   'imgW.o.row.omega': 'Argumento del periastro',
   'imgW.o.row.T': 'Época del periastro',
   'imgW.o.row.chi2': 'Chi cuadrado y grados de libertad',
-  'imgW.o.row.pValue': 'Probabilidad de un ajuste tan malo si el modelo fuera cierto',
+  'imgW.o.row.pValue':
+    'Probabilidad de un ajuste tan malo si el modelo fuera cierto',
   'imgW.o.row.coverage': 'Parte de un período que cubren las épocas',
   'imgW.o.row.mass': 'Suma de masas',
   'imgW.o.row.mass68': 'Suma de masas, intervalo del 68 por ciento',

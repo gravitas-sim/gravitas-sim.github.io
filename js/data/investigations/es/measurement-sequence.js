@@ -560,7 +560,9 @@ export const HOW_FAR_IS_THAT_STAR = {
         'da la distancia si las dos posiciones distan un año',
         'es cero, porque las estrellas no se mueven',
       ],
-      hints: ['¿Qué más, además de la distancia, mueve una estrella entre dos fechas?'],
+      hints: [
+        '¿Qué más, además de la distancia, mueve una estrella entre dos fechas?',
+      ],
       because:
         'No los distingue. Entre dos fechas la estrella se ha movido por su propio movimiento y por una parte distinta de su lazo anual, y un par de posiciones no puede decir cuánto es de cada cosa. La herramienta etiqueta un resultado así como un desplazamiento bajo un supuesto de movimiento fijo, y no da paralaje ni distancia para él.',
     },
@@ -569,7 +571,10 @@ export const HOW_FAR_IS_THAT_STAR = {
       body: 'Pon <strong>Qué ajustar</strong> en el desplazamiento entre dos épocas y usa las 14 épocas, de modo que el desplazamiento vaya de la primera posición a la última. Lee el tamaño del desplazamiento y la velocidad que sería si todo fuera movimiento.',
       fields: [
         { label: 'Tamaño del desplazamiento' },
-        { label: 'Velocidad si todo fuera movimiento, en segundos de arco por año' },
+        {
+          label:
+            'Velocidad si todo fuera movimiento, en segundos de arco por año',
+        },
       ],
     },
     {
@@ -582,7 +587,9 @@ export const HOW_FAR_IS_THAT_STAR = {
         'la describirá si los errores se hacen suficientemente grandes',
         'la describirá, porque el lazo es menor que los errores',
       ],
-      hints: ['El lazo mide unos 60 mas de ancho. ¿Cuán grande es el error de una posición?'],
+      hints: [
+        'El lazo mide unos 60 mas de ancho. ¿Cuán grande es el error de una posición?',
+      ],
       because:
         'No. El lazo es unas quince veces el error de 4 mas de una posición, así que cada posición fuera de la recta lo está por mucho. Un modelo que no puede hacer un lazo no puede describir una estrella que lo hace.',
     },
@@ -624,7 +631,9 @@ export const HOW_FAR_IS_THAT_STAR = {
           say: 'El 1,53 es la incertidumbre del paralaje, en milisegundos de arco. El intervalo propio de la distancia sale de uno sobre los extremos del del paralaje, y no es de 1,53 pársecs.',
         },
       ],
-      hints: ['Un intervalo dice qué harían las repeticiones, y el marco en que se mide el paralaje importa.'],
+      hints: [
+        'Un intervalo dice qué harían las repeticiones, y el marco en que se mide el paralaje importa.',
+      ],
       because:
         'El intervalo es una afirmación sobre repeticiones de la medición, como en ¿Qué afirma el ±?, y sobre el marco: el paralaje es relativo a las estrellas de referencia, así que la distancia nunca es menor que la verdadera si ellas tienen un paralaje propio.',
     },
@@ -678,7 +687,7 @@ export const A_BINARY_STARS_ORBIT = {
   steps: [
     {
       title: 'Una compañera, doce fechas',
-      body: 'Una estrella binaria son dos estrellas que giran una alrededor de otra. Aquí se ha medido la posición de la más tenue, respecto de la más brillante, en doce fechas durante dieciséis años, cada una con un error de 15 milisegundos de arco. Los datos son <strong>sintéticos</strong>: una binaria de elementos que elegimos, vista en ángulo, con errores aleatorios. La verdad queda oculta hasta el final.\n\nLa trayectoria en el cielo es la órbita vista en ángulo. Su tamaño en segundos de arco, a, y su período, P, es lo que fijan las posiciones. La tercera ley de Kepler da entonces la masa del par, M = a&sup3;/P&sup2; en masas solares cuando a está en unidades astronómicas y P en años, y a en unidades astronómicas necesita la distancia: un paralaje de p segundos de arco hace a (ua) = a (segundos de arco)/p. Las posiciones solas fijan solo la <em>suma</em> de las dos masas.',
+      body: 'Una estrella binaria son dos estrellas que giran una alrededor de otra. Aquí se ha medido la posición de la más tenue, respecto de la más brillante, en doce fechas durante dieciséis años, cada una con un error de 15 milisegundos de arco. Los datos son <strong>sintéticos</strong>: una binaria de elementos que elegimos, vista en ángulo, con errores aleatorios. La verdad queda oculta hasta el final.\n\nLa trayectoria en el cielo es la órbita vista en ángulo. Su tamaño en segundos de arco, a, y su período, P, es lo que fijan las posiciones. La tercera ley de Kepler da entonces la masa del par, M = a³/P² en masas solares cuando a está en unidades astronómicas y P en años, y a en unidades astronómicas necesita la distancia: un paralaje de p segundos de arco hace a (ua) = a (segundos de arco)/p. Las posiciones solas fijan solo la <em>suma</em> de las dos masas.',
     },
     {
       title: '¿Qué forma tiene la trayectoria en el cielo?',
@@ -729,11 +738,14 @@ export const A_BINARY_STARS_ORBIT = {
       title: 'La órbita en unidades astronómicas',
       body: 'El paralaje de la binaria, relativo a sus estrellas de referencia, es de 100 mas: 0,100 segundos de arco. Convierte el semieje mayor de 0,908 segundos de arco en unidades astronómicas.',
       prompt: 'El semieje mayor',
-      hints: ['a en ua es a en segundos de arco dividido entre el paralaje en segundos de arco.'],
+      hints: [
+        'a en ua es a en segundos de arco dividido entre el paralaje en segundos de arco.',
+      ],
       worked:
         '0,908 ÷ 0,100 = 9,08 ua. A 10 pársecs un segundo de arco son 10 ua, así que los 0,908 segundos de arco de la órbita son 9,08 ua, algo más que la distancia del Sol a Saturno.',
       feedback: {
-        close: 'Casi. Divide el ángulo entre el paralaje, ambos en segundos de arco.',
+        close:
+          'Casi. Divide el ángulo entre el paralaje, ambos en segundos de arco.',
         'wrong-order-of-magnitude':
           'Se pasa una potencia de diez: divide entre 0,100 segundos de arco, no entre 100.',
         off: 'a (segundos de arco) ÷ paralaje (segundos de arco).',
@@ -744,8 +756,12 @@ export const A_BINARY_STARS_ORBIT = {
       body: 'Con el paralaje en 100 mas, lee la suma de masas y su intervalo del 68 por ciento. El intervalo sale de la incertidumbre de la órbita y de la del paralaje, 4 mas, juntas.',
       fields: [
         { label: 'Suma de masas' },
-        { label: 'Suma de masas, extremo bajo del intervalo del 68 por ciento' },
-        { label: 'Suma de masas, extremo alto del intervalo del 68 por ciento' },
+        {
+          label: 'Suma de masas, extremo bajo del intervalo del 68 por ciento',
+        },
+        {
+          label: 'Suma de masas, extremo alto del intervalo del 68 por ciento',
+        },
       ],
     },
     {

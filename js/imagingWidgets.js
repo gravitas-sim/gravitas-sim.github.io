@@ -277,7 +277,7 @@ const MOON_MARKS = {
   ],
   presets: [
     {
-      values: { x1: 60, x2: 440, cx: 250, cy: 250, r: 20 },
+      values: { cx: 250, cy: 250, r: 20 },
       get label() {
         return t('imgW.m.preset.reset');
       },
@@ -379,7 +379,8 @@ export function parallaxView(v, provided = earth) {
   const spanYears = (STAR.rows[n - 1][0] - STAR.rows[0][0]) / YEAR;
   let res = null;
   let waiting = false;
-  if (fit === 0) res = twoEpochShift(epochs[0], epochs[n - 1], { earth: provided });
+  if (fit === 0)
+    res = twoEpochShift(epochs[0], epochs[n - 1], { earth: provided });
   else if (fit === 1) res = fitMotion({ epochs });
   else if (!provided) waiting = true;
   else
@@ -541,7 +542,8 @@ const STAR_FIT = {
       step: 0.5,
       value: 0,
       decimals: 1,
-      format: v => (v > 0 ? withUnit(fix(v, 1), 'mas') : t('imgW.p.value.noCorrection')),
+      format: v =>
+        v > 0 ? withUnit(fix(v, 1), 'mas') : t('imgW.p.value.noCorrection'),
     },
   ],
   presets: [
@@ -859,7 +861,9 @@ const BINARY_FIT = {
           label: t('imgW.o.row.no'),
           value: t(key, {
             depth: t(
-              f.depth === 'circular' ? 'imgW.o.model.circle' : 'imgW.o.model.ellipse'
+              f.depth === 'circular'
+                ? 'imgW.o.model.circle'
+                : 'imgW.o.model.ellipse'
             ),
             need: d.need ?? '',
             n: d.epochs ?? f.n,
@@ -873,8 +877,7 @@ const BINARY_FIT = {
       return rows;
     }
     const el = r.elements;
-    const pm = (e, d, u = '') =>
-      `${fix(e.value, d)} ± ${fix(e.sigma, d)}${u}`;
+    const pm = (e, d, u = '') => `${fix(e.value, d)} ± ${fix(e.sigma, d)}${u}`;
     rows.push(
       {
         label: t('imgW.o.row.period'),

@@ -21,7 +21,7 @@ export const EN_IMAGING = {
   'imgW.m.control.cx': 'Circle center, x',
   'imgW.m.control.cy': 'Circle center, y',
   'imgW.m.control.r': 'Circle radius',
-  'imgW.m.preset.reset': 'Start again',
+  'imgW.m.preset.reset': 'Reset the circle',
   'imgW.m.value.source':
     'A real picture, enhanced color of a Galileo flyby shown in gray: its gray levels are for the eye and not a measure of light, so the Observatory marks it as display-only',
   'imgW.m.row.pair': 'Length of the pair',
@@ -31,8 +31,10 @@ export const EN_IMAGING = {
   'imgW.m.row.radius': 'Radius of the circle',
   'imgW.m.row.diameterPx': 'Diameter of the circle',
   'imgW.m.row.diameterKm': 'Diameter of the circle in kilometers',
-  'imgW.m.row.offset': 'Distance of the circle from the disc’s center, in disc radii',
-  'imgW.m.row.foreshort': 'Width of a round feature there along that direction, as a share of its true width',
+  'imgW.m.row.offset':
+    'Distance of the circle from the disc’s center, in disc radii',
+  'imgW.m.row.foreshort':
+    'Width of a round feature there along that direction, as a share of its true width',
   'imgW.m.value.how':
     'The stated uncertainty is only the rounding of each placement (one pixel is a step of 0.29 pixel); how sharp the edge is, and whether the picture is cropped, are not in it',
   'imgW.m.value.none': 'not set',

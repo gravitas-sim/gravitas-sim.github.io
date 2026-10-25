@@ -1227,7 +1227,7 @@ export const MEASURING_THE_MOON = {
   title: 'Measuring the Moon',
   subtitle:
     'Marks on a real picture, a scale from a known length, and a size in kilometers',
-  duration: '20-30 min',
+  duration: '15-25 min',
   level: 'Introductory astronomy',
   audience: 'intro',
   textbook: { chapter: 6, section: null },
@@ -1260,7 +1260,7 @@ export const MEASURING_THE_MOON = {
              \n\nA picture has no scale of its own. This one is 496 pixels across,
              and a pixel is not a kilometer. The pixels are numbered from the lower
              left, x to the right and y up, and the disc is cropped close: its right
-             edge touches the last column. In this lesson you give the picture a
+             edge touches the last column. In this investigation you give the picture a
              scale and take one measurement off it.`,
       tool: MM({}, ['x1', 'x2', 'cx', 'cy', 'r']),
     },
@@ -1280,7 +1280,9 @@ export const MEASURING_THE_MOON = {
         'the number of colors in the picture',
       ],
       answer: 1,
-      hints: ['Where could a length in kilometers come from, with nothing else on the picture?'],
+      hints: [
+        'Where could a length in kilometers come from, with nothing else on the picture?',
+      ],
       because:
         'A length in the picture that you already know. A picture records angles and pixels and never says how far away the thing is, so the only way to a scale is to point at something in it whose size you know by other means. Here that is the Moon itself, whose mean diameter, 3,474.8 km, was measured by other means.',
       tool: MM({}, ['x1', 'x2', 'cx', 'cy', 'r']),
@@ -1301,7 +1303,12 @@ export const MEASURING_THE_MOON = {
              the uncertainty the tool states.`,
       fields: [
         { id: 'pair', label: 'Length of the pair', unit: 'px', hint: '493' },
-        { id: 'scale', label: 'Scale from the pair, in km per pixel', unit: '', hint: '7.05' },
+        {
+          id: 'scale',
+          label: 'Scale from the pair, in km per pixel',
+          unit: '',
+          hint: '7.05',
+        },
       ],
       validate: v => {
         if (![v.pair, v.scale].every(Number.isFinite)) return null;
@@ -1366,7 +1373,9 @@ export const MEASURING_THE_MOON = {
       prompt: 'Across, the plain is about&hellip;',
       options: ['6 km', '60 km', '600 km', '6,000 km'],
       answer: 2,
-      hints: ['The whole Moon is about 3,500 km across. What share of it is the plain?'],
+      hints: [
+        'The whole Moon is about 3,500 km across. What share of it is the plain?',
+      ],
       because:
         'About 600 km, a little under a fifth of the Moon’s width: the plain spans roughly a fifth of the disc and the disc is 3,475 km across. The next step measures it.',
       tool: MM({ x1: 3, x2: 496, cx: 289, cy: 306, r: 20 }, ['x1', 'x2']),
@@ -1446,7 +1455,7 @@ export const HOW_FAR_IS_THAT_STAR = {
   title: 'How Far Is That Star?',
   subtitle:
     'A shift, a motion and a parallax from fourteen positions of one star',
-  duration: '25-40 min',
+  duration: '20-30 min',
   level: 'Majors and upper-level astronomy',
   audience: 'intro',
   textbook: { chapter: 19, section: '19.1' },
@@ -1551,7 +1560,9 @@ export const HOW_FAR_IS_THAT_STAR = {
         'will describe it, because the loop is smaller than the errors',
       ],
       answer: 1,
-      hints: ['The loop is about 60 mas across. How large is the error of one position?'],
+      hints: [
+        'The loop is about 60 mas across. How large is the error of one position?',
+      ],
       because:
         'It will not. The loop is about fifteen times the 4 mas error of one position, so every position that is off the line is off it by a lot. A model that cannot make a loop cannot describe a star that makes one.',
       tool: SP({ fit: 1, n: 14 }),
@@ -1594,12 +1605,26 @@ export const HOW_FAR_IS_THAT_STAR = {
              parallax, its uncertainty and the distance.`,
       fields: [
         { id: 'p', label: 'Parallax, relative', unit: 'mas', hint: '60.3' },
-        { id: 'sigma', label: 'Uncertainty of the parallax', unit: 'mas', hint: '1.5' },
-        { id: 'd', label: 'Distance, 1 over the parallax', unit: 'pc', hint: '16.6' },
+        {
+          id: 'sigma',
+          label: 'Uncertainty of the parallax',
+          unit: 'mas',
+          hint: '1.5',
+        },
+        {
+          id: 'd',
+          label: 'Distance, 1 over the parallax',
+          unit: 'pc',
+          hint: '16.6',
+        },
       ],
       validate: v => {
         if (![v.p, v.sigma, v.d].every(Number.isFinite)) return null;
-        if (near(v.p, 60.3, 0.5) && near(v.sigma, 1.53, 0.1) && near(v.d, 16.6, 0.15)) {
+        if (
+          near(v.p, 60.3, 0.5) &&
+          near(v.sigma, 1.53, 0.1) &&
+          near(v.d, 16.6, 0.15)
+        ) {
           return {
             level: 'ok',
             message:
@@ -1648,7 +1673,9 @@ export const HOW_FAR_IS_THAT_STAR = {
           say: 'The 1.53 is the uncertainty of the parallax, in milliarcseconds. The distance’s own interval comes from 1 over the ends of the parallax’s, and is not 1.53 parsecs.',
         },
       ],
-      hints: ['An interval says what repeats would do, and the frame the parallax is measured in matters.'],
+      hints: [
+        'An interval says what repeats would do, and the frame the parallax is measured in matters.',
+      ],
       because:
         'The interval is a statement about repeats of the measurement, as in What Does ± Claim?, and about the frame: the parallax is relative to the reference stars, so the distance is never smaller than the true one if they have a parallax of their own.',
       tool: SP({ fit: 2, n: 14 }),
@@ -1727,7 +1754,7 @@ export const A_BINARY_STARS_ORBIT = {
   title: 'A Binary Star’s Orbit',
   subtitle:
     'Positions over sixteen years, the orbit they fix, and the mass of the pair',
-  duration: '25-40 min',
+  duration: '20-30 min',
   level: 'Majors and upper-level astronomy',
   audience: 'intro',
   textbook: { chapter: 18, section: '18.2' },
@@ -1756,7 +1783,7 @@ export const A_BINARY_STARS_ORBIT = {
              random errors. The truth is withheld until the end.
              \n\nThe path on the sky is the orbit as seen at an angle. Its size in
              arcseconds, a, and its period, P, are what the positions fix. Kepler&rsquo;s third
-             law then gives the mass of the pair, M = a&sup3;/P&sup2; in solar masses when a is in
+             law then gives the mass of the pair, M = a³/P² in solar masses when a is in
              astronomical units and P in years, and a in astronomical units needs the distance:
              a parallax of p arcseconds makes a (au) = a (arcsec)/p. Positions alone fix only the
              <em>sum</em> of the two masses.`,
@@ -1829,7 +1856,11 @@ export const A_BINARY_STARS_ORBIT = {
       ],
       validate: v => {
         if (![v.P, v.a, v.e].every(Number.isFinite)) return null;
-        if (near(v.P, 14.13, 0.15) && near(v.a, 0.908, 0.02) && near(v.e, 0.443, 0.02)) {
+        if (
+          near(v.P, 14.13, 0.15) &&
+          near(v.a, 0.908, 0.02) &&
+          near(v.e, 0.443, 0.02)
+        ) {
           return {
             level: 'ok',
             message:
@@ -1856,7 +1887,9 @@ export const A_BINARY_STARS_ORBIT = {
       unit: 'AU',
       answer: 9.08,
       tolerance: 0.1,
-      hints: ['a in au is a in arcseconds divided by the parallax in arcseconds.'],
+      hints: [
+        'a in au is a in arcseconds divided by the parallax in arcseconds.',
+      ],
       worked:
         '0.908 ÷ 0.100 = 9.08 au. At 10 parsecs one arcsecond is 10 au, so the orbit’s 0.908 arcsecond is 9.08 au, a little more than the distance from the Sun to Saturn.',
       feedback: {
@@ -1877,12 +1910,26 @@ export const A_BINARY_STARS_ORBIT = {
              together.`,
       fields: [
         { id: 'm', label: 'Mass sum', unit: 'M_sun', hint: '3.76' },
-        { id: 'lo', label: 'Mass sum, low end of the 68 percent interval', unit: 'M_sun', hint: '3.33' },
-        { id: 'hi', label: 'Mass sum, high end of the 68 percent interval', unit: 'M_sun', hint: '4.25' },
+        {
+          id: 'lo',
+          label: 'Mass sum, low end of the 68 percent interval',
+          unit: 'M_sun',
+          hint: '3.33',
+        },
+        {
+          id: 'hi',
+          label: 'Mass sum, high end of the 68 percent interval',
+          unit: 'M_sun',
+          hint: '4.25',
+        },
       ],
       validate: v => {
         if (![v.m, v.lo, v.hi].every(Number.isFinite)) return null;
-        if (near(v.m, 3.76, 0.06) && near(v.lo, 3.33, 0.08) && near(v.hi, 4.25, 0.1)) {
+        if (
+          near(v.m, 3.76, 0.06) &&
+          near(v.lo, 3.33, 0.08) &&
+          near(v.hi, 4.25, 0.1)
+        ) {
           return {
             level: 'ok',
             message:

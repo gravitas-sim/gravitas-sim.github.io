@@ -5,7 +5,7 @@
     "title": "Marking the Moon",
     "note": "A real picture of the Moon from the Galileo spacecraft, 7 December 1992, shown in gray. Mark the full width of the disc with a reference pair of known length, then circle a feature: the scale comes from the pair and nowhere else.",
     "controls": [{"id":"x1","label":"Left end of the pair, x","unit":null,"min":1,"max":496,"step":1,"value":60,"decimals":0},{"id":"x2","label":"Right end of the pair, x","unit":null,"min":1,"max":496,"step":1,"value":440,"decimals":0},{"id":"cx","label":"Circle center, x","unit":null,"min":1,"max":496,"step":1,"value":250,"decimals":0},{"id":"cy","label":"Circle center, y","unit":null,"min":1,"max":496,"step":1,"value":250,"decimals":0},{"id":"r","label":"Circle radius","unit":null,"min":1,"max":200,"step":1,"value":20,"decimals":0}],
-    "presets": [{"label":"Start again","values":{"x1":"60","x2":"440","cx":"250","cy":"250","r":"20"},"note":null}],
+    "presets": [{"label":"Reset the circle","values":{"cx":"250","cy":"250","r":"20"},"note":null}],
     "actions": [],
     "defaults": {"x1":"60","x2":"440","cx":"250","cy":"250","r":"20"}
    },
@@ -33,8 +33,8 @@
    "phases": {
     "calls": 1,
     "distinct": 1,
-    "digest": "b6ea400ab63b1456",
-    "samples": [{"preset":"Start again","note":null}]
+    "digest": "50983282d19d9008",
+    "samples": [{"preset":"Reset the circle","note":null}]
    }
   },
   "es": {
@@ -42,7 +42,7 @@
     "title": "Marcar la Luna",
     "note": "Una fotografía real de la Luna tomada por la sonda Galileo el 7 de diciembre de 1992, mostrada en gris. Marca el ancho completo del disco con un par de referencia de longitud conocida y luego rodea un accidente: la escala sale del par y de ninguna otra parte.",
     "controls": [{"id":"x1","label":"Extremo izquierdo del par, x","unit":null,"min":1,"max":496,"step":1,"value":60,"decimals":0},{"id":"x2","label":"Extremo derecho del par, x","unit":null,"min":1,"max":496,"step":1,"value":440,"decimals":0},{"id":"cx","label":"Centro del círculo, x","unit":null,"min":1,"max":496,"step":1,"value":250,"decimals":0},{"id":"cy","label":"Centro del círculo, y","unit":null,"min":1,"max":496,"step":1,"value":250,"decimals":0},{"id":"r","label":"Radio del círculo","unit":null,"min":1,"max":200,"step":1,"value":20,"decimals":0}],
-    "presets": [{"label":"Empezar de nuevo","values":{"x1":"60","x2":"440","cx":"250","cy":"250","r":"20"},"note":null}],
+    "presets": [{"label":"Reiniciar el círculo","values":{"cx":"250","cy":"250","r":"20"},"note":null}],
     "actions": [],
     "defaults": {"x1":"60","x2":"440","cx":"250","cy":"250","r":"20"}
    },
@@ -70,8 +70,8 @@
    "phases": {
     "calls": 1,
     "distinct": 1,
-    "digest": "20fe285644be2275",
-    "samples": [{"preset":"Empezar de nuevo","note":null}]
+    "digest": "9438e5719de2f6a2",
+    "samples": [{"preset":"Reiniciar el círculo","note":null}]
    }
   }
  },
