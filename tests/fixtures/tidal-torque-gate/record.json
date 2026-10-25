@@ -1,0 +1,268 @@
+{
+  "format": "gravitas.tidal-torque-gate-record/1",
+  "prompt": 204,
+  "spike": {
+    "branch": "spike/tidal-torque-gate",
+    "commit": "7fbad39f",
+    "base": "feat/rings-roche-tides 6abaddf1 (v3 5a4bd683 plus the kernel)",
+    "node": "v24.4.0 (Mac, advisory: nothing here is a byte figure)",
+    "files": [
+      "js/engine/forces.js (tidalPairs, tidalPairTerms, applyTidalPairs; one length test per call)",
+      "tools/tidal-torque-gate.mjs",
+      "tools/tidal-torque-gate-bench.mjs"
+    ]
+  },
+  "retrievedAfterThresholds": "thresholds committed in 58ea49ab, oracle results in 0afb9889, clarifications in 6abaddf1, all before the spike commit",
+  "harness": [
+    {
+      "id": "ref.closedForm.vs.oracle",
+      "measured": 0.0000014552738670687639,
+      "bound": null,
+      "pass": true,
+      "note": "closed form 104.4454206230702 against DOP853 104.44557261998257"
+    },
+    {
+      "id": "G4.order.Symplectic Euler",
+      "measured": 1.85094337654313,
+      "bound": [0.8, 1.2],
+      "pass": false,
+      "note": "errors 3.17e-3, 8.87e-4, 2.44e-4 at 100, 200, 400 steps per orbit"
+    },
+    {
+      "id": "G3.closedForm.Symplectic Euler",
+      "measured": 0.005517716829197899,
+      "bound": 0.01,
+      "pass": true,
+      "note": "change in a 4.4699491952549835 against closed form 4.445420623070206"
+    },
+    {
+      "id": "G5.momentum.Symplectic Euler",
+      "measured": 3.421915781389742e-15,
+      "bound": 1e-11,
+      "pass": true,
+      "note": ""
+    },
+    {
+      "id": "G6.angularMomentum.Symplectic Euler",
+      "measured": 0.000013725542768689858,
+      "bound": 0.01,
+      "pass": true,
+      "note": "change 69.2031648076536, integral of torque 69.2022149566553"
+    },
+    {
+      "id": "G6.energy.Symplectic Euler",
+      "measured": 0.004486046815244231,
+      "bound": 0.01,
+      "pass": true,
+      "note": "change 2.1393468790248065, work 2.1297496687714546"
+    },
+    {
+      "id": "G7.rises.Symplectic Euler",
+      "measured": 0,
+      "bound": 0,
+      "pass": true,
+      "note": "orbit-end samples of the total energy"
+    },
+    {
+      "id": "G7.dissipation.Symplectic Euler",
+      "measured": 0.00927906767069728,
+      "bound": 0.01,
+      "pass": true,
+      "note": "fall 1.0870145189617446, closed form 1.097195469975631"
+    },
+    {
+      "id": "G4.order.Velocity Verlet",
+      "measured": 1.9499888440387012,
+      "bound": [1.8, 2.2],
+      "pass": true,
+      "note": "errors 8.07e-4, 2.13e-4, 5.40e-5 at 50, 100, 200 steps per orbit"
+    },
+    {
+      "id": "G3.closedForm.Velocity Verlet",
+      "measured": 0.0011813309515699769,
+      "bound": 0.001,
+      "pass": false,
+      "note": "change in a 4.440169110095425 against closed form 4.445420623070206"
+    },
+    {
+      "id": "G5.momentum.Velocity Verlet",
+      "measured": 9.133930131960298e-15,
+      "bound": 1e-11,
+      "pass": true,
+      "note": ""
+    },
+    {
+      "id": "G6.angularMomentum.Velocity Verlet",
+      "measured": 2.2725968611643915e-13,
+      "bound": 0.001,
+      "pass": true,
+      "note": "change 69.09714049438844, integral of torque 69.09714049437274"
+    },
+    {
+      "id": "G6.energy.Velocity Verlet",
+      "measured": 0.00046251896377035425,
+      "bound": 0.001,
+      "pass": true,
+      "note": "change 2.1256998853644262, work 2.1247167088561607"
+    },
+    {
+      "id": "G7.rises.Velocity Verlet",
+      "measured": 0,
+      "bound": 0,
+      "pass": true,
+      "note": "orbit-end samples of the total energy"
+    },
+    {
+      "id": "G7.dissipation.Velocity Verlet",
+      "measured": 0.0012055806207847714,
+      "bound": 0.01,
+      "pass": true,
+      "note": "fall 1.0958727123798155, closed form 1.097195469975631"
+    },
+    {
+      "id": "G4.order.RK4",
+      "measured": 5.0531890660516785,
+      "bound": [3.5, 4.5],
+      "pass": false,
+      "note": "errors 3.23e-3, 9.72e-5, 2.93e-6 at 24, 48, 96 steps per orbit"
+    },
+    {
+      "id": "G3.closedForm.RK4",
+      "measured": 0.00003174327384724745,
+      "bound": 0.001,
+      "pass": true,
+      "note": "change in a 4.445279510866001 against closed form 4.445420623070206"
+    },
+    {
+      "id": "G5.momentum.RK4",
+      "measured": 2.795286785589998e-15,
+      "bound": 1e-11,
+      "pass": true,
+      "note": ""
+    },
+    {
+      "id": "G6.angularMomentum.RK4",
+      "measured": 0.00007572624934964442,
+      "bound": 0.001,
+      "pass": true,
+      "note": "change 69.17608349946704, integral of torque 69.18132194481515"
+    },
+    {
+      "id": "G6.energy.RK4",
+      "measured": 0.00007626634710838525,
+      "bound": 0.001,
+      "pass": true,
+      "note": "change 2.128042325935631, work 2.1282046239503223"
+    },
+    {
+      "id": "G7.rises.RK4",
+      "measured": 0,
+      "bound": 0,
+      "pass": true,
+      "note": "orbit-end samples of the total energy"
+    },
+    {
+      "id": "G7.dissipation.RK4",
+      "measured": 0.0001562378138398126,
+      "bound": 0.01,
+      "pass": true,
+      "note": "fall 1.097366893397215, closed form 1.097195469975631"
+    },
+    {
+      "id": "G2.zeroStrength.Symplectic Euler",
+      "measured": 0,
+      "bound": 0,
+      "pass": true,
+      "note": "bit-identical to the pair absent"
+    },
+    {
+      "id": "G2.zeroStrength.Velocity Verlet",
+      "measured": 0,
+      "bound": 0,
+      "pass": true,
+      "note": "bit-identical to the pair absent"
+    },
+    {
+      "id": "G2.zeroStrength.RK4",
+      "measured": 0,
+      "bound": 0,
+      "pass": true,
+      "note": "bit-identical to the pair absent"
+    }
+  ],
+  "slopes": {
+    "Symplectic Euler": {
+      "errs": [
+        0.0031721348675824855, 0.0008865610483194075, 0.00024376575272412992
+      ],
+      "slope": 1.85094337654313
+    },
+    "Velocity Verlet": {
+      "errs": [
+        0.0008066520038386215, 0.00021314342547441357, 0.00005403509887145219
+      ],
+      "slope": 1.9499888440387012
+    },
+    "RK4": {
+      "errs": [
+        0.0032311140799508565, 0.00009715501175705299, 0.0000029310911656921236
+      ],
+      "slope": 5.0531890660516785
+    }
+  },
+  "G1": {
+    "seededStepIdentical": [
+      {
+        "scenario": "binary-pair 3",
+        "frames": 300,
+        "base": "7de87ecbf90af5f1",
+        "spike": "7de87ecbf90af5f1"
+      },
+      {
+        "scenario": "solar-system 7",
+        "frames": 300,
+        "base": "487b2484a446ca97",
+        "spike": "487b2484a446ca97"
+      },
+      {
+        "scenario": "kuiper-belt 5",
+        "frames": 300,
+        "base": "3a7567aa600414bc",
+        "spike": "3a7567aa600414bc"
+      },
+      {
+        "scenario": "stellar-graveyard 9",
+        "frames": 300,
+        "base": "02b748f9f26f7cfa",
+        "spike": "02b748f9f26f7cfa"
+      },
+      {
+        "scenario": "galilean-resonance 4",
+        "frames": 300,
+        "base": "80145638add7f6d7",
+        "spike": "80145638add7f6d7"
+      }
+    ],
+    "jest": "tests/seedingEquivalence, engineConservation, engineState (55 tests) and scenarioGeometry*, update-physics, physicsSettingsTruth, irreversibility (1,108 tests) pass on the spike",
+    "differingBits": 0,
+    "pass": true
+  },
+  "G8": {
+    "callsPerRun": 20000,
+    "bodies": 50,
+    "repeats": 7,
+    "baseNsPerCall": [
+      24005.8723, 24082.1102, 24467.48275, 24095.1921, 24213.18355, 24165.2754,
+      24146.39955
+    ],
+    "spikeNsPerCall": [
+      24214.41145, 24192.9788, 24565.313, 24094.3909, 24542.3599, 24336.4949,
+      24296.7204
+    ],
+    "minBase": 24005.8723,
+    "minSpike": 24094.3909,
+    "relative": 0.003687372776701725,
+    "bound": 0.05,
+    "pass": true
+  }
+}

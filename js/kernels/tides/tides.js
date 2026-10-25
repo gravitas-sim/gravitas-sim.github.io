@@ -338,3 +338,63 @@ export function lockingTime(p) {
   const time = (I * spin) / torque;
   return { time, years: time / SECONDS_PER_YEAR, torque };
 }
+
+/**
+ * A precomputed trajectory: the closed form sampled evenly in time from now to
+ * `duration` seconds (negative for the past), the table a plot or a prescribed
+ * pair of bodies is drawn from. Nothing is integrated and no force reaches the
+ * engine (the tidal-torque gate's verdict B, TIDAL_TORQUE_GATE.md). Where the
+ * model ends inside the interval (the orbit meeting the primary, the spin
+ * meeting the orbit) the table stops just before and `endedBy` names why and
+ * when.
+ *
+ * @param {object} p - recession's parameters plus `duration` (s) and `samples` (2 to 2000, default 101)
+ * @returns {{sign:number, rows:Array<{time:number, a:number, spin:number, spinPeriod:number, n:number, orbitalPeriod:number, energy:number, totalAngularMomentum:number}>, endedBy:null|{code:string, time:number}}}
+ */
+export function tidalTrajectory(p) {
+  params(p);
+  const duration = finite(p.duration, 'duration');
+  const samples = p.samples === undefined ? 101 : p.samples;
+  if (!Number.isInteger(samples) || samples < 2 || samples > 2000) {
+    throw new TidesError('input', 'samples must be an integer from 2 to 2000');
+  }
+  if (duration === 0)
+    throw new TidesError('input', 'duration must not be zero');
+  const base = { ...p };
+  delete base.duration;
+  delete base.samples;
+  let horizon = duration;
+  let endedBy = null;
+  try {
+    evolveCircular({ ...base, time: duration });
+  } catch (e) {
+    if (!(e instanceof TidesError)) throw e;
+    if (e.code === 'corotation' && e.detail) {
+      endedBy = { code: 'corotation', time: e.detail.time };
+    } else if (e.code === 'orbit-inside-body') {
+      const o = orbitOf(base);
+      const sign = Math.sign(o.spin - o.n0);
+      endedBy = {
+        code: 'orbit-inside-body',
+        time: (o.R ** 6.5 - o.a0 ** 6.5) / (6.5 * sign * o.C),
+      };
+    } else throw e;
+    horizon = endedBy.time * (1 - 1e-9);
+  }
+  const rows = [];
+  for (let k = 0; k < samples; k++) {
+    const time = (horizon * k) / (samples - 1);
+    const s = evolveCircular({ ...base, time });
+    rows.push({
+      time,
+      a: s.a,
+      spin: s.spin,
+      spinPeriod: (2 * Math.PI) / s.spin,
+      n: s.n,
+      orbitalPeriod: (2 * Math.PI) / s.n,
+      energy: s.energy,
+      totalAngularMomentum: s.totalAngularMomentum,
+    });
+  }
+  return { sign: Math.sign(rows[0].spin - rows[0].n), rows, endedBy };
+}

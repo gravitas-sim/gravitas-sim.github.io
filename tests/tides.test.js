@@ -208,3 +208,87 @@ describe('tides', () => {
     }
   });
 });
+
+describe('the precomputed trajectory (the gate verdict B slice)', () => {
+  const earthMoon = {
+    primaryMass: 5.9722e24,
+    primaryRadius: 6.3781e6,
+    satelliteMass: 7.342e22,
+    semiMajorAxis: 3.844e8,
+    k2: 0.3,
+    Q: 12,
+    spin: 7.2921159e-5,
+    alpha: 0.3307,
+  };
+
+  test('it is the closed form sampled, and the samples are those of the oracle', () => {
+    const oracle = JSON.parse(read('tests/fixtures/tides/oracle-results.json'))
+      .evolution['earth-moon'];
+    const tEnd = oracle.times[oracle.times.length - 1];
+    const tr = K.tidalTrajectory({ ...earthMoon, duration: tEnd, samples: 5 });
+    expect(tr.endedBy).toBeNull();
+    expect(tr.sign).toBe(1);
+    tr.rows.forEach((row, i) => {
+      expect(Math.abs(row.a - oracle.a[i]) / oracle.a[i]).toBeLessThan(1e-9);
+      expect(row.time).toBeCloseTo(oracle.times[i], -3);
+    });
+  });
+
+  test('the Moon recedes, the day lengthens and the account falls along the table', () => {
+    const tr = K.tidalTrajectory({
+      ...earthMoon,
+      duration: 1e9 * K.SECONDS_PER_YEAR,
+      samples: 40,
+    });
+    for (let i = 1; i < tr.rows.length; i++) {
+      expect(tr.rows[i].a).toBeGreaterThan(tr.rows[i - 1].a);
+      expect(tr.rows[i].spinPeriod).toBeGreaterThan(tr.rows[i - 1].spinPeriod);
+      expect(tr.rows[i].energy).toBeLessThan(tr.rows[i - 1].energy);
+      expect(
+        Math.abs(
+          tr.rows[i].totalAngularMomentum / tr.rows[0].totalAngularMomentum - 1
+        )
+      ).toBeLessThan(1e-12);
+    }
+  });
+
+  test('into the past the table stops at contact and names the time', () => {
+    const tr = K.tidalTrajectory({
+      ...earthMoon,
+      duration: -4.5e9 * K.SECONDS_PER_YEAR,
+      samples: 30,
+    });
+    expect(tr.endedBy.code).toBe('orbit-inside-body');
+    expect(tr.endedBy.time).toBeLessThan(0);
+    // the constant-Q age problem: contact well inside the age of the Solar System
+    expect(Math.abs(tr.endedBy.time) / K.SECONDS_PER_YEAR).toBeLessThan(4.5e9);
+    expect(tr.rows[tr.rows.length - 1].a).toBeGreaterThan(
+      earthMoon.primaryRadius
+    );
+  });
+
+  test('forward past corotation it stops and names the time', () => {
+    const tr = K.tidalTrajectory({
+      ...earthMoon,
+      duration: 1e12 * K.SECONDS_PER_YEAR,
+      samples: 30,
+    });
+    expect(tr.endedBy.code).toBe('corotation');
+    const last = tr.rows[tr.rows.length - 1];
+    expect(Math.abs(last.spin - last.n) / last.n).toBeLessThan(1e-5);
+  });
+
+  test('hostile arguments are refused', () => {
+    for (const bad of [
+      { duration: 0 },
+      { duration: NaN },
+      { duration: 1e9, samples: 1 },
+      { duration: 1e9, samples: 5000 },
+      { duration: 1e9, samples: 2.5 },
+    ]) {
+      expect(() => K.tidalTrajectory({ ...earthMoon, ...bad })).toThrow(
+        K.TidesError
+      );
+    }
+  });
+});
