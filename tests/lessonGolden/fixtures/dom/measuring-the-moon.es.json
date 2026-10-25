@@ -1,0 +1,182 @@
+[
+ {
+  "depth": "core",
+  "role": "first",
+  "sid": "a-picture-of-the-moon",
+  "position": [
+   1,
+   8
+  ],
+  "title": "Medir la Luna",
+  "subtitle": "Marcas sobre una imagen real, una escala a partir de una longitud conocida y un tamaño en kilómetros",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 8 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Una imagen real de la Luna</h3><div class=\"inv-step-body\"><p>Esta es una imagen <strong>real</strong>: la Luna, fotografiada por la sonda Galileo de la NASA el 7 de diciembre de 1992 al pasar junto a la Tierra camino de Júpiter. Es un compuesto en color realzado, mostrado aquí en gris. <em>Realzado</em> significa que se estiró el contraste para mostrar diferencias en el terreno, así que sus niveles de gris son para el ojo y no miden la luz que refleja la Luna. El Observatorio llama a una imagen así <strong>solo para mostrar</strong>: puedes marcarla y medirla en píxeles, y nada más.</p><p>Una imagen no tiene escala propia. Esta mide 496 píxeles de ancho, y un píxel no es un kilómetro. Los píxeles se numeran desde abajo a la izquierda, x hacia la derecha e y hacia arriba, y el disco está recortado muy justo: su borde derecho toca la última columna. En esta investigación das a la imagen una escala y tomas una medida de ella.</p></div>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "graded",
+  "sid": "predict-the-scale",
+  "position": [
+   2,
+   8
+  ],
+  "title": "Medir la Luna",
+  "subtitle": "Marcas sobre una imagen real, una escala a partir de una longitud conocida y un tamaño en kilómetros",
+  "body": "<p class=\"inv-step-count\">Paso 2 de 8 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">¿Qué da escala a una imagen?</h3><div class=\"inv-step-body\"><p>Quieres una longitud sobre la imagen en kilómetros, y solo tienes píxeles.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Para convertir píxeles en kilómetros necesitas…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>la fecha en que se tomó la imagen</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>una longitud en la imagen que ya conoces en kilómetros</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>el brillo de la Luna en la imagen</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>el número de colores de la imagen</span></button></div><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> Me vendría bien una pista </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "marked",
+  "sid": "predict-the-scale",
+  "position": [
+   2,
+   8
+  ],
+  "title": "Medir la Luna",
+  "subtitle": "Marcas sobre una imagen real, una escala a partir de una longitud conocida y un tamaño en kilómetros",
+  "body": "<p class=\"inv-step-count\">Paso 2 de 8 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">¿Qué da escala a una imagen?</h3><div class=\"inv-step-body\"><p>Quieres una longitud sobre la imagen en kilómetros, y solo tienes píxeles.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Para convertir píxeles en kilómetros necesitas…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>la fecha en que se tomó la imagen</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>una longitud en la imagen que ya conoces en kilómetros</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>el brillo de la Luna en la imagen</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>el número de colores de la imagen</span></button></div><p class=\"inv-held\">Tu respuesta queda registrada. No se corrige hasta que llegues a «Un par de referencia a través del disco», para que la decida el experimento y no la clave de respuestas.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Cambiar respuesta</button><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> Me vendría bien una pista </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "last",
+  "sid": "what-you-worked-out",
+  "position": [
+   8,
+   8
+  ],
+  "title": "Medir la Luna",
+  "subtitle": "Marcas sobre una imagen real, una escala a partir de una longitud conocida y un tamaño en kilómetros",
+  "body": "<p class=\"inv-step-count\">Paso 8 de 8 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Lo que has deducido</h3><div class=\"inv-step-body\"><p>Una imagen no tiene escala hasta que se la das, y la escala que le das es una medida tuya, apoyada en una longitud que supusiste y en dos marcas que colocaste. Con ella, un círculo sobre un accidente dio un tamaño en kilómetros, unos 630 km para la llanura, y la incertidumbre indicada por la herramienta cubría solo el redondeo de tus marcas. Lo suave del borde, el recorte a la derecha y el diámetro supuesto no están en ella. Y como la imagen es para mostrar, sus niveles de gris no son luz: mediste dónde están las cosas y cuán grandes son, y nada sobre su brillo.</p></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "quantitative",
+  "role": "first",
+  "sid": "a-picture-of-the-moon",
+  "position": [
+   1,
+   10
+  ],
+  "title": "Medir la Luna",
+  "subtitle": "Marcas sobre una imagen real, una escala a partir de una longitud conocida y un tamaño en kilómetros",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 10 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Una imagen real de la Luna</h3><div class=\"inv-step-body\"><p>Esta es una imagen <strong>real</strong>: la Luna, fotografiada por la sonda Galileo de la NASA el 7 de diciembre de 1992 al pasar junto a la Tierra camino de Júpiter. Es un compuesto en color realzado, mostrado aquí en gris. <em>Realzado</em> significa que se estiró el contraste para mostrar diferencias en el terreno, así que sus niveles de gris son para el ojo y no miden la luz que refleja la Luna. El Observatorio llama a una imagen así <strong>solo para mostrar</strong>: puedes marcarla y medirla en píxeles, y nada más.</p><p>Una imagen no tiene escala propia. Esta mide 496 píxeles de ancho, y un píxel no es un kilómetro. Los píxeles se numeran desde abajo a la izquierda, x hacia la derecha e y hacia arriba, y el disco está recortado muy justo: su borde derecho toca la última columna. En esta investigación das a la imagen una escala y tomas una medida de ella.</p></div>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Cuantitativo"
+ },
+ {
+  "depth": "quantitative",
+  "role": "graded",
+  "sid": "predict-the-scale",
+  "position": [
+   2,
+   10
+  ],
+  "title": "Medir la Luna",
+  "subtitle": "Marcas sobre una imagen real, una escala a partir de una longitud conocida y un tamaño en kilómetros",
+  "body": "<p class=\"inv-step-count\">Paso 2 de 10 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">¿Qué da escala a una imagen?</h3><div class=\"inv-step-body\"><p>Quieres una longitud sobre la imagen en kilómetros, y solo tienes píxeles.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Para convertir píxeles en kilómetros necesitas…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>la fecha en que se tomó la imagen</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>una longitud en la imagen que ya conoces en kilómetros</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>el brillo de la Luna en la imagen</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>el número de colores de la imagen</span></button></div><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> Me vendría bien una pista </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Cuantitativo"
+ },
+ {
+  "depth": "quantitative",
+  "role": "marked",
+  "sid": "predict-the-scale",
+  "position": [
+   2,
+   10
+  ],
+  "title": "Medir la Luna",
+  "subtitle": "Marcas sobre una imagen real, una escala a partir de una longitud conocida y un tamaño en kilómetros",
+  "body": "<p class=\"inv-step-count\">Paso 2 de 10 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">¿Qué da escala a una imagen?</h3><div class=\"inv-step-body\"><p>Quieres una longitud sobre la imagen en kilómetros, y solo tienes píxeles.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Para convertir píxeles en kilómetros necesitas…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>la fecha en que se tomó la imagen</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>una longitud en la imagen que ya conoces en kilómetros</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>el brillo de la Luna en la imagen</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>el número de colores de la imagen</span></button></div><p class=\"inv-held\">Tu respuesta queda registrada. No se corrige hasta que llegues a «Un par de referencia a través del disco», para que la decida el experimento y no la clave de respuestas.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Cambiar respuesta</button><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> Me vendría bien una pista </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Cuantitativo"
+ },
+ {
+  "depth": "quantitative",
+  "role": "last",
+  "sid": "what-you-worked-out",
+  "position": [
+   10,
+   10
+  ],
+  "title": "Medir la Luna",
+  "subtitle": "Marcas sobre una imagen real, una escala a partir de una longitud conocida y un tamaño en kilómetros",
+  "body": "<p class=\"inv-step-count\">Paso 10 de 10 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Lo que has deducido</h3><div class=\"inv-step-body\"><p>Una imagen no tiene escala hasta que se la das, y la escala que le das es una medida tuya, apoyada en una longitud que supusiste y en dos marcas que colocaste. Con ella, un círculo sobre un accidente dio un tamaño en kilómetros, unos 630 km para la llanura, y la incertidumbre indicada por la herramienta cubría solo el redondeo de tus marcas. Lo suave del borde, el recorte a la derecha y el diámetro supuesto no están en ella. Y como la imagen es para mostrar, sus niveles de gris no son luz: mediste dónde están las cosas y cuán grandes son, y nada sobre su brillo.</p></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Cuantitativo"
+ },
+ {
+  "depth": "advanced",
+  "role": "first",
+  "sid": "a-picture-of-the-moon",
+  "position": [
+   1,
+   12
+  ],
+  "title": "Medir la Luna",
+  "subtitle": "Marcas sobre una imagen real, una escala a partir de una longitud conocida y un tamaño en kilómetros",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 12 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Una imagen real de la Luna</h3><div class=\"inv-step-body\"><p>Esta es una imagen <strong>real</strong>: la Luna, fotografiada por la sonda Galileo de la NASA el 7 de diciembre de 1992 al pasar junto a la Tierra camino de Júpiter. Es un compuesto en color realzado, mostrado aquí en gris. <em>Realzado</em> significa que se estiró el contraste para mostrar diferencias en el terreno, así que sus niveles de gris son para el ojo y no miden la luz que refleja la Luna. El Observatorio llama a una imagen así <strong>solo para mostrar</strong>: puedes marcarla y medirla en píxeles, y nada más.</p><p>Una imagen no tiene escala propia. Esta mide 496 píxeles de ancho, y un píxel no es un kilómetro. Los píxeles se numeran desde abajo a la izquierda, x hacia la derecha e y hacia arriba, y el disco está recortado muy justo: su borde derecho toca la última columna. En esta investigación das a la imagen una escala y tomas una medida de ella.</p></div>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Avanzado"
+ },
+ {
+  "depth": "advanced",
+  "role": "graded",
+  "sid": "predict-the-scale",
+  "position": [
+   2,
+   12
+  ],
+  "title": "Medir la Luna",
+  "subtitle": "Marcas sobre una imagen real, una escala a partir de una longitud conocida y un tamaño en kilómetros",
+  "body": "<p class=\"inv-step-count\">Paso 2 de 12 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">¿Qué da escala a una imagen?</h3><div class=\"inv-step-body\"><p>Quieres una longitud sobre la imagen en kilómetros, y solo tienes píxeles.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Para convertir píxeles en kilómetros necesitas…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>la fecha en que se tomó la imagen</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>una longitud en la imagen que ya conoces en kilómetros</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>el brillo de la Luna en la imagen</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>el número de colores de la imagen</span></button></div><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> Me vendría bien una pista </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Avanzado"
+ },
+ {
+  "depth": "advanced",
+  "role": "marked",
+  "sid": "predict-the-scale",
+  "position": [
+   2,
+   12
+  ],
+  "title": "Medir la Luna",
+  "subtitle": "Marcas sobre una imagen real, una escala a partir de una longitud conocida y un tamaño en kilómetros",
+  "body": "<p class=\"inv-step-count\">Paso 2 de 12 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">¿Qué da escala a una imagen?</h3><div class=\"inv-step-body\"><p>Quieres una longitud sobre la imagen en kilómetros, y solo tienes píxeles.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Para convertir píxeles en kilómetros necesitas…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>la fecha en que se tomó la imagen</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>una longitud en la imagen que ya conoces en kilómetros</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>el brillo de la Luna en la imagen</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>el número de colores de la imagen</span></button></div><p class=\"inv-held\">Tu respuesta queda registrada. No se corrige hasta que llegues a «Un par de referencia a través del disco», para que la decida el experimento y no la clave de respuestas.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Cambiar respuesta</button><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> Me vendría bien una pista </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Avanzado"
+ },
+ {
+  "depth": "advanced",
+  "role": "last",
+  "sid": "what-you-worked-out",
+  "position": [
+   12,
+   12
+  ],
+  "title": "Medir la Luna",
+  "subtitle": "Marcas sobre una imagen real, una escala a partir de una longitud conocida y un tamaño en kilómetros",
+  "body": "<p class=\"inv-step-count\">Paso 12 de 12 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Lo que has deducido</h3><div class=\"inv-step-body\"><p>Una imagen no tiene escala hasta que se la das, y la escala que le das es una medida tuya, apoyada en una longitud que supusiste y en dos marcas que colocaste. Con ella, un círculo sobre un accidente dio un tamaño en kilómetros, unos 630 km para la llanura, y la incertidumbre indicada por la herramienta cubría solo el redondeo de tus marcas. Lo suave del borde, el recorte a la derecha y el diámetro supuesto no están en ella. Y como la imagen es para mostrar, sus niveles de gris no son luz: mediste dónde están las cosas y cuán grandes son, y nada sobre su brillo.</p></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Avanzado"
+ }
+]

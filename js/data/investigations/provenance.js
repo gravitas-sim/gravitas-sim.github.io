@@ -12,6 +12,7 @@
 // a label cannot claim evidence the lesson never produces; it caught three of
 // the first twenty-two as unsupported.
 export const EVIDENCE_FROM = Object.freeze({
+  'a-binary-stars-orbit': 'model',
   'a-lens-passing-by': 'model',
   'a-universe-of-stars': 'data',
   'a-variable-star-from-frames': 'model',
@@ -28,6 +29,7 @@ export const EVIDENCE_FROM = Object.freeze({
   'goldilocks-question': 'model',
   'gravity-assist': 'engine',
   'hohmann-transfer': 'engine',
+  'how-far-is-that-star': 'model',
   'inside-a-star': 'model',
   'integrators-in-practice': 'computation',
   'keplers-laws': 'engine',
@@ -36,6 +38,7 @@ export const EVIDENCE_FROM = Object.freeze({
   'lines-and-motion': 'model',
   'listening-to-spacetime': 'model',
   'lives-of-stars': 'data',
+  'measuring-the-moon': 'model',
   'missing-mass': 'engine',
   'orbital-energy': 'model',
   'phases-and-eclipses': 'model',

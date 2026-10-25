@@ -2,31 +2,19 @@
 // Saved items and kept collections (Roadmap III Prompt 164)
 // -----------------------------------------------------------------------------
 // A collection is a course package with `profile: "collection"` (js/course/
-// pack.js): one unit, items in order, a note and a depth where an item has
-// them, no assignments. The student's favourites are one such package, kept
-// here; a collection that arrived by a link or a file and was kept is another,
-// in the same shape. One key holds both, in the `courses` collection, so a
-// backup file carries it and My work lists it:
+// pack.js): one unit, items in order, no assignments. The student's favourites
+// are one such package and a collection kept from a link or file is another,
+// both in the `courses` collection under one key:
 //
 //   { v: 1, saved: <package>, received: [{ at, pack }] }
 //
-// `saved` is the student's own (made); each `received` is somebody else's,
-// kept on the student's press of one button, never by opening a link. A 2.0.0
-// build does not know the key and ignores the whole record
-// (tests/compat/kinds/collections-record.mjs). Nothing here leaves the
-// browser, and nothing but the package is stored: no answers and no name.
+// A 2.0.0 build ignores the key (tests/compat/kinds/collections-record.mjs).
+// Nothing leaves the browser and only the package is stored.
 //
-// Lazy and DOM-free: the Library, the course home and the kit load it when
-// something asks. A damaged record, or a package that does not read as a
-// collection, reads as empty and the next write replaces it.
-//
-// It imports nothing. Each page that loads it hands over what the page already
-// has (`bind`: how to read and write the record, the entry an item stands for,
-// a checker, the platform version): the build splits a page's bundle by which
-// entries reach a module, so a lazy module that imported the page's own storage
-// functions, names or package checker would cost every visit one more request
-// (the budget of each route holds that at none). js/library/collectionsDeps.js
-// binds the real ones, for the kit and the tests.
+// Lazy and DOM-free, and it imports nothing: each page hands over what it
+// already has (`bind`), because a lazy module importing the page's own storage
+// would cost every visit a request. js/library/collectionsDeps.js binds the real
+// ones. A damaged record reads as empty and the next write replaces it.
 // =============================================================================
 
 export const COLLECTIONS_VERSION = 1;

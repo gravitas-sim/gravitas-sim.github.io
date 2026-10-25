@@ -427,11 +427,9 @@ export const ES_DEFERRED = {
   'reliability.noValue': 'no medido',
 
   // --- The A/B experiment bench ---------------------------------------------
-  // Moved out of the start-up catalog. The bench is loaded on first press
-  // and most visitors never press it, so its prose has no business being
-  // downloaded by everyone; js/experimentsBridge.js registers this before the
-  // panel builds its markup. failure.load stays in the base catalog,
-  // because it is what the bridge says when this very import fails.
+  // The bench loads on first press, so its prose is not in everyone's download;
+  // js/experimentsBridge.js registers it before the panel builds. failure.load
+  // stays in the base catalog: it is what the bridge says when this import fails.
   'bench.title': 'Experimento A/B',
   'bench.untitled': 'Experimento sin título',
   'bench.copyOf': 'Copia de {name}',
@@ -628,10 +626,8 @@ export const ES_DEFERRED = {
   'sweep.guide.run': 'Ejecutar el barrido guiado',
 
   // --- Tareas para clase --------------------------------------------------
-  // Every one of these is shown from a lazy chunk - the builder, the link
-  // bridge, or the lesson panel with an assignment open - so none of them has
-  // any business in a first-time visitor's download. Registered by
-  // ensureDeferredMessages() before any of those render.
+  // Shown from lazy chunks (the builder, the link bridge, the lesson panel with
+  // an assignment open), so none is in a first visit; ensureDeferredMessages() registers them.
   'assign.title': 'Crear una actividad',
   'assign.hint':
     'Elige los pasos que quieres asignar. Los pasos que construyen el mundo del que trata otro paso se añaden solos, y se indican donde corresponden.',
@@ -743,14 +739,10 @@ export const ES_DEFERRED = {
     'Impulso {n}: {body} en t = {time}, radial {radial}, transversal {transverse}.',
 
   // --- The investigations panel ------------------------------------------------
-  // js/investigations.js is the only module that reads these and it is loaded
-  // on demand, so a visitor who never opens a lesson was downloading all of
-  // them. Registered by ensureInvestigations() before initInvestigations()
-  // runs. The dozen that stay in the base catalog are on static buttons in
-  // index.html, translated by the boot sweep, plus the two the loader itself
-  // says when a lesson fails before its chunk arrives.
-  // Moved out of the start-up catalog: only js/lessonStage.js and the
-  // lesson engine read these, and both are deferred.
+  // js/investigations.js, loaded on demand, is the only reader; ensureInvestigations()
+  // registers them. The dozen in the base catalog are on static buttons in index.html
+  // (boot sweep) plus the two the loader says when a chunk fails. Also moved out:
+  // only js/lessonStage.js and the lesson engine read these.
   'inv.stage.scale.display':
     'Escala comprimida: todas las estrellas se ven y el orden por tamaño es correcto, pero las proporciones en pantalla no son las del modelo.',
   'inv.stage.scale.true':
@@ -1950,6 +1942,12 @@ export const ES_DEFERRED = {
     'Cuánto exponer: el ruido de una medida, qué limita a una estrella brillante y a una débil, y qué cuesta un cielo brillante. Necesita las imágenes de calibración.',
   'inv.seq.observing.a-variable-star-from-frames':
     'Fotometría diferencial de cuarenta imágenes: una estrella de comparación quita la nube, y una estrella de control dice si una variación es real. Necesita las imágenes de calibración.',
+  'inv.seq.observing.measuring-the-moon':
+    'Una imagen real de la Luna: dale una escala a partir de una longitud conocida y mide una llanura oscura en kilómetros.',
+  'inv.seq.observing.how-far-is-that-star':
+    'Un desplazamiento, un movimiento y un paralaje a partir de catorce posiciones de una estrella: una distancia con un intervalo.',
+  'inv.seq.observing.a-binary-stars-orbit':
+    'Las posiciones durante dieciséis años fijan una órbita y la masa del par, y dejan abierto lo demás.',
   'inv.seq.observing.transit-photometry':
     'Mide profundidad, duración y ruido en una curva de luz: la fotometría de la que depende lo demás.',
   'inv.seq.observing.design-the-schedule':

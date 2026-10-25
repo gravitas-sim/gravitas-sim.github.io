@@ -124,6 +124,7 @@ export const DATASETS = Object.freeze([
 
 /** Lessons with an instructor guide in the instructors' portal. */
 export const GUIDED = Object.freeze([
+  'a-binary-stars-orbit',
   'a-lens-passing-by',
   'a-universe-of-stars',
   'a-variable-star-from-frames',
@@ -140,6 +141,7 @@ export const GUIDED = Object.freeze([
   'goldilocks-question',
   'gravity-assist',
   'hohmann-transfer',
+  'how-far-is-that-star',
   'inside-a-star',
   'integrators-in-practice',
   'keplers-laws',
@@ -148,6 +150,7 @@ export const GUIDED = Object.freeze([
   'lines-and-motion',
   'listening-to-spacetime',
   'lives-of-stars',
+  'measuring-the-moon',
   'missing-mass',
   'orbital-energy',
   'phases-and-eclipses',

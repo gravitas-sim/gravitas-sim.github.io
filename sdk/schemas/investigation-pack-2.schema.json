@@ -94,7 +94,10 @@
           "sampling-a-posterior",
           "what-is-a-measurement",
           "what-does-plus-minus-claim",
-          "when-the-method-must-refuse"
+          "when-the-method-must-refuse",
+          "measuring-the-moon",
+          "how-far-is-that-star",
+          "a-binary-stars-orbit"
         ]
       }
     },
@@ -333,7 +336,10 @@
                   "sampling-a-posterior",
                   "what-is-a-measurement",
                   "what-does-plus-minus-claim",
-                  "when-the-method-must-refuse"
+                  "when-the-method-must-refuse",
+                  "measuring-the-moon",
+                  "how-far-is-that-star",
+                  "a-binary-stars-orbit"
                 ]
               }
             }
@@ -1435,7 +1441,10 @@
             "gw-events",
             "frame-marks",
             "coverage-repeats",
-            "profile-refusal"
+            "profile-refusal",
+            "moon-marks",
+            "star-parallax",
+            "binary-orbit"
           ]
         }
       }

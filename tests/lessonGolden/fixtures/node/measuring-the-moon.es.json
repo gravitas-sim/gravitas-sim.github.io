@@ -1,0 +1,772 @@
+{
+ "id": "measuring-the-moon",
+ "locale": "es",
+ "title": "Medir la Luna",
+ "steps": 12,
+ "depths": [
+  [
+   "core",
+   8
+  ],
+  [
+   "quantitative",
+   10
+  ],
+  [
+   "advanced",
+   12
+  ]
+ ],
+ "grading": [
+  {
+   "sid": "predict-the-scale",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "why-a-pair",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "predict-the-plain",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "what-would-change-it",
+   "type": "question",
+   "kind": "short",
+   "grades": [
+    [
+     "ungraded",
+     null
+    ]
+   ]
+  },
+  {
+   "sid": "a-pixel-at-each-end",
+   "type": "question",
+   "kind": "numeric",
+   "tolerance": 0.4,
+   "grades": [
+    [
+     "14,1",
+     true,
+     "correct",
+     14.1,
+     null,
+     false,
+     null
+    ],
+    [
+     "14,3",
+     true,
+     "correct",
+     14.3,
+     null,
+     false,
+     null
+    ],
+    [
+     "15,3",
+     false,
+     "incorrect",
+     15.3,
+     null,
+     false,
+     null
+    ],
+    [
+     "14,1 km",
+     true,
+     "correct",
+     14.1,
+     "km",
+     false,
+     null
+    ],
+    [
+     "not a number",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "notANumber"
+    ],
+    [
+     "",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "blank"
+    ]
+   ]
+  },
+  {
+   "sid": "a-diameter-with-an-error-bar",
+   "type": "question",
+   "kind": "numeric",
+   "tolerance": 40,
+   "grades": [
+    [
+     "634",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "needsUncertainty"
+    ],
+    [
+     "654",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "needsUncertainty"
+    ],
+    [
+     "754",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "needsUncertainty"
+    ],
+    [
+     "634 km",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "needsUncertainty"
+    ],
+    [
+     "not a number",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "notANumber"
+    ],
+    [
+     "",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "blank"
+    ]
+   ]
+  },
+  {
+   "sid": "a-gray-level-is-not-light",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  }
+ ],
+ "progress": {
+  "record": {
+   "schema": 2,
+   "lesson": "measuring-the-moon",
+   "stepSid": "what-you-worked-out",
+   "responses": {
+    "measuring-the-moon:predict-the-scale": 1,
+    "measuring-the-moon:why-a-pair": 1,
+    "measuring-the-moon:predict-the-plain": 2,
+    "measuring-the-moon:what-would-change-it": "A fixed sentence for the golden.",
+    "measuring-the-moon:a-pixel-at-each-end": "14,1",
+    "measuring-the-moon:a-pixel-at-each-end:locale": "es",
+    "measuring-the-moon:a-diameter-with-an-error-bar": "634",
+    "measuring-the-moon:a-diameter-with-an-error-bar:locale": "es",
+    "measuring-the-moon:a-gray-level-is-not-light": 1
+   },
+   "attempts": {
+    "measuring-the-moon:predict-the-scale": 1,
+    "measuring-the-moon:why-a-pair": 1,
+    "measuring-the-moon:predict-the-plain": 1,
+    "measuring-the-moon:a-pixel-at-each-end": 1,
+    "measuring-the-moon:a-diameter-with-an-error-bar": 1,
+    "measuring-the-moon:a-gray-level-is-not-light": 1
+   },
+   "visited": [
+    "a-picture-of-the-moon",
+    "predict-the-scale",
+    "scale-from-the-disc",
+    "why-a-pair",
+    "predict-the-plain",
+    "measure-the-plain",
+    "what-would-change-it",
+    "a-pixel-at-each-end",
+    "a-diameter-with-an-error-bar",
+    "near-the-limb",
+    "a-gray-level-is-not-light",
+    "what-you-worked-out"
+   ],
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "depth": "advanced",
+   "deepest": "advanced",
+   "spent": 600
+  },
+  "read": {
+   "responses": {
+    "measuring-the-moon:predict-the-scale": 1,
+    "measuring-the-moon:why-a-pair": 1,
+    "measuring-the-moon:predict-the-plain": 2,
+    "measuring-the-moon:what-would-change-it": "A fixed sentence for the golden.",
+    "measuring-the-moon:a-pixel-at-each-end": "14,1",
+    "measuring-the-moon:a-pixel-at-each-end:locale": "es",
+    "measuring-the-moon:a-diameter-with-an-error-bar": "634",
+    "measuring-the-moon:a-diameter-with-an-error-bar:locale": "es",
+    "measuring-the-moon:a-gray-level-is-not-light": 1
+   },
+   "attempts": {
+    "measuring-the-moon:predict-the-scale": 1,
+    "measuring-the-moon:why-a-pair": 1,
+    "measuring-the-moon:predict-the-plain": 1,
+    "measuring-the-moon:a-pixel-at-each-end": 1,
+    "measuring-the-moon:a-diameter-with-an-error-bar": 1,
+    "measuring-the-moon:a-gray-level-is-not-light": 1
+   },
+   "visited": [
+    "a-diameter-with-an-error-bar",
+    "a-gray-level-is-not-light",
+    "a-picture-of-the-moon",
+    "a-pixel-at-each-end",
+    "measure-the-plain",
+    "near-the-limb",
+    "predict-the-plain",
+    "predict-the-scale",
+    "scale-from-the-disc",
+    "what-would-change-it",
+    "what-you-worked-out",
+    "why-a-pair"
+   ],
+   "stepSid": "what-you-worked-out",
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "depth": "advanced",
+   "deepest": "advanced",
+   "spent": 600,
+   "schema": 2,
+   "migrated": false,
+   "notes": []
+  }
+ },
+ "backup": {
+  "backup": {
+   "kind": "gravitas.investigation.progress",
+   "version": 2,
+   "savedAt": "2026-01-02T04:05:06.000Z",
+   "lesson": {
+    "id": "measuring-the-moon",
+    "title": "Medir la Luna",
+    "stepCount": 12
+   },
+   "student": null,
+   "progress": {
+    "stepSid": "what-you-worked-out",
+    "startedAt": "2026-01-02T03:04:05.000Z",
+    "visited": [
+     "a-picture-of-the-moon",
+     "predict-the-scale",
+     "scale-from-the-disc",
+     "why-a-pair",
+     "predict-the-plain",
+     "measure-the-plain",
+     "what-would-change-it",
+     "a-pixel-at-each-end",
+     "a-diameter-with-an-error-bar",
+     "near-the-limb",
+     "a-gray-level-is-not-light",
+     "what-you-worked-out"
+    ],
+    "responses": {
+     "measuring-the-moon:predict-the-scale": 1,
+     "measuring-the-moon:why-a-pair": 1,
+     "measuring-the-moon:predict-the-plain": 2,
+     "measuring-the-moon:what-would-change-it": "A fixed sentence for the golden.",
+     "measuring-the-moon:a-pixel-at-each-end": "14,1",
+     "measuring-the-moon:a-pixel-at-each-end:locale": "es",
+     "measuring-the-moon:a-diameter-with-an-error-bar": "634",
+     "measuring-the-moon:a-diameter-with-an-error-bar:locale": "es",
+     "measuring-the-moon:a-gray-level-is-not-light": 1
+    },
+    "attempts": {
+     "measuring-the-moon:predict-the-scale": 1,
+     "measuring-the-moon:why-a-pair": 1,
+     "measuring-the-moon:predict-the-plain": 1,
+     "measuring-the-moon:a-pixel-at-each-end": 1,
+     "measuring-the-moon:a-diameter-with-an-error-bar": 1,
+     "measuring-the-moon:a-gray-level-is-not-light": 1
+    }
+   },
+   "steps": [
+    {
+     "index": 0,
+     "sid": "a-picture-of-the-moon",
+     "fingerprint": "read|-|moon-marks|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 1,
+     "sid": "predict-the-scale",
+     "fingerprint": "predict|-|moon-marks|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 2,
+     "sid": "scale-from-the-disc",
+     "fingerprint": "measure|-|moon-marks|-|pair+scale|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 3,
+     "sid": "why-a-pair",
+     "fingerprint": "question|choice|moon-marks|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 4,
+     "sid": "predict-the-plain",
+     "fingerprint": "predict|-|moon-marks|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 5,
+     "sid": "measure-the-plain",
+     "fingerprint": "measure|-|moon-marks|-|km|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 6,
+     "sid": "what-would-change-it",
+     "fingerprint": "question|short|moon-marks|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 7,
+     "sid": "a-pixel-at-each-end",
+     "fingerprint": "question|numeric|moon-marks|-|-|-|a=14.1;t=0.4;u=km",
+     "optionCount": null
+    },
+    {
+     "index": 8,
+     "sid": "a-diameter-with-an-error-bar",
+     "fingerprint": "question|numeric|moon-marks|-|-|-|a=634;t=40;u=km",
+     "optionCount": null
+    },
+    {
+     "index": 9,
+     "sid": "near-the-limb",
+     "fingerprint": "measure|-|moon-marks|-|off+share|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 10,
+     "sid": "a-gray-level-is-not-light",
+     "fingerprint": "question|choice|moon-marks|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 11,
+     "sid": "what-you-worked-out",
+     "fingerprint": "read|-|moon-marks|-|-|-|-",
+     "optionCount": null
+    }
+   ]
+  },
+  "verdict": {
+   "ok": true
+  },
+  "restored": {
+   "responses": {
+    "measuring-the-moon:predict-the-scale": 1,
+    "measuring-the-moon:why-a-pair": 1,
+    "measuring-the-moon:predict-the-plain": 2,
+    "measuring-the-moon:what-would-change-it": "A fixed sentence for the golden.",
+    "measuring-the-moon:a-pixel-at-each-end": "14,1",
+    "measuring-the-moon:a-pixel-at-each-end:locale": "es",
+    "measuring-the-moon:a-diameter-with-an-error-bar": "634",
+    "measuring-the-moon:a-diameter-with-an-error-bar:locale": "es",
+    "measuring-the-moon:a-gray-level-is-not-light": 1
+   },
+   "attempts": {
+    "measuring-the-moon:predict-the-scale": 1,
+    "measuring-the-moon:why-a-pair": 1,
+    "measuring-the-moon:predict-the-plain": 1,
+    "measuring-the-moon:a-pixel-at-each-end": 1,
+    "measuring-the-moon:a-diameter-with-an-error-bar": 1,
+    "measuring-the-moon:a-gray-level-is-not-light": 1
+   },
+   "visited": [
+    "a-diameter-with-an-error-bar",
+    "a-gray-level-is-not-light",
+    "a-picture-of-the-moon",
+    "a-pixel-at-each-end",
+    "measure-the-plain",
+    "near-the-limb",
+    "predict-the-plain",
+    "predict-the-scale",
+    "scale-from-the-disc",
+    "what-would-change-it",
+    "what-you-worked-out",
+    "why-a-pair"
+   ],
+   "stepIndex": 11,
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "moved": [],
+   "dropped": [],
+   "quarantined": {},
+   "uncertain": 0,
+   "discardedKeys": 0,
+   "byPosition": false
+  }
+ },
+ "ledger": {
+  "entry": "golden-measuring-the-moon",
+  "record": {
+   "ids": [
+    "golden-measuring-the-moon"
+   ],
+   "rows": [
+    [
+     "golden-measuring-the-moon",
+     "q1",
+     3.5247,
+     "d",
+     0.0012,
+     "measured",
+     "simulation",
+     "rv-fit",
+     null,
+     [
+      "s",
+      "d"
+     ]
+    ]
+   ],
+   "total": 1
+  },
+  "digest": "1493eaf5561bee3af04de8ec107d7defd2a27ed9bc053092e32d3b710a7cc9bb"
+ },
+ "tokens": {
+  "plain": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "a": null,
+    "r": null,
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "predict-the-scale",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "why-a-pair",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "predict-the-plain",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "what-would-change-it",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    },
+    {
+     "sid": "a-pixel-at-each-end",
+     "value": "14,1",
+     "locale": "es"
+    },
+    {
+     "sid": "a-diameter-with-an-error-bar",
+     "value": "634",
+     "locale": "es"
+    },
+    {
+     "sid": "a-gray-level-is-not-light",
+     "value": 1,
+     "locale": "es"
+    }
+   ]
+  },
+  "assignment": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "a": "golden-assignment",
+    "r": "roster-1",
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "predict-the-scale",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "why-a-pair",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "predict-the-plain",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "what-would-change-it",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    },
+    {
+     "sid": "a-pixel-at-each-end",
+     "value": "14,1",
+     "locale": "es"
+    },
+    {
+     "sid": "a-diameter-with-an-error-bar",
+     "value": "634",
+     "locale": "es"
+    },
+    {
+     "sid": "a-gray-level-is-not-light",
+     "value": 1,
+     "locale": "es"
+    }
+   ]
+  },
+  "evidence": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "ev": {
+     "d": "1493eaf5561bee3af04de8ec107d7defd2a27ed9bc053092e32d3b710a7cc9bb",
+     "i": [
+      "golden-measuring-the-moon"
+     ],
+     "n": 1,
+     "r": [
+      [
+       "golden-measuring-the-moon",
+       "q1",
+       3.5247,
+       "d",
+       0.0012,
+       "measured",
+       "simulation",
+       "rv-fit",
+       null,
+       [
+        "s",
+        "d"
+       ]
+      ]
+     ]
+    },
+    "a": null,
+    "r": null,
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "predict-the-scale",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "why-a-pair",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "predict-the-plain",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "what-would-change-it",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    },
+    {
+     "sid": "a-pixel-at-each-end",
+     "value": "14,1",
+     "locale": "es"
+    },
+    {
+     "sid": "a-diameter-with-an-error-bar",
+     "value": "634",
+     "locale": "es"
+    },
+    {
+     "sid": "a-gray-level-is-not-light",
+     "value": 1,
+     "locale": "es"
+    }
+   ]
+  },
+  "depth": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "dp": "advanced",
+    "a": null,
+    "r": null,
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "predict-the-scale",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "why-a-pair",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "predict-the-plain",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "what-would-change-it",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    },
+    {
+     "sid": "a-pixel-at-each-end",
+     "value": "14,1",
+     "locale": "es"
+    },
+    {
+     "sid": "a-diameter-with-an-error-bar",
+     "value": "634",
+     "locale": "es"
+    },
+    {
+     "sid": "a-gray-level-is-not-light",
+     "value": 1,
+     "locale": "es"
+    }
+   ]
+  }
+ }
+}

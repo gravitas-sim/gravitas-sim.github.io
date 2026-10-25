@@ -1,0 +1,82 @@
+{
+ "id": "how-far-is-that-star",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.the-shift.fields.0.unit","mas"],
+    ["steps.the-shift.fields.1.unit",""],
+    ["steps.a-straight-line-fails.fields.0.unit",""],
+    ["steps.a-straight-line-fails.fields.1.unit",""],
+    ["steps.the-parallax.fields.0.unit","mas"],
+    ["steps.the-parallax.fields.1.unit","mas"],
+    ["steps.the-parallax.fields.2.unit","pc"],
+    ["steps.the-distance-by-hand.unit","pc"],
+    ["steps.how-many-sigma.unit",""],
+    ["steps.fewer-epochs-wider.unit",""],
+    ["steps.a-zero-point.fields.0.unit","mas"],
+    ["steps.a-zero-point.fields.1.unit","pc"]
+   ],
+   "numbered": [
+    ["steps.the-shift.fields.0.hint","549"],
+    ["steps.the-shift.fields.1.hint","0.287"],
+    ["steps.a-straight-line-fails.fields.0.hint","1576"],
+    ["steps.a-straight-line-fails.fields.1.hint","24"],
+    ["steps.the-parallax.fields.0.hint","60.3"],
+    ["steps.the-parallax.fields.1.hint","1.5"],
+    ["steps.the-parallax.fields.2.label","Distance, 1 over the parallax"],
+    ["steps.the-parallax.fields.2.hint","16.6"],
+    ["steps.a-zero-point.fields.0.hint","61.3"],
+    ["steps.a-zero-point.fields.1.label","Distance, 1 over the parallax"],
+    ["steps.a-zero-point.fields.1.hint","16.3"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.the-parallax.fields.2.label","Distancia, 1 sobre el paralaje"],
+    ["steps.a-zero-point.fields.1.label","Distancia, 1 sobre el paralaje"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "the-distance-by-hand",
+    "answer": "16.59",
+    "tolerance": "0.05",
+    "unit": "pc"
+   },
+   {
+    "sid": "how-many-sigma",
+    "answer": "39.5",
+    "tolerance": "1",
+    "unit": ""
+   },
+   {
+    "sid": "fewer-epochs-wider",
+    "answer": "1.47",
+    "tolerance": "0.07",
+    "unit": ""
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "the-shift": {
+    "validate": {"calls":232,"distinct":2,"digest":"275348e3ab23d1c4","samples":[null,{"level":"error","message":"Choose the two-epoch shift with 14 epochs, then read “Size of the shift” and “Rate if it were all motion”."}]}
+   },
+   "a-straight-line-fails": {
+    "validate": {"calls":232,"distinct":2,"digest":"761297014dcd5dea","samples":[null,{"level":"error","message":"Choose the proper motion with 14 epochs, then read “Chi-square of the fit” and “Degrees of freedom”."}]}
+   },
+   "the-parallax": {
+    "validate": {"calls":242,"distinct":2,"digest":"bd9d4e49ee19d22f","samples":[null,{"level":"error","message":"Choose parallax and motion with 14 epochs, then read “Parallax, relative”, its uncertainty and “Distance, 1 over the parallax”."}]}
+   },
+   "a-zero-point": {
+    "validate": {"calls":232,"distinct":2,"digest":"9f1b898a3874be3e","samples":[null,{"level":"error","message":"Set the correction to 1.0 mas with parallax and motion and 14 epochs, then read “Parallax, absolute” and the distance."}]}
+   }
+  },
+  "es": "same"
+ }
+}

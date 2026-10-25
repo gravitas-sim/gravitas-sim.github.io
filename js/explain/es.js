@@ -169,6 +169,12 @@ export default {
     'Cuán bien se conoce una posición y qué afirma el más-menos, qué parámetro fijan los datos y cuál dejan abierto, y si un modelo describe los datos.',
     'Todo es un modelo con la verdad incorporada: las repeticiones reales rara vez vienen con la verdad con que contarlas, y un ajuste con buen chi cuadrado no queda por eso demostrado.',
   ],
+  imaging: [
+    'Una imagen real de la Luna marcada con un par de referencia y un círculo, las posiciones de una estrella sintética durante dos años, o las posiciones relativas de una binaria sintética durante dieciséis años.',
+    'Cómo la escala y un tamaño en kilómetros salen de las marcas, cómo un desplazamiento, un movimiento propio y un paralaje salen de las épocas usadas, y cómo una órbita y una suma de masas salen de las posiciones.',
+    'Qué puede y qué no puede medir una marca sobre una imagen, qué afirma una distancia por paralaje y su punto cero, y qué fijan las posiciones de una binaria.',
+    'La Luna es una imagen para mostrar cuyos niveles de gris no son luz; la estrella y la binaria son sintéticas con la verdad oculta, y un ajuste rechazado es la respuesta, no un fallo.',
+  ],
   gwEvents: [
     'Deformación real del detector frente al tiempo, y un mapa de tono frente al tiempo.',
     'Una traza ascendente en el mapa es el chirrido de una espiral.',

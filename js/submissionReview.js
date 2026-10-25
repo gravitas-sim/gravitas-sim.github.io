@@ -136,6 +136,12 @@ const DEEPER = {
     import('./data/investigations/depth/what-does-plus-minus-claim.js'),
   'when-the-method-must-refuse': () =>
     import('./data/investigations/depth/when-the-method-must-refuse.js'),
+  'measuring-the-moon': () =>
+    import('./data/investigations/depth/measuring-the-moon.js'),
+  'how-far-is-that-star': () =>
+    import('./data/investigations/depth/how-far-is-that-star.js'),
+  'a-binary-stars-orbit': () =>
+    import('./data/investigations/depth/a-binary-stars-orbit.js'),
 };
 const deepen = async lesson =>
   lesson.depthLaid || !DEEPER[lesson.id]

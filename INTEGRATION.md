@@ -109,6 +109,8 @@ This pull request authorizes T1A and the policies the register rows D-INT-02, D-
 
 **Recorded outcomes:** Continuation checkpoint I (Prompt 160, 2026-10-21, register row D-R10-35, measured on `v3` at f7f0ab17): CONTINUE AS PLANNED. Tranche T1B (R11, R12 and R13, prompts 161 to 192) may run, each prompt under its own run condition and the byte, request and runner-minute draws the row records; the first-visit precache tier has 18 B of room, so a prompt that ships a new file under `js/` uses an idle group unless its bytes are named in a raise (D-R10-36). T2 (R14 and later) is not authorized: only 192's recorded outcome can authorize it. T1A is closed. The row was ratified by Carl on 2026-10-21 ("go with your recommendations on all pending decisions"); the CI part is a recorded-timings refresh only, and any `ci.yml` change stays his to approve.
 
+**End of T1B (Prompt 191, for Prompt 192):** the image investigations (Measuring the Moon, How Far Is That Star?, A Binary Star's Orbit) are on the Observing-and-measuring sequence after Prompt 190's three; "What is in this field?" is not built (no usable quantitative frame in the repository; recorded in `IMAGE_INVESTIGATIONS.md`, register row D-R10-72). Nothing was added to the precached idle tier; the new files are not precached. The instructor bundle's source closure stays at 273 files and the bundle is rebuilt by the queue. Checkpoint II (192) decides T2; this note authorizes nothing.
+
 ## Generated artifacts are regenerated, never hand-merged
 
 A file a generator writes in full is never resolved by editing: take either

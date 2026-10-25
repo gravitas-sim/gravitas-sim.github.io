@@ -210,8 +210,267 @@ export const WHEN_THE_METHOD_MUST_REFUSE_DEEPER = {
 };
 
 /** By lesson id: what instructorLocale.js registers. */
+
+// Las investigaciones de imágenes, más a fondo (Prompt 191): las palabras en español, paso a paso con el inglés.
+export const MEASURING_THE_MOON_DEEPER = {
+  steps: [
+    {
+      title: 'Un píxel en cada extremo',
+      body: 'Supón que los dos extremos del diámetro del círculo están un píxel demasiado afuera, el peor caso de una colocación descuidada. Un píxel es la escala que leíste, 7,05 km.',
+      prompt: '¿Cuánto cambia el diámetro, en kilómetros?',
+      hints: ['Dos extremos, un píxel cada uno: ¿cuántos píxeles son?'],
+      worked:
+        'Dos píxeles, 2 × 7,05 = 14,1 km. Los 6 km de la propia herramienta son menos que este peor caso porque una colocación se redondea a un píxel, un paso de 0,29 píxeles, y no se desvía un píxel entero.',
+      feedback: {
+        close: 'Casi. Dos extremos, un píxel cada uno, por la escala.',
+        'wrong-order-of-magnitude':
+          'Se pasa una potencia de diez: dos píxeles de unos 7 km cada uno.',
+        off: '2 píxeles × 7,05 km por píxel.',
+      },
+    },
+    {
+      title: 'El diámetro con su barra de error',
+      body: 'Informa el diámetro de la llanura oscura como un valor, luego &plusmn;, luego una incertidumbre que puedas defender. Una persona cuidadosa coloca el borde suave de esta llanura con unos tres píxeles de margen a cada lado, que son 21 km. Cuenta como correcto cuando el intervalo que das se solapa con el que permite la llanura, y no es más ancho que 60 km.',
+      prompt: 'El diámetro, con su incertidumbre',
+      placeholder: 'p. ej. 600 ± 30',
+      hints: [
+        'Escribe el diámetro, luego ±, luego una incertidumbre que incluya cuán bien se puede colocar el borde.',
+      ],
+      because:
+        'Unos 634 km, con 20 a 40 de más o de menos: los 6 km que indica la herramienta son el redondeo de las marcas y son demasiado pequeños para ser toda la incertidumbre, porque el borde de la llanura es suave. Una barra de error defendible incluye lo que la indicada deja fuera.',
+    },
+    {
+      title: 'El mismo círculo cerca del limbo',
+      body: 'Un cráter redondo cerca del borde del disco se ve de soslayo, así que queda apretado en la dirección hacia el centro. Mueve el círculo a <strong>x = 470, y = 245</strong>, cerca del borde derecho, con el par a través del disco. Lee a qué distancia del centro del disco está el círculo, en radios del disco, y qué ancho parece tener allí un accidente redondo en esa dirección, como parte de su ancho verdadero.',
+      fields: [
+        { label: 'Distancia al centro del disco, en radios del disco' },
+        { label: 'Ancho en esa dirección' },
+      ],
+    },
+    {
+      title: 'Lo que dice un nivel de gris',
+      body: 'La llanura oscura es más oscura en la imagen que la tierra alta brillante a su lado. Un estudiante escribe que la llanura refleja alrededor de un tercio de la luz.',
+      prompt: '¿Qué falla en la afirmación?',
+      options: [
+        'Nada: píxeles más oscuros significan menos luz',
+        'Los niveles de gris son valores realzados para mostrar y no llevan registro de la luz, así que la imagen puede decir cuán grande es la llanura y no cuán brillante',
+        'La Luna no tiene llanuras oscuras',
+        'La imagen es demasiado pequeña para ver el brillo',
+      ],
+      misconceptions: [
+        {
+          say: 'En una imagen estirada y realzada un nivel de gris es lo que la transformación lo hizo. El Observatorio marca la imagen como solo para mostrar y no da fotometría por esa razón.',
+        },
+        {
+          say: 'El tamaño no es el problema. Una imagen con sus unidades y su calibración registradas permitiría fotometría de cualquier tamaño; esta no tiene ninguna de las dos.',
+        },
+      ],
+      hints: [
+        '¿Qué registra la imagen sobre cómo se hicieron sus niveles de gris?',
+      ],
+      because:
+        'Los niveles de gris son valores para mostrar: contraste estirado para el ojo, sin unidad ni calibración registradas. Una escala y un tamaño son medidas de dónde están las cosas, que sobreviven al estiramiento; un brillo sería una medida de luz, que no.',
+    },
+  ],
+};
+
+export const HOW_FAR_IS_THAT_STAR_DEEPER = {
+  steps: [
+    {
+      title: 'La distancia a mano',
+      body: 'El ajuste da un paralaje relativo de 60,29 mas. Conviértelo en una distancia.',
+      prompt: 'La distancia, 1 sobre el paralaje',
+      hints: [
+        'Un paralaje de p segundos de arco es una distancia de 1/p pársecs. Convierte antes los milisegundos de arco.',
+      ],
+      worked:
+        '60,29 mas son 0,06029 segundos de arco, y 1 ÷ 0,06029 = 16,59 pársecs. Es el medio de un intervalo, de 16,18 a 17,02 al 68 por ciento, no una distancia exacta.',
+      feedback: {
+        close: 'Casi. 1000 dividido entre el paralaje en milisegundos de arco.',
+        'wrong-order-of-magnitude':
+          'Se pasa una potencia de diez: primero de milisegundos de arco a segundos de arco.',
+        off: '1000 ÷ 60,29.',
+      },
+    },
+    {
+      title: 'Cuántas sigma',
+      body: 'Un paralaje solo es una medición cuando está bien por encima de su propia incertidumbre. El ajuste da 60,29 mas con una incertidumbre de 1,53 mas.',
+      prompt: 'El paralaje sobre su incertidumbre',
+      hints: ['Divide el paralaje entre su incertidumbre.'],
+      worked:
+        '60,29 ÷ 1,53 = 39,4, que la herramienta informa como 39,5 con los números sin redondear: un paralaje unas cuarenta veces su propio error, así que la distancia está bien determinada, a un 2,5 por ciento.',
+      feedback: {
+        close: 'Casi. El paralaje dividido entre su incertidumbre.',
+        'wrong-order-of-magnitude':
+          'Se pasa una potencia de diez: ambos están en milisegundos de arco.',
+        off: '60,29 ÷ 1,53.',
+      },
+    },
+    {
+      title: 'Menos épocas, una barra más ancha',
+      body: 'Pon <strong>Épocas usadas</strong> en 8, dejando paralaje y movimiento, y lee la incertidumbre del paralaje. Con las 14 épocas era de 1,53 mas.',
+      prompt: '¿Cuántas veces mayor es la incertidumbre con 8 épocas?',
+      hints: [
+        'La incertidumbre con 8 épocas, dividida entre la incertidumbre con las 14 épocas.',
+      ],
+      worked:
+        'Unos 2,25 ÷ 1,53 = 1,47. Ocho épocas son lo mínimo que acepta la herramienta, y cubren solo 1,03 años, así que el paralaje se conoce a 2,25 mas y la distancia a un 4 por ciento en lugar de a un 2,5.',
+      feedback: {
+        close:
+          'Casi. Divide la incertidumbre con 8 épocas entre la incertidumbre con 14 épocas.',
+        'wrong-order-of-magnitude': 'Un factor cercano a uno y medio, no diez.',
+        off: '(incertidumbre con 8 épocas) ÷ (incertidumbre con 14 épocas).',
+      },
+    },
+    {
+      title: 'Una corrección a absoluto',
+      body: 'Las estrellas de referencia no están en el infinito: un paralaje relativo es menor que el absoluto en su paralaje medio. Supón, como un supuesto que esta investigación indica y no mide, que ese promedio es de 1,0 mas con una incertidumbre de 0,5. Pon la <strong>Corrección</strong> en 1,0 mas, con 14 épocas y el ajuste de paralaje, y lee el paralaje absoluto y la distancia.',
+      fields: [
+        { label: 'Paralaje, absoluto' },
+        { label: 'Distancia, 1 sobre el paralaje' },
+      ],
+    },
+    {
+      title: 'Hacia dónde se mueve la distancia',
+      body: 'Frente a la distancia del paralaje relativo, 16,59 pc, la corregida es de 16,32 pc.',
+      prompt:
+        '¿Por qué es demasiado grande la distancia del paralaje relativo, si las estrellas de referencia tienen paralaje?',
+      options: [
+        'Las estrellas de referencia están más cerca que la estrella, así que bajan su paralaje',
+        'El paralaje de la estrella se mide frente a estrellas que tienen un pequeño paralaje propio, así que el paralaje relativo es la diferencia y es demasiado pequeño, y uno sobre él es demasiado grande',
+        'Un paralaje relativo es siempre mayor que el absoluto',
+        'Nada: la distancia es la misma en cualquier marco',
+      ],
+      misconceptions: [
+        {
+          say: 'Las estrellas de referencia están más lejos que la estrella, y por eso sirven de referencia: lo que importa es que no están en el infinito, así que cada una se mueve un poco también.',
+        },
+        {
+          say: 'Las dos difieren en 0,3 pc aquí, y en una parte mayor para una estrella más lejana, cuyo paralaje se parece más a la corrección.',
+        },
+      ],
+      hints: [
+        '¿Qué se mide cuando las estrellas de referencia también se mueven un poco?',
+      ],
+      because:
+        'Las estrellas de referencia tienen un paralaje propio, así que la estrella se mide frente a un marco que se mueve un poco del mismo modo. Lo que se mide es la diferencia, que es demasiado pequeña, y uno sobre un número demasiado pequeño es demasiado grande. La herramienta lo dice junto a cada distancia.',
+    },
+    {
+      rubric:
+        'Crédito completo por nombrar dos límites que no están en el intervalo indicado y decir hacia dónde mueve cada uno la distancia: el paralaje propio de las estrellas de referencia (el punto cero del marco: la distancia relativa sale alta), el número y el reparto de las épocas (muy pocas se rechazan y pocas dan un intervalo ancho), errores que no son independientes de una época a otra (el intervalo queda demasiado estrecho), o el movimiento orbital si la estrella es una binaria (parece un paralaje). No dar crédito por decir que el intervalo ya lo incluye todo.',
+      title: 'Qué limita la distancia',
+      body: 'El intervalo del 68 por ciento de 16,18 a 17,02 pc cubre los errores aleatorios de las catorce posiciones, con los supuestos que indica la herramienta.',
+      prompt:
+        'En dos o tres frases: nombra dos límites de esta distancia que el intervalo no incluye, y di hacia dónde mueve cada uno la distancia.',
+    },
+  ],
+};
+
+export const A_BINARY_STARS_ORBIT_DEEPER = {
+  steps: [
+    {
+      title: 'La masa a mano',
+      body: 'Usa la tercera ley de Kepler, M = a&sup3;/P&sup2;, con el semieje mayor que hallaste en unidades astronómicas, 9,08 ua, y el período, 14,13 años.',
+      prompt: 'La suma de masas',
+      hints: [
+        'Eleva al cubo el eje en ua, al cuadrado el período en años, y divide.',
+      ],
+      worked:
+        '9,08³ ÷ 14,13² = 748,6 ÷ 199,7 = 3,75 masas solares, que coincide con los 3,76 de la herramienta. A mano no hay intervalo: la herramienta lleva las incertidumbres de la órbita y del paralaje por la misma fórmula.',
+      feedback: {
+        close: 'Casi. a al cubo entre P al cuadrado, con a en ua y P en años.',
+        'wrong-order-of-magnitude':
+          'Se pasa una potencia de diez: 9,08 al cubo es unos 750 y 14,13 al cuadrado unos 200.',
+        off: '9,08³ ÷ 14,13².',
+      },
+    },
+    {
+      title: 'Si el paralaje fuera de 80 mas',
+      body: 'Pon <strong>Paralaje, relativo</strong> en 80 mas, con la órbita elíptica y las doce épocas, y lee la suma de masas. La órbita es la misma.',
+      prompt: 'La suma de masas a 80 mas',
+      hints: [
+        'La órbita en ua crece cuando baja el paralaje, y la masa va como su cubo.',
+      ],
+      worked:
+        'Unas 7,3 masas solares: a 80 mas el eje es 0,908 ÷ 0,080 = 11,35 ua y 11,35³ ÷ 14,13² = 7,3. Un cambio del 20 por ciento en el paralaje duplicó la masa, por eso la distancia es el eslabón más débil.',
+      feedback: {
+        close: 'Casi. Lee la suma de masas con el paralaje en 80 mas.',
+        'wrong-order-of-magnitude':
+          'Un factor de dos respecto de 3,76, no de diez.',
+        off: 'La suma de masas con el paralaje puesto en 80 mas.',
+      },
+    },
+    {
+      title: 'Ocho épocas, un período más ancho',
+      body: 'Pon <strong>Épocas usadas</strong> en 8 con el modelo elíptico y lee la incertidumbre del período. Con las doce es de 0,06 años.',
+      prompt:
+        '¿Cuántas veces mayor es la incertidumbre del período con 8 épocas?',
+      hints: [
+        'La incertidumbre con 8 épocas dividida entre la incertidumbre con 12.',
+      ],
+      worked:
+        'Unos 0,16 ÷ 0,064 = 2,5. Las ocho primeras épocas cubren 0,74 de un período y las doce 1,16: la órbita aún no ha dado una vuelta completa, y el período lo sostiene menos arco.',
+      feedback: {
+        close: 'Casi. La incertidumbre con 8 épocas entre la de 12.',
+        'wrong-order-of-magnitude': 'Un factor de dos o tres, no de diez.',
+        off: '(incertidumbre del período, 8 épocas) ÷ 0,064.',
+      },
+    },
+    {
+      title: 'El nodo',
+      body: 'La herramienta da el nodo ascendente como 34,7 &plusmn; 0,7 grados y dice que solo con posiciones no se puede saber cuál de los dos cruces del cielo es el ascendente, así que da el nodo entre 0 y 180 grados.',
+      prompt: '¿Qué resolvería cuál cruce es el ascendente?',
+      options: [
+        'Más posiciones en el cielo',
+        'Una incertidumbre menor del paralaje',
+        'Las velocidades radiales de las estrellas, que dicen cuál se mueve hacia nosotros',
+        'Un modelo circular',
+      ],
+      misconceptions: [
+        {
+          say: 'La ambigüedad está en la geometría, no en el ruido: una órbita y su espejo en profundidad hacen la misma trayectoria en el cielo, se tomen las posiciones que se tomen.',
+        },
+        {
+          say: 'El modelo circular se rechaza para esta binaria, y tampoco resolvería la ambigüedad.',
+        },
+      ],
+      hints: ['¿Qué es lo único que no da una imagen del cielo?'],
+      because:
+        'Las velocidades radiales. Las posiciones son las dos direcciones del cielo; qué lado de la órbita está más cerca de nosotros es la tercera, y solo el movimiento a lo largo de la línea de visión, medido en el espectro, lo dice.',
+    },
+    {
+      title: 'Un paralaje relativo y la masa',
+      body: 'Los 100 mas son un paralaje relativo a estrellas de referencia, y la herramienta dice que la distancia y la suma de masas salen altas en el paralaje medio de esas estrellas.',
+      prompt:
+        'Si el paralaje medio de las estrellas de referencia no es cero, la suma de masas verdadera es&hellip;',
+      options: [
+        'mayor que 3,8 masas solares, porque la estrella está más cerca',
+        'menor que 3,8 masas solares: el paralaje absoluto es mayor, la estrella está más cerca, la órbita es menor en ua, y la masa va como el cubo',
+        'la misma, porque la masa no depende de la distancia',
+        'mayor, porque el período es más largo',
+      ],
+      misconceptions: [
+        {
+          say: 'Una estrella más cercana tiene una órbita menor en ua para el mismo ángulo, y la masa va como el cubo de la órbita. Más cerca significa más ligera, no más pesada.',
+        },
+        {
+          say: 'El ángulo en el cielo está fijo; convertirlo en ua, y así en masa, necesita la distancia. Por eso la suma lleva la incertidumbre del paralaje.',
+        },
+      ],
+      hints: [
+        '¿Hacia dónde se mueve la distancia, y qué hace la órbita en ua?',
+      ],
+      because:
+        'Menor. El paralaje absoluto es mayor que el relativo, así que la estrella está más cerca, el mismo ángulo es una órbita menor en ua, y la suma de masas, que va como ese tamaño al cubo, es menor. La suma de masas relativa es un lado alto de la verdad.',
+    },
+  ],
+};
+
 export default {
   'what-is-a-measurement': WHAT_IS_A_MEASUREMENT_DEEPER,
   'what-does-plus-minus-claim': WHAT_DOES_PLUS_MINUS_CLAIM_DEEPER,
   'when-the-method-must-refuse': WHEN_THE_METHOD_MUST_REFUSE_DEEPER,
+  'measuring-the-moon': MEASURING_THE_MOON_DEEPER,
+  'how-far-is-that-star': HOW_FAR_IS_THAT_STAR_DEEPER,
+  'a-binary-stars-orbit': A_BINARY_STARS_ORBIT_DEEPER,
 };

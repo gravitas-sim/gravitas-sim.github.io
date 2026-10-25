@@ -199,7 +199,10 @@ describe('the re-baseline command refuses', () => {
     for (const [release, kb] of [
       ['a', 20],
       ['b', 20],
-      ['c', 19.6],
+      ['c', 20],
+      ['e', 20],
+      ['f', 20],
+      ['g', 18.9],
     ])
       s = rebaseline(s, request({ kb, release }), clean);
     expect(() =>

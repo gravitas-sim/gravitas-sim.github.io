@@ -8,6 +8,10 @@
     "es"
   ],
   "lessons": {
+    "a-binary-stars-orbit": {
+      "en": "A Binary Star’s Orbit",
+      "es": "La órbita de una estrella binaria"
+    },
     "a-lens-passing-by": {
       "en": "A Lens Passing By",
       "es": "Una lente que pasa"
@@ -72,6 +76,10 @@
       "en": "Getting There From Here",
       "es": "Llegar hasta allí desde aquí"
     },
+    "how-far-is-that-star": {
+      "en": "How Far Is That Star?",
+      "es": "¿A qué distancia está esa estrella?"
+    },
     "inside-a-star": {
       "en": "Inside a Star",
       "es": "Dentro de una estrella"
@@ -103,6 +111,10 @@
     "lives-of-stars": {
       "en": "Lives of Stars",
       "es": "Vidas de las estrellas"
+    },
+    "measuring-the-moon": {
+      "en": "Measuring the Moon",
+      "es": "Medir la Luna"
     },
     "missing-mass": {
       "en": "The Missing Mass",

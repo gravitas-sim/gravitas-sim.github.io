@@ -62,7 +62,7 @@
       "kind": "feature",
       "purpose": "Sky coordinates for an image (Prompt 181), astrometric time series (Prompt 186) and orbit fitting with a moving-object track (Prompt 187), with their validation.",
       "owner": 181,
-      "student": false
+      "student": true
     },
     {
       "file": "BRANCHING.md",
@@ -338,6 +338,13 @@
       "student": false
     },
     {
+      "file": "IMAGE_INVESTIGATIONS.md",
+      "kind": "feature",
+      "purpose": "The image investigations (Moon, parallax, binary orbit): what each claims, what is real and synthetic, the acceptance sheet, evidence status, data ledger and what was not built (Prompt 191).",
+      "owner": 191,
+      "student": true
+    },
+    {
       "file": "IMAGE_MARKS.md",
       "kind": "feature",
       "purpose": "The image marks instrument: marks, scale, time and the ledger (Prompt 179).",
@@ -356,7 +363,7 @@
       "kind": "feature",
       "purpose": "The four image packs of the first slice: rights decision per source, contracts, the authentic-frame legs and what was not run (Prompt 189).",
       "owner": 189,
-      "student": false
+      "student": true
     },
     {
       "file": "INDEX_DECOMPOSITION.md",

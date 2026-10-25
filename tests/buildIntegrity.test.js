@@ -307,9 +307,9 @@ describe('the service worker manifest is current', () => {
           p
         )
     );
-    // The three measurement and claim lessons are never precached (D-R10-67):
+    // The six measurement, claim and image lessons are never precached (D-R10-67, D-R10-72):
     // they open offline after one online use, like the other lazy families.
-    const NEVER_PRECACHED_LESSONS = 3;
+    const NEVER_PRECACHED_LESSONS = 6;
     expect(bodies.length + NEVER_PRECACHED_LESSONS).toBe(MANIFEST.length);
   });
 

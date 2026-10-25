@@ -1198,9 +1198,823 @@ export const WHEN_THE_METHOD_MUST_REFUSE = {
   ],
 };
 
-/** The three lessons, in order: what the barrel registers. */
+// -----------------------------------------------------------------------------
+// The image investigations (Prompt 191): three more lessons in this file, on the
+// image-measurement instruments (js/imagingWidgets.js). Same rules as above.
+// -----------------------------------------------------------------------------
+const MM = (values = {}, hide = []) => ({
+  id: 'moon-marks',
+  values,
+  hide,
+});
+const SP = (values = {}, hide = ['zero']) => ({
+  id: 'star-parallax',
+  values,
+  hide,
+});
+const BO = (values = {}, hide = ['plx']) => ({
+  id: 'binary-orbit',
+  values,
+  hide,
+});
+
+// -----------------------------------------------------------------------------
+// 4. Measuring the Moon
+// -----------------------------------------------------------------------------
+export const MEASURING_THE_MOON = {
+  id: 'measuring-the-moon',
+  thumbnail: 'images/investigations/measuring-the-moon.webp',
+  title: 'Measuring the Moon',
+  subtitle:
+    'Marks on a real picture, a scale from a known length, and a size in kilometers',
+  duration: '15-25 min',
+  level: 'Introductory astronomy',
+  audience: 'intro',
+  textbook: { chapter: 6, section: null },
+  courseLevel: 'survey',
+  depths: ['core', 'quantitative', 'advanced'],
+  mathematics: 'arithmetic',
+  prerequisites: ['what-is-a-measurement'],
+  tags: ['observing'],
+  lock: { placement: true, inspector: true },
+  objectives: [
+    'Say why a picture has no scale of its own, and where a scale comes from',
+    'Give a real picture a scale from a length you know, and read a size in kilometers from a circle on it',
+    'Predict the size of a feature before measuring it, and say what the stated uncertainty includes and what it leaves out',
+    'Say why this picture can be marked and measured in pixels but not read for brightness',
+  ],
+  steps: [
+    {
+      sid: 'a-picture-of-the-moon',
+      stage: STAGE,
+      type: 'read',
+      title: 'A real picture of the Moon',
+      body: `This is a <strong>real</strong> picture: the Moon, photographed by NASA&rsquo;s
+             Galileo spacecraft on 7 December 1992 as it flew past the Earth on
+             its way to Jupiter. It is an enhanced-color composite, shown here in
+             gray. <em>Enhanced</em> means the contrast was stretched to show
+             differences in the ground, so its gray levels are for the eye and are
+             not a measure of the light the Moon reflects. The Observatory calls such
+             a picture <strong>display-only</strong>: you may mark it and measure
+             it in pixels, and nothing more.
+             \n\nA picture has no scale of its own. This one is 496 pixels across,
+             and a pixel is not a kilometer. The pixels are numbered from the lower
+             left, x to the right and y up, and the disc is cropped close: its right
+             edge touches the last column. In this investigation you give the picture a
+             scale and take one measurement off it.`,
+      tool: MM({}, ['x1', 'x2', 'cx', 'cy', 'r']),
+    },
+    {
+      sid: 'predict-the-scale',
+      stage: STAGE,
+      type: 'predict',
+      reveal: 'scale-from-the-disc',
+      title: 'What gives a picture its scale?',
+      body: `You want a length on the picture in kilometers, and you have only
+             pixels.`,
+      prompt: 'To turn pixels into kilometers you need&hellip;',
+      options: [
+        'the date the picture was taken',
+        'a length in the picture that you already know in kilometers',
+        'the brightness of the Moon in the picture',
+        'the number of colors in the picture',
+      ],
+      answer: 1,
+      hints: [
+        'Where could a length in kilometers come from, with nothing else on the picture?',
+      ],
+      because:
+        'A length in the picture that you already know. A picture records angles and pixels and never says how far away the thing is, so the only way to a scale is to point at something in it whose size you know by other means. Here that is the Moon itself, whose mean diameter, 3,474.8 km, was measured by other means.',
+      tool: MM({}, ['x1', 'x2', 'cx', 'cy', 'r']),
+    },
+    {
+      sid: 'scale-from-the-disc',
+      stage: STAGE,
+      type: 'measure',
+      title: 'A reference pair across the disc',
+      body: `Mark the full width of the disc with a <strong>reference pair</strong>: a
+             line along the horizontal through the middle of the disc (row 245), from
+             its left edge to its right edge. Set the left end to <strong>3</strong>
+             and the right end to <strong>496</strong>. The pair is taken to span
+             3,474.8 km, the Moon&rsquo;s mean diameter. Read its length in pixels and
+             the scale it gives.
+             \n\nThe right end sits on the last column of the frame, so the disc may
+             be a pixel or two wider than the picture. Keep that in mind: it is not in
+             the uncertainty the tool states.`,
+      fields: [
+        { id: 'pair', label: 'Length of the pair', unit: 'px', hint: '493' },
+        {
+          id: 'scale',
+          label: 'Scale from the pair, in km per pixel',
+          unit: '',
+          hint: '7.05',
+        },
+      ],
+      validate: v => {
+        if (![v.pair, v.scale].every(Number.isFinite)) return null;
+        if (near(v.pair, 493, 3) && near(v.scale, 7.05, 0.05)) {
+          return {
+            level: 'ok',
+            message:
+              'The pair spans 493 pixels, so one pixel is 7.05 km on the Moon. The scale is only as good as the two things it rests on: the diameter you assumed, and where you put the two ends.',
+          };
+        }
+        return {
+          level: 'error',
+          message:
+            'Set the left end to 3 and the right end to 496, then read “Length of the pair” and “Scale from the pair”.',
+        };
+      },
+      tool: MM({ x1: 60, x2: 440 }, ['cx', 'cy', 'r']),
+    },
+    {
+      sid: 'why-a-pair',
+      stage: STAGE,
+      type: 'question',
+      kind: 'choice',
+      title: 'Why the scale comes from you',
+      body: `The Observatory can give an image a scale in arcseconds per pixel when
+             the image carries world coordinates, and it refuses to for this picture.
+             The scale you just made came from a pair you marked.`,
+      prompt: 'Why does the scale have to come from a pair that you mark?',
+      options: [
+        'The picture was taken by a spacecraft, so it has no pixels',
+        'The picture carries no coordinates or units for its pixels, so no scale can be read from it; the only scale is one you make from a length you know',
+        'The Observatory does not trust pictures from NASA',
+        'A scale is only needed for pictures in color',
+      ],
+      answer: 1,
+      misconceptions: [
+        {
+          id: 'no-pixels',
+          option: 0,
+          say: 'Every digital picture has pixels. What this one lacks is a record of what a pixel is worth on the sky or on the ground.',
+        },
+        {
+          id: 'trust',
+          option: 2,
+          say: 'It is not about trust. A display picture was stretched and re-encoded for the eye, and no one recorded a scale for it; a scale you state yourself is yours, and the tool shows it as such.',
+        },
+      ],
+      hints: ['What does the picture record about its own pixels?'],
+      because:
+        'The picture carries no coordinates or units, so nothing in it says what a pixel is worth. A scale you make from a length you know is a measurement of yours, with the assumption written beside it, and that is the only kind this picture allows.',
+      tool: MM({ x1: 3, x2: 496 }, ['x1', 'x2', 'cx', 'cy', 'r']),
+    },
+    {
+      sid: 'predict-the-plain',
+      stage: STAGE,
+      type: 'predict',
+      reveal: 'measure-the-plain',
+      title: 'How wide is the dark plain?',
+      body: `Near the middle of the disc there is a large dark plain, nearly round,
+             with its center close to x = 289, y = 306. The Moon&rsquo;s dark plains are
+             old lava flows. Before you measure it, look at it beside the whole disc.`,
+      prompt: 'Across, the plain is about&hellip;',
+      options: ['6 km', '60 km', '600 km', '6,000 km'],
+      answer: 2,
+      hints: [
+        'The whole Moon is about 3,500 km across. What share of it is the plain?',
+      ],
+      because:
+        'About 600 km, a little under a fifth of the Moon’s width: the plain spans roughly a fifth of the disc and the disc is 3,475 km across. The next step measures it.',
+      tool: MM({ x1: 3, x2: 496, cx: 289, cy: 306, r: 20 }, ['x1', 'x2']),
+    },
+    {
+      sid: 'measure-the-plain',
+      stage: STAGE,
+      type: 'measure',
+      title: 'A circle on the plain',
+      body: `The pair stays across the disc. The circle starts at x = 289, y = 306.
+             Change the <strong>radius</strong> until the circle follows the edge of the
+             dark plain, and nudge the center if the circle drifts to one side. Read
+             the diameter of the circle in kilometers.`,
+      fields: [
+        {
+          id: 'km',
+          label: 'Diameter of the circle',
+          unit: 'km',
+          hint: '630',
+        },
+      ],
+      validate: v => {
+        if (!Number.isFinite(v.km)) return null;
+        if (near(v.km, 634, 45)) {
+          return {
+            level: 'ok',
+            message:
+              'About 630 km across, as the prediction said, within the few pixels a careful person can place the edge of a soft dark plain. The tool states about 6 km; the next step is about what that number does and does not include.',
+          };
+        }
+        return {
+          level: 'error',
+          message:
+            'Fit the circle to the edge of the dark plain, then read “Diameter of the circle in kilometers”.',
+        };
+      },
+      tool: MM({ x1: 3, x2: 496, cx: 289, cy: 306, r: 30 }, ['x1', 'x2']),
+    },
+    {
+      sid: 'what-would-change-it',
+      stage: STAGE,
+      type: 'question',
+      kind: 'short',
+      rubric:
+        'Full credit for naming two things that change the diameter, for example where the edge of the plain is placed (a soft edge, so two careful people differ by a few pixels), where the two ends of the pair are placed, the assumed diameter of the Moon, or the picture being cropped at the right, and for saying that the stated uncertainty of about 6 km includes only the rounding of each placement, and so leaves the softness of the edge and the assumptions out. Do not credit saying the number is exact, or that more marks of the same kind remove the assumptions.',
+      title: 'What would change the number?',
+      body: `The tool states the diameter as about 634 &plusmn; 6 km. Two people who each
+             fit the circle by eye will not agree to 6 km.`,
+      prompt:
+        'In two or three sentences: name two things that would change the diameter you got, and say which of them the stated uncertainty includes.',
+      tool: MM({ x1: 3, x2: 496, cx: 289, cy: 306, r: 45 }, ['x1', 'x2']),
+    },
+    {
+      sid: 'what-you-worked-out',
+      stage: STAGE,
+      type: 'read',
+      title: 'What you worked out',
+      body: `A picture has no scale until you give it one, and the scale you give it is
+             a measurement of yours, resting on a length you assumed and on two marks you
+             placed. With it, a circle on a feature gave a size in kilometers, about
+             630 km for the plain, and the tool&rsquo;s stated uncertainty covered only the
+             rounding of your marks. The softness of the edge, the crop at the right
+             and the assumed diameter are not in it. And because the picture is a
+             display picture, its gray levels are not light: you measured where things
+             are and how big they are, and nothing about how bright.`,
+      tool: MM({ x1: 3, x2: 496, cx: 289, cy: 306, r: 45 }, ['x1', 'x2']),
+    },
+  ],
+};
+
+// -----------------------------------------------------------------------------
+// 5. How far is that star?
+// -----------------------------------------------------------------------------
+export const HOW_FAR_IS_THAT_STAR = {
+  id: 'how-far-is-that-star',
+  thumbnail: 'images/investigations/how-far-is-that-star.webp',
+  title: 'How Far Is That Star?',
+  subtitle:
+    'A shift, a motion and a parallax from fourteen positions of one star',
+  duration: '20-30 min',
+  level: 'Majors and upper-level astronomy',
+  audience: 'intro',
+  textbook: { chapter: 19, section: '19.1' },
+  courseLevel: 'majors',
+  depths: ['core', 'quantitative', 'advanced'],
+  mathematics: 'algebra',
+  prerequisites: ['what-does-plus-minus-claim'],
+  tags: ['observing'],
+  lock: { placement: true, inspector: true },
+  objectives: [
+    'Say why a shift between two positions is not a distance, and what a two-epoch shift assumes',
+    'Say why a straight proper motion cannot describe a star that has a parallax, and read the chi-square that says so',
+    'Read a parallax and a distance with an interval from a well-sampled series, and say what the interval claims',
+    'Say what a relative parallax leaves out, and why too few epochs are refused',
+  ],
+  steps: [
+    {
+      sid: 'fourteen-positions',
+      stage: STAGE,
+      type: 'read',
+      title: 'One star, fourteen dates',
+      body: `A star&rsquo;s position on the sky has been measured at fourteen dates over
+             almost two years. The data are <strong>synthetic</strong>: a star was put at a
+             distance and given a motion that we chose, seen from the Earth&rsquo;s real
+             orbit, and each position was given a random error of 4 milliarcseconds
+             (mas). The truth is withheld until the end.
+             \n\nTwo things move a star on the sky. Its own motion through space,
+             its <strong>proper motion</strong>, is steady. The Earth&rsquo;s motion around the
+             Sun makes a nearby star trace a small loop once a year, its
+             <strong>parallax</strong>, and the nearer the star, the bigger the loop. A parallax
+             of p seconds of arc is a distance of 1/p parsecs.`,
+      tool: SP({ fit: 2, n: 14 }),
+    },
+    {
+      sid: 'predict-the-shift',
+      stage: STAGE,
+      type: 'predict',
+      reveal: 'the-shift',
+      title: 'Does a shift give a distance?',
+      body: `Take the first and the last of the fourteen positions. They differ: the
+             star has moved.`,
+      prompt: 'That shift between two positions&hellip;',
+      options: [
+        'gives the distance: the bigger the shift, the nearer the star',
+        'cannot tell the star’s own motion from a parallax, so it gives no distance',
+        'gives the distance if the two positions are a year apart',
+        'is zero, because stars do not move',
+      ],
+      answer: 1,
+      hints: ['What else, besides distance, moves a star between two dates?'],
+      because:
+        'It cannot tell the two apart. Between two dates the star has moved by its own motion and by a different part of its yearly loop, and one pair of positions has no way to say how much is which. The tool labels such a result a shift under a fixed-motion assumption, and gives no parallax or distance for it.',
+      tool: SP({ fit: 0, n: 14 }),
+    },
+    {
+      sid: 'the-shift',
+      stage: STAGE,
+      type: 'measure',
+      title: 'The shift, first to last',
+      body: `Set <strong>What to fit</strong> to the two-epoch shift and use all 14 epochs, so
+             the shift is from the first position to the last. Read the size of the shift
+             and the rate it would be if it were all motion.`,
+      fields: [
+        { id: 'sep', label: 'Size of the shift', unit: 'mas', hint: '549' },
+        {
+          id: 'rate',
+          label: 'Rate if it were all motion, in arcseconds a year',
+          unit: '',
+          hint: '0.287',
+        },
+      ],
+      validate: v => {
+        if (![v.sep, v.rate].every(Number.isFinite)) return null;
+        if (near(v.sep, 549, 5) && near(v.rate, 0.287, 0.004)) {
+          return {
+            level: 'ok',
+            message:
+              'The star shifted 549 mas in 1.92 years: 0.287 arcsec a year if it were all motion. The result carries its label: a shift under a fixed-motion assumption, not a parallax, so there is no distance in it.',
+          };
+        }
+        return {
+          level: 'error',
+          message:
+            'Choose the two-epoch shift with 14 epochs, then read “Size of the shift” and “Rate if it were all motion”.',
+        };
+      },
+      tool: SP({ fit: 0, n: 14 }),
+    },
+    {
+      sid: 'predict-a-straight-line',
+      stage: STAGE,
+      type: 'predict',
+      reveal: 'a-straight-line-fails',
+      title: 'Does a straight line describe the path?',
+      body: `Now fit all fourteen positions with a proper motion alone: a straight line
+             at a steady speed, with no parallax.`,
+      prompt: 'A straight line&hellip;',
+      options: [
+        'will describe the path, because stars move in straight lines',
+        'will not describe it, because the yearly loop lies off any straight line',
+        'will describe it if the errors are made large enough',
+        'will describe it, because the loop is smaller than the errors',
+      ],
+      answer: 1,
+      hints: [
+        'The loop is about 60 mas across. How large is the error of one position?',
+      ],
+      because:
+        'It will not. The loop is about fifteen times the 4 mas error of one position, so every position that is off the line is off it by a lot. A model that cannot make a loop cannot describe a star that makes one.',
+      tool: SP({ fit: 1, n: 14 }),
+    },
+    {
+      sid: 'a-straight-line-fails',
+      stage: STAGE,
+      type: 'measure',
+      title: 'The straight line, judged',
+      body: `Set <strong>What to fit</strong> to the proper motion, with 14 epochs. Read the
+             chi-square of the fit and its degrees of freedom: 28 numbers (14 positions in
+             two coordinates) less the four the line has.`,
+      fields: [
+        { id: 'chi2', label: 'Chi-square of the fit', unit: '', hint: '1576' },
+        { id: 'dof', label: 'Degrees of freedom', unit: '', hint: '24' },
+      ],
+      validate: v => {
+        if (![v.chi2, v.dof].every(Number.isFinite)) return null;
+        if (near(v.chi2, 1576, 12) && near(v.dof, 24, 0.5)) {
+          return {
+            level: 'ok',
+            message:
+              'A chi-square of 1576 for 24 degrees of freedom: each position misses the line by about eight of its own error bars, where a line that described the star would miss by about one. The tool says the residuals are not consistent with the errors, and the straight line is refused as a description.',
+          };
+        }
+        return {
+          level: 'error',
+          message:
+            'Choose the proper motion with 14 epochs, then read “Chi-square of the fit” and “Degrees of freedom”.',
+        };
+      },
+      tool: SP({ fit: 1, n: 14 }),
+    },
+    {
+      sid: 'the-parallax',
+      stage: STAGE,
+      type: 'measure',
+      title: 'Parallax and motion together',
+      body: `Set <strong>What to fit</strong> to parallax and motion, with 14 epochs. Read the
+             parallax, its uncertainty and the distance.`,
+      fields: [
+        { id: 'p', label: 'Parallax, relative', unit: 'mas', hint: '60.3' },
+        {
+          id: 'sigma',
+          label: 'Uncertainty of the parallax',
+          unit: 'mas',
+          hint: '1.5',
+        },
+        {
+          id: 'd',
+          label: 'Distance, 1 over the parallax',
+          unit: 'pc',
+          hint: '16.6',
+        },
+      ],
+      validate: v => {
+        if (![v.p, v.sigma, v.d].every(Number.isFinite)) return null;
+        if (
+          near(v.p, 60.3, 0.5) &&
+          near(v.sigma, 1.53, 0.1) &&
+          near(v.d, 16.6, 0.15)
+        ) {
+          return {
+            level: 'ok',
+            message:
+              'A parallax of 60.3 ± 1.5 mas is a distance of about 16.6 parsecs, and the residuals are now consistent with the errors (chi-square 13.2 for 23 degrees of freedom). A model with the loop describes the star; one without it did not.',
+          };
+        }
+        return {
+          level: 'error',
+          message:
+            'Choose parallax and motion with 14 epochs, then read “Parallax, relative”, its uncertainty and “Distance, 1 over the parallax”.',
+        };
+      },
+      tool: SP({ fit: 2, n: 14 }),
+    },
+    {
+      sid: 'what-the-interval-says',
+      stage: STAGE,
+      type: 'question',
+      kind: 'choice',
+      title: 'What the interval says',
+      body: `The tool gives the distance as 16.59 pc, with a 68 percent interval of 16.18
+             to 17.02 pc and a 95 percent interval of 15.80 to 17.45 pc. The parallax
+             has an uncertainty of 1.53 mas.`,
+      prompt: 'Which sentence does the result support?',
+      options: [
+        'The star is 16.59 pc away, exactly',
+        'If the reference stars have no parallax of their own, the distance is about 16.6 pc, and repeating the measurement would give an interval that holds the true distance about two times in three',
+        'The star is certainly between 16.18 and 17.02 pc',
+        'The star is 16.59 pc away, plus or minus 1.53 pc',
+      ],
+      answer: 1,
+      misconceptions: [
+        {
+          id: 'exact',
+          option: 0,
+          say: 'One over the parallax is the middle of an interval and not an exact distance: with an error on the parallax, the distance has one too, and it is not even symmetric.',
+        },
+        {
+          id: 'certain',
+          option: 2,
+          say: 'A 68 percent interval is a statement about repeats: about one in three would miss it. “Certainly” is a claim no interval makes.',
+        },
+        {
+          id: 'mixed-units',
+          option: 3,
+          say: 'The 1.53 is the uncertainty of the parallax, in milliarcseconds. The distance’s own interval comes from 1 over the ends of the parallax’s, and is not 1.53 parsecs.',
+        },
+      ],
+      hints: [
+        'An interval says what repeats would do, and the frame the parallax is measured in matters.',
+      ],
+      because:
+        'The interval is a statement about repeats of the measurement, as in What Does ± Claim?, and about the frame: the parallax is relative to the reference stars, so the distance is never smaller than the true one if they have a parallax of their own.',
+      tool: SP({ fit: 2, n: 14 }),
+    },
+    {
+      sid: 'six-epochs',
+      stage: STAGE,
+      type: 'question',
+      kind: 'choice',
+      title: 'Only six epochs',
+      body: `Set <strong>Epochs used</strong> to 6, and keep parallax and motion. The
+             first six epochs cover 0.74 of a year.`,
+      prompt: 'What does the tool report?',
+      options: [
+        'A parallax of the same size, with a larger error bar',
+        'Not constrained: a parallax needs at least eight epochs that sample the Earth’s orbit, so it gives no number',
+        'A parallax of zero, because the loop is not complete',
+        'The proper motion, relabeled as a parallax',
+      ],
+      answer: 1,
+      misconceptions: [
+        {
+          id: 'bigger-bar',
+          option: 0,
+          say: 'With too few epochs, or too little of the orbit, the loop is not fixed at all, so a wider bar would still hide that a number was made up.',
+        },
+        {
+          id: 'zero',
+          option: 2,
+          say: 'Zero is a measurement too, and it is not what the data say: they say nothing. The refusal is the honest answer.',
+        },
+      ],
+      hints: ['Read the line that starts “Not constrained”.'],
+      because:
+        'Not constrained. A parallax is the part of the star’s path that repeats every year, so the epochs must sample that loop; the tool requires eight epochs over at least 0.9 of a year and gives no number below that. A refusal is a result, not a failure.',
+      tool: SP({ fit: 2, n: 6 }),
+    },
+    {
+      sid: 'say-what-relative-means',
+      stage: STAGE,
+      type: 'question',
+      kind: 'short',
+      rubric:
+        'Full credit for saying that a parallax needs about a year of coverage because it is the part of the motion that repeats yearly and must be told apart from the steady proper motion, and that a relative parallax is measured against reference stars that themselves have a parallax, so it is smaller than the absolute one by their mean parallax and the distance from it reads too large. Do not credit saying the distance is exact, or that relative means approximate.',
+      title: 'Why a year, and what relative means',
+      body: `Two things limited this distance beyond its interval: how many epochs there
+             were, and the frame the parallax is measured in.`,
+      prompt:
+        'In two or three sentences: why does a parallax need epochs covering about a year, and what does “relative” say about the parallax you read?',
+      tool: SP({ fit: 2, n: 14 }),
+    },
+    {
+      sid: 'what-you-worked-out',
+      stage: STAGE,
+      type: 'read',
+      title: 'What you worked out',
+      body: `A shift between two positions mixes a star&rsquo;s own motion with a parallax
+             and gives no distance. A straight proper motion fitted to a star that has a
+             parallax is rejected by its own chi-square, here 1576 for 24 degrees of freedom.
+             With the loop in the model, fourteen epochs gave 60.3 &plusmn; 1.5 mas, about 16.6
+             parsecs, with an interval, and with six epochs the tool gave nothing, which is
+             the right answer. The parallax is relative to the reference stars, so the
+             distance is never smaller than the true one. The data were synthetic; the star
+             was made at 16.67 parsecs, a parallax of 60 mas, and the interval holds that.`,
+      tool: SP({ fit: 2, n: 14 }),
+    },
+  ],
+};
+
+// -----------------------------------------------------------------------------
+// 6. A binary star's orbit
+// -----------------------------------------------------------------------------
+export const A_BINARY_STARS_ORBIT = {
+  id: 'a-binary-stars-orbit',
+  thumbnail: 'images/investigations/a-binary-stars-orbit.webp',
+  title: 'A Binary Star’s Orbit',
+  subtitle:
+    'Positions over sixteen years, the orbit they fix, and the mass of the pair',
+  duration: '20-30 min',
+  level: 'Majors and upper-level astronomy',
+  audience: 'intro',
+  textbook: { chapter: 18, section: '18.2' },
+  courseLevel: 'upper',
+  depths: ['core', 'quantitative', 'advanced'],
+  mathematics: 'algebra',
+  prerequisites: ['how-far-is-that-star'],
+  tags: ['observing'],
+  lock: { placement: true, inspector: true },
+  objectives: [
+    'Say why the path of a companion on the sky is an ellipse even for a circular orbit, and why a circular model is refused for an eccentric one',
+    'Read an orbit from positions over time, with its period, size and eccentricity and their uncertainties',
+    'Turn the size of the orbit and a parallax into astronomical units, and the period and size into a mass sum by Kepler&rsquo;s third law',
+    'Say what the positions of a binary fix and what they leave open: the mass of each star, the node, and the distance behind the sum',
+  ],
+  steps: [
+    {
+      sid: 'twelve-positions',
+      stage: STAGE,
+      type: 'read',
+      title: 'A companion, twelve dates',
+      body: `A binary star is two stars that go round each other. Here the position of
+             the fainter one, relative to the brighter, has been measured at twelve dates
+             over sixteen years, each with an error of 15 milliarcseconds. The data are
+             <strong>synthetic</strong>: a binary with elements we chose, seen at an angle, with
+             random errors. The truth is withheld until the end.
+             \n\nThe path on the sky is the orbit as seen at an angle. Its size in
+             arcseconds, a, and its period, P, are what the positions fix. Kepler&rsquo;s third
+             law then gives the mass of the pair, M = a³/P² in solar masses when a is in
+             astronomical units and P in years, and a in astronomical units needs the distance:
+             a parallax of p arcseconds makes a (au) = a (arcsec)/p. Positions alone fix only the
+             <em>sum</em> of the two masses.`,
+      tool: BO({ n: 12, model: 0 }),
+    },
+    {
+      sid: 'predict-the-shape',
+      stage: STAGE,
+      type: 'predict',
+      reveal: 'a-circle-first',
+      title: 'What shape is the path on the sky?',
+      body: `Suppose the true orbit were a perfect circle, tilted away from face-on.`,
+      prompt: 'The path of the companion on the sky would be&hellip;',
+      options: [
+        'always a circle',
+        'an ellipse, unless the orbit is seen exactly face-on',
+        'a straight line',
+        'a spiral, because the stars attract each other',
+      ],
+      answer: 1,
+      hints: ['What does a tilted circle look like?'],
+      because:
+        'An ellipse. A circle seen at an angle is foreshortened in one direction and is an ellipse, so an ellipse on the sky does not by itself mean an eccentric orbit. The fit separates the two: it asks the data whether a circle, seen at some angle, describes them.',
+      tool: BO({ n: 12, model: 1 }),
+    },
+    {
+      sid: 'a-circle-first',
+      stage: STAGE,
+      type: 'question',
+      kind: 'choice',
+      title: 'A circular orbit, tried first',
+      body: `Set <strong>Orbit model</strong> to circular, with all twelve epochs, and read what the
+             tool says.`,
+      prompt: 'What does the tool report?',
+      options: [
+        'A circular orbit with a period of 13.3 years',
+        'Not constrained: the residuals are far larger than the stated errors, so a circular orbit does not describe these positions',
+        'An orbit with an eccentricity of zero and the mass of the pair',
+        'A circular orbit, with a note that the fit is poor',
+      ],
+      answer: 1,
+      misconceptions: [
+        {
+          id: 'report-anyway',
+          option: 0,
+          say: 'The tool does fit a period, 13.3 years, and then refuses it: a number from a model the data reject is not a result.',
+        },
+        {
+          id: 'note-and-report',
+          option: 3,
+          say: 'A note does not undo the number. The chi-square, 5225 for 19 degrees of freedom, says the model is wrong, and the tool gives no orbit.',
+        },
+      ],
+      hints: ['Read the line that starts “Not constrained”.'],
+      because:
+        'The circular model is refused. Its chi-square is 5225 for 19 degrees of freedom: the positions miss it by about sixteen of their own error bars each. The orbit is eccentric, and the data say so.',
+      tool: BO({ n: 12, model: 1 }),
+    },
+    {
+      sid: 'the-elliptical-fit',
+      stage: STAGE,
+      type: 'measure',
+      title: 'The elliptical orbit',
+      body: `Set <strong>Orbit model</strong> to elliptical, with all twelve epochs. Read the
+             period, the semi-major axis and the eccentricity.`,
+      fields: [
+        { id: 'P', label: 'Period', unit: 'yr', hint: '14.13' },
+        { id: 'a', label: 'Semi-major axis', unit: 'arcsec', hint: '0.908' },
+        { id: 'e', label: 'Eccentricity', unit: '', hint: '0.443' },
+      ],
+      validate: v => {
+        if (![v.P, v.a, v.e].every(Number.isFinite)) return null;
+        if (
+          near(v.P, 14.13, 0.15) &&
+          near(v.a, 0.908, 0.02) &&
+          near(v.e, 0.443, 0.02)
+        ) {
+          return {
+            level: 'ok',
+            message:
+              'A period of 14.13 ± 0.06 years, a semi-major axis of 0.908 ± 0.008 arcseconds and an eccentricity of 0.443 ± 0.008, with a chi-square of 17.9 for 17 degrees of freedom: the residuals are now what the errors allow.',
+          };
+        }
+        return {
+          level: 'error',
+          message:
+            'Choose the elliptical orbit with 12 epochs, then read “Period”, “Semi-major axis” and “Eccentricity”.',
+        };
+      },
+      tool: BO({ n: 12, model: 0 }),
+    },
+    {
+      sid: 'from-arcseconds-to-au',
+      stage: STAGE,
+      type: 'question',
+      kind: 'numeric',
+      title: 'The orbit in astronomical units',
+      body: `The binary&rsquo;s parallax, relative to its reference stars, is 100 mas: 0.100
+             arcsecond. Turn the semi-major axis of 0.908 arcseconds into astronomical units.`,
+      prompt: 'The semi-major axis',
+      unit: 'AU',
+      answer: 9.08,
+      tolerance: 0.1,
+      hints: [
+        'a in au is a in arcseconds divided by the parallax in arcseconds.',
+      ],
+      worked:
+        '0.908 ÷ 0.100 = 9.08 au. At 10 parsecs one arcsecond is 10 au, so the orbit’s 0.908 arcsecond is 9.08 au, a little more than the distance from the Sun to Saturn.',
+      feedback: {
+        close: 'Close. Divide the angle by the parallax, both in arcseconds.',
+        'wrong-order-of-magnitude':
+          'A power of ten out: divide by 0.100 arcsecond, not by 100.',
+        off: 'a (arcseconds) ÷ parallax (arcseconds).',
+      },
+      tool: BO({ n: 12, model: 0 }),
+    },
+    {
+      sid: 'the-mass-sum',
+      stage: STAGE,
+      type: 'measure',
+      title: 'The mass of the pair',
+      body: `With the parallax at 100 mas, read the mass sum and its 68 percent interval.
+             The interval comes from the orbit&rsquo;s uncertainty and the parallax&rsquo;s, 4 mas,
+             together.`,
+      fields: [
+        { id: 'm', label: 'Mass sum', unit: 'M_sun', hint: '3.76' },
+        {
+          id: 'lo',
+          label: 'Mass sum, low end of the 68 percent interval',
+          unit: 'M_sun',
+          hint: '3.33',
+        },
+        {
+          id: 'hi',
+          label: 'Mass sum, high end of the 68 percent interval',
+          unit: 'M_sun',
+          hint: '4.25',
+        },
+      ],
+      validate: v => {
+        if (![v.m, v.lo, v.hi].every(Number.isFinite)) return null;
+        if (
+          near(v.m, 3.76, 0.06) &&
+          near(v.lo, 3.33, 0.08) &&
+          near(v.hi, 4.25, 0.1)
+        ) {
+          return {
+            level: 'ok',
+            message:
+              'The two stars together weigh about 3.8 solar masses, between 3.3 and 4.2 at 68 percent. The interval is lopsided and wide, because the mass goes as the cube of the distance and the parallax is known to 4 percent.',
+          };
+        }
+        return {
+          level: 'error',
+          message:
+            'Use the elliptical orbit with 12 epochs and the parallax at 100 mas, then read “Mass sum” and its 68 percent interval.',
+        };
+      },
+      tool: BO({ n: 12, model: 0 }, []),
+    },
+    {
+      sid: 'six-epochs',
+      stage: STAGE,
+      type: 'question',
+      kind: 'choice',
+      title: 'Only the first six epochs',
+      body: `Set <strong>Epochs used</strong> to 6 with the elliptical model. The first six epochs
+             cover seven years of a fourteen-year orbit.`,
+      prompt: 'What does the tool report?',
+      options: [
+        'The same orbit with larger error bars',
+        'Not constrained: an elliptical orbit needs at least eight epochs, so it gives no orbit',
+        'A circular orbit instead, because the arc is short',
+        'The period only, since that is the best-fixed element',
+      ],
+      answer: 1,
+      misconceptions: [
+        {
+          id: 'larger-bars',
+          option: 0,
+          say: 'With six positions the seven elements are not all fixed, so there is no orbit to put bars on.',
+        },
+        {
+          id: 'fallback',
+          option: 2,
+          say: 'The tool does not switch to a model the data reject. A circular fit of this binary is refused too.',
+        },
+      ],
+      hints: ['Read the line that starts “Not constrained”.'],
+      because:
+        'Not constrained. An elliptical orbit has seven parameters and needs at least eight epochs, covering enough of the period; six give nothing. As with the star, the refusal is the answer.',
+      tool: BO({ n: 6, model: 0 }),
+    },
+    {
+      sid: 'say-what-the-sum-needs',
+      stage: STAGE,
+      type: 'question',
+      kind: 'short',
+      rubric:
+        'Full credit for saying that the positions fix only the sum of the two masses, not each (it takes the stars’ motion about their common center, or radial velocities, to split it), and that the sum depends on the distance cubed, so the parallax and its frame (relative, so the distance and the sum read high) carry into the mass. Do not credit saying that the sum is exact or that the interval is only the orbit’s.',
+      title: 'What the sum needs',
+      body: `The mass sum came from an orbit and a parallax, each with an uncertainty.`,
+      prompt:
+        'In two or three sentences: what do the positions not tell you about the masses, and which input of the sum is the most dangerous to get wrong?',
+      tool: BO({ n: 12, model: 0 }),
+    },
+    {
+      sid: 'what-you-worked-out',
+      stage: STAGE,
+      type: 'read',
+      title: 'What you worked out',
+      body: `Twelve positions over sixteen years fixed an orbit: a period of 14.13 &plusmn;
+             0.06 years, a semi-major axis of 0.908 arcseconds and an eccentricity of
+             0.44. A circle was refused outright, and six epochs gave nothing. With a
+             parallax of 100 mas the orbit is 9.08 au across and the pair weighs about 3.8
+             solar masses, between 3.3 and 4.2 at 68 percent. Positions fix only the sum, and
+             the sum is the cube of the distance: the parallax is the weakest link. The data
+             were synthetic, made with a period of 14.2 years, an eccentricity of 0.45, a
+             semi-major axis of 0.9 arcseconds and a parallax of 100 mas, and the fit holds
+             them.`,
+      tool: BO({ n: 12, model: 0 }),
+    },
+  ],
+};
+
+/** The lessons, in order: what the barrel registers. */
 export default [
   WHAT_IS_A_MEASUREMENT,
   WHAT_DOES_PLUS_MINUS_CLAIM,
   WHEN_THE_METHOD_MUST_REFUSE,
+  MEASURING_THE_MOON,
+  HOW_FAR_IS_THAT_STAR,
+  A_BINARY_STARS_ORBIT,
 ];

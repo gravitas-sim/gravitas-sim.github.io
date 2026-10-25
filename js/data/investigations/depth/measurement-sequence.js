@@ -454,6 +454,479 @@ export const WHEN_THE_METHOD_MUST_REFUSE_DEEPER = {
 // the offline install is a data-budget ceiling this change does not raise; this
 // file is not installed ahead of use (D-R10-67). English only, as every guide is.
 // =============================================================================
+// -----------------------------------------------------------------------------
+// The image investigations, deeper (Prompt 191). Same rules as above; the
+// instruments are js/imagingWidgets.js and every expected value is recomputed
+// (tests/imageInvestigations.test.js).
+// -----------------------------------------------------------------------------
+const near = (x, target, tolerance) =>
+  Number.isFinite(x) && Math.abs(x - target) <= tolerance;
+const MM = (values = {}, hide = []) => ({ id: 'moon-marks', values, hide });
+const SP = (values = {}, hide = ['zero']) => ({
+  id: 'star-parallax',
+  values,
+  hide,
+});
+const BO = (values = {}, hide = ['plx']) => ({
+  id: 'binary-orbit',
+  values,
+  hide,
+});
+
+export const MEASURING_THE_MOON_DEEPER = {
+  id: 'measuring-the-moon',
+  steps: [
+    {
+      sid: 'a-pixel-at-each-end',
+      after: 'what-would-change-it',
+      depth: 'quantitative',
+      type: 'question',
+      kind: 'numeric',
+      title: 'A pixel at each end',
+      body: `Suppose both ends of the circle&rsquo;s diameter are one pixel too far out, the
+             worst case of a careless placement. One pixel is the scale you read, 7.05 km.`,
+      prompt: 'How much does the diameter change, in kilometers?',
+      unit: 'km',
+      answer: 14.1,
+      tolerance: 0.4,
+      hints: ['Two ends, one pixel each: how many pixels is that?'],
+      worked:
+        'Two pixels, 2 × 7.05 = 14.1 km. The tool’s own 6 km is smaller than this worst case because a placement is rounded to a pixel, a step of 0.29 pixel, not out by a whole one.',
+      feedback: {
+        close: 'Close. Two ends, one pixel each, times the scale.',
+        'wrong-order-of-magnitude':
+          'A power of ten out: two pixels at about 7 km each.',
+        off: '2 pixels × 7.05 km per pixel.',
+      },
+      tool: MM({ x1: 3, x2: 496, cx: 289, cy: 306, r: 45 }, ['x1', 'x2']),
+    },
+    {
+      sid: 'a-diameter-with-an-error-bar',
+      after: 'a-pixel-at-each-end',
+      depth: 'quantitative',
+      type: 'question',
+      kind: 'numeric',
+      uncertainty: true,
+      title: 'The diameter with an error bar',
+      body: `Report the diameter of the dark plain as a value, then &plusmn;, then an uncertainty
+             you can defend. A careful person places the soft edge of this plain to within about
+             three pixels either way, which is 21 km. It counts as right when the range you
+             give overlaps the range the plain allows, and is no wider than 60 km.`,
+      prompt: 'The diameter, with its uncertainty',
+      unit: 'km',
+      placeholder: 'e.g. 600 ± 30',
+      answer: 634,
+      tolerance: 40,
+      maxUncertainty: 60,
+      hints: [
+        'Write the diameter, then ±, then an uncertainty that includes how well the edge can be placed.',
+      ],
+      because:
+        'About 634 km, give or take 20 to 40: the 6 km the tool states is the rounding of the marks and is too small to be the whole uncertainty, because the edge of the plain is soft. An error bar you can defend includes what the stated one leaves out.',
+      tool: MM({ x1: 3, x2: 496, cx: 289, cy: 306, r: 45 }, ['x1', 'x2']),
+    },
+    {
+      sid: 'near-the-limb',
+      after: 'a-diameter-with-an-error-bar',
+      depth: 'advanced',
+      type: 'measure',
+      title: 'The same circle near the limb',
+      body: `A round crater near the edge of the disc is seen at a slant, so it is squeezed in
+             the direction toward the center. Move the circle to <strong>x = 470, y = 245</strong>,
+             close to the right edge, with the pair across the disc. Read how far from the
+             center of the disc the circle is, in radii of the disc, and how wide a round
+             feature there looks along that direction, as a share of its true width.`,
+      fields: [
+        {
+          id: 'off',
+          label: 'Distance from the disc’s center, in disc radii',
+          unit: '',
+          hint: '0.89',
+        },
+        {
+          id: 'share',
+          label: 'Width along that direction',
+          unit: '%',
+          hint: '45',
+        },
+      ],
+      validate: v => {
+        if (![v.off, v.share].every(Number.isFinite)) return null;
+        if (near(v.off, 0.89, 0.02) && near(v.share, 45, 2)) {
+          return {
+            level: 'ok',
+            message:
+              'At 0.89 of the radius a round feature looks 45 percent as wide along the radius as across it. A diameter taken in that direction would be less than half the true one, and a circle drawn on it, round, would measure the wrong thing.',
+          };
+        }
+        return {
+          level: 'error',
+          message:
+            'Set the circle’s center to x = 470, y = 245, then read the distance in disc radii and the width along that direction.',
+        };
+      },
+      tool: MM({ x1: 3, x2: 496, cx: 470, cy: 245, r: 20 }, ['x1', 'x2']),
+    },
+    {
+      sid: 'a-gray-level-is-not-light',
+      after: 'near-the-limb',
+      depth: 'advanced',
+      type: 'question',
+      kind: 'choice',
+      title: 'What a gray level says',
+      body: `The dark plain is darker in the picture than the bright highland beside it.
+             A student writes that the plain reflects about a third as much light.`,
+      prompt: 'What is wrong with the claim?',
+      options: [
+        'Nothing: darker pixels mean less light',
+        'The gray levels are enhanced display values and carry no record of the light, so the picture can say how big the plain is and not how bright',
+        'The Moon has no dark plains',
+        'The picture is too small to see brightness',
+      ],
+      answer: 1,
+      misconceptions: [
+        {
+          id: 'darker-is-fainter',
+          option: 0,
+          say: 'In a stretched, enhanced picture a gray level is whatever the stretch made it. The Observatory marks the picture display-only and gives no photometry for that reason.',
+        },
+        {
+          id: 'too-small',
+          option: 3,
+          say: 'Size is not the issue. A picture with its units and calibration recorded would allow photometry at any size; this one has neither.',
+        },
+      ],
+      hints: [
+        'What does the picture record about how its gray levels were made?',
+      ],
+      because:
+        'The gray levels are display values: contrast stretched for the eye, with no unit or calibration recorded. A scale and a size are measurements of where things are, which survive the stretch; a brightness would be a measurement of light, which does not.',
+      tool: MM({ x1: 3, x2: 496, cx: 289, cy: 306, r: 45 }, ['x1', 'x2']),
+    },
+  ],
+};
+
+export const HOW_FAR_IS_THAT_STAR_DEEPER = {
+  id: 'how-far-is-that-star',
+  steps: [
+    {
+      sid: 'the-distance-by-hand',
+      after: 'say-what-relative-means',
+      depth: 'quantitative',
+      type: 'question',
+      kind: 'numeric',
+      title: 'The distance by hand',
+      body: `The fit gives a relative parallax of 60.29 mas. Turn it into a distance.`,
+      prompt: 'The distance, 1 over the parallax',
+      unit: 'pc',
+      answer: 16.59,
+      tolerance: 0.05,
+      hints: [
+        'A parallax of p arcseconds is a distance of 1/p parsecs. Convert the milliarcseconds first.',
+      ],
+      worked:
+        '60.29 mas is 0.06029 arcsecond, and 1 ÷ 0.06029 = 16.59 parsecs. It is the middle of an interval, 16.18 to 17.02 at 68 percent, not an exact distance.',
+      feedback: {
+        close: 'Close. 1000 divided by the parallax in milliarcseconds.',
+        'wrong-order-of-magnitude':
+          'A power of ten out: milliarcseconds to arcseconds first.',
+        off: '1000 ÷ 60.29.',
+      },
+      tool: SP({ fit: 2, n: 14 }),
+    },
+    {
+      sid: 'how-many-sigma',
+      after: 'the-distance-by-hand',
+      depth: 'quantitative',
+      type: 'question',
+      kind: 'numeric',
+      title: 'How many sigma',
+      body: `A parallax is only a measurement when it is well above its own uncertainty. The fit
+             gives 60.29 mas with an uncertainty of 1.53 mas.`,
+      prompt: 'The parallax over its uncertainty',
+      unit: '',
+      answer: 39.5,
+      tolerance: 1,
+      hints: ['Divide the parallax by its uncertainty.'],
+      worked:
+        '60.29 ÷ 1.53 = 39.4, which the tool reports as 39.5 from the unrounded numbers: a parallax about forty times its own error, so the distance is well determined, to about 2.5 percent.',
+      feedback: {
+        close: 'Close. The parallax divided by its uncertainty.',
+        'wrong-order-of-magnitude':
+          'A power of ten out: both are in milliarcseconds.',
+        off: '60.29 ÷ 1.53.',
+      },
+      tool: SP({ fit: 2, n: 14 }),
+    },
+    {
+      sid: 'fewer-epochs-wider',
+      after: 'how-many-sigma',
+      depth: 'quantitative',
+      type: 'question',
+      kind: 'numeric',
+      title: 'Fewer epochs, a wider bar',
+      body: `Set <strong>Epochs used</strong> to 8, keeping parallax and motion, and read the
+             uncertainty of the parallax. With all 14 epochs it was 1.53 mas.`,
+      prompt: 'By what factor is the uncertainty larger with 8 epochs?',
+      unit: '',
+      answer: 1.47,
+      tolerance: 0.07,
+      hints: [
+        'The uncertainty with 8 epochs, divided by the uncertainty with all 14 epochs.',
+      ],
+      worked:
+        'About 2.25 ÷ 1.53 = 1.47. Eight epochs are the least the tool accepts, and they cover only 1.03 years, so the parallax is known to 2.25 mas and the distance to about 4 percent instead of 2.5.',
+      feedback: {
+        close:
+          'Close. Divide the 8-epoch uncertainty by the 14-epoch uncertainty.',
+        'wrong-order-of-magnitude': 'A factor near 1 and a half, not ten.',
+        off: '(uncertainty with 8 epochs) ÷ (uncertainty with 14 epochs).',
+      },
+      tool: SP({ fit: 2, n: 8 }),
+    },
+    {
+      sid: 'a-zero-point',
+      after: 'fewer-epochs-wider',
+      depth: 'advanced',
+      type: 'measure',
+      title: 'A correction to absolute',
+      body: `The reference stars are not at infinity: a relative parallax is smaller than the
+             absolute one by their mean parallax. Suppose, as an assumption this investigation states
+             and does not measure, that mean is 1.0 mas with an uncertainty of 0.5. Set the
+             <strong>Correction</strong> to 1.0 mas, with 14 epochs and the parallax fit, and read
+             the absolute parallax and the distance.`,
+      fields: [
+        { id: 'abs', label: 'Parallax, absolute', unit: 'mas', hint: '61.3' },
+        {
+          id: 'd',
+          label: 'Distance, 1 over the parallax',
+          unit: 'pc',
+          hint: '16.3',
+        },
+      ],
+      validate: v => {
+        if (![v.abs, v.d].every(Number.isFinite)) return null;
+        if (near(v.abs, 61.29, 0.3) && near(v.d, 16.32, 0.1)) {
+          return {
+            level: 'ok',
+            message:
+              'The absolute parallax is 61.3 ± 1.6 mas and the distance 16.3 pc, 0.3 pc less than the relative one gave. The uncertainty is a little larger, because the correction brings its own 0.5 mas.',
+          };
+        }
+        return {
+          level: 'error',
+          message:
+            'Set the correction to 1.0 mas with parallax and motion and 14 epochs, then read “Parallax, absolute” and the distance.',
+        };
+      },
+      tool: SP({ fit: 2, n: 14, zero: 1 }, []),
+    },
+    {
+      sid: 'which-way-does-it-move',
+      after: 'a-zero-point',
+      depth: 'advanced',
+      type: 'question',
+      kind: 'choice',
+      title: 'Which way the distance moves',
+      body: `Compared with the distance from the relative parallax, 16.59 pc, the corrected one
+             is 16.32 pc.`,
+      prompt:
+        'Why is the relative parallax’s distance too large, if the reference stars have a parallax?',
+      options: [
+        'The reference stars are nearer than the star, so they pull its parallax down',
+        'The star’s parallax is measured against stars that have a small parallax of their own, so the relative parallax is the difference and is too small, and 1 over it is too large',
+        'A relative parallax is always larger than the absolute one',
+        'Nothing: the distance is the same whichever frame is used',
+      ],
+      answer: 1,
+      misconceptions: [
+        {
+          id: 'nearer-references',
+          option: 0,
+          say: 'The reference stars are farther than the star, which is why they make a reference: what matters is that they are not at infinity, so each moves a little too.',
+        },
+        {
+          id: 'same-distance',
+          option: 3,
+          say: 'The two differ by 0.3 pc here, and by a larger share for a more distant star, whose parallax is closer to the correction.',
+        },
+      ],
+      hints: ['What is measured when the reference stars also move a little?'],
+      because:
+        'The reference stars have a parallax of their own, so the star is measured against a frame that moves a little in the same way. What is measured is the difference, which is too small, and one over a number that is too small is too large. The tool says so beside every distance.',
+      tool: SP({ fit: 2, n: 14, zero: 1 }, []),
+    },
+    {
+      sid: 'what-limits-the-distance',
+      after: 'which-way-does-it-move',
+      depth: 'advanced',
+      type: 'question',
+      kind: 'short',
+      rubric:
+        'Full credit for naming two limits that are not in the stated interval and saying how each moves the distance: the reference stars’ own parallax (the zero point of the frame: the relative distance reads high), the number and spread of the epochs (too few are refused and few give a wide interval), errors that are not independent from epoch to epoch (the interval is too narrow), or orbital motion if the star is a binary (it looks like a parallax). Do not credit saying the interval already includes everything.',
+      title: 'What limits the distance',
+      body: `The 68 percent interval of 16.18 to 17.02 pc covers the random errors of the fourteen
+             positions, with the assumptions the tool states.`,
+      prompt:
+        'In two or three sentences: name two limits on this distance that the interval does not include, and say which way each moves it.',
+      tool: SP({ fit: 2, n: 14 }),
+    },
+  ],
+};
+
+export const A_BINARY_STARS_ORBIT_DEEPER = {
+  id: 'a-binary-stars-orbit',
+  steps: [
+    {
+      sid: 'the-mass-by-hand',
+      after: 'say-what-the-sum-needs',
+      depth: 'quantitative',
+      type: 'question',
+      kind: 'numeric',
+      title: 'The mass by hand',
+      body: `Use Kepler&rsquo;s third law, M = a&sup3;/P&sup2;, with the semi-major axis you found in
+             astronomical units, 9.08 au, and the period, 14.13 years.`,
+      prompt: 'The mass sum',
+      unit: 'M_sun',
+      answer: 3.75,
+      tolerance: 0.1,
+      hints: ['Cube the axis in au, square the period in years, and divide.'],
+      worked:
+        '9.08³ ÷ 14.13² = 748.6 ÷ 199.7 = 3.75 solar masses, which the tool’s 3.76 matches. By hand there is no interval: the tool carries the uncertainties of the orbit and of the parallax through the same formula.',
+      feedback: {
+        close: 'Close. a cubed over P squared, with a in au and P in years.',
+        'wrong-order-of-magnitude':
+          'A power of ten out: 9.08 cubed is about 750 and 14.13 squared about 200.',
+        off: '9.08³ ÷ 14.13².',
+      },
+      tool: BO({ n: 12, model: 0 }),
+    },
+    {
+      sid: 'a-nearer-star',
+      after: 'the-mass-by-hand',
+      depth: 'quantitative',
+      type: 'question',
+      kind: 'numeric',
+      title: 'If the parallax were 80 mas',
+      body: `Set <strong>Parallax, relative</strong> to 80 mas, with the elliptical orbit and all
+             twelve epochs, and read the mass sum. The orbit is the same.`,
+      prompt: 'The mass sum at 80 mas',
+      unit: 'M_sun',
+      answer: 7.3,
+      tolerance: 0.4,
+      hints: [
+        'The orbit in au grows as the parallax falls, and the mass goes as its cube.',
+      ],
+      worked:
+        'About 7.3 solar masses: at 80 mas the axis is 0.908 ÷ 0.080 = 11.35 au and 11.35³ ÷ 14.13² = 7.3. A change of 20 percent in the parallax doubled the mass, which is why the distance is the weakest link.',
+      feedback: {
+        close: 'Close. Read the mass sum with the parallax at 80 mas.',
+        'wrong-order-of-magnitude': 'A factor of two from 3.76, not ten.',
+        off: 'The mass sum with the parallax set to 80 mas.',
+      },
+      tool: BO({ n: 12, model: 0, plx: 80 }, []),
+    },
+    {
+      sid: 'eight-epochs',
+      after: 'a-nearer-star',
+      depth: 'advanced',
+      type: 'question',
+      kind: 'numeric',
+      title: 'Eight epochs, a wider period',
+      body: `Set <strong>Epochs used</strong> to 8 with the elliptical model and read the
+             uncertainty of the period. With all twelve it is 0.06 years.`,
+      prompt:
+        'By what factor is the period’s uncertainty larger with 8 epochs?',
+      unit: '',
+      answer: 2.5,
+      tolerance: 0.3,
+      hints: [
+        'The uncertainty with 8 epochs divided by the uncertainty with 12.',
+      ],
+      worked:
+        'About 0.16 ÷ 0.064 = 2.5. The first eight epochs cover 0.74 of a period and the twelve 1.16: the orbit has not yet come round once, and the period is held by less of the arc.',
+      feedback: {
+        close: 'Close. The 8-epoch uncertainty over the 12-epoch one.',
+        'wrong-order-of-magnitude': 'A factor of two or three, not ten.',
+        off: '(period uncertainty, 8 epochs) ÷ 0.064.',
+      },
+      tool: BO({ n: 8, model: 0 }),
+    },
+    {
+      sid: 'the-node',
+      after: 'eight-epochs',
+      depth: 'advanced',
+      type: 'question',
+      kind: 'choice',
+      title: 'The node',
+      body: `The tool gives the ascending node as 34.7 &plusmn; 0.7 degrees and says that positions
+             alone cannot tell which of the two crossings of the sky is ascending, so it gives the
+             node from 0 to 180 degrees.`,
+      prompt: 'What would settle which crossing is ascending?',
+      options: [
+        'More positions on the sky',
+        'A smaller parallax uncertainty',
+        'The radial velocities of the stars, which say which one moves toward us',
+        'A circular model',
+      ],
+      answer: 2,
+      misconceptions: [
+        {
+          id: 'more-positions',
+          option: 0,
+          say: 'The ambiguity is in the geometry, not the noise: an orbit and its mirror in depth make the same path on the sky, however many positions are taken.',
+        },
+        {
+          id: 'circular',
+          option: 3,
+          say: 'The circular model is refused for this binary, and it would not fix the ambiguity either.',
+        },
+      ],
+      hints: ['What is the one thing a picture on the sky does not give?'],
+      because:
+        'Radial velocities. Positions are the sky’s two directions; which side of the orbit is nearer to us is the third, and only motion along the line of sight, measured from the spectrum, tells it.',
+      tool: BO({ n: 12, model: 0 }),
+    },
+    {
+      sid: 'the-reference-frame',
+      after: 'the-node',
+      depth: 'advanced',
+      type: 'question',
+      kind: 'choice',
+      title: 'A relative parallax and the mass',
+      body: `The 100 mas is a parallax relative to reference stars, and the tool says the
+             distance and the mass sum read high by those stars&rsquo; mean parallax.`,
+      prompt:
+        'If the reference stars’ mean parallax is not zero, the true mass sum is…',
+      options: [
+        'higher than 3.8 solar masses, because the star is nearer',
+        'lower than 3.8 solar masses: the absolute parallax is larger, the star is nearer, the orbit smaller in au, and the mass goes as the cube',
+        'the same, because the mass does not depend on distance',
+        'higher, because the period is longer',
+      ],
+      answer: 1,
+      misconceptions: [
+        {
+          id: 'higher',
+          option: 0,
+          say: 'A nearer star has a smaller orbit in au for the same angle, and the mass goes as the cube of the orbit. Nearer means lighter, not heavier.',
+        },
+        {
+          id: 'no-distance',
+          option: 2,
+          say: 'The angle on the sky is fixed; turning it into au, and so into mass, needs the distance. That is why the sum carries the parallax’s uncertainty.',
+        },
+      ],
+      hints: [
+        'Which way does the distance move, and what does the orbit in au do?',
+      ],
+      because:
+        'Lower. The absolute parallax is larger than the relative one, so the star is nearer, the same angle is a smaller orbit in au, and the mass sum, which goes as that size cubed, is smaller. The relative mass sum is an upper side of the truth.',
+      tool: BO({ n: 12, model: 0 }),
+    },
+  ],
+};
+
 export const INSTRUCTOR = {
   content: {
     'what-is-a-measurement': {
@@ -701,6 +1174,258 @@ export const INSTRUCTOR = {
       modelNotes:
         'js/claimWidgets.js (profileAt, lowerMass, lineFit, chi2Sf): the product 0.85 ± 0.06, the profile analytic, the six-point set from a quadratic of curvature 0.08 and errors 0.1, weighted least squares and the chi-square survival function. See MEASUREMENT_CLAIMS.md.',
     },
+    'measuring-the-moon': {
+      topic:
+        'Giving a real picture a scale from a known length, a size in kilometers from a circle on it, what the stated uncertainty includes and leaves out, and why a display picture can be measured for size and not for brightness',
+      difficulty: 'Introductory (real picture, instrument-driven)',
+      placement:
+        'After What Is a Measurement?, which supplies marks, spread and the standard error. It needs only ratios and a diameter. It supports OpenStax Astronomy 2e chapter 6 on how astronomers observe, and it is the first of the image investigations of the observing-and-measuring sequence, placed after the detector investigations.',
+      overview:
+        'Students work on a real picture, the Moon from the Galileo spacecraft on 7 December 1992, an enhanced-color composite shown in gray, which the Observatory treats as display-only. They predict what gives a picture its scale (a length in it that is known by other means), mark a reference pair across the disc from x = 3 to x = 496 and read 493 pixels, so 7.05 km per pixel from the Moon’s mean diameter of 3,474.8 km, and say why the scale must come from them (the picture records no coordinates or units). They predict the width of a large dark plain near the middle of the disc (about 600 km) and measure it with a circle centered at (289, 306): about 634 km, with the tool stating 6 km. They say what would change the number. The quantitative depth gives the worst case of a pixel at each end (14.1 km) and the diameter with a defensible error bar, about 634 ± 20 to 40 km. The advanced depth moves the circle to the limb, where a round feature looks 45 percent as wide along the radius, and says that a gray level of an enhanced picture is not light.',
+      priorKnowledge: [
+        'A position on a picture in pixels',
+        'Ratios and a scale',
+        'The idea of a standard error from What Is a Measurement?',
+      ],
+      keyConcepts: [
+        {
+          heading: 'A picture has no scale of its own',
+          body: 'Pixels are not kilometers. A scale comes from a length in the picture that is known by other means; here the Moon’s own diameter. It is a measurement of the student’s, resting on an assumption and on two marks.',
+        },
+        {
+          heading: 'What the stated uncertainty includes',
+          body: 'The tool states the rounding of each placement. The softness of an edge, a cropped limb and the assumed diameter are not in it, so a defensible error bar is wider than the stated one.',
+        },
+        {
+          heading: 'Display-only',
+          body: 'An enhanced, stretched picture can be marked and measured in pixels for size and position. Its gray levels are not light, and the Observatory refuses photometry on it.',
+        },
+      ],
+      features: [
+        {
+          name: 'Moon-marks instrument (imaging family)',
+          text: 'The Galileo picture, 496 by 496 pixels, with a reference pair along row 245 whose ends are set by two controls and a circle set by its center and radius. The readout gives the pair’s length, the scale from it, the circle’s radius and diameter in pixels and kilometers with the tool’s stated uncertainty, and where the circle sits on the disc and how foreshortened a round feature would be there. Marks and scale are the Observatory’s own modules (marks.js and scale.js).',
+        },
+        {
+          name: 'A real picture, not a synthetic one',
+          text: 'The picture is a public-domain NASA image, fetched when the investigation opens and checked against the checksum the image set records. It is cropped close: the right limb touches the last column, which is why the Observatory’s limb refinement refuses it and why the investigation says the disc may be a pixel or two wider than the frame.',
+        },
+        {
+          name: 'Depth',
+          text: 'Quantitative: a pixel at each end (14.1 km) and the diameter with an error bar. Advanced: foreshortening near the limb (0.89 of the radius, 45 percent) and why gray levels are not light.',
+        },
+      ],
+      misconceptions: [
+        {
+          claim: 'A picture already knows how big things in it are.',
+          response:
+            'It records pixels and angles. A scale needs a length known by other means, and the tool refuses to invent one for a display picture.',
+        },
+        {
+          claim: 'The stated uncertainty of 6 km is the whole uncertainty.',
+          response:
+            'It is the rounding of the marks. A soft edge placed by eye is good to about three pixels, 21 km, and the assumptions are not in it either.',
+        },
+        {
+          claim: 'A circle on a crater near the limb measures its diameter.',
+          response:
+            'Near the limb a round feature is squeezed along the radius; at 0.89 of the radius it looks 45 percent as wide.',
+        },
+        {
+          claim: 'Darker pixels mean less light.',
+          response:
+            'In an enhanced picture the gray level is whatever the stretch made it; the Observatory marks the picture display-only for that reason.',
+        },
+      ],
+      teachingNotes: [
+        'The Moon’s mean diameter, 3,474.8 km, is the one number taken from outside the picture, and the investigation says so; the scale is only as good as that assumption and the two marks.',
+        'The plain is chosen because its center and rough size are unmistakable in the picture. It is not named: at 7 km per pixel a named crater would be a dozen pixels wide and its rim a guess.',
+        'The instrument places marks by controls so every step has a keyboard path; the Observatory’s own marks panel does the same with a click, a nudge pad and a table, and students can repeat the measurement there.',
+        'The picture loads when the investigation opens. If it cannot be loaded, the instrument says so and the readout, which does not need the pixels, still works.',
+      ],
+      discussion: [
+        'What would you need to measure the brightness of the plain, and why does this picture not have it?',
+        'How would you check the scale against a second length in the picture?',
+        'Why would a named crater of 20 km not be measurable here?',
+      ],
+      extensions: [
+        'Open the picture in the Observatory (Galileo Moon) and place the pair and the circle with its marks panel, then compare the table with the instrument’s readout.',
+        'Continue with How Far Is That Star?, which turns positions over time into a distance.',
+      ],
+      modelNotes:
+        'js/imagingWidgets.js (moonView): marks placed with js/measure/marks.js and scaled with js/measure/scale.js; the picture is the image set galileo-moon-19921207 (IMAGE_PACKS.md), display-only; the pair’s row is 245 and its length is taken as 3,474.8 km. See IMAGE_INVESTIGATIONS.md.',
+    },
+    'how-far-is-that-star': {
+      topic:
+        'A two-epoch shift, a straight proper motion and a parallax fitted to fourteen positions of one synthetic star: why a shift gives no distance, why a straight line is rejected for a star with a parallax, a distance with an interval, a relative parallax and why too few epochs are refused',
+      difficulty: 'Intermediate (model-driven)',
+      placement:
+        'After What Does ± Claim?, because the interval is a statement about repeats. It needs a parallax as an angle and the distance 1/p. It supports OpenStax Astronomy 2e chapter 19 (celestial distances) and chapter 6.',
+      overview:
+        'Students look at fourteen positions of one synthetic star over 1.92 years, each with a 4 milliarcsecond error. They predict that a shift between two positions gives no distance, and read the shift of the first to the last position (549 mas, 0.287 arcsec a year if it were all motion), labeled by the tool as a shift under a fixed-motion assumption. They predict and see that a straight proper motion cannot describe the star: a chi-square of 1576 for 24 degrees of freedom. The parallax and motion fit gives 60.3 ± 1.5 mas and a distance of 16.59 pc, with a 68 percent interval of 16.18 to 17.02. They choose what the interval supports, and see that six epochs are refused. The quantitative depth does 1/p by hand, the parallax over its uncertainty (39.5) and the effect of eight epochs (a factor of 1.47). The advanced depth applies a stated correction of 1.0 mas (absolute parallax 61.3, distance 16.32), says which way the distance moves, and asks for two limits the interval does not include.',
+      priorKnowledge: [
+        'Parallax as a small angle and the distance 1/p in parsecs',
+        'The idea of an interval as a statement about repeats, from What Does ± Claim?',
+        'Chi-square and degrees of freedom in words',
+      ],
+      keyConcepts: [
+        {
+          heading: 'A shift is not a distance',
+          body: 'Between two dates a star moves by its own motion and by a different part of its yearly loop; two positions cannot tell which is which, so the tool gives a shift and no parallax.',
+        },
+        {
+          heading: 'A model that cannot make the loop is rejected',
+          body: 'A straight proper motion fitted to a star with a parallax has a chi-square of 1576 for 24 degrees of freedom: each position misses by about eight of its own error bars.',
+        },
+        {
+          heading: 'A relative parallax',
+          body: 'It is measured against reference stars that have a parallax of their own, so it is too small and the distance from it is too large; a correction to absolute needs a stated size and source.',
+        },
+        {
+          heading: 'Refusing',
+          body: 'Fewer than eight epochs, or too little of the Earth’s orbit, give no parallax at all: not constrained.',
+        },
+      ],
+      features: [
+        {
+          name: 'Star-parallax instrument (imaging family)',
+          text: 'Fourteen fixed positions with a plot of the path (east to the right, north up, in milliarcseconds from the first position), a choice of fit (two-epoch shift, proper motion, parallax and motion), the number of epochs used and a stated correction to absolute. Every number is the Observatory’s own module (astrometric-series.js), with its refusals and its frame statement; the Earth’s position is fetched when the investigation opens.',
+        },
+        {
+          name: 'The synthetic truth',
+          text: 'The star was made at a parallax of 60 mas (16.67 pc) with a proper motion of 250 and −120 mas a year, from the exact geometry of the Earth’s orbit, with a seeded 4 mas error. The truth is withheld until the last step. The Observatory’s series panel takes the same table, so students can repeat the fit there.',
+        },
+        {
+          name: 'Depth',
+          text: 'Quantitative: the distance by hand, the significance of the parallax and eight epochs. Advanced: a stated zero-point correction and the limits the interval leaves out.',
+        },
+      ],
+      misconceptions: [
+        {
+          claim: 'A bigger shift means a nearer star.',
+          response:
+            'A shift is mostly proper motion here: 0.287 arcsec a year, against a parallax of 0.060 arcsec.',
+        },
+        {
+          claim: 'A straight line is enough, since stars move steadily.',
+          response:
+            'The yearly loop lies off any line: chi-square 1576 for 24 degrees of freedom.',
+        },
+        {
+          claim: 'The distance is exactly one over the parallax.',
+          response:
+            'It is the middle of an interval, 16.18 to 17.02 pc at 68 percent, and it is a relative one.',
+        },
+        {
+          claim:
+            'A parallax can be fitted from a few epochs with a larger error bar.',
+          response:
+            'Below eight epochs over 0.9 of a year the tool gives no parallax; a wide bar would hide that a number was invented.',
+        },
+      ],
+      teachingNotes: [
+        'The epochs are evenly spaced at 53.8 days from JD 2461045.5; the ephemeris is the project’s own (sky/ephemeris.json), and the series was made with the exact geometry, not the linear model the fit uses.',
+        'The first eight epochs cover 1.03 years and give 61.4 ± 2.2 mas; the first six cover 0.74 and are refused; the correction in the advanced depth is an assumption the investigation states, not a measurement of any frame.',
+        'A one-sigma interval holding the truth about two times in three is the claim from What Does ± Claim?; here the star was made at 60 mas and the interval 60.3 ± 1.5 holds it.',
+        'The distance is the inverse of the parallax, so the investigation states the interval on the parallax first and inverts its ends; the symmetric reading of the distance would only be safe if the parallax were many sigma from zero.',
+      ],
+      discussion: [
+        'Why would a star at ten times the distance need much better positions?',
+        'What would you do if the straight-line chi-square had been 30 for 24 degrees of freedom?',
+        'What does it mean that a refusal is a result?',
+      ],
+      extensions: [
+        'Paste the same fourteen rows into the Observatory’s series panel (sky coordinates, motion and parallax over time) and compare its parameters table with the instrument.',
+        'Continue with A Binary Star’s Orbit, which uses the parallax to turn an orbit into a mass.',
+      ],
+      modelNotes:
+        'js/imagingWidgets.js (parallaxView): twoEpochShift, fitMotion and fitJoint of js/measure/astrometric-series.js on the table STAR (made with tools/astrometric-series-synth.mjs, seed p191-star, parallax 0.060, proper motion 0.25 and −0.12 arcsec a year, 4 mas); the Earth from the ephemeris sidecar. See IMAGE_INVESTIGATIONS.md and ASTROMETRY.md.',
+    },
+    'a-binary-stars-orbit': {
+      topic:
+        'The relative positions of a synthetic binary over sixteen years, an elliptical orbit fitted with its uncertainties, a circular orbit refused, the orbit in astronomical units and the mass sum by Kepler’s third law with an interval, and what the positions leave open',
+      difficulty: 'Advanced (model-driven)',
+      placement:
+        'After How Far Is That Star?, whose parallax it uses. It needs Kepler’s third law and an angle as a size at a distance. It supports OpenStax Astronomy 2e chapter 18 (masses of stars in binaries) and is the last of the image investigations of the observing-and-measuring sequence.',
+      overview:
+        'Students look at twelve relative positions of a synthetic binary over 16.3 years, each with a 15 mas error. They predict that even a circular orbit would look like an ellipse on the sky, and see that a circular model is refused (chi-square 5225 for 19 degrees of freedom). The elliptical fit gives a period of 14.13 ± 0.06 years, a semi-major axis of 0.908 ± 0.008 arcseconds and an eccentricity of 0.443 ± 0.008. With a relative parallax of 100 mas the axis is 9.08 au and the mass sum 3.76 solar masses, between 3.33 and 4.25 at 68 percent. Six epochs are refused. The quantitative depth does the mass by hand (3.75) and at a parallax of 80 mas (7.3). The advanced depth shows the period’s uncertainty growing 2.5 times with eight epochs, why the node is ambiguous without radial velocities, and which way a relative parallax biases the mass.',
+      priorKnowledge: [
+        'Kepler’s third law, M = a³/P², in au, years and solar masses',
+        'A parallax as a distance, from How Far Is That Star?',
+        'An ellipse and its eccentricity',
+      ],
+      keyConcepts: [
+        {
+          heading: 'A tilted circle is an ellipse',
+          body: 'An ellipse on the sky is not an eccentric orbit by itself; the fit asks the data whether a circle seen at an angle describes them, and here it does not.',
+        },
+        {
+          heading: 'The sum, not each mass',
+          body: 'Positions of one star relative to the other fix the size and period, so the sum of the masses; splitting it needs the motion of each about the center of mass.',
+        },
+        {
+          heading: 'The distance cubed',
+          body: 'The orbit in au needs the parallax, and the mass goes as the cube of it: a parallax 20 percent smaller doubles the mass sum.',
+        },
+        {
+          heading: 'What the arc must cover',
+          body: 'Fewer than eight epochs, or too little of a period, give no elliptical orbit at all; eight epochs cover 0.74 of a period and give a period 2.5 times less certain.',
+        },
+      ],
+      features: [
+        {
+          name: 'Binary-orbit instrument (imaging family)',
+          text: 'Twelve fixed positions with a plot of the companion and the fitted orbit (east to the right, north up, in arcseconds), a choice of circular or elliptical model, the number of epochs used and the parallax (with an uncertainty of 4 mas, relative). Every number is the Observatory’s own module (orbit-fit.js), with its refusals, its frame statement and the mass sum by seeded Monte Carlo.',
+        },
+        {
+          name: 'The synthetic truth',
+          text: 'The binary was made with a semi-major axis of 0.9 arcseconds, an eccentricity of 0.45, an inclination of 62 degrees, a node of 35, an argument of periastron of 110 and a period of 14.2 years, with a seeded 15 mas error. The Observatory’s orbit panel loads the same table with its synthetic example button, so students can repeat the fit there. One validation leg of the orbit-fit gate fails as committed (a mass sum at a signal-to-noise of 4.7), which is not the regime used here.',
+        },
+        {
+          name: 'Depth',
+          text: 'Quantitative: the mass by hand and at 80 mas. Advanced: eight epochs, the node, and the relative parallax.',
+        },
+      ],
+      misconceptions: [
+        {
+          claim: 'An ellipse on the sky means an eccentric orbit.',
+          response:
+            'A circle seen at an angle is an ellipse; the circular model is tested and refused here for another reason, the data are not that ellipse.',
+        },
+        {
+          claim: 'The positions give the mass of each star.',
+          response:
+            'They give the sum; the split needs the motion about the center of mass.',
+        },
+        {
+          claim: 'The mass interval is just the orbit’s uncertainty.',
+          response:
+            'It carries the parallax’s too, cubed: 3.33 to 4.25 solar masses at 68 percent.',
+        },
+        {
+          claim: 'More epochs never help once the orbit is fitted.',
+          response:
+            'With eight epochs the period is 2.5 times less certain, and with six there is no orbit.',
+        },
+      ],
+      teachingNotes: [
+        'The table is the one the Observatory’s orbit panel loads with its example button; the instrument and the panel use the same module.',
+        'The mass sum is a seeded Monte Carlo of 20,000 draws in the module, so it is the same for every student; the parallax is relative, which the tool says beside the mass.',
+        'The parallax control runs from 40 to 160 mas; at a very small parallax the module refuses a mass sum whose parallax is under a few times its uncertainty.',
+        'The circular model is offered so that it can be refused: the fit still finds a period, but its residuals are far larger than the stated errors, and the tool reports the result as inconsistent and not constrained rather than printing a number from it.',
+      ],
+      discussion: [
+        'What would you need to split the sum into two masses?',
+        'Why does a 4 percent parallax become a 12 percent mass?',
+        'What would radial velocities add to the positions?',
+      ],
+      extensions: [
+        'Load the synthetic example in the Observatory’s orbit panel and compare its elements table with the instrument.',
+        'Compare with Weighing the Stars, which weighs a binary from a period and a separation in the simulator.',
+      ],
+      modelNotes:
+        'js/imagingWidgets.js (orbitView): fitOrbit and massSum of js/measure/orbit-fit.js on the table BINARY (the Observatory orbit panel’s example, 12 epochs, 15 mas), parallax 100 ± 4 mas relative. See IMAGE_INVESTIGATIONS.md and ASTROMETRY.md.',
+    },
   },
   flow: {
     'what-is-a-measurement': [
@@ -799,6 +1524,72 @@ export const INSTRUCTOR = {
         text: 'The close: a bound, not a number; a refusal, not a rescaling.',
       },
     ],
+    'measuring-the-moon': [
+      {
+        from: 'a-picture-of-the-moon',
+        to: 'predict-the-scale',
+        text: 'A real, display-only picture, and what gives it a scale.',
+      },
+      {
+        from: 'scale-from-the-disc',
+        to: 'why-a-pair',
+        text: 'A reference pair across the disc gives 7.05 km per pixel, and why the scale comes from the student.',
+      },
+      {
+        from: 'predict-the-plain',
+        to: 'measure-the-plain',
+        text: 'The width of a dark plain: predicted at about 600 km and measured at about 634.',
+      },
+      {
+        from: 'what-would-change-it',
+        to: 'what-you-worked-out',
+        text: 'What the stated uncertainty includes and leaves out, and the close.',
+      },
+    ],
+    'how-far-is-that-star': [
+      {
+        from: 'fourteen-positions',
+        to: 'the-shift',
+        text: 'Fourteen positions, and a shift between two that gives no distance.',
+      },
+      {
+        from: 'predict-a-straight-line',
+        to: 'a-straight-line-fails',
+        text: 'A straight proper motion is rejected for a star with a parallax.',
+      },
+      {
+        from: 'the-parallax',
+        to: 'what-the-interval-says',
+        text: 'The parallax, the distance and what its interval claims.',
+      },
+      {
+        from: 'six-epochs',
+        to: 'what-you-worked-out',
+        text: 'Too few epochs are refused; why a year, what relative means, and the close.',
+      },
+    ],
+    'a-binary-stars-orbit': [
+      {
+        from: 'twelve-positions',
+        to: 'a-circle-first',
+        text: 'Twelve positions, the shape of the path, and a circular orbit refused.',
+      },
+      {
+        from: 'the-elliptical-fit',
+        to: 'from-arcseconds-to-au',
+        text: 'The elliptical orbit, and the orbit in astronomical units.',
+      },
+      {
+        from: 'the-mass-sum',
+        to: 'six-epochs',
+        text: 'The mass of the pair with its interval, and six epochs refused.',
+      },
+      {
+        from: 'say-what-the-sum-needs',
+        to: 'what-you-worked-out',
+        text: 'What the sum needs, and the close.',
+      },
+    ],
   },
   expectations: {
     'what-is-a-measurement': {
@@ -839,6 +1630,27 @@ export const INSTRUCTOR = {
       'a-model-that-fits':
         'Parabola: reduced chi-square 0.37 (within 0.04) and squared term 0.089 (within 0.005).',
     },
+    'measuring-the-moon': {
+      'scale-from-the-disc':
+        'Pair length 493 px (within 3) and a scale of 7.05 km per pixel (within 0.05), with the left end at 3 and the right end at 496.',
+      'measure-the-plain':
+        'A circle centered at (289, 306) with a radius of about 45 px gives a diameter of 634 km (the validator accepts within 45 km), with the tool stating ± 6 km.',
+    },
+    'how-far-is-that-star': {
+      'the-shift':
+        'First to last of 14 epochs: a shift of 549 mas (within 5) and 0.287 arcsec a year (within 0.004).',
+      'a-straight-line-fails':
+        'Proper motion alone, 14 epochs: chi-square 1576 (within 12) for 24 degrees of freedom.',
+      'the-parallax':
+        'Parallax 60.3 mas (within 0.5), uncertainty 1.53 mas (within 0.1), distance 16.6 pc (within 0.15), chi-square 13.2 for 23 degrees of freedom.',
+    },
+    'a-binary-stars-orbit': {
+      'the-elliptical-fit':
+        'Period 14.13 yr (within 0.15), semi-major axis 0.908 arcsec (within 0.02), eccentricity 0.443 (within 0.02).',
+      'from-arcseconds-to-au': '0.908 ÷ 0.100 = 9.08 au (within 0.1).',
+      'the-mass-sum':
+        'Mass sum 3.76 solar masses (within 0.06), with a 68 percent interval of 3.33 (within 0.08) to 4.25 (within 0.1).',
+    },
   },
   bands: {
     'what-is-a-measurement': {
@@ -856,6 +1668,21 @@ export const INSTRUCTOR = {
       quantitative: 'long',
       advanced: 'long',
     },
+    'measuring-the-moon': {
+      core: 'short',
+      quantitative: 'medium',
+      advanced: 'medium',
+    },
+    'how-far-is-that-star': {
+      core: 'medium',
+      quantitative: 'medium',
+      advanced: 'long',
+    },
+    'a-binary-stars-orbit': {
+      core: 'medium',
+      quantitative: 'medium',
+      advanced: 'long',
+    },
   },
 };
 
@@ -866,4 +1693,7 @@ export default {
     WHAT_DOES_PLUS_MINUS_CLAIM_DEEPER.steps,
   [WHEN_THE_METHOD_MUST_REFUSE_DEEPER.id]:
     WHEN_THE_METHOD_MUST_REFUSE_DEEPER.steps,
+  [MEASURING_THE_MOON_DEEPER.id]: MEASURING_THE_MOON_DEEPER.steps,
+  [HOW_FAR_IS_THAT_STAR_DEEPER.id]: HOW_FAR_IS_THAT_STAR_DEEPER.steps,
+  [A_BINARY_STARS_ORBIT_DEEPER.id]: A_BINARY_STARS_ORBIT_DEEPER.steps,
 };

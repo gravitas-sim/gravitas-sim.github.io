@@ -165,6 +165,9 @@ const LOADERS = {
   'what-does-plus-minus-claim': () => import('./what-does-plus-minus-claim.js'),
   'when-the-method-must-refuse': () =>
     import('./when-the-method-must-refuse.js'),
+  'measuring-the-moon': () => import('./measuring-the-moon.js'),
+  'how-far-is-that-star': () => import('./how-far-is-that-star.js'),
+  'a-binary-stars-orbit': () => import('./a-binary-stars-orbit.js'),
 };
 // </generated:loaders>
 
@@ -247,6 +250,9 @@ const TRANSLATIONS = {
       import('./es/what-does-plus-minus-claim.js'),
     'when-the-method-must-refuse': () =>
       import('./es/when-the-method-must-refuse.js'),
+    'measuring-the-moon': () => import('./es/measuring-the-moon.js'),
+    'how-far-is-that-star': () => import('./es/how-far-is-that-star.js'),
+    'a-binary-stars-orbit': () => import('./es/a-binary-stars-orbit.js'),
   },
 };
 // </generated:translations>

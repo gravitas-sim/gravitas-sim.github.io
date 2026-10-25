@@ -1,34 +1,18 @@
 // =============================================================================
 // Adapting an activity, proven against the step graph (Prompt 175)
 // -----------------------------------------------------------------------------
-// An activity is a lesson's steps chosen by an instructor (./assignment.js).
-// Adapting one is three more choices - the order the steps come in, a sentence
-// of the instructor's own on a step, and a due line - and the one rule is that
-// no adaptation may make a step mean something it did not mean in the lesson.
+// Adapting an activity is three choices (step order, an instructor's sentence on
+// a step, a due line), and no adaptation may make a step mean something it did
+// not mean in the lesson. The step graph is what the lesson already declares:
+// requires (a step reads another's answer, so it comes first), reveal (a
+// prediction's verdict is held until the step it names, which comes after),
+// when (a remediation step follows the graded one), setup (a step keeps the
+// world of the nearest step before it that builds one) and scene (a step that
+// stages nothing keeps the scene before it).
 //
-// "The step graph" is what the lesson already declares and the engine already
-// acts on, and nothing is invented here:
-//
-//   requires  a step reads another's answer, measurement or action, so that one
-//             has to be in the activity and come first;
-//   reveal    a prediction's verdict is held until the step it names is reached,
-//             so that step has to be in the activity and come after it;
-//   when      a remediation step answers a graded one, so that one is there and
-//             comes first;
-//   setup     the world a step is about is the nearest step at or before it that
-//             builds one (js/investigations.js setupInForceAt): the order must
-//             leave every step under the world it had in the lesson;
-//   scene     a step that stages nothing keeps the scene of the nearest step
-//             before it that does, so it may not be moved under another scene.
-//
-// checkAdaptation() names each broken edge - the step and the one it needs - and
-// reports only what the adaptation introduces: a cut that the builder made in
-// lesson order is the baseline, so the instructor is never refused for a thing
-// they did not change. The builder will not write a package that fails it.
-//
-// Pure: no DOM, no storage. The builder (./assignmentBuilder.js) and the page
-// that opens an activity (./adapted.js) both read it, and tests/
-// assignmentAdaptation.test.js runs it against every lesson in the catalogue.
+// checkAdaptation() names each broken edge and reports only what the adaptation
+// introduces; the builder will not write a package that fails it. Pure: no DOM,
+// no storage (tests/assignmentAdaptation.test.js runs it on every lesson).
 // =============================================================================
 
 import { assignmentIdFor, assignmentVersion, shortHash } from './assignment.js';

@@ -45,6 +45,7 @@
 // is reported by the line that made it, and the recording says which ran.
 // =============================================================================
 
+import { webcrypto } from 'node:crypto';
 import { readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -699,6 +700,15 @@ export async function recordWidgets({
   await ensureBrowser();
   const realFetch = globalThis.fetch;
   globalThis.fetch = localFetch;
+  // The image pack loaders check a SHA-256; Jest's jsdom has no crypto.subtle,
+  // so the recording would differ between the tool and the test without this.
+  const hadSubtle = Boolean(globalThis.crypto?.subtle);
+  const realCrypto = Object.getOwnPropertyDescriptor(globalThis, 'crypto');
+  if (!hadSubtle)
+    Object.defineProperty(globalThis, 'crypto', {
+      value: webcrypto,
+      configurable: true,
+    });
   const swapped = async fn => {
     if (!toFixed) return fn();
     const original = Number.prototype.toFixed;
@@ -794,6 +804,10 @@ export async function recordWidgets({
     );
   } finally {
     globalThis.fetch = realFetch;
+    if (!hadSubtle) {
+      if (realCrypto) Object.defineProperty(globalThis, 'crypto', realCrypto);
+      else delete globalThis.crypto;
+    }
   }
   return {
     families,

@@ -1,0 +1,182 @@
+[
+ {
+  "depth": "core",
+  "role": "first",
+  "sid": "a-picture-of-the-moon",
+  "position": [
+   1,
+   8
+  ],
+  "title": "Measuring the Moon",
+  "subtitle": "Marks on a real picture, a scale from a known length, and a size in kilometers",
+  "body": "<p class=\"inv-step-count\">Step 1 of 8 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">A real picture of the Moon</h3><div class=\"inv-step-body\"><p>This is a <strong>real</strong> picture: the Moon, photographed by NASA’s Galileo spacecraft on 7 December 1992 as it flew past the Earth on its way to Jupiter. It is an enhanced-color composite, shown here in gray. <em>Enhanced</em> means the contrast was stretched to show differences in the ground, so its gray levels are for the eye and are not a measure of the light the Moon reflects. The Observatory calls such a picture <strong>display-only</strong>: you may mark it and measure it in pixels, and nothing more.</p><p>A picture has no scale of its own. This one is 496 pixels across, and a pixel is not a kilometer. The pixels are numbered from the lower left, x to the right and y up, and the disc is cropped close: its right edge touches the last column. In this investigation you give the picture a scale and take one measurement off it.</p></div>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "graded",
+  "sid": "predict-the-scale",
+  "position": [
+   2,
+   8
+  ],
+  "title": "Measuring the Moon",
+  "subtitle": "Marks on a real picture, a scale from a known length, and a size in kilometers",
+  "body": "<p class=\"inv-step-count\">Step 2 of 8 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">What gives a picture its scale?</h3><div class=\"inv-step-body\"><p>You want a length on the picture in kilometers, and you have only pixels.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">To turn pixels into kilometers you need…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>the date the picture was taken</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>a length in the picture that you already know in kilometers</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>the brightness of the Moon in the picture</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>the number of colors in the picture</span></button></div><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> I could use a hint </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "marked",
+  "sid": "predict-the-scale",
+  "position": [
+   2,
+   8
+  ],
+  "title": "Measuring the Moon",
+  "subtitle": "Marks on a real picture, a scale from a known length, and a size in kilometers",
+  "body": "<p class=\"inv-step-count\">Step 2 of 8 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">What gives a picture its scale?</h3><div class=\"inv-step-body\"><p>You want a length on the picture in kilometers, and you have only pixels.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">To turn pixels into kilometers you need…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>the date the picture was taken</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>a length in the picture that you already know in kilometers</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>the brightness of the Moon in the picture</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>the number of colors in the picture</span></button></div><p class=\"inv-held\">Your answer is recorded. It stays unmarked until you reach “A reference pair across the disc”, so the experiment settles it rather than the answer key.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Change answer</button><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> I could use a hint </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "last",
+  "sid": "what-you-worked-out",
+  "position": [
+   8,
+   8
+  ],
+  "title": "Measuring the Moon",
+  "subtitle": "Marks on a real picture, a scale from a known length, and a size in kilometers",
+  "body": "<p class=\"inv-step-count\">Step 8 of 8 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">What you worked out</h3><div class=\"inv-step-body\"><p>A picture has no scale until you give it one, and the scale you give it is a measurement of yours, resting on a length you assumed and on two marks you placed. With it, a circle on a feature gave a size in kilometers, about 630 km for the plain, and the tool’s stated uncertainty covered only the rounding of your marks. The softness of the edge, the crop at the right and the assumed diameter are not in it. And because the picture is a display picture, its gray levels are not light: you measured where things are and how big they are, and nothing about how bright.</p></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "quantitative",
+  "role": "first",
+  "sid": "a-picture-of-the-moon",
+  "position": [
+   1,
+   10
+  ],
+  "title": "Measuring the Moon",
+  "subtitle": "Marks on a real picture, a scale from a known length, and a size in kilometers",
+  "body": "<p class=\"inv-step-count\">Step 1 of 10 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">A real picture of the Moon</h3><div class=\"inv-step-body\"><p>This is a <strong>real</strong> picture: the Moon, photographed by NASA’s Galileo spacecraft on 7 December 1992 as it flew past the Earth on its way to Jupiter. It is an enhanced-color composite, shown here in gray. <em>Enhanced</em> means the contrast was stretched to show differences in the ground, so its gray levels are for the eye and are not a measure of the light the Moon reflects. The Observatory calls such a picture <strong>display-only</strong>: you may mark it and measure it in pixels, and nothing more.</p><p>A picture has no scale of its own. This one is 496 pixels across, and a pixel is not a kilometer. The pixels are numbered from the lower left, x to the right and y up, and the disc is cropped close: its right edge touches the last column. In this investigation you give the picture a scale and take one measurement off it.</p></div>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": "Depth: Quantitative"
+ },
+ {
+  "depth": "quantitative",
+  "role": "graded",
+  "sid": "predict-the-scale",
+  "position": [
+   2,
+   10
+  ],
+  "title": "Measuring the Moon",
+  "subtitle": "Marks on a real picture, a scale from a known length, and a size in kilometers",
+  "body": "<p class=\"inv-step-count\">Step 2 of 10 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">What gives a picture its scale?</h3><div class=\"inv-step-body\"><p>You want a length on the picture in kilometers, and you have only pixels.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">To turn pixels into kilometers you need…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>the date the picture was taken</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>a length in the picture that you already know in kilometers</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>the brightness of the Moon in the picture</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>the number of colors in the picture</span></button></div><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> I could use a hint </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Depth: Quantitative"
+ },
+ {
+  "depth": "quantitative",
+  "role": "marked",
+  "sid": "predict-the-scale",
+  "position": [
+   2,
+   10
+  ],
+  "title": "Measuring the Moon",
+  "subtitle": "Marks on a real picture, a scale from a known length, and a size in kilometers",
+  "body": "<p class=\"inv-step-count\">Step 2 of 10 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">What gives a picture its scale?</h3><div class=\"inv-step-body\"><p>You want a length on the picture in kilometers, and you have only pixels.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">To turn pixels into kilometers you need…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>the date the picture was taken</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>a length in the picture that you already know in kilometers</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>the brightness of the Moon in the picture</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>the number of colors in the picture</span></button></div><p class=\"inv-held\">Your answer is recorded. It stays unmarked until you reach “A reference pair across the disc”, so the experiment settles it rather than the answer key.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Change answer</button><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> I could use a hint </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Depth: Quantitative"
+ },
+ {
+  "depth": "quantitative",
+  "role": "last",
+  "sid": "what-you-worked-out",
+  "position": [
+   10,
+   10
+  ],
+  "title": "Measuring the Moon",
+  "subtitle": "Marks on a real picture, a scale from a known length, and a size in kilometers",
+  "body": "<p class=\"inv-step-count\">Step 10 of 10 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">What you worked out</h3><div class=\"inv-step-body\"><p>A picture has no scale until you give it one, and the scale you give it is a measurement of yours, resting on a length you assumed and on two marks you placed. With it, a circle on a feature gave a size in kilometers, about 630 km for the plain, and the tool’s stated uncertainty covered only the rounding of your marks. The softness of the edge, the crop at the right and the assumed diameter are not in it. And because the picture is a display picture, its gray levels are not light: you measured where things are and how big they are, and nothing about how bright.</p></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Depth: Quantitative"
+ },
+ {
+  "depth": "advanced",
+  "role": "first",
+  "sid": "a-picture-of-the-moon",
+  "position": [
+   1,
+   12
+  ],
+  "title": "Measuring the Moon",
+  "subtitle": "Marks on a real picture, a scale from a known length, and a size in kilometers",
+  "body": "<p class=\"inv-step-count\">Step 1 of 12 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">A real picture of the Moon</h3><div class=\"inv-step-body\"><p>This is a <strong>real</strong> picture: the Moon, photographed by NASA’s Galileo spacecraft on 7 December 1992 as it flew past the Earth on its way to Jupiter. It is an enhanced-color composite, shown here in gray. <em>Enhanced</em> means the contrast was stretched to show differences in the ground, so its gray levels are for the eye and are not a measure of the light the Moon reflects. The Observatory calls such a picture <strong>display-only</strong>: you may mark it and measure it in pixels, and nothing more.</p><p>A picture has no scale of its own. This one is 496 pixels across, and a pixel is not a kilometer. The pixels are numbered from the lower left, x to the right and y up, and the disc is cropped close: its right edge touches the last column. In this investigation you give the picture a scale and take one measurement off it.</p></div>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": "Depth: Advanced"
+ },
+ {
+  "depth": "advanced",
+  "role": "graded",
+  "sid": "predict-the-scale",
+  "position": [
+   2,
+   12
+  ],
+  "title": "Measuring the Moon",
+  "subtitle": "Marks on a real picture, a scale from a known length, and a size in kilometers",
+  "body": "<p class=\"inv-step-count\">Step 2 of 12 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">What gives a picture its scale?</h3><div class=\"inv-step-body\"><p>You want a length on the picture in kilometers, and you have only pixels.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">To turn pixels into kilometers you need…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>the date the picture was taken</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>a length in the picture that you already know in kilometers</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>the brightness of the Moon in the picture</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>the number of colors in the picture</span></button></div><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> I could use a hint </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Depth: Advanced"
+ },
+ {
+  "depth": "advanced",
+  "role": "marked",
+  "sid": "predict-the-scale",
+  "position": [
+   2,
+   12
+  ],
+  "title": "Measuring the Moon",
+  "subtitle": "Marks on a real picture, a scale from a known length, and a size in kilometers",
+  "body": "<p class=\"inv-step-count\">Step 2 of 12 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">What gives a picture its scale?</h3><div class=\"inv-step-body\"><p>You want a length on the picture in kilometers, and you have only pixels.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">To turn pixels into kilometers you need…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>the date the picture was taken</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>a length in the picture that you already know in kilometers</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>the brightness of the Moon in the picture</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>the number of colors in the picture</span></button></div><p class=\"inv-held\">Your answer is recorded. It stays unmarked until you reach “A reference pair across the disc”, so the experiment settles it rather than the answer key.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Change answer</button><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> I could use a hint </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Depth: Advanced"
+ },
+ {
+  "depth": "advanced",
+  "role": "last",
+  "sid": "what-you-worked-out",
+  "position": [
+   12,
+   12
+  ],
+  "title": "Measuring the Moon",
+  "subtitle": "Marks on a real picture, a scale from a known length, and a size in kilometers",
+  "body": "<p class=\"inv-step-count\">Step 12 of 12 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">What you worked out</h3><div class=\"inv-step-body\"><p>A picture has no scale until you give it one, and the scale you give it is a measurement of yours, resting on a length you assumed and on two marks you placed. With it, a circle on a feature gave a size in kilometers, about 630 km for the plain, and the tool’s stated uncertainty covered only the rounding of your marks. The softness of the edge, the crop at the right and the assumed diameter are not in it. And because the picture is a display picture, its gray levels are not light: you measured where things are and how big they are, and nothing about how bright.</p></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Depth: Advanced"
+ }
+]

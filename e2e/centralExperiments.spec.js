@@ -2440,6 +2440,37 @@ test.describe('the central experiment of each investigation', () => {
         [0.5, 34.03, 0.5],
       ],
     },
+    // ---- The image investigations (Roadmap III, Prompt 191) ------------------
+    {
+      id: 'measuring-the-moon',
+      title:
+        'measuring-the-moon: the same scale turns a larger circle into a proportionally larger diameter in kilometers @accepts:ce.measuring-the-moon',
+      row: /^Diameter of the circle in kilometers$/i,
+      values: [
+        [20, 282, 1],
+        [45, 634, 1],
+      ],
+    },
+    {
+      id: 'how-far-is-that-star',
+      title:
+        'how-far-is-that-star: a straight line leaves an enormous chi-square that the parallax removes @accepts:ce.how-far-is-that-star',
+      row: /^Chi-square of the fit$/i,
+      values: [
+        [1, 1575.9, 1],
+        [2, 13.2, 0.3],
+      ],
+    },
+    {
+      id: 'a-binary-stars-orbit',
+      title:
+        'a-binary-stars-orbit: the mass sum rises as the cube of the distance, so it falls as the parallax grows @accepts:ce.a-binary-stars-orbit',
+      row: /^Mass sum$/i,
+      values: [
+        [100, 3.76, 0.05],
+        [80, 7.33, 0.05],
+      ],
+    },
   ];
   for (const c of SURVEY) {
     test(c.title, async ({ page, app }) => {

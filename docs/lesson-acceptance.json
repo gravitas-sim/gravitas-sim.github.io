@@ -846,6 +846,45 @@
         "try-a-mass"
       ],
       "evidenceFrom": "model"
+    },
+    "measuring-the-moon": {
+      "centralExperimentId": "ce.measuring-the-moon",
+      "object": "panel:moon-marks",
+      "control": "moon-marks/r",
+      "quantity": "the diameter in kilometers of a circle drawn on the Galileo picture of the Moon, from the scale a reference pair of known length sets",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "predict-the-plain",
+        "measure-the-plain"
+      ],
+      "evidenceFrom": "model"
+    },
+    "how-far-is-that-star": {
+      "centralExperimentId": "ce.how-far-is-that-star",
+      "object": "panel:star-parallax",
+      "control": "star-parallax/fit",
+      "quantity": "the chi-square of a fit to fourteen positions of one star: enormous for a straight line that leaves the parallax out, near its degrees of freedom once the parallax is in",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "predict-a-straight-line",
+        "a-straight-line-fails"
+      ],
+      "evidenceFrom": "model"
+    },
+    "a-binary-stars-orbit": {
+      "centralExperimentId": "ce.a-binary-stars-orbit",
+      "object": "panel:binary-orbit",
+      "control": "binary-orbit/plx",
+      "quantity": "the mass sum of a visual binary from its fitted orbit, which goes as the cube of the distance and so as the inverse cube of the parallax",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "predict-the-shape",
+        "the-mass-sum"
+      ],
+      "evidenceFrom": "model"
     }
   }
 }
