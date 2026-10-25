@@ -91,7 +91,11 @@ describe('the workflow wiring', () => {
   const job = wf.jobs['pr-class'];
 
   test('the job runs only for pull requests and reads the labels live', () => {
-    expect(String(job.if)).toContain("github.event_name == 'pull_request'");
+    // The steps, not the job: a job skipped on a push would skip deploy too
+    // (the implicit success() reads every job in the needs chain).
+    expect(String(job.if)).not.toContain("github.event_name == 'pull_request'");
+    for (const step of job.steps)
+      expect(String(step.if)).toContain("github.event_name == 'pull_request'");
     const script = JSON.stringify(job.steps);
     expect(script).toContain('node tools/pr-class.mjs --fetch');
   });
