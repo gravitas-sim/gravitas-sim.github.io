@@ -338,6 +338,10 @@ export const NEVER_PRECACHED = [
   // neither. D-R10-72.
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(measuring-the-moon|how-far-is-that-star|a-binary-stars-orbit)\.js$/,
   /^(js\/imagingWidgets\.js|js\/i18n\/(en|es)\.imaging\.js)$/,
+  // Their three thumbnails (3.5 to 3.8 KB each in gzip): the first-visit tier
+  // has about 2.5 KB of room, so the cards show no picture until one online
+  // visit has kept them. D-R10-72.
+  /^images\/investigations\/(measuring-the-moon|how-far-is-that-star|a-binary-stars-orbit)\.webp$/,
   // Orbit fitting and moving-object tracks (Prompt 187, ASTROMETRY.md): the two
   // kernels, the panel and its words, fetched when a reader opens the orbit
   // disclosure inside the sky-coordinates panel. Same reason as the series files

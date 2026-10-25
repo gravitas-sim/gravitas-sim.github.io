@@ -8,8 +8,8 @@
     "butterfly-effect",
     "binary-star-planets",
     "black-holes",
+    "measuring-the-moon",
     "weighing-stars",
-    "what-is-a-measurement",
     "a-universe-of-stars",
     "detect-this-planet",
     "extending-an-experiment",
@@ -166,13 +166,13 @@
       "key:question.checklist",
       "key:read.explainView"
     ],
+    "measuring-the-moon": [
+      "key:predict.hints",
+      "key:question.maxUncertainty"
+    ],
     "weighing-stars": [
       "key:explore.showBarycenter",
       "key:read.showBarycenter"
-    ],
-    "what-is-a-measurement": [
-      "key:predict.hints",
-      "key:question.maxUncertainty"
     ],
     "a-universe-of-stars": [
       "key:measure.checklist"
@@ -264,17 +264,17 @@
     "pin:unpinned"
   ],
   "totals": {
-    "investigations": 63,
-    "steps": 1212,
+    "investigations": 66,
+    "steps": 1254,
     "activityCuts": 6,
     "lessonTokens": 142,
     "activityTokens": 29,
     "stepTypes": {
-      "read": 234,
-      "predict": 138,
+      "read": 240,
+      "predict": 143,
       "ellipse": 1,
-      "question": 441,
-      "measure": 254,
+      "question": 463,
+      "measure": 263,
       "explore": 143,
       "wedges": 1
     }

@@ -1669,18 +1669,18 @@ export const INSTRUCTOR = {
       advanced: 'long',
     },
     'measuring-the-moon': {
+      core: 'short',
+      quantitative: 'medium',
+      advanced: 'medium',
+    },
+    'how-far-is-that-star': {
       core: 'medium',
       quantitative: 'medium',
       advanced: 'long',
     },
-    'how-far-is-that-star': {
-      core: 'medium',
-      quantitative: 'long',
-      advanced: 'long',
-    },
     'a-binary-stars-orbit': {
       core: 'medium',
-      quantitative: 'long',
+      quantitative: 'medium',
       advanced: 'long',
     },
   },
