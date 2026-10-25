@@ -2,6 +2,9 @@
   "format": "gravitas.sun-thresholds/1",
   "prompt": 194,
   "committed": "Before any implementation output was inspected: this file was committed ahead of js/kernels/sun/, the validation tool, the oracle's inputs, script and results, and every test (Roadmap III, 7.5.8). A check that a measurement crosses is a failed check, reported and left failing; only Carl resets a bound. The reference differential-rotation coefficients below are typed from the cited publications by the session that wrote this file and were not re-read at their source (checked: false); they define the reference line, and a coefficient error moves the reference line, not the kernel's recovery of a rate, which is tested against whatever law is supplied.",
+  "corrections": [
+    "The degrees-per-day figures quoted for the primary law in definition.law (14.3267, -2.1188, -1.8317) are rounded by hand and wrong in the fourth decimal; the typed values are the microradians per second, and 1 microradian per second is 86400e-6 * 180 / pi = 4.950355 degrees per day, which gives 14.3263, -2.1188, -1.8316. Found by computing the conversion before any kernel code existed; no bound, coefficient or check depends on the rounded text."
+  ],
   "definition": {
     "what": "The Sun as a measurement: a pixel on a solar disc image becomes a heliographic latitude and longitude from the standard disc geometry (P, B0, L0 and the disc's centre and radius); tracked longitudes give a synodic rate, a sidereal rate and a period with an uncertainty; rates at stated latitudes are compared with a fixed-form reference law, of which only the equatorial term may be fitted and never more coefficients than there are distinct latitudes; a measured flux gives the Sun's luminosity and effective temperature through the radiation kernel. No result is an unrestricted latitude law.",
     "geometry": "Thompson (2006, A&A 449, 791, 'Coordinate systems for solar image data', section 2 and the heliographic section) and Meeus (Astronomical Algorithms, 2nd ed., ch. 29). An image has sky orientation, north up, east left; pixel rows increase downward. dx = x - cx (to the right, solar west), dy = cy - y (up, solar north). The solar north pole is at position angle P, counterclockwise from image up. Normalised offsets (X, Y) = (dx, dy) / radiusPx are rotated by -P: x' = X cos P + Y sin P, y' = -X sin P + Y cos P. With no distance given the projection is orthographic (the observer at infinity): z' = sqrt(1 - x'^2 - y'^2), sin(lat) = y' cos B0 + z' sin B0, Stonyhurst longitude (positive west) = atan2(x', z' cos B0 - y' sin B0), Carrington longitude = L0 + Stonyhurst longitude. With distanceAu given the observer is at finite distance D = d / R_sun (R_sun the IAU 2015 B3 nominal 6.957e8 m, the AU exact): the apparent angular radius is theta_sun = asin(1 / D); the normalised radius r = hypot(X, Y) is linear in angle, theta = r theta_sun; the heliocentric angle from the sub-observer point is rho = asin(sin(theta) / sin(theta_sun)) - theta, in the image direction atan2(y', x'); the unit vector (sin rho cos a, sin rho sin a, cos rho) then goes through the same B0 relations. mu = cos of the angle between the surface normal and the line of sight: orthographic z'; perspective (z D - 1) / sqrt(D^2 - 2 z D + 1) in the observer frame. The inverse (heliographic to pixel) tilts (cos lat sin lon, sin lat, cos lat cos lon) by B0 (y_o = y cos B0 - z sin B0, z_o = z cos B0 + y sin B0), projects along the ray, rotates by +P and returns pixels; a point is on the visible side if z_o > 1 / D (orthographic: z_o > 0). A pixel with r > 1 is off the disc and is refused.",
@@ -51,14 +54,14 @@
     "a1.roundtrip.geometry": {
       "what": "four disk configurations (P, B0, distance) = (0, 0, none), (-20, 6.5, 1.0167 AU), (24, -7, 0.9833 AU), (12.5, 3.2, none) on the standard disk, 1000 positions each with latitude uniform in +/-75 degrees and Stonyhurst longitude uniform in +/-85 degrees, kept if mu >= 0.05: heliographic to pixel to heliographic, and pixel to heliographic to pixel",
       "bounds": {
-        "degrees": 1e-8,
-        "pixels": 1e-6
+        "degrees": 1e-08,
+        "pixels": 1e-06
       }
     },
     "a2.geometry.special": {
       "what": "closed forms: the disc centre is (lat B0, Stonyhurst 0, Carrington L0, mu 1); with P = 0 and B0 = 0 (orthographic) the top limb is latitude 90 and the east and west limbs Stonyhurst -90 and +90; with P = 90 the left limb is latitude 90; with B0 = 7.25 the pixel straight up at r = cos B0 is latitude 90 with mu = sin B0; mu = sqrt(1 - r^2) in the orthographic case; with distanceAu 1 the west limb (r = 1) is Stonyhurst 90 - asin(R_sun / AU) degrees; longitude increases strictly with x; r > 1 is refused off-disc",
       "bounds": {
-        "degrees": 1e-9,
+        "degrees": 1e-09,
         "muRelative": 1e-12
       }
     },
@@ -66,30 +69,30 @@
       "what": "the law at 0, 30 and 60 degrees from its closed form with the typed coefficients; 360 / 25.38 = 14.1844 degrees per day; the Carrington synodic period 360 / (360 / 25.38 - 360 / 365.25636) = 27.2753 days; the Howard and Snodgrass laws differ by at most the stated group scatter floor (0.3 degrees per day) at 0, 15, 30, 45 and 60 degrees",
       "bounds": {
         "lawRelative": 1e-12,
-        "carringtonDegPerDay": 1e-4,
-        "synodicPeriodDays": 5e-4,
+        "carringtonDegPerDay": 0.0001,
+        "synodicPeriodDays": 0.0005,
         "tracerSpreadDegPerDay": 0.3
       }
     },
     "a4.sidereal": {
       "what": "the Earth's rate from the kernel's Sun over a one-day window at perihelion (2024-01-03 00:38 UT) and aphelion (2024-07-05 05:06 UT) against the closed form 0.985609 (1 + e cos nu)^2 / (1 - e^2)^(3/2) with e = 0.016709 (nu = 0 and 180 degrees): 1.0192 and 0.9534; the mean over a sidereal year (365.25636 days from 2024-01-01 00:00 UT) against 360 / 365.25636; synodic from sidereal and back is the identity",
       "bounds": {
-        "extremaDegPerDay": 1e-3,
-        "yearDegPerDay": 1e-4,
+        "extremaDegPerDay": 0.001,
+        "yearDegPerDay": 0.0001,
         "identityAbsolute": 1e-12
       }
     },
     "a5.sigma.secant": {
       "what": "at the disc centre (P = 0, B0 = 0, orthographic) the secant sigma of longitude and latitude for a 0.3 px sigma against the analytic (sigma / R) in degrees; along a radial sweep r = 0, 0.2, 0.4, 0.6, 0.8, 0.9, 0.95, 0.98 the longitude sigma does not decrease; at mu about 0.2 it is at least 3 times the centre value",
       "bounds": {
-        "centreRelative": 1e-6,
+        "centreRelative": 1e-06,
         "limbRatioMin": 3
       }
     },
     "a6.irradiance": {
       "what": "1361 W/m2 at 1 AU gives L within 5e-4 of the IAU 2015 B3 nominal 3.828e26 W and Teff within 0.5 K of the nominal 5772 K; L to S to L is the identity; the same L from S at 0.9833 AU as from S / 0.9833^2 at 1 AU; the closed-form sigma of L and Teff for dS = 0.5 W/m2, dd = 0.0005 AU, dR = 0 and dR/R = 1e-4; a hand-made 14-value series: mean and standard error exactly",
       "bounds": {
-        "luminosityRelativeToIau": 5e-4,
+        "luminosityRelativeToIau": 0.0005,
         "teffKelvinToIau": 0.5,
         "identityRelative": 1e-12,
         "sigmaRelative": 1e-12
@@ -98,8 +101,8 @@
     "a7.track.recovery": {
       "what": "a synthetic spot at latitude 0, 15 and 30 degrees rotating at the primary law's sidereal rate, seen eight times a day apart at 12:00 UT from the Stonyhurst longitude -50 degrees, on four start dates (2024-03-06, 2024-06-09, 2024-09-10, 2024-12-07; P, B0, L0 per frame from this kernel's ephemeris), pixels made by the inverse geometry: noise-free, the sidereal rate by the synodic route plus the Earth's rate is within the stated bound and by the Carrington route within the tight one; with a 0.5 px Gaussian placement noise (named stream, one draw per case) the synodic route is within 4 reported sigma and below 0.05 degrees per day",
       "bounds": {
-        "noiseFreeSynodicRouteDegPerDay": 2e-3,
-        "noiseFreeCarringtonRouteDegPerDay": 1e-8,
+        "noiseFreeSynodicRouteDegPerDay": 0.002,
+        "noiseFreeCarringtonRouteDegPerDay": 1e-08,
         "noisySigmas": 4,
         "noisyAbsoluteDegPerDay": 0.05
       }
@@ -114,21 +117,21 @@
     "b1.pixels": {
       "what": "five pinned pixel positions on a pinned disk (centre 256, 248; radius 235 px; P -15.3, B0 -3.7, L0 221.4 degrees; distance 1.0123 AU), including one at r = 0.93, through the production module against the oracle's ray-traced latitude, Stonyhurst and Carrington longitude, and mu",
       "bounds": {
-        "degrees": 1e-7,
-        "mu": 1e-9
+        "degrees": 1e-07,
+        "mu": 1e-09
       }
     },
     "b2.ephemeris": {
       "what": "six pinned instants (2024-05-10 12:00, 2023-01-03 00:00, 2022-07-04 12:00, 2025-03-20 06:00, 2026-10-25 00:00 and 2019-12-01 00:00 UT) P, B0 and L0 of this kernel against the oracle's vector construction from astropy's Sun and Carrington's elements; and the Earth's mean rate over three 14-day windows against astropy's longitude change",
       "bounds": {
         "pB0L0Degrees": 0.02,
-        "rateDegPerDay": 5e-4
+        "rateDegPerDay": 0.0005
       }
     },
     "b3.irradiance": {
       "what": "five pinned (flux, distance) pairs: S1, L and Teff against numpy and scipy.constants (sigma, au) with R = 6.957e8 m",
       "bounds": {
-        "relative": 1e-9
+        "relative": 1e-09
       }
     },
     "b4.package": {
@@ -138,19 +141,28 @@
     "c1.rate.coverage": {
       "what": "2000 synthetic tracks (latitude drawn from 5, 15, 25 degrees; start date drawn across a year; eight daily points from -50 degrees; Gaussian placement noise of the declared 1.0 px per point): the fraction of 95 percent intervals on the sidereal rate that contain the true rate",
       "bounds": {
-        "coverageBand": [0.93, 0.985]
+        "coverageBand": [
+          0.93,
+          0.985
+        ]
       }
     },
     "c2.law.coverage": {
       "what": "2000 draws of three tracers at 10, 20, 30 degrees with Gaussian rate noise of the declared 0.05 degrees per day around the law with the equatorial term shifted by a draw in +/-0.3: the fraction of 95 percent intervals on A that contain the true A",
       "bounds": {
-        "coverageBand": [0.93, 0.985]
+        "coverageBand": [
+          0.93,
+          0.985
+        ]
       }
     },
     "c3.luminosity.coverage": {
       "what": "2000 draws of a flux (true 1361, Gaussian 0.5 W/m2) at a distance (true 0.9833, Gaussian 0.0005 AU, a flux that scales as 1 / d^2): the fraction of 95 percent intervals on L that contain the true L",
       "bounds": {
-        "coverageBand": [0.935, 0.965]
+        "coverageBand": [
+          0.935,
+          0.965
+        ]
       }
     },
     "d1.limb.widened": {
