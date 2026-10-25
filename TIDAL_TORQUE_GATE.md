@@ -34,3 +34,21 @@ against an independent DOP853 reference), G5 (momentum), G6 (the account of angu
 leg fails): a precomputed trajectory from the kernel is displayed, no force in the engine. **C** (G1 or G2
 fails): no scenario; the kernel's plots stand. The first match from the top. A bound that cannot be measured
 fails its leg; only Carl resets a bound; a failed leg is reported and left failing.
+
+## Clarifications committed before the harness first ran
+
+The thresholds fixture is unchanged; these fix the meaning of three words in it, before any spike output
+existed.
+
+- **Samples** (G7) are the ends of the 20 orbits, 21 states with the start. The engine's integrators wobble the
+  orbital energy within an orbit by far more than the dissipation of one step; what the leg asks is that the
+  account falls from orbit to orbit, and a wobble that repeats each orbit does not move the orbit ends.
+- **The planet's spin** is advanced by the harness by the trapezoid rule on the step-end torque
+  (`omega = omega0 - integral(tau) / I`), after each step; the seam reads it only for the sign. In production the
+  spin update belongs to the step function and not to `computeAccelerations`, which a multi-stage scheme calls
+  several times a step.
+- **The sign** `s = sgn(spin - n_kepler(r))` uses the Kepler rate of the current separation, so the law depends on
+  position alone and every stage of every scheme sees the same acceleration. The planet's radius for the harness is
+  10 (a tenth of `a0`) and enters only `I`; the kernel's `rate` multiplier is the one that makes `eps0` equal
+  `2e-4` for `k2 = 0.3`, `Q = 12` (`tools/tidal-torque-gate-oracle/oracle-inputs.json`, committed before the
+  spike).
