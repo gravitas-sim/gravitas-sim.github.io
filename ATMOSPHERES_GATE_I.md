@@ -132,11 +132,30 @@ the oracle (`tools/atmospheres-gate/oracle.py`), the judge and the measurement s
 `tests/fixtures/atmospheres-gate-i/record.json`; `tests/atmospheresGateI.test.js` re-derives every status from
 it, the verdict from the decision function and checks that this document states it.
 
-**Verdict: C**, by the committed decision function: two `core` checks are not passes, both about how the
-family joins the existing build, and neither about the physics. Every scientific check passes; the two `escape`
-checks were not measured, for want of data this repository does not hold and this session was not allowed to
-fetch. The verdict is pending Carl's ratification (register row D-R10-75, DELEGATED) and Prompt 200 does not run
-on it.
+**Verdict: B**, by the committed decision function after Carl's ruling (below). As first measured, under the
+bounds as committed, the function gave **C** (record `3fbb1ef4`): two `core` checks, both about how the family joins
+the existing build and neither about the physics, were not passes. Carl then reset exactly those two bounds. Every
+scientific check passes; the two `escape` checks were not measured, for want of data this repository does not hold
+and this session was not allowed to fetch. The verdict is pending Carl's ratification as a register row
+(D-R10-75, DELEGATED).
+
+### Carl's ruling (2026-10-25)
+
+Source: Carl, AskUserQuestion to the merge-queue session, 2026-10-25, answered "**Reset both bounds to B**"; the
+coordinator read it in that session's transcript and relayed it to this one (not heard here directly). It is
+applied as the coordinator stated it:
+
+| Check | Bound as committed (`1eeedc93`) | Measured | Bound under the ruling |
+| --- | --- | --- | --- |
+| `T1.tier` | first-visit precache +0 B | +46 B | +46 B |
+| `T1.routes` | no existing route gains a request; none rises by more than 0.2 KB | transit lesson with its instrument open 76 to 77 requests, +0.3 KB; every other route +0.2 KB, +0 requests | 77 requests on the transit route (the lesson with its instrument open) |
+
+The original bounds and the measured values stay in `thresholds.json` (each row's `ruling` object) and in the
+record, so nothing is silently moved; the two rows read **pass under ruling** and the decision function counts a pass
+under a ruling as a pass. **One interpretation is mine and is flagged:** the ruling names 77 requests; the 0.3 KB
+build rise of that same row is the one added chunk, and I read it as part of the same ruling (limit 0.3 KB on that
+row only; every other route keeps 0.2 KB and 0 requests). If Carl meant the requests alone, `T1.routes` still fails on
+that 0.3 KB and the function gives C again. No other bound was touched.
 
 ### The checks
 
@@ -154,8 +173,8 @@ on it.
 | `P1.plot` | pass | three plots drawn by `js/plot/chart.js`; the worst path vertex is 0.095 px from where its data is (bound 0.1); legend toggled from the keyboard; the keyboard readout speaks the values; the family contains no drawing code of its own. jsdom only (see "Not verified") |
 | `T1.noescape.deferred` | pass | +4,724 B of deferred JavaScript (bound 14,336) on a Node 22.23.4 copy, kernel alone 1,488 B (bound 5,120) |
 | `T1.requests` | pass | +2 lazy chunks (bound 3) |
-| `T1.tier` | **fail** | first-visit precache **+46 B** (bound 0); idle +0 B (bound 274). The 46 B is the family's entry in `js/widgets.js` (202 B raw), a file the first-visit tier carries; the family's own sources add 0 B because they are `NEVER_PRECACHED` |
-| `T1.routes` | **fail** | the same 202 B raises the lesson routes' sources and build figures by 0.2 KB (bound 0.2), and the transit lesson **with its instrument opened** gains **one request** (76 to 77) and 0.3 KB (bound: none gains a request); every other route is identical. Reproduced on a second run |
+| `T1.tier` | fail as committed; **pass under ruling** | first-visit precache **+46 B** (bound 0); idle +0 B (bound 274). The 46 B is the family's entry in `js/widgets.js` (202 B raw), a file the first-visit tier carries; the family's own sources add 0 B because they are `NEVER_PRECACHED` |
+| `T1.routes` | fail as committed; **pass under ruling** | the same 202 B raises the lesson routes' sources and build figures by 0.2 KB (bound 0.2), and the transit lesson **with its instrument opened** gains **one request** (76 to 77) and 0.3 KB (bound: none gains a request); every other route is identical. Reproduced on a second run |
 | `J1.arith` | pass | Jeans parameter, speed, flux per unit density and the root of the retention condition: 2.8e-15 against scipy (bound 1e-9) |
 | `J2.vocabulary` | pass | the result is a bound (`canRetainOnlyIf`, the conditions it requires, a refusal without an exobase temperature and radius); no export or field says retained, lost or lifetime |
 | `J3.published` | **not measured** | no published table of Jeans parameters is in the repository; nothing was fetched |
@@ -164,31 +183,27 @@ on it.
 
 ### What the verdict says, and what it does not
 
-- **The C is about two seam costs, and the committed bound on the first is one no widget family can meet.**
-  The family registry is a generated list in `js/widgets.js`; any family adds its entry there (46 B gzipped, 0.2
-  KB raw) and that file is part of the first-visit install. 0 B was my committed bound (178's, where nothing
-  under `js/` imported the instrument); the first-visit room is 810 B, so no ceiling of `tools/data-budget.json`
-  is touched by 46 B. The second check's request is a build-graph effect I did not isolate: the registry entry and
-  the new lazy import are the only change on that route, and the standing approval of 2026-10-10 covers a route
-  ceiling raised by exactly the measured overrun. I did not move either bound and did not change the prototype to
-  hide either cost; both are Carl's to reset, with a register row.
-- **If Carl reset those two bounds** (a recommendation, not an action: first-visit bound to the 810 B room, and one
-  request on one route to the standing approval), the verdict under the same function is **B**: the escape checks
-  are the only ones left, and they are unmeasured, not failed. `record.json` carries that as a counterfactual.
-- **The science is not what failed.** The Eddington gap (3.66 percent at the top), the Venus refusal of the
-  one-layer model and the disagreement of the two models are the lessons' content, and they came out as the
-  physics says.
-- **B needs data.** B's slice (Prompt 200 without the escape panel, a published table replacing the calculation)
-  itself needs a rights decision for that table (`J4`). To measure A or to build B honestly Carl would have to
-  approve, per request, a download of one open-access review or table with exobase temperatures, exobase radii
-  and Jeans parameters for H, He, N2 and CO2 on Venus, Earth, Mars and Titan (size well under 1 MB; the licence
-  must be CC BY or public domain, or be decided as its own row). **No such request was made and nothing was
-  downloaded.**
-
-### What a C removes (Appendix C, entry 199), if Carl ratifies it unchanged
-
-Prompts 200, 201 and 202 are not run. Prompt 203 builds the parameter table itself. Prompt 205's atmosphere items
-are removed and the Goldilocks lesson keeps its present step. Prompt 231's atmosphere item becomes a reading step.
+- **The two failures were seam costs, and the committed bound on the first is one no widget family can meet.** The
+  family registry is a generated list in `js/widgets.js`; any family adds its entry there (46 B gzipped, 0.2 KB raw)
+  and that file is part of the first-visit install. 0 B was my committed bound (178's, where nothing under `js/`
+  imported the instrument); the first-visit room is 810 B, so no ceiling of `tools/data-budget.json` is touched. The
+  extra request on the transit lesson is a build-graph effect I did not isolate: the registry entry and the new lazy
+  import are the only change on that route. I did not move either bound and did not change the prototype to hide
+  either cost; Carl reset them (above).
+- **The science is not what failed.** The Eddington gap (3.66 percent at the top), the Venus refusal of the one-layer
+  model and the disagreement of the two models are the lessons' content, and they came out as the physics says.
+- **What B allows, as Appendix C states it for 199:** Prompt 200 **without the escape panel** (a published table
+  replaces the calculation), and Prompt 205 without the escape bar. B authorizes only that slice and never the A
+  scope: the Jeans parameter and the retention bound are not built; the isothermal scale height, the equilibrium
+  temperature, the one-layer and grey models are. Prompts 201 and 202 are not named by B; they follow their own run
+  conditions.
+- **The escape data are unmeasured.** `J3` (a published table of Jeans parameters) and `J4` (a sourced exobase
+  temperature and radius per body, each with a rights decision) stay **not measured**: nothing in the repository,
+  nothing fetched. The published table that replaces the escape calculation therefore needs its own per-source
+  rights decision and, if it is to be downloaded, Carl's approval per request: one open-access review or table with
+  exobase temperatures, exobase radii and Jeans parameters for H, He, N2 and CO2 on Venus, Earth, Mars and Titan
+  (well under 1 MB; CC BY or public domain, or decided as its own row). **No such request was made and nothing was
+  downloaded.** Without that table the escape bar and panel are simply absent.
 
 ### Iterations, in the open
 

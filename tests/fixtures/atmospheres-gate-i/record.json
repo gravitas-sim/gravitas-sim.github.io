@@ -328,23 +328,35 @@
       }
     },
     "T1.tier": {
-      "status": "fail",
+      "status": "pass-under-ruling",
       "measured": {
         "firstVisitAddedB": 46,
         "idleAddedB": 0,
         "firstVisitRoomB": 810
       },
-      "note": "the 46 B is the family registry entry in js/widgets.js (a first-visit file; 202 B raw, 46 B gzip). The family sources themselves add 0 B: they are NEVER_PRECACHED. The committed bound of 0 B cannot be met by any widget family under the present registry"
+      "note": "the 46 B is the family registry entry in js/widgets.js (a first-visit file; 202 B raw, 46 B gzip). The family sources themselves add 0 B: they are NEVER_PRECACHED. The committed bound of 0 B cannot be met by any widget family under the present registry",
+      "ruling": "R1"
     },
     "T1.routes": {
-      "status": "fail",
+      "status": "pass-under-ruling",
       "measured": {
         "sourcesRiseKb": 0.2,
         "buildRiseKbMax": 0.3,
         "requestsAdded": 1,
         "which": "sources +0.2 KB on kepler, transit, power-law and largest-lesson; build +0.2 KB on the same, +0.3 KB and 76 to 77 requests on transit with an instrument opened; every other route identical",
-        "cause": "202 B of registry text in js/widgets.js; the extra request is esbuild splitting a module the new family shares with the transit instrument family (the entry-set rule)"
-      }
+        "cause": "202 B of registry text in js/widgets.js; the extra request is esbuild splitting a module the new family shares with the transit instrument family (the entry-set rule)",
+        "otherRoutes": {
+          "buildRiseKbMax": 0.2,
+          "sourcesRiseKbMax": 0.2,
+          "requestsAdded": 0
+        },
+        "transitInstrument": {
+          "baseRequests": 76,
+          "requests": 77,
+          "buildRiseKb": 0.3
+        }
+      },
+      "ruling": "R1"
     },
     "T1.whole.deferred": {
       "status": "pass",
@@ -354,12 +366,21 @@
       }
     }
   },
-  "verdict": "C",
-  "counterfactual": {
-    "if": "T1.tier and T1.routes were reset by Carl to bounds the registry seam can meet (his alone; nothing here resets them)",
-    "verdict": "B"
-  },
+  "verdict": "B",
   "iterations": [
     "the oracle for A5 first discretised the Milne equation on 900 geometric cells to tau 400 and failed its own self-test (q(0) 1.26 against 0.5774); the cells were refined (geometric to 0.5, then 0.02 wide, to tau 30) before any comparison with the kernel, whose Eddington formula was not touched; no bound moved"
-  ]
+  ],
+  "originalVerdict": {
+    "verdict": "C",
+    "function": "the decision function on the bounds as committed in 1eeedc93",
+    "at": "3fbb1ef4"
+  },
+  "ruling": {
+    "id": "R1",
+    "date": "2026-10-25",
+    "source": "Carl, AskUserQuestion to the merge-queue session, 2026-10-25",
+    "words": "Reset both bounds to B",
+    "meaning": "T1.tier first-visit bound set to the measured +46 B; T1.routes set to 77 requests on the transit route (the lesson with its instrument open); the original bounds and the measured values stay on the rows",
+    "effect": "the decision function gives B"
+  }
 }

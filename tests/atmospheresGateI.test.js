@@ -16,14 +16,15 @@ const thresholds = JSON.parse(readFileSync(`${DIR}/thresholds.json`, 'utf8'));
 const record = JSON.parse(readFileSync(`${DIR}/record.json`, 'utf8'));
 const doc = readFileSync('ATMOSPHERES_GATE_I.md', 'utf8');
 const byId = Object.fromEntries(thresholds.checks.map(c => [c.id, c]));
-const STATUSES = ['pass', 'fail', 'not-measured'];
+const STATUSES = ['pass', 'pass-under-ruling', 'fail', 'not-measured'];
+const isPass = st => st === 'pass' || st === 'pass-under-ruling';
 
-/** The committed decision function: a core check that is not a pass is C; else an escape one is B; else A. */
+/** The committed decision function: a core check that is not a pass (a pass under a ruling counts) is C; else an escape one is B; else A. */
 function decide(checks) {
   const notPass = group =>
     thresholds.checks
       .filter(c => c.group === group)
-      .some(c => checks[c.id]?.status !== 'pass');
+      .some(c => !isPass(checks[c.id]?.status));
   if (notPass('core')) return 'C';
   if (notPass('escape')) return 'B';
   return 'A';
@@ -52,8 +53,11 @@ const judged = {
     m.firstVisitAddedB <= l.firstVisitAddedMax &&
     m.idleAddedB <= l.idleAddedMax,
   'T1.routes': (m, l) =>
-    m.buildRiseKbMax <= l.routeRiseKbMax &&
-    m.requestsAdded <= l.requestsAddedMax,
+    m.otherRoutes.buildRiseKbMax <= l.routeRiseKbMax &&
+    m.otherRoutes.sourcesRiseKbMax <= l.routeRiseKbMax &&
+    m.otherRoutes.requestsAdded <= l.requestsAddedMax &&
+    m.transitInstrument.requests <= l.transitInstrumentRequestsMax &&
+    m.transitInstrument.buildRiseKb <= l.transitInstrumentRiseKbMax,
   'T1.whole.deferred': (m, l) => m.deferredAddedGzipB <= l.deferredGzipMax,
 };
 
@@ -98,10 +102,12 @@ describe('the recorded result', () => {
   test('each numeric status follows from its recorded measurement and its committed bound', () => {
     for (const [id, f] of Object.entries(judged)) {
       const r = record.checks[id];
-      expect({ id, status: r.status }).toEqual({
-        id,
-        status: f(r.measured, byId[id].limits) ? 'pass' : 'fail',
-      });
+      const want = f(r.measured, byId[id].limits)
+        ? byId[id].ruling
+          ? 'pass-under-ruling'
+          : 'pass'
+        : 'fail';
+      expect({ id, status: r.status }).toEqual({ id, status: want });
     }
   });
 
@@ -148,12 +154,50 @@ describe('the recorded result', () => {
     expect(doc).toContain(`**Verdict: ${record.verdict}**`);
   });
 
-  test('a counterfactual is labelled as one and never replaces the verdict', () => {
-    expect(record.counterfactual.if).toMatch(/reset by Carl/);
-    const reset = JSON.parse(JSON.stringify(record.checks));
-    reset['T1.tier'].status = 'pass';
-    reset['T1.routes'].status = 'pass';
-    expect(decide(reset)).toBe(record.counterfactual.verdict);
+  test('the ruling is pinned and the verdict is B under it (C as committed): source, words, original bounds and measured values stay visible, only two rows carry one', () => {
+    const SOURCE =
+      'Carl, AskUserQuestion to the merge-queue session, 2026-10-25';
+    expect(thresholds.rulings).toHaveLength(1);
+    expect(thresholds.rulings[0].source).toBe(SOURCE);
+    expect(thresholds.rulings[0].words).toBe('Reset both bounds to B');
+    expect(record.ruling).toEqual(thresholds.rulings[0]);
+    const ruled = thresholds.checks
+      .filter(c => c.ruling)
+      .map(c => c.id)
+      .sort();
+    expect(ruled).toEqual(['T1.routes', 'T1.tier']);
+    const tier = byId['T1.tier'];
+    expect(tier.ruling.originalLimits).toEqual({ firstVisitAddedMax: 0 });
+    expect(tier.ruling.measured.firstVisitAddedB).toBe(46);
+    expect(tier.limits.firstVisitAddedMax).toBe(46);
+    const routes = byId['T1.routes'];
+    expect(routes.ruling.originalLimits).toEqual({
+      requestsAddedMax: 0,
+      routeRiseKbMax: 0.2,
+    });
+    expect(routes.ruling.measured.transitInstrumentRequests).toBe(77);
+    expect(routes.limits.transitInstrumentRequestsMax).toBe(77);
+    // every other route keeps the original bounds
+    expect(routes.limits.requestsAddedMax).toBe(0);
+    expect(routes.limits.routeRiseKbMax).toBe(0.2);
+    for (const id of ['T1.tier', 'T1.routes']) {
+      expect(record.checks[id].status).toBe('pass-under-ruling');
+      expect(record.checks[id].ruling).toBe('R1');
+    }
+    expect(
+      Object.values(record.checks).filter(c => c.status === 'pass-under-ruling')
+    ).toHaveLength(2);
+    expect(doc).toContain(SOURCE);
+    expect(doc).toContain('Reset both bounds to B');
+    expect(record.verdict).toBe('B');
+    expect(record.originalVerdict.verdict).toBe('C');
+    const asCommitted = JSON.parse(JSON.stringify(record.checks));
+    asCommitted['T1.tier'].status = 'fail';
+    asCommitted['T1.routes'].status = 'fail';
+    expect(decide(asCommitted)).toBe('C');
+    // the escape checks stay unmeasured: a pass there would be A
+    expect(record.checks['J3.published'].status).toBe('not-measured');
+    expect(record.checks['J4.sources'].status).toBe('not-measured');
   });
 
   test('the prototype is a branch that is never merged: the record names its commit and no js/ file of it is here', () => {
