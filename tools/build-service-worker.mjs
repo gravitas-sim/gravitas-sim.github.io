@@ -338,6 +338,10 @@ export const NEVER_PRECACHED = [
   // neither. D-R10-72.
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(measuring-the-moon|how-far-is-that-star|a-binary-stars-orbit)\.js$/,
   /^(js\/imagingWidgets\.js|js\/i18n\/(en|es)\.imaging\.js)$/,
+  // Spike of Prompt 199: the atmosphere family and its kernel.
+  /^js\/(atmosphereWidgets|atmosphereEscape)\.js$/,
+  /^js\/kernels\/atmospheres\//,
+  /^js\/i18n\/(en|es)\.atmospheres\.js$/,
   // Their three thumbnails (3.5 to 3.8 KB each in gzip): the first-visit tier
   // has about 2.5 KB of room, so the cards show no picture until one online
   // visit has kept them. D-R10-72.

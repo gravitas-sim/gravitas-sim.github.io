@@ -339,6 +339,12 @@ export const LAZY_FAMILIES = Object.freeze({
     ['moon-marks', 'star-parallax', 'binary-orbit'],
     'imagingReady'
   ),
+  atmosphere: familyEntry(
+    () => import('./atmosphereWidgets.js'),
+    './atmosphereWidgets.js',
+    'ATMOSPHERE_WIDGETS',
+    ['atmosphere-balance', 'atmosphere-profile', 'atmosphere-escape']
+  ),
 });
 // </generated:lazy-families>
 
