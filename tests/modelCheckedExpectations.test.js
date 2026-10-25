@@ -198,7 +198,8 @@ describe('the instructor expectations record', () => {
     // 359 after the three calibration investigations (Prompt 86): 13 more.
     // 365 after the two computational investigations (Prompt 102): 6 more.
     // 373 after the three compute-package investigations (Prompt 102 follow-up): 8 more.
-    expect(total).toBe(373);
+    // 389 after the three measurement and claim investigations (Prompt 190): 16 more.
+    expect(total).toBe(389);
   });
 
   test('a /1 record keyed by step number migrates to the same text', () => {

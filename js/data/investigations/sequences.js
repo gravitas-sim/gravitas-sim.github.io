@@ -240,6 +240,13 @@ export const SEQUENCES = [
     'observing',
     ['the-sky'],
     [
+      ['what-is-a-measurement', 'core'],
+      ['what-does-plus-minus-claim', 'quantitative', ['what-is-a-measurement']],
+      [
+        'when-the-method-must-refuse',
+        'quantitative',
+        ['what-does-plus-minus-claim'],
+      ],
       ['plan-a-night', 'quantitative'],
       ['twelve-nights', 'core'],
       ['lines-and-motion', 'quantitative'],

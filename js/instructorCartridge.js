@@ -6,19 +6,10 @@
 // Blackboard. A live tool connection (LTI) is a service and is out of scope
 // (D-CLASS-04); a cartridge is a file, so it needs none.
 //
-// The profile, chosen and why (COURSE_PACKS.md "Common Cartridge")
-// -----------------------------------------------------------------------------
-// The 1EdTech (IMS) Thin Common Cartridge Profile v1.0, Final Specification of
-// 1 May 2015, over Common Cartridge v1.3 (Final, July 2013): a cartridge of
-// web links (and LTI links, which this never writes) and nothing else, so no
-// web content, no assessments and no service. v1.3 over v1.4 because the
-// Thin profile was written for 1.2 and 1.3 and 1.4 is a Candidate Final of 2021
-// (which versions a platform reads was not checked: none was available).
-// The package holds exactly three kinds of file, as the profile says: the one
-// imsmanifest.xml and one web link XML file per link. Inline resource XML
-// ("Minimalist Thin CC") would save the link files, but the profile lets a
-// platform skip inline XML and still be conformant, so the stand-alone files
-// are the form every platform must read.
+// The profile, chosen and why: COURSE_PACKS.md "Common Cartridge". In short,
+// the 1EdTech Thin Common Cartridge Profile v1.0 over Common Cartridge v1.3: a
+// cartridge of web links and nothing else (the one imsmanifest.xml and one web
+// link XML file per link), so no web content, no assessments and no service.
 //
 // What the cartridge holds, from a course
 // -----------------------------------------------------------------------------

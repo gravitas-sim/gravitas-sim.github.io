@@ -82,6 +82,7 @@ export const FAMILY_ORDER = Object.freeze([
   'sky',
   'compare',
   'gwEvents',
+  'claim',
 ]);
 
 /** The three families whose name is not their module's (`<name>Widgets.js`). */
@@ -184,25 +185,43 @@ export function lessonEntries(root = REPO) {
     sourceType: 'module',
   });
   const idOf = new Map();
+  const sharedIds = new Map();
   for (const n of program.body) {
     if (n.type !== 'ImportDeclaration') continue;
     const id = /^\.\/investigations\/([a-z0-9-]+)\.js$/.exec(
       n.source.value
     )?.[1];
     const def = n.specifiers.find(x => x.type === 'ImportDefaultSpecifier');
-    if (id && def) idOf.set(def.local.name, id);
+    if (!id || !def) continue;
+    // One module of several lessons (D-R10-67: the instructor bundle's closure
+    // is capped by file count): its default export is the array of them, and
+    // the catalog spreads it. The ids are the lesson objects' own `id` lines.
+    const file = path.join(root, dir, `${id}.js`);
+    const text = existsSync(file) ? read(root, `${dir}/${id}.js`) : '';
+    if (/^export default \[$/m.test(text))
+      sharedIds.set(
+        def.local.name,
+        [...text.matchAll(/^ {2}id: '([a-z0-9-]+)',\n {2}thumbnail:/gm)].map(
+          m => m[1]
+        )
+      );
+    else idOf.set(def.local.name, id);
   }
   const catalog = topLevelConsts(program).get('INVESTIGATIONS');
   if (catalog?.type !== 'ArrayExpression')
     throw new Error('js/data/investigations.js has no INVESTIGATIONS array');
-  const ids = catalog.elements.map(el => {
+  const ids = catalog.elements.flatMap(el => {
+    if (el?.type === 'SpreadElement' && sharedIds.has(el.argument?.name))
+      return sharedIds.get(el.argument.name);
     if (el?.type !== 'Identifier' || !idOf.has(el.name))
       throw new Error(
         'INVESTIGATIONS lists something that is not an imported lesson'
       );
-    return idOf.get(el.name);
+    return [idOf.get(el.name)];
   });
-  if (ids.length !== idOf.size || new Set(ids).size !== ids.length)
+  const expected =
+    idOf.size + [...sharedIds.values()].reduce((n, a) => n + a.length, 0);
+  if (ids.length !== expected || new Set(ids).size !== ids.length)
     throw new Error(
       'INVESTIGATIONS and the lesson imports are not the same list'
     );

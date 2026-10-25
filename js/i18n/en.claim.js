@@ -1,0 +1,101 @@
+// =============================================================================
+// The measurement and claim instruments' words, in English
+// -----------------------------------------------------------------------------
+// Registered by js/claimWidgets.js when the family loads, so no other page
+// carries them. claimW.* ids. The same keys are in es.claim.js.
+// =============================================================================
+
+export const EN_CLAIM = {
+  'claimW.row.source': 'What this is',
+  'claimW.row.how': 'What is left out',
+  'claimW.m.title': 'Marking a star',
+  'claimW.m.note':
+    'A synthetic frame with one blurred star. Each cross is one mark, the place a careful person would put its center; the ring is the mean of the marks. The star’s true position was set when the frame was made.',
+  'claimW.m.legend': 'marks · mean · true position',
+  'claimW.m.control.n': 'How many marks',
+  'claimW.m.control.blur': 'Width of the star',
+  'claimW.m.control.offset': 'Offset of every mark',
+  'claimW.m.control.truth': 'The true position',
+  'claimW.m.truth.shown': 'shown',
+  'claimW.m.truth.hidden': 'hidden',
+  'claimW.m.preset.five': 'Five marks',
+  'claimW.m.preset.twenty': 'Twenty marks',
+  'claimW.m.value.source':
+    'Synthetic: a blurred star at a position the investigation chose, marked by a model of a careful person',
+  'claimW.m.row.n': 'Marks made',
+  'claimW.m.row.marks': 'The marks, (x, y) in pixels',
+  'claimW.m.row.meanX': 'Mean x position',
+  'claimW.m.row.meanY': 'Mean y position',
+  'claimW.m.row.sdX': 'Spread of the x marks',
+  'claimW.m.row.sdY': 'Spread of the y marks',
+  'claimW.m.row.seX': 'Standard error of x',
+  'claimW.m.row.seY': 'Standard error of y',
+  'claimW.m.row.truth': 'True position',
+  'claimW.m.row.errX': 'Error of the mean in x',
+  'claimW.m.row.errSe': 'That error in standard errors',
+  'claimW.m.value.how':
+    'Marks scatter at random about one center, with no offset unless one is set; the sky noise is for the picture only',
+  'claimW.c.title': 'Checking a claim by repeating it',
+  'claimW.c.note':
+    'A seeded ensemble of repeats of one measurement whose true value is known. Each bar is the interval one repeat states; bars that miss the truth are dashed. The readout counts them all.',
+  'claimW.c.legend':
+    'interval that holds the truth · interval that misses it · the truth',
+  'claimW.c.control.case': 'Which measurement',
+  'claimW.c.control.k': 'Interval half-width',
+  'claimW.c.control.repeats': 'Repeats',
+  'claimW.c.control.form': 'Form of the interval',
+  'claimW.c.control.rate': 'True rate',
+  'claimW.c.case.symmetric': 'An honest instrument',
+  'claimW.c.case.biased': 'A precise, biased instrument',
+  'claimW.c.case.parallax': 'A distance from a parallax',
+  'claimW.c.case.upper': 'An upper limit on a count',
+  'claimW.c.form.symmetric': 'symmetric, carried to first order',
+  'claimW.c.form.asymmetric': 'asymmetric, carried through the division',
+  'claimW.c.value.source':
+    'Synthetic: seeded repeats of one measurement, with the true value known',
+  'claimW.c.row.case': 'Measurement',
+  'claimW.c.row.repeats': 'Repeats counted',
+  'claimW.c.row.truth': 'True value',
+  'claimW.c.row.interval': 'Interval claimed',
+  'claimW.c.value.interval': '± {k} σ',
+  'claimW.c.value.upper': 'A 95 percent upper limit',
+  'claimW.c.row.hits': 'Intervals that hold the truth',
+  'claimW.c.row.coverage': 'Coverage',
+  'claimW.c.row.coverageSe': 'Uncertainty of the coverage',
+  'claimW.c.row.unbounded': 'No upper end',
+  'claimW.c.row.first': 'The first five repeats',
+  'claimW.c.value.how':
+    'The scatter is known and Gaussian (or Poisson for the count); real repeats rarely come with the truth to compare against',
+  'claimW.p.title': 'When the data do not fix a parameter',
+  'claimW.p.note':
+    'Two analyses of synthetic data. One has data that fix only the product of a planet’s mass and the sine of its orbit’s tilt; the picture is the chi-square of the best fit at each trial mass. The other fits a line to six points.',
+  'claimW.p.control.case': 'Which analysis',
+  'claimW.p.control.mass': 'Trial mass',
+  'claimW.p.control.terms': 'Terms in the fit',
+  'claimW.p.case.product': 'a product of two parameters',
+  'claimW.p.case.line': 'a line through six points',
+  'claimW.p.terms.line': 'a line (two terms)',
+  'claimW.p.terms.parabola': 'a parabola (three terms)',
+  'claimW.p.axisM': 'trial mass, Jupiter masses (log scale)',
+  'claimW.p.axisChi': 'chi-square of the best fit',
+  'claimW.p.axisX': 'x (points with one-sigma error bars)',
+  'claimW.p.value.source':
+    'Synthetic: a product of two parameters, and six points from a curve, with the truth known',
+  'claimW.p.row.product': 'What the data fix (m × s)',
+  'claimW.p.row.s': 'Best tilt, the sine s, at this mass',
+  'claimW.p.row.chi': 'Chi-square of that fit',
+  'claimW.p.row.low1': 'Smallest mass inside a rise of 1',
+  'claimW.p.row.low2': 'Smallest mass inside a rise of 3.84',
+  'claimW.p.row.high': 'Largest mass',
+  'claimW.p.value.lower': '{m} Jupiter masses',
+  'claimW.p.value.none': 'Not constrained: no upper bound',
+  'claimW.p.row.points': 'Points',
+  'claimW.p.row.dof': 'Degrees of freedom',
+  'claimW.p.row.slope': 'Slope',
+  'claimW.p.row.curve': 'Coefficient of the squared term',
+  'claimW.p.row.chi2': 'Chi-square',
+  'claimW.p.row.reduced': 'Reduced chi-square',
+  'claimW.p.row.pvalue': 'p-value',
+  'claimW.p.value.how':
+    'The profile uses the likelihood and no prior; the line case assumes the quoted errors and a smooth curve',
+};

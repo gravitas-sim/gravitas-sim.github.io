@@ -326,6 +326,12 @@ export const LAZY_FAMILIES = Object.freeze({
     ['gw-events'],
     'eventsReady'
   ),
+  claim: familyEntry(
+    () => import('./claimWidgets.js'),
+    './claimWidgets.js',
+    'CLAIM_WIDGETS',
+    ['frame-marks', 'coverage-repeats', 'profile-refusal']
+  ),
 });
 // </generated:lazy-families>
 

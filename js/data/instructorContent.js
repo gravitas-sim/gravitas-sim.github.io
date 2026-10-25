@@ -1,21 +1,21 @@
 // =============================================================================
 // Instructor content: the part of a teaching guide that cannot be derived
 // -----------------------------------------------------------------------------
-// Titles, durations, step counts, questions, correct answers and tolerances are
-// NOT here. Those are read out of investigations.js by answerKey.js, so they
-// cannot drift from the lessons a class is actually using.
-//
-// What is here is the prose an instructor needs and a program cannot write: why
-// a lesson is built the way it is, what students get wrong, where they slow
-// down, and what a measurement should come out at. Step numbers referenced in
-// this file are checked against the real lessons by the test suite, so a lesson
-// edit that moves a step is caught rather than silently making a guide wrong.
+// Titles, durations, step counts, questions, answers and tolerances are NOT
+// here: answerKey.js reads them out of investigations.js, so they cannot drift
+// from the lessons a class uses. What is here is the prose an instructor needs
+// and a program cannot write: why a lesson is built the way it is, what
+// students get wrong, where they slow down, what a measurement should come out
+// at. Step numbers here are checked against the real lessons by the tests.
 // =============================================================================
 
 /** Shared closing note pointing at the public model page. */
 const MODEL_PAGE = 'https://gravitas-sim.online/model/';
 
+import { INSTRUCTOR as MEASUREMENT } from './investigations/depth/measurement-sequence.js';
+
 export const INSTRUCTOR_CONTENT = {
+  ...MEASUREMENT.content,
   'extending-an-experiment': {
     topic:
       'Classifying an experiment’s trials, fitting the chance of an outcome with a bootstrap, and extending it to a large synthetic population, in Python, with the limits of what the interval covers',

@@ -1,14 +1,13 @@
 // =============================================================================
 // Every lesson in Spanish, at once, for the documents
 // -----------------------------------------------------------------------------
-// Prompt 79. The Spanish guides and keys read the lesson as a Spanish student
-// does: the lesson's shadow (data/investigations/es) laid over the English by
-// mergeTranslation, and the deeper steps (data/investigations/depth) laid in
-// with their own shadow (depth/es). The application loads these one at a time
-// and on demand (registry.js, depth.js); the documents want all of them and
-// cannot await anything, so this is the static door, as depthAll.js is for the
-// English deeper steps. Static imports, so the digest of what a build was made
-// from (tools/instructor-freshness.mjs) follows every file.
+// Prompt 79. The Spanish guides and keys read each lesson as a Spanish student
+// does: the shadow (data/investigations/es) laid over the English by
+// mergeTranslation, the deeper steps (depth) laid in with theirs (depth/es).
+// The application loads these one at a time (registry.js, depth.js); the
+// documents want all of them and cannot await, so this is the static door, as
+// depthAll.js is for the English deeper steps. Static imports, so the digest
+// (tools/instructor-freshness.mjs) follows every file.
 //
 // Not imported by any route: the build and the tests read it.
 // =============================================================================
@@ -113,6 +112,8 @@ import EXTENDING_AN_EXPERIMENT from './data/investigations/es/extending-an-exper
 import REFITTING_A_TRANSIT from './data/investigations/es/refitting-a-transit.js';
 import TWO_PERIODOGRAMS from './data/investigations/es/two-periodograms.js';
 import SAMPLING_A_POSTERIOR from './data/investigations/es/sampling-a-posterior.js';
+import MEASUREMENT_SHADOWS from './data/investigations/es/measurement-sequence.js';
+import MEASUREMENT_DEEPER from './data/investigations/depth/es/measurement-sequence.js';
 
 /** The Spanish shadow of each lesson, by lesson id. */
 export const SHADOWS = Object.freeze({
@@ -156,6 +157,7 @@ export const SHADOWS = Object.freeze({
   'refitting-a-transit': REFITTING_A_TRANSIT,
   'two-periodograms': TWO_PERIODOGRAMS,
   'sampling-a-posterior': SAMPLING_A_POSTERIOR,
+  ...MEASUREMENT_SHADOWS,
   'design-the-schedule': DESIGN_THE_SCHEDULE,
   'detect-this-planet': DETECT_THIS_PLANET,
   'goldilocks-question': GOLDILOCKS_QUESTION,
@@ -215,6 +217,7 @@ export const DEEPER_SHADOWS = Object.freeze({
   'missing-mass': MISSING_MASS_DEEPER,
   'transit-photometry': TRANSIT_PHOTOMETRY_DEEPER,
   'weighing-stars': WEIGHING_STARS_DEEPER,
+  ...MEASUREMENT_DEEPER,
 });
 
 /**

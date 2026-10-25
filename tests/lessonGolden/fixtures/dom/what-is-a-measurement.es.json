@@ -1,0 +1,182 @@
+[
+ {
+  "depth": "core",
+  "role": "first",
+  "sid": "a-star-on-a-frame",
+  "position": [
+   1,
+   12
+  ],
+  "title": "¿Qué es una medición?",
+  "subtitle": "Marcar una estrella una y otra vez, y qué pueden decir las marcas",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 12 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Una estrella, marcada una y otra vez</h3><div class=\"inv-step-body\"><p>Una medición de dónde está una estrella empieza con una marca sobre una imagen. El cuadro de abajo es <strong>sintético</strong>: se puso una estrella en una posición que elegimos, se la desenfocó como la desenfoca un telescopio y se le dio un poco de ruido de cielo. Cada cruz es una marca, el lugar donde una persona cuidadosa pondría el centro de la mancha borrosa.</p><p>Como hicimos el cuadro, sabemos dónde está realmente la estrella. Un cuadro real nunca lo dice. Por ahora la verdad está oculta. Se muestran cinco marcas, cada una con su posición en píxeles (x, y) en la lista bajo la imagen, y el anillo es su media.</p></div>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "graded",
+  "sid": "predict-the-marks",
+  "position": [
+   2,
+   12
+  ],
+  "title": "¿Qué es una medición?",
+  "subtitle": "Marcar una estrella una y otra vez, y qué pueden decir las marcas",
+  "body": "<p class=\"inv-step-count\">Paso 2 de 12 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">¿Coincidirán las marcas?</h3><div class=\"inv-step-body\"><p>Se marca cinco veces la misma estrella, cada vez con el mayor cuidado posible. Todavía no cambies el instrumento.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Las cinco posiciones serán…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>todas iguales, si el marcado se hace con el suficiente cuidado</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>algo dispersas alrededor de un centro, aunque cada marca sea cuidadosa</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>dispersas solo porque algunas marcas son errores</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>dispersas solo si el cuadro es malo</span></button></div><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> Me vendría bien una pista </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "marked",
+  "sid": "predict-the-marks",
+  "position": [
+   2,
+   12
+  ],
+  "title": "¿Qué es una medición?",
+  "subtitle": "Marcar una estrella una y otra vez, y qué pueden decir las marcas",
+  "body": "<p class=\"inv-step-count\">Paso 2 de 12 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">¿Coincidirán las marcas?</h3><div class=\"inv-step-body\"><p>Se marca cinco veces la misma estrella, cada vez con el mayor cuidado posible. Todavía no cambies el instrumento.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Las cinco posiciones serán…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>todas iguales, si el marcado se hace con el suficiente cuidado</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>algo dispersas alrededor de un centro, aunque cada marca sea cuidadosa</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>dispersas solo porque algunas marcas son errores</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>dispersas solo si el cuadro es malo</span></button></div><p class=\"inv-held\">Tu respuesta queda registrada. No se corrige hasta que llegues a «La media y la dispersión», para que la decida el experimento y no la clave de respuestas.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Cambiar respuesta</button><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> Me vendría bien una pista </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "last",
+  "sid": "what-you-worked-out",
+  "position": [
+   12,
+   12
+  ],
+  "title": "¿Qué es una medición?",
+  "subtitle": "Marcar una estrella una y otra vez, y qué pueden decir las marcas",
+  "body": "<p class=\"inv-step-count\">Paso 12 de 12 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Lo que has deducido</h3><div class=\"inv-step-body\"><p>Las marcas cuidadosas de una misma estrella difieren, porque la mancha es borrosa, y la dispersión de las marcas dice con qué precisión se puede hacer una marca. La media de las marcas es la mejor estimación que dan, y su error estándar, la dispersión entre la raíz cuadrada del número de marcas, dice cuán cerca de la verdad queda típicamente la media. Más marcas lo reducen despacio: cuatro veces las marcas lo reducen a la mitad. Una imagen más borrosa lo aumenta. Aquí se conocía la verdad, y pudimos ver cómo la media caía a menos de un error estándar de ella. La próxima investigación pregunta qué afirma un «más menos» declarado y cómo comprobar una afirmación así.</p></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "quantitative",
+  "role": "first",
+  "sid": "a-star-on-a-frame",
+  "position": [
+   1,
+   14
+  ],
+  "title": "¿Qué es una medición?",
+  "subtitle": "Marcar una estrella una y otra vez, y qué pueden decir las marcas",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 14 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Una estrella, marcada una y otra vez</h3><div class=\"inv-step-body\"><p>Una medición de dónde está una estrella empieza con una marca sobre una imagen. El cuadro de abajo es <strong>sintético</strong>: se puso una estrella en una posición que elegimos, se la desenfocó como la desenfoca un telescopio y se le dio un poco de ruido de cielo. Cada cruz es una marca, el lugar donde una persona cuidadosa pondría el centro de la mancha borrosa.</p><p>Como hicimos el cuadro, sabemos dónde está realmente la estrella. Un cuadro real nunca lo dice. Por ahora la verdad está oculta. Se muestran cinco marcas, cada una con su posición en píxeles (x, y) en la lista bajo la imagen, y el anillo es su media.</p></div>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Cuantitativo"
+ },
+ {
+  "depth": "quantitative",
+  "role": "graded",
+  "sid": "predict-the-marks",
+  "position": [
+   2,
+   14
+  ],
+  "title": "¿Qué es una medición?",
+  "subtitle": "Marcar una estrella una y otra vez, y qué pueden decir las marcas",
+  "body": "<p class=\"inv-step-count\">Paso 2 de 14 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">¿Coincidirán las marcas?</h3><div class=\"inv-step-body\"><p>Se marca cinco veces la misma estrella, cada vez con el mayor cuidado posible. Todavía no cambies el instrumento.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Las cinco posiciones serán…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>todas iguales, si el marcado se hace con el suficiente cuidado</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>algo dispersas alrededor de un centro, aunque cada marca sea cuidadosa</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>dispersas solo porque algunas marcas son errores</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>dispersas solo si el cuadro es malo</span></button></div><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> Me vendría bien una pista </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Cuantitativo"
+ },
+ {
+  "depth": "quantitative",
+  "role": "marked",
+  "sid": "predict-the-marks",
+  "position": [
+   2,
+   14
+  ],
+  "title": "¿Qué es una medición?",
+  "subtitle": "Marcar una estrella una y otra vez, y qué pueden decir las marcas",
+  "body": "<p class=\"inv-step-count\">Paso 2 de 14 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">¿Coincidirán las marcas?</h3><div class=\"inv-step-body\"><p>Se marca cinco veces la misma estrella, cada vez con el mayor cuidado posible. Todavía no cambies el instrumento.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Las cinco posiciones serán…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>todas iguales, si el marcado se hace con el suficiente cuidado</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>algo dispersas alrededor de un centro, aunque cada marca sea cuidadosa</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>dispersas solo porque algunas marcas son errores</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>dispersas solo si el cuadro es malo</span></button></div><p class=\"inv-held\">Tu respuesta queda registrada. No se corrige hasta que llegues a «La media y la dispersión», para que la decida el experimento y no la clave de respuestas.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Cambiar respuesta</button><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> Me vendría bien una pista </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Cuantitativo"
+ },
+ {
+  "depth": "quantitative",
+  "role": "last",
+  "sid": "what-you-worked-out",
+  "position": [
+   14,
+   14
+  ],
+  "title": "¿Qué es una medición?",
+  "subtitle": "Marcar una estrella una y otra vez, y qué pueden decir las marcas",
+  "body": "<p class=\"inv-step-count\">Paso 14 de 14 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Lo que has deducido</h3><div class=\"inv-step-body\"><p>Las marcas cuidadosas de una misma estrella difieren, porque la mancha es borrosa, y la dispersión de las marcas dice con qué precisión se puede hacer una marca. La media de las marcas es la mejor estimación que dan, y su error estándar, la dispersión entre la raíz cuadrada del número de marcas, dice cuán cerca de la verdad queda típicamente la media. Más marcas lo reducen despacio: cuatro veces las marcas lo reducen a la mitad. Una imagen más borrosa lo aumenta. Aquí se conocía la verdad, y pudimos ver cómo la media caía a menos de un error estándar de ella. La próxima investigación pregunta qué afirma un «más menos» declarado y cómo comprobar una afirmación así.</p></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Cuantitativo"
+ },
+ {
+  "depth": "advanced",
+  "role": "first",
+  "sid": "a-star-on-a-frame",
+  "position": [
+   1,
+   16
+  ],
+  "title": "¿Qué es una medición?",
+  "subtitle": "Marcar una estrella una y otra vez, y qué pueden decir las marcas",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 16 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Una estrella, marcada una y otra vez</h3><div class=\"inv-step-body\"><p>Una medición de dónde está una estrella empieza con una marca sobre una imagen. El cuadro de abajo es <strong>sintético</strong>: se puso una estrella en una posición que elegimos, se la desenfocó como la desenfoca un telescopio y se le dio un poco de ruido de cielo. Cada cruz es una marca, el lugar donde una persona cuidadosa pondría el centro de la mancha borrosa.</p><p>Como hicimos el cuadro, sabemos dónde está realmente la estrella. Un cuadro real nunca lo dice. Por ahora la verdad está oculta. Se muestran cinco marcas, cada una con su posición en píxeles (x, y) en la lista bajo la imagen, y el anillo es su media.</p></div>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Avanzado"
+ },
+ {
+  "depth": "advanced",
+  "role": "graded",
+  "sid": "predict-the-marks",
+  "position": [
+   2,
+   16
+  ],
+  "title": "¿Qué es una medición?",
+  "subtitle": "Marcar una estrella una y otra vez, y qué pueden decir las marcas",
+  "body": "<p class=\"inv-step-count\">Paso 2 de 16 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">¿Coincidirán las marcas?</h3><div class=\"inv-step-body\"><p>Se marca cinco veces la misma estrella, cada vez con el mayor cuidado posible. Todavía no cambies el instrumento.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Las cinco posiciones serán…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>todas iguales, si el marcado se hace con el suficiente cuidado</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>algo dispersas alrededor de un centro, aunque cada marca sea cuidadosa</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>dispersas solo porque algunas marcas son errores</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>dispersas solo si el cuadro es malo</span></button></div><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> Me vendría bien una pista </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Avanzado"
+ },
+ {
+  "depth": "advanced",
+  "role": "marked",
+  "sid": "predict-the-marks",
+  "position": [
+   2,
+   16
+  ],
+  "title": "¿Qué es una medición?",
+  "subtitle": "Marcar una estrella una y otra vez, y qué pueden decir las marcas",
+  "body": "<p class=\"inv-step-count\">Paso 2 de 16 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">¿Coincidirán las marcas?</h3><div class=\"inv-step-body\"><p>Se marca cinco veces la misma estrella, cada vez con el mayor cuidado posible. Todavía no cambies el instrumento.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Las cinco posiciones serán…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>todas iguales, si el marcado se hace con el suficiente cuidado</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>algo dispersas alrededor de un centro, aunque cada marca sea cuidadosa</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>dispersas solo porque algunas marcas son errores</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>dispersas solo si el cuadro es malo</span></button></div><p class=\"inv-held\">Tu respuesta queda registrada. No se corrige hasta que llegues a «La media y la dispersión», para que la decida el experimento y no la clave de respuestas.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Cambiar respuesta</button><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> Me vendría bien una pista </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Avanzado"
+ },
+ {
+  "depth": "advanced",
+  "role": "last",
+  "sid": "what-you-worked-out",
+  "position": [
+   16,
+   16
+  ],
+  "title": "¿Qué es una medición?",
+  "subtitle": "Marcar una estrella una y otra vez, y qué pueden decir las marcas",
+  "body": "<p class=\"inv-step-count\">Paso 16 de 16 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Lo que has deducido</h3><div class=\"inv-step-body\"><p>Las marcas cuidadosas de una misma estrella difieren, porque la mancha es borrosa, y la dispersión de las marcas dice con qué precisión se puede hacer una marca. La media de las marcas es la mejor estimación que dan, y su error estándar, la dispersión entre la raíz cuadrada del número de marcas, dice cuán cerca de la verdad queda típicamente la media. Más marcas lo reducen despacio: cuatro veces las marcas lo reducen a la mitad. Una imagen más borrosa lo aumenta. Aquí se conocía la verdad, y pudimos ver cómo la media caía a menos de un error estándar de ella. La próxima investigación pregunta qué afirma un «más menos» declarado y cómo comprobar una afirmación así.</p></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Avanzado"
+ }
+]

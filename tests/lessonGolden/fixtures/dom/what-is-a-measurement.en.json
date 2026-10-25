@@ -1,0 +1,182 @@
+[
+ {
+  "depth": "core",
+  "role": "first",
+  "sid": "a-star-on-a-frame",
+  "position": [
+   1,
+   12
+  ],
+  "title": "What Is a Measurement?",
+  "subtitle": "Marking one star again and again, and what the marks can tell you",
+  "body": "<p class=\"inv-step-count\">Step 1 of 12 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">One star, marked again and again</h3><div class=\"inv-step-body\"><p>A measurement of where a star is begins with a mark on a picture. The frame below is <strong>synthetic</strong>: a star was put at a position we chose, blurred the way a telescope blurs it, and given a little sky noise. Each cross is one mark, the place a careful person would put the center of the blurred spot.</p><p>Because we made the frame, we know where the star really is. A real frame never tells you that. The truth is hidden for now. Five marks are shown, each as its position in pixels (x, y) in the list under the picture, and the ring is their mean.</p></div>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "graded",
+  "sid": "predict-the-marks",
+  "position": [
+   2,
+   12
+  ],
+  "title": "What Is a Measurement?",
+  "subtitle": "Marking one star again and again, and what the marks can tell you",
+  "body": "<p class=\"inv-step-count\">Step 2 of 12 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">Will the marks agree?</h3><div class=\"inv-step-body\"><p>The same star is marked five times, each time as carefully as possible. Do not change the instrument yet.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">The five positions will be…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>all the same, if the marking is done carefully enough</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>scattered a little around a center, even when each mark is careful</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>scattered only because some of the marks are mistakes</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>scattered only if the frame is poor</span></button></div><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> I could use a hint </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "marked",
+  "sid": "predict-the-marks",
+  "position": [
+   2,
+   12
+  ],
+  "title": "What Is a Measurement?",
+  "subtitle": "Marking one star again and again, and what the marks can tell you",
+  "body": "<p class=\"inv-step-count\">Step 2 of 12 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">Will the marks agree?</h3><div class=\"inv-step-body\"><p>The same star is marked five times, each time as carefully as possible. Do not change the instrument yet.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">The five positions will be…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>all the same, if the marking is done carefully enough</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>scattered a little around a center, even when each mark is careful</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>scattered only because some of the marks are mistakes</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>scattered only if the frame is poor</span></button></div><p class=\"inv-held\">Your answer is recorded. It stays unmarked until you reach “The mean and the spread”, so the experiment settles it rather than the answer key.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Change answer</button><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> I could use a hint </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "last",
+  "sid": "what-you-worked-out",
+  "position": [
+   12,
+   12
+  ],
+  "title": "What Is a Measurement?",
+  "subtitle": "Marking one star again and again, and what the marks can tell you",
+  "body": "<p class=\"inv-step-count\">Step 12 of 12 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">What you worked out</h3><div class=\"inv-step-body\"><p>Careful marks of one star differ, because the spot is blurred, and the spread of the marks says how precisely a mark can be made. The mean of the marks is the best estimate they give, and its standard error, the spread over the square root of the number of marks, says how near the truth the mean typically lies. More marks lower it slowly: four times the marks halve it. A blurrier picture raises it. Here the truth was known, so we could see the mean land within one standard error of it. The next investigation asks what a stated \"plus or minus\" claims, and how to check a claim like that.</p></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "quantitative",
+  "role": "first",
+  "sid": "a-star-on-a-frame",
+  "position": [
+   1,
+   14
+  ],
+  "title": "What Is a Measurement?",
+  "subtitle": "Marking one star again and again, and what the marks can tell you",
+  "body": "<p class=\"inv-step-count\">Step 1 of 14 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">One star, marked again and again</h3><div class=\"inv-step-body\"><p>A measurement of where a star is begins with a mark on a picture. The frame below is <strong>synthetic</strong>: a star was put at a position we chose, blurred the way a telescope blurs it, and given a little sky noise. Each cross is one mark, the place a careful person would put the center of the blurred spot.</p><p>Because we made the frame, we know where the star really is. A real frame never tells you that. The truth is hidden for now. Five marks are shown, each as its position in pixels (x, y) in the list under the picture, and the ring is their mean.</p></div>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": "Depth: Quantitative"
+ },
+ {
+  "depth": "quantitative",
+  "role": "graded",
+  "sid": "predict-the-marks",
+  "position": [
+   2,
+   14
+  ],
+  "title": "What Is a Measurement?",
+  "subtitle": "Marking one star again and again, and what the marks can tell you",
+  "body": "<p class=\"inv-step-count\">Step 2 of 14 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">Will the marks agree?</h3><div class=\"inv-step-body\"><p>The same star is marked five times, each time as carefully as possible. Do not change the instrument yet.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">The five positions will be…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>all the same, if the marking is done carefully enough</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>scattered a little around a center, even when each mark is careful</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>scattered only because some of the marks are mistakes</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>scattered only if the frame is poor</span></button></div><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> I could use a hint </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Depth: Quantitative"
+ },
+ {
+  "depth": "quantitative",
+  "role": "marked",
+  "sid": "predict-the-marks",
+  "position": [
+   2,
+   14
+  ],
+  "title": "What Is a Measurement?",
+  "subtitle": "Marking one star again and again, and what the marks can tell you",
+  "body": "<p class=\"inv-step-count\">Step 2 of 14 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">Will the marks agree?</h3><div class=\"inv-step-body\"><p>The same star is marked five times, each time as carefully as possible. Do not change the instrument yet.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">The five positions will be…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>all the same, if the marking is done carefully enough</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>scattered a little around a center, even when each mark is careful</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>scattered only because some of the marks are mistakes</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>scattered only if the frame is poor</span></button></div><p class=\"inv-held\">Your answer is recorded. It stays unmarked until you reach “The mean and the spread”, so the experiment settles it rather than the answer key.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Change answer</button><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> I could use a hint </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Depth: Quantitative"
+ },
+ {
+  "depth": "quantitative",
+  "role": "last",
+  "sid": "what-you-worked-out",
+  "position": [
+   14,
+   14
+  ],
+  "title": "What Is a Measurement?",
+  "subtitle": "Marking one star again and again, and what the marks can tell you",
+  "body": "<p class=\"inv-step-count\">Step 14 of 14 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">What you worked out</h3><div class=\"inv-step-body\"><p>Careful marks of one star differ, because the spot is blurred, and the spread of the marks says how precisely a mark can be made. The mean of the marks is the best estimate they give, and its standard error, the spread over the square root of the number of marks, says how near the truth the mean typically lies. More marks lower it slowly: four times the marks halve it. A blurrier picture raises it. Here the truth was known, so we could see the mean land within one standard error of it. The next investigation asks what a stated \"plus or minus\" claims, and how to check a claim like that.</p></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Depth: Quantitative"
+ },
+ {
+  "depth": "advanced",
+  "role": "first",
+  "sid": "a-star-on-a-frame",
+  "position": [
+   1,
+   16
+  ],
+  "title": "What Is a Measurement?",
+  "subtitle": "Marking one star again and again, and what the marks can tell you",
+  "body": "<p class=\"inv-step-count\">Step 1 of 16 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">One star, marked again and again</h3><div class=\"inv-step-body\"><p>A measurement of where a star is begins with a mark on a picture. The frame below is <strong>synthetic</strong>: a star was put at a position we chose, blurred the way a telescope blurs it, and given a little sky noise. Each cross is one mark, the place a careful person would put the center of the blurred spot.</p><p>Because we made the frame, we know where the star really is. A real frame never tells you that. The truth is hidden for now. Five marks are shown, each as its position in pixels (x, y) in the list under the picture, and the ring is their mean.</p></div>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": "Depth: Advanced"
+ },
+ {
+  "depth": "advanced",
+  "role": "graded",
+  "sid": "predict-the-marks",
+  "position": [
+   2,
+   16
+  ],
+  "title": "What Is a Measurement?",
+  "subtitle": "Marking one star again and again, and what the marks can tell you",
+  "body": "<p class=\"inv-step-count\">Step 2 of 16 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">Will the marks agree?</h3><div class=\"inv-step-body\"><p>The same star is marked five times, each time as carefully as possible. Do not change the instrument yet.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">The five positions will be…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>all the same, if the marking is done carefully enough</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>scattered a little around a center, even when each mark is careful</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>scattered only because some of the marks are mistakes</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>scattered only if the frame is poor</span></button></div><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> I could use a hint </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Depth: Advanced"
+ },
+ {
+  "depth": "advanced",
+  "role": "marked",
+  "sid": "predict-the-marks",
+  "position": [
+   2,
+   16
+  ],
+  "title": "What Is a Measurement?",
+  "subtitle": "Marking one star again and again, and what the marks can tell you",
+  "body": "<p class=\"inv-step-count\">Step 2 of 16 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">Will the marks agree?</h3><div class=\"inv-step-body\"><p>The same star is marked five times, each time as carefully as possible. Do not change the instrument yet.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">The five positions will be…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>all the same, if the marking is done carefully enough</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>scattered a little around a center, even when each mark is careful</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>scattered only because some of the marks are mistakes</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>scattered only if the frame is poor</span></button></div><p class=\"inv-held\">Your answer is recorded. It stays unmarked until you reach “The mean and the spread”, so the experiment settles it rather than the answer key.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Change answer</button><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> I could use a hint </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Depth: Advanced"
+ },
+ {
+  "depth": "advanced",
+  "role": "last",
+  "sid": "what-you-worked-out",
+  "position": [
+   16,
+   16
+  ],
+  "title": "What Is a Measurement?",
+  "subtitle": "Marking one star again and again, and what the marks can tell you",
+  "body": "<p class=\"inv-step-count\">Step 16 of 16 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">What you worked out</h3><div class=\"inv-step-body\"><p>Careful marks of one star differ, because the spot is blurred, and the spread of the marks says how precisely a mark can be made. The mean of the marks is the best estimate they give, and its standard error, the spread over the square root of the number of marks, says how near the truth the mean typically lies. More marks lower it slowly: four times the marks halve it. A blurrier picture raises it. Here the truth was known, so we could see the mean land within one standard error of it. The next investigation asks what a stated \"plus or minus\" claims, and how to check a claim like that.</p></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Depth: Advanced"
+ }
+]

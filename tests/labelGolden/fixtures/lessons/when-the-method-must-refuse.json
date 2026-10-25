@@ -1,0 +1,82 @@
+{
+ "id": "when-the-method-must-refuse",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.try-a-mass.fields.0.unit",""],
+    ["steps.try-a-mass.fields.1.unit",""],
+    ["steps.try-a-small-mass.fields.0.unit",""],
+    ["steps.try-a-small-mass.fields.1.unit",""],
+    ["steps.the-lower-limit.fields.0.unit","M_J"],
+    ["steps.the-lower-limit.fields.1.unit","M_J"],
+    ["steps.the-95-percent-bound-by-hand.unit","M_J"],
+    ["steps.fit-the-line.fields.0.unit",""],
+    ["steps.fit-the-line.fields.1.unit",""],
+    ["steps.fit-the-line.fields.2.unit",""],
+    ["steps.degrees-of-freedom.unit",""],
+    ["steps.a-model-that-fits.fields.0.unit",""],
+    ["steps.a-model-that-fits.fields.1.unit",""]
+   ],
+   "numbered": [
+    ["steps.try-a-mass.fields.0.hint","0.425"],
+    ["steps.try-a-mass.fields.1.hint","0.00"],
+    ["steps.try-a-small-mass.fields.0.hint","1.000"],
+    ["steps.try-a-small-mass.fields.1.hint","34.0"],
+    ["steps.the-lower-limit.fields.0.label","Smallest mass, rise of 1"],
+    ["steps.the-lower-limit.fields.0.hint","0.79"],
+    ["steps.the-lower-limit.fields.1.label","Smallest mass, rise of 3.84"],
+    ["steps.the-lower-limit.fields.1.hint","0.73"],
+    ["steps.fit-the-line.fields.0.hint","1.078"],
+    ["steps.fit-the-line.fields.1.hint","0.024"],
+    ["steps.fit-the-line.fields.2.hint","7.64"],
+    ["steps.a-model-that-fits.fields.0.hint","0.37"],
+    ["steps.a-model-that-fits.fields.1.hint","0.089"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.the-lower-limit.fields.0.label","Masa más pequeña, subida de 1"],
+    ["steps.the-lower-limit.fields.1.label","Masa más pequeña, subida de 3,84"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "the-95-percent-bound-by-hand",
+    "answer": "0.732",
+    "tolerance": "0.005",
+    "unit": "M_J"
+   },
+   {
+    "sid": "degrees-of-freedom",
+    "answer": "4",
+    "tolerance": "0.1",
+    "unit": ""
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "try-a-mass": {
+    "validate": {"calls":232,"distinct":2,"digest":"c7b6570769ab902c","samples":[null,{"level":"error","message":"Set “Trial mass” to 2.0 and read the best tilt and the chi-square."}]}
+   },
+   "try-a-small-mass": {
+    "validate": {"calls":232,"distinct":2,"digest":"8f94ba8aa89a4c17","samples":[null,{"level":"error","message":"Set “Trial mass” to 0.5 and read the same two rows."}]}
+   },
+   "the-lower-limit": {
+    "validate": {"calls":232,"distinct":2,"digest":"ce5cf17c99336277","samples":[null,{"level":"error","message":"Read the rows “Smallest mass inside a rise of 1” and “… of 3.84”."}]}
+   },
+   "fit-the-line": {
+    "validate": {"calls":242,"distinct":2,"digest":"2fd0f6c92ef6c588","samples":[null,{"level":"error","message":"Use a straight line (two terms) and read “Slope”, its uncertainty and “Reduced chi-square”."}]}
+   },
+   "a-model-that-fits": {
+    "validate": {"calls":232,"distinct":2,"digest":"eacbc762a106e7ed","samples":[null,{"level":"error","message":"Use the parabola (three terms), then read “Reduced chi-square” and the squared term."}]}
+   }
+  },
+  "es": "same"
+ }
+}

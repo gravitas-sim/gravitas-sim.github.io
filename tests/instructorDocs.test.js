@@ -246,15 +246,16 @@ describe('the document inventory', () => {
     // 480 after the three compute-package investigations (Prompt 102 follow-up).
     // 540 after the generated Spanish structured notes, one per investigation
     // (Prompt 170): Spanish only, so the English count does not move.
-    expect(inv.documents).toBe(540);
-    expect(inv.byLocale).toEqual({ en: 249, es: 291 });
+    // 573 after the three measurement and claim investigations (Prompt 190).
+    expect(inv.documents).toBe(573);
+    expect(inv.byLocale).toEqual({ en: 264, es: 309 });
     expect(inv.byKind.notes).toBe(INVESTIGATIONS.length);
     expect(inv.byVariant).toEqual({
       activity: 12,
-      depth: 210,
-      full: 240,
+      depth: 228,
+      full: 252,
       general: 18,
-      notes: 60,
+      notes: 63,
     });
   });
 
@@ -282,7 +283,7 @@ describe('the document inventory', () => {
     const withDepth = INVESTIGATIONS.filter(
       i => withAllDepths(i).steps.length !== i.steps.length
     ).map(i => i.id);
-    expect(withDepth.length).toBe(35);
+    expect(withDepth.length).toBe(38);
     for (const id of withDepth)
       for (const d of ['core', 'quantitative', 'advanced'])
         for (const suffix of ['', '-es'])

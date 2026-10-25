@@ -5,20 +5,13 @@
 //
 // An instructor drops a pile of lab reports, backups or pasted tokens on this
 // page and gets one table: which question the class got wrong, and how often.
-// The same pile can be downloaded - a summary row per report, a row per
-// question, or everything as JSON - so the reading does not have to be done
-// twice to reach a spreadsheet. All three, and the table, are projections of
-// one graded record per report, built in js/submission/results.js; this file is
-// only the page around it.
-//
-// Still no roster, no accounts and nothing that survives a reload. What it adds
-// to the CSV and JSON (INSTRUCTOR_FLOW.md) is the instructor's side of the flow:
-// the Activity or Course the reports belong to, named from a file or a link the
-// instructor opens here; a view of the written answers in which the instructor
-// enters a mark and a comment, kept in the page and saved only as a file; and
-// gradebook files for Canvas, Moodle and D2L Brightspace, one score per student
-// per Activity from one canonical model (js/gradebook/). Nothing leaves the
-// browser.
+// The table and the three downloads (a summary row per report, a row per
+// question, JSON) are projections of one graded record per report, built in
+// js/submission/results.js; this file is only the page around it. The
+// instructor's side of the flow (INSTRUCTOR_FLOW.md) is here too: the Activity
+// or Course named from a file or link, written answers marked and commented,
+// and Canvas, Moodle and D2L files (js/gradebook/). Still no roster, no
+// accounts, nothing that survives a reload, and nothing leaves the browser.
 //
 // It is a separate esbuild entry so that none of it reaches the application's
 // start-up download. What it imports is the answer checker, the lesson data,
@@ -137,6 +130,12 @@ const DEEPER = {
     import('./data/investigations/depth/why-the-bright-ones-win.js'),
   'the-completeness-curve': () =>
     import('./data/investigations/depth/the-completeness-curve.js'),
+  'what-is-a-measurement': () =>
+    import('./data/investigations/depth/what-is-a-measurement.js'),
+  'what-does-plus-minus-claim': () =>
+    import('./data/investigations/depth/what-does-plus-minus-claim.js'),
+  'when-the-method-must-refuse': () =>
+    import('./data/investigations/depth/when-the-method-must-refuse.js'),
 };
 const deepen = async lesson =>
   lesson.depthLaid || !DEEPER[lesson.id]

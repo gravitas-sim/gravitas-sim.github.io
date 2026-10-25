@@ -9,10 +9,13 @@
 // tools/migrate-expectations.mjs; edited by hand since.
 // =============================================================================
 
+import { INSTRUCTOR as MEASUREMENT } from './investigations/depth/measurement-sequence.js';
+
 export default {
   format: 'gravitas.instructor-expectations',
   formatVersion: 2,
   lessons: {
+    ...MEASUREMENT.expectations,
     'the-suns-motion': {
       'measure-the-sun':
         'Within 100 pc against the mean of the stars the Sun reads U about 10.5, V about 21.9 and W about 9.1 km/s (489 stars). The validator accepts 10.5 and 9.1 within 1.5 and 21.9 within 2.',

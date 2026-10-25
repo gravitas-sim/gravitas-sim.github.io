@@ -1,34 +1,26 @@
 // =============================================================================
 // The local class summary (Prompt 173)
 // -----------------------------------------------------------------------------
-// The review page grades one report at a time and lists them. This is the
-// picture of the class they make together, computed from the graded records the
-// page already holds and from nothing else: no file is read here, nothing is
-// sent, nothing is stored, and the summary leaves the page only as the one CSV
-// the instructor asks for (classSummaryCsv) or as the page printed.
+// The review page grades one report at a time. This is the picture of the class
+// they make together, computed from the graded records the page already holds
+// and nothing else: no file is read, nothing is sent or stored, and the summary
+// leaves the page only as the one CSV the instructor asks for (classSummaryCsv)
+// or as the page printed.
 //
-// What it says, per investigation the class handed in:
-//   - how much of it each report got through, and per step how many answered,
-//     how many were right of the answers Gravitas can check, and, for written
-//     answers, the marks the instructor entered (never invented: a step nobody
-//     has marked says so);
-//   - the rubric criteria of the written steps, by what each claims (Prompt
-//     172's kinds), as the instructor marked them;
-//   - the wrong answers given most often, and the misconception each one is
-//     where the investigation's author named it (js/answerFeedback.js: a
-//     mistake is named only when the author wrote it down, so most wrong
-//     answers are simply wrong and are shown as that);
-//   - the time a report records, which is the span from the first opening to
-//     the last save and includes every hour away, not time on task;
-//   - each measured quantity the reports' evidence tables carry, one value per
-//     report with its uncertainty as the table states it (Prompt 150's record).
+// Per investigation handed in it says: how far each report got, and per step
+// how many answered and how many were right of what Gravitas can check, with
+// the instructor's marks for written answers (a step nobody marked says so);
+// the rubric criteria of the written steps (Prompt 172's kinds); the wrong
+// answers given most often, with the misconception only where the author named
+// it (js/answerFeedback.js); the time a report records, first opening to last
+// save, every hour away included; and each measured quantity the evidence
+// tables carry, one value per report with its uncertainty (Prompt 150).
 //
 // What it does not say: who. A report is counted once, an exact duplicate not
 // at all, and no name, roster id or file name appears in the summary or its
-// CSV. It never changes a mark, a score or a gradebook row (the marks it reads
-// are the instructor's, as entered; criterion marks are never added to a step
-// mark, js/instructorRubric.js), and it makes no claim about learning: it is
-// what this class handed in, not a study of Gravitas.
+// CSV. It never changes a mark, a score or a gradebook row (criterion marks are
+// never added to a step mark, js/instructorRubric.js), and it makes no claim
+// about learning: it is what this class handed in, not a study of Gravitas.
 //
 // It is named js/instructor*.js so the service worker installs it with the
 // instructor modules, in the idle tier (tools/build-service-worker.mjs), and

@@ -2,21 +2,19 @@
 // The printable activity list (an instructor module, Roadmap III Prompt 174)
 // -----------------------------------------------------------------------------
 // A course package in, a plan out: units, items, links, depths, time bands, what
-// builds on what, textbook chapters, objectives, what students hand in, and the
-// matrix of the instructor's own outcomes against the items. `buildPlan` reads
-// the package and what the page knows; `toHtml` and `toMarkdown` write it, as a
-// page to print and as text to paste into a learning platform's page. Both are
-// made in the browser, from the course on the page, and nothing is committed or
+// builds on what, chapters, objectives, what students hand in, and the matrix of
+// the instructor's own outcomes against the items. `buildPlan` reads the package
+// and what the page knows; `toHtml` and `toMarkdown` write it, to print or to
+// paste into a learning platform. All in the browser; nothing is committed or
 // sent.
 //
-// Honest by construction:
-//  - a time is a band (js/data/instructorTimeBands.js), never a measurement, and
-//    the plan says "editorial estimate; no observed class data" wherever it
-//    shows one, until the evidence-status record holds an observed value;
-//  - the outcome matrix is the instructor's mapping of what the course intends,
-//    and it says so: it is not evidence that any student attained an outcome;
-//  - what students hand in is what the project's lessons produce (a lab report
-//    as a PDF, or its token), not anything Gravitas collects.
+// Honest by construction: a time is a band (js/data/instructorTimeBands.js),
+// never a measurement, and the plan says "editorial estimate; no observed class
+// data" wherever it shows one, until the evidence-status record holds an
+// observed value; the outcome matrix is the instructor's mapping of what the
+// course intends, not evidence that any student attained an outcome; and what
+// students hand in is what the lessons produce (a lab report as a PDF, or its
+// token), not anything Gravitas collects.
 //
 // Pure: no DOM, no import of a page module. What the page owns comes in as
 // arguments, as js/instructorCartridge.js takes it, so this module adds no

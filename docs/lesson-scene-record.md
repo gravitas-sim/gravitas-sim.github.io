@@ -11,15 +11,15 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 60 investigations and 1024 steps: 934 steps
+Across 63 investigations and 1062 steps: 972 steps
 declare a scene, 157 let a reader change one, 163 read the
-running integration, 545 show a prescribed model result, 146 draw
-on a stored dataset, 424 put a self-contained panel beside the text,
-239 keep something, and 56 are prose.
-Of 130 prediction loops, 130 are returned to,
-130 produce a measurement before they are answered, and
+running integration, 583 show a prescribed model result, 146 draw
+on a stored dataset, 462 put a self-contained panel beside the text,
+255 keep something, and 56 are prose.
+Of 138 prediction loops, 138 are returned to,
+138 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
-130 hold their marking until the experiment settles them.
+138 hold their marking until the experiment settles them.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -860,4 +860,46 @@ Of 130 prediction loops, 130 are returned to,
 - **Recovery:** reset: rebuilds the scenario on arrival; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** 1 step(s) on arrival (what-a-sampler-does).
 - **Accepted central experiment** (reviewed 2026-09-11): object `compute:posterior-sampling`, control the compute page's steps setting (not a lesson widget), measures the median and 68 percent interval width of the planet-to-star radius ratio and the impact parameter from an ensemble sampler, and the convergence diagnostics that let the interval be quoted, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## What Is a Measurement? (`what-is-a-measurement`)
+
+- **Steps:** 12. Scene declared on 12; a reader can change something on 0; 12 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 12 prescribed model, 0 stored dataset, 12 self-contained panel.
+- **What students do:** move-an-instrument-control, press-an-instrument-preset, commit-a-prediction, record-values, choose-an-option, answer-in-words.
+- **Objects the steps declare:** star.
+- **Instruments:** frame-marks.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** predict-the-marks → read-the-spread, the-standard-error → read-the-spread; predict-more-marks → twenty-marks → twenty-marks; predict-the-truth → reveal-the-truth, a-blurrier-star, why-it-doubled, what-you-would-report, what-you-worked-out → reveal-the-truth.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:frame-marks`, control frame-marks/n, measures the standard error of the mean of the marks of one star, which falls as the number of marks grows, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## What Does ± Claim? (`what-does-plus-minus-claim`)
+
+- **Steps:** 13. Scene declared on 13; a reader can change something on 0; 13 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 13 prescribed model, 0 stored dataset, 13 self-contained panel.
+- **What students do:** move-an-instrument-control, commit-a-prediction, record-values, choose-an-option, answer-in-words.
+- **Objects the steps declare:** star.
+- **Instruments:** coverage-repeats.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** predict-one-sigma → coverage-at-one-sigma, coverage-at-two-sigma → coverage-at-one-sigma; predict-the-biased-instrument → biased-coverage, what-a-small-error-bar-says, an-asymmetric-interval, the-symmetric-shortcut → biased-coverage; predict-the-upper-limit → upper-limit-coverage, what-would-prove-it-wrong, what-you-worked-out → upper-limit-coverage.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:coverage-repeats`, control coverage-repeats/k, measures the share of seeded repeats whose stated interval holds the true value, at one and at two sigma, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## When the Method Must Refuse (`when-the-method-must-refuse`)
+
+- **Steps:** 13. Scene declared on 13; a reader can change something on 0; 13 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 13 prescribed model, 0 stored dataset, 13 self-contained panel.
+- **What students do:** move-an-instrument-control, commit-a-prediction, record-values, choose-an-option, answer-in-words.
+- **Objects the steps declare:** star.
+- **Instruments:** profile-refusal.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** predict-the-mass → try-a-mass, try-a-small-mass, the-lower-limit, is-there-a-largest-mass, what-to-report → try-a-mass; predict-the-line → fit-the-line, refuse-or-report, a-model-that-fits, what-would-you-refuse, what-you-worked-out → fit-the-line.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:profile-refusal`, control profile-refusal/mass, measures the chi-square of the best fit at a trial mass, which is zero above the product and rises below it, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 

@@ -1,0 +1,91 @@
+{
+ "id": "what-is-a-measurement",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.read-the-spread.fields.0.unit","px"],
+    ["steps.read-the-spread.fields.1.unit","px"],
+    ["steps.the-standard-error.fields.0.unit","px"],
+    ["steps.the-standard-error.fields.1.unit","px"],
+    ["steps.a-position-with-an-error-bar.unit","px"],
+    ["steps.how-many-marks-by-hand.unit",""],
+    ["steps.twenty-marks.fields.0.unit","px"],
+    ["steps.twenty-marks.fields.1.unit",""],
+    ["steps.reveal-the-truth.fields.0.unit","px"],
+    ["steps.reveal-the-truth.fields.1.unit",""],
+    ["steps.a-blurrier-star.fields.0.unit","px"],
+    ["steps.a-blurrier-star.fields.1.unit","px"],
+    ["steps.a-pointer-offset.fields.0.unit","px"],
+    ["steps.a-pointer-offset.fields.1.unit",""]
+   ],
+   "numbered": [
+    ["steps.read-the-spread.fields.0.hint","31.1"],
+    ["steps.read-the-spread.fields.1.hint","0.80"],
+    ["steps.the-standard-error.fields.0.hint","0.36"],
+    ["steps.the-standard-error.fields.1.hint","0.34"],
+    ["steps.a-position-with-an-error-bar.placeholder","e.g. 12.3 ± 0.4"],
+    ["steps.twenty-marks.fields.0.label","Standard error of x, 20 marks"],
+    ["steps.twenty-marks.fields.0.hint","0.17"],
+    ["steps.twenty-marks.fields.1.label","How many times smaller than with 5 marks"],
+    ["steps.twenty-marks.fields.1.hint","2.06"],
+    ["steps.reveal-the-truth.fields.0.hint","-0.30"],
+    ["steps.reveal-the-truth.fields.1.hint","-0.84"],
+    ["steps.a-blurrier-star.fields.0.hint","1.60"],
+    ["steps.a-blurrier-star.fields.1.hint","0.71"],
+    ["steps.a-pointer-offset.fields.0.label","Standard error of x, 30 marks"],
+    ["steps.a-pointer-offset.fields.0.hint","0.14"],
+    ["steps.a-pointer-offset.fields.1.hint","6.2"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.a-position-with-an-error-bar.placeholder","p. ej. 12,3 ± 0,4"],
+    ["steps.twenty-marks.fields.0.label","Error estándar de x, 20 marcas"],
+    ["steps.twenty-marks.fields.1.label","Cuántas veces menor que con 5 marcas"],
+    ["steps.a-pointer-offset.fields.0.label","Error estándar de x, 30 marcas"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "a-position-with-an-error-bar",
+    "answer": "31.1",
+    "tolerance": "0.1",
+    "unit": "px"
+   },
+   {
+    "sid": "how-many-marks-by-hand",
+    "answer": "64",
+    "tolerance": "6",
+    "unit": ""
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "read-the-spread": {
+    "validate": {"calls":232,"distinct":2,"digest":"116550a2ec6aced4","samples":[null,{"level":"error","message":"Set “How many marks” to 5 and read “Mean x position” and “Spread of the x marks”."}]}
+   },
+   "the-standard-error": {
+    "validate": {"calls":232,"distinct":2,"digest":"a7b28f3dd4af9551","samples":[null,{"level":"error","message":"Read the rows “Standard error of x” and “Standard error of y” with 5 marks."}]}
+   },
+   "twenty-marks": {
+    "validate": {"calls":232,"distinct":2,"digest":"855876a6ea89aceb","samples":[null,{"level":"error","message":"Set “How many marks” to 20, read “Standard error of x”, then divide 0.36 by it."}]}
+   },
+   "reveal-the-truth": {
+    "validate": {"calls":232,"distinct":2,"digest":"91124f8d58ee80a6","samples":[null,{"level":"error","message":"Show the truth, then read “Error of the mean in x” and “That error in standard errors”, with 5 marks and the sign shown."}]}
+   },
+   "a-blurrier-star": {
+    "validate": {"calls":232,"distinct":2,"digest":"2690c5dc53c886ab","samples":[null,{"level":"error","message":"Set “Width of the star” to 8 pixels and “How many marks” to 5, then read the spread and the standard error of x."}]}
+   },
+   "a-pointer-offset": {
+    "validate": {"calls":232,"distinct":2,"digest":"bf92831e794d7d7d","samples":[null,{"level":"error","message":"Set the offset to 1.0, the number of marks to 30 and show the truth, then read the two rows."}]}
+   }
+  },
+  "es": "same"
+ }
+}
