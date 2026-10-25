@@ -1,0 +1,85 @@
+{
+  "contract": "Prompt 193, validation contract for the Galilean-moon kernel, committed before any candidate output was inspected (the pack's own held-out errors, in ephemeris-packs/galilean-2025-11.json, and the moons' largest elongations, 5.9, 9.5, 15.0 and 26.5 Jupiter radii, were seen first and fix nothing below).",
+  "committedFirst": true,
+  "window": {
+    "firstNightJdUt": 2461000.5,
+    "nights": 39,
+    "hourlyNightsJdUt": [2461014.5, 2461015.5, 2461016.5],
+    "nightlyUtHours": 5,
+    "lostNights": 6,
+    "lostNightsSeed": 193,
+    "minAltitudeDeg": 25,
+    "observatory": { "name": "Kitt Peak, Arizona (a stated example site)", "latDeg": 31.9583, "lonDeg": -111.5997 }
+  },
+  "legs": {
+    "a1.packVsHorizons": {
+      "claim": "the pack reproduces Horizons at the half-hour samples it never saw",
+      "bound": "each moon's held-out position error at most 5 km and velocity error at most 1e-3 km/s",
+      "positionKm": 5,
+      "velocityKmS": 0.001
+    },
+    "a2.geometryVsOracle": {
+      "claim": "the kernel's offsets of each moon from Jupiter (x, y in Jupiter radii) agree with an independent numpy and astropy computation from the raw hourly Horizons rows (cubic Hermite) and astropy's built-in Jupiter",
+      "bound": "largest difference over 48 epochs at most 0.002 Jupiter radii in x and in y",
+      "xyRj": 0.002
+    },
+    "b1.aliasNightly": {
+      "claim": "once-nightly sampling cannot tell Io's period from its alias",
+      "bound": "from the truth marks sampled at the nightly points only (exactly one day apart), the fit at Io's alias period (2.3 d) and at its true period differ in chi-square by less than 1 (noise 0.03 Jupiter radii); Europa, Ganymede and Callisto have no alias below the Nyquist period of 2 days",
+      "deltaChi2Below": 1,
+      "sigmaRj": 0.03
+    },
+    "b2.aliasDesigned": {
+      "claim": "the designed cadence tells them apart",
+      "bound": "from the truth marks at the designed epochs, the best period for every moon beats any alias candidate by a chi-square difference of at least 100, and is the one within 0.3 percent of the reference sidereal period",
+      "deltaChi2AtLeast": 100,
+      "relativeToReference": 0.003
+    },
+    "c1.periodAmplitude": {
+      "claim": "a sinusoid fitted to the truth marks recovers each moon's period and semi-major axis",
+      "bound": "apparent (synodic) period within 0.25 percent of the reference sidereal period; semi-major axis (the amplitude) within 1 percent of the reference mean element; after the sidereal correction the period within 0.05 percent",
+      "apparentPeriodRelative": 0.0025,
+      "amplitudeRelative": 0.01,
+      "correctedPeriodRelative": 0.0005
+    },
+    "c2.mass": {
+      "claim": "Kepler's third law on the fitted period and axis weighs Jupiter",
+      "bound": "GM from each moon's truth marks within 1.0 percent of the planet's GM, 126,686,534 km^3/s^2, uncorrected for the Earth's motion; within 0.5 percent after the sidereal correction; the moon-to-moon scatter of the corrected values at most 0.3 percent",
+      "uncorrectedRelative": 0.01,
+      "correctedRelative": 0.005,
+      "scatterRelative": 0.003
+    },
+    "d1.coverage": {
+      "claim": "the stated uncertainties of the fit hold on an ensemble",
+      "bound": "over 200 seeded noise realisations (sigma 0.03 Jupiter radii, the designed epochs) the one-sigma interval holds the noise-free fit's period and amplitude between 58 and 78 percent of the time, for every moon",
+      "seeds": 200,
+      "sigmaRj": 0.03,
+      "coverageLow": 0.58,
+      "coverageHigh": 0.78
+    },
+    "d2.massEnsemble": {
+      "claim": "the weighed mass is not claimed more precisely than it is known",
+      "bound": "over the same 200 realisations the corrected GM of each moon lies within 3 stated sigmas of the planet's GM at least 95 percent of the time",
+      "withinSigmas": 3,
+      "atLeast": 0.95
+    },
+    "e1.oracleFit": {
+      "claim": "the sinusoid fit is the least-squares fit",
+      "bound": "scipy curve_fit on the committed truth marks gives the same period and amplitude within 1e-5 relative",
+      "relative": 1e-5
+    },
+    "e2.inferenceCore": {
+      "claim": "the inference core's rv-keplerian fit of the same marks (a different code path) agrees on period and amplitude",
+      "bound": "within 1e-3 relative",
+      "relative": 0.001
+    },
+    "f1.refusals": {
+      "claim": "the fit refuses what the cadence cannot support",
+      "bound": "fewer than eight marks, or a span shorter than one period, makes no period (refusal named in words); a moon whose best two candidates are within chi-square 9 is reported ambiguous with both periods"
+    },
+    "g1.frames": {
+      "claim": "the synthetic frames' centroids return the moons' positions",
+      "bound": "centroid of each moon in a rendered frame within 0.15 pixel of the rendered position (0.02 Jupiter radii at this scale); the sequence digest is stable across runs"
+    }
+  }
+}
