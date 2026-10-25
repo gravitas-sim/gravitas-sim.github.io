@@ -245,13 +245,20 @@ test.describe('filtering', () => {
 
     // A title and a summary: three lessons name Kepler, and all belong here.
     // Integrators in Practice (Prompt 102) runs on the Kepler-16 system, which
-    // its summary names, so it legitimately matches.
+    // its summary names, so it legitimately matches; so does A Binary Star's
+    // Orbit (Prompt 191), whose summary turns an orbit into a mass sum by
+    // Kepler's third law.
     await search.fill('kepler');
-    await expect(page.locator('#investigationList .inv-card')).toHaveCount(3);
+    await expect(page.locator('#investigationList .inv-card')).toHaveCount(4);
     await expect
       .poll(() => shownIds(page))
 
-      .toEqual(['keplers-laws', 'weighing-stars', 'integrators-in-practice']);
+      .toEqual([
+        'keplers-laws',
+        'weighing-stars',
+        'integrators-in-practice',
+        'a-binary-stars-orbit',
+      ]);
 
     // A tag nobody prints on a card is still searchable.
     await search.fill('resonance');
