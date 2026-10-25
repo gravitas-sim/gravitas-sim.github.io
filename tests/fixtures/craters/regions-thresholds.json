@@ -1,0 +1,74 @@
+{
+  "format": "gravitas.craters-regions-thresholds/1",
+  "prompt": 195,
+  "part": 2,
+  "committed": "Before any region list was cut, any frame cropped, any leg run and any output of this part inspected: the four regions, the cuts, the legs of tiers b4 and e and their bounds. The data were retrieved on 2026-10-25 by the main session with Carl's consent (RETRIEVAL.md in the session scratchpad: URLs, byte counts and SHA-256 are copied into tests/fixtures/craters/regions-provenance.json); nothing in them had been read when this file was written except the field names of the two catalogues (Lon_E, Lat, Radius_km for the Moon; lon_e, lat, diamkm for Mars) and the first record of each. A leg that a measurement fails is a failed leg, reported and left failing; only Carl resets a bound.",
+  "regions": {
+    "moon-highland": {
+      "body": "moon",
+      "what": "south-central highlands (Purbach, Walther, Regiomontanus)",
+      "lonE": [-10, 15],
+      "lat": [-35, -20]
+    },
+    "moon-mare": {
+      "body": "moon",
+      "what": "Mare Tranquillitatis and its margins",
+      "lonE": [20, 45],
+      "lat": [0, 15]
+    },
+    "mars-highland": {
+      "body": "mars",
+      "what": "Terra Sabaea, a Noachian highland",
+      "lonE": [41, 53],
+      "lat": [1, 13]
+    },
+    "mars-plains": {
+      "body": "mars",
+      "what": "Elysium Planitia, young lava plains",
+      "lonE": [166, 178],
+      "lat": [1, 13]
+    }
+  },
+  "definition": {
+    "box": "a region is the spherical rectangle lon in lonE, lat in lat (degrees, east positive, planetocentric): lon >= lo and lon < hi, lat >= lo and lat < hi",
+    "area": "R^2 (lon_hi - lon_lo) (sin lat_hi - sin lat_lo) with the longitudes in radians; R = 1737.4 km for the Moon (IAU 2000), 3396.19 km for Mars (the equatorial radius of the MDIM 2.1 map, whose 1 km/px scale is 2 pi R / width); the area's relative sigma is 0 for the Moon and 0.003 for Mars (the sphere against the oblate figure, a bound read from the radii A = 3396.19 km and C = 3376.20 km: (A - C) / A = 0.0059, half of it as a one-sigma allowance)",
+    "catalogues": {
+      "moon": "LU78287GT, Salamuniccar, Loncaric, Grumpe and Woehler 2013, Adv. Space Res., doi:10.1016/j.asr.2013.06.024, with LU60645GT (doi:10.1016/j.pss.2011.09.003): 78,287 craters, 'globally complete up to ~D>=8 km', integrating the catalogues of McDowell, Rodionova and Head; diameter = 2 x Radius_km; USGS Astropedia, Access Constraints None, Use Constraints Please cite authors",
+      "mars": "Robbins V1 crater database as served by the USGS Astrogeology OGC API (collection mars/robbinsv1), Robbins and Hynek 2012, JGR Planets 117, E05004, doi:10.1029/2011JE003966; diameter = diamkm; no licence stated on the collection page or on the author's page"
+    },
+    "cut": "the regional list is the craters of the box with diameter at least cutKm: 20 km on both bodies; the list holds diameter (km), longitude and latitude and nothing else; ties (diameter equal to a threshold) are counted (>=)",
+    "frames": "the Moon: the Clementine nearside orthographic mosaic of the repository fixture (PIA00302, 1,719 x 1,719, the limb touching the four edges), centre (859.5, 859.5) and radius 859.5 pixel-edge coordinates with a half-pixel sigma, so s = 1737.4 / 859.5 km per pixel (about 2.0214) at the centre of the disc, orthographic about 0N 0E: x = cx + Rpx cos(lat) sin(lon), y = cy - Rpx sin(lat), the emission angle E at distance rho from the centre has sin E = rho / Rpx and the compression is along the radial direction. Mars: the MDIM 2.1 colourised global mosaic at 1 km/px (21,339 x 10,670, simple cylindrical): x = (lon + 180) W / 360, y = (90 - lat) H / 180 (the row from the top), s = 2 pi R / W, the east-west direction compressed by cos(lat) relative to the north-south one. A region's crop is the bounding rectangle of its projected box (corners and edges sampled every 0.25 degree), rounded outward to whole pixels; the pixels are the gray of red, green and blue (0.299, 0.587, 0.114, rounded as js/observatory's picture import and Prompt 189's displayPlane do), rows from the bottom as in FITS; nothing is resampled. A display-only frame: marks permitted, photometry and astrometry refused.",
+    "completeness": "a stated input, not corrected here: completeFrom is 30 km on the Moon (at least 15 pixels across at 2.02 km/px, and the catalogue's own 8 km completeness) and 20 km on Mars (20 pixels across at 1 km/px)"
+  },
+  "checks": {
+    "b4.formula": {
+      "what": "tier b4 as the published-formula fallback, craterstats NOT RUN: on the pinned list of 300 diameters (tests/fixtures/craters/oracle-results.json, 5,000 km^2), at the 20 thresholds: (1) the cumulative count and the density equal the Crater Analysis Techniques Working Group's N and N / A exactly; (2) the kernel's Garwood interval at level 0.6827 against the working group's sigma = sqrt(N) / A: the relative difference of the half-width (hi - lo) / 2 from sqrt(N) / A is at most 0.10 where N >= 100, at most 0.20 where 30 <= N < 100, and is reported as evidence below 30 (the Garwood interval is asymmetric and wider than the Gaussian one at small N); (3) the symmetry of the interval is not asserted",
+      "bounds": {
+        "densityRelative": 1e-15,
+        "halfWidthRelativeN100": 0.1,
+        "halfWidthRelativeN30": 0.2
+      }
+    },
+    "e1.regionCounts": {
+      "what": "for each region at the thresholds 20 km times 2^(k/2) up to the largest diameter: the kernel's N(>=D) on the committed regional list equals a count made by an independent script (tools/craters-oracle/regions.py, standard library only) straight from the unmodified catalogue file, and the area the kernel is given equals the script's spherical-rectangle area",
+      "bounds": { "countsExact": 0, "areaRelative": 1e-12 }
+    },
+    "e2.verdict": {
+      "what": "the relative age of each pair with the highland as a and the mare or plains as b, above dMin 30 km (Moon) and 20 km (Mars), both regions' completeFrom as stated: the verdict is 'a older' (the highland is older, the expectation of the published geology of both bodies, stated before the count) with the 95 percent interval of the density ratio excluding 1 (its lower end above 1); a verdict of 'no significant difference' or 'b older' fails the leg",
+      "bounds": { "verdict": "a older", "ratioLowerAbove": 1 }
+    },
+    "e3.index": {
+      "what": "the cumulative index of each region's list above its dMin is between 1.0 and 3.5 (the range of published indices for large lunar and Martian crater populations, e.g. Neukum and Ivanov 1994, Hartmann and Neukum 2001: about 1.8 to 3); the constancy check's flag is reported as evidence, not judged",
+      "bounds": { "indexBand": [1, 3.5] }
+    },
+    "e4.provenance": {
+      "what": "the committed frames and regional lists are the ones the provenance file records: each frames file's size and SHA-256, the regional lists' SHA-256, the source files' sizes and SHA-256 (not committed: the Mars JPEG 36,708,552 B, the Salamuniccar zip 26,224,618 B, the two Robbins answers) as retrieved",
+      "bounds": { "mismatches": 0 }
+    }
+  },
+  "notRun": {
+    "b4.craterstats": "the pin of craterstats' own output: the package is not installed (Python 3.10 venv and pip not authorised); b4 is met by published formula only, and cannot catch a convention mismatch with the tool (bin edges, lower or upper edge of the cumulative, area handling)",
+    "e.published": "Head et al. (2010) / the Brown University LOLA list was not retrievable (host refused connections), so no second independent lunar catalogue exists: the Moon's tier e is one catalogue (LU78287GT, which integrates Head's), and the cross-catalogue agreement the contract proposed is NOT RUN for the Moon; for Mars there is one catalogue",
+    "e.frames": "no student's or other person's crater marks on these frames exist, and none is simulated: no leg measures craters on the frames themselves"
+  }
+}

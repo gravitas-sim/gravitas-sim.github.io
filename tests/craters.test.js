@@ -28,6 +28,7 @@ import {
   toCsv,
 } from '../js/measure/craters.js';
 import { emptyState, place } from '../js/measure/marks.js';
+import { readPlanes } from '../tools/data-packs/image-packs.mjs';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const THRESHOLDS = JSON.parse(
@@ -57,7 +58,9 @@ describe('the committed thresholds hold for the production module', () => {
     }
     expect(rows.filter(r => r.pass === null).map(r => r.id)).toEqual([
       'b4.crater-tool',
-      'e1.authentic',
+      'b4.craterstats',
+      'e.published',
+      'e.frames',
     ]);
   });
 
@@ -70,7 +73,9 @@ describe('the committed thresholds hold for the production module', () => {
       expect(ran).toBe(true);
     }
     for (const id of Object.keys(THRESHOLDS.notRun)) {
-      if (id !== 'packs') expect(ids.has(id)).toBe(true);
+      // e1.authentic is superseded by part 2's e1 to e4 and its own NOT RUN rows
+      if (id !== 'packs' && id !== 'e1.authentic')
+        expect(ids.has(id)).toBe(true);
     }
   });
 
@@ -224,5 +229,95 @@ describe('the index', () => {
     const p = powerLaw([1.1, 1.2, 1.3, 1.4, 1.5, 3], { dMin: 1 });
     expect(p.status).toBe('ok');
     expect(p.constancy.status).toBe('not-run');
+  });
+});
+
+describe('the four regions (part 2)', () => {
+  const doc = JSON.parse(
+    readFileSync(path.join(ROOT, 'frames/craters-regions.json'), 'utf8')
+  );
+  const regions = Object.entries(doc.regions);
+
+  test('four regions, each list holds diameter, longitude and latitude and nothing else', () => {
+    expect(regions.map(([id]) => id)).toEqual([
+      'moon-highland',
+      'moon-mare',
+      'mars-highland',
+      'mars-plains',
+    ]);
+    for (const [, r] of regions) {
+      expect(r.craters.length).toBeGreaterThan(5);
+      let last = Infinity;
+      for (const c of r.craters) {
+        expect(c).toHaveLength(3);
+        const [D, lon, lat] = c;
+        expect(D).toBeGreaterThanOrEqual(r.cutKm);
+        expect(D).toBeLessThanOrEqual(last);
+        last = D;
+        expect(lon).toBeGreaterThanOrEqual(r.lonE[0]);
+        expect(lon).toBeLessThan(r.lonE[1]);
+        expect(lat).toBeGreaterThanOrEqual(r.lat[0]);
+        expect(lat).toBeLessThan(r.lat[1]);
+      }
+    }
+  });
+
+  test('the credit and the rights decision are in the file', () => {
+    expect(doc.credit.moon).toMatch(/Please cite authors/);
+    expect(doc.credit.moon).toMatch(/NASA\/JPL\/USGS/);
+    expect(doc.credit.mars).toMatch(/no licence is stated/);
+    expect(doc.credit.mars).toMatch(/Robbins and B\. M\. Hynek 2012/);
+  });
+
+  test('each frame is a display-only plane of the recorded size, not blank', () => {
+    for (const [id, r] of regions) {
+      const text = readFileSync(path.join(ROOT, r.frame.file), 'utf8');
+      const p = readPlanes(text);
+      expect(p.id).toBe(`craters-${id}`);
+      expect([p.width, p.height]).toEqual([r.frame.width, r.frame.height]);
+      expect(r.frame.use).toBe('display-only');
+      const box = r.frame.cropBoxPx;
+      expect([box[2] - box[0], box[3] - box[1]]).toEqual([p.width, p.height]);
+      const px = p.planes.display;
+      expect(px.length).toBe(p.width * p.height);
+      expect(new Set(px).size).toBeGreaterThan(50);
+    }
+  });
+
+  test('the scale of each frame follows from its geometry', () => {
+    const moon = doc.regions['moon-mare'].geometry;
+    expect(moon.kmPerPixelAtCentre).toBeCloseTo(1737.4 / 859.5, 12);
+    expect(moon.kmPerPixelSigma / moon.kmPerPixelAtCentre).toBeCloseTo(
+      0.5 / 859.5,
+      12
+    );
+    const mars = doc.regions['mars-plains'].geometry;
+    expect(mars.kmPerPixel).toBeCloseTo(1, 3);
+  });
+
+  test('a mark on a regional frame reads a diameter through the foreshortening of its place', () => {
+    // The Moon, orthographic: at 60 degrees of longitude on the equator the
+    // radial direction is compressed by cos E = cos(60) = 0.5, so a radius of
+    // 20 pixels along it is 40 on the ground.
+    const g = doc.regions['moon-mare'].geometry;
+    const d = diameterOf(
+      {
+        kind: 'circle',
+        pts: [
+          [0, 0],
+          [20, 0],
+        ],
+        sigma: 0.3,
+      },
+      {
+        scale: {
+          value: g.kmPerPixelAtCentre,
+          sigma: g.kmPerPixelSigma,
+          unit: 'km/pix',
+        },
+        foreshortening: { cosE: 0.5, axis: 0 },
+      }
+    );
+    expect(d.diameter).toBeCloseTo(2 * 40 * g.kmPerPixelAtCentre, 9);
   });
 });
