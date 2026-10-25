@@ -118,3 +118,99 @@ In order: a `core` check that is not a pass gives **C**; else an `escape` check 
 - **C**: stop and record. Prompts 200, 201 and 202 are not run; 203 builds the parameter table itself; 205's
   atmosphere items are removed and the Goldilocks lesson keeps its present step; 231's atmosphere item becomes a
   reading step (Appendix C, entry 199).
+
+---
+
+## Results
+
+Everything above this line is the text committed in `1eeedc93`, before the prototype (the later change to
+`thresholds.json` is Prettier's formatting, content identical). What follows was written after the
+measurements. The prototype is `spike/atmospheres-gate-i` at `2196ac7e` (never merged): the kernel
+(`js/kernels/atmospheres/`), a widget family of three instruments plotted through `js/plot/chart.js`, their
+English words and a rot13 size stand-in for the Spanish, the registry entry and the `NEVER_PRECACHED` lines,
+the oracle (`tools/atmospheres-gate/oracle.py`), the judge and the measurement script. The record is
+`tests/fixtures/atmospheres-gate-i/record.json`; `tests/atmospheresGateI.test.js` re-derives every status from
+it, the verdict from the decision function and checks that this document states it.
+
+**Verdict: C**, by the committed decision function: two `core` checks are not passes, both about how the
+family joins the existing build, and neither about the physics. Every scientific check passes; the two `escape`
+checks were not measured, for want of data this repository does not hold and this session was not allowed to
+fetch. The verdict is pending Carl's ratification (register row D-R10-75, DELEGATED) and Prompt 200 does not run
+on it.
+
+### The checks
+
+| Check | Status | Measured |
+| --- | --- | --- |
+| `A1.equilibrium` | pass | 2,000 seeded points against numpy and astropy: relative error 0 (bound 1e-12) |
+| `A2.anchors` | pass | Venus 229.1 K against 227 (0.9 percent), Earth 254.0 against 255 (0.4), Mars 209.8 against 210 (0.1); Jupiter 109.84 K against the 109.46 implied by its published pair (0.34 percent, bound 1), Uranus 0.23, Neptune 0.14; HD 209458 b 1,442.7 K, in 1,400 to 1,500 and equal to the lesson's formula (the lesson rounds 215.032 solar radii per AU; with the IAU constants the kernel gives 1,442.6 K, 1e-4 apart) |
+| `A3.onelayer` | pass | 3.6e-16 against a linear solve of the two balance equations; the limits `eps = 0` and `eps = 1`; monotone |
+| `A4.grey` | pass | closed forms 0; against the numerical two-stream solution 2.2e-16 (bound 1e-6), 60 depths from 0.01 to 200 |
+| `A5.eddington` | pass | the oracle returned `q(0)` 0.5775 and `q(infinity)` 0.7104 (self-test passed); the Eddington profile is **3.66 percent warm at the top** (`tau = 0`) and the gap closes with depth: inside the 4.0 percent bound on 401 depths to 100 |
+| `A6.report` | pass | reported, not asserted. Surface-to-emission ratio and the two models' values: Venus 3.217, one layer **no solution** (the model's maximum is 1.189), grey `tau_s` 141.5; Earth 1.134, emissivity 0.790, `tau_s` 0.870; Mars 1.001, emissivity 0.008, `tau_s` 0.005. At `tau = 1` the models give 280.4 K (one layer) and 293.3 K (grey) for an emission temperature of 255 K, and they agree only at `tau_s = 4/3` |
+| `A7.refusals` | pass | 24 of 24 hostile inputs refuse with a reason and no number; every result names its model and what it leaves out |
+| `S1.scale` | pass | 1e-12 against astropy constants on 1,000 points; the e-folding length of a numerically integrated isothermal column to 3e-15 |
+| `S2.anchors` | pass | Venus 15.90 km (published 15.9), Earth 8.43 (8.5; 0.9 percent), Mars 10.86 (11.1; 2.2 percent) |
+| `P1.plot` | pass | three plots drawn by `js/plot/chart.js`; the worst path vertex is 0.095 px from where its data is (bound 0.1); legend toggled from the keyboard; the keyboard readout speaks the values; the family contains no drawing code of its own. jsdom only (see "Not verified") |
+| `T1.noescape.deferred` | pass | +4,724 B of deferred JavaScript (bound 14,336) on a Node 22.23.4 copy, kernel alone 1,488 B (bound 5,120) |
+| `T1.requests` | pass | +2 lazy chunks (bound 3) |
+| `T1.tier` | **fail** | first-visit precache **+46 B** (bound 0); idle +0 B (bound 274). The 46 B is the family's entry in `js/widgets.js` (202 B raw), a file the first-visit tier carries; the family's own sources add 0 B because they are `NEVER_PRECACHED` |
+| `T1.routes` | **fail** | the same 202 B raises the lesson routes' sources and build figures by 0.2 KB (bound 0.2), and the transit lesson **with its instrument opened** gains **one request** (76 to 77) and 0.3 KB (bound: none gains a request); every other route is identical. Reproduced on a second run |
+| `J1.arith` | pass | Jeans parameter, speed, flux per unit density and the root of the retention condition: 2.8e-15 against scipy (bound 1e-9) |
+| `J2.vocabulary` | pass | the result is a bound (`canRetainOnlyIf`, the conditions it requires, a refusal without an exobase temperature and radius); no export or field says retained, lost or lifetime |
+| `J3.published` | **not measured** | no published table of Jeans parameters is in the repository; nothing was fetched |
+| `J4.sources` | **not measured** | no source for the exobase temperature and radius of Venus, Earth, Mars and Titan is in the repository; no rights decision exists |
+| `T1.whole.deferred` | pass | +5,585 B with the escape instrument (bound 16,384); the escape module alone is 838 B |
+
+### What the verdict says, and what it does not
+
+- **The C is about two seam costs, and the committed bound on the first is one no widget family can meet.**
+  The family registry is a generated list in `js/widgets.js`; any family adds its entry there (46 B gzipped, 0.2
+  KB raw) and that file is part of the first-visit install. 0 B was my committed bound (178's, where nothing
+  under `js/` imported the instrument); the first-visit room is 810 B, so no ceiling of `tools/data-budget.json`
+  is touched by 46 B. The second check's request is a build-graph effect I did not isolate: the registry entry and
+  the new lazy import are the only change on that route, and the standing approval of 2026-10-10 covers a route
+  ceiling raised by exactly the measured overrun. I did not move either bound and did not change the prototype to
+  hide either cost; both are Carl's to reset, with a register row.
+- **If Carl reset those two bounds** (a recommendation, not an action: first-visit bound to the 810 B room, and one
+  request on one route to the standing approval), the verdict under the same function is **B**: the escape checks
+  are the only ones left, and they are unmeasured, not failed. `record.json` carries that as a counterfactual.
+- **The science is not what failed.** The Eddington gap (3.66 percent at the top), the Venus refusal of the
+  one-layer model and the disagreement of the two models are the lessons' content, and they came out as the
+  physics says.
+- **B needs data.** B's slice (Prompt 200 without the escape panel, a published table replacing the calculation)
+  itself needs a rights decision for that table (`J4`). To measure A or to build B honestly Carl would have to
+  approve, per request, a download of one open-access review or table with exobase temperatures, exobase radii
+  and Jeans parameters for H, He, N2 and CO2 on Venus, Earth, Mars and Titan (size well under 1 MB; the licence
+  must be CC BY or public domain, or be decided as its own row). **No such request was made and nothing was
+  downloaded.**
+
+### What a C removes (Appendix C, entry 199), if Carl ratifies it unchanged
+
+Prompts 200, 201 and 202 are not run. Prompt 203 builds the parameter table itself. Prompt 205's atmosphere items
+are removed and the Goldilocks lesson keeps its present step. Prompt 231's atmosphere item becomes a reading step.
+
+### Iterations, in the open
+
+The oracle for `A5` first discretised the Milne equation on geometric cells out to optical depth 400 and failed
+its own self-test (`q(0)` 1.26 against 0.5774): the cells at depth were too wide for a linear source function.
+It was refined (geometric cells to 0.5, then 0.02 wide, to depth 30; the tail beyond is the linear asymptote)
+before it was compared with the kernel, whose Eddington formula was not touched and no bound moved. No other
+check was run twice for a different answer.
+
+### Not verified
+
+- The published anchors (the textbook emission temperatures, the Bond albedos, the three giants' effective
+  temperatures and power ratios, the three fact-sheet scale heights, the mean molecular weights) are numbers
+  typed from the cited publications and **were not re-read against them**; each is marked `checked: false`.
+  Their tolerances (1 to 5 percent) are wide enough that a one-digit slip would not change a status, but a
+  reader with the sources must check them before 200 may call any of them "published".
+- The three plots were drawn in jsdom through the real component, mounted beside the lesson tool canvas (which
+  is hidden). The lesson tool host draws on a canvas, and a family that draws through the plot component needs
+  that host seam; it was not exercised in a lesson page in a browser, and no axe or keyboard walk of a lesson
+  was run.
+- Bytes are from a Node 22.23.4 copy (CI's major) as differences against the tree at `5a4bd683`; the Spanish words
+  are a size stand-in (rot13 of the English), not a translation, and no Spanish was written or read.
+- No physics claim here has been reviewed by an external reader; the Eddington and Milne comparison, the
+  Cowan and Agol redistribution factor and the Jeans flux are textbook forms I implemented, checked against
+  independent numerical code, not against a published table.

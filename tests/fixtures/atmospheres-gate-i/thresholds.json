@@ -43,19 +43,30 @@
       "id": "A4.grey",
       "group": "core",
       "bound": "grey Eddington profile T^4(tau) = (3/4) T_e^4 (tau + 2/3) and ground temperature T_g^4 = T_e^4 (1 + 3 tau_s / 4): against an independent evaluation of the closed forms to 1e-12 on 1,000 seeded points, and against a numerical solution of the grey two-stream moment equations (scipy solve_ivp, rtol 1e-12) with the stated boundary conditions to a relative error in T of at most 1e-6 for tau_s from 0.01 to 200",
-      "limits": { "closedRelErrMax": 1e-12, "odeRelErrMax": 1e-6, "tauRange": [0.01, 200] }
+      "limits": {
+        "closedRelErrMax": 1e-12,
+        "odeRelErrMax": 1e-6,
+        "tauRange": [0.01, 200]
+      }
     },
     {
       "id": "A5.eddington",
       "group": "core",
       "bound": "the Eddington profile against a numerically exact grey radiative-equilibrium solution (the Milne equation solved by an independent scipy program, with its own self-test that it returns the Hopf values q(0) = 0.5774 and q(infinity) = 0.7104 to 1 percent): the relative difference in temperature is at most 4.0 percent for every depth tau from 0 to 100 (the bound is the model's stated error, to be shown, not minimized)",
-      "limits": { "tRelMax": 0.04, "tauRange": [0, 100], "oracleSelfTestRel": 0.01 }
+      "limits": {
+        "tRelMax": 0.04,
+        "tauRange": [0, 100],
+        "oracleSelfTestRel": 0.01
+      }
     },
     {
       "id": "A6.report",
       "group": "core",
       "bound": "the kernel returns, for Venus, Earth and Mars, the one-layer emissivity and the grey optical depth that reproduce the observed surface temperature (737, 288 and 210 K), each result carrying its model name; the two models' values are shown side by side; the one-layer model returns a structured refusal (not a number) for Venus, whose surface-to-emission ratio exceeds the model's maximum of 2^(1/4); the values themselves are reported and never asserted against a published optical depth",
-      "limits": { "bodies": ["Venus", "Earth", "Mars"], "onelayerRefusals": ["Venus"] }
+      "limits": {
+        "bodies": ["Venus", "Earth", "Mars"],
+        "onelayerRefusals": ["Venus"]
+      }
     },
     {
       "id": "A7.refusals",
@@ -115,7 +126,9 @@
       "id": "J2.vocabulary",
       "group": "escape",
       "bound": "a Jeans result is typed a bound: it carries `canRetainOnlyIf` with the lambda threshold, the time and the column ratio it assumed, it carries the list of exobase conditions it requires, it refuses without an exobase temperature and radius, and the kernel exports no function and no field that returns retained, lost or a retention time as a prediction",
-      "limits": { "requiredConditions": ["exobase temperature", "exobase radius"] }
+      "limits": {
+        "requiredConditions": ["exobase temperature", "exobase radius"]
+      }
     },
     {
       "id": "J3.published",
