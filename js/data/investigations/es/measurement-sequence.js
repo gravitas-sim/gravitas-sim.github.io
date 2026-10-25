@@ -442,9 +442,355 @@ export const WHEN_THE_METHOD_MUST_REFUSE = {
   ],
 };
 
+// Las investigaciones de imágenes (Prompt 191): tres más, paso a paso con el inglés.
+export const MEASURING_THE_MOON = {
+  title: 'Medir la Luna',
+  subtitle:
+    'Marcas sobre una imagen real, una escala a partir de una longitud conocida y un tamaño en kilómetros',
+  objectives: [
+    'Decir por qué una imagen no tiene escala propia, y de dónde sale una escala',
+    'Dar a una imagen real una escala a partir de una longitud conocida, y leer un tamaño en kilómetros de un círculo sobre ella',
+    'Predecir el tamaño de un accidente antes de medirlo, y decir qué incluye la incertidumbre indicada y qué deja fuera',
+    'Decir por qué esta imagen se puede marcar y medir en píxeles pero no leer su brillo',
+  ],
+  steps: [
+    {
+      title: 'Una imagen real de la Luna',
+      body: 'Esta es una imagen <strong>real</strong>: la Luna, fotografiada por la sonda Galileo de la NASA el 7 de diciembre de 1992 al pasar junto a la Tierra camino de Júpiter. Es un compuesto en color realzado, mostrado aquí en gris. <em>Realzado</em> significa que se estiró el contraste para mostrar diferencias en el terreno, así que sus niveles de gris son para el ojo y no miden la luz que refleja la Luna. El Observatorio llama a una imagen así <strong>solo para mostrar</strong>: puedes marcarla y medirla en píxeles, y nada más.\n\nUna imagen no tiene escala propia. Esta mide 496 píxeles de ancho, y un píxel no es un kilómetro. Los píxeles se numeran desde abajo a la izquierda, x hacia la derecha e y hacia arriba, y el disco está recortado muy justo: su borde derecho toca la última columna. En esta lección das a la imagen una escala y tomas una medida de ella.',
+    },
+    {
+      title: '¿Qué da escala a una imagen?',
+      body: 'Quieres una longitud sobre la imagen en kilómetros, y solo tienes píxeles.',
+      prompt: 'Para convertir píxeles en kilómetros necesitas&hellip;',
+      options: [
+        'la fecha en que se tomó la imagen',
+        'una longitud en la imagen que ya conoces en kilómetros',
+        'el brillo de la Luna en la imagen',
+        'el número de colores de la imagen',
+      ],
+      hints: [
+        '¿De dónde podría salir una longitud en kilómetros, sin nada más en la imagen?',
+      ],
+      because:
+        'Una longitud en la imagen que ya conoces. Una imagen registra ángulos y píxeles y nunca dice a qué distancia está la cosa, así que la única vía a una escala es señalar algo en ella cuyo tamaño conozcas por otros medios. Aquí es la propia Luna, cuyo diámetro medio, 3474,8 km, se midió por otros medios.',
+    },
+    {
+      title: 'Un par de referencia a través del disco',
+      body: 'Marca el ancho completo del disco con un <strong>par de referencia</strong>: una línea a lo largo de la horizontal por el centro del disco (fila 245), de su borde izquierdo a su borde derecho. Pon el extremo izquierdo en <strong>3</strong> y el derecho en <strong>496</strong>. Se toma que el par abarca 3474,8 km, el diámetro medio de la Luna. Lee su longitud en píxeles y la escala que da.\n\nEl extremo derecho está sobre la última columna del cuadro, así que el disco puede ser uno o dos píxeles más ancho que la imagen. Tenlo presente: no está en la incertidumbre que indica la herramienta.',
+      fields: [
+        { label: 'Longitud del par' },
+        { label: 'Escala a partir del par, en km por píxel' },
+      ],
+    },
+    {
+      title: 'Por qué la escala sale de ti',
+      body: 'El Observatorio puede dar a una imagen una escala en segundos de arco por píxel cuando la imagen lleva coordenadas del mundo, y se niega a hacerlo con esta imagen. La escala que acabas de hacer salió de un par que marcaste.',
+      prompt: '¿Por qué la escala tiene que salir de un par que marcas tú?',
+      options: [
+        'La imagen la tomó una sonda, así que no tiene píxeles',
+        'La imagen no lleva coordenadas ni unidades para sus píxeles, así que no se puede leer de ella ninguna escala; la única escala es la que haces a partir de una longitud conocida',
+        'El Observatorio no se fía de las imágenes de la NASA',
+        'Solo hace falta escala en las imágenes en color',
+      ],
+      misconceptions: [
+        {
+          say: 'Toda imagen digital tiene píxeles. Lo que a esta le falta es un registro de lo que vale un píxel en el cielo o en el terreno.',
+        },
+        {
+          say: 'No es cuestión de confianza. Una imagen para mostrar se estiró y recodificó para el ojo, y nadie registró una escala; una escala que indicas tú es tuya, y la herramienta la muestra como tal.',
+        },
+      ],
+      hints: ['¿Qué registra la imagen sobre sus propios píxeles?'],
+      because:
+        'La imagen no lleva coordenadas ni unidades, así que nada en ella dice lo que vale un píxel. Una escala hecha a partir de una longitud conocida es una medida tuya, con el supuesto escrito al lado, y es la única clase que esta imagen permite.',
+    },
+    {
+      title: '¿Cuán ancha es la llanura oscura?',
+      body: 'Cerca del centro del disco hay una gran llanura oscura, casi redonda, con su centro cerca de x = 289, y = 306. Las llanuras oscuras de la Luna son antiguas coladas de lava. Antes de medirla, mírala junto al disco entero.',
+      prompt: 'De lado a lado, la llanura mide unos&hellip;',
+      options: ['6 km', '60 km', '600 km', '6000 km'],
+      hints: [
+        'Toda la Luna mide unos 3500 km de ancho. ¿Qué parte de ella es la llanura?',
+      ],
+      because:
+        'Unos 600 km, algo menos de una quinta parte del ancho de la Luna: la llanura abarca más o menos una quinta parte del disco y el disco mide 3475 km. El paso siguiente la mide.',
+    },
+    {
+      title: 'Un círculo sobre la llanura',
+      body: 'El par se queda a través del disco. El círculo empieza en x = 289, y = 306. Cambia el <strong>radio</strong> hasta que el círculo siga el borde de la llanura oscura, y mueve el centro si el círculo se va hacia un lado. Lee el diámetro del círculo en kilómetros.',
+      fields: [{ label: 'Diámetro del círculo' }],
+    },
+    {
+      rubric:
+        'Crédito completo por nombrar dos cosas que cambian el diámetro, por ejemplo dónde se coloca el borde de la llanura (un borde suave, así que dos personas cuidadosas difieren en unos píxeles), dónde se colocan los dos extremos del par, el diámetro supuesto de la Luna, o el recorte de la imagen a la derecha, y por decir que la incertidumbre indicada de unos 6 km incluye solo el redondeo de cada colocación, y deja fuera lo suave del borde y los supuestos. No dar crédito por decir que el número es exacto, ni que más marcas del mismo tipo quitan los supuestos.',
+      title: '¿Qué cambiaría el número?',
+      body: 'La herramienta indica el diámetro como unos 634 &plusmn; 6 km. Dos personas que ajusten el círculo a ojo no coincidirán en 6 km.',
+      prompt:
+        'En dos o tres frases: nombra dos cosas que cambiarían el diámetro que obtuviste, y di cuál de ellas incluye la incertidumbre indicada.',
+    },
+    {
+      title: 'Lo que has deducido',
+      body: 'Una imagen no tiene escala hasta que se la das, y la escala que le das es una medida tuya, apoyada en una longitud que supusiste y en dos marcas que colocaste. Con ella, un círculo sobre un accidente dio un tamaño en kilómetros, unos 630 km para la llanura, y la incertidumbre indicada por la herramienta cubría solo el redondeo de tus marcas. Lo suave del borde, el recorte a la derecha y el diámetro supuesto no están en ella. Y como la imagen es para mostrar, sus niveles de gris no son luz: mediste dónde están las cosas y cuán grandes son, y nada sobre su brillo.',
+    },
+  ],
+};
+
+export const HOW_FAR_IS_THAT_STAR = {
+  title: '¿A qué distancia está esa estrella?',
+  subtitle:
+    'Un desplazamiento, un movimiento y un paralaje a partir de catorce posiciones de una estrella',
+  objectives: [
+    'Decir por qué un desplazamiento entre dos posiciones no es una distancia, y qué supone un desplazamiento entre dos épocas',
+    'Decir por qué un movimiento propio recto no puede describir una estrella con paralaje, y leer el chi cuadrado que lo dice',
+    'Leer un paralaje y una distancia con un intervalo a partir de una serie bien muestreada, y decir qué afirma el intervalo',
+    'Decir qué deja fuera un paralaje relativo, y por qué se rechazan muy pocas épocas',
+  ],
+  steps: [
+    {
+      title: 'Una estrella, catorce fechas',
+      body: 'Se ha medido la posición de una estrella en el cielo en catorce fechas durante casi dos años. Los datos son <strong>sintéticos</strong>: se puso una estrella a una distancia y con un movimiento que elegimos, vista desde la órbita real de la Tierra, y a cada posición se le dio un error aleatorio de 4 milisegundos de arco (mas). La verdad queda oculta hasta el final.\n\nDos cosas mueven una estrella en el cielo. Su propio movimiento por el espacio, su <strong>movimiento propio</strong>, es constante. El movimiento de la Tierra alrededor del Sol hace que una estrella cercana trace un pequeño lazo una vez al año, su <strong>paralaje</strong>, y cuanto más cerca está la estrella, mayor es el lazo. Un paralaje de p segundos de arco es una distancia de 1/p pársecs.',
+    },
+    {
+      title: '¿Da un desplazamiento una distancia?',
+      body: 'Toma la primera y la última de las catorce posiciones. Difieren: la estrella se ha movido.',
+      prompt: 'Ese desplazamiento entre dos posiciones&hellip;',
+      options: [
+        'da la distancia: cuanto mayor el desplazamiento, más cerca la estrella',
+        'no distingue el movimiento propio de la estrella de un paralaje, así que no da ninguna distancia',
+        'da la distancia si las dos posiciones distan un año',
+        'es cero, porque las estrellas no se mueven',
+      ],
+      hints: ['¿Qué más, además de la distancia, mueve una estrella entre dos fechas?'],
+      because:
+        'No los distingue. Entre dos fechas la estrella se ha movido por su propio movimiento y por una parte distinta de su lazo anual, y un par de posiciones no puede decir cuánto es de cada cosa. La herramienta etiqueta un resultado así como un desplazamiento bajo un supuesto de movimiento fijo, y no da paralaje ni distancia para él.',
+    },
+    {
+      title: 'El desplazamiento, de la primera a la última',
+      body: 'Pon <strong>Qué ajustar</strong> en el desplazamiento entre dos épocas y usa las 14 épocas, de modo que el desplazamiento vaya de la primera posición a la última. Lee el tamaño del desplazamiento y la velocidad que sería si todo fuera movimiento.',
+      fields: [
+        { label: 'Tamaño del desplazamiento' },
+        { label: 'Velocidad si todo fuera movimiento, en segundos de arco por año' },
+      ],
+    },
+    {
+      title: '¿Describe una recta la trayectoria?',
+      body: 'Ahora ajusta las catorce posiciones solo con un movimiento propio: una recta a velocidad constante, sin paralaje.',
+      prompt: 'Una recta&hellip;',
+      options: [
+        'describirá la trayectoria, porque las estrellas se mueven en línea recta',
+        'no la describirá, porque el lazo anual queda fuera de cualquier recta',
+        'la describirá si los errores se hacen suficientemente grandes',
+        'la describirá, porque el lazo es menor que los errores',
+      ],
+      hints: ['El lazo mide unos 60 mas de ancho. ¿Cuán grande es el error de una posición?'],
+      because:
+        'No. El lazo es unas quince veces el error de 4 mas de una posición, así que cada posición fuera de la recta lo está por mucho. Un modelo que no puede hacer un lazo no puede describir una estrella que lo hace.',
+    },
+    {
+      title: 'La recta, juzgada',
+      body: 'Pon <strong>Qué ajustar</strong> en el movimiento propio, con 14 épocas. Lee el chi cuadrado del ajuste y sus grados de libertad: 28 números (14 posiciones en dos coordenadas) menos los cuatro que tiene la recta.',
+      fields: [
+        { label: 'Chi cuadrado del ajuste' },
+        { label: 'Grados de libertad' },
+      ],
+    },
+    {
+      title: 'Paralaje y movimiento juntos',
+      body: 'Pon <strong>Qué ajustar</strong> en paralaje y movimiento, con 14 épocas. Lee el paralaje, su incertidumbre y la distancia.',
+      fields: [
+        { label: 'Paralaje, relativo' },
+        { label: 'Incertidumbre del paralaje' },
+        { label: 'Distancia, 1 sobre el paralaje' },
+      ],
+    },
+    {
+      title: 'Lo que dice el intervalo',
+      body: 'La herramienta da la distancia como 16,59 pc, con un intervalo del 68 por ciento de 16,18 a 17,02 pc y un intervalo del 95 por ciento de 15,80 a 17,45 pc. El paralaje tiene una incertidumbre de 1,53 mas.',
+      prompt: '¿Qué frase respalda el resultado?',
+      options: [
+        'La estrella está a 16,59 pc, exactamente',
+        'Si las estrellas de referencia no tienen paralaje propio, la distancia es de unos 16,6 pc, y repetir la medición daría un intervalo que contiene la distancia verdadera unas dos veces de cada tres',
+        'La estrella está seguramente entre 16,18 y 17,02 pc',
+        'La estrella está a 16,59 pc, más o menos 1,53 pc',
+      ],
+      misconceptions: [
+        {
+          say: 'Uno sobre el paralaje es el medio de un intervalo y no una distancia exacta: con un error en el paralaje, la distancia tiene uno también, y ni siquiera es simétrico.',
+        },
+        {
+          say: 'Un intervalo del 68 por ciento es una afirmación sobre repeticiones: una de cada tres lo fallaría. «Seguramente» es una afirmación que ningún intervalo hace.',
+        },
+        {
+          say: 'El 1,53 es la incertidumbre del paralaje, en milisegundos de arco. El intervalo propio de la distancia sale de uno sobre los extremos del del paralaje, y no es de 1,53 pársecs.',
+        },
+      ],
+      hints: ['Un intervalo dice qué harían las repeticiones, y el marco en que se mide el paralaje importa.'],
+      because:
+        'El intervalo es una afirmación sobre repeticiones de la medición, como en ¿Qué afirma el ±?, y sobre el marco: el paralaje es relativo a las estrellas de referencia, así que la distancia nunca es menor que la verdadera si ellas tienen un paralaje propio.',
+    },
+    {
+      title: 'Solo seis épocas',
+      body: 'Pon <strong>Épocas usadas</strong> en 6, y deja paralaje y movimiento. Las seis primeras épocas cubren 0,74 de un año.',
+      prompt: '¿Qué informa la herramienta?',
+      options: [
+        'Un paralaje del mismo tamaño, con una barra de error mayor',
+        'Sin restricción: un paralaje necesita al menos ocho épocas que muestreen la órbita de la Tierra, así que no da ningún número',
+        'Un paralaje de cero, porque el lazo no está completo',
+        'El movimiento propio, rebautizado como paralaje',
+      ],
+      misconceptions: [
+        {
+          say: 'Con muy pocas épocas, o muy poca órbita, el lazo no queda fijado en absoluto, así que una barra más ancha seguiría ocultando que se inventó un número.',
+        },
+        {
+          say: 'El cero también es una medición, y no es lo que dicen los datos: no dicen nada. El rechazo es la respuesta honesta.',
+        },
+      ],
+      hints: ['Lee la línea que empieza con «Sin restricción».'],
+      because:
+        'Sin restricción. Un paralaje es la parte de la trayectoria de la estrella que se repite cada año, así que las épocas deben muestrear ese lazo; la herramienta exige ocho épocas durante al menos 0,9 de un año y no da ningún número por debajo. Un rechazo es un resultado, no un fallo.',
+    },
+    {
+      rubric:
+        'Crédito completo por decir que un paralaje necesita cobertura de cerca de un año porque es la parte del movimiento que se repite cada año y hay que distinguirla del movimiento propio constante, y que un paralaje relativo se mide frente a estrellas de referencia que tienen paralaje propio, así que es menor que el absoluto en su paralaje medio y la distancia que sale es demasiado grande. No dar crédito por decir que la distancia es exacta, ni que relativo significa aproximado.',
+      title: 'Por qué un año, y qué significa relativo',
+      body: 'Dos cosas limitaron esta distancia más allá de su intervalo: cuántas épocas había, y el marco en que se mide el paralaje.',
+      prompt:
+        'En dos o tres frases: ¿por qué un paralaje necesita épocas que cubran cerca de un año, y qué dice «relativo» del paralaje que lees?',
+    },
+    {
+      title: 'Lo que has deducido',
+      body: 'Un desplazamiento entre dos posiciones mezcla el movimiento propio de una estrella con un paralaje y no da distancia. Un movimiento propio recto ajustado a una estrella con paralaje lo rechaza su propio chi cuadrado, aquí 1576 con 24 grados de libertad. Con el lazo en el modelo, catorce épocas dieron 60,3 &plusmn; 1,5 mas, unos 16,6 pársecs, con un intervalo, y con seis épocas la herramienta no dio nada, que es la respuesta correcta. El paralaje es relativo a las estrellas de referencia, así que la distancia nunca es menor que la verdadera. Los datos eran sintéticos; la estrella se hizo a 16,67 pársecs, un paralaje de 60 mas, y el intervalo lo contiene.',
+    },
+  ],
+};
+
+export const A_BINARY_STARS_ORBIT = {
+  title: 'La órbita de una estrella binaria',
+  subtitle:
+    'Posiciones durante dieciséis años, la órbita que fijan y la masa del par',
+  objectives: [
+    'Decir por qué la trayectoria de una compañera en el cielo es una elipse incluso para una órbita circular, y por qué se rechaza un modelo circular para una órbita excéntrica',
+    'Leer una órbita a partir de posiciones en el tiempo, con su período, tamaño y excentricidad y sus incertidumbres',
+    'Convertir el tamaño de la órbita y un paralaje en unidades astronómicas, y el período y el tamaño en una suma de masas por la tercera ley de Kepler',
+    'Decir qué fijan las posiciones de una binaria y qué dejan abierto: la masa de cada estrella, el nodo y la distancia que hay tras la suma',
+  ],
+  steps: [
+    {
+      title: 'Una compañera, doce fechas',
+      body: 'Una estrella binaria son dos estrellas que giran una alrededor de otra. Aquí se ha medido la posición de la más tenue, respecto de la más brillante, en doce fechas durante dieciséis años, cada una con un error de 15 milisegundos de arco. Los datos son <strong>sintéticos</strong>: una binaria de elementos que elegimos, vista en ángulo, con errores aleatorios. La verdad queda oculta hasta el final.\n\nLa trayectoria en el cielo es la órbita vista en ángulo. Su tamaño en segundos de arco, a, y su período, P, es lo que fijan las posiciones. La tercera ley de Kepler da entonces la masa del par, M = a&sup3;/P&sup2; en masas solares cuando a está en unidades astronómicas y P en años, y a en unidades astronómicas necesita la distancia: un paralaje de p segundos de arco hace a (ua) = a (segundos de arco)/p. Las posiciones solas fijan solo la <em>suma</em> de las dos masas.',
+    },
+    {
+      title: '¿Qué forma tiene la trayectoria en el cielo?',
+      body: 'Supón que la órbita verdadera fuera un círculo perfecto, inclinado respecto de verlo de frente.',
+      prompt: 'La trayectoria de la compañera en el cielo sería&hellip;',
+      options: [
+        'siempre un círculo',
+        'una elipse, salvo que la órbita se vea exactamente de frente',
+        'una línea recta',
+        'una espiral, porque las estrellas se atraen',
+      ],
+      hints: ['¿Qué aspecto tiene un círculo inclinado?'],
+      because:
+        'Una elipse. Un círculo visto en ángulo queda acortado en una dirección y es una elipse, así que una elipse en el cielo no significa por sí sola una órbita excéntrica. El ajuste las separa: pregunta a los datos si un círculo, visto en algún ángulo, los describe.',
+    },
+    {
+      title: 'Primero, una órbita circular',
+      body: 'Pon <strong>Modelo de órbita</strong> en circular, con las doce épocas, y lee qué dice la herramienta.',
+      prompt: '¿Qué informa la herramienta?',
+      options: [
+        'Una órbita circular con un período de 13,3 años',
+        'Sin restricción: los residuos son mucho mayores que los errores indicados, así que una órbita circular no describe estas posiciones',
+        'Una órbita de excentricidad cero y la masa del par',
+        'Una órbita circular, con una nota de que el ajuste es malo',
+      ],
+      misconceptions: [
+        {
+          say: 'La herramienta sí ajusta un período, 13,3 años, y luego lo rechaza: un número de un modelo que los datos rechazan no es un resultado.',
+        },
+        {
+          say: 'Una nota no deshace el número. El chi cuadrado, 5225 con 19 grados de libertad, dice que el modelo es erróneo, y la herramienta no da órbita.',
+        },
+      ],
+      hints: ['Lee la línea que empieza con «Sin restricción».'],
+      because:
+        'Se rechaza el modelo circular. Su chi cuadrado es 5225 con 19 grados de libertad: las posiciones lo fallan por unas dieciséis veces su propia barra de error cada una. La órbita es excéntrica, y los datos lo dicen.',
+    },
+    {
+      title: 'La órbita elíptica',
+      body: 'Pon <strong>Modelo de órbita</strong> en elíptica, con las doce épocas. Lee el período, el semieje mayor y la excentricidad.',
+      fields: [
+        { label: 'Período' },
+        { label: 'Semieje mayor' },
+        { label: 'Excentricidad' },
+      ],
+    },
+    {
+      title: 'La órbita en unidades astronómicas',
+      body: 'El paralaje de la binaria, relativo a sus estrellas de referencia, es de 100 mas: 0,100 segundos de arco. Convierte el semieje mayor de 0,908 segundos de arco en unidades astronómicas.',
+      prompt: 'El semieje mayor',
+      hints: ['a en ua es a en segundos de arco dividido entre el paralaje en segundos de arco.'],
+      worked:
+        '0,908 ÷ 0,100 = 9,08 ua. A 10 pársecs un segundo de arco son 10 ua, así que los 0,908 segundos de arco de la órbita son 9,08 ua, algo más que la distancia del Sol a Saturno.',
+      feedback: {
+        close: 'Casi. Divide el ángulo entre el paralaje, ambos en segundos de arco.',
+        'wrong-order-of-magnitude':
+          'Se pasa una potencia de diez: divide entre 0,100 segundos de arco, no entre 100.',
+        off: 'a (segundos de arco) ÷ paralaje (segundos de arco).',
+      },
+    },
+    {
+      title: 'La masa del par',
+      body: 'Con el paralaje en 100 mas, lee la suma de masas y su intervalo del 68 por ciento. El intervalo sale de la incertidumbre de la órbita y de la del paralaje, 4 mas, juntas.',
+      fields: [
+        { label: 'Suma de masas' },
+        { label: 'Suma de masas, extremo bajo del intervalo del 68 por ciento' },
+        { label: 'Suma de masas, extremo alto del intervalo del 68 por ciento' },
+      ],
+    },
+    {
+      title: 'Solo las seis primeras épocas',
+      body: 'Pon <strong>Épocas usadas</strong> en 6 con el modelo elíptico. Las seis primeras épocas cubren siete años de una órbita de catorce.',
+      prompt: '¿Qué informa la herramienta?',
+      options: [
+        'La misma órbita con barras de error mayores',
+        'Sin restricción: una órbita elíptica necesita al menos ocho épocas, así que no da ninguna órbita',
+        'En su lugar una órbita circular, porque el arco es corto',
+        'Solo el período, ya que es el elemento mejor fijado',
+      ],
+      misconceptions: [
+        {
+          say: 'Con seis posiciones los siete elementos no quedan todos fijados, así que no hay órbita a la que poner barras.',
+        },
+        {
+          say: 'La herramienta no cambia a un modelo que los datos rechazan. Un ajuste circular de esta binaria se rechaza también.',
+        },
+      ],
+      hints: ['Lee la línea que empieza con «Sin restricción».'],
+      because:
+        'Sin restricción. Una órbita elíptica tiene siete parámetros y necesita al menos ocho épocas, que cubran bastante del período; seis no dan nada. Como con la estrella, el rechazo es la respuesta.',
+    },
+    {
+      rubric:
+        'Crédito completo por decir que las posiciones fijan solo la suma de las dos masas, no cada una (hace falta el movimiento de las estrellas alrededor de su centro común, o velocidades radiales, para repartirla), y que la suma depende de la distancia al cubo, así que el paralaje y su marco (relativo, de modo que la distancia y la suma salen altas) pasan a la masa. No dar crédito por decir que la suma es exacta o que el intervalo es solo el de la órbita.',
+      title: 'Lo que necesita la suma',
+      body: 'La suma de masas salió de una órbita y un paralaje, cada uno con una incertidumbre.',
+      prompt:
+        'En dos o tres frases: ¿qué no dicen las posiciones sobre las masas, y qué dato de entrada de la suma es el más peligroso de equivocar?',
+    },
+    {
+      title: 'Lo que has deducido',
+      body: 'Doce posiciones durante dieciséis años fijaron una órbita: un período de 14,13 &plusmn; 0,06 años, un semieje mayor de 0,908 segundos de arco y una excentricidad de 0,44. Un círculo se rechazó de plano, y seis épocas no dieron nada. Con un paralaje de 100 mas la órbita mide 9,08 ua de ancho y el par pesa unas 3,8 masas solares, entre 3,3 y 4,2 al 68 por ciento. Las posiciones fijan solo la suma, y la suma es el cubo de la distancia: el paralaje es el eslabón más débil. Los datos eran sintéticos, hechos con un período de 14,2 años, una excentricidad de 0,45, un semieje mayor de 0,9 segundos de arco y un paralaje de 100 mas, y el ajuste los contiene.',
+    },
+  ],
+};
+
 /** By lesson id: what instructorLocale.js registers. */
 export default {
   'what-is-a-measurement': WHAT_IS_A_MEASUREMENT,
   'what-does-plus-minus-claim': WHAT_DOES_PLUS_MINUS_CLAIM,
   'when-the-method-must-refuse': WHEN_THE_METHOD_MUST_REFUSE,
+  'measuring-the-moon': MEASURING_THE_MOON,
+  'how-far-is-that-star': HOW_FAR_IS_THAT_STAR,
+  'a-binary-stars-orbit': A_BINARY_STARS_ORBIT,
 };

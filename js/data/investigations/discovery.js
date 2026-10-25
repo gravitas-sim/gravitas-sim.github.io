@@ -650,4 +650,34 @@ export const DISCOVERY = {
     },
     courseLevel: 'upper',
   },
+  'measuring-the-moon': {
+    audience: 'intro',
+    mathematics: 'arithmetic',
+    prerequisites: ['what-is-a-measurement'],
+    textbook: {
+      chapter: 6,
+      section: null,
+    },
+    courseLevel: 'survey',
+  },
+  'how-far-is-that-star': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['what-is-a-measurement'],
+    textbook: {
+      chapter: 19,
+      section: '19.1',
+    },
+    courseLevel: 'majors',
+  },
+  'a-binary-stars-orbit': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['how-far-is-that-star'],
+    textbook: {
+      chapter: 18,
+      section: '18.2',
+    },
+    courseLevel: 'upper',
+  },
 };

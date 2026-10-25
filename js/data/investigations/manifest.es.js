@@ -798,4 +798,43 @@ export const MANIFEST = [
     gradedCount: 11,
     objectiveCount: 4,
   },
+  {
+    id: 'measuring-the-moon',
+    title: 'Medir la Luna',
+    subtitle:
+      'Marcas sobre una imagen real, una escala a partir de una longitud conocida y un tamaño en kilómetros',
+    duration: '20-30 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/measuring-the-moon.webp',
+    depths: 3,
+    stepCount: 8,
+    gradedCount: 6,
+    objectiveCount: 4,
+  },
+  {
+    id: 'how-far-is-that-star',
+    title: '¿A qué distancia está esa estrella?',
+    subtitle:
+      'Un desplazamiento, un movimiento y un paralaje a partir de catorce posiciones de una estrella',
+    duration: '25-40 min',
+    level: 'Majors and upper-level astronomy',
+    thumbnail: 'images/investigations/how-far-is-that-star.webp',
+    depths: 3,
+    stepCount: 10,
+    gradedCount: 8,
+    objectiveCount: 4,
+  },
+  {
+    id: 'a-binary-stars-orbit',
+    title: 'La órbita de una estrella binaria',
+    subtitle:
+      'Posiciones durante dieciséis años, la órbita que fijan y la masa del par',
+    duration: '25-40 min',
+    level: 'Majors and upper-level astronomy',
+    thumbnail: 'images/investigations/a-binary-stars-orbit.webp',
+    depths: 3,
+    stepCount: 9,
+    gradedCount: 7,
+    objectiveCount: 4,
+  },
 ];

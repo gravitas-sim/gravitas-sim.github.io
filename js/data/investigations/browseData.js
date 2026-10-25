@@ -264,4 +264,16 @@ export const BROWSE_META = {
     tags: ['observing'],
     numericCount: 0,
   },
+  'measuring-the-moon': {
+    tags: ['observing'],
+    numericCount: 0,
+  },
+  'how-far-is-that-star': {
+    tags: ['observing'],
+    numericCount: 0,
+  },
+  'a-binary-stars-orbit': {
+    tags: ['observing'],
+    numericCount: 1,
+  },
 };

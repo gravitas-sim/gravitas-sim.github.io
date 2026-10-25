@@ -424,11 +424,9 @@ export const EN_DEFERRED = {
   'reliability.noValue': 'not measured',
 
   // --- The A/B experiment bench ---------------------------------------------
-  // Moved out of the start-up catalog. The bench is loaded on first press
-  // and most visitors never press it, so its prose has no business being
-  // downloaded by everyone; js/experimentsBridge.js registers this before the
-  // panel builds its markup. failure.load stays in the base catalog,
-  // because it is what the bridge says when this very import fails.
+  // The bench loads on first press, so its prose is not in everyone's download;
+  // js/experimentsBridge.js registers it before the panel builds. failure.load
+  // stays in the base catalog: it is what the bridge says when this import fails.
   'bench.title': 'A/B Experiment',
   'bench.untitled': 'Untitled experiment',
   'bench.copyOf': 'Copy of {name}',
@@ -624,10 +622,8 @@ export const EN_DEFERRED = {
   'sweep.guide.run': 'Run the guided sweep',
 
   // --- Classroom assignments --------------------------------------------------
-  // Every one of these is shown from a lazy chunk - the builder, the link
-  // bridge, or the lesson panel with an assignment open - so none of them has
-  // any business in a first-time visitor's download. Registered by
-  // ensureDeferredMessages() before any of those render.
+  // Shown from lazy chunks (the builder, the link bridge, the lesson panel with
+  // an assignment open), so none is in a first visit; ensureDeferredMessages() registers them.
   'assign.title': 'Build an activity',
   'assign.hint':
     'Choose the steps to set. Steps that build the world another step is about are added for you, and shown below where they land.',
@@ -737,14 +733,10 @@ export const EN_DEFERRED = {
     'Burn {n}: {body} at t = {time}, radial {radial}, transverse {transverse}.',
 
   // --- The investigations panel ------------------------------------------------
-  // js/investigations.js is the only module that reads these and it is loaded
-  // on demand, so a visitor who never opens a lesson was downloading all of
-  // them. Registered by ensureInvestigations() before initInvestigations()
-  // runs. The dozen that stay in the base catalog are on static buttons in
-  // index.html, translated by the boot sweep, plus the two the loader itself
-  // says when a lesson fails before its chunk arrives.
-  // Moved out of the start-up catalog: only js/lessonStage.js and the
-  // lesson engine read these, and both are deferred.
+  // js/investigations.js, loaded on demand, is the only reader; ensureInvestigations()
+  // registers them. The dozen in the base catalog are on static buttons in index.html
+  // (boot sweep) plus the two the loader says when a chunk fails. Also moved out:
+  // only js/lessonStage.js and the lesson engine read these.
   'inv.stage.scale.display':
     'Compressed scale: every star is visible and the order by size is right, but the ratios on screen are not the ratios in the model.',
   'inv.stage.scale.true':
@@ -1929,6 +1921,12 @@ export const EN_DEFERRED = {
     'How long to expose: the noise of a measurement, what limits a bright and a faint star, and what a bright sky costs. Needs the calibration frames.',
   'inv.seq.observing.a-variable-star-from-frames':
     'Differential photometry of forty frames: a comparison star removes the cloud, and a check star says whether a variation is real. Needs the calibration frames.',
+  'inv.seq.observing.measuring-the-moon':
+    'A real picture of the Moon: give it a scale from a known length and measure a dark plain in kilometers.',
+  'inv.seq.observing.how-far-is-that-star':
+    'A shift, a motion and a parallax from fourteen positions of one star: a distance with an interval.',
+  'inv.seq.observing.a-binary-stars-orbit':
+    'Positions over sixteen years fix an orbit and the mass of the pair, and leave the rest open.',
   'inv.seq.observing.transit-photometry':
     'Measure depth, duration and noise on a light curve: the photometry the rest relies on.',
   'inv.seq.observing.design-the-schedule':

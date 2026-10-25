@@ -11,15 +11,15 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 63 investigations and 1062 steps: 972 steps
+Across 66 investigations and 1089 steps: 999 steps
 declare a scene, 157 let a reader change one, 163 read the
-running integration, 583 show a prescribed model result, 146 draw
-on a stored dataset, 462 put a self-contained panel beside the text,
-255 keep something, and 56 are prose.
-Of 138 prediction loops, 138 are returned to,
-138 produce a measurement before they are answered, and
+running integration, 610 show a prescribed model result, 146 draw
+on a stored dataset, 489 put a self-contained panel beside the text,
+262 keep something, and 56 are prose.
+Of 143 prediction loops, 143 are returned to,
+143 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
-138 hold their marking until the experiment settles them.
+143 hold their marking until the experiment settles them.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -902,4 +902,46 @@ Of 138 prediction loops, 138 are returned to,
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:profile-refusal`, control profile-refusal/mass, measures the chi-square of the best fit at a trial mass, which is zero above the product and rises below it, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## Measuring the Moon (`measuring-the-moon`)
+
+- **Steps:** 8. Scene declared on 8; a reader can change something on 0; 8 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 8 prescribed model, 0 stored dataset, 8 self-contained panel.
+- **What students do:** move-an-instrument-control, press-an-instrument-preset, commit-a-prediction, record-values, choose-an-option, answer-in-words.
+- **Objects the steps declare:** star.
+- **Instruments:** moon-marks.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** predict-the-scale → scale-from-the-disc, why-a-pair → scale-from-the-disc; predict-the-plain → measure-the-plain, what-would-change-it, what-you-worked-out → measure-the-plain.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:moon-marks`, control moon-marks/r, measures the diameter in kilometers of a circle drawn on the Galileo picture of the Moon, from the scale a reference pair of known length sets, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## How Far Is That Star? (`how-far-is-that-star`)
+
+- **Steps:** 10. Scene declared on 10; a reader can change something on 0; 10 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 10 prescribed model, 0 stored dataset, 10 self-contained panel.
+- **What students do:** move-an-instrument-control, press-an-instrument-preset, commit-a-prediction, record-values, choose-an-option, answer-in-words.
+- **Objects the steps declare:** star.
+- **Instruments:** star-parallax.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** predict-the-shift → the-shift → the-shift; predict-a-straight-line → a-straight-line-fails, the-parallax, what-the-interval-says, six-epochs, say-what-relative-means, what-you-worked-out → a-straight-line-fails.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:star-parallax`, control star-parallax/fit, measures the chi-square of a fit to fourteen positions of one star: enormous for a straight line that leaves the parallax out, near its degrees of freedom once the parallax is in, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## A Binary Star’s Orbit (`a-binary-stars-orbit`)
+
+- **Steps:** 9. Scene declared on 9; a reader can change something on 0; 9 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 9 prescribed model, 0 stored dataset, 9 self-contained panel.
+- **What students do:** move-an-instrument-control, press-an-instrument-preset, commit-a-prediction, choose-an-option, record-values, answer-in-words.
+- **Objects the steps declare:** star.
+- **Instruments:** binary-orbit.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** predict-the-shape → a-circle-first, the-elliptical-fit, from-arcseconds-to-au, the-mass-sum, six-epochs, say-what-the-sum-needs, what-you-worked-out → a-circle-first.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:binary-orbit`, control binary-orbit/plx, measures the mass sum of a visual binary from its fitted orbit, which goes as the cube of the distance and so as the inverse cube of the parallax, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
