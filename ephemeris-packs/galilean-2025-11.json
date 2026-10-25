@@ -1,0 +1,233 @@
+{
+  "format": "gravitas.ephemeris-pack",
+  "formatVersion": 1,
+  "id": "galilean-2025-11",
+  "version": "1.0.0",
+  "title": "Io, Europa, Ganymede and Callisto about Jupiter, 20 November to 30 December 2025 (JPL Horizons)",
+  "source": {
+    "system": "NASA/JPL Horizons API",
+    "api": "https://ssd.jpl.nasa.gov/api/horizons.api",
+    "apiVersion": "1.2",
+    "ephemeris": "jup365_merged",
+    "centerEphemeris": "jup365_merged",
+    "citation": "R. A. Jacobson, JUP365 (the Galilean satellites), as served by JPL Horizons; planetary centre and Jupiter's barycentre offset by DE441 (Park et al. 2021)"
+  },
+  "license": {
+    "status": "no-license-stated",
+    "statement": "JPL's Horizons system states no license for its output and asks that the Solar System Dynamics group and the ephemeris be credited.",
+    "basis": "A reduced derivative for teaching, credited in full, with the exact requests and the checksum of every answer recorded so the original states can be fetched again and compared."
+  },
+  "termsAsServed": {
+    "checked": "2026-10-25",
+    "horizonsManual": "https://ssd.jpl.nasa.gov/horizons/manual.html (version 4.98e): 'There are four supported ways to access the program. All can be automated: API (GET and POST programmatic interfaces)'",
+    "apiDocumentation": "https://ssd-api.jpl.nasa.gov/doc/horizons.html (API version 1.3, 2025 June): no usage restriction or licence text; 'For automated systems ... pipe the API command output through the local sed command'",
+    "nasaMedia": "https://www.nasa.gov/nasa-brand-center/images-and-media/: 'NASA content used in a factual manner that does not imply endorsement may be used without needing explicit permission. NASA should be acknowledged as the source of the material.'",
+    "reading": "Nothing found forbids a one-off, pinned, credited derivative for teaching; the manifest's licence status stays no-license-stated as for the planetary pack."
+  },
+  "credit": "Satellite states from NASA/JPL Horizons (Solar System Dynamics group); the satellite ephemeris is JPL's, the Jupiter-centred vectors are geometric",
+  "retrieved": "2026-10-25",
+  "frame": {
+    "name": "ecliptic of J2000.0 (ICRF)",
+    "horizons": "Ecliptic of J2000.0",
+    "center": "Jupiter's center (Horizons 500@599)"
+  },
+  "timeScale": "TDB",
+  "units": {
+    "length": "km",
+    "velocity": "km/s",
+    "time": "Julian date (TDB)"
+  },
+  "range": {
+    "start": "2025-11-20 00:00 TDB",
+    "stop": "2025-12-30 00:00 TDB",
+    "startJd": 2460999.5,
+    "stopJd": 2461039.5
+  },
+  "request": {
+    "center": "500@599",
+    "step": "1 h",
+    "sampling": {
+      "daily": {
+        "start": "2025-11-20 00:00",
+        "stop": "2025-12-30 00:00"
+      },
+      "noon": {
+        "start": "2025-11-20 00:30",
+        "stop": "2025-12-29 23:30"
+      }
+    },
+    "fixed": "EPHEM_TYPE=VECTORS, VEC_TABLE=2, REF_PLANE=ECLIPTIC, REF_SYSTEM=ICRF, VEC_CORR=NONE (geometric), OUT_UNITS=KM-S, CSV_FORMAT=YES; the 'daily' set is the fitted hourly set and the 'noon' set the held-out half-hour offset set (file names kept from the planetary pack)"
+  },
+  "encoding": {
+    "method": "Chebyshev series per segment and axis, fitted by least squares to hourly positions and velocities",
+    "layout": "for each segment, x then y then z: c0 and c1 float64, c2 to cn float32, little-endian, base64",
+    "segments": "fixed length from the start; the last one ends on the last day"
+  },
+  "bodies": [
+    {
+      "id": "io",
+      "name": {
+        "en": "Io",
+        "es": "Ío"
+      },
+      "command": "501",
+      "target": "Io (501)",
+      "source": "jup365_merged",
+      "segmentDays": 1,
+      "degree": 11,
+      "raw": {
+        "daily": {
+          "sha256": "e8dd4afc96a317fe4e2dbdd07c087df08ea0dc062220ae1f4a285873d4296893",
+          "rows": 961
+        },
+        "noon": {
+          "sha256": "e80fb3258504585ff25a08866b7929628b4611bebeab1becdb345b8ce6394f21",
+          "rows": 960
+        }
+      },
+      "segments": 40,
+      "bytes": 6720,
+      "sha256": "5e97e9226302677f1bbda335e40fe402c0effd8196bb5a6803cb7671d9971ef8",
+      "measured": {
+        "fitted": {
+          "positionKm": 0.016058458315206105,
+          "velocityKmS": 0.0000036431957806036927
+        },
+        "heldOut": {
+          "positionKm": 0.015590656863644064,
+          "velocityKmS": 0.000007119444099067754
+        }
+      },
+      "maxError": {
+        "positionKm": 0.0161,
+        "velocityKmS": 0.00000712
+      }
+    },
+    {
+      "id": "europa",
+      "name": {
+        "en": "Europa",
+        "es": "Europa"
+      },
+      "command": "502",
+      "target": "Europa (502)",
+      "source": "jup365_merged",
+      "segmentDays": 2,
+      "degree": 11,
+      "raw": {
+        "daily": {
+          "sha256": "e9c82b0448b6a383e838aaa84fdefad3642e81a2a29259462d8ad52257ab304d",
+          "rows": 961
+        },
+        "noon": {
+          "sha256": "e579473f6ff6e4ffe51858f5db25f71552f7c3cc116a27b2dab141915ea4e4da",
+          "rows": 960
+        }
+      },
+      "segments": 20,
+      "bytes": 3360,
+      "sha256": "e4c690a7aec808c51bbe55a8c75b67cc6d07875fbbd6dcfca9ca42b0c2ca8dc1",
+      "measured": {
+        "fitted": {
+          "positionKm": 0.21501927128815182,
+          "velocityKmS": 0.000032498717107225305
+        },
+        "heldOut": {
+          "positionKm": 0.2171316870600577,
+          "velocityKmS": 0.000032539093729568074
+        }
+      },
+      "maxError": {
+        "positionKm": 0.218,
+        "velocityKmS": 0.0000326
+      }
+    },
+    {
+      "id": "ganymede",
+      "name": {
+        "en": "Ganymede",
+        "es": "Ganímedes"
+      },
+      "command": "503",
+      "target": "Ganymede (503)",
+      "source": "jup365_merged",
+      "segmentDays": 4,
+      "degree": 11,
+      "raw": {
+        "daily": {
+          "sha256": "3ab015ffbef2173997f4efae34afddc1b3003500cbf15675855d07643551bec0",
+          "rows": 961
+        },
+        "noon": {
+          "sha256": "02fc26d48929866766cf26d07312bfb7387b12f311fb5f53687292534dc0b2f3",
+          "rows": 960
+        }
+      },
+      "segments": 10,
+      "bytes": 1680,
+      "sha256": "cc32adbb7e0043b5b6a5ec02bd06c746be1bd2d881cce4262c13af86bfec0a0a",
+      "measured": {
+        "fitted": {
+          "positionKm": 0.4426323041169369,
+          "velocityKmS": 0.00004569084451587866
+        },
+        "heldOut": {
+          "positionKm": 0.4387912881641635,
+          "velocityKmS": 0.00003633787217339164
+        }
+      },
+      "maxError": {
+        "positionKm": 0.443,
+        "velocityKmS": 0.0000457
+      }
+    },
+    {
+      "id": "callisto",
+      "name": {
+        "en": "Callisto",
+        "es": "Calisto"
+      },
+      "command": "504",
+      "target": "Callisto (504)",
+      "source": "jup365_merged",
+      "segmentDays": 5,
+      "degree": 11,
+      "raw": {
+        "daily": {
+          "sha256": "0083b1b02705785ed48599d57d5462d9e82af5e14001ecea69fa6174221a59e4",
+          "rows": 961
+        },
+        "noon": {
+          "sha256": "56565da53d4d0ceded27cff2029d9c47fc02dcb21bf1b688d475443033348fe4",
+          "rows": 960
+        }
+      },
+      "segments": 8,
+      "bytes": 1344,
+      "sha256": "f319531907a230a77ffff9290c991c6f1cc18294ce964478fd550546b7f06dc3",
+      "measured": {
+        "fitted": {
+          "positionKm": 1.65409423385717,
+          "velocityKmS": 0.00017536378212975738
+        },
+        "heldOut": {
+          "positionKm": 1.6478000194480413,
+          "velocityKmS": 0.00012157390048139146
+        }
+      },
+      "maxError": {
+        "positionKm": 1.66,
+        "velocityKmS": 0.000176
+      }
+    }
+  ],
+  "output": {
+    "module": null,
+    "check": "tests/fixtures/galilean/galileanCheck.json",
+    "checkStride": 24,
+    "sidecar": "sky/galilean-moons.json",
+    "checkSha256": "1eac26587b179989deb5ae76d1fc82db5c5367d361398662413e721f1beb656a",
+    "sidecarBytes": 19551,
+    "sidecarSha256": "b9d4b82ec724e7fd888910f2a3e2e0d04eaef9bd728091f97821c43e0b6e928f"
+  }
+}

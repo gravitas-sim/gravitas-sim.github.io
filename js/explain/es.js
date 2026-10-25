@@ -175,6 +175,12 @@ export default {
     'Qué puede y qué no puede medir una marca sobre una imagen, qué afirma una distancia por paralaje y su punto cero, y qué fijan las posiciones de una binaria.',
     'La Luna es una imagen para mostrar cuyos niveles de gris no son luz; la estrella y la binaria son sintéticas con la verdad oculta, y un ajuste rechazado es la respuesta, no un fallo.',
   ],
+  jovian: [
+    'Imágenes sintéticas de Júpiter y sus lunas, la distancia de una luna frente al tiempo con una sinusoide, o la tercera ley de Kepler con un período y un radio ajustados.',
+    'Quién es quién frente a las efemérides, qué período y radio fijan los puntos, y la masa de Júpiter con su incertidumbre.',
+    'Por qué una imagen por noche no puede dar el período de Ío, y por qué el período que ve la Tierra no es del todo el orbital.',
+    'Las imágenes son sintéticas, hechas con posiciones de JPL Horizons; la masa es la del planeta solo y deja fuera su achatamiento.',
+  ],
   gwEvents: [
     'Deformación real del detector frente al tiempo, y un mapa de tono frente al tiempo.',
     'Una traza ascendente en el mapa es el chirrido de una espiral.',

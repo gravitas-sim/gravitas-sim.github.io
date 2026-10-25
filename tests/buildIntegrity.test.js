@@ -307,9 +307,9 @@ describe('the service worker manifest is current', () => {
           p
         )
     );
-    // The six measurement, claim and image lessons are never precached (D-R10-67, D-R10-72):
-    // they open offline after one online use, like the other lazy families.
-    const NEVER_PRECACHED_LESSONS = 6;
+    // The seven measurement, claim, image and Jupiter lessons are never precached (D-R10-67,
+    // D-R10-72, D-R10-74): they open offline after one online use, like the other lazy families.
+    const NEVER_PRECACHED_LESSONS = 7;
     expect(bodies.length + NEVER_PRECACHED_LESSONS).toBe(MANIFEST.length);
   });
 
@@ -324,7 +324,7 @@ describe('the service worker manifest is current', () => {
     expect(manifest).toContain('__GRAVITAS_LOCALE_WARM');
     expect(
       (manifest.match(/investigations\/es\/[a-z0-9-]+\.js/g) || []).length
-    ).toBe(MANIFEST.length + 1); // plus the shared Spanish file (D-R10-67)
+    ).toBe(MANIFEST.length + 2); // plus the two shared Spanish files (D-R10-67, D-R10-74)
   });
 
   test('it leaves out the downloads and the document pages', async () => {

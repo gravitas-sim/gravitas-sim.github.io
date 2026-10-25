@@ -118,6 +118,8 @@ const EXTENSIONS = {
     import('../data/investigations/depth/how-far-is-that-star.js'),
   'a-binary-stars-orbit': () =>
     import('../data/investigations/depth/a-binary-stars-orbit.js'),
+  'weighing-jupiter': () =>
+    import('../data/investigations/depth/weighing-jupiter.js'),
 };
 
 /** Their Spanish, loaded only for a Spanish reader. */
@@ -192,6 +194,8 @@ const WORDS = {
       import('../data/investigations/depth/es/how-far-is-that-star.js'),
     'a-binary-stars-orbit': () =>
       import('../data/investigations/depth/es/a-binary-stars-orbit.js'),
+    'weighing-jupiter': () =>
+      import('../data/investigations/depth/es/weighing-jupiter.js'),
     'missing-mass': () =>
       import('../data/investigations/depth/es/missing-mass.js'),
     'the-turning-sky': () =>

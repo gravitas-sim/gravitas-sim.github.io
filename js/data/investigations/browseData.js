@@ -276,4 +276,8 @@ export const BROWSE_META = {
     tags: ['observing'],
     numericCount: 1,
   },
+  'weighing-jupiter': {
+    tags: ['observing'],
+    numericCount: 0,
+  },
 };

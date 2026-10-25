@@ -44,6 +44,9 @@ const STATIC_FILES = [
   // The Sky Lab's planet positions (ephemeris-packs/solar-system-2025-2045.json,
   // Prompt 106): the mission lab's pack as a JSON copy, fetched by /sky/.
   'sky/ephemeris.json',
+  // Jupiter's moons (ephemeris-packs/galilean-2025-11.json, Prompt 193): the
+  // pack the moon instruments fetch when a Jupiter lesson opens, never precached.
+  'sky/galilean-moons.json',
   // The galactic tables' rows (data-packs/gaia-dr3-*.json and
   // milky-way-rotation-curve.json), fetched by the galactic instruments and
   // the Observatory.

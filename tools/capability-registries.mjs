@@ -84,6 +84,7 @@ export const FAMILY_ORDER = Object.freeze([
   'gwEvents',
   'claim',
   'imaging',
+  'jovian',
 ]);
 
 /** The three families whose name is not their module's (`<name>Widgets.js`). */
@@ -199,7 +200,7 @@ export function lessonEntries(root = REPO) {
     // the catalog spreads it. The ids are the lesson objects' own `id` lines.
     const file = path.join(root, dir, `${id}.js`);
     const text = existsSync(file) ? read(root, `${dir}/${id}.js`) : '';
-    if (/^export default \[$/m.test(text))
+    if (/^export default \[$|^export default \[[A-Z_, ]+\];$/m.test(text))
       sharedIds.set(
         def.local.name,
         [...text.matchAll(/^ {2}id: '([a-z0-9-]+)',\n {2}thumbnail:/gm)].map(

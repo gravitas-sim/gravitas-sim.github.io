@@ -885,6 +885,19 @@
         "the-mass-sum"
       ],
       "evidenceFrom": "model"
+    },
+    "weighing-jupiter": {
+      "centralExperimentId": "ce.weighing-jupiter",
+      "object": "panel:moon-fit",
+      "control": "moon-fit/moon",
+      "quantity": "the period a sinusoid fitted to one moon's measured distances from Jupiter gives when the frames are taken once a night, which for Io is the alias near 2.30 days and not its own 1.77",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "once-a-night",
+        "try-once-a-night"
+      ],
+      "evidenceFrom": "model"
     }
   }
 }

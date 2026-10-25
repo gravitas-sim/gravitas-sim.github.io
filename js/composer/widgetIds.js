@@ -98,6 +98,7 @@ export const WIDGET_FAMILIES = Object.freeze({
   gwEvents: ['gw-events'],
   claim: ['frame-marks', 'coverage-repeats', 'profile-refusal'],
   imaging: ['moon-marks', 'star-parallax', 'binary-orbit'],
+  jovian: ['moon-frames', 'moon-fit', 'jupiter-weigh'],
 });
 
 /** Every instrument id, in the registry’s order. */

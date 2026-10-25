@@ -11,15 +11,15 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 66 investigations and 1089 steps: 999 steps
+Across 67 investigations and 1096 steps: 1006 steps
 declare a scene, 157 let a reader change one, 163 read the
-running integration, 610 show a prescribed model result, 146 draw
-on a stored dataset, 489 put a self-contained panel beside the text,
-262 keep something, and 56 are prose.
-Of 143 prediction loops, 143 are returned to,
-143 produce a measurement before they are answered, and
+running integration, 617 show a prescribed model result, 146 draw
+on a stored dataset, 496 put a self-contained panel beside the text,
+265 keep something, and 56 are prose.
+Of 144 prediction loops, 144 are returned to,
+144 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
-143 hold their marking until the experiment settles them.
+144 hold their marking until the experiment settles them.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -944,4 +944,18 @@ Of 143 prediction loops, 143 are returned to,
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:binary-orbit`, control binary-orbit/plx, measures the mass sum of a visual binary from its fitted orbit, which goes as the cube of the distance and so as the inverse cube of the parallax, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## Weighing Jupiter From Its Moons (`weighing-jupiter`)
+
+- **Steps:** 7. Scene declared on 7; a reader can change something on 0; 7 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 7 prescribed model, 0 stored dataset, 7 self-contained panel.
+- **What students do:** move-an-instrument-control, choose-an-option, record-values, commit-a-prediction.
+- **Objects the steps declare:** star.
+- **Instruments:** moon-frames, moon-fit.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** once-a-night → try-once-a-night, what-you-worked-out → try-once-a-night.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:moon-fit`, control moon-fit/moon, measures the period a sinusoid fitted to one moon's measured distances from Jupiter gives when the frames are taken once a night, which for Io is the alias near 2.30 days and not its own 1.77, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 

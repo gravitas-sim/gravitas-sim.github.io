@@ -11,21 +11,13 @@
 // cartridge of web links and nothing else (the one imsmanifest.xml and one web
 // link XML file per link), so no web content, no assessments and no service.
 //
-// What the cartridge holds, from a course
-// -----------------------------------------------------------------------------
-// - One folder (a module on most platforms) for each unit, in order.
-// - One web link for each item that has an address, opening it in Gravitas:
-//   the link the course already makes (js/course/links.js), which encodes the
-//   pin and the depth, in the cartridge's language. A reading with no address
-//   is left out and reported.
-// - A first folder holding the course home link (and, for a course with a
-//   teacher guide, a link to it for instructors).
-// - Where a unit's items have notes for instructors: one link for instructors
-//   to the course home, and, only when the instructor asks for it, the notes
-//   themselves as that link's description (Thin CC has no pages to put them
-//   on, and a platform that ignores the instructor role would show them).
-// - The text follows the page's language; the course's own words fall back to
-//   English as the course home does.
+// What the cartridge holds, from a course: a folder for each unit, in order; a
+// web link for each item that has an address, opening it in Gravitas through
+// the link the course already makes (js/course/links.js), in the cartridge's
+// language (an item with no address is left out and reported); a first folder
+// with the course home link and, for a course with a teacher guide, a link for
+// instructors; and where a unit has notes for instructors, a link to the course
+// home and, only when asked, the notes as that link's description.
 //
 // What it never holds: student data, a grade return, an LTI link, a file other
 // than XML, a date or anything that varies between runs. The manifest text is
