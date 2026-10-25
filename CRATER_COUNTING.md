@@ -242,7 +242,7 @@ catalogue is LU78287GT on USGS Astropedia, "Access Constraints: None", "Use Cons
 Please cite authors" (cited in the file). The Mars catalogue states no licence on the
 USGS collection page or on its author's page: only the regional diameter, longitude and
 latitude at or above 20 km are committed, with credit, as a recorded "no licence stated,
-credited" decision under Roadmap III 7.5.4 (D-R10-77; Carl: go with my recommendation).
+credited" decision under Roadmap III 7.5.4 (D-R10-77), ratified by Carl: AskUserQuestion to the merge-queue session, 2026-10-25: "Keep, credited (Recommended)" = "Facts-only subset (positions and sizes), credited, and it can be removed later. The legs that need it keep running." (a facts-only subset: positions and sizes).
 The full files (the Mars JPEG, the Salamuniccar zip, both Robbins answers) are not in the
 repository; their size and SHA-256 are.
 

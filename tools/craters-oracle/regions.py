@@ -334,7 +334,7 @@ prov = {
         },
     },
     "decoder": "Pillow " + __import__("PIL").__version__ + "; python " + sys.version.split()[0],
-    "decision": "Robbins' lists state no licence: only the regional diameter, longitude and latitude, cut at 20 km, are committed, with credit, as a recorded 'no licence stated, credited' decision under Roadmap III 7.5.4 (D-R10-77, Carl: go with my recommendation). The full files and answers stay in the scratchpad with their SHA-256.",
+    "decision": "Robbins' lists state no licence: only the regional diameter, longitude and latitude, cut at 20 km, are committed, with credit, as a recorded 'no licence stated, credited' decision under Roadmap III 7.5.4 (D-R10-77), ratified by Carl: \"Keep, credited (Recommended)\" = \"Facts-only subset (positions and sizes), credited, and it can be removed later. The legs that need it keep running.\" (AskUserQuestion to the merge-queue session, 2026-10-25). The full files and answers stay in the scratchpad with their SHA-256.",
 }
 json.dump(prov, open(root + "tests/fixtures/craters/regions-provenance.json", "w"), indent=2)
 for rid, o in oracle.items():
