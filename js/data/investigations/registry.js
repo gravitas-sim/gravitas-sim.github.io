@@ -169,6 +169,8 @@ const LOADERS = {
   'how-far-is-that-star': () => import('./how-far-is-that-star.js'),
   'a-binary-stars-orbit': () => import('./a-binary-stars-orbit.js'),
   'weighing-jupiter': () => import('./weighing-jupiter.js'),
+  'why-venus-is-hot': () => import('./why-venus-is-hot.js'),
+  'two-greenhouse-models': () => import('./two-greenhouse-models.js'),
 };
 // </generated:loaders>
 
@@ -255,6 +257,8 @@ const TRANSLATIONS = {
     'how-far-is-that-star': () => import('./es/how-far-is-that-star.js'),
     'a-binary-stars-orbit': () => import('./es/a-binary-stars-orbit.js'),
     'weighing-jupiter': () => import('./es/weighing-jupiter.js'),
+    'why-venus-is-hot': () => import('./es/why-venus-is-hot.js'),
+    'two-greenhouse-models': () => import('./es/two-greenhouse-models.js'),
   },
 };
 // </generated:translations>

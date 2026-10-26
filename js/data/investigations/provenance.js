@@ -67,6 +67,8 @@ export const EVIDENCE_FROM = Object.freeze({
   'two-periodograms': 'computation',
   'wanderers-on-the-sky': 'model',
   'weighing-jupiter': 'model',
+  'why-venus-is-hot': 'model',
+  'two-greenhouse-models': 'model',
   'weighing-stars': 'engine',
   'what-a-ccd-records': 'model',
   'what-a-spectrum-is-made-of': 'model',

@@ -130,4 +130,6 @@ export const SUMMARIES_ES = {
   'how-far-is-that-star': `Dos posiciones de una estrella no dan su distancia. Ajustarás catorce posiciones de una estrella sintética, verás rechazada una recta y leerás un paralaje y una distancia con un intervalo.`,
   'a-binary-stars-orbit': `Las posiciones durante dieciséis años fijan la órbita de una estrella binaria. Ajustarás la elipse y la convertirás en una suma de masas por la tercera ley de Kepler, con un intervalo y lo que deja abierto.`,
   'weighing-jupiter': `La distancia de una luna a Júpiter oscila como una sinusoide, y su período y su radio pesan el planeta. Por qué una imagen por noche da a Ío un período falso, y la tercera ley de Kepler.`,
+  'why-venus-is-hot': `Venus absorbe menos luz solar que la Tierra y tiene una superficie a 737 K. Compararás lo que da la luz solar sola a cada planeta con su temperatura medida, hallarás la diferencia y verás por qué una capa absorbente no puede cerrarla en Venus y una atmósfera gris sí.`,
+  'two-greenhouse-models': `Una sola capa absorbente y una atmósfera gris son modelos de efecto invernadero distintos. Ajustarás los dos a la Tierra, Marte y Venus, verás por qué los números difieren y leerás dónde se agota cada modelo.`,
 };

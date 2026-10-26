@@ -841,4 +841,30 @@ export const MANIFEST = [
     gradedCount: 5,
     objectiveCount: 4,
   },
+  {
+    id: 'why-venus-is-hot',
+    title: 'Why Venus Is Hot',
+    subtitle:
+      'What sunlight alone gives a planet, the gap it leaves, and what closes it',
+    duration: '25-40 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/why-venus-is-hot.webp',
+    depths: 3,
+    stepCount: 9,
+    gradedCount: 7,
+    objectiveCount: 4,
+  },
+  {
+    id: 'two-greenhouse-models',
+    title: 'Two Greenhouse Models',
+    subtitle:
+      'A single layer and a grey atmosphere, the same planets, and why the numbers differ',
+    duration: '30-40 min',
+    level: 'Majors and upper-level astronomy',
+    thumbnail: 'images/investigations/two-greenhouse-models.webp',
+    depths: 3,
+    stepCount: 7,
+    gradedCount: 5,
+    objectiveCount: 4,
+  },
 ];

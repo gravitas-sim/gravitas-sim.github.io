@@ -162,7 +162,11 @@ describe('the manifest', () => {
 });
 
 /** Files that hold several lessons (the shared files of D-R10-67). */
-const SHARED = ['measurement-sequence.js', 'satellite-sequence.js'];
+const SHARED = [
+  'measurement-sequence.js',
+  'satellite-sequence.js',
+  'atmosphere-sequence.js',
+];
 
 describe('loading a lesson', () => {
   test('there is one file per lesson and no strays', () => {

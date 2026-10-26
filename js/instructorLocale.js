@@ -115,7 +115,9 @@ import SAMPLING_A_POSTERIOR from './data/investigations/es/sampling-a-posterior.
 import MEASUREMENT_SHADOWS from './data/investigations/es/measurement-sequence.js';
 import MEASUREMENT_DEEPER from './data/investigations/depth/es/measurement-sequence.js';
 import SATELLITE_SHADOWS from './data/investigations/es/satellite-sequence.js';
+import ATMOSPHERE_SHADOWS from './data/investigations/es/atmosphere-sequence.js';
 import SATELLITE_DEEPER from './data/investigations/depth/es/satellite-sequence.js';
+import ATMOSPHERE_DEEPER from './data/investigations/depth/es/atmosphere-sequence.js';
 
 /** The Spanish shadow of each lesson, by lesson id. */
 export const SHADOWS = Object.freeze({
@@ -161,6 +163,7 @@ export const SHADOWS = Object.freeze({
   'sampling-a-posterior': SAMPLING_A_POSTERIOR,
   ...MEASUREMENT_SHADOWS,
   ...SATELLITE_SHADOWS,
+  ...ATMOSPHERE_SHADOWS,
   'design-the-schedule': DESIGN_THE_SCHEDULE,
   'detect-this-planet': DETECT_THIS_PLANET,
   'goldilocks-question': GOLDILOCKS_QUESTION,
@@ -222,6 +225,7 @@ export const DEEPER_SHADOWS = Object.freeze({
   'weighing-stars': WEIGHING_STARS_DEEPER,
   ...MEASUREMENT_DEEPER,
   ...SATELLITE_DEEPER,
+  ...ATMOSPHERE_DEEPER,
 });
 
 /**

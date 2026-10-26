@@ -276,6 +276,10 @@ export const INSTRUCTOR = {
           name: 'Depth',
           text: 'Quantitative: Earth with no albedo. Advanced: the scale heights of Venus and Earth.',
         },
+        {
+          name: 'Predictions before answers',
+          text: 'The Venus prediction is recorded before the instrument reveals the equilibrium temperature, and is never marked wrong in the report.',
+        },
       ],
       misconceptions: [
         {
@@ -295,6 +299,11 @@ export const INSTRUCTOR = {
           response:
             'Jupiter’s 55 K is the 1 bar level against a model with no internal heat, and Jupiter has no surface. The instrument says so.',
         },
+        {
+          claim: 'Venus is hot because it is the planet nearest the Sun.',
+          response:
+            'Mercury is nearer, and its surface is cooler on average than Venus’s. What matters is the sunlight absorbed and what the atmosphere does with the heat.',
+        },
       ],
       teachingNotes: [
         'The anchors and the pack (albedos, distances, temperatures) are typed from the NASA fact sheets and read by Carl; they were not checked against the sources.',
@@ -305,9 +314,11 @@ export const INSTRUCTOR = {
       discussion: [
         'Why does the planet that absorbs less sunlight end up with the hotter surface?',
         'What would you need to measure to say the fitted optical depth of Venus is right?',
+        'Why does a fourth root make the temperature change so slowly when the albedo changes?',
       ],
       extensions: [
         'Continue with Two Greenhouse Models, which fits Earth, Mars and Venus in both models.',
+        'Look up the measured surface pressure of Venus and compare it with the scale height you found.',
       ],
       modelNotes:
         'js/kernels/atmospheres/ (ATMOSPHERES.md): equilibriumTemperature, oneLayer, greyGround and greyDepthFor, scaleHeight and the six-body pack, validated against an independent numpy and scipy oracle (npm run atmospheres:validate).',
@@ -324,6 +335,7 @@ export const INSTRUCTOR = {
       priorKnowledge: [
         'The equilibrium temperature and the measured-minus-equilibrium gap',
         'Energy balance: what comes in as sunlight leaves as infrared',
+        'The fourth-root relation between absorbed power and temperature',
       ],
       keyConcepts: [
         {
@@ -348,6 +360,10 @@ export const INSTRUCTOR = {
           name: 'Depth',
           text: 'Quantitative: Mars in both models, one unit in each model. Advanced: the limits of grey opacity.',
         },
+        {
+          name: 'A model that can refuse',
+          text: 'The one-layer model returns no solution, with the reason, when the planet needs a ground warmer than 2^(1/4) times its equilibrium temperature.',
+        },
       ],
       misconceptions: [
         {
@@ -361,17 +377,32 @@ export const INSTRUCTOR = {
           response:
             'They give 302.1 K and 292.2 K for Earth: a fully absorbing sheet and a column of one optical depth are different atmospheres.',
         },
+        {
+          claim: 'The grey model is exact, since it is a published solution.',
+          response:
+            'It is the Eddington approximation of the grey problem, 3.66 percent warm at the top, and the grey assumption itself is the larger simplification.',
+        },
+        {
+          claim: 'A model that has no solution for a planet is broken.',
+          response:
+            'A refusal is a result: the one layer has a ceiling and Venus is above it.',
+        },
       ],
       teachingNotes: [
         'The exact grey curve uses the Hopf function in a closed approximation, checked against a numerical solution of the Milne equation to 0.5 percent.',
         'The pack values were read by Carl and not checked against the NASA fact sheets.',
         'These are not climate models; they cannot say what a real atmosphere will do.',
+        'The one number fitted to each planet is a fit to one measurement, not an observation: say so when students quote it.',
       ],
       discussion: [
         'Which of the two numbers would you expect to move if the clouds changed, and why?',
         'Why is “grey” a bigger limitation than the Eddington approximation?',
+        'What would a model with two opacities, one for sunlight and one for infrared, change?',
       ],
-      extensions: ['Open the validation page and find the atmospheres group.'],
+      extensions: [
+        'Open the validation page and find the atmospheres group.',
+        'Compare the one-layer ceiling with the ratio of measured to equilibrium temperature of each planet in Why Venus Is Hot.',
+      ],
       modelNotes:
         'js/kernels/atmospheres/ (ATMOSPHERES.md): oneLayer, oneLayerEmissivityFor, greyGround, greyDepthFor, greyTemperatureExact; the oracle results are pinned in tests/fixtures/atmospheres/.',
     },
@@ -402,8 +433,13 @@ export const INSTRUCTOR = {
     'two-greenhouse-models': [
       {
         from: 'two-models',
+        to: 'earth-one-layer',
+        text: 'The two models, and Earth fitted with an emissivity.',
+      },
+      {
+        from: 'earth-grey',
         to: 'same-planet-different-numbers',
-        text: 'Earth fitted twice: an emissivity and an optical depth.',
+        text: 'The same planet fitted with an optical depth, and why the two numbers differ.',
       },
       {
         from: 'venus-both',

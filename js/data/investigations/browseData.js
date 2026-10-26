@@ -280,4 +280,12 @@ export const BROWSE_META = {
     tags: ['observing'],
     numericCount: 0,
   },
+  'why-venus-is-hot': {
+    tags: ['habitability', 'solar-system'],
+    numericCount: 0,
+  },
+  'two-greenhouse-models': {
+    tags: ['habitability', 'solar-system'],
+    numericCount: 0,
+  },
 };

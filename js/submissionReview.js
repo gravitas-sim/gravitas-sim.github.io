@@ -144,6 +144,10 @@ const DEEPER = {
     import('./data/investigations/depth/a-binary-stars-orbit.js'),
   'weighing-jupiter': () =>
     import('./data/investigations/depth/weighing-jupiter.js'),
+  'why-venus-is-hot': () =>
+    import('./data/investigations/depth/why-venus-is-hot.js'),
+  'two-greenhouse-models': () =>
+    import('./data/investigations/depth/two-greenhouse-models.js'),
 };
 const deepen = async lesson =>
   lesson.depthLaid || !DEEPER[lesson.id]

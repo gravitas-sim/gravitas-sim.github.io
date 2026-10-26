@@ -850,4 +850,30 @@ export const MANIFEST = [
     gradedCount: 5,
     objectiveCount: 4,
   },
+  {
+    id: 'why-venus-is-hot',
+    title: 'Por qué Venus es caliente',
+    subtitle:
+      'Qué da la luz del Sol por sí sola a un planeta, la diferencia que deja y qué la cierra',
+    duration: '25-40 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/why-venus-is-hot.webp',
+    depths: 3,
+    stepCount: 9,
+    gradedCount: 7,
+    objectiveCount: 4,
+  },
+  {
+    id: 'two-greenhouse-models',
+    title: 'Dos modelos de efecto invernadero',
+    subtitle:
+      'Una sola capa y una atmósfera gris, los mismos planetas y por qué los números difieren',
+    duration: '30-40 min',
+    level: 'Majors and upper-level astronomy',
+    thumbnail: 'images/investigations/two-greenhouse-models.webp',
+    depths: 3,
+    stepCount: 7,
+    gradedCount: 5,
+    objectiveCount: 4,
+  },
 ];

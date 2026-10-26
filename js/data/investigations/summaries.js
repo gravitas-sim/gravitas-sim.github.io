@@ -130,4 +130,6 @@ export const SUMMARIES = {
   'how-far-is-that-star': `Two positions of a star do not give its distance. You will fit fourteen positions of a synthetic star, see a straight line rejected, and read a parallax and a distance with an interval.`,
   'a-binary-stars-orbit': `Positions over sixteen years fix a binary star's orbit. You will fit the ellipse and turn it into a mass sum by Kepler's third law, with an interval and what it leaves open.`,
   'weighing-jupiter': `A moon's distance from Jupiter swings like a sinusoid, and its period and radius weigh the planet. Why one frame a night gives Io a wrong period, and Kepler's third law.`,
+  'why-venus-is-hot': `Venus absorbs less sunlight than Earth and has a surface at 737 K. You will set what sunlight alone gives each planet beside its measured temperature, find the gap, and see why one absorbing layer cannot close it for Venus while a grey atmosphere can.`,
+  'two-greenhouse-models': `A single absorbing layer and a grey atmosphere are different greenhouse models. You will fit both to Earth, Mars and Venus, see why the numbers differ, and read where each model runs out.`,
 };
