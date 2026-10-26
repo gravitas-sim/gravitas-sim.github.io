@@ -185,6 +185,22 @@ function oracleTiers() {
     b1.relativeT,
     `worst at tau = ${at} (the top, warm); the model's stated error`
   );
+  const b3 = C['b3.hopfApproximation'].bounds;
+  let worst3 = 0;
+  ORACLE.milneTau.forEach((tau, i) => {
+    const t = K.greyTemperatureExact({
+      emissionTemperature: 1,
+      tau,
+    }).temperature;
+    worst3 = Math.max(worst3, Math.abs(t / ORACLE.milneT[i] - 1));
+  });
+  within(
+    'b3.hopfApproximation',
+    worst3,
+    b3.relativeT,
+    'exact grey curve against the pinned Milne solution'
+  );
+  within('b3.q0', rel(K.hopfQ(0), 1 / Math.sqrt(3)), b3.q0Relative);
   const b2 = C['b2.pinnedProfiles'].bounds;
   ORACLE.pinned.forEach(o => {
     const te = INPUTS.greyOde.te;

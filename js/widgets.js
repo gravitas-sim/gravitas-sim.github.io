@@ -346,6 +346,12 @@ export const LAZY_FAMILIES = Object.freeze({
     ['moon-frames', 'moon-fit', 'jupiter-weigh'],
     'jovianReady'
   ),
+  atmosphere: familyEntry(
+    () => import('./atmosphereWidgets.js'),
+    './atmosphereWidgets.js',
+    'ATMOSPHERE_WIDGETS',
+    ['atmosphere-balance', 'atmosphere-greenhouse', 'atmosphere-scale']
+  ),
 });
 // </generated:lazy-families>
 

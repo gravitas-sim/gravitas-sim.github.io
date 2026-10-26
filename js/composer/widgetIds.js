@@ -99,6 +99,11 @@ export const WIDGET_FAMILIES = Object.freeze({
   claim: ['frame-marks', 'coverage-repeats', 'profile-refusal'],
   imaging: ['moon-marks', 'star-parallax', 'binary-orbit'],
   jovian: ['moon-frames', 'moon-fit', 'jupiter-weigh'],
+  atmosphere: [
+    'atmosphere-balance',
+    'atmosphere-greenhouse',
+    'atmosphere-scale',
+  ],
 });
 
 /** Every instrument id, in the registry’s order. */
