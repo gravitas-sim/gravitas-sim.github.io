@@ -1878,9 +1878,9 @@ export const ES_DEFERRED = {
   'inv.seq.gravity.integrators-in-practice':
     'Cuatro integradores comparados por la energ\u00eda que pierden en un sistema real, en Python. Necesita la p\u00e1gina de c\u00e1lculo y conexi\u00f3n.',
   'inv.seq.planets.why-venus-is-hot':
-    'Por qué un planeta puede estar más caliente de lo que la luz solar sola lo deja: la Tierra, luego Venus, con una capa y después con una atmósfera gris. Conviene hacerla tras la pregunta de la habitabilidad.',
+    'Por qué un planeta puede estar más caliente de lo que la luz solar sola lo deja: la Tierra y Venus.',
   'inv.seq.planets.two-greenhouse-models':
-    'Dos modelos de efecto invernadero para el mismo planeta, con números libres que no son la misma magnitud. Necesita la primera investigación sobre Venus.',
+    'Dos modelos de efecto invernadero para un planeta, y por qué sus números libres difieren.',
   'inv.seq.planets.binary-star-planets':
     'Estabilidad, resonancia y caos a la vez, decidiendo dónde puede sobrevivir un planeta alrededor de dos estrellas.',
 

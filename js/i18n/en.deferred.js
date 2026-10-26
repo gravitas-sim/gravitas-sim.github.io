@@ -1847,9 +1847,9 @@ export const EN_DEFERRED = {
   'inv.seq.planets.goldilocks-question':
     'What a detection does and does not tell you about whether anywhere is habitable. Needs the transit investigation; the radial-velocity one helps.',
   'inv.seq.planets.why-venus-is-hot':
-    'Why a planet can be hotter than sunlight alone makes it: Earth, then Venus, with one layer and then a gray atmosphere. Worth doing after the habitability question.',
+    'Why a planet can be hotter than sunlight alone makes it: Earth, then Venus.',
   'inv.seq.planets.two-greenhouse-models':
-    'Two greenhouse models for the same planet, with free numbers that are not the same quantity. Needs the first Venus investigation.',
+    'Two greenhouse models for one planet, and why their free numbers differ.',
   'inv.seq.planets.binary-star-planets':
     'Stability, resonance and chaos at once, deciding where a planet can survive around two stars.',
   'inv.seq.planets.extending-an-experiment':
