@@ -1,12 +1,7 @@
 // =============================================================================
-// Messages that arrive with the chunk that needs them
-// -----------------------------------------------------------------------------
-// Strings for panels nobody sees on a first visit (the scenario-specific
-// instruments, the radial velocity workspace, the transit noise budget), about
-// twelve kilobytes of prose that every visitor was downloading at start-up.
-// A separate catalog rather than part of js/i18n/es.js because one object
-// cannot be code-split: the bridges that load those panels register these
-// through registerMessages(), and the audit and i18n tests merge both halves.
+// Messages that arrive with the chunk that needs them: panels nobody sees on a
+// first visit, in a catalog apart because one object cannot be code-split. The
+// bridges register these through registerMessages(); the tests merge both halves.
 // =============================================================================
 
 export const ES_DEFERRED = {
@@ -1882,6 +1877,10 @@ export const ES_DEFERRED = {
     'La posterior de un tr\u00e1nsito muestreada en Python, con las comprobaciones de convergencia que deciden cu\u00e1ndo puede citarse su intervalo. Necesita la p\u00e1gina de c\u00e1lculo y conexi\u00f3n.',
   'inv.seq.gravity.integrators-in-practice':
     'Cuatro integradores comparados por la energ\u00eda que pierden en un sistema real, en Python. Necesita la p\u00e1gina de c\u00e1lculo y conexi\u00f3n.',
+  'inv.seq.planets.why-venus-is-hot':
+    'Por qué un planeta puede estar más caliente de lo que la luz solar sola lo deja: la Tierra, luego Venus, con una capa y después con una atmósfera gris. Conviene hacerla tras la pregunta de la habitabilidad.',
+  'inv.seq.planets.two-greenhouse-models':
+    'Dos modelos de efecto invernadero para el mismo planeta, con números libres que no son la misma magnitud. Necesita la primera investigación sobre Venus.',
   'inv.seq.planets.binary-star-planets':
     'Estabilidad, resonancia y caos a la vez, decidiendo dónde puede sobrevivir un planeta alrededor de dos estrellas.',
 

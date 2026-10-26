@@ -66,6 +66,12 @@ async function stepNumber(page) {
 /** True when the canvas has drawn something other than its background. */
 async function canvasPainted(page, selector) {
   return page.evaluate(sel => {
+    // An instrument that draws through the plot component (js/plot) leaves the
+    // tool canvas hidden and draws a labelled svg; its paths are the drawing.
+    const plot = document.querySelector('#investigationTool svg[aria-label]');
+    if (plot && plot.querySelectorAll('path').length > 0) {
+      return { ok: true, colors: 0 };
+    }
     const c = document.querySelector(sel);
     if (!c || !c.width || !c.height) return { ok: false, why: 'no canvas' };
     const ctx = c.getContext('2d');

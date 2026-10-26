@@ -207,7 +207,7 @@ export const SEQUENCES = [
         ['radial-velocity', 'detect-this-planet'],
       ],
       ['goldilocks-question', 'core', ['transit-photometry']],
-      ['why-venus-is-hot', 'core', ['goldilocks-question']],
+      ['why-venus-is-hot', 'core'],
       ['two-greenhouse-models', 'core', ['why-venus-is-hot']],
       ['binary-star-planets', 'core'],
       ['extending-an-experiment', 'core'],

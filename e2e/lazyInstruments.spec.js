@@ -79,7 +79,15 @@ async function expectInstrument(page) {
   const note = page.locator('#investigationToolNote');
   await expect(note).not.toHaveAttribute('role', 'status');
   await expect(note).not.toHaveText(/could not be loaded|Reload the page/);
-  await expect(page.locator('#investigationToolCanvas')).toBeVisible();
+  // A canvas, or the labelled svg an instrument drawn by the plot component
+  // leaves instead (its tool canvas stays hidden).
+  await expect(
+    page
+      .locator(
+        '#investigationToolCanvas:visible, #investigationTool svg[aria-label]:visible'
+      )
+      .first()
+  ).toBeVisible();
 }
 
 /**
