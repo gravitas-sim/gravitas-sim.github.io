@@ -80,7 +80,7 @@
    "static": {
     "title": "Two greenhouse models, one planet",
     "note": "One absorbing layer and a gray atmosphere with an optical depth are different models. Their free numbers, an emissivity and an optical depth, are different quantities, and they give the same ground temperature only for matching values. The blue curve is the Eddington solution; the dashed green curve is the exact gray solution, so you can see how far the approximation is from the full calculation.",
-    "controls": [{"id":"body","label":"Planet","unit":null,"min":0,"max":2,"step":1,"value":1,"decimals":0},{"id":"tau","label":"Optical depth of the whole atmosphere (gray model)","unit":null,"min":0,"max":150,"step":0.01,"value":1,"decimals":2},{"id":"emissivity","label":"Emissivity of the layer (one-layer model)","unit":null,"min":0,"max":1,"step":0.01,"value":0.5,"decimals":2}],
+    "controls": [{"id":"body","label":"Planet","unit":null,"min":0,"max":2,"step":1,"value":1,"decimals":0},{"id":"tau","label":"Optical depth (gray model)","unit":null,"min":0,"max":150,"step":0.01,"value":1,"decimals":2},{"id":"emissivity","label":"Emissivity (one layer)","unit":null,"min":0,"max":1,"step":0.01,"value":0.5,"decimals":2}],
     "presets": [],
     "actions": [],
     "defaults": {"body":"1","tau":"1","emissivity":"0.5"}
@@ -117,7 +117,7 @@
    "static": {
     "title": "Dos modelos de efecto invernadero, un planeta",
     "note": "Una capa absorbente y una atmósfera gris con una profundidad óptica son modelos distintos. Sus números libres, una emisividad y una profundidad óptica, son magnitudes distintas, y dan la misma temperatura del suelo solo para valores que coincidan. La curva azul es la solución de Eddington; la curva verde discontinua es la solución gris exacta, para ver cuánto se aleja la aproximación del cálculo completo.",
-    "controls": [{"id":"body","label":"Planeta","unit":null,"min":0,"max":2,"step":1,"value":1,"decimals":0},{"id":"tau","label":"Profundidad óptica de toda la atmósfera (modelo gris)","unit":null,"min":0,"max":150,"step":0.01,"value":1,"decimals":2},{"id":"emissivity","label":"Emisividad de la capa (modelo de una capa)","unit":null,"min":0,"max":1,"step":0.01,"value":0.5,"decimals":2}],
+    "controls": [{"id":"body","label":"Planeta","unit":null,"min":0,"max":2,"step":1,"value":1,"decimals":0},{"id":"tau","label":"Profundidad óptica (modelo gris)","unit":null,"min":0,"max":150,"step":0.01,"value":1,"decimals":2},{"id":"emissivity","label":"Emisividad (una capa)","unit":null,"min":0,"max":1,"step":0.01,"value":0.5,"decimals":2}],
     "presets": [],
     "actions": [],
     "defaults": {"body":"1","tau":"1","emissivity":"0.5"}
