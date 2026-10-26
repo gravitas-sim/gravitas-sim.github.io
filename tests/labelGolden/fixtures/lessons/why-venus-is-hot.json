@@ -1,0 +1,74 @@
+{
+ "id": "why-venus-is-hot",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.earth-sunlight-alone.fields.0.unit","K"],
+    ["steps.earth-sunlight-alone.fields.1.unit","K"],
+    ["steps.venus-sunlight-alone.fields.0.unit","K"],
+    ["steps.venus-sunlight-alone.fields.1.unit","K"],
+    ["steps.earth-without-clouds.fields.0.unit","K"],
+    ["steps.earth-without-clouds.fields.1.unit","K"],
+    ["steps.six-bodies.fields.0.unit","K"],
+    ["steps.six-bodies.fields.1.unit","K"],
+    ["steps.one-layer-for-venus.fields.0.unit","K"],
+    ["steps.how-thick-is-venus.fields.0.unit","km"],
+    ["steps.how-thick-is-venus.fields.1.unit","km"]
+   ],
+   "numbered": [
+    ["steps.earth-sunlight-alone.fields.0.hint","254"],
+    ["steps.earth-sunlight-alone.fields.1.hint","34"],
+    ["steps.venus-sunlight-alone.fields.0.hint","229"],
+    ["steps.venus-sunlight-alone.fields.1.hint","508"],
+    ["steps.earth-without-clouds.fields.0.label","Earth’s equilibrium temperature with albedo 0"],
+    ["steps.earth-without-clouds.fields.0.hint","278.3"],
+    ["steps.earth-without-clouds.fields.1.hint","24.3"],
+    ["steps.six-bodies.fields.0.hint","0.2"],
+    ["steps.six-bodies.fields.1.label","Jupiter: measured (1 bar) minus equilibrium"],
+    ["steps.six-bodies.fields.1.hint","55"],
+    ["steps.one-layer-for-venus.fields.0.hint","272"],
+    ["steps.gray-depth-for-venus.fields.0.hint","141.6"],
+    ["steps.how-thick-is-venus.fields.0.hint","15.9"],
+    ["steps.how-thick-is-venus.fields.1.hint","8.4"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.earth-without-clouds.fields.0.label","Temperatura de equilibrio de la Tierra con albedo 0"],
+    ["steps.six-bodies.fields.1.label","Júpiter: medida (1 bar) menos de equilibrio"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "earth-sunlight-alone": {
+    "validate": {"calls":232,"distinct":2,"digest":"47dda4b4ca58aef4","samples":[null,{"level":"error","message":"Choose Earth, leave the albedo as the planet’s own and the night-side heat at 1, then read “Equilibrium temperature” and “Measured minus equilibrium”."}]}
+   },
+   "venus-sunlight-alone": {
+    "validate": {"calls":232,"distinct":2,"digest":"394a844819b532e8","samples":[null,{"level":"error","message":"Choose Venus with its own albedo, then read “Equilibrium temperature” and “Measured minus equilibrium”."}]}
+   },
+   "earth-without-clouds": {
+    "validate": {"calls":232,"distinct":2,"digest":"7a69307ca11bdaa0","samples":[null,{"level":"error","message":"Choose Earth (1), set “Albedo” to “my own”, set “My Bond albedo” to 0 and read “Equilibrium temperature”."}]}
+   },
+   "six-bodies": {
+    "validate": {"calls":232,"distinct":2,"digest":"68b969524bc1a41f","samples":[null,{"level":"error","message":"Choose Mars (2) and then Jupiter (3), each with its own albedo, and read “Measured minus equilibrium”."}]}
+   },
+   "one-layer-for-venus": {
+    "validate": {"calls":97,"distinct":2,"digest":"049952d5315b3e03","samples":[null,{"level":"error","message":"Choose Venus (0), set the emissivity of the layer to 1, then read “Ground temperature, one layer”."}]}
+   },
+   "gray-depth-for-venus": {
+    "validate": {"calls":97,"distinct":2,"digest":"38de7a9c8d4affa0","samples":[null,{"level":"error","message":"Choose Venus (0) and read “Optical depth that gives the measured temperature”."}]}
+   },
+   "how-thick-is-venus": {
+    "validate": {"calls":232,"distinct":2,"digest":"49a3ee03143f5af4","samples":[null,{"level":"error","message":"Choose Venus (0) with the planet’s own temperature, read “Scale height”, then Earth (1)."}]}
+   }
+  },
+  "es": "same"
+ }
+}

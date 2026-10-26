@@ -181,6 +181,12 @@ export default {
     'Por qué una imagen por noche no puede dar el período de Ío, y por qué el período que ve la Tierra no es del todo el orbital.',
     'Las imágenes son sintéticas, hechas con posiciones de JPL Horizons; la masa es la del planeta solo y deja fuera su achatamiento.',
   ],
+  atmosphere: [
+    'La temperatura que da a un planeta la luz del Sol por sí sola junto a la temperatura medida allí, un efecto invernadero de una capa y uno gris lado a lado para un planeta, o con qué rapidez baja la presión con la altura.',
+    'Cuánto se aleja la temperatura medida de Venus, la Tierra, Marte y los planetas gigantes de su temperatura de equilibrio, qué emisividad o profundidad óptica necesita cada modelo para cerrar la diferencia, y la altura de escala que implica cada cuerpo.',
+    'Por qué Venus es mucho más cálido que su temperatura de equilibrio y por qué una sola capa no puede alcanzarlo, por qué los dos modelos dan números distintos para el mismo planeta, y dónde la opacidad gris deja de ser una buena descripción.',
+    'Son modelos de enseñanza: sin convección, sin nubes, sin calor interno, con una sola opacidad en todas las longitudes de onda. La curva de Eddington es cerca de un 4 por ciento más cálida arriba en una atmósfera gris, y un planeta gigante no tiene superficie con la que comparar.',
+  ],
   gwEvents: [
     'Deformación real del detector frente al tiempo, y un mapa de tono frente al tiempo.',
     'Una traza ascendente en el mapa es el chirrido de una espiral.',

@@ -51,3 +51,27 @@ export function greyDepthFor(ratio) {
     tauSurface: (4 / 3) * (ratio ** 4 - 1),
   };
 }
+
+/**
+ * The Hopf function q(tau) of the exact grey solution, T^4 = (3/4) T_e^4
+ * (tau + q(tau)), in the closed approximation q = 0.7104 - 0.1331 exp(-3.4488
+ * tau): q(0) = 0.5773 (exact 1 / sqrt 3) and q(infinity) = 0.7104. Checked
+ * against the pinned Milne solution (b3 in the thresholds).
+ */
+export const hopfQ = tau => 0.7104 - 0.1331 * Math.exp(-3.4488 * tau);
+
+const MODEL_EXACT =
+  'grey radiative equilibrium (exact, Hopf function approximated)';
+
+/** T(tau) of the exact grey solution, to set beside the Eddington curve. */
+export function greyTemperatureExact({ emissionTemperature, tau }) {
+  if (!isPos(emissionTemperature))
+    return refuse(MODEL_EXACT, 'the emission temperature must be positive');
+  if (typeof tau !== 'number' || !(tau >= 0) || !Number.isFinite(tau))
+    return refuse(MODEL_EXACT, 'the optical depth must be zero or more');
+  return {
+    model: MODEL_EXACT,
+    assumes: ASSUMES.slice(0, 4),
+    temperature: emissionTemperature * (0.75 * (tau + hopfQ(tau))) ** 0.25,
+  };
+}

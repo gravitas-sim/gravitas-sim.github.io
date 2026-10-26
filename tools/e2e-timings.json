@@ -2871,5 +2871,13 @@
   "[chromium] › imagePacks.spec.js › what each pack allows › hirise-cerberus-fossae: the photometry panel is refused in words": 1.1,
   "[chromium] › imagePacks.spec.js › controls › every control of the opened TESS frame is at least 24 px at 1280": 0.7,
   "[chromium] › imagePacks.spec.js › controls › every control of the opened TESS frame is at least 24 px at 390": 0.6,
-  "[chromium] › imagePacks.spec.js › the hostile PNG leg, pixel stage › every variant made from the authentic Galileo frame is refused with a stable code in time, or read where the contract says so": 1.6
+  "[chromium] › imagePacks.spec.js › the hostile PNG leg, pixel stage › every variant made from the authentic Galileo frame is refused with a stable code in time, or read where the contract says so": 1.6,
+  "[chromium] › atmosphereLessons.spec.js › why-venus-is-hot venus-sunlight-alone: the instrument paints, lists its numbers, passes axe and keeps its controls large enough in both themes and sizes (en)": 15.5,
+  "[chromium] › atmosphereLessons.spec.js › why-venus-is-hot venus-sunlight-alone: the instrument paints, lists its numbers, passes axe and keeps its controls large enough in both themes and sizes (es)": 15.5,
+  "[chromium] › atmosphereLessons.spec.js › why-venus-is-hot one-layer-for-venus: the instrument paints, lists its numbers, passes axe and keeps its controls large enough in both themes and sizes (en)": 17.0,
+  "[chromium] › atmosphereLessons.spec.js › why-venus-is-hot one-layer-for-venus: the instrument paints, lists its numbers, passes axe and keeps its controls large enough in both themes and sizes (es)": 17.0,
+  "[chromium] › atmosphereLessons.spec.js › why-venus-is-hot how-thick-is-venus: the instrument paints, lists its numbers, passes axe and keeps its controls large enough in both themes and sizes (en)": 16.0,
+  "[chromium] › atmosphereLessons.spec.js › why-venus-is-hot how-thick-is-venus: the instrument paints, lists its numbers, passes axe and keeps its controls large enough in both themes and sizes (es)": 16.0,
+  "[chromium] › centralExperiments.spec.js › the central experiment of each investigation › why-venus-is-hot: Venus gets a cooler equilibrium temperature than Earth, 229 K against 254 K, and a hotter surface @accepts:ce.why-venus-is-hot": 11.0,
+  "[chromium] › centralExperiments.spec.js › the central experiment of each investigation › two-greenhouse-models: one layer warms Venus by at most 2^(1/4), to 272 K, however high its emissivity @accepts:ce.two-greenhouse-models": 11.0
 }

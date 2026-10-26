@@ -1,21 +1,21 @@
 // =============================================================================
 // Instructor content: the part of a teaching guide that cannot be derived
 // -----------------------------------------------------------------------------
-// Titles, durations, step counts, questions, answers and tolerances are NOT
-// here: answerKey.js reads them out of investigations.js, so they cannot drift.
-// What is here is the prose a program cannot write: why a lesson is built the
-// way it is, what students get wrong, where they slow down, what to expect.
+// Titles, durations, step counts, questions, answers and tolerances are NOT here:
+// answerKey.js reads them from investigations.js. What is here is the prose a
+// program cannot write: why a lesson is built so, what students get wrong, what to expect.
 // =============================================================================
 
 /** Shared closing note pointing at the public model page. */
 const MODEL_PAGE = 'https://gravitas-sim.online/model/';
-
 import { INSTRUCTOR as MEASUREMENT } from './investigations/depth/measurement-sequence.js';
 import { INSTRUCTOR as SATELLITE } from './investigations/depth/satellite-sequence.js';
+import { INSTRUCTOR as ATMOSPHERE } from './investigations/depth/atmosphere-sequence.js';
 
 export const INSTRUCTOR_CONTENT = {
   ...MEASUREMENT.content,
   ...SATELLITE.content,
+  ...ATMOSPHERE.content,
   'extending-an-experiment': {
     topic:
       'Classifying an experiment’s trials, fitting the chance of an outcome with a bootstrap, and extending it to a large synthetic population, in Python, with the limits of what the interval covers',

@@ -201,7 +201,8 @@ describe('the instructor expectations record', () => {
     // 389 after the three measurement and claim investigations (Prompt 190): 16 more.
     // 397 after the three image investigations (Prompt 191): 8 more.
     // 400 after Weighing Jupiter From Its Moons (Prompt 193): 3 more.
-    expect(total).toBe(400);
+    // 408 after Why Venus Is Hot and Two Greenhouse Models (Prompt 200): 8 more.
+    expect(total).toBe(408);
   });
 
   test('a /1 record keyed by step number migrates to the same text', () => {

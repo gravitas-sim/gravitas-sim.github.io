@@ -249,15 +249,16 @@ describe('the document inventory', () => {
     // 573 after the three measurement and claim investigations (Prompt 190).
     // 606 after the three image investigations (Prompt 191): 33 more.
     // 617 after Weighing Jupiter From Its Moons (Prompt 193): 11 more.
-    expect(inv.documents).toBe(617);
-    expect(inv.byLocale).toEqual({ en: 284, es: 333 });
+    // 639 after Why Venus Is Hot and Two Greenhouse Models (Prompt 200): 22 more.
+    expect(inv.documents).toBe(639);
+    expect(inv.byLocale).toEqual({ en: 294, es: 345 });
     expect(inv.byKind.notes).toBe(INVESTIGATIONS.length);
     expect(inv.byVariant).toEqual({
       activity: 12,
-      depth: 252,
-      full: 268,
+      depth: 264,
+      full: 276,
       general: 18,
-      notes: 67,
+      notes: 69,
     });
   });
 
@@ -285,7 +286,7 @@ describe('the document inventory', () => {
     const withDepth = INVESTIGATIONS.filter(
       i => withAllDepths(i).steps.length !== i.steps.length
     ).map(i => i.id);
-    expect(withDepth.length).toBe(42);
+    expect(withDepth.length).toBe(44);
     for (const id of withDepth)
       for (const d of ['core', 'quantitative', 'advanced'])
         for (const suffix of ['', '-es'])

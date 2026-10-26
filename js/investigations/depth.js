@@ -120,6 +120,10 @@ const EXTENSIONS = {
     import('../data/investigations/depth/a-binary-stars-orbit.js'),
   'weighing-jupiter': () =>
     import('../data/investigations/depth/weighing-jupiter.js'),
+  'why-venus-is-hot': () =>
+    import('../data/investigations/depth/why-venus-is-hot.js'),
+  'two-greenhouse-models': () =>
+    import('../data/investigations/depth/two-greenhouse-models.js'),
 };
 
 /** Their Spanish, loaded only for a Spanish reader. */
@@ -196,6 +200,10 @@ const WORDS = {
       import('../data/investigations/depth/es/a-binary-stars-orbit.js'),
     'weighing-jupiter': () =>
       import('../data/investigations/depth/es/weighing-jupiter.js'),
+    'why-venus-is-hot': () =>
+      import('../data/investigations/depth/es/why-venus-is-hot.js'),
+    'two-greenhouse-models': () =>
+      import('../data/investigations/depth/es/two-greenhouse-models.js'),
     'missing-mass': () =>
       import('../data/investigations/depth/es/missing-mass.js'),
     'the-turning-sky': () =>

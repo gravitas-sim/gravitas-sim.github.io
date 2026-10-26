@@ -40,5 +40,9 @@
   "js/stellarEvolutionWidgets.js:112:39",
   "js/stellarWidgets.js:162:29"
  ],
- "threw": []
+ "threw": [
+  "atmosphere-balance",
+  "atmosphere-greenhouse",
+  "atmosphere-scale"
+ ]
 }

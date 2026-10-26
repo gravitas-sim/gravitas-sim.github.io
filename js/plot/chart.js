@@ -142,6 +142,7 @@ const color = c => (typeof c === 'function' ? c() : c);
  * @param {number} [opts.width] - Used while the host has none (hidden, or a
  *   page without layout)
  * @param {number} [opts.maxPoints] - Draw only the newest n of each series
+ * @param {number} [opts.legendMinHeight] - Pixels: the legend toggles' least height (default none)
  * @param {boolean} [opts.theme] - Repaint on the page's theme change
  * @param {number} [opts.capPx] - Error-bar caps, in screen pixels per side
  * @param {number} [opts.maxTicks] - Most ticks drawn along either axis (by
@@ -695,7 +696,7 @@ export function createChart(host, opts = {}) {
             gap: '6px',
             margin: '0',
             padding: '2px 6px',
-            minHeight: '0',
+            minHeight: opts.legendMinHeight ? `${opts.legendMinHeight}px` : '0',
             border: '0',
             borderRadius: '4px',
             background: 'transparent',

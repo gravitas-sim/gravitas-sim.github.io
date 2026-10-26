@@ -176,6 +176,7 @@ export const GUIDED = Object.freeze([
   'tides',
   'transit-photometry',
   'twelve-nights',
+  'two-greenhouse-models',
   'two-periodograms',
   'wanderers-on-the-sky',
   'weighing-jupiter',
@@ -191,4 +192,5 @@ export const GUIDED = Object.freeze([
   'which-kind-of-variable',
   'who-gets-counted',
   'why-the-bright-ones-win',
+  'why-venus-is-hot',
 ]);
