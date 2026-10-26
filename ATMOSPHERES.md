@@ -29,7 +29,10 @@ albedo, the measured temperature (the surface for the three terrestrial bodies; 
 which have no surface and are labelled so), surface gravity, mean molecular weight and composition. Each value
 names its source and carries `checked: false` (typed from the fact sheets and the publications above; **no
 retrieval date can be recorded because nothing was retrieved in this session**: the pack is data typed from
-published numbers, not a downloaded table). There are no exobase conditions and no escape fields. The pack is a
+published numbers, not a downloaded table). Carl read the typed anchors and pack values and said they look
+correct (chat, 2026-10-25, relayed by the coordinator); every body carries `reviewedBy` and `reviewNote` for
+that. It is a reader's review and **not a check against the NASA fact sheets or the cited papers**, so
+`checked` stays false and no source check is claimed. There are no exobase conditions and no escape fields. The pack is a
 lazy module (`NEVER_PRECACHED`), so it costs the first-visit tier nothing.
 
 `compareWithMeasured(id, { albedo, redistribution })` returns the emission temperature beside the measured
@@ -76,7 +79,7 @@ results in `tests/fixtures/atmospheres/oracle-results.json` (seed 199, counts as
 What the numbers say, and what they do not: the two greenhouse models disagree about the same planet because
 their free parameters are different quantities (an emissivity of a single layer, an optical depth of a grey
 column); the Eddington profile is a 4 percent approximation to the exact grey solution and is warmest at the
-top; the anchors are textbook numbers, typed and not re-read (`checked: false`), with tolerances wide enough
+top; the anchors are textbook numbers, typed and, since, read by Carl and found correct (a reader's review, not a source check: `checked: false`), with tolerances wide enough
 that a one-digit slip would not change a status. Venus's surface-to-emission ratio is 3.22: no one-layer
 atmosphere gets there, and that refusal is the result, not a bug.
 

@@ -437,7 +437,7 @@ function pack() {
     Number(K.PACK_PROVENANCE.checked),
     0,
     K.PACK_PROVENANCE.checked === false && K.PACK_PROVENANCE.retrieved === null,
-    'typed, not re-read, no retrieval date'
+    'typed, read by Carl, not source-checked, no retrieval date'
   );
   const noEscape =
     !JSON.stringify(K.BODIES).match(/exobase|escape|jeans/i) &&

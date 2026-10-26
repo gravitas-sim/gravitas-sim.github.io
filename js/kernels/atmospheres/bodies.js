@@ -4,21 +4,28 @@
 //
 // PROVENANCE, stated plainly: every number is typed from the NASA Planetary
 // Fact Sheets (NSSDCA, public domain as a U.S. Government work) or from the
-// cited publications and was NOT re-read against them in the session that
-// wrote it; no table was downloaded and so no retrieval date can be
-// recorded. Each parameter group below says `checked: false`; a reader with
-// the sources must check them before any is called verified. There are no
-// exobase conditions here and no escape fields (Prompt 199, verdict B).
+// cited publications and was NOT checked against them: no table was
+// downloaded and so no retrieval date can be recorded, and `checked` stays
+// false. What happened instead: Carl read the typed values and said they look
+// correct (chat, 2026-10-25; a reader's review, recorded as `reviewedBy` and
+// `reviewNote` on every body). That is not a source check and must not be
+// quoted as one. There are no exobase conditions here and no escape fields
+// (Prompt 199, verdict B).
 import { AU_M } from './constants.js';
 import { fluxAt, equilibriumTemperature } from './equilibrium.js';
 
 const FACT = 'NASA Planetary Fact Sheets (NSSDCA)';
+const REVIEWER = 'Carl, chat 2026-10-25';
+const REVIEW_NOTE =
+  'reviewed by Carl, chat 2026-10-25: looks correct (a reader, not a check against the source)';
 
 export const PACK_PROVENANCE = Object.freeze({
   source: FACT,
   basis: 'public domain (a U.S. Government work); single values, attributed',
   retrieved: null,
   checked: false,
+  reviewedBy: REVIEWER,
+  reviewNote: REVIEW_NOTE,
   note: 'typed, not retrieved; semi-major axis in 10^6 km, Bond albedo, measured temperature, gravity and mean molecular weight as the fact sheets list them',
 });
 
@@ -32,6 +39,8 @@ export const BODIES = Object.freeze({
   venus: {
     name: 'Venus',
     kind: 'terrestrial',
+    reviewedBy: REVIEWER,
+    reviewNote: REVIEW_NOTE,
     a: 108.21,
     albedo: 0.76,
     measuredK: 737,
@@ -43,6 +52,8 @@ export const BODIES = Object.freeze({
   earth: {
     name: 'Earth',
     kind: 'terrestrial',
+    reviewedBy: REVIEWER,
+    reviewNote: REVIEW_NOTE,
     a: 149.6,
     albedo: 0.306,
     measuredK: 288,
@@ -54,6 +65,8 @@ export const BODIES = Object.freeze({
   mars: {
     name: 'Mars',
     kind: 'terrestrial',
+    reviewedBy: REVIEWER,
+    reviewNote: REVIEW_NOTE,
     a: 227.92,
     albedo: 0.25,
     measuredK: 210,
@@ -65,6 +78,8 @@ export const BODIES = Object.freeze({
   jupiter: {
     name: 'Jupiter',
     kind: 'giant',
+    reviewedBy: REVIEWER,
+    reviewNote: REVIEW_NOTE,
     a: 778.57,
     albedo: 0.343,
     measuredK: 165,
@@ -78,6 +93,8 @@ export const BODIES = Object.freeze({
   uranus: {
     name: 'Uranus',
     kind: 'giant',
+    reviewedBy: REVIEWER,
+    reviewNote: REVIEW_NOTE,
     a: 2872.46,
     albedo: 0.3,
     measuredK: 76,
@@ -91,6 +108,8 @@ export const BODIES = Object.freeze({
   neptune: {
     name: 'Neptune',
     kind: 'giant',
+    reviewedBy: REVIEWER,
+    reviewNote: REVIEW_NOTE,
     a: 4495.06,
     albedo: 0.29,
     measuredK: 72,

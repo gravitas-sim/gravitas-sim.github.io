@@ -114,9 +114,18 @@ describe('the models, worked', () => {
 });
 
 describe('the pack tells the truth about what it is', () => {
-  test('typed, not re-read, no retrieval date; six bodies; no escape data', () => {
+  test('typed and read by Carl but not source-checked, no retrieval date; six bodies; no escape data', () => {
     expect(K.PACK_PROVENANCE.checked).toBe(false);
     expect(K.PACK_PROVENANCE.retrieved).toBeNull();
+    // Carl's reader review is recorded on the pack and on every body, and it is not a source check.
+    expect(K.PACK_PROVENANCE.reviewedBy).toMatch(/^Carl/);
+    expect(K.PACK_PROVENANCE.reviewNote).toMatch(
+      /not a check against the source/
+    );
+    for (const id of K.BODY_IDS) {
+      expect(K.BODIES[id].reviewedBy).toBe(K.PACK_PROVENANCE.reviewedBy);
+      expect(K.BODIES[id].reviewNote).toBe(K.PACK_PROVENANCE.reviewNote);
+    }
     expect(K.BODY_IDS).toEqual([
       'venus',
       'earth',
