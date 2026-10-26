@@ -1,0 +1,126 @@
+{
+  "format": "gravitas.atmospheres-thresholds/1",
+  "prompt": 200,
+  "committed": "Before js/kernels/atmospheres/, the validation tool, the oracle's results and the tests existed. The bounds are Prompt 199's (tests/fixtures/atmospheres-gate-i/thresholds.json, verdict B, D-R10-75), carried over unchanged; no bound is reset here. The escape checks J1 to J4 are not part of this file: verdict B builds Prompt 200 without the escape panel and the escape data are unmeasured.",
+  "models": {
+    "equilibrium": "T_eq = [(1 - A) S f / sigma]^(1/4), A the Bond albedo, f = 2/3 - 5 eps / 12 for a redistribution efficiency eps in [0, 1] (1/4 for uniform redistribution; Cowan and Agol 2011). Not a surface temperature.",
+    "oneLayer": "One isothermal layer, transparent to sunlight, emissivity eps_L in [0, 1]: T_s = T_e [2 / (2 - eps_L)]^(1/4), T_layer = T_s / 2^(1/4); the surface cannot exceed 2^(1/4) T_e, so the model has no solution above that ratio.",
+    "grey": "Grey radiative equilibrium, Eddington closure: T^4(tau) = (3/4) T_e^4 (tau + 2/3), tau from the top; ground T_g^4 = T_e^4 (1 + 3 tau_s / 4). A different model from the one layer; its optical depth is not the one layer's emissivity.",
+    "scaleHeight": "H = k T / (mu m_u g): isothermal, hydrostatic, constant gravity, well mixed."
+  },
+  "anchors": {
+    "checked": false,
+    "note": "Published numbers typed from the cited publications and not re-read against them in the session that wrote them (Prompt 199 recorded the same). Their tolerances are wide enough that a one-digit slip would not change a status; a reader with the sources must check them before any is called verified.",
+    "terrestrialEmissionK": {
+      "Venus": 227,
+      "Earth": 255,
+      "Mars": 210
+    },
+    "giants": {
+      "Jupiter": {
+        "teffK": 124.4,
+        "powerRatio": 1.668,
+        "source": "Hanel et al. 1981, J. Geophys. Res. 86, 8705"
+      },
+      "Uranus": {
+        "teffK": 59.1,
+        "powerRatio": 1.06,
+        "source": "Pearl et al. 1990, Icarus 84, 12"
+      },
+      "Neptune": {
+        "teffK": 59.3,
+        "powerRatio": 2.61,
+        "source": "Pearl and Conrath 1991, J. Geophys. Res. 96, 18921"
+      }
+    },
+    "hotJupiterBandK": [1400, 1500],
+    "surfaceKelvin": { "Venus": 737, "Earth": 288, "Mars": 210 },
+    "scaleHeightKm": { "Venus": 15.9, "Earth": 8.5, "Mars": 11.1 }
+  },
+  "seed": {
+    "value": 199,
+    "stream": "js/rng.js mulberry32, the seed of the gate that fixed these counts",
+    "counts": {
+      "equilibrium": 2000,
+      "oneLayer": 1000,
+      "grey": 1000,
+      "greyOde": 60,
+      "scale": 1000,
+      "efold": 50,
+      "milne": 401
+    }
+  },
+  "tiers": {
+    "a": "the closed forms, their limits, monotonicity and the anchors (checks a1 to a4, a6, s1, s2)",
+    "b": "an independent oracle in numpy and scipy (no Gravitas code): the closed forms to 1e-12, the grey two-stream moment equations by solve_ivp at three pinned optical depths, the exact grey solution by the Milne equation (checks a1, a3, a4, b1, b2, s1)",
+    "c": "not applicable: the kernel fits no uncertainty and returns none",
+    "d": "an optical depth or any input outside a model's domain is refused with the reason and no number (check d1)"
+  },
+  "checks": {
+    "a1.equilibrium": {
+      "what": "equilibrium temperature against the oracle on 2,000 seeded (flux, Bond albedo, redistribution) points",
+      "bounds": { "relative": 1e-12 }
+    },
+    "a2.anchors": {
+      "what": "Venus, Earth and Mars emission temperatures against the textbook 227, 255 and 210 K; Jupiter, Uranus and Neptune against the temperature implied by the published effective temperature and emitted-to-absorbed power ratio; HD 209458 b (A = 0, full redistribution) inside 1,400 to 1,500 K and equal to the transit lesson's own formula",
+      "bounds": {
+        "terrestrialRelative": 0.02,
+        "giantRelative": 0.01,
+        "hotJupiterBandK": [1400, 1500],
+        "lessonFormulaRelative": 1e-12
+      }
+    },
+    "a3.onelayer": {
+      "what": "one-layer surface and layer temperature against the oracle's linear solve of the two balance equations on 1,000 seeded points; eps = 0 gives T_e, eps = 1 gives 2^(1/4) T_e; monotone in eps",
+      "bounds": { "relative": 1e-12 }
+    },
+    "a4.grey": {
+      "what": "grey profile and ground against the oracle's closed forms (1,000 points) and against a numerical solution of the two-stream moment equations for 60 surface optical depths from 0.01 to 200",
+      "bounds": {
+        "closedRelative": 1e-12,
+        "odeRelative": 1e-6,
+        "tauRange": [0.01, 200]
+      }
+    },
+    "a6.report": {
+      "what": "for Venus, Earth and Mars the one-layer emissivity and the grey optical depth that reproduce the measured surface temperature, each result naming its model; the one-layer model refuses for Venus (ratio above 2^(1/4)); the values are reported and never asserted against a published optical depth",
+      "bounds": {
+        "bodies": ["Venus", "Earth", "Mars"],
+        "onelayerRefusals": ["Venus"],
+        "reproduceRelative": 1e-9
+      }
+    },
+    "b1.eddington": {
+      "what": "the Eddington profile against the exact grey solution (the Milne equation solved by an independent scipy program with its own self-test: q(0) = 0.5774 and q(infinity) = 0.7104 to 1 percent): relative difference in temperature at most 4.0 percent at every depth from 0 to 100, the model's stated error, shown and not minimised",
+      "bounds": {
+        "relativeT": 0.04,
+        "tauRange": [0, 100],
+        "oracleSelfTestRelative": 0.01
+      }
+    },
+    "b2.pinnedProfiles": {
+      "what": "the grey profile at three surface optical depths (0.87, 10 and 141.5: the Earth-like and Venus-like fits and one between) against the pinned two-stream solution at tau = 0, tau_s / 3 and tau_s: relative difference in T at most 1e-6",
+      "bounds": { "relative": 1e-6, "tauSurface": [0.87, 10, 141.5] }
+    },
+    "c.uncertainty": {
+      "what": "not applicable: no fitted uncertainty is returned; stated, not run",
+      "bounds": {}
+    },
+    "d1.refusals": {
+      "what": "24 hostile inputs each refuse with a named reason and no number (albedo, emissivity and redistribution outside [0, 1]; non-positive, infinite or NaN flux; an optical depth below 0, infinite or NaN; non-positive temperature, mean molecular weight or gravity; a ratio the model cannot reach); every result names its model and what it leaves out (at least three assumptions)",
+      "bounds": { "hostileInputs": 24, "assumesMin": 3 }
+    },
+    "s1.scale": {
+      "what": "scale height against the oracle (astropy constants) on 1,000 seeded points, and as an e-folding length: a numerically integrated isothermal hydrostatic column has pressure ratio e at height H",
+      "bounds": { "relative": 1e-12, "efoldRelative": 1e-6 }
+    },
+    "s2.anchors": {
+      "what": "scale heights at 737, 288 and 210 K and the application's gravities and mean molecular weights against the fact-sheet 15.9, 8.5 and 11.1 km",
+      "bounds": { "relative": 0.05 }
+    },
+    "p1.pack": {
+      "what": "the planetary parameter pack: six bodies, each parameter carrying its source and the flag that it was typed and not re-read; albedos in [0, 1]; no exobase or escape field; the measured-temperature comparison labels the difference and says that a giant planet has no surface",
+      "bounds": { "bodies": 6 }
+    }
+  }
+}
