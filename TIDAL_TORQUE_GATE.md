@@ -72,7 +72,7 @@ DOP853, rtol 1e-13), record `tests/fixtures/tidal-torque-gate/record.json`, held
 | G7 rises; dissipation vs closed form | none; 0.93 percent | none; 0.12 percent | none; 0.016 percent | none; 1 percent |
 | G8 overhead, minimum of 7 interleaved | +0.37 percent (24,006 to 24,094 ns per call at 50 bodies) | | | 5 percent |
 
-Verdict by the committed function: **B**. G1 and G2 pass, and three legs fail as committed: G4 for symplectic Euler
+Verdict by the committed function: **B**, ruled on by Carl on 2026-10-25 (AskUserQuestion to the merge-queue session: "Leave failing, merge as B (Recommended)", meaning keep all three bounds, record the legs with their causes, merge the kernel into v3, and do not build the engine seam; D-R10-78). G1 and G2 pass, and three legs fail as committed: G4 for symplectic Euler
 and for RK4, and G3 for Velocity Verlet. Nothing was moved, restated or widened.
 
 What the three failures are, said plainly, because the verdict follows from bounds that were wrong about
