@@ -14,7 +14,7 @@ export const WHY_VENUS_IS_HOT_DEEPER = {
     },
     {
       title: '¿Con qué rapidez se enrarece el aire?',
-      body: 'En una atmósfera isoterma la presión baja en el mismo factor, 1/e o un 37 por ciento, en cada <strong>altura de escala</strong> <em>H</em> = <em>kT</em>/(<em>&mu;m</em><sub>u</sub><em>g</em>). No es el grosor de la atmósfera: no hay un tope. Lee la altura de escala de <strong>Venus</strong> a su temperatura superficial, y la de la <strong>Tierra</strong>.',
+      body: 'En una atmósfera isoterma la presión baja en el mismo factor, 1/e o un 37 por ciento, en cada <strong>altura de escala</strong> <em>H</em> = <em>kT</em>/(<em>μm</em><sub>u</sub><em>g</em>). No es el grosor de la atmósfera: no hay un tope. Lee la altura de escala de <strong>Venus</strong> a su temperatura superficial, y la de la <strong>Tierra</strong>.',
       fields: [
         { label: 'Altura de escala de Venus' },
         { label: 'Altura de escala de la Tierra' },

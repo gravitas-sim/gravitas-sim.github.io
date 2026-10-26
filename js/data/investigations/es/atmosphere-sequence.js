@@ -36,14 +36,6 @@ export const WHY_VENUS_IS_HOT = {
         'más baja que la de la Tierra, cerca de 230 K, porque sus nubes reflejan mucha luz solar',
         'cerca de 737 K, la temperatura medida en su superficie',
       ],
-      misconceptions: [
-        {
-          say: 'Más cerca significa que llega más luz solar, pero un planeta se calienta con la luz solar que absorbe, y Venus refleja el 76 por ciento.',
-        },
-        {
-          say: 'Esa es la temperatura medida en la superficie. La temperatura de equilibrio es lo que da la luz solar por sí sola, y el paso siguiente es averiguar cuánto se separan las dos.',
-        },
-      ],
       hints: [
         'Multiplica la luz solar en Venus por la fracción que absorbe, 1 − 0,76, y compara con el 1 − 0,306 de la Tierra.',
       ],
@@ -171,11 +163,6 @@ export const TWO_GREENHOUSE_MODELS = {
         'solo el modelo gris, con una profundidad óptica grande',
         'solo el modelo de una capa, con una emisividad cercana a 1',
         'ninguno: la luz solar sola no puede',
-      ],
-      misconceptions: [
-        {
-          say: 'Una capa tiene un techo: su suelo es como mucho 2^(1/4) veces la temperatura de equilibrio, por alta que sea la emisividad. El paso siguiente comprueba cuánto es eso para Venus.',
-        },
       ],
       hints: [
         '¿Cuál es el suelo más caliente que puede dar una capa, como múltiplo de la temperatura de equilibrio?',

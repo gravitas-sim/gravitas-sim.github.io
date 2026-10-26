@@ -43,7 +43,7 @@ export const WHY_VENUS_IS_HOT = {
   title: 'Why Venus Is Hot',
   subtitle:
     'What sunlight alone gives a planet, the gap it leaves, and what closes it',
-  duration: '25-40 min',
+  duration: '15-25 min',
   level: 'Introductory astronomy',
   audience: 'intro',
   textbook: { chapter: 10, section: '10.3' },
@@ -135,18 +135,6 @@ export const WHY_VENUS_IS_HOT = {
         'near 737 K, the temperature measured at its surface',
       ],
       answer: 2,
-      misconceptions: [
-        {
-          id: 'closer',
-          option: 0,
-          say: 'Closer means more sunlight arriving, but a planet is heated by the sunlight it absorbs, and Venus reflects 76 percent of it.',
-        },
-        {
-          id: 'measured',
-          option: 3,
-          say: 'That is the temperature measured at the surface. The equilibrium temperature is what sunlight alone gives, and it is the next step to find out how far apart the two are.',
-        },
-      ],
       hints: [
         'Multiply the sunlight at Venus by the fraction it absorbs, 1 − 0.76, and compare with Earth’s 1 − 0.306.',
       ],
@@ -363,7 +351,7 @@ export const TWO_GREENHOUSE_MODELS = {
   title: 'Two Greenhouse Models',
   subtitle:
     'A single layer and a gray atmosphere, the same planets, and why the numbers differ',
-  duration: '30-40 min',
+  duration: '10-20 min',
   level: 'Majors and upper-level astronomy',
   audience: 'intro',
   textbook: { chapter: 8, section: '8.3' },
@@ -501,13 +489,6 @@ export const TWO_GREENHOUSE_MODELS = {
         'neither: sunlight alone cannot do it',
       ],
       answer: 1,
-      misconceptions: [
-        {
-          id: 'both',
-          option: 0,
-          say: 'A one layer has a ceiling: its ground is at most 2^(1/4) times the equilibrium temperature, however high the emissivity. The next step checks what that is for Venus.',
-        },
-      ],
       hints: [
         'What is the warmest ground one layer can give, as a multiple of the equilibrium temperature?',
       ],

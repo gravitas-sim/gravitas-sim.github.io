@@ -81,7 +81,7 @@ export const WHY_VENUS_IS_HOT_DEEPER = {
       title: 'How quickly does the air thin out?',
       body: `In an isothermal atmosphere the pressure falls by the same factor, 1/e or about
              37 percent, over every <strong>scale height</strong>
-             <em>H</em> = <em>kT</em>/(<em>&mu;m</em><sub>u</sub><em>g</em>). It is not the thickness
+             <em>H</em> = <em>kT</em>/(<em>μm</em><sub>u</sub><em>g</em>). It is not the thickness
              of the atmosphere: there is no top. Read the scale height of
              <strong>Venus</strong> at its surface temperature, and of <strong>Earth</strong>.`,
       fields: [
@@ -152,7 +152,7 @@ export const TWO_GREENHOUSE_MODELS_DEEPER = {
             'Choose Mars (2) and read “Emissivity of one layer that gives the measured temperature” and “Optical depth that gives the measured temperature”.',
         };
       },
-      tool: GRN({ body: 2, tau: 0.004, emissivity: 0.006 }),
+      tool: GRN({ body: 2, tau: 0, emissivity: 0 }),
     },
     {
       sid: 'one-unit-two-models',
@@ -474,14 +474,14 @@ export const INSTRUCTOR = {
   },
   bands: {
     'why-venus-is-hot': {
-      core: 'medium',
-      quantitative: 'short',
-      advanced: 'short',
+      core: 'short',
+      quantitative: 'medium',
+      advanced: 'medium',
     },
     'two-greenhouse-models': {
-      core: 'medium',
+      core: 'short',
       quantitative: 'medium',
-      advanced: 'short',
+      advanced: 'medium',
     },
   },
 };
