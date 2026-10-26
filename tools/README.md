@@ -191,6 +191,7 @@ current, and the orchestrator checks it.
 | `surface-gate.mjs` | The surface gate: one decision function, the same for every surface | `npm run surface:check`, `npm run surface:measure`, `npm run surface:write`, `npm run surface:report` |
 | `three-shaders.mjs` | three.js shaders in the bundle: pruned to what the 3-D view can reach, then |  |
 | `thumbnail-config.mjs` | Thumbnail capture settings |  |
+| `tides-validate.mjs` | The tides kernel against its committed thresholds (Prompt 204, part A) | `npm run tides:validate` |
 | `ui-shots.mjs` | The interface, at every size and in both languages |  |
 | `validate-citation.mjs` | Validating CITATION.cff and .zenodo.json |  |
 | `validate-lab3d.mjs` | The 3-D kernel's permanent validation | `npm run validate:lab3d` |

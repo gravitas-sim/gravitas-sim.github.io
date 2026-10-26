@@ -383,6 +383,11 @@ export const NEVER_PRECACHED = [
   // investigations that will use it wait for the frames and the irradiance series).
   // Listed so that a later panel that imports it installs nothing. D-R10-79.
   /^js\/kernels\/sun\//,
+  // The tides kernel (Prompt 204, TIDAL_KERNEL.md): closed forms, imported by no
+  // page until the investigations that use it are built. Listed so that a later
+  // instrument that imports it installs nothing; the idle tier has no room under
+  // a ceiling the standing size approval does not cover. D-R10-78.
+  /^js\/kernels\/tides\//,
   // The validation suite's groups and harness: fetched when the suite runs,
   // like physicsChecks.js itself (ON_DEMAND_ONLY below).
   /^js\/validation\/(groups\/|harness\.js$)/,

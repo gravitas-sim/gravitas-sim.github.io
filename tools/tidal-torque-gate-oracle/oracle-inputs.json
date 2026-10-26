@@ -1,0 +1,14 @@
+{
+  "note": "The numbers the thresholds fixed in words (G the engine's own default 1, M 1000, m 10, a0 100, eps0 2e-4, 20 orbits, spin 1.5 n0, alpha 0.33), plus the two the words left open and this file fixes before any spike code exists: the planet's radius R = 10 (a tenth of a0; it enters only the moment of inertia I = alpha M R^2) and the kernel parameters k2 = 0.3, Q = 12 (k2/Q = 0.025, inside the kernel's range) with the rate multiplier that makes eps0 = (3/2) rate (k2/Q) (m/M) (R/a0)^5 equal 2e-4.",
+  "G": 1,
+  "M": 1000,
+  "m": 10,
+  "a0": 100,
+  "R": 10,
+  "alpha": 0.33,
+  "k2": 0.3,
+  "Q": 12,
+  "eps0": 0.0002,
+  "orbits": 20,
+  "spinOverN0": 1.5
+}
