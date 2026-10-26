@@ -69,7 +69,7 @@
       "kind": "feature",
       "purpose": "Atmospheres I: equilibrium temperature, the one-layer and grey greenhouse models, the scale height and the planet pack, with their validation (Prompt 200).",
       "owner": 200,
-      "student": false
+      "student": true
     },
     {
       "file": "ATMOSPHERES_GATE_I.md",

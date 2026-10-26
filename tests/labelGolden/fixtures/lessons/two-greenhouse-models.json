@@ -1,0 +1,69 @@
+{
+ "id": "two-greenhouse-models",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.one-unit-two-models.fields.0.unit","K"],
+    ["steps.one-unit-two-models.fields.1.unit","K"],
+    ["steps.venus-both-try.fields.0.unit","K"],
+    ["steps.limits-of-gray.fields.0.unit","%"]
+   ],
+   "numbered": [
+    ["steps.earth-one-layer.fields.0.label","Emissivity that gives 288 K"],
+    ["steps.earth-one-layer.fields.0.hint","0.790"],
+    ["steps.earth-gray.fields.0.label","Optical depth that gives 288 K"],
+    ["steps.earth-gray.fields.0.hint","0.87"],
+    ["steps.mars-barely-a-greenhouse.fields.0.label","Emissivity that gives 210 K"],
+    ["steps.mars-barely-a-greenhouse.fields.0.hint","0.006"],
+    ["steps.mars-barely-a-greenhouse.fields.1.label","Optical depth that gives 210 K"],
+    ["steps.mars-barely-a-greenhouse.fields.1.hint","0.004"],
+    ["steps.one-unit-two-models.fields.0.label","Ground temperature, gray model with optical depth 1"],
+    ["steps.one-unit-two-models.fields.0.hint","292.2"],
+    ["steps.one-unit-two-models.fields.1.label","Ground temperature, one layer with emissivity 1"],
+    ["steps.one-unit-two-models.fields.1.hint","302.1"],
+    ["steps.venus-both-try.fields.0.hint","272"],
+    ["steps.venus-both-try.fields.1.hint","141.6"],
+    ["steps.limits-of-gray.fields.0.hint","3.7"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.earth-one-layer.fields.0.label","Emisividad que da 288 K"],
+    ["steps.earth-gray.fields.0.label","Profundidad óptica que da 288 K"],
+    ["steps.mars-barely-a-greenhouse.fields.0.label","Emisividad que da 210 K"],
+    ["steps.mars-barely-a-greenhouse.fields.1.label","Profundidad óptica que da 210 K"],
+    ["steps.one-unit-two-models.fields.0.label","Temperatura del suelo, modelo gris con profundidad óptica 1"],
+    ["steps.one-unit-two-models.fields.1.label","Temperatura del suelo, una capa con emisividad 1"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "earth-one-layer": {
+    "validate": {"calls":97,"distinct":2,"digest":"9f4e3f5d03172e6b","samples":[null,{"level":"error","message":"Choose Earth (1) and read “Emissivity of one layer that gives the measured temperature”."}]}
+   },
+   "earth-gray": {
+    "validate": {"calls":97,"distinct":2,"digest":"6c807469a4c3a736","samples":[null,{"level":"error","message":"Choose Earth (1) and read “Optical depth that gives the measured temperature”."}]}
+   },
+   "mars-barely-a-greenhouse": {
+    "validate": {"calls":232,"distinct":2,"digest":"688e5903158948b4","samples":[null,{"level":"error","message":"Choose Mars (2) and read “Emissivity of one layer that gives the measured temperature” and “Optical depth that gives the measured temperature”."}]}
+   },
+   "one-unit-two-models": {
+    "validate": {"calls":232,"distinct":2,"digest":"997126eb3e93bd74","samples":[null,{"level":"error","message":"Choose Earth (1), set the optical depth to 1 and the emissivity to 1, then read “Ground temperature, gray model” and “Ground temperature, one layer”."}]}
+   },
+   "venus-both-try": {
+    "validate": {"calls":232,"distinct":2,"digest":"b2f59d7d9aead5a2","samples":[null,{"level":"error","message":"Choose Venus (0). Set the emissivity to 1 and read “Ground temperature, one layer”, then read “Optical depth that gives the measured temperature”."}]}
+   },
+   "limits-of-gray": {
+    "validate": {"calls":97,"distinct":2,"digest":"9f4f834cad86bccd","samples":[null,{"level":"error","message":"Read “Eddington against the exact gray solution, at the top” in the instrument."}]}
+   }
+  },
+  "es": "same"
+ }
+}

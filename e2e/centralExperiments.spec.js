@@ -2482,6 +2482,27 @@ test.describe('the central experiment of each investigation', () => {
         [3, 7.1415, 0.03],
       ],
     },
+    // ---- The atmosphere investigations (Roadmap III, Prompt 200) ---------------
+    {
+      id: 'why-venus-is-hot',
+      title:
+        'why-venus-is-hot: Venus gets a cooler equilibrium temperature than Earth, 229 K against 254 K, and a hotter surface @accepts:ce.why-venus-is-hot',
+      row: /^Equilibrium temperature$/i,
+      values: [
+        [0, 229.0, 0.7],
+        [1, 254.0, 0.6],
+      ],
+    },
+    {
+      id: 'two-greenhouse-models',
+      title:
+        'two-greenhouse-models: one layer warms Venus by at most 2^(1/4), to 272 K, however high its emissivity @accepts:ce.two-greenhouse-models',
+      row: /^Ground temperature, one layer$/i,
+      values: [
+        [1, 272.4, 1],
+        [0.5, 246.1, 1],
+      ],
+    },
   ];
   for (const c of SURVEY) {
     test(c.title, async ({ page, app }) => {

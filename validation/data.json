@@ -1,9 +1,9 @@
 {
- "generatedAt": "2026-10-20",
- "version": "2.0.0",
- "passed": 332,
+ "generatedAt": "2026-10-26",
+ "version": "2.1.0",
+ "passed": 339,
  "failed": 0,
- "elapsedMs": 95611,
+ "elapsedMs": 96300,
  "checks": [
   {
    "group": "Unit system",
@@ -4335,6 +4335,99 @@
    "toleranceKind": "bound",
    "why": "A regression check, not validation: the 90th percentile of the relative energy drift over 50 seeded three-body systems (1000 steps of 0.05 s from a perturbed Lagrange triangle, the engine's integrator, G = 2). The bound is the value recorded when the group was written times 1.25; a drift that falls is not a failure, one that rises is a change to look at. A chaotic system has no analytic energy history to be validated against, so this says only that the engine has not got worse.",
    "error": 0,
+   "pass": true
+  },
+  {
+   "group": "Atmospheres",
+   "kind": "data",
+   "name": "Earth’s equilibrium temperature against the textbook value",
+   "measured": 254.0197124282489,
+   "expected": 255,
+   "unit": "K",
+   "tolerance": 0.02,
+   "source": "Bond albedo 0.306 and the solar constant at 1 AU (NASA Planetary Fact Sheet, typed)",
+   "why": "The temperature of a black body that radiates what the planet absorbs, not a surface temperature; textbooks round it to 255 K.",
+   "toleranceKind": "relative",
+   "error": 0.0038442649872591824,
+   "pass": true
+  },
+  {
+   "group": "Atmospheres",
+   "kind": "analytic",
+   "name": "No heat carried to the night side is hotter than uniform redistribution by (8/3)^(1/4)",
+   "measured": 1.277886208492545,
+   "expected": 1.2778862084925449,
+   "unit": "",
+   "tolerance": 1e-12,
+   "why": "The redistribution factor is 2/3 with none and 1/4 with all (Cowan and Agol 2011); a closed form.",
+   "toleranceKind": "relative",
+   "error": 1.737592936283158e-16,
+   "pass": true
+  },
+  {
+   "group": "Atmospheres",
+   "kind": "analytic",
+   "name": "One layer of emissivity 1 warms the ground to 2^(1/4) times the emission temperature",
+   "measured": 1.189207115002721,
+   "expected": 1.189207115002721,
+   "unit": "",
+   "tolerance": 1e-12,
+   "why": "The ceiling of the one-layer model; no emissivity reaches more.",
+   "toleranceKind": "relative",
+   "error": 0,
+   "pass": true
+  },
+  {
+   "group": "Atmospheres",
+   "kind": "analytic",
+   "name": "The one-layer model refuses Venus: the ratio of its surface to emission temperature is above 2^(1/4)",
+   "measured": 1,
+   "expected": 1,
+   "unit": "",
+   "tolerance": 0,
+   "why": "A model that returns no number when the planet is outside its domain, with the reason; the grey model needs an optical depth near 142.",
+   "toleranceKind": "relative",
+   "error": 0,
+   "pass": true
+  },
+  {
+   "group": "Atmospheres",
+   "kind": "analytic",
+   "name": "The grey optical depth fitted to Venus reproduces its surface temperature",
+   "measured": 737,
+   "expected": 737,
+   "unit": "K",
+   "tolerance": 1e-9,
+   "why": "The fit inverts the closed form T_g^4 = T_e^4 (1 + 3 tau / 4); one number fitted to one measurement.",
+   "toleranceKind": "relative",
+   "error": 0,
+   "pass": true
+  },
+  {
+   "group": "Atmospheres",
+   "kind": "approximation",
+   "name": "The Eddington profile is warm at the top of the atmosphere by the exact grey solution’s margin",
+   "measured": 0.03663721505199202,
+   "expected": 0.03661464962807748,
+   "unit": "",
+   "tolerance": 0.01,
+   "why": "The model’s stated error against the Milne solution (q(0) = 1/sqrt(3)): 3.66 percent, shown to students, not minimised.",
+   "toleranceKind": "relative",
+   "error": 0.0006162949569027288,
+   "pass": true
+  },
+  {
+   "group": "Atmospheres",
+   "kind": "data",
+   "name": "Earth’s scale height at its surface temperature against the fact sheet",
+   "measured": 8.4257616665405,
+   "expected": 8.5,
+   "unit": "km",
+   "tolerance": 0.05,
+   "source": "NASA Planetary Fact Sheet (typed)",
+   "why": "An isothermal, hydrostatic atmosphere; real atmospheres change temperature with height, so the agreement is to a few percent.",
+   "toleranceKind": "relative",
+   "error": 0.008733921583470514,
    "pass": true
   }
  ]

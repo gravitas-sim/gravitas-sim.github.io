@@ -64,11 +64,10 @@ export const EVIDENCE_FROM = Object.freeze({
   tides: 'model',
   'transit-photometry': 'engine',
   'twelve-nights': 'model',
+  'two-greenhouse-models': 'model',
   'two-periodograms': 'computation',
   'wanderers-on-the-sky': 'model',
   'weighing-jupiter': 'model',
-  'why-venus-is-hot': 'model',
-  'two-greenhouse-models': 'model',
   'weighing-stars': 'engine',
   'what-a-ccd-records': 'model',
   'what-a-spectrum-is-made-of': 'model',
@@ -81,6 +80,7 @@ export const EVIDENCE_FROM = Object.freeze({
   'which-kind-of-variable': 'model',
   'who-gets-counted': 'model',
   'why-the-bright-ones-win': 'model',
+  'why-venus-is-hot': 'model',
 });
 
 /** @param {string} id - An investigation id @returns {?string} engine|model|data|illustration */

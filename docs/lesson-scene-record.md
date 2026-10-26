@@ -11,15 +11,15 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 67 investigations and 1096 steps: 1006 steps
+Across 69 investigations and 1112 steps: 1022 steps
 declare a scene, 157 let a reader change one, 163 read the
-running integration, 617 show a prescribed model result, 146 draw
-on a stored dataset, 496 put a self-contained panel beside the text,
-265 keep something, and 56 are prose.
-Of 144 prediction loops, 144 are returned to,
-144 produce a measurement before they are answered, and
+running integration, 633 show a prescribed model result, 146 draw
+on a stored dataset, 512 put a self-contained panel beside the text,
+273 keep something, and 56 are prose.
+Of 146 prediction loops, 146 are returned to,
+146 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
-144 hold their marking until the experiment settles them.
+146 hold their marking until the experiment settles them.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -958,4 +958,32 @@ Of 144 prediction loops, 144 are returned to,
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:moon-fit`, control moon-fit/moon, measures the period a sinusoid fitted to one moon's measured distances from Jupiter gives when the frames are taken once a night, which for Io is the alias near 2.30 days and not its own 1.77, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## Why Venus Is Hot (`why-venus-is-hot`)
+
+- **Steps:** 9. Scene declared on 9; a reader can change something on 0; 9 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 9 prescribed model, 0 stored dataset, 9 self-contained panel.
+- **What students do:** move-an-instrument-control, record-values, commit-a-prediction, choose-an-option.
+- **Objects the steps declare:** star.
+- **Instruments:** atmosphere-balance, atmosphere-greenhouse.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** venus-predict → venus-sunlight-alone, what-the-gap-says, six-bodies, one-layer-for-venus, gray-depth-for-venus, what-you-worked-out → venus-sunlight-alone.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:atmosphere-balance`, control atmosphere-balance/body, measures the equilibrium temperature a planet's distance and Bond albedo give, beside the temperature measured at its surface: Venus 229 K against 737 K, cooler than Earth's 254 K, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## Two Greenhouse Models (`two-greenhouse-models`)
+
+- **Steps:** 7. Scene declared on 7; a reader can change something on 0; 7 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 7 prescribed model, 0 stored dataset, 7 self-contained panel.
+- **What students do:** move-an-instrument-control, record-values, choose-an-option, commit-a-prediction.
+- **Objects the steps declare:** star.
+- **Instruments:** atmosphere-greenhouse.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** venus-both → venus-both-try, what-you-worked-out → venus-both-try.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:atmosphere-greenhouse`, control atmosphere-greenhouse/emissivity, measures the ground temperature a single absorbing layer gives Venus as its emissivity rises, which tops out at 2^(1/4) times its equilibrium temperature, 272 K, against a measured 737 K, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
