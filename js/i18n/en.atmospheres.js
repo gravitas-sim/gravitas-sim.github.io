@@ -55,8 +55,8 @@ export const EN_ATMOSPHERES = {
   'atmW.g.title': 'Two greenhouse models, one planet',
   'atmW.g.note':
     'One absorbing layer and a gray atmosphere with an optical depth are different models. Their free numbers, an emissivity and an optical depth, are different quantities, and they give the same ground temperature only for matching values. The blue curve is the Eddington solution; the dashed green curve is the exact gray solution, so you can see how far the approximation is from the full calculation.',
-  'atmW.g.control.tau': 'Optical depth of the whole atmosphere (gray model)',
-  'atmW.g.control.emissivity': 'Emissivity of the layer (one-layer model)',
+  'atmW.g.control.tau': 'Optical depth (gray model)',
+  'atmW.g.control.emissivity': 'Emissivity (one layer)',
   'atmW.g.row.te': 'Equilibrium temperature',
   'atmW.g.row.measured': 'Measured surface temperature',
   'atmW.g.row.gray': 'Ground temperature, gray model',

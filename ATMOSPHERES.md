@@ -1,9 +1,10 @@
 # Atmospheres I: energy balance, two greenhouse models and the scale height
 
 Prompt 200 (Roadmap III, T2 R14, production kernel; verdict B of Prompt 199, D-R10-75). The kernel in
-`js/kernels/atmospheres/` and the planetary parameter pack beside it. **Not built here, and why:** the escape
+`js/kernels/atmospheres/` and the planetary parameter pack beside it. **Not built, and why:** the escape
 panel and the Jeans module (verdict B: the escape data are unmeasured and any table needs its own rights decision
-and a download approval), the instrument family and the three investigations (see "What is not built").
+and a download approval; see "What is not built"). The kernel and the pack came first (D-R10-80); the instruments and
+two investigations followed (D-R10-81, "The instruments and the lessons").
 
 ## The models, each named as its own model
 
@@ -83,19 +84,33 @@ top; the anchors are textbook numbers, typed and, since, read by Carl and found 
 that a one-digit slip would not change a status. Venus's surface-to-emission ratio is 3.22: no one-layer
 atmosphere gets there, and that refusal is the result, not a bug.
 
+## The instruments and the lessons (the follow-up PR, D-R10-81)
+
+`js/atmosphereWidgets.js` (lazy family `atmosphere`, `NEVER_PRECACHED`, words in `js/i18n/{en,es}.atmospheres.js`)
+holds three instruments, each drawn by the plot component (`js/plot/chart.js`) and each with a readout that is the text
+equivalent of the plot, naming its model and what it leaves out: `atmosphere-balance` (the equilibrium temperature of
+six bodies beside the measured temperature, the difference labelled, a giant planet said to have no surface),
+`atmosphere-greenhouse` (the one-layer model and the grey profile side by side, the Eddington curve against the exact
+grey curve, the emissivity and the optical depth each model needs), and `atmosphere-scale` (the scale height and the
+pressure it implies). The exact grey curve uses the Hopf function in a closed approximation (`greyTemperatureExact`,
+check b3: 0.48 percent against the pinned Milne solution, bound 0.5). The instruments are not drawn on a canvas of their own.
+
+Two investigations use them, in `js/data/investigations/atmosphere-sequence.js` and its three siblings (English, Spanish,
+and the deeper steps in both), each with three depths and instructor content: **Why Venus Is Hot** (survey: predict and
+read the emission temperature of Earth and Venus, the gap, the six bodies, one layer cannot reach Venus, one grey optical
+depth can) and **Two Greenhouse Models** (majors: Earth fitted twice, why the numbers differ, which model can reach
+Venus; deeper: Mars, one unit in each model, the limits of grey opacity). Every number a step states is recomputed from
+the kernel in `tests/atmosphereLessons.test.js`. The Spanish is unread by a fluent reader.
+
+The validation page reads a group, "Atmospheres" (`js/validation/groups/atmospheres.js`, 7 checks).
+
 ## What is not built
 
-- **The escape panel and the Jeans module** (verdict B of Prompt 199): the escape data are unmeasured, and a
-  table needs its own rights decision and a download approval from Carl; nothing was fetched.
-- **The instrument family** ("atmospheres": energy balance, greenhouse, scale height). An instrument in this
-  application is a lesson tool: its only host is a lesson step. The lessons cannot be added within the
-  instructor-bundle closure cap (below), and a registered family that no lesson opens costs the first-visit tier
-  46 B and the lesson routes 0.2 to 0.3 KB for no student. The prototype that measured those costs is
-  `spike/atmospheres-gate-i` (`2196ac7e`); it is the starting point, not something to merge.
-- **The three investigations** ("Why Venus is hot", "Two greenhouse models", and "Keeping an atmosphere", the last
-  also gated by the escape data) and the Goldilocks re-pointing (only if a test proves every graded answer
-  identical): a new investigation set is four files in the instructor closure (English, Spanish, depth and
-  depth Spanish), the closure cap (278) has 277 files in use, and the section places the lessons in no existing
-  sequence. A closure raise by Carl (277 to 281, cap 282) is the decision that unblocks them.
-- The model page section and a model-page validation group: a claim for a kernel no instrument uses yet is
-  not made (D-R10-78 did the same).
+- **The escape panel and the Jeans module** (verdict B of Prompt 199): the escape data are unmeasured, and a table needs
+  its own rights decision and a download approval from Carl; nothing was fetched. "Keeping an Atmosphere" is therefore not
+  written.
+- **The Goldilocks re-pointing**: the lesson has no equilibrium-temperature step (it works in stellar flux), so there
+  is nothing to re-point; the transit lesson's formula is the one the kernel is tested against (check a2).
+- **A sequence row** for the two lessons: the curated sequences need a message id per row in two catalogs that sit at
+  their line ceilings, and the section places the lessons in no sequence.
+- **A model page section**: no prose was added to the public model page.

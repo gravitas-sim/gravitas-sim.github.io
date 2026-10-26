@@ -54,6 +54,7 @@ function hostOf(canvas, label) {
     canvas.style.display = 'none';
     h.chart = createChart(h.el, {
       height: 240,
+      legendMinHeight: 24, // WCAG 2.2 target size: the legend toggles are controls
       number: v => fixed(v, v >= 100 ? 0 : 2),
       labels: { legend: label },
       theme: true,
@@ -306,6 +307,7 @@ const GREENHOUSE = {
     const spec = {
       label: t('atmW.g.title'),
       xTitle: t('atmW.g.axis.x'),
+      xRange: [0, Math.max(f.tau * 1.05, 0.05)],
       yTitle: t('atmW.axis.temperature'),
       series: [
         {

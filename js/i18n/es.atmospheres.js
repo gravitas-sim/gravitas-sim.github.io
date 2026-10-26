@@ -53,8 +53,8 @@ export const ES_ATMOSPHERES = {
   'atmW.g.title': 'Dos modelos de efecto invernadero, un planeta',
   'atmW.g.note':
     'Una capa absorbente y una atmósfera gris con una profundidad óptica son modelos distintos. Sus números libres, una emisividad y una profundidad óptica, son magnitudes distintas, y dan la misma temperatura del suelo solo para valores que coincidan. La curva azul es la solución de Eddington; la curva verde discontinua es la solución gris exacta, para ver cuánto se aleja la aproximación del cálculo completo.',
-  'atmW.g.control.tau': 'Profundidad óptica de toda la atmósfera (modelo gris)',
-  'atmW.g.control.emissivity': 'Emisividad de la capa (modelo de una capa)',
+  'atmW.g.control.tau': 'Profundidad óptica (modelo gris)',
+  'atmW.g.control.emissivity': 'Emisividad (una capa)',
   'atmW.g.row.te': 'Temperatura de equilibrio',
   'atmW.g.row.measured': 'Temperatura medida en la superficie',
   'atmW.g.row.gray': 'Temperatura del suelo, modelo gris',
