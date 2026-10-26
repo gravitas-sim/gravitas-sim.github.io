@@ -57,7 +57,7 @@ export const WHY_VENUS_IS_HOT = {
     'Say what the equilibrium temperature of a planet is, and what it is not',
     'Find the gap between a planet’s equilibrium temperature and the temperature measured at its surface, and read it as a greenhouse effect only where it is one',
     'See that Venus, with the cooler equilibrium temperature, has the hotter surface',
-    'Find the one number a grey atmosphere needs to give Venus its surface temperature, and see why a single layer cannot',
+    'Find the one number a gray atmosphere needs to give Venus its surface temperature, and see why a single layer cannot',
   ],
   steps: [
     {
@@ -303,11 +303,11 @@ export const WHY_VENUS_IS_HOT = {
       tool: GRN({ body: 0, emissivity: 1, tau: 1 }),
     },
     {
-      sid: 'grey-depth-for-venus',
+      sid: 'gray-depth-for-venus',
       stage: STAGE,
       type: 'measure',
       title: 'One optical depth for Venus',
-      body: `A <strong>grey atmosphere</strong> is a different model: the opacity is the same at
+      body: `A <strong>gray atmosphere</strong> is a different model: the opacity is the same at
              every wavelength and the atmosphere has an <strong>optical depth</strong>, a
              measure of how opaque the whole column is. A thick enough column can warm the
              ground without limit. With the planet set to <strong>Venus</strong>, read the
@@ -345,7 +345,7 @@ export const WHY_VENUS_IS_HOT = {
              and 737 K: gaps of 34 K and 508 K. Venus reflects most of its sunlight, so it
              has the cooler equilibrium temperature and the hotter surface. Mars&rsquo;s gap
              is a fraction of a kelvin, and Jupiter&rsquo;s is not a greenhouse gap at all.
-             A single absorbing layer cannot give Venus more than 272 K; a grey atmosphere
+             A single absorbing layer cannot give Venus more than 272 K; a gray atmosphere
              with an optical depth of about 142 can. These are teaching models: they leave
              out convection, clouds and the wavelength dependence of real opacity, and
              the one number fitted for Venus is not a measurement of its atmosphere.`,
@@ -362,7 +362,7 @@ export const TWO_GREENHOUSE_MODELS = {
   thumbnail: 'images/investigations/two-greenhouse-models.webp',
   title: 'Two Greenhouse Models',
   subtitle:
-    'A single layer and a grey atmosphere, the same planets, and why the numbers differ',
+    'A single layer and a gray atmosphere, the same planets, and why the numbers differ',
   duration: '30-40 min',
   level: 'Majors and upper-level astronomy',
   audience: 'intro',
@@ -374,10 +374,10 @@ export const TWO_GREENHOUSE_MODELS = {
   tags: ['habitability', 'solar-system'],
   lock: { placement: true, inspector: true },
   objectives: [
-    'Fit Earth’s surface temperature with a one-layer emissivity and with a grey optical depth, and say why the two numbers differ',
+    'Fit Earth’s surface temperature with a one-layer emissivity and with a gray optical depth, and say why the two numbers differ',
     'Say what each model’s free number means and what each leaves out',
     'See which model can reach Venus’s surface temperature and which cannot',
-    'Read the temperature profile of a grey atmosphere and the error of the Eddington approximation',
+    'Read the temperature profile of a gray atmosphere and the error of the Eddington approximation',
   ],
   steps: [
     {
@@ -389,7 +389,7 @@ export const TWO_GREENHOUSE_MODELS = {
              energy balance, and the equilibrium temperature is the temperature it radiates
              at. They differ in how the atmosphere absorbs the heat from the ground.
              \n\nThe <strong>one-layer</strong> model is a single sheet with an
-             <em>emissivity</em> between 0 and 1. The <strong>grey</strong> model is a column
+             <em>emissivity</em> between 0 and 1. The <strong>gray</strong> model is a column
              with an <em>optical depth</em> from the top down and the same opacity at every
              wavelength, solved here with the Eddington approximation. Each has one free
              number and neither is the other with another name. You will fit both to Earth,
@@ -428,11 +428,11 @@ export const TWO_GREENHOUSE_MODELS = {
       tool: GRN({ body: 1, tau: 1, emissivity: 0.79 }),
     },
     {
-      sid: 'earth-grey',
+      sid: 'earth-gray',
       stage: STAGE,
       type: 'measure',
-      title: 'Earth in the grey model',
-      body: `Now the grey model. Read the <strong>optical depth</strong> that gives Earth&rsquo;s
+      title: 'Earth in the gray model',
+      body: `Now the gray model. Read the <strong>optical depth</strong> that gives Earth&rsquo;s
              surface temperature.`,
       fields: [
         {
@@ -447,7 +447,7 @@ export const TWO_GREENHOUSE_MODELS = {
           return {
             level: 'ok',
             message:
-              'An optical depth of 0.87: the grey column has to be a little under one optical depth thick to put the ground at 288 K.',
+              'An optical depth of 0.87: the gray column has to be a little under one optical depth thick to put the ground at 288 K.',
           };
         }
         return {
@@ -496,7 +496,7 @@ export const TWO_GREENHOUSE_MODELS = {
       prompt: 'Which model can give Venus’s surface temperature?',
       options: [
         'both, each with a suitable emissivity or optical depth',
-        'only the grey model, with a large optical depth',
+        'only the gray model, with a large optical depth',
         'only the one-layer model, with an emissivity near 1',
         'neither: sunlight alone cannot do it',
       ],
@@ -512,7 +512,7 @@ export const TWO_GREENHOUSE_MODELS = {
         'What is the warmest ground one layer can give, as a multiple of the equilibrium temperature?',
       ],
       because:
-        'Only the grey model. One layer cannot go above 2^(1/4) = 1.19 times the equilibrium temperature, 272 K for Venus, while a grey atmosphere’s ground temperature keeps rising with its optical depth.',
+        'Only the gray model. One layer cannot go above 2^(1/4) = 1.19 times the equilibrium temperature, 272 K for Venus, while a gray atmosphere’s ground temperature keeps rising with its optical depth.',
       tool: GRN({ body: 0, tau: 1, emissivity: 1 }),
     },
     {
@@ -521,7 +521,7 @@ export const TWO_GREENHOUSE_MODELS = {
       type: 'measure',
       title: 'Venus: the ceiling and the depth',
       body: `Set the planet to <strong>Venus</strong>. Read the highest ground temperature one
-             layer can give it (emissivity 1), and the optical depth the grey model needs.`,
+             layer can give it (emissivity 1), and the optical depth the gray model needs.`,
       fields: [
         {
           id: 'ceiling',
@@ -541,7 +541,7 @@ export const TWO_GREENHOUSE_MODELS = {
           return {
             level: 'ok',
             message:
-              'One layer tops out at 272 K and the instrument reports no emissivity that reaches 737 K. The grey model reaches it with an optical depth near 142. A model with a ceiling can be refused by a planet; refusing is information.',
+              'One layer tops out at 272 K and the instrument reports no emissivity that reaches 737 K. The gray model reaches it with an optical depth near 142. A model with a ceiling can be refused by a planet; refusing is information.',
           };
         }
         return {
@@ -558,12 +558,12 @@ export const TWO_GREENHOUSE_MODELS = {
       type: 'read',
       title: 'What you worked out',
       body: `Earth needs an emissivity of 0.79 in the one-layer model and an optical depth
-             of 0.87 in the grey model: two numbers for one planet, because they are two
-             different quantities. Venus needs an optical depth near 142 in the grey model
+             of 0.87 in the gray model: two numbers for one planet, because they are two
+             different quantities. Venus needs an optical depth near 142 in the gray model
              and has no solution in the one-layer model, whose ground cannot exceed 1.19
              times the equilibrium temperature. Each number is fitted to a single surface
              temperature; neither is a measurement of the atmosphere. The deeper steps look
-             at Mars, at the profile inside a grey atmosphere, and at where grey opacity
+             at Mars, at the profile inside a gray atmosphere, and at where gray opacity
              stops being a good description.`,
       tool: GRN({ body: 1, tau: 0.87, emissivity: 0.79 }),
     },

@@ -43,7 +43,7 @@ export const ES_ATMOSPHERES = {
   'atmW.b.reading.giant':
     'Un planeta gigante no tiene superficie y además emite calor propio que este modelo deja fuera: la diferencia no es un efecto invernadero.',
   'atmW.b.row.layer': 'Emisividad de una capa que daría la temperatura medida',
-  'atmW.b.row.grey': 'Profundidad óptica gris que daría la temperatura medida',
+  'atmW.b.row.gray': 'Profundidad óptica gris que daría la temperatura medida',
   'atmW.b.axis.x': 'Distancia al Sol (UA)',
   'atmW.b.legend.model':
     'Temperatura de equilibrio a cualquier distancia, con el albedo fijado para {body}',
@@ -57,10 +57,10 @@ export const ES_ATMOSPHERES = {
   'atmW.g.control.emissivity': 'Emisividad de la capa (modelo de una capa)',
   'atmW.g.row.te': 'Temperatura de equilibrio',
   'atmW.g.row.measured': 'Temperatura medida en la superficie',
-  'atmW.g.row.grey': 'Temperatura del suelo, modelo gris',
+  'atmW.g.row.gray': 'Temperatura del suelo, modelo gris',
   'atmW.g.row.layer': 'Temperatura del suelo, una capa',
   'atmW.g.row.needLayer': 'Emisividad de una capa que da la temperatura medida',
-  'atmW.g.row.needGrey': 'Profundidad óptica que da la temperatura medida',
+  'atmW.g.row.needGray': 'Profundidad óptica que da la temperatura medida',
   'atmW.g.row.gap': 'Eddington frente a la solución gris exacta, arriba',
   'atmW.g.axis.x': 'Profundidad óptica desde arriba',
   'atmW.g.legend.eddington': 'Eddington',

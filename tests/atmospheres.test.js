@@ -48,6 +48,8 @@ describe('the committed thresholds hold for the production module', () => {
 
   test('every committed check has a row (none silently dropped)', () => {
     for (const id of Object.keys(THRESHOLDS.checks)) {
+      // p2 (the lesson numbers) is held by tests/atmosphereLessons.test.js.
+      if (id.startsWith('p2.')) continue;
       const prefix = id.split('.')[0];
       expect(rows.some(r => r.id.startsWith(prefix))).toBe(true);
     }

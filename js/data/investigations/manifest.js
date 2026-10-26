@@ -858,7 +858,7 @@ export const MANIFEST = [
     id: 'two-greenhouse-models',
     title: 'Two Greenhouse Models',
     subtitle:
-      'A single layer and a grey atmosphere, the same planets, and why the numbers differ',
+      'A single layer and a gray atmosphere, the same planets, and why the numbers differ',
     duration: '30-40 min',
     level: 'Majors and upper-level astronomy',
     thumbnail: 'images/investigations/two-greenhouse-models.webp',

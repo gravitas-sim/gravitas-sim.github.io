@@ -75,7 +75,7 @@ export const WHY_VENUS_IS_HOT_DEEPER = {
     },
     {
       sid: 'how-thick-is-venus',
-      after: 'grey-depth-for-venus',
+      after: 'gray-depth-for-venus',
       depth: 'advanced',
       type: 'measure',
       title: 'How quickly does the air thin out?',
@@ -126,7 +126,7 @@ export const TWO_GREENHOUSE_MODELS_DEEPER = {
   steps: [
     {
       sid: 'mars-barely-a-greenhouse',
-      after: 'earth-grey',
+      after: 'earth-gray',
       depth: 'quantitative',
       type: 'measure',
       title: 'Mars in both models',
@@ -161,12 +161,12 @@ export const TWO_GREENHOUSE_MODELS_DEEPER = {
       type: 'measure',
       title: 'One unit in each model',
       body: `Set the planet to <strong>Earth</strong>. Give the one-layer model an emissivity of
-             <strong>1</strong> (a layer that absorbs all the infrared) and the grey model an
+             <strong>1</strong> (a layer that absorbs all the infrared) and the gray model an
              optical depth of <strong>1</strong>. Read the ground temperature each gives.`,
       fields: [
         {
-          id: 'grey',
-          label: 'Ground temperature, grey model with optical depth 1',
+          id: 'gray',
+          label: 'Ground temperature, gray model with optical depth 1',
           unit: 'K',
           hint: '292.2',
         },
@@ -178,39 +178,39 @@ export const TWO_GREENHOUSE_MODELS_DEEPER = {
         },
       ],
       validate: v => {
-        if (![v.grey, v.layer].every(Number.isFinite)) return null;
-        if (near(v.grey, 292.2, 0.7) && near(v.layer, 302.1, 0.7)) {
+        if (![v.gray, v.layer].every(Number.isFinite)) return null;
+        if (near(v.gray, 292.2, 0.7) && near(v.layer, 302.1, 0.7)) {
           return {
             level: 'ok',
             message:
-              '292.2 K and 302.1 K. A layer that absorbs everything and a column one optical depth thick are not the same: the grey column lets some of the infrared from the ground escape through its upper layers, and the layer does not. “1” means a different thing in each model.',
+              '292.2 K and 302.1 K. A layer that absorbs everything and a column one optical depth thick are not the same: the gray column lets some of the infrared from the ground escape through its upper layers, and the layer does not. “1” means a different thing in each model.',
           };
         }
         return {
           level: 'error',
           message:
-            'Choose Earth (1), set the optical depth to 1 and the emissivity to 1, then read “Ground temperature, grey model” and “Ground temperature, one layer”.',
+            'Choose Earth (1), set the optical depth to 1 and the emissivity to 1, then read “Ground temperature, gray model” and “Ground temperature, one layer”.',
         };
       },
       tool: GRN({ body: 1, tau: 1, emissivity: 1 }),
     },
     {
-      sid: 'limits-of-grey',
+      sid: 'limits-of-gray',
       after: 'venus-both-try',
       depth: 'advanced',
       type: 'measure',
-      title: 'Where the grey model stops',
-      body: `The grey profile is the Eddington solution. A numerically exact grey solution
+      title: 'Where the gray model stops',
+      body: `The gray profile is the Eddington solution. A numerically exact gray solution
              exists and the instrument draws it dashed. Look at the top of the atmosphere, at
              optical depth 0, and read how much warmer the Eddington curve is than the exact
-             grey one, as a percentage.
+             gray one, as a percentage.
              \n\nThat gap is the error of the approximation. A bigger limit is the word
-             <em>grey</em>: real opacity depends on wavelength, and sunlight and the planet&rsquo;s
+             <em>gray</em>: real opacity depends on wavelength, and sunlight and the planet&rsquo;s
              infrared are absorbed very differently, which this model cannot represent.`,
       fields: [
         {
           id: 'gap',
-          label: 'Eddington against exact grey, at the top',
+          label: 'Eddington against exact gray, at the top',
           unit: '%',
           hint: '3.7',
         },
@@ -221,13 +221,13 @@ export const TWO_GREENHOUSE_MODELS_DEEPER = {
           return {
             level: 'ok',
             message:
-              'About 3.7 percent warm at the top, and the curves close together with depth. That is the stated error of the Eddington closure and not a quantity to minimise. The larger omission is the one the model is named for: grey opacity, the same at every wavelength.',
+              'About 3.7 percent warm at the top, and the curves close together with depth. That is the stated error of the Eddington closure and not a quantity to minimise. The larger omission is the one the model is named for: gray opacity, the same at every wavelength.',
           };
         }
         return {
           level: 'error',
           message:
-            'Read “Eddington against the exact grey solution, at the top” in the instrument.',
+            'Read “Eddington against the exact gray solution, at the top” in the instrument.',
         };
       },
       tool: GRN({ body: 1, tau: 5, emissivity: 0.79 }),
@@ -242,12 +242,12 @@ export const INSTRUCTOR = {
   content: {
     'why-venus-is-hot': {
       topic:
-        'The equilibrium temperature of a planet, the gap between it and the measured surface temperature, and what closes the gap: the one-layer and the grey greenhouse models, with Venus as the case that a single layer cannot reach.',
+        'The equilibrium temperature of a planet, the gap between it and the measured surface temperature, and what closes the gap: the one-layer and the gray greenhouse models, with Venus as the case that a single layer cannot reach.',
       difficulty: 'Introductory (a fourth root and a ratio)',
       placement:
         'In a survey course after the unit on the terrestrial planets; it needs no earlier investigation. It supports OpenStax Astronomy 2e chapter 10 (section 10.3 on the atmosphere of Venus), and the chapter citation is the author’s and has not been checked against the book.',
       overview:
-        'Students read the equilibrium temperature of Earth (254 K) and see the 34 K gap to its surface, predict and read Venus (229 K, cooler than Earth because it reflects 76 percent of its sunlight, against a surface at 737 K), read why that gap is a greenhouse effect for Venus and Earth but not for Jupiter, find that one absorbing layer cannot give Venus more than 272 K, and fit one optical depth, about 142, for the grey model. The deeper steps vary the albedo and compare the scale heights of Venus and Earth.',
+        'Students read the equilibrium temperature of Earth (254 K) and see the 34 K gap to its surface, predict and read Venus (229 K, cooler than Earth because it reflects 76 percent of its sunlight, against a surface at 737 K), read why that gap is a greenhouse effect for Venus and Earth but not for Jupiter, find that one absorbing layer cannot give Venus more than 272 K, and fit one optical depth, about 142, for the gray model. The deeper steps vary the albedo and compare the scale heights of Venus and Earth.',
       priorKnowledge: [
         'Planets reflect part of the sunlight and absorb the rest',
         'Temperature and radiated power are linked (hotter radiates more)',
@@ -264,7 +264,7 @@ export const INSTRUCTOR = {
         },
         {
           heading: 'A model can refuse',
-          body: 'One isothermal layer cannot warm the ground above 2^(1/4) times the equilibrium temperature, 272 K for Venus. The instrument reports no solution; the grey model reaches 737 K with an optical depth of about 142.',
+          body: 'One isothermal layer cannot warm the ground above 2^(1/4) times the equilibrium temperature, 272 K for Venus. The instrument reports no solution; the gray model reaches 737 K with an optical depth of about 142.',
         },
       ],
       features: [
@@ -306,9 +306,9 @@ export const INSTRUCTOR = {
         },
       ],
       teachingNotes: [
-        'The anchors and the pack (albedos, distances, temperatures) are typed from the NASA fact sheets and read by Carl; they were not checked against the sources.',
+        'The planet table (albedos, distances, temperatures) is typed from the NASA fact sheets and was read by the project’s author; it was not checked against the sources.',
         'The albedo is the Bond albedo (the fraction of all incident power reflected), not a geometric albedo.',
-        'The models are not climate models: no convection, no clouds, no internal heat, grey opacity. A fitted number is not an observation of the atmosphere.',
+        'The models are not climate models: no convection, no clouds, no internal heat, gray opacity. A fitted number is not an observation of the atmosphere.',
         'No claim is made about retention of an atmosphere: the escape instrument is not built.',
       ],
       discussion: [
@@ -321,17 +321,17 @@ export const INSTRUCTOR = {
         'Look up the measured surface pressure of Venus and compare it with the scale height you found.',
       ],
       modelNotes:
-        'js/kernels/atmospheres/ (ATMOSPHERES.md): equilibriumTemperature, oneLayer, greyGround and greyDepthFor, scaleHeight and the six-body pack, validated against an independent numpy and scipy oracle (npm run atmospheres:validate).',
+        'js/kernels/atmospheres/ (ATMOSPHERES.md): equilibriumTemperature, oneLayer, grayGround and grayDepthFor, scaleHeight and the six-body planet table, validated against an independent numpy and scipy oracle (npm run atmospheres:validate).',
     },
     'two-greenhouse-models': {
       topic:
-        'A single absorbing layer and a grey atmosphere with an optical depth fitted to Earth, Mars and Venus: what each free number means, why they differ, which model can reach Venus and where grey opacity stops being a description.',
+        'A single absorbing layer and a gray atmosphere with an optical depth fitted to Earth, Mars and Venus: what each free number means, why they differ, which model can reach Venus and where gray opacity stops being a description.',
       difficulty:
         'Intermediate (fourth roots, two models, an approximation with a stated error)',
       placement:
         'After Why Venus Is Hot, whose equilibrium temperature and gap it reuses. It supports OpenStax Astronomy 2e chapter 8 (section 8.3 on Earth’s atmosphere); the citation is the author’s and has not been checked against the book.',
       overview:
-        'Students fit Earth’s surface temperature with a one-layer emissivity (0.79) and a grey optical depth (0.87), say why the numbers differ, predict and then read that Venus is out of reach for one layer (272 K at most) and needs an optical depth near 142 in the grey model. Deeper: Mars needs almost nothing in either model, one unit in each model gives 292.2 K and 302.1 K, and the Eddington profile is 3.7 percent warm at the top against the exact grey solution.',
+        'Students fit Earth’s surface temperature with a one-layer emissivity (0.79) and a gray optical depth (0.87), say why the numbers differ, predict and then read that Venus is out of reach for one layer (272 K at most) and needs an optical depth near 142 in the gray model. Deeper: Mars needs almost nothing in either model, one unit in each model gives 292.2 K and 302.1 K, and the Eddington profile is 3.7 percent warm at the top against the exact gray solution.',
       priorKnowledge: [
         'The equilibrium temperature and the measured-minus-equilibrium gap',
         'Energy balance: what comes in as sunlight leaves as infrared',
@@ -348,17 +348,17 @@ export const INSTRUCTOR = {
         },
         {
           heading: 'The approximation has a stated error',
-          body: 'The Eddington profile is 3.66 percent warm at the top against the exact grey solution (a Milne-equation calculation). The error is stated, not minimised, and it is smaller than the error of calling real opacity grey.',
+          body: 'The Eddington profile is 3.66 percent warm at the top against the exact gray solution (a Milne-equation calculation). The error is stated, not minimised, and it is smaller than the error of calling real opacity gray.',
         },
       ],
       features: [
         {
           name: 'Greenhouse instrument',
-          text: 'Both models for Earth, Mars or Venus: the grey profile as Eddington and exact curves through the plot component, the ground temperature of each model, and the number each needs to reproduce the measured temperature.',
+          text: 'Both models for Earth, Mars or Venus: the gray profile as Eddington and exact curves through the plot component, the ground temperature of each model, and the number each needs to reproduce the measured temperature.',
         },
         {
           name: 'Depth',
-          text: 'Quantitative: Mars in both models, one unit in each model. Advanced: the limits of grey opacity.',
+          text: 'Quantitative: Mars in both models, one unit in each model. Advanced: the limits of gray opacity.',
         },
         {
           name: 'A model that can refuse',
@@ -378,9 +378,9 @@ export const INSTRUCTOR = {
             'They give 302.1 K and 292.2 K for Earth: a fully absorbing sheet and a column of one optical depth are different atmospheres.',
         },
         {
-          claim: 'The grey model is exact, since it is a published solution.',
+          claim: 'The gray model is exact, since it is a published solution.',
           response:
-            'It is the Eddington approximation of the grey problem, 3.66 percent warm at the top, and the grey assumption itself is the larger simplification.',
+            'It is the Eddington approximation of the gray problem, 3.66 percent warm at the top, and the gray assumption itself is the larger simplification.',
         },
         {
           claim: 'A model that has no solution for a planet is broken.',
@@ -389,14 +389,14 @@ export const INSTRUCTOR = {
         },
       ],
       teachingNotes: [
-        'The exact grey curve uses the Hopf function in a closed approximation, checked against a numerical solution of the Milne equation to 0.5 percent.',
-        'The pack values were read by Carl and not checked against the NASA fact sheets.',
+        'The exact gray curve uses the Hopf function in a closed approximation, checked against a numerical solution of the Milne equation to 0.5 percent.',
+        'The planet table’s values were read by the project’s author and not checked against the NASA fact sheets.',
         'These are not climate models; they cannot say what a real atmosphere will do.',
         'The one number fitted to each planet is a fit to one measurement, not an observation: say so when students quote it.',
       ],
       discussion: [
         'Which of the two numbers would you expect to move if the clouds changed, and why?',
-        'Why is “grey” a bigger limitation than the Eddington approximation?',
+        'Why is “gray” a bigger limitation than the Eddington approximation?',
         'What would a model with two opacities, one for sunlight and one for infrared, change?',
       ],
       extensions: [
@@ -404,7 +404,7 @@ export const INSTRUCTOR = {
         'Compare the one-layer ceiling with the ratio of measured to equilibrium temperature of each planet in Why Venus Is Hot.',
       ],
       modelNotes:
-        'js/kernels/atmospheres/ (ATMOSPHERES.md): oneLayer, oneLayerEmissivityFor, greyGround, greyDepthFor, greyTemperatureExact; the oracle results are pinned in tests/fixtures/atmospheres/.',
+        'js/kernels/atmospheres/ (ATMOSPHERES.md): oneLayer, oneLayerEmissivityFor, grayGround, grayDepthFor, grayTemperatureExact; the oracle results are pinned in tests/fixtures/atmospheres/.',
     },
   },
   flow: {
@@ -421,8 +421,8 @@ export const INSTRUCTOR = {
       },
       {
         from: 'six-bodies',
-        to: 'grey-depth-for-venus',
-        text: 'Which gaps are a greenhouse, one layer cannot reach Venus, a grey atmosphere can.',
+        to: 'gray-depth-for-venus',
+        text: 'Which gaps are a greenhouse, one layer cannot reach Venus, a gray atmosphere can.',
       },
       {
         from: 'what-you-worked-out',
@@ -437,7 +437,7 @@ export const INSTRUCTOR = {
         text: 'The two models, and Earth fitted with an emissivity.',
       },
       {
-        from: 'earth-grey',
+        from: 'earth-gray',
         to: 'same-planet-different-numbers',
         text: 'The same planet fitted with an optical depth, and why the two numbers differ.',
       },
@@ -463,11 +463,11 @@ export const INSTRUCTOR = {
         'Mars within 0.5 K of 0.2 and Jupiter’s 1 bar level 55 K above its equilibrium temperature (within 2).',
       'one-layer-for-venus':
         'The highest ground temperature one layer can give Venus, 272 K (within 1.5).',
-      'grey-depth-for-venus': 'An optical depth near 141.6 (within 1.5).',
+      'gray-depth-for-venus': 'An optical depth near 141.6 (within 1.5).',
     },
     'two-greenhouse-models': {
       'earth-one-layer': 'An emissivity of 0.79 (within 0.01).',
-      'earth-grey': 'An optical depth of 0.87 (within 0.02).',
+      'earth-gray': 'An optical depth of 0.87 (within 0.02).',
       'venus-both-try':
         'The one-layer ceiling for Venus, 272 K (within 1.5), and an optical depth near 141.6 (within 1.5).',
     },

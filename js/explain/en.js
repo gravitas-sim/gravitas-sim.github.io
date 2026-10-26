@@ -191,10 +191,10 @@ export default {
     'The frames are synthetic, made from JPL Horizons positions; the mass is the planet’s alone and leaves out its oblateness.',
   ],
   atmosphere: [
-    'The temperature sunlight alone gives a planet beside the temperature measured there, a one-layer and a grey greenhouse side by side for one planet, or how quickly the pressure falls with height.',
+    'The temperature sunlight alone gives a planet beside the temperature measured there, a one-layer and a gray greenhouse side by side for one planet, or how quickly the pressure falls with height.',
     'How far the measured temperature of Venus, Earth, Mars and the giant planets is from their equilibrium temperature, what emissivity or optical depth each greenhouse model needs to close the gap, and the scale height each body implies.',
-    'Why Venus is far warmer than its equilibrium temperature and why a single layer cannot reach it, why the two greenhouse models give different numbers for the same planet, and where grey opacity stops being a good description.',
-    'These are teaching models: no convection, no clouds, no internal heat, one opacity at every wavelength. The Eddington curve is about 4 percent warm at the top of a grey atmosphere, and a giant planet has no surface to compare with.',
+    'Why Venus is far warmer than its equilibrium temperature and why a single layer cannot reach it, why the two greenhouse models give different numbers for the same planet, and where gray opacity stops being a good description.',
+    'These are teaching models: no convection, no clouds, no internal heat, one opacity at every wavelength. The Eddington curve is about 4 percent warm at the top of a gray atmosphere, and a giant planet has no surface to compare with.',
   ],
   'plot-measure': [
     'Your own measurements, one point each, with the quantities named on the axes.',

@@ -122,7 +122,7 @@ describe('Why Venus Is Hot: every stated number from the kernel', () => {
     ).toBe(true);
   });
   test('grey: an optical depth near 141.6 reproduces 737 K', () => {
-    holds(V, 'grey-depth-for-venus', { tau: need('venus') }, { tau: 1 });
+    holds(V, 'gray-depth-for-venus', { tau: need('venus') }, { tau: 1 });
     const g = K.greyGround({
       emissionTemperature: teq('venus'),
       tauSurface: need('venus'),
@@ -156,7 +156,7 @@ describe('Two Greenhouse Models: every stated number from the kernel', () => {
   const T = 'two-greenhouse-models';
   test('Earth: emissivity 0.79 against optical depth 0.87, different quantities', () => {
     holds(T, 'earth-one-layer', { eps: layerEps('earth') }, { eps: 0.87 });
-    holds(T, 'earth-grey', { tau: need('earth') }, { tau: 0.79 });
+    holds(T, 'earth-gray', { tau: need('earth') }, { tau: 0.79 });
     expect(layerEps('earth')).toBeCloseTo(0.79, 2);
     expect(need('earth')).toBeCloseTo(0.87, 2);
   });
@@ -189,8 +189,8 @@ describe('Two Greenhouse Models: every stated number from the kernel', () => {
     holds(
       T,
       'one-unit-two-models',
-      { grey: g, layer: l },
-      { grey: 302.1, layer: 292.2 }
+      { gray: g, layer: l },
+      { gray: 302.1, layer: 292.2 }
     );
     expect(g).toBeCloseTo(292.2, 1);
     expect(l).toBeCloseTo(302.1, 1);
@@ -205,7 +205,7 @@ describe('Two Greenhouse Models: every stated number from the kernel', () => {
       tau: 0,
     }).temperature;
     const pct = (100 * (top - exact)) / exact;
-    holds(T, 'limits-of-grey', { gap: pct }, { gap: 0 });
+    holds(T, 'limits-of-gray', { gap: pct }, { gap: 0 });
     expect(pct).toBeCloseTo(3.66, 1);
   });
 });

@@ -18,12 +18,12 @@ export const EN_ATMOSPHERES = {
   'atmW.body.uranus': 'Uranus',
   'atmW.body.neptune': 'Neptune',
   'atmW.m.eq': 'Equilibrium (emission) temperature',
-  'atmW.m.gr': 'Grey radiative equilibrium, Eddington closure',
+  'atmW.m.gr': 'Gray radiative equilibrium, Eddington closure',
   'atmW.m.sc': 'Isothermal scale height',
   'atmW.a.eq':
     'internal heat; any greenhouse effect; a surface (this is the temperature of a black body that radiates what the planet absorbs); a geometric albedo (the albedo here is the Bond albedo)',
   'atmW.a.gr':
-    'convection; clouds; absorption of sunlight inside the atmosphere; any dependence of opacity on wavelength (grey opacity); the Eddington closure is about 4 percent warm at the top',
+    'convection; clouds; absorption of sunlight inside the atmosphere; any dependence of opacity on wavelength (gray opacity); the Eddington closure is about 4 percent warm at the top',
   'atmW.a.sc':
     'a temperature that changes with height; gravity that changes with height; mixing above the homopause; the thickness of the atmosphere (it has none: the pressure only falls)',
   'atmW.b.title': 'What temperature does sunlight alone give a planet?',
@@ -44,8 +44,8 @@ export const EN_ATMOSPHERES = {
     'A giant planet has no surface, and it also gives off heat of its own that this model leaves out: the difference is not a greenhouse effect.',
   'atmW.b.row.layer':
     'Emissivity of one layer that would give the measured temperature',
-  'atmW.b.row.grey':
-    'Grey optical depth that would give the measured temperature',
+  'atmW.b.row.gray':
+    'Gray optical depth that would give the measured temperature',
   'atmW.b.axis.x': 'Distance from the Sun (AU)',
   'atmW.b.legend.model':
     'Equilibrium temperature at any distance, with the albedo set for {body}',
@@ -54,21 +54,21 @@ export const EN_ATMOSPHERES = {
   'atmW.b.legend.measured': 'Measured temperature of each planet',
   'atmW.g.title': 'Two greenhouse models, one planet',
   'atmW.g.note':
-    'One absorbing layer and a grey atmosphere with an optical depth are different models. Their free numbers, an emissivity and an optical depth, are different quantities, and they give the same ground temperature only for matching values. The blue curve is the Eddington solution; the dashed green curve is the exact grey solution, so you can see how far the approximation is from the full calculation.',
-  'atmW.g.control.tau': 'Optical depth of the whole atmosphere (grey model)',
+    'One absorbing layer and a gray atmosphere with an optical depth are different models. Their free numbers, an emissivity and an optical depth, are different quantities, and they give the same ground temperature only for matching values. The blue curve is the Eddington solution; the dashed green curve is the exact gray solution, so you can see how far the approximation is from the full calculation.',
+  'atmW.g.control.tau': 'Optical depth of the whole atmosphere (gray model)',
   'atmW.g.control.emissivity': 'Emissivity of the layer (one-layer model)',
   'atmW.g.row.te': 'Equilibrium temperature',
   'atmW.g.row.measured': 'Measured surface temperature',
-  'atmW.g.row.grey': 'Ground temperature, grey model',
+  'atmW.g.row.gray': 'Ground temperature, gray model',
   'atmW.g.row.layer': 'Ground temperature, one layer',
   'atmW.g.row.needLayer':
     'Emissivity of one layer that gives the measured temperature',
-  'atmW.g.row.needGrey': 'Optical depth that gives the measured temperature',
-  'atmW.g.row.gap': 'Eddington against the exact grey solution, at the top',
+  'atmW.g.row.needGray': 'Optical depth that gives the measured temperature',
+  'atmW.g.row.gap': 'Eddington against the exact gray solution, at the top',
   'atmW.g.axis.x': 'Optical depth from the top',
   'atmW.g.legend.eddington': 'Eddington',
-  'atmW.g.legend.exact': 'Exact grey',
-  'atmW.g.legend.ground': 'Grey model: the ground',
+  'atmW.g.legend.exact': 'Exact gray',
+  'atmW.g.legend.ground': 'Gray model: the ground',
   'atmW.g.legend.layer': 'One layer: the ground',
   'atmW.s.title': 'How quickly does the air thin out?',
   'atmW.s.note':

@@ -221,7 +221,7 @@ const BALANCE = {
         label: t('atmW.b.row.layer'),
         value: f.layer.refused ? none : fixed(f.layer.emissivity, 3),
       },
-      { label: t('atmW.b.row.grey'), value: fixed(f.grey.tauSurface, 2) },
+      { label: t('atmW.b.row.gray'), value: fixed(f.grey.tauSurface, 2) },
       { label: t('atmW.row.assumes'), value: t('atmW.a.eq') },
     ];
   },
@@ -360,7 +360,7 @@ const GREENHOUSE = {
         value: `${fixed(f.cmp.measuredK, 0)} K`,
       },
       {
-        label: t('atmW.g.row.grey'),
+        label: t('atmW.g.row.gray'),
         value: `${fixed(f.ground.ground, 1)} K`,
         emphasis: true,
       },
@@ -374,7 +374,7 @@ const GREENHOUSE = {
         value: f.needLayer.refused ? none : fixed(f.needLayer.emissivity, 3),
       },
       {
-        label: t('atmW.g.row.needGrey'),
+        label: t('atmW.g.row.needGray'),
         value: fixed(f.needGrey.tauSurface, 2),
       },
       {
