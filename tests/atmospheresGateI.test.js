@@ -211,7 +211,10 @@ describe('the recorded result', () => {
     expect(record.spike.mergedNever).toBe(true);
     expect(record.spike.sha).toMatch(/^[0-9a-f]{40}$/);
     expect(record.base).toMatch(/^[0-9a-f]{40}$/);
-    expect(() => readFileSync('js/kernels/atmospheres/index.js')).toThrow();
+    // Prompt 200 built the real kernel in js/kernels/atmospheres/ (verdict B); what stays
+    // spike-only is the prototype's widget family and its escape modules.
     expect(() => readFileSync('js/atmosphereWidgets.js')).toThrow();
+    expect(() => readFileSync('js/atmosphereEscape.js')).toThrow();
+    expect(() => readFileSync('js/kernels/atmospheres/escape.js')).toThrow();
   });
 });

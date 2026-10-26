@@ -65,6 +65,13 @@
       "student": true
     },
     {
+      "file": "ATMOSPHERES.md",
+      "kind": "feature",
+      "purpose": "Atmospheres I: equilibrium temperature, the one-layer and grey greenhouse models, the scale height and the planet pack, with their validation (Prompt 200).",
+      "owner": 200,
+      "student": false
+    },
+    {
       "file": "ATMOSPHERES_GATE_I.md",
       "kind": "gate",
       "purpose": "Atmospheres gate I: the family and its limits, thresholds committed first, the rights rule, the measured checks and the verdict (Prompt 199).",
