@@ -65,6 +65,13 @@
       "student": true
     },
     {
+      "file": "ATMOSPHERES.md",
+      "kind": "feature",
+      "purpose": "Atmospheres I: the equilibrium temperature, the one-layer and grey greenhouse models, the isothermal scale height and the planetary parameter pack, with their validation and what is not built (Prompt 200).",
+      "owner": 200,
+      "student": false
+    },
+    {
       "file": "ATMOSPHERES_GATE_I.md",
       "kind": "gate",
       "purpose": "Atmospheres gate I: the family and its limits, thresholds committed first, the rights rule, the measured checks and the verdict (Prompt 199).",

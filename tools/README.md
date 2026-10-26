@@ -14,6 +14,7 @@ current, and the orchestrator checks it.
 | `astrometric-series-synth.mjs` | Synthetic astrometric series with a truth manifest (Prompt 186, ASTROMETRY.md) |  |
 | `astrometric-series-validate.mjs` | Astrometric time series against its committed thresholds (Prompt 186) | `npm run astrometric-series:validate` |
 | `astrometry-validate.mjs` | WCS-lite and registration against their committed thresholds (Prompt 181) | `npm run astrometry:validate` |
+| `atmospheres-validate.mjs` | The atmospheres kernel against its committed thresholds (Prompt 200) | `npm run atmospheres:validate` |
 | `author-check.mjs` | npm run author:check | `npm run author:check`, `npm run author:strict`, `npm run author:rules` |
 | `blackhole-profile.mjs` | What a black hole costs to draw |  |
 | `blackhole-shots.mjs` | Captures of the black holes |  |

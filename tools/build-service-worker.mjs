@@ -388,6 +388,9 @@ export const NEVER_PRECACHED = [
   // instrument that imports it installs nothing; the idle tier has no room under
   // a ceiling the standing size approval does not cover. D-R10-78.
   /^js\/kernels\/tides\//,
+  // The atmospheres kernel and pack (Prompt 200, ATMOSPHERES.md): imported by no
+  // page until the instrument family and its lessons are built. D-R10-80.
+  /^js\/kernels\/atmospheres\//,
   // The validation suite's groups and harness: fetched when the suite runs,
   // like physicsChecks.js itself (ON_DEMAND_ONLY below).
   /^js\/validation\/(groups\/|harness\.js$)/,
