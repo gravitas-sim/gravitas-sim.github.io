@@ -109,14 +109,14 @@ The Observatory's image measurement train (Prompts 179 to 182, 184, 186 to 189, 
 
 **Gravitas 2.0.0.** Gravitas grows from a gravity sandbox with 22 guided
 investigations into a browser laboratory: <!--fact:scenarios-->59<!--/fact-->
-sandbox scenarios, <!--fact:libraryInvestigations-->84<!--/fact--> guided
-investigations (<!--fact:investigations-->67<!--/fact--> that run in the
+sandbox scenarios, <!--fact:libraryInvestigations-->86<!--/fact--> guided
+investigations (<!--fact:investigations-->69<!--/fact--> that run in the
 simulation and <!--fact:guidedInvestigations-->17<!--/fact--> in the
 Observatory, the 3-D lab and the mission lab), a shared shell, a Library, a
 workspace for each student's own work, an instructor path from adoption page to
 gradebook file, <!--fact:instructorDocuments-->617<!--/fact--> generated
 instructor documents, a public validation suite
-of <!--fact:physicsChecks-->332<!--/fact--> checks, and authoring tools
+of <!--fact:physicsChecks-->339<!--/fact--> checks, and authoring tools
 (Scenario Studio, Investigation Composer, course packs and an extension SDK).
 The Library lists <!--fact:libraryScenarios-->67<!--/fact--> ready-made
 scenarios: the 59 in the sandbox and <!--fact:systems3dScenarios-->8<!--/fact-->
@@ -1834,7 +1834,7 @@ listed here because this is the release that first carries it.
   uncertainty, the target and the observing configuration.
 - **Offline support.** A service worker precaches the application shell, the
   <!--fact:scenarios-->59<!--/fact--> scenario thumbnails and all
-  <!--fact:investigations-->67<!--/fact--> English lessons, so a class keeps
+  <!--fact:investigations-->69<!--/fact--> English lessons, so a class keeps
   working when the room's wifi drops. The cache name is a content hash, so a
   build invalidates it. See [OFFLINE_AND_LOW_END.md](OFFLINE_AND_LOW_END.md).
 - **A measured low-end quality tier.** Chosen from the frame rate the machine
@@ -1843,7 +1843,7 @@ listed here because this is the release that first carries it.
   off.
 - **An investigation authoring toolchain.** `npm run author:check` validates
   every lesson and every one of the
-  <!--fact:investigationSteps-->1096<!--/fact--> steps; `npm run author:new`
+  <!--fact:investigationSteps-->1112<!--/fact--> steps; `npm run author:new`
   scaffolds a lesson with its translation shadow and instructor stub;
   `?author=<lesson>&step=<n>` opens any step with diagnostics without touching
   a student's saved progress; and a browser walker exercises every step of
@@ -1900,7 +1900,7 @@ listed here because this is the release that first carries it.
   the share dialog and the scenario gallery keyboard traps in practice.
 - Three modal dialogs declared `aria-modal="true"` without trapping focus.
 - Stale counts across the documentation: `/model/` claimed 135 physics checks
-  against a suite of <!--fact:physicsChecks-->332<!--/fact-->, and 48 scenarios
+  against a suite of <!--fact:physicsChecks-->339<!--/fact-->, and 48 scenarios
   against a catalog of <!--fact:scenarios-->59<!--/fact-->.
 
 ### Removed
