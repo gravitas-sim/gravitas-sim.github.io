@@ -90,6 +90,7 @@ const GROUPS = [
   () => import('./groups/barnes-hut-gravity.js'),
   () => import('./groups/collision-outcomes.js'),
   () => import('./groups/long-term-regression.js'),
+  () => import('./groups/atmospheres.js'),
 ];
 
 /**

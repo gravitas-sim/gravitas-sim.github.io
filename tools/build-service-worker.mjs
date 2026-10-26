@@ -391,6 +391,13 @@ export const NEVER_PRECACHED = [
   // The atmospheres kernel and pack (Prompt 200, ATMOSPHERES.md): imported by no
   // page until the instrument family and its lessons are built. D-R10-80.
   /^js\/kernels\/atmospheres\//,
+  // The atmosphere family and its lessons (Prompt 200, D-R10-81): the instruments,
+  // their words, the two lessons and their thumbnails are kept by the service worker
+  // after the first online use, not installed (the first-visit and idle tiers have
+  // a few hundred bytes of room under a data-budget ceiling this approval does not cover).
+  /^(js\/atmosphereWidgets\.js|js\/i18n\/(en|es)\.atmospheres\.js)$/,
+  /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(why-venus-is-hot|two-greenhouse-models|atmosphere-sequence)\.js$/,
+  /^images\/investigations\/(why-venus-is-hot|two-greenhouse-models)\.webp$/,
   // The validation suite's groups and harness: fetched when the suite runs,
   // like physicsChecks.js itself (ON_DEMAND_ONLY below).
   /^js\/validation\/(groups\/|harness\.js$)/,
