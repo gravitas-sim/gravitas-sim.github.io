@@ -3026,8 +3026,7 @@ export const WHAT_IS_IN_THIS_FIELD = {
       stage: STAGE,
       type: 'measure',
       title: 'A lower threshold',
-      body: `Set <strong>Threshold</strong> to 2.5 sigma and switch <strong>The stars that were
-             placed</strong> to shown. Read how many sources are listed, and how many of them are
+      body: `Set <strong>Threshold</strong> to 2.5 sigma and switch <strong>Placed stars</strong> to shown. Read how many sources are listed, and how many of them are
              not a star that was placed.`,
       fields: [
         { id: 'n', label: 'Sources listed', unit: '', hint: '44' },
@@ -3050,7 +3049,7 @@ export const WHAT_IS_IN_THIS_FIELD = {
         return {
           level: 'error',
           message:
-            'Set “Threshold” to 2.5 σ, switch “The stars that were placed” to shown, then read “Sources listed” and “Sources that are not a star that was placed”.',
+            'Set “Threshold” to 2.5 σ, switch “Placed stars” to shown, then read “Sources listed” and “Sources that are not a star that was placed”.',
         };
       },
       tool: FSO({ sigma: 2.5, truth: 1 }),

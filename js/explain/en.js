@@ -179,10 +179,10 @@ export default {
     'Everything is a model with the truth built in: real repeats rarely come with the truth to count against, and a fit with a good chi-square is not thereby shown to be right.',
   ],
   imaging: [
-    'A real picture of the Moon marked with a reference pair and a circle, the positions of one synthetic star over two years, or the relative positions of a synthetic binary over sixteen years.',
-    'How the scale and a size in kilometers follow from the marks, how a shift, a proper motion and a parallax come from the epochs used, and how an orbit and a mass sum come from the positions.',
-    'What a mark on a picture can and cannot measure, what a distance from a parallax claims and its zero point, and what the positions of a binary fix.',
-    'The Moon is a display picture whose gray levels are not light; the star and the binary are synthetic with the truth withheld, and a fit that is refused is the answer, not a failure.',
+    'A real picture of the Moon marked with a reference pair and a circle, the positions of one synthetic star over two years, the relative positions of a synthetic binary over sixteen years, or a synthetic star field with the sources a detector lists and the share of added stars it finds.',
+    'How the scale and a size in kilometers follow from the marks, how a shift, a proper motion and a parallax come from the epochs used, how an orbit and a mass sum come from the positions, and how a source list, a width and a completeness curve come from a threshold and from stars added to the frame.',
+    'What a mark on a picture can and cannot measure, what a distance from a parallax claims and its zero point, what the positions of a binary fix, and what a completeness curve is the answer for.',
+    'The Moon is a display picture whose gray levels are not light; the star, the binary and the field are synthetic with the truth withheld, and a fit that is refused is the answer, not a failure.',
   ],
   jovian: [
     'Synthetic frames of Jupiter and its moons, one moon’s distance against time with a sinusoid, or Kepler’s third law on a fitted period and radius.',

@@ -1222,7 +1222,7 @@ export const WHAT_IS_IN_THIS_FIELD = {
     },
     {
       title: 'Un umbral más bajo',
-      body: 'Pon el <strong>Umbral</strong> en 2,5 sigmas y activa <strong>Las estrellas que se colocaron</strong> en mostradas. Lee cuántas fuentes se listan y cuántas de ellas no son una estrella colocada.',
+      body: 'Pon el <strong>Umbral</strong> en 2,5 sigmas y activa <strong>Estrellas colocadas</strong> en mostradas. Lee cuántas fuentes se listan y cuántas de ellas no son una estrella colocada.',
       fields: [
         { label: 'Fuentes listadas' },
         { label: 'Fuentes que no son una estrella colocada' },

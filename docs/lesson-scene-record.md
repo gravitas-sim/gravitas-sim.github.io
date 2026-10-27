@@ -11,15 +11,15 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 72 investigations and 1139 steps: 1049 steps
+Across 73 investigations and 1149 steps: 1059 steps
 declare a scene, 157 let a reader change one, 163 read the
-running integration, 657 show a prescribed model result, 146 draw
-on a stored dataset, 536 put a self-contained panel beside the text,
-284 keep something, and 56 are prose.
-Of 149 prediction loops, 149 are returned to,
-149 produce a measurement before they are answered, and
+running integration, 667 show a prescribed model result, 146 draw
+on a stored dataset, 546 put a self-contained panel beside the text,
+289 keep something, and 56 are prose.
+Of 150 prediction loops, 150 are returned to,
+150 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
-149 hold their marking until the experiment settles them.
+150 hold their marking until the experiment settles them.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -986,6 +986,20 @@ Of 149 prediction loops, 149 are returned to,
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:crater-budget`, control crater-budget/recognition, measures the uncertainty of a crater diameter from where its rim is, a fraction of the diameter that the reader sets, which dominates the quadrature sum with the scale, the circle's placement and the view: 5.0 percent of 5.3, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## What Is in This Field? (`what-is-in-this-field`)
+
+- **Steps:** 10. Scene declared on 10; a reader can change something on 0; 10 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 10 prescribed model, 0 stored dataset, 10 self-contained panel.
+- **What students do:** move-an-instrument-control, press-an-instrument-preset, commit-a-prediction, record-values, choose-an-option.
+- **Objects the steps declare:** star.
+- **Instruments:** field-sources, field-completeness.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** predict-the-list → how-many-sources, lower-the-threshold, the-width, why-the-width, one-magnitude, the-curve, how-faint, what-you-worked-out → how-many-sources.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:field-sources`, control field-sources/sigma, measures the sources a detector lists in one synthetic frame of forty stars as its threshold falls: 30 at 4 sigma, none of them noise, and 44 at 2.5 sigma, seven of them only noise, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Weighing Jupiter From Its Moons (`weighing-jupiter`)
 

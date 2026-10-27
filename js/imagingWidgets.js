@@ -978,7 +978,7 @@ function pictureOf() {
   c.height = h;
   const g = c.getContext('2d');
   const img = g.createImageData(w, h);
-  const top = Math.asinh(2000 / 2);
+  const top = Math.asinh(100);
   for (let i = 0; i < w * h; i += 1) {
     const u = (data[i] - sky) / noiseAdu;
     const v = clamp(Math.round((255 * Math.asinh(u / 2)) / top), 0, 255);

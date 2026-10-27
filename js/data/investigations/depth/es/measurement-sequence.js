@@ -670,7 +670,7 @@ export const WHAT_IS_IN_THIS_FIELD_DEEPER = {
     },
     {
       title: 'La curva frente a las estrellas que hay',
-      body: 'Pon el umbral en 4 sigmas y el ancho en 3 píxeles y activa <strong>Las estrellas del propio campo</strong> en mostradas. La curva da a cada estrella del campo una probabilidad de ser hallada a su propia magnitud. Lee cuántas de las cuarenta estrellas dice la curva que halla una búsqueda, y cuántas listó la búsqueda.',
+      body: 'Pon el umbral en 4 sigmas y el ancho en 3 píxeles y activa <strong>Estrellas del campo</strong> en mostradas. La curva da a cada estrella del campo una probabilidad de ser hallada a su propia magnitud. Lee cuántas de las cuarenta estrellas dice la curva que halla una búsqueda, y cuántas listó la búsqueda.',
       fields: [
         {
           label:
@@ -681,7 +681,7 @@ export const WHAT_IS_IN_THIS_FIELD_DEEPER = {
     },
     {
       title: 'Estrellas del ancho equivocado',
-      body: 'Pon el <strong>Ancho de las estrellas inyectadas</strong> en 4,5 píxeles, con el umbral en 4 sigmas, como si la medición hubiera dado un enfoque peor. Lee la magnitud con el 50 por ciento hallado, y la proporción hallada en el intervalo más brillante.',
+      body: 'Pon el <strong>Ancho de las añadidas</strong> en 4,5 píxeles, con el umbral en 4 sigmas, como si la medición hubiera dado un enfoque peor. Lee la magnitud con el 50 por ciento hallado, y la proporción hallada en el intervalo más brillante.',
       fields: [
         { label: 'Magnitud con el 50 por ciento hallado' },
         { label: 'Halladas, magnitud −3,4 a −3,1' },

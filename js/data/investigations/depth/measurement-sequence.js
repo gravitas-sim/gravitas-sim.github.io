@@ -1394,7 +1394,7 @@ export const WHAT_IS_IN_THIS_FIELD_DEEPER = {
         return {
           level: 'error',
           message:
-            'Set “Threshold” to 3 σ and “Width of the injected stars” to 3 px, then read “Magnitude at 50 percent found” and “Magnitude at 90 percent found”.',
+            'Set “Threshold” to 3 σ and “Width of added stars” to 3 px, then read “Magnitude at 50 percent found” and “Magnitude at 90 percent found”.',
         };
       },
       tool: FCO({ sigma: 3, width: 3 }, ['truth']),
@@ -1444,8 +1444,7 @@ export const WHAT_IS_IN_THIS_FIELD_DEEPER = {
       depth: 'quantitative',
       type: 'measure',
       title: 'The curve against the stars that are there',
-      body: `Set the threshold to 4 sigma and the width to 3 pixels and switch <strong>The field&rsquo;s own
-             stars</strong> to shown. The curve gives each star of the field a chance of being found
+      body: `Set the threshold to 4 sigma and the width to 3 pixels and switch <strong>Field&rsquo;s own stars</strong> to shown. The curve gives each star of the field a chance of being found
              at its own magnitude. Read how many of the forty stars the curve says a search finds,
              and how many the search listed.`,
       fields: [
@@ -1474,7 +1473,7 @@ export const WHAT_IS_IN_THIS_FIELD_DEEPER = {
         return {
           level: 'error',
           message:
-            'Use the threshold 4 σ and the width 3 px, switch “The field’s own stars” to shown, then read “Stars of the field this curve says a search finds” and “Stars of the field the search listed”.',
+            'Use the threshold 4 σ and the width 3 px, switch “Field’s own stars” to shown, then read “Stars of the field this curve says a search finds” and “Stars of the field the search listed”.',
         };
       },
       tool: FCO({ sigma: 4, width: 3, truth: 1 }),
@@ -1485,7 +1484,7 @@ export const WHAT_IS_IN_THIS_FIELD_DEEPER = {
       depth: 'advanced',
       type: 'measure',
       title: 'Stars of the wrong width',
-      body: `Set <strong>Width of the injected stars</strong> to 4.5 pixels, with the threshold at 4
+      body: `Set <strong>Width of added stars</strong> to 4.5 pixels, with the threshold at 4
              sigma, as if the measurement had given a worse focus. Read the magnitude at 50 percent
              found, and the share found in the brightest bin.`,
       fields: [
@@ -1514,7 +1513,7 @@ export const WHAT_IS_IN_THIS_FIELD_DEEPER = {
         return {
           level: 'error',
           message:
-            'Set “Width of the injected stars” to 4.5 px with the threshold at 4 σ, then read “Magnitude at 50 percent found” and the share in “Magnitude −3.4 to −3.1”.',
+            'Set “Width of added stars” to 4.5 px with the threshold at 4 σ, then read “Magnitude at 50 percent found” and the share in “Magnitude −3.4 to −3.1”.',
         };
       },
       tool: FCO({ sigma: 4, width: 4.5 }, ['truth']),
@@ -1913,7 +1912,7 @@ const FIELD_CONTENT = {
       'Magnitudes are instrumental (minus 2.5 log10 of electrons a second): there is no zero point, and a magnitude of −2.5 is a bright star here only because the exposure is 30 seconds.',
       'The injection is twelve trials of twenty stars with a seeded stream: the share in a bin is a count of a few dozen, with an exact binomial interval, and the half point’s own interval is shown.',
       'The widths offered run from 2 to 4.5 pixels in half-pixel steps; the measured width is 3.00 ± 0.02, so 3 is the honest choice, and the others are there to be refused.',
-      'Nothing here is a detection limit for an instrument: the completeness is for this frame and this search only (INJECTION.md, “Limits”).',
+      'Nothing here is a detection limit for an instrument: the completeness is for this frame and this search only (IMAGE_INVESTIGATIONS.md, “Part 3”).',
     ],
     discussion: [
       'What would you need to know about a second frame before using this curve on it?',
@@ -1925,7 +1924,7 @@ const FIELD_CONTENT = {
       'Continue with The Completeness Curve, which asks what a survey’s own selection does to the population it counts.',
     ],
     modelNotes:
-      'js/imagingField.js: the frame from the detector kernel (js/kernels/detector/frame.js), detectIn, selectStars and measurePsf of js/measure/detect.js (DETECTION.md), run, appliesTo and conditionsOf of js/measure/inject.js (INJECTION.md). See IMAGE_INVESTIGATIONS.md.',
+      'js/imagingField.js: the frame from the detector kernel (js/kernels/detector/frame.js), detectIn, selectStars and measurePsf of js/measure/detect.js, run, appliesTo and conditionsOf of js/measure/inject.js. See IMAGE_INVESTIGATIONS.md.',
   },
 };
 

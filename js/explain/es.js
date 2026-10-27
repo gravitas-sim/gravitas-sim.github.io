@@ -170,10 +170,10 @@ export default {
     'Todo es un modelo con la verdad incorporada: las repeticiones reales rara vez vienen con la verdad con que contarlas, y un ajuste con buen chi cuadrado no queda por eso demostrado.',
   ],
   imaging: [
-    'Una imagen real de la Luna marcada con un par de referencia y un círculo, las posiciones de una estrella sintética durante dos años, o las posiciones relativas de una binaria sintética durante dieciséis años.',
-    'Cómo la escala y un tamaño en kilómetros salen de las marcas, cómo un desplazamiento, un movimiento propio y un paralaje salen de las épocas usadas, y cómo una órbita y una suma de masas salen de las posiciones.',
-    'Qué puede y qué no puede medir una marca sobre una imagen, qué afirma una distancia por paralaje y su punto cero, y qué fijan las posiciones de una binaria.',
-    'La Luna es una imagen para mostrar cuyos niveles de gris no son luz; la estrella y la binaria son sintéticas con la verdad oculta, y un ajuste rechazado es la respuesta, no un fallo.',
+    'Una imagen real de la Luna marcada con un par de referencia y un círculo, las posiciones de una estrella sintética durante dos años, las posiciones relativas de una binaria sintética durante dieciséis años, o un campo de estrellas sintético con las fuentes que lista un detector y la proporción de estrellas añadidas que halla.',
+    'Cómo la escala y un tamaño en kilómetros salen de las marcas, cómo un desplazamiento, un movimiento propio y un paralaje salen de las épocas usadas, cómo una órbita y una suma de masas salen de las posiciones, y cómo una lista de fuentes, un ancho y una curva de completitud salen de un umbral y de estrellas añadidas al cuadro.',
+    'Qué puede y qué no puede medir una marca sobre una imagen, qué afirma una distancia por paralaje y su punto cero, qué fijan las posiciones de una binaria, y de qué es respuesta una curva de completitud.',
+    'La Luna es una imagen para mostrar cuyos niveles de gris no son luz; la estrella, la binaria y el campo son sintéticos con la verdad oculta, y un ajuste rechazado es la respuesta, no un fallo.',
   ],
   jovian: [
     'Imágenes sintéticas de Júpiter y sus lunas, la distancia de una luna frente al tiempo con una sinusoide, o la tercera ley de Kepler con un período y un radio ajustados.',
