@@ -39,13 +39,13 @@ export const ES_CRATERS = {
   'crW.r.note':
     'Dos regiones de un mismo mundo, contadas por los autores de un catálogo: los círculos son suyos y nadie ha marcado estas imágenes. Elige el diámetro a partir del cual contar y lee la densidad de cada región con su intervalo y el cociente de las dos con su intervalo. Un cociente de densidades no es una edad en años.',
   'crW.r.control.pair': 'Mundo',
-  'crW.r.control.view': 'Imagen de',
+  'crW.r.control.view': 'Imagen de la región',
   'crW.r.control.dmin': 'Contar cráteres de al menos',
   'crW.r.control.circles': 'Los círculos del catálogo',
   'crW.pair.0': 'Luna',
   'crW.pair.1': 'Marte',
-  'crW.view.0': 'la región de aspecto más antiguo',
-  'crW.view.1': 'la otra región',
+  'crW.view.0': 'primera',
+  'crW.view.1': 'segunda',
   'crW.r.row.region': '{region}',
   'crW.r.value.region':
     '{n} cráteres de al menos {dmin} km de diámetro en {area} mil km²: {density} por millón de km² (95 por ciento: {iv})',

@@ -3,7 +3,7 @@
  "version": "2.1.0",
  "passed": 339,
  "failed": 0,
- "elapsedMs": 95655,
+ "elapsedMs": 106871,
  "checks": [
   {
    "group": "Unit system",

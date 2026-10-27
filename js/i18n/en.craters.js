@@ -39,13 +39,13 @@ export const EN_CRATERS = {
   'crW.r.note':
     'Two regions of one world, counted by the authors of a catalog: the circles are theirs, and nobody has marked these pictures. Choose the diameter above which to count, then read each region’s density with its interval and the ratio of the two with its interval. A density ratio is not an age in years.',
   'crW.r.control.pair': 'World',
-  'crW.r.control.view': 'Picture of',
+  'crW.r.control.view': 'Picture of the region',
   'crW.r.control.dmin': 'Count craters at least',
   'crW.r.control.circles': 'The catalog’s circles',
   'crW.pair.0': 'Moon',
   'crW.pair.1': 'Mars',
-  'crW.view.0': 'the older-looking region',
-  'crW.view.1': 'the other region',
+  'crW.view.0': 'first',
+  'crW.view.1': 'second',
   'crW.r.row.region': '{region}',
   'crW.r.value.region':
     '{n} craters at least {dmin} km across in {area} thousand km²: {density} per million km² (95 percent: {iv})',

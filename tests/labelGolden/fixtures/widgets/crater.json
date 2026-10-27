@@ -4,7 +4,7 @@
    "static": {
     "title": "Which of two surfaces has more craters, per area?",
     "note": "Two regions of one world, counted by the authors of a catalog: the circles are theirs, and nobody has marked these pictures. Choose the diameter above which to count, then read each region’s density with its interval and the ratio of the two with its interval. A density ratio is not an age in years.",
-    "controls": [{"id":"pair","label":"World","unit":null,"min":0,"max":1,"step":1,"value":0,"decimals":0},{"id":"view","label":"Picture of","unit":null,"min":0,"max":1,"step":1,"value":0,"decimals":0},{"id":"dmin","label":"Count craters at least","unit":null,"min":20,"max":100,"step":5,"value":30,"decimals":0},{"id":"circles","label":"The catalog’s circles","unit":null,"min":0,"max":1,"step":1,"value":1,"decimals":0}],
+    "controls": [{"id":"pair","label":"World","unit":null,"min":0,"max":1,"step":1,"value":0,"decimals":0},{"id":"view","label":"Picture of the region","unit":null,"min":0,"max":1,"step":1,"value":0,"decimals":0},{"id":"dmin","label":"Count craters at least","unit":null,"min":20,"max":100,"step":5,"value":30,"decimals":0},{"id":"circles","label":"The catalog’s circles","unit":null,"min":0,"max":1,"step":1,"value":1,"decimals":0}],
     "presets": [],
     "actions": [],
     "defaults": {"pair":"0","view":"0","dmin":"30","circles":"1"}
@@ -27,8 +27,8 @@
    "controls": {
     "calls": 48,
     "distinct": 24,
-    "digest": "e15cd612a5140fa4",
-    "samples": [["Moon","the older-looking region","30 km","on"],["Moon","the older-looking region","20 km","on"],["Moon","the older-looking region","20 km","off"],["Moon","the older-looking region","30 km","off"],["Mars","the other region","100 km","on"],["Mars","the other region","60 km","on"],["Mars","the other region","95 km","on"],["Mars","the older-looking region","30 km","on"],["Mars","the older-looking region","80 km","on"],["Moon","the other region","30 km","on"],["Moon","the other region","95 km","on"],["Moon","the older-looking region","100 km","on"],["Mars","the other region","20 km","off"],["Mars","the other region","70 km","off"],["Moon","the other region","60 km","off"],["Mars","the older-looking region","100 km","off"]]
+    "digest": "59774455b61b50c4",
+    "samples": [["Moon","first","30 km","on"],["Moon","first","20 km","on"],["Moon","first","20 km","off"],["Moon","first","30 km","off"],["Mars","second","100 km","on"],["Mars","second","60 km","on"],["Mars","second","95 km","on"],["Mars","first","30 km","on"],["Mars","first","80 km","on"],["Moon","second","30 km","on"],["Moon","second","95 km","on"],["Moon","first","100 km","on"],["Mars","second","20 km","off"],["Mars","second","70 km","off"],["Moon","second","60 km","off"],["Mars","first","100 km","off"]]
    },
    "phases": {
     "calls": 0,
@@ -41,7 +41,7 @@
    "static": {
     "title": "¿Cuál de dos superficies tiene más cráteres por área?",
     "note": "Dos regiones de un mismo mundo, contadas por los autores de un catálogo: los círculos son suyos y nadie ha marcado estas imágenes. Elige el diámetro a partir del cual contar y lee la densidad de cada región con su intervalo y el cociente de las dos con su intervalo. Un cociente de densidades no es una edad en años.",
-    "controls": [{"id":"pair","label":"Mundo","unit":null,"min":0,"max":1,"step":1,"value":0,"decimals":0},{"id":"view","label":"Imagen de","unit":null,"min":0,"max":1,"step":1,"value":0,"decimals":0},{"id":"dmin","label":"Contar cráteres de al menos","unit":null,"min":20,"max":100,"step":5,"value":30,"decimals":0},{"id":"circles","label":"Los círculos del catálogo","unit":null,"min":0,"max":1,"step":1,"value":1,"decimals":0}],
+    "controls": [{"id":"pair","label":"Mundo","unit":null,"min":0,"max":1,"step":1,"value":0,"decimals":0},{"id":"view","label":"Imagen de la región","unit":null,"min":0,"max":1,"step":1,"value":0,"decimals":0},{"id":"dmin","label":"Contar cráteres de al menos","unit":null,"min":20,"max":100,"step":5,"value":30,"decimals":0},{"id":"circles","label":"Los círculos del catálogo","unit":null,"min":0,"max":1,"step":1,"value":1,"decimals":0}],
     "presets": [],
     "actions": [],
     "defaults": {"pair":"0","view":"0","dmin":"30","circles":"1"}
@@ -64,8 +64,8 @@
    "controls": {
     "calls": 48,
     "distinct": 24,
-    "digest": "4d63707ec224fec3",
-    "samples": [["Luna","la región de aspecto más antiguo","30 km","sí"],["Luna","la región de aspecto más antiguo","20 km","sí"],["Luna","la región de aspecto más antiguo","20 km","no"],["Luna","la región de aspecto más antiguo","30 km","no"],["Marte","la otra región","100 km","sí"],["Marte","la otra región","60 km","sí"],["Marte","la otra región","95 km","sí"],["Marte","la región de aspecto más antiguo","30 km","sí"],["Marte","la región de aspecto más antiguo","80 km","sí"],["Luna","la otra región","30 km","sí"],["Luna","la otra región","95 km","sí"],["Luna","la región de aspecto más antiguo","100 km","sí"],["Marte","la otra región","20 km","no"],["Marte","la otra región","70 km","no"],["Luna","la otra región","60 km","no"],["Marte","la región de aspecto más antiguo","100 km","no"]]
+    "digest": "5ff3ae7fd290b0f3",
+    "samples": [["Luna","primera","30 km","sí"],["Luna","primera","20 km","sí"],["Luna","primera","20 km","no"],["Luna","primera","30 km","no"],["Marte","segunda","100 km","sí"],["Marte","segunda","60 km","sí"],["Marte","segunda","95 km","sí"],["Marte","primera","30 km","sí"],["Marte","primera","80 km","sí"],["Luna","segunda","30 km","sí"],["Luna","segunda","95 km","sí"],["Luna","primera","100 km","sí"],["Marte","segunda","20 km","no"],["Marte","segunda","70 km","no"],["Luna","segunda","60 km","no"],["Marte","primera","100 km","no"]]
    },
    "phases": {
     "calls": 0,
