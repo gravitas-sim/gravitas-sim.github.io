@@ -1,0 +1,257 @@
+{
+  "format": "gravitas.crater-chronology-gate-thresholds/1",
+  "prompt": 196,
+  "part": "A",
+  "committed": "Before any age was computed and before any prototype or oracle output existed: the functions, their sources, the legs, every bound, the decision function and the slices are in this file and in CRATER_CHRONOLOGY_GATE.md ahead of the spike branch spike/crater-chronology-gate. The spike is never merged; production code (Part B) is built afterwards, within the verdict only. The reference sites' sample ages and published counts are NOT in this file: the repository holds none of them and nothing may be downloaded without Carl's word, so the reference legs (R1 to R3) are written as a rule and run when the data arrive (see dataRequests). The values are added in a later commit, before any age is computed from them.",
+  "functions": {
+    "status": "typed from the published tables by recall; NOT yet checked against the papers (data request R0). Leg F1.a0 is a consistency check on one coefficient, not a check of the table.",
+    "lunarProduction": {
+      "source": "Neukum (1983, Habilitation thesis); the coefficients are those of craterstats 3.2.1 (Michael, BSD), config/functions.txt 'Moon, Neukum (1983)', read on 2026-10-27 (R0, R3); the 1983 polynomial is the one paired with the chronology below",
+      "form": "log10 N(>=D) = a0 + sum over n = 1..11 of a_n (log10 D)^n, N the cumulative number per km^2 accumulated in one reference unit of the chronology, D in km",
+      "a": [
+        -3.0768, -3.6269, 0.43662, 0.79347, 0.086468, -0.26485, -0.066382,
+        0.037923, 0.010596, -0.0022496, -0.00051797, 3.97e-5
+      ],
+      "domainKm": [0.01, 300],
+      "domainNote": "the polynomial is a fit over this range; outside it the function is not defined here and every use refuses",
+      "recalledTable": [
+        -3.0768, -3.6269, 0.4366, 0.7935, 0.0865, -0.2649, -0.0664, 0.0379,
+        0.0106, -0.0022, -0.000518, 3.97e-5
+      ],
+      "variant2001": {
+        "a": [
+          -3.0768, -3.557528, 0.781027, 1.021521, -0.156012, -0.444058,
+          0.019977, 0.08685, -0.005874, -0.006809, 0.000825, 5.54e-5
+        ],
+        "role": "sensitivity only, reported and never judged: the polynomial of Neukum, Ivanov and Hartmann (2001) as craterstats 3.2.1 prints it (its a0 is the 1 Ga constant -3.0768; the paper's printed -3.0876 is judged a typo by craterstats' authors)"
+      },
+      "status": "checked on 2026-10-27 against craterstats 3.2.1's table (see sources.json) and not against the printed papers, which are paywalled and were not retrievable; the recalled table that this file first held is kept under recalledTable and differed from it in the fourth or fifth digit of six coefficients"
+    },
+    "lunarChronology": {
+      "source": "Neukum (1983); Neukum, Ivanov and Hartmann (2001); Hartmann and Neukum (2001), Space Sci. Rev. 96, 165",
+      "form": "N1(T) = c1 (exp(lambda T) - 1) + c2 T, the cumulative number of craters of D >= 1 km per km^2 on a surface of model age T (Ga)",
+      "c1": 5.44e-14,
+      "lambda": 6.93,
+      "c2": 0.000838,
+      "calibratedToGa": 3.95,
+      "calibratedNote": "the oldest sample age behind the curve is about 3.9 Ga; older model ages are extrapolation and are flagged as such",
+      "status": "c1, lambda and c2 checked against craterstats 3.2.1 ('Moon, Neukum (1983)' and 'Moon, Neukum et al. (2001)' carry the same three constants) and against Marchi et al. (2009), who quote a = 5.44e-14 of Neukum and Ivanov (1994)"
+    },
+    "martianChronology": {
+      "source": "Hartmann and Neukum (2001); Ivanov (2001), Space Sci. Rev. 96, 87 (the Martian production function)",
+      "form": "the same exponential form with c1 = 2.68e-14, lambda = 6.93, c2 = 4.13e-4 (recorded here, NOT implemented by this gate)",
+      "scaling": "the Martian production function is derived from the lunar one by impact-rate, velocity and gravity scaling and an atmosphere cut-off at small diameters; Ivanov's polynomial coefficients are not in hand and the Mars production function is not built",
+      "anchor": "no sample returned from Mars: the Martian chronology has no radiometric anchor of its own, so it cannot be validated by this gate's criterion (leg M1)"
+    },
+    "saturation": {
+      "source": "Gault (1970), Radio Sci. 5, 273; Melosh (1989), Impact Cratering, ch. 11",
+      "geometricKm2": "N_gs(>=D) = 1.54 D^-2 per km^2, D in km",
+      "flagFraction": 0.03,
+      "flagNote": "a surface whose density at the counting diameter exceeds 3 percent of N_gs is flagged as at or near equilibrium; its model age is a lower limit. The commonly quoted equilibrium range is 1 to 10 percent of N_gs; 3 percent is the committed flag, not a measured equilibrium level."
+    },
+    "secondaries": {
+      "source": "McEwen and Bierhaus (2006), Annu. Rev. Earth Planet. Sci. 34, 535",
+      "minimumDiameterKm": 1.0,
+      "rule": "no age is computed from a count that includes craters smaller than 1 km on the Moon: secondaries steepen the small end of the distribution and make a spurious young age; the cumulative index between dMin and 2 dMin steeper than 3.5 is reported as evidence of contamination and not judged"
+    },
+    "ageFromCount": {
+      "equivalent": "N1_equivalent = (n / A) x N_PF(>=1 km) / N_PF(>=dMin), n the craters of D >= dMin counted over the area A (km^2), a Poisson count whose interval is mapped through the same factor",
+      "interval": "the exact Poisson (Garwood) interval of n at 95 percent, mapped through the factor and through the inverse chronology T(N1); the interval is a statement about counting error only",
+      "approximationError": "the chronology function's own misfit to the samples is a separate term; it is the RMS misfit of leg R1 and, when R1 has not run, no approximation floor exists and no age is presented (so the interval never claims more than it measured)",
+      "inverse": "T is found by bisection on N1(T), which is strictly increasing in T"
+    }
+  },
+  "dataRequests": {
+    "R0": "the Neukum et al. (2001) paper and Hartmann and Neukum (2001): to check the coefficients and the domain",
+    "R1": "the sample ages: Stoffler and Ryder (2001), Space Sci. Rev. 96, 9, the table of radiometric ages of the returned-sample sites (Apollo 11, 12, 14, 15, 16, 17; Luna 16, 20, 24) and of the young sites (Copernicus, Tycho, North Ray, Cone) where it gives them",
+    "R2": "the published counts at those sites: the calibration counts of Neukum (1983) and Neukum and Ivanov (1994) as printed, and at least one recount made after 2001 on spacecraft imagery (for example Michael and Neukum 2010, EPSL 294, 223; Robbins 2014, EPSL 403, 188), each with its area and its stated diameter range",
+    "R3": "craterstats (Michael and Neukum) installed in the oracle environment, to pin its own age output for the same counts",
+    "R4": "for Mars: Ivanov (2001), Hartmann (2005, Icarus 174, 294) and Michael (2013, Icarus 226, 885), to name the factor between the published Martian production functions (not an age)",
+    "R5": "a person to mark craters on the committed frames with the count mode, for leg O2; nothing is simulated",
+    "status": {
+      "R0": "coefficients read from craterstats 3.2.1 (a published package that cites the papers); the papers themselves (Space Sci. Rev. 96) are paywalled and not retrieved",
+      "R1": "ages read from Marchi et al. (2009) Table 1, which quotes Stoffler and Ryder (2001) Table VI; the primary table is paywalled and not retrieved",
+      "R2": "N1 densities read from Marchi et al. (2009) Table 1 and, for Apollo 11, from Iqbal et al. (2019, arXiv:2003.03292); not the raw counts of Neukum (1983), and no counts with their areas for the other sites",
+      "R3": "craterstats 3.2.1 installed in a new venv (Python 3.10.12; 3.3 and later need Python 3.12 or newer, not available); Apollo 12 and 14 recounts (Iqbal et al. 2020, 2023) and Robbins (2014) are not retrievable (publisher pages refuse automated access or are paywalled; nothing was circumvented)"
+    }
+  },
+  "legs": {
+    "F1.a0": {
+      "what": "the constant of the production polynomial against the chronology's linear coefficient: 10^a0 equals c2",
+      "bounds": {
+        "relativeDifference": 0.001
+      },
+      "data": "none"
+    },
+    "F1.inverse": {
+      "what": "T -> N1 -> T through the bisection inverse over T in {0.01, 0.05, 0.1, 0.5, 1, 2, 3, 3.5, 3.9, 4.2, 4.5} Ga",
+      "bounds": {
+        "relative": 1e-9
+      },
+      "data": "none"
+    },
+    "F1.monotone": {
+      "what": "N_PF(>=D) is strictly decreasing in D at 400 log-spaced diameters over the domain (0.01 to 300 km) and N1(T) strictly increasing in T at 400 points over 0.01 to 4.5 Ga",
+      "bounds": {
+        "violations": 0
+      },
+      "data": "none"
+    },
+    "F1.oracle": {
+      "what": "the spike's functions against an independent implementation (Python, numpy and scipy, nothing of Gravitas run) over a 40 diameter by 11 age grid: N_PF, N1, T(N1), and the Garwood-mapped age interval for 30 counts. This is an implementation check: both codes read the same recalled coefficients, so it cannot catch a wrong coefficient (R0 does)",
+      "bounds": {
+        "maxRelative": 1e-9
+      },
+      "data": "none"
+    },
+    "F2.coverage": {
+      "what": "the 95 percent age interval covers the true age at the stated rate on a fixed seeded ensemble: counts drawn as Poisson from the production function at true T in {0.5, 1, 2, 3, 3.5, 3.9} Ga, areas {2e4, 2e5} km^2 and dMin in {1, 3} km; 4,000 trials per cell (24 cells), seed 196; the interval alone, no refusal rule applied, so a count of zero gives the interval from zero",
+      "bounds": {
+        "perCellMinimum": 0.94
+      },
+      "note": "the Garwood interval is conservative, so only a floor is stated; cells with a tiny expected count may cover far more",
+      "data": "none"
+    },
+    "F3.refusals": {
+      "what": "the cases that must return a named status and no age: dMin below 1 km (secondaries); fewer than 5 craters counted; density at dMin above 3 percent of N_gs (lower limit); an N1 equivalent above the chronology's value at 4.5 Ga (older than the chronology); a count with a negative or non-integer n; a diameter outside 0.01 to 300 km; a Martian region (no returned-sample anchor). A separate case, not counted among the refusals: a model age between 3.95 and 4.5 Ga returns the age with the flag extrapolated and a lower limit on its interval's meaning",
+      "bounds": {
+        "refusedCasesWithAgeReturned": 0,
+        "controlRefusalRateMaximum": 0.05
+      },
+      "control": "500 seeded surfaces at T in {0.5, 1, 2, 3, 3.5} Ga with area 2e5 km^2 and dMin 1 km that are none of the above: at most 5 percent of them may be refused or flagged",
+      "data": "none"
+    },
+    "R1.sites": {
+      "what": "for each returned-sample site whose published count is retrieved, the age recovered from the published count is within the tolerance of the sample age (a factor of 1.5 on the 1 km equivalent density); the tolerance is committed here and does not depend on the sites",
+      "tolerance": {
+        "densityFactor": 1.5,
+        "form": "the recovered N1 is within a factor of 1.5 of N1(T_sample), which is the same as the recovered age lying in [T(N1(T_sample) / 1.5), T(1.5 N1(T_sample))]",
+        "why": "published counts of one site differ between teams by about a factor of 1.3 to 2, so a factor of 1.5 is the committed middle. The tolerance is stated on the density because the age is not a linear function of it: the exponential term of the chronology exceeds the linear term only above about 3.5 Ga, so a given density tolerance is a window of a few hundredths of a Ga near 3.9 Ga and several tenths of a Ga near 3 Ga. The tolerance is not derived from the sample uncertainties."
+      },
+      "bounds": {
+        "minimumSitesWithCounts": 6,
+        "minimumSitesWithinTolerance": "every site retrieved"
+      },
+      "circularity": "the chronology was fitted to the calibration counts at these sites, so recovering their ages from those counts shows consistency, not accuracy; R3 is the leg that does not share that circularity",
+      "data": "R0, R1, R2"
+    },
+    "R2.coverage": {
+      "what": "the sample age lies inside the counting interval widened by the approximation floor (the RMS misfit of R1), at every retrieved site",
+      "bounds": {
+        "sitesOutside": 0
+      },
+      "data": "R0, R1, R2"
+    },
+    "R3.recount": {
+      "what": "at least two sites for which the published count is a recount made after 2001, not the calibration count, are within the same tolerance of their sample ages",
+      "bounds": {
+        "minimumRecountSites": 2
+      },
+      "data": "R0, R1, R2"
+    },
+    "O1.feasible": {
+      "what": "whether the lesson's own counts on the committed Moon frames can age a surface at all: for each committed Moon region the smallest diameter counted is dMin = max(8 pixels x the frame's km per pixel, 1 km) (Prompt 195's 8 pixel rule) and the expected number of craters of D >= dMin on a surface of model age 3.5 Ga is A x N_PF(>=dMin) x N1(3.5 Ga) / N_PF(>=1 km), from the region's stated area; no count on the frame is used",
+      "bounds": {
+        "expectedCountMinimumAt3_5Ga": 30
+      },
+      "why": "with fewer than about 30 craters the 95 percent counting interval is wider than about plus or minus 40 percent in N1, which at 3.5 Ga (where the linear and exponential terms are of comparable size) is an age uncertainty of several tenths of a Ga",
+      "data": "none (the regions' areas and scales are committed in frames/craters-regions.json)"
+    },
+    "O2.own": {
+      "what": "the age recovered from a person's counts on the frames, by the chronology, agrees with the age recovered from the same craters' published diameters in the regional list, within the R1 tolerance",
+      "bounds": {
+        "within": "R1.sites.tolerance"
+      },
+      "data": "R5; nothing is simulated"
+    },
+    "I1.completeness": {
+      "what": "the completeness correction by injection: crater-like features (a bowl profile with a stated depth to diameter ratio, a degradation state and the frame's illumination, never a stellar PSF) are injected into the frames and recovered, and the recognition fraction against diameter is measured; the correction is validated by recovering the published counts at a site from a count made at a larger completeness limit",
+      "bounds": {
+        "recognitionAtDminMinimum": 0.9
+      },
+      "data": "R5 and R2; NOT RUN without both (the recognition function is a measurement on people or on a detector, and none exists)"
+    },
+    "M1.mars": {
+      "what": "a Martian absolute age is not measurable by this gate: there is no returned sample and so no radiometric anchor. The Martian chronology and scaling are outside every verdict; a Martian count may be shown with the lunar-scaled isochron only as a labelled model, never as an age",
+      "bounds": {
+        "agesReturnedForMars": 0
+      },
+      "data": "none"
+    },
+    "F1.craterstats": {
+      "what": "the spike's production function and chronology against craterstats 3.2.1's own output on the same grid (R3: its pin): N_PF over the 40 diameters, N1 over the 11 ages, and the age that craterstats' interpolating inverse gives for each N1",
+      "bounds": {
+        "relative": 1e-9,
+        "ageAbsoluteGa": 0.005
+      },
+      "note": "craterstats inverts the chronology by interpolation on a 1000 step grid over 0 to 5 Ga (0.005 Ga), so the age bound is that grid's, not a looseness of ours",
+      "data": "R3"
+    }
+  },
+  "decision": {
+    "function": "the first match from the top. A: F1, F2, F3, R1, R2, R3, O1 and O2 all pass. B: F1, F2, F3, R1, R2 and R3 all pass (the published counts only). C: otherwise.",
+    "notRun": "a leg that cannot run because its data are absent is NOT RUN; NOT RUN is not a pass, so a verdict that depends on it falls to the next case. The verdict C that results from NOT RUN legs is a pending C, not a measured failure, and the same function gives B or A when the data arrive and the legs run. A bound that proves unmeasurable fails its leg; only Carl resets a bound; a failed leg is reported and left failing.",
+    "slices": {
+      "A": "the lesson ages the student's own count with its interval, with the completeness correction and the saturation and secondaries rules; the chronology on the reference table is the comparison",
+      "B": "the lesson teaches the chronology on the reference table of published counts and does not age the student's own count",
+      "C": "no absolute age anywhere; Prompt 195's relative ages stand; Prompt 206's unit lists the chronology as a reading step"
+    }
+  },
+  "rights": "the sample ages and the published counts are facts from papers; they are read, cited with their retrieval date, and committed as a small table with credit, one decision per source (Operating rule 7.5.4), and none is committed before it is read",
+  "corrections": [
+    {
+      "id": "c1",
+      "before": "any age was computed or any prototype or oracle output existed (commit 62062cfa is the original)",
+      "what": "R1.sites' first tolerance (0.3 Ga at 3 Ga and above, 30 percent below) rested on a wrong statement that the exponential term dominates above about 3 Ga; with the committed constants the two terms are equal near 3.5 Ga (a hand estimate from the constants, no output). The tolerance is restated on the density as a factor of 1.5, which is regime-free. The prose in CRATER_CHRONOLOGY_GATE.md followed."
+    },
+    {
+      "id": "c2",
+      "before": "any R-leg age was computed (the intake commit); F1 ran earlier on the recalled table, and its record is replaced by a re-run",
+      "what": "R0: the recalled production table was the Neukum (1983) polynomial typed to four or five digits (a2 0.4366 for 0.43662, a3 0.7935 for 0.79347, a4 0.0865 for 0.086468, a6 -0.0664 for -0.066382, a8 0.0106 for 0.010596, a9 -0.0022 for -0.0022496); the Neukum et al. (2001) polynomial is a different set of coefficients. The functions block now holds the sourced 1983 table, with the 2001 table as a reported sensitivity. No bound moved."
+    }
+  ],
+  "intake": {
+    "committed": "before any R1, R2 or R3 value was computed",
+    "R1": {
+      "source": "Marchi et al. (2009), AJ 137, 4936, Table 1 (arXiv:0903.5137): N1 per km^2 of each calibration region, derived by the authors from Neukum (1983) and later counts with their own production function (two columns, NEO and MBA), and the radiometric age that the table takes from Stoffler and Ryder (2001) Table VI",
+      "rows": [
+        "Descartes Formation",
+        "Imbrium Apennines",
+        "Fra Mauro Formation",
+        "Mare Tranquillitatis (old)",
+        "Taurus Littrow Mares",
+        "Mare Tranquillitatis (young)",
+        "Mare Fecunditatis",
+        "Mare Imbrium",
+        "Mare Crisium",
+        "Oceanus Procellarum",
+        "Copernicus Crater (cont. ejecta)",
+        "Copernicus Crater (crater floor)",
+        "Tycho crater (cont. ejecta, small craters)",
+        "Tycho crater (cont. ejecta, large craters)",
+        "North Ray crater",
+        "Cone Crater"
+      ],
+      "excluded": {
+        "Highlands (all craters and basins)": "an ensemble, not a site",
+        "Nectaris Basin": "not a site on the contract's list (Apollo, Luna, and the young craters Copernicus, Tycho, North Ray, Cone); a basin age from impact-melt samples counted on large craters. Its figure is reported as an informational row and never judged.",
+        "terrestrial craters": "not the Moon"
+      },
+      "judged": "the NEO column is judged, the MBA column is reported; a row passes when 1/1.5 <= N1_published / N1(T_sample) <= 1.5 with N1(T) from the committed chronology; every row must pass (the leg's committed form: every site retrieved)",
+      "note": "these are published N1 densities, not counts with areas, and they were derived under a production function that is not Neukum's, from counts that are largely the ones the chronology was fitted to: a pass here is consistency with the chronology, not independent accuracy"
+    },
+    "R2": {
+      "rows": "the Apollo 11 landing-site area counts that publish N1 with an error: Iqbal et al. (2019) NAC and WAC merges, Robbins (2014), Hiesinger et al. (2000) and Neukum (1983) 'young' and 'old', as quoted in Iqbal et al. (2019) Table 4",
+      "interval": "N1 +/- 1.96 sigma (the published error read as one sigma of a Poisson count fit, as craterstats prints it), divided and multiplied by the approximation floor f = exp(RMS of ln(N1_published / N1(T_sample)) over the R1 rows)",
+      "sampleAge": "Neukum 'young' 3.58 Ga and 'old' 3.80 Ga for the rows labelled so; every other row against the window 3.58 to 3.80 Ga (Apollo 11's two groups, Marchi 2009 Table 1); a row passes when the interval meets [N1(3.58), N1(3.80)] (or the labelled age's N1)",
+      "bounds": {
+        "rowsOutside": 0
+      }
+    },
+    "R3": {
+      "recounts": "counts made after 2001 on spacecraft imagery that the retrieved sources publish: Iqbal et al. (2019) (LRO NAC and WAC) and Robbins (2014) as quoted there, both at Apollo 11; Hiesinger et al. (2000) and Neukum (1983) are before 2001 and are not recounts here",
+      "passes": "a recount is within tolerance when its N1 is within a factor 1.5 of N1(3.58 Ga) or of N1(3.80 Ga)",
+      "sitesMeasured": "the number of distinct sites with a retrieved post-2001 recount; the committed minimum is 2; a count below the minimum fails the leg (an unmeasurable bound fails), and the reason is data that could not be retrieved, stated"
+    }
+  }
+}

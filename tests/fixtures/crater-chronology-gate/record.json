@@ -1,0 +1,624 @@
+{
+  "format": "gravitas.crater-chronology-gate-record/1",
+  "prompt": 196,
+  "node": "v24.4.0",
+  "corrections": [
+    "F3 case 3 (saturated) was first written n = 50, area 100 km^2, dMin 2 km; it returned beyondChronology, because that surface is also older than the chronology reaches, so the case did not isolate its rule. Replaced by n = 6, area 100 km^2, dMin 2 km (N1 below the chronology at 4.5 Ga, density above 3 percent of geometric saturation). The first run is the only one with the old case; no bound moved."
+  ],
+  "rows": [
+    {
+      "id": "F1.a0",
+      "measured": 0.00010135150547776014,
+      "bound": 0.001,
+      "pass": true
+    },
+    {
+      "id": "F1.inverse",
+      "measured": 2.1147105230955362e-16,
+      "bound": 1e-9,
+      "pass": true
+    },
+    {
+      "id": "F1.monotone",
+      "measured": 0,
+      "bound": 0,
+      "pass": true
+    },
+    {
+      "id": "F1.oracle",
+      "measured": 5.3651353869270715e-14,
+      "bound": 1e-9,
+      "pass": true
+    },
+    {
+      "id": "F2.coverage",
+      "measured": 0.9435,
+      "bound": 0.94,
+      "pass": true,
+      "cells": [
+        {
+          "T0": 0.5,
+          "area": 20000,
+          "dMin": 1,
+          "mean": 8.38000003370239,
+          "coverage": 0.963
+        },
+        {
+          "T0": 0.5,
+          "area": 20000,
+          "dMin": 3,
+          "mean": 0.237540272099966,
+          "coverage": 0.97425
+        },
+        {
+          "T0": 0.5,
+          "area": 200000,
+          "dMin": 1,
+          "mean": 83.80000033702389,
+          "coverage": 0.95175
+        },
+        {
+          "T0": 0.5,
+          "area": 200000,
+          "dMin": 3,
+          "mean": 2.3754027209996598,
+          "coverage": 0.98875
+        },
+        {
+          "T0": 1,
+          "area": 20000,
+          "dMin": 1,
+          "mean": 16.76000111138545,
+          "coverage": 0.96925
+        },
+        {
+          "T0": 1,
+          "area": 20000,
+          "dMin": 3,
+          "mean": 0.4750805737927067,
+          "coverage": 0.9855
+        },
+        {
+          "T0": 1,
+          "area": 200000,
+          "dMin": 1,
+          "mean": 167.6000111138545,
+          "coverage": 0.95425
+        },
+        {
+          "T0": 1,
+          "area": 200000,
+          "dMin": 3,
+          "mean": 4.750805737927067,
+          "coverage": 0.96775
+        },
+        {
+          "T0": 2,
+          "area": 20000,
+          "dMin": 1,
+          "mean": 33.52113749631694,
+          "coverage": 0.9545
+        },
+        {
+          "T0": 2,
+          "area": 20000,
+          "dMin": 3,
+          "mean": 0.950193328156529,
+          "coverage": 0.982
+        },
+        {
+          "T0": 2,
+          "area": 200000,
+          "dMin": 1,
+          "mean": 335.21137496316936,
+          "coverage": 0.9435
+        },
+        {
+          "T0": 2,
+          "area": 200000,
+          "dMin": 3,
+          "mean": 9.50193328156529,
+          "coverage": 0.96625
+        },
+        {
+          "T0": 3,
+          "area": 20000,
+          "dMin": 1,
+          "mean": 51.44308424730014,
+          "coverage": 0.9545
+        },
+        {
+          "T0": 3,
+          "area": 20000,
+          "dMin": 3,
+          "mean": 1.4582105227470135,
+          "coverage": 0.98625
+        },
+        {
+          "T0": 3,
+          "area": 200000,
+          "dMin": 1,
+          "mean": 514.4308424730015,
+          "coverage": 0.95025
+        },
+        {
+          "T0": 3,
+          "area": 200000,
+          "dMin": 3,
+          "mean": 14.582105227470135,
+          "coverage": 0.9595
+        },
+        {
+          "T0": 3.5,
+          "area": 20000,
+          "dMin": 1,
+          "mean": 95.85131668025736,
+          "coverage": 0.95925
+        },
+        {
+          "T0": 3.5,
+          "area": 20000,
+          "dMin": 3,
+          "mean": 2.717010471813675,
+          "coverage": 0.9775
+        },
+        {
+          "T0": 3.5,
+          "area": 200000,
+          "dMin": 1,
+          "mean": 958.5131668025736,
+          "coverage": 0.9465
+        },
+        {
+          "T0": 3.5,
+          "area": 200000,
+          "dMin": 3,
+          "mean": 27.170104718136752,
+          "coverage": 0.97
+        },
+        {
+          "T0": 3.9,
+          "area": 20000,
+          "dMin": 1,
+          "mean": 660.0748443183508,
+          "coverage": 0.94925
+        },
+        {
+          "T0": 3.9,
+          "area": 20000,
+          "dMin": 3,
+          "mean": 18.710543853834572,
+          "coverage": 0.9665
+        },
+        {
+          "T0": 3.9,
+          "area": 200000,
+          "dMin": 1,
+          "mean": 6600.748443183507,
+          "coverage": 0.94925
+        },
+        {
+          "T0": 3.9,
+          "area": 200000,
+          "dMin": 3,
+          "mean": 187.1054385383457,
+          "coverage": 0.95625
+        }
+      ]
+    },
+    {
+      "id": "F3.refusals.cases",
+      "measured": 0,
+      "bound": 0,
+      "pass": true,
+      "detail": [
+        {
+          "want": "secondaries",
+          "got": "secondaries",
+          "ok": true,
+          "n": 100,
+          "dMin": 0.5
+        },
+        {
+          "want": "tooFew",
+          "got": "tooFew",
+          "ok": true,
+          "n": 3,
+          "dMin": 1
+        },
+        {
+          "want": "saturated",
+          "got": "saturated",
+          "ok": true,
+          "n": 6,
+          "dMin": 2
+        },
+        {
+          "want": "beyondChronology",
+          "got": "beyondChronology",
+          "ok": true,
+          "n": 4236,
+          "dMin": 100
+        },
+        {
+          "want": "count",
+          "got": "count",
+          "ok": true,
+          "n": 2.5,
+          "dMin": 1
+        },
+        {
+          "want": "count",
+          "got": "count",
+          "ok": true,
+          "n": -1,
+          "dMin": 1
+        },
+        {
+          "want": "diameter",
+          "got": "diameter",
+          "ok": true,
+          "n": 20,
+          "dMin": 500
+        },
+        {
+          "want": "diameter",
+          "got": "diameter",
+          "ok": true,
+          "n": 20,
+          "dMin": 0.005
+        },
+        {
+          "want": "mars",
+          "got": "mars",
+          "ok": true,
+          "n": 100,
+          "dMin": 20
+        }
+      ],
+      "nBeyond": 4236
+    },
+    {
+      "id": "F3.refusals.control",
+      "measured": 0,
+      "bound": 0.05,
+      "pass": true
+    },
+    {
+      "id": "O1.moon-highland",
+      "measured": 1.9496963616267524,
+      "bound": 30,
+      "pass": false,
+      "dMin": 16.171262361838277,
+      "area": 304981.5722401006,
+      "oracle": 1.9496963616267524,
+      "relDiffOracle": 0
+    },
+    {
+      "id": "O1.moon-mare",
+      "measured": 2.179247836295218,
+      "bound": 30,
+      "pass": false,
+      "dMin": 16.171262361838277,
+      "area": 340889.19920823496,
+      "oracle": 2.179247836295218,
+      "relDiffOracle": 0
+    },
+    {
+      "id": "F1.craterstats.functions",
+      "measured": 0,
+      "bound": 1e-9,
+      "pass": true
+    },
+    {
+      "id": "F1.craterstats.age",
+      "measured": 0.00001708208040529513,
+      "bound": 0.005,
+      "pass": true
+    },
+    {
+      "id": "info.pf2001vs1983",
+      "measured": 1.3575908010064777,
+      "bound": null,
+      "pass": null,
+      "rows": [
+        {
+          "D": 1,
+          "ratio2001to1983": 1
+        },
+        {
+          "D": 3,
+          "ratio2001to1983": 1.3198328837912146
+        },
+        {
+          "D": 16.17,
+          "ratio2001to1983": 2.3575908010064777
+        },
+        {
+          "D": 30,
+          "ratio2001to1983": 2.3106301567885246
+        }
+      ]
+    },
+    {
+      "id": "info.R0.recalledVsSourced",
+      "measured": 0.44260080678682856,
+      "bound": null,
+      "pass": null
+    },
+    {
+      "id": "R1.Descartes Formation",
+      "measured": 0.6650441549884872,
+      "bound": [0.6666666666666666, 1.5],
+      "pass": false,
+      "ageSample": 3.92,
+      "ageRecovered": 3.8543417920992713,
+      "ratioMba": 0.6701187891028573,
+      "ageRecoveredMba": 3.8555945507082283
+    },
+    {
+      "id": "R1.Imbrium Apennines",
+      "measured": 0.811410846850159,
+      "bound": [0.6666666666666666, 1.5],
+      "pass": true,
+      "ageSample": 3.85,
+      "ageRecovered": 3.814862241345317,
+      "ratioMba": 0.7961556632457607,
+      "ageRecoveredMba": 3.8116106035135084
+    },
+    {
+      "id": "R1.Fra Mauro Formation",
+      "measured": 1.0699243636057738,
+      "bound": [0.6666666666666666, 1.5],
+      "pass": true,
+      "ageSample": 3.85,
+      "ageRecovered": 3.8611334392139476,
+      "ratioMba": 1.1016716375933053,
+      "ageRecoveredMba": 3.865919375255479
+    },
+    {
+      "id": "R1.Mare Tranquillitatis (old)",
+      "measured": 1.0169289020683188,
+      "bound": [0.6666666666666666, 1.5],
+      "pass": true,
+      "ageSample": 3.8,
+      "ageRecovered": 3.8029126961450936,
+      "ratioMba": 1.0147133706912634,
+      "ageRecoveredMba": 3.8025348044359264
+    },
+    {
+      "id": "R1.Taurus Littrow Mares",
+      "measured": 1.4985753394100891,
+      "bound": [0.6666666666666666, 1.5],
+      "pass": true,
+      "ageSample": 3.7,
+      "ageRecovered": 3.7763876768072144,
+      "ratioMba": 1.5042697358866317,
+      "ageRecoveredMba": 3.777065354196509
+    },
+    {
+      "id": "R1.Mare Tranquillitatis (young)",
+      "measured": 1.4910175880066106,
+      "bound": [0.6666666666666666, 1.5],
+      "pass": true,
+      "ageSample": 3.58,
+      "ageRecovered": 3.6742544830695536,
+      "ratioMba": 1.500156082900845,
+      "ageRecoveredMba": 3.67554574624517
+    },
+    {
+      "id": "R1.Mare Fecunditatis",
+      "measured": 0.8390783941753878,
+      "bound": [0.6666666666666666, 1.5],
+      "pass": true,
+      "ageSample": 3.41,
+      "ageRecovered": 3.3008774614240286,
+      "ratioMba": 0.8450458657480636,
+      "ageRecoveredMba": 3.3064283621349944
+    },
+    {
+      "id": "R1.Mare Imbrium",
+      "measured": 1.6926547970130241,
+      "bound": [0.6666666666666666, 1.5],
+      "pass": false,
+      "ageSample": 3.3,
+      "ageRecovered": 3.5426619568445634,
+      "ratioMba": 1.7106090724751226,
+      "ageRecoveredMba": 3.5458229111780897
+    },
+    {
+      "id": "R1.Mare Crisium",
+      "measured": 0.7873935863564887,
+      "bound": [0.6666666666666666, 1.5],
+      "pass": true,
+      "ageSample": 3.22,
+      "ageRecovered": 2.772093546627662,
+      "ratioMba": 0.8015565545050851,
+      "ageRecoveredMba": 2.8169925071016158
+    },
+    {
+      "id": "R1.Oceanus Procellarum",
+      "measured": 1.3134111168164129,
+      "bound": [0.6666666666666666, 1.5],
+      "pass": true,
+      "ageSample": 3.15,
+      "ageRecovered": 3.3862383093521338,
+      "ratioMba": 1.317690490533979,
+      "ageRecoveredMba": 3.388020712833839
+    },
+    {
+      "id": "R1.Copernicus Crater (cont. ejecta)",
+      "measured": 1.9704653530698035,
+      "bound": [0.6666666666666666, 1.5],
+      "pass": false,
+      "ageSample": 0.8,
+      "ageRecovered": 1.5763687118877145,
+      "ratioMba": 1.994331701025229,
+      "ageRecoveredMba": 1.5954612809223394
+    },
+    {
+      "id": "R1.Copernicus Crater (crater floor)",
+      "measured": 2.010739815244584,
+      "bound": [0.6666666666666666, 1.5],
+      "pass": false,
+      "ageSample": 0.8,
+      "ageRecovered": 1.6085873808964113,
+      "ratioMba": 2.0032815815085137,
+      "ageRecoveredMba": 1.602620976239189
+    },
+    {
+      "id": "R1.Tycho crater (cont. ejecta, small craters)",
+      "measured": 3.7124214465647065,
+      "bound": [0.6666666666666666, 1.5],
+      "pass": false,
+      "ageSample": 0.109,
+      "ageRecovered": 0.40465393694033347,
+      "ratioMba": 3.7233693128182153,
+      "ageRecoveredMba": 0.4058472543538655
+    },
+    {
+      "id": "R1.Tycho crater (cont. ejecta, large craters)",
+      "measured": 1.799829212076785,
+      "bound": [0.6666666666666666, 1.5],
+      "pass": false,
+      "ageSample": 0.109,
+      "ageRecovered": 0.1961813840603165,
+      "ratioMba": 1.8742747026006419,
+      "ageRecoveredMba": 0.2042959425182463
+    },
+    {
+      "id": "R1.North Ray crater",
+      "measured": 3.1273922620005723,
+      "bound": [0.6666666666666666, 1.5],
+      "pass": false,
+      "ageSample": 0.053,
+      "ageRecovered": 0.16575178983630595,
+      "ratioMba": 3.199441615768764,
+      "ageRecoveredMba": 0.16957040558260544
+    },
+    {
+      "id": "R1.Cone Crater",
+      "measured": 3.3269689721128337,
+      "bound": [0.6666666666666666, 1.5],
+      "pass": false,
+      "ageSample": 0.025,
+      "ageRecovered": 0.08317422429306551,
+      "ratioMba": 3.403818614079859,
+      "ageRecoveredMba": 0.08509546534163642
+    },
+    {
+      "id": "R1.count",
+      "measured": 16,
+      "bound": 6,
+      "pass": true
+    },
+    {
+      "id": "R1.rowsOutside",
+      "measured": 8,
+      "bound": 0,
+      "pass": false,
+      "rmsLn": 0.6488547427149688,
+      "floor": 1.9133482976705862
+    },
+    {
+      "id": "info.Nectaris Basin",
+      "measured": 3.5442312998784042,
+      "bound": null,
+      "pass": null,
+      "ageRecovered": 4.1120400111732565
+    },
+    {
+      "id": "info.Highlands (all craters and basins)",
+      "measured": 1.161324681396654,
+      "bound": null,
+      "pass": null,
+      "ageRecovered": 4.371686996865785
+    },
+    {
+      "id": "R2.iqbal-nac",
+      "measured": 0.00642,
+      "bound": [0.0027991349021609623, 0.014320034397290016],
+      "pass": true,
+      "window": [0.006237350970777929, 0.01805435951584996],
+      "ageRecovered": 3.587649311895106
+    },
+    {
+      "id": "R2.iqbal-wac",
+      "measured": 0.00688,
+      "bound": [0.0029657956195997173, 0.015470186325985758],
+      "pass": true,
+      "window": [0.006237350970777929, 0.01805435951584996],
+      "ageRecovered": 3.6053382651657193
+    },
+    {
+      "id": "R2.robbins2014",
+      "measured": 0.00767,
+      "bound": [0.002963809572414985, 0.01850054735983643],
+      "pass": true,
+      "window": [0.006237350970777929, 0.01805435951584996],
+      "ageRecovered": 3.631532075811153
+    },
+    {
+      "id": "R2.hiesinger2000",
+      "measured": 0.0076,
+      "bound": [0.0029477121373387384, 0.018291609725730802],
+      "pass": true,
+      "window": [0.006237350970777929, 0.01805435951584996],
+      "ageRecovered": 3.6293890861160047
+    },
+    {
+      "id": "R2.neukum1983-young",
+      "measured": 0.0064,
+      "bound": [0.0012961571100354738, 0.019745754431960447],
+      "pass": true,
+      "window": [0.006237350970777929, 0.006237350970777929],
+      "ageRecovered": 3.586830542919599
+    },
+    {
+      "id": "R2.neukum1983-old",
+      "measured": 0.009,
+      "bound": [0.0028599079460137544, 0.023970427473217103],
+      "pass": true,
+      "window": [0.01805435951584996, 0.01805435951584996],
+      "ageRecovered": 3.667265047770888
+    },
+    {
+      "id": "R2.rowsOutside",
+      "measured": 0,
+      "bound": 0,
+      "pass": true
+    },
+    {
+      "id": "R3.iqbal-nac",
+      "measured": 1.0292831091400474,
+      "bound": [0.6666666666666666, 1.5],
+      "pass": true,
+      "ratioToOld": 0.3555927860173533
+    },
+    {
+      "id": "R3.iqbal-wac",
+      "measured": 1.1030323661812345,
+      "bound": [0.6666666666666666, 1.5],
+      "pass": true,
+      "ratioToOld": 0.38107139685348757
+    },
+    {
+      "id": "R3.robbins2014",
+      "measured": 1.2296886989258822,
+      "bound": [0.6666666666666666, 1.5],
+      "pass": true,
+      "ratioToOld": 0.424828141550327
+    },
+    {
+      "id": "R3.sites",
+      "measured": 1,
+      "bound": 2,
+      "pass": false,
+      "why": "the Apollo 12 and 14 recounts and the Refubium data could not be retrieved (403, bot challenge, paywall); Robbins 2014 and Iqbal 2019 are both at Apollo 11"
+    }
+  ],
+  "notRun": {
+    "O2.own": "no person has marked craters on the committed frames (R5); nothing is simulated",
+    "I1.completeness": "needs a recognition function measured on crater-like injections and a person or detector to recover them (R5, R2)"
+  }
+}

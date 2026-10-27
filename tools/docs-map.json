@@ -198,6 +198,13 @@
       "student": true
     },
     {
+      "file": "CRATER_CHRONOLOGY_GATE.md",
+      "kind": "gate",
+      "purpose": "The crater-chronology gate: whether Gravitas may state an absolute surface age with its interval, the committed functions and bounds, the measured legs and the verdict (Prompt 196, part A).",
+      "owner": 196,
+      "student": false
+    },
+    {
       "file": "CRATER_COUNTING.md",
       "kind": "feature",
       "purpose": "Crater counting: diameters with an uncertainty budget, the cumulative size-frequency distribution, relative ages as density ratios and the cumulative index, with their validation (Prompt 195).",
