@@ -22,6 +22,7 @@ const DIR = 'tests/fixtures/orbit-determination-gate';
 const TH = read(`${DIR}/thresholds.json`);
 const REC = read(`${DIR}/record.json`);
 const ORA = read(`${DIR}/oracle-results.json`);
+const SRC = read(`${DIR}/sources.json`);
 const DOC = readFileSync(
   path.join(ROOT, 'ORBIT_DETERMINATION_GATE.md'),
   'utf8'
@@ -410,5 +411,52 @@ describe('the verdict', () => {
     expect(REC.spike.branch).toBe('spike/orbit-determination-gate');
     expect(DOC).toMatch(/Verdict by the committed function: \*\*C\*\*/);
     expect(REC.syntheticLegs).toEqual({ A: false, B: false });
+  });
+});
+
+describe('the retrieved MPC data (R2) and what was not retrieved', () => {
+  const r2 = SRC.R2.extract;
+  const kep = Object.fromEntries(
+    r2.KEP.coefficient_names.map((n, i) => [n, r2.KEP.coefficient_values[i]])
+  );
+  const car = r2.CAR.coefficient_values;
+
+  test("the published orbit of Ceres meets the intake rule's elements", () => {
+    expect(r2.designation.name).toBe('Ceres');
+    expect(kep.a).toBeGreaterThanOrEqual(2.2);
+    expect(kep.a).toBeLessThanOrEqual(3.3);
+    expect(kep.e).toBeLessThan(0.25);
+    expect(kep.i).toBeLessThan(20);
+    expect(r2.magnitude_data.H).toBeLessThan(10);
+    expect(r2.categorization.orbit_type_str).toBe('Main Belt');
+  });
+
+  test("the published numbers agree with each other: Kepler's third law, and the Cartesian state against the elements", () => {
+    const k = TH.constants.k;
+    const period = ((2 * Math.PI) / k) * kep.a ** 1.5;
+    expect(Math.abs(period / r2.orbit_fit_statistics.period - 1)).toBeLessThan(
+      2e-6
+    );
+    const r = Math.hypot(car[0], car[1], car[2]);
+    const v2 = car[3] ** 2 + car[4] ** 2 + car[5] ** 2;
+    expect(-(k * k) / (2 * (v2 / 2 - (k * k) / r))).toBeCloseTo(kep.a, 6);
+  });
+
+  test('the provenance is complete, R1 is recorded as not retrieved and R0 as not fetched', () => {
+    expect(SRC.R2.sha256).toMatch(/^[0-9a-f]{64}$/);
+    expect(SRC.R3.sha256).toMatch(/^[0-9a-f]{64}$/);
+    expect(SRC.R3.committed).toBe(false);
+    expect(SRC.R1.retrieved).toBeNull();
+    expect(SRC.R1.status).toMatch(/NOT RETRIEVED/);
+    expect(SRC.R0.status).toMatch(/not fetched/);
+    for (const id of Object.keys(REC.notRun))
+      expect(REC.notRun[id]).toMatch(/R1|as A1/);
+  });
+
+  test('the rulings are in the document verbatim and the thresholds were not touched by them', () => {
+    expect(DOC).toContain('"Leave failing, labelled (Recommended)"');
+    expect(DOC).toContain('"Yes, R1–R3 (Recommended)"');
+    expect(TH.corrections).toEqual([]);
+    expect(TH.legs['A1.authentic'].bounds.kappaMax).toBe(1000);
   });
 });

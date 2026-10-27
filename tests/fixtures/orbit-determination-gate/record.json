@@ -548,7 +548,7 @@
   }
  },
  "notRun": {
-  "A1.authentic": "needs R1, R2 and R3 (the MPC observations, the published orbit, the observatory parallax constants); nothing was downloaded, none is simulated",
+  "A1.authentic": "needs R1, the MPC observations of (1) Ceres, which could not be retrieved: the documented get-obs endpoint returns HTTP 500 on every request (sources.json). R2 (the published orbit) and R3 (the observatory codes) were retrieved with Carl's word; nothing is simulated or typed from memory",
   "A2.reference": "as A1",
   "A3.observation": "as A1",
   "A4.longer": "as A1"

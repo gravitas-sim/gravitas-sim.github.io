@@ -48,10 +48,11 @@ Present: the pack above (positions to 1.05 km, so 7e-9 AU), the orbital layer (`
 two-body and Lambert code, the mover track (`js/measure/mover-track.js`, Prompt 186) and the orbit fitter for visual
 binaries (`js/measure/orbit-fit.js`, Prompt 187, a different problem: relative astrometry of a bound pair).
 
-Absent, and a request for Carl (nothing is downloaded or installed): the Minor Planet Center's observation records of a
-main-belt asteroid over one apparition (R1), its published MPCORB orbit (R2), the observatory-code table with the parallax
+When the contract was written none of the following was in the repository: the Minor Planet Center's observation records of
+a main-belt asteroid over one apparition (R1), its published orbit (R2), the observatory-code table with the parallax
 constants (R3), and a published check of the planetary mass ratios (R0). They are listed with their provenance rules in
-`thresholds.json` (`dataRequests`, `intake`). No authentic observation is read, simulated or recalled.
+`thresholds.json` (`dataRequests`, `intake`). Carl allowed R1 to R3 afterwards; what the retrieval gave is below. No
+authentic observation is read, simulated or recalled.
 
 ## The legs, the decision function and the slices
 
@@ -170,8 +171,8 @@ and the others fail in the iteration. The near-Earth status is therefore **refus
 status is not the one the contract expected.
 
 Verdict by the committed function: **C**, measured on the synthetic legs and not pending: F5, G1, H2 and N1 fail as
-committed, so neither A nor B can follow, whatever the authentic legs give. The authentic legs A1 to A4 are NOT RUN (no
-MPC observation, no published orbit and no station parallax constant is in the repository and nothing was downloaded).
+committed, so neither A nor B can follow, whatever the authentic legs give. The authentic legs A1 to A4 are NOT RUN (the
+MPC's observations could not be retrieved; see the rulings and the retrieval below).
 Part B is not built: it is authorized only by a verdict of A or B.
 
 ## What the verdict builds, and what is asked of Carl
@@ -180,21 +181,35 @@ Part B is not built: it is authorized only by a verdict of A or B.
 blinking, mark it, see it move) and the rate measurement Prompt 186 built stand. Prompt 198's populations slice does not
 depend on this verdict.
 
-The measured record supports a different reading, and the gate leaves the choice to Carl, who alone can reset a bound.
-If he restates the four legs as follows, the committed function gives a **pending A** (every synthetic leg passes; A needs
-A1 to A3 on the published arc, B needs A4): F5 judges the recovery of the state (12 of 12 to 3e-14 AU) and leaves the
-status to G2; G1's minimum ok rate becomes 0.90 (the conditioning exception G2 already allows); H2 judges the fall of
-kappa up to the half span of 60 days, with the rise at 90 days reported as the finding; N1 requires that no draw is ok and
-that every draw ends in a named status. These are recommendations, not changes: nothing in the fixture moved.
+Carl's rulings of 2026-10-27 (his answers in chat, relayed by the coordinator, verbatim): on the four failed legs F5, G1,
+H2 and N1, "Leave failing, labelled (Recommended)": the verdict stays C, measured, and no bound moves. On the data
+requests, "Yes, R1–R3 (Recommended)": the MPC observations of one numbered main-belt asteroid, its published orbit and the
+observatory-code table; R0 (a published check of the planetary mass ratios) was not in his question and was not fetched,
+so the mass ratios stay typed by recall and unchecked. The recommendations of the first version of this gate (restating
+the four legs) are therefore withdrawn.
 
-For Carl, the requests (`thresholds.json`, `dataRequests`): the MPC observations of one numbered main-belt asteroid over
-240 days (R1, the object chosen by the rule in `intake.object`, Ceres first), its published MPCORB orbit (R2), the MPC
-observatory-code table (R3, about 25 KB), and a published check of the planetary mass ratios (R0, a few hundred bytes).
-They are needed for A1 to A4 only; with the restatements above, the authentic legs would then decide between A and B.
+What the retrieval gave (`tests/fixtures/orbit-determination-gate/sources.json`; each item fetched into its own new
+directory and read as data, with the URL, date, size and SHA-256). The MPC's data page answered 403 to automated access and
+was not worked around; its API host's `robots.txt` allows `/api/` and the API documentation states no licence, so the
+numbers are used as facts with credit, as the roadmap says.
+
+- **R2, the published orbit of (1) Ceres** (`/api/get-orb`, 11,550 bytes): epoch MJD 61200 TDT, ecliptic J2000, a 2.76555
+  AU, e 0.07969, i 10.588 degrees, 7,376 of 8,017 optical observations over 1801 to 2026, normalized RMS 0.82, force model
+  AST17 on DE431. By the intake rule Ceres meets the elements (a 2.2 to 3.3 AU, e under 0.25, i under 20 degrees, H 3.34
+  under 10); the 60-observations-in-240-days condition needs R1.
+- **R3, the observatory codes** (`/api/obscodes`, 215,986 bytes, not committed; the hash identifies it).
+- **R1, the observations: not retrieved.** `/api/get-obs` returns HTTP 500 (`property 'json' of 'Request' object has no
+  setter`) on every request, including the exact example in the MPC's own documentation; the query-string form is refused
+  (501). That is a server-side fault, not a block. The old database pages are disallowed by `robots.txt`, so nothing else
+  was tried. Without observations A1 to A4 cannot run and stay NOT RUN; nothing is simulated or typed from memory.
+
+The next step is the MPC's: when `get-obs` works (or Carl supplies an 80-column file by another route he approves), A1 to
+A4 run against the committed thresholds with no bound moved, and a verdict of A or B would need them and a restatement of
+the four failed legs, which only Carl can make.
 
 ## Not done in this gate
 
-A1 to A4 (the published observations, the published elements and the station constants are not in hand), the
+A1 to A4 (the observations could not be retrieved, see above), the
 topocentric observer (the sky kernel's sidereal time and the station vector), the equatorial to ecliptic edge rotation,
 UTC to TDB, stellar aberration and the Moon's offset of the Earth from the Earth-Moon barycentre. Mercury, Saturn, Uranus
 and Neptune are absent from the pack, so `E` is a lower bound within a few percent. Laplace's method is run and reported,
