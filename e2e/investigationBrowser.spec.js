@@ -264,7 +264,9 @@ test.describe('filtering', () => {
 
     // A tag nobody prints on a card is still searchable.
     await search.fill('resonance');
-    await expect.poll(() => shownIds(page)).toEqual(['when-orbits-lock']);
+    await expect
+      .poll(() => shownIds(page))
+      .toEqual(['when-orbits-lock', 'why-rings']);
 
     // The titles are plain language - this lesson is called "Getting There
     // From Here" - so the technical name has to reach it through the id.
@@ -511,7 +513,9 @@ test.describe('everyone can use it', () => {
     }
 
     await page.locator('#investigationSearch').fill('tides');
-    await expect.poll(() => shownIds(page)).toEqual(['tides']);
+    await expect
+      .poll(() => shownIds(page))
+      .toEqual(['tides', 'tides-that-move-the-moon']);
   });
 });
 
