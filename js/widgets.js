@@ -352,6 +352,12 @@ export const LAZY_FAMILIES = Object.freeze({
     'ATMOSPHERE_WIDGETS',
     ['atmosphere-balance', 'atmosphere-greenhouse', 'atmosphere-scale']
   ),
+  tides: familyEntry(
+    () => import('./tidesWidgets.js'),
+    './tidesWidgets.js',
+    'TIDE_WIDGETS',
+    ['tides-roche', 'tides-resonance', 'tides-moon', 'tides-heating']
+  ),
 });
 // </generated:lazy-families>
 

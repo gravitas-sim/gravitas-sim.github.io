@@ -104,6 +104,12 @@ export const WIDGET_FAMILIES = Object.freeze({
     'atmosphere-greenhouse',
     'atmosphere-scale',
   ],
+  tides: [
+    'tides-roche',
+    'tides-resonance',
+    'tides-moon',
+    'tides-heating',
+  ],
 });
 
 /** Every instrument id, in the registry’s order. */

@@ -111,6 +111,8 @@ export const WHY_RINGS = {
       hints: [
         'Calcula los dos límites con las dos densidades; el instrumento de abajo lo hace.',
       ],
+      because:
+        'Los dos límites con las densidades de Marte y de Fobos son 5 466 km (rígido) y 10 585 km (fluido) desde el centro de Marte; Fobos, a 9 376 km, queda entre ambos, así que solo un cuerpo unido por la gravedad sola se desharía.',
     },
     {
       title: 'Dónde queda la órbita de Fobos',
@@ -178,6 +180,8 @@ export const TIDES_THAT_MOVE_THE_MOON = {
       hints: [
         'Mil millones de años a 3,75 cm por año serían 37 500 km si el ritmo fuera constante, y se frena en el camino.',
       ],
+      because:
+        'El modelo pone a la Luna a 414,6 mil km dentro de mil millones de años, unos 65 radios terrestres: el ritmo de 3,75 cm por año baja al alejarse la Luna, así que gana menos que los 37 500 km de un ritmo constante.',
     },
     {
       title: 'Mil millones de años adelante',
@@ -228,6 +232,8 @@ export const IOS_FIRE = {
         'el mismo',
       ],
       hints: ['El calentamiento va como e al cuadrado.'],
+      because:
+        'El calentamiento va como e al cuadrado, así que duplicar la excentricidad da cuatro veces el calor: de 9,33 × 10¹³ W a 3,73 × 10¹⁴ W con k2 = 1,5 y Q = 100.',
     },
     {
       title: 'Duplicar la excentricidad',

@@ -187,6 +187,12 @@ export default {
     'Por qué Venus es mucho más cálido que su temperatura de equilibrio y por qué una sola capa no puede alcanzarlo, por qué los dos modelos dan números distintos para el mismo planeta, y dónde la opacidad gris deja de ser una buena descripción.',
     'Son modelos de enseñanza: sin convección, sin nubes, sin calor interno, con una sola opacidad en todas las longitudes de onda. La curva de Eddington es cerca de un 4 por ciento más cálida arriba en una atmósfera gris, y un planeta gigante no tiene superficie con la que comparar.',
   ],
+  tides: [
+    'El límite de Roche rígido y el fluido de un planeta y un satélite a partir de sus dos densidades, dónde cae la resonancia de una luna en un anillo, el alejamiento de la Luna y el alargamiento del día con una Q de marea constante, o el calor que una marea puede poner en Ío.',
+    'Cuánto puede acercarse un satélite antes de que la gravedad sola deje de mantenerlo unido, qué radios de un anillo vacía una luna a una distancia dada, a qué distancia estaba la Luna en el pasado según el modelo, y el calor por órbita frente al calor que Ío irradia.',
+    'Por qué un anillo está dentro del límite de Roche y una luna fuera, por qué una resonancia abre un hueco, por qué un modelo de Q constante corrido hacia atrás pone a la Luna en contacto demasiado tarde, y por qué la fórmula del calentamiento de marea da una cota y no una predicción.',
+    'Son modelos de enseñanza de forma cerrada: un cuerpo rígido tiene una resistencia de la que carece un montón de escombros, Q se toma constante y no lo es, los números de Love se suponen, y la fórmula necesita una excentricidad y una disipación que nadie mide por separado.',
+  ],
   gwEvents: [
     'Deformación real del detector frente al tiempo, y un mapa de tono frente al tiempo.',
     'Una traza ascendente en el mapa es el chirrido de una espiral.',

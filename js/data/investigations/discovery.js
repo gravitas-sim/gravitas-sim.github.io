@@ -690,26 +690,6 @@ export const DISCOVERY = {
     },
     courseLevel: 'majors',
   },
-  'why-venus-is-hot': {
-    audience: 'intro',
-    mathematics: 'algebra',
-    prerequisites: [],
-    textbook: {
-      chapter: 10,
-      section: '10.3',
-    },
-    courseLevel: 'survey',
-  },
-  'two-greenhouse-models': {
-    audience: 'intro',
-    mathematics: 'algebra',
-    prerequisites: ['why-venus-is-hot'],
-    textbook: {
-      chapter: 8,
-      section: '8.3',
-    },
-    courseLevel: 'majors',
-  },
   'why-rings': {
     audience: 'intro',
     mathematics: 'algebra',
@@ -733,10 +713,30 @@ export const DISCOVERY = {
   'ios-fire': {
     audience: 'intro',
     mathematics: 'algebra',
-    prerequisites: [],
+    prerequisites: ['tides-that-move-the-moon'],
     textbook: {
       chapter: 12,
       section: '12.2',
+    },
+    courseLevel: 'majors',
+  },
+  'why-venus-is-hot': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: [],
+    textbook: {
+      chapter: 10,
+      section: '10.3',
+    },
+    courseLevel: 'survey',
+  },
+  'two-greenhouse-models': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['why-venus-is-hot'],
+    textbook: {
+      chapter: 8,
+      section: '8.3',
     },
     courseLevel: 'majors',
   },

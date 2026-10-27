@@ -1850,6 +1850,12 @@ export const EN_DEFERRED = {
     'Why a planet can be hotter than sunlight alone makes it: Earth, then Venus.',
   'inv.seq.planets.two-greenhouse-models':
     'Two greenhouse models for one planet, and why their free numbers differ.',
+  'inv.seq.planets.why-rings':
+    'Why rings lie inside a planet’s Roche limit, and what a moon’s resonance clears from one.',
+  'inv.seq.planets.tides-that-move-the-moon':
+    'The Moon’s tide on Earth pushes the Moon outward and lengthens the day, until the model is run backward.',
+  'inv.seq.planets.ios-fire':
+    'Jupiter’s tide flexes Io: the heat in one orbit, and why the formula gives a bound.',
   'inv.seq.planets.binary-star-planets':
     'Stability, resonance and chaos at once, deciding where a planet can survive around two stars.',
   'inv.seq.planets.extending-an-experiment':

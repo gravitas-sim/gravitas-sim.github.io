@@ -257,7 +257,7 @@ export const WEIGHING_JUPITER = {
 
 // -----------------------------------------------------------------------------
 // The ring and tide investigations (Prompt 204 part 2): three more lessons in
-// this file, on the tide instruments (js/tideWidgets.js) and the two scenarios
+// this file, on the tide instruments (js/tidesWidgets.js) and the two scenarios
 // declared in js/world/build.js ('Roche Pass', 'Ring Gap'). Same rules as above:
 // every number a step states is recomputed in tests/tidesLessons.test.js from the
 // kernel in js/kernels/tides/ and the committed record of the two scenarios
@@ -361,6 +361,8 @@ export const WHY_RINGS = {
       hints: [
         'Compute both limits for the two densities; the instrument below will.',
       ],
+      because:
+        'The two limits for Mars’s and Phobos’s densities are 5,466 km (rigid) and 10,585 km (fluid) from the center of Mars; Phobos at 9,376 km lies between them, so only a body held together by gravity alone would be pulled apart.',
       tool: RO({ system: 0 }),
     },
     {
@@ -576,6 +578,8 @@ export const TIDES_THAT_MOVE_THE_MOON = {
       hints: [
         'A billion years at 3.75 cm per year is 37,500 km if the rate were constant, and it slows as it goes.',
       ],
+      because:
+        'The model puts the Moon at 414.6 thousand km in a billion years, about 65 Earth radii: the rate of 3.75 cm per year slows as the Moon recedes, so it gains less than the 37,500 km a constant rate would give.',
       tool: TM({ k2: 0.3, Q: 12, gyr: 1 }),
     },
     {
@@ -676,7 +680,7 @@ export const IOS_FIRE = {
   courseLevel: 'majors',
   depths: ['core', 'quantitative', 'advanced'],
   mathematics: 'algebra',
-  prerequisites: [],
+  prerequisites: ['tides-that-move-the-moon'],
   tags: ['solar-system'],
   lock: { placement: true, inspector: true },
   objectives: [
@@ -750,6 +754,8 @@ export const IOS_FIRE = {
       ],
       answer: 1,
       hints: ['Heating goes as e squared.'],
+      because:
+        'The heating goes as e squared, so doubling the eccentricity gives four times the heat: from 9.33 × 10¹³ W to 3.73 × 10¹⁴ W for k2 = 1.5 and Q = 100.',
       tool: TH({ k2: 1.5, Q: 100, e: 0.0041 }),
     },
     {

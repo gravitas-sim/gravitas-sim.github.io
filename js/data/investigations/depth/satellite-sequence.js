@@ -492,6 +492,7 @@ export const INSTRUCTOR = {
       priorKnowledge: [
         'Newtonian gravity and the idea of a tide',
         'Density and a cube root',
+        'Orbital period and the idea of a resonance as a ratio of two periods',
       ],
       keyConcepts: [
         {
@@ -513,11 +514,25 @@ export const INSTRUCTOR = {
           text: 'The rigid and fluid limits of four named pairs, with the regime of a distance, and the resonance radius of three moons beside four edges and gaps in Saturn’s rings. Every number is the tides kernel’s.',
         },
         {
+          name: 'Ring and pass steps of the lesson',
+          text: 'The first and the last stage of the lesson open the two scenarios in the simulation so the numbers of the instruments can be seen on bodies; every step names the instrument it reads.',
+        },
+        {
           name: 'Roche Pass and Ring Gap scenarios',
           text: 'Two scale models declared through the geometry table with Newtonian gravity and no extra force. Their committed legs, three of which failed their bounds, are in tests/fixtures/tides/display-record.json.',
         },
       ],
       misconceptions: [
+        {
+          claim: 'A resonance always clears a gap.',
+          response:
+            'It excites the ring particles’ orbits; whether a gap results depends on collisions and on the ring’s own gravity. The scenario’s ring has no collisions and thins rather than empties.',
+        },
+        {
+          claim: 'The Roche limit is a distance from the planet’s surface.',
+          response:
+            'It is measured from the planet’s center, in units of the planet’s radius or kilometers; a Phobos orbit radius of 9,376 km is from Mars’s center.',
+        },
         {
           claim: 'Anything inside the Roche limit is torn apart.',
           response:
@@ -530,18 +545,23 @@ export const INSTRUCTOR = {
         },
       ],
       teachingNotes: [
+        'Say before the pass that the clump is held by its own gravity alone, which is the case the fluid limit describes; ask what a body with strength would do.',
+        'The Roche numbers are exact in the kernel; the steps use two decimals for Jupiter radii and kilometers to the nearest ten.',
         'The pass is a scale model: the clump is a softened swarm of 60 particles. In the recorded run its extent grows sixteenfold. At 1.5 times the fluid limit the committed control run grows about a quarter, but that is not a robust number: across eight periapses within 2 percent of it the extent ratio runs from 0.2 to 4 (five of eight under 2), because one body that escapes sets the largest extent. A longer run loosens the clump by itself, which the scenario’s summary says.',
         'The ring scenario fails three of its committed legs (the eccentricity contrast at the resonance, the thinning bound by 0.03, and the shepherd’s lane); the lesson states what the run shows (19 particles in the resonance window against 24 beside it) and no more. A ring that has no collisions cannot hold a clean gap.',
       ],
       discussion: [
+        'Why does a scale model with an exaggerated G still tell you the ratio of the two radii?',
+
         'Phobos is between the two limits. What does that tell you about what Phobos is made of?',
         'The model says where a resonance is, not whether it opens a gap. What else would you need?',
       ],
       extensions: [
+        'Find the distance at which the Moon’s fluid Roche limit for the Earth’s density would lie, and compare it to the Moon’s orbit.',
         'Run the Roche Pass scenario in the sandbox and move the periapsis with the inspector.',
       ],
       modelNotes:
-        'js/tideWidgets.js (rocheView, resonanceView), the tides kernel (rocheLimit, rocheRegimeAt, resonanceRadius), the scenarios ring-gap and roche-pass (ENGINE_GEOMETRY in js/world/build.js), tools/tides-scenarios.mjs and tests/tidesScenarios.test.js.',
+        'js/tidesWidgets.js (rocheView, resonanceView), the tides kernel (rocheLimit, rocheRegimeAt, resonanceRadius), the scenarios ring-gap and roche-pass (ENGINE_GEOMETRY in js/world/build.js), tools/tides-scenarios.mjs and tests/tidesScenarios.test.js.',
     },
     'tides-that-move-the-moon': {
       topic:
@@ -554,11 +574,16 @@ export const INSTRUCTOR = {
       priorKnowledge: [
         'Tides and the tidal bulge',
         'Angular momentum and its conservation',
+        'Kepler’s third law and the idea of a period',
       ],
       keyConcepts: [
         {
           heading: 'One process, two effects',
           body: 'The bulge pulls the Moon forward and the Moon pulls it back: the Moon gains orbital angular momentum and the Earth loses spin, and the sum is conserved.',
+        },
+        {
+          heading: 'Backward is a test',
+          body: 'Run backward, the model puts the Moon in contact 1.58 billion years ago, far more recently than the age of the lunar rocks allows; the mismatch says the model’s one number cannot hold across time.',
         },
         {
           heading: 'Q is a parameter',
@@ -567,11 +592,29 @@ export const INSTRUCTOR = {
       ],
       features: [
         {
+          name: 'Constant-Q model',
+          text: 'k2 = 0.30 and Q = 12 are fixed at values that reproduce the present rate; the instrument has no fitted parameter and shows the model’s consequences, not an evolution simulation.',
+        },
+        {
+          name: 'Forward and backward table',
+          text: 'A closed-form table for a chosen number of years in either direction, stopping at contact; it is the same function the tests recompute.',
+        },
+        {
           name: 'Moon instrument (tides family)',
           text: 'The recession rate, the day’s lengthening and a precomputed closed-form table from now to a stated time, forward or backward, with the point where the model stops. Nothing is simulated; no force acts on any engine body (the tidal-torque gate’s verdict B).',
         },
       ],
       misconceptions: [
+        {
+          claim: 'The tide slows the Moon.',
+          response:
+            'It speeds the Moon up in energy and angular momentum; a higher orbit is a slower orbit. The Earth’s spin loses what the Moon gains.',
+        },
+        {
+          claim: 'The Moon will escape.',
+          response:
+            'The Earth’s spin will slow until it matches the Moon’s, at which point the evolution stops, long before the Sun’s evolution matters.',
+        },
         {
           claim: 'The Moon recedes at a constant rate.',
           response:
@@ -584,16 +627,23 @@ export const INSTRUCTOR = {
         },
       ],
       teachingNotes: [
+        'Have students predict the sign of the Moon’s change before the table.',
+        'The contact time is a model result; say what geologic evidence says and let the mismatch stand.',
         'k2 = 0.30 and Q = 12 are chosen to match the present; the instrument does not fit them. The tier-b check holds the recession within 10 percent of 3.82 and the day within 15 percent of 2.3.',
         'The table stops at the first sample before contact; the model’s contact time (1.58 billion years) is the number to quote.',
       ],
       discussion: [
+        'What evidence beyond the lunar rocks could test the Moon’s past distance?',
+
         'What would the ocean’s geography do to Q over time?',
         'If the Moon were once close, what would the day have been?',
       ],
-      extensions: ['Change Q and find the contact time for Q = 30.'],
+      extensions: [
+        'Change Q and find the contact time for Q = 30.',
+        'Find the day length when the Moon has receded to 450 thousand km in the model.',
+      ],
       modelNotes:
-        'js/tideWidgets.js (moonView), the tides kernel (recession, tidalTrajectory, lockingTime). The constant-Q evolution is a parameterisation, as TIDAL_KERNEL.md says.',
+        'js/tidesWidgets.js (moonView), the tides kernel (recession, tidalTrajectory, lockingTime). The constant-Q evolution is a parameterisation, as TIDAL_KERNEL.md says.',
     },
     'ios-fire': {
       topic:
@@ -603,11 +653,19 @@ export const INSTRUCTOR = {
         'After Tides and the Galilean moons. It needs squares and a power of ten. It supports OpenStax Astronomy 2e chapter 12 (section 12.2, the Galilean moons).',
       overview:
         'Students read the heating of Io for k2 = 1.5 and Q = 100 (9.3 × 10¹³ W, inside the observed 0.6 to 1.6 × 10¹⁴), double the eccentricity (four times the heat), and read the k2/Q the observed heat needs (0.0177), seventeen times below the model’s largest.',
-      priorKnowledge: ['Tides', 'Orbital eccentricity', 'Power and energy'],
+      priorKnowledge: [
+        'Tides and the tidal bulge',
+        'Orbital eccentricity',
+        'Power and energy in watts and joules',
+      ],
       keyConcepts: [
         {
           heading: 'Heat is friction in a flexing',
           body: 'Io’s orbit is eccentric, so its tide rises and falls once an orbit; the friction is the heat, in proportion to e squared.',
+        },
+        {
+          heading: 'Energy in one orbit',
+          body: 'The heat times the period is the energy a tide dissipates in one orbit, 1.43 × 10¹⁹ J at the model’s maximum; the observation sets what the interior must do with it.',
         },
         {
           heading: 'A bound, not a prediction',
@@ -616,11 +674,29 @@ export const INSTRUCTOR = {
       ],
       features: [
         {
+          name: 'Observed range',
+          text: 'The observed heat flow of 6 × 10¹³ to 1.6 × 10¹⁴ W is drawn as a band beside the formula’s range, so the match is a comparison and not a fit.',
+        },
+        {
+          name: 'Eccentricity control',
+          text: 'The eccentricity can be changed and the heating follows as its square; the circular orbit has no heat from this source.',
+        },
+        {
           name: 'Heating instrument (tides family)',
           text: 'The heating of a synchronous satellite on an eccentric orbit, its energy per orbit, the range the model allows and the k2/Q the observed heat needs, against the observed flow of 0.6 to 1.6 × 10¹⁴ W.',
         },
       ],
       misconceptions: [
+        {
+          claim: 'Io is hot inside because of radioactivity.',
+          response:
+            'Its radioactive heat is a small part of what it radiates; the observed heat is of the order the tide can supply.',
+        },
+        {
+          claim: 'The heat depends on Jupiter’s tide alone.',
+          response:
+            'It depends on the radius, the orbit, the eccentricity squared and k2/Q; the interior sets the last.',
+        },
         {
           claim: 'The formula predicts Io’s heat.',
           response:
@@ -633,18 +709,23 @@ export const INSTRUCTOR = {
         },
       ],
       teachingNotes: [
+        'Ask for the sign and size of the change before the eccentricity is doubled; the factor of four surprises students who expect two.',
+        'The bound’s width is the lesson: say that agreement within the range is not evidence for a value of k2/Q.',
         'The observed heat flow is a range (Veeder et al. 1994; Spencer et al. 2000); the tier-b check holds the formula within a factor of two of it.',
         'The numbers in the steps are the kernel’s for Io’s radius, orbit and mass, with e = 0.0041.',
       ],
       discussion: [
+        'If k2/Q were ten times larger, what would Io’s surface look like?',
+
         'What would change if Io’s interior were not uniform?',
         'Why does the Moon not heat this way?',
       ],
       extensions: [
+        'Compare Io’s heating to that of Europa at its eccentricity of 0.0094.',
         'Find the eccentricity that gives the lower observed bound at k2/Q = 0.015.',
       ],
       modelNotes:
-        'js/tideWidgets.js (heatingView), the tides kernel (tidalHeating, heatingRange, requiredK2OverQ).',
+        'js/tidesWidgets.js (heatingView) and the tides kernel (tidalHeating, heatingRange, requiredK2OverQ), recomputed in tests/tidesLessons.test.js for every number a step states.',
     },
     'weighing-jupiter': {
       topic:
@@ -765,15 +846,25 @@ export const INSTRUCTOR = {
       },
       {
         from: 'the-model-run-backward',
+        to: 'the-model-run-backward',
+        text: 'The model run backward stops at contact 1.58 billion years ago.',
+      },
+      {
+        from: 'what-the-model-leaves-out',
         to: 'what-the-model-leaves-out',
-        text: 'The model run backward stops at contact 1.58 billion years ago; the close.',
+        text: 'What the constant-Q model leaves out; the close.',
       },
     ],
     'ios-fire': [
       {
         from: 'a-moon-that-melts',
+        to: 'a-moon-that-melts',
+        text: 'Where Io’s heat comes from.',
+      },
+      {
+        from: 'heating-at-the-maximum',
         to: 'heating-at-the-maximum',
-        text: 'Where Io’s heat comes from, and its size at k2 = 1.5 and Q = 100.',
+        text: 'Its size at k2 = 1.5 and Q = 100, and the energy in one orbit.',
       },
       {
         from: 'double-predict',

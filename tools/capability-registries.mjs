@@ -86,6 +86,7 @@ export const FAMILY_ORDER = Object.freeze([
   'imaging',
   'jovian',
   'atmosphere',
+  'tides',
 ]);
 
 /** The three families whose name is not their module's (`<name>Widgets.js`). */
