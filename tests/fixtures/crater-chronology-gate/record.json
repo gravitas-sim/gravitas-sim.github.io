@@ -307,8 +307,8 @@
  ],
  "notRun": {
   "R1.sites": "the sample ages and published counts at the returned-sample sites are not in the repository (data requests R0 to R2); nothing was downloaded and no value was typed from memory",
-  "R2.coverage": "as R1",
-  "R3.recount": "as R1: no recount is in hand",
+  "R2.coverage": "needs the same sample ages and published counts as R1, and the RMS misfit R1 measures (data requests R0 to R2)",
+  "R3.recount": "needs a published recount made after 2001 at two or more sample sites; none is in hand (data request R2)",
   "O2.own": "no person has marked craters on the committed frames (R5); nothing is simulated",
   "I1.completeness": "needs a recognition function measured on crater-like injections and a person or detector to recover them (R5, R2)"
  }
