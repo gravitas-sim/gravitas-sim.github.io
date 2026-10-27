@@ -1,14 +1,7 @@
-// =============================================================================
-// Two scale-model systems for the rings and tides displays (Prompt 204 part 2)
-// -----------------------------------------------------------------------------
-// Each is one `published-system` rule of the geometry table (ENGINE_GEOMETRY in
-// js/world/build.js) and nothing else: the pull is the engine's own Newtonian
-// gravity, no extra force (verdict B of TIDAL_TORQUE_GATE.md). Both are
-// generators of bodies for the world builder; `published` is its constructor of
-// one named body, and every random draw is from the seeded generator, in the order
-// written, so a seed reproduces the world. The legs they are judged against are in
-// tests/fixtures/tides/display-thresholds.json, run by tools/tides-scenarios.mjs.
-// =============================================================================
+// Two scale-model systems for the rings and tides displays (Prompt 204 part 2):
+// one `published-system` rule each, Newtonian gravity only (TIDAL_TORQUE_GATE.md).
+// Draws come from the seeded generator in the order written. Design, bounds and
+// failed legs: D-R10-88, tests/fixtures/tides/display-thresholds.json.
 import {
   CERES_MASS_UNIT,
   EARTH_MASS_UNIT,
@@ -16,20 +9,11 @@ import {
 } from '../physics.js';
 
 /**
- * A ringed planet at the scale of Saturn and Mimas. The planet's mass is true
- * (95.16 Earth masses) and every length is a scale model, 100 units to the
- * resonant moon's orbit, with G carrying the exaggeration of distance as the
- * Earth-Moon System's does (js/data/tidePresets.js). The ring is 200 particles of
- * negligible mass, evenly spaced in radius between 0.52 and 0.76 of that orbit and
- * at random phases, so the moon's 2:1 resonance (0.63 of it, where the Cassini
- * Division lies) is inside it. The resonant moon (0.1 percent of the planet, about
- * 15,000 times Mimas's true ratio, so that twenty orbits can show the effect) and
- * the shepherd inside the ring at 72 (3e-5, a moonlet that clears a lane about its
- * orbit as Pan does in the Encke Gap) are exaggerated, and the scenario says so.
- * Draws: the moons' phases, then one for each particle. A particle's contact
- * radius is four thousandths of a unit: the engine's collisions are inelastic
- * bounces that heat a ring by themselves, and a gap made by them would teach the
- * wrong thing.
+ * A Saturn-like ringed planet (true mass), lengths scaled so the resonant moon
+ * orbits at 100 with G carrying the distance. 200 massless particles between 52 and
+ * 76 put the moon's 2:1 resonance (63) inside the ring; a shepherd at 72 clears a
+ * lane. Both moons are exaggerated in mass and the scenario says so. Draws: moon
+ * phases, then one per particle. Contact radius 0.004, so collisions do not make a gap.
  */
 export function* ringGapSystem(G, published) {
   const M = 95.16 * EARTH_MASS_UNIT;
@@ -87,17 +71,11 @@ export function* ringGapSystem(G, published) {
 }
 
 /**
- * The planet-and-clump geometry of Shoemaker-Levy 9 at Jupiter: a planet of one
- * Jupiter mass drawn 15 units across, and a clump of 60 particles (one thousandth
- * of the planet's mass, 2 units across, so 2.37 times less dense than the planet)
- * on a bound ellipse whose periapsis is `periapsisRadii` planet radii from the
- * planet's centre (1.3 by default; the tests' control uses 1.5 times the fluid
- * limit): inside the rigid Roche limit (2^(1/3) 2.37^(1/3) = 1.68 radii) and the
- * fluid one (2.44 x 2.37^(1/3) = 3.26). The clump starts near virial balance (a
- * disc of equal masses, random motion at the speed its own gravity sets), so what
- * happens after periapsis is the planet's tide. G is large, so a pass takes about
- * ten time units. A rubble particle's contact radius is a hundredth of a unit, so
- * the engine's collisions do not heat the clump.
+ * Shoemaker-Levy 9 at Jupiter: a 15-unit planet and a 60-particle clump (a thousandth
+ * of its mass, 2 units across, 2.37 times less dense) on an e = 0.9 orbit whose
+ * periapsis is `periapsisRadii` radii out (1.3; the tests' control uses 1.5 times
+ * the fluid limit), inside both Roche limits (1.68 and 3.26 radii). The clump starts
+ * near virial balance. Contact radius 0.01, so collisions do not heat it.
  */
 export function* rochePassSystem(G, published, periapsisRadii = 1.3) {
   const Mp = JUPITER_MASS_UNIT;
@@ -120,9 +98,7 @@ export function* rochePassSystem(G, published, periapsisRadii = 1.3) {
     radius: Rp,
     color: '#d9b98a',
   });
-  // Virial random motion (a uniform disc's 0.35 G m / R per axis, below the
-  // 0.42 of a full balance, so the clump holds for the pass), drawn from the
-  // seeded generator, with no net drift inside the clump.
+  // Random motion at 0.35 G m / R per axis (below balance, so it holds), no net drift.
   const sigma = Math.sqrt((0.35 * G * mc) / Rc);
   const gauss = () =>
     Math.sqrt(-2 * Math.log(1 - Math.random())) *
@@ -160,7 +136,7 @@ export function* rochePassSystem(G, published, periapsisRadii = 1.3) {
   }
 }
 
-/** The two scale models as geometry-table entries: one published-system rule each, recentered. */
+/** The two geometry-table entries. */
 export const TIDAL_GEOMETRY = {
   // prettier-ignore
   'ring-gap': { recenter: true, steps: [{ rule: { name: 'published-system', params: { system: 'ring-gap' } } }] },
@@ -168,7 +144,7 @@ export const TIDAL_GEOMETRY = {
   'roche-pass': { recenter: true, steps: [{ rule: { name: 'published-system', params: { system: 'roche-pass' } } }] },
 };
 
-/** The generator for a tidal scale-model system, or null for any other system. */
+/** The generator for a tidal system, or null. */
 export function tidalSystem(system, G, published, periapsisRadii) {
   if (system === 'ring-gap') return ringGapSystem(G, published);
   if (system === 'roche-pass')

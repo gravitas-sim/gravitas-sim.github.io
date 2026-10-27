@@ -1,7 +1,4 @@
-// Rings and tides (Prompt 204 part 2): the settings of the two scale-model scenarios.
-// G carries the distance exaggeration, as in Earth-Moon System; the bodies are declared
-// in js/world/build.js (ENGINE_GEOMETRY) and the bounds they were judged against are in
-// tests/fixtures/tides/display-thresholds.json.
+// Rings and tides (Prompt 204 part 2): settings of the two scale-model scenarios; G carries the distance.
 const EMPTY = {
   num_black_holes: 0,
   num_stars: 0,
