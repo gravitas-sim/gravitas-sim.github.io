@@ -1873,6 +1873,12 @@ export const ES_DEFERRED = {
     'Por qué un planeta puede estar más caliente de lo que la luz solar sola lo deja: la Tierra y Venus.',
   'inv.seq.planets.two-greenhouse-models':
     'Dos modelos de efecto invernadero para un planeta, y por qué sus números libres difieren.',
+  'inv.seq.planets.why-rings':
+    'Por qué los anillos están dentro del límite de Roche de un planeta, y qué despeja en uno la resonancia de una luna.',
+  'inv.seq.planets.tides-that-move-the-moon':
+    'La marea de la Luna sobre la Tierra empuja a la Luna hacia fuera y alarga el día, hasta que el modelo se corre hacia atrás.',
+  'inv.seq.planets.ios-fire':
+    'La marea de Júpiter flexiona a Ío: el calor de una órbita, y por qué la fórmula da una cota.',
   'inv.seq.planets.binary-star-planets':
     'Estabilidad, resonancia y caos a la vez, decidiendo dónde puede sobrevivir un planeta alrededor de dos estrellas.',
 
@@ -3727,16 +3733,10 @@ export const ES_DEFERRED = {
   'nb.stellar.limit.fitted':
     'La comparación se dibujó con cada estrella ajustada a su recuadro, así que los tamaños aparentes no son comparables.',
   // --- Words a lesson computes ----------------------------------------------
-  // Here rather than in the start-up catalog because js/i18n/lesson.js is
-  // the only module that reads them and js/investigations.js is the only
-  // module that imports it: a visitor who never opens a lesson was
-  // downloading a hundred and thirty-three answer-checking sentences in
-  // order to never render one. js/investigationsLoader.js awaits this
-  // catalog before initInvestigations(), so the lookup cannot outrun it.
-  //
-  // Probe rows and answer-checking messages come out of functions inside the
-  // lesson files, which a translation shadow cannot reach. js/i18n/lesson.js
-  // looks them up by what they say. See that file.
+  // Here, not in the start-up catalog: only js/i18n/lesson.js reads them, and only
+  // js/investigations.js imports it. js/investigationsLoader.js awaits this catalog
+  // before initInvestigations(). Probe rows and answer-checking messages come out of
+  // functions in the lesson files, which a shadow cannot reach; lesson.js looks them up.
   'lessonFn.distancesHaveToBePositiveNumbers38':
     'Las distancias tienen que ser números positivos.',
   'lessonFn.closestApproachIsLargerThanFurthest70':

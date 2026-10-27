@@ -406,6 +406,14 @@ export const NEVER_PRECACHED = [
   /^(js\/craterWidgets\.js|js\/i18n\/(en|es)\.craters\.js)$/,
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(which-surface-is-older|craters-by-size|what-a-crater-diameter-is-worth)\.js$/,
   /^images\/investigations\/(which-surface-is-older|craters-by-size|what-a-crater-diameter-is-worth)\.webp$/,
+  // The ring and tide kernel, family and lessons (Prompt 204 part 2): imported by no page
+  // at start-up, kept by the service worker after the first online use, not installed.
+  /^(js\/tidesWidgets\.js|js\/i18n\/(en|es)\.tides\.js)$/,
+  /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(why-rings|tides-that-move-the-moon|ios-fire)\.js$/,
+  /^images\/investigations\/(why-rings|tides-that-move-the-moon|ios-fire)\.webp$/,
+  // The two scenarios' thumbnails: the gallery shows its titled fallback until the first online
+  // visit has kept them (13 KB the first-visit tier has no room for under Carl's data-budget ceiling).
+  /^images\/scenarios\/(ring-gap|roche-pass)\.webp$/,
   // The validation suite's groups and harness: fetched when the suite runs,
   // like physicsChecks.js itself (ON_DEMAND_ONLY below).
   /^js\/validation\/(groups\/|harness\.js$)/,

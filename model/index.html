@@ -128,6 +128,7 @@ try {
           <li><span class="gs-en"><a href="#interiors">Stellar interiors</a></span><span class="gs-es" lang="es"><a href="#interiors">Interiores estelares</a></span></li>
           <li><span class="gs-en"><a href="#spacetime">The spacetime view</a></span><span class="gs-es" lang="es"><a href="#spacetime">La vista del espacio-tiempo</a></span></li>
           <li><span class="gs-en"><a href="#lensing">Gravitational lensing</a></span><span class="gs-es" lang="es"><a href="#lensing">Lentes gravitacionales</a></span></li>
+          <li><span class="gs-en"><a href="#tides">Rings and tides</a></span><span class="gs-es" lang="es"><a href="#tides">Anillos y mareas</a></span></li>
           <li><span class="gs-en"><a href="#visual">Visual effects</a></span><span class="gs-es" lang="es"><a href="#visual">Efectos visuales</a></span></li>
           <li>
             <span class="gs-en"><a href="#conservation">The conservation check</a></span><span class="gs-es" lang="es"><a href="#conservation">La comprobación de conservación</a></span>
@@ -1407,6 +1408,38 @@ try {
         source. No authentic event light curve is shipped, because its terms of use could not be confirmed;
         the data in the fit are synthetic, with a truth the real sky does not give, and are labeled
         so.</span><span class="gs-es" lang="es"><strong>Masa puntual, o una galaxia circular.</strong> La lente es un punto o una esfera isoterma singular. La curva de microlente añade un disco de fuente de brillo uniforme y una mezcla de luz, y deja fuera el oscurecimiento del limbo, el paralaje, el movimiento orbital de la lente, una lente binaria y una segunda fuente. No se incluye ninguna curva de luz de un suceso real, porque no se pudieron confirmar sus condiciones de uso; los datos del ajuste son sintéticos, con una verdad que el cielo real no da, y así se indica.</span>
+      </p>
+
+      <h2 id="tides"><span class="gs-en">Rings and tides</span><span class="gs-es" lang="es">Anillos y mareas</span></h2>
+      <p><span class="gs-en"><span class="doc-badge is-approximate">Approximated</span></span><span class="gs-es" lang="es"><span class="doc-badge is-approximate">Aproximado</span></span></p>
+      <p>
+        <span class="gs-en">The ring and tide instruments (Where does a moon fall apart?, Where does a moon&rsquo;s
+        resonance fall in the ring?, How the Moon&rsquo;s orbit and the day change, How much heat does Io&rsquo;s tide make?) compute with a pure kernel, <code>js/kernels/tides</code>: closed forms
+        for the rigid and the fluid Roche limit, the radius of a p:q resonance, the constant-Q recession of
+        the Moon and the lengthening of the day, and the tidal heating of a synchronous satellite. Nothing
+        is simulated by them: the Moon&rsquo;s table is the closed form sampled in time, forward or
+        backward, and the instruments read the same numbers the tests recompute.</span><span class="gs-es" lang="es">Los instrumentos de anillos y mareas (¿Dónde se desintegra una luna?, ¿Dónde cae la resonancia de una luna dentro del anillo?, Cómo cambian la órbita de la Luna y el día, ¿Cuánto calor produce la marea de Ío?) calculan con un núcleo puro, <code>js/kernels/tides</code>: formas cerradas para el límite de Roche rígido y fluido, el radio de una resonancia p:q, el alejamiento de la Luna con Q constante y el alargamiento del día, y el calentamiento de marea de un satélite sincrónico. Ninguno simula nada: la tabla de la Luna es la forma cerrada muestreada en el tiempo, hacia delante o hacia atrás, y los instrumentos leen los mismos números que recalculan las pruebas.</span>
+      </p>
+      <p>
+        <span class="gs-en"><strong>What it leaves out.</strong> The Roche limits are for a body held by
+        gravity alone; a body with strength survives inside the fluid limit. The Moon&rsquo;s evolution takes
+        k<sub>2</sub> and Q as constants, which fits the present and, run backward, puts the Moon in contact
+        1.58 billion years ago, far more recently than the rocks allow: the model fails, and the investigation says
+        so. The heating of Io is a bound over three orders of magnitude, from a k<sub>2</sub>/Q nobody
+        measures for Io.</span><span class="gs-es" lang="es"><strong>Lo que deja fuera.</strong> Los límites de Roche valen para un cuerpo que solo la gravedad mantiene unido; un cuerpo con resistencia sobrevive dentro del límite fluido. La evolución de la Luna toma k<sub>2</sub> y Q como constantes, lo que ajusta el presente y, corrida hacia atrás, pone a la Luna en contacto hace 1580 millones de años, mucho más recientemente de lo que permiten las rocas: el modelo falla, y la investigación lo dice. El calentamiento de Ío es una cota de tres órdenes de magnitud, a partir de un k<sub>2</sub>/Q que nadie mide para Ío.</span>
+      </p>
+      <p>
+        <span class="gs-en"><strong>Two scale-model scenarios.</strong> Ring Gap (a moon and a ring) and Roche Pass (a clump inside the limit) are ordinary
+        Newtonian N-body worlds declared through the scenario geometry table, with no extra force and no
+        change to the integrator (the engine has no tidal torque; the gate that decided so is
+        <code>TIDAL_TORQUE_GATE.md</code>). Lengths are a scale model with G carrying the distance, as in the
+        Earth-Moon System, the resonant moon and the shepherd are far heavier than the real Mimas and Pan, and
+        the collisions of the engine are switched off in effect by a tiny contact radius. Their legs were
+        committed before the scenarios were built: three of them failed (the eccentricity contrast at the
+        resonance, the thinning of the ring and a lane about the shepherd) and are reported as failed in
+        <code>tests/fixtures/tides/display-record.json</code>; a collisionless ring thins at a resonance
+        and does not empty. The control of the Roche pass depends on its exact periapsis, because one body
+        that escapes sets the largest extent.</span><span class="gs-es" lang="es"><strong>Dos escenarios a escala.</strong> Hueco en el anillo y Paso de Roche son mundos newtonianos de N cuerpos corrientes, declarados con la tabla de geometría de escenarios, sin fuerza adicional ni cambio del integrador (el motor no tiene par de marea; la puerta que lo decidió es <code>TIDAL_TORQUE_GATE.md</code>). Las longitudes son un modelo a escala con G que lleva la distancia, como en el Sistema Tierra-Luna; la luna resonante y la pastora son mucho más pesadas que Mimas y Pan reales, y las colisiones del motor quedan anuladas en la práctica por un radio de contacto diminuto. Sus pruebas se fijaron antes de construir los escenarios: tres fallaron (el contraste de excentricidad en la resonancia, el adelgazamiento del anillo y un carril alrededor de la pastora) y se informan como fallidas en <code>tests/fixtures/tides/display-record.json</code>; un anillo sin colisiones se adelgaza en una resonancia y no se vacía. El control del paso de Roche depende de su periastro exacto, porque un cuerpo que escapa fija la mayor extensión.</span>
       </p>
 
       <h2 id="visual"><span class="gs-en">Visual effects</span><span class="gs-es" lang="es">Efectos visuales</span></h2>
@@ -3204,9 +3237,9 @@ try {
         <span class="gs-en">Each guided investigation relies on a different part of the model. This
         table is generated from the same <code>modelNotes</code> field that the
         instructor guide prints, so it covers every one of the
-        <!--fact:investigations-->72<!--/fact-->
+        <!--fact:investigations-->75<!--/fact-->
         investigations and cannot fall behind them. It listed six of the twelve when it
-        was maintained by hand.</span><span class="gs-es" lang="es">Cada investigación guiada se apoya en una parte distinta del modelo. Esta tabla se genera a partir del mismo campo <code>modelNotes</code> que imprime la guía docente, de modo que cubre cada una de las <!--fact:investigations-->72<!--/fact--> investigaciones y no puede quedar rezagada respecto a ellas. Cuando se mantenía a mano, enumeraba seis de las doce.</span>
+        was maintained by hand.</span><span class="gs-es" lang="es">Cada investigación guiada se apoya en una parte distinta del modelo. Esta tabla se genera a partir del mismo campo <code>modelNotes</code> que imprime la guía docente, de modo que cubre cada una de las <!--fact:investigations-->75<!--/fact--> investigaciones y no puede quedar rezagada respecto a ellas. Cuando se mantenía a mano, enumeraba seis de las doce.</span>
       </p>
       <div class="doc-table-wrap">
         <table class="doc-table">
@@ -3499,6 +3532,18 @@ try {
               <td>js/jovianWidgets.js (sequenceOf, fitMoon, weighAll): the data file made by the galilean-2025-11 manifest read by js/satellites/galilean.js, the plan and alias analysis of cadence.js, the frames of sequence.js through js/forward/models/ccd.js, the fit and Kepler law of weigh.js. See SATELLITE_EPHEMERIS.md for the validation contract and the failing legs.</td>
             </tr>
             <tr>
+              <td>Why Rings?</td>
+              <td>js/tidesWidgets.js (rocheView, resonanceView), the tides kernel (rocheLimit, rocheRegimeAt, resonanceRadius), the scenarios ring-gap and roche-pass (ENGINE_GEOMETRY in js/world/build.js), tools/tides-scenarios.mjs and tests/tidesScenarios.test.js.</td>
+            </tr>
+            <tr>
+              <td>Tides That Move the Moon</td>
+              <td>js/tidesWidgets.js (moonView), the tides kernel (recession, tidalTrajectory, lockingTime). The constant-Q evolution is a parameterisation, as TIDAL_KERNEL.md says.</td>
+            </tr>
+            <tr>
+              <td>Io’s Fire</td>
+              <td>js/tidesWidgets.js (heatingView) and the tides kernel (tidalHeating, heatingRange, requiredK2OverQ), recomputed in tests/tidesLessons.test.js for every number a step states.</td>
+            </tr>
+            <tr>
               <td>Why Venus Is Hot</td>
               <td>js/kernels/atmospheres/ (ATMOSPHERES.md): equilibriumTemperature, oneLayer, grayGround and grayDepthFor, scaleHeight and the six-body planet table, validated against an independent numpy and scipy oracle (npm run atmospheres:validate).</td>
             </tr>
@@ -3537,10 +3582,10 @@ try {
         to
         <!--fact:stabilityScenarios-->12<!--/fact-->
         of the
-        <!--fact:scenarios-->59<!--/fact-->
+        <!--fact:scenarios-->61<!--/fact-->
         shipped scenarios in a real browser &mdash; the ones most exposed to
         integrator error, which is a different and smaller claim than the one
-        this sentence used to make.</span><span class="gs-es" lang="es">Y si prefieres no hacer ninguna de las dos cosas, la batería de validación ya ha hecho buena parte: <code>npm run validate:physics</code> imprime la tabla descrita en <a href="#validation">Validación</a>, y <code>npm run validate:scenarios</code> extiende la auditoría de conservación a <!--fact:stabilityScenarios-->12<!--/fact--> de los <!--fact:scenarios-->59<!--/fact--> escenarios incluidos en un navegador real &mdash; los más expuestos al error del integrador, lo cual es una afirmación distinta y menor que la que solía hacer esta oración.</span>
+        this sentence used to make.</span><span class="gs-es" lang="es">Y si prefieres no hacer ninguna de las dos cosas, la batería de validación ya ha hecho buena parte: <code>npm run validate:physics</code> imprime la tabla descrita en <a href="#validation">Validación</a>, y <code>npm run validate:scenarios</code> extiende la auditoría de conservación a <!--fact:stabilityScenarios-->12<!--/fact--> de los <!--fact:scenarios-->61<!--/fact--> escenarios incluidos en un navegador real &mdash; los más expuestos al error del integrador, lo cual es una afirmación distinta y menor que la que solía hacer esta oración.</span>
       </p>
     </main>
 

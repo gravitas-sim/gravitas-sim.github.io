@@ -894,6 +894,45 @@ export const MANIFEST = [
     objectiveCount: 4,
   },
   {
+    id: 'why-rings',
+    title: 'Why Rings?',
+    subtitle:
+      'Where a moon falls apart, and where a moon’s pull leaves a mark in a ring',
+    duration: '15-25 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/why-rings.webp',
+    depths: 3,
+    stepCount: 8,
+    gradedCount: 4,
+    objectiveCount: 4,
+  },
+  {
+    id: 'tides-that-move-the-moon',
+    title: 'Tides That Move the Moon',
+    subtitle:
+      'The Moon’s recession, the lengthening day, and the model that fails when run backward',
+    duration: '20-30 min',
+    level: 'Majors and upper-level astronomy',
+    thumbnail: 'images/investigations/tides-that-move-the-moon.webp',
+    depths: 3,
+    stepCount: 6,
+    gradedCount: 4,
+    objectiveCount: 4,
+  },
+  {
+    id: 'ios-fire',
+    title: 'Io’s Fire',
+    subtitle:
+      'Tidal heating as energy per orbit, bounded by what nobody knows about Io’s interior',
+    duration: '15-25 min',
+    level: 'Majors and upper-level astronomy',
+    thumbnail: 'images/investigations/ios-fire.webp',
+    depths: 3,
+    stepCount: 6,
+    gradedCount: 4,
+    objectiveCount: 4,
+  },
+  {
     id: 'why-venus-is-hot',
     title: 'Why Venus Is Hot',
     subtitle:

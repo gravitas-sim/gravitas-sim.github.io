@@ -11,15 +11,15 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 73 investigations and 1149 steps: 1059 steps
+Across 75 investigations and 1159 steps: 1067 steps
 declare a scene, 157 let a reader change one, 163 read the
-running integration, 667 show a prescribed model result, 146 draw
-on a stored dataset, 546 put a self-contained panel beside the text,
-289 keep something, and 56 are prose.
-Of 150 prediction loops, 150 are returned to,
-150 produce a measurement before they are answered, and
+running integration, 675 show a prescribed model result, 146 draw
+on a stored dataset, 554 put a self-contained panel beside the text,
+293 keep something, and 58 are prose.
+Of 152 prediction loops, 152 are returned to,
+152 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
-150 hold their marking until the experiment settles them.
+152 hold their marking until the experiment settles them.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -987,20 +987,6 @@ Of 150 prediction loops, 150 are returned to,
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:crater-budget`, control crater-budget/recognition, measures the uncertainty of a crater diameter from where its rim is, a fraction of the diameter that the reader sets, which dominates the quadrature sum with the scale, the circle's placement and the view: 5.0 percent of 5.3, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
-## What Is in This Field? (`what-is-in-this-field`)
-
-- **Steps:** 10. Scene declared on 10; a reader can change something on 0; 10 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 0 live engine, 10 prescribed model, 0 stored dataset, 10 self-contained panel.
-- **What students do:** move-an-instrument-control, press-an-instrument-preset, commit-a-prediction, record-values, choose-an-option.
-- **Objects the steps declare:** star.
-- **Instruments:** field-sources, field-completeness.
-- **Stored data:** none.
-- **Evidence kept:** notebook-fields.
-- **Prediction loops:** predict-the-list → how-many-sources, lower-the-threshold, the-width, why-the-width, one-magnitude, the-curve, how-faint, what-you-worked-out → how-many-sources.
-- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
-- **Scene rebuilds:** none.
-- **Accepted central experiment** (reviewed 2026-09-11): object `panel:field-sources`, control field-sources/sigma, measures the sources a detector lists in one synthetic frame of forty stars as its threshold falls: 30 at 4 sigma, none of them noise, and 44 at 2.5 sigma, seven of them only noise, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
-
 ## Weighing Jupiter From Its Moons (`weighing-jupiter`)
 
 - **Steps:** 7. Scene declared on 7; a reader can change something on 0; 7 declare a scene nobody on that step can touch.
@@ -1014,6 +1000,48 @@ Of 150 prediction loops, 150 are returned to,
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:moon-fit`, control moon-fit/moon, measures the period a sinusoid fitted to one moon's measured distances from Jupiter gives when the frames are taken once a night, which for Io is the alias near 2.30 days and not its own 1.77, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## Why Rings? (`why-rings`)
+
+- **Steps:** 8. Scene declared on 6; a reader can change something on 0; 6 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 6 prescribed model, 0 stored dataset, 6 self-contained panel.
+- **What students do:** move-an-instrument-control, record-values, commit-a-prediction, read, run-the-simulation.
+- **Objects the steps declare:** star.
+- **Instruments:** tides-roche, tides-resonance.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** phobos-predict → phobos-where, where-the-gap-falls, what-rings-tell → phobos-where.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough; reset: rebuilds the scenario, discarding the previous step's scene.
+- **Scene rebuilds:** 2 step(s) on arrival (a-pass-inside-the-limit, a-ring-with-a-resonance).
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:tides-roche`, control tides-roche/system, measures the rigid Roche limit of a pair from its two densities: Phobos about Mars 5,466 km, Shoemaker-Levy 9 about Jupiter 117,327 km, and Phobos's orbit at 9,376 km lying between the rigid and the fluid limit, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## Tides That Move the Moon (`tides-that-move-the-moon`)
+
+- **Steps:** 6. Scene declared on 6; a reader can change something on 0; 6 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 6 prescribed model, 0 stored dataset, 6 self-contained panel.
+- **What students do:** move-an-instrument-control, record-values, commit-a-prediction.
+- **Objects the steps declare:** star.
+- **Instruments:** tides-moon.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** forward-predict → forward-one-billion, the-model-run-backward, what-the-model-leaves-out → forward-one-billion.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:tides-moon`, control tides-moon/gyr, measures the Moon's distance in a constant-Q model a given time on: 62.9 Earth radii in half a billion years and 65.1 in one billion, against the 60.3 of today, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## Io’s Fire (`ios-fire`)
+
+- **Steps:** 6. Scene declared on 6; a reader can change something on 0; 6 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 6 prescribed model, 0 stored dataset, 6 self-contained panel.
+- **What students do:** move-an-instrument-control, record-values, commit-a-prediction.
+- **Objects the steps declare:** star.
+- **Instruments:** tides-heating.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** double-predict → double-the-eccentricity, the-bound, what-heat-is → double-the-eccentricity.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:tides-heating`, control tides-heating/e, measures the tidal heating of Io at k2 = 1.5 and Q = 100, 9.33 x 10^13 W at its eccentricity of 0.0041 and four times that when the eccentricity is doubled, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Why Venus Is Hot (`why-venus-is-hot`)
 

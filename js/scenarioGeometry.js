@@ -66,8 +66,8 @@ const [T, C, P, N] = ['text', 'color', 'positive', 'count'];
  */
 // prettier-ignore
 export const GEOMETRY_RULES = Object.freeze({
-  'published-system': spec({ detuned: 'bool',
-    system: Object.freeze(['galilean', 'pluto-neptune', 'jupiter-trojans', 'trappist-1', 'hd209458', 'kuiper-belt', 'solar-system']) }),
+  'published-system': spec({ detuned: 'bool', periapsisRadii: optional(P),
+    system: Object.freeze(['galilean', 'pluto-neptune', 'jupiter-trojans', 'trappist-1', 'hd209458', 'kuiper-belt', 'solar-system', 'ring-gap', 'roche-pass']) }),
   'restricted-three-body': spec({ primaryName: T, primaryColor: C, primaryRadiusInSuns: P,
     secondaryName: T, secondaryColor: C, secondaryRadiusInSuns: P, drawnSolarRadii: P,
     tracerName: T, tracerColor: C, tracerRadius: P }),

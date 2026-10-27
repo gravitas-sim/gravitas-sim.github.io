@@ -92,6 +92,10 @@
       "en": "Integrators in Practice",
       "es": "Integradores en la práctica"
     },
+    "ios-fire": {
+      "en": "Io’s Fire",
+      "es": "El fuego de Ío"
+    },
     "keplers-laws": {
       "en": "Kepler's Laws",
       "es": "Las leyes de Kepler"
@@ -212,6 +216,10 @@
       "en": "Tides",
       "es": "Mareas"
     },
+    "tides-that-move-the-moon": {
+      "en": "Tides That Move the Moon",
+      "es": "Mareas que mueven la Luna"
+    },
     "transit-photometry": {
       "en": "Finding Planets by Their Shadows",
       "es": "Encontrar planetas por sus sombras"
@@ -291,6 +299,10 @@
     "who-gets-counted": {
       "en": "Who Gets Counted",
       "es": "Quién entra en la cuenta"
+    },
+    "why-rings": {
+      "en": "Why Rings?",
+      "es": "¿Por qué hay anillos?"
     },
     "why-the-bright-ones-win": {
       "en": "Why the Bright Ones Win",

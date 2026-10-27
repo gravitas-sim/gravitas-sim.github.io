@@ -251,15 +251,16 @@ describe('the document inventory', () => {
     // 617 after Weighing Jupiter From Its Moons (Prompt 193): 11 more.
     // 639 after Why Venus Is Hot and Two Greenhouse Models (Prompt 200): 22 more.
     // 672 after the three crater investigations (Prompt 195 part 3): 33 more.
-    expect(inv.documents).toBe(672);
-    expect(inv.byLocale).toEqual({ en: 309, es: 363 });
+    // 705 after Why Rings?, Tides That Move the Moon and Io’s Fire (Prompt 204 part 2): 33 more.
+    expect(inv.documents).toBe(705);
+    expect(inv.byLocale).toEqual({ en: 324, es: 381 });
     expect(inv.byKind.notes).toBe(INVESTIGATIONS.length);
     expect(inv.byVariant).toEqual({
       activity: 12,
-      depth: 282,
-      full: 288,
+      depth: 300,
+      full: 300,
       general: 18,
-      notes: 72,
+      notes: 75,
     });
   });
 
@@ -287,7 +288,7 @@ describe('the document inventory', () => {
     const withDepth = INVESTIGATIONS.filter(
       i => withAllDepths(i).steps.length !== i.steps.length
     ).map(i => i.id);
-    expect(withDepth.length).toBe(47);
+    expect(withDepth.length).toBe(50);
     for (const id of withDepth)
       for (const d of ['core', 'quantitative', 'advanced'])
         for (const suffix of ['', '-es'])

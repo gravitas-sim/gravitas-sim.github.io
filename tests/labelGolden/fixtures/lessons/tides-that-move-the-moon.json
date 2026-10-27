@@ -1,0 +1,52 @@
+{
+ "id": "tides-that-move-the-moon",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.the-moons-recession.fields.0.unit",""],
+    ["steps.the-moons-recession.fields.1.unit",""],
+    ["steps.forward-one-billion.fields.0.unit",""],
+    ["steps.forward-one-billion.fields.1.unit","h"],
+    ["steps.the-model-run-backward.fields.0.unit","Gyr"],
+    ["steps.moon-locking-time.unit",""]
+   ],
+   "numbered": [
+    ["steps.the-moons-recession.fields.0.hint","3.75"],
+    ["steps.the-moons-recession.fields.1.hint","2.05"],
+    ["steps.forward-one-billion.fields.0.hint","414.6"],
+    ["steps.forward-one-billion.fields.1.hint","29.5"],
+    ["steps.the-model-run-backward.fields.0.hint","1.58"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": []
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "moon-locking-time",
+    "answer": "1.15",
+    "tolerance": "0.1",
+    "unit": ""
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "the-moons-recession": {
+    "validate": {"calls":232,"distinct":2,"digest":"6a35f74d1424152f","samples":[null,{"level":"error","message":"Set k2 to 0.30, Q to 12 and the time to 0, then read “Moon’s recession now” and “The day’s lengthening now”."}]}
+   },
+   "forward-one-billion": {
+    "validate": {"calls":232,"distinct":2,"digest":"bb088491b29a2cd1","samples":[null,{"level":"error","message":"Keep k2 = 0.30 and Q = 12, set the time to 1, and read the distance and the day."}]}
+   },
+   "the-model-run-backward": {
+    "validate": {"calls":97,"distinct":2,"digest":"ec0734d66d15b32e","samples":[null,{"level":"error","message":"Set the time to −2 and read “The model stops”: it gives how many billion years away."}]}
+   }
+  },
+  "es": "same"
+ }
+}

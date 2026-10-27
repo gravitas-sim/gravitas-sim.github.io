@@ -285,9 +285,14 @@ describe('the service worker manifest is current', () => {
     // SCENARIO_INFO it says "every scenario's thumbnail is precached", which
     // also catches one that was added to the catalog and never captured.
     const { SCENARIO_INFO } = await import('../js/data/scenarioInfo.js');
+    // Two scale-model scenarios' thumbnails (ring-gap, roche-pass; D-R10-88) are kept after the
+    // first online visit instead: the gallery shows its titled fallback until then.
+    const KEPT_AFTER_FIRST_VISIT = ['ring-gap', 'roche-pass'];
     expect(
       paths.filter(p => /^images\/scenarios\/.*\.webp$/.test(p))
-    ).toHaveLength(Object.keys(SCENARIO_INFO).length);
+    ).toHaveLength(
+      Object.keys(SCENARIO_INFO).length - KEPT_AFTER_FIRST_VISIT.length
+    );
 
     // Every English lesson body. The reasoning is in the generator's header;
     // what matters here is that the decision cannot rot silently - a lesson
@@ -307,9 +312,9 @@ describe('the service worker manifest is current', () => {
           p
         )
     );
-    // The thirteen measurement, claim, image, Jupiter, atmosphere, crater and field lessons are never precached
-    // (D-R10-67, D-R10-72, D-R10-74, D-R10-81, D-R10-85, D-R10-96): they open offline after one online use, like the other lazy families.
-    const NEVER_PRECACHED_LESSONS = 13;
+    // The sixteen measurement, claim, image, Jupiter, atmosphere, crater, field and ring and tide lessons are never precached
+    // (D-R10-67, D-R10-72, D-R10-74, D-R10-81, D-R10-85, D-R10-88, D-R10-96): they open offline after one online use, like the other lazy families.
+    const NEVER_PRECACHED_LESSONS = 16;
     expect(bodies.length + NEVER_PRECACHED_LESSONS).toBe(MANIFEST.length);
   });
 

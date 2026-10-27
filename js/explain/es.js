@@ -193,6 +193,12 @@ export default {
     'Qué superficie tiene más cráteres, por área, a un diámetro donde ambas se cuentan por completo; si una pendiente se mantiene más arriba o se quiebra; y cuál de los términos de la incertidumbre de un diámetro es el mayor.',
     'Los círculos son de un catálogo, no marcas sobre las imágenes. Un cociente de densidades no es una edad en años: no se aplica ninguna función de producción, ni saturación, ni cráteres secundarios, ni corrección de completitud.',
   ],
+  tides: [
+    'El límite de Roche rígido y el fluido de un planeta y un satélite a partir de sus dos densidades, dónde cae la resonancia de una luna en un anillo, el alejamiento de la Luna y el alargamiento del día con una Q de marea constante, o el calor que una marea puede poner en Ío.',
+    'Cuánto puede acercarse un satélite antes de que la gravedad sola deje de mantenerlo unido, qué radios de un anillo vacía una luna a una distancia dada, a qué distancia estaba la Luna en el pasado según el modelo, y el calor por órbita frente al calor que Ío irradia.',
+    'Por qué un anillo está dentro del límite de Roche y una luna fuera, por qué una resonancia abre un hueco, por qué un modelo de Q constante corrido hacia atrás pone a la Luna en contacto demasiado tarde, y por qué la fórmula del calentamiento de marea da una cota y no una predicción.',
+    'Son modelos de enseñanza de forma cerrada: un cuerpo rígido tiene una resistencia de la que carece un montón de escombros, Q se toma constante y no lo es, los números de Love se suponen, y la fórmula necesita una excentricidad y una disipación que nadie mide por separado.',
+  ],
   gwEvents: [
     'Deformación real del detector frente al tiempo, y un mapa de tono frente al tiempo.',
     'Una traza ascendente en el mapa es el chirrido de una espiral.',

@@ -12,6 +12,9 @@ const MATH_RANDOM_ALLOWED = [
   // particle bursts draw from it. js/random/streams.js wraps it as `engine`.
   'js/rng.js',
   'js/world/build.js',
+  // The two ring and tide scale models are built inside the same withSeed() scope
+  // (Prompt 204 part 2): code that was build.js's, moved out for its line ceiling.
+  'js/world/tidalSystems.js',
   'js/scenarios.js',
   'js/placement.js',
   'js/engine/bodies.js',

@@ -243,6 +243,14 @@
     "gw150914": {
       "base": "1585a5e2",
       "shared": "b9a619ec"
+    },
+    "ring-gap": {
+      "base": "35215fa6",
+      "shared": "d46e09fe"
+    },
+    "roche-pass": {
+      "base": "55b36876",
+      "shared": "d9d9866c"
     }
   }
 }

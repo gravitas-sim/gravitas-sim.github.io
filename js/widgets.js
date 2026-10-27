@@ -365,6 +365,12 @@ export const LAZY_FAMILIES = Object.freeze({
     ['crater-regions', 'crater-sfd', 'crater-budget'],
     'craterReady'
   ),
+  tides: familyEntry(
+    () => import('./tidesWidgets.js'),
+    './tidesWidgets.js',
+    'TIDE_WIDGETS',
+    ['tides-roche', 'tides-resonance', 'tides-moon', 'tides-heating']
+  ),
 });
 // </generated:lazy-families>
 
