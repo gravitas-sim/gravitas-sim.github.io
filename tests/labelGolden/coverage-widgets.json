@@ -43,6 +43,10 @@
  "threw": [
   "atmosphere-balance",
   "atmosphere-greenhouse",
-  "atmosphere-scale"
+  "atmosphere-scale",
+  "tides-roche",
+  "tides-resonance",
+  "tides-moon",
+  "tides-heating"
  ]
 }

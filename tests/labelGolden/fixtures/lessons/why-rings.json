@@ -1,0 +1,64 @@
+{
+ "id": "why-rings",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.sl9-limits.fields.0.unit","R"],
+    ["steps.sl9-limits.fields.1.unit","R"],
+    ["steps.phobos-where.fields.0.unit","km"],
+    ["steps.phobos-where.fields.1.unit","km"],
+    ["steps.saturn-ice-limit.unit",""],
+    ["steps.where-the-gap-falls.fields.0.unit","km"],
+    ["steps.where-the-gap-falls.fields.1.unit","%"],
+    ["steps.mimas-3-to-1.unit",""]
+   ],
+   "numbered": [
+    ["steps.sl9-limits.fields.0.hint","1.64"],
+    ["steps.sl9-limits.fields.1.hint","3.18"],
+    ["steps.phobos-where.fields.0.hint","5466"],
+    ["steps.phobos-where.fields.1.hint","10585"],
+    ["steps.where-the-gap-falls.fields.0.label","Radius of the 2:1 resonance"],
+    ["steps.where-the-gap-falls.fields.0.hint","116883"],
+    ["steps.where-the-gap-falls.fields.1.hint","0.59"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.where-the-gap-falls.fields.0.label","Radio de la resonancia 2:1"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "saturn-ice-limit",
+    "answer": "134.4",
+    "tolerance": "0.6",
+    "unit": ""
+   },
+   {
+    "sid": "mimas-3-to-1",
+    "answer": "89.2",
+    "tolerance": "0.4",
+    "unit": ""
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "sl9-limits": {
+    "validate": {"calls":232,"distinct":2,"digest":"1aaa140222e8a61c","samples":[null,{"level":"error","message":"Choose Shoemaker-Levy 9 and Jupiter, leave the distance on “the real one”, then read “Rigid limit” and “Fluid limit” in planet radii (R)."}]}
+   },
+   "phobos-where": {
+    "validate": {"calls":232,"distinct":2,"digest":"3f52b09c5eede89a","samples":[null,{"level":"error","message":"Choose Phobos and Mars with the distance on “the real one”, then read “Rigid limit” and “Fluid limit” in kilometers."}]}
+   },
+   "where-the-gap-falls": {
+    "validate": {"calls":232,"distinct":2,"digest":"5f361ba8610240ab","samples":[null,{"level":"error","message":"Choose Mimas, p = 2 and q = 1, then read “Radius of the 2:1 resonance” and “From that feature”; the offset is a percentage, either sign."}]}
+   }
+  },
+  "es": "same"
+ }
+}

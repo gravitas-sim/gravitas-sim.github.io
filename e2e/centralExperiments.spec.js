@@ -2503,6 +2503,38 @@ test.describe('the central experiment of each investigation', () => {
         [0.5, 246.1, 1],
       ],
     },
+    // ---- The ring and tide investigations (Roadmap III, Prompt 204 part 2) ----------
+    {
+      id: 'why-rings',
+      title:
+        'why-rings: the rigid Roche limit of Phobos about Mars is 5,466 km and of Shoemaker-Levy 9 about Jupiter 117,327 km @accepts:ce.why-rings',
+      row: /^Rigid limit$/i,
+      values: [
+        [0, 5466, 60],
+        [1, 117327, 100],
+      ],
+    },
+    {
+      id: 'tides-that-move-the-moon',
+      title:
+        'tides-that-move-the-moon: the model puts the Moon at 62.9 Earth radii in half a billion years and 65.1 in one billion @accepts:ce.tides-that-move-the-moon',
+      row: /^At .* billion years$/i,
+      nth: 1,
+      values: [
+        [0.5, 62.9, 0.2],
+        [1, 65.1, 0.2],
+      ],
+    },
+    {
+      id: 'ios-fire',
+      title:
+        'ios-fire: Io’s tidal heating is 9.33 x 10^13 W at its eccentricity and 3.73 x 10^14 W when it is doubled @accepts:ce.ios-fire',
+      row: /^Heating$/i,
+      values: [
+        [0.0041, 9.33, 0.02],
+        [0.0082, 3.73, 0.02],
+      ],
+    },
   ];
   for (const c of SURVEY) {
     test(c.title, async ({ page, app }) => {
@@ -2524,11 +2556,11 @@ test.describe('the central experiment of each investigation', () => {
       for (const [value, want, tol] of c.values) {
         await setControl(page, control, value);
         await expect
-          .poll(async () => reading(await readout(page), c.row), {
+          .poll(async () => reading(await readout(page), c.row, c.nth ?? 0), {
             timeout: 5000,
           })
           .not.toBeNaN();
-        let got = reading(await readout(page), c.row);
+        let got = reading(await readout(page), c.row, c.nth ?? 0);
         if (c.abs) got = Math.abs(got);
         seen.push(got);
         if (want !== null) expect(Math.abs(got - want)).toBeLessThan(tol);

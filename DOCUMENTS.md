@@ -140,8 +140,8 @@ catalogue refers to it, so a change to it can reach a student.
 | [SUN_KERNEL.md](SUN_KERNEL.md) | The Sun as a measurement: disc geometry, rotation from tracked spots bounded by a reference law, and the solar constant to luminosity and temperature, with their validation (Prompt 194). | feature | P194 | written | no |
 | [SUPPORT.md](SUPPORT.md) | How to get help, and the supported browsers and versions. | policy | P129 | written | yes |
 | [SURFACE_RETIREMENT_GATE.md](SURFACE_RETIREMENT_GATE.md) | The surface-retirement and consolidation gate: the decision function, the link-support policy and the verdict on every surface. | gate | P165 | written | no |
-| [TIDAL_KERNEL.md](TIDAL_KERNEL.md) | Rings, Roche limits and analytic tides: the constant-Q kernel, its equations, limits and validation (Prompt 204, part A). | feature | P204 | written | no |
-| [TIDAL_TORQUE_GATE.md](TIDAL_TORQUE_GATE.md) | The tidal-torque gate: whether an engine scenario may apply a tidal torque as an extra force (Prompt 204, part B). | gate | P204 | written | no |
+| [TIDAL_KERNEL.md](TIDAL_KERNEL.md) | Rings, Roche limits and analytic tides: the constant-Q kernel, its equations, limits and validation (Prompt 204, part A). | feature | P204 | written | yes |
+| [TIDAL_TORQUE_GATE.md](TIDAL_TORQUE_GATE.md) | The tidal-torque gate: whether an engine scenario may apply a tidal torque as an extra force (Prompt 204, part B). | gate | P204 | written | yes |
 | [TIME_DOMAIN_LADDER.md](TIME_DOMAIN_LADDER.md) | Time-domain astronomy and the first distance-ladder rung. | feature | P96 | written | yes |
 | [TOOLCHAIN.md](TOOLCHAIN.md) | How versions of the build, test and runtime tools are picked and moved. | process | P126 | written | no |
 | [TRANSLATION.md](TRANSLATION.md) | Translation freshness (the ledger and the packs' esOf), the glossary's labels, the English-only surfaces and the rule for new vocabulary. | policy | P156 | written | no |
