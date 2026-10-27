@@ -868,6 +868,19 @@ export const MANIFEST = [
     objectiveCount: 4,
   },
   {
+    id: 'what-is-in-this-field',
+    title: 'What Is in This Field?',
+    subtitle:
+      'The sources a detector lists, the width of the stars, and the curve that says how faint a search can see',
+    duration: '20-30 min',
+    level: 'Majors and upper-level astronomy',
+    thumbnail: 'images/investigations/what-is-in-this-field.webp',
+    depths: 3,
+    stepCount: 10,
+    gradedCount: 8,
+    objectiveCount: 4,
+  },
+  {
     id: 'weighing-jupiter',
     title: 'Weighing Jupiter From Its Moons',
     subtitle:

@@ -130,6 +130,8 @@ const EXTENSIONS = {
     import('../data/investigations/depth/craters-by-size.js'),
   'what-a-crater-diameter-is-worth': () =>
     import('../data/investigations/depth/what-a-crater-diameter-is-worth.js'),
+  'what-is-in-this-field': () =>
+    import('../data/investigations/depth/what-is-in-this-field.js'),
 };
 
 /** Their Spanish, loaded only for a Spanish reader. */
@@ -216,6 +218,8 @@ const WORDS = {
       import('../data/investigations/depth/es/craters-by-size.js'),
     'what-a-crater-diameter-is-worth': () =>
       import('../data/investigations/depth/es/what-a-crater-diameter-is-worth.js'),
+    'what-is-in-this-field': () =>
+      import('../data/investigations/depth/es/what-is-in-this-field.js'),
     'missing-mass': () =>
       import('../data/investigations/depth/es/missing-mass.js'),
     'the-turning-sky': () =>

@@ -1181,6 +1181,134 @@ export const WHAT_A_CRATER_DIAMETER_IS_WORTH = {
   ],
 };
 
+// ¿Qué hay en este campo?: paso a paso con el inglés (Prompt 191, tercera parte).
+export const WHAT_IS_IN_THIS_FIELD = {
+  title: '¿Qué hay en este campo?',
+  subtitle:
+    'Las fuentes que lista un detector, el ancho de las estrellas y la curva que dice cuán débil puede ver una búsqueda',
+  objectives: [
+    'Decir que una lista de fuentes es lo que sobresale del ruido con un umbral, no lo que hay, y qué compra y qué cuesta bajar el umbral',
+    'Leer el ancho de las estrellas de un cuadro con su incertidumbre, y decir por qué las estrellas que se añaden para probar una búsqueda deben tener ese ancho',
+    'Leer una curva de completitud: la proporción de estrellas añadidas que se halla por magnitud, y las magnitudes al 50 y al 90 por ciento con un intervalo',
+    'Decir de qué es respuesta una curva de completitud, de una búsqueda de un cuadro, y de qué no lo es',
+  ],
+  steps: [
+    {
+      title: 'Un cuadro, y todavía ninguna lista',
+      body: 'Abajo hay un cuadro de un campo de estrellas: cuarenta estrellas, de brillantes a tenues, sobre un cielo con ruido. Un detector aún no lo ha mirado. Aquí se le piden tres cosas: qué fuentes sobresalen del ruido, qué ancho tienen las estrellas y, la que dice cuánto fiarse de las otras dos, cuán tenue habría sido la estrella que hallaría.\n\nEl cuadro es <strong>sintético</strong>: las estrellas se colocaron a partir de una tabla, y esa verdad queda oculta hasta que un paso la activa. Un cuadro real nunca la ofrece. Las magnitudes aquí son <em>instrumentales</em>: menos 2,5 por el logaritmo de los electrones por segundo, así que un número menor es una estrella más brillante, y no hay punto cero.',
+    },
+    {
+      title: '¿Qué contendrá la lista?',
+      body: 'El detector resta el cielo, suaviza el cuadro y lista cada lugar que sobresale cuatro sigmas del ruido.',
+      prompt:
+        'Comparada con las estrellas que se colocaron, la lista contendrá&hellip;',
+      options: [
+        'todas las estrellas, y nada más',
+        'las estrellas más brillantes, con las más tenues sin hallar',
+        'las estrellas más brillantes, y varios lugares que son solo ruido',
+        'tantas fuentes como estrellas hay, sean las que sean',
+      ],
+      hints: ['¿Cómo se ve una estrella tenue junto al ruido del cielo?'],
+      because:
+        'Las estrellas más brillantes, con las más tenues sin hallar. A cuatro sigmas casi nada más que una estrella sobresale tanto del ruido, y una estrella cuya luz se reparte entre unos pocos píxeles de ruido de cielo no lo hace. Los pasos siguientes muestran qué hace un umbral más bajo.',
+    },
+    {
+      title: '¿Cuántas fuentes?',
+      body: 'Deja el <strong>Umbral</strong> en 4 sigmas. Lee cuántas fuentes lista el detector y cuántas llevan una marca.',
+      fields: [
+        { label: 'Fuentes listadas' },
+        { label: 'Fuentes con una marca' },
+      ],
+    },
+    {
+      title: 'Un umbral más bajo',
+      body: 'Pon el <strong>Umbral</strong> en 2,5 sigmas y activa <strong>Las estrellas que se colocaron</strong> en mostradas. Lee cuántas fuentes se listan y cuántas de ellas no son una estrella colocada.',
+      fields: [
+        { label: 'Fuentes listadas' },
+        { label: 'Fuentes que no son una estrella colocada' },
+      ],
+    },
+    {
+      title: 'El ancho de las estrellas',
+      body: 'Vuelve a poner el <strong>Umbral</strong> en 4 sigmas y la verdad en oculta. El detector toma las estrellas más brillantes que son redondas y no tienen marca, ajusta una gaussiana a cada una y las combina. Lee cuántas estrellas usó y el ancho (FWHM) con su incertidumbre.',
+      fields: [
+        { label: 'Estrellas usadas para el ancho' },
+        { label: 'Ancho de las estrellas' },
+        { label: 'Su incertidumbre' },
+      ],
+    },
+    {
+      title: 'Para qué sirve el ancho',
+      body: 'El instrumento siguiente añade estrellas de brillo elegido a una copia de este cuadro y hace que el detector vuelva a mirar. Pide el ancho de las estrellas que añade.',
+      prompt: '¿Por qué usar el ancho que se acaba de medir?',
+      options: [
+        'Las estrellas añadidas deben parecerse a las reales, o se prueba el detector con otra clase de estrella',
+        'El ancho fija cuán brillantes son las estrellas añadidas',
+        'Una estrella más ancha es siempre más fácil de hallar para un detector',
+        'La herramienta rechaza cualquier ancho que no sea el medido',
+      ],
+      misconceptions: [
+        {
+          say: 'Una estrella más ancha reparte la misma luz en más píxeles, así que cada uno es más tenue frente al mismo ruido, y es más difícil de hallar. Los últimos pasos lo muestran.',
+        },
+        {
+          say: 'La herramienta acepta otros anchos, y los últimos pasos usan uno. Un ancho equivocado da una curva que describe la clase de estrella equivocada.',
+        },
+      ],
+      hints: ['¿Qué se está probando: el detector, con qué estrellas?'],
+      because:
+        'Una curva de completitud dice cuán probable es que este detector halle estrellas como las añadidas. Si son más estrechas o más anchas que las propias del cuadro, la curva trata de estrellas que el cuadro no tiene.',
+    },
+    {
+      title: 'Estrellas añadidas, halladas y perdidas',
+      body: 'Se añadieron doce ensayos de veinte estrellas cada uno en lugares al azar, entre la magnitud menos 3,4 y menos 1,6, y el detector miró cada vez. Con el umbral en 4 sigmas y el ancho en 3 píxeles, lee la proporción hallada en el intervalo más brillante (menos 3,4 a menos 3,1) y en el que va de menos 2,5 a menos 2,2.',
+      fields: [
+        { label: 'Halladas, magnitud −3,4 a −3,1' },
+        { label: 'Halladas, magnitud −2,5 a −2,2' },
+      ],
+    },
+    {
+      title: 'La curva',
+      body: 'Las proporciones, intervalo a intervalo, son la curva de completitud de esta búsqueda de este cuadro. Lee la magnitud a la que se halla la mitad de las estrellas añadidas, y aquella a la que se hallan nueve de cada diez.',
+      fields: [
+        { label: 'Magnitud con el 50 por ciento hallado' },
+        { label: 'Magnitud con el 90 por ciento hallado' },
+      ],
+    },
+    {
+      title: '¿Cuán tenue puede ver?',
+      body: 'Una pregunta que quiere un solo número tiene por respuesta una curva.',
+      prompt: '¿Cuán tenue puede ver este detector?',
+      options: [
+        'Hasta la magnitud −2,47: nunca se halla nada más tenue',
+        'No hay un límite único: halla casi todas las estrellas más brillantes que −2,9, la mitad de las que están cerca de −2,5 y casi ninguna más tenue que −2,2',
+        'Tan tenue como la fuente más tenue de su lista',
+        'Hasta la magnitud en que el umbral es de 4 sigmas, una propiedad fija del telescopio',
+      ],
+      misconceptions: [
+        {
+          say: 'La mitad se halla en −2,47, y algunas más tenues también: el cinco por ciento de las estrellas añadidas en el intervalo de −2,2 a −1,9. Un límite es una elección de cuán seguro ser, no una pared.',
+        },
+        {
+          say: 'La fuente más tenue listada es la más tenue que casualmente cruzó el umbral, con la mayoría de sus vecinas sin hallar. Una lista no recuerda lo que perdió; las estrellas añadidas lo aportan.',
+        },
+        {
+          say: 'El umbral es un ajuste, no una propiedad del telescopio. Cámbialo y la curva se mueve, como muestra el camino más profundo.',
+        },
+      ],
+      hints: [
+        'Mira las proporciones, intervalo a intervalo, y no un solo número.',
+      ],
+      because:
+        'Depende de cuán seguro quieras estar. La curva da la respuesta completa: el 90 por ciento en −2,87, la mitad en −2,47 y el 5 por ciento en −2,2. «Cuán tenue» sin una proporción no es una medición, y una fuente tenue listada tampoco es una respuesta.',
+    },
+    {
+      title: 'Lo que has deducido',
+      body: 'A cuatro sigmas el detector listó 30 fuentes y no marcó ninguna. A 2,5 sigmas listó 44 y siete eran solo ruido, algo que ninguna lista puede decir de sí misma. Seis estrellas limpias dieron un ancho de 3,00 &plusmn; 0,02 píxeles. Estrellas de ese ancho añadidas en lugares al azar se hallaron nueve de cada diez veces en la magnitud −2,87 y la mitad de las veces en −2,47, con casi ninguna hallada más allá de −2,2: la curva de completitud es como una búsqueda responde a «cuán tenue». Pertenece a este cuadro, este ancho y este umbral. El cuadro era sintético: cuarenta estrellas de una tabla, un cielo de 90 electrones por píxel y 8 de ruido de lectura, y un ancho de 3,0 píxeles, que la medición recuperó.',
+    },
+  ],
+};
+
 /** By lesson id: what instructorLocale.js registers. */
 export default {
   'what-is-a-measurement': WHAT_IS_A_MEASUREMENT,
@@ -1192,4 +1320,5 @@ export default {
   'which-surface-is-older': WHICH_SURFACE_IS_OLDER,
   'craters-by-size': CRATERS_BY_SIZE,
   'what-a-crater-diameter-is-worth': WHAT_A_CRATER_DIAMETER_IS_WORTH,
+  'what-is-in-this-field': WHAT_IS_IN_THIS_FIELD,
 };

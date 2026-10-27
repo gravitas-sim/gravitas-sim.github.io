@@ -288,6 +288,10 @@ export const BROWSE_META = {
     tags: ['observing', 'solar-system'],
     numericCount: 0,
   },
+  'what-is-in-this-field': {
+    tags: ['observing'],
+    numericCount: 0,
+  },
   'weighing-jupiter': {
     tags: ['observing'],
     numericCount: 0,

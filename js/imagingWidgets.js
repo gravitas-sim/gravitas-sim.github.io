@@ -1,7 +1,7 @@
 // =============================================================================
 // The image-measurement instruments
 // -----------------------------------------------------------------------------
-// Three instruments for the three investigations that close the image-
+// Instruments for the investigations that close the image-
 // measurement phase (Prompt 191, IMAGE_INVESTIGATIONS.md). Each one stands on
 // a tool the Observatory has already shipped and states what that tool will and
 // will not say:
@@ -18,11 +18,21 @@
 //   binary-orbit     twelve relative positions of a synthetic binary: a
 //                    circular or an elliptical orbit and the mass sum, by
 //                    js/measure/orbit-fit.js
+//   field-sources    one synthetic star field (js/imagingField.js): the sources
+//                    at a threshold, the width of the stars among them, and on
+//                    request the stars that were really placed, by
+//                    js/measure/detect.js
+//   field-completeness
+//                    sources of chosen magnitudes injected into a copy of that
+//                    field and looked for again: the share found by magnitude,
+//                    the magnitudes at 50 and 90 percent, and whether the curve
+//                    applies to another search, by js/measure/inject.js
 //
 // No arithmetic of the tools is repeated here: every number is the tool's own,
 // and tests/imageInvestigations.test.js recomputes each one a lesson states.
 // The star's and the binary's tables are fixed (made once from the exact
-// geometry with a seeded stream, tools/astrometric-series-synth.mjs), so the
+// geometry with a seeded stream, tools/astrometric-series-synth.mjs), and the
+// field is made from a fixed table of stars with a seeded detector, so the
 // numbers a lesson states are the numbers every student sees. Everything but
 // the Moon is synthetic and says so; the truth is withheld until the lesson
 // reveals it.
@@ -56,6 +66,15 @@ import {
   twoEpochShift,
 } from './measure/astrometric-series.js';
 import { fitOrbit, massSum, orbitCurve } from './measure/orbit-fit.js';
+import {
+  completenessOf,
+  expectedFound,
+  FIELD,
+  fieldFrame,
+  INJECTION,
+  searchOf,
+  STARS,
+} from './imagingField.js';
 import * as MOON_PACK from './data/observations/galileoMoon19921207.js';
 import { readFrames } from './observatory/imagePacks.js';
 
@@ -938,4 +957,447 @@ const BINARY_FIT = {
   },
 };
 
-export const IMAGING_WIDGETS = [MOON_MARKS, STAR_FIT, BINARY_FIT];
+// -----------------------------------------------------------------------------
+// A field of stars
+// -----------------------------------------------------------------------------
+
+/** The thresholds the first instrument offers, in sigma of the smoothed noise. */
+const SIGMAS = Object.freeze({ min: 2, max: 6, step: 0.5 });
+const WIDTHS = Object.freeze({ min: 2, max: 4.5, step: 0.5 });
+
+let fieldPicture = null;
+/** The frame as a picture: sky near black, an inverse hyperbolic sine stretch so the faint stars show beside the bright. */
+function pictureOf() {
+  if (fieldPicture) return fieldPicture;
+  const { frame } = fieldFrame();
+  const { width: w, height: h, data } = frame;
+  const sky = (FIELD.skyRate * FIELD.exposure) / FIELD.gain;
+  const noiseAdu = Math.sqrt(sky + (FIELD.readNoise / FIELD.gain) ** 2);
+  const c = document.createElement('canvas');
+  c.width = w;
+  c.height = h;
+  const g = c.getContext('2d');
+  const img = g.createImageData(w, h);
+  const top = Math.asinh(2000 / 2);
+  for (let i = 0; i < w * h; i += 1) {
+    const u = (data[i] - sky) / noiseAdu;
+    const v = clamp(Math.round((255 * Math.asinh(u / 2)) / top), 0, 255);
+    const k = 4 * i;
+    img.data[k] = img.data[k + 1] = img.data[k + 2] = v;
+    img.data[k + 3] = 255;
+  }
+  g.putImageData(img, 0, 0);
+  fieldPicture = c;
+  return c;
+}
+
+/** What the first instrument's controls ask of the tools, and what comes back. */
+export function sourcesView(v) {
+  const sigma = clamp(
+    Math.round((v.sigma ?? 4) / SIGMAS.step) * SIGMAS.step,
+    SIGMAS.min,
+    SIGMAS.max
+  );
+  return { ...searchOf({ sigma }), sigma, showTruth: (v.truth ?? 0) >= 0.5 };
+}
+
+function drawField(canvas, v) {
+  const f = sourcesView(v);
+  const colors = palette();
+  const side = Math.min(responsiveHeight(320, 240), canvas.clientWidth || 320);
+  const { ctx: g, w } = surface(canvas, side);
+  const k = side / FIELD.width;
+  const ox = Math.max(0, (w - side) / 2);
+  g.fillStyle = '#0b0e16';
+  g.fillRect(ox, 0, side, side);
+  g.imageSmoothingEnabled = false;
+  g.drawImage(pictureOf(), ox, 0, side, side);
+  g.lineWidth = 1.5;
+  g.strokeStyle = colors.accent;
+  for (const s of f.sources ?? []) {
+    g.beginPath();
+    g.arc(ox + (s.x + 0.5) * k, (s.y + 0.5) * k, 7 * k, 0, 2 * Math.PI);
+    g.stroke();
+  }
+  if (f.showTruth) {
+    g.strokeStyle = colors.warn;
+    for (const s of STARS) {
+      const x = ox + (s.x + 0.5) * k;
+      const y = (s.y + 0.5) * k;
+      g.beginPath();
+      g.moveTo(x - 4, y);
+      g.lineTo(x + 4, y);
+      g.moveTo(x, y - 4);
+      g.lineTo(x, y + 4);
+      g.stroke();
+    }
+  }
+  g.font = typeAt(TYPE.TICK);
+  g.textBaseline = 'top';
+  g.textAlign = 'left';
+  g.fillStyle = colors.warn;
+  g.fillText(
+    t(f.showTruth ? 'imgW.f.legendTruth' : 'imgW.f.legend'),
+    ox + 6,
+    6
+  );
+}
+
+const FIELD_SOURCES = {
+  id: 'field-sources',
+  get title() {
+    return t('imgW.f.title');
+  },
+  get note() {
+    return t('imgW.f.note');
+  },
+  animated: false,
+  controls: [
+    {
+      id: 'sigma',
+      get label() {
+        return t('imgW.f.control.sigma');
+      },
+      min: SIGMAS.min,
+      max: SIGMAS.max,
+      step: SIGMAS.step,
+      value: 4,
+      decimals: 1,
+      format: v => withUnit(fix(v, 1), 'σ'),
+    },
+    {
+      id: 'truth',
+      get label() {
+        return t('imgW.f.control.truth');
+      },
+      min: 0,
+      max: 1,
+      step: 1,
+      value: 0,
+      decimals: 0,
+      format: v => t(v >= 0.5 ? 'imgW.f.truth.on' : 'imgW.f.truth.off'),
+    },
+  ],
+  presets: [
+    {
+      values: { sigma: 4, truth: 0 },
+      get label() {
+        return t('imgW.f.preset.default');
+      },
+    },
+    {
+      values: { sigma: 2.5, truth: 1 },
+      get label() {
+        return t('imgW.f.preset.low');
+      },
+    },
+  ],
+  draw: drawField,
+  readout(v) {
+    const f = sourcesView(v);
+    const rows = [
+      {
+        label: t('imgW.row.source'),
+        value: t('imgW.f.value.source'),
+        emphasis: true,
+      },
+      {
+        label: t('imgW.f.row.sigma'),
+        value: withUnit(fix(f.sigma, 1), 'σ'),
+      },
+    ];
+    if (!f.ok) {
+      rows.push({ label: t('imgW.refused'), value: f.det?.code ?? '-' });
+      return rows;
+    }
+    rows.push(
+      {
+        label: t('imgW.f.row.sources'),
+        value: String(f.sources.length),
+        emphasis: true,
+      },
+      { label: t('imgW.f.row.flagged'), value: String(f.flagged) }
+    );
+    const p = f.psf;
+    if (p.ok) {
+      rows.push(
+        { label: t('imgW.f.row.stars'), value: String(p.stars.length) },
+        {
+          label: t('imgW.f.row.width'),
+          value: `${fix(p.fwhm.mean, 2)} ± ${fix(p.fwhm.sigma, 2)} px`,
+          emphasis: true,
+        },
+        {
+          label: t('imgW.f.row.check'),
+          value: t(
+            p.modelLimited ? 'imgW.f.value.limited' : 'imgW.f.value.agree',
+            { chi2: fix(p.chi2red, 2) }
+          ),
+        }
+      );
+    } else
+      rows.push({
+        label: t('imgW.f.row.width'),
+        value: t('imgW.f.value.nostars'),
+        emphasis: true,
+      });
+    if (f.showTruth) {
+      const m = f.truth;
+      rows.push(
+        { label: t('imgW.f.row.placed'), value: String(STARS.length) },
+        { label: t('imgW.f.row.found'), value: String(m.found) },
+        { label: t('imgW.f.row.missed'), value: String(m.missed.length) },
+        {
+          label: t('imgW.f.row.false'),
+          value: String(m.false.length),
+          emphasis: true,
+        }
+      );
+    }
+    rows.push({ label: t('imgW.row.how'), value: t('imgW.f.value.how') });
+    return rows;
+  },
+};
+
+/** What the second instrument's controls ask of the tools, and what comes back. */
+export function completenessView(v) {
+  const sigma = clamp(
+    Math.round((v.sigma ?? 4) / SIGMAS.step) * SIGMAS.step,
+    SIGMAS.min,
+    SIGMAS.max
+  );
+  const width = clamp(
+    Math.round((v.width ?? 3) / WIDTHS.step) * WIDTHS.step,
+    WIDTHS.min,
+    WIDTHS.max
+  );
+  const c = completenessOf({ sigma, width });
+  const search = searchOf({ sigma });
+  return {
+    sigma,
+    width,
+    showTruth: (v.truth ?? 0) >= 0.5,
+    ...c,
+    measured: searchOf({ sigma: INJECTION.reference.sigma }).psf,
+    found: search.ok ? search.truth.found : null,
+    expected: c.ok ? expectedFound(c.curve) : null,
+  };
+}
+
+function drawCurve(canvas, v) {
+  const f = completenessView(v);
+  const colors = palette();
+  const height = responsiveHeight(300, 220);
+  const { ctx: g, w, h } = surface(canvas, height);
+  g.fillStyle = '#0b0e16';
+  g.fillRect(0, 0, w, h);
+  g.font = typeAt(TYPE.TICK);
+  g.textBaseline = 'top';
+  g.textAlign = 'left';
+  g.fillStyle = colors.warn;
+  g.fillText(t('imgW.c.legend'), 8, 6);
+  if (!f.ok) return;
+  const { min, max } = INJECTION.magnitude;
+  const left = 40;
+  const right = w - 12;
+  const top = 26;
+  const bottom = h - 30;
+  const X = m => left + ((m - min) / (max - min)) * (right - left);
+  const Y = p => bottom - p * (bottom - top);
+  g.strokeStyle = colors.muted;
+  g.lineWidth = 1;
+  g.setLineDash([4, 4]);
+  for (const p of [0.5, 0.9]) {
+    g.beginPath();
+    g.moveTo(left, Y(p));
+    g.lineTo(right, Y(p));
+    g.stroke();
+  }
+  g.setLineDash([]);
+  g.beginPath();
+  g.moveTo(left, top);
+  g.lineTo(left, bottom);
+  g.lineTo(right, bottom);
+  g.stroke();
+  g.fillStyle = colors.muted;
+  g.textAlign = 'right';
+  for (const p of [0, 0.5, 1]) g.fillText(fix(p, 1), left - 4, Y(p) - 6);
+  g.textAlign = 'center';
+  for (let m = -3; m <= -2; m += 1) g.fillText(fix(m, 0), X(m), bottom + 4);
+  g.fillText(t('imgW.c.axis'), (left + right) / 2, bottom + 16);
+  const live = f.curve.bins.filter(b => b.n);
+  g.strokeStyle = colors.accent;
+  g.fillStyle = colors.accent;
+  g.lineWidth = 1.5;
+  g.beginPath();
+  live.forEach((b, i) =>
+    i ? g.lineTo(X(b.center), Y(b.p)) : g.moveTo(X(b.center), Y(b.p))
+  );
+  g.stroke();
+  for (const b of live) {
+    g.beginPath();
+    g.moveTo(X(b.center), Y(b.interval.lo));
+    g.lineTo(X(b.center), Y(b.interval.hi));
+    g.stroke();
+    g.beginPath();
+    g.arc(X(b.center), Y(b.p), 3, 0, 2 * Math.PI);
+    g.fill();
+  }
+}
+
+const bin = b => `${fix(b.lo, 1)} to ${fix(b.hi, 1)}`;
+
+const COMPLETENESS = {
+  id: 'field-completeness',
+  get title() {
+    return t('imgW.c.title');
+  },
+  get note() {
+    return t('imgW.c.note');
+  },
+  animated: false,
+  controls: [
+    {
+      id: 'sigma',
+      get label() {
+        return t('imgW.c.control.sigma');
+      },
+      min: SIGMAS.min,
+      max: SIGMAS.max,
+      step: SIGMAS.step,
+      value: 4,
+      decimals: 1,
+      format: v => withUnit(fix(v, 1), 'σ'),
+    },
+    {
+      id: 'width',
+      get label() {
+        return t('imgW.c.control.width');
+      },
+      min: WIDTHS.min,
+      max: WIDTHS.max,
+      step: WIDTHS.step,
+      value: 3,
+      decimals: 1,
+      format: v => withUnit(fix(v, 1), 'px'),
+    },
+    {
+      id: 'truth',
+      get label() {
+        return t('imgW.c.control.truth');
+      },
+      min: 0,
+      max: 1,
+      step: 1,
+      value: 0,
+      decimals: 0,
+      format: v => t(v >= 0.5 ? 'imgW.f.truth.on' : 'imgW.f.truth.off'),
+    },
+  ],
+  presets: [
+    {
+      values: { sigma: 4, width: 3, truth: 0 },
+      get label() {
+        return t('imgW.c.preset.default');
+      },
+    },
+    {
+      values: { sigma: 3, width: 3, truth: 0 },
+      get label() {
+        return t('imgW.c.preset.three');
+      },
+    },
+  ],
+  draw: drawCurve,
+  readout(v) {
+    const f = completenessView(v);
+    const rows = [
+      {
+        label: t('imgW.row.source'),
+        value: t('imgW.c.value.source'),
+        emphasis: true,
+      },
+      {
+        label: t('imgW.f.row.sigma'),
+        value: withUnit(fix(f.sigma, 1), 'σ'),
+      },
+      {
+        label: t('imgW.c.row.width'),
+        value: t('imgW.c.value.width', { width: fix(f.width, 1) }),
+      },
+    ];
+    const p = f.measured;
+    if (p?.ok)
+      rows.push({
+        label: t('imgW.c.row.measured'),
+        value: `${fix(p.fwhm.mean, 2)} ± ${fix(p.fwhm.sigma, 2)} px`,
+      });
+    if (!f.ok) {
+      rows.push({
+        label: t('imgW.refused'),
+        value: t('imgW.c.no.other', { code: f.code ?? '-' }),
+      });
+      return rows;
+    }
+    const c = f.curve;
+    rows.push({
+      label: t('imgW.c.row.injected'),
+      value: t('imgW.c.value.injected', {
+        n: c.injected,
+        trials: c.trials,
+      }),
+    });
+    for (const b of c.bins.filter(x => x.n))
+      rows.push({
+        label: t('imgW.c.row.bin', { bin: bin(b) }),
+        value: t('imgW.c.value.bin', {
+          k: b.k,
+          n: b.n,
+          p: fix(100 * b.p, 0),
+          lo: fix(100 * b.interval.lo, 0),
+          hi: fix(100 * b.interval.hi, 0),
+        }),
+      });
+    const at = (cross, key) =>
+      cross.m === null
+        ? { label: t(key), value: t('imgW.c.value.never') }
+        : {
+            label: t(key),
+            value: t('imgW.c.value.cross', {
+              m: fix(cross.m, 2),
+              lo: fix(cross.lo, 2),
+              hi: fix(cross.hi, 2),
+            }),
+            emphasis: true,
+          };
+    rows.push(at(c.m50, 'imgW.c.row.m50'), at(c.m90, 'imgW.c.row.m90'), {
+      label: t('imgW.c.row.extra'),
+      value: fix(c.extraPerTrial, 2),
+    });
+    rows.push({
+      label: t('imgW.c.row.applies'),
+      value: f.applies.ok
+        ? t('imgW.c.value.applies')
+        : t('imgW.c.value.differs', { what: f.applies.differs.join(', ') }),
+      emphasis: true,
+    });
+    if (f.showTruth && f.found !== null && f.width === INJECTION.reference.fwhm)
+      rows.push(
+        {
+          label: t('imgW.c.row.expected'),
+          value: fix(f.expected, 1),
+        },
+        { label: t('imgW.c.row.found'), value: String(f.found) }
+      );
+    rows.push({ label: t('imgW.row.how'), value: t('imgW.c.value.how') });
+    return rows;
+  },
+};
+
+export const IMAGING_WIDGETS = [
+  MOON_MARKS,
+  STAR_FIT,
+  BINARY_FIT,
+  FIELD_SOURCES,
+  COMPLETENESS,
+];

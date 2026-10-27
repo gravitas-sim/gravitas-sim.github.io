@@ -630,6 +630,74 @@ export const WHAT_A_CRATER_DIAMETER_IS_WORTH_DEEPER = {
   ],
 };
 
+// ¿Qué hay en este campo?, pasos más profundos: paso a paso con el inglés.
+export const WHAT_IS_IN_THIS_FIELD_DEEPER = {
+  steps: [
+    {
+      title: 'Un umbral de 3 sigmas',
+      body: 'Pon el <strong>Umbral</strong> en 3 sigmas, con el ancho en 3 píxeles. Lee la magnitud a la que se halla la mitad de las estrellas añadidas, y nueve de cada diez.',
+      fields: [
+        { label: 'Magnitud con el 50 por ciento hallado' },
+        { label: 'Magnitud con el 90 por ciento hallado' },
+      ],
+    },
+    {
+      title: '¿Qué búsqueda describe la curva?',
+      body: 'Con el umbral en 3 sigmas, lee <strong>¿Describe la búsqueda del primer instrumento?</strong> El primer instrumento buscó en este cuadro a 4 sigmas.',
+      prompt: 'Tienes la curva de 3 sigmas. ¿Qué puedes decir con ella?',
+      options: [
+        'También es la completitud de la búsqueda de 4 sigmas, porque es el mismo cuadro',
+        'Es la completitud de la búsqueda de 3 sigmas de este cuadro y de ningún otro: la herramienta dice que difiere en sus ajustes de detección',
+        'Es la completitud de toda búsqueda de todo cuadro cuyas estrellas tengan este ancho',
+        'Está mal, porque su punto medio difiere del de 4 sigmas',
+      ],
+      misconceptions: [
+        {
+          say: 'Mismo cuadro, otra búsqueda: los puntos medios difieren en un tercio de magnitud. La herramienta se niega a llamar a la curva la completitud de 4 sigmas y nombra el ajuste que difiere.',
+        },
+        {
+          say: 'El cielo, la exposición y el ruido forman parte de ella: un cuadro con el doble de ruido de cielo necesita estrellas más brillantes. La herramienta rechaza un cuadro cuyo ruido difiera en más del diez por ciento.',
+        },
+        {
+          say: 'Dos curvas de dos búsquedas deben diferir; eso es lo que hace un umbral. Ninguna está mal.',
+        },
+      ],
+      hints: [
+        '¿Qué dice la herramienta en la línea que empieza por «Describe»?',
+      ],
+      because:
+        'Una curva es la respuesta para la búsqueda con que se midió: su ancho, su ruido, su umbral y su área mínima. No es una propiedad del cuadro solo, así que una curva para otro ajuste es otra curva, y la herramienta lo dice en vez de prestar una a la otra.',
+    },
+    {
+      title: 'La curva frente a las estrellas que hay',
+      body: 'Pon el umbral en 4 sigmas y el ancho en 3 píxeles y activa <strong>Las estrellas del propio campo</strong> en mostradas. La curva da a cada estrella del campo una probabilidad de ser hallada a su propia magnitud. Lee cuántas de las cuarenta estrellas dice la curva que halla una búsqueda, y cuántas listó la búsqueda.',
+      fields: [
+        {
+          label:
+            'Estrellas del campo que esta curva dice que una búsqueda halla',
+        },
+        { label: 'Estrellas del campo que la búsqueda listó' },
+      ],
+    },
+    {
+      title: 'Estrellas del ancho equivocado',
+      body: 'Pon el <strong>Ancho de las estrellas inyectadas</strong> en 4,5 píxeles, con el umbral en 4 sigmas, como si la medición hubiera dado un enfoque peor. Lee la magnitud con el 50 por ciento hallado, y la proporción hallada en el intervalo más brillante.',
+      fields: [
+        { label: 'Magnitud con el 50 por ciento hallado' },
+        { label: 'Halladas, magnitud −3,4 a −3,1' },
+      ],
+    },
+    {
+      title: 'Lo que necesita una curva',
+      rubric:
+        'Crédito completo por decir que la curva es una afirmación sobre una búsqueda de un cuadro (no sobre el telescopio), y por nombrar lo que debe coincidir antes de usarla en otro cuadro: el ancho de las estrellas, el ruido (cielo y exposición) y los ajustes de detección (el umbral y la fuente mínima), con estrellas aisladas solamente. También crédito por decir que una fuente tenue listada o un solo límite de magnitud no es la misma respuesta. No des crédito por decir que la curva es una propiedad del telescopio o que vale para cualquier cuadro.',
+      body: 'Tienes una curva de completitud de este cuadro, a 4 sigmas, para estrellas de 3 píxeles de ancho.',
+      prompt:
+        'En dos o tres frases: ¿de qué es afirmación la curva, y qué tendría que coincidir antes de usarla en un cuadro distinto?',
+    },
+  ],
+};
+
 export default {
   'what-is-a-measurement': WHAT_IS_A_MEASUREMENT_DEEPER,
   'what-does-plus-minus-claim': WHAT_DOES_PLUS_MINUS_CLAIM_DEEPER,
@@ -640,4 +708,5 @@ export default {
   'which-surface-is-older': WHICH_SURFACE_IS_OLDER_DEEPER,
   'craters-by-size': CRATERS_BY_SIZE_DEEPER,
   'what-a-crater-diameter-is-worth': WHAT_A_CRATER_DIAMETER_IS_WORTH_DEEPER,
+  'what-is-in-this-field': WHAT_IS_IN_THIS_FIELD_DEEPER,
 };

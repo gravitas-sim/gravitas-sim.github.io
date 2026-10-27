@@ -336,7 +336,13 @@ export const LAZY_FAMILIES = Object.freeze({
     () => import('./imagingWidgets.js'),
     './imagingWidgets.js',
     'IMAGING_WIDGETS',
-    ['moon-marks', 'star-parallax', 'binary-orbit'],
+    [
+      'moon-marks',
+      'star-parallax',
+      'binary-orbit',
+      'field-sources',
+      'field-completeness',
+    ],
     'imagingReady'
   ),
   jovian: familyEntry(

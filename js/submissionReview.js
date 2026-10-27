@@ -154,6 +154,8 @@ const DEEPER = {
     import('./data/investigations/depth/craters-by-size.js'),
   'what-a-crater-diameter-is-worth': () =>
     import('./data/investigations/depth/what-a-crater-diameter-is-worth.js'),
+  'what-is-in-this-field': () =>
+    import('./data/investigations/depth/what-is-in-this-field.js'),
 };
 const deepen = async lesson =>
   lesson.depthLaid || !DEEPER[lesson.id]

@@ -2908,6 +2908,351 @@ export const WHAT_A_CRATER_DIAMETER_IS_WORTH = {
   ],
 };
 
+// -----------------------------------------------------------------------------
+// 10. What is in this field? (Prompt 191 part 3, IMAGE_INVESTIGATIONS.md; the
+//     two field instruments in js/imagingWidgets.js, the frame in
+//     js/imagingField.js)
+// -----------------------------------------------------------------------------
+// One more investigation, appended here for the same reason as the others (the
+// closure cap, D-R10-67). Every number is recomputed in tests/fieldLesson.test.js
+// from the detector and injection tools. The frame is synthetic and says so.
+const FSO = (values = {}, hide = []) => ({
+  id: 'field-sources',
+  values,
+  hide,
+});
+const FCO = (values = {}, hide = []) => ({
+  id: 'field-completeness',
+  values,
+  hide,
+});
+
+export const WHAT_IS_IN_THIS_FIELD = {
+  id: 'what-is-in-this-field',
+  thumbnail: 'images/investigations/what-is-in-this-field.webp',
+  title: 'What Is in This Field?',
+  subtitle:
+    'The sources a detector lists, the width of the stars, and the curve that says how faint a search can see',
+  duration: '20-30 min',
+  level: 'Majors and upper-level astronomy',
+  audience: 'intro',
+  textbook: { chapter: 6, section: null },
+  courseLevel: 'majors',
+  depths: ['core', 'quantitative', 'advanced'],
+  mathematics: 'algebra',
+  prerequisites: ['signal-noise-and-exposure'],
+  tags: ['observing'],
+  lock: { placement: true, inspector: true },
+  objectives: [
+    'Say that a list of sources is what stands out of the noise at a threshold, not what is there, and what lowering the threshold buys and costs',
+    'Read the width of the stars in a frame with its uncertainty, and say why the stars added to test a search must have that width',
+    'Read a completeness curve: the share of added stars found by magnitude, and the magnitudes at 50 and at 90 percent with an interval',
+    'Say what a completeness curve is the answer for, one search of one frame, and what it is not',
+  ],
+  steps: [
+    {
+      sid: 'a-field-of-stars',
+      stage: STAGE,
+      type: 'read',
+      title: 'A frame, and no list yet',
+      body: `Below is one frame of a star field: forty stars, bright to faint, on a sky with noise.
+             A detector has not yet looked at it. Three things are asked of it here: which sources
+             stand out of the noise, how wide the stars are, and, the one that says how far to trust
+             the other two, how faint a star it would have found.
+             \n\nThe frame is <strong>synthetic</strong>: the stars were placed from a table, and
+             that truth stays hidden until a step switches it on. A real frame never offers it.
+             Magnitudes here are <em>instrumental</em>: minus 2.5 times the logarithm of the
+             electrons a second, so a smaller number is a brighter star, and there is no zero
+             point.`,
+      tool: FSO({}, ['sigma', 'truth']),
+    },
+    {
+      sid: 'predict-the-list',
+      stage: STAGE,
+      type: 'predict',
+      reveal: 'how-many-sources',
+      title: 'What will the list hold?',
+      body: `The detector subtracts the sky, smooths the frame and lists every place that stands
+             four sigma out of the noise.`,
+      prompt:
+        'Compared with the stars that were placed, the list will hold&hellip;',
+      options: [
+        'every star, and nothing else',
+        'the brighter stars, with the faintest ones missed',
+        'the brighter stars, and several places that are only noise',
+        'about as many sources as there are stars, whichever they are',
+      ],
+      answer: 1,
+      hints: ['What does a faint star look like beside the noise of the sky?'],
+      because:
+        'The brighter stars, with the faintest ones missed. At four sigma almost nothing but a star stands that far out of the noise, and a star whose light is spread over a few pixels of sky noise does not. The next steps show what a lower threshold does.',
+      tool: FSO({}, ['sigma', 'truth']),
+    },
+    {
+      sid: 'how-many-sources',
+      stage: STAGE,
+      type: 'measure',
+      title: 'How many sources?',
+      body: `Leave <strong>Threshold</strong> at 4 sigma. Read how many sources the detector lists,
+             and how many of them carry a flag.`,
+      fields: [
+        { id: 'n', label: 'Sources listed', unit: '', hint: '30' },
+        {
+          id: 'flagged',
+          label: 'Sources carrying a flag',
+          unit: '',
+          hint: '0',
+        },
+      ],
+      validate: v => {
+        if (![v.n, v.flagged].every(Number.isFinite)) return null;
+        if (v.n === 30 && v.flagged === 0) {
+          return {
+            level: 'ok',
+            message:
+              'Thirty sources and no flags. Whether that is every star is something the list cannot say: it holds what stood out of the noise, and says nothing of what did not. Here the truth is known and the next step looks at it; in a real frame it never is.',
+          };
+        }
+        return {
+          level: 'error',
+          message:
+            'Leave “Threshold” at 4 σ, then read “Sources listed” and “Sources carrying a flag”.',
+        };
+      },
+      tool: FSO({ sigma: 4 }, ['truth']),
+    },
+    {
+      sid: 'lower-the-threshold',
+      stage: STAGE,
+      type: 'measure',
+      title: 'A lower threshold',
+      body: `Set <strong>Threshold</strong> to 2.5 sigma and switch <strong>The stars that were
+             placed</strong> to shown. Read how many sources are listed, and how many of them are
+             not a star that was placed.`,
+      fields: [
+        { id: 'n', label: 'Sources listed', unit: '', hint: '44' },
+        {
+          id: 'noise',
+          label: 'Sources that are not a star that was placed',
+          unit: '',
+          hint: '7',
+        },
+      ],
+      validate: v => {
+        if (![v.n, v.noise].every(Number.isFinite)) return null;
+        if (v.n === 44 && v.noise === 7) {
+          return {
+            level: 'ok',
+            message:
+              'Forty-four sources, seven of them noise. The threshold bought seven more stars, 37 of the 40 now listed, and cost seven places that are only noise that crossed it. At 2 sigma the list has 73 sources and 36 are noise. A list does not say which entries are which; a real frame has no truth to switch on.',
+          };
+        }
+        return {
+          level: 'error',
+          message:
+            'Set “Threshold” to 2.5 σ, switch “The stars that were placed” to shown, then read “Sources listed” and “Sources that are not a star that was placed”.',
+        };
+      },
+      tool: FSO({ sigma: 2.5, truth: 1 }),
+    },
+    {
+      sid: 'the-width',
+      stage: STAGE,
+      type: 'measure',
+      title: 'The width of the stars',
+      body: `Set <strong>Threshold</strong> back to 4 sigma and the truth to hidden. The detector
+             takes the brightest stars that are round and have no flag, fits each with a Gaussian
+             and combines them. Read how many stars it used and the width (FWHM) with its
+             uncertainty.`,
+      fields: [
+        { id: 'n', label: 'Stars used for the width', unit: '', hint: '6' },
+        { id: 'w', label: 'Width of the stars', unit: 'px', hint: '3.00' },
+        { id: 's', label: 'Its uncertainty', unit: 'px', hint: '0.02' },
+      ],
+      validate: v => {
+        if (![v.n, v.w, v.s].every(Number.isFinite)) return null;
+        if (v.n === 6 && near(v.w, 3.0, 0.03) && near(v.s, 0.02, 0.005)) {
+          return {
+            level: 'ok',
+            message:
+              'Six stars give a width of 3.00 ± 0.02 pixels, and a Gaussian and a Moffat model agree on it. It is the width of the stars in this frame and nowhere else: a different night, a different focus would give another.',
+          };
+        }
+        return {
+          level: 'error',
+          message:
+            'Set “Threshold” to 4 σ with the truth hidden, then read “Stars used for the width” and “Width of the stars”.',
+        };
+      },
+      tool: FSO({ sigma: 4, truth: 0 }, ['truth']),
+    },
+    {
+      sid: 'why-the-width',
+      stage: STAGE,
+      type: 'question',
+      kind: 'choice',
+      title: 'What the width is for',
+      body: `The next instrument adds stars of chosen brightness to a copy of this frame and has the
+             detector look again. It asks for the width of the stars it adds.`,
+      prompt: 'Why use the width just measured?',
+      options: [
+        'The added stars must look like the real ones, or the detector is tested on a different kind of star',
+        'The width sets how bright the added stars are',
+        'A wider star is always easier for a detector to find',
+        'The tool refuses any width but the measured one',
+      ],
+      answer: 0,
+      misconceptions: [
+        {
+          id: 'wide-is-easy',
+          option: 2,
+          say: 'A wider star spreads the same light over more pixels, so each pixel is dimmer against the same noise, and it is harder to find. The last steps show it.',
+        },
+        {
+          id: 'refuses',
+          option: 3,
+          say: 'The tool accepts other widths, and the last steps use one. A wrong width gives a curve that describes the wrong kind of star.',
+        },
+      ],
+      hints: ['What is being tested: the detector, on which stars?'],
+      because:
+        'A completeness curve says how likely this detector is to find stars like the ones added. If they are narrower or wider than the frame’s own, the curve is about stars the frame does not have.',
+      tool: FCO({}, ['sigma', 'truth']),
+    },
+    {
+      sid: 'one-magnitude',
+      stage: STAGE,
+      type: 'measure',
+      title: 'Added stars, found and missed',
+      body: `Twelve trials of twenty stars each were added at random places, between magnitude
+             minus 3.4 and minus 1.6, and the detector looked each time. With the threshold at 4
+             sigma and the width at 3 pixels, read the share found in the brightest bin (minus 3.4
+             to minus 3.1) and in the bin from minus 2.5 to minus 2.2.`,
+      fields: [
+        {
+          id: 'bright',
+          label: 'Found, magnitude −3.4 to −3.1',
+          unit: '%',
+          hint: '100',
+        },
+        {
+          id: 'faint',
+          label: 'Found, magnitude −2.5 to −2.2',
+          unit: '%',
+          hint: '31',
+        },
+      ],
+      validate: v => {
+        if (![v.bright, v.faint].every(Number.isFinite)) return null;
+        if (near(v.bright, 100, 0.5) && near(v.faint, 31, 1)) {
+          return {
+            level: 'ok',
+            message:
+              'All 34 of the brightest were found, and 12 of 39 in the bin from −2.5 to −2.2: 31 percent, with a 68 percent interval of 23 to 40. A share of a few dozen added stars is a measured fraction, and carries the binomial uncertainty of that few.',
+          };
+        }
+        return {
+          level: 'error',
+          message:
+            'Use the threshold 4 σ and the width 3 px, then read the two bins’ shares (“Magnitude −3.4 to −3.1” and “Magnitude −2.5 to −2.2”).',
+        };
+      },
+      tool: FCO({ sigma: 4, width: 3 }, ['sigma', 'truth']),
+    },
+    {
+      sid: 'the-curve',
+      stage: STAGE,
+      type: 'measure',
+      title: 'The curve',
+      body: `The shares, bin by bin, are the completeness curve of this search of this frame. Read
+             the magnitude at which half of the added stars are found, and the one at which nine in
+             ten are.`,
+      fields: [
+        {
+          id: 'm50',
+          label: 'Magnitude at 50 percent found',
+          unit: 'mag',
+          hint: '-2.47',
+        },
+        {
+          id: 'm90',
+          label: 'Magnitude at 90 percent found',
+          unit: 'mag',
+          hint: '-2.87',
+        },
+      ],
+      validate: v => {
+        if (![v.m50, v.m90].every(Number.isFinite)) return null;
+        if (near(v.m50, -2.47, 0.03) && near(v.m90, -2.87, 0.03)) {
+          return {
+            level: 'ok',
+            message:
+              'Half are found at magnitude −2.47 (the interval’s edges cross at −2.52 and −2.42) and nine in ten at −2.87. The detector goes from nearly always finding a star to missing every second one in less than half a magnitude.',
+          };
+        }
+        return {
+          level: 'error',
+          message:
+            'Use the threshold 4 σ and the width 3 px, then read “Magnitude at 50 percent found” and “Magnitude at 90 percent found”.',
+        };
+      },
+      tool: FCO({ sigma: 4, width: 3 }, ['truth']),
+    },
+    {
+      sid: 'how-faint',
+      stage: STAGE,
+      type: 'question',
+      kind: 'choice',
+      title: 'How faint can it see?',
+      body: `A question that wants one number has a curve for an answer.`,
+      prompt: 'How faint can this detector see?',
+      options: [
+        'To magnitude −2.47: nothing fainter is ever found',
+        'There is no single limit: it finds nearly every star brighter than −2.9, about half of those near −2.5, and almost none fainter than −2.2',
+        'As faint as the faintest source on its list',
+        'To the magnitude where the threshold is 4 sigma, a fixed property of the telescope',
+      ],
+      answer: 1,
+      misconceptions: [
+        {
+          id: 'a-wall',
+          option: 0,
+          say: 'Half are found at −2.47, and a few fainter ones too: five percent of the added stars in the bin from −2.2 to −1.9. A limit is a choice of how sure to be, not a wall.',
+        },
+        {
+          id: 'faintest-listed',
+          option: 2,
+          say: 'The faintest source listed is the faintest that happened to cross the threshold, with most of its neighbors missed. A list has no memory of what it missed; the added stars supply it.',
+        },
+        {
+          id: 'fixed-property',
+          option: 3,
+          say: 'The threshold is a setting, not a property of the telescope. Change it and the curve moves, as the deeper path shows.',
+        },
+      ],
+      hints: ['Look at the shares, bin by bin, and not at one number.'],
+      because:
+        'It depends on how sure you want to be. The curve gives the whole answer: 90 percent at −2.87, half at −2.47 and 5 percent at −2.2. “How faint” without a share is not a measurement, and a faintest listed source is not an answer either.',
+      tool: FCO({ sigma: 4, width: 3 }, ['truth']),
+    },
+    {
+      sid: 'what-you-worked-out',
+      stage: STAGE,
+      type: 'read',
+      title: 'What you worked out',
+      body: `At four sigma the detector listed 30 sources and flagged none. At 2.5 sigma it listed 44
+             and seven were only noise, which no list can say of itself. Six clean stars gave a width
+             of 3.00 &plusmn; 0.02 pixels. Stars of that width added at random places were found
+             nine times in ten at magnitude −2.87 and half the time at −2.47, with almost none
+             found beyond −2.2: the completeness curve is how a search answers &ldquo;how
+             faint&rdquo;. It belongs to this frame, this width and this threshold. The frame was
+             synthetic: forty stars of a table, a sky of 90 electrons a pixel and 8 of read noise,
+             and a width of 3.0 pixels, which the measurement recovered.`,
+      tool: FSO({}, ['sigma', 'truth']),
+    },
+  ],
+};
+
 /** The lessons, in order: what the barrel registers. */
 export default [
   WHAT_IS_A_MEASUREMENT,
@@ -2919,4 +3264,5 @@ export default [
   WHICH_SURFACE_IS_OLDER,
   CRATERS_BY_SIZE,
   WHAT_A_CRATER_DIAMETER_IS_WORTH,
+  WHAT_IS_IN_THIS_FIELD,
 ];

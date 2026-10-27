@@ -142,4 +142,70 @@ export const EN_IMAGING = {
   'imgW.o.no.other': 'The fit was refused: {code}',
   'imgW.o.value.how':
     'Positions alone give no masses of the two stars apart, only their sum; the sum assumes the distance, and its uncertainty carries the parallax’s, cubed',
+  'imgW.f.title': 'A field of stars',
+  'imgW.f.note':
+    'One synthetic frame, 192 by 192 pixels, of forty stars of every brightness on a noisy sky, made by the detector kernel with seeded noise. Set the threshold and read what the detector lists and the width of the stars it measures from the bright ones. The stars that were really placed can be shown, and only then.',
+  'imgW.f.legend': 'sources the detector lists (circled)',
+  'imgW.f.legendTruth': 'sources listed (circled) · stars placed (+)',
+  'imgW.f.control.sigma': 'Threshold',
+  'imgW.f.control.truth': 'The stars that were placed',
+  'imgW.f.truth.on': 'shown',
+  'imgW.f.truth.off': 'hidden',
+  'imgW.f.preset.default': 'Threshold 4, truth hidden',
+  'imgW.f.preset.low': 'Threshold 2.5, truth shown',
+  'imgW.f.value.source':
+    'Synthetic: forty stars of a table the investigation made, on a detector with a sky of 90 electrons a pixel and 8 of read noise, with seeded noise; the truth is hidden until it is switched on',
+  'imgW.f.row.sigma': 'Threshold, in sigma of the smoothed noise',
+  'imgW.f.row.sources': 'Sources listed',
+  'imgW.f.row.flagged':
+    'Sources carrying a flag (crowded, edge, saturated, sharp)',
+  'imgW.f.row.stars': 'Stars used for the width',
+  'imgW.f.row.width': 'Width of the stars (FWHM)',
+  'imgW.f.row.check': 'Does the model describe them?',
+  'imgW.f.value.agree':
+    'Yes as far as this check goes: a Gaussian and a Moffat give the same width, and the reduced chi-square is {chi2}',
+  'imgW.f.value.limited':
+    'No: the width depends on the model, and the reduced chi-square is {chi2}',
+  'imgW.f.value.nostars':
+    'No star is bright and clean enough: none has a signal to noise of 30 or more with no flag',
+  'imgW.f.row.placed': 'Stars that were placed',
+  'imgW.f.row.found': 'Of them, listed as a source',
+  'imgW.f.row.missed': 'Of them, not listed',
+  'imgW.f.row.false': 'Sources that are not a star that was placed',
+  'imgW.f.value.how':
+    'The list is of what stands out of the noise at this threshold, not of what is there. The width is a circular Gaussian fitted to the six or so brightest clean stars: it is the width of this frame only, and it does not see a profile the model cannot draw',
+  'imgW.c.title': 'How faint can the detector see?',
+  'imgW.c.note':
+    'Stars of known brightness are added to a copy of the same frame, the detector looks again, and the share it finds, by magnitude, is the completeness of this search of this frame. Magnitudes here are instrumental: minus 2.5 times the logarithm of the electrons a second, so a smaller number is brighter.',
+  'imgW.c.legend': 'share found · 68 percent interval',
+  'imgW.c.axis': 'instrumental magnitude (brighter to the left)',
+  'imgW.c.control.sigma': 'Threshold',
+  'imgW.c.control.width': 'Width of the injected stars (FWHM)',
+  'imgW.c.control.truth': 'The field’s own stars',
+  'imgW.c.preset.default': 'Threshold 4, width 3',
+  'imgW.c.preset.three': 'Threshold 3, width 3',
+  'imgW.c.value.source':
+    'Synthetic: stars injected at random places of a copy of the synthetic field, twelve trials of twenty, between magnitude minus 3.4 and minus 1.6, with seeded shot noise',
+  'imgW.c.row.width': 'Width of the injected stars',
+  'imgW.c.value.width': '{width} px, entered',
+  'imgW.c.row.measured': 'Width measured from the field’s stars',
+  'imgW.c.no.other': 'The injection was refused: {code}',
+  'imgW.c.row.injected': 'Stars injected',
+  'imgW.c.value.injected': '{n} in {trials} trials',
+  'imgW.c.row.bin': 'Magnitude {bin}',
+  'imgW.c.value.bin': '{k} of {n} found ({p} percent, interval {lo} to {hi})',
+  'imgW.c.row.m50': 'Magnitude at 50 percent found',
+  'imgW.c.row.m90': 'Magnitude at 90 percent found',
+  'imgW.c.value.cross': '{m} (the interval’s edges cross at {lo} and {hi})',
+  'imgW.c.value.never': 'the curve never crosses it',
+  'imgW.c.row.extra': 'Sources listed that were not injected, a trial',
+  'imgW.c.row.applies':
+    'Describes the first instrument’s search (threshold 4, width 3)?',
+  'imgW.c.value.applies': 'Yes: the same width, noise and settings',
+  'imgW.c.value.differs':
+    'No: it differs in {what}. This curve is the answer for the search it was measured under and for no other',
+  'imgW.c.row.expected': 'Stars of the field this curve says a search finds',
+  'imgW.c.row.found': 'Stars of the field the search listed',
+  'imgW.c.value.how':
+    'Isolated stars only: crowded fields are another measurement. One width for the whole frame, instrumental magnitudes with no zero point, and the bin’s share is an average across the bin. It is the detection chance for this frame and this search, not for the instrument',
 };

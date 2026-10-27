@@ -97,7 +97,13 @@ export const WIDGET_FAMILIES = Object.freeze({
   compare: ['compare-transit'],
   gwEvents: ['gw-events'],
   claim: ['frame-marks', 'coverage-repeats', 'profile-refusal'],
-  imaging: ['moon-marks', 'star-parallax', 'binary-orbit'],
+  imaging: [
+    'moon-marks',
+    'star-parallax',
+    'binary-orbit',
+    'field-sources',
+    'field-completeness',
+  ],
   jovian: ['moon-frames', 'moon-fit', 'jupiter-weigh'],
   atmosphere: [
     'atmosphere-balance',
