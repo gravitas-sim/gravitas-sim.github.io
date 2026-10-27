@@ -1,0 +1,198 @@
+{
+  "ring": {
+    "aMoon": 100,
+    "aResonance": 62.996,
+    "kernelResonance": 62.996,
+    "ringInner": 50.783,
+    "period": 117.47,
+    "hillRadius": 1.5512,
+    "dt": 0.1,
+    "steps": 23494,
+    "start": {
+      "alive": 200,
+      "window": 25,
+      "flankMean": 25,
+      "thinning": 1,
+      "eccWindow": 1e-9,
+      "eccFlank": 1e-9,
+      "eccRatio": 1,
+      "lane": 33,
+      "outer": 25,
+      "finite": true
+    },
+    "end": {
+      "alive": 200,
+      "window": 19,
+      "flankMean": 24.5,
+      "thinning": 0.77551,
+      "eccWindow": 0.035882,
+      "eccFlank": 0.032105,
+      "eccRatio": 1.1177,
+      "lane": 31,
+      "outer": 24,
+      "finite": true
+    },
+    "laneRatio": 0.93939,
+    "outerRatio": 0.96,
+    "aliveFraction": 1
+  },
+  "control": {
+    "aMoon": 100,
+    "aResonance": 62.996,
+    "kernelResonance": 62.996,
+    "ringInner": 52.062,
+    "period": 117.47,
+    "hillRadius": 1.5512,
+    "dt": 0.1,
+    "steps": 23494,
+    "start": {
+      "alive": 200,
+      "window": 25,
+      "flankMean": 25,
+      "thinning": 1,
+      "eccWindow": 1e-9,
+      "eccFlank": 1e-9,
+      "eccRatio": 1,
+      "lane": 33,
+      "outer": 25,
+      "finite": true
+    },
+    "end": {
+      "alive": 200,
+      "window": 25,
+      "flankMean": 25,
+      "thinning": 1,
+      "eccWindow": 0.0002498,
+      "eccFlank": 0.00015734,
+      "eccRatio": 1.5876,
+      "lane": 34,
+      "outer": 25,
+      "finite": true
+    },
+    "laneRatio": 1.0303,
+    "outerRatio": 1,
+    "aliveFraction": 1
+  },
+  "pass": {
+    "q": 1.3,
+    "G": 3000,
+    "particles": 60,
+    "planetRadius": 15,
+    "densityRatio": 2.3704,
+    "rigidLimitRadii": 1.6799,
+    "fluidLimitRadii": 3.2533,
+    "kernelRigidRadii": 1.6799,
+    "kernelFluidRadii": 3.2533,
+    "periapsisRadii": 1.2725,
+    "startExtent": 3.7731,
+    "endExtent": 61.117,
+    "ratio": 16.198,
+    "tPeriapsis": 8.68,
+    "tEnd": 17.59,
+    "aliveFraction": 1,
+    "finite": true,
+    "unit": 20
+  },
+  "ctl": {
+    "q": 4.88,
+    "G": 3000,
+    "particles": 60,
+    "planetRadius": 15,
+    "densityRatio": 2.3704,
+    "rigidLimitRadii": 1.6799,
+    "fluidLimitRadii": 3.2533,
+    "kernelRigidRadii": 1.6799,
+    "kernelFluidRadii": 3.2533,
+    "periapsisRadii": 4.7731,
+    "startExtent": 3.7731,
+    "endExtent": 4.6776,
+    "ratio": 1.2397,
+    "tPeriapsis": 62.94,
+    "tEnd": 125.86,
+    "aliveFraction": 1,
+    "finite": true,
+    "unit": 20
+  },
+  "ctlSweep": {
+    "what": "the control run at periapsis factors about 1.5 times the fluid limit; sorted extent ratios (not a committed leg)",
+    "factors": [
+      0.985,
+      0.995,
+      0.9995,
+      1.0005,
+      1.005,
+      1.015,
+      1.02,
+      1
+    ],
+    "ratios": [
+      0.2213,
+      0.9961,
+      1.24,
+      1.391,
+      1.643,
+      2.09,
+      2.28,
+      3.951
+    ],
+    "underBound": 5,
+    "runs": 8
+  },
+  "legs": [
+    {
+      "id": "s1.resonance.radius",
+      "value": 0,
+      "pass": true
+    },
+    {
+      "id": "s2.eccentricity",
+      "value": 1.118,
+      "pass": false
+    },
+    {
+      "id": "s3.thinning",
+      "value": 0.7755,
+      "pass": false
+    },
+    {
+      "id": "s4b.lane",
+      "value": 0.9394,
+      "pass": false
+    },
+    {
+      "id": "s5.control.thinning",
+      "value": 1,
+      "pass": true
+    },
+    {
+      "id": "s5.control.eccentricity",
+      "value": 0.0002498,
+      "pass": true
+    },
+    {
+      "id": "s6.bodies",
+      "value": 1,
+      "pass": true
+    },
+    {
+      "id": "r1.limits",
+      "value": 0,
+      "pass": true
+    },
+    {
+      "id": "r2.stretch",
+      "value": 16.2,
+      "pass": true
+    },
+    {
+      "id": "r3.control",
+      "value": 1.24,
+      "pass": true
+    },
+    {
+      "id": "r4.bodies",
+      "value": 1,
+      "pass": true
+    }
+  ]
+}

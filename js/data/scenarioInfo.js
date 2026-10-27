@@ -135,6 +135,12 @@ const SCENARIO_STRUCTURE = {
   'kuiper-belt': {
     tags: ['solar-system', 'orbits-kepler'],
   },
+  'ring-gap': {
+    tags: ['solar-system', 'tides', 'orbits-kepler'],
+  },
+  'roche-pass': {
+    tags: ['solar-system', 'tides'],
+  },
   'sagittarius-a': {
     tags: ['compact-objects', 'galaxies-clusters', 'orbits-kepler'],
   },

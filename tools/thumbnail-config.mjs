@@ -97,6 +97,8 @@ export const CAPTURE = {
   // trails are one shared circle with the bodies spaced round it - which is
   // exactly what the scenario is about.
   'jupiter-trojans': { settle: 30, speed: 40, zoom: 0.55, trail: 900 },
+  'ring-gap': { settle: 60, speed: 2, zoom: 3.8 },
+  'roche-pass': { settle: 1.9, speed: 1, zoom: 4.5, trail: 30 },
   'three-body-sensitivity-lab': { settle: 48, trail: 150, zoom: 3.4 },
   'binary-pair': { settle: 20, speed: 12, zoom: 1.3, trail: 1400 },
   // Framed on the inner pair rather than on the outermost planet, which sits

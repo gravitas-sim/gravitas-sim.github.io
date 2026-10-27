@@ -176,7 +176,7 @@ their ceilings:
 | `js/investigations.js` | 3,287 | 3,287 |
 | `js/render.js` | 3,015 | 3,015 |
 | `js/data/investigations/measurement-sequence.js` | 2,922 | 2,922 |
-| `js/world/build.js` | 2,599 | 2,599 |
+| `js/world/build.js` | 2,598 | 2,598 |
 | `js/composerPage.js` | 2,528 | 2,528 |
 <!--/fact-block-->
 
@@ -485,8 +485,8 @@ npm run author:check -- --json            # for an editor
 **`author:walk`** is the part that cannot be done as data. The checker can see
 that a step names a widget and that the widget has a control called `mass`; it
 cannot see that the widget painted, that the scenario built, that a probe
-produced rows against a live world, or that Next moved. The walker opens all <!--fact:investigations-->72<!--/fact--> investigations in
-a browser and takes all <!--fact:investigationSteps-->1139<!--/fact--> steps,
+produced rows against a live world, or that Next moved. The walker opens all <!--fact:investigations-->75<!--/fact--> investigations in
+a browser and takes all <!--fact:investigationSteps-->1159<!--/fact--> steps,
 sharded one lesson per test so contexts are reused and a failure names its lesson. It takes about two
 minutes and runs as part of `npm run e2e`.
 
@@ -580,7 +580,7 @@ every scenario, because each one was laid out against its error behavior.
 **Counts are generated.** Anything of the form
 
 ```markdown
-**<!--fact:scenarios-->59<!--/fact--> built-in scenarios**
+**<!--fact:scenarios-->61<!--/fact--> built-in scenarios**
 ```
 
 is written by `npm run docs:sync` from the catalog, the lesson manifest, the

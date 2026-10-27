@@ -34,7 +34,15 @@ import { withSeed } from '../js/rng.js';
 import { ENGINE_GEOMETRY } from '../js/world/build.js';
 
 /** Every declaration: a pack may carry some, only the engine builds the rest. */
-const ALL_GEOMETRY = { ...SCENARIO_GEOMETRY, ...ENGINE_GEOMETRY };
+// Prompt 204 part 2's two scenarios are new, not converted from code: there is
+// no world the code built to hold them to, and tests/tidesScenarios.test.js
+// holds them to their own contract.
+const NEW_SCENARIOS = ['ring-gap', 'roche-pass'];
+const ALL_GEOMETRY = Object.fromEntries(
+  Object.entries({ ...SCENARIO_GEOMETRY, ...ENGINE_GEOMETRY }).filter(
+    ([k]) => !NEW_SCENARIOS.includes(k)
+  )
+);
 import { validateScenarioPack } from '../js/platform/scenario.js';
 import {
   GEOMETRY_ENGINE_SET,

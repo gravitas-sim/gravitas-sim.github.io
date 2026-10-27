@@ -963,6 +963,45 @@
         "the-budget"
       ],
       "evidenceFrom": "model"
+    },
+    "why-rings": {
+      "centralExperimentId": "ce.why-rings",
+      "object": "panel:tides-roche",
+      "control": "tides-roche/system",
+      "quantity": "the rigid Roche limit of a pair from its two densities: Phobos about Mars 5,466 km, Shoemaker-Levy 9 about Jupiter 117,327 km, and Phobos's orbit at 9,376 km lying between the rigid and the fluid limit",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "phobos-predict",
+        "phobos-where"
+      ],
+      "evidenceFrom": "model"
+    },
+    "tides-that-move-the-moon": {
+      "centralExperimentId": "ce.moon-recedes",
+      "object": "panel:tides-moon",
+      "control": "tides-moon/gyr",
+      "quantity": "the Moon's distance in a constant-Q model a given time on: 62.9 Earth radii in half a billion years and 65.1 in one billion, against the 60.3 of today",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "forward-predict",
+        "forward-one-billion"
+      ],
+      "evidenceFrom": "model"
+    },
+    "ios-fire": {
+      "centralExperimentId": "ce.ios-fire",
+      "object": "panel:tides-heating",
+      "control": "tides-heating/e",
+      "quantity": "the tidal heating of Io at k2 = 1.5 and Q = 100, 9.33 x 10^13 W at its eccentricity of 0.0041 and four times that when the eccentricity is doubled",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "double-predict",
+        "double-the-eccentricity"
+      ],
+      "evidenceFrom": "model"
     }
   }
 }

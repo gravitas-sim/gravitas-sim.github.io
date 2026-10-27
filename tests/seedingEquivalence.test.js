@@ -341,6 +341,6 @@ describe('Math.random is forbidden outside js/random/ by a lint rule with a shor
         calls: true,
       });
     }
-    expect(allowed).toHaveLength(15);
+    expect(allowed).toHaveLength(16);
   });
 });

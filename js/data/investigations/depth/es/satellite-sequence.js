@@ -134,6 +134,114 @@ export const WEIGHING_JUPITER_DEEPER = {
   ],
 };
 
+// Anillos y mareas, pasos más profundos (Prompt 204, segunda parte): paso a paso con el inglés.
+export const WHY_RINGS_DEEPER = {
+  steps: [
+    {
+      title: 'Hielo alrededor de Saturno',
+      body: 'El límite sale de las dos densidades: d = 2,44 R (ρ<sub>planeta</sub> / ρ<sub>satélite</sub>)<sup>1/3</sup> para un cuerpo que puede deformarse. Saturno tiene un radio de 60 268 km y una densidad media de 687 kg/m&sup3;, y el hielo ronda los 900 kg/m&sup3;.',
+      prompt:
+        '¿Cuál es el límite de Roche fluido del hielo alrededor de Saturno, en miles de km?',
+      hints: [
+        '(687 / 900) a la un tercio es 0,914; multiplica por 2,44 y por 60 268 km.',
+      ],
+      worked:
+        '2,44 × 60 268 × (687/900)^(1/3) = 2,44 × 60 268 × 0,9139 = 134 400 km: 134,4 miles de km. El borde exterior del anillo B está a 117 580 km, dentro de él.',
+      feedback: {
+        close:
+          'Casi. La densidad del satélite va en el denominador, dentro de la raíz cúbica.',
+        'wrong-order-of-magnitude':
+          'Se pasa una potencia de diez: los radios del paso están en kilómetros y esta respuesta, en miles de km.',
+        off: '2,44 R (ρ del planeta / ρ del satélite)^(1/3).',
+      },
+    },
+    {
+      title: 'Las otras resonancias de Mimas',
+      body: 'La resonancia p:q está en a<sub>m</sub> (q/p)<sup>2/3</sup>, con a<sub>m</sub> = 185 540 km para Mimas. La resonancia 3:1, donde una partícula da tres vueltas por cada órbita de Mimas, queda mucho más adentro.',
+      prompt:
+        '¿Dónde está la resonancia 3:1 de Mimas, en miles de km desde el centro de Saturno?',
+      hints: ['(1/3) a las dos terceras es 0,4807.'],
+      worked:
+        '185 540 × (1/3)^(2/3) = 185 540 × 0,4807 = 89 200 km: 89,2 miles de km.',
+      feedback: {
+        close: 'Casi. El exponente es 2/3, y la razón es q/p = 1/3.',
+        'wrong-order-of-magnitude':
+          'Se pasa una potencia de diez: es un poco menos de cien mil km.',
+        off: 'a (q/p)^(2/3) con q = 1 y p = 3.',
+      },
+    },
+    {
+      rubric:
+        'Crédito completo por decir que un cuerpo rígido resiste que lo desgarren y uno fluido no, así que el fluido se rompe más lejos; que el límite real de un cuerpo real queda entre los dos; y que el límite depende de las densidades y no del tamaño del satélite. Crédito parcial por una de las tres.',
+      title: 'Dos límites para un par',
+      body: 'Para Fobos y Marte el límite rígido es 5 466 km y el fluido 10 585 km: casi un factor de dos de diferencia (2,44 frente a 1,26). Fobos orbita a 9 376 km.',
+      prompt:
+        'En dos o tres frases: ¿por qué hay dos límites, y dónde queda el de una luna real?',
+    },
+  ],
+};
+
+export const TIDES_DEEPER = {
+  steps: [
+    {
+      title: 'Cuánto tarda en bloquearse la Luna',
+      body: 'El mismo par que mueve a la Luna frena el giro propio de la Luna: la marea de la Tierra sobre la Luna. El tiempo para quitar un giro ω es t = Iω/N, con I = α m R&sup2; el momento de inercia de la Luna (α = 0,393) y N = (3/2)(k2/Q) G M&sup2; R&sup5; / a&sup6; el par. Para la Luna (k2 = 0,024, Q = 100, radio 1 737,4 km) a 384 400 km, desde un giro de una vuelta en diez horas, el núcleo de cálculo da el tiempo de abajo.',
+      prompt:
+        '¿Cuál es el tiempo para bloquear la Luna, en unidades de 10⁸ años?',
+      hints: [
+        'El par cae como a⁻⁶: a la distancia de la Luna es pequeño, pero el giro de la Luna también lo es.',
+      ],
+      worked:
+        'N = 1,5 × (0,024/100) × G M² R⁵/a⁶ = 4,2 × 10¹⁵ N m e I ω = 0,393 × 7,342 × 10²² × (1,7374 × 10⁶)² × 1,745 × 10⁻⁴ = 1,52 × 10³¹, así que t = 3,6 × 10¹⁵ s = 1,15 × 10⁸ años: muy por debajo de la edad de la Luna, de acuerdo con que la Luna esté bloqueada.',
+      feedback: {
+        close: 'Casi. Divide el momento angular del giro entre el par.',
+        'wrong-order-of-magnitude':
+          'Se pasa una potencia de diez: son cien millones de años, no mil millones ni un millón.',
+        off: 't = I ω / N.',
+      },
+    },
+    {
+      rubric:
+        'Crédito completo por decir que la Q del modelo es un solo número y que la disipación de marea real de la Tierra depende de los océanos (su profundidad, la forma de las cuencas, que han cambiado con la deriva continental) y por tanto del tiempo; que corrido hacia atrás con la Q actual la Luna está en contacto hace 1,58 miles de millones de años, cosa que la edad de la Luna contradice; y que eso significa que el ritmo de alejamiento en el pasado fue menor, no que el ritmo actual del modelo sea erróneo. Crédito parcial por dos.',
+      title: 'Una Q que cambia',
+      body: 'Corrido hacia atrás con Q = 12, el modelo pone a la Luna en contacto con la Tierra hace 1,58 miles de millones de años. La Luna tiene unos 4,5 miles de millones de años.',
+      prompt:
+        'En dos o tres frases: ¿qué dice eso de Q, y del ritmo de alejamiento de la Luna en el pasado?',
+    },
+  ],
+};
+
+export const IOS_DEEPER = {
+  steps: [
+    {
+      title: 'A qué distancia del k2/Q máximo',
+      body: 'El modelo admite k2/Q hasta 0,3 (k2 = 1,5 entre Q = 5). El k2/Q que necesita el valor medio del calor observado es el número que leíste.',
+      prompt:
+        '¿Cuántas veces menor es el k2/Q necesario que el máximo del modelo?',
+      hints: ['Divide 0,3 entre el k2/Q que leíste.'],
+      worked:
+        '0,3 / 0,01768 = 17,0: el calor observado necesita un k2/Q diecisiete veces por debajo del máximo del modelo, con holgura dentro del intervalo.',
+      feedback: {
+        close: 'Casi. El número mayor va arriba.',
+        'wrong-order-of-magnitude':
+          'Se pasa una potencia de diez: es cerca de diecisiete.',
+        off: '0,3 dividido entre el k2/Q necesario.',
+      },
+    },
+    {
+      rubric:
+        'Crédito completo por decir que la fórmula toma k2 y Q como números dados para todo el cuerpo mientras el interior de Ío es por capas y puede estar parcialmente fundido, así que k2 y Q no se conocen y el calor es una cota; que es de primer orden en la excentricidad; y que necesita una razón para que la órbita siga excéntrica (la resonancia con Europa y Ganímedes), porque el calentamiento de marea también circulariza la órbita. Crédito parcial por dos.',
+      title: 'Lo que la fórmula deja fuera',
+      body: 'La fórmula da el calor de Ío como 21/2 &times; (k2/Q) G M&sup2; n R&sup5; e&sup2; / a&sup6;. Necesita tres cosas que no proporciona.',
+      prompt:
+        'En dos o tres frases: ¿qué toma como dado la fórmula, y qué mantiene excéntrica la órbita de Ío?',
+    },
+  ],
+};
+
 export default {
   'weighing-jupiter': WEIGHING_JUPITER_DEEPER,
+  'why-rings': WHY_RINGS_DEEPER,
+  'tides-that-move-the-moon': TIDES_DEEPER,
+  'ios-fire': IOS_DEEPER,
 };

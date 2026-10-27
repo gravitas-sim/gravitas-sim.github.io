@@ -173,6 +173,9 @@ const LOADERS = {
   'what-a-crater-diameter-is-worth': () =>
     import('./what-a-crater-diameter-is-worth.js'),
   'weighing-jupiter': () => import('./weighing-jupiter.js'),
+  'why-rings': () => import('./why-rings.js'),
+  'tides-that-move-the-moon': () => import('./tides-that-move-the-moon.js'),
+  'ios-fire': () => import('./ios-fire.js'),
   'why-venus-is-hot': () => import('./why-venus-is-hot.js'),
   'two-greenhouse-models': () => import('./two-greenhouse-models.js'),
 };
@@ -265,6 +268,10 @@ const TRANSLATIONS = {
     'what-a-crater-diameter-is-worth': () =>
       import('./es/what-a-crater-diameter-is-worth.js'),
     'weighing-jupiter': () => import('./es/weighing-jupiter.js'),
+    'why-rings': () => import('./es/why-rings.js'),
+    'tides-that-move-the-moon': () =>
+      import('./es/tides-that-move-the-moon.js'),
+    'ios-fire': () => import('./es/ios-fire.js'),
     'why-venus-is-hot': () => import('./es/why-venus-is-hot.js'),
     'two-greenhouse-models': () => import('./es/two-greenhouse-models.js'),
   },

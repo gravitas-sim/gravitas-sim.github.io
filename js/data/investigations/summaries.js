@@ -135,4 +135,7 @@ export const SUMMARIES = {
   'which-surface-is-older': `Craters collect on a surface as it is hit. You will compare the craters per area of two regions of the Moon and of Mars, read a density ratio with its interval, and see why no significant difference is not the same age.`,
   'craters-by-size': `Small craters are many and large ones few. You will read a size-frequency plot with its error bars, fit its slope with an interval, and see a count that stops short bend it.`,
   'what-a-crater-diameter-is-worth': `A circle on a map becomes a diameter in kilometers. You will read the four terms of its uncertainty, see a ten percent correction that is known to a hundredth of a percent, and see why no age in years is reported.`,
+  'why-rings': `A body held together only by gravity comes apart inside its Roche limit. You will find the rigid and the fluid limit of four pairs, watch a clump pass inside the limit, and find where Mimas's 2:1 resonance falls against the Cassini Division, with what each model leaves out.`,
+  'tides-that-move-the-moon': `The Moon's tide on the Earth pushes the Moon outward and lengthens the day. You will read both from a constant-Q model against laser ranging and eclipse records, run it forward and backward, and find where it fails.`,
+  'ios-fire': `Jupiter's tide flexes Io, and the friction is heat. You will read the heat and the energy in one orbit from the tidal heating formula, see why the answer is a bound and not a prediction, and read what the observed heat needs.`,
 };
