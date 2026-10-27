@@ -2,7 +2,9 @@
   "format": "gravitas.small-bodies-thresholds/1",
   "prompt": 198,
   "committed": "Before any implementation output was inspected: this file was committed ahead of js/kernels/smallbodies/, the validation tool, the oracle's inputs, script and results, and every test (Roadmap III, 7.5.8). A check that a measurement crosses is a failed check, reported and left failing; only Carl resets a bound. No catalog, pack or light curve of a real object was read or available when it was written; every authentic leg (tier e) is NOT RUN until Carl supplies the files named in SMALL_BODIES.md.",
-  "corrections": [],
+  "corrections": [
+    "definition.gapWindows quotes the window centres as 2.0652, 2.5013, 2.8240, 2.9582 and 3.2778 AU, the figures usually given for the resonances; those were typed by hand. The kernel centres every window on the resonance axis computed from Jupiter's a = 5.202887 AU (2.0648, 2.5013, 2.8246, 2.9575, 3.2776 AU), the number a1.resonance.axes and b1.oracle.axes hold, and the half-widths are as typed. The two differ by at most 0.0007 AU, a thirtieth of the narrowest half-width; no bound, tolerance or window width was moved, and no kernel output had been read when the discrepancy was noticed beyond a single smoke run that printed the axes."
+  ],
   "definition": {
     "what": "The belts from a catalog and the spin from a light curve. (1) Resonance locations: a body at period ratio r = T_body / T_planet orbits at a = a_planet r^(2/3) (Kepler's third law with the body's mass neglected); the resonance is named inner:outer, the whole numbers of orbits the inner and the outer body complete in the same time (Jupiter 3:1 means three asteroid orbits to one of Jupiter, r = 1/3; the plutinos are 3:2 with Neptune, Neptune inside, r = 3/2). (2) The belt's distribution in semi-major axis, eccentricity and inclination as histograms. (3) A gap as a measured depletion: D = 1 - N_obs / N_exp over a stated window in a, N_exp the integral of a smooth baseline fitted outside every gap window, D reported with a case-bootstrap percentile interval (js/kernels/statistics/resample.js, intervals.js; the bootstrap refits the baseline on every draw) and the verdict resolved or not resolved. (4) Population counts by orbit-class rules in (a, e, i): the main belt thirds, Hilda, Jupiter Trojan, Kuiper-belt classical, plutino and twotino. (5) A bounded light-curve model: a triaxial ellipsoid a >= b >= c rotating about its c axis, seen at aspect angle theta from the spin axis, with geometric scattering at zero phase angle (flux proportional to the projected area, pi sqrt(b^2 c^2 nx^2 + a^2 c^2 ny^2 + a^2 b^2 nz^2) for the unit viewing direction n in the body frame, n = (sin theta cos phi, sin theta sin phi, cos theta)); the rotation period from the Lomb-Scargle peak of the light curve with the two-maxima rule (P_rot = 2 / f_peak: a convex ellipsoid shows two maxima and two minima a rotation, so the flux has period P_rot / 2) refined by a K = 4 harmonic series at the double period; the amplitude from the fitted curve, peak to peak, in magnitudes; and the shape reported as a BOUND, a/b >= 10^(0.4 Delta m), with equality only at theta = 90 degrees (Zappala et al. 1990, the amplitude-aspect relation Delta m = 2.5 log10(a/b) - 1.25 log10((a^2 cos^2 theta + c^2 sin^2 theta) / (b^2 cos^2 theta + c^2 sin^2 theta))). (6) The survey's selection: a magnitude-limited discovery at opposition, V = H + 5 log10(r Delta) with Delta = r - 1 for a circular orbit (the opposition surge and phase function are not modelled), cumulative H distribution N(<H) proportional to 10^(alpha H); what a histogram of the detected objects shows and does not show.",
     "constants": "Jupiter a = 5.20288700 AU and Neptune a = 30.06952752 AU, the 1800-2050 AD mean elements of E. M. Standish, 'Keplerian Elements for Approximate Positions of the Major Planets' (JPL Solar System Dynamics, Table 1), typed here; no retrieval in the session that wrote this file. The AU is not used outside a ratio.",
@@ -32,23 +34,86 @@
     "ensembleN0": 8000,
     "smallN0": 150,
     "gaps": [
-      { "id": "4:1", "inner": 4, "outer": 1, "halfWidthAu": 0.015, "dmax": 0.4 },
-      { "id": "3:1", "inner": 3, "outer": 1, "halfWidthAu": 0.025, "dmax": 0.85 },
-      { "id": "5:2", "inner": 5, "outer": 2, "halfWidthAu": 0.025, "dmax": 0.7 },
-      { "id": "7:3", "inner": 7, "outer": 3, "halfWidthAu": 0.02, "dmax": 0.5 },
-      { "id": "2:1", "inner": 2, "outer": 1, "halfWidthAu": 0.04, "dmax": 0.9 }
+      {
+        "id": "4:1",
+        "inner": 4,
+        "outer": 1,
+        "halfWidthAu": 0.015,
+        "dmax": 0.4
+      },
+      {
+        "id": "3:1",
+        "inner": 3,
+        "outer": 1,
+        "halfWidthAu": 0.025,
+        "dmax": 0.85
+      },
+      {
+        "id": "5:2",
+        "inner": 5,
+        "outer": 2,
+        "halfWidthAu": 0.025,
+        "dmax": 0.7
+      },
+      {
+        "id": "7:3",
+        "inner": 7,
+        "outer": 3,
+        "halfWidthAu": 0.02,
+        "dmax": 0.5
+      },
+      {
+        "id": "2:1",
+        "inner": 2,
+        "outer": 1,
+        "halfWidthAu": 0.04,
+        "dmax": 0.9
+      }
     ],
     "coverageGaps": ["3:1", "5:2", "7:3", "2:1"],
-    "planets": { "jupiterAu": 5.202887, "neptuneAu": 30.06952752 },
+    "planets": {
+      "jupiterAu": 5.202887,
+      "neptuneAu": 30.06952752
+    },
     "classes": {
-      "innerMainBelt": { "a": [2.0, 2.5], "e": [0, 0.4], "i": [0, 30] },
-      "middleMainBelt": { "a": [2.5, 2.82], "e": [0, 0.4], "i": [0, 30] },
-      "outerMainBelt": { "a": [2.82, 3.27], "e": [0, 0.4], "i": [0, 30] },
-      "hilda": { "a": [3.7, 4.2], "e": [0, 0.3], "i": [0, 20] },
-      "trojan": { "a": [5.05, 5.4], "e": [0, 0.3], "i": [0, 40] },
-      "kuiperClassical": { "a": [42.0, 47.0], "e": [0, 0.25], "i": [0, 40] },
-      "plutino": { "aAroundResonance": 0.5, "resonance": [3, 2] },
-      "twotino": { "aAroundResonance": 0.5, "resonance": [2, 1] }
+      "innerMainBelt": {
+        "a": [2.0, 2.5],
+        "e": [0, 0.4],
+        "i": [0, 30]
+      },
+      "middleMainBelt": {
+        "a": [2.5, 2.82],
+        "e": [0, 0.4],
+        "i": [0, 30]
+      },
+      "outerMainBelt": {
+        "a": [2.82, 3.27],
+        "e": [0, 0.4],
+        "i": [0, 30]
+      },
+      "hilda": {
+        "a": [3.7, 4.2],
+        "e": [0, 0.3],
+        "i": [0, 20]
+      },
+      "trojan": {
+        "a": [5.05, 5.4],
+        "e": [0, 0.3],
+        "i": [0, 40]
+      },
+      "kuiperClassical": {
+        "a": [42.0, 47.0],
+        "e": [0, 0.25],
+        "i": [0, 40]
+      },
+      "plutino": {
+        "aAroundResonance": 0.5,
+        "resonance": [3, 2]
+      },
+      "twotino": {
+        "aAroundResonance": 0.5,
+        "resonance": [2, 1]
+      }
     },
     "classNote": "The classes follow the orbit-class limits of the JPL Small-Body Database as recalled when this file was written, restated here and not retrieved; the plutino and twotino classes are a-windows around the resonance's location and are a PROXY for resonance (a body inside the window may circulate; the resonant angle settles it, js/resonance/elements.js classifyAngle over an integration).",
     "lightcurve": {
@@ -64,7 +129,11 @@
       "ensembleCurves": 300,
       "noiseMag": [0.01, 0.03]
     },
-    "selection": { "vLim": 21, "alpha": 0.5, "aRangeAu": [2.0, 3.5] },
+    "selection": {
+      "vLim": 21,
+      "alpha": 0.5,
+      "aRangeAu": [2.0, 3.5]
+    },
     "refusalCodes": [
       "too-few",
       "range",
@@ -83,60 +152,93 @@
   "checks": {
     "a1.resonance.axes": {
       "what": "the closed form a = a_planet r^(2/3) with r = outer/inner (body inside the planet) or inner/outer (body outside) for the seven Jupiter and four Neptune entries of the tables, in the kernel's order and with the labels inner:outer; the 1:1 entry is a_Jupiter; the 3:1 gap is the number 5.202887 / 3^(2/3)",
-      "bounds": { "relative": 1e-13 }
+      "bounds": {
+        "relative": 1e-13
+      }
     },
     "a2.resonance.roundtrip": {
       "what": "the period ratio recovered from each axis by Kepler's third law returns r to the stated relative tolerance, and js/resonance/elements.js nearestRatio of T_planet / T_body (maxDenominator 10) returns the whole numbers inner and outer of the entry for every entry",
-      "bounds": { "relative": 1e-13 }
+      "bounds": {
+        "relative": 1e-13
+      }
     },
     "a3.lightcurve.closed": {
       "what": "the projected area at theta = 90, phi = 0 is pi b c, at phi = 90 is pi a c, at theta = 0 is pi a b; a sphere has zero amplitude at every aspect; the pole-on aspect (theta = 0) has zero amplitude for every a, b, c; the flux at phi and phi + pi are equal (period P_rot / 2); the amplitude at theta = 90 is 2.5 log10(a / b); the max minus min of the computed curve equals the Zappala relation at 60 random (a, b, c, theta)",
-      "bounds": { "relative": 1e-12 }
+      "bounds": {
+        "relative": 1e-12
+      }
     },
     "a4.bound.is.a.bound": {
       "what": "1000 random (a/b in [1.05, 3], b/c in [1, 2], theta in [20, 90] by uniform cos) triaxial bodies: the bound 10^(0.4 Delta m) never exceeds a/b (tolerance 1e-12 relative); equals a/b at theta = 90 (1e-12); and at theta <= 60 the bound is below a/b by more than 5 percent in at least 90 percent of the draws, so the bound is not the shape",
-      "bounds": { "relative": 1e-12, "slack": 0.05, "fractionBelow": 0.9 }
+      "bounds": {
+        "relative": 1e-12,
+        "slack": 0.05,
+        "fractionBelow": 0.9
+      }
     },
     "a5.baseline.exact": {
       "what": "expected counts from the log-polynomial of degree 4 (c = [4.2, 0.3, -0.5, 0.1, 0.2] in x on the fit range) with no noise and a gap window multiplied by 0.5 over its whole window: the fit excluding the windows recovers the polynomial's coefficients to the stated relative tolerance and the depletion of the window to the stated absolute tolerance",
-      "bounds": { "coefficientRelative": 1e-6, "depletionAbsolute": 1e-6 }
+      "bounds": {
+        "coefficientRelative": 1e-6,
+        "depletionAbsolute": 1e-6
+      }
     },
     "a6.selection.analytic": {
       "what": "detectionLimitH against its closed form at a = 2, 2.5, 3, 3.5 (1e-13); the ratio of detected fractions at a = 2 and a = 3.5 equals (a2 (a2 - 1) / (a1 (a1 - 1)))^(5 alpha) to 1e-12; and on 400 synthetic populations of 20,000 objects uniform in a on the stated range, the mean a of the detected objects differs from the quadrature of the weight (Simpson, 4001 points) by no more than 3 standard errors in the mean of the 400 means, and the detected mean lies below the true mean (the survey's bias is inward)",
-      "bounds": { "closedForm": 1e-12, "sigmas": 3 }
+      "bounds": {
+        "closedForm": 1e-12,
+        "sigmas": 3
+      }
     },
     "a7.classes.partition": {
       "what": "10,000 synthetic orbits with a, e, i uniform over the union of the class boxes: no orbit is in two classes, an orbit in a box and outside every other box is that class, the plutino window is centred on 30.06952752 x 1.5^(2/3) and the twotino on 30.06952752 x 2^(2/3), and the table of counts sums to the number of orbits",
-      "bounds": { "exact": true }
+      "bounds": {
+        "exact": true
+      }
     },
     "b1.oracle.axes": {
       "what": "the kernel's eleven resonance axes against the oracle's numpy values (pinned, tests/fixtures/small-bodies/oracle-results.json)",
-      "bounds": { "relative": 1e-12 }
+      "bounds": {
+        "relative": 1e-12
+      }
     },
     "b2.oracle.projectedArea": {
       "what": "the closed-form projected area against the oracle's surface integral for 40 (a, b, c, theta, phi) drawn by the oracle's own seed (pinned inputs): relative difference",
-      "bounds": { "relative": 1e-4 }
+      "bounds": {
+        "relative": 0.0001
+      }
     },
     "b3.oracle.period": {
       "what": "the kernel's refined peak period against astropy's Lomb-Scargle peak on six pinned series (periods 3.1, 5.4, 8.8, 14.0, 21.5 and 37 hours; 4 to 6 nights of 6 to 8 hours; noise 0.01 and 0.03 mag; pinned by the oracle), and the kernel's rotation period against the oracle's 2 / f_peak: relative difference of the peak periods and of the rotation periods",
-      "bounds": { "relative": 5e-4 }
+      "bounds": {
+        "relative": 0.0005
+      }
     },
     "b4.oracle.depletion": {
       "what": "the baseline-fit depletion at the five gap windows of three pinned synthetic catalogs (n0 = 8000, 3000 and 800, seeds pinned in the oracle inputs) against scipy's maximum-likelihood fit of the same model: absolute difference of the depletion",
-      "bounds": { "absolute": 5e-4 }
+      "bounds": {
+        "absolute": 0.0005
+      }
     },
     "c1.coverage.ensemble": {
       "what": "300 synthetic belts (n0 = 8000, the stated injections) seeded from named streams, each analysed with 200 bootstrap draws at level 0.95: the fraction of catalogs whose interval covers the truth depletion of the window, for each of 3:1, 5:2, 7:3 and 2:1",
-      "bounds": { "coverage": [0.9, 0.995] }
+      "bounds": {
+        "coverage": [0.9, 0.995]
+      }
     },
     "c2.coverage.bootstrap": {
       "what": "the roadmap's form of the check: one seeded catalog (n0 = 8000); its point estimate of the 3:1 depletion D_hat; 200 bootstrap resamples of the catalog treated as catalogs in their own right, each analysed with 100 inner draws at level 0.95: the fraction whose interval covers D_hat",
-      "bounds": { "coverage": [0.88, 0.995] }
+      "bounds": {
+        "coverage": [0.88, 0.995]
+      }
     },
     "c3.lightcurve.recovery": {
       "what": "300 synthetic light curves per noise level (a/b in [1.15, 2.2], b/c in [1.0, 1.6], theta from cos uniform over [30, 90] degrees, P_rot log-uniform over [2.5, 24] hours, 5 nights of 7 hours, 40 random times per night, noise as stated; the truth manifest kept): the fraction whose rotation period is within the stated relative tolerance of the truth, the fraction whose amplitude is within 0.03 mag of the true Delta m at that aspect, the coverage of the amplitude's 95 percent interval of the true Delta m, the fraction for which the claim a/b >= bound holds for the true a/b, and the coverage of the period's 1.96 sigma interval of the truth",
       "bounds": {
-        "periodRelativeByNoise": { "0.01": 0.002, "0.03": 0.003 },
+        "periodRelativeByNoise": {
+          "0.01": 0.002,
+          "0.03": 0.003
+        },
         "periodFraction": 0.95,
         "amplitudeAbsolute": 0.03,
         "amplitudeFraction": 0.95,
@@ -147,7 +249,9 @@
     },
     "c4.populations.counts": {
       "what": "a synthetic main belt, Hilda, Trojan and Kuiper population with known class membership (the truth manifest): classify returns the manifest's class for every member whose orbit was drawn inside its own box, and the count table equals the manifest's",
-      "bounds": { "exact": true }
+      "bounds": {
+        "exact": true
+      }
     },
     "d1.cut.too.small": {
       "what": "300 synthetic catalogs at n0 = 150 (the gap injected as stated): the fraction whose 3:1 verdict is 'not resolved'; the power curve at n0 = 500, 1000 and 2000 is reported; 300 gap-free catalogs at n0 = 8000: the fraction whose 3:1 verdict is 'resolved' (the false-positive rate); 300 gapped catalogs at n0 = 8000: the fraction 'resolved'",
@@ -159,11 +263,16 @@
     },
     "d2.refusals": {
       "what": "29 values (below minObjects), a window outside the fitted range, two windows overlapping, a window of zero width, a NaN in the values, a non-whole draws count, a level of 1: each is a refusal with the stated code; a light curve of 10 points (below minPoints) and one with a NaN time and a sigma that is not positive: each is a refusal with the stated code; a triaxial body with c > b or b > a, an aspect outside [0, 90]: refused",
-      "bounds": { "exact": true }
+      "bounds": {
+        "exact": true
+      }
     },
     "d3.steep.edge": {
       "what": "100 catalogs (n0 = 8000) whose density falls by a factor of 20 across 3.20 to 3.30 AU (a sharp outer edge) with NO gap injected: the warning steep-baseline is present on the 2:1 window in at least the stated fraction, and the verdict is 'not resolved' in at least the stated fraction (a baseline across a cliff cannot say a gap is there)",
-      "bounds": { "warnedFraction": 0.95, "notResolvedFraction": 0.95 }
+      "bounds": {
+        "warnedFraction": 0.95,
+        "notResolvedFraction": 0.95
+      }
     },
     "d4.not.periodic": {
       "what": "300 pure-noise series (the same cadence as c3, noise 0.03 mag) return not-periodic at least at the stated fraction; 300 series with a 0.06 mag two-maxima signal at noise 0.03 return a period (not not-periodic) at least at the stated fraction; once-nightly sampling (one point a night for 40 nights, jitter 0.02 day) of a 9.0 hour rotation is returned as ambiguous or refused sampling in at least the stated fraction of 100 series, and dense sampling (a point every 6 minutes for 3 nights) of the same is ambiguous in at most the stated fraction",
@@ -176,7 +285,9 @@
     },
     "d5.one.maximum": {
       "what": "a series with ONE maximum a rotation (a single-harmonic albedo-spot curve, amplitude 0.2 mag, true period 6.0 hours, noise 0.01): the two-maxima rule returns twice the true period as the primary and the true period as the alternative; the primary is within 1e-3 of twice the truth and the alternative within 1e-3 of the truth. A demonstration of a stated limit, not a failure.",
-      "bounds": { "relative": 1e-3 }
+      "bounds": {
+        "relative": 0.001
+      }
     },
     "e1.catalog": {
       "what": "NOT RUN: the numbered-asteroid cut from the MPC orbit catalog, downsampled by the stated rule, the gap depths of the five windows against a cited independent analysis on the same cut (the roadmap's tier b), the Hilda and Trojan counts, and the Kuiper-belt subset; no catalog is in the tree and none was downloaded",
