@@ -801,6 +801,386 @@ export const A_BINARY_STARS_ORBIT = {
   ],
 };
 
+// ¿Qué superficie es más antigua?: paso a paso con el inglés (Prompt 195).
+export const WHICH_SURFACE_IS_OLDER = {
+  title: '¿Qué superficie es más antigua?',
+  subtitle:
+    'Cráteres por área en dos regiones de la Luna y de Marte, y el cociente que dice cuál es más antigua',
+  objectives: [
+    'Decir por qué los cráteres por área, y no los cráteres, dicen cuál de dos superficies es más antigua',
+    'Contar los cráteres por encima de un diámetro en dos regiones, hallar cada densidad con su intervalo y predecir cuál es más antigua antes de leer el cociente',
+    'Leer un cociente de densidades y su intervalo, y decir qué significa y qué no significa un intervalo que contiene el 1',
+    'Nombrar lo que puede hacer que una superficie parezca más antigua o más joven de lo que es: la renovación de la superficie, la saturación y los cráteres secundarios',
+  ],
+  steps: [
+    {
+      title: 'Dos superficies, un reloj',
+      body: 'Una superficie empieza sin cráteres y los va acumulando a medida que la golpean. Si el ritmo de impactos es más o menos el mismo en todas partes, una superficie que ha tenido más tiempo para acumularlos tiene más cráteres <strong>por área</strong>. Esa es la idea de contar cráteres: la densidad de cráteres dice cuál de dos superficies es más <strong>antigua</strong>, en relación con la otra.\n\nEl instrumento muestra dos regiones de la Luna (unas tierras altas y un mar liso y oscuro) y dos de Marte. Los círculos de las imágenes son los cráteres que enumera un <strong>catálogo</strong>, hecho por sus autores a partir de otros datos: nadie ha marcado estas imágenes, y nada de esto es un recuento tuyo. Lo que haces es elegir un diámetro, leer los números y decir qué muestran y qué no. Un cociente de densidades <em>no</em> es una edad en años.',
+    },
+    {
+      title: '¿Cuál tiene más?',
+      body: 'Piensa en dos regiones de la Luna: unas tierras altas claras y accidentadas en el sur, y el oscuro y liso Mar de la Tranquilidad. Cuenta solo los cráteres de al menos 30 km de diámetro.',
+      prompt: 'Por área, las tierras altas tendrán&hellip;',
+      options: [
+        'más o menos la misma densidad de cráteres que el mar',
+        'una densidad de cráteres mucho mayor que el mar',
+        'una densidad de cráteres mucho menor que el mar, porque el mar es la región más grande',
+        'una densidad mayor solo si es la región más grande: la densidad es solo el recuento',
+      ],
+      hints: [
+        'Los mares oscuros son lava que inundó el terreno bajo mucho después de que se formaran las tierras altas. ¿Qué hace la lava fresca con los cráteres que hay debajo?',
+      ],
+      because:
+        'Una densidad mucho mayor. La lava enterró los cráteres que ya había en el mar, así que empezó a contar de nuevo desde la inundación, mientras que las tierras altas llevan contando desde mucho antes. El paso siguiente lee los recuentos.',
+    },
+    {
+      title: 'Cuenta los cráteres de al menos 30 km',
+      body: 'Elige la <strong>Luna</strong> y pon el diámetro en <strong>30 km</strong>. Lee cuántos cráteres de al menos 30 km de diámetro tienen las tierras altas y cuántos el mar.',
+      fields: [
+        { label: 'Cráteres en las tierras altas lunares' },
+        { label: 'Cráteres en el mar lunar' },
+      ],
+    },
+    {
+      title: 'Por millón de kilómetros cuadrados',
+      body: 'Las tierras altas cubren unos 305 mil km² y el mar unos 341 mil, así que los recuentos no están en pie de igualdad. Lee la <strong>densidad</strong> de cada una, en cráteres por millón de km², en las dos filas de región.',
+      fields: [
+        { label: 'Densidad de las tierras altas' },
+        { label: 'Densidad del mar' },
+      ],
+    },
+    {
+      title: '¿Cuánto más densa, y con cuánta seguridad?',
+      body: 'Lee el <strong>cociente de densidades</strong>, tierras altas entre mar, y el <strong>extremo inferior de su intervalo del 95 por ciento</strong>. El intervalo se calcula exactamente a partir de los dos recuentos (un intervalo de Clopper&ndash;Pearson para la proporción de cráteres que caen en las tierras altas).',
+      fields: [
+        { label: 'Cociente de densidades, tierras altas entre mar' },
+        { label: 'Extremo inferior del intervalo' },
+      ],
+    },
+    {
+      title: '¿Qué dice el intervalo?',
+      body: 'El cociente es 6,4, con un intervalo de 2,8 a 16,9.',
+      prompt: '¿Cuál es la mejor lectura?',
+      options: [
+        'Las tierras altas son más densas que el mar; cuánto más es incierto en un factor de unos seis',
+        'Las tierras altas son 6,4 veces más antiguas que el mar, en años',
+        'El intervalo es tan ancho que los recuentos no dicen nada',
+        'El cociente es 6,4, y el intervalo es solo la incertidumbre del área',
+      ],
+      misconceptions: [
+        {
+          say: 'Un cociente de densidades no es un cociente de edades en años. Los cráteres se acumulan a un ritmo que ha cambiado, y convertir una densidad en años necesita una cronología y correcciones que esta investigación no aplica.',
+        },
+        {
+          say: 'El intervalo excluye el 1, y eso es un hallazgo: las dos densidades difieren. Un intervalo ancho limita el tamaño de la diferencia, no su sentido.',
+        },
+        {
+          say: 'El intervalo es la variación por azar en cuántos cráteres cayeron en cada área. Las áreas tienen su propia incertidumbre, menor, que no está en él.',
+        },
+      ],
+      hints: [
+        'El intervalo contiene los cocientes que los recuentos no pueden descartar. ¿Es el 1 uno de ellos?',
+      ],
+      because:
+        'El intervalo no contiene el 1, así que las tierras altas son más densas. Su anchura, de 2,8 a 16,9, es la incertidumbre honesta de un recuento de 40 y otro de 7.',
+    },
+    {
+      title: 'La misma pregunta en Marte',
+      body: 'Pasa a <strong>Marte</strong>: unas tierras altas (Terra Sabaea) y unas llanuras de lava jóvenes (Elysium Planitia), de 12&deg; por 12&deg; cada una. En Marte el recuento es completo desde 20 km, así que pon el diámetro en <strong>20 km</strong>. Lee el cociente de densidades, tierras altas entre llanuras, y el extremo inferior de su intervalo.',
+      fields: [
+        { label: 'Cociente de densidades, tierras altas entre llanuras' },
+        { label: 'Extremo inferior del intervalo' },
+      ],
+    },
+    {
+      title: 'Cuando el veredicto es «ninguna diferencia significativa»',
+      body: 'Sube el diámetro en Marte a 60 km. Solo 12 cráteres de las tierras altas y 4 de las llanuras son tan grandes, y el instrumento lee ahora un cociente de 3,0 con un intervalo de 0,91 a 12,8, y el veredicto &ldquo;ninguna diferencia significativa&rdquo;.',
+      prompt: '¿Qué significa ese veredicto?',
+      options: [
+        'Las dos superficies tienen la misma edad',
+        'Estos recuentos, a este diámetro, no pueden distinguir las dos: el intervalo contiene el 1',
+        'El recuento a 60 km está mal, porque el veredicto a 20 km era distinto',
+        'Las llanuras son más antiguas, porque 4 es menor que 12',
+      ],
+      misconceptions: [
+        {
+          say: '«Ninguna diferencia significativa» no es un hallazgo de igualdad. El intervalo de 0,91 a 12,8 incluye cocientes cercanos a 1 y cocientes cercanos a 13: los recuentos los dejan todos abiertos.',
+        },
+        {
+          say: 'Los dos son correctos. Subir el diámetro deja solo los cráteres mayores, así que hay menos y el intervalo es más ancho. El veredicto a 20 km salía de 105 cráteres, este de 16.',
+        },
+      ],
+      hints: ['¿De cuántos cráteres sale ahora el cociente?'],
+      because:
+        'El intervalo, de 0,91 a 12,8, contiene el 1. Con 12 y 4 cráteres, el azar solo puede dar un cociente de 3 con dos superficies igual de antiguas. Contar hacia cráteres más pequeños, donde hay más, es lo que vuelve a estrechar el intervalo.',
+    },
+    {
+      title:
+        '¿Qué podría hacer que una superficie parezca más antigua de lo que es?',
+      body: 'Un cociente de densidades supone que los cráteres cayeron de forma independiente, a un ritmo constante, y se quedaron. Las superficies reales rompen estas suposiciones. Un impacto grande lanza escombros que cavan miles de pequeños <strong>cráteres secundarios</strong> cerca, todos a la vez.',
+      prompt:
+        'Si esos secundarios se cuentan como cráteres normales, la superficie parecerá&hellip;',
+      options: [
+        'más antigua de lo que es: tiene más cráteres de los que hizo su propia historia de impactos',
+        'más joven de lo que es: tantos cráteres se solapan que se borran unos a otros',
+        'sin diferencia, porque los cráteres pequeños cuentan igual que los grandes',
+        'sin diferencia, porque el intervalo de Poisson ya lo tiene en cuenta',
+      ],
+      misconceptions: [
+        {
+          say: 'Borrar cráteres es saturación, que hace que una superficie muy antigua parezca más joven de lo que es: los cráteres nuevos destruyen a los viejos y el recuento deja de crecer. Los secundarios hacen lo contrario.',
+        },
+        {
+          say: 'Los cráteres pequeños no cuentan igual: son los que más afectan los secundarios y la saturación, y los más difíciles de ver por completo. Por eso se cuenta por encima de un diámetro en el que el recuento es completo.',
+        },
+        {
+          say: 'El intervalo tiene en cuenta el azar en el número de cráteres independientes. Los secundarios no son independientes: llegan en grupos, y entonces el intervalo es demasiado estrecho.',
+        },
+      ],
+      hints: [
+        'Un cráter secundario lo hace un trozo de un impacto grande, no un impacto propio.',
+      ],
+      because:
+        'Más antigua de lo que es. La renovación de la superficie oculta cráteres viejos y hace que parezca más joven; la saturación hace lo mismo; los secundarios añaden cráteres que no son independientes y la hacen parecer más antigua. Una edad relativa supone que nada de eso ha ocurrido, y lo dice.',
+    },
+    {
+      title: 'Lo que has deducido',
+      body: 'Por encima de 30 km las tierras altas lunares tienen 131 cráteres por millón de km² y el mar 20,5, un cociente de 6,4 con un intervalo del 95 por ciento de 2,8 a 17: las tierras altas son las más densas. En Marte por encima de 20 km las tierras altas son 6,5 veces las llanuras, de 3,7 a 12,4. Sube el diámetro y los recuentos bajan y los intervalos se ensanchan, hasta que en Marte a 60 km el veredicto pasa a ser &ldquo;ninguna diferencia significativa&rdquo;, que no es lo mismo que &ldquo;la misma edad&rdquo;. El cociente no es una edad en años: supone una sola función de producción, ninguna saturación, ninguna parte grande de secundarios y un recuento completo. Los pasos más profundos miran cómo depende el intervalo del diámetro y qué rechaza el instrumento.',
+    },
+  ],
+};
+
+// Cráteres por tamaño: paso a paso con el inglés.
+export const CRATERS_BY_SIZE = {
+  title: 'Cráteres por tamaño',
+  subtitle:
+    'El gráfico de tamaño y frecuencia con sus barras de error, la pendiente con su intervalo y un recuento que se queda corto',
+  objectives: [
+    'Leer un gráfico acumulado de tamaño y frecuencia: el número de cráteres de al menos D de diámetro, por área, con un intervalo de Poisson en cada punto',
+    'Hallar la pendiente de una ley de potencias, con su intervalo, y decir cómo el número de cráteres del ajuste fija la anchura del intervalo',
+    'Mostrar que un recuento que se queda corto a diámetros pequeños curva el gráfico, y decir qué dice y qué no dice la señal sobre la pendiente',
+    'Decir por qué la pendiente del gráfico y el nivel del gráfico responden a preguntas distintas',
+  ],
+  steps: [
+    {
+      title: 'Un gráfico de cuántos hay, de al menos este tamaño',
+      body: 'Los cráteres pequeños son muchos y los grandes pocos. El gráfico <strong>acumulado</strong> de tamaño y frecuencia cuenta, para cada diámetro <em>D</em>, todos los cráteres de al menos ese tamaño, por área. Los dos ejes son logarítmicos, así que una ley de potencias <em>N</em>(&ge;<em>D</em>) &prop; <em>D</em><sup>&minus;<em>b</em></sup> es una recta de pendiente &minus;<em>b</em>. Cada punto lleva un intervalo de Poisson del 95 por ciento: un recuento es incierto porque el azar decide cuántos cráteres cayeron.\n\nLos cráteres son de un catálogo, no marcas sobre la imagen. Una línea discontinua es la ley de potencias ajustada por encima del diámetro que elijas, y la lectura da su índice <em>b</em> con un intervalo. Por debajo del diámetro en el que el recuento es <em>completo</em>, los puntos se dibujan de otro color y no son fiables.',
+    },
+    {
+      title: 'La pendiente de las tierras altas lunares',
+      body: 'Elige las <strong>tierras altas lunares</strong> y ajusta los cráteres de al menos <strong>30 km</strong> de diámetro, el diámetro por encima del cual su recuento es completo. Lee el índice acumulado <em>b</em> y los dos extremos de su intervalo del 95 por ciento.',
+      fields: [
+        { label: 'Índice b' },
+        { label: 'Extremo inferior del intervalo' },
+        { label: 'Extremo superior del intervalo' },
+      ],
+    },
+    {
+      title: '¿De quién se conoce mejor la pendiente?',
+      body: 'Las tierras altas lunares dieron un índice con un intervalo de 1,06 de ancho, a partir de 40 cráteres. Las tierras altas de Marte tienen 91 cráteres de al menos 20 km de diámetro, el diámetro por encima del cual su recuento es completo.',
+      prompt:
+        'El intervalo del índice de las tierras altas de Marte será&hellip;',
+      options: [
+        'más ancho, porque los cráteres de Marte son más difíciles de medir',
+        'más estrecho, porque hay más cráteres en el ajuste',
+        'el mismo, porque una pendiente es una pendiente sea cual sea el ajuste',
+        'imposible de decir sin la pendiente',
+      ],
+      hints: [
+        '¿Qué fija lo bien que un ajuste de máxima verosimilitud conoce su pendiente?',
+      ],
+      because:
+        'Más estrecho. El intervalo de un índice a partir de n cráteres se estrecha aproximadamente como uno entre la raíz cuadrada de n, así que 91 cráteres conocen la pendiente mejor que 40. El paso siguiente lo lee.',
+    },
+    {
+      title: 'La pendiente de las tierras altas de Marte',
+      body: 'Elige las <strong>tierras altas de Marte</strong> y ajusta los cráteres de al menos <strong>20 km</strong> de diámetro. Lee los dos extremos del intervalo de su índice.',
+      fields: [
+        { label: 'Extremo inferior del intervalo' },
+        { label: 'Extremo superior del intervalo' },
+      ],
+    },
+    {
+      title: 'Una pendiente a partir de siete cráteres',
+      body: 'Elige el <strong>mar lunar</strong>, ajustado desde <strong>30 km</strong>. Solo siete cráteres son tan grandes. Lee su índice y el extremo superior de su intervalo.',
+      fields: [
+        { label: 'Índice b' },
+        { label: 'Extremo superior del intervalo' },
+      ],
+    },
+    {
+      title: '¿Es distinta la pendiente del mar?',
+      body: 'El índice del mar es 3,5, de 1,4 a 6,5. El de las tierras altas lunares es 1,7, de 1,2 a 2,3.',
+      prompt: '¿Qué se puede decir?',
+      options: [
+        'El mar tiene proporcionalmente menos cráteres grandes: 3,5 es el doble de 1,7',
+        'Los dos intervalos se solapan mucho, así que siete cráteres no pueden separar las pendientes',
+        'El mar debe de ser la superficie más antigua, porque su pendiente es más empinada',
+        'El índice del mar está mal, porque supera todos los valores publicados',
+      ],
+      misconceptions: [
+        {
+          say: 'Un índice vale lo que vale su intervalo. El intervalo de 1,4 a 6,5 incluye 1,7, así que no se descarta una pendiente igual a la de las tierras altas.',
+        },
+        {
+          say: 'La pendiente es la forma de la distribución de tamaños: la rapidez con que bajan los recuentos con el diámetro. El nivel del gráfico, cuántos cráteres hay en total, es en lo que se basa la edad. Una pendiente más empinada no es una superficie más antigua.',
+        },
+      ],
+      hints: [
+        '¿Está el 1,7 de las tierras altas dentro del intervalo del mar?',
+      ],
+      because:
+        'El 1,7 de las tierras altas está dentro del intervalo del mar, que es ancho porque se apoya en siete cráteres. Los datos ni muestran ni descartan una diferencia de pendiente.',
+    },
+    {
+      title: 'Un recuento que se queda corto',
+      body: 'Un recuento de una imagen pasa por alto primero los cráteres pequeños. Elige las <strong>tierras altas lunares</strong>, ajusta los cráteres de al menos <strong>20 km</strong>, por debajo de su límite de completitud de 30 km, y pon <strong>Un recuento que se queda corto</strong> en <strong>100 %</strong>: todos los cráteres de menos de 30 km quedan fuera de la lista, como los pasaría por alto un recuento de la imagen. Lee el índice y la <strong>z</strong> de la comprobación de la pendiente más arriba.',
+      fields: [
+        { label: 'Índice b' },
+        {
+          label:
+            'z de la comprobación por encima del doble del diámetro del ajuste',
+        },
+      ],
+    },
+    {
+      title: '¿Qué dice la señal?',
+      body: 'El instrumento indica que la pendiente no es constante: el índice por encima de 40 km difiere del índice de 1,0 ajustado desde 20 km.',
+      prompt: '¿Qué debes concluir?',
+      options: [
+        'La superficie tiene de verdad pocos cráteres pequeños, así que 1,0 es su pendiente real',
+        'La lista no sigue una sola ley de potencias hasta 20 km, así que un solo índice no puede describirla; la señal no puede decir si la causa es un recuento incompleto, la saturación o un quiebre real',
+        'Nada: los cráteres pequeños cuentan igual que los grandes, así que el índice vale a cualquier diámetro',
+        'El ajuste falló, porque se usaron menos de cinco cráteres',
+      ],
+      misconceptions: [
+        {
+          say: 'Aquí la curva se hizo dejando cráteres fuera, así que la superficie no ha cambiado. Una caída real por saturación o por renovación de la superficie curvaría el gráfico igual, y el gráfico solo no puede decir cuál.',
+        },
+        {
+          say: 'Los cráteres pequeños no cuentan igual: son los más numerosos y los más difíciles de contar por completo, y los primeros en perderse por saturación. Por eso el ajuste empieza en un diámetro en el que el recuento es completo.',
+        },
+      ],
+      hints: ['¿Qué se le hizo a la lista antes del ajuste?'],
+      because:
+        'La señal dice que la lista no es una sola ley de potencias. No corrige nada y no nombra una causa: un recuento que se queda corto, la saturación, la renovación de la superficie y un cambio real en los impactores pueden curvar el gráfico. El remedio es ajustar solo por encima del diámetro en el que el recuento es completo.',
+    },
+    {
+      title: 'Lo que has deducido',
+      body: 'Un gráfico acumulado de tamaño y frecuencia cuenta los cráteres de al menos cada diámetro, por área, con un intervalo de Poisson en cada punto. La pendiente de las tierras altas lunares es 1,71 de 1,22 a 2,28 (40 cráteres) y la de las tierras altas de Marte 1,72 de 1,39 a 2,09 (91 cráteres): más cráteres, un intervalo más estrecho. El 3,5 del mar, a partir de 7 cráteres, es casi todo incertidumbre. Deja fuera los cráteres pequeños y el ajuste cae a 1,0 y la comprobación de la pendiente lo señala: la señal dice que una lista no es una sola ley de potencias, no por qué. La caída <em>no</em> se corrige aquí. Los pasos más profundos miran cómo se ensancha el intervalo al subir el ajuste, y por qué el ajuste no es una recta trazada por los puntos dibujados.',
+    },
+  ],
+};
+
+// Lo que vale el diámetro de un cráter: paso a paso con el inglés.
+export const WHAT_A_CRATER_DIAMETER_IS_WORTH = {
+  title: 'Lo que vale el diámetro de un cráter',
+  subtitle:
+    'Un círculo en un mapa, los cuatro términos de su incertidumbre y por qué no se da una edad en años',
+  objectives: [
+    'Convertir un círculo de un mapa en un diámetro en kilómetros, con la escala y la vista indicadas',
+    'Nombrar los cuatro términos de la incertidumbre de un diámetro (la escala, colocar el círculo, dónde está el borde, la vista) y decir cuál es el mayor',
+    'Decir por qué una corrección mayor que su propia incertidumbre sigue siendo una corrección, y qué cuesta omitirla',
+    'Decir por qué esta investigación da un diámetro y un cociente de densidades pero ninguna edad en años',
+  ],
+  steps: [
+    {
+      title: 'De un círculo a un diámetro',
+      body: 'Un diámetro en un mapa es una longitud en píxeles por la escala del mapa. Aquí el mapa es una imagen de Clementine de las tierras altas del sur de la Luna a 2,02 km por píxel, y tu círculo tiene un <strong>centro</strong> y un <strong>punto del borde</strong>. El instrumento convierte el radio del círculo en kilómetros, corrige la vista si lo permites y da el diámetro con cuatro términos de su incertidumbre: la escala, lo bien que una mano coloca un círculo, dónde está de verdad el borde y la vista.\n\nEl mapa es una vista de una esfera. Cerca del borde del disco un cráter circular se ve de soslayo y queda comprimido en la dirección hacia el centro del disco. El instrumento dibuja el círculo del suelo como la elipse que forma. El círculo de la imagen parte de un cráter del catálogo, y se pueden mostrar los círculos del propio catálogo para comparar.',
+    },
+    {
+      title: 'Lee el diámetro',
+      body: 'El círculo está puesto sobre un cráter grande, con su punto del borde a 25 píxeles del centro, en la dirección hacia el centro del disco, y la vista corregida. Lee el <strong>diámetro</strong> y su incertidumbre.',
+      fields: [{ label: 'Diámetro' }, { label: 'Su incertidumbre (un sigma)' }],
+    },
+    {
+      title: '¿Qué término es el mayor?',
+      body: 'La incertidumbre del diámetro se compone de cuatro términos: la escala del mapa, lo bien que se coloca el círculo, dónde está de verdad el borde y la vista.',
+      prompt: 'Para este círculo, el término mayor es&hellip;',
+      options: [
+        'la escala del mapa',
+        'lo bien que se coloca el círculo',
+        'dónde está de verdad el borde, una fracción del diámetro que fijas tú',
+        'la vista, porque el cráter está cerca del borde del disco',
+      ],
+      hints: [
+        'Una mano coloca un punto con una fracción de píxel, y el círculo mide 50 píxeles de ancho. ¿Qué fracción del diámetro es eso?',
+      ],
+      because:
+        'Dónde está el borde. El borde de un cráter es una cresta, erosionada y solapada, y dos personas cuidadosas discrepan sobre ella en unos pocos por ciento del diámetro. La colocación de una mano y la escala son mucho menores, y la vista se conoce bien. El paso siguiente lee cada término.',
+    },
+    {
+      title: 'Los cuatro términos',
+      body: 'Lee la incertidumbre de <strong>colocar el círculo</strong> y de <strong>dónde está el borde</strong>, cada una como porcentaje del diámetro. El término de reconocimiento es tuyo: lo fijaste en un 5 por ciento, y el instrumento no sabe más.',
+      fields: [
+        { label: 'Incertidumbre de colocar el círculo' },
+        { label: 'Incertidumbre de dónde está el borde' },
+      ],
+    },
+    {
+      title: 'Omite la vista',
+      body: 'Pon <strong>Corregir la vista</strong> en no: la vista se toma como cenital y el círculo se dibuja redondo. Lee el diámetro y cuánto, en porcentaje, baja.',
+      fields: [
+        { label: 'Diámetro sin la corrección' },
+        { label: 'Cuánto menos que con ella' },
+      ],
+    },
+    {
+      title: 'Una corrección grande, una incertidumbre pequeña',
+      body: 'La vista cambia el diámetro en un diez por ciento y añade un 0,06 por ciento a su incertidumbre.',
+      prompt: '¿Qué dice eso?',
+      options: [
+        'La corrección no importa, porque su incertidumbre es minúscula',
+        'La corrección es grande y bien conocida, así que omitirla sería un error sistemático, no una incertidumbre pequeña',
+        'La corrección debería descartarse, porque la imagen parece redonda sin ella',
+        'La corrección es tan incierta como el diámetro, porque las dos salen del mismo círculo',
+      ],
+      misconceptions: [
+        {
+          say: 'Una incertidumbre pequeña en una corrección dice que se conoce bien, no que sea pequeña. Un efecto grande y conocido hay que aplicarlo: omitirlo desplaza todos los diámetros en el mismo sentido.',
+        },
+        {
+          say: 'La imagen parece redonda porque la compresión es en una dirección y suave en este lugar. La elipse que dibuja el instrumento es el círculo del suelo tal como lo ve la cámara.',
+        },
+      ],
+      hints: [
+        '¿En qué se diferencia el tamaño de un efecto de lo bien que se conoce?',
+      ],
+      because:
+        'Una corrección puede ser grande y segura. La vista la fija dónde está el cráter en el disco, que se conoce con un píxel. Omitirla no es una barra de error mayor: es una respuesta equivocada en un diez por ciento, siempre, en el mismo sentido.',
+    },
+    {
+      title: '¿Por qué no hay edad en años?',
+      body: 'Esta investigación, y las dos anteriores, dan un diámetro, una densidad y un cociente de dos densidades. Ninguna da una edad en años.',
+      prompt: '¿Por qué no?',
+      options: [
+        'La incertidumbre del diámetro es demasiado grande para dar una edad',
+        'Una edad necesita una función de producción, correcciones por saturación y cráteres secundarios y una corrección de completitud comprobada con cráteres de tamaño conocido; nada de eso ha pasado su prueba aquí',
+        'Los cráteres no se pueden fechar, porque los impactos no ocurren a un ritmo constante',
+        'Los intervalos de Poisson son demasiado anchos para dar una edad',
+      ],
+      misconceptions: [
+        {
+          say: 'Un diámetro bueno al cinco por ciento basta para un recuento. Los obstáculos para una edad están en otra parte: cuál fue el ritmo de impactos, y lo completo y limpio que es el recuento.',
+        },
+        {
+          say: 'Los cráteres se pueden fechar, calibrando la densidad con muestras de edad conocida: esa es exactamente la función de cronología que necesitaría una edad. El ritmo no es constante, y la calibración dice cómo cambió.',
+        },
+        {
+          say: 'Los intervalos son una parte de la incertidumbre de una edad, y a menudo no la mayor. El recuento tiene que ser completo, sin secundarios y por debajo de la saturación para que la densidad signifique algo en años.',
+        },
+      ],
+      hints: ['¿Cuál de estas cosas no se ha probado aquí?'],
+      because:
+        'Una edad necesita varias cosas que no están aquí: una función de producción y una cronología para convertir una densidad en años, correcciones por saturación y cráteres secundarios, y una corrección de lo que pasa por alto un recuento, comprobada con cráteres de tamaño conocido. Hasta que pasen su prueba, un cociente de densidades es el hallazgo, y dice qué superficie es más antigua, no en cuántos años.',
+    },
+    {
+      title: 'Lo que has deducido',
+      body: 'Un círculo con un centro y un punto del borde a 25 píxeles dio un diámetro de 112,0 &plusmn; 5,9 km: la escala del mapa, la colocación del círculo, dónde está el borde y la vista, sumados en cuadratura, con el borde, una fracción que fijas tú, el mayor. La vista cambia el diámetro en un diez por ciento aproximadamente y su incertidumbre en un 0,06 por ciento: es una corrección que aplicar, no un error que citar. Un diámetro y un cociente de densidades es lo que da esta investigación. Una edad en años no, porque necesita una función de producción, correcciones por saturación y cráteres secundarios, y una corrección de completitud que no ha pasado su prueba.',
+    },
+  ],
+};
+
 /** By lesson id: what instructorLocale.js registers. */
 export default {
   'what-is-a-measurement': WHAT_IS_A_MEASUREMENT,
@@ -809,4 +1189,7 @@ export default {
   'measuring-the-moon': MEASURING_THE_MOON,
   'how-far-is-that-star': HOW_FAR_IS_THAT_STAR,
   'a-binary-stars-orbit': A_BINARY_STARS_ORBIT,
+  'which-surface-is-older': WHICH_SURFACE_IS_OLDER,
+  'craters-by-size': CRATERS_BY_SIZE,
+  'what-a-crater-diameter-is-worth': WHAT_A_CRATER_DIAMETER_IS_WORTH,
 };

@@ -192,5 +192,7 @@ export const GUIDED = Object.freeze([
   'which-kind-of-variable',
   'who-gets-counted',
   'why-the-bright-ones-win',
+  'what-a-crater-diameter-is-worth',
+  'which-surface-is-older',
   'why-venus-is-hot',
 ]);
