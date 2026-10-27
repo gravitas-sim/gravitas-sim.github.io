@@ -3161,9 +3161,9 @@ try {
         <span class="gs-en">Each guided investigation relies on a different part of the model. This
         table is generated from the same <code>modelNotes</code> field that the
         instructor guide prints, so it covers every one of the
-        <!--fact:investigations-->69<!--/fact-->
+        <!--fact:investigations-->72<!--/fact-->
         investigations and cannot fall behind them. It listed six of the twelve when it
-        was maintained by hand.</span><span class="gs-es" lang="es">Cada investigación guiada se apoya en una parte distinta del modelo. Esta tabla se genera a partir del mismo campo <code>modelNotes</code> que imprime la guía docente, de modo que cubre cada una de las <!--fact:investigations-->69<!--/fact--> investigaciones y no puede quedar rezagada respecto a ellas. Cuando se mantenía a mano, enumeraba seis de las doce.</span>
+        was maintained by hand.</span><span class="gs-es" lang="es">Cada investigación guiada se apoya en una parte distinta del modelo. Esta tabla se genera a partir del mismo campo <code>modelNotes</code> que imprime la guía docente, de modo que cubre cada una de las <!--fact:investigations-->72<!--/fact--> investigaciones y no puede quedar rezagada respecto a ellas. Cuando se mantenía a mano, enumeraba seis de las doce.</span>
       </p>
       <div class="doc-table-wrap">
         <table class="doc-table">
@@ -3444,6 +3444,18 @@ try {
               <td>js/jovianWidgets.js (sequenceOf, fitMoon, weighAll): the data file made by the galilean-2025-11 manifest read by js/satellites/galilean.js, the plan and alias analysis of cadence.js, the frames of sequence.js through js/forward/models/ccd.js, the fit and Kepler law of weigh.js. See SATELLITE_EPHEMERIS.md for the validation contract and the failing legs.</td>
             </tr>
             <tr>
+              <td>Why Rings?</td>
+              <td>js/tidesWidgets.js (rocheView, resonanceView), the tides kernel (rocheLimit, rocheRegimeAt, resonanceRadius), the scenarios ring-gap and roche-pass (ENGINE_GEOMETRY in js/world/build.js), tools/tides-scenarios.mjs and tests/tidesScenarios.test.js.</td>
+            </tr>
+            <tr>
+              <td>Tides That Move the Moon</td>
+              <td>js/tidesWidgets.js (moonView), the tides kernel (recession, tidalTrajectory, lockingTime). The constant-Q evolution is a parameterisation, as TIDAL_KERNEL.md says.</td>
+            </tr>
+            <tr>
+              <td>Io’s Fire</td>
+              <td>js/tidesWidgets.js (heatingView) and the tides kernel (tidalHeating, heatingRange, requiredK2OverQ), recomputed in tests/tidesLessons.test.js for every number a step states.</td>
+            </tr>
+            <tr>
               <td>Why Venus Is Hot</td>
               <td>js/kernels/atmospheres/ (ATMOSPHERES.md): equilibriumTemperature, oneLayer, grayGround and grayDepthFor, scaleHeight and the six-body planet table, validated against an independent numpy and scipy oracle (npm run atmospheres:validate).</td>
             </tr>
@@ -3482,10 +3494,10 @@ try {
         to
         <!--fact:stabilityScenarios-->12<!--/fact-->
         of the
-        <!--fact:scenarios-->59<!--/fact-->
+        <!--fact:scenarios-->61<!--/fact-->
         shipped scenarios in a real browser &mdash; the ones most exposed to
         integrator error, which is a different and smaller claim than the one
-        this sentence used to make.</span><span class="gs-es" lang="es">Y si prefieres no hacer ninguna de las dos cosas, la batería de validación ya ha hecho buena parte: <code>npm run validate:physics</code> imprime la tabla descrita en <a href="#validation">Validación</a>, y <code>npm run validate:scenarios</code> extiende la auditoría de conservación a <!--fact:stabilityScenarios-->12<!--/fact--> de los <!--fact:scenarios-->59<!--/fact--> escenarios incluidos en un navegador real &mdash; los más expuestos al error del integrador, lo cual es una afirmación distinta y menor que la que solía hacer esta oración.</span>
+        this sentence used to make.</span><span class="gs-es" lang="es">Y si prefieres no hacer ninguna de las dos cosas, la batería de validación ya ha hecho buena parte: <code>npm run validate:physics</code> imprime la tabla descrita en <a href="#validation">Validación</a>, y <code>npm run validate:scenarios</code> extiende la auditoría de conservación a <!--fact:stabilityScenarios-->12<!--/fact--> de los <!--fact:scenarios-->61<!--/fact--> escenarios incluidos en un navegador real &mdash; los más expuestos al error del integrador, lo cual es una afirmación distinta y menor que la que solía hacer esta oración.</span>
       </p>
     </main>
 
