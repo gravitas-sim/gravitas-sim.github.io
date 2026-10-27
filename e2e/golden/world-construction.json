@@ -769,6 +769,55 @@
       "planets|1|Planet|310|Pluto|0.00000654760736315|0.795255996313|218.066615805|-29.1024238025|0.295744824814|2.21643079687||"
     ]
   },
+  "ring-gap": {
+    "error": null,
+    "count": 203,
+    "byType": {
+      "Planet": 2,
+      "GasGiant": 1,
+      "Asteroid": 200
+    },
+    "totalMass": 0.286106515467,
+    "momentumResidual": "cancels into rounding error",
+    "scenarioName": "ring-gap",
+    "presetSentinel": "None",
+    "zoom": 3.8,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "aa6640147450b636",
+    "settings": "2b920019d9300739",
+    "head": [
+      "planets|0|Planet|1|Resonant moon|0.00028581207187|3|75.6082142529|65.4476732779|-3.49723293635|4.03992113146|P|",
+      "planets|1|Planet|2|Shepherd moon|0.00000857436215611|2|68.64207503|-21.731671256|1.90513636174|6.00251478526|P|",
+      "gas_giants|0|GasGiant|0|Ringed planet|0.28581207187|32.5|0|0|0.00343997895958|-0.00422000532506|P|"
+    ]
+  },
+  "roche-pass": {
+    "error": null,
+    "count": 61,
+    "byType": {
+      "GasGiant": 1,
+      "Asteroid": 60
+    },
+    "totalMass": 0.955746690211,
+    "momentumResidual": "cancels into rounding error",
+    "scenarioName": "roche-pass",
+    "presetSentinel": "None",
+    "zoom": 2.6,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "d0cb9b32422ea4da",
+    "settings": "189556194dd77cd3",
+    "head": [
+      "gas_giants|0|GasGiant|0|Planet|0.954791898313|15|0|0|0.00642110648853|-0.00417234696065|P|",
+      "asteroids|0|Asteroid|1|Rubble 1|0.0000159131983052|0.01|78.1380410816|0.119490556635|-4.93299485803|4.14164932121|P|",
+      "asteroids|1|Asteroid|2|Rubble 2|0.0000159131983052|0.01|77.6838974216|0.00889718670817|-6.01340510285|5.8191170933|P|"
+    ]
+  },
   "sagittarius-a": {
     "error": null,
     "count": 336,
