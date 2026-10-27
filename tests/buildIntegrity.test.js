@@ -307,9 +307,9 @@ describe('the service worker manifest is current', () => {
           p
         )
     );
-    // The nine measurement, claim, image, Jupiter and atmosphere lessons are never precached (D-R10-67,
-    // D-R10-72, D-R10-74, D-R10-81): they open offline after one online use, like the other lazy families.
-    const NEVER_PRECACHED_LESSONS = 9;
+    // The twelve measurement, claim, image, Jupiter, atmosphere and ring and tide lessons are never precached
+    // (D-R10-67, D-R10-72, D-R10-74, D-R10-81, D-R10-85): they open offline after one online use, like the other lazy families.
+    const NEVER_PRECACHED_LESSONS = 12;
     expect(bodies.length + NEVER_PRECACHED_LESSONS).toBe(MANIFEST.length);
   });
 

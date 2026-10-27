@@ -97,7 +97,10 @@ export const WHY_RINGS = {
     {
       title: 'Shoemaker-Levy 9 en Júpiter',
       body: 'En julio de 1992 el cometa Shoemaker-Levy 9 pasó a 1,3 radios de Júpiter del centro del planeta y se rompió en pedazos. Con el par en <strong>SL9, Júpiter</strong> (Shoemaker-Levy 9 y Júpiter), lee el <strong>límite rígido</strong> y el <strong>límite fluido</strong>, en radios de Júpiter (R).',
-      fields: [{ label: 'Límite rígido' }, { label: 'Límite fluido' }],
+      fields: [
+        { label: 'Límite rígido (radios del planeta)' },
+        { label: 'Límite fluido (radios del planeta)' },
+      ],
     },
     {
       title: 'Fobos y los límites',
@@ -134,7 +137,7 @@ export const WHY_RINGS = {
     },
     {
       title: 'Lo que muestra el escenario del anillo, y lo que no',
-      body: 'Un planeta con la masa de Saturno, 200 partículas de anillo, una luna resonante cuya resonancia 2:1 cae en el anillo y una luna pastora dentro de él. Las dos lunas pesan mucho más que Mimas y Pan, para que veinte órbitas puedan mostrar algo. El resultado honesto de la corrida registrada para esta lección es modesto: el anillo se adelgaza en la resonancia (19 partículas donde los tramos vecinos tienen 24) y el anillo sin luna queda como estaba, pero no se abre un hueco, y la pastora no deja un carril libre. Las partículas de este modelo nunca chocan, y un hueco real lo hace una resonancia que actúa sobre un anillo que sí choca.',
+      body: 'Un planeta con la masa de Saturno, 200 partículas de anillo, una luna resonante cuya resonancia 2:1 cae en el anillo y una luna pastora dentro de él. Las dos lunas pesan mucho más que Mimas y Pan, para que veinte órbitas puedan mostrar algo. El resultado honesto de la corrida registrada para esta investigación es modesto: el anillo se adelgaza en la resonancia (19 partículas donde los tramos vecinos tienen 24) y el anillo sin luna queda como estaba, pero no se abre un hueco, y la pastora no deja un carril libre. Las partículas de este modelo nunca chocan, y un hueco real lo hace una resonancia que actúa sobre un anillo que sí choca.',
       tip: 'Compara el anillo con las lunas y sin ellas corriéndolo y volviéndolo a cargar.',
     },
     {
@@ -163,8 +166,8 @@ export const TIDES_THAT_MOVE_THE_MOON = {
       title: 'Qué tan rápido se aleja ahora la Luna',
       body: 'Con k2 = 0,30 y Q = 12 y el tiempo en 0, lee a qué ritmo se aleja la Luna, en cm por año, y cuánto se alarga el día, en milisegundos por siglo.',
       fields: [
-        { label: 'El alejamiento de la Luna' },
-        { label: 'El alargamiento del día' },
+        { label: 'El alejamiento de la Luna (cm por año)' },
+        { label: 'El alargamiento del día (ms por siglo)' },
       ],
     },
     {
@@ -186,7 +189,10 @@ export const TIDES_THAT_MOVE_THE_MOON = {
     {
       title: 'Mil millones de años adelante',
       body: 'Pon el tiempo en <strong>1</strong> mil millones de años y lee la distancia de la Luna en miles de km y la duración del día en horas.',
-      fields: [{ label: 'La distancia de la Luna' }, { label: 'El día' }],
+      fields: [
+        { label: 'La distancia de la Luna (miles de km)' },
+        { label: 'El día' },
+      ],
     },
     {
       title: 'Córrelo hacia atrás',
@@ -218,7 +224,10 @@ export const IOS_FIRE = {
     {
       title: 'El calor para k2 = 1,5 y Q = 100',
       body: 'Pon k2 en 1,5 (lo máximo que puede tener un cuerpo, para un fluido), Q en 100 y la excentricidad en 0,0041. Lee el <strong>calentamiento</strong> en unidades de 10<sup>13</sup> W, y la energía en una órbita en unidades de 10<sup>19</sup> J.',
-      fields: [{ label: 'Calentamiento' }, { label: 'Energía en una órbita' }],
+      fields: [
+        { label: 'Calentamiento' },
+        { label: 'Energía en una órbita (10¹⁹ J)' },
+      ],
     },
     {
       title: 'Una órbita más excéntrica',

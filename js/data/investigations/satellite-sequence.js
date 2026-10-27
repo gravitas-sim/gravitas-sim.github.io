@@ -322,8 +322,18 @@ export const WHY_RINGS = {
              <strong>SL9, Jupiter</strong> (Shoemaker-Levy 9 and Jupiter), read the <strong>rigid limit</strong>
              and the <strong>fluid limit</strong>, in Jupiter radii (R).`,
       fields: [
-        { id: 'rigid', label: 'Rigid limit', unit: 'R', hint: '1.64' },
-        { id: 'fluid', label: 'Fluid limit', unit: 'R', hint: '3.18' },
+        {
+          id: 'rigid',
+          label: 'Rigid limit (planet radii)',
+          unit: '',
+          hint: '1.64',
+        },
+        {
+          id: 'fluid',
+          label: 'Fluid limit (planet radii)',
+          unit: '',
+          hint: '3.18',
+        },
       ],
       validate: v => {
         if (![v.rigid, v.fluid].every(Number.isFinite)) return null;
@@ -458,7 +468,7 @@ export const WHY_RINGS = {
       body: `A Saturn-mass planet, 200 ring particles, a resonant moon whose 2:1 resonance
              falls in the ring, and a shepherd moon inside it. Both moons are far heavier than
              Mimas and Pan, so twenty orbits can show something. The honest result of the run
-             recorded for this lesson is modest: the ring thins at the resonance (19 particles
+             recorded for this investigation is modest: the ring thins at the resonance (19 particles
              where the neighbouring stretches hold 24) and the ring with no moon stays as it
              was, but it does not open a gap, and the shepherd leaves no clear lane. The
              particles in this model never collide, and a real gap is made by a resonance
@@ -530,14 +540,14 @@ export const TIDES_THAT_MOVE_THE_MOON = {
       fields: [
         {
           id: 'rate',
-          label: 'The Moon’s recession',
-          unit: 'cm/yr',
+          label: 'The Moon’s recession (cm per year)',
+          unit: '',
           hint: '3.75',
         },
         {
           id: 'day',
-          label: 'The day’s lengthening',
-          unit: 'ms/cy',
+          label: 'The day’s lengthening (ms per century)',
+          unit: '',
           hint: '2.05',
         },
       ],
@@ -592,8 +602,8 @@ export const TIDES_THAT_MOVE_THE_MOON = {
       fields: [
         {
           id: 'a',
-          label: 'The Moon’s distance',
-          unit: 'thousand km',
+          label: 'The Moon’s distance (thousand km)',
+          unit: '',
           hint: '414.6',
         },
         { id: 'day', label: 'The day', unit: 'h', hint: '29.5' },
@@ -715,8 +725,8 @@ export const IOS_FIRE = {
         { id: 'power', label: 'Heating', unit: '1e13 W', hint: '9.33' },
         {
           id: 'orbit',
-          label: 'Energy in one orbit',
-          unit: '1e19 J',
+          label: 'Energy in one orbit (10¹⁹ J)',
+          unit: '',
           hint: '1.43',
         },
       ],

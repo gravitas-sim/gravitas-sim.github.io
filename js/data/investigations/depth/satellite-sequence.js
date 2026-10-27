@@ -314,8 +314,8 @@ export const WHY_RINGS_DEEPER = {
       type: 'question',
       kind: 'numeric',
       title: 'Ice about Saturn',
-      body: `The limit comes from the two densities: d = 2.44 R (&rho;<sub>planet</sub> /
-             &rho;<sub>satellite</sub>)<sup>1/3</sup> for a body that can deform. Saturn has a
+      body: `The limit comes from the two densities: d = 2.44 R (ρ<sub>planet</sub> /
+             ρ<sub>satellite</sub>)<sup>1/3</sup> for a body that can deform. Saturn has a
              radius of 60,268 km and a mean density of 687 kg/m&sup3;, and ice is about 900
              kg/m&sup3;.`,
       prompt:
@@ -392,8 +392,8 @@ export const TIDES_DEEPER = {
       kind: 'numeric',
       title: 'How long to lock the Moon',
       body: `The same torque that moves the Moon slows the Moon’s own spin: the Earth’s tide
-             on the Moon. The time to remove a spin &omega; is t = I&omega;/N, with I =
-             &alpha; m R&sup2; the Moon&rsquo;s moment of inertia (&alpha; = 0.393) and N =
+             on the Moon. The time to remove a spin ω is t = Iω/N, with I =
+             α m R&sup2; the Moon&rsquo;s moment of inertia (α = 0.393) and N =
              (3/2)(k2/Q) G M&sup2; R&sup5; / a&sup6; the torque. For the Moon (k2 = 0.024, Q =
              100, radius 1,737.4 km) at 384,400 km, from a spin of one turn in ten hours, the
              kernel gives the time below.`,
@@ -514,8 +514,8 @@ export const INSTRUCTOR = {
           text: 'The rigid and fluid limits of four named pairs, with the regime of a distance, and the resonance radius of three moons beside four edges and gaps in Saturn’s rings. Every number is the tides kernel’s.',
         },
         {
-          name: 'Ring and pass steps of the lesson',
-          text: 'The first and the last stage of the lesson open the two scenarios in the simulation so the numbers of the instruments can be seen on bodies; every step names the instrument it reads.',
+          name: 'Ring and pass steps of the investigation',
+          text: 'The first and the last stage of the investigation open the two scenarios in the simulation so the numbers of the instruments can be seen on bodies; every step names the instrument it reads.',
         },
         {
           name: 'Roche Pass and Ring Gap scenarios',
@@ -548,7 +548,7 @@ export const INSTRUCTOR = {
         'Say before the pass that the clump is held by its own gravity alone, which is the case the fluid limit describes; ask what a body with strength would do.',
         'The Roche numbers are exact in the kernel; the steps use two decimals for Jupiter radii and kilometers to the nearest ten.',
         'The pass is a scale model: the clump is a softened swarm of 60 particles. In the recorded run its extent grows sixteenfold. At 1.5 times the fluid limit the committed control run grows about a quarter, but that is not a robust number: across eight periapses within 2 percent of it the extent ratio runs from 0.2 to 4 (five of eight under 2), because one body that escapes sets the largest extent. A longer run loosens the clump by itself, which the scenario’s summary says.',
-        'The ring scenario fails three of its committed legs (the eccentricity contrast at the resonance, the thinning bound by 0.03, and the shepherd’s lane); the lesson states what the run shows (19 particles in the resonance window against 24 beside it) and no more. A ring that has no collisions cannot hold a clean gap.',
+        'The ring scenario fails three of its committed legs (the eccentricity contrast at the resonance, the thinning bound by 0.03, and the shepherd’s lane); the investigation states what the run shows (19 particles in the resonance window against 24 beside it) and no more. A ring that has no collisions cannot hold a clean gap.',
       ],
       discussion: [
         'Why does a scale model with an exaggerated G still tell you the ratio of the two radii?',
@@ -710,7 +710,7 @@ export const INSTRUCTOR = {
       ],
       teachingNotes: [
         'Ask for the sign and size of the change before the eccentricity is doubled; the factor of four surprises students who expect two.',
-        'The bound’s width is the lesson: say that agreement within the range is not evidence for a value of k2/Q.',
+        'The bound’s width is the point: say that agreement within the range is not evidence for a value of k2/Q.',
         'The observed heat flow is a range (Veeder et al. 1994; Spencer et al. 2000); the tier-b check holds the formula within a factor of two of it.',
         'The numbers in the steps are the kernel’s for Io’s radius, orbit and mass, with e = 0.0041.',
       ],
@@ -933,13 +933,13 @@ export const INSTRUCTOR = {
     },
   },
   bands: {
-    'why-rings': { core: 'medium', quantitative: 'medium', advanced: 'short' },
+    'why-rings': { core: 'short', quantitative: 'medium', advanced: 'medium' },
     'tides-that-move-the-moon': {
       core: 'medium',
       quantitative: 'medium',
-      advanced: 'short',
+      advanced: 'medium',
     },
-    'ios-fire': { core: 'medium', quantitative: 'short', advanced: 'short' },
+    'ios-fire': { core: 'short', quantitative: 'medium', advanced: 'medium' },
     'weighing-jupiter': {
       core: 'medium',
       quantitative: 'long',

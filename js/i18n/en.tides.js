@@ -51,7 +51,7 @@ export const EN_TIDES = {
   'tideW.s.moon.mimas': 'Mimas',
   'tideW.s.moon.enceladus': 'Enceladus',
   'tideW.s.moon.tethys': 'Tethys',
-  'tideW.s.axis.x': 'Radius from Saturn’s centre (thousand km)',
+  'tideW.s.axis.x': 'Radius from Saturn’s center (thousand km)',
   'tideW.s.legend.features': 'edges and gaps in the rings',
   'tideW.s.legend.resonance': 'the {p}:{q} resonance',
   'tideW.s.row.radius': 'Radius of the {p}:{q} resonance',

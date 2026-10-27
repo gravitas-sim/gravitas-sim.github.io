@@ -139,7 +139,7 @@ export const WHY_RINGS_DEEPER = {
   steps: [
     {
       title: 'Hielo alrededor de Saturno',
-      body: 'El límite sale de las dos densidades: d = 2,44 R (&rho;<sub>planeta</sub> / &rho;<sub>satélite</sub>)<sup>1/3</sup> para un cuerpo que puede deformarse. Saturno tiene un radio de 60 268 km y una densidad media de 687 kg/m&sup3;, y el hielo ronda los 900 kg/m&sup3;.',
+      body: 'El límite sale de las dos densidades: d = 2,44 R (ρ<sub>planeta</sub> / ρ<sub>satélite</sub>)<sup>1/3</sup> para un cuerpo que puede deformarse. Saturno tiene un radio de 60 268 km y una densidad media de 687 kg/m&sup3;, y el hielo ronda los 900 kg/m&sup3;.',
       prompt:
         '¿Cuál es el límite de Roche fluido del hielo alrededor de Saturno, en miles de km?',
       hints: [
@@ -185,7 +185,7 @@ export const TIDES_DEEPER = {
   steps: [
     {
       title: 'Cuánto tarda en bloquearse la Luna',
-      body: 'El mismo par que mueve a la Luna frena el giro propio de la Luna: la marea de la Tierra sobre la Luna. El tiempo para quitar un giro &omega; es t = I&omega;/N, con I = &alpha; m R&sup2; el momento de inercia de la Luna (&alpha; = 0,393) y N = (3/2)(k2/Q) G M&sup2; R&sup5; / a&sup6; el par. Para la Luna (k2 = 0,024, Q = 100, radio 1 737,4 km) a 384 400 km, desde un giro de una vuelta en diez horas, el núcleo de cálculo da el tiempo de abajo.',
+      body: 'El mismo par que mueve a la Luna frena el giro propio de la Luna: la marea de la Tierra sobre la Luna. El tiempo para quitar un giro ω es t = Iω/N, con I = α m R&sup2; el momento de inercia de la Luna (α = 0,393) y N = (3/2)(k2/Q) G M&sup2; R&sup5; / a&sup6; el par. Para la Luna (k2 = 0,024, Q = 100, radio 1 737,4 km) a 384 400 km, desde un giro de una vuelta en diez horas, el núcleo de cálculo da el tiempo de abajo.',
       prompt:
         '¿Cuál es el tiempo para bloquear la Luna, en unidades de 10⁸ años?',
       hints: [
