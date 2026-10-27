@@ -292,9 +292,360 @@ export const WEIGHING_JUPITER_DEEPER = {
   ],
 };
 
+// -----------------------------------------------------------------------------
+// The ring and tide investigations (Prompt 204 part 2): the deeper steps.
+// -----------------------------------------------------------------------------
+const RO = (values = {}, hide = []) => ({ id: 'tides-roche', values, hide });
+const RS = (values = {}, hide = []) => ({
+  id: 'tides-resonance',
+  values,
+  hide,
+});
+const TM = (values = {}, hide = []) => ({ id: 'tides-moon', values, hide });
+const TH = (values = {}, hide = []) => ({ id: 'tides-heating', values, hide });
+
+export const WHY_RINGS_DEEPER = {
+  id: 'why-rings',
+  steps: [
+    {
+      sid: 'saturn-ice-limit',
+      after: 'phobos-where',
+      depth: 'quantitative',
+      type: 'question',
+      kind: 'numeric',
+      title: 'Ice about Saturn',
+      body: `The limit comes from the two densities: d = 2.44 R (&rho;<sub>planet</sub> /
+             &rho;<sub>satellite</sub>)<sup>1/3</sup> for a body that can deform. Saturn has a
+             radius of 60,268 km and a mean density of 687 kg/m&sup3;, and ice is about 900
+             kg/m&sup3;.`,
+      prompt:
+        'What is the fluid Roche limit of ice about Saturn, in thousand km?',
+      unit: '',
+      answer: 134.4,
+      tolerance: 0.6,
+      hints: [
+        '(687 / 900) to the one third is 0.914; multiply by 2.44 and by 60,268 km.',
+      ],
+      worked:
+        '2.44 × 60,268 × (687/900)^(1/3) = 2.44 × 60,268 × 0.9139 = 134,400 km: 134.4 thousand km. The B ring’s outer edge is at 117,580 km, inside it.',
+      feedback: {
+        close:
+          'Close. The satellite’s density is in the denominator, inside the cube root.',
+        'wrong-order-of-magnitude':
+          'A power of ten out: the answer is about a hundred thousand km, so about 134 in thousand km.',
+        off: '2.44 R (ρ planet / ρ satellite)^(1/3).',
+      },
+      tool: RO({ system: 3, own: 1 }),
+    },
+    {
+      sid: 'mimas-3-to-1',
+      after: 'where-the-gap-falls',
+      depth: 'quantitative',
+      type: 'question',
+      kind: 'numeric',
+      title: 'Mimas’s other resonances',
+      body: `The p:q resonance lies at a<sub>m</sub> (q/p)<sup>2/3</sup>, with a<sub>m</sub> =
+             185,540 km for Mimas. The 3:1 resonance, where a particle goes round three times
+             for every orbit of Mimas, lies much deeper in.`,
+      prompt:
+        'Where is the 3:1 resonance of Mimas, in thousand km from Saturn’s center?',
+      unit: '',
+      answer: 89.2,
+      tolerance: 0.4,
+      hints: ['(1/3) to the two thirds is 0.4807.'],
+      worked:
+        '185,540 × (1/3)^(2/3) = 185,540 × 0.4807 = 89,200 km: 89.2 thousand km.',
+      feedback: {
+        close: 'Close. The exponent is 2/3, and the ratio is q/p = 1/3.',
+        'wrong-order-of-magnitude':
+          'A power of ten out: it is a little under a hundred thousand km.',
+        off: 'a (q/p)^(2/3) with q = 1 and p = 3.',
+      },
+      tool: RS({ moon: 0, p: 3, q: 1 }),
+    },
+    {
+      sid: 'why-two-limits',
+      after: 'a-ring-with-a-resonance',
+      depth: 'advanced',
+      type: 'question',
+      kind: 'short',
+      rubric:
+        'Full credit for saying that a rigid body has strength against being pulled apart and a fluid one has none, so a fluid body breaks farther out; that the real limit for a real body lies between the two; and that the limit depends on the densities and not on the satellite’s size. Partial credit for one of the three.',
+      title: 'Two limits for one pair',
+      body: `For Phobos and Mars the rigid limit is 5,466 km and the fluid limit 10,585 km:
+             almost a factor of two apart (2.44 against 1.26). Phobos orbits at 9,376 km.`,
+      prompt:
+        'In two or three sentences: why are there two limits, and where does a real moon’s lie?',
+      tool: RO({ system: 0, own: 1 }),
+    },
+  ],
+};
+
+export const TIDES_DEEPER = {
+  id: 'tides-that-move-the-moon',
+  steps: [
+    {
+      sid: 'moon-locking-time',
+      after: 'the-model-run-backward',
+      depth: 'quantitative',
+      type: 'question',
+      kind: 'numeric',
+      title: 'How long to lock the Moon',
+      body: `The same torque that moves the Moon slows the Moon’s own spin: the Earth’s tide
+             on the Moon. The time to remove a spin &omega; is t = I&omega;/N, with I =
+             &alpha; m R&sup2; the Moon&rsquo;s moment of inertia (&alpha; = 0.393) and N =
+             (3/2)(k2/Q) G M&sup2; R&sup5; / a&sup6; the torque. For the Moon (k2 = 0.024, Q =
+             100, radius 1,737.4 km) at 384,400 km, from a spin of one turn in ten hours, the
+             kernel gives the time below.`,
+      prompt: 'What is the time to lock the Moon, in units of 10⁸ years?',
+      unit: '',
+      answer: 1.15,
+      tolerance: 0.1,
+      hints: [
+        'The torque falls as a⁻⁶: at the Moon’s distance it is small, but the Moon’s spin is small too.',
+      ],
+      worked:
+        'N = 1.5 × (0.024/100) × G M² R⁵/a⁶ = 4.2 × 10¹⁵ N m and I ω = 0.393 × 7.342 × 10²² × (1.7374 × 10⁶)² × 1.745 × 10⁻⁴ = 1.52 × 10³¹, so t = 3.6 × 10¹⁵ s = 1.15 × 10⁸ years: far below the age of the Moon, consistent with the Moon being locked.',
+      feedback: {
+        close: 'Close. Divide the spin angular momentum by the torque.',
+        'wrong-order-of-magnitude':
+          'A power of ten out: it is a hundred million years, not a billion or a million.',
+        off: 't = I ω / N.',
+      },
+      tool: TM({ k2: 0.3, Q: 12, gyr: 0 }),
+    },
+    {
+      sid: 'a-q-that-changes',
+      after: 'what-the-model-leaves-out',
+      depth: 'advanced',
+      type: 'question',
+      kind: 'short',
+      rubric:
+        'Full credit for saying that the model’s Q is one number and the Earth’s real tidal dissipation depends on the oceans (their depth, the shape of the basins, which have changed with continental drift) and so on time; that run backward with the present Q the Moon is in contact 1.58 billion years ago, which the Moon’s age contradicts; and that this means the recession rate in the past was lower, not that the model’s present rate is wrong. Partial credit for two.',
+      title: 'A Q that changes',
+      body: `Run backward with Q = 12, the model puts the Moon in contact with the Earth 1.58
+             billion years ago. The Moon is about 4.5 billion years old.`,
+      prompt:
+        'In two or three sentences: what does that say about Q, and about the Moon’s past rate of recession?',
+      tool: TM({ k2: 0.3, Q: 12, gyr: -2 }),
+    },
+  ],
+};
+
+export const IOS_DEEPER = {
+  id: 'ios-fire',
+  steps: [
+    {
+      sid: 'how-far-from-the-maximum',
+      after: 'the-bound',
+      depth: 'quantitative',
+      type: 'question',
+      kind: 'numeric',
+      title: 'How far from the largest k2/Q',
+      body: `The model allows k2/Q up to 0.3 (k2 = 1.5 over Q = 5). The k2/Q that the middle of
+             the observed heat needs is the number you read.`,
+      prompt:
+        'How many times smaller is the needed k2/Q than the model’s largest?',
+      unit: '',
+      answer: 17,
+      tolerance: 0.5,
+      hints: ['Divide 0.3 by the k2/Q you read.'],
+      worked:
+        '0.3 / 0.01768 = 17.0: the observed heat needs a k2/Q seventeen times below the largest the model allows, comfortably inside the range.',
+      feedback: {
+        close: 'Close. The larger number goes on top.',
+        'wrong-order-of-magnitude':
+          'A power of ten out: it is about seventeen.',
+        off: '0.3 divided by the needed k2/Q.',
+      },
+      tool: TH({ k2: 1.5, Q: 100, e: 0.0041 }),
+    },
+    {
+      sid: 'what-the-formula-leaves-out',
+      after: 'what-heat-is',
+      depth: 'advanced',
+      type: 'question',
+      kind: 'short',
+      rubric:
+        'Full credit for saying that the formula takes k2 and Q as given numbers for the whole body while Io’s interior is layered and may be partly molten, so k2 and Q are not known and the heat is a bound; that it is leading order in the eccentricity; and that it needs a reason for the orbit to stay eccentric (the resonance with Europa and Ganymede), because tidal heating also circularizes the orbit. Partial credit for two.',
+      title: 'What the formula leaves out',
+      body: `The formula gives Io&rsquo;s heat as 21/2 &times; (k2/Q) G M&sup2; n R&sup5; e&sup2; /
+             a&sup6;. It needs three things it does not supply.`,
+      prompt:
+        'In two or three sentences: what does the formula take as given, and what keeps Io’s orbit eccentric?',
+      tool: TH({ k2: 1.5, Q: 100, e: 0.0041 }),
+    },
+  ],
+};
+
 /** The guides, flows, expectations and time bands of the lesson above. */
 export const INSTRUCTOR = {
   content: {
+    'why-rings': {
+      topic:
+        'The Roche limit for a rigid and a fluid body from two densities, a resonance as a radius in a ring, and two scale-model scenarios that show a tidal stream and the first sign of a resonance, with what each leaves out.',
+      difficulty: 'Introductory',
+      placement:
+        'After the Tides investigation and Newton’s gravity. It needs a ratio and a cube root. It supports OpenStax Astronomy 2e chapter 12 (section 12.5, planetary rings).',
+      overview:
+        'Students read the Roche limit of four pairs (Phobos and Mars, Shoemaker-Levy 9 and Jupiter, the Moon and the Earth, ice in Saturn’s B ring), predict where Phobos lies against the two limits, watch a clump pass inside the limit in the Roche Pass scenario, and find where the 2:1 resonance of Mimas falls against the Cassini Division. The Ring Gap scenario is shown with what its run records: a thinning, not a gap.',
+      priorKnowledge: [
+        'Newtonian gravity and the idea of a tide',
+        'Density and a cube root',
+      ],
+      keyConcepts: [
+        {
+          heading: 'Two limits for one pair',
+          body: 'A rigid body resists being pulled apart (rigid limit, 1.26 R (ρp/ρs)^(1/3)); a fluid one does not (2.44 times the same). A real body lies between them.',
+        },
+        {
+          heading: 'A resonance is a radius',
+          body: 'The p:q resonance lies at a (q/p)^(2/3) of the moon’s distance. Mimas’s 2:1 lies 0.6 percent from the edge of the Cassini Division; the real radius differs by about as much because of Saturn’s oblateness.',
+        },
+        {
+          heading: 'A model shows what it contains',
+          body: 'The ring scenario’s particles never collide, so its resonance thins the ring and does not empty it. Say what each model leaves out.',
+        },
+      ],
+      features: [
+        {
+          name: 'Roche and resonance instruments (tides family)',
+          text: 'The rigid and fluid limits of four named pairs, with the regime of a distance, and the resonance radius of three moons beside four edges and gaps in Saturn’s rings. Every number is the tides kernel’s.',
+        },
+        {
+          name: 'Roche Pass and Ring Gap scenarios',
+          text: 'Two scale models declared through the geometry table with Newtonian gravity and no extra force. Their committed legs, three of which failed their bounds, are in tests/fixtures/tides/display-record.json.',
+        },
+      ],
+      misconceptions: [
+        {
+          claim: 'Anything inside the Roche limit is torn apart.',
+          response:
+            'Only a body held together by gravity alone. A body with strength survives inside the fluid limit, and a rocky moon can orbit between the limits.',
+        },
+        {
+          claim: 'Rings are the debris of a moon that crossed the limit.',
+          response:
+            'That is one idea. Rings can also be material that never formed a moon; the limit says only that a moon cannot form there.',
+        },
+      ],
+      teachingNotes: [
+        'The pass is a scale model: the clump is a softened swarm of 60 particles. In the recorded run its extent grows sixteenfold. At 1.5 times the fluid limit the committed control run grows about a quarter, but that is not a robust number: across eight periapses within 2 percent of it the extent ratio runs from 0.2 to 4 (five of eight under 2), because one body that escapes sets the largest extent. A longer run loosens the clump by itself, which the scenario’s summary says.',
+        'The ring scenario fails three of its committed legs (the eccentricity contrast at the resonance, the thinning bound by 0.03, and the shepherd’s lane); the lesson states what the run shows (19 particles in the resonance window against 24 beside it) and no more. A ring that has no collisions cannot hold a clean gap.',
+      ],
+      discussion: [
+        'Phobos is between the two limits. What does that tell you about what Phobos is made of?',
+        'The model says where a resonance is, not whether it opens a gap. What else would you need?',
+      ],
+      extensions: [
+        'Run the Roche Pass scenario in the sandbox and move the periapsis with the inspector.',
+      ],
+      modelNotes:
+        'js/tideWidgets.js (rocheView, resonanceView), the tides kernel (rocheLimit, rocheRegimeAt, resonanceRadius), the scenarios ring-gap and roche-pass (ENGINE_GEOMETRY in js/world/build.js), tools/tides-scenarios.mjs and tests/tidesScenarios.test.js.',
+    },
+    'tides-that-move-the-moon': {
+      topic:
+        'The Moon’s recession and the day’s lengthening as one exchange of angular momentum in a constant-Q model, a closed-form table forward and backward, and the failure of the model run backward.',
+      difficulty: 'Intermediate',
+      placement:
+        'After Tides and Newton’s gravity. It needs an exponent and a unit conversion. It supports OpenStax Astronomy 2e chapter 4 (section 4.6, tides).',
+      overview:
+        'Students read the Moon’s recession and the day’s lengthening for k2 = 0.30 and Q = 12 against lunar laser ranging and eclipse records, run the model forward one billion years, and run it backward until it stops: contact 1.58 billion years ago, long after the Moon formed.',
+      priorKnowledge: [
+        'Tides and the tidal bulge',
+        'Angular momentum and its conservation',
+      ],
+      keyConcepts: [
+        {
+          heading: 'One process, two effects',
+          body: 'The bulge pulls the Moon forward and the Moon pulls it back: the Moon gains orbital angular momentum and the Earth loses spin, and the sum is conserved.',
+        },
+        {
+          heading: 'Q is a parameter',
+          body: 'The model fits the present with one Q and fails backward. That is information about Q, not about the Moon.',
+        },
+      ],
+      features: [
+        {
+          name: 'Moon instrument (tides family)',
+          text: 'The recession rate, the day’s lengthening and a precomputed closed-form table from now to a stated time, forward or backward, with the point where the model stops. Nothing is simulated; no force acts on any engine body (the tidal-torque gate’s verdict B).',
+        },
+      ],
+      misconceptions: [
+        {
+          claim: 'The Moon recedes at a constant rate.',
+          response:
+            'The rate falls steeply with distance (da/dt goes as a^-11/2), so it is larger in the past; the model reaches contact in finite time.',
+        },
+        {
+          claim: 'The failure backward means the present rate is wrong.',
+          response:
+            'The present rate matches laser ranging. The failure is of the assumption that Q was the same in the past.',
+        },
+      ],
+      teachingNotes: [
+        'k2 = 0.30 and Q = 12 are chosen to match the present; the instrument does not fit them. The tier-b check holds the recession within 10 percent of 3.82 and the day within 15 percent of 2.3.',
+        'The table stops at the first sample before contact; the model’s contact time (1.58 billion years) is the number to quote.',
+      ],
+      discussion: [
+        'What would the ocean’s geography do to Q over time?',
+        'If the Moon were once close, what would the day have been?',
+      ],
+      extensions: ['Change Q and find the contact time for Q = 30.'],
+      modelNotes:
+        'js/tideWidgets.js (moonView), the tides kernel (recession, tidalTrajectory, lockingTime). The constant-Q evolution is a parameterisation, as TIDAL_KERNEL.md says.',
+    },
+    'ios-fire': {
+      topic:
+        'Tidal heating as a formula, energy per orbit, the square dependence on the eccentricity, and a bound over three orders of magnitude from the unknown k2/Q.',
+      difficulty: 'Intermediate',
+      placement:
+        'After Tides and the Galilean moons. It needs squares and a power of ten. It supports OpenStax Astronomy 2e chapter 12 (section 12.2, the Galilean moons).',
+      overview:
+        'Students read the heating of Io for k2 = 1.5 and Q = 100 (9.3 × 10¹³ W, inside the observed 0.6 to 1.6 × 10¹⁴), double the eccentricity (four times the heat), and read the k2/Q the observed heat needs (0.0177), seventeen times below the model’s largest.',
+      priorKnowledge: ['Tides', 'Orbital eccentricity', 'Power and energy'],
+      keyConcepts: [
+        {
+          heading: 'Heat is friction in a flexing',
+          body: 'Io’s orbit is eccentric, so its tide rises and falls once an orbit; the friction is the heat, in proportion to e squared.',
+        },
+        {
+          heading: 'A bound, not a prediction',
+          body: 'The heat is proportional to k2/Q, which nobody knows for Io. The kernel gives a range of three orders of magnitude; the observation selects k2/Q.',
+        },
+      ],
+      features: [
+        {
+          name: 'Heating instrument (tides family)',
+          text: 'The heating of a synchronous satellite on an eccentric orbit, its energy per orbit, the range the model allows and the k2/Q the observed heat needs, against the observed flow of 0.6 to 1.6 × 10¹⁴ W.',
+        },
+      ],
+      misconceptions: [
+        {
+          claim: 'The formula predicts Io’s heat.',
+          response:
+            'It predicts a multiple of k2/Q. The match to the observed heat depends on the chosen k2 and Q.',
+        },
+        {
+          claim: 'Tidal heating can go on forever.',
+          response:
+            'It also circularizes the orbit; Io’s eccentricity is sustained by the resonance with Europa and Ganymede.',
+        },
+      ],
+      teachingNotes: [
+        'The observed heat flow is a range (Veeder et al. 1994; Spencer et al. 2000); the tier-b check holds the formula within a factor of two of it.',
+        'The numbers in the steps are the kernel’s for Io’s radius, orbit and mass, with e = 0.0041.',
+      ],
+      discussion: [
+        'What would change if Io’s interior were not uniform?',
+        'Why does the Moon not heat this way?',
+      ],
+      extensions: [
+        'Find the eccentricity that gives the lower observed bound at k2/Q = 0.015.',
+      ],
+      modelNotes:
+        'js/tideWidgets.js (heatingView), the tides kernel (tidalHeating, heatingRange, requiredK2OverQ).',
+    },
     'weighing-jupiter': {
       topic:
         'Four moons identified night by night, a cadence that can measure them, a sinusoid for each, and Kepler’s third law with the Earth’s motion corrected: Jupiter’s mass with its uncertainty against the ephemeris',
@@ -379,6 +730,62 @@ export const INSTRUCTOR = {
     },
   },
   flow: {
+    'why-rings': [
+      {
+        from: 'rings-and-limits',
+        to: 'sl9-limits',
+        text: 'The two Roche limits of Shoemaker-Levy 9 and Jupiter, and the pass inside both.',
+      },
+      {
+        from: 'phobos-predict',
+        to: 'phobos-where',
+        text: 'Phobos orbits between the rigid and the fluid limit.',
+      },
+      {
+        from: 'a-pass-inside-the-limit',
+        to: 'where-the-gap-falls',
+        text: 'From a stream to a resonance: where Mimas’s 2:1 lies against the Cassini Division.',
+      },
+      {
+        from: 'a-ring-with-a-resonance',
+        to: 'what-rings-tell',
+        text: 'What the ring scenario shows and what it leaves out; the close.',
+      },
+    ],
+    'tides-that-move-the-moon': [
+      {
+        from: 'the-bulge-ahead',
+        to: 'the-moons-recession',
+        text: 'The bulge that runs ahead, and the recession and the day’s lengthening it gives.',
+      },
+      {
+        from: 'forward-predict',
+        to: 'forward-one-billion',
+        text: 'The Moon a billion years from now.',
+      },
+      {
+        from: 'the-model-run-backward',
+        to: 'what-the-model-leaves-out',
+        text: 'The model run backward stops at contact 1.58 billion years ago; the close.',
+      },
+    ],
+    'ios-fire': [
+      {
+        from: 'a-moon-that-melts',
+        to: 'heating-at-the-maximum',
+        text: 'Where Io’s heat comes from, and its size at k2 = 1.5 and Q = 100.',
+      },
+      {
+        from: 'double-predict',
+        to: 'double-the-eccentricity',
+        text: 'Doubling the eccentricity quadruples the heat.',
+      },
+      {
+        from: 'the-bound',
+        to: 'what-heat-is',
+        text: 'The bound over three orders of magnitude and the k2/Q the observed heat needs; the close.',
+      },
+    ],
     'weighing-jupiter': [
       {
         from: 'a-sequence-of-frames',
@@ -403,6 +810,28 @@ export const INSTRUCTOR = {
     ],
   },
   expectations: {
+    'why-rings': {
+      'sl9-limits':
+        'The rigid limit 1.64 and the fluid limit 3.18 Jupiter radii (within 0.03 and 0.04).',
+      'phobos-where':
+        'The rigid limit 5,466 km (within 60) and the fluid limit 10,585 km (within 100); Phobos at 9,376 km is between them.',
+      'where-the-gap-falls':
+        'The 2:1 resonance of Mimas at 116,883 km (within 400), 0.59 percent (within 0.1) inside the outer edge of the B ring.',
+    },
+    'tides-that-move-the-moon': {
+      'the-moons-recession':
+        'Recession 3.75 cm per year (within 0.06) and day lengthening 2.05 ms per century (within 0.06).',
+      'forward-one-billion':
+        'The Moon at 414.6 thousand km (within 1.5) and a day of 29.5 hours (within 0.4) in one billion years.',
+      'the-model-run-backward': 'Contact 1.58 billion years ago (within 0.03).',
+    },
+    'ios-fire': {
+      'heating-at-the-maximum':
+        'Heating 9.33 × 10¹³ W (within 0.1) and 1.43 × 10¹⁹ J in one orbit (within 0.03).',
+      'double-the-eccentricity':
+        'Heating 3.73 × 10¹⁴ W (within 0.05), four times as much.',
+      'the-bound': 'The needed k2/Q is 0.0177 (within 0.0006).',
+    },
     'weighing-jupiter': {
       'how-fast-does-ganymede-move':
         'Ganymede is 9.66 Jupiter radii from Jupiter in frame 14 (within 0.25) and moves 0.89 radii by frame 16 (within 0.2).',
@@ -413,6 +842,13 @@ export const INSTRUCTOR = {
     },
   },
   bands: {
+    'why-rings': { core: 'medium', quantitative: 'medium', advanced: 'short' },
+    'tides-that-move-the-moon': {
+      core: 'medium',
+      quantitative: 'medium',
+      advanced: 'short',
+    },
+    'ios-fire': { core: 'medium', quantitative: 'short', advanced: 'short' },
     'weighing-jupiter': {
       core: 'medium',
       quantitative: 'long',
@@ -424,4 +860,7 @@ export const INSTRUCTOR = {
 /** The deeper steps by lesson id: what depthAll.js registers. */
 export default {
   [WEIGHING_JUPITER_DEEPER.id]: WEIGHING_JUPITER_DEEPER.steps,
+  [WHY_RINGS_DEEPER.id]: WHY_RINGS_DEEPER.steps,
+  [TIDES_DEEPER.id]: TIDES_DEEPER.steps,
+  [IOS_DEEPER.id]: IOS_DEEPER.steps,
 };

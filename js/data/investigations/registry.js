@@ -171,6 +171,9 @@ const LOADERS = {
   'weighing-jupiter': () => import('./weighing-jupiter.js'),
   'why-venus-is-hot': () => import('./why-venus-is-hot.js'),
   'two-greenhouse-models': () => import('./two-greenhouse-models.js'),
+  'why-rings': () => import('./why-rings.js'),
+  'tides-that-move-the-moon': () => import('./tides-that-move-the-moon.js'),
+  'ios-fire': () => import('./ios-fire.js'),
 };
 // </generated:loaders>
 
@@ -259,6 +262,9 @@ const TRANSLATIONS = {
     'weighing-jupiter': () => import('./es/weighing-jupiter.js'),
     'why-venus-is-hot': () => import('./es/why-venus-is-hot.js'),
     'two-greenhouse-models': () => import('./es/two-greenhouse-models.js'),
+    'why-rings': () => import('./es/why-rings.js'),
+    'tides-that-move-the-moon': () => import('./es/tides-that-move-the-moon.js'),
+    'ios-fire': () => import('./es/ios-fire.js'),
   },
 };
 // </generated:translations>

@@ -398,6 +398,11 @@ export const NEVER_PRECACHED = [
   /^(js\/atmosphereWidgets\.js|js\/i18n\/(en|es)\.atmospheres\.js)$/,
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(why-venus-is-hot|two-greenhouse-models|atmosphere-sequence)\.js$/,
   /^images\/investigations\/(why-venus-is-hot|two-greenhouse-models)\.webp$/,
+  // The ring and tide kernel, family and lessons (Prompt 204 part 2): imported by no page
+  // at start-up, kept by the service worker after the first online use, not installed.
+  /^(js\/tideWidgets\.js|js\/i18n\/(en|es)\.tides\.js)$/,
+  /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(why-rings|tides-that-move-the-moon|ios-fire)\.js$/,
+  /^images\/investigations\/(why-rings|tides-that-move-the-moon|ios-fire)\.webp$/,
   // The validation suite's groups and harness: fetched when the suite runs,
   // like physicsChecks.js itself (ON_DEMAND_ONLY below).
   /^js\/validation\/(groups\/|harness\.js$)/,

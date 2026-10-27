@@ -148,6 +148,12 @@ const DEEPER = {
     import('./data/investigations/depth/why-venus-is-hot.js'),
   'two-greenhouse-models': () =>
     import('./data/investigations/depth/two-greenhouse-models.js'),
+  'why-rings': () =>
+    import('./data/investigations/depth/why-rings.js'),
+  'tides-that-move-the-moon': () =>
+    import('./data/investigations/depth/tides-that-move-the-moon.js'),
+  'ios-fire': () =>
+    import('./data/investigations/depth/ios-fire.js'),
 };
 const deepen = async lesson =>
   lesson.depthLaid || !DEEPER[lesson.id]
