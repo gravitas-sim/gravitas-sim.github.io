@@ -458,7 +458,9 @@ test.describe('everyone can use it', () => {
     // The Spanish catalog is what is being searched: "marea" is a word the
     // English manifest does not contain anywhere.
     await page.locator('#investigationSearch').fill('marea');
-    await expect.poll(() => shownIds(page)).toEqual(['tides']);
+    await expect
+      .poll(() => shownIds(page))
+      .toEqual(['tides', 'tides-that-move-the-moon', 'ios-fire']);
     await expect(page.locator('#investigationSequences')).toBeHidden();
   });
 

@@ -425,6 +425,10 @@ test.describe('the integrator setting', () => {
     // The lesson watches the Jacobi constant hold; first-order drift would
     // make that a claim about the integrator.
     'lagrange-point-lab': 'Velocity Verlet',
+    // The ring scale model holds a resonance for twenty moon orbits, and the Roche pass
+    // a clump's close pass: first-order phase error would heat the one and smear the other.
+    'ring-gap': 'Velocity Verlet',
+    'roche-pass': 'Velocity Verlet',
   };
 
   test('every shipped scenario loads under the scheme it declares', async ({
