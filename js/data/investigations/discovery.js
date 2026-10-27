@@ -680,6 +680,36 @@ export const DISCOVERY = {
     },
     courseLevel: 'upper',
   },
+  'which-surface-is-older': {
+    audience: 'intro',
+    mathematics: 'arithmetic',
+    prerequisites: [],
+    textbook: {
+      chapter: 9,
+      section: '9.2',
+    },
+    courseLevel: 'survey',
+  },
+  'craters-by-size': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['which-surface-is-older'],
+    textbook: {
+      chapter: 9,
+      section: '9.2',
+    },
+    courseLevel: 'majors',
+  },
+  'what-a-crater-diameter-is-worth': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['which-surface-is-older'],
+    textbook: {
+      chapter: 9,
+      section: null,
+    },
+    courseLevel: 'upper',
+  },
   'weighing-jupiter': {
     audience: 'intro',
     mathematics: 'algebra',

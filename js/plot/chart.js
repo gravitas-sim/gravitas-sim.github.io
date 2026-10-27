@@ -298,7 +298,8 @@ export function createChart(host, opts = {}) {
    *   `number`; yNumber likewise
    * @param {boolean} [next.legend] - Whether the legend shows (default: when
    *   there is more than one series)
-   * @param {Array<object>} next.series - id, label, x, y, sigma?, color,
+   * @param {Array<object>} next.series - id, label, x, y, sigma? (and sigmaLow?, the lower bar
+   *   where it differs), color,
    *   width (2), dash ([]), mode ('line', 'points' or 'both'), fill (true, or
    *   a color), radius (3), hidden, order, maxPoints
    */
@@ -344,9 +345,10 @@ export function createChart(host, opts = {}) {
         const y = s.y[i];
         if (!isNum(x) || !isNum(y)) continue;
         const e = s.sigma && isNum(s.sigma[i]) ? s.sigma[i] : 0;
+        const eLow = s.sigmaLow && isNum(s.sigmaLow[i]) ? s.sigmaLow[i] : e;
         if (x < x0) x0 = x;
         if (x > x1) x1 = x;
-        if (y - e < y0) y0 = y - e;
+        if (y - eLow < y0) y0 = y - eLow;
         if (y + e > y1) y1 = y + e;
       }
     }
@@ -547,7 +549,7 @@ export function createChart(host, opts = {}) {
         if (!isNum(x) || !isNum(y) || !isNum(e) || e <= 0) continue;
         const px = r1(sx(x));
         const top = r1(sy(y + e));
-        const bottom = r1(sy(y - e));
+        const bottom = r1(sy(y - (isNum(s.sigmaLow?.[i]) ? s.sigmaLow[i] : e)));
         d.push(
           `M${px},${top}L${px},${bottom}M${r1(px - capPx)},${top}L${r1(px + capPx)},${top}M${r1(px - capPx)},${bottom}L${r1(px + capPx)},${bottom}`
         );

@@ -168,6 +168,10 @@ const LOADERS = {
   'measuring-the-moon': () => import('./measuring-the-moon.js'),
   'how-far-is-that-star': () => import('./how-far-is-that-star.js'),
   'a-binary-stars-orbit': () => import('./a-binary-stars-orbit.js'),
+  'which-surface-is-older': () => import('./which-surface-is-older.js'),
+  'craters-by-size': () => import('./craters-by-size.js'),
+  'what-a-crater-diameter-is-worth': () =>
+    import('./what-a-crater-diameter-is-worth.js'),
   'weighing-jupiter': () => import('./weighing-jupiter.js'),
   'why-rings': () => import('./why-rings.js'),
   'tides-that-move-the-moon': () => import('./tides-that-move-the-moon.js'),
@@ -259,6 +263,10 @@ const TRANSLATIONS = {
     'measuring-the-moon': () => import('./es/measuring-the-moon.js'),
     'how-far-is-that-star': () => import('./es/how-far-is-that-star.js'),
     'a-binary-stars-orbit': () => import('./es/a-binary-stars-orbit.js'),
+    'which-surface-is-older': () => import('./es/which-surface-is-older.js'),
+    'craters-by-size': () => import('./es/craters-by-size.js'),
+    'what-a-crater-diameter-is-worth': () =>
+      import('./es/what-a-crater-diameter-is-worth.js'),
     'weighing-jupiter': () => import('./es/weighing-jupiter.js'),
     'why-rings': () => import('./es/why-rings.js'),
     'tides-that-move-the-moon': () =>

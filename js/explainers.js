@@ -133,6 +133,7 @@ export const FAMILY_IDS = Object.freeze({
     'atmosphere-greenhouse',
     'atmosphere-scale',
   ],
+  crater: ['crater-regions', 'crater-sfd', 'crater-budget'],
   tides: ['tides-roche', 'tides-resonance', 'tides-moon', 'tides-heating'],
 });
 

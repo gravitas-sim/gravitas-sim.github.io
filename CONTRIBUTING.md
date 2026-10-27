@@ -171,13 +171,13 @@ their ceilings:
 | Module | Lines | Ceiling |
 | --- | ---: | ---: |
 | `js/data/instructorContent.js` | 6,715 | 6,715 |
-| `js/i18n/es.deferred.js` | 4,087 | 4,087 |
-| `js/i18n/en.deferred.js` | 3,840 | 3,840 |
+| `js/i18n/es.deferred.js` | 4,081 | 4,081 |
+| `js/i18n/en.deferred.js` | 3,834 | 3,834 |
 | `js/investigations.js` | 3,287 | 3,287 |
 | `js/render.js` | 3,015 | 3,015 |
-| `js/world/build.js` | 2,608 | 2,608 |
+| `js/data/investigations/measurement-sequence.js` | 2,922 | 2,922 |
+| `js/world/build.js` | 2,598 | 2,598 |
 | `js/composerPage.js` | 2,528 | 2,528 |
-| `js/darkMatterWidgets.js` | 2,329 | 2,329 |
 <!--/fact-block-->
 
 | Layer | What lives there | Examples |
@@ -485,8 +485,8 @@ npm run author:check -- --json            # for an editor
 **`author:walk`** is the part that cannot be done as data. The checker can see
 that a step names a widget and that the widget has a control called `mass`; it
 cannot see that the widget painted, that the scenario built, that a probe
-produced rows against a live world, or that Next moved. The walker opens all <!--fact:investigations-->72<!--/fact--> investigations in
-a browser and takes all <!--fact:investigationSteps-->1132<!--/fact--> steps,
+produced rows against a live world, or that Next moved. The walker opens all <!--fact:investigations-->75<!--/fact--> investigations in
+a browser and takes all <!--fact:investigationSteps-->1159<!--/fact--> steps,
 sharded one lesson per test so contexts are reused and a failure names its lesson. It takes about two
 minutes and runs as part of `npm run e2e`.
 

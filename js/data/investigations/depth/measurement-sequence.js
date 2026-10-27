@@ -927,8 +927,732 @@ export const A_BINARY_STARS_ORBIT_DEEPER = {
   ],
 };
 
+// -----------------------------------------------------------------------------
+// The crater investigations, deeper (Prompt 195, D-R10-85): the same instruments
+// (js/craterWidgets.js); every expected value is recomputed in
+// tests/craterLessons.test.js.
+// -----------------------------------------------------------------------------
+const CRG = (values = {}, hide = []) => ({
+  id: 'crater-regions',
+  values,
+  hide,
+});
+const CSF = (values = {}, hide = []) => ({
+  id: 'crater-sfd',
+  values,
+  hide,
+});
+const CBD = (values = {}, hide = []) => ({
+  id: 'crater-budget',
+  values,
+  hide,
+});
+
+export const WHICH_SURFACE_IS_OLDER_DEEPER = {
+  id: 'which-surface-is-older',
+  steps: [
+    {
+      sid: 'harder-craters',
+      after: 'reading-the-interval',
+      depth: 'quantitative',
+      type: 'measure',
+      title: 'Only the largest craters',
+      body: `Raise the diameter on the Moon to <strong>50 km</strong>. Fewer craters qualify. Read how many the mare has,
+             and the <strong>upper end</strong> of the interval of the density ratio.`,
+      fields: [
+        { id: 'mare', label: 'Craters in the lunar mare', hint: '2' },
+        { id: 'hi', label: 'Upper end of the interval', hint: '84.8' },
+      ],
+      validate: v => {
+        if (![v.mare, v.hi].every(Number.isFinite)) return null;
+        if (v.mare === 2 && near(v.hi, 84.8, 1)) {
+          return {
+            level: 'ok',
+            message:
+              'The mare has two craters this large and the highland 17: the ratio is 9.5, and its interval runs from 2.3 to 84.8. The verdict has not changed, but the interval has become enormous. Fewer craters give a wider interval, whichever way the counts point.',
+          };
+        }
+        return {
+          level: 'error',
+          message:
+            'Choose the Moon, set “Count craters at least” to 50 km and read the number of craters in the mare and the upper end of the interval of the density ratio.',
+        };
+      },
+      tool: CRG({ pair: 0, view: 1, dmin: 50, circles: 1 }),
+    },
+    {
+      sid: 'below-the-limit',
+      after: 'harder-craters',
+      depth: 'quantitative',
+      type: 'question',
+      kind: 'choice',
+      title: 'Why will it not compare at 25 km?',
+      body: `Set the diameter on the Moon to <strong>25 km</strong>. The instrument refuses a comparison and says the
+             diameter is below the one at which the count is complete.`,
+      prompt: 'Why is a smaller diameter not allowed?',
+      options: [
+        'Craters smaller than 30 km do not exist on the Moon',
+        'Below 30 km a count of these pictures would miss craters, so a density there would not be the surface’s',
+        'The instrument can only count whole numbers of kilometers',
+        'Smaller craters have a different age from larger ones',
+      ],
+      answer: 1,
+      misconceptions: [
+        {
+          id: 'none',
+          option: 0,
+          say: 'There are far more craters below 30 km than above it. The point is that they are the ones a count of this picture would not reach completely: a 25 km crater is 12 pixels across.',
+        },
+        {
+          id: 'age',
+          option: 3,
+          say: 'A crater’s size is not its age. Small craters are the first to be lost to saturation and to be buried, and the most affected by secondaries, which is the real reason they are counted with care.',
+        },
+      ],
+      hints: ['How many pixels across is a crater of 25 km at 2 km per pixel?'],
+      because:
+        'A comparison needs both counts complete above the diameter. The Moon’s limit of 30 km is 15 pixels across; the instrument refuses below it rather than compare densities that are partly missing craters.',
+      tool: CRG({ pair: 0, view: 0, dmin: 25, circles: 1 }),
+    },
+    {
+      sid: 'the-flip',
+      after: 'fewer-craters',
+      depth: 'advanced',
+      type: 'measure',
+      title: 'Where Mars changes its verdict',
+      body: `Set Mars to <strong>60 km</strong> and read the density ratio and the <strong>lower end</strong> of its interval.
+             Then raise the diameter in steps of 5 km from 20 and watch where the verdict changes.`,
+      fields: [
+        {
+          id: 'ratio',
+          label: 'Density ratio, highland over plains',
+          hint: '3.00',
+        },
+        { id: 'lo', label: 'Lower end of the interval', hint: '0.91' },
+      ],
+      validate: v => {
+        if (![v.ratio, v.lo].every(Number.isFinite)) return null;
+        if (near(v.ratio, 3.0, 0.05) && near(v.lo, 0.91, 0.03)) {
+          return {
+            level: 'ok',
+            message:
+              'A ratio of 3.00 and a lower end of 0.91: the interval holds 1. At 55 km it does not (the lower end is just above 1), at 60 km it does. The verdict depended on where you set the diameter, which is why the diameter has to be stated, and chosen before the counts are read.',
+          };
+        }
+        return {
+          level: 'error',
+          message:
+            'Choose Mars, set “Count craters at least” to 60 km and read “Density ratio, first over second” and the lower end in brackets.',
+        };
+      },
+      tool: CRG({ pair: 1, view: 0, dmin: 60, circles: 1 }),
+    },
+    {
+      sid: 'no-craters-at-all',
+      after: 'the-flip',
+      depth: 'advanced',
+      type: 'measure',
+      title: 'When one region has none',
+      body: `Set the Moon to <strong>100 km</strong>. The highland has craters this large and the mare has none. Read how many the
+             highland has and the lower end of the interval of the ratio.`,
+      fields: [
+        { id: 'highland', label: 'Craters in the lunar highland', hint: '5' },
+        { id: 'lo', label: 'Lower end of the interval', hint: '1.02' },
+      ],
+      validate: v => {
+        if (![v.highland, v.lo].every(Number.isFinite)) return null;
+        if (v.highland === 5 && near(v.lo, 1.02, 0.03)) {
+          return {
+            level: 'ok',
+            message:
+              'Five and none. The ratio itself is undefined, and the instrument gives only a floor: at least 1.02. A count of zero is not a count of nothing: it is an upper limit, and the comparison still works, but only in one direction.',
+          };
+        }
+        return {
+          level: 'error',
+          message:
+            'Choose the Moon, set “Count craters at least” to 100 km and read the number of craters in the highland and the lower end of the ratio’s interval.',
+        };
+      },
+      tool: CRG({ pair: 0, view: 0, dmin: 100, circles: 1 }),
+    },
+  ],
+};
+
+export const CRATERS_BY_SIZE_DEEPER = {
+  id: 'craters-by-size',
+  steps: [
+    {
+      sid: 'raise-the-floor',
+      after: 'does-mare-differ',
+      depth: 'quantitative',
+      type: 'measure',
+      title: 'Fit only the largest',
+      body: `Choose the <strong>lunar highland</strong> and raise the fit to <strong>60 km</strong>. Read how many craters
+             are in the fit and the upper end of the interval.`,
+      fields: [
+        { id: 'n', label: 'Craters in the fit', hint: '14' },
+        { id: 'hi', label: 'Upper end of the interval', hint: '3.56' },
+      ],
+      validate: v => {
+        if (![v.n, v.hi].every(Number.isFinite)) return null;
+        if (v.n === 14 && near(v.hi, 3.56, 0.05)) {
+          return {
+            level: 'ok',
+            message:
+              'Fourteen craters, an index of 2.24 and an interval from 1.23 to 3.56: more than twice as wide as with 40. Raising the floor throws away craters, and every one thrown away costs width.',
+          };
+        }
+        return {
+          level: 'error',
+          message:
+            'Choose the lunar highland (0), set “Fit craters at least” to 60 km and read the number of craters in the fit and the upper end of the interval.',
+        };
+      },
+      tool: CSF({ region: 0, dmin: 60, miss: 0 }, ['miss']),
+    },
+    {
+      sid: 'unbiased-form',
+      after: 'raise-the-floor',
+      depth: 'quantitative',
+      type: 'measure',
+      title: 'The unbiased form',
+      body: `The maximum-likelihood index is <em>n</em>/<em>S</em>, where <em>S</em> is the sum of ln(<em>D</em>/<em>D</em><sub>min</sub>).
+             With few craters it is biased high; <em>(n &minus; 1)/S</em> is the unbiased form. Choose the <strong>lunar mare</strong>,
+             fitted from <strong>30 km</strong>, and read the unbiased index.`,
+      fields: [
+        {
+          id: 'unbiased',
+          label: 'Index, unbiased form (n − 1) / S',
+          hint: '2.97',
+        },
+      ],
+      validate: v => {
+        if (!Number.isFinite(v.unbiased)) return null;
+        if (near(v.unbiased, 2.97, 0.04)) {
+          return {
+            level: 'ok',
+            message:
+              '2.97, against the maximum-likelihood 3.47: the ratio is (n − 1)/n, 6 over 7. With 91 craters the two agree to a fraction of a percent. The interval is the exact chi-square one and does not depend on which you quote.',
+          };
+        }
+        return {
+          level: 'error',
+          message:
+            'Choose the lunar mare (1), set “Fit craters at least” to 30 km and read “Index, unbiased form”.',
+        };
+      },
+      tool: CSF({ region: 1, dmin: 30, miss: 0 }, ['miss']),
+    },
+    {
+      sid: 'why-not-a-line',
+      after: 'what-the-flag-says',
+      depth: 'advanced',
+      type: 'question',
+      kind: 'choice',
+      title: 'Why not draw a line through the points?',
+      body: `The plot shows points joined, to the eye, by a line. The index is not the slope of a line fitted to them.`,
+      prompt:
+        'Why is a straight-line fit to the plotted points the wrong tool?',
+      options: [
+        'A line is always better: it uses every point on the plot',
+        'The points are not independent (each counts every larger crater too) and their errors are not Gaussian, so the line’s interval would be wrong',
+        'A line cannot be fitted on a logarithmic scale',
+        'The maximum-likelihood index is the line fit, written differently',
+      ],
+      answer: 1,
+      misconceptions: [
+        {
+          id: 'always',
+          option: 0,
+          say: 'Using every point is not the same as using every crater. The points share their craters: the largest crater is in every one of them, and a fit that treats them as separate counts its information many times over.',
+        },
+        {
+          id: 'same',
+          option: 3,
+          say: 'They differ: the maximum-likelihood index weights each crater once and has an exact interval. A least-squares line through the cumulative points weights the large-diameter end, where the points are few and correlated, as much as the small end.',
+        },
+      ],
+      hints: ['How many of the plotted points include the largest crater?'],
+      because:
+        'Each cumulative point includes all the craters to its right, so the points are correlated, and the error of a count is Poisson, not Gaussian. The fit uses the craters, once each, and gets an exact interval.',
+      tool: CSF({ region: 0, dmin: 30, miss: 0 }, ['miss']),
+    },
+    {
+      sid: 'the-limit-is-the-picture',
+      after: 'why-not-a-line',
+      depth: 'advanced',
+      type: 'question',
+      kind: 'choice',
+      title: 'Why 30 km, when the catalog goes lower?',
+      body: `The lunar catalog says it is complete down to about 8 km, and the instrument still marks 30 km as the
+             completeness limit for the lunar highland.`,
+      prompt: 'Why?',
+      options: [
+        'The catalog is wrong below 30 km',
+        'The limit belongs to a count made on this picture: 30 km is about 15 pixels across at 2 km per pixel, the least that can be placed reliably',
+        'Craters smaller than 30 km do not exist on the Moon',
+        'The Poisson interval is not valid below 30 km',
+      ],
+      answer: 1,
+      misconceptions: [
+        {
+          id: 'wrong',
+          option: 0,
+          say: 'The catalog was made from other data, at a finer scale, and its own completeness is stated. The limit here is for the picture: a count by a person of this map cannot be complete where the craters are only a few pixels across.',
+        },
+        {
+          id: 'poisson',
+          option: 3,
+          say: 'The Poisson interval is fine for any number of independent craters. What fails below the limit is that the list is no longer all the craters, which no interval can repair.',
+        },
+      ],
+      hints: ['What is a crater 20 km across, in pixels?'],
+      because:
+        'Completeness depends on the data a count is made from. The same surface needs a different limit on a different picture, so the limit is stated with the picture, and a fit below it is flagged as untrustworthy.',
+      tool: CSF({ region: 0, dmin: 20, miss: 0 }),
+    },
+  ],
+};
+
+export const WHAT_A_CRATER_DIAMETER_IS_WORTH_DEEPER = {
+  id: 'what-a-crater-diameter-is-worth',
+  steps: [
+    {
+      sid: 'a-small-circle',
+      after: 'the-correction',
+      depth: 'quantitative',
+      type: 'measure',
+      title: 'A small circle',
+      body: `Set the rim point to <strong>5 pixels</strong> from the center, a crater 10 pixels across. Read the diameter and the
+             uncertainty from <strong>placing the circle</strong>, as a percentage.`,
+      fields: [
+        { id: 'D', label: 'Diameter', unit: 'km', hint: '22.4' },
+        {
+          id: 'fit',
+          label: 'Uncertainty from placing the circle',
+          unit: '%',
+          hint: '8.2',
+        },
+      ],
+      validate: v => {
+        if (![v.D, v.fit].every(Number.isFinite)) return null;
+        if (near(v.D, 22.4, 0.3) && near(v.fit, 8.2, 0.2)) {
+          return {
+            level: 'ok',
+            message:
+              '22.4 km, with 8.2 percent from placing the circle. A hand places a point to a fraction of a pixel, and that fraction is a larger share of a small circle: the term goes as one over the radius. Under 8 pixels across a circle is too small to place, and the instrument says so.',
+          };
+        }
+        return {
+          level: 'error',
+          message:
+            'Set “Rim point, distance from the center” to 5 px, leave the rest as it is, and read the diameter and “Uncertainty from placing the circle”.',
+        };
+      },
+      tool: CBD({ r: 5 }, ['dmin', 'catalog']),
+    },
+    {
+      sid: 'coin-toss',
+      after: 'a-small-circle',
+      depth: 'quantitative',
+      type: 'measure',
+      title: 'Is it at least 110 km across?',
+      body: `A count above 110 km needs to know whether this crater is in it. With the circle back at 25 pixels, set
+             <strong>Counting craters at least</strong> to <strong>110 km</strong> and read the chance that this crater is
+             at least that large, given its uncertainty.`,
+      fields: [
+        {
+          id: 'p',
+          label: 'Chance the crater is at least 110 km across',
+          unit: '%',
+          hint: '63',
+        },
+      ],
+      validate: v => {
+        if (!Number.isFinite(v.p)) return null;
+        if (near(v.p, 63, 2)) {
+          return {
+            level: 'ok',
+            message:
+              '63 percent. The diameter is 112.0 ± 5.9 km, so a threshold at 110 km is a third of a sigma away. A crater near the threshold is a coin toss for the count, and the diameter’s uncertainty is reported apart from the Poisson interval of the count, never added to it.',
+          };
+        }
+        return {
+          level: 'error',
+          message:
+            'Leave the circle at its start, set “Counting craters at least” to 110 km and read “Chance it is at least 110 km across”.',
+        };
+      },
+      tool: CBD({ dmin: 110 }, ['catalog']),
+    },
+    {
+      sid: 'which-improvement',
+      after: 'why-no-age',
+      depth: 'advanced',
+      type: 'question',
+      kind: 'choice',
+      title: 'The best improvement',
+      body: `Four things could shrink the diameter’s uncertainty: a better scale for the map, a more careful hand,
+             agreeing on where a rim is, and a better estimate of the view.`,
+      prompt: 'Which would shrink it most for this circle?',
+      options: [
+        'a better scale: the scale term sets the budget',
+        'a more careful hand: it places the circle to a pixel',
+        'agreeing, by a convention, on where the rim is',
+        'a better estimate of the view',
+      ],
+      answer: 2,
+      misconceptions: [
+        {
+          id: 'scale',
+          option: 0,
+          say: 'The scale is already known to 0.06 percent. Shrinking a term that is already a hundredth of the total changes nothing.',
+        },
+        {
+          id: 'hand',
+          option: 1,
+          say: 'A more careful hand shrinks the 1.6 percent of placing the circle, which adds to the 5 percent of the rim in quadrature: it makes almost no difference.',
+        },
+      ],
+      hints: ['Terms add in quadrature: which one dominates the sum?'],
+      because:
+        'The terms add as squares, so the largest dominates. Here it is where the rim is, 5 percent. A convention that fixes it, such as the same rim definition for every crater, is what craters counted by different people need, and that is a different kind of work from a better instrument.',
+      tool: CBD({}, ['dmin', 'catalog']),
+    },
+    {
+      sid: 'against-the-catalog',
+      after: 'which-improvement',
+      depth: 'advanced',
+      type: 'measure',
+      title: 'Against the catalog',
+      body: `Switch <strong>The catalog&rsquo;s circles</strong> on. The catalog lists a crater under the center of your circle.
+             Read its diameter.`,
+      fields: [
+        { id: 'D', label: 'The catalog’s diameter', unit: 'km', hint: '112.2' },
+      ],
+      validate: v => {
+        if (!Number.isFinite(v.D)) return null;
+        if (near(v.D, 112.2, 0.3)) {
+          return {
+            level: 'ok',
+            message:
+              'The catalog gives 112.2 km and the circle 112.0 ± 5.9: they agree, well inside one sigma. That is agreement between two measurements, each with its own uncertainty, and not a check against the truth: the catalog is another person’s circles.',
+          };
+        }
+        return {
+          level: 'error',
+          message:
+            'Switch “The catalog’s circles” on and read “The catalog’s crater under your center”.',
+        };
+      },
+      tool: CBD({ catalog: 1 }, ['dmin']),
+    },
+  ],
+};
+
+const CRATER_CONTENT = {
+  'which-surface-is-older': {
+    topic:
+      'Relative age by crater density: the number of craters at least one diameter across per area in two regions of the Moon and of Mars, its Poisson interval, the ratio of the two densities with an exact interval, and what that ratio assumes.',
+    difficulty: 'Introductory (counting, division, one idea of an interval)',
+    placement:
+      'In a survey course after the unit on the Moon and the terrestrial planets; it needs no earlier investigation. It supports OpenStax Astronomy 2e chapter 9 (section 9.2, the Moon), and the chapter citation is the author’s and has not been checked against the book.',
+    overview:
+      'Students predict that the lunar highland is denser in craters than the dark mare, count craters at least 30 km across in each (40 and 7), convert to densities per million km² (131.2 and 20.5, because the regions differ in area), read the density ratio 6.39 with its interval 2.83 to 16.9, and say what it does and does not mean. On Mars above 20 km the highland is 6.50 times the plains (3.68 to 12.4). At 60 km the Martian verdict becomes no significant difference, and a question separates that from the same age. The deeper steps show the interval widening at 50 km (2 craters in the mare, upper end 84.8), the refusal below the completeness limit, the Martian verdict flipping at 60 km, and a ratio with a zero count.',
+    priorKnowledge: [
+      'Craters are made by impacts, and impacts continue',
+      'A density is a count divided by an area',
+      'A count is a little uncertain: a different patch would give a different number',
+    ],
+    keyConcepts: [
+      {
+        heading: 'Density, not count',
+        body: 'The highland has 40 craters and the mare 7 above 30 km, but the regions differ in size: the comparison is per area, 131.2 against 20.5 per million km².',
+      },
+      {
+        heading: 'A ratio with an interval',
+        body: 'Given the two counts, the share that fall in the first region is binomial, and its exact (Clopper-Pearson) interval gives the ratio’s interval. An interval that holds 1 means these counts cannot separate the surfaces, not that they are equal.',
+      },
+      {
+        heading: 'What the ratio assumes',
+        body: 'One production function for both surfaces, no saturation or partial resurfacing, secondaries not a large share, a count complete above the diameter used, independent craters. It is a ratio, not an age in years.',
+      },
+    ],
+    features: [
+      {
+        name: 'Crater instruments (crater family)',
+        text: 'Two regions of the Moon and of Mars, the catalog’s circles on the pictures (not marks anyone made), each density with its 95 percent interval, the ratio and its verdict, and the refusals (below the completeness limit, too few craters).',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: the largest craters only, and why 25 km is refused on the Moon. Advanced: where Mars changes its verdict, and a region with no craters at all.',
+      },
+      {
+        name: 'Predictions before answers',
+        text: 'Which lunar region is denser is predicted before the counts are read, and is never marked wrong in the report.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'More craters means older, whatever the area.',
+        response:
+          'The count has to be per area: the lunar highland and mare differ in area, and the comparison is the density with its interval.',
+      },
+      {
+        claim: 'A density ratio of 6.4 means 6.4 times the age.',
+        response:
+          'It is a ratio of densities above one diameter. Turning it into years needs a chronology and corrections for saturation, secondaries and completeness; none is applied.',
+      },
+      {
+        claim: '“No significant difference” means the same age.',
+        response:
+          'It means the interval holds 1: the counts cannot tell. Mars at 60 km shows it, with 12 and 4 craters.',
+      },
+      {
+        claim: 'Small craters count the same as large ones.',
+        response:
+          'Small craters are the numerous ones, the hardest to count completely and the first lost to saturation, and most affected by secondaries. A count is made above a diameter at which it is complete.',
+      },
+      {
+        claim: 'Secondaries, resurfacing and saturation only add noise.',
+        response:
+          'They bias: resurfacing and saturation make a surface look younger, secondaries older. The interval allows only for chance among independent craters.',
+      },
+    ],
+    teachingNotes: [
+      'The circles are the catalogs’ (LU78287GT for the Moon, Robbins for Mars), made by their authors from other data. Nobody has marked these pictures, and the instrument says so on every row.',
+      'The Moon’s highland box takes in an edge of Mare Nubium, which lowers its density: the verdict is reached against, not for, the expectation.',
+      'The Mars catalog states no license; only each crater’s diameter and position at least 20 km are used, with credit (a recorded decision, D-R10-77).',
+      'The areas have their own uncertainty (0 for the Moon, 0.3 percent for Mars), which is stated and is not in the interval.',
+    ],
+    discussion: [
+      'Why does a surface that was flooded by lava look younger than the rocks beneath it?',
+      'What would you want to know about a count before comparing it with another?',
+      'Why is a ratio with an interval a better thing to report than a ratio alone?',
+    ],
+    extensions: [
+      'Continue with Craters by Size, which reads the size-frequency plot and its slope.',
+      'Pick a diameter before looking at the counts, as a pre-registered choice, and see how the verdict on Mars moves with the diameter.',
+    ],
+    modelNotes:
+      'js/measure/craters.js (CRATER_COUNTING.md): cumulative, relativeAge with its exact interval and refusals, validated against scipy and on a seeded ensemble (npm run craters:validate); the four regions in frames/craters-regions.json.',
+  },
+  'craters-by-size': {
+    topic:
+      'The cumulative size-frequency distribution of craters with Poisson intervals, the power-law index with an exact interval, how the number of craters in the fit sets its width, and a roll-off at small diameters that is flagged and not corrected.',
+    difficulty: 'Intermediate (logarithms, a power law, intervals)',
+    placement:
+      'After Which Surface Is Older, whose counts and intervals it reuses. It supports OpenStax Astronomy 2e chapter 9 (section 9.2); the citation is the author’s and has not been checked against the book.',
+    overview:
+      'Students read the cumulative plot of the lunar highland above 30 km (index 1.71, interval 1.22 to 2.28, from 40 craters), predict that the Martian highland’s interval will be narrower and read it (1.39 to 2.09, from 91), see the mare’s 3.47 (1.39 to 6.47) from seven craters, and say what that can and cannot show. Leaving out the smallest craters of the highland (a count that stops short) bends the list: the index falls to 1.01 and the slope check flags it (z 2.77). Deeper: fitting only above 60 km (14 craters, upper end 3.56), the unbiased form, why a line is not fitted to the points, and why the limit belongs to the picture.',
+    priorKnowledge: [
+      'Which Surface Is Older: counts, densities and a Poisson interval',
+      'Logarithmic axes and a power law as a straight line',
+      'A maximum-likelihood estimate as the value the data make most likely',
+    ],
+    keyConcepts: [
+      {
+        heading: 'The slope and the level answer different questions',
+        body: 'The slope, the index b, is the shape of the size distribution. The level, how many craters there are per area, is what a relative age rests on. A steeper slope is not an older surface.',
+      },
+      {
+        heading: 'The interval is set by n',
+        body: 'An index from n craters has an interval that shrinks about as one over the square root of n: 1.06 wide from 40, 0.71 from 91.',
+      },
+      {
+        heading: 'A flag is not a cure',
+        body: 'The slope check flags a list that is not one power law. It cannot name the cause (an incomplete count, saturation, resurfacing, a real break) and corrects nothing; the roll-off is not corrected here.',
+      },
+    ],
+    features: [
+      {
+        name: 'Size-frequency instrument',
+        text: 'The cumulative plot through the plot component, with an asymmetric Poisson interval on each point, the fitted power law, the index with its exact chi-square interval and its unbiased form, the check above twice the fit diameter, and a control that leaves out the smallest craters as a count of the picture would miss them.',
+      },
+      {
+        name: 'A controlled perturbation',
+        text: 'The stopped-short list is made from the published list by leaving out the smallest craters below the completeness limit; it is labeled as such on its row and is not data.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: the largest craters only, and the unbiased index. Advanced: why a line is not fitted to the points, and where a completeness limit comes from.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'A steeper slope means an older surface.',
+        response:
+          'The slope is the shape of the size distribution; the age rests on the level of the plot.',
+      },
+      {
+        claim: 'An index is a number; an interval is a footnote.',
+        response:
+          'The mare’s 3.5 from seven craters runs from 1.4 to 6.5: nearly all uncertainty.',
+      },
+      {
+        claim: 'Small craters count the same as large ones.',
+        response:
+          'They are the most numerous and the hardest to count completely; leave them out and the plot bends.',
+      },
+      {
+        claim: 'A straight line through the plotted points is the right fit.',
+        response:
+          'The cumulative points share their craters, and the errors are Poisson: the fit uses each crater once.',
+      },
+    ],
+    teachingNotes: [
+      'No roll-off is visible in the published lists above 20 km; the perturbation exists so that a student can see what the flag does. A real roll-off from saturation or resurfacing would bend the plot in the same way.',
+      'The Moon’s completeness limit, 30 km, belongs to a count on the 2 km per pixel picture, not to the catalog, which is complete to about 8 km.',
+      'The index here is cumulative; the incremental or differential index is one larger.',
+      'The mare’s slope is the uncertain one because it rests on seven craters, not because the mare is a different kind of surface; a student who blames the surface has not yet read the interval as a statement about the count.',
+    ],
+    discussion: [
+      'What would you need in order to tell a real roll-off from a count that stopped short?',
+      'Why is the interval of the Martian highland’s index narrower than the Moon’s?',
+      'Why would a different person counting the same picture get a different list?',
+    ],
+    extensions: [
+      'Continue with What a Crater Diameter Is Worth, which takes a circle apart.',
+      'Fit the plains and highland of Mars from 30 km and ask whether their intervals overlap.',
+    ],
+    modelNotes:
+      'js/measure/craters.js (CRATER_COUNTING.md): powerLaw (maximum likelihood, exact chi-square interval, constancy check) and cumulative (Garwood intervals), validated against scipy and by coverage on a seeded ensemble, with the roll-off check committed first (npm run craters:validate).',
+  },
+  'what-a-crater-diameter-is-worth': {
+    topic:
+      'The diameter of one crater from a circle on a map: the scale, the view of a sphere, and the four terms of the uncertainty, in quadrature; why a correction can be large and certain; and why no age in years is reported.',
+    difficulty: 'Advanced (error propagation, a geometric correction)',
+    placement:
+      'In an upper-level course, after Which Surface Is Older. It supports OpenStax Astronomy 2e chapter 9; the citation is the author’s and has not been checked against the book.',
+    overview:
+      'Students read the diameter of a circle set on a large crater of the lunar highlands, 112.0 ± 5.9 km, predict that where the rim is dominates the uncertainty (5.0 of 5.3 percent), and read the four terms. Switching the view’s correction off lowers the diameter by 9.8 percent, to 101.1 km, against an uncertainty of 0.06 percent from the correction: a large, well-known effect. A question names what an age in years would need and has not passed its test. Deeper: a circle five pixels from its center (22.4 km, 8.2 percent from placing it), the chance a crater near a threshold counts (63 percent at 110 km), which improvement would shrink the budget, and the agreement with the catalog (112.2 km).',
+    priorKnowledge: [
+      'Which Surface Is Older: a count above a diameter',
+      'Adding uncertainties in quadrature',
+      'A map has a scale, and a view of a sphere is foreshortened toward its edge',
+    ],
+    keyConcepts: [
+      {
+        heading: 'Four terms, added in quadrature',
+        body: 'The scale of the map (0.06 percent), placing the circle (1.6), where the rim is (5.0, set by the reader) and the view (0.06). The largest dominates the sum.',
+      },
+      {
+        heading: 'A correction is not an error bar',
+        body: 'The view stretches the radius by 1.108: a 10 percent correction, with its own uncertainty at 0.06 percent. Leaving it out is a systematic error.',
+      },
+      {
+        heading: 'A diameter is not an age',
+        body: 'An age needs a production function, a chronology, corrections for saturation and secondary craters, and a completeness correction checked on craters of known size. None is applied.',
+      },
+    ],
+    features: [
+      {
+        name: 'Budget instrument',
+        text: 'A circle on a Clementine map of the Moon’s southern highlands, with its ground ellipse drawn, the diameter with its four terms, the view’s correction with and without, the chance a crater counts above a threshold, and the catalog’s crater under the center.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: a small circle, and a crater near a threshold. Advanced: the best improvement, and the catalog as another measurement.',
+      },
+      {
+        name: 'Honest limits on the screen',
+        text: 'The recognition term is a number the reader sets, and the instrument says it is no measurement; the age is stated as not reported, with its reasons.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'Once the scale is known, the diameter is exact.',
+        response:
+          'The scale is the smallest term. The rim’s position and the placement of the circle are larger.',
+      },
+      {
+        claim:
+          'A tiny uncertainty on a correction means the correction is unimportant.',
+        response:
+          'It means the correction is known well. Its size, ten percent here, is why it must be applied.',
+      },
+      {
+        claim: 'A diameter good to five percent is good enough for an age.',
+        response:
+          'The obstacles to an age are the production function, the chronology and the corrections, not the diameter.',
+      },
+      {
+        claim:
+          'The catalog’s diameter is the right answer and mine is the test.',
+        response:
+          'The catalog is another measurement, made by other people from other data with its own error. Two measurements that differ by their errors agree; neither is the truth.',
+      },
+    ],
+    teachingNotes: [
+      'The circle is the reader’s, a rim point and a center; the catalog’s circles are another measurement of other data and are not the truth.',
+      'The sigma of the view’s cos E comes from a one-pixel allowance on the disc, a stated input; the Moon is treated as a sphere of 1,737.4 km and the picture as orthographic about the center of the disc.',
+      'A crater under 8 pixels across is below what a person can place: the comparison of counts refuses it.',
+      'No absolute age is computed anywhere in Gravitas yet (Prompt 196 decides whether any can be).',
+    ],
+    discussion: [
+      'Who decides where a rim is, and what would two people’s disagreement cost a density ratio?',
+      'Why is a correction that moves every diameter ten percent worse than an error bar of ten percent?',
+      'What would a test of a completeness correction on craters of known size look like?',
+    ],
+    extensions: [
+      'Move the circle to a different crater and see how the view changes the correction with distance from the center of the disc.',
+      'Set the recognition to 0 and ask what remains of the budget.',
+    ],
+    modelNotes:
+      'js/measure/craters.js (CRATER_COUNTING.md): diameterOf (the budget by component, the foreshortening of an orthographic view), cumulative (the boundary expectation), validated analytically and by coverage of the diameter budget (npm run craters:validate).',
+  },
+};
+
+const CRATER_EXPECTATIONS = {
+  'which-surface-is-older': {
+    'count-the-moon': 'Exactly 40 craters in the highland and 7 in the mare.',
+    'per-area':
+      'Densities 131.2 (within 0.6) and 20.5 (within 0.3) per million km².',
+    'ratio-moon':
+      'A ratio of 6.39 (within 0.1) with a lower end of 2.83 (within 0.1).',
+    'mars-pair':
+      'A ratio of 6.50 (within 0.1) with a lower end of 3.68 (within 0.1).',
+  },
+  'craters-by-size': {
+    'highland-slope':
+      'An index of 1.71 with an interval from 1.22 to 2.28 (each within 0.03).',
+    'mars-slope': 'An interval from 1.39 to 2.09 (each within 0.03).',
+    'thin-mare':
+      'An index of 3.47 (within 0.05) and an upper end of 6.47 (within 0.08).',
+    'roll-off': 'An index of 1.01 (within 0.04) and a z of 2.77 (within 0.1).',
+  },
+  'what-a-crater-diameter-is-worth': {
+    'read-the-diameter':
+      'A diameter of 112.0 km (within 0.6) and an uncertainty of 5.9 km (within 0.3).',
+    'the-budget':
+      'Placing the circle 1.6 percent and the rim 5.0 percent (each within 0.1).',
+    'the-correction':
+      'A diameter of 101.1 km (within 0.6), 9.8 percent smaller (within 0.5).',
+  },
+};
+
+const CRATER_BANDS = {
+  'which-surface-is-older': {
+    core: 'short',
+    quantitative: 'medium',
+    advanced: 'medium',
+  },
+  'craters-by-size': {
+    core: 'short',
+    quantitative: 'medium',
+    advanced: 'medium',
+  },
+  'what-a-crater-diameter-is-worth': {
+    core: 'short',
+    quantitative: 'medium',
+    advanced: 'medium',
+  },
+};
+
 export const INSTRUCTOR = {
   content: {
+    ...CRATER_CONTENT,
     'what-is-a-measurement': {
       topic:
         'What a measurement is: repeated marks of one synthetic star, their spread, the mean and its standard error, and what the standard error does not include',
@@ -1590,8 +2314,85 @@ export const INSTRUCTOR = {
         text: 'What the sum needs, and the close.',
       },
     ],
+    'which-surface-is-older': [
+      {
+        from: 'two-surfaces',
+        to: 'which-is-older-predict',
+        text: 'A surface collects craters as time passes, so more craters per area reads as older; students predict the Moon’s two regions before counting.',
+      },
+      {
+        from: 'count-the-moon',
+        to: 'ratio-moon',
+        text: 'The catalog’s craters at least 30 km across: 40 in the highland and 7 in the mare, 131.2 and 20.5 per million km², a ratio of 6.39 with an interval of 2.83 to 16.9.',
+      },
+      {
+        from: 'reading-the-interval',
+        to: 'reading-the-interval',
+        text: 'The interval excludes 1, so the highland is denser.',
+      },
+      {
+        from: 'mars-pair',
+        to: 'mars-pair',
+        text: 'The same question on Mars at 20 km: 91 and 14 craters, a ratio of 6.50 (3.68 to 12.4).',
+      },
+      {
+        from: 'fewer-craters',
+        to: 'fewer-craters',
+        text: 'On Mars at 60 km, 12 and 4 craters give 3.00 (0.91 to 12.8): no significant difference.',
+      },
+      {
+        from: 'what-can-go-wrong',
+        to: 'what-you-worked-out',
+        text: 'What could make a surface look older than it is (saturation, resurfacing, secondaries), and why a ratio of densities is not an age in years.',
+      },
+    ],
+    'craters-by-size': [
+      {
+        from: 'a-plot-of-counts',
+        to: 'narrower-predict',
+        text: 'The size-frequency plot with Poisson error bars, and the prediction of whose slope is better known; the lunar highland index is 1.71 (1.22 to 2.28) from 40 craters.',
+      },
+      {
+        from: 'mars-slope',
+        to: 'does-mare-differ',
+        text: 'The Martian highland gives 1.72 (1.39 to 2.09) from 91 craters; the mare’s seven craters give 3.47 (1.39 to 6.47), an interval too wide to say it differs.',
+      },
+      {
+        from: 'roll-off',
+        to: 'what-the-flag-says',
+        text: 'A count that stops short of the completeness limit flattens the slope to about 1.0 and the constancy check flags it.',
+      },
+      {
+        from: 'what-you-worked-out',
+        to: 'what-you-worked-out',
+        text: 'The close: a slope with its interval, and what a roll-off does to it.',
+      },
+    ],
+    'what-a-crater-diameter-is-worth': [
+      {
+        from: 'a-circle-and-a-scale',
+        to: 'largest-term-predict',
+        text: 'A diameter is a length in pixels times the map’s scale, corrected for the view; students read one circle’s diameter and predict which uncertainty term is largest.',
+      },
+      {
+        from: 'the-budget',
+        to: 'the-correction',
+        text: 'The default circle reads 112.0 ± 5.9 km, with the scale, the placement, where the rim is and the view as separate terms; leaving the view out reads 101.1 km.',
+      },
+      {
+        from: 'big-correction-small-uncertainty',
+        to: 'why-no-age',
+        text: 'A large correction can carry a small uncertainty, and an age in years is not reported because its model has not passed its test here.',
+      },
+      {
+        from: 'what-you-worked-out',
+        to: 'what-you-worked-out',
+        text: 'The close: a diameter is a measurement with four terms.',
+      },
+    ],
   },
   expectations: {
+    ...CRATER_EXPECTATIONS,
     'what-is-a-measurement': {
       'read-the-spread':
         'With 5 marks: mean x 31.10 px (within 0.05) and spread 0.80 px (within 0.03).',
@@ -1653,6 +2454,7 @@ export const INSTRUCTOR = {
     },
   },
   bands: {
+    ...CRATER_BANDS,
     'what-is-a-measurement': {
       core: 'medium',
       quantitative: 'medium',
@@ -1696,4 +2498,8 @@ export default {
   [MEASURING_THE_MOON_DEEPER.id]: MEASURING_THE_MOON_DEEPER.steps,
   [HOW_FAR_IS_THAT_STAR_DEEPER.id]: HOW_FAR_IS_THAT_STAR_DEEPER.steps,
   [A_BINARY_STARS_ORBIT_DEEPER.id]: A_BINARY_STARS_ORBIT_DEEPER.steps,
+  [WHICH_SURFACE_IS_OLDER_DEEPER.id]: WHICH_SURFACE_IS_OLDER_DEEPER.steps,
+  [CRATERS_BY_SIZE_DEEPER.id]: CRATERS_BY_SIZE_DEEPER.steps,
+  [WHAT_A_CRATER_DIAMETER_IS_WORTH_DEEPER.id]:
+    WHAT_A_CRATER_DIAMETER_IS_WORTH_DEEPER.steps,
 };

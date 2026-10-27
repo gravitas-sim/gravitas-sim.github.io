@@ -246,16 +246,55 @@ credited" decision under Roadmap III 7.5.4 (D-R10-77), ratified by Carl: AskUser
 The full files (the Mars JPEG, the Salamuniccar zip, both Robbins answers) are not in the
 repository; their size and SHA-256 are.
 
-### Still not built (items 3 and 4)
+## Part 3: the three investigations, the instruments and the model page
 
-The three investigations (survey, majors, upper depth), their instructor materials and
-Spanish, the misconceptions and the model page's section are not built: they need the
-whole lesson family of Prompt 191's footprint (a lesson trio appended to the four shared
-`measurement-sequence.js` files, twelve per-id re-exports, an instrument family with its
-words, thumbnails, Library, catalogue, sitemap, alignment, golden fixtures, the nine
-regenerated artifacts, an e2e spec and the manual), which does not fit what is left of this
-session. They would append to files already in the instructor closure (273 of 274 stays);
-no new closure file is needed for them. The data and the kernel they consume are ready.
+Items 3 and 4 of the prompt, built on the kernel of part 1 and the regions of part 2 (D-R10-85).
+
+| What | Where |
+| --- | --- |
+| The instruments, a lazy family `crater` (three instruments, drawn by the plot component or a canvas, English and Spanish) | `js/craterWidgets.js`, `js/i18n/{en,es}.craters.js` |
+| Survey: Which Surface Is Older? (count the craters above a diameter in two regions, predict which is older, read the density ratio and its interval, and the verdict "no significant difference") | `which-surface-is-older` |
+| Majors: Craters by Size (the size-frequency plot with error bars, the slope with its interval, the roll-off as a count that stops short, what the flag does and does not say) | `craters-by-size` |
+| Upper: What a Crater Diameter Is Worth (the diameter of one circle on a map, the four terms of its uncertainty, the correction for the view, and why no age in years is reported) | `what-a-crater-diameter-is-worth` |
+| The lessons, their depths (core, quantitative, advanced), their Spanish and their instructor content | appended to the four shared `js/data/investigations/{,es/,depth/,depth/es/}measurement-sequence.js` (no new closure file) and twelve one-line re-exports for the loaders |
+| The model page's section, "Crater counting: what a relative age assumes" | `model/index.html#craters` |
+| The numbers every step states | recomputed from the kernel in `tests/craterLessons.test.js` |
+
+**The instruments.** `crater-regions` compares two regions at a diameter: each density with its
+exact Poisson interval, the density ratio with its exact interval, the verdict and, when it applies, the
+refusal (below the completeness limit, too small to place, no crater at all above the diameter).
+`crater-sfd` draws one region's cumulative plot through the plot component (the chart gained an optional
+`sigmaLow` so a Poisson interval, which is asymmetric, is drawn as it is), the maximum-likelihood
+index with its interval and unbiased form, and the check at twice the fit diameter. `crater-budget`
+turns a circle on the Clementine highlands frame into a diameter with the four terms of its uncertainty,
+the view's correction with and without it, and the chance that this crater counts above a threshold.
+
+**Nothing simulated.** The circles drawn on a picture are the catalogs' (LU78287GT for the Moon,
+Robbins for Mars), at their listed positions and diameters, as ellipses (the ground circle seen
+at its angle on the Moon, stretched by 1 / cos(latitude) on the Mars map). They are not marks that anyone made on the
+pictures, and every row that names them says so. No participant's marks exist and none is invented. The one circle a reader
+places, in `crater-budget`, starts on the catalog's crater at 112.2 km and reads 112.0 km with the view
+corrected. The "count that stops short" control of `crater-sfd` is a labeled perturbation of the
+published list (the smallest craters under the completeness limit are left out, smallest first); it
+exists so that the slope check's flag (check d4 of the contract) can be seen at work, and it is
+not data. No roll-off is visible in the committed lists above 20 km.
+
+**Misconceptions** (each is a distractor with its own reply, or a statement in the instructor guide): a count
+is not a density; a density ratio is not a ratio of ages in years; "no significant difference" is
+not "the same age"; small craters do not count the same as large ones (the numerous and incomplete
+ones, the first lost to saturation); resurfacing and saturation make a surface look younger and
+secondary craters older; a steeper slope is not an older surface; a correction with a small
+uncertainty is still a large correction; a diameter good to five percent is not what stands between a
+density and an age. A prediction step shows no instrument (its readout would give the answer away) and
+carries no misconception (the remix cannot carry them).
+
+**Alt text.** Each picture's description is the first row of its readout (`crW.alt.<region>`:
+what the picture shows, its scale, and how many of the catalog's circles are drawn); the canvas
+is named from the instrument's title and points at that readout.
+
+**Not done here.** An age in years, in any form (Prompt 196's gate). A count of the frames by a person
+(tier e on the frames themselves). The craterstats pin (tier b4) and Head's second catalog (tier e). A
+Spanish read by a fluent reader. No new closure file: the instructor bundle's closure stays at 281.
 
 ## References
 

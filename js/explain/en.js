@@ -196,6 +196,12 @@ export default {
     'Why Venus is far warmer than its equilibrium temperature and why a single layer cannot reach it, why the two greenhouse models give different numbers for the same planet, and where gray opacity stops being a good description.',
     'These are teaching models: no convection, no clouds, no internal heat, one opacity at every wavelength. The Eddington curve is about 4 percent warm at the top of a gray atmosphere, and a giant planet has no surface to compare with.',
   ],
+  crater: [
+    'Two regions side by side with their densities, one region’s size-frequency plot with its intervals, or one circle’s diameter with the four terms of its uncertainty.',
+    'How many craters of at least a given diameter a region has per area and how sure that is, the ratio of two regions’ densities with its interval, and the slope of the plot with its interval.',
+    'Which surface has more craters, per area, at a diameter where both are counted completely; whether a slope holds higher up or breaks; and which term of a diameter’s uncertainty is the largest.',
+    'The circles are a catalog’s, not marks on the pictures. A density ratio is not an age in years: no production function, saturation, secondary craters or completeness correction is applied.',
+  ],
   tides: [
     'The rigid and the fluid Roche limit of a planet and a satellite from their two densities, where a moon’s resonance falls in a ring, the Moon’s recession and the lengthening day under a constant tidal Q, or the heat a tide can put into Io.',
     'How near a satellite can come before gravity alone stops holding it together, which ring radii a moon at a given distance empties, how far the Moon was in the past under the model, and the heat per orbit against the heat Io is observed to radiate.',

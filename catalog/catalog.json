@@ -48,6 +48,10 @@
       "en": "Color and Temperature",
       "es": "Color y temperatura"
     },
+    "craters-by-size": {
+      "en": "Craters by Size",
+      "es": "Cráteres por tamaño"
+    },
     "design-the-schedule": {
       "en": "Design the Schedule",
       "es": "Diseña el calendario"
@@ -248,6 +252,10 @@
       "en": "What a CCD Records",
       "es": "Qué registra un CCD"
     },
+    "what-a-crater-diameter-is-worth": {
+      "en": "What a Crater Diameter Is Worth",
+      "es": "Lo que vale el diámetro de un cráter"
+    },
     "what-a-spectrum-is-made-of": {
       "en": "What a Spectrum Is Made Of",
       "es": "De qué está hecho un espectro"
@@ -279,6 +287,10 @@
     "which-kind-of-variable": {
       "en": "Which Kind of Variable",
       "es": "Qué tipo de variable"
+    },
+    "which-surface-is-older": {
+      "en": "Which Surface Is Older?",
+      "es": "¿Qué superficie es más antigua?"
     },
     "who-gets-counted": {
       "en": "Who Gets Counted",

@@ -38,7 +38,7 @@ catalogue refers to it, so a change to it can reach a student.
 | [COSMOLOGY.md](COSMOLOGY.md) | The cosmology kernel and Hubble-diagram data. | feature | P91 | written | yes |
 | [COSMOLOGY_GATE.md](COSMOLOGY_GATE.md) | Cosmology and extragalactic data gate. | gate | unassigned | written | yes |
 | [COURSE_PACKS.md](COURSE_PACKS.md) | Course packs: a course as a file. | feature | unassigned | written | yes |
-| [CRATER_COUNTING.md](CRATER_COUNTING.md) | Crater counting: diameters with an uncertainty budget, the cumulative size-frequency distribution, relative ages as density ratios and the cumulative index, with their validation (Prompt 195). | feature | P195 | written | no |
+| [CRATER_COUNTING.md](CRATER_COUNTING.md) | Crater counting: diameters with an uncertainty budget, the cumulative size-frequency distribution, relative ages as density ratios and the cumulative index, with their validation (Prompt 195). | feature | P195 | written | yes |
 | [DARK_MATTER.md](DARK_MATTER.md) | Rotation curves and the missing mass. | feature | unassigned | regions (docs) | no |
 | [DATA_PACKS.md](DATA_PACKS.md) | Observation data packs. | feature | unassigned | written | yes |
 | [DATA_PROTECTION.es.md](DATA_PROTECTION.es.md) | What data Gravitas keeps, shares and never collects (Spanish). | policy | P127 | written | yes |

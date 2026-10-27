@@ -86,6 +86,7 @@ export const FAMILY_ORDER = Object.freeze([
   'imaging',
   'jovian',
   'atmosphere',
+  'crater',
   'tides',
 ]);
 

@@ -15,8 +15,8 @@
     "initialKb": 830.0,
     "deferredCoreKb": 1985.8,
     "routes": {
-      "front-door": { "kb": 2130.4, "requests": 109 },
-      "sandbox": { "kb": 2130.4, "requests": 109 },
+      "front-door": { "kb": 2130.5, "requests": 109 },
+      "sandbox": { "kb": 2130.5, "requests": 109 },
       "kepler": { "kb": 3342.9, "requests": 148 },
       "transit": { "kb": 3354.9, "requests": 148 },
       "power-law": { "kb": 3320.2, "requests": 148 },
@@ -25,9 +25,9 @@
     }
   },
   "allowance": {
-    "note": "PROPOSAL. deferredCoreKb + capCumulativeKb is exactly today's deferred ceiling (2180.6 KB after Prompt 204 part 2's raise under the standing approval, D-R10-89), so adopting the policy raises nothing; the 194.8 KB is what Prompt 131 and 132 freed plus the 1.0 KB of Prompt 190, the 59.3 KB of Prompt 191 and the 27.4 KB of Prompt 193. Nothing is granted until Carl grants it per release.",
+    "note": "PROPOSAL. deferredCoreKb + capCumulativeKb is exactly today's deferred ceiling (2236.5 KB after Prompt 204 part 2's raise under the standing approval, D-R10-89), so adopting the policy raises nothing; the 250.7 KB is what Prompt 131 and 132 freed plus the 1.0 KB of Prompt 190, the 59.3 KB of Prompt 191 and the 27.4 KB of Prompt 193, the 21.2 KB of Prompt 200 and the 55.9 KB of Prompt 195 part 3. Nothing is granted until Carl grants it per release.",
     "capPerReleaseKb": 20.0,
-    "capCumulativeKb": 194.8,
+    "capCumulativeKb": 250.7,
     "grantedKb": 0.0
   },
   "allocation": {

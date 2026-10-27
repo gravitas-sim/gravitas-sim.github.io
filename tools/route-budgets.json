@@ -4,11 +4,11 @@
   "routes": {
     "sources": {
       "front-door": {
-        "kb": 2130.4,
+        "kb": 2130.5,
         "requests": 109
       },
       "sandbox": {
-        "kb": 2130.4,
+        "kb": 2130.5,
         "requests": 109
       },
       "kepler": {
@@ -40,11 +40,11 @@
         "requests": 5
       },
       "instructors": {
-        "kb": 1017.7,
+        "kb": 1059.1,
         "requests": 18
       },
       "figure": {
-        "kb": 2406.5,
+        "kb": 2406.6,
         "requests": 129
       },
       "experiments": {
@@ -60,7 +60,7 @@
         "requests": 13
       },
       "library": {
-        "kb": 88.4,
+        "kb": 88.9,
         "requests": 12
       },
       "my-work": {
@@ -72,15 +72,15 @@
         "requests": 49
       },
       "composer": {
-        "kb": 518,
+        "kb": 519.3,
         "requests": 31
       },
       "course-builder": {
-        "kb": 1077.8,
+        "kb": 1081.3,
         "requests": 47
       },
       "course-home": {
-        "kb": 278.6,
+        "kb": 279.9,
         "requests": 20
       },
       "lab3d": {
@@ -116,7 +116,7 @@
         "requests": 6
       },
       "course-packs": {
-        "kb": 657.9,
+        "kb": 662.1,
         "requests": 45
       },
       "sky": {
@@ -166,7 +166,7 @@
         "requests": 2
       },
       "instructors": {
-        "kb": 897.7,
+        "kb": 933.7,
         "requests": 2
       },
       "figure": {
@@ -186,7 +186,7 @@
         "requests": 2
       },
       "library": {
-        "kb": 32.4,
+        "kb": 32.6,
         "requests": 2
       },
       "my-work": {
@@ -198,15 +198,15 @@
         "requests": 4
       },
       "composer": {
-        "kb": 269.4,
+        "kb": 270.5,
         "requests": 15
       },
       "course-builder": {
-        "kb": 641.3,
+        "kb": 644,
         "requests": 13
       },
       "course-home": {
-        "kb": 95.2,
+        "kb": 96.3,
         "requests": 4
       },
       "lab3d": {
@@ -242,7 +242,7 @@
         "requests": 2
       },
       "course-packs": {
-        "kb": 274.4,
+        "kb": 277.6,
         "requests": 13
       },
       "sky": {

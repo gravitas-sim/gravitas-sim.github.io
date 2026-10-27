@@ -838,6 +838,45 @@ export const MANIFEST = [
     objectiveCount: 4,
   },
   {
+    id: 'which-surface-is-older',
+    title: '¿Qué superficie es más antigua?',
+    subtitle:
+      'Cráteres por área en dos regiones de la Luna y de Marte, y el cociente que dice cuál es más antigua',
+    duration: '15-25 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/which-surface-is-older.webp',
+    depths: 3,
+    stepCount: 10,
+    gradedCount: 8,
+    objectiveCount: 4,
+  },
+  {
+    id: 'craters-by-size',
+    title: 'Cráteres por tamaño',
+    subtitle:
+      'El gráfico de tamaño y frecuencia con sus barras de error, la pendiente con su intervalo y un recuento que se queda corto',
+    duration: '10-20 min',
+    level: 'Majors and upper-level astronomy',
+    thumbnail: 'images/investigations/craters-by-size.webp',
+    depths: 3,
+    stepCount: 9,
+    gradedCount: 7,
+    objectiveCount: 4,
+  },
+  {
+    id: 'what-a-crater-diameter-is-worth',
+    title: 'Lo que vale el diámetro de un cráter',
+    subtitle:
+      'Un círculo en un mapa, los cuatro términos de su incertidumbre y por qué no se da una edad en años',
+    duration: '10-20 min',
+    level: 'Upper-level astronomy',
+    thumbnail: 'images/investigations/what-a-crater-diameter-is-worth.webp',
+    depths: 3,
+    stepCount: 8,
+    gradedCount: 6,
+    objectiveCount: 4,
+  },
+  {
     id: 'weighing-jupiter',
     title: 'Pesar Júpiter con sus lunas',
     subtitle:

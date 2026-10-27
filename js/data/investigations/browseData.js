@@ -276,6 +276,18 @@ export const BROWSE_META = {
     tags: ['observing'],
     numericCount: 1,
   },
+  'which-surface-is-older': {
+    tags: ['observing', 'solar-system'],
+    numericCount: 0,
+  },
+  'craters-by-size': {
+    tags: ['observing', 'solar-system'],
+    numericCount: 0,
+  },
+  'what-a-crater-diameter-is-worth': {
+    tags: ['observing', 'solar-system'],
+    numericCount: 0,
+  },
   'weighing-jupiter': {
     tags: ['observing'],
     numericCount: 0,

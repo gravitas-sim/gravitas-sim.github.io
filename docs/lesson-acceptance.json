@@ -925,6 +925,45 @@
       ],
       "evidenceFrom": "model"
     },
+    "which-surface-is-older": {
+      "centralExperimentId": "ce.which-surface-is-older",
+      "object": "panel:crater-regions",
+      "control": "crater-regions/dmin",
+      "quantity": "the craters at least a chosen diameter across in a lunar highland and a lunar mare, per area, and the density ratio with its interval: 40 and 7 above 30 km, a ratio of 6.4 from 2.8 to 16.9",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "which-is-older-predict",
+        "count-the-moon"
+      ],
+      "evidenceFrom": "model"
+    },
+    "craters-by-size": {
+      "centralExperimentId": "ce.craters-by-size",
+      "object": "panel:crater-sfd",
+      "control": "crater-sfd/dmin",
+      "quantity": "the number of craters in a power-law fit of the cumulative size-frequency plot, and its index with an interval, as the smallest diameter fitted rises: the Martian highland has 91 craters above 20 km and 31 above 40 km",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "narrower-predict",
+        "mars-slope"
+      ],
+      "evidenceFrom": "model"
+    },
+    "what-a-crater-diameter-is-worth": {
+      "centralExperimentId": "ce.what-a-crater-diameter-is-worth",
+      "object": "panel:crater-budget",
+      "control": "crater-budget/recognition",
+      "quantity": "the uncertainty of a crater diameter from where its rim is, a fraction of the diameter that the reader sets, which dominates the quadrature sum with the scale, the circle's placement and the view: 5.0 percent of 5.3",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "largest-term-predict",
+        "the-budget"
+      ],
+      "evidenceFrom": "model"
+    },
     "why-rings": {
       "centralExperimentId": "ce.why-rings",
       "object": "panel:tides-roche",

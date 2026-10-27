@@ -829,6 +829,45 @@ export const MANIFEST = [
     objectiveCount: 4,
   },
   {
+    id: 'which-surface-is-older',
+    title: 'Which Surface Is Older?',
+    subtitle:
+      'Craters per area in two regions of the Moon and of Mars, and the ratio that says which is older',
+    duration: '15-25 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/which-surface-is-older.webp',
+    depths: 3,
+    stepCount: 10,
+    gradedCount: 8,
+    objectiveCount: 4,
+  },
+  {
+    id: 'craters-by-size',
+    title: 'Craters by Size',
+    subtitle:
+      'The size-frequency plot with its error bars, the slope with its interval, and a count that stops short',
+    duration: '10-20 min',
+    level: 'Majors and upper-level astronomy',
+    thumbnail: 'images/investigations/craters-by-size.webp',
+    depths: 3,
+    stepCount: 9,
+    gradedCount: 7,
+    objectiveCount: 4,
+  },
+  {
+    id: 'what-a-crater-diameter-is-worth',
+    title: 'What a Crater Diameter Is Worth',
+    subtitle:
+      'One circle on a map, the four terms of its uncertainty, and why no age in years is reported',
+    duration: '10-20 min',
+    level: 'Upper-level astronomy',
+    thumbnail: 'images/investigations/what-a-crater-diameter-is-worth.webp',
+    depths: 3,
+    stepCount: 8,
+    gradedCount: 6,
+    objectiveCount: 4,
+  },
+  {
     id: 'weighing-jupiter',
     title: 'Weighing Jupiter From Its Moons',
     subtitle:

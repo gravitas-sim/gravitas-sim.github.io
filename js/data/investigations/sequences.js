@@ -263,6 +263,13 @@ export const SEQUENCES = [
       ['how-far-is-that-star', 'quantitative', ['what-does-plus-minus-claim']],
       ['a-binary-stars-orbit', 'quantitative', ['how-far-is-that-star']],
       ['weighing-jupiter', 'quantitative', ['a-binary-stars-orbit']],
+      ['which-surface-is-older', 'core'],
+      ['craters-by-size', 'quantitative', ['which-surface-is-older']],
+      [
+        'what-a-crater-diameter-is-worth',
+        'quantitative',
+        ['which-surface-is-older'],
+      ],
       ['transit-photometry', 'quantitative'],
       ['design-the-schedule', 'core'],
       ['who-gets-counted', 'core'],

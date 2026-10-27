@@ -395,7 +395,6 @@ export const EN_DEFERRED = {
   'reliability.reason.alreadyRunning': 'A check is already running.',
   'reliability.reason.noMetrics': 'Choose at least one quantity to measure.',
   'reliability.reason.canceled': 'Stopped. The world is back where it was.',
-
   'reliability.conservationIsNotAccuracy':
     'Energy and angular momentum are shown as separate evidence, not as the verdict. A well-conserved run can still be wrong: energy is one number, and a close approach can be resolved far too coarsely without disturbing it.',
   'reliability.conservationNotExpected':
@@ -415,7 +414,6 @@ export const EN_DEFERRED = {
   'reliability.agrees': 'unchanged within {tolerance}',
   'reliability.moved': 'moved by {change}',
   'reliability.noValue': 'not measured',
-
   // --- The A/B experiment bench ---------------------------------------------
   // The bench loads on first press, so its prose is not in everyone's download;
   // js/experimentsBridge.js registers it before the panel builds. failure.load
@@ -534,7 +532,6 @@ export const EN_DEFERRED = {
   'bench.driftWithdrawn':
     'An earlier version recorded the energy and angular momentum drift in this experiment wrongly, as the totals times a hundred. Those values have been removed. Record the runs again to measure the drift.',
   'bench.error.import': 'That file could not be read ({reason}).',
-
   // --- The parameter sweep ----------------------------------------------------
   'sweep.title': 'Parameter sweep',
   'sweep.hint':
@@ -555,14 +552,12 @@ export const EN_DEFERRED = {
   'sweep.range': 'Allowed range {min} to {max}',
   'sweep.settings':
     'Every other initial condition is the scenario default at seed {seed}. {integrator}, {substeps} substeps per frame, step {step}.',
-
   'sweep.param.planetA': 'Planet\u2019s starting orbit',
   'sweep.param.impact': 'Impact parameter',
   'sweep.param.vInfinity': 'Approach speed far away',
   'sweep.unit.separations': 'binary separations',
   'sweep.unit.simUnits': 'simulation units',
   'sweep.unit.simVelocity': 'simulation velocity units',
-
   'sweep.status.ok': 'measured',
   'sweep.status.buildFailed': 'the world would not build at this value',
   'sweep.status.bodiesMissing':
@@ -573,7 +568,6 @@ export const EN_DEFERRED = {
   'sweep.status.canceled': 'not run',
   'sweep.status.stalled': 'stopped early',
   'sweep.status.capped': 'hit the sample limit',
-
   'sweep.reason.parameterNotSweepable':
     'That parameter cannot be swept in this scenario. Only a scenario\u2019s own laboratory variables survive the rebuild each trial needs.',
   'sweep.reason.valueCount':
@@ -1932,6 +1926,12 @@ export const EN_DEFERRED = {
     'Positions over sixteen years fix an orbit and the mass of the pair, and leave the rest open.',
   'inv.seq.observing.weighing-jupiter':
     'Weigh Jupiter from four moons: a cadence that can measure Io, a sinusoid for each, and Kepler’s third law with an uncertainty.',
+  'inv.seq.observing.which-surface-is-older':
+    'Which of two surfaces is older: craters per area in two regions of the Moon and of Mars, a density ratio with its interval, and what it assumes.',
+  'inv.seq.observing.craters-by-size':
+    'The size-frequency plot of craters with its error bars, a slope with its interval, and a count that stops short. Needs the first crater investigation.',
+  'inv.seq.observing.what-a-crater-diameter-is-worth':
+    'One circle on a map: the diameter, the four terms of its uncertainty, and why no age in years is reported. Needs the first crater investigation.',
   'inv.seq.observing.transit-photometry':
     'Measure depth, duration and noise on a light curve: the photometry the rest relies on.',
   'inv.seq.observing.design-the-schedule':

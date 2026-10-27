@@ -398,7 +398,6 @@ export const ES_DEFERRED = {
   'reliability.reason.alreadyRunning': 'Ya hay una comprobacion en curso.',
   'reliability.reason.noMetrics': 'Elige al menos una magnitud que medir.',
   'reliability.reason.canceled': 'Detenida. El mundo ha vuelto a donde estaba.',
-
   'reliability.conservationIsNotAccuracy':
     'La energia y el momento angular se muestran como evidencia aparte, no como veredicto. Una pasada que conserva bien puede seguir siendo erronea: la energia es un solo numero, y un encuentro cercano puede resolverse con muy poca finura sin alterarla.',
   'reliability.conservationNotExpected':
@@ -418,7 +417,6 @@ export const ES_DEFERRED = {
   'reliability.agrees': 'sin cambio dentro de {tolerance}',
   'reliability.moved': 'cambio {change}',
   'reliability.noValue': 'no medido',
-
   // --- The A/B experiment bench ---------------------------------------------
   // The bench loads on first press, so its prose is not in everyone's download;
   // js/experimentsBridge.js registers it before the panel builds. failure.load
@@ -539,7 +537,6 @@ export const ES_DEFERRED = {
   'bench.driftWithdrawn':
     'Una versión anterior grabó mal la deriva de energía y de momento angular de este experimento, como los totales multiplicados por cien. Esos valores se han quitado. Vuelve a grabar las ejecuciones para medir la deriva.',
   'bench.error.import': 'No se pudo leer ese archivo ({reason}).',
-
   // --- El barrido de parametros -----------------------------------------------
   'sweep.title': 'Barrido de parametros',
   'sweep.hint':
@@ -560,14 +557,12 @@ export const ES_DEFERRED = {
   'sweep.range': 'Rango permitido de {min} a {max}',
   'sweep.settings':
     'Las demas condiciones iniciales son las del escenario con la semilla {seed}. {integrator}, {substeps} subpasos por fotograma, paso {step}.',
-
   'sweep.param.planetA': 'Orbita inicial del planeta',
   'sweep.param.impact': 'Parametro de impacto',
   'sweep.param.vInfinity': 'Velocidad de aproximacion lejana',
   'sweep.unit.separations': 'separaciones binarias',
   'sweep.unit.simUnits': 'unidades de simulacion',
   'sweep.unit.simVelocity': 'unidades de velocidad de simulacion',
-
   'sweep.status.ok': 'medida',
   'sweep.status.buildFailed': 'el mundo no se pudo construir con este valor',
   'sweep.status.bodiesMissing':
@@ -578,7 +573,6 @@ export const ES_DEFERRED = {
   'sweep.status.canceled': 'sin ejecutar',
   'sweep.status.stalled': 'se detuvo antes',
   'sweep.status.capped': 'alcanzo el limite de muestras',
-
   'sweep.reason.parameterNotSweepable':
     'Ese parametro no se puede barrer en este escenario. Solo las variables de laboratorio propias de un escenario sobreviven a la reconstruccion que necesita cada prueba.',
   'sweep.reason.valueCount':
@@ -1953,6 +1947,12 @@ export const ES_DEFERRED = {
     'Las posiciones durante dieciséis años fijan una órbita y la masa del par, y dejan abierto lo demás.',
   'inv.seq.observing.weighing-jupiter':
     'Pesa Júpiter con cuatro lunas: un ritmo de observación que puede medir a Ío, una sinusoide para cada una y la tercera ley de Kepler con una incertidumbre.',
+  'inv.seq.observing.which-surface-is-older':
+    'Cuál de dos superficies es más antigua: cráteres por área en dos regiones de la Luna y de Marte, un cociente de densidades con su intervalo y lo que supone.',
+  'inv.seq.observing.craters-by-size':
+    'El gráfico de tamaño y frecuencia de los cráteres con sus barras de error, una pendiente con su intervalo y un recuento que se queda corto. Necesita la primera investigación de cráteres.',
+  'inv.seq.observing.what-a-crater-diameter-is-worth':
+    'Un círculo en un mapa: el diámetro, los cuatro términos de su incertidumbre y por qué no se da una edad en años. Necesita la primera investigación de cráteres.',
   'inv.seq.observing.transit-photometry':
     'Mide profundidad, duración y ruido en una curva de luz: la fotometría de la que depende lo demás.',
   'inv.seq.observing.design-the-schedule':
