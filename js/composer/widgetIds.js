@@ -104,6 +104,7 @@ export const WIDGET_FAMILIES = Object.freeze({
     'atmosphere-greenhouse',
     'atmosphere-scale',
   ],
+  crater: ['crater-regions', 'crater-sfd', 'crater-budget'],
 });
 
 /** Every instrument id, in the registry’s order. */
