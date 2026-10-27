@@ -145,6 +145,7 @@ export const GUIDED = Object.freeze([
   'how-far-is-that-star',
   'inside-a-star',
   'integrators-in-practice',
+  'ios-fire',
   'keplers-laws',
   'lagrange-points',
   'leavitts-law',
@@ -175,6 +176,7 @@ export const GUIDED = Object.freeze([
   'the-suns-motion',
   'the-turning-sky',
   'tides',
+  'tides-that-move-the-moon',
   'transit-photometry',
   'twelve-nights',
   'two-greenhouse-models',
@@ -194,6 +196,7 @@ export const GUIDED = Object.freeze([
   'which-kind-of-variable',
   'which-surface-is-older',
   'who-gets-counted',
+  'why-rings',
   'why-the-bright-ones-win',
   'why-venus-is-hot',
 ]);

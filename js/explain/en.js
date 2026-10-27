@@ -202,6 +202,12 @@ export default {
     'Which surface has more craters, per area, at a diameter where both are counted completely; whether a slope holds higher up or breaks; and which term of a diameter’s uncertainty is the largest.',
     'The circles are a catalog’s, not marks on the pictures. A density ratio is not an age in years: no production function, saturation, secondary craters or completeness correction is applied.',
   ],
+  tides: [
+    'The rigid and the fluid Roche limit of a planet and a satellite from their two densities, where a moon’s resonance falls in a ring, the Moon’s recession and the lengthening day under a constant tidal Q, or the heat a tide can put into Io.',
+    'How near a satellite can come before gravity alone stops holding it together, which ring radii a moon at a given distance empties, how far the Moon was in the past under the model, and the heat per orbit against the heat Io is observed to radiate.',
+    'Why a ring lies inside the Roche limit and a moon outside it, why a resonance clears a gap, why a constant-Q model run backward puts the Moon in contact too recently, and why the tidal heating formula gives a bound and not a prediction.',
+    'These are closed-form teaching models: a rigid body has a strength a rubble pile lacks, Q is a constant when it is not, Love numbers are assumed, and the heating formula needs an eccentricity and a dissipation nobody measures independently.',
+  ],
   'plot-measure': [
     'Your own measurements, one point each, with the quantities named on the axes.',
     'A straight line of points means the two quantities are proportional, or after a transform, a power law.',

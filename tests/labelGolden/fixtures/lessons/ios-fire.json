@@ -1,0 +1,55 @@
+{
+ "id": "ios-fire",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.heating-at-the-maximum.fields.0.unit","1e13 W"],
+    ["steps.heating-at-the-maximum.fields.1.unit",""],
+    ["steps.double-the-eccentricity.fields.0.unit","1e14 W"],
+    ["steps.the-bound.fields.0.unit",""],
+    ["steps.how-far-from-the-maximum.unit",""]
+   ],
+   "numbered": [
+    ["steps.heating-at-the-maximum.fields.0.hint","9.33"],
+    ["steps.heating-at-the-maximum.fields.1.label","Energy in one orbit (10¹⁹ J)"],
+    ["steps.heating-at-the-maximum.fields.1.hint","1.43"],
+    ["steps.double-the-eccentricity.fields.0.hint","3.73"],
+    ["steps.the-bound.fields.0.label","k2/Q the observed middle value needs"],
+    ["steps.the-bound.fields.0.hint","0.0177"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.heating-at-the-maximum.fields.1.label","Energía en una órbita (10¹⁹ J)"],
+    ["steps.the-bound.fields.0.label","k2/Q que necesita el valor medio observado"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "how-far-from-the-maximum",
+    "answer": "17",
+    "tolerance": "0.5",
+    "unit": ""
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "heating-at-the-maximum": {
+    "validate": {"calls":232,"distinct":2,"digest":"60a79fd7d25de4a6","samples":[null,{"level":"error","message":"Set k2 = 1.5, Q = 100, e = 0.0041, then read “Heating” and “Energy in one orbit”."}]}
+   },
+   "double-the-eccentricity": {
+    "validate": {"calls":97,"distinct":2,"digest":"ffcc959312909030","samples":[null,{"level":"error","message":"Keep k2 = 1.5 and Q = 100, set e = 0.0082, and read “Heating”."}]}
+   },
+   "the-bound": {
+    "validate": {"calls":97,"distinct":2,"digest":"e749d4d2d376a9ae","samples":[null,{"level":"error","message":"Set e = 0.0041 and read “k2/Q the observed middle value needs”."}]}
+   }
+  },
+  "es": "same"
+ }
+}

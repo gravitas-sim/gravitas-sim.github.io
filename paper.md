@@ -22,10 +22,10 @@ bibliography: paper.bib
 # Summary
 
 Gravitas is a browser-based gravitational sandbox and a suite of guided
-investigations for introductory and general-education astronomy. It ships 59
-configurable scenarios drawn from real and idealized systems, and 89 guided
-investigations (72 that run in the simulation and 17 in the Observatory, the
-3-D lab and the mission lab). The 60 that run in the simulation have 1139 steps
+investigations for introductory and general-education astronomy. It ships 61
+configurable scenarios drawn from real and idealized systems, and 92 guided
+investigations (75 that run in the simulation and 17 in the Observatory, the
+3-D lab and the mission lab). The 60 that run in the simulation have 1159 steps
 in which a student predicts an outcome, changes one thing, measures the result,
 and revises the prediction against what they measured. It runs entirely
 client-side as a static site, requires no account and no installation, works

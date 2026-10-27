@@ -33,6 +33,7 @@ export const EVIDENCE_FROM = Object.freeze({
   'how-far-is-that-star': 'model',
   'inside-a-star': 'model',
   'integrators-in-practice': 'computation',
+  'ios-fire': 'model',
   'keplers-laws': 'engine',
   'lagrange-points': 'engine',
   'leavitts-law': 'model',
@@ -63,6 +64,7 @@ export const EVIDENCE_FROM = Object.freeze({
   'the-suns-motion': 'model',
   'the-turning-sky': 'model',
   tides: 'model',
+  'tides-that-move-the-moon': 'model',
   'transit-photometry': 'engine',
   'twelve-nights': 'model',
   'two-greenhouse-models': 'model',
@@ -82,6 +84,7 @@ export const EVIDENCE_FROM = Object.freeze({
   'which-kind-of-variable': 'model',
   'which-surface-is-older': 'model',
   'who-gets-counted': 'model',
+  'why-rings': 'model',
   'why-the-bright-ones-win': 'model',
   'why-venus-is-hot': 'model',
 });

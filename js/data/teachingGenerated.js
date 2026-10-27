@@ -31,4 +31,4 @@ export const DEMO_LINKS = Object.freeze({
 });
 
 /** How many scenarios js/data/scenarioInfo.js describes. */
-export const SCENARIO_COUNT = 59;
+export const SCENARIO_COUNT = 61;

@@ -890,6 +890,45 @@ export const MANIFEST = [
     objectiveCount: 4,
   },
   {
+    id: 'why-rings',
+    title: '¿Por qué hay anillos?',
+    subtitle:
+      'Dónde se deshace una luna y dónde el tirón de una luna deja una marca en un anillo',
+    duration: '15-25 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/why-rings.webp',
+    depths: 3,
+    stepCount: 8,
+    gradedCount: 4,
+    objectiveCount: 4,
+  },
+  {
+    id: 'tides-that-move-the-moon',
+    title: 'Mareas que mueven la Luna',
+    subtitle:
+      'El alejamiento de la Luna, el día que se alarga y el modelo que falla al correrlo hacia atrás',
+    duration: '20-30 min',
+    level: 'Majors and upper-level astronomy',
+    thumbnail: 'images/investigations/tides-that-move-the-moon.webp',
+    depths: 3,
+    stepCount: 6,
+    gradedCount: 4,
+    objectiveCount: 4,
+  },
+  {
+    id: 'ios-fire',
+    title: 'El fuego de Ío',
+    subtitle:
+      'El calentamiento de marea como energía por órbita, acotado por lo que nadie sabe del interior de Ío',
+    duration: '15-25 min',
+    level: 'Majors and upper-level astronomy',
+    thumbnail: 'images/investigations/ios-fire.webp',
+    depths: 3,
+    stepCount: 6,
+    gradedCount: 4,
+    objectiveCount: 4,
+  },
+  {
     id: 'why-venus-is-hot',
     title: 'Por qué Venus es caliente',
     subtitle:

@@ -720,6 +720,36 @@ export const DISCOVERY = {
     },
     courseLevel: 'majors',
   },
+  'why-rings': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: [],
+    textbook: {
+      chapter: 12,
+      section: '12.5',
+    },
+    courseLevel: 'survey',
+  },
+  'tides-that-move-the-moon': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: [],
+    textbook: {
+      chapter: 4,
+      section: '4.6',
+    },
+    courseLevel: 'majors',
+  },
+  'ios-fire': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['tides-that-move-the-moon'],
+    textbook: {
+      chapter: 12,
+      section: '12.2',
+    },
+    courseLevel: 'majors',
+  },
   'why-venus-is-hot': {
     audience: 'intro',
     mathematics: 'algebra',

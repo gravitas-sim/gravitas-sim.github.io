@@ -44,6 +44,10 @@
   "atmosphere-balance",
   "atmosphere-greenhouse",
   "atmosphere-scale",
-  "crater-sfd"
+  "crater-sfd",
+  "tides-roche",
+  "tides-resonance",
+  "tides-moon",
+  "tides-heating"
  ]
 }

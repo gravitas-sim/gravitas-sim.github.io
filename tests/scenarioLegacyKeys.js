@@ -44,6 +44,8 @@ export const LEGACY_SCENARIO_KEYS = Object.freeze([
   ['Supermassive BH', 'supermassive-bh'],
   ['Star Cluster', 'star-cluster'],
   ['Kuiper Belt', 'kuiper-belt'],
+  ['Ring Gap', 'ring-gap'],
+  ['Roche Pass', 'roche-pass'],
   ['Sagittarius A*', 'sagittarius-a'],
   ['Binary Star System', 'binary-star-system'],
   ['Slingshot', 'slingshot'],

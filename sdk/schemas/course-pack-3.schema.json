@@ -411,6 +411,9 @@
         "craters-by-size",
         "what-a-crater-diameter-is-worth",
         "weighing-jupiter",
+        "why-rings",
+        "tides-that-move-the-moon",
+        "ios-fire",
         "why-venus-is-hot",
         "two-greenhouse-models"
       ]
@@ -719,6 +722,8 @@
             "supermassive-bh",
             "star-cluster",
             "kuiper-belt",
+            "ring-gap",
+            "roche-pass",
             "sagittarius-a",
             "binary-star-system",
             "slingshot",
@@ -778,6 +783,8 @@
             "Supermassive BH",
             "Star Cluster",
             "Kuiper Belt",
+            "Ring Gap",
+            "Roche Pass",
             "Sagittarius A*",
             "Binary Star System",
             "Slingshot",

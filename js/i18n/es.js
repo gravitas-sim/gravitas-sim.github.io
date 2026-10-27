@@ -1017,6 +1017,12 @@ export const ES = {
   'scenario.kuiper-belt.title': 'Cinturón de Kuiper',
   'scenario.kuiper-belt.summary':
     'Una simulación fiel del cinturón de Kuiper de nuestro sistema solar, con planetas enanos reales (Plutón, Eris, Haumea, Makemake), grandes objetos transneptunianos (Quaoar, Sedna, Orcus, Varuna) y cuerpos menores (Ixión, Huya, 2002 AW197), todos con masas y propiedades orbitales realistas.',
+  'scenario.ring-gap.title': 'Hueco en el anillo: una luna y un anillo',
+  'scenario.ring-gap.summary':
+    'Un planeta con la masa de Saturno, un anillo de 200 partículas, una luna resonante cuya resonancia 2:1 cae dentro del anillo y una luna pastora dentro de él. Es un modelo a escala: las longitudes están estiradas y G carga la exageración, y las dos lunas pesan mucho más que Mimas y Pan para que veinte órbitas basten para ver el efecto. El anillo se adelgaza en la resonancia y la pastora abre un carril a su alrededor; no se vacía, porque sus partículas no chocan.',
+  'scenario.roche-pass.title': 'Paso de Roche: un cúmulo dentro del límite',
+  'scenario.roche-pass.summary':
+    'Un planeta y un cúmulo suelto de 60 partículas en una órbita cuyo punto más cercano está a 1,3 radios del centro del planeta, dentro del límite de Roche rígido y del fluido para la densidad del cúmulo, como estuvo Shoemaker-Levy 9 junto a Júpiter. Es un modelo a escala con gravedad newtoniana solamente: el cúmulo es un enjambre suavizado, así que el paso lo estira en un chorro y además se afloja despacio por sí solo.',
   'scenario.sagittarius-a.title': 'Sagitario A*',
   'scenario.sagittarius-a.summary':
     'El agujero negro supermasivo central de la Vía Láctea (4000 M☉, reducido para la simulación) con estrellas S de movimiento rápido, objetos compactos y restos en órbitas extremas. Permite presenciar las increíbles fuerzas gravitatorias y los efectos relativistas cerca del agujero negro supermasivo de nuestra galaxia.',

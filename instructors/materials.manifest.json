@@ -1,30 +1,30 @@
 {
   "version": "October 2026",
   "generated": "2026-10-27",
-  "documents": 672,
+  "documents": 705,
   "inventory": {
-    "documents": 672,
+    "documents": 705,
     "byLocale": {
-      "en": 309,
-      "es": 363
+      "en": 324,
+      "es": 381
     },
     "byKind": {
       "general": 2,
-      "guide": 151,
-      "key": 442,
-      "notes": 72,
+      "guide": 157,
+      "key": 466,
+      "notes": 75,
       "worksheet": 5
     },
     "byVariant": {
       "activity": 12,
-      "depth": 282,
-      "full": 288,
+      "depth": 300,
+      "full": 300,
       "general": 18,
-      "notes": 72
+      "notes": 75
     }
   },
   "sourceFiles": 281,
-  "sourceDigest": "0a47038a61df9d0d04d989be06eb971bbb476bbe6f25e1faf8abef6b28994747",
+  "sourceDigest": "046a114830fc0e25c283bf98b6c262cafb9c1a2485c3b65b35c9525fca00cd33",
   "sources": {
     "js/activities/activities.js": "39ac98cd99b8b0387c55e41d5d4530bad55a8da8758819ad056be73e7a716b01",
     "js/activities/activityBridge.js": "67a82aff98e0ed935d6b8b0f0f654c6ad4332ee929cb3604e896a7f790a6fdc1",
@@ -83,7 +83,7 @@
     "js/data/investigations/depth/es/missing-mass.js": "489731f5650f93f5597c26bd5f7e419067bfd3d6abc71c1018907954e327bab4",
     "js/data/investigations/depth/es/phases-and-eclipses.js": "b8e49177963d5140de6f35ca384f22430fbcbc3ebd5f74bfa4ee44270a526c6a",
     "js/data/investigations/depth/es/plan-a-night.js": "77c7fa443d9b7afd96b68af8d7e9a68e6c0f32d5f99eabc91162672812fd8728",
-    "js/data/investigations/depth/es/satellite-sequence.js": "762ee9bff690074692a85563ce24bafade63a181d2de1a5b025106d875c92fae",
+    "js/data/investigations/depth/es/satellite-sequence.js": "7bba5e059c6335a08ebe5148c9475efb05ac16bb35ef76c6c4b905a85d568dde",
     "js/data/investigations/depth/es/scaling-the-main-sequence.js": "a7268c62591e663879fd1d03deaba725e6f3544bfba910d8d0ccbf7a42ee1354",
     "js/data/investigations/depth/es/signal-noise-and-exposure.js": "1e43ba3de76332a13e0e147e79fa12209bc3d2869cce84e462bdd7195db3248f",
     "js/data/investigations/depth/es/standard-candles.js": "da91793d121c3072869f7857a7820670dd16c1392bec1b9906f1501175720f33",
@@ -114,7 +114,7 @@
     "js/data/investigations/depth/missing-mass.js": "25ced998f2f71f10040ffa09b458c2d9f6c990ddf9c005036602025a74b39888",
     "js/data/investigations/depth/phases-and-eclipses.js": "6040ea671dd294cfeb426a3d92bd3321704c3b690df8097ff276d12c2fa75379",
     "js/data/investigations/depth/plan-a-night.js": "1c7e05a8096cf36c0e6b218298c29ecfd9fb3e7c9c5ad808f10afa69a1610efa",
-    "js/data/investigations/depth/satellite-sequence.js": "5f9a24d710c2731a7542595afb30aa21457dcd45b4ef9ea30bc26bb0f6d67551",
+    "js/data/investigations/depth/satellite-sequence.js": "4d6bb86e9d180fe381abb644db39b922d60e7a24b04809c47133e1892495fd49",
     "js/data/investigations/depth/scaling-the-main-sequence.js": "7b8496dcaa26efeb30889a8a4aa3726ab7314f6331b7bb24a6420e988b28cabd",
     "js/data/investigations/depth/signal-noise-and-exposure.js": "5568b125b3d211933a209b61f205acbf05ab0b89adfb92ecdbe0925ee22b0a83",
     "js/data/investigations/depth/standard-candles.js": "76b21582d5e4ca925a25e021eb641b455ec31d8f41e85d6c5de0ae6719b1fd89",
@@ -139,7 +139,7 @@
     "js/data/investigations/depth/why-the-bright-ones-win.js": "2efd2f0f8f383755a667f7452f9931d527faeed4d3b4d40a536b7a4725918fa1",
     "js/data/investigations/design-the-schedule.js": "8262b01d351491c0b1c0af1355b52daeb7817caaee519db0a17edb54a6a9d0b0",
     "js/data/investigations/detect-this-planet.js": "e7ff6bbdac10bb95b29b2e7aef91b015d8c69a37a014db1fb014dc531124ce43",
-    "js/data/investigations/discovery.js": "2dec7867779bdfac6b270f015046ffe1d579a1e3d67b53db2bff89c211c9026e",
+    "js/data/investigations/discovery.js": "aa56d7112f13297685962621189cce61e9eaaa58fc947f8835590f7c57fa84fd",
     "js/data/investigations/einstein-rings-and-arcs.js": "94e991a437d84d63e2f9df1dddb3c74d4b5c99ff88c8a523c76ac9391b013f6e",
     "js/data/investigations/es/a-lens-passing-by.js": "9f341a46e06db9cf8c17467a8bde8eb392425d6eeba94f1f131ff1e7babcec36",
     "js/data/investigations/es/a-universe-of-stars.js": "e978b7bb1a4297064769e4a005c48a4f3399d8851ea1c321568aff8627265bbe",
@@ -176,7 +176,7 @@
     "js/data/investigations/es/refitting-a-transit.js": "e00acffa9ea4e003b6d29d9d32bb8601b0fb5c877123f4286ad52773a6c0bc10",
     "js/data/investigations/es/retrograde-motion.js": "3eac83242a5f66a2408a0581755dff57d130868bea010eec510da07ddc2d54ea",
     "js/data/investigations/es/sampling-a-posterior.js": "c9727dc6bf3e50a22bfab509fd787e59a078a2b405246c7da7402553125f11d3",
-    "js/data/investigations/es/satellite-sequence.js": "b4020fae3940ad8d7143a292173852a03b2f43f2d57528f40eb3c6a00ae5b7b9",
+    "js/data/investigations/es/satellite-sequence.js": "d1f384a2c6c162c4eeca92eeb3edd291e9b7de0a5edc811a9e8d01fbb0cc5369",
     "js/data/investigations/es/scaling-the-main-sequence.js": "841f5b887e96089fd54197488e02975d4cdea85fc20d84adff8c55c9b8f1e4af",
     "js/data/investigations/es/signal-noise-and-exposure.js": "9ac2e13caec723469c1b516bb058d92a55cd9867baf7bc529f2b85bb3b6747e0",
     "js/data/investigations/es/standard-candles.js": "2ce6d41611eda1b4840274b35f19805dfae4caf542361d89031a95e6737cdfbf",
@@ -227,11 +227,11 @@
     "js/data/investigations/refitting-a-transit.js": "8b3758b9a4b3911dde363a615273722f68f9bc902136a57721a0fa4f1b4b4cd8",
     "js/data/investigations/retrograde-motion.js": "354cbfda5e7ba343bd6604910842b9ff25af525a2d7ceb15c68cfdc7e5a5638c",
     "js/data/investigations/sampling-a-posterior.js": "603d154cfe8907a75efcc9c6d3bfee505f07298db2ddc6e449aa6da120f86125",
-    "js/data/investigations/satellite-sequence.js": "0d23d96e7dc9638afe607ae4865911f3e3a77a5200142c714df50baa0cc6ba50",
+    "js/data/investigations/satellite-sequence.js": "090fa1140b5797de12a8e5a44a3170f43bb309914267216ec65ad3ad358a2184",
     "js/data/investigations/scaling-the-main-sequence.js": "69ad3e9e62d69ff8986d8cd6fd8439aecd987843e10725f872e60c83bd07191b",
     "js/data/investigations/signal-noise-and-exposure.js": "0d5ce28c379c51a3ef073b3674b14b4d405887bbdb96fd99c2d073a563630209",
     "js/data/investigations/standard-candles.js": "77f5101c57d2eb5de1dbcae2dc1250ad245751a4d600d82dd507978f8b80fa7c",
-    "js/data/investigations/summaries.js": "40a16046c09012e7327278c8a2c1f796e64a17b61fab2144c152124dfc297b6a",
+    "js/data/investigations/summaries.js": "fa675e4ac71720f1c26face60b4714047ace3d5334b867d35d381883e9a08437",
     "js/data/investigations/the-beat-of-a-star.js": "4005037e9b5c1a37777bf8e90f4c657a667aff3c6aae3e46633a3f4e3da9a3e4",
     "js/data/investigations/the-completeness-curve.js": "6a81cabc545758ae5de1e2f04644409c1e0d7152809253d9d33ab8cad3abf6c5",
     "js/data/investigations/the-expanding-universe.js": "4e2d6776b896a4a7b8424bf36f7f6afde0e9b75f2ff67dccf26f198b2b641b7c",
@@ -265,7 +265,7 @@
     "js/i18n/en.activities.js": "f20cf171d13a956aed5e7f15319f7ef93a918ccbc803fd441e5b08394488d5d5",
     "js/i18n/en.exoplanet.js": "f7d834d396e30716ea395efee77e99bfc90c6f159c094e5623272ce83ba8704c",
     "js/i18n/en.guides.js": "6462bfa9a931d5901393a19fdab9d5f3a27ba0969799f2dfbd7d61e501a43252",
-    "js/i18n/en.js": "03bf6b127b504538679e0f7bfa3464ed9374de4f9b51861677f3cd14f4ea6cc4",
+    "js/i18n/en.js": "4c2e543a98c4c514fe3bacb7fee767f7ccf6219975f584c0ef70124477175f11",
     "js/i18n/en.lab3dGuides.js": "e2d4eaa678c6872969f358dffd125dad34953900f83a822de71391ba906e6bc7",
     "js/i18n/en.missionLabGuides.js": "6c859aefad385c14245218a4d53514fb35ce1443c1fcb3b055575137a6a6d086",
     "js/i18n/en.populations.js": "91250db8e3d6d843e32bb524f2e53762184ce773a10d376d03b6ddb80c0d0d87",
@@ -308,5 +308,5 @@
     "tools/instructor-freshness.mjs": "96052b2f27080f0243fdd4d5f7608927bd67f0c50808b6eac3345a65c14d1e28",
     "tools/source-closure.mjs": "961828e4d0d40d8a6f8c029fe9b9435ecaf39a74b62640efc0b4145c35c7650a"
   },
-  "contentDigest": "8c6ef490d56ecfee68abc79feaf29c9160fbef58db313ae2b56461d292b025b7"
+  "contentDigest": "62773f2f6a7e98c50467d53099cdb496ae2acf674d77c1ac302aa6f043b11dfb"
 }

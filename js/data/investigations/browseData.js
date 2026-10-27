@@ -292,6 +292,18 @@ export const BROWSE_META = {
     tags: ['observing'],
     numericCount: 0,
   },
+  'why-rings': {
+    tags: ['solar-system'],
+    numericCount: 0,
+  },
+  'tides-that-move-the-moon': {
+    tags: ['solar-system'],
+    numericCount: 0,
+  },
+  'ios-fire': {
+    tags: ['solar-system'],
+    numericCount: 0,
+  },
   'why-venus-is-hot': {
     tags: ['habitability', 'solar-system'],
     numericCount: 0,

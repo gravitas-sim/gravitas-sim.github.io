@@ -4,17 +4,16 @@
 // Every built-in scenario's settings, as one table keyed by the scenario's
 // public id (SCENARIO_PRESETS below), and the function that stamps a row of
 // it onto the settings object. Extracted from ui.js: this was 778 lines of a
-// 8,900-line module, and it has no dependency on the UI beyond the objects
-// handed to it, so it takes them as parameters rather than importing ui.js
-// and closing a cycle.
+// 8,900-line module, with no dependency on the UI beyond the objects handed to
+// it, taken as parameters rather than importing ui.js and closing a cycle.
 //
-// The table replaced an if-chain on the scenario's English name (Roadmap II
-// Prompt 63; "migration 1" of STUDIO_ROUNDTRIP_GATE.md). A row is data: the
-// settings the scenario runs under and nothing else. A scenario's bodies are
-// either generated from those settings, declared in SCENARIO_GEOMETRY at the
-// end of this file (Roadmap II Prompt 108, SCENARIO_GEOMETRY.md), or still
-// placed by code in js/world/build.js, keyed on the same ids.
+// The table replaced an if-chain on the scenario's English name (Roadmap II Prompt 63;
+// "migration 1" of STUDIO_ROUNDTRIP_GATE.md). A row is data: the settings the scenario
+// runs under and nothing else. A scenario's bodies are either generated from those
+// settings, declared in SCENARIO_GEOMETRY at the end of this file (Roadmap II Prompt
+// 108, SCENARIO_GEOMETRY.md), or placed by code in js/world/build.js, keyed on the same ids.
 // =============================================================================
+import { RING_TIDE_PRESETS } from './data/tidePresets.js';
 
 /**
  * The last preset this function set up.
@@ -1712,6 +1711,7 @@ export const SCENARIO_PRESETS = /* @__PURE__ */ Object.freeze({
     max_star_mass_before_bh: 20.0,
     preset_zoom: 1.7,
   },
+  ...RING_TIDE_PRESETS,
 });
 
 /** The public ids of every built-in scenario, in the table's order. */
