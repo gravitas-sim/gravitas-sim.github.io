@@ -1,0 +1,315 @@
+{
+ "format": "gravitas.crater-chronology-gate-record/1",
+ "prompt": 196,
+ "node": "v24.4.0",
+ "corrections": [
+  "F3 case 3 (saturated) was first written n = 50, area 100 km^2, dMin 2 km; it returned beyondChronology, because that surface is also older than the chronology reaches, so the case did not isolate its rule. Replaced by n = 6, area 100 km^2, dMin 2 km (N1 below the chronology at 4.5 Ga, density above 3 percent of geometric saturation). The first run is the only one with the old case; no bound moved."
+ ],
+ "rows": [
+  {
+   "id": "F1.a0",
+   "measured": 0.00010135150547776014,
+   "bound": 0.001,
+   "pass": true
+  },
+  {
+   "id": "F1.inverse",
+   "measured": 2.1147105230955362e-16,
+   "bound": 1e-9,
+   "pass": true
+  },
+  {
+   "id": "F1.monotone",
+   "measured": 0,
+   "bound": 0,
+   "pass": true
+  },
+  {
+   "id": "F1.oracle",
+   "measured": 5.3651353869270715e-14,
+   "bound": 1e-9,
+   "pass": true
+  },
+  {
+   "id": "F2.coverage",
+   "measured": 0.9435,
+   "bound": 0.94,
+   "pass": true,
+   "cells": [
+    {
+     "T0": 0.5,
+     "area": 20000,
+     "dMin": 1,
+     "mean": 8.38000003370239,
+     "coverage": 0.963
+    },
+    {
+     "T0": 0.5,
+     "area": 20000,
+     "dMin": 3,
+     "mean": 0.23753964859128973,
+     "coverage": 0.97425
+    },
+    {
+     "T0": 0.5,
+     "area": 200000,
+     "dMin": 1,
+     "mean": 83.80000033702389,
+     "coverage": 0.95175
+    },
+    {
+     "T0": 0.5,
+     "area": 200000,
+     "dMin": 3,
+     "mean": 2.3753964859128973,
+     "coverage": 0.98875
+    },
+    {
+     "T0": 1,
+     "area": 20000,
+     "dMin": 1,
+     "mean": 16.76000111138545,
+     "coverage": 0.96925
+    },
+    {
+     "T0": 1,
+     "area": 20000,
+     "dMin": 3,
+     "mean": 0.4750793267752764,
+     "coverage": 0.9855
+    },
+    {
+     "T0": 1,
+     "area": 200000,
+     "dMin": 1,
+     "mean": 167.6000111138545,
+     "coverage": 0.95425
+    },
+    {
+     "T0": 1,
+     "area": 200000,
+     "dMin": 3,
+     "mean": 4.750793267752765,
+     "coverage": 0.96775
+    },
+    {
+     "T0": 2,
+     "area": 20000,
+     "dMin": 1,
+     "mean": 33.52113749631694,
+     "coverage": 0.9545
+    },
+    {
+     "T0": 2,
+     "area": 20000,
+     "dMin": 3,
+     "mean": 0.9501908340371993,
+     "coverage": 0.982
+    },
+    {
+     "T0": 2,
+     "area": 200000,
+     "dMin": 1,
+     "mean": 335.21137496316936,
+     "coverage": 0.9435
+    },
+    {
+     "T0": 2,
+     "area": 200000,
+     "dMin": 3,
+     "mean": 9.501908340371992,
+     "coverage": 0.96625
+    },
+    {
+     "T0": 3,
+     "area": 20000,
+     "dMin": 1,
+     "mean": 51.44308424730014,
+     "coverage": 0.9545
+    },
+    {
+     "T0": 3,
+     "area": 20000,
+     "dMin": 3,
+     "mean": 1.4582066951564128,
+     "coverage": 0.98625
+    },
+    {
+     "T0": 3,
+     "area": 200000,
+     "dMin": 1,
+     "mean": 514.4308424730015,
+     "coverage": 0.95025
+    },
+    {
+     "T0": 3,
+     "area": 200000,
+     "dMin": 3,
+     "mean": 14.582066951564128,
+     "coverage": 0.9595
+    },
+    {
+     "T0": 3.5,
+     "area": 20000,
+     "dMin": 1,
+     "mean": 95.85131668025736,
+     "coverage": 0.95925
+    },
+    {
+     "T0": 3.5,
+     "area": 20000,
+     "dMin": 3,
+     "mean": 2.7170033400562357,
+     "coverage": 0.9775
+    },
+    {
+     "T0": 3.5,
+     "area": 200000,
+     "dMin": 1,
+     "mean": 958.5131668025736,
+     "coverage": 0.9465
+    },
+    {
+     "T0": 3.5,
+     "area": 200000,
+     "dMin": 3,
+     "mean": 27.170033400562357,
+     "coverage": 0.97
+    },
+    {
+     "T0": 3.9,
+     "area": 20000,
+     "dMin": 1,
+     "mean": 660.0748443183508,
+     "coverage": 0.94925
+    },
+    {
+     "T0": 3.9,
+     "area": 20000,
+     "dMin": 3,
+     "mean": 18.71049474137744,
+     "coverage": 0.9665
+    },
+    {
+     "T0": 3.9,
+     "area": 200000,
+     "dMin": 1,
+     "mean": 6600.748443183507,
+     "coverage": 0.94925
+    },
+    {
+     "T0": 3.9,
+     "area": 200000,
+     "dMin": 3,
+     "mean": 187.1049474137744,
+     "coverage": 0.95625
+    }
+   ]
+  },
+  {
+   "id": "F3.refusals.cases",
+   "measured": 0,
+   "bound": 0,
+   "pass": true,
+   "detail": [
+    {
+     "want": "secondaries",
+     "got": "secondaries",
+     "ok": true,
+     "n": 100,
+     "dMin": 0.5
+    },
+    {
+     "want": "tooFew",
+     "got": "tooFew",
+     "ok": true,
+     "n": 3,
+     "dMin": 1
+    },
+    {
+     "want": "saturated",
+     "got": "saturated",
+     "ok": true,
+     "n": 6,
+     "dMin": 2
+    },
+    {
+     "want": "beyondChronology",
+     "got": "beyondChronology",
+     "ok": true,
+     "n": 4449,
+     "dMin": 100
+    },
+    {
+     "want": "count",
+     "got": "count",
+     "ok": true,
+     "n": 2.5,
+     "dMin": 1
+    },
+    {
+     "want": "count",
+     "got": "count",
+     "ok": true,
+     "n": -1,
+     "dMin": 1
+    },
+    {
+     "want": "diameter",
+     "got": "diameter",
+     "ok": true,
+     "n": 20,
+     "dMin": 500
+    },
+    {
+     "want": "diameter",
+     "got": "diameter",
+     "ok": true,
+     "n": 20,
+     "dMin": 0.005
+    },
+    {
+     "want": "mars",
+     "got": "mars",
+     "ok": true,
+     "n": 100,
+     "dMin": 20
+    }
+   ],
+   "nBeyond": 4449
+  },
+  {
+   "id": "F3.refusals.control",
+   "measured": 0,
+   "bound": 0.05,
+   "pass": true
+  },
+  {
+   "id": "O1.moon-highland",
+   "measured": 1.9501967134724327,
+   "bound": 30,
+   "pass": false,
+   "dMin": 16.171262361838277,
+   "area": 304981.5722401006,
+   "oracle": 1.9501967134724327,
+   "relDiffOracle": 0
+  },
+  {
+   "id": "O1.moon-mare",
+   "measured": 2.17980709808518,
+   "bound": 30,
+   "pass": false,
+   "dMin": 16.171262361838277,
+   "area": 340889.19920823496,
+   "oracle": 2.17980709808518,
+   "relDiffOracle": 0
+  }
+ ],
+ "notRun": {
+  "R1.sites": "the sample ages and published counts at the returned-sample sites are not in the repository (data requests R0 to R2); nothing was downloaded and no value was typed from memory",
+  "R2.coverage": "as R1",
+  "R3.recount": "as R1: no recount is in hand",
+  "O2.own": "no person has marked craters on the committed frames (R5); nothing is simulated",
+  "I1.completeness": "needs a recognition function measured on crater-like injections and a person or detector to recover them (R5, R2)"
+ }
+}
