@@ -1,0 +1,581 @@
+{
+ "format": "gravitas.orbit-determination-gate-record/1",
+ "prompt": "197",
+ "node": "v24.4.0",
+ "oracle": {
+  "python": "3.10.12",
+  "numpy": "2.0.2",
+  "scipy": "1.13.1"
+ },
+ "seconds": 56.77,
+ "rows": [
+  {
+   "id": "F1.propagate",
+   "measured": {
+    "relativeInvariant": 1.1102230246251565e-15,
+    "roundTripAu": 1.5059797815742442e-15
+   },
+   "bound": {
+    "relativeInvariant": 1e-11,
+    "roundTripAu": 1e-11
+   },
+   "pass": true
+  },
+  {
+   "id": "F2.oracle",
+   "measured": 1.0014188417421103e-14,
+   "bound": 1e-09,
+   "pass": true
+  },
+  {
+   "id": "F3.observer",
+   "measured": 3.376611507232129e-16,
+   "bound": 1e-09,
+   "pass": true
+  },
+  {
+   "id": "F4.forward",
+   "measured": 3.799260101148489e-10,
+   "bound": 0.001,
+   "pass": true
+  },
+  {
+   "id": "F5.exact",
+   "measured": {
+    "objectsRecoveredToBound": 12,
+    "objectsStatusOk": 11,
+    "maxPositionAu": 3.237861288911783e-14
+   },
+   "bound": {
+    "objectsRecovered": 12,
+    "maxPositionAu": 1e-08
+   },
+   "pass": false
+  },
+  {
+   "id": "G2.cond",
+   "measured": {
+    "objectsAtOrBelow": 11,
+    "kappa": [
+     29.099539632855148,
+     1539.1059013562965,
+     289.1705568901413,
+     50.446311549966275,
+     18.1374724063216,
+     18.36322429247756,
+     19.564495753886217,
+     40.05981209006272,
+     34.181711708268665,
+     24.100070281132947,
+     58.47987415728508,
+     86.40427000245523
+    ]
+   },
+   "bound": {
+    "kappaMax": 1000,
+    "minObjects": 11
+   },
+   "pass": true
+  },
+  {
+   "id": "G1.noisy",
+   "measured": {
+    "okRate": 0.9158333333333334,
+    "statuses": {
+     "ok": 1099,
+     "illConditioned": 100,
+     "noConvergence": 1
+    }
+   },
+   "bound": 0.95,
+   "pass": false
+  },
+  {
+   "id": "G3.withheld",
+   "measured": {
+    "aWn": 0.9990900818926297,
+    "aWf": 1,
+    "bWn": 0.9981801637852593,
+    "bWf": 1
+   },
+   "bound": 0.97,
+   "pass": true
+  },
+  {
+   "id": "G5.useful",
+   "measured": {
+    "rate": 1,
+    "medianSemiMajor95Arcsec": 1.2568680215101498
+   },
+   "bound": 0.9,
+   "pass": true
+  },
+  {
+   "id": "G4.coverage",
+   "measured": {
+    "Wn": {
+     "ellipse95": 0.9490677580718508,
+     "ellipse68": 0.6784902228285584,
+     "n": 2199
+    },
+    "Wf": {
+     "ellipse95": 0.9495225102319236,
+     "ellipse68": 0.6903137789904502,
+     "n": 2199
+    }
+   },
+   "bound": {
+    "ellipse95": [
+     0.92,
+     0.98
+    ],
+    "ellipse68": [
+     0.6,
+     0.76
+    ],
+    "epochs": [
+     "Wn",
+     "Wf"
+    ]
+   },
+   "pass": true
+  },
+  {
+   "id": "H1.refuse",
+   "measured": {
+    "okRate": 0,
+    "okDraws": 0,
+    "draws": 3600,
+    "kappaNotAbove": 0
+   },
+   "bound": {
+    "maxOkRate": 0.01,
+    "kappaAbove": 1000
+   },
+   "pass": true
+  },
+  {
+   "id": "H2.sweep",
+   "measured": {
+    "violations": 1,
+    "sweep": [
+     {
+      "T": 1,
+      "medianKappa": 87967.48570565495,
+      "medianSemiMajor95NextNightArcsec": 9312.68531040189,
+      "kappaAboveThreshold": 12
+     },
+     {
+      "T": 2,
+      "medianKappa": 22220.10380739966,
+      "medianSemiMajor95NextNightArcsec": 2334.2830730505825,
+      "kappaAboveThreshold": 12
+     },
+     {
+      "T": 5,
+      "medianKappa": 3701.7186976678413,
+      "medianSemiMajor95NextNightArcsec": 372.1607747449814,
+      "kappaAboveThreshold": 12
+     },
+     {
+      "T": 10,
+      "medianKappa": 993.2295876708013,
+      "medianSemiMajor95NextNightArcsec": 91.64752116072663,
+      "kappaAboveThreshold": 6
+     },
+     {
+      "T": 20,
+      "medianKappa": 267.44596283391223,
+      "medianSemiMajor95NextNightArcsec": 21.503958535321857,
+      "kappaAboveThreshold": 2
+     },
+     {
+      "T": 40,
+      "medianKappa": 73.72235839447924,
+      "medianSemiMajor95NextNightArcsec": 4.039710270429593,
+      "kappaAboveThreshold": 1
+     },
+     {
+      "T": 60,
+      "medianKappa": 37.12076189916569,
+      "medianSemiMajor95NextNightArcsec": 1.2613704548505695,
+      "kappaAboveThreshold": 1
+     },
+     {
+      "T": 90,
+      "medianKappa": 45.33987148418429,
+      "medianSemiMajor95NextNightArcsec": 4.495734953465397,
+      "kappaAboveThreshold": 0
+     }
+    ]
+   },
+   "bound": 0,
+   "pass": false
+  },
+  {
+   "id": "L1.longer",
+   "measured": {
+    "okRate": 0.9841666666666666,
+    "statuses": {
+     "ok": 1181,
+     "noConvergence": 19
+    },
+    "withinTolWn": 1,
+    "withinTolWf": 1,
+    "medianSigmaMajorWf": 0.4095474633372383,
+    "curatedMedianSigmaMajorWf": 3.673630996481588,
+    "medianSigmaMajorWn": 0.26540917259581853,
+    "semiMajorRatioWf": 0.11148301604855836
+   },
+   "bound": {
+    "minOkRate": 0.95,
+    "minRate": 0.97,
+    "semiMajorRatioMax": 1,
+    "epochs": [
+     "Wn",
+     "Wf"
+    ]
+   },
+   "pass": true
+  },
+  {
+   "id": "N1.nearEarth",
+   "measured": {
+    "okDraws": 0,
+    "nearEarthOrIllConditioned": 0.3,
+    "mainBeltNearEarth": 0,
+    "statuses": {
+     "noConvergence": 720,
+     "nearEarth": 360,
+     "unphysical": 120
+    }
+   },
+   "bound": {
+    "maxOkRate": 0,
+    "minNearEarthOrIllConditioned": 0.9,
+    "maxNearEarthOnMainBelt": 0
+   },
+   "pass": false
+  },
+  {
+   "id": "P1.laplace",
+   "measured": {
+    "reported": "never judged",
+    "draws": 240,
+    "laplaceRootsFound": 240,
+    "laplacePolishConverged": 240,
+    "medianPositionErrorAu": {
+     "laplaceRaw": 0.6535206749871805,
+     "gaussRaw": 0.00010439239784520489,
+     "gaussPolished": 0.00010439240097264585
+    }
+   },
+   "bound": "reported, never judged",
+   "pass": null
+  }
+ ],
+ "detail": {
+  "F5": [
+   {
+    "id": 0,
+    "status": "ok",
+    "roots": 3,
+    "candidates": 1,
+    "errAu": 3.6299369564111875e-15,
+    "rawGaussErrAu": 2.611468901850379e-12
+   },
+   {
+    "id": 1,
+    "status": "ok",
+    "roots": 3,
+    "candidates": 1,
+    "errAu": 1.492852065305806e-14,
+    "rawGaussErrAu": 3.6369622209729026e-12
+   },
+   {
+    "id": 2,
+    "status": "ok",
+    "roots": 3,
+    "candidates": 1,
+    "errAu": 1.3327193038905524e-15,
+    "rawGaussErrAu": 1.387814132330288e-12
+   },
+   {
+    "id": 3,
+    "status": "ok",
+    "roots": 3,
+    "candidates": 1,
+    "errAu": 1.3353179736535835e-14,
+    "rawGaussErrAu": 2.7025091274346424e-12
+   },
+   {
+    "id": 4,
+    "status": "ok",
+    "roots": 3,
+    "candidates": 1,
+    "errAu": 9.019494489765868e-16,
+    "rawGaussErrAu": 5.105431801759078e-12
+   },
+   {
+    "id": 5,
+    "status": "ok",
+    "roots": 3,
+    "candidates": 1,
+    "errAu": 3.985994439185402e-15,
+    "rawGaussErrAu": 3.3505899047025833e-12
+   },
+   {
+    "id": 6,
+    "status": "ok",
+    "roots": 3,
+    "candidates": 1,
+    "errAu": 1.7519023829470347e-15,
+    "rawGaussErrAu": 1.416346375031127e-11
+   },
+   {
+    "id": 7,
+    "status": "ok",
+    "roots": 3,
+    "candidates": 1,
+    "errAu": 1.260041995837332e-14,
+    "rawGaussErrAu": 1.296721676816791e-12
+   },
+   {
+    "id": 8,
+    "status": "ok",
+    "roots": 3,
+    "candidates": 1,
+    "errAu": 4.754879262731141e-15,
+    "rawGaussErrAu": 2.6921159402949555e-13
+   },
+   {
+    "id": 9,
+    "status": "ok",
+    "roots": 3,
+    "candidates": 1,
+    "errAu": 1.3620043033829906e-15,
+    "rawGaussErrAu": 5.069849553105357e-12
+   },
+   {
+    "id": 10,
+    "status": "ok",
+    "roots": 3,
+    "candidates": 1,
+    "errAu": 3.237861288911783e-14,
+    "rawGaussErrAu": 8.062013819538609e-13
+   },
+   {
+    "id": 11,
+    "status": "ok",
+    "roots": 3,
+    "candidates": 1,
+    "errAu": 3.3639253828290606e-15,
+    "rawGaussErrAu": 4.594222510396736e-12
+   }
+  ],
+  "G2": [
+   29.099539632855148,
+   1539.1059013562965,
+   289.1705568901413,
+   50.446311549966275,
+   18.1374724063216,
+   18.36322429247756,
+   19.564495753886217,
+   40.05981209006272,
+   34.181711708268665,
+   24.100070281132947,
+   58.47987415728508,
+   86.40427000245523
+  ],
+  "G1": {
+   "statuses": {
+    "ok": 1099,
+    "illConditioned": 100,
+    "noConvergence": 1
+   },
+   "ok": 1099,
+   "total": 1200
+  },
+  "G3": {
+   "aWn": 0.9990900818926297,
+   "aWf": 1,
+   "bWn": 0.9981801637852593,
+   "bWf": 1,
+   "medianD": {
+    "Wn": 0.9583204544916941,
+    "Wf": 3.9091787695731286
+   },
+   "medianTol": {
+    "Wn": 2.669179218298411,
+    "Wf": 19.27576247440053
+   },
+   "medianSigmaMajor": {
+    "Wn": 0.5134994902680671,
+    "Wf": 3.673630996481588
+   },
+   "medianE": {
+    "Wn": 0.8496506329617409,
+    "Wf": 2.0890696647843217
+   },
+   "medianEfit": {
+    "Wn": 0.028572077753975137,
+    "Wf": 4.147117146602888
+   }
+  },
+  "nearEarthOnMainBelt": 0,
+  "G4": {
+   "Wn": {
+    "ellipse95": 0.9490677580718508,
+    "ellipse68": 0.6784902228285584,
+    "n": 2199
+   },
+   "Wf": {
+    "ellipse95": 0.9495225102319236,
+    "ellipse68": 0.6903137789904502,
+    "n": 2199
+   },
+   "okDraws": 2199,
+   "draws": 2400
+  },
+  "H1": {
+   "statuses": {
+    "T0.5": {
+     "illConditioned": 348,
+     "noConvergence": 593,
+     "unphysical": 43,
+     "noRoot": 194,
+     "nearEarth": 22
+    },
+    "T1": {
+     "illConditioned": 698,
+     "noConvergence": 398,
+     "noRoot": 77,
+     "nearEarth": 22,
+     "unphysical": 5
+    },
+    "T2": {
+     "illConditioned": 912,
+     "noConvergence": 239,
+     "noRoot": 28,
+     "nearEarth": 15,
+     "unphysical": 6
+    }
+   },
+   "kappaNotAboveThreshold": 0
+  },
+  "H2": [
+   {
+    "T": 1,
+    "medianKappa": 87967.48570565495,
+    "medianSemiMajor95NextNightArcsec": 9312.68531040189,
+    "kappaAboveThreshold": 12
+   },
+   {
+    "T": 2,
+    "medianKappa": 22220.10380739966,
+    "medianSemiMajor95NextNightArcsec": 2334.2830730505825,
+    "kappaAboveThreshold": 12
+   },
+   {
+    "T": 5,
+    "medianKappa": 3701.7186976678413,
+    "medianSemiMajor95NextNightArcsec": 372.1607747449814,
+    "kappaAboveThreshold": 12
+   },
+   {
+    "T": 10,
+    "medianKappa": 993.2295876708013,
+    "medianSemiMajor95NextNightArcsec": 91.64752116072663,
+    "kappaAboveThreshold": 6
+   },
+   {
+    "T": 20,
+    "medianKappa": 267.44596283391223,
+    "medianSemiMajor95NextNightArcsec": 21.503958535321857,
+    "kappaAboveThreshold": 2
+   },
+   {
+    "T": 40,
+    "medianKappa": 73.72235839447924,
+    "medianSemiMajor95NextNightArcsec": 4.039710270429593,
+    "kappaAboveThreshold": 1
+   },
+   {
+    "T": 60,
+    "medianKappa": 37.12076189916569,
+    "medianSemiMajor95NextNightArcsec": 1.2613704548505695,
+    "kappaAboveThreshold": 1
+   },
+   {
+    "T": 90,
+    "medianKappa": 45.33987148418429,
+    "medianSemiMajor95NextNightArcsec": 4.495734953465397,
+    "kappaAboveThreshold": 0
+   }
+  ],
+  "L1": {
+   "okRate": 0.9841666666666666,
+   "statuses": {
+    "ok": 1181,
+    "noConvergence": 19
+   },
+   "withinTolWn": 1,
+   "withinTolWf": 1,
+   "medianSigmaMajorWf": 0.4095474633372383,
+   "curatedMedianSigmaMajorWf": 3.673630996481588,
+   "medianSigmaMajorWn": 0.26540917259581853,
+   "semiMajorRatioWf": 0.11148301604855836
+  },
+  "N1": {
+   "statuses": {
+    "noConvergence": 720,
+    "nearEarth": 360,
+    "unphysical": 120
+   },
+   "total": 1200,
+   "nearEarthOnMainBelt": 0
+  },
+  "P1": {
+   "reported": "never judged",
+   "draws": 240,
+   "laplaceRootsFound": 240,
+   "laplacePolishConverged": 240,
+   "medianPositionErrorAu": {
+    "laplaceRaw": 0.6535206749871805,
+    "gaussRaw": 0.00010439239784520489,
+    "gaussPolished": 0.00010439240097264585
+   }
+  }
+ },
+ "notRun": {
+  "A1.authentic": "needs R1, the MPC observations of (1) Ceres, which could not be retrieved: the documented get-obs endpoint returns HTTP 500 on every request (sources.json). R2 (the published orbit) and R3 (the observatory codes) were retrieved with Carl's word; nothing is simulated or typed from memory",
+  "A2.reference": "as A1",
+  "A3.observation": "as A1",
+  "A4.longer": "as A1"
+ },
+ "syntheticLegs": {
+  "A": false,
+  "B": false
+ },
+ "spike": {
+  "branch": "spike/orbit-determination-gate",
+  "commit": "24cef4fb",
+  "note": "never merged; tools/orbit-determination-gate-core.mjs (functions), tools/orbit-determination-gate.mjs (harness), tools/orbit-determination-gate-oracle/oracle.py (independent oracle, run as python -I with numpy 2.0.2 and scipy 1.13.1 in the venv of the crater gate)"
+ },
+ "corrections": [
+  {
+   "id": "k1",
+   "when": "after the first full run of the harness, before this record",
+   "what": "the differential correction accepted a step only if the cost did not rise. Near the minimum of a least-squares problem the cost is flat to rounding, the line search measured the rounding, and 761 of the 1,200 longer-arc draws (L1) returned noConvergence (ok rate 0.366). Steps of 1e-6 AU or less are now taken as they stand (Newton region). The committed convergence criterion (a step under 1e-12 AU) is unchanged. L1 ok rate afterwards 0.906."
+  },
+  {
+   "id": "k2",
+   "when": "after k1, before this record",
+   "what": "the central-difference steps of the Jacobian were 1e-6 AU and 1e-8 AU per day; below about 1e-5 AU the rounding of the residuals divided by the step made the Gauss-Newton steps cycle at 5e-10 AU on arcs whose residual is not zero (a two-body fit to a 240-day perturbed arc, rms 2.4 arcseconds), so the committed criterion was never met. The steps are 1e-5 AU and 1e-7 AU per day (truncation error of order 1e-10 relative). Nothing else moved. L1 ok rate afterwards 0.984; the curated arc is unchanged (G1 0.916 both times)."
+  },
+  {
+   "id": "k3",
+   "what": "the statuses are counted after k1 and k2; the first-run figures (F5, G1, G2, G3, G4, G5, H1, H2 and N1 pass or fail exactly as in this record) differ only in L1, in the status mix of the ill-conditioned and near-Earth arcs (more draws end in illConditioned and fewer in noConvergence) and in kappa in the sixth digit."
+  }
+ ]
+}
