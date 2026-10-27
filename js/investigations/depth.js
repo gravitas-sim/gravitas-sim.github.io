@@ -134,6 +134,8 @@ const EXTENSIONS = {
   'tides-that-move-the-moon': () =>
     import('../data/investigations/depth/tides-that-move-the-moon.js'),
   'ios-fire': () => import('../data/investigations/depth/ios-fire.js'),
+  'what-is-in-this-field': () =>
+    import('../data/investigations/depth/what-is-in-this-field.js'),
 };
 
 /** Their Spanish, loaded only for a Spanish reader. */
@@ -224,6 +226,8 @@ const WORDS = {
     'tides-that-move-the-moon': () =>
       import('../data/investigations/depth/es/tides-that-move-the-moon.js'),
     'ios-fire': () => import('../data/investigations/depth/es/ios-fire.js'),
+    'what-is-in-this-field': () =>
+      import('../data/investigations/depth/es/what-is-in-this-field.js'),
     'missing-mass': () =>
       import('../data/investigations/depth/es/missing-mass.js'),
     'the-turning-sky': () =>

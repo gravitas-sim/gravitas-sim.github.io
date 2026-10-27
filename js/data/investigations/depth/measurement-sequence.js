@@ -1351,6 +1351,190 @@ export const WHAT_A_CRATER_DIAMETER_IS_WORTH_DEEPER = {
   ],
 };
 
+const FCO = (values = {}, hide = []) => ({
+  id: 'field-completeness',
+  values,
+  hide,
+});
+
+export const WHAT_IS_IN_THIS_FIELD_DEEPER = {
+  id: 'what-is-in-this-field',
+  steps: [
+    {
+      sid: 'a-lower-threshold',
+      after: 'the-curve',
+      depth: 'quantitative',
+      type: 'measure',
+      title: 'A threshold of 3 sigma',
+      body: `Set <strong>Threshold</strong> to 3 sigma, with the width at 3 pixels. Read the magnitude at
+             which half of the added stars are found, and nine in ten.`,
+      fields: [
+        {
+          id: 'm50',
+          label: 'Magnitude at 50 percent found',
+          unit: 'mag',
+          hint: '-2.14',
+        },
+        {
+          id: 'm90',
+          label: 'Magnitude at 90 percent found',
+          unit: 'mag',
+          hint: '-2.53',
+        },
+      ],
+      validate: v => {
+        if (![v.m50, v.m90].every(Number.isFinite)) return null;
+        if (near(v.m50, -2.14, 0.03) && near(v.m90, -2.53, 0.03)) {
+          return {
+            level: 'ok',
+            message:
+              'Half at −2.14 and nine in ten at −2.53: a third of a magnitude fainter than at 4 sigma, from the same frame. Nothing about the sky or the camera changed, only the setting. At 3 sigma this frame lists no source that is only noise, so the lower setting cost nothing here; at 2.5 it did.',
+          };
+        }
+        return {
+          level: 'error',
+          message:
+            'Set “Threshold” to 3 σ and “Width of added stars” to 3 px, then read “Magnitude at 50 percent found” and “Magnitude at 90 percent found”.',
+        };
+      },
+      tool: FCO({ sigma: 3, width: 3 }, ['truth']),
+    },
+    {
+      sid: 'not-the-same-search',
+      after: 'a-lower-threshold',
+      depth: 'quantitative',
+      type: 'question',
+      kind: 'choice',
+      title: 'Which search does the curve describe?',
+      body: `With the threshold at 3 sigma, read <strong>Describes the first instrument&rsquo;s
+             search</strong>. The first instrument searched this frame at 4 sigma.`,
+      prompt: 'You have the 3 sigma curve. What can you say with it?',
+      options: [
+        'It is also the completeness of the 4 sigma search, because it is the same frame',
+        'It is the completeness of the 3 sigma search of this frame and of no other: the tool says it differs in its detection settings',
+        'It is the completeness of every search of every frame whose stars have this width',
+        'It is wrong, because its half point differs from the one at 4 sigma',
+      ],
+      answer: 1,
+      misconceptions: [
+        {
+          id: 'same-frame',
+          option: 0,
+          say: 'Same frame, different search: the half points differ by a third of a magnitude. The tool refuses to call the curve the 4 sigma completeness and names the setting that differs.',
+        },
+        {
+          id: 'every-frame',
+          option: 2,
+          say: 'The sky, the exposure and the noise are part of it: a frame with twice the sky noise needs brighter stars. The tool refuses a frame whose noise differs by more than ten percent.',
+        },
+        {
+          id: 'wrong-curve',
+          option: 3,
+          say: 'Two curves from two searches should differ; that is what a threshold does. Neither is wrong.',
+        },
+      ],
+      hints: ['What does the tool say in the line that starts “Describes”?'],
+      because:
+        'A curve is the answer for the search it was measured under: its width, its noise, its threshold and its minimum area. It is not a property of the frame alone, so a curve for another setting is a different curve, and the tool says so instead of lending one to the other.',
+      tool: FCO({ sigma: 3, width: 3 }, ['truth']),
+    },
+    {
+      sid: 'the-curve-and-the-field',
+      after: 'not-the-same-search',
+      depth: 'quantitative',
+      type: 'measure',
+      title: 'The curve against the stars that are there',
+      body: `Set the threshold to 4 sigma and the width to 3 pixels and switch <strong>Field&rsquo;s own stars</strong> to shown. The curve gives each star of the field a chance of being found
+             at its own magnitude. Read how many of the forty stars the curve says a search finds,
+             and how many the search listed.`,
+      fields: [
+        {
+          id: 'expected',
+          label: 'Stars of the field this curve says a search finds',
+          unit: '',
+          hint: '27.2',
+        },
+        {
+          id: 'found',
+          label: 'Stars of the field the search listed',
+          unit: '',
+          hint: '30',
+        },
+      ],
+      validate: v => {
+        if (![v.expected, v.found].every(Number.isFinite)) return null;
+        if (near(v.expected, 27.2, 0.3) && v.found === 30) {
+          return {
+            level: 'ok',
+            message:
+              'The curve says 27.2 of the forty and the search listed 30. The difference, 2.8, is 1.7 times the scatter of 1.6 that forty stars, each found with a chance and not a certainty, would show: the two agree. The curve was measured on added stars and was never shown the field’s own: that it predicts them is the test.',
+          };
+        }
+        return {
+          level: 'error',
+          message:
+            'Use the threshold 4 σ and the width 3 px, switch “Field’s own stars” to shown, then read “Stars of the field this curve says a search finds” and “Stars of the field the search listed”.',
+        };
+      },
+      tool: FCO({ sigma: 4, width: 3, truth: 1 }),
+    },
+    {
+      sid: 'a-wrong-width',
+      after: 'how-faint',
+      depth: 'advanced',
+      type: 'measure',
+      title: 'Stars of the wrong width',
+      body: `Set <strong>Width of added stars</strong> to 4.5 pixels, with the threshold at 4
+             sigma, as if the measurement had given a worse focus. Read the magnitude at 50 percent
+             found, and the share found in the brightest bin.`,
+      fields: [
+        {
+          id: 'm50',
+          label: 'Magnitude at 50 percent found',
+          unit: 'mag',
+          hint: '-2.79',
+        },
+        {
+          id: 'bright',
+          label: 'Found, magnitude −3.4 to −3.1',
+          unit: '%',
+          hint: '90',
+        },
+      ],
+      validate: v => {
+        if (![v.m50, v.bright].every(Number.isFinite)) return null;
+        if (near(v.m50, -2.79, 0.04) && near(v.bright, 90, 1)) {
+          return {
+            level: 'ok',
+            message:
+              'Half at −2.79, a third of a magnitude brighter than for stars of 3 pixels (−2.47), and the curve never reaches nine in ten: even the brightest bin finds 90 percent. A wider star spreads its light over more pixels, so each is dimmer against the same noise. The tool also says this curve differs from the first search in its width: it describes a field of fatter stars than this one.',
+          };
+        }
+        return {
+          level: 'error',
+          message:
+            'Set “Width of added stars” to 4.5 px with the threshold at 4 σ, then read “Magnitude at 50 percent found” and the share in “Magnitude −3.4 to −3.1”.',
+        };
+      },
+      tool: FCO({ sigma: 4, width: 4.5 }, ['truth']),
+    },
+    {
+      sid: 'say-what-a-curve-needs',
+      after: 'a-wrong-width',
+      depth: 'advanced',
+      type: 'question',
+      kind: 'short',
+      rubric:
+        'Full credit for saying that the curve is a statement about one search of one frame (not about the telescope), and for naming what must match before it is used on another frame: the width of the stars, the noise (sky and exposure), and the detection settings (the threshold and the smallest source), with isolated stars only. Credit also saying that a faintest listed source or one magnitude limit is not the same answer. Do not credit saying that the curve is a property of the telescope or that it carries over to any frame.',
+      title: 'What a curve needs',
+      body: `You have a completeness curve for this frame, at 4 sigma, for stars 3 pixels wide.`,
+      prompt:
+        'In two or three sentences: what is the curve a statement about, and what would have to match before you used it on a different frame?',
+      tool: FCO({ sigma: 4, width: 3 }, ['truth']),
+    },
+  ],
+};
+
 const CRATER_CONTENT = {
   'which-surface-is-older': {
     topic:
@@ -1650,9 +1834,156 @@ const CRATER_BANDS = {
   },
 };
 
+const FIELD_CONTENT = {
+  'what-is-in-this-field': {
+    topic:
+      'A synthetic star field searched by a detector: the sources listed at a threshold and what a lower threshold buys and costs, the width of the stars measured with its uncertainty, and the completeness curve by injection and recovery that says how faint a search can see and for which search it is true.',
+    difficulty: 'Advanced (model-driven)',
+    placement:
+      'After Signal, Noise and Exposure, whose idea of noise it uses, and as the last of the image investigations of the observing-and-measuring sequence. It supports OpenStax Astronomy 2e chapter 6 (detectors); the chapter citation is the author’s and has not been checked against the book.',
+    overview:
+      'Students look at one synthetic frame of forty stars of a table, bright to faint, on a sky of 90 electrons a pixel and 8 of read noise, and predict that a detector at four sigma will list the brighter stars and miss the faintest. It lists 30 and flags none. At 2.5 sigma it lists 44, and with the truth switched on seven are only noise (73 and 36 at 2 sigma). Six bright clean stars give a width of 3.00 ± 0.02 pixels, which is what the frame was made with. Stars of that width added at random places, twelve trials of twenty between magnitude −3.4 and −1.6, are all found in the brightest bin and 31 percent (12 of 39) in the bin from −2.5 to −2.2; half are found at −2.47 and nine in ten at −2.87. The deeper steps give the curve at 3 sigma (−2.14 and −2.53), the tool’s refusal to lend it to the 4 sigma search, the curve’s prediction of the field’s own stars (27.2 against 30 listed) and stars of 4.5 pixels (half at −2.79, never nine in ten).',
+    priorKnowledge: [
+      'Signal, Noise and Exposure: noise from the sky, the star and the camera',
+      'A magnitude as minus 2.5 times a logarithm of a rate',
+      'A share found out of a number tried, and that a small number carries an uncertainty',
+    ],
+    keyConcepts: [
+      {
+        heading: 'A list is not the sky',
+        body: 'The detector lists what stands out of the noise at its threshold. A lower threshold lists more stars and, here, seven places that are only noise at 2.5 sigma. A list cannot say which entries are which.',
+      },
+      {
+        heading: 'Test it on stars you add',
+        body: 'Adding stars of known magnitude and looking again measures what the detector misses, which a list never shows. The added stars must have the width the real ones have, so the width is measured first.',
+      },
+      {
+        heading: 'A curve, not a limit',
+        body: 'How faint a search can see is a curve: nine in ten at magnitude −2.87, half at −2.47, five percent at −2.2. It is true of one search of one frame, and the tool refuses to call it the answer for another threshold, width or noise.',
+      },
+    ],
+    features: [
+      {
+        name: 'Field instruments (imaging family)',
+        text: 'A 192 by 192 pixel synthetic frame with the detector’s sources circled, a threshold control, the width of the stars it measures and, on request, the stars that were placed; and the completeness instrument, with the width of the added stars, the share found by magnitude with its interval, the magnitudes at 50 and 90 percent, and whether the curve describes the first instrument’s search. Every number is the Observatory’s own module (detect.js, inject.js).',
+      },
+      {
+        name: 'The synthetic truth',
+        text: 'Forty stars from a table (js/imagingField.js) with matched-filter signal to noise from 3.1 to 196, on the detector kernel with seed field-191 and a PSF of FWHM 3.0 pixels. The truth is hidden until a control shows it. A real frame has no such truth, which is why the miss is measured by injection.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: the curve at 3 sigma, the refusal to lend it to another search, and the curve against the field’s own stars. Advanced: stars of the wrong width, and what a curve is a statement about.',
+      },
+      {
+        name: 'Predictions before answers',
+        text: 'What the list will hold is predicted before it is read, and is never marked wrong in the report.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'The detector’s list is every star in the field.',
+        response:
+          'It is the sources that stood out of the noise at its threshold; at 4 sigma the field’s ten faintest stars are not on it, and at 2.5 sigma seven of 44 entries are noise.',
+      },
+      {
+        claim: 'A lower threshold is always better.',
+        response:
+          'It lists more stars and more noise: 44 sources at 2.5 sigma, seven of them noise, and 73 at 2 sigma with 36 of them noise.',
+      },
+      {
+        claim: 'The faintest source on the list is the limit of the search.',
+        response:
+          'It is the faintest that happened to cross the threshold; the completeness curve, from added stars, is what says how many were missed.',
+      },
+      {
+        claim: 'The completeness curve is a property of the telescope.',
+        response:
+          'It is a property of one search of one frame: change the threshold from 4 to 3 sigma and the half point moves by a third of a magnitude.',
+      },
+      {
+        claim: 'A wider star is easier to find.',
+        response:
+          'It spreads the same light over more pixels against the same noise: stars of 4.5 pixels are found half the time at −2.79 against −2.47 for stars of 3.',
+      },
+    ],
+    teachingNotes: [
+      'The stars are not real and the sky is not a sky: a table of positions and signal to noise, placed on the detector kernel. The injected stars are the tool’s Gaussians, which is also what the field’s stars are, so the curve predicts the field well; a real frame has no such guarantee.',
+      'Magnitudes are instrumental (minus 2.5 log10 of electrons a second): there is no zero point, and a magnitude of −2.5 is a bright star here only because the exposure is 30 seconds.',
+      'The injection is twelve trials of twenty stars with a seeded stream: the share in a bin is a count of a few dozen, with an exact binomial interval, and the half point’s own interval is shown.',
+      'The widths offered run from 2 to 4.5 pixels in half-pixel steps; the measured width is 3.00 ± 0.02, so 3 is the honest choice, and the others are there to be refused.',
+      'Nothing here is a detection limit for an instrument: the completeness is for this frame and this search only (IMAGE_INVESTIGATIONS.md, “Part 3”).',
+    ],
+    discussion: [
+      'What would you need to know about a second frame before using this curve on it?',
+      'Why can the detector’s own list not tell you what it missed?',
+      'What does a lower threshold cost, and who pays for it in a survey?',
+    ],
+    extensions: [
+      'Open the Observatory’s detection and injection panels on a frame of your own and repeat the three measurements.',
+      'Continue with The Completeness Curve, which asks what a survey’s own selection does to the population it counts.',
+    ],
+    modelNotes:
+      'js/imagingField.js: the frame from the detector kernel (js/kernels/detector/frame.js), detectIn, selectStars and measurePsf of js/measure/detect.js, run, appliesTo and conditionsOf of js/measure/inject.js. See IMAGE_INVESTIGATIONS.md.',
+  },
+};
+
+const FIELD_FLOW = {
+  'what-is-in-this-field': [
+    {
+      from: 'a-field-of-stars',
+      to: 'predict-the-list',
+      text: 'One synthetic frame, forty stars, bright to faint; students predict what a detector at four sigma will list.',
+    },
+    {
+      from: 'how-many-sources',
+      to: 'lower-the-threshold',
+      text: 'Thirty sources at four sigma; 44 at 2.5 sigma, seven of them only noise.',
+    },
+    {
+      from: 'the-width',
+      to: 'why-the-width',
+      text: 'The width of the stars, 3.00 ± 0.02 pixels, and why the stars added to test the search must have it.',
+    },
+    {
+      from: 'one-magnitude',
+      to: 'how-faint',
+      text: 'Added stars found and missed by magnitude; half at −2.47 and nine in ten at −2.87, and why “how faint” has a curve for an answer.',
+    },
+    {
+      from: 'what-you-worked-out',
+      to: 'what-you-worked-out',
+      text: 'The close: a list is not the sky, and a curve belongs to one search.',
+    },
+  ],
+};
+
+const FIELD_EXPECTATIONS = {
+  'what-is-in-this-field': {
+    'how-many-sources': 'Exactly 30 sources and no flagged source.',
+    'lower-the-threshold':
+      'Exactly 44 sources, 7 of them not a star that was placed.',
+    'the-width':
+      'Six stars, a width of 3.00 px (within 0.03) and an uncertainty of 0.02 px (within 0.005).',
+    'one-magnitude':
+      '100 percent (within 0.5) in the brightest bin and 31 percent (within 1) in the bin from −2.5 to −2.2.',
+    'the-curve':
+      'Half found at −2.47 (within 0.03) and nine in ten at −2.87 (within 0.03).',
+  },
+};
+
+const FIELD_BANDS = {
+  'what-is-in-this-field': {
+    core: 'medium',
+    quantitative: 'medium',
+    advanced: 'long',
+  },
+};
+
 export const INSTRUCTOR = {
   content: {
     ...CRATER_CONTENT,
+    ...FIELD_CONTENT,
     'what-is-a-measurement': {
       topic:
         'What a measurement is: repeated marks of one synthetic star, their spread, the mean and its standard error, and what the standard error does not include',
@@ -2152,6 +2483,7 @@ export const INSTRUCTOR = {
     },
   },
   flow: {
+    ...FIELD_FLOW,
     'what-is-a-measurement': [
       {
         from: 'a-star-on-a-frame',
@@ -2393,6 +2725,7 @@ export const INSTRUCTOR = {
   },
   expectations: {
     ...CRATER_EXPECTATIONS,
+    ...FIELD_EXPECTATIONS,
     'what-is-a-measurement': {
       'read-the-spread':
         'With 5 marks: mean x 31.10 px (within 0.05) and spread 0.80 px (within 0.03).',
@@ -2455,6 +2788,7 @@ export const INSTRUCTOR = {
   },
   bands: {
     ...CRATER_BANDS,
+    ...FIELD_BANDS,
     'what-is-a-measurement': {
       core: 'medium',
       quantitative: 'medium',
@@ -2502,4 +2836,5 @@ export default {
   [CRATERS_BY_SIZE_DEEPER.id]: CRATERS_BY_SIZE_DEEPER.steps,
   [WHAT_A_CRATER_DIAMETER_IS_WORTH_DEEPER.id]:
     WHAT_A_CRATER_DIAMETER_IS_WORTH_DEEPER.steps,
+  [WHAT_IS_IN_THIS_FIELD_DEEPER.id]: WHAT_IS_IN_THIS_FIELD_DEEPER.steps,
 };

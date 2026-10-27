@@ -2534,6 +2534,17 @@ test.describe('the central experiment of each investigation', () => {
         [10, 10.0, 0.1],
       ],
     },
+    // ---- What is in this field? (Roadmap III, Prompt 191 part 3) ---------------
+    {
+      id: 'what-is-in-this-field',
+      title:
+        'what-is-in-this-field: a lower threshold lists more sources, 30 at 4 sigma and 44 at 2.5 @accepts:ce.what-is-in-this-field',
+      row: /^Sources listed$/i,
+      values: [
+        [4, 30, 0.5],
+        [2.5, 44, 0.5],
+      ],
+    },
     // ---- The ring and tide investigations (Roadmap III, Prompt 204 part 2) ----------
     {
       id: 'why-rings',

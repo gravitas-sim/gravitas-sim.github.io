@@ -46,6 +46,9 @@
       "gravitas_locale": 1,
       "gravitasLocaleChanged": 1
     },
+    "js/imagingField.js": {
+      "gravitas.image": 1
+    },
     "js/instructorExpectations.js": {
       "gravitas.instructor-expectations": 1
     },

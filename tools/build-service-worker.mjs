@@ -336,12 +336,12 @@ export const NEVER_PRECACHED = [
   // measurement and claim files give: the first-visit tier has about 2.6 KB of
   // room and the idle tier about 466 B, and the standing size approval covers
   // neither. D-R10-72.
-  /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(measuring-the-moon|how-far-is-that-star|a-binary-stars-orbit)\.js$/,
-  /^(js\/imagingWidgets\.js|js\/i18n\/(en|es)\.imaging\.js)$/,
+  /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(measuring-the-moon|how-far-is-that-star|a-binary-stars-orbit|what-is-in-this-field)\.js$/,
+  /^(js\/imagingWidgets\.js|js\/imagingField\.js|js\/i18n\/(en|es)\.imaging\.js)$/,
   // Their three thumbnails (3.5 to 3.8 KB each in gzip): the first-visit tier
   // has about 2.5 KB of room, so the cards show no picture until one online
   // visit has kept them. D-R10-72.
-  /^images\/investigations\/(measuring-the-moon|how-far-is-that-star|a-binary-stars-orbit)\.webp$/,
+  /^images\/investigations\/(measuring-the-moon|how-far-is-that-star|a-binary-stars-orbit|what-is-in-this-field)\.webp$/,
   // Weighing Jupiter (Prompt 193, SATELLITE_EPHEMERIS.md, D-R10-74): the lesson
   // and its instruments, the satellite kernel, the moons' pack and the
   // thumbnail. The first-visit and idle tiers have a few hundred bytes of room

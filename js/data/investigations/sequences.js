@@ -262,6 +262,7 @@ export const SEQUENCES = [
       ['measuring-the-moon', 'core', ['what-is-a-measurement']],
       ['how-far-is-that-star', 'quantitative', ['what-does-plus-minus-claim']],
       ['a-binary-stars-orbit', 'quantitative', ['how-far-is-that-star']],
+      ['what-is-in-this-field', 'quantitative', ['signal-noise-and-exposure']],
       ['weighing-jupiter', 'quantitative', ['a-binary-stars-orbit']],
       ['which-surface-is-older', 'core'],
       ['craters-by-size', 'quantitative', ['which-surface-is-older']],

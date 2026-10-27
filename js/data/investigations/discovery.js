@@ -710,6 +710,16 @@ export const DISCOVERY = {
     },
     courseLevel: 'upper',
   },
+  'what-is-in-this-field': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['signal-noise-and-exposure'],
+    textbook: {
+      chapter: 6,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
   'weighing-jupiter': {
     audience: 'intro',
     mathematics: 'algebra',

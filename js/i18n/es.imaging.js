@@ -147,4 +147,72 @@ export const ES_IMAGING = {
   'imgW.o.no.other': 'Se rechazó el ajuste: {code}',
   'imgW.o.value.how':
     'Solo con posiciones no se obtienen las masas de las dos estrellas por separado, solo su suma; la suma supone la distancia, y su incertidumbre lleva la del paralaje, al cubo',
+  'imgW.f.title': 'Un campo de estrellas',
+  'imgW.f.note':
+    'Un cuadro sintético de 192 por 192 píxeles con cuarenta estrellas de todos los brillos sobre un cielo ruidoso, hecho por el núcleo del detector con ruido sembrado. Fije el umbral y lea lo que el detector lista y el ancho de las estrellas que mide en las brillantes. Las estrellas que de verdad se colocaron se pueden mostrar, y solo entonces.',
+  'imgW.f.legend': 'fuentes que el detector lista (con círculo)',
+  'imgW.f.legendTruth': 'fuentes listadas (círculo) · estrellas colocadas (+)',
+  'imgW.f.control.sigma': 'Umbral',
+  'imgW.f.control.truth': 'Estrellas colocadas',
+  'imgW.f.truth.on': 'mostradas',
+  'imgW.f.truth.off': 'ocultas',
+  'imgW.f.preset.default': 'Umbral 4, verdad oculta',
+  'imgW.f.preset.low': 'Umbral 2,5, verdad mostrada',
+  'imgW.f.value.source':
+    'Sintético: cuarenta estrellas de una tabla que hizo la investigación, en un detector con un cielo de 90 electrones por píxel y 8 de ruido de lectura, con ruido sembrado; la verdad está oculta hasta que se active',
+  'imgW.f.row.sigma': 'Umbral, en sigmas del ruido suavizado',
+  'imgW.f.row.sources': 'Fuentes listadas',
+  'imgW.f.row.flagged':
+    'Fuentes con una marca (apiñada, borde, saturada, aguda)',
+  'imgW.f.row.stars': 'Estrellas usadas para el ancho',
+  'imgW.f.row.width': 'Ancho de las estrellas (FWHM)',
+  'imgW.f.row.check': '¿Las describe el modelo?',
+  'imgW.f.value.agree':
+    'Sí, hasta donde llega esta comprobación: una gaussiana y una de Moffat dan el mismo ancho, y el chi cuadrado reducido es {chi2}',
+  'imgW.f.value.limited':
+    'No: el ancho depende del modelo, y el chi cuadrado reducido es {chi2}',
+  'imgW.f.value.nostars':
+    'Ninguna estrella es lo bastante brillante y limpia: ninguna tiene una señal a ruido de 30 o más sin marca',
+  'imgW.f.row.placed': 'Estrellas que se colocaron',
+  'imgW.f.row.found': 'De ellas, listadas como fuente',
+  'imgW.f.row.missed': 'De ellas, no listadas',
+  'imgW.f.row.false': 'Fuentes que no son una estrella colocada',
+  'imgW.f.value.how':
+    'La lista es de lo que sobresale del ruido con este umbral, no de lo que hay. El ancho es una gaussiana circular ajustada a las seis o así estrellas limpias más brillantes: es el ancho de este cuadro solamente, y no ve un perfil que el modelo no pueda dibujar',
+  'imgW.c.title': '¿Cuán débil puede ver el detector?',
+  'imgW.c.note':
+    'Se añaden estrellas de brillo conocido a una copia del mismo cuadro, el detector vuelve a mirar, y la proporción que halla, por magnitud, es la completitud de esta búsqueda en este cuadro. Las magnitudes son instrumentales: menos 2,5 por el logaritmo de los electrones por segundo, así que un número menor es más brillante.',
+  'imgW.c.legend': 'proporción hallada · intervalo del 68 por ciento',
+  'imgW.c.axis': 'magnitud instrumental (más brillante a la izquierda)',
+  'imgW.c.control.sigma': 'Umbral',
+  'imgW.c.control.width': 'Ancho de las añadidas',
+  'imgW.c.control.truth': 'Estrellas del campo',
+  'imgW.c.preset.default': 'Umbral 4, ancho 3',
+  'imgW.c.preset.three': 'Umbral 3, ancho 3',
+  'imgW.c.value.source':
+    'Sintético: estrellas inyectadas en lugares al azar de una copia del campo sintético, doce ensayos de veinte, entre la magnitud menos 3,4 y menos 1,6, con ruido de disparo sembrado',
+  'imgW.c.row.width': 'Ancho de las estrellas inyectadas',
+  'imgW.c.value.width': '{width} px, introducido',
+  'imgW.c.row.measured': 'Ancho medido en las estrellas del campo',
+  'imgW.c.no.other': 'Se rechazó la inyección: {code}',
+  'imgW.c.row.injected': 'Estrellas inyectadas',
+  'imgW.c.value.injected': '{n} en {trials} ensayos',
+  'imgW.c.row.bin': 'Magnitud {bin}',
+  'imgW.c.value.bin':
+    '{k} de {n} halladas ({p} por ciento, intervalo {lo} a {hi})',
+  'imgW.c.row.m50': 'Magnitud con el 50 por ciento hallado',
+  'imgW.c.row.m90': 'Magnitud con el 90 por ciento hallado',
+  'imgW.c.value.cross': '{m} (los bordes del intervalo cruzan en {lo} y {hi})',
+  'imgW.c.value.never': 'la curva nunca lo cruza',
+  'imgW.c.row.extra': 'Fuentes listadas que no se inyectaron, por ensayo',
+  'imgW.c.row.applies':
+    '¿Describe la búsqueda del primer instrumento (umbral 4, ancho 3)?',
+  'imgW.c.value.applies': 'Sí: el mismo ancho, ruido y ajustes',
+  'imgW.c.value.differs':
+    'No: difiere en {what}. Esta curva es la respuesta para la búsqueda con que se midió y para ninguna otra',
+  'imgW.c.row.expected':
+    'Estrellas del campo que esta curva dice que una búsqueda halla',
+  'imgW.c.row.found': 'Estrellas del campo que la búsqueda listó',
+  'imgW.c.value.how':
+    'Solo estrellas aisladas: los campos apiñados son otra medición. Un solo ancho para todo el cuadro, magnitudes instrumentales sin punto cero, y la proporción de un intervalo es un promedio en él. Es la probabilidad de detección de este cuadro y esta búsqueda, no del instrumento',
 };

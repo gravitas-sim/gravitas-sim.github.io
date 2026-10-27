@@ -190,6 +190,7 @@ export const GUIDED = Object.freeze([
   'what-does-plus-minus-claim',
   'what-is-a-gravitational-wave',
   'what-is-a-measurement',
+  'what-is-in-this-field',
   'when-orbits-lock',
   'when-the-method-must-refuse',
   'where-galaxies-live',
