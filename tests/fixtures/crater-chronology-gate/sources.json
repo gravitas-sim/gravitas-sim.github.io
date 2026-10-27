@@ -1,0 +1,257 @@
+{
+  "format": "gravitas.crater-chronology-gate-sources/1",
+  "prompt": 196,
+  "retrieved": "2026-10-27",
+  "consent": "Carl, chat 2026-10-27, relayed by the coordinator: 'Yes, R0-R3 (Recommended)' (R4 and R5 stay out); the downloads were made by the session of Prompt 196 into new, empty scratchpad directories and read, never executed; nothing from them is committed except the transcribed numbers below, with credit",
+  "retrieved_items": [
+    {
+      "id": "craterstats",
+      "what": "craterstats 3.2.1 (Michael, BSD 3-Clause), wheel from PyPI, installed with pip --only-binary into a new venv (Python 3.10.12); its config/functions.txt is the table read for R0 and its Chronologyfn and Productionfn the pin for R3",
+      "url": "https://pypi.org/pypi/craterstats/3.2.1/json",
+      "wheel": {
+        "file": "craterstats-3.2.1-py3-none-any.whl",
+        "bytes": 127388,
+        "sha256": "a7d66da3434b5c085a201c7c8de04a8b374c24c130232d1b133930955e65b93c"
+      },
+      "functionsTxt": {
+        "bytes": 21502,
+        "sha256": "f6170e590275a7ceaa83ae41b8dc0177983eacbd8f741aa0b39ef2777ce60eed"
+      },
+      "licence": "BSD 3-Clause",
+      "why3_2_1": "the latest release that installs on the Python available (3.10); 3.3 and later require Python 3.12 or newer"
+    },
+    {
+      "id": "marchi2009",
+      "what": "Marchi, Mottola, Cremonese, Massironi and Martellato (2009), A new chronology for the Moon and Mercury, AJ 137, 4936; Table 1",
+      "url": "https://arxiv.org/pdf/0903.5137",
+      "bytes": 432328,
+      "sha256": "92c2faea13d2fffa3e73e977964965a5f83523f6575ee5ae842e1680b4e360a1",
+      "licence": "arXiv.org perpetual non-exclusive licence 1.0 (numbers transcribed as facts, with credit)"
+    },
+    {
+      "id": "iqbal2019",
+      "what": "Iqbal, Hiesinger, van der Bogert et al. (2019), Geological mapping and chronology of lunar landing sites: Apollo 11, Icarus 333, 528 (accepted manuscript); Tables 1, 2 and 4",
+      "url": "https://arxiv.org/pdf/2003.03292",
+      "bytes": 3639726,
+      "sha256": "b9e147b064e7fa7bd6e831c1224cfb667a7eca6603a3e5326b5694d43de39a23",
+      "licence": "arXiv.org perpetual non-exclusive licence 1.0 (numbers transcribed as facts, with credit)"
+    }
+  ],
+  "not_retrieved": [
+    {
+      "id": "neukum2001",
+      "what": "Neukum, Ivanov and Hartmann (2001), Space Sci. Rev. 96, 55",
+      "why": "publisher page needs cookies and a subscription; not retrieved. The coefficients come from craterstats' table, which cites it."
+    },
+    {
+      "id": "stoffler2001",
+      "what": "Stoffler and Ryder (2001), Space Sci. Rev. 96, 9, Table VI",
+      "why": "as above; the ages are read from Marchi et al. (2009) Table 1, which quotes that table (a secondary reading)."
+    },
+    {
+      "id": "robbins2014",
+      "what": "Robbins (2014), EPSL 403, 188",
+      "why": "closed access; its Apollo 11 N1 is read from Iqbal et al. (2019) Table 4"
+    },
+    {
+      "id": "michael2010",
+      "what": "Michael and Neukum (2010), EPSL 294, 223",
+      "why": "closed access; not retrieved"
+    },
+    {
+      "id": "iqbal2020-apollo12",
+      "what": "Iqbal et al. (2020), Icarus 345, 113991 (CC BY-NC-ND) and its replication data (Refubium, DOI 10.35003/P0F3MM)",
+      "why": "the publisher refused automated access (HTTP 403) and the repository answered with a bot challenge; one attempt to fetch the PDF with a changed user agent was refused by the permission system and was not repeated or worked around"
+    },
+    {
+      "id": "iqbal2023-apollo14",
+      "what": "Iqbal et al. (2023), Icarus 406, 115732 (CC BY)",
+      "why": "the publisher refused automated access (HTTP 403)"
+    }
+  ],
+  "marchi2009Table1": {
+    "columns": "N1 (NEO), N1 (MBA) per km^2, radiometric age (Gyr, from Stoffler and Ryder 2001 Table VI as quoted)",
+    "rows": [
+      {
+        "name": "Descartes Formation",
+        "n1Neo": 0.0249,
+        "n1Mba": 0.02509,
+        "ageGa": 3.92
+      },
+      {
+        "name": "Imbrium Apennines",
+        "n1Neo": 0.01968,
+        "n1Mba": 0.01931,
+        "ageGa": 3.85
+      },
+      {
+        "name": "Fra Mauro Formation",
+        "n1Neo": 0.02595,
+        "n1Mba": 0.02672,
+        "ageGa": 3.85
+      },
+      {
+        "name": "Mare Tranquillitatis (old)",
+        "n1Neo": 0.01836,
+        "n1Mba": 0.01832,
+        "ageGa": 3.8
+      },
+      {
+        "name": "Taurus Littrow Mares",
+        "n1Neo": 0.01579,
+        "n1Mba": 0.01585,
+        "ageGa": 3.7
+      },
+      {
+        "name": "Mare Tranquillitatis (young)",
+        "n1Neo": 0.0093,
+        "n1Mba": 0.009357,
+        "ageGa": 3.58
+      },
+      {
+        "name": "Mare Fecunditatis",
+        "n1Neo": 0.003234,
+        "n1Mba": 0.003257,
+        "ageGa": 3.41
+      },
+      {
+        "name": "Mare Imbrium",
+        "n1Neo": 0.005468,
+        "n1Mba": 0.005526,
+        "ageGa": 3.3
+      },
+      {
+        "name": "Mare Crisium",
+        "n1Neo": 0.002335,
+        "n1Mba": 0.002377,
+        "ageGa": 3.22
+      },
+      {
+        "name": "Oceanus Procellarum",
+        "n1Neo": 0.003683,
+        "n1Mba": 0.003695,
+        "ageGa": 3.15
+      },
+      {
+        "name": "Copernicus Crater (cont. ejecta)",
+        "n1Neo": 0.001321,
+        "n1Mba": 0.001337,
+        "ageGa": 0.8
+      },
+      {
+        "name": "Copernicus Crater (crater floor)",
+        "n1Neo": 0.001348,
+        "n1Mba": 0.001343,
+        "ageGa": 0.8
+      },
+      {
+        "name": "Tycho crater (cont. ejecta, small craters)",
+        "n1Neo": 0.0003391,
+        "n1Mba": 0.0003401,
+        "ageGa": 0.109
+      },
+      {
+        "name": "Tycho crater (cont. ejecta, large craters)",
+        "n1Neo": 0.0001644,
+        "n1Mba": 0.0001712,
+        "ageGa": 0.109
+      },
+      {
+        "name": "North Ray crater",
+        "n1Neo": 0.0001389,
+        "n1Mba": 0.0001421,
+        "ageGa": 0.053
+      },
+      {
+        "name": "Cone Crater",
+        "n1Neo": 6.97e-5,
+        "n1Mba": 7.131e-5,
+        "ageGa": 0.025
+      }
+    ],
+    "informational": [
+      {
+        "name": "Nectaris Basin",
+        "n1Neo": 0.1327,
+        "n1Mba": 0.06648,
+        "ageGa": 3.92
+      },
+      {
+        "name": "Highlands (all craters and basins)",
+        "n1Neo": 0.7851,
+        "n1Mba": 0.2018,
+        "ageGa": 4.35
+      }
+    ]
+  },
+  "apollo11Counts": {
+    "source": "Iqbal et al. (2019) Table 4 and sections 4.1, 4.2 (areas in km^2, N1 per km^2 with the printed error, craters in the fit)",
+    "rows": [
+      {
+        "id": "iqbal-nac",
+        "by": "Iqbal et al. 2019, LRO NAC merge",
+        "year": 2019,
+        "area": 135,
+        "craters": 140,
+        "n1": 0.00642,
+        "sigma": 0.000543,
+        "label": ""
+      },
+      {
+        "id": "iqbal-wac",
+        "by": "Iqbal et al. 2019, LRO WAC merge",
+        "year": 2019,
+        "area": 800,
+        "craters": 127,
+        "n1": 0.00688,
+        "sigma": 0.000615,
+        "label": ""
+      },
+      {
+        "id": "robbins2014",
+        "by": "Robbins 2014, as quoted in Iqbal et al. 2019 Table 4",
+        "year": 2014,
+        "area": 12828,
+        "craters": 604,
+        "n1": 0.00767,
+        "sigma": 0.00102,
+        "label": ""
+      },
+      {
+        "id": "hiesinger2000",
+        "by": "Hiesinger et al. 2000, unit T17, as quoted",
+        "year": 2000,
+        "area": 3754,
+        "craters": null,
+        "n1": 0.0076,
+        "sigma": 0.001,
+        "label": ""
+      },
+      {
+        "id": "neukum1983-young",
+        "by": "Neukum 1983 'young', as quoted",
+        "year": 1983,
+        "area": 1590,
+        "craters": null,
+        "n1": 0.0064,
+        "sigma": 0.002,
+        "label": "young"
+      },
+      {
+        "id": "neukum1983-old",
+        "by": "Neukum 1983 'old', as quoted",
+        "year": 1983,
+        "area": 1590,
+        "craters": null,
+        "n1": 0.009,
+        "sigma": 0.0018,
+        "label": "old"
+      }
+    ]
+  },
+  "sampleAgesGa": {
+    "apollo11-young": 3.58,
+    "apollo11-old": 3.8,
+    "source": "Marchi et al. (2009) Table 1 (Stoffler and Ryder 2001 Table VI as quoted); Iqbal et al. (2019) gives Group A 3.58 Ga and Group B2 3.80 Ga"
+  }
+}

@@ -6,14 +6,26 @@
   "functions": {
     "status": "typed from the published tables by recall; NOT yet checked against the papers (data request R0). Leg F1.a0 is a consistency check on one coefficient, not a check of the table.",
     "lunarProduction": {
-      "source": "Neukum (1983, Habilitation thesis, Univ. Munich); Neukum, Ivanov and Hartmann (2001), Space Sci. Rev. 96, 55 (the lunar production function, chronology and their use for other bodies)",
+      "source": "Neukum (1983, Habilitation thesis); the coefficients are those of craterstats 3.2.1 (Michael, BSD), config/functions.txt 'Moon, Neukum (1983)', read on 2026-10-27 (R0, R3); the 1983 polynomial is the one paired with the chronology below",
       "form": "log10 N(>=D) = a0 + sum over n = 1..11 of a_n (log10 D)^n, N the cumulative number per km^2 accumulated in one reference unit of the chronology, D in km",
       "a": [
+        -3.0768, -3.6269, 0.43662, 0.79347, 0.086468, -0.26485, -0.066382,
+        0.037923, 0.010596, -0.0022496, -0.00051797, 3.97e-5
+      ],
+      "domainKm": [0.01, 300],
+      "domainNote": "the polynomial is a fit over this range; outside it the function is not defined here and every use refuses",
+      "recalledTable": [
         -3.0768, -3.6269, 0.4366, 0.7935, 0.0865, -0.2649, -0.0664, 0.0379,
         0.0106, -0.0022, -0.000518, 3.97e-5
       ],
-      "domainKm": [0.01, 300],
-      "domainNote": "the polynomial is a fit over this range; outside it the function is not defined here and every use refuses"
+      "variant2001": {
+        "a": [
+          -3.0768, -3.557528, 0.781027, 1.021521, -0.156012, -0.444058,
+          0.019977, 0.08685, -0.005874, -0.006809, 0.000825, 5.54e-5
+        ],
+        "role": "sensitivity only, reported and never judged: the polynomial of Neukum, Ivanov and Hartmann (2001) as craterstats 3.2.1 prints it (its a0 is the 1 Ga constant -3.0768; the paper's printed -3.0876 is judged a typo by craterstats' authors)"
+      },
+      "status": "checked on 2026-10-27 against craterstats 3.2.1's table (see sources.json) and not against the printed papers, which are paywalled and were not retrievable; the recalled table that this file first held is kept under recalledTable and differed from it in the fourth or fifth digit of six coefficients"
     },
     "lunarChronology": {
       "source": "Neukum (1983); Neukum, Ivanov and Hartmann (2001); Hartmann and Neukum (2001), Space Sci. Rev. 96, 165",
@@ -22,7 +34,8 @@
       "lambda": 6.93,
       "c2": 0.000838,
       "calibratedToGa": 3.95,
-      "calibratedNote": "the oldest sample age behind the curve is about 3.9 Ga; older model ages are extrapolation and are flagged as such"
+      "calibratedNote": "the oldest sample age behind the curve is about 3.9 Ga; older model ages are extrapolation and are flagged as such",
+      "status": "c1, lambda and c2 checked against craterstats 3.2.1 ('Moon, Neukum (1983)' and 'Moon, Neukum et al. (2001)' carry the same three constants) and against Marchi et al. (2009), who quote a = 5.44e-14 of Neukum and Ivanov (1994)"
     },
     "martianChronology": {
       "source": "Hartmann and Neukum (2001); Ivanov (2001), Space Sci. Rev. 96, 87 (the Martian production function)",
@@ -54,7 +67,13 @@
     "R2": "the published counts at those sites: the calibration counts of Neukum (1983) and Neukum and Ivanov (1994) as printed, and at least one recount made after 2001 on spacecraft imagery (for example Michael and Neukum 2010, EPSL 294, 223; Robbins 2014, EPSL 403, 188), each with its area and its stated diameter range",
     "R3": "craterstats (Michael and Neukum) installed in the oracle environment, to pin its own age output for the same counts",
     "R4": "for Mars: Ivanov (2001), Hartmann (2005, Icarus 174, 294) and Michael (2013, Icarus 226, 885), to name the factor between the published Martian production functions (not an age)",
-    "R5": "a person to mark craters on the committed frames with the count mode, for leg O2; nothing is simulated"
+    "R5": "a person to mark craters on the committed frames with the count mode, for leg O2; nothing is simulated",
+    "status": {
+      "R0": "coefficients read from craterstats 3.2.1 (a published package that cites the papers); the papers themselves (Space Sci. Rev. 96) are paywalled and not retrieved",
+      "R1": "ages read from Marchi et al. (2009) Table 1, which quotes Stoffler and Ryder (2001) Table VI; the primary table is paywalled and not retrieved",
+      "R2": "N1 densities read from Marchi et al. (2009) Table 1 and, for Apollo 11, from Iqbal et al. (2019, arXiv:2003.03292); not the raw counts of Neukum (1983), and no counts with their areas for the other sites",
+      "R3": "craterstats 3.2.1 installed in a new venv (Python 3.10.12; 3.3 and later need Python 3.12 or newer, not available); Apollo 12 and 14 recounts (Iqbal et al. 2020, 2023) and Robbins (2014) are not retrievable (publisher pages refuse automated access or are paywalled; nothing was circumvented)"
+    }
   },
   "legs": {
     "F1.a0": {
@@ -158,6 +177,15 @@
         "agesReturnedForMars": 0
       },
       "data": "none"
+    },
+    "F1.craterstats": {
+      "what": "the spike's production function and chronology against craterstats 3.2.1's own output on the same grid (R3: its pin): N_PF over the 40 diameters, N1 over the 11 ages, and the age that craterstats' interpolating inverse gives for each N1",
+      "bounds": {
+        "relative": 1e-9,
+        "ageAbsoluteGa": 0.005
+      },
+      "note": "craterstats inverts the chronology by interpolation on a 1000 step grid over 0 to 5 Ga (0.005 Ga), so the age bound is that grid's, not a looseness of ours",
+      "data": "R3"
     }
   },
   "decision": {
@@ -175,6 +203,55 @@
       "id": "c1",
       "before": "any age was computed or any prototype or oracle output existed (commit 62062cfa is the original)",
       "what": "R1.sites' first tolerance (0.3 Ga at 3 Ga and above, 30 percent below) rested on a wrong statement that the exponential term dominates above about 3 Ga; with the committed constants the two terms are equal near 3.5 Ga (a hand estimate from the constants, no output). The tolerance is restated on the density as a factor of 1.5, which is regime-free. The prose in CRATER_CHRONOLOGY_GATE.md followed."
+    },
+    {
+      "id": "c2",
+      "before": "any R-leg age was computed (the intake commit); F1 ran earlier on the recalled table, and its record is replaced by a re-run",
+      "what": "R0: the recalled production table was the Neukum (1983) polynomial typed to four or five digits (a2 0.4366 for 0.43662, a3 0.7935 for 0.79347, a4 0.0865 for 0.086468, a6 -0.0664 for -0.066382, a8 0.0106 for 0.010596, a9 -0.0022 for -0.0022496); the Neukum et al. (2001) polynomial is a different set of coefficients. The functions block now holds the sourced 1983 table, with the 2001 table as a reported sensitivity. No bound moved."
     }
-  ]
+  ],
+  "intake": {
+    "committed": "before any R1, R2 or R3 value was computed",
+    "R1": {
+      "source": "Marchi et al. (2009), AJ 137, 4936, Table 1 (arXiv:0903.5137): N1 per km^2 of each calibration region, derived by the authors from Neukum (1983) and later counts with their own production function (two columns, NEO and MBA), and the radiometric age that the table takes from Stoffler and Ryder (2001) Table VI",
+      "rows": [
+        "Descartes Formation",
+        "Imbrium Apennines",
+        "Fra Mauro Formation",
+        "Mare Tranquillitatis (old)",
+        "Taurus Littrow Mares",
+        "Mare Tranquillitatis (young)",
+        "Mare Fecunditatis",
+        "Mare Imbrium",
+        "Mare Crisium",
+        "Oceanus Procellarum",
+        "Copernicus Crater (cont. ejecta)",
+        "Copernicus Crater (crater floor)",
+        "Tycho crater (cont. ejecta, small craters)",
+        "Tycho crater (cont. ejecta, large craters)",
+        "North Ray crater",
+        "Cone Crater"
+      ],
+      "excluded": {
+        "Highlands (all craters and basins)": "an ensemble, not a site",
+        "Nectaris Basin": "not a site on the contract's list (Apollo, Luna, and the young craters Copernicus, Tycho, North Ray, Cone); a basin age from impact-melt samples counted on large craters. Its figure is reported as an informational row and never judged.",
+        "terrestrial craters": "not the Moon"
+      },
+      "judged": "the NEO column is judged, the MBA column is reported; a row passes when 1/1.5 <= N1_published / N1(T_sample) <= 1.5 with N1(T) from the committed chronology; every row must pass (the leg's committed form: every site retrieved)",
+      "note": "these are published N1 densities, not counts with areas, and they were derived under a production function that is not Neukum's, from counts that are largely the ones the chronology was fitted to: a pass here is consistency with the chronology, not independent accuracy"
+    },
+    "R2": {
+      "rows": "the Apollo 11 landing-site area counts that publish N1 with an error: Iqbal et al. (2019) NAC and WAC merges, Robbins (2014), Hiesinger et al. (2000) and Neukum (1983) 'young' and 'old', as quoted in Iqbal et al. (2019) Table 4",
+      "interval": "N1 +/- 1.96 sigma (the published error read as one sigma of a Poisson count fit, as craterstats prints it), divided and multiplied by the approximation floor f = exp(RMS of ln(N1_published / N1(T_sample)) over the R1 rows)",
+      "sampleAge": "Neukum 'young' 3.58 Ga and 'old' 3.80 Ga for the rows labelled so; every other row against the window 3.58 to 3.80 Ga (Apollo 11's two groups, Marchi 2009 Table 1); a row passes when the interval meets [N1(3.58), N1(3.80)] (or the labelled age's N1)",
+      "bounds": {
+        "rowsOutside": 0
+      }
+    },
+    "R3": {
+      "recounts": "counts made after 2001 on spacecraft imagery that the retrieved sources publish: Iqbal et al. (2019) (LRO NAC and WAC) and Robbins (2014) as quoted there, both at Apollo 11; Hiesinger et al. (2000) and Neukum (1983) are before 2001 and are not recounts here",
+      "passes": "a recount is within tolerance when its N1 is within a factor 1.5 of N1(3.58 Ga) or of N1(3.80 Ga)",
+      "sitesMeasured": "the number of distinct sites with a retrieved post-2001 recount; the committed minimum is 2; a count below the minimum fails the leg (an unmeasurable bound fails), and the reason is data that could not be retrieved, stated"
+    }
+  }
 }
