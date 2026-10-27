@@ -134,6 +134,7 @@ try {
           </li>
           <li><span class="gs-en"><a href="#sizes">Displayed sizes</a></span><span class="gs-es" lang="es"><a href="#sizes">Tamaños mostrados</a></span></li>
           <li><span class="gs-en"><a href="#other">Other educational models</a></span><span class="gs-es" lang="es"><a href="#other">Otros modelos educativos</a></span></li>
+          <li><span class="gs-en"><a href="#craters">Crater counting: what a relative age assumes</a></span><span class="gs-es" lang="es"><a href="#craters">Recuento de cráteres: qué supone una edad relativa</a></span></li>
           <li><span class="gs-en"><a href="#trust">What should I trust this to show?</a></span><span class="gs-es" lang="es"><a href="#trust">¿Qué puedo esperar que muestre con fiabilidad?</a></span></li>
           <li><span class="gs-en"><a href="#validation">Validation: what has been checked</a></span><span class="gs-es" lang="es"><a href="#validation">Validación: qué se ha comprobado</a></span></li>
           <li><span class="gs-en"><a href="#data">Where the data comes from</a></span><span class="gs-es" lang="es"><a href="#data">De dónde provienen los datos</a></span></li>
@@ -2160,6 +2161,60 @@ try {
           </tbody>
         </table>
       </div>
+
+      <h2 id="craters"><span class="gs-en">Crater counting: what a relative age assumes</span><span class="gs-es" lang="es">Recuento de cráteres: qué supone una edad relativa</span></h2>
+      <p>
+        <span class="gs-en">Three investigations (Which Surface Is Older?, Craters by Size and What a Crater Diameter Is
+        Worth) count craters. They compare the craters per area of two regions of the Moon and of Mars, read a
+        size-frequency plot and its slope, and take apart the uncertainty of one diameter. What they report is a
+        <strong>density ratio with an interval</strong>, which says which of two surfaces has collected more craters
+        per area above one diameter. It is not an age in years, and Gravitas computes no age in years anywhere.</span><span class="gs-es" lang="es">Tres investigaciones (¿Qué superficie es más antigua?, Cráteres por tamaño y Lo que vale el diámetro de un cráter) cuentan cráteres. Comparan los cráteres por área de dos regiones de la Luna y de Marte, leen un gráfico de tamaño y frecuencia y su pendiente, y descomponen la incertidumbre de un diámetro. Lo que dan es un <strong>cociente de densidades con un intervalo</strong>, que dice cuál de dos superficies ha acumulado más cráteres por área por encima de un diámetro. No es una edad en años, y Gravitas no calcula ninguna edad en años en ningún sitio.</span>
+      </p>
+      <h3><span class="gs-en">What a relative age assumes</span><span class="gs-es" lang="es">Qué supone una edad relativa</span></h3>
+      <p>
+        <span class="gs-en">A larger density above the same diameter reads as a longer exposure only if all of these hold.
+        The instrument states them beside every ratio and tests none of them.</span><span class="gs-es" lang="es">Una densidad mayor por encima del mismo diámetro se lee como una exposición más larga solo si se cumple todo lo siguiente. El instrumento lo enuncia junto a cada cociente y no comprueba nada de ello.</span>
+      </p>
+      <ul>
+        <li><span class="gs-en">The two surfaces share one production function (the same shape of the size-frequency
+        distribution) and one terrain type.</span><span class="gs-es" lang="es">Las dos superficies comparten una misma función de producción (la misma forma de la distribución de tamaño y frecuencia) y un mismo tipo de terreno.</span></li>
+        <li><span class="gs-en">Neither is saturated above the diameter used, neither has been resurfaced in part, and secondary
+        craters (many small craters made at once by one large impact) are not a large share of either count.
+        Resurfacing and saturation make a surface look younger than it is; secondaries make it look older.</span><span class="gs-es" lang="es">Ninguna está saturada por encima del diámetro usado, ninguna ha sido renovada en parte y los cráteres secundarios (muchos cráteres pequeños hechos a la vez por un solo impacto grande) no son una parte grande de ninguno de los recuentos. La renovación de la superficie y la saturación hacen que parezca más joven de lo que es; los secundarios, más antigua.</span></li>
+        <li><span class="gs-en">Both counts are complete above that diameter. Each region states the diameter from which its count
+        is complete (30 km for the Moon, 20 km for Mars), and a comparison below it is refused. The limit belongs to a
+        count of the picture at its scale, not to the catalog.</span><span class="gs-es" lang="es">Los dos recuentos son completos por encima de ese diámetro. Cada región indica el diámetro desde el cual su recuento es completo (30 km en la Luna, 20 km en Marte), y una comparación por debajo se rechaza. El límite es de un recuento de la imagen a su escala, no del catálogo.</span></li>
+        <li><span class="gs-en">The craters are independent, so that the count in an area is Poisson. Clustered craters make the
+        intervals too narrow.</span><span class="gs-es" lang="es">Los cráteres son independientes, de modo que el recuento en un área es de Poisson. Los cráteres agrupados hacen los intervalos demasiado estrechos.</span></li>
+        <li><span class="gs-en">The ratio is a ratio, not an age in years. Turning it into years needs a production function, a
+        chronology, a correction for saturation and for secondaries, and a completeness correction checked on craters
+        of known size; none is applied, and whether any can be is the question of a later gate.</span><span class="gs-es" lang="es">El cociente es un cociente, no una edad en años. Convertirlo en años necesita una función de producción, una cronología, una corrección por saturación y por secundarios, y una corrección de completitud comprobada con cráteres de tamaño conocido; no se aplica ninguna, y si alguna puede aplicarse es la pregunta de una puerta posterior.</span></li>
+      </ul>
+      <h3><span class="gs-en">What is computed, and what the intervals cover</span><span class="gs-es" lang="es">Qué se calcula y qué cubren los intervalos</span></h3>
+      <p>
+        <span class="gs-en">The density of a region is the number of craters at least as large as a diameter, divided by its area, with
+        an exact Poisson interval (Garwood) on the count. The ratio of two densities has an exact interval from the
+        conditional binomial (Clopper and Pearson): given the two counts together, the share in the first region is
+        binomial. The slope of the size-frequency plot is the maximum-likelihood index of a power law above a diameter, with an
+        exact chi-square interval; it is not a line fitted to the plotted points, whose errors are correlated. Every
+        interval is a statement about counting error only: the uncertainty of the areas, of each diameter, and of what
+        the catalog missed are reported apart and are not added. The diameter of one circle on a map is its radius times the
+        map's scale, corrected for the view of a sphere, with four terms of uncertainty (the scale, placing the circle,
+        where the rim is, and the view) added in quadrature; where the rim is is a number the reader sets and is not a
+        measurement. The kernel (<code>js/measure/craters.js</code>) is checked against closed forms, against scipy on a
+        pinned list, and by the coverage of its intervals on seeded synthetic counts; see
+        <code>CRATER_COUNTING.md</code>.</span><span class="gs-es" lang="es">La densidad de una región es el número de cráteres de al menos un diámetro dividido por su área, con un intervalo de Poisson exacto (Garwood) para el recuento. El cociente de dos densidades tiene un intervalo exacto de la binomial condicional (Clopper y Pearson): dados los dos recuentos juntos, la proporción de la primera región es binomial. La pendiente del gráfico de tamaño y frecuencia es el índice de máxima verosimilitud de una ley de potencias por encima de un diámetro, con un intervalo exacto de chi cuadrado; no es una recta ajustada a los puntos dibujados, cuyos errores están correlacionados. Cada intervalo es una afirmación sobre el error de recuento solamente: la incertidumbre de las áreas, de cada diámetro y de lo que el catálogo pasó por alto se da aparte y no se suma. El diámetro de un círculo en un mapa es su radio por la escala del mapa, corregido por la vista de una esfera, con cuatro términos de incertidumbre (la escala, colocar el círculo, dónde está el borde y la vista) sumados en cuadratura; dónde está el borde es un número que fija el lector y no es una medida. El núcleo (<code>js/measure/craters.js</code>) se comprueba con formas cerradas, con scipy sobre una lista fijada y por la cobertura de sus intervalos en recuentos sintéticos con semilla; véase <code>CRATER_COUNTING.md</code>.</span>
+      </p>
+      <h3><span class="gs-en">Where the craters and pictures come from</span><span class="gs-es" lang="es">De dónde vienen los cráteres y las imágenes</span></h3>
+      <p>
+        <span class="gs-en">The circles on the pictures are not marks anyone made on them. They are the craters of two catalogs, drawn at
+        their listed positions and diameters: for the Moon, LU78287GT (Salamuniccar and others 2013, on the USGS
+        Astrogeology archive, <q>Please cite authors</q>), and for Mars the Robbins database (Robbins and Hynek 2012), of which only each
+        crater's diameter and position at least 20 km are used, with credit, because the collection states no license (a recorded
+        decision). The lunar picture is the Clementine map and the Martian one the Viking color map at 1 km per pixel, both public domain, shown as display-only
+        pictures: they can be marked and measured in pixels and nothing more. Four regions are used, each a
+        spherical rectangle of known area. A count of these pictures by a person has not been made, and nothing simulates one.</span><span class="gs-es" lang="es">Los círculos de las imágenes no son marcas que nadie haya hecho sobre ellas. Son los cráteres de dos catálogos, dibujados en sus posiciones y diámetros indicados: para la Luna, LU78287GT (Salamuniccar y otros 2013, en el archivo de Astrogeología del USGS, <q>Please cite authors</q>), y para Marte la base de datos de Robbins (Robbins y Hynek 2012), de la que solo se usan el diámetro y la posición de cada cráter de al menos 20 km, con crédito, porque la colección no indica licencia (una decisión registrada). La imagen lunar es el mapa de Clementine y la marciana el mapa en color de Viking a 1 km por píxel, ambos de dominio público, mostrados como imágenes solo de visualización: se pueden marcar y medir en píxeles y nada más. Se usan cuatro regiones, cada una un rectángulo esférico de área conocida. No se ha hecho un recuento de estas imágenes por una persona, y nada lo simula.</span>
+      </p>
 
       <h2 id="trust"><span class="gs-en">What should I trust this to show?</span><span class="gs-es" lang="es">¿Qué puedo esperar que muestre con fiabilidad?</span></h2>
       <div class="doc-table-wrap">

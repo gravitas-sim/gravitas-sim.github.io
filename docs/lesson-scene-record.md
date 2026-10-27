@@ -11,15 +11,15 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 69 investigations and 1112 steps: 1022 steps
+Across 72 investigations and 1139 steps: 1049 steps
 declare a scene, 157 let a reader change one, 163 read the
-running integration, 633 show a prescribed model result, 146 draw
-on a stored dataset, 512 put a self-contained panel beside the text,
-273 keep something, and 56 are prose.
-Of 146 prediction loops, 146 are returned to,
-146 produce a measurement before they are answered, and
+running integration, 657 show a prescribed model result, 146 draw
+on a stored dataset, 536 put a self-contained panel beside the text,
+284 keep something, and 56 are prose.
+Of 149 prediction loops, 149 are returned to,
+149 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
-146 hold their marking until the experiment settles them.
+149 hold their marking until the experiment settles them.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -944,6 +944,48 @@ Of 146 prediction loops, 146 are returned to,
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:binary-orbit`, control binary-orbit/plx, measures the mass sum of a visual binary from its fitted orbit, which goes as the cube of the distance and so as the inverse cube of the parallax, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## Which Surface Is Older? (`which-surface-is-older`)
+
+- **Steps:** 10. Scene declared on 10; a reader can change something on 0; 10 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 9 prescribed model, 0 stored dataset, 9 self-contained panel.
+- **What students do:** move-an-instrument-control, commit-a-prediction, record-values, choose-an-option.
+- **Objects the steps declare:** star.
+- **Instruments:** crater-regions.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** which-is-older-predict → count-the-moon, per-area, ratio-moon, reading-the-interval, mars-pair, fewer-craters, what-can-go-wrong, what-you-worked-out → count-the-moon.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:crater-regions`, control crater-regions/dmin, measures the craters at least a chosen diameter across in a lunar highland and a lunar mare, per area, and the density ratio with its interval: 40 and 7 above 30 km, a ratio of 6.4 from 2.8 to 16.9, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## Craters by Size (`craters-by-size`)
+
+- **Steps:** 9. Scene declared on 9; a reader can change something on 0; 9 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 8 prescribed model, 0 stored dataset, 8 self-contained panel.
+- **What students do:** move-an-instrument-control, record-values, commit-a-prediction, choose-an-option.
+- **Objects the steps declare:** star.
+- **Instruments:** crater-sfd.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** narrower-predict → mars-slope, thin-mare, does-mare-differ, roll-off, what-the-flag-says, what-you-worked-out → mars-slope.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:crater-sfd`, control crater-sfd/dmin, measures the number of craters in a power-law fit of the cumulative size-frequency plot, and its index with an interval, as the smallest diameter fitted rises: the Martian highland has 91 craters above 20 km and 31 above 40 km, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## What a Crater Diameter Is Worth (`what-a-crater-diameter-is-worth`)
+
+- **Steps:** 8. Scene declared on 8; a reader can change something on 0; 8 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 7 prescribed model, 0 stored dataset, 7 self-contained panel.
+- **What students do:** move-an-instrument-control, record-values, commit-a-prediction, choose-an-option.
+- **Objects the steps declare:** star.
+- **Instruments:** crater-budget.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** largest-term-predict → the-budget, the-correction, big-correction-small-uncertainty, why-no-age, what-you-worked-out → the-budget.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:crater-budget`, control crater-budget/recognition, measures the uncertainty of a crater diameter from where its rim is, a fraction of the diameter that the reader sets, which dominates the quadrature sum with the scale, the circle's placement and the view: 5.0 percent of 5.3, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Weighing Jupiter From Its Moons (`weighing-jupiter`)
 

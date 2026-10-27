@@ -1,0 +1,66 @@
+{
+ "id": "what-a-crater-diameter-is-worth",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.read-the-diameter.fields.0.unit","km"],
+    ["steps.read-the-diameter.fields.1.unit","km"],
+    ["steps.the-budget.fields.0.unit","%"],
+    ["steps.the-budget.fields.1.unit","%"],
+    ["steps.the-correction.fields.0.unit","km"],
+    ["steps.the-correction.fields.1.unit","%"],
+    ["steps.a-small-circle.fields.0.unit","km"],
+    ["steps.a-small-circle.fields.1.unit","%"],
+    ["steps.coin-toss.fields.0.unit","%"],
+    ["steps.against-the-catalog.fields.0.unit","km"]
+   ],
+   "numbered": [
+    ["steps.read-the-diameter.fields.0.hint","112.0"],
+    ["steps.read-the-diameter.fields.1.hint","5.9"],
+    ["steps.the-budget.fields.0.hint","1.6"],
+    ["steps.the-budget.fields.1.hint","5.0"],
+    ["steps.the-correction.fields.0.hint","101.1"],
+    ["steps.the-correction.fields.1.hint","9.8"],
+    ["steps.a-small-circle.fields.0.hint","22.4"],
+    ["steps.a-small-circle.fields.1.hint","8.2"],
+    ["steps.coin-toss.fields.0.label","Chance the crater is at least 110 km across"],
+    ["steps.coin-toss.fields.0.hint","63"],
+    ["steps.against-the-catalog.fields.0.hint","112.2"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.coin-toss.fields.0.label","Probabilidad de que el cráter mida al menos 110 km"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "read-the-diameter": {
+    "validate": {"calls":232,"distinct":2,"digest":"ed99650dbce9ce86","samples":[null,{"level":"error","message":"Leave the circle as it is (center 113, 76; rim point 25 pixels away at 95 degrees; recognition 5 percent; view corrected) and read “Diameter”."}]}
+   },
+   "the-budget": {
+    "validate": {"calls":232,"distinct":2,"digest":"7b09472b8222451c","samples":[null,{"level":"error","message":"Read “Uncertainty from placing the circle” and “Uncertainty from where the rim is”, as percentages."}]}
+   },
+   "the-correction": {
+    "validate": {"calls":232,"distinct":2,"digest":"d6b6f51f006d1570","samples":[null,{"level":"error","message":"Set “Correct for the view” to off and read the diameter; the percentage is (112.0 minus that diameter) over 112.0."}]}
+   },
+   "a-small-circle": {
+    "validate": {"calls":232,"distinct":2,"digest":"e82b7d807e44a8d2","samples":[null,{"level":"error","message":"Set “Rim point, distance from the center” to 5 px, leave the rest as it is, and read the diameter and “Uncertainty from placing the circle”."}]}
+   },
+   "coin-toss": {
+    "validate": {"calls":97,"distinct":2,"digest":"7de5ea90bc0166fb","samples":[null,{"level":"error","message":"Leave the circle at its start, set “Counting craters at least” to 110 km and read “Chance it is at least 110 km across”."}]}
+   },
+   "against-the-catalog": {
+    "validate": {"calls":97,"distinct":2,"digest":"79f8d27e87995489","samples":[null,{"level":"error","message":"Switch “The catalog’s circles” on and read “The catalog’s crater under your center”."}]}
+   }
+  },
+  "es": "same"
+ }
+}

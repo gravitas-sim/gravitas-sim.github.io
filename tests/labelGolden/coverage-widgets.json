@@ -43,6 +43,7 @@
  "threw": [
   "atmosphere-balance",
   "atmosphere-greenhouse",
-  "atmosphere-scale"
+  "atmosphere-scale",
+  "crater-sfd"
  ]
 }
