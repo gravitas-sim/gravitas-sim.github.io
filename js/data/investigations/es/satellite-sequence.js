@@ -96,7 +96,7 @@ export const WHY_RINGS = {
     },
     {
       title: 'Shoemaker-Levy 9 en Júpiter',
-      body: 'En julio de 1992 el cometa Shoemaker-Levy 9 pasó a 1,3 radios de Júpiter del centro del planeta y se rompió en pedazos. Con el par en <strong>Shoemaker-Levy 9 y Júpiter</strong>, lee el <strong>límite rígido</strong> y el <strong>límite fluido</strong>, en radios de Júpiter (R).',
+      body: 'En julio de 1992 el cometa Shoemaker-Levy 9 pasó a 1,3 radios de Júpiter del centro del planeta y se rompió en pedazos. Con el par en <strong>SL9, Júpiter</strong> (Shoemaker-Levy 9 y Júpiter), lee el <strong>límite rígido</strong> y el <strong>límite fluido</strong>, en radios de Júpiter (R).',
       fields: [{ label: 'Límite rígido' }, { label: 'Límite fluido' }],
     },
     {
@@ -116,7 +116,7 @@ export const WHY_RINGS = {
     },
     {
       title: 'Dónde queda la órbita de Fobos',
-      body: 'Pon el par en <strong>Fobos y Marte</strong> y lee los dos límites en kilómetros desde el centro de Marte.',
+      body: 'Pon el par en <strong>Fobos, Marte</strong> y lee los dos límites en kilómetros desde el centro de Marte.',
       fields: [{ label: 'Límite rígido' }, { label: 'Límite fluido' }],
     },
     {

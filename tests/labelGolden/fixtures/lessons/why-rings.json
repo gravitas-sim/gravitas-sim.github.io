@@ -50,10 +50,10 @@
  "steps": {
   "en": {
    "sl9-limits": {
-    "validate": {"calls":232,"distinct":2,"digest":"1aaa140222e8a61c","samples":[null,{"level":"error","message":"Choose Shoemaker-Levy 9 and Jupiter, leave the distance on “the real one”, then read “Rigid limit” and “Fluid limit” in planet radii (R)."}]}
+    "validate": {"calls":232,"distinct":2,"digest":"44a9cbf53d5e4893","samples":[null,{"level":"error","message":"Choose the pair “SL9, Jupiter”, leave the distance on “the real one”, then read “Rigid limit” and “Fluid limit” in planet radii (R)."}]}
    },
    "phobos-where": {
-    "validate": {"calls":232,"distinct":2,"digest":"3f52b09c5eede89a","samples":[null,{"level":"error","message":"Choose Phobos and Mars with the distance on “the real one”, then read “Rigid limit” and “Fluid limit” in kilometers."}]}
+    "validate": {"calls":232,"distinct":2,"digest":"18339bc14b473b36","samples":[null,{"level":"error","message":"Choose the pair “Phobos, Mars” with the distance on “the real one”, then read “Rigid limit” and “Fluid limit” in kilometers."}]}
    },
    "where-the-gap-falls": {
     "validate": {"calls":232,"distinct":2,"digest":"5f361ba8610240ab","samples":[null,{"level":"error","message":"Choose Mimas, p = 2 and q = 1, then read “Radius of the 2:1 resonance” and “From that feature”; the offset is a percentage, either sign."}]}

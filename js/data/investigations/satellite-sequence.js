@@ -319,7 +319,7 @@ export const WHY_RINGS = {
       title: 'Shoemaker-Levy 9 at Jupiter',
       body: `In July 1992 comet Shoemaker-Levy 9 passed 1.3 Jupiter radii from the
              center of Jupiter and broke into pieces. With the pair set to
-             <strong>Shoemaker-Levy 9 and Jupiter</strong>, read the <strong>rigid limit</strong>
+             <strong>SL9, Jupiter</strong> (Shoemaker-Levy 9 and Jupiter), read the <strong>rigid limit</strong>
              and the <strong>fluid limit</strong>, in Jupiter radii (R).`,
       fields: [
         { id: 'rigid', label: 'Rigid limit', unit: 'R', hint: '1.64' },
@@ -337,7 +337,7 @@ export const WHY_RINGS = {
         return {
           level: 'error',
           message:
-            'Choose Shoemaker-Levy 9 and Jupiter, leave the distance on “the real one”, then read “Rigid limit” and “Fluid limit” in planet radii (R).',
+            'Choose the pair “SL9, Jupiter”, leave the distance on “the real one”, then read “Rigid limit” and “Fluid limit” in planet radii (R).',
         };
       },
       tool: RO({ system: 1, own: 1 }),
@@ -370,7 +370,7 @@ export const WHY_RINGS = {
       stage: STAGE,
       type: 'measure',
       title: 'Where Phobos’s orbit lies',
-      body: `Set the pair to <strong>Phobos and Mars</strong> and read the two limits in
+      body: `Set the pair to <strong>Phobos, Mars</strong> and read the two limits in
              kilometers from the center of Mars.`,
       fields: [
         { id: 'rigid', label: 'Rigid limit', unit: 'km', hint: '5466' },
@@ -388,7 +388,7 @@ export const WHY_RINGS = {
         return {
           level: 'error',
           message:
-            'Choose Phobos and Mars with the distance on “the real one”, then read “Rigid limit” and “Fluid limit” in kilometers.',
+            'Choose the pair “Phobos, Mars” with the distance on “the real one”, then read “Rigid limit” and “Fluid limit” in kilometers.',
         };
       },
       tool: RO({ system: 0, own: 1 }),

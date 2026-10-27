@@ -4,7 +4,7 @@
    "static": {
     "title": "Where does a moon fall apart?",
     "note": "A satellite held together by its own gravity is pulled apart once the planet’s tide across it beats its self-gravity. For a given pair of densities that happens inside the Roche limit: close in for a rigid satellite (the rigid limit), farther out for one that can deform (the fluid limit). Choose a pair, and move the satellite.",
-    "controls": [{"id":"system","label":"Pair","unit":null,"min":0,"max":3,"step":1,"value":0,"decimals":0},{"id":"own","label":"Distance","unit":null,"min":0,"max":1,"step":1,"value":1,"decimals":0},{"id":"radii","label":"My distance (planet radii)","unit":null,"min":1,"max":12,"step":0.1,"value":3,"decimals":1}],
+    "controls": [{"id":"system","label":"Pair","unit":null,"min":0,"max":3,"step":1,"value":0,"decimals":0},{"id":"own","label":"Distance","unit":null,"min":0,"max":1,"step":1,"value":1,"decimals":0},{"id":"radii","label":"Distance (R)","unit":null,"min":1,"max":12,"step":0.1,"value":3,"decimals":1}],
     "presets": [],
     "actions": [],
     "defaults": {"system":"0","own":"1","radii":"3"}
@@ -27,8 +27,8 @@
    "controls": {
     "calls": 39,
     "distinct": 19,
-    "digest": "5a383022a9b40a24",
-    "samples": [["Phobos and Mars","the real one","3.0"],["Phobos and Mars","the real one","1.0"],["Phobos and Mars","my own","1.0"],["Phobos and Mars","my own","3.0"],["Ice in Saturn’s B ring","the real one","12.0"],["The Moon and the Earth","the real one","6.5"],["The Moon and the Earth","the real one","3.0"],["Shoemaker-Levy 9 and Jupiter","the real one","3.0"],["Shoemaker-Levy 9 and Jupiter","the real one","3.7"],["Ice in Saturn’s B ring","the real one","3.0"],["Ice in Saturn’s B ring","the real one","2.7"],["Phobos and Mars","the real one","12.0"],["Phobos and Mars","my own","11.8"],["Shoemaker-Levy 9 and Jupiter","my own","7.9"]]
+    "digest": "c3a7c428bbad76cc",
+    "samples": [["Phobos, Mars","the real one","3.0"],["Phobos, Mars","the real one","1.0"],["Phobos, Mars","my own","1.0"],["Phobos, Mars","my own","3.0"],["B-ring ice","the real one","12.0"],["Moon, Earth","the real one","6.5"],["Moon, Earth","the real one","3.0"],["SL9, Jupiter","the real one","3.0"],["SL9, Jupiter","the real one","3.7"],["B-ring ice","the real one","3.0"],["B-ring ice","the real one","2.7"],["Phobos, Mars","the real one","12.0"],["Phobos, Mars","my own","11.8"],["SL9, Jupiter","my own","7.9"]]
    },
    "phases": {
     "calls": 0,
@@ -41,7 +41,7 @@
    "static": {
     "title": "¿Dónde se desintegra una luna?",
     "note": "Un satélite que solo su propia gravedad mantiene unido se deshace cuando la marea del planeta a través de él supera su autogravedad. Para un par de densidades dado eso ocurre dentro del límite de Roche: más cerca para un satélite rígido (el límite rígido), más lejos para uno que puede deformarse (el límite fluido). Elige un par y mueve el satélite.",
-    "controls": [{"id":"system","label":"Par","unit":null,"min":0,"max":3,"step":1,"value":0,"decimals":0},{"id":"own","label":"Distancia","unit":null,"min":0,"max":1,"step":1,"value":1,"decimals":0},{"id":"radii","label":"Mi distancia (radios del planeta)","unit":null,"min":1,"max":12,"step":0.1,"value":3,"decimals":1}],
+    "controls": [{"id":"system","label":"Par","unit":null,"min":0,"max":3,"step":1,"value":0,"decimals":0},{"id":"own","label":"Distancia","unit":null,"min":0,"max":1,"step":1,"value":1,"decimals":0},{"id":"radii","label":"Distancia (R)","unit":null,"min":1,"max":12,"step":0.1,"value":3,"decimals":1}],
     "presets": [],
     "actions": [],
     "defaults": {"system":"0","own":"1","radii":"3"}
@@ -64,8 +64,8 @@
    "controls": {
     "calls": 39,
     "distinct": 19,
-    "digest": "685da5b2fb33489e",
-    "samples": [["Fobos y Marte","la real","3.0"],["Fobos y Marte","la real","1.0"],["Fobos y Marte","la mía","1.0"],["Fobos y Marte","la mía","3.0"],["Hielo en el anillo B de Saturno","la real","12.0"],["La Luna y la Tierra","la real","6.5"],["La Luna y la Tierra","la real","3.0"],["Shoemaker-Levy 9 y Júpiter","la real","3.0"],["Shoemaker-Levy 9 y Júpiter","la real","3.7"],["Hielo en el anillo B de Saturno","la real","3.0"],["Hielo en el anillo B de Saturno","la real","2.7"],["Fobos y Marte","la real","12.0"],["Fobos y Marte","la mía","11.8"],["Shoemaker-Levy 9 y Júpiter","la mía","7.9"]]
+    "digest": "daa00c1a02037180",
+    "samples": [["Fobos, Marte","la real","3.0"],["Fobos, Marte","la real","1.0"],["Fobos, Marte","la mía","1.0"],["Fobos, Marte","la mía","3.0"],["Hielo anillo B","la real","12.0"],["Luna, Tierra","la real","6.5"],["Luna, Tierra","la real","3.0"],["SL9, Júpiter","la real","3.0"],["SL9, Júpiter","la real","3.7"],["Hielo anillo B","la real","3.0"],["Hielo anillo B","la real","2.7"],["Fobos, Marte","la real","12.0"],["Fobos, Marte","la mía","11.8"],["SL9, Júpiter","la mía","7.9"]]
    },
    "phases": {
     "calls": 0,
@@ -80,7 +80,7 @@
    "static": {
     "title": "Where does a moon’s resonance fall in the ring?",
     "note": "A ring particle whose orbital period is a simple fraction of a moon’s is pulled by the moon at the same point of every orbit, and those tugs add up. The p:q resonance lies at a radius set by the moon’s distance alone. Choose a moon and a ratio and set the radius against the edges and gaps of Saturn’s rings.",
-    "controls": [{"id":"moon","label":"Moon","unit":null,"min":0,"max":2,"step":1,"value":0,"decimals":0},{"id":"p","label":"p (the moon’s period over the particle’s, times q)","unit":null,"min":2,"max":6,"step":1,"value":2,"decimals":0},{"id":"q","label":"q","unit":null,"min":1,"max":3,"step":1,"value":1,"decimals":0}],
+    "controls": [{"id":"moon","label":"Moon","unit":null,"min":0,"max":2,"step":1,"value":0,"decimals":0},{"id":"p","label":"p","unit":null,"min":2,"max":6,"step":1,"value":2,"decimals":0},{"id":"q","label":"q","unit":null,"min":1,"max":3,"step":1,"value":1,"decimals":0}],
     "presets": [],
     "actions": [],
     "defaults": {"moon":"0","p":"2","q":"1"}
@@ -117,7 +117,7 @@
    "static": {
     "title": "¿Dónde cae la resonancia de una luna dentro del anillo?",
     "note": "Una partícula del anillo cuyo periodo orbital es una fracción simple del de una luna recibe el tirón de la luna en el mismo punto de cada órbita, y esos tirones se suman. La resonancia p:q está en un radio que fija solo la distancia de la luna. Elige una luna y una razón y compara el radio con los bordes y huecos de los anillos de Saturno.",
-    "controls": [{"id":"moon","label":"Luna","unit":null,"min":0,"max":2,"step":1,"value":0,"decimals":0},{"id":"p","label":"p (el periodo de la luna entre el de la partícula, por q)","unit":null,"min":2,"max":6,"step":1,"value":2,"decimals":0},{"id":"q","label":"q","unit":null,"min":1,"max":3,"step":1,"value":1,"decimals":0}],
+    "controls": [{"id":"moon","label":"Luna","unit":null,"min":0,"max":2,"step":1,"value":0,"decimals":0},{"id":"p","label":"p","unit":null,"min":2,"max":6,"step":1,"value":2,"decimals":0},{"id":"q","label":"q","unit":null,"min":1,"max":3,"step":1,"value":1,"decimals":0}],
     "presets": [],
     "actions": [],
     "defaults": {"moon":"0","p":"2","q":"1"}
@@ -156,7 +156,7 @@
    "static": {
     "title": "How the Moon’s orbit and the day change",
     "note": "The Moon raises a tide on the Earth that runs ahead of it, because the Earth spins faster than the Moon orbits. That bulge pulls the Moon forward, so the Moon recedes, and drags the Earth’s spin down, so the day lengthens. The table is the model’s closed form: nothing is simulated and no force acts.",
-    "controls": [{"id":"k2","label":"k2 (the Earth’s tidal response)","unit":null,"min":0.05,"max":0.6,"step":0.01,"value":0.3,"decimals":2},{"id":"Q","label":"Q (the Earth’s tidal quality factor)","unit":null,"min":5,"max":200,"step":1,"value":12,"decimals":0},{"id":"gyr","label":"Time from now (billion years; negative is the past)","unit":null,"min":-4,"max":4,"step":0.1,"value":1,"decimals":1}],
+    "controls": [{"id":"k2","label":"k2","unit":null,"min":0.05,"max":0.6,"step":0.01,"value":0.3,"decimals":2},{"id":"Q","label":"Q","unit":null,"min":5,"max":200,"step":1,"value":12,"decimals":0},{"id":"gyr","label":"Time (Gyr)","unit":null,"min":-4,"max":4,"step":0.1,"value":1,"decimals":1}],
     "presets": [],
     "actions": [],
     "defaults": {"k2":"0.3","Q":"12","gyr":"1"}
@@ -193,7 +193,7 @@
    "static": {
     "title": "Cómo cambian la órbita de la Luna y el día",
     "note": "La Luna levanta en la Tierra una marea que va por delante de ella, porque la Tierra gira más rápido de lo que la Luna orbita. Ese abultamiento tira de la Luna hacia delante, así que la Luna se aleja, y frena el giro de la Tierra, así que el día se alarga. La tabla es la forma cerrada del modelo: no se simula nada y no actúa ninguna fuerza.",
-    "controls": [{"id":"k2","label":"k2 (la respuesta de marea de la Tierra)","unit":null,"min":0.05,"max":0.6,"step":0.01,"value":0.3,"decimals":2},{"id":"Q","label":"Q (el factor de calidad de marea de la Tierra)","unit":null,"min":5,"max":200,"step":1,"value":12,"decimals":0},{"id":"gyr","label":"Tiempo desde ahora (miles de millones de años; negativo es el pasado)","unit":null,"min":-4,"max":4,"step":0.1,"value":1,"decimals":1}],
+    "controls": [{"id":"k2","label":"k2","unit":null,"min":0.05,"max":0.6,"step":0.01,"value":0.3,"decimals":2},{"id":"Q","label":"Q","unit":null,"min":5,"max":200,"step":1,"value":12,"decimals":0},{"id":"gyr","label":"Tiempo (Ga)","unit":null,"min":-4,"max":4,"step":0.1,"value":1,"decimals":1}],
     "presets": [],
     "actions": [],
     "defaults": {"k2":"0.3","Q":"12","gyr":"1"}
@@ -232,7 +232,7 @@
    "static": {
     "title": "How much heat does Io’s tide make?",
     "note": "Jupiter’s tide flexes Io, and because Io’s orbit is slightly eccentric the flexing never stops. The friction in the flexing is heat. The formula gives the heat as a multiple of k2/Q, a number nobody knows for Io, so the honest answer is a range. Set the heat against what is observed.",
-    "controls": [{"id":"k2","label":"k2 (Io’s tidal response)","unit":null,"min":0.1,"max":1.5,"step":0.05,"value":1.5,"decimals":2},{"id":"Q","label":"Q (Io’s tidal quality factor)","unit":null,"min":5,"max":500,"step":1,"value":100,"decimals":0},{"id":"e","label":"Io’s orbital eccentricity","unit":null,"min":0.001,"max":0.01,"step":0.0001,"value":0.0041,"decimals":4}],
+    "controls": [{"id":"k2","label":"k2","unit":null,"min":0.1,"max":1.5,"step":0.05,"value":1.5,"decimals":2},{"id":"Q","label":"Q","unit":null,"min":5,"max":500,"step":1,"value":100,"decimals":0},{"id":"e","label":"Eccentricity","unit":null,"min":0.001,"max":0.01,"step":0.0001,"value":0.0041,"decimals":4}],
     "presets": [],
     "actions": [],
     "defaults": {"k2":"1.5","Q":"100","e":"0.0041"}
@@ -269,7 +269,7 @@
    "static": {
     "title": "¿Cuánto calor produce la marea de Ío?",
     "note": "La marea de Júpiter flexiona a Ío, y como su órbita es algo excéntrica la flexión nunca cesa. El rozamiento de la flexión es calor. La fórmula da el calor como un múltiplo de k2/Q, un número que nadie conoce para Ío, así que la respuesta honesta es un intervalo. Compara el calor con lo que se observa.",
-    "controls": [{"id":"k2","label":"k2 (la respuesta de marea de Ío)","unit":null,"min":0.1,"max":1.5,"step":0.05,"value":1.5,"decimals":2},{"id":"Q","label":"Q (el factor de calidad de marea de Ío)","unit":null,"min":5,"max":500,"step":1,"value":100,"decimals":0},{"id":"e","label":"Excentricidad orbital de Ío","unit":null,"min":0.001,"max":0.01,"step":0.0001,"value":0.0041,"decimals":4}],
+    "controls": [{"id":"k2","label":"k2","unit":null,"min":0.1,"max":1.5,"step":0.05,"value":1.5,"decimals":2},{"id":"Q","label":"Q","unit":null,"min":5,"max":500,"step":1,"value":100,"decimals":0},{"id":"e","label":"Excentricidad","unit":null,"min":0.001,"max":0.01,"step":0.0001,"value":0.0041,"decimals":4}],
     "presets": [],
     "actions": [],
     "defaults": {"k2":"1.5","Q":"100","e":"0.0041"}

@@ -21,11 +21,11 @@ export const ES_TIDES = {
   'tideW.r.control.own': 'Distancia',
   'tideW.r.real': 'la real',
   'tideW.r.mine': 'la mía',
-  'tideW.r.control.radii': 'Mi distancia (radios del planeta)',
-  'tideW.r.sys.phobos': 'Fobos y Marte',
-  'tideW.r.sys.sl9': 'Shoemaker-Levy 9 y Júpiter',
-  'tideW.r.sys.moon': 'La Luna y la Tierra',
-  'tideW.r.sys.ring': 'Hielo en el anillo B de Saturno',
+  'tideW.r.control.radii': 'Distancia (R)',
+  'tideW.r.sys.phobos': 'Fobos, Marte',
+  'tideW.r.sys.sl9': 'SL9, Júpiter',
+  'tideW.r.sys.moon': 'Luna, Tierra',
+  'tideW.r.sys.ring': 'Hielo anillo B',
   'tideW.r.axis.x': 'Distancia (radios del planeta)',
   'tideW.r.axis.y':
     'Marea a través del satélite, en unidades de la del límite rígido',
@@ -46,8 +46,7 @@ export const ES_TIDES = {
   'tideW.s.note':
     'Una partícula del anillo cuyo periodo orbital es una fracción simple del de una luna recibe el tirón de la luna en el mismo punto de cada órbita, y esos tirones se suman. La resonancia p:q está en un radio que fija solo la distancia de la luna. Elige una luna y una razón y compara el radio con los bordes y huecos de los anillos de Saturno.',
   'tideW.s.control.moon': 'Luna',
-  'tideW.s.control.p':
-    'p (el periodo de la luna entre el de la partícula, por q)',
+  'tideW.s.control.p': 'p',
   'tideW.s.control.q': 'q',
   'tideW.s.moon.mimas': 'Mimas',
   'tideW.s.moon.enceladus': 'Encélado',
@@ -67,10 +66,9 @@ export const ES_TIDES = {
   'tideW.m.title': 'Cómo cambian la órbita de la Luna y el día',
   'tideW.m.note':
     'La Luna levanta en la Tierra una marea que va por delante de ella, porque la Tierra gira más rápido de lo que la Luna orbita. Ese abultamiento tira de la Luna hacia delante, así que la Luna se aleja, y frena el giro de la Tierra, así que el día se alarga. La tabla es la forma cerrada del modelo: no se simula nada y no actúa ninguna fuerza.',
-  'tideW.m.control.k2': 'k2 (la respuesta de marea de la Tierra)',
-  'tideW.m.control.Q': 'Q (el factor de calidad de marea de la Tierra)',
-  'tideW.m.control.gyr':
-    'Tiempo desde ahora (miles de millones de años; negativo es el pasado)',
+  'tideW.m.control.k2': 'k2',
+  'tideW.m.control.Q': 'Q',
+  'tideW.m.control.gyr': 'Tiempo (Ga)',
   'tideW.m.axis.x': 'Tiempo desde ahora (miles de millones de años)',
   'tideW.m.axis.y': 'Distancia de la Luna (radios terrestres)',
   'tideW.m.legend.orbit': 'la distancia de la Luna',
@@ -92,9 +90,9 @@ export const ES_TIDES = {
   'tideW.h.title': '¿Cuánto calor produce la marea de Ío?',
   'tideW.h.note':
     'La marea de Júpiter flexiona a Ío, y como su órbita es algo excéntrica la flexión nunca cesa. El rozamiento de la flexión es calor. La fórmula da el calor como un múltiplo de k2/Q, un número que nadie conoce para Ío, así que la respuesta honesta es un intervalo. Compara el calor con lo que se observa.',
-  'tideW.h.control.k2': 'k2 (la respuesta de marea de Ío)',
-  'tideW.h.control.Q': 'Q (el factor de calidad de marea de Ío)',
-  'tideW.h.control.e': 'Excentricidad orbital de Ío',
+  'tideW.h.control.k2': 'k2',
+  'tideW.h.control.Q': 'Q',
+  'tideW.h.control.e': 'Excentricidad',
   'tideW.h.axis.x': 'Excentricidad',
   'tideW.h.axis.y': 'Calentamiento (10^13 W)',
   'tideW.h.legend.chosen': 'mi k2 y mi Q',
