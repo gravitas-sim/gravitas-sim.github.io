@@ -2916,15 +2916,18 @@ export const WHAT_A_CRATER_DIAMETER_IS_WORTH = {
 // One more investigation, appended here for the same reason as the others (the
 // closure cap, D-R10-67). Every number is recomputed in tests/fieldLesson.test.js
 // from the detector and injection tools. The frame is synthetic and says so.
+// A step that hides a control offers no preset: one could move it unseen.
 const FSO = (values = {}, hide = []) => ({
   id: 'field-sources',
   values,
   hide,
+  ...(hide.length ? { presets: false } : {}),
 });
 const FCO = (values = {}, hide = []) => ({
   id: 'field-completeness',
   values,
   hide,
+  ...(hide.length ? { presets: false } : {}),
 });
 
 export const WHAT_IS_IN_THIS_FIELD = {

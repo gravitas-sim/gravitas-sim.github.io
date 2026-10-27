@@ -1869,7 +1869,7 @@ const FIELD_CONTENT = {
       },
       {
         name: 'The synthetic truth',
-        text: 'Forty stars from a table (js/imagingField.js) with matched-filter signal to noise from 3.1 to 196, on the detector kernel with seed field-191 and a PSF of FWHM 3.0 pixels. The truth is hidden until a control shows it. A real frame has no such truth, which is why the lesson measures the miss by injection.',
+        text: 'Forty stars from a table (js/imagingField.js) with matched-filter signal to noise from 3.1 to 196, on the detector kernel with seed field-191 and a PSF of FWHM 3.0 pixels. The truth is hidden until a control shows it. A real frame has no such truth, which is why the miss is measured by injection.',
       },
       {
         name: 'Depth',
