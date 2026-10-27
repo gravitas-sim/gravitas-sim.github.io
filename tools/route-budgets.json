@@ -4,11 +4,11 @@
   "routes": {
     "sources": {
       "front-door": {
-        "kb": 2130.5,
+        "kb": 2128.5,
         "requests": 109
       },
       "sandbox": {
-        "kb": 2130.5,
+        "kb": 2128.5,
         "requests": 109
       },
       "kepler": {
@@ -44,7 +44,7 @@
         "requests": 18
       },
       "figure": {
-        "kb": 2406.6,
+        "kb": 2404.3,
         "requests": 129
       },
       "experiments": {
@@ -76,11 +76,11 @@
         "requests": 31
       },
       "course-builder": {
-        "kb": 1081.3,
+        "kb": 1081.1,
         "requests": 47
       },
       "course-home": {
-        "kb": 279.9,
+        "kb": 279.7,
         "requests": 20
       },
       "lab3d": {
@@ -116,7 +116,7 @@
         "requests": 6
       },
       "course-packs": {
-        "kb": 662.1,
+        "kb": 661.9,
         "requests": 45
       },
       "sky": {
