@@ -13,6 +13,8 @@ const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const FIX = path.join(ROOT, 'tests/fixtures/crater-chronology-gate');
 const TH = JSON.parse(readFileSync(path.join(FIX, 'thresholds.json'), 'utf8'));
 const OR = JSON.parse(readFileSync(path.join(FIX, 'oracle-results.json'), 'utf8'));
+const CS = JSON.parse(readFileSync(path.join(FIX, 'craterstats-results.json'), 'utf8'));
+const SRC = JSON.parse(readFileSync(path.join(FIX, 'sources.json'), 'utf8'));
 const FR = JSON.parse(readFileSync(path.join(ROOT, 'frames/craters-regions.json'), 'utf8'));
 
 const F = TH.functions;
@@ -106,6 +108,13 @@ function poisson(rng, mean) {
   return n;
 }
 
+const A01 = TH.functions.lunarProduction.variant2001.a;
+const pfAt2001 = D => {
+  const L = Math.log10(D);
+  let s = 0;
+  for (let k = A01.length - 1; k >= 0; k--) s = s * L + A01[k];
+  return 10 ** s;
+};
 const rows = [];
 const add = (id, measured, bound, pass, extra = {}) => rows.push({ id, measured, bound, pass, ...extra });
 const rel = (x, y) => Math.abs(x - y) / Math.abs(y);
@@ -236,11 +245,81 @@ const rel = (x, y) => Math.abs(x - y) / Math.abs(y);
   }
 }
 
+
+// F1.craterstats (R3's pin): the same functions as craterstats 3.2.1 prints them
+{
+  const b = TH.legs['F1.craterstats'].bounds;
+  let mxF = 0;
+  CS.D.forEach((D, i) => (mxF = Math.max(mxF, rel(pf(D), CS.pf1983[i]))));
+  CS.T.forEach((T, i) => (mxF = Math.max(mxF, rel(n1(T), CS.n1[i]))));
+  let mxA = 0;
+  CS.T.forEach((T, i) => (mxA = Math.max(mxA, Math.abs(ageOf(CS.n1[i]) - CS.age[i]))));
+  add('F1.craterstats.functions', mxF, b.relative, mxF <= b.relative);
+  add('F1.craterstats.age', mxA, b.ageAbsoluteGa, mxA <= b.ageAbsoluteGa);
+  // reported, never judged: the 2001 polynomial against the 1983 one
+  let mx01 = 0;
+  const rows01 = [1, 3, 16.17, 30].map(D => {
+    const r = pfAt2001(D) / pf(D);
+    mx01 = Math.max(mx01, Math.abs(r - 1));
+    return { D, ratio2001to1983: r };
+  });
+  rows.push({ id: 'info.pf2001vs1983', measured: mx01, bound: null, pass: null, rows: rows01 });
+}
+// R0: the recalled table against the sourced one (reported)
+{
+  const rec = TH.functions.lunarProduction.recalledTable;
+  const pfRec = D => {
+    const L = Math.log10(D);
+    let s = 0;
+    for (let k = rec.length - 1; k >= 0; k--) s = s * L + rec[k];
+    return 10 ** s;
+  };
+  let mx = 0;
+  OR.D.forEach(D => (mx = Math.max(mx, rel(pfRec(D), pf(D)))));
+  rows.push({ id: 'info.R0.recalledVsSourced', measured: mx, bound: null, pass: null });
+}
+
+// R1 (Marchi 2009 Table 1, NEO column judged), R2, R3 (Apollo 11)
+{
+  const f = TH.legs['R1.sites'].tolerance.densityFactor;
+  const inTol = r => r >= 1 / f && r <= f;
+  const m = SRC.marchi2009Table1.rows;
+  let ss = 0;
+  const r1 = m.map(x => {
+    const ref = n1(x.ageGa);
+    const ratio = x.n1Neo / ref;
+    ss += Math.log(ratio) ** 2;
+    rows.push({ id: `R1.${x.name}`, measured: ratio, bound: [1 / f, f], pass: inTol(ratio), ageSample: x.ageGa, ageRecovered: ageOf(x.n1Neo), ratioMba: x.n1Mba / ref, ageRecoveredMba: ageOf(x.n1Mba) });
+    return inTol(ratio);
+  });
+  const rms = Math.sqrt(ss / m.length);
+  const floor = Math.exp(rms);
+  add('R1.count', m.length, TH.legs['R1.sites'].bounds.minimumSitesWithCounts, m.length >= TH.legs['R1.sites'].bounds.minimumSitesWithCounts);
+  add('R1.rowsOutside', r1.filter(x => !x).length, 0, r1.every(Boolean), { rmsLn: rms, floor });
+  for (const x of SRC.marchi2009Table1.informational) rows.push({ id: `info.${x.name}`, measured: x.n1Neo / n1(x.ageGa), bound: null, pass: null, ageRecovered: ageOf(x.n1Neo) });
+  const young = n1(SRC.sampleAgesGa['apollo11-young']);
+  const old = n1(SRC.sampleAgesGa['apollo11-old']);
+  let outside = 0;
+  for (const c of SRC.apollo11Counts.rows) {
+    const lo = Math.max(0, c.n1 - 1.96 * c.sigma) / floor;
+    const hi = (c.n1 + 1.96 * c.sigma) * floor;
+    const [a, b] = c.label === 'young' ? [young, young] : c.label === 'old' ? [old, old] : [young, old];
+    const meets = hi >= a && lo <= b;
+    if (!meets) outside++;
+    rows.push({ id: `R2.${c.id}`, measured: c.n1, bound: [lo, hi], pass: meets, window: [a, b], ageRecovered: ageOf(c.n1) });
+  }
+  add('R2.rowsOutside', outside, TH.intake.R2.bounds.rowsOutside, outside === 0);
+  const rec = SRC.apollo11Counts.rows.filter(c => c.year > 2001);
+  for (const c of rec) {
+    const ok = inTol(c.n1 / young) || inTol(c.n1 / old);
+    rows.push({ id: `R3.${c.id}`, measured: c.n1 / young, bound: [1 / f, f], pass: ok, ratioToOld: c.n1 / old });
+  }
+  const sites = 1; // Apollo 11 is the only site with a retrieved post-2001 recount
+  add('R3.sites', sites, TH.legs['R3.recount'].bounds.minimumRecountSites, sites >= TH.legs['R3.recount'].bounds.minimumRecountSites, { why: 'the Apollo 12 and 14 recounts and the Refubium data could not be retrieved (403, bot challenge, paywall); Robbins 2014 and Iqbal 2019 are both at Apollo 11' });
+}
+
 // not run
 const notRun = {
-  'R1.sites': 'the sample ages and published counts at the returned-sample sites are not in the repository (data requests R0 to R2); nothing was downloaded and no value was typed from memory',
-  'R2.coverage': 'needs the same sample ages and published counts as R1, and the RMS misfit R1 measures (data requests R0 to R2)',
-  'R3.recount': 'needs a published recount made after 2001 at two or more sample sites; none is in hand (data request R2)',
   'O2.own': 'no person has marked craters on the committed frames (R5); nothing is simulated',
   'I1.completeness': 'needs a recognition function measured on crater-like injections and a person or detector to recover them (R5, R2)',
 };
@@ -255,4 +334,4 @@ const out = {
   notRun,
 };
 writeFileSync(path.join(FIX, 'record.json'), JSON.stringify(out, null, 1) + '\n');
-for (const r of rows) console.log(r.pass ? 'pass' : 'FAIL', r.id, r.measured, 'bound', JSON.stringify(r.bound));
+for (const r of rows) console.log(r.pass === null ? 'info' : r.pass ? 'pass' : 'FAIL', r.id, r.measured, 'bound', JSON.stringify(r.bound));
