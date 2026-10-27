@@ -108,3 +108,94 @@ is reported and left failing.
 The near-Earth case is outside every verdict. N1 judges only that the pipeline refuses it with a named status: the
 geocentric approximation costs 29 arcseconds at 0.3 AU and 176 at 0.05, the topocentric position is the station's, and a
 near-Earth determination is a later prompt's.
+
+## The measurement
+
+Spike `spike/orbit-determination-gate` (commit 24cef4fb, never merged): universal-variable propagation, the geocentric
+light-time forward model with the committed pack, Gauss's method (the eighth-degree polynomial, the `f` and `g` series,
+the universal-variable refinement with light time), Laplace's method, differential correction, kappa, the covariance and
+the refusal rule, and the harness `tools/orbit-determination-gate.mjs`. The oracle is an independent Python program
+(`tools/orbit-determination-gate-oracle/oracle.py` on the spike, run as `python -I`, numpy 2.0.2, scipy 1.13.1, nothing of
+Gravitas run): its own decoding of the pack's coefficients, its own draw of the objects, DOP853 integration of the
+perturbed and the unperturbed motion, its own light-time directions, and its own best-fit unperturbed orbits (`Efit`).
+`tests/fixtures/orbit-determination-gate/oracle-results.json` is its output and `record.json` the harness's.
+`tests/orbitDeterminationGate.test.js` judges every leg from the recorded numbers and the committed bounds and holds the
+verdict. The bounds are the committed ones; no bound moved. Two corrections to the spike's numerics were made after the
+first full run and are recorded in `record.json` (k1: the differential correction takes a small Newton step as it stands
+instead of asking the cost to fall, which is flat to rounding at the minimum; k2: the central-difference steps are 1e-5 AU
+and 1e-7 AU per day, because below that the rounding of the residuals divided by the step made the steps cycle at 5e-10
+AU on arcs whose residual is not zero); they changed the longer-arc ok rate from 0.366 to 0.984 and no pass or fail
+elsewhere.
+
+| Leg | Measured | Bound | |
+|---|---|---|---|
+| F1 invariants and round trip | 1.1e-15 and 1.5e-15 AU | 1e-11 | pass |
+| F2 propagation against the oracle's DOP853 | 1.0e-14 AU | 1e-9 | pass |
+| F3 Earth position against the oracle's decoding | 3.4e-16 AU | 1e-9 | pass |
+| F4 observed direction against the oracle's | 3.8e-10 arcsec | 0.001 | pass |
+| F5 exact curated arc | state recovered to 3.2e-14 AU on 12 of 12; status ok on **11** of 12 | 12 of 12 ok | **fail** |
+| G1 curated arc with noise, status ok | **0.916** (1,099 of 1,200; 100 illConditioned, all object 1; 1 noConvergence) | 0.95 | **fail** |
+| G2 kappa of the curated arc at the true state | 11 of 12 at 18 to 289; object 1 at **1,539** | 11 of 12 at 1,000 | pass |
+| G3 withheld epochs, `Wn` / `Wf` | 0.999 / 1.000 within `tol` of the reference; 0.998 / 1.000 within `Efit + 3.44 sigma` of the truth | 0.97 | pass |
+| G4 coverage of the formal 95 and 68 percent ellipses | `Wn` 0.949, 0.678; `Wf` 0.950, 0.690 (2,199 ok draws of 2,400) | 0.92 to 0.98; 0.60 to 0.76 | pass |
+| G5 next-night 95 percent semi-major axis | median 1.3 arcsec; 100 percent of ok draws under 600 | 0.90 | pass |
+| H1 ill-conditioned arcs (3,600 draws) | 0 ok; kappa above 1,000 on all 36 object-arcs | 0.01 | pass |
+| H2 median kappa against the half span | 87,967, 22,220, 3,704, 993, 267, 74, **37 at 60 days, 45 at 90 days** | no rise | **fail** (one rise) |
+| L1 least squares on the longer arc | ok 0.984; within `tol` 1.000 and 1.000; median `Wf` semi-axis 0.41 against 3.67 arcsec (ratio 0.11) | 0.95; 0.97; 1.0 | pass |
+| N1 twelve near-Earth objects (1,200 draws) | 0 ok; nearEarth 360, noConvergence 720, unphysical 120: **0.30** nearEarth or illConditioned; main belt never nearEarth | 0 ok; 0.90 | **fail** |
+| P1 Laplace on the curated arc | median position error 0.65 AU raw, against 1.0e-4 AU for Gauss; the polish from Laplace's start converges on 240 of 240 | reported | not judged |
+| A1 to A4 (the published arc and orbit) | NOT RUN | | |
+
+What the measurement says. The functions are right: propagation, Earth position and the forward model agree with the
+independent oracle to 1e-14 AU and 4e-10 arcsec, and noise-free curated arcs return the state to 3e-14 AU. On a
+well-conditioned arc (`T60`, kappa 18 to 289 on eleven objects) the three-observation determination predicts the next night
+to a median 1.0 arcsecond of the unperturbed reference against a tolerance of 2.7, and 61 days on to 3.9 against 19; the
+model's own error `E` is 0.8 and 2.1 arcseconds at the two epochs, `Efit` 0.03 and 4.1, and the formal prediction
+interval is honest (coverage 0.949 against 0.95). Every ill-conditioned arc refuses: none of the 3,600 draws returned an
+orbit. The least-squares fit of the longer arc is nine times sharper at `Wf` than the curated arc.
+
+The fails are the contract's own legs, not the solver's. F5 asks the exact curated arc to return status ok on every
+object; object 1 (inclination 0.44 degrees, node 2.9 degrees) has kappa 1,539 and is refused, which is G2's allowed
+exception and G1's 8 percent false refusal (the two legs disagree by construction: G2 lets one object in twelve exceed
+the threshold, G1 lets 5 percent of draws refuse). That is a physical finding, taught in Part B: an object on the ecliptic
+seen from the Earth at opposition has parallax only in longitude, and the latitude carries no range information, so
+kappa rises as the inclination falls (object 2, inclination 0.7 degrees, 289; object 3, 2.6 degrees, 50). H2 asks kappa
+never to rise with the half span; it falls to its minimum of 37 at 60 days and rises to 45 at 90 days (the semi-major axis
+of the next-night ellipse likewise, 1.3 to 4.5 arcseconds); the cause is probably that beyond a quarter of the Earth's
+orbit the observer's path stops adding curvature in the direction that matters, a reading this gate did not test. The 60 days chosen a priori is, by this record, the
+best of the sweep. N1 asks 90 percent of near-Earth draws to end as nearEarth or illConditioned; none returns an orbit,
+but 720 end as noConvergence and 120 as unphysical: six of the twelve objects lie within 5 percent of the Earth's
+heliocentric distance, where the committed rule excludes the true root of Gauss's polynomial as the spurious Earth root,
+and the others fail in the iteration. The near-Earth status is therefore **refused**, never determined, and the named
+status is not the one the contract expected.
+
+Verdict by the committed function: **C**, measured on the synthetic legs and not pending: F5, G1, H2 and N1 fail as
+committed, so neither A nor B can follow, whatever the authentic legs give. The authentic legs A1 to A4 are NOT RUN (no
+MPC observation, no published orbit and no station parallax constant is in the repository and nothing was downloaded).
+Part B is not built: it is authorized only by a verdict of A or B.
+
+## What the verdict builds, and what is asked of Carl
+
+**C** (as it stands): no kernel and no orbit-determination investigation; the survey investigation (find the mover by
+blinking, mark it, see it move) and the rate measurement Prompt 186 built stand. Prompt 198's populations slice does not
+depend on this verdict.
+
+The measured record supports a different reading, and the gate leaves the choice to Carl, who alone can reset a bound.
+If he restates the four legs as follows, the committed function gives a **pending A** (every synthetic leg passes; A needs
+A1 to A3 on the published arc, B needs A4): F5 judges the recovery of the state (12 of 12 to 3e-14 AU) and leaves the
+status to G2; G1's minimum ok rate becomes 0.90 (the conditioning exception G2 already allows); H2 judges the fall of
+kappa up to the half span of 60 days, with the rise at 90 days reported as the finding; N1 requires that no draw is ok and
+that every draw ends in a named status. These are recommendations, not changes: nothing in the fixture moved.
+
+For Carl, the requests (`thresholds.json`, `dataRequests`): the MPC observations of one numbered main-belt asteroid over
+240 days (R1, the object chosen by the rule in `intake.object`, Ceres first), its published MPCORB orbit (R2), the MPC
+observatory-code table (R3, about 25 KB), and a published check of the planetary mass ratios (R0, a few hundred bytes).
+They are needed for A1 to A4 only; with the restatements above, the authentic legs would then decide between A and B.
+
+## Not done in this gate
+
+A1 to A4 (the published observations, the published elements and the station constants are not in hand), the
+topocentric observer (the sky kernel's sidereal time and the station vector), the equatorial to ecliptic edge rotation,
+UTC to TDB, stellar aberration and the Moon's offset of the Earth from the Earth-Moon barycentre. Mercury, Saturn, Uranus
+and Neptune are absent from the pack, so `E` is a lower bound within a few percent. Laplace's method is run and reported,
+not judged. Part B (the kernel, the packs, the validation tiers, the investigations, the model page section) is not built.
