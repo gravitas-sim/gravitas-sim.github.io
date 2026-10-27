@@ -997,6 +997,12 @@ export const EN = {
   'scenario.kuiper-belt.title': 'Kuiper Belt',
   'scenario.kuiper-belt.summary':
     "An accurate simulation of our Solar System's Kuiper Belt featuring real dwarf planets (Pluto, Eris, Haumea, Makemake), large KBOs (Quaoar, Sedna, Orcus, Varuna), and smaller objects (Ixion, Huya, 2002 AW197) with realistic masses and orbital properties.",
+  'scenario.ring-gap.title': 'Ring Gap: a moon and a ring',
+  'scenario.ring-gap.summary':
+    'A Saturn-mass planet, a ring of 200 particles, a resonant moon whose 2:1 resonance falls inside the ring and a shepherd moon inside it. A scale model: lengths are stretched and G carries the exaggeration, and both moons are far heavier than Mimas and Pan so that twenty orbits can show the effect. The ring thins at the resonance and clears a lane about the shepherd; it does not empty, because its particles do not collide.',
+  'scenario.roche-pass.title': 'Roche Pass: a clump inside the limit',
+  'scenario.roche-pass.summary':
+    'A planet and a loose clump of 60 particles on an orbit whose closest point is 1.3 planet radii from the planet’s centre, inside both the rigid and the fluid Roche limit for the clump’s density, as Shoemaker-Levy 9 was at Jupiter. A scale model with Newtonian gravity only: the clump is a softened swarm, so it is drawn into a stream at the pass and also loosens slowly by itself.',
   'scenario.sagittarius-a.title': 'Sagittarius A*',
   'scenario.sagittarius-a.summary':
     "The Milky Way's central supermassive black hole (4000 M☉, scaled down for simulation) with fast-moving S-stars, compact objects, and debris in extreme orbits. Witness the incredible gravitational forces and relativistic effects near our galaxy's supermassive black hole.",
