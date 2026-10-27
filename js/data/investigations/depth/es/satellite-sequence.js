@@ -151,7 +151,7 @@ export const WHY_RINGS_DEEPER = {
         close:
           'Casi. La densidad del satélite va en el denominador, dentro de la raíz cúbica.',
         'wrong-order-of-magnitude':
-          'Se pasa una potencia de diez: la respuesta es unos cien mil km, o sea cerca de 134 en miles de km.',
+          'Se pasa una potencia de diez: los radios del paso están en kilómetros y esta respuesta, en miles de km.',
         off: '2,44 R (ρ del planeta / ρ del satélite)^(1/3).',
       },
     },

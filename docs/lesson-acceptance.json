@@ -939,7 +939,7 @@
       "evidenceFrom": "model"
     },
     "tides-that-move-the-moon": {
-      "centralExperimentId": "ce.tides-that-move-the-moon",
+      "centralExperimentId": "ce.moon-recedes",
       "object": "panel:tides-moon",
       "control": "tides-moon/gyr",
       "quantity": "the Moon's distance in a constant-Q model a given time on: 62.9 Earth radii in half a billion years and 65.1 in one billion, against the 60.3 of today",

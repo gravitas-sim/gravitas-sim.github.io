@@ -124,12 +124,10 @@ const EXTENSIONS = {
     import('../data/investigations/depth/why-venus-is-hot.js'),
   'two-greenhouse-models': () =>
     import('../data/investigations/depth/two-greenhouse-models.js'),
-  'why-rings': () =>
-    import('../data/investigations/depth/why-rings.js'),
+  'why-rings': () => import('../data/investigations/depth/why-rings.js'),
   'tides-that-move-the-moon': () =>
     import('../data/investigations/depth/tides-that-move-the-moon.js'),
-  'ios-fire': () =>
-    import('../data/investigations/depth/ios-fire.js'),
+  'ios-fire': () => import('../data/investigations/depth/ios-fire.js'),
 };
 
 /** Their Spanish, loaded only for a Spanish reader. */
@@ -210,12 +208,10 @@ const WORDS = {
       import('../data/investigations/depth/es/why-venus-is-hot.js'),
     'two-greenhouse-models': () =>
       import('../data/investigations/depth/es/two-greenhouse-models.js'),
-    'why-rings': () =>
-      import('../data/investigations/depth/es/why-rings.js'),
+    'why-rings': () => import('../data/investigations/depth/es/why-rings.js'),
     'tides-that-move-the-moon': () =>
       import('../data/investigations/depth/es/tides-that-move-the-moon.js'),
-    'ios-fire': () =>
-      import('../data/investigations/depth/es/ios-fire.js'),
+    'ios-fire': () => import('../data/investigations/depth/es/ios-fire.js'),
     'missing-mass': () =>
       import('../data/investigations/depth/es/missing-mass.js'),
     'the-turning-sky': () =>

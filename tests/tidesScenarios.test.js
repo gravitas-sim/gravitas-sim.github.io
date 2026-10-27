@@ -21,6 +21,7 @@
 // range the recorded sweep spans, not to one value.
 // =============================================================================
 
+/* global URL, process */
 import { describe, test, expect } from '@jest/globals';
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';

@@ -332,7 +332,7 @@ export const WHY_RINGS_DEEPER = {
         close:
           'Close. The satellite’s density is in the denominator, inside the cube root.',
         'wrong-order-of-magnitude':
-          'A power of ten out: the answer is about a hundred thousand km, so about 134 in thousand km.',
+          'A power of ten out: the radii in the step are in kilometers and this answer is in thousand km.',
         off: '2.44 R (ρ planet / ρ satellite)^(1/3).',
       },
       tool: RO({ system: 3, own: 1 }),
@@ -416,7 +416,7 @@ export const TIDES_DEEPER = {
     },
     {
       sid: 'a-q-that-changes',
-      after: 'what-the-model-leaves-out',
+      after: 'moon-locking-time',
       depth: 'advanced',
       type: 'question',
       kind: 'short',
@@ -462,7 +462,7 @@ export const IOS_DEEPER = {
     },
     {
       sid: 'what-the-formula-leaves-out',
-      after: 'what-heat-is',
+      after: 'how-far-from-the-maximum',
       depth: 'advanced',
       type: 'question',
       kind: 'short',

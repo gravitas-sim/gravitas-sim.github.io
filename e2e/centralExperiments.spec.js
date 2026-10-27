@@ -2517,7 +2517,7 @@ test.describe('the central experiment of each investigation', () => {
     {
       id: 'tides-that-move-the-moon',
       title:
-        'tides-that-move-the-moon: the model puts the Moon at 62.9 Earth radii in half a billion years and 65.1 in one billion @accepts:ce.tides-that-move-the-moon',
+        'tides-that-move-the-moon: the model puts the Moon at 62.9 Earth radii in half a billion years and 65.1 in one billion @accepts:ce.moon-recedes',
       row: /^At .* billion years$/i,
       nth: 1,
       values: [

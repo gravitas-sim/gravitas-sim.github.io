@@ -15,12 +15,12 @@
     "initialKb": 830.0,
     "deferredCoreKb": 1985.8,
     "routes": {
-      "front-door": { "kb": 2121.9, "requests": 107 },
-      "sandbox": { "kb": 2121.9, "requests": 107 },
-      "kepler": { "kb": 3342.9, "requests": 146 },
-      "transit": { "kb": 3354.9, "requests": 146 },
-      "power-law": { "kb": 3320.2, "requests": 146 },
-      "largest-lesson": { "kb": 3452.4, "requests": 148 },
+      "front-door": { "kb": 2130.4, "requests": 109 },
+      "sandbox": { "kb": 2130.4, "requests": 109 },
+      "kepler": { "kb": 3342.9, "requests": 148 },
+      "transit": { "kb": 3354.9, "requests": 148 },
+      "power-law": { "kb": 3320.2, "requests": 148 },
+      "largest-lesson": { "kb": 3452.4, "requests": 150 },
       "observatory": "the Observatory with one observation open: read from tools/route-budgets.json"
     }
   },
