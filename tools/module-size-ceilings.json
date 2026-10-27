@@ -17,8 +17,8 @@
     "js/experiments/panel.js": 2028,
     "js/gwWidgets.js": 2180,
     "js/habitabilityWidgets.js": 1699,
-    "js/i18n/en.deferred.js": 3840,
-    "js/i18n/es.deferred.js": 4087,
+    "js/i18n/en.deferred.js": 3834,
+    "js/i18n/es.deferred.js": 4081,
     "js/investigations.js": 3287,
     "js/lessonStage.js": 1905,
     "js/notebook/capture.js": 2081,
@@ -29,6 +29,6 @@
     "js/stellarEvolutionWidgets.js": 1674,
     "js/stellarWidgets.js": 2202,
     "js/tidalWidgets.js": 1655,
-    "js/world/build.js": 2608
+    "js/world/build.js": 2598
   }
 }

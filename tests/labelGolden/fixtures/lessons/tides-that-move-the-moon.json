@@ -3,9 +3,9 @@
  "static": {
   "en": {
    "units": [
-    ["steps.the-moons-recession.fields.0.unit","cm/yr"],
-    ["steps.the-moons-recession.fields.1.unit","ms/cy"],
-    ["steps.forward-one-billion.fields.0.unit","thousand km"],
+    ["steps.the-moons-recession.fields.0.unit",""],
+    ["steps.the-moons-recession.fields.1.unit",""],
+    ["steps.forward-one-billion.fields.0.unit",""],
     ["steps.forward-one-billion.fields.1.unit","h"],
     ["steps.the-model-run-backward.fields.0.unit","Gyr"],
     ["steps.moon-locking-time.unit",""]

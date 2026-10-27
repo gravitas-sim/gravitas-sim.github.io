@@ -2814,14 +2814,11 @@ export const EN_DEFERRED = {
   // ---------------------------------------------------------------------------
   // Instrument prose moved out of the start-up download
   // ---------------------------------------------------------------------------
-  // The dark-matter, transit and black-hole widget families. Nothing in the
-  // entry graph can reach any of them - they are reachable only through
-  // js/widgets.js, which the lazy lesson engine imports - so every visitor was
-  // downloading thirteen kilobytes of instrument labels in order not to use
-  // them. Each of the three modules now calls ensureDeferredMessages() itself,
-  // the way js/chaosWidgets.js and js/resonanceWidgets.js already did, so a
-  // test or an authoring preview that imports one directly still gets its
-  // strings.
+  // The dark-matter, transit and black-hole widget families, reachable only through
+  // js/widgets.js (the lazy lesson engine): every visitor was downloading thirteen
+  // kilobytes of instrument labels to not use them. Each module now calls
+  // ensureDeferredMessages() itself, as js/chaosWidgets.js does, so a test or an
+  // authoring preview that imports one directly still gets its strings.
   'dmW.mondTitle': 'The same curve, two explanations',
   'dmW.mondNote':
     'The halo fit and MOND, scored against the same points. Switch between them, and adjust the disc until each one matches. Watch what each of them needed to be told.',
@@ -3191,11 +3188,9 @@ export const EN_DEFERRED = {
   // ---------------------------------------------------------------------------
   // More prose moved out of the start-up download
   // ---------------------------------------------------------------------------
-  // The front door, the tidal-disruption model, the activity bridge, the export
-  // dialog and the lesson engine are all loaded on demand, so their strings
-  // were downloaded by every visitor in order not to be read. The stellar phase
-  // and class names went with them: they are read only when an inspector card
-  // is built for a star, and the inspector primes this catalog first.
+  // The front door, the tidal-disruption model, the activity bridge, the export dialog
+  // and the lesson engine load on demand, and so do their strings. The stellar phase
+  // and class names went with them: read only when an inspector card is built.
   'export.empty': 'There is nothing recorded to export yet.',
   'export.failed': 'Could not build that file.',
   'export.done': { one: 'Exported {n} row.', other: 'Exported {n} rows.' },
@@ -3826,12 +3821,11 @@ export const EN_DEFERRED = {
     'The gravity worker stopped, so gravity is now worked out on the main thread. The simulation is still correct, but may run more slowly.',
 
   // --- Words a lesson computes ----------------------------------------------
-  // None in English, on purpose. js/i18n/lesson.js looks a computed sentence
-  // up by an id made from what it says, and returns the sentence itself when
-  // the locale has no entry - so an English entry could only ever repeat its
-  // own source, which is what all 139 of them did. The Spanish catalog keeps
-  // its translations under the same ids (js/i18n/es.deferred.js), and
-  // tools/i18n-audit.mjs does not count them as orphans.
+  // None in English, on purpose. js/i18n/lesson.js looks a computed sentence up by an
+  // id made from what it says and returns the sentence itself when the locale has no
+  // entry, so an English entry could only repeat its source (all 139 did). The Spanish
+  // catalog keeps its translations under the same ids; tools/i18n-audit.mjs does not
+  // count them as orphans.
   'assign.roster.help':
     'The code rides on the link into every report, so one code can cover a whole class; it does not say which student made a report. To tell students apart, ask them to type their login or student number where the report asks for a name, or make one link per student.',
   'assign.kit': 'Open the distribution kit',

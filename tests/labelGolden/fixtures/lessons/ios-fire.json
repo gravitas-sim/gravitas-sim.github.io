@@ -4,13 +4,14 @@
   "en": {
    "units": [
     ["steps.heating-at-the-maximum.fields.0.unit","1e13 W"],
-    ["steps.heating-at-the-maximum.fields.1.unit","1e19 J"],
+    ["steps.heating-at-the-maximum.fields.1.unit",""],
     ["steps.double-the-eccentricity.fields.0.unit","1e14 W"],
     ["steps.the-bound.fields.0.unit",""],
     ["steps.how-far-from-the-maximum.unit",""]
    ],
    "numbered": [
     ["steps.heating-at-the-maximum.fields.0.hint","9.33"],
+    ["steps.heating-at-the-maximum.fields.1.label","Energy in one orbit (10¹⁹ J)"],
     ["steps.heating-at-the-maximum.fields.1.hint","1.43"],
     ["steps.double-the-eccentricity.fields.0.hint","3.73"],
     ["steps.the-bound.fields.0.label","k2/Q the observed middle value needs"],
@@ -20,6 +21,7 @@
   "es": {
    "units": [],
    "numbered": [
+    ["steps.heating-at-the-maximum.fields.1.label","Energía en una órbita (10¹⁹ J)"],
     ["steps.the-bound.fields.0.label","k2/Q que necesita el valor medio observado"]
    ]
   }

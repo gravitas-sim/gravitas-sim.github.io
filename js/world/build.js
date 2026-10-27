@@ -35,7 +35,7 @@ import {
   JUPITER_MASSES_PER_SOLAR_MASS,
 } from '../constants.js';
 import { haloEnclosedMass } from '../darkMatter.js';
-import { ringGapSystem, rochePassSystem } from './tidalSystems.js';
+import { TIDAL_GEOMETRY, tidalSystem } from './tidalSystems.js';
 import { HD209458 } from '../data/exoplanetSystems.js';
 import { TRAPPIST1_PLANETS, TRAPPIST1_STAR } from '../data/trappist1.js';
 import {
@@ -294,12 +294,10 @@ export const ENGINE_GEOMETRY = /* @__PURE__ */ Object.freeze({
   // prettier-ignore
   'solar-system': { keep: ['BlackHole', 'NeutronStar', 'WhiteDwarf', 'Debris'], steps: [{ rule: { name: 'published-system', params: { system: 'solar-system' } } }] },
   //
-  // Slice 5: five scenarios that placed bodies inside applyPlacement. `place`
-  // steps run there, between the layout and the momentum balance; `steps` run
-  // at the end of the build, as the other declarations do, and with every type
-  // kept (nothing here replaces the generated population). Binary Black Hole
-  // is placed twice, as the code placed it: its pair again after everything
-  // else, then the planets and the asteroids on circular orbits about the pair.
+  // Slice 5: five scenarios that placed bodies inside applyPlacement. `place` steps run
+  // there, between the layout and the momentum balance; `steps` run at the end of the
+  // build, with every type kept. Binary Black Hole is placed twice, as the code placed
+  // it: its pair again after everything else, then planets and asteroids about the pair.
   // prettier-ignore
   'binary-bh': { keep: KEEP_ALL, place: [{ rule: { name: 'inspiral-pair', params: { separation: 120, perturbation: 0.95 } } }], steps: [
     { rule: { name: 'inspiral-pair', params: { separation: 120, perturbation: 0.95 } } },
@@ -314,11 +312,7 @@ export const ENGINE_GEOMETRY = /* @__PURE__ */ Object.freeze({
   'neutron-star-collision': { keep: KEEP_ALL, place: [{ rule: { name: 'pin-pair', params: { type: 'NeutronStar', x: 50, speed: 15 } } }], steps: [{ rule: { name: 'name-pair', params: { type: 'NeutronStar', names: ['GW170817-A', 'GW170817-B'] } } }] },
   // prettier-ignore
   'white-dwarf-binary': { place: [{ rule: { name: 'pin-pair', params: { type: 'WhiteDwarf', x: 80, speed: 20 } } }] },
-  // Prompt 204 part 2: two scale models, one published-system rule each (js/world/tidalSystems.js).
-  // prettier-ignore
-  'ring-gap': { recenter: true, steps: [{ rule: { name: 'published-system', params: { system: 'ring-gap' } } }] },
-  // prettier-ignore
-  'roche-pass': { recenter: true, steps: [{ rule: { name: 'published-system', params: { system: 'roche-pass' } } }] },
+  ...TIDAL_GEOMETRY,
 });
 
 /**
@@ -1476,12 +1470,10 @@ export const applyPlacement = (SETTINGS, current_scenario_name) => {
         obj.pos.x = Math.cos(angle) * radius;
         obj.pos.y = Math.sin(angle) * radius;
 
-        // A random velocity is the right answer for a loose cloud of
-        // comparable bodies, and the wrong one when a single mass dominates:
-        // nothing given a few tens of units per time unit a thousand units
-        // from a supermassive black hole is doing anything except falling in.
-        // Where there is a dominant central mass, orbit it and let the random
-        // component perturb that orbit instead of replacing it.
+        // A random velocity is right for a loose cloud of comparable bodies and wrong when
+        // one mass dominates: nothing given a few tens of units per time unit a thousand
+        // units from a supermassive black hole does anything but fall in. Where there is a
+        // dominant central mass, orbit it and let the random component perturb that orbit.
         const vel_angle = Math.random() * 2 * Math.PI;
         const vel_mag =
           (Math.random() - 0.5) * SETTINGS.init_velocity +
@@ -2130,10 +2122,9 @@ export const buildWorld = ctx => {
     if (!keep.has('WhiteDwarf')) white_dwarfs.length = 0;
     if (!keep.has('Debris')) debris.length = 0;
 
-    // One body of a published system, whose masses are in simulation units. A
-    // constructor derives the display masses from the mass it is handed, so all
-    // four are set; each body is persistent because investigations match bodies
-    // between samples by identity.
+    // One body of a published system, masses in simulation units. A constructor derives
+    // the display masses from the mass it is handed, so all four are set; each body is
+    // persistent because investigations match bodies between samples by identity.
     const published = d => ({
       type:
         d.kind === 'star'
@@ -2166,9 +2157,8 @@ export const buildWorld = ctx => {
         if (system === 'hd209458') return hd209458(G);
         if (system === 'kuiper-belt') return kuiperBelt(G);
         if (system === 'solar-system') return solarSystem(G);
-        if (system === 'ring-gap') return ringGapSystem(G, published);
-        if (system === 'roche-pass')
-          return rochePassSystem(G, published, periapsisRadii ?? 1.3);
+        const tidal = tidalSystem(system, G, published, periapsisRadii);
+        if (tidal) return tidal;
         if (system === 'galilean') {
           spec = galileanBodies(G, detuned ? { detune: GALILEAN.detune } : {});
         } else if (system === 'pluto-neptune') spec = plutoBodies(G);

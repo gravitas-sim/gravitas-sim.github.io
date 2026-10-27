@@ -159,3 +159,19 @@ export function* rochePassSystem(G, published, periapsisRadii = 1.3) {
     };
   }
 }
+
+/** The two scale models as geometry-table entries: one published-system rule each, recentered. */
+export const TIDAL_GEOMETRY = {
+  // prettier-ignore
+  'ring-gap': { recenter: true, steps: [{ rule: { name: 'published-system', params: { system: 'ring-gap' } } }] },
+  // prettier-ignore
+  'roche-pass': { recenter: true, steps: [{ rule: { name: 'published-system', params: { system: 'roche-pass' } } }] },
+};
+
+/** The generator for a tidal scale-model system, or null for any other system. */
+export function tidalSystem(system, G, published, periapsisRadii) {
+  if (system === 'ring-gap') return ringGapSystem(G, published);
+  if (system === 'roche-pass')
+    return rochePassSystem(G, published, periapsisRadii);
+  return null;
+}

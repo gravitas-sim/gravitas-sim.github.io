@@ -3,8 +3,8 @@
  "static": {
   "en": {
    "units": [
-    ["steps.sl9-limits.fields.0.unit","R"],
-    ["steps.sl9-limits.fields.1.unit","R"],
+    ["steps.sl9-limits.fields.0.unit",""],
+    ["steps.sl9-limits.fields.1.unit",""],
     ["steps.phobos-where.fields.0.unit","km"],
     ["steps.phobos-where.fields.1.unit","km"],
     ["steps.saturn-ice-limit.unit",""],
