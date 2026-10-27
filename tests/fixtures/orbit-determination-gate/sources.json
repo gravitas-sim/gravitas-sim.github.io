@@ -1,0 +1,131 @@
+{
+ "format": "gravitas.orbit-determination-gate-sources/1",
+ "prompt": 197,
+ "authorization": "Carl's chat answer of 2026-10-27, relayed by the coordinator and quoted in D-R10-99: \"Yes, R1\u2013R3 (Recommended)\"; R0 was not in the question and was not fetched",
+ "R2": {
+  "what": "the MPC's published orbit of (1) Ceres, mpc_orb JSON, one object",
+  "url": "https://data.minorplanetcenter.net/api/get-orb",
+  "request": "GET with JSON body {\"desig\": \"1\"}",
+  "retrieved": "2026-10-27T20:54Z (server Date header)",
+  "bytes": 11550,
+  "sha256": "ee8e044f0f5633dae2dbc4975b7962313cd57c84842b1f3c33b14a93e73740fa",
+  "fetchedInto": "a new empty scratchpad directory, read with python -I as data",
+  "robots": "data.minorplanetcenter.net/robots.txt disallows /iau/, /mpec/, /mpcops/, /cgi_bin/, /wamo/ and others, not /api/; documented at docs.minorplanetcenter.net/mpc-ops-docs/apis/get-orb/",
+  "licence": "no licence statement found in the API documentation; the MPC data page (minorplanetcenter.net/data) answered 403 to automated access and was not worked around; used as facts with credit (\"Observations and orbits from the Minor Planet Center\"), as the roadmap states; committed here only as the numbers the gate reads",
+  "extract": {
+   "KEP": {
+    "coefficient_names": [
+     "a",
+     "e",
+     "i",
+     "node",
+     "argperi",
+     "mean_anomaly"
+    ],
+    "coefficient_uncertainties": [
+     1.03436e-09,
+     9.87997e-09,
+     1.13713e-06,
+     6.19696e-06,
+     9.53155e-06,
+     7.51807e-06
+    ],
+    "coefficient_values": [
+     2.7655525987075684,
+     0.079692348726086,
+     10.5880287986925,
+     80.2486340128639,
+     73.294198507041,
+     274.4193524885952
+    ]
+   },
+   "CAR": {
+    "coefficient_names": [
+     "x",
+     "y",
+     "z",
+     "vx",
+     "vy",
+     "vz"
+    ],
+    "coefficient_uncertainties": [
+     8.20012e-08,
+     4.78338e-08,
+     5.43675e-08,
+     1.86162e-10,
+     2.63591e-10,
+     2.09299e-10
+    ],
+    "coefficient_values": [
+     1.41490571573078,
+     2.36959506591179,
+     -0.185642179577012,
+     -0.00908092658526952,
+     0.00460269675458493,
+     0.00181868472815213
+    ]
+   },
+   "epoch_data": {
+    "epoch": 61200.0,
+    "timeform": "MJD",
+    "timesystem": "TDT"
+   },
+   "magnitude_data": {
+    "G": 0.15,
+    "G1": null,
+    "G12": null,
+    "G2": null,
+    "H": 3.343,
+    "photometric_model": "HG"
+   },
+   "orbit_fit_statistics": {
+    "arc_length_total": "1801-2026",
+    "nobs_optical": 8017,
+    "nobs_total_sel": 7376,
+    "normalized_RMS": 0.82166,
+    "orbit_quality": "good",
+    "period": 1679.8531231059974
+   },
+   "system_data": {
+    "EclipticObliquityArcseconds": "84381.448",
+    "eph": "DE431",
+    "force_model": "AST17",
+    "refframe": "ICRF",
+    "refsys": "Ecliptic"
+   },
+   "categorization": {
+    "object_type_int": 0,
+    "object_type_str": "Minor Planet",
+    "orbit_type_int": 11,
+    "orbit_type_str": "Main Belt"
+   },
+   "designation": {
+    "iau_designation": "(1)",
+    "name": "Ceres",
+    "permid": "1"
+   }
+  }
+ },
+ "R3": {
+  "what": "the MPC observatory-code table with the parallax constants, ObsCodes.html format",
+  "url": "https://data.minorplanetcenter.net/api/obscodes",
+  "request": "GET with JSON body {\"format\": \"ObsCodes.html\"}",
+  "retrieved": "2026-10-27T20:54Z (server Date header)",
+  "bytes": 215986,
+  "sha256": "777776a3e0a5f27262b5ea44b4fb26cdf3fdc27281bed63f32fc081a8c56aa49",
+  "committed": false,
+  "why": "not committed: unused until R1 exists, and 216 KB; the hash identifies it"
+ },
+ "R1": {
+  "what": "the MPC 80-column observations of (1) Ceres",
+  "url": "https://data.minorplanetcenter.net/api/get-obs",
+  "request": "GET with JSON body {\"desigs\": [\"1\"], \"output_format\": [\"OBS80\"]}, three times, the last with the exact documented example for another object (13270) and once as a query string",
+  "result": "HTTP 500 {\"error\": \"general_error\", \"message\": \"get-obs failed with property 'json' of 'Request' object has no setter\"} on every JSON-body request (including the documentation's own example); the query-string form is refused with 501 content_type_error",
+  "retrieved": null,
+  "workarounds": "none: db_search/show_object is disallowed by robots.txt and was not requested; no other host or archive was tried",
+  "status": "NOT RETRIEVED: a server-side fault in the documented endpoint, not a block; observations are needed for A1 to A4"
+ },
+ "R0": {
+  "status": "not requested and not fetched: the planetary mass ratios in thresholds.json stay typed by recall, unchecked"
+ }
+}
