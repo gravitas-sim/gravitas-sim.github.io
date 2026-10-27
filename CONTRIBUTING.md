@@ -174,9 +174,9 @@ their ceilings:
 | `js/i18n/es.deferred.js` | 4,081 | 4,081 |
 | `js/i18n/en.deferred.js` | 3,834 | 3,834 |
 | `js/investigations.js` | 3,287 | 3,287 |
-| `js/data/investigations/measurement-sequence.js` | 3,270 | 2,922 |
+| `js/data/investigations/measurement-sequence.js` | 3,270 | 3,270 |
 | `js/render.js` | 3,015 | 3,015 |
-| `js/data/investigations/depth/measurement-sequence.js` | 2,840 | 2,505 |
+| `js/data/investigations/depth/measurement-sequence.js` | 2,840 | 2,840 |
 | `js/world/build.js` | 2,598 | 2,598 |
 <!--/fact-block-->
 
