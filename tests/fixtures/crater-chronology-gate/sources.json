@@ -30,7 +30,7 @@
     },
     {
       "id": "iqbal2019",
-      "what": "Iqbal, Hiesinger, van der Bogert et al. (2019), Geological mapping and chronology of lunar landing sites: Apollo 11, Icarus 333, 528 (accepted manuscript); Tables 1, 2 and 4",
+      "what": "Iqbal, Hiesinger, van der Bogert et al. (2019), Geological mapping and chronology of lunar landing sites: Apollo 11, Icarus, doi:10.1016/j.icarus.2019.06.020 (accepted manuscript); Tables 1, 2 and 4",
       "url": "https://arxiv.org/pdf/2003.03292",
       "bytes": 3639726,
       "sha256": "b9e147b064e7fa7bd6e831c1224cfb667a7eca6603a3e5326b5694d43de39a23",
@@ -60,12 +60,12 @@
     },
     {
       "id": "iqbal2020-apollo12",
-      "what": "Iqbal et al. (2020), Icarus 345, 113991 (CC BY-NC-ND) and its replication data (Refubium, DOI 10.35003/P0F3MM)",
+      "what": "Iqbal et al. (2020), Icarus, doi:10.1016/j.icarus.2020.113991 (CC BY-NC-ND) and its replication data (Refubium, DOI 10.35003/P0F3MM)",
       "why": "the publisher refused automated access (HTTP 403) and the repository answered with a bot challenge; one attempt to fetch the PDF with a changed user agent was refused by the permission system and was not repeated or worked around"
     },
     {
       "id": "iqbal2023-apollo14",
-      "what": "Iqbal et al. (2023), Icarus 406, 115732 (CC BY)",
+      "what": "Iqbal et al. (2023), Icarus, doi:10.1016/j.icarus.2023.115732 (CC BY)",
       "why": "the publisher refused automated access (HTTP 403)"
     }
   ],
