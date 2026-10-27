@@ -172,6 +172,7 @@ const LOADERS = {
   'craters-by-size': () => import('./craters-by-size.js'),
   'what-a-crater-diameter-is-worth': () =>
     import('./what-a-crater-diameter-is-worth.js'),
+  'what-is-in-this-field': () => import('./what-is-in-this-field.js'),
   'weighing-jupiter': () => import('./weighing-jupiter.js'),
   'why-rings': () => import('./why-rings.js'),
   'tides-that-move-the-moon': () => import('./tides-that-move-the-moon.js'),
@@ -267,6 +268,7 @@ const TRANSLATIONS = {
     'craters-by-size': () => import('./es/craters-by-size.js'),
     'what-a-crater-diameter-is-worth': () =>
       import('./es/what-a-crater-diameter-is-worth.js'),
+    'what-is-in-this-field': () => import('./es/what-is-in-this-field.js'),
     'weighing-jupiter': () => import('./es/weighing-jupiter.js'),
     'why-rings': () => import('./es/why-rings.js'),
     'tides-that-move-the-moon': () =>

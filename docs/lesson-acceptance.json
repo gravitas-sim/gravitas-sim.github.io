@@ -964,6 +964,19 @@
       ],
       "evidenceFrom": "model"
     },
+    "what-is-in-this-field": {
+      "centralExperimentId": "ce.what-is-in-this-field",
+      "object": "panel:field-sources",
+      "control": "field-sources/sigma",
+      "quantity": "the sources a detector lists in one synthetic frame of forty stars as its threshold falls: 30 at 4 sigma, none of them noise, and 44 at 2.5 sigma, seven of them only noise",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "predict-the-list",
+        "how-many-sources"
+      ],
+      "evidenceFrom": "model"
+    },
     "why-rings": {
       "centralExperimentId": "ce.why-rings",
       "object": "panel:tides-roche",

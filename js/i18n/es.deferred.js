@@ -1,7 +1,5 @@
 // =============================================================================
-// Messages that arrive with the chunk that needs them: panels nobody sees on a
-// first visit, in a catalog apart because one object cannot be code-split. The
-// bridges register these through registerMessages(); the tests merge both halves.
+// Messages that arrive with the chunk that needs them (panels nobody sees on a first visit): a catalog apart, one object cannot be code-split; registerMessages() loads it.
 // =============================================================================
 
 export const ES_DEFERRED = {
@@ -1953,6 +1951,8 @@ export const ES_DEFERRED = {
     'El gráfico de tamaño y frecuencia de los cráteres con sus barras de error, una pendiente con su intervalo y un recuento que se queda corto. Necesita la primera investigación de cráteres.',
   'inv.seq.observing.what-a-crater-diameter-is-worth':
     'Un círculo en un mapa: el diámetro, los cuatro términos de su incertidumbre y por qué no se da una edad en años. Necesita la primera investigación de cráteres.',
+  'inv.seq.observing.what-is-in-this-field':
+    'Lo que lista un detector no es lo que hay: una lista de fuentes con dos umbrales, el ancho de las estrellas y la curva de completitud con estrellas añadidas al cuadro.',
   'inv.seq.observing.transit-photometry':
     'Mide profundidad, duración y ruido en una curva de luz: la fotometría de la que depende lo demás.',
   'inv.seq.observing.design-the-schedule':

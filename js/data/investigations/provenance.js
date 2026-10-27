@@ -78,6 +78,7 @@ export const EVIDENCE_FROM = Object.freeze({
   'what-does-plus-minus-claim': 'model',
   'what-is-a-gravitational-wave': 'model',
   'what-is-a-measurement': 'model',
+  'what-is-in-this-field': 'model',
   'when-orbits-lock': 'engine',
   'when-the-method-must-refuse': 'model',
   'where-galaxies-live': 'model',

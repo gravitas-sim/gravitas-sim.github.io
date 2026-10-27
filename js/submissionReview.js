@@ -158,6 +158,8 @@ const DEEPER = {
   'tides-that-move-the-moon': () =>
     import('./data/investigations/depth/tides-that-move-the-moon.js'),
   'ios-fire': () => import('./data/investigations/depth/ios-fire.js'),
+  'what-is-in-this-field': () =>
+    import('./data/investigations/depth/what-is-in-this-field.js'),
 };
 const deepen = async lesson =>
   lesson.depthLaid || !DEEPER[lesson.id]

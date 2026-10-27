@@ -1,7 +1,5 @@
 // =============================================================================
-// Messages that arrive with the chunk that needs them: panels nobody sees on a
-// first visit, in a catalog apart because one object cannot be code-split. The
-// bridges register these through registerMessages(); the tests merge both halves.
+// Messages that arrive with the chunk that needs them (panels nobody sees on a first visit): a catalog apart, one object cannot be code-split; registerMessages() loads it.
 // =============================================================================
 
 export const EN_DEFERRED = {
@@ -1932,6 +1930,8 @@ export const EN_DEFERRED = {
     'The size-frequency plot of craters with its error bars, a slope with its interval, and a count that stops short. Needs the first crater investigation.',
   'inv.seq.observing.what-a-crater-diameter-is-worth':
     'One circle on a map: the diameter, the four terms of its uncertainty, and why no age in years is reported. Needs the first crater investigation.',
+  'inv.seq.observing.what-is-in-this-field':
+    'What a detector lists is not what is there: a source list at two thresholds, the width of the stars, and the completeness curve from stars added to the frame.',
   'inv.seq.observing.transit-photometry':
     'Measure depth, duration and noise on a light curve: the photometry the rest relies on.',
   'inv.seq.observing.design-the-schedule':

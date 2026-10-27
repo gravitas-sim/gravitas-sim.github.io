@@ -203,7 +203,8 @@ describe('the instructor expectations record', () => {
     // 400 after Weighing Jupiter From Its Moons (Prompt 193): 3 more.
     // 408 after Why Venus Is Hot and Two Greenhouse Models (Prompt 200): 8 more.
     // 428 after Why Rings?, Tides That Move the Moon and Io’s Fire (Prompt 204 part 2): 9 more.
-    expect(total).toBe(428);
+    // 433 after What Is in This Field? (Prompt 191 part 3): 5 more.
+    expect(total).toBe(433);
   });
 
   test('a /1 record keyed by step number migrates to the same text', () => {

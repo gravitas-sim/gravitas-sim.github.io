@@ -877,6 +877,19 @@ export const MANIFEST = [
     objectiveCount: 4,
   },
   {
+    id: 'what-is-in-this-field',
+    title: '¿Qué hay en este campo?',
+    subtitle:
+      'Las fuentes que lista un detector, el ancho de las estrellas y la curva que dice cuán débil puede ver una búsqueda',
+    duration: '20-30 min',
+    level: 'Majors and upper-level astronomy',
+    thumbnail: 'images/investigations/what-is-in-this-field.webp',
+    depths: 3,
+    stepCount: 10,
+    gradedCount: 8,
+    objectiveCount: 4,
+  },
+  {
     id: 'weighing-jupiter',
     title: 'Pesar Júpiter con sus lunas',
     subtitle:

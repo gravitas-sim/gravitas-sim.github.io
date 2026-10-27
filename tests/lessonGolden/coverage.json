@@ -264,17 +264,17 @@
     "pin:unpinned"
   ],
   "totals": {
-    "investigations": 75,
-    "steps": 1357,
+    "investigations": 76,
+    "steps": 1372,
     "activityCuts": 6,
     "lessonTokens": 142,
     "activityTokens": 29,
     "stepTypes": {
-      "read": 260,
-      "predict": 152,
+      "read": 262,
+      "predict": 153,
       "ellipse": 1,
-      "question": 491,
-      "measure": 309,
+      "question": 495,
+      "measure": 317,
       "explore": 143,
       "wedges": 1
     }

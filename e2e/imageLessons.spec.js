@@ -1,8 +1,8 @@
 // =============================================================================
 // The image investigations, in two languages
 // -----------------------------------------------------------------------------
-// Measuring the Moon, How Far Is That Star? and A Binary Star's Orbit
-// (Roadmap III, Prompt 191). Checked here: each instrument paints and lists
+// Measuring the Moon, How Far Is That Star?, A Binary Star's Orbit and What Is
+// in This Field? (Roadmap III, Prompt 191, and its third part). Checked here: each instrument paints and lists
 // its numbers (the readout is the text equivalent of the canvas), the Spanish
 // lesson shows its own words, and the panel passes axe and keeps every control
 // and link at least 24 px square at 1280 and 390 px wide, in the dark and the
@@ -36,6 +36,12 @@ const CASES = [
     sid: 'the-mass-sum',
     row: /Mass sum/i,
     rowEs: /Suma de masas/i,
+  },
+  {
+    id: 'what-is-in-this-field',
+    sid: 'the-curve',
+    row: /Magnitude at 50 percent found/i,
+    rowEs: /Magnitud con el 50 por ciento hallado/i,
   },
 ];
 

@@ -1,30 +1,30 @@
 {
   "version": "October 2026",
   "generated": "2026-10-27",
-  "documents": 705,
+  "documents": 716,
   "inventory": {
-    "documents": 705,
+    "documents": 716,
     "byLocale": {
-      "en": 324,
-      "es": 381
+      "en": 329,
+      "es": 387
     },
     "byKind": {
       "general": 2,
-      "guide": 157,
-      "key": 466,
-      "notes": 75,
+      "guide": 159,
+      "key": 474,
+      "notes": 76,
       "worksheet": 5
     },
     "byVariant": {
       "activity": 12,
-      "depth": 300,
-      "full": 300,
+      "depth": 306,
+      "full": 304,
       "general": 18,
-      "notes": 75
+      "notes": 76
     }
   },
   "sourceFiles": 281,
-  "sourceDigest": "046a114830fc0e25c283bf98b6c262cafb9c1a2485c3b65b35c9525fca00cd33",
+  "sourceDigest": "1d06ae1793ef54aea16fedab5bb9703d2b02e87a69747659ac656f3e45118cb4",
   "sources": {
     "js/activities/activities.js": "39ac98cd99b8b0387c55e41d5d4530bad55a8da8758819ad056be73e7a716b01",
     "js/activities/activityBridge.js": "67a82aff98e0ed935d6b8b0f0f654c6ad4332ee929cb3604e896a7f790a6fdc1",
@@ -79,7 +79,7 @@
     "js/data/investigations/depth/es/keplers-laws.js": "4884da2cc36b38da2b246019e12e0174b1c91099ad6284034c82c32292f45ab7",
     "js/data/investigations/depth/es/leavitts-law.js": "025030cae733d69b425964dce6da61d1a627981182e36a1ffdb30a7ba361b4d5",
     "js/data/investigations/depth/es/lines-and-motion.js": "88c0b6dba56b8f80446518ccbc9e0490e9186225f8e509f75acafa9261cc1e17",
-    "js/data/investigations/depth/es/measurement-sequence.js": "b530d6c1a5cbd93f999e7c5fae1bf2c56544ad4e24bd3a7263eb3452e44135ba",
+    "js/data/investigations/depth/es/measurement-sequence.js": "5e57574d8fd4a11913e54c0cfc0557a7b0f5d88337c77b3b2d70cda11d0267ff",
     "js/data/investigations/depth/es/missing-mass.js": "489731f5650f93f5597c26bd5f7e419067bfd3d6abc71c1018907954e327bab4",
     "js/data/investigations/depth/es/phases-and-eclipses.js": "b8e49177963d5140de6f35ca384f22430fbcbc3ebd5f74bfa4ee44270a526c6a",
     "js/data/investigations/depth/es/plan-a-night.js": "77c7fa443d9b7afd96b68af8d7e9a68e6c0f32d5f99eabc91162672812fd8728",
@@ -110,7 +110,7 @@
     "js/data/investigations/depth/keplers-laws.js": "41f8350432a378b85e1233b187299dabb04d57bab7958d7df4333c1f6c0226dc",
     "js/data/investigations/depth/leavitts-law.js": "9454cd1d1d1015776ca933de073c4e153e441c3698b77c510c62e68ca919090f",
     "js/data/investigations/depth/lines-and-motion.js": "ec5eba7c1fd2adcd052129d2ab46d5326b24fa0de7c79d2c953a4c9d1feb6eb4",
-    "js/data/investigations/depth/measurement-sequence.js": "03437682f35204b49665aab8c647ee09641660a351524550f126659c40e70e1f",
+    "js/data/investigations/depth/measurement-sequence.js": "16261ef580a14a98cb2be387d28ae3124fb4e41965f7b15f7ce09d07b3f5d87b",
     "js/data/investigations/depth/missing-mass.js": "25ced998f2f71f10040ffa09b458c2d9f6c990ddf9c005036602025a74b39888",
     "js/data/investigations/depth/phases-and-eclipses.js": "6040ea671dd294cfeb426a3d92bd3321704c3b690df8097ff276d12c2fa75379",
     "js/data/investigations/depth/plan-a-night.js": "1c7e05a8096cf36c0e6b218298c29ecfd9fb3e7c9c5ad808f10afa69a1610efa",
@@ -139,7 +139,7 @@
     "js/data/investigations/depth/why-the-bright-ones-win.js": "2efd2f0f8f383755a667f7452f9931d527faeed4d3b4d40a536b7a4725918fa1",
     "js/data/investigations/design-the-schedule.js": "8262b01d351491c0b1c0af1355b52daeb7817caaee519db0a17edb54a6a9d0b0",
     "js/data/investigations/detect-this-planet.js": "e7ff6bbdac10bb95b29b2e7aef91b015d8c69a37a014db1fb014dc531124ce43",
-    "js/data/investigations/discovery.js": "aa56d7112f13297685962621189cce61e9eaaa58fc947f8835590f7c57fa84fd",
+    "js/data/investigations/discovery.js": "0058301185e16a85f9bda343f406233194badb8ee429470ee46d65589083502c",
     "js/data/investigations/einstein-rings-and-arcs.js": "94e991a437d84d63e2f9df1dddb3c74d4b5c99ff88c8a523c76ac9391b013f6e",
     "js/data/investigations/es/a-lens-passing-by.js": "9f341a46e06db9cf8c17467a8bde8eb392425d6eeba94f1f131ff1e7babcec36",
     "js/data/investigations/es/a-universe-of-stars.js": "e978b7bb1a4297064769e4a005c48a4f3399d8851ea1c321568aff8627265bbe",
@@ -166,7 +166,7 @@
     "js/data/investigations/es/lines-and-motion.js": "c5d05deb1b4bee8a6797e45ea30d7fca59132d8279a7327eccd46748844a98b7",
     "js/data/investigations/es/listening-to-spacetime.js": "c32024d1ae8433921b183e8ca4fad3b4044af04550aa12edf0d04626598668f7",
     "js/data/investigations/es/lives-of-stars.js": "b01807a197040de0e449f7ec37f0b1e7a335404953121cd4180c30d01200b31f",
-    "js/data/investigations/es/measurement-sequence.js": "0a0352bda480b9e3089633f95d77381183a999326f148a608908d7482e1684bb",
+    "js/data/investigations/es/measurement-sequence.js": "4f86b3b3b655a768897a54be2a1c3ce25e76db5f105110c934d0aa5956e03a3f",
     "js/data/investigations/es/missing-mass.js": "e5c3155b20ede486b50a24986b8776019542c69a79c27a684af6ce53a0600223",
     "js/data/investigations/es/orbital-energy.js": "51938dccbcb3176c1e743ec0555af1ef2b72897a5884b0f260b73b755db85ed2",
     "js/data/investigations/es/phases-and-eclipses.js": "9cf3ab142481bde7b16eae1832dc9f44eb29369697f3d828e8bc17098df87017",
@@ -217,7 +217,7 @@
     "js/data/investigations/lines-and-motion.js": "4296f0dfa5c5ec296415cde7431873adbf96d9788a3f735ffd43987accda713f",
     "js/data/investigations/listening-to-spacetime.js": "069943a5681fd03c0441dce75787a3de80e2882f71e0fe40f666994a024b33a0",
     "js/data/investigations/lives-of-stars.js": "e64b60b6c2018e72f5dddb0b6a1b59e8588529d034fae15573ca3b50b2dbee1b",
-    "js/data/investigations/measurement-sequence.js": "d13b1b9a20be106d4d067e879509dc741374044e744a08abae9cfe0e8a9a8546",
+    "js/data/investigations/measurement-sequence.js": "6bcf91c57750bea57458962d205ca51d4efb48a3ea3946f454182016d330a519",
     "js/data/investigations/missing-mass.js": "572c7a7a2a548c8ec23629bbd429550bd6cc2db68266311fcf07a63c9265d510",
     "js/data/investigations/orbital-energy.js": "db045b8aa91bec380d347bb05d3ca60f7239337d2ab02abf6e3b59ea81f6932c",
     "js/data/investigations/phases-and-eclipses.js": "bd5582a234a90ae8a7da5417b105fc7534c6212ddcb4c48194b12f5c5a336cb5",
@@ -231,7 +231,7 @@
     "js/data/investigations/scaling-the-main-sequence.js": "69ad3e9e62d69ff8986d8cd6fd8439aecd987843e10725f872e60c83bd07191b",
     "js/data/investigations/signal-noise-and-exposure.js": "0d5ce28c379c51a3ef073b3674b14b4d405887bbdb96fd99c2d073a563630209",
     "js/data/investigations/standard-candles.js": "77f5101c57d2eb5de1dbcae2dc1250ad245751a4d600d82dd507978f8b80fa7c",
-    "js/data/investigations/summaries.js": "fa675e4ac71720f1c26face60b4714047ace3d5334b867d35d381883e9a08437",
+    "js/data/investigations/summaries.js": "d2dbac8742deba1b1f44a7ed77fa7699e4574668a3417523886f7d432cbbdb77",
     "js/data/investigations/the-beat-of-a-star.js": "4005037e9b5c1a37777bf8e90f4c657a667aff3c6aae3e46633a3f4e3da9a3e4",
     "js/data/investigations/the-completeness-curve.js": "6a81cabc545758ae5de1e2f04644409c1e0d7152809253d9d33ab8cad3abf6c5",
     "js/data/investigations/the-expanding-universe.js": "4e2d6776b896a4a7b8424bf36f7f6afde0e9b75f2ff67dccf26f198b2b641b7c",
@@ -308,5 +308,5 @@
     "tools/instructor-freshness.mjs": "96052b2f27080f0243fdd4d5f7608927bd67f0c50808b6eac3345a65c14d1e28",
     "tools/source-closure.mjs": "961828e4d0d40d8a6f8c029fe9b9435ecaf39a74b62640efc0b4145c35c7650a"
   },
-  "contentDigest": "62773f2f6a7e98c50467d53099cdb496ae2acf674d77c1ac302aa6f043b11dfb"
+  "contentDigest": "57cc9d10189127e5c8b959381e4573893757cb3320aff4449102aa95ec6a7b98"
 }

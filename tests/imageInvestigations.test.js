@@ -80,12 +80,14 @@ describe('the lessons exist and are wired', () => {
     }
   });
 
-  test('both languages carry the same instrument words, and the three instruments exist', () => {
+  test('both languages carry the same instrument words, and the instruments exist (the last two are the field lesson’s, tests/fieldLesson.test.js)', () => {
     expect(Object.keys(ES_IMG).sort()).toEqual(Object.keys(EN_IMG).sort());
     expect(W.IMAGING_WIDGETS.map(w => w.id)).toEqual([
       'moon-marks',
       'star-parallax',
       'binary-orbit',
+      'field-sources',
+      'field-completeness',
     ]);
   });
 

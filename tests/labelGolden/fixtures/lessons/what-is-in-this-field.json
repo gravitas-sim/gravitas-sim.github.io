@@ -1,0 +1,100 @@
+{
+ "id": "what-is-in-this-field",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.how-many-sources.fields.0.unit",""],
+    ["steps.how-many-sources.fields.1.unit",""],
+    ["steps.lower-the-threshold.fields.0.unit",""],
+    ["steps.lower-the-threshold.fields.1.unit",""],
+    ["steps.the-width.fields.0.unit",""],
+    ["steps.the-width.fields.1.unit","px"],
+    ["steps.the-width.fields.2.unit","px"],
+    ["steps.one-magnitude.fields.0.unit","%"],
+    ["steps.one-magnitude.fields.1.unit","%"],
+    ["steps.the-curve.fields.0.unit","mag"],
+    ["steps.the-curve.fields.1.unit","mag"],
+    ["steps.a-lower-threshold.fields.0.unit","mag"],
+    ["steps.a-lower-threshold.fields.1.unit","mag"],
+    ["steps.the-curve-and-the-field.fields.0.unit",""],
+    ["steps.the-curve-and-the-field.fields.1.unit",""],
+    ["steps.a-wrong-width.fields.0.unit","mag"],
+    ["steps.a-wrong-width.fields.1.unit","%"]
+   ],
+   "numbered": [
+    ["steps.how-many-sources.fields.0.hint","30"],
+    ["steps.how-many-sources.fields.1.hint","0"],
+    ["steps.lower-the-threshold.fields.0.hint","44"],
+    ["steps.lower-the-threshold.fields.1.hint","7"],
+    ["steps.the-width.fields.0.hint","6"],
+    ["steps.the-width.fields.1.hint","3.00"],
+    ["steps.the-width.fields.2.hint","0.02"],
+    ["steps.one-magnitude.fields.0.label","Found, magnitude −3.4 to −3.1"],
+    ["steps.one-magnitude.fields.0.hint","100"],
+    ["steps.one-magnitude.fields.1.label","Found, magnitude −2.5 to −2.2"],
+    ["steps.one-magnitude.fields.1.hint","31"],
+    ["steps.the-curve.fields.0.label","Magnitude at 50 percent found"],
+    ["steps.the-curve.fields.0.hint","-2.47"],
+    ["steps.the-curve.fields.1.label","Magnitude at 90 percent found"],
+    ["steps.the-curve.fields.1.hint","-2.87"],
+    ["steps.a-lower-threshold.fields.0.label","Magnitude at 50 percent found"],
+    ["steps.a-lower-threshold.fields.0.hint","-2.14"],
+    ["steps.a-lower-threshold.fields.1.label","Magnitude at 90 percent found"],
+    ["steps.a-lower-threshold.fields.1.hint","-2.53"],
+    ["steps.the-curve-and-the-field.fields.0.hint","27.2"],
+    ["steps.the-curve-and-the-field.fields.1.hint","30"],
+    ["steps.a-wrong-width.fields.0.label","Magnitude at 50 percent found"],
+    ["steps.a-wrong-width.fields.0.hint","-2.79"],
+    ["steps.a-wrong-width.fields.1.label","Found, magnitude −3.4 to −3.1"],
+    ["steps.a-wrong-width.fields.1.hint","90"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.one-magnitude.fields.0.label","Halladas, magnitud −3,4 a −3,1"],
+    ["steps.one-magnitude.fields.1.label","Halladas, magnitud −2,5 a −2,2"],
+    ["steps.the-curve.fields.0.label","Magnitud con el 50 por ciento hallado"],
+    ["steps.the-curve.fields.1.label","Magnitud con el 90 por ciento hallado"],
+    ["steps.a-lower-threshold.fields.0.label","Magnitud con el 50 por ciento hallado"],
+    ["steps.a-lower-threshold.fields.1.label","Magnitud con el 90 por ciento hallado"],
+    ["steps.a-wrong-width.fields.0.label","Magnitud con el 50 por ciento hallado"],
+    ["steps.a-wrong-width.fields.1.label","Halladas, magnitud −3,4 a −3,1"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "how-many-sources": {
+    "validate": {"calls":232,"distinct":2,"digest":"108e21c1be4d6b01","samples":[null,{"level":"error","message":"Leave “Threshold” at 4 σ, then read “Sources listed” and “Sources carrying a flag”."}]}
+   },
+   "lower-the-threshold": {
+    "validate": {"calls":232,"distinct":2,"digest":"5f7cde5e2c42e5e0","samples":[null,{"level":"error","message":"Set “Threshold” to 2.5 σ, switch “Placed stars” to shown, then read “Sources listed” and “Sources that are not a star that was placed”."}]}
+   },
+   "the-width": {
+    "validate": {"calls":242,"distinct":2,"digest":"0b5931d728bc8aca","samples":[null,{"level":"error","message":"Set “Threshold” to 4 σ with the truth hidden, then read “Stars used for the width” and “Width of the stars”."}]}
+   },
+   "one-magnitude": {
+    "validate": {"calls":232,"distinct":2,"digest":"5bbb7343f72253a5","samples":[null,{"level":"error","message":"Use the threshold 4 σ and the width 3 px, then read the two bins’ shares (“Magnitude −3.4 to −3.1” and “Magnitude −2.5 to −2.2”)."}]}
+   },
+   "the-curve": {
+    "validate": {"calls":232,"distinct":2,"digest":"442863fd5f07888d","samples":[null,{"level":"error","message":"Use the threshold 4 σ and the width 3 px, then read “Magnitude at 50 percent found” and “Magnitude at 90 percent found”."}]}
+   },
+   "a-lower-threshold": {
+    "validate": {"calls":232,"distinct":2,"digest":"b33fc1e4d11312ab","samples":[null,{"level":"error","message":"Set “Threshold” to 3 σ and “Width of added stars” to 3 px, then read “Magnitude at 50 percent found” and “Magnitude at 90 percent found”."}]}
+   },
+   "the-curve-and-the-field": {
+    "validate": {"calls":232,"distinct":2,"digest":"753132c9c8dd912b","samples":[null,{"level":"error","message":"Use the threshold 4 σ and the width 3 px, switch “Field’s own stars” to shown, then read “Stars of the field this curve says a search finds” and “Stars of the field the search listed”."}]}
+   },
+   "a-wrong-width": {
+    "validate": {"calls":232,"distinct":2,"digest":"d06ea5ce98f96529","samples":[null,{"level":"error","message":"Set “Width of added stars” to 4.5 px with the threshold at 4 σ, then read “Magnitude at 50 percent found” and the share in “Magnitude −3.4 to −3.1”."}]}
+   }
+  },
+  "es": "same"
+ }
+}
