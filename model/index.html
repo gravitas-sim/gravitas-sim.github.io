@@ -128,6 +128,7 @@ try {
           <li><span class="gs-en"><a href="#interiors">Stellar interiors</a></span><span class="gs-es" lang="es"><a href="#interiors">Interiores estelares</a></span></li>
           <li><span class="gs-en"><a href="#spacetime">The spacetime view</a></span><span class="gs-es" lang="es"><a href="#spacetime">La vista del espacio-tiempo</a></span></li>
           <li><span class="gs-en"><a href="#lensing">Gravitational lensing</a></span><span class="gs-es" lang="es"><a href="#lensing">Lentes gravitacionales</a></span></li>
+          <li><span class="gs-en"><a href="#tides">Rings and tides</a></span><span class="gs-es" lang="es"><a href="#tides">Anillos y mareas</a></span></li>
           <li><span class="gs-en"><a href="#visual">Visual effects</a></span><span class="gs-es" lang="es"><a href="#visual">Efectos visuales</a></span></li>
           <li>
             <span class="gs-en"><a href="#conservation">The conservation check</a></span><span class="gs-es" lang="es"><a href="#conservation">La comprobación de conservación</a></span>
@@ -1405,6 +1406,38 @@ try {
         source. No authentic event light curve is shipped, because its terms of use could not be confirmed;
         the data in the fit are synthetic, with a truth the real sky does not give, and are labeled
         so.</span><span class="gs-es" lang="es"><strong>Masa puntual, o una galaxia circular.</strong> La lente es un punto o una esfera isoterma singular. La curva de microlente añade un disco de fuente de brillo uniforme y una mezcla de luz, y deja fuera el oscurecimiento del limbo, el paralaje, el movimiento orbital de la lente, una lente binaria y una segunda fuente. No se incluye ninguna curva de luz de un suceso real, porque no se pudieron confirmar sus condiciones de uso; los datos del ajuste son sintéticos, con una verdad que el cielo real no da, y así se indica.</span>
+      </p>
+
+      <h2 id="tides"><span class="gs-en">Rings and tides</span><span class="gs-es" lang="es">Anillos y mareas</span></h2>
+      <p><span class="gs-en"><span class="doc-badge is-approximate">Approximated</span></span><span class="gs-es" lang="es"><span class="doc-badge is-approximate">Aproximado</span></span></p>
+      <p>
+        <span class="gs-en">The ring and tide instruments (Where does a moon fall apart?, Where does a moon&rsquo;s
+        resonance fall in the ring?, How the Moon&rsquo;s orbit and the day change, How much heat does Io&rsquo;s tide make?) compute with a pure kernel, <code>js/kernels/tides</code>: closed forms
+        for the rigid and the fluid Roche limit, the radius of a p:q resonance, the constant-Q recession of
+        the Moon and the lengthening of the day, and the tidal heating of a synchronous satellite. Nothing
+        is simulated by them: the Moon&rsquo;s table is the closed form sampled in time, forward or
+        backward, and the instruments read the same numbers the tests recompute.</span><span class="gs-es" lang="es">Los instrumentos de anillos y mareas (¿Dónde se desintegra una luna?, ¿Dónde cae la resonancia de una luna dentro del anillo?, Cómo cambian la órbita de la Luna y el día, ¿Cuánto calor produce la marea de Ío?) calculan con un núcleo puro, <code>js/kernels/tides</code>: formas cerradas para el límite de Roche rígido y fluido, el radio de una resonancia p:q, el alejamiento de la Luna con Q constante y el alargamiento del día, y el calentamiento de marea de un satélite sincrónico. Ninguno simula nada: la tabla de la Luna es la forma cerrada muestreada en el tiempo, hacia delante o hacia atrás, y los instrumentos leen los mismos números que recalculan las pruebas.</span>
+      </p>
+      <p>
+        <span class="gs-en"><strong>What it leaves out.</strong> The Roche limits are for a body held by
+        gravity alone; a body with strength survives inside the fluid limit. The Moon&rsquo;s evolution takes
+        k<sub>2</sub> and Q as constants, which fits the present and, run backward, puts the Moon in contact
+        1.58 billion years ago, far more recently than the rocks allow: the model fails, and the lesson says
+        so. The heating of Io is a bound over three orders of magnitude, from a k<sub>2</sub>/Q nobody
+        measures for Io.</span><span class="gs-es" lang="es"><strong>Lo que deja fuera.</strong> Los límites de Roche valen para un cuerpo que solo la gravedad mantiene unido; un cuerpo con resistencia sobrevive dentro del límite fluido. La evolución de la Luna toma k<sub>2</sub> y Q como constantes, lo que ajusta el presente y, corrida hacia atrás, pone a la Luna en contacto hace 1580 millones de años, mucho más recientemente de lo que permiten las rocas: el modelo falla, y la lección lo dice. El calentamiento de Ío es una cota de tres órdenes de magnitud, a partir de un k<sub>2</sub>/Q que nadie mide para Ío.</span>
+      </p>
+      <p>
+        <span class="gs-en"><strong>Two scale-model scenarios.</strong> Ring Gap (a moon and a ring) and Roche Pass (a clump inside the limit) are ordinary
+        Newtonian N-body worlds declared through the scenario geometry table, with no extra force and no
+        change to the integrator (the engine has no tidal torque; the gate that decided so is
+        <code>TIDAL_TORQUE_GATE.md</code>). Lengths are a scale model with G carrying the distance, as in the
+        Earth-Moon System, the resonant moon and the shepherd are far heavier than the real Mimas and Pan, and
+        the collisions of the engine are switched off in effect by a tiny contact radius. Their legs were
+        committed before the scenarios were built: three of them failed (the eccentricity contrast at the
+        resonance, the thinning of the ring and a lane about the shepherd) and are reported as failed in
+        <code>tests/fixtures/tides/display-record.json</code>; a collisionless ring thins at a resonance
+        and does not empty. The control of the Roche pass depends on its exact periapsis, because one body
+        that escapes sets the largest extent.</span><span class="gs-es" lang="es"><strong>Dos escenarios a escala.</strong> Hueco en el anillo y Paso de Roche son mundos newtonianos de N cuerpos corrientes, declarados con la tabla de geometría de escenarios, sin fuerza adicional ni cambio del integrador (el motor no tiene par de marea; la puerta que lo decidió es <code>TIDAL_TORQUE_GATE.md</code>). Las longitudes son un modelo a escala con G que lleva la distancia, como en el Sistema Tierra-Luna; la luna resonante y la pastora son mucho más pesadas que Mimas y Pan reales, y las colisiones del motor quedan anuladas en la práctica por un radio de contacto diminuto. Sus pruebas se fijaron antes de construir los escenarios: tres fallaron (el contraste de excentricidad en la resonancia, el adelgazamiento del anillo y un carril alrededor de la pastora) y se informan como fallidas en <code>tests/fixtures/tides/display-record.json</code>; un anillo sin colisiones se adelgaza en una resonancia y no se vacía. El control del paso de Roche depende de su periastro exacto, porque un cuerpo que escapa fija la mayor extensión.</span>
       </p>
 
       <h2 id="visual"><span class="gs-en">Visual effects</span><span class="gs-es" lang="es">Efectos visuales</span></h2>
