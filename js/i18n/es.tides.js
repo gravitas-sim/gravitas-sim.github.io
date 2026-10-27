@@ -27,8 +27,7 @@ export const ES_TIDES = {
   'tideW.r.sys.moon': 'Luna, Tierra',
   'tideW.r.sys.ring': 'Hielo anillo B',
   'tideW.r.axis.x': 'Distancia (radios del planeta)',
-  'tideW.r.axis.y':
-    'Marea a través del satélite, en unidades de la del límite rígido',
+  'tideW.r.axis.y': 'Marea, en unidades del límite rígido',
   'tideW.r.legend.curve':
     'marea a través del satélite, relativa a la del límite rígido',
   'tideW.r.legend.limits': 'límites rígido y fluido',

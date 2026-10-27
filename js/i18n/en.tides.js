@@ -28,7 +28,7 @@ export const EN_TIDES = {
   'tideW.r.sys.moon': 'Moon, Earth',
   'tideW.r.sys.ring': 'B-ring ice',
   'tideW.r.axis.x': 'Distance (planet radii)',
-  'tideW.r.axis.y': 'Tide across the satellite, in units of the rigid limit’s',
+  'tideW.r.axis.y': 'Tide, in rigid-limit units',
   'tideW.r.legend.curve':
     'tide across the satellite, relative to the rigid limit’s',
   'tideW.r.legend.limits': 'rigid and fluid limits',
