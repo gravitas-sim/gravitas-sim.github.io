@@ -71,8 +71,68 @@ Mars is outside every verdict. The Martian chronology (Hartmann and Neukum 2001)
 are the lunar ones scaled by impact rate, velocity, gravity and an atmosphere cut-off, with no returned sample to
 anchor them, so a Martian count may be drawn against a labelled model isochron and never returns an age.
 
+## The measurement and the verdict: C (pending)
+
+Spike `spike/crater-chronology-gate` (commit a909eba9, never merged): the functions as the contract states them, an
+independent Python implementation (`python -I`, numpy 2.2.6 and scipy 1.15.3, nothing of Gravitas run), and the harness
+`tools/crater-chronology-gate.mjs`. The record is `tests/fixtures/crater-chronology-gate/record.json`, the oracle's output
+`oracle-results.json`, and `tests/craterChronologyGate.test.js` holds both against the committed bounds. The bounds are
+the committed ones (one correction, c1, recorded in the thresholds before any age was computed).
+
+| Leg | Measured | Bound | |
+|---|---|---|---|
+| F1.a0 (10^a0 against c2) | 1.0e-4 | 1e-3 | pass |
+| F1.inverse (T to N1 to T) | 2e-16 | 1e-9 | pass |
+| F1.monotone | 0 violations | 0 | pass |
+| F1.oracle (independent implementation) | 5e-14 | 1e-9 | pass |
+| F2.coverage, 24 cells of 4,000 trials | minimum 0.9435 (T 2 Ga, 2e5 km^2, dMin 1 km) | 0.94 | pass |
+| F3 refusal cases (nine) | nine named statuses, no age | 0 wrong | pass |
+| F3 control (500 surfaces) | 0 refused or flagged | 0.05 | pass |
+| O1 expected count at 3.5 Ga, highland box | **1.95** (dMin 16.2 km, 304,982 km^2) | 30 | **fail** |
+| O1 expected count at 3.5 Ga, mare box | **2.18** (dMin 16.2 km, 340,889 km^2) | 30 | **fail** |
+| R1, R2, R3 (published counts at the sample sites) | NOT RUN | | |
+| O2 (a person's counts on the frames) | NOT RUN | | |
+| I1 (completeness by crater-like injection) | NOT RUN | | |
+| M1 (no Martian age) | holds by construction: the harness refuses a Martian region | 0 ages | pass |
+
+Verdict by the committed function: **C**, and a pending C. F1, F2 and F3 pass, so the functions are implemented as
+stated and the interval covers; but B needs R1 to R3 to pass and none could be run, because the sample ages and the
+published counts are not in the repository and nothing was downloaded. The same function gives B when those legs run
+and pass. A is out of reach on the committed frames, whatever R1 to R3 give: O1 fails as committed. A lunar frame at
+2.02 km per pixel counts craters of 16 km and over (Prompt 195's 8 pixel rule), and a 3.5 Ga surface of either box
+carries about two craters of that size, against the 30 the interval needs. Nothing was moved or restated: the bound
+is Carl's to reset, and the honest alternatives are a finer frame (a lunar frame at 100 to 200 m per pixel would
+count from about 1 to 2 km) or a larger area, neither of which is in the repository.
+
+An observation, not a leg and not an age: the committed lists hold 72 (highland) and 21 (mare) craters of 20 km or
+more, against the two a 3.5 Ga surface would carry at 16 km. The large craters on those boxes are therefore far
+older ground than 3.5 Ga, and in the mare box they are the craters the lava did not bury, which is why a count of
+large craters on a mare dates the basement and not the lava.
+
+Two things in the record the reader should weigh. First, the F1 oracle shares the recalled coefficients with the
+spike, so its agreement (5e-14) is a check of the code and says nothing about the table; F1.a0 is the only check on a
+coefficient (10^a0 = 8.3809e-4 against c2 = 8.38e-4, within 1.0e-4), and R0 (reading the papers) is what checks the
+rest. Second, one case was corrected in the harness after its first run: F3's saturated case (n = 50 over 100 km^2 at
+2 km) returned `beyondChronology`, because that surface is also older than the chronology reaches, so the case did
+not isolate its rule; it became n = 6 over 100 km^2, which does. No bound moved.
+
+## What each verdict builds, and what is asked
+
+**B** (the likely outcome once R0 to R3 are run): the kernel's functions, the 1 km equivalent, the inverse chronology
+with its counting interval and the approximation floor from R1, the refusals above; the investigation's upper depth
+teaches the chronology on the reference table of published counts and sample ages and does not age the student's own
+count; the model page's chronology section states the interval and what it assumes. **C** (as it stands): nothing is
+built; Prompt 195's relative ages stand and Prompt 206's unit lists the chronology as a reading step.
+
+For Carl, the requests (`thresholds.json`, `dataRequests`): the two Space Science Reviews papers that carry the
+functions (R0), the table of sample ages (R1), the published counts at the sites with their areas and at least one
+recount after 2001 (R2), craterstats in the oracle environment (R3), the Martian references to name the factor between
+the published production functions (R4), and a person to mark craters on a frame finer than the present ones (R5),
+for O2 and I1.
+
 ## Not done in this gate
 
-I1 (the completeness correction by injection) needs the injection kernel's recognition measured on crater-like
-features and a person or a published detector to recover them; none exists, so it is NOT RUN and its method is the
-contract above. No count on any frame is made by anyone, and none is simulated.
+R1 to R3 (no sample ages or published counts in hand), O2 and I1 (the completeness correction by injection needs the
+recognition measured on crater-like features and a person or a published detector to recover them) are NOT RUN, and
+their methods are the contract above. No count on any frame is made by anyone, and none is simulated. Part B is not
+built: it is authorized only by a verdict of A or B, and the verdict is a pending C.
