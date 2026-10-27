@@ -17,8 +17,9 @@ surface that has only been cratered, and the chronology function
 lambda = 6.93 per Ga, c2 = 8.38e-4 per km^2 per Ga). The count is converted to the 1 km equivalent
 `N1 = (n / A) N_PF(>=1) / N_PF(>=dMin)`, its Garwood interval is mapped through the same factor, and the inverse
 chronology `T(N1)` gives the age and its interval. The shape of `N1(T)` is the whole difficulty of the method: above
-about 3.3 Ga the exponential dominates, a 10 percent change in the count is 0.014 Ga, and the age is insensitive to the
-count; below about 3 Ga the linear term dominates and the age is proportional to the count.
+3.5 Ga the exponential term is the larger and the age is insensitive to the count (a 10 percent change in the
+count moves the age by about 0.016 Ga near 3.9 Ga and 0.035 Ga near 3.5 Ga); below it the linear term dominates and
+the age is nearly proportional to the count (0.3 Ga near 3 Ga).
 
 Everything that is not the Poisson count is an assumption the interval does not contain. The age of a surface assumes
 that the craters accumulated at the rates the chronology says (calibrated on the Apollo and Luna sites, 3.0 to about
@@ -51,7 +52,7 @@ Every bound is in the fixture.
 | F1 | the functions are what the contract says: 10^a0 equals the linear coefficient; the inverse round-trips to 1e-9; N_PF strictly decreasing in D and N1 strictly increasing in T; an independent Python implementation agrees to 1e-9 (an implementation check, it shares the recalled coefficients) | none |
 | F2 | the 95 percent age interval covers the true age at 0.94 or more in each of 24 cells of a seeded ensemble (six ages, two areas, two `dMin`) | none |
 | F3 | each refusal case returns a named status and no age (`dMin` under 1 km, under 5 craters, saturated, older than the chronology, an invalid count or diameter, a Martian region), and at most 5 percent of 500 control surfaces are refused or flagged | none |
-| R1 | the age recovered from each retrieved published count is within the committed tolerance of the sample age (0.3 Ga at 3 Ga and above, 30 percent below), at no fewer than six sites | R0, R1, R2 |
+| R1 | the age recovered from each retrieved published count is within the committed tolerance of the sample age (the recovered 1 km density within a factor of 1.5 of the density at the sample age), at no fewer than six sites | R0, R1, R2 |
 | R2 | the sample age is inside the counting interval widened by the RMS misfit of R1, at every site | R0, R1, R2 |
 | R3 | at least two sites whose published count is a recount made after 2001, not the calibration count, are within the same tolerance | R0, R1, R2 |
 | O1 | the expected count on the committed Moon frames, from the production function at 3.5 Ga, above the 8-pixel limit is at least 30 | none |

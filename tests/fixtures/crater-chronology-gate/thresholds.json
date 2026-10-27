@@ -10,7 +10,7 @@
       "form": "log10 N(>=D) = a0 + sum over n = 1..11 of a_n (log10 D)^n, N the cumulative number per km^2 accumulated in one reference unit of the chronology, D in km",
       "a": [
         -3.0768, -3.6269, 0.4366, 0.7935, 0.0865, -0.2649, -0.0664, 0.0379,
-        0.0106, -0.0022, -0.000518, 0.0000397
+        0.0106, -0.0022, -0.000518, 3.97e-5
       ],
       "domainKm": [0.01, 300],
       "domainNote": "the polynomial is a fit over this range; outside it the function is not defined here and every use refuses"
@@ -20,7 +20,7 @@
       "form": "N1(T) = c1 (exp(lambda T) - 1) + c2 T, the cumulative number of craters of D >= 1 km per km^2 on a surface of model age T (Ga)",
       "c1": 5.44e-14,
       "lambda": 6.93,
-      "c2": 8.38e-4,
+      "c2": 0.000838,
       "calibratedToGa": 3.95,
       "calibratedNote": "the oldest sample age behind the curve is about 3.9 Ga; older model ages are extrapolation and are flagged as such"
     },
@@ -59,27 +59,37 @@
   "legs": {
     "F1.a0": {
       "what": "the constant of the production polynomial against the chronology's linear coefficient: 10^a0 equals c2",
-      "bounds": { "relativeDifference": 0.001 },
+      "bounds": {
+        "relativeDifference": 0.001
+      },
       "data": "none"
     },
     "F1.inverse": {
       "what": "T -> N1 -> T through the bisection inverse over T in {0.01, 0.05, 0.1, 0.5, 1, 2, 3, 3.5, 3.9, 4.2, 4.5} Ga",
-      "bounds": { "relative": 1e-9 },
+      "bounds": {
+        "relative": 1e-9
+      },
       "data": "none"
     },
     "F1.monotone": {
       "what": "N_PF(>=D) is strictly decreasing in D at 400 log-spaced diameters over the domain (0.01 to 300 km) and N1(T) strictly increasing in T at 400 points over 0.01 to 4.5 Ga",
-      "bounds": { "violations": 0 },
+      "bounds": {
+        "violations": 0
+      },
       "data": "none"
     },
     "F1.oracle": {
       "what": "the spike's functions against an independent implementation (Python, numpy and scipy, nothing of Gravitas run) over a 40 diameter by 11 age grid: N_PF, N1, T(N1), and the Garwood-mapped age interval for 30 counts. This is an implementation check: both codes read the same recalled coefficients, so it cannot catch a wrong coefficient (R0 does)",
-      "bounds": { "maxRelative": 1e-9 },
+      "bounds": {
+        "maxRelative": 1e-9
+      },
       "data": "none"
     },
     "F2.coverage": {
       "what": "the 95 percent age interval covers the true age at the stated rate on a fixed seeded ensemble: counts drawn as Poisson from the production function at true T in {0.5, 1, 2, 3, 3.5, 3.9} Ga, areas {2e4, 2e5} km^2 and dMin in {1, 3} km; 4,000 trials per cell (24 cells), seed 196; the interval alone, no refusal rule applied, so a count of zero gives the interval from zero",
-      "bounds": { "perCellMinimum": 0.94 },
+      "bounds": {
+        "perCellMinimum": 0.94
+      },
       "note": "the Garwood interval is conservative, so only a floor is stated; cells with a tiny expected count may cover far more",
       "data": "none"
     },
@@ -93,46 +103,60 @@
       "data": "none"
     },
     "R1.sites": {
-      "what": "for each returned-sample site whose published count is retrieved, the age recovered from the published count lies within the tolerance of the sample age; the tolerance is committed here and does not depend on the sites",
+      "what": "for each returned-sample site whose published count is retrieved, the age recovered from the published count is within the tolerance of the sample age (a factor of 1.5 on the 1 km equivalent density); the tolerance is committed here and does not depend on the sites",
       "tolerance": {
-        "atOrAboveGa": 3.0,
-        "absoluteGaAtOrAbove": 0.3,
-        "relativeBelow": 0.3,
-        "why": "above about 3 Ga the exponential term makes the age insensitive to the count (a 10 percent count error moves the age by about 0.014 Ga) and the published counts of one site differ between teams by up to about a factor of 2, which is 0.1 Ga there; below 3 Ga the linear term makes the age proportional to the count, so a factor 1.3 between teams is a 30 percent age difference. The tolerance is not derived from the sample uncertainties."
+        "densityFactor": 1.5,
+        "form": "the recovered N1 is within a factor of 1.5 of N1(T_sample), which is the same as the recovered age lying in [T(N1(T_sample) / 1.5), T(1.5 N1(T_sample))]",
+        "why": "published counts of one site differ between teams by about a factor of 1.3 to 2, so a factor of 1.5 is the committed middle. The tolerance is stated on the density because the age is not a linear function of it: the exponential term of the chronology exceeds the linear term only above about 3.5 Ga, so a given density tolerance is a window of a few hundredths of a Ga near 3.9 Ga and several tenths of a Ga near 3 Ga. The tolerance is not derived from the sample uncertainties."
       },
-      "bounds": { "minimumSitesWithCounts": 6, "minimumSitesWithinTolerance": "every site retrieved" },
+      "bounds": {
+        "minimumSitesWithCounts": 6,
+        "minimumSitesWithinTolerance": "every site retrieved"
+      },
       "circularity": "the chronology was fitted to the calibration counts at these sites, so recovering their ages from those counts shows consistency, not accuracy; R3 is the leg that does not share that circularity",
       "data": "R0, R1, R2"
     },
     "R2.coverage": {
       "what": "the sample age lies inside the counting interval widened by the approximation floor (the RMS misfit of R1), at every retrieved site",
-      "bounds": { "sitesOutside": 0 },
+      "bounds": {
+        "sitesOutside": 0
+      },
       "data": "R0, R1, R2"
     },
     "R3.recount": {
       "what": "at least two sites for which the published count is a recount made after 2001, not the calibration count, are within the same tolerance of their sample ages",
-      "bounds": { "minimumRecountSites": 2 },
+      "bounds": {
+        "minimumRecountSites": 2
+      },
       "data": "R0, R1, R2"
     },
     "O1.feasible": {
       "what": "whether the lesson's own counts on the committed Moon frames can age a surface at all: for each committed Moon region the smallest diameter counted is dMin = max(8 pixels x the frame's km per pixel, 1 km) (Prompt 195's 8 pixel rule) and the expected number of craters of D >= dMin on a surface of model age 3.5 Ga is A x N_PF(>=dMin) x N1(3.5 Ga) / N_PF(>=1 km), from the region's stated area; no count on the frame is used",
-      "bounds": { "expectedCountMinimumAt3_5Ga": 30 },
+      "bounds": {
+        "expectedCountMinimumAt3_5Ga": 30
+      },
       "why": "with fewer than about 30 craters the 95 percent counting interval is wider than about plus or minus 40 percent in N1, which at 3.5 Ga (where the linear and exponential terms are of comparable size) is an age uncertainty of several tenths of a Ga",
       "data": "none (the regions' areas and scales are committed in frames/craters-regions.json)"
     },
     "O2.own": {
       "what": "the age recovered from a person's counts on the frames, by the chronology, agrees with the age recovered from the same craters' published diameters in the regional list, within the R1 tolerance",
-      "bounds": { "within": "R1.sites.tolerance" },
+      "bounds": {
+        "within": "R1.sites.tolerance"
+      },
       "data": "R5; nothing is simulated"
     },
     "I1.completeness": {
       "what": "the completeness correction by injection: crater-like features (a bowl profile with a stated depth to diameter ratio, a degradation state and the frame's illumination, never a stellar PSF) are injected into the frames and recovered, and the recognition fraction against diameter is measured; the correction is validated by recovering the published counts at a site from a count made at a larger completeness limit",
-      "bounds": { "recognitionAtDminMinimum": 0.9 },
+      "bounds": {
+        "recognitionAtDminMinimum": 0.9
+      },
       "data": "R5 and R2; NOT RUN without both (the recognition function is a measurement on people or on a detector, and none exists)"
     },
     "M1.mars": {
       "what": "a Martian absolute age is not measurable by this gate: there is no returned sample and so no radiometric anchor. The Martian chronology and scaling are outside every verdict; a Martian count may be shown with the lunar-scaled isochron only as a labelled model, never as an age",
-      "bounds": { "agesReturnedForMars": 0 },
+      "bounds": {
+        "agesReturnedForMars": 0
+      },
       "data": "none"
     }
   },
@@ -145,5 +169,12 @@
       "C": "no absolute age anywhere; Prompt 195's relative ages stand; Prompt 206's unit lists the chronology as a reading step"
     }
   },
-  "rights": "the sample ages and the published counts are facts from papers; they are read, cited with their retrieval date, and committed as a small table with credit, one decision per source (Operating rule 7.5.4), and none is committed before it is read"
+  "rights": "the sample ages and the published counts are facts from papers; they are read, cited with their retrieval date, and committed as a small table with credit, one decision per source (Operating rule 7.5.4), and none is committed before it is read",
+  "corrections": [
+    {
+      "id": "c1",
+      "before": "any age was computed or any prototype or oracle output existed (commit 62062cfa is the original)",
+      "what": "R1.sites' first tolerance (0.3 Ga at 3 Ga and above, 30 percent below) rested on a wrong statement that the exponential term dominates above about 3 Ga; with the committed constants the two terms are equal near 3.5 Ga (a hand estimate from the constants, no output). The tolerance is restated on the density as a factor of 1.5, which is regime-free. The prose in CRATER_CHRONOLOGY_GATE.md followed."
+    }
+  ]
 }
