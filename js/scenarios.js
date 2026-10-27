@@ -4,17 +4,16 @@
 // Every built-in scenario's settings, as one table keyed by the scenario's
 // public id (SCENARIO_PRESETS below), and the function that stamps a row of
 // it onto the settings object. Extracted from ui.js: this was 778 lines of a
-// 8,900-line module, and it has no dependency on the UI beyond the objects
-// handed to it, so it takes them as parameters rather than importing ui.js
-// and closing a cycle.
+// 8,900-line module, with no dependency on the UI beyond the objects handed to
+// it, taken as parameters rather than importing ui.js and closing a cycle.
 //
-// The table replaced an if-chain on the scenario's English name (Roadmap II
-// Prompt 63; "migration 1" of STUDIO_ROUNDTRIP_GATE.md). A row is data: the
-// settings the scenario runs under and nothing else. A scenario's bodies are
-// either generated from those settings, declared in SCENARIO_GEOMETRY at the
-// end of this file (Roadmap II Prompt 108, SCENARIO_GEOMETRY.md), or still
-// placed by code in js/world/build.js, keyed on the same ids.
+// The table replaced an if-chain on the scenario's English name (Roadmap II Prompt 63;
+// "migration 1" of STUDIO_ROUNDTRIP_GATE.md). A row is data: the settings the scenario
+// runs under and nothing else. A scenario's bodies are either generated from those
+// settings, declared in SCENARIO_GEOMETRY at the end of this file (Roadmap II Prompt
+// 108, SCENARIO_GEOMETRY.md), or placed by code in js/world/build.js, keyed on the same ids.
 // =============================================================================
+import { RING_TIDE_PRESETS } from './data/tidePresets.js';
 
 /**
  * The last preset this function set up.
@@ -1712,59 +1711,7 @@ export const SCENARIO_PRESETS = /* @__PURE__ */ Object.freeze({
     max_star_mass_before_bh: 20.0,
     preset_zoom: 1.7,
   },
-  // Rings and tides (Prompt 204): scale models, G carrying the distance (as in
-  // Earth-Moon System); the bodies are declared in js/world/build.js.
-  'ring-gap': {
-    num_black_holes: 0,
-    num_stars: 0,
-    num_planets: 0,
-    num_gas_giants: 0,
-    num_asteroids: 0,
-    num_comets: 0,
-    num_neutron_stars: 0,
-    num_white_dwarfs: 0,
-    enable_asteroids: false,
-    placement: 'Empty',
-    mutual_gravity: true,
-    star_only_gravity: false,
-    enable_star_merging: false,
-    dynamic_object_properties: false,
-    gravitational_constant: 10000,
-    integrator: 'Velocity Verlet',
-    min_interaction_distance: 0.05,
-    max_timestep: 0.1,
-    sim_speed: 4,
-    show_trails: false,
-    show_scale_bar: false,
-    show_elapsed_time: false,
-    preset_zoom: 3.8,
-  },
-  'roche-pass': {
-    num_black_holes: 0,
-    num_stars: 0,
-    num_planets: 0,
-    num_gas_giants: 0,
-    num_asteroids: 0,
-    num_comets: 0,
-    num_neutron_stars: 0,
-    num_white_dwarfs: 0,
-    enable_asteroids: false,
-    placement: 'Empty',
-    mutual_gravity: true,
-    star_only_gravity: false,
-    enable_star_merging: false,
-    dynamic_object_properties: false,
-    gravitational_constant: 3000,
-    integrator: 'Velocity Verlet',
-    min_interaction_distance: 0.4,
-    max_timestep: 0.02,
-    sim_speed: 0.4,
-    show_trails: true,
-    trail_length: 40,
-    show_scale_bar: false,
-    show_elapsed_time: false,
-    preset_zoom: 2.6,
-  },
+  ...RING_TIDE_PRESETS,
 });
 
 /** The public ids of every built-in scenario, in the table's order. */

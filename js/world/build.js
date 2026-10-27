@@ -35,13 +35,13 @@ import {
   JUPITER_MASSES_PER_SOLAR_MASS,
 } from '../constants.js';
 import { haloEnclosedMass } from '../darkMatter.js';
+import { ringGapSystem, rochePassSystem } from './tidalSystems.js';
 import { HD209458 } from '../data/exoplanetSystems.js';
 import { TRAPPIST1_PLANETS, TRAPPIST1_STAR } from '../data/trappist1.js';
 import {
   Asteroid,
   BlackHole,
   Comet,
-  CERES_MASS_UNIT,
   EARTH_MASS_UNIT,
   Galaxy,
   GasGiant,
@@ -314,12 +314,7 @@ export const ENGINE_GEOMETRY = /* @__PURE__ */ Object.freeze({
   'neutron-star-collision': { keep: KEEP_ALL, place: [{ rule: { name: 'pin-pair', params: { type: 'NeutronStar', x: 50, speed: 15 } } }], steps: [{ rule: { name: 'name-pair', params: { type: 'NeutronStar', names: ['GW170817-A', 'GW170817-B'] } } }] },
   // prettier-ignore
   'white-dwarf-binary': { place: [{ rule: { name: 'pin-pair', params: { type: 'WhiteDwarf', x: 80, speed: 20 } } }] },
-  //
-  // Prompt 204 part 2: two scale models for the rings and tides displays. Each
-  // is one published-system rule (the table and its sources are
-  // ringGapSystem and rochePassSystem below) and nothing else: the pull is the
-  // engine's own Newtonian gravity, no extra force. The whole system is
-  // recentered.
+  // Prompt 204 part 2: two scale models, one published-system rule each (js/world/tidalSystems.js).
   // prettier-ignore
   'ring-gap': { recenter: true, steps: [{ rule: { name: 'published-system', params: { system: 'ring-gap' } } }] },
   // prettier-ignore
@@ -2171,9 +2166,9 @@ export const buildWorld = ctx => {
         if (system === 'hd209458') return hd209458(G);
         if (system === 'kuiper-belt') return kuiperBelt(G);
         if (system === 'solar-system') return solarSystem(G);
-        if (system === 'ring-gap') return ringGapSystem(G);
+        if (system === 'ring-gap') return ringGapSystem(G, published);
         if (system === 'roche-pass')
-          return rochePassSystem(G, periapsisRadii ?? 1.3);
+          return rochePassSystem(G, published, periapsisRadii ?? 1.3);
         if (system === 'galilean') {
           spec = galileanBodies(G, detuned ? { detune: GALILEAN.detune } : {});
         } else if (system === 'pluto-neptune') spec = plutoBodies(G);
@@ -2210,145 +2205,6 @@ export const buildWorld = ctx => {
             density: 'icy',
             baseColor: '#CFE6F5',
             isKuiperBeltObject: true,
-          },
-        };
-      }
-    };
-    // A ringed planet at the scale of Saturn and Mimas (Prompt 204 part 2): the
-    // planet's mass is true (95.16 Earth masses) and every length is a scale
-    // model, 100 units to the resonant moon's orbit, with G carrying the
-    // exaggeration of distance as the Earth-Moon System's does (js/scenarios.js).
-    // The ring is 200 particles of negligible mass, evenly spaced in radius
-    // between 0.52 and 0.76 of that orbit and at random phases, so the moon's 2:1 resonance (a (1/2)^(2/3) = 0.63 of it, which is
-    // where the Cassini Division lies) is inside it. The resonant moon (0.1
-    // percent of the planet, about 15,000 times Mimas's true ratio, so that
-    // twenty orbits can show the effect) and the shepherd inside the ring at 72
-    // (3e-5, a moonlet clearing a lane about its orbit as Pan does in the
-    // Encke Gap) are exaggerated and the scenario says so. Phases and the
-    // phases are drawn from the seeded generator in this order: the moons', then one
-    // for each particle. A particle's contact radius is a thousandth of a
-    // unit: the engine's collisions are inelastic bounces, which heat a ring
-    // by themselves, and a gap that came from them would teach the wrong thing.
-    const ringGapSystem = function* (G) {
-      const M = 95.16 * EARTH_MASS_UNIT;
-      const circle = (a, m, extra) => {
-        const th = Math.random() * 2 * Math.PI;
-        const v = Math.sqrt((G * (M + m)) / a);
-        return {
-          pos: { x: a * Math.cos(th), y: a * Math.sin(th) },
-          vel: { x: -v * Math.sin(th), y: v * Math.cos(th) },
-          ...extra,
-        };
-      };
-      yield published({
-        kind: 'gasGiant',
-        name: 'Ringed planet',
-        mass: M,
-        pos: { x: 0, y: 0 },
-        vel: { x: 0, y: 0 },
-        radius: 32.5,
-        color: '#e3cf9e',
-      });
-      for (const [name, a, ratio, radius, color] of [
-        ['Resonant moon', 100, 1e-3, 3, '#cfd2d6'],
-        ['Shepherd moon', 72, 3e-5, 2, '#b9a38a'],
-      ])
-        yield published({
-          kind: 'planet',
-          name,
-          mass: ratio * M,
-          radius,
-          color,
-          ...circle(a, ratio * M),
-        });
-      const N = 200;
-      const m = 1e-9 * M;
-      for (let i = 0; i < N; i++) {
-        const r = 52 + 24 * ((i + 0.5) / N);
-        const th = Math.random() * 2 * Math.PI;
-        const v = Math.sqrt((G * M) / r);
-        yield {
-          type: 'Asteroid',
-          ctor: 1,
-          pos: { x: r * Math.cos(th), y: r * Math.sin(th) },
-          vel: { x: -v * Math.sin(th), y: v * Math.cos(th) },
-          assign: {
-            name: `Ring particle ${i + 1}`,
-            mass: m,
-            massInCeres: m / CERES_MASS_UNIT,
-            radius: 0.004,
-            baseColor: '#c8b89a',
-            persistent: true,
-          },
-        };
-      }
-    };
-    // The same planet-and-clump geometry as Shoemaker-Levy 9 at Jupiter (Prompt
-    // 204 part 2): a planet of one Jupiter mass drawn 15 units across, and a
-    // clump of 40 particles (one thousandth of the planet's mass, 2 units
-    // across, so 2.37 times less dense than the planet) on a bound ellipse whose
-    // periapsis is 1.3 planet radii from the planet's centre (`periapsisRadii`,
-    // for the tests' control): inside the rigid Roche limit (2^(1/3) 2.37^(1/3)
-    // = 1.68 radii) and the fluid one (2.44 x 2.37^(1/3) = 3.26).
-    // The clump starts in virial balance (a disc of equal masses, random
-    // motion at the speed its own gravity sets), so that what happens after
-    // periapsis is the planet's tide. G is large so a pass takes about ten
-    // time units.
-    const rochePassSystem = function* (G, periapsisRadii) {
-      const Mp = JUPITER_MASS_UNIT;
-      const Rp = 15;
-      const mc = 1e-3 * Mp;
-      const Rc = 2;
-      const N = 60;
-      const q = periapsisRadii * Rp;
-      const e = 0.9;
-      const a = q / (1 - e);
-      const r0 = 4 * q;
-      const vt = Math.sqrt(G * Mp * q * (1 + e)) / r0;
-      const vr = -Math.sqrt(Math.max(0, G * Mp * (2 / r0 - 1 / a) - vt * vt));
-      yield published({
-        kind: 'gasGiant',
-        name: 'Planet',
-        mass: Mp,
-        pos: { x: 0, y: 0 },
-        vel: { x: 0, y: 0 },
-        radius: Rp,
-        color: '#d9b98a',
-      });
-      // Virial random motion (a uniform disc's 0.42 G m / R per axis), drawn
-      // from the seeded generator, and no net drift inside the clump.
-      const sigma = Math.sqrt((0.35 * G * mc) / Rc);
-      const gauss = () =>
-        Math.sqrt(-2 * Math.log(1 - Math.random())) *
-        Math.cos(2 * Math.PI * Math.random());
-      const phase = Math.random() * 2 * Math.PI;
-      const rows = [];
-      for (let i = 0; i < N; i++) {
-        const r = Rc * Math.sqrt((i + 0.5) / N);
-        const th = phase + i * 2.399963229728653;
-        rows.push({
-          x: r * Math.cos(th),
-          y: r * Math.sin(th),
-          u: sigma * gauss(),
-          w: sigma * gauss(),
-        });
-      }
-      const mu = rows.reduce((t, b) => t + b.u / N, 0);
-      const mw = rows.reduce((t, b) => t + b.w / N, 0);
-      for (let i = 0; i < N; i++) {
-        const b = rows[i];
-        yield {
-          type: 'Asteroid',
-          ctor: 1,
-          pos: { x: r0 + b.x, y: b.y },
-          vel: { x: vr + b.u - mu, y: vt + b.w - mw },
-          assign: {
-            name: `Rubble ${i + 1}`,
-            mass: mc / N,
-            massInCeres: mc / N / CERES_MASS_UNIT,
-            radius: 0.01,
-            baseColor: '#b8a58a',
-            persistent: true,
           },
         };
       }
