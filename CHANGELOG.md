@@ -109,12 +109,12 @@ The Observatory's image measurement train (Prompts 179 to 182, 184, 186 to 189, 
 
 **Gravitas 2.0.0.** Gravitas grows from a gravity sandbox with 22 guided
 investigations into a browser laboratory: <!--fact:scenarios-->59<!--/fact-->
-sandbox scenarios, <!--fact:libraryInvestigations-->86<!--/fact--> guided
-investigations (<!--fact:investigations-->69<!--/fact--> that run in the
+sandbox scenarios, <!--fact:libraryInvestigations-->89<!--/fact--> guided
+investigations (<!--fact:investigations-->72<!--/fact--> that run in the
 simulation and <!--fact:guidedInvestigations-->17<!--/fact--> in the
 Observatory, the 3-D lab and the mission lab), a shared shell, a Library, a
 workspace for each student's own work, an instructor path from adoption page to
-gradebook file, <!--fact:instructorDocuments-->639<!--/fact--> generated
+gradebook file, <!--fact:instructorDocuments-->672<!--/fact--> generated
 instructor documents, a public validation suite
 of <!--fact:physicsChecks-->339<!--/fact--> checks, and authoring tools
 (Scenario Studio, Investigation Composer, course packs and an extension SDK).
@@ -1767,7 +1767,7 @@ listed here because this is the release that first carries it.
 - **An instructor portal that explains itself.** `/instructors/` states what is
   behind the passphrase before asking for it, says plainly what client-side
   encryption on a static host can and cannot promise, and presents the
-  <!--fact:instructorDocuments-->639<!--/fact--> documents grouped by investigation
+  <!--fact:instructorDocuments-->672<!--/fact--> documents grouped by investigation
   with their kind and size. A wrong passphrase and a missing bundle now report
   as the different problems they are.
 - **Dual licensing.** The code is MIT; the original educational material is
@@ -1834,7 +1834,7 @@ listed here because this is the release that first carries it.
   uncertainty, the target and the observing configuration.
 - **Offline support.** A service worker precaches the application shell, the
   <!--fact:scenarios-->59<!--/fact--> scenario thumbnails and all
-  <!--fact:investigations-->69<!--/fact--> English lessons, so a class keeps
+  <!--fact:investigations-->72<!--/fact--> English lessons, so a class keeps
   working when the room's wifi drops. The cache name is a content hash, so a
   build invalidates it. See [OFFLINE_AND_LOW_END.md](OFFLINE_AND_LOW_END.md).
 - **A measured low-end quality tier.** Chosen from the frame rate the machine
@@ -1843,7 +1843,7 @@ listed here because this is the release that first carries it.
   off.
 - **An investigation authoring toolchain.** `npm run author:check` validates
   every lesson and every one of the
-  <!--fact:investigationSteps-->1112<!--/fact--> steps; `npm run author:new`
+  <!--fact:investigationSteps-->1139<!--/fact--> steps; `npm run author:new`
   scaffolds a lesson with its translation shadow and instructor stub;
   `?author=<lesson>&step=<n>` opens any step with diagnostics without touching
   a student's saved progress; and a browser walker exercises every step of

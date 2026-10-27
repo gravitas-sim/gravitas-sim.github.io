@@ -1,0 +1,59 @@
+{
+ "id": "which-surface-is-older",
+ "static": {
+  "en": {
+   "units": [],
+   "numbered": [
+    ["steps.count-the-moon.fields.0.hint","40"],
+    ["steps.count-the-moon.fields.1.hint","7"],
+    ["steps.per-area.fields.0.hint","131.2"],
+    ["steps.per-area.fields.1.hint","20.5"],
+    ["steps.ratio-moon.fields.0.hint","6.39"],
+    ["steps.ratio-moon.fields.1.hint","2.83"],
+    ["steps.harder-craters.fields.0.hint","2"],
+    ["steps.harder-craters.fields.1.hint","84.8"],
+    ["steps.mars-pair.fields.0.hint","6.50"],
+    ["steps.mars-pair.fields.1.hint","3.68"],
+    ["steps.the-flip.fields.0.hint","3.00"],
+    ["steps.the-flip.fields.1.hint","0.91"],
+    ["steps.no-craters-at-all.fields.0.hint","5"],
+    ["steps.no-craters-at-all.fields.1.hint","1.02"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": []
+  }
+ },
+ "numeric": {
+  "answers": [],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "count-the-moon": {
+    "validate": {"calls":232,"distinct":2,"digest":"99ec3c40c4d0f21c","samples":[null,{"level":"error","message":"Choose the Moon, set “Count craters at least” to 30 km and read the number of craters in each region."}]}
+   },
+   "per-area": {
+    "validate": {"calls":232,"distinct":2,"digest":"e63cdfd33e315bf6","samples":[null,{"level":"error","message":"Keep the Moon at 30 km and read the number “per million km²” in each of the two region rows."}]}
+   },
+   "ratio-moon": {
+    "validate": {"calls":232,"distinct":2,"digest":"9ca130df2a942264","samples":[null,{"level":"error","message":"Stay on the Moon at 30 km and read “Density ratio, first over second”: the first number, then the lower end of the interval in brackets."}]}
+   },
+   "harder-craters": {
+    "validate": {"calls":232,"distinct":2,"digest":"39cdbba78665a86a","samples":[null,{"level":"error","message":"Choose the Moon, set “Count craters at least” to 50 km and read the number of craters in the mare and the upper end of the interval of the density ratio."}]}
+   },
+   "mars-pair": {
+    "validate": {"calls":232,"distinct":2,"digest":"946ec42192d4288e","samples":[null,{"level":"error","message":"Choose Mars, set “Count craters at least” to 20 km and read “Density ratio, first over second”."}]}
+   },
+   "the-flip": {
+    "validate": {"calls":232,"distinct":2,"digest":"304b8990f49aa843","samples":[null,{"level":"error","message":"Choose Mars, set “Count craters at least” to 60 km and read “Density ratio, first over second” and the lower end in brackets."}]}
+   },
+   "no-craters-at-all": {
+    "validate": {"calls":232,"distinct":2,"digest":"1c6b717f4631b4c5","samples":[null,{"level":"error","message":"Choose the Moon, set “Count craters at least” to 100 km and read the number of craters in the highland and the lower end of the ratio’s interval."}]}
+   }
+  },
+  "es": "same"
+ }
+}

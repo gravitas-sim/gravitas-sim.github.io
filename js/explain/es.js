@@ -187,6 +187,12 @@ export default {
     'Por qué Venus es mucho más cálido que su temperatura de equilibrio y por qué una sola capa no puede alcanzarlo, por qué los dos modelos dan números distintos para el mismo planeta, y dónde la opacidad gris deja de ser una buena descripción.',
     'Son modelos de enseñanza: sin convección, sin nubes, sin calor interno, con una sola opacidad en todas las longitudes de onda. La curva de Eddington es cerca de un 4 por ciento más cálida arriba en una atmósfera gris, y un planeta gigante no tiene superficie con la que comparar.',
   ],
+  crater: [
+    'Dos regiones lado a lado con sus densidades, el gráfico de tamaño y frecuencia de una región con sus intervalos, o el diámetro de un círculo con los cuatro términos de su incertidumbre.',
+    'Cuántos cráteres de al menos un diámetro dado tiene una región por área y con cuánta seguridad, el cociente de las densidades de dos regiones con su intervalo y la pendiente del gráfico con su intervalo.',
+    'Qué superficie tiene más cráteres, por área, a un diámetro donde ambas se cuentan por completo; si una pendiente se mantiene más arriba o se quiebra; y cuál de los términos de la incertidumbre de un diámetro es el mayor.',
+    'Los círculos son de un catálogo, no marcas sobre las imágenes. Un cociente de densidades no es una edad en años: no se aplica ninguna función de producción, ni saturación, ni cráteres secundarios, ni corrección de completitud.',
+  ],
   gwEvents: [
     'Deformación real del detector frente al tiempo, y un mapa de tono frente al tiempo.',
     'Una traza ascendente en el mapa es el chirrido de una espiral.',

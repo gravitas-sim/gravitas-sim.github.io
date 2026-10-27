@@ -1,0 +1,57 @@
+{
+ "id": "craters-by-size",
+ "static": {
+  "en": {
+   "units": [],
+   "numbered": [
+    ["steps.highland-slope.fields.0.hint","1.71"],
+    ["steps.highland-slope.fields.1.hint","1.22"],
+    ["steps.highland-slope.fields.2.hint","2.28"],
+    ["steps.mars-slope.fields.0.hint","1.39"],
+    ["steps.mars-slope.fields.1.hint","2.09"],
+    ["steps.thin-mare.fields.0.hint","3.47"],
+    ["steps.thin-mare.fields.1.hint","6.47"],
+    ["steps.raise-the-floor.fields.0.hint","14"],
+    ["steps.raise-the-floor.fields.1.hint","3.56"],
+    ["steps.unbiased-form.fields.0.label","Index, unbiased form (n − 1) / S"],
+    ["steps.unbiased-form.fields.0.hint","2.97"],
+    ["steps.roll-off.fields.0.hint","1.01"],
+    ["steps.roll-off.fields.1.hint","2.77"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.unbiased-form.fields.0.label","Índice, forma insesgada (n − 1) / S"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "highland-slope": {
+    "validate": {"calls":242,"distinct":2,"digest":"0504fd804e0cac24","samples":[null,{"level":"error","message":"Choose the lunar highland, set “Fit craters at least” to 30 km and leave the count as given. Read the index and the two ends of its 95 percent interval."}]}
+   },
+   "mars-slope": {
+    "validate": {"calls":232,"distinct":2,"digest":"f93c190dd7668cee","samples":[null,{"level":"error","message":"Choose the Martian highland (2), set “Fit craters at least” to 20 km and read the two ends of the interval of the index."}]}
+   },
+   "thin-mare": {
+    "validate": {"calls":232,"distinct":2,"digest":"8913e296f733246b","samples":[null,{"level":"error","message":"Choose the lunar mare (1), set “Fit craters at least” to 30 km and read the index and the upper end of its interval."}]}
+   },
+   "raise-the-floor": {
+    "validate": {"calls":232,"distinct":2,"digest":"8fbb20497988da8f","samples":[null,{"level":"error","message":"Choose the lunar highland (0), set “Fit craters at least” to 60 km and read the number of craters in the fit and the upper end of the interval."}]}
+   },
+   "unbiased-form": {
+    "validate": {"calls":97,"distinct":2,"digest":"c15d87bf35a2cd97","samples":[null,{"level":"error","message":"Choose the lunar mare (1), set “Fit craters at least” to 30 km and read “Index, unbiased form”."}]}
+   },
+   "roll-off": {
+    "validate": {"calls":232,"distinct":2,"digest":"1b7e6ad68285e4c1","samples":[null,{"level":"error","message":"Choose the lunar highland (0), set “Fit craters at least” to 20 km and “A count that stops short” to 100 %, then read the index and the z in the slope check."}]}
+   }
+  },
+  "es": "same"
+ }
+}

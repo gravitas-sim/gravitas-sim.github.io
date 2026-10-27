@@ -466,6 +466,170 @@ export const A_BINARY_STARS_ORBIT_DEEPER = {
   ],
 };
 
+// ¿Qué superficie es más antigua?, pasos más profundos: paso a paso con el inglés (Prompt 195).
+export const WHICH_SURFACE_IS_OLDER_DEEPER = {
+  steps: [
+    {
+      title: 'Solo los cráteres mayores',
+      body: 'Sube el diámetro en la Luna a <strong>50 km</strong>. Menos cráteres cumplen. Lee cuántos tiene el mar y el <strong>extremo superior</strong> del intervalo del cociente de densidades.',
+      fields: [
+        { label: 'Cráteres en el mar lunar' },
+        { label: 'Extremo superior del intervalo' },
+      ],
+    },
+    {
+      title: '¿Por qué no compara a 25 km?',
+      body: 'Pon el diámetro en la Luna en <strong>25 km</strong>. El instrumento rechaza una comparación y dice que el diámetro queda por debajo de aquel en el que el recuento es completo.',
+      prompt: '¿Por qué no se permite un diámetro menor?',
+      options: [
+        'Los cráteres de menos de 30 km no existen en la Luna',
+        'Por debajo de 30 km un recuento de estas imágenes pasaría por alto cráteres, así que una densidad ahí no sería la de la superficie',
+        'El instrumento solo puede contar números enteros de kilómetros',
+        'Los cráteres más pequeños tienen una edad distinta a la de los grandes',
+      ],
+      misconceptions: [
+        {
+          say: 'Hay muchos más cráteres por debajo de 30 km que por encima. Lo que importa es que son los que un recuento de esta imagen no alcanzaría por completo: un cráter de 25 km mide 12 píxeles.',
+        },
+        {
+          say: 'El tamaño de un cráter no es su edad. Los cráteres pequeños son los primeros en perderse por saturación y en quedar enterrados, y los más afectados por los secundarios, que es la verdadera razón de contarlos con cuidado.',
+        },
+      ],
+      hints: [
+        '¿Cuántos píxeles de ancho tiene un cráter de 25 km a 2 km por píxel?',
+      ],
+      because:
+        'Una comparación necesita los dos recuentos completos por encima del diámetro. El límite de la Luna, 30 km, son 15 píxeles de ancho; el instrumento rechaza por debajo en vez de comparar densidades a las que les faltan cráteres.',
+    },
+    {
+      title: 'Dónde cambia su veredicto Marte',
+      body: 'Pon Marte en <strong>60 km</strong> y lee el cociente de densidades y el <strong>extremo inferior</strong> de su intervalo. Luego sube el diámetro de 5 en 5 km desde 20 y observa dónde cambia el veredicto.',
+      fields: [
+        { label: 'Cociente de densidades, tierras altas entre llanuras' },
+        { label: 'Extremo inferior del intervalo' },
+      ],
+    },
+    {
+      title: 'Cuando una región no tiene ninguno',
+      body: 'Pon la Luna en <strong>100 km</strong>. Las tierras altas tienen cráteres así de grandes y el mar ninguno. Lee cuántos tienen las tierras altas y el extremo inferior del intervalo del cociente.',
+      fields: [
+        { label: 'Cráteres en las tierras altas lunares' },
+        { label: 'Extremo inferior del intervalo' },
+      ],
+    },
+  ],
+};
+
+// Cráteres por tamaño, pasos más profundos: paso a paso con el inglés.
+export const CRATERS_BY_SIZE_DEEPER = {
+  steps: [
+    {
+      title: 'Ajustar solo los mayores',
+      body: 'Elige las <strong>tierras altas lunares</strong> y sube el ajuste a <strong>60 km</strong>. Lee cuántos cráteres hay en el ajuste y el extremo superior del intervalo.',
+      fields: [
+        { label: 'Cráteres en el ajuste' },
+        { label: 'Extremo superior del intervalo' },
+      ],
+    },
+    {
+      title: 'La forma insesgada',
+      body: 'El índice de máxima verosimilitud es <em>n</em>/<em>S</em>, donde <em>S</em> es la suma de ln(<em>D</em>/<em>D</em><sub>mín</sub>). Con pocos cráteres está sesgado al alza; <em>(n &minus; 1)/S</em> es la forma insesgada. Elige el <strong>mar lunar</strong>, ajustado desde <strong>30 km</strong>, y lee el índice insesgado.',
+      fields: [{ label: 'Índice, forma insesgada (n − 1) / S' }],
+    },
+    {
+      title: '¿Por qué no trazar una recta por los puntos?',
+      body: 'El gráfico muestra puntos unidos, a la vista, por una línea. El índice no es la pendiente de una recta ajustada a ellos.',
+      prompt:
+        '¿Por qué un ajuste de recta a los puntos dibujados es la herramienta equivocada?',
+      options: [
+        'Una recta siempre es mejor: usa todos los puntos del gráfico',
+        'Los puntos no son independientes (cada uno cuenta también todos los cráteres mayores) y sus errores no son gaussianos, así que el intervalo de la recta sería erróneo',
+        'No se puede ajustar una recta en una escala logarítmica',
+        'El índice de máxima verosimilitud es el ajuste de recta, escrito de otra manera',
+      ],
+      misconceptions: [
+        {
+          say: 'Usar todos los puntos no es usar todos los cráteres. Los puntos comparten sus cráteres: el mayor está en todos ellos, y un ajuste que los trata como separados cuenta su información muchas veces.',
+        },
+        {
+          say: 'Difieren: el índice de máxima verosimilitud pesa cada cráter una vez y tiene un intervalo exacto. Una recta de mínimos cuadrados por los puntos acumulados da al extremo de diámetros grandes, donde los puntos son pocos y correlacionados, el mismo peso que al pequeño.',
+        },
+      ],
+      hints: ['¿Cuántos de los puntos dibujados incluyen el cráter mayor?'],
+      because:
+        'Cada punto acumulado incluye todos los cráteres a su derecha, así que los puntos están correlacionados, y el error de un recuento es de Poisson, no gaussiano. El ajuste usa los cráteres, una vez cada uno, y obtiene un intervalo exacto.',
+    },
+    {
+      title: '¿Por qué 30 km, si el catálogo llega más abajo?',
+      body: 'El catálogo lunar dice que es completo hasta unos 8 km, y el instrumento aún marca 30 km como límite de completitud de las tierras altas lunares.',
+      prompt: '¿Por qué?',
+      options: [
+        'El catálogo está mal por debajo de 30 km',
+        'El límite es de un recuento hecho con esta imagen: 30 km son unos 15 píxeles de ancho a 2 km por píxel, lo menos que se puede colocar con fiabilidad',
+        'Los cráteres de menos de 30 km no existen en la Luna',
+        'El intervalo de Poisson no es válido por debajo de 30 km',
+      ],
+      misconceptions: [
+        {
+          say: 'El catálogo se hizo con otros datos, a una escala más fina, y su propia completitud está indicada. El límite aquí es de la imagen: un recuento de una persona sobre este mapa no puede ser completo donde los cráteres miden solo unos pocos píxeles.',
+        },
+        {
+          say: 'El intervalo de Poisson vale para cualquier número de cráteres independientes. Lo que falla por debajo del límite es que la lista ya no son todos los cráteres, algo que ningún intervalo puede reparar.',
+        },
+      ],
+      hints: ['¿Cuánto mide en píxeles un cráter de 20 km?'],
+      because:
+        'La completitud depende de los datos con que se hace un recuento. La misma superficie necesita otro límite en otra imagen, así que el límite se indica con la imagen, y un ajuste por debajo se señala como poco fiable.',
+    },
+  ],
+};
+
+// Lo que vale el diámetro de un cráter, pasos más profundos: paso a paso con el inglés.
+export const WHAT_A_CRATER_DIAMETER_IS_WORTH_DEEPER = {
+  steps: [
+    {
+      title: 'Un círculo pequeño',
+      body: 'Pon el punto del borde a <strong>5 píxeles</strong> del centro, un cráter de 10 píxeles de ancho. Lee el diámetro y la incertidumbre de <strong>colocar el círculo</strong>, en porcentaje.',
+      fields: [
+        { label: 'Diámetro' },
+        { label: 'Incertidumbre de colocar el círculo' },
+      ],
+    },
+    {
+      title: '¿Mide al menos 110 km?',
+      body: 'Un recuento por encima de 110 km necesita saber si este cráter está dentro. Con el círculo de nuevo a 25 píxeles, pon <strong>Contando cráteres de al menos</strong> en <strong>110 km</strong> y lee la probabilidad de que este cráter mida al menos eso, dada su incertidumbre.',
+      fields: [{ label: 'Probabilidad de que el cráter mida al menos 110 km' }],
+    },
+    {
+      title: 'La mejor mejora',
+      body: 'Cuatro cosas podrían reducir la incertidumbre del diámetro: una mejor escala del mapa, una mano más cuidadosa, acordar dónde está un borde y una mejor estimación de la vista.',
+      prompt: '¿Cuál la reduciría más para este círculo?',
+      options: [
+        'una mejor escala: el término de la escala fija el total',
+        'una mano más cuidadosa: coloca el círculo con un píxel',
+        'acordar, por convención, dónde está el borde',
+        'una mejor estimación de la vista',
+      ],
+      misconceptions: [
+        {
+          say: 'La escala ya se conoce al 0,06 por ciento. Reducir un término que ya es una centésima del total no cambia nada.',
+        },
+        {
+          say: 'Una mano más cuidadosa reduce el 1,6 por ciento de colocar el círculo, que se suma en cuadratura al 5 por ciento del borde: casi no cambia nada.',
+        },
+      ],
+      hints: ['Los términos se suman en cuadratura: ¿cuál domina la suma?'],
+      because:
+        'Los términos se suman como cuadrados, así que domina el mayor. Aquí es dónde está el borde, un 5 por ciento. Una convención que lo fije, como la misma definición de borde para todos los cráteres, es lo que necesitan los cráteres contados por distintas personas, y es un trabajo distinto de un mejor instrumento.',
+    },
+    {
+      title: 'Contra el catálogo',
+      body: 'Activa <strong>Los círculos del catálogo</strong>. El catálogo enumera un cráter bajo el centro de tu círculo. Lee su diámetro.',
+      fields: [{ label: 'El diámetro del catálogo' }],
+    },
+  ],
+};
+
 export default {
   'what-is-a-measurement': WHAT_IS_A_MEASUREMENT_DEEPER,
   'what-does-plus-minus-claim': WHAT_DOES_PLUS_MINUS_CLAIM_DEEPER,
@@ -473,4 +637,7 @@ export default {
   'measuring-the-moon': MEASURING_THE_MOON_DEEPER,
   'how-far-is-that-star': HOW_FAR_IS_THAT_STAR_DEEPER,
   'a-binary-stars-orbit': A_BINARY_STARS_ORBIT_DEEPER,
+  'which-surface-is-older': WHICH_SURFACE_IS_OLDER_DEEPER,
+  'craters-by-size': CRATERS_BY_SIZE_DEEPER,
+  'what-a-crater-diameter-is-worth': WHAT_A_CRATER_DIAMETER_IS_WORTH_DEEPER,
 };

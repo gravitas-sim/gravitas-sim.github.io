@@ -104,7 +104,7 @@ const familyEntry = (load, path, exportName, ids, ready) => ({
 });
 
 // <generated:lazy-families>
-// tidal, darkMatter, spectra, light, variables, galactic, cosmology, sky, gwEvents, imaging, jovian wait on their own readiness (prose or data behind a second import); whenWidgetsReady() waits for it.
+// tidal, darkMatter, spectra, light, variables, galactic, cosmology, sky, gwEvents, imaging, jovian, crater wait on their own readiness (prose or data behind a second import); whenWidgetsReady() waits for it.
 export const LAZY_FAMILIES = Object.freeze({
   energy: familyEntry(
     () => import('./energyWidgets.js'),
@@ -352,6 +352,13 @@ export const LAZY_FAMILIES = Object.freeze({
     'ATMOSPHERE_WIDGETS',
     ['atmosphere-balance', 'atmosphere-greenhouse', 'atmosphere-scale']
   ),
+  crater: familyEntry(
+    () => import('./craterWidgets.js'),
+    './craterWidgets.js',
+    'CRATER_WIDGETS',
+    ['crater-regions', 'crater-sfd', 'crater-budget'],
+    'craterReady'
+  ),
 });
 // </generated:lazy-families>
 
@@ -530,9 +537,13 @@ export async function whenWidgetsReady() {
   // loaded machine, jest's linker lost it ("request for '../setup.js' is not in
   // cache"). It is loaded after the rest, so that setup is already linked. This
   // adds no import, so no chunk and no request.
+  // The crater family reaches the plot component, as the atmosphere family
+  // does, and its words (js/i18n/index.js): the same failure, so it too is
+  // loaded after the rest. No import is added here either.
   const families = Object.keys(LAZY_FAMILIES);
-  await Promise.all(families.filter(f => f !== 'variables').map(loadFamily));
-  await loadFamily('variables');
+  const late = ['variables', 'crater'];
+  await Promise.all(families.filter(f => !late.includes(f)).map(loadFamily));
+  for (const f of late) await loadFamily(f);
   const results = await Promise.all([...familyReady.values()]);
   return results.every(Boolean);
 }

@@ -148,6 +148,12 @@ const DEEPER = {
     import('./data/investigations/depth/why-venus-is-hot.js'),
   'two-greenhouse-models': () =>
     import('./data/investigations/depth/two-greenhouse-models.js'),
+  'which-surface-is-older': () =>
+    import('./data/investigations/depth/which-surface-is-older.js'),
+  'craters-by-size': () =>
+    import('./data/investigations/depth/craters-by-size.js'),
+  'what-a-crater-diameter-is-worth': () =>
+    import('./data/investigations/depth/what-a-crater-diameter-is-worth.js'),
 };
 const deepen = async lesson =>
   lesson.depthLaid || !DEEPER[lesson.id]

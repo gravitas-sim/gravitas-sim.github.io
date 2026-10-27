@@ -98,6 +98,9 @@
           "measuring-the-moon",
           "how-far-is-that-star",
           "a-binary-stars-orbit",
+          "which-surface-is-older",
+          "craters-by-size",
+          "what-a-crater-diameter-is-worth",
           "weighing-jupiter",
           "why-venus-is-hot",
           "two-greenhouse-models"
@@ -343,6 +346,9 @@
                   "measuring-the-moon",
                   "how-far-is-that-star",
                   "a-binary-stars-orbit",
+                  "which-surface-is-older",
+                  "craters-by-size",
+                  "what-a-crater-diameter-is-worth",
                   "weighing-jupiter",
                   "why-venus-is-hot",
                   "two-greenhouse-models"
@@ -1442,7 +1448,10 @@
             "jupiter-weigh",
             "atmosphere-balance",
             "atmosphere-greenhouse",
-            "atmosphere-scale"
+            "atmosphere-scale",
+            "crater-regions",
+            "crater-sfd",
+            "crater-budget"
           ]
         }
       }

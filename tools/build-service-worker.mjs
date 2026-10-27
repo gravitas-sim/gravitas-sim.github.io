@@ -398,6 +398,14 @@ export const NEVER_PRECACHED = [
   /^(js\/atmosphereWidgets\.js|js\/i18n\/(en|es)\.atmospheres\.js)$/,
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(why-venus-is-hot|two-greenhouse-models|atmosphere-sequence)\.js$/,
   /^images\/investigations\/(why-venus-is-hot|two-greenhouse-models)\.webp$/,
+  // The crater instruments and investigations (Prompt 195, D-R10-85): the family
+  // and its words, the three lessons' per-lesson paths (their text is appended to
+  // the shared measurement files above) and their thumbnails. Kept by the service
+  // worker after the first online use, not installed (the first-visit and idle
+  // tiers have no room under data-budget ceilings this approval does not cover).
+  /^(js\/craterWidgets\.js|js\/i18n\/(en|es)\.craters\.js)$/,
+  /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(which-surface-is-older|craters-by-size|what-a-crater-diameter-is-worth)\.js$/,
+  /^images\/investigations\/(which-surface-is-older|craters-by-size|what-a-crater-diameter-is-worth)\.webp$/,
   // The validation suite's groups and harness: fetched when the suite runs,
   // like physicsChecks.js itself (ON_DEMAND_ONLY below).
   /^js\/validation\/(groups\/|harness\.js$)/,

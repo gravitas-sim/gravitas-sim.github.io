@@ -2503,6 +2503,37 @@ test.describe('the central experiment of each investigation', () => {
         [0.5, 246.1, 1],
       ],
     },
+    // ---- The crater investigations (Roadmap III, Prompt 195) -------------------
+    {
+      id: 'which-surface-is-older',
+      title:
+        'which-surface-is-older: the lunar highland has 40 craters at least 30 km across and 17 at least 50 km @accepts:ce.which-surface-is-older',
+      row: /^Lunar highland$/i,
+      values: [
+        [30, 40, 0.5],
+        [50, 17, 0.5],
+      ],
+    },
+    {
+      id: 'craters-by-size',
+      title:
+        'craters-by-size: the Martian highland fit holds 91 craters from 20 km and 31 from 40 km @accepts:ce.craters-by-size',
+      row: /^Craters in the fit$/i,
+      values: [
+        [20, 91, 0.5],
+        [40, 31, 0.5],
+      ],
+    },
+    {
+      id: 'what-a-crater-diameter-is-worth',
+      title:
+        'what-a-crater-diameter-is-worth: where the rim is sets the largest term of a diameter’s uncertainty, 5 percent at 5 and 10 at 10 @accepts:ce.what-a-crater-diameter-is-worth',
+      row: /^Uncertainty from where the rim is$/i,
+      values: [
+        [5, 5.0, 0.1],
+        [10, 10.0, 0.1],
+      ],
+    },
   ];
   for (const c of SURVEY) {
     test(c.title, async ({ page, app }) => {

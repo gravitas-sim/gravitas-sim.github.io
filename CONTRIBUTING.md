@@ -175,9 +175,9 @@ their ceilings:
 | `js/i18n/en.deferred.js` | 3,834 | 3,834 |
 | `js/investigations.js` | 3,287 | 3,287 |
 | `js/render.js` | 3,015 | 3,015 |
+| `js/data/investigations/measurement-sequence.js` | 2,922 | 2,922 |
 | `js/world/build.js` | 2,599 | 2,599 |
 | `js/composerPage.js` | 2,528 | 2,528 |
-| `js/darkMatterWidgets.js` | 2,329 | 2,329 |
 <!--/fact-block-->
 
 | Layer | What lives there | Examples |
@@ -485,8 +485,8 @@ npm run author:check -- --json            # for an editor
 **`author:walk`** is the part that cannot be done as data. The checker can see
 that a step names a widget and that the widget has a control called `mass`; it
 cannot see that the widget painted, that the scenario built, that a probe
-produced rows against a live world, or that Next moved. The walker opens all <!--fact:investigations-->69<!--/fact--> investigations in
-a browser and takes all <!--fact:investigationSteps-->1112<!--/fact--> steps,
+produced rows against a live world, or that Next moved. The walker opens all <!--fact:investigations-->72<!--/fact--> investigations in
+a browser and takes all <!--fact:investigationSteps-->1139<!--/fact--> steps,
 sharded one lesson per test so contexts are reused and a failure names its lesson. It takes about two
 minutes and runs as part of `npm run e2e`.
 
