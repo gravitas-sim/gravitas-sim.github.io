@@ -42,11 +42,11 @@ test holds it to that.
 
 ## The counts, once
 
-The preprint says 22 investigations and the Library says <!--fact:libraryInvestigations-->92<!--/fact-->. Both are right about different things:
+The preprint says 22 investigations and the Library says <!--fact:libraryInvestigations-->93<!--/fact-->. Both are right about different things:
 
 - 22 was the number of lessons at v1.0.0.
-- The Library lists **<!--fact:libraryInvestigations-->92<!--/fact--> guided
-  investigations**: **<!--fact:investigations-->75<!--/fact-->** that run in the
+- The Library lists **<!--fact:libraryInvestigations-->93<!--/fact--> guided
+  investigations**: **<!--fact:investigations-->76<!--/fact-->** that run in the
   simulation and **<!--fact:guidedInvestigations-->17<!--/fact-->** in the
   Observatory (10), the 3-D lab (4) and the mission lab (3). It also lists
   courses, classroom activities and data sets, which are other counts.
@@ -60,8 +60,8 @@ The preprint says 22 investigations and the Library says <!--fact:libraryInvesti
   `tools/project-metadata.mjs` and these facts, so one count holds everywhere
   and each statement names what it counts.
 
-A sentence for the paper, in the Library's terms: "Gravitas offers <!--fact:libraryInvestigations-->92<!--/fact--> guided investigations
-(<!--fact:investigations-->75<!--/fact--> in the simulation, 17 in the
+A sentence for the paper, in the Library's terms: "Gravitas offers <!--fact:libraryInvestigations-->93<!--/fact--> guided investigations
+(<!--fact:investigations-->76<!--/fact--> in the simulation, 17 in the
 Observatory and the 3-D and mission labs)." `CITATION.cff`, `.zenodo.json` and
 `paper.md` now say it (D-ADOPT-05 left the rewording to Carl; D-R8-01 records
 it).
