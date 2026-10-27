@@ -2,7 +2,7 @@
 // The atmosphere investigations (Prompt 200)
 // -----------------------------------------------------------------------------
 // Two investigations on the atmosphere instruments (js/atmosphereWidgets.js), in
-// a module of their own: "Why Venus Is Hot" (survey) and "Two Greenhouse Models"
+// a module of their own (and, from Prompt 194 part 2, two on the Sun at the end): "Why Venus Is Hot" (survey) and "Two Greenhouse Models"
 // (majors). Separate files because the shared sequence files sit at their line
 // ceilings (D-R10-81); the per-lesson path every loader builds from an id is a
 // one-line re-export of the named export here, and the instructor bundle's
@@ -551,5 +551,511 @@ export const TWO_GREENHOUSE_MODELS = {
   ],
 };
 
+// -----------------------------------------------------------------------------
+// The Sun (Prompt 194 part 2, SUN_KERNEL.md Part 2, D-R10-92)
+// -----------------------------------------------------------------------------
+// Two more investigations in this file, on the Sun instruments (js/sunWidgets.js):
+// "The Turning Sun" (survey, with a majors and an upper depth) and "The Sun's
+// Power". Appended here, and not in a file of their own, because the instructor
+// bundle's closure is capped by file count. Every number is recomputed in
+// tests/sunLessons.test.js from the kernel (js/kernels/sun/) and the committed
+// sequence (frames/sun-2024-05.json). The pictures are SDO browse pictures: display
+// pictures that their source says are not for science analysis, so what is read
+// from them is an instructional reading with an uncertainty, labeled not
+// astrometry. The marks of the two groups are the author's, by a stated rule;
+// nobody else has marked these pictures. NOAA's region counts were not retrieved.
+const SF = (values = {}, hide = []) => ({ id: 'sun-frames', values, hide });
+const SR = (values = {}, hide = []) => ({ id: 'sun-rotation', values, hide });
+const SP = (values = {}, hide = []) => ({ id: 'sun-power', values, hide });
+
+export const THE_TURNING_SUN = {
+  id: 'the-turning-sun',
+  thumbnail: 'images/investigations/the-turning-sun.webp',
+  title: 'The Turning Sun',
+  subtitle:
+    'Fourteen days of pictures, one spot group followed across the disc, and the Sun’s rotation from it',
+  duration: '20-30 min',
+  level: 'Introductory to upper-level astronomy',
+  audience: 'intro',
+  textbook: { chapter: 16, section: null },
+  courseLevel: 'survey',
+  depths: ['core', 'quantitative', 'advanced'],
+  mathematics: 'algebra',
+  prerequisites: [],
+  tags: ['solar-system', 'observing'],
+  lock: { placement: true, inspector: true },
+  objectives: [
+    'Read the latitude and longitude of a spot from a picture of the Sun, with the uncertainty of placing it, and say why one near the edge is read less well',
+    'Follow one spot group over days to a rotation rate and period, and correct it for the Earth’s own motion',
+    'Say what a sunspot is, and why spots at different latitudes turn at different rates',
+    'Say what two groups can and cannot show about how the Sun turns, and why two latitudes cannot fix three coefficients',
+  ],
+  steps: [
+    {
+      sid: 'fourteen-days',
+      stage: STAGE,
+      type: 'read',
+      title: 'Fourteen pictures of the Sun',
+      body: `On 4 May 2024 the Sun showed a handful of dark <strong>spots</strong>. Over the next
+             thirteen days they crossed its face. The pictures here are one a day, at 12:00
+             UT, from the Solar Dynamics Observatory (credit SDO/NASA and the HMI science
+             team). They are <strong>browse pictures</strong>, made to be looked at: their source says
+             they are not for science analysis, so what you read from them is an instructional
+             reading with an uncertainty, not astrometry. The two rings, G1 and G3, are two groups
+             marked by the author with a stated rule; nobody else has marked these pictures.
+             \n\nSet the day to 1 and then to 5 and watch G1, a small spot near the middle of the disc.`,
+      tool: SF({ day: 1, x: 452, y: 422, marks: 1 }),
+    },
+    {
+      sid: 'which-way',
+      stage: STAGE,
+      type: 'question',
+      kind: 'choice',
+      title: 'Which way do the spots go?',
+      body: `North is up and east is on the left in these pictures. Step the day from 1 to 6 and
+             follow G1.`,
+      prompt: 'Across the face, the spots move&hellip;',
+      options: [
+        'from the left edge toward the right edge, east to west',
+        'from the right edge toward the left edge, west to east',
+        'up toward the north pole',
+        'not at all: a spot stays where it is and the Sun’s face just brightens',
+      ],
+      answer: 0,
+      misconceptions: [
+        {
+          id: 'stay',
+          option: 3,
+          say: 'A spot is at a fixed place on the Sun, and it moves across the picture because the Sun turns. G1 is at 452 pixels across on day 1 and at 912 on day 6.',
+        },
+      ],
+      hints: ['Look at G1’s position across, on day 1 and on day 5.'],
+      because:
+        'From the left, east, toward the right, west. The Sun turns in the same sense as the planets go around it, so spots come over the east edge and leave at the west edge.',
+      tool: SF({ day: 5, marks: 1 }),
+    },
+    {
+      sid: 'read-a-position',
+      stage: STAGE,
+      type: 'measure',
+      title: 'Where on the Sun is G1?',
+      body: `A picture shows the Sun flat; what you want is where on the sphere a spot sits. The
+             instrument does the geometry, from the tilt of the Sun’s pole toward us and the
+             Carrington longitude of the central meridian, both from JPL Horizons. The crosshair
+             starts on G1 on day 1. Read its <strong>latitude</strong> and its <strong>longitude from the
+             central meridian</strong>, in degrees. East is negative.`,
+      fields: [
+        {
+          id: 'lat',
+          label: 'G1’s latitude on day 1',
+          unit: 'deg',
+          hint: '7.1',
+        },
+        {
+          id: 'lon',
+          label: 'G1’s longitude from the central meridian on day 1',
+          unit: 'deg',
+          hint: '-7.3',
+        },
+      ],
+      validate: v => {
+        if (![v.lat, v.lon].every(Number.isFinite)) return null;
+        if (near(v.lat, 7.14, 0.3) && near(v.lon, -7.29, 0.4)) {
+          return {
+            level: 'ok',
+            message:
+              'About 7 degrees north and 7 degrees east of the central meridian, with a placement uncertainty of 0.2 degree in longitude for 1.5 pixels. The disc is a sphere seen from one side, and a pixel near the middle is a small fraction of a degree: that is why the middle of the disc is the best place to read from.',
+          };
+        }
+        return {
+          level: 'error',
+          message:
+            'Leave the crosshair where it starts (452 across, 422 down) on day 1 and read “latitude” and “longitude” from the crosshair row.',
+        };
+      },
+      tool: SF({ day: 1, x: 452, y: 422, marks: 1 }),
+    },
+    {
+      sid: 'how-far-in-three-days',
+      stage: STAGE,
+      type: 'measure',
+      title: 'How far does it turn in three days?',
+      body: `Set the day to <strong>4</strong> and read G1&rsquo;s longitude from the <strong>author&rsquo;s mark</strong>
+             row. Then divide how far it moved, from day 1, by the three days between.`,
+      fields: [
+        {
+          id: 'lon4',
+          label: 'G1’s longitude on day 4',
+          unit: 'deg',
+          hint: '32.4',
+        },
+        {
+          id: 'rate',
+          label:
+            'How far it turned each day, from day 1 to day 4 (degrees a day)',
+          unit: '',
+          hint: '13.2',
+        },
+      ],
+      validate: v => {
+        if (![v.lon4, v.rate].every(Number.isFinite)) return null;
+        if (near(v.lon4, 32.44, 0.3) && near(v.rate, 13.22, 0.25)) {
+          return {
+            level: 'ok',
+            message:
+              'From −7.2 to 32.4 degrees in three days, 13.2 degrees a day. Two points make a rate and not a measurement of how good it is. The next step uses all the days.',
+          };
+        }
+        return {
+          level: 'error',
+          message:
+            'Set the day to 4, read the longitude in the “Author’s mark of G1” row, subtract the −7.2 of day 1 and divide by 3.',
+        };
+      },
+      tool: SF({ day: 4, marks: 1 }),
+    },
+    {
+      sid: 'track-the-group',
+      stage: STAGE,
+      type: 'measure',
+      title: 'The whole track',
+      body: `The second instrument takes all the marks of G1 that are not too close to the edge
+             (six days) and fits a straight line to longitude against time. Read the <strong>synodic
+             rate</strong>, the rate as the Earth sees it, with its uncertainty, and the <strong>synodic
+             period</strong>: how long a turn of 360 degrees takes at that rate.`,
+      fields: [
+        {
+          id: 'rate',
+          label: 'G1’s synodic rate (degrees a day)',
+          unit: '',
+          hint: '13.17',
+        },
+        {
+          id: 'period',
+          label: 'The synodic period',
+          unit: 'd',
+          hint: '27.3',
+        },
+      ],
+      validate: v => {
+        if (![v.rate, v.period].every(Number.isFinite)) return null;
+        if (near(v.rate, 13.17, 0.06) && near(v.period, 27.33, 0.15)) {
+          return {
+            level: 'ok',
+            message:
+              '13.17 ± 0.06 degrees a day, a period of 27.3 days between a spot facing us and facing us again. The marks lie on the line within their uncertainties. This is the period the Earth sees; it is not the Sun’s own.',
+          };
+        }
+        return {
+          level: 'error',
+          message:
+            'Choose G1 with the first day 1 and the last day 9 and read “Synodic rate” and “Synodic period”.',
+        };
+      },
+      tool: SR({ group: 0, first: 1, last: 9, limb: 0, mode: 0 }, ['mode']),
+    },
+    {
+      sid: 'longer-or-shorter',
+      stage: STAGE,
+      type: 'predict',
+      reveal: 'the-sidereal-period',
+      title: 'The Sun’s own period',
+      body: `While the spot turned, the Earth moved too, around the Sun in the same direction.
+             The 27.3 days are measured from a moving place.`,
+      prompt:
+        'The Sun’s own period of rotation, against the stars, will be&hellip;',
+      options: [
+        'shorter than 27.3 days: the Earth has moved on, so the spot has to turn a little more than once to face us again',
+        'longer than 27.3 days: the Earth’s motion drags the spot back',
+        'the same: the Earth is far too far away to matter',
+      ],
+      answer: 0,
+      hints: [
+        'In 27 days the Earth goes about a thirteenth of the way round its orbit, in the same direction as the Sun turns.',
+      ],
+      because:
+        'Shorter. The spot has to turn through 360 degrees plus the angle the Earth has gone round in the meantime before it faces us again. The next step takes the Earth’s motion off the rate.',
+      tool: SR({ group: 0, first: 1, last: 9 }, ['mode', 'limb']),
+    },
+    {
+      sid: 'the-sidereal-period',
+      stage: STAGE,
+      type: 'measure',
+      title: 'Against the stars',
+      body: `Add the Earth&rsquo;s own motion, about 0.96 degree a day along the Sun&rsquo;s equator, to the
+             synodic rate. Read the <strong>sidereal rate</strong> and the <strong>sidereal period</strong>.`,
+      fields: [
+        {
+          id: 'rate',
+          label: 'G1’s sidereal rate (degrees a day)',
+          unit: '',
+          hint: '14.13',
+        },
+        {
+          id: 'period',
+          label: 'The sidereal period',
+          unit: 'd',
+          hint: '25.5',
+        },
+      ],
+      validate: v => {
+        if (![v.rate, v.period].every(Number.isFinite)) return null;
+        if (near(v.rate, 14.13, 0.06) && near(v.period, 25.47, 0.15)) {
+          return {
+            level: 'ok',
+            message:
+              '14.13 ± 0.06 degrees a day, a period of 25.5 days (95 percent: 25.3 to 25.7). It is shorter than the synodic 27.3, as predicted. Near the equator the Sun turns in about 25 days, and nearer the poles it takes longer, which the next steps use.',
+          };
+        }
+        return {
+          level: 'error',
+          message:
+            'Keep G1 and read “Sidereal rate” and “Sidereal period”: the synodic rate plus the Earth’s motion.',
+        };
+      },
+      tool: SR({ group: 0, first: 1, last: 9 }, ['mode', 'limb']),
+    },
+    {
+      sid: 'what-is-a-spot',
+      stage: STAGE,
+      type: 'question',
+      kind: 'choice',
+      title: 'What is a sunspot?',
+      body: `You have followed one for a week. It stayed at one latitude, which is how you could
+             follow it, and it turned with the Sun.`,
+      prompt: 'A sunspot is&hellip;',
+      options: [
+        'a patch of the Sun’s surface that is cooler than its surroundings, and so darker, where strong magnetic fields hold the heat back',
+        'a hole in the Sun’s surface through which we see a dark interior',
+        'a cloud of cold gas in front of the Sun',
+        'a planet crossing in front of the Sun',
+      ],
+      answer: 0,
+      misconceptions: [
+        {
+          id: 'hole',
+          option: 1,
+          say: 'There is no hole: a spot is part of the surface. It only looks dark beside the hotter surface around it, as a coal looks dark beside a flame. It still glows.',
+        },
+        {
+          id: 'cloud',
+          option: 2,
+          say: 'A cloud or a planet would not stay at one latitude and turn with the Sun for a week: G1 did. A spot belongs to the Sun.',
+        },
+      ],
+      hints: [
+        'What does staying at one latitude and turning with the Sun say?',
+      ],
+      because:
+        'A cooler patch where strong magnetic fields hold the heat from below back. It is dark only by contrast and it belongs to the Sun, so tracking it follows the Sun’s own turning.',
+      tool: SF({ day: 3, marks: 1 }),
+    },
+    {
+      sid: 'what-you-worked-out',
+      stage: STAGE,
+      type: 'read',
+      title: 'What you worked out',
+      body: `You read a spot&rsquo;s place on the Sun from a flat picture, with an uncertainty, followed
+             G1 for six days to 13.17 &plusmn; 0.06 degrees a day as the Earth sees it, and corrected for the
+             Earth&rsquo;s motion to 14.13 &plusmn; 0.06 against the stars, a period of 25.5 days. A spot is a cooler
+             patch of the surface and belongs to it. Two limits to keep: the pictures are browse pictures,
+             so these are instructional readings and not astrometry, and G1 is one small group, so this is
+             one latitude. The deeper steps follow a second group at another latitude and ask what two
+             groups can and cannot show.`,
+      tool: SR({ group: 0, first: 1, last: 9 }, ['mode', 'limb']),
+    },
+  ],
+};
+
+export const THE_SUNS_POWER = {
+  id: 'the-suns-power',
+  thumbnail: 'images/investigations/the-suns-power.webp',
+  title: 'The Sun’s Power',
+  subtitle:
+    'A flux measured at the Earth, brought to one astronomical unit, and the Sun’s luminosity and temperature from it',
+  duration: '15-25 min',
+  level: 'Introductory to upper-level astronomy',
+  audience: 'intro',
+  textbook: { chapter: 15, section: null },
+  courseLevel: 'survey',
+  depths: ['core', 'quantitative', 'advanced'],
+  mathematics: 'algebra',
+  prerequisites: [],
+  tags: ['solar-system', 'observing'],
+  lock: { placement: true, inspector: true },
+  objectives: [
+    'Bring a flux measured at the Earth to one astronomical unit with the Earth–Sun distance, and say why the correction has to be made',
+    'Turn a flux at one astronomical unit into the Sun’s luminosity and effective temperature, and compare it with the Sun of the Color and Temperature investigation',
+    'Say what the interval of a mean of daily values does and does not include',
+    'Read a file’s fill values as missing data, not as measurements of zero',
+  ],
+  steps: [
+    {
+      sid: 'a-flux-above-the-air',
+      stage: STAGE,
+      type: 'read',
+      title: 'Sunlight measured above the air',
+      body: `The <strong>TSIS-1 TIM</strong> instrument measures the Sun&rsquo;s total irradiance, all the sunlight
+             through one square meter facing the Sun, above the atmosphere. The daily values here are from
+             LASP (credit LASP/TSIS-1 TIM team): the six days of 4 to 9 May 2024, the same days as the
+             pictures in The Turning Sun. The file has seven more days after them, but they read 0.0
+             with an uncertainty of 0.0: fill values, not measurements (a later step). The
+             instrument gives the irradiance <strong>at the Earth</strong>, and the Earth is not always the same
+             distance from the Sun.`,
+      tool: SP({ days: 1, correct: 1 }),
+    },
+    {
+      sid: 'flux-at-one-au',
+      stage: STAGE,
+      type: 'measure',
+      title: 'Bring it to one astronomical unit',
+      body: `Sunlight spreads over a sphere, so the flux falls as the square of the distance. On
+             4 May the Earth was 1.00844 AU from the Sun. Read the flux at the Earth and the flux
+             brought to <strong>1 AU</strong>: the flux times the distance in AU, squared.`,
+      fields: [
+        {
+          id: 'earth',
+          label: 'The flux at the Earth on 4 May (W/m²)',
+          unit: '',
+          hint: '1338.90',
+        },
+        {
+          id: 'au',
+          label: 'The flux at 1 AU (W/m²)',
+          unit: '',
+          hint: '1361.60',
+        },
+      ],
+      validate: v => {
+        if (![v.earth, v.au].every(Number.isFinite)) return null;
+        if (near(v.earth, 1338.9, 0.1) && near(v.au, 1361.6, 0.1)) {
+          return {
+            level: 'ok',
+            message:
+              '1338.90 at the Earth and 1361.60 at 1 AU: the Earth was 0.8 percent farther than one astronomical unit, so its flux was 1.7 percent lower than at 1 AU. A flux is only comparable with another once both are at the same distance.',
+          };
+        }
+        return {
+          level: 'error',
+          message:
+            'Use one day and read “At the Earth” and “At 1 AU” (the first and the last day are the same here).',
+        };
+      },
+      tool: SP({ days: 1, correct: 1 }),
+    },
+    {
+      sid: 'power-predict',
+      stage: STAGE,
+      type: 'predict',
+      reveal: 'luminosity',
+      title: 'How much power in all?',
+      body: `The Sun sends about 1361 W through every square meter at 1 AU, in every direction. The area of a
+             sphere of radius 1 AU is about 2.8 &times; 10<sup>23</sup> square meters.`,
+      prompt: 'The Sun’s total power, its luminosity, will be about&hellip;',
+      options: [
+        '4 × 10²⁶ W',
+        '4 × 10²⁰ W',
+        '4 × 10³² W',
+        '1361 W, the same as the flux',
+      ],
+      answer: 0,
+      hints: ['Multiply the flux by the area: 1361 × 2.8 × 10²³.'],
+      because:
+        'About 4 × 10²⁶ W, 400 trillion trillion watts: 1361 W per square meter times 2.8 × 10²³ square meters. The next step reads it from the instrument with every measured day.',
+      tool: SP({ days: 6, correct: 1 }),
+    },
+    {
+      sid: 'luminosity',
+      stage: STAGE,
+      type: 'measure',
+      title: 'The Sun’s luminosity and temperature',
+      body: `Use all six days. The instrument brings each to 1 AU, takes the mean, and multiplies by the
+             area of the sphere. The temperature is the one a black surface the size of the Sun
+             would need to radiate that power. Read the <strong>luminosity</strong> in units of
+             10<sup>26</sup> W and the <strong>effective temperature</strong>.`,
+      fields: [
+        {
+          id: 'lum',
+          label: 'The Sun’s luminosity (× 10²⁶ W)',
+          unit: '',
+          hint: '3.828',
+        },
+        {
+          id: 'teff',
+          label: 'The effective temperature',
+          unit: 'K',
+          hint: '5772',
+        },
+      ],
+      validate: v => {
+        if (![v.lum, v.teff].every(Number.isFinite)) return null;
+        if (near(v.lum, 3.828, 0.012) && near(v.teff, 5772, 3)) {
+          return {
+            level: 'ok',
+            message:
+              '3.828 × 10²⁶ W and 5772 K. That is the 5772 K of the Sun in Color and Temperature, and the class G of A Universe of Stars. It is a surface that radiates like a black body, not a temperature you could measure with a thermometer anywhere on the Sun.',
+          };
+        }
+        return {
+          level: 'error',
+          message:
+            'Set the days to 6 with the correction on, and read “The Sun’s luminosity” and “Effective temperature”.',
+        };
+      },
+      tool: SP({ days: 6, correct: 1 }),
+    },
+    {
+      sid: 'forget-the-au',
+      stage: STAGE,
+      type: 'question',
+      kind: 'choice',
+      title: 'What if the correction is left out?',
+      body: `Switch the correction off. The luminosity comes out lower. The Earth was between 1.0084 and
+             1.0096 AU from the Sun on these days.`,
+      prompt: 'Why is it lower, and by how much?',
+      options: [
+        'The Earth was a little farther than 1 AU, so each flux is lower than at 1 AU: about 1.8 percent too low',
+        'The Sun gave out 1.8 percent less power on these days than on any other',
+        'Leaving it out changes nothing: a flux is a flux',
+        'The Earth was nearer than 1 AU, so the flux is higher and the luminosity too high',
+      ],
+      answer: 0,
+      misconceptions: [
+        {
+          id: 'dimmer',
+          option: 1,
+          say: 'The correction is for where the Earth was, not for what the Sun did. At 1 AU the six days differ by less than 0.1 percent; the rest of the 1.8 percent is the distance.',
+        },
+        {
+          id: 'same',
+          option: 2,
+          say: 'A flux falls as the square of the distance, so it depends on where it was measured. Two fluxes are only comparable at one distance.',
+        },
+      ],
+      hints: ['Is the Earth’s distance on these days more or less than 1 AU?'],
+      because:
+        'The Earth was 0.8 to 1 percent farther than 1 AU, so each flux is about 1.7 to 1.9 percent lower than it would be at 1 AU. Skipping the correction gives a luminosity 1.8 percent too low and a temperature of 5746 K instead of 5772 K.',
+      tool: SP({ days: 6, correct: 0 }),
+    },
+    {
+      sid: 'what-you-worked-out',
+      stage: STAGE,
+      type: 'read',
+      title: 'What you worked out',
+      body: `A flux measured at the Earth is brought to 1 AU with the distance, and six days give 1361.2 W/m<sup>2</sup>
+             at 1 AU. Multiplied by the area of a sphere it is a luminosity of 3.828 &times; 10<sup>26</sup> W, and
+             a surface of the Sun&rsquo;s size would have to be at 5772 K to radiate it. The correction matters:
+             leaving it out gives a luminosity 1.8 percent too low. The deeper steps look at what the six days
+             show, how sure the mean is and what it leaves out.`,
+      tool: SP({ days: 6, correct: 1 }),
+    },
+  ],
+};
+
 /** The lessons, in order: what the barrel registers. */
-export default [WHY_VENUS_IS_HOT, TWO_GREENHOUSE_MODELS];
+export default [
+  WHY_VENUS_IS_HOT,
+  TWO_GREENHOUSE_MODELS,
+  THE_TURNING_SUN,
+  THE_SUNS_POWER,
+];

@@ -64,6 +64,10 @@ const STATIC_FILES = [
   'frames/craters-mars-highland.json',
   'frames/craters-mars-plains.json',
   'frames/craters-regions.json',
+  // The Sun's 14-day sequence (Prompt 194 part 2, SUN_KERNEL.md): the sidecar here and
+  // the fourteen browse pictures (frames/sun/, a directory below), fetched on demand
+  // by the Sun instruments; in no precache tier.
+  'frames/sun-2024-05.json',
   // The variable-star tables' rows (data-packs/tess-su-dra-s15.json and two
   // more, Roadmap II Prompt 96), fetched by the variable-star instruments.
   'variables/tess-su-dra-s15.json',
@@ -97,6 +101,8 @@ const STATIC_DIRS = [
   'vendor',
   'catalog/packages',
   'js/fragments',
+  // The Sun's fourteen browse pictures (frames/sun-2024-05.json lists them with their SHA-256).
+  'frames/sun',
   // The compute page's reviewed notebooks and their example inputs, fetched
   // by /compute/ when a run is asked for (COMPUTE.md).
   'compute/notebooks',

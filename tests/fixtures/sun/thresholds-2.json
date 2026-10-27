@@ -1,0 +1,81 @@
+{
+  "format": "gravitas.sun-thresholds/2",
+  "prompt": 194,
+  "part": 2,
+  "committed": "Part 2 (the data-dependent parts). Written before the frames were converted to heliographic positions by any tool of this repository, before any rate of a spot group was computed and before the irradiance series was summarised. tests/fixtures/sun/thresholds.json is untouched: its two authentic rows e1.authentic (each rate within 2 sigma of the primary law at its latitude, sigma the fit's sigma and the 0.3 degree a day scatter floor in quadrature) and e2.irradiance (luminosity within 0.5 percent of the IAU 2015 B3 nominal, Teff within 15 K of 5772 K) are run as they stand, and the legs below are NEW ones, each with its bound and its reason. A check that a measurement crosses is a failed check, reported and left failing; only Carl resets a bound. The failed leg a7.noiseFree.synodicRoute stays as recorded in failed-legs.json.",
+  "whatWasSeenBefore": [
+    "The pictures were looked at (an author's reading) to find where spot groups are, and an orientation check was run in a scratch script: dark clusters of the first frames converted with P = 0 and Horizons' B0 and L0 had latitudes that stayed within about half a degree from day to day. No rotation rate was computed or compared with a law.",
+    "The limb of each frame was fitted in the same scratch script: the radius times Horizons' distance came out the same to 0.01 pixel on all 14 frames. The bounds on that are below and were written after it was seen, so it is not a blind leg; it is a pack-integrity check.",
+    "Group G2 was seen to be a spread-out complex whose centroid may drift; it is in the contract anyway (below) and is judged like the others."
+  ],
+  "data": {
+    "frames": "14 SDO HMI continuum browse JPEGs, 1,024 pixels, 2024-05-04 to 2024-05-17 at 12:00 UT, from sdo.gsfc.nasa.gov/assets/img/browse; display pictures, not for science analysis (their terms): heliographic readings of them are an instructional, labelled-not-astrometry measurement (delegated ruling D-R10-92)",
+    "ephemeris": "JPL Horizons API 1.2, target 10, observer 500@399 (geocentre), daily 12:00 UT, quantities 14 (ObsSub-LON and ObsSub-LAT, L0 and B0), 17 (NP.ang, P) and 20 (delta and deldot)",
+    "irradiance": "LASP LISIRD tsis_tsi_24hr (TSIS-1 TIM), JD 2460435 to 2460447; the file has 13 rows of which the last 7 are 0.0 with an uncertainty of 0.0 (fill values: the series was not yet available when it was retrieved); 2024-05-17 is not in it",
+    "noaaRegionCounts": "NOT retrieved; the frames' alternative text states only what the author's detector reads from them, and says so"
+  },
+  "rules": {
+    "imageNorth": "SDO browse frames have solar north up (helioprojective north is the image's up). The kernel's disk.pDeg is the position angle of the pole in the IMAGE, so it is 0 for these frames; Horizons' NP.ang (the pole's position angle against celestial north, about -23 degrees in May 2024) is carried in the sidecar for information and is NOT used for pixel to heliographic conversion. Leg e0.orientation holds this.",
+    "limbFit": "The disc centre and radius of each frame are measured, not assumed: luminance 0.299 R + 0.587 G + 0.114 B of the decoded pixels; 360 rays one degree apart from a coarse centre (the mean of the pixels above luminance 60) outward; the limb on a ray is where the luminance falls through half of the mean of the same ray's levels from 14 to 6 pixels inside the coarse radius, linearly interpolated; an algebraic circle fit with six passes that drop rays more than 1.0 pixel off the circle. Pixel coordinates have the centre of the first pixel at (0, 0).",
+    "spotDetector": "dark pixel: luminance below 0.62 times the 41 by 41 box mean of the luminance (the window clipped at the edges), more than 0 and inside 0.985 of the fitted radius. A cluster: single linkage of dark pixels at a Euclidean distance of 14 pixels or less. A group counted in a frame: a cluster of at least 12 dark pixels. A cluster's position: the mean of its dark pixels. This reads dark clusters, not NOAA region numbers, and a split group counts as two.",
+    "tracking": "A group's seed is a position on 2024-05-04: G1 (452, 422), G2 (593, 276), G3 (259, 654), each taken to the nearest cluster of at least 6 dark pixels within 40 pixels. The following day's expected position is the same heliographic latitude and Carrington longitude, converted with that day's centre, radius, B0 and L0 (solid co-rotation: the law's rates are not used); the group in that frame is the nearest cluster of at least 6 dark pixels within 40 pixels of it; a track ends when there is none or when the group's mu is below 0.25. The group's mark on a day is that cluster's position, with a placement sigma of 1.5 pixels (a cluster centroid is not a point).",
+    "usableDays": "a rate uses the days on which the group's mu is at least 0.35 (the kernel's own `precise` line); the days between mu 0.25 and 0.35 are kept in the sidecar for the foreshortening lesson and are used only in leg e1.limb",
+    "reference": "the primary law, Howard, Harvey and Forgach (1990), as in thresholds.json, and the 0.3 degree a day group scatter floor of thresholds.json"
+  },
+  "groups": {
+    "G1": "the isolated small spot near the equator (latitude about +7 degrees)",
+    "G2": "the northern spread-out complex (latitude about +26 degrees); its centroid is not a point",
+    "G3": "the large southern group that grows during the window (latitude about -20 degrees), the largest and longest-tracked",
+    "lessonGroups": "The lessons use G1 and G3: G3 is the largest and longest-tracked, G1 is compact. This was decided here, before any rate was computed; G2 is reported in the table and not used by a lesson."
+  },
+  "checks": {
+    "e0.pack.integrity": {
+      "what": "the sidecar's frame list has 14 entries; each frame's SHA-256 equals the retrieval record's; each ephemeris row's date is the frame's date; the irradiance rows with a measured value are exactly the 6 of 2024-05-04 to 2024-05-09 and the 7 rows after them are fill values (0.0 and an uncertainty of 0.0)",
+      "bounds": { "frames": 14, "validIrradianceDays": 6, "fillDays": 7 }
+    },
+    "e0.scale": {
+      "what": "the fitted limb radius times Horizons' distance (a constant if the scale is) over the 14 frames: the largest departure from the mean, and the centre against the middle of the image (511.5, 511.5)",
+      "bounds": { "radiusTimesDistancePx": 0.1, "centrePx": 0.5 }
+    },
+    "e0.orientation": {
+      "what": "the standard deviation of a tracked group's latitude over its usable days, with pDeg = 0: at most 0.6 degree for each of G1, G2 and G3; and the same with pDeg set to Horizons' NP.ang (the wrong choice) at least 5 degrees for G3, so the leg can tell the two apart",
+      "bounds": { "latitudeSdDegMax": 0.6, "wrongPLatitudeSdDegMin": 5 }
+    },
+    "b5.ephemeris": {
+      "what": "the kernel's subEarth (P, B0, L0) against Horizons' values at the 14 instants: B0 at most 0.05 degree, the sky P (the kernel's P against NP.ang less 360) at most 0.1 degree, L0 at most 0.2 degree (Horizons' L0 is apparent, with the light-time turn of about 0.08 degree, and its pole is the IAU's, the kernel's is Carrington's)",
+      "bounds": { "b0Deg": 0.05, "pDeg": 0.1, "l0Deg": 0.2 }
+    },
+    "e1.tracks": {
+      "what": "each of G1, G2 and G3 has at least 5 usable positions at mu 0.35 or more, and returns no refusal",
+      "bounds": { "minUsable": 5 }
+    },
+    "e1.authentic": {
+      "what": "thresholds.json e1.authentic, run on each group: the sidereal rate within 2 sigma of the primary law at the group's mean latitude, sigma the fit's sigma and the 0.3 degree a day floor in quadrature",
+      "bounds": { "sigmas": 2 }
+    },
+    "e1.carrington": {
+      "what": "the Carrington-route sidereal rate against the synodic-route rate of each group: at most 0.01 degree a day apart (Horizons' L0 steps are not exactly the kernel's Earth rate along the solar equator)",
+      "bounds": { "degPerDay": 0.01 }
+    },
+    "e1.order": {
+      "what": "the lower-latitude group of G1 and G3 rotates faster than the higher-latitude one, as the law says (the equatorial rate is the fastest), without a statement of how much",
+      "bounds": {}
+    },
+    "e1.limb": {
+      "what": "G1 with the days between mu 0.25 and 0.35 added: the foreshortening warning, precise false, and a sidereal-rate sigma at least 1.5 times the sigma of the usable days alone",
+      "bounds": { "sigmaRatioMin": 1.5 }
+    },
+    "e2.series": {
+      "what": "thresholds.json e2.irradiance on the 6 measured days (not 14: the series stops, see data.irradiance): the mean at 1 AU gives L within 0.5 percent of 3.828e26 W and Teff within 15 K of 5772 K",
+      "bounds": { "luminosityRelative": 0.005, "teffKelvin": 15 }
+    },
+    "e2.au": {
+      "what": "LASP's own true-Earth column times the square of Horizons' distance against its 1 AU column, on each measured day: at most 0.01 W/m2 apart (two independent distances)",
+      "bounds": { "wattsPerSquareMetre": 0.01 }
+    },
+    "e2.interval": {
+      "what": "the standard error the kernel gives for the 6-day mean is not smaller than the quoted measurement uncertainty divided by the square root of 6, and the report says what it does not include (the instrument's absolute accuracy and the Sun's real change over the days)",
+      "bounds": {}
+    }
+  }
+}

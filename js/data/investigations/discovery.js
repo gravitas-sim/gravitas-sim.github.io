@@ -780,4 +780,24 @@ export const DISCOVERY = {
     },
     courseLevel: 'majors',
   },
+  'the-turning-sun': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: [],
+    textbook: {
+      chapter: 16,
+      section: null,
+    },
+    courseLevel: 'survey',
+  },
+  'the-suns-power': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: [],
+    textbook: {
+      chapter: 15,
+      section: null,
+    },
+    courseLevel: 'survey',
+  },
 };

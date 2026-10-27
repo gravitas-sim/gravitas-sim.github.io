@@ -967,4 +967,30 @@ export const MANIFEST = [
     gradedCount: 5,
     objectiveCount: 4,
   },
+  {
+    id: 'the-turning-sun',
+    title: 'El Sol que gira',
+    subtitle:
+      'Catorce días de imágenes, un grupo de manchas seguido a través del disco y la rotación del Sol a partir de él',
+    duration: '20-30 min',
+    level: 'Introductory to upper-level astronomy',
+    thumbnail: 'images/investigations/the-turning-sun.webp',
+    depths: 3,
+    stepCount: 9,
+    gradedCount: 7,
+    objectiveCount: 4,
+  },
+  {
+    id: 'the-suns-power',
+    title: 'El poder del Sol',
+    subtitle:
+      'Un flujo medido en la Tierra, llevado a una unidad astronómica, y la luminosidad y la temperatura del Sol a partir de él',
+    duration: '15-25 min',
+    level: 'Introductory to upper-level astronomy',
+    thumbnail: 'images/investigations/the-suns-power.webp',
+    depths: 3,
+    stepCount: 6,
+    gradedCount: 4,
+    objectiveCount: 4,
+  },
 ];

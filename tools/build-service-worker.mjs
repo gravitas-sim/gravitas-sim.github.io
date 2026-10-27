@@ -398,6 +398,14 @@ export const NEVER_PRECACHED = [
   /^(js\/atmosphereWidgets\.js|js\/i18n\/(en|es)\.atmospheres\.js)$/,
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(why-venus-is-hot|two-greenhouse-models|atmosphere-sequence)\.js$/,
   /^images\/investigations\/(why-venus-is-hot|two-greenhouse-models)\.webp$/,
+  // The Sun instruments and investigations (Prompt 194 part 2, D-R10-92): the family
+  // and its words, the two lessons' per-lesson paths (their text is appended to the
+  // atmosphere files above) and their thumbnails: kept by the service worker after the
+  // first online use, not installed. The sidecar and the fourteen pictures (frames/sun*)
+  // are in no list: fetched at run time, kept after their first online use.
+  /^(js\/sunWidgets\.js|js\/i18n\/(en|es)\.sun\.js)$/,
+  /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(the-turning-sun|the-suns-power)\.js$/,
+  /^images\/investigations\/(the-turning-sun|the-suns-power)\.webp$/,
   // The crater instruments and investigations (Prompt 195, D-R10-85): the family
   // and its words, the three lessons' per-lesson paths (their text is appended to
   // the shared measurement files above) and their thumbnails. Kept by the service

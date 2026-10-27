@@ -11,15 +11,15 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 76 investigations and 1169 steps: 1077 steps
+Across 78 investigations and 1184 steps: 1092 steps
 declare a scene, 157 let a reader change one, 163 read the
-running integration, 685 show a prescribed model result, 146 draw
-on a stored dataset, 564 put a self-contained panel beside the text,
-298 keep something, and 58 are prose.
-Of 153 prediction loops, 153 are returned to,
-153 produce a measurement before they are answered, and
+running integration, 700 show a prescribed model result, 146 draw
+on a stored dataset, 579 put a self-contained panel beside the text,
+304 keep something, and 58 are prose.
+Of 155 prediction loops, 155 are returned to,
+155 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
-153 hold their marking until the experiment settles them.
+155 hold their marking until the experiment settles them.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -1084,4 +1084,32 @@ Of 153 prediction loops, 153 are returned to,
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:atmosphere-greenhouse`, control atmosphere-greenhouse/emissivity, measures the ground temperature a single absorbing layer gives Venus as its emissivity rises, which tops out at 2^(1/4) times its equilibrium temperature, 272 K, against a measured 737 K, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## The Turning Sun (`the-turning-sun`)
+
+- **Steps:** 9. Scene declared on 9; a reader can change something on 0; 9 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 9 prescribed model, 0 stored dataset, 9 self-contained panel.
+- **What students do:** move-an-instrument-control, choose-an-option, record-values, commit-a-prediction.
+- **Objects the steps declare:** star.
+- **Instruments:** sun-frames, sun-rotation.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** longer-or-shorter → the-sidereal-period, what-is-a-spot, what-you-worked-out → the-sidereal-period.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:sun-rotation`, control sun-rotation/first, measures the sidereal rotation rate of the spot group G1 from the marks of the first day chosen to the ninth, with its uncertainty: 14.13 from six days (the first day 1) and 14.04 from five (the first day 2), degrees a day, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## The Sun’s Power (`the-suns-power`)
+
+- **Steps:** 6. Scene declared on 6; a reader can change something on 0; 6 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 6 prescribed model, 0 stored dataset, 6 self-contained panel.
+- **What students do:** move-an-instrument-control, record-values, commit-a-prediction, choose-an-option.
+- **Objects the steps declare:** star.
+- **Instruments:** sun-power.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** power-predict → luminosity, forget-the-au, what-you-worked-out → luminosity.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:sun-power`, control sun-power/days, measures the Sun's luminosity from the first days of the TSIS-1 TIM series corrected to one astronomical unit, in units of 1e26 W: 3.829 from two days and 3.828 from six, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 

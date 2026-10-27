@@ -6,3 +6,4 @@ export * from './geometry.js';
 export * from './ephemeris.js';
 export * from './rotation.js';
 export * from './irradiance.js';
+export * from './sequence.js';

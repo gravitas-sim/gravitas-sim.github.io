@@ -138,7 +138,7 @@ catalogue refers to it, so a change to it can reach a student.
 | [STORAGE.md](STORAGE.md) | What Gravitas keeps in the browser. | reference | P65 | written | no |
 | [STUDIO.md](STUDIO.md) | The Scenario Studio. | feature | unassigned | written | no |
 | [STUDIO_ROUNDTRIP_GATE.md](STUDIO_ROUNDTRIP_GATE.md) | Studio round-trip architecture gate. | gate | unassigned | written | no |
-| [SUN_KERNEL.md](SUN_KERNEL.md) | The Sun as a measurement: disc geometry, rotation from tracked spots bounded by a reference law, and the solar constant to luminosity and temperature, with their validation (Prompt 194). | feature | P194 | written | no |
+| [SUN_KERNEL.md](SUN_KERNEL.md) | The Sun as a measurement: disc geometry, rotation from tracked spots bounded by a reference law, and the solar constant to luminosity and temperature, with their validation (Prompt 194). | feature | P194 | written | yes |
 | [SUPPORT.md](SUPPORT.md) | How to get help, and the supported browsers and versions. | policy | P129 | written | yes |
 | [SURFACE_RETIREMENT_GATE.md](SURFACE_RETIREMENT_GATE.md) | The surface-retirement and consolidation gate: the decision function, the link-support policy and the verdict on every surface. | gate | P165 | written | no |
 | [TIDAL_KERNEL.md](TIDAL_KERNEL.md) | Rings, Roche limits and analytic tides: the constant-Q kernel, its equations, limits and validation (Prompt 204, part A). | feature | P204 | written | yes |
