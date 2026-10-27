@@ -385,7 +385,7 @@ describe('What a Crater Diameter Is Worth: every stated number from the kernel',
     expect((f.diameter.diameter - 110) / f.diameter.sigma).toBeCloseTo(0.34, 2);
   });
   test('the catalog’s crater under the start is 112.2 km, within one sigma of the circle', () => {
-    const f = W.budgetView({ catalogue: 1 });
+    const f = W.budgetView({ catalog: 1 });
     holds(L, 'against-the-catalog', { D: f.nearest.D }, { D: 90 });
     expect(Math.abs(f.nearest.D - f.diameter.diameter)).toBeLessThan(
       f.diameter.sigma
@@ -416,7 +416,7 @@ describe('the instruments', () => {
       ...[0, 1].map(pair => regions.readout({ pair })),
       ...[0, 1, 2, 3].map(region => sfd.readout({ region })),
       budget.readout({}),
-      budget.readout({ catalogue: 1, correct: 0 }),
+      budget.readout({ catalog: 1, correct: 0 }),
     ];
     for (const rows of rowsOf) {
       expect(rows.length).toBeGreaterThan(4);

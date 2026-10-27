@@ -46,7 +46,7 @@ import { recordWidgets, widgetSites } from './widgets.mjs';
  */
 export const PARTS = Object.freeze({
   gw: ['gw'],
-  survey: ['survey', 'claim', 'imaging', 'jovian', 'atmosphere'],
+  survey: ['survey', 'claim', 'imaging', 'jovian', 'atmosphere', 'crater'],
   stellar: ['stellarEvolution', 'stellar'],
   powerLaw: ['powerLaw', 'lensing'],
   detector: ['detector', 'sky'],

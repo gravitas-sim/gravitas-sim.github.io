@@ -845,8 +845,8 @@ export const WHICH_SURFACE_IS_OLDER = {
       title: 'Por millón de kilómetros cuadrados',
       body: 'Las tierras altas cubren unos 305 mil km² y el mar unos 341 mil, así que los recuentos no están en pie de igualdad. Lee la <strong>densidad</strong> de cada una, en cráteres por millón de km², en las dos filas de región.',
       fields: [
-        { label: 'Densidad de las tierras altas' },
-        { label: 'Densidad del mar' },
+        { label: 'Densidad de las tierras altas, por millón de km²' },
+        { label: 'Densidad del mar, por millón de km²' },
       ],
     },
     {
@@ -964,7 +964,7 @@ export const CRATERS_BY_SIZE = {
   steps: [
     {
       title: 'Un gráfico de cuántos hay, de al menos este tamaño',
-      body: 'Los cráteres pequeños son muchos y los grandes pocos. El gráfico <strong>acumulado</strong> de tamaño y frecuencia cuenta, para cada diámetro <em>D</em>, todos los cráteres de al menos ese tamaño, por área. Los dos ejes son logarítmicos, así que una ley de potencias <em>N</em>(&ge;<em>D</em>) &prop; <em>D</em><sup>&minus;<em>b</em></sup> es una recta de pendiente &minus;<em>b</em>. Cada punto lleva un intervalo de Poisson del 95 por ciento: un recuento es incierto porque el azar decide cuántos cráteres cayeron.\n\nLos cráteres son de un catálogo, no marcas sobre la imagen. Una línea discontinua es la ley de potencias ajustada por encima del diámetro que elijas, y la lectura da su índice <em>b</em> con un intervalo. Por debajo del diámetro en el que el recuento es <em>completo</em>, los puntos se dibujan de otro color y no son fiables.',
+      body: 'Los cráteres pequeños son muchos y los grandes pocos. El gráfico <strong>acumulado</strong> de tamaño y frecuencia cuenta, para cada diámetro <em>D</em>, todos los cráteres de al menos ese tamaño, por área. Los dos ejes son logarítmicos, así que una ley de potencias <em>N</em>(≥<em>D</em>) ∝ <em>D</em><sup>&minus;<em>b</em></sup> es una recta de pendiente &minus;<em>b</em>. Cada punto lleva un intervalo de Poisson del 95 por ciento: un recuento es incierto porque el azar decide cuántos cráteres cayeron.\n\nLos cráteres son de un catálogo, no marcas sobre la imagen. Una línea discontinua es la ley de potencias ajustada por encima del diámetro que elijas, y la lectura da su índice <em>b</em> con un intervalo. Por debajo del diámetro en el que el recuento es <em>completo</em>, los puntos se dibujan de otro color y no son fiables.',
     },
     {
       title: 'La pendiente de las tierras altas lunares',

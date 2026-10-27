@@ -2,10 +2,7 @@
  "id": "which-surface-is-older",
  "static": {
   "en": {
-   "units": [
-    ["steps.per-area.fields.0.unit","per million km²"],
-    ["steps.per-area.fields.1.unit","per million km²"]
-   ],
+   "units": [],
    "numbered": [
     ["steps.count-the-moon.fields.0.hint","40"],
     ["steps.count-the-moon.fields.1.hint","7"],

@@ -2071,8 +2071,8 @@ export const WHICH_SURFACE_IS_OLDER = {
              surfaces is <strong>older</strong>, relative to the other.
              \n\nThe instrument shows two regions of the Moon (a highland and a dark,
              smooth mare) and two of Mars. The circles on the pictures are the craters
-             that a <strong>catalog</strong> lists, made by its authors from other data:
-             nobody has marked these pictures, and nothing here is a count you made. What
+             that a <strong>catalog</strong> lists, made by its authors from other data.
+             Nobody has marked these pictures, and nothing here is a count you made. What
              you do is choose a diameter, read the numbers, and say what they do and do not
              show. A density ratio is <em>not</em> an age in years.`,
       tool: CRG({ pair: 0, view: 0, dmin: 30 }),
@@ -2146,14 +2146,12 @@ export const WHICH_SURFACE_IS_OLDER = {
       fields: [
         {
           id: 'highland',
-          label: 'Highland density',
-          unit: 'per million km²',
+          label: 'Highland density, per million km²',
           hint: '131.2',
         },
         {
           id: 'mare',
-          label: 'Mare density',
-          unit: 'per million km²',
+          label: 'Mare density, per million km²',
           hint: '20.5',
         },
       ],
@@ -2409,7 +2407,7 @@ export const CRATERS_BY_SIZE = {
       body: `Small craters are many and large craters are few. The <strong>cumulative</strong>
              size-frequency plot counts, for each diameter <em>D</em>, all the craters at least
              that large, per area. Both axes are logarithmic, so a power law
-             <em>N</em>(&ge;<em>D</em>) &prop; <em>D</em><sup>&minus;<em>b</em></sup> is a straight line
+             <em>N</em>(≥<em>D</em>) ∝ <em>D</em><sup>&minus;<em>b</em></sup> is a straight line
              whose slope is &minus;<em>b</em>. Each point carries a 95 percent Poisson interval:
              a count is uncertain because chance decides how many craters landed.
              \n\nThe craters are a catalog&rsquo;s, not marks on the picture. A dashed line is the
@@ -2687,7 +2685,7 @@ export const WHAT_A_CRATER_DIAMETER_IS_WORTH = {
              at a slant, and is squeezed along the direction toward the center of the disc. The instrument draws the
              ground circle as the ellipse it makes. The circle on the picture starts on one crater of the catalog,
              and the catalog&rsquo;s own circles can be shown to compare.`,
-      tool: CBD({}, ['dmin', 'catalogue', 'correct', 'recognition']),
+      tool: CBD({}, ['dmin', 'catalog', 'correct', 'recognition']),
     },
     {
       sid: 'read-the-diameter',
@@ -2721,7 +2719,7 @@ export const WHAT_A_CRATER_DIAMETER_IS_WORTH = {
             'Leave the circle as it is (center 113, 76; rim point 25 pixels away at 95 degrees; recognition 5 percent; view corrected) and read “Diameter”.',
         };
       },
-      tool: CBD({}, ['dmin', 'catalogue']),
+      tool: CBD({}, ['dmin', 'catalog']),
     },
     {
       sid: 'largest-term-predict',
@@ -2782,7 +2780,7 @@ export const WHAT_A_CRATER_DIAMETER_IS_WORTH = {
             'Read “Uncertainty from placing the circle” and “Uncertainty from where the rim is”, as percentages.',
         };
       },
-      tool: CBD({}, ['dmin', 'catalogue']),
+      tool: CBD({}, ['dmin', 'catalog']),
     },
     {
       sid: 'the-correction',
@@ -2820,7 +2818,7 @@ export const WHAT_A_CRATER_DIAMETER_IS_WORTH = {
             'Set “Correct for the view” to off and read the diameter; the percentage is (112.0 minus that diameter) over 112.0.',
         };
       },
-      tool: CBD({ correct: 0 }, ['dmin', 'catalogue']),
+      tool: CBD({ correct: 0 }, ['dmin', 'catalog']),
     },
     {
       sid: 'big-correction-small-uncertainty',
@@ -2854,7 +2852,7 @@ export const WHAT_A_CRATER_DIAMETER_IS_WORTH = {
       ],
       because:
         'A correction can be large and certain. The view is fixed by where the crater is on the disc, which is known to a pixel. Leaving it out is not a larger error bar: it is a wrong answer by about ten percent, every time, in the same direction.',
-      tool: CBD({ correct: 1 }, ['dmin', 'catalogue']),
+      tool: CBD({ correct: 1 }, ['dmin', 'catalog']),
     },
     {
       sid: 'why-no-age',
@@ -2892,7 +2890,7 @@ export const WHAT_A_CRATER_DIAMETER_IS_WORTH = {
       hints: ['Which of these has not been tested here?'],
       because:
         'An age needs several things that are not here: a production function and a chronology to turn a density into years, corrections for saturation and secondary craters, and a correction for what a count misses, checked on craters whose sizes are known. Until they pass their test, a density ratio is the finding, and it says which surface is older, not by how many years.',
-      tool: CBD({}, ['dmin', 'catalogue']),
+      tool: CBD({}, ['dmin', 'catalog']),
     },
     {
       sid: 'what-you-worked-out',
@@ -2905,7 +2903,7 @@ export const WHAT_A_CRATER_DIAMETER_IS_WORTH = {
              by 0.06 percent: it is a correction to apply, not an error to quote. A diameter and a density ratio are
              what this investigation reports. An age in years is not, because it needs a production function, corrections
              for saturation and secondary craters, and a completeness correction that has not passed its test.`,
-      tool: CBD({}, ['dmin', 'catalogue']),
+      tool: CBD({}, ['dmin', 'catalog']),
     },
   ],
 };

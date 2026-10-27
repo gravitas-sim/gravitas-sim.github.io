@@ -537,9 +537,13 @@ export async function whenWidgetsReady() {
   // loaded machine, jest's linker lost it ("request for '../setup.js' is not in
   // cache"). It is loaded after the rest, so that setup is already linked. This
   // adds no import, so no chunk and no request.
+  // The crater family reaches the plot component, as the atmosphere family
+  // does, and its words (js/i18n/index.js): the same failure, so it too is
+  // loaded after the rest. No import is added here either.
   const families = Object.keys(LAZY_FAMILIES);
-  await Promise.all(families.filter(f => f !== 'variables').map(loadFamily));
-  await loadFamily('variables');
+  const late = ['variables', 'crater'];
+  await Promise.all(families.filter(f => !late.includes(f)).map(loadFamily));
+  for (const f of late) await loadFamily(f);
   const results = await Promise.all([...familyReady.values()]);
   return results.every(Boolean);
 }

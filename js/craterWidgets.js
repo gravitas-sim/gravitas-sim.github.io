@@ -68,6 +68,9 @@ export const PAIRS = Object.freeze([
   ['moon-highland', 'moon-mare'],
   ['mars-highland', 'mars-plains'],
 ]);
+// The kernel's name for a scale in kilometers per pixel (js/measure/craters.js).
+const SCALE_UNIT = 'km/pix';
+
 /** The cut of the committed lists (km): no diameter below it is in them. */
 export const CUT_KM = 20;
 
@@ -686,7 +689,7 @@ export function budgetView(v) {
   const scale = {
     value: s,
     sigma: region.geometry.kmPerPixelSigma,
-    unit: 'km/pix',
+    unit: SCALE_UNIT,
   };
   const diameter = diameterOf(mark, {
     scale,
@@ -778,12 +781,12 @@ const BUDGET = {
     ),
     toggleControl('correct', 'crW.b.control.correct'),
     bareControl('dmin', 'crW.b.control.dmin', CUT_KM, 150, 5, 110, kmFormat),
-    toggleControl('catalogue', 'crW.b.control.catalogue', 0),
+    toggleControl('catalog', 'crW.b.control.catalogue', 0),
   ],
   draw(canvas, v) {
     const run = () => {
       const f = budgetView(v);
-      const circles = f && (v.catalogue ?? 0) >= 0.5 ? f.region.craters : [];
+      const circles = f && (v.catalog ?? 0) >= 0.5 ? f.region.craters : [];
       drawPicture(canvas, BUDGET_REGION, circles, (g, { k, ox }) => {
         if (!f) return;
         const colors = palette();
@@ -833,7 +836,7 @@ const BUDGET = {
       {
         label: t('crW.row.picture'),
         value: alt(BUDGET_REGION, 'alt', {
-          n: (v.catalogue ?? 0) >= 0.5 ? f.region.craters.length : 0,
+          n: (v.catalog ?? 0) >= 0.5 ? f.region.craters.length : 0,
           dmin: fix(CUT_KM, 0),
         }),
       },

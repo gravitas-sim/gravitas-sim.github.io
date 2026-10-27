@@ -1250,7 +1250,7 @@ export const WHAT_A_CRATER_DIAMETER_IS_WORTH_DEEPER = {
             'Set “Rim point, distance from the center” to 5 px, leave the rest as it is, and read the diameter and “Uncertainty from placing the circle”.',
         };
       },
-      tool: CBD({ r: 5 }, ['dmin', 'catalogue']),
+      tool: CBD({ r: 5 }, ['dmin', 'catalog']),
     },
     {
       sid: 'coin-toss',
@@ -1284,7 +1284,7 @@ export const WHAT_A_CRATER_DIAMETER_IS_WORTH_DEEPER = {
             'Leave the circle at its start, set “Counting craters at least” to 110 km and read “Chance it is at least 110 km across”.',
         };
       },
-      tool: CBD({ dmin: 110 }, ['catalogue']),
+      tool: CBD({ dmin: 110 }, ['catalog']),
     },
     {
       sid: 'which-improvement',
@@ -1318,7 +1318,7 @@ export const WHAT_A_CRATER_DIAMETER_IS_WORTH_DEEPER = {
       hints: ['Terms add in quadrature: which one dominates the sum?'],
       because:
         'The terms add as squares, so the largest dominates. Here it is where the rim is, 5 percent. A convention that fixes it, such as the same rim definition for every crater, is what craters counted by different people need, and that is a different kind of work from a better instrument.',
-      tool: CBD({}, ['dmin', 'catalogue']),
+      tool: CBD({}, ['dmin', 'catalog']),
     },
     {
       sid: 'against-the-catalog',
@@ -1346,7 +1346,7 @@ export const WHAT_A_CRATER_DIAMETER_IS_WORTH_DEEPER = {
             'Switch “The catalog’s circles” on and read “The catalog’s crater under your center”.',
         };
       },
-      tool: CBD({ catalogue: 1 }, ['dmin']),
+      tool: CBD({ catalog: 1 }, ['dmin']),
     },
   ],
 };
@@ -1505,6 +1505,7 @@ const CRATER_CONTENT = {
       'No roll-off is visible in the published lists above 20 km; the perturbation exists so that a student can see what the flag does. A real roll-off from saturation or resurfacing would bend the plot in the same way.',
       'The Moon’s completeness limit, 30 km, belongs to a count on the 2 km per pixel picture, not to the catalog, which is complete to about 8 km.',
       'The index here is cumulative; the incremental or differential index is one larger.',
+      'The mare’s slope is the uncertain one because it rests on seven craters, not because the mare is a different kind of surface; a student who blames the surface has not yet read the interval as a statement about the count.',
     ],
     discussion: [
       'What would you need in order to tell a real roll-off from a count that stopped short?',
@@ -1576,6 +1577,12 @@ const CRATER_CONTENT = {
         response:
           'The obstacles to an age are the production function, the chronology and the corrections, not the diameter.',
       },
+      {
+        claim:
+          'The catalog’s diameter is the right answer and mine is the test.',
+        response:
+          'The catalog is another measurement, made by other people from other data with its own error. Two measurements that differ by their errors agree; neither is the truth.',
+      },
     ],
     teachingNotes: [
       'The circle is the reader’s, a rim point and a center; the catalog’s circles are another measurement of other data and are not the truth.',
@@ -1606,12 +1613,6 @@ const CRATER_EXPECTATIONS = {
       'A ratio of 6.39 (within 0.1) with a lower end of 2.83 (within 0.1).',
     'mars-pair':
       'A ratio of 6.50 (within 0.1) with a lower end of 3.68 (within 0.1).',
-    'harder-craters':
-      'Two craters in the mare and an upper end of 84.8 (within 1).',
-    'the-flip':
-      'A ratio of 3.00 (within 0.05) and a lower end of 0.91 (within 0.03).',
-    'no-craters-at-all':
-      'Five craters in the highland and a lower end of 1.02 (within 0.03).',
   },
   'craters-by-size': {
     'highland-slope':
@@ -1620,9 +1621,6 @@ const CRATER_EXPECTATIONS = {
     'thin-mare':
       'An index of 3.47 (within 0.05) and an upper end of 6.47 (within 0.08).',
     'roll-off': 'An index of 1.01 (within 0.04) and a z of 2.77 (within 0.1).',
-    'raise-the-floor':
-      'Fourteen craters in the fit and an upper end of 3.56 (within 0.05).',
-    'unbiased-form': 'An unbiased index of 2.97 (within 0.04).',
   },
   'what-a-crater-diameter-is-worth': {
     'read-the-diameter':
@@ -1631,26 +1629,22 @@ const CRATER_EXPECTATIONS = {
       'Placing the circle 1.6 percent and the rim 5.0 percent (each within 0.1).',
     'the-correction':
       'A diameter of 101.1 km (within 0.6), 9.8 percent smaller (within 0.5).',
-    'a-small-circle':
-      'A diameter of 22.4 km (within 0.3) and 8.2 percent from placing the circle (within 0.2).',
-    'coin-toss': 'A chance of 63 percent (within 2).',
-    'against-the-catalog': 'The catalog’s diameter, 112.2 km (within 0.3).',
   },
 };
 
 const CRATER_BANDS = {
   'which-surface-is-older': {
-    core: 'medium',
+    core: 'short',
     quantitative: 'medium',
     advanced: 'medium',
   },
   'craters-by-size': {
-    core: 'medium',
+    core: 'short',
     quantitative: 'medium',
     advanced: 'medium',
   },
   'what-a-crater-diameter-is-worth': {
-    core: 'medium',
+    core: 'short',
     quantitative: 'medium',
     advanced: 'medium',
   },
