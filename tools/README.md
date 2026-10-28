@@ -123,6 +123,7 @@ current, and the orchestrator checks it.
 | `instructor-freshness.mjs` | Was the committed instructor bundle built from these sources? |  |
 | `instrument-families.mjs` | Which instrument families a script the page fetched contains |  |
 | `interaction-contract.mjs` | Is a surface keeping the interaction contract? |  |
+| `interiors-validate.mjs` | The interiors kernel's Part A against its committed thresholds (Prompt 203) | `npm run interiors:validate` |
 | `jest-sequencer.mjs` | Start the slowest suites first |  |
 | `key-groups-check.mjs` | Key groups: does the rewritten catalog equal its source? |  |
 | `key-groups.mjs` | Key groups: write a shared key prefix once, in the bundle only |  |
