@@ -1162,10 +1162,6 @@ function notRuns() {
     'e2.lightcurve',
     'no measured asteroid light curve: the ALCDEF download is a form-based job and the PDS path returned 404 on 2026-10-27; nothing is simulated as authentic'
   );
-  notRun(
-    'e3.kuiper',
-    'the Kuiper-belt subset file was announced and is not on disk'
-  );
 }
 
 // ---- (e1) the retrieved numbered H < 13 cut ---------------------------------------
@@ -1265,6 +1261,78 @@ function authentic() {
   );
 }
 
+function kuiper() {
+  const bd = C['e3.kuiper'].bounds;
+  const pack = JSON.parse(
+    readFileSync(path.join(HERE, '..', R.authentic.kuiper.file), 'utf8')
+  );
+  const cat = catalogFromPack(pack);
+  atLeast('e3.rows', cat.n, bd.rowsAtLeast, `${cat.n} rows in the pack`);
+  exact(
+    'e3.wellObserved',
+    pack.minDataArcDays > bd.dataArcDaysAbove,
+    `the shortest data arc is ${pack.minDataArcDays} days`
+  );
+  const rowsIn = Array.from(cat.a, (a, k) => ({ a, e: cat.e[k], i: cat.i[k] }));
+  const table = countClasses(rowsIn).counts;
+  atLeast(
+    'e3.plutino',
+    table.plutino,
+    bd.plutinoAtLeast,
+    'objects in the plutino a-window (a proxy for the 3:2 resonance)'
+  );
+  atLeast(
+    'e3.twotino',
+    table.twotino,
+    bd.twotinoAtLeast,
+    'objects in the twotino a-window'
+  );
+  atLeast(
+    'e3.classical',
+    table.kuiperClassical,
+    bd.classicalAtLeast,
+    'objects in the classical box'
+  );
+  const aN = PLANETS.neptune.aAu;
+  const win = c =>
+    cat.a.filter(a => a >= c - bd.windowHalfAu && a < c + bd.windowHalfAu)
+      .length;
+  const span = (lo, hi) => cat.a.filter(a => a >= lo && a < hi).length;
+  const conc = c => {
+    const lo = c - bd.windowHalfAu;
+    const hi = c + bd.windowHalfAu;
+    const fl =
+      (span(lo - bd.flankWidthAu, lo) + span(hi, hi + bd.flankWidthAu)) / 2;
+    return { n: win(c), flank: fl, factor: win(c) / Math.max(fl, 0.5) };
+  };
+  const plu = conc(aN * Math.pow(1.5, 2 / 3));
+  const two = conc(aN * Math.pow(2, 2 / 3));
+  atLeast(
+    'e3.concentration',
+    plu.factor,
+    bd.concentrationFactor,
+    `plutino window ${plu.n} against a flank mean of ${plu.flank}`
+  );
+  reported(
+    'e3.concentration.twotino',
+    two.factor,
+    `twotino window ${two.n} against a flank mean of ${two.flank}: reported, not bounded`
+  );
+  const ref = read('oracle-kuiper-results.json');
+  const same =
+    ref.n === cat.n &&
+    ref.plutino === table.plutino &&
+    ref.twotino === table.twotino &&
+    ref.classical === table.kuiperClassical &&
+    ref.plutinoFlankLow + ref.plutinoFlankHigh === 2 * plu.flank;
+  exact(
+    'e3.oracle',
+    same,
+    'the class counts and the plutino flanks against an independent numpy count of the same file'
+  );
+  reported('e3.table', cat.n, JSON.stringify(table));
+}
+
 // ---- the run ----------------------------------------------------------------------
 
 const GROUPS = {
@@ -1284,7 +1352,7 @@ const GROUPS = {
     negativeCurves,
   ],
   belt: [beltEnsembles],
-  authentic: [authentic],
+  authentic: [authentic, kuiper],
   'curves-0.01': [() => curveEnsemble(0.01)],
   'curves-0.03': [() => curveEnsemble(0.03)],
 };

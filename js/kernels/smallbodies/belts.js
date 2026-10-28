@@ -583,14 +583,16 @@ export function catalogFromPack(pack) {
   if (pack?.format !== 'gravitas.small-body-catalog/1')
     return refused('range', 'not a small-body catalog pack');
   const n = pack.n;
-  for (const k of ['number', 'a', 'e', 'i', 'H'])
+  const idCol = Array.isArray(pack.number) ? 'number' : 'name';
+  for (const k of [idCol, 'a', 'e', 'i', 'H'])
     if (!Array.isArray(pack[k]) || pack[k].length !== n)
       return refused('range', `column ${k} does not have ${n} rows`);
   return {
     status: 'ok',
     id: pack.id,
     n,
-    number: Int32Array.from(pack.number),
+    number: idCol === 'number' ? Int32Array.from(pack.number) : null,
+    name: idCol === 'name' ? pack.name.slice() : null,
     a: Float64Array.from(pack.a),
     e: Float64Array.from(pack.e),
     i: Float64Array.from(pack.i),

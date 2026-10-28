@@ -35,3 +35,25 @@ for g in gaps:
 out = {"note": "scipy fit of the same model on js/data/smallbodies/numbered-h13.json", "n": int(len(a)), "converged": ok, "gaps": rows}
 (oracle.FIX / "oracle-real-results.json").write_text(json.dumps(out, indent=1) + "\n")
 print(json.dumps(out)[:600])
+
+
+# ---- the Kuiper-belt file (tier e3): counts by an independent numpy count -------------
+kb = json.loads((ROOT / "js/data/smallbodies/kuiper-a30-60.json").read_text())
+ka, ke, ki = np.array(kb["a"]), np.array(kb["e"]), np.array(kb["i"])
+aN = R["planets"]["neptuneAu"]
+plu = aN * 1.5 ** (2 / 3)
+two = aN * 2.0 ** (2 / 3)
+win = lambda c: int(np.sum((ka >= c - 0.5) & (ka < c + 0.5)))
+flank = lambda lo, hi: int(np.sum((ka >= lo) & (ka < hi)))
+res = {
+    "n": int(len(ka)),
+    "plutino": win(plu),
+    "twotino": win(two),
+    "classical": int(np.sum((ka >= 42.0) & (ka < 47.0) & (ke >= 0) & (ke <= 0.25) & (ki >= 0) & (ki <= 40))),
+    "plutinoFlankLow": flank(plu - 0.5 - 1.0, plu - 0.5),
+    "plutinoFlankHigh": flank(plu + 0.5, plu + 0.5 + 1.0),
+    "twotinoFlankLow": flank(two - 0.5 - 1.0, two - 0.5),
+    "twotinoFlankHigh": flank(two + 0.5, two + 0.5 + 1.0),
+}
+(oracle.FIX / "oracle-kuiper-results.json").write_text(json.dumps(res, indent=1) + "\n")
+print(res)
