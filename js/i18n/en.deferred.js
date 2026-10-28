@@ -1990,6 +1990,8 @@ export const EN_DEFERRED = {
     'Brightness bias, made quantitative: why the sample is not the population.',
   'inv.seq.observing.the-completeness-curve':
     'Put a number on what a survey misses, and correct for it.',
+  'inv.seq.observing.what-a-telescope-resolves':
+    'What aperture and the air do to a pair of stars.',
   'inv.seq.depth.core': 'Core depth',
   'inv.seq.depth.quantitative': 'Quantitative depth',
   'inv.seq.depth.advanced': 'Advanced depth',

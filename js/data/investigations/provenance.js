@@ -82,6 +82,7 @@ export const EVIDENCE_FROM = Object.freeze({
   'weighing-jupiter': 'model',
   'weighing-stars': 'engine',
   'what-a-ccd-records': 'model',
+  'what-a-telescope-resolves': 'model',
   'what-a-crater-diameter-is-worth': 'model',
   'what-a-spectrum-is-made-of': 'model',
   'what-does-plus-minus-claim': 'model',

@@ -194,6 +194,7 @@ export const GUIDED = Object.freeze([
   'weighing-jupiter',
   'weighing-stars',
   'what-a-ccd-records',
+  'what-a-telescope-resolves',
   'what-a-crater-diameter-is-worth',
   'what-a-spectrum-is-made-of',
   'what-does-plus-minus-claim',

@@ -870,4 +870,14 @@ export const DISCOVERY = {
     },
     courseLevel: 'survey',
   },
+  'what-a-telescope-resolves': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: [],
+    textbook: {
+      chapter: 6,
+      section: null,
+    },
+    courseLevel: 'survey',
+  },
 };

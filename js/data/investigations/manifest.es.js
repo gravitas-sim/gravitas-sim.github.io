@@ -1082,4 +1082,17 @@ export const MANIFEST = [
     gradedCount: 6,
     objectiveCount: 4,
   },
+  {
+    id: 'what-a-telescope-resolves',
+    title: 'Qué resuelve un telescopio',
+    subtitle:
+      'Qué apertura muestra dos estrellas como dos, cuándo aparece la estrella débil y por qué la anchura de una estrella no es el límite del telescopio',
+    duration: '15-25 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/what-a-telescope-resolves.webp',
+    depths: 3,
+    stepCount: 7,
+    gradedCount: 5,
+    objectiveCount: 4,
+  },
 ];

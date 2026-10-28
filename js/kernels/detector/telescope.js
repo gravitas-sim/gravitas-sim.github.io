@@ -43,13 +43,16 @@ export const DEFAULTS = Object.freeze({
   seeingArcsec: 1,
   beta: MOFFAT_BETA,
   exposureS: 60,
-  size: 64,
+  /** Pixels on a side; 'auto' makes it wide enough for the stars' profile (at least 64, at most 128). */
+  size: 'auto',
   skyMag: 20,
   scene: 'pair',
   separationArcsec: 1,
   pairMag: 14,
   faintMag: 19,
-  refMag: 13,
+  /** The reference stars are chosen, as at a telescope, to be well exposed and not saturated: this many electrons each (a magnitude is derived unless refMag is given). */
+  refElectrons: 80000,
+  refMag: null,
   magnitude: 15.5,
   seed: 'telescope',
 });
@@ -72,17 +75,17 @@ export const DETECTOR = Object.freeze({
 
 /** The reference stars every scene carries (positions as fractions of the frame; V magnitudes are `refMag` plus the offset). */
 const REFERENCES = [
-  [0.2, 0.2, 0],
-  [0.8, 0.2, 0.4],
-  [0.2, 0.8, 0.8],
+  [0.25, 0.25, 0],
+  [0.75, 0.25, 0.4],
+  [0.25, 0.75, 0.8],
 ];
 /** The faint field: fractions of the frame and offsets in magnitude from `faintMag` (negative: brighter). */
 const FIELD = [
-  [0.75, 0.75, -4.2],
-  [0.55, 0.2, -3.1],
-  [0.35, 0.4, -2.4],
-  [0.8, 0.5, -1.6],
-  [0.5, 0.82, -0.9],
+  [0.78, 0.78, -3.2],
+  [0.55, 0.15, -2.6],
+  [0.4, 0.45, -2.0],
+  [0.85, 0.5, -1.4],
+  [0.55, 0.85, -0.8],
 ];
 const FAINT_AT = [0.62, 0.45];
 
@@ -100,8 +103,6 @@ export function normalizeTelescope(c = {}) {
   finitePos(t.pixelM, 'the pixel pitch');
   finitePos(t.wavelengthNm, 'the wavelength');
   finitePos(t.exposureS, 'the exposure');
-  if (!(Number.isInteger(t.size) && t.size >= 16 && t.size <= 128))
-    throw new OpticsError('input', 'the frame is 16 to 128 pixels square');
   if (!['pair', 'field', 'single'].includes(t.scene))
     throw new OpticsError('input', `no scene ${t.scene}`);
   if (
@@ -114,7 +115,19 @@ export function normalizeTelescope(c = {}) {
     throw new OpticsError('input', 'the separation is zero or more');
   const focalLength = focalLengthM(t.apertureM, t.focalRatio);
   const pixelScale = pixelScaleArcsec(focalLength, t.pixelM);
-  return { ...t, focalLengthM: focalLength, pixelScaleArcsec: pixelScale };
+  let size = t.size;
+  if (size === 'auto') {
+    const fwhmPx = toArcsec(opticsOf(t).fwhm) / pixelScale;
+    size = Math.min(128, Math.max(64, Math.ceil((16 * fwhmPx) / 8) * 8));
+  }
+  if (!(Number.isInteger(size) && size >= 16 && size <= 128))
+    throw new OpticsError('input', 'the frame is 16 to 128 pixels square');
+  return {
+    ...t,
+    size,
+    focalLengthM: focalLength,
+    pixelScaleArcsec: pixelScale,
+  };
 }
 
 /** The optics (optics.js's psf) of a config. */
@@ -189,13 +202,16 @@ export function sceneStars(t) {
     });
     return stars;
   }
+  const refMag =
+    t.refMag ??
+    -2.5 * Math.log10(t.refElectrons / (starRate(t, 0) * t.exposureS));
   REFERENCES.forEach(([fx, fy, dm], i) =>
     stars.push({
       id: `R${i + 1}`,
       role: 'reference',
       x: at(fx) + u(),
       y: at(fy) + u(),
-      mag: t.refMag + dm,
+      mag: refMag + dm,
     })
   );
   if (t.scene === 'pair') {

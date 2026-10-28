@@ -1073,4 +1073,17 @@ export const MANIFEST = [
     gradedCount: 6,
     objectiveCount: 4,
   },
+  {
+    id: 'what-a-telescope-resolves',
+    title: 'What a Telescope Resolves',
+    subtitle:
+      'Which aperture shows two stars as two, when the faint star appears, and why the width of a star is not the limit of the telescope',
+    duration: '15-25 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/what-a-telescope-resolves.webp',
+    depths: 3,
+    stepCount: 7,
+    gradedCount: 5,
+    objectiveCount: 4,
+  },
 ];

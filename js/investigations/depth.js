@@ -148,6 +148,8 @@ const EXTENSIONS = {
   'ios-fire': () => import('../data/investigations/depth/ios-fire.js'),
   'goldilocks-question': () =>
     import('../data/investigations/depth/goldilocks-question.js'),
+  'what-a-telescope-resolves': () =>
+    import('../data/investigations/depth/what-a-telescope-resolves.js'),
   'what-is-in-this-field': () =>
     import('../data/investigations/depth/what-is-in-this-field.js'),
 };
@@ -254,6 +256,8 @@ const WORDS = {
     'ios-fire': () => import('../data/investigations/depth/es/ios-fire.js'),
     'goldilocks-question': () =>
       import('../data/investigations/depth/es/goldilocks-question.js'),
+    'what-a-telescope-resolves': () =>
+      import('../data/investigations/depth/es/what-a-telescope-resolves.js'),
     'what-is-in-this-field': () =>
       import('../data/investigations/depth/es/what-is-in-this-field.js'),
     'missing-mass': () =>

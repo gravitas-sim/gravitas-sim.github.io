@@ -26,7 +26,12 @@ import {
   fitStar,
   measurePsf,
 } from './measure/detect.js';
-import { DETECTOR, telescopeFrame } from './kernels/detector/telescope.js';
+import {
+  DETECTOR,
+  skyRate,
+  telescopeFrame,
+} from './kernels/detector/telescope.js';
+import { snrAt } from './kernels/detector/snr.js';
 import {
   collectingAreaM2,
   EYE_PUPIL_M,
@@ -105,7 +110,7 @@ export function adaptedFrame(r) {
   return { frame, a: adapt(frame, permits) };
 }
 
-const near = (s, p) => Math.hypot(s.x - p.x, s.y - p.y) <= MATCH_PX;
+const near = (s, p, r = MATCH_PX) => Math.hypot(s.x - p.x, s.y - p.y) <= r;
 
 /**
  * Make the frame of a config and measure it. The width comes from the reference stars (isolated, well exposed)
@@ -135,13 +140,15 @@ export function measureTelescope(config = {}, { sigma = 4 } = {}) {
     ...DETECT,
     sigma,
     fwhm: Math.min(Math.max(guess, 1.5), 12),
+    box: Math.min(256, Math.max(16, Math.round(4 * r.truth.combinedFwhmPx))),
   });
   if (!det.ok) return { ...out, code: det.code };
   out.det = det;
   out.a = a;
   out.sources = det.sources;
   const placed = r.stars;
-  const matched = s => placed.find(p => near(s, p)) ?? null;
+  const radius = Math.max(MATCH_PX, 0.75 * r.truth.combinedFwhmPx);
+  const matched = s => placed.find(p => near(s, p, radius)) ?? null;
   out.sources.forEach(s => (s.placed = matched(s)));
   const refs = det.sources.filter(
     s =>
@@ -192,9 +199,23 @@ export function measureTelescope(config = {}, { sigma = 4 } = {}) {
   if (t.scene === 'field') {
     const f = det.sources.find(s => s.placed?.role === 'faint') ?? null;
     const p = placed.find(s => s.role === 'faint');
+    // The signal to noise the CCD equation gives for the faint star in an aperture one FWHM in radius (a prediction
+    // from the stated rates; the detector's own list is the measurement).
+    const rAp = r.psf.fwhm;
+    const npix = Math.PI * (rAp / toRad(px)) ** 2;
+    const expectedSnr = snrAt(
+      {
+        rate: p.rate * r.psf.encircled(rAp),
+        npix,
+        skyRate: skyRate(t),
+        readNoise: DETECTOR.readNoise,
+      },
+      t.exposureS
+    );
     out.faint = {
       detected: Boolean(f),
       snr: f?.snr ?? null,
+      expectedSnr,
       electrons: p.electrons,
       magnitude: p.mag,
       listed: det.sources.length,

@@ -181,6 +181,12 @@ export default {
     'Por qué una imagen por noche no puede dar el período de Ío, y por qué el período que ve la Tierra no es del todo el orbital.',
     'Las imágenes son sintéticas, hechas con posiciones de JPL Horizons; la masa es la del planeta solo y deja fuera su achatamiento.',
   ],
+  telescope: [
+    'Una estrella doble sintética o un campo débil a través de un telescopio que describes: su apertura, relación focal, longitud de onda, obstrucción central y exposición, y el desenfoque del aire.',
+    'La separación de Rayleigh de la apertura (calculada) junto a la anchura ajustada a las estrellas de la imagen (medida), la caída entre las dos estrellas, si la estrella débil aparece en la lista, la luz recogida y la escala de placa.',
+    'Qué apertura muestra un par cercano como dos, cómo la apertura y la exposición sacan una estrella débil, por qué la anchura de una estrella no es el límite del telescopio y por qué un telescopio terrestre mayor deja de resolver más detalle cerca del seeing.',
+    'Las imágenes son sintéticas: un patrón de Airy convolucionado con un perfil de seeing de Moffat de anchura dada, una longitud de onda, sin aberraciones, óptica adaptativa ni araña, un píxel cuadrado. El seeing es una entrada, no un sitio.',
+  ],
   atmosphere: [
     'La temperatura que da a un planeta la luz del Sol por sí sola junto a la temperatura medida allí, un efecto invernadero de una capa y uno gris lado a lado para un planeta, o con qué rapidez baja la presión con la altura. O cuatro profundidades de eclipse secundario con la temperatura que da cada una, o la curva de fase de un planeta con el albedo que fija.',
     'Cuánto se aleja la temperatura medida de Venus, la Tierra, Marte y los planetas gigantes de su temperatura de equilibrio, qué emisividad o profundidad óptica necesita cada modelo para cerrar la diferencia, y la altura de escala que implica cada cuerpo.',
