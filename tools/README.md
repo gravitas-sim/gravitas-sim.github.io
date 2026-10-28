@@ -180,6 +180,7 @@ current, and the orchestrator checks it.
 | `seeding-probes.mjs` | The moved seeded call sites, run against v3's own copies of them |  |
 | `shell.mjs` | The shared shell, stamped into every page |  |
 | `sky-horizons-astrometric.mjs` | Reference positions for the Sky Lab's ephemeris source (Prompt 106), from JPL Horizons |  |
+| `small-bodies-validate.mjs` | The small-body kernel against its committed thresholds (Prompt 198) | `npm run small-bodies:validate` |
 | `small-body-sweep.mjs` | Small-body scenario sweep |  |
 | `source-closure.mjs` | Which files a program actually reads |  |
 | `starfield-probe.mjs` | Starfield phase profile |  |

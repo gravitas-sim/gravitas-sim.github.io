@@ -1,0 +1,865 @@
+{
+ "format": "gravitas.small-bodies-record/1",
+ "prompt": 198,
+ "what": "The rows of the full run (npm run small-bodies:validate -- --record), including the ensembles the Jest suite does not rerun. tests/smallBodies.test.js reruns the fast and authentic groups live and holds them to these rows.",
+ "rows": [
+  {
+   "id": "a0.defaults",
+   "measured": 1,
+   "bound": 1,
+   "pass": true,
+   "note": "the kernel's windows, rules and planets are the committed ones"
+  },
+  {
+   "id": "a1.entries",
+   "measured": 0,
+   "bound": 0,
+   "pass": true,
+   "note": "7 Jupiter and 4 Neptune entries"
+  },
+  {
+   "id": "a1.relative",
+   "measured": 0,
+   "bound": 1e-13,
+   "pass": true,
+   "note": ""
+  },
+  {
+   "id": "a1.three.to.one",
+   "measured": 1.7754427136338297e-16,
+   "bound": 1e-13,
+   "pass": true,
+   "note": ""
+  },
+  {
+   "id": "a1.trojans",
+   "measured": 0,
+   "bound": 1e-13,
+   "pass": true,
+   "note": ""
+  },
+  {
+   "id": "a2.periodRatio",
+   "measured": 1.6653345369377348e-16,
+   "bound": 1e-13,
+   "pass": true,
+   "note": ""
+  },
+  {
+   "id": "a2.nearestRatio.wrong",
+   "measured": 0,
+   "bound": 0,
+   "pass": true,
+   "note": "js/resonance/elements.js returns each entry's whole numbers"
+  },
+  {
+   "id": "a3.areas",
+   "measured": 0,
+   "bound": 1e-12,
+   "pass": true,
+   "note": "pi b c, pi a c, pi a b"
+  },
+  {
+   "id": "a3.sphere",
+   "measured": 1.205409333191609e-16,
+   "bound": 1e-12,
+   "pass": true,
+   "note": ""
+  },
+  {
+   "id": "a3.poleOn",
+   "measured": 0,
+   "bound": 1e-12,
+   "pass": true,
+   "note": ""
+  },
+  {
+   "id": "a3.halfPeriod",
+   "measured": 2.8004205366024674e-16,
+   "bound": 1e-12,
+   "pass": true,
+   "note": "the flux at phi and phi + 180 degrees"
+  },
+  {
+   "id": "a3.equatorOn",
+   "measured": 0,
+   "bound": 1e-12,
+   "pass": true,
+   "note": ""
+  },
+  {
+   "id": "a3.zappala",
+   "measured": 7.314599188726942e-13,
+   "bound": 1e-12,
+   "pass": true,
+   "note": "60 bodies, the maximum minus the minimum of the curve"
+  },
+  {
+   "id": "a4.neverOver",
+   "measured": 0,
+   "bound": 1e-12,
+   "pass": true,
+   "note": "1000 bodies"
+  },
+  {
+   "id": "a4.equalAtEquatorOn",
+   "measured": 2.449863669406563e-16,
+   "bound": 1e-12,
+   "pass": true,
+   "note": ""
+  },
+  {
+   "id": "a4.notTheShape",
+   "measured": 0.9895397489539749,
+   "bound": 0.9,
+   "pass": true,
+   "note": "478 bodies at theta <= 60"
+  },
+  {
+   "id": "a5.coefficients",
+   "measured": 2.1496693314304594e-13,
+   "bound": 0.000001,
+   "pass": true,
+   "note": "4 iterations"
+  },
+  {
+   "id": "a5.depletion",
+   "measured": -0.0000019513709996754613,
+   "bound": 0.0001,
+   "pass": true,
+   "note": "the midpoint rule of the bins, stated in c2"
+  },
+  {
+   "id": "a7.noOverlap",
+   "measured": 1,
+   "bound": 1,
+   "pass": true,
+   "note": "10,000 orbits, none in two boxes"
+  },
+  {
+   "id": "a7.classified",
+   "measured": 1,
+   "bound": 1,
+   "pass": true,
+   "note": "every orbit is the class it was drawn in"
+  },
+  {
+   "id": "a7.windowsCentred",
+   "measured": 1,
+   "bound": 1,
+   "pass": true,
+   "note": "plutino 1.5^(2/3), twotino 2^(2/3) times a_Neptune"
+  },
+  {
+   "id": "a7.tableSums",
+   "measured": 1,
+   "bound": 1,
+   "pass": true,
+   "note": "10000"
+  },
+  {
+   "id": "b1.axes",
+   "measured": 0,
+   "bound": 1e-12,
+   "pass": true,
+   "note": "11 axes against numpy"
+  },
+  {
+   "id": "b2.projectedArea",
+   "measured": 2.1119961691866284e-7,
+   "bound": 0.0001,
+   "pass": true,
+   "note": "40 configurations against the surface integral"
+  },
+  {
+   "id": "b3.peakPeriod",
+   "measured": 0.0000012247597398571654,
+   "bound": 0.0005,
+   "pass": true,
+   "note": "6 series against astropy's peak"
+  },
+  {
+   "id": "b3.rotationPeriod",
+   "measured": 0.0008720887162863051,
+   "bound": 0.0005,
+   "pass": false,
+   "note": "the refined period against astropy's 2 / f_peak"
+  },
+  {
+   "id": "b3.vsTruth.kernel",
+   "measured": 0.0009890653582680427,
+   "bound": "reported",
+   "pass": true,
+   "note": "the kernel's rotation period against the truth that made each series, worst of six"
+  },
+  {
+   "id": "b3.vsTruth.oracle",
+   "measured": 0.0009056625879092176,
+   "bound": "reported",
+   "pass": true,
+   "note": "astropy's 2 / f_peak against the same truth, worst of six"
+  },
+  {
+   "id": "b4.depletion",
+   "measured": 1.0735856648125264e-13,
+   "bound": 0.0005,
+   "pass": true,
+   "note": "3 catalogs, 5 windows against the scipy fit"
+  },
+  {
+   "id": "b4.counts",
+   "measured": 0,
+   "bound": 0,
+   "pass": true,
+   "note": "the observed counts agree exactly"
+  },
+  {
+   "id": "c4.membership",
+   "measured": 1,
+   "bound": 1,
+   "pass": true,
+   "note": "1960 synthetic orbits"
+  },
+  {
+   "id": "c4.table",
+   "measured": 1,
+   "bound": 1,
+   "pass": true,
+   "note": "the table equals the manifest"
+  },
+  {
+   "id": "d2.refusals",
+   "measured": 1,
+   "bound": 1,
+   "pass": true,
+   "note": "13 refusals"
+  },
+  {
+   "id": "a6.detectionLimitH",
+   "measured": 0,
+   "bound": 1e-12,
+   "pass": true,
+   "note": ""
+  },
+  {
+   "id": "a6.ratio",
+   "measured": 0,
+   "bound": 1e-12,
+   "pass": true,
+   "note": "a = 2 against 3.5"
+  },
+  {
+   "id": "a6.ratio.value",
+   "measured": 40.03548955094698,
+   "bound": "reported",
+   "pass": true,
+   "note": "the inner belt is found this many times more completely than the outer edge"
+  },
+  {
+   "id": "a6.meanDetected.sigmas",
+   "measured": 0.5496347566233006,
+   "bound": 3,
+   "pass": true,
+   "note": "ensemble 2.3477, quadrature 2.3471"
+  },
+  {
+   "id": "a6.biasInward",
+   "measured": 2.347698168684433,
+   "bound": 2.75,
+   "pass": true,
+   "note": "the detected mean is below the true mean"
+  },
+  {
+   "id": "d5.primary",
+   "measured": 0.0006035540984186127,
+   "bound": 0.001,
+   "pass": true,
+   "note": "12.0072 h for a true 6 h"
+  },
+  {
+   "id": "d5.alternative",
+   "measured": 0.0005799260120162112,
+   "bound": 0.001,
+   "pass": true,
+   "note": "the one-maximum period is listed"
+  },
+  {
+   "id": "d4.noiseNotPeriodic",
+   "measured": 0.9733333333333334,
+   "bound": 0.97,
+   "pass": true,
+   "note": "300 noise series, false-alarm limit 0.01"
+  },
+  {
+   "id": "d4.signalPeriodic",
+   "measured": 1,
+   "bound": 0.99,
+   "pass": true,
+   "note": "0.06 mag two-maxima signal at 0.03 mag noise"
+  },
+  {
+   "id": "d4.onceNightlyFlagged",
+   "measured": 1,
+   "bound": 0.9,
+   "pass": true,
+   "note": "40 nights, one point a night, 9.0 h"
+  },
+  {
+   "id": "d4.denseAmbiguous",
+   "measured": 0,
+   "bound": 0.05,
+   "pass": true,
+   "note": "three 8-hour nights at 6 minutes"
+  },
+  {
+   "id": "e1.cited",
+   "measured": null,
+   "pass": null,
+   "note": "no cited independent analysis of the same catalog cut was supplied: e1.oracle is an independent implementation of the same estimator, not a cited analysis"
+  },
+  {
+   "id": "e2.lightcurve",
+   "measured": null,
+   "pass": null,
+   "note": "no measured asteroid light curve: the ALCDEF download is a form-based job and the PDS path returned 404 on 2026-10-27; nothing is simulated as authentic"
+  },
+  {
+   "id": "c1.coverage.3:1",
+   "measured": 0.9266666666666666,
+   "bound": [
+    0.9,
+    0.995
+   ],
+   "pass": true,
+   "note": "300 catalogs, 200 draws"
+  },
+  {
+   "id": "c1.coverage.5:2",
+   "measured": 0.9133333333333333,
+   "bound": [
+    0.9,
+    0.995
+   ],
+   "pass": true,
+   "note": "300 catalogs, 200 draws"
+  },
+  {
+   "id": "c1.coverage.7:3",
+   "measured": 0.8466666666666667,
+   "bound": [
+    0.9,
+    0.995
+   ],
+   "pass": false,
+   "note": "300 catalogs, 200 draws"
+  },
+  {
+   "id": "c1.coverage.2:1",
+   "measured": 0.7866666666666666,
+   "bound": [
+    0.9,
+    0.995
+   ],
+   "pass": false,
+   "note": "300 catalogs, 200 draws"
+  },
+  {
+   "id": "c1.refused",
+   "measured": 0,
+   "bound": 0,
+   "pass": true,
+   "note": ""
+  },
+  {
+   "id": "c2.coverage",
+   "measured": 0.915,
+   "bound": [
+    0.88,
+    0.995
+   ],
+   "pass": true,
+   "note": "D_hat 0.382, 200 resamples, 100 inner draws"
+  },
+  {
+   "id": "d1.notResolvedAtSmall",
+   "measured": 0.9966666666666667,
+   "bound": 0.95,
+   "pass": true,
+   "note": "300 catalogs at n0 = 150"
+  },
+  {
+   "id": "d1.falsePositive",
+   "measured": 0.016666666666666666,
+   "bound": 0.08,
+   "pass": true,
+   "note": "300 gap-free catalogs, the 3:1 window"
+  },
+  {
+   "id": "d1.falsePositive.allWindows",
+   "measured": 0.072,
+   "bound": "reported",
+   "pass": true,
+   "note": "resolved windows over all five windows of the gap-free catalogs"
+  },
+  {
+   "id": "d1.powerAtLarge",
+   "measured": 1,
+   "bound": 0.95,
+   "pass": true,
+   "note": "the c1 catalogs, n0 = 8000"
+  },
+  {
+   "id": "d1.power.500",
+   "measured": 0.68,
+   "bound": "reported",
+   "pass": true,
+   "note": "fraction of 100 catalogs at n0 = 500 that resolve the 3:1 gap"
+  },
+  {
+   "id": "d1.power.1000",
+   "measured": 0.88,
+   "bound": "reported",
+   "pass": true,
+   "note": "fraction of 100 catalogs at n0 = 1000 that resolve the 3:1 gap"
+  },
+  {
+   "id": "d1.power.2000",
+   "measured": 1,
+   "bound": "reported",
+   "pass": true,
+   "note": "fraction of 100 catalogs at n0 = 2000 that resolve the 3:1 gap"
+  },
+  {
+   "id": "d3.warned",
+   "measured": 0.29,
+   "bound": 0.95,
+   "pass": false,
+   "note": "100 catalogs with a sharp outer edge, no gap"
+  },
+  {
+   "id": "d3.notResolved",
+   "measured": 1,
+   "bound": 0.95,
+   "pass": true,
+   "note": ""
+  },
+  {
+   "id": "d3.warned.added",
+   "measured": 1,
+   "bound": 0.95,
+   "pass": true,
+   "note": "steep-baseline or uneven-flanks"
+  },
+  {
+   "id": "d3.notResolved.added",
+   "measured": 1,
+   "bound": 0.95,
+   "pass": true,
+   "note": ""
+  },
+  {
+   "id": "d3.cleanFlagged.added",
+   "measured": 0.018,
+   "bound": 0.02,
+   "pass": true,
+   "note": "windows of 100 gap-free smooth belts flagged for uneven flanks (a figure reported against 2 percent)"
+  },
+  {
+   "id": "c3.noise0.01.period",
+   "measured": 0.99,
+   "bound": 0.95,
+   "pass": true,
+   "note": "within 0.002 of the truth, 300 curves"
+  },
+  {
+   "id": "c3.noise0.01.amplitude",
+   "measured": 0.94,
+   "bound": 0.95,
+   "pass": false,
+   "note": "within 0.03 mag"
+  },
+  {
+   "id": "c3.noise0.01.amplitudeCoverage",
+   "measured": 0.6166666666666667,
+   "bound": [
+    0.9,
+    0.995
+   ],
+   "pass": false,
+   "note": ""
+  },
+  {
+   "id": "c3.noise0.01.boundHolds",
+   "measured": 0.9466666666666667,
+   "bound": 0.95,
+   "pass": false,
+   "note": "a/b >= the bound, from the interval lower end"
+  },
+  {
+   "id": "c3.noise0.01.periodCoverage",
+   "measured": 0.92,
+   "bound": [
+    0.85,
+    0.995
+   ],
+   "pass": true,
+   "note": "1.96 sigma of the period bootstrap"
+  },
+  {
+   "id": "c3.noise0.01.noVerdict",
+   "measured": 0,
+   "bound": "reported",
+   "pass": true,
+   "note": "fraction returned as not periodic or refused (a signal under the noise)"
+  },
+  {
+   "id": "c3.noise0.01.ambiguous",
+   "measured": 0.04666666666666667,
+   "bound": "reported",
+   "pass": true,
+   "note": "fraction the kernel called ambiguous"
+  },
+  {
+   "id": "c3.noise0.01.withheld",
+   "measured": 0.04666666666666667,
+   "bound": "reported",
+   "pass": true,
+   "note": "fraction whose amplitude was withheld (phase gap or ill-conditioned)"
+  },
+  {
+   "id": "c3.noise0.01.period.added",
+   "measured": 0.9892857142857143,
+   "bound": 0.95,
+   "pass": true,
+   "note": "280 curves called period with an amplitude"
+  },
+  {
+   "id": "c3.noise0.01.amplitude.added",
+   "measured": 0.9857142857142858,
+   "bound": 0.95,
+   "pass": true,
+   "note": ""
+  },
+  {
+   "id": "c3.noise0.01.amplitudeCoverage.added",
+   "measured": 0.6464285714285715,
+   "bound": [
+    0.9,
+    0.995
+   ],
+   "pass": false,
+   "note": ""
+  },
+  {
+   "id": "c3.noise0.01.boundHolds.added",
+   "measured": 0.9928571428571429,
+   "bound": 0.95,
+   "pass": true,
+   "note": ""
+  },
+  {
+   "id": "c3.noise0.01.periodCoverage.added",
+   "measured": 0.9214285714285714,
+   "bound": [
+    0.85,
+    0.995
+   ],
+   "pass": true,
+   "note": ""
+  },
+  {
+   "id": "c3.noise0.03.period",
+   "measured": 0.9166666666666666,
+   "bound": 0.95,
+   "pass": false,
+   "note": "within 0.003 of the truth, 300 curves"
+  },
+  {
+   "id": "c3.noise0.03.amplitude",
+   "measured": 0.9266666666666666,
+   "bound": 0.95,
+   "pass": false,
+   "note": "within 0.03 mag"
+  },
+  {
+   "id": "c3.noise0.03.amplitudeCoverage",
+   "measured": 0.6966666666666667,
+   "bound": [
+    0.9,
+    0.995
+   ],
+   "pass": false,
+   "note": ""
+  },
+  {
+   "id": "c3.noise0.03.boundHolds",
+   "measured": 0.96,
+   "bound": 0.95,
+   "pass": true,
+   "note": "a/b >= the bound, from the interval lower end"
+  },
+  {
+   "id": "c3.noise0.03.periodCoverage",
+   "measured": 0.8966666666666666,
+   "bound": [
+    0.85,
+    0.995
+   ],
+   "pass": true,
+   "note": "1.96 sigma of the period bootstrap"
+  },
+  {
+   "id": "c3.noise0.03.noVerdict",
+   "measured": 0.0033333333333333335,
+   "bound": "reported",
+   "pass": true,
+   "note": "fraction returned as not periodic or refused (a signal under the noise)"
+  },
+  {
+   "id": "c3.noise0.03.ambiguous",
+   "measured": 0.05333333333333334,
+   "bound": "reported",
+   "pass": true,
+   "note": "fraction the kernel called ambiguous"
+  },
+  {
+   "id": "c3.noise0.03.withheld",
+   "measured": 0.03333333333333333,
+   "bound": "reported",
+   "pass": true,
+   "note": "fraction whose amplitude was withheld (phase gap or ill-conditioned)"
+  },
+  {
+   "id": "c3.noise0.03.period.added",
+   "measured": 0.9532374100719424,
+   "bound": 0.95,
+   "pass": true,
+   "note": "278 curves called period with an amplitude"
+  },
+  {
+   "id": "c3.noise0.03.amplitude.added",
+   "measured": 0.9784172661870504,
+   "bound": 0.95,
+   "pass": true,
+   "note": ""
+  },
+  {
+   "id": "c3.noise0.03.amplitudeCoverage.added",
+   "measured": 0.737410071942446,
+   "bound": [
+    0.9,
+    0.995
+   ],
+   "pass": false,
+   "note": ""
+  },
+  {
+   "id": "c3.noise0.03.boundHolds.added",
+   "measured": 1,
+   "bound": 0.95,
+   "pass": true,
+   "note": ""
+  },
+  {
+   "id": "c3.noise0.03.periodCoverage.added",
+   "measured": 0.920863309352518,
+   "bound": [
+    0.85,
+    0.995
+   ],
+   "pass": true,
+   "note": ""
+  },
+  {
+   "id": "e1.rows",
+   "measured": 5871,
+   "bound": 3000,
+   "pass": true,
+   "note": "8886 rows in the pack, 5871 in 2 to 3.5 AU"
+  },
+  {
+   "id": "e1.window.4:1",
+   "measured": 1,
+   "bound": "reported",
+   "pass": true,
+   "note": "depletion 1.000, interval 1.000 to 1.000, 0 found of 2.6 expected, verdict not resolved (too-few-expected), warnings none"
+  },
+  {
+   "id": "e1.window.3:1",
+   "measured": 0.8797105055920302,
+   "bound": "reported",
+   "pass": true,
+   "note": "depletion 0.880, interval 0.829 to 0.924, 26 found of 216.1 expected, verdict resolved, warnings none"
+  },
+  {
+   "id": "e1.window.5:2",
+   "measured": 0.6334312158388236,
+   "bound": "reported",
+   "pass": true,
+   "note": "depletion 0.633, interval 0.565 to 0.700, 115 found of 313.7 expected, verdict resolved, warnings none"
+  },
+  {
+   "id": "e1.window.7:3",
+   "measured": 0.8359835835872297,
+   "bound": "reported",
+   "pass": true,
+   "note": "depletion 0.836, interval 0.788 to 0.873, 58 found of 353.6 expected, verdict not resolved (uneven-flanks), warnings uneven-flanks"
+  },
+  {
+   "id": "e1.window.2:1",
+   "measured": 0.8933039075209258,
+   "bound": "reported",
+   "pass": true,
+   "note": "depletion 0.893, interval 0.864 to 0.921, 52 found of 487.4 expected, verdict not resolved (uneven-flanks), warnings uneven-flanks"
+  },
+  {
+   "id": "e1.verdict.3:1",
+   "measured": 1,
+   "bound": 1,
+   "pass": true,
+   "note": "verdict resolved"
+  },
+  {
+   "id": "e1.depth.3:1",
+   "measured": 0.8797105055920302,
+   "bound": [
+    0.4,
+    1
+   ],
+   "pass": true,
+   "note": ""
+  },
+  {
+   "id": "e1.verdict.5:2",
+   "measured": 1,
+   "bound": 1,
+   "pass": true,
+   "note": "verdict resolved"
+  },
+  {
+   "id": "e1.depth.5:2",
+   "measured": 0.6334312158388236,
+   "bound": [
+    0.4,
+    1
+   ],
+   "pass": true,
+   "note": ""
+  },
+  {
+   "id": "e1.oracle",
+   "measured": 1.6986412276764895e-14,
+   "bound": 0.0005,
+   "pass": true,
+   "note": "five windows against the scipy fit on the real cut"
+  },
+  {
+   "id": "e1.oracle.counts",
+   "measured": 0,
+   "bound": 0,
+   "pass": true,
+   "note": ""
+  },
+  {
+   "id": "e1.coverage",
+   "measured": 0.91,
+   "bound": [
+    0.88,
+    0.995
+   ],
+   "pass": true,
+   "note": "D_hat 0.880"
+  },
+  {
+   "id": "e1.populations.hilda",
+   "measured": 183,
+   "bound": 30,
+   "pass": true,
+   "note": "Hildas by the class rule (an a-e-i box, not a libration test)"
+  },
+  {
+   "id": "e1.populations.trojan",
+   "measured": 1555,
+   "bound": 100,
+   "pass": true,
+   "note": "Jupiter Trojans by the class rule"
+  },
+  {
+   "id": "e1.populations.table",
+   "measured": 8886,
+   "bound": "reported",
+   "pass": true,
+   "note": "{\"innerMainBelt\":716,\"middleMainBelt\":1642,\"outerMainBelt\":3355,\"hilda\":183,\"trojan\":1555,\"kuiperClassical\":375,\"plutino\":169,\"twotino\":46,\"other\":845}"
+  },
+  {
+   "id": "e1.selection.H11",
+   "measured": 0.8377840803906963,
+   "bound": "reported",
+   "pass": true,
+   "note": "the 3:1 depletion on the 2537 objects with H < 11 (the H < 13 cut gives 0.880): the same gap in a brighter cut"
+  },
+  {
+   "id": "e3.rows",
+   "measured": 3453,
+   "bound": 3000,
+   "pass": true,
+   "note": "3453 rows in the pack"
+  },
+  {
+   "id": "e3.wellObserved",
+   "measured": 1,
+   "bound": 1,
+   "pass": true,
+   "note": "the shortest data arc is 366 days"
+  },
+  {
+   "id": "e3.plutino",
+   "measured": 520,
+   "bound": 100,
+   "pass": true,
+   "note": "objects in the plutino a-window (a proxy for the 3:2 resonance)"
+  },
+  {
+   "id": "e3.twotino",
+   "measured": 169,
+   "bound": 20,
+   "pass": true,
+   "note": "objects in the twotino a-window"
+  },
+  {
+   "id": "e3.classical",
+   "measured": 1782,
+   "bound": 300,
+   "pass": true,
+   "note": "objects in the classical box"
+  },
+  {
+   "id": "e3.concentration",
+   "measured": 6.666666666666667,
+   "bound": 2,
+   "pass": true,
+   "note": "plutino window 520 against a flank mean of 78"
+  },
+  {
+   "id": "e3.concentration.twotino",
+   "measured": 1.5576036866359446,
+   "bound": "reported",
+   "pass": true,
+   "note": "twotino window 169 against a flank mean of 108.5: reported, not bounded"
+  },
+  {
+   "id": "e3.oracle",
+   "measured": 1,
+   "bound": 1,
+   "pass": true,
+   "note": "the class counts and the plutino flanks against an independent numpy count of the same file"
+  },
+  {
+   "id": "e3.table",
+   "measured": 3453,
+   "bound": "reported",
+   "pass": true,
+   "note": "{\"innerMainBelt\":0,\"middleMainBelt\":0,\"outerMainBelt\":0,\"hilda\":0,\"trojan\":0,\"kuiperClassical\":1782,\"plutino\":520,\"twotino\":169,\"other\":982}"
+  }
+ ]
+}

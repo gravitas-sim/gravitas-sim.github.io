@@ -1,0 +1,37 @@
+{
+ "note": "scipy fit of the same model on js/data/smallbodies/numbered-h13.json",
+ "n": 5871,
+ "converged": true,
+ "gaps": [
+  {
+   "id": "4:1",
+   "nObs": 0,
+   "nExp": 2.6131028577838644,
+   "depletion": 1.0
+  },
+  {
+   "id": "3:1",
+   "nObs": 26,
+   "nExp": 216.14522638044429,
+   "depletion": 0.8797105055920293
+  },
+  {
+   "id": "5:2",
+   "nObs": 115,
+   "nExp": 313.7201119379515,
+   "depletion": 0.6334312158388333
+  },
+  {
+   "id": "7:3",
+   "nObs": 58,
+   "nExp": 353.6231388816372,
+   "depletion": 0.835983583587234
+  },
+  {
+   "id": "2:1",
+   "nObs": 52,
+   "nExp": 487.3655519315931,
+   "depletion": 0.8933039075209428
+  }
+ ]
+}

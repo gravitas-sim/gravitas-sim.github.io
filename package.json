@@ -159,6 +159,7 @@
     "atmospheres:validate": "node tools/atmospheres-validate.mjs",
     "atmospheres-ii:validate": "node tools/atmospheres-ii-validate.mjs",
     "tides:validate": "node tools/tides-validate.mjs",
+    "small-bodies:validate": "node tools/small-bodies-validate.mjs",
     "i18n:freshness": "node tools/i18n-freshness.mjs",
     "author:check": "node tools/author-check.mjs",
     "author:strict": "node tools/author-check.mjs --warnings",
