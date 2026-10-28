@@ -101,6 +101,21 @@ C1 reads 0.675 against the band [0.60, 0.76] with a mean relative bias of -0.9 p
 three are refusals) with a mean reduced chi-square of 24. The measured width is a Moffat model's width: on an Airy-dominated
 frame the tool says so (`modelLimited`) and the panel labels its number a model fit.
 
+## The panel and the lesson
+
+The `telescope` panel (js/telescopeWidgets.js, in the lazy `telescope` family) draws a synthetic double star or a faint field
+and shows two labelled numbers, the Rayleigh separation (computed) and the measured FWHM (a model fit), with the pattern
+width, the seeing, the combined width, the dip between the stars, the faint star's listing and signal to noise, the light
+gathered against a 7 mm pupil and the plate scale. The frame is labelled synthetic. "Resolved" is judged by the kernel's
+dip between the stars, not by the detector's list, because Prompt 183's detector merges a blended pair.
+
+"What a Telescope Resolves" (js/data/investigations/telescope-sequence.js, the one new closure file, D-R10-208-02) carries
+seven core steps, three quantitative and three advanced, in both languages, with the instructor content. The claim rule is
+committed in thresholds.json (`claimRule`) and checked by tests/telescopeLessons.test.js over every string, in both
+languages: no text calls the FWHM the resolution limit, or says the Rayleigh separation is what a frame measured, or says
+magnification is what a telescope is for; two permitted controls and eight forbidden ones keep the rule from passing by
+matching nothing. The Spanish has not been read by a fluent reader.
+
 ## Where things are
 
 `js/kernels/detector/optics.js` (Airy, Moffat, combination, Rayleigh, dip, light gathering, plate scale),

@@ -961,6 +961,13 @@
       "student": false
     },
     {
+      "file": "TELESCOPES.md",
+      "kind": "feature",
+      "purpose": "Telescopes and resolution over the existing PSF: the annular Airy pattern, Moffat seeing, the Rayleigh angle against the measured width, light gathering and plate scale, with their limits and validation (Prompt 208).",
+      "owner": 208,
+      "student": true
+    },
+    {
       "file": "TIDAL_KERNEL.md",
       "kind": "feature",
       "purpose": "Rings, Roche limits and analytic tides: the constant-Q kernel, its equations, limits and validation (Prompt 204, part A).",
