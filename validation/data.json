@@ -1,9 +1,9 @@
 {
- "generatedAt": "2026-10-27",
+ "generatedAt": "2026-10-28",
  "version": "2.1.0",
- "passed": 339,
+ "passed": 343,
  "failed": 0,
- "elapsedMs": 106871,
+ "elapsedMs": 101756,
  "checks": [
   {
    "group": "Unit system",
@@ -4428,6 +4428,59 @@
    "why": "An isothermal, hydrostatic atmosphere; real atmospheres change temperature with height, so the agreement is to a few percent.",
    "toleranceKind": "relative",
    "error": 0.008733921583470514,
+   "pass": true
+  },
+  {
+   "group": "Interiors",
+   "kind": "data",
+   "name": "Earth’s bulk density from its GM and volumetric mean radius against the fact sheet",
+   "measured": 5513.393520369498,
+   "expected": 5514,
+   "unit": "kg/m3",
+   "tolerance": 0.01,
+   "source": "IAU radii and JPL GM against the NASA Planetary Fact Sheet (all typed)",
+   "why": "Density is mass over volume; the mass comes from GM and the Newtonian constant, so its error is carried in the stated uncertainty.",
+   "toleranceKind": "relative",
+   "error": 0.00010998905159626057,
+   "pass": true
+  },
+  {
+   "group": "Interiors",
+   "kind": "analytic",
+   "name": "Surface gravity GM / R^2 and escape speed sqrt(2 GM / R) are tied by v^2 = 2 g R",
+   "measured": 0.9999999999999998,
+   "expected": 1,
+   "unit": "",
+   "tolerance": 1e-12,
+   "why": "Both are closed forms of GM and R; they need no gravitational constant.",
+   "toleranceKind": "relative",
+   "error": 2.220446049250313e-16,
+   "pass": true
+  },
+  {
+   "group": "Interiors",
+   "kind": "analytic",
+   "name": "Density alone cannot separate Jupiter from Uranus: they differ by under 5 percent",
+   "measured": 0.0439256431775612,
+   "expected": 0,
+   "unit": "",
+   "tolerance": 0.05,
+   "why": "Hydrogen and helium and water ice give the same bulk density here, so the density classes do not split the volatile-rich bodies.",
+   "toleranceKind": "relative",
+   "error": 0.0439256431775612,
+   "pass": true
+  },
+  {
+   "group": "Interiors",
+   "kind": "analytic",
+   "name": "The first-order density uncertainty equals the quadrature of GM, G and 3 R errors",
+   "measured": 0.1266000216855013,
+   "expected": 0.1266000216855013,
+   "unit": "kg/m3",
+   "tolerance": 1e-12,
+   "why": "Uncorrelated first-order propagation of a product of powers; the constant’s error is the larger term for Earth.",
+   "toleranceKind": "relative",
+   "error": 0,
    "pass": true
   }
  ]

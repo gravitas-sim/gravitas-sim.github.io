@@ -94,7 +94,7 @@ model page sets out the four different radii a body has under _Displayed
 sizes_.
 
 **A validation suite.** `npm run validate:physics` prints a PASS/FAIL table
-of <!--fact:physicsChecks-->339<!--/fact--> checks with measured error against a
+of <!--fact:physicsChecks-->343<!--/fact--> checks with measured error against a
 stated tolerance: orbital periods and Kepler's laws, conservation of momentum,
 angular momentum and energy, the convergence order of each selectable
 integrator, escape velocity, transit depth, radial-velocity semi-amplitude,
@@ -341,7 +341,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->16261<!--/fact--> tests across <!--fact:jestSuites-->477<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->16304<!--/fact--> tests across <!--fact:jestSuites-->479<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
@@ -558,7 +558,7 @@ and against what.
 npm run validate:physics
 ```
 
-That is <!--fact:physicsChecks-->339<!--/fact--> deterministic checks, about
+That is <!--fact:physicsChecks-->343<!--/fact--> deterministic checks, about
 two minutes, printed as a table of measured value, expected value, error and
 tolerance. Five kinds, and the table labels each: closed-form arithmetic,
 quantities measured by running the N-body engine, literature values with their

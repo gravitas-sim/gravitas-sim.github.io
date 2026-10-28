@@ -450,6 +450,20 @@
       "student": false
     },
     {
+      "file": "INTERIORS.md",
+      "kind": "feature",
+      "purpose": "Interiors I: density, gravity, escape speed, equilibrium temperature, density classes and compression correction of the planets, with uncertainties and validation (Prompt 203 Part A).",
+      "owner": 203,
+      "student": false
+    },
+    {
+      "file": "INTERIORS_GATE.md",
+      "kind": "gate",
+      "purpose": "Interiors gate: the two-layer inversion and the Darwin-Radau oblateness, thresholds committed first, the measured checks and the verdict C (Prompt 203 Part B).",
+      "owner": 203,
+      "student": false
+    },
+    {
       "file": "LAB3D.md",
       "kind": "feature",
       "purpose": "The 3-D small-N kernel.",
