@@ -3337,9 +3337,9 @@ try {
         <span class="gs-en">Each guided investigation relies on a different part of the model. This
         table is generated from the same <code>modelNotes</code> field that the
         instructor guide prints, so it covers every one of the
-        <!--fact:investigations-->85<!--/fact-->
+        <!--fact:investigations-->86<!--/fact-->
         investigations and cannot fall behind them. It listed six of the twelve when it
-        was maintained by hand.</span><span class="gs-es" lang="es">Cada investigación guiada se apoya en una parte distinta del modelo. Esta tabla se genera a partir del mismo campo <code>modelNotes</code> que imprime la guía docente, de modo que cubre cada una de las <!--fact:investigations-->85<!--/fact--> investigaciones y no puede quedar rezagada respecto a ellas. Cuando se mantenía a mano, enumeraba seis de las doce.</span>
+        was maintained by hand.</span><span class="gs-es" lang="es">Cada investigación guiada se apoya en una parte distinta del modelo. Esta tabla se genera a partir del mismo campo <code>modelNotes</code> que imprime la guía docente, de modo que cubre cada una de las <!--fact:investigations-->86<!--/fact--> investigaciones y no puede quedar rezagada respecto a ellas. Cuando se mantenía a mano, enumeraba seis de las doce.</span>
       </p>
       <div class="doc-table-wrap">
         <table class="doc-table">
@@ -3656,10 +3656,6 @@ try {
               <td>js/kernels/smallbodies/ (SMALL_BODIES.md): synthLightCurve, nightlyTimes, rotationFromLightCurve (the Lomb-Scargle peak, the two-maxima rule, the harmonic refinement, the amplitude with an interval, the bound, the verdicts) and falseAlarm; the b, c and d legs of npm run small-bodies:validate, with the failed legs recorded.</td>
             </tr>
             <tr>
-              <td>What a Telescope Resolves</td>
-              <td>js/kernels/detector/ (optics.js and telescope.js; TELESCOPES.md): the annular Airy pattern, the Moffat seeing, their combination, the Rayleigh angle, the dip between two stars, light gathering and plate scale, with the frame drawn by the detector kernel and the width measured by the imaging tool; validated against an independent numpy and scipy oracle (npm run telescopes:validate), every number a step states recomputed in tests/telescopeLessons.test.js.</td>
-            </tr>
-            <tr>
               <td>Why Venus Is Hot</td>
               <td>js/kernels/atmospheres/ (ATMOSPHERES.md): equilibriumTemperature, oneLayer, grayGround and grayDepthFor, scaleHeight and the six-body planet table, validated against an independent numpy and scipy oracle (npm run atmospheres:validate).</td>
             </tr>
@@ -3694,6 +3690,10 @@ try {
             <tr>
               <td>Comets and the Sun</td>
               <td>js/kernels/atmospheres/equilibrium.js: the emission temperature, with uniform redistribution and a Bond albedo of 0.04; js/bodyVisuals.js: the ion and dust tail directions.</td>
+            </tr>
+            <tr>
+              <td>What a Telescope Resolves</td>
+              <td>js/kernels/detector/optics.js (Airy, Moffat, their convolution), telescope.js (the frame), js/telescopeField.js (the PSF tool’s measurement), TELESCOPES.md.</td>
             </tr>
           <!--/fact-block-->
           </tbody>
