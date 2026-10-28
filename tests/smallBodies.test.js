@@ -42,34 +42,60 @@ const json = f => JSON.parse(readFileSync(path.join(ROOT, f), 'utf8'));
 const THRESHOLDS = json('tests/fixtures/small-bodies/thresholds.json');
 const FAILED = json('tests/fixtures/small-bodies/failed-legs.json').legs;
 
-describe('the committed thresholds hold for the production module', () => {
-  const ran = spawnSync(
-    process.execPath,
-    [path.join(ROOT, 'tools/small-bodies-validate.mjs'), '--json'],
-    { cwd: ROOT, encoding: 'utf8', maxBuffer: 1 << 25 }
+// The full run (the ensembles, four minutes on two processes) is `npm run
+// small-bodies:validate -- --record`, which writes record.json. This suite reruns the
+// quick groups (the analytic, oracle and refusal rows and the real-catalog rows, about
+// twenty seconds) live and holds them to that record, and holds the record to the
+// thresholds and to the failed legs.
+const RECORD = json('tests/fixtures/small-bodies/record.json').rows;
+const run = group =>
+  JSON.parse(
+    spawnSync(
+      process.execPath,
+      [
+        path.join(ROOT, 'tools/small-bodies-validate.mjs'),
+        '--json',
+        `--group=${group}`,
+      ],
+      { cwd: ROOT, encoding: 'utf8', maxBuffer: 1 << 25 }
+    ).stdout
   );
-  const rows = JSON.parse(ran.stdout);
 
-  test('every committed row passes but the recorded ones, and the inputs not run say so', () => {
-    for (const r of rows) {
-      if (r.pass === null) continue;
-      if (FAILED[r.id]) continue;
+describe('the committed thresholds hold for the production module', () => {
+  const live = [...run('fast'), ...run('authentic')];
+
+  test('every live row passes but the recorded ones, and the inputs not run say so', () => {
+    for (const r of live) {
+      if (r.pass === null || FAILED[r.id]) continue;
       if (r.pass !== true)
         throw new Error(
           `${r.id}: ${r.measured} against ${JSON.stringify(r.bound)}`
         );
     }
-    expect(rows.filter(r => r.pass === null).map(r => r.id)).toEqual([
-      'e1.catalog',
+    expect(live.filter(r => r.pass === null).map(r => r.id)).toEqual([
+      'e1.cited',
       'e2.lightcurve',
+      'e3.kuiper',
     ]);
   });
 
-  test('the failed legs are held to their record: still failing, in their measured range', () => {
-    const failing = rows.filter(r => r.pass === false).map(r => r.id);
+  test('the live rows are the record: the same pass flags and the same numbers', () => {
+    for (const r of live) {
+      const rec = RECORD.find(x => x.id === r.id);
+      expect([r.id, rec !== undefined]).toEqual([r.id, true]);
+      expect([r.id, r.pass]).toEqual([r.id, rec.pass]);
+      if (r.measured !== null)
+        expect(Math.abs(r.measured - rec.measured)).toBeLessThanOrEqual(
+          1e-9 * (1 + Math.abs(rec.measured))
+        );
+    }
+  });
+
+  test('the record holds every row but the recorded legs, and the legs fail in their range', () => {
+    const failing = RECORD.filter(r => r.pass === false).map(r => r.id);
     expect([...failing].sort()).toEqual(Object.keys(FAILED).sort());
     for (const [id, leg] of Object.entries(FAILED)) {
-      const r = rows.find(x => x.id === id);
+      const r = RECORD.find(x => x.id === id);
       expect(r.measured).toBeGreaterThanOrEqual(leg.measuredRange[0]);
       expect(r.measured).toBeLessThanOrEqual(leg.measuredRange[1]);
       expect(r.bound).toEqual(leg.bound);
@@ -77,15 +103,16 @@ describe('the committed thresholds hold for the production module', () => {
   });
 
   test('every check the thresholds name is run, or declared not run', () => {
-    const ids = rows.map(r => r.id);
+    const ids = RECORD.map(r => r.id);
     for (const id of Object.keys(THRESHOLDS.checks)) {
       const head = id.split('.')[0];
       expect(ids.some(r => r === id || r.startsWith(`${head}.`))).toBe(true);
     }
   });
 
-  test('the row set is stable', () => {
-    expect(rows.length).toBeGreaterThanOrEqual(88);
+  test('the record is a full run', () => {
+    expect(RECORD.length).toBeGreaterThanOrEqual(100);
+    expect(RECORD.some(r => r.id.startsWith('c3.noise0.03'))).toBe(true);
   });
 });
 

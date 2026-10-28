@@ -32,7 +32,10 @@ import { percentileInterval, caseBootstrap } from '../statistics/index.js';
 import { refused } from '../statistics/check.js';
 import { JUPITER_RESONANCES, NEPTUNE_RESONANCES } from './resonances.js';
 
-const { Math, Number, Float64Array } = globalThis;
+const { Math, Number, Float64Array, Int32Array } = globalThis;
+
+/** A value on a bin edge belongs to the bin above it; the nudge undoes the rounding of (a - lo) / width (2.5 gave 49.99999999999999). */
+const EDGE = 1e-9;
 
 /** Half-widths in a (AU) of the default windows: data-independent, stated before any catalog was seen. */
 const WINDOW_HALF_WIDTH_AU = Object.freeze({
@@ -92,7 +95,7 @@ export function histogram(values, { lo, hi, binWidth }) {
       return refused('non-finite', 'a value is NaN or infinite');
     if (v < lo) below++;
     else if (v >= hi) above++;
-    else counts[Math.min(nb - 1, Math.floor((v - lo) / binWidth))]++;
+    else counts[Math.min(nb - 1, Math.floor((v - lo) / binWidth + EDGE))]++;
   }
   const centers = Float64Array.from(
     { length: nb },
@@ -195,7 +198,7 @@ export function fitBaseline(
   let coef = null;
   let dev = Infinity;
   let it = 0;
-  for (; it < 30; it++) {
+  for (; it < 50; it++) {
     const A = new Float64Array(m * m);
     const b = new Float64Array(m);
     for (let i = 0; i < n; i++) {
@@ -210,6 +213,11 @@ export function fitBaseline(
       for (let c = 0; c < r; c++) A[r * m + c] = A[c * m + r];
     const next = solve(A, b, m);
     if (!next) return refused('baseline', 'the baseline system is singular');
+    let step = 0;
+    if (coef)
+      for (let k = 0; k < m; k++)
+        step = Math.max(step, Math.abs(next[k] - coef[k]));
+    else step = Infinity;
     coef = next;
     let d = 0;
     for (let i = 0; i < n; i++) {
@@ -218,7 +226,10 @@ export function fitBaseline(
       d += ys[i] > 0 ? ys[i] * Math.log(ys[i] / mu) - (ys[i] - mu) : mu;
     }
     d *= 2;
-    const done = Math.abs(dev - d) < 1e-10 * (1 + Math.abs(d));
+    // Stop on the coefficients, not the deviance: the deviance is quadratic at the
+    // optimum, so a change of 1e-10 in it left the coefficients 1e-5 away on the
+    // real catalog (a 3e-4 error in N_exp; found by the e1 oracle row).
+    const done = step < 1e-10;
     dev = d;
     if (done) {
       it++;
@@ -331,7 +342,7 @@ export function gapSurvey(values, opts = {}) {
     const obs = new Float64Array(gaps.length);
     const count = i => {
       const a = v[i];
-      counts[Math.min(nb - 1, Math.floor((a - lo) / o.binWidthAu))]++;
+      counts[Math.min(nb - 1, Math.floor((a - lo) / o.binWidthAu + EDGE))]++;
       for (let g = 0; g < gaps.length; g++)
         if (
           a >= gaps[g].centerAu - gaps[g].halfWidthAu &&
@@ -559,4 +570,34 @@ export function countClasses(rows) {
     else counts[id]++;
   }
   return { counts, total: rows.length - notFinite, notFinite };
+}
+
+// ---- the retrieved catalog ---------------------------------------------------------
+
+/**
+ * A catalog pack (js/data/smallbodies/*.json, format gravitas.small-body-catalog/1)
+ * as typed columns, with its selection statement carried beside the numbers: a
+ * histogram of it is a histogram of what the cut keeps, never of the population.
+ */
+export function catalogFromPack(pack) {
+  if (pack?.format !== 'gravitas.small-body-catalog/1')
+    return refused('range', 'not a small-body catalog pack');
+  const n = pack.n;
+  for (const k of ['number', 'a', 'e', 'i', 'H'])
+    if (!Array.isArray(pack[k]) || pack[k].length !== n)
+      return refused('range', `column ${k} does not have ${n} rows`);
+  return {
+    status: 'ok',
+    id: pack.id,
+    n,
+    number: Int32Array.from(pack.number),
+    a: Float64Array.from(pack.a),
+    e: Float64Array.from(pack.e),
+    i: Float64Array.from(pack.i),
+    H: Float64Array.from(pack.H),
+    selection: pack.selection,
+    source: pack.source,
+    credit: pack.credit,
+    retrieved: pack.retrieved,
+  };
 }

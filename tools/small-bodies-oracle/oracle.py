@@ -204,8 +204,12 @@ def fit_baseline(a, gaps):
     lo, hi = R["fitRangeAu"]
     bw = R["binWidthAu"]
     nb = int(round((hi - lo) / bw))
+    # Integer binning: the values carry at most six decimals, so (a - lo) in millionths
+    # is an exact integer and a value on an edge is in the bin above it (floating
+    # point edges lo + bw * k put 2.49 below 2.4900000000000002).
+    k = (np.round((a - lo) * 1e6).astype(np.int64)) // int(round(bw * 1e6))
+    counts = np.bincount(k[(k >= 0) & (k < nb)], minlength=nb)
     edges = lo + bw * np.arange(nb + 1)
-    counts, _ = np.histogram(a, bins=edges)
     centers = 0.5 * (edges[:-1] + edges[1:])
     mid, half = 0.5 * (lo + hi), 0.5 * (hi - lo)
     keep = np.ones(nb, bool)
@@ -229,8 +233,11 @@ def fit_baseline(a, gaps):
 
     c0 = np.linalg.lstsq(X, np.log(y + 0.5), rcond=None)[0]
     res = optimize.minimize(nll, c0, jac=grad, hess=hess, method="trust-exact", options={"gtol": 1e-9, "maxiter": 500})
-    # converged means the gradient of the log-likelihood is at rounding
-    return res.x, mid, half, bool(np.linalg.norm(grad(res.x)) < 1e-6)
+    c = res.x
+    for _ in range(5):  # Newton polish: the optimiser stops on an absolute gradient
+        c = c - np.linalg.solve(hess(c), grad(c))
+    # converged: the gradient of the log-likelihood is at rounding, relative to the counts
+    return c, mid, half, bool(np.linalg.norm(grad(c)) < 1e-9 * max(1.0, y.sum()))
 
 
 def b4(inp):

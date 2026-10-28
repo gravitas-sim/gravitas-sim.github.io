@@ -4,6 +4,7 @@
 // -----------------------------------------------------------------------------
 //   npm run small-bodies:validate              print the table
 //   npm run small-bodies:validate -- --json    print it as JSON
+//   npm run small-bodies:validate -- --record  also write tests/fixtures/small-bodies/record.json
 //   npm run small-bodies:validate -- --group=belt   one group only (the groups
 //                                              are what the parallel run splits)
 //
@@ -25,7 +26,7 @@
 // check ids.
 // =============================================================================
 
-import { readFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { spawn } from 'node:child_process';
 import path from 'node:path';
 import process from 'node:process';
@@ -39,6 +40,7 @@ import {
   PLANETS,
   amplitudeMag,
   axisRatioBound,
+  catalogFromPack,
   classifyOrbit,
   countClasses,
   detectedFractionRatio,
@@ -1153,12 +1155,113 @@ function refusals() {
 
 function notRuns() {
   notRun(
-    'e1.catalog',
-    'no MPC orbit catalog cut is in the repository and nothing may be downloaded without Carl: the request list is in SMALL_BODIES.md'
+    'e1.cited',
+    'no cited independent analysis of the same catalog cut was supplied: e1.oracle is an independent implementation of the same estimator, not a cited analysis'
   );
   notRun(
     'e2.lightcurve',
-    'no measured asteroid light curve with a recorded rights decision is in the repository: the request list is in SMALL_BODIES.md'
+    'no measured asteroid light curve: the ALCDEF download is a form-based job and the PDS path returned 404 on 2026-10-27; nothing is simulated as authentic'
+  );
+  notRun(
+    'e3.kuiper',
+    'the Kuiper-belt subset file was announced and is not on disk'
+  );
+}
+
+// ---- (e1) the retrieved numbered H < 13 cut ---------------------------------------
+
+function authentic() {
+  const A = R.authentic;
+  const bd = C['e1.catalog'].bounds;
+  const pack = JSON.parse(
+    readFileSync(path.join(HERE, '..', A.numbered.file), 'utf8')
+  );
+  const cat = catalogFromPack(pack);
+  const [lo, hi] = R.fitRangeAu;
+  let nIn = 0;
+  for (const a of cat.a) if (a >= lo && a < hi) nIn++;
+  atLeast(
+    'e1.rows',
+    nIn,
+    A.numbered.rowsInFitRangeAtLeast,
+    `${cat.n} rows in the pack, ${nIn} in ${lo} to ${hi} AU`
+  );
+  const res = gapSurvey(cat.a, {
+    gaps: WINDOWS,
+    draws: A.numbered.draws,
+    seed: A.numbered.seed,
+    label: 'e1',
+  });
+  for (const g of res.gaps) {
+    const tag = `e1.window.${g.id}`;
+    reported(
+      tag,
+      g.depletion,
+      `depletion ${g.depletion.toFixed(3)}, interval ${g.lo?.toFixed(3)} to ${g.hi?.toFixed(3)}, ${g.nObs} found of ${g.nExp.toFixed(1)} expected, verdict ${g.verdict}${g.reason ? ` (${g.reason})` : ''}, warnings ${g.warnings.join(' ') || 'none'}`
+    );
+  }
+  for (const id of bd.resolvedGaps) {
+    const g = res.gaps[idx(id)];
+    exact(`e1.verdict.${id}`, g.verdict === 'resolved', `verdict ${g.verdict}`);
+    inBand(`e1.depth.${id}`, g.depletion, bd.depletionBand);
+  }
+  const ref = read('oracle-real-results.json');
+  const point = gapSurvey(cat.a, { gaps: WINDOWS, draws: 0 });
+  let worst = 0;
+  let nobs = 0;
+  ref.gaps.forEach((g, k) => {
+    worst = Math.max(worst, Math.abs(point.gaps[k].depletion - g.depletion));
+    nobs += Math.abs(point.gaps[k].nObs - g.nObs);
+  });
+  within(
+    'e1.oracle',
+    worst,
+    bd.oracleAbsolute,
+    'five windows against the scipy fit on the real cut'
+  );
+  within('e1.oracle.counts', nobs, 0);
+  // the c2 form on the real cut
+  const aIn = Float64Array.from(cat.a.filter(a => a >= lo && a < hi));
+  const dHat = point.gaps[idx('3:1')].depletion;
+  const u = rng('e1-resample');
+  let cover = 0;
+  for (let r = 0; r < bd.resamples; r++) {
+    const re = new Float64Array(aIn.length);
+    for (let k = 0; k < re.length; k++)
+      re[k] = aIn[Math.min(re.length - 1, Math.floor(u() * re.length))];
+    const o = survey(re, `e1c-${r}`, { draws: bd.innerDraws }).gaps?.[
+      idx('3:1')
+    ];
+    if (o && o.lo !== null && o.lo <= dHat && dHat <= o.hi) cover++;
+  }
+  inBand(
+    'e1.coverage',
+    cover / bd.resamples,
+    bd.bootstrapCoverage,
+    `D_hat ${dHat.toFixed(3)}`
+  );
+  const rowsIn = Array.from(cat.a, (a, k) => ({ a, e: cat.e[k], i: cat.i[k] }));
+  const table = countClasses(rowsIn);
+  atLeast(
+    'e1.populations.hilda',
+    table.counts.hilda,
+    bd.hildasAtLeast,
+    'Hildas by the class rule (an a-e-i box, not a libration test)'
+  );
+  atLeast(
+    'e1.populations.trojan',
+    table.counts.trojan,
+    bd.trojansAtLeast,
+    'Jupiter Trojans by the class rule'
+  );
+  reported('e1.populations.table', table.total, JSON.stringify(table.counts));
+  // The selection: the 3:1 depletion on the brighter H < 11 subset, reported.
+  const bright = Float64Array.from(cat.a.filter((a, k) => cat.H[k] < 11));
+  const rb = gapSurvey(bright, { gaps: WINDOWS, draws: 0 });
+  reported(
+    'e1.selection.H11',
+    rb.status === 'ok' ? rb.gaps[idx('3:1')].depletion : NaN,
+    `the 3:1 depletion on the ${bright.length} objects with H < 11 (the H < 13 cut gives ${dHat.toFixed(3)}): the same gap in a brighter cut`
   );
 }
 
@@ -1181,10 +1284,11 @@ const GROUPS = {
     negativeCurves,
   ],
   belt: [beltEnsembles],
+  authentic: [authentic],
   'curves-0.01': [() => curveEnsemble(0.01)],
   'curves-0.03': [() => curveEnsemble(0.03)],
 };
-const ORDER = ['fast', 'belt', 'curves-0.01', 'curves-0.03'];
+const ORDER = ['fast', 'belt', 'curves-0.01', 'curves-0.03', 'authentic'];
 
 /** The rows of one group (or all, serially), as the tests and the command line read them. */
 export function runValidation(group = null) {
@@ -1233,6 +1337,11 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const t0 = Date.now();
   const groupArg = process.argv.find(a => a.startsWith('--group='))?.slice(8);
   const out = groupArg ? runValidation(groupArg) : await runParallel();
+  if (process.argv.includes('--record') && !groupArg)
+    writeFileSync(
+      path.join(FIX, 'record.json'),
+      `${JSON.stringify({ format: 'gravitas.small-bodies-record/1', prompt: 198, what: 'The rows of the full run (npm run small-bodies:validate -- --record), including the ensembles the Jest suite does not rerun. tests/smallBodies.test.js reruns the fast and authentic groups live and holds them to these rows.', rows: out }, null, 1)}\n`
+    );
   if (process.argv.includes('--json'))
     process.stdout.write(`${JSON.stringify(out, null, 1)}\n`);
   else {
