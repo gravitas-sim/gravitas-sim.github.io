@@ -10,6 +10,16 @@
     "tx": "band-integrated transmission: its analytic cases, numerics, regime tolerance, coverage, refusals, the published-code reference, the pinned table and the whole family's bytes",
     "data": "qualitative comparisons with published tables: recorded, never refit, not inputs of the decision function"
   },
+  "amendments": [
+    {
+      "id": "AM1",
+      "check": "E1.planck",
+      "field": "the Rayleigh-Jeans sub-bound",
+      "before": "holds to 1e-3 at lambda T = 1e5 micron K",
+      "after": "holds to a relative 1e-3 at lambda T = 1e7 micron K",
+      "why": "an arithmetic error in the first commit (4d30d73e), found by re-deriving the bound before the harness or any E1 output existed: x = h c / (lambda k T) = 14388 / (lambda T in micron K) is 0.144 at 1e5, where the Rayleigh-Jeans form is wrong by x/2 = 7.2 percent by the physics of the Planck function, so no kernel could meet 1e-3 there; at 1e7 the correction is x/2 = 7.2e-4, inside the bound. No output of E1 had been inspected (the oracle's self-tests were the only output seen). The limit and the rest of E1 are unchanged."
+    }
+  ],
   "decision": {
     "order": [
       "a shared or ep check that is not a pass (or a pass under a ruling): C",
@@ -105,7 +115,7 @@
     {
       "id": "E1.planck",
       "group": "ep",
-      "bound": "band-integrated Planck radiance against scipy.integrate.quad of the Planck function on 400 seeded points (T 200 to 10000 K, band edges 0.3 to 30 micron, widths at least 0.01 micron): relative error at most 1e-9; the integral over 0.001 to 100000 micron equals sigma T^4/pi to 1e-9 at five temperatures; the Rayleigh-Jeans limit holds to 1e-3 at lambda T = 1e5 micron K; the band radiance is monotone in T",
+      "bound": "band-integrated Planck radiance against scipy.integrate.quad of the Planck function on 400 seeded points (T 200 to 10000 K, band edges 0.3 to 30 micron, widths at least 0.01 micron): relative error at most 1e-9; the integral over 0.001 to 100000 micron equals sigma T^4/pi to 1e-9 at five temperatures; the Rayleigh-Jeans limit holds to a relative 1e-3 at lambda T = 1e7 micron K (amended, see amendments); the band radiance is monotone in T",
       "limits": {
         "relErrMax": 1e-9,
         "points": 400,
