@@ -122,7 +122,7 @@ No bound was moved, multiplied or restated. Each leg's cause, from the measureme
 - Before the oracle ran, one smoke run of the kernel printed the five axes, one synthetic belt's
   depletions and one light curve's period and amplitude; no bound was chosen or moved after it.
 - **After the first full run** (11 failing rows) the kernel gained, and the tool gained rows for,
-  three things: the `uneven-flanks` warning (the counts in the two flanks of a window, each the
+  three things (the kernel as first run was never committed; `fc30702e` is the version after these changes): the `uneven-flanks` warning (the counts in the two flanks of a window, each the
   window's width, outside the baseline's mask, differ by more than a factor e^1 at three sigma;
   it forces "not resolved"), the withholding of the amplitude and the bound when more than 35
   percent of the folded phase is empty (`phase-gap`) or the fitted amplitude exceeds 3 mag
