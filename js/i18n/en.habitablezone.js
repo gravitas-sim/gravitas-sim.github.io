@@ -47,7 +47,7 @@ export const EN_HABITABLEZONE = {
     'Tides raised by the star slow a planet’s spin; the closer the star, the faster. The locking radius is the distance inside which the spin is removed within the star’s age, for an Earth-like planet (k2 0.3, a 10-hour initial spin) and the Q set here. Q is not known to a factor of ten, so the radius is a range, drawn dashed.',
   'hzL.k.control.star': 'Star mass',
   'hzL.k.control.age': 'Age',
-  'hzL.k.control.q': 'Planet’s tidal quality factor',
+  'hzL.k.control.q': 'Tidal Q',
   'hzL.k.axis.x': 'Star mass (solar masses)',
   'hzL.k.legend.inner': 'Inner edge of the conservative zone',
   'hzL.k.legend.outer': 'Outer edge of the conservative zone',

@@ -80,7 +80,7 @@
    "static": {
     "title": "Which zones are inside the locking radius?",
     "note": "Tides raised by the star slow a planet’s spin; the closer the star, the faster. The locking radius is the distance inside which the spin is removed within the star’s age, for an Earth-like planet (k2 0.3, a 10-hour initial spin) and the Q set here. Q is not known to a factor of ten, so the radius is a range, drawn dashed.",
-    "controls": [{"id":"star","label":"Star mass","unit":null,"min":0,"max":3,"step":1,"value":2,"decimals":0},{"id":"age","label":"Age","unit":null,"min":0.5,"max":10,"step":0.5,"value":5,"decimals":1},{"id":"q","label":"Planet’s tidal quality factor","unit":null,"min":0,"max":4,"step":1,"value":2,"decimals":0}],
+    "controls": [{"id":"star","label":"Star mass","unit":null,"min":0,"max":3,"step":1,"value":2,"decimals":0},{"id":"age","label":"Age","unit":null,"min":0.5,"max":10,"step":0.5,"value":5,"decimals":1},{"id":"q","label":"Tidal Q","unit":null,"min":0,"max":4,"step":1,"value":2,"decimals":0}],
     "presets": [],
     "actions": [],
     "defaults": {"star":"2","age":"5","q":"2"}
@@ -117,7 +117,7 @@
    "static": {
     "title": "¿Qué zonas quedan dentro del radio de acoplamiento?",
     "note": "Las mareas que levanta la estrella frenan el espín de un planeta; cuanto más cerca la estrella, más deprisa. El radio de acoplamiento es la distancia dentro de la cual el espín se anula en la edad de la estrella, para un planeta de tipo terrestre (k2 0,3, un espín inicial de 10 horas) y la Q fijada aquí. La Q no se conoce con un factor de diez, así que el radio es un intervalo, dibujado con trazos.",
-    "controls": [{"id":"star","label":"Masa de la estrella","unit":null,"min":0,"max":3,"step":1,"value":2,"decimals":0},{"id":"age","label":"Edad","unit":null,"min":0.5,"max":10,"step":0.5,"value":5,"decimals":1},{"id":"q","label":"Factor de calidad de marea del planeta","unit":null,"min":0,"max":4,"step":1,"value":2,"decimals":0}],
+    "controls": [{"id":"star","label":"Masa de la estrella","unit":null,"min":0,"max":3,"step":1,"value":2,"decimals":0},{"id":"age","label":"Edad","unit":null,"min":0.5,"max":10,"step":0.5,"value":5,"decimals":1},{"id":"q","label":"Q de marea","unit":null,"min":0,"max":4,"step":1,"value":2,"decimals":0}],
     "presets": [],
     "actions": [],
     "defaults": {"star":"2","age":"5","q":"2"}

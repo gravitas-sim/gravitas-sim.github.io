@@ -50,7 +50,7 @@ export const ES_HABITABLEZONE = {
     'Las mareas que levanta la estrella frenan el espín de un planeta; cuanto más cerca la estrella, más deprisa. El radio de acoplamiento es la distancia dentro de la cual el espín se anula en la edad de la estrella, para un planeta de tipo terrestre (k2 0,3, un espín inicial de 10 horas) y la Q fijada aquí. La Q no se conoce con un factor de diez, así que el radio es un intervalo, dibujado con trazos.',
   'hzL.k.control.star': 'Masa de la estrella',
   'hzL.k.control.age': 'Edad',
-  'hzL.k.control.q': 'Factor de calidad de marea del planeta',
+  'hzL.k.control.q': 'Q de marea',
   'hzL.k.axis.x': 'Masa de la estrella (masas solares)',
   'hzL.k.legend.inner': 'Borde interior de la zona conservadora',
   'hzL.k.legend.outer': 'Borde exterior de la zona conservadora',
