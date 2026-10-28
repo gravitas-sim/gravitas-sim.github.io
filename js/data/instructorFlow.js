@@ -5,6 +5,7 @@
 import { INSTRUCTOR as MEASUREMENT } from './investigations/depth/measurement-sequence.js';
 import { INSTRUCTOR as SATELLITE } from './investigations/depth/satellite-sequence.js';
 import { INSTRUCTOR as ATMOSPHERE } from './investigations/depth/atmosphere-sequence.js';
+import { INSTRUCTOR as PLANETS } from './investigations/planets-sequence.js';
 
 export default {
   format: 'gravitas.instructor-flow',
@@ -13,6 +14,7 @@ export default {
     ...MEASUREMENT.flow,
     ...SATELLITE.flow,
     ...ATMOSPHERE.flow,
+    ...PLANETS.flow,
     'the-suns-motion': [
       {
         from: 'from-stars-to-velocities',

@@ -1037,4 +1037,43 @@ export const MANIFEST = [
     gradedCount: 5,
     objectiveCount: 4,
   },
+  {
+    id: 'the-scale-of-the-solar-system',
+    title: 'The Scale of the Solar System',
+    subtitle:
+      'True distances from the sandbox, the light travel time, and a scale model in which Earth is a marble',
+    duration: '15-25 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/scenarios/solar-system.webp',
+    depths: 1,
+    stepCount: 8,
+    gradedCount: 6,
+    objectiveCount: 4,
+  },
+  {
+    id: 'moons-of-the-giants',
+    title: 'Moons of the Giants',
+    subtitle:
+      'Three periods from one set of frames, and the combination that is zero when a family of moons keeps step',
+    duration: '15-25 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/weighing-jupiter.webp',
+    depths: 1,
+    stepCount: 10,
+    gradedCount: 8,
+    objectiveCount: 4,
+  },
+  {
+    id: 'comets-and-the-sun',
+    title: 'Comets and the Sun',
+    subtitle:
+      'A model comet’s orbit from the sandbox, how hot it gets at each end, the real Halley as a transfer case, and which way its tails point',
+    duration: '15-25 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/scenarios/solar-system.webp',
+    depths: 1,
+    stepCount: 9,
+    gradedCount: 6,
+    objectiveCount: 4,
+  },
 ];

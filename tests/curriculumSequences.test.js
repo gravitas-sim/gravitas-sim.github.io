@@ -12,12 +12,13 @@ import { auditCourse, textsOf, translationState } from '../js/course/review.js';
 import { itemLink } from '../js/course/links.js';
 
 describe('the sequences', () => {
-  test('are the six named ones, each ordered, and cover every investigation', () => {
+  test('are the seven named ones, each ordered, and cover every investigation', () => {
     expect(SEQUENCES.map(s => s.id)).toEqual([
       'the-sky',
       'gravity-and-orbits',
       'light-and-stars',
       'planets-and-exoplanets',
+      'planets-and-the-sun',
       'galaxies-and-the-universe',
       'observing-and-measuring',
     ]);

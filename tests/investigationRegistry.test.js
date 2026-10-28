@@ -166,7 +166,10 @@ const SHARED = [
   'measurement-sequence.js',
   'satellite-sequence.js',
   'atmosphere-sequence.js',
+  'planets-sequence.js',
 ];
+/** The shared files that have a sibling under es/: the Spanish of planets-sequence.js lives in the file itself (D-R10-206-02). */
+const SHARED_ES = SHARED.filter(f => f !== 'planets-sequence.js');
 
 describe('loading a lesson', () => {
   test('there is one file per lesson and no strays', () => {
@@ -217,7 +220,7 @@ describe('loading a lesson', () => {
         .filter(f => f.endsWith('.js'))
         .sort();
       expect(files).toEqual(
-        [...INVESTIGATIONS.map(i => `${i.id}.js`), ...SHARED].sort()
+        [...INVESTIGATIONS.map(i => `${i.id}.js`), ...SHARED_ES].sort()
       );
     }
   });
