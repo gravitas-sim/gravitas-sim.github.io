@@ -10,10 +10,12 @@ magnitude-limited survey finds of a population; and a bounded light-curve model,
 ellipsoid, from which the rotation period comes by the two-maxima rule and the amplitude gives a
 **bound** on the axis ratio a/b, never the shape.
 
-**This is the kernel, its validation and its words only.** No catalog, pack, light curve,
-investigation, Spanish string or model-page section is built: the data are not in the repository
-and nothing may be downloaded without Carl (the request list is below, not made). Nothing in this
-PR is imported by a page; the kernel is `NEVER_PRECACHED`.
+**This is the kernel, its validation, its words and one real catalog pack.** Part 2 added the
+JPL Small-Body Database numbered-asteroid cut (H < 13) as a lazy pack and ran the tier-e rows on
+it (below). The Kuiper-belt subset (the announced file is not on disk) and the light curve (not
+retrievable) are NOT RUN, and the two investigations, Spanish, instructor materials and the
+model-page section are **not built**. Nothing in this PR is imported by a page; the kernel and the
+pack are `NEVER_PRECACHED`.
 
 ## The validation contract (committed first)
 
@@ -37,8 +39,10 @@ same catalog cut": that needs the catalog and is tier e1.
 
 ## Result
 
-`npm run small-bodies:validate` (about 4 minutes on two child processes): **90 rows, 76 pass,
-12 fail (left failing), 2 NOT RUN**; 76 includes 14 reported figures. In detail.
+`npm run small-bodies:validate -- --record` (about 4 minutes on two child processes; the Jest
+suite reruns only the quick groups, 23 s, and holds them to the committed `record.json`): **108
+rows, 93 pass, 12 fail (left failing, Carl's ruling D-R10-198-03), 3 NOT RUN**; 93 includes 20
+reported figures. In detail.
 
 - **Axes.** The five gaps sit at 2.0648, 2.5013, 2.8246, 2.9575 and 3.2776 AU, the Hildas at
   3.9705, the Trojans at 5.2029, the plutinos at 39.402 and the twotinos at 47.732 AU, agreeing
@@ -136,25 +140,67 @@ No bound was moved, multiplied or restated. Each leg's cause, from the measureme
   ECSV input and output, which the script never uses; PyYAML is not installed and nothing may be
   downloaded).
 
+## Part 2: the real catalog (tier e1)
+
+**Data and rights** (Roadmap III 7.5.4, register row D-R10-198-02). The NASA/JPL Small-Body Database
+Query API, numbered asteroids with H < 13, fields name, a, e, i, H, epoch and spkid, 8,886 rows,
+715,136 bytes, SHA-256 `5f1d1dbd...c2fdf06`, retrieved 2026-10-27 by the main session. A U.S.
+Government work, credited to JPL SBDB (public domain with credit; the terms were stated to this
+session, not re-read in it). The MPC is not used. `tools/small-bodies-pack.py` reads the response
+as data (never executed) and writes `js/data/smallbodies/numbered-h13.json` (number, a, e, i, H;
+294 KB, 95 KB gzip; every row kept) with the source, credit, retrieval date, hash and the
+selection statement in its manifest. It is a lazy `NEVER_PRECACHED` file; `data-budget.json` is
+not touched.
+
+**The selection, as the manifest states it.** The catalog is the large numbered objects that were
+found (H < 13). For the main belt that is below the survey's completeness limit, so the cut shows
+the gaps with little discovery bias and says nothing about small bodies; it is not the
+population. (`selection.js` shows what a V-limited survey would do; this cut is magnitude-limited
+instead, which is why the 3:1 depletion barely moves between H < 13, 0.880, and H < 11, 0.838.)
+
+**The contract** was committed before any value was read (correction c3, `fad90e44`). **The
+result, all e1 rows passing:** 5,871 of the 8,886 objects lie in 2.0 to 3.5 AU; the 3:1 window is
+depleted by 0.880 (95 percent interval 0.829 to 0.924; 26 found where 216 were expected) and the
+5:2 by 0.633 (0.565 to 0.700; 115 of 314), both "resolved"; the 7:3 (0.836) and 2:1 (0.893)
+windows are called **not resolved** by the flank warning (the real counts on either side differ
+by more than a factor of e; the 2:1 gap sits on the belt's outer edge); the 4:1 window holds 2.6
+expected objects. The kernel agrees with scipy's maximum-likelihood fit of the same model on the
+same cut to 1.7e-14, and its counts exactly. The bootstrap-resample coverage is 0.910. By the
+class boxes the cut holds 183 Hildas and 1,555 Jupiter Trojans (and 375, 169 and 46 numbered
+Kuiper-belt classical, plutino and twotino objects). **The roadmap's tier-b "cited independent
+analysis of the same catalog cut" is NOT RUN** (none was supplied); `e1.oracle` is an independent
+implementation of the same estimator, not that.
+
+**Two kernel faults the real data found** (the synthetic ensembles could not: their values have
+six random decimals): a value exactly on a bin edge (2.5 gave 49.99999999999999 in
+`(a - lo) / width`) fell in the bin below, and the Poisson fit stopped on the change of the
+deviance, which is quadratic at the optimum and left the coefficients 1e-5 away. Both are fixed
+(an edge nudge of 1e-9; stop on the coefficients) with no bound touched, and the oracle bins in
+integers. The failing legs are unchanged by them.
+
+**NOT RUN, with reasons.** e2: no measured light curve (the ALCDEF download is a form-based job;
+the PDS path returned 404, 2026-10-27); e3: the Kuiper-belt file was announced and is not on
+disk; e1.cited as above. Nothing is simulated as authentic.
+
 ## What is built, and what is not
 
-Built: the kernel (item 2 of the prompt), its validation and this document.
+Built: the kernel (item 2 of the prompt), its validation, the numbered-asteroid pack (item 1,
+the belts' half; JPL SBDB instead of the MPC, a magnitude cut instead of a downsample) and this
+document.
 
-Not built, because each needs data the repository does not hold, and nothing may be fetched
-without Carl's word per request:
+Not built:
 
-- **Item 1, the packs.** The MPC orbit catalog's a, e and i for the numbered asteroids (a table
-  pack, downsampled by a stated reproducible rule, with the selection statement in the manifest), a
-  Kuiper-belt subset, and an asteroid light curve under a recorded rights decision (else the
-  synthetic curve, which this kernel already produces, labelled with its truth manifest).
+- **Item 1, the rest.** A Kuiper-belt subset (the announced file is not on disk) and an asteroid
+  light curve under a recorded rights decision (not retrievable; the synthetic curve this kernel
+  produces, labelled with its truth manifest, stands in until then).
 - **Item 3, the investigations** ("The gaps in the belt", "How fast does it spin?"), their
   Spanish, instructor materials, the resonance-scenario links and the model-page section; the
-  alt text and the misconception each must name. They need the packs, and add lessons to the
+  alt text and the misconception each must name. The belts one can now be built on the pack; they add lessons to the
   four shared measurement-sequence files already in the instructor closure (no closure file is
   added by this PR: 281, cap under 282).
 - **Tier e**: NOT RUN, with the reason in the validator's note.
 
-### What would unblock the rest (a request, not made)
+### What would unblock the rest (the first row was fetched in part 2; the others were not retrievable)
 
 | Need | Source (candidate; identifiers unverified, to be confirmed by whoever fetches) | Licence | Size |
 | --- | --- | --- | --- |
@@ -232,6 +278,7 @@ at 0.9 of the first's power outside its resolution makes it "ambiguous" and list
 `js/kernels/smallbodies/{resonances,belts,selection,lightcurve,synthetic,index}.js`,
 `tools/small-bodies-validate.mjs` (`npm run small-bodies:validate`),
 `tools/small-bodies-oracle/oracle.py`,
-`tests/fixtures/small-bodies/{thresholds,oracle-inputs,oracle-results,failed-legs}.json`,
+`tests/fixtures/small-bodies/{thresholds,oracle-inputs,oracle-results,oracle-real-results,failed-legs,record}.json`,
+`js/data/smallbodies/numbered-h13.json`, `tools/small-bodies-pack.py`,
 `tests/smallBodies.test.js`. The kernel is listed in `NEVER_PRECACHED`
-(`tools/build-service-worker.mjs`) though no page imports it yet. Register row D-R10-198-01.
+(`tools/build-service-worker.mjs`) though no page imports it yet. Register rows D-R10-198-01 to -03.
