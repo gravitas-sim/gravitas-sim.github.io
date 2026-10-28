@@ -45,7 +45,12 @@ describe('the sequences', () => {
 });
 
 describe('the shipped course packs', () => {
-  const ids = ['astronomy-semester', 'observing-lab', 'upper-level-modules'];
+  const ids = [
+    'astronomy-semester',
+    'observing-lab',
+    'upper-level-modules',
+    'solar-system-and-the-sun',
+  ];
   test.each(ids)(
     '%s is valid, audits clean and is translated',
     async id => {

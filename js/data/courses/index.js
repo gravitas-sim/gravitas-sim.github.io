@@ -10,6 +10,10 @@ export const BUILTIN_COURSES = Object.freeze({
     import('./intro-astronomy.js').then(m => m.INTRO_ASTRONOMY),
   'astronomy-semester': () =>
     import('./astronomy-semester.js').then(m => m.ASTRONOMY_SEMESTER),
+  'solar-system-and-the-sun': () =>
+    import('./solar-system-and-the-sun.js').then(
+      m => m.SOLAR_SYSTEM_AND_THE_SUN
+    ),
   'observing-lab': () =>
     import('./observing-lab.js').then(m => m.OBSERVING_LAB),
   'upper-level-modules': () =>

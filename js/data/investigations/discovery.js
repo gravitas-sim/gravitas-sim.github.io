@@ -765,7 +765,7 @@ export const DISCOVERY = {
     mathematics: 'algebra',
     prerequisites: [],
     textbook: {
-      chapter: 14,
+      chapter: 13,
       section: null,
     },
     courseLevel: 'survey',
@@ -775,7 +775,7 @@ export const DISCOVERY = {
     mathematics: 'algebra',
     prerequisites: [],
     textbook: {
-      chapter: 14,
+      chapter: 13,
       section: null,
     },
     courseLevel: 'survey',

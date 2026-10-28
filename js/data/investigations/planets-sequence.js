@@ -490,13 +490,19 @@ export const THE_SCALE_OF_THE_SOLAR_SYSTEM = {
         },
       ],
       probe: distanceRows,
-      validate: v => {
+      validate: (v, ctx) => {
         if (![v.earth, v.jupiter, v.neptune].every(Number.isFinite))
           return null;
+        // Against the live world when there is one, so the answer is the
+        // sandbox's own reading and not a table's.
+        const live = (ctx.bodies || []).length
+          ? ['earth', 'jupiter', 'neptune'].map(r => auFromSun(ctx, r))
+          : [];
+        const want =
+          live.length && live.every(Number.isFinite) ? live : [1, 5.2, 30.07];
+        const got = [v.earth, v.jupiter, v.neptune];
         if (
-          near(v.earth, 1, 0.05) &&
-          near(v.jupiter, 5.2, 0.15) &&
-          near(v.neptune, 30.07, 0.5)
+          got.every((x, k) => near(x, want[k], Math.max(0.05, 0.02 * want[k])))
         ) {
           return {
             level: 'ok',
@@ -1423,6 +1429,10 @@ const CONTENT = {
         name: 'Predictions before answers',
         text: 'The light time to Neptune and the marble-scale distance are predicted before they are worked out, and are never marked wrong in the report.',
       },
+      {
+        name: 'Light time as a ruler',
+        text: 'The light time to Neptune is worked out from the distance read in the sandbox, by an instrument-free field that multiplies by 499 seconds, so a student can check the arithmetic by hand.',
+      },
     ],
     misconceptions: [
       {
@@ -1435,14 +1445,27 @@ const CONTENT = {
         response:
           'It takes 8.3 minutes to reach the Earth and 4.17 hours to reach Neptune.',
       },
+      {
+        claim: 'Neptune is only a little farther from the Sun than Saturn.',
+        response:
+          'Saturn is 9.6 AU out and Neptune 30.1: the outer planets are spread far more widely than the inner ones, which is why the sandbox frames Mercury to Saturn.',
+      },
+      {
+        claim: 'The Sun is a small coin among the planets, as in a diagram.',
+        response:
+          'In the marble model it is a ball 109 centimeters across; the diagram shrinks it to fit.',
+      },
     ],
     teachingNotes: [
       'The planets are placed on near-circular orbits at the table’s distances (Earth 1.00 AU, Jupiter 5.20, Neptune 30.07), so the readout equals the table to within its precision; it is a model of the Solar System and not an ephemeris.',
       'The 499.005-second light time per AU and the 12,742-kilometer Earth are the values the steps use; the marble model is a worked example, not a measurement.',
+      'The sandbox’s planets are drawn larger than their true size at every zoom so that they can be seen; the distances in the readout are the table’s, and the lesson says so in its first step.',
+      'The marble model uses the Earth’s diameter, 12,742 kilometers, and the astronomical unit, 149,597,870.7 kilometers; the Sun’s diameter of 1,392,700 kilometers gives 109 marbles across.',
     ],
     discussion: [
       'Where would the nearest star be in the marble model?',
       'What would you have to give up to make a page-wide diagram that is to scale in size and in distance?',
+      'Where would the nearest star be in the marble model, and what does that say about a diagram of the Solar System?',
     ],
     extensions: [
       'Mark the planets on a long strip of paper at a scale of your choice and walk it.',
@@ -1487,6 +1510,10 @@ const CONTENT = {
         name: 'Live checking',
         text: 'The two distance steps are checked against the live orbit of the comet the readout names, within four percent, so any seed gives a graded answer.',
       },
+      {
+        name: 'Predictions before answers',
+        text: 'The direction of the tail is predicted before the sandbox shows it, and the prediction is never marked wrong in the report.',
+      },
     ],
     misconceptions: [
       {
@@ -1499,17 +1526,31 @@ const CONTENT = {
         response:
           'It grows as the ice warms near the Sun and fades far from it.',
       },
+      {
+        claim: 'A comet’s orbit is the same as a planet’s, only longer.',
+        response:
+          'Its eccentricity is large: the model comet here comes within 5.79 AU and goes out to 17.84, a ratio of three, and real ones are far more extreme.',
+      },
+      {
+        claim: 'A comet is hot because it is near the Sun.',
+        response:
+          'A bare nucleus at 5.79 AU would be at 115 K, far too cold to turn its ice to gas; what matters is how close it comes, not that it is near.',
+      },
     ],
     teachingNotes: [
       'The comets carry the names of famous comets (Halley, Hale-Bopp) but are placed by the sandbox at the distance of their average orbit at 70 percent of circular speed, so their orbits are not the real ones; the lesson says so and uses the real Halley (0.586 AU) as a transfer case. The first comet on a closed orbit, named Halley, is the one the steps use: it comes no closer than 5.79 AU and goes out to 17.84 AU, and its bare-body temperature never reaches the 160 K at which ice turns to gas.',
       'The temperature is a bare-body, uniform-redistribution estimate with a Bond albedo of 0.04 (the emission temperature of the atmosphere kernel); a real nucleus loses energy by sublimation and is not uniform.',
+      'The temperature of 275.5 K at 1 AU is the emission temperature of the atmosphere kernel for a Bond albedo of 0.04 and uniform redistribution; the day-side maximum is higher by a factor of 2^(1/4), about 1.19.',
+      'The sandbox’s ion and dust tails are drawn from the geometry in js/bodyVisuals.js: the ion tail always away from the Sun, the dust tail lagging along the orbit; their length and brightness are a drawing, not a measurement.',
     ],
     discussion: [
       'Why would a comet that has been round the Sun many times grow a smaller tail than a new one?',
       'What would change in the temperature estimate for a comet with a bright surface?',
+      'Which of a comet’s two tails would you expect to see curve, and why?',
     ],
     extensions: [
       'Compare the comet’s temperature at its near end with the equilibrium temperatures of the planets in Why Venus Is Hot.',
+      'Estimate where in the Solar System a bare dark body reaches 160 K, and compare it with the inner edge of the asteroid belt.',
     ],
     modelNotes:
       'js/kernels/atmospheres/equilibrium.js: the emission temperature, with uniform redistribution and a Bond albedo of 0.04; js/bodyVisuals.js: the ion and dust tail directions.',
@@ -1572,11 +1613,18 @@ const CONTENT = {
         response:
           'It is consistent with zero and no more: it cannot tell exact step from a small departure the frames are too coarse to see.',
       },
+      {
+        claim:
+          'The Laplace combination is a measurement of the resonance angle.',
+        response:
+          'It combines three periods; the angle itself is a different quantity, which librates about 180 degrees in a model that When Orbits Lock runs.',
+      },
     ],
     teachingNotes: [
       'The periods are the ones the frames show, from Earth: each is a little shorter than the moon’s true period because Jupiter moves along its own orbit, by the same angle a day for all three, which the combination cancels. The true sidereal periods are 1.7691, 3.5512 and 7.1546 days.',
       'The frames are synthetic, made from the real positions of the satellite ephemeris JUP365 (JPL Horizons), and the pack covers only Jupiter’s moons: the title says “giants” and the last step says what is not covered.',
       'The combination is a necessary relation. The libration of the Laplace angle is shown, in a model, by When Orbits Lock; it should not be claimed from these frames.',
+      'Callisto is not part of the Laplace chain: its period is 2.328 times Ganymede’s. The step says so with the same arithmetic, not by assertion.',
     ],
     discussion: [
       'If the combination had come out as 0.4 degrees a day, what would you conclude, and what would you check first?',
@@ -1618,8 +1666,13 @@ const FLOW = {
   'comets-and-the-sun': [
     {
       from: 'a-dirty-snowball',
+      to: 'tail-predict',
+      text: 'A dirty snowball, and the prediction of the tail’s direction.',
+    },
+    {
+      from: 'watch-the-tails',
       to: 'going-out',
-      text: 'A dirty snowball, the prediction of the tail’s direction, watching the tails and the outbound comet.',
+      text: 'Watching the tails, and the outbound comet.',
     },
     {
       from: 'orbit-ends',

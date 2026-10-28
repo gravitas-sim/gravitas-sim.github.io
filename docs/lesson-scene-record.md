@@ -11,11 +11,11 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 85 investigations and 1241 steps: 1149 steps
-declare a scene, 157 let a reader change one, 166 read the
+Across 85 investigations and 1242 steps: 1150 steps
+declare a scene, 157 let a reader change one, 167 read the
 running integration, 741 show a prescribed model result, 146 draw
 on a stored dataset, 620 put a self-contained panel beside the text,
-326 keep something, and 58 are prose.
+327 keep something, and 58 are prose.
 Of 164 prediction loops, 164 are returned to,
 164 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
@@ -1172,7 +1172,7 @@ Of 164 prediction loops, 164 are returned to,
 ## The Scale of the Solar System (`the-scale-of-the-solar-system`)
 
 - **Steps:** 8. Scene declared on 8; a reader can change something on 0; 8 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 0 live engine, 0 prescribed model, 0 stored dataset, 0 self-contained panel.
+- **Where the numbers come from:** 1 live engine, 0 prescribed model, 0 stored dataset, 0 self-contained panel.
 - **What students do:** read, record-values, commit-a-prediction, choose-an-option.
 - **Objects the steps declare:** sun, earth, jupiter, neptune.
 - **Instruments:** none.
@@ -1181,7 +1181,7 @@ Of 164 prediction loops, 164 are returned to,
 - **Prediction loops:** light-time-predict → light-time → light-time; earth-as-a-marble → scale-model → scale-model.
 - **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; null result: the probe names what is missing; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** 1 step(s) on arrival (a-picture-you-have-seen).
-- **Accepted central experiment:** not yet reviewed.
+- **Accepted central experiment** (reviewed 2026-09-11): object `neptune`, control the canvas: scroll to zoom out to Neptune, and read the distances in the readout, measures the distance of Neptune from the Sun in astronomical units, 30.07, and the light time it gives, 4.17 hours, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Moons of the Giants (`moons-of-the-giants`)
 
@@ -1195,19 +1195,19 @@ Of 164 prediction loops, 164 are returned to,
 - **Prediction loops:** three-periods-predict → three-periods, the-ratios, a-hint-is-not-proof → three-periods; the-laplace-combination → the-motions-together, consistent-with-zero, callisto-is-not-in-the-chain, what-you-worked-out → the-motions-together.
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
-- **Accepted central experiment:** not yet reviewed.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:moon-fit`, control moon-fit/moon, measures the period a sinusoid fitted to one moon's measured distances from Jupiter gives, from which the Laplace combination of three motions follows: Io 1.7682, Europa 3.5480 and Ganymede 7.1413 days, a combination of 0.015 against an uncertainty of 0.025 degrees a day, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Comets and the Sun (`comets-and-the-sun`)
 
-- **Steps:** 8. Scene declared on 8; a reader can change something on 0; 8 declare a scene nobody on that step can touch.
+- **Steps:** 9. Scene declared on 9; a reader can change something on 0; 9 declare a scene nobody on that step can touch.
 - **Where the numbers come from:** 3 live engine, 0 prescribed model, 0 stored dataset, 0 self-contained panel.
 - **What students do:** read, commit-a-prediction, run-the-simulation, tick-a-checklist, choose-an-option, record-values.
 - **Objects the steps declare:** sun.
 - **Instruments:** none.
 - **Stored data:** none.
 - **Evidence kept:** notebook-fields.
-- **Prediction loops:** tail-predict → watch-the-tails, orbit-ends, heat-at-the-ends → watch-the-tails.
+- **Prediction loops:** tail-predict → watch-the-tails, orbit-ends, heat-at-the-ends, the-real-halley → watch-the-tails.
 - **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; null result: the probe names what is missing; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** 1 step(s) on arrival (a-dirty-snowball).
-- **Accepted central experiment:** not yet reviewed.
+- **Accepted central experiment** (reviewed 2026-09-11): object `sun`, control the canvas: watch the model comets, and read the first one's closest and furthest distance in the readout, measures the closest and furthest distance of the first model comet from the Sun, 5.79 and 17.84 astronomical units, and its bare-body temperature at each end, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 

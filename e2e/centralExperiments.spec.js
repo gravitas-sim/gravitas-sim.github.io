@@ -2640,6 +2640,17 @@ test.describe('the central experiment of each investigation', () => {
         [2, 8.002, 0.01],
       ],
     },
+    // ---- The planetary closeout (Roadmap III, Prompt 206) ---------------------
+    {
+      id: 'moons-of-the-giants',
+      title:
+        'moons-of-the-giants: Io goes round in 1.7682 days and Ganymede in 7.1413, from frames taken on the designed cadence @accepts:ce.moons-of-the-giants',
+      row: /^Period$/i,
+      values: [
+        [1, 1.7682, 0.001],
+        [3, 7.1413, 0.002],
+      ],
+    },
   ];
   for (const c of SURVEY) {
     test(c.title, async ({ page, app }) => {
@@ -3168,6 +3179,90 @@ test.describe('the central experiment of each investigation', () => {
     await recordFields(page, id, relationSid, diag);
     await accepted(page);
     await expectEvidenceRetained(page, id, relationSid, diag);
+    await expectVerdictRevealed(page, plan, predict);
+  });
+  // ---- Two sandbox investigations (Roadmap III, Prompt 206) ----------------------
+  // Both are read from the live world. The readout rows are the probe's; the
+  // numbers are the sandbox's own (100 units to an astronomical unit), so the
+  // test reads them rather than carrying a table.
+  const probeRows = page =>
+    page.locator('#investigationProbe .inv-probe-row').allInnerTexts();
+  const probeNumber = (rows, label) => {
+    const hit = rows.find(r => label.test(r));
+    const m = hit && /(-?\d+(?:\.\d+)?)\s*AU/.exec(hit);
+    return m ? Number(m[1]) : NaN;
+  };
+
+  test('the-scale-of-the-solar-system: Neptune is 30 astronomical units out, four hours of light @accepts:ce.the-scale-of-the-solar-system', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    const id = 'the-scale-of-the-solar-system';
+    const entry = declared(id);
+    const [predictSid, measureSid] = entry.loop;
+
+    await openInvestigation(page, app, id);
+    const plan = await lessonPlan(page, id);
+    const predict = await walkToSid(page, plan, predictSid);
+    await commitPredictionHeld(page, predict);
+    await walkToSid(page, plan, measureSid);
+
+    await expect
+      .poll(async () =>
+        probeNumber(await probeRows(page), /^Neptune: distance/i)
+      )
+      .not.toBeNaN();
+    const au = probeNumber(await probeRows(page), /^Neptune: distance/i);
+    expect(Math.abs(au - 30.07)).toBeLessThan(0.5);
+
+    await recordFields(page, id, measureSid, { neptune: au.toFixed(2) });
+    await expectDerived(page, id, measureSid, { hours: 4.17 }, 0.03);
+    await expectEvidenceRetained(page, id, measureSid, {
+      neptune: au.toFixed(2),
+    });
+    await expectVerdictRevealed(page, plan, predict);
+  });
+
+  test('comets-and-the-sun: the first model comet runs from 5.79 to 17.84 astronomical units and stays below 160 K @accepts:ce.comets-and-the-sun', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    const id = 'comets-and-the-sun';
+    const entry = declared(id);
+    const [predictSid, watchSid] = entry.loop;
+
+    await openInvestigation(page, app, id);
+    const plan = await lessonPlan(page, id);
+    const predict = await walkToSid(page, plan, predictSid);
+    await commitPredictionHeld(page, predict);
+    await walkToSid(page, plan, watchSid);
+    await walkToSid(page, plan, 'orbit-ends');
+
+    await expect
+      .poll(async () =>
+        probeNumber(await probeRows(page), /^Closest approach to the Sun/i)
+      )
+      .not.toBeNaN();
+    const rows = await probeRows(page);
+    const peri = probeNumber(rows, /^Closest approach to the Sun/i);
+    const apo = probeNumber(rows, /^Furthest distance from the Sun/i);
+    expect(Math.abs(peri - 5.79)).toBeLessThan(0.1);
+    expect(Math.abs(apo - 17.84)).toBeLessThan(0.2);
+
+    const ends = { peri: peri.toFixed(2), apo: apo.toFixed(2) };
+    await recordFields(page, id, 'orbit-ends', ends);
+    await expectEvidenceRetained(page, id, 'orbit-ends', ends);
+    await walkToSid(page, plan, 'heat-at-the-ends');
+    await recordFields(page, id, 'heat-at-the-ends', ends);
+    await expectDerived(
+      page,
+      id,
+      'heat-at-the-ends',
+      { t_peri: 275.5 / Math.sqrt(peri), t_apo: 275.5 / Math.sqrt(apo) },
+      0.03
+    );
     await expectVerdictRevealed(page, plan, predict);
   });
 });

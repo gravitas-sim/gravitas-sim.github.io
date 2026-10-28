@@ -95022,6 +95022,7 @@
      },
      "kinds": [
       "scene-declared",
+      "engine-measurement",
       "captured-evidence"
      ],
      "actions": [
@@ -95048,14 +95049,16 @@
        "measure",
        "interpret"
       ],
-      "handTranscribed": true,
+      "handTranscribed": false,
       "mismatch": null
      },
      "scene": {
       "nameMatches": [],
       "readsSelection": false,
       "importsFromSelection": false,
-      "engineReads": [],
+      "engineReads": [
+       "bodies"
+      ],
       "mutates": [],
       "eventWatch": null
      },
@@ -95527,7 +95530,7 @@
     "steps": 8,
     "declared": 8,
     "student": 0,
-    "engine": 0,
+    "engine": 1,
     "model": 0,
     "data": 0,
     "diagram": 0,
@@ -96765,8 +96768,76 @@
      ]
     },
     {
-     "sid": "why-a-tail-near-the-sun",
+     "sid": "the-real-halley",
      "index": 7,
+     "type": "measure",
+     "title": "The real Halley",
+     "declares": {
+      "stage": null,
+      "bound": [
+       "sun"
+      ],
+      "roles": [
+       "sun"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values",
+      "run-the-simulation"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": true,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": true,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the step binds the object by name, so there is none",
+      "missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "why-a-tail-near-the-sun",
+     "index": 8,
      "type": "question",
      "title": "Why a tail near the Sun?",
      "declares": {
@@ -96826,7 +96897,7 @@
     },
     {
      "sid": "what-you-worked-out",
-     "index": 8,
+     "index": 9,
      "type": "read",
      "title": "What you worked out",
      "declares": {
@@ -96893,16 +96964,19 @@
      "experiment": [
       "watch-the-tails",
       "orbit-ends",
-      "heat-at-the-ends"
+      "heat-at-the-ends",
+      "the-real-halley"
      ],
      "measure": [
       "watch-the-tails",
       "orbit-ends",
-      "heat-at-the-ends"
+      "heat-at-the-ends",
+      "the-real-halley"
      ],
      "evidence": [
       "orbit-ends",
-      "heat-at-the-ends"
+      "heat-at-the-ends",
+      "the-real-halley"
      ],
      "interpret": "watch-the-tails",
      "measuredBeforeAnswering": true,
@@ -96913,16 +96987,16 @@
     }
    ],
    "totals": {
-    "steps": 8,
-    "declared": 8,
+    "steps": 9,
+    "declared": 9,
     "student": 0,
     "engine": 3,
     "model": 0,
     "data": 0,
     "diagram": 0,
-    "evidence": 2,
+    "evidence": 3,
     "computation": 0,
-    "declaredButInert": 8,
+    "declaredButInert": 9,
     "prose": 0,
     "mismatched": 0,
     "rebuilds": 1
@@ -96930,16 +97004,16 @@
   }
  ],
  "totals": {
-  "steps": 1241,
-  "declared": 1149,
+  "steps": 1242,
+  "declared": 1150,
   "student": 157,
-  "engine": 166,
+  "engine": 167,
   "model": 741,
   "data": 146,
   "diagram": 620,
-  "evidence": 326,
+  "evidence": 327,
   "computation": 14,
-  "declaredButInert": 992,
+  "declaredButInert": 993,
   "prose": 58,
   "mismatched": 0,
   "rebuilds": 80,
