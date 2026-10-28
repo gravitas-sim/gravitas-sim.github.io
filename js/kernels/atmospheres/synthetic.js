@@ -29,7 +29,7 @@ function normals(seed) {
   };
   return () => Math.sqrt(-2 * Math.log(u())) * Math.cos(2 * Math.PI * u());
 }
-const round = (x, d) => Number(x.toFixed(d));
+const round = (x, d) => Math.round(x * 10 ** d) / 10 ** d;
 
 /** Four named bands (micrometres) and a hot Jupiter's truth: the day-side temperature, the star, the radius ratio. */
 export const ECLIPSE_BANDS = [

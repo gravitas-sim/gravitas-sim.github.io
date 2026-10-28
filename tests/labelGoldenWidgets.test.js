@@ -122,7 +122,7 @@ describe('the committed recording', () => {
 
   test('has every widget in both locales', () => {
     const widgets = widgetsOf(recorded);
-    expect(widgets.length).toBe(124);
+    expect(widgets.length).toBe(126);
     for (const [, rec] of widgets) {
       expect(rec.en.frames).toBeGreaterThan(0);
       // Spanish is either the same recording or its own.

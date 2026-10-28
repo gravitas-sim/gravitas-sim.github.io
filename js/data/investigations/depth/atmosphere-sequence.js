@@ -1170,7 +1170,7 @@ const BT_CONTENT = {
       },
     ],
     teachingNotes: [
-      'The depths are synthetic: seed 202 and the truth (2,100 K, radius ratio 0.12, star 6,000 K, noise 40 ppm) are in the manifest the generator returns. No published table was compared, so the authentic-data requirement of the validation contract is not met for this lesson and the register says so.',
+      'The depths are synthetic: seed 202 and the truth (2,100 K, radius ratio 0.12, star 6,000 K, noise 40 ppm) are in the manifest the generator returns. No published table was compared, so the authentic-data requirement of the validation contract is not met for this investigation and the register says so.',
       'The model is a uniform blackbody with one skin: no day-night structure, a flat band response, no scattering. The independent oracle agrees with the kernel to better than 1e-11 (npm run atmospheres-ii:validate).',
       '“Assume none” passes the converter a very large orbit so that its reflected-light test cannot refuse; the instrument says so and shows the refusal with the other setting.',
       'A 95 percent interval misses the truth about one time in twenty: with four bands, one miss (band A here) is expected from time to time and is not a sign that the method failed.',
@@ -1253,9 +1253,9 @@ const BT_CONTENT = {
       },
     ],
     teachingNotes: [
-      'Both curves are synthetic: seed 202, an albedo of 0.35 at 10 planet radii, noise 3 percent of the full-phase signal; Planet Q is a Lommel-Seeliger sphere. No published table was compared, so the authentic-data requirement is not met for this lesson.',
+      'Both curves are synthetic: seed 202, an albedo of 0.35 at 10 planet radii, noise 3 percent of the full-phase signal; Planet Q is a Lommel-Seeliger sphere. No published table was compared, so the authentic-data requirement is not met for this investigation.',
       'The independent oracle integrates the sphere’s surface numerically and agrees with the kernel’s closed form to better than 1e-11; the misfit flag was tested on Lommel-Seeliger and Henyey-Greenstein spheres (power at least 0.8) and on true Lambert spheres (false flags at most 2 percent).',
-      'Thermal phase variation, clouds and polarisation are not modelled; in a real hot Jupiter thermal emission varies with phase too.',
+      'Thermal phase variation, clouds and polarization are not modeled; in a real hot Jupiter thermal emission varies with phase too.',
       'The flag that refuses an albedo is a chi-square test at the 0.99 quantile: it was tested to catch Lommel-Seeliger and Henyey-Greenstein spheres at least 80 percent of the time and to flag a true Lambert sphere at most 2 percent of the time.',
     ],
     discussion: [
@@ -1341,14 +1341,14 @@ const BT_EXPECTATIONS = {
 
 const BT_BANDS = {
   'how-hot-is-the-day-side': {
-    core: 'medium',
-    quantitative: 'short',
-    advanced: 'short',
+    core: 'short',
+    quantitative: 'medium',
+    advanced: 'medium',
   },
   'phases-and-albedo': {
-    core: 'medium',
-    quantitative: 'short',
-    advanced: 'short',
+    core: 'short',
+    quantitative: 'medium',
+    advanced: 'medium',
   },
 };
 

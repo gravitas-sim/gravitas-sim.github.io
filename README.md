@@ -26,9 +26,9 @@ tides, and a dense cluster relaxing over time. Each is tagged by curriculum
 concept, so the scenario gallery doubles as an index an instructor can scan for
 the week they are teaching.
 
-**<!--fact:libraryInvestigations-->95<!--/fact--> guided
+**<!--fact:libraryInvestigations-->97<!--/fact--> guided
 investigations**: <!--fact:investigations-->80<!--/fact--> that run in the
-simulation, <!--fact:investigationSteps-->1200<!--/fact--> steps between them
+simulation, <!--fact:investigationSteps-->1201<!--/fact--> steps between them
 (the table below), and <!--fact:guidedInvestigations-->17<!--/fact--> in the
 Observatory, the 3-D lab and the mission lab (the Library lists all of them):
 
