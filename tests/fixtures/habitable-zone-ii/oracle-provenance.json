@@ -1,0 +1,24 @@
+{
+  "format": "gravitas.habitable-zone-ii-oracle-provenance/1",
+  "prompt": 205,
+  "oracle": "numpy 2.2.6 and scipy 1.15.3 (optimize.brentq for Kepler's equation)",
+  "identity": "An independent implementation, in Python floats, of the Kopparapu quartic, the inverse-square edges, Kepler's equation solved by root finding with the time-mean flux and the fraction of the year in a band taken by sampling the solution (200,001 points), the locking radius derived from t_lock = I omega / N inverted for a, and the MIST pack's int16 and int32 columns decoded from the data strings of js/data/stellar/mistTracks.js (read as text) and interpolated linearly in log age. No Gravitas code ran. The coefficient table was typed by the author from the same source as the kernel's table and was not re-read.",
+  "retrieved": "2026-10-27",
+  "index": "none: Prompt 180's scratch virtual environment as it was; nothing was added for this prompt",
+  "python": "3.10.12 (macOS-26.6.2-x86_64-i386-64bit, x86_64)",
+  "packages": {
+    "numpy": "2.2.6",
+    "scipy": "1.15.3"
+  },
+  "run": "cd <empty scratchpad directory>; <venv>/bin/python -I tools/habitable-zone-oracle/oracle.py tools/habitable-zone-oracle/oracle-inputs.json js/data/stellar/mistTracks.js tests/fixtures/habitable-zone-ii/oracle-results.json; then Prettier",
+  "committedBefore": "thresholds.json and HABITABLE_ZONE_II.md's contract were committed (caa669c7) before the oracle's inputs and script existed; the oracle's results were committed before js/kernels/habitablezone/, the validation tool and the tests existed",
+  "files": {
+    "tools/habitable-zone-oracle/oracle-inputs.json": "22b52b181c3f7106ff11d05ab30e18c3ae1fdee26e82c18dbc10aad275ef7683",
+    "tools/habitable-zone-oracle/oracle.py": "f8177c18035450eca3c2620d6126a885b1f558e62f83418e116da0ee25a0db61",
+    "tests/fixtures/habitable-zone-ii/oracle-results.json": "dfc4a91b9efbadda7f84251bda283a697d4edcad20199d406db22c9a1e809aa5",
+    "js/data/stellar/mistTracks.js": "4c4f68cbcb641a7e65675f6802147504bb6fa240ab72b433862c6854d0c73046"
+  },
+  "corrections": [
+    "2026-10-27, after the kernel had been run once (the first run of tools/habitable-zone-validate.mjs failed a3.band.sampled and a3.band.existing-sampler): the oracle's closed form for a circular orbit used a half-open band, so a band whose inner edge equals the orbit's radius gave 0 while the oracle's own sampling, js/habitability.js and the kernel's corrected rule (a band includes both its ends) give 1. The kernel had the same half-open rule and was fixed; the oracle's closed form was corrected to the inclusive band and the results regenerated, which changed one number (orbit 'circular', band [1.0, 1.4] times a: closed 0 to 1). No bound was moved."
+  ]
+}

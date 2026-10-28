@@ -1,0 +1,117 @@
+{
+  "format": "gravitas.habitable-zone-ii-thresholds/1",
+  "prompt": 205,
+  "committed": "Before the kernel, the oracle's script or results, the validation tool or any test existed: this file and the validation contract in HABITABLE_ZONE_II.md. No number below is the output of js/kernels/habitablezone/. Stated plainly: before this file was written the author had read, once, js/stellar/tracks.js's output for the 1 solar-mass MIST track at 0.1, 1, 4.57, 8 and 10 Gyr and at its ZAMS point (L = 0.764, 0.828, 1.108, 1.611, 2.319 and 0.746 solar), to choose the three ages and to learn that this model star is 11 percent brighter than the Sun at 4.57 Gyr. The bound of b3.model-star (0.15) and the 10 percent bound of b3.zams were set with those numbers in view and are flagged as such; the closed-form, oracle and refusal bounds were not. Every published value was typed from the cited source and not re-read (checked: false). A disagreement with a source is a defect to be found, not a tolerance to be widened.",
+  "amendments": [
+    "2026-10-27, before the kernel was run and before any row was judged: a5.age.closed said 'one second past' a track's last age. One second is 2.7e-18 of that age, below the spacing of a double (1.1e-16), so no kernel could tell the two ages apart; the check now uses 1e-12 of the age. No bound of a measured quantity was changed."
+  ],
+  "model": {
+    "name": "habitable-zone flux limits, the zone along a MIST track, the tidal-locking radius and the flux of an eccentric orbit",
+    "units": "AU, solar units and Earth-insolation units in the zone functions; SI inside the locking radius (reused from js/kernels/tides/)",
+    "parameterisation": "Kopparapu et al. (2013), ApJ 765, 131, with the coefficients of the 2014 erratum (ApJ 787, L29), for a planet of one Earth mass: each limit is an effective stellar flux S_eff = S_sun + a T + b T^2 + c T^3 + d T^4 with T = Teff - 5780 K, in units of the flux Earth receives, and the limit's distance is d = sqrt((L / L_sun) / S_eff) AU",
+    "limits": "runaway greenhouse (inner, climate model), maximum greenhouse (outer, climate model), recent Venus (inner, empirical) and early Mars (outer, empirical); the conservative zone is runaway to maximum, the optimistic zone recent Venus to early Mars",
+    "simplification": "a one-dimensional, cloud-free radiative-convective model of a water-rich planet (inner) and a CO2 planet (outer), one Earth mass, Earth gravity and a fixed surface pressure; clouds, rotation, ocean heat transport, the stellar spectrum beyond the fitted Teff and the planet's history are not modelled; the zone is a band of a flux, not a measurement of any planet",
+    "domain": "stellar effective temperature 2600 K to 7200 K inclusive, the range the cited fit is calibrated over; outside it the kernel refuses (js/habitability.js, the existing authority for the panel and the ring, evaluates at the nearest calibrated temperature and flags it; the kernel does not)",
+    "orbit": "periapsis and apoapsis flux S = L / (a (1 -+ e))^2 and the time-mean flux L / (a^2 sqrt(1 - e^2)); the fraction of the year inside a band of distance from the closed form r = a (1 - e cos E), M = E - e sin E",
+    "locking": "t_lock = I omega / N from js/kernels/tides/ lockingTime (TIDAL_KERNEL.md, constant Q, circular orbit, spin aligned): since t_lock goes as a^6 the radius at which t_lock equals an age is a_ref (age / t_lock(a_ref))^(1/6) exactly; the planet's k2/Q is unknown, so a range over Q is returned beside the central value",
+    "age": "the star is a point on a MIST v1.2 evolutionary track (js/stellar/tracks.js, solar metallicity, no rotation), interpolated linearly in log age between stored rows; the age is years since the start of the track (an early pre-main-sequence model), not since a star was born; the 1 solar-mass track is a model star and not the Sun",
+    "escape": "not built: the escape bound is Prompt 199 verdict B's unauthorised slice (D-R10-75: Prompt 205 without the escape bar); no escape data were measured and none were fetched"
+  },
+  "domain": {
+    "teffK": [2600, 7200],
+    "eccentricity": [0, 1],
+    "refusalCodes": [
+      "input",
+      "teff-domain",
+      "luminosity",
+      "eccentricity",
+      "orbit",
+      "limit",
+      "model",
+      "track",
+      "age-domain",
+      "band"
+    ],
+    "reusedFromTides": [
+      "q-range",
+      "k2-range",
+      "alpha-range",
+      "orbit-inside-body"
+    ]
+  },
+  "ages": {
+    "years": [1.0e9, 4.57e9, 8.0e9],
+    "track": "m100",
+    "note": "the three ages along the 1 solar-mass track at which the zone is read; 4.57 Gyr is the Sun's age"
+  },
+  "checks": {
+    "a1.limits.closed": {
+      "what": "the four limit fluxes against an independent numpy polynomial (the oracle) at 25 stellar temperatures from 2600 K to 7200 K inclusive, both ends and 5780 K among them; at 5780 K every limit equals its constant term exactly; the flux at the solar temperature is 1.7763, 1.0385, 0.3507 and 0.3207",
+      "bounds": { "relative": 1e-12, "constantTermAbsolute": 1e-12 }
+    },
+    "a2.edges.closed": {
+      "what": "the conservative and optimistic edges in AU against the oracle for twelve stars (luminosity, temperature); the flux at an edge, from the inverse-square law at the returned distance, equals the limit flux; an edge scales exactly as the square root of the luminosity; the conservative zone lies inside the optimistic zone and the inner edge is inside the outer edge for every in-domain star",
+      "bounds": { "relative": 1e-12, "scalingRelative": 1e-12 }
+    },
+    "a3.orbit.closed": {
+      "what": "periapsis, apoapsis and time-mean flux against the oracle for six orbits; the mean flux lies between the two extremes and equals the time average of the flux over the orbit (oracle: numerical quadrature of the Kepler solution at 200,001 points); the fraction of the year inside a band of distance against the oracle's closed form (relative 1e-12) and against its numerical sampling of the Kepler equation (absolute 1e-4); a circular orbit in or out of the band gives 1 or 0; the fraction of the year inside the band is zero when the band lies wholly outside the orbit's range and one when it contains the whole orbit; and the fraction matches js/habitability.js fractionOfYearInZone, which samples 4,000 points, within 5e-4 absolute",
+      "bounds": {
+        "relative": 1e-12,
+        "samplingAbsolute": 1e-4,
+        "existingSamplerAbsolute": 5e-4
+      }
+    },
+    "a4.locking.closed": {
+      "what": "the locking radius against the oracle's independent derivation (t_lock = (2/3 alpha) omega a^6 m Q / (k2 G M^2 R^3) inverted for a) for six stars and planets; the kernel's own lockingTime from js/kernels/tides/ evaluated at the returned radius equals the age to 1e-12; the radius scales as M^(1/3), age^(1/6), (k2/Q)^(1/6) and omega^(-1/6) exactly; the range over Q brackets the central value and its width is the factor 10^(1/6) each way for Q = 10 and Q = 1000 about Q = 100",
+      "bounds": { "relative": 1e-12, "exponentAbsolute": 1e-10 }
+    },
+    "a5.age.closed": {
+      "what": "the star's luminosity and temperature and the four edges of the zone at the three ages (1.0, 4.57 and 8.0 Gyr) on the 1 solar-mass track against the oracle, which decodes the track's stored int16 columns itself and interpolates linearly in log age; edges scale as the square root of the luminosity; a track's last stored age is accepted and an age 1e-12 of itself beyond it (about 11 years on the 1 solar-mass track) is refused",
+      "bounds": { "relative": 1e-9 }
+    },
+    "b1.sun.published": {
+      "what": "the zone of the Sun (L = 1, 5780 K) against the published edges, quoted to two figures: recent Venus 0.75 AU, runaway greenhouse 0.99 AU, maximum greenhouse 1.70 AU, early Mars 1.77 AU (Kopparapu et al. 2013, Table 2, as revised in the 2014 erratum). The exact evaluation of the erratum coefficients gives 0.981 AU for the runaway edge, 0.9 percent below the rounded quote; the bound allows for the rounding of a two-figure quote and not for a wrong coefficient, which moves an edge by tens of percent",
+      "bounds": { "relative": 0.015 }
+    },
+    "b2.existing.authority": {
+      "what": "the kernel is the same parameterisation as the one the habitable-zone panel and the simulation's ring read, not a second copy that could drift: at 41 stellar temperatures the four limit fluxes equal js/habitability.js effectiveFluxAt, and the conservative and optimistic edges equal habitableZoneBounds for six stars; periapsis and apoapsis insolations equal orbitExtremes",
+      "bounds": { "relative": 1e-14 }
+    },
+    "b3.luminosity.ratio": {
+      "what": "the ratio of the 1 solar-mass track's luminosity at 1.0 Gyr and at 8.0 Gyr to its luminosity at 4.57 Gyr against the same ratio from the analytic fit of a standard solar model, L(t) = L_sun / (1 + (2/5)(1 - t / 4.57 Gyr)) (Gough 1981, Solar Physics 74, 21): 0.762 at 1.0 Gyr and 1.429 at 8.0 Gyr. Two model stars of one mass need not agree to better than a few percent; the bound is that scatter. Set with the track's values in view (see 'committed')",
+      "bounds": { "relative": 0.05 }
+    },
+    "b3.zams": {
+      "what": "the luminosity at the track's zero-age main-sequence point against the standard solar model's zero-age luminosity, 0.714 of the present Sun (the same fit at t = 0, divided by its value at 4.57 Gyr, which is 1); the bound is 10 percent. Set with the track's value in view (see 'committed')",
+      "bounds": { "relative": 0.1 }
+    },
+    "b3.model-star": {
+      "what": "the 1 solar-mass track is a model star, not the Sun: its luminosity at 4.57 Gyr lies within 15 percent of the Sun's, the bound that makes the kernel say so rather than pretend (the zone read at 4.57 Gyr is the zone of this model star and the result carries that statement). Set with the track's value in view (see 'committed')",
+      "bounds": { "relative": 0.15 }
+    },
+    "b3.movement": {
+      "what": "the zone moves outward as the star brightens: at 1.0, 4.57 and 8.0 Gyr both the inner and the outer conservative edges are strictly larger than at the previous age, and the zone's width grows with them",
+      "bounds": {}
+    },
+    "b4.locking.published": {
+      "what": "for an Earth-like planet (5.972e24 kg, 6.371e6 m, k2 0.3, Q 100, alpha 0.3307, initial spin period 10 hours): the Earth, at 1 AU from a 1 solar-mass star at 4.5 Gyr, is outside the locking radius (it is not locked: its day is 24 hours); Proxima Centauri b (0.0485 AU, 0.1221 solar masses, 4.85 Gyr) is inside it, as Ribas et al. (2016) and Barnes et al. (2016) expect it to be locked or in a spin-orbit resonance; the seven TRAPPIST-1 planets, the outermost at 0.0619 AU (star 0.0898 solar masses, 7.6 Gyr), are inside it as Gillon et al. (2017) expect; the inner edge of the conservative zone of the 0.2 solar-mass track at 5 Gyr is inside the locking radius and that of the 1 solar-mass track at 4.57 Gyr is outside it, the published expectation that the habitable zone of an M dwarf is locked and that of a Sun-like star is not (Dole 1964; Kasting et al. 1993). These are inequalities, not values: the constant-Q model fixes the locking radius only to a factor 2 or so through k2/Q, which the range returned beside it states",
+      "bounds": {}
+    },
+    "b5.escape": {
+      "what": "not applicable and stated: the escape bound of Prompt 200 is not built (Prompt 199 verdict B, D-R10-75, authorizes Prompt 205 without the escape bar); no escape data exist and no row is judged",
+      "bounds": {}
+    },
+    "c.ensemble": {
+      "what": "not applicable and stated: the kernel returns closed-form values and table interpolations with no uncertainty estimator, so no stated uncertainty can be covered; the published tier (b) carries the comparison with measurement",
+      "bounds": {}
+    },
+    "d.refusals": {
+      "what": "every hostile or out-of-domain input is refused with its named code and never returns a number: a stellar temperature below 2600 K or above 7200 K (the nearest in-domain value is not used), non-finite, zero and negative temperatures, luminosities, distances, masses and ages, eccentricities below 0 or at and above 1, an unknown limit or model, an unknown track, an age before the track's first stored age or after its last, a band whose inner edge is not below its outer, a star on the track whose temperature leaves the domain (the 2 solar-mass track at 0.1 Gyr is near 9,400 K and is refused), values of the wrong type, and an unknown Q, k2 or spin refused by the tides kernel with its own code",
+      "bounds": { "minimumCases": 40 }
+    },
+    "d.domain": {
+      "what": "the domain's edges: 2600 K and 7200 K are accepted; 2599.999 K and 7200.001 K are refused with teff-domain; the refusal's detail names the temperature and both bounds",
+      "bounds": {}
+    }
+  }
+}

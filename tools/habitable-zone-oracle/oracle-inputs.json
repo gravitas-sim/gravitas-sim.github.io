@@ -1,0 +1,134 @@
+{
+  "constants": {
+    "G": 6.6743e-11,
+    "AU": 1.496e11,
+    "solarMass": 1.989e30,
+    "earthMass": 5.972e24,
+    "earthRadius": 6.371e6,
+    "year": 31557600
+  },
+  "teffs": [
+    2600, 2800, 3000, 3200, 3400, 3600, 3800, 4000, 4200, 4400, 4600, 4800,
+    5000, 5200, 5400, 5600, 5780, 6000, 6200, 6400, 6600, 6800, 7000, 7100, 7200
+  ],
+  "stars": [
+    { "id": "sun", "luminosity": 1, "teff": 5780 },
+    { "id": "proxima-like", "luminosity": 0.0017, "teff": 3042 },
+    { "id": "cool-floor", "luminosity": 0.0005, "teff": 2600 },
+    { "id": "m-dwarf-3200", "luminosity": 0.004, "teff": 3200 },
+    { "id": "k-dwarf-3800", "luminosity": 0.04, "teff": 3800 },
+    { "id": "k-dwarf-4200", "luminosity": 0.15, "teff": 4200 },
+    { "id": "k-dwarf-5000", "luminosity": 0.35, "teff": 5000 },
+    { "id": "young-sun", "luminosity": 0.764, "teff": 5717 },
+    { "id": "model-sun-4p57", "luminosity": 1.108, "teff": 5849 },
+    { "id": "old-sun", "luminosity": 2.3185, "teff": 5650 },
+    { "id": "f-dwarf", "luminosity": 6, "teff": 6500 },
+    { "id": "hot-ceiling", "luminosity": 20, "teff": 7200 }
+  ],
+  "orbits": [
+    { "id": "circular", "luminosity": 1, "semiMajorAU": 1, "eccentricity": 0 },
+    {
+      "id": "earth",
+      "luminosity": 1,
+      "semiMajorAU": 1,
+      "eccentricity": 0.0167
+    },
+    { "id": "e0.3", "luminosity": 1, "semiMajorAU": 1.5, "eccentricity": 0.3 },
+    {
+      "id": "e0.5",
+      "luminosity": 0.5,
+      "semiMajorAU": 0.8,
+      "eccentricity": 0.5
+    },
+    { "id": "e0.7", "luminosity": 2, "semiMajorAU": 3, "eccentricity": 0.7 },
+    {
+      "id": "e0.1-dim",
+      "luminosity": 0.1,
+      "semiMajorAU": 0.3,
+      "eccentricity": 0.1
+    }
+  ],
+  "bandsOfA": [
+    [0, 0.5],
+    [0.7, 1.0],
+    [0.9, 1.1],
+    [1.0, 1.4],
+    [0.5, 2.0],
+    [0.95, 1.05]
+  ],
+  "locking": [
+    {
+      "id": "sun-earthlike",
+      "starMassSun": 1,
+      "ageYr": 4.5e9,
+      "planetMassEarth": 1,
+      "planetRadiusEarth": 1,
+      "k2": 0.3,
+      "Q": 100,
+      "spinPeriodHours": 10,
+      "alpha": 0.3307
+    },
+    {
+      "id": "proxima",
+      "starMassSun": 0.1221,
+      "ageYr": 4.85e9,
+      "planetMassEarth": 1.07,
+      "planetRadiusEarth": 1.1,
+      "k2": 0.3,
+      "Q": 100,
+      "spinPeriodHours": 10,
+      "alpha": 0.3307
+    },
+    {
+      "id": "trappist1",
+      "starMassSun": 0.0898,
+      "ageYr": 7.6e9,
+      "planetMassEarth": 0.7,
+      "planetRadiusEarth": 0.9,
+      "k2": 0.3,
+      "Q": 100,
+      "spinPeriodHours": 10,
+      "alpha": 0.3307
+    },
+    {
+      "id": "stiff-planet",
+      "starMassSun": 0.5,
+      "ageYr": 1e9,
+      "planetMassEarth": 5,
+      "planetRadiusEarth": 1.6,
+      "k2": 0.1,
+      "Q": 500,
+      "spinPeriodHours": 24,
+      "alpha": 0.33
+    },
+    {
+      "id": "soft-planet",
+      "starMassSun": 1.5,
+      "ageYr": 2e9,
+      "planetMassEarth": 2,
+      "planetRadiusEarth": 1.3,
+      "k2": 1.0,
+      "Q": 20,
+      "spinPeriodHours": 5,
+      "alpha": 0.25
+    },
+    {
+      "id": "old-red-dwarf",
+      "starMassSun": 0.2,
+      "ageYr": 1e10,
+      "planetMassEarth": 1,
+      "planetRadiusEarth": 1,
+      "k2": 0.3,
+      "Q": 10,
+      "spinPeriodHours": 48,
+      "alpha": 0.3307
+    }
+  ],
+  "track": { "id": "m100", "agesYr": [1e9, 4.57e9, 8e9] },
+  "extraTrackAges": {
+    "m020": [1e9, 5e9],
+    "m050": [1e9, 5e9],
+    "m200": [3e8, 6e8]
+  },
+  "kepler": { "samples": 200001 }
+}
