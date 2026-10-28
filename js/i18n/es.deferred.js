@@ -1873,6 +1873,8 @@ export const ES_DEFERRED = {
     'Catorce días de imágenes del Sol: dónde está una mancha, con qué rapidez gira un grupo visto desde la Tierra y respecto de las estrellas, y qué pueden y qué no pueden mostrar dos grupos.',
   'inv.seq.planets.the-suns-power':
     'Un flujo medido en la Tierra llevado a una unidad astronómica, la luminosidad y la temperatura del Sol, y lo que deja fuera el intervalo de una media.',
+  'inv.seq.planets.how-hot-is-the-day-side': 'Eclipse y calor del lado diurno.',
+  'inv.seq.planets.phases-and-albedo': 'Una curva de fase y un albedo.',
   'inv.seq.planets.why-rings':
     'Por qué los anillos están dentro del límite de Roche de un planeta, y qué despeja en uno la resonancia de una luna.',
   'inv.seq.planets.tides-that-move-the-moon':

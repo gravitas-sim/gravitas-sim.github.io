@@ -310,9 +310,9 @@ describe('the recorded result', () => {
     expect(record.spike.mergedNever).toBe(true);
     expect(record.spike.sha).toMatch(/^[0-9a-f]{40}$/);
     expect(record.base).toMatch(/^[0-9a-f]{40}$/);
+    // emission.js and phase.js left this list when Prompt 202 promoted the
+    // eclipse and phase slice (D-R10-202-01); transmission is not built.
     for (const f of [
-      'js/kernels/atmospheres/emission.js',
-      'js/kernels/atmospheres/phase.js',
       'js/kernels/atmospheres/transmission.js',
       'js/kernels/atmospheres/bands.js',
       'tools/atmospheres-gate-ii/oracle.py',

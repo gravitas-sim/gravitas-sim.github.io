@@ -1,0 +1,67 @@
+{
+ "id": "how-hot-is-the-day-side",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.one-band.fields.0.unit","K"],
+    ["steps.four-bands.fields.0.unit","K"],
+    ["steps.four-bands.fields.1.unit","K"],
+    ["steps.match-by-hand.fields.0.unit","K"],
+    ["steps.match-by-hand.fields.1.unit",""],
+    ["steps.the-manifest.fields.0.unit",""],
+    ["steps.reflected-light.fields.0.unit",""],
+    ["steps.planet-y.fields.0.unit","K"],
+    ["steps.planet-y-misfit.fields.0.unit",""]
+   ],
+   "numbered": [
+    ["steps.one-band.fields.0.hint","2094"],
+    ["steps.four-bands.fields.0.hint","2171"],
+    ["steps.four-bands.fields.1.hint","2067"],
+    ["steps.match-by-hand.fields.0.hint","2090"],
+    ["steps.match-by-hand.fields.1.hint","6.5"],
+    ["steps.the-manifest.fields.0.label","Intervals that contain 2,100 K"],
+    ["steps.the-manifest.fields.0.hint","3"],
+    ["steps.reflected-light.fields.0.hint","0"],
+    ["steps.planet-y.fields.0.hint","314"],
+    ["steps.planet-y-misfit.fields.0.hint","231"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.the-manifest.fields.0.label","Intervalos que contienen 2100 K"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "one-band": {
+    "validate": {"calls":97,"distinct":2,"digest":"6d0fc73f8529cb19","samples":[null,{"level":"error","message":"Choose Planet X, set “Reflected light” to “assume none” and read “Brightness temperature, band C”."}]}
+   },
+   "four-bands": {
+    "validate": {"calls":232,"distinct":2,"digest":"b3e7d432657c4f11","samples":[null,{"level":"error","message":"Read the four “Brightness temperature” rows for Planet X with the reflected light set to “assume none”, and report the highest and the lowest."}]}
+   },
+   "match-by-hand": {
+    "validate": {"calls":232,"distinct":2,"digest":"28cf88db58466353","samples":[null,{"level":"error","message":"Move “My blackbody temperature” until the chi-square is at its smallest, near 2,090 K, and report both numbers from the “My blackbody against the four depths” row."}]}
+   },
+   "the-manifest": {
+    "validate": {"calls":97,"distinct":2,"digest":"e922236c1578ca94","samples":[null,{"level":"error","message":"Read the four intervals in the “Brightness temperature” rows of Planet X with “assume none” and count those that include 2,100 K."}]}
+   },
+   "reflected-light": {
+    "validate": {"calls":97,"distinct":3,"digest":"fd0234bb36349a47","samples":[null,{"level":"error","message":"Set “Reflected light” to “allow for it” and count the rows that give a temperature; each one that does not says it is not converted."},{"level":"ok","message":"None. At 8 planet radii, reflected light with an albedo of up to 0.3 could be 4,688 ppm, more than the largest of the four depths, 2,817 ppm. A depth is not turned into a temperature until you say what the reflected light is, which is why the instrument refuses and why “assume none” is a stated assumption."}]}
+   },
+   "planet-y": {
+    "validate": {"calls":97,"distinct":2,"digest":"8ce9e43c18f9b338","samples":[null,{"level":"error","message":"Choose Planet Y, set “Reflected light” to “assume none”, read band C and subtract it from 2,094 K."}]}
+   },
+   "planet-y-misfit": {
+    "validate": {"calls":97,"distinct":2,"digest":"8847155afc4546d4","samples":[null,{"level":"error","message":"Choose Planet Y and move “My blackbody temperature” to the smallest chi-square, near 1,990 K; read the “My blackbody against the four depths” row."}]}
+   }
+  },
+  "es": "same"
+ }
+}

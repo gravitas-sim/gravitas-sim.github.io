@@ -102,7 +102,7 @@ depth can) and **Two Greenhouse Models** (majors: Earth fitted twice, why the nu
 Venus; deeper: Mars, one unit in each model, the limits of grey opacity). Every number a step states is recomputed from
 the kernel in `tests/atmosphereLessons.test.js`. The Spanish is unread by a fluent reader.
 
-The validation page reads a group, "Atmospheres" (`js/validation/groups/atmospheres.js`, 7 checks).
+The validation page reads a group, "Atmospheres" (`js/validation/groups/atmospheres.js`, 12 checks: 7 of Prompt 200 and 5 of Prompt 202).
 
 ## What is not built
 
@@ -114,3 +114,95 @@ The validation page reads a group, "Atmospheres" (`js/validation/groups/atmosphe
 - **A sequence row** for the two lessons: the curated sequences need a message id per row in two catalogs that sit at
   their line ceilings, and the section places the lessons in no sequence.
 - **A model page section**: no prose was added to the public model page.
+
+---
+
+# Atmospheres II: eclipse depth and phase curve (Prompt 202)
+
+Prompt 202 builds **the eclipse and phase slice only**. Prompt 201's gate (`ATMOSPHERES_GATE_II.md`, D-R10-201-01) ended in verdict B
+after Carl's ruling on the kernel-alone size line; B authorizes the eclipse model with its brightness temperature, the Lambert phase
+curve with the Bond-albedo relation, and synthetic data with a truth manifest. **Transmission is not built** (X3, X4 and the whole
+family's size failed as measured; XR, XT and D1 to D3 were not measured), and neither is Prompt 205's spectra work. No table was
+downloaded and no published table was compared.
+
+## The models
+
+| Model | Statement | What it is not |
+| --- | --- | --- |
+| Blackbody plus one band (secondary eclipse) | `delta = (R_p/R_s)^2 B(T_p)/B(T_*) + A_g (R_p/a)^2`, `B` the Planck radiance averaged over a flat band; in an absorbing band the planet's flux is that of a blackbody at `T_p` seen through one isothermal skin at `T_p / 2^(1/4)`: `F/pi = B(T_p) 2E3(tau) + B(T_skin) (1 - 2E3(tau))`. A brightness temperature is the inverse of the band ratio | A day-side map. The planet is one blackbody (a band can only be a dip, never a bump), the band response is flat, and a depth is **not** turned into a temperature where reflected light could be a tenth of it (computed for `A_g` up to 0.3) |
+| Lambert-sphere phase curve | `f(alpha) = A_g (R_p/a)^2 Phi(alpha)`, `Phi = [sin alpha + (pi - alpha) cos alpha]/pi`, `alpha` the phase angle (0 at full phase); the Bond albedo is `3/2` of the geometric (the phase integral of a Lambert sphere) | A real planet. The albedo found is the albedo **of a Lambert sphere**; a curve the fit does not describe (chi-square above the 0.99 quantile) is flagged and returns no albedo |
+
+References: Russell 1916 (the Lambert-sphere phase function); Planck's law and the two-stream flux of an isothermal slab (`2E3`) as in Chandrasekhar 1960; the Lommel-Seeliger sphere
+in the closed form that agrees with the oracle's surface integral to 5e-13. Equations are not copied text. Every result carries `model` and `assumes`; a refusal carries a reason and
+no number.
+
+`js/kernels/atmospheres/{quadrature,emission,phase}.js` is the kernel (2,249 B gzipped, minified, on Node 22 and 24); `synthetic.js` generates the data.
+
+## The validation contract (committed first)
+
+`tests/fixtures/atmospheres-ii/thresholds.json` was committed (`f6de79dc`) before the kernel was promoted, the validator, the oracle results and the tests existed. Every bound
+carried from the gate is a verbatim copy of `tests/fixtures/atmospheres-gate-ii/thresholds.json`, and `tests/atmospheresII.test.js` compares them field by field, so this prompt cannot
+restate one. The only amendment is AM-S1 (S1 named no numeric limits; they were stated before the validator existed).
+
+| Tier | Checks |
+| --- | --- |
+| (a) analytic | E1 Planck against the Stefan-Boltzmann integral and the Rayleigh-Jeans limit; E2 equal temperatures give `(R_p/R_s)^2`; E3 the slab at `tau = 0` and in the thick limit; E4 the Lambert function at 0, 90 and 180 degrees and the phase integral 3/2 |
+| (b) independent oracle | `tools/atmospheres-ii-oracle/oracle.py` (numpy 2.2.6, scipy 1.15.3, astropy 6.1.7 constants, run as `python -I`, no Gravitas code) pins 400 Planck bands, 1,000 eclipse depths, 300 slab fluxes, a surface integral of the Lambert sphere at 181 angles and four phase curves; it reproduces the gate's own numbers to 5e-15 |
+| (c) coverage | E5 the Lambert albedo's 95 percent interval covers in [0.93, 0.97] over 2,000 curves; E6 the brightness-temperature interval covers in [0.93, 0.97] over 2,000 depths; S1 the same on the synthetic data |
+| (d) refusal | N1 the Lambert fit is flagged for Lommel-Seeliger and Henyey-Greenstein spheres and not for a Lambert sphere; N2 a depth where reflected light could matter is refused; R1 at least 40 hostile inputs refuse with a reason and no number; C1 the claim rule over every string |
+| (e) authentic data | **not measured** (A1): no published table was available, so the authentic-data requirement of the validation contract is unmet for this slice. The register row says so, and every lesson says "no published table was compared" |
+
+`npm run atmospheres-ii:validate` prints the table; `tests/atmospheresII.test.js` holds every row.
+
+## Result
+
+`npm run atmospheres-ii:validate`: 13 rows, 12 pass, 0 fail, 1 not measured (A1).
+
+| Check | Measured | Bound |
+| --- | --- | --- |
+| E1 Planck, 400 points against `quad`; the full band; Rayleigh-Jeans at `lambda T` = 1e7 micron K | 1.8e-12; 5.7e-12; 6.4e-4 | 1e-9; 1e-9; 1e-3 |
+| E2 eclipse depth, 1,000 points | 1.7e-14 | 1e-12 |
+| E3 slab flux, 300 optical depths | 2.7e-12 | 1e-9 |
+| E4 Lambert, 181 angles; the phase integral | 6.8e-12; 2.9e-15 | 1e-8; 1e-9 |
+| E5 albedo interval coverage (a flagged fit counts as not covered) | 0.939 | [0.93, 0.97] |
+| E6 brightness-temperature interval coverage; the round trip | 0.956; 5.0e-13 | [0.93, 0.97]; 1e-9 |
+| N1 flagged for Lommel-Seeliger and both Henyey-Greenstein spheres; falsely for a Lambert sphere | 1.0, 1.0, 1.0; 0.006 | at least 0.8; at most 0.02 |
+| N2 reflected-light rule | 60 of 60 | 60 |
+| R1 hostile inputs refused | 42 of 42 | 40 |
+| C1 claim rule: bad controls caught, permitted ones passed, violations in 16 files | 12 of 12, 6 of 6, 0 | 12, 6, 0 |
+| S1 synthetic data: identical repeats; Lambert interval coverage; Lommel-Seeliger flagged; brightness coverage | yes; 0.935; 0.967; 0.949 | identical; [0.93, 0.97]; 0.8; [0.93, 0.97] |
+| P1 two plots through `js/plot/chart.js` (jsdom): worst path vertex | under 0.1 px | 0.1 px |
+| kernel alone, gzipped | 2,249 B | 2,282 B (the gate's line, as Carl reset it) |
+
+What the numbers say, and what they do not. The kernel agrees with an independent numerical integration to 1e-11 or better everywhere, so the formulas are the formulas; that is a statement about
+the arithmetic of the model, not about any planet. The two coverage rows say the stated interval covers the truth at about its stated rate **on synthetic data generated by the same model**, which
+cannot reveal a model that is wrong about a real planet. The misfit flag catches the other spheres it was tested on and falsely flags a Lambert sphere in at most 1 draw in 100.
+
+## What the gate's record says and what was measured here
+
+The gate recorded the kernel alone at 2,282 B (raw 4,676 B). The spike's HEAD (`9a72fd65`), measured again here on Node 22.23.4 and Node 24, is 2,302 B (raw 4,710 B): the file state the gate recorded
+is not the file state that was pushed. The promoted kernel is smaller than either: `lommelSeeligerPhase`, used only to generate the misspecified synthetic curve, moved from `phase.js` to `synthetic.js`,
+and the three kernel files now measure **2,249 B** (raw 4,588 B). No bound moved. The gate's recorded 2,282 B stands as recorded.
+
+## Synthetic data, with its truth manifest
+
+No published table was available (data requests Q4 and Q5 of the gate are not accepted: nothing was downloaded, no rights decision exists), so the data are generated by the kernel's own model with noise:
+`syntheticEclipse` (four bands, a hot Jupiter with `T_p` = 2,100 K, `T_*` = 6,000 K, `R_p/R_s` = 0.12, `a/R_p` = 8, noise 40 ppm; optionally one band seen through the skin) and `syntheticPhase`
+(24 phase angles, a Lambert sphere with `A_g` = 0.35 at `a/R_p` = 10 and noise 3 percent of the full-phase signal, or a Lommel-Seeliger sphere). Each returns `synthetic: true`, the seed (202, the prompt number, not
+tuned: one band of Planet X, band A, happens to lie outside its own 95 percent interval, which the lesson uses), the truth, the noise and the sentence "no published table was compared". The same seed gives identical bytes.
+
+## The instruments and the lessons
+
+`atmosphere-eclipse` and `atmosphere-phase` join the lazy `atmosphere` family (`js/atmosphereWidgets.js`, `NEVER_PRECACHED`), drawn by the plot component with a readout that is the text equivalent of the plot.
+The eclipse instrument offers the reflected-light assumption as a switch: **"assume none"** passes the converter a very large `a/R_p` so that its reflected-light test cannot refuse, and the instrument says so; "allow for it"
+shows the refusal (at `a/R_p` = 8 an albedo of 0.3 could reflect 4,688 ppm, more than the largest of the four depths, 2,817 ppm). The committed rule is unchanged.
+
+Two investigations use them, appended to the atmosphere module and its three siblings (no new file of the instructor bundle's closure): **How Hot Is the Day Side?** (majors; prerequisite Why Venus Is Hot) and
+**Phases and Albedo** (majors; prerequisite Phases and Eclipses). Every number a step states is recomputed from the kernel in `tests/atmosphereLessonsII.test.js`. The Spanish is unread by a fluent reader.
+
+## What is not built
+
+- **Transmission** (the band-integrated depth, the transmission panel, the "Reading an atmosphere" investigation), and Prompt 205's spectra items. The gate's X3 and X4 failed as measured and XR and XT are not measured; only Carl can restate a bound.
+- **Sequence rows** for the two lessons: a row needs a message id in two catalogs (`js/i18n/{en,es}.deferred.js`) that sit at their line ceilings (3,834 and 4,081), and the two ids cost 4 lines each; no ceiling was raised. The lessons are reachable from the library and the lesson list.
+- **A published eclipse-depth table and a Solar System phase-function table** (rights decisions and downloads are Carl's); the investigations use synthetic data and say so.
+

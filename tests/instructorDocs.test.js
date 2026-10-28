@@ -254,15 +254,16 @@ describe('the document inventory', () => {
     // 705 after Why Rings?, Tides That Move the Moon and Io’s Fire (Prompt 204 part 2): 33 more.
     // 716 after What Is in This Field? (Prompt 191 part 3): 11 more.
     // 738 after the two Sun investigations (Prompt 194 part 2): 22 more.
-    expect(inv.documents).toBe(738);
-    expect(inv.byLocale).toEqual({ en: 339, es: 399 });
+    // 760 after How Hot Is the Day Side? and Phases and Albedo (Prompt 202): 22 more.
+    expect(inv.documents).toBe(760);
+    expect(inv.byLocale).toEqual({ en: 349, es: 411 });
     expect(inv.byKind.notes).toBe(INVESTIGATIONS.length);
     expect(inv.byVariant).toEqual({
       activity: 12,
-      depth: 318,
-      full: 312,
+      depth: 330,
+      full: 320,
       general: 18,
-      notes: 78,
+      notes: 80,
     });
   });
 
@@ -290,7 +291,7 @@ describe('the document inventory', () => {
     const withDepth = INVESTIGATIONS.filter(
       i => withAllDepths(i).steps.length !== i.steps.length
     ).map(i => i.id);
-    expect(withDepth.length).toBe(53);
+    expect(withDepth.length).toBe(55);
     for (const id of withDepth)
       for (const d of ['core', 'quantitative', 'advanced'])
         for (const suffix of ['', '-es'])

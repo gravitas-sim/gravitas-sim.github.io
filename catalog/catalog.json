@@ -84,6 +84,10 @@
       "en": "How Far Is That Star?",
       "es": "¿A qué distancia está esa estrella?"
     },
+    "how-hot-is-the-day-side": {
+      "en": "How Hot Is the Day Side?",
+      "es": "¿Qué tan caliente está el lado diurno?"
+    },
     "inside-a-star": {
       "en": "Inside a Star",
       "es": "Dentro de una estrella"
@@ -131,6 +135,10 @@
     "orbital-energy": {
       "en": "Bound, Unbound and Escape",
       "es": "Ligado, no ligado y escape"
+    },
+    "phases-and-albedo": {
+      "en": "Phases and Albedo",
+      "es": "Fases y albedo"
     },
     "phases-and-eclipses": {
       "en": "Phases and Eclipses",

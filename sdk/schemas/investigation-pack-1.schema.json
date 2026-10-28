@@ -109,7 +109,9 @@
           "why-venus-is-hot",
           "two-greenhouse-models",
           "the-turning-sun",
-          "the-suns-power"
+          "the-suns-power",
+          "how-hot-is-the-day-side",
+          "phases-and-albedo"
         ]
       }
     },
@@ -367,7 +369,9 @@
                   "why-venus-is-hot",
                   "two-greenhouse-models",
                   "the-turning-sun",
-                  "the-suns-power"
+                  "the-suns-power",
+                  "how-hot-is-the-day-side",
+                  "phases-and-albedo"
                 ]
               }
             }
@@ -1471,6 +1475,8 @@
             "atmosphere-balance",
             "atmosphere-greenhouse",
             "atmosphere-scale",
+            "atmosphere-eclipse",
+            "atmosphere-phase",
             "crater-regions",
             "crater-sfd",
             "crater-budget",

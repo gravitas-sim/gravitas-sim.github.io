@@ -211,6 +211,8 @@ export const SEQUENCES = [
       ['two-greenhouse-models', 'core', ['why-venus-is-hot']],
       ['the-turning-sun', 'core'],
       ['the-suns-power', 'core'],
+      ['how-hot-is-the-day-side', 'core'],
+      ['phases-and-albedo', 'core'],
       ['why-rings', 'core'],
       ['tides-that-move-the-moon', 'core'],
       ['ios-fire', 'core', ['tides-that-move-the-moon']],

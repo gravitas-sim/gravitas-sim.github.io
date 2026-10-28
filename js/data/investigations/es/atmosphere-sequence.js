@@ -380,9 +380,220 @@ export const THE_SUNS_POWER = {
   ],
 };
 
+// ¿Qué tan caliente está el lado diurno?: paso a paso con el inglés (Prompt 202).
+export const HOW_HOT_IS_THE_DAY_SIDE = {
+  title: '¿Qué tan caliente está el lado diurno?',
+  subtitle:
+    'Una profundidad de eclipse, un cuerpo negro y lo que deja fuera una temperatura de brillo',
+  objectives: [
+    'Decir qué mide la profundidad de un eclipse secundario y por qué es una parte de la luz y no una temperatura',
+    'Convertir la profundidad de un eclipse en una banda en una temperatura de brillo y decir qué supone esa temperatura',
+    'Ver por qué cuatro profundidades con ruido dan cuatro temperaturas dispersas y un solo ajuste de cuerpo negro',
+    'Ver por qué la conversión se niega cuando la luz reflejada podría importar, y qué puede y qué no puede decir una banda que marca menos',
+  ],
+  steps: [
+    {
+      title: 'Un planeta detrás de su estrella',
+      body: 'Cuando un planeta pasa detrás de su estrella, la luz baja en la parte que le corresponde al planeta. Esa bajada es la <strong>profundidad del eclipse secundario</strong>. Un júpiter caliente está tan cerca de su estrella que esa parte es de unos pocos miles de partes por millón (ppm). El modelo trata al planeta como un cuerpo negro uniforme a una sola temperatura y halla la profundidad en una banda como la radiancia del planeta entre la de la estrella, por el cuadrado de la razón de radios. Al revés, una profundidad da una <strong>temperatura de brillo</strong>: la temperatura del cuerpo negro que daría esa profundidad en esa banda.\n\nLas profundidades de esta investigación son <strong>sintéticas</strong>: generadas con el modelo y con ruido, con la temperatura verdadera anotada en un manifiesto que puedes leer al final. No se comparó ninguna tabla publicada.',
+    },
+    {
+      title: 'El planeta X: una banda',
+      body: 'El planeta X tiene una razón de radios de 0,12 y una estrella a 6000 K. Con la luz reflejada en <strong>suponer que no hay</strong>, lee la <strong>temperatura de brillo</strong> de la <strong>banda C</strong>.',
+      fields: [{ label: 'Temperatura de brillo, banda C' }],
+    },
+    {
+      title: 'Cuatro bandas, cuatro temperaturas',
+      body: 'El planeta X es un solo cuerpo negro, pero las cuatro bandas no dan un solo número. Lee la <strong>más alta</strong> y la <strong>más baja</strong> de las cuatro temperaturas de brillo.',
+      fields: [
+        { label: 'La más alta de las cuatro' },
+        { label: 'La más baja de las cuatro' },
+      ],
+    },
+    {
+      title: '¿Por qué no coinciden las cuatro?',
+      body: 'Las cuatro temperaturas de brillo del planeta X van de 2067 K a 2171 K.',
+      prompt: '¿Cuál es la lectura más razonable de esa dispersión?',
+      options: [
+        'El lado diurno tiene de verdad cuatro temperaturas distintas, una por banda',
+        'Cada profundidad tiene ruido, así que las cuatro lecturas se dispersan alrededor de un solo valor',
+        'Las bandas tienen anchuras distintas, así que deben dar temperaturas distintas',
+        'El modelo ha fallado y hay que tirar sus números',
+      ],
+      misconceptions: [
+        {
+          say: 'Aquí el planeta es un solo cuerpo negro, por construcción: la dispersión es ruido. Un planeta real podría tener temperaturas distintas en bandas distintas, pero no se notaría por una dispersión de este tamaño.',
+        },
+        {
+          say: 'Un cuerpo negro da la misma temperatura en una banda ancha que en una estrecha; el modelo ya integra sobre cada banda.',
+        },
+      ],
+      hints: [
+        'Cada profundidad se da con un ruido de 40 ppm. ¿Qué tan grande es frente a las profundidades?',
+      ],
+      because:
+        'Una profundidad de unos cientos a unos miles de ppm con 40 ppm de ruido da una temperatura incierta en decenas de kelvin, así que cuatro lecturas de un cuerpo negro se dispersan en esa medida. El paso siguiente ajusta una sola temperatura a las cuatro.',
+    },
+    {
+      title: 'Ajusta a mano las cuatro profundidades',
+      body: 'Mueve <strong>Mi temperatura de cuerpo negro</strong> hasta que la curva pase por los cuatro puntos. El instrumento da un <strong>chi cuadrado</strong>: cuánto se alejan las cuatro profundidades de tu curva, en unidades de su ruido. Es de 4 o menos cuando un modelo ajusta bien cuatro profundidades. Anota tu temperatura y su chi cuadrado.',
+      fields: [
+        { label: 'Mi temperatura de cuerpo negro' },
+        { label: 'Su chi cuadrado' },
+      ],
+    },
+    {
+      title: '¿Y si parte de esa luz es reflejada?',
+      body: 'Un planeta a 8 radios de su estrella también refleja luz estelar, como máximo cerca de 0,3 de la que le llega. Pon <strong>Luz reflejada</strong> en <strong>tenerla en cuenta</strong> y cuenta cuántas de las cuatro bandas convierte aún el modelo en temperatura.',
+      fields: [{ label: 'Bandas convertidas en temperatura' }],
+    },
+    {
+      title: 'El planeta Y: una banda absorbe',
+      body: 'El planeta Y es el planeta X con un solo cambio: una piel más fría que es opaca en la banda C y transparente en las otras tres.',
+      prompt:
+        'Comparada con los 2094 K del planeta X, la temperatura de brillo del planeta Y en la banda C será&hellip;',
+      options: [
+        'más alta, porque la piel aporta calor',
+        'más o menos la misma, porque el planeta es el mismo',
+        'más baja, porque esa banda ve la piel más fría',
+        'ilegible, porque el modelo siempre se niega ante una caída',
+      ],
+      hints: [
+        'Donde la piel es opaca, la banda muestra la temperatura de la piel, que es 2^(&minus;1/4) de la del planeta.',
+      ],
+      because:
+        'La piel es más fría que el planeta, así que la banda que la ve marca menos. El paso siguiente lee cuánto.',
+    },
+    {
+      title: 'El planeta Y: una banda marca menos',
+      body: 'El planeta Y tiene la misma estrella y la misma razón de radios. Pon el planeta en <strong>Planeta Y</strong> y la luz reflejada de nuevo en <strong>suponer que no hay</strong>. Lee la temperatura de brillo de la banda C y di cuántos kelvin menos que los 2094 K del planeta X.',
+      fields: [
+        { label: 'Banda C del planeta Y, más fría que la del planeta X en' },
+      ],
+    },
+    {
+      title: '¿Qué dice la caída?',
+      body: 'Una banda del planeta Y marca 314 K menos que las otras.',
+      prompt: '¿Cuál es la lectura más razonable?',
+      options: [
+        'El lado diurno está más frío en todas partes, así que todas las bandas deberían bajar juntas',
+        'Esa banda ve una capa más fría y más alta, que una sola piel isoterma puede reproducir; los datos no dicen qué absorbente es, ni que la piel sea la única causa',
+        'La banda muestra que el planeta tiene una atmósfera de un gas en particular',
+        'Un cuerpo negro no puede bajar, así que la profundidad de esa banda debe ser un error',
+      ],
+      misconceptions: [
+        {
+          say: 'Las otras tres bandas coinciden con el planeta X. Solo una banda baja, que es lo que haría una capa que absorbe en esa banda.',
+        },
+        {
+          say: 'Una profundidad en una banda es coherente con un absorbente en esa banda bajo los supuestos del modelo. No dice cuál es, y otras causas podrían dar la misma caída.',
+        },
+        {
+          say: 'Un planeta visto a través de una capa más fría sí se ve más frío en la banda donde la capa es opaca. El modelo lo incluye: una banda solo puede ser una caída, nunca un aumento.',
+        },
+      ],
+      hints: ['Compara las tres bandas que no se movieron con la que sí.'],
+      because:
+        'El modelo pone una piel isoterma sobre el planeta. Donde la piel es opaca, la banda muestra la temperatura más baja de la piel. Eso reproduce la caída, y otras cosas también podrían; los datos son una profundidad en una banda y no dicen nada de qué es el absorbente.',
+    },
+    {
+      title: 'Lo que has deducido',
+      body: 'La profundidad de un eclipse es una parte de la luz, unos pocos miles de ppm para un júpiter caliente. En una banda se convierte en una temperatura de brillo, la temperatura de un cuerpo negro que da esa profundidad, solo si dices que la luz reflejada es pequeña: a 8 radios planetarios el instrumento no convierte sin eso. Cuatro profundidades con ruido se dispersan unos 100 K alrededor de un cuerpo negro a 2090 K. Una banda que marca menos es coherente con una capa más fría en esa banda bajo un modelo de una piel; no nombra el absorbente. Las profundidades eran sintéticas, generadas de un planeta a 2100 K con un ruido anotado, y no se comparó ninguna tabla publicada.',
+    },
+  ],
+};
+
+// Fases y albedo: paso a paso con el inglés (Prompt 202).
+export const PHASES_AND_ALBEDO = {
+  title: 'Fases y albedo',
+  subtitle:
+    'La curva de fase de un planeta, una esfera de Lambert y el albedo que da',
+  objectives: [
+    'Decir por qué la luz que refleja un planeta sigue su fase, como la de la Luna',
+    'Leer un albedo geométrico en una curva de fase y convertirlo en el albedo de Bond de una esfera de Lambert',
+    'Hallar el albedo que ajusta a mano y por chi cuadrado',
+    'Ver una curva que una esfera de Lambert no describe y decir por qué el modelo no da albedo para ella',
+  ],
+  steps: [
+    {
+      title: 'Luz que sigue la fase',
+      body: 'Un planeta brilla por luz estelar reflejada, así que lo que vemos cambia con su fase, como la de la Luna en Fases y eclipses. Con <strong>ángulo de fase 0</strong> el planeta está lleno, detrás de su estrella; a 90 grados está iluminado a medias; a 180 grados es nuevo. Para una <strong>esfera de Lambert</strong>, que dispersa la luz por igual en todas las direcciones, la curva tiene una sola forma, y su altura es el <strong>albedo geométrico</strong>.\n\nLas curvas de aquí son <strong>sintéticas</strong>: generadas con un modelo y con ruido, con la verdad anotada en un manifiesto. No se comparó ninguna tabla publicada.',
+    },
+    {
+      title: 'El planeta P: el albedo que ajusta',
+      body: 'El planeta P está a 10 radios planetarios de su estrella. El instrumento ajusta una esfera de Lambert a sus 24 puntos. Lee el <strong>albedo geométrico que ajusta</strong> y el <strong>albedo de Bond</strong> de esa esfera.',
+      fields: [
+        { label: 'Albedo geométrico de la esfera de Lambert que ajusta' },
+        { label: 'Albedo de Bond de esa esfera' },
+      ],
+    },
+    {
+      title: '¿Por qué es mayor el albedo de Bond?',
+      body: 'Para el planeta P el albedo de Bond es 0,52 y el geométrico 0,35.',
+      prompt: '¿Por qué son distintos?',
+      options: [
+        'El albedo geométrico es el brillo a fase llena frente a un disco blanco plano; el de Bond cuenta la luz enviada en todas las direcciones, y una esfera de Lambert envía 3/2 de lo que sugiere su brillo a fase llena',
+        'El albedo de Bond incluye el calor propio del planeta',
+        'Los dos números son la misma cantidad medida dos veces, y la diferencia es ruido',
+        'El albedo de Bond es siempre el doble del geométrico',
+      ],
+      misconceptions: [
+        {
+          say: 'Ningún albedo incluye el calor propio del planeta: los dos son fracciones de la luz estelar reflejada.',
+        },
+        {
+          say: 'Son cantidades distintas: una es el brillo a fase llena, la otra la parte de toda la luz reflejada en todas las direcciones.',
+        },
+        {
+          say: 'El factor es 3/2 para una esfera de Lambert y otro número para otro tipo de esfera: viene de la función de fase.',
+        },
+      ],
+      hints: [
+        'La integral de fase es la integral de la curva de fase sobre todos los ángulos; para una esfera de Lambert es 3/2.',
+      ],
+      because:
+        'El albedo de Bond es el albedo geométrico por la integral de fase, 3/2 para una esfera de Lambert. Descansa en el supuesto de que la superficie dispersa como una de ellas.',
+    },
+    {
+      title: 'Ajusta la curva a mano',
+      body: 'Mueve <strong>Mi albedo geométrico</strong> hasta que la curva pase por los puntos. El instrumento da un chi cuadrado para tu albedo: para 24 puntos es cercano a 23 cuando un modelo ajusta. Anota tu albedo y su chi cuadrado.',
+      fields: [{ label: 'Mi albedo geométrico' }, { label: 'Su chi cuadrado' }],
+    },
+    {
+      title: 'El planeta Q se ve igual',
+      body: 'El planeta Q está a la misma distancia y su curva sube y baja casi igual. Su ruido es el mismo que el del planeta P.',
+      prompt: '¿Describirá una esfera de Lambert la curva del planeta Q?',
+      options: [
+        'Sí: cualquier curva que sube hacia la fase llena es una esfera de Lambert',
+        'Sí, con otro albedo',
+        'No: la forma es algo distinta de la de una esfera de Lambert, y 24 puntos con este ruido bastan para mostrarlo',
+        'No se puede decir: un ajuste nunca dice que un modelo esté mal',
+      ],
+      hints: [
+        'Compara el chi cuadrado del ajuste con el cuantil 0,99 del chi cuadrado para 23 grados de libertad, cerca de 41,7.',
+      ],
+      because:
+        'La forma de la curva del planeta Q es la de otro tipo de esfera, y los 24 puntos son lo bastante precisos para mostrarlo. El paso siguiente lee el chi cuadrado.',
+    },
+    {
+      title: 'El planeta Q: ningún albedo',
+      body: 'Pon el planeta en <strong>Planeta Q</strong>. Lee el chi cuadrado del mejor ajuste de Lambert y los grados de libertad, y mira qué devuelve el instrumento para el albedo.',
+      fields: [
+        { label: 'Chi cuadrado del mejor ajuste de Lambert' },
+        { label: 'Grados de libertad' },
+      ],
+    },
+    {
+      title: 'Lo que has deducido',
+      body: 'La luz reflejada sigue la fase. Una esfera de Lambert da una curva de una sola forma cuya altura es el albedo geométrico, 0,35 para el planeta P, y el albedo de Bond es 3/2 de él, 0,52. El albedo que se obtiene es el de una esfera de Lambert: donde una curva no es lambertiana, como la del planeta Q, el modelo no da albedo y lo dice. Los dos planetas eran sintéticos, con la verdad anotada, y no se comparó ninguna tabla publicada.',
+    },
+  ],
+};
+
 export default {
   'why-venus-is-hot': WHY_VENUS_IS_HOT,
   'two-greenhouse-models': TWO_GREENHOUSE_MODELS,
   'the-turning-sun': THE_TURNING_SUN,
   'the-suns-power': THE_SUNS_POWER,
+  'how-hot-is-the-day-side': HOW_HOT_IS_THE_DAY_SIDE,
+  'phases-and-albedo': PHASES_AND_ALBEDO,
 };

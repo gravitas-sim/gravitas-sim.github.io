@@ -1,9 +1,9 @@
 {
  "generatedAt": "2026-10-28",
  "version": "2.1.0",
- "passed": 343,
+ "passed": 348,
  "failed": 0,
- "elapsedMs": 101756,
+ "elapsedMs": 98964,
  "checks": [
   {
    "group": "Unit system",
@@ -4428,6 +4428,71 @@
    "why": "An isothermal, hydrostatic atmosphere; real atmospheres change temperature with height, so the agreement is to a few percent.",
    "toleranceKind": "relative",
    "error": 0.008733921583470514,
+   "pass": true
+  },
+  {
+   "group": "Atmospheres",
+   "kind": "analytic",
+   "name": "An eclipse of a planet as hot as its star hides the radius ratio squared of the light",
+   "measured": 0.010000000000000002,
+   "expected": 0.01,
+   "unit": "",
+   "tolerance": 1e-12,
+   "why": "Equal temperatures give equal band radiances, so the depth is (R_p/R_s)^2 whatever the band.",
+   "toleranceKind": "relative",
+   "error": 1.734723475976807e-16,
+   "pass": true
+  },
+  {
+   "group": "Atmospheres",
+   "kind": "analytic",
+   "name": "A deep absorbing band in an eclipse shows the isothermal skin at 2^(-1/4) of the planet’s temperature",
+   "measured": 0.00039150395347119097,
+   "expected": 0.00039150395347119097,
+   "unit": "",
+   "tolerance": 1e-9,
+   "why": "Where the skin is opaque the planet’s band flux is the skin’s blackbody: a band can only be a dip in this model.",
+   "toleranceKind": "relative",
+   "error": 0,
+   "pass": true
+  },
+  {
+   "group": "Atmospheres",
+   "kind": "analytic",
+   "name": "The Lambert phase integral is 3/2",
+   "measured": 1.4999999999999971,
+   "expected": 1.5,
+   "unit": "",
+   "tolerance": 1e-9,
+   "why": "The integral of the Lambert phase function over all phase angles, which makes the Bond albedo 3/2 of the geometric albedo for a Lambert sphere.",
+   "toleranceKind": "relative",
+   "error": 1.924386576016938e-15,
+   "pass": true
+  },
+  {
+   "group": "Atmospheres",
+   "kind": "analytic",
+   "name": "The brightness temperature of an eclipse depth returns the temperature that made it",
+   "measured": 1500.0000000002447,
+   "expected": 1500,
+   "unit": "K",
+   "tolerance": 1e-9,
+   "why": "The inverse of a monotone function; the independent check of the forward model against numerical integration is the oracle’s (E1 to E3).",
+   "toleranceKind": "relative",
+   "error": 1.6310271651794514e-13,
+   "pass": true
+  },
+  {
+   "group": "Atmospheres",
+   "kind": "analytic",
+   "name": "The brightness temperature refuses where reflected light could be a tenth of the depth",
+   "measured": 1,
+   "expected": 1,
+   "unit": "",
+   "tolerance": 0,
+   "why": "A depth is not a temperature unless reflected light is known to be small; the model returns no number and says why.",
+   "toleranceKind": "relative",
+   "error": 0,
    "pass": true
   },
   {

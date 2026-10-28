@@ -324,4 +324,12 @@ export const BROWSE_META = {
     tags: ['observing', 'solar-system'],
     numericCount: 0,
   },
+  'how-hot-is-the-day-side': {
+    tags: ['exoplanets', 'solar-system'],
+    numericCount: 0,
+  },
+  'phases-and-albedo': {
+    tags: ['exoplanets', 'solar-system'],
+    numericCount: 0,
+  },
 };

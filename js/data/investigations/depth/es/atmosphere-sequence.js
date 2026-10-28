@@ -225,9 +225,44 @@ export const THE_SUNS_POWER_DEEPER = {
   ],
 };
 
+// ¿Qué tan caliente está el lado diurno? y Fases y albedo, pasos más profundos: paso a paso con el inglés (Prompt 202).
+export const HOW_HOT_IS_THE_DAY_SIDE_DEEPER = {
+  steps: [
+    {
+      title: '¿Puede un cuerpo negro ajustar al planeta Y?',
+      body: 'Quédate con el <strong>Planeta Y</strong> y mueve <strong>Mi temperatura de cuerpo negro</strong> para hallar el chi cuadrado más bajo que da una sola temperatura a las cuatro profundidades. Anota ese chi cuadrado. El mejor del planeta X fue 6,5.',
+      fields: [{ label: 'El chi cuadrado más bajo del planeta Y' }],
+    },
+    {
+      title: 'Compara las lecturas con el manifiesto',
+      body: 'El manifiesto de verdad del planeta X dice que su cuerpo negro está a <strong>2100 K</strong>. Con la luz reflejada en <strong>suponer que no hay</strong>, cuenta cuántos de los cuatro intervalos del 95 por ciento contienen 2100 K.',
+      fields: [{ label: 'Intervalos que contienen 2100 K' }],
+    },
+  ],
+};
+
+export const PHASES_AND_ALBEDO_DEEPER = {
+  steps: [
+    {
+      title: '¿Qué tan bien fija la curva el albedo?',
+      body: 'El ajuste del planeta P viene con un intervalo del 95 por ciento. Lee sus extremos <strong>inferior</strong> y <strong>superior</strong>.',
+      fields: [
+        { label: 'Extremo inferior del intervalo' },
+        { label: 'Extremo superior del intervalo' },
+      ],
+    },
+    {
+      title: 'Otra esfera, otro factor',
+      body: 'La curva del planeta Q se hizo con una esfera de <strong>Lommel-Seeliger</strong>, una superficie distinta que se oscurece hacia el borde del disco de otra manera. Su integral de fase, la integral de su curva sobre todos los ángulos, es 1,64 y no el 3/2 de una esfera de Lambert. Para el mismo brillo a fase llena su albedo de Bond sería cerca de un 9 por ciento mayor, 1,64 frente a 1,5 veces el albedo geométrico. Así que el factor entre los dos albedos es una propiedad de la superficie, y el instrumento no da albedo para el planeta Q en lugar del albedo de la esfera equivocada.',
+    },
+  ],
+};
+
 export default {
   'why-venus-is-hot': WHY_VENUS_IS_HOT_DEEPER,
   'two-greenhouse-models': TWO_GREENHOUSE_MODELS_DEEPER,
   'the-turning-sun': THE_TURNING_SUN_DEEPER,
   'the-suns-power': THE_SUNS_POWER_DEEPER,
+  'how-hot-is-the-day-side': HOW_HOT_IS_THE_DAY_SIDE_DEEPER,
+  'phases-and-albedo': PHASES_AND_ALBEDO_DEEPER,
 };
