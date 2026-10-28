@@ -1,0 +1,504 @@
+{
+  "format": "gravitas.atmospheres-gate-ii-thresholds/1",
+  "prompt": 201,
+  "document": "ATMOSPHERES_GATE_II.md",
+  "committed": "before any spike code, any measurement and any oracle output existed",
+  "seeds": {
+    "oracle": 201,
+    "harness": 2010001
+  },
+  "groups": {
+    "shared": "units, refusals, the claim rule, plots and the bytes of the eclipse and phase slice: needed whatever the verdict",
+    "ep": "the eclipse and phase-curve physics (Planck bands, eclipse depth, the skin slab, the Lambert sphere, their ensembles and negative cases)",
+    "tx": "band-integrated transmission: its analytic cases, numerics, regime tolerance, coverage, refusals, the published-code reference, the pinned table and the whole family's bytes",
+    "data": "qualitative comparisons with published tables: recorded, never refit, not inputs of the decision function"
+  },
+  "amendments": [
+    {
+      "id": "AM1",
+      "check": "E1.planck",
+      "field": "the Rayleigh-Jeans sub-bound",
+      "before": "holds to 1e-3 at lambda T = 1e5 micron K",
+      "after": "holds to a relative 1e-3 at lambda T = 1e7 micron K",
+      "why": "an arithmetic error in the first commit (4d30d73e), found by re-deriving the bound before the harness or any E1 output existed: x = h c / (lambda k T) = 14388 / (lambda T in micron K) is 0.144 at 1e5, where the Rayleigh-Jeans form is wrong by x/2 = 7.2 percent by the physics of the Planck function, so no kernel could meet 1e-3 there; at 1e7 the correction is x/2 = 7.2e-4, inside the bound. No output of E1 had been inspected (the oracle's self-tests were the only output seen). The limit and the rest of E1 are unchanged."
+    },
+    {
+      "id": "AM2",
+      "check": "C1.claims",
+      "field": "the Spanish forbidden patterns and the regular-expression flags",
+      "before": "patterns written with the ASCII word boundary after letters such as o-acute and a-acute, flags i",
+      "after": "the same alternations with Unicode-aware boundaries (negative lookbehind and lookahead on the Unicode letter class) and flags iu; the bound (12 of 12 bad controls caught, 6 of 6 permitted passed, no violation) is unchanged",
+      "why": "found by the committed positive controls on the first harness run: the ASCII word boundary of JavaScript regular expressions does not see an accented letter as a letter, so the Spanish bad control about detecting water (with its accents) was not caught (11 of 12 bad controls caught as first measured; no atmosphere string was flagged either way). The patterns, not the bound, are repaired; Carl rules whether the amendment stands (needed ruling).",
+      "ruling": {
+        "source": "Carl, in chat on 2026-10-27, relayed by the coordinator (not heard by this session directly)",
+        "words": "Let AM2 stand (Recommended)",
+        "effect": "AM2 stands"
+      }
+    },
+    {
+      "id": "AM3",
+      "check": "T1.ep.deferred",
+      "field": "the kernel-alone bound",
+      "before": "at most 2,048 B",
+      "after": "at most 2,282 B, Carl's ruling",
+      "source": "Carl, in chat on 2026-10-27, relayed by the coordinator (not heard by this session directly)",
+      "words": "Reset to 2,282 (verdict B)",
+      "madeAfterMeasurement": true,
+      "why": "after the measurement (kernel 2,282 B gzipped, the one shared or ep failure, which gave C). Carl's ruling, not a pre-committed bound. No other bound moved: X3, X4 and T1.whole.deferred stay failing as committed."
+    }
+  ],
+  "decision": {
+    "order": [
+      "a shared or ep check that is not a pass (or a pass under a ruling): C",
+      "else a tx check that is not a pass: B",
+      "else A"
+    ],
+    "rule": "a check that was not measured is never a pass; a pass under a ruling counts as a pass and its row carries the ruling; the data group is recorded and does not enter the function",
+    "dataGroupConsequence": "a data leg that is not measured means Prompt 202's comparison steps are built over synthetic data with a truth manifest and say that no published table was compared; the validation contract's authentic-data requirement (7.5.8e) is unmet for that leg and the register row says so"
+  },
+  "regime": {
+    "hOverRpMax": 0.01,
+    "zEffOverRpMax": 0.1,
+    "temperatureK": [300, 3500],
+    "meanMolecularWeight": [2, 45],
+    "gravity": [2, 40],
+    "statedModelError": "1.5 * zEff / Rp of the atmospheric excess delta - (Rp/Rs)^2",
+    "kDistribution": {
+      "points": 16,
+      "rule": "8 Gauss-Legendre points on the lower 90 percent of the sorted band cross-sections, 8 on the upper 10 percent"
+    },
+    "reflectedFractionMax": 0.1,
+    "reflectedAlbedoReference": 0.3,
+    "notConstrainedSigma": 3
+  },
+  "syntheticAbsorber": {
+    "label": "synthetic absorber S, names no molecule; tests the integration and the geometry, not any molecule's opacity",
+    "lines": 400,
+    "peakCrossSectionM2": [1e-28, 1e-24],
+    "halfWidthMicron": 0.0002,
+    "bands": {
+      "strong": {
+        "microns": [1.3, 1.4],
+        "lines": "the strong share of the 400"
+      },
+      "weak": {
+        "microns": [1.4, 1.5],
+        "lines": 40
+      },
+      "window": {
+        "microns": [1.55, 1.65],
+        "lines": 0
+      }
+    },
+    "manifest": "line centres, peaks and widths are written into oracle-results.json"
+  },
+  "checks": [
+    {
+      "id": "U1.constants",
+      "group": "shared",
+      "bound": "the new modules import every physical constant from the existing kernel constants (no numeric copy of k, h, c, sigma, the atomic mass unit, the AU or a solar or Jovian radius in them) and the constants they use equal astropy's CODATA 2018 and IAU 2015 values to a relative 1e-9",
+      "limits": {
+        "relMax": 1e-9
+      }
+    },
+    {
+      "id": "R1.refusals",
+      "group": "shared",
+      "bound": "every one of 40 seeded hostile inputs (non-finite or non-positive temperature, mean molecular weight, gravity, radii, pressure, abundance, cross-section, band edges out of order, weights not summing to one, phase angle outside [0, pi], albedo outside [0, 1], optical depth below 0, outside the domain) refuses with a named reason and no number; and every result names its model and an assumes list that contains the words isothermal, one absorber, no scattering, no clouds and band-integrated (transmission), uniform blackbody and one skin (emission), Lambert (phase curve)",
+      "limits": {
+        "hostileInputs": 40
+      }
+    },
+    {
+      "id": "C1.claims",
+      "group": "shared",
+      "bound": "the scanner of the claim rule (forbidden English and Spanish patterns in the fixture) catches each of the 12 committed bad strings, passes each of the 6 committed permitted strings, and finds no violation in any string of js/i18n/en.atmospheres.js, js/i18n/es.atmospheres.js, the atmosphere sequences and their depths in both languages, and the prototype's own words",
+      "limits": {
+        "badControls": 12,
+        "permittedControls": 6,
+        "violationsMax": 0
+      }
+    },
+    {
+      "id": "P1.plot",
+      "group": "shared",
+      "bound": "the plots the slice draws (band depths with the stated model error; the eclipse bands; the phase curve) are drawn by js/plot/chart.js with no drawing code of the family's own: the drawn path vertices are where the data is to 0.1 px, the legend toggles from the keyboard, the keyboard readout is spoken in words, the axis titles carry units, and no module under js/ outside js/plot draws an axis (jsdom)",
+      "limits": {
+        "vertexPxMax": 0.1,
+        "plots": 3
+      }
+    },
+    {
+      "id": "T1.ep.deferred",
+      "group": "shared",
+      "bound": "the eclipse and phase slice (its kernel files, two instruments, the English words and a rot13 size stand-in for the Spanish words, which is not a translation): at most 7,168 B of added deferred JavaScript, minified and gzipped the way build.js counts, as the difference of the app build's deferred figure on a Node 22 copy, with the slice's kernel alone at most 2,048 B",
+      "limits": {
+        "deferredGzipMax": 7168,
+        "kernelGzipMax": 2282
+      },
+      "ruling": {
+        "id": "R1",
+        "source": "Carl, in chat on 2026-10-27, relayed by the coordinator (not heard by this session directly)",
+        "words": "Reset to 2,282 (verdict B)",
+        "originalLimits": {
+          "kernelGzipMax": 2048
+        },
+        "measured": {
+          "kernelAloneGzipB": 2282
+        },
+        "madeAfterMeasurement": true,
+        "note": "Carl's ruling, made AFTER the measurement; it is not a pre-committed bound. Only the kernel-alone line moved (2,048 to 2,282 B); the slice bound 7,168 B is untouched; the original failure stays in record.json and failed-legs.json as measured."
+      }
+    },
+    {
+      "id": "T1.requests",
+      "group": "shared",
+      "bound": "at most 2 added lazy chunks for the family with transmission",
+      "limits": {
+        "chunksMax": 2
+      }
+    },
+    {
+      "id": "T1.tier",
+      "group": "shared",
+      "bound": "first-visit precache at most +64 B (the new instruments' ids in the existing atmosphere family's list in js/widgets.js) and idle precache at most +0 B; new files are NEVER_PRECACHED",
+      "limits": {
+        "firstVisitAddedMax": 64,
+        "idleAddedMax": 0
+      }
+    },
+    {
+      "id": "T1.routes",
+      "group": "shared",
+      "bound": "no existing route gains a request and none rises by more than 0.2 KB in its sources or its build figure (tools/route-budget.mjs, Node 22 copy)",
+      "limits": {
+        "requestsAddedMax": 0,
+        "routeRiseKbMax": 0.2
+      }
+    },
+    {
+      "id": "E1.planck",
+      "group": "ep",
+      "bound": "band-integrated Planck radiance against scipy.integrate.quad of the Planck function on 400 seeded points (T 200 to 10000 K, band edges 0.3 to 30 micron, widths at least 0.01 micron): relative error at most 1e-9; the integral over 0.001 to 100000 micron equals sigma T^4/pi to 1e-9 at five temperatures; the Rayleigh-Jeans limit holds to a relative 1e-3 at lambda T = 1e7 micron K (amended, see amendments); the band radiance is monotone in T",
+      "limits": {
+        "relErrMax": 1e-9,
+        "points": 400,
+        "fullBandRelMax": 1e-9,
+        "rayleighJeansRelMax": 0.001
+      }
+    },
+    {
+      "id": "E2.eclipse",
+      "group": "ep",
+      "bound": "eclipse depth (Rp/Rs)^2 B(Tp)/B(T*) + Ag (Rp/a)^2 against an independent evaluation to a relative 1e-12 on 1,000 seeded points; the limits Tp = T* (depth (Rp/Rs)^2) and Ag = 0 (thermal only); monotone in Tp; the reflected term additive",
+      "limits": {
+        "relErrMax": 1e-12,
+        "points": 1000
+      }
+    },
+    {
+      "id": "E3.slab",
+      "group": "ep",
+      "bound": "the skin-slab band flux B(Tp) 2 E3(tau) + B(Tskin)(1 - 2 E3(tau)) against a numerical mu integral of the emergent intensity (scipy quad) at 300 seeded optical depths 1e-4 to 1e2: relative error at most 1e-9; tau = 0 gives B(Tp) exactly; the flux tends to B(Tskin) as tau grows; monotone in tau; Tskin = Tp/2^(1/4)",
+      "limits": {
+        "relErrMax": 1e-9,
+        "points": 300
+      }
+    },
+    {
+      "id": "E4.lambert",
+      "group": "ep",
+      "bound": "the Lambert phase function against the oracle's surface integral over the visible lit hemisphere (scipy dblquad) at 181 phase angles: absolute error at most 1e-8; Phi(0) = 1, Phi(pi/2) = 1/pi, Phi(pi) = 0 to 1e-12; the phase integral 2 integral Phi sin(alpha) d(alpha) = 3/2 to 1e-9; Ag = (2/3) AB and AB = (3/2) Ag round-trip to 1e-12; Phi monotone decreasing on [0, pi]",
+      "limits": {
+        "absErrMax": 1e-8,
+        "angles": 181,
+        "phaseIntegralAbsMax": 1e-9
+      }
+    },
+    {
+      "id": "E5.albedo",
+      "group": "ep",
+      "bound": "ensemble coverage: 2,000 seeded draws of a Lambert planet (Ag uniform 0.05 to 0.6, a/Rp 5 to 20), 24 phase-curve points uniform in alpha from 0.1 to 3.04 rad with Gaussian noise of 3 percent of the full-phase signal of Ag = 0.3 at that a/Rp, truth from the oracle's surface integral; the 95 percent interval of the least-squares albedo covers the truth in a fraction within [0.93, 0.97]",
+      "limits": {
+        "coverageRange": [0.93, 0.97],
+        "draws": 2000,
+        "points": 24,
+        "noiseFraction": 0.03
+      }
+    },
+    {
+      "id": "E6.btemp",
+      "group": "ep",
+      "bound": "ensemble coverage: 2,000 seeded draws (Tp 800 to 2800 K, T* 4500 to 6500 K, Rp/Rs 0.05 to 0.15, band 3.6 to 4.5 micron, thermal depth with 5 percent Gaussian noise, truth from the oracle's quad); the 95 percent interval of the brightness temperature (propagated through the inverse band ratio) covers the truth in a fraction within [0.93, 0.97]; the round trip of the inverse is exact to 1e-9 without noise",
+      "limits": {
+        "coverageRange": [0.93, 0.97],
+        "draws": 2000,
+        "noiseFraction": 0.05,
+        "roundTripRelMax": 1e-9
+      }
+    },
+    {
+      "id": "N1.misfit",
+      "group": "ep",
+      "bound": "misspecified phase curves: for a Lommel-Seeliger sphere and for Henyey-Greenstein single-scattering spheres with g = +0.3 and g = -0.3 (oracle truth, noise 2 percent of the full-phase signal, 24 points, 500 draws each) the Lambert fit is flagged as not describing the data (reduced chi-square above the 0.99 quantile, Wilson-Hilferty, and no albedo returned) in at least 80 percent of draws for each; for a true Lambert sphere the false flag rate is at most 2 percent of 500 draws",
+      "limits": {
+        "powerMin": 0.8,
+        "falseFlagMax": 0.02,
+        "draws": 500,
+        "noiseFraction": 0.02,
+        "quantile": 0.99,
+        "truths": ["lommel-seeliger", "hg+0.3", "hg-0.3"]
+      }
+    },
+    {
+      "id": "N2.reflected",
+      "group": "ep",
+      "bound": "a band depth is refused as a brightness temperature when the reflected light of Ag = 0.3 is at least a tenth of the depth, and when the depth is at or below zero, and is converted otherwise: 30 seeded cases each side of the rule, all decided as the rule says",
+      "limits": {
+        "reflectedFractionMax": 0.1,
+        "casesEachSide": 30
+      }
+    },
+    {
+      "id": "X1.analytic",
+      "group": "tx",
+      "bound": "the kernel's limb integral of 1 - exp(-tau_0 exp(-x/H)) against the closed form H [E1(tau_0) + ln(tau_0) + gamma] at 20 values of tau_0 from 1e-2 to 1e8: relative error at most 1e-8; and the depth is monotone in the cross-section and increases by H per factor e of the cross-section in the strongly absorbing limit",
+      "limits": {
+        "relErrMax": 1e-8,
+        "values": 20
+      }
+    },
+    {
+      "id": "X2.numerics",
+      "group": "tx",
+      "bound": "with constant gravity in the oracle (the kernel's own assumption, so only numerics differ): at one wavelength (200 seeded regime draws) the atmospheric excess delta - (Rp/Rs)^2 agrees to a relative 1e-4; for the three bands of the synthetic absorber (the 16-point k-distribution against the oracle's line-by-line over a 1e4-point grid per band) to a relative 1e-2",
+      "limits": {
+        "singleRelMax": 0.0001,
+        "bandRelMax": 0.01,
+        "singleDraws": 200
+      }
+    },
+    {
+      "id": "X3.regime",
+      "group": "tx",
+      "bound": "the regime tolerance: with g(r) = GM/r^2 and exact spherical chords in the oracle, on every one of 2,000 seeded in-regime draws and the three bands, |delta_kernel - delta_oracle| / (delta_oracle - (Rp/Rs)^2) is at most max(0.001, 1.5 zEff/Rp)",
+      "limits": {
+        "draws": 2000,
+        "absoluteFloor": 0.001,
+        "factor": 1.5
+      }
+    },
+    {
+      "id": "X4.coverage",
+      "group": "tx",
+      "bound": "ensemble coverage: 2,000 seeded in-regime draws, the temperature (scale height) inferred from the depth difference of the strong and the weak band with 30 ppm of Gaussian noise on each depth, truth from the oracle with g(r); the 95 percent interval (propagated noise plus the stated model error as a variance b^2/3) covers the truth in a fraction within [0.93, 0.99]",
+      "limits": {
+        "coverageRange": [0.93, 0.99],
+        "draws": 2000,
+        "noisePpm": 30
+      }
+    },
+    {
+      "id": "X5.refusals",
+      "group": "tx",
+      "bound": "twelve seeded inputs outside the domain (H/Rp above 0.01, zEff/Rp above 0.1, temperature or mean molecular weight outside) all refuse with the reason and no depth, twelve inside do not; with a true depth difference of zero the scale height is returned in at most 0.5 percent of 2,000 draws; with a difference of six noise standard deviations in at least 99 percent of 2,000 draws; the rule is that a difference under three standard deviations is not constrained",
+      "limits": {
+        "outsideCases": 12,
+        "insideCases": 12,
+        "nullReturnMax": 0.005,
+        "powerMin": 0.99,
+        "draws": 2000,
+        "sigmaRule": 3
+      }
+    },
+    {
+      "id": "X6.cloud",
+      "group": "tx",
+      "bound": "an opaque grey cloud deck above the weak band's effective height (oracle truth, 500 seeded draws) makes the two band depths equal: the method returns not constrained, and no number labelled a scale height, in at least 95 percent of draws",
+      "limits": {
+        "notConstrainedMin": 0.95,
+        "draws": 500
+      }
+    },
+    {
+      "id": "XR.reference",
+      "group": "tx",
+      "bound": "a cited radiative-transfer code's band-integrated depths for the same atmosphere, the same pinned table and the same bands, pinned as a fixture with the code's name, version and settings and never recomputed by Gravitas, agree with the kernel to the tolerance of X3 (data request Q2; the check is not measured until the fixture exists and its terms are read)",
+      "limits": {
+        "tolerance": "as X3",
+        "dataRequest": "Q2"
+      }
+    },
+    {
+      "id": "XT.table",
+      "group": "tx",
+      "bound": "the absorber's pinned, cited cross-section table (one temperature and pressure, per-band k-distribution derived by a recorded script) is in the repository with its source, version, terms as read with a retrieval date, the rights basis accepted, the transformation and attribution, the fallback and the affected lessons (data request Q1; Roadmap III 7.5.4)",
+      "limits": {
+        "dataRequest": "Q1"
+      }
+    },
+    {
+      "id": "T1.whole.deferred",
+      "group": "tx",
+      "bound": "the whole family with transmission (kernel, three instruments, the English words and a rot13 size stand-in for the Spanish): at most 12,288 B of added deferred JavaScript on a Node 22 copy, its kernel alone at most 4,096 B",
+      "limits": {
+        "deferredGzipMax": 12288,
+        "kernelGzipMax": 4096
+      }
+    },
+    {
+      "id": "D1.transmission",
+      "group": "data",
+      "bound": "a published transmission spectrum's table, under a recorded rights decision, compared qualitatively with the model's band depths and never refit (data request Q3)",
+      "limits": {
+        "dataRequest": "Q3"
+      }
+    },
+    {
+      "id": "D2.eclipse",
+      "group": "data",
+      "bound": "a published eclipse-depth table for a hot Jupiter, under a recorded rights decision, compared with the emission model's brightness temperatures and never refit (data request Q4)",
+      "limits": {
+        "dataRequest": "Q4"
+      }
+    },
+    {
+      "id": "D3.phase",
+      "group": "data",
+      "bound": "a published Solar System phase-function table, under a recorded rights decision, compared with the Lambert phase function and never refit (data request Q5)",
+      "limits": {
+        "dataRequest": "Q5"
+      }
+    },
+    {
+      "id": "Z1.reported",
+      "group": "tx",
+      "bound": "reported, not asserted: the scale-height bias when X P0 is wrong by a factor 3, when the truth has a linear temperature gradient of plus and minus 10 percent over five scale heights, and when a deck cuts only the strong band; each figure is measured and recorded and no bound is attached",
+      "limits": {
+        "cases": ["xp0x3", "gradient+10", "gradient-10", "deckStrongOnly"]
+      }
+    }
+  ],
+  "slices": {
+    "A": "Prompt 202 whole",
+    "B": "Prompt 202 without the transmission piece: the eclipse model with its brightness temperature and the Lambert phase curve with the Bond-albedo relation, over synthetic data with a truth manifest unless a table's rights decision exists; Prompt 205's spectra items need the transmission piece and are not authorized by B",
+    "C": "stop and record: Prompt 202 not run; 205's spectra items removed and the Goldilocks lesson keeps its present step; 231's One planet, every method omits the eclipse depth"
+  },
+  "claimRule": {
+    "forbidden": {
+      "en": [
+        "\\bdetect(s|ed|ion|ing)?\\b[^.]{0,30}\\b(water|H2O|methane|CO2|carbon dioxide|sodium|an atmosphere)\\b",
+        "\\b(water|H2O|methane|CO2|carbon dioxide|sodium)\\b[^.]{0,30}\\b(is|was|has been|were|are) (detected|found|present|confirmed|identified)\\b",
+        "\\b(keeps?|kept|retains?|retained|holds? on to|will (keep|retain|lose)|has (kept|retained|lost)|loses|lost) (its|the|an|their) (own )?atmosphere\\b",
+        "\\bconfirm(s|ed)? (the presence|an atmosphere|water)"
+      ],
+      "es": [
+        "(?<![\\p{L}])(detecta|detectó|detectado|detectada|detección)(?![\\p{L}])[^.]{0,30}(?<![\\p{L}])(agua|metano|CO2|dióxido de carbono|sodio|una atmósfera)(?![\\p{L}])",
+        "(?<![\\p{L}])(agua|metano|CO2|sodio)(?![\\p{L}])[^.]{0,30}(?<![\\p{L}])(está|fue|ha sido|son|fueron) (detectad[oa]s?|encontrad[oa]s?|presente|confirmad[oa]s?)(?![\\p{L}])",
+        "(?<![\\p{L}])(conserva|conservó|retiene|retuvo|mantiene|mantuvo|perderá|conservará|retendrá|pierde|perdió) (su|la|una) atmósfera(?![\\p{L}])"
+      ]
+    },
+    "badControls": [
+      "Water was detected in this planet's atmosphere.",
+      "The spectrum detects water.",
+      "Detection of water vapour in the transit depth.",
+      "Methane is present and confirmed.",
+      "This planet keeps its atmosphere.",
+      "The planet retains its atmosphere for billions of years.",
+      "It will lose its atmosphere within a million years.",
+      "The band confirms the presence of an absorber.",
+      "Se detectó agua en la atmósfera de este planeta.",
+      "El agua está presente y confirmada.",
+      "Este planeta conserva su atmósfera.",
+      "El planeta perderá su atmósfera pronto."
+    ],
+    "permittedControls": [
+      "This band's depth is consistent with this absorber at this scale height under these assumptions.",
+      "A flat spectrum is what a cloud deck would give; the data do not constrain the scale height.",
+      "The escape parameter is a bound, not a prediction.",
+      "La profundidad de esta banda es coherente con este absorbente a esta altura de escala bajo estos supuestos.",
+      "Un espectro plano es lo que daría una capa de nubes; los datos no acotan la altura de escala.",
+      "La temperatura de equilibrio no es la temperatura de la superficie."
+    ],
+    "requiredForm": "a statement about an absorber in the prototype's words names its band, its scale height and its assumptions (the readout carries an assumes list)",
+    "flags": "iu"
+  },
+  "intake": {
+    "rule": "No table is accepted until its terms are read in the retrieval session and recorded with the date, the exact product and version, the rights basis, the transformation, the attribution, the fallback and the affected lessons (Roadmap III 7.5.4). A hash and a byte count are recorded for every file. Numbers are never typed from memory into a fixture that stands for a table. The gate does not download anything; Carl fetches, or allows a named fetch.",
+    "downloadsMade": 0
+  },
+  "dataRequests": [
+    {
+      "id": "Q1",
+      "for": ["XT.table"],
+      "what": "one absorber's cross-section table at a single temperature and pressure over 1.3 to 1.65 micron (water is the natural choice for the lesson's example)",
+      "candidates": [
+        "ExoMol cross-section files for H2O (POKAZATEL line list, Polyansky et al. 2018) via https://www.exomol.com/ (the cross-section tool or the pre-computed files)",
+        "HITRAN/HITEMP H2O via https://hitran.org/ (terms require registration and are NOT a plain public-domain basis)"
+      ],
+      "sizeEstimate": "a few MB to tens of MB as downloaded; the committed derived table (16 cross-sections and weights per band) is a few hundred bytes",
+      "licence": "not read: ExoMol states free use with citation of the line-list papers, the exact terms to be read on retrieval; HITRAN's terms to be read; neither is a decision",
+      "status": "not requested of Carl yet; not downloaded"
+    },
+    {
+      "id": "Q2",
+      "for": ["XR.reference"],
+      "what": "a cited radiative-transfer code's band-integrated transit depths for the gate's inputs, run once offline: the outputs (a few KB) are pinned with the code name, version and settings",
+      "candidates": [
+        "petitRADTRANS (Molliere et al. 2019), https://petitradtrans.readthedocs.io/ (open-source; the opacity data are separate downloads, tens to hundreds of MB)",
+        "TauREx 3 (Al-Refaie et al. 2021) or another published code; the choice and its licence are Carl's"
+      ],
+      "sizeEstimate": "the install plus opacities are large (up to hundreds of MB); only the outputs enter the repository",
+      "licence": "not read",
+      "status": "not requested of Carl yet; not downloaded; needs Q1's table for the same inputs"
+    },
+    {
+      "id": "Q3",
+      "for": ["D1.transmission"],
+      "what": "one published transmission spectrum's table (band depths and uncertainties) of a hot Jupiter, for qualitative comparison",
+      "candidates": [
+        "a VizieR table of a published HST/WFC3 spectrum (CDS terms: free with citation, to be read; VizieR dates its responses), or the NASA Exoplanet Archive atmospheric-spectra tables (to be confirmed)"
+      ],
+      "sizeEstimate": "under 20 KB",
+      "licence": "not read",
+      "status": "not requested of Carl yet; not downloaded"
+    },
+    {
+      "id": "Q4",
+      "for": ["D2.eclipse"],
+      "what": "one published eclipse-depth table (several bands, with uncertainties) for a hot Jupiter",
+      "candidates": [
+        "a VizieR or NASA Exoplanet Archive table of Spitzer or JWST secondary-eclipse depths (terms to be read)"
+      ],
+      "sizeEstimate": "under 20 KB",
+      "licence": "not read",
+      "status": "not requested of Carl yet; not downloaded"
+    },
+    {
+      "id": "Q5",
+      "for": ["D3.phase"],
+      "what": "published phase-angle functions of Venus, Mars and Jupiter (the polynomial coefficients of Mallama and Hilton 2018 (Astronomy and Computing; the citation to be checked), or a Horizons magnitude-versus-phase table)",
+      "candidates": [
+        "the paper's tables (the arXiv listing and the terms to be confirmed on retrieval; facts with credit, to be decided), or JPL Horizons API output (terms to be read)"
+      ],
+      "sizeEstimate": "under 20 KB",
+      "licence": "not read",
+      "status": "not requested of Carl yet; not downloaded"
+    }
+  ],
+  "rulings": [
+    {
+      "id": "R1",
+      "source": "Carl, in chat on 2026-10-27, relayed by the coordinator (not heard by this session directly)",
+      "words": "Reset to 2,282 (verdict B)",
+      "originalLimits": {
+        "kernelGzipMax": 2048
+      },
+      "measured": {
+        "kernelAloneGzipB": 2282
+      },
+      "madeAfterMeasurement": true,
+      "note": "Carl's ruling, made AFTER the measurement; it is not a pre-committed bound. Only the kernel-alone line moved (2,048 to 2,282 B); the slice bound 7,168 B is untouched; the original failure stays in record.json and failed-legs.json as measured."
+    }
+  ]
+}
