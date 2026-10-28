@@ -542,7 +542,7 @@ describe('the instruments', () => {
     expect(out.find(r => /What the cut is/.test(r.label)).value).toMatch(
       /not the objects there are/
     );
-    expect(out.find(r => /^Depletion/.test(r.label)).value).toMatch(
+    expect(out.find(r => /^Depletion against the baseline$/.test(r.label)).value).toMatch(
       /^88\.0 percent, 95 percent interval 82\.9 to 92\.4/
     );
     expect(out.find(r => /Verdict/.test(r.label)).value).toMatch(/^resolved/);

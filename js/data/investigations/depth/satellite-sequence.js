@@ -1292,7 +1292,7 @@ const SMALL_BODY_CONTENT = {
       },
     ],
     teachingNotes: [
-      'Every light curve is simulated: a triaxial ellipsoid rotating about its short axis at one aspect, geometric scattering at zero phase angle, seeded Gaussian noise. The truth manifest (period, axes, aspect, amplitude) is withheld until “Show the truth” is switched on. Tier e2 of the validation, a measured curve, was not run, and the lesson never presents the data as authentic.',
+      'Every light curve is simulated: a triaxial ellipsoid rotating about its short axis at one aspect, geometric scattering at zero phase angle, seeded Gaussian noise. The truth manifest (period, axes, aspect, amplitude) is withheld until “Show the truth” is switched on. Tier e2 of the validation, a measured curve, was not run, and the investigation never presents the data as authentic.',
       'On the validation ensemble of 300 synthetic curves the period within 0.003 h and the claim a/b at least the bound held for between 92 and 99 percent of curves; several legs (amplitude interval coverage near 0.62 to 0.70 against 0.95 stated, the claim at one noise level) failed as committed and are recorded in tests/fixtures/small-bodies/failed-legs.json. Read the amplitude interval as a floor.',
       'The false-alarm probability is the Horne and Baliunas form; the phase-gap limit (0.35 of the turn) and the alias ratio (0.9) are fixed in the kernel before any curve was seen.',
       'Phase angle, albedo markings, non-ellipsoidal shapes and tumbling are left out, and the instrument says so.',
@@ -1342,8 +1342,13 @@ const SMALL_BODY_FLOW = {
     },
     {
       from: 'rotation-period',
+      to: 'rotation-period',
+      text: 'The period at the strongest peak, and the rotation period twice it.',
+    },
+    {
+      from: 'amplitude-and-bound',
       to: 'amplitude-and-bound',
-      text: 'The period at the strongest peak and the amplitude, with the bound on a/b.',
+      text: 'The amplitude and the lower bound it gives on a/b.',
     },
     {
       from: 'ask-for-the-truth',
@@ -1371,14 +1376,14 @@ const SMALL_BODY_EXPECTATIONS = {
 
 const SMALL_BODY_BANDS = {
   'the-gaps-in-the-belt': {
-    core: 'medium',
-    quantitative: 'long',
-    advanced: 'long',
+    core: 'short',
+    quantitative: 'medium',
+    advanced: 'medium',
   },
   'how-fast-does-it-spin': {
-    core: 'medium',
+    core: 'short',
     quantitative: 'medium',
-    advanced: 'long',
+    advanced: 'medium',
   },
 };
 

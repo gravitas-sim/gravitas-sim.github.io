@@ -874,7 +874,7 @@
       "kind": "feature",
       "purpose": "The belts from a catalog and the spin from a light curve: gaps as measured depletions, class counts, the survey's selection and a bounded ellipsoid light-curve model, validated (Prompt 198).",
       "owner": 198,
-      "student": false
+      "student": true
     },
     {
       "file": "STATISTICS.md",

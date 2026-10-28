@@ -137,6 +137,7 @@ try {
           <li><span class="gs-en"><a href="#other">Other educational models</a></span><span class="gs-es" lang="es"><a href="#other">Otros modelos educativos</a></span></li>
           <li><span class="gs-en"><a href="#craters">Crater counting: what a relative age assumes</a></span><span class="gs-es" lang="es"><a href="#craters">Recuento de cráteres: qué supone una edad relativa</a></span></li>
           <li><span class="gs-en"><a href="#completeness">A completeness curve: what it is the answer for</a></span><span class="gs-es" lang="es"><a href="#completeness">Una curva de completitud: de qué es respuesta</a></span></li>
+          <li><span class="gs-en"><a href="#small-bodies">Asteroid gaps and spin: what a depletion and a bound assume</a></span><span class="gs-es" lang="es"><a href="#small-bodies">Huecos y giro de los asteroides: qué suponen un vaciamiento y una cota</a></span></li>
           <li><span class="gs-en"><a href="#trust">What should I trust this to show?</a></span><span class="gs-es" lang="es"><a href="#trust">¿Qué puedo esperar que muestre con fiabilidad?</a></span></li>
           <li><span class="gs-en"><a href="#validation">Validation: what has been checked</a></span><span class="gs-es" lang="es"><a href="#validation">Validación: qué se ha comprobado</a></span></li>
           <li><span class="gs-en"><a href="#data">Where the data comes from</a></span><span class="gs-es" lang="es"><a href="#data">De dónde provienen los datos</a></span></li>
@@ -2270,6 +2271,53 @@ try {
         injection tools&rsquo;, and a test recomputes each one stated here.</span><span class="gs-es" lang="es">No es un límite de detección de un instrumento. Los números son los de las herramientas de detección e inyección del Observatorio, y una prueba recalcula cada uno de los que se enuncian aquí.</span></li>
       </ul>
 
+      <h2 id="small-bodies"><span class="gs-en">Asteroid gaps and spin: what a depletion and a bound assume</span><span class="gs-es" lang="es">Huecos y giro de los asteroides: qué suponen un vaciamiento y una cota</span></h2>
+      <p>
+        <span class="gs-en">The Gaps in the Belt measures how depleted a window at a Jupiter resonance is in a real catalog, and How
+        Fast Does It Spin? reads a rotation period and an axis-ratio bound from a light curve. The first uses the 8,886
+        numbered minor planets with an absolute magnitude H below 13 (JPL Small-Body Database, retrieved 27 October 2026,
+        credit JPL, not endorsed). The second is <strong>synthetic</strong>: a measured light curve was not available, so
+        every curve is simulated with a known truth that stays hidden until the reader asks, and none is presented as a
+        real asteroid&rsquo;s.</span><span class="gs-es" lang="es">Los huecos del cinturón mide cuán vaciada está una ventana en una resonancia de Júpiter en un catálogo real, y ¿Qué tan rápido gira? lee un periodo de rotación y una cota de la razón de ejes de una curva de luz. La primera usa los 8 886 planetas menores numerados con magnitud absoluta H menor que 13 (JPL Small-Body Database, consultado el 27 de octubre de 2026, crédito JPL, sin su aval). La segunda es <strong>sintética</strong>: no había una curva de luz medida, así que cada curva se simula con una verdad conocida que queda oculta hasta que se pide, y ninguna se presenta como la de un asteroide real.</span>
+      </p>
+      <h3><span class="gs-en">What a depletion assumes</span><span class="gs-es" lang="es">Qué supone un vaciamiento</span></h3>
+      <ul>
+        <li><span class="gs-en">The catalog is what was found and numbered, not what is there. The cut at H below 13 keeps the large
+        bodies, which for the main belt is brighter than the completeness limit of the discoveries, so the gaps show with
+        little discovery bias; the outer belt and the Trojans are less complete at the same H, and nothing is said of
+        small bodies. A magnitude-limited survey finds a body at 2.0 AU about 40 times as completely as one at 3.5 AU, so a
+        histogram of discoveries is skewed inward unless the cut is above that limit.</span><span class="gs-es" lang="es">El catálogo es lo que se encontró y se numeró, no lo que hay. El corte en H menor que 13 conserva los cuerpos grandes, que en el cinturón principal son más brillantes que el límite de completitud de los descubrimientos, así que los huecos se ven con poco sesgo de descubrimiento; el cinturón exterior y los troyanos están menos completos con la misma H, y no se dice nada de los cuerpos pequeños. Un sondeo limitado por magnitud encuentra un cuerpo a 2,0 UA unas 40 veces más completamente que uno a 3,5 UA, así que un histograma de descubrimientos se sesga hacia dentro si el corte no está por encima de ese límite.</span></li>
+        <li><span class="gs-en">A gap is the depletion of a window against a smooth baseline: a degree-4 polynomial in the logarithm of the
+        count, fitted by Poisson maximum likelihood outside every window, with a case-bootstrap 95 percent interval of the
+        catalog rows. The windows and the degree were fixed before the catalog was read. The interval is sampling error only;
+        a different window, degree or H limit is a different measurement, and the baseline&rsquo;s shape adds a systematic of
+        about one standard error on test belts.</span><span class="gs-es" lang="es">Un hueco es el vaciamiento de una ventana frente a una línea base suave: un polinomio de grado 4 en el logaritmo del recuento, ajustado por máxima verosimilitud de Poisson fuera de toda ventana, con un intervalo bootstrap de casos del 95 por ciento de las filas del catálogo. Las ventanas y el grado se fijaron antes de leer el catálogo. El intervalo es solo error de muestreo; otra ventana, otro grado u otro límite de H es otra medición, y la forma de la línea base añade un sesgo sistemático de cerca de un error estándar en cinturones de prueba.</span></li>
+        <li><span class="gs-en">The method declines where it cannot tell: with uneven flanks (7:3 and 2:1 in this catalog), with a steep baseline,
+        or when the baseline expects too few objects (4:1). On test belts the 95 percent intervals covered at 0.927 (3:1) and
+        0.913 (5:2) but only 0.847 (7:3) and 0.787 (2:1): those legs of the validation fail and are recorded, not hidden.</span><span class="gs-es" lang="es">El método se niega donde no puede distinguir: con flancos desiguales (7:3 y 2:1 en este catálogo), con una línea base empinada o cuando la línea base espera muy pocos objetos (4:1). En cinturones de prueba los intervalos del 95 por ciento cubrieron 0,927 (3:1) y 0,913 (5:2), pero solo 0,847 (7:3) y 0,787 (2:1): esas pruebas de la validación fallan y quedan registradas, no ocultas.</span></li>
+        <li><span class="gs-en">A depletion is not the share Jupiter cleared: it is a statement about this catalog against a stated model, and
+        the history of the belt is a dynamical question. The Hildas and the Trojans are counted by a box in semi-major axis,
+        eccentricity and inclination, not by a test of libration.</span><span class="gs-es" lang="es">Un vaciamiento no es la parte que despejó Júpiter: es una afirmación sobre este catálogo frente a un modelo declarado, y la historia del cinturón es una pregunta dinámica. Las hildas y los troyanos se cuentan con una caja en semieje mayor, excentricidad e inclinación, no con una prueba de libración.</span></li>
+      </ul>
+      <h3><span class="gs-en">What a rotation period and a bound assume</span><span class="gs-es" lang="es">Qué suponen un periodo de rotación y una cota</span></h3>
+      <ul>
+        <li><span class="gs-en">The light curve is a triaxial ellipsoid turning about its short axis, seen at one aspect, with geometric scattering at
+        zero phase angle and seeded Gaussian noise. The truth (period, axes, aspect, amplitude) is a manifest the reader can
+        show; a real asteroid&rsquo;s is never shown. Phase angle, albedo markings, non-ellipsoidal shapes and tumbling are left out.</span><span class="gs-es" lang="es">La curva de luz es un elipsoide triaxial que gira en torno a su eje corto, visto con un solo aspecto, con dispersión geométrica a ángulo de fase cero y ruido gaussiano con semilla. La verdad (periodo, ejes, aspecto, amplitud) es un manifiesto que la persona puede mostrar; la de un asteroide real nunca se muestra. Quedan fuera el ángulo de fase, las manchas de albedo, las formas no elipsoidales y el balanceo caótico.</span></li>
+        <li><span class="gs-en">The period is the Lomb-Scargle peak doubled (two maxima a rotation), refined by a four-harmonic fit, with a
+        bootstrap error that is a floor, and the one-maximum alternative is always listed beside it. The amplitude gives
+        a lower bound on a/b, 10<sup>0.4 &times; amplitude</sup>, equal to it only equator-on, and nothing about b/c.</span><span class="gs-es" lang="es">El periodo es el pico de Lomb-Scargle duplicado (dos máximos por rotación), refinado con un ajuste de cuatro armónicos, con un error bootstrap que es un piso, y la alternativa de un solo máximo se enumera siempre junto a él. La amplitud da una cota inferior de a/b, 10<sup>0,4 &times; amplitud</sup>, igual a él solo desde el ecuador, y nada sobre b/c.</span></li>
+        <li><span class="gs-en">It says when it cannot tell: once-a-night sampling aliases the period (ambiguous), a gap of more than a third of
+        the turn withholds the amplitude, and a peak that noise would reach by chance is not a period. On the validation
+        curves the period was within 0.003 h for 92 to 99 percent, but the amplitude interval covered the true amplitude only
+        0.62 to 0.70 of the time at a stated 0.95, and the claim a/b at least the bound missed at one noise level: those legs
+        fail and are recorded. A measured light curve (tier e2) was not run.</span><span class="gs-es" lang="es">Dice cuándo no puede distinguir: el muestreo de una vez por noche produce alias del periodo (ambiguo), un hueco de más de un tercio del giro retiene la amplitud, y un pico que el ruido alcanzaría por azar no es un periodo. En las curvas de validación el periodo estuvo a menos de 0,003 h entre el 92 y el 99 por ciento, pero el intervalo de la amplitud cubrió la amplitud verdadera solo de 0,62 a 0,70 de las veces con un 0,95 declarado, y la afirmación a/b al menos la cota falló con un nivel de ruido: esas pruebas fallan y quedan registradas. No se ejecutó una curva de luz medida (nivel e2).</span></li>
+      </ul>
+      <p>
+        <span class="gs-en">The kernel is <code>js/kernels/smallbodies/</code>, described in <code>SMALL_BODIES.md</code>, and a test recomputes each
+        number these investigations state.</span><span class="gs-es" lang="es">El núcleo es <code>js/kernels/smallbodies/</code>, descrito en <code>SMALL_BODIES.md</code>, y una prueba recalcula cada número que enuncian estas investigaciones.</span>
+      </p>
+
       <h2 id="trust"><span class="gs-en">What should I trust this to show?</span><span class="gs-es" lang="es">¿Qué puedo esperar que muestre con fiabilidad?</span></h2>
       <div class="doc-table-wrap">
         <table class="doc-table">
@@ -3237,9 +3285,9 @@ try {
         <span class="gs-en">Each guided investigation relies on a different part of the model. This
         table is generated from the same <code>modelNotes</code> field that the
         instructor guide prints, so it covers every one of the
-        <!--fact:investigations-->78<!--/fact-->
+        <!--fact:investigations-->80<!--/fact-->
         investigations and cannot fall behind them. It listed six of the twelve when it
-        was maintained by hand.</span><span class="gs-es" lang="es">Cada investigación guiada se apoya en una parte distinta del modelo. Esta tabla se genera a partir del mismo campo <code>modelNotes</code> que imprime la guía docente, de modo que cubre cada una de las <!--fact:investigations-->78<!--/fact--> investigaciones y no puede quedar rezagada respecto a ellas. Cuando se mantenía a mano, enumeraba seis de las doce.</span>
+        was maintained by hand.</span><span class="gs-es" lang="es">Cada investigación guiada se apoya en una parte distinta del modelo. Esta tabla se genera a partir del mismo campo <code>modelNotes</code> que imprime la guía docente, de modo que cubre cada una de las <!--fact:investigations-->80<!--/fact--> investigaciones y no puede quedar rezagada respecto a ellas. Cuando se mantenía a mano, enumeraba seis de las doce.</span>
       </p>
       <div class="doc-table-wrap">
         <table class="doc-table">
@@ -3546,6 +3594,14 @@ try {
             <tr>
               <td>Io’s Fire</td>
               <td>js/tidesWidgets.js (heatingView) and the tides kernel (tidalHeating, heatingRange, requiredK2OverQ), recomputed in tests/tidesLessons.test.js for every number a step states.</td>
+            </tr>
+            <tr>
+              <td>The Gaps in the Belt</td>
+              <td>js/kernels/smallbodies/ (SMALL_BODIES.md): histogram, fitBaseline, gapSurvey (the depletion, the case-bootstrap interval and the verdicts), countClasses, detectedFractionRatio and meanAxisDetected; the e1 legs of npm run small-bodies:validate, with the coverage failures at 7:3 and 2:1 recorded.</td>
+            </tr>
+            <tr>
+              <td>How Fast Does It Spin?</td>
+              <td>js/kernels/smallbodies/ (SMALL_BODIES.md): synthLightCurve, nightlyTimes, rotationFromLightCurve (the Lomb-Scargle peak, the two-maxima rule, the harmonic refinement, the amplitude with an interval, the bound, the verdicts) and falseAlarm; the b, c and d legs of npm run small-bodies:validate, with the failed legs recorded.</td>
             </tr>
             <tr>
               <td>Why Venus Is Hot</td>

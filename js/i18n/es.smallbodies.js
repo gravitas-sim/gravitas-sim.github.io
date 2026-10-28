@@ -44,7 +44,7 @@ export const ES_SMALLBODIES = {
   'sbW.b.value.window': '{id}, a = {a} UA ± {half} UA',
   'sbW.b.row.found': 'Encontrados, y esperados según la línea base',
   'sbW.b.value.found': '{found} encontrados, {expected} esperados',
-  'sbW.b.row.depletion': 'Vaciamiento (1 − encontrados / esperados)',
+  'sbW.b.row.depletion': 'Vaciamiento contra la línea base',
   'sbW.b.value.depletion':
     '{d} por ciento, intervalo del 95 por ciento de {lo} a {hi} por ciento (un bootstrap de las filas del catálogo)',
   'sbW.b.row.verdict': 'Veredicto',

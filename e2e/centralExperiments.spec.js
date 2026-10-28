@@ -2598,6 +2598,27 @@ test.describe('the central experiment of each investigation', () => {
         [0.0082, 3.73, 0.02],
       ],
     },
+    // ---- The small-body investigations (Roadmap III, Prompt 198 part 3) ----------
+    {
+      id: 'the-gaps-in-the-belt',
+      title:
+        'the-gaps-in-the-belt: the 3:1 window of the numbered asteroids is depleted by 88.0 percent and the 5:2 by 63.3 @accepts:ce.the-gaps-in-the-belt',
+      row: /^Depletion against the baseline$/i,
+      values: [
+        [1, 88.0, 0.2],
+        [2, 63.3, 0.2],
+      ],
+    },
+    {
+      id: 'how-fast-does-it-spin',
+      title:
+        'how-fast-does-it-spin: the synthetic target A turns in 6.199 hours and target C in 8.002 @accepts:ce.how-fast-does-it-spin',
+      row: /^Rotation period/i,
+      values: [
+        [0, 6.199, 0.01],
+        [2, 8.002, 0.01],
+      ],
+    },
   ];
   for (const c of SURVEY) {
     test(c.title, async ({ page, app }) => {

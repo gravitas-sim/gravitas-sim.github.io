@@ -43,7 +43,7 @@ export const EN_SMALLBODIES = {
   'sbW.b.value.window': '{id}, a = {a} AU ± {half} AU',
   'sbW.b.row.found': 'Found, and expected from the baseline',
   'sbW.b.value.found': '{found} found, {expected} expected',
-  'sbW.b.row.depletion': 'Depletion (1 − found / expected)',
+  'sbW.b.row.depletion': 'Depletion against the baseline',
   'sbW.b.value.depletion':
     '{d} percent, 95 percent interval {lo} to {hi} percent (a bootstrap of the catalog rows)',
   'sbW.b.row.verdict': 'Verdict',

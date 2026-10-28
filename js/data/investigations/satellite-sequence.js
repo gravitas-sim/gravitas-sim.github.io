@@ -874,7 +874,7 @@ export const THE_GAPS_IN_THE_BELT = {
   title: 'The Gaps in the Belt',
   subtitle:
     'A histogram of 8,886 numbered asteroids, a smooth baseline fitted outside the resonance windows, and how deep each gap is, with an interval',
-  duration: '20-30 min',
+  duration: '12-16 min',
   level: 'Introductory to upper-level astronomy',
   audience: 'intro',
   textbook: { chapter: 14, section: null },
@@ -1158,7 +1158,7 @@ export const HOW_FAST_DOES_IT_SPIN = {
   title: 'How Fast Does It Spin?',
   subtitle:
     'A synthetic light curve, the rotation period from its periodogram, the amplitude, and what the amplitude bounds about the shape',
-  duration: '20-30 min',
+  duration: '8-12 min',
   level: 'Introductory to upper-level astronomy',
   audience: 'intro',
   textbook: { chapter: 14, section: null },

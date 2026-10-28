@@ -990,6 +990,26 @@
       ],
       "evidenceFrom": "model"
     },
+    "the-gaps-in-the-belt": {
+      "centralExperimentId": "ce.the-gaps-in-the-belt",
+      "object": "panel:belt-gaps",
+      "control": "belt-gaps/gap",
+      "quantity": "the depletion of a Jupiter resonance window of the numbered-asteroid catalog (H below 13) against a smooth baseline fitted outside the windows, in percent: 88.0 at the 3:1 window and 63.3 at the 5:2",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": ["depletion-predict", "depletion"],
+      "evidenceFrom": "model"
+    },
+    "how-fast-does-it-spin": {
+      "centralExperimentId": "ce.how-fast-does-it-spin",
+      "object": "panel:spin-curve",
+      "control": "spin-curve/target",
+      "quantity": "the rotation period of a synthetic light curve by the two-maxima rule, in hours: 6.199 for target A and 8.002 for target C over five dense nights",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": ["two-maxima-predict", "rotation-period"],
+      "evidenceFrom": "model"
+    },
     "what-is-in-this-field": {
       "centralExperimentId": "ce.what-is-in-this-field",
       "object": "panel:field-sources",

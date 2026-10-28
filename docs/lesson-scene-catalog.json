@@ -64,6 +64,22 @@
    "mutates": [],
    "datasets": []
   },
+  "belt-gaps": {
+   "live": false,
+   "controls": [
+    "gap",
+    "hlimit",
+    "width",
+    "degree",
+    "classes",
+    "survey"
+   ],
+   "presets": 2,
+   "buttons": [],
+   "engineReads": [],
+   "mutates": [],
+   "datasets": []
+  },
   "bh-blocks": {
    "live": false,
    "controls": [
@@ -1363,6 +1379,22 @@
      "binding": ".wavelengths"
     }
    ]
+  },
+  "spin-curve": {
+   "live": false,
+   "controls": [
+    "target",
+    "nights",
+    "hours",
+    "noise",
+    "cadence",
+    "truth"
+   ],
+   "presets": 2,
+   "buttons": [],
+   "engineReads": [],
+   "mutates": [],
+   "datasets": []
   },
   "star-parallax": {
    "live": false,
@@ -89814,6 +89846,1169 @@
    }
   },
   {
+   "id": "the-gaps-in-the-belt",
+   "title": "The Gaps in the Belt",
+   "lock": {
+    "placement": true,
+    "inspector": true
+   },
+   "steps": [
+    {
+     "sid": "a-catalog-of-whats-found",
+     "index": 1,
+     "type": "read",
+     "title": "A catalog of what was found",
+     "declares": {
+      "stage": {
+       "objects": 1,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "star"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram"
+     ],
+     "actions": [
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "experiment",
+       "measure"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "belt-gaps",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "inherits the world already on screen",
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "what-is-counted",
+     "index": 2,
+     "type": "question",
+     "title": "What does the histogram show?",
+     "declares": {
+      "stage": {
+       "objects": 1,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "star"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram"
+     ],
+     "actions": [
+      "choose-an-option",
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "belt-gaps",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "depletion-predict",
+     "index": 3,
+     "type": "predict",
+     "title": "How depleted is the 3:1 gap?",
+     "declares": {
+      "stage": {
+       "objects": 1,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "star"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram"
+     ],
+     "actions": [
+      "commit-a-prediction",
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": "depletion",
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "predict",
+      "actual": [
+       "predict",
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "belt-gaps",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "count-the-gap",
+     "index": 4,
+     "type": "measure",
+     "title": "Count the 3:1 window",
+     "declares": {
+      "stage": {
+       "objects": 1,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "star"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values",
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "belt-gaps",
+      "capture": false
+     },
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "depletion",
+     "index": 5,
+     "type": "measure",
+     "title": "The depletion, and how sure it is",
+     "declares": {
+      "stage": {
+       "objects": 1,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "star"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values",
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "belt-gaps",
+      "capture": false
+     },
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "not-empty",
+     "index": 6,
+     "type": "question",
+     "title": "Is the gap empty?",
+     "declares": {
+      "stage": {
+       "objects": 1,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "star"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram"
+     ],
+     "actions": [
+      "choose-an-option",
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "belt-gaps",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "the-second-gap",
+     "index": 7,
+     "type": "measure",
+     "title": "A shallower gap: 5:2",
+     "declares": {
+      "stage": {
+       "objects": 1,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "star"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values",
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "belt-gaps",
+      "capture": false
+     },
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "what-you-worked-out",
+     "index": 8,
+     "type": "read",
+     "title": "What you worked out",
+     "declares": {
+      "stage": {
+       "objects": 1,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "star"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram"
+     ],
+     "actions": [
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "experiment",
+       "measure"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "belt-gaps",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    }
+   ],
+   "loops": [
+    {
+     "predict": "depletion-predict",
+     "predictCollects": true,
+     "heldUntil": "depletion",
+     "experiment": [
+      "count-the-gap",
+      "depletion",
+      "not-empty",
+      "the-second-gap",
+      "what-you-worked-out"
+     ],
+     "measure": [
+      "count-the-gap",
+      "depletion",
+      "not-empty",
+      "the-second-gap",
+      "what-you-worked-out"
+     ],
+     "evidence": [
+      "count-the-gap",
+      "depletion",
+      "the-second-gap"
+     ],
+     "interpret": "depletion",
+     "measuredBeforeAnswering": true,
+     "explained": false,
+     "answeredByTheExperiment": true,
+     "closed": true,
+     "complete": true
+    }
+   ],
+   "totals": {
+    "steps": 8,
+    "declared": 8,
+    "student": 0,
+    "engine": 0,
+    "model": 8,
+    "data": 0,
+    "diagram": 8,
+    "evidence": 3,
+    "computation": 0,
+    "declaredButInert": 8,
+    "prose": 0,
+    "mismatched": 0,
+    "rebuilds": 0
+   }
+  },
+  {
+   "id": "how-fast-does-it-spin",
+   "title": "How Fast Does It Spin?",
+   "lock": {
+    "placement": true,
+    "inspector": true
+   },
+   "steps": [
+    {
+     "sid": "a-flickering-point",
+     "index": 1,
+     "type": "read",
+     "title": "A flickering point of light",
+     "declares": {
+      "stage": {
+       "objects": 1,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "star"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram"
+     ],
+     "actions": [
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "experiment",
+       "measure"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "spin-curve",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "inherits the world already on screen",
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "two-maxima-predict",
+     "index": 2,
+     "type": "predict",
+     "title": "The light peaks twice a turn",
+     "declares": {
+      "stage": {
+       "objects": 1,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "star"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram"
+     ],
+     "actions": [
+      "commit-a-prediction",
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": "rotation-period",
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "predict",
+      "actual": [
+       "predict",
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "spin-curve",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "rotation-period",
+     "index": 3,
+     "type": "measure",
+     "title": "The period",
+     "declares": {
+      "stage": {
+       "objects": 1,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "star"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values",
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "spin-curve",
+      "capture": false
+     },
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "amplitude-and-bound",
+     "index": 4,
+     "type": "measure",
+     "title": "How much it varies, and what that bounds",
+     "declares": {
+      "stage": {
+       "objects": 1,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "star"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values",
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "spin-curve",
+      "capture": false
+     },
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "ask-for-the-truth",
+     "index": 5,
+     "type": "question",
+     "title": "Check against the truth",
+     "declares": {
+      "stage": {
+       "objects": 1,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "star"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram"
+     ],
+     "actions": [
+      "choose-an-option",
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "spin-curve",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "what-you-worked-out",
+     "index": 6,
+     "type": "read",
+     "title": "What you worked out",
+     "declares": {
+      "stage": {
+       "objects": 1,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "star"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram"
+     ],
+     "actions": [
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "experiment",
+       "measure"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "spin-curve",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    }
+   ],
+   "loops": [
+    {
+     "predict": "two-maxima-predict",
+     "predictCollects": true,
+     "heldUntil": "rotation-period",
+     "experiment": [
+      "rotation-period",
+      "amplitude-and-bound",
+      "ask-for-the-truth",
+      "what-you-worked-out"
+     ],
+     "measure": [
+      "rotation-period",
+      "amplitude-and-bound",
+      "ask-for-the-truth",
+      "what-you-worked-out"
+     ],
+     "evidence": [
+      "rotation-period",
+      "amplitude-and-bound"
+     ],
+     "interpret": "rotation-period",
+     "measuredBeforeAnswering": true,
+     "explained": false,
+     "answeredByTheExperiment": true,
+     "closed": true,
+     "complete": true
+    }
+   ],
+   "totals": {
+    "steps": 6,
+    "declared": 6,
+    "student": 0,
+    "engine": 0,
+    "model": 6,
+    "data": 0,
+    "diagram": 6,
+    "evidence": 2,
+    "computation": 0,
+    "declaredButInert": 6,
+    "prose": 0,
+    "mismatched": 0,
+    "rebuilds": 0
+   }
+  },
+  {
    "id": "why-venus-is-hot",
    "title": "Why Venus Is Hot",
    "lock": {
@@ -92337,24 +93532,24 @@
   }
  ],
  "totals": {
-  "steps": 1184,
-  "declared": 1092,
+  "steps": 1198,
+  "declared": 1106,
   "student": 157,
   "engine": 163,
-  "model": 700,
+  "model": 714,
   "data": 146,
-  "diagram": 579,
-  "evidence": 304,
+  "diagram": 593,
+  "evidence": 309,
   "computation": 14,
-  "declaredButInert": 935,
+  "declaredButInert": 949,
   "prose": 58,
   "mismatched": 0,
   "rebuilds": 78,
-  "lessons": 78,
-  "loops": 155,
-  "closedLoops": 155,
+  "lessons": 80,
+  "loops": 157,
+  "closedLoops": 157,
   "explainedLoops": 0,
-  "heldLoops": 155,
-  "completeLoops": 155
+  "heldLoops": 157,
+  "completeLoops": 157
  }
 }
