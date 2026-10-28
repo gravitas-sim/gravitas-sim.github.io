@@ -2,11 +2,19 @@
  "id": "goldilocks-question",
  "locale": "es",
  "title": "La cuestión de Ricitos de Oro",
- "steps": 37,
+ "steps": 46,
  "depths": [
   [
    "core",
    37
+  ],
+  [
+   "quantitative",
+   42
+  ],
+  [
+   "advanced",
+   46
   ]
  ],
  "grading": [
@@ -300,6 +308,33 @@
    ]
   },
   {
+   "sid": "a-star-the-fit-refuses",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
    "sid": "venus-by-the-rule-you",
    "type": "question",
    "kind": "numeric",
@@ -358,6 +393,33 @@
      null,
      false,
      "blank"
+    ]
+   ]
+  },
+  {
+   "sid": "earth-in-the-model-zone",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
     ]
    ]
   },
@@ -541,8 +603,10 @@
     "goldilocks-question:the-mars-problem": "A fixed sentence for the golden.",
     "goldilocks-question:what-actually-changed": 1,
     "goldilocks-question:what-the-wider-band-bought": 2,
+    "goldilocks-question:a-star-the-fit-refuses": 2,
     "goldilocks-question:venus-by-the-rule-you": "1,92",
     "goldilocks-question:venus-by-the-rule-you:locale": "es",
+    "goldilocks-question:earth-in-the-model-zone": 1,
     "goldilocks-question:now-stretch-the-orbit": 1,
     "goldilocks-question:reading-the-fraction": 2,
     "goldilocks-question:a-real-system-forty-light": 2,
@@ -560,7 +624,9 @@
     "goldilocks-question:reading-the-real-solar-system": 1,
     "goldilocks-question:what-actually-changed": 1,
     "goldilocks-question:what-the-wider-band-bought": 1,
+    "goldilocks-question:a-star-the-fit-refuses": 1,
     "goldilocks-question:venus-by-the-rule-you": 1,
+    "goldilocks-question:earth-in-the-model-zone": 1,
     "goldilocks-question:now-stretch-the-orbit": 1,
     "goldilocks-question:reading-the-fraction": 1,
     "goldilocks-question:a-real-system-forty-light": 1,
@@ -591,7 +657,13 @@
     "what-actually-changed",
     "the-wider-definition-on-the",
     "what-the-wider-band-bought",
+    "the-limits-as-starlight",
+    "the-same-limit-a-dim-star",
+    "a-star-the-fit-refuses",
     "venus-by-the-rule-you",
+    "the-zone-at-three-ages",
+    "earth-in-the-model-zone",
+    "why-no-climate-history",
     "a-year-on-a-circular",
     "now-stretch-the-orbit",
     "run-an-eccentric-year",
@@ -599,6 +671,9 @@
     "reading-the-fraction",
     "a-real-system-forty-light",
     "all-seven-planets",
+    "the-m-dwarf-zone-and-the-tide",
+    "a-middling-star",
+    "how-sure-is-the-radius",
     "watch-it-run",
     "take-the-readings-yourself",
     "the-question-the-name-invites",
@@ -608,7 +683,8 @@
     "what-you-worked-out"
    ],
    "startedAt": "2026-01-02T03:04:05.000Z",
-   "depth": "core",
+   "depth": "advanced",
+   "deepest": "advanced",
    "spent": 600
   },
   "read": {
@@ -624,8 +700,10 @@
     "goldilocks-question:the-mars-problem": "A fixed sentence for the golden.",
     "goldilocks-question:what-actually-changed": 1,
     "goldilocks-question:what-the-wider-band-bought": 2,
+    "goldilocks-question:a-star-the-fit-refuses": 2,
     "goldilocks-question:venus-by-the-rule-you": "1,92",
     "goldilocks-question:venus-by-the-rule-you:locale": "es",
+    "goldilocks-question:earth-in-the-model-zone": 1,
     "goldilocks-question:now-stretch-the-orbit": 1,
     "goldilocks-question:reading-the-fraction": 2,
     "goldilocks-question:a-real-system-forty-light": 2,
@@ -643,7 +721,9 @@
     "goldilocks-question:reading-the-real-solar-system": 1,
     "goldilocks-question:what-actually-changed": 1,
     "goldilocks-question:what-the-wider-band-bought": 1,
+    "goldilocks-question:a-star-the-fit-refuses": 1,
     "goldilocks-question:venus-by-the-rule-you": 1,
+    "goldilocks-question:earth-in-the-model-zone": 1,
     "goldilocks-question:now-stretch-the-orbit": 1,
     "goldilocks-question:reading-the-fraction": 1,
     "goldilocks-question:a-real-system-forty-light": 1,
@@ -652,12 +732,16 @@
     "goldilocks-question:one-more-and-then-you": 1
    },
    "visited": [
+    "a-middling-star",
     "a-real-system-forty-light",
+    "a-star-the-fit-refuses",
     "a-year-on-a-circular",
     "all-seven-planets",
     "crossing-the-edges",
     "dim-stars-close-bands",
+    "earth-in-the-model-zone",
     "four-stars-one-planet",
+    "how-sure-is-the-radius",
     "leave-the-planet-change-the",
     "move-it-twice-as-far",
     "now-put-it-round-the",
@@ -670,11 +754,15 @@
     "saying-it-carefully",
     "so-where-would-a-planet",
     "take-the-readings-yourself",
+    "the-limits-as-starlight",
+    "the-m-dwarf-zone-and-the-tide",
     "the-mars-problem",
     "the-question-the-name-invites",
+    "the-same-limit-a-dim-star",
     "the-star-is-not-running",
     "the-two-edges",
     "the-wider-definition-on-the",
+    "the-zone-at-three-ages",
     "three-distances",
     "three-planets-that-all-look",
     "two-definitions-of-the-same",
@@ -687,13 +775,14 @@
     "what-the-wider-band-bought",
     "what-you-worked-out",
     "which-one-would-you-observe",
+    "why-no-climate-history",
     "write-the-three-down",
     "writing-it-down-then-using"
    ],
    "stepSid": "what-you-worked-out",
    "startedAt": "2026-01-02T03:04:05.000Z",
-   "depth": "core",
-   "deepest": null,
+   "depth": "advanced",
+   "deepest": "advanced",
    "spent": 600,
    "schema": 2,
    "migrated": false,
@@ -708,7 +797,7 @@
    "lesson": {
     "id": "goldilocks-question",
     "title": "La cuestión de Ricitos de Oro",
-    "stepCount": 37
+    "stepCount": 46
    },
    "student": null,
    "progress": {
@@ -737,7 +826,13 @@
      "what-actually-changed",
      "the-wider-definition-on-the",
      "what-the-wider-band-bought",
+     "the-limits-as-starlight",
+     "the-same-limit-a-dim-star",
+     "a-star-the-fit-refuses",
      "venus-by-the-rule-you",
+     "the-zone-at-three-ages",
+     "earth-in-the-model-zone",
+     "why-no-climate-history",
      "a-year-on-a-circular",
      "now-stretch-the-orbit",
      "run-an-eccentric-year",
@@ -745,6 +840,9 @@
      "reading-the-fraction",
      "a-real-system-forty-light",
      "all-seven-planets",
+     "the-m-dwarf-zone-and-the-tide",
+     "a-middling-star",
+     "how-sure-is-the-radius",
      "watch-it-run",
      "take-the-readings-yourself",
      "the-question-the-name-invites",
@@ -765,8 +863,10 @@
      "goldilocks-question:the-mars-problem": "A fixed sentence for the golden.",
      "goldilocks-question:what-actually-changed": 1,
      "goldilocks-question:what-the-wider-band-bought": 2,
+     "goldilocks-question:a-star-the-fit-refuses": 2,
      "goldilocks-question:venus-by-the-rule-you": "1,92",
      "goldilocks-question:venus-by-the-rule-you:locale": "es",
+     "goldilocks-question:earth-in-the-model-zone": 1,
      "goldilocks-question:now-stretch-the-orbit": 1,
      "goldilocks-question:reading-the-fraction": 2,
      "goldilocks-question:a-real-system-forty-light": 2,
@@ -784,7 +884,9 @@
      "goldilocks-question:reading-the-real-solar-system": 1,
      "goldilocks-question:what-actually-changed": 1,
      "goldilocks-question:what-the-wider-band-bought": 1,
+     "goldilocks-question:a-star-the-fit-refuses": 1,
      "goldilocks-question:venus-by-the-rule-you": 1,
+     "goldilocks-question:earth-in-the-model-zone": 1,
      "goldilocks-question:now-stretch-the-orbit": 1,
      "goldilocks-question:reading-the-fraction": 1,
      "goldilocks-question:a-real-system-forty-light": 1,
@@ -928,90 +1030,144 @@
     },
     {
      "index": 22,
+     "sid": "the-limits-as-starlight",
+     "fingerprint": "measure|-|hz-limits|-|runaway+maximum|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 23,
+     "sid": "the-same-limit-a-dim-star",
+     "fingerprint": "measure|-|hz-limits|-|flux+distance|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 24,
+     "sid": "a-star-the-fit-refuses",
+     "fingerprint": "question|choice|hz-limits|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 25,
      "sid": "venus-by-the-rule-you",
      "fingerprint": "question|numeric|-|-|-|-|a=1.92;t=0.12;u=Earths",
      "optionCount": null
     },
     {
-     "index": 23,
+     "index": 26,
+     "sid": "the-zone-at-three-ages",
+     "fingerprint": "measure|-|hz-ages|-|inner1+inner457+inner8|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 27,
+     "sid": "earth-in-the-model-zone",
+     "fingerprint": "question|choice|hz-ages|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 28,
+     "sid": "why-no-climate-history",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 29,
      "sid": "a-year-on-a-circular",
      "fingerprint": "read|-|hz-orbit|-|-|-|-",
      "optionCount": null
     },
     {
-     "index": 24,
+     "index": 30,
      "sid": "now-stretch-the-orbit",
      "fingerprint": "predict|-|-|-|-|4|a=1;c=1",
      "optionCount": 4
     },
     {
-     "index": 25,
+     "index": 31,
      "sid": "run-an-eccentric-year",
      "fingerprint": "explore|-|hz-orbit|-|-|-|-",
      "optionCount": null
     },
     {
-     "index": 26,
+     "index": 32,
      "sid": "crossing-the-edges",
      "fingerprint": "explore|-|hz-orbit|-|-|-|-",
      "optionCount": null
     },
     {
-     "index": 27,
+     "index": 33,
      "sid": "reading-the-fraction",
      "fingerprint": "question|choice|-|-|-|4|a=2;c=2",
      "optionCount": 4
     },
     {
-     "index": 28,
+     "index": 34,
      "sid": "a-real-system-forty-light",
      "fingerprint": "predict|-|-|TRAPPIST-1 System|-|4|a=2;c=2",
      "optionCount": 4
     },
     {
-     "index": 29,
+     "index": 35,
      "sid": "all-seven-planets",
      "fingerprint": "explore|-|hz-trappist|TRAPPIST-1 System|-|-|-",
      "optionCount": null
     },
     {
-     "index": 30,
+     "index": 36,
+     "sid": "the-m-dwarf-zone-and-the-tide",
+     "fingerprint": "measure|-|hz-locking|-|radius+inner|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 37,
+     "sid": "a-middling-star",
+     "fingerprint": "measure|-|hz-locking|-|radius+outer|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 38,
+     "sid": "how-sure-is-the-radius",
+     "fingerprint": "measure|-|hz-locking|-|low+high|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 39,
      "sid": "watch-it-run",
      "fingerprint": "explore|-|-|TRAPPIST-1 System|-|-|-",
      "optionCount": null
     },
     {
-     "index": 31,
+     "index": 40,
      "sid": "take-the-readings-yourself",
      "fingerprint": "measure|-|hz-trappist|-|e+f+g+inner+outer|-|-",
      "optionCount": null
     },
     {
-     "index": 32,
+     "index": 41,
      "sid": "the-question-the-name-invites",
      "fingerprint": "question|choice|-|-|-|4|a=2;c=2",
      "optionCount": 4
     },
     {
-     "index": 33,
+     "index": 42,
      "sid": "three-planets-that-all-look",
      "fingerprint": "explore|-|hz-candidates|-|-|-|-",
      "optionCount": null
     },
     {
-     "index": 34,
+     "index": 43,
      "sid": "which-one-would-you-observe",
      "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
      "optionCount": 4
     },
     {
-     "index": 35,
+     "index": 44,
      "sid": "one-more-and-then-you",
      "fingerprint": "question|choice|-|-|-|4|a=2;c=2",
      "optionCount": 4
     },
     {
-     "index": 36,
+     "index": 45,
      "sid": "what-you-worked-out",
      "fingerprint": "read|-|-|-|-|-|-",
      "optionCount": null
@@ -1034,8 +1190,10 @@
     "goldilocks-question:the-mars-problem": "A fixed sentence for the golden.",
     "goldilocks-question:what-actually-changed": 1,
     "goldilocks-question:what-the-wider-band-bought": 2,
+    "goldilocks-question:a-star-the-fit-refuses": 2,
     "goldilocks-question:venus-by-the-rule-you": "1,92",
     "goldilocks-question:venus-by-the-rule-you:locale": "es",
+    "goldilocks-question:earth-in-the-model-zone": 1,
     "goldilocks-question:now-stretch-the-orbit": 1,
     "goldilocks-question:reading-the-fraction": 2,
     "goldilocks-question:a-real-system-forty-light": 2,
@@ -1053,7 +1211,9 @@
     "goldilocks-question:reading-the-real-solar-system": 1,
     "goldilocks-question:what-actually-changed": 1,
     "goldilocks-question:what-the-wider-band-bought": 1,
+    "goldilocks-question:a-star-the-fit-refuses": 1,
     "goldilocks-question:venus-by-the-rule-you": 1,
+    "goldilocks-question:earth-in-the-model-zone": 1,
     "goldilocks-question:now-stretch-the-orbit": 1,
     "goldilocks-question:reading-the-fraction": 1,
     "goldilocks-question:a-real-system-forty-light": 1,
@@ -1062,12 +1222,16 @@
     "goldilocks-question:one-more-and-then-you": 1
    },
    "visited": [
+    "a-middling-star",
     "a-real-system-forty-light",
+    "a-star-the-fit-refuses",
     "a-year-on-a-circular",
     "all-seven-planets",
     "crossing-the-edges",
     "dim-stars-close-bands",
+    "earth-in-the-model-zone",
     "four-stars-one-planet",
+    "how-sure-is-the-radius",
     "leave-the-planet-change-the",
     "move-it-twice-as-far",
     "now-put-it-round-the",
@@ -1080,11 +1244,15 @@
     "saying-it-carefully",
     "so-where-would-a-planet",
     "take-the-readings-yourself",
+    "the-limits-as-starlight",
+    "the-m-dwarf-zone-and-the-tide",
     "the-mars-problem",
     "the-question-the-name-invites",
+    "the-same-limit-a-dim-star",
     "the-star-is-not-running",
     "the-two-edges",
     "the-wider-definition-on-the",
+    "the-zone-at-three-ages",
     "three-distances",
     "three-planets-that-all-look",
     "two-definitions-of-the-same",
@@ -1097,10 +1265,11 @@
     "what-the-wider-band-bought",
     "what-you-worked-out",
     "which-one-would-you-observe",
+    "why-no-climate-history",
     "write-the-three-down",
     "writing-it-down-then-using"
    ],
-   "stepIndex": 36,
+   "stepIndex": 45,
    "startedAt": "2026-01-02T03:04:05.000Z",
    "moved": [],
    "dropped": [],
@@ -1201,8 +1370,18 @@
      "locale": "es"
     },
     {
+     "sid": "a-star-the-fit-refuses",
+     "value": 2,
+     "locale": "es"
+    },
+    {
      "sid": "venus-by-the-rule-you",
      "value": "1,92",
+     "locale": "es"
+    },
+    {
+     "sid": "earth-in-the-model-zone",
+     "value": 1,
      "locale": "es"
     },
     {
@@ -1300,8 +1479,18 @@
      "locale": "es"
     },
     {
+     "sid": "a-star-the-fit-refuses",
+     "value": 2,
+     "locale": "es"
+    },
+    {
      "sid": "venus-by-the-rule-you",
      "value": "1,92",
+     "locale": "es"
+    },
+    {
+     "sid": "earth-in-the-model-zone",
+     "value": 1,
      "locale": "es"
     },
     {
@@ -1423,8 +1612,18 @@
      "locale": "es"
     },
     {
+     "sid": "a-star-the-fit-refuses",
+     "value": 2,
+     "locale": "es"
+    },
+    {
      "sid": "venus-by-the-rule-you",
      "value": "1,92",
+     "locale": "es"
+    },
+    {
+     "sid": "earth-in-the-model-zone",
+     "value": 1,
      "locale": "es"
     },
     {
@@ -1466,7 +1665,7 @@
    "backupIntact": true,
    "payload": {
     "v": 2,
-    "dp": "core",
+    "dp": "advanced",
     "a": null,
     "r": null,
     "fl": "es"
@@ -1523,8 +1722,18 @@
      "locale": "es"
     },
     {
+     "sid": "a-star-the-fit-refuses",
+     "value": 2,
+     "locale": "es"
+    },
+    {
      "sid": "venus-by-the-rule-you",
      "value": "1,92",
+     "locale": "es"
+    },
+    {
+     "sid": "earth-in-the-model-zone",
+     "value": 1,
      "locale": "es"
     },
     {

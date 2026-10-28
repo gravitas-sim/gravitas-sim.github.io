@@ -1,0 +1,230 @@
+{
+ "hz-limits": {
+  "en": {
+   "static": {
+    "title": "Four limits, as amounts of starlight",
+    "note": "Each limit is an amount of starlight, in Earths, that a published climate fit says a planet of one Earth mass can cope with. Switch each limit on and off. The distance of a limit follows from the star’s luminosity; the amount of starlight is the fit’s own and changes only a little with the star’s temperature. Two limits come from a model and two from what happened to Venus and Mars.",
+    "controls": [{"id":"star","label":"Star","unit":null,"min":0,"max":4,"step":1,"value":0,"decimals":0},{"id":"runawayGreenhouse","label":"Runaway greenhouse (inner edge)","unit":null,"min":0,"max":1,"step":1,"value":1,"decimals":0},{"id":"maximumGreenhouse","label":"Maximum greenhouse (outer edge)","unit":null,"min":0,"max":1,"step":1,"value":1,"decimals":0},{"id":"recentVenus","label":"Recent Venus (optimistic inner edge)","unit":null,"min":0,"max":1,"step":1,"value":0,"decimals":0},{"id":"earlyMars","label":"Early Mars (optimistic outer edge)","unit":null,"min":0,"max":1,"step":1,"value":0,"decimals":0}],
+    "presets": [],
+    "actions": [],
+    "defaults": {"star":"0","runawayGreenhouse":"1","maximumGreenhouse":"1","recentVenus":"0","earlyMars":"0"}
+   },
+   "precision": [],
+   "specs": 4,
+   "frames": 32,
+   "readout": {
+    "calls": 32,
+    "distinct": 5,
+    "digest": "529f70769141f201",
+    "samples": [[{"label":"Model","value":"Habitable-zone limits: flux thresholds of one published fit","emphasis":true},{"label":"Star","value":"5780 K, 1.00 times the Sun’s luminosity"},{"label":"Recent Venus (optimistic inner edge)","value":"1.776 Earths of starlight (2418 W/m²), at 0.750 AU. From the history of Venus or Mars, not a model."},{"label":"Runaway greenhouse (inner edge)","value":"1.038 Earths of starlight (1413 W/m²), at 0.981 AU. From a climate model.","emphasis":true},{"label":"Maximum greenhouse (outer edge)","value":"0.351 Earths of starlight (477 W/m²), at 1.689 AU. From a climate model.","emphasis":true},{"label":"Early Mars (optimistic outer edge)","value":"0.321 Earths of starlight (436 W/m²), at 1.766 AU. From the history of Venus or Mars, not a model."},{"label":"What it leaves out","value":"clouds; rotation and obliquity; ocean heat transport; any planet but one of an Earth mass with Earth gravity; any atmosphere but water (inner limits) or carbon dioxide (outer limits); a star outside 2600 to 7200 K. The zone is a band of starlight, not a measurement of any planet"}],[{"label":"Model","value":"Habitable-zone limits: flux thresholds of one published fit","emphasis":true},{"label":"Star","value":"4200 K, 0.15 times the Sun’s luminosity"},{"label":"Recent Venus (optimistic inner edge)","value":"1.581 Earths of starlight (2152 W/m²), at 0.308 AU. From the history of Venus or Mars, not a model."},{"label":"Runaway greenhouse (inner edge)","value":"0.897 Earths of starlight (1221 W/m²), at 0.409 AU. From a climate model.","emphasis":true},{"label":"Maximum greenhouse (outer edge)","value":"0.269 Earths of starlight (367 W/m²), at 0.746 AU. From a climate model.","emphasis":true},{"label":"Early Mars (optimistic outer edge)","value":"0.245 Earths of starlight (333 W/m²), at 0.783 AU. From the history of Venus or Mars, not a model."},{"label":"What it leaves out","value":"clouds; rotation and obliquity; ocean heat transport; any planet but one of an Earth mass with Earth gravity; any atmosphere but water (inner limits) or carbon dioxide (outer limits); a star outside 2600 to 7200 K. The zone is a band of starlight, not a measurement of any planet"}],[{"label":"Model","value":"Habitable-zone limits: flux thresholds of one published fit","emphasis":true},{"label":"Star","value":"2566 K, 0.0006 times the Sun’s luminosity"},{"label":"Refused","value":"the fit is calibrated for stars from 2600 K to 7200 K; this star is at 2566 K, outside it, and no limit is given","emphasis":true},{"label":"What it leaves out","value":"clouds; rotation and obliquity; ocean heat transport; any planet but one of an Earth mass with Earth gravity; any atmosphere but water (inner limits) or carbon dioxide (outer limits); a star outside 2600 to 7200 K. The zone is a band of starlight, not a measurement of any planet"}],[{"label":"Model","value":"Habitable-zone limits: flux thresholds of one published fit","emphasis":true},{"label":"Star","value":"3200 K, 0.0040 times the Sun’s luminosity"},{"label":"Recent Venus (optimistic inner edge)","value":"1.507 Earths of starlight (2051 W/m²), at 0.0515 AU. From the history of Venus or Mars, not a model."},{"label":"Runaway greenhouse (inner edge)","value":"0.868 Earths of starlight (1181 W/m²), at 0.0679 AU. From a climate model.","emphasis":true},{"label":"Maximum greenhouse (outer edge)","value":"0.237 Earths of starlight (322 W/m²), at 0.130 AU. From a climate model.","emphasis":true},{"label":"Early Mars (optimistic outer edge)","value":"0.211 Earths of starlight (287 W/m²), at 0.138 AU. From the history of Venus or Mars, not a model."},{"label":"What it leaves out","value":"clouds; rotation and obliquity; ocean heat transport; any planet but one of an Earth mass with Earth gravity; any atmosphere but water (inner limits) or carbon dioxide (outer limits); a star outside 2600 to 7200 K. The zone is a band of starlight, not a measurement of any planet"}]]
+   },
+   "canvas": {
+    "calls": 32,
+    "distinct": 1,
+    "digest": "e610688fcc6117ea",
+    "samples": [{"drew":{"threw":"TypeError: canvas.after is not a function"},"texts":[]}]
+   },
+   "controls": {
+    "calls": 32,
+    "distinct": 21,
+    "digest": "58c6d858990fcb08",
+    "samples": [["The Sun","shown","shown","hidden","hidden"],["The Sun","hidden","hidden","hidden","hidden"],["TRAPPIST-1 (2566 K)","shown","shown","shown","shown"],["A K dwarf (4200 K)","shown","shown","shown","shown"],["An F star (6800 K)","shown","shown","hidden","hidden"],["A K dwarf (4200 K)","shown","shown","hidden","hidden"],["An M dwarf (3200 K)","shown","shown","hidden","hidden"],["TRAPPIST-1 (2566 K)","shown","shown","hidden","hidden"],["The Sun","hidden","shown","hidden","hidden"],["The Sun","shown","hidden","hidden","hidden"],["The Sun","shown","shown","shown","hidden"],["The Sun","shown","shown","hidden","shown"],["TRAPPIST-1 (2566 K)","hidden","shown","shown","hidden"],["TRAPPIST-1 (2566 K)","hidden","hidden","hidden","hidden"],["An F star (6800 K)","hidden","hidden","shown","hidden"],["A K dwarf (4200 K)","shown","shown","shown","hidden"],["A K dwarf (4200 K)","hidden","shown","shown","hidden"],["An F star (6800 K)","hidden","shown","hidden","hidden"],["TRAPPIST-1 (2566 K)","shown","hidden","shown","shown"],["An M dwarf (3200 K)","hidden","shown","shown","shown"],["The Sun","shown","shown","shown","shown"]]
+   },
+   "phases": {
+    "calls": 0,
+    "distinct": 0,
+    "digest": "4f53cda18c2baa0c",
+    "samples": []
+   }
+  },
+  "es": {
+   "static": {
+    "title": "Cuatro límites, como cantidades de luz estelar",
+    "note": "Cada límite es una cantidad de luz estelar, en Tierras, que un ajuste climático publicado dice que un planeta de una masa terrestre puede soportar. Muestra u oculta cada límite. La distancia de un límite sale de la luminosidad de la estrella; la cantidad de luz estelar es la del propio ajuste y cambia poco con la temperatura de la estrella. Dos límites vienen de un modelo y dos de lo que le ocurrió a Venus y a Marte.",
+    "controls": [{"id":"star","label":"Estrella","unit":null,"min":0,"max":4,"step":1,"value":0,"decimals":0},{"id":"runawayGreenhouse","label":"Efecto invernadero desbocado (borde interior)","unit":null,"min":0,"max":1,"step":1,"value":1,"decimals":0},{"id":"maximumGreenhouse","label":"Efecto invernadero máximo (borde exterior)","unit":null,"min":0,"max":1,"step":1,"value":1,"decimals":0},{"id":"recentVenus","label":"Venus reciente (borde interior optimista)","unit":null,"min":0,"max":1,"step":1,"value":0,"decimals":0},{"id":"earlyMars","label":"Marte primitivo (borde exterior optimista)","unit":null,"min":0,"max":1,"step":1,"value":0,"decimals":0}],
+    "presets": [],
+    "actions": [],
+    "defaults": {"star":"0","runawayGreenhouse":"1","maximumGreenhouse":"1","recentVenus":"0","earlyMars":"0"}
+   },
+   "precision": [],
+   "specs": 4,
+   "frames": 32,
+   "readout": {
+    "calls": 32,
+    "distinct": 5,
+    "digest": "c7be1be47c2d5ef8",
+    "samples": [[{"label":"Modelo","value":"Límites de la zona habitable: umbrales de flujo de un ajuste publicado","emphasis":true},{"label":"Estrella","value":"5780 K, 1.00 veces la luminosidad del Sol"},{"label":"Venus reciente (borde interior optimista)","value":"1.776 Tierras de luz estelar (2418 W/m²), a 0.750 UA. De la historia de Venus o de Marte, no de un modelo."},{"label":"Efecto invernadero desbocado (borde interior)","value":"1.038 Tierras de luz estelar (1413 W/m²), a 0.981 UA. De un modelo climático.","emphasis":true},{"label":"Efecto invernadero máximo (borde exterior)","value":"0.351 Tierras de luz estelar (477 W/m²), a 1.689 UA. De un modelo climático.","emphasis":true},{"label":"Marte primitivo (borde exterior optimista)","value":"0.321 Tierras de luz estelar (436 W/m²), a 1.766 UA. De la historia de Venus o de Marte, no de un modelo."},{"label":"Lo que deja fuera","value":"las nubes; la rotación y la oblicuidad; el transporte de calor por los océanos; cualquier planeta que no sea de una masa terrestre con la gravedad de la Tierra; cualquier atmósfera que no sea de agua (límites interiores) o de dióxido de carbono (límites exteriores); una estrella fuera de 2600 a 7200 K. La zona es una banda de luz estelar, no una medida de ningún planeta"}],[{"label":"Modelo","value":"Límites de la zona habitable: umbrales de flujo de un ajuste publicado","emphasis":true},{"label":"Estrella","value":"4200 K, 0.15 veces la luminosidad del Sol"},{"label":"Venus reciente (borde interior optimista)","value":"1.581 Tierras de luz estelar (2152 W/m²), a 0.308 UA. De la historia de Venus o de Marte, no de un modelo."},{"label":"Efecto invernadero desbocado (borde interior)","value":"0.897 Tierras de luz estelar (1221 W/m²), a 0.409 UA. De un modelo climático.","emphasis":true},{"label":"Efecto invernadero máximo (borde exterior)","value":"0.269 Tierras de luz estelar (367 W/m²), a 0.746 UA. De un modelo climático.","emphasis":true},{"label":"Marte primitivo (borde exterior optimista)","value":"0.245 Tierras de luz estelar (333 W/m²), a 0.783 UA. De la historia de Venus o de Marte, no de un modelo."},{"label":"Lo que deja fuera","value":"las nubes; la rotación y la oblicuidad; el transporte de calor por los océanos; cualquier planeta que no sea de una masa terrestre con la gravedad de la Tierra; cualquier atmósfera que no sea de agua (límites interiores) o de dióxido de carbono (límites exteriores); una estrella fuera de 2600 a 7200 K. La zona es una banda de luz estelar, no una medida de ningún planeta"}],[{"label":"Modelo","value":"Límites de la zona habitable: umbrales de flujo de un ajuste publicado","emphasis":true},{"label":"Estrella","value":"2566 K, 0.0006 veces la luminosidad del Sol"},{"label":"Rechazado","value":"el ajuste está calibrado para estrellas de 2600 K a 7200 K; esta estrella está a 2566 K, fuera del intervalo, y no se da ningún límite","emphasis":true},{"label":"Lo que deja fuera","value":"las nubes; la rotación y la oblicuidad; el transporte de calor por los océanos; cualquier planeta que no sea de una masa terrestre con la gravedad de la Tierra; cualquier atmósfera que no sea de agua (límites interiores) o de dióxido de carbono (límites exteriores); una estrella fuera de 2600 a 7200 K. La zona es una banda de luz estelar, no una medida de ningún planeta"}],[{"label":"Modelo","value":"Límites de la zona habitable: umbrales de flujo de un ajuste publicado","emphasis":true},{"label":"Estrella","value":"3200 K, 0.0040 veces la luminosidad del Sol"},{"label":"Venus reciente (borde interior optimista)","value":"1.507 Tierras de luz estelar (2051 W/m²), a 0.0515 UA. De la historia de Venus o de Marte, no de un modelo."},{"label":"Efecto invernadero desbocado (borde interior)","value":"0.868 Tierras de luz estelar (1181 W/m²), a 0.0679 UA. De un modelo climático.","emphasis":true},{"label":"Efecto invernadero máximo (borde exterior)","value":"0.237 Tierras de luz estelar (322 W/m²), a 0.130 UA. De un modelo climático.","emphasis":true},{"label":"Marte primitivo (borde exterior optimista)","value":"0.211 Tierras de luz estelar (287 W/m²), a 0.138 UA. De la historia de Venus o de Marte, no de un modelo."},{"label":"Lo que deja fuera","value":"las nubes; la rotación y la oblicuidad; el transporte de calor por los océanos; cualquier planeta que no sea de una masa terrestre con la gravedad de la Tierra; cualquier atmósfera que no sea de agua (límites interiores) o de dióxido de carbono (límites exteriores); una estrella fuera de 2600 a 7200 K. La zona es una banda de luz estelar, no una medida de ningún planeta"}]]
+   },
+   "canvas": {
+    "calls": 32,
+    "distinct": 1,
+    "digest": "e610688fcc6117ea",
+    "samples": [{"drew":{"threw":"TypeError: canvas.after is not a function"},"texts":[]}]
+   },
+   "controls": {
+    "calls": 32,
+    "distinct": 21,
+    "digest": "72909284cac5516a",
+    "samples": [["El Sol","visible","visible","oculto","oculto"],["El Sol","oculto","oculto","oculto","oculto"],["TRAPPIST-1 (2566 K)","visible","visible","visible","visible"],["Una enana K (4200 K)","visible","visible","visible","visible"],["Una estrella F (6800 K)","visible","visible","oculto","oculto"],["Una enana K (4200 K)","visible","visible","oculto","oculto"],["Una enana M (3200 K)","visible","visible","oculto","oculto"],["TRAPPIST-1 (2566 K)","visible","visible","oculto","oculto"],["El Sol","oculto","visible","oculto","oculto"],["El Sol","visible","oculto","oculto","oculto"],["El Sol","visible","visible","visible","oculto"],["El Sol","visible","visible","oculto","visible"],["TRAPPIST-1 (2566 K)","oculto","visible","visible","oculto"],["TRAPPIST-1 (2566 K)","oculto","oculto","oculto","oculto"],["Una estrella F (6800 K)","oculto","oculto","visible","oculto"],["Una enana K (4200 K)","visible","visible","visible","oculto"],["Una enana K (4200 K)","oculto","visible","visible","oculto"],["Una estrella F (6800 K)","oculto","visible","oculto","oculto"],["TRAPPIST-1 (2566 K)","visible","oculto","visible","visible"],["Una enana M (3200 K)","oculto","visible","visible","visible"],["El Sol","visible","visible","visible","visible"]]
+   },
+   "phases": {
+    "calls": 0,
+    "distinct": 0,
+    "digest": "4f53cda18c2baa0c",
+    "samples": []
+   }
+  }
+ },
+ "hz-locking": {
+  "en": {
+   "static": {
+    "title": "Which zones are inside the locking radius?",
+    "note": "Tides raised by the star slow a planet’s spin; the closer the star, the faster. The locking radius is the distance inside which the spin is removed within the star’s age, for an Earth-like planet (k2 0.3, a 10-hour initial spin) and the Q set here. Q is not known to a factor of ten, so the radius is a range, drawn dashed.",
+    "controls": [{"id":"star","label":"Star mass","unit":null,"min":0,"max":3,"step":1,"value":2,"decimals":0},{"id":"age","label":"Age","unit":null,"min":0.5,"max":10,"step":0.5,"value":5,"decimals":1},{"id":"q","label":"Planet’s tidal quality factor","unit":null,"min":0,"max":4,"step":1,"value":2,"decimals":0}],
+    "presets": [],
+    "actions": [],
+    "defaults": {"star":"2","age":"5","q":"2"}
+   },
+   "precision": [],
+   "specs": 4,
+   "frames": 34,
+   "readout": {
+    "calls": 34,
+    "distinct": 15,
+    "digest": "9579e140c386dd6f",
+    "samples": [[{"label":"Model","value":"Tidal-locking radius in the constant-Q model","emphasis":true},{"label":"Conservative zone","value":"1.052 to 1.807 AU"},{"label":"Locking radius (range over Q)","value":"0.482 AU (0.328 to 0.708 AU)","emphasis":true},{"label":"The zone against the radius","value":"The whole zone is outside the locking radius: a planet there would keep its spin in this model.","emphasis":true},{"label":"What it leaves out","value":"orbital eccentricity; spin-orbit resonance (Mercury); atmospheric tides (Venus); the planet’s own k2 and Q, which are not known to a factor of ten, so the radius is given as a range. A planet inside the radius is despun within the age in this model; it is not a statement that it is locked"}],[{"label":"Model","value":"Tidal-locking radius in the constant-Q model","emphasis":true},{"label":"Conservative zone","value":"1.077 to 1.850 AU"},{"label":"Locking radius (range over Q)","value":"0.490 AU (0.334 to 0.719 AU)","emphasis":true},{"label":"The zone against the radius","value":"The whole zone is outside the locking radius: a planet there would keep its spin in this model.","emphasis":true},{"label":"What it leaves out","value":"orbital eccentricity; spin-orbit resonance (Mercury); atmospheric tides (Venus); the planet’s own k2 and Q, which are not known to a factor of ten, so the radius is given as a range. A planet inside the radius is despun within the age in this model; it is not a statement that it is locked"}],{"threw":"TidesError: Q must lie in [5, 10000000] for the constant-Q model"},[{"label":"Model","value":"Tidal-locking radius in the constant-Q model","emphasis":true},{"label":"Refused","value":"The star is no longer on this track at that age (it has left the main sequence stage the track covers), so there is nothing to read.","emphasis":true},{"label":"What it leaves out","value":"orbital eccentricity; spin-orbit resonance (Mercury); atmospheric tides (Venus); the planet’s own k2 and Q, which are not known to a factor of ten, so the radius is given as a range. A planet inside the radius is despun within the age in this model; it is not a statement that it is locked"}],[{"label":"Model","value":"Tidal-locking radius in the constant-Q model","emphasis":true},{"label":"Conservative zone","value":"0.0743 to 0.142 AU"},{"label":"Locking radius (range over Q)","value":"0.282 AU (0.192 to 0.414 AU)","emphasis":true},{"label":"The zone against the radius","value":"The whole zone is inside the locking radius: a planet there would be despun within the age in this model.","emphasis":true},{"label":"What it leaves out","value":"orbital eccentricity; spin-orbit resonance (Mercury); atmospheric tides (Venus); the planet’s own k2 and Q, which are not known to a factor of ten, so the radius is given as a range. A planet inside the radius is despun within the age in this model; it is not a statement that it is locked"}],[{"label":"Model","value":"Tidal-locking radius in the constant-Q model","emphasis":true},{"label":"Conservative zone","value":"0.0741 to 0.142 AU"},{"label":"Locking radius (range over Q)","value":"0.185 AU (0.126 to 0.272 AU)","emphasis":true},{"label":"The zone against the radius","value":"The whole zone is inside the locking radius: a planet there would be despun within the age in this model.","emphasis":true},{"label":"What it leaves out","value":"orbital eccentricity; spin-orbit resonance (Mercury); atmospheric tides (Venus); the planet’s own k2 and Q, which are not known to a factor of ten, so the radius is given as a range. A planet inside the radius is despun within the age in this model; it is not a statement that it is locked"}],[{"label":"Model","value":"Tidal-locking radius in the constant-Q model","emphasis":true},{"label":"Conservative zone","value":"0.216 to 0.402 AU"},{"label":"Locking radius (range over Q)","value":"0.383 AU (0.261 to 0.562 AU)","emphasis":true},{"label":"The zone against the radius","value":"The locking radius lies within the zone: the inner part would be despun and the outer part would not.","emphasis":true},{"label":"What it leaves out","value":"orbital eccentricity; spin-orbit resonance (Mercury); atmospheric tides (Venus); the planet’s own k2 and Q, which are not known to a factor of ten, so the radius is given as a range. A planet inside the radius is despun within the age in this model; it is not a statement that it is locked"}]]
+   },
+   "canvas": {
+    "calls": 34,
+    "distinct": 2,
+    "digest": "0913321715ccd28d",
+    "samples": [{"drew":{"threw":"TypeError: canvas.after is not a function"},"texts":[]},{"drew":{"threw":"TidesError: Q must lie in [5, 10000000] for the constant-Q model"},"texts":[]}]
+   },
+   "controls": {
+    "calls": 34,
+    "distinct": 22,
+    "digest": "2b984f19840419a0",
+    "samples": [["1 solar mass","5.0 Gyr","Q = 100"],["1 solar mass","5.5 Gyr","Q = 100"],["0.2 solar masses","0.5 Gyr","Q = 10"],["0.2 solar masses","5.0 Gyr","Q = 30"],["2 solar masses","10.0 Gyr","Q = 1000"],["0.2 solar masses","5.0 Gyr","Q = 100"],["0.5 solar masses","5.0 Gyr","Q = 100"],["2 solar masses","5.0 Gyr","Q = 100"],["1 solar mass","10.0 Gyr","Q = 100"],["1 solar mass","5.0 Gyr","Q = 10"],["1 solar mass","5.0 Gyr","Q = 30"],["1 solar mass","5.0 Gyr","Q = 1000"],["0.2 solar masses","4.0 Gyr","Q = 1000"],["2 solar masses","3.0 Gyr","Q = 30"],["1 solar mass","10.0 Gyr","Q = 1000"]]
+   },
+   "phases": {
+    "calls": 0,
+    "distinct": 0,
+    "digest": "4f53cda18c2baa0c",
+    "samples": []
+   }
+  },
+  "es": {
+   "static": {
+    "title": "¿Qué zonas quedan dentro del radio de acoplamiento?",
+    "note": "Las mareas que levanta la estrella frenan el espín de un planeta; cuanto más cerca la estrella, más deprisa. El radio de acoplamiento es la distancia dentro de la cual el espín se anula en la edad de la estrella, para un planeta de tipo terrestre (k2 0,3, un espín inicial de 10 horas) y la Q fijada aquí. La Q no se conoce con un factor de diez, así que el radio es un intervalo, dibujado con trazos.",
+    "controls": [{"id":"star","label":"Masa de la estrella","unit":null,"min":0,"max":3,"step":1,"value":2,"decimals":0},{"id":"age","label":"Edad","unit":null,"min":0.5,"max":10,"step":0.5,"value":5,"decimals":1},{"id":"q","label":"Factor de calidad de marea del planeta","unit":null,"min":0,"max":4,"step":1,"value":2,"decimals":0}],
+    "presets": [],
+    "actions": [],
+    "defaults": {"star":"2","age":"5","q":"2"}
+   },
+   "precision": [],
+   "specs": 4,
+   "frames": 34,
+   "readout": {
+    "calls": 34,
+    "distinct": 15,
+    "digest": "a98bdb99457597ad",
+    "samples": [[{"label":"Modelo","value":"Radio de acoplamiento de marea en el modelo de Q constante","emphasis":true},{"label":"Zona conservadora","value":"1.052 a 1.807 UA"},{"label":"Radio de acoplamiento (intervalo según Q)","value":"0.482 UA (0.328 a 0.708 UA)","emphasis":true},{"label":"La zona frente al radio","value":"Toda la zona queda fuera del radio de acoplamiento: un planeta allí conservaría su espín en este modelo.","emphasis":true},{"label":"Lo que deja fuera","value":"la excentricidad de la órbita; la resonancia espín-órbita (Mercurio); las mareas atmosféricas (Venus); el k2 y la Q propios del planeta, que no se conocen con un factor de diez, así que el radio se da como un intervalo. Un planeta dentro del radio pierde su espín dentro de la edad en este modelo; no se afirma que esté acoplado"}],[{"label":"Modelo","value":"Radio de acoplamiento de marea en el modelo de Q constante","emphasis":true},{"label":"Zona conservadora","value":"1.077 a 1.850 UA"},{"label":"Radio de acoplamiento (intervalo según Q)","value":"0.490 UA (0.334 a 0.719 UA)","emphasis":true},{"label":"La zona frente al radio","value":"Toda la zona queda fuera del radio de acoplamiento: un planeta allí conservaría su espín en este modelo.","emphasis":true},{"label":"Lo que deja fuera","value":"la excentricidad de la órbita; la resonancia espín-órbita (Mercurio); las mareas atmosféricas (Venus); el k2 y la Q propios del planeta, que no se conocen con un factor de diez, así que el radio se da como un intervalo. Un planeta dentro del radio pierde su espín dentro de la edad en este modelo; no se afirma que esté acoplado"}],{"threw":"TidesError: Q must lie in [5, 10000000] for the constant-Q model"},[{"label":"Modelo","value":"Radio de acoplamiento de marea en el modelo de Q constante","emphasis":true},{"label":"Rechazado","value":"A esa edad la estrella ya no está en este modelo (ha salido de la etapa de secuencia principal que cubre), así que no hay nada que leer.","emphasis":true},{"label":"Lo que deja fuera","value":"la excentricidad de la órbita; la resonancia espín-órbita (Mercurio); las mareas atmosféricas (Venus); el k2 y la Q propios del planeta, que no se conocen con un factor de diez, así que el radio se da como un intervalo. Un planeta dentro del radio pierde su espín dentro de la edad en este modelo; no se afirma que esté acoplado"}],[{"label":"Modelo","value":"Radio de acoplamiento de marea en el modelo de Q constante","emphasis":true},{"label":"Zona conservadora","value":"0.0743 a 0.142 UA"},{"label":"Radio de acoplamiento (intervalo según Q)","value":"0.282 UA (0.192 a 0.414 UA)","emphasis":true},{"label":"La zona frente al radio","value":"Toda la zona queda dentro del radio de acoplamiento: un planeta allí perdería su espín dentro de la edad en este modelo.","emphasis":true},{"label":"Lo que deja fuera","value":"la excentricidad de la órbita; la resonancia espín-órbita (Mercurio); las mareas atmosféricas (Venus); el k2 y la Q propios del planeta, que no se conocen con un factor de diez, así que el radio se da como un intervalo. Un planeta dentro del radio pierde su espín dentro de la edad en este modelo; no se afirma que esté acoplado"}],[{"label":"Modelo","value":"Radio de acoplamiento de marea en el modelo de Q constante","emphasis":true},{"label":"Zona conservadora","value":"0.0741 a 0.142 UA"},{"label":"Radio de acoplamiento (intervalo según Q)","value":"0.185 UA (0.126 a 0.272 UA)","emphasis":true},{"label":"La zona frente al radio","value":"Toda la zona queda dentro del radio de acoplamiento: un planeta allí perdería su espín dentro de la edad en este modelo.","emphasis":true},{"label":"Lo que deja fuera","value":"la excentricidad de la órbita; la resonancia espín-órbita (Mercurio); las mareas atmosféricas (Venus); el k2 y la Q propios del planeta, que no se conocen con un factor de diez, así que el radio se da como un intervalo. Un planeta dentro del radio pierde su espín dentro de la edad en este modelo; no se afirma que esté acoplado"}],[{"label":"Modelo","value":"Radio de acoplamiento de marea en el modelo de Q constante","emphasis":true},{"label":"Zona conservadora","value":"0.216 a 0.402 UA"},{"label":"Radio de acoplamiento (intervalo según Q)","value":"0.383 UA (0.261 a 0.562 UA)","emphasis":true},{"label":"La zona frente al radio","value":"El radio de acoplamiento cae dentro de la zona: la parte interior perdería su espín y la exterior no.","emphasis":true},{"label":"Lo que deja fuera","value":"la excentricidad de la órbita; la resonancia espín-órbita (Mercurio); las mareas atmosféricas (Venus); el k2 y la Q propios del planeta, que no se conocen con un factor de diez, así que el radio se da como un intervalo. Un planeta dentro del radio pierde su espín dentro de la edad en este modelo; no se afirma que esté acoplado"}]]
+   },
+   "canvas": {
+    "calls": 34,
+    "distinct": 2,
+    "digest": "0913321715ccd28d",
+    "samples": [{"drew":{"threw":"TypeError: canvas.after is not a function"},"texts":[]},{"drew":{"threw":"TidesError: Q must lie in [5, 10000000] for the constant-Q model"},"texts":[]}]
+   },
+   "controls": {
+    "calls": 34,
+    "distinct": 22,
+    "digest": "9cc4f65b2d3557d7",
+    "samples": [["1 masa solar","5.0 Gyr","Q = 100"],["1 masa solar","5.5 Gyr","Q = 100"],["0,2 masas solares","0.5 Gyr","Q = 10"],["0,2 masas solares","5.0 Gyr","Q = 30"],["2 masas solares","10.0 Gyr","Q = 1000"],["0,2 masas solares","5.0 Gyr","Q = 100"],["0,5 masas solares","5.0 Gyr","Q = 100"],["2 masas solares","5.0 Gyr","Q = 100"],["1 masa solar","10.0 Gyr","Q = 100"],["1 masa solar","5.0 Gyr","Q = 10"],["1 masa solar","5.0 Gyr","Q = 30"],["1 masa solar","5.0 Gyr","Q = 1000"],["0,2 masas solares","4.0 Gyr","Q = 1000"],["2 masas solares","3.0 Gyr","Q = 30"],["1 masa solar","10.0 Gyr","Q = 1000"]]
+   },
+   "phases": {
+    "calls": 0,
+    "distinct": 0,
+    "digest": "4f53cda18c2baa0c",
+    "samples": []
+   }
+  }
+ },
+ "hz-ages": {
+  "en": {
+   "static": {
+    "title": "Where the zone is, at three ages",
+    "note": "A star of one solar mass from the MIST evolution tracks brightens as it ages, and the zone moves out with it. The age counts from the start of the model track. This is a model star, not the Sun: it is about 11 percent brighter than the Sun at the Sun’s age.",
+    "controls": [{"id":"age","label":"Age","unit":null,"min":0.25,"max":10,"step":0.01,"value":4.57,"decimals":2}],
+    "presets": [{"label":"1 Gyr","values":{"age":"1"},"note":null},{"label":"4.57 Gyr","values":{"age":"4.57"},"note":null},{"label":"8 Gyr","values":{"age":"8"},"note":null}],
+    "actions": [],
+    "defaults": {"age":"4.57"}
+   },
+   "precision": [],
+   "specs": 3,
+   "frames": 25,
+   "readout": {
+    "calls": 25,
+    "distinct": 16,
+    "digest": "228acde54523a714",
+    "samples": [[{"label":"Model","value":"Habitable zone of a model star at an age (MIST track)","emphasis":true},{"label":"The model star","value":"1.108 times the Sun’s present luminosity, 5849 K"},{"label":"Conservative zone","value":"1.029 to 1.767 AU","emphasis":true},{"label":"A planet at 1 AU","value":"receives 1.108 Earths of starlight: closer in than the inner edge","emphasis":true},{"label":"Not the Sun","value":"This is a model star of one solar mass, not the Sun. At the Sun’s age it is 11 percent brighter than the Sun really is, so the 1 AU reading belongs to the model."},{"label":"What it leaves out","value":"clouds; rotation and obliquity; ocean heat transport; any planet but one of an Earth mass with Earth gravity; any atmosphere but water (inner limits) or carbon dioxide (outer limits); a star outside 2600 to 7200 K. The zone is a band of starlight, not a measurement of any planet"}],[{"label":"Model","value":"Habitable zone of a model star at an age (MIST track)","emphasis":true},{"label":"The model star","value":"2.319 times the Sun’s present luminosity, 5650 K"},{"label":"Conservative zone","value":"1.506 to 2.600 AU","emphasis":true},{"label":"A planet at 1 AU","value":"receives 2.319 Earths of starlight: closer in than the inner edge","emphasis":true},{"label":"Not the Sun","value":"This is a model star of one solar mass, not the Sun. At the Sun’s age it is 11 percent brighter than the Sun really is, so the 1 AU reading belongs to the model."},{"label":"What it leaves out","value":"clouds; rotation and obliquity; ocean heat transport; any planet but one of an Earth mass with Earth gravity; any atmosphere but water (inner limits) or carbon dioxide (outer limits); a star outside 2600 to 7200 K. The zone is a band of starlight, not a measurement of any planet"}],[{"label":"Model","value":"Habitable zone of a model star at an age (MIST track)","emphasis":true},{"label":"The model star","value":"0.784 times the Sun’s present luminosity, 5729 K"},{"label":"Conservative zone","value":"0.871 to 1.501 AU","emphasis":true},{"label":"A planet at 1 AU","value":"receives 0.784 Earths of starlight: inside the zone","emphasis":true},{"label":"Not the Sun","value":"This is a model star of one solar mass, not the Sun. At the Sun’s age it is 11 percent brighter than the Sun really is, so the 1 AU reading belongs to the model."},{"label":"What it leaves out","value":"clouds; rotation and obliquity; ocean heat transport; any planet but one of an Earth mass with Earth gravity; any atmosphere but water (inner limits) or carbon dioxide (outer limits); a star outside 2600 to 7200 K. The zone is a band of starlight, not a measurement of any planet"}],[{"label":"Model","value":"Habitable zone of a model star at an age (MIST track)","emphasis":true},{"label":"The model star","value":"0.944 times the Sun’s present luminosity, 5802 K"},{"label":"Conservative zone","value":"0.952 to 1.637 AU","emphasis":true},{"label":"A planet at 1 AU","value":"receives 0.944 Earths of starlight: inside the zone","emphasis":true},{"label":"Not the Sun","value":"This is a model star of one solar mass, not the Sun. At the Sun’s age it is 11 percent brighter than the Sun really is, so the 1 AU reading belongs to the model."},{"label":"What it leaves out","value":"clouds; rotation and obliquity; ocean heat transport; any planet but one of an Earth mass with Earth gravity; any atmosphere but water (inner limits) or carbon dioxide (outer limits); a star outside 2600 to 7200 K. The zone is a band of starlight, not a measurement of any planet"}]]
+   },
+   "canvas": {
+    "calls": 25,
+    "distinct": 1,
+    "digest": "e610688fcc6117ea",
+    "samples": [{"drew":{"threw":"TypeError: canvas.after is not a function"},"texts":[]}]
+   },
+   "controls": {
+    "calls": 25,
+    "distinct": 16,
+    "digest": "8b60de7a75ef0843",
+    "samples": [["4.57 Gyr"],["0.25 Gyr"],["10.00 Gyr"]]
+   },
+   "phases": {
+    "calls": 3,
+    "distinct": 3,
+    "digest": "9e9b8913ba4bb9cd",
+    "samples": [{"preset":"1 Gyr","note":null},{"preset":"8 Gyr","note":null},{"preset":"4.57 Gyr","note":null}]
+   }
+  },
+  "es": {
+   "static": {
+    "title": "Dónde está la zona, a tres edades",
+    "note": "Una estrella de una masa solar de los modelos de evolución MIST se hace más brillante con la edad, y la zona se desplaza hacia fuera con ella. La edad se cuenta desde el comienzo del modelo. Es una estrella modelo, no el Sol: es un 11 por ciento más brillante que el Sol a la edad del Sol.",
+    "controls": [{"id":"age","label":"Edad","unit":null,"min":0.25,"max":10,"step":0.01,"value":4.57,"decimals":2}],
+    "presets": [{"label":"1 Gyr","values":{"age":"1"},"note":null},{"label":"4.57 Gyr","values":{"age":"4.57"},"note":null},{"label":"8 Gyr","values":{"age":"8"},"note":null}],
+    "actions": [],
+    "defaults": {"age":"4.57"}
+   },
+   "precision": [],
+   "specs": 3,
+   "frames": 25,
+   "readout": {
+    "calls": 25,
+    "distinct": 16,
+    "digest": "aefc7e98a2af2551",
+    "samples": [[{"label":"Modelo","value":"Zona habitable de una estrella modelo a una edad (modelo MIST)","emphasis":true},{"label":"La estrella modelo","value":"1.108 veces la luminosidad actual del Sol, 5849 K"},{"label":"Zona conservadora","value":"1.029 a 1.767 UA","emphasis":true},{"label":"Un planeta a 1 UA","value":"recibe 1.108 Tierras de luz estelar: más cerca que el borde interior","emphasis":true},{"label":"No es el Sol","value":"Es una estrella modelo de una masa solar, no el Sol. A la edad del Sol es un 11 por ciento más brillante que el Sol de verdad, así que la lectura a 1 UA pertenece al modelo."},{"label":"Lo que deja fuera","value":"las nubes; la rotación y la oblicuidad; el transporte de calor por los océanos; cualquier planeta que no sea de una masa terrestre con la gravedad de la Tierra; cualquier atmósfera que no sea de agua (límites interiores) o de dióxido de carbono (límites exteriores); una estrella fuera de 2600 a 7200 K. La zona es una banda de luz estelar, no una medida de ningún planeta"}],[{"label":"Modelo","value":"Zona habitable de una estrella modelo a una edad (modelo MIST)","emphasis":true},{"label":"La estrella modelo","value":"2.319 veces la luminosidad actual del Sol, 5650 K"},{"label":"Zona conservadora","value":"1.506 a 2.600 UA","emphasis":true},{"label":"Un planeta a 1 UA","value":"recibe 2.319 Tierras de luz estelar: más cerca que el borde interior","emphasis":true},{"label":"No es el Sol","value":"Es una estrella modelo de una masa solar, no el Sol. A la edad del Sol es un 11 por ciento más brillante que el Sol de verdad, así que la lectura a 1 UA pertenece al modelo."},{"label":"Lo que deja fuera","value":"las nubes; la rotación y la oblicuidad; el transporte de calor por los océanos; cualquier planeta que no sea de una masa terrestre con la gravedad de la Tierra; cualquier atmósfera que no sea de agua (límites interiores) o de dióxido de carbono (límites exteriores); una estrella fuera de 2600 a 7200 K. La zona es una banda de luz estelar, no una medida de ningún planeta"}],[{"label":"Modelo","value":"Zona habitable de una estrella modelo a una edad (modelo MIST)","emphasis":true},{"label":"La estrella modelo","value":"0.784 veces la luminosidad actual del Sol, 5729 K"},{"label":"Zona conservadora","value":"0.871 a 1.501 UA","emphasis":true},{"label":"Un planeta a 1 UA","value":"recibe 0.784 Tierras de luz estelar: dentro de la zona","emphasis":true},{"label":"No es el Sol","value":"Es una estrella modelo de una masa solar, no el Sol. A la edad del Sol es un 11 por ciento más brillante que el Sol de verdad, así que la lectura a 1 UA pertenece al modelo."},{"label":"Lo que deja fuera","value":"las nubes; la rotación y la oblicuidad; el transporte de calor por los océanos; cualquier planeta que no sea de una masa terrestre con la gravedad de la Tierra; cualquier atmósfera que no sea de agua (límites interiores) o de dióxido de carbono (límites exteriores); una estrella fuera de 2600 a 7200 K. La zona es una banda de luz estelar, no una medida de ningún planeta"}],[{"label":"Modelo","value":"Zona habitable de una estrella modelo a una edad (modelo MIST)","emphasis":true},{"label":"La estrella modelo","value":"0.944 veces la luminosidad actual del Sol, 5802 K"},{"label":"Zona conservadora","value":"0.952 a 1.637 UA","emphasis":true},{"label":"Un planeta a 1 UA","value":"recibe 0.944 Tierras de luz estelar: dentro de la zona","emphasis":true},{"label":"No es el Sol","value":"Es una estrella modelo de una masa solar, no el Sol. A la edad del Sol es un 11 por ciento más brillante que el Sol de verdad, así que la lectura a 1 UA pertenece al modelo."},{"label":"Lo que deja fuera","value":"las nubes; la rotación y la oblicuidad; el transporte de calor por los océanos; cualquier planeta que no sea de una masa terrestre con la gravedad de la Tierra; cualquier atmósfera que no sea de agua (límites interiores) o de dióxido de carbono (límites exteriores); una estrella fuera de 2600 a 7200 K. La zona es una banda de luz estelar, no una medida de ningún planeta"}]]
+   },
+   "canvas": {
+    "calls": 25,
+    "distinct": 1,
+    "digest": "e610688fcc6117ea",
+    "samples": [{"drew":{"threw":"TypeError: canvas.after is not a function"},"texts":[]}]
+   },
+   "controls": {
+    "calls": 25,
+    "distinct": 16,
+    "digest": "8b60de7a75ef0843",
+    "samples": [["4.57 Gyr"],["0.25 Gyr"],["10.00 Gyr"]]
+   },
+   "phases": {
+    "calls": 3,
+    "distinct": 3,
+    "digest": "9e9b8913ba4bb9cd",
+    "samples": [{"preset":"1 Gyr","note":null},{"preset":"8 Gyr","note":null},{"preset":"4.57 Gyr","note":null}]
+   }
+  }
+ }
+}

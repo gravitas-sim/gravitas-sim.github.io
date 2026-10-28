@@ -254,12 +254,13 @@ describe('the document inventory', () => {
     // 705 after Why Rings?, Tides That Move the Moon and Io’s Fire (Prompt 204 part 2): 33 more.
     // 716 after What Is in This Field? (Prompt 191 part 3): 11 more.
     // 738 after the two Sun investigations (Prompt 194 part 2): 22 more.
-    expect(inv.documents).toBe(738);
-    expect(inv.byLocale).toEqual({ en: 339, es: 399 });
+    // 744 after the Goldilocks upper depth (Prompt 205 part B): a key for each of three depths, in two languages, 6 more.
+    expect(inv.documents).toBe(744);
+    expect(inv.byLocale).toEqual({ en: 342, es: 402 });
     expect(inv.byKind.notes).toBe(INVESTIGATIONS.length);
     expect(inv.byVariant).toEqual({
       activity: 12,
-      depth: 318,
+      depth: 324,
       full: 312,
       general: 18,
       notes: 78,
@@ -290,7 +291,7 @@ describe('the document inventory', () => {
     const withDepth = INVESTIGATIONS.filter(
       i => withAllDepths(i).steps.length !== i.steps.length
     ).map(i => i.id);
-    expect(withDepth.length).toBe(53);
+    expect(withDepth.length).toBe(54);
     for (const id of withDepth)
       for (const d of ['core', 'quantitative', 'advanced'])
         for (const suffix of ['', '-es'])

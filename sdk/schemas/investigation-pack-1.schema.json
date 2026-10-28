@@ -1480,7 +1480,10 @@
             "tides-roche",
             "tides-resonance",
             "tides-moon",
-            "tides-heating"
+            "tides-heating",
+            "hz-limits",
+            "hz-locking",
+            "hz-ages"
           ]
         }
       }

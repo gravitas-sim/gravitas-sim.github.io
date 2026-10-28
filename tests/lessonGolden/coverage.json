@@ -4,7 +4,6 @@
     "goldilocks-question",
     "transit-photometry",
     "what-is-a-gravitational-wave",
-    "missing-mass",
     "butterfly-effect",
     "binary-star-planets",
     "black-holes",
@@ -106,6 +105,8 @@
       "type:wedges"
     ],
     "goldilocks-question": [
+      "depth-step:advanced/measure",
+      "depth-step:advanced/read",
       "key:explore.allowInspector",
       "key:explore.pauseAt",
       "key:explore.setup",
@@ -119,6 +120,9 @@
       "key:question.requires",
       "key:question.stage",
       "key:question.tip",
+      "key:question.tool",
+      "key:read.after",
+      "key:read.depth",
       "key:read.tool",
       "lock:{\"placement\":true,\"inspector\":true,\"areaSweep\":false}",
       "math:algebra",
@@ -131,7 +135,6 @@
       "key:explore.observerAngle",
       "key:measure.lightCurve",
       "key:question.agrees",
-      "key:question.tool",
       "key:read.figure",
       "key:read.pauseAt",
       "key:read.probe"
@@ -146,12 +149,6 @@
       "key:read.stage",
       "lock:{\"placement\":true,\"inspector\":false,\"areaSweep\":false}",
       "math:arithmetic"
-    ],
-    "missing-mass": [
-      "depth-step:advanced/measure",
-      "depth-step:advanced/read",
-      "key:read.after",
-      "key:read.depth"
     ],
     "butterfly-effect": [
       "key:explore.rubric",
@@ -265,16 +262,16 @@
   ],
   "totals": {
     "investigations": 78,
-    "steps": 1399,
+    "steps": 1408,
     "activityCuts": 6,
     "lessonTokens": 142,
     "activityTokens": 29,
     "stepTypes": {
-      "read": 266,
+      "read": 267,
       "predict": 155,
       "ellipse": 1,
-      "question": 502,
-      "measure": 331,
+      "question": 504,
+      "measure": 337,
       "explore": 143,
       "wedges": 1
     }

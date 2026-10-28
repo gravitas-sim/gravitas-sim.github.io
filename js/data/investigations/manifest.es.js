@@ -109,6 +109,7 @@ export const MANIFEST = [
     level: 'Astronomía introductoria',
     thumbnail: 'images/scenarios/habitable-zone-lab.webp',
     series: 'Detección de exoplanetas',
+    depths: 3,
     stepCount: 37,
     gradedCount: 19,
     objectiveCount: 7,

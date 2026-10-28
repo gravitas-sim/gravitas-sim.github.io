@@ -64,6 +64,7 @@ export const PARTS = Object.freeze({
     'binary',
     'blackHole',
     'habitability',
+    'habitabilityLimits',
     'exoplanet',
     'tidal',
     'darkMatter',

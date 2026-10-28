@@ -7,8 +7,8 @@ export default {
       title: 'Los bordes son cantidades de luz estelar',
       body: 'Cada borde que has usado era una distancia. Detrás de cada distancia hay una cantidad de luz estelar, en Tierras, que un ajuste climático publicado dice que un planeta de una masa terrestre puede soportar. La distancia sale de la luminosidad de la estrella y de la ley del inverso del cuadrado que escribiste al principio; la cantidad de luz estelar es la del propio ajuste.\n\nEl panel muestra los cuatro límites para el Sol. Lee la luz estelar en el límite del <strong>efecto invernadero desbocado</strong> (el borde interior de la zona conservadora) y en el del <strong>efecto invernadero máximo</strong> (el borde exterior).',
       fields: [
-        { label: 'Luz estelar en el límite del invernadero desbocado' },
-        { label: 'Luz estelar en el límite del invernadero máximo' },
+        { label: 'Luz estelar en el límite del invernadero desbocado (Tierras)' },
+        { label: 'Luz estelar en el límite del invernadero máximo (Tierras)' },
       ],
       tool: {
         title: 'Cuatro límites para el Sol',
@@ -19,7 +19,7 @@ export default {
       title: 'El mismo límite junto a una estrella tenue',
       body: 'Elige <strong>una enana M (3200 K)</strong>, una estrella con cerca del 0,4 por ciento de la luminosidad del Sol. Lee la luz estelar en su límite del invernadero desbocado y la distancia a la que un planeta la recibe.\n\nLa cantidad de luz estelar cambia poco de una estrella a otra (el ajuste depende débilmente de la temperatura de la estrella). La distancia cambia mucho, porque cambia la luminosidad.',
       fields: [
-        { label: 'Luz estelar en el límite del invernadero desbocado' },
+        { label: 'Luz estelar en el límite del invernadero desbocado (Tierras)' },
         { label: 'Distancia de ese límite' },
       ],
       tool: {

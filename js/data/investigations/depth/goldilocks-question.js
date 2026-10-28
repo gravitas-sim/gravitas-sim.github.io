@@ -38,14 +38,14 @@ export default {
       fields: [
         {
           id: 'runaway',
-          label: 'Starlight at the runaway-greenhouse limit',
-          unit: 'Earths',
+          label: 'Starlight at the runaway-greenhouse limit (Earths)',
+          unit: '',
           hint: '1.04',
         },
         {
           id: 'maximum',
-          label: 'Starlight at the maximum-greenhouse limit',
-          unit: 'Earths',
+          label: 'Starlight at the maximum-greenhouse limit (Earths)',
+          unit: '',
           hint: '0.35',
         },
       ],
@@ -91,8 +91,8 @@ export default {
       fields: [
         {
           id: 'flux',
-          label: 'Starlight at the runaway-greenhouse limit',
-          unit: 'Earths',
+          label: 'Starlight at the runaway-greenhouse limit (Earths)',
+          unit: '',
           hint: '0.87',
         },
         {
