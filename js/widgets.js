@@ -378,6 +378,12 @@ export const LAZY_FAMILIES = Object.freeze({
     'TIDE_WIDGETS',
     ['tides-roche', 'tides-resonance', 'tides-moon', 'tides-heating']
   ),
+  habitabilityLimits: familyEntry(
+    () => import('./habitabilityLimitsWidgets.js'),
+    './habitabilityLimitsWidgets.js',
+    'HABITABILITY_LIMIT_WIDGETS',
+    ['hz-limits', 'hz-locking', 'hz-ages']
+  ),
 });
 // </generated:lazy-families>
 

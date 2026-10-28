@@ -392,6 +392,13 @@ export const NEVER_PRECACHED = [
   // imported by no page until the panel's limits and the lesson's upper depth use
   // it, and then only from their lazy chunks. D-R10-205-01.
   /^js\/kernels\/habitablezone\//,
+  // The habitable-zone limit instruments and the Goldilocks upper depth (Prompt 205
+  // part B, D-R10-205-03): the family, its words and the lesson's deeper steps and their
+  // Spanish are kept by the service worker after the first online use, not installed
+  // (the first-visit and idle tiers have no room under data-budget ceilings the
+  // standing approval does not cover).
+  /^(js\/habitabilityLimitsWidgets\.js|js\/i18n\/(en|es)\.habitablezone\.js)$/,
+  /^js\/data\/investigations\/depth\/(es\/)?goldilocks-question\.js$/,
   // The atmospheres kernel and pack (Prompt 200, ATMOSPHERES.md): imported by no
   // page until the instrument family and its lessons are built. D-R10-80.
   /^js\/kernels\/atmospheres\//,

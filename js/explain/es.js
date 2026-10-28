@@ -211,6 +211,12 @@ export default {
     'Cuándo aparece la señal y si un modelo del suceso la sigue.',
     'El ruido es real y en los datos sin tratar suele ser mayor que la señal.',
   ],
+  habitabilityLimits: [
+    'Los cuatro límites de la zona habitable como cantidades de luz estelar sobre un eje de distancia, el radio de acoplamiento junto a la zona para cuatro estrellas modelo, o la zona de una estrella modelo de una masa solar a lo largo de su edad.',
+    'Cuánta luz estelar es cada límite, dónde lo pone una estrella, cuáles vienen de un modelo climático y cuáles de la historia de Venus y Marte, cómo se desplaza la zona al envejecer la estrella y qué zonas quedan dentro del radio de acoplamiento.',
+    'Por qué la zona de una estrella tenue está cerca, por qué el borde interior se aleja al brillar más la estrella, por qué la marea de la estrella frenaría el espín en la zona de una enana M y no en la de una estrella como el Sol, y por qué se rechaza una estrella fuera de 2600 a 7200 K.',
+    'Una banda de luz estelar para un planeta de una masa terrestre no es una medida de ningún planeta. El radio de acoplamiento es un intervalo, no un valor, por una disipación desconocida. La estrella del modelo es una estrella modelo, no el Sol, y nada aquí es una historia del clima.',
+  ],
   'plot-measure': [
     'Tus propias medidas, un punto cada una, con las magnitudes nombradas en los ejes.',
     'Una línea recta de puntos indica que las magnitudes son proporcionales o, tras una transformación, una ley de potencias.',
