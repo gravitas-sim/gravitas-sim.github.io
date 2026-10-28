@@ -1,30 +1,30 @@
 {
   "version": "October 2026",
   "generated": "2026-10-28",
-  "documents": 760,
+  "documents": 766,
   "inventory": {
-    "documents": 760,
+    "documents": 766,
     "byLocale": {
-      "en": 349,
-      "es": 411
+      "en": 352,
+      "es": 414
     },
     "byKind": {
       "general": 2,
       "guide": 167,
-      "key": 506,
+      "key": 512,
       "notes": 80,
       "worksheet": 5
     },
     "byVariant": {
       "activity": 12,
-      "depth": 330,
+      "depth": 336,
       "full": 320,
       "general": 18,
       "notes": 80
     }
   },
-  "sourceFiles": 281,
-  "sourceDigest": "cabf1691c927c7b17e98ee61d5a9b92e4803837d8e2ccf203373ccd61c875c5c",
+  "sourceFiles": 283,
+  "sourceDigest": "e631f7cb0c0c5be4b49c38f2ac0b8de0b7605d6d3e4306c0552331f07e800ae8",
   "sources": {
     "js/activities/activities.js": "39ac98cd99b8b0387c55e41d5d4530bad55a8da8758819ad056be73e7a716b01",
     "js/activities/activityBridge.js": "67a82aff98e0ed935d6b8b0f0f654c6ad4332ee929cb3604e896a7f790a6fdc1",
@@ -43,7 +43,7 @@
     "js/data/activityTeaching.js": "7694fc798f8c4130e5aead5357e69bab04d6a5d386013d009430dba9a1c31008",
     "js/data/exoplanetAnswerKey.js": "b3eed2e93a5f18cc85b0b91c1127b4a977790edacf4288575961963a3673e817",
     "js/data/instructorContent.es.js": "471a388f9e2abfbe837cdad387388f52f0a547d2ae5f466e66fa5680866d5d3c",
-    "js/data/instructorContent.js": "b3e529786d79eefc545f281b8ce57cdef2e4ef62ce7cc26f8068d3e3acfcd318",
+    "js/data/instructorContent.js": "de8aa56af56bdce71c6117d584ebf4295d287587c8e6690c2fc45f7a8738d2a1",
     "js/data/instructorExpectations.es.js": "5ec751fabe0ed60f692799c260ab8f383ffae25379c4b426efdd4351e0ae00ee",
     "js/data/instructorExpectations.js": "519ccdb3e2dfe2c675ea7f4a074e266e6376eccbfb9fd10c885150eaee10c177",
     "js/data/instructorFlow.es.js": "f1c087e5240114351245f6a7fa7ad9b3efd269ec6d415183fd945ac95534fd86",
@@ -75,6 +75,7 @@
     "js/data/investigations/depth/es/cluster-membership.js": "76ed2e20189d6a7c232abe3883f44bd503d2b6e99cf84dfefcf44ff04ee09050",
     "js/data/investigations/depth/es/color-and-temperature.js": "28ae3e6aa32be6ece9baf98378f001535f5a2921447fa68bfa223b845204a123",
     "js/data/investigations/depth/es/einstein-rings-and-arcs.js": "548aedef560f4fd7f82945fbefbaa1553df5d1e5b169fb60e70390f15673e64e",
+    "js/data/investigations/depth/es/goldilocks-question.js": "9342d428457fa7cf026661363e618d9b1d20693910397338dbddac7c64215fed",
     "js/data/investigations/depth/es/inside-a-star.js": "32511010ea6c06d640c674ec8e24a9aebcd093a01c7b86e3b44fc2f7549688bb",
     "js/data/investigations/depth/es/keplers-laws.js": "4884da2cc36b38da2b246019e12e0174b1c91099ad6284034c82c32292f45ab7",
     "js/data/investigations/depth/es/leavitts-law.js": "025030cae733d69b425964dce6da61d1a627981182e36a1ffdb30a7ba361b4d5",
@@ -106,6 +107,7 @@
     "js/data/investigations/depth/es/which-kind-of-variable.js": "8a38be33b74afa322e5eaf8cc845031940810f49bda7679e337b60af16e8b188",
     "js/data/investigations/depth/es/who-gets-counted.js": "32213d6dca7eaf38d967b93f2b9a39d4ffce4c5697fe000977c32adbb91e5237",
     "js/data/investigations/depth/es/why-the-bright-ones-win.js": "7d112b942384582682a64f0795713d015f7864a0847d3da793dc236371a5e3c1",
+    "js/data/investigations/depth/goldilocks-question.js": "50163cc22c1aa3f1a60b6ea2079e9cf6c6b5fcda8b5fdc75867f02810631a635",
     "js/data/investigations/depth/inside-a-star.js": "e29579768289c6bbe4d2b53a204853b4eaa69a5e229e254b3a62ee1af2caa7e1",
     "js/data/investigations/depth/keplers-laws.js": "41f8350432a378b85e1233b187299dabb04d57bab7958d7df4333c1f6c0226dc",
     "js/data/investigations/depth/leavitts-law.js": "9454cd1d1d1015776ca933de073c4e153e441c3698b77c510c62e68ca919090f",
@@ -205,7 +207,7 @@
     "js/data/investigations/es/who-gets-counted.js": "9a8c6eb0edf2c5eeaae0b2cfa448b2784795dd5882f7caf059e3c50cd8b84634",
     "js/data/investigations/es/why-the-bright-ones-win.js": "e44b8549ae8ad24107e75558487552ed4fc01eb59c206c8a9b8907a704192f99",
     "js/data/investigations/extending-an-experiment.js": "5c35594bba4ba6e785215a36a48aaf4038bbee6ead8f77dd1b2ee3f60dd7ec69",
-    "js/data/investigations/goldilocks-question.js": "0d8d494637e43e86f499f585c9642d3e94ce08d9cb6444b887a96226b545cd11",
+    "js/data/investigations/goldilocks-question.js": "1b8d7b5e35626f285de049a108045d84160f2bb3e7d9d0f338f9360580350328",
     "js/data/investigations/gravity-assist.js": "3cf9644f2af3355343c81cdb1d11f4c28dd4a07a419875ac7023bd667dedcc1f",
     "js/data/investigations/hohmann-transfer.js": "81b0a8aa402db09636181b01dd77fd70f4c6ccc60dc1476f6b3d392082676913",
     "js/data/investigations/i18n.js": "b58ba59ef1fd8bc1f6b3a68bb57b90268da79b040087afe90d143cf04b14d511",
@@ -277,10 +279,10 @@
     "js/instructorExpectations.js": "09b1aeac6b3fa134374f0286029cdda1cbe68c9e3d7885afdc75387a4f5d6282",
     "js/instructorFacts.js": "a8939d4e55ea32df76d53d4ae9222ccb98554a0251603aafe523f4f37f658a41",
     "js/instructorFlow.js": "d06edcc3404196951515250e971b81ddb53cd00315704c7f65b2616de0084122",
-    "js/instructorLocale.js": "adc6969855ecc531501c1e8471f1868fd17a34a2e673b41137dcb475489b9468",
-    "js/instructorNotes.js": "a7b99db5efa6ff5b90956dbae6fe1de94d50fb587c26e7bc9039923bb59e865b",
+    "js/instructorLocale.js": "ced4e2bf22081c35fb369f88015af141a24647b3d66bd493d814b5dbd966f364",
+    "js/instructorNotes.js": "b5968f82e98e52a65b5fab395d6bc305d0d9f8bb97a88f55043f04472f52a06e",
     "js/instructorSource.js": "da3fb5a0d4387db76d3117b0c7cac81919de0186041cf4161c328d5802f5890a",
-    "js/investigations/depthAll.js": "692cfd1ef25a21fe47303091f85049e15d66981855702fd356dfcea1c68b6880",
+    "js/investigations/depthAll.js": "d244ddcfccde83d35a213f6345423f5b1d64574f6ada6867630c9e04b7d39074",
     "js/investigations/depthPure.js": "61ea6369eef1b8b9c39c2395f2be1a1ebaf83772180520f6ec7fbe3c8ea085f6",
     "js/investigations/progressBackup.js": "36f9c5642612fd62c91e3e483eb1083684e297157c8d1fd12b3fb3aaa0eae44d",
     "js/lab3d/elements.js": "6a951db87df0d36795285e1ea6abb6ab473c48cda372ea985279bc498a34d043",
@@ -308,5 +310,5 @@
     "tools/instructor-freshness.mjs": "96052b2f27080f0243fdd4d5f7608927bd67f0c50808b6eac3345a65c14d1e28",
     "tools/source-closure.mjs": "961828e4d0d40d8a6f8c029fe9b9435ecaf39a74b62640efc0b4145c35c7650a"
   },
-  "contentDigest": "c455bd709b5a08d54417b81331e9cc0bc0af6ea0c62173ce956e7e018130a320"
+  "contentDigest": "d1e5b1d284ba7cea7dce486c7946eeddcef98388fbfc9fc445554b469ebbf5a4"
 }

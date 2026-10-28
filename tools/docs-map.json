@@ -370,7 +370,7 @@
       "kind": "feature",
       "purpose": "Habitable zone II: the threshold limits, the zone along a MIST track, the locking radius and the eccentric-orbit flux (Prompt 205, part A).",
       "owner": 205,
-      "student": false
+      "student": true
     },
     {
       "file": "IMAGE_IMPORT.md",

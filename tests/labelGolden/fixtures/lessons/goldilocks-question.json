@@ -10,7 +10,20 @@
     ["steps.write-the-three-down.fields.4.unit","AU"],
     ["steps.write-the-three-down.fields.5.unit","Earths"],
     ["steps.writing-it-down-then-using.unit","Earths"],
+    ["steps.the-limits-as-starlight.fields.0.unit",""],
+    ["steps.the-limits-as-starlight.fields.1.unit",""],
+    ["steps.the-same-limit-a-dim-star.fields.0.unit",""],
+    ["steps.the-same-limit-a-dim-star.fields.1.unit","AU"],
     ["steps.venus-by-the-rule-you.unit","Earths"],
+    ["steps.the-zone-at-three-ages.fields.0.unit","AU"],
+    ["steps.the-zone-at-three-ages.fields.1.unit","AU"],
+    ["steps.the-zone-at-three-ages.fields.2.unit","AU"],
+    ["steps.the-m-dwarf-zone-and-the-tide.fields.0.unit","AU"],
+    ["steps.the-m-dwarf-zone-and-the-tide.fields.1.unit","AU"],
+    ["steps.a-middling-star.fields.0.unit","AU"],
+    ["steps.a-middling-star.fields.1.unit","AU"],
+    ["steps.how-sure-is-the-radius.fields.0.unit","AU"],
+    ["steps.how-sure-is-the-radius.fields.1.unit","AU"],
     ["steps.take-the-readings-yourself.fields.0.unit","Earths"],
     ["steps.take-the-readings-yourself.fields.1.unit","Earths"],
     ["steps.take-the-readings-yourself.fields.2.unit","Earths"],
@@ -27,6 +40,22 @@
     ["steps.write-the-three-down.fields.4.label","Distance 3"],
     ["steps.write-the-three-down.fields.4.hint","2"],
     ["steps.write-the-three-down.fields.5.hint","0.25"],
+    ["steps.the-limits-as-starlight.fields.0.hint","1.04"],
+    ["steps.the-limits-as-starlight.fields.1.hint","0.35"],
+    ["steps.the-same-limit-a-dim-star.fields.0.hint","0.87"],
+    ["steps.the-same-limit-a-dim-star.fields.1.hint","0.068"],
+    ["steps.the-zone-at-three-ages.fields.0.label","Inner edge at 1 billion years"],
+    ["steps.the-zone-at-three-ages.fields.0.hint","0.89"],
+    ["steps.the-zone-at-three-ages.fields.1.label","Inner edge at 4.57 billion years"],
+    ["steps.the-zone-at-three-ages.fields.1.hint","1.03"],
+    ["steps.the-zone-at-three-ages.fields.2.label","Inner edge at 8 billion years"],
+    ["steps.the-zone-at-three-ages.fields.2.hint","1.24"],
+    ["steps.the-m-dwarf-zone-and-the-tide.fields.0.hint","0.28"],
+    ["steps.the-m-dwarf-zone-and-the-tide.fields.1.hint","0.074"],
+    ["steps.a-middling-star.fields.0.hint","0.38"],
+    ["steps.a-middling-star.fields.1.hint","0.40"],
+    ["steps.how-sure-is-the-radius.fields.0.hint","0.26"],
+    ["steps.how-sure-is-the-radius.fields.1.hint","0.56"],
     ["steps.take-the-readings-yourself.fields.0.label","TRAPPIST-1e receives"],
     ["steps.take-the-readings-yourself.fields.0.hint","0.65"],
     ["steps.take-the-readings-yourself.fields.1.label","TRAPPIST-1f receives"],
@@ -45,6 +74,9 @@
     ["steps.write-the-three-down.fields.2.label","Distancia 2"],
     ["steps.write-the-three-down.fields.4.label","Distancia 3"],
     ["steps.write-the-three-down.fields.5.hint","0,25"],
+    ["steps.the-zone-at-three-ages.fields.0.label","Borde interior a 1000 millones de años"],
+    ["steps.the-zone-at-three-ages.fields.1.label","Borde interior a 4570 millones de años"],
+    ["steps.the-zone-at-three-ages.fields.2.label","Borde interior a 8000 millones de años"],
     ["steps.take-the-readings-yourself.fields.0.label","TRAPPIST-1e recibe"],
     ["steps.take-the-readings-yourself.fields.0.hint","0,65"],
     ["steps.take-the-readings-yourself.fields.1.label","TRAPPIST-1f recibe"],
@@ -85,11 +117,29 @@
    "the-wider-definition-on-the": {
     "probe": [[{"label":"Selected","value":"click a planet on the canvas to read it"}],[{"label":"Planet","value":"Eccentric Orbiter"},{"label":"Distance from its star","value":"1.234 AU"},{"label":"Starlight it receives","value":"0.65 Earths"},{"label":"Zone (conservative)","value":"0.95 to 1.67 AU"},{"label":"Which puts it","value":"inside the habitable zone"}],[{"label":"Planet","value":"Circular Orbiter"},{"label":"Distance from its star","value":"0.046 AU"},{"label":"Starlight it receives","value":"14.20 Earths"},{"label":"Zone (conservative)","value":"0.10 to 0.30 AU"},{"label":"Which puts it","value":"inside the inner edge"}],[{"label":"Planet","value":"Far Orbiter"},{"label":"Distance from its star","value":"9.500 AU"},{"label":"Starlight it receives","value":"0.01 Earths"},{"label":"Zone (conservative)","value":"0.80 to 1.40 AU"},{"label":"Which puts it","value":"outside the outer edge"}]]
    },
+   "the-limits-as-starlight": {
+    "validate": {"calls":232,"distinct":2,"digest":"aab66adffbb72125","samples":[null,{"level":"error","message":"Read “Runaway greenhouse” and “Maximum greenhouse” in the panel for the Sun. Each row begins with the amount of starlight, in Earths."}]}
+   },
+   "the-same-limit-a-dim-star": {
+    "validate": {"calls":232,"distinct":2,"digest":"4ed3e01f68549de5","samples":[null,{"level":"error","message":"Choose the M dwarf (3200 K) and read the “Runaway greenhouse” row: the amount of starlight first, then the distance."}]}
+   },
+   "the-zone-at-three-ages": {
+    "validate": {"calls":242,"distinct":2,"digest":"7618ccc5dce3e686","samples":[null,{"level":"error","message":"Use the 1 Gyr, 4.57 Gyr and 8 Gyr buttons and read “Conservative zone” each time: the first number is the inner edge."}]}
+   },
    "crossing-the-edges": {
     "probe": [[{"label":"Selected","value":"click a planet on the canvas to read it"}],[{"label":"Planet","value":"Eccentric Orbiter"},{"label":"Distance from its star","value":"1.234 AU"},{"label":"Starlight it receives","value":"0.65 Earths"},{"label":"Zone (conservative)","value":"0.95 to 1.67 AU"},{"label":"Which puts it","value":"inside the habitable zone"}],[{"label":"Planet","value":"Circular Orbiter"},{"label":"Distance from its star","value":"0.046 AU"},{"label":"Starlight it receives","value":"14.20 Earths"},{"label":"Zone (conservative)","value":"0.10 to 0.30 AU"},{"label":"Which puts it","value":"inside the inner edge"}],[{"label":"Planet","value":"Far Orbiter"},{"label":"Distance from its star","value":"9.500 AU"},{"label":"Starlight it receives","value":"0.01 Earths"},{"label":"Zone (conservative)","value":"0.80 to 1.40 AU"},{"label":"Which puts it","value":"outside the outer edge"}]]
    },
    "reading-the-fraction": {
     "probe": [[{"label":"Selected","value":"click a planet on the canvas to read it"}],[{"label":"Planet","value":"Eccentric Orbiter"},{"label":"Distance from its star","value":"1.234 AU"},{"label":"Starlight it receives","value":"0.65 Earths"},{"label":"Zone (conservative)","value":"0.95 to 1.67 AU"},{"label":"Which puts it","value":"inside the habitable zone"}],[{"label":"Planet","value":"Circular Orbiter"},{"label":"Distance from its star","value":"0.046 AU"},{"label":"Starlight it receives","value":"14.20 Earths"},{"label":"Zone (conservative)","value":"0.10 to 0.30 AU"},{"label":"Which puts it","value":"inside the inner edge"}],[{"label":"Planet","value":"Far Orbiter"},{"label":"Distance from its star","value":"9.500 AU"},{"label":"Starlight it receives","value":"0.01 Earths"},{"label":"Zone (conservative)","value":"0.80 to 1.40 AU"},{"label":"Which puts it","value":"outside the outer edge"}]]
+   },
+   "the-m-dwarf-zone-and-the-tide": {
+    "validate": {"calls":232,"distinct":2,"digest":"9b472752b5a56f12","samples":[null,{"level":"error","message":"Choose 0.2 solar masses, set the age to 5 Gyr and Q = 100, and read “Locking radius” and the first number of “Conservative zone”."}]}
+   },
+   "a-middling-star": {
+    "validate": {"calls":232,"distinct":2,"digest":"7ebffef065f885fb","samples":[null,{"level":"error","message":"Choose 0.5 solar masses, set the age to 5 Gyr and Q = 100, and read “Locking radius” and the second number of “Conservative zone”."}]}
+   },
+   "how-sure-is-the-radius": {
+    "validate": {"calls":232,"distinct":2,"digest":"ae952bc4a1446a22","samples":[null,{"level":"error","message":"Keep 0.5 solar masses, 5 Gyr and Q = 100, and read the two dashed ends of the range in “Locking radius”."}]}
    },
    "watch-it-run": {
     "probe": [[{"label":"Selected","value":"click a planet on the canvas to read it"}],[{"label":"Planet","value":"Eccentric Orbiter"},{"label":"Distance from its star","value":"1.234 AU"},{"label":"Starlight it receives","value":"0.65 Earths"},{"label":"Zone (conservative)","value":"0.95 to 1.67 AU"},{"label":"Which puts it","value":"inside the habitable zone"}],[{"label":"Planet","value":"Circular Orbiter"},{"label":"Distance from its star","value":"0.046 AU"},{"label":"Starlight it receives","value":"14.20 Earths"},{"label":"Zone (conservative)","value":"0.10 to 0.30 AU"},{"label":"Which puts it","value":"inside the inner edge"}],[{"label":"Planet","value":"Far Orbiter"},{"label":"Distance from its star","value":"9.500 AU"},{"label":"Starlight it receives","value":"0.01 Earths"},{"label":"Zone (conservative)","value":"0.80 to 1.40 AU"},{"label":"Which puts it","value":"outside the outer edge"}]]

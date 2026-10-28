@@ -214,6 +214,12 @@ export default {
     'Why a ring lies inside the Roche limit and a moon outside it, why a resonance clears a gap, why a constant-Q model run backward puts the Moon in contact too recently, and why the tidal heating formula gives a bound and not a prediction.',
     'These are closed-form teaching models: a rigid body has a strength a rubble pile lacks, Q is a constant when it is not, Love numbers are assumed, and the heating formula needs an eccentricity and a dissipation nobody measures independently.',
   ],
+  habitabilityLimits: [
+    'The four habitable-zone limits as amounts of starlight on a distance axis, the locking radius beside the zone for four model stars, or the zone of a one-solar-mass model star along its age.',
+    'How much starlight each limit is, where a star puts it, which limits come from a climate model and which from the history of Venus and Mars, how the zone moves as the star ages, and which zones lie inside the locking radius.',
+    'Why a dim star’s zone is close in, why the inner edge moves out as a star brightens, why the zone of an M dwarf would be despun by the star’s tide and that of a Sun-like star would not, and why a star outside 2600 to 7200 K is refused.',
+    'A band of starlight for a planet of one Earth mass is not a measurement of any planet. The locking radius is a range, not a value, from an unknown dissipation. The star on the track is a model star, not the Sun, and nothing here is a climate history.',
+  ],
   'plot-measure': [
     'Your own measurements, one point each, with the quantities named on the axes.',
     'A straight line of points means the two quantities are proportional, or after a transform, a power law.',
