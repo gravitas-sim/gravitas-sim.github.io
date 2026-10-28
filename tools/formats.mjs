@@ -192,6 +192,17 @@ export const FORMATS = Object.freeze([
     newer: 'a validation problem',
     schema: 'grid-1.schema.json',
   },
+  {
+    name: 'gravitas.instrument',
+    fields: 'format, formatVersion',
+    version: 1,
+    const: ['js/instruments/validate.js', 'FORMAT_VERSION'],
+    owner: 'js/instruments/validate.js validatePack',
+    persisted: 'repository, extension archive',
+    older: 'v1 only',
+    newer: 'a validation problem',
+    schema: 'instrument-1.schema.json',
+  },
   // --- Simulation, systems and experiments ---
   {
     name: 'world share link',

@@ -1,12 +1,13 @@
 # The Gravitas Extension SDK
 
-A command line, a small library and five formats for contributors who want to
+A command line, a small library and six formats for contributors who want to
 add to Gravitas without learning its internals first:
 
 - **observation data packs:** measured data with its record;
 - **course packs:** sequences of lessons Gravitas already has, in the form the catalog installs (`/1`) or the form the course-pack builder writes (`/2`);
 - **investigation packs:** a guided investigation as data, which the Studio's lesson composer writes;
 - **scenario packs:** a scenario as data, which the Scenario Studio writes;
+- **instrument packs:** a telescope with its instruments and every value cited, which a course adds beside the instrument library's own facilities ([INSTRUMENTS.md](../INSTRUMENTS.md));
 - **capability packages:** new instruments.
 
 To contribute one for the catalog, [CONTRIBUTING_CONTENT.md](../CONTRIBUTING_CONTENT.md)
@@ -22,7 +23,7 @@ declarative: data and text, never script. That is the security boundary the
 platform draws ([PLATFORM_PACKAGE_RFC.md](../PLATFORM_PACKAGE_RFC.md)), and
 the SDK enforces it rather than working around it.
 
-## The five types
+## The six types
 
 | Type | Kind | What it holds | What Gravitas does with it today |
 |---|---|---|---|
@@ -30,13 +31,14 @@ the SDK enforces it rather than working around it.
 | `course-pack` | declarative | a `gravitas.course-pack/1` sequence (`course.json`): units of existing lessons, by id, with notes, in every declared language; or a `gravitas.course-pack/2`, what the builder writes: units of items (lessons, assignments, scenarios, datasets, readings) with objectives, times and a pin on each lesson | validated, tested and archived, /1 and /2 alike (since 1.8.0). The course-pack builder opens a /1 pack and migrates it to /2 (COURSE_PACKS.md); the catalog installs /1 |
 | `investigation-pack` | declarative | a `gravitas.investigation-pack/1` guided investigation (`investigation.json`): steps that read, predict, explore, measure and ask, with held predictions and remediation, in every declared language | validated through the format's rules and the lesson checker every built-in lesson passes, tested and archived (since 1.8.0). The Studio composer (`/studio/lesson/`) opens and writes the same file. A remix of a built-in carries `derivedFrom` and is also judged against its original ([REMIX.md](../REMIX.md)) |
 | `scenario-pack` | declarative | a `gravitas.scenario-pack/1` scenario (`scenario.json`): settings Gravitas understands, a seed, the instruments it opens with, and bodies as an orbital system or typed states, in every declared language | validated, tested and archived. Gravitas opens one as a link: the Scenario Studio (`/studio/`) compiles it into the share link the application already reads |
+| `instrument-pack` | declarative | a `gravitas.instrument/1` facility (`instrument.json`): a telescope, its instruments and, on the ground, its site, each value with a registry unit and a source that has a retrieval date and a rights basis; a missing value is absent | validated and tested (the plate-scale and field cross-checks) and archived by the SDK. Nothing in a running copy reads it yet; the library's adapters take a built-in facility's id |
 | `capability` | built-in | an instrument family: one JavaScript module and its manifest | validated and contract-tested by the SDK, then reviewed and vendored by a maintainer |
 
 Every extension is a directory with `gravitas-extension.json` at its root. That
 file is a `gravitas.capability-package/1` manifest, the same format as the
 packages in [`capabilities/`](../capabilities/). The type is what it
 `provides`: `dataPacks`, `courses`, `investigations` (with a `file`),
-`scenarios` or `widgetFamilies`, exactly one.
+`scenarios`, `instruments` (with a `file`) or `widgetFamilies`, exactly one.
 
 ## Make a Package from a pack
 
@@ -400,10 +402,10 @@ declares all of it, and the contract suite fails if the two differ.
 
 | Export | What it is |
 |---|---|
-| `SDK_VERSION` | this SDK, `1.10.0` |
+| `SDK_VERSION` | this SDK, `1.11.0` |
 | `PLATFORM_API` | the platform API this Gravitas implements, `1.0.0` |
 | `FORMATS` | each format this SDK reads and writes, with the highest version it reads (`gravitas.course-pack` is 3: it reads /1 and /2 too) |
-| `EXTENSION_TYPES`, `LOCALES` | the five types and their kinds; the interface languages (`en`, `es`) |
+| `EXTENSION_TYPES`, `LOCALES` | the six types and their kinds; the interface languages (`en`, `es`) |
 | `publicIds()` | every lesson, instrument, scenario, data pack, course and package id, and each lesson's title in each language |
 | `acceptsPlatform(range)` | whether a `gravitas` range accepts this platform |
 | `installedDataPack(id)` | an installed pack's record, runtime module and decoded observation |
@@ -482,6 +484,19 @@ anything else.
 | 1.8.0 | 1.0.0 | 1 (with `file` on `provides.courses`, `provides.scenarios` and `provides.investigations`) | 1, as 1.7.0 | 1 and 2 | 1, as 1.7.0 | 1 |
 | 1.9.0 | 1.0.0 | 1 (with `file` on `provides.translations`) | 1, as 1.7.0 | 1 and 2 | 1, as 1.7.0 | 1 |
 | 1.10.0 | 1.0.0 | 1, as 1.9.0 | 1, as 1.7.0 | 1 and 2 | 1, as 1.7.0 | 1 |
+| 1.11.0 | 1.0.0 | 1, with `provides.instruments` | 1, as 1.7.0 | 1 and 2 | 1, as 1.7.0 | 1 |
+
+SDK 1.11.0 adds, and removes nothing (Roadmap III P209), the `instrument-pack`
+type: the `gravitas.instrument/1` format (`sdk/schemas/instrument-1.schema.json`),
+`provides.instruments` in the manifest, its validator (the instrument library's
+own, `js/instruments/validate.js`) and test, and `init instrument-pack`, which
+writes a typical entry with one value. A pack carries its own sources and sites,
+may not reuse the id of a built-in facility, source or site, and is held to the
+library's rules: a registry unit of the parameter's dimension and a source with
+a retrieval date and a rights basis on every value, a missing value absent,
+nothing estimated. `test` runs the library's cross-checks wherever the pack has
+the numbers they need. `locate()` no longer loops on a path whose first segment
+is not in the file.
 
 SDK 1.10.0 adds, and removes nothing (Roadmap II P81, repair R-A5):
 

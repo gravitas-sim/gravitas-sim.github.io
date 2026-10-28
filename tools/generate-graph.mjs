@@ -214,6 +214,23 @@ export const GRAPH = Object.freeze([
     after: ['manifest', 'registries'],
   },
   {
+    // Roadmap III Prompt 209 (INSTRUMENTS.md): the instrument library's module
+    // and the facilities table in its document, from the cited source table.
+    id: 'instruments',
+    generate: 'node tools/build-instruments.mjs',
+    check: 'node tools/build-instruments.mjs --check',
+    inputs: [
+      'tools/instruments',
+      'tools/build-instruments.mjs',
+      'js/instruments/validate.js',
+    ],
+    outputs: ['js/data/instruments.js'],
+    regions: ['INSTRUMENTS.md'],
+    after: [],
+    notes:
+      'The facilities table in INSTRUMENTS.md sits between `<!-- instruments:begin -->` and `<!-- instruments:end -->`; a conflict inside it is resolved by regenerating.',
+  },
+  {
     id: 'irreversible',
     generate: 'node tools/build-irreversibility-audit.mjs',
     check: 'node tools/build-irreversibility-audit.mjs --check',

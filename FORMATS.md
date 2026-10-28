@@ -2,7 +2,7 @@
 
 # Formats
 
-Every versioned format Gravitas reads or writes: 65 of them. 35 have a JSON Schema in `sdk/schemas`, and 14 read their previous version rather than only their own.
+Every versioned format Gravitas reads or writes: 66 of them. 36 have a JSON Schema in `sdk/schemas`, and 14 read their previous version rather than only their own.
 
 Roadmap II Prompt 61 puts each under one rule:
 - a JSON Schema;
@@ -34,6 +34,7 @@ The columns:
 | gravitas.image-sequence | format, formatVersion | 1 | js/dataKinds/contract.js validateImageSequence | repository, extension archive | v1 only | a validation problem | [yes](sdk/schemas/image-sequence-1.schema.json) |
 | gravitas.image-pack-planes | format, formatVersion | 1 | js/observatory/imagePacks.js readFrames | repository (frames/), fetched when an image pack is opened | v1 only | refused: "not the frames of" the pack | no |
 | gravitas.grid | format, formatVersion | 1 | js/dataKinds/contract.js validateGrid | repository, extension archive | v1 only | a validation problem | [yes](sdk/schemas/grid-1.schema.json) |
+| gravitas.instrument | format, formatVersion | 1 | js/instruments/validate.js validatePack | repository, extension archive | v1 only | a validation problem | [yes](sdk/schemas/instrument-1.schema.json) |
 | world share link | v (link prefix 2) | 2 | js/shareState.js decodePayload | link | reads v1, whose scenario is an English name, by id | refused, in words | no |
 | built-in scenario id | a public id (SCENARIO_INFO key) | 1 | js/scenarios.js scenarioId, js/data/scenarioInfo.js scenarioId | link, lesson, course pack, investigation pack, experiment, notebook entry | reads the English name it was keyed by before ids | refused: a link in words, a pack by its validator | [yes](sdk/schemas/scenario-id-1.schema.json) |
 | experiment link block (xp) | v | 1 | js/experiments/shareExperiment.js readExperimentBlock | link | v1 only | reported, not checked | no |
@@ -130,6 +131,7 @@ An older build is a real reader: a browser still running 2.0.0's cached code, a 
 | gravitas.image-sequence | none yet | not yet exercised | policy (above) |
 | gravitas.image-pack-planes | none yet | not yet exercised | policy (above) |
 | gravitas.grid | none yet | not yet exercised | policy (above) |
+| gravitas.instrument | none yet | not yet exercised | policy (above) |
 | world share link | `share-link` | n/a | policy (above) |
 | built-in scenario id | none yet | not yet exercised | policy (above) |
 | experiment link block (xp) | none yet | not yet exercised | policy (above) |

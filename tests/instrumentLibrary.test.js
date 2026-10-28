@@ -15,6 +15,7 @@ import { runLegs } from '../tools/instruments-validate.mjs';
 import {
   CLASSES,
   EXPECTED,
+  PARAMS,
   completeness,
   describeProblems,
   unitSignature,
@@ -45,6 +46,7 @@ import { DEFAULT_DETECTOR } from '../js/kernels/detector/frame.js';
 import { validateSetup } from '../js/forward/setup.js';
 import * as ccd from '../js/forward/models/ccd.js';
 import { UNITS } from '../js/units/registry.js';
+import { valid } from './jsonSchemaSubset.js';
 
 const THR = JSON.parse(
   readFileSync('tests/fixtures/instruments/thresholds.json', 'utf8')
@@ -397,5 +399,61 @@ describe('adopters', () => {
       38 + 25 / 60 + 59.236 / 3600,
       6
     );
+  });
+});
+
+describe('the pack kind (gravitas.instrument/1)', () => {
+  const schema = JSON.parse(
+    readFileSync('sdk/schemas/instrument-1.schema.json', 'utf8')
+  );
+  const packOf = f => ({
+    format: 'gravitas.instrument',
+    formatVersion: 1,
+    id: `copy-of-${f.id}`,
+    sources: SOURCES,
+    sites: SITES,
+    facility: { ...clone(f), id: `copy-of-${f.id}` },
+  });
+  const builtin = {
+    sources: {},
+    sites: {},
+    facilityIds: facilityIds(),
+  };
+
+  test('the schema holds every built-in facility, and the validator accepts it as a pack', () => {
+    for (const f of FACILITIES) {
+      const pack = packOf(f);
+      expect([f.id, valid(schema, pack)]).toEqual([f.id, true]);
+      expect(describeProblems(validatePack(pack, builtin))).toBe('');
+    }
+  });
+  test('the schema names the parameters the validator knows, no more and no fewer', () => {
+    const named = d => Object.keys(d.properties).sort();
+    const without = (list, drop) => list.filter(k => !drop.includes(k));
+    expect(named(schema.$defs.facility.properties.telescope)).toEqual(
+      ['name', ...Object.keys(PARAMS.telescope)].sort()
+    );
+    const [im, rc] = schema.$defs.instrument.anyOf;
+    expect(
+      without(named(im), ['id', 'kind', 'name', 'filters', 'bands'])
+    ).toEqual(Object.keys(PARAMS.imager).sort());
+    expect(without(named(rc), ['id', 'kind', 'name'])).toEqual(
+      Object.keys(PARAMS.receiver).sort()
+    );
+    expect(named(schema.$defs.band)).toEqual(Object.keys(PARAMS.band).sort());
+  });
+  test('the schema rejects what the validator rejects at the structure level', () => {
+    const bad = packOf(getFacility('gbt'));
+    bad.facility.instruments[0].colour = { v: 1, u: '', s: 'gbt-instruments' };
+    expect(valid(schema, bad)).toBe(false);
+    const noSrc = packOf(getFacility('gbt'));
+    delete noSrc.facility.telescope.aperture.s;
+    expect(valid(schema, noSrc)).toBe(false);
+  });
+  test('a pack with its own sources and a wrong unit is refused by path', () => {
+    const pack = packOf(getFacility('typical-campus'));
+    pack.facility.instruments[0].gain.u = 'e-/ADU';
+    const out = validatePack(pack, builtin);
+    expect(out.map(p => p.path)).toContain('facility.instruments[0].gain');
   });
 });

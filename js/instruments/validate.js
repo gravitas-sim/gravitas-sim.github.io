@@ -244,15 +244,17 @@ function checkValue(val, path, spec, ctx, out) {
   // The source: every value has one, and it is in the table.
   if (!text(val.s)) return bad('has no source (s)');
   const src = ctx.sources[val.s];
-  if (!src) return bad(`cites "${val.s}", which is not in the sources`);
-  ctx.cited?.add(val.s);
-  const isTypicalSource = src.kind === TYPICAL_SOURCE_KIND;
-  if (ctx.typical && !isTypicalSource)
-    bad(
-      'is in a typical entry but cites a real source; a typical entry cites the project convention only'
-    );
-  if (!ctx.typical && isTypicalSource)
-    bad('cites the project convention in a real facility');
+  if (!src) bad(`cites "${val.s}", which is not in the sources`);
+  else {
+    ctx.cited?.add(val.s);
+    const isTypicalSource = src.kind === TYPICAL_SOURCE_KIND;
+    if (ctx.typical && !isTypicalSource)
+      bad(
+        'is in a typical entry but cites a real source; a typical entry cites the project convention only'
+      );
+    if (!ctx.typical && isTypicalSource)
+      bad('cites the project convention in a real facility');
+  }
   for (const k of ['at', 'n'])
     if (val[k] !== undefined && !text(val[k])) bad(`${k} is a non-empty text`);
   if (!spec) {
@@ -340,12 +342,13 @@ export function validateSite(id, site, ctx) {
 /**
  * Everything wrong with one facility, given the sources and sites it may name.
  * @param {object} f - The facility
- * @param {{sources: object, sites: object, typical?: boolean, cited?: Set<string>}} lib
+ * @param {{sources: object, sites: object, typical?: boolean, cited?: Set<string>,
+ *   root?: string}} lib - `root` is the facility's path in the file it came from
  * @returns {Array<{path: string, message: string}>}
  */
 export function validateFacility(f, lib) {
   const out = [];
-  const path = `facilities.${f?.id}`;
+  const path = lib.root ?? `facilities.${f?.id}`;
   const need = (ok, k, message) => {
     if (!ok) out.push({ path: `${path}.${k}`, message });
   };
@@ -545,7 +548,7 @@ export function validatePack(pack, builtin) {
     out.push(...validateSite(id, s, ctxSite));
   // A pack's facility is a real one unless it says it is typical; a typical
   // one must say so and cite the convention source it carries itself.
-  out.push(...validateFacility(f, { sources, sites }));
+  out.push(...validateFacility(f, { sources, sites, root: 'facility' }));
   return out;
 }
 

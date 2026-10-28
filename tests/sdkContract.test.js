@@ -111,11 +111,13 @@ describe('the public surface', () => {
       'gravitas.course-pack': 3,
       'gravitas.investigation-pack': 2,
       'gravitas.scenario-pack': 1,
+      'gravitas.instrument': 1,
     });
     expect(Object.keys(api.EXTENSION_TYPES).sort()).toEqual([
       'capability',
       'course-pack',
       'data-pack',
+      'instrument-pack',
       'investigation-pack',
       'scenario-pack',
     ]);
@@ -290,12 +292,13 @@ describe('what is wrong, where', () => {
 });
 
 describe('init', () => {
-  test('a course pack, an investigation pack, a scenario pack and a capability start valid; a data pack starts as a list of what to fill in', async () => {
+  test('a course pack, an investigation pack, a scenario pack, an instrument pack and a capability start valid; a data pack starts as a list of what to fill in', async () => {
     const root = tmp();
     for (const type of [
       'course-pack',
       'investigation-pack',
       'scenario-pack',
+      'instrument-pack',
       'capability',
     ]) {
       const dir = path.join(root, type);
@@ -616,7 +619,7 @@ describe('the command line', () => {
     const { code, out } = await sdk('frobnicate');
     expect(code).toBe(2);
     expect(out).toMatch(
-      /init <data-pack\|course-pack\|investigation-pack\|scenario-pack\|capability> <id>/
+      /init <data-pack\|course-pack\|investigation-pack\|scenario-pack\|instrument-pack\|capability> <id>/
     );
     expect((await sdk()).code).toBe(0);
   });

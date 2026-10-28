@@ -92,6 +92,10 @@ export function positions(text) {
  */
 export function locate(text, path, table = positions(text)) {
   let p = path;
-  while (p && !table.has(p)) p = p.replace(/(\.[^.[\]]+|\[\d+\])$/, '');
+  while (p && !table.has(p)) {
+    const parent = p.replace(/(\.[^.[\]]+|\[\d+\])$/, '');
+    // A top-level name that is not in the file has no parent but the root.
+    p = parent === p ? '' : parent;
+  }
   return { ...(table.get(p) || { line: 1, column: 1 }), exact: p === path };
 }
