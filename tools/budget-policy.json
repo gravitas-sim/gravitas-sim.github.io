@@ -17,17 +17,17 @@
     "routes": {
       "front-door": { "kb": 2128.5, "requests": 109 },
       "sandbox": { "kb": 2128.5, "requests": 109 },
-      "kepler": { "kb": 3343.7, "requests": 148 },
-      "transit": { "kb": 3355.6, "requests": 148 },
-      "power-law": { "kb": 3320.9, "requests": 148 },
-      "largest-lesson": { "kb": 3453.1, "requests": 150 },
+      "kepler": { "kb": 3344.1, "requests": 148 },
+      "transit": { "kb": 3356.0, "requests": 148 },
+      "power-law": { "kb": 3321.3, "requests": 148 },
+      "largest-lesson": { "kb": 3453.6, "requests": 150 },
       "observatory": "the Observatory with one observation open: read from tools/route-budgets.json"
     }
   },
   "allowance": {
-    "note": "PROPOSAL. deferredCoreKb + capCumulativeKb is exactly today's deferred ceiling (2328.7 KB after Prompt 202's raise under the standing approval, D-R10-202-01), so adopting the policy raises nothing; the 342.9 KB is what Prompt 131 and 132 freed plus the 1.0 KB of Prompt 190, the 59.3 KB of Prompt 191 and the 27.4 KB of Prompt 193, the 21.2 KB of Prompt 200 the 55.9 KB of Prompt 195 part 3 the 29.9 KB of Prompt 191 part 3 the 42.7 KB of Prompt 194 part 2 and the 19.6 KB of Prompt 202. Nothing is granted until Carl grants it per release.",
+    "note": "PROPOSAL. deferredCoreKb + capCumulativeKb is exactly today's deferred ceiling (2328.9 KB after Prompt 202's raise under the standing approval, D-R10-202-01), so adopting the policy raises nothing; the 343.1 KB is what Prompt 131 and 132 freed plus the 1.0 KB of Prompt 190, the 59.3 KB of Prompt 191 and the 27.4 KB of Prompt 193, the 21.2 KB of Prompt 200 the 55.9 KB of Prompt 195 part 3 the 29.9 KB of Prompt 191 part 3 the 42.7 KB of Prompt 194 part 2 and the 19.8 KB of Prompt 202. Nothing is granted until Carl grants it per release.",
     "capPerReleaseKb": 20.0,
-    "capCumulativeKb": 342.9,
+    "capCumulativeKb": 343.1,
     "grantedKb": 0.0
   },
   "allocation": {
