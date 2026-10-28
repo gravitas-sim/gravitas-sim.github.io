@@ -1,0 +1,67 @@
+{
+  "format": "gravitas.small-bodies-failed-legs/1",
+  "prompt": 198,
+  "what": "Legs that fail as committed in thresholds.json (and two added rows that fail) and are left failing, each with its cause. No bound was moved, multiplied or restated. tests/smallBodies.test.js holds each to this record, so a change that fixes or worsens one cannot pass unnoticed. Carl may rule on each later. The kernel was changed after the first full run (uneven-flanks, phase-gap withholding): SMALL_BODIES.md, 'Honest notes on order', lists what moved.",
+  "legs": {
+    "b3.rotationPeriod": {
+      "bound": 0.0005,
+      "cause": "The K = 4 harmonic refinement at the double period moves the period away from the periodogram's by up to 8.7e-4 on the 21.5 h series (thin phase coverage). Against the truth that made the series the kernel is within 9.9e-4 and astropy's 2/f_peak within 9.1e-4 (rows b3.vsTruth.kernel and b3.vsTruth.oracle, reported): the committed leg compares two estimators, not an estimator and the truth.",
+      "measuredRange": [0.00072, 0.00102]
+    },
+    "c1.coverage.7:3": {
+      "bound": [0.9, 0.995],
+      "cause": "The bootstrap interval is sampling error only; the degree-4 log-polynomial baseline bridged across masked windows misses the synthetic density's shape by a systematic of -0.048 in depletion at 7:3 (sd 0.058), about one standard error.",
+      "measuredRange": [0.8367, 0.8567]
+    },
+    "c1.coverage.2:1": {
+      "bound": [0.9, 0.995],
+      "cause": "Same: the baseline's systematic is +0.047 at 2:1 (sd 0.046), about one standard error, which the bootstrap interval cannot see.",
+      "measuredRange": [0.7767, 0.7967]
+    },
+    "d3.warned": {
+      "bound": 0.95,
+      "cause": "The steep-baseline rule reads the fitted baseline's slope across the window; a degree-4 polynomial bridging a masked cliff does not follow it, so the baseline looks gentle where the data fall by a factor of 20. The kernel's added uneven-flanks test flags 100 percent (d3.warned.added passes); this committed row is left failing as measured.",
+      "measuredRange": [0.28, 0.3]
+    },
+    "c3.noise0.01.amplitude": {
+      "bound": 0.95,
+      "cause": "About 5 percent of curves are in a regime the kernel itself flags (a period near a multiple of a day with nightly windows leaves a third of the rotation unobserved: ambiguous or phase-gap, counted here as a miss); among curves called period the amplitude is within 0.03 mag 0.986 of the time (c3.noise0.01.amplitude.added, passes).",
+      "measuredRange": [0.93, 0.95]
+    },
+    "c3.noise0.01.amplitudeCoverage": {
+      "bound": [0.9, 0.995],
+      "cause": "The amplitude's error has sd 0.0074 mag and no bias, while the percentile bootstrap's half-width is 0.0052 mag: the peak-to-peak of a fitted curve is an extreme-type statistic and the percentile bootstrap under-covers it. Plus the flagged regime above.",
+      "measuredRange": [0.6067, 0.6267]
+    },
+    "c3.noise0.01.boundHolds": {
+      "bound": 0.95,
+      "cause": "One curve short of the bound (284 of 300); a withheld amplitude counts as a miss. Among curves called period the claim a/b >= bound holds 0.993 (c3.noise0.01.boundHolds.added, passes).",
+      "measuredRange": [0.9367, 0.9567]
+    },
+    "c3.noise0.03.period": {
+      "bound": 0.95,
+      "cause": "Low-amplitude curves (Delta m under 0.15 mag against 0.03 mag noise) at 15 to 20 hours and the ambiguous long periods; among curves called period 0.953 (c3.noise0.03.period.added, passes by one curve).",
+      "measuredRange": [0.9067, 0.9267]
+    },
+    "c3.noise0.03.amplitude": {
+      "bound": 0.95,
+      "cause": "As c3.noise0.01.amplitude; among curves called period 0.978 (c3.noise0.03.amplitude.added, passes).",
+      "measuredRange": [0.9167, 0.9367]
+    },
+    "c3.noise0.03.amplitudeCoverage": {
+      "bound": [0.9, 0.995],
+      "cause": "As c3.noise0.01.amplitudeCoverage.",
+      "measuredRange": [0.6867, 0.7067]
+    },
+    "c3.noise0.01.amplitudeCoverage.added": {
+      "bound": [0.9, 0.995],
+      "cause": "ADDED row (not committed in thresholds.json; the bound is the committed row's): among curves called period the percentile bootstrap interval still covers the true amplitude 0.646 of the time at a stated 0.95. Not a substitute for the committed leg.",
+      "measuredRange": [0.6364, 0.6564]
+    },
+    "c3.noise0.03.amplitudeCoverage.added": {
+      "bound": [0.9, 0.995],
+      "cause": "ADDED row, as above.",
+      "measuredRange": [0.7274, 0.7474]
+    }
+  }
+}
