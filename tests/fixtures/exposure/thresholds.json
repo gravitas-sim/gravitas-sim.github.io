@@ -1,0 +1,320 @@
+{
+  "format": "gravitas.exposure-thresholds/1",
+  "prompt": "Roadmap III, Prompt 210, exposure planning: extending the CCD-equation kernel and the existing lesson (tranche T3 by D-R10-207-01)",
+  "document": "EXPOSURE_PLANNING.md (\"Validation contract\")",
+  "committed": "before any extension of js/kernels/detector/snr.js, the facility adapter, the planning panel, the validator, the oracle script, its results, the exposure ensemble or the lesson changes of Prompt 210 existed; the hand-worked numbers below were computed with Python 3 arithmetic outside the repository, the published numbers were read from the typeset text of the paper named in the source field",
+  "rule": "A crossed bound is a failed check, recorded in failed-legs.json and left failing; only Carl resets one. A leg that cannot be measured is NOT RUN and says why. Nothing here was tuned against the kernel: the extensions did not exist when this file was written.",
+  "seeds": {
+    "oracle": 210,
+    "harness": 2100001,
+    "ensemble": "exposure-210"
+  },
+  "scope": {
+    "built": "the CCD equation with several exposures (the read noise paid once per exposure); a point source seen through a Gaussian point-spread function by a circular aperture or by optimal (point-spread-function) photometry; an extended source by its surface brightness; the limiting magnitude of an exposure in closed form; the exposure that reaches a target signal-to-noise with a refusal when the exposure limit or the detector's full well forbids it; atmospheric extinction by a stated coefficient and the airmass; a facility adapter over the instrument library (Prompt 209) that refuses what the library does not state; a planning panel; a rendered frame of what the calculation predicts, measured with the existing photometry (Prompts 180 and 183)",
+    "notBuilt": "flat-field or sky-subtraction systematic error (the calculation says so and warns past a stated floor), crowding and confusion noise, a point-spread function other than a Gaussian, colour terms, moon and twilight sky models (the sky is an input in mag per square arcsec), site extinction measured by Prompt 212 (a stated coefficient stands in), scintillation, charge-transfer loss, nonlinearity, binning, a spectrograph or radio calculation (Prompts 213 and the radio prompts)"
+  },
+  "published": {
+    "source": "Ivezic, Z., Kahn, S. M., Tyson, J. A., et al. 2019, ApJ 873, 111 (LSST: from Science Drivers to Reference Design and Anticipated Data Products), arXiv:0805.2366v5, Sec. 3.2.1, equations 6 and 7 and Table 2, read from the typeset text of the arXiv PDF on 2026-10-28 (the file is not committed; sha256 b50e784ec68eedd70abcd92621f2d8e07ad8af677b9cdb74f5d00d09a5950de9)",
+    "equations": {
+      "m5": "m5 = Cm + 0.50 (msky - 21) + 2.5 log10(0.7 / thetaEff) + 1.25 log10(tvis / 30) - km (X - 1)",
+      "doubling": "dCm(tau) = dCmInf - 1.25 log10(1 + (10^(0.8 dCmInf) - 1) / tau), added to Cm for an exposure tau times the 30 s visit",
+      "seeingWithAirmass": "the seeing scales approximately as X^0.6 (Table 2 note b)"
+    },
+    "visit": {
+      "exposures": 2,
+      "secondsEach": 15,
+      "readNoiseElectrons": 9,
+      "note": "Table 2 note g: 2 x 15 s exposures; note h: 9 electrons per pixel and per readout, two readouts per visit"
+    },
+    "bands": ["u", "g", "r", "i", "z", "y"],
+    "msky": [22.99, 22.26, 21.2, 20.48, 19.6, 18.61],
+    "thetaEff": [0.92, 0.87, 0.83, 0.8, 0.78, 0.76],
+    "km": [0.491, 0.213, 0.126, 0.096, 0.069, 0.17],
+    "Cm": [23.09, 24.42, 24.44, 24.32, 24.16, 23.73],
+    "m5": [23.78, 24.81, 24.35, 23.92, 23.34, 22.45],
+    "dCmInf": [0.62, 0.18, 0.1, 0.07, 0.05, 0.04],
+    "dCm2": [0.23, 0.08, 0.05, 0.03, 0.02, 0.02],
+    "dm5AtX1p2": [0.21, 0.16, 0.14, 0.13, 0.13, 0.14],
+    "pixelScaleArcsec": 0.2,
+    "effectiveApertureM": 6.5,
+    "note": "pixelScale and effectiveAperture are the instrument library's values for LSSTCam (js/data/instruments.js, rubin), cited there to the same paper; the table's msky is an AB magnitude per square arcsecond. The paper does not state a dark current: the oracle takes it as zero and says so. The Rubin zero points are not in the library, so the oracle FITS one per band to the published m5 and the kernel is judged on what it then predicts that was not fitted (b2 to b5)."
+  },
+  "handWorked": {
+    "inputs": {
+      "signal": 50000,
+      "npix": 30,
+      "sky": 12,
+      "dark": 0.5,
+      "readNoise": 6,
+      "nBackground": 300
+    },
+    "oneExposure": {
+      "k": 1.1,
+      "source": 50000,
+      "sky": 396,
+      "dark": 16.5,
+      "read": 1188,
+      "variance": 51600.5,
+      "noise": 227.15743439297776,
+      "snr": 220.1116601515274
+    },
+    "fourExposures": {
+      "read": 4752,
+      "variance": 55164.5,
+      "noise": 234.871241321708,
+      "snr": 212.88259779541917
+    },
+    "exposureForSnr": {
+      "inputs": {
+        "rate": 40,
+        "skyRate": 5,
+        "darkRate": 0.1,
+        "readNoise": 8,
+        "npix": 25,
+        "snr": 50
+      },
+      "seconds": 270.9456913388581
+    },
+    "source": "the CCD equation of Merline and Howell (1995) and Howell, Handbook of CCD Astronomy, Sec. 4.4, as stated in js/kernels/detector/snr.js, worked by hand and checked in Python; it is a worked example of the equation, not a transcription of a textbook's numbers"
+  },
+  "checks": [
+    {
+      "id": "A1.limits",
+      "group": "a",
+      "bound": "the three closed-form limits of the CCD equation: with only the star's photons SNR = sqrt(S) to a relative 1e-9; with the sky dominant (star's electrons 1e-6 of the sky's) SNR = S / sqrt(npix k B) to a relative 1e-5; with the read noise dominant SNR = S / sqrt(npix k R^2) to a relative 1e-5; the dominant-term report names source, sky and read in those three cases",
+      "limits": { "relSource": 1e-9, "relSky": 1e-5, "relRead": 1e-5 }
+    },
+    {
+      "id": "A2.handWorked",
+      "group": "a",
+      "bound": "the hand-worked example above: every term, the variance, the noise and the SNR for one exposure and for four exposures (the read term four times as large) to a relative 1e-12",
+      "limits": { "relMax": 1e-12 }
+    },
+    {
+      "id": "A3.exposureInverse",
+      "group": "a",
+      "bound": "exposureForSnr gives 270.9456913388581 s for the hand-worked case to a relative 1e-12, and snrAt of the exposure it returns equals the target to a relative 1e-9 over 200 seeded random parameter sets spanning source-, sky- and read-limited regimes and one to ten exposures",
+      "limits": { "relHand": 1e-12, "relInverse": 1e-9, "sets": 200 }
+    },
+    {
+      "id": "A4.limitingMagnitudeInverse",
+      "group": "a",
+      "bound": "the SNR of a star at the limiting magnitude the kernel returns equals the target to a relative 1e-9 over 200 seeded random parameter sets, the limit is fainter for a longer exposure, and the exposure that reaches the target for a star at the limit is the exposure asked",
+      "limits": { "relMax": 1e-9, "sets": 200 }
+    },
+    {
+      "id": "A5.exposures",
+      "group": "a",
+      "bound": "n exposures of a total time T have n times the read variance of one and the same source, sky and dark variance: the variance equals the single-exposure variance plus (n - 1) npix k R^2 to a relative 1e-12; a total time T split into more exposures never improves the SNR",
+      "limits": { "relMax": 1e-12 }
+    },
+    {
+      "id": "A6.scaling",
+      "group": "a",
+      "bound": "doubling the exposure multiplies the SNR by sqrt(2) in the source-limited and in the sky-limited regime (relative 1e-3 where the other terms are 1e-6 of the dominant) and by 2 in the read-limited regime at a fixed number of exposures (relative 1e-3)",
+      "limits": { "relMax": 1e-3 }
+    },
+    {
+      "id": "A7.extended",
+      "group": "a",
+      "bound": "an extended source of surface brightness mu over A square arcsec gives the signal of a point source of total magnitude mu - 2.5 log10(A) to a relative 1e-12; its signal is the same through a bigger aperture only if the aperture holds the same area; a surface-brightness limit equals the point-source limit minus 2.5 log10 of the aperture's area in square arcsec",
+      "limits": { "relMax": 1e-12 }
+    },
+    {
+      "id": "A8.extinction",
+      "group": "a",
+      "bound": "a star observed through airmass X with coefficient k arrives k X magnitudes fainter: its rate is the zenith-free rate times 10^(-0.4 k X) to a relative 1e-12; the limiting magnitude above the atmosphere gets brighter by exactly k X relative to the limit observed; Kasten and Young's airmass at an apparent altitude of 90 degrees is 1 to 1e-3 and at 30 degrees 1.99 to 5e-3",
+      "limits": { "relMax": 1e-12, "airmassZenith": 1e-3, "airmass30": 5e-3 }
+    },
+    {
+      "id": "A9.noiseEquivalentArea",
+      "group": "a",
+      "bound": "the noise-equivalent area of a Gaussian point-spread function of FWHM f pixels, 1 / sum(p_i^2), is 4 pi sigma^2 (sigma = f / 2.3548200450309493) pixels: the kernel's value agrees with a numerical sum over a 0.02 pixel grid to a relative 1e-3, and the aperture's enclosed fraction 1 - exp(-r^2 / 2 sigma^2) agrees with the numerical integral to 1e-4",
+      "limits": { "relNeff": 1e-3, "relEnclosed": 1e-4 }
+    },
+    {
+      "id": "A10.lessonArithmetic",
+      "group": "a",
+      "bound": "the lesson's instrument (js/detectorWidgets.js, ccd-snr) computes the faintest star by a 60-step bisection; replaced by the kernel's closed form it returns the same magnitude to an absolute 1e-9 over the instrument's whole control grid (magnitude, exposure, radius, sky), and every graded answer of the lesson at its three existing depths is unchanged",
+      "limits": { "absMax": 1e-9 }
+    },
+    {
+      "id": "B1.implementation",
+      "group": "b",
+      "bound": "a second, independent implementation (tools/exposure-oracle/oracle.py: Python and scipy, no Gravitas code) solves the same equation for the zero points fitted to the published m5 and for the predictions of b2 to b5: the kernel's zero point agrees to a relative 1e-6 and its predicted depth changes to 1e-6 mag",
+      "limits": { "relZeroPoint": 1e-6, "absMag": 1e-6 }
+    },
+    {
+      "id": "B2.readNoiseLoss",
+      "group": "b",
+      "bound": "with the zero point of each band fitted to the published m5 (point-spread-function photometry, the table's sky, effective seeing, 0.2 arcsec pixels, 2 x 15 s, 9 electrons, no dark) the kernel's loss of depth to the read noise, m5 without read noise minus m5 with it, agrees with the published dCmInf to 0.03 mag in g, r, i, z and y and 0.06 mag in u",
+      "limits": { "absMax": 0.03, "absMaxU": 0.06 }
+    },
+    {
+      "id": "B3.doubling",
+      "group": "b",
+      "bound": "with the exposures lengthened and not multiplied (two reads at any length, as equation 7 assumes), the kernel's correction to the depth for tau = 2 agrees with the published dCm2 to 0.03 mag, and for tau = 4 and 10 with the paper's equation 7 evaluated at the published dCmInf to 0.03 mag, in every band",
+      "limits": { "absMax": 0.03, "taus": [2, 4, 10] }
+    },
+    {
+      "id": "B4.offFiducial",
+      "group": "b",
+      "bound": "away from the fiducial conditions (sky 1 mag brighter and 1 mag fainter, effective seeing 1.3 and 0.8 times the table's, an exposure of 60 s and 120 s as two reads, airmass 1.5 with the seeing scaled by X^0.6) the kernel's limiting magnitude agrees with equation 6 plus equation 7's correction to 0.05 mag, in every band, the paper itself quoting its depth predictions as uncertain by 0.1 to 0.2 mag",
+      "limits": { "absMax": 0.05 }
+    },
+    {
+      "id": "B5.airmassLoss",
+      "group": "b",
+      "bound": "the kernel's loss of depth at X = 1.2 (seeing times X^0.6, extinction km (X - 1)) agrees with the published dm5AtX1p2 to 0.03 mag in every band",
+      "limits": { "absMax": 0.03 }
+    },
+    {
+      "id": "B6.impliedThroughput",
+      "group": "b",
+      "bound": "the zero points fitted to the published depths imply a peak system throughput, taking the radiation kernel's SDSS u, g, r, i and z passbands as stand-ins for the LSST filters, between 0.15 and 0.95 in each of those bands; this holds the photon-rate arithmetic (area, band integral, units) to within a factor of a few of a real system, and says nothing finer (the stand-in passbands differ from the filters')",
+      "limits": { "min": 0.15, "max": 0.95 }
+    },
+    {
+      "id": "B7.adapter",
+      "group": "b",
+      "bound": "the facility adapter returns, for rubin and for lco-1m0, exactly the library's stated values in the units the kernel takes: aperture area, pixel scale in arcsec, read noise (the middle of a range when the caller asks for it), sky brightness per stated band, extinction per stated band, and marks every value it was given by the caller and not by the library as supplied; no value is added that the library does not state",
+      "limits": {}
+    },
+    {
+      "id": "C1.coverage",
+      "group": "c",
+      "bound": "on clean rendered frames (no flat-field structure, hot pixels, cosmic rays or bias pattern; 48 x 48; the point-spread function's FWHM 2.8 pixels; 400 seeded frames per scenario; four scenarios: source-limited, sky-limited, read-limited and a star near 5 sigma) the calculation's predicted noise covers the measured aperture photometry: the fraction of frames whose net electrons lie within 1.96 predicted sigma of the truth is in [0.92, 0.98] in each scenario, the standard deviation of the standardised error is in [0.88, 1.12] and its mean has magnitude at most 0.20; the prediction uses the pixel aperture the photometry used (its pixel count, its enclosed fraction and its sky annulus) and the dominant-term report names the regime of each scenario",
+      "limits": {
+        "coverage": [0.92, 0.98],
+        "sd": [0.88, 1.12],
+        "meanAbsMax": 0.2,
+        "frames": 400,
+        "scenarios": 4
+      }
+    },
+    {
+      "id": "C2.detection",
+      "group": "c",
+      "bound": "Prompt 183's detection (4 sigma, a one-pixel minimum area, 16 pixel background boxes, the point-spread function's FWHM as the smoothing kernel) on 200 seeded frames with one star at random sub-pixel position injected at the magnitude of the kernel's limit for four sigma: the fraction detected differs from the probability the kernel's noise terms predict (the star's electrons against four times the star-free matched-filter noise, with the star's own noise included) by at most 0.12; the fraction detected at a star one magnitude brighter is at least 0.97 and at a star one magnitude fainter at most 0.35",
+      "limits": {
+        "absMax": 0.12,
+        "frames": 200,
+        "brighterMin": 0.97,
+        "fainterMax": 0.35
+      }
+    },
+    {
+      "id": "D1.notReachable",
+      "group": "d",
+      "bound": "a target that needs more than the exposure limit is returned as not reachable in the exposure limit: the status is 'not-reachable', the reason code is 'exposure-limit', the SNR reached at the limit (snrAt) is below the target and reported, the limiting magnitude at the limit is reported, and no exposure time is returned as a plan; a target fainter than the sky-limited floor of the stated limit (an extended source 4 mag per square arcsec below a sky-limited plan's reach) is such a case; the same target with the limit raised is reachable",
+      "limits": {}
+    },
+    {
+      "id": "D2.noSignal",
+      "group": "d",
+      "bound": "a source of zero or negative rate, a non-finite magnitude or a zero target is refused with its own reason code ('no-signal', 'bad-input'), never an infinite time presented as a plan",
+      "limits": {}
+    },
+    {
+      "id": "D3.belowHorizon",
+      "group": "d",
+      "bound": "an altitude at or below the horizon (airmass infinite) is refused with the reason code 'below-horizon'; an airmass above 5 carries a warning 'low-altitude' (the plane-parallel and Kasten and Young approximations and the extinction coefficient are not reliable there)",
+      "limits": { "warnAirmass": 5 }
+    },
+    {
+      "id": "D4.saturation",
+      "group": "d",
+      "bound": "an exposure whose brightest pixel (the star's peak pixel plus the sky and the dark) would hold more than the full well is refused with the reason code 'saturated' and the largest exposure that does not, and the plan with that many exposures (more, shorter) is offered; the star's peak-pixel fraction for a Gaussian of FWHM f is the pixel-integrated value at the star's centre and agrees with the frame model's to a relative 1e-3",
+      "limits": { "relPeak": 1e-3 }
+    },
+    {
+      "id": "D5.adapterRefusals",
+      "group": "d",
+      "bound": "the adapter raises InstrumentTableError, naming the facility and the field, when the library lacks a value the plan needs and the caller did not supply it (rubin dark current; every facility's zero point or throughput; a band with no stated sky brightness; a radio or space facility without a site sky), never fills a default, and accepts the value when the caller supplies it and records it as supplied",
+      "limits": {}
+    },
+    {
+      "id": "D6.flatFieldFloor",
+      "group": "d",
+      "bound": "the calculation leaves out flat-field error and says so: its plan always carries the assumption 'no flat-field or sky-subtraction error', and a plan whose SNR exceeds 100 (a floor of 1 percent, a stated teaching value, not a measured one) carries the warning 'beyond-flat-field-accuracy'; on frames with the lesson's default flat-field structure (vignette 0.3, three dust shadows, 1 percent pixel scatter), 200 seeded frames of a bright star measured with the same photometry have a standard deviation of the standardised error above 1.3, the clean frames' scenario being within its coverage bound",
+      "limits": { "snrFloor": 100, "sdMin": 1.3, "frames": 200 }
+    },
+    {
+      "id": "E1.authentic",
+      "group": "e",
+      "bound": "authentic-data applicability: one real exposure of a known star with a recorded exposure time, sky and read noise measured by a fixed analysis contract and compared with the calculation; NOT MEASURED unless a product is supplied (below)",
+      "limits": {}
+    },
+    {
+      "id": "P1.speed",
+      "group": "p",
+      "bound": "1000 plans (planExposure with the facility adapter's values) build in at most 400 ms, so the panel recomputes on every control change",
+      "limits": { "ms": 400, "plans": 1000 }
+    }
+  ],
+  "ensemble": {
+    "frame": {
+      "width": 48,
+      "height": 48,
+      "fwhmPixels": 2.8,
+      "gain": 1.5,
+      "readNoise": 8,
+      "darkRate": 0.1,
+      "clean": {
+        "vignette": 0,
+        "dustCount": 0,
+        "qeScatter": 0,
+        "hotFraction": 0,
+        "cosmicRate": 0,
+        "biasColumnSigma": 0
+      }
+    },
+    "photometry": {
+      "apertureFwhm": 1.5,
+      "annulusFwhm": [3, 5],
+      "note": "the ratios Prompt 180's tool uses (js/measure/photometry.js FWHM_RATIOS)"
+    },
+    "scenarios": [
+      {
+        "id": "source",
+        "rate": 2000,
+        "sky": 3,
+        "exposure": 30,
+        "regime": "source"
+      },
+      {
+        "id": "sky",
+        "rate": 60,
+        "sky": 20,
+        "exposure": 120,
+        "regime": "sky"
+      },
+      {
+        "id": "read",
+        "rate": 3,
+        "sky": 0.2,
+        "exposure": 60,
+        "regime": "read"
+      },
+      {
+        "id": "faint",
+        "rate": 12,
+        "sky": 3,
+        "exposure": 60,
+        "regime": "sky"
+      }
+    ]
+  },
+  "authenticRequest": {
+    "status": "NOT MEASURED",
+    "need": "one real, calibrated exposure of a star of known catalogue magnitude with the exposure time, filter, airmass, sky level and read noise recorded in its header or its instrument's documentation, for example a Las Cumbres Observatory archive frame of a standard field; the decision (product, version, terms, rights basis, size) is Carl's. Nothing was downloaded and nothing is typed from memory."
+  },
+  "claimRules": {
+    "forbid": [
+      "guarantees",
+      "will reach",
+      "limiting magnitude of the telescope"
+    ],
+    "note": "a plan is a prediction under stated assumptions (no flat-field error, no crowding, the sky and seeing as given); it is never a guarantee, and a limiting magnitude belongs to an exposure, a band, a sky and a seeing, not to a telescope"
+  }
+}
