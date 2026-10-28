@@ -457,6 +457,20 @@
       "student": false
     },
     {
+      "file": "INTERIORS.md",
+      "kind": "feature",
+      "purpose": "Interiors I: density, gravity, escape speed, equilibrium temperature, density classes and compression correction of the planets, with uncertainties and validation (Prompt 203 Part A).",
+      "owner": 203,
+      "student": false
+    },
+    {
+      "file": "INTERIORS_GATE.md",
+      "kind": "gate",
+      "purpose": "Interiors gate: the two-layer inversion and the Darwin-Radau oblateness, thresholds committed first, the measured checks and the verdict C (Prompt 203 Part B).",
+      "owner": 203,
+      "student": false
+    },
+    {
       "file": "LAB3D.md",
       "kind": "feature",
       "purpose": "The 3-D small-N kernel.",
@@ -874,6 +888,13 @@
       "kind": "gate",
       "purpose": "Sky Lab gate: sky, time and coordinates.",
       "owner": 87,
+      "student": false
+    },
+    {
+      "file": "SMALL_BODIES.md",
+      "kind": "feature",
+      "purpose": "The belts from a catalog and the spin from a light curve: gaps as measured depletions, class counts, the survey's selection and a bounded ellipsoid light-curve model, validated (Prompt 198).",
+      "owner": 198,
       "student": false
     },
     {

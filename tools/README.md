@@ -124,6 +124,7 @@ current, and the orchestrator checks it.
 | `instructor-freshness.mjs` | Was the committed instructor bundle built from these sources? |  |
 | `instrument-families.mjs` | Which instrument families a script the page fetched contains |  |
 | `interaction-contract.mjs` | Is a surface keeping the interaction contract? |  |
+| `interiors-validate.mjs` | The interiors kernel's Part A against its committed thresholds (Prompt 203) | `npm run interiors:validate` |
 | `jest-sequencer.mjs` | Start the slowest suites first |  |
 | `key-groups-check.mjs` | Key groups: does the rewritten catalog equal its source? |  |
 | `key-groups.mjs` | Key groups: write a shared key prefix once, in the bundle only |  |
@@ -180,6 +181,7 @@ current, and the orchestrator checks it.
 | `seeding-probes.mjs` | The moved seeded call sites, run against v3's own copies of them |  |
 | `shell.mjs` | The shared shell, stamped into every page |  |
 | `sky-horizons-astrometric.mjs` | Reference positions for the Sky Lab's ephemeris source (Prompt 106), from JPL Horizons |  |
+| `small-bodies-validate.mjs` | The small-body kernel against its committed thresholds (Prompt 198) | `npm run small-bodies:validate` |
 | `small-body-sweep.mjs` | Small-body scenario sweep |  |
 | `source-closure.mjs` | Which files a program actually reads |  |
 | `starfield-probe.mjs` | Starfield phase profile |  |

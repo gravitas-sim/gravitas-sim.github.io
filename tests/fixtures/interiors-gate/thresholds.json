@@ -1,0 +1,180 @@
+{
+  "prompt": 203,
+  "part": "B",
+  "document": "INTERIORS_GATE.md",
+  "committed": "before any spike code, any oracle output and any measurement existed",
+  "seed": 203,
+  "groups": {
+    "common": "what every verdict needs: the kernel stays lazy and costs the budgets nothing",
+    "inversion": "the two-layer core-radius inversion, its moment-of-inertia check and its refusals",
+    "oblateness": "the Darwin-Radau flattening from rotation, its refusals and its uncertainty"
+  },
+  "decision": {
+    "order": [
+      "a common check that is not a pass (or a pass under a ruling): C",
+      "else an oblateness check that is not a pass: C",
+      "else an inversion check that is not a pass: B (oblateness only)",
+      "else A"
+    ],
+    "rule": "a check that was not measured is never a pass; a check recorded as pass-under-ruling counts as a pass and its row carries the ruling; 'inversion passes alone' is C because Appendix C names no such slice"
+  },
+  "domain": {
+    "inversion": {
+      "bodies": ["earth", "mars"],
+      "rhoBarMin": 3000,
+      "algebraic": "rhoMantle < rhoBar < rhoCore"
+    },
+    "oblateness": {
+      "qMax": 0.1,
+      "tested": ["earth", "jupiter"],
+      "factorRange": [0, 0.4],
+      "qConvention": "q = omega^2 a^3 / (G M), equatorial radius a, f = (a - b) / a"
+    }
+  },
+  "checks": [
+    {
+      "id": "I1.closed",
+      "group": "inversion",
+      "bound": "two-layer core radius and mass: kernel against the oracle's brentq root and quad integral on 1,500 seeded points: relative error at most 1e-12 (core radius 1e-10)",
+      "limits": {
+        "massRelMax": 1e-12,
+        "coreRelMax": 1e-10,
+        "points": 1500
+      }
+    },
+    {
+      "id": "I2.moment",
+      "group": "inversion",
+      "bound": "moment-of-inertia factor against scipy quad on the same 1,500 points to 1e-9; rho_c = rho_m gives 0.4 exactly",
+      "limits": {
+        "relMax": 1e-9,
+        "points": 1500,
+        "homogeneous": 0.4
+      }
+    },
+    {
+      "id": "I3.earth",
+      "group": "inversion",
+      "bound": "Earth's core radius from the in-situ layer means, mass and radius against the published core-mantle boundary (3,480 km) within 2.0 percent (a closure test, stated)",
+      "limits": {
+        "relMax": 0.02,
+        "publishedKm": 3480
+      }
+    },
+    {
+      "id": "I4.mars",
+      "group": "inversion",
+      "bound": "Mars's core radius against 1,830 km within 5.0 percent (a closure test, stated)",
+      "limits": {
+        "relMax": 0.05,
+        "publishedKm": 1830,
+        "publishedSigmaKm": 40
+      }
+    },
+    {
+      "id": "I5.coverage",
+      "group": "inversion",
+      "bound": "seeded ensemble of 1,000 Earth-like and 1,000 Mars-like synthetic bodies, truth densities from the table's stated spread, M and R with 0.01 percent noise: the stated 1-sigma interval on the core radius covers the truth at a rate in [0.63, 0.73] and the 2-sigma interval at least 0.92, in each cluster",
+      "limits": {
+        "perCluster": 1000,
+        "noise": 0.0001,
+        "oneSigma": [0.63, 0.73],
+        "twoSigmaMin": 0.92
+      }
+    },
+    {
+      "id": "I6.moment-published",
+      "group": "inversion",
+      "bound": "the moment-of-inertia factor predicted from the inverted structure within 10 percent of the published factor (Earth 0.3307, Mars 0.364), and a homogeneous body (0.4) ruled out by each published factor by more than 10 times its stated error",
+      "limits": {
+        "relMax": 0.1,
+        "ruledOutSigmas": 10
+      }
+    },
+    {
+      "id": "I7.refusals",
+      "group": "inversion",
+      "bound": "at least 20 hostile or out-of-domain inputs each refused with a named code and no number",
+      "limits": {
+        "count": 20
+      }
+    },
+    {
+      "id": "O1.closed",
+      "group": "oblateness",
+      "bound": "Darwin-Radau forward and inverse against the oracle's closed form to 1e-12 on 1,000 seeded points; the homogeneous limit returns f = 5 q / 4; the round trip f to C to f returns the input",
+      "limits": {
+        "relMax": 1e-12,
+        "points": 1000
+      }
+    },
+    {
+      "id": "O2.radau-clairaut",
+      "group": "oblateness",
+      "bound": "for 200 seeded two-layer profiles and the n = 1 polytrope: Darwin-Radau flattening from the exact moment of inertia against the oracle's first-order Clairaut flattening, at q = 0.01: relative error in f at most 3.0 percent; the oracle must pass its self-tests first (homogeneous: eta 0, factor 0.4, f = 5q/4; polytrope factor (2/3)(1 - 6/pi^2) to 1e-8)",
+      "limits": {
+        "profiles": 200,
+        "q": 0.01,
+        "relMax": 0.03,
+        "selfTestRel": 1e-8
+      }
+    },
+    {
+      "id": "O3.earth",
+      "group": "oblateness",
+      "bound": "Earth's flattening from the published moment (0.3307), GM, the equatorial radius and the sidereal period against 1/298.257 within 2.0 percent",
+      "limits": {
+        "relMax": 0.02
+      }
+    },
+    {
+      "id": "O4.jupiter",
+      "group": "oblateness",
+      "bound": "Jupiter's flattening from the published moment (0.264), GM, the equatorial radius (71,492 km) and the System III period against f = 0.06487 (IAU radii 71,492 and 66,854 km) within 10.0 percent",
+      "limits": {
+        "relMax": 0.1,
+        "publishedF": 0.06487
+      }
+    },
+    {
+      "id": "O5.chain",
+      "group": "oblateness",
+      "bound": "Earth's flattening from the two-layer model's own moment (the inversion's) and the rotation against the published value within 10.0 percent",
+      "limits": {
+        "relMax": 0.1
+      }
+    },
+    {
+      "id": "O6.coverage",
+      "group": "oblateness",
+      "bound": "seeded ensemble of 1,000 two-layer profiles at q = 0.0035 (moment known to 0.002, q to 1 percent): the stated 1-sigma interval on f (propagated error plus a model term of 1 percent of f) covers the oracle's first-order Clairaut flattening at a rate in [0.60, 0.76]",
+      "limits": {
+        "profiles": 1000,
+        "q": 0.0035,
+        "momentSigma": 0.002,
+        "qRel": 0.01,
+        "modelTerm": 0.01,
+        "oneSigma": [0.6, 0.76]
+      }
+    },
+    {
+      "id": "O7.refusals",
+      "group": "oblateness",
+      "bound": "at least 12 inputs (Saturn, Venus, the Moon, Mars, Mercury, q <= 0, non-finite, factor 0.4 or more, factor 0 or less, 5q/(2f) - 1 < 0, q above 0.10, an unknown body) each refused with a named code and no number",
+      "limits": {
+        "count": 12
+      }
+    },
+    {
+      "id": "B1.lazy",
+      "group": "common",
+      "bound": "the kernel files are NEVER_PRECACHED, imported by no page, and add 0 B to the first-visit precache, 0 B to the idle precache, 0 B to the app's deferred JavaScript, and no file to the instructor closure (281 files)",
+      "limits": {
+        "firstVisitAddedMax": 0,
+        "idleAddedMax": 0,
+        "deferredAddedMax": 0,
+        "closureFiles": 281
+      }
+    }
+  ]
+}
