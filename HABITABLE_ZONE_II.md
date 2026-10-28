@@ -86,5 +86,45 @@ Whitmire and Reynolds 1993, Icarus 101, 108 (the habitable zone and tidal lockin
 
 ## The validation table
 
-Filled in below once the kernel has been run against the committed bounds (`npm run habitablezone:validate`, held by
-`tests/habitableZoneII.test.js`).
+`npm run habitablezone:validate`, held by `tests/habitableZoneII.test.js`. 60 rows, 58 pass, none fails, two are
+stated not applicable (tier c and the escape row). Bounds are the committed ones. No leg failed, so there is no
+`failed-legs.json`.
+
+| Tier | Result |
+|---|---|
+| (a1) the limit fluxes | 25 stellar temperatures from 2600 K to 7200 K, four limits, against the oracle's numpy polynomial: worst relative difference 2.2e-16 (bound 1e-12); at 5780 K every limit equals its constant term exactly |
+| (a2) the edges | 12 stars, four limits: 2.1e-16 against the oracle; the inverse-square round trip 3.6e-16; four times the luminosity doubles an edge exactly; the optimistic zone contains the conservative zone for every star |
+| (a3) the orbit | periapsis, apoapsis and time-mean flux for six orbits against the oracle (exact), the mean against quadrature over 200,001 points of mean anomaly (4e-16), the fraction of the year in a band against the oracle's closed form (exact) and against its sampling of Kepler's equation (8.7e-6 absolute, bound 1e-4), and against the 4,000-sample estimate in `js/habitability.js` (4.3e-4 absolute, bound 5e-4: the sampler's own resolution) |
+| (a4) the locking radius | six star-planet pairs against the oracle's independent inversion (1.5e-15); the tides kernel's `lockingTime` at the returned radius is the age (6.3e-16); the exponents 1/3 (star mass), 1/6 (age, k2) and -1/6 (spin rate) to 6e-17; the range over Q is 10^(1/6) either way |
+| (a5) the zone along a MIST track | the 1 solar-mass track at 1.0, 4.57 and 8.0 Gyr against the oracle, which decodes the pack's columns itself: 0 in luminosity and temperature, 1.4e-16 in the four edges (bound 1e-9); the 0.2 and 0.5 solar-mass tracks the same; the last stored age of the 0.2 solar-mass track is accepted and an age 1e-12 beyond it refused |
+| (b1) the Sun against the published edges | 0.7503 AU against 0.75 (0.04 percent), 0.9813 against 0.99 (0.88 percent), 1.6886 against 1.70 (0.67 percent), 1.7658 against 1.77 (0.24 percent); bound 1.5 percent |
+| (b2) the existing authority | 41 temperatures, six stars in both zone models and six orbits: identical to `js/habitability.js` to the last bit |
+| (b3) the model star | luminosity 0.7475 and 1.4541 of its 4.57 Gyr value at 1 and 8 Gyr against the analytic solar-model fit's 0.7619 and 1.4290 (1.9 and 1.8 percent, bound 5); ZAMS 0.746 against 0.714 (4.4 percent, bound 10); **the track's luminosity at 4.57 Gyr is 1.108, 10.8 percent above the Sun's (bound 15)**; the conservative zone moves outward: inner edge 0.895, 1.029, 1.239 AU, outer edge 1.541, 1.767, 2.128 AU |
+| (b4) locking | Earth-like planet (k2 0.3, Q 100, 10-hour initial spin): the locking radius is 0.474 AU at 4.5 Gyr around the Sun (the Earth at 1 AU is outside), 0.238 AU around Proxima Centauri against b at 0.0485 AU (inside), 0.231 AU around TRAPPIST-1 against h at 0.0619 AU (inside); the inner edge of the 0.2 solar-mass track's zone at 5 Gyr (0.074 AU) is inside its locking radius (0.282 AU) and that of the 1 solar-mass track at 4.57 Gyr (1.029 AU) is outside its radius (0.475 AU) |
+| (b5) the escape bound | not applicable, stated: not built (Prompt 199 verdict B, D-R10-75) |
+| (c) | not applicable, stated: no uncertainty estimator to cover |
+| (d) | 63 hostile or out-of-domain inputs refused with their codes, among them 2599.999 K and 7200.001 K (and 2600 K and 7200 K accepted), TRAPPIST-1's 2566 K, a 2 solar-mass star at 0.1 Gyr (9,400 K), a band with its edges reversed, an unknown limit, track or age, and a Q the tides kernel refuses |
+
+Things the contract did not settle, decided before the kernel was judged and recorded here so nobody reads them as a
+bound that was moved:
+
+- The kernel's first run failed two a3 rows (a band whose edge equals a circular orbit's radius was half-open in
+  the kernel and in the oracle's closed form, while the oracle's sampling and `js/habitability.js` include both ends).
+  The kernel's rule became "a band includes both its ends" and the oracle's closed form was corrected and its results
+  regenerated (one number changed; the correction is in `oracle-provenance.json`). No bound moved.
+- `thresholds.json` carries an amendment: "one second past a track's last age" cannot be tested (a second is below the
+  spacing of a double at that age); the row uses 1e-12 of the age.
+- The three bounds of (b3) were set with the track's values in view, as `thresholds.json` says. The 15 percent bound on the
+  model star's luminosity at 4.57 Gyr is the weakest: it is wide enough to hold the measured 10.8 percent, and its only
+  purpose is to make the kernel carry the statement that this star is not the Sun.
+- Tier (b4) is inequalities typed from expectations in the literature, not values; the constant-Q model fixes the
+  locking radius to a factor 2 or so through k2/Q, which the range returned beside it states, and every inequality here
+  holds by more than that factor (the nearest, Earth at 1 AU against 0.474 AU, by 2.1; the 0.2 solar-mass zone against 0.282 AU, by 3.8).
+
+## What is not built (the rest of Prompt 205)
+
+The kernel, its validation and the document are here. Not built in this part: the panel's limit toggles, locking
+bar and age selector (an instrument change to `js/habitabilityWidgets.js` and the deferred catalogues, English and
+Spanish), the Goldilocks lesson's upper depth (limits, locking, the zone at three ages), and the reading step on why a
+climate trajectory is not built. The escape bar is dropped by verdict B. A majors investigation, "A planet's climate
+over time", is deferred, not built: it would resume only with a vetted evolving-climate model (D-R10-205-01).

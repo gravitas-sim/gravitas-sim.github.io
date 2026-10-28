@@ -388,6 +388,10 @@ export const NEVER_PRECACHED = [
   // instrument that imports it installs nothing; the idle tier has no room under
   // a ceiling the standing size approval does not cover. D-R10-78.
   /^js\/kernels\/tides\//,
+  // The habitable-zone kernel (Prompt 205, HABITABLE_ZONE_II.md): closed forms,
+  // imported by no page until the panel's limits and the lesson's upper depth use
+  // it, and then only from their lazy chunks. D-R10-205-01.
+  /^js\/kernels\/habitablezone\//,
   // The atmospheres kernel and pack (Prompt 200, ATMOSPHERES.md): imported by no
   // page until the instrument family and its lessons are built. D-R10-80.
   /^js\/kernels\/atmospheres\//,

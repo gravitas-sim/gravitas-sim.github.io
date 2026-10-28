@@ -89,16 +89,16 @@ for o in inp["orbits"]:
         # closed form, written out here
         def F(rr):
             if e == 0.0:
-                return 0.0 if rr < a else 1.0
+                raise AssertionError("circular orbits are handled below")
             if rr <= a * (1 - e):
                 return 0.0
             if rr >= a * (1 + e):
                 return 1.0
             Ee = np.arccos((1 - rr / a) / e)
             return (Ee - e * np.sin(Ee)) / np.pi
-        rec["bands"].append(
-            {"innerAU": r1, "outerAU": r2, "sampled": sampled, "closed": float(F(r2) - F(r1))}
-        )
+        # a circle is at one distance all year and the band includes both its ends
+        closed = (1.0 if r1 <= a <= r2 else 0.0) if e == 0.0 else float(F(r2) - F(r1))
+        rec["bands"].append({"innerAU": r1, "outerAU": r2, "sampled": sampled, "closed": closed})
     out["orbits"][o["id"]] = rec
 
 # a4: the locking radius, derived here from t_lock = I omega / N inverted for a

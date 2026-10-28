@@ -158,6 +158,7 @@
     "sun:validate": "node tools/sun-validate.mjs",
     "atmospheres:validate": "node tools/atmospheres-validate.mjs",
     "tides:validate": "node tools/tides-validate.mjs",
+    "habitablezone:validate": "node tools/habitable-zone-validate.mjs",
     "i18n:freshness": "node tools/i18n-freshness.mjs",
     "author:check": "node tools/author-check.mjs",
     "author:strict": "node tools/author-check.mjs --warnings",

@@ -6,13 +6,19 @@
   "retrieved": "2026-10-27",
   "index": "none: Prompt 180's scratch virtual environment as it was; nothing was added for this prompt",
   "python": "3.10.12 (macOS-26.6.2-x86_64-i386-64bit, x86_64)",
-  "packages": { "numpy": "2.2.6", "scipy": "1.15.3" },
+  "packages": {
+    "numpy": "2.2.6",
+    "scipy": "1.15.3"
+  },
   "run": "cd <empty scratchpad directory>; <venv>/bin/python -I tools/habitable-zone-oracle/oracle.py tools/habitable-zone-oracle/oracle-inputs.json js/data/stellar/mistTracks.js tests/fixtures/habitable-zone-ii/oracle-results.json; then Prettier",
   "committedBefore": "thresholds.json and HABITABLE_ZONE_II.md's contract were committed (caa669c7) before the oracle's inputs and script existed; the oracle's results were committed before js/kernels/habitablezone/, the validation tool and the tests existed",
   "files": {
     "tools/habitable-zone-oracle/oracle-inputs.json": "22b52b181c3f7106ff11d05ab30e18c3ae1fdee26e82c18dbc10aad275ef7683",
-    "tools/habitable-zone-oracle/oracle.py": "9dce501153dfa7431b6a2f6d247b8a9f3cd37910139d615dcbd07b37cd2a4154",
-    "tests/fixtures/habitable-zone-ii/oracle-results.json": "b064eb3f94499b557c7c68c533ad03657a3bbeb07ee26c6b6a072ddc366034e7",
+    "tools/habitable-zone-oracle/oracle.py": "f8177c18035450eca3c2620d6126a885b1f558e62f83418e116da0ee25a0db61",
+    "tests/fixtures/habitable-zone-ii/oracle-results.json": "dfc4a91b9efbadda7f84251bda283a697d4edcad20199d406db22c9a1e809aa5",
     "js/data/stellar/mistTracks.js": "4c4f68cbcb641a7e65675f6802147504bb6fa240ab72b433862c6854d0c73046"
-  }
+  },
+  "corrections": [
+    "2026-10-27, after the kernel had been run once (the first run of tools/habitable-zone-validate.mjs failed a3.band.sampled and a3.band.existing-sampler): the oracle's closed form for a circular orbit used a half-open band, so a band whose inner edge equals the orbit's radius gave 0 while the oracle's own sampling, js/habitability.js and the kernel's corrected rule (a band includes both its ends) give 1. The kernel had the same half-open rule and was fixed; the oracle's closed form was corrected to the inclusive band and the results regenerated, which changed one number (orbit 'circular', band [1.0, 1.4] times a: closed 0 to 1). No bound was moved."
+  ]
 }

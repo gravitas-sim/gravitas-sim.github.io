@@ -97,6 +97,7 @@ current, and the orchestrator checks it.
 | `geometry-fuzz.mjs` | Base-versus-head fuzz of every scenario's world (Roadmap II Prompt 108) |  |
 | `glossary.mjs` | The glossary, and the words it retires |  |
 | `gw-shots.mjs` | Captures of the gravitational-wave lab |  |
+| `habitable-zone-validate.mjs` | The habitable-zone kernel against its committed thresholds (Prompt 205) | `npm run habitablezone:validate` |
 | `i18n-audit.mjs` | Message-catalog audit | `npm run i18n:check` |
 | `i18n-catalog.mjs` | The message catalog, however many files it is split across |  |
 | `i18n-freshness.mjs` | Is every translation still a translation of the English it stands beside? | `npm run i18n:freshness` |

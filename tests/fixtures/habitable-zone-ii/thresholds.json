@@ -2,6 +2,9 @@
   "format": "gravitas.habitable-zone-ii-thresholds/1",
   "prompt": 205,
   "committed": "Before the kernel, the oracle's script or results, the validation tool or any test existed: this file and the validation contract in HABITABLE_ZONE_II.md. No number below is the output of js/kernels/habitablezone/. Stated plainly: before this file was written the author had read, once, js/stellar/tracks.js's output for the 1 solar-mass MIST track at 0.1, 1, 4.57, 8 and 10 Gyr and at its ZAMS point (L = 0.764, 0.828, 1.108, 1.611, 2.319 and 0.746 solar), to choose the three ages and to learn that this model star is 11 percent brighter than the Sun at 4.57 Gyr. The bound of b3.model-star (0.15) and the 10 percent bound of b3.zams were set with those numbers in view and are flagged as such; the closed-form, oracle and refusal bounds were not. Every published value was typed from the cited source and not re-read (checked: false). A disagreement with a source is a defect to be found, not a tolerance to be widened.",
+  "amendments": [
+    "2026-10-27, before the kernel was run and before any row was judged: a5.age.closed said 'one second past' a track's last age. One second is 2.7e-18 of that age, below the spacing of a double (1.1e-16), so no kernel could tell the two ages apart; the check now uses 1e-12 of the age. No bound of a measured quantity was changed."
+  ],
   "model": {
     "name": "habitable-zone flux limits, the zone along a MIST track, the tidal-locking radius and the flux of an eccentric orbit",
     "units": "AU, solar units and Earth-insolation units in the zone functions; SI inside the locking radius (reused from js/kernels/tides/)",
@@ -63,7 +66,7 @@
       "bounds": { "relative": 1e-12, "exponentAbsolute": 1e-10 }
     },
     "a5.age.closed": {
-      "what": "the star's luminosity and temperature and the four edges of the zone at the three ages (1.0, 4.57 and 8.0 Gyr) on the 1 solar-mass track against the oracle, which decodes the track's stored int16 columns itself and interpolates linearly in log age; edges scale as the square root of the luminosity; a track's last stored age is accepted and one second past it refused",
+      "what": "the star's luminosity and temperature and the four edges of the zone at the three ages (1.0, 4.57 and 8.0 Gyr) on the 1 solar-mass track against the oracle, which decodes the track's stored int16 columns itself and interpolates linearly in log age; edges scale as the square root of the luminosity; a track's last stored age is accepted and an age 1e-12 of itself beyond it (about 11 years on the 1 solar-mass track) is refused",
       "bounds": { "relative": 1e-9 }
     },
     "b1.sun.published": {
