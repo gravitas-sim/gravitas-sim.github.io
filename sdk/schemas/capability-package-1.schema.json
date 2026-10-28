@@ -221,6 +221,24 @@
               }
             }
           }
+        },
+        "instruments": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "file": {
+                "type": "string",
+                "description": "For an instrument-pack extension: the gravitas.instrument/1 file (sdk/schemas/instrument-1.schema.json)."
+              }
+            }
+          }
         }
       }
     },

@@ -3,7 +3,7 @@
 // -----------------------------------------------------------------------------
 // An extension is a directory (or a .gxp archive of one) whose
 // gravitas-extension.json is a gravitas.capability-package/1 manifest, plus
-// the files that manifest names. Five types, told apart by what it provides:
+// the files that manifest names. Six types, told apart by what it provides:
 //
 //   data-pack     declarative. provides.dataPacks: one pack, a
 //                 gravitas.observation-data-pack/1 record and its series.
@@ -14,6 +14,9 @@
 //   investigation-pack  declarative. provides.investigations: one
 //                 gravitas.investigation-pack/1, a guided investigation as
 //                 data (the Studio's lesson composer writes one).
+//   instrument-pack  declarative. provides.instruments: one
+//                 gravitas.instrument/1, a telescope with its instruments and
+//                 cited values (INSTRUMENTS.md).
 //   capability    built-in: curated, executable. provides.widgetFamilies: an
 //                 instrument family whose code is reviewed, vendored into
 //                 Gravitas and compiled with it. Never installed at run time.
@@ -71,6 +74,11 @@ import {
   stepPackWorld,
   worldSnapshot,
 } from './scenario.mjs';
+import {
+  checkInstrumentPack,
+  instrumentCompleteness,
+  instrumentLegs,
+} from './instrument.mjs';
 import { positions, locate } from './locate.mjs';
 import { MANIFEST_ENTRY, read as readArchive } from './archive.mjs';
 import {
@@ -221,6 +229,7 @@ export function extensionType(m) {
   // An investigation with a `file` is a pack; one with an `entry` is a
   // built-in lesson a capability package names.
   if (p.investigations?.some(i => !i?.entry)) kinds.push('investigation-pack');
+  if (p.instruments?.length) kinds.push('instrument-pack');
   if (p.widgetFamilies?.length) kinds.push('capability');
   return kinds;
 }
@@ -253,7 +262,7 @@ export async function validateExtension(ext) {
       'provides',
       types.length
         ? `provides ${types.join(' and ')}; an extension is exactly one type`
-        : 'provides no dataPacks, courses, scenarios, investigations or widgetFamilies, so it is no extension type'
+        : 'provides no dataPacks, courses, scenarios, investigations, instruments or widgetFamilies, so it is no extension type'
     );
     return { type: null, manifest: m, findings: report.list };
   }
@@ -370,6 +379,7 @@ export async function validateExtension(ext) {
     'course-pack': validateCourseExtension,
     'scenario-pack': validateScenarioExtension,
     'investigation-pack': validateInvestigationExtension,
+    'instrument-pack': validateInstrumentExtension,
     capability: validateCapabilityExtension,
   }[type];
   const extra = (await checkType(ext, m, report, ids)) || [];
@@ -578,6 +588,41 @@ async function validateInvestigationExtension(ext, m, report, ids) {
           t.path,
           'its Spanish was written from English that has since changed'
         );
+  if (pack.id !== entry.id)
+    report.error(
+      entry.file,
+      'id',
+      `is "${pack.id}"; the extension provides "${entry.id}"`
+    );
+  if (!(m.assets || []).some(a => a?.path === entry.file))
+    report.error(
+      M,
+      'assets',
+      `${entry.file} is provided but not declared as an asset`
+    );
+  return [];
+}
+
+async function validateInstrumentExtension(ext, m, report) {
+  const M = MANIFEST_ENTRY;
+  const entries = m.provides.instruments;
+  if (entries.length !== 1)
+    report.error(
+      M,
+      'provides.instruments',
+      'an instrument-pack extension provides exactly one facility'
+    );
+  const entry = entries[0] || {};
+  if (typeof entry.file !== 'string')
+    return report.error(
+      M,
+      'provides.instruments[0].file',
+      'the gravitas.instrument/1 file'
+    );
+  const pack = parseJson(ext, entry.file, report);
+  if (!pack) return [];
+  for (const e of checkInstrumentPack(pack))
+    report.error(entry.file, e.path, e.message);
   if (pack.id !== entry.id)
     report.error(
       entry.file,
@@ -858,6 +903,18 @@ export async function testExtension(ext, { type, manifest: m }) {
       JSON.stringify(worldSnapshot()) === snap,
       'the same pack builds the same world again'
     );
+  } else if (type === 'instrument-pack') {
+    const pack = json(m.provides.instruments[0].file);
+    check(
+      checkInstrumentPack(pack).length === 0,
+      'every value has a registry unit and a source, and nothing is guessed'
+    );
+    for (const leg of instrumentLegs(pack))
+      if (leg.status !== 'N/A')
+        check(
+          leg.status === 'pass',
+          `${leg.id} ${leg.facility}: ${leg.detail}`
+        );
   } else if (type === 'capability') {
     const dir = materialize(ext, { rewrite: true });
     for (const family of m.provides.widgetFamilies) {
@@ -1054,6 +1111,13 @@ export async function describeExtension(
       if (set.length) say(`  settings   ${set.join(', ')}`);
       const open = [...(pack.open || []), ...(pack.tools || [])];
       if (open.length) say(`  opens      ${open.join(', ')}`);
+    } else if (type === 'instrument-pack') {
+      const pack = json(m.provides.instruments[0].file);
+      const c = instrumentCompleteness(pack);
+      say(
+        `  facility   ${pack.facility.name} (${pack.facility.class}${pack.facility.typical ? ', typical' : ''}): ${c.present} of ${c.expected} expected fields stated`
+      );
+      if (c.missing.length) say(`  absent     ${c.missing.join(', ')}`);
     } else if (type === 'capability') {
       const dir = materialize(ext, { rewrite: true });
       const asset = m.assets.find(a => a.role === 'code');

@@ -1,0 +1,252 @@
+{
+  "id": "rubin",
+  "class": "survey",
+  "typical": false,
+  "name": "Rubin Observatory LSST (reference design) with the LSST camera",
+  "note": "The reference design of the 2019 paper. Gain and dark current are not stated there and are absent; the read noise is an assumption the paper states for its depth calculation.",
+  "site": "cerro-pachon",
+  "telescope": {
+    "name": "Rubin Observatory three-mirror telescope",
+    "aperture": {
+      "v": 8.4,
+      "u": "m",
+      "s": "ivezic2019",
+      "at": "Table 1",
+      "n": "geometrical diameter of the primary"
+    },
+    "effectiveAperture": {
+      "v": 6.5,
+      "u": "m",
+      "s": "ivezic2019",
+      "at": "Abstract, Sec. II.2.2"
+    },
+    "focalRatio": {
+      "v": 1.234,
+      "u": "",
+      "s": "ivezic2019",
+      "at": "Table 1",
+      "n": "the final design"
+    }
+  },
+  "instruments": [
+    {
+      "id": "lsstcam",
+      "kind": "imager",
+      "name": "LSST camera",
+      "pixelSize": {
+        "v": 10,
+        "u": "um",
+        "s": "ivezic2019",
+        "at": "camera description (section number not recorded)",
+        "n": "CCD science sensors with 10 um pixels"
+      },
+      "pixelScale": {
+        "v": 0.2,
+        "u": "arcsec/pix",
+        "s": "ivezic2019",
+        "at": "Table 1"
+      },
+      "sensorWidth": {
+        "v": 4096,
+        "u": "pix",
+        "s": "ivezic2019",
+        "at": "camera description (section number not recorded)",
+        "n": "the paper writes '4K x 4K' sensors"
+      },
+      "sensorHeight": {
+        "v": 4096,
+        "u": "pix",
+        "s": "ivezic2019",
+        "at": "camera description (section number not recorded)",
+        "n": "the paper writes '4K x 4K' sensors"
+      },
+      "sensorCount": {
+        "v": 189,
+        "u": "count",
+        "s": "ivezic2019",
+        "at": "camera description (section number not recorded)"
+      },
+      "fieldArea": {
+        "v": 9.6,
+        "u": "deg2",
+        "s": "ivezic2019",
+        "at": "Abstract, Table 1"
+      },
+      "readNoise": {
+        "v": 9,
+        "u": "electron",
+        "s": "ivezic2019",
+        "at": "Table 2 footnote",
+        "q": "assumed",
+        "n": "assumed instrumental noise of 9 e- per pixel and per readout, in the paper"
+      },
+      "readoutTime": {
+        "v": 2,
+        "u": "s",
+        "s": "ivezic2019",
+        "at": "Sec. II.2.2",
+        "q": "upper",
+        "n": "the longest acceptable read-out time, a design limit"
+      },
+      "exposureTime": {
+        "v": 15,
+        "u": "s",
+        "s": "ivezic2019",
+        "at": "Abstract",
+        "n": "a 30 s visit is two 15 s exposures"
+      },
+      "bands": {
+        "u": {
+          "throughputConstant": {
+            "v": 23.09,
+            "u": "mag",
+            "s": "ivezic2019",
+            "at": "Table 2",
+            "n": "the band-dependent parameter C_m of Eq. III.2.1"
+          },
+          "depth5sigma": {
+            "v": 23.78,
+            "u": "mag",
+            "s": "ivezic2019",
+            "at": "Table 2",
+            "q": "typical",
+            "n": "typical 5-sigma point-source depth at zenith for 2 x 15 s exposures, AB"
+          },
+          "seeing": {
+            "v": 0.92,
+            "u": "arcsec",
+            "s": "ivezic2019",
+            "at": "Table 2",
+            "q": "median",
+            "n": "the footnote read says delivered median zenith seeing (FWHM); the depth formula reproduces the depths with this row (oracle o4) while the paper's text says the effective seeing enters it, so the labels of the two seeing rows may be exchanged in the text read; the neighbouring row (0.81 to 0.68 arcsec) is not stored"
+          }
+        },
+        "g": {
+          "throughputConstant": {
+            "v": 24.42,
+            "u": "mag",
+            "s": "ivezic2019",
+            "at": "Table 2",
+            "n": "the band-dependent parameter C_m of Eq. III.2.1"
+          },
+          "depth5sigma": {
+            "v": 24.81,
+            "u": "mag",
+            "s": "ivezic2019",
+            "at": "Table 2",
+            "q": "typical",
+            "n": "typical 5-sigma point-source depth at zenith for 2 x 15 s exposures, AB"
+          },
+          "seeing": {
+            "v": 0.87,
+            "u": "arcsec",
+            "s": "ivezic2019",
+            "at": "Table 2",
+            "q": "median",
+            "n": "the footnote read says delivered median zenith seeing (FWHM); the depth formula reproduces the depths with this row (oracle o4) while the paper's text says the effective seeing enters it, so the labels of the two seeing rows may be exchanged in the text read; the neighbouring row (0.81 to 0.68 arcsec) is not stored"
+          }
+        },
+        "r": {
+          "throughputConstant": {
+            "v": 24.44,
+            "u": "mag",
+            "s": "ivezic2019",
+            "at": "Table 2",
+            "n": "the band-dependent parameter C_m of Eq. III.2.1"
+          },
+          "depth5sigma": {
+            "v": 24.35,
+            "u": "mag",
+            "s": "ivezic2019",
+            "at": "Table 2",
+            "q": "typical",
+            "n": "typical 5-sigma point-source depth at zenith for 2 x 15 s exposures, AB"
+          },
+          "seeing": {
+            "v": 0.83,
+            "u": "arcsec",
+            "s": "ivezic2019",
+            "at": "Table 2",
+            "q": "median",
+            "n": "the footnote read says delivered median zenith seeing (FWHM); the depth formula reproduces the depths with this row (oracle o4) while the paper's text says the effective seeing enters it, so the labels of the two seeing rows may be exchanged in the text read; the neighbouring row (0.81 to 0.68 arcsec) is not stored"
+          }
+        },
+        "i": {
+          "throughputConstant": {
+            "v": 24.32,
+            "u": "mag",
+            "s": "ivezic2019",
+            "at": "Table 2",
+            "n": "the band-dependent parameter C_m of Eq. III.2.1"
+          },
+          "depth5sigma": {
+            "v": 23.92,
+            "u": "mag",
+            "s": "ivezic2019",
+            "at": "Table 2",
+            "q": "typical",
+            "n": "typical 5-sigma point-source depth at zenith for 2 x 15 s exposures, AB"
+          },
+          "seeing": {
+            "v": 0.8,
+            "u": "arcsec",
+            "s": "ivezic2019",
+            "at": "Table 2",
+            "q": "median",
+            "n": "the footnote read says delivered median zenith seeing (FWHM); the depth formula reproduces the depths with this row (oracle o4) while the paper's text says the effective seeing enters it, so the labels of the two seeing rows may be exchanged in the text read; the neighbouring row (0.81 to 0.68 arcsec) is not stored"
+          }
+        },
+        "z": {
+          "throughputConstant": {
+            "v": 24.16,
+            "u": "mag",
+            "s": "ivezic2019",
+            "at": "Table 2",
+            "n": "the band-dependent parameter C_m of Eq. III.2.1"
+          },
+          "depth5sigma": {
+            "v": 23.34,
+            "u": "mag",
+            "s": "ivezic2019",
+            "at": "Table 2",
+            "q": "typical",
+            "n": "typical 5-sigma point-source depth at zenith for 2 x 15 s exposures, AB"
+          },
+          "seeing": {
+            "v": 0.78,
+            "u": "arcsec",
+            "s": "ivezic2019",
+            "at": "Table 2",
+            "q": "median",
+            "n": "the footnote read says delivered median zenith seeing (FWHM); the depth formula reproduces the depths with this row (oracle o4) while the paper's text says the effective seeing enters it, so the labels of the two seeing rows may be exchanged in the text read; the neighbouring row (0.81 to 0.68 arcsec) is not stored"
+          }
+        },
+        "y": {
+          "throughputConstant": {
+            "v": 23.73,
+            "u": "mag",
+            "s": "ivezic2019",
+            "at": "Table 2",
+            "n": "the band-dependent parameter C_m of Eq. III.2.1"
+          },
+          "depth5sigma": {
+            "v": 22.45,
+            "u": "mag",
+            "s": "ivezic2019",
+            "at": "Table 2",
+            "q": "typical",
+            "n": "typical 5-sigma point-source depth at zenith for 2 x 15 s exposures, AB"
+          },
+          "seeing": {
+            "v": 0.76,
+            "u": "arcsec",
+            "s": "ivezic2019",
+            "at": "Table 2",
+            "q": "median",
+            "n": "the footnote read says delivered median zenith seeing (FWHM); the depth formula reproduces the depths with this row (oracle o4) while the paper's text says the effective seeing enters it, so the labels of the two seeing rows may be exchanged in the text read; the neighbouring row (0.81 to 0.68 arcsec) is not stored"
+          }
+        }
+      }
+    }
+  ]
+}

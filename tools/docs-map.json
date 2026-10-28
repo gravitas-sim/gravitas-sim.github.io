@@ -443,6 +443,13 @@
       "student": false
     },
     {
+      "file": "INSTRUMENTS.md",
+      "kind": "feature",
+      "purpose": "The instrument library: a few real facilities with every value cited, typical entries labelled, the cross-checks, the adopters and the course pack kind (Prompt 209).",
+      "owner": 209,
+      "student": true
+    },
+    {
       "file": "INTEGRATION.md",
       "kind": "process",
       "purpose": "Branch, train and merge protocol and the current integration status.",

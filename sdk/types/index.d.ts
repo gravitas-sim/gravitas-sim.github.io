@@ -36,6 +36,8 @@ export interface CapabilityPackage {
     routes?: Array<{ path: string }>;
     models?: Array<{ id: string }>;
     scenarios?: Array<{ id: string; file?: string }>;
+    /** An instrument-pack extension's gravitas.instrument/1 file. */
+    instruments?: Array<{ id: string; file?: string }>;
     /** `file`: an investigation-pack extension's gravitas.investigation-pack/1 file. */
     investigations?: Array<{ id: string; entry?: string; file?: string }>;
     translations?: Array<{ locale: string; investigation?: string; entry?: string }>;
@@ -334,7 +336,7 @@ export interface Instrument<V = Record<string, number>> {
 export const SDK_VERSION: string;
 export const PLATFORM_API: string;
 export const FORMATS: Readonly<Record<string, number>>;
-export const EXTENSION_TYPES: Readonly<Record<'data-pack' | 'course-pack' | 'investigation-pack' | 'scenario-pack' | 'capability', { kind: 'declarative' | 'built-in'; code: boolean }>>;
+export const EXTENSION_TYPES: Readonly<Record<'data-pack' | 'course-pack' | 'investigation-pack' | 'scenario-pack' | 'instrument-pack' | 'capability', { kind: 'declarative' | 'built-in'; code: boolean }>>;
 export const LOCALES: readonly string[];
 export const INSTRUMENT_API: Readonly<Record<string, { module: string; exports: string[] }>>;
 export function translator(

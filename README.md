@@ -341,7 +341,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->16761<!--/fact--> tests across <!--fact:jestSuites-->485<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->16791<!--/fact--> tests across <!--fact:jestSuites-->486<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
