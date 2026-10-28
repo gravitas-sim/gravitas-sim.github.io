@@ -92,11 +92,11 @@ export const ES_ATMOSPHERES = {
   'atmW.e.note':
     'La profundidad del eclipse es la parte de la luz que desaparece cuando el planeta pasa detrás de su estrella. El modelo la convierte en la temperatura de un cuerpo negro que daría esa profundidad en esa banda, una temperatura de brillo. Las profundidades son sintéticas: generadas con el modelo y con ruido, y no se comparó ninguna tabla publicada.',
   'atmW.e.control.dataset': 'Planeta',
-  'atmW.e.dataset.0': 'Planeta X (ninguna banda absorbe)',
-  'atmW.e.dataset.1': 'Planeta Y (una banda absorbe)',
+  'atmW.e.dataset.0': 'Planeta X',
+  'atmW.e.dataset.1': 'Planeta Y',
   'atmW.e.control.tp': 'Mi temperatura de cuerpo negro',
   'atmW.e.control.reflected': 'Luz reflejada',
-  'atmW.e.reflected.0': 'tenerla en cuenta (albedo hasta 0,3)',
+  'atmW.e.reflected.0': 'tenerla en cuenta',
   'atmW.e.reflected.1': 'suponer que no hay',
   'atmW.e.axis.x': 'Longitud de onda (µm)',
   'atmW.e.axis.y': 'Profundidad del eclipse (ppm)',
@@ -119,7 +119,7 @@ export const ES_ATMOSPHERES = {
   'atmW.p.dataset.1': 'Planeta Q',
   'atmW.p.control.ag': 'Mi albedo geométrico',
   'atmW.p.axis.x': 'Ángulo de fase (grados; 0 es la fase llena)',
-  'atmW.p.axis.y': 'Flujo del planeta respecto a la estrella (ppm)',
+  'atmW.p.axis.y': 'Flujo frente a la estrella (ppm)',
   'atmW.p.legend.data': 'Curva de fase sintética',
   'atmW.p.legend.model': 'Esfera de Lambert, albedo {A}',
   'atmW.p.data':

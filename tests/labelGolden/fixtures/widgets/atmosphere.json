@@ -255,8 +255,8 @@
    "controls": {
     "calls": 42,
     "distinct": 23,
-    "digest": "d4c1362804fadf04",
-    "samples": [["Planet X (no band absorbs)","1500 K","allow for it (albedo up to 0.3)"],["Planet X (no band absorbs)","1350 K","allow for it (albedo up to 0.3)"],["Planet X (no band absorbs)","800 K","allow for it (albedo up to 0.3)"],["Planet Y (one band absorbs)","3000 K","assume none"],["Planet Y (one band absorbs)","1900 K","assume none"],["Planet Y (one band absorbs)","1500 K","allow for it (albedo up to 0.3)"],["Planet Y (one band absorbs)","2080 K","allow for it (albedo up to 0.3)"],["Planet X (no band absorbs)","1500 K","assume none"],["Planet X (no band absorbs)","2090 K","assume none"],["Planet X (no band absorbs)","950 K","assume none"]]
+    "digest": "d43fc98f5a9a4908",
+    "samples": [["Planet X","1500 K","allow for it"],["Planet X","1350 K","allow for it"],["Planet X","800 K","allow for it"],["Planet Y","3000 K","assume none"],["Planet Y","1900 K","assume none"],["Planet Y","1500 K","allow for it"],["Planet Y","2080 K","allow for it"],["Planet X","1500 K","assume none"],["Planet X","2090 K","assume none"],["Planet X","950 K","assume none"]]
    },
    "phases": {
     "calls": 0,
@@ -292,8 +292,8 @@
    "controls": {
     "calls": 42,
     "distinct": 23,
-    "digest": "2507e564e21ed3ce",
-    "samples": [["Planeta X (ninguna banda absorbe)","1500 K","tenerla en cuenta (albedo hasta 0,3)"],["Planeta X (ninguna banda absorbe)","1350 K","tenerla en cuenta (albedo hasta 0,3)"],["Planeta X (ninguna banda absorbe)","800 K","tenerla en cuenta (albedo hasta 0,3)"],["Planeta Y (una banda absorbe)","3000 K","suponer que no hay"],["Planeta Y (una banda absorbe)","1900 K","suponer que no hay"],["Planeta Y (una banda absorbe)","1500 K","tenerla en cuenta (albedo hasta 0,3)"],["Planeta Y (una banda absorbe)","2080 K","tenerla en cuenta (albedo hasta 0,3)"],["Planeta X (ninguna banda absorbe)","1500 K","suponer que no hay"],["Planeta X (ninguna banda absorbe)","2090 K","suponer que no hay"],["Planeta X (ninguna banda absorbe)","950 K","suponer que no hay"]]
+    "digest": "8d5068058a1c0980",
+    "samples": [["Planeta X","1500 K","tenerla en cuenta"],["Planeta X","1350 K","tenerla en cuenta"],["Planeta X","800 K","tenerla en cuenta"],["Planeta Y","3000 K","suponer que no hay"],["Planeta Y","1900 K","suponer que no hay"],["Planeta Y","1500 K","tenerla en cuenta"],["Planeta Y","2080 K","tenerla en cuenta"],["Planeta X","1500 K","suponer que no hay"],["Planeta X","2090 K","suponer que no hay"],["Planeta X","950 K","suponer que no hay"]]
    },
    "phases": {
     "calls": 0,
