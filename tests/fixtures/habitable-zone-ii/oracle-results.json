@@ -1,0 +1,637 @@
+{
+  "constants": {
+    "AU": 149600000000.0,
+    "G": 6.6743e-11,
+    "earthMass": 5.972e24,
+    "earthRadius": 6371000.0,
+    "solarMass": 1.989e30,
+    "year": 31557600
+  },
+  "edges": {
+    "cool-floor": {
+      "earlyMars": 0.05082076834672538,
+      "maximumGreenhouse": 0.047490349595198905,
+      "recentVenus": 0.01839187526413738,
+      "runawayGreenhouse": 0.024159961843340287
+    },
+    "f-dwarf": {
+      "earlyMars": 4.0836298089449095,
+      "maximumGreenhouse": 3.9063255036691547,
+      "recentVenus": 1.787377064404693,
+      "runawayGreenhouse": 2.3018044495063252
+    },
+    "hot-ceiling": {
+      "earlyMars": 7.130530677358156,
+      "maximumGreenhouse": 6.8362435326217685,
+      "recentVenus": 3.1943994826388598,
+      "runawayGreenhouse": 4.05577014029786
+    },
+    "k-dwarf-3800": {
+      "earlyMars": 0.41720713886508176,
+      "maximumGreenhouse": 0.3963412672088924,
+      "recentVenus": 0.16081574720382474,
+      "runawayGreenhouse": 0.2130187028539352
+    },
+    "k-dwarf-4200": {
+      "earlyMars": 0.7830586442768062,
+      "maximumGreenhouse": 0.7462446415127004,
+      "recentVenus": 0.3080248025076376,
+      "runawayGreenhouse": 0.40884551189606777
+    },
+    "k-dwarf-5000": {
+      "earlyMars": 1.1179731908296988,
+      "maximumGreenhouse": 1.0686440673496136,
+      "recentVenus": 0.45783642087036686,
+      "runawayGreenhouse": 0.6059547540968817
+    },
+    "m-dwarf-3200": {
+      "earlyMars": 0.13779916775907047,
+      "maximumGreenhouse": 0.12998994814336734,
+      "recentVenus": 0.05151535903136636,
+      "runawayGreenhouse": 0.06788745216920386
+    },
+    "model-sun-4p57": {
+      "earlyMars": 1.8479317139183808,
+      "maximumGreenhouse": 1.7671245408396958,
+      "recentVenus": 0.7875973688466367,
+      "runawayGreenhouse": 1.0286390651933968
+    },
+    "old-sun": {
+      "earlyMars": 2.7188260786304053,
+      "maximumGreenhouse": 2.5999386833124243,
+      "recentVenus": 1.1484879421940422,
+      "runawayGreenhouse": 1.505764098573754
+    },
+    "proxima-like": {
+      "earlyMars": 0.09083082306319658,
+      "maximumGreenhouse": 0.08548810915435616,
+      "recentVenus": 0.033677968095831144,
+      "runawayGreenhouse": 0.04432450901152808
+    },
+    "sun": {
+      "earlyMars": 1.765836624230467,
+      "maximumGreenhouse": 1.6886207321919509,
+      "recentVenus": 0.7503119132218752,
+      "runawayGreenhouse": 0.9812885910826266
+    },
+    "young-sun": {
+      "earlyMars": 1.5517751871892465,
+      "maximumGreenhouse": 1.4839209104260458,
+      "recentVenus": 0.6574965336271625,
+      "runawayGreenhouse": 0.860949914965452
+    }
+  },
+  "fluxes": {
+    "2600": {
+      "earlyMars": 0.19359206431279677,
+      "maximumGreenhouse": 0.22169672170572002,
+      "recentVenus": 1.4781481993416001,
+      "runawayGreenhouse": 0.8565989076268641
+    },
+    "2800": {
+      "earlyMars": 0.1992012818502688,
+      "maximumGreenhouse": 0.22658947307852,
+      "recentVenus": 1.4871165866376002,
+      "runawayGreenhouse": 0.861013517989424
+    },
+    "3000": {
+      "earlyMars": 0.20485229657430076,
+      "maximumGreenhouse": 0.23155061611532002,
+      "recentVenus": 1.4967205377736,
+      "runawayGreenhouse": 0.864587454380784
+    },
+    "3200": {
+      "earlyMars": 0.21065258943209278,
+      "maximumGreenhouse": 0.23672299689612003,
+      "recentVenus": 1.5072542927496,
+      "runawayGreenhouse": 0.867922549056944
+    },
+    "3400": {
+      "earlyMars": 0.2166949410828448,
+      "maximumGreenhouse": 0.24222952230092,
+      "recentVenus": 1.5189662035656,
+      "runawayGreenhouse": 0.871553392033904
+    },
+    "3600": {
+      "earlyMars": 0.22305743189775679,
+      "maximumGreenhouse": 0.24817316000972,
+      "recentVenus": 1.5320587342216,
+      "runawayGreenhouse": 0.875947331087664
+    },
+    "3800": {
+      "earlyMars": 0.22980344196002878,
+      "maximumGreenhouse": 0.25463693850252,
+      "recentVenus": 1.5466884607176,
+      "runawayGreenhouse": 0.881504471754224
+    },
+    "4000": {
+      "earlyMars": 0.2369816510648608,
+      "maximumGreenhouse": 0.26168394705932,
+      "recentVenus": 1.5629660710536,
+      "runawayGreenhouse": 0.888557677329584
+    },
+    "4200": {
+      "earlyMars": 0.24462603871945277,
+      "maximumGreenhouse": 0.26935733576012,
+      "recentVenus": 1.5809563652296,
+      "runawayGreenhouse": 0.897372568869744
+    },
+    "4400": {
+      "earlyMars": 0.25275588414300476,
+      "maximumGreenhouse": 0.27768031548492,
+      "recentVenus": 1.6006782552456,
+      "runawayGreenhouse": 0.908147525190704
+    },
+    "4600": {
+      "earlyMars": 0.26137576626671677,
+      "maximumGreenhouse": 0.28665615791372,
+      "recentVenus": 1.6221047651016,
+      "runawayGreenhouse": 0.921013682868464
+    },
+    "4800": {
+      "earlyMars": 0.2704755637337888,
+      "maximumGreenhouse": 0.29626819552652,
+      "recentVenus": 1.6451630307976,
+      "runawayGreenhouse": 0.936034936239024
+    },
+    "5000": {
+      "earlyMars": 0.2800304548994208,
+      "maximumGreenhouse": 0.30647982160332,
+      "recentVenus": 1.6697343003336,
+      "runawayGreenhouse": 0.9532079373983839
+    },
+    "5200": {
+      "earlyMars": 0.2900009178308128,
+      "maximumGreenhouse": 0.31723449022412,
+      "recentVenus": 1.6956539337096,
+      "runawayGreenhouse": 0.972462096202544
+    },
+    "5400": {
+      "earlyMars": 0.3003327303071648,
+      "maximumGreenhouse": 0.32845571626892,
+      "recentVenus": 1.7227114029256,
+      "runawayGreenhouse": 0.993659580267504
+    },
+    "5600": {
+      "earlyMars": 0.3109569698196768,
+      "maximumGreenhouse": 0.34004707541772,
+      "recentVenus": 1.7506502919816,
+      "runawayGreenhouse": 1.016595314969264
+    },
+    "5780": {
+      "earlyMars": 0.3207,
+      "maximumGreenhouse": 0.3507,
+      "recentVenus": 1.7763,
+      "runawayGreenhouse": 1.0385
+    },
+    "6000": {
+      "earlyMars": 0.33273353847798076,
+      "maximumGreenhouse": 0.36385479974732,
+      "recentVenus": 1.8079172256136,
+      "runawayGreenhouse": 1.066525026587184
+    },
+    "6200": {
+      "earlyMars": 0.3436745211661728,
+      "maximumGreenhouse": 0.37577862028812004,
+      "recentVenus": 1.8365029981896,
+      "runawayGreenhouse": 1.092772643055344
+    },
+    "6400": {
+      "earlyMars": 0.3544852379753248,
+      "maximumGreenhouse": 0.38748748465292,
+      "recentVenus": 1.8644856466056,
+      "runawayGreenhouse": 1.119265789264304
+    },
+    "6600": {
+      "earlyMars": 0.3650232649566368,
+      "maximumGreenhouse": 0.39878527252172,
+      "recentVenus": 1.8913793148616,
+      "runawayGreenhouse": 1.145463179390064
+    },
+    "6800": {
+      "earlyMars": 0.3751314778733088,
+      "maximumGreenhouse": 0.40945592437452,
+      "recentVenus": 1.9166522589576,
+      "runawayGreenhouse": 1.170756285368624
+    },
+    "7000": {
+      "earlyMars": 0.3846380522005408,
+      "maximumGreenhouse": 0.41926344149132,
+      "recentVenus": 1.9397268468936,
+      "runawayGreenhouse": 1.194469336895984
+    },
+    "7100": {
+      "earlyMars": 0.3891080101191168,
+      "maximumGreenhouse": 0.42376432279872,
+      "recentVenus": 1.9502466998016,
+      "runawayGreenhouse": 1.205503777470464
+    },
+    "7200": {
+      "earlyMars": 0.3933564631255328,
+      "maximumGreenhouse": 0.42795188595212,
+      "recentVenus": 1.9599795586696,
+      "runawayGreenhouse": 1.215859321428144
+    }
+  },
+  "locking": {
+    "old-red-dwarf": {
+      "radiusAU": 0.6032293751595622,
+      "radiusM": 90243114523.8705
+    },
+    "proxima": {
+      "radiusAU": 0.24675170823650533,
+      "radiusM": 36914055552.1812
+    },
+    "soft-planet": {
+      "radiusAU": 0.7177720282270765,
+      "radiusM": 107378695422.77065
+    },
+    "stiff-planet": {
+      "radiusAU": 0.20860624654431784,
+      "radiusM": 31207494483.02995
+    },
+    "sun-earthlike": {
+      "radiusAU": 0.47366107486322945,
+      "radiusM": 70859696799.53912
+    },
+    "trappist1": {
+      "radiusAU": 0.23304058913551448,
+      "radiusM": 34862872134.672966
+    }
+  },
+  "orbits": {
+    "circular": {
+      "apoapsisFlux": 1.0,
+      "bands": [
+        {
+          "closed": 0.0,
+          "innerAU": 0,
+          "outerAU": 0.5,
+          "sampled": 0.0
+        },
+        {
+          "closed": 1.0,
+          "innerAU": 0.7,
+          "outerAU": 1.0,
+          "sampled": 1.0
+        },
+        {
+          "closed": 1.0,
+          "innerAU": 0.9,
+          "outerAU": 1.1,
+          "sampled": 1.0
+        },
+        {
+          "closed": 0.0,
+          "innerAU": 1.0,
+          "outerAU": 1.4,
+          "sampled": 1.0
+        },
+        {
+          "closed": 1.0,
+          "innerAU": 0.5,
+          "outerAU": 2.0,
+          "sampled": 1.0
+        },
+        {
+          "closed": 1.0,
+          "innerAU": 0.95,
+          "outerAU": 1.05,
+          "sampled": 1.0
+        }
+      ],
+      "meanFluxClosed": 1.0,
+      "meanFluxSampled": 1.0,
+      "periapsisFlux": 1.0
+    },
+    "e0.1-dim": {
+      "apoapsisFlux": 0.9182736455463728,
+      "bands": [
+        {
+          "closed": 0.0,
+          "innerAU": 0.0,
+          "outerAU": 0.15,
+          "sampled": 0.0
+        },
+        {
+          "closed": 0.4681690113816209,
+          "innerAU": 0.21,
+          "outerAU": 0.3,
+          "sampled": 0.46816765916170416
+        },
+        {
+          "closed": 1.0,
+          "innerAU": 0.27,
+          "outerAU": 0.33,
+          "sampled": 1.0
+        },
+        {
+          "closed": 0.5318309886183791,
+          "innerAU": 0.3,
+          "outerAU": 0.42,
+          "sampled": 0.5318323408382958
+        },
+        {
+          "closed": 1.0,
+          "innerAU": 0.15,
+          "outerAU": 0.6,
+          "sampled": 1.0
+        },
+        {
+          "closed": 0.33333333333333376,
+          "innerAU": 0.285,
+          "outerAU": 0.315,
+          "sampled": 0.33332833335833323
+        }
+      ],
+      "meanFluxClosed": 1.1167086836213467,
+      "meanFluxSampled": 1.1167086836213471,
+      "periapsisFlux": 1.3717421124828533
+    },
+    "e0.3": {
+      "apoapsisFlux": 0.2629848783694937,
+      "bands": [
+        {
+          "closed": 0.0,
+          "innerAU": 0.0,
+          "outerAU": 0.75,
+          "sampled": 0.0
+        },
+        {
+          "closed": 0.4045070341448628,
+          "innerAU": 1.0499999999999998,
+          "outerAU": 1.5,
+          "sampled": 0.4045079774601127
+        },
+        {
+          "closed": 0.2163468959387856,
+          "innerAU": 1.35,
+          "outerAU": 1.6500000000000001,
+          "sampled": 0.21633891830540847
+        },
+        {
+          "closed": 0.5954929658551372,
+          "innerAU": 1.5,
+          "outerAU": 2.0999999999999996,
+          "sampled": 0.5954920225398873
+        },
+        {
+          "closed": 1.0,
+          "innerAU": 0.75,
+          "outerAU": 3.0,
+          "sampled": 1.0
+        },
+        {
+          "closed": 0.10660075807622754,
+          "innerAU": 1.4249999999999998,
+          "outerAU": 1.5750000000000002,
+          "sampled": 0.10660946695266524
+        }
+      ],
+      "meanFluxClosed": 0.46590437187640815,
+      "meanFluxSampled": 0.46590437187640815,
+      "periapsisFlux": 0.9070294784580503
+    },
+    "e0.5": {
+      "apoapsisFlux": 0.34722222222222215,
+      "bands": [
+        {
+          "closed": 0.0,
+          "innerAU": 0.0,
+          "outerAU": 0.4,
+          "sampled": 0.0
+        },
+        {
+          "closed": 0.17300177608075448,
+          "innerAU": 0.5599999999999999,
+          "outerAU": 0.8,
+          "sampled": 0.17300913495432524
+        },
+        {
+          "closed": 0.1281884336979499,
+          "innerAU": 0.7200000000000001,
+          "outerAU": 0.8800000000000001,
+          "sampled": 0.12818935905320472
+        },
+        {
+          "closed": 0.3588292125376243,
+          "innerAU": 0.8,
+          "outerAU": 1.1199999999999999,
+          "sampled": 0.3588282058589707
+        },
+        {
+          "closed": 1.0,
+          "innerAU": 0.4,
+          "outerAU": 1.6,
+          "sampled": 1.0
+        },
+        {
+          "closed": 0.06376856085851995,
+          "innerAU": 0.76,
+          "outerAU": 0.8400000000000001,
+          "sampled": 0.06376968115159425
+        }
+      ],
+      "meanFluxClosed": 0.9021097956087901,
+      "meanFluxSampled": 0.90210979560879,
+      "periapsisFlux": 3.1249999999999996
+    },
+    "e0.7": {
+      "apoapsisFlux": 0.07689350249903884,
+      "bands": [
+        {
+          "closed": 0.09081235418211465,
+          "innerAU": 0,
+          "outerAU": 1.5,
+          "sampled": 0.09080954595227024
+        },
+        {
+          "closed": 0.11948289211791863,
+          "innerAU": 2.0999999999999996,
+          "outerAU": 3.0,
+          "sampled": 0.11947940260298698
+        },
+        {
+          "closed": 0.09125789668597992,
+          "innerAU": 2.7,
+          "outerAU": 3.3000000000000003,
+          "sampled": 0.0912595437022815
+        },
+        {
+          "closed": 0.23357239310383854,
+          "innerAU": 3.0,
+          "outerAU": 4.199999999999999,
+          "sampled": 0.23357883210583946
+        },
+        {
+          "closed": 0.9091876458178854,
+          "innerAU": 1.5,
+          "outerAU": 6.0,
+          "sampled": 0.9091904540477298
+        },
+        {
+          "closed": 0.0455115973128038,
+          "innerAU": 2.8499999999999996,
+          "outerAU": 3.1500000000000004,
+          "sampled": 0.04550977245113774
+        }
+      ],
+      "meanFluxClosed": 0.3111733520062244,
+      "meanFluxSampled": 0.3111733520062243,
+      "periapsisFlux": 2.4691358024691348
+    },
+    "earth": {
+      "apoapsisFlux": 0.9674184214016407,
+      "bands": [
+        {
+          "closed": 0.0,
+          "innerAU": 0,
+          "outerAU": 0.5,
+          "sampled": 0.0
+        },
+        {
+          "closed": 0.4946842249007307,
+          "innerAU": 0.7,
+          "outerAU": 1.0,
+          "sampled": 0.4946875265623672
+        },
+        {
+          "closed": 1.0,
+          "innerAU": 0.9,
+          "outerAU": 1.1,
+          "sampled": 1.0
+        },
+        {
+          "closed": 0.5053157750992693,
+          "innerAU": 1.0,
+          "outerAU": 1.4,
+          "sampled": 0.5053124734376329
+        },
+        {
+          "closed": 1.0,
+          "innerAU": 0.5,
+          "outerAU": 2.0,
+          "sampled": 1.0
+        },
+        {
+          "closed": 1.0,
+          "innerAU": 0.95,
+          "outerAU": 1.05,
+          "sampled": 1.0
+        }
+      ],
+      "meanFluxClosed": 1.0001394741741425,
+      "meanFluxSampled": 1.0001394741741423,
+      "periapsisFlux": 1.034255696698477
+    }
+  },
+  "track": {
+    "m020": {
+      "1000000000.0": {
+        "edges": {
+          "earlyMars": 0.1497232479169361,
+          "maximumGreenhouse": 0.14129435097979345,
+          "recentVenus": 0.056056230119122856,
+          "runawayGreenhouse": 0.07388984361791204
+        },
+        "lastAgeYr": 1140714074378.0945,
+        "luminosity": 0.004741289017657103,
+        "teff": 3228.729891252215
+      },
+      "5000000000.0": {
+        "edges": {
+          "earlyMars": 0.1504897591998423,
+          "maximumGreenhouse": 0.14202160492241572,
+          "recentVenus": 0.05634902540007269,
+          "runawayGreenhouse": 0.07427708522674373
+        },
+        "lastAgeYr": 1140714074378.0945,
+        "luminosity": 0.004791305843046917,
+        "teff": 3230.7300601990637
+      }
+    },
+    "m050": {
+      "1000000000.0": {
+        "edges": {
+          "earlyMars": 0.4114779049800934,
+          "maximumGreenhouse": 0.3908332777388172,
+          "recentVenus": 0.1584659574141102,
+          "runawayGreenhouse": 0.20987922873242923
+        },
+        "lastAgeYr": 95797174517.10846,
+        "luminosity": 0.03880566723681855,
+        "teff": 3782.410069347579
+      },
+      "5000000000.0": {
+        "edges": {
+          "earlyMars": 0.4227923612038321,
+          "maximumGreenhouse": 0.40169855173501595,
+          "recentVenus": 0.16308145308011293,
+          "runawayGreenhouse": 0.21604098676827346
+        },
+        "lastAgeYr": 95797174517.10846,
+        "luminosity": 0.04116317123493808,
+        "teff": 3813.649219184133
+      }
+    },
+    "m100": {
+      "1000000000.0": {
+        "edges": {
+          "earlyMars": 1.6109800111821213,
+          "maximumGreenhouse": 1.5405363170317135,
+          "recentVenus": 0.6836530692171343,
+          "runawayGreenhouse": 0.8945998540923079
+        },
+        "lastAgeYr": 11465470994.955683,
+        "luminosity": 0.8283273614866534,
+        "teff": 5751.883754338839
+      },
+      "4570000000.0": {
+        "edges": {
+          "earlyMars": 1.8480009530295551,
+          "maximumGreenhouse": 1.7671907507682432,
+          "recentVenus": 0.7876359618144958,
+          "runawayGreenhouse": 1.0286840329950566
+        },
+        "lastAgeYr": 11465470994.955683,
+        "luminosity": 1.1081319611078035,
+        "teff": 5849.262163197959
+      },
+      "8000000000.0": {
+        "edges": {
+          "earlyMars": 2.225435694747165,
+          "maximumGreenhouse": 2.1281208653413928,
+          "recentVenus": 0.9491747367907597,
+          "runawayGreenhouse": 1.2392557425432509
+        },
+        "lastAgeYr": 11465470994.955683,
+        "luminosity": 1.6113738722513222,
+        "teff": 5865.399107654986
+      }
+    },
+    "m200": {
+      "300000000.0": {
+        "edges": {
+          "earlyMars": 7.036573053983729,
+          "maximumGreenhouse": 7.047429878277194,
+          "recentVenus": 3.225466074946114,
+          "runawayGreenhouse": 4.175974917634941
+        },
+        "lastAgeYr": 1342747028.6402268,
+        "luminosity": 19.230733862683905,
+        "teff": 9161.094156443965
+      },
+      "600000000.0": {
+        "edges": {
+          "earlyMars": 7.337851065062836,
+          "maximumGreenhouse": 7.203256065432863,
+          "recentVenus": 3.371088543715558,
+          "runawayGreenhouse": 4.276767091752041
+        },
+        "lastAgeYr": 1342747028.6402268,
+        "luminosity": 22.128615734103267,
+        "teff": 8697.463773632131
+      }
+    }
+  }
+}
