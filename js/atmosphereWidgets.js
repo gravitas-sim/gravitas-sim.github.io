@@ -11,6 +11,14 @@
 //                          side for one planet
 //   atmosphere-scale       the isothermal scale height and the pressure it implies
 //
+// and, from Prompt 202 (the eclipse and phase slice), two more over synthetic
+// data with a truth manifest (no published table was compared):
+//
+//   atmosphere-eclipse     eclipse depths in four bands and the temperature each
+//                          implies, with the reflected-light assumption stated
+//   atmosphere-phase       a phase curve and the Lambert albedo it gives, or the
+//                          refusal where a Lambert sphere does not describe it
+//
 // No arithmetic is repeated here: every number is the kernel's, and
 // tests/atmosphereLessons.test.js recomputes each one a lesson states. There is
 // no escape instrument (verdict B of Prompt 199): the Jeans parameter is not built.
@@ -23,6 +31,14 @@ import { ES_ATMOSPHERES } from './i18n/es.atmospheres.js';
 import { fixed } from './format.js';
 import { createChart } from './plot/mount.js';
 import {
+  ECLIPSE_BANDS,
+  bondFromGeometric,
+  brightnessTemperature,
+  eclipseDepth,
+  fitAlbedo,
+  lambertPhase,
+  syntheticEclipse,
+  syntheticPhase,
   BODIES,
   BODY_IDS,
   compareWithMeasured,
@@ -495,4 +511,267 @@ const SCALE = {
   },
 };
 
-export const ATMOSPHERE_WIDGETS = [BALANCE, GREENHOUSE, SCALE];
+// ----------------------------------------------------------------------------
+// atmosphere-eclipse and atmosphere-phase (Prompt 202)
+// ----------------------------------------------------------------------------
+const MICRON = 1e-6;
+const ppm = x => 1e6 * x;
+const choice = (id, label, text) => ({
+  id,
+  get label() {
+    return t(label);
+  },
+  min: 0,
+  max: 1,
+  step: 1,
+  value: 0,
+  decimals: 0,
+  format: x => t(`${text}.${Math.round(x)}`),
+});
+const numeric = (id, label, min, max, step, value, unit, decimals = 0) => ({
+  id,
+  get label() {
+    return t(label);
+  },
+  min,
+  max,
+  step,
+  value,
+  decimals,
+  format: x => `${fixed(x, decimals)}${unit}`,
+});
+const ECL_X = Array.from({ length: 33 }, (_, i) => 1 + i / 8);
+const bandKey = b => ({
+  band: b.name,
+  lo: fixed(b.lo, 1),
+  hi: fixed(b.hi, 1),
+});
+
+export function eclipseView(v) {
+  const data = syntheticEclipse({
+    absorbingBand: (v.dataset ?? 0) >= 0.5 ? 'C' : null,
+  });
+  const tr = data.truth;
+  const tPlanet = v.tPlanet ?? 1500;
+  const noReflected = (v.reflected ?? 1) >= 0.5;
+  const model = (lo, hi) =>
+    eclipseDepth({
+      radiusRatio: tr.radiusRatio,
+      tPlanet,
+      tStar: tr.tStar,
+      band: [lo * MICRON, hi * MICRON],
+    }).depth;
+  const bands = ECLIPSE_BANDS.map((b, i) => {
+    const bt = brightnessTemperature({
+      radiusRatio: tr.radiusRatio,
+      tStar: tr.tStar,
+      band: [b.lo * MICRON, b.hi * MICRON],
+      // Said as an assumption: a very large a / R_p removes the reflected-light test.
+      semiMajorOverRp: noReflected ? 1e6 : tr.semiMajorOverRp,
+      depth: data.depthsPpm[i] * 1e-6,
+      sigma: data.sigma * 1e-6,
+    });
+    return {
+      ...b,
+      centre: (b.lo + b.hi) / 2,
+      depth: data.depthsPpm[i],
+      model: ppm(model(b.lo, b.hi)),
+      bt,
+    };
+  });
+  const chi2 = bands.reduce(
+    (sum, b) => sum + ((b.depth - b.model) / data.sigma) ** 2,
+    0
+  );
+  return { data, bands, chi2, tPlanet };
+}
+
+const ECLIPSE = {
+  id: 'atmosphere-eclipse',
+  get title() {
+    return t('atmW.e.title');
+  },
+  get note() {
+    return t('atmW.e.note');
+  },
+  animated: false,
+  controls: [
+    choice('dataset', 'atmW.e.control.dataset', 'atmW.e.dataset'),
+    numeric('tPlanet', 'atmW.e.control.tp', 800, 3000, 10, 1500, ' K'),
+    choice('reflected', 'atmW.e.control.reflected', 'atmW.e.reflected'),
+  ],
+  draw(canvas, v) {
+    const f = eclipseView(v);
+    const tr = f.data.truth;
+    const spec = {
+      label: t('atmW.e.title'),
+      xTitle: t('atmW.e.axis.x'),
+      yTitle: t('atmW.e.axis.y'),
+      series: [
+        {
+          id: 'data',
+          label: t('atmW.e.legend.data'),
+          x: f.bands.map(b => b.centre),
+          y: f.bands.map(b => b.depth),
+          sigma: f.bands.map(() => f.data.sigma),
+          color: SERIES.orange,
+          mode: 'points',
+          radius: 4,
+        },
+        {
+          id: 'model',
+          label: t('atmW.e.legend.model', { T: fixed(f.tPlanet, 0) }),
+          x: ECL_X,
+          y: ECL_X.map(c =>
+            ppm(
+              eclipseDepth({
+                radiusRatio: tr.radiusRatio,
+                tPlanet: f.tPlanet,
+                tStar: tr.tStar,
+                band: [(c / 1.05) * MICRON, c * 1.05 * MICRON],
+              }).depth
+            )
+          ),
+          color: SERIES.blue,
+          width: 2,
+          mode: 'line',
+        },
+      ],
+    };
+    hostOf(canvas, t('atmW.e.title')).chart.draw(spec);
+    return spec;
+  },
+  readout(v) {
+    const f = eclipseView(v);
+    return [
+      { label: t('atmW.row.model'), value: t('atmW.m.ec'), emphasis: true },
+      { label: t('atmW.row.data'), value: t('atmW.e.data') },
+      ...f.bands.map(b => ({
+        label: t('atmW.e.row.bt', bandKey(b)),
+        value: b.bt.refused
+          ? t('atmW.e.refused')
+          : t('atmW.e.value.bt', {
+              T: fixed(b.bt.temperature, 0),
+              lo: fixed(b.bt.lo, 0),
+              hi: fixed(b.bt.hi, 0),
+            }),
+        emphasis: true,
+      })),
+      {
+        label: t('atmW.e.row.chi'),
+        value: t('atmW.e.value.chi', {
+          chi: fixed(f.chi2, 1),
+          T: fixed(f.tPlanet, 0),
+        }),
+      },
+      { label: t('atmW.row.assumes'), value: t('atmW.a.ec') },
+    ];
+  },
+};
+
+const PH_DEG = Array.from({ length: 61 }, (_, i) => (i * 180) / 60);
+export function phaseView(v) {
+  const ls = (v.dataset ?? 0) >= 0.5;
+  const data = syntheticPhase({ shape: ls ? 'lommel-seeliger' : 'lambert' });
+  const albedo = v.albedo ?? 0.2;
+  const aR = data.truth.semiMajorOverRp;
+  const fit = fitAlbedo({
+    alphas: data.alphas,
+    flux: data.fluxPpm.map(x => x * 1e-6),
+    sigma: data.sigma * 1e-6,
+    semiMajorOverRp: aR,
+  });
+  return {
+    data,
+    albedo,
+    fit,
+    bond: bondFromGeometric(albedo),
+    curve: PH_DEG.map(d =>
+      ppm((albedo * lambertPhase((d * Math.PI) / 180)) / aR ** 2)
+    ),
+  };
+}
+
+const PHASE = {
+  id: 'atmosphere-phase',
+  get title() {
+    return t('atmW.p.title');
+  },
+  get note() {
+    return t('atmW.p.note');
+  },
+  animated: false,
+  controls: [
+    choice('dataset', 'atmW.p.control.dataset', 'atmW.p.dataset'),
+    numeric('albedo', 'atmW.p.control.ag', 0.05, 0.8, 0.01, 0.2, '', 2),
+  ],
+  draw(canvas, v) {
+    const f = phaseView(v);
+    const spec = {
+      label: t('atmW.p.title'),
+      xTitle: t('atmW.p.axis.x'),
+      yTitle: t('atmW.p.axis.y'),
+      series: [
+        {
+          id: 'data',
+          label: t('atmW.p.legend.data'),
+          x: f.data.alphas.map(a => (a * 180) / Math.PI),
+          y: f.data.fluxPpm,
+          sigma: f.data.fluxPpm.map(() => f.data.sigma),
+          color: SERIES.orange,
+          mode: 'points',
+          radius: 3,
+        },
+        {
+          id: 'model',
+          label: t('atmW.p.legend.model', { A: fixed(f.albedo, 2) }),
+          x: PH_DEG,
+          y: f.curve,
+          color: SERIES.blue,
+          width: 2,
+          mode: 'line',
+        },
+      ],
+    };
+    hostOf(canvas, t('atmW.p.title')).chart.draw(spec);
+    return spec;
+  },
+  readout(v) {
+    const f = phaseView(v);
+    const fit = f.fit;
+    return [
+      { label: t('atmW.row.model'), value: t('atmW.m.ph'), emphasis: true },
+      { label: t('atmW.row.data'), value: t('atmW.p.data') },
+      {
+        label: t('atmW.p.row.fit'),
+        value: fit.flagged
+          ? t('atmW.p.flagged')
+          : t('atmW.p.value.fit', {
+              A: fixed(fit.albedo, 2),
+              lo: fixed(fit.lo, 2),
+              hi: fixed(fit.hi, 2),
+            }),
+        emphasis: true,
+      },
+      {
+        label: t('atmW.p.row.bond'),
+        value: fit.flagged
+          ? t('atmW.refused')
+          : t('atmW.p.value.bond', {
+              B: fixed(fit.bond, 2),
+              A: fixed(fit.albedo, 2),
+            }),
+      },
+      {
+        label: t('atmW.p.row.chi'),
+        value: t('atmW.p.value.chi', {
+          chi: fixed(fit.chi2, 1),
+          dof: fit.dof,
+        }),
+      },
+      { label: t('atmW.row.assumes'), value: t('atmW.a.ph') },
+    ];
+  },
+};
+
+export const ATMOSPHERE_WIDGETS = [BALANCE, GREENHOUSE, SCALE, ECLIPSE, PHASE];

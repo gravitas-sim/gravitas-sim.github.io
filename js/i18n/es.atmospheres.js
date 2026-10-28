@@ -81,4 +81,54 @@ export const ES_ATMOSPHERES = {
   'atmW.s.row.inputs': 'Datos de entrada',
   'atmW.s.value.inputs':
     'T = {T} K, peso molecular medio {mu}, gravedad {g} m/s²',
+  'atmW.row.data': 'Datos',
+  'atmW.m.ec': 'Cuerpo negro más una banda (eclipse secundario)',
+  'atmW.m.ph': 'Curva de fase de una esfera de Lambert',
+  'atmW.a.ec':
+    'un lado diurno que no tiene una sola temperatura; la luz reflejada en la misma banda (una profundidad no se convierte en temperatura salvo que usted diga que no hay ninguna); una banda que emite en lugar de absorber; cualquier cosa en la atmósfera por debajo de una piel isoterma; el perfil de un filtro (la respuesta de la banda es plana)',
+  'atmW.a.ph':
+    'un planeta que no es una esfera de Lambert (las funciones de fase reales difieren); la variación térmica con la fase; las nubes; la polarización; el albedo que se obtiene es el de una esfera de Lambert, y el albedo de Bond que da es el mismo supuesto multiplicado por 3/2',
+  'atmW.e.title': '¿Qué tan caliente está el lado diurno?',
+  'atmW.e.note':
+    'La profundidad del eclipse es la parte de la luz que desaparece cuando el planeta pasa detrás de su estrella. El modelo la convierte en la temperatura de un cuerpo negro que daría esa profundidad en esa banda, una temperatura de brillo. Las profundidades son sintéticas: generadas con el modelo y con ruido, y no se comparó ninguna tabla publicada.',
+  'atmW.e.control.dataset': 'Planeta',
+  'atmW.e.dataset.0': 'Planeta X (ninguna banda absorbe)',
+  'atmW.e.dataset.1': 'Planeta Y (una banda absorbe)',
+  'atmW.e.control.tp': 'Mi temperatura de cuerpo negro',
+  'atmW.e.control.reflected': 'Luz reflejada',
+  'atmW.e.reflected.0': 'tenerla en cuenta (albedo hasta 0,3)',
+  'atmW.e.reflected.1': 'suponer que no hay',
+  'atmW.e.axis.x': 'Longitud de onda (µm)',
+  'atmW.e.axis.y': 'Profundidad del eclipse (ppm)',
+  'atmW.e.legend.data': 'Profundidades sintéticas del eclipse, cuatro bandas',
+  'atmW.e.legend.model': 'Cuerpo negro a {T} K',
+  'atmW.e.data':
+    'sintéticos, generados con el modelo y con ruido; no se comparó ninguna tabla publicada',
+  'atmW.e.row.bt': 'Temperatura de brillo, banda {band} ({lo} a {hi} µm)',
+  'atmW.e.value.bt': '{T} K (95 por ciento: {lo} a {hi} K)',
+  'atmW.e.refused':
+    'no se convierte: la luz reflejada podría ser una décima parte de esta profundidad o más',
+  'atmW.e.row.chi': 'Mi cuerpo negro frente a las cuatro profundidades',
+  'atmW.e.value.chi':
+    'chi cuadrado {chi} para cuatro profundidades a {T} K (cerca de 4 cuando un modelo ajusta)',
+  'atmW.p.title': '¿Qué dice una curva de fase sobre el albedo?',
+  'atmW.p.note':
+    'La luz reflejada del planeta sigue su fase, como la de la Luna. Para una esfera de Lambert la curva tiene una sola forma y su altura es el albedo. Las curvas son sintéticas: generadas con un modelo y con ruido, y no se comparó ninguna tabla publicada.',
+  'atmW.p.control.dataset': 'Planeta',
+  'atmW.p.dataset.0': 'Planeta P',
+  'atmW.p.dataset.1': 'Planeta Q',
+  'atmW.p.control.ag': 'Mi albedo geométrico',
+  'atmW.p.axis.x': 'Ángulo de fase (grados; 0 es la fase llena)',
+  'atmW.p.axis.y': 'Flujo del planeta respecto a la estrella (ppm)',
+  'atmW.p.legend.data': 'Curva de fase sintética',
+  'atmW.p.legend.model': 'Esfera de Lambert, albedo {A}',
+  'atmW.p.data':
+    'sintéticos, generados con un modelo y con ruido; no se comparó ninguna tabla publicada',
+  'atmW.p.row.fit': 'Albedo geométrico de la esfera de Lambert que ajusta',
+  'atmW.p.value.fit': '{A} (95 por ciento: {lo} a {hi})',
+  'atmW.p.flagged': 'ninguno: una esfera de Lambert no describe esta curva',
+  'atmW.p.row.bond': 'Albedo de Bond de esa esfera de Lambert',
+  'atmW.p.value.bond': '{B} (3/2 de {A})',
+  'atmW.p.row.chi': 'Ajuste frente a la curva',
+  'atmW.p.value.chi': 'chi cuadrado {chi} con {dof} grados de libertad',
 };
