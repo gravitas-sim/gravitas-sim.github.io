@@ -1,0 +1,67 @@
+{
+  "format": "gravitas.atmospheres-gate-ii-failed-legs/1",
+  "note": "failing legs left failing as committed; no bound moved; the not-measured checks are listed apart",
+  "failed": [
+    {
+      "id": "X3.regime",
+      "group": "tx",
+      "measured": {
+        "draws": 2000,
+        "pairsAccepted": 5979,
+        "pairsRefused": 21,
+        "refusedReasons": {
+          "the effective height is above a tenth of": 21
+        },
+        "failures": 3095,
+        "worstErrorOverBound": 38.59459125745368,
+        "worstPerBand": {
+          "strong": 1.3450784539034564,
+          "weak": 9.11939563989648,
+          "window": 38.59459125745368
+        },
+        "worstAbsoluteError": 0.11651451509932709,
+        "worstErrorOverZeffRp": 99911.74471104922
+      }
+    },
+    {
+      "id": "X4.coverage",
+      "group": "tx",
+      "measured": {
+        "coverage": 0.8635,
+        "draws": 2000,
+        "candidatesOracleTried": 3689,
+        "returned": 1750,
+        "notReturned": 250,
+        "biasMedian": 0.07049214309791207,
+        "bias05": -0.0617420614961617,
+        "bias95": 0.1764525371597992,
+        "note": "draws kept by the oracle only if the true strong-minus-weak difference is at least 10 noise standard deviations; not-returned counts as not covered"
+      }
+    },
+    {
+      "id": "T1.ep.deferred",
+      "group": "shared",
+      "measured": {
+        "deferredAddedGzipB": 3233,
+        "kernelAloneGzipB": 2282,
+        "kernelAloneRawB": 4676
+      }
+    },
+    {
+      "id": "T1.whole.deferred",
+      "group": "tx",
+      "measured": {
+        "deferredAddedGzipB": 5676,
+        "kernelAloneGzipB": 4109,
+        "kernelAloneRawB": 9217
+      }
+    }
+  ],
+  "notMeasured": [
+    "XR.reference",
+    "XT.table",
+    "D1.transmission",
+    "D2.eclipse",
+    "D3.phase"
+  ]
+}

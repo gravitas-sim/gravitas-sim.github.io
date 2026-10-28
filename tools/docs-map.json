@@ -79,6 +79,13 @@
       "student": false
     },
     {
+      "file": "ATMOSPHERES_GATE_II.md",
+      "kind": "gate",
+      "purpose": "Atmospheres gate II: the committed regime, oracle and bounds for transmission, emission and phase curves, the measured legs and the verdict (Prompt 201).",
+      "owner": 201,
+      "student": false
+    },
+    {
       "file": "BRANCHING.md",
       "kind": "process",
       "purpose": "Branches, the publish rule and the table of generated artifacts.",

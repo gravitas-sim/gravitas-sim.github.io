@@ -161,3 +161,104 @@ pass gives **B**; else **A**. A B authorizes only the slice it names.
 **Needed rulings, stated before the result so none is read into it:** (R-a) whether a `not-measured` data leg leaves the validation
 contract's authentic-data requirement met for the slice it supports; (R-b) whether to allow Q1 and Q2 so that the transmission slice
 can be measured and the gate re-run (a B is then re-decidable by Carl only).
+
+---
+
+## Results
+
+Everything above this line is the text committed in `4d30d73e` (before the prototype or any oracle output), with the two amendments
+that are named in it (AM1, `5ed16fd8`, before any measurement; AM2, `c0a87417`, after one measurement of `C1`). What follows was
+written after the measurements. The prototype is `spike/atmospheres-gate-ii` at `9a72fd65` (never merged): the kernel
+(`js/kernels/atmospheres/{quadrature,emission,phase,transmission,bands}.js`), three instruments added to the existing `atmosphere`
+family plotted through `js/plot/chart.js`, their English words and a rot13 size stand-in for the Spanish, the independent oracle
+(`tools/atmospheres-gate-ii/oracle.py`, run as `python -I` in a scratch virtual environment with numpy 2.2.6, scipy 1.15.3 and
+astropy 6.1.7, 428 s), the harness, the byte measurement, and the full oracle results (2.6 MB, SHA-256 in
+`oracle-results.json`). The record is `tests/fixtures/atmospheres-gate-ii/record.json`; `tests/atmospheresGateII.test.js`
+re-derives every status from it, recomputes the verdict, checks that this document states it, and runs the claim rule live.
+
+**Verdict: C**, by the committed decision function, **as measured and not pending a ruling**: one `shared` check fails, the
+eclipse-and-phase slice's kernel size (`T1.ep.deferred`: the kernel alone is 2,282 B gzipped against the committed 2,048 B; the
+slice as a whole is +3,233 B against 7,168). **Every physics check of the eclipse and phase slice passes** (`E1` to `E6`, `N1`, `N2`).
+The verdict is **B if** that one bound is reset (as Carl reset Gate I's two seam bounds): by the same function, the transmission
+slice then fails and the eclipse and phase slice is authorized. The register row is D-R10-201-01 (DELEGATED, pending Carl).
+
+### The checks
+
+| Check | Status | Measured |
+| --- | --- | --- |
+| `U1.constants` | pass | no physical constant copied into the new modules; k, h, c, the atomic mass unit and sigma equal astropy's to at most 1e-9 |
+| `R1.refusals` | pass | 40 of 40 hostile inputs refuse with a reason and no number; every result names its model and the committed assumption words |
+| `C1.claims` | pass (after AM2) | 12 of 12 bad controls caught, 6 of 6 permitted passed, no violation in 15 files of the atmosphere family and the prototype's words. As first measured, with the committed Spanish patterns: **11 of 12** (the ASCII word boundary does not see an accented letter); see AM2 |
+| `P1.plot` | pass | three plots drawn by `js/plot/chart.js`; worst path vertex 0.059 px from where its data is (bound 0.1); legend toggled from the keyboard; the keyboard readout speaks the values; the family contains no drawing code. jsdom only |
+| `E1.planck` | pass | 400 points against `quad`: 1e-13 class (bound 1e-9); the full-band integral equals sigma T^4/pi; Rayleigh-Jeans at lambda T = 1e7 micron K within 1e-3 (AM1); monotone |
+| `E2.eclipse` | pass | 1,000 points to rounding (bound 1e-12); equal-temperature limit; the reflected term additive |
+| `E3.slab` | pass | 300 optical depths against a numerical mu integral at 2.7e-12 (bound 1e-9); tau = 0 exact; thick limit; monotone; skin temperature `Tp/2^(1/4)` |
+| `E4.lambert` | pass | 181 angles against the oracle's surface integral; end values; the phase integral 3/2; the Bond relation; monotone |
+| `E5.albedo` | pass | coverage 0.9405 of the 95 percent interval (bound [0.93, 0.97]); a flagged fit counts as not covered |
+| `E6.btemp` | pass | coverage 0.956 (bound [0.93, 0.97]); round trip 5e-13. `a/R_p` was set to 1000 so that the reflected-light rule, tested in `N2`, did not apply |
+| `N1.misfit` | pass | the Lambert fit is flagged for Lommel-Seeliger and Henyey-Greenstein spheres of either sign in at least 80 percent of 500 draws each, and falsely in at most 2 percent for a true Lambert sphere (rates in the record) |
+| `N2.reflected` | pass | 60 of 60 cases decided as the rule says |
+| `X1.analytic` | pass | the limb integral against `H [E1 + ln tau_0 + gamma]` at 20 values to 1.5e-10 (bound 1e-8); monotone. The slope (about 1.0027 scale heights per e-fold of cross-section) is reported, not bounded: the committed text gave it no tolerance |
+| `X2.numerics` | pass | constant gravity in the oracle: one wavelength 8e-8 (bound 1e-4), the 16-point k-distribution against line by line 4.1e-4 (bound 1e-2) |
+| `X3.regime` | **fail** | with `g(r) = GM/r^2` in the oracle, 3,095 of 5,979 accepted (draw, band) pairs exceed `max(0.001, 1.5 z_eff/R_p)`. The error of the thin bands is set by `H/R_p` (3.9 percent for the window band at `z_eff/R_p` of 1e-4), not by `z_eff`; the strong band is within the bound in all but 31 of 1,980 pairs (worst 1.35 times it). 21 pairs refused (effective height above 0.1 R_p) |
+| `X4.coverage` | **fail** | coverage 0.8635 (bound [0.93, 0.99]); 1,750 of 2,000 returned an estimate (230 "outside what the model can give", 20 refused), the median estimate is 7.0 percent warm, because the oracle's gravity falls with height and the model's does not |
+| `X5.refusals` | pass | 12 of 12 outside inputs refuse, none of 12 inside; a zero difference returns a scale height in 0.2 percent of 2,000 draws, six standard deviations in 99.75 percent |
+| `X6.cloud` | pass | 99.8 percent of 500 draws "not constrained" (bound 95); one draw returned a number. The committed text said a deck above the **weak** band's effective height makes the bands equal; that is not so (a deck between the two leaves the strong band deeper), so the case run is a deck 4 scale heights above the **strong** band's; the between case is in `Z1` |
+| `XR.reference` | **not measured** | needs a cited radiative-transfer code's outputs for the same inputs (Q2); nothing downloaded |
+| `XT.table` | **not measured** | needs the pinned, cited cross-section table (Q1); the synthetic absorber tests the integration and names no molecule |
+| `T1.ep.deferred` | **fail** | slice +3,233 B (bound 7,168) but its kernel alone is 2,282 B (bound 2,048) |
+| `T1.whole.deferred` | **fail** | family +5,676 B (bound 12,288) but its kernel alone is 4,109 B (bound 4,096, over by 13 B) |
+| `T1.requests` | pass | +0 lazy chunks (bound 2): the kernel and instruments join the existing atmosphere chunk |
+| `T1.tier` | pass | first-visit precache +16 B whole, +11 B slice (bound 64), idle +0 B. The base build sits exactly at `tools/data-budget.json`'s first-visit ceiling (5,188,079 B), so these bytes are over it: **no budget file was edited**; Prompt 202 will need Carl's ruling on that line |
+| `T1.routes` | pass | no route gains a request; the largest rise is 0.2 KB (the largest lesson's sources), the rest 0.1 KB |
+| `D1`, `D2`, `D3` | not measured | published tables (Q3, Q4, Q5); recorded, not decision inputs |
+| `Z1.reported` | reported | relative temperature bias from the scale-height inference, median [5th, 95th percentile]: `X P0` wrong by 3: +3.6 percent [-6.7, +9.5]; a +10 percent temperature gradient: +13.3 percent [+5.4, +20.6]; a -10 percent gradient: -11.9 percent [-17.4, -5.2]; a deck between the bands: -53 percent [-55, -47] (10 of 100 gave no estimate) |
+
+### What the verdict says, and what it does not
+
+- **C is driven by 234 bytes of kernel, not by physics.** The slice's whole cost is 3.2 KB of the 7.2 KB allowed; the bound that
+  failed is the kernel-alone line, set before any code existed. I did not trim the prototype to the line after seeing the
+  number, and I did not move the bound. Whether to reset it is Carl's, as with Gate I.
+- **The eclipse and phase physics is sound within its stated model.** Brightness temperature and Lambert albedo return their
+  truth at the stated rate, refuse where reflected light matters, and flag a planet that is not a Lambert sphere. What neither can
+  say is in the `assumes` field and the claim rule.
+- **Transmission is not ready as committed, for two reasons that are the model's.** (1) Its numerics are exact (`X1`, `X2`), but
+  constant gravity understates the depth of the thin bands by about `H/R_p` and of the thick ones by about `z_eff/R_p`: the
+  stated error `1.5 z_eff/R_p` is the wrong statement. As information, not a threshold: `1.5 (z_eff + 3 H)/R_p` held on all 5,979
+  pairs (worst 0.89 of it). (2) A scale height read from two bands with the model's own error treated as uncorrelated noise
+  covers 86 percent, not 95, and is warm by 7 percent near the edge of the domain. A production model would carry the
+  gravity term (about a line of code: `n ~ exp(-z/H + z^2/(H R_p))`), and the gate would be re-run on it.
+- **A cloud deck, a gradient and a wrong abundance bias the estimate** (`Z1`); a flat spectrum is "not constrained", which is the
+  lesson's point, and the claim rule keeps the words "detected" and "retains" out.
+- **Data.** Nothing was downloaded. The five requests (Q1 the cross-section table, Q2 a cited code's outputs, Q3 a published
+  transmission spectrum, Q4 an eclipse-depth table, Q5 a Solar System phase-function table) are in `thresholds.json` with the
+  intake rules; none has a rights decision, and none is accepted until read. Without Q1 and Q2 the transmission slice cannot be
+  A whatever its other results; without Q3 to Q5 202's comparison steps are over synthetic data with a truth manifest.
+
+### Iterations, in the open
+
+First harness run: `E3` failed on a harness bug (a strict monotone test at the saturated end), `E6` and `N2` on a kernel bug
+(`brightnessTemperature` demanded a planet temperature it does not use), `C1` on the committed Spanish patterns (AM2). The
+harness and the kernel were fixed and the checks re-run with no bound moved; the first-run outcomes are recorded here and in
+`failed-legs.json`'s companion note only for `C1`. `X3` and `X4` failed on the first run and every run since. No other check was
+run twice for a different answer. The oracle's first run was started under `python -I` without numpy (user site) and rerun in the
+scratch virtual environment.
+
+### Not verified
+
+- The three plots were drawn in jsdom through the real component; no browser run, no axe or keyboard walk of a lesson page was
+  made for a prototype that is never merged.
+- Bytes are from Node 22.23.4 copies (CI's major) as differences against `ab815f06`; the Spanish words are rot13 of the English
+  (a size stand-in), not a translation.
+- No physics claim here has been reviewed by an external reader. The Planck, slab and Lambert results are checked against
+  independent numerical integration, not against a published table; the Lommel-Seeliger closed form used for the comparison curve
+  agrees with the oracle's surface integral to 5e-13.
+- The synthetic absorber is not a molecule: nothing here says what water, or any gas, would do.
+
+### Rulings asked of Carl (the register row carries them)
+
+1. **`T1.ep.deferred`**: reset the slice's kernel-alone bound (2,048 B to 2,282 B, the measured value) so the function gives B; or leave C.
+2. **AM2** (the Spanish claim patterns): stand, or not.
+3. **R-a**: whether `not-measured` data legs leave the authentic-data requirement met for the eclipse and phase slice.
+4. **R-b**: whether to allow Q1 and Q2 (and Q3 to Q5) and a re-run; and, if B stands, whether 205's spectra items remain unauthorized.
+5. **X3's stated error**: whether a re-run of the transmission model with a gravity term, and a corrected stated error, is wanted before 202 is ever built whole.
