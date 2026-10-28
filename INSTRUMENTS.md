@@ -68,8 +68,7 @@ Each number in `tools/instruments/*.json` is `{ "v", "u", "s" }` plus optional
 
 A text value (a filter list) is `{ "t", "s" }`. A value is stored in the unit the
 source uses; the adapters convert by registry factors and refuse a unit they do
-not take. The registry gained three units for this: `electron`, `deg2` and
-`airmass`.
+not take. The registry gained two units for this, `electron` (a count, placed after `count` so the formula engine still writes a count in counts) and `deg2`; `airmass` is the one token the validator reads that is not a registry unit, so that no student's formula can meet it. Gain, read noise, full well, dark current and extinction must be written in exactly the unit the adapters take.
 
 Each source in `sources.json` has a kind, a title, authors, a year, a reference,
 an https address (a typical source has none), a **retrieval date**, a **method**

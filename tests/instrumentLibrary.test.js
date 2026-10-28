@@ -151,6 +151,9 @@ describe('refusals (r1 to r8)', () => {
     const g = base();
     g.instruments[0].readNoise.u = 'electron/count';
     mentions(g, /readNoise .*dimension/);
+    const h = base();
+    h.instruments[0].readNoise.u = 'count';
+    mentions(h, /readNoise .*written in electron/);
   });
   test('r5: null, NaN and non-finite values', () => {
     for (const bad of [null, NaN, Infinity, '', [1, NaN]]) {
@@ -203,12 +206,13 @@ describe('refusals (r1 to r8)', () => {
   });
   test('compound units are read from the registry, not guessed', () => {
     expect(unitSignature('arcsec/pix')).toBe('angle/pixel');
-    expect(unitSignature('electron/s/pix')).toBe('electrons/time/pixel');
+    expect(unitSignature('electron/s/pix')).toBe('count/time/pixel');
+    expect(unitSignature('mag/airmass')).toBe('magnitude/airmass');
     expect(unitSignature('mag/arcsec2')).toBe('magnitude/solid-angle');
     expect(unitSignature('e-/ADU')).toBeNull();
     expect(unitSignature('m^2')).toBe('length^2');
     expect(unitSignature('furlong^2')).toBeNull();
-    for (const id of ['electron', 'deg2', 'airmass'])
+    for (const id of ['electron', 'deg2'])
       expect(UNITS[id].symbol).toBeTruthy();
   });
 });

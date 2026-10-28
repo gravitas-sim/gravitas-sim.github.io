@@ -75,7 +75,11 @@ export const PARAMS = Object.freeze({
     elevation: P('length', { min: -500, max: 9000 }),
     seeing: P('angle', { ...POS, band: 'either' }),
     skyBrightness: P('magnitude/solid-angle', { band: 'only' }),
-    extinction: P('magnitude/airmass', { ...POS, band: 'only' }),
+    extinction: P('magnitude/airmass', {
+      ...POS,
+      band: 'only',
+      units: ['mag/airmass'],
+    }),
   }),
   orbit: Object.freeze({
     perigee: P('length', POS),
@@ -91,10 +95,10 @@ export const PARAMS = Object.freeze({
     fieldWidth: P('angle', POS),
     fieldHeight: P('angle', POS),
     fieldArea: P('solid-angle', POS),
-    readNoise: P('electrons', { min: 0, range: true }),
-    gain: P('electrons/count', { ...POS, range: true }),
-    darkCurrent: P('electrons/time/pixel', { min: 0 }),
-    fullWell: P('electrons', { ...POS, range: true }),
+    readNoise: P('count', { min: 0, range: true, units: ['electron'] }),
+    gain: P('count/count', { ...POS, range: true, units: ['electron/count'] }),
+    darkCurrent: P('count/time/pixel', { min: 0, units: ['electron/s/pix'] }),
+    fullWell: P('count', { ...POS, range: true, units: ['electron'] }),
     readoutTime: P('time', POS),
     cycleTime: P('time', POS),
     exposureTime: P('time', POS),
@@ -179,6 +183,10 @@ export function unitSignature(u) {
   // Registry units joined by '/', each with an optional whole power: 'm^2'.
   const parts = u.split('/').map(p => {
     const m = /^(.+?)(?:\^(\d))?$/.exec(p);
+    // 'airmass' is the one token that is not a registry unit: an extinction
+    // coefficient is magnitudes per airmass, and a registry unit of that name
+    // would be a word the formula engine reads in a student's formula.
+    if (m && m[1] === 'airmass' && !m[2]) return 'airmass';
     const id = m && unitIdOf(m[1]);
     return id === undefined || id === null
       ? null
@@ -288,6 +296,10 @@ function checkValue(val, path, spec, ctx, out) {
     bad(`has a unit (${JSON.stringify(val.u)}) that is not in the registry`);
   else if (sig !== spec.dim)
     bad(`has a unit of dimension ${sig}; this parameter is ${spec.dim}`);
+  else if (spec.units && !spec.units.includes(val.u))
+    bad(
+      `is in ${JSON.stringify(val.u)}; this parameter is written in ${spec.units.join(' or ')}`
+    );
   for (const n of nums) {
     if (spec.integer && !Number.isInteger(n)) bad('is a whole number');
     if (spec.min !== undefined && (spec.open ? n <= spec.min : n < spec.min))

@@ -128,13 +128,6 @@ export const UNITS = Object.freeze({
 
   K: { dim: 'temperature', factor: 1, symbol: 'K' },
   'electron/s': { dim: 'count-rate', factor: 1, symbol: 'e⁻/s' },
-  // The instrument library (Prompt 209): an electron is not a count of a
-  // converter (the gain between them is a number with its own unit,
-  // electron/count), a survey field is square degrees, and an extinction
-  // coefficient is magnitudes per airmass.
-  electron: { dim: 'electrons', factor: 1, symbol: 'e⁻' },
-  deg2: { dim: 'solid-angle', factor: 12960000, symbol: 'deg²' },
-  airmass: { dim: 'airmass', factor: 1, symbol: 'airmass' },
   count: {
     dim: 'count',
     factor: 1,
@@ -142,6 +135,14 @@ export const UNITS = Object.freeze({
     es: 'cuentas',
     integer: true,
   },
+  // The instrument library (Prompt 209). An electron is a count of electrons,
+  // so the formula engine reads it as one (as it reads `electron/s`) and writes
+  // a count result in counts: it stays after `count`, because the engine writes
+  // a dimension in the first unit it finds. The gain between electrons and
+  // converter counts is a number with its own unit, electron/count.
+  electron: { dim: 'count', factor: 1, symbol: 'e⁻' },
+  // A survey field in square degrees (one arcsec^2 is the registry's 1).
+  deg2: { dim: 'solid-angle', factor: 12960000, symbol: 'deg²' },
   pix: { dim: 'pixel', factor: 1, symbol: 'px', integer: true },
 
   // The simulation's own units, which are not physical ones: an energy or an

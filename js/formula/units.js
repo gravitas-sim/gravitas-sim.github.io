@@ -67,11 +67,6 @@ export const DIMS = Object.freeze({
   'flux-per-frequency': [vec({ kg: 1, s: -2 }), 1e-26],
   'count-rate': [vec({ ct: 1, s: -1 }), 1],
   count: [vec({ ct: 1 }), 1],
-  // The instrument library's units (Prompt 209). An electron is a count here, as
-  // `electron/s` already is: the formula engine cannot tell electrons from
-  // converter counts (the gain between them is a number with a unit of its own).
-  electrons: [vec({ ct: 1 }), 1],
-  airmass: [ZERO, 1],
   pixel: [vec({ px: 1 }), 1],
   magnitude: [vec({ mag: 1 }), 1],
   logarithm: [vec({ dex: 1 }), 1],
