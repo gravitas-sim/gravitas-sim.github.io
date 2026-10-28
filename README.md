@@ -486,7 +486,7 @@ npm run e2e:ui                    # the Playwright inspector
 npm run e2e:report                # open the last HTML report
 ```
 
-The suite is <!--fact:e2eTests-->2963<!--/fact--> tests
+The suite is <!--fact:e2eTests-->2971<!--/fact--> tests
 in <!--fact:e2eFiles-->207<!--/fact--> files and takes several minutes in
 Chromium.
 
@@ -586,7 +586,7 @@ broke Newton's third law, and a scenario that turned out to have no gravity in i
 
 ## Instructor resources
 
-All <!--fact:instructorDocuments-->716<!--/fact--> documents are generated from
+All <!--fact:instructorDocuments-->738<!--/fact--> documents are generated from
 the investigations at build time and live at
 [gravitas-sim.online/instructors/](https://gravitas-sim.online/instructors/):
 
