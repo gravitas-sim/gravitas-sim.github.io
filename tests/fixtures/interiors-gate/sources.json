@@ -1,0 +1,185 @@
+{
+  "prompt": 203,
+  "provenance": {
+    "retrieved": null,
+    "checked": false,
+    "note": "every value is typed from the cited source and was not re-read against it in this session; nothing was downloaded; a disagreement with a source is a defect to be found, not a tolerance to be widened"
+  },
+  "constants": {
+    "G": {
+      "value": 6.6743e-11,
+      "sigma": 1.5e-15,
+      "unit": "m3 kg-1 s-2",
+      "source": "CODATA 2018"
+    }
+  },
+  "bodies": {
+    "earth": {
+      "gm": {
+        "value": 398600.4418,
+        "sigma": 0.0008,
+        "unit": "km3 s-2",
+        "source": "JPL Solar System Dynamics; the geodetic value"
+      },
+      "equatorialRadiusKm": {
+        "value": 6378.137,
+        "sigma": 0.001,
+        "source": "WGS 84 / IAU nominal"
+      },
+      "polarRadiusKm": {
+        "value": 6356.752,
+        "sigma": 0.001,
+        "source": "WGS 84"
+      },
+      "siderealPeriodS": {
+        "value": 86164.0905,
+        "source": "IERS"
+      },
+      "publishedFlattening": {
+        "value": 0.00335281,
+        "note": "1/298.257",
+        "source": "WGS 84"
+      },
+      "publishedMomentFactor": {
+        "value": 0.3307,
+        "sigma": 0.0001,
+        "note": "C / (M a^2), the standard reference value",
+        "source": "Williams 1994 and standard references"
+      },
+      "layers": {
+        "rhoMantle": {
+          "value": 4455,
+          "sigma": 100,
+          "unit": "kg m-3",
+          "note": "mantle and crust mean from PREM's layer masses"
+        },
+        "rhoCore": {
+          "value": 10950,
+          "sigma": 300,
+          "unit": "kg m-3",
+          "note": "core mean from PREM"
+        },
+        "publishedCoreRadiusKm": {
+          "value": 3480,
+          "sigma": 1,
+          "source": "PREM (Dziewonski and Anderson 1981)"
+        }
+      }
+    },
+    "mars": {
+      "gm": {
+        "value": 42828.375,
+        "sigma": 0.01,
+        "unit": "km3 s-2",
+        "source": "JPL; the Mars system"
+      },
+      "equatorialRadiusKm": {
+        "value": 3396.19,
+        "sigma": 0.1,
+        "source": "IAU WGCCRE (Archinal et al. 2018)"
+      },
+      "polarRadiusKm": {
+        "value": 3376.2,
+        "sigma": 0.1,
+        "source": "IAU WGCCRE (Archinal et al. 2018)"
+      },
+      "siderealPeriodS": {
+        "value": 88642.66,
+        "source": "IAU"
+      },
+      "publishedMomentFactor": {
+        "value": 0.364,
+        "sigma": 0.001,
+        "note": "0.3639 to 0.3644",
+        "source": "Konopliv et al. 2016; Genova et al. 2016"
+      },
+      "layers": {
+        "rhoMantle": {
+          "value": 3550,
+          "sigma": 50,
+          "unit": "kg m-3",
+          "note": "mantle mean density from published interior models, chosen to be the mean consistent with the published core"
+        },
+        "rhoCore": {
+          "value": 6000,
+          "sigma": 300,
+          "unit": "kg m-3",
+          "note": "InSight core density range 5,700 to 6,300"
+        },
+        "publishedCoreRadiusKm": {
+          "value": 1830,
+          "sigma": 40,
+          "source": "Staehler et al. 2021 (InSight)"
+        }
+      }
+    },
+    "jupiter": {
+      "gm": {
+        "value": 126686534,
+        "sigma": 100,
+        "unit": "km3 s-2",
+        "source": "JPL; Juno"
+      },
+      "equatorialRadiusKm": {
+        "value": 71492,
+        "sigma": 4,
+        "source": "IAU WGCCRE (Archinal et al. 2018)"
+      },
+      "polarRadiusKm": {
+        "value": 66854,
+        "sigma": 10,
+        "source": "IAU WGCCRE (Archinal et al. 2018)"
+      },
+      "siderealPeriodS": {
+        "value": 35729.711,
+        "note": "System III, 9 h 55 m 29.711 s",
+        "source": "IAU"
+      },
+      "publishedMomentFactor": {
+        "value": 0.264,
+        "sigma": 0.001,
+        "note": "model-derived, not measured",
+        "source": "Wahl et al. 2017; Ni 2018; Nettelmann et al. 2021"
+      }
+    },
+    "saturn": {
+      "gm": {
+        "value": 37931207.8,
+        "sigma": 1.0,
+        "unit": "km3 s-2",
+        "source": "JPL; Cassini"
+      },
+      "equatorialRadiusKm": {
+        "value": 60268,
+        "sigma": 4,
+        "source": "IAU WGCCRE (Archinal et al. 2018)"
+      },
+      "polarRadiusKm": {
+        "value": 54364,
+        "sigma": 10,
+        "source": "IAU WGCCRE (Archinal et al. 2018)"
+      },
+      "siderealPeriodS": {
+        "value": 38018,
+        "note": "10.56 h, the radio period; not tested, used only to compute q for the refusal"
+      },
+      "publishedMomentFactor": {
+        "value": 0.221,
+        "sigma": 0.002,
+        "note": "model-derived",
+        "source": "Helled and Guillot 2013; Militzer et al. 2019"
+      }
+    }
+  },
+  "nonHydrostatic": {
+    "mercury": "spin-orbit resonance; the observed figure is not a rotational equilibrium",
+    "venus": "the 243-day rotation gives q about 6e-8; the figure is not rotational",
+    "moon": "tidally locked; a fossil figure",
+    "mars": "the Tharsis load; the observed flattening includes a non-hydrostatic part"
+  },
+  "untestedForInversion": {
+    "mercury": "differentiated, moment of inertia published, not tested by this gate",
+    "moon": "differentiated, moment of inertia published, not tested by this gate",
+    "venus": "the moment of inertia is unmeasured; there is no published core"
+  }
+}
