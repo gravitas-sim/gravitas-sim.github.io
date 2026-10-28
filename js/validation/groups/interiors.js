@@ -21,7 +21,7 @@ export default async function run({ add }) {
     name: 'Earth’s bulk density from its GM and volumetric mean radius against the fact sheet',
     measured: earth.density.value,
     expected: 5514,
-    unit: 'kg m-3',
+    unit: 'kg/m3',
     tolerance: 0.01,
     source:
       'IAU radii and JPL GM against the NASA Planetary Fact Sheet (all typed)',
@@ -64,7 +64,7 @@ export default async function run({ add }) {
     expected:
       earth.density.value *
       Math.hypot(0.0008 / 398600.4418, K.G_SIGMA / K.G, (3 * 0.01) / 6371.008),
-    unit: 'kg m-3',
+    unit: 'kg/m3',
     tolerance: 1e-12,
     why: 'Uncorrelated first-order propagation of a product of powers; the constant’s error is the larger term for Earth.',
   });

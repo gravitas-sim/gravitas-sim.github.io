@@ -445,7 +445,7 @@
     {
       "file": "INTERIORS.md",
       "kind": "feature",
-      "purpose": "Interiors I: density, gravity, escape speed, equilibrium temperature, density classes and the compression correction of the planets, with first-order uncertainties and their validation (Prompt 203 Part A).",
+      "purpose": "Interiors I: density, gravity, escape speed, equilibrium temperature, density classes and compression correction of the planets, with uncertainties and validation (Prompt 203 Part A).",
       "owner": 203,
       "student": false
     },

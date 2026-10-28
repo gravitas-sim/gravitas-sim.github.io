@@ -66,7 +66,7 @@ export function bulkDensity({ gm, radius, sigma = {} }) {
     G_SIGMA / G,
     (3 * (sigma.radius ?? 0)) / radius
   );
-  return { value, sigma: value * rel, unit: 'kg m-3' };
+  return { value, sigma: value * rel, unit: 'kg/m3' };
 }
 
 /** Surface gravity GM / R^2, m s^-2 (no rotation term). Needs no G. */
@@ -78,7 +78,7 @@ export function surfaceGravity({ gm, radius, sigma = {} }) {
     (sigma.gm ?? 0) / gm,
     (2 * (sigma.radius ?? 0)) / radius
   );
-  return { value, sigma: value * rel, unit: 'm s-2' };
+  return { value, sigma: value * rel, unit: 'm/s2' };
 }
 
 /** Escape speed sqrt(2 GM / R), m s^-1 (a non-rotating sphere). Needs no G. */
@@ -90,7 +90,7 @@ export function escapeSpeed({ gm, radius, sigma = {} }) {
     (sigma.gm ?? 0) / (2 * gm),
     (sigma.radius ?? 0) / (2 * radius)
   );
-  return { value, sigma: value * rel, unit: 'm s-1' };
+  return { value, sigma: value * rel, unit: 'm/s' };
 }
 
 /**

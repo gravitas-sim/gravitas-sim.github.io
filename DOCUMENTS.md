@@ -73,7 +73,7 @@ catalogue refers to it, so a change to it can reach a student.
 | [INSTRUCTOR_MATERIALS.md](INSTRUCTOR_MATERIALS.md) | The generated guides and answer keys. | guide | P79 | written | no |
 | [INTEGRATION.md](INTEGRATION.md) | Branch, train and merge protocol and the current integration status. | process | P122 | written | no |
 | [INTERACTION.md](INTERACTION.md) | The interaction contract: keyboard model, single-pointer rule, focus, announcements and reduced motion. | policy | P155 | written | no |
-| [INTERIORS.md](INTERIORS.md) | Interiors I: density, gravity, escape speed, equilibrium temperature, density classes and the compression correction of the planets, with first-order uncertainties and their validation (Prompt 203 Part A). | feature | P203 | written | no |
+| [INTERIORS.md](INTERIORS.md) | Interiors I: density, gravity, escape speed, equilibrium temperature, density classes and compression correction of the planets, with uncertainties and validation (Prompt 203 Part A). | feature | P203 | written | no |
 | [INTERIORS_GATE.md](INTERIORS_GATE.md) | Interiors gate: the two-layer inversion and the Darwin-Radau oblateness, thresholds committed first, the measured checks and the verdict C (Prompt 203 Part B). | gate | P203 | written | no |
 | [LAB3D.md](LAB3D.md) | The 3-D small-N kernel. | feature | unassigned | written | yes |
 | [LAB3D_CURRICULUM.md](LAB3D_CURRICULUM.md) | The 3-D lab curriculum. | feature | unassigned | written | no |
