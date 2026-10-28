@@ -388,6 +388,10 @@ export const NEVER_PRECACHED = [
   // instrument that imports it installs nothing; the idle tier has no room under
   // a ceiling the standing size approval does not cover. D-R10-78.
   /^js\/kernels\/tides\//,
+  // The habitable-zone kernel (Prompt 205, HABITABLE_ZONE_II.md): closed forms,
+  // imported by no page until the panel's limits and the lesson's upper depth use
+  // it, and then only from their lazy chunks. D-R10-205-01.
+  /^js\/kernels\/habitablezone\//,
   // The atmospheres kernel and pack (Prompt 200, ATMOSPHERES.md): imported by no
   // page until the instrument family and its lessons are built. D-R10-80.
   /^js\/kernels\/atmospheres\//,
@@ -433,6 +437,9 @@ export const NEVER_PRECACHED = [
   // The validation suite's groups and harness: fetched when the suite runs,
   // like physicsChecks.js itself (ON_DEMAND_ONLY below).
   /^js\/validation\/(groups\/|harness\.js$)/,
+  // The interiors kernel and its packs (Prompt 203, INTERIORS.md): imported by no
+  // shipped page yet, so no page can fetch them and an install has no use for them.
+  /^js\/kernels\/interiors\//,
 ];
 
 const ON_DEMAND_ONLY = new Set([

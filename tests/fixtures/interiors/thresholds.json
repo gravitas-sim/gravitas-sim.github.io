@@ -1,0 +1,145 @@
+{
+  "prompt": 203,
+  "part": "A",
+  "document": "INTERIORS.md",
+  "committed": "before js/kernels/interiors/, the validation tool, the oracle's results and the tests existed",
+  "seed": 2031,
+  "classes": {
+    "rocky": {
+      "minDensity": 3000
+    },
+    "rock-ice": {
+      "minDensity": 1800,
+      "maxDensity": 3000
+    },
+    "volatile-rich": {
+      "maxDensity": 1800
+    },
+    "note": "conventions, not measurements: density cannot tell hydrogen and helium from water ice (Jupiter and Uranus differ by 4 percent), so the third class is not split; a body whose density lies within 2 sigma of a boundary is labelled ambiguous"
+  },
+  "anchors": {
+    "source": "NASA Planetary Fact Sheets (NSSDCA), typed, unchecked; the fact sheet's gravity and escape speed use the equatorial radius, its density the volumetric mean",
+    "densityKgM3": {
+      "mercury": 5427,
+      "venus": 5243,
+      "earth": 5514,
+      "moon": 3344,
+      "mars": 3933,
+      "jupiter": 1326,
+      "saturn": 687,
+      "uranus": 1271,
+      "neptune": 1638
+    },
+    "gravityMS2": {
+      "mercury": 3.7,
+      "venus": 8.87,
+      "earth": 9.8,
+      "moon": 1.62,
+      "mars": 3.71,
+      "jupiter": 24.79,
+      "saturn": 10.44,
+      "uranus": 8.87,
+      "neptune": 11.15
+    },
+    "escapeKmS": {
+      "mercury": 4.3,
+      "venus": 10.4,
+      "earth": 11.2,
+      "moon": 2.4,
+      "mars": 5.0,
+      "jupiter": 59.5,
+      "saturn": 35.5,
+      "uranus": 21.3,
+      "neptune": 23.5
+    },
+    "blackbodyK": {
+      "mercury": 439.6,
+      "moon": 270.4,
+      "saturn": 81.1
+    }
+  },
+  "checks": [
+    {
+      "id": "a1.closed",
+      "tier": "a",
+      "bound": "bulk density, surface gravity, escape speed and their first-order uncertainties against an independent numpy evaluation on 1,000 seeded (GM, R, sigmas) points: values to 1e-12, uncertainties to 1e-10, relative",
+      "limits": {
+        "valueRelMax": 1e-12,
+        "sigmaRelMax": 1e-10,
+        "points": 1000
+      }
+    },
+    {
+      "id": "a2.anchors",
+      "tier": "b",
+      "bound": "the nine bodies against the fact sheet: density within 1 percent, gravity (equatorial radius) within 1 percent, escape speed within 2 percent (the fact sheet rounds it to two figures)",
+      "limits": {
+        "densityRelMax": 0.01,
+        "gravityRelMax": 0.01,
+        "escapeRelMax": 0.02
+      }
+    },
+    {
+      "id": "a3.mean-radius",
+      "tier": "a",
+      "bound": "the volumetric mean radius (a^2 b)^(1/3) from the equatorial and polar radii within 0.1 percent of the tabulated mean for Earth, Mars, Jupiter, Saturn, Uranus and Neptune",
+      "limits": {
+        "relMax": 0.001
+      }
+    },
+    {
+      "id": "a4.teq",
+      "tier": "b",
+      "bound": "the equilibrium temperature of Mercury, the Moon and Saturn (Bond albedo, semi-major axis, full redistribution) within 2 percent of the fact sheet's black-body temperatures; for the six bodies of the Prompt 200 pack the value equals Prompt 200's own to 1e-12 (one source of truth)",
+      "limits": {
+        "relMax": 0.02,
+        "packRelMax": 1e-12
+      }
+    },
+    {
+      "id": "a5.classes",
+      "tier": "b",
+      "bound": "Mercury, Venus, Earth, the Moon and Mars classify rocky; Jupiter, Saturn, Uranus and Neptune volatile-rich; Jupiter and Uranus are reported as indistinguishable by density (within 5 percent); a body within 2 sigma of a boundary is labelled ambiguous",
+      "limits": {
+        "indistinguishableRel": 0.05,
+        "ambiguousSigmas": 2
+      }
+    },
+    {
+      "id": "b1.propagation",
+      "tier": "b",
+      "bound": "the first-order uncertainty of density, gravity and escape speed against the standard deviation of 200,000 numpy Monte Carlo draws of (GM, R, G) for each of the nine bodies: within 2 percent",
+      "limits": {
+        "draws": 200000,
+        "relMax": 0.02
+      }
+    },
+    {
+      "id": "b2.uncompressed",
+      "tier": "a",
+      "bound": "the compression correction (bulk minus uncompressed density) and its uncertainty (the table's declared 0.2 g/cm3 combined with the bulk density's) against the oracle to 1e-12; for the five bodies of the table the bulk density exceeds the uncompressed one",
+      "limits": {
+        "relMax": 1e-12,
+        "declaredSigmaKgM3": 200
+      }
+    },
+    {
+      "id": "c1.coverage",
+      "tier": "c",
+      "bound": "seeded ensemble of 4,000 trials per body: truth drawn from the table's stated errors, an 'observed' table drawn around it, the quantity computed from the observed table; the stated 1-sigma interval covers the quantity computed from the truth at a rate in [0.64, 0.72] and the 2-sigma interval in [0.94, 0.97], for density, gravity and escape speed of all nine bodies",
+      "limits": {
+        "trials": 4000,
+        "oneSigma": [0.64, 0.72],
+        "twoSigma": [0.94, 0.97]
+      }
+    },
+    {
+      "id": "d1.refusals",
+      "tier": "d",
+      "bound": "at least 24 hostile inputs (zero, negative, non-finite and string masses and radii, negative sigmas, a sigma above the value, unknown bodies, unknown radius kinds, an empty selection) each refused with a named code and no number",
+      "limits": {
+        "count": 24
+      }
+    }
+  ]
+}

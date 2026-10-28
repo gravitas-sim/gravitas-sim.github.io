@@ -366,6 +366,13 @@
       "student": false
     },
     {
+      "file": "HABITABLE_ZONE_II.md",
+      "kind": "feature",
+      "purpose": "Habitable zone II: the threshold limits, the zone along a MIST track, the locking radius and the eccentric-orbit flux (Prompt 205, part A).",
+      "owner": 205,
+      "student": false
+    },
+    {
       "file": "IMAGE_IMPORT.md",
       "kind": "feature",
       "purpose": "Bringing a FITS frame, a PNG or a JPEG into the Observatory: bounds, refusals, what the reader states and what is saved (Prompt 188).",
@@ -447,6 +454,20 @@
       "kind": "policy",
       "purpose": "The interaction contract: keyboard model, single-pointer rule, focus, announcements and reduced motion.",
       "owner": 155,
+      "student": false
+    },
+    {
+      "file": "INTERIORS.md",
+      "kind": "feature",
+      "purpose": "Interiors I: density, gravity, escape speed, equilibrium temperature, density classes and compression correction of the planets, with uncertainties and validation (Prompt 203 Part A).",
+      "owner": 203,
+      "student": false
+    },
+    {
+      "file": "INTERIORS_GATE.md",
+      "kind": "gate",
+      "purpose": "Interiors gate: the two-layer inversion and the Darwin-Radau oblateness, thresholds committed first, the measured checks and the verdict C (Prompt 203 Part B).",
+      "owner": 203,
       "student": false
     },
     {

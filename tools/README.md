@@ -98,6 +98,7 @@ current, and the orchestrator checks it.
 | `geometry-fuzz.mjs` | Base-versus-head fuzz of every scenario's world (Roadmap II Prompt 108) |  |
 | `glossary.mjs` | The glossary, and the words it retires |  |
 | `gw-shots.mjs` | Captures of the gravitational-wave lab |  |
+| `habitable-zone-validate.mjs` | The habitable-zone kernel against its committed thresholds (Prompt 205) | `npm run habitablezone:validate` |
 | `i18n-audit.mjs` | Message-catalog audit | `npm run i18n:check` |
 | `i18n-catalog.mjs` | The message catalog, however many files it is split across |  |
 | `i18n-freshness.mjs` | Is every translation still a translation of the English it stands beside? | `npm run i18n:freshness` |
@@ -124,6 +125,7 @@ current, and the orchestrator checks it.
 | `instructor-freshness.mjs` | Was the committed instructor bundle built from these sources? |  |
 | `instrument-families.mjs` | Which instrument families a script the page fetched contains |  |
 | `interaction-contract.mjs` | Is a surface keeping the interaction contract? |  |
+| `interiors-validate.mjs` | The interiors kernel's Part A against its committed thresholds (Prompt 203) | `npm run interiors:validate` |
 | `jest-sequencer.mjs` | Start the slowest suites first |  |
 | `key-groups-check.mjs` | Key groups: does the rewritten catalog equal its source? |  |
 | `key-groups.mjs` | Key groups: write a shared key prefix once, in the bundle only |  |
