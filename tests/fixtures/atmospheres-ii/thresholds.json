@@ -1,0 +1,242 @@
+{
+  "format": "gravitas.atmospheres-ii-thresholds/1",
+  "prompt": "Roadmap III, Prompt 202, the eclipse and phase slice (verdict B of Prompt 201, D-R10-201-01; tranche T2 by D-R10-73)",
+  "document": "ATMOSPHERES.md (\"Atmospheres II: eclipse depth and phase curve\")",
+  "committed": "before the kernel modules, the validator, the oracle script, its results, the synthetic data and the tests of Prompt 202 existed",
+  "rule": "Every bound of a check carried from the gate is copied verbatim from tests/fixtures/atmospheres-gate-ii/thresholds.json and a test compares them field by field: a production run cannot restate a bound. A crossed bound is a failed check, recorded and left failing; only Carl resets one. The bounds that exist only because the slice is built (S1, A1, P1 scope, T1 scope) are stated here, before any code.",
+  "seeds": {
+    "oracle": 201,
+    "harness": 2010001,
+    "synthetic": 202
+  },
+  "scope": {
+    "built": "the eclipse model with its brightness temperature (blackbody plus one band, isothermal skin); the Lambert phase curve with the Bond-albedo relation; synthetic data with a truth manifest; two instruments; two investigations",
+    "notBuilt": "transmission (X1 to X6, XR, XT and the whole-family size fail or are not measured at the gate), 205 spectra items, any published table (D1 to D3: no rights decision, nothing downloaded)"
+  },
+  "checks": [
+    {
+      "id": "U1.constants",
+      "group": "shared",
+      "bound": "the new modules import every physical constant from the existing kernel constants (no numeric copy of k, h, c, sigma, the atomic mass unit, the AU or a solar or Jovian radius in them) and the constants they use equal astropy's CODATA 2018 and IAU 2015 values to a relative 1e-9",
+      "limits": {
+        "relMax": 1e-9
+      },
+      "from": "ATMOSPHERES_GATE_II.md, carried unchanged"
+    },
+    {
+      "id": "E1.planck",
+      "group": "ep",
+      "bound": "band-integrated Planck radiance against scipy.integrate.quad of the Planck function on 400 seeded points (T 200 to 10000 K, band edges 0.3 to 30 micron, widths at least 0.01 micron): relative error at most 1e-9; the integral over 0.001 to 100000 micron equals sigma T^4/pi to 1e-9 at five temperatures; the Rayleigh-Jeans limit holds to a relative 1e-3 at lambda T = 1e7 micron K (amended, see amendments); the band radiance is monotone in T",
+      "limits": {
+        "relErrMax": 1e-9,
+        "points": 400,
+        "fullBandRelMax": 1e-9,
+        "rayleighJeansRelMax": 0.001
+      },
+      "from": "ATMOSPHERES_GATE_II.md, carried unchanged"
+    },
+    {
+      "id": "E2.eclipse",
+      "group": "ep",
+      "bound": "eclipse depth (Rp/Rs)^2 B(Tp)/B(T*) + Ag (Rp/a)^2 against an independent evaluation to a relative 1e-12 on 1,000 seeded points; the limits Tp = T* (depth (Rp/Rs)^2) and Ag = 0 (thermal only); monotone in Tp; the reflected term additive",
+      "limits": {
+        "relErrMax": 1e-12,
+        "points": 1000
+      },
+      "from": "ATMOSPHERES_GATE_II.md, carried unchanged"
+    },
+    {
+      "id": "E3.slab",
+      "group": "ep",
+      "bound": "the skin-slab band flux B(Tp) 2 E3(tau) + B(Tskin)(1 - 2 E3(tau)) against a numerical mu integral of the emergent intensity (scipy quad) at 300 seeded optical depths 1e-4 to 1e2: relative error at most 1e-9; tau = 0 gives B(Tp) exactly; the flux tends to B(Tskin) as tau grows; monotone in tau; Tskin = Tp/2^(1/4)",
+      "limits": {
+        "relErrMax": 1e-9,
+        "points": 300
+      },
+      "from": "ATMOSPHERES_GATE_II.md, carried unchanged"
+    },
+    {
+      "id": "E4.lambert",
+      "group": "ep",
+      "bound": "the Lambert phase function against the oracle's surface integral over the visible lit hemisphere (scipy dblquad) at 181 phase angles: absolute error at most 1e-8; Phi(0) = 1, Phi(pi/2) = 1/pi, Phi(pi) = 0 to 1e-12; the phase integral 2 integral Phi sin(alpha) d(alpha) = 3/2 to 1e-9; Ag = (2/3) AB and AB = (3/2) Ag round-trip to 1e-12; Phi monotone decreasing on [0, pi]",
+      "limits": {
+        "absErrMax": 1e-8,
+        "angles": 181,
+        "phaseIntegralAbsMax": 1e-9
+      },
+      "from": "ATMOSPHERES_GATE_II.md, carried unchanged"
+    },
+    {
+      "id": "E5.albedo",
+      "group": "ep",
+      "bound": "ensemble coverage: 2,000 seeded draws of a Lambert planet (Ag uniform 0.05 to 0.6, a/Rp 5 to 20), 24 phase-curve points uniform in alpha from 0.1 to 3.04 rad with Gaussian noise of 3 percent of the full-phase signal of Ag = 0.3 at that a/Rp, truth from the oracle's surface integral; the 95 percent interval of the least-squares albedo covers the truth in a fraction within [0.93, 0.97]",
+      "limits": {
+        "coverageRange": [
+          0.93,
+          0.97
+        ],
+        "draws": 2000,
+        "points": 24,
+        "noiseFraction": 0.03
+      },
+      "from": "ATMOSPHERES_GATE_II.md, carried unchanged"
+    },
+    {
+      "id": "E6.btemp",
+      "group": "ep",
+      "bound": "ensemble coverage: 2,000 seeded draws (Tp 800 to 2800 K, T* 4500 to 6500 K, Rp/Rs 0.05 to 0.15, band 3.6 to 4.5 micron, thermal depth with 5 percent Gaussian noise, truth from the oracle's quad); the 95 percent interval of the brightness temperature (propagated through the inverse band ratio) covers the truth in a fraction within [0.93, 0.97]; the round trip of the inverse is exact to 1e-9 without noise",
+      "limits": {
+        "coverageRange": [
+          0.93,
+          0.97
+        ],
+        "draws": 2000,
+        "noiseFraction": 0.05,
+        "roundTripRelMax": 1e-9
+      },
+      "from": "ATMOSPHERES_GATE_II.md, carried unchanged"
+    },
+    {
+      "id": "N1.misfit",
+      "group": "ep",
+      "bound": "misspecified phase curves: for a Lommel-Seeliger sphere and for Henyey-Greenstein single-scattering spheres with g = +0.3 and g = -0.3 (oracle truth, noise 2 percent of the full-phase signal, 24 points, 500 draws each) the Lambert fit is flagged as not describing the data (reduced chi-square above the 0.99 quantile, Wilson-Hilferty, and no albedo returned) in at least 80 percent of draws for each; for a true Lambert sphere the false flag rate is at most 2 percent of 500 draws",
+      "limits": {
+        "powerMin": 0.8,
+        "falseFlagMax": 0.02,
+        "draws": 500,
+        "noiseFraction": 0.02,
+        "quantile": 0.99,
+        "truths": [
+          "lommel-seeliger",
+          "hg+0.3",
+          "hg-0.3"
+        ]
+      },
+      "from": "ATMOSPHERES_GATE_II.md, carried unchanged"
+    },
+    {
+      "id": "N2.reflected",
+      "group": "ep",
+      "bound": "a band depth is refused as a brightness temperature when the reflected light of Ag = 0.3 is at least a tenth of the depth, and when the depth is at or below zero, and is converted otherwise: 30 seeded cases each side of the rule, all decided as the rule says",
+      "limits": {
+        "reflectedFractionMax": 0.1,
+        "casesEachSide": 30
+      },
+      "from": "ATMOSPHERES_GATE_II.md, carried unchanged"
+    },
+    {
+      "id": "R1.refusals",
+      "group": "shared",
+      "bound": "every one of 40 seeded hostile inputs (non-finite or non-positive temperature, mean molecular weight, gravity, radii, pressure, abundance, cross-section, band edges out of order, weights not summing to one, phase angle outside [0, pi], albedo outside [0, 1], optical depth below 0, outside the domain) refuses with a named reason and no number; and every result names its model and an assumes list that contains the words isothermal, one absorber, no scattering, no clouds and band-integrated (transmission), uniform blackbody and one skin (emission), Lambert (phase curve)",
+      "limits": {
+        "hostileInputs": 40
+      },
+      "from": "ATMOSPHERES_GATE_II.md, carried unchanged"
+    },
+    {
+      "id": "C1.claims",
+      "group": "shared",
+      "bound": "the scanner of the claim rule (forbidden English and Spanish patterns in the fixture) catches each of the 12 committed bad strings, passes each of the 6 committed permitted strings, and finds no violation in any string of js/i18n/en.atmospheres.js, js/i18n/es.atmospheres.js, the atmosphere sequences and their depths in both languages, and the prototype's own words",
+      "limits": {
+        "badControls": 12,
+        "permittedControls": 6,
+        "violationsMax": 0
+      },
+      "from": "ATMOSPHERES_GATE_II.md, carried unchanged"
+    },
+    {
+      "id": "S1.synthetic",
+      "group": "shared",
+      "bound": "The synthetic eclipse-depth table and the synthetic phase curves are generated by a seeded function from the kernel (seed 202); each carries a truth manifest (the generating parameters, the noise standard deviation, the seed, the words \"synthetic\" and \"no published table was compared\"); the same seed gives identical bytes; a Lambert curve is recovered by fitAlbedo within its stated interval, a Lommel-Seeliger curve is flagged; the brightness temperature recovered from the synthetic eclipse depth covers the truth at the 95 percent interval.",
+      "limits": {
+        "identicalRepeats": true,
+        "manifestFields": [
+          "kind",
+          "synthetic",
+          "seed",
+          "truth",
+          "sigma",
+          "note"
+        ],
+        "noteMust": "no published table was compared"
+      }
+    },
+    {
+      "id": "A1.authentic",
+      "group": "data",
+      "bound": "The validation contract (Roadmap III 7.5.8e) asks for authentic data. None was available (D1 to D3 not measured: no rights decision, nothing downloaded). The row is recorded as not-measured, never as a pass, and the investigations carry the words \"no published table was compared\".",
+      "limits": {
+        "status": "not-measured",
+        "dataRequests": [
+          "Q4",
+          "Q5"
+        ]
+      }
+    },
+    {
+      "id": "P1.plot",
+      "group": "shared",
+      "bound": "The gate bound (every plotted path vertex within 0.1 px of where its data is, the legend toggled from the keyboard, the keyboard readout in words, units in the axis titles, no drawing code outside js/plot/; jsdom) applied to the two plots of the slice (eclipse and phase); the gate counted three plots because it included the transmission panel, which is not built.",
+      "limits": {
+        "vertexPxMax": 0.1,
+        "plots": 2
+      }
+    },
+    {
+      "id": "T1.ep.deferred",
+      "group": "shared",
+      "bound": "Bytes as the gate stated them for the eclipse and phase slice (kernel, two instruments, their words; the investigations are measured and reported separately because the gate bound them not): deferred at most 7,168 B gzipped, the kernel alone at most 2,282 B (Carl, AM3), no new lazy chunk, the first-visit precache added at most 64 B and the idle precache 0 B. The investigations add their own measured overrun, raised only under the standing size approval of 2026-10-10 with a register row.",
+      "limits": {
+        "deferredGzipMax": 7168,
+        "kernelGzipMax": 2282,
+        "chunksMax": 2,
+        "firstVisitAddedMax": 64,
+        "idleAddedMax": 0
+      }
+    }
+  ],
+  "claimRule": {
+    "forbidden": {
+      "en": [
+        "\\bdetect(s|ed|ion|ing)?\\b[^.]{0,30}\\b(water|H2O|methane|CO2|carbon dioxide|sodium|an atmosphere)\\b",
+        "\\b(water|H2O|methane|CO2|carbon dioxide|sodium)\\b[^.]{0,30}\\b(is|was|has been|were|are) (detected|found|present|confirmed|identified)\\b",
+        "\\b(keeps?|kept|retains?|retained|holds? on to|will (keep|retain|lose)|has (kept|retained|lost)|loses|lost) (its|the|an|their) (own )?atmosphere\\b",
+        "\\bconfirm(s|ed)? (the presence|an atmosphere|water)"
+      ],
+      "es": [
+        "(?<![\\p{L}])(detecta|detectó|detectado|detectada|detección)(?![\\p{L}])[^.]{0,30}(?<![\\p{L}])(agua|metano|CO2|dióxido de carbono|sodio|una atmósfera)(?![\\p{L}])",
+        "(?<![\\p{L}])(agua|metano|CO2|sodio)(?![\\p{L}])[^.]{0,30}(?<![\\p{L}])(está|fue|ha sido|son|fueron) (detectad[oa]s?|encontrad[oa]s?|presente|confirmad[oa]s?)(?![\\p{L}])",
+        "(?<![\\p{L}])(conserva|conservó|retiene|retuvo|mantiene|mantuvo|perderá|conservará|retendrá|pierde|perdió) (su|la|una) atmósfera(?![\\p{L}])"
+      ]
+    },
+    "badControls": [
+      "Water was detected in this planet's atmosphere.",
+      "The spectrum detects water.",
+      "Detection of water vapour in the transit depth.",
+      "Methane is present and confirmed.",
+      "This planet keeps its atmosphere.",
+      "The planet retains its atmosphere for billions of years.",
+      "It will lose its atmosphere within a million years.",
+      "The band confirms the presence of an absorber.",
+      "Se detectó agua en la atmósfera de este planeta.",
+      "El agua está presente y confirmada.",
+      "Este planeta conserva su atmósfera.",
+      "El planeta perderá su atmósfera pronto."
+    ],
+    "permittedControls": [
+      "This band's depth is consistent with this absorber at this scale height under these assumptions.",
+      "A flat spectrum is what a cloud deck would give; the data do not constrain the scale height.",
+      "The escape parameter is a bound, not a prediction.",
+      "La profundidad de esta banda es coherente con este absorbente a esta altura de escala bajo estos supuestos.",
+      "Un espectro plano es lo que daría una capa de nubes; los datos no acotan la altura de escala.",
+      "La temperatura de equilibrio no es la temperatura de la superficie."
+    ],
+    "requiredForm": "a statement about an absorber in the prototype's words names its band, its scale height and its assumptions (the readout carries an assumes list)",
+    "flags": "iu"
+  },
+  "notBuilt": [
+    "transmission piece",
+    "XR, XT",
+    "D1 to D3 published tables"
+  ]
+}
