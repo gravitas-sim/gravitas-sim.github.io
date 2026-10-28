@@ -954,9 +954,408 @@ const SUN_BANDS = {
   },
 };
 
+// -----------------------------------------------------------------------------
+// How Hot Is the Day Side? and Phases and Albedo: the deeper steps (Prompt 202).
+// -----------------------------------------------------------------------------
+const ECL = (values = {}, hide = []) => ({
+  id: 'atmosphere-eclipse',
+  values,
+  hide,
+});
+const PHS = (values = {}, hide = []) => ({
+  id: 'atmosphere-phase',
+  values,
+  hide,
+});
+
+export const HOW_HOT_IS_THE_DAY_SIDE_DEEPER = {
+  id: 'how-hot-is-the-day-side',
+  steps: [
+    {
+      sid: 'planet-y-misfit',
+      after: 'planet-y',
+      depth: 'quantitative',
+      type: 'measure',
+      title: 'Can one blackbody fit Planet Y?',
+      body: `Keep <strong>Planet Y</strong> and move <strong>My blackbody temperature</strong> to find
+             the lowest chi-square any single temperature gives the four depths. Report that
+             chi-square. Planet X&rsquo;s best was 6.5.`,
+      fields: [
+        {
+          id: 'chi',
+          label: 'The lowest chi-square for Planet Y',
+          unit: '',
+          hint: '231',
+        },
+      ],
+      validate: v => {
+        if (!Number.isFinite(v.chi)) return null;
+        if (v.chi >= 225 && v.chi <= 250) {
+          return {
+            level: 'ok',
+            message:
+              'About 231, at 1,990 K, against 6.5 for Planet X. The dip in band C is what one temperature cannot make: a single blackbody would have to sit between the three clear bands and the cool one and fits neither. A large chi-square says the model, with its one temperature, does not describe these four depths.',
+          };
+        }
+        return {
+          level: 'error',
+          message:
+            'Choose Planet Y and move “My blackbody temperature” to the smallest chi-square, near 1,990 K; read the “My blackbody against the four depths” row.',
+        };
+      },
+      tool: ECL({ dataset: 1, tPlanet: 1990, reflected: 1 }),
+    },
+    {
+      sid: 'the-manifest',
+      after: 'match-by-hand',
+      depth: 'advanced',
+      type: 'measure',
+      title: 'Check the readings against the manifest',
+      body: `The truth manifest of Planet X says its blackbody is at <strong>2,100 K</strong>. With the
+             reflected light set to <strong>assume none</strong>, count how many of the four
+             95 percent intervals contain 2,100 K.`,
+      fields: [
+        {
+          id: 'n',
+          label: 'Intervals that contain 2,100 K',
+          unit: '',
+          hint: '3',
+        },
+      ],
+      validate: v => {
+        if (!Number.isFinite(v.n)) return null;
+        if (v.n === 3) {
+          return {
+            level: 'ok',
+            message:
+              'Three of four. Band A reads 2,171 K with an interval from 2,104 to 2,239 K and misses by 4 K. A 95 percent interval misses about one time in twenty, and with only four bands one miss is not a sign that the method is wrong. Over 2,000 seeded repeats the interval covers the truth 95 percent of the time.',
+          };
+        }
+        return {
+          level: 'error',
+          message:
+            'Read the four intervals in the “Brightness temperature” rows of Planet X with “assume none” and count those that include 2,100 K.',
+        };
+      },
+      tool: ECL({ dataset: 0, tPlanet: 2100, reflected: 1 }),
+    },
+  ],
+};
+
+export const PHASES_AND_ALBEDO_DEEPER = {
+  id: 'phases-and-albedo',
+  steps: [
+    {
+      sid: 'the-interval',
+      after: 'full-phase-albedo',
+      depth: 'quantitative',
+      type: 'measure',
+      title: 'How well does the curve fix the albedo?',
+      body: `Planet P&rsquo;s fit comes with a 95 percent interval. Read its
+             <strong>lower</strong> and <strong>upper</strong> ends.`,
+      fields: [
+        {
+          id: 'lo',
+          label: 'Lower end of the interval',
+          unit: '',
+          hint: '0.34',
+        },
+        {
+          id: 'hi',
+          label: 'Upper end of the interval',
+          unit: '',
+          hint: '0.36',
+        },
+      ],
+      validate: v => {
+        if (![v.lo, v.hi].every(Number.isFinite)) return null;
+        if (near(v.lo, 0.34, 0.006) && near(v.hi, 0.36, 0.006)) {
+          return {
+            level: 'ok',
+            message:
+              'From 0.34 to 0.36, about ±0.007. Twenty-four points with 3 percent noise each fix a Lambert albedo to about two percent. The interval covers the true albedo 94 percent of the time over 2,000 seeded curves, a little under 95 because a curve the fit refuses is counted as not covered.',
+          };
+        }
+        return {
+          level: 'error',
+          message:
+            'Choose Planet P and read the two ends of the 95 percent interval in the “Geometric albedo of a Lambert sphere that fits” row.',
+        };
+      },
+      tool: PHS({ dataset: 0, albedo: 0.35 }),
+    },
+    {
+      sid: 'another-sphere',
+      after: 'planet-q',
+      depth: 'advanced',
+      type: 'read',
+      title: 'Another sphere, another factor',
+      body: `Planet Q&rsquo;s curve was made with a <strong>Lommel-Seeliger</strong> sphere, a different
+             surface that darkens toward the edge of the disc differently. Its phase integral, the
+             integral of its curve over every angle, is 1.64, not the 3/2 of a Lambert sphere. For the
+             same full-phase brightness its Bond albedo would be about 9 percent larger, 1.64 against
+             1.5 times the geometric albedo. So the factor between the two albedos is a
+             property of the surface, and the instrument returns no albedo for Planet Q rather than
+             the albedo of the wrong sphere.`,
+      tool: PHS({ dataset: 1, albedo: 0.35 }),
+    },
+  ],
+};
+
+const BT_CONTENT = {
+  'how-hot-is-the-day-side': {
+    topic:
+      'The secondary eclipse depth of a hot Jupiter in four bands, the brightness temperature each gives under a stated assumption about reflected light, the scatter that noise makes, a band that reads cooler, and what a one-skin blackbody model can and cannot say.',
+    difficulty:
+      'Intermediate (a blackbody ratio, a chi-square by eye, a stated assumption)',
+    placement:
+      'In a majors course after Why Venus Is Hot, whose equilibrium temperature it extends to a planet seen only as a share of its star’s light. It supports OpenStax Astronomy 2e chapter 21 on planets around other stars; the chapter citation is the author’s and has not been checked against the book.',
+    overview:
+      'Students read the brightness temperature of Planet X in band C (2,094 K), find the four bands scatter from 2,067 to 2,171 K because each depth carries 40 ppm of noise, match the four depths by hand (chi-square 6.5 at 2,090 K), see that allowing for reflected light up to an albedo of 0.3 at 8 planet radii leaves no band convertible (4,688 ppm of reflected light against a largest depth of 2,817), and read Planet Y, whose band C reads 314 K cooler. The deeper steps show that no single blackbody fits Planet Y (chi-square 231) and count the intervals that contain the true 2,100 K (three of four).',
+    priorKnowledge: [
+      'A hotter blackbody radiates more at every wavelength',
+      'The star is much brighter than the planet, so the planet is a small dip in the light',
+      'Parts per million as a way of writing a small fraction',
+    ],
+    keyConcepts: [
+      {
+        heading: 'A depth is a share of the light, not a temperature',
+        body: 'The depth is the planet’s radiance over the star’s times the radius ratio squared (plus any reflected light). A temperature comes from turning that round, and only under a stated assumption.',
+      },
+      {
+        heading: 'The conversion refuses when reflected light could matter',
+        body: 'At 8 planet radii an albedo of 0.3 could reflect 4,688 ppm, more than any of the four depths. The instrument says the depth is not converted; “assume none” is a statement you make.',
+      },
+      {
+        heading:
+          'A dip is consistent with a cooler layer, and says nothing more',
+        body: 'The model puts one isothermal skin over the planet, at 2^(−1/4) of its temperature. A band that sees the skin reads cooler. The data are one depth in one band and do not name the absorber.',
+      },
+    ],
+    features: [
+      {
+        name: 'Eclipse instrument (atmosphere family)',
+        text: 'Four synthetic depths with their noise, the blackbody curve of the temperature you set, the brightness temperature of each band with its 95 percent interval, a chi-square, and a switch for the reflected-light assumption. Drawn by the plot component.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: whether one blackbody can fit Planet Y. Advanced: the intervals against the truth manifest.',
+      },
+      {
+        name: 'Synthetic data, stated',
+        text: 'Every step says the depths are generated from the model with noise (seed 202) and that no published table was compared.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'A brightness temperature is the temperature of the planet.',
+        response:
+          'It is the temperature of the blackbody that gives that depth in that band. A real day side is not one temperature, and the band may not see the same layer as another band.',
+      },
+      {
+        claim:
+          'If the four temperatures differ, the planet has four temperatures.',
+        response:
+          'Here the planet is one blackbody and the spread is noise. Scatter of tens of kelvin is expected from 40 ppm of noise.',
+      },
+      {
+        claim: 'A band that reads cooler shows what gas is in the atmosphere.',
+        response:
+          'It is consistent with a cooler layer in that band under a one-skin model. It does not say which absorber, and other causes could give the same dip.',
+      },
+      {
+        claim: 'A planet with no reflected light needs no assumption.',
+        response:
+          'Saying there is none is the assumption. The instrument refuses to convert a depth at 8 planet radii until you say it, because a possible albedo of 0.3 would make more light than the depth.',
+      },
+    ],
+    teachingNotes: [
+      'The depths are synthetic: seed 202 and the truth (2,100 K, radius ratio 0.12, star 6,000 K, noise 40 ppm) are in the manifest the generator returns. No published table was compared, so the authentic-data requirement of the validation contract is not met for this lesson and the register says so.',
+      'The model is a uniform blackbody with one skin: no day-night structure, a flat band response, no scattering. The independent oracle agrees with the kernel to better than 1e-11 (npm run atmospheres-ii:validate).',
+      '“Assume none” passes the converter a very large orbit so that its reflected-light test cannot refuse; the instrument says so and shows the refusal with the other setting.',
+      'A 95 percent interval misses the truth about one time in twenty: with four bands, one miss (band A here) is expected from time to time and is not a sign that the method failed.',
+    ],
+    discussion: [
+      'What would you need to know about the planet to turn a depth near 3 ppt at 8 planet radii into a temperature?',
+      'Why does a band that dips need a cooler layer, and not a hotter one, in this model?',
+      'How would you tell noise from a real difference between two bands?',
+    ],
+    extensions: [
+      'Continue with Phases and Albedo, which measures the albedo that decides how much of a depth could be reflected light.',
+      'Open the validation page and find the atmospheres group.',
+    ],
+    modelNotes:
+      'js/kernels/atmospheres/ (ATMOSPHERES.md, Atmospheres II): eclipseDepth, brightnessTemperature, bandRadiance and slabFlux, validated against an independent numpy and scipy oracle (npm run atmospheres-ii:validate); the synthetic depths are syntheticEclipse.',
+  },
+  'phases-and-albedo': {
+    topic:
+      'The phase curve of a planet seen in reflected light, a Lambert sphere, the geometric albedo that fits and the Bond albedo it implies, a chi-square by hand, and a curve that is not a Lambert sphere and so returns no albedo.',
+    difficulty:
+      'Intermediate (a fitted amplitude, a chi-square, a model that refuses)',
+    placement:
+      'In a majors course after Phases and Eclipses, whose Moon phases it carries to a planet that cannot be resolved. It supports OpenStax Astronomy 2e chapter 2 (the Moon’s phases); the citation is the author’s and has not been checked against the book.',
+    overview:
+      'Students read the Lambert albedo that fits Planet P (0.35, interval 0.34 to 0.36) and its Bond albedo (0.52, 3/2 of it), say why the two differ, match the curve by hand (chi-square 31.2 for 24 points at 0.35), predict and then read that Planet Q is not described by a Lambert sphere (chi-square 82 for 23 degrees of freedom against a limit of 41.7), so no albedo is returned. The deeper steps read the interval and the phase integral of a Lommel-Seeliger sphere (1.64).',
+    priorKnowledge: [
+      'The Moon shows phases because we see different amounts of its lit side',
+      'Albedo is the fraction of light a surface reflects',
+      'A model can fit data well or badly, and a chi-square measures how badly',
+    ],
+    keyConcepts: [
+      {
+        heading: 'A Lambert curve has one shape; its height is the albedo',
+        body: 'The reflected flux is the geometric albedo times (R/a)² times a fixed function of phase angle that is 1 at full phase and 0 at 180 degrees.',
+      },
+      {
+        heading: 'Bond is 3/2 of geometric for a Lambert sphere only',
+        body: 'The factor is the phase integral of the surface. A Lommel-Seeliger sphere has 1.64. The albedo found is the albedo of the sphere assumed.',
+      },
+      {
+        heading: 'A model that does not fit returns no number',
+        body: 'Planet Q’s chi-square, 82, is far above the 41.7 that a true Lambert sphere stays under 99 times in 100. The instrument returns no albedo.',
+      },
+    ],
+    features: [
+      {
+        name: 'Phase instrument (atmosphere family)',
+        text: 'A synthetic phase curve with its noise, the Lambert curve of the albedo you set, the albedo that fits with its 95 percent interval, the Bond albedo, and the chi-square of your albedo and of the fit. Drawn by the plot component.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: the interval. Advanced: another sphere’s phase integral.',
+      },
+      {
+        name: 'Synthetic data, stated',
+        text: 'Every step says the curves are generated from a model with noise (seed 202) and that no published table was compared.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'The albedo from a phase curve is the planet’s albedo.',
+        response:
+          'It is the albedo of a Lambert sphere with that curve. A different kind of surface gives a different curve and a different factor between the two albedos.',
+      },
+      {
+        claim: 'A good-looking fit means the model is right.',
+        response:
+          'Planet Q looks like Planet P by eye and fails the chi-square test by a factor of two. The look of a curve is not the test.',
+      },
+      {
+        claim: 'The Bond albedo is twice the geometric albedo.',
+        response:
+          'It is 3/2 for a Lambert sphere. The factor is the surface’s phase integral.',
+      },
+      {
+        claim:
+          'A phase curve that rises to full phase must be a Lambert sphere.',
+        response:
+          'Many surfaces give curves that rise toward full phase. Only the shape, tested against the noise, says which: Planet Q’s shape fails the Lambert test.',
+      },
+    ],
+    teachingNotes: [
+      'Both curves are synthetic: seed 202, an albedo of 0.35 at 10 planet radii, noise 3 percent of the full-phase signal; Planet Q is a Lommel-Seeliger sphere. No published table was compared, so the authentic-data requirement is not met for this lesson.',
+      'The independent oracle integrates the sphere’s surface numerically and agrees with the kernel’s closed form to better than 1e-11; the misfit flag was tested on Lommel-Seeliger and Henyey-Greenstein spheres (power at least 0.8) and on true Lambert spheres (false flags at most 2 percent).',
+      'Thermal phase variation, clouds and polarisation are not modelled; in a real hot Jupiter thermal emission varies with phase too.',
+      'The flag that refuses an albedo is a chi-square test at the 0.99 quantile: it was tested to catch Lommel-Seeliger and Henyey-Greenstein spheres at least 80 percent of the time and to flag a true Lambert sphere at most 2 percent of the time.',
+    ],
+    discussion: [
+      'Why does the planet’s light fall to zero at 180 degrees in the model, and would a real planet do the same?',
+      'What would you want to see in a curve before trusting a Bond albedo from it?',
+      'How is this like the Moon, and how is it not?',
+    ],
+    extensions: [
+      'Go back to How Hot Is the Day Side? and find how large a reflected-light share the albedo you found implies at 8 planet radii.',
+      'Open the validation page and find the atmospheres group.',
+    ],
+    modelNotes:
+      'js/kernels/atmospheres/ (ATMOSPHERES.md, Atmospheres II): lambertPhase, phaseCurve, fitAlbedo, bondFromGeometric and the misfit flag, validated against an independent numpy and scipy oracle (npm run atmospheres-ii:validate); the synthetic curves are syntheticPhase.',
+  },
+};
+
+const BT_FLOW = {
+  'how-hot-is-the-day-side': [
+    {
+      from: 'a-planet-behind-its-star',
+      to: 'four-bands',
+      text: 'An eclipse depth, a brightness temperature in one band, and four bands that scatter.',
+    },
+    {
+      from: 'why-the-scatter',
+      to: 'match-by-hand',
+      text: 'Noise explains the scatter, and one blackbody fits all four.',
+    },
+    {
+      from: 'reflected-light',
+      to: 'what-a-dip-says',
+      text: 'The conversion refuses until reflected light is stated, and a cooler band says only what a skin would.',
+    },
+    {
+      from: 'what-you-worked-out',
+      to: 'what-you-worked-out',
+      text: 'The close: what a brightness temperature assumes.',
+    },
+  ],
+  'phases-and-albedo': [
+    {
+      from: 'reflected-light-has-phases',
+      to: 'why-three-halves',
+      text: 'The phase curve, the albedo that fits and why Bond is 3/2 of it.',
+    },
+    {
+      from: 'match-by-hand',
+      to: 'planet-q-predict',
+      text: 'The albedo by hand, and the prediction about a second planet.',
+    },
+    {
+      from: 'planet-q',
+      to: 'planet-q',
+      text: 'A curve a Lambert sphere does not describe, and the refusal.',
+    },
+    {
+      from: 'what-you-worked-out',
+      to: 'what-you-worked-out',
+      text: 'The close: the albedo of a Lambert sphere, and the refusal.',
+    },
+  ],
+};
+
+const BT_EXPECTATIONS = {
+  'how-hot-is-the-day-side': {
+    'one-band': 'A brightness temperature of 2,094 K in band C (within 6).',
+    'four-bands':
+      'The highest of the four, 2,171 K, and the lowest, 2,067 K (each within 6).',
+    'match-by-hand':
+      'A temperature near 2,090 K (within 30) with a chi-square between 5 and 15.',
+    'reflected-light':
+      'No band converted (0) when reflected light is allowed for.',
+    'planet-y': 'Band C of Planet Y 314 K cooler than Planet X (within 12).',
+  },
+  'phases-and-albedo': {
+    'full-phase-albedo':
+      'A geometric albedo of 0.35 (within 0.01) and a Bond albedo of 0.52 (within 0.015).',
+    'match-by-hand':
+      'An albedo near 0.35 (within 0.015) with a chi-square between 28 and 45.',
+    'planet-q': 'A chi-square of 82 (within 1.5) for 23 degrees of freedom.',
+  },
+};
+
+const BT_BANDS = {
+  'how-hot-is-the-day-side': {
+    core: 'medium',
+    quantitative: 'short',
+    advanced: 'short',
+  },
+  'phases-and-albedo': {
+    core: 'medium',
+    quantitative: 'short',
+    advanced: 'short',
+  },
+};
+
 export const INSTRUCTOR = {
   content: {
     ...SUN_CONTENT,
+    ...BT_CONTENT,
     'why-venus-is-hot': {
       topic:
         'The equilibrium temperature of a planet, the gap between it and the measured surface temperature, and what closes the gap: the one-layer and the gray greenhouse models, with Venus as the case that a single layer cannot reach.',
@@ -1126,6 +1525,7 @@ export const INSTRUCTOR = {
   },
   flow: {
     ...SUN_FLOW,
+    ...BT_FLOW,
     'why-venus-is-hot': [
       {
         from: 'two-temperatures',
@@ -1173,6 +1573,7 @@ export const INSTRUCTOR = {
   },
   expectations: {
     ...SUN_EXPECTATIONS,
+    ...BT_EXPECTATIONS,
     'why-venus-is-hot': {
       'earth-sunlight-alone':
         'Earth’s equilibrium temperature 254 K (within 0.6) and a gap of 34 K (within 1).',
@@ -1193,6 +1594,7 @@ export const INSTRUCTOR = {
   },
   bands: {
     ...SUN_BANDS,
+    ...BT_BANDS,
     'why-venus-is-hot': {
       core: 'short',
       quantitative: 'medium',
@@ -1212,4 +1614,6 @@ export default {
   [TWO_GREENHOUSE_MODELS_DEEPER.id]: TWO_GREENHOUSE_MODELS_DEEPER.steps,
   [THE_TURNING_SUN_DEEPER.id]: THE_TURNING_SUN_DEEPER.steps,
   [THE_SUNS_POWER_DEEPER.id]: THE_SUNS_POWER_DEEPER.steps,
+  [HOW_HOT_IS_THE_DAY_SIDE_DEEPER.id]: HOW_HOT_IS_THE_DAY_SIDE_DEEPER.steps,
+  [PHASES_AND_ALBEDO_DEEPER.id]: PHASES_AND_ALBEDO_DEEPER.steps,
 };

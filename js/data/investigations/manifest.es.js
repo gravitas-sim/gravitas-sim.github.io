@@ -993,4 +993,30 @@ export const MANIFEST = [
     gradedCount: 4,
     objectiveCount: 4,
   },
+  {
+    id: 'how-hot-is-the-day-side',
+    title: '¿Qué tan caliente está el lado diurno?',
+    subtitle:
+      'Una profundidad de eclipse, un cuerpo negro y lo que deja fuera una temperatura de brillo',
+    duration: '15-25 min',
+    level: 'Majors and upper-level astronomy',
+    thumbnail: 'images/investigations/how-hot-is-the-day-side.webp',
+    depths: 3,
+    stepCount: 10,
+    gradedCount: 8,
+    objectiveCount: 4,
+  },
+  {
+    id: 'phases-and-albedo',
+    title: 'Fases y albedo',
+    subtitle:
+      'La curva de fase de un planeta, una esfera de Lambert y el albedo que da',
+    duration: '15-25 min',
+    level: 'Majors and upper-level astronomy',
+    thumbnail: 'images/investigations/phases-and-albedo.webp',
+    depths: 3,
+    stepCount: 7,
+    gradedCount: 5,
+    objectiveCount: 4,
+  },
 ];
