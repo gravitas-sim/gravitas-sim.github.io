@@ -1,0 +1,528 @@
+{
+  "format": "gravitas.exposure-oracle/1",
+  "thresholds": "tests/fixtures/exposure/thresholds.json",
+  "model": "point-spread-function photometry, noise^2 = S + n_eff (B t + n_reads R^2), no dark current, SNR = 5, sky as an AB surface brightness read through the zenith zero point",
+  "versions": {
+    "python": "3.9.6",
+    "numpy": "1.26.4",
+    "scipy": "1.13.1"
+  },
+  "bands": [
+    {
+      "band": "u",
+      "zeroPoint": 54959487998.96663,
+      "m5Fiducial": 23.779999999999998,
+      "readLoss": 0.8249886086524683,
+      "doubling": {
+        "2": 0.2771121507997166,
+        "4": 0.4973444685301943,
+        "10": 0.6920937161849743
+      },
+      "eq7": {
+        "2": 0.22591820948626945,
+        "4": 0.38795849274066996,
+        "10": 0.5150269689592328
+      },
+      "conditions": [
+        {
+          "label": "sky-1",
+          "overrides": {
+            "dsky": -1.0
+          },
+          "implementation": 23.63636709048404,
+          "equation6": 23.288275531671754
+        },
+        {
+          "label": "sky+1",
+          "overrides": {
+            "dsky": 1.0
+          },
+          "implementation": 23.849940154921136,
+          "equation6": 24.288275531671754
+        },
+        {
+          "label": "seeing x1.3",
+          "overrides": {
+            "dtheta": 1.3
+          },
+          "implementation": 23.501473249724402,
+          "equation6": 23.503417150904664
+        },
+        {
+          "label": "seeing x0.8",
+          "overrides": {
+            "dtheta": 0.8
+          },
+          "implementation": 24.015416825603417,
+          "equation6": 24.030550564191895
+        },
+        {
+          "label": "60 s",
+          "overrides": {
+            "t": 60.0
+          },
+          "implementation": 24.43339964537969,
+          "equation6": 24.390481235737997
+        },
+        {
+          "label": "120 s",
+          "overrides": {
+            "t": 120.0
+          },
+          "implementation": 25.029919457690145,
+          "equation6": 24.928809013572373
+        },
+        {
+          "label": "airmass 1.5",
+          "overrides": {
+            "X": 1.5
+          },
+          "implementation": 23.27628804825934,
+          "equation6": 23.278638643088232
+        },
+        {
+          "label": "combined",
+          "overrides": {
+            "dsky": -1.0,
+            "dtheta": 1.3,
+            "t": 60.0,
+            "X": 1.5
+          },
+          "implementation": 23.425695396949294,
+          "equation6": 23.095985966387385
+        }
+      ],
+      "lossAtX1p2": 0.2141288916189552
+    },
+    {
+      "band": "g",
+      "zeroPoint": 200473432296.21347,
+      "m5Fiducial": 24.81000000000003,
+      "readLoss": 0.2297052413085936,
+      "doubling": {
+        "2": 0.10889403080442156,
+        "4": 0.1736739687480765,
+        "10": 0.21771780399919294
+      },
+      "eq7": {
+        "2": 0.08257355067857694,
+        "4": 0.12910410838852046,
+        "10": 0.15906565050679794
+      },
+      "conditions": [
+        {
+          "label": "sky-1",
+          "overrides": {
+            "dsky": -1.0
+          },
+          "implementation": 24.44424987521294,
+          "equation6": 24.3139469684891
+        },
+        {
+          "label": "sky+1",
+          "overrides": {
+            "dsky": 1.0
+          },
+          "implementation": 25.073695266005256,
+          "equation6": 25.3139469684891
+        },
+        {
+          "label": "seeing x1.3",
+          "overrides": {
+            "dtheta": 1.3
+          },
+          "implementation": 24.52959093217933,
+          "equation6": 24.529088587722008
+        },
+        {
+          "label": "seeing x0.8",
+          "overrides": {
+            "dtheta": 0.8
+          },
+          "implementation": 25.047455311171433,
+          "equation6": 25.056222001009242
+        },
+        {
+          "label": "60 s",
+          "overrides": {
+            "t": 60.0
+          },
+          "implementation": 25.29518152538443,
+          "equation6": 25.27280801374765
+        },
+        {
+          "label": "120 s",
+          "overrides": {
+            "t": 120.0
+          },
+          "implementation": 25.73624895790806,
+          "equation6": 25.69562606603757
+        },
+        {
+          "label": "airmass 1.5",
+          "overrides": {
+            "X": 1.5
+          },
+          "implementation": 24.443526644331246,
+          "equation6": 24.44331007990558
+        },
+        {
+          "label": "combined",
+          "overrides": {
+            "dsky": -1.0,
+            "dtheta": 1.3,
+            "t": 60.0,
+            "X": 1.5
+          },
+          "implementation": 24.222895308383055,
+          "equation6": 24.117312744397037
+        }
+      ],
+      "lossAtX1p2": 0.15937403812055706
+    },
+    {
+      "band": "r",
+      "zeroPoint": 166527663414.15494,
+      "m5Fiducial": 24.35,
+      "readLoss": 0.1171317572079893,
+      "doubling": {
+        "2": 0.06005889170715767,
+        "4": 0.0935742701053216,
+        "10": 0.11561393233232309
+      },
+      "eq7": {
+        "2": 0.047700663047291536,
+        "4": 0.07322076710152157,
+        "10": 0.08912928011223964
+      },
+      "conditions": [
+        {
+          "label": "sky-1",
+          "overrides": {
+            "dsky": -1.0
+          },
+          "implementation": 23.92336045124842,
+          "equation6": 23.855049869095456
+        },
+        {
+          "label": "sky+1",
+          "overrides": {
+            "dsky": 1.0
+          },
+          "implementation": 24.702755508314944,
+          "equation6": 24.855049869095456
+        },
+        {
+          "label": "seeing x1.3",
+          "overrides": {
+            "dtheta": 1.3
+          },
+          "implementation": 24.068634844256806,
+          "equation6": 24.070191488328366
+        },
+        {
+          "label": "seeing x0.8",
+          "overrides": {
+            "dtheta": 0.8
+          },
+          "implementation": 24.588490883356336,
+          "equation6": 24.597324901615597
+        },
+        {
+          "label": "60 s",
+          "overrides": {
+            "t": 60.0
+          },
+          "implementation": 24.786346386287136,
+          "equation6": 24.779038026722727
+        },
+        {
+          "label": "120 s",
+          "overrides": {
+            "t": 120.0
+          },
+          "implementation": 25.196149259265276,
+          "equation6": 25.180845625356934
+        },
+        {
+          "label": "airmass 1.5",
+          "overrides": {
+            "X": 1.5
+          },
+          "implementation": 24.026131968572177,
+          "equation6": 24.027912980511935
+        },
+        {
+          "label": "combined",
+          "overrides": {
+            "dsky": -1.0,
+            "dtheta": 1.3,
+            "t": 60.0,
+            "X": 1.5
+          },
+          "implementation": 23.718044671786163,
+          "equation6": 23.667042757372116
+        }
+      ],
+      "lossAtX1p2": 0.14240333009886186
+    },
+    {
+      "band": "i",
+      "zeroPoint": 126907968449.47455,
+      "m5Fiducial": 23.92000000000001,
+      "readLoss": 0.08208649879895802,
+      "doubling": {
+        "2": 0.04353878019352214,
+        "4": 0.06742375080097684,
+        "10": 0.08306365743967703
+      },
+      "eq7": {
+        "2": 0.0338725140812414,
+        "4": 0.051635780172545304,
+        "10": 0.06257959980043566
+      },
+      "conditions": [
+        {
+          "label": "sky-1",
+          "overrides": {
+            "dsky": -1.0
+          },
+          "implementation": 23.47304661227446,
+          "equation6": 23.415020132555785
+        },
+        {
+          "label": "sky+1",
+          "overrides": {
+            "dsky": 1.0
+          },
+          "implementation": 24.308565543946564,
+          "equation6": 24.415020132555785
+        },
+        {
+          "label": "seeing x1.3",
+          "overrides": {
+            "dtheta": 1.3
+          },
+          "implementation": 23.63822136363531,
+          "equation6": 23.630161751788695
+        },
+        {
+          "label": "seeing x0.8",
+          "overrides": {
+            "dtheta": 0.8
+          },
+          "implementation": 24.158938764694295,
+          "equation6": 24.157295165075926
+        },
+        {
+          "label": "60 s",
+          "overrides": {
+            "t": 60.0
+          },
+          "implementation": 24.339826274773507,
+          "equation6": 24.325180141217
+        },
+        {
+          "label": "120 s",
+          "overrides": {
+            "t": 120.0
+          },
+          "implementation": 24.73999873996094,
+          "equation6": 24.719230901888285
+        },
+        {
+          "label": "airmass 1.5",
+          "overrides": {
+            "X": 1.5
+          },
+          "implementation": 23.610745046364197,
+          "equation6": 23.602883243972265
+        },
+        {
+          "label": "combined",
+          "overrides": {
+            "dsky": -1.0,
+            "dtheta": 1.3,
+            "t": 60.0,
+            "X": 1.5
+          },
+          "implementation": 23.274374625479343,
+          "equation6": 23.22818487186639
+        }
+      ],
+      "lossAtX1p2": 0.13658898909629968
+    },
+    {
+      "band": "z",
+      "zeroPoint": 88115259510.64532,
+      "m5Fiducial": 23.339999999999996,
+      "readLoss": 0.05411021255015669,
+      "doubling": {
+        "2": 0.029752946082460652,
+        "4": 0.04590186238138483,
+        "10": 0.05649209787728893
+      },
+      "eq7": {
+        "2": 0.024424557079616376,
+        "4": 0.03706167962006647,
+        "10": 0.044787610334404565
+      },
+      "conditions": [
+        {
+          "label": "sky-1",
+          "overrides": {
+            "dsky": -1.0
+          },
+          "implementation": 22.87618960657714,
+          "equation6": 22.842508593309443
+        },
+        {
+          "label": "sky+1",
+          "overrides": {
+            "dsky": 1.0
+          },
+          "implementation": 23.76113284563861,
+          "equation6": 23.842508593309443
+        },
+        {
+          "label": "seeing x1.3",
+          "overrides": {
+            "dtheta": 1.3
+          },
+          "implementation": 23.05773651220367,
+          "equation6": 23.05765021254235
+        },
+        {
+          "label": "seeing x0.8",
+          "overrides": {
+            "dtheta": 0.8
+          },
+          "implementation": 23.579463971410853,
+          "equation6": 23.584783625829584
+        },
+        {
+          "label": "60 s",
+          "overrides": {
+            "t": 60.0
+          },
+          "implementation": 23.746040440662433,
+          "equation6": 23.743220644969036
+        },
+        {
+          "label": "120 s",
+          "overrides": {
+            "t": 120.0
+          },
+          "implementation": 24.138476851541334,
+          "equation6": 24.132145262089463
+        },
+        {
+          "label": "airmass 1.5",
+          "overrides": {
+            "X": 1.5
+          },
+          "implementation": 23.043791337213236,
+          "equation6": 23.04387170472592
+        },
+        {
+          "label": "combined",
+          "overrides": {
+            "dsky": -1.0,
+            "dtheta": 1.3,
+            "t": 60.0,
+            "X": 1.5
+          },
+          "implementation": 22.684244469591842,
+          "equation6": 22.659725375618418
+        }
+      ],
+      "lossAtX1p2": 0.1314066962707443
+    },
+    {
+      "band": "y",
+      "zeroPoint": 39946085210.41778,
+      "m5Fiducial": 22.450000000000003,
+      "readLoss": 0.048241243502399556,
+      "doubling": {
+        "2": 0.026852808673954398,
+        "4": 0.04141802883593837,
+        "10": 0.050994879105381585
+      },
+      "eq7": {
+        "2": 0.01963166969540402,
+        "4": 0.029720313360669513,
+        "10": 0.03586473757196692
+      },
+      "conditions": [
+        {
+          "label": "sky-1",
+          "overrides": {
+            "dsky": -1.0
+          },
+          "implementation": 21.982656762042062,
+          "equation6": 21.945711119333662
+        },
+        {
+          "label": "sky+1",
+          "overrides": {
+            "dsky": 1.0
+          },
+          "implementation": 22.878368111664784,
+          "equation6": 22.945711119333662
+        },
+        {
+          "label": "seeing x1.3",
+          "overrides": {
+            "dtheta": 1.3
+          },
+          "implementation": 22.167662598379167,
+          "equation6": 22.16085273856657
+        },
+        {
+          "label": "seeing x0.8",
+          "overrides": {
+            "dtheta": 0.8
+          },
+          "implementation": 22.689544038663612,
+          "equation6": 22.687986151853803
+        },
+        {
+          "label": "60 s",
+          "overrides": {
+            "t": 60.0
+          },
+          "implementation": 22.853140303253934,
+          "equation6": 22.841630283609042
+        },
+        {
+          "label": "120 s",
+          "overrides": {
+            "t": 120.0
+          },
+          "implementation": 23.243993017995894,
+          "equation6": 23.228006421854285
+        },
+        {
+          "label": "airmass 1.5",
+          "overrides": {
+            "X": 1.5
+          },
+          "implementation": 22.103222170883505,
+          "equation6": 22.096574230750143
+        },
+        {
+          "label": "combined",
+          "overrides": {
+            "dsky": -1.0,
+            "dtheta": 1.3,
+            "t": 60.0,
+            "X": 1.5
+          },
+          "implementation": 21.738855681427495,
+          "equation6": 21.70763501425843
+        }
+      ],
+      "lossAtX1p2": 0.1516398850686862
+    }
+  ]
+}
