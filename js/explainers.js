@@ -143,6 +143,7 @@ export const FAMILY_IDS = Object.freeze({
   ],
   crater: ['crater-regions', 'crater-sfd', 'crater-budget'],
   sun: ['sun-frames', 'sun-rotation', 'sun-power'],
+  smallBodies: ['belt-gaps', 'spin-curve'],
   tides: ['tides-roche', 'tides-resonance', 'tides-moon', 'tides-heating'],
   habitabilityLimits: ['hz-limits', 'hz-locking', 'hz-ages'],
 });

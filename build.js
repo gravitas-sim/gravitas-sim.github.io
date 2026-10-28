@@ -82,6 +82,10 @@ const STATIC_FILES = [
   'cosmology/pantheon-plus-hd.json',
   'cosmology/sdss-dr18-redshift-slice.json',
   'cosmology/coma-cluster-quoted.json',
+  // The numbered-asteroid catalog (Prompt 198 part 2, D-R10-198-02): the gap
+  // instrument fetches it at its own repository path when The Gaps in the Belt
+  // opens, so no bundle holds it; in no precache tier.
+  'js/data/smallbodies/numbered-h13.json',
 ];
 
 // Directories copied whole. Lesson figures are photographs used under licenses

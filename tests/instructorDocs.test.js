@@ -256,15 +256,16 @@ describe('the document inventory', () => {
     // 738 after the two Sun investigations (Prompt 194 part 2): 22 more.
     // 760 after How Hot Is the Day Side? and Phases and Albedo (Prompt 202): 22 more.
     // 766 after the Goldilocks upper depth (Prompt 205 part B): a key for each of three depths, in two languages, 6 more.
-    expect(inv.documents).toBe(766);
-    expect(inv.byLocale).toEqual({ en: 352, es: 414 });
+    // 788 after the two small-body investigations (Prompt 198 part 3): 22 more.
+    expect(inv.documents).toBe(788);
+    expect(inv.byLocale).toEqual({ en: 362, es: 426 });
     expect(inv.byKind.notes).toBe(INVESTIGATIONS.length);
     expect(inv.byVariant).toEqual({
       activity: 12,
-      depth: 336,
-      full: 320,
+      depth: 348,
+      full: 328,
       general: 18,
-      notes: 80,
+      notes: 82,
     });
   });
 
@@ -292,7 +293,7 @@ describe('the document inventory', () => {
     const withDepth = INVESTIGATIONS.filter(
       i => withAllDepths(i).steps.length !== i.steps.length
     ).map(i => i.id);
-    expect(withDepth.length).toBe(56);
+    expect(withDepth.length).toBe(58);
     for (const id of withDepth)
       for (const d of ['core', 'quantitative', 'advanced'])
         for (const suffix of ['', '-es'])

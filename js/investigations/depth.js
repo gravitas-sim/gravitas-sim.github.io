@@ -128,6 +128,10 @@ const EXTENSIONS = {
     import('../data/investigations/depth/the-turning-sun.js'),
   'the-suns-power': () =>
     import('../data/investigations/depth/the-suns-power.js'),
+  'the-gaps-in-the-belt': () =>
+    import('../data/investigations/depth/the-gaps-in-the-belt.js'),
+  'how-fast-does-it-spin': () =>
+    import('../data/investigations/depth/how-fast-does-it-spin.js'),
   'how-hot-is-the-day-side': () =>
     import('../data/investigations/depth/how-hot-is-the-day-side.js'),
   'phases-and-albedo': () =>
@@ -230,6 +234,10 @@ const WORDS = {
       import('../data/investigations/depth/es/the-turning-sun.js'),
     'the-suns-power': () =>
       import('../data/investigations/depth/es/the-suns-power.js'),
+    'the-gaps-in-the-belt': () =>
+      import('../data/investigations/depth/es/the-gaps-in-the-belt.js'),
+    'how-fast-does-it-spin': () =>
+      import('../data/investigations/depth/es/how-fast-does-it-spin.js'),
     'how-hot-is-the-day-side': () =>
       import('../data/investigations/depth/es/how-hot-is-the-day-side.js'),
     'phases-and-albedo': () =>

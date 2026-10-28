@@ -1842,6 +1842,10 @@ export const EN_DEFERRED = {
     'Fourteen days of pictures of the Sun: where a spot is, how fast a group turns as the Earth sees it and against the stars, and what two groups can and cannot show.',
   'inv.seq.planets.the-suns-power':
     'A flux measured at the Earth brought to one astronomical unit, the Sun’s luminosity and temperature, and what the interval of a mean leaves out.',
+  'inv.seq.planets.the-gaps-in-the-belt':
+    'A real catalog of 8,886 numbered asteroids: how deep the gaps at Jupiter’s resonances are against a smooth baseline, with an interval, and where the method says it cannot tell.',
+  'inv.seq.planets.how-fast-does-it-spin':
+    'A synthetic light curve: the rotation period from the periodogram, the amplitude and the bound it gives on the shape, and what one point a night hides.',
   'inv.seq.planets.how-hot-is-the-day-side': 'Eclipse depth and day-side heat.',
   'inv.seq.planets.phases-and-albedo': 'A phase curve and an albedo.',
   'inv.seq.planets.why-rings':

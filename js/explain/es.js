@@ -199,6 +199,12 @@ export default {
     'Que las manchas a distintas latitudes giran a distinta velocidad, por qué hay que corregir la velocidad por el movimiento propio de la Tierra, por qué dos latitudes no pueden fijar tres coeficientes y por qué un flujo hay que llevarlo a una unidad astronómica antes de dar una luminosidad.',
     'Las imágenes son de vista previa, hechas para mirarlas, así que una posición leída de una es una lectura didáctica y no astrometría. El centro de un grupo de manchas no es un punto, la ley de referencia se midió sobre rasgos magnéticos y no sobre manchas, y la serie de irradiancia tiene seis días medidos.',
   ],
+  smallBodies: [
+    'O bien los semiejes mayores de 8 886 asteroides numerados como un histograma con una línea base suave y las ventanas de resonancia de Júpiter, o bien una curva de luz sintética con su periodograma y su pliegue al periodo de rotación.',
+    'Cuán vaciada está una ventana de resonancia frente a la línea base con un intervalo y un veredicto, el recuento por clases de órbita y lo que conserva un sondeo limitado por magnitud; o un periodo de rotación, una amplitud y la cota inferior que da de a/b, con los veredictos ambiguo, no periódica y retenida.',
+    'Que un hueco es un vaciamiento y no un vacío, que un catálogo es lo que se encontró y no lo que hay, que otra ventana u otra línea base es otra medición, y que muestrear una vez por noche puede dar un periodo equivocado con mucha confianza.',
+    'El catálogo guarda solo los objetos numerados grandes, y la curva de luz es sintética con una verdad que queda oculta hasta que se pide. El intervalo es solo error de muestreo, el error del periodo es un piso y la amplitud da una cota de a/b y no la forma.',
+  ],
   tides: [
     'El límite de Roche rígido y el fluido de un planeta y un satélite a partir de sus dos densidades, dónde cae la resonancia de una luna en un anillo, el alejamiento de la Luna y el alargamiento del día con una Q de marea constante, o el calor que una marea puede poner en Ío.',
     'Cuánto puede acercarse un satélite antes de que la gravedad sola deje de mantenerlo unido, qué radios de un anillo vacía una luna a una distancia dada, a qué distancia estaba la Luna en el pasado según el modelo, y el calor por órbita frente al calor que Ío irradia.',

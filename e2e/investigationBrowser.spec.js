@@ -262,11 +262,12 @@ test.describe('filtering', () => {
         'weighing-jupiter',
       ]);
 
-    // A tag nobody prints on a card is still searchable.
+    // A tag nobody prints on a card is still searchable. The Gaps in the Belt
+    // is a third match: its summary says "resonance" (Prompt 198 part 3).
     await search.fill('resonance');
     await expect
       .poll(() => shownIds(page))
-      .toEqual(['when-orbits-lock', 'why-rings']);
+      .toEqual(['when-orbits-lock', 'why-rings', 'the-gaps-in-the-belt']);
 
     // The titles are plain language - this lesson is called "Getting There
     // From Here" - so the technical name has to reach it through the id.

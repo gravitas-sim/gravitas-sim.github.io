@@ -137,7 +137,7 @@ catalogue refers to it, so a change to it can reach a student.
 | [SEEDING.md](SEEDING.md) | Seeding: named random streams that keep every old sequence. | feature | P149 | written | no |
 | [SKY_LAB.md](SKY_LAB.md) | The Sky Lab. | feature | P88 | written | yes |
 | [SKY_LAB_GATE.md](SKY_LAB_GATE.md) | Sky Lab gate: sky, time and coordinates. | gate | P87 | written | no |
-| [SMALL_BODIES.md](SMALL_BODIES.md) | The belts from a catalog and the spin from a light curve: gaps as measured depletions, class counts, the survey's selection and a bounded ellipsoid light-curve model, validated (Prompt 198). | feature | P198 | written | no |
+| [SMALL_BODIES.md](SMALL_BODIES.md) | The belts from a catalog and the spin from a light curve: gaps as measured depletions, class counts, the survey's selection and a bounded ellipsoid light-curve model, validated (Prompt 198). | feature | P198 | written | yes |
 | [STATISTICS.md](STATISTICS.md) | The statistics kernel: labelled intervals, resampling, residual diagnostics, comparison of estimates, the F-test and the selection function, with their limits and validation. | feature | P154 | written | no |
 | [STELLAR_POPULATIONS.md](STELLAR_POPULATIONS.md) | Stellar populations guides in the Observatory. | feature | unassigned | written | no |
 | [STELLAR_STRUCTURE.md](STELLAR_STRUCTURE.md) | Stellar structure kernel and investigations. | feature | P95 | written | yes |

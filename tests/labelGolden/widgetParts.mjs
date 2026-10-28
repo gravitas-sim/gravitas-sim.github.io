@@ -55,6 +55,7 @@ export const PARTS = Object.freeze({
     'crater',
     'tides',
     'sun',
+    'smallBodies',
   ],
   stellar: ['stellarEvolution', 'stellar'],
   powerLaw: ['powerLaw', 'lensing'],

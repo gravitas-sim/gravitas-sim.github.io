@@ -13,9 +13,9 @@ ellipsoid, from which the rotation period comes by the two-maxima rule and the a
 **This is the kernel, its validation, its words and one real catalog pack.** Part 2 added the
 JPL Small-Body Database numbered-asteroid cut (H < 13) as a lazy pack and ran the tier-e rows on
 it (below). The Kuiper-belt file was added afterwards (tier e3, below); the light curve (not
-retrievable) is NOT RUN, and the two investigations, Spanish, instructor materials and the
-model-page section are **not built**. Nothing in this PR is imported by a page; the kernel and the
-pack are `NEVER_PRECACHED`.
+retrievable) is NOT RUN. **Part 3 (below) builds the two investigations, their Spanish, instructor
+content and the model-page section** on the numbered pack and on the synthetic curve. The kernel,
+the packs and the instrument family are `NEVER_PRECACHED`.
 
 ## The validation contract (committed first)
 
@@ -197,19 +197,17 @@ the PDS path returned 404, 2026-10-27); e1.cited as above. Nothing is simulated 
 ## What is built, and what is not
 
 Built: the kernel (item 2 of the prompt), its validation, the numbered-asteroid pack (item 1,
-the belts' half; JPL SBDB instead of the MPC, a magnitude cut instead of a downsample) and this
-document.
+the belts' half; JPL SBDB instead of the MPC, a magnitude cut instead of a downsample), the two
+investigations and their instruments (item 3, part 3) and this document.
 
 Not built:
 
 - **Item 1, the rest.** An asteroid light curve under a recorded rights decision (not retrievable; the synthetic curve this kernel
   produces, labelled with its truth manifest, stands in until then).
-- **Item 3, the investigations** ("The gaps in the belt", "How fast does it spin?"), their
-  Spanish, instructor materials, the resonance-scenario links and the model-page section; the
-  alt text and the misconception each must name. The belts one can now be built on the pack; they add lessons to the
-  four shared measurement-sequence files already in the instructor closure (no closure file is
-  added by this PR: 281, cap under 282).
-- **Tier e**: NOT RUN, with the reason in the validator's note.
+- **Item 3, the resonance-scenario links** (the lessons link no scenario; the two investigations
+  are built in part 3, below). The Kuiper pack is not read by any lesson.
+- **Tier e2**: NOT RUN, with the reason in the validator's note. The spin investigation is
+  synthetic and says so.
 
 ### What would unblock the rest (the first row was fetched in part 2; the others were not retrievable)
 
@@ -225,6 +223,47 @@ room for a pack (4,337 B raw and 781 B gzip), so it would be a lazy `NEVER_PRECA
 The downsampling rule proposed here is "every k-th numbered object by number" with k stated in the
 manifest; the selection statement, in the words of `SELECTION_ASSUMES`, is part of the manifest
 and of the lesson that reads it.
+
+## Part 3: the investigations and the instruments
+
+**What was built** (register rows D-R10-198-04 to -06). Two investigations, each at three depths in
+English and Spanish, appended to the four shared `satellite-sequence.js` files already in the
+instructor closure (no closure file is added: 281, cap under 282), with twelve one-line per-id
+re-exports outside it, instructor content (guides, flow, expectations, time bands, in the depth
+file), a model-page section, Library, teaching and alignment entries, acceptance rows, and
+`e2e/smallBodyLessons.spec.js` (both locales, axe in two themes, 24 px targets) and two
+`@accepts:` tests in `centralExperiments.spec.js`. One lazy instrument family,
+`js/smallBodiesWidgets.js` with `js/i18n/{en,es}.smallbodies.js`, `NEVER_PRECACHED` like the kernel
+and the pack:
+
+- **The Gaps in the Belt** (survey, 8 core steps; 4 majors and 4 upper-depth steps) on the numbered
+  pack: the histogram of a, the baseline and the five windows, the depletion with its
+  400-draw interval and verdict (the seed and label of the e1 rows, so the default view prints
+  their intervals: 3:1 is 88.0 percent, 82.9 to 92.4, 26 found of 216 expected; 5:2 is 63.3, 56.5
+  to 70.0), controls for the window, its width, the H limit and the baseline degree, the orbit
+  classes (183 Hildas, 1,555 Trojans) and what a magnitude-limited survey keeps (40.0 times at 2.0
+  against 3.5 AU; a uniform belt shows a mean of 2.35 AU against 2.75). It states the pack's
+  selection statement in the first step and again in the readout: the catalog is what was found,
+  never the population. The deeper steps show that a wider window (62.4 percent), a brighter cut
+  (83.8, interval 69.4 to 95.2) and another degree (83.7 to 88.5) move the number, and that 7:3 and
+  2:1 are not resolved (flanks 152 against 645 and 1,045 against 73).
+- **How Fast Does It Spin?** (survey, 6 core steps; 4 majors and 4 upper-depth steps) on the
+  **synthetic** curve. **Tier e2 stays NOT RUN**: the investigation is labelled synthetic in its
+  first step, in the instrument's note, in its first readout row and on the model page; the truth
+  manifest is hidden until the reader asks and no step presents the data as a real asteroid's.
+  Four seeded targets (three ellipsoids and a flat star), nights, hours and noise, one point a
+  night: the period 6.199 +- 0.001 h of target A (truth 6.2), an amplitude of 0.333 mag and a/b at
+  least 1.36 (truth 1.5), and the cases the kernel declines (once-a-night sampling is ambiguous
+  with the top peak wrong, 5.49 h against 6.20; target C at 8.0 h is not periodic at one point a
+  night; one night of target B withholds the amplitude; a flat star has a peak with a
+  false-alarm probability of 0.26).
+
+Every stated number is recomputed in `tests/smallBodiesLessons.test.js` from the kernel and the
+pack. The validation's failed legs (12) are untouched and not hidden: the instructor notes and the
+model page state the coverage failures at 7:3 and 2:1 (the two windows the instrument declines)
+and the amplitude interval's coverage of 0.62 to 0.70 at a stated 0.95, and the lessons read that
+interval as a floor. The Spanish is unread by a fluent reader and the measure steps'
+validator messages stay English (computed strings).
 
 ## The model
 
@@ -268,8 +307,9 @@ at 0.9 of the first's power outside its resolution makes it "ambiguous" and list
 
 ## Limits stated, not hidden
 
-- No real catalog, light curve or period has been measured with this kernel; the recovery is on
-  synthetic belts and curves with truth manifests, on pinned oracle series and on closed forms.
+- No real light curve or period has been measured with this kernel; the recovery is on synthetic
+  belts and curves with truth manifests, on pinned oracle series and on closed forms (the belt is
+  a real catalog and is measured). The spin investigation is synthetic.
 - The depletion's interval is sampling error only; on the validation belts the baseline's shape
   added up to one standard error (twice at the two windows between large neighbours), and the
   2:1 gap sits on the real belt's outer edge, where the kernel says "not resolved".
@@ -291,5 +331,9 @@ at 0.9 of the first's power outside its resolution makes it "ambiguous" and list
 `tools/small-bodies-oracle/oracle.py`,
 `tests/fixtures/small-bodies/{thresholds,oracle-inputs,oracle-results,oracle-real-results,failed-legs,record}.json`,
 `js/data/smallbodies/{numbered-h13,kuiper-a30-60}.json`, `tools/small-bodies-pack.py`,
-`tests/smallBodies.test.js`. The kernel is listed in `NEVER_PRECACHED`
-(`tools/build-service-worker.mjs`) though no page imports it yet. Register rows D-R10-198-01 to -03.
+`tests/smallBodies.test.js`; part 3: `js/smallBodiesWidgets.js`, `js/i18n/{en,es}.smallbodies.js`,
+the lessons in `js/data/investigations/{,es/,depth/,depth/es/}satellite-sequence.js` with twelve
+re-exports, `tests/smallBodiesLessons.test.js`, `e2e/smallBodyLessons.spec.js`. The kernel, the
+packs, the family, the lesson paths and the thumbnails are listed in `NEVER_PRECACHED`
+(`tools/build-service-worker.mjs`). Register rows D-R10-198-01 to -03 (parts 1 and 2) and -04 to
+-06 (part 3).

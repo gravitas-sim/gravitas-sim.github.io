@@ -943,6 +943,32 @@ export const MANIFEST = [
     objectiveCount: 4,
   },
   {
+    id: 'the-gaps-in-the-belt',
+    title: 'Los huecos del cinturón',
+    subtitle:
+      'Un histograma de 8 886 asteroides numerados, una línea base suave ajustada fuera de las ventanas de resonancia, y la profundidad de cada hueco con un intervalo',
+    duration: '12-16 min',
+    level: 'Introductory to upper-level astronomy',
+    thumbnail: 'images/investigations/the-gaps-in-the-belt.webp',
+    depths: 3,
+    stepCount: 8,
+    gradedCount: 6,
+    objectiveCount: 4,
+  },
+  {
+    id: 'how-fast-does-it-spin',
+    title: '¿Qué tan rápido gira?',
+    subtitle:
+      'Una curva de luz sintética, el periodo de rotación a partir de su periodograma, la amplitud, y lo que la amplitud acota de la forma',
+    duration: '8-12 min',
+    level: 'Introductory to upper-level astronomy',
+    thumbnail: 'images/investigations/how-fast-does-it-spin.webp',
+    depths: 3,
+    stepCount: 6,
+    gradedCount: 4,
+    objectiveCount: 4,
+  },
+  {
     id: 'why-venus-is-hot',
     title: 'Por qué Venus es caliente',
     subtitle:

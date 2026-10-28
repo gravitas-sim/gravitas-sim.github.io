@@ -760,6 +760,26 @@ export const DISCOVERY = {
     },
     courseLevel: 'majors',
   },
+  'the-gaps-in-the-belt': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: [],
+    textbook: {
+      chapter: 14,
+      section: null,
+    },
+    courseLevel: 'survey',
+  },
+  'how-fast-does-it-spin': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: [],
+    textbook: {
+      chapter: 14,
+      section: null,
+    },
+    courseLevel: 'survey',
+  },
   'why-venus-is-hot': {
     audience: 'intro',
     mathematics: 'algebra',

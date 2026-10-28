@@ -308,6 +308,14 @@ export const BROWSE_META = {
     tags: ['solar-system'],
     numericCount: 0,
   },
+  'the-gaps-in-the-belt': {
+    tags: ['observing', 'solar-system'],
+    numericCount: 0,
+  },
+  'how-fast-does-it-spin': {
+    tags: ['observing', 'solar-system'],
+    numericCount: 0,
+  },
   'why-venus-is-hot': {
     tags: ['habitability', 'solar-system'],
     numericCount: 0,

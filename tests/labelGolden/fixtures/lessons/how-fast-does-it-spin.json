@@ -1,0 +1,67 @@
+{
+ "id": "how-fast-does-it-spin",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.rotation-period.fields.0.unit",""],
+    ["steps.rotation-period.fields.1.unit",""],
+    ["steps.amplitude-and-bound.fields.0.unit",""],
+    ["steps.amplitude-and-bound.fields.1.unit",""],
+    ["steps.fewer-nights.fields.0.unit",""],
+    ["steps.fewer-nights.fields.1.unit",""],
+    ["steps.the-error-is-a-floor.fields.0.unit",""],
+    ["steps.the-error-is-a-floor.fields.1.unit",""],
+    ["steps.a-nearly-round-body.fields.0.unit",""],
+    ["steps.a-nearly-round-body.fields.1.unit",""],
+    ["steps.once-a-night.fields.0.unit",""],
+    ["steps.once-a-night.fields.1.unit",""]
+   ],
+   "numbered": [
+    ["steps.rotation-period.fields.0.hint","3.099"],
+    ["steps.rotation-period.fields.1.hint","6.199"],
+    ["steps.amplitude-and-bound.fields.0.hint","0.333"],
+    ["steps.amplitude-and-bound.fields.1.hint","1.36"],
+    ["steps.fewer-nights.fields.0.hint","6.268"],
+    ["steps.fewer-nights.fields.1.hint","0.036"],
+    ["steps.the-error-is-a-floor.fields.0.hint","11.388"],
+    ["steps.the-error-is-a-floor.fields.1.hint","0.005"],
+    ["steps.a-nearly-round-body.fields.0.hint","0.106"],
+    ["steps.a-nearly-round-body.fields.1.hint","1.10"],
+    ["steps.once-a-night.fields.0.hint","5.49"],
+    ["steps.once-a-night.fields.1.hint","6.20"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": []
+  }
+ },
+ "numeric": {
+  "answers": [],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "rotation-period": {
+    "validate": {"calls":232,"distinct":2,"digest":"5686b7217ac78403","samples":[null,{"level":"error","message":"Use target A with five nights and read “Strongest peak” and “Rotation period”."}]}
+   },
+   "amplitude-and-bound": {
+    "validate": {"calls":232,"distinct":2,"digest":"55f1ebbf542953ed","samples":[null,{"level":"error","message":"Read “Amplitude” and the number in “The axis ratio a/b”."}]}
+   },
+   "fewer-nights": {
+    "validate": {"calls":232,"distinct":2,"digest":"66cd003bb5e3f750","samples":[null,{"level":"error","message":"Use target A with one night and read the two numbers in “Rotation period”."}]}
+   },
+   "the-error-is-a-floor": {
+    "validate": {"calls":232,"distinct":2,"digest":"06ee31f80a6f7185","samples":[null,{"level":"error","message":"Choose target B, keep five nights, and read the two numbers in “Rotation period”."}]}
+   },
+   "a-nearly-round-body": {
+    "validate": {"calls":232,"distinct":2,"digest":"4b878012e51ae4e9","samples":[null,{"level":"error","message":"Choose target B and read “Amplitude” and the number in “The axis ratio a/b”."}]}
+   },
+   "once-a-night": {
+    "validate": {"calls":232,"distinct":2,"digest":"18dd8b9650b4e009","samples":[null,{"level":"error","message":"Use target A and one point a night, and read the two periods in “The competing periods”."}]}
+   }
+  },
+  "es": "same"
+ }
+}

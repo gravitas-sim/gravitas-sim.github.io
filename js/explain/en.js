@@ -208,6 +208,12 @@ export default {
     'That spots at different latitudes turn at different rates, why the rate has to be corrected for the Earth’s own motion, why two latitudes cannot fix three coefficients, and why a flux has to be brought to one astronomical unit before it gives a luminosity.',
     'The pictures are browse pictures made to be looked at, so a position read from one is an instructional reading and not astrometry. A spot group’s centre is not a point, the reference law was measured on magnetic features and not spots, and the irradiance series has six measured days.',
   ],
+  smallBodies: [
+    'Either the semi-major axes of 8,886 numbered asteroids as a histogram with a smooth baseline and the Jupiter resonance windows, or a synthetic light curve with its periodogram and its fold at the rotation period.',
+    'How depleted a resonance window is against the baseline with an interval and a verdict, the orbit-class counts and what a magnitude-limited survey keeps; or a rotation period, an amplitude and the lower bound it puts on a/b, with the verdicts ambiguous, not periodic and withheld.',
+    'That a gap is a depletion and not an emptiness, that a catalog is what was found and not what is there, that a different window or baseline is a different measurement, and that sampling once a night can give a confident wrong period.',
+    'The catalog keeps the large numbered objects only, and the light curve is synthetic with a truth that stays hidden until asked for. The interval is sampling error only, the period error is a floor, and the amplitude gives a bound on a/b and not the shape.',
+  ],
   tides: [
     'The rigid and the fluid Roche limit of a planet and a satellite from their two densities, where a moon’s resonance falls in a ring, the Moon’s recession and the lengthening day under a constant tidal Q, or the heat a tide can put into Io.',
     'How near a satellite can come before gravity alone stops holding it together, which ring radii a moon at a given distance empties, how far the Moon was in the past under the model, and the heat per orbit against the heat Io is observed to radiate.',
