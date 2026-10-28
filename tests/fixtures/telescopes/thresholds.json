@@ -32,19 +32,30 @@
       "id": "A1.airy.zeros",
       "group": "a",
       "bound": "an unobstructed Airy pattern's first three dark rings lie where J1(x) = 0, x = pi D theta / lambda: the kernel's first dark-ring angle (the Rayleigh angle) equals 3.8317059702 lambda / (pi D), the second and third equal their zeros, each to a relative 1e-8, and the intensity at each is at most 1e-12 of the peak",
-      "limits": { "relMax": 1e-8, "intensityMax": 1e-12, "rings": 3 }
+      "limits": {
+        "relMax": 1e-8,
+        "intensityMax": 1e-12,
+        "rings": 3
+      }
     },
     {
       "id": "A2.airy.fwhm",
       "group": "a",
       "bound": "the unobstructed Airy FWHM is 1.028993969962187 lambda / D to a relative 1e-8, and the kernel's intensity at half that angle is one half of the peak to an absolute 1e-10",
-      "limits": { "relMax": 1e-8, "halfAbsMax": 1e-10 }
+      "limits": {
+        "relMax": 1e-8,
+        "halfAbsMax": 1e-10
+      }
     },
     {
       "id": "A3.airy.encircled",
       "group": "a",
       "bound": "the unobstructed encircled energy 1 - J0(x)^2 - J1(x)^2 at the first three dark rings is 0.8377848692, 0.9099305351 and 0.9376474743 to an absolute 1e-9 (Born and Wolf's table to three digits agrees: 0.838, 0.910, 0.938); it is 0 at the centre and rises monotonically on 400 points to 40 lambda / D; the kernel's numerical encircled energy for an obstructed aperture reduces to the closed form at obstruction 0 to an absolute 1e-9",
-      "limits": { "absMax": 1e-9, "tableAbsMax": 5e-4, "points": 400 }
+      "limits": {
+        "absMax": 1e-9,
+        "tableAbsMax": 0.0005,
+        "points": 400
+      }
     },
     {
       "id": "A4.airy.obstructed",
@@ -73,47 +84,66 @@
       "id": "A6.rayleigh.dip",
       "group": "a",
       "bound": "two equal unobstructed Airy patterns separated by the Rayleigh angle sum to a midpoint intensity of 0.735031662423 of the peak (a 26.5 percent dip) to an absolute 1e-9; the pair is not a dip (midpoint above 0.99) at 0.3 of the Rayleigh angle and a clear dip (below 0.5) at 1.6",
-      "limits": { "absMax": 1e-9, "notDipAt": 0.3, "clearDipAt": 1.6 }
+      "limits": {
+        "absMax": 1e-9,
+        "notDipAt": 0.3,
+        "clearDipAt": 1.6
+      }
     },
     {
       "id": "A7.rayleigh.vs.fwhm",
       "group": "a",
       "bound": "the Rayleigh angle and the FWHM are different quantities even for a pure Airy pattern: their ratio is 1.185303244597 (3.8317059702 / (2 x 1.6163399483)) to a relative 1e-8, and the kernel exposes the two under different names",
-      "limits": { "relMax": 1e-8 }
+      "limits": {
+        "relMax": 1e-8
+      }
     },
     {
       "id": "A8.scales",
       "group": "a",
       "bound": "light-gathering power is the ratio of collecting areas D^2 (1 - e^2): 0.4 m with obstruction 0.3 against 0.1 m with none is 14.56, and against the dark-adapted eye (7 mm pupil) is 0.1456 / 0.000049 = 2971.428571428571 to a relative 1e-12; the plate scale is 206264.80624709636 arcsec per radian over the focal length: a 3.2 m focal length and a 10 micron pixel is 0.644577519522 arcsec, to a relative 1e-12; the focal length is the focal ratio times the aperture",
-      "limits": { "relMax": 1e-12 }
+      "limits": {
+        "relMax": 1e-12
+      }
     },
     {
       "id": "A9.combination.limits",
       "group": "a",
       "bound": "the combined profile (the Moffat seeing convolved with the Airy pattern, by the product of their transfer functions) tends to its two limits: with a seeing FWHM of 1e-3 of the Airy FWHM it equals the Airy profile to an absolute 2e-4 of the peak at 200 radii out to 8 lambda / D, and with an Airy FWHM of 1e-3 of the seeing FWHM it equals the Moffat profile to an absolute 2e-4 of the peak at 200 radii out to 3 seeing FWHM; its encircled energy is 0 at 0 and increases monotonically",
-      "limits": { "absMax": 2e-4, "ratio": 1e-3, "radii": 200 }
+      "limits": {
+        "absMax": 0.0002,
+        "ratio": 0.001,
+        "radii": 200
+      }
     },
     {
       "id": "B1.pupil.fft",
       "group": "b",
       "bound": "an independent numerical diffraction calculation (numpy FFT of a sampled, anti-aliased annular pupil, Fraunhofer diffraction, azimuthally averaged; no Bessel function and no Gravitas code) at two apertures, A: D = 0.25 m, obstruction 0, 550 nm and B: D = 1.0 m, obstruction 0.30, 700 nm, pinned as a fixture: the kernel's Airy profile equals the pinned profile to an absolute 5e-4 of the peak at every pinned radius out to 8 lambda / D, and its encircled energy at 1, 2, 3 and 5 lambda / D to an absolute 1e-3",
-      "limits": { "profileAbsMax": 5e-4, "eeAbsMax": 1e-3, "apertures": 2 }
+      "limits": {
+        "profileAbsMax": 0.0005,
+        "eeAbsMax": 0.001,
+        "apertures": 2
+      }
     },
     {
       "id": "B2.pupil.convolution",
       "group": "b",
       "bound": "the same two apertures with a Moffat seeing profile of FWHM 1.2 arcsec (A) and 0.6 arcsec (B) and beta 4.765, the oracle forming the combined profile by two-dimensional FFT convolution of the pupil PSF with the sampled Moffat: the kernel's combined profile (a different algorithm: the product of transfer functions and an inverse Hankel transform) equals the pinned profile to an absolute 2e-3 of the peak at every pinned radius out to 3 combined FWHM, its FWHM to a relative 2e-3 and its encircled energy at 1, 2 and 3 FWHM to an absolute 3e-3",
       "limits": {
-        "profileAbsMax": 2e-3,
-        "fwhmRelMax": 2e-3,
-        "eeAbsMax": 3e-3
+        "profileAbsMax": 0.002,
+        "fwhmRelMax": 0.002,
+        "eeAbsMax": 0.003
       }
     },
     {
       "id": "F1.frame.flux",
       "group": "f",
       "bound": "the frame model's point-spread function through a supplied profile conserves light: the electrons a noiseless rendered star puts on the frame equal its rate times the exposure times the profile's encircled energy at the rendering reach, to a relative 2e-3 at pixel scales of 0.15, 0.5 and 1.5 times the Airy FWHM, and the model's own default (no profile supplied) is bit-identical to the version before this prompt on a fixed seeded frame",
-      "limits": { "relMax": 2e-3, "scales": [0.15, 0.5, 1.5] }
+      "limits": {
+        "relMax": 0.002,
+        "scales": [0.15, 0.5, 1.5]
+      }
     },
     {
       "id": "C1.coverage",
@@ -172,13 +202,18 @@
       "id": "P1.speed",
       "group": "p",
       "bound": "building the combined profile for one telescope configuration takes at most 400 ms (median of 9 builds, Node), so a slider can drive it",
-      "limits": { "medianMsMax": 400, "builds": 9 }
+      "limits": {
+        "medianMsMax": 400,
+        "builds": 9
+      }
     },
     {
       "id": "A1.authentic",
       "group": "e",
       "bound": "authentic-data applicability (Operating rule 7.5, 8e): a measured PSF of a real telescope under a fixed analysis contract (for example a published FWHM and encircled-energy curve of a space telescope at a stated wavelength) compared with the kernel's Airy pattern for its aperture and obstruction. NOT MEASURED: no dataset has been retrieved (a download needs Carl's say) and none is typed from memory; the request is in TELESCOPES.md",
-      "limits": { "status": "not measured" }
+      "limits": {
+        "status": "not measured"
+      }
     }
   ],
   "claimRule": {
@@ -216,5 +251,12 @@
     ]
   },
   "notBuilt": "see scope.notBuilt",
-  "amendments": []
+  "amendments": [
+    {
+      "id": "AM1",
+      "when": "after the oracle's first run and before any kernel code ran",
+      "what": "B1 and B2 name a binary pupil (a pixel is open when more than half of it is covered) where the committed text said anti-aliased",
+      "why": "the oracle's own check against the Bessel closed form (scipy, an independent calculation) showed the anti-aliased amplitude edge biases the encircled energy by +0.002 (0.8283 against 0.8264 inside 1 lambda/D) because amplitude and intensity transmission differ at the edge; the binary pupil agrees to 6e-4 at 128 pixels. No bound moved."
+    }
+  ]
 }
