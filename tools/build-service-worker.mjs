@@ -415,8 +415,8 @@ export const NEVER_PRECACHED = [
   // after the first online use, not installed (the first-visit and idle tiers have
   // a few hundred bytes of room under a data-budget ceiling this approval does not cover).
   /^(js\/atmosphereWidgets\.js|js\/i18n\/(en|es)\.atmospheres\.js)$/,
-  /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(why-venus-is-hot|two-greenhouse-models|atmosphere-sequence)\.js$/,
-  /^images\/investigations\/(why-venus-is-hot|two-greenhouse-models)\.webp$/,
+  /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(why-venus-is-hot|two-greenhouse-models|how-hot-is-the-day-side|phases-and-albedo|atmosphere-sequence)\.js$/,
+  /^images\/investigations\/(why-venus-is-hot|two-greenhouse-models|how-hot-is-the-day-side|phases-and-albedo)\.webp$/,
   // The Sun instruments and investigations (Prompt 194 part 2, D-R10-92): the family
   // and its words, the two lessons' per-lesson paths (their text is appended to the
   // atmosphere files above) and their thumbnails: kept by the service worker after the

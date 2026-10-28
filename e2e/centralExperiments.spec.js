@@ -2503,6 +2503,27 @@ test.describe('the central experiment of each investigation', () => {
         [0.5, 246.1, 1],
       ],
     },
+    // ---- The eclipse and phase investigations (Roadmap III, Prompt 202) --------
+    {
+      id: 'how-hot-is-the-day-side',
+      title:
+        'how-hot-is-the-day-side: one band of Planet Y reads 1780 K where Planet X reads 2094 K @accepts:ce.how-hot-is-the-day-side',
+      row: /^Brightness temperature, band C/i,
+      values: [
+        [0, 2094, 8],
+        [1, 1780, 8],
+      ],
+    },
+    {
+      id: 'phases-and-albedo',
+      title:
+        'phases-and-albedo: a Lambert fit to Planet P has a chi-square near 31 and to Planet Q near 82 @accepts:ce.phases-and-albedo',
+      row: /^Fit against the curve$/i,
+      values: [
+        [0, 31.2, 1],
+        [1, 82, 1.5],
+      ],
+    },
     // ---- The crater investigations (Roadmap III, Prompt 195) -------------------
     {
       id: 'which-surface-is-older',

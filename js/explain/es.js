@@ -182,10 +182,10 @@ export default {
     'Las imágenes son sintéticas, hechas con posiciones de JPL Horizons; la masa es la del planeta solo y deja fuera su achatamiento.',
   ],
   atmosphere: [
-    'La temperatura que da a un planeta la luz del Sol por sí sola junto a la temperatura medida allí, un efecto invernadero de una capa y uno gris lado a lado para un planeta, o con qué rapidez baja la presión con la altura.',
+    'La temperatura que da a un planeta la luz del Sol por sí sola junto a la temperatura medida allí, un efecto invernadero de una capa y uno gris lado a lado para un planeta, o con qué rapidez baja la presión con la altura. O cuatro profundidades de eclipse secundario con la temperatura que da cada una, o la curva de fase de un planeta con el albedo que fija.',
     'Cuánto se aleja la temperatura medida de Venus, la Tierra, Marte y los planetas gigantes de su temperatura de equilibrio, qué emisividad o profundidad óptica necesita cada modelo para cerrar la diferencia, y la altura de escala que implica cada cuerpo.',
     'Por qué Venus es mucho más cálido que su temperatura de equilibrio y por qué una sola capa no puede alcanzarlo, por qué los dos modelos dan números distintos para el mismo planeta, y dónde la opacidad gris deja de ser una buena descripción.',
-    'Son modelos de enseñanza: sin convección, sin nubes, sin calor interno, con una sola opacidad en todas las longitudes de onda. La curva de Eddington es cerca de un 4 por ciento más cálida arriba en una atmósfera gris, y un planeta gigante no tiene superficie con la que comparar.',
+    'Son modelos de enseñanza: sin convección, sin nubes, sin calor interno, con una sola opacidad en todas las longitudes de onda. La curva de Eddington es cerca de un 4 por ciento más cálida arriba en una atmósfera gris, y un planeta gigante no tiene superficie con la que comparar. Las profundidades de eclipse y las curvas de fase son sintéticas, el modelo de eclipse es un cuerpo negro y el de fase, una esfera de Lambert.',
   ],
   crater: [
     'Dos regiones lado a lado con sus densidades, el gráfico de tamaño y frecuencia de una región con sus intervalos, o el diámetro de un círculo con los cuatro términos de su incertidumbre.',

@@ -191,10 +191,10 @@ export default {
     'The frames are synthetic, made from JPL Horizons positions; the mass is the planet’s alone and leaves out its oblateness.',
   ],
   atmosphere: [
-    'The temperature sunlight alone gives a planet beside the temperature measured there, a one-layer and a gray greenhouse side by side for one planet, or how quickly the pressure falls with height.',
+    'The temperature sunlight alone gives a planet beside the temperature measured there, a one-layer and a gray greenhouse side by side for one planet, or how quickly the pressure falls with height. Or four secondary-eclipse depths with the temperature each gives, or a planet’s phase curve with the albedo it fixes.',
     'How far the measured temperature of Venus, Earth, Mars and the giant planets is from their equilibrium temperature, what emissivity or optical depth each greenhouse model needs to close the gap, and the scale height each body implies.',
     'Why Venus is far warmer than its equilibrium temperature and why a single layer cannot reach it, why the two greenhouse models give different numbers for the same planet, and where gray opacity stops being a good description.',
-    'These are teaching models: no convection, no clouds, no internal heat, one opacity at every wavelength. The Eddington curve is about 4 percent warm at the top of a gray atmosphere, and a giant planet has no surface to compare with.',
+    'These are teaching models: no convection, no clouds, no internal heat, one opacity at every wavelength. The Eddington curve is about 4 percent warm at the top of a gray atmosphere, and a giant planet has no surface to compare with. The eclipse depths and phase curves here are synthetic, and the eclipse model is a blackbody; the phase model is a Lambert sphere.',
   ],
   crater: [
     'Two regions side by side with their densities, one region’s size-frequency plot with its intervals, or one circle’s diameter with the four terms of its uncertainty.',

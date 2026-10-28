@@ -1,8 +1,9 @@
 // =============================================================================
 // Why Venus Is Hot and Two Greenhouse Models, in two languages
 // -----------------------------------------------------------------------------
-// Roadmap III, Prompt 200. Checked here: each of the three atmosphere
-// instruments (the energy balance, the two greenhouse models, the scale height)
+// Roadmap III, Prompts 200 and 202. Checked here: each of the five atmosphere
+// instruments (the energy balance, the two greenhouse models, the scale height,
+// and the eclipse and the phase curve)
 // draws through the plot component (a labelled svg with its paths) and lists its
 // numbers (the readout is the text equivalent), the Spanish lesson shows its own
 // words, and the panel passes axe and keeps every control and link at least 24
@@ -68,6 +69,22 @@ const CASES = [
     rowEs: /Altura de escala/i,
     title: /^How quickly/i,
     titleEs: /^¿Con qué rapidez/i,
+  },
+  {
+    id: 'how-hot-is-the-day-side',
+    sid: 'one-band',
+    row: /Brightness temperature, band C/i,
+    rowEs: /Temperatura de brillo, banda C/i,
+    title: /^How hot is the day side/i,
+    titleEs: /^¿Qué tan caliente/i,
+  },
+  {
+    id: 'phases-and-albedo',
+    sid: 'full-phase-albedo',
+    row: /Geometric albedo of a Lambert sphere that fits/i,
+    rowEs: /Albedo geométrico de la esfera de Lambert que ajusta/i,
+    title: /^What does a phase curve/i,
+    titleEs: /^¿Qué dice una curva de fase/i,
   },
 ];
 

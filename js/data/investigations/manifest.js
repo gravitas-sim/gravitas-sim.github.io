@@ -985,4 +985,30 @@ export const MANIFEST = [
     gradedCount: 4,
     objectiveCount: 4,
   },
+  {
+    id: 'how-hot-is-the-day-side',
+    title: 'How Hot Is the Day Side?',
+    subtitle:
+      'An eclipse depth, a blackbody, and what a brightness temperature leaves out',
+    duration: '15-25 min',
+    level: 'Majors and upper-level astronomy',
+    thumbnail: 'images/investigations/how-hot-is-the-day-side.webp',
+    depths: 3,
+    stepCount: 10,
+    gradedCount: 8,
+    objectiveCount: 4,
+  },
+  {
+    id: 'phases-and-albedo',
+    title: 'Phases and Albedo',
+    subtitle:
+      'A planet’s phase curve, a Lambert sphere, and the albedo it gives',
+    duration: '15-25 min',
+    level: 'Majors and upper-level astronomy',
+    thumbnail: 'images/investigations/phases-and-albedo.webp',
+    depths: 3,
+    stepCount: 7,
+    gradedCount: 5,
+    objectiveCount: 4,
+  },
 ];

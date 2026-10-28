@@ -228,17 +228,19 @@ describe('the instruments', () => {
     }
   });
 
-  test('three instruments, each drawing through the plot component and reading out', () => {
+  test('five instruments (three of Prompt 200, two of Prompt 202), each drawing through the plot component and reading out', () => {
     expect(W.ATMOSPHERE_WIDGETS.map(w => w.id)).toEqual([
       'atmosphere-balance',
       'atmosphere-greenhouse',
       'atmosphere-scale',
+      'atmosphere-eclipse',
+      'atmosphere-phase',
     ]);
     for (const w of W.ATMOSPHERE_WIDGETS) {
       const canvas = document.createElement('canvas');
       document.body.append(canvas);
       const spec = w.draw(canvas, {});
-      expect(spec.series.length).toBeGreaterThanOrEqual(3);
+      expect(spec.series.length).toBeGreaterThanOrEqual(2);
       expect(spec.xTitle).toBeTruthy();
       expect(spec.yTitle).toBeTruthy();
       expect(canvas.style.display).toBe('none');

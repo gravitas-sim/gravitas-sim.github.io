@@ -84,4 +84,57 @@ export const EN_ATMOSPHERES = {
   'atmW.s.row.inputs': 'Inputs',
   'atmW.s.value.inputs':
     'T = {T} K, mean molecular weight {mu}, gravity {g} m/s²',
+  'atmW.row.data': 'Data',
+  'atmW.m.ec': 'Blackbody plus one band (secondary eclipse)',
+  'atmW.m.ph': 'Lambert-sphere phase curve',
+  'atmW.a.ec':
+    'a day side that is not one uniform temperature; reflected light in the same band (a depth is not turned into a temperature unless you say none is there); a band that emits instead of absorbing; anything in the atmosphere below one isothermal skin; a filter profile (the band response is flat)',
+  'atmW.a.ph':
+    'a planet that is not a Lambert sphere (real phase functions differ); thermal phase variation; clouds; polarisation; the albedo found is the albedo of a Lambert sphere, and the Bond albedo it gives is the same assumption times 3/2',
+  'atmW.e.title': 'How hot is the day side?',
+  'atmW.e.note':
+    'The eclipse depth is the share of the light that disappears when the planet goes behind its star. The model turns it into the temperature of a blackbody that would give that depth in that band, a brightness temperature. The depths here are synthetic: generated from the model with noise, and no published table was compared.',
+  'atmW.e.control.dataset': 'Planet',
+  'atmW.e.dataset.0': 'Planet X',
+  'atmW.e.dataset.1': 'Planet Y',
+  'atmW.e.control.tp': 'My blackbody temperature',
+  'atmW.e.control.reflected': 'Reflected light',
+  'atmW.e.reflected.0': 'allow for it',
+  'atmW.e.reflected.1': 'assume none',
+  'atmW.e.axis.x': 'Wavelength (µm)',
+  'atmW.e.axis.y': 'Eclipse depth (ppm)',
+  'atmW.e.legend.data': 'Synthetic eclipse depths, four bands',
+  'atmW.e.legend.model': 'Blackbody at {T} K',
+  'atmW.e.data':
+    'synthetic, generated from the model with noise; no published table was compared',
+  'atmW.e.row.bt': 'Brightness temperature, band {band} ({lo} to {hi} µm)',
+  'atmW.e.value.bt': '{T} K (95 percent: {lo} to {hi} K)',
+  'atmW.e.refused':
+    'not converted: reflected light could be a tenth of this depth or more',
+  'atmW.e.row.chi': 'My blackbody against the four depths',
+  'atmW.e.value.chi':
+    'chi-square {chi} for four depths at {T} K (about 4 when a model fits)',
+  'atmW.p.title': 'What does a phase curve say about albedo?',
+  'atmW.p.note':
+    'The planet’s reflected light follows its phase, as the Moon’s does. For a Lambert sphere the curve has one shape and its height is the albedo. The curves here are synthetic: generated from a model with noise, and no published table was compared.',
+  'atmW.p.control.dataset': 'Planet',
+  'atmW.p.dataset.0': 'Planet P',
+  'atmW.p.dataset.1': 'Planet Q',
+  'atmW.p.control.ag': 'My geometric albedo',
+  'atmW.p.axis.x': 'Phase angle (degrees; 0 is full phase)',
+  'atmW.p.axis.y': 'Planet to star flux (ppm)',
+  'atmW.p.legend.data': 'Synthetic phase curve',
+  'atmW.p.legend.model': 'Lambert sphere, albedo {A}',
+  'atmW.p.data':
+    'synthetic, generated from a model with noise; no published table was compared',
+  'atmW.p.row.fit': 'Geometric albedo of a Lambert sphere that fits',
+  'atmW.p.value.fit': '{A} (95 percent: {lo} to {hi})',
+  'atmW.p.flagged': 'none: a Lambert sphere does not describe this curve',
+  'atmW.p.row.bond': 'Bond albedo of that Lambert sphere',
+  'atmW.p.value.bond': '{B} (3/2 times {A})',
+  'atmW.p.row.mine': 'My albedo against the curve',
+  'atmW.p.value.mine':
+    'chi-square {chi} for {n} points (about {dof} when a model fits)',
+  'atmW.p.row.chi': 'Fit against the curve',
+  'atmW.p.value.chi': 'chi-square {chi} for {dof} degrees of freedom',
 };

@@ -128,6 +128,10 @@ const EXTENSIONS = {
     import('../data/investigations/depth/the-turning-sun.js'),
   'the-suns-power': () =>
     import('../data/investigations/depth/the-suns-power.js'),
+  'how-hot-is-the-day-side': () =>
+    import('../data/investigations/depth/how-hot-is-the-day-side.js'),
+  'phases-and-albedo': () =>
+    import('../data/investigations/depth/phases-and-albedo.js'),
   'which-surface-is-older': () =>
     import('../data/investigations/depth/which-surface-is-older.js'),
   'craters-by-size': () =>
@@ -226,6 +230,10 @@ const WORDS = {
       import('../data/investigations/depth/es/the-turning-sun.js'),
     'the-suns-power': () =>
       import('../data/investigations/depth/es/the-suns-power.js'),
+    'how-hot-is-the-day-side': () =>
+      import('../data/investigations/depth/es/how-hot-is-the-day-side.js'),
+    'phases-and-albedo': () =>
+      import('../data/investigations/depth/es/phases-and-albedo.js'),
     'which-surface-is-older': () =>
       import('../data/investigations/depth/es/which-surface-is-older.js'),
     'craters-by-size': () =>

@@ -44,6 +44,8 @@
   "atmosphere-balance",
   "atmosphere-greenhouse",
   "atmosphere-scale",
+  "atmosphere-eclipse",
+  "atmosphere-phase",
   "crater-sfd",
   "sun-rotation",
   "sun-power",

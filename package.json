@@ -157,6 +157,7 @@
     "craters:validate": "node tools/craters-validate.mjs",
     "sun:validate": "node tools/sun-validate.mjs",
     "atmospheres:validate": "node tools/atmospheres-validate.mjs",
+    "atmospheres-ii:validate": "node tools/atmospheres-ii-validate.mjs",
     "tides:validate": "node tools/tides-validate.mjs",
     "interiors:validate": "node tools/interiors-validate.mjs",
     "small-bodies:validate": "node tools/small-bodies-validate.mjs",

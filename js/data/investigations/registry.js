@@ -181,6 +181,8 @@ const LOADERS = {
   'two-greenhouse-models': () => import('./two-greenhouse-models.js'),
   'the-turning-sun': () => import('./the-turning-sun.js'),
   'the-suns-power': () => import('./the-suns-power.js'),
+  'how-hot-is-the-day-side': () => import('./how-hot-is-the-day-side.js'),
+  'phases-and-albedo': () => import('./phases-and-albedo.js'),
 };
 // </generated:loaders>
 
@@ -280,6 +282,8 @@ const TRANSLATIONS = {
     'two-greenhouse-models': () => import('./es/two-greenhouse-models.js'),
     'the-turning-sun': () => import('./es/the-turning-sun.js'),
     'the-suns-power': () => import('./es/the-suns-power.js'),
+    'how-hot-is-the-day-side': () => import('./es/how-hot-is-the-day-side.js'),
+    'phases-and-albedo': () => import('./es/phases-and-albedo.js'),
   },
 };
 // </generated:translations>
