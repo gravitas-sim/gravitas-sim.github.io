@@ -1,7 +1,7 @@
 // =============================================================================
 // What `sdk init` writes
 // -----------------------------------------------------------------------------
-// A course pack, an investigation pack, a scenario pack and a capability start valid: a course needs
+// A course pack, an investigation pack, a scenario pack, an instrument pack and a capability start valid: a course needs
 // only lessons Gravitas already has, a scenario only settings it already
 // understands, and an instrument can start as one working readout.
 // A data pack cannot, because its whole point is data the author brings: it
@@ -197,6 +197,54 @@ throw new Error('write the transformation for ${id}');
         : `# ${title(id)}\n\nA scenario-pack extension: settings, a seed and bodies, as data. The Scenario Studio (/studio/) writes \`scenario.json\`; \`npm run sdk -- init scenario-pack ${id} --from <export.json>\` wraps one.\n\n## Author\n\nWho wrote this, in the words you want printed.\n\n## Sources\n\nWhat it is based on ("original work" is a complete answer).\n`,
     };
   },
+
+  // A telescope of the course's own. It starts as a typical entry (the
+  // library's label for a convention, not a measurement) with one value, the
+  // aperture, so it validates; `sdk init` invents no number about a real
+  // instrument. Replace it with a facility, each value cited (INSTRUMENTS.md).
+  'instrument-pack': id => ({
+    'gravitas-extension.json': json({
+      ...base(id, 'declarative'),
+      provides: { instruments: [{ id, file: 'instrument.json' }] },
+      assets: [{ path: 'instrument.json', role: 'data', offline: 'optional' }],
+      citations: [],
+      licenses: [{ scope: 'instrument.json', license: 'CC-BY-4.0' }],
+      offline: { policy: 'precache' },
+      validation: [{ check: 'registry:sdk-extensions' }],
+      migrations: [],
+    }),
+    'instrument.json': json({
+      format: 'gravitas.instrument',
+      formatVersion: 1,
+      id,
+      sources: {
+        'course-convention': {
+          kind: 'typical',
+          title: 'A convention of this course, not a measurement',
+          authors: 'The course author',
+          year: new Date().getFullYear(),
+          ref: 'this extension',
+          retrieved: new Date().toISOString().slice(0, 10),
+          method: 'Chosen by the course author for teaching.',
+          rights: 'The course author own convention.',
+        },
+      },
+      facility: {
+        id,
+        class: 'campus',
+        typical: true,
+        name: title(id),
+        telescope: {
+          name: 'A teaching telescope',
+          aperture: { v: 0.4, u: 'm', s: 'course-convention' },
+        },
+        instruments: [
+          { id: 'camera', kind: 'imager', name: 'A teaching camera' },
+        ],
+      },
+    }),
+    'README.md': `# ${title(id)}\n\nAn instrument-pack extension: one telescope with its instruments, every value cited (INSTRUMENTS.md). \`instrument.json\` starts as a typical entry; replace it with a real facility, each value with a registry unit and a source that has a retrieval date and a rights basis, and leave out what the sources do not state. \`npm run sdk -- validate\` lists what is wrong, by field.\n`,
+  }),
 
   capability: id => ({
     'gravitas-extension.json': json({

@@ -118,6 +118,7 @@ const PINNED = {
   ID_EXPERIMENT: 'gravitas.experiment',
   ID_EXPERIMENT_RESULT: 'gravitas.experiment-result',
   ID_INFERENCE: 'gravitas.inference',
+  ID_INSTRUMENT: 'gravitas.instrument',
   ID_INVESTIGATION_PACK: 'gravitas.investigation-pack',
   ID_INVESTIGATION_PROGRESS: 'gravitas.investigation.progress',
   ID_LAB3D_SNAPSHOT: 'gravitas.lab3d.snapshot',

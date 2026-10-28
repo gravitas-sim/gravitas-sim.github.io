@@ -30,6 +30,7 @@ current, and the orchestrator checks it.
 | `build-gw-data.mjs` | The published GW150914 figure data, as a data pack | `npm run gw:data`, `npm run gw:provenance`, `npm run gw:check` |
 | `build-gwosc-events.mjs` | The five GWOSC events, as a data pack | `npm run gwosc:data`, `npm run gwosc:provenance`, `npm run gwosc:check` |
 | `build-instructor-materials.js` | Build the instructor materials, and encrypt them. | `npm run build`, `npm run build:instructors`, `npm run instructors:validate`, `npm run instructors:restamp`, `npm run build:ci` |
+| `build-instruments.mjs` | npm run instruments:data  /  npm run instruments:check | `npm run instruments:data`, `npm run instruments:check` |
 | `build-investigation-manifest.js` | Generate js/data/investigations/manifest.js | `npm run manifest` |
 | `build-irreversibility-audit.mjs` | npm run audit:irreversible  /  npm run audit:irreversible -- --check | `npm run audit:irreversible` |
 | `build-lesson-translation-skeleton.mjs` | Skeleton for a lesson translation |  |
@@ -124,6 +125,7 @@ current, and the orchestrator checks it.
 | `instructor-fixture.mjs` | Is the disposable instructor fixture the one these sources would build? |  |
 | `instructor-freshness.mjs` | Was the committed instructor bundle built from these sources? |  |
 | `instrument-families.mjs` | Which instrument families a script the page fetched contains |  |
+| `instruments-validate.mjs` | npm run instruments:validate | `npm run instruments:validate` |
 | `interaction-contract.mjs` | Is a surface keeping the interaction contract? |  |
 | `interiors-validate.mjs` | The interiors kernel's Part A against its committed thresholds (Prompt 203) | `npm run interiors:validate` |
 | `jest-sequencer.mjs` | Start the slowest suites first |  |

@@ -1,0 +1,118 @@
+{
+  "id": "lco-1m0",
+  "class": "metre",
+  "typical": false,
+  "name": "Las Cumbres Observatory 1.0 m (f/8 Ritchey-Chretien with a Sinistro camera)",
+  "note": "One of an identical fleet; the Cerro Tololo unit is the site here. The Sinistro cameras are announced to be replaced in 2026-2027 (the instrument page); the values are the current ones. Gain is stated only per readout mode, so it is absent here.",
+  "site": "ctio-lco",
+  "telescope": {
+    "name": "LCO 1.0 m",
+    "aperture": {
+      "v": 1,
+      "u": "m",
+      "s": "brown2013",
+      "at": "Table 2"
+    },
+    "focalRatio": {
+      "v": 8,
+      "u": "",
+      "s": "brown2013",
+      "at": "Table 2",
+      "n": "f/8 modified Ritchey-Chretien with a doublet corrector, Sec. IV.4"
+    },
+    "secondaryDiameter": {
+      "v": 0.33,
+      "u": "m",
+      "s": "brown2013",
+      "at": "Sec. IV.4",
+      "n": "the physical diameter of the secondary mirror, not an obstruction ratio"
+    }
+  },
+  "instruments": [
+    {
+      "id": "sinistro",
+      "kind": "imager",
+      "name": "Sinistro (Fairchild CCD486 BI)",
+      "pixelSize": {
+        "v": 15,
+        "u": "um",
+        "s": "lco-sinistro",
+        "at": "instrument page"
+      },
+      "pixelScale": {
+        "v": 0.389,
+        "u": "arcsec/pix",
+        "s": "lco-sinistro",
+        "at": "instrument page",
+        "n": "1x1 binning"
+      },
+      "sensorWidth": {
+        "v": 4096,
+        "u": "pix",
+        "s": "brown2013",
+        "at": "Table 3"
+      },
+      "sensorHeight": {
+        "v": 4096,
+        "u": "pix",
+        "s": "brown2013",
+        "at": "Table 3"
+      },
+      "fieldWidth": {
+        "v": 26.5,
+        "u": "arcmin",
+        "s": "lco-sinistro",
+        "at": "instrument page",
+        "n": "full frame"
+      },
+      "fieldHeight": {
+        "v": 26.5,
+        "u": "arcmin",
+        "s": "lco-sinistro",
+        "at": "instrument page",
+        "n": "full frame"
+      },
+      "readNoise": {
+        "v": [
+          7.5,
+          8
+        ],
+        "u": "electron",
+        "s": "lco-sinistro",
+        "at": "instrument page",
+        "q": "typical"
+      },
+      "fullWell": {
+        "v": [
+          100000,
+          120000
+        ],
+        "u": "electron",
+        "s": "lco-sinistro",
+        "at": "instrument page",
+        "q": "typical",
+        "n": "unbinned"
+      },
+      "darkCurrent": {
+        "v": 0.002,
+        "u": "electron/s/pix",
+        "s": "lco-sinistro",
+        "at": "instrument page",
+        "q": "estimated",
+        "n": "the page says: at -100 C (estimated)"
+      },
+      "cycleTime": {
+        "v": 28,
+        "u": "s",
+        "s": "lco-sinistro",
+        "at": "instrument page",
+        "n": "1x1 binning, full frame"
+      },
+      "filters": {
+        "t": "Johnson-Cousins/Bessell UBVRI; SDSS/Pan-STARRS u', g', r', i', zs, Y, w",
+        "s": "lco-sinistro",
+        "at": "instrument page"
+      }
+    }
+  ]
+}

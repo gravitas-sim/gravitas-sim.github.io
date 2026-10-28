@@ -1,0 +1,164 @@
+{
+  "id": "lco-0m35",
+  "class": "campus",
+  "typical": false,
+  "name": "Las Cumbres Observatory 0.35 m (PlaneWave DeltaRho 350 with a QHY600 camera)",
+  "note": "One of an identical fleet; the McDonald Observatory unit is the site here. The zero points are for camera sq30 (a Haleakalā unit); the other units are the same design.",
+  "site": "mcdonald-lco",
+  "telescope": {
+    "name": "PlaneWave DeltaRho 350",
+    "aperture": {
+      "v": 0.35,
+      "u": "m",
+      "s": "harbeck2024",
+      "at": "Table 1"
+    },
+    "focalRatio": {
+      "v": 3,
+      "u": "",
+      "s": "harbeck2024",
+      "at": "Table 1"
+    },
+    "obstructionDiameter": {
+      "v": 0.196,
+      "u": "m",
+      "s": "harbeck2024",
+      "at": "Sec. 4.1 collecting-area formula",
+      "q": "inferred",
+      "n": "the diameter the paper subtracts as the central obscuration; the paper does not name it in words, so this is read from the formula"
+    }
+  },
+  "instruments": [
+    {
+      "id": "qhy600",
+      "kind": "imager",
+      "name": "QHY600 (Sony IMX455 CMOS)",
+      "pixelSize": {
+        "v": 3.76,
+        "u": "um",
+        "s": "harbeck2024",
+        "at": "Table 1"
+      },
+      "pixelScale": {
+        "v": 0.73,
+        "u": "arcsec/pix",
+        "s": "harbeck2024",
+        "at": "Table 1",
+        "n": "the paper calls it the projected pixel size"
+      },
+      "sensorWidth": {
+        "v": 9576,
+        "u": "pix",
+        "s": "harbeck2024",
+        "at": "Table 1"
+      },
+      "sensorHeight": {
+        "v": 6388,
+        "u": "pix",
+        "s": "harbeck2024",
+        "at": "Table 1"
+      },
+      "fieldWidth": {
+        "v": 1.9,
+        "u": "deg",
+        "s": "harbeck2024",
+        "at": "Table 1",
+        "n": "readout mode full_frame"
+      },
+      "fieldHeight": {
+        "v": 1.2,
+        "u": "deg",
+        "s": "harbeck2024",
+        "at": "Table 1",
+        "n": "readout mode full_frame"
+      },
+      "readNoise": {
+        "v": [
+          3.1,
+          3.5
+        ],
+        "u": "electron",
+        "s": "harbeck2024",
+        "at": "Table 1",
+        "q": "typical"
+      },
+      "gain": {
+        "v": [
+          0.7,
+          0.8
+        ],
+        "u": "electron/count",
+        "s": "harbeck2024",
+        "at": "Table 1"
+      },
+      "fullWell": {
+        "v": 44000,
+        "u": "electron",
+        "s": "harbeck2024",
+        "at": "Table 1",
+        "q": "approx",
+        "n": "the paper writes 64 kADU, about 44 ke-, limited by the 16-bit converter"
+      },
+      "cycleTime": {
+        "v": 6,
+        "u": "s",
+        "s": "harbeck2024",
+        "at": "Table 1",
+        "q": "upper",
+        "n": "bias to bias, full frame"
+      },
+      "filters": {
+        "t": "Sloan u', g', r', i', zs; Johnson-Cousins B, V; Pan-STARRS w; Baader Halpha, [O III], [S II]; Astrodon exoplanet (500 nm redpass)",
+        "s": "harbeck2024",
+        "at": "Table 1"
+      },
+      "bands": {
+        "u": {
+          "zeroPoint": {
+            "v": 17.5,
+            "u": "mag",
+            "s": "harbeck2024",
+            "at": "Table 2",
+            "n": "the paper words its zero points 'in units of log(e-/s)'; the values are magnitude zero points per electron per second (checked by the library's oracle o5); camera sq30"
+          }
+        },
+        "g": {
+          "zeroPoint": {
+            "v": 21.8,
+            "u": "mag",
+            "s": "harbeck2024",
+            "at": "Table 2",
+            "n": "the paper words its zero points 'in units of log(e-/s)'; the values are magnitude zero points per electron per second (checked by the library's oracle o5); camera sq30"
+          }
+        },
+        "r": {
+          "zeroPoint": {
+            "v": 21.2,
+            "u": "mag",
+            "s": "harbeck2024",
+            "at": "Table 2",
+            "n": "the paper words its zero points 'in units of log(e-/s)'; the values are magnitude zero points per electron per second (checked by the library's oracle o5); camera sq30"
+          }
+        },
+        "i": {
+          "zeroPoint": {
+            "v": 20.1,
+            "u": "mag",
+            "s": "harbeck2024",
+            "at": "Table 2",
+            "n": "the paper words its zero points 'in units of log(e-/s)'; the values are magnitude zero points per electron per second (checked by the library's oracle o5); camera sq30"
+          }
+        },
+        "z": {
+          "zeroPoint": {
+            "v": 18.4,
+            "u": "mag",
+            "s": "harbeck2024",
+            "at": "Table 2",
+            "n": "the paper words its zero points 'in units of log(e-/s)'; the values are magnitude zero points per electron per second (checked by the library's oracle o5); camera sq30"
+          }
+        }
+      }
+    }
+  ]
+}

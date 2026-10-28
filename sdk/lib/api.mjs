@@ -63,7 +63,7 @@ export {
 // the check a transit pack states (added in 1.3.0; `sdk test` runs the same).
 
 /** This SDK. A major version changes only with a breaking change to this file. */
-export const SDK_VERSION = '1.10.0';
+export const SDK_VERSION = '1.11.0';
 
 /**
  * The modules an extension instrument (or a vendored panel) may import, by the
@@ -102,17 +102,19 @@ export const FORMATS = Object.freeze({
   // Reads /1 and /2 (a rubric criterion's kind, depth or weight).
   'gravitas.investigation-pack': 2,
   'gravitas.scenario-pack': 1,
+  'gravitas.instrument': 1,
   'gravitas.extension-archive': 1,
   // Reads /1 and /2 (the extended uncertainty states, a correlation or a fit).
   'gravitas.artifact': 2,
 });
 
-/** The five kinds of extension, and whether each may carry code. */
+/** The six kinds of extension, and whether each may carry code. */
 export const EXTENSION_TYPES = Object.freeze({
   'data-pack': { kind: 'declarative', code: false },
   'course-pack': { kind: 'declarative', code: false },
   'scenario-pack': { kind: 'declarative', code: false },
   'investigation-pack': { kind: 'declarative', code: false },
+  'instrument-pack': { kind: 'declarative', code: false },
   capability: { kind: 'built-in', code: true },
 });
 

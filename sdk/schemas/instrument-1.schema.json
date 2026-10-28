@@ -1,0 +1,491 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/instrument-1.schema.json",
+  "title": "gravitas.instrument/1",
+  "description": "One facility (a telescope, its instruments and, on the ground, its site) with every value cited, and its own sources and sites. The structure only; js/instruments/validate.js validatePack() is the authority (it checks each unit against the registry and its dimension, each source against the sources, and a missing value being absent). INSTRUMENTS.md. FORMATS.md lists it.",
+  "type": "object",
+  "required": [
+    "format",
+    "formatVersion",
+    "id",
+    "sources",
+    "facility"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "format": {
+      "const": "gravitas.instrument"
+    },
+    "formatVersion": {
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "title": {
+      "type": "object"
+    },
+    "sources": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/source"
+      }
+    },
+    "sites": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/site"
+      }
+    },
+    "facility": {
+      "$ref": "#/$defs/facility"
+    }
+  },
+  "$defs": {
+    "source": {
+      "type": "object",
+      "required": [
+        "kind",
+        "title",
+        "authors",
+        "year",
+        "ref",
+        "retrieved",
+        "method",
+        "rights"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "paper",
+            "instrument-page",
+            "document",
+            "typical"
+          ]
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "authors": {
+          "type": "string",
+          "minLength": 1
+        },
+        "year": {
+          "type": "integer"
+        },
+        "ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "url": {
+          "type": "string",
+          "pattern": "^https://"
+        },
+        "retrieved": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "method": {
+          "type": "string",
+          "minLength": 1
+        },
+        "rights": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "value": {
+      "type": "object",
+      "required": [
+        "v",
+        "u",
+        "s"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "v": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 2,
+              "maxItems": 2
+            }
+          ]
+        },
+        "u": {
+          "type": "string"
+        },
+        "s": {
+          "type": "string",
+          "minLength": 1
+        },
+        "at": {
+          "type": "string",
+          "minLength": 1
+        },
+        "q": {
+          "enum": [
+            "typical",
+            "upper",
+            "approx",
+            "assumed",
+            "estimated",
+            "inferred",
+            "median",
+            "effective"
+          ]
+        },
+        "n": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "textValue": {
+      "type": "object",
+      "required": [
+        "t",
+        "s"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "t": {
+          "type": "string",
+          "minLength": 1
+        },
+        "s": {
+          "type": "string",
+          "minLength": 1
+        },
+        "at": {
+          "type": "string"
+        },
+        "n": {
+          "type": "string"
+        }
+      }
+    },
+    "site": {
+      "type": "object",
+      "required": [
+        "kind",
+        "name"
+      ],
+      "anyOf": [
+        {
+          "properties": {
+            "latitude": {
+              "$ref": "#/$defs/value"
+            },
+            "longitude": {
+              "$ref": "#/$defs/value"
+            },
+            "elevation": {
+              "$ref": "#/$defs/value"
+            },
+            "seeing": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/value"
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": {
+                    "$ref": "#/$defs/value"
+                  }
+                }
+              ]
+            },
+            "skyBrightness": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/value"
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": {
+                    "$ref": "#/$defs/value"
+                  }
+                }
+              ]
+            },
+            "extinction": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/value"
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": {
+                    "$ref": "#/$defs/value"
+                  }
+                }
+              ]
+            },
+            "kind": {
+              "const": "ground"
+            },
+            "name": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "type": "object",
+          "additionalProperties": false
+        },
+        {
+          "properties": {
+            "perigee": {
+              "$ref": "#/$defs/value"
+            },
+            "apogee": {
+              "$ref": "#/$defs/value"
+            },
+            "period": {
+              "$ref": "#/$defs/value"
+            },
+            "kind": {
+              "const": "orbit"
+            },
+            "name": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "type": "object",
+          "additionalProperties": false
+        }
+      ]
+    },
+    "facility": {
+      "type": "object",
+      "required": [
+        "id",
+        "class",
+        "typical",
+        "name",
+        "telescope",
+        "instruments"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "class": {
+          "enum": [
+            "campus",
+            "metre",
+            "space",
+            "survey",
+            "radio"
+          ]
+        },
+        "typical": {
+          "type": "boolean"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "note": {
+          "type": "string"
+        },
+        "site": {
+          "type": "string"
+        },
+        "telescope": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "name"
+          ],
+          "properties": {
+            "aperture": {
+              "$ref": "#/$defs/value"
+            },
+            "effectiveAperture": {
+              "$ref": "#/$defs/value"
+            },
+            "obstructionDiameter": {
+              "$ref": "#/$defs/value"
+            },
+            "secondaryDiameter": {
+              "$ref": "#/$defs/value"
+            },
+            "focalRatio": {
+              "$ref": "#/$defs/value"
+            },
+            "collectingArea": {
+              "$ref": "#/$defs/value"
+            },
+            "name": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "instruments": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/instrument"
+          }
+        }
+      }
+    },
+    "instrument": {
+      "type": "object",
+      "required": [
+        "id",
+        "kind",
+        "name"
+      ],
+      "anyOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "pixelSize": {
+              "$ref": "#/$defs/value"
+            },
+            "pixelScale": {
+              "$ref": "#/$defs/value"
+            },
+            "sensorWidth": {
+              "$ref": "#/$defs/value"
+            },
+            "sensorHeight": {
+              "$ref": "#/$defs/value"
+            },
+            "sensorCount": {
+              "$ref": "#/$defs/value"
+            },
+            "fieldWidth": {
+              "$ref": "#/$defs/value"
+            },
+            "fieldHeight": {
+              "$ref": "#/$defs/value"
+            },
+            "fieldArea": {
+              "$ref": "#/$defs/value"
+            },
+            "readNoise": {
+              "$ref": "#/$defs/value"
+            },
+            "gain": {
+              "$ref": "#/$defs/value"
+            },
+            "darkCurrent": {
+              "$ref": "#/$defs/value"
+            },
+            "fullWell": {
+              "$ref": "#/$defs/value"
+            },
+            "readoutTime": {
+              "$ref": "#/$defs/value"
+            },
+            "cycleTime": {
+              "$ref": "#/$defs/value"
+            },
+            "exposureTime": {
+              "$ref": "#/$defs/value"
+            },
+            "bandpass": {
+              "$ref": "#/$defs/value"
+            },
+            "id": {
+              "type": "string"
+            },
+            "kind": {
+              "const": "imager"
+            },
+            "name": {
+              "type": "string"
+            },
+            "filters": {
+              "$ref": "#/$defs/textValue"
+            },
+            "bands": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/band"
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "frequencyRange": {
+              "$ref": "#/$defs/value"
+            },
+            "systemTemperature": {
+              "$ref": "#/$defs/value"
+            },
+            "receiverTemperature": {
+              "$ref": "#/$defs/value"
+            },
+            "beamFwhm": {
+              "$ref": "#/$defs/value"
+            },
+            "beamReferenceFrequency": {
+              "$ref": "#/$defs/value"
+            },
+            "apertureEfficiency": {
+              "$ref": "#/$defs/value"
+            },
+            "mainBeamEfficiency": {
+              "$ref": "#/$defs/value"
+            },
+            "bandwidth": {
+              "$ref": "#/$defs/value"
+            },
+            "velocityResolution": {
+              "$ref": "#/$defs/value"
+            },
+            "id": {
+              "type": "string"
+            },
+            "kind": {
+              "const": "receiver"
+            },
+            "name": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "band": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "zeroPoint": {
+          "$ref": "#/$defs/value"
+        },
+        "throughputConstant": {
+          "$ref": "#/$defs/value"
+        },
+        "depth5sigma": {
+          "$ref": "#/$defs/value"
+        },
+        "seeing": {
+          "$ref": "#/$defs/value"
+        }
+      }
+    }
+  }
+}

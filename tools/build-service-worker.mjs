@@ -434,6 +434,12 @@ export const NEVER_PRECACHED = [
   /^(js\/sunWidgets\.js|js\/i18n\/(en|es)\.sun\.js)$/,
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(the-turning-sun|the-suns-power)\.js$/,
   /^images\/investigations\/(the-turning-sun|the-suns-power)\.webp$/,
+  // The instrument library (Prompt 209, INSTRUMENTS.md): the cited table, its validator
+  // and its three adapters. No shipped page imports them yet (the exposure planner,
+  // Prompt 210, is the first), so an install has no use for them and the first-visit
+  // tier has no room. Their first page adopter decides whether any of it is installed.
+  /^js\/instruments\//,
+  /^js\/data\/instruments\.js$/,
   // The small-body instruments and investigations (Prompt 198 part 3, D-R10-198-04): the
   // family and its words, the two lessons' per-lesson paths (their text is appended to the
   // satellite files) and their thumbnails: kept after the first online use, not installed.

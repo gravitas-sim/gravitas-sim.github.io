@@ -65,6 +65,9 @@ export const PROVIDES = {
   // Declarative: the SDK validates and archives it, and the catalog installs
   // a curated one and shows its units (CATALOG.md).
   courses: 'id',
+  // A telescope with its instruments and cited values (gravitas.instrument/1,
+  // INSTRUMENTS.md). Declarative: the SDK validates and archives it.
+  instruments: 'id',
 };
 /** What a package may use from elsewhere. */
 export const USES = ['scenarios', 'widgets', 'dataPacks', 'models'];

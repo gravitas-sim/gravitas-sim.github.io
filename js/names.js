@@ -113,6 +113,8 @@ export const ID_MISSION_PLAN = 'gravitas.mission-plan';
 export const ID_OBSERVATION = 'gravitas.observation';
 export const ID_OBSERVED = 'gravitas.observed';
 export const ID_OBSERVING_SETUP = 'gravitas.observing-setup';
+/** The format of an instrument pack (INSTRUMENTS.md, sdk/schemas/instrument-1.schema.json). */
+export const ID_INSTRUMENT = 'gravitas.instrument';
 export const ID_ORBITAL_SYSTEM = 'gravitas.orbital-system';
 export const ID_PIPELINE = 'gravitas.pipeline';
 export const ID_POWER_LAW_INSTRUMENTS = 'gravitas.power-law-instruments';

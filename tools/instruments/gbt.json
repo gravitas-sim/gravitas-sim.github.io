@@ -1,0 +1,96 @@
+{
+  "id": "gbt",
+  "class": "radio",
+  "typical": false,
+  "name": "Green Bank Telescope with the L-band receiver",
+  "note": "The 21 cm line receiver. Gain in K/Jy and the pointing accuracy are not stated in the sources read, and are absent.",
+  "site": "green-bank",
+  "telescope": {
+    "name": "Green Bank Telescope",
+    "aperture": {
+      "v": 100,
+      "u": "m",
+      "s": "gbt-instruments",
+      "at": "instruments page",
+      "q": "effective",
+      "n": "the page: 100 m (effective); a 110 m x 100 m unblocked section of a 208 m parent paraboloid"
+    },
+    "collectingArea": {
+      "v": 7854.0,
+      "u": "m^2",
+      "s": "gbt-performance",
+      "at": "Planning Observations",
+      "n": "the guide gives the dish area, not a diameter"
+    }
+  },
+  "instruments": [
+    {
+      "id": "l-band",
+      "kind": "receiver",
+      "name": "Rcvr1_2 (L band) with the autocorrelation spectrometer",
+      "frequencyRange": {
+        "v": [
+          1.15,
+          1.73
+        ],
+        "u": "GHz",
+        "s": "gbt-instruments",
+        "at": "receiver row"
+      },
+      "systemTemperature": {
+        "v": 20,
+        "u": "K",
+        "s": "gbt-instruments",
+        "at": "receiver row",
+        "n": "the page; Boothroyd et al. (2011, Sec. 2) report 18 K at the zenith for the same receiver"
+      },
+      "receiverTemperature": {
+        "v": 6,
+        "u": "K",
+        "s": "gbt-instruments",
+        "at": "receiver row"
+      },
+      "beamReferenceFrequency": {
+        "v": 1420,
+        "u": "MHz",
+        "s": "boothroyd2011",
+        "at": "Sec. 2",
+        "n": "the paper equates 21 cm with 1420 MHz"
+      },
+      "beamFwhm": {
+        "v": 9.1,
+        "u": "arcmin",
+        "s": "boothroyd2011",
+        "at": "Sec. 2",
+        "n": "9.1 x 9.0 arcmin (cross-elevation x elevation) at 21 cm; the larger is stored"
+      },
+      "apertureEfficiency": {
+        "v": 0.65,
+        "u": "",
+        "s": "boothroyd2011",
+        "at": "Sec. 2",
+        "n": "at 21 cm"
+      },
+      "mainBeamEfficiency": {
+        "v": 0.88,
+        "u": "",
+        "s": "boothroyd2011",
+        "at": "Sec. 2"
+      },
+      "bandwidth": {
+        "v": 12.5,
+        "u": "MHz",
+        "s": "boothroyd2011",
+        "at": "Sec. 3.2",
+        "n": "the spectrometer configuration used in that paper"
+      },
+      "velocityResolution": {
+        "v": 0.16,
+        "u": "km/s",
+        "s": "boothroyd2011",
+        "at": "Sec. 3.2",
+        "n": "in the 21 cm line, for that configuration"
+      }
+    }
+  ]
+}
