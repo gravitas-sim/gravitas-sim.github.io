@@ -9,7 +9,7 @@
 // from an id is a one-line re-export of a named export here (English, or `_ES`
 // for the Spanish), and the instructor modules read INSTRUCTOR.
 //
-// Content, with one import (js/format.js, which imports nothing): every number a step states is recomputed in
+// Content, no imports: every number a step states is recomputed in
 // tests/planetsCloseout.test.js from the instruments and kernels the lesson
 // points at. Every step carries a `sid`, an opaque stable id that student
 // progress is keyed by: reword a step, move it, translate it, never change its
@@ -23,7 +23,19 @@
 // unit of the course package (js/data/courses/solar-system-and-the-sun.js).
 // =============================================================================
 
-import { fixed } from '../../format.js';
+// js/format.js is 13 KB on the instructor route (a request and a closure file
+// for ten calls), so the computed messages format through one Intl formatter
+// here, fixed to English like the messages themselves (a computed string is
+// not translated).
+const FIX = {};
+const fixed = (value, digits) =>
+  Number.isFinite(value)
+    ? (FIX[digits] ||= new Intl.NumberFormat('en-US', {
+        minimumFractionDigits: digits,
+        maximumFractionDigits: digits,
+        useGrouping: false,
+      })).format(value)
+    : '';
 
 /** A placeholder star on the canvas: a display; the instrument is where the picture is. */
 const STAGE = {
@@ -1171,7 +1183,7 @@ export const MOONS_OF_THE_GIANTS_ES = {
     },
     {
       title: 'Lo que has deducido',
-      body: 'Tres periodos de imágenes sintéticas, 1,7682, 3,5480 y 7,1413 días; cocientes de 2,006 y 2,013, cerca de 2 y no iguales a 2, lo cual es un indicio y no una prueba; y una combinación de los tres movimientos, 0,015 grados por día frente a una incertidumbre de 0,025, compatible con cero cuando cada movimiento es cientos de veces mayor. Calisto, con un cociente de 2,33, queda fuera de la cadena. Lo que las imágenes no pueden mostrar es el ángulo mismo manteniéndose durante años, que <em>Cuando las órbitas se enlazan</em> sigue en un modelo. Otros gigantes tienen familias propias (las lunas de Saturno, las de Urano), y este paquete solo cubre las de Júpiter.',
+      body: 'Tres periodos de imágenes sintéticas, 1,7682, 3,5480 y 7,1413 días; cocientes de 2,006 y 2,013, cerca de 2 y no iguales a 2, lo cual es un indicio y no una prueba; y una combinación de los tres movimientos, 0,015 grados por día frente a una incertidumbre de 0,025, compatible con cero cuando cada movimiento es cientos de veces mayor. Calisto, con un cociente de 2,33, queda fuera de la cadena. Lo que las imágenes no pueden mostrar es el ángulo mismo manteniéndose durante años, que <em>Cuando las órbitas se enlazan</em> sigue en un modelo. Otros gigantes tienen familias propias (las lunas de Saturno, las de Urano), y este conjunto solo cubre las de Júpiter.',
     },
   ],
 };

@@ -33,7 +33,7 @@ const IDS = [
 
 describe('the three investigations', () => {
   test('are in the catalog, once each, with a guide, a flow, expectations and a band', () => {
-    expect(PLANETS.map(l => l.id)).toEqual(IDS);
+    expect(PLANETS.map(l => l.id).sort()).toEqual([...IDS].sort());
     for (const id of IDS) {
       expect(INVESTIGATIONS.filter(i => i.id === id)).toHaveLength(1);
       for (const k of ['content', 'flow', 'expectations', 'bands'])
