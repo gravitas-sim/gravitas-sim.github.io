@@ -12,8 +12,8 @@ ellipsoid, from which the rotation period comes by the two-maxima rule and the a
 
 **This is the kernel, its validation, its words and one real catalog pack.** Part 2 added the
 JPL Small-Body Database numbered-asteroid cut (H < 13) as a lazy pack and ran the tier-e rows on
-it (below). The Kuiper-belt subset (the announced file is not on disk) and the light curve (not
-retrievable) are NOT RUN, and the two investigations, Spanish, instructor materials and the
+it (below). The Kuiper-belt file was added afterwards (tier e3, below); the light curve (not
+retrievable) is NOT RUN, and the two investigations, Spanish, instructor materials and the
 model-page section are **not built**. Nothing in this PR is imported by a page; the kernel and the
 pack are `NEVER_PRECACHED`.
 
@@ -40,8 +40,8 @@ same catalog cut": that needs the catalog and is tier e1.
 ## Result
 
 `npm run small-bodies:validate -- --record` (about 4 minutes on two child processes; the Jest
-suite reruns only the quick groups, 23 s, and holds them to the committed `record.json`): **108
-rows, 93 pass, 12 fail (left failing, Carl's ruling D-R10-198-03), 3 NOT RUN**; 93 includes 20
+suite reruns only the quick groups, 23 s, and holds them to the committed `record.json`): **116
+rows, 102 pass, 12 fail (left failing, Carl's ruling D-R10-198-03), 2 NOT RUN**; 102 includes 22
 reported figures. In detail.
 
 - **Axes.** The five gaps sit at 2.0648, 2.5013, 2.8246, 2.9575 and 3.2776 AU, the Hildas at
@@ -178,9 +178,21 @@ deviance, which is quadratic at the optimum and left the coefficients 1e-5 away.
 (an edge nudge of 1e-9; stop on the coefficients) with no bound touched, and the oracle bins in
 integers. The failing legs are unchanged by them.
 
+**Tier e3, the Kuiper-belt file.** JPL SBDB, all kinds, a 30 to 60 AU, e < 0.5, data arc over 365
+days; 3,453 rows, 268,965 bytes, SHA-256 `5dd21849...b0fbd`, retrieved 2026-10-27, the rights of
+the numbered cut (same answer of Carl's). Contract committed before any value was read (correction
+c4, `3535a81b`); packed whole as `js/data/smallbodies/kuiper-a30-60.json` (137 KB; name, a, e,
+i, H), a lazy `NEVER_PRECACHED` file. **All e3 rows pass:** 520 objects in the plutino a-window
+(39.402 AU +- 0.5) against a mean of 78 in the two flanking one-AU windows (a factor of 6.7; bound
+2), 169 in the twotino window against 108.5 (a factor of 1.6, reported, not bounded), 1,782 in the
+classical box, the shortest arc 366 days, and every count equal to an independent numpy count of
+the file. The pack's selection statement says what it is: objects observed over a year, found by
+magnitude-limited surveys, so large, bright and near-perihelion objects are over-represented; the
+counts are not the population's, and the plutino and twotino classes are a-windows (a proxy for
+resonance, not a libration test).
+
 **NOT RUN, with reasons.** e2: no measured light curve (the ALCDEF download is a form-based job;
-the PDS path returned 404, 2026-10-27); e3: the Kuiper-belt file was announced and is not on
-disk; e1.cited as above. Nothing is simulated as authentic.
+the PDS path returned 404, 2026-10-27); e1.cited as above. Nothing is simulated as authentic.
 
 ## What is built, and what is not
 
@@ -190,8 +202,7 @@ document.
 
 Not built:
 
-- **Item 1, the rest.** A Kuiper-belt subset (the announced file is not on disk) and an asteroid
-  light curve under a recorded rights decision (not retrievable; the synthetic curve this kernel
+- **Item 1, the rest.** An asteroid light curve under a recorded rights decision (not retrievable; the synthetic curve this kernel
   produces, labelled with its truth manifest, stands in until then).
 - **Item 3, the investigations** ("The gaps in the belt", "How fast does it spin?"), their
   Spanish, instructor materials, the resonance-scenario links and the model-page section; the
@@ -279,6 +290,6 @@ at 0.9 of the first's power outside its resolution makes it "ambiguous" and list
 `tools/small-bodies-validate.mjs` (`npm run small-bodies:validate`),
 `tools/small-bodies-oracle/oracle.py`,
 `tests/fixtures/small-bodies/{thresholds,oracle-inputs,oracle-results,oracle-real-results,failed-legs,record}.json`,
-`js/data/smallbodies/numbered-h13.json`, `tools/small-bodies-pack.py`,
+`js/data/smallbodies/{numbered-h13,kuiper-a30-60}.json`, `tools/small-bodies-pack.py`,
 `tests/smallBodies.test.js`. The kernel is listed in `NEVER_PRECACHED`
 (`tools/build-service-worker.mjs`) though no page imports it yet. Register rows D-R10-198-01 to -03.

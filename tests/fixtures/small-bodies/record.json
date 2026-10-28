@@ -324,12 +324,6 @@
    "note": "no measured asteroid light curve: the ALCDEF download is a form-based job and the PDS path returned 404 on 2026-10-27; nothing is simulated as authentic"
   },
   {
-   "id": "e3.kuiper",
-   "measured": null,
-   "pass": null,
-   "note": "the Kuiper-belt subset file was announced and is not on disk"
-  },
-  {
    "id": "c1.coverage.3:1",
    "measured": 0.9266666666666666,
    "bound": [
@@ -803,6 +797,69 @@
    "bound": "reported",
    "pass": true,
    "note": "the 3:1 depletion on the 2537 objects with H < 11 (the H < 13 cut gives 0.880): the same gap in a brighter cut"
+  },
+  {
+   "id": "e3.rows",
+   "measured": 3453,
+   "bound": 3000,
+   "pass": true,
+   "note": "3453 rows in the pack"
+  },
+  {
+   "id": "e3.wellObserved",
+   "measured": 1,
+   "bound": 1,
+   "pass": true,
+   "note": "the shortest data arc is 366 days"
+  },
+  {
+   "id": "e3.plutino",
+   "measured": 520,
+   "bound": 100,
+   "pass": true,
+   "note": "objects in the plutino a-window (a proxy for the 3:2 resonance)"
+  },
+  {
+   "id": "e3.twotino",
+   "measured": 169,
+   "bound": 20,
+   "pass": true,
+   "note": "objects in the twotino a-window"
+  },
+  {
+   "id": "e3.classical",
+   "measured": 1782,
+   "bound": 300,
+   "pass": true,
+   "note": "objects in the classical box"
+  },
+  {
+   "id": "e3.concentration",
+   "measured": 6.666666666666667,
+   "bound": 2,
+   "pass": true,
+   "note": "plutino window 520 against a flank mean of 78"
+  },
+  {
+   "id": "e3.concentration.twotino",
+   "measured": 1.5576036866359446,
+   "bound": "reported",
+   "pass": true,
+   "note": "twotino window 169 against a flank mean of 108.5: reported, not bounded"
+  },
+  {
+   "id": "e3.oracle",
+   "measured": 1,
+   "bound": 1,
+   "pass": true,
+   "note": "the class counts and the plutino flanks against an independent numpy count of the same file"
+  },
+  {
+   "id": "e3.table",
+   "measured": 3453,
+   "bound": "reported",
+   "pass": true,
+   "note": "{\"innerMainBelt\":0,\"middleMainBelt\":0,\"outerMainBelt\":0,\"hilda\":0,\"trojan\":0,\"kuiperClassical\":1782,\"plutino\":520,\"twotino\":169,\"other\":982}"
   }
  ]
 }

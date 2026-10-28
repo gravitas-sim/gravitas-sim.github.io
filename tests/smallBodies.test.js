@@ -75,7 +75,6 @@ describe('the committed thresholds hold for the production module', () => {
     expect(live.filter(r => r.pass === null).map(r => r.id)).toEqual([
       'e1.cited',
       'e2.lightcurve',
-      'e3.kuiper',
     ]);
   });
 
