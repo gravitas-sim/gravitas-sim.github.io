@@ -1,0 +1,63 @@
+{
+  "format": "gravitas.atmospheres-gate-ii-oracle-results/1",
+  "seed": 201,
+  "fullResults": {
+    "file": "tools/atmospheres-gate-ii/oracle-results-full.json",
+    "branch": "spike/atmospheres-gate-ii",
+    "sha256": "a3e071d6c79ca584b2710d7e3ce36b21e6832d733a25ea8a29d06ae22c581a3c",
+    "bytes": 2627723,
+    "why": "the full file (seeded inputs and truth for every ensemble) is on the never-merged spike; this summary is what the test needs"
+  },
+  "selfTest": {
+    "lambertAt0": 1.0000000000000002,
+    "lambertAtHalfPi": 0,
+    "lambertAtPi": 0,
+    "lommelSeeligerClosedVsNumeric": 5.023759186428833e-13,
+    "chordVsBessel": -1.7430501486614958e-14,
+    "depthGridConvergence": 5.082653846259362e-14
+  },
+  "counts": {
+    "E1": 400,
+    "E2": 1000,
+    "E3": 300,
+    "E4": 181,
+    "E6": 2000,
+    "X2single": 200,
+    "X2bands": 200,
+    "X3": 2000,
+    "X4": 2000,
+    "X4candidates": 3689,
+    "X6": 500,
+    "Z1": 100
+  },
+  "syntheticAbsorber": {
+    "strong": {
+      "lines": 360,
+      "microns": [1.3, 1.4],
+      "sigmaMinMedianMax": [
+        1.4408673647642812e-26, 1.276625355600561e-25, 1.3105131259770127e-24
+      ]
+    },
+    "weak": {
+      "lines": 40,
+      "microns": [1.4, 1.5],
+      "sigmaMinMedianMax": [
+        1.9293759693858311e-28, 2.5167109561253265e-27, 6.808545391963794e-25
+      ]
+    },
+    "window": {
+      "lines": 0,
+      "microns": [1.55, 1.65],
+      "sigmaMinMedianMax": [1e-30, 1e-30, 1e-30]
+    }
+  },
+  "constants": {
+    "k": 1.380649e-23,
+    "h": 6.62607015e-34,
+    "c": 299792458,
+    "mu": 1.6605390666e-27,
+    "sigma": 5.6703744191844314e-8,
+    "RJup": 71492000,
+    "RSun": 695700000
+  }
+}
