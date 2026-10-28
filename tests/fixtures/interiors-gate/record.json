@@ -1,0 +1,216 @@
+{
+  "prompt": 203,
+  "part": "B",
+  "thresholdsCommit": "186ebf90",
+  "base": "c4b7375920bee1c99544fb764bf96c850b1e8039",
+  "spike": {
+    "branch": "spike/interiors-gate",
+    "sha": "ad5a7d737538c1c5ec7bb8cbc5918c94eec5836d",
+    "mergedNever": true
+  },
+  "environment": {
+    "judgeNode": "24.4.0",
+    "bytesNode": "22.23.4",
+    "oracle": "python -I in the scratch venv: numpy 2.2.6, scipy 1.15.3 (solve_ivp Radau, quad, brentq)",
+    "seed": 203,
+    "streams": {
+      "I5": 20301,
+      "O6": 20302
+    }
+  },
+  "packEqualsSources": {
+    "pass": true,
+    "count": 26
+  },
+  "checks": {
+    "I1.closed": {
+      "status": "pass",
+      "measured": {
+        "massRelMax": 6.145409247259622e-16,
+        "coreVsBrentqRelMax": 7.808344078428219e-13,
+        "coreVsTruthRelMax": 8.809805271300789e-13,
+        "points": 1500
+      }
+    },
+    "I2.moment": {
+      "status": "pass",
+      "measured": {
+        "relMax": 8.328160427421672e-16,
+        "homogeneous": 0.4,
+        "points": 1500
+      }
+    },
+    "I3.earth": {
+      "status": "pass",
+      "measured": {
+        "coreKm": 3479.8959207638213,
+        "sigmaKm": 106.23569931372882,
+        "published": 3480,
+        "rel": 0.000029907826488125602
+      }
+    },
+    "I4.mars": {
+      "status": "pass",
+      "measured": {
+        "coreKm": 1827.3747322114393,
+        "sigmaKm": 100.19405351424024,
+        "published": 1830,
+        "rel": 0.0014345725620550148
+      }
+    },
+    "I6.moment-published": {
+      "status": "pass",
+      "measured": {
+        "rows": [
+          {
+            "body": "earth",
+            "predicted": 0.34612109567100163,
+            "sigma": 0.00394625708709177,
+            "published": 0.3307,
+            "rel": 0.046631677263385664,
+            "ruledOutSigmas": 693.0000000000002
+          },
+          {
+            "body": "mars",
+            "predicted": 0.3723096738840241,
+            "sigma": 0.0029260276781077482,
+            "published": 0.364,
+            "rel": 0.022828774406659598,
+            "ruledOutSigmas": 36.00000000000003
+          }
+        ]
+      }
+    },
+    "I5.coverage": {
+      "status": "pass",
+      "measured": {
+        "clusters": [
+          {
+            "cluster": "earth-like",
+            "oneSigma": 0.672,
+            "twoSigma": 0.95,
+            "n": 1000
+          },
+          {
+            "cluster": "mars-like",
+            "oneSigma": 0.678,
+            "twoSigma": 0.972,
+            "n": 1000
+          }
+        ]
+      }
+    },
+    "I7.refusals": {
+      "status": "pass",
+      "measured": {
+        "refused": 23,
+        "of": 23,
+        "codes": [
+          "input",
+          "layer-order",
+          "no-core",
+          "core-fills",
+          "volatile-rich",
+          "sigma",
+          "not-tested",
+          "unknown-body"
+        ]
+      }
+    },
+    "O1.closed": {
+      "status": "pass",
+      "measured": {
+        "forwardRelMax": 0,
+        "inverseRelMax": 0,
+        "roundTripRelMax": 2.590498787150331e-15,
+        "homogeneousMoment": 0.39999999999999997,
+        "points": 1000
+      }
+    },
+    "O2.radau-clairaut": {
+      "status": "pass",
+      "measured": {
+        "oracleSelfTest": {
+          "pass": true,
+          "homogeneousEta": 0,
+          "homogeneousMoment": 0.4,
+          "homogeneousF_over_q": 1.25,
+          "polytropeMoment": 0.2613819320973156,
+          "polytropeTarget": 0.26138193209731553,
+          "polytropeEta": 1.2898681336963027,
+          "polytropeF_over_q": 0.759908877317568
+        },
+        "worstProfileRel": 0.004829669860966011,
+        "worstProfile": {
+          "x": 0.6281321139540523,
+          "kappa": 3.872223087772727
+        },
+        "polytropeRel": 0.006035892172502011,
+        "profiles": 200
+      }
+    },
+    "O3.earth": {
+      "status": "pass",
+      "measured": {
+        "q": 0.0034613927129773406,
+        "predicted": 0.0033446186756324425,
+        "published": 0.00335281,
+        "rel": 0.002443122147559031
+      }
+    },
+    "O4.jupiter": {
+      "status": "pass",
+      "measured": {
+        "q": 0.08919543245010236,
+        "predicted": 0.0679822508841974,
+        "published": 0.06487,
+        "radiiFlattening": 0.0648743915403122,
+        "rel": 0.0479767363064191
+      }
+    },
+    "O5.chain": {
+      "status": "pass",
+      "measured": {
+        "twoLayerMoment": 0.34612109567100163,
+        "predicted": 0.0035393803763434967,
+        "published": 0.00335281,
+        "rel": 0.05564597348000536
+      }
+    },
+    "O6.coverage": {
+      "status": "fail",
+      "measured": {
+        "oneSigma": 0.79,
+        "twoSigma": 0.987,
+        "n": 1000
+      }
+    },
+    "O7.refusals": {
+      "status": "pass",
+      "measured": {
+        "refused": 18,
+        "of": 18,
+        "saturnCode": "q-range",
+        "codes": [
+          "q-range",
+          "non-hydrostatic",
+          "unknown-body",
+          "input",
+          "moment-range",
+          "closure"
+        ]
+      }
+    },
+    "B1.lazy": {
+      "status": "pass",
+      "measured": {
+        "firstVisitAddedB": 0,
+        "idleAddedB": 0,
+        "deferredAddedB": 0,
+        "closureFiles": 281,
+        "method": "Node 22.23.4 copies of v3 c4b73759 and of this branch: tools/data-budget.mjs (first-visit 5,189,906 and idle 1,554,278 gzip bytes in both), node build.js and tools/bundle-budget.mjs (identical logs), sw-manifest.js byte-identical, sourcePathsFor 281 files with none under interiors",
+        "neverPrecached": "/^js\\/kernels\\/interiors\\//"
+      }
+    }
+  }
+}

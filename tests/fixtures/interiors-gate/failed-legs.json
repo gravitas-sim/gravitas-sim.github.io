@@ -1,0 +1,13 @@
+{
+  "format": "gravitas.interiors-gate-failed-legs/1",
+  "prompt": 203,
+  "what": "Legs that fail as committed in thresholds.json and are left failing, each with its cause. No bound was moved. tests/interiorsGate.test.js holds each to this record, so a change that fixes or worsens one cannot pass unnoticed.",
+  "legs": {
+    "O6.coverage": {
+      "bound": [0.6, 0.76],
+      "measured": 0.79,
+      "cause": "The stated 1-sigma interval on the flattening covered the oracle's first-order Clairaut flattening in 790 of 1,000 profiles (2-sigma 0.987), above the committed band: the interval is conservative, not too narrow. The interval is the propagated error (the moment's 0.002 and q's 1 percent) plus a committed model term of 1 percent of f, and O2 measured the Radau closure's own error at 0.48 percent at worst (0.60 percent for the polytrope), so the model term is about twice what the closure costs and the stated interval over-covers. The kernel is not under-reporting its uncertainty. Left as committed: only Carl resets a bound; verdict C follows from the committed decision function and the evidence for A is in the record (every other leg passes).",
+      "kernelUnchanged": "ad5a7d73"
+    }
+  }
+}
