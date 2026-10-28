@@ -119,3 +119,87 @@ the slice it names and never the A scope.
 - **C**: no inversion and no oblateness; Part A stands.
 
 ---
+
+## Results
+
+Everything above this line is the text committed in `186ebf90`, before the prototype (Prettier has since padded the
+tables; content identical). What follows was written after the measurements. The prototype is
+`spike/interiors-gate` at `ad5a7d73` (never merged): the two-layer, Darwin-Radau and layer-pack modules
+(`js/kernels/interiors/{twoLayer,radau,layers}.js`), the seeded inputs, the independent oracle, the measurement script
+(`tools/interiors-gate/`). The record is `tests/fixtures/interiors-gate/record.json`, the pinned oracle output
+`oracle-results.json`; `tests/interiorsGate.test.js` re-derives every status from them, the verdict from the decision
+function, and checks that this document states it.
+
+**Verdict: C**, by the committed decision function, on one coverage leg. Fourteen of the fifteen legs pass. `O6.coverage`
+fails as committed, on the **conservative** side: the stated 1-sigma interval on the flattening covered the first-order
+Clairaut truth in 79.0 percent of 1,000 profiles (committed band 0.60 to 0.76; the 2-sigma interval 98.7 percent). The interval
+is the propagated error plus a committed model term of 1 percent of `f`, and `O2` measured the Radau closure's own error at
+0.48 percent at worst, so the model term costs about twice what the closure does: the kernel over-reports its uncertainty, it does not
+hide it. No bound was moved and the prototype was not changed to hide it (`failed-legs.json`). The decision function reads any
+oblateness leg that is not a pass as C; with `O6` passing it would give **A** (the test shows this). Only Carl resets a bound:
+a ruling that `O6` passes under a ruling (upper edge 0.76 to 0.80, the measured 0.79 rounded up) would make the verdict A, and the
+spike's three modules, already validated, would be promoted with the tests and the instruments built on them. The
+verdict is pending Carl's ratification as a register row (D-R10-203-02, DELEGATED).
+
+### The checks
+
+| Check | Status | Measured |
+| --- | --- | --- |
+| `I1.closed` | pass | mass 6.1e-16, core radius 7.8e-13 against `brentq` (8.8e-13 against the truth), 1,500 points (bounds 1e-12, 1e-10) |
+| `I2.moment` | pass | 8.3e-16 against `quad` (bound 1e-9); `rho_c = rho_m` gives 0.4 exactly |
+| `I3.earth` | pass | 3,479.9 km against 3,480 (0.003 percent; stated uncertainty 106 km): a closure test |
+| `I4.mars` | pass | 1,827.4 km against 1,830 (0.14 percent; stated uncertainty 100 km): a closure test |
+| `I5.coverage` | pass | Earth-like 1 sigma 0.672, 2 sigma 0.950; Mars-like 0.678, 0.972 |
+| `I6.moment-published` | pass | Earth 0.3461 against 0.3307 (4.7 percent), Mars 0.3723 against 0.364 (2.3 percent); a homogeneous 0.4 is ruled out by 693 and 36 times the published errors |
+| `I7.refusals` | pass | 23 of 23 refused, codes `input`, `layer-order`, `no-core`, `core-fills`, `volatile-rich`, `sigma`, `not-tested`, `unknown-body` |
+| `O1.closed` | pass | forward and inverse 0 against the oracle (bound 1e-12), round trip 2.6e-15; homogeneous limit 0.4 |
+| `O2.radau-clairaut` | pass | oracle self-tests passed (homogeneous eta 0, factor 0.4, `f/q` 1.25; polytrope factor 0.261382 against 0.261382); worst of 200 profiles 0.48 percent (x 0.63, density ratio 3.9), the `n = 1` polytrope 0.60 percent (bound 3.0) |
+| `O3.earth` | pass | `q` 0.0034614, `f` 0.0033446 against 0.0033528 (0.24 percent) |
+| `O4.jupiter` | pass | `q` 0.08920, `f` 0.06798 against 0.06487 (**+4.8 percent**, bound 10): inside the size of the neglected terms |
+| `O5.chain` | pass | the two-layer moment 0.3461 gives `f` 0.003539 against 0.003353 (5.6 percent, bound 10) |
+| `O6.coverage` | **fail** | 1 sigma 0.790 (band 0.60 to 0.76), 2 sigma 0.987; conservative |
+| `O7.refusals` | pass | 18 of 18; Saturn refused with `q-range` (q 0.158 against the tested 0.10) |
+| `B1.lazy` | pass | first-visit and idle precache +0 B (5,189,906 and 1,554,278 gzip bytes, equal on a Node 22 copy of the base and of this branch), deferred JavaScript and `sw-manifest.js` identical, instructor closure 281 files with none under `interiors` |
+
+### What the verdict says, and what it does not
+
+- **Part A stands whole.** The bulk kernel, the pack and their validation are `INTERIORS.md`.
+- **Not built, on this verdict:** the two-layer inversion, the oblateness calculation, the cross-section, the upper depth's moment
+  of inertia and "Why Jupiter is flattened". A C-dependent deliverable is skipped with a written reason (this one).
+- **What passes is most of the science:** the arithmetic against an independent oracle, the closure of Earth and Mars, the
+  predicted moments (within 5 percent, and ruling out homogeneity), the Darwin-Radau relation against Clairaut's equation (under
+  0.7 percent) and against Earth and Jupiter, and the refusals, including Saturn. The two legs that carry independent information
+  about the model are `I6` and `O4`: the two-layer constant-density model over-predicts Earth's moment by 4.7 percent, and
+  Darwin-Radau over-predicts Jupiter's flattening by 4.8 percent. **Both are reported as the models' stated limits, not as
+  errors to remove.**
+- **`I3` and `I4` are closure tests**, as committed: the layer means come from the same models that give the core radii. Their
+  agreement says the arithmetic, the table and the masses are consistent.
+- **The convention for `q` matters at the size of the result.** With `a^2 b` in place of `a^3`, Jupiter's prediction falls by 6.5
+  percent to about 2 percent below the published value. The convention was committed (`a^3`) before the measurement.
+
+### Iterations, in the open
+
+The oracle's first run stalled for over eight minutes and was stopped: the `n = 1` polytrope's `sin(x) - x cos(x)` loses all
+precision near the centre, where the integrator starts, so the step size collapsed. The cure was a series for that term below
+`x = 0.2` (commit `ad5a7d73`); no bound, input range or kernel line was touched. The oracle then ran once (273 s) and its
+results are the pinned file. No check was run twice for a different answer. The kernel prototype was run once on
+Earth, Mars and Jupiter before the oracle finished (to see it work), after the thresholds were committed.
+
+### Not verified
+
+- Every published input is typed and was **not re-read** against its source (`checked: false`): the layer means (Earth's from
+  PREM's layer masses, Mars's chosen to be consistent with the published core and its core density range), the moments of
+  inertia (Jupiter's is model-derived), the IAU radii, the rotation periods. The tolerances are wide enough that a one-digit
+  slip would not change a status except `I4`'s Mars table, whose mantle mean was chosen to match the published core and so
+  could not fail it.
+- The oracle's author is the kernel's author; no external published interior code was used.
+- Nothing was checked in a browser: no instrument exists yet.
+- The Spanish and the lessons do not exist.
+
+### Requests for Carl (nothing was fetched)
+
+1. A ruling on `O6.coverage` (the 0.76 upper edge): leave it failing (verdict C stands), or reset it to 0.80 (pass under ruling,
+   verdict A).
+2. If A: a reader's check of the typed layer and moment values against PREM, Staehler et al. 2021, Konopliv et al. 2016 and the Juno-era
+   papers (single values; facts with citation; no download needed if Carl reads them), and of the uncompressed-density table.
+3. A ruling on the declared 200 kg/m3 spread of the uncompressed-density correction (Part A), or a source that states one.
