@@ -639,6 +639,13 @@
       "student": false
     },
     {
+      "file": "ORBIT_DETERMINATION_GATE.md",
+      "kind": "gate",
+      "purpose": "The orbit-determination gate: what an orbit from three observations may claim, with the committed conditioning threshold, tolerance and bounds, the measured legs and the verdict (Prompt 197, part A).",
+      "owner": 197,
+      "student": false
+    },
+    {
       "file": "ORBIT_FIT_GATE.md",
       "kind": "gate",
       "purpose": "The orbit-fit gate: the identifiability criterion and test set, committed before any fit was run, and the verdict (Prompt 187).",
@@ -909,7 +916,7 @@
       "kind": "feature",
       "purpose": "The Sun as a measurement: disc geometry, rotation from tracked spots bounded by a reference law, and the solar constant to luminosity and temperature, with their validation (Prompt 194).",
       "owner": 194,
-      "student": false
+      "student": true
     },
     {
       "file": "SUPPORT.md",

@@ -7,8 +7,9 @@
 // this file runs it, holds every row to its bound (the one leg that fails as
 // committed is held to tests/fixtures/sun/failed-legs.json), and adds what needs
 // no ensemble: a worked example, the refusals, the reference laws' data, the
-// summary of a flux series, and the inputs that were not run (a cited
-// solar-coordinates package, the authentic frames, a measured irradiance series).
+// summary of a flux series, and the input that was not run (a cited
+// solar-coordinates package). Part 2 runs the authentic frames and the measured
+// irradiance series (tests/fixtures/sun/thresholds-2.json) in the same table.
 // =============================================================================
 
 import { describe, test, expect } from '@jest/globals';
@@ -53,19 +54,19 @@ describe('the committed thresholds hold for the production module', () => {
     }
     expect(rows.filter(r => r.pass === null).map(r => r.id)).toEqual([
       'b4.package',
-      'e1.authentic',
-      'e2.irradiance',
     ]);
   });
 
   test('the failed leg is held to its record: still failing, in its measured range', () => {
     const failing = rows.filter(r => r.pass === false).map(r => r.id);
-    expect(failing).toEqual(Object.keys(FAILED));
+    expect(failing.sort()).toEqual(Object.keys(FAILED).sort());
     for (const [id, leg] of Object.entries(FAILED)) {
       const r = rows.find(x => x.id === id);
       expect(r.measured).toBeGreaterThanOrEqual(leg.measuredRange[0]);
       expect(r.measured).toBeLessThanOrEqual(leg.measuredRange[1]);
-      expect(r.bound).toBe(leg.bound.noiseFreeSynodicRouteDegPerDay);
+      if (leg.rowBound === undefined)
+        expect(r.bound).toBe(leg.bound.noiseFreeSynodicRouteDegPerDay);
+      else expect(r.bound).toEqual(leg.rowBound);
     }
   });
 

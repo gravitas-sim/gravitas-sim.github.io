@@ -148,6 +148,10 @@ const DEEPER = {
     import('./data/investigations/depth/why-venus-is-hot.js'),
   'two-greenhouse-models': () =>
     import('./data/investigations/depth/two-greenhouse-models.js'),
+  'the-turning-sun': () =>
+    import('./data/investigations/depth/the-turning-sun.js'),
+  'the-suns-power': () =>
+    import('./data/investigations/depth/the-suns-power.js'),
   'which-surface-is-older': () =>
     import('./data/investigations/depth/which-surface-is-older.js'),
   'craters-by-size': () =>

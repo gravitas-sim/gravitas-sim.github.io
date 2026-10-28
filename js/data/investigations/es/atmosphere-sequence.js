@@ -191,7 +191,198 @@ export const TWO_GREENHOUSE_MODELS = {
   ],
 };
 
+// El Sol que gira (Prompt 194, parte 2): paso a paso con el inglés.
+export const THE_TURNING_SUN = {
+  title: 'El Sol que gira',
+  subtitle:
+    'Catorce días de imágenes, un grupo de manchas seguido a través del disco y la rotación del Sol a partir de él',
+  objectives: [
+    'Leer la latitud y la longitud de una mancha en una imagen del Sol, con la incertidumbre de colocarla, y decir por qué una cerca del borde se lee peor',
+    'Seguir un grupo de manchas durante días hasta una velocidad y un período de rotación, y corregirlo por el movimiento propio de la Tierra',
+    'Decir qué es una mancha solar y por qué las manchas a distintas latitudes giran a distinta velocidad',
+    'Decir qué pueden y qué no pueden mostrar dos grupos sobre cómo gira el Sol, y por qué dos latitudes no pueden fijar tres coeficientes',
+  ],
+  steps: [
+    {
+      title: 'Catorce imágenes del Sol',
+      body: 'El 4 de mayo de 2024 el Sol mostraba un puñado de <strong>manchas</strong> oscuras. Durante los trece días siguientes cruzaron su cara. Las imágenes de aquí son una por día, a las 12:00 UT, del Observatorio de Dinámica Solar (crédito SDO/NASA y el equipo científico de HMI). Son <strong>imágenes de vista previa</strong>, hechas para mirarlas: su fuente dice que no son para análisis científico, así que lo que leas de ellas es una lectura didáctica con una incertidumbre, no astrometría. Los dos círculos, G1 y G3, son dos grupos marcados por el autor con una regla declarada; nadie más ha marcado estas imágenes.\n\nPon el día en 1 y luego en 5 y observa G1, una mancha pequeña cerca del centro del disco.',
+    },
+    {
+      title: '¿Hacia dónde van las manchas?',
+      body: 'En estas imágenes el norte está arriba y el este a la izquierda. Avanza el día de 1 a 6 y sigue a G1.',
+      prompt: 'A través de la cara, las manchas se mueven&hellip;',
+      options: [
+        'desde el borde izquierdo hacia el derecho, de este a oeste',
+        'desde el borde derecho hacia el izquierdo, de oeste a este',
+        'hacia arriba, hacia el polo norte',
+        'nada: una mancha se queda donde está y la cara del Sol solo se ilumina',
+      ],
+      misconceptions: [
+        {
+          say: 'Una mancha está en un lugar fijo del Sol, y se mueve por la imagen porque el Sol gira. G1 está a 452 píxeles de la izquierda el día 1 y a 912 el día 6.',
+        },
+      ],
+      hints: ['Mira la posición horizontal de G1 el día 1 y el día 5.'],
+      because:
+        'Desde la izquierda, el este, hacia la derecha, el oeste. El Sol gira en el mismo sentido en que los planetas lo rodean, así que las manchas entran por el borde este y salen por el oeste.',
+    },
+    {
+      title: '¿Dónde está G1 en el Sol?',
+      body: 'Una imagen muestra el Sol plano; lo que quieres es dónde está una mancha en la esfera. El instrumento hace la geometría, a partir de la inclinación del polo del Sol hacia nosotros y la longitud de Carrington del meridiano central, ambas de JPL Horizons. La cruz empieza sobre G1 el día 1. Lee su <strong>latitud</strong> y su <strong>longitud desde el meridiano central</strong>, en grados. El este es negativo.',
+      fields: [
+        { label: 'Latitud de G1 el día 1' },
+        { label: 'Longitud de G1 desde el meridiano central el día 1' },
+      ],
+    },
+    {
+      title: '¿Cuánto gira en tres días?',
+      body: 'Pon el día en <strong>4</strong> y lee la longitud de G1 en la fila de la <strong>marca del autor</strong>. Luego divide lo que se movió, desde el día 1, entre los tres días transcurridos.',
+      fields: [
+        { label: 'Longitud de G1 el día 4' },
+        { label: 'Cuánto giró cada día, del día 1 al día 4 (grados por día)' },
+      ],
+    },
+    {
+      title: 'El seguimiento completo',
+      body: 'El segundo instrumento toma todas las marcas de G1 que no están demasiado cerca del borde (seis días) y ajusta una recta a la longitud frente al tiempo. Lee la <strong>velocidad sinódica</strong>, la velocidad vista desde la Tierra, con su incertidumbre, y el <strong>período sinódico</strong>: lo que tarda una vuelta de 360 grados a esa velocidad.',
+      fields: [
+        { label: 'Velocidad sinódica de G1 (grados por día)' },
+        { label: 'El período sinódico' },
+      ],
+    },
+    {
+      title: 'El período propio del Sol',
+      body: 'Mientras la mancha giraba, la Tierra también se movía, alrededor del Sol y en el mismo sentido. Los 27,3 días se miden desde un lugar en movimiento.',
+      prompt:
+        'El período de rotación propio del Sol, respecto de las estrellas, será&hellip;',
+      options: [
+        'menor que 27,3 días: la Tierra ha avanzado, así que la mancha tiene que girar algo más de una vuelta para volver a mirarnos',
+        'mayor que 27,3 días: el movimiento de la Tierra arrastra la mancha hacia atrás',
+        'el mismo: la Tierra está demasiado lejos para importar',
+      ],
+      hints: [
+        'En 27 días la Tierra recorre cerca de la decimotercera parte de su órbita, en el mismo sentido en que gira el Sol.',
+      ],
+      because:
+        'Menor. La mancha tiene que girar 360 grados más el ángulo que ha recorrido la Tierra mientras tanto antes de volver a mirarnos. El paso siguiente quita el movimiento de la Tierra de la velocidad.',
+    },
+    {
+      title: 'Respecto de las estrellas',
+      body: 'Suma el movimiento propio de la Tierra, unos 0,96 grados al día a lo largo del ecuador del Sol, a la velocidad sinódica. Lee la <strong>velocidad sideral</strong> y el <strong>período sideral</strong>.',
+      fields: [
+        { label: 'Velocidad sideral de G1 (grados por día)' },
+        { label: 'El período sideral' },
+      ],
+    },
+    {
+      title: '¿Qué es una mancha solar?',
+      body: 'Has seguido una durante una semana. Se quedó a una latitud, y por eso pudiste seguirla, y giró con el Sol.',
+      prompt: 'Una mancha solar es&hellip;',
+      options: [
+        'una zona de la superficie del Sol más fría que su entorno, y por eso más oscura, donde campos magnéticos intensos retienen el calor',
+        'un agujero en la superficie del Sol por el que vemos un interior oscuro',
+        'una nube de gas frío delante del Sol',
+        'un planeta que pasa por delante del Sol',
+      ],
+      misconceptions: [
+        {
+          say: 'No hay agujero: una mancha es parte de la superficie. Solo parece oscura junto a la superficie más caliente que la rodea, como un carbón parece oscuro junto a una llama. Sigue brillando.',
+        },
+        {
+          say: 'Una nube o un planeta no se quedarían a una latitud girando con el Sol durante una semana: G1 lo hizo. Una mancha pertenece al Sol.',
+        },
+      ],
+      hints: ['¿Qué dice que se quede a una latitud y gire con el Sol?'],
+      because:
+        'Una zona más fría donde campos magnéticos intensos retienen el calor de abajo. Es oscura solo por contraste y pertenece al Sol, así que seguirla es seguir el giro del propio Sol.',
+    },
+    {
+      title: 'Lo que has deducido',
+      body: 'Has leído el lugar de una mancha en el Sol a partir de una imagen plana, con una incertidumbre, has seguido a G1 durante seis días hasta 13,17 &plusmn; 0,06 grados al día vista desde la Tierra, y lo has corregido por el movimiento de la Tierra hasta 14,13 &plusmn; 0,06 respecto de las estrellas, un período de 25,5 días. Una mancha es una zona más fría de la superficie y pertenece a ella. Dos límites que conviene recordar: las imágenes son de vista previa, así que estas son lecturas didácticas y no astrometría, y G1 es un grupo pequeño, así que esto es una sola latitud. Los pasos más profundos siguen a un segundo grupo a otra latitud y preguntan qué pueden y qué no pueden mostrar dos grupos.',
+    },
+  ],
+};
+
+// El poder del Sol (Prompt 194, parte 2): paso a paso con el inglés.
+export const THE_SUNS_POWER = {
+  title: 'El poder del Sol',
+  subtitle:
+    'Un flujo medido en la Tierra, llevado a una unidad astronómica, y la luminosidad y la temperatura del Sol a partir de él',
+  objectives: [
+    'Llevar un flujo medido en la Tierra a una unidad astronómica con la distancia Tierra–Sol, y decir por qué hay que hacer la corrección',
+    'Convertir un flujo a una unidad astronómica en la luminosidad y la temperatura efectiva del Sol, y compararlas con el Sol de la investigación Color y temperatura',
+    'Decir qué incluye y qué no incluye el intervalo de una media de valores diarios',
+    'Leer los valores de relleno de un archivo como datos que faltan, no como medidas de cero',
+  ],
+  steps: [
+    {
+      title: 'Luz solar medida sobre el aire',
+      body: 'El instrumento <strong>TSIS-1 TIM</strong> mide la irradiancia total del Sol, toda la luz solar por un metro cuadrado de cara al Sol, sobre la atmósfera. Los valores diarios de aquí son de LASP (crédito LASP/equipo TSIS-1 TIM): los seis días del 4 al 9 de mayo de 2024, los mismos días que las imágenes de El Sol que gira. El archivo tiene siete días más después de ellos, pero valen 0,0 con una incertidumbre de 0,0: son valores de relleno, no medidas (un paso posterior). El instrumento da la irradiancia <strong>en la Tierra</strong>, y la Tierra no siempre está a la misma distancia del Sol.',
+    },
+    {
+      title: 'Llévalo a una unidad astronómica',
+      body: 'La luz solar se reparte sobre una esfera, así que el flujo cae con el cuadrado de la distancia. El 4 de mayo la Tierra estaba a 1,00844 UA del Sol. Lee el flujo en la Tierra y el flujo llevado a <strong>1 UA</strong>: el flujo por la distancia en UA, al cuadrado.',
+      fields: [
+        { label: 'El flujo en la Tierra el 4 de mayo (W/m²)' },
+        { label: 'El flujo a 1 UA (W/m²)' },
+      ],
+    },
+    {
+      title: '¿Cuánta potencia en total?',
+      body: 'El Sol envía unos 1361 W por cada metro cuadrado a 1 UA, en todas las direcciones. El área de una esfera de radio 1 UA es de unos 2,8 &times; 10<sup>23</sup> metros cuadrados.',
+      prompt: 'La potencia total del Sol, su luminosidad, será de unos&hellip;',
+      options: [
+        '4 × 10²⁶ W',
+        '4 × 10²⁰ W',
+        '4 × 10³² W',
+        '1361 W, igual que el flujo',
+      ],
+      hints: ['Multiplica el flujo por el área: 1361 × 2,8 × 10²³.'],
+      because:
+        'Unos 4 × 10²⁶ W, 400 billones de billones de vatios: 1361 W por metro cuadrado por 2,8 × 10²³ metros cuadrados. El paso siguiente lo lee en el instrumento con todos los días medidos.',
+    },
+    {
+      title: 'La luminosidad y la temperatura del Sol',
+      body: 'Usa los seis días. El instrumento lleva cada uno a 1 UA, toma la media y multiplica por el área de la esfera. La temperatura es la que necesitaría una superficie negra del tamaño del Sol para irradiar esa potencia. Lee la <strong>luminosidad</strong> en unidades de 10<sup>26</sup> W y la <strong>temperatura efectiva</strong>.',
+      fields: [
+        { label: 'La luminosidad del Sol (× 10²⁶ W)' },
+        { label: 'La temperatura efectiva' },
+      ],
+    },
+    {
+      title: '¿Y si se omite la corrección?',
+      body: 'Desactiva la corrección. La luminosidad sale más baja. La Tierra estaba entre 1,0084 y 1,0096 UA del Sol esos días.',
+      prompt: '¿Por qué sale más baja, y cuánto?',
+      options: [
+        'La Tierra estaba algo más lejos de 1 UA, así que cada flujo es menor que a 1 UA: un 1,8 por ciento demasiado baja',
+        'El Sol emitió un 1,8 por ciento menos de potencia esos días que cualquier otro',
+        'Omitirla no cambia nada: un flujo es un flujo',
+        'La Tierra estaba más cerca de 1 UA, así que el flujo es mayor y la luminosidad demasiado alta',
+      ],
+      misconceptions: [
+        {
+          say: 'La corrección es por dónde estaba la Tierra, no por lo que hizo el Sol. A 1 UA los seis días difieren en menos de un 0,1 por ciento; el resto del 1,8 por ciento es la distancia.',
+        },
+        {
+          say: 'Un flujo cae con el cuadrado de la distancia, así que depende de dónde se midió. Dos flujos solo son comparables a una misma distancia.',
+        },
+      ],
+      hints: [
+        '¿La distancia de la Tierra esos días es mayor o menor que 1 UA?',
+      ],
+      because:
+        'La Tierra estaba entre un 0,8 y un 1 por ciento más lejos que 1 UA, así que cada flujo es de un 1,7 a un 1,9 por ciento menor que a 1 UA. Omitir la corrección da una luminosidad un 1,8 por ciento demasiado baja y una temperatura de 5746 K en vez de 5772 K.',
+    },
+    {
+      title: 'Lo que has deducido',
+      body: 'Un flujo medido en la Tierra se lleva a 1 UA con la distancia, y seis días dan 1361,2 W/m<sup>2</sup> a 1 UA. Multiplicado por el área de una esfera es una luminosidad de 3,828 &times; 10<sup>26</sup> W, y una superficie del tamaño del Sol tendría que estar a 5772 K para irradiarla. La corrección importa: omitirla da una luminosidad un 1,8 por ciento demasiado baja. Los pasos más profundos miran qué muestran los seis días, cuán segura es la media y qué deja fuera.',
+    },
+  ],
+};
+
 export default {
   'why-venus-is-hot': WHY_VENUS_IS_HOT,
   'two-greenhouse-models': TWO_GREENHOUSE_MODELS,
+  'the-turning-sun': THE_TURNING_SUN,
+  'the-suns-power': THE_SUNS_POWER,
 };

@@ -1,0 +1,271 @@
+{
+  "format": "gravitas.orbit-determination-gate-thresholds/1",
+  "prompt": 197,
+  "part": "A",
+  "committed": "Before any orbit was determined, before any prototype or oracle output existed: the equations of the forward model, the observing noise, the arcs, the ensemble, the conditioning threshold, the refusal rule, the tolerance of the withheld-epoch test, every leg's bound, the decision function and the slices are in this file and in ORBIT_DETERMINATION_GATE.md, ahead of the spike branch spike/orbit-determination-gate. The spike is never merged; production code (Part B) is built afterwards, within the verdict only. The authentic legs (a published MPC arc and its published orbit) are written as rules and are NOT RUN until Carl allows the retrieval named in dataRequests; nothing is simulated as authentic. Every number below was fixed from the physics and the arithmetic of the contract (the reasoning is in the document), not from any run.",
+  "constants": {
+    "frame": "heliocentric ecliptic of J2000.0 (the frame of the committed ephemeris pack), AU and days; angles are ecliptic longitude and latitude (the equatorial to ecliptic rotation by the J2000 obliquity is a fixed rotation applied at the edge in Part B)",
+    "time": "Julian date, TDB (the pack's scale); UTC to TDB is Part B's, not this gate's",
+    "k": 0.01720209895,
+    "muSun": "k squared, AU^3 per day^2 (the Gaussian gravitational constant, exact by definition of the system of astronomical constants)",
+    "lightSpeedAuPerDay": 173.1446326846693,
+    "auKm": 149597870.7,
+    "planetMassRatios": {
+      "venus": 2.4478383e-6,
+      "earth": 3.0404326e-6,
+      "mars": 3.2271560e-7,
+      "jupiter": 9.5479194e-4,
+      "status": "ratios of GM to the Sun's GM, typed from the DE-series values by recall (Venus 324858.592, Earth plus Moon 403503.236, Mars system 42828.376, Jupiter system 126712764.8, Sun 132712440041.94, km^3 per s^2); NOT yet checked against a source file (data request R0). A relative error of 1e-4 in a ratio changes the perturbation, and so the model error E below, by 1e-4 relative, and the test uses the same ratios on both sides.",
+      "earthNote": "the pack's Earth is the geocentre (399) and its mass is the Earth-Moon system's: the Moon's offset from the barycentre (at most 4.7e6 m, 3.1e-5 AU) is neglected in the perturbation and is not a leg"
+    },
+    "perturbers": "Venus, Earth, Mars and Jupiter at the pack's positions, point masses acting on a massless asteroid, heliocentric frame with the indirect term; Mercury, Saturn, Uranus, Neptune and the Moon's offset are absent from the pack. At a main-belt distance the tidal acceleration of a planet of mass ratio m at distance d is of order m r / d^3: Jupiter (d about 3 AU) 3.5e-5, Saturn 7e-7 (2 percent of Jupiter's), Mars 1e-7 (0.3 percent), so the omitted bodies bound the computed model error E from below by a few percent of itself; the figure is an estimate by arithmetic, recorded in the document.",
+    "observation": "the geocentric astrometric direction of the asteroid: the unit vector from the Earth's centre at the receive time to the asteroid's position one light time earlier (the light time iterated to 1e-12 day), no stellar aberration, no gravitational deflection, in the ecliptic of J2000.0; observations are geocentric. A real observatory sits up to one Earth radius (4.26e-5 AU) from the geocentre, which moves a direction by 4.26e-5 over the range in radians (5.9 arcseconds at 1.5 AU, 29 arcseconds at 0.3 AU, 176 arcseconds at 0.05 AU): the synthetic legs are geocentric and so free of it, the authentic legs need the station's parallax constants (data request R3) and the near-Earth case is excluded on this ground (N1)."
+  },
+  "noise": {
+    "sigmaArcsec": 0.5,
+    "model": "independent Gaussian errors of 0.5 arcsecond standard deviation added to the observed pair (longitude times cos latitude, latitude) of every observation, in the harness's seeded generator (mulberry32, seeds in the record)",
+    "why": "0.5 arcsecond is a typical modern CCD astrometric residual for a reference-catalogue reduction; MPC weights run from 0.2 to 1 arcsecond; the same number is the weight in the least-squares covariance"
+  },
+  "ensemble": {
+    "objects": 12,
+    "draws": 100,
+    "coverageDraws": 200,
+    "objectRule": "twelve synthetic main-belt asteroids drawn in the oracle (numpy PCG64, seed 197) with a uniform in 2.2 to 3.3 AU, e uniform in 0 to 0.25, i uniform in 0 to 20 degrees, the node and the argument of perihelion uniform in 0 to 360 degrees, and the mean anomaly at t2 solved so that the object's heliocentric ecliptic longitude equals the Earth's at t2 (the object is at opposition at t2, beyond the Earth), the smallest such mean anomaly in [0, 2 pi) taken. They are labelled synthetic: their elements are not those of any real asteroid.",
+    "epochs": "t2 for object k is JD 2460900.5 + 380 k, k = 0 to 11 (TDB): every object's arc, its withheld epochs and the light time lie inside the pack's range (2460676.5 to 2467981.5) with 140 days before t2 to spare",
+    "truth": "the truth state at t2 is the oracle's osculating state of those elements; the perturbed truth is the oracle's integration of that state under the perturbers above (both directions, DOP853, rtol 1e-13, atol 1e-16 AU), the two-body truth the oracle's integration of the same state under the Sun alone",
+    "seeds": {
+      "oracle": 197,
+      "harnessNoise": 1970001
+    }
+  },
+  "arcs": {
+    "curated": {
+      "id": "T60",
+      "epochsDaysFromT2": [-60, 0, 60],
+      "why": "chosen before any measurement so that the observer's path is well curved between the observations: the Earth turns through 1.03 rad in 60 days, and the range of an object is separated from the angular velocity along the Earth's motion only by that curvature (and by the object's own acceleration)"
+    },
+    "illConditioned": {
+      "ids": ["T0.5", "T1", "T2"],
+      "halfSpansDays": [0.5, 1, 2],
+      "epochsDaysFromT2": "[-T, 0, T] for the half span T of the id",
+      "why": "a single-night pair and a two-night tracklet: the Earth turns through 0.0086, 0.017 and 0.034 rad, and the range cannot be separated from the angular velocity"
+    },
+    "sweep": {
+      "halfSpansDays": [1, 2, 5, 10, 20, 40, 60, 90],
+      "epochsDaysFromT2": "[-T, 0, T]"
+    },
+    "longer": {
+      "id": "L240",
+      "epochsDaysFromT2": [-120, -100, -80, -60, -40, -20, 0, 20, 40, 60, 80, 100, 120],
+      "why": "thirteen observations over 240 days, the least-squares improvement the roadmap's verdict B keeps"
+    },
+    "nearEarth": {
+      "id": "N5",
+      "epochsDaysFromT2": [-5, 0, 5]
+    },
+    "withheld": {
+      "nextNight": {
+        "id": "Wn",
+        "daysFromT2": 61,
+        "why": "one day after the curated arc's last observation (the next night); inside the longer arc, where it is a held-out interpolation"
+      },
+      "far": {
+        "id": "Wf",
+        "daysFromT2": 121,
+        "why": "sixty-one days beyond the curated arc's last observation, and one day after the longer arc's last: the epoch at which the unperturbed model's own error has had time to show"
+      },
+      "rule": "no withheld epoch is an observation of the arc that is judged against it"
+    }
+  },
+  "determination": {
+    "pipeline": "Gauss's method: the cosine matrix of the three line-of-sight vectors, the eighth-degree polynomial in the heliocentric distance at the middle epoch, each admissible positive root taken, the f and g series, the light-time correction and the universal-variable refinement of f and g iterated until the middle range changes by less than 1e-10 AU; then differential correction of the six elements of the state at the middle epoch by Newton's method on the six observation equations (two-body propagation, light time) to a step below 1e-12 AU in position, the polish. With more than three observations the same differential correction is a weighted least squares started from the Gauss solution of the first, middle and last observation.",
+    "admissibleRoot": "the root's heliocentric distance lies in 0.5 to 8 AU and differs by more than 5 percent from the Earth's heliocentric distance at the middle epoch (the Earth is a spurious root of the polynomial by construction)",
+    "rootChoice": "each admissible root is carried through the iteration and the polish; the root whose polished solution has the smallest observation residual is returned, and the status is ambiguousRoots when a second root also converges with a residual under twice the best",
+    "laplace": "Laplace's method on the same three observations: the line-of-sight vector and its first two time derivatives at the middle epoch from the parabola through the three directions, the eighth-degree polynomial in the distance, the range and range rate from the linear solve, followed by the same polish; reported as the upper comparison and NEVER judged in this gate (Part B judges it)",
+    "covariance": "the state covariance is (J^T W J)^-1 with J the (2 N by 6) Jacobian of the observed pair at the observations with respect to the state at the middle epoch, by central differences of the forward model, W the inverse variance of the noise; the predicted-position covariance at an epoch is G C G^T, G the (2 by 6) Jacobian of the observed pair at that epoch; the one-standard-deviation semi-axes are the square roots of its eigenvalues, the 95 percent ellipse has the chi-square radius for two degrees of freedom, 5.991, and the 68 percent ellipse 2.279",
+    "conditioning": {
+      "measure": "kappa: the ratio of the largest to the smallest singular value of the Jacobian J after every column is scaled to unit Euclidean norm (so that the number does not depend on the units or the parameterization's magnitudes, and the weights are equal), evaluated at the determined state; for the exact-fit arcs of three observations J is square (6 by 6)",
+      "threshold": 1000,
+      "reading": "the weakest combination of state components moves the observations kappa times less than the strongest; at kappa = 1000 and 0.5 arcsecond noise, a combination that moves the observations by one unit of the strongest changes them by 0.1 percent of it, and is determined to an error of the order of 0.5 arcsecond times kappa, 500 arcseconds of equivalent displacement; the number was chosen by the turning-angle argument of the arcs above to lie between the curated arc (expected to be of order 10 to 100) and the single-night pair (expected above 10^4), at the geometric middle of the gap; it is an a priori value and is not adjusted by any run (a run that puts the curated arc above it fails G2, a run that puts the single-night pair below it fails H1)"
+    },
+    "refusal": {
+      "statuses": ["ok", "illConditioned", "noRoot", "noConvergence", "ambiguousRoots", "unphysical", "nearEarth"],
+      "rule": "the first match from the top, none of which returns an orbit: noRoot (no admissible root of the polynomial); noConvergence (the iteration or the polish did not converge in 60 steps); unphysical (the determined orbit is not bound, e >= 0.95, or its middle heliocentric distance is outside 0.5 to 8 AU); nearEarth (the geocentric range at the middle epoch is below 0.5 AU, where the geocentric approximation costs more than 29 arcseconds); illConditioned (kappa above the threshold); ambiguousRoots (above); otherwise ok",
+      "falseRefusalBound": 0.05
+    }
+  },
+  "tolerance": {
+    "model": "the unperturbed model's own error over the arc, computed in the oracle and recorded: E(W) is the angular distance at the epoch W between the perturbed truth's observed direction and the observed direction from the independent unperturbed propagation of the osculating state at t2; Efit(W) is the same distance between the perturbed truth and the best unperturbed orbit fitted to the noise-free perturbed observations of the arc being judged (an independent fit in the oracle: scipy least squares on the six state components with DOP853 propagation)",
+    "withheldTolerance": "tol(W) = E(W) + Efit(W) + 3.44 sigmaMajor(W), 3.44 = the radius of the 99.7 percent ellipse of two Gaussian degrees of freedom in standard deviations (the square root of 11.83), sigmaMajor the larger one-standard-deviation semi-axis of the formal prediction covariance at W; by the triangle inequality the distance D(W) from the solver's predicted direction to the oracle's unperturbed reference is below it unless the noise exceeds its 99.7 percent ellipse or the linearization fails, which is what the rate bound measures",
+    "notDemanded": "no agreement with a perturbed ephemeris (Horizons or any other) beyond the unperturbed model's own error is demanded of an unperturbed element set, and no number from Horizons enters any tolerance"
+  },
+  "dataRequests": {
+    "R1": "the published astrometry of one numbered main-belt asteroid: the Minor Planet Center's 80-column observation records for the 240-day window centred on the object's opposition inside 2025-01-01 to 2045-01-01 (the pack's range), from the MPC's public observation database or its observation API, with the retrieval date, the URL, the byte count and the SHA-256; the object by the rule in intake.object",
+    "R2": "the published orbit of that object: its MPCORB.DAT record (the MPC's published osculating elements, epoch, number of observations and arc, residual rms) from the MPC, with the same provenance; JPL's Small-Body Database record is an acceptable second source for cross-reading and is never a tolerance",
+    "R3": "the MPC's observatory-code table (ObsCodes.html, parallax constants rho cos phi' and rho sin phi' per station, about 25 KB), with the same provenance, for the stations of the observations used",
+    "R0": "the planetary mass ratios of constants.planetMassRatios checked against a published source (the DE440 header or the JPL planetary-masses table, a few hundred bytes)",
+    "terms": "MPC data are public and are cited with the MPC's request ('Observations and orbits from the MPC'); the observations are facts and are committed as a small table with credit, one rights decision per source (Operating rule 7.5.4), none committed before it is read; nothing is fetched at run time (the roadmap's prohibition), and nothing is downloaded without Carl's word"
+  },
+  "intake": {
+    "committed": "before any authentic observation was read: these rules, not values, are fixed here",
+    "object": "the numbered main-belt asteroid with the smallest number that has a == 2.2 to 3.3 AU, e < 0.25, i < 20 degrees, an absolute magnitude H below 10 and at least 60 published observations in a 240-day window inside the pack's range; (1) Ceres meets the elements and is therefore the first candidate; if the window has fewer than 60 observations the next number is tried, and the choice and its refusals are recorded",
+    "window": "240 days centred on the date of the object's opposition (the date the geocentric elongation from the Sun is greatest) in the retrieved observations' range, read from the MPC orbit by the independent propagation, recorded",
+    "arcSelection": "the curated authentic arc is the three observations, one per night, from the stations whose parallax constants are in R3, nearest in time to t2 - 60, t2 and t2 + 60 days, where t2 is the opposition epoch; the longer authentic arc is every observation in the window from those stations after one observation per station per night is kept (the one nearest local midnight); the withheld authentic epochs are the observations nearest t2 + 61 and t2 + 121 days that are not in the arc judged",
+    "topocentric": "each observation's observer is the Earth's centre from the pack plus the station's parallax-constant vector rotated by the local sidereal time of the observation (the sky kernel's mean sidereal time); the geocentric approximation is not used on authentic data",
+    "weights": "the MPC's reported weight is not used; every authentic observation carries 0.5 arcsecond, the contract's noise, and the residuals of the fit (in arcseconds) are reported so that a different true scatter is visible"
+  },
+  "legs": {
+    "F1.propagate": {
+      "what": "the universal-variable two-body propagation conserves energy and angular momentum and is reversible: on the twelve objects over 0 to 260 days, the relative change in energy and in the angular momentum vector and the position after a forward and backward step",
+      "bounds": {
+        "relativeInvariant": 1e-11,
+        "roundTripAu": 1e-11
+      },
+      "data": "none"
+    },
+    "F2.oracle": {
+      "what": "the spike's two-body propagation against the oracle's DOP853 integration of the same states, at t2 + {-120, -60, 61, 121, 260} days on the twelve objects",
+      "bounds": {
+        "maxPositionAu": 1e-9
+      },
+      "data": "none"
+    },
+    "F3.observer": {
+      "what": "the spike's Earth position from the committed pack against the oracle's independent decoding of the same pack, at fifty epochs spread over the objects' arcs",
+      "bounds": {
+        "maxPositionAu": 1e-9
+      },
+      "data": "none"
+    },
+    "F4.forward": {
+      "what": "the spike's observed direction (light time, geocentric, two-body truth) against the oracle's, at every observation and withheld epoch of the curated, longer and sweep arcs on the twelve objects",
+      "bounds": {
+        "maxArcsec": 0.001
+      },
+      "data": "none"
+    },
+    "F5.exact": {
+      "what": "noise-free two-body observations of the curated arc: the Gauss pipeline returns status ok and the state at t2 to a position within the bound, on every object",
+      "bounds": {
+        "objectsRecovered": 12,
+        "maxPositionAu": 1e-8
+      },
+      "data": "none"
+    },
+    "G1.noisy": {
+      "what": "the curated arc with the contract's noise on perturbed truth: the pipeline's status is ok on at least 95 percent of the 1,200 draws (a false refusal costs the lesson, not the science)",
+      "bounds": {
+        "minOkRate": 0.95
+      },
+      "data": "none"
+    },
+    "G2.cond": {
+      "what": "kappa of the curated arc at the true state, noise-free: at most the conditioning threshold on at least eleven of the twelve objects",
+      "bounds": {
+        "kappaMax": 1000,
+        "minObjects": 11
+      },
+      "data": "none"
+    },
+    "G3.withheld": {
+      "what": "on the draws with status ok, at each withheld epoch: (a) the distance D from the predicted direction to the oracle's unperturbed reference is at most tol(W), and (b) the distance from the predicted direction to the perturbed truth is at most Efit(W) + 3.44 sigmaMajor(W)",
+      "bounds": {
+        "minRate": 0.97,
+        "epochs": ["Wn", "Wf"]
+      },
+      "data": "none"
+    },
+    "G4.coverage": {
+      "what": "on two-body truth (no model error) with 200 draws per object, the fraction of draws whose truth direction at the withheld epoch lies inside the formal 95 percent and 68 percent prediction ellipses: the interval is honest, not only the point",
+      "bounds": {
+        "ellipse95": [0.92, 0.98],
+        "ellipse68": [0.6, 0.76],
+        "epochs": ["Wn", "Wf"]
+      },
+      "data": "none"
+    },
+    "G5.useful": {
+      "what": "the 95 percent prediction ellipse's semi-major axis at the next night is at most 600 arcseconds (ten arcminutes, inside the field of a small telescope) on at least 90 percent of the ok draws",
+      "bounds": {
+        "semiMajorArcsec": 600,
+        "minRate": 0.9,
+        "epoch": "Wn"
+      },
+      "data": "none"
+    },
+    "H1.refuse": {
+      "what": "the ill-conditioned arcs (half spans 0.5, 1 and 2 days, 1,200 draws each) return status ok on at most 1 percent of draws; every other draw returns one of the named statuses and no orbit; and kappa at the true state of each ill-conditioned arc exceeds the threshold on every object",
+      "bounds": {
+        "maxOkRate": 0.01,
+        "kappaAbove": 1000
+      },
+      "data": "none"
+    },
+    "H2.sweep": {
+      "what": "the median over the objects of kappa at the true state falls (does not rise) as the half span grows over 1, 2, 5, 10, 20, 40, 60 and 90 days (the degeneracy, taught as a curve); the median 95 percent next-night semi-major axis is reported alongside",
+      "bounds": {
+        "violations": 0
+      },
+      "data": "none"
+    },
+    "L1.longer": {
+      "what": "the least-squares fit of the longer arc (thirteen observations over 240 days, perturbed truth with the contract's noise): status ok on at least 95 percent of draws; at each withheld epoch the distance D is at most tol(W) (with Efit of the longer arc) on at least 97 percent of the ok draws; and the median 95 percent ellipse semi-major axis at Wf is no larger than the curated arc's",
+      "bounds": {
+        "minOkRate": 0.95,
+        "minRate": 0.97,
+        "semiMajorRatioMax": 1.0,
+        "epochs": ["Wn", "Wf"]
+      },
+      "data": "none"
+    },
+    "N1.nearEarth": {
+      "what": "twelve synthetic near-Earth objects (the oracle places each at 0.05 to 0.4 AU from the Earth at t2 with a bound heliocentric orbit) observed over [-5, 0, 5] days with the contract's noise, 100 draws each: no draw returns status ok; at least 90 percent return nearEarth or illConditioned; and the same pipeline returns nearEarth on none of the main-belt draws of the curated arc",
+      "bounds": {
+        "maxOkRate": 0,
+        "minNearEarthOrIllConditioned": 0.9,
+        "maxNearEarthOnMainBelt": 0
+      },
+      "data": "none"
+    },
+    "P1.laplace": {
+      "what": "Laplace's method on the curated arc, noise-free and noisy: the fraction of draws that converge and the median position error at t2, beside Gauss's",
+      "bounds": "reported, never judged",
+      "data": "none"
+    },
+    "A1.authentic": {
+      "what": "the curated authentic arc (intake.arcSelection) determines: status ok with kappa at most the threshold",
+      "bounds": {
+        "kappaMax": 1000
+      },
+      "data": "R1, R2, R3"
+    },
+    "A2.reference": {
+      "what": "at each authentic withheld epoch, the distance from the predicted direction to the independent unperturbed propagation of the MPC's published elements is at most tol(W), with E and Efit computed in the oracle from the published elements and the arc",
+      "bounds": "tol(W) as in tolerance.withheldTolerance",
+      "data": "R1, R2, R3"
+    },
+    "A3.observation": {
+      "what": "at each authentic withheld epoch, the distance from the predicted direction to the published observation nearest that epoch (topocentric) is at most 3.44 sigmaMajor(W) + Efit(W) + 1.5 arcseconds (the observation's own 3-sigma error at the contract's noise)",
+      "bounds": "as stated",
+      "data": "R1, R2, R3"
+    },
+    "A4.longer": {
+      "what": "the least-squares fit of the longer authentic arc predicts the withheld observations within the same form of tolerance, with the weighted RMS residual of the fit at most 2 arcseconds",
+      "bounds": {
+        "rmsResidualArcsec": 2.0
+      },
+      "data": "R1, R2, R3"
+    }
+  },
+  "decision": {
+    "function": "the first match from the top. A: F1 to F5, G1 to G5, H1, H2, L1, N1 and A1 to A3 all pass (the curated arc determines and predicts within tolerance, the ill-conditioned arc refuses). B: F1 to F5, H1, H2, L1, N1 and A4 pass (least-squares improvement over a longer arc only; no three-observation determination). C: otherwise (no orbit determination; the investigation ships as mover identification and rate measurement).",
+    "notRun": "a leg that cannot run because its data are absent is NOT RUN; NOT RUN is not a pass, so a verdict that depends on it falls to the next case. The verdict C that results from NOT RUN legs is a pending C, not a measured failure, and the same function gives A or B once the data arrive and the authentic legs run. A bound that proves unmeasurable fails its leg; only Carl resets a bound; a failed leg is reported and left failing.",
+    "slices": {
+      "A": "the kernel (Gauss, Laplace, the least-squares improvement, the conditioning refusal, the propagation and the prediction interval), the packs, the validation contract on every tier, and the three investigations as the roadmap states them",
+      "B": "the kernel's least-squares improvement over a longer arc, the refusal, the propagation and the prediction interval; the investigations teach the determination on the longer arc and show Gauss's three-observation solution only as the arc that refuses",
+      "C": "no orbit determination: the survey investigation (find the mover by blinking, mark it, see it move) and a rate measurement; no kernel, no majors or upper investigation"
+    },
+    "nearEarth": "outside every verdict: Part B refuses near-Earth objects with the named status; a near-Earth determination needs the station's topocentric position and is a later prompt's"
+  },
+  "corrections": []
+}

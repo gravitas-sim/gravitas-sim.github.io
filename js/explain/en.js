@@ -202,6 +202,12 @@ export default {
     'Which surface has more craters, per area, at a diameter where both are counted completely; whether a slope holds higher up or breaks; and which term of a diameter’s uncertainty is the largest.',
     'The circles are a catalog’s, not marks on the pictures. A density ratio is not an age in years: no production function, saturation, secondary craters or completeness correction is applied.',
   ],
+  sun: [
+    'A picture of the Sun on one of fourteen days with a crosshair you place and the position it gives, one spot group’s longitude against time with its rotation rate, or the Sun’s daily irradiance with the luminosity and temperature it gives.',
+    'Where on the Sun a spot is (latitude and longitude, with an uncertainty), how fast a group turns as the Earth sees it and against the stars, how that compares with a reference law, and the Sun’s power from a flux measured at the Earth.',
+    'That spots at different latitudes turn at different rates, why the rate has to be corrected for the Earth’s own motion, why two latitudes cannot fix three coefficients, and why a flux has to be brought to one astronomical unit before it gives a luminosity.',
+    'The pictures are browse pictures made to be looked at, so a position read from one is an instructional reading and not astrometry. A spot group’s centre is not a point, the reference law was measured on magnetic features and not spots, and the irradiance series has six measured days.',
+  ],
   tides: [
     'The rigid and the fluid Roche limit of a planet and a satellite from their two densities, where a moon’s resonance falls in a ring, the Moon’s recession and the lengthening day under a constant tidal Q, or the heat a tide can put into Io.',
     'How near a satellite can come before gravity alone stops holding it together, which ring radii a moon at a given distance empties, how far the Moon was in the past under the model, and the heat per orbit against the heat Io is observed to radiate.',

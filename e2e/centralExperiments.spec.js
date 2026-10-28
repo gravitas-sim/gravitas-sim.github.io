@@ -2534,6 +2534,27 @@ test.describe('the central experiment of each investigation', () => {
         [10, 10.0, 0.1],
       ],
     },
+    // ---- The Sun investigations (Roadmap III, Prompt 194 part 2) ---------------
+    {
+      id: 'the-turning-sun',
+      title:
+        'the-turning-sun: the sidereal rate of G1 is 14.13 degrees a day from six days of marks and 14.04 from five @accepts:ce.the-turning-sun',
+      row: /^Sidereal rate/i,
+      values: [
+        [1, 14.13, 0.02],
+        [2, 14.04, 0.02],
+      ],
+    },
+    {
+      id: 'the-suns-power',
+      title:
+        'the-suns-power: the luminosity from six days is 3.828 and from two days 3.829, in units of 1e26 W @accepts:ce.the-suns-power',
+      row: /^The Sun’s luminosity$/i,
+      values: [
+        [6, 3.828, 0.0006],
+        [2, 3.829, 0.0006],
+      ],
+    },
     // ---- What is in this field? (Roadmap III, Prompt 191 part 3) ---------------
     {
       id: 'what-is-in-this-field',

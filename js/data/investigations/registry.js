@@ -179,6 +179,8 @@ const LOADERS = {
   'ios-fire': () => import('./ios-fire.js'),
   'why-venus-is-hot': () => import('./why-venus-is-hot.js'),
   'two-greenhouse-models': () => import('./two-greenhouse-models.js'),
+  'the-turning-sun': () => import('./the-turning-sun.js'),
+  'the-suns-power': () => import('./the-suns-power.js'),
 };
 // </generated:loaders>
 
@@ -276,6 +278,8 @@ const TRANSLATIONS = {
     'ios-fire': () => import('./es/ios-fire.js'),
     'why-venus-is-hot': () => import('./es/why-venus-is-hot.js'),
     'two-greenhouse-models': () => import('./es/two-greenhouse-models.js'),
+    'the-turning-sun': () => import('./es/the-turning-sun.js'),
+    'the-suns-power': () => import('./es/the-suns-power.js'),
   },
 };
 // </generated:translations>

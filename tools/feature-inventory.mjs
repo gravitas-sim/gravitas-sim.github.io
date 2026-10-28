@@ -317,6 +317,11 @@ export const FEATURES = [
         detect: /crypto\.subtle\.digest/,
         note: 'no fallback (the digest of a frame in a saved calibration)',
       },
+      {
+        file: 'js/sunWidgets.js',
+        detect: /crypto\.subtle\.digest/,
+        note: 'no fallback (the check of each solar picture against its recorded SHA-256; without it the picture is refused and the instrument says it could not be loaded)',
+      },
     ],
   },
 ];

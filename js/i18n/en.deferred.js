@@ -1,7 +1,4 @@
-// =============================================================================
-// Messages that arrive with the chunk that needs them (panels nobody sees on a first visit): a catalog apart, one object cannot be code-split; registerMessages() loads it.
-// =============================================================================
-
+// Messages that arrive with the chunk that needs them (registerMessages()); a catalog apart because one object cannot be code-split.
 export const EN_DEFERRED = {
   'binaryRun.close.hint': 'Hide the binary run panel',
   'assist.close.hint': 'Hide the gravity assist panel',
@@ -584,7 +581,6 @@ export const EN_DEFERRED = {
   'sweep.reason.notReady': 'The bench is still loading.',
   'sweep.reason.alreadyRunning': 'A sweep is already running.',
   'sweep.reason.recording': 'A run is being recorded.',
-
   'sweep.summary.changed':
     '{metric} moved from {min} to {max} across the range.',
   'sweep.summary.monotonic': 'It changed in one direction throughout.',
@@ -1842,6 +1838,10 @@ export const EN_DEFERRED = {
     'Why a planet can be hotter than sunlight alone makes it: Earth, then Venus.',
   'inv.seq.planets.two-greenhouse-models':
     'Two greenhouse models for one planet, and why their free numbers differ.',
+  'inv.seq.planets.the-turning-sun':
+    'Fourteen days of pictures of the Sun: where a spot is, how fast a group turns as the Earth sees it and against the stars, and what two groups can and cannot show.',
+  'inv.seq.planets.the-suns-power':
+    'A flux measured at the Earth brought to one astronomical unit, the Sun’s luminosity and temperature, and what the interval of a mean leaves out.',
   'inv.seq.planets.why-rings':
     'Why rings lie inside a planet’s Roche limit, and what a moon’s resonance clears from one.',
   'inv.seq.planets.tides-that-move-the-moon':
