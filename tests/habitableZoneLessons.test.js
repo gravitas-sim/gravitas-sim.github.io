@@ -17,8 +17,8 @@ import { INVESTIGATIONS } from '../js/data/investigations.js';
 import { withAllDepths } from '../js/investigations/depthAll.js';
 import * as K from '../js/kernels/habitablezone/index.js';
 import { zoneAtAge } from '../js/kernels/habitablezone/age.js';
-import { EN_HZ_LIMITS } from '../js/i18n/en.habitablezone.js';
-import { ES_HZ_LIMITS } from '../js/i18n/es.habitablezone.js';
+import { EN_HABITABLEZONE } from '../js/i18n/en.habitablezone.js';
+import { ES_HABITABLEZONE } from '../js/i18n/es.habitablezone.js';
 import ES_DEEP from '../js/data/investigations/depth/es/goldilocks-question.js';
 import DEEP from '../js/data/investigations/depth/goldilocks-question.js';
 import { LAZY_FAMILIES } from '../js/widgets.js';
@@ -200,10 +200,10 @@ describe('every stated number from the kernel', () => {
 
 describe('the words', () => {
   test('both languages have the same keys, and no value is empty', () => {
-    expect(Object.keys(ES_HZ_LIMITS).sort()).toEqual(
-      Object.keys(EN_HZ_LIMITS).sort()
+    expect(Object.keys(ES_HABITABLEZONE).sort()).toEqual(
+      Object.keys(EN_HABITABLEZONE).sort()
     );
-    for (const v of Object.values(ES_HZ_LIMITS))
+    for (const v of Object.values(ES_HABITABLEZONE))
       expect(v.length).toBeGreaterThan(0);
   });
 

@@ -21,8 +21,8 @@
 
 import './instrumentStartup.js';
 import { t, registerMessages } from './i18n/index.js';
-import { EN_HZ_LIMITS } from './i18n/en.habitablezone.js';
-import { ES_HZ_LIMITS } from './i18n/es.habitablezone.js';
+import { EN_HABITABLEZONE } from './i18n/en.habitablezone.js';
+import { ES_HABITABLEZONE } from './i18n/es.habitablezone.js';
 import { fixed } from './format.js';
 import { createChart } from './plot/mount.js';
 import {
@@ -33,8 +33,8 @@ import {
 } from './kernels/habitablezone/index.js';
 import { zoneAtAge } from './kernels/habitablezone/age.js';
 
-registerMessages('en', EN_HZ_LIMITS);
-registerMessages('es', ES_HZ_LIMITS);
+registerMessages('en', EN_HABITABLEZONE);
+registerMessages('es', ES_HABITABLEZONE);
 
 const GYR = 1e9;
 const SERIES = {

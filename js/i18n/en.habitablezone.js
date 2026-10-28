@@ -1,7 +1,7 @@
 // The habitable-zone limit instruments' words, in English (Prompt 205 part B).
 // The model and what-it-leaves-out lines are fixed text per model (the kernel
 // names the same models in English), so they translate by key.
-export const EN_HZ_LIMITS = {
+export const EN_HABITABLEZONE = {
   'hzL.on': 'shown',
   'hzL.off': 'hidden',
   'hzL.axis.distance': 'Distance from the star (AU)',

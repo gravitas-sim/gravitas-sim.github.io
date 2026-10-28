@@ -1,7 +1,7 @@
 // Las palabras de los instrumentos de los límites de la zona habitable, en
 // español (Prompt 205, parte B). Sin lectura por una persona que lea español
 // con fluidez.
-export const ES_HZ_LIMITS = {
+export const ES_HABITABLEZONE = {
   'hzL.on': 'visible',
   'hzL.off': 'oculto',
   'hzL.axis.distance': 'Distancia a la estrella (UA)',
