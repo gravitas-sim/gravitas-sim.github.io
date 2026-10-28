@@ -128,6 +128,14 @@ export const UNITS = Object.freeze({
 
   K: { dim: 'temperature', factor: 1, symbol: 'K' },
   'electron/s': { dim: 'count-rate', factor: 1, symbol: 'e⁻/s' },
+  // The instrument library (Prompt 209): an electron is not a count of a
+  // converter (the gain between them is a number with its own unit,
+  // electron/count), a collecting area is square metres, and an extinction
+  // coefficient is magnitudes per airmass.
+  electron: { dim: 'electrons', factor: 1, symbol: 'e⁻' },
+  m2: { dim: 'area', factor: 1, symbol: 'm²' },
+  deg2: { dim: 'solid-angle', factor: 12960000, symbol: 'deg²' },
+  airmass: { dim: 'airmass', factor: 1, symbol: 'airmass' },
   count: {
     dim: 'count',
     factor: 1,

@@ -2,65 +2,106 @@
   "format": "gravitas.instrument-library-thresholds/1",
   "prompt": 209,
   "committed": "Before tools/instruments/*.json, the generator, the validator, the adapters or any test existed. Stated plainly: before this file was written the author had read the cited sources once through a summarising fetch (2026-10-28) and had done, by hand and in his head, four things that bear on the bounds below: the plate-scale relation for the five imagers (agreement 0.2 to 1.3 percent), the field against array times pixel scale (agreement 0.3 to 8 percent, the 1.2 degree side of the 0.35 m camera being the worst), the Rubin 5-sigma depth formula against the tabulated depths (a constant offset of about -0.12 to -0.15 mag in all six bands) and the GBT beam in units of lambda over D (about 1.25). The bounds o2.field (10 percent) and o4.rubin-m5 (0.2 mag) were set with those numbers in view and are flagged as such; the others were not. A value that disagrees with its source is a defect in the table, not a tolerance to widen. No value in the table is an estimate: a quantity the source does not state is absent.",
-  "amendments": [],
+  "amendments": [
+    "2026-10-28, before the validator, the table or any test existed: the 'committed' paragraph says the Rubin depth formula was checked against the row of effective seeing (0.81 to 0.68 arcsec) and left a constant offset of -0.13 mag. A second hand check with the other seeing row of the same table (0.92 to 0.76 arcsec) reproduces the six tabulated depths to 0.03 mag or better. The footnotes as extracted call that row 'delivered median zenith seeing (FWHM)' and the first 'effective seeing', which the formula contradicts, so the two labels may be exchanged in the extraction. Consequences: only the 0.92-to-0.76 row is stored, under the footnote's label with the doubt in its note, and o4.rubin-m5 is tightened from 0.2 mag to 0.05 mag, because 0.2 could not tell the two rows apart (the wrong row gives 0.13). The tightening is flagged as set with the result in view."
+  ],
   "rule": "Prompt 209, EXECUTION CONTRACT and the validation contract (section 7.5, rule 8): a table of cited facts, not a model. Rule 8(c) (ensembles), (d) (misspecified cases for a method) and (e) (authentic data) do not apply to a table; rule 8(a) and (b) are the structural and cross-check rows below, and 8(d) is the refusal rows (r1 to r8) that the validator must hold.",
   "units": "lengths in m (or the unit the source states, converted never), angles in arcsec/arcmin/deg as published, electrons and ADU counts as published, magnitudes as published. A value is stored in the unit the source uses.",
   "structural": {
     "s1.facilities": {
       "claim": "the table holds at least five real facilities, one per class: campus, metre, space, survey, radio",
-      "bound": { "realFacilities": ">= 5", "classes": ["campus", "metre", "space", "survey", "radio"] }
+      "bound": {
+        "realFacilities": ">= 5",
+        "classes": [
+          "campus",
+          "metre",
+          "space",
+          "survey",
+          "radio"
+        ]
+      }
     },
     "s2.typical": {
       "claim": "every generic entry has typical: true, is listed apart from the real facilities, and cites the Gravitas teaching default as its source (kind 'typical'); no real facility has typical: true",
-      "bound": { "typicalEntries": ">= 1" }
+      "bound": {
+        "typicalEntries": ">= 1"
+      }
     },
     "s3.units": {
       "claim": "every numeric value carries a unit that parses in js/units/registry.js (a registry id, or registry ids joined by '/') and whose dimension is the parameter's declared dimension",
-      "bound": { "violations": 0 }
+      "bound": {
+        "violations": 0
+      }
     },
     "s4.citations": {
       "claim": "every value names a source in the sources table; every source has a title, a reference or URL (https), a retrieval date (ISO) and a recorded rights basis",
-      "bound": { "valuesWithoutSource": 0, "sourcesWithoutDate": 0, "sourcesWithoutRights": 0 }
+      "bound": {
+        "valuesWithoutSource": 0,
+        "sourcesWithoutDate": 0,
+        "sourcesWithoutRights": 0
+      }
     },
     "s5.absent": {
       "claim": "a missing value is absent: no null, no NaN, no empty string, no zero standing for unknown",
-      "bound": { "violations": 0 }
+      "bound": {
+        "violations": 0
+      }
     },
     "s6.generated": {
       "claim": "js/data/instruments.js is exactly what tools/build-instruments.mjs writes from tools/instruments/*.json (a prettier fixed point); --check is empty",
-      "bound": { "staleBytes": 0 }
+      "bound": {
+        "staleBytes": 0
+      }
     }
   },
   "oracle": {
     "note": "Independent cross-checks computed from other cited values, never from the value they check. Each applies only where every quantity it needs is present; a check that does not apply is reported N/A with the missing field, never passed.",
     "o1.plate-scale": {
       "claim": "pixelScale equals 206265 arcsec x pixelSize / focalLength, with focalLength = focalRatio x aperture (the geometric primary)",
-      "bound": { "relative": 0.05 }
+      "bound": {
+        "relative": 0.05
+      }
     },
     "o2.field": {
       "claim": "each stated field dimension equals pixels x pixelScale (the gaps between detectors of a mosaic make the product an upper limit for a mosaic's area)",
-      "bound": { "relative": 0.1, "flag": "set with the 8 percent disagreement of the 0.35 m camera's short side in view" }
+      "bound": {
+        "relative": 0.1,
+        "flag": "set with the 8 percent disagreement of the 0.35 m camera's short side in view"
+      }
     },
     "o3.radio-area": {
       "claim": "collectingArea equals pi (D/2)^2 for the stated diameter",
-      "bound": { "relative": 0.001 }
+      "bound": {
+        "relative": 0.001
+      }
     },
     "o3b.radio-beam": {
       "claim": "the stated half-power beamwidth lies between 1.0 and 1.4 lambda/D at the stated frequency (a tapered dish)",
-      "bound": { "lambdaOverDLow": 1.0, "lambdaOverDHigh": 1.4 }
+      "bound": {
+        "lambdaOverDLow": 1.0,
+        "lambdaOverDHigh": 1.4
+      }
     },
     "o4.rubin-m5": {
-      "claim": "the tabulated 5-sigma depth in each band equals C_m + 0.50 (m_sky - 21) + 2.5 log10(0.7 / theta_eff) for the same band's tabulated C_m, m_sky and effective seeing (airmass 1, 30 s visit), within the paper's own fudge terms",
-      "bound": { "absoluteMag": 0.2, "flag": "set with the constant offset of about -0.13 mag in view" }
+      "claim": "the tabulated 5-sigma depth in each band equals C_m + 0.50 (m_sky - 21) + 2.5 log10(0.7 / theta) for the same band's tabulated C_m, m_sky and the stored seeing row (airmass 1, 30 s visit), within the paper's own fudge terms",
+      "bound": {
+        "absoluteMag": 0.05,
+        "flag": "tightened from 0.2 to 0.05 with the 0.025 mag worst residual (g band) of a hand check in view; see the amendment"
+      }
     },
     "o5.zero-point-throughput": {
       "claim": "a published photometric zero point (magnitude zero point per e-/s) implies a system throughput between 0.10 and 1.00 when compared with an ideal AB photon rate through the same band, computed by the radiation kernel's photonRate() for the collecting area of aperture and obstruction",
-      "bound": { "throughputLow": 0.1, "throughputHigh": 1.0 },
+      "bound": {
+        "throughputLow": 0.1,
+        "throughputHigh": 1.0
+      },
       "note": "the Las Cumbres paper words its zero points as 'log(e-/s)'; this check is what tells a magnitude zero point from a logarithm, and a leg that fails is a finding about the reading, recorded and not widened"
     },
     "o6.gain-full-well": {
       "claim": "where gain, full well in electrons and a 16-bit converter are all stated, fullWell / gain does not exceed 65535 counts by more than the stated rounding (10 percent)",
-      "bound": { "relative": 0.1 }
+      "bound": {
+        "relative": 0.1
+      }
     }
   },
   "refusals": {
