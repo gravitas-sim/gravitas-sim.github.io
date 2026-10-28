@@ -72,6 +72,7 @@ const ASSUMES = Object.freeze([
   'a smooth polynomial in log density describes the distribution outside the windows and across them',
   'the window and the baseline are part of the estimate; a different window or degree is a different measurement',
   'the bootstrap interval covers the depletion relative to that baseline, not a dynamical clearing fraction',
+  "the interval is sampling error only: the baseline's shape adds a systematic that, on the validation belts, reached about one standard error (SMALL_BODIES.md)",
 ]);
 
 /**

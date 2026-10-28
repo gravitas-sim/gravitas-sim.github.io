@@ -343,7 +343,13 @@ export function rotationFromLightCurve(t, m, opts = {}) {
     phaseGap,
     amplitudeInterval:
       ai.status === 'ok'
-        ? { lo: ai.lo, hi: ai.hi, level: o.level, method: 'case-bootstrap' }
+        ? {
+            lo: ai.lo,
+            hi: ai.hi,
+            level: o.level,
+            method: 'case-bootstrap',
+            note: 'a percentile bootstrap of a peak-to-peak statistic at the fitted period: on synthetic curves it covered the true amplitude about two times in three at a stated 95 percent (SMALL_BODIES.md), so read it as a floor on the uncertainty',
+          }
         : null,
     axisRatioBound:
       ampLo === null || withheld
