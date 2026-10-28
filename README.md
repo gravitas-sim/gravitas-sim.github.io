@@ -367,7 +367,7 @@ reports what the browser downloads at start-up separately from what is deferred:
 | ---------------------- | ------------------------------------------------------ | --------------------------------------------- |
 | CSS                    | <!--fact:buildCss-->209<!--/fact--> KB                 | 1                                             |
 | JavaScript at start-up | <!--fact:buildStartupJs-->593<!--/fact--> KB           | <!--fact:buildStartupFiles-->53<!--/fact-->   |
-| JavaScript on demand   | <!--fact:buildDeferredJs-->6338<!--/fact--> KB         | <!--fact:buildDeferredChunks-->541<!--/fact--> |
+| JavaScript on demand   | <!--fact:buildDeferredJs-->6406<!--/fact--> KB         | <!--fact:buildDeferredChunks-->549<!--/fact--> |
 | **Initial download**   | **<!--fact:buildInitialDownload-->802<!--/fact--> KB** |                                               |
 
 Those figures are the last build's, to the nearest kilobyte, and are written
