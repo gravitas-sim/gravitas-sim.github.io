@@ -153,14 +153,15 @@ describe('the profile', () => {
 });
 
 describe('every built-in course', () => {
-  test('there are four courses, each built in two languages with and without notes', () => {
+  test('there are five courses, each built in two languages with and without notes', () => {
     expect(COURSES.sort()).toEqual([
       'astronomy-semester',
       'intro-astronomy',
       'observing-lab',
+      'solar-system-and-the-sun',
       'upper-level-modules',
     ]);
-    expect(built).toHaveLength(16);
+    expect(built).toHaveLength(20);
   });
 
   test('every cartridge conforms to the profile', () => {
