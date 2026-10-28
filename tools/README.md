@@ -195,6 +195,7 @@ current, and the orchestrator checks it.
 | `sun-frames-build.mjs` | The 14-day solar sequence (Prompt 194 part 2, SUN_KERNEL.md Part 2) |  |
 | `sun-validate.mjs` | The solar kernel against its committed thresholds (Prompt 194) | `npm run sun:validate` |
 | `surface-gate.mjs` | The surface gate: one decision function, the same for every surface | `npm run surface:check`, `npm run surface:measure`, `npm run surface:write`, `npm run surface:report` |
+| `telescopes-validate.mjs` | The telescope optics against their committed thresholds (Prompt 208) | `npm run telescopes:validate` |
 | `three-shaders.mjs` | three.js shaders in the bundle: pruned to what the 3-D view can reach, then |  |
 | `thumbnail-config.mjs` | Thumbnail capture settings |  |
 | `tides-scenarios.mjs` | The ring and Roche scenarios, measured (Prompt 204 part 2) |  |

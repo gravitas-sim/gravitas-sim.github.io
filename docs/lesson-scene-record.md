@@ -11,15 +11,15 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 85 investigations and 1242 steps: 1150 steps
+Across 86 investigations and 1249 steps: 1157 steps
 declare a scene, 157 let a reader change one, 167 read the
-running integration, 741 show a prescribed model result, 146 draw
-on a stored dataset, 620 put a self-contained panel beside the text,
-327 keep something, and 58 are prose.
-Of 164 prediction loops, 164 are returned to,
-164 produce a measurement before they are answered, and
+running integration, 748 show a prescribed model result, 146 draw
+on a stored dataset, 627 put a self-contained panel beside the text,
+329 keep something, and 58 are prose.
+Of 166 prediction loops, 166 are returned to,
+166 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
-164 hold their marking until the experiment settles them.
+166 hold their marking until the experiment settles them.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -1210,4 +1210,18 @@ Of 164 prediction loops, 164 are returned to,
 - **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; null result: the probe names what is missing; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** 1 step(s) on arrival (a-dirty-snowball).
 - **Accepted central experiment** (reviewed 2026-09-11): object `sun`, control the canvas: watch the model comets, and read the first one's closest and furthest distance in the readout, measures the closest and furthest distance of the first model comet from the Sun, 5.79 and 17.84 astronomical units, and its bare-body temperature at each end, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## What a Telescope Resolves (`what-a-telescope-resolves`)
+
+- **Steps:** 7. Scene declared on 7; a reader can change something on 0; 7 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 7 prescribed model, 0 stored dataset, 7 self-contained panel.
+- **What students do:** move-an-instrument-control, commit-a-prediction, record-values, choose-an-option.
+- **Objects the steps declare:** star.
+- **Instruments:** telescope.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** smallest-aperture-predict → dips → dips; faint-star-predict → faint-appears, magnification, two-widths → faint-appears.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:telescope`, control telescope/aperture, measures the dip between two stars 1 arcsecond apart, in percent of the light at a star, with 0.6 arcseconds of seeing: 0 at 10 cm and 50.3 at 40 cm, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
