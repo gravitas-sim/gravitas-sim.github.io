@@ -132,6 +132,9 @@ export const EN_ATMOSPHERES = {
   'atmW.p.flagged': 'none: a Lambert sphere does not describe this curve',
   'atmW.p.row.bond': 'Bond albedo of that Lambert sphere',
   'atmW.p.value.bond': '{B} (3/2 times {A})',
+  'atmW.p.row.mine': 'My albedo against the curve',
+  'atmW.p.value.mine':
+    'chi-square {chi} for {n} points (about {dof} when a model fits)',
   'atmW.p.row.chi': 'Fit against the curve',
   'atmW.p.value.chi': 'chi-square {chi} for {dof} degrees of freedom',
 };

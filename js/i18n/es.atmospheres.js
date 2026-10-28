@@ -129,6 +129,9 @@ export const ES_ATMOSPHERES = {
   'atmW.p.flagged': 'ninguno: una esfera de Lambert no describe esta curva',
   'atmW.p.row.bond': 'Albedo de Bond de esa esfera de Lambert',
   'atmW.p.value.bond': '{B} (3/2 de {A})',
+  'atmW.p.row.mine': 'Mi albedo frente a la curva',
+  'atmW.p.value.mine':
+    'chi cuadrado {chi} para {n} puntos (cerca de {dof} cuando un modelo ajusta)',
   'atmW.p.row.chi': 'Ajuste frente a la curva',
   'atmW.p.value.chi': 'chi cuadrado {chi} con {dof} grados de libertad',
 };

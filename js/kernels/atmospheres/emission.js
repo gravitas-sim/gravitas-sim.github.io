@@ -1,5 +1,5 @@
-// Blackbody plus one band (Prompt 201 spike): band radiance, the isothermal-skin slab, the eclipse depth and the
-// brightness temperature. Pure functions; ATMOSPHERES_GATE_II.md.
+// Blackbody plus one band (Prompt 202, promoted from the Prompt 201 spike): band radiance, the isothermal-skin slab, the eclipse depth and the
+// brightness temperature. Pure functions; ATMOSPHERES.md (Atmospheres II).
 import { H_PLANCK, C_LIGHT, K_BOLTZMANN, refuse, isPos } from './constants.js';
 import { composite } from './quadrature.js';
 

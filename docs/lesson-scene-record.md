@@ -11,15 +11,15 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 78 investigations and 1184 steps: 1092 steps
+Across 80 investigations and 1201 steps: 1109 steps
 declare a scene, 157 let a reader change one, 163 read the
-running integration, 700 show a prescribed model result, 146 draw
-on a stored dataset, 579 put a self-contained panel beside the text,
-304 keep something, and 58 are prose.
-Of 155 prediction loops, 155 are returned to,
-155 produce a measurement before they are answered, and
+running integration, 717 show a prescribed model result, 146 draw
+on a stored dataset, 596 put a self-contained panel beside the text,
+312 keep something, and 58 are prose.
+Of 157 prediction loops, 157 are returned to,
+157 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
-155 hold their marking until the experiment settles them.
+157 hold their marking until the experiment settles them.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -1112,4 +1112,32 @@ Of 155 prediction loops, 155 are returned to,
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:sun-power`, control sun-power/days, measures the Sun's luminosity from the first days of the TSIS-1 TIM series corrected to one astronomical unit, in units of 1e26 W: 3.829 from two days and 3.828 from six, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## How Hot Is the Day Side? (`how-hot-is-the-day-side`)
+
+- **Steps:** 10. Scene declared on 10; a reader can change something on 0; 10 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 10 prescribed model, 0 stored dataset, 10 self-contained panel.
+- **What students do:** move-an-instrument-control, record-values, choose-an-option, commit-a-prediction.
+- **Objects the steps declare:** star.
+- **Instruments:** atmosphere-eclipse.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** planet-y-predict → planet-y, what-a-dip-says, what-you-worked-out → planet-y.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:atmosphere-eclipse`, control atmosphere-eclipse/dataset, measures the brightness temperature one band of a synthetic hot Jupiter gives, 2094 K for a planet with no absorbing band and 1780 K where one band absorbs, from an eclipse depth with the reflected light assumed none, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## Phases and Albedo (`phases-and-albedo`)
+
+- **Steps:** 7. Scene declared on 7; a reader can change something on 0; 7 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 7 prescribed model, 0 stored dataset, 7 self-contained panel.
+- **What students do:** move-an-instrument-control, record-values, choose-an-option, commit-a-prediction.
+- **Objects the steps declare:** star.
+- **Instruments:** atmosphere-phase.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** planet-q-predict → planet-q, what-you-worked-out → planet-q.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:atmosphere-phase`, control atmosphere-phase/dataset, measures how well a Lambert sphere describes a synthetic phase curve: a chi-square near 31 for 23 degrees of freedom for a Lambert planet and near 82 for a Lommel-Seeliger planet, for which no albedo is returned, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 

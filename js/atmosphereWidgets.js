@@ -681,10 +681,18 @@ export function phaseView(v) {
     sigma: data.sigma * 1e-6,
     semiMajorOverRp: aR,
   });
+  const k = 1 / aR ** 2;
+  const mine = data.alphas.reduce(
+    (sum, a, i) =>
+      sum +
+      ((data.fluxPpm[i] - ppm(albedo * k * lambertPhase(a))) / data.sigma) ** 2,
+    0
+  );
   return {
     data,
     albedo,
     fit,
+    mine,
     bond: bondFromGeometric(albedo),
     curve: PH_DEG.map(d =>
       ppm((albedo * lambertPhase((d * Math.PI) / 180)) / aR ** 2)
@@ -761,6 +769,14 @@ const PHASE = {
               B: fixed(fit.bond, 2),
               A: fixed(fit.albedo, 2),
             }),
+      },
+      {
+        label: t('atmW.p.row.mine'),
+        value: t('atmW.p.value.mine', {
+          chi: fixed(f.mine, 1),
+          n: f.data.alphas.length,
+          dof: f.data.alphas.length - 1,
+        }),
       },
       {
         label: t('atmW.p.row.chi'),

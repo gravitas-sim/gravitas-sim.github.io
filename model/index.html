@@ -3237,9 +3237,9 @@ try {
         <span class="gs-en">Each guided investigation relies on a different part of the model. This
         table is generated from the same <code>modelNotes</code> field that the
         instructor guide prints, so it covers every one of the
-        <!--fact:investigations-->78<!--/fact-->
+        <!--fact:investigations-->80<!--/fact-->
         investigations and cannot fall behind them. It listed six of the twelve when it
-        was maintained by hand.</span><span class="gs-es" lang="es">Cada investigación guiada se apoya en una parte distinta del modelo. Esta tabla se genera a partir del mismo campo <code>modelNotes</code> que imprime la guía docente, de modo que cubre cada una de las <!--fact:investigations-->78<!--/fact--> investigaciones y no puede quedar rezagada respecto a ellas. Cuando se mantenía a mano, enumeraba seis de las doce.</span>
+        was maintained by hand.</span><span class="gs-es" lang="es">Cada investigación guiada se apoya en una parte distinta del modelo. Esta tabla se genera a partir del mismo campo <code>modelNotes</code> que imprime la guía docente, de modo que cubre cada una de las <!--fact:investigations-->80<!--/fact--> investigaciones y no puede quedar rezagada respecto a ellas. Cuando se mantenía a mano, enumeraba seis de las doce.</span>
       </p>
       <div class="doc-table-wrap">
         <table class="doc-table">
@@ -3562,6 +3562,14 @@ try {
             <tr>
               <td>The Sun’s Power</td>
               <td>js/kernels/sun/ (SUN_KERNEL.md Part 2): summariseIrradiance, luminosityFromFlux and temperatureFromLuminosity through the radiation kernel; the e2 legs of npm run sun:validate.</td>
+            </tr>
+            <tr>
+              <td>How Hot Is the Day Side?</td>
+              <td>js/kernels/atmospheres/ (ATMOSPHERES.md, Atmospheres II): eclipseDepth, brightnessTemperature, bandRadiance and slabFlux, validated against an independent numpy and scipy oracle (npm run atmospheres-ii:validate); the synthetic depths are syntheticEclipse.</td>
+            </tr>
+            <tr>
+              <td>Phases and Albedo</td>
+              <td>js/kernels/atmospheres/ (ATMOSPHERES.md, Atmospheres II): lambertPhase, phaseCurve, fitAlbedo, bondFromGeometric and the misfit flag, validated against an independent numpy and scipy oracle (npm run atmospheres-ii:validate); the synthetic curves are syntheticPhase.</td>
             </tr>
           <!--/fact-block-->
           </tbody>

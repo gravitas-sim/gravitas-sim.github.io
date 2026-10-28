@@ -1,4 +1,4 @@
-// The Lambert-sphere phase curve and its albedo (Prompt 201 spike). ATMOSPHERES_GATE_II.md.
+// The Lambert-sphere phase curve and its albedo (Prompt 202, promoted from the Prompt 201 spike). ATMOSPHERES.md.
 import { refuse, isUnit } from './constants.js';
 
 const MODEL = 'Lambert-sphere phase curve';
