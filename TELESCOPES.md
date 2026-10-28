@@ -83,3 +83,27 @@ seeing-limited frame with a header-stated FWHM. Nothing was downloaded and nothi
 
 `npm run telescopes:validate` prints the table; `tools/telescopes-oracle/oracle.py` produces the pinned fixture
 (`tests/fixtures/telescopes/oracle-results.json`) from numpy and scipy outside the repository's code.
+
+## What the first run found
+
+The production kernel was first run against the committed bounds after the oracle's results were committed (5a5c0d5f). Four rows
+failed; none was a bound that moved. A5 (the Moffat normalisation): the harness's Simpson rule dropped the integrand's non-zero
+limit at the far end for beta = 1.5 (fixed: the limit is stated). A6 (the pair at 1.6 Rayleigh): the harness compared the
+kernel's ratio with the oracle's midpoint over the sum at a star, which is not the maximum along the line (fixed: compare
+the midpoint). F1 (flux): the harness's frame was smaller than twice the rendering reach at the finest pixel scale, so light
+left the frame (fixed: a 256-pixel frame), and at the coarsest scale the radial table's step (an eighth of a pixel)
+mis-integrated the core by 2.6e-3 (fixed in the kernel: a sixteenth of the smaller of a pixel, lambda/D and the FWHM). C2
+(misspecified): three of the 50 frames returned a refusal from the tool (an edge source, two non-convergent fits); the share
+is of the 50 frames, so a refusal is not a flag (the committed text), and the harness had demanded 50 fits. After the fixes:
+16 rows pass, none fails, A1.authentic is not measured.
+
+C1 reads 0.675 against the band [0.60, 0.76] with a mean relative bias of -0.9 percent; C2 flags 47 of 50 frames (the other
+three are refusals) with a mean reduced chi-square of 24. The measured width is a Moffat model's width: on an Airy-dominated
+frame the tool says so (`modelLimited`) and the panel labels its number a model fit.
+
+## Where things are
+
+`js/kernels/detector/optics.js` (Airy, Moffat, combination, Rayleigh, dip, light gathering, plate scale),
+`js/kernels/detector/telescope.js` (config, photon rates through `lab.js`, the profile table `frame.js` draws with, the scenes),
+`js/telescopeField.js` (the matching and measuring half: Prompt 183's tools), `tools/telescopes-validate.mjs`,
+`tools/telescopes-oracle/oracle.py`, `tests/telescopes.test.js`.
