@@ -24,11 +24,11 @@
       "power-law": {
         "kb": 3321.3,
         "requests": 148,
-        "toolKb": 3374.6,
+        "toolKb": 3374.5,
         "toolRequests": 151
       },
       "largest-lesson": {
-        "kb": 3453.6,
+        "kb": 3453.5,
         "requests": 150
       },
       "teaching": {
@@ -116,7 +116,7 @@
         "requests": 6
       },
       "course-packs": {
-        "kb": 668.6,
+        "kb": 668.5,
         "requests": 45
       },
       "sky": {
