@@ -148,7 +148,7 @@ runtime cache has nothing. A tenth of the payload to remove that cliff is worth
 it, and picking a favorite subset would be guessing which lesson a class is
 about to want.
 
-**The <!--fact:spanishShadows-->83<!--/fact--> Spanish shadows are not**: they are only ever fetched
+**The <!--fact:spanishShadows-->81<!--/fact--> Spanish shadows are not**: they are only ever fetched
 when the interface is in Spanish. They are runtime-cached on first use, and
 `js/offline.js` asks the worker to warm all of them the moment the language is
 switched. A Spanish classroom is therefore covered from when it chooses
