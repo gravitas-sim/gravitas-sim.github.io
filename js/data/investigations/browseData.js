@@ -316,4 +316,12 @@ export const BROWSE_META = {
     tags: ['habitability', 'solar-system'],
     numericCount: 0,
   },
+  'the-turning-sun': {
+    tags: ['observing', 'solar-system'],
+    numericCount: 0,
+  },
+  'the-suns-power': {
+    tags: ['observing', 'solar-system'],
+    numericCount: 0,
+  },
 };

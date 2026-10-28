@@ -1,15 +1,53 @@
 {
   "format": "gravitas.sun-failed-legs/1",
   "prompt": 194,
-  "what": "Legs that fail as committed in thresholds.json and are left failing, each with its cause. No bound was moved, multiplied or restated. tests/sun.test.js holds each to this record, so a change that fixes or worsens one cannot pass unnoticed. Carl may rule on each later.",
+  "what": "Legs that fail as committed in thresholds.json and are left failing, each with its cause. No bound was moved, multiplied or restated. tests/sun.test.js holds each to this record, so a change that fixes or worsens one cannot pass unnoticed. Carl may rule on each later. Part 2 (the authentic legs of thresholds-2.json and thresholds.json) adds three; each is recorded with its cause and none was restated.",
   "legs": {
     "a7.noiseFree.synodicRoute": {
       "bound": {
         "noiseFreeSynodicRouteDegPerDay": 0.002
       },
       "cause": "The committed route adds the Earth's ecliptic rate (the change of the apparent Sun's longitude) to the Stonyhurst synodic rate. A feature's Stonyhurst longitude actually loses the sub-Earth point's rate along the SOLAR EQUATOR, dL0/dt plus 360 / 25.38, and the equator is inclined 7.25 degrees to the ecliptic, so the two rates differ by up to 1 / cos(7.25 degrees) - 1 = 0.8 percent of a degree a day (up to 0.008 degree a day), with a sign that follows the Earth's phase against the node. Measured, noise-free, twelve cases (three latitudes, four start dates): 0.008035 degree a day worst, 0.0075 to 0.0080 at 15 degrees across the four dates, signs alternating with the season; the error is the same weighted and unweighted (0.00799 against 0.00793 in March), so it is not the weights. The leg was committed with a bound set by a guess about curvature, not by this term. Left as committed and measured through the committed route. The kernel's own sidereal rate now corrects with the rate along the solar equator, and two rows ADDED after this one failed hold that (a7.noiseFree.equatorRoute 8.0e-5, under the same 0.002; b2.rateEquator 2.4e-4 against the oracle's daily L0 steps, under the committed 5e-4); neither stands in for the committed leg. Restating this leg to the equator route is Carl's.",
-      "measuredRange": [0.0079, 0.0081],
+      "measuredRange": [
+        0.0079,
+        0.0081
+      ],
       "ruling": "Relayed by the merge-queue session (Carl, AskUserQuestion to the merge-queue session, 2026-10-25); quoted verbatim: \"Leave failing, labelled (Recommended)\" = \"Keep the committed bound, record a7 with its cause, and merge into v3, as for the earlier legs.\""
+    },
+    "e1.authentic.G2": {
+      "rowBound": 2,
+      "bound": {
+        "sigmas": 2
+      },
+      "cause": "Group G2, the northern spread-out complex, rotates at 12.375 +/- 0.182 degrees a day (sidereal) by the committed rule against the law's 13.858 at 25.8 degrees: z 4.2 against 2. The cause is the rule, not the Sun: G2 is a complex that splits and decays (164 dark pixels on 4 May, 17 on 9 May), and the nearest-cluster tracking, committed in thresholds-2.json before any rate was computed, follows the trailing piece from 6 May while a leading piece of 85 pixels stands 45 pixels further west; the five marks are not a line (Birge ratio 3.7, chi-square 11.2 on 3 degrees of freedom, so the kernel's own sigma is inflated by 1.9). thresholds-2.json said this group's centroid is not a point. The rule was not changed and the group is not used by a lesson. G1 (z 0.5) and G3 (z 1.88, close to the bound) pass.",
+      "measuredRange": [
+        4.2,
+        4.3
+      ]
+    },
+    "e1.limb": {
+      "rowBound": {
+        "sigmaRatioMin": 1.5
+      },
+      "bound": {
+        "sigmaRatioMin": 1.5
+      },
+      "cause": "G1 with its day near the limb added (mu 0.29, one more position) gives a sidereal-rate sigma 0.936 times the sigma of the disc days alone, not 1.5 times or more. The bound assumed that a limb point widens the rate's sigma; the weighted fit trusts the point by its OWN sigma, which is widened (0.64 degree of longitude against 0.2 on the disc), so one more position still adds a little information and the rate's sigma falls from 0.059 to 0.055. What a limb point does do is the warning, precise false and its own sigma 2.9 times the median disc point's: two rows ADDED after this one failed hold that (e1.limb.pointSigma 2, e1.limb.warning), and neither stands in for this leg. The lessons say what the limb day carries, not that the rate's sigma widens.",
+      "measuredRange": [
+        0.93,
+        0.94
+      ]
+    },
+    "e2.au": {
+      "rowBound": 0.01,
+      "bound": {
+        "wattsPerSquareMetre": 0.01
+      },
+      "cause": "LASP's true-Earth column times Horizons' distance squared differs from LASP's own 1 AU column by 0.0067, 0.0131, 0.0076, 0.0088 and 0.0013 W/m2 on 4 to 8 May (the 5 May and 7 May rows are over 0.01, a few tenths of an hour of a day's change in the distance, 4e-6 AU) and by 0.156 W/m2 on 9 May, where the file's own columns imply a distance 5.8e-5 AU short of Horizons' at 12:00 UT, about 6 hours of the Earth's motion earlier. The bound of 0.01 was a guess about the file's rounding and timestamps. The lessons correct each Earth flux with Horizons' distance; the file's own 1 AU values differ from that by at most 0.16 W/m2 (0.01 percent), under the quoted 0.27 to 0.32 W/m2, and the luminosity moves by 2e-5 of itself.",
+      "measuredRange": [
+        0.15,
+        0.16
+      ]
     }
   }
 }

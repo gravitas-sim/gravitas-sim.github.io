@@ -209,6 +209,8 @@ export const SEQUENCES = [
       ['goldilocks-question', 'core', ['transit-photometry']],
       ['why-venus-is-hot', 'core'],
       ['two-greenhouse-models', 'core', ['why-venus-is-hot']],
+      ['the-turning-sun', 'core'],
+      ['the-suns-power', 'core'],
       ['why-rings', 'core'],
       ['tides-that-move-the-moon', 'core'],
       ['ios-fire', 'core', ['tides-that-move-the-moon']],

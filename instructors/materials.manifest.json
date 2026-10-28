@@ -1,30 +1,30 @@
 {
   "version": "October 2026",
-  "generated": "2026-10-27",
-  "documents": 716,
+  "generated": "2026-10-28",
+  "documents": 738,
   "inventory": {
-    "documents": 716,
+    "documents": 738,
     "byLocale": {
-      "en": 329,
-      "es": 387
+      "en": 339,
+      "es": 399
     },
     "byKind": {
       "general": 2,
-      "guide": 159,
-      "key": 474,
-      "notes": 76,
+      "guide": 163,
+      "key": 490,
+      "notes": 78,
       "worksheet": 5
     },
     "byVariant": {
       "activity": 12,
-      "depth": 306,
-      "full": 304,
+      "depth": 318,
+      "full": 312,
       "general": 18,
-      "notes": 76
+      "notes": 78
     }
   },
   "sourceFiles": 281,
-  "sourceDigest": "1d06ae1793ef54aea16fedab5bb9703d2b02e87a69747659ac656f3e45118cb4",
+  "sourceDigest": "cca76aac935471c379b276af54f8ed20004a88f9dc875a7ba22a8e7e88fb78e2",
   "sources": {
     "js/activities/activities.js": "39ac98cd99b8b0387c55e41d5d4530bad55a8da8758819ad056be73e7a716b01",
     "js/activities/activityBridge.js": "67a82aff98e0ed935d6b8b0f0f654c6ad4332ee929cb3604e896a7f790a6fdc1",
@@ -53,7 +53,7 @@
     "js/data/investigations/a-lens-passing-by.js": "b0516c2bdb40f085f5dd2ab1ade0e006771d9507e3809c89e8de3ba35376e030",
     "js/data/investigations/a-universe-of-stars.js": "8a5cf66239f97a96d71b262a24b178cbe327a86500f252f6e65a405455f1dd65",
     "js/data/investigations/a-variable-star-from-frames.js": "9e516c56e4623154492a535a3fda58c4f80b1179a248565c05bd81421e3f42b1",
-    "js/data/investigations/atmosphere-sequence.js": "9292c2810ffe18aa55af2d3c21bab4fb898649d6b403ca5087431bbe04fc8123",
+    "js/data/investigations/atmosphere-sequence.js": "35d14385ff5b150be2be712fdfc9b7fa7de03462dd1ec1503d1d42a52fe96942",
     "js/data/investigations/bending-light.js": "67958eae861937ba76ae8cfc9fcf632dd06f100f5f615c26b95870d2e9c60e0e",
     "js/data/investigations/binary-star-planets.js": "dae7b75bc10cd1f6e40dfac40dd8bddfd82e30af12e8bd9674021cac1dd7024b",
     "js/data/investigations/black-holes.js": "3e666dd2ad06285545ee0749124d0654f9f66783f51a60ac97182a58ff23fd89",
@@ -63,14 +63,14 @@
     "js/data/investigations/color-and-temperature.js": "76b99b8ae55fdc4029b92b852e61d656ffec185503088d2b97b0629bf16b18aa",
     "js/data/investigations/depth/a-lens-passing-by.js": "812e2dca2dfdc7a416554c59b64b6cd6e699b82a43aa23c30a4e288e91851439",
     "js/data/investigations/depth/a-variable-star-from-frames.js": "c4f2e754c77bbc614562c9581bfc42a80c92b0ad38099f9896e29cd68da8b3c9",
-    "js/data/investigations/depth/atmosphere-sequence.js": "1c1ef1c8ab48952851cf449109225f0eb1902667cf7c9d9b66df7f6b0b2dc4a3",
+    "js/data/investigations/depth/atmosphere-sequence.js": "2aeff5db26c62836f114d53280d442e50f25f086a0da52787f1f1575a2004d8d",
     "js/data/investigations/depth/bending-light.js": "935305df378f9ef2933b5a05124fc7ca032582db220218aeeecfde7b5855c966",
     "js/data/investigations/depth/cluster-membership.js": "ffcc0c200eebff3a73113b80cda5c6e8af5b56eb911ed5314e760312443849c8",
     "js/data/investigations/depth/color-and-temperature.js": "f7167525956a3de941f787a5b7f74e76edc0c30c3b56a4dcd75b4610d7ad1d17",
     "js/data/investigations/depth/einstein-rings-and-arcs.js": "1fc7cfdd3a1d8c518f81a1bed61acffdd69dbef9b3ad894e8fded04c0c549a39",
     "js/data/investigations/depth/es/a-lens-passing-by.js": "db610c76a63b2e398506f60865008baae4a5fa93d98ac783d19b7559fca3172d",
     "js/data/investigations/depth/es/a-variable-star-from-frames.js": "901f6641d046de4cade2a9d14fe34489bdbf54b3f89f1b50c9733dc31f7b04b5",
-    "js/data/investigations/depth/es/atmosphere-sequence.js": "48fc6430329eb35518e97f15d1f09aecf31403aa888bcb97e4f7a6b5e7d6c499",
+    "js/data/investigations/depth/es/atmosphere-sequence.js": "0d45a29995c24d27cb7706efecce063d52a1218acea00bddbbaf6de805678343",
     "js/data/investigations/depth/es/bending-light.js": "ec36b74d506d72838dfe0bc9526ff221b351c8abba026f032b5b75290cf7d76b",
     "js/data/investigations/depth/es/cluster-membership.js": "76ed2e20189d6a7c232abe3883f44bd503d2b6e99cf84dfefcf44ff04ee09050",
     "js/data/investigations/depth/es/color-and-temperature.js": "28ae3e6aa32be6ece9baf98378f001535f5a2921447fa68bfa223b845204a123",
@@ -139,12 +139,12 @@
     "js/data/investigations/depth/why-the-bright-ones-win.js": "2efd2f0f8f383755a667f7452f9931d527faeed4d3b4d40a536b7a4725918fa1",
     "js/data/investigations/design-the-schedule.js": "8262b01d351491c0b1c0af1355b52daeb7817caaee519db0a17edb54a6a9d0b0",
     "js/data/investigations/detect-this-planet.js": "e7ff6bbdac10bb95b29b2e7aef91b015d8c69a37a014db1fb014dc531124ce43",
-    "js/data/investigations/discovery.js": "0058301185e16a85f9bda343f406233194badb8ee429470ee46d65589083502c",
+    "js/data/investigations/discovery.js": "10b3ae6f8ec235201d9c8c295e2a02d0854d5281187fd074b69bed79fe5e1eea",
     "js/data/investigations/einstein-rings-and-arcs.js": "94e991a437d84d63e2f9df1dddb3c74d4b5c99ff88c8a523c76ac9391b013f6e",
     "js/data/investigations/es/a-lens-passing-by.js": "9f341a46e06db9cf8c17467a8bde8eb392425d6eeba94f1f131ff1e7babcec36",
     "js/data/investigations/es/a-universe-of-stars.js": "e978b7bb1a4297064769e4a005c48a4f3399d8851ea1c321568aff8627265bbe",
     "js/data/investigations/es/a-variable-star-from-frames.js": "e47ee213044fbf8dc7b88a44558c779e6de56736e11807cb41f63e9170bb0d4c",
-    "js/data/investigations/es/atmosphere-sequence.js": "7d3d32a9e62499b2b0804bd5219fbf5fec0d8ca80016248ed0b7b8f6173931cd",
+    "js/data/investigations/es/atmosphere-sequence.js": "13b81a549d67195a0e4ec9cc92670c61c962f00650fb73212a46d2fe37fde231",
     "js/data/investigations/es/bending-light.js": "f829d275b78b89ffcbf678ffd4b4f9980cbb531a5bc3ce80b9bbd6b5b31abb65",
     "js/data/investigations/es/binary-star-planets.js": "cceb1992dda614a4f3bad0b58eb2b8a07f195ed694ecd5974a366b6c3e378af1",
     "js/data/investigations/es/black-holes.js": "7c1a2560b46a8ca54988d403033872fc862d0e0d327071f8fbd253b86b31038e",
@@ -231,7 +231,7 @@
     "js/data/investigations/scaling-the-main-sequence.js": "69ad3e9e62d69ff8986d8cd6fd8439aecd987843e10725f872e60c83bd07191b",
     "js/data/investigations/signal-noise-and-exposure.js": "0d5ce28c379c51a3ef073b3674b14b4d405887bbdb96fd99c2d073a563630209",
     "js/data/investigations/standard-candles.js": "77f5101c57d2eb5de1dbcae2dc1250ad245751a4d600d82dd507978f8b80fa7c",
-    "js/data/investigations/summaries.js": "d2dbac8742deba1b1f44a7ed77fa7699e4574668a3417523886f7d432cbbdb77",
+    "js/data/investigations/summaries.js": "15e6d6b0e957af55d7ea9f7bf2c48cb0aacbcb001ba991da4c82aeea6fa08c63",
     "js/data/investigations/the-beat-of-a-star.js": "4005037e9b5c1a37777bf8e90f4c657a667aff3c6aae3e46633a3f4e3da9a3e4",
     "js/data/investigations/the-completeness-curve.js": "6a81cabc545758ae5de1e2f04644409c1e0d7152809253d9d33ab8cad3abf6c5",
     "js/data/investigations/the-expanding-universe.js": "4e2d6776b896a4a7b8424bf36f7f6afde0e9b75f2ff67dccf26f198b2b641b7c",
@@ -308,5 +308,5 @@
     "tools/instructor-freshness.mjs": "96052b2f27080f0243fdd4d5f7608927bd67f0c50808b6eac3345a65c14d1e28",
     "tools/source-closure.mjs": "961828e4d0d40d8a6f8c029fe9b9435ecaf39a74b62640efc0b4145c35c7650a"
   },
-  "contentDigest": "57cc9d10189127e5c8b959381e4573893757cb3320aff4449102aa95ec6a7b98"
+  "contentDigest": "c13f61e0db4fb9b76820d4fc66229e8fde0ff1292f932a48b2fc3eeaea7fa04d"
 }
