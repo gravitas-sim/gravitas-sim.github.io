@@ -214,6 +214,8 @@ export const SEQUENCES = [
       ['why-rings', 'core'],
       ['tides-that-move-the-moon', 'core'],
       ['ios-fire', 'core', ['tides-that-move-the-moon']],
+      ['the-gaps-in-the-belt', 'core'],
+      ['how-fast-does-it-spin', 'core'],
       ['binary-star-planets', 'core'],
       ['extending-an-experiment', 'core'],
       ['refitting-a-transit', 'core', ['transit-photometry']],

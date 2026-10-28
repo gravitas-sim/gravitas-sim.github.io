@@ -984,4 +984,30 @@ export const MANIFEST = [
     gradedCount: 4,
     objectiveCount: 4,
   },
+  {
+    id: 'the-gaps-in-the-belt',
+    title: 'The Gaps in the Belt',
+    subtitle:
+      'A histogram of 8,886 numbered asteroids, a smooth baseline fitted outside the resonance windows, and how deep each gap is, with an interval',
+    duration: '20-30 min',
+    level: 'Introductory to upper-level astronomy',
+    thumbnail: 'images/investigations/the-gaps-in-the-belt.webp',
+    depths: 3,
+    stepCount: 8,
+    gradedCount: 6,
+    objectiveCount: 4,
+  },
+  {
+    id: 'how-fast-does-it-spin',
+    title: 'How Fast Does It Spin?',
+    subtitle:
+      'A synthetic light curve, the rotation period from its periodogram, the amplitude, and what the amplitude bounds about the shape',
+    duration: '20-30 min',
+    level: 'Introductory to upper-level astronomy',
+    thumbnail: 'images/investigations/how-fast-does-it-spin.webp',
+    depths: 3,
+    stepCount: 6,
+    gradedCount: 4,
+    objectiveCount: 4,
+  },
 ];

@@ -177,6 +177,8 @@ const LOADERS = {
   'why-rings': () => import('./why-rings.js'),
   'tides-that-move-the-moon': () => import('./tides-that-move-the-moon.js'),
   'ios-fire': () => import('./ios-fire.js'),
+  'the-gaps-in-the-belt': () => import('./the-gaps-in-the-belt.js'),
+  'how-fast-does-it-spin': () => import('./how-fast-does-it-spin.js'),
   'why-venus-is-hot': () => import('./why-venus-is-hot.js'),
   'two-greenhouse-models': () => import('./two-greenhouse-models.js'),
   'the-turning-sun': () => import('./the-turning-sun.js'),
@@ -276,6 +278,8 @@ const TRANSLATIONS = {
     'tides-that-move-the-moon': () =>
       import('./es/tides-that-move-the-moon.js'),
     'ios-fire': () => import('./es/ios-fire.js'),
+    'the-gaps-in-the-belt': () => import('./es/the-gaps-in-the-belt.js'),
+    'how-fast-does-it-spin': () => import('./es/how-fast-does-it-spin.js'),
     'why-venus-is-hot': () => import('./es/why-venus-is-hot.js'),
     'two-greenhouse-models': () => import('./es/two-greenhouse-models.js'),
     'the-turning-sun': () => import('./es/the-turning-sun.js'),

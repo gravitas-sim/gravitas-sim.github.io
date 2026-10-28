@@ -152,6 +152,10 @@ const DEEPER = {
     import('./data/investigations/depth/the-turning-sun.js'),
   'the-suns-power': () =>
     import('./data/investigations/depth/the-suns-power.js'),
+  'the-gaps-in-the-belt': () =>
+    import('./data/investigations/depth/the-gaps-in-the-belt.js'),
+  'how-fast-does-it-spin': () =>
+    import('./data/investigations/depth/how-fast-does-it-spin.js'),
   'which-surface-is-older': () =>
     import('./data/investigations/depth/which-surface-is-older.js'),
   'craters-by-size': () =>

@@ -261,9 +261,203 @@ export const IOS_FIRE = {
   ],
 };
 
+// Los huecos del cinturón: paso a paso con el inglés (Prompt 198, parte 3).
+export const THE_GAPS_IN_THE_BELT = {
+  title: 'Los huecos del cinturón',
+  subtitle:
+    'Un histograma de 8 886 asteroides numerados, una línea base suave ajustada fuera de las ventanas de resonancia, y la profundidad de cada hueco con un intervalo',
+  objectives: [
+    'Decir de qué es un recuento el histograma de un catálogo de asteroides numerados, y de qué no lo es',
+    'Medir la profundidad de un hueco contra una línea base suave ajustada fuera de las ventanas de resonancia, con un intervalo bootstrap',
+    'Decir por qué un hueco es un vaciamiento y no un vacío, y por qué dos huecos tienen profundidades distintas',
+    'Decir cuándo una ventana no se puede medir, y que otra ventana, otro corte u otra línea base es otra medición',
+  ],
+  steps: [
+    {
+      title: 'Un catálogo de lo que se encontró',
+      body: 'El <strong>JPL Small-Body Database</strong> enumera todos los planetas menores que se han descubierto y han recibido un número. Esta investigación usa los 8 886 objetos numerados con magnitud absoluta <strong>H menor que 13</strong>, los grandes (consultado el 27 de octubre de 2026; crédito JPL, sin su aval). La figura los cuenta por <strong>semieje mayor</strong> a, el tamaño de la órbita, de 2,0 a 3,5 UA: el cinturón principal. Las líneas de trazos marcan las <strong>resonancias</strong> con Júpiter, donde un asteroide da un número entero de vueltas al Sol por cada número entero de vueltas de Júpiter: 4:1, 3:1, 5:2, 7:3 y 2:1. Es un catálogo de lo que se <em>encontró</em>, no de lo que hay; el paso siguiente pregunta qué te permite decir eso.',
+    },
+    {
+      title: '¿Qué muestra el histograma?',
+      body: 'Cada barra es un recuento de objetos del catálogo. El catálogo guarda los objetos que se encontraron y se numeraron, y el corte en H menor que 13 conserva los grandes. Su propia nota dice que, para el cinturón principal, el corte es más brillante que el límite de completitud de los descubrimientos, así que los huecos se ven con poco sesgo de descubrimiento, y que el cinturón exterior y los troyanos están menos completos que el interior con la misma H.',
+      prompt: '¿Qué puedes decir a partir de la figura?',
+      options: [
+        'Dónde están los objetos grandes que se encontraron; describe el cinturón en la medida en que los objetos grandes se encuentran todos, lo que la nota dice que ocurre en el cinturón principal',
+        'Cuántos asteroides hay y cómo se reparten',
+        'Las órbitas de todos los asteroides de todos los tamaños',
+        'Nada: un catálogo de descubrimientos no dice nada del cielo',
+      ],
+      misconceptions: [
+        {
+          say: 'El catálogo es un recuento de objetos encontrados y numerados, no de objetos que existen. Es un recuento de los grandes, y faltan los débiles.',
+        },
+        {
+          say: 'El corte conserva solo los cuerpos brillantes (grandes); no dice nada de los pequeños, mucho más numerosos y en su mayoría no encontrados.',
+        },
+        {
+          say: 'Una muestra seleccionada sigue siendo evidencia, de lo que selecciona. Lo que debes hacer es decir cuál es la selección, como hace la nota del catálogo.',
+        },
+      ],
+      hints: [
+        'Pregúntate qué tuvo que ocurrir para que un objeto estuviera en el catálogo.',
+      ],
+      because:
+        'Es un histograma de lo que se encontró con H menor que 13, y describe el cinturón principal en la medida en que los cuerpos grandes se encuentran todos. Por eso esta investigación mide los huecos, que una selección casi completa en los cuerpos grandes muestra con poco sesgo de descubrimiento, y no cuenta cuerpos.',
+    },
+    {
+      title: '¿Qué tan vacío está el hueco 3:1?',
+      body: 'Se ajusta una curva suave a los recuentos fuera de cada ventana sombreada y se lleva a través de ellas: dice cuántos objetos grandes tendría una banda de 0,05 UA de ancho en la resonancia 3:1 si el cinturón fuera suave allí.',
+      prompt:
+        'De ese número, el catálogo encuentra en la ventana 3:1 cerca de&hellip;',
+      options: [
+        'uno de cada ocho, un vaciamiento cercano al 88 por ciento',
+        'la mitad, un vaciamiento cercano al 50 por ciento',
+        'nueve de cada diez, un vaciamiento cercano al 10 por ciento',
+        'todo: un hueco solo se ve en una figura, no en los recuentos',
+      ],
+      hints: [
+        'El hueco se ve claramente en las barras; pregúntate cuánto bajan, no si bajan.',
+      ],
+      because:
+        'Cerca de uno de cada ocho: 26 encontrados donde se esperan 216, un vaciamiento del 88 por ciento. Los dos pasos siguientes lo cuentan y le ponen un intervalo.',
+    },
+    {
+      title: 'Cuenta la ventana 3:1',
+      body: 'La banda sombreada es la ventana 3:1, 0,025 UA a cada lado de a = 2,5013 UA. Lee cuántos objetos del catálogo <strong>hay</strong> en la ventana y cuántos <strong>espera</strong> allí la curva suave.',
+      fields: [
+        { label: 'Encontrados en la ventana' },
+        { label: 'Esperados según la línea base' },
+      ],
+    },
+    {
+      title: 'El vaciamiento, y cuán seguro es',
+      body: 'El <strong>vaciamiento</strong> es uno menos lo encontrado entre lo esperado. El intervalo sale de remuestrear 400 veces las filas del catálogo y reajustar la línea base cada vez, así que dice cuánto se movería la profundidad con otra muestra del mismo tipo de cinturón. Lee el vaciamiento y los dos extremos de su intervalo del 95 por ciento, en por ciento.',
+      fields: [
+        { label: 'El vaciamiento (por ciento)' },
+        { label: 'Extremo bajo del intervalo del 95 por ciento (por ciento)' },
+        { label: 'Extremo alto del intervalo del 95 por ciento (por ciento)' },
+      ],
+    },
+    {
+      title: '¿Está vacío el hueco?',
+      body: 'La ventana 3:1 aún contiene 26 objetos del catálogo.',
+      prompt: '¿Qué debería decirse?',
+      options: [
+        'Es un adelgazamiento, no un agujero: la ventana está muy vaciada y se encuentran algunos cuerpos en ella',
+        'No es un hueco en absoluto: un hueco no contendría nada',
+        'Los 26 deben ser errores del catálogo',
+        'Júpiter barrió la ventana, así que esos 26 no son asteroides de verdad',
+      ],
+      misconceptions: [
+        {
+          say: 'Un hueco en un histograma es un vaciamiento frente a lo que dicen los vecinos que cabe esperar. Nada en los datos pide cero; lo que muestran es uno de cada ocho.',
+        },
+        {
+          say: 'Los objetos están numerados, con órbitas de muchas observaciones. Llamar errores a los incómodos es una manera de hacer que una medición salga como querías.',
+        },
+        {
+          say: 'Son asteroides, encontrados con un semieje mayor dentro de la ventana. Por qué hay algunos cuerpos allí es una pregunta para cálculos de órbitas, que un histograma no puede responder.',
+        },
+      ],
+      hints: ['¿Qué número muestra el instrumento para el vaciamiento?'],
+      because:
+        'Un vaciamiento del 88 por ciento con un intervalo del 83 al 92 por ciento: un adelgazamiento fuerte, no un vacío. El recuento de un hueco es una medición con un número, y el número no es cero.',
+    },
+    {
+      title: 'Un hueco menos profundo: 5:2',
+      body: 'Elige la ventana 5:2, en a = 2,8246 UA. Lee cuántos objetos contiene y cuán vaciada está.',
+      fields: [
+        { label: 'Encontrados en la ventana' },
+        { label: 'El vaciamiento (por ciento)' },
+      ],
+    },
+    {
+      title: 'Lo que has deducido',
+      body: 'Un histograma de los 8 886 asteroides numerados con H menor que 13 muestra los huecos en las resonancias de Júpiter. Una curva suave ajustada fuera de las ventanas dice cuántos objetos tendría cada ventana, y el vaciamiento es cuánto cae el recuento por debajo de ella: 88,0 por ciento en 3:1 (intervalo de 82,9 a 92,4) y 63,3 en 5:2 (de 56,5 a 70,0). Un hueco es un vaciamiento, no un vacío, y el catálogo es lo que se encontró, no lo que hay. Los pasos más profundos cambian la ventana, el corte y la línea base, encuentran dos ventanas que el método no puede medir, y dicen qué dice y qué no dice un vaciamiento sobre Júpiter.',
+    },
+  ],
+};
+
+// ¿Qué tan rápido gira?: paso a paso con el inglés (Prompt 198, parte 3).
+export const HOW_FAST_DOES_IT_SPIN = {
+  title: '¿Qué tan rápido gira?',
+  subtitle:
+    'Una curva de luz sintética, el periodo de rotación a partir de su periodograma, la amplitud, y lo que la amplitud acota de la forma',
+  objectives: [
+    'Leer el periodo de rotación de un asteroide en el pico más fuerte de un periodograma, con la regla de los dos máximos, y decir de qué es un piso su error',
+    'Convertir la amplitud de una curva de luz en una cota inferior de la razón de ejes, y decir por qué solo es una cota',
+    'Decir qué puede ocultar el muestreo: un alias, una parte del giro nunca observada o un periodo que no está',
+    'Decir que los datos de aquí son sintéticos, y qué significa comprobar un método contra una verdad conocida',
+  ],
+  steps: [
+    {
+      title: 'Un punto de luz que parpadea',
+      body: 'Un asteroide es un punto de luz que se hace más brillante y más débil al girar, porque un cuerpo irregular nos muestra un área distinta al rotar. Los datos de aquí son <strong>sintéticos</strong>: un elipsoide que gira, simulado para esta investigación con ruido, en cinco noches de 40 medidas cada una en una noche de 7 horas. No es la curva de luz de un asteroide real (la medida que el proyecto buscó no estaba disponible), y su periodo y su forma verdaderos quedan ocultos hasta que los pidas. Arriba: las medidas contra el tiempo. En medio: cuán bien explica cada periodo de rotación de prueba las medidas (un <strong>periodograma</strong>). Abajo: las medidas plegadas con el mejor periodo.',
+    },
+    {
+      title: 'La luz alcanza el máximo dos veces por vuelta',
+      body: 'El pico más fuerte del periodograma dice cada cuánto se repite la luz: cerca de cada tres horas. Un cuerpo alargado nos muestra su lado largo dos veces en cada vuelta, una por cada extremo.',
+      prompt: 'El periodo de rotación del asteroide será de unas&hellip;',
+      options: [
+        'el doble del periodo de la luz, unas 6 horas',
+        'lo mismo que el periodo de la luz, unas 3 horas',
+        'la mitad, unas 1,5 horas',
+        'cuatro veces, unas 12 horas',
+      ],
+      hints: ['¿Cuántos extremos brillantes tiene un cuerpo alargado?'],
+      because:
+        'El doble: 6,2 horas. La luz se repite cada 3,1 horas porque caben dos máximos en cada vuelta. Es la regla de los dos máximos, y vale para un cuerpo que es más o menos un elipsoide; los pasos más profundos vuelven a lo que supone.',
+    },
+    {
+      title: 'El periodo',
+      body: 'Lee el periodo de la luz en el pico más fuerte del periodograma, y el periodo de rotación que da el instrumento a partir de él con la regla de los dos máximos.',
+      fields: [
+        { label: 'El periodo de la luz en el pico más fuerte (horas)' },
+        { label: 'El periodo de rotación (horas)' },
+      ],
+    },
+    {
+      title: 'Cuánto varía, y qué acota eso',
+      body: 'La curva plegada sube y baja una <strong>amplitud</strong>, en magnitudes. Una razón de brillo de 10<sup>0,4 &times; amplitud</sup> es lo mínimo en que el eje largo puede superar al medio: la cota de <strong>a/b</strong>. Lee la amplitud y la cota.',
+      fields: [{ label: 'La amplitud (mag)' }, { label: 'a/b es al menos' }],
+    },
+    {
+      title: 'Compáralo con la verdad',
+      body: 'Activa &ldquo;Mostrar la verdad&rdquo;. El periodo de rotación, la razón de ejes y el aspecto de la simulación aparecen debajo de tus medidas: es lo único que da una curva sintética y que un asteroide real nunca da.',
+      prompt: '¿Cómo se comparan las medidas y la verdad?',
+      options: [
+        'El periodo coincide con una diferencia de 0,001 h (6,199 frente a 6,2), y la cota, 1,36, queda por debajo del a/b verdadero de 1,5, como debe ocurrir con una cota inferior',
+        'Coinciden exactamente: el instrumento devuelve la verdad',
+        'El periodo es correcto pero la cota está mal, pues debería ser 1,5',
+        'No se pueden comparar: la verdad es inventada',
+      ],
+      misconceptions: [
+        {
+          say: 'El periodo difiere de la verdad en 0,001 h y la cota no es 1,5. Una medida está cerca de la verdad, no es igual a ella.',
+        },
+        {
+          say: 'Una cota que fuera igual a a/b sería una medida de a/b. Solo es igual cuando el cuerpo se ve exactamente desde su ecuador, y este se ve con un aspecto de 70 grados.',
+        },
+        {
+          say: 'Una verdad inventada es justo lo que permite comprobar un método: conoces la respuesta. Lo que no puede es sustituir a un asteroide real, cuya verdad nunca se muestra.',
+        },
+      ],
+      hints: ['¿Debe una cota inferior ser igual a lo que acota?'],
+      because:
+        'El periodo de la simulación es 6,2 h y su razón de ejes a/b 1,5, vista a 70 grados del eje de giro, con una amplitud de 0,335 mag. El periodo medido está a menos de 0,001 h y la cota 1,36 queda por debajo de 1,5: ambos como deben. La verdad de un asteroide real nunca se muestra, y por eso un método hay que comprobarlo así primero.',
+    },
+    {
+      title: 'Lo que has deducido',
+      body: 'La luz de un cuerpo que gira se repite dos veces por vuelta, así que el periodo de rotación es el doble del pico más fuerte: 6,199 h aquí, de cinco noches, con un error que es un piso. La amplitud, 0,333 mag, acota la razón de ejes por debajo, a/b de al menos 1,36, y la verdad de la simulación, 1,5, queda por encima, como exige una cota. Todo es sintético. Los pasos más profundos acortan la serie, redondean el cuerpo, muestrean una vez por noche y encuentran los casos en que el instrumento dice que no puede distinguir.',
+    },
+  ],
+};
+
 export default {
   'weighing-jupiter': WEIGHING_JUPITER,
   'why-rings': WHY_RINGS,
   'tides-that-move-the-moon': TIDES_THAT_MOVE_THE_MOON,
   'ios-fire': IOS_FIRE,
+  'the-gaps-in-the-belt': THE_GAPS_IN_THE_BELT,
+  'how-fast-does-it-spin': HOW_FAST_DOES_IT_SPIN,
 };

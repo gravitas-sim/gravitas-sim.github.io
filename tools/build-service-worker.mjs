@@ -414,6 +414,12 @@ export const NEVER_PRECACHED = [
   /^(js\/sunWidgets\.js|js\/i18n\/(en|es)\.sun\.js)$/,
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(the-turning-sun|the-suns-power)\.js$/,
   /^images\/investigations\/(the-turning-sun|the-suns-power)\.webp$/,
+  // The small-body instruments and investigations (Prompt 198 part 3, D-R10-198-04): the
+  // family and its words, the two lessons' per-lesson paths (their text is appended to the
+  // satellite files) and their thumbnails: kept after the first online use, not installed.
+  /^(js\/smallBodiesWidgets\.js|js\/i18n\/(en|es)\.smallbodies\.js)$/,
+  /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(the-gaps-in-the-belt|how-fast-does-it-spin)\.js$/,
+  /^images\/investigations\/(the-gaps-in-the-belt|how-fast-does-it-spin)\.webp$/,
   // The crater instruments and investigations (Prompt 195, D-R10-85): the family
   // and its words, the three lessons' per-lesson paths (their text is appended to
   // the shared measurement files above) and their thumbnails. Kept by the service

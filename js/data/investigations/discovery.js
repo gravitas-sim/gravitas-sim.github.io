@@ -800,4 +800,24 @@ export const DISCOVERY = {
     },
     courseLevel: 'survey',
   },
+  'the-gaps-in-the-belt': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: [],
+    textbook: {
+      chapter: 14,
+      section: null,
+    },
+    courseLevel: 'survey',
+  },
+  'how-fast-does-it-spin': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: [],
+    textbook: {
+      chapter: 14,
+      section: null,
+    },
+    courseLevel: 'survey',
+  },
 };

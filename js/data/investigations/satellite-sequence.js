@@ -841,10 +841,514 @@ export const IOS_FIRE = {
   ],
 };
 
+// -----------------------------------------------------------------------------
+// The small-body investigations (Prompt 198 part 3): two more lessons in this
+// file, on the small-body instruments (js/smallBodiesWidgets.js). Same rules as
+// above: every number a step states is recomputed in
+// tests/smallBodiesLessons.test.js from the kernel in js/kernels/smallbodies/
+// and the pack js/data/smallbodies/numbered-h13.json. The belt is a real catalog
+// of what was found; the light curve is synthetic and says so (tier e2, a
+// measured curve, was not run).
+// -----------------------------------------------------------------------------
+const BG = (values = {}, hide = []) => ({
+  id: 'belt-gaps',
+  values,
+  hide,
+  ...(hide.length ? { presets: false } : {}),
+});
+const SC = (values = {}, hide = []) => ({
+  id: 'spin-curve',
+  values,
+  hide,
+  ...(hide.length ? { presets: false } : {}),
+});
+const BELT_ONLY_GAP = ['hlimit', 'width', 'degree', 'classes', 'survey'];
+const SPIN_ONLY_TARGET = ['hours', 'noise', 'cadence', 'truth'];
+
+// -----------------------------------------------------------------------------
+// 8. The Gaps in the Belt
+// -----------------------------------------------------------------------------
+export const THE_GAPS_IN_THE_BELT = {
+  id: 'the-gaps-in-the-belt',
+  thumbnail: 'images/investigations/the-gaps-in-the-belt.webp',
+  title: 'The Gaps in the Belt',
+  subtitle:
+    'A histogram of 8,886 numbered asteroids, a smooth baseline fitted outside the resonance windows, and how deep each gap is, with an interval',
+  duration: '20-30 min',
+  level: 'Introductory to upper-level astronomy',
+  audience: 'intro',
+  textbook: { chapter: 14, section: null },
+  courseLevel: 'survey',
+  depths: ['core', 'quantitative', 'advanced'],
+  mathematics: 'algebra',
+  prerequisites: [],
+  tags: ['solar-system', 'observing'],
+  lock: { placement: true, inspector: true },
+  objectives: [
+    'Say what a histogram of a catalog of numbered asteroids is a count of, and what it is not a count of',
+    'Measure how deep a gap is against a smooth baseline fitted outside the resonance windows, with a bootstrap interval',
+    'Say why a gap is a depletion rather than an emptiness, and why two gaps have different depths',
+    'Say when a window cannot be measured, and that a different window, cut or baseline is a different measurement',
+  ],
+  steps: [
+    {
+      sid: 'a-catalog-of-whats-found',
+      stage: STAGE,
+      type: 'read',
+      title: 'A catalog of what was found',
+      body: `The <strong>JPL Small-Body Database</strong> lists every minor planet that has been discovered and given a
+             number. This investigation uses the 8,886 numbered objects with an absolute magnitude <strong>H below 13</strong>,
+             the large ones (retrieved on 27 October 2026; credit JPL, not endorsed). The picture counts them by
+             <strong>semi-major axis</strong> a, the size of the orbit, from 2.0 to 3.5 AU: the main belt. The dashed lines
+             mark the <strong>resonances</strong> with Jupiter, where an asteroid goes around the Sun a whole number of
+             times for a whole number of Jupiter&rsquo;s turns: the 4:1, 3:1, 5:2, 7:3 and 2:1. This is a catalog of what was
+             <em>found</em>, not of what is there; the next step asks what that lets you say.`,
+      tool: BG({ gap: 1 }, BELT_ONLY_GAP),
+    },
+    {
+      sid: 'what-is-counted',
+      stage: STAGE,
+      type: 'question',
+      kind: 'choice',
+      title: 'What does the histogram show?',
+      body: `Every bar is a count of catalog objects. The catalog holds the objects that were found and numbered, and the cut
+             at H below 13 keeps the large ones. Its own note says that for the main belt the cut is brighter than the
+             completeness limit of the discoveries, so the gaps show with little discovery bias, and that the outer belt and
+             the Trojans are less complete than the inner belt at the same H.`,
+      prompt: 'What may you say from the picture?',
+      options: [
+        'Where the large objects that were found lie; it describes the belt as far as large objects are all found, which the note says holds for the main belt',
+        'How many asteroids there are, and how they are spread',
+        'The orbits of every asteroid of every size',
+        'Nothing: a catalog of discoveries says nothing about the sky',
+      ],
+      answer: 0,
+      misconceptions: [
+        {
+          id: 'population',
+          option: 1,
+          say: 'The catalog is a count of objects found and numbered, not of objects that exist. It is a count of the large ones, and the faint are missing.',
+        },
+        {
+          id: 'small-bodies',
+          option: 2,
+          say: 'The cut keeps only the bright (large) bodies; it says nothing about the small ones, which are far more numerous and mostly not found.',
+        },
+        {
+          id: 'nothing',
+          option: 3,
+          say: 'A selected sample is still evidence, about what it selects. What you must do is say what the selection is, as the catalog’s note does.',
+        },
+      ],
+      hints: [
+        'Ask what had to happen for an object to be in the catalog at all.',
+      ],
+      because:
+        'It is a histogram of what was found with H below 13, and it describes the main belt as far as the large bodies are all found. That is why this investigation measures the gaps, which a selection that is nearly complete in the large bodies shows with little discovery bias, and does not count bodies.',
+      tool: BG({ gap: 1 }, BELT_ONLY_GAP),
+    },
+    {
+      sid: 'depletion-predict',
+      stage: STAGE,
+      type: 'predict',
+      reveal: 'depletion',
+      title: 'How depleted is the 3:1 gap?',
+      body: `A smooth curve is fitted to the counts outside every shaded window and carried across them: it says how many
+             large objects a band 0.05 AU wide at the 3:1 resonance would hold if the belt were smooth there.`,
+      prompt:
+        'Of that number, the catalog finds in the 3:1 window about&hellip;',
+      options: [
+        'one in eight, a depletion near 88 percent',
+        'half of it, a depletion near 50 percent',
+        'nine in ten, a depletion near 10 percent',
+        'all of it: a gap only shows in a picture, not in the counts',
+      ],
+      answer: 0,
+      hints: [
+        'The gap is plainly visible in the bars; ask how low the bars go, not whether they do.',
+      ],
+      because:
+        'About one in eight: 26 found where 216 are expected, a depletion of 88 percent. The next two steps count it and put an interval on it.',
+      tool: BG({ gap: 1 }, BELT_ONLY_GAP),
+    },
+    {
+      sid: 'count-the-gap',
+      stage: STAGE,
+      type: 'measure',
+      title: 'Count the 3:1 window',
+      body: `The shaded band is the 3:1 window, 0.025 AU either side of a = 2.5013 AU. Read how many catalog objects
+             <strong>are</strong> in the window and how many the smooth curve <strong>expects</strong> there.`,
+      fields: [
+        {
+          id: 'found',
+          label: 'Found in the window',
+          unit: '',
+          hint: '26',
+        },
+        {
+          id: 'expected',
+          label: 'Expected from the baseline',
+          unit: '',
+          hint: '216',
+        },
+      ],
+      validate: v => {
+        if (![v.found, v.expected].every(Number.isFinite)) return null;
+        if (near(v.found, 26, 0.5) && near(v.expected, 216, 1.5)) {
+          return {
+            level: 'ok',
+            message:
+              '26 found where 216 are expected. The window is not empty, and it is far below what the smooth curve gives.',
+          };
+        }
+        return {
+          level: 'error',
+          message:
+            'Set the window to 3:1 and read “Found” and “expected” in “Found, and expected from the baseline”.',
+        };
+      },
+      tool: BG({ gap: 1 }, BELT_ONLY_GAP),
+    },
+    {
+      sid: 'depletion',
+      stage: STAGE,
+      type: 'measure',
+      title: 'The depletion, and how sure it is',
+      body: `The <strong>depletion</strong> is one minus found over expected. The interval comes from resampling the
+             catalog&rsquo;s rows 400 times and refitting the baseline each time, so it says how far the depth would move
+             with another sample of the same kind of belt. Read the depletion and the two ends of its 95 percent interval,
+             in percent.`,
+      fields: [
+        {
+          id: 'dep',
+          label: 'The depletion (percent)',
+          unit: '',
+          hint: '88.0',
+        },
+        {
+          id: 'lo',
+          label: 'Low end of the 95 percent interval (percent)',
+          unit: '',
+          hint: '82.9',
+        },
+        {
+          id: 'hi',
+          label: 'High end of the 95 percent interval (percent)',
+          unit: '',
+          hint: '92.4',
+        },
+      ],
+      validate: v => {
+        if (![v.dep, v.lo, v.hi].every(Number.isFinite)) return null;
+        if (
+          near(v.dep, 88.0, 0.3) &&
+          near(v.lo, 82.9, 0.5) &&
+          near(v.hi, 92.4, 0.5)
+        ) {
+          return {
+            level: 'ok',
+            message:
+              '88.0 percent, 82.9 to 92.4: the window holds about one object in eight of what a smooth belt would. The interval is the sampling error of this catalog; it does not include the choice of window or baseline, which the deeper steps vary.',
+          };
+        }
+        return {
+          level: 'error',
+          message:
+            'Set the window to 3:1 and read the percent and the two ends of the interval in “Depletion against the baseline”.',
+        };
+      },
+      tool: BG({ gap: 1 }, BELT_ONLY_GAP),
+    },
+    {
+      sid: 'not-empty',
+      stage: STAGE,
+      type: 'question',
+      kind: 'choice',
+      title: 'Is the gap empty?',
+      body: `The 3:1 window still holds 26 catalog objects.`,
+      prompt: 'What should one say?',
+      options: [
+        'It is a thinning, not a hole: the window is strongly depleted, and some bodies are found in it',
+        'It is not a gap at all: a gap would hold nothing',
+        'The 26 must be errors in the catalog',
+        'Jupiter swept the window clean, so those 26 are not really asteroids',
+      ],
+      answer: 0,
+      misconceptions: [
+        {
+          id: 'hole',
+          option: 1,
+          say: 'A gap in a histogram is a depletion against what the neighbors say to expect. Nothing in the data asks for zero; what it shows is one in eight.',
+        },
+        {
+          id: 'errors',
+          option: 2,
+          say: 'The objects are numbered, with orbits from many observations. Calling the awkward ones errors is a way of making a measurement come out the way you wanted.',
+        },
+        {
+          id: 'swept',
+          option: 3,
+          say: 'They are asteroids, found with a semi-major axis in the window. Why some bodies are there is a question for orbit calculations, which a histogram cannot answer.',
+        },
+      ],
+      hints: ['What number does the instrument show for the depletion?'],
+      because:
+        'A depletion of 88 percent with an interval from 83 to 92 percent: a strong thinning, not an emptiness. The count of a gap is a measurement with a number, and the number is not zero.',
+      tool: BG({ gap: 1 }, BELT_ONLY_GAP),
+    },
+    {
+      sid: 'the-second-gap',
+      stage: STAGE,
+      type: 'measure',
+      title: 'A shallower gap: 5:2',
+      body: `Choose the 5:2 window, at a = 2.8246 AU. Read how many objects it holds and how depleted it is.`,
+      fields: [
+        {
+          id: 'found',
+          label: 'Found in the window',
+          unit: '',
+          hint: '115',
+        },
+        {
+          id: 'dep',
+          label: 'The depletion (percent)',
+          unit: '',
+          hint: '63.3',
+        },
+      ],
+      validate: v => {
+        if (![v.found, v.dep].every(Number.isFinite)) return null;
+        if (near(v.found, 115, 0.5) && near(v.dep, 63.3, 0.3)) {
+          return {
+            level: 'ok',
+            message:
+              '115 found of 314 expected: a depletion of 63.3 percent, interval 56.5 to 70.0. The 3:1 gap is 88 percent deep and the 5:2 gap 63, and their intervals do not overlap: the gaps differ in depth, and each is a measurement of its own.',
+          };
+        }
+        return {
+          level: 'error',
+          message:
+            'Set the window to 5:2 and read “Found” and the percent in “Depletion against the baseline”.',
+        };
+      },
+      tool: BG({ gap: 2 }, ['hlimit', 'width', 'degree', 'classes', 'survey']),
+    },
+    {
+      sid: 'what-you-worked-out',
+      stage: STAGE,
+      type: 'read',
+      title: 'What you worked out',
+      body: `A histogram of the 8,886 numbered asteroids with H below 13 shows the gaps at Jupiter&rsquo;s resonances. A smooth
+             curve fitted outside the windows says how many objects each window would hold, and the depletion is how far the
+             count falls below it: 88.0 percent at 3:1 (interval 82.9 to 92.4) and 63.3 at 5:2 (56.5 to 70.0). A gap is a
+             depletion, not an emptiness, and the catalog is what was found, not what is there. The deeper steps change the
+             window, the cut and the baseline, meet two windows the method cannot measure, and say what a depletion does
+             and does not tell you about Jupiter.`,
+      tool: BG({ gap: 1 }, BELT_ONLY_GAP),
+    },
+  ],
+};
+
+// -----------------------------------------------------------------------------
+// 9. How Fast Does It Spin?
+// -----------------------------------------------------------------------------
+export const HOW_FAST_DOES_IT_SPIN = {
+  id: 'how-fast-does-it-spin',
+  thumbnail: 'images/investigations/how-fast-does-it-spin.webp',
+  title: 'How Fast Does It Spin?',
+  subtitle:
+    'A synthetic light curve, the rotation period from its periodogram, the amplitude, and what the amplitude bounds about the shape',
+  duration: '20-30 min',
+  level: 'Introductory to upper-level astronomy',
+  audience: 'intro',
+  textbook: { chapter: 14, section: null },
+  courseLevel: 'survey',
+  depths: ['core', 'quantitative', 'advanced'],
+  mathematics: 'algebra',
+  prerequisites: [],
+  tags: ['solar-system', 'observing'],
+  lock: { placement: true, inspector: true },
+  objectives: [
+    'Read the rotation period of an asteroid from the strongest peak of a periodogram, with the two-maxima rule, and say what its error is a floor of',
+    'Turn the amplitude of a light curve into a lower bound on the axis ratio, and say why it is only a bound',
+    'Say what sampling can hide: an alias, a part of the turn never observed, or a period that is not there',
+    'Say that the data here are synthetic, and what it means to check a method against a known truth',
+  ],
+  steps: [
+    {
+      sid: 'a-flickering-point',
+      stage: STAGE,
+      type: 'read',
+      title: 'A flickering point of light',
+      body: `An asteroid is a point of light that gets brighter and fainter as it turns, because a lumpy body shows us a
+             different area as it rotates. The data here are <strong>synthetic</strong>: a rotating ellipsoid simulated for this
+             investigation with noise, over five nights of 40 measurements each in a night of 7 hours. It is not a real
+             asteroid&rsquo;s light curve (the measured one the project looked for was not available), and its true period and
+             shape are withheld until you ask. Top: the measurements against time. Middle: how well each trial rotation
+             period explains them (a <strong>periodogram</strong>). Bottom: the measurements folded on the best period.`,
+      tool: SC({ target: 0 }, SPIN_ONLY_TARGET),
+    },
+    {
+      sid: 'two-maxima-predict',
+      stage: STAGE,
+      type: 'predict',
+      reveal: 'rotation-period',
+      title: 'The light peaks twice a turn',
+      body: `The periodogram&rsquo;s strongest peak says how often the light repeats: about every three hours. An elongated body shows
+             its long side to us twice in each turn, once at each end.`,
+      prompt: 'The asteroid&rsquo;s rotation period will be about&hellip;',
+      options: [
+        'twice the light’s period, about 6 hours',
+        'the same as the light’s period, about 3 hours',
+        'half of it, about 1.5 hours',
+        'four times it, about 12 hours',
+      ],
+      answer: 0,
+      hints: ['How many bright ends does an elongated body have?'],
+      because:
+        'Twice: 6.2 hours. The light repeats every 3.1 hours because two maxima fit into each turn. That is the two-maxima rule, and it holds for a body that is roughly an ellipsoid; the deeper steps return to what it assumes.',
+      tool: SC({ target: 0 }, SPIN_ONLY_TARGET),
+    },
+    {
+      sid: 'rotation-period',
+      stage: STAGE,
+      type: 'measure',
+      title: 'The period',
+      body: `Read the light&rsquo;s period at the strongest peak of the periodogram, and the rotation period the instrument
+             gives from it by the two-maxima rule.`,
+      fields: [
+        {
+          id: 'peak',
+          label: 'The light’s period at the strongest peak (hours)',
+          unit: '',
+          hint: '3.099',
+        },
+        {
+          id: 'period',
+          label: 'The rotation period (hours)',
+          unit: '',
+          hint: '6.199',
+        },
+      ],
+      validate: v => {
+        if (![v.peak, v.period].every(Number.isFinite)) return null;
+        if (near(v.peak, 3.099, 0.01) && near(v.period, 6.199, 0.01)) {
+          return {
+            level: 'ok',
+            message:
+              'The light repeats every 3.099 h, and the rotation period is twice that, 6.199 ± 0.001 h, taking two maxima a rotation. The ± is from resampling the measurements: it assumes they are independent, and it is a floor on the error, not the whole of it.',
+          };
+        }
+        return {
+          level: 'error',
+          message:
+            'Use target A with five nights and read “Strongest peak” and “Rotation period”.',
+        };
+      },
+      tool: SC({ target: 0 }, SPIN_ONLY_TARGET),
+    },
+    {
+      sid: 'amplitude-and-bound',
+      stage: STAGE,
+      type: 'measure',
+      title: 'How much it varies, and what that bounds',
+      body: `The folded curve rises and falls by an <strong>amplitude</strong>, in magnitudes. A brightness ratio of
+             10<sup>0.4 &times; amplitude</sup> is the least that the long axis can exceed the middle one by: the bound on
+             <strong>a/b</strong>. Read the amplitude and the bound.`,
+      fields: [
+        {
+          id: 'amp',
+          label: 'The amplitude (mag)',
+          unit: '',
+          hint: '0.333',
+        },
+        {
+          id: 'bound',
+          label: 'a/b is at least',
+          unit: '',
+          hint: '1.36',
+        },
+      ],
+      validate: v => {
+        if (![v.amp, v.bound].every(Number.isFinite)) return null;
+        if (near(v.amp, 0.333, 0.004) && near(v.bound, 1.36, 0.01)) {
+          return {
+            level: 'ok',
+            message:
+              '0.333 mag (interval 0.331 to 0.339) and a/b of at least 1.36: the body is at least 1.36 times longer than wide. It is a lower bound: it equals a/b only if we look at the body exactly along its equator.',
+          };
+        }
+        return {
+          level: 'error',
+          message: 'Read “Amplitude” and the number in “The axis ratio a/b”.',
+        };
+      },
+      tool: SC({ target: 0 }, SPIN_ONLY_TARGET),
+    },
+    {
+      sid: 'ask-for-the-truth',
+      stage: STAGE,
+      type: 'question',
+      kind: 'choice',
+      title: 'Check against the truth',
+      body: `Turn on &ldquo;Show the truth&rdquo;. The simulation&rsquo;s own rotation period, axis ratio and aspect appear below your
+             measurements: this is the one thing a synthetic curve gives that a real asteroid never does.`,
+      prompt: 'How do the measurements and the truth compare?',
+      options: [
+        'The period agrees to within 0.001 h (6.199 against 6.2), and the bound, 1.36, is below the true a/b of 1.5, as a lower bound must be',
+        'Both match exactly: the instrument returns the truth',
+        'The period is right but the bound is wrong, since it should be 1.5',
+        'They cannot be compared: the truth is made up',
+      ],
+      answer: 0,
+      misconceptions: [
+        {
+          id: 'exact',
+          option: 1,
+          say: 'The period differs from the truth by 0.001 h and the bound is not 1.5. A measurement is close to the truth, not equal to it.',
+        },
+        {
+          id: 'bound-wrong',
+          option: 2,
+          say: 'A bound that equaled a/b would be a measurement of it. It equals a/b only when the body is seen exactly equator-on, and this one is seen at an aspect of 70 degrees.',
+        },
+        {
+          id: 'made-up',
+          option: 3,
+          say: 'A made-up truth is exactly what lets you check a method: you know the answer. What it cannot do is stand in for a real asteroid, whose truth is never shown.',
+        },
+      ],
+      hints: ['Is a lower bound supposed to be equal to what it bounds?'],
+      because:
+        'The simulation’s period is 6.2 h and its axis ratio a/b 1.5, seen at 70 degrees from the spin axis, with an amplitude of 0.335 mag. The measured period is within 0.001 h and the bound 1.36 lies below 1.5: both as they should. A real asteroid’s truth is never shown, which is why a method has to be checked like this first.',
+      tool: SC({ target: 0, truth: 1 }, [
+        'nights',
+        'hours',
+        'noise',
+        'cadence',
+      ]),
+    },
+    {
+      sid: 'what-you-worked-out',
+      stage: STAGE,
+      type: 'read',
+      title: 'What you worked out',
+      body: `The light of a rotating body repeats twice a turn, so the rotation period is twice the strongest peak: 6.199 h
+             here, from five nights, with an error that is a floor. The amplitude, 0.333 mag, bounds the axis ratio from
+             below, a/b of at least 1.36, and the simulation&rsquo;s truth, 1.5, is above it as a bound requires. All of it is
+             synthetic. The deeper steps shorten the run, round the body, sample once a night, and meet the cases in which
+             the instrument says it cannot tell.`,
+      tool: SC({ target: 0 }, SPIN_ONLY_TARGET),
+    },
+  ],
+};
+
 /** The lessons, in order: what the barrel registers. */
 export default [
   WEIGHING_JUPITER,
   WHY_RINGS,
   TIDES_THAT_MOVE_THE_MOON,
   IOS_FIRE,
+  THE_GAPS_IN_THE_BELT,
+  HOW_FAST_DOES_IT_SPIN,
 ];

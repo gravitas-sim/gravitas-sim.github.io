@@ -324,4 +324,12 @@ export const BROWSE_META = {
     tags: ['observing', 'solar-system'],
     numericCount: 0,
   },
+  'the-gaps-in-the-belt': {
+    tags: ['observing', 'solar-system'],
+    numericCount: 0,
+  },
+  'how-fast-does-it-spin': {
+    tags: ['observing', 'solar-system'],
+    numericCount: 0,
+  },
 };

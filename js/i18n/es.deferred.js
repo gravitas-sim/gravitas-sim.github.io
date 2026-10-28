@@ -1873,6 +1873,10 @@ export const ES_DEFERRED = {
     'Catorce días de imágenes del Sol: dónde está una mancha, con qué rapidez gira un grupo visto desde la Tierra y respecto de las estrellas, y qué pueden y qué no pueden mostrar dos grupos.',
   'inv.seq.planets.the-suns-power':
     'Un flujo medido en la Tierra llevado a una unidad astronómica, la luminosidad y la temperatura del Sol, y lo que deja fuera el intervalo de una media.',
+  'inv.seq.planets.the-gaps-in-the-belt':
+    'Un catálogo real de 8 886 asteroides numerados: cuán profundos son los huecos en las resonancias de Júpiter frente a una línea base suave, con un intervalo, y dónde dice el método que no puede distinguir.',
+  'inv.seq.planets.how-fast-does-it-spin':
+    'Una curva de luz sintética: el periodo de rotación a partir del periodograma, la amplitud y la cota que da de la forma, y qué oculta un punto por noche.',
   'inv.seq.planets.why-rings':
     'Por qué los anillos están dentro del límite de Roche de un planeta, y qué despeja en uno la resonancia de una luna.',
   'inv.seq.planets.tides-that-move-the-moon':

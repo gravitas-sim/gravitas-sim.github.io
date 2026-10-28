@@ -239,9 +239,269 @@ export const IOS_DEEPER = {
   ],
 };
 
+// Los huecos del cinturón, pasos más profundos: paso a paso con el inglés (Prompt 198, parte 3).
+export const THE_GAPS_IN_THE_BELT_DEEPER = {
+  steps: [
+    {
+      title: 'Otra ventana',
+      body: 'Pon el ancho de la ventana 3:1 en 2, el doble (0,05 UA a cada lado). Lee cuántos objetos contiene y el vaciamiento.',
+      fields: [
+        { label: 'Encontrados en la ventana' },
+        { label: 'El vaciamiento (por ciento)' },
+      ],
+    },
+    {
+      title: 'Solo los más brillantes',
+      body: 'Vuelve a poner el ancho en 1 y el límite de H en 11: solo los 2 537 objetos más brillantes del catálogo, 1 118 de ellos en el intervalo de la figura. Lee el recuento de la ventana 3:1, su vaciamiento y el extremo bajo del intervalo.',
+      fields: [
+        { label: 'Encontrados en la ventana' },
+        { label: 'El vaciamiento (por ciento)' },
+        { label: 'Extremo bajo del intervalo del 95 por ciento (por ciento)' },
+      ],
+    },
+    {
+      title: 'Dos ventanas que el instrumento no da por resueltas',
+      body: 'Elige la ventana 7:3 y luego la 2:1. Ambas muestran vaciamientos profundos, del 84 y el 89 por ciento, y el instrumento se niega a dar ninguna por resuelta.',
+      prompt: '¿Por qué?',
+      options: [
+        'El recuento difiere mucho a los dos lados de cada ventana (152 frente a 645 objetos a cada lado de 7:3, 1 045 frente a 73 a cada lado de 2:1), así que una curva suave a través de la ventana no la describe y el vaciamiento no se distingue de la pendiente',
+        'Las ventanas contienen muy pocos objetos para hacer un intervalo',
+        'Porque no son huecos de verdad',
+        'Porque las resonancias 7:3 y 2:1 de Júpiter son más débiles que la 3:1',
+      ],
+      misconceptions: [
+        {
+          say: 'La línea base espera 354 y 487 objetos allí, de sobra para un intervalo. Lo que falla es el supuesto de que una curva suave describe el cinturón a través de la ventana.',
+        },
+        {
+          say: 'Nada aquí dice que los huecos no existan. Dice que esta medición no puede decir cuán profundos son, porque la línea base no es fiable a través de la ventana; el hueco y su medición son cosas distintas.',
+        },
+        {
+          say: 'El instrumento no dice nada de la fuerza de una resonancia. Mira solo la forma de los recuentos alrededor de la ventana.',
+        },
+      ],
+      hints: [
+        'Mira los recuentos de los flancos: ¿qué tendría que hacer una línea base suave entre ellos?',
+      ],
+      because:
+        'La densidad del cinturón cambia en un factor grande de un lado a otro de cada ventana, así que el vaciamiento no puede separarse de la pendiente de la línea base. El instrumento informa &ldquo;no resuelto&rdquo; y dice por qué, en lugar de una profundidad que parezca tan segura como la de 3:1. No se demuestra que la profundidad sea cero; se demuestra que este método no puede medirla.',
+    },
+    {
+      title: 'Hildas y troyanos',
+      body: 'Activa &ldquo;Mostrar el recuento por clases de órbita&rdquo;. Las hildas (cerca de 3,97 UA, la resonancia 3:2) y los troyanos de Júpiter (a 5,20 UA, la 1:1) se cuentan con una caja en semieje mayor, excentricidad e inclinación: una regla de clase, no una prueba de que la órbita esté en resonancia. Lee ambos recuentos.',
+      fields: [{ label: 'Hildas' }, { label: 'Troyanos de Júpiter' }],
+    },
+    {
+      title: 'Lo que conserva un sondeo',
+      body: 'Activa &ldquo;Mostrar lo que conserva un sondeo&rdquo;. Un sondeo con una sola magnitud límite encuentra con más completitud los cuerpos cercanos, porque el brillo en oposición cae con la distancia. Es un modelo con una pendiente declarada, no una corrección del catálogo. Lee cuántas veces más completamente se encuentra un cuerpo a 2,0 UA que uno a 3,5 UA, y la media de a que mostraría un cinturón uniforme en a.',
+      fields: [
+        { label: 'Encontrado a 2,0 UA frente a 3,5 UA' },
+        { label: 'La media de a de lo encontrado (UA)' },
+      ],
+    },
+    {
+      title: 'La línea base es una elección',
+      body: 'La línea base es un polinomio en el logaritmo del recuento; el grado por defecto es 4. Pon el grado en 3 y lee el vaciamiento de 3:1, luego ponlo en 6 y léelo otra vez.',
+      fields: [
+        { label: 'El vaciamiento con grado 3 (por ciento)' },
+        { label: 'El vaciamiento con grado 6 (por ciento)' },
+      ],
+    },
+    {
+      title: '¿Qué dice el 88 por ciento de Júpiter?',
+      body: 'La ventana 3:1 está vaciada en un 88 por ciento.',
+      prompt: '¿Qué dice ese número?',
+      options: [
+        'Que el catálogo encuentra un 88 por ciento menos de objetos grandes en la ventana que los que daría una curva suave ajustada fuera; cuántos cuerpos quitó Júpiter, y en cuánto tiempo, es una pregunta para cálculos de órbitas que un histograma no puede responder',
+        'Que Júpiter quitó el 88 por ciento de los asteroides que alguna vez estuvieron en la ventana',
+        'Que la ventana está un 88 por ciento vacía de asteroides de todos los tamaños',
+        'Que el mismo vaciamiento vale para objetos de todos los tamaños',
+      ],
+      misconceptions: [
+        {
+          say: 'El histograma no sabe qué hubo antes. La línea base es una curva suave ajustada a lo que se encuentra fuera de las ventanas, no un registro del pasado del cinturón.',
+        },
+        {
+          say: 'El catálogo conserva solo H menor que 13, los cuerpos grandes. Nada aquí dice qué hacen los pequeños.',
+        },
+        {
+          say: 'La profundidad de 3:1 en los 1 118 objetos más brillantes es 83,8 por ciento y en todo el catálogo 88,0, dentro del intervalo, pero eso es una prueba con un intervalo ancho, no un resultado sobre todos los tamaños.',
+        },
+      ],
+      hints: [
+        '¿De qué está hecha la línea base, y contra qué se mide el vaciamiento?',
+      ],
+      because:
+        'El vaciamiento es una afirmación medida sobre este catálogo contra una línea base suave declarada. Que la línea base sea lo que sería el cinturón sin Júpiter es un modelo, y que el hueco se despejara como imaginas es una pregunta dinámica; el intervalo cubre solo el error de muestreo.',
+    },
+    {
+      title: '¿Qué promete &ldquo;resuelto&rdquo;?',
+      body: 'Pon el límite de H en 9: los 304 objetos más brillantes entre 2,0 y 3,5 UA. La ventana 3:1 contiene 1 donde se esperan 17, un vaciamiento del 94 por ciento con un intervalo del 80 al 100 por ciento, y el instrumento lo da por resuelto.',
+      prompt: '¿Qué promete &ldquo;resuelto&rdquo; aquí?',
+      options: [
+        'Solo que el intervalo queda por encima de cero: la ventana está vaciada, pero cuánto se conoce con unos veinte puntos de margen',
+        'Que la profundidad se conoce al uno por ciento',
+        'Que el vaciamiento verdadero es del 94 por ciento',
+        'Que la línea base es correcta',
+      ],
+      misconceptions: [
+        {
+          say: 'Un intervalo del 80 al 100 por ciento no es una profundidad conocida al uno por ciento. &ldquo;Resuelto&rdquo; es un veredicto sobre el extremo inferior del intervalo, y el intervalo es tan ancho como permiten los datos.',
+        },
+        {
+          say: 'El 94 por ciento es la estimación puntual de un objeto encontrado donde se esperaban 17; uno más o uno menos la mueve seis puntos.',
+        },
+        {
+          say: '&ldquo;Resuelto&rdquo; no dice nada de la línea base más allá de las advertencias que el instrumento también comprueba; el paso anterior mostró que otro grado mueve una profundidad varios puntos.',
+        },
+      ],
+      hints: ['¿Cuál es el intervalo, y qué excluye?'],
+      because:
+        'La regla es que el extremo bajo del intervalo esté por encima de cero y no se aplique ninguna advertencia. Con 304 objetos el intervalo abarca unos veinte puntos. &ldquo;Resuelto&rdquo; es un piso de lo que puedes decir, no una afirmación de precisión, y un veredicto debe leerse siempre junto al intervalo.',
+    },
+  ],
+};
+
+// ¿Qué tan rápido gira?, pasos más profundos: paso a paso con el inglés (Prompt 198, parte 3).
+export const HOW_FAST_DOES_IT_SPIN_DEEPER = {
+  steps: [
+    {
+      title: 'Solo una noche',
+      body: 'Pon el número de noches en 1: 40 medidas en una noche de 7 horas. Lee el periodo de rotación y su incertidumbre.',
+      fields: [
+        { label: 'El periodo de rotación (horas)' },
+        { label: 'Su incertidumbre (horas)' },
+      ],
+    },
+    {
+      title: 'El error es un piso',
+      body: 'Elige el objetivo B (de nuevo cinco noches). Lee su periodo de rotación y la incertidumbre que da el instrumento, luego activa &ldquo;Mostrar la verdad&rdquo; y compara.',
+      fields: [
+        { label: 'El periodo de rotación (horas)' },
+        { label: 'Su incertidumbre (horas)' },
+      ],
+    },
+    {
+      title: 'Un cuerpo casi redondo',
+      body: 'El objetivo B es casi redondo. Lee su amplitud y la cota de a/b que da.',
+      fields: [{ label: 'La amplitud (mag)' }, { label: 'a/b es al menos' }],
+    },
+    {
+      title: 'Una noche de un rotador lento',
+      body: 'Elige el objetivo B con una noche. Su rotación dura 11,4 horas y la noche dura 7. El instrumento da un periodo de 16,6 &plusmn; 9,3 h y, para la amplitud, la palabra &ldquo;retenida&rdquo;.',
+      prompt: '¿Por qué se retiene la amplitud?',
+      options: [
+        'Cerca de 0,60 del giro nunca se observó, así que la curva ajustada allí es una conjetura, y una amplitud leída de ella también lo sería',
+        'El ruido es demasiado grande para cualquier amplitud',
+        'Un cuerpo casi redondo no tiene amplitud',
+        'El instrumento ha fallado',
+      ],
+      misconceptions: [
+        {
+          say: 'El ruido es el mismo 0,01 mag que con cinco noches, cuando la amplitud se lee sin dificultad. Lo que cambia es cuánto del giro se vio.',
+        },
+        {
+          say: 'El cuerpo tiene una amplitud de 0,103 mag, como muestran cinco noches. Una noche simplemente no cubre bastante del giro para medirla.',
+        },
+        {
+          say: 'Retener es el instrumento funcionando: prefiere no decir nada antes que devolver un número que no puede respaldar.',
+        },
+      ],
+      hints: ['¿Cuánto del giro cubren 7 horas de 11,4?'],
+      because:
+        'El hueco en la fase plegada, el tramo más largo del giro nunca observado, es 0,60 de la rotación, por encima del límite de 0,35 que admite el instrumento. El periodo de una noche no es mejor, 16,6 ± 9,3 h frente a una verdad de 11,4: una rotación más lenta que la duración de la noche no puede medirse con una sola noche.',
+    },
+    {
+      title: 'Un punto por noche',
+      body: 'Pon el muestreo en un punto por noche: 40 noches, a una hora algo distinta cada noche. Lee los dos periodos en competencia que enumera el instrumento.',
+      fields: [
+        { label: 'El primer periodo (horas)' },
+        { label: 'El segundo periodo (horas)' },
+      ],
+    },
+    {
+      title: 'Un periodo que no se encuentra',
+      body: 'Elige el objetivo C con un punto por noche. La simulación rota cada 8,0 horas y varía 0,315 mag, pero el veredicto es &ldquo;no periódica&rdquo;.',
+      prompt: '¿Qué dice ese veredicto?',
+      options: [
+        'Que este muestreo no puede mostrar un periodo: es un veredicto sobre los datos, no sobre el asteroide. Una rotación de 8 horas cabe tres veces en un día, así que cada noche encuentra al asteroide casi en la misma fase',
+        'Que el objetivo C no rota',
+        'Que rota pero es redondo',
+        'Que el instrumento está roto',
+      ],
+      misconceptions: [
+        {
+          say: 'El mismo objetivo con cinco noches densas da unas limpias 8,002 h. No encontrar un periodo es una afirmación sobre lo que se observó.',
+        },
+        {
+          say: 'Su amplitud es 0,315 mag, como muestran las noches densas. Un cuerpo redondo sería una línea plana con cualquier muestreo.',
+        },
+        {
+          say: 'El instrumento dice que el pico más fuerte podría ser ruido: su probabilidad de falsa alarma es 0,33. Decirlo es lo correcto.',
+        },
+      ],
+      hints: ['¿Cuántas vueltas da el asteroide en 24 horas?'],
+      because:
+        'Un periodo que divide un día, muestreado una vez por noche, se ve en la misma fase cada vez, así que la luz parece constante. El muestreo denso lo revela. &ldquo;No periódica&rdquo; es el veredicto del muestreo, que ninguna cantidad de mirar los mismos datos puede revocar.',
+    },
+    {
+      title: 'Un pico sin nada detrás',
+      body: 'Elige el objetivo D: un punto que no varía en absoluto. El periodograma sigue teniendo un pico más alto, en 4,09 horas con una potencia de 0,06, y el instrumento no informa ningún periodo.',
+      prompt: '¿Por qué?',
+      options: [
+        'Siempre existe un pico más alto. Su probabilidad de falsa alarma, 0,26, dice que el ruido solo da un pico así de alto cerca de una cuarta parte de las veces, así que no es una detección',
+        'El pico es demasiado pequeño para verse',
+        'Un cuerpo redondo tiene un periodo infinito',
+        'El instrumento necesita más noches',
+      ],
+      misconceptions: [
+        {
+          say: 'Si un pico es &ldquo;pequeño&rdquo; no es la cuestión; la cuestión es si el ruido daría uno así de alto. Esa probabilidad es la que calcula el instrumento.',
+        },
+        {
+          say: 'Un cuerpo redondo no varía, así que no se puede medir ningún periodo; no tiene uno infinito.',
+        },
+        {
+          say: 'Más noches no ayudarían: no hay señal que encontrar.',
+        },
+      ],
+      hints: ['¿Sería cero el más alto de muchos picos con ruido?'],
+      because:
+        'El pico más fuerte del periodograma es el más fuerte de cientos de periodos de prueba, y hasta el ruido puro tiene uno. La probabilidad de falsa alarma pregunta con qué frecuencia el ruido alcanzaría esa potencia; con 0,26 no es inusual, y el instrumento se niega a dar un periodo.',
+    },
+    {
+      title: '¿Seis horas o tres?',
+      body: 'El pico más fuerte está en 3,10 h y el instrumento da el periodo de rotación como el doble, 6,20 h. La fila de debajo da la otra lectura: 3,10 h, si la curva tiene un máximo por rotación.',
+      prompt: '¿Qué decide entre 6,20 h y 3,10 h?',
+      options: [
+        'El supuesto de que el cuerpo es convexo y más o menos un elipsoide, con dos máximos por vuelta; esta curva de luz no puede demostrarlo, y por eso se enumeran ambos',
+        'El periodograma: su pico más fuerte está en 3,10 h, así que la rotación es de 3,10 h',
+        'El nivel de ruido',
+        'Nada: la respuesta es siempre el doble del pico',
+      ],
+      misconceptions: [
+        {
+          say: 'El pico es el periodo de la luz. El periodo de rotación es igual a él solo si el cuerpo muestra un máximo por vuelta.',
+        },
+        {
+          say: 'El ruido cambia el error, no el factor de dos entre las lecturas.',
+        },
+        {
+          say: 'El doble es lo que da un elipsoide. Una mancha de albedo, o una forma muy distinta de un elipsoide, puede dar un máximo por vuelta, y entonces la rotación es el periodo de la luz.',
+        },
+      ],
+      hints: ['¿Qué forma supuso el modelo?'],
+      because:
+        'El factor de dos es un supuesto sobre la forma, la regla de los dos máximos, y el instrumento declara la otra lectura junto a la primera por eso. La evidencia que lo decide viene de otra parte: curvas vistas con otras geometrías, o las dos mitades del pliegue siendo distintas.',
+    },
+  ],
+};
+
 export default {
   'weighing-jupiter': WEIGHING_JUPITER_DEEPER,
   'why-rings': WHY_RINGS_DEEPER,
   'tides-that-move-the-moon': TIDES_DEEPER,
   'ios-fire': IOS_DEEPER,
+  'the-gaps-in-the-belt': THE_GAPS_IN_THE_BELT_DEEPER,
+  'how-fast-does-it-spin': HOW_FAST_DOES_IT_SPIN_DEEPER,
 };
