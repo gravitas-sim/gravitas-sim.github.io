@@ -121,10 +121,30 @@ bound that was moved:
   locking radius to a factor 2 or so through k2/Q, which the range returned beside it states, and every inequality here
   holds by more than that factor (the nearest, Earth at 1 AU against 0.474 AU, by 2.1; the 0.2 solar-mass zone against 0.282 AU, by 3.8).
 
-## What is not built (the rest of Prompt 205)
+## Part B: the instruments and the lesson's upper depth
 
-The kernel, its validation and the document are here. Not built in this part: the panel's limit toggles, locking
-bar and age selector (an instrument change to `js/habitabilityWidgets.js` and the deferred catalogues, English and
-Spanish), the Goldilocks lesson's upper depth (limits, locking, the zone at three ages), and the reading step on why a
-climate trajectory is not built. The escape bar is dropped by verdict B. A majors investigation, "A planet's climate
-over time", is deferred, not built: it would resume only with a vetted evolving-climate model (D-R10-205-01).
+Part B (a separate pull request) puts the kernel in front of students. Three instruments live in a new lazy family,
+`js/habitabilityLimitsWidgets.js` (words in `js/i18n/en.habitablezone.js` and `es.habitablezone.js`), which the
+existing habitability panel does not import, so every existing step's grading and DOM golden is unchanged:
+
+- `hz-limits`: a star control (the Sun, an F, a K and an M dwarf, and TRAPPIST-1, which the kernel refuses at 2566 K and the
+  readout says so), four limit toggles (runaway greenhouse, moist greenhouse, maximum greenhouse, early Mars), and a flux
+  plot with every limit marked; the readout always gives the flux of each limit, whether or not its line is shown.
+- `hz-locking`: a MIST mass (0.2, 0.5, 1, 2 solar masses), an age, and a tidal Q, with the constant-Q locking radius and the
+  range over Q a factor 10 each way (a factor 10^(1/6) in radius), and a verdict (inside, outside, straddles) against the zone.
+- `hz-ages`: the 1 solar-mass track at an age, with the inner and outer edges; the readout says this star is a model star,
+  10.8 percent brighter than the Sun at 4.57 Gyr, not the Sun.
+
+The upper depth of "The Goldilocks Question" adds nine steps (`depth/goldilocks-question.js`, Spanish shadow aligned by
+index): the limits, why a Sun-like star's runaway limit sits at 1.0385 AU, an M dwarf's zone and the flux its planets
+see, locking, and the zone's edge moving with age (0.8946, 1.0287 and 1.2393 AU for the inner edge at 1, 4.57 and 8 Gyr). The
+expected values come from the kernel, which the oracle of Part A checked independently. The reading step on why a
+climate trajectory is not built is in the depth. Climate trajectory, spectra and the escape bar stay out
+(D-R10-205-03). The instructor closure rose to 283 files for the two new depth files, within the cap the coordinator
+approved (below 284). Size figures and what is open are in D-R10-205-04 to D-R10-205-06.
+
+## What is not built
+
+The panel extension and the lesson's upper depth are Part B (above). The escape bar is dropped by verdict B. A majors
+investigation, "A planet's climate over time", is deferred, not built: it would resume only with a vetted
+evolving-climate model (D-R10-205-01).

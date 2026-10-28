@@ -140,10 +140,10 @@ const LIMITS = {
       format: x =>
         t(`hzL.star.${LIMIT_STARS[clampIndex(x, LIMIT_STARS.length)].id}`),
     },
-    toggleControl('runawayGreenhouse', 'hzL.limit.runawayGreenhouse', 1),
-    toggleControl('maximumGreenhouse', 'hzL.limit.maximumGreenhouse', 1),
-    toggleControl('recentVenus', 'hzL.limit.recentVenus', 0),
-    toggleControl('earlyMars', 'hzL.limit.earlyMars', 0),
+    toggleControl('runawayGreenhouse', 'hzL.ctl.runawayGreenhouse', 1),
+    toggleControl('maximumGreenhouse', 'hzL.ctl.maximumGreenhouse', 1),
+    toggleControl('recentVenus', 'hzL.ctl.recentVenus', 0),
+    toggleControl('earlyMars', 'hzL.ctl.earlyMars', 0),
   ],
   draw(canvas, v) {
     const f = limitsView(v);

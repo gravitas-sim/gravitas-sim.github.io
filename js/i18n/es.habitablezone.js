@@ -26,6 +26,10 @@ export const ES_HABITABLEZONE = {
     '{flux} Tierras de luz estelar ({wm2} W/m²), a {d} UA. {kind}',
   'hzL.kind.model': 'De un modelo climático.',
   'hzL.kind.empirical': 'De la historia de Venus o de Marte, no de un modelo.',
+  'hzL.ctl.runawayGreenhouse': 'Desbocado',
+  'hzL.ctl.maximumGreenhouse': 'Invernadero máx.',
+  'hzL.ctl.recentVenus': 'Venus reciente',
+  'hzL.ctl.earlyMars': 'Marte primitivo',
   'hzL.limit.runawayGreenhouse':
     'Efecto invernadero desbocado (borde interior)',
   'hzL.limit.maximumGreenhouse': 'Efecto invernadero máximo (borde exterior)',
