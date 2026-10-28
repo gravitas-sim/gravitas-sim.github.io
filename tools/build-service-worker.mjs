@@ -391,6 +391,10 @@ export const NEVER_PRECACHED = [
   // The atmospheres kernel and pack (Prompt 200, ATMOSPHERES.md): imported by no
   // page until the instrument family and its lessons are built. D-R10-80.
   /^js\/kernels\/atmospheres\//,
+  // The small-body kernel (Prompt 198, SMALL_BODIES.md): the belts, the resonance
+  // locations and the light-curve model, imported by no page until the packs and
+  // investigations that use them are built. D-R10-198-01.
+  /^js\/kernels\/smallbodies\//,
   // The atmosphere family and its lessons (Prompt 200, D-R10-81): the instruments,
   // their words, the two lessons and their thumbnails are kept by the service worker
   // after the first online use, not installed (the first-visit and idle tiers have
