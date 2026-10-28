@@ -132,7 +132,7 @@ const sequence = (id, key, after, rows) => ({
  *
  * Message ids rather than prose, because the browser is translated and these
  * lines are read by students. They live with the rest of the inv.* family in
- * the deferred catalog. Six sequences (Roadmap II, Prompt 97), each ordered; a
+ * the deferred catalog. Six sequences (Roadmap II, Prompt 97) and a seventh, Planets and the Sun (Prompt 206), each ordered; a
  * lesson that belongs to two (Transit Photometry, Lines and Motion) is in
  * both, with its own reason in each. tests/investigationRegistry.test.js holds
  * every `needs` to an earlier item, every depth to what the lesson offers, and
@@ -223,6 +223,36 @@ export const SEQUENCES = [
       ['refitting-a-transit', 'core', ['transit-photometry']],
       ['two-periodograms', 'core', ['transit-photometry']],
       ['sampling-a-posterior', 'core', ['refitting-a-transit']],
+    ]
+  ),
+  sequence(
+    'planets-and-the-sun',
+    'solar',
+    ['gravity-and-orbits'],
+    [
+      ['the-scale-of-the-solar-system', 'core'],
+      ['why-venus-is-hot', 'core'],
+      ['which-surface-is-older', 'core'],
+      ['moons-of-the-giants', 'core'],
+      ['why-rings', 'core'],
+      ['tides-that-move-the-moon', 'core'],
+      ['ios-fire', 'core', ['tides-that-move-the-moon']],
+      ['the-gaps-in-the-belt', 'core'],
+      ['how-fast-does-it-spin', 'core'],
+      ['comets-and-the-sun', 'core'],
+      ['the-turning-sun', 'core'],
+      ['the-suns-power', 'core'],
+      ['goldilocks-question', 'core'],
+      ['craters-by-size', 'quantitative', ['which-surface-is-older']],
+      ['how-hot-is-the-day-side', 'quantitative', ['why-venus-is-hot']],
+      ['weighing-jupiter', 'quantitative'],
+      ['two-greenhouse-models', 'advanced', ['why-venus-is-hot']],
+      [
+        'what-a-crater-diameter-is-worth',
+        'advanced',
+        ['which-surface-is-older'],
+      ],
+      ['when-orbits-lock', 'core'],
     ]
   ),
   sequence(

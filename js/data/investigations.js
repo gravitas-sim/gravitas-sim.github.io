@@ -91,6 +91,7 @@ import SAMPLING_A_POSTERIOR from './investigations/sampling-a-posterior.js';
 import MEASUREMENT_LESSONS from './investigations/measurement-sequence.js';
 import SATELLITE_LESSONS from './investigations/satellite-sequence.js';
 import ATMOSPHERE_LESSONS from './investigations/atmosphere-sequence.js';
+import PLANETS_LESSONS from './investigations/planets-sequence.js';
 import { gradedSteps, positionIn } from './investigations/catalog.js';
 import { SUMMARIES } from './investigations/summaries.js';
 import INSIDE_A_STAR from './investigations/inside-a-star.js';
@@ -196,6 +197,7 @@ export const INVESTIGATIONS = [
   ...MEASUREMENT_LESSONS,
   ...SATELLITE_LESSONS,
   ...ATMOSPHERE_LESSONS,
+  ...PLANETS_LESSONS,
 ];
 
 // The lessons carry no card summary; it is written once in summaries.js and

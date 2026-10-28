@@ -352,6 +352,15 @@ export const NEVER_PRECACHED = [
   /^(js\/jovianWidgets\.js|js\/i18n\/(en|es)\.jovian\.js)$/,
   /^js\/satellites\//,
   /^(sky\/galilean-moons\.json|images\/investigations\/weighing-jupiter\.webp)$/,
+  // The planetary closeout (Prompt 206, D-R10-206-05): the three connecting
+  // investigations of the Planets and the Sun sequence (one shared file, its
+  // six one-line stubs and its thumbnail) and the course package that names
+  // them. The first-visit and idle tiers are at their data-budget ceilings,
+  // which the standing size approval does not cover, so none is installed: the
+  // service worker keeps each after its first online use.
+  /^js\/data\/investigations\/(es\/)?(planets-sequence|the-scale-of-the-solar-system|moons-of-the-giants|comets-and-the-sun)\.js$/,
+  /^js\/data\/courses\/solar-system-and-the-sun\.js$/,
+  /^images\/investigations\/moons-of-the-giants\.webp$/,
   // Orbit fitting and moving-object tracks (Prompt 187, ASTROMETRY.md): the two
   // kernels, the panel and its words, fetched when a reader opens the orbit
   // disclosure inside the sky-coordinates panel. Same reason as the series files

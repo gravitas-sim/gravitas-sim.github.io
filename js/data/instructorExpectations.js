@@ -12,6 +12,7 @@
 import { INSTRUCTOR as MEASUREMENT } from './investigations/depth/measurement-sequence.js';
 import { INSTRUCTOR as SATELLITE } from './investigations/depth/satellite-sequence.js';
 import { INSTRUCTOR as ATMOSPHERE } from './investigations/depth/atmosphere-sequence.js';
+import { INSTRUCTOR as PLANETS } from './investigations/planets-sequence.js';
 
 export default {
   format: 'gravitas.instructor-expectations',
@@ -20,6 +21,7 @@ export default {
     ...MEASUREMENT.expectations,
     ...SATELLITE.expectations,
     ...ATMOSPHERE.expectations,
+    ...PLANETS.expectations,
     'the-suns-motion': {
       'measure-the-sun':
         'Within 100 pc against the mean of the stars the Sun reads U about 10.5, V about 21.9 and W about 9.1 km/s (489 stars). The validator accepts 10.5 and 9.1 within 1.5 and 21.9 within 2.',

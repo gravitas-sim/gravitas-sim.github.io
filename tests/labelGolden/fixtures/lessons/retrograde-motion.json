@@ -78,7 +78,7 @@
     "probe": [[{"label":"Select Mars","value":"-"}],[{"label":"Mars: distance from Earth","value":"0.781 AU"}]]
    },
    "do-it-for-the-sun": {
-    "probe": [[{"label":"Reference frame","value":"World"},{"label":"Sun: as seen from Earth","value":"the Sun is not on the canvas yet"}],[{"label":"Reference frame","value":"A body"},{"label":"Sun: distance from Earth","value":"0.829 AU"},{"label":"Sun: direction from Earth","value":"221.5°"}],[{"label":"Reference frame","value":"World"},{"label":"Sun: distance from Earth","value":"0.829 AU"},{"label":"Sun: direction from Earth","value":"221.5°"}]]
+    "probe": [[{"label":"Reference frame","value":"World"},{"label":"Sun: as seen from Earth","value":"the Sun is not on the canvas yet"}],[{"label":"Reference frame","value":"A body"},{"label":"Sun: distance from Earth","value":"3.30 AU"},{"label":"Sun: direction from Earth","value":"316.5°"}],[{"label":"Reference frame","value":"World"},{"label":"Sun: distance from Earth","value":"3.30 AU"},{"label":"Sun: direction from Earth","value":"316.5°"}]]
    },
    "how-long-does-a-loop": {
     "probe": [[{"label":"Select Mars","value":"-"}],[{"label":"Mars: direction from Earth","value":"34.9°"},{"label":"Day","value":"3"}],[{"label":"Mars: direction from Earth","value":"34.9°"},{"label":"Day","value":"13"}],[{"label":"Mars: direction from Earth","value":"34.9°"},{"label":"Day","value":"400"}]]

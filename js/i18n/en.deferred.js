@@ -1867,6 +1867,48 @@ export const EN_DEFERRED = {
   'inv.seq.gravity.integrators-in-practice':
     'Four integrators compared by the energy they lose on a real system, in Python. Needs the compute page and a connection.',
 
+  'inv.seq.solar.title': 'Planets and the Sun',
+  'inv.seq.solar.blurb':
+    'The Solar System as a unit: its scale, then worlds and their atmospheres, craters, moons, rings and tides, the small bodies, comets and the Sun, then the same investigations at the majors and upper depths. Short investigations; the survey ones come first. Not here yet, with the reasons in the course package: how worlds compare inside, marking a Mars surface, space weather and the sunspot cycle, and absolute crater ages. Better after Gravity and orbits.',
+  'inv.seq.solar.the-scale-of-the-solar-system':
+    'True distances, light time and a scale model: the sizes and the spaces between them.',
+  'inv.seq.solar.why-venus-is-hot':
+    'What sunlight alone gives a planet, and the gap a greenhouse closes.',
+  'inv.seq.solar.which-surface-is-older':
+    'Counting craters to rank surfaces by age, without a calendar.',
+  'inv.seq.solar.moons-of-the-giants':
+    'Three moons keeping step, and what a near-miss of 2 can and cannot prove.',
+  'inv.seq.solar.why-rings':
+    'Why a ring and not a moon: the Roche limit and the resonances in a ring.',
+  'inv.seq.solar.tides-that-move-the-moon':
+    'How tides push a moon outward, and what that costs the planet’s spin.',
+  'inv.seq.solar.ios-fire':
+    'Where Io’s heat comes from, bounded by what nobody knows of its interior.',
+  'inv.seq.solar.the-gaps-in-the-belt':
+    'A real catalog of asteroids: where they are not, and why.',
+  'inv.seq.solar.how-fast-does-it-spin':
+    'A rotation period and a shape bound from a synthetic light curve.',
+  'inv.seq.solar.comets-and-the-sun':
+    'A comet’s two orbit ends, its heat at each, and which way the tail points.',
+  'inv.seq.solar.the-turning-sun':
+    'A rotation rate from a spot, and a correction for the Earth’s own motion.',
+  'inv.seq.solar.the-suns-power':
+    'The Sun’s power from a flux measured at the Earth.',
+  'inv.seq.solar.goldilocks-question':
+    'Why a habitable zone has edges, and what moves them.',
+  'inv.seq.solar.craters-by-size':
+    'The size distribution of craters and what it says about a surface. Needs Which Surface Is Older.',
+  'inv.seq.solar.how-hot-is-the-day-side':
+    'Eclipse depth as heat, at the majors depth. Needs Why Venus Is Hot.',
+  'inv.seq.solar.weighing-jupiter':
+    'Kepler’s third law on four moons: a planet’s mass from its satellites.',
+  'inv.seq.solar.two-greenhouse-models':
+    'Two greenhouse models and what each leaves out, at the upper depth. Needs Why Venus Is Hot.',
+  'inv.seq.solar.what-a-crater-diameter-is-worth':
+    'What a crater’s diameter does and does not say, at the upper depth. Needs Which Surface Is Older.',
+  'inv.seq.solar.when-orbits-lock':
+    'The Laplace argument librating over years: what proves a resonance. Long.',
+
   'inv.seq.galaxies.title': 'Galaxies and the universe',
   'inv.seq.galaxies.blurb':
     'Our place in the Milky Way, the mass we cannot see, light bent by gravity, the distance ladder from variable stars, and the expanding universe. Short investigations in three groups. Better after Gravity and orbits and Light and stars.',

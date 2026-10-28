@@ -1036,6 +1036,36 @@
       "loop": ["two-maxima-predict", "rotation-period"],
       "evidenceFrom": "model"
     },
+    "moons-of-the-giants": {
+      "centralExperimentId": "ce.moons-of-the-giants",
+      "object": "panel:moon-fit",
+      "control": "moon-fit/moon",
+      "quantity": "the period a sinusoid fitted to one moon's measured distances from Jupiter gives, from which the Laplace combination of three motions follows: Io 1.7682, Europa 3.5480 and Ganymede 7.1413 days, a combination of 0.015 against an uncertainty of 0.025 degrees a day",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": ["three-periods-predict", "three-periods"],
+      "evidenceFrom": "model"
+    },
+    "the-scale-of-the-solar-system": {
+      "centralExperimentId": "ce.the-scale-of-the-solar-system",
+      "object": "neptune",
+      "control": "the canvas: scroll to zoom out to Neptune, and read the distances in the readout",
+      "quantity": "the distance of Neptune from the Sun in astronomical units, 30.07, and the light time it gives, 4.17 hours",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": ["light-time-predict", "light-time"],
+      "evidenceFrom": "engine"
+    },
+    "comets-and-the-sun": {
+      "centralExperimentId": "ce.comets-and-the-sun",
+      "object": "sun",
+      "control": "the canvas: watch the model comets, and read the first one's closest and furthest distance in the readout",
+      "quantity": "the closest and furthest distance of the first model comet from the Sun, 5.79 and 17.84 astronomical units, and its bare-body temperature at each end",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": ["tail-predict", "watch-the-tails"],
+      "evidenceFrom": "engine"
+    },
     "what-is-in-this-field": {
       "centralExperimentId": "ce.what-is-in-this-field",
       "object": "panel:field-sources",

@@ -29,9 +29,9 @@ export const UPPER_LEVEL_MODULES = {
     esOf: '1cdd587a',
   },
   audience: {
-    en: 'Upper-level astronomy or physics majors with calculus and a first course in mechanics.',
-    es: 'Estudiantes de astronomía o física de nivel superior con cálculo y un primer curso de mecánica.',
-    esOf: 'e908e7b7',
+    en: 'Upper-level astronomy or physics majors with calculus and a first course in mechanics, who have read an introductory astronomy text such as OpenStax Astronomy 2e: the units assume its chapters on orbits, light, stars, galaxies and the Solar System as background.',
+    es: 'Estudiantes de astronomía o física de nivel superior con cálculo y un primer curso de mecánica, que han leído un texto introductorio de astronomía como OpenStax Astronomy 2e: las unidades suponen como base sus capítulos sobre órbitas, luz, estrellas, galaxias y el sistema solar.',
+    esOf: '54404cc6',
   },
   teacherGuide: {
     en: 'Each unit takes about two to four hours and can be set on its own. Where an investigation has an advanced depth, items open at it. Students carry results between investigations, so keep each unit in order. The celestial mechanics unit offers the 3-D lab investigations on orbit planes and eclipses on the introductory path and those on mutual events and the Kozai effect on the advanced path; the mission lab’s investigations on the rendezvous and the launch window are on the introductory path and the one on the patched conic against the direct flight is on the advanced path. The computation unit uses the compute page, which is online only and downloads about 19 MB of Python once per student; run its investigations in a room with a connection, or have students open a capsule you made. Instructor notes and keys are in the portal.',

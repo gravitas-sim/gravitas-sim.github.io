@@ -257,15 +257,16 @@ describe('the document inventory', () => {
     // 760 after How Hot Is the Day Side? and Phases and Albedo (Prompt 202): 22 more.
     // 766 after the Goldilocks upper depth (Prompt 205 part B): a key for each of three depths, in two languages, 6 more.
     // 788 after the two small-body investigations (Prompt 198 part 3): 22 more.
-    expect(inv.documents).toBe(788);
-    expect(inv.byLocale).toEqual({ en: 362, es: 426 });
+    // 803 after the three planetary closeout investigations (Prompt 206): a guide and a key in each language and the Spanish notes, 5 each, 15 more.
+    expect(inv.documents).toBe(803);
+    expect(inv.byLocale).toEqual({ en: 368, es: 435 });
     expect(inv.byKind.notes).toBe(INVESTIGATIONS.length);
     expect(inv.byVariant).toEqual({
       activity: 12,
       depth: 348,
-      full: 328,
+      full: 340,
       general: 18,
-      notes: 82,
+      notes: 85,
     });
   });
 

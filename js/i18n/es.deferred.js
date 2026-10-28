@@ -1888,6 +1888,48 @@ export const ES_DEFERRED = {
   'inv.seq.planets.binary-star-planets':
     'Estabilidad, resonancia y caos a la vez, decidiendo dónde puede sobrevivir un planeta alrededor de dos estrellas.',
 
+  'inv.seq.solar.title': 'Planetas y el Sol',
+  'inv.seq.solar.blurb':
+    'El sistema solar como unidad: su escala, luego los mundos y sus atmósferas, los cráteres, las lunas, los anillos y las mareas, los cuerpos pequeños, los cometas y el Sol, y después las mismas investigaciones en las profundidades de especialidad y superior. Investigaciones cortas; las de curso general van primero. Aún no están aquí, con los motivos en el paquete de curso: cómo se comparan los mundos por dentro, marcar una superficie de Marte, el clima espacial y el ciclo de manchas solares, y las edades absolutas de los cráteres. Mejor tras Gravedad y órbitas.',
+  'inv.seq.solar.the-scale-of-the-solar-system':
+    'Distancias verdaderas, tiempo de la luz y una maqueta: los tamaños y los espacios entre ellos.',
+  'inv.seq.solar.why-venus-is-hot':
+    'Lo que da la luz del Sol a un planeta solo, y el hueco que cierra un efecto invernadero.',
+  'inv.seq.solar.which-surface-is-older':
+    'Contar cráteres para ordenar superficies por edad, sin calendario.',
+  'inv.seq.solar.moons-of-the-giants':
+    'Tres lunas que llevan el paso, y qué puede y qué no puede probar un casi 2.',
+  'inv.seq.solar.why-rings':
+    'Por qué un anillo y no una luna: el límite de Roche y las resonancias en un anillo.',
+  'inv.seq.solar.tides-that-move-the-moon':
+    'Cómo las mareas empujan a una luna hacia fuera, y qué le cuesta eso al giro del planeta.',
+  'inv.seq.solar.ios-fire':
+    'De dónde viene el calor de Ío, acotado por lo que nadie sabe de su interior.',
+  'inv.seq.solar.the-gaps-in-the-belt':
+    'Un catálogo real de asteroides: dónde no están, y por qué.',
+  'inv.seq.solar.how-fast-does-it-spin':
+    'Un periodo de rotación y una cota de la forma a partir de una curva de luz sintética.',
+  'inv.seq.solar.comets-and-the-sun':
+    'Los dos extremos de la órbita de un cometa, su calor en cada uno y hacia dónde apunta la cola.',
+  'inv.seq.solar.the-turning-sun':
+    'Una tasa de rotación a partir de una mancha, y una corrección por el propio movimiento de la Tierra.',
+  'inv.seq.solar.the-suns-power':
+    'La potencia del Sol a partir de un flujo medido en la Tierra.',
+  'inv.seq.solar.goldilocks-question':
+    'Por qué una zona habitable tiene bordes, y qué los mueve.',
+  'inv.seq.solar.craters-by-size':
+    'La distribución de tamaños de cráteres y lo que dice de una superficie. Requiere ¿Qué superficie es más antigua?',
+  'inv.seq.solar.how-hot-is-the-day-side':
+    'La profundidad del eclipse como calor, en la profundidad de especialidad. Requiere Por qué Venus es tan caliente.',
+  'inv.seq.solar.weighing-jupiter':
+    'La tercera ley de Kepler con cuatro lunas: la masa de un planeta a partir de sus satélites.',
+  'inv.seq.solar.two-greenhouse-models':
+    'Dos modelos de efecto invernadero y qué deja fuera cada uno, en la profundidad superior. Requiere Por qué Venus es tan caliente.',
+  'inv.seq.solar.what-a-crater-diameter-is-worth':
+    'Lo que dice y lo que no dice el diámetro de un cráter, en la profundidad superior. Requiere ¿Qué superficie es más antigua?',
+  'inv.seq.solar.when-orbits-lock':
+    'El argumento de Laplace librando durante años: qué prueba una resonancia. Larga.',
+
   'inv.seq.galaxies.title': 'Galaxias y el universo',
   'inv.seq.galaxies.blurb':
     'Nuestro lugar en la Vía Láctea, la masa que no vemos, la luz curvada por la gravedad, la escalera de distancias desde las estrellas variables y el universo en expansión. Investigaciones cortas en tres grupos. Mejor después de Gravedad y órbitas y de Luz y estrellas.',

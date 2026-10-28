@@ -185,6 +185,10 @@ const LOADERS = {
   'the-suns-power': () => import('./the-suns-power.js'),
   'how-hot-is-the-day-side': () => import('./how-hot-is-the-day-side.js'),
   'phases-and-albedo': () => import('./phases-and-albedo.js'),
+  'moons-of-the-giants': () => import('./moons-of-the-giants.js'),
+  'the-scale-of-the-solar-system': () =>
+    import('./the-scale-of-the-solar-system.js'),
+  'comets-and-the-sun': () => import('./comets-and-the-sun.js'),
 };
 // </generated:loaders>
 
@@ -288,6 +292,10 @@ const TRANSLATIONS = {
     'the-suns-power': () => import('./es/the-suns-power.js'),
     'how-hot-is-the-day-side': () => import('./es/how-hot-is-the-day-side.js'),
     'phases-and-albedo': () => import('./es/phases-and-albedo.js'),
+    'moons-of-the-giants': () => import('./es/moons-of-the-giants.js'),
+    'the-scale-of-the-solar-system': () =>
+      import('./es/the-scale-of-the-solar-system.js'),
+    'comets-and-the-sun': () => import('./es/comets-and-the-sun.js'),
   },
 };
 // </generated:translations>

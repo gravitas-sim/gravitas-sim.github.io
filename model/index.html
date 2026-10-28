@@ -3285,9 +3285,9 @@ try {
         <span class="gs-en">Each guided investigation relies on a different part of the model. This
         table is generated from the same <code>modelNotes</code> field that the
         instructor guide prints, so it covers every one of the
-        <!--fact:investigations-->82<!--/fact-->
+        <!--fact:investigations-->85<!--/fact-->
         investigations and cannot fall behind them. It listed six of the twelve when it
-        was maintained by hand.</span><span class="gs-es" lang="es">Cada investigación guiada se apoya en una parte distinta del modelo. Esta tabla se genera a partir del mismo campo <code>modelNotes</code> que imprime la guía docente, de modo que cubre cada una de las <!--fact:investigations-->82<!--/fact--> investigaciones y no puede quedar rezagada respecto a ellas. Cuando se mantenía a mano, enumeraba seis de las doce.</span>
+        was maintained by hand.</span><span class="gs-es" lang="es">Cada investigación guiada se apoya en una parte distinta del modelo. Esta tabla se genera a partir del mismo campo <code>modelNotes</code> que imprime la guía docente, de modo que cubre cada una de las <!--fact:investigations-->85<!--/fact--> investigaciones y no puede quedar rezagada respecto a ellas. Cuando se mantenía a mano, enumeraba seis de las doce.</span>
       </p>
       <div class="doc-table-wrap">
         <table class="doc-table">
@@ -3626,6 +3626,18 @@ try {
             <tr>
               <td>Phases and Albedo</td>
               <td>js/kernels/atmospheres/ (ATMOSPHERES.md, Atmospheres II): lambertPhase, phaseCurve, fitAlbedo, bondFromGeometric and the misfit flag, validated against an independent numpy and scipy oracle (npm run atmospheres-ii:validate); the synthetic curves are syntheticPhase.</td>
+            </tr>
+            <tr>
+              <td>Moons of the Giants</td>
+              <td>js/satellites/ (SATELLITE_EPHEMERIS.md): the fit of js/satellites/weigh.js on the marks measured from the synthetic frames; the Laplace argument itself is in js/resonance/elements.js.</td>
+            </tr>
+            <tr>
+              <td>The Scale of the Solar System</td>
+              <td>js/world/build.js: the planet table (distances at 100 units to the AU); the sandbox is a scenario, with no kernel of its own.</td>
+            </tr>
+            <tr>
+              <td>Comets and the Sun</td>
+              <td>js/kernels/atmospheres/equilibrium.js: the emission temperature, with uniform redistribution and a Bond albedo of 0.04; js/bodyVisuals.js: the ion and dust tail directions.</td>
             </tr>
           <!--/fact-block-->
           </tbody>

@@ -24,9 +24,9 @@ export const ASTRONOMY_SEMESTER = {
     esOf: 'ff971f2a',
   },
   summary: {
-    en: 'Seven units that follow the order of OpenStax Astronomy 2e and give each a hands-on investigation: the sky, gravity and orbits, light, stars, other worlds, compact objects and galaxies. Each unit names the book chapter it goes with, has an optional reading for students who want the background first, and an advanced investigation for those who want more. It supplements a lecture course; it does not replace one.',
-    es: 'Siete unidades que siguen el orden de OpenStax Astronomy 2e y dan a cada una una investigación práctica: el cielo, la gravedad y las órbitas, la luz, las estrellas, otros mundos, los objetos compactos y las galaxias. Cada unidad nombra el capítulo del libro con el que va, tiene una lectura opcional para quien quiera primero el contexto y una investigación avanzada para quien quiera más. Complementa un curso de clases; no lo sustituye.',
-    esOf: '6d5cbae8',
+    en: 'Units that follow the order of OpenStax Astronomy 2e and give each a hands-on investigation: the sky, gravity and orbits, light, the Solar System and the Sun, stars, other worlds, compact objects and galaxies. Each unit names the book chapter it goes with, has an optional reading for students who want the background first, and an advanced investigation for those who want more. It supplements a lecture course; it does not replace one.',
+    es: 'Unidades que siguen el orden de OpenStax Astronomy 2e y dan a cada una una investigación práctica: el cielo, la gravedad y las órbitas, la luz, el sistema solar y el Sol, las estrellas, otros mundos, los objetos compactos y las galaxias. Cada unidad nombra el capítulo del libro con el que va, tiene una lectura opcional para quien quiera primero el contexto y una investigación avanzada para quien quiera más. Complementa un curso de clases; no lo sustituye.',
+    esOf: 'd29159be',
   },
   audience: {
     en: 'A one-semester college astronomy course for non-majors, or an advanced high-school class. No calculus.',
@@ -93,6 +93,14 @@ export const ASTRONOMY_SEMESTER = {
         en: 'Use motions and distances to infer the mass of the Galaxy and the expansion of the universe.',
         es: 'Usar movimientos y distancias para inferir la masa de la Galaxia y la expansión del universo.',
         esOf: 'b29cd0f6',
+      },
+    },
+    {
+      id: 'solar',
+      text: {
+        en: 'Describe the scale of the Solar System, how its worlds compare, and what the Sun’s light does to them, from measurements.',
+        es: 'Describir la escala del sistema solar, cómo se comparan sus mundos y qué hace con ellos la luz del Sol, a partir de medidas.',
+        esOf: '9cb096a8',
       },
     },
   ],
@@ -350,6 +358,93 @@ export const ASTRONOMY_SEMESTER = {
             en: 'A real spectrum of a star like the Sun. Find where it is brightest and estimate the temperature.',
             es: 'Un espectro real de una estrella parecida al Sol. Busca dónde es más brillante y estima la temperatura.',
             esOf: 'a412042e',
+          },
+        },
+      ],
+    },
+    {
+      id: 'solar-system',
+      title: {
+        en: 'The Solar System and the Sun (chapters 7 to 16)',
+        es: 'El sistema solar y el Sol (capítulos 7 a 16)',
+        esOf: '8579640c',
+      },
+      summary: {
+        en: 'The planets, moons, small bodies and the Sun, one short investigation each, with the course The Solar System and the Sun for the readings and the longer ones.',
+        es: 'Los planetas, las lunas, los cuerpos pequeños y el Sol, una investigación corta de cada, con el curso El sistema solar y el Sol para las lecturas y las más largas.',
+        esOf: 'f141f4dd',
+      },
+      items: [
+        {
+          id: 'the-scale-of-the-solar-system',
+          kind: 'lesson',
+          lesson: 'the-scale-of-the-solar-system',
+          objectives: ['solar'],
+          pin: {
+            fp: '50a03e13',
+            n: 8,
+          },
+        },
+        {
+          id: 'why-venus-is-hot',
+          kind: 'lesson',
+          lesson: 'why-venus-is-hot',
+          objectives: ['solar'],
+          pin: {
+            fp: '291bb6ed',
+            n: 9,
+          },
+        },
+        {
+          id: 'which-surface-is-older',
+          kind: 'lesson',
+          lesson: 'which-surface-is-older',
+          objectives: ['solar'],
+          pin: {
+            fp: '91307e8d',
+            n: 10,
+          },
+        },
+        {
+          id: 'moons-of-the-giants',
+          kind: 'lesson',
+          lesson: 'moons-of-the-giants',
+          objectives: ['solar'],
+          pin: {
+            fp: '7fd8bb28',
+            n: 10,
+          },
+        },
+        {
+          id: 'comets-and-the-sun',
+          kind: 'lesson',
+          lesson: 'comets-and-the-sun',
+          objectives: ['solar'],
+          pin: {
+            fp: '2cf7e8b3',
+            n: 9,
+          },
+        },
+        {
+          id: 'the-turning-sun',
+          kind: 'lesson',
+          lesson: 'the-turning-sun',
+          objectives: ['solar'],
+          pin: {
+            fp: '02c79b5e',
+            n: 9,
+          },
+        },
+        {
+          id: 'the-suns-power',
+          kind: 'lesson',
+          path: 'advanced',
+          lesson: 'the-suns-power',
+          objectives: ['solar'],
+          needs: ['the-turning-sun'],
+          pin: {
+            fp: 'b338982d',
+            n: 6,
           },
         },
       ],

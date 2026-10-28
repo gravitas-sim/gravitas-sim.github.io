@@ -1046,4 +1046,40 @@ export const MANIFEST = [
     gradedCount: 5,
     objectiveCount: 4,
   },
+  {
+    id: 'moons-of-the-giants',
+    title: 'Las lunas de los gigantes',
+    subtitle:
+      'Tres periodos de un mismo conjunto de imágenes, y la combinación que vale cero cuando una familia de lunas lleva el paso',
+    duration: '15-25 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/moons-of-the-giants.webp',
+    stepCount: 10,
+    gradedCount: 8,
+    objectiveCount: 4,
+  },
+  {
+    id: 'the-scale-of-the-solar-system',
+    title: 'La escala del sistema solar',
+    subtitle:
+      'Distancias verdaderas del sandbox, el tiempo que tarda la luz y una maqueta en la que la Tierra es una canica',
+    duration: '15-25 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/scenarios/solar-system.webp',
+    stepCount: 8,
+    gradedCount: 6,
+    objectiveCount: 4,
+  },
+  {
+    id: 'comets-and-the-sun',
+    title: 'Los cometas y el Sol',
+    subtitle:
+      'La órbita de un cometa modelo en el sandbox, cuánto se calienta en cada extremo, el Halley real como caso de transferencia y hacia dónde apuntan sus colas',
+    duration: '15-25 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/scenarios/solar-system.webp',
+    stepCount: 9,
+    gradedCount: 6,
+    objectiveCount: 4,
+  },
 ];

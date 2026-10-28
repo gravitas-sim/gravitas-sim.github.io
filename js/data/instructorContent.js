@@ -11,11 +11,13 @@ const MODEL_PAGE = 'https://gravitas-sim.online/model/';
 import { INSTRUCTOR as MEASUREMENT } from './investigations/depth/measurement-sequence.js';
 import { INSTRUCTOR as SATELLITE } from './investigations/depth/satellite-sequence.js';
 import { INSTRUCTOR as ATMOSPHERE } from './investigations/depth/atmosphere-sequence.js';
+import { INSTRUCTOR as PLANETS } from './investigations/planets-sequence.js';
 
 export const INSTRUCTOR_CONTENT = {
   ...MEASUREMENT.content,
   ...SATELLITE.content,
   ...ATMOSPHERE.content,
+  ...PLANETS.content,
   'extending-an-experiment': {
     topic:
       'Classifying an experiment’s trials, fitting the chance of an outcome with a bootstrap, and extending it to a large synthetic population, in Python, with the limits of what the interval covers',

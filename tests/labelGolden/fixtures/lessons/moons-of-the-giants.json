@@ -1,0 +1,96 @@
+{
+ "id": "moons-of-the-giants",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.three-periods.fields.0.unit","d"],
+    ["steps.three-periods.fields.1.unit","d"],
+    ["steps.three-periods.fields.2.unit","d"],
+    ["steps.the-ratios.fields.0.unit","d"],
+    ["steps.the-ratios.fields.1.unit","d"],
+    ["steps.the-ratios.fields.2.unit","d"],
+    ["steps.the-ratios.fields.3.unit",""],
+    ["steps.the-ratios.fields.4.unit",""],
+    ["steps.the-motions-together.fields.0.unit","d"],
+    ["steps.the-motions-together.fields.1.unit","d"],
+    ["steps.the-motions-together.fields.2.unit","d"],
+    ["steps.the-motions-together.fields.3.unit",""],
+    ["steps.the-motions-together.fields.4.unit",""],
+    ["steps.the-motions-together.fields.5.unit",""],
+    ["steps.the-motions-together.fields.6.unit",""],
+    ["steps.callisto-is-not-in-the-chain.fields.0.unit","d"],
+    ["steps.callisto-is-not-in-the-chain.fields.1.unit",""]
+   ],
+   "numbered": [
+    ["steps.three-periods.fields.0.hint","1.7682"],
+    ["steps.three-periods.fields.1.hint","3.5480"],
+    ["steps.three-periods.fields.2.hint","7.1413"],
+    ["steps.the-ratios.fields.0.hint","1.7682"],
+    ["steps.the-ratios.fields.1.hint","3.5480"],
+    ["steps.the-ratios.fields.2.hint","7.1413"],
+    ["steps.the-motions-together.fields.0.hint","1.7682"],
+    ["steps.the-motions-together.fields.1.hint","3.5480"],
+    ["steps.the-motions-together.fields.2.hint","7.1413"],
+    ["steps.the-motions-together.fields.6.label","Io − 3 × Europa + 2 × Ganymede, degrees a day"],
+    ["steps.callisto-is-not-in-the-chain.fields.0.hint","16.624"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.the-motions-together.fields.6.label","Ío − 3 × Europa + 2 × Ganímedes, grados por día"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [],
+  "decimals": [
+   [
+    "the-ratios.r12",
+    3
+   ],
+   [
+    "the-ratios.r23",
+    3
+   ],
+   [
+    "the-motions-together.n1",
+    2
+   ],
+   [
+    "the-motions-together.n2",
+    2
+   ],
+   [
+    "the-motions-together.n3",
+    2
+   ],
+   [
+    "the-motions-together.laplace",
+    3
+   ],
+   [
+    "callisto-is-not-in-the-chain.r34",
+    3
+   ]
+  ]
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "three-periods": {
+    "validate": {"calls":242,"distinct":2,"digest":"cdc208bfa1c6b6c0","samples":[null,{"level":"error","message":"Choose each moon in turn (1, 2, 3) with the designed sampling (1), then read “Period” to four decimals."}]}
+   },
+   "the-ratios": {
+    "validate": {"calls":242,"distinct":2,"digest":"0e2093098a2820ba","samples":[null,{"level":"error","message":"Type the periods to four decimals, from the previous step: Io 1.7682, Europa 3.5480, Ganymede 7.1413."}]}
+   },
+   "the-motions-together": {
+    "validate": {"calls":242,"distinct":3,"digest":"cbc6ff22635ff7b0","samples":[null,{"level":"error","message":"Use four decimals: Io 1.7682, Europa 3.5480 and Ganymede 7.1413 days. The combination is very small, and a period rounded to three decimals can move it by more than its own size."},{"level":"ok","message":"About 0.015 degrees a day, against motions of 204, 101 and 50 degrees a day and an uncertainty of ±0.025: consistent with zero, and 14 thousand times smaller than Io’s own motion. Rounded to three decimals the periods would give 0.05: the four decimals matter."}]}
+   },
+   "callisto-is-not-in-the-chain": {
+    "validate": {"calls":232,"distinct":2,"digest":"d922f8e56da34eec","samples":[null,{"level":"error","message":"Choose moon 4 with the designed sampling, then read “Period”."}]}
+   }
+  },
+  "es": "same"
+ }
+}

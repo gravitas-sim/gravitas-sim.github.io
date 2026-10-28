@@ -1141,7 +1141,7 @@ const SMALL_BODY_CONTENT = {
     difficulty:
       'Introductory (a count and a ratio), with an upper depth on what a baseline and a window assume',
     placement:
-      'In a survey course after the unit on asteroids, and in a majors course as a first measurement from a real catalog; it needs no earlier investigation. It supports OpenStax Astronomy 2e chapter 14 (asteroids); the chapter citation is the author’s and has not been checked against the book.',
+      'In a survey course after the unit on asteroids, and in a majors course as a first measurement from a real catalog; it needs no earlier investigation. It supports OpenStax Astronomy 2e chapter 13 (asteroids); the chapter citation is the author’s and has not been checked against the book.',
     overview:
       'Students read what a catalog of numbered objects with H below 13 is a count of (what was found, not what is there), predict how depleted the 3:1 gap is, and measure it: 26 found where 216 are expected, 88.0 percent (interval 82.9 to 92.4); the 5:2 gap is 63.3 percent (56.5 to 70.0). The quantitative depth widens the window (62.4 percent), cuts to the brightest 2,537 (83.8, interval 69.4 to 95.2), meets 7:3 and 2:1, which the instrument will not call resolved because their flanks differ, and counts 183 Hildas and 1,555 Jupiter Trojans. The advanced depth states what a magnitude-limited survey keeps (40.0 times as completely at 2.0 as at 3.5 AU), varies the baseline (83.7 to 88.5 percent), and says what a depletion does not say about Jupiter.',
     priorKnowledge: [
@@ -1228,7 +1228,7 @@ const SMALL_BODY_CONTENT = {
     difficulty:
       'Introductory (a period and a ratio), with an upper depth on aliasing and false alarms',
     placement:
-      'In a survey course after the unit on asteroids, and in a majors course alongside periodograms; it needs no earlier investigation. It supports OpenStax Astronomy 2e chapter 14 (asteroids); the citation is the author’s and has not been checked against the book.',
+      'In a survey course after the unit on asteroids, and in a majors course alongside periodograms; it needs no earlier investigation. It supports OpenStax Astronomy 2e chapter 13 (asteroids); the citation is the author’s and has not been checked against the book.',
     overview:
       'Students see the light of a synthetic rotating ellipsoid (five nights, 40 points a night, noise 0.01 mag), predict that its rotation period is twice the light’s, and read 3.099 h and 6.199 ± 0.001 h; the amplitude is 0.333 mag and a/b is at least 1.36. With the truth shown (6.2 h, a/b 1.5, 70 degrees) the bound lies below it, as a bound must. The quantitative depth shortens the run (one night: 6.268 ± 0.036), shows the error is a floor (target B: 11.388 ± 0.005 against 11.400), a nearly round body (amplitude 0.106, a/b at least 1.10) and an amplitude withheld for a gap in the phase. The advanced depth samples once a night (5.49 or 6.20 h, ambiguous, the top peak wrong), a period hidden by the sampling, a peak with nothing behind it, and the one-maximum alternative.',
     priorKnowledge: [
