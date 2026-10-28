@@ -263,11 +263,17 @@ test.describe('filtering', () => {
       ]);
 
     // A tag nobody prints on a card is still searchable. The Gaps in the Belt
-    // is a third match: its summary says "resonance" (Prompt 198 part 3).
+    // is a third match: its summary says "resonance" (Prompt 198 part 3), and
+    // Moons of the Giants a fourth (Prompt 206, D-R10-206-09).
     await search.fill('resonance');
     await expect
       .poll(() => shownIds(page))
-      .toEqual(['when-orbits-lock', 'why-rings', 'the-gaps-in-the-belt']);
+      .toEqual([
+        'when-orbits-lock',
+        'why-rings',
+        'the-gaps-in-the-belt',
+        'moons-of-the-giants',
+      ]);
 
     // The titles are plain language - this lesson is called "Getting There
     // From Here" - so the technical name has to reach it through the id.
