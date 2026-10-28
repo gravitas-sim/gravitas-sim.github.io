@@ -963,7 +963,7 @@
     {
       "file": "TELESCOPES.md",
       "kind": "feature",
-      "purpose": "Telescopes and resolution over the existing PSF: the annular Airy pattern, Moffat seeing, the Rayleigh angle against the measured width, light gathering and plate scale, with their limits and validation (Prompt 208).",
+      "purpose": "Telescopes over the existing PSF: the annular Airy pattern, Moffat seeing, the Rayleigh angle against the measured width, light gathering, validation (Prompt 208).",
       "owner": 208,
       "student": true
     },

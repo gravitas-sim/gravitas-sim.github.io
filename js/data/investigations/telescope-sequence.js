@@ -699,7 +699,7 @@ const CONTENT = {
     features: [
       {
         name: 'The telescope panel (detector family)',
-        text: 'A synthetic double star or faint field through the telescope the controls describe, with the Rayleigh separation and the measured FWHM as two labelled numbers, the dip between the stars, whether the faint star is listed, the light gathered and the plate scale.',
+        text: 'A synthetic double star or faint field through the telescope the controls describe, with the Rayleigh separation and the measured FWHM as two labeled numbers, the dip between the stars, whether the faint star is listed, the light gathered and the plate scale.',
       },
       {
         name: 'Depth',
@@ -789,9 +789,9 @@ const EXPECTATIONS = {
 
 const BANDS = {
   'what-a-telescope-resolves': {
-    core: 'medium',
+    core: 'short',
     quantitative: 'medium',
-    advanced: 'medium',
+    advanced: 'long',
   },
 };
 
