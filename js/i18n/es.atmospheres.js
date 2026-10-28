@@ -81,4 +81,53 @@ export const ES_ATMOSPHERES = {
   'atmW.s.row.inputs': 'Datos de entrada',
   'atmW.s.value.inputs':
     'T = {T} K, peso molecular medio {mu}, gravedad {g} m/s²',
+  // <bands>
+  'atmW.m.tx': 'Onaq-vagrtengrq genafzvffvba',
+  'atmW.a.tx':
+    'n grzcrengher gung punatrf jvgu urvtug; pybhqf naq unmrf; fpnggrevat; zber guna bar nofbeore; cerffher oebnqravat; yvzo qnexravat naq gur cynarg’f cngu npebff gur fgne; n erfbyirq fcrpgehz (guvf vf n qrcgu bire rnpu anzrq onaq); gur gnoyr vf n flagurgvp nofbeore, abg n zbyrphyr',
+  'atmW.x.title': 'Jung qbrf bar onaq’f qrcgu fnl nobhg gur ngzbfcurer?',
+  'atmW.x.note':
+    'Guerr onaqf bs n flagurgvp nofbeore. N fgebat onaq vf qrrcre guna n jrnx bar ol nobhg bar fpnyr urvtug bs gur ngzbfcurer sbe rirel snpgbe r va nofbecgvba.',
+  'atmW.x.control.t': 'Grzcrengher',
+  'atmW.x.control.x': 'Nohaqnapr, ybt bs zvkvat engvb',
+  'atmW.x.control.p': 'Ersrerapr cerffher, ybt bs one',
+  'atmW.x.axis.x': 'Jniryratgu (µz)',
+  'atmW.x.axis.y': 'Genafvg qrcgu (ccz)',
+  'atmW.x.legend.depth': 'Onaq qrcgu',
+  'atmW.x.legend.err': 'Qrcgu cyhf gur zbqry’f fgngrq reebe',
+  'atmW.x.legend.errLow': 'Qrcgu zvahf gur zbqry’f fgngrq reebe',
+  'atmW.x.row.diff': 'Fgebat onaq zvahf jrnx onaq',
+  'atmW.x.row.h': 'Fpnyr urvtug',
+  'atmW.x.row.err': 'Fgngrq reebe bs gur ngzbfcurevp cneg',
+  'atmW.x.row.say': 'Jung vg fnlf',
+  'atmW.x.say':
+    'N qvssrerapr bs {d} ccz vf pbafvfgrag jvgu guvf nofbeore ng n fpnyr urvtug bs {h} xz haqre gur nffhzcgvbaf yvfgrq.',
+  // </bands>
+  'atmW.m.ec': 'Oynpxobql cyhf bar onaq (rpyvcfr)',
+  'atmW.a.ec':
+    'n qnl fvqr gung vf abg havsbez; n onaq gung rzvgf vafgrnq bs nofbeovat; ersyrpgrq yvtug va gur fnzr onaq (n qrcgu vf abg ghearq vagb n grzcrengher jurer vg pbhyq znggre); nal fgehpgher va gur ngzbfcurer orybj gur fxva',
+  'atmW.e.title': 'Ubj ubg vf gur qnl fvqr?',
+  'atmW.e.note':
+    'Gur rpyvcfr qrcgu vf gur cynarg’f funer bs gur yvtug. Na nofbeovat onaq frrf gur pbbyre fxva, fb vgf qrcgu qvcf.',
+  'atmW.e.control.tp': 'Cynarg grzcrengher',
+  'atmW.e.control.ts': 'Fgne grzcrengher',
+  'atmW.e.control.tau': 'Onaq bcgvpny qrcgu',
+  'atmW.e.axis.x': 'Jniryratgu (µz)',
+  'atmW.e.axis.y': 'Rpyvcfr qrcgu (%)',
+  'atmW.e.legend.cont': 'Ab nofbeore',
+  'atmW.e.legend.dip': 'Jvgu gur 4.3 µz onaq nofbeovat',
+  'atmW.e.row.bt': 'Oevtugarff grzcrengher, 3.6 gb 4.5 µz',
+  'atmW.m.ph': 'Ynzoreg-fcurer cunfr pheir',
+  'atmW.a.ph':
+    'n cynarg gung vf abg n Ynzoreg fcurer (erny cunfr shapgvbaf qvssre); gurezny cunfr inevngvba; pybhqf; cbynevfngvba; gur nyorqb sbhaq vf gur nyorqb bs n Ynzoreg fcurer',
+  'atmW.p.title': 'Jung qbrf n cunfr pheir fnl nobhg nyorqb?',
+  'atmW.p.note':
+    'Gur qnfurq pheir vf nabgure fcurer, n Ybzzry-Frryvtre bar: gur fnzr cynarg pna or svg ol obgu, naq bayl gur funcr gryyf gurz ncneg.',
+  'atmW.p.control.ag': 'Trbzrgevp nyorqb',
+  'atmW.p.control.a': 'Beovg fvmr, va cynarg enqvv',
+  'atmW.p.axis.x': 'Cunfr natyr (qrterrf)',
+  'atmW.p.axis.y': 'Cynarg gb fgne syhk (ccz)',
+  'atmW.p.legend.lambert': 'Ynzoreg fcurer',
+  'atmW.p.legend.ls': 'Ybzzry-Frryvtre fcurer',
+  'atmW.p.row.bond': 'Obaq nyorqb bs n Ynzoreg fcurer',
 };

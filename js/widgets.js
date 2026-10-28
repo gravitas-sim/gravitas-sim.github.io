@@ -356,7 +356,14 @@ export const LAZY_FAMILIES = Object.freeze({
     () => import('./atmosphereWidgets.js'),
     './atmosphereWidgets.js',
     'ATMOSPHERE_WIDGETS',
-    ['atmosphere-balance', 'atmosphere-greenhouse', 'atmosphere-scale']
+    [
+      'atmosphere-balance',
+      'atmosphere-greenhouse',
+      'atmosphere-scale',
+      'atmosphere-bands',
+      'atmosphere-eclipse',
+      'atmosphere-phase',
+    ]
   ),
   crater: familyEntry(
     () => import('./craterWidgets.js'),

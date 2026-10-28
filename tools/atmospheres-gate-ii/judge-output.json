@@ -1,0 +1,457 @@
+{
+  "checks": {
+    "U1.constants": {
+      "status": "pass",
+      "measured": {
+        "copies": [],
+        "worstRel": 0
+      }
+    },
+    "E1.planck": {
+      "status": "pass",
+      "measured": {
+        "relErrMax": 5.400124791776761e-13,
+        "points": 400,
+        "fullBandRelMax": 5.664024804730161e-12,
+        "rayleighJeansRel": 0.0006359681233941705,
+        "monotone": true
+      }
+    },
+    "E2.eclipse": {
+      "status": "pass",
+      "measured": {
+        "relErrMax": 2.220446049250313e-15,
+        "points": 1000,
+        "equalTemperatureLimitRel": 2.220446049250313e-16,
+        "additiveRel": 1.1709383462843448e-16,
+        "monotone": true
+      }
+    },
+    "E3.slab": {
+      "status": "pass",
+      "measured": {
+        "relErrMax": 2.6783020246057276e-12,
+        "points": 300,
+        "tauZeroExact": true,
+        "thickRel": 0,
+        "monotone": true,
+        "skinRel": 4.440892098500626e-16
+      }
+    },
+    "E4.lambert": {
+      "status": "pass",
+      "measured": {
+        "absErrMax": 6.795786156033046e-12,
+        "angles": 181,
+        "endpointsAbs": 3.8981718325193755e-17,
+        "phaseIntegralAbs": 2.886579864025407e-15,
+        "roundTripAbs": 5.551115123125783e-17,
+        "monotone": true
+      }
+    },
+    "E5.albedo": {
+      "status": "pass",
+      "measured": {
+        "coverage": 0.939,
+        "flaggedFraction": 0.012,
+        "draws": 2000,
+        "note": "a flagged fit returns no interval and counts as not covered"
+      }
+    },
+    "N1.misfit": {
+      "status": "pass",
+      "measured": {
+        "power": {
+          "lommel-seeliger": 1,
+          "hg+0.3": 1,
+          "hg-0.3": 1
+        },
+        "falseFlag": 0.006,
+        "draws": 500
+      }
+    },
+    "E6.btemp": {
+      "status": "pass",
+      "measured": {
+        "coverage": 0.956,
+        "draws": 2000,
+        "refused": 0,
+        "roundTripRelMax": 4.991562718714704e-13,
+        "note": "a/R_p set to 1000 so the reflected-light rule (N2) does not apply here"
+      }
+    },
+    "N2.reflected": {
+      "status": "pass",
+      "measured": {
+        "decidedAsTheRuleSays": 60,
+        "of": 60
+      }
+    },
+    "X1.analytic": {
+      "status": "pass",
+      "measured": {
+        "relErrMax": 1.4600010089793614e-10,
+        "values": 20,
+        "monotone": true,
+        "slopeInScaleHeightsPerE": [
+          1.0026908762896107,
+          1.0026578565887416,
+          1.0026256390213222
+        ],
+        "note": "the slope is reported, not bounded: the committed text gives it no tolerance"
+      }
+    },
+    "X2.numerics": {
+      "status": "pass",
+      "measured": {
+        "singleRelMax": 8.225730041555579e-8,
+        "bandRelMax": 0.00041094371556726905,
+        "perBand": {
+          "strong": 0.00041094371556726905,
+          "weak": 0.00035512077424715294,
+          "window": 9.012559942789267e-8
+        },
+        "singleRefused": 0,
+        "bandPairsRefused": 2,
+        "singleDraws": 200
+      }
+    },
+    "X3.regime": {
+      "status": "fail",
+      "measured": {
+        "draws": 2000,
+        "pairsAccepted": 5979,
+        "pairsRefused": 21,
+        "refusedReasons": {
+          "the effective height is above a tenth of": 21
+        },
+        "failures": 3095,
+        "worstErrorOverBound": 38.59459125745368,
+        "worstPerBand": {
+          "strong": 1.3450784539034564,
+          "weak": 9.11939563989648,
+          "window": 38.59459125745368
+        },
+        "worstAbsoluteError": 0.11651451509932709,
+        "worstErrorOverZeffRp": 99911.74471104922
+      }
+    },
+    "X4.coverage": {
+      "status": "fail",
+      "measured": {
+        "coverage": 0.8635,
+        "draws": 2000,
+        "candidatesOracleTried": 3689,
+        "returned": 1750,
+        "notReturned": 250,
+        "biasMedian": 0.07049214309791207,
+        "bias05": -0.0617420614961617,
+        "bias95": 0.1764525371597992,
+        "note": "draws kept by the oracle only if the true strong-minus-weak difference is at least 10 noise standard deviations; not-returned counts as not covered"
+      }
+    },
+    "X5.refusals": {
+      "status": "pass",
+      "measured": {
+        "refusedOutside": 12,
+        "outside": 12,
+        "refusedInside": 0,
+        "nullReturnedFraction": 0.002,
+        "powerReturnedFraction": 0.9975,
+        "draws": 2000,
+        "outsideReasons": [
+          "the scale height is above 1 percent of the radius: the constant-gravity, plane-parallel treatment was tested only to here",
+          "the scale height is above 1 percent of the radius: the constant-gravity, plane-parallel treatment was tested only to here",
+          "the scale height is above 1 percent of the radius: the constant-gravity, plane-parallel treatment was tested only to here",
+          "the scale height is above 1 percent of the radius: the constant-gravity, plane-parallel treatment was tested only to here",
+          "the temperature is outside 300 to 3500 K, where this model was tested",
+          "the temperature is outside 300 to 3500 K, where this model was tested",
+          "the mean molecular weight is outside 2 to 45",
+          "the mean molecular weight is outside 2 to 45",
+          "the gravity is outside 2 to 40 m/s^2",
+          "the gravity is outside 2 to 40 m/s^2",
+          "the effective height is above a tenth of the radius: the atmosphere is too thick for this model",
+          "the scale height is above 1 percent of the radius: the constant-gravity, plane-parallel treatment was tested only to here"
+        ]
+      }
+    },
+    "X6.cloud": {
+      "status": "pass",
+      "measured": {
+        "notConstrainedFraction": 0.998,
+        "returnedANumber": 1,
+        "refusedOther": 0,
+        "draws": 500,
+        "trueDifferenceInSigma": {
+          "median": 0.08519009518289748,
+          "p95": 0.4003570391685381,
+          "max": 1.2110089224359744
+        },
+        "note": "the deck is above both bands effective heights (4 H above the strong band); the committed text said above the weak band, which does not make the bands equal"
+      }
+    },
+    "Z1.reported": {
+      "status": "pass",
+      "measured": {
+        "relativeTemperatureBias": {
+          "xp0x3": {
+            "n": 91,
+            "p05": -0.066612309186721,
+            "median": 0.035630729752545685,
+            "p95": 0.09515475420321896,
+            "noEstimate": 9
+          },
+          "gradient+10": {
+            "n": 93,
+            "p05": 0.053894874043403096,
+            "median": 0.1326146556267737,
+            "p95": 0.2062026022307758,
+            "noEstimate": 7
+          },
+          "gradient-10": {
+            "n": 98,
+            "p05": -0.17359683299111894,
+            "median": -0.1186139971441806,
+            "p95": -0.05180620575499331,
+            "noEstimate": 2
+          },
+          "deckStrongOnly": {
+            "n": 90,
+            "p05": -0.5523320688073311,
+            "median": -0.5295379690788656,
+            "p95": -0.46510508359517716,
+            "noEstimate": 10
+          }
+        },
+        "draws": 100
+      },
+      "note": "reported, not asserted; a bias is relative: (T estimated - T true) / T true"
+    },
+    "R1.refusals": {
+      "status": "pass",
+      "measured": {
+        "hostileInputs": 40,
+        "refusing": 40,
+        "bad": [],
+        "assumesWords": {
+          "tx": [
+            [
+              "isothermal",
+              true
+            ],
+            [
+              "one absorber",
+              true
+            ],
+            [
+              "no scattering",
+              true
+            ],
+            [
+              "no clouds",
+              true
+            ],
+            [
+              "band-integrated",
+              true
+            ]
+          ],
+          "ec": [
+            [
+              "uniform blackbody",
+              true
+            ],
+            [
+              "one skin",
+              true
+            ]
+          ],
+          "ph": [
+            [
+              "Lambert",
+              true
+            ]
+          ]
+        }
+      }
+    },
+    "C1.claims": {
+      "status": "pass",
+      "measured": {
+        "badCaught": 12,
+        "of": 12,
+        "permittedPass": 6,
+        "permitted": 6,
+        "filesScanned": 15,
+        "violations": []
+      }
+    },
+    "XR.reference": {
+      "status": "not-measured",
+      "measured": null,
+      "note": "data request Q2: no cited radiative-transfer code and no pinned fixture exist; nothing was downloaded"
+    },
+    "XT.table": {
+      "status": "not-measured",
+      "measured": null,
+      "note": "data request Q1: no pinned cross-section table exists; nothing was downloaded; the synthetic absorber stands in only for the numerics and names no molecule"
+    },
+    "D1.transmission": {
+      "status": "not-measured",
+      "measured": null,
+      "note": "data request Q3"
+    },
+    "D2.eclipse": {
+      "status": "not-measured",
+      "measured": null,
+      "note": "data request Q4"
+    },
+    "D3.phase": {
+      "status": "not-measured",
+      "measured": null,
+      "note": "data request Q5"
+    },
+    "P1.plot": {
+      "status": "pass",
+      "measured": {
+        "worstVertexPx": 0.07200000000000273,
+        "plots": [
+          "atmosphere-bands",
+          "atmosphere-eclipse",
+          "atmosphere-phase"
+        ],
+        "noOwnDrawing": true,
+        "legendToggled": [
+          true,
+          true,
+          true
+        ],
+        "jsdomOnly": true
+      }
+    },
+    "T1.ep.deferred": {
+      "status": "fail",
+      "measured": {
+        "deferredAddedGzipB": 3233,
+        "kernelAloneGzipB": 2282,
+        "kernelAloneRawB": 4676
+      }
+    },
+    "T1.whole.deferred": {
+      "status": "fail",
+      "measured": {
+        "deferredAddedGzipB": 5676,
+        "kernelAloneGzipB": 4109,
+        "kernelAloneRawB": 9217
+      }
+    },
+    "T1.requests": {
+      "status": "pass",
+      "measured": {
+        "chunksAddedWhole": 0,
+        "chunksAddedEp": 0
+      }
+    },
+    "T1.tier": {
+      "status": "pass",
+      "measured": {
+        "firstVisitAddedB": 16,
+        "firstVisitAddedEpB": 11,
+        "idleAddedB": 0
+      },
+      "note": "the base build is exactly at tools/data-budget.json first-visit precache ceiling (5,188,079 B): any addition is over it; no budget file was edited"
+    },
+    "T1.routes": {
+      "status": "pass",
+      "measured": {
+        "whole": {
+          "routeRiseKbMax": 0.2,
+          "requestsAddedMax": 0,
+          "changed": [
+            {
+              "route": "sources:kepler",
+              "riseKb": 0.1,
+              "requestsAdded": 0
+            },
+            {
+              "route": "sources:transit",
+              "riseKb": 0.1,
+              "requestsAdded": 0
+            },
+            {
+              "route": "sources:transit:instrument",
+              "riseKb": 0.1,
+              "requestsAdded": 0
+            },
+            {
+              "route": "sources:power-law",
+              "riseKb": 0.1,
+              "requestsAdded": 0
+            },
+            {
+              "route": "sources:power-law:instrument",
+              "riseKb": 0.1,
+              "requestsAdded": 0
+            },
+            {
+              "route": "sources:largest-lesson",
+              "riseKb": 0.2,
+              "requestsAdded": 0
+            },
+            {
+              "route": "build:transit",
+              "riseKb": 0.1,
+              "requestsAdded": 0
+            },
+            {
+              "route": "build:transit:instrument",
+              "riseKb": 0.1,
+              "requestsAdded": 0
+            },
+            {
+              "route": "build:largest-lesson",
+              "riseKb": 0.1,
+              "requestsAdded": 0
+            }
+          ]
+        },
+        "ep": {
+          "routeRiseKbMax": 0.1,
+          "requestsAddedMax": 0,
+          "changed": [
+            {
+              "route": "sources:kepler",
+              "riseKb": 0.1,
+              "requestsAdded": 0
+            },
+            {
+              "route": "sources:transit",
+              "riseKb": 0.1,
+              "requestsAdded": 0
+            },
+            {
+              "route": "sources:power-law",
+              "riseKb": 0.1,
+              "requestsAdded": 0
+            },
+            {
+              "route": "sources:largest-lesson",
+              "riseKb": 0.1,
+              "requestsAdded": 0
+            },
+            {
+              "route": "build:transit",
+              "riseKb": 0.1,
+              "requestsAdded": 0
+            },
+            {
+              "route": "build:transit:instrument",
+              "riseKb": 0.1,
+              "requestsAdded": 0
+            }
+          ]
+        }
+      }
+    }
+  }
+}

@@ -84,4 +84,53 @@ export const EN_ATMOSPHERES = {
   'atmW.s.row.inputs': 'Inputs',
   'atmW.s.value.inputs':
     'T = {T} K, mean molecular weight {mu}, gravity {g} m/s²',
+  // <bands>
+  'atmW.m.tx': 'Band-integrated transmission',
+  'atmW.a.tx':
+    'a temperature that changes with height; clouds and hazes; scattering; more than one absorber; pressure broadening; limb darkening and the planet’s path across the star; a resolved spectrum (this is a depth over each named band); the table is a synthetic absorber, not a molecule',
+  'atmW.x.title': 'What does one band’s depth say about the atmosphere?',
+  'atmW.x.note':
+    'Three bands of a synthetic absorber. A strong band is deeper than a weak one by about one scale height of the atmosphere for every factor e in absorption.',
+  'atmW.x.control.t': 'Temperature',
+  'atmW.x.control.x': 'Abundance, log of mixing ratio',
+  'atmW.x.control.p': 'Reference pressure, log of bar',
+  'atmW.x.axis.x': 'Wavelength (µm)',
+  'atmW.x.axis.y': 'Transit depth (ppm)',
+  'atmW.x.legend.depth': 'Band depth',
+  'atmW.x.legend.err': 'Depth plus the model’s stated error',
+  'atmW.x.legend.errLow': 'Depth minus the model’s stated error',
+  'atmW.x.row.diff': 'Strong band minus weak band',
+  'atmW.x.row.h': 'Scale height',
+  'atmW.x.row.err': 'Stated error of the atmospheric part',
+  'atmW.x.row.say': 'What it says',
+  'atmW.x.say':
+    'A difference of {d} ppm is consistent with this absorber at a scale height of {h} km under the assumptions listed.',
+  // </bands>
+  'atmW.m.ec': 'Blackbody plus one band (eclipse)',
+  'atmW.a.ec':
+    'a day side that is not uniform; a band that emits instead of absorbing; reflected light in the same band (a depth is not turned into a temperature where it could matter); any structure in the atmosphere below the skin',
+  'atmW.e.title': 'How hot is the day side?',
+  'atmW.e.note':
+    'The eclipse depth is the planet’s share of the light. An absorbing band sees the cooler skin, so its depth dips.',
+  'atmW.e.control.tp': 'Planet temperature',
+  'atmW.e.control.ts': 'Star temperature',
+  'atmW.e.control.tau': 'Band optical depth',
+  'atmW.e.axis.x': 'Wavelength (µm)',
+  'atmW.e.axis.y': 'Eclipse depth (%)',
+  'atmW.e.legend.cont': 'No absorber',
+  'atmW.e.legend.dip': 'With the 4.3 µm band absorbing',
+  'atmW.e.row.bt': 'Brightness temperature, 3.6 to 4.5 µm',
+  'atmW.m.ph': 'Lambert-sphere phase curve',
+  'atmW.a.ph':
+    'a planet that is not a Lambert sphere (real phase functions differ); thermal phase variation; clouds; polarisation; the albedo found is the albedo of a Lambert sphere',
+  'atmW.p.title': 'What does a phase curve say about albedo?',
+  'atmW.p.note':
+    'The dashed curve is another sphere, a Lommel-Seeliger one: the same planet can be fit by both, and only the shape tells them apart.',
+  'atmW.p.control.ag': 'Geometric albedo',
+  'atmW.p.control.a': 'Orbit size, in planet radii',
+  'atmW.p.axis.x': 'Phase angle (degrees)',
+  'atmW.p.axis.y': 'Planet to star flux (ppm)',
+  'atmW.p.legend.lambert': 'Lambert sphere',
+  'atmW.p.legend.ls': 'Lommel-Seeliger sphere',
+  'atmW.p.row.bond': 'Bond albedo of a Lambert sphere',
 };

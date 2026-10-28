@@ -23,6 +23,13 @@ import { ES_ATMOSPHERES } from './i18n/es.atmospheres.js';
 import { fixed } from './format.js';
 import { createChart } from './plot/mount.js';
 import {
+  bandDepth,
+  brightnessTemperature,
+  eclipseDepth,
+  lambertPhase,
+  lommelSeeligerPhase,
+  bondFromGeometric,
+  SYNTHETIC_BANDS,
   BODIES,
   BODY_IDS,
   compareWithMeasured,
@@ -495,4 +502,308 @@ const SCALE = {
   },
 };
 
-export const ATMOSPHERE_WIDGETS = [BALANCE, GREENHOUSE, SCALE];
+// ----------------------------------------------------------------------------
+// The second half (Prompt 201 spike): bands, eclipse, phase
+// ----------------------------------------------------------------------------
+const PLANET = {
+  radius: 9.7e7,
+  starRadius: 8.04e8,
+  meanMolecularWeight: 2.3,
+  gravity: 9.3,
+};
+const numControl = (id, label, min, max, step, value, dec, unit) => ({
+  id,
+  get label() {
+    return t(label);
+  },
+  min,
+  max,
+  step,
+  value,
+  decimals: dec,
+  format: x => `${fixed(x, dec)}${unit}`,
+});
+const MICRON = 1e-6;
+
+// <bands>
+export function bandsView(v) {
+  const common = {
+    ...PLANET,
+    temperature: v.temperature ?? 1400,
+    pressure: 1e5 * 10 ** (v.logP ?? 0),
+    abundance: 10 ** (v.logX ?? -3),
+  };
+  const rows = Object.entries(SYNTHETIC_BANDS).map(([id, b]) => ({
+    id,
+    micron: (b.micron[0] + b.micron[1]) / 2,
+    r: bandDepth({ ...common, band: b }),
+  }));
+  return { common, rows };
+}
+
+const BANDS = {
+  id: 'atmosphere-bands',
+  get title() {
+    return t('atmW.x.title');
+  },
+  get note() {
+    return t('atmW.x.note');
+  },
+  animated: false,
+  controls: [
+    numControl('temperature', 'atmW.x.control.t', 600, 2400, 10, 1400, 0, ' K'),
+    numControl('logX', 'atmW.x.control.x', -5, -2, 0.1, -3, 1, ''),
+    numControl('logP', 'atmW.x.control.p', -1, 1, 0.1, 0, 1, ''),
+  ],
+  draw(canvas, v) {
+    const { rows } = bandsView(v);
+    const ok = rows.filter(r => !r.r.refused);
+    const x = ok.map(r => r.micron);
+    const ppm = f => ok.map(r => 1e6 * f(r.r));
+    const spec = {
+      label: t('atmW.x.title'),
+      xTitle: t('atmW.x.axis.x'),
+      yTitle: t('atmW.x.axis.y'),
+      series: [
+        {
+          id: 'depth',
+          label: t('atmW.x.legend.depth'),
+          x,
+          y: ppm(r => r.depth),
+          color: SERIES.blue,
+          width: 2,
+          mode: 'both',
+        },
+        {
+          id: 'hi',
+          label: t('atmW.x.legend.err'),
+          x,
+          y: ppm(r => r.depth + r.modelError * r.excess),
+          color: SERIES.orange,
+          width: 1,
+          dash: [4, 3],
+          mode: 'line',
+        },
+        {
+          id: 'lo',
+          label: t('atmW.x.legend.errLow'),
+          x,
+          y: ppm(r => r.depth - r.modelError * r.excess),
+          color: SERIES.orange,
+          width: 1,
+          dash: [4, 3],
+          mode: 'line',
+        },
+      ],
+    };
+    hostOf(canvas, t('atmW.x.title')).chart.draw(spec);
+    return spec;
+  },
+  readout(v) {
+    const { rows } = bandsView(v);
+    const bad = rows.find(r => r.r.refused);
+    if (bad)
+      return [
+        {
+          label: t('atmW.row.model'),
+          value: t('atmW.refused'),
+          emphasis: true,
+        },
+        { label: t('atmW.row.assumes'), value: bad.r.reason },
+      ];
+    const [s, w] = rows;
+    return [
+      { label: t('atmW.row.model'), value: t('atmW.m.tx'), emphasis: true },
+      {
+        label: t('atmW.x.row.diff'),
+        value: `${fixed(1e6 * (s.r.depth - w.r.depth), 0)} ppm`,
+        emphasis: true,
+      },
+      {
+        label: t('atmW.x.row.h'),
+        value: `${fixed(s.r.scaleHeight / 1000, 0)} km`,
+      },
+      {
+        label: t('atmW.x.row.err'),
+        value: `${fixed(100 * s.r.modelError, 1)} %`,
+      },
+      {
+        label: t('atmW.x.row.say'),
+        value: t('atmW.x.say', {
+          d: fixed(1e6 * (s.r.depth - w.r.depth), 0),
+          h: fixed(s.r.scaleHeight / 1000, 0),
+        }),
+      },
+      { label: t('atmW.row.assumes'), value: t('atmW.a.tx') },
+    ];
+  },
+};
+// </bands>
+
+const EC_BANDS = Array.from({ length: 30 }, (_, i) => 1 + (i * 9) / 29);
+export function eclipseView(v) {
+  const p = {
+    radiusRatio: PLANET.radius / PLANET.starRadius,
+    tPlanet: v.tPlanet ?? 1700,
+    tStar: v.tStar ?? 5800,
+    semiMajorOverRp: 8.8,
+  };
+  const depth = (c, tau) =>
+    eclipseDepth({
+      ...p,
+      band: [(c / 1.05) * MICRON, c * 1.05 * MICRON],
+      bandTau: tau,
+      geometricAlbedo: 0.2,
+    });
+  const tau = v.tau ?? 2;
+  const inBand = c => c >= 4.0 && c <= 4.6;
+  const cont = EC_BANDS.map(c => depth(c, 0));
+  const dip = EC_BANDS.map(c => depth(c, inBand(c) ? tau : 0));
+  const bt = brightnessTemperature({
+    ...p,
+    band: [3.6 * MICRON, 4.5 * MICRON],
+    depth: eclipseDepth({
+      ...p,
+      band: [3.6 * MICRON, 4.5 * MICRON],
+      bandTau: tau,
+    }).thermal,
+    sigma: 1e-5,
+  });
+  return { p, cont, dip, bt };
+}
+
+const ECLIPSE = {
+  id: 'atmosphere-eclipse',
+  get title() {
+    return t('atmW.e.title');
+  },
+  get note() {
+    return t('atmW.e.note');
+  },
+  animated: false,
+  controls: [
+    numControl('tPlanet', 'atmW.e.control.tp', 800, 2800, 10, 1700, 0, ' K'),
+    numControl('tStar', 'atmW.e.control.ts', 5000, 6500, 10, 5800, 0, ' K'),
+    numControl('tau', 'atmW.e.control.tau', 0, 5, 0.1, 2, 1, ''),
+  ],
+  draw(canvas, v) {
+    const f = eclipseView(v);
+    const spec = {
+      label: t('atmW.e.title'),
+      xTitle: t('atmW.e.axis.x'),
+      yTitle: t('atmW.e.axis.y'),
+      series: [
+        {
+          id: 'cont',
+          label: t('atmW.e.legend.cont'),
+          x: EC_BANDS,
+          y: f.cont.map(d => 100 * d.depth),
+          color: SERIES.blue,
+          width: 2,
+          mode: 'line',
+        },
+        {
+          id: 'dip',
+          label: t('atmW.e.legend.dip'),
+          x: EC_BANDS,
+          y: f.dip.map(d => 100 * d.depth),
+          color: SERIES.orange,
+          width: 2,
+          mode: 'line',
+        },
+      ],
+    };
+    hostOf(canvas, t('atmW.e.title')).chart.draw(spec);
+    return spec;
+  },
+  readout(v) {
+    const f = eclipseView(v);
+    return [
+      { label: t('atmW.row.model'), value: t('atmW.m.ec'), emphasis: true },
+      {
+        label: t('atmW.e.row.bt'),
+        value: f.bt.refused
+          ? t('atmW.refused')
+          : `${fixed(f.bt.temperature, 0)} K`,
+        emphasis: true,
+      },
+      { label: t('atmW.row.assumes'), value: t('atmW.a.ec') },
+    ];
+  },
+};
+
+const PH_ANGLES = Array.from({ length: 61 }, (_, i) => (i * 180) / 60);
+export function phaseView(v) {
+  const ag = v.albedo ?? 0.3;
+  const k = 1 / (v.aOverRp ?? 8.8) ** 2;
+  const curve = f => PH_ANGLES.map(a => 1e6 * ag * k * f((a * Math.PI) / 180));
+  return {
+    ag,
+    lambert: curve(lambertPhase),
+    ls: curve(lommelSeeligerPhase),
+    bond: bondFromGeometric(ag),
+  };
+}
+
+const PHASE = {
+  id: 'atmosphere-phase',
+  get title() {
+    return t('atmW.p.title');
+  },
+  get note() {
+    return t('atmW.p.note');
+  },
+  animated: false,
+  controls: [
+    numControl('albedo', 'atmW.p.control.ag', 0.05, 0.6, 0.01, 0.3, 2, ''),
+    numControl('aOverRp', 'atmW.p.control.a', 4, 20, 0.1, 8.8, 1, ''),
+  ],
+  draw(canvas, v) {
+    const f = phaseView(v);
+    const spec = {
+      label: t('atmW.p.title'),
+      xTitle: t('atmW.p.axis.x'),
+      yTitle: t('atmW.p.axis.y'),
+      series: [
+        {
+          id: 'lambert',
+          label: t('atmW.p.legend.lambert'),
+          x: PH_ANGLES,
+          y: f.lambert,
+          color: SERIES.blue,
+          width: 2,
+          mode: 'line',
+        },
+        {
+          id: 'ls',
+          label: t('atmW.p.legend.ls'),
+          x: PH_ANGLES,
+          y: f.ls,
+          color: SERIES.green,
+          width: 2,
+          dash: [5, 3],
+          mode: 'line',
+        },
+      ],
+    };
+    hostOf(canvas, t('atmW.p.title')).chart.draw(spec);
+    return spec;
+  },
+  readout(v) {
+    const f = phaseView(v);
+    return [
+      { label: t('atmW.row.model'), value: t('atmW.m.ph'), emphasis: true },
+      { label: t('atmW.p.row.bond'), value: fixed(f.bond, 2), emphasis: true },
+      { label: t('atmW.row.assumes'), value: t('atmW.a.ph') },
+    ];
+  },
+};
+
+export const ATMOSPHERE_WIDGETS = [
+  BALANCE,
+  GREENHOUSE,
+  SCALE,
+  BANDS,
+  ECLIPSE,
+  PHASE,
+];
