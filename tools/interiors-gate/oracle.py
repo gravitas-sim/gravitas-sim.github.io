@@ -11,7 +11,7 @@ import numpy as np
 from scipy.integrate import quad, solve_ivp
 from scipy.optimize import brentq
 
-EPS = 1e-14
+EPS = 2e-14
 
 
 def two_layer_mass(R, rc, rm, rcore):
@@ -56,8 +56,13 @@ def two_layer_C_unit(x, kappa):
 
 
 def polytrope_D(r):
+    """rho / rho_bar for the n = 1 polytrope; a series for sin(x) - x cos(x) near the centre (cancellation)."""
     xi = np.pi * r
-    return xi ** 2 * np.sin(xi) / (3 * (np.sin(xi) - xi * np.cos(xi)))
+    if xi < 0.2:
+        g = xi ** 3 / 3 - xi ** 5 / 30 + xi ** 7 / 840 - xi ** 9 / 45360 + xi ** 11 / 3991680
+    else:
+        g = np.sin(xi) - xi * np.cos(xi)
+    return xi ** 2 * np.sin(xi) / (3 * g)
 
 
 def polytrope_C():
