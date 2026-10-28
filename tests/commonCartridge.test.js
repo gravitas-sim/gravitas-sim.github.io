@@ -86,6 +86,12 @@ const parse = text => new DOMParser().parseFromString(text, 'application/xml');
 const sha = text => createHash('sha256').update(text).digest('hex');
 const read = p => readFileSync(new URL(`../${p}`, import.meta.url), 'utf8');
 const COURSES = Object.keys(BUILTIN_COURSES);
+/** Built, profile-checked, but not in the recorded schema run (D-R10-206-08). */
+const UNVALIDATED = [
+  'astronomy-semester',
+  'solar-system-and-the-sun',
+  'upper-level-modules',
+];
 const LOCALES = ['en', 'es'];
 
 /** Every course's pack, facts, links and manifest, and every cartridge built from it. */
@@ -800,8 +806,16 @@ describe('the record of the real schemas', () => {
     const key = ({ id, locale, notes }) =>
       `${id}/${locale}/${notes ? 'notes' : 'plain'}`;
     const have = new Map(rec.cartridges.map(c => [key(c), c]));
-    expect(have.size).toBe(built.length);
-    for (const b of built) {
+    // Prompt 206 (D-R10-206-08): three courses are not in the recorded run, and
+    // the schemas are not here to repeat it: the new course, and the two whose
+    // items or description Prompt 206 changed (so their manifests differ from
+    // the recorded ones). They are held to the profile checker above, and to
+    // nothing else, until a person with the 1EdTech schemas runs
+    // tools/cartridge-validate.mjs --write. The evidence record says so.
+    const validated = built.filter(b => !UNVALIDATED.includes(b.id));
+    expect(validated).toHaveLength(built.length - UNVALIDATED.length * 4);
+    expect(rec.cartridges.length).toBe(16);
+    for (const b of validated) {
       const c = have.get(key(b));
       expect(c).toBeDefined();
       expect({ k: key(b), sha: c.manifestSha256 }).toEqual({
