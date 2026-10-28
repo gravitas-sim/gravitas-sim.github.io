@@ -840,16 +840,6 @@ export const DISCOVERY = {
     },
     courseLevel: 'majors',
   },
-  'the-scale-of-the-solar-system': {
-    audience: 'intro',
-    mathematics: 'algebra',
-    prerequisites: [],
-    textbook: {
-      chapter: 7,
-      section: null,
-    },
-    courseLevel: 'survey',
-  },
   'moons-of-the-giants': {
     audience: 'intro',
     mathematics: 'algebra',
@@ -857,6 +847,16 @@ export const DISCOVERY = {
     textbook: {
       chapter: 12,
       section: '12.2',
+    },
+    courseLevel: 'survey',
+  },
+  'the-scale-of-the-solar-system': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: [],
+    textbook: {
+      chapter: 7,
+      section: null,
     },
     courseLevel: 'survey',
   },

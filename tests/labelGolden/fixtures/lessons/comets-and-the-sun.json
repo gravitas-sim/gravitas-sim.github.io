@@ -1,0 +1,65 @@
+{
+ "id": "comets-and-the-sun",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.orbit-ends.fields.0.unit","AU"],
+    ["steps.orbit-ends.fields.1.unit","AU"],
+    ["steps.heat-at-the-ends.fields.0.unit","AU"],
+    ["steps.heat-at-the-ends.fields.1.unit","AU"],
+    ["steps.heat-at-the-ends.fields.2.unit","K"],
+    ["steps.heat-at-the-ends.fields.3.unit","K"],
+    ["steps.the-real-halley.fields.0.unit","AU"],
+    ["steps.the-real-halley.fields.1.unit","K"]
+   ],
+   "numbered": [
+    ["steps.orbit-ends.fields.0.hint","5.79"],
+    ["steps.orbit-ends.fields.1.hint","17.84"],
+    ["steps.heat-at-the-ends.fields.0.hint","5.79"],
+    ["steps.heat-at-the-ends.fields.1.hint","17.84"],
+    ["steps.the-real-halley.fields.0.hint","0.586"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": []
+  }
+ },
+ "numeric": {
+  "answers": [],
+  "decimals": [
+   [
+    "heat-at-the-ends.t_peri",
+    0
+   ],
+   [
+    "heat-at-the-ends.t_apo",
+    0
+   ],
+   [
+    "the-real-halley.t_q",
+    0
+   ]
+  ]
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "watch-the-tails": {
+    "probe": [[{"label":"The first comet on a closed orbit","value":"not on the canvas yet"}]]
+   },
+   "orbit-ends": {
+    "probe": [[{"label":"The first comet on a closed orbit","value":"not on the canvas yet"}]],
+    "validate": {"calls":232,"distinct":1,"digest":"1d8fc6ceb1f94c63","samples":[null]}
+   },
+   "heat-at-the-ends": {
+    "probe": [[{"label":"The first comet on a closed orbit","value":"not on the canvas yet"}]],
+    "validate": {"calls":242,"distinct":1,"digest":"1d8fc6ceb1f94c63","samples":[null]}
+   },
+   "the-real-halley": {
+    "validate": {"calls":232,"distinct":2,"digest":"ca176a39c66b4ed0","samples":[null,{"level":"error","message":"Type 0.586, the real closest approach in astronomical units."}]}
+   }
+  },
+  "es": "same"
+ }
+}

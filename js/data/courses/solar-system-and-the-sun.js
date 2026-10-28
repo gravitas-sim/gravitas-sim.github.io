@@ -37,7 +37,7 @@ export const SOLAR_SYSTEM_AND_THE_SUN = {
   },
   teacherGuide: {
     en: 'Run the units in order, beside the chapters. The core path is a few hours in all, over three or four weeks; every investigation has an instructor guide and key. The chapters were matched from the table of contents of the edition cited: check them against the edition you teach from. The investigations about comets and the scale of the Solar System use the sandbox, whose comets are model comets with orbits of their own; the moons investigation uses synthetic frames made from the real positions of the moons.',
-    es: 'Haz las unidades en orden, junto a los capítulos. El camino principal son unas horas en total, a lo largo de tres o cuatro semanas; cada investigación tiene guía y clave para el profesorado. Los capítulos se asociaron a partir del índice de la edición citada: compruébalos con la edición que uses. Las investigaciones sobre los cometas y la escala del sistema solar usan el sandbox, cuyos cometas son cometas modelo con órbitas propias; la de las lunas usa imágenes sintéticas hechas con las posiciones reales de las lunas.',
+    es: 'Haz las unidades en orden, junto a los capítulos. El camino principal son unas horas en total, a lo largo de tres o cuatro semanas; cada investigación tiene notas para el profesorado y clave. Los capítulos se asociaron a partir del índice de la edición citada: compruébalos con la edición que uses. Las investigaciones sobre los cometas y la escala del sistema solar usan el sandbox, cuyos cometas son cometas modelo con órbitas propias; la de las lunas usa imágenes sintéticas hechas con las posiciones reales de las lunas.',
     esOf: 'b7e68fb9',
   },
   objectives: [

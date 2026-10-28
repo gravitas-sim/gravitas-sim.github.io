@@ -370,9 +370,9 @@ export const ASTRONOMY_SEMESTER = {
         esOf: '8579640c',
       },
       summary: {
-        en: 'The planets, moons, small bodies and the Sun, one short investigation each, with the course pack The Solar System and the Sun for the readings and the longer ones.',
-        es: 'Los planetas, las lunas, los cuerpos pequeños y el Sol, una investigación corta de cada, con el paquete El sistema solar y el Sol para las lecturas y las más largas.',
-        esOf: 'd625efac',
+        en: 'The planets, moons, small bodies and the Sun, one short investigation each, with the course The Solar System and the Sun for the readings and the longer ones.',
+        es: 'Los planetas, las lunas, los cuerpos pequeños y el Sol, una investigación corta de cada, con el curso El sistema solar y el Sol para las lecturas y las más largas.',
+        esOf: 'f141f4dd',
       },
       items: [
         {

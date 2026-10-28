@@ -1169,20 +1169,6 @@ Of 164 prediction loops, 164 are returned to,
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:atmosphere-phase`, control atmosphere-phase/dataset, measures how well a Lambert sphere describes a synthetic phase curve: a chi-square near 31 for 23 degrees of freedom for a Lambert planet and near 82 for a Lommel-Seeliger planet, for which no albedo is returned, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
-## The Scale of the Solar System (`the-scale-of-the-solar-system`)
-
-- **Steps:** 8. Scene declared on 8; a reader can change something on 0; 8 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 1 live engine, 0 prescribed model, 0 stored dataset, 0 self-contained panel.
-- **What students do:** read, record-values, commit-a-prediction, choose-an-option.
-- **Objects the steps declare:** sun, earth, jupiter, neptune.
-- **Instruments:** none.
-- **Stored data:** none.
-- **Evidence kept:** notebook-fields.
-- **Prediction loops:** light-time-predict → light-time → light-time; earth-as-a-marble → scale-model → scale-model.
-- **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; null result: the probe names what is missing; ambiguous result: the check says in words how close is close enough.
-- **Scene rebuilds:** 1 step(s) on arrival (a-picture-you-have-seen).
-- **Accepted central experiment** (reviewed 2026-09-11): object `neptune`, control the canvas: scroll to zoom out to Neptune, and read the distances in the readout, measures the distance of Neptune from the Sun in astronomical units, 30.07, and the light time it gives, 4.17 hours, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
-
 ## Moons of the Giants (`moons-of-the-giants`)
 
 - **Steps:** 10. Scene declared on 10; a reader can change something on 0; 10 declare a scene nobody on that step can touch.
@@ -1196,6 +1182,20 @@ Of 164 prediction loops, 164 are returned to,
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:moon-fit`, control moon-fit/moon, measures the period a sinusoid fitted to one moon's measured distances from Jupiter gives, from which the Laplace combination of three motions follows: Io 1.7682, Europa 3.5480 and Ganymede 7.1413 days, a combination of 0.015 against an uncertainty of 0.025 degrees a day, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## The Scale of the Solar System (`the-scale-of-the-solar-system`)
+
+- **Steps:** 8. Scene declared on 8; a reader can change something on 0; 8 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 1 live engine, 0 prescribed model, 0 stored dataset, 0 self-contained panel.
+- **What students do:** read, record-values, commit-a-prediction, choose-an-option.
+- **Objects the steps declare:** sun, earth, jupiter, neptune.
+- **Instruments:** none.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** light-time-predict → light-time → light-time; earth-as-a-marble → scale-model → scale-model.
+- **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; null result: the probe names what is missing; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** 1 step(s) on arrival (a-picture-you-have-seen).
+- **Accepted central experiment** (reviewed 2026-09-11): object `neptune`, control the canvas: scroll to zoom out to Neptune, and read the distances in the readout, measures the distance of Neptune from the Sun in astronomical units, 30.07, and the light time it gives, 4.17 hours, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Comets and the Sun (`comets-and-the-sun`)
 

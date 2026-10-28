@@ -340,12 +340,12 @@ export const BROWSE_META = {
     tags: ['exoplanets', 'solar-system'],
     numericCount: 0,
   },
-  'the-scale-of-the-solar-system': {
-    tags: ['orbits', 'solar-system'],
-    numericCount: 0,
-  },
   'moons-of-the-giants': {
     tags: ['orbits', 'resonance', 'solar-system'],
+    numericCount: 0,
+  },
+  'the-scale-of-the-solar-system': {
+    tags: ['orbits', 'solar-system'],
     numericCount: 0,
   },
   'comets-and-the-sun': {

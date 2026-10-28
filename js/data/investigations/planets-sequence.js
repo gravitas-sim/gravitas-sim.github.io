@@ -9,7 +9,7 @@
 // from an id is a one-line re-export of a named export here (English, or `_ES`
 // for the Spanish), and the instructor modules read INSTRUCTOR.
 //
-// Content only, no imports: every number a step states is recomputed in
+// Content, with one import (js/format.js, which imports nothing): every number a step states is recomputed in
 // tests/planetsCloseout.test.js from the instruments and kernels the lesson
 // points at. Every step carries a `sid`, an opaque stable id that student
 // progress is keyed by: reword a step, move it, translate it, never change its
@@ -19,8 +19,11 @@
 // Prompt 203 part B, which is not built; "Reading a surface" needs a marking
 // instrument for craters, channels and dunes on the Mars frame, which does not
 // exist; "Space weather from the Sun" needs a sunspot-number table pack that has
-// not been retrieved. Each is a reading step of the sequence, with its reason.
+// not been retrieved. Each is listed with its reason as a reading in the last
+// unit of the course package (js/data/courses/solar-system-and-the-sun.js).
 // =============================================================================
+
+import { fixed } from '../../format.js';
 
 /** A placeholder star on the canvas: a display; the instrument is where the picture is. */
 const STAGE = {
@@ -259,29 +262,29 @@ export const MOONS_OF_THE_GIANTS = {
         { id: 'p3', label: 'Ganymede’s period', unit: 'd', hint: '7.1413' },
         {
           id: 'n1',
-          label: 'Io’s motion',
-          unit: '°/d',
+          label: 'Io’s motion, degrees a day',
+          unit: '',
           compute: v => 360 / v.p1,
           decimals: 2,
         },
         {
           id: 'n2',
-          label: 'Europa’s motion',
-          unit: '°/d',
+          label: 'Europa’s motion, degrees a day',
+          unit: '',
           compute: v => 360 / v.p2,
           decimals: 2,
         },
         {
           id: 'n3',
-          label: 'Ganymede’s motion',
-          unit: '°/d',
+          label: 'Ganymede’s motion, degrees a day',
+          unit: '',
           compute: v => 360 / v.p3,
           decimals: 2,
         },
         {
           id: 'laplace',
-          label: 'Io − 3 × Europa + 2 × Ganymede',
-          unit: '°/d',
+          label: 'Io − 3 × Europa + 2 × Ganymede, degrees a day',
+          unit: '',
           compute: v => 360 / v.p1 - (3 * 360) / v.p2 + (2 * 360) / v.p3,
           decimals: 3,
         },
@@ -385,7 +388,7 @@ export const MOONS_OF_THE_GIANTS = {
              chain. What the frames cannot show is the angle itself holding for years,
              which <em>When Orbits Lock</em> follows in a model. Other giants carry
              families of their own (Saturn&rsquo;s moons, Uranus&rsquo;s), and this
-             pack covers only Jupiter&rsquo;s.`,
+             set covers only Jupiter&rsquo;s.`,
       tool: JP({ moon: 3, cadence: 1 }),
     },
   ],
@@ -419,7 +422,7 @@ const distanceRows = ctx =>
     const au = auFromSun(ctx, role);
     return {
       label: `${role[0].toUpperCase()}${role.slice(1)}: distance from the Sun`,
-      value: au === null ? 'not on the canvas yet' : `${au.toFixed(2)} AU`,
+      value: au === null ? 'not on the canvas yet' : `${fixed(au, 2)} AU`,
     };
   });
 
@@ -727,12 +730,12 @@ const cometRows = ctx => {
     (b.pos.y - sun.pos.y) * (b.vel.y - sun.vel.y);
   return [
     { label: 'Comet', value: b.name || 'Comet', emphasis: true },
-    { label: 'Closest approach to the Sun', value: `${c.peri.toFixed(2)} AU` },
+    { label: 'Closest approach to the Sun', value: `${fixed(c.peri, 2)} AU` },
     {
       label: 'Furthest distance from the Sun',
-      value: `${c.apo.toFixed(2)} AU`,
+      value: `${fixed(c.apo, 2)} AU`,
     },
-    { label: 'Distance now', value: `${r.toFixed(2)} AU` },
+    { label: 'Distance now', value: `${fixed(r, 2)} AU` },
     { label: 'Moving', value: vr < 0 ? 'toward the Sun' : 'away from the Sun' },
   ];
 };
@@ -870,7 +873,7 @@ export const COMETS_AND_THE_SUN = {
         ) {
           return {
             level: 'ok',
-            message: `${c.peri.toFixed(2)} AU and ${c.apo.toFixed(2)} AU: the orbit’s two ends, a ratio of ${(c.apo / c.peri).toFixed(1)} between them. A comet spends most of its time near the far end.`,
+            message: `${fixed(c.peri, 2)} AU and ${fixed(c.apo, 2)} AU: the orbit’s two ends, a ratio of ${fixed(c.apo / c.peri, 1)} between them. A comet spends most of its time near the far end.`,
           };
         }
         return {
@@ -930,7 +933,7 @@ export const COMETS_AND_THE_SUN = {
         ) {
           return {
             level: 'ok',
-            message: `${cometTemperature(c.peri).toFixed(0)} K at closest approach and ${cometTemperature(c.apo).toFixed(0)} K at the far end: a factor of ${Math.sqrt(c.apo / c.peri).toFixed(1)}, the square root of the ratio of distances. Water ice turns to gas readily from about 160 K, and by this estimate this model comet never gets there: it stays frozen at both ends.`,
+            message: `${fixed(cometTemperature(c.peri), 0)} K at closest approach and ${fixed(cometTemperature(c.apo), 0)} K at the far end: a factor of ${fixed(Math.sqrt(c.apo / c.peri), 1)}, the square root of the ratio of distances. Water ice turns to gas readily from about 160 K, and by this estimate this model comet never gets there: it stays frozen at both ends.`,
           };
         }
         return {
@@ -1128,10 +1131,10 @@ export const MOONS_OF_THE_GIANTS_ES = {
         { label: 'Periodo de Ío' },
         { label: 'Periodo de Europa' },
         { label: 'Periodo de Ganímedes' },
-        { label: 'Movimiento de Ío' },
-        { label: 'Movimiento de Europa' },
-        { label: 'Movimiento de Ganímedes' },
-        { label: 'Ío − 3 × Europa + 2 × Ganímedes' },
+        { label: 'Movimiento de Ío, grados por día' },
+        { label: 'Movimiento de Europa, grados por día' },
+        { label: 'Movimiento de Ganímedes, grados por día' },
+        { label: 'Ío − 3 × Europa + 2 × Ganímedes, grados por día' },
       ],
     },
     {
@@ -1456,7 +1459,7 @@ const CONTENT = {
     teachingNotes: [
       'The planets are placed on near-circular orbits at the table’s distances (Earth 1.00 AU, Jupiter 5.20, Neptune 30.07), so the readout equals the table to within its precision; it is a model of the Solar System and not an ephemeris.',
       'The 499.005-second light time per AU and the 12,742-kilometer Earth are the values the steps use; the marble model is a worked example, not a measurement.',
-      'The sandbox’s planets are drawn larger than their true size at every zoom so that they can be seen; the distances in the readout are the table’s, and the lesson says so in its first step.',
+      'The sandbox’s planets are drawn larger than their true size at every zoom so that they can be seen; the distances in the readout are the table’s, and the first step says so.',
       'The marble model uses the Earth’s diameter, 12,742 kilometers, and the astronomical unit, 149,597,870.7 kilometers; the Sun’s diameter of 1,392,700 kilometers gives 109 marbles across.',
     ],
     discussion: [
@@ -1535,7 +1538,7 @@ const CONTENT = {
       },
     ],
     teachingNotes: [
-      'The comets carry the names of famous comets (Halley, Hale-Bopp) but are placed by the sandbox at the distance of their average orbit at 70 percent of circular speed, so their orbits are not the real ones; the lesson says so and uses the real Halley (0.586 AU) as a transfer case. The first comet on a closed orbit, named Halley, is the one the steps use: it comes no closer than 5.79 AU and goes out to 17.84 AU, and its bare-body temperature never reaches the 160 K at which ice turns to gas.',
+      'The comets carry the names of famous comets (Halley, Hale-Bopp) but are placed by the sandbox at the distance of their average orbit at 70 percent of circular speed, so their orbits are not the real ones; the investigation says so and uses the real Halley (0.586 AU) as a transfer case. The first comet on a closed orbit, named Halley, is the one the steps use: it comes no closer than 5.79 AU and goes out to 17.84 AU, and its bare-body temperature never reaches the 160 K at which ice turns to gas.',
       'The temperature is a bare-body, uniform-redistribution estimate with a Bond albedo of 0.04 (the emission temperature of the atmosphere kernel); a real nucleus loses energy by sublimation and is not uniform.',
       'The temperature of 275.5 K at 1 AU is the emission temperature of the atmosphere kernel for a Bond albedo of 0.04 and uniform redistribution; the day-side maximum is higher by a factor of 2^(1/4), about 1.19.',
       'The sandbox’s ion and dust tails are drawn from the geometry in js/bodyVisuals.js: the ion tail always away from the Sun, the dust tail lagging along the orbit; their length and brightness are a drawing, not a measurement.',
@@ -1619,7 +1622,7 @@ const CONTENT = {
     ],
     teachingNotes: [
       'The periods are the ones the frames show, from Earth: each is a little shorter than the moon’s true period because Jupiter moves along its own orbit, by the same angle a day for all three, which the combination cancels. The true sidereal periods are 1.7691, 3.5512 and 7.1546 days.',
-      'The frames are synthetic, made from the real positions of the satellite ephemeris JUP365 (JPL Horizons), and the pack covers only Jupiter’s moons: the title says “giants” and the last step says what is not covered.',
+      'The frames are synthetic, made from the real positions of the satellite ephemeris JUP365 (JPL Horizons), and the set covers only Jupiter’s moons: the title says “giants” and the last step says what is not covered.',
       'The combination is a necessary relation. The libration of the Laplace angle is shown, in a model, by When Orbits Lock; it should not be claimed from these frames.',
       'Callisto is not part of the Laplace chain: its period is 2.328 times Ganymede’s. The step says so with the same arithmetic, not by assertion.',
     ],
@@ -1755,8 +1758,10 @@ export const SHADOWS = {
 };
 
 /** The lessons, in catalog order (what js/data/investigations.js spreads). */
+// The catalog order is the order the lessons are written in this file: the
+// registry generator reads it from the text (tools/capability-registries.mjs).
 export default [
-  THE_SCALE_OF_THE_SOLAR_SYSTEM,
   MOONS_OF_THE_GIANTS,
+  THE_SCALE_OF_THE_SOLAR_SYSTEM,
   COMETS_AND_THE_SUN,
 ];

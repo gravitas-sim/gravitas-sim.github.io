@@ -1047,18 +1047,6 @@ export const MANIFEST = [
     objectiveCount: 4,
   },
   {
-    id: 'the-scale-of-the-solar-system',
-    title: 'La escala del sistema solar',
-    subtitle:
-      'Distancias verdaderas del sandbox, el tiempo que tarda la luz y una maqueta en la que la Tierra es una canica',
-    duration: '15-25 min',
-    level: 'Introductory astronomy',
-    thumbnail: 'images/scenarios/solar-system.webp',
-    stepCount: 8,
-    gradedCount: 6,
-    objectiveCount: 4,
-  },
-  {
     id: 'moons-of-the-giants',
     title: 'Las lunas de los gigantes',
     subtitle:
@@ -1068,6 +1056,18 @@ export const MANIFEST = [
     thumbnail: 'images/investigations/moons-of-the-giants.webp',
     stepCount: 10,
     gradedCount: 8,
+    objectiveCount: 4,
+  },
+  {
+    id: 'the-scale-of-the-solar-system',
+    title: 'La escala del sistema solar',
+    subtitle:
+      'Distancias verdaderas del sandbox, el tiempo que tarda la luz y una maqueta en la que la Tierra es una canica',
+    duration: '15-25 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/scenarios/solar-system.webp',
+    stepCount: 8,
+    gradedCount: 6,
     objectiveCount: 4,
   },
   {

@@ -1,0 +1,62 @@
+{
+ "id": "the-scale-of-the-solar-system",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.three-distances.fields.0.unit","AU"],
+    ["steps.three-distances.fields.1.unit","AU"],
+    ["steps.three-distances.fields.2.unit","AU"],
+    ["steps.light-time.fields.0.unit","AU"],
+    ["steps.light-time.fields.1.unit","h"],
+    ["steps.scale-model.fields.0.unit","AU"],
+    ["steps.scale-model.fields.1.unit","m"],
+    ["steps.scale-model.fields.2.unit","km"]
+   ],
+   "numbered": [
+    ["steps.three-distances.fields.0.hint","1.00"],
+    ["steps.three-distances.fields.1.hint","5.20"],
+    ["steps.three-distances.fields.2.hint","30.07"],
+    ["steps.light-time.fields.0.hint","30.07"],
+    ["steps.scale-model.fields.0.hint","30.07"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": []
+  }
+ },
+ "numeric": {
+  "answers": [],
+  "decimals": [
+   [
+    "light-time.hours",
+    2
+   ],
+   [
+    "scale-model.earth_m",
+    1
+   ],
+   [
+    "scale-model.neptune_km",
+    2
+   ]
+  ]
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "three-distances": {
+    "probe": [[{"label":"Earth: distance from the Sun","value":"not on the canvas yet"},{"label":"Jupiter: distance from the Sun","value":"not on the canvas yet"},{"label":"Neptune: distance from the Sun","value":"not on the canvas yet"}],[{"label":"Earth: distance from the Sun","value":"2.84 AU"},{"label":"Jupiter: distance from the Sun","value":"4.40 AU"},{"label":"Neptune: distance from the Sun","value":"4.46 AU"}]],
+    "validate": {"calls":242,"distinct":2,"digest":"55bf9ae621b418ff","samples":[null,{"level":"error","message":"Read the three rows of the readout. If Neptune is not there yet, let the world finish building."}]}
+   },
+   "light-time": {
+    "probe": [[{"label":"Earth: distance from the Sun","value":"not on the canvas yet"},{"label":"Jupiter: distance from the Sun","value":"not on the canvas yet"},{"label":"Neptune: distance from the Sun","value":"not on the canvas yet"}],[{"label":"Earth: distance from the Sun","value":"2.84 AU"},{"label":"Jupiter: distance from the Sun","value":"4.40 AU"},{"label":"Neptune: distance from the Sun","value":"4.46 AU"}]],
+    "validate": {"calls":232,"distinct":2,"digest":"de4e7f9c893b4e02","samples":[null,{"level":"error","message":"Type Neptune’s distance in astronomical units: about 30."}]}
+   },
+   "scale-model": {
+    "validate": {"calls":242,"distinct":2,"digest":"de4e7f9c893b4e02","samples":[null,{"level":"error","message":"Type Neptune’s distance in astronomical units: about 30."}]}
+   }
+  },
+  "es": "same"
+ }
+}

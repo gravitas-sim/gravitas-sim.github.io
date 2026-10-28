@@ -94925,624 +94925,6 @@
    }
   },
   {
-   "id": "the-scale-of-the-solar-system",
-   "title": "The Scale of the Solar System",
-   "lock": {
-    "placement": true,
-    "inspector": true
-   },
-   "steps": [
-    {
-     "sid": "a-picture-you-have-seen",
-     "index": 1,
-     "type": "read",
-     "title": "A picture you have seen",
-     "declares": {
-      "stage": null,
-      "bound": [
-       "sun",
-       "earth",
-       "jupiter",
-       "neptune"
-      ],
-      "roles": [
-       "sun",
-       "earth",
-       "jupiter",
-       "neptune"
-      ]
-     },
-     "kinds": [
-      "scene-declared"
-     ],
-     "actions": [
-      "read"
-     ],
-     "requires": [],
-     "reveal": null,
-     "asks": {
-      "choice": false,
-      "numeric": false,
-      "short": false,
-      "rubric": false,
-      "validated": false
-     },
-     "worldRunning": false,
-     "affordances": {
-      "inspector": "locked",
-      "placement": "locked",
-      "areaSweep": "locked"
-     },
-     "loop": {
-      "declared": "read",
-      "actual": [
-       "read"
-      ],
-      "handTranscribed": false,
-      "mismatch": null
-     },
-     "scene": {
-      "nameMatches": [],
-      "readsSelection": false,
-      "importsFromSelection": false,
-      "engineReads": [],
-      "mutates": [],
-      "eventWatch": null
-     },
-     "instrument": null,
-     "evidence": [],
-     "reset": [
-      "rebuilds: scenario \"Solar System\" seed scale-of-the-solar-system + camera + settings",
-      "lesson locks: placement, inspector"
-     ],
-     "recovery": [
-      "wrong body: the step binds the object by name, so there is none",
-      "reset: rebuilds the scenario on arrival"
-     ]
-    },
-    {
-     "sid": "three-distances",
-     "index": 2,
-     "type": "measure",
-     "title": "Three distances",
-     "declares": {
-      "stage": null,
-      "bound": [
-       "sun",
-       "earth",
-       "jupiter",
-       "neptune"
-      ],
-      "roles": [
-       "sun",
-       "earth",
-       "jupiter",
-       "neptune"
-      ]
-     },
-     "kinds": [
-      "scene-declared",
-      "engine-measurement",
-      "captured-evidence"
-     ],
-     "actions": [
-      "record-values"
-     ],
-     "requires": [],
-     "reveal": null,
-     "asks": {
-      "choice": false,
-      "numeric": false,
-      "short": false,
-      "rubric": false,
-      "validated": true
-     },
-     "worldRunning": false,
-     "affordances": {
-      "inspector": "locked",
-      "placement": "locked",
-      "areaSweep": "locked"
-     },
-     "loop": {
-      "declared": "measure",
-      "actual": [
-       "measure",
-       "interpret"
-      ],
-      "handTranscribed": false,
-      "mismatch": null
-     },
-     "scene": {
-      "nameMatches": [],
-      "readsSelection": false,
-      "importsFromSelection": false,
-      "engineReads": [
-       "bodies"
-      ],
-      "mutates": [],
-      "eventWatch": null
-     },
-     "instrument": null,
-     "evidence": [
-      "notebook-fields"
-     ],
-     "reset": [
-      "lesson locks: placement, inspector"
-     ],
-     "recovery": [
-      "wrong body: the step binds the object by name, so there is none",
-      "missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand",
-      "null result: the probe names what is missing",
-      "ambiguous result: the check says in words how close is close enough"
-     ]
-    },
-    {
-     "sid": "light-time-predict",
-     "index": 3,
-     "type": "predict",
-     "title": "How long does the light take?",
-     "declares": {
-      "stage": null,
-      "bound": [
-       "sun",
-       "earth",
-       "jupiter",
-       "neptune"
-      ],
-      "roles": [
-       "sun",
-       "earth",
-       "jupiter",
-       "neptune"
-      ]
-     },
-     "kinds": [
-      "scene-declared"
-     ],
-     "actions": [
-      "commit-a-prediction"
-     ],
-     "requires": [],
-     "reveal": "light-time",
-     "asks": {
-      "choice": true,
-      "numeric": false,
-      "short": false,
-      "rubric": false,
-      "validated": false
-     },
-     "worldRunning": false,
-     "affordances": {
-      "inspector": "locked",
-      "placement": "locked",
-      "areaSweep": "locked"
-     },
-     "loop": {
-      "declared": "predict",
-      "actual": [
-       "predict",
-       "interpret"
-      ],
-      "handTranscribed": false,
-      "mismatch": null
-     },
-     "scene": {
-      "nameMatches": [],
-      "readsSelection": false,
-      "importsFromSelection": false,
-      "engineReads": [],
-      "mutates": [],
-      "eventWatch": null
-     },
-     "instrument": null,
-     "evidence": [],
-     "reset": [
-      "lesson locks: placement, inspector"
-     ],
-     "recovery": [
-      "wrong body: the step binds the object by name, so there is none"
-     ]
-    },
-    {
-     "sid": "light-time",
-     "index": 4,
-     "type": "measure",
-     "title": "The light time to Neptune",
-     "declares": {
-      "stage": null,
-      "bound": [
-       "sun",
-       "earth",
-       "jupiter",
-       "neptune"
-      ],
-      "roles": [
-       "sun",
-       "earth",
-       "jupiter",
-       "neptune"
-      ]
-     },
-     "kinds": [
-      "scene-declared",
-      "captured-evidence"
-     ],
-     "actions": [
-      "record-values"
-     ],
-     "requires": [],
-     "reveal": null,
-     "asks": {
-      "choice": false,
-      "numeric": false,
-      "short": false,
-      "rubric": false,
-      "validated": true
-     },
-     "worldRunning": false,
-     "affordances": {
-      "inspector": "locked",
-      "placement": "locked",
-      "areaSweep": "locked"
-     },
-     "loop": {
-      "declared": "measure",
-      "actual": [
-       "measure",
-       "interpret"
-      ],
-      "handTranscribed": true,
-      "mismatch": null
-     },
-     "scene": {
-      "nameMatches": [],
-      "readsSelection": false,
-      "importsFromSelection": false,
-      "engineReads": [],
-      "mutates": [],
-      "eventWatch": null
-     },
-     "instrument": null,
-     "evidence": [
-      "notebook-fields"
-     ],
-     "reset": [
-      "lesson locks: placement, inspector"
-     ],
-     "recovery": [
-      "wrong body: the step binds the object by name, so there is none",
-      "missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand",
-      "null result: the probe names what is missing",
-      "ambiguous result: the check says in words how close is close enough"
-     ]
-    },
-    {
-     "sid": "earth-as-a-marble",
-     "index": 5,
-     "type": "predict",
-     "title": "Earth as a marble",
-     "declares": {
-      "stage": null,
-      "bound": [
-       "sun",
-       "earth",
-       "jupiter",
-       "neptune"
-      ],
-      "roles": [
-       "sun",
-       "earth",
-       "jupiter",
-       "neptune"
-      ]
-     },
-     "kinds": [
-      "scene-declared"
-     ],
-     "actions": [
-      "commit-a-prediction"
-     ],
-     "requires": [],
-     "reveal": "scale-model",
-     "asks": {
-      "choice": true,
-      "numeric": false,
-      "short": false,
-      "rubric": false,
-      "validated": false
-     },
-     "worldRunning": false,
-     "affordances": {
-      "inspector": "locked",
-      "placement": "locked",
-      "areaSweep": "locked"
-     },
-     "loop": {
-      "declared": "predict",
-      "actual": [
-       "predict",
-       "interpret"
-      ],
-      "handTranscribed": false,
-      "mismatch": null
-     },
-     "scene": {
-      "nameMatches": [],
-      "readsSelection": false,
-      "importsFromSelection": false,
-      "engineReads": [],
-      "mutates": [],
-      "eventWatch": null
-     },
-     "instrument": null,
-     "evidence": [],
-     "reset": [
-      "lesson locks: placement, inspector"
-     ],
-     "recovery": [
-      "wrong body: the step binds the object by name, so there is none"
-     ]
-    },
-    {
-     "sid": "scale-model",
-     "index": 6,
-     "type": "measure",
-     "title": "Where Neptune is in the marble model",
-     "declares": {
-      "stage": null,
-      "bound": [
-       "sun",
-       "earth",
-       "jupiter",
-       "neptune"
-      ],
-      "roles": [
-       "sun",
-       "earth",
-       "jupiter",
-       "neptune"
-      ]
-     },
-     "kinds": [
-      "scene-declared",
-      "captured-evidence"
-     ],
-     "actions": [
-      "record-values"
-     ],
-     "requires": [],
-     "reveal": null,
-     "asks": {
-      "choice": false,
-      "numeric": false,
-      "short": false,
-      "rubric": false,
-      "validated": true
-     },
-     "worldRunning": false,
-     "affordances": {
-      "inspector": "locked",
-      "placement": "locked",
-      "areaSweep": "locked"
-     },
-     "loop": {
-      "declared": "measure",
-      "actual": [
-       "measure",
-       "interpret"
-      ],
-      "handTranscribed": true,
-      "mismatch": null
-     },
-     "scene": {
-      "nameMatches": [],
-      "readsSelection": false,
-      "importsFromSelection": false,
-      "engineReads": [],
-      "mutates": [],
-      "eventWatch": null
-     },
-     "instrument": null,
-     "evidence": [
-      "notebook-fields"
-     ],
-     "reset": [
-      "lesson locks: placement, inspector"
-     ],
-     "recovery": [
-      "wrong body: the step binds the object by name, so there is none",
-      "missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand",
-      "ambiguous result: the check says in words how close is close enough"
-     ]
-    },
-    {
-     "sid": "what-a-diagram-gets-wrong",
-     "index": 7,
-     "type": "question",
-     "title": "What does a textbook diagram get wrong?",
-     "declares": {
-      "stage": null,
-      "bound": [
-       "sun",
-       "earth",
-       "jupiter",
-       "neptune"
-      ],
-      "roles": [
-       "sun",
-       "earth",
-       "jupiter",
-       "neptune"
-      ]
-     },
-     "kinds": [
-      "scene-declared"
-     ],
-     "actions": [
-      "choose-an-option"
-     ],
-     "requires": [],
-     "reveal": null,
-     "asks": {
-      "choice": true,
-      "numeric": false,
-      "short": false,
-      "rubric": false,
-      "validated": false
-     },
-     "worldRunning": false,
-     "affordances": {
-      "inspector": "locked",
-      "placement": "locked",
-      "areaSweep": "locked"
-     },
-     "loop": {
-      "declared": "interpret",
-      "actual": [
-       "interpret"
-      ],
-      "handTranscribed": false,
-      "mismatch": null
-     },
-     "scene": {
-      "nameMatches": [],
-      "readsSelection": false,
-      "importsFromSelection": false,
-      "engineReads": [],
-      "mutates": [],
-      "eventWatch": null
-     },
-     "instrument": null,
-     "evidence": [],
-     "reset": [
-      "lesson locks: placement, inspector"
-     ],
-     "recovery": [
-      "wrong body: the step binds the object by name, so there is none"
-     ]
-    },
-    {
-     "sid": "what-you-worked-out",
-     "index": 8,
-     "type": "read",
-     "title": "What you worked out",
-     "declares": {
-      "stage": null,
-      "bound": [
-       "sun",
-       "earth",
-       "jupiter",
-       "neptune"
-      ],
-      "roles": [
-       "sun",
-       "earth",
-       "jupiter",
-       "neptune"
-      ]
-     },
-     "kinds": [
-      "scene-declared"
-     ],
-     "actions": [
-      "read"
-     ],
-     "requires": [],
-     "reveal": null,
-     "asks": {
-      "choice": false,
-      "numeric": false,
-      "short": false,
-      "rubric": false,
-      "validated": false
-     },
-     "worldRunning": false,
-     "affordances": {
-      "inspector": "locked",
-      "placement": "locked",
-      "areaSweep": "locked"
-     },
-     "loop": {
-      "declared": "read",
-      "actual": [
-       "read"
-      ],
-      "handTranscribed": false,
-      "mismatch": null
-     },
-     "scene": {
-      "nameMatches": [],
-      "readsSelection": false,
-      "importsFromSelection": false,
-      "engineReads": [],
-      "mutates": [],
-      "eventWatch": null
-     },
-     "instrument": null,
-     "evidence": [],
-     "reset": [
-      "lesson locks: placement, inspector"
-     ],
-     "recovery": [
-      "wrong body: the step binds the object by name, so there is none"
-     ]
-    }
-   ],
-   "loops": [
-    {
-     "predict": "light-time-predict",
-     "predictCollects": true,
-     "heldUntil": "light-time",
-     "experiment": [],
-     "measure": [
-      "light-time"
-     ],
-     "evidence": [
-      "light-time"
-     ],
-     "interpret": "light-time",
-     "measuredBeforeAnswering": true,
-     "explained": false,
-     "answeredByTheExperiment": true,
-     "closed": true,
-     "complete": true
-    },
-    {
-     "predict": "earth-as-a-marble",
-     "predictCollects": true,
-     "heldUntil": "scale-model",
-     "experiment": [],
-     "measure": [
-      "scale-model"
-     ],
-     "evidence": [
-      "scale-model"
-     ],
-     "interpret": "scale-model",
-     "measuredBeforeAnswering": true,
-     "explained": false,
-     "answeredByTheExperiment": true,
-     "closed": true,
-     "complete": true
-    }
-   ],
-   "totals": {
-    "steps": 8,
-    "declared": 8,
-    "student": 0,
-    "engine": 1,
-    "model": 0,
-    "data": 0,
-    "diagram": 0,
-    "evidence": 3,
-    "computation": 0,
-    "declaredButInert": 8,
-    "prose": 0,
-    "mismatched": 0,
-    "rebuilds": 1
-   }
-  },
-  {
    "id": "moons-of-the-giants",
    "title": "Moons of the Giants",
    "lock": {
@@ -96364,6 +95746,624 @@
     "prose": 0,
     "mismatched": 0,
     "rebuilds": 0
+   }
+  },
+  {
+   "id": "the-scale-of-the-solar-system",
+   "title": "The Scale of the Solar System",
+   "lock": {
+    "placement": true,
+    "inspector": true
+   },
+   "steps": [
+    {
+     "sid": "a-picture-you-have-seen",
+     "index": 1,
+     "type": "read",
+     "title": "A picture you have seen",
+     "declares": {
+      "stage": null,
+      "bound": [
+       "sun",
+       "earth",
+       "jupiter",
+       "neptune"
+      ],
+      "roles": [
+       "sun",
+       "earth",
+       "jupiter",
+       "neptune"
+      ]
+     },
+     "kinds": [
+      "scene-declared"
+     ],
+     "actions": [
+      "read"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "read"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "rebuilds: scenario \"Solar System\" seed scale-of-the-solar-system + camera + settings",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the step binds the object by name, so there is none",
+      "reset: rebuilds the scenario on arrival"
+     ]
+    },
+    {
+     "sid": "three-distances",
+     "index": 2,
+     "type": "measure",
+     "title": "Three distances",
+     "declares": {
+      "stage": null,
+      "bound": [
+       "sun",
+       "earth",
+       "jupiter",
+       "neptune"
+      ],
+      "roles": [
+       "sun",
+       "earth",
+       "jupiter",
+       "neptune"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "engine-measurement",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [
+       "bodies"
+      ],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the step binds the object by name, so there is none",
+      "missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand",
+      "null result: the probe names what is missing",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "light-time-predict",
+     "index": 3,
+     "type": "predict",
+     "title": "How long does the light take?",
+     "declares": {
+      "stage": null,
+      "bound": [
+       "sun",
+       "earth",
+       "jupiter",
+       "neptune"
+      ],
+      "roles": [
+       "sun",
+       "earth",
+       "jupiter",
+       "neptune"
+      ]
+     },
+     "kinds": [
+      "scene-declared"
+     ],
+     "actions": [
+      "commit-a-prediction"
+     ],
+     "requires": [],
+     "reveal": "light-time",
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "predict",
+      "actual": [
+       "predict",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the step binds the object by name, so there is none"
+     ]
+    },
+    {
+     "sid": "light-time",
+     "index": 4,
+     "type": "measure",
+     "title": "The light time to Neptune",
+     "declares": {
+      "stage": null,
+      "bound": [
+       "sun",
+       "earth",
+       "jupiter",
+       "neptune"
+      ],
+      "roles": [
+       "sun",
+       "earth",
+       "jupiter",
+       "neptune"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": true,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the step binds the object by name, so there is none",
+      "missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand",
+      "null result: the probe names what is missing",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "earth-as-a-marble",
+     "index": 5,
+     "type": "predict",
+     "title": "Earth as a marble",
+     "declares": {
+      "stage": null,
+      "bound": [
+       "sun",
+       "earth",
+       "jupiter",
+       "neptune"
+      ],
+      "roles": [
+       "sun",
+       "earth",
+       "jupiter",
+       "neptune"
+      ]
+     },
+     "kinds": [
+      "scene-declared"
+     ],
+     "actions": [
+      "commit-a-prediction"
+     ],
+     "requires": [],
+     "reveal": "scale-model",
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "predict",
+      "actual": [
+       "predict",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the step binds the object by name, so there is none"
+     ]
+    },
+    {
+     "sid": "scale-model",
+     "index": 6,
+     "type": "measure",
+     "title": "Where Neptune is in the marble model",
+     "declares": {
+      "stage": null,
+      "bound": [
+       "sun",
+       "earth",
+       "jupiter",
+       "neptune"
+      ],
+      "roles": [
+       "sun",
+       "earth",
+       "jupiter",
+       "neptune"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": true,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the step binds the object by name, so there is none",
+      "missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "what-a-diagram-gets-wrong",
+     "index": 7,
+     "type": "question",
+     "title": "What does a textbook diagram get wrong?",
+     "declares": {
+      "stage": null,
+      "bound": [
+       "sun",
+       "earth",
+       "jupiter",
+       "neptune"
+      ],
+      "roles": [
+       "sun",
+       "earth",
+       "jupiter",
+       "neptune"
+      ]
+     },
+     "kinds": [
+      "scene-declared"
+     ],
+     "actions": [
+      "choose-an-option"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the step binds the object by name, so there is none"
+     ]
+    },
+    {
+     "sid": "what-you-worked-out",
+     "index": 8,
+     "type": "read",
+     "title": "What you worked out",
+     "declares": {
+      "stage": null,
+      "bound": [
+       "sun",
+       "earth",
+       "jupiter",
+       "neptune"
+      ],
+      "roles": [
+       "sun",
+       "earth",
+       "jupiter",
+       "neptune"
+      ]
+     },
+     "kinds": [
+      "scene-declared"
+     ],
+     "actions": [
+      "read"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "read"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the step binds the object by name, so there is none"
+     ]
+    }
+   ],
+   "loops": [
+    {
+     "predict": "light-time-predict",
+     "predictCollects": true,
+     "heldUntil": "light-time",
+     "experiment": [],
+     "measure": [
+      "light-time"
+     ],
+     "evidence": [
+      "light-time"
+     ],
+     "interpret": "light-time",
+     "measuredBeforeAnswering": true,
+     "explained": false,
+     "answeredByTheExperiment": true,
+     "closed": true,
+     "complete": true
+    },
+    {
+     "predict": "earth-as-a-marble",
+     "predictCollects": true,
+     "heldUntil": "scale-model",
+     "experiment": [],
+     "measure": [
+      "scale-model"
+     ],
+     "evidence": [
+      "scale-model"
+     ],
+     "interpret": "scale-model",
+     "measuredBeforeAnswering": true,
+     "explained": false,
+     "answeredByTheExperiment": true,
+     "closed": true,
+     "complete": true
+    }
+   ],
+   "totals": {
+    "steps": 8,
+    "declared": 8,
+    "student": 0,
+    "engine": 1,
+    "model": 0,
+    "data": 0,
+    "diagram": 0,
+    "evidence": 3,
+    "computation": 0,
+    "declaredButInert": 8,
+    "prose": 0,
+    "mismatched": 0,
+    "rebuilds": 1
    }
   },
   {

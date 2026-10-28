@@ -1038,18 +1038,6 @@ export const MANIFEST = [
     objectiveCount: 4,
   },
   {
-    id: 'the-scale-of-the-solar-system',
-    title: 'The Scale of the Solar System',
-    subtitle:
-      'True distances from the sandbox, the light travel time, and a scale model in which Earth is a marble',
-    duration: '15-25 min',
-    level: 'Introductory astronomy',
-    thumbnail: 'images/scenarios/solar-system.webp',
-    stepCount: 8,
-    gradedCount: 6,
-    objectiveCount: 4,
-  },
-  {
     id: 'moons-of-the-giants',
     title: 'Moons of the Giants',
     subtitle:
@@ -1059,6 +1047,18 @@ export const MANIFEST = [
     thumbnail: 'images/investigations/moons-of-the-giants.webp',
     stepCount: 10,
     gradedCount: 8,
+    objectiveCount: 4,
+  },
+  {
+    id: 'the-scale-of-the-solar-system',
+    title: 'The Scale of the Solar System',
+    subtitle:
+      'True distances from the sandbox, the light travel time, and a scale model in which Earth is a marble',
+    duration: '15-25 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/scenarios/solar-system.webp',
+    stepCount: 8,
+    gradedCount: 6,
     objectiveCount: 4,
   },
   {
