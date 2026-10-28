@@ -17,7 +17,7 @@
     },
     "collectingArea": {
       "v": 7854.0,
-      "u": "m2",
+      "u": "m^2",
       "s": "gbt-performance",
       "at": "Planning Observations",
       "n": "the guide gives the dish area, not a diameter"

@@ -191,7 +191,7 @@ export function runLegs(table, thr) {
       } else if (ins.kind === 'receiver') {
         if (t.collectingArea && t.aperture) {
           const pred = Math.PI * (inUnit(t.aperture, 'm') / 2) ** 2;
-          const e = rel(pred, inUnit(t.collectingArea, 'm2'));
+          const e = rel(pred, t.collectingArea.v);
           const b = thr.oracle['o3.radio-area'].bound.relative;
           add(
             'o3.radio-area',

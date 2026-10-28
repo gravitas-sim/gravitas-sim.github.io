@@ -9,7 +9,7 @@
     "aperture": {
       "v": 0.4,
       "u": "m",
-      "s": "gravitas-default",
+      "s": "teaching-default",
       "at": "DEFAULT_DETECTOR comment"
     }
   },
@@ -21,37 +21,37 @@
       "sensorWidth": {
         "v": 48,
         "u": "pix",
-        "s": "gravitas-default",
+        "s": "teaching-default",
         "at": "DEFAULT_DETECTOR.width"
       },
       "sensorHeight": {
         "v": 48,
         "u": "pix",
-        "s": "gravitas-default",
+        "s": "teaching-default",
         "at": "DEFAULT_DETECTOR.height"
       },
       "gain": {
         "v": 1.5,
         "u": "electron/count",
-        "s": "gravitas-default",
+        "s": "teaching-default",
         "at": "DEFAULT_DETECTOR.gain"
       },
       "readNoise": {
         "v": 8,
         "u": "electron",
-        "s": "gravitas-default",
+        "s": "teaching-default",
         "at": "DEFAULT_DETECTOR.readNoise"
       },
       "darkCurrent": {
         "v": 0.1,
         "u": "electron/s/pix",
-        "s": "gravitas-default",
+        "s": "teaching-default",
         "at": "DEFAULT_DETECTOR.darkRate"
       },
       "fullWell": {
         "v": 50000,
         "u": "electron",
-        "s": "gravitas-default",
+        "s": "teaching-default",
         "at": "DEFAULT_DETECTOR.fullWell"
       }
     }

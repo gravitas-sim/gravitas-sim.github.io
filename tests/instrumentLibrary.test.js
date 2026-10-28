@@ -84,7 +84,7 @@ describe('structural rows', () => {
         expect(SOURCES[m.slice(5, -1)].kind).toBe('typical');
     }
     for (const f of realFacilities())
-      expect(JSON.stringify(f)).not.toContain('gravitas-default');
+      expect(JSON.stringify(f)).not.toContain('teaching-default');
   });
 
   test('s3, s4, s5: the whole table validates (units, citations, absence)', () => {
@@ -118,7 +118,7 @@ describe('structural rows', () => {
         encoding: 'utf8',
       }
     );
-    expect(out).toMatch(/is current/);
+    expect(out).toMatch(/are current/);
   });
 });
 
@@ -178,7 +178,7 @@ describe('refusals (r1 to r8)', () => {
     f.telescope.aperture.s = 'harbeck2024';
     mentions(f, /typical entry but cites a real source/);
     const g = base();
-    g.telescope.aperture.s = 'gravitas-default';
+    g.telescope.aperture.s = 'teaching-default';
     mentions(g, /project convention in a real facility/);
   });
   test('r8: an unknown parameter, and a missing site, are refused', () => {
@@ -206,7 +206,9 @@ describe('refusals (r1 to r8)', () => {
     expect(unitSignature('electron/s/pix')).toBe('electrons/time/pixel');
     expect(unitSignature('mag/arcsec2')).toBe('magnitude/solid-angle');
     expect(unitSignature('e-/ADU')).toBeNull();
-    for (const id of ['electron', 'm2', 'deg2', 'airmass'])
+    expect(unitSignature('m^2')).toBe('length^2');
+    expect(unitSignature('furlong^2')).toBeNull();
+    for (const id of ['electron', 'deg2', 'airmass'])
       expect(UNITS[id].symbol).toBeTruthy();
   });
 });

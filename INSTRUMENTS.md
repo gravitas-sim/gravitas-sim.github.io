@@ -40,7 +40,7 @@ Completeness is the fields stated out of the fields the class is expected to car
 | `gbt-instruments` | GBT instruments (Green Bank Observatory) (Green Bank Observatory, 2026) | greenbankobservatory.org/portal/gbt/instruments | 2026-10-28 |
 | `gbt-performance` | Planning Observations: a guide for planning observations (GBT performance) (Green Bank Observatory, 2009) | gb.nrao.edu/GBT/Performance (content last revised 2009-11-01) | 2026-10-28 |
 | `boothroyd2011` | Accurate Galactic 21-cm HI measurements with the NRAO Green Bank Telescope (Boothroyd, A. I., Blagrave, K., Lockman, F. J., et al., 2011) | arXiv:1110.1765 | 2026-10-28 |
-| `gravitas-default` | Gravitas teaching defaults (Gravitas, 2026) | js/kernels/detector/frame.js DEFAULT_DETECTOR | 2026-10-28 |
+| `teaching-default` | Gravitas teaching defaults (Gravitas, 2026) | js/kernels/detector/frame.js DEFAULT_DETECTOR | 2026-10-28 |
 
 <!-- instruments:end -->
 
@@ -60,7 +60,7 @@ Each number in `tools/instruments/*.json` is `{ "v", "u", "s" }` plus optional
 | Field | Meaning |
 |---|---|
 | `v` | a finite number, or `[low, high]` for a range the source states |
-| `u` | a unit of `js/units/registry.js`, or registry units joined by `/` (`arcsec/pix`, `electron/count`, `electron/s/pix`, `mag/arcsec2`); its dimension is the parameter's |
+| `u` | a unit of `js/units/registry.js`, or registry units joined by `/`, with a whole power where needed (`m^2`, `arcsec/pix`, `electron/count`, `electron/s/pix`, `mag/arcsec2`); its dimension is the parameter's |
 | `s` | the source id, in `sources.json` |
 | `at` | where in the source (a table, a section) |
 | `q` | a qualifier: `typical`, `upper`, `approx`, `assumed`, `estimated`, `inferred`, `median`, `effective`; the source's own word, never ours |
@@ -68,7 +68,7 @@ Each number in `tools/instruments/*.json` is `{ "v", "u", "s" }` plus optional
 
 A text value (a filter list) is `{ "t", "s" }`. A value is stored in the unit the
 source uses; the adapters convert by registry factors and refuse a unit they do
-not take. The registry gained four units for this: `electron`, `m2`, `deg2` and
+not take. The registry gained three units for this: `electron`, `deg2` and
 `airmass`.
 
 Each source in `sources.json` has a kind, a title, authors, a year, a reference,

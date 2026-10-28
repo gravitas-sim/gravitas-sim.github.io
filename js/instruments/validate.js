@@ -22,9 +22,10 @@
 // Pure: no DOM, no I/O. Browser and Node alike.
 // =============================================================================
 
+import { ID_INSTRUMENT } from '../names.js';
 import { UNITS, unitIdOf } from '../units/registry.js';
 
-export const FORMAT = 'gravitas.instrument';
+export const FORMAT = ID_INSTRUMENT;
 export const FORMAT_VERSION = 1;
 
 export const CLASSES = Object.freeze([
@@ -66,7 +67,7 @@ export const PARAMS = Object.freeze({
     obstructionDiameter: P('length', POS),
     secondaryDiameter: P('length', POS),
     focalRatio: P('ratio', POS),
-    collectingArea: P('area', POS),
+    collectingArea: P('length^2', POS),
   }),
   ground: Object.freeze({
     latitude: P('angle', { min: -90, max: 90 }),
@@ -175,10 +176,19 @@ export function unitSignature(u) {
   if (typeof u !== 'string') return null;
   const whole = unitIdOf(u);
   if (whole !== undefined) return UNITS[whole].dim;
-  if (!u.includes('/')) return null;
-  const parts = u.split('/').map(p => unitIdOf(p));
-  if (parts.some(p => p === undefined)) return null;
-  return parts.map(p => UNITS[p].dim).join('/');
+  // Registry units joined by '/', each with an optional whole power: 'm^2'.
+  const parts = u.split('/').map(p => {
+    const m = /^(.+?)(?:\^(\d))?$/.exec(p);
+    const id = m && unitIdOf(m[1]);
+    return id === undefined || id === null
+      ? null
+      : m[2]
+        ? `${UNITS[id].dim}^${m[2]}`
+        : UNITS[id].dim;
+  });
+  if (parts.some(p => p === null) || (parts.length === 1 && !u.includes('^')))
+    return null;
+  return parts.join('/');
 }
 
 /** Every problem with one source record. */

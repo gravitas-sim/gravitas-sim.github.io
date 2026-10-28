@@ -24,6 +24,7 @@
 // Pure: no DOM.
 // =============================================================================
 
+import { ID_OBSERVING_SETUP } from '../names.js';
 import {
   InstrumentTableError,
   getInstrument,
@@ -136,7 +137,7 @@ export function imagerSetupOf(id, opts) {
       field: 'sensorWidth',
     });
   return {
-    format: 'gravitas.observing-setup',
+    format: ID_OBSERVING_SETUP,
     formatVersion: 1,
     seed,
     ...(title ? { title } : {}),

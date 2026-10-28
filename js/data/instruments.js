@@ -113,7 +113,7 @@ export const SOURCES = {
     rights:
       'Numerical specifications stated in the paper, credited; no text, table or figure is reproduced. The licence of this arXiv paper was not read; the basis is bare facts with attribution (D-R10-209-01).',
   },
-  'gravitas-default': {
+  'teaching-default': {
     kind: 'typical',
     title: 'Gravitas teaching defaults',
     authors: 'Gravitas',
@@ -959,7 +959,7 @@ export const FACILITIES = [
       },
       collectingArea: {
         v: 7854,
-        u: 'm2',
+        u: 'm^2',
         s: 'gbt-performance',
         at: 'Planning Observations',
         n: 'the guide gives the dish area, not a diameter',
@@ -1044,7 +1044,7 @@ export const FACILITIES = [
       aperture: {
         v: 0.4,
         u: 'm',
-        s: 'gravitas-default',
+        s: 'teaching-default',
         at: 'DEFAULT_DETECTOR comment',
       },
     },
@@ -1056,37 +1056,37 @@ export const FACILITIES = [
         sensorWidth: {
           v: 48,
           u: 'pix',
-          s: 'gravitas-default',
+          s: 'teaching-default',
           at: 'DEFAULT_DETECTOR.width',
         },
         sensorHeight: {
           v: 48,
           u: 'pix',
-          s: 'gravitas-default',
+          s: 'teaching-default',
           at: 'DEFAULT_DETECTOR.height',
         },
         gain: {
           v: 1.5,
           u: 'electron/count',
-          s: 'gravitas-default',
+          s: 'teaching-default',
           at: 'DEFAULT_DETECTOR.gain',
         },
         readNoise: {
           v: 8,
           u: 'electron',
-          s: 'gravitas-default',
+          s: 'teaching-default',
           at: 'DEFAULT_DETECTOR.readNoise',
         },
         darkCurrent: {
           v: 0.1,
           u: 'electron/s/pix',
-          s: 'gravitas-default',
+          s: 'teaching-default',
           at: 'DEFAULT_DETECTOR.darkRate',
         },
         fullWell: {
           v: 50000,
           u: 'electron',
-          s: 'gravitas-default',
+          s: 'teaching-default',
           at: 'DEFAULT_DETECTOR.fullWell',
         },
       },
