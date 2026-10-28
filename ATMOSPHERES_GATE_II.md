@@ -59,6 +59,8 @@ transmission slice's A (see 7). They are listed as requests in the fixture (`dat
 
 **Amendment AM1 (before any measurement).** Re-deriving `E1` found that its Rayleigh-Jeans sub-bound, written at `lambda T = 1e5` micron K, cannot be met by any code: there `x = h c/(lambda k T) = 0.144` and the Rayleigh-Jeans form is wrong by `x/2 = 7.2` percent. It is restated at `lambda T = 1e7` micron K (`x/2 = 7.2e-4`). The first commit's text is in the branch history; no output of `E1` had been inspected; the fixture's `amendments` records it.
 
+**Amendment AM2 (after the first harness run, before any recorded verdict).** The claim rule's committed positive controls caught a defect in the committed Spanish patterns: JavaScript's ASCII word boundary does not treat an accented letter as a letter, so the Spanish bad control about detecting water was not caught (11 of 12 bad controls). The Spanish patterns now use Unicode-aware boundaries and the flags are `iu`; the bound (12 of 12, 6 of 6, no violation) is unchanged. Unlike AM1 this was made after one measurement of `C1`, so it is listed among the rulings Carl is asked for.
+
 **Analytic cases** (`X1`, `E1` to `E4`): for a frozen exponential `tau = tau_0 exp(-x/H)` the depth integral has the closed form
 `H [E1(tau_0) + ln tau_0 + gamma]`; the full-spectrum Planck integral is `sigma T^4/pi`; the slab flux is `B_p` at `tau = 0` and
 `B_skin` as `tau` grows; the Lambert function is 1 at `alpha = 0`, `1/pi` at 90 degrees, 0 at 180 degrees, with phase
