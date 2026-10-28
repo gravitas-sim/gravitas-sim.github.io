@@ -6,13 +6,13 @@ import { bulkOf, equilibriumOf } from './bulk.js';
 
 /** The quantities a comparison offers: id, label, unit, how to read it from a row. */
 export const QUANTITIES = Object.freeze([
-  { id: 'density', unit: 'kg/m3', pick: r => r.density },
-  { id: 'gravity', unit: 'm/s2', pick: r => r.gravity },
-  { id: 'escapeSpeed', unit: 'm/s', pick: r => r.escapeSpeed },
-  { id: 'mass', unit: 'kg', pick: r => r.mass },
+  { id: 'density', units: 'kg/m3', pick: r => r.density },
+  { id: 'gravity', units: 'm/s2', pick: r => r.gravity },
+  { id: 'escapeSpeed', units: 'm/s', pick: r => r.escapeSpeed },
+  { id: 'mass', units: 'kg', pick: r => r.mass },
   {
     id: 'temperature',
-    unit: 'K',
+    units: 'K',
     pick: r => ({ value: r.temperature, sigma: null }),
   },
 ]);

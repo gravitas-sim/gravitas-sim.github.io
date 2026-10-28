@@ -93,7 +93,6 @@ export const UNITS = Object.freeze({
   arcsec2: { dim: 'solid-angle', factor: 1, symbol: 'arcsec²' },
 
   'm/s': { dim: 'velocity', factor: 1, symbol: 'm/s' },
-  'm/s2': { dim: 'acceleration', factor: 1, symbol: 'm/s²' },
   'km/h': { dim: 'velocity', factor: 1 / 3.6, symbol: 'km/h' },
   'km/s': { dim: 'velocity', factor: 1e3, symbol: 'km/s' },
   'AU/yr': {
