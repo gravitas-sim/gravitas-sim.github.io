@@ -1,0 +1,103 @@
+{
+  "format": "gravitas.instrument-sources/1",
+  "sources": {
+    "harbeck2024": {
+      "kind": "paper",
+      "title": "An upgraded 0.4-meter telescope fleet for Las Cumbres Observatory's Educational and Science Programs",
+      "authors": "Harbeck, D.-R., Taylor, B., Kirby, A., et al.",
+      "year": 2024,
+      "ref": "arXiv:2405.10408v1",
+      "url": "https://arxiv.org/abs/2405.10408",
+      "retrieved": "2026-10-28",
+      "method": "Read through a summarising web fetch on the retrieval date; a value is as that fetch reported it from the source and was not re-read in the original typeset document.",
+      "rights": "Numerical specifications stated in the paper, credited; no text, table or figure is reproduced. The licence of this arXiv paper was not read; the basis is bare facts with attribution (D-R10-209-01)."
+    },
+    "brown2013": {
+      "kind": "paper",
+      "title": "Las Cumbres Observatory Global Telescope Network",
+      "authors": "Brown, T. M., Baliber, N., Bianco, F. B., et al.",
+      "year": 2013,
+      "ref": "PASP 125, 1031; arXiv:1305.2437",
+      "url": "https://arxiv.org/abs/1305.2437",
+      "retrieved": "2026-10-28",
+      "method": "Read through a summarising web fetch on the retrieval date; a value is as that fetch reported it from the source and was not re-read in the original typeset document.",
+      "rights": "Numerical specifications stated in the paper, credited; no text, table or figure is reproduced. The licence of this arXiv paper was not read; the basis is bare facts with attribution (D-R10-209-01)."
+    },
+    "lco-sinistro": {
+      "kind": "instrument-page",
+      "title": "Sinistro (Las Cumbres Observatory instrument page)",
+      "authors": "Las Cumbres Observatory",
+      "year": 2026,
+      "ref": "lco.global/observatory/instruments/sinistro",
+      "url": "https://lco.global/observatory/instruments/sinistro",
+      "retrieved": "2026-10-28",
+      "method": "Read through a summarising web fetch on the retrieval date; a value is as that fetch reported it from the source and was not re-read in the original typeset document.",
+      "rights": "Numerical specifications stated on the page, credited; no text, table or figure is reproduced. The page's terms were not read beyond its public availability; the basis is bare facts with attribution (D-R10-209-01)."
+    },
+    "ricker2015": {
+      "kind": "paper",
+      "title": "The Transiting Exoplanet Survey Satellite",
+      "authors": "Ricker, G. R., Winn, J. N., Vanderspek, R., et al.",
+      "year": 2015,
+      "ref": "JATIS 1, 014003; arXiv:1406.0151",
+      "url": "https://arxiv.org/abs/1406.0151",
+      "retrieved": "2026-10-28",
+      "method": "Read through a summarising web fetch on the retrieval date; a value is as that fetch reported it from the source and was not re-read in the original typeset document.",
+      "rights": "Numerical specifications stated in the paper, credited; no text, table or figure is reproduced. The licence of this arXiv paper was not read; the basis is bare facts with attribution (D-R10-209-01)."
+    },
+    "ivezic2019": {
+      "kind": "paper",
+      "title": "LSST: From Science Drivers to Reference Design and Anticipated Data Products",
+      "authors": "Ivezić, Ž., Kahn, S. M., Tyson, J. A., et al.",
+      "year": 2019,
+      "ref": "ApJ 873, 111; arXiv:0805.2366",
+      "url": "https://arxiv.org/abs/0805.2366",
+      "retrieved": "2026-10-28",
+      "method": "Read through a summarising web fetch on the retrieval date; a value is as that fetch reported it from the source and was not re-read in the original typeset document.",
+      "rights": "Numerical specifications stated in the paper, credited; no text, table or figure is reproduced. The licence of this arXiv paper was not read; the basis is bare facts with attribution (D-R10-209-01)."
+    },
+    "gbt-instruments": {
+      "kind": "instrument-page",
+      "title": "GBT instruments (Green Bank Observatory)",
+      "authors": "Green Bank Observatory",
+      "year": 2026,
+      "ref": "greenbankobservatory.org/portal/gbt/instruments",
+      "url": "https://greenbankobservatory.org/portal/gbt/instruments",
+      "retrieved": "2026-10-28",
+      "method": "Read through a summarising web fetch on the retrieval date; a value is as that fetch reported it from the source and was not re-read in the original typeset document.",
+      "rights": "Numerical specifications stated on the page, credited; no text, table or figure is reproduced. The page's terms were not read beyond its public availability; the basis is bare facts with attribution (D-R10-209-01)."
+    },
+    "gbt-performance": {
+      "kind": "instrument-page",
+      "title": "Planning Observations: a guide for planning observations (GBT performance)",
+      "authors": "Green Bank Observatory",
+      "year": 2009,
+      "ref": "gb.nrao.edu/GBT/Performance (content last revised 2009-11-01)",
+      "url": "https://www.gb.nrao.edu/GBT/Performance",
+      "retrieved": "2026-10-28",
+      "method": "Read through a summarising web fetch on the retrieval date; a value is as that fetch reported it from the source and was not re-read in the original typeset document.",
+      "rights": "Numerical specifications stated on the page, credited; no text, table or figure is reproduced. The page's terms were not read beyond its public availability; the basis is bare facts with attribution (D-R10-209-01)."
+    },
+    "boothroyd2011": {
+      "kind": "paper",
+      "title": "Accurate Galactic 21-cm HI measurements with the NRAO Green Bank Telescope",
+      "authors": "Boothroyd, A. I., Blagrave, K., Lockman, F. J., et al.",
+      "year": 2011,
+      "ref": "arXiv:1110.1765",
+      "url": "https://arxiv.org/abs/1110.1765",
+      "retrieved": "2026-10-28",
+      "method": "Read through a summarising web fetch on the retrieval date; a value is as that fetch reported it from the source and was not re-read in the original typeset document.",
+      "rights": "Numerical specifications stated in the paper, credited; no text, table or figure is reproduced. The licence of this arXiv paper was not read; the basis is bare facts with attribution (D-R10-209-01)."
+    },
+    "gravitas-default": {
+      "kind": "typical",
+      "title": "Gravitas teaching defaults",
+      "authors": "Gravitas",
+      "year": 2026,
+      "ref": "js/kernels/detector/frame.js DEFAULT_DETECTOR",
+      "retrieved": "2026-10-28",
+      "method": "The values the detector lab already uses; a convention of this project, not a measurement of any instrument.",
+      "rights": "Gravitas own convention; not a third-party source."
+    }
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "id": "tess",
+  "class": "space",
+  "typical": false,
+  "name": "TESS (one of four identical cameras)",
+  "note": "The design as described before launch (Phase B, 2014). Gain, dark current and a zero point are not stated in the paper and are absent.",
+  "site": "tess-orbit",
+  "telescope": {
+    "name": "TESS wide-field camera",
+    "aperture": {
+      "v": 0.105,
+      "u": "m",
+      "s": "ricker2015",
+      "at": "Sec. 4.1, Table 1",
+      "n": "entrance pupil diameter"
+    },
+    "focalRatio": {
+      "v": 1.4,
+      "u": "",
+      "s": "ricker2015",
+      "at": "Sec. 4.1, Table 1"
+    }
+  },
+  "instruments": [
+    {
+      "id": "ccd-camera",
+      "kind": "imager",
+      "name": "Four CCID-80 CCDs per camera",
+      "pixelSize": {
+        "v": 15,
+        "u": "um",
+        "s": "ricker2015",
+        "at": "Sec. 4.2"
+      },
+      "pixelScale": {
+        "v": 0.35,
+        "u": "arcmin/pix",
+        "s": "ricker2015",
+        "at": "Sec. 4.1, Table 1",
+        "n": "the paper: 15 um (one pixel or 0.35 arcmin)"
+      },
+      "sensorWidth": {
+        "v": 2048,
+        "u": "pix",
+        "s": "ricker2015",
+        "at": "Sec. 4.2",
+        "n": "each of four devices images 2048 x 2048 pixels"
+      },
+      "sensorHeight": {
+        "v": 2048,
+        "u": "pix",
+        "s": "ricker2015",
+        "at": "Sec. 4.2"
+      },
+      "sensorCount": {
+        "v": 4,
+        "u": "count",
+        "s": "ricker2015",
+        "at": "Sec. 4.2",
+        "n": "abutted into an effective 4096 x 4096 array"
+      },
+      "fieldWidth": {
+        "v": 24,
+        "u": "deg",
+        "s": "ricker2015",
+        "at": "Sec. 4.1, Table 1",
+        "n": "per camera"
+      },
+      "fieldHeight": {
+        "v": 24,
+        "u": "deg",
+        "s": "ricker2015",
+        "at": "Sec. 4.1, Table 1",
+        "n": "per camera; the four cameras together cover 24 x 96 degrees, about 2300 square degrees"
+      },
+      "readNoise": {
+        "v": 10,
+        "u": "electron",
+        "s": "ricker2015",
+        "at": "Sec. 4.2",
+        "q": "upper",
+        "n": "the paper says less than 10 e-"
+      },
+      "fullWell": {
+        "v": 200000,
+        "u": "electron",
+        "s": "ricker2015",
+        "at": "Sec. 4.2",
+        "q": "approx"
+      },
+      "exposureTime": {
+        "v": 2,
+        "u": "s",
+        "s": "ricker2015",
+        "at": "Sec. 4.3",
+        "n": "summed on board into 2 minute and 30 minute cadences"
+      },
+      "bandpass": {
+        "v": [
+          600,
+          1000
+        ],
+        "u": "nm",
+        "s": "ricker2015",
+        "at": "Sec. 3.4, Table 1"
+      }
+    }
+  ]
+}

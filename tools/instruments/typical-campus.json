@@ -1,0 +1,59 @@
+{
+  "id": "typical-campus",
+  "class": "campus",
+  "typical": true,
+  "name": "A typical teaching telescope and small CCD (generic, not a real facility)",
+  "note": "The telescope and detector the detector lab uses by default; every value is a Gravitas convention for teaching, not a measurement of any instrument.",
+  "telescope": {
+    "name": "a 0.4 m teaching telescope",
+    "aperture": {
+      "v": 0.4,
+      "u": "m",
+      "s": "gravitas-default",
+      "at": "DEFAULT_DETECTOR comment"
+    }
+  },
+  "instruments": [
+    {
+      "id": "small-ccd",
+      "kind": "imager",
+      "name": "a small teaching CCD",
+      "sensorWidth": {
+        "v": 48,
+        "u": "pix",
+        "s": "gravitas-default",
+        "at": "DEFAULT_DETECTOR.width"
+      },
+      "sensorHeight": {
+        "v": 48,
+        "u": "pix",
+        "s": "gravitas-default",
+        "at": "DEFAULT_DETECTOR.height"
+      },
+      "gain": {
+        "v": 1.5,
+        "u": "electron/count",
+        "s": "gravitas-default",
+        "at": "DEFAULT_DETECTOR.gain"
+      },
+      "readNoise": {
+        "v": 8,
+        "u": "electron",
+        "s": "gravitas-default",
+        "at": "DEFAULT_DETECTOR.readNoise"
+      },
+      "darkCurrent": {
+        "v": 0.1,
+        "u": "electron/s/pix",
+        "s": "gravitas-default",
+        "at": "DEFAULT_DETECTOR.darkRate"
+      },
+      "fullWell": {
+        "v": 50000,
+        "u": "electron",
+        "s": "gravitas-default",
+        "at": "DEFAULT_DETECTOR.fullWell"
+      }
+    }
+  ]
+}
