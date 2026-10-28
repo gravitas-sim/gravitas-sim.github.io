@@ -89,11 +89,11 @@ Prompt 76 starts from.
 <!-- library:coverage -->
 | Kind | Entries | summary | level | duration | mathematics | calculation | subjects | prerequisites | textbook | courseLevel | thumbnail |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| investigation | 99 | all | all | all | all | all | all | all | all | all | 82 |
+| investigation | 102 | all | all | all | all | all | all | all | all | all | 85 |
 | activity | 6 | all | all | all | all | all | all | all | all | all | all |
 | scenario | 69 | all | all | all | all | all | all | all | **none** | **none** | 61 |
 | dataset | 16 | all | all | all | all | all | all | all | **none** | **none** | **none** |
-| course | 5 | all | all | all | all | all | all | all | **none** | all | **none** |
+| course | 6 | all | all | all | all | all | all | all | **none** | all | **none** |
 | experiment | 4 | all | all | all | all | all | all | all | **none** | **none** | all |
 <!-- /library:coverage -->
 
@@ -107,11 +107,11 @@ What is left unstated, and why:
 - A **catalog data pack's** subjects come from the curation file, because the
   catalog entry carries none.
 
-## The six sequences (Prompt 97)
+## The sequences (Prompt 97, and Planets and the Sun, Prompt 206)
 
-`sequences` carries six named orders over the investigations (The sky; Gravity
-and orbits; Light and stars; Planets and exoplanets; Galaxies and the universe;
-Observing and measuring), each with `depths` (the depth each entry is read at)
+`sequences` carries named orders over the investigations (The sky; Gravity
+and orbits; Light and stars; Planets and exoplanets; Planets and the Sun;
+Galaxies and the universe; Observing and measuring), each with `depths` (the depth each entry is read at)
 and `after` (sequences worth doing first). Every investigation is in at least
 one, and every `needs` in `js/data/investigations/sequences.js` is an earlier
 item that the lesson declares as a prerequisite.

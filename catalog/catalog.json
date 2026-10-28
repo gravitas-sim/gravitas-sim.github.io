@@ -48,6 +48,10 @@
       "en": "Color and Temperature",
       "es": "Color y temperatura"
     },
+    "comets-and-the-sun": {
+      "en": "Comets and the Sun",
+      "es": "Los cometas y el Sol"
+    },
     "craters-by-size": {
       "en": "Craters by Size",
       "es": "Cráteres por tamaño"
@@ -136,6 +140,10 @@
       "en": "The Missing Mass",
       "es": "La masa que falta"
     },
+    "moons-of-the-giants": {
+      "en": "Moons of the Giants",
+      "es": "Las lunas de los gigantes"
+    },
     "orbital-energy": {
       "en": "Bound, Unbound and Escape",
       "es": "Ligado, no ligado y escape"
@@ -211,6 +219,10 @@
     "the-rotating-disk": {
       "en": "The Rotating Disk",
       "es": "El disco que gira"
+    },
+    "the-scale-of-the-solar-system": {
+      "en": "The Scale of the Solar System",
+      "es": "La escala del sistema solar"
     },
     "the-shape-of-expansion": {
       "en": "The Shape of Expansion",

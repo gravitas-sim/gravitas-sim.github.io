@@ -39,7 +39,7 @@ const JP = (values = {}, hide = []) => ({ id: 'moon-fit', values, hide });
 // -----------------------------------------------------------------------------
 export const MOONS_OF_THE_GIANTS = {
   id: 'moons-of-the-giants',
-  thumbnail: 'images/investigations/weighing-jupiter.webp',
+  thumbnail: 'images/investigations/moons-of-the-giants.webp',
   title: 'Moons of the Giants',
   subtitle:
     'Three periods from one set of frames, and the combination that is zero when a family of moons keeps step',
@@ -48,7 +48,6 @@ export const MOONS_OF_THE_GIANTS = {
   audience: 'intro',
   textbook: { chapter: 12, section: '12.2' },
   courseLevel: 'survey',
-  depths: ['core'],
   mathematics: 'algebra',
   prerequisites: [],
   tags: ['orbits', 'resonance', 'solar-system'],
@@ -435,7 +434,6 @@ export const THE_SCALE_OF_THE_SOLAR_SYSTEM = {
   audience: 'intro',
   textbook: { chapter: 7, section: null },
   courseLevel: 'survey',
-  depths: ['core'],
   mathematics: 'algebra',
   prerequisites: [],
   tags: ['solar-system', 'orbits'],
@@ -750,7 +748,6 @@ export const COMETS_AND_THE_SUN = {
   audience: 'intro',
   textbook: { chapter: 13, section: null },
   courseLevel: 'survey',
-  depths: ['core'],
   mathematics: 'algebra',
   prerequisites: [],
   tags: ['solar-system', 'orbits'],
@@ -1737,9 +1734,9 @@ const EXPECTATIONS = {
 };
 
 const BANDS = {
-  'the-scale-of-the-solar-system': { core: 'medium' },
-  'comets-and-the-sun': { core: 'medium' },
-  'moons-of-the-giants': { core: 'medium' },
+  'the-scale-of-the-solar-system': { core: 'short' },
+  'comets-and-the-sun': { core: 'short' },
+  'moons-of-the-giants': { core: 'short' },
 };
 
 /** The guides, flows, expectations and time bands of the lessons above. */
