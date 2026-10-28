@@ -182,10 +182,10 @@ export default {
     'Las imágenes son sintéticas, hechas con posiciones de JPL Horizons; la masa es la del planeta solo y deja fuera su achatamiento.',
   ],
   atmosphere: [
-    'La temperatura que da a un planeta la luz del Sol por sí sola junto a la temperatura medida allí, un efecto invernadero de una capa y uno gris lado a lado para un planeta, o con qué rapidez baja la presión con la altura.',
+    'La temperatura que da a un planeta la luz del Sol por sí sola junto a la temperatura medida allí, un efecto invernadero de una capa y uno gris lado a lado para un planeta, o con qué rapidez baja la presión con la altura. O cuatro profundidades de eclipse secundario con la temperatura que da cada una, o la curva de fase de un planeta con el albedo que fija.',
     'Cuánto se aleja la temperatura medida de Venus, la Tierra, Marte y los planetas gigantes de su temperatura de equilibrio, qué emisividad o profundidad óptica necesita cada modelo para cerrar la diferencia, y la altura de escala que implica cada cuerpo.',
     'Por qué Venus es mucho más cálido que su temperatura de equilibrio y por qué una sola capa no puede alcanzarlo, por qué los dos modelos dan números distintos para el mismo planeta, y dónde la opacidad gris deja de ser una buena descripción.',
-    'Son modelos de enseñanza: sin convección, sin nubes, sin calor interno, con una sola opacidad en todas las longitudes de onda. La curva de Eddington es cerca de un 4 por ciento más cálida arriba en una atmósfera gris, y un planeta gigante no tiene superficie con la que comparar.',
+    'Son modelos de enseñanza: sin convección, sin nubes, sin calor interno, con una sola opacidad en todas las longitudes de onda. La curva de Eddington es cerca de un 4 por ciento más cálida arriba en una atmósfera gris, y un planeta gigante no tiene superficie con la que comparar. Las profundidades de eclipse y las curvas de fase son sintéticas, el modelo de eclipse es un cuerpo negro y el de fase, una esfera de Lambert.',
   ],
   crater: [
     'Dos regiones lado a lado con sus densidades, el gráfico de tamaño y frecuencia de una región con sus intervalos, o el diámetro de un círculo con los cuatro términos de su incertidumbre.',
@@ -216,6 +216,12 @@ export default {
     'Una traza ascendente en el mapa es el chirrido de una espiral.',
     'Cuándo aparece la señal y si un modelo del suceso la sigue.',
     'El ruido es real y en los datos sin tratar suele ser mayor que la señal.',
+  ],
+  habitabilityLimits: [
+    'Los cuatro límites de la zona habitable como cantidades de luz estelar sobre un eje de distancia, el radio de acoplamiento junto a la zona para cuatro estrellas modelo, o la zona de una estrella modelo de una masa solar a lo largo de su edad.',
+    'Cuánta luz estelar es cada límite, dónde lo pone una estrella, cuáles vienen de un modelo climático y cuáles de la historia de Venus y Marte, cómo se desplaza la zona al envejecer la estrella y qué zonas quedan dentro del radio de acoplamiento.',
+    'Por qué la zona de una estrella tenue está cerca, por qué el borde interior se aleja al brillar más la estrella, por qué la marea de la estrella frenaría el espín en la zona de una enana M y no en la de una estrella como el Sol, y por qué se rechaza una estrella fuera de 2600 a 7200 K.',
+    'Una banda de luz estelar para un planeta de una masa terrestre no es una medida de ningún planeta. El radio de acoplamiento es un intervalo, no un valor, por una disipación desconocida. La estrella del modelo es una estrella modelo, no el Sol, y nada aquí es una historia del clima.',
   ],
   'plot-measure': [
     'Tus propias medidas, un punto cada una, con las magnitudes nombradas en los ejes.',

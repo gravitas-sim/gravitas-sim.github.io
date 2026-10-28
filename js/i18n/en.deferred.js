@@ -1846,6 +1846,8 @@ export const EN_DEFERRED = {
     'A real catalog of 8,886 numbered asteroids: how deep the gaps at Jupiter’s resonances are against a smooth baseline, with an interval, and where the method says it cannot tell.',
   'inv.seq.planets.how-fast-does-it-spin':
     'A synthetic light curve: the rotation period from the periodogram, the amplitude and the bound it gives on the shape, and what one point a night hides.',
+  'inv.seq.planets.how-hot-is-the-day-side': 'Eclipse depth and day-side heat.',
+  'inv.seq.planets.phases-and-albedo': 'A phase curve and an albedo.',
   'inv.seq.planets.why-rings':
     'Why rings lie inside a planet’s Roche limit, and what a moon’s resonance clears from one.',
   'inv.seq.planets.tides-that-move-the-moon':

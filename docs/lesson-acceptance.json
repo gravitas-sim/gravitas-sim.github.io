@@ -925,6 +925,32 @@
       ],
       "evidenceFrom": "model"
     },
+    "how-hot-is-the-day-side": {
+      "centralExperimentId": "ce.how-hot-is-the-day-side",
+      "object": "panel:atmosphere-eclipse",
+      "control": "atmosphere-eclipse/dataset",
+      "quantity": "the brightness temperature one band of a synthetic hot Jupiter gives, 2094 K for a planet with no absorbing band and 1780 K where one band absorbs, from an eclipse depth with the reflected light assumed none",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "planet-y-predict",
+        "planet-y"
+      ],
+      "evidenceFrom": "model"
+    },
+    "phases-and-albedo": {
+      "centralExperimentId": "ce.phases-and-albedo",
+      "object": "panel:atmosphere-phase",
+      "control": "atmosphere-phase/dataset",
+      "quantity": "how well a Lambert sphere describes a synthetic phase curve: a chi-square near 31 for 23 degrees of freedom for a Lambert planet and near 82 for a Lommel-Seeliger planet, for which no albedo is returned",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "planet-q-predict",
+        "planet-q"
+      ],
+      "evidenceFrom": "model"
+    },
     "which-surface-is-older": {
       "centralExperimentId": "ce.which-surface-is-older",
       "object": "panel:crater-regions",

@@ -14,6 +14,7 @@ current, and the orchestrator checks it.
 | `astrometric-series-synth.mjs` | Synthetic astrometric series with a truth manifest (Prompt 186, ASTROMETRY.md) |  |
 | `astrometric-series-validate.mjs` | Astrometric time series against its committed thresholds (Prompt 186) | `npm run astrometric-series:validate` |
 | `astrometry-validate.mjs` | WCS-lite and registration against their committed thresholds (Prompt 181) | `npm run astrometry:validate` |
+| `atmospheres-ii-validate.mjs` | The eclipse and phase kernel against its committed thresholds (Prompt 202) | `npm run atmospheres-ii:validate` |
 | `atmospheres-validate.mjs` | The atmospheres kernel against its committed thresholds (Prompt 200) | `npm run atmospheres:validate` |
 | `author-check.mjs` | npm run author:check | `npm run author:check`, `npm run author:strict`, `npm run author:rules` |
 | `blackhole-profile.mjs` | What a black hole costs to draw |  |
@@ -97,6 +98,7 @@ current, and the orchestrator checks it.
 | `geometry-fuzz.mjs` | Base-versus-head fuzz of every scenario's world (Roadmap II Prompt 108) |  |
 | `glossary.mjs` | The glossary, and the words it retires |  |
 | `gw-shots.mjs` | Captures of the gravitational-wave lab |  |
+| `habitable-zone-validate.mjs` | The habitable-zone kernel against its committed thresholds (Prompt 205) | `npm run habitablezone:validate` |
 | `i18n-audit.mjs` | Message-catalog audit | `npm run i18n:check` |
 | `i18n-catalog.mjs` | The message catalog, however many files it is split across |  |
 | `i18n-freshness.mjs` | Is every translation still a translation of the English it stands beside? | `npm run i18n:freshness` |

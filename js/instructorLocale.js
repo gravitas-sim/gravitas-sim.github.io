@@ -75,6 +75,7 @@ import THE_SUN_THROUGH_THE_YEAR_DEEPER from './data/investigations/depth/es/the-
 import PHASES_AND_ECLIPSES_DEEPER from './data/investigations/depth/es/phases-and-eclipses.js';
 import WANDERERS_ON_THE_SKY_DEEPER from './data/investigations/depth/es/wanderers-on-the-sky.js';
 import PLAN_A_NIGHT_DEEPER from './data/investigations/depth/es/plan-a-night.js';
+import GOLDILOCKS_QUESTION_DEEPER from './data/investigations/depth/es/goldilocks-question.js';
 import LINES_AND_MOTION_DEEPER from './data/investigations/depth/es/lines-and-motion.js';
 import WHAT_A_SPECTRUM_IS_MADE_OF_DEEPER from './data/investigations/depth/es/what-a-spectrum-is-made-of.js';
 import THE_SUNS_MOTION_DEEPER from './data/investigations/depth/es/the-suns-motion.js';
@@ -194,6 +195,7 @@ export const DEEPER_SHADOWS = Object.freeze({
   'phases-and-eclipses': PHASES_AND_ECLIPSES_DEEPER,
   'wanderers-on-the-sky': WANDERERS_ON_THE_SKY_DEEPER,
   'plan-a-night': PLAN_A_NIGHT_DEEPER,
+  'goldilocks-question': GOLDILOCKS_QUESTION_DEEPER,
   'lines-and-motion': LINES_AND_MOTION_DEEPER,
   'what-a-spectrum-is-made-of': WHAT_A_SPECTRUM_IS_MADE_OF_DEEPER,
   'the-suns-motion': THE_SUNS_MOTION_DEEPER,

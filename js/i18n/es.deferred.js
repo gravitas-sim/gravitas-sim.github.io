@@ -1877,6 +1877,8 @@ export const ES_DEFERRED = {
     'Un catálogo real de 8 886 asteroides numerados: cuán profundos son los huecos en las resonancias de Júpiter frente a una línea base suave, con un intervalo, y dónde dice el método que no puede distinguir.',
   'inv.seq.planets.how-fast-does-it-spin':
     'Una curva de luz sintética: el periodo de rotación a partir del periodograma, la amplitud y la cota que da de la forma, y qué oculta un punto por noche.',
+  'inv.seq.planets.how-hot-is-the-day-side': 'Eclipse y calor del lado diurno.',
+  'inv.seq.planets.phases-and-albedo': 'Una curva de fase y un albedo.',
   'inv.seq.planets.why-rings':
     'Por qué los anillos están dentro del límite de Roche de un planeta, y qué despeja en uno la resonancia de una luna.',
   'inv.seq.planets.tides-that-move-the-moon':

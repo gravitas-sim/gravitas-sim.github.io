@@ -151,6 +151,7 @@ const GOLDILOCKS = {
   audience: 'intro',
   textbook: { chapter: 30, section: null },
   courseLevel: 'survey',
+  depths: ['core', 'quantitative', 'advanced'],
   mathematics: 'algebra',
   prerequisites: ['transit-photometry'],
   // Subject tags, for the browser's filters. A fixed vocabulary

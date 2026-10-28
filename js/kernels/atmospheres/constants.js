@@ -5,9 +5,11 @@ import {
   SIGMA_SB,
   AU_M,
   R_SUN_M,
+  H_PLANCK,
+  C_LIGHT,
 } from '../radiation/constants.js';
 
-export { K_BOLTZMANN, SIGMA_SB, AU_M, R_SUN_M };
+export { K_BOLTZMANN, SIGMA_SB, AU_M, R_SUN_M, H_PLANCK, C_LIGHT };
 /** Atomic mass constant, kg (CODATA 2018). */
 export const ATOMIC_MASS = 1.6605390666e-27;
 /** Solar constant at 1 AU, W m^-2 (Kopp and Lean 2011, 1360.8). */

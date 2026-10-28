@@ -1,0 +1,53 @@
+{
+ "id": "phases-and-albedo",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.full-phase-albedo.fields.0.unit",""],
+    ["steps.full-phase-albedo.fields.1.unit",""],
+    ["steps.the-interval.fields.0.unit",""],
+    ["steps.the-interval.fields.1.unit",""],
+    ["steps.match-by-hand.fields.0.unit",""],
+    ["steps.match-by-hand.fields.1.unit",""],
+    ["steps.planet-q.fields.0.unit",""],
+    ["steps.planet-q.fields.1.unit",""]
+   ],
+   "numbered": [
+    ["steps.full-phase-albedo.fields.0.hint","0.35"],
+    ["steps.full-phase-albedo.fields.1.hint","0.52"],
+    ["steps.the-interval.fields.0.hint","0.34"],
+    ["steps.the-interval.fields.1.hint","0.36"],
+    ["steps.match-by-hand.fields.0.hint","0.35"],
+    ["steps.match-by-hand.fields.1.hint","31.2"],
+    ["steps.planet-q.fields.0.hint","82"],
+    ["steps.planet-q.fields.1.hint","23"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": []
+  }
+ },
+ "numeric": {
+  "answers": [],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "full-phase-albedo": {
+    "validate": {"calls":232,"distinct":2,"digest":"be31f61dc09a119b","samples":[null,{"level":"error","message":"Choose Planet P and read “Geometric albedo of a Lambert sphere that fits” and “Bond albedo of that Lambert sphere”."}]}
+   },
+   "the-interval": {
+    "validate": {"calls":232,"distinct":2,"digest":"867150e24a0319a8","samples":[null,{"level":"error","message":"Choose Planet P and read the two ends of the 95 percent interval in the “Geometric albedo of a Lambert sphere that fits” row."}]}
+   },
+   "match-by-hand": {
+    "validate": {"calls":232,"distinct":2,"digest":"7c1f7c5d2840916b","samples":[null,{"level":"error","message":"Move “My geometric albedo” until the chi-square is at its smallest, near 0.35, and report both numbers from the “My albedo against the curve” row."}]}
+   },
+   "planet-q": {
+    "validate": {"calls":232,"distinct":2,"digest":"8b59f2d8a719d696","samples":[null,{"level":"error","message":"Choose Planet Q and read the “Fit against the curve” row: the chi-square and the degrees of freedom."}]}
+   }
+  },
+  "es": "same"
+ }
+}

@@ -820,4 +820,24 @@ export const DISCOVERY = {
     },
     courseLevel: 'survey',
   },
+  'how-hot-is-the-day-side': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['why-venus-is-hot'],
+    textbook: {
+      chapter: 21,
+      section: '21.4',
+    },
+    courseLevel: 'majors',
+  },
+  'phases-and-albedo': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['phases-and-eclipses'],
+    textbook: {
+      chapter: 2,
+      section: '2.3',
+    },
+    courseLevel: 'majors',
+  },
 };

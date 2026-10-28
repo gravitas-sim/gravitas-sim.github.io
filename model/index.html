@@ -2609,9 +2609,9 @@ try {
       </p>
       <p>
         <span class="gs-en">The repository carries an automated validation suite. It runs
-        <!--fact:physicsChecks-->343<!--/fact-->
+        <!--fact:physicsChecks-->348<!--/fact-->
         deterministic checks and prints a table of measured value, expected
-        value, error and tolerance:</span><span class="gs-es" lang="es">El repositorio incluye una batería automática de validación. Ejecuta <!--fact:physicsChecks-->343<!--/fact--> comprobaciones deterministas e imprime una tabla con el valor medido, el valor esperado, el error y la tolerancia:</span>
+        value, error and tolerance:</span><span class="gs-es" lang="es">El repositorio incluye una batería automática de validación. Ejecuta <!--fact:physicsChecks-->348<!--/fact--> comprobaciones deterministas e imprime una tabla con el valor medido, el valor esperado, el error y la tolerancia:</span>
       </p>
       <p class="doc-eq-block">npm run validate:physics</p>
       <p>
@@ -2765,7 +2765,7 @@ try {
               <td>Left unvalidated against general relativity by decision (DECISION_REGISTER.md, D-R10-13): the model is a constant fractional velocity decay, not the power-law inspiral of the quadrupole formula. The suite checks that the code does what the model page says it does, and measures how far that is from the equation it does not use, so the departure is a number; it does not check the physics of an inspiral, which is not claimed. <small>(PHYSICS_VALIDATION.md, What is not validated)</small></td>
               <td>Velocity damping matches the stated constant fractional decay: passes<br />Separation decays exponentially at -2 * decay rate: passes<br />Decay is exponential in time, not the GR power law: passes<br />GR would give a late/early rate ratio of 3.4 over this window: passes</td>
             </tr>
-            <tr><td colspan="4">Checks failing in the report with no row above: none (343 checks, 343 pass).</td></tr>
+            <tr><td colspan="4">Checks failing in the report with no row above: none (348 checks, 348 pass).</td></tr>
           <!--/fact-block-->
           </tbody>
         </table>
@@ -3329,7 +3329,7 @@ try {
             </tr>
             <tr>
               <td>The Goldilocks Question</td>
-              <td>The habitable-zone boundaries come from the Kopparapu et al. (2013) prescription with the 2014 erratum coefficients, evaluated from each star’s luminosity and effective temperature. The same module draws the ring in the live simulation and the bands in the investigation panels, so a student who reads 0.98 AU off a panel and then looks at the ring on screen is looking at one calculation drawn twice. Measured stellar luminosities are used wherever a scenario carries one, which matters most for TRAPPIST-1: a mass-luminosity relation would put its zone out by more than a factor of four. Below 2,600 K the polynomial is evaluated at its own lower limit rather than extrapolated, and the ring says so on screen. The orbital instruments solve Kepler’s equation analytically rather than integrating, so the timing of an eccentric year and the fraction spent inside the zone are exact. Nothing in this investigation models a climate: the zone is a statement about incident starlight against limits from a published model, and the investigation is careful to say so. Both habitable-zone scenarios put their planets on circles, deliberately: circles keep the insolation measurement clean, and the real eccentricities of Earth and Mars would change nothing about the argument. That leaves the screens about a planet whose distance changes round its year with nothing live to point at, so screen 27 stands up one of its own - Wanderer, on a genuine ellipse of eccentricity 0.45, moved by the same gravity solver as everything else. The screen says so, and the scene is named again on screen 29 when the subject changes to TRAPPIST-1. Where a planet sits relative to the zone is computed by habitableZoneBounds() and habitableZoneStatus(), the same two functions the ring on the canvas is drawn with, so the investigation and the picture cannot disagree about where the edges are. Being in the zone is a statement about incoming starlight and nothing else: it is not evidence of water, of an atmosphere, or of anything living, and the investigation is careful never to say otherwise.</td>
+              <td>The habitable-zone boundaries come from the Kopparapu et al. (2013) prescription with the 2014 erratum coefficients, evaluated from each star’s luminosity and effective temperature. The same module draws the ring in the live simulation and the bands in the investigation panels, so a student who reads 0.98 AU off a panel and then looks at the ring on screen is looking at one calculation drawn twice. Measured stellar luminosities are used wherever a scenario carries one, which matters most for TRAPPIST-1: a mass-luminosity relation would put its zone out by more than a factor of four. Below 2,600 K the polynomial is evaluated at its own lower limit rather than extrapolated, and the ring says so on screen. The orbital instruments solve Kepler’s equation analytically rather than integrating, so the timing of an eccentric year and the fraction spent inside the zone are exact. Nothing in this investigation models a climate: the zone is a statement about incident starlight against limits from a published model, and the investigation is careful to say so. Both habitable-zone scenarios put their planets on circles, deliberately: circles keep the insolation measurement clean, and the real eccentricities of Earth and Mars would change nothing about the argument. That leaves the screens about a planet whose distance changes round its year with nothing live to point at, so screen 27 stands up one of its own - Wanderer, on a genuine ellipse of eccentricity 0.45, moved by the same gravity solver as everything else. The screen says so, and the scene is named again on screen 29 when the subject changes to TRAPPIST-1. Where a planet sits relative to the zone is computed by habitableZoneBounds() and habitableZoneStatus(), the same two functions the ring on the canvas is drawn with, so the investigation and the picture cannot disagree about where the edges are. Being in the zone is a statement about incoming starlight and nothing else: it is not evidence of water, of an atmosphere, or of anything living, and the investigation is careful never to say otherwise. The deeper steps (quantitative and advanced) add three instruments that stand on a separate, validated kernel (js/kernels/habitablezone/, HABITABLE_ZONE_II.md): the four limits as amounts of starlight, which refuses a star outside the fit’s 2,600 to 7,200 K range instead of evaluating at the nearest calibrated temperature as the ring does; the radius inside which a star’s tide would remove an Earth-like planet’s spin within the star’s age, from the tides kernel’s constant-Q model, given as a range over the planet’s unknown Q; and the zone of a one-solar-mass MIST model star at an age. That star is about 11 per cent brighter than the Sun at the Sun’s age, so it is marked as a model star, and no climate history is built: the zone at three ages is where a band of starlight lies, not what a planet’s climate did.</td>
             </tr>
             <tr>
               <td>The Missing Mass</td>
@@ -3618,6 +3618,14 @@ try {
             <tr>
               <td>The Sun’s Power</td>
               <td>js/kernels/sun/ (SUN_KERNEL.md Part 2): summariseIrradiance, luminosityFromFlux and temperatureFromLuminosity through the radiation kernel; the e2 legs of npm run sun:validate.</td>
+            </tr>
+            <tr>
+              <td>How Hot Is the Day Side?</td>
+              <td>js/kernels/atmospheres/ (ATMOSPHERES.md, Atmospheres II): eclipseDepth, brightnessTemperature, bandRadiance and slabFlux, validated against an independent numpy and scipy oracle (npm run atmospheres-ii:validate); the synthetic depths are syntheticEclipse.</td>
+            </tr>
+            <tr>
+              <td>Phases and Albedo</td>
+              <td>js/kernels/atmospheres/ (ATMOSPHERES.md, Atmospheres II): lambertPhase, phaseCurve, fitAlbedo, bondFromGeometric and the misfit flag, validated against an independent numpy and scipy oracle (npm run atmospheres-ii:validate); the synthetic curves are syntheticPhase.</td>
             </tr>
           <!--/fact-block-->
           </tbody>

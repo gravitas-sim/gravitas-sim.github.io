@@ -356,7 +356,13 @@ export const LAZY_FAMILIES = Object.freeze({
     () => import('./atmosphereWidgets.js'),
     './atmosphereWidgets.js',
     'ATMOSPHERE_WIDGETS',
-    ['atmosphere-balance', 'atmosphere-greenhouse', 'atmosphere-scale']
+    [
+      'atmosphere-balance',
+      'atmosphere-greenhouse',
+      'atmosphere-scale',
+      'atmosphere-eclipse',
+      'atmosphere-phase',
+    ]
   ),
   crater: familyEntry(
     () => import('./craterWidgets.js'),
@@ -384,6 +390,12 @@ export const LAZY_FAMILIES = Object.freeze({
     './tidesWidgets.js',
     'TIDE_WIDGETS',
     ['tides-roche', 'tides-resonance', 'tides-moon', 'tides-heating']
+  ),
+  habitabilityLimits: familyEntry(
+    () => import('./habitabilityLimitsWidgets.js'),
+    './habitabilityLimitsWidgets.js',
+    'HABITABILITY_LIMIT_WIDGETS',
+    ['hz-limits', 'hz-locking', 'hz-ages']
   ),
 });
 // </generated:lazy-families>

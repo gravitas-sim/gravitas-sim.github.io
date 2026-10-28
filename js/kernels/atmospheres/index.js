@@ -5,3 +5,7 @@ export * from './greenhouse.js';
 export * from './grey.js';
 export * from './scale.js';
 export * from './bodies.js';
+export * from './quadrature.js';
+export * from './emission.js';
+export * from './phase.js';
+export * from './synthetic.js';

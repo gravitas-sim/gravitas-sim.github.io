@@ -44,12 +44,17 @@
   "atmosphere-balance",
   "atmosphere-greenhouse",
   "atmosphere-scale",
+  "atmosphere-eclipse",
+  "atmosphere-phase",
   "crater-sfd",
   "sun-rotation",
   "sun-power",
   "tides-roche",
   "tides-resonance",
   "tides-moon",
-  "tides-heating"
+  "tides-heating",
+  "hz-limits",
+  "hz-locking",
+  "hz-ages"
  ]
 }

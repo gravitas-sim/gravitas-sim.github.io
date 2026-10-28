@@ -191,10 +191,10 @@ export default {
     'The frames are synthetic, made from JPL Horizons positions; the mass is the planet’s alone and leaves out its oblateness.',
   ],
   atmosphere: [
-    'The temperature sunlight alone gives a planet beside the temperature measured there, a one-layer and a gray greenhouse side by side for one planet, or how quickly the pressure falls with height.',
+    'The temperature sunlight alone gives a planet beside the temperature measured there, a one-layer and a gray greenhouse side by side for one planet, or how quickly the pressure falls with height. Or four secondary-eclipse depths with the temperature each gives, or a planet’s phase curve with the albedo it fixes.',
     'How far the measured temperature of Venus, Earth, Mars and the giant planets is from their equilibrium temperature, what emissivity or optical depth each greenhouse model needs to close the gap, and the scale height each body implies.',
     'Why Venus is far warmer than its equilibrium temperature and why a single layer cannot reach it, why the two greenhouse models give different numbers for the same planet, and where gray opacity stops being a good description.',
-    'These are teaching models: no convection, no clouds, no internal heat, one opacity at every wavelength. The Eddington curve is about 4 percent warm at the top of a gray atmosphere, and a giant planet has no surface to compare with.',
+    'These are teaching models: no convection, no clouds, no internal heat, one opacity at every wavelength. The Eddington curve is about 4 percent warm at the top of a gray atmosphere, and a giant planet has no surface to compare with. The eclipse depths and phase curves here are synthetic, and the eclipse model is a blackbody; the phase model is a Lambert sphere.',
   ],
   crater: [
     'Two regions side by side with their densities, one region’s size-frequency plot with its intervals, or one circle’s diameter with the four terms of its uncertainty.',
@@ -219,6 +219,12 @@ export default {
     'How near a satellite can come before gravity alone stops holding it together, which ring radii a moon at a given distance empties, how far the Moon was in the past under the model, and the heat per orbit against the heat Io is observed to radiate.',
     'Why a ring lies inside the Roche limit and a moon outside it, why a resonance clears a gap, why a constant-Q model run backward puts the Moon in contact too recently, and why the tidal heating formula gives a bound and not a prediction.',
     'These are closed-form teaching models: a rigid body has a strength a rubble pile lacks, Q is a constant when it is not, Love numbers are assumed, and the heating formula needs an eccentricity and a dissipation nobody measures independently.',
+  ],
+  habitabilityLimits: [
+    'The four habitable-zone limits as amounts of starlight on a distance axis, the locking radius beside the zone for four model stars, or the zone of a one-solar-mass model star along its age.',
+    'How much starlight each limit is, where a star puts it, which limits come from a climate model and which from the history of Venus and Mars, how the zone moves as the star ages, and which zones lie inside the locking radius.',
+    'Why a dim star’s zone is close in, why the inner edge moves out as a star brightens, why the zone of an M dwarf would be despun by the star’s tide and that of a Sun-like star would not, and why a star outside 2600 to 7200 K is refused.',
+    'A band of starlight for a planet of one Earth mass is not a measurement of any planet. The locking radius is a range, not a value, from an unknown dissipation. The star on the track is a model star, not the Sun, and nothing here is a climate history.',
   ],
   'plot-measure': [
     'Your own measurements, one point each, with the quantities named on the axes.',

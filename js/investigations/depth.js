@@ -132,6 +132,10 @@ const EXTENSIONS = {
     import('../data/investigations/depth/the-gaps-in-the-belt.js'),
   'how-fast-does-it-spin': () =>
     import('../data/investigations/depth/how-fast-does-it-spin.js'),
+  'how-hot-is-the-day-side': () =>
+    import('../data/investigations/depth/how-hot-is-the-day-side.js'),
+  'phases-and-albedo': () =>
+    import('../data/investigations/depth/phases-and-albedo.js'),
   'which-surface-is-older': () =>
     import('../data/investigations/depth/which-surface-is-older.js'),
   'craters-by-size': () =>
@@ -142,6 +146,8 @@ const EXTENSIONS = {
   'tides-that-move-the-moon': () =>
     import('../data/investigations/depth/tides-that-move-the-moon.js'),
   'ios-fire': () => import('../data/investigations/depth/ios-fire.js'),
+  'goldilocks-question': () =>
+    import('../data/investigations/depth/goldilocks-question.js'),
   'what-is-in-this-field': () =>
     import('../data/investigations/depth/what-is-in-this-field.js'),
 };
@@ -232,6 +238,10 @@ const WORDS = {
       import('../data/investigations/depth/es/the-gaps-in-the-belt.js'),
     'how-fast-does-it-spin': () =>
       import('../data/investigations/depth/es/how-fast-does-it-spin.js'),
+    'how-hot-is-the-day-side': () =>
+      import('../data/investigations/depth/es/how-hot-is-the-day-side.js'),
+    'phases-and-albedo': () =>
+      import('../data/investigations/depth/es/phases-and-albedo.js'),
     'which-surface-is-older': () =>
       import('../data/investigations/depth/es/which-surface-is-older.js'),
     'craters-by-size': () =>
@@ -242,6 +252,8 @@ const WORDS = {
     'tides-that-move-the-moon': () =>
       import('../data/investigations/depth/es/tides-that-move-the-moon.js'),
     'ios-fire': () => import('../data/investigations/depth/es/ios-fire.js'),
+    'goldilocks-question': () =>
+      import('../data/investigations/depth/es/goldilocks-question.js'),
     'what-is-in-this-field': () =>
       import('../data/investigations/depth/es/what-is-in-this-field.js'),
     'missing-mass': () =>

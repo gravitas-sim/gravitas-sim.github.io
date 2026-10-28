@@ -114,9 +114,9 @@ investigations (<!--fact:investigations-->80<!--/fact--> that run in the
 simulation and <!--fact:guidedInvestigations-->17<!--/fact--> in the
 Observatory, the 3-D lab and the mission lab), a shared shell, a Library, a
 workspace for each student's own work, an instructor path from adoption page to
-gradebook file, <!--fact:instructorDocuments-->738<!--/fact--> generated
+gradebook file, <!--fact:instructorDocuments-->766<!--/fact--> generated
 instructor documents, a public validation suite
-of <!--fact:physicsChecks-->343<!--/fact--> checks, and authoring tools
+of <!--fact:physicsChecks-->348<!--/fact--> checks, and authoring tools
 (Scenario Studio, Investigation Composer, course packs and an extension SDK).
 The Library lists <!--fact:libraryScenarios-->69<!--/fact--> ready-made
 scenarios: the 59 in the sandbox and <!--fact:systems3dScenarios-->8<!--/fact-->
@@ -1767,7 +1767,7 @@ listed here because this is the release that first carries it.
 - **An instructor portal that explains itself.** `/instructors/` states what is
   behind the passphrase before asking for it, says plainly what client-side
   encryption on a static host can and cannot promise, and presents the
-  <!--fact:instructorDocuments-->738<!--/fact--> documents grouped by investigation
+  <!--fact:instructorDocuments-->766<!--/fact--> documents grouped by investigation
   with their kind and size. A wrong passphrase and a missing bundle now report
   as the different problems they are.
 - **Dual licensing.** The code is MIT; the original educational material is
@@ -1843,7 +1843,7 @@ listed here because this is the release that first carries it.
   off.
 - **An investigation authoring toolchain.** `npm run author:check` validates
   every lesson and every one of the
-  <!--fact:investigationSteps-->1198<!--/fact--> steps; `npm run author:new`
+  <!--fact:investigationSteps-->1201<!--/fact--> steps; `npm run author:new`
   scaffolds a lesson with its translation shadow and instructor stub;
   `?author=<lesson>&step=<n>` opens any step with diagnostics without touching
   a student's saved progress; and a browser walker exercises every step of
@@ -1900,7 +1900,7 @@ listed here because this is the release that first carries it.
   the share dialog and the scenario gallery keyboard traps in practice.
 - Three modal dialogs declared `aria-modal="true"` without trapping focus.
 - Stale counts across the documentation: `/model/` claimed 135 physics checks
-  against a suite of <!--fact:physicsChecks-->343<!--/fact-->, and 48 scenarios
+  against a suite of <!--fact:physicsChecks-->348<!--/fact-->, and 48 scenarios
   against a catalog of <!--fact:scenarios-->61<!--/fact-->.
 
 ### Removed

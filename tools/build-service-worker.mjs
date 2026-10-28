@@ -388,6 +388,17 @@ export const NEVER_PRECACHED = [
   // instrument that imports it installs nothing; the idle tier has no room under
   // a ceiling the standing size approval does not cover. D-R10-78.
   /^js\/kernels\/tides\//,
+  // The habitable-zone kernel (Prompt 205, HABITABLE_ZONE_II.md): closed forms,
+  // imported by no page until the panel's limits and the lesson's upper depth use
+  // it, and then only from their lazy chunks. D-R10-205-01.
+  /^js\/kernels\/habitablezone\//,
+  // The habitable-zone limit instruments and the Goldilocks upper depth (Prompt 205
+  // part B, D-R10-205-03): the family, its words and the lesson's deeper steps and their
+  // Spanish are kept by the service worker after the first online use, not installed
+  // (the first-visit and idle tiers have no room under data-budget ceilings the
+  // standing approval does not cover).
+  /^(js\/habitabilityLimitsWidgets\.js|js\/i18n\/(en|es)\.habitablezone\.js)$/,
+  /^js\/data\/investigations\/depth\/(es\/)?goldilocks-question\.js$/,
   // The atmospheres kernel and pack (Prompt 200, ATMOSPHERES.md): imported by no
   // page until the instrument family and its lessons are built. D-R10-80.
   /^js\/kernels\/atmospheres\//,
@@ -404,8 +415,8 @@ export const NEVER_PRECACHED = [
   // after the first online use, not installed (the first-visit and idle tiers have
   // a few hundred bytes of room under a data-budget ceiling this approval does not cover).
   /^(js\/atmosphereWidgets\.js|js\/i18n\/(en|es)\.atmospheres\.js)$/,
-  /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(why-venus-is-hot|two-greenhouse-models|atmosphere-sequence)\.js$/,
-  /^images\/investigations\/(why-venus-is-hot|two-greenhouse-models)\.webp$/,
+  /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(why-venus-is-hot|two-greenhouse-models|how-hot-is-the-day-side|phases-and-albedo|atmosphere-sequence)\.js$/,
+  /^images\/investigations\/(why-venus-is-hot|two-greenhouse-models|how-hot-is-the-day-side|phases-and-albedo)\.webp$/,
   // The Sun instruments and investigations (Prompt 194 part 2, D-R10-92): the family
   // and its words, the two lessons' per-lesson paths (their text is appended to the
   // atmosphere files above) and their thumbnails: kept by the service worker after the

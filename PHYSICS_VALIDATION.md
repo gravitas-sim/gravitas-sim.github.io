@@ -12,7 +12,7 @@ reason for every tolerance.
 npm run validate:physics
 ```
 
-That is <!--fact:physicsChecks-->343<!--/fact--> checks, about two minutes, and a
+That is <!--fact:physicsChecks-->348<!--/fact--> checks, about two minutes, and a
 PASS/FAIL table with measured error against stated tolerance. Add `--verbose` to print the rationale for each tolerance,
 `--json` for machine-readable output, or `--group "Conservation"` to run one
 section. Exit status is 0 only if everything passes, so it works in CI unchanged.
@@ -65,9 +65,9 @@ are two front ends onto it.
 | Barnes-Hut gravity | 7 | 2 analytic, 2 integrated, 3 approximation |
 | Collision outcomes | 19 | 7 analytic, 9 integrated, 3 approximation |
 | Long-term regression | 2 | 2 integrated |
-| Atmospheres | 7 | 4 analytic, 2 published, 1 approximation |
+| Atmospheres | 12 | 9 analytic, 2 published, 1 approximation |
 | Interiors | 4 | 3 analytic, 1 published |
-| **Total** | **343** | 130 analytic, 124 integrated, 64 published, 24 approximation, 1 empirical |
+| **Total** | **348** | 135 analytic, 124 integrated, 64 published, 24 approximation, 1 empirical |
 <!--/fact-block-->
 
 Nothing here reads a pixel. Every check is a deterministic number-in,

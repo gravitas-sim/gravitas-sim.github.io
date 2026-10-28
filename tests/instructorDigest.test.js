@@ -200,7 +200,10 @@ describe('the digest the derived closure produces', () => {
     // 282 after the two atmosphere investigations (Prompt 200, D-R10-81: the cap
     // raised by four, to 282, on Carl's ruling of 2026-10-25, for four files, one
     // atmosphere-sequence file for each kind of file the lessons need).
-    expect(current.length).toBeLessThan(282);
+    // 284 after the Goldilocks upper depth (Prompt 205 part B, D-R10-205-03: the cap
+    // raised by two, to 284, on the coordinator's call under Carl's night delegation of
+    // 2026-10-28, for two files, the lesson's deeper steps and their Spanish).
+    expect(current.length).toBeLessThan(284);
     // 230 after the four variable-star investigations (Prompt 96): their shadows, deeper shadows and depth files;
     // 246 after the four cosmology investigations (Prompt 91).
     // 258 after the three calibration investigations (Prompt 86).

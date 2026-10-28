@@ -11,11 +11,11 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 80 investigations and 1198 steps: 1106 steps
+Across 80 investigations and 1201 steps: 1109 steps
 declare a scene, 157 let a reader change one, 163 read the
-running integration, 714 show a prescribed model result, 146 draw
-on a stored dataset, 593 put a self-contained panel beside the text,
-309 keep something, and 58 are prose.
+running integration, 717 show a prescribed model result, 146 draw
+on a stored dataset, 596 put a self-contained panel beside the text,
+312 keep something, and 58 are prose.
 Of 157 prediction loops, 157 are returned to,
 157 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
@@ -1057,34 +1057,6 @@ Of 157 prediction loops, 157 are returned to,
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:tides-heating`, control tides-heating/e, measures the tidal heating of Io at k2 = 1.5 and Q = 100, 9.33 x 10^13 W at its eccentricity of 0.0041 and four times that when the eccentricity is doubled, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
-## The Gaps in the Belt (`the-gaps-in-the-belt`)
-
-- **Steps:** 8. Scene declared on 8; a reader can change something on 0; 8 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 0 live engine, 8 prescribed model, 0 stored dataset, 8 self-contained panel.
-- **What students do:** move-an-instrument-control, press-an-instrument-preset, choose-an-option, commit-a-prediction, record-values.
-- **Objects the steps declare:** star.
-- **Instruments:** belt-gaps.
-- **Stored data:** none.
-- **Evidence kept:** notebook-fields.
-- **Prediction loops:** depletion-predict → count-the-gap, depletion, not-empty, the-second-gap, what-you-worked-out → depletion.
-- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
-- **Scene rebuilds:** none.
-- **Accepted central experiment** (reviewed 2026-09-11): object `panel:belt-gaps`, control belt-gaps/gap, measures the depletion of a Jupiter resonance window of the numbered-asteroid catalog (H below 13) against a smooth baseline fitted outside the windows, in percent: 88.0 at the 3:1 window and 63.3 at the 5:2, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
-
-## How Fast Does It Spin? (`how-fast-does-it-spin`)
-
-- **Steps:** 6. Scene declared on 6; a reader can change something on 0; 6 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 0 live engine, 6 prescribed model, 0 stored dataset, 6 self-contained panel.
-- **What students do:** move-an-instrument-control, press-an-instrument-preset, commit-a-prediction, record-values, choose-an-option.
-- **Objects the steps declare:** star.
-- **Instruments:** spin-curve.
-- **Stored data:** none.
-- **Evidence kept:** notebook-fields.
-- **Prediction loops:** two-maxima-predict → rotation-period, amplitude-and-bound, ask-for-the-truth, what-you-worked-out → rotation-period.
-- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
-- **Scene rebuilds:** none.
-- **Accepted central experiment** (reviewed 2026-09-11): object `panel:spin-curve`, control spin-curve/target, measures the rotation period of a synthetic light curve by the two-maxima rule, in hours: 6.199 for target A and 8.002 for target C over five dense nights, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
-
 ## Why Venus Is Hot (`why-venus-is-hot`)
 
 - **Steps:** 9. Scene declared on 9; a reader can change something on 0; 9 declare a scene nobody on that step can touch.
@@ -1140,4 +1112,32 @@ Of 157 prediction loops, 157 are returned to,
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:sun-power`, control sun-power/days, measures the Sun's luminosity from the first days of the TSIS-1 TIM series corrected to one astronomical unit, in units of 1e26 W: 3.829 from two days and 3.828 from six, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## How Hot Is the Day Side? (`how-hot-is-the-day-side`)
+
+- **Steps:** 10. Scene declared on 10; a reader can change something on 0; 10 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 10 prescribed model, 0 stored dataset, 10 self-contained panel.
+- **What students do:** move-an-instrument-control, record-values, choose-an-option, commit-a-prediction.
+- **Objects the steps declare:** star.
+- **Instruments:** atmosphere-eclipse.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** planet-y-predict → planet-y, what-a-dip-says, what-you-worked-out → planet-y.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:atmosphere-eclipse`, control atmosphere-eclipse/dataset, measures the brightness temperature one band of a synthetic hot Jupiter gives, 2094 K for a planet with no absorbing band and 1780 K where one band absorbs, from an eclipse depth with the reflected light assumed none, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## Phases and Albedo (`phases-and-albedo`)
+
+- **Steps:** 7. Scene declared on 7; a reader can change something on 0; 7 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 7 prescribed model, 0 stored dataset, 7 self-contained panel.
+- **What students do:** move-an-instrument-control, record-values, choose-an-option, commit-a-prediction.
+- **Objects the steps declare:** star.
+- **Instruments:** atmosphere-phase.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** planet-q-predict → planet-q, what-you-worked-out → planet-q.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:atmosphere-phase`, control atmosphere-phase/dataset, measures how well a Lambert sphere describes a synthetic phase curve: a chi-square near 31 for 23 degrees of freedom for a Lambert planet and near 82 for a Lommel-Seeliger planet, for which no albedo is returned, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
