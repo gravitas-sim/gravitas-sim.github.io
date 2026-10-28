@@ -16,8 +16,7 @@
     "seed": 201,
     "elapsedSeconds": 427
   },
-  "verdict": "C",
-  "verdictIfEpKernelBoundWereReset": "B",
+  "verdict": "B",
   "checks": {
     "U1.constants": {
       "status": "pass",
@@ -313,12 +312,15 @@
       }
     },
     "T1.ep.deferred": {
-      "status": "fail",
+      "status": "pass-under-ruling",
       "measured": {
         "deferredAddedGzipB": 3233,
         "kernelAloneGzipB": 2282,
         "kernelAloneRawB": 4676
-      }
+      },
+      "originalStatus": "fail",
+      "ruling": "R1",
+      "note": "fails as committed (kernel alone 2,282 B against 2,048 B); passes under Carl's ruling R1 (bound reset to 2,282 B after the measurement)"
     },
     "T1.whole.deferred": {
       "status": "fail",
@@ -435,6 +437,31 @@
           ]
         }
       }
+    }
+  },
+  "originalVerdict": {
+    "verdict": "C",
+    "as": "the committed bounds, as measured (record 42af7e57)",
+    "drivenBy": "T1.ep.deferred, kernel alone 2,282 B against 2,048 B"
+  },
+  "ruling": {
+    "id": "R1",
+    "source": "Carl, in chat on 2026-10-27, relayed by the coordinator (not heard by this session directly)",
+    "words": "Reset to 2,282 (verdict B)",
+    "originalLimits": {
+      "kernelGzipMax": 2048
+    },
+    "measured": {
+      "kernelAloneGzipB": 2282
+    },
+    "madeAfterMeasurement": true,
+    "note": "Carl's ruling, made AFTER the measurement; it is not a pre-committed bound. Only the kernel-alone line moved (2,048 to 2,282 B); the slice bound 7,168 B is untouched; the original failure stays in record.json and failed-legs.json as measured."
+  },
+  "amendmentRulings": {
+    "AM2": {
+      "source": "Carl, in chat on 2026-10-27, relayed by the coordinator (not heard by this session directly)",
+      "words": "Let AM2 stand (Recommended)",
+      "effect": "AM2 stands"
     }
   }
 }

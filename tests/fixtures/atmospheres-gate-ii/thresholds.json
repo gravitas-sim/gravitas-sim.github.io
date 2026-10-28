@@ -28,7 +28,23 @@
       "field": "the Spanish forbidden patterns and the regular-expression flags",
       "before": "patterns written with the ASCII word boundary after letters such as o-acute and a-acute, flags i",
       "after": "the same alternations with Unicode-aware boundaries (negative lookbehind and lookahead on the Unicode letter class) and flags iu; the bound (12 of 12 bad controls caught, 6 of 6 permitted passed, no violation) is unchanged",
-      "why": "found by the committed positive controls on the first harness run: the ASCII word boundary of JavaScript regular expressions does not see an accented letter as a letter, so the Spanish bad control about detecting water (with its accents) was not caught (11 of 12 bad controls caught as first measured; no atmosphere string was flagged either way). The patterns, not the bound, are repaired; Carl rules whether the amendment stands (needed ruling)."
+      "why": "found by the committed positive controls on the first harness run: the ASCII word boundary of JavaScript regular expressions does not see an accented letter as a letter, so the Spanish bad control about detecting water (with its accents) was not caught (11 of 12 bad controls caught as first measured; no atmosphere string was flagged either way). The patterns, not the bound, are repaired; Carl rules whether the amendment stands (needed ruling).",
+      "ruling": {
+        "source": "Carl, in chat on 2026-10-27, relayed by the coordinator (not heard by this session directly)",
+        "words": "Let AM2 stand (Recommended)",
+        "effect": "AM2 stands"
+      }
+    },
+    {
+      "id": "AM3",
+      "check": "T1.ep.deferred",
+      "field": "the kernel-alone bound",
+      "before": "at most 2,048 B",
+      "after": "at most 2,282 B, Carl's ruling",
+      "source": "Carl, in chat on 2026-10-27, relayed by the coordinator (not heard by this session directly)",
+      "words": "Reset to 2,282 (verdict B)",
+      "madeAfterMeasurement": true,
+      "why": "after the measurement (kernel 2,282 B gzipped, the one shared or ep failure, which gave C). Carl's ruling, not a pre-committed bound. No other bound moved: X3, X4 and T1.whole.deferred stay failing as committed."
     }
   ],
   "decision": {
@@ -118,7 +134,20 @@
       "bound": "the eclipse and phase slice (its kernel files, two instruments, the English words and a rot13 size stand-in for the Spanish words, which is not a translation): at most 7,168 B of added deferred JavaScript, minified and gzipped the way build.js counts, as the difference of the app build's deferred figure on a Node 22 copy, with the slice's kernel alone at most 2,048 B",
       "limits": {
         "deferredGzipMax": 7168,
-        "kernelGzipMax": 2048
+        "kernelGzipMax": 2282
+      },
+      "ruling": {
+        "id": "R1",
+        "source": "Carl, in chat on 2026-10-27, relayed by the coordinator (not heard by this session directly)",
+        "words": "Reset to 2,282 (verdict B)",
+        "originalLimits": {
+          "kernelGzipMax": 2048
+        },
+        "measured": {
+          "kernelAloneGzipB": 2282
+        },
+        "madeAfterMeasurement": true,
+        "note": "Carl's ruling, made AFTER the measurement; it is not a pre-committed bound. Only the kernel-alone line moved (2,048 to 2,282 B); the slice bound 7,168 B is untouched; the original failure stays in record.json and failed-legs.json as measured."
       }
     },
     {
@@ -455,6 +484,21 @@
       "sizeEstimate": "under 20 KB",
       "licence": "not read",
       "status": "not requested of Carl yet; not downloaded"
+    }
+  ],
+  "rulings": [
+    {
+      "id": "R1",
+      "source": "Carl, in chat on 2026-10-27, relayed by the coordinator (not heard by this session directly)",
+      "words": "Reset to 2,282 (verdict B)",
+      "originalLimits": {
+        "kernelGzipMax": 2048
+      },
+      "measured": {
+        "kernelAloneGzipB": 2282
+      },
+      "madeAfterMeasurement": true,
+      "note": "Carl's ruling, made AFTER the measurement; it is not a pre-committed bound. Only the kernel-alone line moved (2,048 to 2,282 B); the slice bound 7,168 B is untouched; the original failure stays in record.json and failed-legs.json as measured."
     }
   ]
 }

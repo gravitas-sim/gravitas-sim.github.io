@@ -59,7 +59,9 @@ transmission slice's A (see 7). They are listed as requests in the fixture (`dat
 
 **Amendment AM1 (before any measurement).** Re-deriving `E1` found that its Rayleigh-Jeans sub-bound, written at `lambda T = 1e5` micron K, cannot be met by any code: there `x = h c/(lambda k T) = 0.144` and the Rayleigh-Jeans form is wrong by `x/2 = 7.2` percent. It is restated at `lambda T = 1e7` micron K (`x/2 = 7.2e-4`). The first commit's text is in the branch history; no output of `E1` had been inspected; the fixture's `amendments` records it.
 
-**Amendment AM2 (after the first harness run, before any recorded verdict).** The claim rule's committed positive controls caught a defect in the committed Spanish patterns: JavaScript's ASCII word boundary does not treat an accented letter as a letter, so the Spanish bad control about detecting water was not caught (11 of 12 bad controls). The Spanish patterns now use Unicode-aware boundaries and the flags are `iu`; the bound (12 of 12, 6 of 6, no violation) is unchanged. Unlike AM1 this was made after one measurement of `C1`, so it is listed among the rulings Carl is asked for.
+**Amendment AM2 (after the first harness run, before any recorded verdict).** The claim rule's committed positive controls caught a defect in the committed Spanish patterns: JavaScript's ASCII word boundary does not treat an accented letter as a letter, so the Spanish bad control about detecting water was not caught (11 of 12 bad controls). The Spanish patterns now use Unicode-aware boundaries and the flags are `iu`; the bound (12 of 12, 6 of 6, no violation) is unchanged. Unlike AM1 this was made after one measurement of `C1`, so it was put to Carl, who ruled "Let AM2 stand (Recommended)".
+
+**Amendment AM3 (Carl's ruling, after the measurement).** The kernel-alone bound of `T1.ep.deferred` was reset from 2,048 B to 2,282 B by Carl ("Reset to 2,282 (verdict B)", 2026-10-27, relayed by the coordinator). It is his ruling made after the measurement, not a bound committed in advance; see "Carl's rulings" in the Results.
 
 **Analytic cases** (`X1`, `E1` to `E4`): for a frozen exponential `tau = tau_0 exp(-x/H)` the depth integral has the closed form
 `H [E1(tau_0) + ln tau_0 + gamma]`; the full-spectrum Planck integral is `sigma T^4/pi`; the slab flux is `B_p` at `tau = 0` and
@@ -176,11 +178,35 @@ astropy 6.1.7, 428 s), the harness, the byte measurement, and the full oracle re
 `oracle-results.json`). The record is `tests/fixtures/atmospheres-gate-ii/record.json`; `tests/atmospheresGateII.test.js`
 re-derives every status from it, recomputes the verdict, checks that this document states it, and runs the claim rule live.
 
-**Verdict: C**, by the committed decision function, **as measured and not pending a ruling**: one `shared` check fails, the
-eclipse-and-phase slice's kernel size (`T1.ep.deferred`: the kernel alone is 2,282 B gzipped against the committed 2,048 B; the
-slice as a whole is +3,233 B against 7,168). **Every physics check of the eclipse and phase slice passes** (`E1` to `E6`, `N1`, `N2`).
-The verdict is **B if** that one bound is reset (as Carl reset Gate I's two seam bounds): by the same function, the transmission
-slice then fails and the eclipse and phase slice is authorized. The register row is D-R10-201-01 (DELEGATED, pending Carl).
+**Verdict: B**, by the committed decision function **after Carl's ruling R1 (below), which he made after the measurement and which is
+not a pre-committed bound**. As first measured, under the bounds as committed, the function gave **C** (record `42af7e57`): one
+`shared` check failed, the eclipse-and-phase slice's kernel size (`T1.ep.deferred`: the kernel alone is 2,282 B gzipped against the
+committed 2,048 B; the slice as a whole is +3,233 B against 7,168). **Every physics check of the eclipse and phase slice passes**
+(`E1` to `E6`, `N1`, `N2`). Under the ruling the transmission slice still fails (below), so the function gives B. The register row
+is D-R10-201-01 (DELEGATED, reviewed by Carl for the two parts below, the rest pending).
+
+### Carl's rulings (2026-10-27)
+
+Source: Carl, in chat on 2026-10-27, relayed by the coordinator to this session (not heard here directly). His answers, verbatim:
+
+| Question | Carl's answer | Effect |
+| --- | --- | --- |
+| `T1.ep.deferred`: reset the kernel-alone bound (2,048 B to the measured 2,282 B) so the function gives B, or leave C | "Reset to 2,282 (verdict B)" | **R1 / AM3.** The kernel-alone line is 2,282 B; the slice bound (7,168 B) is untouched; the row reads **pass under ruling**; the original failure stays in `record.json` (`originalStatus`, `originalVerdict`) and `failed-legs.json` as measured. The reset was made after the measurement |
+| AM2, the Spanish claim patterns made Unicode-aware after one measurement | "Let AM2 stand (Recommended)" | AM2 stands; the bound was never changed |
+
+No other bound moved. **`X3`, `X4` and `T1.whole.deferred` still fail as measured and are not restated.** `XR`, `XT` and `D1` to `D3` are still
+not measured.
+
+### What B means for the prompts that follow
+
+- **202** is authorized for the slice B names only: the eclipse model with its brightness temperature and the Lambert phase curve
+  with the Bond-albedo relation, over synthetic data with a truth manifest. Not the transmission piece (the whole-family size and the
+  transmission legs failed as measured), and not the A scope.
+- **205's spectra items** need the transmission piece and **stay unauthorized**.
+- **202 needs a ruling on the first-visit precache before it merges:** the base build sits exactly at `tools/data-budget.json`'s
+  first-visit ceiling (5,188,079 B) and the slice adds +11 B (+16 B for the whole family), so it is over it. This gate edited no
+  budget file; the ruling is Carl's.
+- 231's "One planet, every method" keeps the eclipse depth under B (only C omits it).
 
 ### The checks
 
@@ -206,7 +232,7 @@ slice then fails and the eclipse and phase slice is authorized. The register row
 | `X6.cloud` | pass | 99.8 percent of 500 draws "not constrained" (bound 95); one draw returned a number. The committed text said a deck above the **weak** band's effective height makes the bands equal; that is not so (a deck between the two leaves the strong band deeper), so the case run is a deck 4 scale heights above the **strong** band's; the between case is in `Z1` |
 | `XR.reference` | **not measured** | needs a cited radiative-transfer code's outputs for the same inputs (Q2); nothing downloaded |
 | `XT.table` | **not measured** | needs the pinned, cited cross-section table (Q1); the synthetic absorber tests the integration and names no molecule |
-| `T1.ep.deferred` | **fail** | slice +3,233 B (bound 7,168) but its kernel alone is 2,282 B (bound 2,048) |
+| `T1.ep.deferred` | fail as committed; **pass under ruling R1** | slice +3,233 B (bound 7,168); its kernel alone is 2,282 B (bound as committed 2,048, reset by Carl to 2,282 after the measurement) |
 | `T1.whole.deferred` | **fail** | family +5,676 B (bound 12,288) but its kernel alone is 4,109 B (bound 4,096, over by 13 B) |
 | `T1.requests` | pass | +0 lazy chunks (bound 2): the kernel and instruments join the existing atmosphere chunk |
 | `T1.tier` | pass | first-visit precache +16 B whole, +11 B slice (bound 64), idle +0 B. The base build sits exactly at `tools/data-budget.json`'s first-visit ceiling (5,188,079 B), so these bytes are over it: **no budget file was edited**; Prompt 202 will need Carl's ruling on that line |
@@ -216,9 +242,9 @@ slice then fails and the eclipse and phase slice is authorized. The register row
 
 ### What the verdict says, and what it does not
 
-- **C is driven by 234 bytes of kernel, not by physics.** The slice's whole cost is 3.2 KB of the 7.2 KB allowed; the bound that
-  failed is the kernel-alone line, set before any code existed. I did not trim the prototype to the line after seeing the
-  number, and I did not move the bound. Whether to reset it is Carl's, as with Gate I.
+- **The first measurement's C was driven by 234 bytes of kernel, not by physics.** The slice's whole cost is 3.2 KB of the 7.2 KB
+  allowed; the bound that failed is the kernel-alone line, set before any code existed. I did not trim the prototype to the line
+  after seeing the number and did not move the bound; Carl reset it (R1), as with Gate I, and the function gives B.
 - **The eclipse and phase physics is sound within its stated model.** Brightness temperature and Lambert albedo return their
   truth at the stated rate, refuse where reflected light matters, and flag a planet that is not a Lambert sphere. What neither can
   say is in the `assumes` field and the claim rule.
@@ -255,10 +281,11 @@ scratch virtual environment.
   agrees with the oracle's surface integral to 5e-13.
 - The synthetic absorber is not a molecule: nothing here says what water, or any gas, would do.
 
-### Rulings asked of Carl (the register row carries them)
+### Still open for Carl (the register row carries them)
 
-1. **`T1.ep.deferred`**: reset the slice's kernel-alone bound (2,048 B to 2,282 B, the measured value) so the function gives B; or leave C.
-2. **AM2** (the Spanish claim patterns): stand, or not.
-3. **R-a**: whether `not-measured` data legs leave the authentic-data requirement met for the eclipse and phase slice.
-4. **R-b**: whether to allow Q1 and Q2 (and Q3 to Q5) and a re-run; and, if B stands, whether 205's spectra items remain unauthorized.
-5. **X3's stated error**: whether a re-run of the transmission model with a gravity term, and a corrected stated error, is wanted before 202 is ever built whole.
+3. **R-a**: whether `not-measured` data legs (`D1` to `D3`) leave the authentic-data requirement (7.5.8e) met for the eclipse and phase slice.
+4. **R-b**: whether to allow the data requests Q1 to Q5 (cross-section table, a cited code's outputs, a transmission spectrum, eclipse depths, phase functions) and a re-run of the gate; the transmission slice cannot be A without Q1 and Q2.
+5. **X3's stated error**: whether a re-run of the transmission model with a gravity term and a corrected stated error is wanted before 202 is ever built whole.
+6. **The first-visit precache line** that 202 will need (above).
+
+(Items 1 and 2 of the first report, the kernel bound and AM2, were answered above.)

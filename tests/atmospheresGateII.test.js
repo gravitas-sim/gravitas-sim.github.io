@@ -137,9 +137,10 @@ describe('the committed thresholds', () => {
   });
 
   test('the two amendments are recorded in the fixture and the document, AM1 before any measurement and AM2 after one', () => {
-    expect(thresholds.amendments.map(a => a.id)).toEqual(['AM1', 'AM2']);
+    expect(thresholds.amendments.map(a => a.id)).toEqual(['AM1', 'AM2', 'AM3']);
     expect(doc).toContain('Amendment AM1');
     expect(doc).toContain('Amendment AM2');
+    expect(doc).toContain('Amendment AM3');
     expect(byId['E1.planck'].bound).toMatch(/amended/);
     expect(thresholds.amendments[1].why).toMatch(/11 of 12/);
     expect(thresholds.claimRule.flags).toBe('iu');
@@ -173,7 +174,11 @@ describe('the recorded result', () => {
   test('each numeric status follows from its recorded measurement and its committed bound', () => {
     for (const [id, f] of Object.entries(judged)) {
       const r = record.checks[id];
-      const want = f(r.measured, byId[id].limits) ? 'pass' : 'fail';
+      const want = f(r.measured, byId[id].limits)
+        ? byId[id].ruling
+          ? 'pass-under-ruling'
+          : 'pass'
+        : 'fail';
       expect({ id, status: r.status }).toEqual({ id, status: want });
     }
   });
@@ -201,25 +206,22 @@ describe('the recorded result', () => {
     );
   });
 
-  test('the failing legs are left failing as committed and are the ones failed-legs.json lists', () => {
+  test('the failing legs are left failing as committed and are the ones failed-legs.json lists, plus the one Carl ruled on, kept as measured', () => {
     const failing = Object.entries(record.checks)
       .filter(([, v]) => v.status === 'fail')
       .map(([id]) => id)
       .sort();
-    expect(failedLegs.failed.map(f => f.id).sort()).toEqual(failing);
-    expect(failing).toEqual([
-      'T1.ep.deferred',
-      'T1.whole.deferred',
-      'X3.regime',
-      'X4.coverage',
-    ]);
-    const kernel = record.checks['T1.ep.deferred'].measured;
-    expect(kernel.kernelAloneGzipB).toBeGreaterThan(
-      byId['T1.ep.deferred'].limits.kernelGzipMax
+    expect(failing).toEqual(['T1.whole.deferred', 'X3.regime', 'X4.coverage']);
+    expect(failedLegs.failed.map(f => f.id).sort()).toEqual(
+      [...failing, 'T1.ep.deferred'].sort()
     );
-    expect(byId['T1.ep.deferred'].limits.kernelGzipMax).toBe(2048);
+    const ruled = failedLegs.failed.find(f => f.id === 'T1.ep.deferred');
+    expect(ruled.ruledByCarl).toMatch(/R1/);
+    expect(ruled.measured.kernelAloneGzipB).toBe(2282);
+    expect(record.checks['T1.ep.deferred'].originalStatus).toBe('fail');
     expect(byId['X3.regime'].limits.factor).toBe(1.5);
     expect(byId['X4.coverage'].limits.coverageRange).toEqual([0.93, 0.99]);
+    expect(byId['T1.whole.deferred'].limits.kernelGzipMax).toBe(4096);
     for (const c of thresholds.checks.filter(c => c.group === 'ep'))
       expect(isPass(record.checks[c.id].status)).toBe(true);
   });
@@ -248,15 +250,50 @@ describe('the recorded result', () => {
     expect(Math.abs(z.deckStrongOnly.median)).toBeGreaterThan(0.3);
   });
 
-  test('the verdict follows from the decision function, the document states it, and the verdict under a reset of the one bound that drives C is B', () => {
+  test("the verdict follows from the decision function (B under Carl's ruling), the committed bounds as measured gave C, and the document states both", () => {
     expect(decide(record.checks)).toBe(record.verdict);
-    expect(record.verdict).toBe('C');
-    expect(decide(record.checks, ['T1.ep.deferred'])).toBe(
-      record.verdictIfEpKernelBoundWereReset
+    expect(record.verdict).toBe('B');
+    expect(record.originalVerdict.verdict).toBe('C');
+    const asCommitted = JSON.parse(JSON.stringify(record.checks));
+    asCommitted['T1.ep.deferred'].status = 'fail';
+    expect(decide(asCommitted)).toBe('C');
+    // transmission still fails: a pass anywhere in tx would be needed for A
+    expect(decide(record.checks, ['T1.ep.deferred'])).toBe('B');
+    expect(doc).toContain('**Verdict: B**');
+    expect(doc).toContain('(record `42af7e57`)');
+  });
+
+  test("Carl's two rulings are pinned: source, verbatim words, original and measured values, the one row that carries R1, AM2 standing", () => {
+    const SOURCE =
+      'Carl, in chat on 2026-10-27, relayed by the coordinator (not heard by this session directly)';
+    expect(thresholds.rulings).toHaveLength(1);
+    expect(thresholds.rulings[0].source).toBe(SOURCE);
+    expect(thresholds.rulings[0].words).toBe('Reset to 2,282 (verdict B)');
+    expect(thresholds.rulings[0].madeAfterMeasurement).toBe(true);
+    expect(record.ruling).toEqual(thresholds.rulings[0]);
+    expect(thresholds.checks.filter(c => c.ruling).map(c => c.id)).toEqual([
+      'T1.ep.deferred',
+    ]);
+    const c = byId['T1.ep.deferred'];
+    expect(c.ruling.originalLimits).toEqual({ kernelGzipMax: 2048 });
+    expect(c.limits.kernelGzipMax).toBe(2282);
+    expect(c.limits.deferredGzipMax).toBe(7168);
+    expect(record.checks['T1.ep.deferred'].status).toBe('pass-under-ruling');
+    expect(record.checks['T1.ep.deferred'].ruling).toBe('R1');
+    expect(
+      Object.values(record.checks).filter(x => x.status === 'pass-under-ruling')
+    ).toHaveLength(1);
+    const am2 = thresholds.amendments.find(a => a.id === 'AM2');
+    expect(am2.ruling.words).toBe('Let AM2 stand (Recommended)');
+    expect(thresholds.amendments.find(a => a.id === 'AM3').words).toBe(
+      'Reset to 2,282 (verdict B)'
     );
-    expect(record.verdictIfEpKernelBoundWereReset).toBe('B');
-    expect(doc).toContain(`**Verdict: ${record.verdict}**`);
-    expect(doc).toContain('**B if**');
+    expect(doc).toContain('"Reset to 2,282 (verdict B)"');
+    expect(doc).toContain('"Let AM2 stand (Recommended)"');
+    expect(doc).toContain(
+      "205's spectra items** need the transmission piece and **stay unauthorized"
+    );
+    expect(doc).toContain('202 needs a ruling on the first-visit precache');
   });
 
   test('the oracle was independent and checked itself: the Lommel-Seeliger sphere agrees with its closed form and the depth grid is converged', () => {

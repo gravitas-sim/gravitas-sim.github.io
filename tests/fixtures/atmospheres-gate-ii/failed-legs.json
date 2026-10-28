@@ -1,6 +1,6 @@
 {
   "format": "gravitas.atmospheres-gate-ii-failed-legs/1",
-  "note": "failing legs left failing as committed; no bound moved; the not-measured checks are listed apart",
+  "note": "failing legs left failing as committed; no bound moved except T1.ep.deferred on Carl's ruling R1 (kept here as measured); X3, X4 and T1.whole.deferred remain failing; the not-measured checks are listed apart",
   "failed": [
     {
       "id": "X3.regime",
@@ -45,7 +45,8 @@
         "deferredAddedGzipB": 3233,
         "kernelAloneGzipB": 2282,
         "kernelAloneRawB": 4676
-      }
+      },
+      "ruledByCarl": "R1: kernel-alone bound reset to 2,282 B after the measurement; the leg failed as committed and is kept here as measured"
     },
     {
       "id": "T1.whole.deferred",
