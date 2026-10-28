@@ -118,4 +118,83 @@ export default async function run({ add }) {
     source: 'NASA Planetary Fact Sheet (typed)',
     why: 'An isothermal, hydrostatic atmosphere; real atmospheres change temperature with height, so the agreement is to a few percent.',
   });
+
+  // The eclipse and phase slice (Prompt 202; the full table, with the independent
+  // oracle, is `npm run atmospheres-ii:validate`).
+  const ec = {
+    radiusRatio: 0.1,
+    tPlanet: 1500,
+    tStar: 5800,
+    band: [3e-6, 4e-6],
+  };
+
+  add({
+    group: 'Atmospheres',
+    kind: 'analytic',
+    name: 'An eclipse of a planet as hot as its star hides the radius ratio squared of the light',
+    measured: K.eclipseDepth({ ...ec, tPlanet: 5800 }).depth,
+    expected: 0.01,
+    unit: '',
+    tolerance: 1e-12,
+    why: 'Equal temperatures give equal band radiances, so the depth is (R_p/R_s)^2 whatever the band.',
+  });
+
+  add({
+    group: 'Atmospheres',
+    kind: 'analytic',
+    name: 'A deep absorbing band in an eclipse shows the isothermal skin at 2^(-1/4) of the planet’s temperature',
+    measured: K.eclipseDepth({ ...ec, bandTau: 1e4 }).depth,
+    expected: K.eclipseDepth({ ...ec, tPlanet: 1500 / 2 ** 0.25 }).depth,
+    unit: '',
+    tolerance: 1e-9,
+    why: 'Where the skin is opaque the planet’s band flux is the skin’s blackbody: a band can only be a dip in this model.',
+  });
+
+  add({
+    group: 'Atmospheres',
+    kind: 'analytic',
+    name: 'The Lambert phase integral is 3/2',
+    measured:
+      2 * K.composite(a => K.lambertPhase(a) * Math.sin(a), 0, Math.PI, 0.25),
+    expected: 1.5,
+    unit: '',
+    tolerance: 1e-9,
+    why: 'The integral of the Lambert phase function over all phase angles, which makes the Bond albedo 3/2 of the geometric albedo for a Lambert sphere.',
+  });
+
+  add({
+    group: 'Atmospheres',
+    kind: 'analytic',
+    name: 'The brightness temperature of an eclipse depth returns the temperature that made it',
+    measured: K.brightnessTemperature({
+      radiusRatio: 0.1,
+      tStar: 5800,
+      band: [3e-6, 4e-6],
+      semiMajorOverRp: 1e6,
+      depth: K.eclipseDepth(ec).depth,
+    }).temperature,
+    expected: 1500,
+    unit: 'K',
+    tolerance: 1e-9,
+    why: 'The inverse of a monotone function; the independent check of the forward model against numerical integration is the oracle’s (E1 to E3).',
+  });
+
+  add({
+    group: 'Atmospheres',
+    kind: 'analytic',
+    name: 'The brightness temperature refuses where reflected light could be a tenth of the depth',
+    measured: Number(
+      K.brightnessTemperature({
+        radiusRatio: 0.12,
+        tStar: 6000,
+        band: [3.2e-6, 4e-6],
+        semiMajorOverRp: 8,
+        depth: 2.8e-3,
+      }).refused === true
+    ),
+    expected: 1,
+    unit: '',
+    tolerance: 0,
+    why: 'A depth is not a temperature unless reflected light is known to be small; the model returns no number and says why.',
+  });
 }

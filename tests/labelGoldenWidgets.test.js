@@ -88,7 +88,7 @@ describe('the parts of the recording', () => {
   test('every instrument is in exactly one family, and each family has its own module', () => {
     const ids = Object.values(recorded.ids).flat();
     expect(new Set(ids).size).toBe(ids.length);
-    expect(ids.length).toBe(124);
+    expect(ids.length).toBe(126);
     const paths = Object.values(modules);
     expect(new Set(paths).size).toBe(paths.length);
   });
