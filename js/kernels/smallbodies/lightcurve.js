@@ -257,7 +257,7 @@ export function rotationFromLightCurve(t, m, opts = {}) {
     return {
       ...base,
       verdict: 'not-periodic',
-      why: `the strongest peak has a false-alarm probability of ${fap.toPrecision(2)}, above ${o.falseAlarmMax}`,
+      why: `the strongest peak's false-alarm probability (falseAlarm) is above the limit of ${o.falseAlarmMax}`,
     };
   // The second peak: the strongest local maximum outside 1.5 resolution elements of the first.
   const g = found.grid;
