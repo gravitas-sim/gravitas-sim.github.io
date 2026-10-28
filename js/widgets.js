@@ -104,7 +104,7 @@ const familyEntry = (load, path, exportName, ids, ready) => ({
 });
 
 // <generated:lazy-families>
-// tidal, darkMatter, spectra, light, variables, galactic, cosmology, sky, gwEvents, imaging, jovian, crater wait on their own readiness (prose or data behind a second import); whenWidgetsReady() waits for it.
+// tidal, darkMatter, spectra, light, variables, galactic, cosmology, sky, gwEvents, imaging, jovian, crater, sun wait on their own readiness (prose or data behind a second import); whenWidgetsReady() waits for it.
 export const LAZY_FAMILIES = Object.freeze({
   energy: familyEntry(
     () => import('./energyWidgets.js'),
@@ -364,6 +364,13 @@ export const LAZY_FAMILIES = Object.freeze({
     'CRATER_WIDGETS',
     ['crater-regions', 'crater-sfd', 'crater-budget'],
     'craterReady'
+  ),
+  sun: familyEntry(
+    () => import('./sunWidgets.js'),
+    './sunWidgets.js',
+    'SUN_WIDGETS',
+    ['sun-frames', 'sun-rotation', 'sun-power'],
+    'sunReady'
   ),
   tides: familyEntry(
     () => import('./tidesWidgets.js'),

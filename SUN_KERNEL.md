@@ -75,7 +75,7 @@ Carrington route (a fit of the Carrington longitude, no Earth rate) recovers the
 - Every bound in the table above is the committed one; `thresholds.json` was not edited
   after the correction note.
 
-## What is built, and what is not
+## What is built, and what is not (Part 1, as merged in #454; Part 2 below built the rest)
 
 Built: the kernel (item 2 of the prompt), its validation and this document.
 
@@ -110,6 +110,97 @@ fetched without Carl's word per request:
 Whether the frames ship as app packs (the data budget has 4,337 B raw and 781 B gzip of
 room, so they would not) or as lazy `NEVER_PRECACHED` files is a decision for Carl, as at
 189, 193 and 195.
+
+## Part 2: the data-dependent parts (frames, irradiance, instruments, investigations)
+
+Built on the kernel above after Carl approved the downloads in chat on 2026-10-27, and with
+the delegated ruling D-R10-92 that a heliographic reading of a display-only browse frame is
+allowed as an instructional measurement, labeled not astrometry, with the browse-product caveat
+in the student text and the provenance.
+
+### The data (retrieved once, pinned by SHA-256 in `frames/sun-2024-05.json`)
+
+| What | Source and terms | Size |
+| --- | --- | --- |
+| Fourteen SDO HMI continuum browse pictures, 1,024 pixels, one a day at 12:00 UT, 2024-05-04 to 2024-05-17 | `sdo.gsfc.nasa.gov/assets/img/browse/YYYY/MM/DD/YYYYMMDD_120000_1024_HMIIC.jpg`; SDO data are not copyrighted unless noted, credit SDO/NASA and the HMI science team; **browse products are not for science analysis** | 14 files, 3.0 MB (about 215 KB each) |
+| The Sun's geometry per day | JPL Horizons API 1.2, target 10, observer 500@399, daily 12:00 UT; quantities 14, 17 and 20 (L0, B0, NP.ang, distance) | 8 KB |
+| Daily total solar irradiance | LASP LISIRD `tsis_tsi_24hr` (TSIS-1 TIM); the citation requested is LASP/TSIS-1 TIM team | 0.5 KB, 13 rows |
+| NOAA SWPC region counts | **not retrieved** (the host was unreachable): the alternative text states only what the page's detector reads from a picture | none |
+
+The irradiance file has 13 rows, JD 2460435 to 2460447 (2024-05-04 to 2024-05-16; 17 May is not in
+it). Only the first six (4 to 9 May) are measurements. The last seven read 0.0 with an
+uncertainty of 0.0 and are fill values: the pack marks them `fill` and no calculation uses them.
+
+The pictures are copied byte for byte by `build.js` to `frames/sun/` and the sidecar to
+`frames/sun-2024-05.json`; both are fetched on demand by the instruments, checked against their
+SHA-256 and kept by the service worker after the first online use. They are in no precache tier,
+no data pack and no data budget.
+
+### What the build tool reads from the pictures (`tools/sun-frames-build.mjs`)
+
+Rules committed in `tests/fixtures/sun/thresholds-2.json` before any rate was computed:
+
+- **The disc.** The limb fitted on every picture (360 rays, half-level crossing, an algebraic circle
+  fit that drops rays more than 1 pixel off): the centre is (511.58, 511.48) to 0.03 pixel on every
+  frame, the radius falls from 471.03 to 469.65 pixels, and the radius times Horizons' distance is
+  475.00 pixels AU to 0.01 on all 14 frames: the scale is 2.0194 arcseconds per pixel and the
+  distance in the pictures is JPL's.
+- **North up.** SDO browse pictures have solar north up, so the pole angle used for the
+  pixel-to-heliographic conversion is 0 and Horizons' NP.ang (about -23 degrees) is listed and not
+  used. With P = 0 the tracked groups keep their latitude to 0.5 degree over days; with NP.ang the
+  scatter of G3's latitude would be 11.6 degrees (leg `e0.orientation.wrongP.G3`).
+- **A dark-cluster detector.** Pixels below 0.62 of the 41 by 41 mean luminosity, single-linkage
+  clusters at 14 pixels, a group counted if it has at least 12 dark pixels (`groupsRead` per day:
+  4 to 8). These are clusters and not NOAA regions.
+- **Three groups tracked** by solid co-rotation from a seed on 4 May: G1, a small spot near
+  latitude +7 degrees; G2, a northern spread-out complex at +26; G3, the large southern group at
+  -20 that grows from 78 to 465 dark pixels. The lessons use G1 and G3 (chosen before any rate
+  was computed). The marks are the author's; no participant has marked these pictures.
+
+### Part 2 results (`npm run sun:validate`: 96 rows, 91 pass, 4 fail, 1 not run)
+
+| Leg | Result |
+| --- | --- |
+| `e0.pack.integrity` | 14 frames each the file its record names; 6 measured and 7 fill irradiance rows: pass |
+| `e0.scale` | radius times distance constant to 0.010 pixel (bound 0.1); centre 0.11 pixel from the middle (0.5): pass |
+| `e0.orientation` | latitude scatter of G1, G2, G3 0.14, 0.27, 0.50 degree (0.6); with NP.ang it would be 11.6 degrees (at least 5): pass |
+| `b5.ephemeris` | the kernel's `subEarth` against Horizons at 14 instants: B0 0.0014 degree (0.05), P 0.0037 (0.1), L0 0.061 (0.2): pass |
+| `e1.tracks`, `e1.carrington`, `e1.order` | 6, 5 and 9 usable positions; the Carrington route agrees with the synodic route to 7e-4 degrees a day (0.01); G1 faster than G3: pass |
+| `e1.authentic.G1` | sidereal 14.134 +/- 0.059 degrees a day against the law's 14.292 at 7.3 degrees: z -0.52, pass |
+| `e1.authentic.G3` | 13.476 +/- 0.056 against 14.050 at -20.1 degrees: z -1.88, **pass, close to the bound of 2**; chi-square 16.5 on 7 degrees of freedom (the group grows, its centre moves) |
+| `e1.authentic.G2` | 12.375 +/- 0.182 against 13.858: z 4.2, **FAIL (left failing)**: the committed nearest-cluster rule followed the trailing piece of a complex that splits as it decays |
+| `e1.limb` | G1 with its mu 0.29 day added: precise false, the warning, but the sidereal sigma is 0.94 of the disc-only sigma (bound: 1.5 times or more), **FAIL (left failing)**: the weighted fit trusts a limb point by its own widened sigma. Two rows ADDED after it failed hold what is true (`e1.limb.pointSigma` 2.9 times the median disc point, `e1.limb.warning`) and do not stand in for it |
+| `e2.irradiance` | six measured days: L = 3.82801e26 W (0.00013 percent from the nominal 3.828e26; bound 0.5 percent), Teff 5772.01 K (bound 15 K): pass; not 14 days as the committed text said, the series has six |
+| `e2.au` | LASP's true-Earth column times Horizons' distance squared against its 1 AU column: 0.007 to 0.013 W/m2 on four days and **0.156 on 9 May (bound 0.01), FAIL (left failing)**; the file's implied distance on 9 May is 5.8e-5 AU short, about 6 hours of the Earth's motion |
+| `e2.interval` | the standard error from the scatter, 0.149 W/m2, is not below the quoted uncertainty over root six (0.118): pass; the quoted 0.29 is about twice the scatter-based interval |
+
+Three of the four failing rows are new (the fourth is `a7.noiseFree.synodicRoute`, Carl's ruling
+of 2026-10-25 in D-R10-79); each is recorded with its cause in
+`tests/fixtures/sun/failed-legs.json` and held by `tests/sun.test.js`. No bound was moved. The
+bounds were written after an orientation check and a limb fit were seen (said in `thresholds-2.json`
+under `whatWasSeenBefore`): `e0.scale` is a pack-integrity check and not a blind test. The rates
+were not computed before the contract was committed.
+
+### The instruments and the investigations
+
+`js/sunWidgets.js` (family `sun`, lazy, never precached): `sun-frames` (a day, a crosshair set with
+two sliders, the heliographic position with its uncertainty and mu, the author's marks, an optional
+grid), `sun-rotation` (one group's marks to a synodic and a sidereal rate and period, the law beside
+it; the equatorial term fitted alone; all three coefficients refused), `sun-power` (the daily flux,
+its correction to 1 AU, the luminosity and temperature, the cost of leaving the correction out, the
+fill rows). Their words are in `js/i18n/{en,es}.sun.js`. Two investigations are appended to the
+four atmosphere-sequence files (the instructor closure stays at 281 files): **The Turning Sun**
+(survey: the position of a spot, a rate from two days, the track, the Earth's correction, what a
+spot is; majors: a second group, the law at two latitudes, whether two groups show differential
+rotation, a mark near the limb; upper: the equatorial term alone, why three coefficients cannot be
+fitted from two latitudes, a growing group that does not lie on a line) and **The Sun's Power**
+(survey: a flux at the Earth to 1 AU, the luminosity and temperature, what leaving out the
+correction costs; majors: the fall over the days, the uncertainty of the mean, fill values; upper:
+the quoted against the scatter-based uncertainty, the comparison with the nominal Sun). The
+misconceptions are named (the Sun as a solid body, spots as holes, a flux at the Earth as the
+Sun's output, a row of zeros as a measurement), the alternative text of each picture names the date
+and the dark clusters read from it and says NOAA's counts were not retrieved, and the model page has
+a section (`#sun`). `tests/sunLessons.test.js` recomputes every number a step states.
 
 ## The model
 
@@ -182,6 +273,6 @@ no light-time turn of the surface, which is about 0.08 degree and was not measur
 
 `js/kernels/sun/{geometry,ephemeris,rotation,irradiance,index}.js`, `tools/sun-validate.mjs`
 (`npm run sun:validate`), `tools/sun-oracle/{oracle.py,oracle-inputs.json}`,
-`tests/fixtures/sun/{thresholds,oracle-results,failed-legs}.json`, `tests/sun.test.js`.
+`tests/fixtures/sun/{thresholds,thresholds-2,oracle-results,failed-legs}.json`, `tests/sun.test.js`.
 The kernel is listed in `NEVER_PRECACHED` (`tools/build-service-worker.mjs`) though no page
 imports it yet, so a later panel that imports it installs nothing. Register row D-R10-79.

@@ -1503,6 +1503,48 @@
     }
    ]
   },
+  "sun-frames": {
+   "live": false,
+   "controls": [
+    "day",
+    "x",
+    "y",
+    "marks",
+    "grid"
+   ],
+   "presets": 0,
+   "buttons": [],
+   "engineReads": [],
+   "mutates": [],
+   "datasets": []
+  },
+  "sun-power": {
+   "live": false,
+   "controls": [
+    "days",
+    "correct"
+   ],
+   "presets": 0,
+   "buttons": [],
+   "engineReads": [],
+   "mutates": [],
+   "datasets": []
+  },
+  "sun-rotation": {
+   "live": false,
+   "controls": [
+    "group",
+    "first",
+    "last",
+    "limb",
+    "mode"
+   ],
+   "presets": 0,
+   "buttons": [],
+   "engineReads": [],
+   "mutates": [],
+   "datasets": []
+  },
   "survey-counts": {
    "live": false,
    "controls": [
@@ -91075,27 +91117,1244 @@
     "mismatched": 0,
     "rebuilds": 0
    }
+  },
+  {
+   "id": "the-turning-sun",
+   "title": "The Turning Sun",
+   "lock": {
+    "placement": true,
+    "inspector": true
+   },
+   "steps": [
+    {
+     "sid": "fourteen-days",
+     "index": 1,
+     "type": "read",
+     "title": "Fourteen pictures of the Sun",
+     "declares": {
+      "stage": {
+       "objects": 1,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "star"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram"
+     ],
+     "actions": [
+      "move-an-instrument-control"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "experiment",
+       "measure"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "sun-frames",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "inherits the world already on screen",
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "which-way",
+     "index": 2,
+     "type": "question",
+     "title": "Which way do the spots go?",
+     "declares": {
+      "stage": {
+       "objects": 1,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "star"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram"
+     ],
+     "actions": [
+      "choose-an-option",
+      "move-an-instrument-control"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "sun-frames",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "read-a-position",
+     "index": 3,
+     "type": "measure",
+     "title": "Where on the Sun is G1?",
+     "declares": {
+      "stage": {
+       "objects": 1,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "star"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values",
+      "move-an-instrument-control"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "sun-frames",
+      "capture": false
+     },
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "how-far-in-three-days",
+     "index": 4,
+     "type": "measure",
+     "title": "How far does it turn in three days?",
+     "declares": {
+      "stage": {
+       "objects": 1,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "star"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values",
+      "move-an-instrument-control"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "sun-frames",
+      "capture": false
+     },
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "track-the-group",
+     "index": 5,
+     "type": "measure",
+     "title": "The whole track",
+     "declares": {
+      "stage": {
+       "objects": 1,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "star"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values",
+      "move-an-instrument-control"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "sun-rotation",
+      "capture": false
+     },
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "longer-or-shorter",
+     "index": 6,
+     "type": "predict",
+     "title": "The Sun’s own period",
+     "declares": {
+      "stage": {
+       "objects": 1,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "star"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram"
+     ],
+     "actions": [
+      "commit-a-prediction",
+      "move-an-instrument-control"
+     ],
+     "requires": [],
+     "reveal": "the-sidereal-period",
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "predict",
+      "actual": [
+       "predict",
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "sun-rotation",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "the-sidereal-period",
+     "index": 7,
+     "type": "measure",
+     "title": "Against the stars",
+     "declares": {
+      "stage": {
+       "objects": 1,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "star"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values",
+      "move-an-instrument-control"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "sun-rotation",
+      "capture": false
+     },
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "what-is-a-spot",
+     "index": 8,
+     "type": "question",
+     "title": "What is a sunspot?",
+     "declares": {
+      "stage": {
+       "objects": 1,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "star"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram"
+     ],
+     "actions": [
+      "choose-an-option",
+      "move-an-instrument-control"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "sun-frames",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "what-you-worked-out",
+     "index": 9,
+     "type": "read",
+     "title": "What you worked out",
+     "declares": {
+      "stage": {
+       "objects": 1,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "star"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram"
+     ],
+     "actions": [
+      "move-an-instrument-control"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "experiment",
+       "measure"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "sun-rotation",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    }
+   ],
+   "loops": [
+    {
+     "predict": "longer-or-shorter",
+     "predictCollects": true,
+     "heldUntil": "the-sidereal-period",
+     "experiment": [
+      "the-sidereal-period",
+      "what-is-a-spot",
+      "what-you-worked-out"
+     ],
+     "measure": [
+      "the-sidereal-period",
+      "what-is-a-spot",
+      "what-you-worked-out"
+     ],
+     "evidence": [
+      "the-sidereal-period"
+     ],
+     "interpret": "the-sidereal-period",
+     "measuredBeforeAnswering": true,
+     "explained": false,
+     "answeredByTheExperiment": true,
+     "closed": true,
+     "complete": true
+    }
+   ],
+   "totals": {
+    "steps": 9,
+    "declared": 9,
+    "student": 0,
+    "engine": 0,
+    "model": 9,
+    "data": 0,
+    "diagram": 9,
+    "evidence": 4,
+    "computation": 0,
+    "declaredButInert": 9,
+    "prose": 0,
+    "mismatched": 0,
+    "rebuilds": 0
+   }
+  },
+  {
+   "id": "the-suns-power",
+   "title": "The Sun’s Power",
+   "lock": {
+    "placement": true,
+    "inspector": true
+   },
+   "steps": [
+    {
+     "sid": "a-flux-above-the-air",
+     "index": 1,
+     "type": "read",
+     "title": "Sunlight measured above the air",
+     "declares": {
+      "stage": {
+       "objects": 1,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "star"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram"
+     ],
+     "actions": [
+      "move-an-instrument-control"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "experiment",
+       "measure"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "sun-power",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "inherits the world already on screen",
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "flux-at-one-au",
+     "index": 2,
+     "type": "measure",
+     "title": "Bring it to one astronomical unit",
+     "declares": {
+      "stage": {
+       "objects": 1,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "star"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values",
+      "move-an-instrument-control"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "sun-power",
+      "capture": false
+     },
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "power-predict",
+     "index": 3,
+     "type": "predict",
+     "title": "How much power in all?",
+     "declares": {
+      "stage": {
+       "objects": 1,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "star"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram"
+     ],
+     "actions": [
+      "commit-a-prediction",
+      "move-an-instrument-control"
+     ],
+     "requires": [],
+     "reveal": "luminosity",
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "predict",
+      "actual": [
+       "predict",
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "sun-power",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "luminosity",
+     "index": 4,
+     "type": "measure",
+     "title": "The Sun’s luminosity and temperature",
+     "declares": {
+      "stage": {
+       "objects": 1,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "star"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values",
+      "move-an-instrument-control"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "sun-power",
+      "capture": false
+     },
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "forget-the-au",
+     "index": 5,
+     "type": "question",
+     "title": "What if the correction is left out?",
+     "declares": {
+      "stage": {
+       "objects": 1,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "star"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram"
+     ],
+     "actions": [
+      "choose-an-option",
+      "move-an-instrument-control"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "sun-power",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "what-you-worked-out",
+     "index": 6,
+     "type": "read",
+     "title": "What you worked out",
+     "declares": {
+      "stage": {
+       "objects": 1,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "star"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram"
+     ],
+     "actions": [
+      "move-an-instrument-control"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "experiment",
+       "measure"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "sun-power",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    }
+   ],
+   "loops": [
+    {
+     "predict": "power-predict",
+     "predictCollects": true,
+     "heldUntil": "luminosity",
+     "experiment": [
+      "luminosity",
+      "forget-the-au",
+      "what-you-worked-out"
+     ],
+     "measure": [
+      "luminosity",
+      "forget-the-au",
+      "what-you-worked-out"
+     ],
+     "evidence": [
+      "luminosity"
+     ],
+     "interpret": "luminosity",
+     "measuredBeforeAnswering": true,
+     "explained": false,
+     "answeredByTheExperiment": true,
+     "closed": true,
+     "complete": true
+    }
+   ],
+   "totals": {
+    "steps": 6,
+    "declared": 6,
+    "student": 0,
+    "engine": 0,
+    "model": 6,
+    "data": 0,
+    "diagram": 6,
+    "evidence": 2,
+    "computation": 0,
+    "declaredButInert": 6,
+    "prose": 0,
+    "mismatched": 0,
+    "rebuilds": 0
+   }
   }
  ],
  "totals": {
-  "steps": 1169,
-  "declared": 1077,
+  "steps": 1184,
+  "declared": 1092,
   "student": 157,
   "engine": 163,
-  "model": 685,
+  "model": 700,
   "data": 146,
-  "diagram": 564,
-  "evidence": 298,
+  "diagram": 579,
+  "evidence": 304,
   "computation": 14,
-  "declaredButInert": 920,
+  "declaredButInert": 935,
   "prose": 58,
   "mismatched": 0,
   "rebuilds": 78,
-  "lessons": 76,
-  "loops": 153,
-  "closedLoops": 153,
+  "lessons": 78,
+  "loops": 155,
+  "closedLoops": 155,
   "explainedLoops": 0,
-  "heldLoops": 153,
-  "completeLoops": 153
+  "heldLoops": 155,
+  "completeLoops": 155
  }
 }

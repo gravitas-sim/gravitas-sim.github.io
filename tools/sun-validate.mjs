@@ -14,12 +14,13 @@
 //
 // The oracle's rows read the results pinned in tests/fixtures/sun/ (numpy ray
 // tracing, pyerfa vectors, scipy constants: no Gravitas code). Tier b4 (a cited
-// solar-coordinates package) and tier e (the authentic frames and the measured
-// irradiance series) are reported NOT RUN. The ensembles draw from named streams
+// solar-coordinates package) is reported NOT RUN; tier e (the authentic frames and the
+// measured irradiance series) runs on frames/sun-2024-05.json (Prompt 194 part 2). The ensembles draw from named streams
 // of js/random/streams.js; nothing stores a value that passes through a
 // trigonometric function.
 // =============================================================================
 
+import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
@@ -42,6 +43,11 @@ import {
   siderealFromSynodic,
   subEarth,
   summariseFluxSeries,
+  summariseIrradiance,
+  groupIds,
+  groupPositions,
+  measuredIrradiance,
+  trackGroup,
   synodicFromSidereal,
   temperatureFromLuminosity,
   trackRotation,
@@ -54,6 +60,8 @@ const HERE = path.dirname(fileURLToPath(import.meta.url));
 const FIX = path.join(HERE, '../tests/fixtures/sun');
 const read = name => JSON.parse(readFileSync(path.join(FIX, name), 'utf8'));
 export const THRESHOLDS = read('thresholds.json');
+export const THRESHOLDS_2 = read('thresholds-2.json');
+const T2 = THRESHOLDS_2.checks;
 const C = THRESHOLDS.checks;
 const R = THRESHOLDS.rules;
 const ORACLE = read('oracle-results.json');
@@ -927,6 +935,250 @@ function refusalChecks() {
   row('d4.underdetermined', bad4, 0, bad4 === 0, n4.join('; '));
 }
 
+// ---- (e) authentic data: the 14-day sequence and the irradiance series (part 2) -----
+// Bounds: thresholds.json e1.authentic and e2.irradiance as committed, and the new
+// legs of thresholds-2.json (committed before any rate was computed).
+
+const REPO = path.join(HERE, '..');
+const SIDE = JSON.parse(
+  readFileSync(path.join(REPO, 'frames/sun-2024-05.json'), 'utf8')
+);
+
+function authentic() {
+  const side = SIDE;
+  // e0.pack.integrity
+  const b0i = T2['e0.pack.integrity'].bounds;
+  let shaBad = 0;
+  for (const d of side.days) {
+    const bytes = readFileSync(path.join(REPO, d.file));
+    if (createHash('sha256').update(bytes).digest('hex') !== d.sha256) shaBad++;
+  }
+  const valid = measuredIrradiance(side).length;
+  const fills = side.irradiance.filter(r => r.fill).length;
+  const dateBad = side.days.filter(
+    d => d.file.slice(-12, -4) !== d.date.replaceAll('-', '')
+  ).length;
+  const ok =
+    side.days.length === b0i.frames &&
+    shaBad === 0 &&
+    dateBad === 0 &&
+    valid === b0i.validIrradianceDays &&
+    fills === b0i.fillDays;
+  row(
+    'e0.pack.integrity',
+    shaBad + dateBad,
+    b0i,
+    ok,
+    `${side.days.length} frames, ${valid} measured and ${fills} fill irradiance rows`
+  );
+  // e0.scale
+  const b0s = T2['e0.scale'].bounds;
+  const prod = side.days.map(d => d.disc.radiusPx * d.distanceAu);
+  const mean = prod.reduce((a, b) => a + b, 0) / prod.length;
+  within(
+    'e0.scale.radiusTimesDistance',
+    Math.max(...prod.map(p => Math.abs(p - mean))),
+    b0s.radiusTimesDistancePx,
+    `radius times distance ${mean.toFixed(3)} px AU`
+  );
+  within(
+    'e0.scale.centre',
+    Math.max(
+      ...side.days.map(d =>
+        Math.max(
+          Math.abs(d.disc.centrePx[0] - 511.5),
+          Math.abs(d.disc.centrePx[1] - 511.5)
+        )
+      )
+    ),
+    b0s.centrePx,
+    'against the middle of the picture'
+  );
+  // the tracks
+  const b1 = T2['e1.tracks'].bounds;
+  const b0o = T2['e0.orientation'].bounds;
+  const tracks = {};
+  for (const id of groupIds(side)) {
+    const t = trackGroup(side, id);
+    tracks[id] = t;
+    row(
+      `e1.tracks.${id}`,
+      t.status === 'refused' ? 0 : t.nUsed,
+      b1,
+      t.status !== 'refused' && t.nUsed >= b1.minUsable,
+      t.status === 'refused' ? t.code : `${t.nUsed} usable positions`
+    );
+    if (t.status === 'refused') continue;
+    within(
+      `e0.orientation.${id}`,
+      t.latitude.sdDeg,
+      b0o.latitudeSdDegMax,
+      `mean latitude ${t.latitude.deg.toFixed(2)} degrees`
+    );
+    // e1.authentic: the committed row, as it stands
+    row(
+      `e1.authentic.${id}`,
+      Math.abs(t.law.z),
+      C['e1.authentic'].bounds.sigmas,
+      Math.abs(t.law.difference) <=
+        C['e1.authentic'].bounds.sigmas * t.law.sigmaTotal,
+      `sidereal ${t.sidereal.rate.toFixed(3)} +/- ${t.sidereal.sigma.toFixed(3)} against the law's ${t.law.predicted.toFixed(3)} degrees a day at ${t.latitude.deg.toFixed(1)} degrees`
+    );
+    within(
+      `e1.carrington.${id}`,
+      t.carringtonRoute.differenceFromSynodicRoute,
+      T2['e1.carrington'].bounds.degPerDay,
+      'the Carrington route against the synodic route'
+    );
+  }
+  // the wrong choice of P, to show the leg can tell
+  const wrong = groupPositions(side, 'G3')
+    .filter(p => p.mu >= 0.35)
+    .map(p => {
+      const d = {
+        ...diskOfDaySide(side, p.day),
+        pDeg: side.days[p.day].pSkyDeg,
+      };
+      return diskToHeliographic(p.x, p.y, d).latDeg;
+    });
+  const wm = wrong.reduce((a, b) => a + b, 0) / wrong.length;
+  const wsd = Math.sqrt(
+    wrong.reduce((a, b) => a + (b - wm) ** 2, 0) / (wrong.length - 1)
+  );
+  atLeast(
+    'e0.orientation.wrongP.G3',
+    wsd,
+    b0o.wrongPLatitudeSdDegMin,
+    "the latitude's scatter with Horizons' NP.ang used as the picture's P"
+  );
+  if (tracks.G1.status !== 'refused' && tracks.G3.status !== 'refused')
+    row(
+      'e1.order',
+      tracks.G1.sidereal.rate - tracks.G3.sidereal.rate,
+      'G1 faster than G3',
+      tracks.G1.latitude.deg < Math.abs(tracks.G3.latitude.deg)
+        ? tracks.G1.sidereal.rate > tracks.G3.sidereal.rate
+        : tracks.G1.sidereal.rate < tracks.G3.sidereal.rate,
+      `|latitude| ${Math.abs(tracks.G1.latitude.deg).toFixed(1)} and ${Math.abs(tracks.G3.latitude.deg).toFixed(1)}`
+    );
+  // e1.limb
+  const wide = trackGroup(side, 'G1', { minMu: 0.25 });
+  const b1l = T2['e1.limb'].bounds;
+  if (wide.status === 'refused' || tracks.G1.status === 'refused')
+    row('e1.limb', 0, b1l, false, 'refused');
+  else
+    row(
+      'e1.limb',
+      wide.sidereal.sigma / tracks.G1.sidereal.sigma,
+      b1l,
+      wide.precise === false &&
+        wide.warnings.some(w => w.code === 'foreshortening') &&
+        wide.sidereal.sigma >= b1l.sigmaRatioMin * tracks.G1.sidereal.sigma,
+      `${wide.nUsed} positions, precise ${wide.precise}`
+    );
+  // ADDED after e1.limb failed (its bound assumed that a limb point widens the
+  // rate's sigma; the weighted fit trusts it by its own, larger, sigma): what a
+  // limb point does do, with a bound written after that was seen.
+  if (wide.status !== 'refused') {
+    const lone = wide.points.filter(p => p.mu < 0.35);
+    const disc = wide.points
+      .filter(p => p.mu >= 0.35)
+      .map(p => p.sigmaLonDeg)
+      .sort((a, b) => a - b);
+    const median = disc[Math.floor(disc.length / 2)];
+    const ratio = Math.max(...lone.map(p => p.sigmaLonDeg)) / median;
+    atLeast(
+      'e1.limb.pointSigma',
+      ratio,
+      2,
+      'ADDED after e1.limb failed: the limb point carries at least twice the longitude sigma of the median disc point'
+    );
+    row(
+      'e1.limb.warning',
+      lone.length,
+      'foreshortening warned, precise false',
+      lone.length > 0 &&
+        wide.precise === false &&
+        wide.warnings.some(w => w.code === 'foreshortening'),
+      'ADDED after e1.limb failed'
+    );
+  }
+  // b5.ephemeris
+  const b5 = T2['b5.ephemeris'].bounds;
+  let wb = 0;
+  let wp = 0;
+  let wl = 0;
+  for (const d of side.days) {
+    const k = subEarth(d.jd);
+    wb = Math.max(wb, Math.abs(k.b0Deg - d.b0Deg));
+    wp = Math.max(wp, Math.abs(wrap180(k.pDeg - d.pSkyDeg)));
+    wl = Math.max(wl, Math.abs(wrap180(k.l0Deg - d.l0Deg)));
+  }
+  within(
+    'b5.ephemeris.b0',
+    wb,
+    b5.b0Deg,
+    'the kernel against Horizons, 14 instants'
+  );
+  within('b5.ephemeris.p', wp, b5.pDeg, "against Horizons' NP.ang");
+  within(
+    'b5.ephemeris.l0',
+    wl,
+    b5.l0Deg,
+    "Horizons' L0 is apparent and IAU; the kernel's is geometric and Carrington's"
+  );
+  // e2
+  const s = summariseIrradiance(side);
+  const b2 = C['e2.irradiance'].bounds;
+  row(
+    'e2.irradiance.luminosity',
+    rel(s.luminosityW, 3.828e26),
+    b2.luminosityRelative,
+    rel(s.luminosityW, 3.828e26) <= b2.luminosityRelative,
+    `${s.n} measured days (not 14): ${s.luminosityW.toExponential(5)} W against the nominal 3.828e26`
+  );
+  row(
+    'e2.irradiance.teff',
+    Math.abs(s.teffK - 5772),
+    b2.teffKelvin,
+    Math.abs(s.teffK - 5772) <= b2.teffKelvin,
+    `${s.teffK.toFixed(2)} K against 5772`
+  );
+  const rows2 = measuredIrradiance(side);
+  within(
+    'e2.au',
+    Math.max(
+      ...rows2.map(r => Math.abs(r.fluxEarth * r.distanceAu ** 2 - r.flux1Au))
+    ),
+    T2['e2.au'].bounds.wattsPerSquareMetre,
+    "LASP's true-Earth column times Horizons' distance squared against LASP's 1 AU column"
+  );
+  const quoted =
+    rows2.reduce((a, r) => a + r.sigma, 0) /
+    rows2.length /
+    Math.sqrt(rows2.length);
+  row(
+    'e2.interval',
+    s.standardError,
+    `not below ${quoted.toFixed(3)}`,
+    s.standardError >= quoted,
+    `standard error ${s.standardError.toFixed(3)} W/m2 from the scatter against the quoted sigma over root n; it excludes the instrument's absolute accuracy and the Sun's real change over the days`
+  );
+}
+
+function diskOfDaySide(side, i) {
+  const d = side.days[i];
+  return {
+    cx: d.disc.centrePx[0],
+    cy: d.disc.centrePx[1],
+    radiusPx: d.disc.radiusPx,
+    pDeg: 0,
+    b0Deg: d.b0Deg,
+    l0Deg: d.l0Deg,
+    distanceAu: d.distanceAu,
+  };
+}
+
 /** Every row, as the tests and the command line read them. */
 export function runValidation() {
   rows.length = 0;
@@ -942,14 +1194,7 @@ export function runValidation() {
   coverage();
   limbChecks();
   refusalChecks();
-  notRun(
-    'e1.authentic',
-    'the 14-day HMI continuum sequence with tracked groups is not in the repository and nothing may be fetched without Carl: the one SDO frame in the packs is a display-only browse picture of one day'
-  );
-  notRun(
-    'e2.irradiance',
-    'a measured daily total-solar-irradiance series is not in the repository and nothing may be fetched without Carl'
-  );
+  authentic();
   return rows.slice();
 }
 

@@ -208,9 +208,17 @@
       "en": "The Sun’s Motion",
       "es": "El movimiento del Sol"
     },
+    "the-suns-power": {
+      "en": "The Sun’s Power",
+      "es": "El poder del Sol"
+    },
     "the-turning-sky": {
       "en": "The Turning Sky",
       "es": "El cielo que gira"
+    },
+    "the-turning-sun": {
+      "en": "The Turning Sun",
+      "es": "El Sol que gira"
     },
     "tides": {
       "en": "Tides",

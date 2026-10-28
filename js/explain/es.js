@@ -193,6 +193,12 @@ export default {
     'Qué superficie tiene más cráteres, por área, a un diámetro donde ambas se cuentan por completo; si una pendiente se mantiene más arriba o se quiebra; y cuál de los términos de la incertidumbre de un diámetro es el mayor.',
     'Los círculos son de un catálogo, no marcas sobre las imágenes. Un cociente de densidades no es una edad en años: no se aplica ninguna función de producción, ni saturación, ni cráteres secundarios, ni corrección de completitud.',
   ],
+  sun: [
+    'Una imagen del Sol en uno de catorce días con una cruz que colocas tú y la posición que da, la longitud de un grupo de manchas frente al tiempo con su velocidad de rotación, o la irradiancia diaria del Sol con la luminosidad y la temperatura que da.',
+    'Dónde está una mancha en el Sol (latitud y longitud, con una incertidumbre), con qué rapidez gira un grupo visto desde la Tierra y respecto de las estrellas, cómo se compara con una ley de referencia y la potencia del Sol a partir de un flujo medido en la Tierra.',
+    'Que las manchas a distintas latitudes giran a distinta velocidad, por qué hay que corregir la velocidad por el movimiento propio de la Tierra, por qué dos latitudes no pueden fijar tres coeficientes y por qué un flujo hay que llevarlo a una unidad astronómica antes de dar una luminosidad.',
+    'Las imágenes son de vista previa, hechas para mirarlas, así que una posición leída de una es una lectura didáctica y no astrometría. El centro de un grupo de manchas no es un punto, la ley de referencia se midió sobre rasgos magnéticos y no sobre manchas, y la serie de irradiancia tiene seis días medidos.',
+  ],
   tides: [
     'El límite de Roche rígido y el fluido de un planeta y un satélite a partir de sus dos densidades, dónde cae la resonancia de una luna en un anillo, el alejamiento de la Luna y el alargamiento del día con una Q de marea constante, o el calor que una marea puede poner en Ío.',
     'Cuánto puede acercarse un satélite antes de que la gravedad sola deje de mantenerlo unido, qué radios de un anillo vacía una luna a una distancia dada, a qué distancia estaba la Luna en el pasado según el modelo, y el calor por órbita frente al calor que Ío irradia.',

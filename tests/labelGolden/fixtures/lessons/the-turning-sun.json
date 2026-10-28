@@ -1,0 +1,109 @@
+{
+ "id": "the-turning-sun",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.read-a-position.fields.0.unit","deg"],
+    ["steps.read-a-position.fields.1.unit","deg"],
+    ["steps.how-far-in-three-days.fields.0.unit","deg"],
+    ["steps.how-far-in-three-days.fields.1.unit",""],
+    ["steps.track-the-group.fields.0.unit",""],
+    ["steps.track-the-group.fields.1.unit","d"],
+    ["steps.the-sidereal-period.fields.0.unit",""],
+    ["steps.the-sidereal-period.fields.1.unit","d"],
+    ["steps.a-southern-group.fields.0.unit",""],
+    ["steps.a-southern-group.fields.1.unit",""],
+    ["steps.the-law-at-two-latitudes.fields.0.unit",""],
+    ["steps.the-law-at-two-latitudes.fields.1.unit",""],
+    ["steps.near-the-limb.fields.0.unit",""],
+    ["steps.near-the-limb.fields.1.unit","deg"],
+    ["steps.fit-the-equatorial-term.fields.0.unit",""],
+    ["steps.fit-the-equatorial-term.fields.1.unit",""],
+    ["steps.why-the-scatter.fields.0.unit",""]
+   ],
+   "numbered": [
+    ["steps.read-a-position.fields.0.label","G1’s latitude on day 1"],
+    ["steps.read-a-position.fields.0.hint","7.1"],
+    ["steps.read-a-position.fields.1.label","G1’s longitude from the central meridian on day 1"],
+    ["steps.read-a-position.fields.1.hint","-7.3"],
+    ["steps.how-far-in-three-days.fields.0.label","G1’s longitude on day 4"],
+    ["steps.how-far-in-three-days.fields.0.hint","32.4"],
+    ["steps.how-far-in-three-days.fields.1.label","How far it turned each day, from day 1 to day 4 (degrees a day)"],
+    ["steps.how-far-in-three-days.fields.1.hint","13.2"],
+    ["steps.track-the-group.fields.0.label","G1’s synodic rate (degrees a day)"],
+    ["steps.track-the-group.fields.0.hint","13.17"],
+    ["steps.track-the-group.fields.1.hint","27.3"],
+    ["steps.the-sidereal-period.fields.0.label","G1’s sidereal rate (degrees a day)"],
+    ["steps.the-sidereal-period.fields.0.hint","14.13"],
+    ["steps.the-sidereal-period.fields.1.hint","25.5"],
+    ["steps.a-southern-group.fields.0.label","G3’s sidereal rate (degrees a day)"],
+    ["steps.a-southern-group.fields.0.hint","13.48"],
+    ["steps.a-southern-group.fields.1.hint","0.06"],
+    ["steps.the-law-at-two-latitudes.fields.0.label","The law’s rate at G1’s latitude, 7.3 degrees (degrees a day)"],
+    ["steps.the-law-at-two-latitudes.fields.0.hint","14.29"],
+    ["steps.the-law-at-two-latitudes.fields.1.label","The law’s rate at G3’s latitude, −20.1 degrees (degrees a day)"],
+    ["steps.the-law-at-two-latitudes.fields.1.hint","14.05"],
+    ["steps.near-the-limb.fields.0.label","G1’s mu on day 7"],
+    ["steps.near-the-limb.fields.0.hint","0.29"],
+    ["steps.near-the-limb.fields.1.hint","0.64"],
+    ["steps.fit-the-equatorial-term.fields.0.hint","13.96"],
+    ["steps.fit-the-equatorial-term.fields.1.hint","0.22"],
+    ["steps.why-the-scatter.fields.0.label","G3’s chi-square per degree of freedom"],
+    ["steps.why-the-scatter.fields.0.hint","2.35"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.read-a-position.fields.0.label","Latitud de G1 el día 1"],
+    ["steps.read-a-position.fields.1.label","Longitud de G1 desde el meridiano central el día 1"],
+    ["steps.how-far-in-three-days.fields.0.label","Longitud de G1 el día 4"],
+    ["steps.how-far-in-three-days.fields.1.label","Cuánto giró cada día, del día 1 al día 4 (grados por día)"],
+    ["steps.track-the-group.fields.0.label","Velocidad sinódica de G1 (grados por día)"],
+    ["steps.the-sidereal-period.fields.0.label","Velocidad sideral de G1 (grados por día)"],
+    ["steps.a-southern-group.fields.0.label","Velocidad sideral de G3 (grados por día)"],
+    ["steps.the-law-at-two-latitudes.fields.0.label","La velocidad de la ley a la latitud de G1, 7,3 grados (grados por día)"],
+    ["steps.the-law-at-two-latitudes.fields.1.label","La velocidad de la ley a la latitud de G3, −20,1 grados (grados por día)"],
+    ["steps.near-the-limb.fields.0.label","El mu de G1 el día 7"],
+    ["steps.why-the-scatter.fields.0.label","Chi cuadrado por grado de libertad de G3"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "read-a-position": {
+    "validate": {"calls":232,"distinct":2,"digest":"e53505439df85f80","samples":[null,{"level":"error","message":"Leave the crosshair where it starts (452 across, 422 down) on day 1 and read “latitude” and “longitude” from the crosshair row."}]}
+   },
+   "how-far-in-three-days": {
+    "validate": {"calls":232,"distinct":2,"digest":"80cd82214a39f7ad","samples":[null,{"level":"error","message":"Set the day to 4, read the longitude in the “Author’s mark of G1” row, subtract the −7.2 of day 1 and divide by 3."}]}
+   },
+   "track-the-group": {
+    "validate": {"calls":232,"distinct":2,"digest":"27cd731439bb2f97","samples":[null,{"level":"error","message":"Choose G1 with the first day 1 and the last day 9 and read “Synodic rate” and “Synodic period”."}]}
+   },
+   "the-sidereal-period": {
+    "validate": {"calls":232,"distinct":2,"digest":"52fadd7f4eb924e2","samples":[null,{"level":"error","message":"Keep G1 and read “Sidereal rate” and “Sidereal period”: the synodic rate plus the Earth’s motion."}]}
+   },
+   "a-southern-group": {
+    "validate": {"calls":232,"distinct":2,"digest":"5ee4b0ed4f545db0","samples":[null,{"level":"error","message":"Choose G3 (group 2), the first day 1 and the last day 9, and read “Sidereal rate”."}]}
+   },
+   "the-law-at-two-latitudes": {
+    "validate": {"calls":232,"distinct":2,"digest":"bbeeffc14e22371f","samples":[null,{"level":"error","message":"Read “The reference law at this latitude” for G1 and then for G3 (the number before “the group is”)."}]}
+   },
+   "near-the-limb": {
+    "validate": {"calls":232,"distinct":2,"digest":"43db65daade3eb09","samples":[null,{"level":"error","message":"Set the day to 7 and read G1’s mu and ± in the “Author’s mark of G1” row."}]}
+   },
+   "fit-the-equatorial-term": {
+    "validate": {"calls":232,"distinct":2,"digest":"f95b0e86333a32bb","samples":[null,{"level":"error","message":"Choose the mode “Fit the equatorial term” and read “Equatorial term A, fitted” and its ±."}]}
+   },
+   "why-the-scatter": {
+    "validate": {"calls":97,"distinct":3,"digest":"d3e86334ec3c9e95","samples":[null,{"level":"error","message":"Choose “Track one group”, G3, the first day 1 and the last day 9, and read “Do the marks lie on a line?”."},{"level":"ok","message":"2.35: the marks scatter about the line more than 1.5 pixels of placement can explain, so the instrument has made the rate’s uncertainty 1.5 times larger. The reason is in the pictures: G3 grows, from 78 dark pixels on 4 May to 465 on 10 May, and the center of a growing group moves. Its Carrington longitude drifts from 351 to 347 degrees in a week. The rate you read is the rate of a changing group’s center, and the law is for features that do not change that way."}]}
+   }
+  },
+  "es": "same"
+ }
+}

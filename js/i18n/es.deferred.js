@@ -1,7 +1,4 @@
-// =============================================================================
-// Messages that arrive with the chunk that needs them (panels nobody sees on a first visit): a catalog apart, one object cannot be code-split; registerMessages() loads it.
-// =============================================================================
-
+// Messages that arrive with the chunk that needs them (registerMessages()); a catalog apart because one object cannot be code-split.
 export const ES_DEFERRED = {
   'binaryRun.close.hint': 'Ocultar el panel de ejecución en binaria',
   'assist.close.hint': 'Ocultar el panel de asistencia gravitatoria',
@@ -589,7 +586,6 @@ export const ES_DEFERRED = {
   'sweep.reason.notReady': 'El banco todavia se esta cargando.',
   'sweep.reason.alreadyRunning': 'Ya hay un barrido en curso.',
   'sweep.reason.recording': 'Se esta grabando una pasada.',
-
   'sweep.summary.changed':
     '{metric} paso de {min} a {max} a lo largo del rango.',
   'sweep.summary.monotonic': 'Cambio en una sola direccion en todo el rango.',
@@ -1873,6 +1869,10 @@ export const ES_DEFERRED = {
     'Por qué un planeta puede estar más caliente de lo que la luz solar sola lo deja: la Tierra y Venus.',
   'inv.seq.planets.two-greenhouse-models':
     'Dos modelos de efecto invernadero para un planeta, y por qué sus números libres difieren.',
+  'inv.seq.planets.the-turning-sun':
+    'Catorce días de imágenes del Sol: dónde está una mancha, con qué rapidez gira un grupo visto desde la Tierra y respecto de las estrellas, y qué pueden y qué no pueden mostrar dos grupos.',
+  'inv.seq.planets.the-suns-power':
+    'Un flujo medido en la Tierra llevado a una unidad astronómica, la luminosidad y la temperatura del Sol, y lo que deja fuera el intervalo de una media.',
   'inv.seq.planets.why-rings':
     'Por qué los anillos están dentro del límite de Roche de un planeta, y qué despeja en uno la resonancia de una luna.',
   'inv.seq.planets.tides-that-move-the-moon':

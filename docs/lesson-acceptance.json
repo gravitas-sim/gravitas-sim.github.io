@@ -964,6 +964,32 @@
       ],
       "evidenceFrom": "model"
     },
+    "the-turning-sun": {
+      "centralExperimentId": "ce.the-turning-sun",
+      "object": "panel:sun-rotation",
+      "control": "sun-rotation/first",
+      "quantity": "the sidereal rotation rate of the spot group G1 from the marks of the first day chosen to the ninth, with its uncertainty: 14.13 from six days (the first day 1) and 14.04 from five (the first day 2), degrees a day",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "longer-or-shorter",
+        "the-sidereal-period"
+      ],
+      "evidenceFrom": "model"
+    },
+    "the-suns-power": {
+      "centralExperimentId": "ce.the-suns-power",
+      "object": "panel:sun-power",
+      "control": "sun-power/days",
+      "quantity": "the Sun's luminosity from the first days of the TSIS-1 TIM series corrected to one astronomical unit, in units of 1e26 W: 3.829 from two days and 3.828 from six",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "power-predict",
+        "luminosity"
+      ],
+      "evidenceFrom": "model"
+    },
     "what-is-in-this-field": {
       "centralExperimentId": "ce.what-is-in-this-field",
       "object": "panel:field-sources",

@@ -1,0 +1,73 @@
+{
+ "id": "the-suns-power",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.flux-at-one-au.fields.0.unit",""],
+    ["steps.flux-at-one-au.fields.1.unit",""],
+    ["steps.luminosity.fields.0.unit",""],
+    ["steps.luminosity.fields.1.unit","K"],
+    ["steps.the-fall-and-its-cause.fields.0.unit",""],
+    ["steps.the-fall-and-its-cause.fields.1.unit",""],
+    ["steps.how-sure-is-the-mean.fields.0.unit",""],
+    ["steps.how-sure-is-the-mean.fields.1.unit",""],
+    ["steps.compare-with-the-nominal.fields.0.unit","%"],
+    ["steps.compare-with-the-nominal.fields.1.unit","K"]
+   ],
+   "numbered": [
+    ["steps.flux-at-one-au.fields.0.label","The flux at the Earth on 4 May (W/m²)"],
+    ["steps.flux-at-one-au.fields.0.hint","1338.90"],
+    ["steps.flux-at-one-au.fields.1.label","The flux at 1 AU (W/m²)"],
+    ["steps.flux-at-one-au.fields.1.hint","1361.60"],
+    ["steps.luminosity.fields.0.label","The Sun’s luminosity (× 10²⁶ W)"],
+    ["steps.luminosity.fields.0.hint","3.828"],
+    ["steps.luminosity.fields.1.hint","5772"],
+    ["steps.the-fall-and-its-cause.fields.0.hint","4.04"],
+    ["steps.the-fall-and-its-cause.fields.1.label","The fall at 1 AU (W/m²)"],
+    ["steps.the-fall-and-its-cause.fields.1.hint","0.86"],
+    ["steps.how-sure-is-the-mean.fields.0.hint","0.15"],
+    ["steps.how-sure-is-the-mean.fields.1.label","The uncertainty of the luminosity (× 10²² W)"],
+    ["steps.how-sure-is-the-mean.fields.1.hint","4.2"],
+    ["steps.compare-with-the-nominal.fields.0.hint","0.00"],
+    ["steps.compare-with-the-nominal.fields.1.label","The temperature against 5772 K"],
+    ["steps.compare-with-the-nominal.fields.1.hint","0.0"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.flux-at-one-au.fields.0.label","El flujo en la Tierra el 4 de mayo (W/m²)"],
+    ["steps.flux-at-one-au.fields.1.label","El flujo a 1 UA (W/m²)"],
+    ["steps.luminosity.fields.0.label","La luminosidad del Sol (× 10²⁶ W)"],
+    ["steps.the-fall-and-its-cause.fields.1.label","La caída a 1 UA (W/m²)"],
+    ["steps.how-sure-is-the-mean.fields.1.label","La incertidumbre de la luminosidad (× 10²² W)"],
+    ["steps.compare-with-the-nominal.fields.1.label","La temperatura frente a 5772 K"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "flux-at-one-au": {
+    "validate": {"calls":232,"distinct":2,"digest":"fa3d1f33e5afab3c","samples":[null,{"level":"error","message":"Use one day and read “At the Earth” and “At 1 AU” (the first and the last day are the same here)."}]}
+   },
+   "luminosity": {
+    "validate": {"calls":232,"distinct":2,"digest":"9fe4c8e5f90e1d76","samples":[null,{"level":"error","message":"Set the days to 6 with the correction on, and read “The Sun’s luminosity” and “Effective temperature”."}]}
+   },
+   "the-fall-and-its-cause": {
+    "validate": {"calls":232,"distinct":2,"digest":"ea09a0ad035633b5","samples":[null,{"level":"error","message":"Use 6 days with the correction on, and read “At the Earth, first and last day” and “At 1 AU, first and last day”: the falls."}]}
+   },
+   "how-sure-is-the-mean": {
+    "validate": {"calls":232,"distinct":2,"digest":"9344155c702c200c","samples":[null,{"level":"error","message":"Use 6 days with the correction on, and read the “±” of “Mean over the days used” and of “The Sun’s luminosity”."}]}
+   },
+   "compare-with-the-nominal": {
+    "validate": {"calls":232,"distinct":3,"digest":"2ab255d04e7dff0a","samples":[null,{"level":"error","message":"Use 6 days with the correction on, and read the percent in the luminosity row and the K in the temperature row."},{"level":"ok","message":"Within a thousandth of a percent and a hundredth of a kelvin: the six days land on the nominal value. Do not read that as a result that is good to a thousandth of a percent. The quoted uncertainty is about 0.02 percent, and the nominal value is itself a defined round number; the agreement to five digits is partly luck, and what the comparison supports is agreement within about 0.02 percent."}]}
+   }
+  },
+  "es": "same"
+ }
+}

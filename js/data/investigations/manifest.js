@@ -958,4 +958,30 @@ export const MANIFEST = [
     gradedCount: 5,
     objectiveCount: 4,
   },
+  {
+    id: 'the-turning-sun',
+    title: 'The Turning Sun',
+    subtitle:
+      'Fourteen days of pictures, one spot group followed across the disc, and the Sun’s rotation from it',
+    duration: '20-30 min',
+    level: 'Introductory to upper-level astronomy',
+    thumbnail: 'images/investigations/the-turning-sun.webp',
+    depths: 3,
+    stepCount: 9,
+    gradedCount: 7,
+    objectiveCount: 4,
+  },
+  {
+    id: 'the-suns-power',
+    title: 'The Sun’s Power',
+    subtitle:
+      'A flux measured at the Earth, brought to one astronomical unit, and the Sun’s luminosity and temperature from it',
+    duration: '15-25 min',
+    level: 'Introductory to upper-level astronomy',
+    thumbnail: 'images/investigations/the-suns-power.webp',
+    depths: 3,
+    stepCount: 6,
+    gradedCount: 4,
+    objectiveCount: 4,
+  },
 ];
