@@ -1,0 +1,360 @@
+{
+  "format": "gravitas.small-bodies-thresholds/1",
+  "prompt": 198,
+  "committed": "Before any implementation output was inspected: this file was committed ahead of js/kernels/smallbodies/, the validation tool, the oracle's inputs, script and results, and every test (Roadmap III, 7.5.8). A check that a measurement crosses is a failed check, reported and left failing; only Carl resets a bound. No catalog, pack or light curve of a real object was read or available when it was written; every authentic leg (tier e) is NOT RUN until Carl supplies the files named in SMALL_BODIES.md.",
+  "corrections": [
+    "definition.gapWindows quotes the window centres as 2.0652, 2.5013, 2.8240, 2.9582 and 3.2778 AU, the figures usually given for the resonances; those were typed by hand. The kernel centres every window on the resonance axis computed from Jupiter's a = 5.202887 AU (2.0648, 2.5013, 2.8246, 2.9575, 3.2776 AU), the number a1.resonance.axes and b1.oracle.axes hold, and the half-widths are as typed. The two differ by at most 0.0007 AU, a thirtieth of the narrowest half-width; no bound, tolerance or window width was moved, and no kernel output had been read when the discrepancy was noticed beyond a single smoke run that printed the axes.",
+    "c2 (before any validation row was computed). (1) a5.baseline.exact: the depletion tolerance 1e-6 was set without the discretisation it must carry: the baseline is fitted to counts at the bin centres (exp of the polynomial at each centre) while N_exp integrates exp(polynomial) over the window, and the midpoint rule differs from the integral by about (bin width^2 / 24) f''/f, 4e-6 times a curvature of order one to three per square AU, so 1e-6 cannot be met by a correct implementation. The depletion tolerance becomes 1e-4 absolute; the coefficient tolerance (1e-6 relative, exact for counts that ARE exp(polynomial at the centres)) is unchanged. The analytic window is bin-aligned (centre 2.50 AU, half-width 0.03: [2.47, 2.53]), with the bins whose centres lie in it halved, and N_obs is their sum. (2) Harness choices the text left open, stated before they were run: d4's dense sampling is three nights of 8 hours at 6 minutes (80 points a night) and d4's signal and once-nightly series are analysed without the period and amplitude bootstraps (the verdict does not use them); d1's gapped n0 = 8000 catalogs are the c1 ensemble's, the same 300 seeded catalogs, and the false-positive catalogs are 300 further ones; the d1 power curve uses 100 catalogs at each size.",
+    "c3 (the tier-e contract, committed after Carl's ruling and BEFORE any value of the retrieved data was read; only the file's field list, its row count and its byte size were looked at). Data: the JPL Small-Body Database Query API (https://ssd-api.jpl.nasa.gov/sbdb_query.api), retrieved 2026-10-27 by the main session: numbered asteroids with H < 13, fields full_name, a, e, i, H, epoch, spkid, 8,886 rows, 715,136 bytes, SHA-256 5f1d1dbd8a21e80554ebb8b05d6e3f3709db770c798e3a9b2cf906f05c2fdf06. Rights: a U.S. Government work, credited to JPL SBDB; the MPC is not used. The cut is a magnitude cut within the numbered set, a DEFINED selection (not every k-th object): the catalog is the large objects that were found, H < 13; for the main belt that is below the survey's completeness limit, so the cut shows the gaps with little selection bias, and says nothing of the small bodies. The Kuiper-belt file was announced but is not on disk: e3 is NOT RUN. The light curve was not retrievable: e2 stays NOT RUN. The e1 rows below replace e1.catalog's NOT RUN text; the bounds are fixed here and are not tuned to the data. The tier-b 'cited independent analysis of the same cut' remains NOT RUN (e1.cited); e1.oracle is an independent implementation (scipy) of the same estimator on the real cut, not a cited analysis.",
+    "c4 (the tier-e3 contract, committed BEFORE any value of the Kuiper-belt file was read; only its field list, row count and size were looked at). Data: the JPL Small-Body Database Query API, retrieved 2026-10-27 by the main session, all kinds, a 30 to 60 AU, e < 0.5, data arc over 365 days, fields full_name, a, e, i, H, epoch, condition_code, data_arc, 3,453 rows, 268,965 bytes, SHA-256 5dd21849bd247c67c415e513be247d51203641b60047675763197c687f084fbd; the rights are those of the numbered cut (a U.S. Government work, credited to JPL SBDB), covered by Carl's 'Yes, all three'. Pack: js/data/smallbodies/kuiper-a30-60.json, columns name, a, e, i, H, every row, a lazy NEVER_PRECACHED file, no data-budget edit. Selection stated in its manifest: objects observed over more than a year, found by magnitude-limited ground surveys, so large, bright and near perihelion are over-represented; the class counts are not the population's, and the plutino and twotino classes are a-windows (a proxy for resonance, never a libration test). The e3 rows (bounds fixed here, not tuned): e3.rows at least 3000 rows; e3.plutino at least 100 objects in the plutino window (3:2 location 39.402 AU +- 0.5); e3.twotino at least 20 in the twotino window (47.732 +- 0.5); e3.classical at least 300 in the classical box (a 42 to 47, e < 0.25, i < 40); e3.concentration the plutino window holds at least twice the mean count of the two flanking windows of the same width ([38.9 - 1, 38.9) and (39.9, 39.9 + 1]); the twotino concentration (against its flanks) is REPORTED, not bounded; e3.oracle the class counts against an independent Python count of the same file (exact); e3.wellObserved every row has a data arc over 365 days (exact). The Jupiter-belt classes are not applied to this file."
+  ],
+  "definition": {
+    "what": "The belts from a catalog and the spin from a light curve. (1) Resonance locations: a body at period ratio r = T_body / T_planet orbits at a = a_planet r^(2/3) (Kepler's third law with the body's mass neglected); the resonance is named inner:outer, the whole numbers of orbits the inner and the outer body complete in the same time (Jupiter 3:1 means three asteroid orbits to one of Jupiter, r = 1/3; the plutinos are 3:2 with Neptune, Neptune inside, r = 3/2). (2) The belt's distribution in semi-major axis, eccentricity and inclination as histograms. (3) A gap as a measured depletion: D = 1 - N_obs / N_exp over a stated window in a, N_exp the integral of a smooth baseline fitted outside every gap window, D reported with a case-bootstrap percentile interval (js/kernels/statistics/resample.js, intervals.js; the bootstrap refits the baseline on every draw) and the verdict resolved or not resolved. (4) Population counts by orbit-class rules in (a, e, i): the main belt thirds, Hilda, Jupiter Trojan, Kuiper-belt classical, plutino and twotino. (5) A bounded light-curve model: a triaxial ellipsoid a >= b >= c rotating about its c axis, seen at aspect angle theta from the spin axis, with geometric scattering at zero phase angle (flux proportional to the projected area, pi sqrt(b^2 c^2 nx^2 + a^2 c^2 ny^2 + a^2 b^2 nz^2) for the unit viewing direction n in the body frame, n = (sin theta cos phi, sin theta sin phi, cos theta)); the rotation period from the Lomb-Scargle peak of the light curve with the two-maxima rule (P_rot = 2 / f_peak: a convex ellipsoid shows two maxima and two minima a rotation, so the flux has period P_rot / 2) refined by a K = 4 harmonic series at the double period; the amplitude from the fitted curve, peak to peak, in magnitudes; and the shape reported as a BOUND, a/b >= 10^(0.4 Delta m), with equality only at theta = 90 degrees (Zappala et al. 1990, the amplitude-aspect relation Delta m = 2.5 log10(a/b) - 1.25 log10((a^2 cos^2 theta + c^2 sin^2 theta) / (b^2 cos^2 theta + c^2 sin^2 theta))). (6) The survey's selection: a magnitude-limited discovery at opposition, V = H + 5 log10(r Delta) with Delta = r - 1 for a circular orbit (the opposition surge and phase function are not modelled), cumulative H distribution N(<H) proportional to 10^(alpha H); what a histogram of the detected objects shows and does not show.",
+    "constants": "Jupiter a = 5.20288700 AU and Neptune a = 30.06952752 AU, the 1800-2050 AD mean elements of E. M. Standish, 'Keplerian Elements for Approximate Positions of the Major Planets' (JPL Solar System Dynamics, Table 1), typed here; no retrieval in the session that wrote this file. The AU is not used outside a ratio.",
+    "baseline": "Poisson regression of the bin counts on a polynomial of degree 4 in x = (a - a_mid) / half-range, log mu = sum c_k x^k, by iteratively reweighted least squares from the log of the mean count, 30 iterations or a change in deviance under 1e-10; bins whose centres fall inside any gap window widened by baselineMarginAu are excluded; N_exp = sum of mu over the bins of the window, the window's edge bins apportioned by their overlap. Counts may be non-integer (an expected-count input is an analytic test, not a sample).",
+    "gapWindows": "The windows are data-independent defaults, chosen from the resonances' nominal strengths and stated here before any catalog was seen: 4:1 at 2.0652 AU half-width 0.015, 3:1 at 2.5013 half-width 0.025, 5:2 at 2.8240 half-width 0.025, 7:3 at 2.9582 half-width 0.02, 2:1 at 3.2778 half-width 0.04. A student may change them; the window is part of the estimate and is reported with it.",
+    "interval": "Case bootstrap of the objects (the catalog's rows resampled with replacement), the statistic recomputed whole on each resample (histogram, baseline fit, depletion), percentile interval at the stated level, labelled case-bootstrap. The verdict is 'resolved' when the interval's lower end is above zero depletion (lo > 0) and N_exp >= minExpected; otherwise 'not resolved', with the reason. A depletion below zero (an excess) is reported and is not a gap.",
+    "refusals": "Fewer than minObjects finite values in range, a window outside the fitted range or overlapping another, a non-positive window, fewer baseline bins than baselineDegree + 3 after exclusion, a non-finite value, a draws count that is not a whole number: each a record { status: 'refused', code, why }. The warnings are not refusals: steep-baseline (the fitted log density changes by more than steepLimit across the window), edge (the window is within one window-width of the fitted range's end).",
+    "synthetic": "A synthetic belt is drawn from named streams (js/random/streams.js 'noise', the seed small-bodies-198 and a label) from the smooth density f(a) = 0.40 N(a; 2.40, 0.20) + 0.60 N(a; 2.95, 0.30) truncated to [1.9, 3.6] AU, n0 candidates, each thinned inside gap g with probability dmax_g (1 - |a - a_g| / w_g) (a V-shaped profile of half-width w_g, the window's half-width); dmax: 4:1 0.40, 3:1 0.85, 5:2 0.70, 7:3 0.50, 2:1 0.90. The truth manifest carries every parameter, the seed and the truth depletion of each window, the window-average of the V profile weighted by f, by Simpson quadrature on 4001 points. e and i are drawn from truncated normals and the catalog is labelled synthetic wherever it appears. A synthetic light curve carries its a, b, c, theta, period, phase and noise in a truth manifest.",
+    "lightcurve": "Times in days, magnitudes (m = -2.5 log10 of the area, plus a constant). The period search covers rotation periods from periodMinHours to periodMaxHours, i.e. peak periods from half of each; findPeriod of js/kernels/variables/period.js with the stated oversample, refinePeriod with K harmonics at the double period; the period's sigma from bootstrapPeriod (the points resampled, the period refit; a floor on the error, the file says so) with periodBootstrapResamples; the amplitude is the peak-to-peak of the K-harmonic fit (curveStats) with a percentile interval from the same kind of resampling at the fitted period; the bound is 10^(0.4 x amplitude_lo) from the amplitude's interval's lower end, so the claim a/b >= bound carries the interval's level. The false-alarm probability of the strongest peak is 1 - (1 - (1 - P)^((n - 3) / 2))^M with M = max(1, baseline x (fmax - fmin)) independent frequencies (Horne and Baliunas 1986); above falseAlarmMax the answer is not-periodic. A second peak outside the first's half-power width with power at least ambiguityRatio of the first makes the answer ambiguous and lists both. The result always carries the alternative one-maximum period 1 / f_peak and says that the two-maxima rule assumes a convex shape with no albedo markings.",
+    "selection": "detectionLimitH(a, vLim) = vLim - 5 log10(a (a - 1)); the detected fraction of an H distribution N(<H) proportional to 10^(alpha H) is proportional to 10^(alpha detectionLimitH) = (a (a - 1))^(-5 alpha) 10^(alpha vLim) while that stays below the distribution's end; the shift in the mean a of the detected objects from a population uniform in a is the quadrature of the weight.",
+    "oracle": "Python 3.9.6 with numpy 1.26.4, scipy 1.13.1 and astropy 6.0.1, no Gravitas code: (b1) the resonance axes from the period ratios; (b2) the projected area of the ellipsoid by a surface integral of max(0, n . normal) dS on a 2000 x 4000 grid of (u, v) in the ellipsoid's own parametrisation, which does not use the closed form; (b3) the Lomb-Scargle peak of pinned series by astropy.timeseries.LombScargle (fit_mean = True) on a 2e5-point frequency grid refined by a parabola; (b4) the baseline fit and depletion of three pinned synthetic catalogs by scipy.optimize.minimize of the Poisson negative log-likelihood of the same model, with the bins, degree and windows read from this file. It is an independent implementation of the same estimator on the same synthetic catalogs. It is NOT the roadmap's cited independent analysis of a real catalog cut: that is tier e1, NOT RUN.",
+    "seed": "small-bodies-198; every ensemble draws from named streams of js/random/streams.js ('noise', the seed, the check id); a trial count is the figure given in the check"
+  },
+  "rules": {
+    "level": 0.95,
+    "z": 1.959964,
+    "binWidthAu": 0.01,
+    "fitRangeAu": [2.0, 3.5],
+    "generatorRangeAu": [1.9, 3.6],
+    "baselineDegree": 4,
+    "baselineMarginAu": 0.01,
+    "minObjects": 30,
+    "minExpected": 10,
+    "steepLimit": 1.0,
+    "bootstrapDraws": 200,
+    "ensembleCatalogs": 300,
+    "ensembleN0": 8000,
+    "smallN0": 150,
+    "gaps": [
+      {
+        "id": "4:1",
+        "inner": 4,
+        "outer": 1,
+        "halfWidthAu": 0.015,
+        "dmax": 0.4
+      },
+      {
+        "id": "3:1",
+        "inner": 3,
+        "outer": 1,
+        "halfWidthAu": 0.025,
+        "dmax": 0.85
+      },
+      {
+        "id": "5:2",
+        "inner": 5,
+        "outer": 2,
+        "halfWidthAu": 0.025,
+        "dmax": 0.7
+      },
+      {
+        "id": "7:3",
+        "inner": 7,
+        "outer": 3,
+        "halfWidthAu": 0.02,
+        "dmax": 0.5
+      },
+      {
+        "id": "2:1",
+        "inner": 2,
+        "outer": 1,
+        "halfWidthAu": 0.04,
+        "dmax": 0.9
+      }
+    ],
+    "coverageGaps": ["3:1", "5:2", "7:3", "2:1"],
+    "planets": {
+      "jupiterAu": 5.202887,
+      "neptuneAu": 30.06952752
+    },
+    "classes": {
+      "innerMainBelt": {
+        "a": [2.0, 2.5],
+        "e": [0, 0.4],
+        "i": [0, 30]
+      },
+      "middleMainBelt": {
+        "a": [2.5, 2.82],
+        "e": [0, 0.4],
+        "i": [0, 30]
+      },
+      "outerMainBelt": {
+        "a": [2.82, 3.27],
+        "e": [0, 0.4],
+        "i": [0, 30]
+      },
+      "hilda": {
+        "a": [3.7, 4.2],
+        "e": [0, 0.3],
+        "i": [0, 20]
+      },
+      "trojan": {
+        "a": [5.05, 5.4],
+        "e": [0, 0.3],
+        "i": [0, 40]
+      },
+      "kuiperClassical": {
+        "a": [42.0, 47.0],
+        "e": [0, 0.25],
+        "i": [0, 40]
+      },
+      "plutino": {
+        "aAroundResonance": 0.5,
+        "resonance": [3, 2]
+      },
+      "twotino": {
+        "aAroundResonance": 0.5,
+        "resonance": [2, 1]
+      }
+    },
+    "classNote": "The classes follow the orbit-class limits of the JPL Small-Body Database as recalled when this file was written, restated here and not retrieved; the plutino and twotino classes are a-windows around the resonance's location and are a PROXY for resonance (a body inside the window may circulate; the resonant angle settles it, js/resonance/elements.js classifyAngle over an integration).",
+    "lightcurve": {
+      "periodMinHours": 1.5,
+      "periodMaxHours": 100,
+      "oversample": 8,
+      "harmonics": 4,
+      "periodBootstrapResamples": 40,
+      "amplitudeBootstrapDraws": 200,
+      "falseAlarmMax": 0.01,
+      "ambiguityRatio": 0.9,
+      "minPoints": 20,
+      "ensembleCurves": 300,
+      "noiseMag": [0.01, 0.03]
+    },
+    "selection": {
+      "vLim": 21,
+      "alpha": 0.5,
+      "aRangeAu": [2.0, 3.5]
+    },
+    "refusalCodes": [
+      "too-few",
+      "range",
+      "window",
+      "baseline",
+      "non-finite",
+      "draws",
+      "level",
+      "axes",
+      "aspect",
+      "sigma",
+      "sampling"
+    ],
+    "noShapeFromAmplitude": "no function returns axis ratios as a measurement: it returns a lower bound on a/b and nothing about b/c; and no function returns the numbered catalog's counts as the population's counts without the selection text",
+    "authentic": {
+      "numbered": {
+        "file": "js/data/smallbodies/numbered-h13.json",
+        "source": "JPL SBDB Query API, numbered asteroids, H < 13",
+        "sha256OfRetrieved": "5f1d1dbd8a21e80554ebb8b05d6e3f3709db770c798e3a9b2cf906f05c2fdf06",
+        "rows": 8886,
+        "retrieved": "2026-10-27",
+        "fieldsKept": ["number", "a", "e", "i", "H"],
+        "seed": "small-bodies-198:e1",
+        "draws": 400,
+        "rowsInFitRangeAtLeast": 3000
+      },
+      "bounds": {
+        "resolvedGaps": ["3:1", "5:2"],
+        "depletionBand": [0.4, 1.0],
+        "oracleAbsolute": 0.0005,
+        "bootstrapCoverage": [0.88, 0.995],
+        "hildasAtLeast": 30,
+        "trojansAtLeast": 100,
+        "resamples": 200,
+        "innerDraws": 100
+      },
+      "kuiper": {
+        "file": "js/data/smallbodies/kuiper-a30-60.json",
+        "sha256OfRetrieved": "5dd21849bd247c67c415e513be247d51203641b60047675763197c687f084fbd",
+        "rows": 3453,
+        "retrieved": "2026-10-27",
+        "fieldsKept": ["name", "a", "e", "i", "H"]
+      }
+    }
+  },
+  "checks": {
+    "a1.resonance.axes": {
+      "what": "the closed form a = a_planet r^(2/3) with r = outer/inner (body inside the planet) or inner/outer (body outside) for the seven Jupiter and four Neptune entries of the tables, in the kernel's order and with the labels inner:outer; the 1:1 entry is a_Jupiter; the 3:1 gap is the number 5.202887 / 3^(2/3)",
+      "bounds": {
+        "relative": 1e-13
+      }
+    },
+    "a2.resonance.roundtrip": {
+      "what": "the period ratio recovered from each axis by Kepler's third law returns r to the stated relative tolerance, and js/resonance/elements.js nearestRatio of T_planet / T_body (maxDenominator 10) returns the whole numbers inner and outer of the entry for every entry",
+      "bounds": {
+        "relative": 1e-13
+      }
+    },
+    "a3.lightcurve.closed": {
+      "what": "the projected area at theta = 90, phi = 0 is pi b c, at phi = 90 is pi a c, at theta = 0 is pi a b; a sphere has zero amplitude at every aspect; the pole-on aspect (theta = 0) has zero amplitude for every a, b, c; the flux at phi and phi + pi are equal (period P_rot / 2); the amplitude at theta = 90 is 2.5 log10(a / b); the max minus min of the computed curve equals the Zappala relation at 60 random (a, b, c, theta)",
+      "bounds": {
+        "relative": 1e-12
+      }
+    },
+    "a4.bound.is.a.bound": {
+      "what": "1000 random (a/b in [1.05, 3], b/c in [1, 2], theta in [20, 90] by uniform cos) triaxial bodies: the bound 10^(0.4 Delta m) never exceeds a/b (tolerance 1e-12 relative); equals a/b at theta = 90 (1e-12); and at theta <= 60 the bound is below a/b by more than 5 percent in at least 90 percent of the draws, so the bound is not the shape",
+      "bounds": {
+        "relative": 1e-12,
+        "slack": 0.05,
+        "fractionBelow": 0.9
+      }
+    },
+    "a5.baseline.exact": {
+      "what": "expected counts from the log-polynomial of degree 4 (c = [4.2, 0.3, -0.5, 0.1, 0.2] in x on the fit range) with no noise and a gap window multiplied by 0.5 over its whole window: the fit excluding the windows recovers the polynomial's coefficients to the stated relative tolerance and the depletion of the window to the stated absolute tolerance",
+      "bounds": {
+        "coefficientRelative": 1e-6,
+        "depletionAbsolute": 0.0001
+      }
+    },
+    "a6.selection.analytic": {
+      "what": "detectionLimitH against its closed form at a = 2, 2.5, 3, 3.5 (1e-13); the ratio of detected fractions at a = 2 and a = 3.5 equals (a2 (a2 - 1) / (a1 (a1 - 1)))^(5 alpha) to 1e-12; and on 400 synthetic populations of 20,000 objects uniform in a on the stated range, the mean a of the detected objects differs from the quadrature of the weight (Simpson, 4001 points) by no more than 3 standard errors in the mean of the 400 means, and the detected mean lies below the true mean (the survey's bias is inward)",
+      "bounds": {
+        "closedForm": 1e-12,
+        "sigmas": 3
+      }
+    },
+    "a7.classes.partition": {
+      "what": "10,000 synthetic orbits with a, e, i uniform over the union of the class boxes: no orbit is in two classes, an orbit in a box and outside every other box is that class, the plutino window is centred on 30.06952752 x 1.5^(2/3) and the twotino on 30.06952752 x 2^(2/3), and the table of counts sums to the number of orbits",
+      "bounds": {
+        "exact": true
+      }
+    },
+    "b1.oracle.axes": {
+      "what": "the kernel's eleven resonance axes against the oracle's numpy values (pinned, tests/fixtures/small-bodies/oracle-results.json)",
+      "bounds": {
+        "relative": 1e-12
+      }
+    },
+    "b2.oracle.projectedArea": {
+      "what": "the closed-form projected area against the oracle's surface integral for 40 (a, b, c, theta, phi) drawn by the oracle's own seed (pinned inputs): relative difference",
+      "bounds": {
+        "relative": 0.0001
+      }
+    },
+    "b3.oracle.period": {
+      "what": "the kernel's refined peak period against astropy's Lomb-Scargle peak on six pinned series (periods 3.1, 5.4, 8.8, 14.0, 21.5 and 37 hours; 4 to 6 nights of 6 to 8 hours; noise 0.01 and 0.03 mag; pinned by the oracle), and the kernel's rotation period against the oracle's 2 / f_peak: relative difference of the peak periods and of the rotation periods",
+      "bounds": {
+        "relative": 0.0005
+      }
+    },
+    "b4.oracle.depletion": {
+      "what": "the baseline-fit depletion at the five gap windows of three pinned synthetic catalogs (n0 = 8000, 3000 and 800, seeds pinned in the oracle inputs) against scipy's maximum-likelihood fit of the same model: absolute difference of the depletion",
+      "bounds": {
+        "absolute": 0.0005
+      }
+    },
+    "c1.coverage.ensemble": {
+      "what": "300 synthetic belts (n0 = 8000, the stated injections) seeded from named streams, each analysed with 200 bootstrap draws at level 0.95: the fraction of catalogs whose interval covers the truth depletion of the window, for each of 3:1, 5:2, 7:3 and 2:1",
+      "bounds": {
+        "coverage": [0.9, 0.995]
+      }
+    },
+    "c2.coverage.bootstrap": {
+      "what": "the roadmap's form of the check: one seeded catalog (n0 = 8000); its point estimate of the 3:1 depletion D_hat; 200 bootstrap resamples of the catalog treated as catalogs in their own right, each analysed with 100 inner draws at level 0.95: the fraction whose interval covers D_hat",
+      "bounds": {
+        "coverage": [0.88, 0.995]
+      }
+    },
+    "c3.lightcurve.recovery": {
+      "what": "300 synthetic light curves per noise level (a/b in [1.15, 2.2], b/c in [1.0, 1.6], theta from cos uniform over [30, 90] degrees, P_rot log-uniform over [2.5, 24] hours, 5 nights of 7 hours, 40 random times per night, noise as stated; the truth manifest kept): the fraction whose rotation period is within the stated relative tolerance of the truth, the fraction whose amplitude is within 0.03 mag of the true Delta m at that aspect, the coverage of the amplitude's 95 percent interval of the true Delta m, the fraction for which the claim a/b >= bound holds for the true a/b, and the coverage of the period's 1.96 sigma interval of the truth",
+      "bounds": {
+        "periodRelativeByNoise": {
+          "0.01": 0.002,
+          "0.03": 0.003
+        },
+        "periodFraction": 0.95,
+        "amplitudeAbsolute": 0.03,
+        "amplitudeFraction": 0.95,
+        "amplitudeCoverage": [0.9, 0.995],
+        "boundHolds": 0.95,
+        "periodCoverage": [0.85, 0.995]
+      }
+    },
+    "c4.populations.counts": {
+      "what": "a synthetic main belt, Hilda, Trojan and Kuiper population with known class membership (the truth manifest): classify returns the manifest's class for every member whose orbit was drawn inside its own box, and the count table equals the manifest's",
+      "bounds": {
+        "exact": true
+      }
+    },
+    "d1.cut.too.small": {
+      "what": "300 synthetic catalogs at n0 = 150 (the gap injected as stated): the fraction whose 3:1 verdict is 'not resolved'; the power curve at n0 = 500, 1000 and 2000 is reported; 300 gap-free catalogs at n0 = 8000: the fraction whose 3:1 verdict is 'resolved' (the false-positive rate); 300 gapped catalogs at n0 = 8000: the fraction 'resolved'",
+      "bounds": {
+        "notResolvedAtSmall": 0.95,
+        "falsePositiveMax": 0.08,
+        "powerAtLargeMin": 0.95
+      }
+    },
+    "d2.refusals": {
+      "what": "29 values (below minObjects), a window outside the fitted range, two windows overlapping, a window of zero width, a NaN in the values, a non-whole draws count, a level of 1: each is a refusal with the stated code; a light curve of 10 points (below minPoints) and one with a NaN time and a sigma that is not positive: each is a refusal with the stated code; a triaxial body with c > b or b > a, an aspect outside [0, 90]: refused",
+      "bounds": {
+        "exact": true
+      }
+    },
+    "d3.steep.edge": {
+      "what": "100 catalogs (n0 = 8000) whose density falls by a factor of 20 across 3.20 to 3.30 AU (a sharp outer edge) with NO gap injected: the warning steep-baseline is present on the 2:1 window in at least the stated fraction, and the verdict is 'not resolved' in at least the stated fraction (a baseline across a cliff cannot say a gap is there)",
+      "bounds": {
+        "warnedFraction": 0.95,
+        "notResolvedFraction": 0.95
+      }
+    },
+    "d4.not.periodic": {
+      "what": "300 pure-noise series (the same cadence as c3, noise 0.03 mag) return not-periodic at least at the stated fraction; 300 series with a 0.06 mag two-maxima signal at noise 0.03 return a period (not not-periodic) at least at the stated fraction; once-nightly sampling (one point a night for 40 nights, jitter 0.02 day) of a 9.0 hour rotation is returned as ambiguous or refused sampling in at least the stated fraction of 100 series, and dense sampling (a point every 6 minutes for 3 nights) of the same is ambiguous in at most the stated fraction",
+      "bounds": {
+        "noiseNotPeriodic": 0.97,
+        "signalPeriodic": 0.99,
+        "onceNightlyFlagged": 0.9,
+        "denseAmbiguousMax": 0.05
+      }
+    },
+    "d5.one.maximum": {
+      "what": "a series with ONE maximum a rotation (a single-harmonic albedo-spot curve, amplitude 0.2 mag, true period 6.0 hours, noise 0.01): the two-maxima rule returns twice the true period as the primary and the true period as the alternative; the primary is within 1e-3 of twice the truth and the alternative within 1e-3 of the truth. A demonstration of a stated limit, not a failure.",
+      "bounds": {
+        "relative": 0.001
+      }
+    },
+    "e1.catalog": {
+      "what": "the numbered H < 13 cut, read as data, through the kernel's defaults (the five windows, degree 4, 400 draws, seed small-bodies-198:e1): e1.verdict the 3:1 and 5:2 verdicts are 'resolved'; e1.depth their depletions lie in the band; e1.oracle the five windows' depletions against scipy's maximum-likelihood fit of the same model on the same cut (absolute difference); e1.coverage the c2 form on the real cut (200 resamples, 100 inner draws, level 0.95): the fraction whose 3:1 interval covers the cut's own estimate; e1.populations the Hilda and Trojan counts by the class rules are at least the stated figures; the 4:1, 7:3 and 2:1 verdicts, depletions and warnings are REPORTED, not bounded (the 2:1 gap sits on the belt's outer edge); e1.rows the number of rows in the fit range is at least the stated figure",
+      "bounds": {
+        "resolvedGaps": ["3:1", "5:2"],
+        "depletionBand": [0.4, 1.0],
+        "oracleAbsolute": 0.0005,
+        "bootstrapCoverage": [0.88, 0.995],
+        "hildasAtLeast": 30,
+        "trojansAtLeast": 100,
+        "resamples": 200,
+        "innerDraws": 100
+      }
+    },
+    "e2.lightcurve": {
+      "what": "NOT RUN: no measured asteroid light curve: the ALCDEF download is a form-based job and the PDS path returned 404 (retrieval attempted 2026-10-27); nothing is simulated as authentic",
+      "bounds": {}
+    },
+    "e1.cited": {
+      "what": "NOT RUN: a pinned gap-depth estimate from a cited independent analysis on the same catalog cut (the roadmap's tier b): none was supplied",
+      "bounds": {}
+    },
+    "e3.kuiper": {
+      "what": "the retrieved Kuiper-belt file, read as data through the kernel's class rules, against the c4 contract: rows, plutino, twotino and classical counts, the plutino concentration over its flanks, the independent count, the data-arc floor; the twotino concentration is reported",
+      "bounds": {
+        "rowsAtLeast": 3000,
+        "plutinoAtLeast": 100,
+        "twotinoAtLeast": 20,
+        "classicalAtLeast": 300,
+        "concentrationFactor": 2,
+        "flankWidthAu": 1.0,
+        "windowHalfAu": 0.5,
+        "dataArcDaysAbove": 365
+      }
+    }
+  }
+}

@@ -870,6 +870,13 @@
       "student": false
     },
     {
+      "file": "SMALL_BODIES.md",
+      "kind": "feature",
+      "purpose": "The belts from a catalog and the spin from a light curve: gaps as measured depletions, class counts, the survey's selection and a bounded ellipsoid light-curve model, validated (Prompt 198).",
+      "owner": 198,
+      "student": false
+    },
+    {
       "file": "STATISTICS.md",
       "kind": "feature",
       "purpose": "The statistics kernel: labelled intervals, resampling, residual diagnostics, comparison of estimates, the F-test and the selection function, with their limits and validation.",
