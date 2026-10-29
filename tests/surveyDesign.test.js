@@ -28,15 +28,26 @@ describe('the committed checks', () => {
     for (const a of THRESHOLDS.amendments) expect(a.boundMoved).toBe(false);
   });
   test('the rows that fail are exactly the recorded failed legs', () => {
-    const fail = rows.filter(r => r.status === 'fail').map(r => r.id).sort();
+    const fail = rows
+      .filter(r => r.status === 'fail')
+      .map(r => r.id)
+      .sort();
     expect(fail).toEqual(failed.failed.map(f => f.id).sort());
-    expect(fail).toEqual(['A3.skyLimited', 'A4.optimum', 'A5.timeRatio', 'B2.cosmology']);
+    expect(fail).toEqual([
+      'A3.skyLimited',
+      'A4.optimum',
+      'A5.timeRatio',
+      'B2.cosmology',
+    ]);
   });
   test('every other row passes and E1 is not run', () => {
     for (const r of rows) {
       if (r.id === 'E1.authentic') expect(r.status).toBe('not-run');
       else if (!failed.failed.some(f => f.id === r.id))
-        expect({ id: r.id, status: r.status }).toEqual({ id: r.id, status: 'pass' });
+        expect({ id: r.id, status: r.status }).toEqual({
+          id: r.id,
+          status: 'pass',
+        });
     }
   });
 });
