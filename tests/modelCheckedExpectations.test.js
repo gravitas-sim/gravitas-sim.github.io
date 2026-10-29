@@ -212,7 +212,8 @@ describe('the instructor expectations record', () => {
     // 464 after What a Telescope Resolves (Prompt 208): 2 more.
     // 467 after Plan an Exposure (Prompt 210): 3 more.
     // 470 after The Saturated Star (Prompt 211): 3 more.
-    expect(total).toBe(470);
+    // 471 after Counts to Magnitudes (Prompt 212): 1 more.
+    expect(total).toBe(471);
   });
 
   test('a /1 record keyed by step number migrates to the same text', () => {

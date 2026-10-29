@@ -1,0 +1,729 @@
+{
+ "id": "counts-to-magnitudes",
+ "locale": "en",
+ "title": "Counts to Magnitudes",
+ "steps": 19,
+ "depths": [
+  [
+   "core",
+   6
+  ],
+  [
+   "quantitative",
+   14
+  ],
+  [
+   "advanced",
+   19
+  ]
+ ],
+ "grading": [
+  {
+   "sid": "low-in-the-sky-predict",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "why-fainter",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     true,
+     "correct"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "not-the-dust",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     true,
+     "correct"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "refuse-a-target",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     true,
+     "correct"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "narrow-predict",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     true,
+     "correct"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "what-it-costs",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     true,
+     "correct"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  }
+ ],
+ "progress": {
+  "record": {
+   "schema": 2,
+   "lesson": "counts-to-magnitudes",
+   "stepSid": "what-a-calibration-does",
+   "responses": {
+    "counts-to-magnitudes:low-in-the-sky-predict": 1,
+    "counts-to-magnitudes:why-fainter": 0,
+    "counts-to-magnitudes:not-the-dust": 0,
+    "counts-to-magnitudes:refuse-a-target": 0,
+    "counts-to-magnitudes:narrow-predict": 0,
+    "counts-to-magnitudes:what-it-costs": 0
+   },
+   "attempts": {
+    "counts-to-magnitudes:low-in-the-sky-predict": 1,
+    "counts-to-magnitudes:why-fainter": 1,
+    "counts-to-magnitudes:not-the-dust": 1,
+    "counts-to-magnitudes:refuse-a-target": 1,
+    "counts-to-magnitudes:narrow-predict": 1,
+    "counts-to-magnitudes:what-it-costs": 1
+   },
+   "visited": [
+    "a-night-of-standards",
+    "low-in-the-sky-predict",
+    "bouguer",
+    "why-fainter",
+    "not-the-dust",
+    "the-zero-point",
+    "calibrate-a-target",
+    "the-airmass-limit",
+    "refuse-a-target",
+    "narrow-predict",
+    "narrow-night",
+    "a-cited-coefficient",
+    "how-few-standards",
+    "the-color-night",
+    "second-order",
+    "a-blue-target",
+    "what-it-costs",
+    "the-limits",
+    "what-a-calibration-does"
+   ],
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "depth": "advanced",
+   "deepest": "advanced",
+   "spent": 600
+  },
+  "read": {
+   "responses": {
+    "counts-to-magnitudes:low-in-the-sky-predict": 1,
+    "counts-to-magnitudes:why-fainter": 0,
+    "counts-to-magnitudes:not-the-dust": 0,
+    "counts-to-magnitudes:refuse-a-target": 0,
+    "counts-to-magnitudes:narrow-predict": 0,
+    "counts-to-magnitudes:what-it-costs": 0
+   },
+   "attempts": {
+    "counts-to-magnitudes:low-in-the-sky-predict": 1,
+    "counts-to-magnitudes:why-fainter": 1,
+    "counts-to-magnitudes:not-the-dust": 1,
+    "counts-to-magnitudes:refuse-a-target": 1,
+    "counts-to-magnitudes:narrow-predict": 1,
+    "counts-to-magnitudes:what-it-costs": 1
+   },
+   "visited": [
+    "a-blue-target",
+    "a-cited-coefficient",
+    "a-night-of-standards",
+    "bouguer",
+    "calibrate-a-target",
+    "how-few-standards",
+    "low-in-the-sky-predict",
+    "narrow-night",
+    "narrow-predict",
+    "not-the-dust",
+    "refuse-a-target",
+    "second-order",
+    "the-airmass-limit",
+    "the-color-night",
+    "the-limits",
+    "the-zero-point",
+    "what-a-calibration-does",
+    "what-it-costs",
+    "why-fainter"
+   ],
+   "stepSid": "what-a-calibration-does",
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "depth": "advanced",
+   "deepest": "advanced",
+   "spent": 600,
+   "schema": 2,
+   "migrated": false,
+   "notes": []
+  }
+ },
+ "backup": {
+  "backup": {
+   "kind": "gravitas.investigation.progress",
+   "version": 2,
+   "savedAt": "2026-01-02T04:05:06.000Z",
+   "lesson": {
+    "id": "counts-to-magnitudes",
+    "title": "Counts to Magnitudes",
+    "stepCount": 19
+   },
+   "student": null,
+   "progress": {
+    "stepSid": "what-a-calibration-does",
+    "startedAt": "2026-01-02T03:04:05.000Z",
+    "visited": [
+     "a-night-of-standards",
+     "low-in-the-sky-predict",
+     "bouguer",
+     "why-fainter",
+     "not-the-dust",
+     "the-zero-point",
+     "calibrate-a-target",
+     "the-airmass-limit",
+     "refuse-a-target",
+     "narrow-predict",
+     "narrow-night",
+     "a-cited-coefficient",
+     "how-few-standards",
+     "the-color-night",
+     "second-order",
+     "a-blue-target",
+     "what-it-costs",
+     "the-limits",
+     "what-a-calibration-does"
+    ],
+    "responses": {
+     "counts-to-magnitudes:low-in-the-sky-predict": 1,
+     "counts-to-magnitudes:why-fainter": 0,
+     "counts-to-magnitudes:not-the-dust": 0,
+     "counts-to-magnitudes:refuse-a-target": 0,
+     "counts-to-magnitudes:narrow-predict": 0,
+     "counts-to-magnitudes:what-it-costs": 0
+    },
+    "attempts": {
+     "counts-to-magnitudes:low-in-the-sky-predict": 1,
+     "counts-to-magnitudes:why-fainter": 1,
+     "counts-to-magnitudes:not-the-dust": 1,
+     "counts-to-magnitudes:refuse-a-target": 1,
+     "counts-to-magnitudes:narrow-predict": 1,
+     "counts-to-magnitudes:what-it-costs": 1
+    }
+   },
+   "steps": [
+    {
+     "index": 0,
+     "sid": "a-night-of-standards",
+     "fingerprint": "read|-|photometric-calibration|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 1,
+     "sid": "low-in-the-sky-predict",
+     "fingerprint": "predict|-|photometric-calibration|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 2,
+     "sid": "bouguer",
+     "fingerprint": "measure|-|photometric-calibration|-|k+dm|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 3,
+     "sid": "why-fainter",
+     "fingerprint": "question|choice|photometric-calibration|-|-|4|a=0;c=0",
+     "optionCount": 4
+    },
+    {
+     "index": 4,
+     "sid": "not-the-dust",
+     "fingerprint": "question|choice|photometric-calibration|-|-|4|a=0;c=0",
+     "optionCount": 4
+    },
+    {
+     "index": 5,
+     "sid": "the-zero-point",
+     "fingerprint": "measure|-|photometric-calibration|-|z+k+z0|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 6,
+     "sid": "calibrate-a-target",
+     "fingerprint": "measure|-|photometric-calibration|-|M+s+iv|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 7,
+     "sid": "the-airmass-limit",
+     "fingerprint": "measure|-|photometric-calibration|-|n+k|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 8,
+     "sid": "refuse-a-target",
+     "fingerprint": "question|choice|photometric-calibration|-|-|4|a=0;c=0",
+     "optionCount": 4
+    },
+    {
+     "index": 9,
+     "sid": "narrow-predict",
+     "fingerprint": "predict|-|photometric-calibration|-|-|4|a=0;c=0",
+     "optionCount": 4
+    },
+    {
+     "index": 10,
+     "sid": "narrow-night",
+     "fingerprint": "measure|-|photometric-calibration|-|lo+hi+span+c|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 11,
+     "sid": "a-cited-coefficient",
+     "fingerprint": "measure|-|photometric-calibration|-|M+s+off|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 12,
+     "sid": "how-few-standards",
+     "fingerprint": "measure|-|photometric-calibration|-|s2+s3+ratio|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 13,
+     "sid": "the-color-night",
+     "fingerprint": "read|-|photometric-calibration|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 14,
+     "sid": "second-order",
+     "fingerprint": "measure|-|photometric-calibration|-|dchi+k2|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 15,
+     "sid": "a-blue-target",
+     "fingerprint": "measure|-|photometric-calibration|-|m1+m2+d|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 16,
+     "sid": "what-it-costs",
+     "fingerprint": "question|choice|photometric-calibration|-|-|4|a=0;c=0",
+     "optionCount": 4
+    },
+    {
+     "index": 17,
+     "sid": "the-limits",
+     "fingerprint": "read|-|photometric-calibration|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 18,
+     "sid": "what-a-calibration-does",
+     "fingerprint": "read|-|photometric-calibration|-|-|-|-",
+     "optionCount": null
+    }
+   ]
+  },
+  "verdict": {
+   "ok": true
+  },
+  "restored": {
+   "responses": {
+    "counts-to-magnitudes:low-in-the-sky-predict": 1,
+    "counts-to-magnitudes:why-fainter": 0,
+    "counts-to-magnitudes:not-the-dust": 0,
+    "counts-to-magnitudes:refuse-a-target": 0,
+    "counts-to-magnitudes:narrow-predict": 0,
+    "counts-to-magnitudes:what-it-costs": 0
+   },
+   "attempts": {
+    "counts-to-magnitudes:low-in-the-sky-predict": 1,
+    "counts-to-magnitudes:why-fainter": 1,
+    "counts-to-magnitudes:not-the-dust": 1,
+    "counts-to-magnitudes:refuse-a-target": 1,
+    "counts-to-magnitudes:narrow-predict": 1,
+    "counts-to-magnitudes:what-it-costs": 1
+   },
+   "visited": [
+    "a-blue-target",
+    "a-cited-coefficient",
+    "a-night-of-standards",
+    "bouguer",
+    "calibrate-a-target",
+    "how-few-standards",
+    "low-in-the-sky-predict",
+    "narrow-night",
+    "narrow-predict",
+    "not-the-dust",
+    "refuse-a-target",
+    "second-order",
+    "the-airmass-limit",
+    "the-color-night",
+    "the-limits",
+    "the-zero-point",
+    "what-a-calibration-does",
+    "what-it-costs",
+    "why-fainter"
+   ],
+   "stepIndex": 18,
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "moved": [],
+   "dropped": [],
+   "quarantined": {},
+   "uncertain": 0,
+   "discardedKeys": 0,
+   "byPosition": false
+  }
+ },
+ "ledger": {
+  "entry": "golden-counts-to-magnitudes",
+  "record": {
+   "ids": [
+    "golden-counts-to-magnitudes"
+   ],
+   "rows": [
+    [
+     "golden-counts-to-magnitudes",
+     "q1",
+     3.5247,
+     "d",
+     0.0012,
+     "measured",
+     "simulation",
+     "rv-fit",
+     null,
+     [
+      "s",
+      "d"
+     ]
+    ]
+   ],
+   "total": 1
+  },
+  "digest": "8a87363541498bfe8ce0bab1d3bc08f8413120c432276436e7860754eb486fe9"
+ },
+ "tokens": {
+  "plain": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "a": null,
+    "r": null,
+    "fl": "en"
+   },
+   "answers": [
+    {
+     "sid": "low-in-the-sky-predict",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "why-fainter",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "not-the-dust",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "refuse-a-target",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "narrow-predict",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "what-it-costs",
+     "value": 0,
+     "locale": "en"
+    }
+   ]
+  },
+  "assignment": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "a": "golden-assignment",
+    "r": "roster-1",
+    "fl": "en"
+   },
+   "answers": [
+    {
+     "sid": "low-in-the-sky-predict",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "why-fainter",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "not-the-dust",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "refuse-a-target",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "narrow-predict",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "what-it-costs",
+     "value": 0,
+     "locale": "en"
+    }
+   ]
+  },
+  "evidence": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "ev": {
+     "d": "8a87363541498bfe8ce0bab1d3bc08f8413120c432276436e7860754eb486fe9",
+     "i": [
+      "golden-counts-to-magnitudes"
+     ],
+     "n": 1,
+     "r": [
+      [
+       "golden-counts-to-magnitudes",
+       "q1",
+       3.5247,
+       "d",
+       0.0012,
+       "measured",
+       "simulation",
+       "rv-fit",
+       null,
+       [
+        "s",
+        "d"
+       ]
+      ]
+     ]
+    },
+    "a": null,
+    "r": null,
+    "fl": "en"
+   },
+   "answers": [
+    {
+     "sid": "low-in-the-sky-predict",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "why-fainter",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "not-the-dust",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "refuse-a-target",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "narrow-predict",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "what-it-costs",
+     "value": 0,
+     "locale": "en"
+    }
+   ]
+  },
+  "depth": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "dp": "advanced",
+    "a": null,
+    "r": null,
+    "fl": "en"
+   },
+   "answers": [
+    {
+     "sid": "low-in-the-sky-predict",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "why-fainter",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "not-the-dust",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "refuse-a-target",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "narrow-predict",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "what-it-costs",
+     "value": 0,
+     "locale": "en"
+    }
+   ]
+  }
+ }
+}

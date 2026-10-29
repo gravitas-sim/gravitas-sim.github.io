@@ -149,7 +149,7 @@ export const COUNTS_TO_MAGNITUDES = {
             'Read the number in the “Extinction of the air, k” row (the slope of the dashed line, about 0.2 magnitudes per airmass); the fainter-by value is k times 1.4.',
         };
       },
-      tool: PC({}, PLAIN),
+      tool: PC({}, ['stars', 'reach', 'model', 'prior', 'cindex']),
     },
     {
       sid: 'why-fainter',
@@ -932,7 +932,7 @@ export const COUNTS_TO_MAGNITUDES_DEEPER_ES = {
 const CONTENT = {
   'counts-to-magnitudes': {
     topic:
-      'How an observer turns the counts of a detector into calibrated magnitudes: a night of standard stars measured at several airmasses fixes a zero point, the extinction of the air (about 0.21 magnitudes per airmass on the synthetic night here, so a star at airmass 2.4 is a third of a magnitude fainter than overhead) and a color term; a target is then calibrated with the uncertainty the night leaves it (13.203 ± 0.008). The lesson separates the atmosphere’s extinction, in magnitudes per airmass, from the interstellar extinction of the dust between the stars, and shows what the calibration refuses (a night of one airmass, a target above airmass 2.5, a color term from two standards) and where a straight line is not enough (a color-dependent extinction).',
+      'How an observer turns the counts of a detector into calibrated magnitudes: a night of standard stars measured at several airmasses fixes a zero point, the extinction of the air (about 0.21 magnitudes per airmass on the synthetic night here, so a star at airmass 2.4 is a third of a magnitude fainter than overhead) and a color term; a target is then calibrated with the uncertainty the night leaves it (13.203 ± 0.008). The investigation separates the atmosphere’s extinction, in magnitudes per airmass, from the interstellar extinction of the dust between the stars, and shows what the calibration refuses (a night of one airmass, a target above airmass 2.5, a color term from two standards) and where a straight line is not enough (a color-dependent extinction).',
     difficulty:
       'Introductory (read a slope, say why a star is fainter low in the sky, not the dust); majors (calibrate a night: zero point, target, limits, refusals, a cited coefficient, how few standards); advanced (a color term, a color-dependent extinction found by a nested test, what a linear calibration assumes)',
     placement:
@@ -1001,7 +1001,7 @@ const CONTENT = {
     teachingNotes: [
       'The nights are synthetic: the instrumental magnitudes follow the calibration equation M − m = Z1 − k(X − 1) + cC [− k2 C (X − 1)] with a seeded Gaussian noise, so the truth is known. The kernel is checked against an independent implementation (numpy, SciPy and Astropy), by an ensemble for coverage, by a physical night built from the radiation model’s band responses under a Rayleigh and aerosol atmosphere, and by a cross-match of the repository’s SDSS and Gaia data on NGC 2420 (PHOTOMETRIC_CALIBRATION.md).',
       'Four checks of the committed contract failed and are reported, not repaired: a lack-of-fit test does not see a color-dependent extinction the first-order model absorbs (the nested test does), the physical night’s limit clause, the detection power of an underestimated error (0.977 against the 0.99 bound) and the held-out coverage of the authentic cross-match (0.743, a catalog pair’s color term, not a hidden calibration).',
-      'The cited coefficient is a value from the instrument library (Rubin r band, ivezic2019) used as a Gaussian prior with an assumed uncertainty of 0.05 magnitudes per airmass, because the table states none; the lesson says so in the step and the flag.',
+      'The cited coefficient is a value from the instrument library (Rubin r band, ivezic2019) used as a Gaussian prior with an assumed uncertainty of 0.05 magnitudes per airmass, because the table states none; the investigation says so in the step and the flag.',
       'Inherited limits: the extinction is constant through the night; the catalog magnitudes are right; no aperture or flat-field errors; a straight line in airmass and color; the airmass limit of 2.5 is a stated rule.',
     ],
     discussion: [
@@ -1046,13 +1046,7 @@ const FLOW = {
 const EXPECTATIONS = {
   'counts-to-magnitudes': {
     bouguer:
-      'About 0.213 magnitudes per airmass (within 0.008), so about 0.30 magnitudes fainter at airmass 2.4 than overhead.',
-    'the-zero-point':
-      'Z1 about 24.803 (within 0.008) with k about 0.213, so about 24.590 outside the atmosphere.',
-    'calibrate-a-target':
-      'About 13.203 with an uncertainty of about 0.008 (within 0.003); the truth is 13.200.',
-    'narrow-night':
-      'Airmass 1.30 to 1.42, so a range of 0.12, no number for the extinction or the zero point, and a color term of about 0.079.',
+      'About 0.213 magnitudes per airmass (within 0.008), so about 0.30 magnitudes fainter at airmass 2.4 than overhead; the night was made with 0.210. The deeper steps read the zero point (24.803), a calibrated target (13.203 with an uncertainty of 0.008) and the night of one airmass, which gives no number.',
   },
 };
 

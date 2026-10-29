@@ -1251,7 +1251,7 @@ Of 171 prediction loops, 171 are returned to,
 - **Prediction loops:** low-in-the-sky-predict → bouguer, why-fainter, not-the-dust, what-a-calibration-does → bouguer.
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
-- **Accepted central experiment:** not yet reviewed.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:photometric-calibration`, control photometric-calibration/noise, measures the extinction of the air the standards of a synthetic night give, in magnitudes per airmass: 0.213 at 5 mmag of noise per measurement and 0.211 at 1 mmag, the night made with 0.210, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Plan an Exposure (`plan-an-exposure`)
 

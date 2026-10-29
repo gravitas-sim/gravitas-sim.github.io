@@ -964,6 +964,19 @@
       ],
       "evidenceFrom": "model"
     },
+    "counts-to-magnitudes": {
+      "centralExperimentId": "ce.counts-to-magnitudes",
+      "object": "panel:photometric-calibration",
+      "control": "photometric-calibration/noise",
+      "quantity": "the extinction of the air the standards of a synthetic night give, in magnitudes per airmass: 0.213 at 5 mmag of noise per measurement and 0.211 at 1 mmag, the night made with 0.210",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "low-in-the-sky-predict",
+        "bouguer"
+      ],
+      "evidenceFrom": "model"
+    },
     "craters-by-size": {
       "centralExperimentId": "ce.craters-by-size",
       "object": "panel:crater-sfd",

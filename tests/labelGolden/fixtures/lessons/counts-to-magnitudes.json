@@ -1,0 +1,139 @@
+{
+ "id": "counts-to-magnitudes",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.bouguer.fields.0.unit","mag/airmass"],
+    ["steps.bouguer.fields.1.unit","mag"],
+    ["steps.the-zero-point.fields.0.unit","mag"],
+    ["steps.the-zero-point.fields.1.unit","mag/airmass"],
+    ["steps.the-zero-point.fields.2.unit","mag"],
+    ["steps.calibrate-a-target.fields.0.unit","mag"],
+    ["steps.calibrate-a-target.fields.1.unit","mag"],
+    ["steps.calibrate-a-target.fields.2.unit","mag"],
+    ["steps.the-airmass-limit.fields.0.unit",""],
+    ["steps.the-airmass-limit.fields.1.unit","mag/airmass"],
+    ["steps.narrow-night.fields.0.unit",""],
+    ["steps.narrow-night.fields.1.unit",""],
+    ["steps.narrow-night.fields.2.unit",""],
+    ["steps.narrow-night.fields.3.unit",""],
+    ["steps.a-cited-coefficient.fields.0.unit","mag"],
+    ["steps.a-cited-coefficient.fields.1.unit","mag"],
+    ["steps.a-cited-coefficient.fields.2.unit","mag"],
+    ["steps.how-few-standards.fields.0.unit","mag"],
+    ["steps.how-few-standards.fields.1.unit","mag"],
+    ["steps.how-few-standards.fields.2.unit",""],
+    ["steps.second-order.fields.0.unit",""],
+    ["steps.second-order.fields.1.unit","mag/airmass/color"],
+    ["steps.a-blue-target.fields.0.unit","mag"],
+    ["steps.a-blue-target.fields.1.unit","mag"],
+    ["steps.a-blue-target.fields.2.unit","mag"]
+   ],
+   "numbered": [
+    ["steps.bouguer.fields.0.hint","0.21"],
+    ["steps.bouguer.fields.1.label","Fainter at airmass 2.4 than overhead"],
+    ["steps.the-zero-point.fields.0.label","Zero point at airmass 1, Z1"],
+    ["steps.the-zero-point.fields.0.hint","24.80"],
+    ["steps.the-zero-point.fields.1.hint","0.21"],
+    ["steps.calibrate-a-target.fields.0.hint","13.20"],
+    ["steps.calibrate-a-target.fields.1.hint","0.008"],
+    ["steps.calibrate-a-target.fields.2.label","Half-width of the 95 percent interval"],
+    ["steps.the-airmass-limit.fields.0.hint","6"],
+    ["steps.the-airmass-limit.fields.1.hint","0.21"],
+    ["steps.narrow-night.fields.0.hint","1.30"],
+    ["steps.narrow-night.fields.1.hint","1.42"],
+    ["steps.narrow-night.fields.3.hint","0.079"],
+    ["steps.a-cited-coefficient.fields.0.hint","13.22"],
+    ["steps.a-cited-coefficient.fields.1.hint","0.012"],
+    ["steps.a-cited-coefficient.fields.2.label","Distance from the true 13.200"],
+    ["steps.how-few-standards.fields.0.label","Uncertainty with 2 standards"],
+    ["steps.how-few-standards.fields.0.hint","0.081"],
+    ["steps.how-few-standards.fields.1.label","Uncertainty with 3 standards"],
+    ["steps.how-few-standards.fields.1.hint","0.0088"],
+    ["steps.second-order.fields.0.hint","67.8"],
+    ["steps.second-order.fields.1.label","Color-dependent extinction, k2"],
+    ["steps.second-order.fields.1.hint","-0.047"],
+    ["steps.a-blue-target.fields.0.hint","13.215"],
+    ["steps.a-blue-target.fields.1.hint","13.202"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.bouguer.fields.1.label","Más débil con masa de aire 2,4 que en el cenit"],
+    ["steps.the-zero-point.fields.0.label","Punto cero a masa de aire 1, Z1"],
+    ["steps.calibrate-a-target.fields.2.label","Semianchura del intervalo del 95 por ciento"],
+    ["steps.a-cited-coefficient.fields.2.label","Distancia a la verdad, 13,200"],
+    ["steps.how-few-standards.fields.0.label","Incertidumbre con 2 patrones"],
+    ["steps.how-few-standards.fields.1.label","Incertidumbre con 3 patrones"],
+    ["steps.second-order.fields.1.label","Extinción que depende del color, k2"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [],
+  "decimals": [
+   [
+    "bouguer.dm",
+    2
+   ],
+   [
+    "the-zero-point.z0",
+    3
+   ],
+   [
+    "calibrate-a-target.iv",
+    3
+   ],
+   [
+    "narrow-night.span",
+    2
+   ],
+   [
+    "a-cited-coefficient.off",
+    3
+   ],
+   [
+    "how-few-standards.ratio",
+    1
+   ],
+   [
+    "a-blue-target.d",
+    3
+   ]
+  ]
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "bouguer": {
+    "validate": {"calls":232,"distinct":2,"digest":"076cc6de34d3aeff","samples":[null,{"level":"error","message":"Read the number in the “Extinction of the air, k” row (the slope of the dashed line, about 0.2 magnitudes per airmass); the fainter-by value is k times 1.4."}]}
+   },
+   "the-zero-point": {
+    "validate": {"calls":242,"distinct":2,"digest":"e5d4d8e619016901","samples":[null,{"level":"error","message":"Read Z1 from the “Zero point at airmass 1” row (about 24.8) and k from the next row (about 0.21)."}]}
+   },
+   "calibrate-a-target": {
+    "validate": {"calls":242,"distinct":2,"digest":"3a17ed85e53b5e7f","samples":[null,{"level":"error","message":"Read the “Target star” row: the calibrated magnitude (about 13.2) and the number after the plus-minus sign (about 0.008)."}]}
+   },
+   "the-airmass-limit": {
+    "validate": {"calls":232,"distinct":2,"digest":"c7f822ba0211fff4","samples":[null,{"level":"error","message":"Set the highest airmass to 3.0, then read the “Excluded” row (the number of measurements) and the extinction row."}]}
+   },
+   "narrow-night": {
+    "validate": {"calls":242,"distinct":2,"digest":"d63f4ea8779b853d","samples":[null,{"level":"error","message":"Choose the narrow night and read the airmass range in the “Night” row (1.30 to 1.42) and the color term in its row (about 0.079)."}]}
+   },
+   "a-cited-coefficient": {
+    "validate": {"calls":242,"distinct":2,"digest":"451e77d0e7e9531f","samples":[null,{"level":"error","message":"Choose the narrow night, turn the cited coefficient on, then read the “Target star” row: about 13.22 with an uncertainty of about 0.012."}]}
+   },
+   "how-few-standards": {
+    "validate": {"calls":242,"distinct":2,"digest":"0b768806683cdb97","samples":[null,{"level":"error","message":"Set the number of standards to 2, read the target’s uncertainty, then to 3 and read it again: about 0.081 and 0.0088."}]}
+   },
+   "second-order": {
+    "validate": {"calls":232,"distinct":2,"digest":"7ff2b15b1eac3497","samples":[null,{"level":"error","message":"On the color-dependent night in the first-order model read the “Is there more in the data?” row (about 67.8); then choose the second-order model and read the k2 row (about −0.047)."}]}
+   },
+   "a-blue-target": {
+    "validate": {"calls":242,"distinct":2,"digest":"c862ac58f4a7bbe5","samples":[null,{"level":"error","message":"On the color-dependent night set the target color to −0.2 and read the “Target star” row in each model: about 13.215 first order, 13.202 second order."}]}
+   }
+  },
+  "es": "same"
+ }
+}
