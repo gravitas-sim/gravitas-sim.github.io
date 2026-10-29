@@ -26,6 +26,86 @@ advanced steps, and a new majors investigation "Plan an exposure". The validatio
   of it with a noise-equivalent area `4 pi sigma^2`. The published LSST depths are for the second; the rendered frames are
   measured with the first.
 
+## Equations, limits, assumptions
+
+1. **The CCD equation** (Merline and Howell 1995; Howell, Handbook of CCD Astronomy, Sec. 4.4), for `n` pixels in the aperture,
+   `n_b` pixels in the sky estimate, `N` exposures: `noise^2 = S + n (1 + n / n_b) (B + D + N R^2)`, `SNR = S / noise`; `S` the
+   star's electrons in the aperture, `B` and `D` the sky and dark electrons per pixel over the whole exposure, `R` the read noise.
+   The read variance is paid once per exposure; the other terms grow with the total time.
+2. **The exposure for a target**: with `S = r t`, `B = b t`, `D = d t`, a quadratic in `t`:
+   `t = (q + sqrt(q^2 + 4 a c)) / (2 a)`, `a = r^2 / SNR^2`, `q = r + n k (b + d)`, `c = n k N R^2`, `k = 1 + n / n_b`.
+3. **The limiting magnitude of an exposure** (`limitingRate`, `limitingMagnitude`): the positive root of
+   `S^2 - SNR^2 S - SNR^2 V0 = 0`, `V0` the variance without the star, divided by `t` and the enclosed fraction, then
+   `m = -2.5 log10(rate / zero point) - k_ext (X - 1)`.
+4. **The star's pixels**: a Gaussian of FWHM `f` pixels (`sigma = f / 2.3548`): a circular aperture of radius `r` holds
+   `1 - exp(-r^2 / 2 sigma^2)` of the light in `pi r^2` pixels; optimal photometry holds all of it with a noise-equivalent
+   area `4 pi sigma^2`. The brightest pixel holds the pixel-integrated Gaussian at the centre. An extended source is a surface
+   brightness `mu` over an area `A`: its total magnitude is `mu - 2.5 log10 A`.
+5. **The zero point** is electrons per second from a magnitude-0 object at the **zenith** (X = 1), as the Rubin depth model
+   defines its constants; the sky is a stated surface brightness read through the same zero point, the extinction is
+   `k (X - 1)` magnitudes and the seeing scales as `X^0.6` (Kolmogorov, a stated model).
+6. **The plan** (`planExposure`): solves 2, then checks the exposure limit (`not-reachable`, reason `exposure-limit`, with the
+   SNR the limit reaches), the brightest pixel against the full well and the per-exposure limit (`saturated`, `frame-limit`,
+   with the largest exposure and the plan with enough exposures), and returns the noise budget, the dominant term, the limiting
+   magnitude, the warnings and the assumptions. A refusal has a reason code and no time.
+
+Assumptions: no flat-field or sky-subtraction error, no crowding or confusion noise, no scintillation, a Gaussian
+point-spread function, the sky and seeing as given (no moon model), no binning or nonlinearity. **Physical domain**: a
+signal-to-noise above 100 warns (a stated teaching floor for flat fielding of about one percent); an airmass above 5 warns;
+an airmass at or below the horizon is refused.
+
+## The facility adapter, and what the library does not state
+
+`js/instruments/exposure.js` (`exposureSetupOf`, `planFor`, `areaOf`) reads a facility's imager from the cited table
+(`js/data/instruments.js`): the pixel scale (converted from arcmin where the table states it so), the read noise (the middle of
+a stated range unless the caller asks for the low or high end), the dark current, the full well, the site seeing, the sky
+brightness and the extinction per stated band. The library states **no throughput or zero point for any facility**, a dark
+current for only some, and an extinction only for Rubin: each is the caller's, recorded as `supplied` in the result, and
+asking for a plan without one raises an `InstrumentTableError` naming the facility and the field (D5). The panel supplies a
+peak throughput of 0.5 through the radiation kernel's passband for the zero point (V for Las Cumbres in the Vega system, SDSS
+g, r and i for Rubin in AB: the stand-in passbands differ from the real filters'), a dark current of 0.01 electron a second a
+pixel where the library has none (0.002 for the Sinistro, which states it) and an extinction of 0.2 mag per airmass in V for
+the Las Cumbres telescopes; all are teaching values and the panel lists them apart from the library's. `js/instruments/
+exposureSky.js` makes a zero point from a throughput and a passband and the airmass from an altitude (Kasten and Young, the
+sky kernel); the adapter itself reaches neither kernel.
+
+## The panel, the frame and the record
+
+`js/exposureWidgets.js` is a lazy widget family (`exposure-planner`): facility and band, a star or an extended patch, the
+brightness, the aperture or the patch radius, the number of exposures, the target SNR, the airmass and a brighter sky. Its
+readout is the table alternative to the picture: the result, the total exposure and its split, the SNR reached, the dominant
+term, the four noise terms with their shares, the faintest object reached, the brightest pixel against the full well, the
+pixels and enclosed light, the prediction for the frame's own aperture beside the measurement on the frame, the values the
+library supplied, the values Gravitas supplied, the warnings and what the calculation leaves out. The picture is the frame
+(`js/exposureField.js`: the detector kernel's forward model of exactly the plan, several exposures as one stacked frame with the
+read noise of `N` reads and the full well `N` times larger) and a stacked bar of the noise budget. Every frame is synthetic.
+
+## What the first run found
+
+The validator's first run against the committed bounds (the oracle and the kernel existed; the bounds did not move):
+
+* Four rows failed on the harness, not the kernel, and were fixed without moving a bound: the detection probability used a
+  wrong normal CDF (C2); the magnitude steps of the same leg were signed the wrong way round; D1's reachable control kept a
+  full well that the sky alone fills in an hour (the planner refused it as `saturated`, correctly: the leg now holds the
+  exposure limit apart from the well); D4's bright star needed a target SNR of 1000 to saturate a 50,000 electron well (the
+  peak pixel of a Gaussian holds about 11 percent of its light, and the SNR fixes the electrons); the adapter threw on TESS's
+  pixel scale in arcmin (it now converts by the registry's factors).
+* **Three legs crossed their committed bounds and stay failing** (`tests/fixtures/exposure/failed-legs.json`), all against the
+  published Rubin model, not against the independent implementation (B1 passes to 1e-13):
+  B2, the read-noise loss: the CCD equation with the table's inputs loses 0.83 mag in u and 0.23 in g where the paper states
+  0.62 and 0.18 (r, i, z and y agree to 0.017 or better); B3, the longer exposure: the same cause (u and g, and u at every
+  tau); B4, equation 6 away from the fiducial sky and exposure: the equation holds `C_m` fixed while the read-noise share
+  changes, so a sky one magnitude brighter or fainter disagrees by up to 0.44 mag in u and 0.07 to 0.24 in g, r and i. What the
+  paper's detailed throughput and noise model carries that the stated inputs do not is not known; the roadmap's literal
+  "cited public exposure-time calculator" leg was not run.
+
+## Reproduce
+
+`npm run exposure:validate` prints the table (exit 0 when only the recorded failed legs fail); with `--write-failed` it rewrites
+`tests/fixtures/exposure/failed-legs.json`. `tools/exposure-oracle/oracle.py` (Python, numpy and scipy, no Gravitas code)
+produces `tests/fixtures/exposure/oracle-results.json`. `tests/exposurePlanning.test.js` and `tests/exposureLessons.test.js`
+hold the contract, the failed legs and every number the lessons state.
+
 ## Validation contract (committed first)
 
 Seeds: oracle 210; harness 2100001; ensemble prefix `exposure-210`. Bounds are in `tests/fixtures/exposure/thresholds.json`;
