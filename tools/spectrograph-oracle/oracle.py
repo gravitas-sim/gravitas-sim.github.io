@@ -105,6 +105,8 @@ def a2():
         mu = float(rng.uniform(-3, 3))
         a = float(rng.uniform(-6, 6) * sigma + mu)
         b = a + float(10 ** rng.uniform(-2, 0.5)) * sigma
+        # the inputs are rounded to the 12 digits the file keeps before the value is computed from them
+        mu, sigma, a, b = (float(f"{v:.12g}") for v in (mu, sigma, a, b))
         cases.append({"mu": mu, "sigma": sigma, "a": a, "b": b, "value": pixel_area(mu, sigma, a, b)})
     tail = []
     for z in (8, 10, 12, 15, 20, 25, 30):

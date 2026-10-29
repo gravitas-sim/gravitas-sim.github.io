@@ -366,6 +366,13 @@
       "what": "F2 states the throughput at R equal to R_s as 0.760968108 (erf(sqrt(ln 2))), where the committed text said 0.76115",
       "why": "a miscopied numeral: the stated closed form erf(sqrt(ln 2)) is 0.760968108 and the oracle's dblquad agrees to 1e-12; the tolerance (1e-5 relative) and the expression are unchanged",
       "boundMoved": false
+    },
+    {
+      "id": "AM4",
+      "when": "after the kernel module existed and was smoke-run on the A2 cases, before any validator or test existed",
+      "what": "the oracle's A2 inputs are rounded to 12 significant digits before their values are computed, where the first version computed the values from full-precision inputs and stored rounded ones",
+      "why": "the smoke run showed an absolute difference of 1.4e-11 on a case with a correct erf (the kernel's erf agrees with scipy's to 1e-16), which is the stored inputs' rounding, not the kernel. The oracle was regenerated: only the a2 block changed, everything else is byte-identical. No bound, tolerance or case count moved",
+      "boundMoved": false
     }
   ]
 }
