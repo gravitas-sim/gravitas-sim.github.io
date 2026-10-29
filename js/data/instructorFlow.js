@@ -18,7 +18,7 @@ export default {
     ...ATMOSPHERE.flow,
     ...PLANETS.flow,
     ...TELESCOPE.flow,
-  ...SATURATED_STAR.flow,
+    ...SATURATED_STAR.flow,
     'the-suns-motion': [
       {
         from: 'from-stars-to-velocities',

@@ -297,3 +297,27 @@ export function normalizeEffects(effects = {}) {
     throw new Error('the bleed length is at least one pixel');
   return out;
 }
+
+// --- Sampling regimes (the phase statistics are in sampling.js) ---
+export const SAMPLING = Object.freeze({
+  underBelowFwhmPx: 2,
+  overFromFwhmPx: 4,
+  apertureFwhmRatio: 1.5,
+  phaseGrid: 21,
+});
+
+/** The regime of a profile of this FWHM in pixels: under, adequate or over. */
+export function samplingOf(fwhmPx) {
+  if (!(fwhmPx > 0))
+    throw new Error('the profile’s width is a positive number of pixels');
+  return {
+    fwhmPx,
+    nyquistRatio: fwhmPx / SAMPLING.underBelowFwhmPx,
+    regime:
+      fwhmPx < SAMPLING.underBelowFwhmPx
+        ? 'under'
+        : fwhmPx < SAMPLING.overFromFwhmPx
+          ? 'adequate'
+          : 'over',
+  };
+}

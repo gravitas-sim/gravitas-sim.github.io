@@ -1237,5 +1237,5 @@ Of 168 prediction loops, 168 are returned to,
 - **Prediction loops:** bright-star-predict → clipped-star, magnitude-error, why-too-faint → clipped-star; trail-predict → trail, a-ray, what-an-observer-does → trail.
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
-- **Accepted central experiment** (reviewed 2026-09-11): object `panel:detector-effects`, control detector-effects/bright, measures the share of its true flux the clipped sum of the brightest star would read, in percent, with a 60 second exposure: 30 at V = 9.5 and 53 at V = 10.5, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:detector-effects`, control detector-effects/bright, measures the share of its true flux the clipped sum of the brightest star would read, in percent, with a 60 second exposure: 30 at V = 9.5 and 55 at V = 10.5, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 

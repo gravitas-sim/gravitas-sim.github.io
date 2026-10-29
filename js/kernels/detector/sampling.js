@@ -14,29 +14,9 @@ import { fractionIn } from './frame.js';
 
 const { Math } = globalThis;
 
-export const SAMPLING = Object.freeze({
-  underBelowFwhmPx: 2,
-  overFromFwhmPx: 4,
-  apertureFwhmRatio: 1.5,
-  phaseGrid: 21,
-});
+export { SAMPLING, samplingOf } from './effects.js';
+import { SAMPLING } from './effects.js';
 const FWHM_PER_SIGMA = 2 * Math.sqrt(2 * Math.LN2);
-
-/** The regime of a profile of this FWHM in pixels: under, adequate or over. */
-export function samplingOf(fwhmPx) {
-  if (!(fwhmPx > 0))
-    throw new Error('the profile’s width is a positive number of pixels');
-  return {
-    fwhmPx,
-    nyquistRatio: fwhmPx / SAMPLING.underBelowFwhmPx,
-    regime:
-      fwhmPx < SAMPLING.underBelowFwhmPx
-        ? 'under'
-        : fwhmPx < SAMPLING.overFromFwhmPx
-          ? 'adequate'
-          : 'over',
-  };
-}
 
 /**
  * The peak-pixel fraction's range and the proportional aperture's flux over a

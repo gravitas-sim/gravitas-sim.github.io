@@ -51,7 +51,7 @@ import {
   responseCurve,
   trackDeposit,
 } from './effects.js';
-import { samplingOf } from './sampling.js';
+import { samplingOf } from './effects.js';
 
 // Free globals are slow under Jest's vm; the local names are not.
 const { Math, Float64Array, Int32Array } = globalThis;
