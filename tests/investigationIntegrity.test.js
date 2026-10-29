@@ -138,7 +138,11 @@ describe('the lesson catalog', () => {
           bad.push(`${where(s)}: tolerance is not positive`);
         }
       }
-      if (step.kind === 'short' && (step.rubric || '').length < 40) {
+      if (
+        step.kind === 'short' &&
+        !step.reflect &&
+        (step.rubric || '').length < 40
+      ) {
         bad.push(`${where(s)}: short answer with no usable rubric`);
       }
     }

@@ -52,7 +52,7 @@
    },
    {
     "sid": "adding-in-quadrature",
-    "answer": "0.02337",
+    "answer": "0.0234",
     "tolerance": "0.0012",
     "unit": "mag"
    },
@@ -80,13 +80,7 @@
    ]
   ]
  },
- "precision": [
-  {
-   "rule": "answer-beyond-tolerance",
-   "at": "adding-in-quadrature",
-   "text": "0.02337 mag within 0.0012"
-  }
- ],
+ "precision": [],
  "steps": {
   "en": {
    "the-counts": {

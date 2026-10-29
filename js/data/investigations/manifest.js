@@ -1195,7 +1195,7 @@ export const MANIFEST = [
     title: 'Which Instrument for Which Question?',
     subtitle:
       'Five facilities from the instrument library, the same faint star, and what decides the choice: light, sampling, field and wavelength',
-    duration: '15-25 min',
+    duration: '10-15 min',
     level: 'Majors and upper-level astronomy',
     thumbnail: 'images/investigations/which-instrument-for-which-question.webp',
     depths: 2,
@@ -1208,7 +1208,7 @@ export const MANIFEST = [
     title: 'The Sky Background',
     subtitle:
       'The sky is a light of its own: how bright it is inside a star’s aperture, what a brighter sky costs in exposure, and when the Moon matters',
-    duration: '15-25 min',
+    duration: '12-18 min',
     level: 'Majors and upper-level astronomy',
     thumbnail: 'images/investigations/the-sky-background.webp',
     depths: 2,
@@ -1220,8 +1220,8 @@ export const MANIFEST = [
     id: 'coordinates-and-time',
     title: 'Coordinates and Time at Depth',
     subtitle:
-      'Sidereal time and the hour angle, the minute a star crosses the meridian, and what precession does to a catalogue position',
-    duration: '15-25 min',
+      'Sidereal time and the hour angle, the minute a star crosses the meridian, and what precession does to a catalog position',
+    duration: '8-14 min',
     level: 'Majors and upper-level astronomy',
     thumbnail: 'images/investigations/coordinates-and-time.webp',
     depths: 2,
@@ -1234,7 +1234,7 @@ export const MANIFEST = [
     title: 'A Night at the Telescope, End to End',
     subtitle:
       'Plan, expose, calibrate, measure and report one star, with a prepared plan: five stations, each with the number it hands to the next',
-    duration: '20-30 min',
+    duration: '15-25 min',
     level: 'Majors and upper-level astronomy',
     thumbnail: 'images/investigations/a-night-at-the-telescope.webp',
     depths: 2,
@@ -1247,7 +1247,7 @@ export const MANIFEST = [
     title: 'From Photons to a Number',
     subtitle:
       'The whole chain as one traced calculation: electrons, noise, signal-to-noise, magnitude, calibration, and the uncertainty carried at each step',
-    duration: '20-30 min',
+    duration: '12-18 min',
     level: 'Majors and upper-level astronomy',
     thumbnail: 'images/investigations/from-photons-to-a-number.webp',
     depths: 2,

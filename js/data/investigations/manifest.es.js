@@ -1204,7 +1204,7 @@ export const MANIFEST = [
     title: '¿Qué instrumento para qué pregunta?',
     subtitle:
       'Cinco instalaciones de la biblioteca de instrumentos, la misma estrella débil y lo que decide la elección: luz, muestreo, campo y longitud de onda',
-    duration: '15-25 min',
+    duration: '10-15 min',
     level: 'Majors and upper-level astronomy',
     thumbnail: 'images/investigations/which-instrument-for-which-question.webp',
     depths: 2,
@@ -1217,7 +1217,7 @@ export const MANIFEST = [
     title: 'El fondo de cielo',
     subtitle:
       'El cielo es una luz propia: lo brillante que es dentro de la abertura de una estrella, lo que cuesta un cielo más brillante en exposición y cuándo importa la Luna',
-    duration: '15-25 min',
+    duration: '12-18 min',
     level: 'Majors and upper-level astronomy',
     thumbnail: 'images/investigations/the-sky-background.webp',
     depths: 2,
@@ -1230,7 +1230,7 @@ export const MANIFEST = [
     title: 'Coordenadas y tiempo en profundidad',
     subtitle:
       'El tiempo sidéreo y el ángulo horario, el minuto en que una estrella cruza el meridiano y lo que la precesión hace a una posición de catálogo',
-    duration: '15-25 min',
+    duration: '8-14 min',
     level: 'Majors and upper-level astronomy',
     thumbnail: 'images/investigations/coordinates-and-time.webp',
     depths: 2,
@@ -1243,7 +1243,7 @@ export const MANIFEST = [
     title: 'Una noche en el telescopio, de principio a fin',
     subtitle:
       'Planificar, exponer, calibrar, medir e informar una estrella con un plan preparado: cinco estaciones, cada una con el número que entrega a la siguiente',
-    duration: '20-30 min',
+    duration: '15-25 min',
     level: 'Majors and upper-level astronomy',
     thumbnail: 'images/investigations/a-night-at-the-telescope.webp',
     depths: 2,
@@ -1256,7 +1256,7 @@ export const MANIFEST = [
     title: 'De fotones a un número',
     subtitle:
       'La cadena entera como un solo cálculo trazado: electrones, ruido, señal a ruido, magnitud, calibración y la incertidumbre que se arrastra en cada paso',
-    duration: '20-30 min',
+    duration: '12-18 min',
     level: 'Majors and upper-level astronomy',
     thumbnail: 'images/investigations/from-photons-to-a-number.webp',
     depths: 2,

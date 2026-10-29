@@ -81,7 +81,7 @@ export const WHICH_INSTRUMENT_FOR_WHICH_QUESTION = {
   title: 'Which Instrument for Which Question?',
   subtitle:
     'Five facilities from the instrument library, the same faint star, and what decides the choice: light, sampling, field and wavelength',
-  duration: '15-25 min',
+  duration: '10-15 min',
   level: 'Majors and upper-level astronomy',
   audience: 'intro',
   textbook: { chapter: 6, section: null },
@@ -248,7 +248,7 @@ export const WHICH_INSTRUMENT_FOR_WHICH_QUESTION = {
           return {
             level: 'ok',
             message:
-              '1.3 ÷ 0.73 = 1.8 pixels across the blur, a little under the two the rule asks: a star’s centre will be found less well than the signal-to-noise alone promises. The 1.0 m telescope has 2.3 and Rubin 3.3 in their own seeing.',
+              '1.3 ÷ 0.73 = 1.8 pixels across the blur, a little under the two the rule asks: a star’s center will be found less well than the signal-to-noise alone promises. The 1.0 m telescope has 2.3 and Rubin 3.3 in their own seeing.',
           };
         }
         return {
@@ -462,7 +462,7 @@ export const THE_SKY_BACKGROUND = {
   title: 'The Sky Background',
   subtitle:
     'The sky is a light of its own: how bright it is inside a star’s aperture, what a brighter sky costs in exposure, and when the Moon matters',
-  duration: '15-25 min',
+  duration: '12-18 min',
   level: 'Majors and upper-level astronomy',
   audience: 'intro',
   textbook: { chapter: 6, section: null },
@@ -794,7 +794,7 @@ export const THE_SKY_BACKGROUND = {
       body: `The library holds three dark sites and no city. The “sky brighter by” control is
              an exercise offset, not a measurement: the real light of a Moon depends on its
              phase, its height and how far it is from the target, and none of that is
-             modelled.`,
+             modeled.`,
       prompt:
         'If your campus sky were three magnitudes brighter than a dark site, what would you change about an observing plan, and what would you have to measure first?',
     },
@@ -899,8 +899,8 @@ export const COORDINATES_AND_TIME = {
   thumbnail: 'images/investigations/coordinates-and-time.webp',
   title: 'Coordinates and Time at Depth',
   subtitle:
-    'Sidereal time and the hour angle, the minute a star crosses the meridian, and what precession does to a catalogue position',
-  duration: '15-25 min',
+    'Sidereal time and the hour angle, the minute a star crosses the meridian, and what precession does to a catalog position',
+  duration: '8-14 min',
   level: 'Majors and upper-level astronomy',
   audience: 'intro',
   textbook: { chapter: 2, section: null },
@@ -913,8 +913,8 @@ export const COORDINATES_AND_TIME = {
   objectives: [
     'Say why the sky comes ahead of the clock by 3 minutes 56 seconds a day, and measure it from the meridian crossings of a star',
     'Find the time a star crosses the meridian from the sidereal time at midnight and the star’s right ascension, and the hour angle at any clock time',
-    'Say why a catalogue position carries an epoch, and find the shift precession makes to a position over 25 years in right ascension and declination',
-    'Say what an uncorrected catalogue position does to where a telescope points, in arcseconds and in pixels',
+    'Say why a catalog position carries an epoch, and find the shift precession makes to a position over 25 years in right ascension and declination',
+    'Say what an uncorrected catalog position does to where a telescope points, in arcseconds and in pixels',
   ],
   steps: [
     {
@@ -1003,7 +1003,7 @@ export const COORDINATES_AND_TIME = {
       title: 'When does it cross?',
       body: `A star crosses the meridian when the sidereal time equals its right ascension.
              The panel says the sidereal time at the midnight that ends the date is <strong>6.792
-             h</strong> and Sirius’s catalogue right ascension is <strong>6.752 h</strong>:
+             h</strong> and Sirius’s catalog right ascension is <strong>6.752 h</strong>:
              the star crosses <em>before</em> midnight, when the sidereal time was smaller. The
              sidereal time runs 1.0027379 hours for each hour of clock, so it was this many
              hours before midnight: (6.792 − 6.752) ÷ 1.0027379. Type the two readings from the
@@ -1061,7 +1061,7 @@ export const COORDINATES_AND_TIME = {
       tolerance: 0.3,
       hints: ['Subtract your crossing from the panel’s.'],
       worked:
-        '718.7 − 717.6 = 1.1 minutes. The catalogue’s right ascension is for a fixed reference (J2000.0); the panel crosses the star where it is on the date. The next steps say why the two differ.',
+        '718.7 − 717.6 = 1.1 minutes. The catalog’s right ascension is for a fixed reference (J2000.0); the panel crosses the star where it is on the date. The next steps say why the two differ.',
       feedback: {
         close: 'Close. 718.7 minus your computed crossing.',
         'wrong-order-of-magnitude': 'About a minute, not seconds or hours.',
@@ -1075,12 +1075,12 @@ export const COORDINATES_AND_TIME = {
       type: 'question',
       kind: 'choice',
       title: 'Why the panel is later',
-      body: `The catalogue gives Sirius’s right ascension as 6.752 h. The kernel’s Sirius
+      body: `The catalog gives Sirius’s right ascension as 6.752 h. The kernel’s Sirius
              crosses 1.1 minutes later than a calculation with that number.`,
       prompt: 'What is the main reason?',
       options: [
         'The panel’s clock runs slow',
-        'The Earth’s axis precesses: the equator and equinox the catalogue refers to (J2000.0) have moved, so the star’s right ascension of date is larger by about a minute of time',
+        'The Earth’s axis precesses: the equator and equinox the catalog refers to (J2000.0) have moved, so the star’s right ascension of date is larger by about a minute of time',
         'Sirius is moving through space so fast that its right ascension grows by a minute in 25 years',
         'Refraction lifts the star so it crosses later',
       ],
@@ -1098,10 +1098,10 @@ export const COORDINATES_AND_TIME = {
         },
       ],
       hints: [
-        'The catalogue’s coordinates have an epoch. What does the Earth’s axis do over 25 years?',
+        'The catalog’s coordinates have an epoch. What does the Earth’s axis do over 25 years?',
       ],
       because:
-        'Precession: the Earth’s axis traces a cone in 25,800 years, moving the equinox along the equator by 50 arcseconds a year, so every right ascension grows, by about 3 seconds of time a year near the equator. In 25 years that is a minute: the panel uses the star’s place for the night, the catalogue’s number is for 2000.',
+        'Precession: the Earth’s axis traces a cone in 25,800 years, moving the equinox along the equator by 50 arcseconds a year, so every right ascension grows, by about 3 seconds of time a year near the equator. In 25 years that is a minute: the panel uses the star’s place for the night, the catalog’s number is for 2000.',
       tool: TURN(),
     },
     {
@@ -1126,7 +1126,7 @@ export const COORDINATES_AND_TIME = {
              as 3.93 minutes earlier each night for Sirius. From the sidereal time at midnight
              and the right ascension you found that the star crosses the meridian at 717.6
              minutes after noon, and that the kernel’s crossing is a minute later because a
-             catalogue position carries an epoch: the right ascension of date has moved
+             catalog position carries an epoch: the right ascension of date has moved
              since 2000. A telescope’s pointing model does this arithmetic for every target.
              \n\nThe panel is a model of the sky, computed from the Sky Lab kernel. It uses
              the star’s apparent place, with precession, nutation and aberration; this
@@ -1186,7 +1186,7 @@ export const COORDINATES_AND_TIME_DEEPER = {
       tolerance: 3,
       hints: ['Multiply the yearly rate by cos α and by the number of years.'],
       worked:
-        '20.04 × (−0.196) × 25 = −98.4 arcseconds; the rigorous precession gives −99.5. Declination decreases: Sirius sits 1.7 arcminutes further south than the catalogue says.',
+        '20.04 × (−0.196) × 25 = −98.4 arcseconds; the rigorous precession gives −99.5. Declination decreases: Sirius sits 1.7 arcminutes further south than the catalog says.',
       feedback: {
         close: 'Close. The yearly rate times 25, with its sign.',
         'wrong-order-of-magnitude':
@@ -1202,7 +1202,7 @@ export const COORDINATES_AND_TIME_DEEPER = {
       type: 'question',
       kind: 'numeric',
       title: 'What an uncorrected position costs',
-      body: `A telescope is pointed with Sirius’s J2000 catalogue position and no precession.
+      body: `A telescope is pointed with Sirius’s J2000 catalog position and no precession.
              The 1.0 m telescope’s camera has pixels of 0.389 arcseconds, so a shift of 99.5
              arcseconds in declination is a number of pixels.`,
       prompt: 'How many pixels is the declination error alone?',
@@ -1238,7 +1238,7 @@ export const A_NIGHT_AT_THE_TELESCOPE = {
   title: 'A Night at the Telescope, End to End',
   subtitle:
     'Plan, expose, calibrate, measure and report one star, with a prepared plan: five stations, each with the number it hands to the next',
-  duration: '20-30 min',
+  duration: '15-25 min',
   level: 'Majors and upper-level astronomy',
   audience: 'intro',
   textbook: { chapter: 6, section: null },
@@ -1341,7 +1341,7 @@ export const A_NIGHT_AT_THE_TELESCOPE = {
       tolerance: 1,
       hints: ['Visits lost = planned − executed; divide by planned.'],
       worked:
-        '(42 − 24) ÷ 42 = 42.9 percent. The planner draws whole nights lost to a seeded weather chain; the real fraction at a real site is a climate statistic the library does not hold, so the number is a lesson about plans, not a forecast.',
+        '(42 − 24) ÷ 42 = 42.9 percent. The planner draws whole nights lost to a seeded weather chain; the real fraction at a real site is a climate statistic the library does not hold, so the number is an example about plans, not a forecast.',
       feedback: {
         close: 'Close. (planned − executed) ÷ planned, in percent.',
         'wrong-order-of-magnitude': 'Tens of percent, not a few or all.',
@@ -1416,7 +1416,7 @@ export const A_NIGHT_AT_THE_TELESCOPE = {
       title: 'Station 3: what is a count worth?',
       body: `The <strong>calibration</strong> panel is a synthetic night of standard stars
              whose magnitudes are known: it fits the zero point, the extinction of the air and
-             a colour term to them, and says what the night leaves unknown about a target.
+             a color term to them, and says what the night leaves unknown about a target.
              Read the <strong>zero point at airmass 1</strong>, the <strong>extinction</strong>
              and the one-sigma uncertainty of the <strong>calibrated magnitude of the target
              star</strong>. The panel’s instrument is its own synthetic one; what carries
@@ -1658,7 +1658,7 @@ export const FROM_PHOTONS_TO_A_NUMBER = {
   title: 'From Photons to a Number',
   subtitle:
     'The whole chain as one traced calculation: electrons, noise, signal-to-noise, magnitude, calibration, and the uncertainty carried at each step',
-  duration: '20-30 min',
+  duration: '12-18 min',
   level: 'Majors and upper-level astronomy',
   audience: 'intro',
   textbook: { chapter: 6, section: null },
@@ -1813,7 +1813,7 @@ export const FROM_PHOTONS_TO_A_NUMBER = {
           return {
             level: 'ok',
             message:
-              'The zero point is known to 0.003 magnitude and the calibrated target to 0.008: the target’s figure includes the extinction, the colour term and the standards’ own scatter. The trace uses the larger, 0.008.',
+              'The zero point is known to 0.003 magnitude and the calibrated target to 0.008: the target’s figure includes the extinction, the color term and the standards’ own scatter. The trace uses the larger, 0.008.',
           };
         }
         return {
@@ -1835,7 +1835,7 @@ export const FROM_PHOTONS_TO_A_NUMBER = {
       prompt:
         'What is the total one-sigma uncertainty of the calibrated magnitude?',
       unit: 'mag',
-      answer: 0.02337,
+      answer: 0.0234,
       tolerance: 0.0012,
       hints: ['The square root of the sum of the squares.'],
       worked:
@@ -2504,7 +2504,7 @@ export const A_NIGHT_AT_THE_TELESCOPE_ES = {
         'Visitas perdidas = planificadas − ejecutadas; divide entre las planificadas.',
       ],
       worked:
-        '(42 − 24) ÷ 42 = 42,9 por ciento. El planificador saca noches enteras perdidas de una cadena de tiempo con semilla; la fracción real en un sitio real es una estadística climática que la biblioteca no contiene, así que el número es una lección sobre planes, no un pronóstico.',
+        '(42 − 24) ÷ 42 = 42,9 por ciento. El planificador saca noches enteras perdidas de una cadena de tiempo con semilla; la fracción real en un sitio real es una estadística climática que la biblioteca no contiene, así que el número es un ejemplo sobre planes, no un pronóstico.',
     },
     {
       title: 'Estación 2: ¿qué limita la exposición?',
@@ -2769,7 +2769,7 @@ const GUIDE = (
   features: [
     {
       name: 'The panels (exposure planner, night planner, turning sky, calibration and strategy panels)',
-      text: 'The instruments of Prompts 208 to 215 and the survey sky lessons, set to a prepared plan: every number a step states is the instrument’s own, over the instrument library’s cited table (Prompt 209) with a supplied throughput and dark current the planner labels as supplied.',
+      text: 'The instruments of Prompts 208 to 215 and the survey sky investigations, set to a prepared plan: every number a step states is the instrument’s own, over the instrument library’s cited table (Prompt 209) with a supplied throughput and dark current the planner labels as supplied.',
     },
     {
       name: 'Depth',
@@ -2829,12 +2829,12 @@ const CONTENT = {
         claim:
           'Two pixels across the seeing is the same as sampled well enough.',
         response:
-          'It is a rule of thumb for adequate sampling; below it a star’s centre is found less well than its signal-to-noise promises.',
+          'It is a rule of thumb for adequate sampling; below it a star’s center is found less well than its signal-to-noise promises.',
       },
     ],
     [
       'Rubin’s band is r and the Las Cumbres telescopes’ V in step 2; the star is the same brightness in each, and the three are the planner’s facility choices (Rubin g and i are not offered, see the register).',
-      'The library holds five facilities and one typical entry; a value a source does not state is absent, and the planner’s throughput, dark current and (for the Las Cumbres telescopes) extinction are labelled as supplied.',
+      'The library holds five facilities and one typical entry; a value a source does not state is absent, and the planner’s throughput, dark current and (for the Las Cumbres telescopes) extinction are labeled as supplied.',
       'The field of the 0.35 m camera (1.9 by 1.2 degrees) and of Sinistro (26.5 arcminutes) are the library’s; Rubin’s 9.6 square degrees is a field area, not a rectangle.',
       'The reflection is not marked: it gives the class a question of its own to carry into the next unit.',
     ],
@@ -2898,7 +2898,7 @@ const CONTENT = {
       'The planner reads Rubin’s r band: sky 21.2, seeing 0.65, library values; the Rubin g and i settings of the planner are not used (see the register).',
       'The sky of 5.15 times in i against g uses the library’s per-band sky table; the planner is not needed for it.',
       'The aperture of the panel is 1.5 seeing radii (the deeper step uses 2.5), so the sky in it is a function of the seeing, which is itself a table value.',
-      'No city, no moonlight geometry and no twilight are modelled; the reflection asks students what they would measure first.',
+      'No city, no moonlight geometry and no twilight are modeled; the reflection asks students what they would measure first.',
     ],
     [
       'If your campus sky is 3 magnitudes brighter than a dark site, which programs on your telescope stop being worth doing?',
@@ -2916,10 +2916,10 @@ const CONTENT = {
     ]
   ),
   'coordinates-and-time': GUIDE(
-    'Sidereal time and the hour angle, the minute a star crosses the meridian, and precession as the reason a catalogue position carries an epoch',
+    'Sidereal time and the hour angle, the minute a star crosses the meridian, and precession as the reason a catalog position carries an epoch',
     'Students compute that a sidereal day is 235.9 seconds short, measure 3.93 minutes a night from the meridian crossings of Sirius, find the crossing from the sidereal time and the right ascension (717.6 minutes after noon against the panel’s 718.7), and say why the panel is later; the deeper steps compute the 25-year shift (67 seconds of time in right ascension, −99.5 arcseconds in declination) and what it does to pointing (256 pixels in declination alone).',
-    'Majors observing unit (the quantitative depth adds the precession arithmetic); the existing sky lessons are the survey tier',
-    'In an observing unit after The Turning Sky and Plan a Night, before a pointing, a telescope or a catalogue lesson.',
+    'Majors observing unit (the quantitative depth adds the precession arithmetic); the existing sky investigations are the survey tier',
+    'In an observing unit after The Turning Sky and Plan a Night, before a pointing, a telescope or a catalog investigation.',
     [
       {
         heading: 'Two clocks',
@@ -2931,7 +2931,7 @@ const CONTENT = {
         body: 'The sidereal time runs 1.0027379 hours per clock hour; the hour angle is the sidereal time minus the right ascension.',
       },
       {
-        heading: 'A catalogue position has an epoch',
+        heading: 'A catalog position has an epoch',
         body: 'Precession moves the equinox about 50 arcseconds a year: in 25 years Sirius’s right ascension has grown 67 seconds of time and its declination moved −99.5 arcseconds.',
       },
     ],
@@ -2953,7 +2953,7 @@ const CONTENT = {
       },
       {
         claim:
-          'A telescope can be pointed with the catalogue’s coordinates unchanged.',
+          'A telescope can be pointed with the catalog’s coordinates unchanged.',
         response:
           'Twenty-five years of precession is 16 arcminutes in right ascension for Sirius: the star would be out of a 26-arcminute frame.',
       },
@@ -2967,10 +2967,10 @@ const CONTENT = {
     [
       'Why do observatories keep sidereal time as well as clock time?',
       'What would the pointing look like after 100 years without a correction?',
-      'Which other effects move a catalogue position, and which of them can you correct from a catalogue alone?',
+      'Which other effects move a catalog position, and which of them can you correct from a catalog alone?',
     ],
     [
-      'Find the crossing time of a second star from the panel and from the catalogue, and compare the differences.',
+      'Find the crossing time of a second star from the panel and from the catalog, and compare the differences.',
       'Compute the shift for a star near the pole, where tan δ is large, and say why the first-order formula needs care.',
     ],
     [
@@ -2991,7 +2991,7 @@ const CONTENT = {
       },
       {
         heading: 'A plan assumes weather',
-        body: 'The strategy planner’s seeded chain loses 18 of 42 visits; the number is a lesson about plans, not a forecast.',
+        body: 'The strategy planner’s seeded chain loses 18 of 42 visits; the number is an example about plans, not a forecast.',
       },
       {
         heading: 'The larger term is the one to improve',
@@ -3022,7 +3022,7 @@ const CONTENT = {
       },
     ],
     [
-      'Regulus stands in for the field’s position; the planner has eight bright stars and no target entry, and the lesson says so.',
+      'Regulus stands in for the field’s position; the planner has eight bright stars and no target entry, and the investigation says so.',
       'The calibration panel’s instrument is its own synthetic one: only the size of its uncertainty carries over to the chain, which the step states.',
       'The exposure planner’s zero point is a supplied throughput (0.5), a teaching value; the report is a prediction under stated assumptions.',
       'The reflection is not marked: it asks for one assumption that could fail on a real night.',
@@ -3166,7 +3166,7 @@ const FLOW = {
     {
       from: 'the-panel-is-later',
       to: 'why-later',
-      text: 'A minute apart, and why: a catalogue position has an epoch.',
+      text: 'A minute apart, and why: a catalog position has an epoch.',
     },
     {
       from: 'in-your-words',
@@ -3224,35 +3224,42 @@ const EXPECTATIONS = {
   'which-instrument-for-which-question': {
     'the-same-star-three-ways':
       'About 12,070 s (within 250) for the 0.35 m telescope, 602 s (within 12) for the 1.0 m and 15.2 s (within 0.6) for Rubin, for a magnitude-22 star at a signal-to-noise of 20.',
-    'how-much-longer': 'A ratio of 20.0 (within 0.6).',
+    'how-much-longer':
+      'A ratio of 20.0 (within 0.6): the 0.35 m telescope needs 20 times the time of the 1.0 m.',
     'pixels-across-the-seeing':
       'A pixel scale of 0.73 and a seeing of 1.3 arcseconds (1.8 pixels across) for the 0.35 m telescope.',
-    'the-field': 'About 11.7 frames (within 0.4).',
+    'the-field':
+      'About 11.7 frames of the 1.0 m camera (within 0.4) cover one frame of the 0.35 m camera.',
   },
   'the-sky-background': {
     'sky-in-the-aperture': 'A magnitude of 20.0 (within 0.1).',
-    'sky-over-the-star': 'A ratio of 15.7 (within 0.8).',
+    'sky-over-the-star':
+      'A ratio of 15.7 (within 0.8): the sky in the aperture gives that many times the star’s light.',
     'a-sky-limited-plan':
       'A total exposure of about 79.8 s (within 1.5) with 87 percent of the noise squared from the sky (within 2).',
     'two-magnitudes-brighter':
       'About 79.8 s and 443 s (within 8), a ratio of 5.6.',
-    'three-magnitudes-brighter': 'A ratio of 13.84 (within 0.5).',
+    'three-magnitudes-brighter':
+      'A ratio of 13.84 (within 0.5) of the exposure to the dark-sky 79.8 seconds.',
     'the-moon-and-a-bright-star':
       'For the 1.0 m telescope: 43 and 204 s at magnitude 20 and 2.3 and 2.7 s at magnitude 17 (dark and 3 magnitudes brighter).',
-    'a-redder-sky': 'A ratio of 5.15 (within 0.15).',
+    'a-redder-sky':
+      'A ratio of 5.15 (within 0.15): the sky gives that many times more light in i than in g.',
   },
   'coordinates-and-time': {
-    'a-day-that-is-short': '235.9 seconds (within 2).',
+    'a-day-that-is-short': '235.9 seconds (within 2) shorter than a solar day.',
     'earlier-each-night':
       'Crossings of 718.7 and 600.8 minutes after noon (each within 0.6), 3.93 minutes a night.',
     'from-sidereal-time-to-crossing':
       'A sidereal time of 6.792 h and a right ascension of 6.752 h (each within 0.003): a crossing at 717.6 minutes.',
-    'the-panel-is-later': 'A difference of 1.1 minutes (within 0.3).',
+    'the-panel-is-later':
+      'A difference of 1.1 minutes (within 0.3) between the panel’s crossing and the arithmetic’s.',
   },
   'a-night-at-the-telescope': {
     'station-when':
       '10.5 hours of dark (within 0.15), 8.08 hours usable (within 0.15) and a best airmass of 1.05 (within 0.03) for Regulus.',
-    'station-weather': 'A share of 42.9 percent (within 1).',
+    'station-weather':
+      'A share of 42.9 percent (within 1) of the planned visits lost to weather.',
     'station-expose':
       'About 59.3 s (within 1.2), with 49 percent of the noise squared from the target’s photons (within 2).',
     'station-calibrate':
@@ -3266,7 +3273,8 @@ const EXPECTATIONS = {
     'the-counts':
       'About 5101 electrons (within 60) and a noise of 103 (within 2).',
     'the-magnitude-uncertainty': '0.02195 magnitude (within 0.0008).',
-    'the-rate-to-a-magnitude': 'A magnitude of 19.00 (within 0.03).',
+    'the-rate-to-a-magnitude':
+      'A magnitude of 19.00 (within 0.03) from the electrons a second and the zero point.',
     'the-calibration-term':
       'A zero point uncertainty of 0.003 (within 0.0012) and a target uncertainty of 0.008 (within 0.0015).',
     'adding-in-quadrature': 'A total of 0.0234 magnitude (within 0.0012).',
@@ -3278,12 +3286,12 @@ const EXPECTATIONS = {
 const BANDS = {
   'which-instrument-for-which-question': {
     core: 'short',
-    quantitative: 'medium',
+    quantitative: 'short',
   },
-  'the-sky-background': { core: 'short', quantitative: 'medium' },
-  'coordinates-and-time': { core: 'short', quantitative: 'medium' },
-  'a-night-at-the-telescope': { core: 'medium', quantitative: 'medium' },
-  'from-photons-to-a-number': { core: 'medium', quantitative: 'medium' },
+  'the-sky-background': { core: 'short', quantitative: 'short' },
+  'coordinates-and-time': { core: 'short', quantitative: 'short' },
+  'a-night-at-the-telescope': { core: 'short', quantitative: 'medium' },
+  'from-photons-to-a-number': { core: 'short', quantitative: 'short' },
 };
 
 /** The guides, flows, expectations and time bands of the lessons above. */

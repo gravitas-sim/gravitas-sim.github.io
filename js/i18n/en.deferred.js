@@ -2028,7 +2028,7 @@ export const EN_DEFERRED = {
   'inv.seq.instruments.the-sky-background':
     'The sky as a light of its own: what it costs in exposure, and when the Moon matters.',
   'inv.seq.instruments.coordinates-and-time':
-    'Sidereal time, the hour angle and precession: why a catalogue position has an epoch.',
+    'Sidereal time, the hour angle and precession: why a catalog position has an epoch.',
   'inv.seq.instruments.the-saturated-star':
     'Why the brightest star in the frame has the wrong magnitude, and where a measurement is safe.',
   'inv.seq.instruments.why-two-lines-become-one':
