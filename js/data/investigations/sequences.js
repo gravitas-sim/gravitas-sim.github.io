@@ -294,6 +294,7 @@ export const SEQUENCES = [
       ['what-a-spectrum-is-made-of', 'quantitative', ['lines-and-motion']],
       ['what-a-ccd-records', 'core'],
       ['signal-noise-and-exposure', 'quantitative', ['what-a-ccd-records']],
+      ['plan-an-exposure', 'core', ['signal-noise-and-exposure']],
       ['a-variable-star-from-frames', 'core', ['what-a-ccd-records']],
       ['measuring-the-moon', 'core', ['what-is-a-measurement']],
       ['how-far-is-that-star', 'quantitative', ['what-does-plus-minus-claim']],

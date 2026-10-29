@@ -18,7 +18,11 @@
     ["steps.what-the-moon-costs.unit",""],
     ["steps.faintest-star.fields.0.unit","mag"],
     ["steps.faintest-star.fields.1.unit","mag"],
-    ["steps.the-square-root-promise.unit","mag"]
+    ["steps.the-square-root-promise.unit","mag"],
+    ["steps.budget-bright-dark.unit","%"],
+    ["steps.budget-faint-short.unit","%"],
+    ["steps.budget-faint-moon.unit","%"],
+    ["steps.read-noise-crossover.unit","s"]
    ],
    "numbered": [
     ["steps.one-star-one-minute.fields.0.hint","33630"],
@@ -81,6 +85,30 @@
     "answer": "0.75",
     "tolerance": "0.02",
     "unit": "mag"
+   },
+   {
+    "sid": "budget-bright-dark",
+    "answer": "69",
+    "tolerance": "1.5",
+    "unit": "%"
+   },
+   {
+    "sid": "budget-faint-short",
+    "answer": "77",
+    "tolerance": "1.5",
+    "unit": "%"
+   },
+   {
+    "sid": "budget-faint-moon",
+    "answer": "97",
+    "tolerance": "1.5",
+    "unit": "%"
+   },
+   {
+    "sid": "read-noise-crossover",
+    "answer": "42.4",
+    "tolerance": "1.5",
+    "unit": "s"
    }
   ],
   "decimals": []

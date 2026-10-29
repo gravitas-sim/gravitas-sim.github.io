@@ -968,6 +968,13 @@
       "student": false
     },
     {
+      "file": "EXPOSURE_PLANNING.md",
+      "kind": "feature",
+      "purpose": "Exposure planning: the CCD equation with several exposures, extended sources, the limiting magnitude and the plan, the facility adapter, the planner, validation and failed legs (Prompt 210).",
+      "owner": 210,
+      "student": true
+    },
+    {
       "file": "DETECTOR_EFFECTS.md",
       "kind": "feature",
       "purpose": "Detector effects over the frame model: saturation, a stated nonlinearity, cosmic-ray tracks, charge bleeding and sampling, each flagged in the sidecar; validation and the failed legs (Prompt 211).",

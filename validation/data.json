@@ -1,9 +1,9 @@
 {
- "generatedAt": "2026-10-28",
+ "generatedAt": "2026-10-29",
  "version": "2.1.0",
  "passed": 348,
  "failed": 0,
- "elapsedMs": 98964,
+ "elapsedMs": 109514,
  "checks": [
   {
    "group": "Unit system",

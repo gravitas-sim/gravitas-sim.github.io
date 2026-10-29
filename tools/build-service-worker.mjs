@@ -468,6 +468,10 @@ export const NEVER_PRECACHED = [
   // The interiors kernel and its packs (Prompt 203, INTERIORS.md): imported by no
   // shipped page yet, so no page can fetch them and an install has no use for them.
   /^js\/kernels\/interiors\//,
+  // Prompt 210: the exposure planner, its field module, the facility adapter and the exposure lesson's one new file (D-R10-210-01).
+  /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(plan-an-exposure|exposure-sequence)\.js$/,
+  /^(js\/exposureWidgets\.js|js\/exposureField\.js|js\/i18n\/(en|es)\.exposure\.js)$/,
+  /^js\/instruments\/(exposure|exposureSky)\.js$/,
   // Prompt 208: the telescope instrument, its optics and its one lesson file (D-R10-208-02).
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(what-a-telescope-resolves|telescope-sequence)\.js$/,
   /^(js\/telescopeWidgets\.js|js\/telescopeField\.js|js\/i18n\/(en|es)\.telescope\.js)$/,

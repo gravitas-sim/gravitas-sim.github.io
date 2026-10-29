@@ -397,6 +397,12 @@ export const LAZY_FAMILIES = Object.freeze({
     'EFFECTS_WIDGETS',
     ['detector-effects']
   ),
+  exposure: familyEntry(
+    () => import('./exposureWidgets.js'),
+    './exposureWidgets.js',
+    'EXPOSURE_WIDGETS',
+    ['exposure-planner']
+  ),
   habitabilityLimits: familyEntry(
     () => import('./habitabilityLimitsWidgets.js'),
     './habitabilityLimitsWidgets.js',

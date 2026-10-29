@@ -486,7 +486,7 @@ npm run author:check -- --json            # for an editor
 that a step names a widget and that the widget has a control called `mass`; it
 cannot see that the widget painted, that the scenario built, that a probe
 produced rows against a live world, or that Next moved. The walker opens all <!--fact:investigations-->87<!--/fact--> investigations in
-a browser and takes all <!--fact:investigationSteps-->1258<!--/fact--> steps,
+a browser and takes all <!--fact:investigationSteps-->1260<!--/fact--> steps,
 sharded one lesson per test so contexts are reused and a failure names its lesson. It takes about two
 minutes and runs as part of `npm run e2e`.
 

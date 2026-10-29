@@ -168,13 +168,15 @@ const SHARED = [
   'atmosphere-sequence.js',
   'planets-sequence.js',
   'telescope-sequence.js',
+  'exposure-sequence.js',
   'saturated-star-sequence.js',
 ];
-/** The shared files that have a sibling under es/: the Spanish of planets-sequence.js and of telescope-sequence.js lives in the file itself (D-R10-206-02, D-R10-208-02, D-R10-211-01). */
+/** The shared files that have a sibling under es/: the Spanish of planets-sequence.js, telescope-sequence.js, exposure-sequence.js and saturated-star-sequence.js lives in the file itself (D-R10-206-02, D-R10-208-02, D-R10-210-01, D-R10-211-01). */
 const SHARED_ES = SHARED.filter(
   f =>
     f !== 'planets-sequence.js' &&
     f !== 'telescope-sequence.js' &&
+    f !== 'exposure-sequence.js' &&
     f !== 'saturated-star-sequence.js'
 );
 

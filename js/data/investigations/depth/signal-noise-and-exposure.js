@@ -139,5 +139,112 @@ export default {
       },
       tool: SNR(),
     },
+    // ---- Prompt 210: the noise budget under three conditions, and the read-noise regime ----
+    {
+      sid: 'budget-bright-dark',
+      after: 'the-square-root-promise',
+      depth: 'advanced',
+      type: 'question',
+      kind: 'numeric',
+      title: 'The budget, a bright star at a dark site',
+      body: `Set V = 15, 60 seconds, a 5 pixel radius and a dark site. The table gives the
+             four terms of the noise squared and the total noise.`,
+      prompt: 'The largest term’s share of the noise squared, in percent',
+      unit: '%',
+      answer: 69,
+      tolerance: 1.5,
+      hints: [
+        'Divide the largest of the four terms by the square of the total noise.',
+      ],
+      worked:
+        'The star’s own photons are 69 percent of the noise squared (the sky 17, the read noise 13, the dark current 1). A star this bright is limited by its own light: only more light helps.',
+      feedback: {
+        close:
+          'Close. Divide the largest term by the square of the total noise.',
+        'wrong-order-of-magnitude':
+          'A share between zero and a hundred percent.',
+        off: 'The largest term of the four, as a percent of the noise squared.',
+      },
+      tool: SNR(),
+    },
+    {
+      sid: 'budget-faint-short',
+      after: 'budget-bright-dark',
+      depth: 'advanced',
+      type: 'question',
+      kind: 'numeric',
+      title: 'The budget, a faint star in a short exposure',
+      body: `Set V = 19, 10 seconds, a 3 pixel radius and a dark site.`,
+      prompt: 'The largest term’s share of the noise squared, in percent',
+      unit: '%',
+      answer: 77,
+      tolerance: 1.5,
+      hints: [
+        'The star gives only a few electrons a second here; the camera charges its read noise to every pixel of the aperture.',
+      ],
+      worked:
+        'The read noise is 77 percent of the noise squared. A faint star in a short exposure is limited by the camera, not by the sky or the star: reading the pixels costs the same however long the exposure was.',
+      feedback: {
+        close:
+          'Close. Divide the largest term by the square of the total noise.',
+        'wrong-order-of-magnitude':
+          'A share between zero and a hundred percent.',
+        off: 'The largest term of the four, as a percent of the noise squared.',
+      },
+      tool: SNR({ mag: 19, exposure: 10, radius: 3, sky: 0 }),
+    },
+    {
+      sid: 'budget-faint-moon',
+      after: 'budget-faint-short',
+      depth: 'advanced',
+      type: 'question',
+      kind: 'numeric',
+      title: 'The budget, the same star under a bright moon',
+      body: `Keep V = 19 and the 3 pixel radius, lengthen the exposure to 300 seconds and
+             choose the bright moon.`,
+      prompt: 'The largest term’s share of the noise squared, in percent',
+      unit: '%',
+      answer: 97,
+      tolerance: 1.5,
+      hints: [
+        'Under a bright moon every pixel of the aperture collects the moon’s sky for the whole exposure.',
+      ],
+      worked:
+        'The sky is 97 percent of the noise squared. The moon’s extra light adds noise in every pixel, and at 300 seconds the read noise has become a rounding error: the star is sky-limited, the regime where the square-root law holds and where a longer exposure is worth the most.',
+      feedback: {
+        close:
+          'Close. Divide the largest term by the square of the total noise.',
+        'wrong-order-of-magnitude':
+          'A share between zero and a hundred percent.',
+        off: 'The largest term of the four, as a percent of the noise squared.',
+      },
+      tool: SNR({ mag: 19, exposure: 300, radius: 3, sky: 2 }),
+    },
+    {
+      sid: 'read-noise-crossover',
+      after: 'budget-faint-moon',
+      depth: 'advanced',
+      type: 'question',
+      kind: 'numeric',
+      title: 'Where the sky takes over from the camera',
+      body: `The read noise squared is paid once per exposure, the sky’s and the dark
+             current’s noise squared grow with the exposure. For a dark site the sky gives
+             1.41 electrons a second in each pixel and the dark current 0.10; the read noise is 8 electrons.`,
+      prompt:
+        'The exposure at which the sky’s and the dark’s noise squared in a pixel equal the read noise squared, in seconds',
+      unit: 's',
+      answer: 42.4,
+      tolerance: 1.5,
+      hints: ['Set (1.41 + 0.10) × t equal to 8², then solve for t.'],
+      worked:
+        '64 ÷ (1.408 + 0.100) = 42.4 seconds. Below it the camera’s read noise is the larger term and a longer exposure buys more than the square root; above it the sky is, and the square-root law takes over. A 10 second exposure of the faint star was well inside the read-limited regime; a 300 second one is well outside it.',
+      feedback: {
+        close:
+          'Close. Divide the read noise squared by the electrons a second the sky and the dark give a pixel together.',
+        'wrong-order-of-magnitude': 'Tens of seconds: 64 divided by about 1.5.',
+        off: '8² ÷ (1.41 + 0.10).',
+      },
+      tool: SNR({ mag: 19, exposure: 10, radius: 3, sky: 0 }),
+    },
   ],
 };

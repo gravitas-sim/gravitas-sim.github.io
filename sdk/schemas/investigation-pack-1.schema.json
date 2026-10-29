@@ -118,6 +118,7 @@
           "the-scale-of-the-solar-system",
           "comets-and-the-sun",
           "what-a-telescope-resolves",
+          "plan-an-exposure",
           "the-saturated-star"
         ]
       }
@@ -385,6 +386,7 @@
                   "the-scale-of-the-solar-system",
                   "comets-and-the-sun",
                   "what-a-telescope-resolves",
+                  "plan-an-exposure",
                   "the-saturated-star"
                 ]
               }
@@ -1467,6 +1469,7 @@
             "ccd-frames",
             "ccd-snr",
             "diff-photometry",
+            "exposure-planner",
             "telescope",
             "detector-effects",
             "sky-turning",

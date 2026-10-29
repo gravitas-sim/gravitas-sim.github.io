@@ -259,13 +259,14 @@ describe('the document inventory', () => {
     // 788 after the two small-body investigations (Prompt 198 part 3): 22 more.
     // 803 after the three planetary closeout investigations (Prompt 206): a guide and a key in each language and the Spanish notes, 5 each, 15 more.
     // 814 after Telescopes and Resolution (Prompt 208): a guide, a key and a key for each of three depths in each language, and the Spanish notes, 11 more.
-    // 825 after The Saturated Star (Prompt 211): the same eleven more as the telescope lesson (a guide, a key and a key for each of three depths in each language, and the Spanish notes).
-    expect(inv.documents).toBe(825);
-    expect(inv.byLocale).toEqual({ en: 378, es: 447 });
+    // 819 after Plan an Exposure (Prompt 210): a guide and a key in each language and the Spanish notes, 5 more.
+    // 830 after The Saturated Star (Prompt 211, over Plan an Exposure): eleven more, as for the telescope lesson (a guide, a key and a key for each of three depths in each language, and the Spanish notes).
+    expect(inv.documents).toBe(830);
+    expect(inv.byLocale).toEqual({ en: 375, es: 444 });
     expect(inv.byKind.notes).toBe(INVESTIGATIONS.length);
     expect(inv.byVariant).toEqual({
       activity: 12,
-      depth: 360,
+      depth: 354,
       full: 348,
       general: 18,
       notes: 87,

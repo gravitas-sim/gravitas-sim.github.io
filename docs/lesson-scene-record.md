@@ -11,10 +11,10 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 87 investigations and 1258 steps: 1166 steps
+Across 87 investigations and 1260 steps: 1168 steps
 declare a scene, 157 let a reader change one, 167 read the
-running integration, 757 show a prescribed model result, 146 draw
-on a stored dataset, 636 put a self-contained panel beside the text,
+running integration, 759 show a prescribed model result, 146 draw
+on a stored dataset, 638 put a self-contained panel beside the text,
 332 keep something, and 58 are prose.
 Of 168 prediction loops, 168 are returned to,
 168 produce a measurement before they are answered, and
@@ -1225,17 +1225,17 @@ Of 168 prediction loops, 168 are returned to,
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:telescope`, control telescope/aperture, measures the dip between two stars 1 arcsecond apart, in percent of the light at a star, with 0.6 arcseconds of seeing: 0 at 10 cm and 50.3 at 40 cm, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
-## The Saturated Star (`the-saturated-star`)
+## Plan an Exposure (`plan-an-exposure`)
 
-- **Steps:** 9. Scene declared on 9; a reader can change something on 0; 9 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 0 live engine, 9 prescribed model, 0 stored dataset, 9 self-contained panel.
+- **Steps:** 11. Scene declared on 11; a reader can change something on 0; 11 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 11 prescribed model, 0 stored dataset, 11 self-contained panel.
 - **What students do:** move-an-instrument-control, commit-a-prediction, record-values, choose-an-option.
 - **Objects the steps declare:** star.
-- **Instruments:** detector-effects.
+- **Instruments:** exposure-planner.
 - **Stored data:** none.
 - **Evidence kept:** notebook-fields.
-- **Prediction loops:** bright-star-predict → clipped-star, magnitude-error, why-too-faint → clipped-star; trail-predict → trail, a-ray, what-an-observer-does → trail.
+- **Prediction loops:** predict-the-limit → the-plan → the-plan; predict-more-exposures → twenty-exposures, airmass-cost, the-moon, on-the-frame, cannot-be-reached, what-the-plan-leaves-out, what-you-worked-out → twenty-exposures.
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
-- **Accepted central experiment** (reviewed 2026-09-11): object `panel:detector-effects`, control detector-effects/bright, measures the share of its true flux the clipped sum of the brightest star would read, in percent, with a 60 second exposure: 30 at V = 9.5 and 55 at V = 10.5, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:exposure-planner`, control exposure-planner/exposures, measures the total exposure that reaches a signal-to-noise of 20 for a magnitude-24 star in the Rubin r band: 455 seconds in two exposures and 512 seconds in twenty, the read noise paid once per exposure, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 

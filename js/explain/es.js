@@ -145,6 +145,12 @@ export default {
     'Qué quita cada imagen de calibración, qué limita la señal sobre ruido de una estrella brillante y de una débil, y por qué una estrella de comparación quita la nube delgada que una estrella medida sola no puede.',
     'Todo es sintético, de un modelo directo con verdad conocida, o un cálculo para un telescopio declarado de 0,4 m: sin blooming, no linealidad, términos de color ni seeing, así que una cámara real añade errores que estas imágenes no muestran.',
   ],
+  exposure: [
+    'Una instalación de la biblioteca de instrumentos, un objetivo (una estrella o una mancha extensa) y una señal sobre ruido que alcanzar, en una banda, a una masa de aire y bajo un cielo que tú fijas.',
+    'La exposición que pide la ecuación del CCD, en cuántas exposiciones, qué la limita (los fotones del objetivo, el cielo, la corriente oscura o el ruido de lectura) con el presupuesto de ruido, el objeto más débil que alcanza esa exposición y una imagen sintética del plan con su señal sobre ruido medida junto a la predicha.',
+    'Cuánto tarda una señal sobre ruido dada, por qué se aparta de la ley de la raíz cuadrada cuando importa el ruido de lectura de la cámara, qué cuestan un cielo más brillante o más exposiciones, y cuándo un objetivo no se alcanza en absoluto.',
+    'El cálculo omite el error de aplanado y de resta del cielo, el apiñamiento y el centelleo, así que es una predicción bajo supuestos declarados, no una garantía; un rendimiento, una corriente oscura y un coeficiente de extinción que la biblioteca no declara son valores didácticos, rotulados como tales; las imágenes son sintéticas.',
+  ],
   survey: [
     'Estrellas sintéticas de brillo conocido a distancias conocidas: estrellas contadas y perdidas, el sesgo por capas de distancia, o la función de luminosidad frente a su verdad.',
     'Cómo cambian la parte contada, el sesgo y la función de luminosidad recuperada al cambiar el límite de magnitud, la curva de completitud o el corte de paralaje.',

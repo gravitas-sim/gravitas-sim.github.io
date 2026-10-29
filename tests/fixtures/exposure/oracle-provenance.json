@@ -1,0 +1,8 @@
+{
+  "script": "tools/exposure-oracle/oracle.py",
+  "scriptSha256": "569ce99cf35590a5bba290b1d0df27c010ac5f103e50b536a1194674ef926c31",
+  "thresholdsSha256AtRun": "6ee373e943714fa4a43e63b0aaebe604a3ba251b27ee37327836817735686c16",
+  "command": "python3 tools/exposure-oracle/oracle.py > tests/fixtures/exposure/oracle-results.json",
+  "python": "3.9.6",
+  "note": "Run before js/kernels/detector/snr.js was extended. Its output was read before the kernel existed (the contract allows it); the read showed that the published m5 relation holds its Cm constant, so B2 (u and g), B3 (tau 4 and 10 in u and g) and B4 (sky of one magnitude brighter or fainter in u to i) are expected to cross their committed bounds on physics the published formula leaves out (the read-noise share changes with the sky); no bound was moved, and the legs stay as committed."
+}

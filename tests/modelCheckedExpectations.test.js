@@ -50,8 +50,9 @@ describe('the digits a literal is written to', () => {
 });
 
 describe('the allowlist only shrinks', () => {
-  test('there are 50 numeric literals, and each is in exactly one table', () => {
-    expect(literals).toHaveLength(50);
+  test('there are 52 numeric literals, and each is in exactly one table', () => {
+    // 52 after Plan an Exposure (Prompt 210): two literals, both model-checked.
+    expect(literals).toHaveLength(52);
     for (const l of literals) {
       const homes = [MODELS, SOURCED, UNCHECKED].filter(t => t[l.key]);
       expect({ key: l.key, homes: homes.length }).toEqual({
@@ -67,7 +68,7 @@ describe('the allowlist only shrinks', () => {
     expect(UNCHECKED_CEILING).toBe(34);
     expect(
       Object.keys(MODELS).length + Object.keys(SOURCED).length + UNCHECKED_COUNT
-    ).toBe(50);
+    ).toBe(52);
   });
 
   test('every entry names a real literal and gives a reason', () => {
@@ -209,8 +210,9 @@ describe('the instructor expectations record', () => {
     // 447 after How Hot Is the Day Side? and Phases and Albedo (Prompt 202): 8 more.
     // 462 after the three planetary investigations (Prompt 206): 10 more.
     // 464 after What a Telescope Resolves (Prompt 208): 2 more.
-    // 467 after The Saturated Star (Prompt 211): 3 more.
-    expect(total).toBe(467);
+    // 467 after Plan an Exposure (Prompt 210): 3 more.
+    // 470 after The Saturated Star (Prompt 211): 3 more.
+    expect(total).toBe(470);
   });
 
   test('a /1 record keyed by step number migrates to the same text', () => {
