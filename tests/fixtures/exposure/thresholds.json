@@ -377,6 +377,11 @@
       "id": "AM1",
       "date": "2026-10-28",
       "text": "A8 first stated the star's dimming as k X (a zero point above the atmosphere). The Rubin depth model the oracle follows defines its constants at the zenith (the extinction term is km (X - 1)), and the sky brightness a site states is a ground-level quantity, so the kernel's zero point refers to the zenith and the dimming is k (X - 1). Amended before any kernel, adapter or oracle output existed; no numerical bound moved."
+    },
+    {
+      "id": "AM2",
+      "date": "2026-10-28",
+      "text": "A7's last clause reads 'a surface-brightness limit equals the point-source limit minus 2.5 log10 of the aperture's area'; the identity it means is that a source's total magnitude is its surface brightness minus 2.5 log10(A), so the limit in surface brightness is the total-magnitude limit plus 2.5 log10(A). The validator tests that identity. Wording only; no bound moved; written before any kernel output was compared."
     }
   ]
 }

@@ -54,6 +54,7 @@ import {
   exposureForSnr,
   snrAt,
   dominantTerm,
+  limitingMagnitude,
 } from './kernels/detector/snr.js';
 import {
   FRAME_FIELD,
@@ -65,6 +66,7 @@ import {
   labSeries,
   rateFromMagnitude,
   skyRateFromMagnitude,
+  ZERO_POINT_V,
   aperture,
 } from './kernels/detector/lab.js';
 
@@ -507,15 +509,12 @@ export function snrView(v) {
   });
   const target = Math.max(1, v.target);
   const needed = exposureForSnr({ ...p, snr: target });
-  // The faintest star (SNR 5 in this exposure): bisection on the magnitude.
-  let lo = 8;
-  let hi = 30;
-  for (let i = 0; i < 60; i++) {
-    const mid = (lo + hi) / 2;
-    const r = { ...p, rate: rateFromMagnitude(mid) * enclosed };
-    if (snrAt(r, exposure) > 5) lo = mid;
-    else hi = mid;
-  }
+  // The faintest star (SNR 5 in this exposure): the kernel's closed form.
+  const limit = limitingMagnitude(
+    { ...p, zeroPoint: ZERO_POINT_V, enclosed },
+    exposure,
+    5
+  );
   return {
     mag,
     exposure,
@@ -528,7 +527,7 @@ export function snrView(v) {
     terms,
     target,
     needed,
-    limit: lo,
+    limit,
     dominant: dominantTerm(p, exposure),
   };
 }

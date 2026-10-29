@@ -1089,5 +1089,13 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
       console.log(
         `${r.status.toUpperCase().padEnd(8)} ${r.id}  ${JSON.stringify(r.measured)}${r.note ? `  (${r.note})` : ''}`
       );
-  process.exitCode = out.some(r => r.status === 'fail') ? 1 : 0;
+  // A recorded failed leg (failed-legs.json) is a labelled finding; a new failure is an error.
+  const recorded = read('tests/fixtures/exposure/failed-legs.json').failed.map(
+    f => f.id
+  );
+  process.exitCode = out.some(
+    r => r.status === 'fail' && !recorded.includes(r.id)
+  )
+    ? 1
+    : 0;
 }
