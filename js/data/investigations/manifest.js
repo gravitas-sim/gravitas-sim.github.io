@@ -1081,7 +1081,6 @@ export const MANIFEST = [
     duration: '15-25 min',
     level: 'Majors and upper-level astronomy',
     thumbnail: 'images/investigations/plan-an-exposure.webp',
-    depths: 1,
     stepCount: 11,
     gradedCount: 9,
     objectiveCount: 4,

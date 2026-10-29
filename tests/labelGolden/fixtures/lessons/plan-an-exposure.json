@@ -1,0 +1,64 @@
+{
+ "id": "plan-an-exposure",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.the-plan.fields.0.unit","s"],
+    ["steps.the-plan.fields.1.unit","mag"],
+    ["steps.twenty-exposures.fields.0.unit","s"],
+    ["steps.twenty-exposures.fields.1.unit","%"],
+    ["steps.airmass-cost.unit",""],
+    ["steps.the-moon.unit",""],
+    ["steps.on-the-frame.fields.0.unit",""],
+    ["steps.on-the-frame.fields.1.unit",""]
+   ],
+   "numbered": [
+    ["steps.the-plan.fields.0.hint","455"],
+    ["steps.the-plan.fields.1.label","Faintest object (5σ)"],
+    ["steps.the-plan.fields.1.hint","25.51"],
+    ["steps.twenty-exposures.fields.0.hint","512"],
+    ["steps.twenty-exposures.fields.1.hint","12.5"],
+    ["steps.on-the-frame.fields.0.hint","19.8"],
+    ["steps.on-the-frame.fields.1.hint","19.6"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.the-plan.fields.1.label","Objeto más débil (5σ)"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "airmass-cost",
+    "answer": "2.83",
+    "tolerance": "0.1",
+    "unit": ""
+   },
+   {
+    "sid": "the-moon",
+    "answer": "5.09",
+    "tolerance": "0.15",
+    "unit": ""
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "the-plan": {
+    "validate": {"calls":232,"distinct":2,"digest":"38752387a96a2887","samples":[null,{"level":"error","message":"Set the facility to “Rubin, r”, brightness 24, two exposures and a target of 20, then read “Total exposure” and “Faintest object this exposure reaches”."}]}
+   },
+   "twenty-exposures": {
+    "validate": {"calls":232,"distinct":2,"digest":"8efc1fe031482a74","samples":[null,{"level":"error","message":"Set the exposures to 20 and read “Total exposure” and the row “Noise budget: the read noise” (its percent)."}]}
+   },
+   "on-the-frame": {
+    "validate": {"calls":232,"distinct":2,"digest":"33fb9824298be4cf","samples":[null,{"level":"error","message":"Read the rows “Predicted for the frame’s own aperture” and “Measured on the frame”: about 19.8 and 19.6 for this plan."}]}
+   }
+  },
+  "es": "same"
+ }
+}
