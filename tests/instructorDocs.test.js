@@ -262,7 +262,7 @@ describe('the document inventory', () => {
     // 819 after Plan an Exposure (Prompt 210): a guide and a key in each language and the Spanish notes, 5 more.
     // 830 after The Saturated Star (Prompt 211, over Plan an Exposure): eleven more, as for the telescope lesson (a guide, a key and a key for each of three depths in each language, and the Spanish notes).
     expect(inv.documents).toBe(830);
-    expect(inv.byLocale).toEqual({ en: 375, es: 444 });
+    expect(inv.byLocale).toEqual({ en: 380, es: 450 });
     expect(inv.byKind.notes).toBe(INVESTIGATIONS.length);
     expect(inv.byVariant).toEqual({
       activity: 12,
