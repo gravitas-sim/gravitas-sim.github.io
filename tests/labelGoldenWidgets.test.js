@@ -117,7 +117,7 @@ describe('the parts of the recording', () => {
 describe('the committed recording', () => {
   test('has a fixture for every family and none for a family that is gone', () => {
     expect(Object.keys(files).sort()).toEqual(Object.keys(modules).sort());
-    expect(Object.keys(modules).length).toBe(41);
+    expect(Object.keys(modules).length).toBe(42);
   });
 
   test('has every widget in both locales', () => {
