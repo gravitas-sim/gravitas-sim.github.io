@@ -196,6 +196,10 @@ const LOADERS = {
   'plan-an-exposure': () => import('./plan-an-exposure.js'),
   'why-the-period-is-wrong': () => import('./why-the-period-is-wrong.js'),
   'two-stars-eclipsing': () => import('./two-stars-eclipsing.js'),
+  'deep-or-wide': () => import('./deep-or-wide.js'),
+  'two-telescopes-one-question': () =>
+    import('./two-telescopes-one-question.js'),
+  'propose-an-observation': () => import('./propose-an-observation.js'),
 };
 // </generated:loaders>
 
@@ -312,6 +316,10 @@ const TRANSLATIONS = {
     'plan-an-exposure': () => import('./es/plan-an-exposure.js'),
     'why-the-period-is-wrong': () => import('./es/why-the-period-is-wrong.js'),
     'two-stars-eclipsing': () => import('./es/two-stars-eclipsing.js'),
+    'deep-or-wide': () => import('./es/deep-or-wide.js'),
+    'two-telescopes-one-question': () =>
+      import('./es/two-telescopes-one-question.js'),
+    'propose-an-observation': () => import('./es/propose-an-observation.js'),
   },
 };
 // </generated:translations>

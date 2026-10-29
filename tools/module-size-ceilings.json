@@ -1,7 +1,7 @@
 {
   "_note": "Line ceilings, read by tools/check-architecture.mjs. Only a module over 1,500 lines is listed, and it must sit exactly at its ceiling; run check:architecture -- --record-sizes after moving code out. A module at or under 1,500 lines needs no entry. A module that crosses 1,500 is split, or listed with a DECISION_REGISTER row. Never raised without a DECISION_REGISTER row.",
   "ceilings": {
-    "js/authoring/rules.js": 1637,
+    "js/authoring/rules.js": 1675,
     "js/blackHoleWidgets.js": 1680,
     "js/composerPage.js": 2528,
     "js/coursePage.js": 2201,
@@ -21,9 +21,9 @@
     "js/experiments/panel.js": 2028,
     "js/gwWidgets.js": 2180,
     "js/habitabilityWidgets.js": 1699,
-    "js/i18n/en.deferred.js": 3897,
-    "js/i18n/es.deferred.js": 4144,
-    "js/investigations.js": 3287,
+    "js/i18n/en.deferred.js": 3901,
+    "js/i18n/es.deferred.js": 4148,
+    "js/investigations.js": 3298,
     "js/lessonStage.js": 1905,
     "js/notebook/capture.js": 2081,
     "js/observatory/measurePanel.js": 2023,

@@ -122,7 +122,10 @@
           "the-saturated-star",
           "counts-to-magnitudes",
           "plan-an-exposure",
-          "why-the-period-is-wrong"
+          "why-the-period-is-wrong",
+          "deep-or-wide",
+          "two-telescopes-one-question",
+          "propose-an-observation"
         ]
       }
     },
@@ -393,7 +396,10 @@
                   "the-saturated-star",
                   "counts-to-magnitudes",
                   "plan-an-exposure",
-                  "why-the-period-is-wrong"
+                  "why-the-period-is-wrong",
+                  "deep-or-wide",
+                  "two-telescopes-one-question",
+                  "propose-an-observation"
                 ]
               }
             }
@@ -1498,6 +1504,9 @@
             "telescope",
             "detector-effects",
             "photometric-calibration",
+            "survey-design-tradeoff",
+            "survey-design-plan",
+            "survey-design-compare",
             "sky-turning",
             "sky-seasons",
             "sky-phases",

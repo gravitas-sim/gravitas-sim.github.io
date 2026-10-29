@@ -153,7 +153,15 @@ export function entryFor(step, index) {
       derived: Boolean(f.compute),
       hint: plainText(f.hint) || null,
     }));
-    entry.hasValidator = typeof step.validate === 'function';
+    entry.hasValidator =
+      typeof step.validate === 'function' || Boolean(step.plan);
+    // An open-ended plan (Prompt 215): the key states the rule the screen applies, never one plan.
+    if (step.plan)
+      entry.plan = {
+        class: step.plan.class,
+        goal: { ...step.plan.goal },
+        tolerance: { ...step.plan.tolerance },
+      };
     entry.importable = Boolean(step.importFromSelection);
   }
 

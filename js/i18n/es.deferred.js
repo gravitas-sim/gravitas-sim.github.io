@@ -2013,6 +2013,12 @@ export const ES_DEFERRED = {
     'Qué estrella es más caliente y cuál es menor por dos eclipses, y qué puede y qué no puede fijar un ajuste del par.',
   'inv.seq.observing.why-the-period-is-wrong':
     'Por qué un período con una visita por noche puede salir mal, y cómo decide la cadencia.',
+  'inv.seq.observing.deep-or-wide':
+    'Qué encuentra más: las mismas noches en exposiciones largas sobre un área pequeña o en cortas sobre una grande.',
+  'inv.seq.observing.two-telescopes-one-question':
+    'Un objetivo, dos telescopios: por qué el grande tarda aproximadamente 1 entre 65 del tiempo.',
+  'inv.seq.observing.propose-an-observation':
+    'Diseña un censo para un objetivo declarado, predice qué encuentra y justifica el plan: muchos planes son correctos.',
   'inv.seq.observing.plan-an-exposure':
     'Convierte la ecuación del CCD en un plan: cuánto exponer y qué lo limita.',
   'inv.seq.observing.the-completeness-curve':

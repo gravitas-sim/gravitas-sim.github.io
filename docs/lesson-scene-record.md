@@ -11,15 +11,15 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 92 investigations and 1295 steps: 1203 steps
+Across 94 investigations and 1304 steps: 1212 steps
 declare a scene, 157 let a reader change one, 167 read the
-running integration, 794 show a prescribed model result, 146 draw
-on a stored dataset, 673 put a self-contained panel beside the text,
-342 keep something, and 58 are prose.
-Of 174 prediction loops, 174 are returned to,
-174 produce a measurement before they are answered, and
+running integration, 800 show a prescribed model result, 146 draw
+on a stored dataset, 679 put a self-contained panel beside the text,
+345 keep something, and 58 are prose.
+Of 175 prediction loops, 175 are returned to,
+175 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
-174 hold their marking until the experiment settles them.
+175 hold their marking until the experiment settles them.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -1295,17 +1295,45 @@ Of 174 prediction loops, 174 are returned to,
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:strategy-window`, control strategy-window/cadence, measures the phase bins out of 20 that forty nights of visits fill for a 0.8-day period: 13 for one visit a night at the same time and 20 for three visits a night at irregular times, the cadence that breaks the alias, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
-## Two Stars Eclipsing (`two-stars-eclipsing`)
+## Deep or Wide? (`deep-or-wide`)
 
 - **Steps:** 6. Scene declared on 6; a reader can change something on 0; 6 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 0 live engine, 6 prescribed model, 0 stored dataset, 6 self-contained panel.
+- **Where the numbers come from:** 0 live engine, 5 prescribed model, 0 stored dataset, 5 self-contained panel.
 - **What students do:** move-an-instrument-control, commit-a-prediction, record-values, choose-an-option.
 - **Objects the steps declare:** star.
-- **Instruments:** eclipse-curve.
+- **Instruments:** survey-design-tradeoff.
 - **Stored data:** none.
 - **Evidence kept:** notebook-fields.
-- **Prediction loops:** which-eclipse-is-deeper → the-two-depths, the-flat-bottom, half-an-orbit, what-eclipses-leave-out → the-two-depths.
+- **Prediction loops:** predict-deep-or-wide → euclid-best, steep-class, what-decides-it, the-rule-and-its-limits → steep-class.
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
-- **Accepted central experiment** (reviewed 2026-09-11): object `panel:eclipse-curve`, control eclipse-curve/J, measures the depth of the primary eclipse, in percent of the light of the pair, for two stars that eclipse each other nearly edge on: 48.3 at a surface brightness ratio of 0.55 and 40.7 at 1, the deeper eclipse being the one that hides the hotter star, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:survey-design-tradeoff`, control survey-design-tradeoff/cls, measures the exposure that finds the most sources in ten nights on a one-metre telescope: 335 seconds for a class with the Euclidean slope of 0.6 and 3162 seconds, the longest on the slider, for a class with a slope of 1.0, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## Two Telescopes, One Question (`two-telescopes-one-question`)
+
+- **Steps:** 5. Scene declared on 5; a reader can change something on 0; 5 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 4 prescribed model, 0 stored dataset, 4 self-contained panel.
+- **What students do:** move-an-instrument-control, commit-a-prediction, record-values, choose-an-option.
+- **Objects the steps declare:** star.
+- **Instruments:** survey-design-compare.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** predict-the-ratio → read-the-hours, why-so-much, two-limits-of-the-comparison → read-the-hours.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:survey-design-compare`, control survey-design-compare/goalDepth, measures the time the 8.4-metre telescope needs as a fraction of the time the one-metre telescope needs for the same depth over ten square degrees: 0.031 for a goal of 22 magnitude and 0.015 for 23, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## Propose an Observation (`propose-an-observation`)
+
+- **Steps:** 4. Scene declared on 4; a reader can change something on 0; 4 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 3 prescribed model, 0 stored dataset, 3 self-contained panel.
+- **What students do:** move-an-instrument-control, record-values, answer-in-words.
+- **Objects the steps declare:** star.
+- **Instruments:** survey-design-plan.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** none.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: nothing marks these, they are a record.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:survey-design-plan`, control survey-design-plan/logExposure, measures the verdict of a plan on the goal of 22.5 magnitude over 100 square degrees in ten nights: feasible for the one-metre telescope at 63 seconds, not feasible at 4 seconds; many plans pass and the screen judges feasibility and the student's own stated numbers, never one plan, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 

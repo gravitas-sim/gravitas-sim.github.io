@@ -171,6 +171,11 @@ export default {
     'Which star is hotter and which is larger from the two eclipses, how the secondary’s phase gives e cos w, how the eclipse durations give e sin w only weakly, why a grazing eclipse leaves the radius ratio open, and what a residual test says when something the model leaves out is in the data.',
     'Why the deeper eclipse hides the hotter star, why a flat bottom means the smaller star was hidden, why radii come as fractions of the orbit and not in kilometres, and why a number from a fit is only a measurement when the data fix it.',
     'The model is two spheres on a Kepler orbit: no reflection, no ellipsoidal light, no spots, no third star, no masses (those need velocities); limb darkening is fixed from a table; every data set is synthetic, with its truth stated.',
+  surveyDesign: [
+    'A facility from the instrument library, a class of source with a stated counts slope, an exposure, visits to stack, nights and a detection threshold, with a goal depth and area to meet.',
+    'The depth the plan reaches, the area its nights buy, the sources it would find with a Poisson interval, the false positives its threshold lets through and the reliability, a verdict that names every reason a plan is not feasible, and the exposure that finds most sources at fixed time.',
+    'Why deep wins only where the counts of a class rise faster than 0.8 dex a magnitude, why the time to a depth goes as the seeing squared over the collecting power, what a threshold costs in false positives, and that many different plans can meet one goal.',
+    'The classes are stated power laws, teaching models and not real populations; counts are Poisson only (no clustering or cosmic variance); noise is Gaussian and false positives are an independent-element rate, so a real detector is worse; a throughput, a dark current and a slew are supplied; the patch is synthetic.',
   ],
   survey: [
     'Synthetic stars of known brightness at known distances: counted and missed stars, the bias by shells of distance, or the luminosity function against its truth.',

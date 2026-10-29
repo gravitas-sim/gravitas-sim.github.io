@@ -1,0 +1,43 @@
+{
+ "id": "propose-an-observation",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.propose-a-plan.fields.1.unit","s"],
+    ["steps.propose-a-plan.fields.5.unit","mag"],
+    ["steps.a-second-plan.fields.1.unit","s"],
+    ["steps.a-second-plan.fields.5.unit","mag"]
+   ],
+   "numbered": [
+    ["steps.propose-a-plan.fields.0.label","Facility: 1 LCO 0.35 m, 2 LCO 1.0 m, 3 Rubin 8.4 m"],
+    ["steps.propose-a-plan.fields.0.hint","2"],
+    ["steps.propose-a-plan.fields.1.hint","100"],
+    ["steps.propose-a-plan.fields.2.hint","1"],
+    ["steps.propose-a-plan.fields.3.hint","10"],
+    ["steps.propose-a-plan.fields.4.hint","5"],
+    ["steps.a-second-plan.fields.0.label","Facility: 1 LCO 0.35 m, 2 LCO 1.0 m, 3 Rubin 8.4 m"],
+    ["steps.a-second-plan.fields.0.hint","2"],
+    ["steps.a-second-plan.fields.1.hint","100"],
+    ["steps.a-second-plan.fields.2.hint","1"],
+    ["steps.a-second-plan.fields.3.hint","10"],
+    ["steps.a-second-plan.fields.4.hint","5"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.propose-a-plan.fields.0.label","Instalación: 1 LCO 0,35 m, 2 LCO 1,0 m, 3 Rubin 8,4 m"],
+    ["steps.a-second-plan.fields.0.label","Instalación: 1 LCO 0,35 m, 2 LCO 1,0 m, 3 Rubin 8,4 m"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {},
+  "es": "same"
+ }
+}

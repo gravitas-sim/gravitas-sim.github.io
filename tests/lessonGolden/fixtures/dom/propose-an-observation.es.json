@@ -1,0 +1,122 @@
+[
+ {
+  "depth": "core",
+  "role": "first",
+  "sid": "the-brief",
+  "position": [
+   1,
+   4
+  ],
+  "title": "Propón una observación",
+  "subtitle": "Diseña un censo para un objetivo declarado, predice qué encontrará, compruébalo con el modelo y justifica el plan: muchos planes son correctos",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 4 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">El encargo</h3><div class=\"inv-step-body\"><p>Tienes <strong>diez noches</strong>. Encuentra fuentes de la <em>clase aplanada</em> (conteos que crecen 0,4 dex por magnitud) hasta una profundidad de <strong>magnitud 22,5</strong>, sobre al menos <strong>100 grados cuadrados</strong>, con al menos un <strong>95 por ciento</strong> de las detecciones reales. Hay tres instalaciones: los telescopios Las Cumbres de 0,35 m y de 1,0 m y Rubin. Explora con el panel y propón después un plan.</p><p>No hay un único plan correcto. Se comprueba si tu plan cumple el objetivo y si lo que dices que alcanza coincide con él.</p></div>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "last",
+  "sid": "two-valid-plans",
+  "position": [
+   4,
+   4
+  ],
+  "title": "Propón una observación",
+  "subtitle": "Diseña un censo para un objetivo declarado, predice qué encontrará, compruébalo con el modelo y justifica el plan: muchos planes son correctos",
+  "body": "<p class=\"inv-step-count\">Paso 4 de 4 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Muchos planes, un objetivo</h3><div class=\"inv-step-body\"><p>El telescopio de un metro con unos 60 s por visita durante diez noches, Rubin con unos 30 s y el de 0,35 m con unos 1000 s cumplen este objetivo; un umbral de 3 sigma profundiza cada uno pero incumple la fiabilidad. La pantalla juzga la viabilidad y la coherencia, nunca una respuesta única. El intervalo del conteo es solo de Poisson: un censo real dispersa más, por el agrupamiento y porque la población real difiere de una clase declarada.</p></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "quantitative",
+  "role": "first",
+  "sid": "the-brief",
+  "position": [
+   1,
+   6
+  ],
+  "title": "Propón una observación",
+  "subtitle": "Diseña un censo para un objetivo declarado, predice qué encontrará, compruébalo con el modelo y justifica el plan: muchos planes son correctos",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 6 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">El encargo</h3><div class=\"inv-step-body\"><p>Tienes <strong>diez noches</strong>. Encuentra fuentes de la <em>clase aplanada</em> (conteos que crecen 0,4 dex por magnitud) hasta una profundidad de <strong>magnitud 22,5</strong>, sobre al menos <strong>100 grados cuadrados</strong>, con al menos un <strong>95 por ciento</strong> de las detecciones reales. Hay tres instalaciones: los telescopios Las Cumbres de 0,35 m y de 1,0 m y Rubin. Explora con el panel y propón después un plan.</p><p>No hay un único plan correcto. Se comprueba si tu plan cumple el objetivo y si lo que dices que alcanza coincide con él.</p></div>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Cuantitativo"
+ },
+ {
+  "depth": "quantitative",
+  "role": "last",
+  "sid": "two-valid-plans",
+  "position": [
+   6,
+   6
+  ],
+  "title": "Propón una observación",
+  "subtitle": "Diseña un censo para un objetivo declarado, predice qué encontrará, compruébalo con el modelo y justifica el plan: muchos planes son correctos",
+  "body": "<p class=\"inv-step-count\">Paso 6 de 6 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Muchos planes, un objetivo</h3><div class=\"inv-step-body\"><p>El telescopio de un metro con unos 60 s por visita durante diez noches, Rubin con unos 30 s y el de 0,35 m con unos 1000 s cumplen este objetivo; un umbral de 3 sigma profundiza cada uno pero incumple la fiabilidad. La pantalla juzga la viabilidad y la coherencia, nunca una respuesta única. El intervalo del conteo es solo de Poisson: un censo real dispersa más, por el agrupamiento y porque la población real difiere de una clase declarada.</p></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Cuantitativo"
+ },
+ {
+  "depth": "advanced",
+  "role": "first",
+  "sid": "the-brief",
+  "position": [
+   1,
+   7
+  ],
+  "title": "Propón una observación",
+  "subtitle": "Diseña un censo para un objetivo declarado, predice qué encontrará, compruébalo con el modelo y justifica el plan: muchos planes son correctos",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 7 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">El encargo</h3><div class=\"inv-step-body\"><p>Tienes <strong>diez noches</strong>. Encuentra fuentes de la <em>clase aplanada</em> (conteos que crecen 0,4 dex por magnitud) hasta una profundidad de <strong>magnitud 22,5</strong>, sobre al menos <strong>100 grados cuadrados</strong>, con al menos un <strong>95 por ciento</strong> de las detecciones reales. Hay tres instalaciones: los telescopios Las Cumbres de 0,35 m y de 1,0 m y Rubin. Explora con el panel y propón después un plan.</p><p>No hay un único plan correcto. Se comprueba si tu plan cumple el objetivo y si lo que dices que alcanza coincide con él.</p></div>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Avanzado"
+ },
+ {
+  "depth": "advanced",
+  "role": "graded",
+  "sid": "what-the-interval-misses",
+  "position": [
+   6,
+   7
+  ],
+  "title": "Propón una observación",
+  "subtitle": "Diseña un censo para un objetivo declarado, predice qué encontrará, compruébalo con el modelo y justifica el plan: muchos planes son correctos",
+  "body": "<p class=\"inv-step-count\">Paso 6 de 7 <span class=\"inv-step-kind\">pregunta</span></p><h3 class=\"inv-step-title\">Lo que pierde el intervalo</h3><div class=\"inv-step-body\"><p>El panel da un conteo con un intervalo de Poisson.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">¿Qué efecto hace que el conteo de un censo real disperse más que ese intervalo?</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>El agrupamiento y la varianza cósmica: las fuentes no se reparten de forma independiente, así que el conteo en un campo varía más que Poisson</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>La forma del espejo del telescopio</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>El tiempo de exposición</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>El número de visitas</span></button></div><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> Me vendría bien una pista </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Avanzado"
+ },
+ {
+  "depth": "advanced",
+  "role": "marked",
+  "sid": "what-the-interval-misses",
+  "position": [
+   6,
+   7
+  ],
+  "title": "Propón una observación",
+  "subtitle": "Diseña un censo para un objetivo declarado, predice qué encontrará, compruébalo con el modelo y justifica el plan: muchos planes son correctos",
+  "body": "<p class=\"inv-step-count\">Paso 6 de 7 <span class=\"inv-step-kind\">pregunta</span></p><h3 class=\"inv-step-title\">Lo que pierde el intervalo</h3><div class=\"inv-step-body\"><p>El panel da un conteo con un intervalo de Poisson.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">¿Qué efecto hace que el conteo de un censo real disperse más que ese intervalo?</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option is-chosen is-correct\" data-option=\"0\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>El agrupamiento y la varianza cósmica: las fuentes no se reparten de forma independiente, así que el conteo en un campo varía más que Poisson</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>La forma del espejo del telescopio</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>El tiempo de exposición</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>El número de visitas</span></button></div><p class=\"inv-because\">Un conteo de Poisson supone que las fuentes caen de forma independiente. Las fuentes reales se agrupan, así que la varianza entre campos es mayor, y un censo debe dar su intervalo con eso incluido.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Cambiar respuesta</button><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> Me vendría bien una pista </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Avanzado"
+ },
+ {
+  "depth": "advanced",
+  "role": "last",
+  "sid": "two-valid-plans",
+  "position": [
+   7,
+   7
+  ],
+  "title": "Propón una observación",
+  "subtitle": "Diseña un censo para un objetivo declarado, predice qué encontrará, compruébalo con el modelo y justifica el plan: muchos planes son correctos",
+  "body": "<p class=\"inv-step-count\">Paso 7 de 7 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Muchos planes, un objetivo</h3><div class=\"inv-step-body\"><p>El telescopio de un metro con unos 60 s por visita durante diez noches, Rubin con unos 30 s y el de 0,35 m con unos 1000 s cumplen este objetivo; un umbral de 3 sigma profundiza cada uno pero incumple la fiabilidad. La pantalla juzga la viabilidad y la coherencia, nunca una respuesta única. El intervalo del conteo es solo de Poisson: un censo real dispersa más, por el agrupamiento y porque la población real difiere de una clase declarada.</p></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Avanzado"
+ }
+]

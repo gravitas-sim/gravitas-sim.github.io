@@ -158,6 +158,22 @@ export const BOUNDARY = [
     note: 'not built as a field: Prompt 163 keeps the resume record a sidecar key (resume-record), which 2.0.0 never reads',
   },
   {
+    id: 'open-ended-plan-step',
+    prompt: 215,
+    kind: 'progress-store',
+    plans:
+      'the open-ended plan step (Prompt 215): a lesson `measure` step whose answer is a survey plan, kept as the numbers of a measure step in the progress record (facility, exposure, visits, nights, threshold and the stated depth and density) and judged by the survey kernel (not built as a pack step type: no pack can author it, no stored field is new)',
+    mutate: doc => ({
+      ...clone(doc),
+      responses: {
+        ...clone(doc.responses),
+        'tides:measure:d': '63',
+      },
+    }),
+    expect: 'ignored',
+    note: 'not carried: the plan step is a lesson-format addition, not a pack step type. Its answer is the numbers of a measure step under the existing `lesson:sid` response key, so the progress record, the report and the links gain no field, an old pack is byte-identical and the pack formats are unchanged (D-R10-215-05)',
+  },
+  {
     id: 'asymmetric-interval',
     prompt: 150,
     kind: 'artifact',

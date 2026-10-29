@@ -97,6 +97,11 @@ export const WIDGET_FAMILIES = Object.freeze({
   telescope: ['telescope'],
   effects: ['detector-effects'],
   photcal: ['photometric-calibration'],
+  surveyDesign: [
+    'survey-design-tradeoff',
+    'survey-design-plan',
+    'survey-design-compare',
+  ],
   sky: [
     'sky-turning',
     'sky-seasons',

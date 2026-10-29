@@ -940,4 +940,34 @@ export const DISCOVERY = {
     },
     courseLevel: 'survey',
   },
+  'deep-or-wide': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: [],
+    textbook: {
+      chapter: 6,
+      section: null,
+    },
+    courseLevel: 'survey',
+  },
+  'two-telescopes-one-question': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: [],
+    textbook: {
+      chapter: 6,
+      section: null,
+    },
+    courseLevel: 'survey',
+  },
+  'propose-an-observation': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['deep-or-wide'],
+    textbook: {
+      chapter: 6,
+      section: null,
+    },
+    courseLevel: 'upper',
+  },
 };

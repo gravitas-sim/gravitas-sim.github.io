@@ -1,0 +1,557 @@
+{
+ "A1": {
+  "14": 0.6184749128212168,
+  "15": 2.4621929760157433,
+  "16": 9.802166790383291
+ },
+ "A5": {
+  "tA": 533.0470168132156,
+  "tB": 76.69321366861334,
+  "ratio": 0.14387701506542214,
+  "B": {
+   "zeroPoint": 10000000000.0,
+   "pixelScale": 0.4,
+   "fwhm": 0.8999999999999999,
+   "skyMag": 20.5,
+   "readNoise": 0,
+   "darkRate": 0,
+   "fullWell": 1000000000000.0,
+   "fovDeg2": 0.2,
+   "overhead": 20
+  }
+ },
+ "A6": {
+  "3": 0.0013498980316300933,
+  "4": 3.167124183311986e-05,
+  "5": 2.8665157187919333e-07,
+  "6": 9.865876450376946e-10
+ },
+ "A7": {
+  "0.5|0.6827": {
+   "lo": 0,
+   "hi": 1,
+   "coverage": 0.9097959895689501
+  },
+  "0.5|0.9545": {
+   "lo": 0,
+   "hi": 2,
+   "coverage": 0.9856123220330293
+  },
+  "3|0.6827": {
+   "lo": 1,
+   "hi": 5,
+   "coverage": 0.8662949896008326
+  },
+  "3|0.9545": {
+   "lo": 0,
+   "hi": 7,
+   "coverage": 0.9880954961436426
+  },
+  "12|0.6827": {
+   "lo": 9,
+   "hi": 15,
+   "coverage": 0.6893878706827202
+  },
+  "12|0.9545": {
+   "lo": 6,
+   "hi": 19,
+   "coverage": 0.9583792012000449
+  },
+  "40|0.6827": {
+   "lo": 34,
+   "hi": 46,
+   "coverage": 0.6964764335961946
+  },
+  "40|0.9545": {
+   "lo": 28,
+   "hi": 53,
+   "coverage": 0.9606664120402384
+  },
+  "200|0.6827": {
+   "lo": 186,
+   "hi": 214,
+   "coverage": 0.6948898221364423
+  },
+  "200|0.9545": {
+   "lo": 172,
+   "hi": 229,
+   "coverage": 0.9597924063163815
+  },
+  "1000|0.6827": {
+   "lo": 968,
+   "hi": 1032,
+   "coverage": 0.6959499796861064
+  },
+  "1000|0.9545": {
+   "lo": 937,
+   "hi": 1064,
+   "coverage": 0.9570339432682142
+  }
+ },
+ "B1": [
+  {
+   "pointings": 3456,
+   "area": 691.2,
+   "depth": 21.38530443033926,
+   "well": 396223298115.2793,
+   "sharp": 4685828.480341373,
+   "detected": 5148567.6817417,
+   "falsePositives": 786.8757303241126,
+   "reliability": 0.9998471894445135,
+   "setup": "skyLimited",
+   "exposure": 30,
+   "visits": 1
+  },
+  {
+   "pointings": 864,
+   "area": 172.8,
+   "depth": 22.17237498847538,
+   "well": 396223298115.2793,
+   "sharp": 3475111.4008508823,
+   "detected": 3805276.14284432,
+   "falsePositives": 196.71893258102816,
+   "reliability": 0.9999483063104833,
+   "setup": "skyLimited",
+   "exposure": 30,
+   "visits": 4
+  },
+  {
+   "pointings": 540,
+   "area": 108.0,
+   "depth": 22.682489260635077,
+   "well": 396223298115.2793,
+   "sharp": 4394579.36236534,
+   "detected": 4806181.830457208,
+   "falsePositives": 122.9493328631426,
+   "reliability": 0.9999744191559844,
+   "setup": "skyLimited",
+   "exposure": 300,
+   "visits": 1
+  },
+  {
+   "pointings": 135,
+   "area": 27.0,
+   "depth": 23.44598428373401,
+   "well": 396223298115.2793,
+   "sharp": 3154672.895451207,
+   "detected": 3446528.42752085,
+   "falsePositives": 30.73733321578565,
+   "reliability": 0.9999910817334781,
+   "setup": "skyLimited",
+   "exposure": 300,
+   "visits": 4
+  },
+  {
+   "pointings": 2979,
+   "area": 580.905,
+   "depth": 21.448113567847734,
+   "well": 30977.953497312858,
+   "sharp": 4295099.75876,
+   "detected": 4703946.754398613,
+   "falsePositives": 423.2407834480821,
+   "reliability": 0.9999100324200941,
+   "setup": "lcoLike",
+   "exposure": 30,
+   "visits": 1
+  },
+  {
+   "pointings": 744,
+   "area": 145.08,
+   "depth": 22.21879696162919,
+   "well": 30977.953497312858,
+   "sharp": 3110897.6574171265,
+   "detected": 3401047.364516278,
+   "falsePositives": 105.70363977353914,
+   "reliability": 0.9999689212341651,
+   "setup": "lcoLike",
+   "exposure": 30,
+   "visits": 4
+  },
+  {
+   "pointings": 526,
+   "area": 102.57000000000001,
+   "depth": 22.93335458279899,
+   "well": 30977.953497312858,
+   "sharp": 5902460.714571594,
+   "detected": 6450390.877458537,
+   "falsePositives": 74.73133672161504,
+   "reliability": 0.999988414582566,
+   "setup": "lcoLike",
+   "exposure": 300,
+   "visits": 1
+  },
+  {
+   "pointings": 131,
+   "area": 25.545,
+   "depth": 23.692898780179817,
+   "well": 30977.953497312858,
+   "sharp": 4198026.494118968,
+   "detected": 4584679.623028429,
+   "falsePositives": 18.61179678808283,
+   "reliability": 0.9999959404532568,
+   "setup": "lcoLike",
+   "exposure": 300,
+   "visits": 4
+  },
+  {
+   "pointings": 4800,
+   "area": 46080.0,
+   "depth": 24.58484419721074,
+   "well": 4354.435155970157,
+   "sharp": 25966833230.787357,
+   "detected": 28372095660.730995,
+   "falsePositives": 93259.34581619111,
+   "reliability": 0.9999967130013803,
+   "setup": "rubinLike",
+   "exposure": 30,
+   "visits": 1
+  },
+  {
+   "pointings": 1200,
+   "area": 11520.0,
+   "depth": 25.34342031464381,
+   "well": 4354.435155970157,
+   "sharp": 18514187934.731712,
+   "detected": 20217546974.311935,
+   "falsePositives": 23314.836454047778,
+   "reliability": 0.9999988468032449,
+   "setup": "rubinLike",
+   "exposure": 30,
+   "visits": 4
+  },
+  {
+   "pointings": 564,
+   "area": 5414.4,
+   "depth": 25.879646771683007,
+   "well": 4354.435155970157,
+   "sharp": 18253174263.238472,
+   "detected": 19928587660.31062,
+   "falsePositives": 10957.973133402455,
+   "reliability": 0.999999450138299,
+   "setup": "rubinLike",
+   "exposure": 300,
+   "visits": 1
+  },
+  {
+   "pointings": 141,
+   "area": 1353.6,
+   "depth": 26.634184837463394,
+   "well": 4354.435155970157,
+   "sharp": 12941995610.058968,
+   "detected": 14127277262.296738,
+   "falsePositives": 2739.4932833506136,
+   "reliability": 0.9999998060848738,
+   "setup": "rubinLike",
+   "exposure": 300,
+   "visits": 4
+  }
+ ],
+ "B2": {
+  "14": {
+   "lcdm": 0.5700329404365027,
+   "euclid": 0.6184749128212168
+  },
+  "15": {
+   "lcdm": 2.170703230713742,
+   "euclid": 2.4621929760157433
+  },
+  "16.5": {
+   "lcdm": 15.44237469430774,
+   "euclid": 19.557894001891196
+  }
+ },
+ "B4": 113.06341218073273,
+ "D1": [
+  {
+   "setup": "lcoLike",
+   "name": "feasible",
+   "exposure": 300,
+   "nights": 10,
+   "goalDepth": 22.73335458279899,
+   "goalArea": 82.05600000000001,
+   "depth": 22.93335458279899,
+   "area": 102.57000000000001,
+   "well": 30977.953497312858,
+   "feasible": true,
+   "reasons": []
+  },
+  {
+   "setup": "lcoLike",
+   "name": "depth",
+   "exposure": 300,
+   "nights": 10,
+   "goalDepth": 23.13335458279899,
+   "goalArea": 82.05600000000001,
+   "depth": 22.93335458279899,
+   "area": 102.57000000000001,
+   "well": 30977.953497312858,
+   "feasible": false,
+   "reasons": [
+    "depth"
+   ]
+  },
+  {
+   "setup": "lcoLike",
+   "name": "area",
+   "exposure": 300,
+   "nights": 10,
+   "goalDepth": 22.73335458279899,
+   "goalArea": 128.2125,
+   "depth": 22.93335458279899,
+   "area": 102.57000000000001,
+   "well": 30977.953497312858,
+   "feasible": false,
+   "reasons": [
+    "area"
+   ]
+  },
+  {
+   "setup": "lcoLike",
+   "name": "saturates",
+   "exposure": 46466.930245969284,
+   "nights": 10,
+   "goalDepth": 22.73335458279899,
+   "goalArea": 82.05600000000001,
+   "depth": 25.713249530269124,
+   "area": 0.585,
+   "well": 30977.953497312858,
+   "feasible": false,
+   "reasons": [
+    "area",
+    "saturates"
+   ]
+  },
+  {
+   "setup": "lcoLike",
+   "name": "time",
+   "exposure": 300,
+   "nights": 0.01,
+   "goalDepth": 22.73335458279899,
+   "goalArea": 82.05600000000001,
+   "depth": 22.93335458279899,
+   "area": 0.0,
+   "well": 30977.953497312858,
+   "feasible": false,
+   "reasons": [
+    "area",
+    "time"
+   ]
+  },
+  {
+   "setup": "rubinLike",
+   "name": "feasible",
+   "exposure": 300,
+   "nights": 10,
+   "goalDepth": 25.679646771683007,
+   "goalArea": 4331.5199999999995,
+   "depth": 25.879646771683007,
+   "area": 5414.4,
+   "well": 4354.435155970157,
+   "feasible": true,
+   "reasons": []
+  },
+  {
+   "setup": "rubinLike",
+   "name": "depth",
+   "exposure": 300,
+   "nights": 10,
+   "goalDepth": 26.079646771683006,
+   "goalArea": 4331.5199999999995,
+   "depth": 25.879646771683007,
+   "area": 5414.4,
+   "well": 4354.435155970157,
+   "feasible": false,
+   "reasons": [
+    "depth"
+   ]
+  },
+  {
+   "setup": "rubinLike",
+   "name": "area",
+   "exposure": 300,
+   "nights": 10,
+   "goalDepth": 25.679646771683007,
+   "goalArea": 6768.0,
+   "depth": 25.879646771683007,
+   "area": 5414.4,
+   "well": 4354.435155970157,
+   "feasible": false,
+   "reasons": [
+    "area"
+   ]
+  },
+  {
+   "setup": "rubinLike",
+   "name": "saturates",
+   "exposure": 6531.652733955236,
+   "nights": 10,
+   "goalDepth": 25.679646771683007,
+   "goalArea": 4331.5199999999995,
+   "depth": 27.559148657411704,
+   "area": 249.6,
+   "well": 4354.435155970157,
+   "feasible": false,
+   "reasons": [
+    "area",
+    "saturates"
+   ]
+  },
+  {
+   "setup": "rubinLike",
+   "name": "time",
+   "exposure": 300,
+   "nights": 0.01,
+   "goalDepth": 25.679646771683007,
+   "goalArea": 4331.5199999999995,
+   "depth": 25.879646771683007,
+   "area": 0.0,
+   "well": 4354.435155970157,
+   "feasible": false,
+   "reasons": [
+    "area",
+    "time"
+   ]
+  }
+ ],
+ "D4": [
+  {
+   "setup": "lcoLike",
+   "cls": "steep",
+   "exposure": 30,
+   "threshold": 3,
+   "reliability": 0.8687336996703713,
+   "unreliable": false,
+   "detected": 13190691.70012102,
+   "falsePositives": 1993123.2078606116
+  },
+  {
+   "setup": "lcoLike",
+   "cls": "steep",
+   "exposure": 300,
+   "threshold": 3,
+   "reliability": 0.9948301331880878,
+   "unreliable": false,
+   "detected": 67720314.0916109,
+   "falsePositives": 351924.4066245995
+  },
+  {
+   "setup": "rubinLike",
+   "cls": "flattened",
+   "exposure": 30,
+   "threshold": 3,
+   "reliability": 0.9015445377526776,
+   "unreliable": false,
+   "detected": 4021484249.2691646,
+   "falsePositives": 439176406.8241077
+  },
+  {
+   "setup": "lcoLike",
+   "cls": "steep",
+   "exposure": 30,
+   "threshold": 5,
+   "reliability": 0.9948802927901507,
+   "unreliable": false,
+   "detected": 82245.7022049026,
+   "falsePositives": 423.2407834480821
+  },
+  {
+   "setup": "lcoLike",
+   "cls": "steep",
+   "exposure": 300,
+   "threshold": 5,
+   "reliability": 0.9998305584920764,
+   "unreliable": false,
+   "detected": 440970.3091458366,
+   "falsePositives": 74.73133672161504
+  },
+  {
+   "setup": "rubinLike",
+   "cls": "flattened",
+   "exposure": 30,
+   "threshold": 5,
+   "reliability": 0.9999552984928411,
+   "unreliable": false,
+   "detected": 2086175230.0979037,
+   "falsePositives": 93259.34581619111
+  }
+ ],
+ "D4b": [
+  {
+   "setup": "lcoLike",
+   "cls": "rare",
+   "exposure": 30,
+   "threshold": 3,
+   "reliability": 0.0013824071888527874,
+   "unreliable": true,
+   "detected": 2759.122081015556,
+   "falsePositives": 1993123.2078606116
+  },
+  {
+   "setup": "lcoLike",
+   "cls": "rare",
+   "exposure": 300,
+   "threshold": 3,
+   "reliability": 0.010427520904475776,
+   "unreliable": true,
+   "detected": 3708.3681937349083,
+   "falsePositives": 351924.4066245995
+  },
+  {
+   "setup": "rubinLike",
+   "cls": "rare",
+   "exposure": 30,
+   "threshold": 3,
+   "reliability": 0.0242765729809178,
+   "unreliable": true,
+   "detected": 10926967.41364004,
+   "falsePositives": 439176406.8241077
+  },
+  {
+   "setup": "lcoLike",
+   "cls": "rare",
+   "exposure": 30,
+   "threshold": 5,
+   "reliability": 0.5837680358757711,
+   "unreliable": false,
+   "detected": 593.5979505463146,
+   "falsePositives": 423.2407834480821
+  },
+  {
+   "setup": "lcoLike",
+   "cls": "rare",
+   "exposure": 300,
+   "threshold": 5,
+   "reliability": 0.9159108564627232,
+   "unreliable": false,
+   "detected": 813.9842997801005,
+   "falsePositives": 74.73133672161504
+  },
+  {
+   "setup": "rubinLike",
+   "cls": "rare",
+   "exposure": 30,
+   "threshold": 5,
+   "reliability": 0.9746134688430558,
+   "unreliable": false,
+   "detected": 3580316.4270865694,
+   "falsePositives": 93259.34581619111
+  }
+ ],
+ "A4b": {
+  "0.4": {
+   "best": 23.02763385911651,
+   "index": 82,
+   "rising": false
+  },
+  "0.6": {
+   "best": 71.38240825178059,
+   "index": 135,
+   "rising": false
+  },
+  "1.0": {
+   "best": 20000.0,
+   "index": 399,
+   "rising": true
+  }
+ }
+}

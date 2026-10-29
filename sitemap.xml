@@ -537,7 +537,17 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://gravitas-sim.online/teaching/investigation/two-stars-eclipsing/</loc>
+    <loc>https://gravitas-sim.online/teaching/investigation/deep-or-wide/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://gravitas-sim.online/teaching/investigation/two-telescopes-one-question/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://gravitas-sim.online/teaching/investigation/propose-an-observation/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>

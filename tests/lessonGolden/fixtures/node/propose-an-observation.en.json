@@ -1,0 +1,404 @@
+{
+ "id": "propose-an-observation",
+ "locale": "en",
+ "title": "Propose an Observation",
+ "steps": 7,
+ "depths": [
+  [
+   "core",
+   4
+  ],
+  [
+   "quantitative",
+   6
+  ],
+  [
+   "advanced",
+   7
+  ]
+ ],
+ "grading": [
+  {
+   "sid": "justify-the-plan",
+   "type": "question",
+   "kind": "short",
+   "grades": [
+    [
+     "ungraded",
+     null
+    ]
+   ]
+  },
+  {
+   "sid": "compare-your-plans",
+   "type": "question",
+   "kind": "short",
+   "grades": [
+    [
+     "ungraded",
+     null
+    ]
+   ]
+  },
+  {
+   "sid": "what-the-interval-misses",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     true,
+     "correct"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  }
+ ],
+ "progress": {
+  "record": {
+   "schema": 2,
+   "lesson": "propose-an-observation",
+   "stepSid": "two-valid-plans",
+   "responses": {
+    "propose-an-observation:justify-the-plan": "A fixed sentence for the golden.",
+    "propose-an-observation:compare-your-plans": "A fixed sentence for the golden.",
+    "propose-an-observation:what-the-interval-misses": 0
+   },
+   "attempts": {
+    "propose-an-observation:what-the-interval-misses": 1
+   },
+   "visited": [
+    "the-brief",
+    "propose-a-plan",
+    "justify-the-plan",
+    "a-second-plan",
+    "compare-your-plans",
+    "what-the-interval-misses",
+    "two-valid-plans"
+   ],
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "depth": "advanced",
+   "deepest": "advanced",
+   "spent": 600
+  },
+  "read": {
+   "responses": {
+    "propose-an-observation:justify-the-plan": "A fixed sentence for the golden.",
+    "propose-an-observation:compare-your-plans": "A fixed sentence for the golden.",
+    "propose-an-observation:what-the-interval-misses": 0
+   },
+   "attempts": {
+    "propose-an-observation:what-the-interval-misses": 1
+   },
+   "visited": [
+    "a-second-plan",
+    "compare-your-plans",
+    "justify-the-plan",
+    "propose-a-plan",
+    "the-brief",
+    "two-valid-plans",
+    "what-the-interval-misses"
+   ],
+   "stepSid": "two-valid-plans",
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "depth": "advanced",
+   "deepest": "advanced",
+   "spent": 600,
+   "schema": 2,
+   "migrated": false,
+   "notes": []
+  }
+ },
+ "backup": {
+  "backup": {
+   "kind": "gravitas.investigation.progress",
+   "version": 2,
+   "savedAt": "2026-01-02T04:05:06.000Z",
+   "lesson": {
+    "id": "propose-an-observation",
+    "title": "Propose an Observation",
+    "stepCount": 7
+   },
+   "student": null,
+   "progress": {
+    "stepSid": "two-valid-plans",
+    "startedAt": "2026-01-02T03:04:05.000Z",
+    "visited": [
+     "the-brief",
+     "propose-a-plan",
+     "justify-the-plan",
+     "a-second-plan",
+     "compare-your-plans",
+     "what-the-interval-misses",
+     "two-valid-plans"
+    ],
+    "responses": {
+     "propose-an-observation:justify-the-plan": "A fixed sentence for the golden.",
+     "propose-an-observation:compare-your-plans": "A fixed sentence for the golden.",
+     "propose-an-observation:what-the-interval-misses": 0
+    },
+    "attempts": {
+     "propose-an-observation:what-the-interval-misses": 1
+    }
+   },
+   "steps": [
+    {
+     "index": 0,
+     "sid": "the-brief",
+     "fingerprint": "read|-|survey-design-plan|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 1,
+     "sid": "propose-a-plan",
+     "fingerprint": "measure|-|survey-design-plan|-|facility+exposure+visits+nights+threshold+depth+n|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 2,
+     "sid": "justify-the-plan",
+     "fingerprint": "question|short|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 3,
+     "sid": "a-second-plan",
+     "fingerprint": "measure|-|survey-design-plan|-|facility+exposure+visits+nights+threshold+depth+n|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 4,
+     "sid": "compare-your-plans",
+     "fingerprint": "question|short|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 5,
+     "sid": "what-the-interval-misses",
+     "fingerprint": "question|choice|-|-|-|4|a=0;c=0",
+     "optionCount": 4
+    },
+    {
+     "index": 6,
+     "sid": "two-valid-plans",
+     "fingerprint": "read|-|survey-design-plan|-|-|-|-",
+     "optionCount": null
+    }
+   ]
+  },
+  "verdict": {
+   "ok": true
+  },
+  "restored": {
+   "responses": {
+    "propose-an-observation:justify-the-plan": "A fixed sentence for the golden.",
+    "propose-an-observation:compare-your-plans": "A fixed sentence for the golden.",
+    "propose-an-observation:what-the-interval-misses": 0
+   },
+   "attempts": {
+    "propose-an-observation:what-the-interval-misses": 1
+   },
+   "visited": [
+    "a-second-plan",
+    "compare-your-plans",
+    "justify-the-plan",
+    "propose-a-plan",
+    "the-brief",
+    "two-valid-plans",
+    "what-the-interval-misses"
+   ],
+   "stepIndex": 6,
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "moved": [],
+   "dropped": [],
+   "quarantined": {},
+   "uncertain": 0,
+   "discardedKeys": 0,
+   "byPosition": false
+  }
+ },
+ "ledger": {
+  "entry": "golden-propose-an-observation",
+  "record": {
+   "ids": [
+    "golden-propose-an-observation"
+   ],
+   "rows": [
+    [
+     "golden-propose-an-observation",
+     "q1",
+     3.5247,
+     "d",
+     0.0012,
+     "measured",
+     "simulation",
+     "rv-fit",
+     null,
+     [
+      "s",
+      "d"
+     ]
+    ]
+   ],
+   "total": 1
+  },
+  "digest": "c770da27a70038d299d93eab444d613a68133c1d9c41217e8caaf06dea76a111"
+ },
+ "tokens": {
+  "plain": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "a": null,
+    "r": null,
+    "fl": "en"
+   },
+   "answers": [
+    {
+     "sid": "justify-the-plan",
+     "value": "A fixed sentence for the golden.",
+     "locale": "en"
+    },
+    {
+     "sid": "compare-your-plans",
+     "value": "A fixed sentence for the golden.",
+     "locale": "en"
+    },
+    {
+     "sid": "what-the-interval-misses",
+     "value": 0,
+     "locale": "en"
+    }
+   ]
+  },
+  "assignment": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "a": "golden-assignment",
+    "r": "roster-1",
+    "fl": "en"
+   },
+   "answers": [
+    {
+     "sid": "justify-the-plan",
+     "value": "A fixed sentence for the golden.",
+     "locale": "en"
+    },
+    {
+     "sid": "compare-your-plans",
+     "value": "A fixed sentence for the golden.",
+     "locale": "en"
+    },
+    {
+     "sid": "what-the-interval-misses",
+     "value": 0,
+     "locale": "en"
+    }
+   ]
+  },
+  "evidence": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "ev": {
+     "d": "c770da27a70038d299d93eab444d613a68133c1d9c41217e8caaf06dea76a111",
+     "i": [
+      "golden-propose-an-observation"
+     ],
+     "n": 1,
+     "r": [
+      [
+       "golden-propose-an-observation",
+       "q1",
+       3.5247,
+       "d",
+       0.0012,
+       "measured",
+       "simulation",
+       "rv-fit",
+       null,
+       [
+        "s",
+        "d"
+       ]
+      ]
+     ]
+    },
+    "a": null,
+    "r": null,
+    "fl": "en"
+   },
+   "answers": [
+    {
+     "sid": "justify-the-plan",
+     "value": "A fixed sentence for the golden.",
+     "locale": "en"
+    },
+    {
+     "sid": "compare-your-plans",
+     "value": "A fixed sentence for the golden.",
+     "locale": "en"
+    },
+    {
+     "sid": "what-the-interval-misses",
+     "value": 0,
+     "locale": "en"
+    }
+   ]
+  },
+  "depth": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "dp": "advanced",
+    "a": null,
+    "r": null,
+    "fl": "en"
+   },
+   "answers": [
+    {
+     "sid": "justify-the-plan",
+     "value": "A fixed sentence for the golden.",
+     "locale": "en"
+    },
+    {
+     "sid": "compare-your-plans",
+     "value": "A fixed sentence for the golden.",
+     "locale": "en"
+    },
+    {
+     "sid": "what-the-interval-misses",
+     "value": 0,
+     "locale": "en"
+    }
+   ]
+  }
+ }
+}

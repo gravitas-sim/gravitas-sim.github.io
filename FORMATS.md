@@ -205,6 +205,7 @@ A change an older build refuses or misreads is a major version, and this is the 
 
 **Not carried.**
 - the one resume record carried as a field of the progress record (not built: Prompt 163 keeps it a sidecar key, `resume-record`) (163): not built as a field: Prompt 163 keeps the resume record a sidecar key (resume-record), which 2.0.0 never reads.
+- the open-ended plan step (Prompt 215): a lesson `measure` step whose answer is a survey plan, kept as the numbers of a measure step in the progress record (facility, exposure, visits, nights, threshold and the stated depth and density) and judged by the survey kernel (not built as a pack step type: no pack can author it, no stored field is new) (215): not carried: the plan step is a lesson-format addition, not a pack step type. Its answer is the numbers of a measure step under the existing `lesson:sid` response key, so the progress record, the report and the links gain no field, an old pack is byte-identical and the pack formats are unchanged (D-R10-215-05).
 - a stated confidence level on the (already asymmetric) interval: `level` (150): not a boundary: 2.0.0 already reads and checks `level` on an interval, so a build that reads /1 opens it.
 - named streams, the stream fork per trial and the kernel versions on the experiment record (265): not built: Prompt 265 writes these and carries its own boundary row when it does.
 
