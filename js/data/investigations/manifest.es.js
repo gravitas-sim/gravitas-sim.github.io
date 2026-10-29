@@ -184,6 +184,7 @@ export const MANIFEST = [
     level: 'Astronomía introductoria',
     thumbnail: 'images/scenarios/exoplanet-characterization-lab.webp',
     series: 'Detección de exoplanetas',
+    depths: 2,
     stepCount: 15,
     gradedCount: 8,
     objectiveCount: 7,
@@ -1105,6 +1106,19 @@ export const MANIFEST = [
     thumbnail: 'images/investigations/plan-an-exposure.webp',
     stepCount: 11,
     gradedCount: 9,
+    objectiveCount: 4,
+  },
+  {
+    id: 'why-the-period-is-wrong',
+    title: 'Por qué el período sale mal',
+    subtitle:
+      'Por qué mirar una vez por noche no distingue un período de sus alias, cómo diseñar una cadencia que sí, y cuánto cuesta un plan',
+    duration: '12-22 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/why-the-period-is-wrong.webp',
+    depths: 3,
+    stepCount: 8,
+    gradedCount: 6,
     objectiveCount: 4,
   },
 ];

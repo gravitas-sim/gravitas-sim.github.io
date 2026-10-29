@@ -1131,6 +1131,19 @@
       ],
       "evidenceFrom": "model"
     },
+    "why-the-period-is-wrong": {
+      "centralExperimentId": "ce.why-the-period-is-wrong",
+      "object": "panel:strategy-window",
+      "control": "strategy-window/cadence",
+      "quantity": "the phase bins out of 20 that forty nights of visits fill for a 0.8-day period: 13 for one visit a night at the same time and 20 for three visits a night at irregular times, the cadence that breaks the alias",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "predict-the-period",
+        "the-aliases"
+      ],
+      "evidenceFrom": "model"
+    },
     "what-a-telescope-resolves": {
       "centralExperimentId": "ce.what-a-telescope-resolves",
       "object": "panel:telescope",

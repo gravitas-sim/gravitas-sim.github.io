@@ -880,16 +880,6 @@ export const DISCOVERY = {
     },
     courseLevel: 'survey',
   },
-  'why-the-period-is-wrong': {
-    audience: 'intro',
-    mathematics: 'algebra',
-    prerequisites: [],
-    textbook: {
-      chapter: 6,
-      section: null,
-    },
-    courseLevel: 'survey',
-  },
   'plan-an-exposure': {
     audience: 'intro',
     mathematics: 'algebra',
@@ -899,5 +889,15 @@ export const DISCOVERY = {
       section: null,
     },
     courseLevel: 'majors',
+  },
+  'why-the-period-is-wrong': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: [],
+    textbook: {
+      chapter: 6,
+      section: null,
+    },
+    courseLevel: 'survey',
   },
 };
