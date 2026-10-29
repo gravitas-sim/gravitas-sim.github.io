@@ -204,7 +204,8 @@ describe('the digest the derived closure produces', () => {
     // raised by two, to 284, on the coordinator's call under Carl's night delegation of
     // 2026-10-28, for two files, the lesson's deeper steps and their Spanish).
     // 285 after the planetary closeout (Prompt 206, D-R10-206-02): one file, planets-sequence.js, which holds three lessons, their Spanish and their guides; pending the coordinator's approval of the cap.
-    expect(current.length).toBeLessThan(285);
+    // 286 after What a Telescope Resolves (Prompt 208, D-R10-208-02): one file, telescope-sequence.js, which holds the lesson, its Spanish, its deeper steps and its guide; pending the coordinator's approval of the cap.
+    expect(current.length).toBeLessThan(286);
     // 230 after the four variable-star investigations (Prompt 96): their shadows, deeper shadows and depth files;
     // 246 after the four cosmology investigations (Prompt 91).
     // 258 after the three calibration investigations (Prompt 86).

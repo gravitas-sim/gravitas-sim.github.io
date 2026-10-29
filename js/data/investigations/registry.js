@@ -189,6 +189,7 @@ const LOADERS = {
   'the-scale-of-the-solar-system': () =>
     import('./the-scale-of-the-solar-system.js'),
   'comets-and-the-sun': () => import('./comets-and-the-sun.js'),
+  'what-a-telescope-resolves': () => import('./what-a-telescope-resolves.js'),
 };
 // </generated:loaders>
 
@@ -296,6 +297,8 @@ const TRANSLATIONS = {
     'the-scale-of-the-solar-system': () =>
       import('./es/the-scale-of-the-solar-system.js'),
     'comets-and-the-sun': () => import('./es/comets-and-the-sun.js'),
+    'what-a-telescope-resolves': () =>
+      import('./es/what-a-telescope-resolves.js'),
   },
 };
 // </generated:translations>

@@ -1,0 +1,16 @@
+{
+  "format": "gravitas.telescopes-oracle-provenance/1",
+  "prompt": 208,
+  "oracle": "numpy 2.0.2 and scipy 1.13.1 (scipy.special j0, j1, jn_zeros; scipy.optimize.brentq; scipy.integrate.quad, fixed_quad; scipy.ndimage map_coordinates and spline_filter)",
+  "identity": "An independent implementation, in Python floats, of (A4) the obstructed Airy intensity and its first dark ring and encircled energy from the closed forms with scipy's Bessel functions, (A5) the Moffat normalisation and encircled energy by quadrature, (A6) the Rayleigh pair midpoint, and (B1, B2) Fraunhofer diffraction as the numpy FFT of a sampled binary annular pupil (256 pixels across the diameter, FFT size 4096: 1/16 lambda/D per pixel, a field of 256 lambda/D), azimuthally averaged by cubic-spline sampling, with the combined profile formed by two-dimensional FFT convolution of that pattern with a sampled Moffat profile. No Bessel function enters B1 or B2 and no Gravitas code ran.",
+  "selfCheck": "Before any kernel code ran, B1 was compared with the Bessel closed form by scipy: profile difference at most 9.4e-5 (A) and 5.0e-5 (B) of the peak; encircled energy at 1, 2, 3 and 5 lambda/D within 2e-4 (A: 0.82632 against 0.82643, ...). The first run used an anti-aliased (gray) pupil and was off by +0.002 in encircled energy; the committed bounds were not moved and the pupil was made binary (amendment AM1 in thresholds.json).",
+  "retrieved": "not applicable: nothing was downloaded",
+  "index": "none: a scratch virtual environment left by an earlier session (craterstats-venv, Python 3.10.12), nothing was added for this prompt",
+  "run": "cd <empty scratchpad directory>; <venv>/bin/python -I tools/telescopes-oracle/oracle.py OUT.json; then Prettier",
+  "seconds": 64,
+  "committedBefore": "thresholds.json and TELESCOPES.md's contract were committed (eb474c38) before the oracle script existed; the oracle's results were committed before js/kernels/detector/optics.js was run, before the validator, the telescope field, the panel, the lesson and the tests existed",
+  "files": {
+    "tools/telescopes-oracle/oracle.py": "52eee46243a543cd184703da757c261339f90755c241450edb5f7a6343b0c27f",
+    "tests/fixtures/telescopes/oracle-results.json": "8517264fdc7e2fd4009c104a210538a95937e8caedd6a8e36b5b27cd6cd0ca8b"
+  }
+}

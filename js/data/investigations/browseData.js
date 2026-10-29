@@ -352,4 +352,8 @@ export const BROWSE_META = {
     tags: ['orbits', 'solar-system'],
     numericCount: 0,
   },
+  'what-a-telescope-resolves': {
+    tags: ['observing'],
+    numericCount: 0,
+  },
 };

@@ -2651,6 +2651,18 @@ test.describe('the central experiment of each investigation', () => {
         [3, 7.1413, 0.002],
       ],
     },
+    // ---- Telescopes (Roadmap III, Prompt 208) ---------------------------------
+    {
+      id: 'what-a-telescope-resolves',
+      title:
+        'what-a-telescope-resolves: with 0.6 arcseconds of seeing the dip between the two stars is 0 percent at 10 cm and 50.3 at 40 @accepts:ce.what-a-telescope-resolves',
+      row: /^The pair$/i,
+      nth: 2,
+      values: [
+        [1, 0, 2],
+        [4, 50.3, 2],
+      ],
+    },
   ];
   for (const c of SURVEY) {
     test(c.title, async ({ page, app }) => {

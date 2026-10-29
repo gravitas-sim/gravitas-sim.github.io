@@ -116,7 +116,8 @@
           "phases-and-albedo",
           "moons-of-the-giants",
           "the-scale-of-the-solar-system",
-          "comets-and-the-sun"
+          "comets-and-the-sun",
+          "what-a-telescope-resolves"
         ]
       }
     },
@@ -381,7 +382,8 @@
                   "phases-and-albedo",
                   "moons-of-the-giants",
                   "the-scale-of-the-solar-system",
-                  "comets-and-the-sun"
+                  "comets-and-the-sun",
+                  "what-a-telescope-resolves"
                 ]
               }
             }
@@ -1463,6 +1465,7 @@
             "ccd-frames",
             "ccd-snr",
             "diff-photometry",
+            "telescope",
             "sky-turning",
             "sky-seasons",
             "sky-phases",

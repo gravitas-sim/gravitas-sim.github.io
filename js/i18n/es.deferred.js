@@ -2011,6 +2011,8 @@ export const ES_DEFERRED = {
     'El sesgo de brillo, hecho cuantitativo: por qué la muestra no es la población.',
   'inv.seq.observing.the-completeness-curve':
     'Pon un número a lo que un sondeo pierde y corrígelo.',
+  'inv.seq.observing.what-a-telescope-resolves':
+    'Qué hacen la apertura y el aire con un par de estrellas.',
   'inv.seq.depth.core': 'Profundidad básica',
   'inv.seq.depth.quantitative': 'Profundidad cuantitativa',
   'inv.seq.depth.advanced': 'Profundidad avanzada',

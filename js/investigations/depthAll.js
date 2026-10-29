@@ -46,6 +46,7 @@ import PHASES_AND_ECLIPSES_DEEPER from '../data/investigations/depth/phases-and-
 import WANDERERS_ON_THE_SKY_DEEPER from '../data/investigations/depth/wanderers-on-the-sky.js';
 import PLAN_A_NIGHT_DEEPER from '../data/investigations/depth/plan-a-night.js';
 import GOLDILOCKS_DEEPER from '../data/investigations/depth/goldilocks-question.js';
+import { DEPTH as TELESCOPE_DEPTH } from '../data/investigations/telescope-sequence.js';
 
 /** The deeper steps of the lessons that have them, by lesson id (DEPTH.md). */
 export const DEEPER = Object.freeze({
@@ -60,6 +61,9 @@ export const DEEPER = Object.freeze({
   [WANDERERS_ON_THE_SKY_DEEPER.id]: WANDERERS_ON_THE_SKY_DEEPER.steps,
   [PLAN_A_NIGHT_DEEPER.id]: PLAN_A_NIGHT_DEEPER.steps,
   [GOLDILOCKS_DEEPER.id]: GOLDILOCKS_DEEPER.steps,
+  ...Object.fromEntries(
+    Object.entries(TELESCOPE_DEPTH).map(([id, d]) => [id, d.steps])
+  ),
   [MOTION_DEEPER.id]: MOTION_DEEPER.steps,
   [MADE_OF_DEEPER.id]: MADE_OF_DEEPER.steps,
   [THE_SUNS_MOTION_DEEPER.id]: THE_SUNS_MOTION_DEEPER.steps,

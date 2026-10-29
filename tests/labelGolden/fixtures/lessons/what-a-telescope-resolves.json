@@ -1,0 +1,116 @@
+{
+ "id": "what-a-telescope-resolves",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.dips.fields.0.unit","%"],
+    ["steps.dips.fields.1.unit","%"],
+    ["steps.dips.fields.2.unit","%"],
+    ["steps.measure-the-width.fields.0.unit","arcsec"],
+    ["steps.measure-the-width.fields.1.unit","arcsec"],
+    ["steps.rayleigh-by-hand.fields.0.unit","cm"],
+    ["steps.rayleigh-by-hand.fields.1.unit","nm"],
+    ["steps.rayleigh-by-hand.fields.2.unit","arcsec"],
+    ["steps.faint-appears.fields.0.unit","s"],
+    ["steps.faint-appears.fields.1.unit","s"],
+    ["steps.faint-appears.fields.2.unit","s"],
+    ["steps.seeing-sets-a-floor.fields.0.unit","arcsec"],
+    ["steps.seeing-sets-a-floor.fields.1.unit","arcsec"],
+    ["steps.seeing-sets-a-floor.fields.2.unit","arcsec"],
+    ["steps.why-space-does.fields.0.unit","arcsec"],
+    ["steps.why-space-does.fields.1.unit","arcsec"],
+    ["steps.the-crossover.fields.0.unit","arcsec"],
+    ["steps.the-crossover.fields.1.unit","nm"],
+    ["steps.the-crossover.fields.2.unit","cm"]
+   ],
+   "numbered": [
+    ["steps.dips.fields.0.label","Dip at 10 cm"],
+    ["steps.dips.fields.0.hint","0"],
+    ["steps.dips.fields.1.label","Dip at 20 cm"],
+    ["steps.dips.fields.1.hint","27"],
+    ["steps.dips.fields.2.label","Dip at 40 cm"],
+    ["steps.dips.fields.2.hint","50"],
+    ["steps.measure-the-width.fields.0.label","Measured FWHM at 20 cm"],
+    ["steps.measure-the-width.fields.0.hint","0.77"],
+    ["steps.measure-the-width.fields.1.hint","0.003"],
+    ["steps.rayleigh-by-hand.fields.0.hint","20"],
+    ["steps.rayleigh-by-hand.fields.1.hint","550"],
+    ["steps.faint-appears.fields.0.label","Shortest exposure at 10 cm"],
+    ["steps.faint-appears.fields.0.hint","600"],
+    ["steps.faint-appears.fields.1.label","Shortest exposure at 20 cm"],
+    ["steps.faint-appears.fields.1.hint","120"],
+    ["steps.faint-appears.fields.2.label","Shortest exposure at 40 cm"],
+    ["steps.faint-appears.fields.2.hint","60"],
+    ["steps.seeing-sets-a-floor.fields.0.label","Combined FWHM at 20 cm"],
+    ["steps.seeing-sets-a-floor.fields.0.hint","1.19"],
+    ["steps.seeing-sets-a-floor.fields.1.label","Combined FWHM at 1 m"],
+    ["steps.seeing-sets-a-floor.fields.1.hint","1.03"],
+    ["steps.seeing-sets-a-floor.fields.2.label","Combined FWHM at 4 m"],
+    ["steps.seeing-sets-a-floor.fields.2.hint","1.01"],
+    ["steps.why-space-does.fields.0.label","Pattern FWHM at 1 m"],
+    ["steps.why-space-does.fields.0.hint","0.117"],
+    ["steps.why-space-does.fields.1.label","Pattern FWHM at 4 m"],
+    ["steps.why-space-does.fields.1.hint","0.029"],
+    ["steps.the-crossover.fields.0.hint","1.0"],
+    ["steps.the-crossover.fields.1.hint","550"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.dips.fields.0.label","Caída con 10 cm"],
+    ["steps.dips.fields.1.label","Caída con 20 cm"],
+    ["steps.dips.fields.2.label","Caída con 40 cm"],
+    ["steps.measure-the-width.fields.0.label","FWHM medido con 20 cm"],
+    ["steps.faint-appears.fields.0.label","Exposición más corta con 10 cm"],
+    ["steps.faint-appears.fields.1.label","Exposición más corta con 20 cm"],
+    ["steps.faint-appears.fields.2.label","Exposición más corta con 40 cm"],
+    ["steps.seeing-sets-a-floor.fields.0.label","FWHM combinado con 20 cm"],
+    ["steps.seeing-sets-a-floor.fields.1.label","FWHM combinado con 1 m"],
+    ["steps.seeing-sets-a-floor.fields.2.label","FWHM combinado con 4 m"],
+    ["steps.why-space-does.fields.0.label","FWHM del patrón con 1 m"],
+    ["steps.why-space-does.fields.1.label","FWHM del patrón con 4 m"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [],
+  "decimals": [
+   [
+    "rayleigh-by-hand.r",
+    3
+   ],
+   [
+    "the-crossover.dc",
+    1
+   ]
+  ]
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "dips": {
+    "validate": {"calls":242,"distinct":2,"digest":"a3827d522729c481","samples":[null,{"level":"error","message":"Choose each aperture in turn with the seeing at 0.6 arcsec and read the percent in the “The pair” row: 0, 27 and 50."}]}
+   },
+   "measure-the-width": {
+    "validate": {"calls":232,"distinct":2,"digest":"b30dc8e0f568457d","samples":[null,{"level":"error","message":"Set the aperture to 20 cm and the seeing to 0.6 arcsec, then read the “Measured FWHM” row."}]}
+   },
+   "rayleigh-by-hand": {
+    "validate": {"calls":242,"distinct":2,"digest":"7142a302aa5dad58","samples":[null,{"level":"error","message":"Use 20 cm and 550 nm: 1.22 × 550e-9 / 0.20 radians, times 206,265."}]}
+   },
+   "faint-appears": {
+    "validate": {"calls":242,"distinct":2,"digest":"c8c1742f65b0ab23","samples":[null,{"level":"error","message":"Switch the field to the faint field, set the seeing to 1.0 and step the exposure up until the row says the star is listed, for each aperture."}]}
+   },
+   "seeing-sets-a-floor": {
+    "validate": {"calls":242,"distinct":2,"digest":"fd36ef10256beefa","samples":[null,{"level":"error","message":"Set the seeing to 1.0 and read the “FWHM of the combined profile” row at each aperture."}]}
+   },
+   "why-space-does": {
+    "validate": {"calls":232,"distinct":2,"digest":"874e83083ecb0faa","samples":[null,{"level":"error","message":"Set the seeing to 0 and read the “The diffraction pattern’s own FWHM” row."}]}
+   },
+   "the-crossover": {
+    "validate": {"calls":242,"distinct":2,"digest":"eb5726990f9712d6","samples":[null,{"level":"error","message":"Use a seeing of 1.0 and a wavelength of 550: 1.029 × 550e-9 / (1/206,265) meters."}]}
+   }
+  },
+  "es": "same"
+ }
+}

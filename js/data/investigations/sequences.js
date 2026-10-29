@@ -132,7 +132,7 @@ const sequence = (id, key, after, rows) => ({
  *
  * Message ids rather than prose, because the browser is translated and these
  * lines are read by students. They live with the rest of the inv.* family in
- * the deferred catalog. Six sequences (Roadmap II, Prompt 97) and a seventh, Planets and the Sun (Prompt 206), each ordered; a
+ * the deferred catalog. Six sequences (Roadmap II, Prompt 97) and a seventh, Planets and the Sun (Prompt 206), each ordered (Observing and measuring gained What a Telescope Resolves in Prompt 208); a
  * lesson that belongs to two (Transit Photometry, Lines and Motion) is in
  * both, with its own reason in each. tests/investigationRegistry.test.js holds
  * every `needs` to an earlier item, every depth to what the lesson offers, and
@@ -312,6 +312,7 @@ export const SEQUENCES = [
       ['who-gets-counted', 'core'],
       ['why-the-bright-ones-win', 'quantitative', ['who-gets-counted']],
       ['the-completeness-curve', 'quantitative', ['why-the-bright-ones-win']],
+      ['what-a-telescope-resolves', 'core'],
     ]
   ),
 ];

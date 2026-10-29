@@ -219,8 +219,51 @@ export function detectorPattern(seed, detector) {
   return { flat, dark, biasPattern, hot: Int32Array.from(hot) };
 }
 
+/**
+ * Electrons per pixel from point sources through a supplied radial profile (Prompt 208, TELESCOPES.md):
+ * `psf` is `{ step, values, reach, subsamples }`, the intensity per square pixel (integrating to 1 over the
+ * plane) at distances i x step pixels, the radius in pixels beyond which light is dropped, and the sub-pixel
+ * grid each pixel's integral is taken on. Without a profile the Gaussian below is used, unchanged.
+ */
+function lightMapProfile(d, sources, exposure, scale, psf) {
+  const { width: W, height: H } = d;
+  const out = new Float64Array(W * H);
+  const n = psf.subsamples;
+  const reach = Math.ceil(psf.reach) + 1;
+  const inv = 1 / psf.step;
+  const last = psf.values.length - 1;
+  const at = r => {
+    const q = r * inv;
+    const i = Math.floor(q);
+    if (i >= last) return 0;
+    const f = q - i;
+    return psf.values[i] * (1 - f) + psf.values[i + 1] * f;
+  };
+  for (const s of sources) {
+    const e = s.rate * exposure * scale;
+    const x0 = Math.max(0, Math.floor(s.x) - reach);
+    const x1 = Math.min(W - 1, Math.ceil(s.x) + reach);
+    const y0 = Math.max(0, Math.floor(s.y) - reach);
+    const y1 = Math.min(H - 1, Math.ceil(s.y) + reach);
+    for (let y = y0; y <= y1; y++)
+      for (let x = x0; x <= x1; x++) {
+        let acc = 0;
+        for (let j = 0; j < n; j++) {
+          const dy = y + (j + 0.5) / n - 0.5 - s.y;
+          for (let i = 0; i < n; i++) {
+            const dx = x + (i + 0.5) / n - 0.5 - s.x;
+            acc += at(Math.sqrt(dx * dx + dy * dy));
+          }
+        }
+        out[y * W + x] += (e * acc) / (n * n);
+      }
+  }
+  return out;
+}
+
 /** Electrons per pixel from point sources of the given rate and exposure. */
-function lightMap(d, sources, exposure, scale) {
+function lightMap(d, sources, exposure, scale, psf) {
+  if (psf) return lightMapProfile(d, sources, exposure, scale, psf);
   const { width: W, height: H } = d;
   const sigma = d.fwhm / FWHM_PER_SIGMA;
   const out = new Float64Array(W * H);
@@ -253,6 +296,7 @@ function lightMap(d, sources, exposure, scale) {
  * @param {number} [spec.transparency=1] - A multiplier on the stars (clouds, air)
  * @param {number} [spec.flatLevel=20000] - Electrons per pixel a flat holds
  * @param {boolean} [spec.cosmicRays] - Default: science and dark frames only
+ * @param {object} [spec.psf] - A radial profile instead of the Gaussian (see lightMapProfile); the truth then records it
  * @returns {{kind, width, height, exposure, values: Float64Array, truth: object}}
  *   `values` are counts. `truth` holds what the frame was made of.
  */
@@ -276,7 +320,7 @@ export function simulateFrame(spec) {
   let flatLevel = 0;
   let starMap = null;
   if (kind === 'science') {
-    starMap = lightMap(d, scene.sources, exposure, transparency);
+    starMap = lightMap(d, scene.sources, exposure, transparency, spec.psf);
     for (let i = 0; i < n; i++)
       mean[i] =
         pat.flat[i] * (scene.sky * exposure + starMap[i]) +
@@ -343,6 +387,15 @@ export function simulateFrame(spec) {
       biasPattern: pat.biasPattern,
       hot: pat.hot,
       starElectrons: starMap,
+      ...(spec.psf
+        ? {
+            psf: {
+              step: spec.psf.step,
+              reach: spec.psf.reach,
+              subsamples: spec.psf.subsamples,
+            },
+          }
+        : {}),
       cosmic,
       saturated,
     },

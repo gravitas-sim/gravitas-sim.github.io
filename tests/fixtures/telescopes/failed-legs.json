@@ -1,0 +1,10 @@
+{
+  "note": "Legs of tests/fixtures/telescopes/thresholds.json that crossed their bound, kept failing and labelled (only Carl resets a bound). None crossed: the first run of the production kernel against the committed bounds had four rows fail, all four traced to the validation harness or to a table step and fixed without moving a bound (TELESCOPES.md, 'What the first run found'); A1.authentic is not measured.",
+  "failed": [],
+  "notMeasured": [
+    {
+      "id": "A1.authentic",
+      "reason": "no authentic PSF measurement retrieved; a download needs Carl's say and nothing is typed from memory"
+    }
+  ]
+}

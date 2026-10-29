@@ -138,6 +138,7 @@ try {
           <li><span class="gs-en"><a href="#craters">Crater counting: what a relative age assumes</a></span><span class="gs-es" lang="es"><a href="#craters">Recuento de cráteres: qué supone una edad relativa</a></span></li>
           <li><span class="gs-en"><a href="#completeness">A completeness curve: what it is the answer for</a></span><span class="gs-es" lang="es"><a href="#completeness">Una curva de completitud: de qué es respuesta</a></span></li>
           <li><span class="gs-en"><a href="#small-bodies">Asteroid gaps and spin: what a depletion and a bound assume</a></span><span class="gs-es" lang="es"><a href="#small-bodies">Huecos y giro de los asteroides: qué suponen un vaciamiento y una cota</a></span></li>
+          <li><span class="gs-en"><a href="#telescopes">Telescopes: what a Rayleigh separation and a measured width are</a></span><span class="gs-es" lang="es"><a href="#telescopes">Telescopios: qué son una separación de Rayleigh y una anchura medida</a></span></li>
           <li><span class="gs-en"><a href="#trust">What should I trust this to show?</a></span><span class="gs-es" lang="es"><a href="#trust">¿Qué puedo esperar que muestre con fiabilidad?</a></span></li>
           <li><span class="gs-en"><a href="#validation">Validation: what has been checked</a></span><span class="gs-es" lang="es"><a href="#validation">Validación: qué se ha comprobado</a></span></li>
           <li><span class="gs-en"><a href="#data">Where the data comes from</a></span><span class="gs-es" lang="es"><a href="#data">De dónde provienen los datos</a></span></li>
@@ -2318,6 +2319,57 @@ try {
         number these investigations state.</span><span class="gs-es" lang="es">El núcleo es <code>js/kernels/smallbodies/</code>, descrito en <code>SMALL_BODIES.md</code>, y una prueba recalcula cada número que enuncian estas investigaciones.</span>
       </p>
 
+      <h2 id="telescopes"><span class="gs-en">Telescopes: what a Rayleigh separation and a measured width are</span><span class="gs-es" lang="es">Telescopios: qué son una separación de Rayleigh y una anchura medida</span></h2>
+      <p>
+        <span class="gs-en">What a Telescope Resolves puts a synthetic double star and a synthetic faint field through a telescope whose
+        aperture, central obstruction, wavelength, seeing and exposure the reader sets. Every frame is <strong>synthetic</strong>:
+        the stars are placed by the investigation, the seeing is an input and no site, night or real sky is represented. Two numbers
+        are shown and they are never the same one: the Rayleigh separation, which is computed, and the full width at half
+        maximum (FWHM), which is measured from the frame.</span><span class="gs-es" lang="es">Qué resuelve un telescopio pone una estrella doble sintética y un campo débil sintético a través de un telescopio cuya apertura, obstrucción central, longitud de onda, seeing y exposición fija el lector. Cada imagen es <strong>sintética</strong>: las estrellas las coloca la investigación, el seeing es un dato de entrada y no se representa ningún sitio, noche ni cielo real. Se muestran dos números y nunca son el mismo: la separación de Rayleigh, que se calcula, y la anchura a media altura (FWHM), que se mide en la imagen.</span>
+      </p>
+      <h3><span class="gs-en">What the two numbers are</span><span class="gs-es" lang="es">Qué son los dos números</span></h3>
+      <ul>
+        <li><span class="gs-en">The Rayleigh separation is a criterion for a diffraction pattern: the angle to the first dark ring of the Airy
+        pattern, 1.220 &lambda;/D for a clear circular aperture (x = 3.832 in x = &pi;D&theta;/&lambda;), a little more with a central
+        obstruction. Two equal stars at that separation leave a dip of 26.5 percent between them (the midpoint is 0.735 of the
+        peak). It is a convention; a star pair can be told apart closer than it, or not at all above it, depending on the noise
+        and on what is being asked.</span><span class="gs-es" lang="es">La separación de Rayleigh es un criterio para un patrón de difracción: el ángulo hasta el primer anillo oscuro del patrón de Airy, 1.220 &lambda;/D para una apertura circular libre (x = 3.832 en x = &pi;D&theta;/&lambda;), algo más con una obstrucción central. Dos estrellas iguales a esa separación dejan entre ellas un valle del 26.5 por ciento (el punto medio vale 0.735 del máximo). Es una convención; un par de estrellas puede distinguirse más cerca, o no distinguirse por encima de ella, según el ruido y lo que se pregunte.</span></li>
+        <li><span class="gs-en">The measured FWHM is the width of a Moffat profile fitted to a star in the frame by the same measuring tool the
+        imaging investigations use. It is the width of the profile, not the resolution limit of the telescope. Even with no
+        atmosphere the Airy pattern&rsquo;s FWHM is 1.029 &lambda;/D, which is 0.84 of the Rayleigh angle, so the two differ
+        by construction. On a frame the Airy core dominates, the fit says so and the panel labels the number a model
+        fit.</span><span class="gs-es" lang="es">La FWHM medida es la anchura de un perfil de Moffat ajustado a una estrella de la imagen con la misma herramienta de medida que usan las investigaciones de imagen. Es la anchura del perfil, no el límite de resolución del telescopio. Incluso sin atmósfera la FWHM del patrón de Airy es 1.029 &lambda;/D, que es 0.84 del ángulo de Rayleigh, de modo que los dos difieren por construcción. En una imagen donde domina el núcleo de Airy, el ajuste lo dice y el panel rotula el número como ajuste de un modelo.</span></li>
+      </ul>
+      <h3><span class="gs-en">What is computed, and what it assumes</span><span class="gs-es" lang="es">Qué se calcula y qué supone</span></h3>
+      <ul>
+        <li><span class="gs-en">The pattern is the Airy pattern of an annular aperture, I(x) = [2J<sub>1</sub>(x)/x &minus; &epsilon;<sup>2</sup> 2J<sub>1</sub>(&epsilon;x)/(&epsilon;x)]<sup>2</sup>/(1&minus;&epsilon;<sup>2</sup>)<sup>2</sup>
+        for obstruction ratio &epsilon;. The seeing is a Moffat profile with &beta; = 4.765 (Trujillo et al. 2001) and FWHM an
+        input; the two are combined as the product of their transfer functions, band-limited at D/&lambda;. A bigger obstruction
+        than the aperture is refused, not corrected. One wavelength, no aberrations, no atmosphere beyond a single seeing
+        number, no tracking error and no pixel response beyond the sampling are modeled.</span><span class="gs-es" lang="es">El patrón es el patrón de Airy de una apertura anular, I(x) = [2J<sub>1</sub>(x)/x &minus; &epsilon;<sup>2</sup> 2J<sub>1</sub>(&epsilon;x)/(&epsilon;x)]<sup>2</sup>/(1&minus;&epsilon;<sup>2</sup>)<sup>2</sup> para una razón de obstrucción &epsilon;. El seeing es un perfil de Moffat con &beta; = 4.765 (Trujillo et al. 2001) y FWHM como dato de entrada; ambos se combinan como el producto de sus funciones de transferencia, limitado en banda a D/&lambda;. Una obstrucción mayor que la apertura se rechaza, no se corrige. Se modela una sola longitud de onda, sin aberraciones, sin más atmósfera que un solo número de seeing, sin error de seguimiento y sin respuesta del píxel más allá del muestreo.</span></li>
+        <li><span class="gs-en">Light gathering is the ratio of collecting areas (the investigation compares against a 7 mm eye pupil), and the faint
+        star is listed when the CCD equation&rsquo;s signal to noise reaches the threshold, using the same photon rates and
+        detector as the exposure lab. Doubling the aperture quadruples the area, so the same signal arrives in about a
+        quarter of the exposure; the investigation&rsquo;s list of exposures is coarse and says so. Magnification appears nowhere
+        in these numbers: it enlarges an image and adds no detail the aperture and the seeing did not already
+        allow.</span><span class="gs-es" lang="es">La captación de luz es la razón de las áreas colectoras (la investigación compara con una pupila de ojo de 7 mm), y la estrella débil se lista cuando la señal a ruido de la ecuación del CCD alcanza el umbral, con las mismas tasas de fotones y el mismo detector que el laboratorio de exposición. Duplicar la apertura cuadruplica el área, de modo que la misma señal llega en cerca de una cuarta parte de la exposición; la lista de exposiciones de la investigación es gruesa y lo dice. La ampliación no aparece en ninguno de estos números: agranda una imagen y no añade detalle que la apertura y el seeing no permitieran ya.</span></li>
+        <li><span class="gs-en">The frame is drawn from the combined profile by the detector kernel&rsquo;s frame model, with photon and read noise.
+        The default frame of that kernel is unchanged by this addition (its checksum is pinned).</span><span class="gs-es" lang="es">La imagen se dibuja a partir del perfil combinado con el modelo de imagen del núcleo del detector, con ruido de fotones y de lectura. La imagen por defecto de ese núcleo no cambia con esta incorporación (su suma de verificación está fijada).</span></li>
+      </ul>
+      <h3><span class="gs-en">What has been checked</span><span class="gs-es" lang="es">Qué se ha comprobado</span></h3>
+      <ul>
+        <li><span class="gs-en">The kernel agrees with an independent numerical oracle (a Fourier transform of a binary pupil, and scipy closed forms) at
+        two apertures. The measured FWHM&rsquo;s stated uncertainty covered the truth in 0.675 of 200 seeded frames, against a
+        band of 0.60 to 0.76 and a stated 0.683, with a mean relative bias of &minus;0.9 percent. On frames with a wrong
+        profile model the fit was flagged in 47 of 50 (the other three were refusals). Sixteen rows pass and none fails.
+        A measured-data leg (a real frame with a known double star) was not run and is requested, not claimed.</span><span class="gs-es" lang="es">El núcleo concuerda con un oráculo numérico independiente (una transformada de Fourier de una pupila binaria y formas cerradas de scipy) con dos aperturas. La incertidumbre declarada de la FWHM medida cubrió la verdad en 0.675 de 200 imágenes con semilla, frente a una banda de 0.60 a 0.76 y un 0.683 declarado, con un sesgo relativo medio de &minus;0.9 por ciento. En imágenes con un modelo de perfil equivocado, el ajuste fue señalado en 47 de 50 (las otras tres fueron rechazos). Dieciséis filas pasan y ninguna falla. Un tramo con datos medidos (una imagen real con una estrella doble conocida) no se ejecutó y se solicita, no se afirma.</span></li>
+      </ul>
+      <p>
+        <span class="gs-en">The kernel is <code>js/kernels/<wbr>detector/<wbr>optics.js</code> and <code>telescope.js</code>, described in <code>TELESCOPES.md</code>
+        with its thresholds (<code>tests/fixtures/<wbr>telescopes/<wbr>thresholds.json</code>), and a test recomputes each number the
+        investigation states.</span><span class="gs-es" lang="es">El núcleo es <code>js/kernels/<wbr>detector/<wbr>optics.js</code> y <code>telescope.js</code>, descrito en <code>TELESCOPES.md</code> con sus umbrales (<code>tests/fixtures/<wbr>telescopes/<wbr>thresholds.json</code>), y una prueba recalcula cada número que enuncia la investigación.</span>
+      </p>
+
       <h2 id="trust"><span class="gs-en">What should I trust this to show?</span><span class="gs-es" lang="es">¿Qué puedo esperar que muestre con fiabilidad?</span></h2>
       <div class="doc-table-wrap">
         <table class="doc-table">
@@ -3285,9 +3337,9 @@ try {
         <span class="gs-en">Each guided investigation relies on a different part of the model. This
         table is generated from the same <code>modelNotes</code> field that the
         instructor guide prints, so it covers every one of the
-        <!--fact:investigations-->85<!--/fact-->
+        <!--fact:investigations-->86<!--/fact-->
         investigations and cannot fall behind them. It listed six of the twelve when it
-        was maintained by hand.</span><span class="gs-es" lang="es">Cada investigación guiada se apoya en una parte distinta del modelo. Esta tabla se genera a partir del mismo campo <code>modelNotes</code> que imprime la guía docente, de modo que cubre cada una de las <!--fact:investigations-->85<!--/fact--> investigaciones y no puede quedar rezagada respecto a ellas. Cuando se mantenía a mano, enumeraba seis de las doce.</span>
+        was maintained by hand.</span><span class="gs-es" lang="es">Cada investigación guiada se apoya en una parte distinta del modelo. Esta tabla se genera a partir del mismo campo <code>modelNotes</code> que imprime la guía docente, de modo que cubre cada una de las <!--fact:investigations-->86<!--/fact--> investigaciones y no puede quedar rezagada respecto a ellas. Cuando se mantenía a mano, enumeraba seis de las doce.</span>
       </p>
       <div class="doc-table-wrap">
         <table class="doc-table">
@@ -3638,6 +3690,10 @@ try {
             <tr>
               <td>Comets and the Sun</td>
               <td>js/kernels/atmospheres/equilibrium.js: the emission temperature, with uniform redistribution and a Bond albedo of 0.04; js/bodyVisuals.js: the ion and dust tail directions.</td>
+            </tr>
+            <tr>
+              <td>What a Telescope Resolves</td>
+              <td>js/kernels/detector/optics.js (Airy, Moffat, their convolution), telescope.js (the frame), js/telescopeField.js (the PSF tool’s measurement), TELESCOPES.md.</td>
             </tr>
           <!--/fact-block-->
           </tbody>
