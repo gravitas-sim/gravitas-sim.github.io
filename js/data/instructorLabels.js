@@ -197,6 +197,9 @@ const en = {
   'key.derived': ' (worked out for the student)',
   'key.validator':
     'This screen checks the entered values as they are typed and explains what is wrong when they do not hang together.',
+  'key.plan':
+    'An open-ended plan: there is no single right plan. The screen accepts a plan when it is feasible for the goal (reaches {depth} mag over at least {area} square degrees{reliability}) and the depth and count the student states agree with what that plan reaches, within {tolD} mag and {tolN} percent. Judge the written justification with the criteria, not the numbers.',
+  'key.planReliability': ', with at least {r} percent of the detections real',
   'key.checklist': 'Students are asked to:',
   'key.expected': 'Expected observation:',
   'key.reflection':
@@ -462,6 +465,10 @@ const es = {
   'key.derived': ' (calculado para el estudiante)',
   'key.validator':
     'Esta pantalla comprueba los valores a medida que se escriben y explica qué falla cuando no concuerdan entre sí.',
+  'key.plan':
+    'Un plan abierto: no hay un único plan correcto. La pantalla acepta un plan cuando es viable para el objetivo (alcanza {depth} mag en al menos {area} grados cuadrados{reliability}) y la profundidad y el conteo que declara el estudiante concuerdan con lo que ese plan alcanza, con {tolD} mag y {tolN} por ciento de margen. Evalúe la justificación escrita con los criterios, no con los números.',
+  'key.planReliability':
+    ', con al menos un {r} por ciento de detecciones reales',
   'key.checklist': 'Se pide al estudiantado:',
   'key.expected': 'Observación esperada:',
   'key.reflection':

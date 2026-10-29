@@ -1,0 +1,7 @@
+{
+  "script": "tools/survey-oracle/oracle.py",
+  "run": "2026-10-29, python3 3.9.6, numpy 1.26.4, scipy 1.13.1, astropy 6.0.1",
+  "independent": "NumPy and SciPy: its own CCD equation with the matched filter, brentq for every depth and magnitude, quad for every count integral, norm.cdf for the completeness, poisson.ppf for the intervals; Astropy's FlatLambdaCDM(H0 = 70, Om0 = 0.3) for the cosmological count; no Gravitas code",
+  "note": "PyYAML is not installed on the machine that pinned this; astropy.cosmology imports astropy.io.misc.yaml at load although nothing here reads YAML, so the script puts an inert module in its place before the import. Nothing was installed or downloaded.",
+  "cites": ["Schechter 1976, ApJ 203, 297 (the luminosity function)", "Blanton et al. 2003, ApJ 592, 819 (parameters of the order of the r-band function, as recalled and not checked against the typeset table)", "Astropy Collaboration 2022, ApJ 935, 167 (FlatLambdaCDM)"]
+}

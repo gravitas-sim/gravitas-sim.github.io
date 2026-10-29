@@ -239,6 +239,8 @@ let depthChoice = null;
 let deepest = 'core';
 let depthName = '';
 let probeTimer = null;
+/** js/surveyDesignPlan.js, once a lesson with a plan step has opened. */
+let planModule = null;
 let els = {};
 let plotCanvas = null;
 let plotTransformed = false;
@@ -969,6 +971,10 @@ function recomputeFields(step, id) {
  * @returns {{level:string, message:string}|null} Feedback, or null
  */
 function validateStep(step, id) {
+  // An open-ended plan step (Prompt 215) is judged by the survey kernel: feasible for its goal, and
+  // what the student says it reaches consistent with the plan (js/surveyDesignPlan.js, loaded at open).
+  if (step.plan)
+    return planModule?.planVerdict(step, fieldValues(step, id)) ?? null;
   if (!step.validate) return null;
   try {
     return step.validate(fieldValues(step, id), probeContext()) || null;
@@ -2310,6 +2316,11 @@ export async function openInvestigation(id, opts = {}) {
         localeOfAnswer(responses, key, getLocale())
       );
     });
+  }
+  // A plan step's verdict is a synchronous call into a lazy module, loaded here for a lesson that has one.
+  if (inv.steps.some(s => s.plan)) {
+    planModule = await import('./surveyDesignPlan.js');
+    if (generation !== openGeneration) return;
   }
   depth = 'core';
   depthChoice = null;

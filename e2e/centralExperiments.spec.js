@@ -2673,6 +2673,27 @@ test.describe('the central experiment of each investigation', () => {
         [1, 20, 0.6],
       ],
     },
+    // ---- Survey design (Roadmap III, Prompt 215) -------------------------------------
+    {
+      id: 'deep-or-wide',
+      title:
+        'deep-or-wide: ten nights on the one-metre telescope find most sources at 335 s for the Euclidean class and at the longest exposure for a steeper one @accepts:ce.deep-or-wide',
+      row: /^Best exposure$/i,
+      values: [
+        [0, 335, 50],
+        [2, 3162, 300],
+      ],
+    },
+    {
+      id: 'two-telescopes-one-question',
+      title:
+        "two-telescopes-one-question: the 8.4-metre telescope needs 0.031 of the one-metre telescope's time for 22 mag and 0.015 for 23 @accepts:ce.two-telescopes-one-question",
+      row: /^Ratio$/i,
+      values: [
+        [22, 0.031, 0.002],
+        [23, 0.015, 0.002],
+      ],
+    },
     // ---- Telescopes (Roadmap III, Prompt 208) ---------------------------------
     {
       id: 'what-a-telescope-resolves',
@@ -2755,6 +2776,25 @@ test.describe('the central experiment of each investigation', () => {
       await expectVerdictRevealed(page, plan, predict);
     });
   }
+  // Propose an Observation is open-ended: no prediction is held against one
+  // number. The panel's verdict on a plan is what the screen judges, and a plan
+  // that reaches the goal and one that does not read differently.
+  test('propose-an-observation: a plan on the one-metre telescope at 63 s is feasible for the goal and one at 4 s is not @accepts:ce.propose-an-observation', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    const entry = declared('propose-an-observation');
+    const { control } = controlOf(entry);
+    await openInvestigation(page, app, 'propose-an-observation');
+    const plan = await lessonPlan(page, 'propose-an-observation');
+    await walkToSid(page, plan, 'propose-a-plan');
+    const verdict = async () => (await readout(page)).Verdict ?? '';
+    await setControl(page, control, 1.8);
+    await expect.poll(verdict, { timeout: 5000 }).toMatch(/^feasible/i);
+    await setControl(page, control, 0.6);
+    await expect.poll(verdict, { timeout: 5000 }).toMatch(/^not feasible/i);
+  });
   // ---- The sky sequence (Roadmap II, Prompt 89) ---------------------------------
   const SKY = [
     {

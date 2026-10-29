@@ -331,11 +331,27 @@ export function answerKeyDocument(
         ),
         { size: 9, gap: 1 }
       );
-      if (e.hasValidator) {
+      if (e.hasValidator && !e.plan) {
         doc.paragraph(L('key.validator'), {
           size: 8.5,
           color: '0.4 0.4 0.46',
         });
+      }
+      if (e.plan) {
+        doc.paragraph(
+          L('key.plan', {
+            depth: e.plan.goal.depth,
+            area: e.plan.goal.areaDeg2,
+            reliability: e.plan.goal.minReliability
+              ? L('key.planReliability', {
+                  r: Math.round(100 * e.plan.goal.minReliability),
+                })
+              : '',
+            tolD: e.plan.tolerance.depth,
+            tolN: e.plan.tolerance.countsPct,
+          }),
+          { size: 8.5, color: '0.4 0.4 0.46' }
+        );
       }
     }
 

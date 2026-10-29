@@ -1,0 +1,73 @@
+{
+  "note": "Legs of tests/fixtures/survey/thresholds.json that crossed their bound, kept failing and labelled (only Carl resets a bound).",
+  "failed": [
+    {
+      "id": "A3.skyLimited",
+      "measured": {
+        "gains": [1.2629335046286556, 1.2581802181503328, 1.2540901969861267],
+        "worst": 0.012933504628655612
+      },
+      "note": "the gain approaches 1.25 from above as the sky takes over: 0.013 off at 400 s (the source shot noise is 3 percent of the sky variance at that depth), 0.004 at 4000 s"
+    },
+    {
+      "id": "A4.optimum",
+      "measured": [
+        {
+          "alpha": 0.4,
+          "found": 23.02763385911651,
+          "predicted": 20,
+          "rel": 0.15138169295582546
+        },
+        {
+          "alpha": 0.6,
+          "found": 71.38240825178059,
+          "predicted": 60,
+          "rel": 0.18970680419634314
+        },
+        {
+          "alpha": 1,
+          "interior": false,
+          "rising": true
+        }
+      ],
+      "note": "the closed form is the sky-limited limit: the real maximum is 15 and 19 percent above it for alpha 0.4 and 0.6 (AM6); A4b holds the kernel to the oracle"
+    },
+    {
+      "id": "A5.timeRatio",
+      "measured": {
+        "kernelRatio": 0.14387701506542105,
+        "closedForm": 0.14062499999999997,
+        "rel": 0.023125440465216588,
+        "rateOk": true
+      },
+      "note": "the closed form is the sky-limited limit (AM4); A5b is the exact one"
+    },
+    {
+      "id": "B2.cosmology",
+      "measured": [
+        {
+          "m": 14,
+          "ratio": 1.084981005391759,
+          "ok": true
+        },
+        {
+          "m": 15,
+          "ratio": 1.1342835543696868,
+          "ok": true
+        },
+        {
+          "m": 16.5,
+          "ratio": 1.2665081886078382,
+          "ok": false
+        }
+      ],
+      "note": "fails at 16.5; the class is reduced to mMax 15 (AM5)"
+    }
+  ],
+  "notMeasured": [
+    {
+      "id": "E1.authentic",
+      "reason": "the repository holds no real catalogue with a stated completeness and none is downloaded here"
+    }
+  ]
+}

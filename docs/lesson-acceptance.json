@@ -1157,6 +1157,46 @@
       ],
       "evidenceFrom": "model"
     },
+    "deep-or-wide": {
+      "centralExperimentId": "ce.deep-or-wide",
+      "object": "panel:survey-design-tradeoff",
+      "control": "survey-design-tradeoff/cls",
+      "quantity": "the exposure that finds the most sources in ten nights on a one-metre telescope: 335 seconds for a class with the Euclidean slope of 0.6 and 3162 seconds, the longest on the slider, for a class with a slope of 1.0",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "predict-deep-or-wide",
+        "euclid-best"
+      ],
+      "evidenceFrom": "model"
+    },
+    "two-telescopes-one-question": {
+      "centralExperimentId": "ce.two-telescopes-one-question",
+      "object": "panel:survey-design-compare",
+      "control": "survey-design-compare/goalDepth",
+      "quantity": "the time the 8.4-metre telescope needs as a fraction of the time the one-metre telescope needs for the same depth over ten square degrees: 0.031 for a goal of 22 magnitude and 0.015 for 23",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "predict-the-ratio",
+        "read-the-hours"
+      ],
+      "evidenceFrom": "model"
+    },
+    "propose-an-observation": {
+      "centralExperimentId": "ce.propose-an-observation",
+      "object": "panel:survey-design-plan",
+      "control": "survey-design-plan/logExposure",
+      "quantity": "the verdict of a plan on the goal of 22.5 magnitude over 100 square degrees in ten nights: feasible for the one-metre telescope at 63 seconds, not feasible at 4 seconds; many plans pass and the screen judges feasibility and the student's own stated numbers, never one plan",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "the-brief",
+        "propose-a-plan",
+        "justify-the-plan"
+      ],
+      "evidenceFrom": "model"
+    },
     "what-a-telescope-resolves": {
       "centralExperimentId": "ce.what-a-telescope-resolves",
       "object": "panel:telescope",

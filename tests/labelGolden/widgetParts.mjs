@@ -67,6 +67,7 @@ export const PARTS = Object.freeze({
     'effects',
     'strategy',
     'photcal',
+    'surveyDesign',
     'spectrograph',
   ],
   rest: [

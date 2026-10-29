@@ -20,6 +20,7 @@ the release rather than in the tag.
 - A planetary sequence, Planets and the Sun, ordering the Solar System investigations that exist, with three new connecting investigations, each in English and Spanish with instructor materials: The Scale of the Solar System (sizes, distances, a marble model and light time), Moons of the Giants (the Laplace combination of Io, Europa and Ganymede from fitted periods) and Comets and the Sun (a comet's orbit and the heat at each end of it). A course package, The Solar System and the Sun, and a Solar System unit in the one-semester course. Worlds Compared, Reading a Surface and Space Weather from the Sun are not built: each needs a component or a data pack that is not in the project yet, and DECISION_REGISTER.md (D-R10-206-01) says which.
 - Observing strategy: a kernel for the window function of a sampling pattern (read through the period search, unchanged), the aliases of a period against the sidereal day, the year and the month, a verdict (resolved, ambiguous, not constrained) with its alias list, phase coverage, a multi-night plan from the observing-window planner with its cost in hours and a seeded weather loss, validated against Astropy's `LombScargle` and closed forms with the thresholds committed first; two panels (the window and aliases, the plan of the nights), the investigation Why the Period Is Wrong at three depths and three new advanced steps in Design the Schedule, both languages.
 - Exposure planning: the CCD-equation kernel (`js/kernels/detector/snr.js`) extended with several exposures, point-spread-function photometry, extended sources, extinction by airmass, the limiting magnitude of an exposure and refusals for targets the exposure limit or the full well forbids, a facility adapter over the instrument library that fills in nothing the library does not state, an exposure-planner panel with a synthetic frame measured with aperture photometry, four new advanced steps in Signal, Noise and Exposure (the lower depths grade as before), and the majors investigation Plan an Exposure, in English and Spanish with instructor materials. Validated against analytic cases, an independent implementation, the published Rubin depth model and 1600 rendered frames; three legs against the published model (the read-noise loss in u and g, and the equation away from the fiducial sky) stay failing and labelled in `EXPOSURE_PLANNING.md`.
+- Survey design: a kernel for the depth an exposure and a facility reach (the CCD equation of the exposure planner, with optimal photometry), the area a plan covers, the expected counts from a stated count model, completeness and contamination, the depth-against-area trade-off at fixed time and the time two facilities need for one goal (`js/kernels/survey/`, `SURVEY_DESIGN.md`), validated against an independent Python oracle and an ensemble; four validation legs failed their committed bounds and are recorded and labelled, and a leg against an authentic catalogue was not run. An open-ended `plan` step on the lesson format (feasibility and the student's own stated numbers, never one correct plan), and three investigations, each in English and Spanish with instructor materials: Deep or Wide? (survey, majors, upper), Two Telescopes, One Question and the capstone Propose an Observation.
 
 ## [2.1.0] - 2026-10-24
 
@@ -115,12 +116,12 @@ The Observatory's image measurement train (Prompts 179 to 182, 184, 186 to 189, 
 
 **Gravitas 2.0.0.** Gravitas grows from a gravity sandbox with 22 guided
 investigations into a browser laboratory: <!--fact:scenarios-->61<!--/fact-->
-sandbox scenarios, <!--fact:libraryInvestigations-->108<!--/fact--> guided
-investigations (<!--fact:investigations-->91<!--/fact--> that run in the
+sandbox scenarios, <!--fact:libraryInvestigations-->111<!--/fact--> guided
+investigations (<!--fact:investigations-->94<!--/fact--> that run in the
 simulation and <!--fact:guidedInvestigations-->17<!--/fact--> in the
 Observatory, the 3-D lab and the mission lab), a shared shell, a Library, a
 workspace for each student's own work, an instructor path from adoption page to
-gradebook file, <!--fact:instructorDocuments-->867<!--/fact--> generated
+gradebook file, <!--fact:instructorDocuments-->900<!--/fact--> generated
 instructor documents, a public validation suite
 of <!--fact:physicsChecks-->348<!--/fact--> checks, and authoring tools
 (Scenario Studio, Investigation Composer, course packs and an extension SDK).
@@ -1773,7 +1774,7 @@ listed here because this is the release that first carries it.
 - **An instructor portal that explains itself.** `/instructors/` states what is
   behind the passphrase before asking for it, says plainly what client-side
   encryption on a static host can and cannot promise, and presents the
-  <!--fact:instructorDocuments-->867<!--/fact--> documents grouped by investigation
+  <!--fact:instructorDocuments-->900<!--/fact--> documents grouped by investigation
   with their kind and size. A wrong passphrase and a missing bundle now report
   as the different problems they are.
 - **Dual licensing.** The code is MIT; the original educational material is
@@ -1840,7 +1841,7 @@ listed here because this is the release that first carries it.
   uncertainty, the target and the observing configuration.
 - **Offline support.** A service worker precaches the application shell, the
   <!--fact:scenarios-->61<!--/fact--> scenario thumbnails and all
-  <!--fact:investigations-->91<!--/fact--> English lessons, so a class keeps
+  <!--fact:investigations-->94<!--/fact--> English lessons, so a class keeps
   working when the room's wifi drops. The cache name is a content hash, so a
   build invalidates it. See [OFFLINE_AND_LOW_END.md](OFFLINE_AND_LOW_END.md).
 - **A measured low-end quality tier.** Chosen from the frame rate the machine
@@ -1849,7 +1850,7 @@ listed here because this is the release that first carries it.
   off.
 - **An investigation authoring toolchain.** `npm run author:check` validates
   every lesson and every one of the
-  <!--fact:investigationSteps-->1289<!--/fact--> steps; `npm run author:new`
+  <!--fact:investigationSteps-->1304<!--/fact--> steps; `npm run author:new`
   scaffolds a lesson with its translation shadow and instructor stub;
   `?author=<lesson>&step=<n>` opens any step with diagnostics without touching
   a student's saved progress; and a browser walker exercises every step of
