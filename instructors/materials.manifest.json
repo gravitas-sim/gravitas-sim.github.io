@@ -1,38 +1,38 @@
 {
   "version": "October 2026",
   "generated": "2026-10-29",
-  "documents": 867,
+  "documents": 900,
   "inventory": {
-    "documents": 867,
+    "documents": 900,
     "byLocale": {
-      "en": 397,
-      "es": 470
+      "en": 412,
+      "es": 488
     },
     "byKind": {
       "general": 2,
-      "guide": 189,
-      "key": 580,
-      "notes": 91,
+      "guide": 195,
+      "key": 604,
+      "notes": 94,
       "worksheet": 5
     },
     "byVariant": {
       "activity": 12,
-      "depth": 382,
-      "full": 364,
+      "depth": 400,
+      "full": 376,
       "general": 18,
-      "notes": 91
+      "notes": 94
     }
   },
-  "sourceFiles": 290,
-  "sourceDigest": "fc60dfbb6bcbb250459d38f5b9b6a537f915ed7d4bd2a8ff296f26fcc16654ce",
+  "sourceFiles": 291,
+  "sourceDigest": "e520b89278003938bfc885a0fcd0e3262d48e20974e2367f9e0be73fbda325c0",
   "sources": {
     "js/activities/activities.js": "39ac98cd99b8b0387c55e41d5d4530bad55a8da8758819ad056be73e7a716b01",
     "js/activities/activityBridge.js": "67a82aff98e0ed935d6b8b0f0f654c6ad4332ee929cb3604e896a7f790a6fdc1",
     "js/activityDocs.js": "a5c56e6db7b4b82fdaf5535db62c402ed6ed90bf819b34e1473792af0724abe8",
     "js/answerCheck.js": "93d09ed32008916989cdc01b4acd9fc1a5e54581cebd9645d061b6c48303dfa4",
     "js/answerFeedback.js": "5766d9b30ff10534d101f8c1d2eb65b47dcaf53dea99eac0ce2a78f0d15d82c5",
-    "js/answerKey.js": "71169ff09ba8a1c051cc7c487ab6c17060fbba61cd72f1b6276bdb50f6b0a804",
-    "js/answerKeyDocument.js": "25a66b1141220d2a3b4c025cae5adf63e5c73d2aa341d003ffe018bc0f72dd88",
+    "js/answerKey.js": "64bf827714f381e157465d6263f511aaacc2b4350caab32ee39e47aa5400e18b",
+    "js/answerKeyDocument.js": "b7bb157ea52e9b9c6547dfcdd73fe5905518f71e7afbe198baa72afc70f0fe3e",
     "js/answerParse.js": "420ce48b5513fa3c1d2b8abe1ad35c9a7c281ac3deca4c3cfd2204b38e1d4863",
     "js/assignments/assignment.js": "c89ab86e79b7727f9f51c52a06cb4df878901332b29d6785e371f6f44b39a62f",
     "js/authoring/instructorSchema.js": "e53fac3d680fd804ee5341004c86652bceb01c30015bb50c347a6356b6d9e002",
@@ -43,13 +43,13 @@
     "js/data/activityTeaching.js": "7694fc798f8c4130e5aead5357e69bab04d6a5d386013d009430dba9a1c31008",
     "js/data/exoplanetAnswerKey.js": "b3eed2e93a5f18cc85b0b91c1127b4a977790edacf4288575961963a3673e817",
     "js/data/instructorContent.es.js": "471a388f9e2abfbe837cdad387388f52f0a547d2ae5f466e66fa5680866d5d3c",
-    "js/data/instructorContent.js": "e38180c3fb66fa967e6f43874b787b40c3bdc6dcd5a8db2e5226a6c341eeb449",
+    "js/data/instructorContent.js": "df1d30a4b738b5193f3eb942dfcee3541ea6eb74654ca9f40c73ed8719ccc74f",
     "js/data/instructorExpectations.es.js": "5ec751fabe0ed60f692799c260ab8f383ffae25379c4b426efdd4351e0ae00ee",
-    "js/data/instructorExpectations.js": "8de8f0b450b10aec14c936f43b64d7be27fb738b22ac1168e41072cf4e40709c",
+    "js/data/instructorExpectations.js": "24850821aa482d51c6f4873e5e19998a7266ab6f696f3a0dfbadd4c77866a925",
     "js/data/instructorFlow.es.js": "f1c087e5240114351245f6a7fa7ad9b3efd269ec6d415183fd945ac95534fd86",
-    "js/data/instructorFlow.js": "666d7fd3f079c4d9e081e5f22e65c8addede4eaf9475fe6bb1739ef4e1464771",
-    "js/data/instructorLabels.js": "d6ea504f084d882295379f7df296e59f2aab572b5bf7fa985baf1b7253a16da1",
-    "js/data/investigations.js": "44cdcc8e1d584e2eaa3babf2c96e65ee934bd4d9f984e6ace0399be4c65505ed",
+    "js/data/instructorFlow.js": "7b473561d70483a7e87787a84b0d216c3ea278e9234aa00d0182ddb8ebb28f1f",
+    "js/data/instructorLabels.js": "382bb5d24bd9f59e7bf6cbf68b645a340f7c6271897cecc2d0dc407753180265",
+    "js/data/investigations.js": "c4d39fe0f3852298102aee93590ceb432fae10a92887d1f6eaf9fd6b565b4df1",
     "js/data/investigations/a-lens-passing-by.js": "b0516c2bdb40f085f5dd2ab1ade0e006771d9507e3809c89e8de3ba35376e030",
     "js/data/investigations/a-universe-of-stars.js": "8a5cf66239f97a96d71b262a24b178cbe327a86500f252f6e65a405455f1dd65",
     "js/data/investigations/a-variable-star-from-frames.js": "9e516c56e4623154492a535a3fda58c4f80b1179a248565c05bd81421e3f42b1",
@@ -141,7 +141,7 @@
     "js/data/investigations/depth/why-the-bright-ones-win.js": "2efd2f0f8f383755a667f7452f9931d527faeed4d3b4d40a536b7a4725918fa1",
     "js/data/investigations/design-the-schedule.js": "acfb29b82f4014cf5827e3ee4c4776a021691ee5eb66e22a7001e081e19aaadc",
     "js/data/investigations/detect-this-planet.js": "e7ff6bbdac10bb95b29b2e7aef91b015d8c69a37a014db1fb014dc531124ce43",
-    "js/data/investigations/discovery.js": "f725db108ac94a1e5ccfc55d99cda6a0b1c5f2971b64f8311756252e629de5da",
+    "js/data/investigations/discovery.js": "5d9e26923da8ea6ed53dea0705bf0981542007902072df8873163b81d3bf48fe",
     "js/data/investigations/einstein-rings-and-arcs.js": "94e991a437d84d63e2f9df1dddb3c74d4b5c99ff88c8a523c76ac9391b013f6e",
     "js/data/investigations/es/a-lens-passing-by.js": "9f341a46e06db9cf8c17467a8bde8eb392425d6eeba94f1f131ff1e7babcec36",
     "js/data/investigations/es/a-universe-of-stars.js": "e978b7bb1a4297064769e4a005c48a4f3399d8851ea1c321568aff8627265bbe",
@@ -239,7 +239,8 @@
     "js/data/investigations/spectrograph-sequence.js": "3e0f163459fe330f5f61c87d207a3ba4dcd983423ee6f4fba1f4695712f5a2eb",
     "js/data/investigations/standard-candles.js": "77f5101c57d2eb5de1dbcae2dc1250ad245751a4d600d82dd507978f8b80fa7c",
     "js/data/investigations/strategy-sequence.js": "f48f527890aeceb0308c643683afa3e80e3017c65f85476bd995305e076c5af5",
-    "js/data/investigations/summaries.js": "eaf29ecb46d933acae7cb366e003043f18c3fc4888e435dd6d34744391b4ea32",
+    "js/data/investigations/summaries.js": "972efead14b8ff38fb4975e6088b0eb4a9694a7bdc74c1f0a3939e693f19ccc2",
+    "js/data/investigations/survey-sequence.js": "c80b75253eec2cd98bb540d5c68fcdadc52e161aa3c393637adfbb61aaf1924a",
     "js/data/investigations/telescope-sequence.js": "85d081bfd0eb364db25a5f661fe5f18755196243bd6a04f173abc7114191b523",
     "js/data/investigations/the-beat-of-a-star.js": "4005037e9b5c1a37777bf8e90f4c657a667aff3c6aae3e46633a3f4e3da9a3e4",
     "js/data/investigations/the-completeness-curve.js": "6a81cabc545758ae5de1e2f04644409c1e0d7152809253d9d33ab8cad3abf6c5",
@@ -286,10 +287,10 @@
     "js/instructorExpectations.js": "09b1aeac6b3fa134374f0286029cdda1cbe68c9e3d7885afdc75387a4f5d6282",
     "js/instructorFacts.js": "a8939d4e55ea32df76d53d4ae9222ccb98554a0251603aafe523f4f37f658a41",
     "js/instructorFlow.js": "d06edcc3404196951515250e971b81ddb53cd00315704c7f65b2616de0084122",
-    "js/instructorLocale.js": "2b6b88452298f77123f382304264d5961d97b07b2bdb2821a55df7281a8142b5",
+    "js/instructorLocale.js": "7da1cbf231df429ed1027d876a18d3e456cb97ba475edea2e6d5f25aa6c8e921",
     "js/instructorNotes.js": "f970bb0bb06431eab37b4d409a780166932f44c17bd73b0548bc5480fe30728f",
     "js/instructorSource.js": "da3fb5a0d4387db76d3117b0c7cac81919de0186041cf4161c328d5802f5890a",
-    "js/investigations/depthAll.js": "aed201768f4261925c0fe53f628279792a775500f162015776f582438c90bdd0",
+    "js/investigations/depthAll.js": "8f8d957cac7b136723912286ac519a58d5372efac428b32f5a670c7e8ebbea18",
     "js/investigations/depthPure.js": "61ea6369eef1b8b9c39c2395f2be1a1ebaf83772180520f6ec7fbe3c8ea085f6",
     "js/investigations/progressBackup.js": "36f9c5642612fd62c91e3e483eb1083684e297157c8d1fd12b3fb3aaa0eae44d",
     "js/lab3d/elements.js": "6a951db87df0d36795285e1ea6abb6ab473c48cda372ea985279bc498a34d043",
@@ -317,5 +318,5 @@
     "tools/instructor-freshness.mjs": "96052b2f27080f0243fdd4d5f7608927bd67f0c50808b6eac3345a65c14d1e28",
     "tools/source-closure.mjs": "961828e4d0d40d8a6f8c029fe9b9435ecaf39a74b62640efc0b4145c35c7650a"
   },
-  "contentDigest": "e3e0b80edab91f080b91c728a083acd67c42190352e24bddac474f003d478602"
+  "contentDigest": "61e18bac736c8f06bb09e97b528e16ef44b18345b65e8fc91870b21f183b3735"
 }
