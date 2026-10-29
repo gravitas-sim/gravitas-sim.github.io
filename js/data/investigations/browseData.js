@@ -378,6 +378,8 @@ export const BROWSE_META = {
   },
   'two-stars-eclipsing': {
     tags: ['observing', 'stars'],
+    numericCount: 0,
+  },
   'deep-or-wide': {
     tags: ['observing'],
     numericCount: 0,
