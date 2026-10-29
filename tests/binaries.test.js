@@ -27,6 +27,8 @@ import {
 import { MODELS } from '../js/inference/models.js';
 import { fitOnce } from '../js/inference/infer.js';
 import { syntheticEclipse } from '../js/inference/synthetic.js';
+import { modelsFor } from '../js/observatory/fitPanel.js';
+import { validateInference } from '../js/inference/manifest.js';
 
 const read = f => JSON.parse(readFileSync(f, 'utf8'));
 const THR = read('tests/fixtures/binaries/thresholds.json');
@@ -187,5 +189,31 @@ describe('the kernel', () => {
     ).toBeLessThan(0.001);
     const flat = { ...data, y: Float64Array.from(data.y, () => 1) };
     expect(() => fitOnce(req, flat)).toThrow(/eclipse/);
+  });
+});
+
+describe('the Observatory fit panel', () => {
+  test('offers the eclipse model beside the transit for a flux and not for a velocity', () => {
+    const o = kind => ({
+      kind: 'time-series',
+      axes: { y: 'y' },
+      columns: [{ id: 'y', unit: kind }],
+    });
+    const dim = u => (u === 'm/s' ? 'velocity' : 'ratio');
+    expect(modelsFor(o('1'), dim)).toEqual([
+      'transit-quadratic',
+      'eclipsing-binary',
+    ]);
+    expect(modelsFor(o('m/s'), dim)).toEqual(['rv-keplerian']);
+  });
+  test('a request with limb darkening out of range is refused by the manifest check', () => {
+    const request = {
+      format: 'gravitas.inference-manifest',
+      model: { id: 'eclipsing-binary', version: '1.0.0' },
+      parameters: {},
+      settings: { ldA: [2, 2], ldB: [0.5, 0.18], thirdLight: 0 },
+    };
+    const out = validateInference(request, { rows: 100 });
+    expect(JSON.stringify(out)).toMatch(/ld/i);
   });
 });

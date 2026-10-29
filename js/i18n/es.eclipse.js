@@ -4,10 +4,10 @@ export const ES_ECLIPSE = {
   'eclW.c.title': 'Dos estrellas que se eclipsan',
   'eclW.c.note':
     'Dos estrellas en una misma órbita, vistas casi de canto, de modo que cada una pasa delante de la otra. La curva es la luz de ambas frente a la fase de la órbita: el eclipse primario es cuando se oculta la estrella 1 (la 2 delante), el secundario cuando se oculta la 2. Mueve los deslizadores para cambiar las estrellas y la órbita; activa unos datos para compararlos. Todos los datos de aquí son sintéticos: los hizo un modelo.',
-  'eclW.c.control.rsum': 'Suma de los radios sobre la órbita, (R1+R2)/a',
+  'eclW.c.control.rsum': 'Suma de radios, (R1+R2)/a',
   'eclW.c.control.k': 'Cociente de radios, R2/R1',
   'eclW.c.control.inc': 'Inclinación',
-  'eclW.c.control.J': 'Cociente de brillos superficiales, S2/S1',
+  'eclW.c.control.J': 'Brillo superficial, S2/S1',
   'eclW.c.control.ecosw': 'e cos w',
   'eclW.c.control.esinw': 'e sen w',
   'eclW.c.control.data': 'Comparar con datos',

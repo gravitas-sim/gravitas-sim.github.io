@@ -4,10 +4,10 @@ export const EN_ECLIPSE = {
   'eclW.c.title': 'Two stars eclipsing',
   'eclW.c.note':
     'Two stars on one orbit, seen edge on enough that each passes in front of the other. The curve is the light of both against the orbit’s phase: the primary eclipse is when star 1 is hidden (star 2 in front), the secondary when star 2 is. Move the sliders to change the stars and the orbit; switch a data set on to compare. Every data set here is synthetic: a model made it.',
-  'eclW.c.control.rsum': 'Sum of the radii over the orbit, (R1+R2)/a',
+  'eclW.c.control.rsum': 'Radii sum, (R1+R2)/a',
   'eclW.c.control.k': 'Radius ratio, R2/R1',
   'eclW.c.control.inc': 'Inclination',
-  'eclW.c.control.J': 'Surface brightness ratio, S2/S1',
+  'eclW.c.control.J': 'Surface brightness, S2/S1',
   'eclW.c.control.ecosw': 'e cos w',
   'eclW.c.control.esinw': 'e sin w',
   'eclW.c.control.data': 'Compare with data',
