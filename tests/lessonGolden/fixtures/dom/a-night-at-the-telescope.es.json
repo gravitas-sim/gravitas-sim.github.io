@@ -1,0 +1,122 @@
+[
+ {
+  "depth": "core",
+  "role": "first",
+  "sid": "five-stations",
+  "position": [
+   1,
+   11
+  ],
+  "title": "Una noche en el telescopio, de principio a fin",
+  "subtitle": "Planificar, exponer, calibrar, medir e informar una estrella con un plan preparado: cinco estaciones, cada una con el número que entrega a la siguiente",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 11 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Cinco estaciones</h3><div class=\"inv-step-body\"><p>Una observación es una cadena. Un <strong>plan</strong> dice cuándo un objetivo está alto y a oscuras; una <strong>exposición</strong> es lo bastante larga para alcanzar una señal a ruido; una <strong>calibración</strong> convierte cuentas en una magnitud; una <strong>medida</strong> lee las cuentas de la imagen; y un <strong>informe</strong> da el número con aquello a lo que es bueno. Cada estación es un instrumento que ya conoces, y cada una entrega a la siguiente un número.</p><p>Esta investigación sigue un plan preparado: una estrella de magnitud 19 en el telescopio de 1,0 m de Las Cumbres, la noche del 29-01-2025 (Luna nueva), desde un sitio a 30° de latitud norte. Cada imagen y cada noche de estrellas patrón es <strong>sintética</strong>, y los valores de la instalación son los de la biblioteca de instrumentos; nadie ha observado esto. La primera estación es el planificador de noche.</p></div>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "graded",
+  "sid": "station-weather",
+  "position": [
+   3,
+   11
+  ],
+  "title": "Una noche en el telescopio, de principio a fin",
+  "subtitle": "Planificar, exponer, calibrar, medir e informar una estrella con un plan preparado: cinco estaciones, cada una con el número que entrega a la siguiente",
+  "body": "<p class=\"inv-step-count\">Paso 3 de 11 <span class=\"inv-step-kind\">pregunta</span></p><h3 class=\"inv-step-title\">Un plan supone noches despejadas</h3><div class=\"inv-step-body\"><p>Un plan para una noche no dice nada de las nubes. El <strong>planificador de estrategia</strong> de las investigaciones de estrategia de observación reparte tres visitas por noche en una quincena y saca el tiempo de una cadena declarada (el 60 por ciento de las noches despejadas, con persistencia). Lee su fila <strong>Visitas</strong>: cuántas visitas se ejecutaron de cuántas planificadas.</p></div><p class=\"inv-prompt\">¿Qué parte de las visitas planificadas se llevó el tiempo, en por ciento?</p><div class=\"inv-numeric\"><input type=\"text\" inputmode=\"decimal\" class=\"inv-answer-num\" data-numeric=\"a-night-at-the-telescope:station-weather\" value=\"\" placeholder=\"Tu valor en %\"><span class=\"inv-unit\">%</span><button type=\"button\" class=\"ui-button\" data-check-numeric=\"a-night-at-the-telescope:station-weather\">Comprobar</button></div><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> Me vendría bien una pista </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "marked",
+  "sid": "station-weather",
+  "position": [
+   3,
+   11
+  ],
+  "title": "Una noche en el telescopio, de principio a fin",
+  "subtitle": "Planificar, exponer, calibrar, medir e informar una estrella con un plan preparado: cinco estaciones, cada una con el número que entrega a la siguiente",
+  "body": "<p class=\"inv-step-count\">Paso 3 de 11 <span class=\"inv-step-kind\">pregunta</span></p><h3 class=\"inv-step-title\">Un plan supone noches despejadas</h3><div class=\"inv-step-body\"><p>Un plan para una noche no dice nada de las nubes. El <strong>planificador de estrategia</strong> de las investigaciones de estrategia de observación reparte tres visitas por noche en una quincena y saca el tiempo de una cadena declarada (el 60 por ciento de las noches despejadas, con persistencia). Lee su fila <strong>Visitas</strong>: cuántas visitas se ejecutaron de cuántas planificadas.</p></div><p class=\"inv-prompt\">¿Qué parte de las visitas planificadas se llevó el tiempo, en por ciento?</p><div class=\"inv-numeric\"><input type=\"text\" inputmode=\"decimal\" class=\"inv-answer-num\" data-numeric=\"a-night-at-the-telescope:station-weather\" value=\"42,9\" placeholder=\"Tu valor en %\"><span class=\"inv-unit\">%</span><button type=\"button\" class=\"ui-button\" data-check-numeric=\"a-night-at-the-telescope:station-weather\">Comprobar</button></div><p class=\"inv-feedback is-right\">Eso coincide. </p><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> Me vendría bien una pista </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "last",
+  "sid": "what-you-worked-out",
+  "position": [
+   11,
+   11
+  ],
+  "title": "Una noche en el telescopio, de principio a fin",
+  "subtitle": "Planificar, exponer, calibrar, medir e informar una estrella con un plan preparado: cinco estaciones, cada una con el número que entrega a la siguiente",
+  "body": "<p class=\"inv-step-count\">Paso 11 de 11 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Lo que averiguaste</h3><div class=\"inv-step-body\"><p>La estación 1 halló 8,1 horas utilizables con una masa de aire de 1,05 en una noche de Luna nueva, y el planificador de estrategia mostró que un plan de varias noches pierde el 43 por ciento de sus visitas con una cadena de tiempo declarada. La estación 2 pidió 59 segundos para una señal a ruido de 50, limitada por los fotones de la propia estrella. La estación 3 calibró con patrones a 0,008 magnitudes. La estación 4 halló la señal a ruido medida de la imagen a un sorteo de la predicción. La estación 5 combinó 0,022 y 0,008 en 0,023 magnitudes, y el término mayor, los fotones de la estrella, es el que hay que mejorar.</p><p>Cada imagen y noche de aquí es sintética y los valores de la instalación son los de la biblioteca; la cadena es una predicción con suposiciones declaradas, y deja fuera el error de aplanado y de resta de cielo, el amontonamiento, las nubes y una atmósfera cambiante. La siguiente investigación, <em>De fotones a un número</em>, traza la aritmética de las estaciones 2 a 5 en un solo cálculo.</p></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "quantitative",
+  "role": "first",
+  "sid": "five-stations",
+  "position": [
+   1,
+   13
+  ],
+  "title": "Una noche en el telescopio, de principio a fin",
+  "subtitle": "Planificar, exponer, calibrar, medir e informar una estrella con un plan preparado: cinco estaciones, cada una con el número que entrega a la siguiente",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 13 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Cinco estaciones</h3><div class=\"inv-step-body\"><p>Una observación es una cadena. Un <strong>plan</strong> dice cuándo un objetivo está alto y a oscuras; una <strong>exposición</strong> es lo bastante larga para alcanzar una señal a ruido; una <strong>calibración</strong> convierte cuentas en una magnitud; una <strong>medida</strong> lee las cuentas de la imagen; y un <strong>informe</strong> da el número con aquello a lo que es bueno. Cada estación es un instrumento que ya conoces, y cada una entrega a la siguiente un número.</p><p>Esta investigación sigue un plan preparado: una estrella de magnitud 19 en el telescopio de 1,0 m de Las Cumbres, la noche del 29-01-2025 (Luna nueva), desde un sitio a 30° de latitud norte. Cada imagen y cada noche de estrellas patrón es <strong>sintética</strong>, y los valores de la instalación son los de la biblioteca de instrumentos; nadie ha observado esto. La primera estación es el planificador de noche.</p></div>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Cuantitativo"
+ },
+ {
+  "depth": "quantitative",
+  "role": "graded",
+  "sid": "station-weather",
+  "position": [
+   3,
+   13
+  ],
+  "title": "Una noche en el telescopio, de principio a fin",
+  "subtitle": "Planificar, exponer, calibrar, medir e informar una estrella con un plan preparado: cinco estaciones, cada una con el número que entrega a la siguiente",
+  "body": "<p class=\"inv-step-count\">Paso 3 de 13 <span class=\"inv-step-kind\">pregunta</span></p><h3 class=\"inv-step-title\">Un plan supone noches despejadas</h3><div class=\"inv-step-body\"><p>Un plan para una noche no dice nada de las nubes. El <strong>planificador de estrategia</strong> de las investigaciones de estrategia de observación reparte tres visitas por noche en una quincena y saca el tiempo de una cadena declarada (el 60 por ciento de las noches despejadas, con persistencia). Lee su fila <strong>Visitas</strong>: cuántas visitas se ejecutaron de cuántas planificadas.</p></div><p class=\"inv-prompt\">¿Qué parte de las visitas planificadas se llevó el tiempo, en por ciento?</p><div class=\"inv-numeric\"><input type=\"text\" inputmode=\"decimal\" class=\"inv-answer-num\" data-numeric=\"a-night-at-the-telescope:station-weather\" value=\"\" placeholder=\"Tu valor en %\"><span class=\"inv-unit\">%</span><button type=\"button\" class=\"ui-button\" data-check-numeric=\"a-night-at-the-telescope:station-weather\">Comprobar</button></div><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> Me vendría bien una pista </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Cuantitativo"
+ },
+ {
+  "depth": "quantitative",
+  "role": "marked",
+  "sid": "station-weather",
+  "position": [
+   3,
+   13
+  ],
+  "title": "Una noche en el telescopio, de principio a fin",
+  "subtitle": "Planificar, exponer, calibrar, medir e informar una estrella con un plan preparado: cinco estaciones, cada una con el número que entrega a la siguiente",
+  "body": "<p class=\"inv-step-count\">Paso 3 de 13 <span class=\"inv-step-kind\">pregunta</span></p><h3 class=\"inv-step-title\">Un plan supone noches despejadas</h3><div class=\"inv-step-body\"><p>Un plan para una noche no dice nada de las nubes. El <strong>planificador de estrategia</strong> de las investigaciones de estrategia de observación reparte tres visitas por noche en una quincena y saca el tiempo de una cadena declarada (el 60 por ciento de las noches despejadas, con persistencia). Lee su fila <strong>Visitas</strong>: cuántas visitas se ejecutaron de cuántas planificadas.</p></div><p class=\"inv-prompt\">¿Qué parte de las visitas planificadas se llevó el tiempo, en por ciento?</p><div class=\"inv-numeric\"><input type=\"text\" inputmode=\"decimal\" class=\"inv-answer-num\" data-numeric=\"a-night-at-the-telescope:station-weather\" value=\"42,9\" placeholder=\"Tu valor en %\"><span class=\"inv-unit\">%</span><button type=\"button\" class=\"ui-button\" data-check-numeric=\"a-night-at-the-telescope:station-weather\">Comprobar</button></div><p class=\"inv-feedback is-right\">Eso coincide. </p><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> Me vendría bien una pista </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Cuantitativo"
+ },
+ {
+  "depth": "quantitative",
+  "role": "last",
+  "sid": "what-you-worked-out",
+  "position": [
+   13,
+   13
+  ],
+  "title": "Una noche en el telescopio, de principio a fin",
+  "subtitle": "Planificar, exponer, calibrar, medir e informar una estrella con un plan preparado: cinco estaciones, cada una con el número que entrega a la siguiente",
+  "body": "<p class=\"inv-step-count\">Paso 13 de 13 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Lo que averiguaste</h3><div class=\"inv-step-body\"><p>La estación 1 halló 8,1 horas utilizables con una masa de aire de 1,05 en una noche de Luna nueva, y el planificador de estrategia mostró que un plan de varias noches pierde el 43 por ciento de sus visitas con una cadena de tiempo declarada. La estación 2 pidió 59 segundos para una señal a ruido de 50, limitada por los fotones de la propia estrella. La estación 3 calibró con patrones a 0,008 magnitudes. La estación 4 halló la señal a ruido medida de la imagen a un sorteo de la predicción. La estación 5 combinó 0,022 y 0,008 en 0,023 magnitudes, y el término mayor, los fotones de la estrella, es el que hay que mejorar.</p><p>Cada imagen y noche de aquí es sintética y los valores de la instalación son los de la biblioteca; la cadena es una predicción con suposiciones declaradas, y deja fuera el error de aplanado y de resta de cielo, el amontonamiento, las nubes y una atmósfera cambiante. La siguiente investigación, <em>De fotones a un número</em>, traza la aritmética de las estaciones 2 a 5 en un solo cálculo.</p></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Cuantitativo"
+ }
+]
