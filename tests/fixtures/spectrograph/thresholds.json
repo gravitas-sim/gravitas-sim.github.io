@@ -34,10 +34,10 @@
       "continuumE": 20,
       "labelled": "synthetic: the lines and their wavelengths are the pack's; the intensities are invented; the truth manifest is the solution coefficients, the line list and the noise seed"
     },
-    "isolatedRule": "a lamp line is isolated when every other lamp line is farther than 2.5 FWHM (0.75 nm) away; a pair closer than that is a blend (the pack's Ca II H / H-epsilon, the two Mg b pairs and the Na D pair are such pairs)",
+    "isolatedRule": "a lamp line is isolated when every other lamp line is farther than 6 FWHM (1.8 nm) away, so that no neighbour reaches the 12-pixel fit window (amendment AM2; it was 2.5 FWHM); a pair closer than 2.5 FWHM (0.75 nm) is a blend (the pack's Ca II H / H-epsilon, the Mg b4 / b2 pair and the Na D pair are such pairs); the lamp's H-alpha (656.279 nm) lies outside the detector's 380 to 595 nm, so 22 of the 23 lamp lines fall on it",
     "science": {
       "continuum": "a blackbody of 6000 K (js/kernels/radiation planckLambda), scaled to 1.0e4 electrons per pixel at 500 nm",
-      "absorption": "Gaussian absorption lines at H-alpha, H-beta, H-gamma and H-delta of the line pack (air), each of intrinsic sigma 0.10 nm and central depth 0.40 before the instrument",
+      "absorption": "Gaussian absorption lines at H-beta, H-gamma, H-delta and H-epsilon of the line pack (air), each of intrinsic sigma 0.10 nm and central depth 0.40 before the instrument (amendment AM1: H-alpha was named and lies outside the reference spectrograph's 380 to 595 nm)",
       "velocityKmS": 120,
       "form": "relativistic Doppler factor on the rest wavelength in the stated medium"
     }
@@ -261,7 +261,7 @@
     {
       "id": "F2.slit.throughput",
       "group": "f",
-      "bound": "the long-slit throughput of a Gaussian seeing disk through a slit of width w and the seeing FWHM theta, erf(w / (2 sqrt(2) sigma_seeing)) with sigma_seeing = theta / 2.3548, against a numerical two-dimensional integral of the Gaussian over the slit (scipy.integrate.dblquad over a finite height of plus and minus 12 sigma) to an absolute 1e-8 at w / theta = 0.1, 0.5, 1, 2 and 5; the slit width that keeps a resolving power R, w = R_s theta / R, makes the throughput erf(sqrt(ln 2) R_s / R) and, at R equal to R_s, 0.76115 to a relative 1e-5",
+      "bound": "the long-slit throughput of a Gaussian seeing disk through a slit of width w and the seeing FWHM theta, erf(w / (2 sqrt(2) sigma_seeing)) with sigma_seeing = theta / 2.3548, against a numerical two-dimensional integral of the Gaussian over the slit (scipy.integrate.dblquad over a finite height of plus and minus 12 sigma) to an absolute 1e-8 at w / theta = 0.1, 0.5, 1, 2 and 5; the slit width that keeps a resolving power R, w = R_s theta / R, makes the throughput erf(sqrt(ln 2) R_s / R) and, at R equal to R_s, 0.760968108 to a relative 1e-5",
       "limits": {
         "absMax": 1e-8,
         "ratios": [0.1, 0.5, 1, 2, 5],
@@ -345,5 +345,27 @@
     ]
   },
   "notBuilt": "see scope.notBuilt",
-  "amendments": []
+  "amendments": [
+    {
+      "id": "AM1",
+      "when": "after the oracle script was written and before it produced results and before any kernel code existed",
+      "what": "the science exposure's four Balmer lines are H-beta, H-gamma, H-delta and H-epsilon, where the committed text named H-alpha, H-beta, H-gamma and H-delta; B1's pixel grid starts at 380 nm instead of 480 nm so that it holds them",
+      "why": "the reference spectrograph's solution (380 + 0.105 x - 1e-7 x^2 + 4e-12 x^3, 2048 pixels) covers 380 to 595 nm and H-alpha (656.279 nm) is outside it; the oracle's own root find failed on it. No bound, tolerance or count moved",
+      "boundMoved": false
+    },
+    {
+      "id": "AM2",
+      "when": "after the oracle's first results and before any kernel code existed",
+      "what": "the isolation rule of the reference arc is a gap of more than 6 FWHM (1.8 nm), where the committed text said 2.5 FWHM (0.75 nm); 16 lines were isolated by the old rule, 14 are by the new",
+      "why": "the oracle's own fits showed two lines (Mg b1, He I 5876) with a reduced chi-square of 1894 and 363, because a neighbour (Mg b2 at 1.09 nm, Na D2 at 1.43 nm) lies inside the 12-pixel (1.26 nm) fit window or its wing does. The harness's isolation rule was too weak for its own window. It only removes lines from the ensembles; no bound, tolerance or count of a check moved",
+      "boundMoved": false
+    },
+    {
+      "id": "AM3",
+      "when": "before any kernel code existed",
+      "what": "F2 states the throughput at R equal to R_s as 0.760968108 (erf(sqrt(ln 2))), where the committed text said 0.76115",
+      "why": "a miscopied numeral: the stated closed form erf(sqrt(ln 2)) is 0.760968108 and the oracle's dblquad agrees to 1e-12; the tolerance (1e-5 relative) and the expression are unchanged",
+      "boundMoved": false
+    }
+  ]
 }
