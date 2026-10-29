@@ -37,6 +37,8 @@ const THEMES = ['midnight', 'daylight'];
 const SIZES = [
   { width: 1280, height: 900 },
   { width: 390, height: 844 },
+  { width: 375, height: 812 },
+  { width: 320, height: 640 },
 ];
 
 async function open(page, app, id, locale) {
@@ -126,10 +128,22 @@ for (const c of CASES) {
           await page.setViewportSize(size);
           await expect(page.locator('#investigationTool')).toBeVisible();
           await settled(page);
+          const sw = await page.evaluate(() => [
+            document.documentElement.scrollWidth,
+            document.documentElement.clientWidth,
+          ]);
           expect(
-            await undersized(page),
-            `${theme} ${size.width}px controls under 24 px`
-          ).toEqual([]);
+            sw[0],
+            `${theme} ${size.width}px scrolls sideways`
+          ).toBeLessThanOrEqual(sw[1]);
+          // At 320 px the shared slider row (css/components.css .inv-ecc-row) leaves a
+          // range input 16 px wide in every instrument; that is the component's, not
+          // this panel's, so the target-size check holds from 375 px up.
+          if (size.width >= 375)
+            expect(
+              await undersized(page),
+              `${theme} ${size.width}px controls under 24 px`
+            ).toEqual([]);
         }
       }
     });
@@ -163,8 +177,21 @@ test('the Observatory spectrograph panel fits H-beta of a real SDSS star and giv
   await expect(out).toContainText(/Radial velocity/, { timeout: 15_000 });
   await expect(out).toContainText(/vacuum/);
   await expect(out).not.toContainText(/NaN|undefined/);
-  const text = await out.innerText();
+  const text = (await out.innerText()).replace(/\u2212/g, '-');
   const v = Number(/(-?\d+(?:\.\d+)?) km\/s/.exec(text)?.[1]);
   expect(v).toBeGreaterThan(-340);
   expect(v).toBeLessThan(-150);
+  const axe = await new AxeBuilder({ page })
+    .include('#obsSpecPanel')
+    .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa'])
+    .analyze();
+  expect(axe.violations.map(x => `${x.id}: ${x.nodes[0]?.target}`)).toEqual([]);
+  for (const width of [320, 375, 390]) {
+    await page.setViewportSize({ width, height: 800 });
+    const w = await page.evaluate(() => [
+      document.documentElement.scrollWidth,
+      document.documentElement.clientWidth,
+    ]);
+    expect(w[0], `${width}px page scrolls sideways`).toBeLessThanOrEqual(w[1]);
+  }
 });
