@@ -50,9 +50,10 @@ describe('the digits a literal is written to', () => {
 });
 
 describe('the allowlist only shrinks', () => {
-  test('there are 52 numeric literals, and each is in exactly one table', () => {
+  test('there are 65 numeric literals, and each is in exactly one table', () => {
     // 52 after Plan an Exposure (Prompt 210): two literals, both model-checked.
-    expect(literals).toHaveLength(52);
+    // 65 after the five observing closeout investigations (Prompt 216): 13 more, all model-checked.
+    expect(literals).toHaveLength(65);
     for (const l of literals) {
       const homes = [MODELS, SOURCED, UNCHECKED].filter(t => t[l.key]);
       expect({ key: l.key, homes: homes.length }).toEqual({
@@ -68,7 +69,7 @@ describe('the allowlist only shrinks', () => {
     expect(UNCHECKED_CEILING).toBe(34);
     expect(
       Object.keys(MODELS).length + Object.keys(SOURCED).length + UNCHECKED_COUNT
-    ).toBe(52);
+    ).toBe(65);
   });
 
   test('every entry names a real literal and gives a reason', () => {
@@ -216,7 +217,8 @@ describe('the instructor expectations record', () => {
     // 473 after Counts to Magnitudes (Prompt 212): 1 more.
     // 476 after Why Two Lines Become One (Prompt 213): 3 more.
     // 480 after the three survey-design investigations (Prompt 215): 4 more.
-    expect(total).toBe(480);
+    // 507 after the five observing closeout investigations (Prompt 216): 27 more.
+    expect(total).toBe(507);
   });
 
   test('a /1 record keyed by step number migrates to the same text', () => {

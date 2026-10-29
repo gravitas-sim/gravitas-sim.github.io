@@ -2962,7 +2962,7 @@ const CONTENT = {
       'The panel’s “sidereal time at midnight” is for the midnight that ends the date (00:00 UT on the next day at longitude 0), which is why the arithmetic uses 720 minutes after noon.',
       'The panel crosses the star at its apparent place (precession, nutation, aberration); the investigation separates precession, the largest of the three, and leaves the others.',
       'The first-order formulas are good to a tenth of a second of time and a couple of arcseconds over 25 years at this declination; they fail near the pole.',
-      'The reflection is not marked.',
+      'The reflection is not marked: it asks which of the two clocks a student would trust for a pointing.',
     ],
     [
       'Why do observatories keep sidereal time as well as clock time?',
@@ -3278,10 +3278,10 @@ const EXPECTATIONS = {
 const BANDS = {
   'which-instrument-for-which-question': {
     core: 'short',
-    quantitative: 'short',
+    quantitative: 'medium',
   },
-  'the-sky-background': { core: 'short', quantitative: 'short' },
-  'coordinates-and-time': { core: 'short', quantitative: 'short' },
+  'the-sky-background': { core: 'short', quantitative: 'medium' },
+  'coordinates-and-time': { core: 'short', quantitative: 'medium' },
   'a-night-at-the-telescope': { core: 'medium', quantitative: 'medium' },
   'from-photons-to-a-number': { core: 'medium', quantitative: 'medium' },
 };

@@ -158,7 +158,9 @@ describe('every lesson', () => {
           expect(Number.isFinite(step.answer)).toBe(true);
           expect(step.tolerance).toBeGreaterThan(0);
         }
-        if (step.kind === 'short') expect(step.rubric).toBeTruthy();
+        // A reflection is never marked, so it has no rubric (author:check forbids one).
+        if (step.kind === 'short' && !step.reflect)
+          expect(step.rubric).toBeTruthy();
         if (step.type === 'measure') {
           expect(step.fields.length).toBeGreaterThan(0);
           const ids = step.fields.map(f => f.id);
