@@ -157,6 +157,12 @@ export default {
     'Por qué una visita por noche a la misma hora no distingue un período de sus alias, cómo los tiempos irregulares o más noches deshacen el empate, por qué más noches desde un mismo sitio no quitan el alias del día sidéreo y qué cuesta el mal tiempo.',
     'El veredicto es de una sinusoide en ruido blanco, no de un eclipse ni de una llamarada; el tiempo es un sorteo con semilla que pierde noches enteras, no un pronóstico; la Luna entra solo por el límite de separación del planificador; las series son sintéticas, con el período que fijas como verdad.',
   ],
+  surveyDesign: [
+    'Una instalación de la biblioteca de instrumentos, una clase de fuente con una pendiente de conteos declarada, una exposición, visitas a apilar, noches y un umbral de detección, con una profundidad y un área objetivo.',
+    'La profundidad que alcanza el plan, el área que compran sus noches, las fuentes que encontraría con un intervalo de Poisson, los falsos positivos que deja pasar su umbral y la fiabilidad, un veredicto que nombra cada razón por la que un plan no es viable, y la exposición que encuentra más fuentes a tiempo fijo.',
+    'Por qué lo profundo gana solo donde los conteos de una clase crecen más rápido que 0,8 dex por magnitud, por qué el tiempo hasta una profundidad va como el seeing al cuadrado entre la capacidad de recoger luz, qué cuesta un umbral en falsos positivos, y que muchos planes distintos pueden cumplir un mismo objetivo.',
+    'Las clases son leyes de potencias declaradas, modelos didácticos y no poblaciones reales; los conteos son solo de Poisson (sin agrupamiento ni varianza cósmica); el ruido es gaussiano y los falsos positivos son una tasa de elementos independientes, así que un detector real es peor; el rendimiento, la corriente oscura y el cambio de apuntado son supuestos; el recuadro es sintético.',
+  ],
   survey: [
     'Estrellas sintéticas de brillo conocido a distancias conocidas: estrellas contadas y perdidas, el sesgo por capas de distancia, o la función de luminosidad frente a su verdad.',
     'Cómo cambian la parte contada, el sesgo y la función de luminosidad recuperada al cambiar el límite de magnitud, la curva de completitud o el corte de paralaje.',

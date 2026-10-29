@@ -160,6 +160,12 @@ export default {
     'Why one visit a night at the same time cannot tell a period from its aliases, how irregular times or more nights break the tie, why more nights from one site do not remove the sidereal-day alias, and what weather costs.',
     'The verdict is a sinusoid in white noise, not an eclipse or a flare; the weather is a seeded draw that loses whole nights, not a forecast; the Moon enters only through the planner’s separation limit; the series are synthetic, with the period you set as their truth.',
   ],
+  surveyDesign: [
+    'A facility from the instrument library, a class of source with a stated counts slope, an exposure, visits to stack, nights and a detection threshold, with a goal depth and area to meet.',
+    'The depth the plan reaches, the area its nights buy, the sources it would find with a Poisson interval, the false positives its threshold lets through and the reliability, a verdict that names every reason a plan is not feasible, and the exposure that finds most sources at fixed time.',
+    'Why deep wins only where the counts of a class rise faster than 0.8 dex a magnitude, why the time to a depth goes as the seeing squared over the collecting power, what a threshold costs in false positives, and that many different plans can meet one goal.',
+    'The classes are stated power laws, teaching models and not real populations; counts are Poisson only (no clustering or cosmic variance); noise is Gaussian and false positives are an independent-element rate, so a real detector is worse; a throughput, a dark current and a slew are supplied; the patch is synthetic.',
+  ],
   survey: [
     'Synthetic stars of known brightness at known distances: counted and missed stars, the bias by shells of distance, or the luminosity function against its truth.',
     'How the counted share, the bias and the recovered luminosity function change as the magnitude limit, the completeness curve or the parallax cut changes.',

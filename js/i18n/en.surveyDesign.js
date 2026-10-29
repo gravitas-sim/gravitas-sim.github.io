@@ -1,0 +1,125 @@
+// The survey-design panels' words, in English (Prompt 215).
+export const EN_SURVEYDESIGN = {
+  'sdW.facility.0': 'LCO 0.35 m, QHY600 (V)',
+  'sdW.facility.1': 'LCO 1.0 m, Sinistro (V)',
+  'sdW.facility.2': 'Rubin 8.4 m, LSST camera (r)',
+  'sdW.class.0': 'Euclidean class (counts slope 0.6)',
+  'sdW.class.1': 'Flattened class (slope 0.4)',
+  'sdW.class.2': 'Steep class (slope 1.0)',
+  'sdW.v.seconds': '{t} s',
+  'sdW.v.mag': '{m} mag',
+  'sdW.v.deg2': '{a} deg2',
+  'sdW.v.nights': '{n} nights',
+  'sdW.v.sigma': '{s} sigma',
+  'sdW.t.title': 'Deep or wide: the trade-off at fixed time',
+  'sdW.t.note':
+    'The same nights can go into long exposures that reach faint sources over a small area, or short ones that cover a large area more shallowly. Each exposure costs its overhead too. The curves show the area surveyed and the sources found against the exposure; the best exposure for the class is where the sources found peak. All numbers are a model with stated limits, and the class is a teaching model, not a real population.',
+  'sdW.t.control.facility': 'Facility',
+  'sdW.t.control.cls': 'Class of source',
+  'sdW.t.control.exposure': 'Exposure per pointing',
+  'sdW.t.control.nights': 'Nights',
+  'sdW.axis.exposure': 'Exposure (log10 seconds)',
+  'sdW.axis.logcount': 'log10 of the area (deg2) or the sources found',
+  'sdW.legend.area': 'Area surveyed',
+  'sdW.legend.found': 'Sources found',
+  'sdW.legend.chosen': 'Your exposure',
+  'sdW.legend.optimum': 'Best exposure found',
+  'sdW.row.model': 'Model',
+  'sdW.m.trade':
+    'The CCD equation for a matched-filter point source, the area the nights buy (field over the cycle of exposure plus overhead), the counts of the class and the completeness of a 5 sigma threshold',
+  'sdW.t.row.setup': 'Setup',
+  'sdW.t.v.setup':
+    'seeing {fwhm} arcsec, sky {sky} mag per square arcsec, field {fov} deg2, overhead {oh} s a frame (cited table; throughput supplied)',
+  'sdW.t.row.depth': 'Depth',
+  'sdW.t.v.depth': '{m} at 5 sigma (half of the sources that bright are found)',
+  'sdW.t.row.area': 'Area and time',
+  'sdW.t.v.area': '{a} deg2 in {p} pointings of {t} s plus {o} s overhead',
+  'sdW.t.row.found': 'Sources found',
+  'sdW.t.v.found':
+    '{n}, give or take {s} (a Poisson count; real surveys scatter more)',
+  'sdW.t.row.best': 'Best exposure',
+  'sdW.t.v.best':
+    'about {t} s found most sources; the sky-limited rule gives {r} s, which undershoots because the source and the detector add noise',
+  'sdW.t.v.deepwins':
+    'about {t} s found most sources (the counts of this class rise faster than 0.8 dex a magnitude, so the longest exposure shown wins)',
+  'sdW.t.row.rule': 'The rule',
+  'sdW.t.v.rule':
+    'Sky-limited, the depth gains 1.25 mag per decade of exposure, so the counts go as exposure to the power {b} against the area as one over exposure: deep wins only where the counts rise faster than 0.8 dex a magnitude (this class: {a})',
+  'sdW.row.assumes': 'Leaves out',
+  'sdW.t.a':
+    'clustering and cosmic variance (counts are Poisson), crowding, dust, the Moon, weather (a 0.6 clear fraction is assumed), slews between fields beyond a 5 s allowance, and every real population: the class is a stated power law',
+  'sdW.p.title': 'A survey plan and what it would find',
+  'sdW.p.note':
+    'Choose a facility, an exposure, a number of visits to stack, nights and a detection threshold. The panel gives the depth, the area, the sources the plan would find, the false positives it lets through and whether it meets your goal. The patch is a synthetic piece of sky: the sources found are filled, the ones missed are open, and the crosses are false positives.',
+  'sdW.p.control.facility': 'Facility',
+  'sdW.p.control.cls': 'Class of source',
+  'sdW.p.control.exposure': 'Exposure per visit',
+  'sdW.p.control.visits': 'Visits stacked',
+  'sdW.p.control.nights': 'Nights',
+  'sdW.p.control.threshold': 'Detection threshold',
+  'sdW.p.control.depth': 'Goal depth',
+  'sdW.p.control.area': 'Goal area',
+  'sdW.axis.patchx': 'Position across the patch',
+  'sdW.axis.patchy': 'Position up the patch',
+  'sdW.legend.found2': 'Found',
+  'sdW.legend.missed': 'Missed',
+  'sdW.legend.false': 'False positive',
+  'sdW.p.row.depth': 'Depth',
+  'sdW.p.v.depth':
+    '{m} at the threshold (half found); the 5 sigma depth is {m5}',
+  'sdW.p.row.area': 'Area and time',
+  'sdW.p.v.area':
+    '{a} deg2 in {p} pointings of {v} x {t} s, using {u} hours of {h}',
+  'sdW.p.row.found': 'Sources found',
+  'sdW.p.v.found':
+    '{n} (68 percent interval {lo} to {hi}) of {s} in the class to that depth',
+  'sdW.p.row.false': 'False positives',
+  'sdW.p.v.false': '{n} expected; reliability {r} percent',
+  'sdW.p.v.unreliable':
+    ', so most of the detections would be false: unreliable',
+  'sdW.p.row.verdict': 'Verdict',
+  'sdW.p.v.feasible': 'feasible: it reaches the goal depth and the goal area',
+  'sdW.p.v.not': 'not feasible: {why}',
+  'sdW.reason.depth': 'it is not deep enough',
+  'sdW.reason.area': 'it does not cover the area',
+  'sdW.reason.time': 'no pointing fits in the nights',
+  'sdW.reason.saturates': 'the sky fills the pixels in one exposure',
+  'sdW.reason.reliability': 'too many detections are false',
+  'sdW.reason.outside-count-model':
+    'the depth is beyond the range of the class',
+  'sdW.p.row.patch': 'The patch',
+  'sdW.p.v.patch':
+    'a synthetic {a} arcmin by {a} arcmin piece of sky: {n} of the {s} sources drawn are found; a survey of this size would expect about {e}',
+  'sdW.p.row.source': 'Which numbers are cited',
+  'sdW.p.v.source':
+    'the facility table states the pixel scale, read noise, field and cycle time; the throughput, the dark current and the slew are supplied',
+  'sdW.p.a':
+    'Poisson counts only, a power-law class that is a teaching model, a Gaussian noise and an independent-element false-positive rate: a real detector is worse. The depth is for a point source in the matched filter.',
+  'sdW.c.title': 'Two telescopes, one question',
+  'sdW.c.note':
+    'The same goal, a depth over an area, for two facilities. The panel gives the visits each needs to reach the depth, the hours to cover the area and the ratio. A wide field and a large mirror help in different ways: the mirror makes each pointing deeper, the field covers more of the sky in each pointing.',
+  'sdW.c.control.a': 'First facility',
+  'sdW.c.control.b': 'Second facility',
+  'sdW.c.control.exposure': 'Exposure per visit',
+  'sdW.c.control.depth': 'Goal depth',
+  'sdW.c.control.area': 'Goal area',
+  'sdW.axis.facility': 'Facility (first, second)',
+  'sdW.axis.hours': 'log10 of the hours to reach the goal',
+  'sdW.legend.hours': 'Hours to the goal',
+  'sdW.c.row.a': 'First',
+  'sdW.c.row.b': 'Second',
+  'sdW.c.v.each':
+    '{v} visits of {t} s in each of {p} pointings: {h} hours ({n} nights)',
+  'sdW.c.v.cannot': 'cannot: {why}',
+  'sdW.c.row.ratio': 'Ratio',
+  'sdW.c.v.ratio': 'the second takes {r} times as long as the first',
+  'sdW.c.row.rate': 'Survey rate',
+  'sdW.c.v.rate': '{a} against {b} deg2 an hour to this depth',
+  'sdW.c.row.rule': 'The rule of thumb',
+  'sdW.c.v.rule':
+    'Sky-limited, the time to a depth goes as the seeing squared over the collecting power: {r} here for one pointing. The field then sets the area each pointing covers.',
+  'sdW.reason.saturates2': 'the exposure fills the pixels with sky',
+  'sdW.reason.not-reachable': 'no stack of this exposure reaches the depth',
+  'sdW.c.a':
+    'The same detection threshold and the same exposure per visit for both, a supplied throughput of 0.5 each, no overlap or gaps between pointings and the same clear fraction. A different exposure would change the answer.',
+};

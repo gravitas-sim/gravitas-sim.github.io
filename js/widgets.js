@@ -421,6 +421,12 @@ export const LAZY_FAMILIES = Object.freeze({
     'STRATEGY_WIDGETS',
     ['strategy-window', 'strategy-plan']
   ),
+  surveyDesign: familyEntry(
+    () => import('./surveyDesignWidgets.js'),
+    './surveyDesignWidgets.js',
+    'SURVEY_DESIGN_WIDGETS',
+    ['survey-design-tradeoff', 'survey-design-plan', 'survey-design-compare']
+  ),
   telescope: familyEntry(
     () => import('./telescopeWidgets.js'),
     './telescopeWidgets.js',
@@ -623,6 +629,7 @@ export async function whenWidgetsReady() {
     'effects',
     'strategy',
     'photcal',
+    'surveyDesign',
   ];
   await Promise.all(families.filter(f => !late.includes(f)).map(loadFamily));
   for (const f of late) await loadFamily(f);
