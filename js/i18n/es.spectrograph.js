@@ -130,4 +130,36 @@ export const ES_SPECTROGRAPH = {
   'specW.axis.snr': 'Señal a ruido de la línea',
   'specW.legend.now': 'este ajuste',
   'specW.legend.best': 'el máximo',
+  'specObs.note':
+    'Elige una línea e indica el poder de resolución del instrumento. La línea se ajusta como una gaussiana integrada por píxel sobre un continuo recto (el modelo de instrumento de Por qué dos líneas se vuelven una), y la velocidad se rechaza cuando la longitud de onda en reposo y el espectro no están en el mismo medio.',
+  'specObs.line': 'Línea en reposo',
+  'specObs.R': 'Poder de resolución del instrumento',
+  'specObs.fit': 'Ajustar la línea',
+  'specObs.none': 'Ninguna línea de la lista cae dentro de este espectro.',
+  'specObs.notSpectrum':
+    'Este panel lee un espectro con eje de longitud de onda.',
+  'specObs.row.centre': 'Centro ajustado',
+  'specObs.row.width': 'FWHM ajustado frente al del instrumento',
+  'specObs.row.sampling': 'Muestreo (píxeles por FWHM)',
+  'specObs.row.R': 'Poder de resolución que implica el ancho',
+  'specObs.row.flag': 'Ensanchada',
+  'specObs.row.velocity': 'Velocidad radial',
+  'specObs.row.medium': 'Medio del espectro',
+  'specObs.row.assumes': 'Qué supone',
+  'specObs.v.centre':
+    '{c} nm, incertidumbre {s} nm (errores a partir de la dispersión de los píxeles respecto al ajuste: se supone ruido blanco)',
+  'specObs.v.width': '{w} nm frente a {i} nm',
+  'specObs.v.R': '{r}',
+  'specObs.v.broad':
+    'sí: más ancha de lo que permite el instrumento, así que una mezcla o una línea con ancho propio (una marca, no una prueba)',
+  'specObs.v.narrow': 'no: coherente con el ancho del instrumento',
+  'specObs.v.velocity': '{v} km/s, incertidumbre {s} km/s',
+  'specObs.v.refused':
+    'rechazada: el espectro está en {a} y la longitud de onda en reposo en {b}; el panel nunca convierte entre medios en silencio',
+  'specObs.v.unknown':
+    'rechazada: el espectro no dice si sus longitudes de onda están en aire o en vacío',
+  'specObs.v.fail': 'sin ajuste: {r}',
+  'specObs.a':
+    'Un poder de resolución constante a lo largo de la línea y una función de dispersión gaussiana; un continuo recto bajo la línea; píxeles tal como los da el archivo (un espectro remuestreado por la cadena de reducción tiene píxeles correlacionados, así que la incertidumbre es una cota inferior).',
+  'specObs.plot': 'El espectro alrededor de la línea con el perfil ajustado',
 };

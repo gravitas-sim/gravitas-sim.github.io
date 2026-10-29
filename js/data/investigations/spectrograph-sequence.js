@@ -399,7 +399,7 @@ export const WHY_TWO_LINES_BECOME_ONE_DEEPER = {
           id: 'off',
           label: 'The offset of the mix-up',
           unit: 'km/s',
-          compute: v => 299792.458 * (486.2708 / 486.135 - 1),
+          compute: () => 299792.458 * (486.2708 / 486.135 - 1),
           decimals: 1,
         },
       ],

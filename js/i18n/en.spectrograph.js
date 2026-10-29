@@ -129,4 +129,35 @@ export const EN_SPECTROGRAPH = {
   'specW.axis.snr': 'Signal to noise of the line',
   'specW.legend.now': 'this setting',
   'specW.legend.best': 'the maximum',
+  'specObs.note':
+    'Pick a line and state the instrument’s resolving power. The line is fitted as a pixel-integrated Gaussian on a straight continuum (the instrument model of Why Two Lines Become One), and the velocity is refused when the rest wavelength and the spectrum are not in the same medium.',
+  'specObs.line': 'Rest line',
+  'specObs.R': 'Resolving power of the instrument',
+  'specObs.fit': 'Fit the line',
+  'specObs.none': 'No line of the list falls inside this spectrum.',
+  'specObs.notSpectrum': 'This panel reads a spectrum with a wavelength axis.',
+  'specObs.row.centre': 'Fitted centre',
+  'specObs.row.width': 'Fitted FWHM against the instrument’s',
+  'specObs.row.sampling': 'Sampling (pixels per FWHM)',
+  'specObs.row.R': 'Resolving power the width implies',
+  'specObs.row.flag': 'Broadened',
+  'specObs.row.velocity': 'Radial velocity',
+  'specObs.row.medium': 'Medium of the spectrum',
+  'specObs.row.assumes': 'What it assumes',
+  'specObs.v.centre':
+    '{c} nm, uncertainty {s} nm (errors from the scatter of the pixels about the fit: white noise assumed)',
+  'specObs.v.width': '{w} nm against {i} nm',
+  'specObs.v.R': '{r}',
+  'specObs.v.broad':
+    'yes: wider than the instrument allows, so a blend or a line with a width of its own (a flag, not a proof)',
+  'specObs.v.narrow': 'no: consistent with the instrument’s width',
+  'specObs.v.velocity': '{v} km/s, uncertainty {s} km/s',
+  'specObs.v.refused':
+    'refused: the spectrum is in {a} and the rest wavelength in {b}; the panel never converts between media silently',
+  'specObs.v.unknown':
+    'refused: the spectrum does not say whether its wavelengths are in air or in vacuum',
+  'specObs.v.fail': 'no fit: {r}',
+  'specObs.a':
+    'A constant resolving power across the line and a Gaussian line-spread function; a straight continuum under the line; pixels as the file gives them (a spectrum resampled by the pipeline has correlated pixels, so the uncertainty is a lower bound).',
+  'specObs.plot': 'The spectrum around the line with the fitted profile',
 };

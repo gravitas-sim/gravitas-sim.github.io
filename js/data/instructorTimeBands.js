@@ -82,7 +82,7 @@ export const LESSON_BANDS = Object.freeze({
   ...EXPOSURE.bands,
   ...STRATEGY.bands,
   ...TELESCOPE.bands,
-    ...SPECTROGRAPH.bands,
+  ...SPECTROGRAPH.bands,
   ...SATURATED_STAR.bands,
   'keplers-laws': { core: 'medium', quantitative: 'long', advanced: 'long' },
   'retrograde-motion': { core: 'medium' },

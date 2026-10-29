@@ -135,3 +135,36 @@ for (const c of CASES) {
     });
   }
 }
+
+test('the Observatory spectrograph panel fits H-beta of a real SDSS star and gives a velocity with its medium', async ({
+  page,
+}) => {
+  test.slow();
+  await page.goto('/observatory/', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('html')).toHaveAttribute('data-ready', 'true', {
+    timeout: 30_000,
+  });
+  await page.locator('#obsFixture').selectOption('sdss-a');
+  await page.locator('#obsOpen').click();
+  await expect(page.locator('#obsTitle')).toContainText('SDSS', {
+    timeout: 30_000,
+  });
+  await expect(page.locator('#obsSpecPanel')).toBeVisible();
+  await page.locator('#obsSpecPanel summary').click();
+  await page.locator('#obsSpecLine').selectOption('h-beta');
+  // the archive's thinned spectrum has about 1 pixel per FWHM at R = 1800: the panel says so
+  await page.locator('#obsSpecFit').click();
+  await expect(page.locator('#obsSpecOut')).toContainText(/pixel wide/, {
+    timeout: 15_000,
+  });
+  await page.locator('#obsSpecR').fill('1200');
+  await page.locator('#obsSpecFit').click();
+  const out = page.locator('#obsSpecOut');
+  await expect(out).toContainText(/Radial velocity/, { timeout: 15_000 });
+  await expect(out).toContainText(/vacuum/);
+  await expect(out).not.toContainText(/NaN|undefined/);
+  const text = await out.innerText();
+  const v = Number(/(-?\d+(?:\.\d+)?) km\/s/.exec(text)?.[1]);
+  expect(v).toBeGreaterThan(-340);
+  expect(v).toBeLessThan(-150);
+});

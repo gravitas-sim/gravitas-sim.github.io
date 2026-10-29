@@ -292,6 +292,7 @@ export const EN_OBSERVATORY = {
   'obs.table.next': 'Next rows',
   'obs.export.json': 'Save as JSON (everything, with your changes)',
   'obs.export.csv': 'Save the rows as CSV',
+  'specObs.title': 'Spectrograph: fit a line with the instrument model',
   'obs.cmp.title': 'Compare a model with the data',
   'obs.fit.title': 'Fit a model (diagnostic)',
   'obs.sky.title': 'Sky: Galactic map and proper-motion vectors',

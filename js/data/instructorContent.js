@@ -26,7 +26,7 @@ export const INSTRUCTOR_CONTENT = {
   ...EXPOSURE.content,
   ...STRATEGY.content,
   ...TELESCOPE.content,
-    ...SPECTROGRAPH.content,
+  ...SPECTROGRAPH.content,
   ...SATURATED_STAR.content,
   'extending-an-experiment': {
     topic:
