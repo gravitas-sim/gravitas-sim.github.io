@@ -11,15 +11,15 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 86 investigations and 1249 steps: 1157 steps
+Across 87 investigations and 1257 steps: 1165 steps
 declare a scene, 157 let a reader change one, 167 read the
-running integration, 748 show a prescribed model result, 146 draw
-on a stored dataset, 627 put a self-contained panel beside the text,
-329 keep something, and 58 are prose.
-Of 166 prediction loops, 166 are returned to,
-166 produce a measurement before they are answered, and
+running integration, 756 show a prescribed model result, 146 draw
+on a stored dataset, 635 put a self-contained panel beside the text,
+332 keep something, and 58 are prose.
+Of 168 prediction loops, 168 are returned to,
+168 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
-166 hold their marking until the experiment settles them.
+168 hold their marking until the experiment settles them.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -1224,4 +1224,18 @@ Of 166 prediction loops, 166 are returned to,
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:telescope`, control telescope/aperture, measures the dip between two stars 1 arcsecond apart, in percent of the light at a star, with 0.6 arcseconds of seeing: 0 at 10 cm and 50.3 at 40 cm, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## The Saturated Star (`the-saturated-star`)
+
+- **Steps:** 8. Scene declared on 8; a reader can change something on 0; 8 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 8 prescribed model, 0 stored dataset, 8 self-contained panel.
+- **What students do:** move-an-instrument-control, commit-a-prediction, record-values, choose-an-option.
+- **Objects the steps declare:** star.
+- **Instruments:** detector-effects.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** bright-star-predict → clipped-star, magnitude-error, why-too-faint → clipped-star; trail-predict → trail, a-ray → trail.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment:** not yet reviewed.
 

@@ -196,6 +196,12 @@ export default {
     'Which aperture shows a close pair as two, how aperture and exposure bring out a faint star, why the width of a star is not the telescope’s limit, and why a bigger ground telescope stops resolving finer detail near the seeing.',
     'The frames are synthetic: an Airy pattern convolved with a Moffat seeing profile of stated width, one wavelength, no aberrations, adaptive optics or spider, a box pixel. The seeing is an input, not a site.',
   ],
+  effects: [
+    'A synthetic frame of one bright star and some fainter ones, made with the detector effects you switch on: a nonlinear response near the full well, cosmic-ray tracks and charge bleeding along columns, and a profile width you set against the pixel.',
+    'The photometry tool’s answer for each star: a flux with its error, or a refusal with the reason, beside the number it would have given had it ignored the flags, and the sidecar flags near the star (saturated, bleed, cosmic ray, nonlinear).',
+    'Why the bright star’s magnitude is wrong, where the response stops being linear and a measurement is safe, what a bleed trail does to a star on its column, and what undersampling does to the peak pixel.',
+    'The frames are synthetic and the effects are stated models: a tanh roll-off, a track deposit and a column spill rule, not the measured response of any detector.',
+  ],
   atmosphere: [
     'The temperature sunlight alone gives a planet beside the temperature measured there, a one-layer and a gray greenhouse side by side for one planet, or how quickly the pressure falls with height. Or four secondary-eclipse depths with the temperature each gives, or a planet’s phase curve with the albedo it fixes.',
     'How far the measured temperature of Venus, Earth, Mars and the giant planets is from their equilibrium temperature, what emissivity or optical depth each greenhouse model needs to close the gap, and the scale height each body implies.',

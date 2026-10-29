@@ -391,6 +391,12 @@ export const LAZY_FAMILIES = Object.freeze({
     'TIDE_WIDGETS',
     ['tides-roche', 'tides-resonance', 'tides-moon', 'tides-heating']
   ),
+  effects: familyEntry(
+    () => import('./effectsWidgets.js'),
+    './effectsWidgets.js',
+    'EFFECTS_WIDGETS',
+    ['detector-effects']
+  ),
   habitabilityLimits: familyEntry(
     () => import('./habitabilityLimitsWidgets.js'),
     './habitabilityLimitsWidgets.js',
@@ -588,7 +594,8 @@ export async function whenWidgetsReady() {
   // does, and its words (js/i18n/index.js): the same failure, so it too is
   // loaded after the rest. No import is added here either.
   const families = Object.keys(LAZY_FAMILIES);
-  const late = ['variables', 'crater', 'telescope'];
+  // The effects family reaches the same measuring layer, and is loaded after the rest for the same reason.
+  const late = ['variables', 'crater', 'telescope', 'effects'];
   await Promise.all(families.filter(f => !late.includes(f)).map(loadFamily));
   for (const f of late) await loadFamily(f);
   const results = await Promise.all([...familyReady.values()]);

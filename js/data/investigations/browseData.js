@@ -356,4 +356,8 @@ export const BROWSE_META = {
     tags: ['observing'],
     numericCount: 0,
   },
+  'the-saturated-star': {
+    tags: ['observing'],
+    numericCount: 0,
+  },
 };

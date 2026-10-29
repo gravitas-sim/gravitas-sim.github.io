@@ -116,6 +116,7 @@ export const FAMILY_IDS = Object.freeze({
   cosmology: ['hubble-law', 'hubble-diagram', 'redshift-wedge'],
   detector: ['ccd-frames', 'ccd-snr', 'diff-photometry'],
   telescope: ['telescope'],
+  effects: ['detector-effects'],
   sky: [
     'sky-turning',
     'sky-seasons',
