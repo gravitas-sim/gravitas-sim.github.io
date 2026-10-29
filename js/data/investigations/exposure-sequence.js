@@ -22,7 +22,9 @@ const near = (x, target, tolerance) =>
 const STAGE = {
   spacing: 150,
   fit: true,
-  stars: [{ role: 'star', name: 'A star to be observed', teffK: 5800, lumSun: 1 }],
+  stars: [
+    { role: 'star', name: 'A star to be observed', teffK: 5800, lumSun: 1 },
+  ],
 };
 /** The exposure planner with its controls set: Rubin in r, a 24th-magnitude star, a signal-to-noise of 20, two exposures. */
 const EXP = (values = {}) => ({
@@ -91,7 +93,8 @@ export const PLAN_AN_EXPOSURE = {
       body: `A star of magnitude 24 in the r band, seen from the ground with the
              seeing the library states, is faint but not hopeless for an 8 meter telescope.
              Do not read the planner yet.`,
-      prompt: 'The largest term of the noise budget for this star will be&hellip;',
+      prompt:
+        'The largest term of the noise budget for this star will be&hellip;',
       options: [
         'The star’s own photons',
         'The sky’s photons in the aperture',
@@ -150,7 +153,8 @@ export const PLAN_AN_EXPOSURE = {
       body: `Keep the same star and target. A telescope often cannot take one long frame:
              the sky saturates the detector, or a cosmic ray ruins it. Suppose the plan is
              split into 20 shorter exposures.`,
-      prompt: 'The total time to reach the same signal-to-noise will be&hellip;',
+      prompt:
+        'The total time to reach the same signal-to-noise will be&hellip;',
       options: [
         'Much shorter, because each frame is shorter',
         'The same: the light collected is the same',
@@ -215,7 +219,8 @@ export const PLAN_AN_EXPOSURE = {
       worked:
         '1288 ÷ 455.3 = 2.83. Extinction dims the star by 0.13 magnitude, and the blur grows from 0.65 to 0.99 arcsecond, which puts more sky in the aperture: both cost time, the second most of all, which is why surveys avoid high airmass.',
       feedback: {
-        close: 'Close. Divide the exposure at airmass 2 by the one at the zenith.',
+        close:
+          'Close. Divide the exposure at airmass 2 by the one at the zenith.',
         'wrong-order-of-magnitude':
           'A small factor, a few at most: both exposures are hundreds of seconds.',
         off: 'exposure at airmass 2 ÷ exposure at the zenith.',

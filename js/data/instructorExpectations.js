@@ -24,7 +24,7 @@ export default {
     ...SATELLITE.expectations,
     ...ATMOSPHERE.expectations,
     ...PLANETS.expectations,
-  ...EXPOSURE.expectations,
+    ...EXPOSURE.expectations,
     ...TELESCOPE.expectations,
     'the-suns-motion': {
       'measure-the-sun':

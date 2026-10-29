@@ -17,7 +17,7 @@ export default {
     ...SATELLITE.flow,
     ...ATMOSPHERE.flow,
     ...PLANETS.flow,
-  ...EXPOSURE.flow,
+    ...EXPOSURE.flow,
     ...TELESCOPE.flow,
     'the-suns-motion': [
       {
