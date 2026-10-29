@@ -311,6 +311,7 @@ export const SEQUENCES = [
       ['transit-photometry', 'quantitative'],
       ['design-the-schedule', 'core'],
       ['why-the-period-is-wrong', 'core'],
+      ['two-stars-eclipsing', 'core'],
       ['who-gets-counted', 'core'],
       ['why-the-bright-ones-win', 'quantitative', ['who-gets-counted']],
       ['the-completeness-curve', 'quantitative', ['why-the-bright-ones-win']],

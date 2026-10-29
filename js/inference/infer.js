@@ -597,6 +597,23 @@ export function fitOnce(request, data, hooks = {}) {
     }
   }
   out.warnings = warningsFor(out, model, data, values, request);
+  // A model that can say more than the rank analysis does about what its data
+  // fix (the eclipsing binary's radius ratio) adds it, and the warning the
+  // rank analysis would have given if it listed the same parameters.
+  if (model.identify) {
+    out.identifiability = model.identify(out);
+    const listed = new Set(out.rank?.notConstrained || []);
+    const extra = Object.entries(out.identifiability.parameters)
+      .filter(([n, v]) => v.status !== 'constrained' && !listed.has(n))
+      .map(([n]) => n);
+    for (const q of out.parameters)
+      if (extra.includes(q.name)) q.notConstrained = true;
+    if (extra.length)
+      out.warnings.push({
+        code: 'notConstrained',
+        parameters: extra.join(', '),
+      });
+  }
   hooks.onProgress?.(1);
   return out;
 }
@@ -623,7 +640,8 @@ function timeCorrelated(data, residuals, request) {
   );
   const scale =
     request.algorithm?.redNoiseTimescale ??
-    (request.model.id === 'transit-quadratic'
+    (request.model.id === 'transit-quadratic' ||
+    request.model.id === 'eclipsing-binary'
       ? 30 / 1440
       : (request.parameters?.P?.lo ?? 1) / 10);
   const sizes = [];

@@ -163,6 +163,12 @@ export default {
     'Por qué una visita por noche a la misma hora no distingue un período de sus alias, cómo los tiempos irregulares o más noches deshacen el empate, por qué más noches desde un mismo sitio no quitan el alias del día sidéreo y qué cuesta el mal tiempo.',
     'El veredicto es de una sinusoide en ruido blanco, no de un eclipse ni de una llamarada; el tiempo es un sorteo con semilla que pierde noches enteras, no un pronóstico; la Luna entra solo por el límite de separación del planificador; las series son sintéticas, con el período que fijas como verdad.',
   ],
+  eclipse: [
+    'Dos estrellas en una órbita: la luz de ambas frente a la fase de la órbita para los radios, el cociente de radios, la inclinación, el cociente de brillos superficiales y la excentricidad que fijas, con la profundidad, la duración y el fondo de cada eclipse y, ajustados por el núcleo de inferencia a unos datos sintéticos, cada parámetro con su incertidumbre o las palabras «no restringido».',
+    'Qué estrella es más caliente y cuál es mayor a partir de los dos eclipses, cómo la fase del secundario da e cos w, cómo las duraciones de los eclipses dan e sen w solo débilmente, por qué un eclipse rasante deja abierto el cociente de radios y qué dice una prueba de residuos cuando los datos contienen algo que el modelo omite.',
+    'Por qué el eclipse más profundo oculta la estrella más caliente, por qué un fondo plano significa que se ocultó la estrella menor, por qué los radios vienen como fracciones de la órbita y no en kilómetros, y por qué un número de un ajuste solo es una medida cuando los datos lo fijan.',
+    'El modelo son dos esferas en una órbita kepleriana: sin reflexión, sin luz elipsoidal, sin manchas, sin una tercera estrella, sin masas (esas necesitan velocidades); el oscurecimiento del limbo es fijo, de una tabla; todos los datos son sintéticos, con su verdad indicada.',
+  ],
   survey: [
     'Estrellas sintéticas de brillo conocido a distancias conocidas: estrellas contadas y perdidas, el sesgo por capas de distancia, o la función de luminosidad frente a su verdad.',
     'Cómo cambian la parte contada, el sesgo y la función de luminosidad recuperada al cambiar el límite de magnitud, la curva de completitud o el corte de paralaje.',

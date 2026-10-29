@@ -195,6 +195,7 @@ const LOADERS = {
   'counts-to-magnitudes': () => import('./counts-to-magnitudes.js'),
   'plan-an-exposure': () => import('./plan-an-exposure.js'),
   'why-the-period-is-wrong': () => import('./why-the-period-is-wrong.js'),
+  'two-stars-eclipsing': () => import('./two-stars-eclipsing.js'),
 };
 // </generated:loaders>
 
@@ -310,6 +311,7 @@ const TRANSLATIONS = {
     'counts-to-magnitudes': () => import('./es/counts-to-magnitudes.js'),
     'plan-an-exposure': () => import('./es/plan-an-exposure.js'),
     'why-the-period-is-wrong': () => import('./es/why-the-period-is-wrong.js'),
+    'two-stars-eclipsing': () => import('./es/two-stars-eclipsing.js'),
   },
 };
 // </generated:translations>

@@ -258,8 +258,9 @@ export function estimate(
   const model = MODELS[m.model.id];
   const mode = name => m.parameters?.[name]?.mode ?? 'fitted';
   const free = model.parameters.filter(p => mode(p.name) === 'fitted').length;
-  const transit = model.id === 'transit-quadratic';
-  const starts = transit && mode('b') === 'fixed' ? 1 : 3;
+  const eclipse = model.id === 'eclipsing-binary';
+  const transit = model.id === 'transit-quadratic' || eclipse;
+  const starts = eclipse ? 6 : transit && mode('b') === 'fixed' ? 1 : 3;
   const perFit = starts * 25 * (2 * free + 3);
   const jitterTrials = model.nuisance && mode('jitter') === 'fitted' ? 20 : 1;
   const points = m.algorithm?.profile?.points ?? 11;

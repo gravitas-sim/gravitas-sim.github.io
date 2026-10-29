@@ -427,6 +427,12 @@ export const LAZY_FAMILIES = Object.freeze({
     'STRATEGY_WIDGETS',
     ['strategy-window', 'strategy-plan']
   ),
+  eclipse: familyEntry(
+    () => import('./eclipseWidgets.js'),
+    './eclipseWidgets.js',
+    'ECLIPSE_WIDGETS',
+    ['eclipse-curve', 'eclipse-fit']
+  ),
   telescope: familyEntry(
     () => import('./telescopeWidgets.js'),
     './telescopeWidgets.js',
@@ -629,6 +635,8 @@ export async function whenWidgetsReady() {
     'effects',
     'strategy',
     'photcal',
+    // The eclipse family reaches the plot component and the inference core: late for the same reason (Prompt 217).
+    'eclipse',
   ];
   await Promise.all(families.filter(f => !late.includes(f)).map(loadFamily));
   for (const f of late) await loadFamily(f);

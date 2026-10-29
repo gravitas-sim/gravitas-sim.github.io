@@ -154,6 +154,8 @@ const EXTENSIONS = {
     import('../data/investigations/depth/why-two-lines-become-one.js'),
   'why-the-period-is-wrong': () =>
     import('../data/investigations/depth/why-the-period-is-wrong.js'),
+  'two-stars-eclipsing': () =>
+    import('../data/investigations/depth/two-stars-eclipsing.js'),
   'design-the-schedule': () =>
     import('../data/investigations/depth/design-the-schedule.js'),
   'the-saturated-star': () =>
@@ -272,6 +274,8 @@ const WORDS = {
       import('../data/investigations/depth/es/why-two-lines-become-one.js'),
     'why-the-period-is-wrong': () =>
       import('../data/investigations/depth/es/why-the-period-is-wrong.js'),
+    'two-stars-eclipsing': () =>
+      import('../data/investigations/depth/es/two-stars-eclipsing.js'),
     'design-the-schedule': () =>
       import('../data/investigations/depth/es/design-the-schedule.js'),
     'the-saturated-star': () =>

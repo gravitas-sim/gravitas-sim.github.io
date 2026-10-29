@@ -1148,6 +1148,19 @@ export const MANIFEST = [
     objectiveCount: 4,
   },
   {
+    id: 'two-stars-eclipsing',
+    title: 'Dos estrellas que se eclipsan',
+    subtitle:
+      'Lee dos eclipses para saber qué estrella es más caliente y cuál es mayor, ajusta el tamaño de las estrellas como fracciones de su órbita y mira qué puede y qué no puede fijar un ajuste',
+    duration: '12-24 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/two-stars-eclipsing.webp',
+    depths: 3,
+    stepCount: 6,
+    gradedCount: 4,
+    objectiveCount: 4,
+  },
+  {
     id: 'why-the-period-is-wrong',
     title: 'Por qué el período sale mal',
     subtitle:
