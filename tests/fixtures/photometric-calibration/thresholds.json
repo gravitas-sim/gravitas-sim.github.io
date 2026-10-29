@@ -25,7 +25,10 @@
     "lackOfFitP": 0.01,
     "unconstrainedColourSigma": 0.1,
     "extinctionNotConstrainedTolerance": 0.1,
-    "intervalLevels": [0.6827, 0.95],
+    "intervalLevels": [
+      0.6827,
+      0.95
+    ],
     "interval": "normal quantile while the stated errors are taken at face value; Student t with the fit's degrees of freedom when lack of fit rescales them by sqrt(chi2 / dof)",
     "atmosphere": {
       "model": "tau(lambda) = tauR (lambda / 550 nm)^-4.05 + tauA (lambda / 550 nm)^-1.3, k(lambda) = (2.5 / ln 10) tau(lambda) mag per airmass; tauR 0.0975, tauA 0.06 (a stated teaching atmosphere: sea-level Rayleigh scattering plus a modest aerosol term, no ozone, no water, no site altitude)",
@@ -35,7 +38,12 @@
       "standards": "blackbodies of 3500, 4000, 4500, 5000, 5500, 6000, 6500, 7000, 8000, 9000, 10000 and 12000 K",
       "standardBands": "Johnson V (magnitude) and Johnson B and V (colour), Vega system, from the radiation pack",
       "instrumentBand": "SDSS g, photon counting through the same atmosphere",
-      "airmasses": [1.1, 1.5, 2.0, 2.4]
+      "airmasses": [
+        1.1,
+        1.5,
+        2.0,
+        2.4
+      ]
     },
     "nights": {
       "N1": "14 standards, M_std = 11.0 + 0.8 i (i = 0..13), colour C_i = -0.20 + 1.70 i / 13, each observed at three airmasses taken from the list [1.05, 1.30, 1.55, 1.80, 2.15, 2.40] starting at index i mod 4 (the next three entries, cyclically), 42 observations; truth Z1 = 24.80, k = 0.21, c = 0.08, k2 = 0; sigma_inst = 0.005 every observation, sigma_std = 0.005; numpy default_rng(212) draws the instrumental noise (normal) and the catalogue-magnitude errors are NOT drawn (the catalogue values are the truth the standards are given, with sigma_std only in the weights)",
@@ -49,121 +57,194 @@
       "id": "A1.exact",
       "group": "a",
       "bound": "a night with no noise (every sigma_inst set to 1e-6 mag and the instrumental magnitudes exactly the truth's) on the N1 geometry: Z1, k, c recovered to an absolute 1e-6 mag, and with the second-order model also k2 (truth -0.03) to 1e-6; the residuals are zero to 1e-6; the reported chi2 is below 1e-3 x dof",
-      "limits": { "absMax": 1e-6 }
+      "limits": {
+        "absMax": 1e-06
+      }
     },
     {
       "id": "A2.closedForm.constant",
       "group": "a",
       "bound": "with k and c held at their truth values (not fitted), the zero point is the weighted mean of M - m_inst + k (X - 1) - c C and its sigma is 1 / sqrt(sum w): the kernel equals the closed form to a relative 1e-12 on N1 and on N2",
-      "limits": { "relMax": 1e-12 }
+      "limits": {
+        "relMax": 1e-12
+      }
     },
     {
       "id": "A3.closedForm.line",
       "group": "a",
       "bound": "with c held at 0, the fit of Z1 and k is the weighted straight line y = Z1 - k (X - 1): the kernel's parameters and its 2 x 2 covariance equal the closed-form normal-equation solution (S, Sx, Sxx, Sy, Sxy) to a relative 1e-10 on N1 and on N2",
-      "limits": { "relMax": 1e-10 }
+      "limits": {
+        "relMax": 1e-10
+      }
     },
     {
       "id": "A4.bouguer",
       "group": "a",
       "bound": "one star measured at exactly two airmasses with no noise gives k = (m2 - m1) / (X2 - X1) to a relative 1e-12 (the Bouguer line through two points); at three airmasses on a perfect line the third point adds nothing and k is unchanged to 1e-12",
-      "limits": { "relMax": 1e-12 }
+      "limits": {
+        "relMax": 1e-12
+      }
     },
     {
       "id": "A5.conventions",
       "group": "a",
       "bound": "the instrumental magnitude of 1 count per second is 0 and of 100 counts per second is -5 to 1e-12; sigma_m of 1 percent flux error is 1.0857362 x 0.01 to a relative 1e-7; Z0 = Z1 - k (the zero point outside the atmosphere) to 1e-12; the zero point of the exposure kernel's convention is reported at X = 1: a night whose standards are all at X = 1 returns Z1 with no extinction term and no dependence on k",
-      "limits": { "relMax": 1e-7, "tight": 1e-12 }
+      "limits": {
+        "relMax": 1e-07,
+        "tight": 1e-12
+      }
     },
     {
       "id": "A6.airmass",
       "group": "a",
       "bound": "the sky kernel's Kasten and Young airmass at apparent altitudes 90, 60, 45, 30, 15 and 10 degrees equals the oracle's independent evaluation of the formula (Python, the published coefficients 0.50572, 6.07995, 1.6364) to a relative 1e-12, and exceeds the plane-parallel secant by less than 0.1 percent at 60 degrees and is below it at 10 degrees (the curvature of the atmosphere); the calibration reads this airmass and defines none of its own",
-      "limits": { "relMax": 1e-12 }
+      "limits": {
+        "relMax": 1e-12
+      }
     },
     {
       "id": "A7.colourEquation",
       "group": "a",
       "bound": "the colour equation C_std = mu c_inst + Zc - kc (X - 1) on a noise-free two-band night recovers mu, Zc and kc to 1e-6; a target's colour from its two instrumental magnitudes and airmass equals the truth to 1e-6 on that night",
-      "limits": { "absMax": 1e-6 }
+      "limits": {
+        "absMax": 1e-06
+      }
     },
     {
       "id": "A8.propagation",
       "group": "a",
       "bound": "the calibrated magnitude's variance equals sigma_inst,t^2 + a' Sigma a + (c sigma_C,t)^2 (with the cross terms of the colour's own equation when the colour comes from two bands): the kernel equals an independent evaluation from the reported covariance to a relative 1e-12; and a Monte Carlo of 100000 draws of the parameters from N(theta, Sigma) reproduces the parameter part of the variance to within 2 percent",
-      "limits": { "relMax": 1e-12, "mcRel": 0.02, "draws": 100000 }
+      "limits": {
+        "relMax": 1e-12,
+        "mcRel": 0.02,
+        "draws": 100000
+      }
     },
     {
       "id": "A9.assumed.sigmaC",
       "group": "a",
       "bound": "the standards' colour error is neglected in the weights; the leg shows what the neglect costs: on N1 with a colour error of 0.01 mag added to every standard colour (default_rng(2129), 400 nights) the mean of (c_fit - c_truth) is within 0.01 of zero and its standard deviation is not larger than 1.5 times the one with exact colours",
-      "limits": { "meanAbsMax": 0.01, "sdRatioMax": 1.5, "nights": 400 }
+      "limits": {
+        "meanAbsMax": 0.01,
+        "sdRatioMax": 1.5,
+        "nights": 400
+      }
     },
     {
       "id": "B1.parameters",
       "group": "b",
       "bound": "on the pinned nights N1, N2 and N3 the oracle (numpy.linalg.lstsq on the sigma-weighted design, astropy.modeling.fitting.LinearLSQFitter with weights, and scipy.optimize.least_squares as three independent solvers that must agree among themselves to 1e-8) and the kernel give Z1, k, c (and k2 where the second-order model is fitted) equal to an absolute 1e-7 mag",
-      "limits": { "absMax": 1e-7, "oracleAgree": 1e-8 }
+      "limits": {
+        "absMax": 1e-07,
+        "oracleAgree": 1e-08
+      }
     },
     {
       "id": "B2.covariance",
       "group": "b",
       "bound": "the kernel's parameter standard errors and the chi-square equal the oracle's (the inverse of A' W A; the chi-square of the weighted residuals) to a relative 1e-6 on N1, N2 and N3",
-      "limits": { "relMax": 1e-6 }
+      "limits": {
+        "relMax": 1e-06
+      }
     },
     {
       "id": "B3.calibrated",
       "group": "b",
       "bound": "the five targets of each night: the calibrated magnitude and its standard error equal the oracle's (independent propagation in numpy) to an absolute 1e-7 mag; the target of unknown colour is flagged colour-assumed-typical and its sigma equals the oracle's with the standards' mean colour and their standard deviation as the colour and its error",
-      "limits": { "absMax": 1e-7 }
+      "limits": {
+        "absMax": 1e-07
+      }
     },
     {
       "id": "B4.secondOrder",
       "group": "b",
       "bound": "on N3 the second-order model recovers k2 = -0.03 within 3 of its own standard errors and the oracle's value to 1e-7; the first-order model on the same night raises the lack-of-fit flag (chi2 p below 0.01)",
-      "limits": { "sigmas": 3, "absMax": 1e-7, "p": 0.01 }
+      "limits": {
+        "sigmas": 3,
+        "absMax": 1e-07,
+        "p": 0.01
+      }
     },
     {
       "id": "P1.physical.colourTerm",
       "group": "b",
       "bound": "no atmosphere (all airmasses 1): the twelve blackbody standards observed through SDSS g and catalogued in Johnson V with the Johnson B - V colour; the linear colour term c (V - g_inst) is within [-0.75, -0.55] and the residual rms is below 0.005 mag; and the kernel's c equals the oracle's (an independent numpy integration of the same pack, Planck function in SI, trapezoid on a 0.5 nm grid) to an absolute 5e-4, because the two integrate on different grids",
-      "limits": { "cMin": -0.75, "cMax": -0.55, "rmsMax": 0.005, "oracleAbs": 5e-4 }
+      "limits": {
+        "cMin": -0.75,
+        "cMax": -0.55,
+        "rmsMax": 0.005,
+        "oracleAbs": 0.0005
+      }
     },
     {
       "id": "P2.physical.extinction",
       "group": "b",
       "bound": "the physical night (12 standards at the four airmasses through the stated atmosphere): the first-order fit's k lies in [0.25, 0.30] mag per airmass and the second-order fit's k2 in [-0.035, -0.018], and both equal the oracle's to an absolute 5e-4; the first-order fit's lack-of-fit flag is raised at an added noise of 0.002 mag (seeded) and the second-order fit's is not",
-      "limits": { "kMin": 0.25, "kMax": 0.3, "k2Min": -0.035, "k2Max": -0.018, "oracleAbs": 5e-4, "noise": 0.002 }
+      "limits": {
+        "kMin": 0.25,
+        "kMax": 0.3,
+        "k2Min": -0.035,
+        "k2Max": -0.018,
+        "oracleAbs": 0.0005,
+        "noise": 0.002
+      }
     },
     {
       "id": "P3.physical.limit",
       "group": "b",
       "bound": "a 3500 K target (B - V about 1.2) at airmass 2.3 calibrated from the same night: the first-order calibration is wrong by at least 0.005 mag (the Forbes and colour-dependent extinction the linear law omits), the second-order calibration by at most 0.002 mag, and the first-order interval, rescaled by the lack of fit, does not cover the truth less often than the second-order one over 200 noise draws",
-      "limits": { "firstOrderErrMin": 0.005, "secondOrderErrMax": 0.002, "draws": 200 }
+      "limits": {
+        "firstOrderErrMin": 0.005,
+        "secondOrderErrMax": 0.002,
+        "draws": 200
+      }
     },
     {
       "id": "C1.coverage",
       "group": "c",
       "bound": "2000 seeded nights (12 standards with colours uniform in [-0.2, 1.6], magnitudes 10 to 14, airmasses uniform in [1.05, 2.2], two observations each; truth Z1 in [24, 26], k in [0.08, 0.35], c in [-0.1, 0.1], all uniform; sigma_inst 0.01, sigma_std 0.01, errors normal) with one target per night (colour uniform in [-0.1, 1.5], airmass uniform in [1.05, 2.2], sigma_inst 0.01): the 68.27 percent interval covers the truth in [0.650, 0.715] and the 95 percent interval in [0.935, 0.965] of nights; the pulls of Z1, k and c have standard deviations in [0.95, 1.05] and means within 0.06 of zero",
-      "limits": { "nights": 2000, "cover68": [0.65, 0.715], "cover95": [0.935, 0.965], "pullSd": [0.95, 1.05], "pullMean": 0.06 }
+      "limits": {
+        "nights": 2000,
+        "cover68": [
+          0.65,
+          0.715
+        ],
+        "cover95": [
+          0.935,
+          0.965
+        ],
+        "pullSd": [
+          0.95,
+          1.05
+        ],
+        "pullMean": 0.06
+      }
     },
     {
       "id": "C2.coverage.underestimated",
       "group": "c",
       "bound": "the same ensemble with the errors the kernel is told too small by a factor of 2 (the noise unchanged): lack of fit is flagged in at least 99 percent of nights, the rescaled 95 percent interval covers the truth in at least 0.93 of nights, and the interval is wider than the unscaled one in every flagged night",
-      "limits": { "nights": 1000, "flaggedMin": 0.99, "cover95Min": 0.93 }
+      "limits": {
+        "nights": 1000,
+        "flaggedMin": 0.99,
+        "cover95Min": 0.93
+      }
     },
     {
       "id": "C3.coverage.falseAlarm",
       "group": "c",
       "bound": "on the honest ensemble of C1 the lack-of-fit flag is raised in at most 2 percent of nights (nominal 1 percent)",
-      "limits": { "maxRate": 0.02 }
+      "limits": {
+        "maxRate": 0.02
+      }
     },
     {
       "id": "D1.twoStandards",
       "group": "d",
       "bound": "a night with two distinct standards (each at four airmasses): the colour term is reported not-constrained with no value, the fit is refit without it, the flag colour-term-not-constrained is raised, a calibrated target's sigma includes the stated unconstrained-colour systematic 0.1 |C_t - mean C| in quadrature, and its interval is wider than the one the same night gives with a third standard added",
-      "limits": { "unconstrainedColourSigma": 0.1 }
+      "limits": {
+        "unconstrainedColourSigma": 0.1
+      }
     },
     {
       "id": "D2.airmassLimit",
@@ -175,19 +256,30 @@
       "id": "D3.extinctionNotConstrained",
       "group": "d",
       "bound": "standards observed over an airmass span below 0.3: k is reported not-constrained; with no prior the zero point at unit airmass is not constrained either and a target more than 0.1 airmass from the standards' mean airmass is refused (reason extinction-not-constrained); with the site's cited coefficient as a prior (Rubin r, 0.126 mag per airmass, a stated sigma of 0.05) the fit is full rank, k is reported with the status prior and the flag extinction-from-prior, and the zero point's sigma exceeds the unconstrained-span night's data-only sigma",
-      "limits": { "spanMin": 0.3, "tolerance": 0.1, "priorSigma": 0.05 }
+      "limits": {
+        "spanMin": 0.3,
+        "tolerance": 0.1,
+        "priorSigma": 0.05
+      }
     },
     {
       "id": "D4.colourSpan",
       "group": "d",
       "bound": "five standards whose colours span less than 0.3 mag: the colour term is not-constrained and flagged colour-span-too-small",
-      "limits": { "spanMin": 0.3 }
+      "limits": {
+        "spanMin": 0.3
+      }
     },
     {
       "id": "D5.misspecified.secondOrder",
       "group": "d",
       "bound": "200 seeded nights as N3 (k2 = -0.03, sigma 0.003, different seeds): the first-order fit raises lack of fit in at least 95 percent of them and its interval is widened by sqrt(chi2 / dof); the second-order fit raises it in at most 3 percent and recovers k2 within 3 standard errors in 0.99 of them or better",
-      "limits": { "nights": 200, "flaggedMin": 0.95, "secondOrderFlagMax": 0.03, "recoveredMin": 0.99 }
+      "limits": {
+        "nights": 200,
+        "flaggedMin": 0.95,
+        "secondOrderFlagMax": 0.03,
+        "recoveredMin": 0.99
+      }
     },
     {
       "id": "D6.refusals",
@@ -205,7 +297,11 @@
       "id": "F1.frames",
       "group": "f",
       "bound": "end to end through the detector kernel and Prompt 180's aperture photometry: three synthetic frames (airmasses 1.1, 1.6 and 2.2, ten standards each, seeded 2121, an exposure of 30 s, the lab's detector with its sky) rendered from a truth zero point and extinction; the photometry's net counts give instrumental magnitudes; the recovered zero point is within 0.02 mag of the truth and k within 0.02, each within 3 of its own standard errors; a target star on the first frame is recovered within 3 of the interval's sigma",
-      "limits": { "zAbs": 0.02, "kAbs": 0.02, "sigmas": 3 }
+      "limits": {
+        "zAbs": 0.02,
+        "kAbs": 0.02,
+        "sigmas": 3
+      }
     },
     {
       "id": "R1.record",
@@ -223,7 +319,22 @@
       "id": "E1.authentic",
       "group": "e",
       "bound": "NGC 2420, the repo's own two packs (SDSS DR18 psf g and r, Gaia DR3 G and BP - RP): stars matched within 1.0 arcsec, SDSS g and r errors below 0.03, 14.5 <= r <= 19, a clean sample by a 4 x 1.4826 x MAD clip about the median relation; the fixed contract is: the SDSS g magnitude is the standard, Gaia G the instrumental magnitude of a space instrument (X = 1, no extinction), BP - RP the colour index; the colour term of g - G against BP - RP is fitted with the kernel. At least 150 stars match; the fitted colour term is negative with magnitude between 0.3 and 1.2 (the instrument's G band is broader than g: a large term is expected) and significant at 10 sigma after the lack-of-fit rescaling; the residual rms is at most 0.08 mag; with the matched stars split by parity into calibrators and held-out targets the 95 percent interval covers the held-out SDSS g in 0.90 or more; a quadratic term in colour is fitted as a limit of linearity and its significance is reported (a number, not a bound). No coefficient of any published relation between the two systems entered the contract.",
-      "limits": { "matchArcsec": 1.0, "minStars": 150, "cMag": [0.3, 1.2], "sigmaMin": 10, "rmsMax": 0.08, "coverMin": 0.9, "errMax": 0.03, "rRange": [14.5, 19] }
+      "limits": {
+        "matchArcsec": 1.0,
+        "minStars": 150,
+        "cMag": [
+          0.3,
+          1.2
+        ],
+        "sigmaMin": 10,
+        "rmsMax": 0.08,
+        "coverMin": 0.9,
+        "errMax": 0.03,
+        "rRange": [
+          14.5,
+          19
+        ]
+      }
     }
   ],
   "claimRule": "the pages say what the model is: a linear calibration of a synthetic night with stated truth, a stated atmosphere, and what it refuses; they never say that a night's extinction is constant, that a colour term is linear for every star, that the model validates a real observatory's calibration or any site's extinction, and they never use interstellar extinction and atmospheric extinction as one word",
@@ -235,5 +346,12 @@
     "a real standard field shipped with the product: none is, and none can be without a recorded rights decision per source (roadmap rule 4); the authentic leg reads the repo's own SDSS and Gaia packs for a test and ships nothing",
     "site extinction coefficients the library does not state (Las Cumbres): absent, never estimated"
   ],
-  "amendments": []
+  "amendments": [
+    {
+      "id": "AM1",
+      "when": "after the oracle's first run (analytic parts, the nights and the physical night) and before any kernel code existed",
+      "what": "Two clarifications, no bound moved: (1) the instrumental noise of N2 is drawn from default_rng(2120) and of N3 from default_rng(2125) (the contract named the seeds of the catalogue errors and the targets but not these); (2) the third oracle solver is scipy.optimize.lsq_linear with the exact solver for the parameters, and scipy.optimize.least_squares only for the Jacobian behind the covariance, because least_squares' own iterative stopping rule left the parameters 1.4e-8 (trf) and 4.4e-8 (lm) from the two direct solvers on the ill-conditioned second-order fit of N2; the three solvers now agree to 1.1e-13 and the covariances to 1.1e-9 (relative). The bound on the kernel against the oracle (1e-7) was not touched.",
+      "why": "the contract's wording named a solver whose stopping rule, not the model, set the disagreement; the kernel had not been written, so nothing was tuned"
+    }
+  ]
 }
