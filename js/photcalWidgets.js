@@ -69,7 +69,7 @@ export function configOf(v = {}) {
     second: (v.model ?? 0) >= 0.5,
     prior: (v.prior ?? 0) >= 0.5,
     view: idx(v.view, 3),
-    colour: Math.max(-0.2, Math.min(1.6, v.colour ?? 0.8)),
+    colour: Math.max(-0.2, Math.min(1.6, v.cindex ?? 0.8)),
     airmass: Math.max(1.05, Math.min(3, v.airmass ?? 1.9)),
     truth: (v.truth ?? 0) >= 0.5,
   };
@@ -313,7 +313,7 @@ const PHOTOMETRIC_CALIBRATION = {
       decimals: 0,
       format: x => t(`pcW.view.${idx(x, 3)}`),
     },
-    numeric('colour', 'pcW.control.colour', -0.2, 1.6, 0.1, 0.8, x =>
+    numeric('cindex', 'pcW.control.colour', -0.2, 1.6, 0.1, 0.8, x =>
       fixed(x, 1)
     ),
     numeric('airmass', 'pcW.control.airmass', 1.05, 3, 0.05, 1.9, x =>

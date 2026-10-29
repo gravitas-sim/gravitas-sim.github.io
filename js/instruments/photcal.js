@@ -81,7 +81,7 @@ const PARAM = {
  * A solved night and its calibrated targets as an artifact envelope.
  * @param {object} solution - from solveNight
  * @param {object[]} calibrated - results of calibrate() (refusals are recorded as failed quantities)
- * @param {{id: string, source: {kind?: string, id: string}, citations?: object[], targets?: object[]}} ctx
+ * @param {{id: string, source: {kind?: string, id: string, digest?: string}, citations?: object[], targets?: object[]}} ctx
  */
 export function calibrationRecord(solution, calibrated, ctx) {
   const basis = solution.lackOfFit ? 'scaled' : 'data';
@@ -204,6 +204,7 @@ export function calibrationRecord(solution, calibrated, ctx) {
     source: {
       kind: ctx.source?.kind ?? 'forward-model',
       id: ctx.source?.id ?? ctx.id,
+      ...(ctx.source?.digest ? { digest: ctx.source.digest } : {}),
     },
     quantities,
     provenance: {

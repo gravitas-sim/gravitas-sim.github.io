@@ -25,7 +25,7 @@ const STAGE = {
   fit: true,
   stars: [{ role: 'star', name: 'A star', teffK: 5772, lumSun: 1 }],
 };
-/** The calibration panel with its controls set (night 0 clear, 1 narrow, 2 colour-dependent; model 1 second order). */
+/** The calibration panel with its controls set (night 0 clear, 1 narrow, 2 color-dependent; model 1 second order). */
 const PC = (values = {}, hide = []) => ({
   id: 'photometric-calibration',
   values: {
@@ -36,7 +36,7 @@ const PC = (values = {}, hide = []) => ({
     model: 0,
     prior: 0,
     view: 0,
-    colour: 0.8,
+    cindex: 0.8,
     airmass: 1.9,
     truth: 0,
     ...values,
@@ -44,7 +44,7 @@ const PC = (values = {}, hide = []) => ({
   hide,
 });
 /** The controls a first reading does not need. */
-const PLAIN = ['stars', 'noise', 'reach', 'model', 'prior', 'colour'];
+const PLAIN = ['stars', 'noise', 'reach', 'model', 'prior', 'cindex'];
 
 export const COUNTS_TO_MAGNITUDES = {
   id: 'counts-to-magnitudes',
@@ -171,7 +171,7 @@ export const COUNTS_TO_MAGNITUDES = {
         {
           id: 'distance',
           option: 1,
-          say: 'The star is the same distance whatever its height: the extra path is only the last few tens of kilometres, through the atmosphere.',
+          say: 'The star is the same distance whatever its height: the extra path is only the last few tens of kilometers, through the atmosphere.',
         },
         {
           id: 'star',
@@ -209,7 +209,7 @@ export const COUNTS_TO_MAGNITUDES = {
         {
           id: 'same',
           option: 1,
-          say: 'The two are separate: the dust is between the star and the top of our atmosphere and is the same however high the star is; this k is in the last hundred kilometres, per airmass. A calibrated magnitude here is corrected for the air, not for the dust.',
+          say: 'The two are separate: the dust is between the star and the top of our atmosphere and is the same however high the star is; this k is in the last hundred kilometers, per airmass. A calibrated magnitude here is corrected for the air, not for the dust.',
         },
         {
           id: 'horizon',
@@ -234,7 +234,7 @@ export const COUNTS_TO_MAGNITUDES = {
       title: 'What a calibration does',
       body: `A night of standards fixes three numbers: the <strong>zero point</strong>
              (what magnitude one count per second is), the <strong>extinction</strong> of the
-             air, and a <strong>colour term</strong> (the instrument sees blue and red stars
+             air, and a <strong>color term</strong> (the instrument sees blue and red stars
              a little differently). With them, any star on the same frames gets a calibrated
              magnitude, <em>with an uncertainty</em> that comes from how well the night fixed
              them. The next steps make one. Remember the night is synthetic and the
@@ -283,7 +283,7 @@ export const COUNTS_TO_MAGNITUDES_DEEPER = {
             'Read Z1 from the “Zero point at airmass 1” row (about 24.8) and k from the next row (about 0.21).',
         };
       },
-      tool: PC({}, ['stars', 'noise', 'reach', 'model', 'prior', 'colour']),
+      tool: PC({}, ['stars', 'noise', 'reach', 'model', 'prior', 'cindex']),
     },
     {
       sid: 'calibrate-a-target',
@@ -292,7 +292,7 @@ export const COUNTS_TO_MAGNITUDES_DEEPER = {
       type: 'measure',
       title: 'Calibrate a target',
       body: `The panel also measures one <strong>target</strong> star, at airmass 1.9 and
-             colour index 0.8. Read the <em>Target star</em> row: its calibrated magnitude
+             color index 0.8. Read the <em>Target star</em> row: its calibrated magnitude
              and the uncertainty. Then turn on <em>Show the truth</em> and compare with the
              magnitude the model gave it.`,
       fields: [
@@ -312,7 +312,7 @@ export const COUNTS_TO_MAGNITUDES_DEEPER = {
           return {
             level: 'ok',
             message:
-              'The target calibrates to 13.203 with an uncertainty of 0.008; the truth is 13.200, three thousandths of a magnitude away, well inside the error. The error is not the noise of the target alone: it folds in the uncertainties of the zero point, the extinction and the colour term, and the correlations between them.',
+              'The target calibrates to 13.203 with an uncertainty of 0.008; the truth is 13.200, three thousandths of a magnitude away, well inside the error. The error is not the noise of the target alone: it folds in the uncertainties of the zero point, the extinction and the color term, and the correlations between them.',
           };
         }
         return {
@@ -321,7 +321,7 @@ export const COUNTS_TO_MAGNITUDES_DEEPER = {
             'Read the “Target star” row: the calibrated magnitude (about 13.2) and the number after the plus-minus sign (about 0.008).',
         };
       },
-      tool: PC({ truth: 1 }, ['stars', 'noise', 'reach', 'model', 'prior', 'colour']),
+      tool: PC({ truth: 1 }, ['stars', 'noise', 'reach', 'model', 'prior', 'cindex']),
     },
     {
       sid: 'the-airmass-limit',
@@ -352,7 +352,7 @@ export const COUNTS_TO_MAGNITUDES_DEEPER = {
             'Set the highest airmass to 3.0, then read the “Excluded” row (the number of measurements) and the extinction row.',
         };
       },
-      tool: PC({ reach: 3 }, ['stars', 'noise', 'model', 'prior', 'colour']),
+      tool: PC({ reach: 3 }, ['stars', 'noise', 'model', 'prior', 'cindex']),
     },
     {
       sid: 'refuse-a-target',
@@ -391,7 +391,7 @@ export const COUNTS_TO_MAGNITUDES_DEEPER = {
       hints: ['What does the calibration know about the air at an airmass that none of the standards was observed at?'],
       because:
         'An extrapolation beyond what was tested is a guess dressed as a measurement. The tool refuses above airmass 2.5 and the observer re-observes the target higher in the sky.',
-      tool: PC({ airmass: 3 }, ['stars', 'noise', 'reach', 'model', 'prior', 'colour']),
+      tool: PC({ airmass: 3 }, ['stars', 'noise', 'reach', 'model', 'prior', 'cindex']),
     },
     {
       sid: 'narrow-predict',
@@ -416,7 +416,7 @@ export const COUNTS_TO_MAGNITUDES_DEEPER = {
       ],
       because:
         'The slope is a change in magnitude over a change in airmass; if the airmass hardly changes, any slope fits about as well, and the zero point and the extinction trade off against each other.',
-      tool: PC({ night: 1 }, ['stars', 'noise', 'reach', 'model', 'prior', 'colour']),
+      tool: PC({ night: 1 }, ['stars', 'noise', 'reach', 'model', 'prior', 'cindex']),
     },
     {
       sid: 'narrow-night',
@@ -425,8 +425,8 @@ export const COUNTS_TO_MAGNITUDES_DEEPER = {
       type: 'measure',
       title: 'The night that cannot say',
       body: `Read the <em>Night</em> row for the airmass range, then the extinction and
-             zero point rows. The colour term is still fixed (the standards span a wide
-             range of colour). Give the airmass range, and the colour term.`,
+             zero point rows. The color term is still fixed (the standards span a wide
+             range of color). Give the airmass range, and the color term.`,
       fields: [
         { id: 'lo', label: 'Lowest airmass', unit: '', hint: '1.30' },
         { id: 'hi', label: 'Highest airmass', unit: '', hint: '1.42' },
@@ -437,7 +437,7 @@ export const COUNTS_TO_MAGNITUDES_DEEPER = {
           compute: v => v.hi - v.lo,
           decimals: 2,
         },
-        { id: 'c', label: 'Colour term, c', unit: '', hint: '0.079' },
+        { id: 'c', label: 'Color term, c', unit: '', hint: '0.079' },
       ],
       validate: v => {
         if (![v.lo, v.hi, v.c].every(Number.isFinite)) return null;
@@ -445,16 +445,16 @@ export const COUNTS_TO_MAGNITUDES_DEEPER = {
           return {
             level: 'ok',
             message:
-              'A range of 0.12 in airmass: the tool says the extinction and the zero point are not constrained, and gives no number for either, not a zero and not a guess. The colour term is fixed (0.079 with an uncertainty of 0.006), because the standards do span colour. The target is refused: it was not observed at the standards’ airmass.',
+              'A range of 0.12 in airmass: the tool says the extinction and the zero point are not constrained, and gives no number for either, not a zero and not a guess. The color term is fixed (0.079 with an uncertainty of 0.006), because the standards do span color. The target is refused: it was not observed at the standards’ airmass.',
           };
         }
         return {
           level: 'error',
           message:
-            'Choose the narrow night and read the airmass range in the “Night” row (1.30 to 1.42) and the colour term in its row (about 0.079).',
+            'Choose the narrow night and read the airmass range in the “Night” row (1.30 to 1.42) and the color term in its row (about 0.079).',
         };
       },
-      tool: PC({ night: 1 }, ['stars', 'noise', 'reach', 'model', 'prior', 'colour']),
+      tool: PC({ night: 1 }, ['stars', 'noise', 'reach', 'model', 'prior', 'cindex']),
     },
     {
       sid: 'a-cited-coefficient',
@@ -493,7 +493,7 @@ export const COUNTS_TO_MAGNITUDES_DEEPER = {
             'Choose the narrow night, turn the cited coefficient on, then read the “Target star” row: about 13.22 with an uncertainty of about 0.012.',
         };
       },
-      tool: PC({ night: 1, prior: 1, truth: 1 }, ['stars', 'noise', 'reach', 'model', 'colour']),
+      tool: PC({ night: 1, prior: 1, truth: 1 }, ['stars', 'noise', 'reach', 'model', 'cindex']),
     },
     {
       sid: 'how-few-standards',
@@ -502,8 +502,8 @@ export const COUNTS_TO_MAGNITUDES_DEEPER = {
       type: 'measure',
       title: 'How few standards?',
       body: `On the clear night, lower <em>Standard stars used</em> to <strong>2</strong>,
-             then <strong>3</strong>. Two stars cannot fix both the extinction and a colour
-             term, so the colour term is not constrained and the tool adds a stated
+             then <strong>3</strong>. Two stars cannot fix both the extinction and a color
+             term, so the color term is not constrained and the tool adds a stated
              uncertainty for it. Read the target&rsquo;s uncertainty each time.`,
       fields: [
         { id: 's2', label: 'Uncertainty with 2 standards', unit: 'mag', hint: '0.081' },
@@ -531,34 +531,34 @@ export const COUNTS_TO_MAGNITUDES_DEEPER = {
             'Set the number of standards to 2, read the target’s uncertainty, then to 3 and read it again: about 0.081 and 0.0088.',
         };
       },
-      tool: PC({ stars: 2 }, ['noise', 'reach', 'model', 'prior', 'colour']),
+      tool: PC({ stars: 2 }, ['noise', 'reach', 'model', 'prior', 'cindex']),
     },
     {
-      sid: 'the-colour-night',
+      sid: 'the-color-night',
       after: 'not-the-dust',
       depth: 'advanced',
       type: 'read',
       title: 'A night the straight line does not fit',
-      body: `Choose the night called <em>colour-dependent extinction</em>. Here the air dims
-             blue stars a little more than red ones, so the extinction depends on colour, a
+      body: `Choose the night called <em>color-dependent extinction</em>. Here the air dims
+             blue stars a little more than red ones, so the extinction depends on color, a
              term the first-order equation does not have. Look at the <em>The fit</em> row
              and at the residual plots (choose <em>residuals against airmass</em>): the
              standards no longer scatter around the fit as their errors say they should, and
-             the tool says so, and says why it suspects a colour-dependent extinction.`,
-      tool: PC({ night: 2, view: 1 }, ['stars', 'noise', 'reach', 'model', 'prior', 'colour', 'airmass']),
+             the tool says so, and says why it suspects a color-dependent extinction.`,
+      tool: PC({ night: 2, view: 1 }, ['stars', 'noise', 'reach', 'model', 'prior', 'cindex', 'airmass']),
     },
     {
       sid: 'second-order',
-      after: 'the-colour-night',
+      after: 'the-color-night',
       depth: 'advanced',
       type: 'measure',
       title: 'Is there more in the data?',
       body: `Read the row <em>Is there more in the data?</em>: how much adding a
-             colour-dependent extinction lowers chi-square. Then switch the model to
-             <em>with colour-dependent extinction</em> and read the new term, <em>k2</em>.`,
+             color-dependent extinction lowers chi-square. Then switch the model to
+             <em>with color-dependent extinction</em> and read the new term, <em>k2</em>.`,
       fields: [
         { id: 'dchi', label: 'Drop in chi-square', unit: '', hint: '67.8' },
-        { id: 'k2', label: 'Colour-dependent extinction, k2', unit: 'mag/airmass/colour', hint: '-0.047' },
+        { id: 'k2', label: 'Color-dependent extinction, k2', unit: 'mag/airmass/color', hint: '-0.047' },
       ],
       validate: v => {
         if (![v.dchi, v.k2].every(Number.isFinite)) return null;
@@ -572,10 +572,10 @@ export const COUNTS_TO_MAGNITUDES_DEEPER = {
         return {
           level: 'error',
           message:
-            'On the colour-dependent night in the first-order model read the “Is there more in the data?” row (about 67.8); then choose the second-order model and read the k2 row (about −0.047).',
+            'On the color-dependent night in the first-order model read the “Is there more in the data?” row (about 67.8); then choose the second-order model and read the k2 row (about −0.047).',
         };
       },
-      tool: PC({ night: 2, view: 1 }, ['stars', 'noise', 'reach', 'prior', 'colour', 'airmass']),
+      tool: PC({ night: 2, view: 1 }, ['stars', 'noise', 'reach', 'prior', 'cindex', 'airmass']),
     },
     {
       sid: 'a-blue-target',
@@ -583,7 +583,7 @@ export const COUNTS_TO_MAGNITUDES_DEEPER = {
       depth: 'advanced',
       type: 'measure',
       title: 'What it does to a blue star',
-      body: `Set the <em>Target colour index</em> to <strong>&minus;0.2</strong>, a blue
+      body: `Set the <em>Target color index</em> to <strong>&minus;0.2</strong>, a blue
              star. Read the calibrated magnitude in the first-order model and again in the
              second-order one. The true magnitude is 13.200.`,
       fields: [
@@ -609,10 +609,10 @@ export const COUNTS_TO_MAGNITUDES_DEEPER = {
         return {
           level: 'error',
           message:
-            'On the colour-dependent night set the target colour to −0.2 and read the “Target star” row in each model: about 13.215 first order, 13.202 second order.',
+            'On the color-dependent night set the target color to −0.2 and read the “Target star” row in each model: about 13.215 first order, 13.202 second order.',
         };
       },
-      tool: PC({ night: 2, colour: -0.2, truth: 1 }, ['stars', 'noise', 'reach', 'prior', 'airmass']),
+      tool: PC({ night: 2, cindex: -0.2, truth: 1 }, ['stars', 'noise', 'reach', 'prior', 'airmass']),
     },
     {
       sid: 'what-it-costs',
@@ -621,12 +621,12 @@ export const COUNTS_TO_MAGNITUDES_DEEPER = {
       type: 'question',
       kind: 'choice',
       title: 'Why not always the bigger model?',
-      body: `On the clear night the second-order model finds a colour-dependent extinction of
+      body: `On the clear night the second-order model finds a color-dependent extinction of
              −0.001, no more than its own error. Its target is as good, and its extinction
              is less certain: 0.0047 instead of 0.0029.`,
-      prompt: 'When should an observer fit the colour-dependent extinction?',
+      prompt: 'When should an observer fit the color-dependent extinction?',
       options: [
-        'When the data ask for it: the fit’s residuals and the test of the extra term say there is more in the data, and the night’s colours and airmasses can fix it',
+        'When the data ask for it: the fit’s residuals and the test of the extra term say there is more in the data, and the night’s colors and airmasses can fix it',
         'Always: a more general model is always better',
         'Never: the first-order equation is the standard',
         'Only for red stars',
@@ -641,18 +641,18 @@ export const COUNTS_TO_MAGNITUDES_DEEPER = {
         {
           id: 'never',
           option: 2,
-          say: 'On the colour-dependent night the first-order answer is wrong by 0.015 for a blue star and says so with a flag; ignoring the flag is not caution.',
+          say: 'On the color-dependent night the first-order answer is wrong by 0.015 for a blue star and says so with a flag; ignoring the flag is not caution.',
         },
         {
           id: 'red',
           option: 3,
-          say: 'The term works on blue and red stars alike (its effect is proportional to the colour); the blue target here was the bigger test, but it is not the only case.',
+          say: 'The term works on blue and red stars alike (its effect is proportional to the color); the blue target here was the bigger test, but it is not the only case.',
         },
       ],
       hints: ['Compare the uncertainties of the extinction in the two models on the clear night.'],
       because:
         'A bigger model is chosen by evidence, not by default: the test of the extra term and the residuals decide, and the extra term is fitted only when the night’s standards can determine it.',
-      tool: PC({ model: 1 }, ['stars', 'noise', 'reach', 'prior', 'airmass', 'colour']),
+      tool: PC({ model: 1 }, ['stars', 'noise', 'reach', 'prior', 'airmass', 'cindex']),
     },
     {
       sid: 'the-limits',
@@ -662,15 +662,15 @@ export const COUNTS_TO_MAGNITUDES_DEEPER = {
       title: 'What the calibration assumes',
       body: `A linear calibration claims only what its equation allows. It assumes the
              extinction is constant through the night (clouds, dust and a rising wind break
-             it), the catalogue magnitudes are right (their errors are shared by every
+             it), the catalog magnitudes are right (their errors are shared by every
              measurement of a star, and the tool includes that), the measurements are free of
-             aperture and flat-field errors, and one straight line in airmass and in colour
+             aperture and flat-field errors, and one straight line in airmass and in color
              describes the instrument. The tool refuses where it cannot support a number,
              and it flags the rest: refusal, widened errors and flags are the calibration
              saying what it does not know. The panel&rsquo;s <em>It assumes</em> row says it
              again. And the extinction is the atmosphere&rsquo;s, in magnitudes per
              airmass: the dust between the stars is another correction entirely.`,
-      tool: PC({ night: 2, model: 1 }, ['stars', 'noise', 'reach', 'prior', 'airmass', 'colour']),
+      tool: PC({ night: 2, model: 1 }, ['stars', 'noise', 'reach', 'prior', 'airmass', 'cindex']),
     },
   ],
 };
@@ -932,13 +932,13 @@ export const COUNTS_TO_MAGNITUDES_DEEPER_ES = {
 const CONTENT = {
   'counts-to-magnitudes': {
     topic:
-      'How an observer turns the counts of a detector into calibrated magnitudes: a night of standard stars measured at several airmasses fixes a zero point, the extinction of the air (about 0.21 magnitudes per airmass on the synthetic night here, so a star at airmass 2.4 is a third of a magnitude fainter than overhead) and a colour term; a target is then calibrated with the uncertainty the night leaves it (13.203 ± 0.008). The lesson separates the atmosphere’s extinction, in magnitudes per airmass, from the interstellar extinction of the dust between the stars, and shows what the calibration refuses (a night of one airmass, a target above airmass 2.5, a colour term from two standards) and where a straight line is not enough (a colour-dependent extinction).',
+      'How an observer turns the counts of a detector into calibrated magnitudes: a night of standard stars measured at several airmasses fixes a zero point, the extinction of the air (about 0.21 magnitudes per airmass on the synthetic night here, so a star at airmass 2.4 is a third of a magnitude fainter than overhead) and a color term; a target is then calibrated with the uncertainty the night leaves it (13.203 ± 0.008). The lesson separates the atmosphere’s extinction, in magnitudes per airmass, from the interstellar extinction of the dust between the stars, and shows what the calibration refuses (a night of one airmass, a target above airmass 2.5, a color term from two standards) and where a straight line is not enough (a color-dependent extinction).',
     difficulty:
-      'Introductory (read a slope, say why a star is fainter low in the sky, not the dust); majors (calibrate a night: zero point, target, limits, refusals, a cited coefficient, how few standards); advanced (a colour term, a colour-dependent extinction found by a nested test, what a linear calibration assumes)',
+      'Introductory (read a slope, say why a star is fainter low in the sky, not the dust); majors (calibrate a night: zero point, target, limits, refusals, a cited coefficient, how few standards); advanced (a color term, a color-dependent extinction found by a nested test, what a linear calibration assumes)',
     placement:
       'In a survey course beside the unit on the atmosphere and observing, and before photometry; in a majors course after the saturated-star investigation (the saturation limit comes before the calibration) and beside the exposure and the observing-strategy investigations. It supports OpenStax Astronomy 2e chapter 6 (astronomical instruments). It is the investigation behind the calibration kernel of Prompt 212, on the detector pipeline of Prompts 180 and 209-211.',
     overview:
-      'Students predict how much fainter a star looks at airmass 2.15 than at 1.05, read the slope of a synthetic night’s standards (k about 0.21 magnitudes per airmass), say why, and say that it is not the dust between the stars. At the quantitative depth they read the zero point (24.803 at airmass 1, 24.590 outside the atmosphere), calibrate a target (13.203 ± 0.008 against a truth of 13.200), see standards above airmass 2.5 left out and a target there refused, see a night of one airmass leave the extinction and zero point not constrained (and no number given), borrow a cited coefficient with an assumed uncertainty and see the flag, and see two standards leave the colour term open (0.081 against 0.009 with three). At the advanced depth they read a colour-dependent night (a drop in chi-square of 67.8 for one added term, k2 = −0.047 ± 0.006), the 0.015 magnitude error of a first-order calibration of a blue star, why the bigger model is not always the better one, and what a linear calibration assumes.',
+      'Students predict how much fainter a star looks at airmass 2.15 than at 1.05, read the slope of a synthetic night’s standards (k about 0.21 magnitudes per airmass), say why, and say that it is not the dust between the stars. At the quantitative depth they read the zero point (24.803 at airmass 1, 24.590 outside the atmosphere), calibrate a target (13.203 ± 0.008 against a truth of 13.200), see standards above airmass 2.5 left out and a target there refused, see a night of one airmass leave the extinction and zero point not constrained (and no number given), borrow a cited coefficient with an assumed uncertainty and see the flag, and see two standards leave the color term open (0.081 against 0.009 with three). At the advanced depth they read a color-dependent night (a drop in chi-square of 67.8 for one added term, k2 = −0.047 ± 0.006), the 0.015 magnitude error of a first-order calibration of a blue star, why the bigger model is not always the better one, and what a linear calibration assumes.',
     priorKnowledge: [
       'Magnitudes are a logarithmic scale: five magnitudes is a factor of 100 in brightness',
       'A straight-line fit has a slope and an intercept',
@@ -955,21 +955,21 @@ const CONTENT = {
       },
       {
         heading: 'A refusal and a flag are part of the answer',
-        body: 'A night that does not span airmass cannot fix k (the tool gives no number), a target above airmass 2.5 is refused, two standards cannot fix a colour term, a borrowed coefficient is flagged, and a lack of fit widens the errors.',
+        body: 'A night that does not span airmass cannot fix k (the tool gives no number), a target above airmass 2.5 is refused, two standards cannot fix a color term, a borrowed coefficient is flagged, and a lack of fit widens the errors.',
       },
       {
         heading: 'A bigger model is chosen by evidence',
-        body: 'A colour-dependent extinction is fitted when the test of the extra term and the residuals ask for it (a drop in chi-square of 67.8 for one term); on a night that does not need it the term costs precision (0.0029 to 0.0047 on k).',
+        body: 'A color-dependent extinction is fitted when the test of the extra term and the residuals ask for it (a drop in chi-square of 67.8 for one term); on a night that does not need it the term costs precision (0.0029 to 0.0047 on k).',
       },
     ],
     features: [
       {
         name: 'The photometric-calibration panel (its own lazy family)',
-        text: 'Three synthetic nights of standard stars (clear, one narrow airmass range, colour-dependent extinction), the fit of Z1 − k(X − 1) + cC to them with its uncertainties, the Bouguer line and the residual plots through the plot component, a target star calibrated with its 95 percent interval, a switch for the cited-coefficient prior and the second-order model, and a button that keeps the calibration in the notebook as a gravitas.artifact record.',
+        text: 'Three synthetic nights of standard stars (clear, one narrow airmass range, color-dependent extinction), the fit of Z1 − k(X − 1) + cC to them with its uncertainties, the Bouguer line and the residual plots through the plot component, a target star calibrated with its 95 percent interval, a switch for the cited-coefficient prior and the second-order model, and a button that keeps the calibration in the notebook as a gravitas.artifact record.',
       },
       {
         name: 'Depth',
-        text: 'Quantitative: the zero point, a calibrated target, the airmass limit and a refused target, a night of one airmass, a cited coefficient, how few standards. Advanced: a colour-dependent extinction, its test, a blue target in two models, the price of the bigger model, what a linear calibration assumes.',
+        text: 'Quantitative: the zero point, a calibrated target, the airmass limit and a refused target, a night of one airmass, a cited coefficient, how few standards. Advanced: a color-dependent extinction, its test, a blue target in two models, the price of the bigger model, what a linear calibration assumes.',
       },
       {
         name: 'Synthetic nights, stated',
@@ -1000,9 +1000,9 @@ const CONTENT = {
     ],
     teachingNotes: [
       'The nights are synthetic: the instrumental magnitudes follow the calibration equation M − m = Z1 − k(X − 1) + cC [− k2 C (X − 1)] with a seeded Gaussian noise, so the truth is known. The kernel is checked against an independent implementation (numpy, SciPy and Astropy), by an ensemble for coverage, by a physical night built from the radiation model’s band responses under a Rayleigh and aerosol atmosphere, and by a cross-match of the repository’s SDSS and Gaia data on NGC 2420 (PHOTOMETRIC_CALIBRATION.md).',
-      'Four checks of the committed contract failed and are reported, not repaired: a lack-of-fit test does not see a colour-dependent extinction the first-order model absorbs (the nested test does), the physical night’s limit clause, the detection power of an underestimated error (0.977 against the 0.99 bound) and the held-out coverage of the authentic cross-match (0.743, a catalogue pair’s colour term, not a hidden calibration).',
+      'Four checks of the committed contract failed and are reported, not repaired: a lack-of-fit test does not see a color-dependent extinction the first-order model absorbs (the nested test does), the physical night’s limit clause, the detection power of an underestimated error (0.977 against the 0.99 bound) and the held-out coverage of the authentic cross-match (0.743, a catalog pair’s color term, not a hidden calibration).',
       'The cited coefficient is a value from the instrument library (Rubin r band, ivezic2019) used as a Gaussian prior with an assumed uncertainty of 0.05 magnitudes per airmass, because the table states none; the lesson says so in the step and the flag.',
-      'Inherited limits: the extinction is constant through the night; the catalogue magnitudes are right; no aperture or flat-field errors; a straight line in airmass and colour; the airmass limit of 2.5 is a stated rule.',
+      'Inherited limits: the extinction is constant through the night; the catalog magnitudes are right; no aperture or flat-field errors; a straight line in airmass and color; the airmass limit of 2.5 is a stated rule.',
     ],
     discussion: [
       'Why is the zero point at airmass 1 more useful to an observer than the zero point outside the atmosphere?',
@@ -1022,13 +1022,23 @@ const FLOW = {
   'counts-to-magnitudes': [
     {
       from: 'a-night-of-standards',
+      to: 'low-in-the-sky-predict',
+      text: 'A night of standards on a plot of magnitude against airmass, and the prediction of how much fainter the same star looks at airmass 2.15 than at 1.05.',
+    },
+    {
+      from: 'bouguer',
       to: 'bouguer',
-      text: 'A night of standards on a plot of magnitude against airmass; the prediction of how much fainter the same star looks at airmass 2.15 and the slope that answers it (0.213 magnitudes per airmass).',
+      text: 'The slope of the points is the extinction of the air: 0.213 magnitudes per airmass, so a third of a magnitude fainter at airmass 2.4 than overhead.',
     },
     {
       from: 'why-fainter',
+      to: 'why-fainter',
+      text: 'Why the star is fainter: its light crosses more air, and the air takes about 0.21 magnitudes for every airmass.',
+    },
+    {
+      from: 'not-the-dust',
       to: 'what-a-calibration-does',
-      text: 'Why the star is fainter (more air), why that is not the dust between the stars, and what a calibration fixes.',
+      text: 'The extinction of the air is not the dust between the stars, and what a night of standards fixes: the zero point, the extinction and a color term.',
     },
   ],
 };
@@ -1042,7 +1052,7 @@ const EXPECTATIONS = {
     'calibrate-a-target':
       'About 13.203 with an uncertainty of about 0.008 (within 0.003); the truth is 13.200.',
     'narrow-night':
-      'Airmass 1.30 to 1.42, so a range of 0.12, no number for the extinction or the zero point, and a colour term of about 0.079.',
+      'Airmass 1.30 to 1.42, so a range of 0.12, no number for the extinction or the zero point, and a color term of about 0.079.',
   },
 };
 

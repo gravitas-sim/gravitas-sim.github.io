@@ -30,7 +30,7 @@ const base = {
   model: 0,
   prior: 0,
   view: 0,
-  colour: 0.8,
+  cindex: 0.8,
   airmass: 1.9,
   truth: 0,
 };
@@ -169,8 +169,8 @@ describe('the numbers the lesson states', () => {
     };
     expect(so.validate(dv).level).toBe('ok');
     expect(so.validate({ dchi: 1, k2: 0 }).level).toBe('error');
-    const b1 = view({ night: 2, colour: -0.2 }).calibrated;
-    const b2 = view({ night: 2, colour: -0.2, model: 1 }).calibrated;
+    const b1 = view({ night: 2, cindex: -0.2 }).calibrated;
+    const b2 = view({ night: 2, cindex: -0.2, model: 1 }).calibrated;
     expect(b1.M).toBeCloseTo(13.2149, 4);
     expect(b2.M).toBeCloseTo(13.2019, 4);
     expect(Math.abs(b1.M - 13.2)).toBeGreaterThan(Math.abs(b2.M - 13.2));
@@ -214,7 +214,7 @@ describe('the lesson’s structure', () => {
       'model',
       'prior',
       'view',
-      'colour',
+      'cindex',
       'airmass',
       'truth',
     ];
