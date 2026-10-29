@@ -1990,6 +1990,12 @@ export const EN_DEFERRED = {
     'Brightness bias, made quantitative: why the sample is not the population.',
   'inv.seq.observing.why-the-period-is-wrong':
     'Why a period from one night a visit can be wrong, and how the cadence decides.',
+  'inv.seq.observing.deep-or-wide':
+    'Which finds more: the same nights as long exposures over a small area, or short ones over a large one.',
+  'inv.seq.observing.two-telescopes-one-question':
+    'One goal, two telescopes: why the large one takes about 1 in 65 of the time.',
+  'inv.seq.observing.propose-an-observation':
+    'Design a survey for a stated goal, predict what it finds and justify the plan: many plans are right.',
   'inv.seq.observing.plan-an-exposure':
     'Turn the CCD equation into a plan: how long, and what limits it.',
   'inv.seq.observing.the-completeness-curve':

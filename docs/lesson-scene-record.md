@@ -11,15 +11,15 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 90 investigations and 1283 steps: 1191 steps
+Across 93 investigations and 1298 steps: 1206 steps
 declare a scene, 157 let a reader change one, 167 read the
-running integration, 782 show a prescribed model result, 146 draw
-on a stored dataset, 661 put a self-contained panel beside the text,
-338 keep something, and 58 are prose.
-Of 172 prediction loops, 172 are returned to,
-172 produce a measurement before they are answered, and
+running integration, 794 show a prescribed model result, 146 draw
+on a stored dataset, 673 put a self-contained panel beside the text,
+342 keep something, and 58 are prose.
+Of 174 prediction loops, 174 are returned to,
+174 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
-172 hold their marking until the experiment settles them.
+174 hold their marking until the experiment settles them.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -1280,4 +1280,46 @@ Of 172 prediction loops, 172 are returned to,
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:strategy-window`, control strategy-window/cadence, measures the phase bins out of 20 that forty nights of visits fill for a 0.8-day period: 13 for one visit a night at the same time and 20 for three visits a night at irregular times, the cadence that breaks the alias, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## Deep or Wide? (`deep-or-wide`)
+
+- **Steps:** 6. Scene declared on 6; a reader can change something on 0; 6 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 5 prescribed model, 0 stored dataset, 5 self-contained panel.
+- **What students do:** move-an-instrument-control, commit-a-prediction, record-values, choose-an-option.
+- **Objects the steps declare:** star.
+- **Instruments:** survey-design-tradeoff.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** predict-deep-or-wide → euclid-best, steep-class, what-decides-it, the-rule-and-its-limits → steep-class.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment:** not yet reviewed.
+
+## Two Telescopes, One Question (`two-telescopes-one-question`)
+
+- **Steps:** 5. Scene declared on 5; a reader can change something on 0; 5 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 4 prescribed model, 0 stored dataset, 4 self-contained panel.
+- **What students do:** move-an-instrument-control, commit-a-prediction, record-values, choose-an-option.
+- **Objects the steps declare:** star.
+- **Instruments:** survey-design-compare.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** predict-the-ratio → read-the-hours, why-so-much, two-limits-of-the-comparison → read-the-hours.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment:** not yet reviewed.
+
+## Propose an Observation (`propose-an-observation`)
+
+- **Steps:** 4. Scene declared on 4; a reader can change something on 0; 4 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 3 prescribed model, 0 stored dataset, 3 self-contained panel.
+- **What students do:** move-an-instrument-control, record-values, answer-in-words.
+- **Objects the steps declare:** star.
+- **Instruments:** survey-design-plan.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** none.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: nothing marks these, they are a record.
+- **Scene rebuilds:** none.
+- **Accepted central experiment:** not yet reviewed.
 

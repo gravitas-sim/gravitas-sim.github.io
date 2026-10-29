@@ -213,5 +213,8 @@ export const GUIDED = Object.freeze([
   'why-rings',
   'why-the-bright-ones-win',
   'why-the-period-is-wrong',
+  'deep-or-wide',
+  'two-telescopes-one-question',
+  'propose-an-observation',
   'why-venus-is-hot',
 ]);

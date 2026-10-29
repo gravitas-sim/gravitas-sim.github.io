@@ -48,6 +48,7 @@ import PLAN_A_NIGHT_DEEPER from '../data/investigations/depth/plan-a-night.js';
 import GOLDILOCKS_DEEPER from '../data/investigations/depth/goldilocks-question.js';
 import { DEPTH as TELESCOPE_DEPTH } from '../data/investigations/telescope-sequence.js';
 import { DEPTH as STRATEGY_DEPTH } from '../data/investigations/strategy-sequence.js';
+import { DEPTH as SURVEY_DEPTH } from '../data/investigations/survey-sequence.js';
 import { DEPTH as SATURATED_STAR_DEPTH } from '../data/investigations/saturated-star-sequence.js';
 import { DEPTH as PHOTCAL_DEPTH } from '../data/investigations/photometric-calibration-sequence.js';
 
@@ -75,6 +76,9 @@ export const DEEPER = Object.freeze({
   ),
   ...Object.fromEntries(
     Object.entries(STRATEGY_DEPTH).map(([id, d]) => [id, d.steps])
+  ),
+  ...Object.fromEntries(
+    Object.entries(SURVEY_DEPTH).map(([id, d]) => [id, d.steps])
   ),
   [MOTION_DEEPER.id]: MOTION_DEEPER.steps,
   [MADE_OF_DEEPER.id]: MADE_OF_DEEPER.steps,

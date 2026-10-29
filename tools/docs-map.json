@@ -989,6 +989,13 @@
       "student": true
     },
     {
+      "file": "SURVEY_DESIGN.md",
+      "kind": "feature",
+      "purpose": "Survey design: depth from exposure and facility, area, expected counts from a stated count model, completeness and contamination, the depth-against-area trade-off, the validation contract and failed legs (Prompt 215).",
+      "owner": 215,
+      "student": true
+    },
+    {
       "file": "DETECTOR_EFFECTS.md",
       "kind": "feature",
       "purpose": "Detector effects over the frame model: saturation, a stated nonlinearity, cosmic-ray tracks, charge bleeding and sampling, each flagged in the sidecar; validation and the failed legs (Prompt 211).",

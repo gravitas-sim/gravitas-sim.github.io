@@ -94,6 +94,7 @@ import ATMOSPHERE_LESSONS from './investigations/atmosphere-sequence.js';
 import PLANETS_LESSONS from './investigations/planets-sequence.js';
 import EXPOSURE_LESSONS from './investigations/exposure-sequence.js';
 import STRATEGY_LESSONS from './investigations/strategy-sequence.js';
+import SURVEY_LESSONS from './investigations/survey-sequence.js';
 import TELESCOPE_LESSONS from './investigations/telescope-sequence.js';
 import SATURATED_STAR_LESSONS from './investigations/saturated-star-sequence.js';
 import PHOTCAL_LESSONS from './investigations/photometric-calibration-sequence.js';
@@ -208,6 +209,7 @@ export const INVESTIGATIONS = [
   ...PHOTCAL_LESSONS,
   ...EXPOSURE_LESSONS,
   ...STRATEGY_LESSONS,
+  ...SURVEY_LESSONS,
 ];
 
 // The lessons carry no card summary; it is written once in summaries.js and

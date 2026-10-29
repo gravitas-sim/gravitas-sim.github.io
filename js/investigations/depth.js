@@ -152,6 +152,11 @@ const EXTENSIONS = {
     import('../data/investigations/depth/what-a-telescope-resolves.js'),
   'why-the-period-is-wrong': () =>
     import('../data/investigations/depth/why-the-period-is-wrong.js'),
+  'deep-or-wide': () => import('../data/investigations/depth/deep-or-wide.js'),
+  'two-telescopes-one-question': () =>
+    import('../data/investigations/depth/two-telescopes-one-question.js'),
+  'propose-an-observation': () =>
+    import('../data/investigations/depth/propose-an-observation.js'),
   'design-the-schedule': () =>
     import('../data/investigations/depth/design-the-schedule.js'),
   'the-saturated-star': () =>
@@ -268,6 +273,12 @@ const WORDS = {
       import('../data/investigations/depth/es/what-a-telescope-resolves.js'),
     'why-the-period-is-wrong': () =>
       import('../data/investigations/depth/es/why-the-period-is-wrong.js'),
+    'deep-or-wide': () =>
+      import('../data/investigations/depth/es/deep-or-wide.js'),
+    'two-telescopes-one-question': () =>
+      import('../data/investigations/depth/es/two-telescopes-one-question.js'),
+    'propose-an-observation': () =>
+      import('../data/investigations/depth/es/propose-an-observation.js'),
     'design-the-schedule': () =>
       import('../data/investigations/depth/es/design-the-schedule.js'),
     'the-saturated-star': () =>

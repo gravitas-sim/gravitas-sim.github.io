@@ -60,6 +60,10 @@
       "en": "Craters by Size",
       "es": "Cráteres por tamaño"
     },
+    "deep-or-wide": {
+      "en": "Deep or Wide?",
+      "es": "¿Profundo o ancho?"
+    },
     "design-the-schedule": {
       "en": "Design the Schedule",
       "es": "Diseña el calendario"
@@ -172,6 +176,10 @@
       "en": "What If Gravity Were Not Inverse Square?",
       "es": "¿Y si la gravedad no fuera inversa al cuadrado?"
     },
+    "propose-an-observation": {
+      "en": "Propose an Observation",
+      "es": "Propón una observación"
+    },
     "radial-velocity": {
       "en": "Finding Planets by Their Tug",
       "es": "Encontrar planetas por su tirón"
@@ -283,6 +291,10 @@
     "two-periodograms": {
       "en": "Two Periodograms",
       "es": "Dos periodogramas"
+    },
+    "two-telescopes-one-question": {
+      "en": "Two Telescopes, One Question",
+      "es": "Dos telescopios, una pregunta"
     },
     "wanderers-on-the-sky": {
       "en": "Wanderers on the Sky",

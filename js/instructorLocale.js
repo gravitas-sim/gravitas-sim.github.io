@@ -120,6 +120,7 @@ import ATMOSPHERE_SHADOWS from './data/investigations/es/atmosphere-sequence.js'
 import { SHADOWS as PLANETS_SHADOWS } from './data/investigations/planets-sequence.js';
 import { SHADOWS as EXPOSURE_SHADOWS } from './data/investigations/exposure-sequence.js';
 import { SHADOWS as STRATEGY_SHADOWS } from './data/investigations/strategy-sequence.js';
+import { SHADOWS as SURVEY_SHADOWS } from './data/investigations/survey-sequence.js';
 import { SHADOWS as TELESCOPE_SHADOWS } from './data/investigations/telescope-sequence.js';
 import { SHADOWS as SATURATED_STAR_SHADOWS } from './data/investigations/saturated-star-sequence.js';
 import { SHADOWS as PHOTCAL_SHADOWS } from './data/investigations/photometric-calibration-sequence.js';
@@ -174,6 +175,7 @@ export const SHADOWS = Object.freeze({
   ...PLANETS_SHADOWS,
   ...EXPOSURE_SHADOWS,
   ...STRATEGY_SHADOWS,
+  ...SURVEY_SHADOWS,
   ...TELESCOPE_SHADOWS,
   ...SATURATED_STAR_SHADOWS,
   ...PHOTCAL_SHADOWS,

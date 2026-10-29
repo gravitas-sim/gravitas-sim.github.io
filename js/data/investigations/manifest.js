@@ -1138,4 +1138,43 @@ export const MANIFEST = [
     gradedCount: 6,
     objectiveCount: 4,
   },
+  {
+    id: 'deep-or-wide',
+    title: 'Deep or Wide?',
+    subtitle:
+      'The same nights can reach faint sources over a small area or bright ones over a large one: which finds more depends on the class of source',
+    duration: '12-22 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/deep-or-wide.webp',
+    depths: 3,
+    stepCount: 6,
+    gradedCount: 4,
+    objectiveCount: 3,
+  },
+  {
+    id: 'two-telescopes-one-question',
+    title: 'Two Telescopes, One Question',
+    subtitle:
+      'The same depth over the same area with a one-metre telescope and an 8.4-metre one: how much longer does the small one take, and why',
+    duration: '12-22 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/two-telescopes-one-question.webp',
+    depths: 3,
+    stepCount: 5,
+    gradedCount: 3,
+    objectiveCount: 3,
+  },
+  {
+    id: 'propose-an-observation',
+    title: 'Propose an Observation',
+    subtitle:
+      'Design a survey for a stated goal, predict what it will find, check it against the model and justify the plan: many plans are right',
+    duration: '20-40 min',
+    level: 'Upper-level astronomy',
+    thumbnail: 'images/investigations/propose-an-observation.webp',
+    depths: 3,
+    stepCount: 4,
+    gradedCount: 2,
+    objectiveCount: 3,
+  },
 ];

@@ -261,6 +261,7 @@ export const DEEP_OR_WIDE_DEEPER = {
         'For a class with a slope of 1.0, the sources found go as the exposure to the power p. What is p?',
       answer: 0.25,
       tolerance: 0.03,
+      unit: '',
       hints: ['1.25 times the slope, minus 1.'],
       because:
         'The counts per square degree go as the exposure to the 1.25 times the slope, the area as the exposure to the minus one: 1.25 - 1 = 0.25.',
@@ -515,6 +516,7 @@ export const TWO_TELESCOPES_DEEPER = {
       prompt: 'How many times more sky does a Rubin pointing cover?',
       answer: 49.2,
       tolerance: 1,
+      unit: '',
       hints: ['Divide the two fields.'],
       because:
         '9.6 / 0.195 = 49.2: 52 pointings against 2 is the same factor within the whole-pointing rounding.',
@@ -555,7 +557,7 @@ export const PROPOSE_AN_OBSERVATION = {
     'Design a survey for a stated goal, predict what it will find, check it against the model and justify the plan: many plans are right',
   duration: '20-40 min',
   level: 'Upper-level astronomy',
-  audience: 'upper',
+  audience: 'intro',
   textbook: { chapter: 6, section: null },
   courseLevel: 'upper',
   mathematics: 'algebra',
@@ -719,7 +721,6 @@ export const PROPOSE_AN_OBSERVATION_DEEPER = {
         'Which would you propose to a time-allocation committee, and what would change your mind?',
       rubric:
         'Credit for choosing by a stated criterion (robustness to weather, time used, margin over the depth, reliability), and for naming something that would change the choice. No plan is the answer.',
-      reflect: true,
     },
     {
       sid: 'what-the-interval-misses',
@@ -1351,7 +1352,10 @@ const EXPECTATIONS = {
     'read-the-hours':
       'About 3.84 hours (within 0.15) for the one-metre telescope and a ratio of about 0.0155 (within 0.002).',
   },
-  'propose-an-observation': {},
+  'propose-an-observation': {
+    'propose-a-plan':
+      'Any plan the screen accepts: feasible for 22.5 mag over 100 square degrees in at most ten nights with 95 percent of the detections real, and the stated depth and density within 0.15 mag and 10 percent of the plan’s own. The one-metre telescope at about 63 s, Rubin at about 32 s and the 0.35 m at about 1000 s all pass.',
+  },
 };
 
 const BANDS = {

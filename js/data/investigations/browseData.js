@@ -372,4 +372,16 @@ export const BROWSE_META = {
     tags: ['observing'],
     numericCount: 0,
   },
+  'deep-or-wide': {
+    tags: ['observing'],
+    numericCount: 0,
+  },
+  'two-telescopes-one-question': {
+    tags: ['observing'],
+    numericCount: 0,
+  },
+  'propose-an-observation': {
+    tags: ['observing'],
+    numericCount: 0,
+  },
 };
