@@ -22,7 +22,7 @@
         "toolRequests": 153
       },
       "power-law": {
-        "kb": 3335.9,
+        "kb": 3336,
         "requests": 148,
         "toolKb": 3389.2,
         "toolRequests": 151
@@ -40,7 +40,7 @@
         "requests": 5
       },
       "instructors": {
-        "kb": 1361.8,
+        "kb": 1363.3,
         "requests": 21
       },
       "figure": {
@@ -166,7 +166,7 @@
         "requests": 2
       },
       "instructors": {
-        "kb": 1127.2,
+        "kb": 1128,
         "requests": 2
       },
       "figure": {
