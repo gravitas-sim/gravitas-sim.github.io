@@ -342,22 +342,17 @@ $('obsComparePanel').addEventListener('toggle', async () => {
   cmp.loading ??= import('./observatory/comparePanel.js').then(mountCompare);
   await cmp.loading;
 });
-// The spectrograph model (SPECTROGRAPH.md): one line of a spectrum fitted with
-// the instrument's line-spread function, loaded when first opened.
-const spec = { panel: null, loading: null };
-function mountSpec(m) {
-  spec.panel?.destroy();
+// The spectrograph model (SPECTROGRAPH.md): one line fitted with the instrument's
+// line-spread function, loaded when first opened.
+const spec = { panel: null };
+$('obsSpecPanel').addEventListener('toggle', async () => {
+  if (!$('obsSpecPanel').open || !state.view) return;
+  if (spec.panel) return spec.panel.update(state.view);
+  const m = await import('./observatory/spectrographPanel.js');
   spec.panel = m.mountSpectrographPanel($('obsSpecBody'), {
     ...lent,
     observation: state.view,
   });
-  return spec.panel;
-}
-$('obsSpecPanel').addEventListener('toggle', async () => {
-  if (!$('obsSpecPanel').open || !state.view) return;
-  if (spec.panel) return spec.panel.update(state.view);
-  spec.loading ??= import('./observatory/spectrographPanel.js').then(mountSpec);
-  await spec.loading;
 });
 $('obsFitPanel').addEventListener('toggle', async () => {
   if (!$('obsFitPanel').open || !state.view) return;

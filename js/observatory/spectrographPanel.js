@@ -14,6 +14,7 @@
 // `ctx`), for the reason js/observatory/fitPanel.js gives.
 // =============================================================================
 
+import { listeners } from '../listeners.js';
 import { fitLine, radialVelocity } from '../kernels/spectrograph/index.js';
 import { LINES } from '../data/radiation/lines.js';
 import { EN_SPECTROGRAPH } from '../i18n/en.spectrograph.js';
@@ -252,7 +253,8 @@ export function mountSpectrographPanel(root, ctx) {
       el('table', { class: 'ow-table' }, el('tbody', {}, ...rows))
     );
   };
-  go.addEventListener('click', run);
+  const listen = listeners();
+  listen(go, 'click', run);
   fill();
   return {
     update(o) {
@@ -260,6 +262,7 @@ export function mountSpectrographPanel(root, ctx) {
       fill();
     },
     destroy() {
+      listen.off();
       root.replaceChildren();
     },
   };
