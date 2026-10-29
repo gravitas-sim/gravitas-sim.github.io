@@ -84,6 +84,8 @@ export const DEEPER = Object.freeze({
   ),
   ...Object.fromEntries(
     Object.entries(BINARIES_DEPTH).map(([id, d]) => [id, d.steps])
+  ),
+  ...Object.fromEntries(
     Object.entries(SURVEY_DEPTH).map(([id, d]) => [id, d.steps])
   ),
   [MOTION_DEEPER.id]: MOTION_DEEPER.steps,

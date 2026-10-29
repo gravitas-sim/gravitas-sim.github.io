@@ -168,6 +168,7 @@ export default {
     'Qué estrella es más caliente y cuál es mayor a partir de los dos eclipses, cómo la fase del secundario da e cos w, cómo las duraciones de los eclipses dan e sen w solo débilmente, por qué un eclipse rasante deja abierto el cociente de radios y qué dice una prueba de residuos cuando los datos contienen algo que el modelo omite.',
     'Por qué el eclipse más profundo oculta la estrella más caliente, por qué un fondo plano significa que se ocultó la estrella menor, por qué los radios vienen como fracciones de la órbita y no en kilómetros, y por qué un número de un ajuste solo es una medida cuando los datos lo fijan.',
     'El modelo son dos esferas en una órbita kepleriana: sin reflexión, sin luz elipsoidal, sin manchas, sin una tercera estrella, sin masas (esas necesitan velocidades); el oscurecimiento del limbo es fijo, de una tabla; todos los datos son sintéticos, con su verdad indicada.',
+  ],
   surveyDesign: [
     'Una instalación de la biblioteca de instrumentos, una clase de fuente con una pendiente de conteos declarada, una exposición, visitas a apilar, noches y un umbral de detección, con una profundidad y un área objetivo.',
     'La profundidad que alcanza el plan, el área que compran sus noches, las fuentes que encontraría con un intervalo de Poisson, los falsos positivos que deja pasar su umbral y la fiabilidad, un veredicto que nombra cada razón por la que un plan no es viable, y la exposición que encuentra más fuentes a tiempo fijo.',
