@@ -102,6 +102,7 @@ catalogue refers to it, so a change to it can reach a student.
 | [OBJECT_INSPECTOR.md](OBJECT_INSPECTOR.md) | The object inspector. | feature | unassigned | written | no |
 | [OBSERVATION_DATA_PACK_GATE.md](OBSERVATION_DATA_PACK_GATE.md) | Authentic observation data packs gate. | gate | P10 | written | no |
 | [OBSERVATORY_WORKSPACE_DESIGN.md](OBSERVATORY_WORKSPACE_DESIGN.md) | The observation workspace design. | design | unassigned | written | no |
+| [OBSERVING_STRATEGY.md](OBSERVING_STRATEGY.md) | Observing strategy: the window function of a cadence, the aliases and the verdict, the phase coverage, a multi-night plan with its cost in hours and the weather as a seeded loss, validation (Prompt 214). | feature |
 | [OFFLINE_AND_LOW_END.md](OFFLINE_AND_LOW_END.md) | Offline use and slow machines. | reference | unassigned | regions (docs) | no |
 | [ONBOARDING.md](ONBOARDING.md) | The student first-run path and what-next guidance. | feature | P73 | written | no |
 | [ORBITAL_LAYER.md](ORBITAL_LAYER.md) | The orbital layer: elements and state vectors with units, frames and time scales named. | feature | P148 | written | no |
