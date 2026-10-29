@@ -110,7 +110,7 @@ V505 Persei (TIC 348517784), TESS Sector 18, SPOC 2-minute light curve `tess2019
 restriction, the acknowledgement of MAST and the TESS mission requested. The comparison values are Southworth (2021), "Rediscussion of
 eclipsing binaries. Paper VI. The F-type system V505 Persei", The Observatory 141, 122 (arXiv:2106.04323, CC BY-NC-ND 4.0: **the paper is
 not reproduced or stored; only its numerical results are cited**), Table II. The file is **not in the repository**; the validator reads it from
-`--fits=<path>`, `BINARIES_FITS` or the path in `oracle-provenance.json`, checks its SHA-256 and otherwise reports the leg NOT RUN. The
+`--fits=<path>`, `BINARIES_FITS` or the relative path in `oracle-provenance.json`, checks its SHA-256 and otherwise reports the leg NOT RUN. The
 contract was fixed before the file was opened.
 
 ## Limits to carry into every claim

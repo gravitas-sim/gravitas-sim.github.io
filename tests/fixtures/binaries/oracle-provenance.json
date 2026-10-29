@@ -14,7 +14,7 @@
     "bytes": 1785600,
     "source": "https://archive.stsci.edu/missions/tess/tid/s0018/0000/0003/4851/7784/tess2019306063752-s0018-0000000348517784-0162-s_lc.fits",
     "retrieved": "2026-10-29",
-    "defaultPath": "/Users/carl/Desktop/Gravitas/scratch-data/binaries/tess2019306063752-s0018-0000000348517784-0162-s_lc.fits",
-    "note": "MAST/TESS public data, retrieved by the coordinator; not committed. defaultPath is where a maintainer keeps it; --fits or BINARIES_FITS override."
+    "relativePath": "../../scratch-data/binaries/tess2019306063752-s0018-0000000348517784-0162-s_lc.fits",
+    "note": "MAST/TESS public data, retrieved by the coordinator; not committed. relativePath (from the repository root) is where a maintainer keeps it; --fits or BINARIES_FITS override."
   }
 }

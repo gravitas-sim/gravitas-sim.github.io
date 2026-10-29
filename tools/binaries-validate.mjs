@@ -705,7 +705,10 @@ function e1() {
   const l = lim('E1.authentic');
   const arg = process.argv.find(a => a.startsWith('--fits='))?.slice(7);
   const prov = read('tests/fixtures/binaries/oracle-provenance.json').authentic;
-  const file = arg || process.env.BINARIES_FITS || prov?.defaultPath;
+  const file =
+    arg ||
+    process.env.BINARIES_FITS ||
+    (prov?.relativePath && path.resolve(ROOT, prov.relativePath));
   if (!file || !existsSync(file))
     return notRun(
       'E1.authentic',

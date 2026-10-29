@@ -977,7 +977,7 @@
     {
       "file": "BINARIES.md",
       "kind": "feature",
-      "purpose": "Eclipsing binaries: a detached two-sphere model on a Kepler orbit, e cos w and e sin w from the eclipses, grazing non-identifiability, the fit through the inference core, validation and failed legs (Prompt 217).",
+      "purpose": "Eclipsing binaries: the detached two-sphere model, what the eclipses fix (e cos w) and leave open (grazing, e sin w), its validation and failed legs (Prompt 217).",
       "owner": 217,
       "student": true
     },

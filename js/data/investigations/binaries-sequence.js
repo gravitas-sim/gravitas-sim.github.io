@@ -221,7 +221,7 @@ export const TWO_STARS_ECLIPSING = {
       body: `From the eclipses alone you have which star is hotter, which is smaller, how
              big each is compared with the orbit, how tilted the orbit is and, from the
              secondary&rsquo;s phase, something about its shape. You do not have a
-             <strong>mass</strong>, and you do not have a size in kilometres: the orbit
+             <strong>mass</strong>, and you do not have a size in kilometers: the orbit
              itself has no scale in a light curve. Those need the stars&rsquo; speeds,
              which come from their spectra. The deeper steps fit the model to data,
              and say what it can and cannot fix.`,
@@ -276,11 +276,11 @@ export const TWO_STARS_ECLIPSING_DEEPER = {
       type: 'question',
       kind: 'choice',
       title: 'Why fractions of the orbit',
-      body: `The fit gives R1/a = 0.1085 and R2/a = 0.0814, not radii in kilometres.`,
-      prompt: 'Why can the light curve not give kilometres?',
+      body: `The fit gives R1/a = 0.1085 and R2/a = 0.0814, not radii in kilometers.`,
+      prompt: 'Why can the light curve not give kilometers?',
       options: [
         'The curve records how long each star takes to cross the other as a fraction of the period, which fixes sizes relative to the orbit; the orbit’s own size needs the stars’ speeds',
-        'The telescope is not big enough to measure kilometres',
+        'The telescope is not big enough to measure kilometers',
         'The limb darkening hides the size',
         'Kilometres need the distance to the stars, and the model has none',
       ],
@@ -289,7 +289,7 @@ export const TWO_STARS_ECLIPSING_DEEPER = {
         {
           id: 'aperture',
           option: 1,
-          say: 'The same curve from any size of telescope has the same fractions. Sizes in kilometres are missing from the light, not from the instrument.',
+          say: 'The same curve from any size of telescope has the same fractions. Sizes in kilometers are missing from the light, not from the instrument.',
         },
         {
           id: 'distance',
@@ -301,7 +301,7 @@ export const TWO_STARS_ECLIPSING_DEEPER = {
         'A star crossing the other for a time t at a speed v covers a distance v t. What does the light curve measure, t or v?',
       ],
       because:
-        'The light curve gives times: how long the eclipse lasts and how long the orbit takes. A duration over a period is a length over a circumference, so sizes come out as fractions of the orbit. The orbit’s size in kilometres is the stars’ speeds times the period, and the speeds come from the Doppler shifts of their spectra. With those, a fraction becomes a radius and, with Kepler’s third law, the masses follow. That is the next investigation of this kind.',
+        'The light curve gives times: how long the eclipse lasts and how long the orbit takes. A duration over a period is a length over a circumference, so sizes come out as fractions of the orbit. The orbit’s size in kilometers is the stars’ speeds times the period, and the speeds come from the Doppler shifts of their spectra. With those, a fraction becomes a radius and, with Kepler’s third law, the masses follow. That is the next investigation of this kind.',
       tool: FIT(),
     },
     {
@@ -374,7 +374,7 @@ export const TWO_STARS_ECLIPSING_DEEPER = {
   ].concat([
     {
       sid: 'the-secondary-phase',
-      after: 'what-eclipses-leave-out',
+      after: 'what-the-spots-did',
       depth: 'advanced',
       type: 'measure',
       title: 'e cos w from the secondary',
@@ -565,9 +565,15 @@ export const TWO_STARS_ECLIPSING_ES = {
         'La estrella mayor es la que está delante',
       ],
       misconceptions: [
-        'Aquí nada varía por sí solo: el modelo tiene dos estrellas estables. La forma del fondo es geometría.',
-        'La excentricidad aparta el secundario de media órbita; no aplana un fondo.',
-        'Cuando la mayor está delante se oculta la menor: ese es el plano. Cuando la menor está delante cruza el disco de la mayor, y el fondo se curva porque la mayor es más oscura en el borde.',
+        {
+          say: 'Aquí nada varía por sí solo: el modelo tiene dos estrellas estables. La forma del fondo es geometría.',
+        },
+        {
+          say: 'La excentricidad aparta el secundario de media órbita; no aplana un fondo.',
+        },
+        {
+          say: 'Cuando la mayor está delante se oculta la menor: ese es el plano. Cuando la menor está delante cruza el disco de la mayor, y el fondo se curva porque la mayor es más oscura en el borde.',
+        },
       ],
       hints: [
         'Mientras la estrella menor está entera detrás de la mayor, ¿se oculta más o menos de ella?',
@@ -620,8 +626,12 @@ export const TWO_STARS_ECLIPSING_DEEPER_ES = {
         'Los kilómetros necesitan la distancia a las estrellas, y el modelo no la tiene',
       ],
       misconceptions: [
-        'La misma curva de un telescopio de cualquier tamaño tiene las mismas fracciones. Los tamaños en kilómetros faltan en la luz, no en el instrumento.',
-        'Una distancia convertiría un tamaño aparente en un tamaño, pero las estrellas de una binaria eclipsante nunca se resuelven. Sus tamaños salen de tiempos, y un tiempo necesita una velocidad para convertirse en longitud.',
+        {
+          say: 'La misma curva de un telescopio de cualquier tamaño tiene las mismas fracciones. Los tamaños en kilómetros faltan en la luz, no en el instrumento.',
+        },
+        {
+          say: 'Una distancia convertiría un tamaño aparente en un tamaño, pero las estrellas de una binaria eclipsante nunca se resuelven. Sus tamaños salen de tiempos, y un tiempo necesita una velocidad para convertirse en longitud.',
+        },
       ],
       hints: [
         'Una estrella que cruza a la otra durante un tiempo t a una velocidad v recorre una distancia v t. ¿Qué mide la curva de luz, t o v?',
@@ -648,8 +658,12 @@ export const TWO_STARS_ECLIPSING_DEEPER_ES = {
         'Los datos tienen pocos puntos',
       ],
       misconceptions: [
-        'Aquí sabes la verdad solo porque un modelo hizo los datos. Con una estrella real no la sabes, y la prueba es la única forma de saber que no se puede confiar en la incertidumbre indicada.',
-        'Los números son un ajuste a la parte de la curva que el modelo describe, y no son absurdos. Lo que falla es la afirmación de que las barras de error dicen cuánto se apartan de la verdad.',
+        {
+          say: 'Aquí sabes la verdad solo porque un modelo hizo los datos. Con una estrella real no la sabes, y la prueba es la única forma de saber que no se puede confiar en la incertidumbre indicada.',
+        },
+        {
+          say: 'Los números son un ajuste a la parte de la curva que el modelo describe, y no son absurdos. Lo que falla es la afirmación de que las barras de error dicen cuánto se apartan de la verdad.',
+        },
       ],
       hints: [
         'Las barras de error suponen que la dispersión es solo ruido. ¿Y si parte de ella es una señal que el modelo no sabe dibujar?',
@@ -676,8 +690,12 @@ export const TWO_STARS_ECLIPSING_DEEPER_ES = {
         'e sen w necesita un espectro',
       ],
       misconceptions: [
-        'Aquí e sen w vale 0,10 y e cos w 0,14: parecidas. La diferencia está en lo bien que la curva de luz las mide, no en su tamaño.',
-        'Una curva de velocidades sí restringe bien e sen w, y por eso ayuda un ajuste conjunto. Pero la curva de luz sola la da, débilmente, por las duraciones.',
+        {
+          say: 'Aquí e sen w vale 0,10 y e cos w 0,14: parecidas. La diferencia está en lo bien que la curva de luz las mide, no en su tamaño.',
+        },
+        {
+          say: 'Una curva de velocidades sí restringe bien e sen w, y por eso ayuda un ajuste conjunto. Pero la curva de luz sola la da, débilmente, por las duraciones.',
+        },
       ],
       hints: [
         '¿Qué es más fácil de medir a una parte en diez mil: el momento de un mínimo o la duración de un eclipse?',
@@ -704,9 +722,15 @@ export const TWO_STARS_ECLIPSING_DEEPER_ES = {
         'Elegir el ajuste que da el cociente de radios más cercano a 1',
       ],
       misconceptions: [
-        'Más puntos afilan el valle sin romperlo: la dirección alargada sigue ahí. Una dirección que la curva de luz no restringe sigue abierta por más puntos que tenga.',
-        'Una barra mayor sobre un número que no es una medida sigue engañando. Dar el intervalo, que está abierto, o las combinaciones que los datos sí fijan, es la forma honesta.',
-        'Elegir el valor que esperas usa una expectativa previa y la llama resultado.',
+        {
+          say: 'Más puntos afilan el valle sin romperlo: la dirección alargada sigue ahí. Una dirección que la curva de luz no restringe sigue abierta por más puntos que tenga.',
+        },
+        {
+          say: 'Una barra mayor sobre un número que no es una medida sigue engañando. Dar el intervalo, que está abierto, o las combinaciones que los datos sí fijan, es la forma honesta.',
+        },
+        {
+          say: 'Elegir el valor que esperas usa una expectativa previa y la llama resultado.',
+        },
       ],
       hints: [
         'Los datos fijan una combinación de k, la suma de los radios y la inclinación, no las tres. ¿Qué fija otra?',
@@ -724,12 +748,12 @@ const CONTENT = {
     difficulty:
       'Introductory (read two eclipses); majors (fit, uncertainties, the residual test); advanced (e cos w, e sin w, the grazing degeneracy)',
     placement:
-      'In a survey course with the unit on stellar masses and radii, before the investigation on binary orbits; in a majors course after the exoplanet transit lessons, since the fit is the transit fit with a second light source. It supports OpenStax Astronomy 2e chapter 18 (the stars: a celestial census). It needs no mathematics beyond a ratio at the survey depth.',
+      'In a survey course with the unit on stellar masses and radii, before the investigation on binary orbits; in a majors course after the exoplanet transit investigations, since the fit is the transit fit with a second light source. It supports OpenStax Astronomy 2e chapter 18 (the stars: a celestial census). It needs no mathematics beyond a ratio at the survey depth.',
     overview:
       'Students predict which eclipse of a pair is deeper and read 48 and 23 percent, say that a flat bottom means the smaller star was hidden and that a secondary at exactly half an orbit means a circular orbit; at depth they read the fitted radii of an unequal pair with their uncertainties, see a spotted pair fail the residual test (reduced chi-square 25.6, correlated-noise factor 1.8), read e cos w from the secondary’s phase of an eccentric pair (0.5893 gives 0.1402), say why e sin w is forty times less certain, and see a grazing eclipse return a radius ratio of 0.16 for stars whose true ratio is 0.9, with the panel saying k is not constrained.',
     priorKnowledge: [
       'A period as the time for one orbit, and a phase as the fraction of it',
-      'That a star is darker at its edge than at its centre (limb darkening), at the level of a picture',
+      'That a star is darker at its edge than at its center (limb darkening), at the level of a picture',
       'What a fit is: the model curve that comes closest to the points',
     ],
     keyConcepts: [
@@ -739,7 +763,7 @@ const CONTENT = {
       },
       {
         heading: 'Eclipses give radii as fractions of the orbit',
-        body: 'Duration over period is a length over a circumference. The orbit’s size in kilometres, and so the masses, need the stars’ velocities from spectra; the light curve alone does not have them.',
+        body: 'Duration over period is a length over a circumference. The orbit’s size in kilometers, and so the masses, need the stars’ velocities from spectra; the light curve alone does not have them.',
       },
       {
         heading:
@@ -754,7 +778,7 @@ const CONTENT = {
       },
       {
         name: 'Depth',
-        text: 'Quantitative: fit an unequal pair and read radii as fractions of the orbit, why not kilometres, the residual test on a spotted pair. Advanced: e cos w from the secondary’s phase, why e sin w is weaker, a grazing eclipse and what would fix k.',
+        text: 'Quantitative: fit an unequal pair and read radii as fractions of the orbit, why not kilometers, the residual test on a spotted pair. Advanced: e cos w from the secondary’s phase, why e sin w is weaker, a grazing eclipse and what would fix k.',
       },
       {
         name: 'Synthetic data, stated',
@@ -786,7 +810,7 @@ const CONTENT = {
     teachingNotes: [
       'The data are synthetic and the truth is stated: the unequal pair has R1/a 0.1086, R2/a 0.0814, k 0.75, inclination 87.6 degrees, J 0.55; the fit returns 0.1085 and 0.0814 within 0.00016.',
       'The model is validated against batman 2.5.1 (maximum difference 2.6e-5 of the flux), a brute-force quadrature, closed forms for depths, contacts and the secondary’s phase, ensembles for coverage, and misspecified systems that must fail the residual test or be flagged not constrained (BINARIES.md).',
-      'The convention is Winn (2010): w is the argument of periastron of star 2’s orbit about star 1; the radial-velocity convention adds 180 degrees. The panel and the guide state it.',
+      'The convention is Winn (2010): w is the argument of periastron of star 2’s orbit about star 1; the radial-velocity convention adds 180 degrees. The panel states it, and so do these notes.',
       'Inherited limits: no reflection, ellipsoidal light, beaming, spots or third body; limb darkening is fixed from a table; only the spotted pair carries a stated misspecification, and a real star may have several.',
     ],
     discussion: [
@@ -838,7 +862,7 @@ const EXPECTATIONS = {
 const BANDS = {
   'two-stars-eclipsing': {
     core: 'short',
-    quantitative: 'medium',
+    quantitative: 'long',
     advanced: 'long',
   },
 };
