@@ -24,7 +24,10 @@ import {
  * @returns {Promise<{ok: boolean, reason?: string}>}
  */
 export async function keepCalibration(view) {
-  const digest = await sha256Hex(JSON.stringify(view.observations));
+  const digest = await sha256Hex(JSON.stringify(view.observations)).catch(
+    () => null
+  );
+  if (!digest) return { ok: false, reason: 'no-digest' };
   const envelope = calibrationRecord(view.solution, [view.calibrated], {
     id: `photometric-calibration-${digest.slice(0, 12)}`,
     source: {
