@@ -1143,7 +1143,7 @@ export const MANIFEST = [
     title: 'Deep or Wide?',
     subtitle:
       'The same nights can reach faint sources over a small area or bright ones over a large one: which finds more depends on the class of source',
-    duration: '12-22 min',
+    duration: '8-14 min',
     level: 'Introductory astronomy',
     thumbnail: 'images/investigations/deep-or-wide.webp',
     depths: 3,
@@ -1156,7 +1156,7 @@ export const MANIFEST = [
     title: 'Two Telescopes, One Question',
     subtitle:
       'The same depth over the same area with a one-meter telescope and an 8.4-meter one: how much longer does the small one take, and why',
-    duration: '12-22 min',
+    duration: '5-9 min',
     level: 'Introductory astronomy',
     thumbnail: 'images/investigations/two-telescopes-one-question.webp',
     depths: 3,
@@ -1169,7 +1169,7 @@ export const MANIFEST = [
     title: 'Propose an Observation',
     subtitle:
       'Design a survey for a stated goal, predict what it will find, check it against the model and justify the plan: many plans are right',
-    duration: '10-30 min',
+    duration: '6-12 min',
     level: 'Upper-level astronomy',
     thumbnail: 'images/investigations/propose-an-observation.webp',
     depths: 3,

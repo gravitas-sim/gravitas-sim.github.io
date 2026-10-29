@@ -1396,16 +1396,16 @@ const EXPECTATIONS = {
 };
 
 const BANDS = {
-  'deep-or-wide': { core: 'short', quantitative: 'medium', advanced: 'long' },
+  'deep-or-wide': { core: 'short', quantitative: 'short', advanced: 'medium' },
   'two-telescopes-one-question': {
     core: 'short',
-    quantitative: 'medium',
-    advanced: 'medium',
+    quantitative: 'short',
+    advanced: 'short',
   },
   'propose-an-observation': {
-    core: 'medium',
-    quantitative: 'long',
-    advanced: 'long',
+    core: 'short',
+    quantitative: 'short',
+    advanced: 'medium',
   },
 };
 
