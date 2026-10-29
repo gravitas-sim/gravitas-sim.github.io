@@ -102,3 +102,32 @@ numpy's least squares; this is stated as what it is, not as an end-to-end compar
 Evidence classes (7.5.10): the model is S (software works) and V-internal (analytic, oracle, ensemble, E1 authentic velocities);
 nothing here is V-external beyond E1, A (adopted) or L (learning measured). The panel and the lesson do not claim the
 reference instrument is a real facility. The air and vacuum conventions follow the line pack (NIST), as corrected by Prompt 125.
+
+## Results (the committed contract, run on this branch)
+
+All 27 rows of `tests/fixtures/spectrograph/thresholds.json` pass; `tests/fixtures/spectrograph/failed-legs.json` is empty (no leg failed, none is unmeasured). `npm run spectrograph:validate` prints the table; `tests/spectrograph.test.js` runs it.
+
+| Check | Measured |
+|---|---|
+| B4 the whole chain against the oracle | wavelength to 1.5e-10 nm, uncertainty to 2.5e-8 relative |
+| C1 line centres, 5600 seeded fits | the stated 1 sigma covered the truth in 0.667, 2 sigma in 0.953 (band 0.60 to 0.76 for 1 sigma) |
+| C4 recovered resolving power, 5600 | 0.682 and 0.958 |
+| C2 solutions, 1500 | 0.693 and 0.959 |
+| C3 velocities, 1200 | 0.681 and 0.954 |
+| C5 mis-specified solution | a straight line fitted to a curved scale flagged in 100 percent, a correct cubic in 2 percent |
+| D2 blends | flagged at separations of 0.5, 0.7 and 1 FWHM; a single line never |
+| E1 authentic SDSS spectra | 4 of 4 Balmer velocities within the stated bounds of the pipeline's (A star H-alpha -227 +/- 18 against -243 km/s) |
+| E2 authentic sampling | the archive's spectrum has 2.17 Angstrom per pixel after thinning; thinned further it is severely undersampled and the panel refuses |
+| F1 to F3 trade | the line signal to noise matches the analytic value to 1.3e-15 (discrete) and 1 percent (continuous); the best resolving power matches scipy to 1.2e-8 (2355 for sigma 0.1 nm) |
+
+## What the first run found
+
+* The kernel passed every committed leg on its first run; six amendments (AM1 to AM6) were recorded before they mattered and none moved a bound. They were mistakes in the contract, not in the kernel: H-alpha falls off the reference detector (AM1), a window containing a neighbour's wing gave reduced chi-squares of 363 and 1894 until lines had to be isolated by 6 FWHM (AM2), two miscopied numerals (AM3 and AM5), a rounding mismatch of 1.4e-11 between the oracle and the kernel (AM4), and a missing pair-dip leg (AM6).
+* Finer pixels cannot create a dip: at R = 500 two lines 0.5 nm apart are one peak at every sampling from 1 to 8 pixels per FWHM. At R = 1000, where the dip is 7.3 percent, a grid of 2 pixels per FWHM misses it and 8 shows it. This is the teaching point of the first steps.
+* A two-line linear solution is "exactly determined" and states an uncertainty of 3.2 km/s while its real error is about 28 km/s: the uncertainty is only as good as the model, and the state says that nothing tests it.
+* The signal to noise of an unresolved line has no interior optimum in resolving power (16.2, 17.6 and 16.6 at R = 3000, 10000 and 30000); a line with a width of its own does, at R = 2355 for sigma 0.1 nm.
+* The archive's SDSS spectrum is thinned to about 1 pixel per FWHM, so the Observatory panel refuses R = 1800 there (a line one pixel wide fixes neither its width nor its centre) and fits at R = 1200 with the undersampling stated.
+
+## Not built (stated)
+
+The clickable arc-line marking in the Observatory (the Observatory has no pixel-axis spectrum, so the arc exercise stays in the lesson's panel, where lines are marked by count in a spread-out order), echelle orders, a constant-R instrument, flat fields, telluric lines and sky. The Observatory panel fits one line of a spectrum that already has wavelengths; it does not calibrate.
