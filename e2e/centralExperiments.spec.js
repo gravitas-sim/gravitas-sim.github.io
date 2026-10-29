@@ -2662,6 +2662,17 @@ test.describe('the central experiment of each investigation', () => {
         [20, 512, 8],
       ],
     },
+    // ---- Observing strategy (Roadmap III, Prompt 214) -------------------------------
+    {
+      id: 'why-the-period-is-wrong',
+      title:
+        'why-the-period-is-wrong: three irregular visits a night fill all twenty phase bins, one visit a night at one time leaves seven empty @accepts:ce.why-the-period-is-wrong',
+      row: /^Phase coverage$/i,
+      values: [
+        [0, 13, 0.6],
+        [1, 20, 0.6],
+      ],
+    },
     // ---- Telescopes (Roadmap III, Prompt 208) ---------------------------------
     {
       id: 'what-a-telescope-resolves',

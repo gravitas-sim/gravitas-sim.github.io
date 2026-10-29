@@ -11,11 +11,11 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 89 investigations and 1275 steps: 1183 steps
+Across 89 investigations and 1277 steps: 1185 steps
 declare a scene, 157 let a reader change one, 167 read the
-running integration, 774 show a prescribed model result, 146 draw
-on a stored dataset, 653 put a self-contained panel beside the text,
-336 keep something, and 58 are prose.
+running integration, 776 show a prescribed model result, 146 draw
+on a stored dataset, 655 put a self-contained panel beside the text,
+337 keep something, and 58 are prose.
 Of 171 prediction loops, 171 are returned to,
 171 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
@@ -1239,20 +1239,6 @@ Of 171 prediction loops, 171 are returned to,
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:detector-effects`, control detector-effects/bright, measures the share of its true flux the clipped sum of the brightest star would read, in percent, with a 60 second exposure: 30 at V = 9.5 and 55 at V = 10.5, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
-## Counts to Magnitudes (`counts-to-magnitudes`)
-
-- **Steps:** 6. Scene declared on 6; a reader can change something on 0; 6 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 0 live engine, 6 prescribed model, 0 stored dataset, 6 self-contained panel.
-- **What students do:** move-an-instrument-control, press-an-instrument-button, commit-a-prediction, record-values, choose-an-option.
-- **Objects the steps declare:** star.
-- **Instruments:** photometric-calibration.
-- **Stored data:** none.
-- **Evidence kept:** notebook-fields.
-- **Prediction loops:** low-in-the-sky-predict → bouguer, why-fainter, not-the-dust, what-a-calibration-does → bouguer.
-- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
-- **Scene rebuilds:** none.
-- **Accepted central experiment** (reviewed 2026-09-11): object `panel:photometric-calibration`, control photometric-calibration/noise, measures the extinction of the air the standards of a synthetic night give, in magnitudes per airmass: 0.213 at 5 mmag of noise per measurement and 0.211 at 1 mmag, the night made with 0.210, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
-
 ## Plan an Exposure (`plan-an-exposure`)
 
 - **Steps:** 11. Scene declared on 11; a reader can change something on 0; 11 declare a scene nobody on that step can touch.
@@ -1266,4 +1252,18 @@ Of 171 prediction loops, 171 are returned to,
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:exposure-planner`, control exposure-planner/exposures, measures the total exposure that reaches a signal-to-noise of 20 for a magnitude-24 star in the Rubin r band: 455 seconds in two exposures and 512 seconds in twenty, the read noise paid once per exposure, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## Why the Period Is Wrong (`why-the-period-is-wrong`)
+
+- **Steps:** 8. Scene declared on 8; a reader can change something on 0; 8 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 8 prescribed model, 0 stored dataset, 8 self-contained panel.
+- **What students do:** move-an-instrument-control, commit-a-prediction, record-values, choose-an-option.
+- **Objects the steps declare:** star.
+- **Instruments:** strategy-window.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** predict-the-period → the-aliases, why-the-comb, break-the-tie, what-breaks-it, the-wrong-answer, the-cadence-comes-first → the-aliases.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:strategy-window`, control strategy-window/cadence, measures the phase bins out of 20 that forty nights of visits fill for a 0.8-day period: 13 for one visit a night at the same time and 20 for three visits a night at irregular times, the cadence that breaks the alias, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 

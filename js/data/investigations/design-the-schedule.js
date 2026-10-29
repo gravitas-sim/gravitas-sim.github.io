@@ -114,6 +114,7 @@ const DESIGN_THE_SCHEDULE = {
   mathematics: 'arithmetic',
   prerequisites: ['radial-velocity', 'detect-this-planet'],
   tags: ['exoplanets', 'observing'],
+  depths: ['core', 'advanced'],
   lock: { placement: true, inspector: true },
   objectives: [
     'Configure an observing run by its times rather than only by its cadence',

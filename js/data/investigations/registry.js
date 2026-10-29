@@ -193,6 +193,7 @@ const LOADERS = {
   'the-saturated-star': () => import('./the-saturated-star.js'),
   'counts-to-magnitudes': () => import('./counts-to-magnitudes.js'),
   'plan-an-exposure': () => import('./plan-an-exposure.js'),
+  'why-the-period-is-wrong': () => import('./why-the-period-is-wrong.js'),
 };
 // </generated:loaders>
 
@@ -305,6 +306,7 @@ const TRANSLATIONS = {
     'the-saturated-star': () => import('./es/the-saturated-star.js'),
     'counts-to-magnitudes': () => import('./es/counts-to-magnitudes.js'),
     'plan-an-exposure': () => import('./es/plan-an-exposure.js'),
+    'why-the-period-is-wrong': () => import('./es/why-the-period-is-wrong.js'),
   },
 };
 // </generated:translations>

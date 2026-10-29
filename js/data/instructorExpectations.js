@@ -14,6 +14,7 @@ import { INSTRUCTOR as SATELLITE } from './investigations/depth/satellite-sequen
 import { INSTRUCTOR as ATMOSPHERE } from './investigations/depth/atmosphere-sequence.js';
 import { INSTRUCTOR as PLANETS } from './investigations/planets-sequence.js';
 import { INSTRUCTOR as EXPOSURE } from './investigations/exposure-sequence.js';
+import { INSTRUCTOR as STRATEGY } from './investigations/strategy-sequence.js';
 import { INSTRUCTOR as TELESCOPE } from './investigations/telescope-sequence.js';
 import { INSTRUCTOR as SATURATED_STAR } from './investigations/saturated-star-sequence.js';
 import { INSTRUCTOR as PHOTCAL } from './investigations/photometric-calibration-sequence.js';
@@ -27,6 +28,7 @@ export default {
     ...ATMOSPHERE.expectations,
     ...PLANETS.expectations,
     ...EXPOSURE.expectations,
+    ...STRATEGY.expectations,
     ...TELESCOPE.expectations,
     ...SATURATED_STAR.expectations,
     ...PHOTCAL.expectations,

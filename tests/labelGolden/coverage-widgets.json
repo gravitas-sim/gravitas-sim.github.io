@@ -57,6 +57,7 @@
   "hz-limits",
   "hz-locking",
   "hz-ages",
-  "photometric-calibration"
+  "strategy-window",
+  "strategy-plan"
  ]
 }

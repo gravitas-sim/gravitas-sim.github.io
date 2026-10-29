@@ -206,7 +206,8 @@ describe('the digest the derived closure produces', () => {
     // 285 after the planetary closeout (Prompt 206, D-R10-206-02): one file, planets-sequence.js, which holds three lessons, their Spanish and their guides; pending the coordinator's approval of the cap.
     // 287 after Plan an Exposure (Prompt 210, D-R10-210-02) over What a Telescope Resolves (Prompt 208): one file, exposure-sequence.js, which holds the lesson, its Spanish and its guide; approved by the coordinator under Carl's delegation of 2026-10-28.
     // 288 after The Saturated Star (Prompt 211, D-R10-211-01) over Plan an Exposure (Prompt 210): one file, saturated-star-sequence.js, which holds the lesson, its Spanish, its deeper steps and its guide; approved by the coordinator.
-    // 289 after Counts to Magnitudes (Prompt 212, D-R10-212-01) over The Saturated Star (Prompt 211): one file, photometric-calibration-sequence.js, which holds the lesson, its Spanish, its deeper steps and its guide; approved by the coordinator under Carl's delegation of 2026-10-28.
+    // 289 after Why the Period Is Wrong (Prompt 214, D-R10-214-02) over The Saturated Star (Prompt 211): one file, strategy-sequence.js, which holds the lesson, its Spanish, its guide and the three advanced steps of Design the Schedule; approved by the coordinator under Carl's delegation of 2026-10-28.
+    // 290 after Counts to Magnitudes (Prompt 212, D-R10-212-01) over Why the Period Is Wrong (Prompt 214): one file, photometric-calibration-sequence.js, which holds the lesson, its Spanish, its deeper steps and its guide; approved by the coordinator under Carl's delegation of 2026-10-28.
     expect(current.length).toBeLessThan(289);
     // 230 after the four variable-star investigations (Prompt 96): their shadows, deeper shadows and depth files;
     // 246 after the four cosmology investigations (Prompt 91).

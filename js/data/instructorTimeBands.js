@@ -69,6 +69,7 @@ import { INSTRUCTOR as SATELLITE } from './investigations/depth/satellite-sequen
 import { INSTRUCTOR as ATMOSPHERE } from './investigations/depth/atmosphere-sequence.js';
 import { INSTRUCTOR as PLANETS } from './investigations/planets-sequence.js';
 import { INSTRUCTOR as EXPOSURE } from './investigations/exposure-sequence.js';
+import { INSTRUCTOR as STRATEGY } from './investigations/strategy-sequence.js';
 import { INSTRUCTOR as TELESCOPE } from './investigations/telescope-sequence.js';
 import { INSTRUCTOR as SATURATED_STAR } from './investigations/saturated-star-sequence.js';
 import { INSTRUCTOR as PHOTCAL } from './investigations/photometric-calibration-sequence.js';
@@ -79,6 +80,7 @@ export const LESSON_BANDS = Object.freeze({
   ...ATMOSPHERE.bands,
   ...PLANETS.bands,
   ...EXPOSURE.bands,
+  ...STRATEGY.bands,
   ...TELESCOPE.bands,
   ...SATURATED_STAR.bands,
   ...PHOTCAL.bands,
@@ -107,7 +109,7 @@ export const LESSON_BANDS = Object.freeze({
   'butterfly-effect': { core: 'long' },
   'when-orbits-lock': { core: 'long' },
   'detect-this-planet': { core: 'medium' },
-  'design-the-schedule': { core: 'medium' },
+  'design-the-schedule': { core: 'medium', advanced: 'long' },
   'binary-star-planets': { core: 'medium' },
   'gravity-assist': { core: 'short' },
   'hohmann-transfer': { core: 'short' },

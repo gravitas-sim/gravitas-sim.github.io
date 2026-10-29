@@ -100,6 +100,7 @@ export const EVIDENCE_FROM = Object.freeze({
   'who-gets-counted': 'model',
   'why-rings': 'model',
   'why-the-bright-ones-win': 'model',
+  'why-the-period-is-wrong': 'model',
   'why-venus-is-hot': 'model',
 });
 

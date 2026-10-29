@@ -28,7 +28,7 @@ the week they are teaching.
 
 **<!--fact:libraryInvestigations-->106<!--/fact--> guided
 investigations**: <!--fact:investigations-->89<!--/fact--> that run in the
-simulation, <!--fact:investigationSteps-->1275<!--/fact--> steps between them
+simulation, <!--fact:investigationSteps-->1277<!--/fact--> steps between them
 (the table below), and <!--fact:guidedInvestigations-->17<!--/fact--> in the
 Observatory, the 3-D lab and the mission lab (the Library lists all of them):
 
@@ -306,7 +306,7 @@ service and works offline ([MISSION_LAB.md](MISSION_LAB.md)).
 
 **Spanish.** The interface ships in <!--fact:locales-->2<!--/fact--> languages
 — <!--fact:localeNames-->English, Español<!--/fact--> — from a catalog
-of <!--fact:uiStrings-->12190<!--/fact--> strings, and
+of <!--fact:uiStrings-->12197<!--/fact--> strings, and
 all <!--fact:investigations-->89<!--/fact--> investigations are translated. A
 translation carries only words: no scenario name, no seed, no widget id and no
 numeric answer can be reached from a locale file, so a mistranslation cannot
@@ -341,7 +341,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->17067<!--/fact--> tests across <!--fact:jestSuites-->494<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->17060<!--/fact--> tests across <!--fact:jestSuites-->494<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
@@ -367,7 +367,7 @@ reports what the browser downloads at start-up separately from what is deferred:
 | ---------------------- | ------------------------------------------------------ | --------------------------------------------- |
 | CSS                    | <!--fact:buildCss-->209<!--/fact--> KB                 | 1                                             |
 | JavaScript at start-up | <!--fact:buildStartupJs-->593<!--/fact--> KB           | <!--fact:buildStartupFiles-->53<!--/fact-->   |
-| JavaScript on demand   | <!--fact:buildDeferredJs-->6941<!--/fact--> KB         | <!--fact:buildDeferredChunks-->604<!--/fact--> |
+| JavaScript on demand   | <!--fact:buildDeferredJs-->6929<!--/fact--> KB         | <!--fact:buildDeferredChunks-->602<!--/fact--> |
 | **Initial download**   | **<!--fact:buildInitialDownload-->802<!--/fact--> KB** |                                               |
 
 Those figures are the last build's, to the nearest kilobyte, and are written
@@ -486,7 +486,7 @@ npm run e2e:ui                    # the Playwright inspector
 npm run e2e:report                # open the last HTML report
 ```
 
-The suite is <!--fact:e2eTests-->3039<!--/fact--> tests
+The suite is <!--fact:e2eTests-->3041<!--/fact--> tests
 in <!--fact:e2eFiles-->213<!--/fact--> files and takes several minutes in
 Chromium.
 
@@ -586,7 +586,7 @@ broke Newton's third law, and a scenario that turned out to have no gravity in i
 
 ## Instructor resources
 
-All <!--fact:instructorDocuments-->830<!--/fact--> documents are generated from
+All <!--fact:instructorDocuments-->845<!--/fact--> documents are generated from
 the investigations at build time and live at
 [gravitas-sim.online/instructors/](https://gravitas-sim.online/instructors/):
 

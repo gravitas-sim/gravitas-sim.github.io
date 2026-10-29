@@ -6,18 +6,26 @@
     ["steps.read-the-comparison.fields.0.unit","d"],
     ["steps.read-the-comparison.fields.1.unit","m/s"],
     ["steps.read-the-comparison.fields.2.unit","d"],
-    ["steps.read-the-comparison.fields.3.unit","m/s"]
+    ["steps.read-the-comparison.fields.3.unit","m/s"],
+    ["steps.the-site-sets-the-comb.fields.0.unit","d"]
    ],
    "numbered": [
     ["steps.read-the-comparison.fields.0.hint","0.28"],
     ["steps.read-the-comparison.fields.1.hint","7"],
     ["steps.read-the-comparison.fields.2.hint","3.52"],
-    ["steps.read-the-comparison.fields.3.hint","105"]
+    ["steps.read-the-comparison.fields.3.hint","105"],
+    ["steps.the-site-sets-the-comb.fields.0.label","Alias period near 1.4 days"],
+    ["steps.the-site-sets-the-comb.fields.0.hint","1.395"],
+    ["steps.the-site-sets-the-comb.fields.1.hint","0"],
+    ["steps.an-irregular-night-costs-nothing.fields.0.hint","69"],
+    ["steps.an-irregular-night-costs-nothing.fields.1.hint","282"]
    ]
   },
   "es": {
    "units": [],
-   "numbered": []
+   "numbered": [
+    ["steps.the-site-sets-the-comb.fields.0.label","Período del alias cerca de 1,4 días"]
+   ]
   }
  },
  "numeric": {
@@ -36,11 +44,17 @@
    "read-the-comparison": {
     "validate": {"calls":242,"distinct":2,"digest":"2f983f3d90d892e0","samples":[null,{"level":"warn","message":"The irregular arm should land near 3.5 days. Check the second schedule is Irregular with scatter 0.45, and that both arms finished all eight observations."}]}
    },
+   "the-site-sets-the-comb": {
+    "validate": {"calls":232,"distinct":2,"digest":"c2bf4fe25b1717cc","samples":[null,{"level":"error","message":"Strategy panel: cadence “nightly, same time”, period 3.5, 24 nights; read the alias row near 1.4 days."}]}
+   },
    "break-your-own-result": {
     "probe": [[{"label":"On the canvas","value":"nothing bound yet"},{"label":"Last run","value":"none yet"}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"Sweep of the planet’s starting distance"},{"label":"Does it still describe this scene?","value":"yes","emphasis":false}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"unnamed"},{"label":"Does it still describe this scene?","value":"NO — the scene has been rebuilt since, so re-run before comparing","emphasis":true}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"none yet"}]]
    },
    "lose-a-fortnight": {
     "probe": [[{"label":"On the canvas","value":"nothing bound yet"},{"label":"Last run","value":"none yet"}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"Sweep of the planet’s starting distance"},{"label":"Does it still describe this scene?","value":"yes","emphasis":false}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"unnamed"},{"label":"Does it still describe this scene?","value":"NO — the scene has been rebuilt since, so re-run before comparing","emphasis":true}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"none yet"}]]
+   },
+   "an-irregular-night-costs-nothing": {
+    "validate": {"calls":232,"distinct":2,"digest":"12c4d2ffed37aa42","samples":[null,{"level":"error","message":"Strategy panel: cadence “three a night”, period 3.5, 24 nights; read the first alias row."}]}
    },
    "type-the-dates": {
     "probe": [[{"label":"On the canvas","value":"nothing bound yet"},{"label":"Last run","value":"none yet"}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"Sweep of the planet’s starting distance"},{"label":"Does it still describe this scene?","value":"yes","emphasis":false}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"unnamed"},{"label":"Does it still describe this scene?","value":"NO — the scene has been rebuilt since, so re-run before comparing","emphasis":true}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"none yet"}]]
