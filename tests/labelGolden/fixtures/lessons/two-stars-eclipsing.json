@@ -1,0 +1,59 @@
+{
+ "id": "two-stars-eclipsing",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.the-two-depths.fields.0.unit","%"],
+    ["steps.the-two-depths.fields.1.unit","%"],
+    ["steps.fit-the-pair.fields.2.unit","1e-4"]
+   ],
+   "numbered": [
+    ["steps.the-two-depths.fields.0.hint","48.3"],
+    ["steps.the-two-depths.fields.1.hint","23.0"],
+    ["steps.fit-the-pair.fields.0.label","R1/a"],
+    ["steps.fit-the-pair.fields.0.hint","0.1085"],
+    ["steps.fit-the-pair.fields.1.label","R2/a"],
+    ["steps.fit-the-pair.fields.1.hint","0.0814"],
+    ["steps.fit-the-pair.fields.2.label","Uncertainty of R2/a"],
+    ["steps.fit-the-pair.fields.2.hint","1.6"],
+    ["steps.the-residual-test.fields.0.hint","25.6"],
+    ["steps.the-residual-test.fields.1.hint","1.80"],
+    ["steps.the-secondary-phase.fields.0.hint","0.5893"],
+    ["steps.the-secondary-phase.fields.1.hint","0.1402"],
+    ["steps.the-grazing-fit.fields.0.hint","0.162"],
+    ["steps.the-grazing-fit.fields.1.hint","0.129"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.fit-the-pair.fields.2.label","Incertidumbre de R2/a"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "the-two-depths": {
+    "validate": {"calls":232,"distinct":2,"digest":"0c4e3b2ab885680b","samples":[null,{"level":"error","message":"Read the two eclipses with no data switched on and the settings the panel opens with: the primary is about 48 percent deep and the secondary about 23."}]}
+   },
+   "fit-the-pair": {
+    "validate": {"calls":242,"distinct":2,"digest":"a47a7408dd7ea7a4","samples":[null,{"level":"error","message":"Choose the data set “the unequal pair” and read R1/a (0.1085), R2/a (0.0814) and the uncertainty of R2/a in units of 0.0001 (about 1.6)."}]}
+   },
+   "the-residual-test": {
+    "validate": {"calls":232,"distinct":2,"digest":"f91a70f6dea09c71","samples":[null,{"level":"error","message":"Choose “the spotted pair” and read the reduced chi-square (about 25.6) and the correlated-noise factor (about 1.80)."}]}
+   },
+   "the-secondary-phase": {
+    "validate": {"calls":232,"distinct":2,"digest":"864ad832ecfcb452","samples":[null,{"level":"error","message":"Set the sliders to R sum 0.14, k 0.80, inclination 88, J 0.70, e cos w 0.14, e sin w 0.10 and switch on “the eccentric pair”: the secondary is at phase 0.5893."}]}
+   },
+   "the-grazing-fit": {
+    "validate": {"calls":232,"distinct":2,"digest":"bd07925a4fe39a9f","samples":[null,{"level":"error","message":"Choose “the grazing pair”, switch the profile on, and read the radius ratio (0.162) and the lower end of its profile interval (0.129)."}]}
+   }
+  },
+  "es": "same"
+ }
+}
