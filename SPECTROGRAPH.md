@@ -61,7 +61,7 @@ Wavelengths are nm. Pixel `i` has its centre at `x = i` and spans `x - 1/2` to `
    `v^T C v` with the coefficient covariance `C`; outside the span of the marked lines it is flagged as an extrapolation.
 6. **A velocity** `v = c (lambda_obs / lambda_rest - 1)` (relativistic form `c (r^2 - 1) / (r^2 + 1)`, `r = lambda_obs /
    lambda_rest`), with `sigma_v = c sigma_obs / lambda_rest` to first order; both wavelengths are in a stated medium and a
-   mismatch is refused. A rest wavelength in air against an observed one in vacuum is 82.7 km/s off at H-alpha.
+   mismatch is refused. A rest wavelength in air against an observed one in vacuum is 82.8 km/s off at H-alpha.
 7. **Throughput and the trade.** For a long slit of width `w` and Gaussian seeing of FWHM `theta`, the fraction of light through
    the slit is `erf(w / (2 sqrt 2 sigma_seeing))`. For a fixed grating, camera and detector the resolving power is inversely
    proportional to the slit width, `R w = R_s theta`, with `R_s` the resolving power at which the slit equals the seeing; the

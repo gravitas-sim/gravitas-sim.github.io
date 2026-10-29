@@ -109,7 +109,7 @@
     {
       "id": "A7.doppler.media",
       "group": "a",
-      "bound": "a velocity put through the relativistic Doppler factor to an observed wavelength and back returns it to a relative 1e-12 (seven velocities from -300 to 300 km/s); a rest wavelength in the wrong medium shifts the velocity by c (lambda_vacuum / lambda_air - 1), which the kernel reports as the media offset to a relative 1e-12 (82.7 km/s for H-alpha, from the pack's 656.279 and 656.4603 nm); a velocity asked for with the media of the observed and the rest wavelength different, or not stated, is refused and never converted silently",
+      "bound": "a velocity put through the relativistic Doppler factor to an observed wavelength and back returns it to a relative 1e-12 (seven velocities from -300 to 300 km/s); a rest wavelength in the wrong medium shifts the velocity by c (lambda_vacuum / lambda_air - 1), which the kernel reports as the media offset to a relative 1e-12 (82.82 km/s for H-alpha, from the pack's 656.279 and 656.4603 nm); a velocity asked for with the media of the observed and the rest wavelength different, or not stated, is refused and never converted silently",
       "limits": {
         "relMax": 1e-12,
         "velocitiesKmS": [-300, -120, -30, 0, 30, 120, 300]
@@ -372,6 +372,13 @@
       "when": "after the kernel module existed and was smoke-run on the A2 cases, before any validator or test existed",
       "what": "the oracle's A2 inputs are rounded to the 15 significant digits the file keeps before their values are computed, and the file keeps 15 digits for every number where the first version kept 12 and computed the A2 values from full-precision inputs",
       "why": "the smoke run showed an absolute difference of 1.4e-11 on an A2 case with a correct erf (the kernel's erf agrees with scipy's to 1e-16): the stored inputs' rounding; and a value near 0.5 stored to 12 digits cannot meet the committed 1e-14 absolute bound at all. The oracle was regenerated with the same seed: the arc's noise and every other draw are unchanged. No bound, tolerance or case count moved",
+      "boundMoved": false
+    },
+    {
+      "id": "AM5",
+      "when": "after the kernel and the validator existed, before the first full run's results were read into any document",
+      "what": "A7 and SPECTROGRAPH.md state the H-alpha media offset as 82.82 km/s where the committed text said 82.7 km/s",
+      "why": "a miscopied numeral: c (656.4603 / 656.279 - 1) is 82.819 km/s and the oracle's independent value is 82.8190032523; the check compares the kernel with the oracle to a relative 1e-12, not with the numeral in the prose, and does not change",
       "boundMoved": false
     }
   ]
