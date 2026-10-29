@@ -720,7 +720,10 @@ function e1() {
     );
   const units = readFits(new Uint8Array(bytes));
   const lc = units.find(u => u.cards.EXTNAME === 'LIGHTCURVE');
-  const { TIME, SAP_FLUX, QUALITY } = lc.columns;
+  const col = n => lc.columns[n].values;
+  const TIME = col('TIME');
+  const SAP_FLUX = col('SAP_FLUX');
+  const QUALITY = col('QUALITY');
   const pp = l.paper;
   const T0 = 2458798;
   const paper = {
@@ -870,6 +873,21 @@ const ALL = [
   p1,
 ];
 
+/**
+ * Legs take minutes each: with --progress=<file> every finished group is kept in a JSON
+ * file and --resume skips the groups already in it, so a crash in a late leg loses nothing.
+ */
+const PROGRESS = process.argv.find(a => a.startsWith('--progress='))?.slice(11);
+const progress = (() => {
+  try {
+    return PROGRESS && process.argv.includes('--resume')
+      ? JSON.parse(readFileSync(PROGRESS, 'utf8'))
+      : {};
+  } catch {
+    return {};
+  }
+})();
+
 export function runAll(only = null) {
   rows.length = 0;
   for (const f of ALL) {
@@ -883,7 +901,17 @@ export function runAll(only = null) {
           (f === bGroup && p[0] === 'B') ||
           (f === c12 && /^C[12]/.test(p))
       );
-    if (wanted) f();
+    if (!wanted) continue;
+    if (progress[f.name]) {
+      rows.push(...progress[f.name]);
+      continue;
+    }
+    const before = rows.length;
+    f();
+    if (PROGRESS) {
+      progress[f.name] = rows.slice(before);
+      writeFileSync(PROGRESS, JSON.stringify(progress));
+    }
   }
   return only
     ? rows.filter(r => only.some(p => r.id.startsWith(p)))
@@ -893,10 +921,23 @@ export function runAll(only = null) {
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const onlyArg = process.argv.find(a => a.startsWith('--only='))?.slice(7);
   const out = runAll(onlyArg ? onlyArg.split(',') : null);
+  const previousWhy = id => {
+    try {
+      return read('tests/fixtures/binaries/failed-legs.json').failed.find(
+        f => f.id === id
+      )?.why;
+    } catch {
+      return undefined;
+    }
+  };
   if (process.argv.includes('--write-failed')) {
     const failed = out
       .filter(r => r.status === 'fail')
-      .map(r => ({ id: r.id, measured: r.measured }));
+      .map(r => ({
+        id: r.id,
+        measured: r.measured,
+        why: previousWhy(r.id),
+      }));
     const notMeasured = out
       .filter(r => r.status === 'not-run')
       .map(r => ({ id: r.id, reason: r.note }));

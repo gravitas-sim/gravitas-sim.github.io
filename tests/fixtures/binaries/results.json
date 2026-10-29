@@ -1,0 +1,289 @@
+{
+  "note": "The validation table of tools/binaries-validate.mjs as last measured (Node 22.23.4, 2026-10-29); the Jest group reruns the quick legs and holds these against failed-legs.json.",
+  "rows": [
+    {
+      "id": "A1.depthCentral",
+      "status": "pass",
+      "measured": {
+        "uniform": 1.3433698597964394e-14,
+        "limbDarkened": 4.152160737458388e-8
+      },
+      "note": ""
+    },
+    {
+      "id": "A2.contacts",
+      "status": "pass",
+      "measured": {
+        "contactTimeMaxAbs": 1.8041124150158794e-15,
+        "fluxIsOneOutside": true,
+        "fluxBelowOneInside": true,
+        "circularDurationRel": 7.30257031988444e-16
+      },
+      "note": ""
+    },
+    {
+      "id": "A3.secondaryPhase",
+      "status": "pass",
+      "measured": {
+        "maxAbs": 2.220446049250313e-16
+      },
+      "note": ""
+    },
+    {
+      "id": "A4.swapSymmetry",
+      "status": "pass",
+      "measured": {
+        "maxAbs": 2.0761170560490427e-14
+      },
+      "note": ""
+    },
+    {
+      "id": "A5.outOfEclipse",
+      "status": "pass",
+      "measured": {
+        "outside": 0,
+        "aboveOne": 0,
+        "thirdLight": 0
+      },
+      "note": ""
+    },
+    {
+      "id": "A6.derived",
+      "status": "pass",
+      "measured": {
+        "maxRel": 5.5986560510578316e-14
+      },
+      "note": ""
+    },
+    {
+      "id": "A7.ecoswFromPhase",
+      "status": "pass",
+      "measured": {
+        "worstOverBound": 0.29056563800087987
+      },
+      "note": ""
+    },
+    {
+      "id": "A8.durationRatio",
+      "status": "pass",
+      "measured": {
+        "worstOverBound": 0.2043831903472644
+      },
+      "note": ""
+    },
+    {
+      "id": "B1.batman",
+      "status": "pass",
+      "measured": {
+        "maxAbs": 0.00002600432421473453,
+        "perSystem": {
+          "S1": 0.00002600432421473453,
+          "S2": 0.00002329464715167262,
+          "S3": 0.00002419826583566209
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "B2.bruteForce",
+      "status": "pass",
+      "measured": {
+        "maxAbs": 0.00003388335415310806,
+        "bruteVsBatman": 0.000015632702126566755
+      },
+      "note": ""
+    },
+    {
+      "id": "B3.batmanTiming",
+      "status": "pass",
+      "measured": {
+        "timeMaxAbs": 0,
+        "depthMaxAbs": 0.000026004347787211834
+      },
+      "note": ""
+    },
+    {
+      "id": "C1.coverageCircular",
+      "status": "pass",
+      "measured": {
+        "coverage": {
+          "tc": 0.7083333333333334,
+          "P": 0.7083333333333334,
+          "rsum": 0.6666666666666666,
+          "k": 0.6333333333333333,
+          "inc": 0.6666666666666666,
+          "J": 0.65
+        },
+        "failures": 0,
+        "bounds": [0.57, 0.79]
+      },
+      "note": ""
+    },
+    {
+      "id": "C2.coverageEccentric",
+      "status": "pass",
+      "measured": {
+        "coverage": {
+          "tc": 0.625,
+          "P": 0.6583333333333333,
+          "rsum": 0.6916666666666667,
+          "k": 0.7,
+          "inc": 0.6833333333333333,
+          "J": 0.675,
+          "ecosw": 0.6666666666666666,
+          "esinw": 0.6833333333333333
+        },
+        "failures": 0,
+        "bounds": [0.57, 0.79]
+      },
+      "note": ""
+    },
+    {
+      "id": "C3.coverageProfile",
+      "status": "pass",
+      "measured": {
+        "coverage": {
+          "rsum": 0.575,
+          "k": 0.625,
+          "inc": 0.675
+        },
+        "n": 40,
+        "bounds": [0.5, 0.86]
+      },
+      "note": ""
+    },
+    {
+      "id": "C4.recovery",
+      "status": "pass",
+      "measured": {
+        "tc": {
+          "bias": -0.0000021353382818056765,
+          "sigma": 0.000013422952920025246,
+          "biasOverSigma": -0.1590811123698451
+        },
+        "P": {
+          "bias": 0.000001032463165628883,
+          "sigma": 0.000009662884282810821,
+          "biasOverSigma": 0.10684834211101112
+        },
+        "rsum": {
+          "bias": -0.000009392213047326736,
+          "sigma": 0.00005674420861686422,
+          "biasOverSigma": -0.16551844278493288
+        },
+        "k": {
+          "bias": 0.0000014171227701309519,
+          "sigma": 0.0015641460381559877,
+          "biasOverSigma": 0.0009060041297688767
+        },
+        "inc": {
+          "bias": 0.0005511972207585814,
+          "sigma": 0.012721172533055209,
+          "biasOverSigma": 0.04332912074939069
+        },
+        "J": {
+          "bias": 0.00004048503593578889,
+          "sigma": 0.0003078987256885755,
+          "biasOverSigma": 0.13148815684523985
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "D1.grazing",
+      "status": "fail",
+      "measured": {
+        "grazingFlagged": 0.8,
+        "controlFlagged": 0,
+        "errors": 0
+      },
+      "note": ""
+    },
+    {
+      "id": "D2.spots",
+      "status": "pass",
+      "measured": {
+        "spottedFail": 1,
+        "controlFail": 0
+      },
+      "note": ""
+    },
+    {
+      "id": "D3.noEclipse",
+      "status": "pass",
+      "measured": {
+        "refused": 20,
+        "namedTheEclipse": 20,
+        "n": 20
+      },
+      "note": ""
+    },
+    {
+      "id": "D4.circularAssumed",
+      "status": "pass",
+      "measured": {
+        "fail": 1,
+        "errors": 0
+      },
+      "note": ""
+    },
+    {
+      "id": "D5.esinwWeak",
+      "status": "pass",
+      "measured": {
+        "sigmaEcosw": 0.000007421572849548152,
+        "sigmaEsinw": 0.00032515263430085565,
+        "ratio": 43.811822762159096
+      },
+      "note": ""
+    },
+    {
+      "id": "E1.authentic",
+      "status": "fail",
+      "measured": {
+        "rsum": {
+          "ours": 0.17090125400282444,
+          "ourSigma": 0.000011782661449773124,
+          "paper": 0.170906,
+          "paperSigma": 0.000035,
+          "deltaOverPaperSigma": 0.13559991930185106
+        },
+        "k": {
+          "ours": 0.9806594959876316,
+          "ourSigma": 0.001663459567860438,
+          "paper": 0.9788,
+          "paperSigma": 0.0019,
+          "deltaOverPaperSigma": 0.9786820987534612
+        },
+        "inc": {
+          "ours": 87.90326450857779,
+          "ourSigma": 0.000714248061991271,
+          "paper": 87.9166,
+          "paperSigma": 0.003,
+          "deltaOverPaperSigma": 4.445163807403674
+        },
+        "J": {
+          "ours": 0.9777696506081005,
+          "ourSigma": 0.00010791423194892788,
+          "paper": 0.97775,
+          "paperSigma": 0.0005,
+          "deltaOverPaperSigma": 0.03930121620099314
+        },
+        "rows": 3150,
+        "rms": 0.0003923269228574469,
+        "reducedChi2": 1.1095730387525693,
+        "identifiability": "constrained"
+      },
+      "note": ""
+    },
+    {
+      "id": "P1.speed",
+      "status": "pass",
+      "measured": {
+        "cpuSeconds": 0.527693,
+        "rows": 1383
+      },
+      "note": ""
+    }
+  ]
+}

@@ -16,6 +16,7 @@
 import { describe, test, expect, beforeAll } from '@jest/globals';
 import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
+import process from 'node:process';
 import {
   contacts,
   eclipseFlux,
