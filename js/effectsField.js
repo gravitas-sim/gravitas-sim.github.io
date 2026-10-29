@@ -17,6 +17,7 @@
 // =============================================================================
 
 import { permits } from './dataKinds/contract.js';
+import { fixed } from './format.js';
 import { adapt, apertureFor, measure } from './measure/photometry.js';
 import { detectIn, DEFAULTS as DETECT } from './measure/detect.js';
 import { simulateFrame } from './kernels/detector/frame.js';
@@ -157,7 +158,7 @@ export function effectsSidecar(r, { maskPlane = true } = {}) {
         status: 'linear',
         limit,
         source: nl
-          ? `the forward model's stated response, ${(100 * nl.safeDeviation).toFixed(0)} percent below linear at this level`
+          ? `the forward model's stated response, ${fixed(100 * nl.safeDeviation, 0, 'en')} percent below linear at this level`
           : 'the forward model is linear below the full well; the limit is 5 read-noise sigma below the plateau',
       },
       saturation: {
