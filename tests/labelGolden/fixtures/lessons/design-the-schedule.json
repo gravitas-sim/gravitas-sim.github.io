@@ -45,7 +45,7 @@
     "validate": {"calls":242,"distinct":2,"digest":"2f983f3d90d892e0","samples":[null,{"level":"warn","message":"The irregular arm should land near 3.5 days. Check the second schedule is Irregular with scatter 0.45, and that both arms finished all eight observations."}]}
    },
    "the-site-sets-the-comb": {
-    "validate": {"calls":232,"distinct":2,"digest":"9c02f467dbeb33f9","samples":[null,{"level":"error","message":"Strategy panel: cadence “one visit a night, same time”, period 3.5, 24 nights; read the alias row near 1.4 days."}]}
+    "validate": {"calls":232,"distinct":2,"digest":"c2bf4fe25b1717cc","samples":[null,{"level":"error","message":"Strategy panel: cadence “nightly, same time”, period 3.5, 24 nights; read the alias row near 1.4 days."}]}
    },
    "break-your-own-result": {
     "probe": [[{"label":"On the canvas","value":"nothing bound yet"},{"label":"Last run","value":"none yet"}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"Sweep of the planet’s starting distance"},{"label":"Does it still describe this scene?","value":"yes","emphasis":false}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"unnamed"},{"label":"Does it still describe this scene?","value":"NO — the scene has been rebuilt since, so re-run before comparing","emphasis":true}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"none yet"}]]
@@ -54,7 +54,7 @@
     "probe": [[{"label":"On the canvas","value":"nothing bound yet"},{"label":"Last run","value":"none yet"}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"Sweep of the planet’s starting distance"},{"label":"Does it still describe this scene?","value":"yes","emphasis":false}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"unnamed"},{"label":"Does it still describe this scene?","value":"NO — the scene has been rebuilt since, so re-run before comparing","emphasis":true}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"none yet"}]]
    },
    "an-irregular-night-costs-nothing": {
-    "validate": {"calls":232,"distinct":2,"digest":"d5ce875bb75d1a2e","samples":[null,{"level":"error","message":"Strategy panel: cadence “three visits a night, irregular”, period 3.5, 24 nights; read the first alias row."}]}
+    "validate": {"calls":232,"distinct":2,"digest":"12c4d2ffed37aa42","samples":[null,{"level":"error","message":"Strategy panel: cadence “three a night”, period 3.5, 24 nights; read the first alias row."}]}
    },
    "type-the-dates": {
     "probe": [[{"label":"On the canvas","value":"nothing bound yet"},{"label":"Last run","value":"none yet"}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"Sweep of the planet’s starting distance"},{"label":"Does it still describe this scene?","value":"yes","emphasis":false}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"unnamed"},{"label":"Does it still describe this scene?","value":"NO — the scene has been rebuilt since, so re-run before comparing","emphasis":true}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"none yet"}]]

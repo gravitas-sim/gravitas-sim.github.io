@@ -124,7 +124,7 @@ export const WHY_THE_PERIOD_IS_WRONG = {
       stage: STAGE,
       type: 'measure',
       title: 'Read the aliases',
-      body: `In the panel (<em>one visit a night, same time</em>, true period 0.8 days)
+      body: `In the panel (<em>nightly, same time</em>, true period 0.8 days)
              read the three alias rows. One of them is near 4 days. Type its period, and
              the <em>chi-square preference</em> the data give the true period over it:
              how many times worse than the truth a fit at the alias is, in the
@@ -145,7 +145,7 @@ export const WHY_THE_PERIOD_IS_WRONG = {
         return {
           level: 'error',
           message:
-            'Use the cadence “one visit a night, same time”, the true period 0.8 days, and read the alias row that is near 4 days: its period (4.04) and its chi-square preference (0).',
+            'Use the cadence “nightly, same time”, the true period 0.8 days, and read the alias row that is near 4 days: its period (4.04) and its chi-square preference (0).',
         };
       },
       tool: WIN(),
@@ -195,7 +195,7 @@ export const WHY_THE_PERIOD_IS_WRONG = {
       stage: STAGE,
       type: 'measure',
       title: 'Break the tie',
-      body: `Change the cadence to <em>three visits a night, irregular</em>: the same forty
+      body: `Change the cadence to <em>three a night</em>: the same forty
              nights, but each night three visits at different clock times. Read the
              strongest alias row: how high its peak stands, in percent of the true peak,
              and the chi-square preference the data now give the truth.`,
@@ -219,7 +219,7 @@ export const WHY_THE_PERIOD_IS_WRONG = {
         return {
           level: 'error',
           message:
-            'Set the cadence to “three visits a night, irregular” (period 0.8 days, forty nights) and read the first alias row: about 67 percent and a preference near 490.',
+            'Set the cadence to “three a night” (period 0.8 days, forty nights) and read the first alias row: about 67 percent and a preference near 490.',
         };
       },
       tool: WIN({ cadence: 1 }),
@@ -243,7 +243,7 @@ export const WHY_THE_PERIOD_IS_WRONG = {
         {
           id: 'more-nights',
           option: 1,
-          say: 'More nights at the same time keep every visit on the same comb. Try sixty nights in the panel with the cadence “one visit a night, same time”: the alias is still exactly as high as the truth.',
+          say: 'More nights at the same time keep every visit on the same comb. Try sixty nights in the panel with the cadence “nightly, same time”: the alias is still exactly as high as the truth.',
         },
         {
           id: 'longer',
@@ -269,7 +269,7 @@ export const WHY_THE_PERIOD_IS_WRONG = {
       type: 'question',
       kind: 'choice',
       title: 'The search that sounded sure',
-      body: `Go back to <em>one visit a night, same time</em> and switch on <strong>Run the
+      body: `Go back to <em>nightly, same time</em> and switch on <strong>Run the
              search on a series</strong>. The panel makes the series the plan would produce
              (0.8 days, with noise) and runs the period search on it. It returns about
              <strong>0.266 days</strong>.`,
@@ -325,7 +325,7 @@ export const WHY_THE_PERIOD_IS_WRONG_DEEPER = {
       type: 'measure',
       title: 'Design a cadence',
       body: `Three visits a night worked, but it costs three times the telescope time. Try
-             <em>one visit a night, clock time varies</em>: one visit each night, but its
+             <em>nightly, time varies</em>: one visit each night, but its
              clock time moves by up to 3.6 hours either way. Read the strongest alias row.`,
       fields: [
         {
@@ -347,7 +347,7 @@ export const WHY_THE_PERIOD_IS_WRONG_DEEPER = {
         return {
           level: 'error',
           message:
-            'Use the cadence “one visit a night, clock time varies”, 0.8 days, forty nights: about 77 percent and a preference near 116.',
+            'Use the cadence “nightly, time varies”, 0.8 days, forty nights: about 77 percent and a preference near 116.',
         };
       },
       tool: WIN({ cadence: 2 }),
@@ -386,7 +386,7 @@ export const WHY_THE_PERIOD_IS_WRONG_DEEPER = {
       depth: 'quantitative',
       type: 'measure',
       title: 'Verify on a series',
-      body: `Take <em>three visits a night, irregular</em> and switch on <strong>Run the
+      body: `Take <em>three a night</em> and switch on <strong>Run the
              search on a series</strong>. Read the period the search finds and its
              uncertainty, from the Cramer-Rao bound for the epochs and the noise.`,
       fields: [
@@ -405,7 +405,7 @@ export const WHY_THE_PERIOD_IS_WRONG_DEEPER = {
         return {
           level: 'error',
           message:
-            'Set “three visits a night, irregular” and switch the series on: the panel reports a period near 0.8004 days with an uncertainty near 0.0002.',
+            'Set “three a night” and switch the series on: the panel reports a period near 0.8004 days with an uncertainty near 0.0002.',
         };
       },
       tool: WIN({ cadence: 1, series: 1 }),
@@ -488,7 +488,7 @@ export const WHY_THE_PERIOD_IS_WRONG_DEEPER = {
       type: 'measure',
       title: 'How much of the cycle you see',
       body: `Fold the visits on the period: each lands at a phase between 0 and 1 of one
-             pulse. With the cadence <em>one visit a night, same time</em>, read the
+             pulse. With the cadence <em>nightly, same time</em>, read the
              <em>Phase coverage</em> row at a true period of <strong>0.8 days</strong>
              and then of <strong>1.0 days</strong>: the number of the twenty phase bins that
              hold a point, and the largest empty arc.`,
@@ -652,7 +652,7 @@ export const DESIGN_THE_SCHEDULE_DEEPER = {
       body: `The window you read for your own eight nights has teeth because the site
              imposes a comb: a visit a night recurs once a sidereal day. Use the strategy
              panel for the planet of this investigation (a period of 3.5 days, the nearest
-             setting) with <em>one visit a night, same time</em> over 24 nights. Read the
+             setting) with <em>nightly, same time</em> over 24 nights. Read the
              verdict, and the alias period near 1.4 days.`,
       fields: [
         {
@@ -675,7 +675,7 @@ export const DESIGN_THE_SCHEDULE_DEEPER = {
         return {
           level: 'error',
           message:
-            'Strategy panel: cadence “one visit a night, same time”, period 3.5, 24 nights; read the alias row near 1.4 days.',
+            'Strategy panel: cadence “nightly, same time”, period 3.5, 24 nights; read the alias row near 1.4 days.',
         };
       },
       tool: WIN({ period: 3.5, nights: 24 }),
@@ -686,7 +686,7 @@ export const DESIGN_THE_SCHEDULE_DEEPER = {
       depth: 'advanced',
       type: 'measure',
       title: 'What irregular times buy, in numbers',
-      body: `Change the cadence to <em>three visits a night, irregular</em> over the same
+      body: `Change the cadence to <em>three a night</em> over the same
              24 nights at 3.5 days. Read the strongest alias row: how high it stands and
              the preference the data give the true period.`,
       fields: [
@@ -709,7 +709,7 @@ export const DESIGN_THE_SCHEDULE_DEEPER = {
         return {
           level: 'error',
           message:
-            'Strategy panel: cadence “three visits a night, irregular”, period 3.5, 24 nights; read the first alias row.',
+            'Strategy panel: cadence “three a night”, period 3.5, 24 nights; read the first alias row.',
         };
       },
       tool: WIN({ cadence: 1, period: 3.5, nights: 24 }),
@@ -784,7 +784,7 @@ export const WHY_THE_PERIOD_IS_WRONG_ES = {
     },
     {
       title: 'Lee los alias',
-      body: 'En el panel (<em>una visita por noche, a la misma hora</em>, período verdadero 0,8 días) lee las tres filas de alias. Una está cerca de 4 días. Escribe su período y la <em>preferencia en chi cuadrado</em> que dan los datos al período verdadero sobre él: cuántas veces peor que la verdad es un ajuste en el alias, en unidades del estadístico. Nueve o más es una preferencia clara.',
+      body: 'En el panel (<em>cada noche, misma hora</em>, período verdadero 0,8 días) lee las tres filas de alias. Una está cerca de 4 días. Escribe su período y la <em>preferencia en chi cuadrado</em> que dan los datos al período verdadero sobre él: cuántas veces peor que la verdad es un ajuste en el alias, en unidades del estadístico. Nueve o más es una preferencia clara.',
       fields: [
         { label: 'El alias cerca de 4 días' },
         { label: 'Preferencia en chi cuadrado por la verdad' },
@@ -819,7 +819,7 @@ export const WHY_THE_PERIOD_IS_WRONG_ES = {
     },
     {
       title: 'Deshaz el empate',
-      body: 'Cambia la cadencia a <em>tres visitas por noche, irregulares</em>: las mismas cuarenta noches, pero cada noche tres visitas a horas distintas. Lee la fila del alias más fuerte: cuánto sube su pico, en por ciento del pico verdadero, y la preferencia en chi cuadrado que ahora dan los datos a la verdad.',
+      body: 'Cambia la cadencia a <em>tres por noche</em>: las mismas cuarenta noches, pero cada noche tres visitas a horas distintas. Lee la fila del alias más fuerte: cuánto sube su pico, en por ciento del pico verdadero, y la preferencia en chi cuadrado que ahora dan los datos a la verdad.',
       fields: [
         { label: 'Alias más fuerte, por ciento del pico verdadero' },
         { label: 'Preferencia en chi cuadrado por la verdad' },
@@ -837,7 +837,7 @@ export const WHY_THE_PERIOD_IS_WRONG_ES = {
       ],
       misconceptions: [
         {
-          say: 'Más noches a la misma hora dejan cada visita en el mismo peine. Prueba sesenta noches en el panel con la cadencia «una visita por noche, a la misma hora»: el alias sigue igual de alto que la verdad.',
+          say: 'Más noches a la misma hora dejan cada visita en el mismo peine. Prueba sesenta noches en el panel con la cadencia «cada noche, misma hora»: el alias sigue igual de alto que la verdad.',
         },
         {
           say: 'Una exposición más larga baja el ruido de cada punto. Los alias están en los tiempos de los puntos, no en su ruido.',
@@ -854,7 +854,7 @@ export const WHY_THE_PERIOD_IS_WRONG_ES = {
     },
     {
       title: 'La búsqueda que sonaba segura',
-      body: 'Vuelve a <em>una visita por noche, a la misma hora</em> y activa <strong>Buscar en una serie</strong>. El panel hace la serie que daría el plan (0,8 días, con ruido) y ejecuta en ella la búsqueda de períodos. Devuelve unos <strong>0,266 días</strong>.',
+      body: 'Vuelve a <em>cada noche, misma hora</em> y activa <strong>Buscar en una serie</strong>. El panel hace la serie que daría el plan (0,8 días, con ruido) y ejecuta en ella la búsqueda de períodos. Devuelve unos <strong>0,266 días</strong>.',
       prompt: '¿Qué te dice ese resultado?',
       options: [
         'La estrella pulsa cada 0,266 días',
@@ -885,7 +885,7 @@ export const WHY_THE_PERIOD_IS_WRONG_DEEPER_ES = {
   steps: [
     {
       title: 'Diseña una cadencia',
-      body: 'Tres visitas por noche funcionaron, pero cuestan el triple de tiempo de telescopio. Prueba <em>una visita por noche, la hora varía</em>: una visita cada noche, pero su hora se mueve hasta 3,6 horas a un lado y a otro. Lee la fila del alias más fuerte.',
+      body: 'Tres visitas por noche funcionaron, pero cuestan el triple de tiempo de telescopio. Prueba <em>cada noche, hora varía</em>: una visita cada noche, pero su hora se mueve hasta 3,6 horas a un lado y a otro. Lee la fila del alias más fuerte.',
       fields: [
         { label: 'Alias más fuerte, por ciento del pico verdadero' },
         { label: 'Preferencia en chi cuadrado por la verdad' },
@@ -898,7 +898,7 @@ export const WHY_THE_PERIOD_IS_WRONG_DEEPER_ES = {
     },
     {
       title: 'Compruébalo en una serie',
-      body: 'Toma <em>tres visitas por noche, irregulares</em> y activa <strong>Buscar en una serie</strong>. Lee el período que halla la búsqueda y su incertidumbre, de la cota de Cramér-Rao para las épocas y el ruido.',
+      body: 'Toma <em>tres por noche</em> y activa <strong>Buscar en una serie</strong>. Lee el período que halla la búsqueda y su incertidumbre, de la cota de Cramér-Rao para las épocas y el ruido.',
       fields: [{ label: 'Período hallado' }, { label: 'Su incertidumbre' }],
     },
     {
@@ -933,7 +933,7 @@ export const WHY_THE_PERIOD_IS_WRONG_DEEPER_ES = {
     },
     {
       title: 'Cuánto del ciclo ves',
-      body: 'Pliega las visitas sobre el período: cada una cae en una fase entre 0 y 1 de un pulso. Con la cadencia <em>una visita por noche, a la misma hora</em>, lee la fila <em>Cobertura de fase</em> con un período verdadero de <strong>0,8 días</strong> y luego de <strong>1,0 días</strong>: cuántas de las veinte casillas de fase tienen un punto, y el arco vacío más largo.',
+      body: 'Pliega las visitas sobre el período: cada una cae en una fase entre 0 y 1 de un pulso. Con la cadencia <em>cada noche, misma hora</em>, lee la fila <em>Cobertura de fase</em> con un período verdadero de <strong>0,8 días</strong> y luego de <strong>1,0 días</strong>: cuántas de las veinte casillas de fase tienen un punto, y el arco vacío más largo.',
       fields: [
         { label: 'Casillas llenas con 0,8 d' },
         { label: 'Arco vacío más largo con 0,8 d, en ciclos' },
@@ -987,7 +987,7 @@ export const DESIGN_THE_SCHEDULE_DEEPER_ES = {
   steps: [
     {
       title: 'El peine que impone el sitio',
-      body: 'La ventana que leíste para tus ocho noches tiene dientes porque el sitio impone un peine: una visita por noche se repite una vez por día sidéreo. Usa el panel de estrategia para el planeta de esta investigación (un período de 3,5 días, el ajuste más cercano) con <em>una visita por noche, a la misma hora</em> durante 24 noches. Lee el veredicto y el período del alias cerca de 1,4 días.',
+      body: 'La ventana que leíste para tus ocho noches tiene dientes porque el sitio impone un peine: una visita por noche se repite una vez por día sidéreo. Usa el panel de estrategia para el planeta de esta investigación (un período de 3,5 días, el ajuste más cercano) con <em>cada noche, misma hora</em> durante 24 noches. Lee el veredicto y el período del alias cerca de 1,4 días.',
       fields: [
         { label: 'Período del alias cerca de 1,4 días' },
         { label: 'Preferencia en chi cuadrado por la verdad' },
@@ -995,7 +995,7 @@ export const DESIGN_THE_SCHEDULE_DEEPER_ES = {
     },
     {
       title: 'Lo que compran los tiempos irregulares, en números',
-      body: 'Cambia la cadencia a <em>tres visitas por noche, irregulares</em> durante las mismas 24 noches con 3,5 días. Lee la fila del alias más fuerte: cuánto sube y la preferencia que dan los datos al período verdadero.',
+      body: 'Cambia la cadencia a <em>tres por noche</em> durante las mismas 24 noches con 3,5 días. Lee la fila del alias más fuerte: cuánto sube y la preferencia que dan los datos al período verdadero.',
       fields: [
         { label: 'Alias más fuerte, por ciento del pico verdadero' },
         { label: 'Preferencia en chi cuadrado por la verdad' },
@@ -1142,7 +1142,7 @@ const EXPECTATIONS = {
     'the-aliases':
       'The alias near 4 days at 4.04 (within 0.02) and a chi-square preference of 0 for the truth (within 0.5) for one visit a night at the same time over forty nights.',
     'break-the-tie':
-      'The strongest alias at about 67 percent (within 3) and a preference of about 491 (within 30) for three visits a night, irregular.',
+      'The strongest alias at about 67 percent (within 3) and a preference of about 491 (within 30) for three a night.',
   },
 };
 

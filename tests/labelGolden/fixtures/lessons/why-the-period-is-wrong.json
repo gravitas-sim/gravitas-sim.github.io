@@ -68,19 +68,19 @@
  "steps": {
   "en": {
    "the-aliases": {
-    "validate": {"calls":232,"distinct":2,"digest":"17202cc9a1f7d552","samples":[null,{"level":"error","message":"Use the cadence “one visit a night, same time”, the true period 0.8 days, and read the alias row that is near 4 days: its period (4.04) and its chi-square preference (0)."}]}
+    "validate": {"calls":232,"distinct":2,"digest":"2f237f480a755d52","samples":[null,{"level":"error","message":"Use the cadence “nightly, same time”, the true period 0.8 days, and read the alias row that is near 4 days: its period (4.04) and its chi-square preference (0)."}]}
    },
    "break-the-tie": {
-    "validate": {"calls":232,"distinct":2,"digest":"a987ffe3210f64e3","samples":[null,{"level":"error","message":"Set the cadence to “three visits a night, irregular” (period 0.8 days, forty nights) and read the first alias row: about 67 percent and a preference near 490."}]}
+    "validate": {"calls":232,"distinct":2,"digest":"fd42855981cdc068","samples":[null,{"level":"error","message":"Set the cadence to “three a night” (period 0.8 days, forty nights) and read the first alias row: about 67 percent and a preference near 490."}]}
    },
    "design-a-cadence": {
-    "validate": {"calls":232,"distinct":2,"digest":"f465756b84d1871e","samples":[null,{"level":"error","message":"Use the cadence “one visit a night, clock time varies”, 0.8 days, forty nights: about 77 percent and a preference near 116."}]}
+    "validate": {"calls":232,"distinct":2,"digest":"3f078da23174140d","samples":[null,{"level":"error","message":"Use the cadence “nightly, time varies”, 0.8 days, forty nights: about 77 percent and a preference near 116."}]}
    },
    "how-many-resolve": {
     "validate": {"calls":97,"distinct":2,"digest":"c3908ce769a60190","samples":[null,{"level":"error","message":"Try cadences 0 to 4 in turn and count the verdicts that say resolved: the comb and the two seasons are ambiguous."}]}
    },
    "verify-on-a-series": {
-    "validate": {"calls":232,"distinct":2,"digest":"284b383f9511e6e5","samples":[null,{"level":"error","message":"Set “three visits a night, irregular” and switch the series on: the panel reports a period near 0.8004 days with an uncertainty near 0.0002."}]}
+    "validate": {"calls":232,"distinct":2,"digest":"344ecd678a9fd87d","samples":[null,{"level":"error","message":"Set “three a night” and switch the series on: the panel reports a period near 0.8004 days with an uncertainty near 0.0002."}]}
    },
    "window-width": {
     "validate": {"calls":232,"distinct":2,"digest":"5c82ddf651604980","samples":[null,{"level":"error","message":"With forty nights and one visit a night the Epochs row says 38.9 days; its inverse is 0.0257 cycles a day."}]}
