@@ -170,9 +170,9 @@ their ceilings:
 <!--fact-block:moduleSizes-->
 | Module | Lines | Ceiling |
 | --- | ---: | ---: |
-| `js/data/instructorContent.js` | 6,721 | 6,719 |
-| `js/i18n/es.deferred.js` | 4,133 | 4,131 |
-| `js/i18n/en.deferred.js` | 3,886 | 3,884 |
+| `js/data/instructorContent.js` | 6,721 | 6,721 |
+| `js/i18n/es.deferred.js` | 4,133 | 4,133 |
+| `js/i18n/en.deferred.js` | 3,886 | 3,886 |
 | `js/investigations.js` | 3,287 | 3,287 |
 | `js/data/investigations/measurement-sequence.js` | 3,270 | 3,270 |
 | `js/render.js` | 3,015 | 3,015 |
