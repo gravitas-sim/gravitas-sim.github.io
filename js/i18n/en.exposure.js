@@ -3,11 +3,10 @@
 export const EN_EXPOSURE = {
   'expW.title': 'How long to expose',
   'expW.note':
-    'The CCD equation for a facility from the instrument library, a target and a signal-to-noise: the exposure it asks, the noise budget, the faintest object that exposure reaches, and a synthetic frame of exactly that plan, measured with the Observatory’s aperture photometry so the prediction can be checked.',
+    'The CCD equation for a facility from the instrument library (brightness is a magnitude, or a magnitude per square arcsecond for a patch), a target and a signal-to-noise: the exposure it asks, the noise budget, the faintest object that exposure reaches, and a synthetic frame of exactly that plan, measured with the Observatory’s aperture photometry so the prediction can be checked.',
   'expW.control.setup': 'Facility and band',
   'expW.control.kind': 'Target',
-  'expW.control.mag':
-    'Brightness (magnitude; magnitude per square arcsec for a patch)',
+  'expW.control.mag': 'Brightness',
   'expW.control.aperture': 'Aperture radius',
   'expW.control.patch': 'Patch radius',
   'expW.control.exposures': 'Exposures',

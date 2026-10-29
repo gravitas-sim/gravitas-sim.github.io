@@ -1117,6 +1117,19 @@
         "double-the-eccentricity"
       ],
       "evidenceFrom": "model"
+    },
+    "plan-an-exposure": {
+      "centralExperimentId": "ce.plan-an-exposure",
+      "object": "panel:exposure-planner",
+      "control": "exposure-planner/exposures",
+      "quantity": "the total exposure that reaches a signal-to-noise of 20 for a magnitude-24 star in the Rubin r band: 455 seconds in two exposures and 512 seconds in twenty, the read noise paid once per exposure",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "predict-more-exposures",
+        "twenty-exposures"
+      ],
+      "evidenceFrom": "model"
     }
   }
 }

@@ -3,11 +3,10 @@
 export const ES_EXPOSURE = {
   'expW.title': 'Cuánto exponer',
   'expW.note':
-    'La ecuación del CCD para una instalación de la biblioteca de instrumentos, un objetivo y una señal a ruido: la exposición que pide, el presupuesto de ruido, el objeto más débil que alcanza esa exposición y una imagen sintética de ese plan, medida con la fotometría de abertura del Observatorio para poder comprobar la predicción.',
+    'La ecuación del CCD para una instalación de la biblioteca de instrumentos (el brillo es una magnitud, o una magnitud por segundo de arco cuadrado para una mancha), un objetivo y una señal a ruido: la exposición que pide, el presupuesto de ruido, el objeto más débil que alcanza esa exposición y una imagen sintética de ese plan, medida con la fotometría de abertura del Observatorio para poder comprobar la predicción.',
   'expW.control.setup': 'Instalación y banda',
   'expW.control.kind': 'Objetivo',
-  'expW.control.mag':
-    'Brillo (magnitud; magnitud por segundo de arco cuadrado para una mancha)',
+  'expW.control.mag': 'Brillo',
   'expW.control.aperture': 'Radio de la abertura',
   'expW.control.patch': 'Radio de la mancha',
   'expW.control.exposures': 'Exposiciones',

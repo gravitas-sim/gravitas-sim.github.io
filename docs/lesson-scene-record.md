@@ -11,15 +11,15 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 85 investigations and 1242 steps: 1150 steps
+Across 86 investigations and 1253 steps: 1161 steps
 declare a scene, 157 let a reader change one, 167 read the
-running integration, 741 show a prescribed model result, 146 draw
-on a stored dataset, 620 put a self-contained panel beside the text,
-327 keep something, and 58 are prose.
-Of 164 prediction loops, 164 are returned to,
-164 produce a measurement before they are answered, and
+running integration, 752 show a prescribed model result, 146 draw
+on a stored dataset, 631 put a self-contained panel beside the text,
+330 keep something, and 58 are prose.
+Of 166 prediction loops, 166 are returned to,
+166 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
-164 hold their marking until the experiment settles them.
+166 hold their marking until the experiment settles them.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -1210,4 +1210,18 @@ Of 164 prediction loops, 164 are returned to,
 - **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; null result: the probe names what is missing; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** 1 step(s) on arrival (a-dirty-snowball).
 - **Accepted central experiment** (reviewed 2026-09-11): object `sun`, control the canvas: watch the model comets, and read the first one's closest and furthest distance in the readout, measures the closest and furthest distance of the first model comet from the Sun, 5.79 and 17.84 astronomical units, and its bare-body temperature at each end, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## Plan an Exposure (`plan-an-exposure`)
+
+- **Steps:** 11. Scene declared on 11; a reader can change something on 0; 11 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 11 prescribed model, 0 stored dataset, 11 self-contained panel.
+- **What students do:** move-an-instrument-control, commit-a-prediction, record-values, choose-an-option.
+- **Objects the steps declare:** star.
+- **Instruments:** exposure-planner.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** predict-the-limit → the-plan → the-plan; predict-more-exposures → twenty-exposures, airmass-cost, the-moon, on-the-frame, cannot-be-reached, what-the-plan-leaves-out, what-you-worked-out → twenty-exposures.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:exposure-planner`, control exposure-planner/exposures, measures the total exposure that reaches a signal-to-noise of 20 for a magnitude-24 star in the Rubin r band: 455 seconds in two exposures and 512 seconds in twenty, the read noise paid once per exposure, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
