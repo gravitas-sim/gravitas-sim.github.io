@@ -150,6 +150,8 @@ const EXTENSIONS = {
     import('../data/investigations/depth/goldilocks-question.js'),
   'what-a-telescope-resolves': () =>
     import('../data/investigations/depth/what-a-telescope-resolves.js'),
+  'why-two-lines-become-one': () =>
+    import('../data/investigations/depth/why-two-lines-become-one.js'),
   'why-the-period-is-wrong': () =>
     import('../data/investigations/depth/why-the-period-is-wrong.js'),
   'design-the-schedule': () =>
@@ -264,6 +266,8 @@ const WORDS = {
       import('../data/investigations/depth/es/goldilocks-question.js'),
     'what-a-telescope-resolves': () =>
       import('../data/investigations/depth/es/what-a-telescope-resolves.js'),
+    'why-two-lines-become-one': () =>
+      import('../data/investigations/depth/es/why-two-lines-become-one.js'),
     'why-the-period-is-wrong': () =>
       import('../data/investigations/depth/es/why-the-period-is-wrong.js'),
     'design-the-schedule': () =>

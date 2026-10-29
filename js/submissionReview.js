@@ -162,6 +162,8 @@ const DEEPER = {
     import('./data/investigations/depth/phases-and-albedo.js'),
   'what-a-telescope-resolves': () =>
     import('./data/investigations/depth/what-a-telescope-resolves.js'),
+  'why-two-lines-become-one': () =>
+    import('./data/investigations/depth/why-two-lines-become-one.js'),
   'the-saturated-star': () =>
     import('./data/investigations/depth/the-saturated-star.js'),
   'which-surface-is-older': () =>

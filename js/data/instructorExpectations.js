@@ -16,6 +16,7 @@ import { INSTRUCTOR as PLANETS } from './investigations/planets-sequence.js';
 import { INSTRUCTOR as EXPOSURE } from './investigations/exposure-sequence.js';
 import { INSTRUCTOR as STRATEGY } from './investigations/strategy-sequence.js';
 import { INSTRUCTOR as TELESCOPE } from './investigations/telescope-sequence.js';
+import { INSTRUCTOR as SPECTROGRAPH } from './investigations/spectrograph-sequence.js';
 import { INSTRUCTOR as SATURATED_STAR } from './investigations/saturated-star-sequence.js';
 
 export default {
@@ -29,6 +30,7 @@ export default {
     ...EXPOSURE.expectations,
     ...STRATEGY.expectations,
     ...TELESCOPE.expectations,
+    ...SPECTROGRAPH.expectations,
     ...SATURATED_STAR.expectations,
     'the-suns-motion': {
       'measure-the-sun':

@@ -190,6 +190,7 @@ const LOADERS = {
     import('./the-scale-of-the-solar-system.js'),
   'comets-and-the-sun': () => import('./comets-and-the-sun.js'),
   'what-a-telescope-resolves': () => import('./what-a-telescope-resolves.js'),
+  'why-two-lines-become-one': () => import('./why-two-lines-become-one.js'),
   'the-saturated-star': () => import('./the-saturated-star.js'),
   'plan-an-exposure': () => import('./plan-an-exposure.js'),
   'why-the-period-is-wrong': () => import('./why-the-period-is-wrong.js'),
@@ -302,6 +303,8 @@ const TRANSLATIONS = {
     'comets-and-the-sun': () => import('./es/comets-and-the-sun.js'),
     'what-a-telescope-resolves': () =>
       import('./es/what-a-telescope-resolves.js'),
+    'why-two-lines-become-one': () =>
+      import('./es/why-two-lines-become-one.js'),
     'the-saturated-star': () => import('./es/the-saturated-star.js'),
     'plan-an-exposure': () => import('./es/plan-an-exposure.js'),
     'why-the-period-is-wrong': () => import('./es/why-the-period-is-wrong.js'),
