@@ -23,6 +23,7 @@ export const EVIDENCE_FROM = Object.freeze({
   'cluster-membership': 'model',
   'color-and-temperature': 'model',
   'comets-and-the-sun': 'engine',
+  'counts-to-magnitudes': 'model',
   'craters-by-size': 'model',
   'design-the-schedule': 'engine',
   'detect-this-planet': 'model',

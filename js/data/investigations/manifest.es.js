@@ -1123,6 +1123,19 @@ export const MANIFEST = [
     objectiveCount: 4,
   },
   {
+    id: 'counts-to-magnitudes',
+    title: 'De cuentas a magnitudes',
+    subtitle:
+      'Por qué una estrella se ve más débil cerca del horizonte, cómo una noche de estrellas patrón convierte cuentas en magnitudes y qué no puede decirte la calibración',
+    duration: '10-20 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/counts-to-magnitudes.webp',
+    depths: 3,
+    stepCount: 6,
+    gradedCount: 4,
+    objectiveCount: 4,
+  },
+  {
     id: 'plan-an-exposure',
     title: 'Planifica una exposición',
     subtitle:

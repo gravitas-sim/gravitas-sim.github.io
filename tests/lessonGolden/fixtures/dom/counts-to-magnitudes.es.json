@@ -1,0 +1,182 @@
+[
+ {
+  "depth": "core",
+  "role": "first",
+  "sid": "a-night-of-standards",
+  "position": [
+   1,
+   6
+  ],
+  "title": "De cuentas a magnitudes",
+  "subtitle": "Por qué una estrella se ve más débil cerca del horizonte, cómo una noche de estrellas patrón convierte cuentas en magnitudes y qué no puede decirte la calibración",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 6 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Una noche de estrellas patrón</h3><div class=\"inv-step-body\"><p>Un detector cuenta electrones; un catálogo da magnitudes. Para pasar de lo uno a lo otro el observador mide <strong>estrellas patrón</strong>, estrellas cuyas magnitudes ya se conocen, a varias alturas del cielo. Cada punto de abajo es una medida de un patrón: el eje horizontal es la <strong>masa de aire</strong> (1 en el cenit, cerca de 2 a 30 grados sobre el horizonte) y el vertical, cuánto se aparta la magnitud del propio instrumento de la del catálogo.</p><p>La noche es <strong>sintética</strong>: la hizo un modelo a partir de una verdad declarada, con ruido, para poder comprobar la respuesta después. Nadie la observó.</p></div>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "graded",
+  "sid": "low-in-the-sky-predict",
+  "position": [
+   2,
+   6
+  ],
+  "title": "De cuentas a magnitudes",
+  "subtitle": "Por qué una estrella se ve más débil cerca del horizonte, cómo una noche de estrellas patrón convierte cuentas en magnitudes y qué no puede decirte la calibración",
+  "body": "<p class=\"inv-step-count\">Paso 2 de 6 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">Bajo en el cielo</h3><div class=\"inv-step-body\"><p>La misma estrella se mide en el cenit, con masa de aire 1,05, y de nuevo más tarde, cuando ha bajado a 2,15, más del doble de aire que atravesar. Los puntos del gráfico dicen cuánto cuesta el aire.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Con la masa de aire mayor la misma estrella se ve…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>igual: el brillo de una estrella no depende de dónde esté en el cielo</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>más débil en un cuarto de magnitud, aproximadamente</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>más débil en unas dos magnitudes y media (un factor 10)</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>más brillante, porque está más cerca del horizonte</span></button></div><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> Me vendría bien una pista </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "marked",
+  "sid": "low-in-the-sky-predict",
+  "position": [
+   2,
+   6
+  ],
+  "title": "De cuentas a magnitudes",
+  "subtitle": "Por qué una estrella se ve más débil cerca del horizonte, cómo una noche de estrellas patrón convierte cuentas en magnitudes y qué no puede decirte la calibración",
+  "body": "<p class=\"inv-step-count\">Paso 2 de 6 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">Bajo en el cielo</h3><div class=\"inv-step-body\"><p>La misma estrella se mide en el cenit, con masa de aire 1,05, y de nuevo más tarde, cuando ha bajado a 2,15, más del doble de aire que atravesar. Los puntos del gráfico dicen cuánto cuesta el aire.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Con la masa de aire mayor la misma estrella se ve…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>igual: el brillo de una estrella no depende de dónde esté en el cielo</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>más débil en un cuarto de magnitud, aproximadamente</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>más débil en unas dos magnitudes y media (un factor 10)</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>más brillante, porque está más cerca del horizonte</span></button></div><p class=\"inv-held\">Tu respuesta queda registrada. No se corrige hasta que llegues a «La pendiente es el aire», para que la decida el experimento y no la clave de respuestas.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Cambiar respuesta</button><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> Me vendría bien una pista </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "last",
+  "sid": "what-a-calibration-does",
+  "position": [
+   6,
+   6
+  ],
+  "title": "De cuentas a magnitudes",
+  "subtitle": "Por qué una estrella se ve más débil cerca del horizonte, cómo una noche de estrellas patrón convierte cuentas en magnitudes y qué no puede decirte la calibración",
+  "body": "<p class=\"inv-step-count\">Paso 6 de 6 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Qué hace una calibración</h3><div class=\"inv-step-body\"><p>Una noche de patrones fija tres números: el <strong>punto cero</strong> (qué magnitud tiene una cuenta por segundo), la <strong>extinción</strong> del aire y un <strong>término de color</strong> (el instrumento ve las estrellas azules y rojas de forma algo distinta). Con ellos, cualquier estrella de las mismas imágenes recibe una magnitud calibrada, <em>con una incertidumbre</em> que sale de lo bien que la noche los fijó. Los pasos siguientes hacen una. Recuerda que la noche es sintética y que la extinción es la de la atmósfera, no la del polvo.</p></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "quantitative",
+  "role": "first",
+  "sid": "a-night-of-standards",
+  "position": [
+   1,
+   14
+  ],
+  "title": "De cuentas a magnitudes",
+  "subtitle": "Por qué una estrella se ve más débil cerca del horizonte, cómo una noche de estrellas patrón convierte cuentas en magnitudes y qué no puede decirte la calibración",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 14 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Una noche de estrellas patrón</h3><div class=\"inv-step-body\"><p>Un detector cuenta electrones; un catálogo da magnitudes. Para pasar de lo uno a lo otro el observador mide <strong>estrellas patrón</strong>, estrellas cuyas magnitudes ya se conocen, a varias alturas del cielo. Cada punto de abajo es una medida de un patrón: el eje horizontal es la <strong>masa de aire</strong> (1 en el cenit, cerca de 2 a 30 grados sobre el horizonte) y el vertical, cuánto se aparta la magnitud del propio instrumento de la del catálogo.</p><p>La noche es <strong>sintética</strong>: la hizo un modelo a partir de una verdad declarada, con ruido, para poder comprobar la respuesta después. Nadie la observó.</p></div>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Cuantitativo"
+ },
+ {
+  "depth": "quantitative",
+  "role": "graded",
+  "sid": "low-in-the-sky-predict",
+  "position": [
+   2,
+   14
+  ],
+  "title": "De cuentas a magnitudes",
+  "subtitle": "Por qué una estrella se ve más débil cerca del horizonte, cómo una noche de estrellas patrón convierte cuentas en magnitudes y qué no puede decirte la calibración",
+  "body": "<p class=\"inv-step-count\">Paso 2 de 14 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">Bajo en el cielo</h3><div class=\"inv-step-body\"><p>La misma estrella se mide en el cenit, con masa de aire 1,05, y de nuevo más tarde, cuando ha bajado a 2,15, más del doble de aire que atravesar. Los puntos del gráfico dicen cuánto cuesta el aire.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Con la masa de aire mayor la misma estrella se ve…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>igual: el brillo de una estrella no depende de dónde esté en el cielo</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>más débil en un cuarto de magnitud, aproximadamente</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>más débil en unas dos magnitudes y media (un factor 10)</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>más brillante, porque está más cerca del horizonte</span></button></div><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> Me vendría bien una pista </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Cuantitativo"
+ },
+ {
+  "depth": "quantitative",
+  "role": "marked",
+  "sid": "low-in-the-sky-predict",
+  "position": [
+   2,
+   14
+  ],
+  "title": "De cuentas a magnitudes",
+  "subtitle": "Por qué una estrella se ve más débil cerca del horizonte, cómo una noche de estrellas patrón convierte cuentas en magnitudes y qué no puede decirte la calibración",
+  "body": "<p class=\"inv-step-count\">Paso 2 de 14 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">Bajo en el cielo</h3><div class=\"inv-step-body\"><p>La misma estrella se mide en el cenit, con masa de aire 1,05, y de nuevo más tarde, cuando ha bajado a 2,15, más del doble de aire que atravesar. Los puntos del gráfico dicen cuánto cuesta el aire.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Con la masa de aire mayor la misma estrella se ve…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>igual: el brillo de una estrella no depende de dónde esté en el cielo</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>más débil en un cuarto de magnitud, aproximadamente</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>más débil en unas dos magnitudes y media (un factor 10)</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>más brillante, porque está más cerca del horizonte</span></button></div><p class=\"inv-held\">Tu respuesta queda registrada. No se corrige hasta que llegues a «La pendiente es el aire», para que la decida el experimento y no la clave de respuestas.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Cambiar respuesta</button><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> Me vendría bien una pista </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Cuantitativo"
+ },
+ {
+  "depth": "quantitative",
+  "role": "last",
+  "sid": "what-a-calibration-does",
+  "position": [
+   14,
+   14
+  ],
+  "title": "De cuentas a magnitudes",
+  "subtitle": "Por qué una estrella se ve más débil cerca del horizonte, cómo una noche de estrellas patrón convierte cuentas en magnitudes y qué no puede decirte la calibración",
+  "body": "<p class=\"inv-step-count\">Paso 14 de 14 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Qué hace una calibración</h3><div class=\"inv-step-body\"><p>Una noche de patrones fija tres números: el <strong>punto cero</strong> (qué magnitud tiene una cuenta por segundo), la <strong>extinción</strong> del aire y un <strong>término de color</strong> (el instrumento ve las estrellas azules y rojas de forma algo distinta). Con ellos, cualquier estrella de las mismas imágenes recibe una magnitud calibrada, <em>con una incertidumbre</em> que sale de lo bien que la noche los fijó. Los pasos siguientes hacen una. Recuerda que la noche es sintética y que la extinción es la de la atmósfera, no la del polvo.</p></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Cuantitativo"
+ },
+ {
+  "depth": "advanced",
+  "role": "first",
+  "sid": "a-night-of-standards",
+  "position": [
+   1,
+   19
+  ],
+  "title": "De cuentas a magnitudes",
+  "subtitle": "Por qué una estrella se ve más débil cerca del horizonte, cómo una noche de estrellas patrón convierte cuentas en magnitudes y qué no puede decirte la calibración",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 19 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Una noche de estrellas patrón</h3><div class=\"inv-step-body\"><p>Un detector cuenta electrones; un catálogo da magnitudes. Para pasar de lo uno a lo otro el observador mide <strong>estrellas patrón</strong>, estrellas cuyas magnitudes ya se conocen, a varias alturas del cielo. Cada punto de abajo es una medida de un patrón: el eje horizontal es la <strong>masa de aire</strong> (1 en el cenit, cerca de 2 a 30 grados sobre el horizonte) y el vertical, cuánto se aparta la magnitud del propio instrumento de la del catálogo.</p><p>La noche es <strong>sintética</strong>: la hizo un modelo a partir de una verdad declarada, con ruido, para poder comprobar la respuesta después. Nadie la observó.</p></div>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Avanzado"
+ },
+ {
+  "depth": "advanced",
+  "role": "graded",
+  "sid": "low-in-the-sky-predict",
+  "position": [
+   2,
+   19
+  ],
+  "title": "De cuentas a magnitudes",
+  "subtitle": "Por qué una estrella se ve más débil cerca del horizonte, cómo una noche de estrellas patrón convierte cuentas en magnitudes y qué no puede decirte la calibración",
+  "body": "<p class=\"inv-step-count\">Paso 2 de 19 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">Bajo en el cielo</h3><div class=\"inv-step-body\"><p>La misma estrella se mide en el cenit, con masa de aire 1,05, y de nuevo más tarde, cuando ha bajado a 2,15, más del doble de aire que atravesar. Los puntos del gráfico dicen cuánto cuesta el aire.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Con la masa de aire mayor la misma estrella se ve…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>igual: el brillo de una estrella no depende de dónde esté en el cielo</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>más débil en un cuarto de magnitud, aproximadamente</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>más débil en unas dos magnitudes y media (un factor 10)</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>más brillante, porque está más cerca del horizonte</span></button></div><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> Me vendría bien una pista </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Avanzado"
+ },
+ {
+  "depth": "advanced",
+  "role": "marked",
+  "sid": "low-in-the-sky-predict",
+  "position": [
+   2,
+   19
+  ],
+  "title": "De cuentas a magnitudes",
+  "subtitle": "Por qué una estrella se ve más débil cerca del horizonte, cómo una noche de estrellas patrón convierte cuentas en magnitudes y qué no puede decirte la calibración",
+  "body": "<p class=\"inv-step-count\">Paso 2 de 19 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">Bajo en el cielo</h3><div class=\"inv-step-body\"><p>La misma estrella se mide en el cenit, con masa de aire 1,05, y de nuevo más tarde, cuando ha bajado a 2,15, más del doble de aire que atravesar. Los puntos del gráfico dicen cuánto cuesta el aire.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Con la masa de aire mayor la misma estrella se ve…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>igual: el brillo de una estrella no depende de dónde esté en el cielo</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>más débil en un cuarto de magnitud, aproximadamente</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>más débil en unas dos magnitudes y media (un factor 10)</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>más brillante, porque está más cerca del horizonte</span></button></div><p class=\"inv-held\">Tu respuesta queda registrada. No se corrige hasta que llegues a «La pendiente es el aire», para que la decida el experimento y no la clave de respuestas.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Cambiar respuesta</button><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> Me vendría bien una pista </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Avanzado"
+ },
+ {
+  "depth": "advanced",
+  "role": "last",
+  "sid": "what-a-calibration-does",
+  "position": [
+   19,
+   19
+  ],
+  "title": "De cuentas a magnitudes",
+  "subtitle": "Por qué una estrella se ve más débil cerca del horizonte, cómo una noche de estrellas patrón convierte cuentas en magnitudes y qué no puede decirte la calibración",
+  "body": "<p class=\"inv-step-count\">Paso 19 de 19 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Qué hace una calibración</h3><div class=\"inv-step-body\"><p>Una noche de patrones fija tres números: el <strong>punto cero</strong> (qué magnitud tiene una cuenta por segundo), la <strong>extinción</strong> del aire y un <strong>término de color</strong> (el instrumento ve las estrellas azules y rojas de forma algo distinta). Con ellos, cualquier estrella de las mismas imágenes recibe una magnitud calibrada, <em>con una incertidumbre</em> que sale de lo bien que la noche los fijó. Los pasos siguientes hacen una. Recuerda que la noche es sintética y que la extinción es la de la atmósfera, no la del polvo.</p></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Avanzado"
+ }
+]

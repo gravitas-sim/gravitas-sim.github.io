@@ -492,6 +492,10 @@ export const NEVER_PRECACHED = [
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(the-saturated-star|saturated-star-sequence)\.js$/,
   /^(js\/effectsWidgets\.js|js\/effectsField\.js|js\/i18n\/(en|es)\.effects\.js)$/,
   /^js\/kernels\/detector\/(effects|sampling)\.js$/,
+  // Prompt 212: the photometric-calibration instrument, its kernel, adapter, field, keep module and its one lesson file.
+  /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(counts-to-magnitudes|photometric-calibration-sequence)\.js$/,
+  /^(js\/photcalWidgets\.js|js\/photcalField\.js|js\/photcalKeep\.js|js\/i18n\/(en|es)\.photcal\.js|js\/instruments\/photcal\.js)$/,
+  /^js\/kernels\/detector\/photcal\.js$/,
 ];
 
 const ON_DEMAND_ONLY = new Set([

@@ -158,6 +158,8 @@ const EXTENSIONS = {
     import('../data/investigations/depth/design-the-schedule.js'),
   'the-saturated-star': () =>
     import('../data/investigations/depth/the-saturated-star.js'),
+  'counts-to-magnitudes': () =>
+    import('../data/investigations/depth/counts-to-magnitudes.js'),
   'what-is-in-this-field': () =>
     import('../data/investigations/depth/what-is-in-this-field.js'),
 };
@@ -274,6 +276,8 @@ const WORDS = {
       import('../data/investigations/depth/es/design-the-schedule.js'),
     'the-saturated-star': () =>
       import('../data/investigations/depth/es/the-saturated-star.js'),
+    'counts-to-magnitudes': () =>
+      import('../data/investigations/depth/es/counts-to-magnitudes.js'),
     'what-is-in-this-field': () =>
       import('../data/investigations/depth/es/what-is-in-this-field.js'),
     'missing-mass': () =>

@@ -192,6 +192,7 @@ const LOADERS = {
   'what-a-telescope-resolves': () => import('./what-a-telescope-resolves.js'),
   'why-two-lines-become-one': () => import('./why-two-lines-become-one.js'),
   'the-saturated-star': () => import('./the-saturated-star.js'),
+  'counts-to-magnitudes': () => import('./counts-to-magnitudes.js'),
   'plan-an-exposure': () => import('./plan-an-exposure.js'),
   'why-the-period-is-wrong': () => import('./why-the-period-is-wrong.js'),
 };
@@ -306,6 +307,7 @@ const TRANSLATIONS = {
     'why-two-lines-become-one': () =>
       import('./es/why-two-lines-become-one.js'),
     'the-saturated-star': () => import('./es/the-saturated-star.js'),
+    'counts-to-magnitudes': () => import('./es/counts-to-magnitudes.js'),
     'plan-an-exposure': () => import('./es/plan-an-exposure.js'),
     'why-the-period-is-wrong': () => import('./es/why-the-period-is-wrong.js'),
   },

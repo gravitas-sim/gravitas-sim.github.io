@@ -409,6 +409,12 @@ export const LAZY_FAMILIES = Object.freeze({
     'HABITABILITY_LIMIT_WIDGETS',
     ['hz-limits', 'hz-locking', 'hz-ages']
   ),
+  photcal: familyEntry(
+    () => import('./photcalWidgets.js'),
+    './photcalWidgets.js',
+    'PHOTCAL_WIDGETS',
+    ['photometric-calibration']
+  ),
   spectrograph: familyEntry(
     () => import('./spectrographWidgets.js'),
     './spectrographWidgets.js',
@@ -616,7 +622,14 @@ export async function whenWidgetsReady() {
   // schema ("request for '../observatory/schema.js' is not linked") and the
   // forward models' setup, so it too is loaded after the rest (Prompt 214).
   const families = Object.keys(LAZY_FAMILIES);
-  const late = ['variables', 'crater', 'telescope', 'effects', 'strategy'];
+  const late = [
+    'variables',
+    'crater',
+    'telescope',
+    'effects',
+    'strategy',
+    'photcal',
+  ];
   await Promise.all(families.filter(f => !late.includes(f)).map(loadFamily));
   for (const f of late) await loadFamily(f);
   const results = await Promise.all([...familyReady.values()]);

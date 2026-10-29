@@ -166,6 +166,8 @@ const DEEPER = {
     import('./data/investigations/depth/why-two-lines-become-one.js'),
   'the-saturated-star': () =>
     import('./data/investigations/depth/the-saturated-star.js'),
+  'counts-to-magnitudes': () =>
+    import('./data/investigations/depth/counts-to-magnitudes.js'),
   'which-surface-is-older': () =>
     import('./data/investigations/depth/which-surface-is-older.js'),
   'craters-by-size': () =>

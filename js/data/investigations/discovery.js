@@ -900,6 +900,16 @@ export const DISCOVERY = {
     },
     courseLevel: 'survey',
   },
+  'counts-to-magnitudes': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: [],
+    textbook: {
+      chapter: 6,
+      section: null,
+    },
+    courseLevel: 'survey',
+  },
   'plan-an-exposure': {
     audience: 'intro',
     mathematics: 'algebra',

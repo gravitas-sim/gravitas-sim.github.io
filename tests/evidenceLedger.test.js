@@ -28,6 +28,9 @@ import {
   withContext,
 } from '../js/notebook/entry.js';
 import { observedEntry } from '../js/notebook/observed.js';
+import { solveNight, calibrate } from '../js/kernels/detector/photcal.js';
+import { calibrationRecord } from '../js/instruments/photcal.js';
+import { drawNight, drawTarget } from '../js/photcalField.js';
 import { artifactEntry } from '../js/notebook/artifactEntry.js';
 import {
   deriveEnvelope,
@@ -529,6 +532,31 @@ const every = () => [
       ],
     }),
   }),
+  // A photometric calibration of a synthetic night (js/photcalKeep.js, Prompt
+  // 212): its kernel is covered in tests/photometricCalibration.test.js; here
+  // only that the ledger holds one, with the atmospheric extinction in mag/airmass.
+  (() => {
+    const night = drawNight({ seed: 'ledger' });
+    const solution = solveNight(night.observations);
+    const target = drawTarget(night, {
+      id: 'target',
+      M: 13.2,
+      C: 0.8,
+      X: 1.9,
+      sigma: 0.008,
+      seed: 'ledger',
+    });
+    return artifactEntry({
+      source: SOURCE.PHOTOMETRIC_CALIBRATION,
+      title: 'Photometric calibration of a synthetic night',
+      capturedAt: at,
+      context: { page: 'sandbox' },
+      envelope: calibrationRecord(solution, [calibrate(solution, target)], {
+        id: 'photometric-calibration-ledger',
+        source: { kind: 'forward-model', id: 'ledger', digest },
+      }),
+    });
+  })(),
 ];
 
 describe('every producer writes an envelope with where it was kept', () => {
@@ -709,7 +737,7 @@ describe('the submission token carries the ledger', () => {
     });
   // Every source's entry together holds more rows than a token carries
   // (TOKEN_ROWS), so these leave out the calibration's, the PSF's, the completeness's, the light curve's and
-  // the astrometric series' one row each; the cut to the limit is tested on its own below.
+  // the astrometric series' and the photometric calibration's one row each; the cut to the limit is tested on its own below.
   const withLedger = async (
     entries = every().filter(
       e =>
@@ -717,7 +745,8 @@ describe('the submission token carries the ledger', () => {
         e.source !== SOURCE.IMAGE_DETECTION &&
         e.source !== SOURCE.IMAGE_INJECTION &&
         e.source !== SOURCE.IMAGE_SEQUENCE &&
-        e.source !== SOURCE.IMAGE_SERIES
+        e.source !== SOURCE.IMAGE_SERIES &&
+        e.source !== SOURCE.PHOTOMETRIC_CALIBRATION
     )
   ) => {
     const record = ledgerRecord(entries);

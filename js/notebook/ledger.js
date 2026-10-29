@@ -439,6 +439,7 @@ export const ARTIFACT_SOURCES = [
   'image-injection',
   'image-sequence',
   'image-series',
+  'photometric-calibration',
 ];
 
 /**

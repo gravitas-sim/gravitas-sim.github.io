@@ -10,6 +10,7 @@
     "black-holes",
     "weighing-stars",
     "a-universe-of-stars",
+    "counts-to-magnitudes",
     "detect-this-planet",
     "extending-an-experiment",
     "measuring-the-moon",
@@ -178,6 +179,9 @@
     "a-universe-of-stars": [
       "key:measure.checklist"
     ],
+    "counts-to-magnitudes": [
+      "depth-step:quantitative/predict"
+    ],
     "detect-this-planet": [
       "key:read.allowInspector"
     ],
@@ -268,17 +272,17 @@
     "pin:unpinned"
   ],
   "totals": {
-    "investigations": 90,
-    "steps": 1568,
+    "investigations": 91,
+    "steps": 1587,
     "activityCuts": 6,
-    "lessonTokens": 146,
+    "lessonTokens": 147,
     "activityTokens": 29,
     "stepTypes": {
-      "read": 296,
-      "predict": 174,
+      "read": 300,
+      "predict": 176,
       "ellipse": 1,
-      "question": 542,
-      "measure": 410,
+      "question": 546,
+      "measure": 419,
       "explore": 144,
       "wedges": 1
     }

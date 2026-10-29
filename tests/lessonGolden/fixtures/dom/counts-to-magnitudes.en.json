@@ -1,0 +1,182 @@
+[
+ {
+  "depth": "core",
+  "role": "first",
+  "sid": "a-night-of-standards",
+  "position": [
+   1,
+   6
+  ],
+  "title": "Counts to Magnitudes",
+  "subtitle": "Why a star looks fainter low in the sky, how a night of standard stars turns counts into magnitudes, and what the calibration cannot tell you",
+  "body": "<p class=\"inv-step-count\">Step 1 of 6 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">A night of standard stars</h3><div class=\"inv-step-body\"><p>A detector counts electrons; a catalog lists magnitudes. To turn one into the other an observer measures <strong>standard stars</strong>, stars whose magnitudes are already known, at several heights in the sky. Each point below is one measurement of one standard: the horizontal axis is the <strong>airmass</strong> (1 straight overhead, about 2 at 30 degrees above the horizon), the vertical axis how far the instrument’s own magnitude lies from the catalog’s.</p><p>The night is <strong>synthetic</strong>: made by a model from a stated truth, with noise, so the answer can be checked afterwards. Nobody observed it.</p></div>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "graded",
+  "sid": "low-in-the-sky-predict",
+  "position": [
+   2,
+   6
+  ],
+  "title": "Counts to Magnitudes",
+  "subtitle": "Why a star looks fainter low in the sky, how a night of standard stars turns counts into magnitudes, and what the calibration cannot tell you",
+  "body": "<p class=\"inv-step-count\">Step 2 of 6 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">Low in the sky</h3><div class=\"inv-step-body\"><p>The same star is measured overhead, at airmass 1.05, and again later when it has sunk to airmass 2.15, more than twice as much air to look through. The points on the plot tell you how much the air costs.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">At the higher airmass the same star looks…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>the same: a star’s brightness does not depend on where it is in the sky</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>about a quarter of a magnitude fainter</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>about two and a half magnitudes (a factor of 10) fainter</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>brighter, because it is closer to the horizon</span></button></div><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> I could use a hint </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "marked",
+  "sid": "low-in-the-sky-predict",
+  "position": [
+   2,
+   6
+  ],
+  "title": "Counts to Magnitudes",
+  "subtitle": "Why a star looks fainter low in the sky, how a night of standard stars turns counts into magnitudes, and what the calibration cannot tell you",
+  "body": "<p class=\"inv-step-count\">Step 2 of 6 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">Low in the sky</h3><div class=\"inv-step-body\"><p>The same star is measured overhead, at airmass 1.05, and again later when it has sunk to airmass 2.15, more than twice as much air to look through. The points on the plot tell you how much the air costs.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">At the higher airmass the same star looks…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>the same: a star’s brightness does not depend on where it is in the sky</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>about a quarter of a magnitude fainter</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>about two and a half magnitudes (a factor of 10) fainter</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>brighter, because it is closer to the horizon</span></button></div><p class=\"inv-held\">Your answer is recorded. It stays unmarked until you reach “The slope is the air”, so the experiment settles it rather than the answer key.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Change answer</button><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> I could use a hint </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "last",
+  "sid": "what-a-calibration-does",
+  "position": [
+   6,
+   6
+  ],
+  "title": "Counts to Magnitudes",
+  "subtitle": "Why a star looks fainter low in the sky, how a night of standard stars turns counts into magnitudes, and what the calibration cannot tell you",
+  "body": "<p class=\"inv-step-count\">Step 6 of 6 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">What a calibration does</h3><div class=\"inv-step-body\"><p>A night of standards fixes three numbers: the <strong>zero point</strong> (what magnitude one count per second is), the <strong>extinction</strong> of the air, and a <strong>color term</strong> (the instrument sees blue and red stars a little differently). With them, any star on the same frames gets a calibrated magnitude, <em>with an uncertainty</em> that comes from how well the night fixed them. The next steps make one. Remember the night is synthetic and the extinction is the atmosphere’s, not the dust’s.</p></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "quantitative",
+  "role": "first",
+  "sid": "a-night-of-standards",
+  "position": [
+   1,
+   14
+  ],
+  "title": "Counts to Magnitudes",
+  "subtitle": "Why a star looks fainter low in the sky, how a night of standard stars turns counts into magnitudes, and what the calibration cannot tell you",
+  "body": "<p class=\"inv-step-count\">Step 1 of 14 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">A night of standard stars</h3><div class=\"inv-step-body\"><p>A detector counts electrons; a catalog lists magnitudes. To turn one into the other an observer measures <strong>standard stars</strong>, stars whose magnitudes are already known, at several heights in the sky. Each point below is one measurement of one standard: the horizontal axis is the <strong>airmass</strong> (1 straight overhead, about 2 at 30 degrees above the horizon), the vertical axis how far the instrument’s own magnitude lies from the catalog’s.</p><p>The night is <strong>synthetic</strong>: made by a model from a stated truth, with noise, so the answer can be checked afterwards. Nobody observed it.</p></div>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": "Depth: Quantitative"
+ },
+ {
+  "depth": "quantitative",
+  "role": "graded",
+  "sid": "low-in-the-sky-predict",
+  "position": [
+   2,
+   14
+  ],
+  "title": "Counts to Magnitudes",
+  "subtitle": "Why a star looks fainter low in the sky, how a night of standard stars turns counts into magnitudes, and what the calibration cannot tell you",
+  "body": "<p class=\"inv-step-count\">Step 2 of 14 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">Low in the sky</h3><div class=\"inv-step-body\"><p>The same star is measured overhead, at airmass 1.05, and again later when it has sunk to airmass 2.15, more than twice as much air to look through. The points on the plot tell you how much the air costs.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">At the higher airmass the same star looks…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>the same: a star’s brightness does not depend on where it is in the sky</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>about a quarter of a magnitude fainter</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>about two and a half magnitudes (a factor of 10) fainter</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>brighter, because it is closer to the horizon</span></button></div><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> I could use a hint </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Depth: Quantitative"
+ },
+ {
+  "depth": "quantitative",
+  "role": "marked",
+  "sid": "low-in-the-sky-predict",
+  "position": [
+   2,
+   14
+  ],
+  "title": "Counts to Magnitudes",
+  "subtitle": "Why a star looks fainter low in the sky, how a night of standard stars turns counts into magnitudes, and what the calibration cannot tell you",
+  "body": "<p class=\"inv-step-count\">Step 2 of 14 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">Low in the sky</h3><div class=\"inv-step-body\"><p>The same star is measured overhead, at airmass 1.05, and again later when it has sunk to airmass 2.15, more than twice as much air to look through. The points on the plot tell you how much the air costs.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">At the higher airmass the same star looks…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>the same: a star’s brightness does not depend on where it is in the sky</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>about a quarter of a magnitude fainter</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>about two and a half magnitudes (a factor of 10) fainter</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>brighter, because it is closer to the horizon</span></button></div><p class=\"inv-held\">Your answer is recorded. It stays unmarked until you reach “The slope is the air”, so the experiment settles it rather than the answer key.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Change answer</button><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> I could use a hint </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Depth: Quantitative"
+ },
+ {
+  "depth": "quantitative",
+  "role": "last",
+  "sid": "what-a-calibration-does",
+  "position": [
+   14,
+   14
+  ],
+  "title": "Counts to Magnitudes",
+  "subtitle": "Why a star looks fainter low in the sky, how a night of standard stars turns counts into magnitudes, and what the calibration cannot tell you",
+  "body": "<p class=\"inv-step-count\">Step 14 of 14 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">What a calibration does</h3><div class=\"inv-step-body\"><p>A night of standards fixes three numbers: the <strong>zero point</strong> (what magnitude one count per second is), the <strong>extinction</strong> of the air, and a <strong>color term</strong> (the instrument sees blue and red stars a little differently). With them, any star on the same frames gets a calibrated magnitude, <em>with an uncertainty</em> that comes from how well the night fixed them. The next steps make one. Remember the night is synthetic and the extinction is the atmosphere’s, not the dust’s.</p></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Depth: Quantitative"
+ },
+ {
+  "depth": "advanced",
+  "role": "first",
+  "sid": "a-night-of-standards",
+  "position": [
+   1,
+   19
+  ],
+  "title": "Counts to Magnitudes",
+  "subtitle": "Why a star looks fainter low in the sky, how a night of standard stars turns counts into magnitudes, and what the calibration cannot tell you",
+  "body": "<p class=\"inv-step-count\">Step 1 of 19 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">A night of standard stars</h3><div class=\"inv-step-body\"><p>A detector counts electrons; a catalog lists magnitudes. To turn one into the other an observer measures <strong>standard stars</strong>, stars whose magnitudes are already known, at several heights in the sky. Each point below is one measurement of one standard: the horizontal axis is the <strong>airmass</strong> (1 straight overhead, about 2 at 30 degrees above the horizon), the vertical axis how far the instrument’s own magnitude lies from the catalog’s.</p><p>The night is <strong>synthetic</strong>: made by a model from a stated truth, with noise, so the answer can be checked afterwards. Nobody observed it.</p></div>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": "Depth: Advanced"
+ },
+ {
+  "depth": "advanced",
+  "role": "graded",
+  "sid": "low-in-the-sky-predict",
+  "position": [
+   2,
+   19
+  ],
+  "title": "Counts to Magnitudes",
+  "subtitle": "Why a star looks fainter low in the sky, how a night of standard stars turns counts into magnitudes, and what the calibration cannot tell you",
+  "body": "<p class=\"inv-step-count\">Step 2 of 19 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">Low in the sky</h3><div class=\"inv-step-body\"><p>The same star is measured overhead, at airmass 1.05, and again later when it has sunk to airmass 2.15, more than twice as much air to look through. The points on the plot tell you how much the air costs.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">At the higher airmass the same star looks…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>the same: a star’s brightness does not depend on where it is in the sky</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>about a quarter of a magnitude fainter</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>about two and a half magnitudes (a factor of 10) fainter</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>brighter, because it is closer to the horizon</span></button></div><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> I could use a hint </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Depth: Advanced"
+ },
+ {
+  "depth": "advanced",
+  "role": "marked",
+  "sid": "low-in-the-sky-predict",
+  "position": [
+   2,
+   19
+  ],
+  "title": "Counts to Magnitudes",
+  "subtitle": "Why a star looks fainter low in the sky, how a night of standard stars turns counts into magnitudes, and what the calibration cannot tell you",
+  "body": "<p class=\"inv-step-count\">Step 2 of 19 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">Low in the sky</h3><div class=\"inv-step-body\"><p>The same star is measured overhead, at airmass 1.05, and again later when it has sunk to airmass 2.15, more than twice as much air to look through. The points on the plot tell you how much the air costs.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">At the higher airmass the same star looks…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>the same: a star’s brightness does not depend on where it is in the sky</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>about a quarter of a magnitude fainter</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>about two and a half magnitudes (a factor of 10) fainter</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>brighter, because it is closer to the horizon</span></button></div><p class=\"inv-held\">Your answer is recorded. It stays unmarked until you reach “The slope is the air”, so the experiment settles it rather than the answer key.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Change answer</button><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> I could use a hint </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Depth: Advanced"
+ },
+ {
+  "depth": "advanced",
+  "role": "last",
+  "sid": "what-a-calibration-does",
+  "position": [
+   19,
+   19
+  ],
+  "title": "Counts to Magnitudes",
+  "subtitle": "Why a star looks fainter low in the sky, how a night of standard stars turns counts into magnitudes, and what the calibration cannot tell you",
+  "body": "<p class=\"inv-step-count\">Step 19 of 19 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">What a calibration does</h3><div class=\"inv-step-body\"><p>A night of standards fixes three numbers: the <strong>zero point</strong> (what magnitude one count per second is), the <strong>extinction</strong> of the air, and a <strong>color term</strong> (the instrument sees blue and red stars a little differently). With them, any star on the same frames gets a calibrated magnitude, <em>with an uncertainty</em> that comes from how well the night fixed them. The next steps make one. Remember the night is synthetic and the extinction is the atmosphere’s, not the dust’s.</p></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Depth: Advanced"
+ }
+]

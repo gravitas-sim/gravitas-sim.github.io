@@ -317,6 +317,7 @@ export const SEQUENCES = [
       ['what-a-telescope-resolves', 'core'],
       ['why-two-lines-become-one', 'core'],
       ['the-saturated-star', 'core'],
+      ['counts-to-magnitudes', 'core'],
     ]
   ),
 ];
