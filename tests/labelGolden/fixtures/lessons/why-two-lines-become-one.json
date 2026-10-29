@@ -1,0 +1,123 @@
+{
+ "id": "why-two-lines-become-one",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.dip-by-r.fields.0.unit","%"],
+    ["steps.dip-by-r.fields.1.unit","%"],
+    ["steps.dip-by-r.fields.2.unit","%"],
+    ["steps.finer-pixels.fields.0.unit",""],
+    ["steps.finer-pixels.fields.1.unit",""],
+    ["steps.finer-pixels.fields.2.unit",""],
+    ["steps.a-blend.fields.0.unit","%"],
+    ["steps.degrees-of-freedom.fields.0.unit",""],
+    ["steps.degrees-of-freedom.fields.1.unit",""],
+    ["steps.degrees-of-freedom.fields.2.unit",""],
+    ["steps.the-residuals.fields.0.unit","nm"],
+    ["steps.the-residuals.fields.1.unit","nm"],
+    ["steps.a-velocity.fields.0.unit","km/s"],
+    ["steps.a-velocity.fields.1.unit","km/s"],
+    ["steps.the-medium.fields.0.unit","km/s"],
+    ["steps.the-medium.fields.1.unit","km/s"],
+    ["steps.slit-and-throughput.fields.0.unit","%"],
+    ["steps.slit-and-throughput.fields.1.unit","%"],
+    ["steps.the-best-r.fields.0.unit",""],
+    ["steps.the-best-r.fields.1.unit",""]
+   ],
+   "numbered": [
+    ["steps.dip-by-r.fields.0.label","Dip at R = 500"],
+    ["steps.dip-by-r.fields.0.hint","0"],
+    ["steps.dip-by-r.fields.1.label","Dip at R = 1000"],
+    ["steps.dip-by-r.fields.1.hint","7.3"],
+    ["steps.dip-by-r.fields.2.label","Dip at R = 2000"],
+    ["steps.dip-by-r.fields.2.hint","87.5"],
+    ["steps.finer-pixels.fields.0.label","Peaks at R = 500, 8 pixels per FWHM"],
+    ["steps.finer-pixels.fields.0.hint","1"],
+    ["steps.finer-pixels.fields.1.label","Peaks at R = 1000, 2 pixels per FWHM"],
+    ["steps.finer-pixels.fields.1.hint","1"],
+    ["steps.finer-pixels.fields.2.label","Peaks at R = 1000, 8 pixels per FWHM"],
+    ["steps.finer-pixels.fields.2.hint","2"],
+    ["steps.a-blend.fields.0.hint","16"],
+    ["steps.degrees-of-freedom.fields.0.label","Degrees of freedom with 5 lines"],
+    ["steps.degrees-of-freedom.fields.0.hint","1"],
+    ["steps.degrees-of-freedom.fields.1.label","Degrees of freedom with 8 lines"],
+    ["steps.degrees-of-freedom.fields.1.hint","4"],
+    ["steps.degrees-of-freedom.fields.2.label","Degrees of freedom with 14 lines"],
+    ["steps.degrees-of-freedom.fields.2.hint","10"],
+    ["steps.the-residuals.fields.0.label","rms at degree 3"],
+    ["steps.the-residuals.fields.0.hint","0.0005"],
+    ["steps.the-residuals.fields.1.label","rms at degree 1"],
+    ["steps.the-residuals.fields.1.hint","0.018"],
+    ["steps.a-velocity.fields.0.hint","116"],
+    ["steps.a-velocity.fields.1.hint","3.2"],
+    ["steps.the-medium.fields.0.hint","32"],
+    ["steps.slit-and-throughput.fields.0.label","Light passed at R = 3000"],
+    ["steps.slit-and-throughput.fields.0.hint","76"],
+    ["steps.slit-and-throughput.fields.1.label","Light passed at R = 10000"],
+    ["steps.slit-and-throughput.fields.1.hint","28"],
+    ["steps.the-best-r.fields.0.hint","2355"],
+    ["steps.the-best-r.fields.1.hint","12.6"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.dip-by-r.fields.0.label","Caída con R = 500"],
+    ["steps.dip-by-r.fields.1.label","Caída con R = 1000"],
+    ["steps.dip-by-r.fields.2.label","Caída con R = 2000"],
+    ["steps.finer-pixels.fields.0.label","Picos con R = 500, 8 píxeles por FWHM"],
+    ["steps.finer-pixels.fields.1.label","Picos con R = 1000, 2 píxeles por FWHM"],
+    ["steps.finer-pixels.fields.2.label","Picos con R = 1000, 8 píxeles por FWHM"],
+    ["steps.degrees-of-freedom.fields.0.label","Grados de libertad con 5 líneas"],
+    ["steps.degrees-of-freedom.fields.1.label","Grados de libertad con 8 líneas"],
+    ["steps.degrees-of-freedom.fields.2.label","Grados de libertad con 14 líneas"],
+    ["steps.the-residuals.fields.0.label","rms con grado 3"],
+    ["steps.the-residuals.fields.1.label","rms con grado 1"],
+    ["steps.slit-and-throughput.fields.0.label","Luz que pasa con R = 3000"],
+    ["steps.slit-and-throughput.fields.1.label","Luz que pasa con R = 10000"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [],
+  "decimals": [
+   [
+    "the-medium.off",
+    1
+   ]
+  ]
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "dip-by-r": {
+    "validate": {"calls":242,"distinct":2,"digest":"d7dd2ca55b8f811b","samples":[null,{"level":"error","message":"Keep the separation at 0.5 nm and the noise off, and read the “Dip between the lines” row: 0, 7.3 and 87.5."}]}
+   },
+   "finer-pixels": {
+    "validate": {"calls":242,"distinct":2,"digest":"36b862622516eab6","samples":[null,{"level":"error","message":"Set R to 500 with 8 pixels per FWHM, then R to 1000 with 2 and with 8, and read the “Peaks in the pixels” row each time."}]}
+   },
+   "a-blend": {
+    "validate": {"calls":97,"distinct":3,"digest":"c73dde2ca520b60c","samples":[null,{"level":"error","message":"Set R to 500, the sampling to 3 and the separation to 0.5 nm, and read the percent in the “Fitted as one line” row."},{"level":"ok","message":"16 percent. A line that is wider than the instrument allows is the signature of a blend, or of a line with a width of its own: a flag, not a proof. The deeper steps use it to leave blends out of a calibration."}]}
+   },
+   "degrees-of-freedom": {
+    "validate": {"calls":242,"distinct":2,"digest":"575e92fb1705d81a","samples":[null,{"level":"error","message":"Set the degree to 3 and mark 5, 8 and 14 lines in turn; the degrees of freedom are lines minus 4."}]}
+   },
+   "the-residuals": {
+    "validate": {"calls":232,"distinct":2,"digest":"ecd692d35b596abd","samples":[null,{"level":"error","message":"Mark 8 lines, then set the degree to 3 and to 1 and read the rms in the “Residuals” row."}]}
+   },
+   "a-velocity": {
+    "validate": {"calls":232,"distinct":2,"digest":"0c037a4475a78d3b","samples":[null,{"level":"error","message":"Mark 8 lines, degree 3, the line H-beta and the medium air, and read the “Radial velocity” row."}]}
+   },
+   "the-medium": {
+    "validate": {"calls":232,"distinct":2,"digest":"bbc475d669feee4f","samples":[null,{"level":"error","message":"Set the medium to vacuum, read “If the media were ignored”, and compute 299,792 × (486.2708 / 486.135 − 1)."}]}
+   },
+   "slit-and-throughput": {
+    "validate": {"calls":232,"distinct":2,"digest":"e1add2cdcb10899b","samples":[null,{"level":"error","message":"Set R to 3000 and then 10000 with the seeing at 1.0 and R_s at 3000, and read the percent in “Slit width that gives this R”."}]}
+   },
+   "the-best-r": {
+    "validate": {"calls":232,"distinct":2,"digest":"445ab96fbfad2935","samples":[null,{"level":"error","message":"Set the line’s own width to 0.1 nm, with R_s = 3000, and read the “resolving power that maximises it” row."}]}
+   }
+  },
+  "es": "same"
+ }
+}
