@@ -233,6 +233,15 @@
       }
     },
     {
+      "id": "D3.cosmic.unflagged",
+      "group": "d",
+      "bound": "see amendment AM2 (2): a cosmic-ray track through a faint star's aperture, found by a seeded search over at most 200 frames of the panel scene with cosmic rays on and the bright star dimmed to 15 mag; measured with the mask plane withheld the star is not refused and its flux error exceeds 5 sigma; with the mask plane it is refused with the code masked",
+      "limits": {
+        "sigmaSpoiled": 5,
+        "maxFrames": 200
+      }
+    },
+    {
       "id": "D2.sidecar",
       "group": "d",
       "bound": "the sidecar the effects write is a valid gravitas.image document (js/dataKinds/contract.js validate) with the mask plane's bits named, the linearity limit and the saturation level in the data's unit, the effect parameters and the regime in the model parameters, and the source stated synthetic; it has no photometry permission when the pixels are display units",
@@ -267,6 +276,12 @@
       "when": "after the oracle's first run (analytic parts) and before any kernel code existed",
       "what": "Four clarifications, no bound moved: (1) A2: where the deviation never reaches the stated fraction within the full well (5 percent for knees 0.8 and 0.95), the limit is null in the oracle and in the kernel; (2) A11: the relative standard deviation is the population one (divisor n); (3) A8 additionally compares the kernel with the oracle's independent re-implementation of the bleeding text on 20 pinned columns (cases of cap 4, 10 and 64), after, lost and touched pixels equal to a relative 1e-12; (4) A5: the deposit per pixel is dedx x (projected length in the pixel) / sin(theta) for a track of projected length L = min(thickness x tan(theta), cap), and a track with L below 1e-9 pixel puts dedx x thickness / cos(theta) in its entry pixel",
       "why": "the committed text left these four points open; the oracle's first run showed the 5 percent root does not exist below the full well for knees 0.8 and 0.95 (the curve at the well is 4.8 and 1.2 percent below linear), and an independent implementation is a stronger check than conservation alone"
+    },
+    {
+      "id": "AM2",
+      "when": "after the kernel module and the field module were written and one hand run of the panel scene had shown that bleed trails fill their pixels to the full well, and before the validator ran or any row was computed",
+      "what": "Two changes, no bound moved: (1) A1's finite-difference step at the knee is 1e-6 of the full well, not 1e-3, because a one-sided difference of a tanh has the truncation error (h/w)^2/3 by Taylor series, which at 1e-3 of the full well is 1.3e-4 for a knee of 0.95 and cannot meet the committed 1e-6 for any correct curve; (2) a check D3.cosmic.unflagged is added: a faint star with a cosmic-ray track through its aperture, found by a seeded search over frames, measured with the mask plane withheld is not refused and its flux error exceeds 5 sigma, and with the mask plane it is refused with the code masked",
+      "why": "(1) the committed step was a specification error found by working the series; (2) the hand run showed that the unflagged bleed-trail clause of D1 cannot hold as written, because a trail's pixels sit at the full well, and the measuring tools refuse a pixel at the limit by its value whether or not a mask exists: the value gate is a backstop for bleeding. D1's clause stays as committed and is reported as it comes out; D3 states the case where the flag, and only the flag, prevents a wrong number"
     }
   ]
 }
