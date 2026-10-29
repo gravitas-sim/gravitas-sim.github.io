@@ -12,6 +12,7 @@ import { INSTRUCTOR as TELESCOPE } from './investigations/telescope-sequence.js'
 import { INSTRUCTOR as SPECTROGRAPH } from './investigations/spectrograph-sequence.js';
 import { INSTRUCTOR as SATURATED_STAR } from './investigations/saturated-star-sequence.js';
 import { INSTRUCTOR as PHOTCAL } from './investigations/photometric-calibration-sequence.js';
+import { INSTRUCTOR as BINARIES } from './investigations/binaries-sequence.js';
 
 export default {
   format: 'gravitas.instructor-flow',
@@ -27,6 +28,7 @@ export default {
     ...SPECTROGRAPH.flow,
     ...SATURATED_STAR.flow,
     ...PHOTCAL.flow,
+    ...BINARIES.flow,
     'the-suns-motion': [
       {
         from: 'from-stars-to-velocities',

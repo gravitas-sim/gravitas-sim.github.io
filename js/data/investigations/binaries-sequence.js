@@ -799,7 +799,7 @@ const CONTENT = {
       'Move the inclination down from 90 and say at what value the flat bottom disappears.',
     ],
     modelNotes:
-      'js/stellar/binaries.js, js/inference/binaryModel.js, js/eclipseField.js, js/eclipseWidgets.js, BINARIES.md.',
+      'js/stellar/binaries.js (the detached two-sphere light curve, the contacts, the identifiability rule), js/inference/binaryModel.js (the fitted model), js/eclipseField.js, js/eclipseWidgets.js, BINARIES.md.',
   },
 };
 
@@ -812,8 +812,13 @@ const FLOW = {
     },
     {
       from: 'the-two-depths',
+      to: 'the-two-depths',
+      text: 'The depths, 48 and 23 percent, read from the panel and the one number that sets their ratio.',
+    },
+    {
+      from: 'the-flat-bottom',
       to: 'the-flat-bottom',
-      text: 'The depths, 48 and 23 percent, and what a flat bottom says about the star hidden.',
+      text: 'What a flat bottom says: the star hidden is the smaller and wholly behind the larger.',
     },
     {
       from: 'half-an-orbit',
