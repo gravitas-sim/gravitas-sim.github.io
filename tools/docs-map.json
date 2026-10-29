@@ -716,6 +716,13 @@
       "student": false
     },
     {
+      "file": "PHOTOMETRIC_CALIBRATION.md",
+      "kind": "feature",
+      "purpose": "Photometric calibration: zero point, atmospheric extinction and color term from standard stars, with the oracle, the validation and the failed legs (Prompt 212).",
+      "owner": 212,
+      "student": true
+    },
+    {
       "file": "PHOTOMETRY.md",
       "kind": "feature",
       "purpose": "Photometry on an image over the existing reduction: the equations, the contract, the limits, the oracle and the validation (Prompt 180).",

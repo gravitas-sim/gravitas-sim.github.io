@@ -16,6 +16,7 @@ import { INSTRUCTOR as EXPOSURE } from './investigations/exposure-sequence.js';
 import { INSTRUCTOR as STRATEGY } from './investigations/strategy-sequence.js';
 import { INSTRUCTOR as TELESCOPE } from './investigations/telescope-sequence.js';
 import { INSTRUCTOR as SATURATED_STAR } from './investigations/saturated-star-sequence.js';
+import { INSTRUCTOR as PHOTCAL } from './investigations/photometric-calibration-sequence.js';
 
 export const INSTRUCTOR_CONTENT = {
   ...MEASUREMENT.content,
@@ -26,6 +27,7 @@ export const INSTRUCTOR_CONTENT = {
   ...STRATEGY.content,
   ...TELESCOPE.content,
   ...SATURATED_STAR.content,
+  ...PHOTCAL.content,
   'extending-an-experiment': {
     topic:
       'Classifying an experiment’s trials, fitting the chance of an outcome with a bootstrap, and extending it to a large synthetic population, in Python, with the limits of what the interval covers',

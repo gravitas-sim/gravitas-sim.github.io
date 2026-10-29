@@ -213,7 +213,8 @@ describe('the instructor expectations record', () => {
     // 467 after Plan an Exposure (Prompt 210): 3 more.
     // 470 after The Saturated Star (Prompt 211): 3 more.
     // 472 after Why the Period Is Wrong and the Design the Schedule depth (Prompt 214): 2 more.
-    expect(total).toBe(472);
+    // 473 after Counts to Magnitudes (Prompt 212): 1 more.
+    expect(total).toBe(473);
   });
 
   test('a /1 record keyed by step number migrates to the same text', () => {

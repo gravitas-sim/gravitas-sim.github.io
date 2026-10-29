@@ -167,6 +167,7 @@ current, and the orchestrator checks it.
 | `pending-acceptance.mjs` | Acceptance checks for features that are not built yet |  |
 | `perf-probe.mjs` | Frame-time probe | `npm run perf` |
 | `perf-trace.mjs` | Compositor measurement: what a Chromium trace says about where a frame went |  |
+| `photometric-calibration-validate.mjs` | The photometric calibration against its committed thresholds (Prompt 212) | `npm run photcal:validate` |
 | `photometry-fixtures.mjs` | Photometry fixtures: what is captured, and from what (Prompt 180) |  |
 | `photometry-validate.mjs` | Photometry against its committed thresholds (Prompt 180) | `npm run photometry:validate` |
 | `playwright-cache.mjs` | A Playwright transform cache that no other process is writing |  |

@@ -10,6 +10,7 @@ import { INSTRUCTOR as EXPOSURE } from './investigations/exposure-sequence.js';
 import { INSTRUCTOR as STRATEGY } from './investigations/strategy-sequence.js';
 import { INSTRUCTOR as TELESCOPE } from './investigations/telescope-sequence.js';
 import { INSTRUCTOR as SATURATED_STAR } from './investigations/saturated-star-sequence.js';
+import { INSTRUCTOR as PHOTCAL } from './investigations/photometric-calibration-sequence.js';
 
 export default {
   format: 'gravitas.instructor-flow',
@@ -23,6 +24,7 @@ export default {
     ...STRATEGY.flow,
     ...TELESCOPE.flow,
     ...SATURATED_STAR.flow,
+    ...PHOTCAL.flow,
     'the-suns-motion': [
       {
         from: 'from-stars-to-velocities',

@@ -119,6 +119,7 @@
           "comets-and-the-sun",
           "what-a-telescope-resolves",
           "the-saturated-star",
+          "counts-to-magnitudes",
           "plan-an-exposure",
           "why-the-period-is-wrong"
         ]
@@ -388,6 +389,7 @@
                   "comets-and-the-sun",
                   "what-a-telescope-resolves",
                   "the-saturated-star",
+                  "counts-to-magnitudes",
                   "plan-an-exposure",
                   "why-the-period-is-wrong"
                 ]
@@ -1490,6 +1492,7 @@
             "strategy-plan",
             "telescope",
             "detector-effects",
+            "photometric-calibration",
             "sky-turning",
             "sky-seasons",
             "sky-phases",

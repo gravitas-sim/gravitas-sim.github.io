@@ -119,6 +119,7 @@ export const FAMILY_IDS = Object.freeze({
   strategy: ['strategy-window', 'strategy-plan'],
   telescope: ['telescope'],
   effects: ['detector-effects'],
+  photcal: ['photometric-calibration'],
   sky: [
     'sky-turning',
     'sky-seasons',

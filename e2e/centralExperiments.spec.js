@@ -2697,6 +2697,17 @@ test.describe('the central experiment of each investigation', () => {
         [10.5, 54.6, 1],
       ],
     },
+    // ---- Photometric calibration (Roadmap III, Prompt 212) -------------------------
+    {
+      id: 'counts-to-magnitudes',
+      title:
+        'counts-to-magnitudes: the standards of a synthetic night give an extinction of 0.213 magnitudes per airmass at 5 mmag of noise and 0.211 at 1 @accepts:ce.counts-to-magnitudes',
+      row: /^Extinction of the air/i,
+      values: [
+        [5, 0.213, 0.003],
+        [1, 0.211, 0.003],
+      ],
+    },
   ];
   for (const c of SURVEY) {
     test(c.title, async ({ page, app }) => {

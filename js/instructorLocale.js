@@ -122,6 +122,7 @@ import { SHADOWS as EXPOSURE_SHADOWS } from './data/investigations/exposure-sequ
 import { SHADOWS as STRATEGY_SHADOWS } from './data/investigations/strategy-sequence.js';
 import { SHADOWS as TELESCOPE_SHADOWS } from './data/investigations/telescope-sequence.js';
 import { SHADOWS as SATURATED_STAR_SHADOWS } from './data/investigations/saturated-star-sequence.js';
+import { SHADOWS as PHOTCAL_SHADOWS } from './data/investigations/photometric-calibration-sequence.js';
 import SATELLITE_DEEPER from './data/investigations/depth/es/satellite-sequence.js';
 import ATMOSPHERE_DEEPER from './data/investigations/depth/es/atmosphere-sequence.js';
 
@@ -175,6 +176,7 @@ export const SHADOWS = Object.freeze({
   ...STRATEGY_SHADOWS,
   ...TELESCOPE_SHADOWS,
   ...SATURATED_STAR_SHADOWS,
+  ...PHOTCAL_SHADOWS,
   'design-the-schedule': DESIGN_THE_SCHEDULE,
   'detect-this-planet': DETECT_THIS_PLANET,
   'goldilocks-question': GOLDILOCKS_QUESTION,

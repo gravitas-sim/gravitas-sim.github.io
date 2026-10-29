@@ -135,6 +135,7 @@ export const GUIDED = Object.freeze([
   'cluster-membership',
   'color-and-temperature',
   'comets-and-the-sun',
+  'counts-to-magnitudes',
   'craters-by-size',
   'design-the-schedule',
   'detect-this-planet',

@@ -42,6 +42,7 @@ the 2.1.0 tag and the concept DOI and claim no version DOI for it; the 2.0.0
 archive and its DOI are unchanged. The tag `v2.1.0` is a plain git tag.
 
 - Detector effects in the frame model (Prompt 211, invisible): saturation and full well, a stated nonlinearity near the full well, seeded cosmic-ray tracks, bounded column bleeding and the under- and oversampling regimes, each flagged in the image sidecar's mask plane, a detector-effects panel with instrument toggles, and the investigation The Saturated Star (survey, majors, upper; English and Spanish) in which the measuring tools refuse a saturated, bleeding or track-crossed star. Validated against an independent oracle; three legs are recorded as failing (DETECTOR_EFFECTS.md).
+- Photometric calibration (Prompt 212, invisible): a kernel beside the reduction (`js/kernels/detector/photcal.js`) that turns instrumental magnitudes into calibrated ones from a night of standard stars, with the zero point at unit airmass, the atmospheric extinction in magnitudes per airmass (never the interstellar extinction), a color term and an optional color-dependent extinction, weighted least squares with the catalog error shared among a star's measurements, refusals for a night that cannot fix a term (no number is given) and above airmass 2.5, and the target's calibrated magnitude with its propagated uncertainty; the cited site coefficients of the instrument library as a prior, the record as an artifact envelope, a panel of synthetic nights (`js/photcalWidgets.js`) that keeps a calibration in the notebook, and the investigation Counts to Magnitudes at three depths in English and Spanish with instructor materials. Checked against closed forms, an independent numpy, Astropy and SciPy implementation, an ensemble, a physical night and a cross-match of SDSS and Gaia for NGC 2420; four legs of the contract fail and are reported (`PHOTOMETRIC_CALIBRATION.md`).
 
 ### Format version boundary (Prompt 176; FORMATS.md names 3.0.0)
 
@@ -114,12 +115,12 @@ The Observatory's image measurement train (Prompts 179 to 182, 184, 186 to 189, 
 
 **Gravitas 2.0.0.** Gravitas grows from a gravity sandbox with 22 guided
 investigations into a browser laboratory: <!--fact:scenarios-->61<!--/fact-->
-sandbox scenarios, <!--fact:libraryInvestigations-->106<!--/fact--> guided
-investigations (<!--fact:investigations-->89<!--/fact--> that run in the
+sandbox scenarios, <!--fact:libraryInvestigations-->107<!--/fact--> guided
+investigations (<!--fact:investigations-->90<!--/fact--> that run in the
 simulation and <!--fact:guidedInvestigations-->17<!--/fact--> in the
 Observatory, the 3-D lab and the mission lab), a shared shell, a Library, a
 workspace for each student's own work, an instructor path from adoption page to
-gradebook file, <!--fact:instructorDocuments-->845<!--/fact--> generated
+gradebook file, <!--fact:instructorDocuments-->856<!--/fact--> generated
 instructor documents, a public validation suite
 of <!--fact:physicsChecks-->348<!--/fact--> checks, and authoring tools
 (Scenario Studio, Investigation Composer, course packs and an extension SDK).
@@ -1772,7 +1773,7 @@ listed here because this is the release that first carries it.
 - **An instructor portal that explains itself.** `/instructors/` states what is
   behind the passphrase before asking for it, says plainly what client-side
   encryption on a static host can and cannot promise, and presents the
-  <!--fact:instructorDocuments-->845<!--/fact--> documents grouped by investigation
+  <!--fact:instructorDocuments-->856<!--/fact--> documents grouped by investigation
   with their kind and size. A wrong passphrase and a missing bundle now report
   as the different problems they are.
 - **Dual licensing.** The code is MIT; the original educational material is
@@ -1839,7 +1840,7 @@ listed here because this is the release that first carries it.
   uncertainty, the target and the observing configuration.
 - **Offline support.** A service worker precaches the application shell, the
   <!--fact:scenarios-->61<!--/fact--> scenario thumbnails and all
-  <!--fact:investigations-->89<!--/fact--> English lessons, so a class keeps
+  <!--fact:investigations-->90<!--/fact--> English lessons, so a class keeps
   working when the room's wifi drops. The cache name is a content hash, so a
   build invalidates it. See [OFFLINE_AND_LOW_END.md](OFFLINE_AND_LOW_END.md).
 - **A measured low-end quality tier.** Chosen from the frame rate the machine
@@ -1848,7 +1849,7 @@ listed here because this is the release that first carries it.
   off.
 - **An investigation authoring toolchain.** `npm run author:check` validates
   every lesson and every one of the
-  <!--fact:investigationSteps-->1277<!--/fact--> steps; `npm run author:new`
+  <!--fact:investigationSteps-->1283<!--/fact--> steps; `npm run author:new`
   scaffolds a lesson with its translation shadow and instructor stub;
   `?author=<lesson>&step=<n>` opens any step with diagnostics without touching
   a student's saved progress; and a browser walker exercises every step of

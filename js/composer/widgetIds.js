@@ -90,6 +90,7 @@ export const WIDGET_FAMILIES = Object.freeze({
   strategy: ['strategy-window', 'strategy-plan'],
   telescope: ['telescope'],
   effects: ['detector-effects'],
+  photcal: ['photometric-calibration'],
   sky: [
     'sky-turning',
     'sky-seasons',

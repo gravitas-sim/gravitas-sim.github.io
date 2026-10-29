@@ -96,6 +96,7 @@ import EXPOSURE_LESSONS from './investigations/exposure-sequence.js';
 import STRATEGY_LESSONS from './investigations/strategy-sequence.js';
 import TELESCOPE_LESSONS from './investigations/telescope-sequence.js';
 import SATURATED_STAR_LESSONS from './investigations/saturated-star-sequence.js';
+import PHOTCAL_LESSONS from './investigations/photometric-calibration-sequence.js';
 import { gradedSteps, positionIn } from './investigations/catalog.js';
 import { SUMMARIES } from './investigations/summaries.js';
 import INSIDE_A_STAR from './investigations/inside-a-star.js';
@@ -204,6 +205,7 @@ export const INVESTIGATIONS = [
   ...PLANETS_LESSONS,
   ...TELESCOPE_LESSONS,
   ...SATURATED_STAR_LESSONS,
+  ...PHOTCAL_LESSONS,
   ...EXPOSURE_LESSONS,
   ...STRATEGY_LESSONS,
 ];

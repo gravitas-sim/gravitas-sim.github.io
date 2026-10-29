@@ -316,6 +316,7 @@ export const SEQUENCES = [
       ['the-completeness-curve', 'quantitative', ['why-the-bright-ones-win']],
       ['what-a-telescope-resolves', 'core'],
       ['the-saturated-star', 'core'],
+      ['counts-to-magnitudes', 'core'],
     ]
   ),
 ];

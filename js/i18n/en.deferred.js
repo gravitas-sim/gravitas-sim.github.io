@@ -1998,6 +1998,8 @@ export const EN_DEFERRED = {
     'What aperture and the air do to a pair of stars.',
   'inv.seq.observing.the-saturated-star':
     'Why the brightest star has the wrong magnitude, and what bleeding and cosmic rays do.',
+  'inv.seq.observing.counts-to-magnitudes':
+    'Why a star looks fainter low in the sky, and how a night of standards makes magnitudes.',
   'inv.seq.depth.core': 'Core depth',
   'inv.seq.depth.quantitative': 'Quantitative depth',
   'inv.seq.depth.advanced': 'Advanced depth',
@@ -3771,6 +3773,7 @@ export const EN_DEFERRED = {
   'nb.source.image-injection': 'Completeness of an image',
   'nb.source.image-sequence': 'Light curve from frames',
   'nb.source.image-series': 'Motion and parallax of a source',
+  'nb.source.photometric-calibration': 'Photometric calibration of a night',
   'nb.flag.missionModel':
     'impulsive burns, patched conics and point masses: a teaching model of a mission',
   'nb.flag.notOperational': 'not for operational mission design or navigation',
