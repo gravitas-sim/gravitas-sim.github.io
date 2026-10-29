@@ -46,7 +46,7 @@ export const THE_SATURATED_STAR = {
   title: 'The Saturated Star',
   subtitle:
     'Why the brightest star in the frame has the wrong magnitude, what bleeding and cosmic rays do to its neighbors, and where a measurement is safe',
-  duration: '15-25 min',
+  duration: '10-20 min',
   level: 'Introductory astronomy',
   audience: 'intro',
   textbook: { chapter: 6, section: null },
@@ -1063,7 +1063,7 @@ const EXPECTATIONS = {
 const BANDS = {
   'the-saturated-star': {
     core: 'short',
-    quantitative: 'long',
+    quantitative: 'medium',
     advanced: 'long',
   },
 };

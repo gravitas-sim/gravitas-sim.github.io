@@ -1100,7 +1100,7 @@ export const MANIFEST = [
     title: 'La estrella saturada',
     subtitle:
       'Por qué la estrella más brillante de la imagen tiene la magnitud equivocada, qué hacen el desbordamiento de carga y los rayos cósmicos a sus vecinas y dónde es segura una medida',
-    duration: '15-25 min',
+    duration: '10-20 min',
     level: 'Introductory astronomy',
     thumbnail: 'images/investigations/the-saturated-star.webp',
     depths: 3,

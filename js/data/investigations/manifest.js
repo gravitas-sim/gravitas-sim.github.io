@@ -1091,7 +1091,7 @@ export const MANIFEST = [
     title: 'The Saturated Star',
     subtitle:
       'Why the brightest star in the frame has the wrong magnitude, what bleeding and cosmic rays do to its neighbors, and where a measurement is safe',
-    duration: '15-25 min',
+    duration: '10-20 min',
     level: 'Introductory astronomy',
     thumbnail: 'images/investigations/the-saturated-star.webp',
     depths: 3,

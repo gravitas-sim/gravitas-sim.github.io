@@ -1482,6 +1482,7 @@
             "ccd-snr",
             "diff-photometry",
             "telescope",
+            "detector-effects",
             "sky-turning",
             "sky-seasons",
             "sky-phases",
