@@ -1467,6 +1467,7 @@
             "ccd-frames",
             "ccd-snr",
             "diff-photometry",
+            "exposure-planner",
             "telescope",
             "sky-turning",
             "sky-seasons",
