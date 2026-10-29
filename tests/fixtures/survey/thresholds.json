@@ -4,7 +4,11 @@
   "document": "SURVEY_DESIGN.md (\"Validation contract\")",
   "committed": "before js/kernels/survey/, the instrument adapter, the panels, the validator, the oracle script, its results, the ensembles, the plan step kind or any lesson of Prompt 215 existed. The setups, plans, classes and grids below are written out so that the oracle and the harness build identical inputs; nothing was tuned against an output.",
   "rule": "A crossed bound is a failed check, recorded in failed-legs.json and left failing; only Carl resets one. A leg that cannot be measured is NOT RUN and says why.",
-  "seeds": { "oracle": 215, "harness": 2150001, "ensemble": "survey-215" },
+  "seeds": {
+    "oracle": 215,
+    "harness": 2150001,
+    "ensemble": "survey-215"
+  },
   "scope": {
     "built": "the survey a plan makes: the 5-sigma matched-filter depth of a facility's setup for an exposure, a number of visits and a stack (the CCD equation of js/kernels/detector/snr.js, read unchanged); the area from the field, the cycle time and the night; the expected counts of a stated class (a cumulative power law in magnitude, whose Euclidean slope 0.6 is derived and whose normalisation for the one cited class comes from a Schechter luminosity function in a Euclidean volume); the completeness of a detection threshold (a source is found when its matched-filter signal to noise plus unit Gaussian noise exceeds the threshold: Phi(s - threshold), the form of the closed form of INJECTION.md a1); the false positives of a threshold (one-sided Gaussian tail per independent element); the trade-off at fixed time; the time to a stated depth and area for two setups; and a feasibility verdict with reason codes.",
     "notBuilt": "clustering and cosmic variance (counts are Poisson only), K-corrections, evolution, crowding, extended-source detection, extinction by dust, a cosmological volume (the Euclidean model is checked against Astropy's and bounded), forecasts of weather (a clear fraction is a stated input), scheduling of fields and slew.",
@@ -12,131 +16,385 @@
   },
   "setups": {
     "note": "Teaching setups, not library values. Throughput and zero point are supplied (the instrument library states none); 'lcoLike' is a one-metre-class setup and 'rubinLike' a very large aperture with a very wide field, each only in the numbers written here. zeroPoint is electrons per second at magnitude 0 at the zenith; pixelScale and fwhm in arcsec; skyMag in mag per square arcsec; readNoise in electrons; darkRate in electrons per second per pixel; fullWell in electrons; fovDeg2 the field of one pointing; overhead the seconds a frame costs beyond its exposure.",
-    "skyLimited": { "zeroPoint": 2.5e9, "pixelScale": 0.4, "fwhm": 1.2, "skyMag": 20.5, "readNoise": 0, "darkRate": 0, "fullWell": 1e12, "fovDeg2": 0.2, "overhead": 20 },
-    "lcoLike": { "zeroPoint": 4.9e9, "pixelScale": 0.389, "fwhm": 1.5, "skyMag": 20.8, "readNoise": 7.75, "darkRate": 0.002, "fullWell": 110000, "fovDeg2": 0.195, "overhead": 28 },
-    "rubinLike": { "zeroPoint": 2.6e11, "pixelScale": 0.2, "fwhm": 0.9, "skyMag": 21.2, "readNoise": 9, "darkRate": 0.01, "fullWell": 150000, "fovDeg2": 9.6, "overhead": 6 }
+    "skyLimited": {
+      "zeroPoint": 2500000000.0,
+      "pixelScale": 0.4,
+      "fwhm": 1.2,
+      "skyMag": 20.5,
+      "readNoise": 0,
+      "darkRate": 0,
+      "fullWell": 1000000000000.0,
+      "fovDeg2": 0.2,
+      "overhead": 20
+    },
+    "lcoLike": {
+      "zeroPoint": 4900000000.0,
+      "pixelScale": 0.389,
+      "fwhm": 1.5,
+      "skyMag": 20.8,
+      "readNoise": 7.75,
+      "darkRate": 0.002,
+      "fullWell": 110000,
+      "fovDeg2": 0.195,
+      "overhead": 28
+    },
+    "rubinLike": {
+      "zeroPoint": 260000000000.0,
+      "pixelScale": 0.2,
+      "fwhm": 0.9,
+      "skyMag": 21.2,
+      "readNoise": 9,
+      "darkRate": 0.01,
+      "fullWell": 150000,
+      "fovDeg2": 9.6,
+      "overhead": 6
+    }
   },
   "classes": {
     "note": "A class is a cumulative count per square degree, N(<m) = n0 10^(alpha (m - m0)), valid for m up to mMax. 'test-power-law' is for the oracle comparisons only. The Euclidean slope 0.6 is derived in SURVEY_DESIGN.md; 'galaxies-local' takes its normalisation from a Schechter function (phiStar in Mpc^-3, MStar, alphaS) in a Euclidean volume, parameters of the order of the SDSS r-band function (Blanton et al. 2003, as recalled and NOT checked against the typeset table), with h = 0.7.",
-    "test-power-law": { "n0": 1000, "m0": 20, "alpha": 0.6, "mMax": 32 },
-    "galaxies-local": { "alpha": 0.6, "mMax": 16.5, "mMin": 12, "schechter": { "phiStar": 0.00511, "MStar": -21.215, "alphaS": -1.05 } },
-    "uniform-euclidean": { "n0": 300, "m0": 20, "alpha": 0.6, "mMax": 28 },
-    "flattened": { "n0": 4000, "m0": 22, "alpha": 0.4, "mMax": 28 },
-    "steep": { "n0": 400, "m0": 22, "alpha": 1.0, "mMax": 28 }
+    "test-power-law": {
+      "n0": 1000,
+      "m0": 20,
+      "alpha": 0.6,
+      "mMax": 32
+    },
+    "galaxies-local": {
+      "alpha": 0.6,
+      "mMax": 16.5,
+      "mMin": 12,
+      "schechter": {
+        "phiStar": 0.00511,
+        "MStar": -21.215,
+        "alphaS": -1.05
+      }
+    },
+    "uniform-euclidean": {
+      "n0": 300,
+      "m0": 20,
+      "alpha": 0.6,
+      "mMax": 28
+    },
+    "flattened": {
+      "n0": 4000,
+      "m0": 22,
+      "alpha": 0.4,
+      "mMax": 28
+    },
+    "steep": {
+      "n0": 400,
+      "m0": 22,
+      "alpha": 1.0,
+      "mMax": 28
+    },
+    "rare": {
+      "n0": 2,
+      "m0": 22,
+      "alpha": 0.6,
+      "mMax": 28,
+      "note": "added by amendment AM3, for D4b only"
+    }
   },
-  "night": { "hoursPerNight": 8, "clearFraction": 0.6, "threshold": 5 },
+  "night": {
+    "hoursPerNight": 8,
+    "clearFraction": 0.6,
+    "threshold": 5
+  },
   "grids": {
-    "b1": { "setups": ["skyLimited", "lcoLike", "rubinLike"], "exposures": [30, 300], "visits": [1, 4], "nights": 10, "class": "test-power-law", "note": "twelve plans; the oracle and the harness build each one in this order: setup, exposure, visits, the last varying fastest" }
+    "b1": {
+      "setups": [
+        "skyLimited",
+        "lcoLike",
+        "rubinLike"
+      ],
+      "exposures": [
+        30,
+        300
+      ],
+      "visits": [
+        1,
+        4
+      ],
+      "nights": 10,
+      "class": "test-power-law",
+      "note": "twelve plans; the oracle and the harness build each one in this order: setup, exposure, visits, the last varying fastest"
+    }
   },
   "checks": [
     {
       "id": "A1.euclid",
       "leg": "a",
       "what": "the class 'galaxies-local': N(<m) per square degree equals the closed form (pi/180)^2 / 3 * phiStar * dStar^3 * Gamma(alphaS + 5/2) with dStar = 10^((m - MStar + 5)/5) parsecs converted to Mpc, against a numerical integral of the Schechter function over luminosity at m = 14, 15, 16; and the cumulative slope d log10 N / dm equals 0.6",
-      "limits": { "magnitudes": [14, 15, 16], "maxRel": 1e-6, "slope": 0.6, "slopeTol": 1e-9 }
+      "limits": {
+        "magnitudes": [
+          14,
+          15,
+          16
+        ],
+        "maxRel": 1e-06,
+        "slope": 0.6,
+        "slopeTol": 1e-09
+      }
     },
     {
       "id": "A2.probit",
       "leg": "a",
       "what": "detections by quadrature for a completeness that is a probit in magnitude, C(m) = Phi((mc - m)/w), against the closed form N(<mc) exp((alpha ln10 w)^2 / 2) per square degree",
-      "limits": { "alphas": [0.4, 0.6, 1.0], "widths": [0.1, 0.3, 0.5], "mc": 22, "maxRel": 1e-6 }
+      "limits": {
+        "alphas": [
+          0.4,
+          0.6,
+          1.0
+        ],
+        "widths": [
+          0.1,
+          0.3,
+          0.5
+        ],
+        "mc": 22,
+        "maxRel": 1e-06
+      }
     },
     {
       "id": "A3.skyLimited",
       "leg": "a",
       "what": "in setup 'skyLimited' with a faint limit (sky dominates) the 5 sigma depth gains 1.25 magnitude per decade of exposure: m(10 t) - m(t) for t = 400, 1000, 4000 s",
-      "limits": { "times": [400, 1000, 4000], "gain": 1.25, "tol": 0.01 }
+      "limits": {
+        "times": [
+          400,
+          1000,
+          4000
+        ],
+        "gain": 1.25,
+        "tol": 0.01
+      }
     },
     {
       "id": "A4.optimum",
       "leg": "a",
       "what": "the exposure that maximises the sharp-cut count N(<m5) A, at fixed total time, one visit, 'skyLimited' with zero overhead replaced by its stated 20 s, equals beta overhead / (1 - beta) with beta = 1.25 alpha when beta < 1 (alpha 0.4 and 0.6), within the bound; for alpha = 1.0 (beta >= 1) the count grows with exposure across the whole grid (no interior optimum). Exposure grid: 4 to 20000 s, 400 log-spaced points, total time 30 nights x 8 h x 0.6",
-      "limits": { "alphas": [0.4, 0.6, 1.0], "maxRel": 0.03 }
+      "limits": {
+        "alphas": [
+          0.4,
+          0.6,
+          1.0
+        ],
+        "maxRel": 0.03
+      }
     },
     {
       "id": "A5.timeRatio",
       "leg": "a",
       "what": "the time two sky-limited setups need for the same depth and one pointing: t_B / t_A = (fwhm_B^2 / fwhm_A^2) (zeroPoint_A / zeroPoint_B), setups 'skyLimited' as A and a copy of it with a 4 times larger zeroPoint and a 0.75 times smaller fwhm as B, at a depth of 23.0 and a 5 sigma threshold, within the bound; and the survey rate is the field over (time + overhead)",
-      "limits": { "depth": 23.0, "maxRel": 0.005 }
+      "limits": {
+        "depth": 23.0,
+        "maxRel": 0.005
+      }
     },
     {
       "id": "A6.falseRate",
       "leg": "a",
       "what": "false positives per independent element Q(theta) = 0.5 erfc(theta / sqrt 2) against SciPy's survival function at theta = 3, 4, 5, 6, and the number of elements per square degree 3600^2 / (4 pi sigma^2) arcsec^2 with sigma = fwhm / 2.3548",
-      "limits": { "thetas": [3, 4, 5, 6], "maxRel": 1e-9 }
+      "limits": {
+        "thetas": [
+          3,
+          4,
+          5,
+          6
+        ],
+        "maxRel": 1e-09
+      }
     },
     {
       "id": "A7.poisson",
       "leg": "a",
       "what": "the prediction interval of a count (the Poisson quantiles at 0.15866 and 0.84134, and 0.02275 and 0.97725): its exact coverage summed over the Poisson distribution is never below the nominal level (1e-9) and, averaged over the means 12, 40, 200 and 1000, exceeds the level by at most 0.06 at both levels",
-      "limits": { "means": [0.5, 3, 12, 40, 200, 1000], "levels": [0.6827, 0.9545], "meanExcess": 0.06 }
+      "limits": {
+        "means": [
+          0.5,
+          3,
+          12,
+          40,
+          200,
+          1000
+        ],
+        "levels": [
+          0.6827,
+          0.9545
+        ],
+        "meanExcess": 0.06
+      }
     },
     {
       "id": "A8.area",
       "leg": "a",
       "what": "the plan's arithmetic is exact: pointings = floor(nights x hours x 3600 x clear / (visits (exposure + overhead))), area = pointings x field, for 12 designed plans, and the stack's depth with v visits of t equals the single exposure of v t with the read noise of v frames",
-      "limits": { "exact": true, "depthTol": 1e-9 }
+      "limits": {
+        "exact": true,
+        "depthTol": 1e-09
+      }
     },
     {
       "id": "B1.oracle",
       "leg": "b",
       "what": "the 12 plans of grid b1 against the independent calculation of tools/survey-oracle/oracle.py (NumPy and SciPy: its own CCD equation, brentq for the depth, quad for the counts and Phi for the completeness): the 5 sigma depth, the true count within the depth, the detections and the false positives, at the stated tolerances",
-      "limits": { "depthAbs": 0.002, "countsRel": 1e-3, "falseRel": 1e-6 }
+      "limits": {
+        "depthAbs": 0.002,
+        "countsRel": 0.001,
+        "falseRel": 1e-06
+      }
     },
     {
       "id": "B2.cosmology",
       "leg": "b",
       "what": "the Euclidean count of the class 'galaxies-local' against Astropy's FlatLambdaCDM(H0 = 70, Om0 = 0.3) with the same Schechter function and no K-correction or evolution, at m = 14, 15 and 16.5: the ratio model / cosmology within the bound (the stated error of the Euclidean approximation, and so the class's mMax)",
-      "limits": { "magnitudes": [14, 15, 16.5], "ratioMin": 0.75, "ratioMax": 1.25 }
+      "limits": {
+        "magnitudes": [
+          14,
+          15,
+          16.5
+        ],
+        "ratioMin": 0.75,
+        "ratioMax": 1.25
+      }
     },
     {
       "id": "B3.injection",
       "leg": "b",
       "what": "the kernel's completeness against Prompt 184's measurement: on the synthetic frame of INJECTION.md (128 by 128 pixels, sky 90 electrons per pixel, read noise 8, gain 1.5, FWHM 3 pixels), the half-completeness magnitude of the injection run (js/measure/inject.js, count 20, trials 50, binWidth 0.25, seed 'survey-215') against the kernel's, whose threshold is the closed form s_c = 4 exp(5 / (4 pi sigma^2)) of that document's a1",
-      "limits": { "m50Abs": 0.3 }
+      "limits": {
+        "m50Abs": 0.3
+      }
     },
     {
       "id": "B4.density",
       "leg": "b",
       "what": "an order-of-magnitude check of the cited class: N(<17.77) of 'galaxies-local' (outside its range, computed by the closed form only) within a factor 1.6 of 100 per square degree, the surface density of the SDSS main galaxy sample as recalled (about 90 to 100; not pinned from the paper)",
-      "limits": { "target": 100, "factor": 1.6 }
+      "limits": {
+        "target": 100,
+        "factor": 1.6
+      }
     },
     {
       "id": "C1.coverage",
       "leg": "c",
       "what": "4000 seeded surveys of each of four plans (the first plan of grid b1 for 'skyLimited', 'lcoLike' and 'rubinLike' at exposure 300 and 1 visit, and 'lcoLike' at 30 s and 4 visits; class 'uniform-euclidean', nights 3): the number of detections is a Poisson draw, as sources are drawn from the counts and each kept with its completeness; the realised count lies inside the 95.45 percent prediction interval in at least 0.94 of the surveys and inside the 68.27 percent interval in at least 0.64 and at most 0.82; and the mean of the draws is within 3.5 standard errors of the kernel's expected detections",
-      "limits": { "surveys": 4000, "cover95Min": 0.94, "cover68Min": 0.64, "cover68Max": 0.82, "meanSE": 3.5 }
+      "limits": {
+        "surveys": 4000,
+        "cover95Min": 0.94,
+        "cover68Min": 0.64,
+        "cover68Max": 0.82,
+        "meanSE": 3.5
+      }
     },
     {
       "id": "D1.feasible",
       "leg": "d",
       "what": "plans that cannot reach the depth in the time return 'not feasible' with the right reasons, and plans that can return feasible: for 'lcoLike' and 'rubinLike' at exposure 300, 1 visit, 10 nights, with the oracle's depth D and area A (its own numbers), the goals depth D - 0.2 and area 0.8 A (feasible); depth D + 0.2 (reason depth); area 1.25 A (reason area); and an exposure of 1.5 times the oracle's sky-well time (reason saturates, whatever else it says); the verdict and the set of reasons must equal the oracle's on all 10 cases",
-      "limits": { "exact": true }
+      "limits": {
+        "exact": true
+      }
     },
     {
       "id": "D2.outsideModel",
       "leg": "d",
       "what": "a plan whose detections reach beyond a class's mMax (class 'galaxies-local' with any of the three setups at exposure 300) returns no count, the reason 'outside-count-model', and never extrapolates; four cases",
-      "limits": { "cases": 4 }
+      "limits": {
+        "cases": 4
+      }
     },
     {
       "id": "D3.refusals",
       "leg": "d",
       "what": "refusals with a code and no NaN: a negative or zero exposure, a threshold at or below 0, zero nights, zero visits, a fraction clear above 1, an unknown class, a facility that is not an imager, a band the facility does not state",
-      "limits": { "cases": 8 }
+      "limits": {
+        "cases": 8
+      }
     },
     {
       "id": "D4.reliability",
       "leg": "d",
       "what": "where false positives outnumber true detections (threshold 3 sigma, class 'steep', 'lcoLike' at exposure 30, one visit, 10 nights, and four more designed cases written in the harness from the oracle's numbers) the plan says 'unreliable', and where they do not (threshold 5) it does not; reliability = detections / (detections + false positives) equals the oracle's within 1e-3",
-      "limits": { "cases": 6, "relTol": 1e-3 }
+      "limits": {
+        "cases": 6,
+        "relTol": 0.001
+      }
     },
     {
       "id": "E1.authentic",
       "leg": "e",
       "what": "authentic-data applicability: the survey model against a real catalogue's counts with a fixed contract. NOT RUN unless a catalogue with a stated completeness is already in the repository; none is proposed for download here",
-      "limits": { "run": false }
+      "limits": {
+        "run": false
+      }
+    },
+    {
+      "id": "A5b.timeExact",
+      "leg": "a",
+      "what": "added by AM4: the exact time to depth, t = s^2 (F + V) / F^2 with F = zeroPoint 10^(-0.4 m) the source rate and V = 4 pi sigma_pix^2 (sky rate per pixel) the sky variance rate (no read noise or dark), against the oracle's root-finding for the two setups of A5, and the kernel's exposure for the same depth against both",
+      "limits": {
+        "maxRel": 1e-06
+      }
+    },
+    {
+      "id": "D4b.reliabilityRare",
+      "leg": "d",
+      "what": "added by AM3: six cases of the class 'rare': lcoLike at 30 s and 300 s and rubinLike at 30 s, each at threshold 3 and at threshold 5, one visit, 10 nights; the unreliable flag equals the oracle's and the reliability is within 1e-3",
+      "limits": {
+        "cases": 6,
+        "relTol": 0.001
+      }
     }
   ],
-  "amendments": []
+  "amendments": [
+    {
+      "id": "AM1",
+      "check": "A1.euclid / B1.oracle (the detection integral)",
+      "kernelExisted": true,
+      "outputInspected": false,
+      "boundMoved": false,
+      "was": "the quadrature runs between the magnitude where the completeness is 0.99997 and where it is 1e-6",
+      "now": "the same, with the faint end the brighter of the magnitude where the signal to noise is 0.05 and the class's mMax, and no detection integral at all when the plan's depth is beyond mMax (refused)",
+      "reason": "found while writing the kernel and the oracle together, before either was run: for a threshold below 4.8 the completeness never falls to 1e-6, and a power-law count grows without bound; the oracle builds the same limits"
+    },
+    {
+      "id": "AM2",
+      "check": "D1.feasible",
+      "kernelExisted": true,
+      "outputInspected": true,
+      "boundMoved": false,
+      "was": "four goal types listed for two setups and 'all 10 cases'",
+      "now": "five cases a setup (feasible, depth, area, saturates, time), the fifth with 0.01 nights so that no pointing fits (reasons time and area)",
+      "reason": "the text said ten cases and listed eight; the fifth is the 'cannot reach it in the time' case of the roadmap's own wording"
+    },
+    {
+      "id": "AM3",
+      "check": "D4.reliability",
+      "kernelExisted": true,
+      "outputInspected": true,
+      "boundMoved": false,
+      "was": "six cases in which, the check says, false positives outnumber detections at threshold 3",
+      "now": "the six committed cases are kept and judged as written; the oracle shows none of them has more false positives than detections (reliability 0.87 to 0.99: the class's own faint sources dominate), so the unreliable half of the check was vacuous; six more cases (D4b) of a class 'rare' (n0 2 per square degree at 22, alpha 0.6) are added, and judged by the same two bounds (the unreliable flag equals the oracle's, the reliability within 1e-3)",
+      "reason": "the premise of the committed cases was wrong; nothing is loosened"
+    },
+    {
+      "id": "AM4",
+      "check": "A5.timeRatio",
+      "kernelExisted": true,
+      "outputInspected": true,
+      "boundMoved": false,
+      "was": "the ratio of the times to one depth equals the sky-limited closed form to 0.5 percent",
+      "now": "A5 stays as committed and is judged as committed. The oracle's ratio is 0.1439 against the closed form 0.1406 (2.3 percent): the closed form drops the source's own shot noise, 3 and 5.5 percent of the sky variance in the two setups at depth 23. A5b is added: the exact time t = s^2 (F + V) / F^2 (F the source rate, V the sky variance rate under the matched filter) against the oracle's root-finding, bound 1e-6 relative, and the kernel's time against the same",
+      "reason": "the committed closed form is a limit, not an identity; A5 is kept failing and labelled if it fails, and a lesson states the rule as a rule of thumb good to a few percent"
+    },
+    {
+      "id": "AM5",
+      "check": "B2.cosmology",
+      "kernelExisted": true,
+      "outputInspected": true,
+      "boundMoved": false,
+      "was": "the class 'galaxies-local' has mMax 16.5",
+      "now": "mMax 15.0, the faintest tested magnitude at which the Euclidean count is within the bound of Astropy's (ratios 1.085 at 14 and 1.134 at 15, 1.266 at 16.5 against 1.25)",
+      "reason": "B2 as committed fails at 16.5 and stays failing and labelled; the scope of the class is reduced to what the check supports (section 7.5.3)"
+    }
+  ]
 }
