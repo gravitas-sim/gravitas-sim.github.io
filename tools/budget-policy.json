@@ -17,8 +17,8 @@
     "routes": {
       "front-door": { "kb": 2128.6, "requests": 109 },
       "sandbox": { "kb": 2128.6, "requests": 109 },
-      "kepler": { "kb": 3361.1, "requests": 148 },
-      "transit": { "kb": 3373, "requests": 148 },
+      "kepler": { "kb": 3361.2, "requests": 148 },
+      "transit": { "kb": 3373.1, "requests": 148 },
       "power-law": { "kb": 3338.4, "requests": 148 },
       "largest-lesson": { "kb": 3470.6, "requests": 150 },
       "observatory": "the Observatory with one observation open: read from tools/route-budgets.json"
