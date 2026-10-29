@@ -154,6 +154,12 @@ export default {
     'How long a given signal-to-noise takes, why it falls off the square-root law when the camera’s read noise matters, what a brighter sky or more exposures cost, and when a target cannot be reached at all.',
     'The calculation leaves out flat-field and sky-subtraction error, crowding and scintillation, so it is a prediction under stated assumptions, not a guarantee; a throughput, a dark current and an extinction coefficient the library does not state are teaching values, labelled as such; the frames are synthetic.',
   ],
+  strategy: [
+    'A cadence, a period to look for and a run of nights: the window function of your epochs, the aliases it predicts and, for a facility from the instrument library, the nights the planner finds usable for a target, your visits placed in them and the weather losing whole nights.',
+    'Whether the cadence can tell the true period from its aliases (resolved, ambiguous or not constrained) with the chance-free chi-square preference, how much of the phase the visits cover, what the plan costs in hours of telescope time, and the period the search finds in the synthetic series the plan would produce.',
+    'Why one visit a night at the same time cannot tell a period from its aliases, how irregular times or more nights break the tie, why more nights from one site do not remove the sidereal-day alias, and what weather costs.',
+    'The verdict is a sinusoid in white noise, not an eclipse or a flare; the weather is a seeded draw that loses whole nights, not a forecast; the Moon enters only through the planner’s separation limit; the series are synthetic, with the period you set as their truth.',
+  ],
   survey: [
     'Synthetic stars of known brightness at known distances: counted and missed stars, the bias by shells of distance, or the luminosity function against its truth.',
     'How the counted share, the bias and the recovered luminosity function change as the magnitude limit, the completeness curve or the parallax cut changes.',

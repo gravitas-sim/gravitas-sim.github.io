@@ -13,6 +13,7 @@ import { INSTRUCTOR as SATELLITE } from './investigations/depth/satellite-sequen
 import { INSTRUCTOR as ATMOSPHERE } from './investigations/depth/atmosphere-sequence.js';
 import { INSTRUCTOR as PLANETS } from './investigations/planets-sequence.js';
 import { INSTRUCTOR as EXPOSURE } from './investigations/exposure-sequence.js';
+import { INSTRUCTOR as STRATEGY } from './investigations/strategy-sequence.js';
 import { INSTRUCTOR as TELESCOPE } from './investigations/telescope-sequence.js';
 
 export const INSTRUCTOR_CONTENT = {
@@ -21,6 +22,7 @@ export const INSTRUCTOR_CONTENT = {
   ...ATMOSPHERE.content,
   ...PLANETS.content,
   ...EXPOSURE.content,
+  ...STRATEGY.content,
   ...TELESCOPE.content,
   'extending-an-experiment': {
     topic:

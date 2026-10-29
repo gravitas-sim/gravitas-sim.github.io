@@ -87,6 +87,7 @@ export const WIDGET_FAMILIES = Object.freeze({
   cosmology: ['hubble-law', 'hubble-diagram', 'redshift-wedge'],
   detector: ['ccd-frames', 'ccd-snr', 'diff-photometry'],
   exposure: ['exposure-planner'],
+  strategy: ['strategy-window', 'strategy-plan'],
   telescope: ['telescope'],
   sky: [
     'sky-turning',

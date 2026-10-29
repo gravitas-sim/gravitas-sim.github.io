@@ -151,6 +151,12 @@ export default {
     'Cuánto tarda una señal sobre ruido dada, por qué se aparta de la ley de la raíz cuadrada cuando importa el ruido de lectura de la cámara, qué cuestan un cielo más brillante o más exposiciones, y cuándo un objetivo no se alcanza en absoluto.',
     'El cálculo omite el error de aplanado y de resta del cielo, el apiñamiento y el centelleo, así que es una predicción bajo supuestos declarados, no una garantía; un rendimiento, una corriente oscura y un coeficiente de extinción que la biblioteca no declara son valores didácticos, rotulados como tales; las imágenes son sintéticas.',
   ],
+  strategy: [
+    'Una cadencia, un período que buscar y una serie de noches: la función ventana de tus épocas, los alias que predice y, para una instalación de la biblioteca de instrumentos, las noches que el planificador halla útiles para un objetivo, tus visitas colocadas en ellas y el tiempo que pierde noches enteras.',
+    'Si la cadencia distingue el período verdadero de sus alias (resuelto, ambiguo o no acotado) con la preferencia en chi cuadrado, cuánta fase cubren las visitas, cuánto cuesta el plan en horas de telescopio y el período que halla la búsqueda en la serie sintética que daría el plan.',
+    'Por qué una visita por noche a la misma hora no distingue un período de sus alias, cómo los tiempos irregulares o más noches deshacen el empate, por qué más noches desde un mismo sitio no quitan el alias del día sidéreo y qué cuesta el mal tiempo.',
+    'El veredicto es de una sinusoide en ruido blanco, no de un eclipse ni de una llamarada; el tiempo es un sorteo con semilla que pierde noches enteras, no un pronóstico; la Luna entra solo por el límite de separación del planificador; las series son sintéticas, con el período que fijas como verdad.',
+  ],
   survey: [
     'Estrellas sintéticas de brillo conocido a distancias conocidas: estrellas contadas y perdidas, el sesgo por capas de distancia, o la función de luminosidad frente a su verdad.',
     'Cómo cambian la parte contada, el sesgo y la función de luminosidad recuperada al cambiar el límite de magnitud, la curva de completitud o el corte de paralaje.',

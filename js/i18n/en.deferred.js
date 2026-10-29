@@ -1988,6 +1988,8 @@ export const EN_DEFERRED = {
     'Start of the selection-effects group: a survey counts only what it can see.',
   'inv.seq.observing.why-the-bright-ones-win':
     'Brightness bias, made quantitative: why the sample is not the population.',
+  'inv.seq.observing.why-the-period-is-wrong':
+    'Why a period from one night a visit can be wrong, and how the cadence decides.',
   'inv.seq.observing.plan-an-exposure':
     'Turn the CCD equation into a plan: how long, and what limits it.',
   'inv.seq.observing.the-completeness-curve':

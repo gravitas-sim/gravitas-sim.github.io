@@ -32,7 +32,7 @@ export const EN_STRATEGY = {
     '{n} over {T} days; the peak width, one over the baseline, is {r} cycles per day',
   'strW.row.verdict': 'Verdict',
   'strW.verdict.resolved':
-    'resolved: the nearest alias is {d} times less likely than the true period (a preference of {x} in chi-square), enough to tell them apart',
+    'resolved: the nearest alias is rejected by a chi-square preference of {x} for the true period, enough to tell them apart',
   'strW.verdict.ambiguous':
     'ambiguous: the {p} day alias fits the data as well as the true period (a preference of only {x} in chi-square, below 9)',
   'strW.verdict.not-constrained':

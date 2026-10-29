@@ -150,6 +150,10 @@ const EXTENSIONS = {
     import('../data/investigations/depth/goldilocks-question.js'),
   'what-a-telescope-resolves': () =>
     import('../data/investigations/depth/what-a-telescope-resolves.js'),
+  'why-the-period-is-wrong': () =>
+    import('../data/investigations/depth/why-the-period-is-wrong.js'),
+  'design-the-schedule': () =>
+    import('../data/investigations/depth/design-the-schedule.js'),
   'what-is-in-this-field': () =>
     import('../data/investigations/depth/what-is-in-this-field.js'),
 };
@@ -258,6 +262,10 @@ const WORDS = {
       import('../data/investigations/depth/es/goldilocks-question.js'),
     'what-a-telescope-resolves': () =>
       import('../data/investigations/depth/es/what-a-telescope-resolves.js'),
+    'why-the-period-is-wrong': () =>
+      import('../data/investigations/depth/es/why-the-period-is-wrong.js'),
+    'design-the-schedule': () =>
+      import('../data/investigations/depth/es/design-the-schedule.js'),
     'what-is-in-this-field': () =>
       import('../data/investigations/depth/es/what-is-in-this-field.js'),
     'missing-mass': () =>

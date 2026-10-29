@@ -191,6 +191,7 @@ const LOADERS = {
   'comets-and-the-sun': () => import('./comets-and-the-sun.js'),
   'what-a-telescope-resolves': () => import('./what-a-telescope-resolves.js'),
   'plan-an-exposure': () => import('./plan-an-exposure.js'),
+  'why-the-period-is-wrong': () => import('./why-the-period-is-wrong.js'),
 };
 // </generated:loaders>
 
@@ -301,6 +302,7 @@ const TRANSLATIONS = {
     'what-a-telescope-resolves': () =>
       import('./es/what-a-telescope-resolves.js'),
     'plan-an-exposure': () => import('./es/plan-an-exposure.js'),
+    'why-the-period-is-wrong': () => import('./es/why-the-period-is-wrong.js'),
   },
 };
 // </generated:translations>

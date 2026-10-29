@@ -32,7 +32,7 @@ export const ES_STRATEGY = {
     '{n} a lo largo de {T} días; el ancho del pico, uno sobre la base, es {r} ciclos por día',
   'strW.row.verdict': 'Veredicto',
   'strW.verdict.resolved':
-    'resuelto: el alias más cercano es {d} veces menos probable que el período verdadero (una preferencia de {x} en chi cuadrado), suficiente para distinguirlos',
+    'resuelto: el alias más cercano queda descartado por una preferencia de {x} en chi cuadrado a favor del período verdadero, suficiente para distinguirlos',
   'strW.verdict.ambiguous':
     'ambiguo: el alias de {p} días ajusta los datos igual de bien que el período verdadero (una preferencia de solo {x} en chi cuadrado, menos de 9)',
   'strW.verdict.not-constrained':
