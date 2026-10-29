@@ -397,12 +397,6 @@ export const LAZY_FAMILIES = Object.freeze({
     'EFFECTS_WIDGETS',
     ['detector-effects']
   ),
-  photcal: familyEntry(
-    () => import('./photcalWidgets.js'),
-    './photcalWidgets.js',
-    'PHOTCAL_WIDGETS',
-    ['photometric-calibration']
-  ),
   exposure: familyEntry(
     () => import('./exposureWidgets.js'),
     './exposureWidgets.js',
@@ -414,6 +408,12 @@ export const LAZY_FAMILIES = Object.freeze({
     './habitabilityLimitsWidgets.js',
     'HABITABILITY_LIMIT_WIDGETS',
     ['hz-limits', 'hz-locking', 'hz-ages']
+  ),
+  photcal: familyEntry(
+    () => import('./photcalWidgets.js'),
+    './photcalWidgets.js',
+    'PHOTCAL_WIDGETS',
+    ['photometric-calibration']
   ),
   telescope: familyEntry(
     () => import('./telescopeWidgets.js'),

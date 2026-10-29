@@ -517,6 +517,11 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://gravitas-sim.online/teaching/investigation/counts-to-magnitudes/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://gravitas-sim.online/teaching/investigation/plan-an-exposure/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
