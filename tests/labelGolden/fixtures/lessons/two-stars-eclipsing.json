@@ -4,8 +4,7 @@
   "en": {
    "units": [
     ["steps.the-two-depths.fields.0.unit","%"],
-    ["steps.the-two-depths.fields.1.unit","%"],
-    ["steps.fit-the-pair.fields.2.unit","1e-4"]
+    ["steps.the-two-depths.fields.1.unit","%"]
    ],
    "numbered": [
     ["steps.the-two-depths.fields.0.hint","48.3"],
@@ -14,7 +13,7 @@
     ["steps.fit-the-pair.fields.0.hint","0.1085"],
     ["steps.fit-the-pair.fields.1.label","R2/a"],
     ["steps.fit-the-pair.fields.1.hint","0.0814"],
-    ["steps.fit-the-pair.fields.2.label","Uncertainty of R2/a"],
+    ["steps.fit-the-pair.fields.2.label","Uncertainty of R2/a (in units of 1e-4)"],
     ["steps.fit-the-pair.fields.2.hint","1.6"],
     ["steps.the-residual-test.fields.0.hint","25.6"],
     ["steps.the-residual-test.fields.1.hint","1.80"],
@@ -27,7 +26,7 @@
   "es": {
    "units": [],
    "numbered": [
-    ["steps.fit-the-pair.fields.2.label","Incertidumbre de R2/a"]
+    ["steps.fit-the-pair.fields.2.label","Incertidumbre de R2/a (en unidades de 1e-4)"]
    ]
   }
  },

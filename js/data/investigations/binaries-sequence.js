@@ -246,7 +246,11 @@ export const TWO_STARS_ECLIPSING_DEEPER = {
       fields: [
         { id: 'a', label: 'R1/a', hint: '0.1085' },
         { id: 'b', label: 'R2/a', hint: '0.0814' },
-        { id: 'u', label: 'Uncertainty of R2/a', unit: '1e-4', hint: '1.6' },
+        {
+          id: 'u',
+          label: 'Uncertainty of R2/a (in units of 1e-4)',
+          hint: '1.6',
+        },
       ],
       validate: v => {
         if (![v.a, v.b, v.u].every(Number.isFinite)) return null;
@@ -612,7 +616,7 @@ export const TWO_STARS_ECLIPSING_DEEPER_ES = {
       fields: [
         { label: 'R1/a' },
         { label: 'R2/a' },
-        { label: 'Incertidumbre de R2/a' },
+        { label: 'Incertidumbre de R2/a (en unidades de 1e-4)' },
       ],
     },
     {
