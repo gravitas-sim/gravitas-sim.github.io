@@ -98230,6 +98230,77 @@
      "recovery": [
       "wrong body: the object list names what the step staged"
      ]
+    },
+    {
+     "sid": "what-an-observer-does",
+     "index": 9,
+     "type": "read",
+     "title": "What an observer does",
+     "declares": {
+      "stage": {
+       "objects": 1,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "star"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram"
+     ],
+     "actions": [
+      "move-an-instrument-control"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "experiment",
+       "measure"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "detector-effects",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
     }
    ],
    "loops": [
@@ -98264,11 +98335,13 @@
      "heldUntil": "trail",
      "experiment": [
       "trail",
-      "a-ray"
+      "a-ray",
+      "what-an-observer-does"
      ],
      "measure": [
       "trail",
-      "a-ray"
+      "a-ray",
+      "what-an-observer-does"
      ],
      "evidence": [
       "trail"
@@ -98282,16 +98355,16 @@
     }
    ],
    "totals": {
-    "steps": 8,
-    "declared": 8,
+    "steps": 9,
+    "declared": 9,
     "student": 0,
     "engine": 0,
-    "model": 8,
+    "model": 9,
     "data": 0,
-    "diagram": 8,
+    "diagram": 9,
     "evidence": 3,
     "computation": 0,
-    "declaredButInert": 8,
+    "declaredButInert": 9,
     "prose": 0,
     "mismatched": 0,
     "rebuilds": 0
@@ -98299,16 +98372,16 @@
   }
  ],
  "totals": {
-  "steps": 1257,
-  "declared": 1165,
+  "steps": 1258,
+  "declared": 1166,
   "student": 157,
   "engine": 167,
-  "model": 756,
+  "model": 757,
   "data": 146,
-  "diagram": 635,
+  "diagram": 636,
   "evidence": 332,
   "computation": 14,
-  "declaredButInert": 1008,
+  "declaredButInert": 1009,
   "prose": 58,
   "mismatched": 0,
   "rebuilds": 80,

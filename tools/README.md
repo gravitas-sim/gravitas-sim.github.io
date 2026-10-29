@@ -73,6 +73,7 @@ current, and the orchestrator checks it.
 | `design-ratchet.mjs` | Four migrations to the design system that may only go one way |  |
 | `detection-synth.mjs` | Synthetic frames for the detection checks (Prompt 183, DETECTION.md) |  |
 | `detection-validate.mjs` | Detection and the PSF against their committed thresholds (Prompt 183) | `npm run detection:validate` |
+| `detector-effects-validate.mjs` | The detector effects against their committed thresholds (Prompt 211) | `npm run detector-effects:validate` |
 | `docs-facts.mjs` | Documentation facts: derive the numbers, then hold the docs to them | `npm run docs:facts`, `npm run docs:sync`, `npm run docs:check`, `npm run docs:check:tests`, `npm run docs:check:build` |
 | `docs-map.mjs` | DOCUMENTS.md, the map of every root document, from a committed table |  |
 | `draw-trace.mjs` | The canvas calls a body makes, recorded and hashed |  |
@@ -198,7 +199,6 @@ current, and the orchestrator checks it.
 | `sun-validate.mjs` | The solar kernel against its committed thresholds (Prompt 194) | `npm run sun:validate` |
 | `surface-gate.mjs` | The surface gate: one decision function, the same for every surface | `npm run surface:check`, `npm run surface:measure`, `npm run surface:write`, `npm run surface:report` |
 | `telescopes-validate.mjs` | The telescope optics against their committed thresholds (Prompt 208) | `npm run telescopes:validate` |
-| `detector-effects-validate.mjs` | The detector effects against their committed thresholds and the independent oracle (Prompt 211) | `npm run detector-effects:validate` |
 | `three-shaders.mjs` | three.js shaders in the bundle: pruned to what the 3-D view can reach, then |  |
 | `thumbnail-config.mjs` | Thumbnail capture settings |  |
 | `tides-scenarios.mjs` | The ring and Roche scenarios, measured (Prompt 204 part 2) |  |

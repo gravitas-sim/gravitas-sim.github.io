@@ -11,10 +11,10 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 87 investigations and 1257 steps: 1165 steps
+Across 87 investigations and 1258 steps: 1166 steps
 declare a scene, 157 let a reader change one, 167 read the
-running integration, 756 show a prescribed model result, 146 draw
-on a stored dataset, 635 put a self-contained panel beside the text,
+running integration, 757 show a prescribed model result, 146 draw
+on a stored dataset, 636 put a self-contained panel beside the text,
 332 keep something, and 58 are prose.
 Of 168 prediction loops, 168 are returned to,
 168 produce a measurement before they are answered, and
@@ -1227,15 +1227,15 @@ Of 168 prediction loops, 168 are returned to,
 
 ## The Saturated Star (`the-saturated-star`)
 
-- **Steps:** 8. Scene declared on 8; a reader can change something on 0; 8 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 0 live engine, 8 prescribed model, 0 stored dataset, 8 self-contained panel.
+- **Steps:** 9. Scene declared on 9; a reader can change something on 0; 9 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 9 prescribed model, 0 stored dataset, 9 self-contained panel.
 - **What students do:** move-an-instrument-control, commit-a-prediction, record-values, choose-an-option.
 - **Objects the steps declare:** star.
 - **Instruments:** detector-effects.
 - **Stored data:** none.
 - **Evidence kept:** notebook-fields.
-- **Prediction loops:** bright-star-predict → clipped-star, magnitude-error, why-too-faint → clipped-star; trail-predict → trail, a-ray → trail.
+- **Prediction loops:** bright-star-predict → clipped-star, magnitude-error, why-too-faint → clipped-star; trail-predict → trail, a-ray, what-an-observer-does → trail.
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
-- **Accepted central experiment:** not yet reviewed.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:detector-effects`, control detector-effects/bright, measures the share of its true flux the clipped sum of the brightest star would read, in percent, with a 60 second exposure: 30 at V = 9.5 and 53 at V = 10.5, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 

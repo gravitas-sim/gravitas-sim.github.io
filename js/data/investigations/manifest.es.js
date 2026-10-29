@@ -1104,7 +1104,7 @@ export const MANIFEST = [
     level: 'Introductory astronomy',
     thumbnail: 'images/investigations/the-saturated-star.webp',
     depths: 3,
-    stepCount: 8,
+    stepCount: 9,
     gradedCount: 7,
     objectiveCount: 4,
   },
