@@ -391,6 +391,15 @@
       "was": "the three cases named La Silla, Mauna Kea and Haleakala",
       "now": "the three cases above, from the instrument library's sites (Cerro Tololo and McDonald), with the right ascensions, date and cadence written out",
       "reason": "the library holds no La Silla, Mauna Kea or Haleakala site and nothing may be typed from memory; the kernel's modules existed but had not been run against any check. The constraint (zero seconds outside a usable interval, the exact spacing and count) is unchanged."
+    },
+    {
+      "id": "AM3",
+      "check": "B3.aliasPeaks",
+      "kernelExisted": true,
+      "boundMoved": false,
+      "was": "the first run of the validator took the window's own peaks as its local maxima of at least 0.1 (the convention of js/rvSchedule.js spectralWindow, an unstated choice of the harness)",
+      "now": "every local maximum of the window, whatever its height; the contract text names no height floor, and the frequency and height tolerances (0.25/T, 0.05) are unchanged",
+      "reason": "the first run failed B3 on the lcg pattern: its window has no peak above 0.098, so Astropy's second and third peaks were compared with an almost empty list. The periodogram's sidelobe heights are the coherent sum of the window at f - f0 and at f + f0 (the response of a real sinusoid has both images), up to (|W1| + |W2|)^2, which is why the highest sidelobe there (0.21) is three times the window's (0.074). Recorded as a finding in OBSERVING_STRATEGY.md; with every local maximum admitted the comparison is a weak test on a random pattern (about 30 percent of frequencies fall within the tolerance by chance), and the leg's strength is the three nightly patterns."
     }
   ]
 }

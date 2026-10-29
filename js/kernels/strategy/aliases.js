@@ -60,7 +60,10 @@ export const MIN_CYCLES = 2;
  * @param {{id: string, frequency: number}[]} combs
  * @param {{order?: number, fMin?: number, fMax?: number}} [opts]
  * @returns {{kinds: Object<string, number>, k: number, order: number,
- *   frequency: number, period: number}[]} nearest the true frequency first
+ *   offset: number, frequency: number, period: number}[]} lowest order first;
+ *   `offset` is the signed shift sum(k_i f_i) from the true frequency (or from
+ *   its negative image when f0 + offset is below zero), which is where the
+ *   window is read
  */
 export function predictAliases(
   f0,
@@ -73,9 +76,10 @@ export function predictAliases(
   const walk = (i, used) => {
     if (i === combs.length) {
       if (used === 0) return;
-      let f = f0;
-      for (let j = 0; j < combs.length; j++) f += vec[j] * combs[j].frequency;
-      f = Math.abs(f);
+      let offset = 0;
+      for (let j = 0; j < combs.length; j++)
+        offset += vec[j] * combs[j].frequency;
+      const f = Math.abs(f0 + offset);
       if (!(f > Math.max(fMin, 1e-9)) || f > fMax) return;
       const key = f.toPrecision(12);
       if (seen.has(key)) return;
@@ -88,6 +92,7 @@ export function predictAliases(
         kinds,
         k: combs.length ? vec[0] : 0,
         order: used,
+        offset,
         frequency: f,
         period: 1 / f,
       });
@@ -151,7 +156,7 @@ export function judgeCadence(
   {
     snr,
     combs = [COMBS.siderealDay],
-    order = 2,
+    order = null,
     band = {},
     dchi2Min = DCHI2_MIN,
   } = {}
@@ -183,7 +188,15 @@ export function judgeCadence(
     };
   const fMin = band.maxPeriod ? 1 / band.maxPeriod : 0;
   const fMax = band.minPeriod ? 1 / band.minPeriod : Infinity;
-  const list = predictAliases(f0, combs, { order, fMin, fMax });
+  // Every alias the search band can hold, unless the caller fixes the order: a
+  // band to 4 cycles a day holds aliases of order 4 of a one-cycle-a-day comb.
+  const top = Math.max(...combs.map(c => c.frequency));
+  const orderUsed =
+    order ??
+    (Number.isFinite(fMax)
+      ? Math.min(combs.length > 1 ? 4 : 12, Math.ceil((fMax + f0) / top))
+      : 2);
+  const list = predictAliases(f0, combs, { order: orderUsed, fMin, fMax });
   const aliases = [];
   const merged = [];
   const t = Float64Array.from(times);
@@ -210,12 +223,20 @@ export function judgeCadence(
     aliases.push({
       ...a,
       power: p,
-      window: spectralWindow(t, [a.frequency - f0])[0],
+      window: spectralWindow(t, [a.offset])[0],
       dchi2,
     });
   }
   aliases.sort((a, b) => a.dchi2 - b.dchi2);
   const worst = aliases[0] ?? null;
   const verdict = worst && worst.dchi2 < dchi2Min ? 'ambiguous' : 'resolved';
-  return { ...base, verdict, aliases, merged, worst, dchi2Min };
+  return {
+    ...base,
+    verdict,
+    aliases,
+    merged,
+    worst,
+    dchi2Min,
+    order: orderUsed,
+  };
 }
