@@ -3685,6 +3685,7 @@ export const ES_DEFERRED = {
   'nb.source.image-injection': 'Completitud de una imagen',
   'nb.source.image-sequence': 'Curva de luz a partir de imágenes',
   'nb.source.image-series': 'Movimiento y paralaje de una fuente',
+  'nb.source.photometric-calibration': 'Calibración fotométrica de una noche',
   'nb.flag.missionModel':
     'impulsos instantáneos, cónicas empalmadas y masas puntuales: un modelo didáctico de una misión',
   'nb.flag.notOperational':

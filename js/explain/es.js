@@ -193,6 +193,12 @@ export default {
     'Qué apertura muestra un par cercano como dos, cómo la apertura y la exposición sacan una estrella débil, por qué la anchura de una estrella no es el límite del telescopio y por qué un telescopio terrestre mayor deja de resolver más detalle cerca del seeing.',
     'Las imágenes son sintéticas: un patrón de Airy convolucionado con un perfil de seeing de Moffat de anchura dada, una longitud de onda, sin aberraciones, óptica adaptativa ni araña, un píxel cuadrado. El seeing es una entrada, no un sitio.',
   ],
+  photcal: [
+    'Una noche sintética de estrellas patrón cuyas magnitudes y colores de catálogo se conocen, medidas por un instrumento cuyo punto cero, extinción y término de color los fija una verdad que puedes mostrar; eliges cuántas estrellas patrón, cuánto ruido, a qué altura del cielo se vieron y qué hace el aire.',
+    'El ajuste del punto cero, de la extinción de la atmósfera y del término de color con sus errores, lo que sobra frente a la masa de aire y frente al color, y una estrella problema calibrada con un intervalo que incluye la incertidumbre del ajuste.',
+    'Por qué una estrella se ve más débil baja en el cielo, cómo las estrellas patrón de una noche dan un punto cero y una extinción, qué es un término de color, cuándo los datos no pueden fijar un término y dónde deja de funcionar una calibración en línea recta.',
+    'La noche es sintética. La extinción es la de la atmósfera, en magnitudes por masa de aire, no la extinción interestelar del modelo de radiación; se toma constante durante la noche, y una recta en la masa de aire y en el color es todo el modelo.',
+  ],
   effects: [
     'Una imagen sintética de una estrella brillante y otras más débiles, hecha con los efectos del detector que actives: una respuesta no lineal cerca de la capacidad máxima, trazas de rayos cósmicos y desbordamiento de carga a lo largo de las columnas, y una anchura de perfil que fijas frente al píxel.',
     'La respuesta de la herramienta de fotometría para cada estrella: un flujo con su error, o un rechazo con su motivo, junto al número que habría dado sin tener en cuenta las marcas, y las marcas del archivo asociado cerca de la estrella (saturado, desbordamiento, rayo cósmico, no lineal).',

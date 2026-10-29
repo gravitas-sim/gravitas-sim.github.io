@@ -3769,6 +3769,7 @@ export const EN_DEFERRED = {
   'nb.source.image-injection': 'Completeness of an image',
   'nb.source.image-sequence': 'Light curve from frames',
   'nb.source.image-series': 'Motion and parallax of a source',
+  'nb.source.photometric-calibration': 'Photometric calibration of a night',
   'nb.flag.missionModel':
     'impulsive burns, patched conics and point masses: a teaching model of a mission',
   'nb.flag.notOperational': 'not for operational mission design or navigation',

@@ -202,6 +202,12 @@ export default {
     'Which aperture shows a close pair as two, how aperture and exposure bring out a faint star, why the width of a star is not the telescope’s limit, and why a bigger ground telescope stops resolving finer detail near the seeing.',
     'The frames are synthetic: an Airy pattern convolved with a Moffat seeing profile of stated width, one wavelength, no aberrations, adaptive optics or spider, a box pixel. The seeing is an input, not a site.',
   ],
+  photcal: [
+    'A synthetic night of standard stars whose catalogue magnitudes and colours are known, measured by an instrument whose zero point, extinction and colour term are set by a truth you can reveal; you choose how many standards, how noisy, how high in the sky they were seen, and what the air does.',
+    'The fit of the zero point, the atmosphere’s extinction and the colour term with their errors, what is left over against airmass and against colour, and one target star calibrated with an interval that includes the fit’s uncertainty.',
+    'Why a star looks fainter low in the sky, how a night’s standards give a zero point and an extinction, what a colour term is, when the data cannot fix a term, and where a straight-line calibration stops working.',
+    'The night is synthetic. The extinction is the atmosphere’s, in magnitudes per airmass, not the interstellar extinction of the radiation model; it is taken as constant through the night, and one straight line in airmass and colour is the whole model.',
+  ],
   effects: [
     'A synthetic frame of one bright star and some fainter ones, made with the detector effects you switch on: a nonlinear response near the full well, cosmic-ray tracks and charge bleeding along columns, and a profile width you set against the pixel.',
     'The photometry tool’s answer for each star: a flux with its error, or a refusal with the reason, beside the number it would have given had it ignored the flags, and the sidecar flags near the star (saturated, bleed, cosmic ray, nonlinear).',

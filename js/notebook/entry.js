@@ -118,6 +118,10 @@ export const SOURCE = Object.freeze({
   // fit with its frame statement and distance interval, and the request that
   // runs it again (js/observatory/imageSeries.js, js/measure/astrometric-series.js).
   IMAGE_SERIES: 'image-series',
+  // A synthetic night of standard stars calibrated to a catalogue system: the zero point, the atmospheric extinction
+  // and the colour term with their uncertainties and the calibrated magnitudes, kept as their envelope
+  // (js/photcalKeep.js, js/kernels/detector/photcal.js).
+  PHOTOMETRIC_CALIBRATION: 'photometric-calibration',
 });
 
 /** The sources this build can capture from. */
@@ -146,6 +150,7 @@ export const SOURCES = [
   SOURCE.IMAGE_INJECTION,
   SOURCE.IMAGE_SEQUENCE,
   SOURCE.IMAGE_SERIES,
+  SOURCE.PHOTOMETRIC_CALIBRATION,
 ];
 
 /** How long a student's prose may be, per field. */

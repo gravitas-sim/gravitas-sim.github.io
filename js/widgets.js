@@ -397,6 +397,12 @@ export const LAZY_FAMILIES = Object.freeze({
     'EFFECTS_WIDGETS',
     ['detector-effects']
   ),
+  photcal: familyEntry(
+    () => import('./photcalWidgets.js'),
+    './photcalWidgets.js',
+    'PHOTCAL_WIDGETS',
+    ['photometric-calibration']
+  ),
   exposure: familyEntry(
     () => import('./exposureWidgets.js'),
     './exposureWidgets.js',
@@ -601,7 +607,7 @@ export async function whenWidgetsReady() {
   // loaded after the rest. No import is added here either.
   const families = Object.keys(LAZY_FAMILIES);
   // The effects family reaches the same measuring layer, and is loaded after the rest for the same reason.
-  const late = ['variables', 'crater', 'telescope', 'effects'];
+  const late = ['variables', 'crater', 'telescope', 'effects', 'photcal'];
   await Promise.all(families.filter(f => !late.includes(f)).map(loadFamily));
   for (const f of late) await loadFamily(f);
   const results = await Promise.all([...familyReady.values()]);
