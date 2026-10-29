@@ -26,9 +26,9 @@ tides, and a dense cluster relaxing over time. Each is tagged by curriculum
 concept, so the scenario gallery doubles as an index an instructor can scan for
 the week they are teaching.
 
-**<!--fact:libraryInvestigations-->104<!--/fact--> guided
-investigations**: <!--fact:investigations-->87<!--/fact--> that run in the
-simulation, <!--fact:investigationSteps-->1260<!--/fact--> steps between them
+**<!--fact:libraryInvestigations-->105<!--/fact--> guided
+investigations**: <!--fact:investigations-->88<!--/fact--> that run in the
+simulation, <!--fact:investigationSteps-->1268<!--/fact--> steps between them
 (the table below), and <!--fact:guidedInvestigations-->17<!--/fact--> in the
 Observatory, the 3-D lab and the mission lab (the Library lists all of them):
 
@@ -51,7 +51,7 @@ locally, and exports a lab report as a PDF that they submit through whatever LMS
 the course already uses.
 
 **Instructor materials.** An instructor guide and a generated answer key for each of
-the <!--fact:investigations-->87<!--/fact--> investigations that run in the simulation — learning
+the <!--fact:investigations-->88<!--/fact--> investigations that run in the simulation — learning
 objectives, expected observations, the numbers a student should get and the
 common wrong turns — plus an adopter's guide and a curriculum map, all rebuilt
 from the investigations themselves on every release so a key cannot disagree with the
@@ -306,8 +306,8 @@ service and works offline ([MISSION_LAB.md](MISSION_LAB.md)).
 
 **Spanish.** The interface ships in <!--fact:locales-->2<!--/fact--> languages
 — <!--fact:localeNames-->English, Español<!--/fact--> — from a catalog
-of <!--fact:uiStrings-->12051<!--/fact--> strings, and
-all <!--fact:investigations-->87<!--/fact--> investigations are translated. A
+of <!--fact:uiStrings-->12148<!--/fact--> strings, and
+all <!--fact:investigations-->88<!--/fact--> investigations are translated. A
 translation carries only words: no scenario name, no seed, no widget id and no
 numeric answer can be reached from a locale file, so a mistranslation cannot
 change what an investigation measures.
@@ -341,7 +341,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->16924<!--/fact--> tests across <!--fact:jestSuites-->490<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->16991<!--/fact--> tests across <!--fact:jestSuites-->492<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
@@ -486,8 +486,8 @@ npm run e2e:ui                    # the Playwright inspector
 npm run e2e:report                # open the last HTML report
 ```
 
-The suite is <!--fact:e2eTests-->3023<!--/fact--> tests
-in <!--fact:e2eFiles-->211<!--/fact--> files and takes several minutes in
+The suite is <!--fact:e2eTests-->3033<!--/fact--> tests
+in <!--fact:e2eFiles-->212<!--/fact--> files and takes several minutes in
 Chromium.
 
 Some notes on how it is put together, because two of the choices are not
@@ -590,8 +590,8 @@ All <!--fact:instructorDocuments-->819<!--/fact--> documents are generated from
 the investigations at build time and live at
 [gravitas-sim.online/instructors/](https://gravitas-sim.online/instructors/):
 
-- <!--fact:investigations-->87<!--/fact--> instructor guides
-- <!--fact:investigations-->87<!--/fact--> answer keys
+- <!--fact:investigations-->88<!--/fact--> instructor guides
+- <!--fact:investigations-->88<!--/fact--> answer keys
 - <!--fact:activityDocuments-->8<!--/fact--> classroom-activity instructor guides and
   student worksheets, across <!--fact:activities-->3<!--/fact--> activities
 - an adopter's guide and a curriculum map
@@ -654,7 +654,7 @@ part was built:
 | [`DESIGN_SYSTEM.md`](DESIGN_SYSTEM.md)                             | The shared controls: field, input, select, textarea, file, range, toolbar, buttons; their states, tokens and accessibility                     |
 | [`NUMBER_TYPOGRAPHY.md`](NUMBER_TYPOGRAPHY.md)                     | How numbers are formatted, and why                                                                                                             |
 | [`SCENARIO_GALLERY.md`](SCENARIO_GALLERY.md)                       | The gallery, its concept tags and its thumbnails                                                                                               |
-| [`OFFLINE_AND_LOW_END.md`](OFFLINE_AND_LOW_END.md)                 | Offline support and the low-end quality tier: what is precached and why, which of the <!--fact:investigations-->87<!--/fact--> investigations, and what a 2019 Chromebook actually gets |
+| [`OFFLINE_AND_LOW_END.md`](OFFLINE_AND_LOW_END.md)                 | Offline support and the low-end quality tier: what is precached and why, which of the <!--fact:investigations-->88<!--/fact--> investigations, and what a 2019 Chromebook actually gets |
 | [`PERFORMANCE_PROFILING_GUIDE.md`](PERFORMANCE_PROFILING_GUIDE.md) | How to profile a change                                                                                                                        |
 
 Three documents are records of finished work rather than descriptions of the
