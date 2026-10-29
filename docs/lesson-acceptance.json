@@ -1157,6 +1157,19 @@
       ],
       "evidenceFrom": "model"
     },
+    "two-stars-eclipsing": {
+      "centralExperimentId": "ce.two-stars-eclipsing",
+      "object": "panel:eclipse-curve",
+      "control": "eclipse-curve/J",
+      "quantity": "the depth of the primary eclipse, in percent of the light of the pair, for two stars that eclipse each other nearly edge on: 48.3 at a surface brightness ratio of 0.55 and 40.7 at 1, the deeper eclipse being the one that hides the hotter star",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "which-eclipse-is-deeper",
+        "the-two-depths"
+      ],
+      "evidenceFrom": "model"
+    },
     "what-a-telescope-resolves": {
       "centralExperimentId": "ce.what-a-telescope-resolves",
       "object": "panel:telescope",

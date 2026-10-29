@@ -5,6 +5,7 @@
 //   npm run binaries:validate                    print the table
 //   npm run binaries:validate -- --json          print it as JSON
 //   npm run binaries:validate -- --write-failed  rewrite tests/fixtures/binaries/failed-legs.json
+//   npm run binaries:validate -- --write-results rewrite tests/fixtures/binaries/results.json (the table as measured)
 //   npm run binaries:validate -- --only=A1,B1    run the rows whose id starts with one of these
 //   npm run binaries:validate -- --fits=<path>   the V505 Per light curve for E1 (else NOT RUN)
 //
@@ -904,6 +905,11 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
       `${JSON.stringify({ note: 'Legs of tests/fixtures/binaries/thresholds.json that crossed their bound, kept failing and labelled (only Carl resets a bound).', failed, notMeasured }, null, 2)}\n`
     );
   }
+  if (process.argv.includes('--write-results'))
+    writeFileSync(
+      path.join(ROOT, 'tests/fixtures/binaries/results.json'),
+      `${JSON.stringify({ note: 'The validation table of tools/binaries-validate.mjs as last measured (Node 22.23.4, 2026-10-29); the Jest group reruns the quick legs and holds these against failed-legs.json.', rows: out }, null, 2)}\n`
+    );
   if (process.argv.includes('--json'))
     console.log(JSON.stringify(out, null, 2));
   else

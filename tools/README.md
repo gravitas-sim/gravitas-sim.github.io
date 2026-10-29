@@ -199,6 +199,7 @@ current, and the orchestrator checks it.
 | `storage-matrix.mjs` | npm run storage:matrix | `npm run storage:matrix` |
 | `storage-profile.mjs` | npm run storage:profile -- --capture | `npm run storage:profile` |
 | `strategy-validate.mjs` | The observing-strategy kernel against its committed thresholds (Prompt 214) | `npm run strategy:validate` |
+| `binaries-validate.mjs` | The eclipsing-binary model against its committed thresholds (Prompt 217) | `npm run binaries:validate` |
 | `sun-frames-build.mjs` | The 14-day solar sequence (Prompt 194 part 2, SUN_KERNEL.md Part 2) |  |
 | `sun-validate.mjs` | The solar kernel against its committed thresholds (Prompt 194) | `npm run sun:validate` |
 | `surface-gate.mjs` | The surface gate: one decision function, the same for every surface | `npm run surface:check`, `npm run surface:measure`, `npm run surface:write`, `npm run surface:report` |

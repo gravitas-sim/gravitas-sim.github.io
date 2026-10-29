@@ -975,6 +975,13 @@
       "student": false
     },
     {
+      "file": "BINARIES.md",
+      "kind": "feature",
+      "purpose": "Eclipsing binaries: a detached two-sphere model on a Kepler orbit, e cos w and e sin w from the eclipses, grazing non-identifiability, the fit through the inference core, validation and failed legs (Prompt 217).",
+      "owner": 217,
+      "student": true
+    },
+    {
       "file": "OBSERVING_STRATEGY.md",
       "kind": "feature",
       "purpose": "Observing strategy: the window function of a cadence, aliases and the verdict, phase coverage, a multi-night plan with its cost in hours, weather as a seeded loss, validation (Prompt 214).",

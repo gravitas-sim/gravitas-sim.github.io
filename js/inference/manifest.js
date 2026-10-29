@@ -222,6 +222,32 @@ export function validateInference(m) {
       'is { value, sigma? } in solar radii'
     );
   }
+  if (model.id === 'eclipsing-binary') {
+    for (const k of ['ldA', 'ldB'])
+      need(
+        s[k] === undefined ||
+          (Array.isArray(s[k]) &&
+            s[k].length === 2 &&
+            s[k].every(Number.isFinite) &&
+            s[k][0] >= 0 &&
+            s[k][0] + s[k][1] <= 1),
+        `settings.${k}`,
+        "is the star's quadratic limb darkening [u1, u2], u1 at least 0 and u1 + u2 at most 1"
+      );
+    need(
+      s.thirdLight === undefined ||
+        (Number.isFinite(s.thirdLight) &&
+          s.thirdLight >= 0 &&
+          s.thirdLight < 1),
+      'settings.thirdLight',
+      "is the share of the light that is neither star's, 0 up to 1"
+    );
+    need(
+      s.exposure === undefined || s.exposure >= 0,
+      'settings.exposure',
+      'is a duration'
+    );
+  }
   return out;
 }
 
