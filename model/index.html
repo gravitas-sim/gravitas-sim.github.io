@@ -141,6 +141,7 @@ try {
           <li><span class="gs-en"><a href="#exposure-planning">Exposure planning: what a plan predicts and leaves out</a></span><span class="gs-es" lang="es"><a href="#exposure-planning">Planificación de la exposición: qué predice un plan y qué omite</a></span></li>
           <li><span class="gs-en"><a href="#observing-strategy">Observing strategy: what a cadence can and cannot tell apart</a></span><span class="gs-es" lang="es"><a href="#observing-strategy">Estrategia de observación: qué distingue y qué no una cadencia</a></span></li>
           <li><span class="gs-en"><a href="#telescopes">Telescopes: what a Rayleigh separation and a measured width are</a></span><span class="gs-es" lang="es"><a href="#telescopes">Telescopios: qué son una separación de Rayleigh y una anchura medida</a></span></li>
+          <li><span class="gs-en"><a href="#detector-effects">Detector effects: what a saturated star, a bleed trail and a cosmic ray do</a></span><span class="gs-es" lang="es"><a href="#detector-effects">Efectos del detector: qué hacen una estrella saturada, una estela de desbordamiento y un rayo cósmico</a></span></li>
           <li><span class="gs-en"><a href="#trust">What should I trust this to show?</a></span><span class="gs-es" lang="es"><a href="#trust">¿Qué puedo esperar que muestre con fiabilidad?</a></span></li>
           <li><span class="gs-en"><a href="#validation">Validation: what has been checked</a></span><span class="gs-es" lang="es"><a href="#validation">Validación: qué se ha comprobado</a></span></li>
           <li><span class="gs-en"><a href="#data">Where the data comes from</a></span><span class="gs-es" lang="es"><a href="#data">De dónde provienen los datos</a></span></li>
@@ -2418,6 +2419,51 @@ try {
         investigation states.</span><span class="gs-es" lang="es">El núcleo es <code>js/kernels/<wbr>detector/<wbr>optics.js</code> y <code>telescope.js</code>, descrito en <code>TELESCOPES.md</code> con sus umbrales (<code>tests/fixtures/<wbr>telescopes/<wbr>thresholds.json</code>), y una prueba recalcula cada número que enuncia la investigación.</span>
       </p>
 
+      <h2 id="detector-effects"><span class="gs-en">Detector effects: what a saturated star, a bleed trail and a cosmic ray do</span><span class="gs-es" lang="es">Efectos del detector: qué hacen una estrella saturada, una estela de desbordamiento y un rayo cósmico</span></h2>
+      <p>
+        <span class="gs-en">The Saturated Star puts a synthetic frame of one bright star and some fainter ones through a detector with the
+        effects the reader switches on. Every frame is <strong>synthetic</strong> and every effect is a <strong>stated model</strong>,
+        not the measured response of a detector: a nonlinearity near the full well, cosmic-ray tracks, charge bleeding along columns,
+        and a profile that may be narrower than the pixels can sample. The photometry tool refuses what these effects spoil, and
+        the number it would have given is shown beside the refusal, never as the measurement.</span><span class="gs-es" lang="es">La estrella saturada pasa una imagen sintética de una estrella brillante y otras más débiles por un detector con los efectos que activa el lector. Cada imagen es <strong>sintética</strong> y cada efecto es un <strong>modelo declarado</strong>, no la respuesta medida de un detector: una no linealidad cerca de la capacidad máxima, trazas de rayos cósmicos, desbordamiento de carga a lo largo de las columnas y un perfil que puede ser más estrecho de lo que los píxeles pueden muestrear. La herramienta de fotometría rechaza lo que estos efectos estropean, y el número que habría dado se muestra junto al rechazo, nunca como la medida.</span>
+      </p>
+      <h3><span class="gs-en">What each effect is</span><span class="gs-es" lang="es">Qué es cada efecto</span></h3>
+      <ul>
+        <li><span class="gs-en">Saturation: a pixel holds at most the full well (50,000 electrons here), and the converter clips independently. The
+        bright star in the investigation reads 30 percent of the flux the model put in, 1.3 magnitudes too faint.</span><span class="gs-es" lang="es">Saturación: un píxel guarda como máximo la capacidad máxima (50&nbsp;000 electrones aquí), y el conversor recorta por su cuenta. La estrella brillante de la investigación lee el 30 por ciento del flujo que puso el modelo, 1,3 magnitudes demasiado débil.</span></li>
+        <li><span class="gs-en">Nonlinearity: linear up to a knee at 0.8 of the full well, then a tanh roll-off, so the response is continuous with a
+        continuous slope and a full pixel reads 0.952 of the well. The linear limit is the charge at which the response is
+        1 percent below the straight line (45,330 electrons). This curve is a choice of the model; a real detector&rsquo;s is
+        measured.</span><span class="gs-es" lang="es">No linealidad: lineal hasta un codo en 0,8 de la capacidad máxima y después una caída tipo tanh, de modo que la respuesta es continua con pendiente continua y un píxel lleno lee 0,952 de la capacidad. El límite lineal es la carga con la que la respuesta está 1 por ciento por debajo de la recta (45&nbsp;330 electrones). Esta curva es una elección del modelo; la de un detector real se mide.</span></li>
+        <li><span class="gs-en">Cosmic rays: straight tracks through a layer one pixel thick, a cosine-weighted incidence, a uniform azimuth, a deposit of
+        1,200 electrons per pixel of path (an assumed value from about 80 pairs per micron in silicon) and no energy-loss spread.
+        The deposit in each pixel is exact for the track&rsquo;s geometry.</span><span class="gs-es" lang="es">Rayos cósmicos: trazas rectas a través de una capa de un píxel de grosor, una incidencia con peso en coseno, un acimut uniforme, un depósito de 1&nbsp;200 electrones por píxel de camino (un valor supuesto a partir de unos 80 pares por micra en silicio) y sin dispersión de la pérdida de energía. El depósito en cada píxel es exacto para la geometría de la traza.</span></li>
+        <li><span class="gs-en">Bleeding: the excess of a run of saturated pixels spills equally up and down its column, filling its neighbors to the full
+        well, bounded at 64 pixels a side; charge is conserved, and what is lost at the cap or the edge is recorded. Only along
+        columns.</span><span class="gs-es" lang="es">Desbordamiento: el exceso de una tira de píxeles saturados se derrama por igual hacia arriba y abajo de su columna, llenando a sus vecinos hasta la capacidad máxima, con un tope de 64 píxeles por lado; la carga se conserva y lo que se pierde en el tope o en el borde se registra. Solo a lo largo de las columnas.</span></li>
+        <li><span class="gs-en">Sampling: the profile is integrated over each square pixel, so the pixels are exact; below two pixels of FWHM the
+        profile is undersampled, and the share of a star&rsquo;s light in its brightest pixel depends on where the star sits in
+        the pixel (24 to 45 percent at 1.2 pixels, 9 to 11 at 2.8), while the flux inside a proportional aperture varies by
+        0.27 and 0.035 percent.</span><span class="gs-es" lang="es">Muestreo: el perfil se integra sobre cada píxel cuadrado, así que los píxeles son exactos; por debajo de dos píxeles de FWHM el perfil está submuestreado, y la parte de la luz de una estrella en su píxel más brillante depende de dónde esté la estrella en el píxel (24 a 45 por ciento con 1,2 píxeles, 9 a 11 con 2,8), mientras que el flujo dentro de una apertura proporcional varía en 0,27 y 0,035 por ciento.</span></li>
+      </ul>
+      <h3><span class="gs-en">What has been checked</span><span class="gs-es" lang="es">Qué se ha comprobado</span></h3>
+      <ul>
+        <li><span class="gs-en">Each effect against its stated model, with an independent oracle (scipy for the response, its limits and the exact Poisson
+        expectations; a separate slab-clipping computation for the tracks; a re-implementation of the spill rule; scipy for the
+        sampling), and the flag plane against its rules pixel by pixel. Eighteen of the twenty-three rows of the contract pass.
+        Three fail, and are reported: the detector&rsquo;s own cosmic-ray mask finds 27 of the 55 track pixels that stand out by
+        8 sigma (its sharpness test needs a deposit of about four times the background), so it disagrees with an
+        implementation of van Dokkum&rsquo;s L.A.Cosmic (which finds all 55); and an unflagged bleed trail is still refused,
+        because its pixels sit at the full well. A frame of a real saturated star was not measured and is requested, not
+        claimed.</span><span class="gs-es" lang="es">Cada efecto frente a su modelo declarado, con un oráculo independiente (scipy para la respuesta, sus límites y las esperanzas de Poisson exactas; un cálculo aparte de recorte por rendijas para las trazas; una reimplementación de la regla de derrame; scipy para el muestreo), y el plano de marcas frente a sus reglas píxel a píxel. Dieciocho de las veintitrés filas del contrato pasan. Tres fallan y se informa de ellas: la máscara de rayos cósmicos del propio detector encuentra 27 de los 55 píxeles de traza que destacan a 8 sigmas (su prueba de nitidez necesita un depósito de unas cuatro veces el fondo), así que discrepa de una implementación del L.A.Cosmic de van Dokkum (que encuentra los 55); y una estela de desbordamiento sin marcar se rechaza igualmente, porque sus píxeles están en la capacidad máxima. No se midió una imagen de una estrella saturada real y se solicita, no se afirma.</span></li>
+      </ul>
+      <p>
+        <span class="gs-en">The kernel is <code>js/kernels/<wbr>detector/<wbr>effects.js</code> and <code>sampling.js</code>, with the frame model&rsquo;s
+        <code>effects</code> field, described in <code>DETECTOR_<wbr>EFFECTS.md</code> with its thresholds
+        (<code>tests/fixtures/<wbr>detector-<wbr>effects/<wbr>thresholds.json</code>), and a test recomputes each number the investigation
+        states.</span><span class="gs-es" lang="es">El núcleo es <code>js/kernels/<wbr>detector/<wbr>effects.js</code> y <code>sampling.js</code>, con el campo <code>effects</code> del modelo de imagen, descrito en <code>DETECTOR_<wbr>EFFECTS.md</code> con sus umbrales (<code>tests/fixtures/<wbr>detector-<wbr>effects/<wbr>thresholds.json</code>), y una prueba recalcula cada número que enuncia la investigación.</span>
+      </p>
+
       <h2 id="trust"><span class="gs-en">What should I trust this to show?</span><span class="gs-es" lang="es">¿Qué puedo esperar que muestre con fiabilidad?</span></h2>
       <div class="doc-table-wrap">
         <table class="doc-table">
@@ -3742,6 +3788,10 @@ try {
             <tr>
               <td>What a Telescope Resolves</td>
               <td>js/kernels/detector/optics.js (Airy, Moffat, their convolution), telescope.js (the frame), js/telescopeField.js (the PSF tool’s measurement), TELESCOPES.md.</td>
+            </tr>
+            <tr>
+              <td>The Saturated Star</td>
+              <td>js/kernels/detector/effects.js (the response, the tracks, the spill), sampling.js (the peak share and the aperture variation), frame.js (the effects field), js/effectsField.js (the sidecar and the tool’s measurement), DETECTOR_EFFECTS.md.</td>
             </tr>
             <tr>
               <td>Plan an Exposure</td>

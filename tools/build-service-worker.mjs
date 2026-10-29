@@ -482,6 +482,10 @@ export const NEVER_PRECACHED = [
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(what-a-telescope-resolves|telescope-sequence)\.js$/,
   /^(js\/telescopeWidgets\.js|js\/telescopeField\.js|js\/i18n\/(en|es)\.telescope\.js)$/,
   /^js\/kernels\/detector\/(optics|telescope)\.js$/,
+  // Prompt 211: the detector-effects instrument, its kernel and its one lesson file (D-R10-211-01).
+  /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(the-saturated-star|saturated-star-sequence)\.js$/,
+  /^(js\/effectsWidgets\.js|js\/effectsField\.js|js\/i18n\/(en|es)\.effects\.js)$/,
+  /^js\/kernels\/detector\/(effects|sampling)\.js$/,
 ];
 
 const ON_DEMAND_ONLY = new Set([

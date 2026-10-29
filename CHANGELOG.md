@@ -41,6 +41,8 @@ version DOI. `RELEASE.doi` is null, so `CITATION.cff` and `.zenodo.json` name
 the 2.1.0 tag and the concept DOI and claim no version DOI for it; the 2.0.0
 archive and its DOI are unchanged. The tag `v2.1.0` is a plain git tag.
 
+- Detector effects in the frame model (Prompt 211, invisible): saturation and full well, a stated nonlinearity near the full well, seeded cosmic-ray tracks, bounded column bleeding and the under- and oversampling regimes, each flagged in the image sidecar's mask plane, a detector-effects panel with instrument toggles, and the investigation The Saturated Star (survey, majors, upper; English and Spanish) in which the measuring tools refuse a saturated, bleeding or track-crossed star. Validated against an independent oracle; three legs are recorded as failing (DETECTOR_EFFECTS.md).
+
 ### Format version boundary (Prompt 176; FORMATS.md names 3.0.0)
 
 - The saved formats a 2.0.0 build refuses or misreads now carry a version number it refuses by, in words it already has. A course package that carries a collection profile, a term or outcomes is `gravitas.course-pack/3` (a course link for it is `c3`); a result envelope with an uncertainty state beyond sigma, interval and none, a failed quantity, a correlation or a fit record is `gravitas.artifact/2`; an investigation pack or question bank whose rubric criterion sets a kind, a depth or a weight is `/2` (its link is `i2`). Every other file and link is written as 2.0.0 wrote it (the lowest version that carries the payload), so it opens in 2.0.0 and in 3.0.0 alike. Readers for every earlier version stay; no support period starts. A 2.0.0 build refuses a newer file as made by a newer version of Gravitas, and refuses an Observatory workspace with image marks as nested too deep (it checks nesting before the version, so no version could name it). FORMATS.md records every refusal message and the rollback rehearsal (`tests/compat/`), and the paragraph for the release notes is generated there. RELEASING.md names 3.0.0 as the version this boundary asks for.
@@ -117,7 +119,7 @@ investigations (<!--fact:investigations-->88<!--/fact--> that run in the
 simulation and <!--fact:guidedInvestigations-->17<!--/fact--> in the
 Observatory, the 3-D lab and the mission lab), a shared shell, a Library, a
 workspace for each student's own work, an instructor path from adoption page to
-gradebook file, <!--fact:instructorDocuments-->819<!--/fact--> generated
+gradebook file, <!--fact:instructorDocuments-->830<!--/fact--> generated
 instructor documents, a public validation suite
 of <!--fact:physicsChecks-->348<!--/fact--> checks, and authoring tools
 (Scenario Studio, Investigation Composer, course packs and an extension SDK).
@@ -1770,7 +1772,7 @@ listed here because this is the release that first carries it.
 - **An instructor portal that explains itself.** `/instructors/` states what is
   behind the passphrase before asking for it, says plainly what client-side
   encryption on a static host can and cannot promise, and presents the
-  <!--fact:instructorDocuments-->819<!--/fact--> documents grouped by investigation
+  <!--fact:instructorDocuments-->830<!--/fact--> documents grouped by investigation
   with their kind and size. A wrong passphrase and a missing bundle now report
   as the different problems they are.
 - **Dual licensing.** The code is MIT; the original educational material is
@@ -1846,7 +1848,7 @@ listed here because this is the release that first carries it.
   off.
 - **An investigation authoring toolchain.** `npm run author:check` validates
   every lesson and every one of the
-  <!--fact:investigationSteps-->1268<!--/fact--> steps; `npm run author:new`
+  <!--fact:investigationSteps-->1269<!--/fact--> steps; `npm run author:new`
   scaffolds a lesson with its translation shadow and instructor stub;
   `?author=<lesson>&step=<n>` opens any step with diagnostics without touching
   a student's saved progress; and a browser walker exercises every step of

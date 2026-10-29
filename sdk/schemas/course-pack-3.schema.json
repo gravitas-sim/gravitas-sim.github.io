@@ -426,9 +426,10 @@
         "moons-of-the-giants",
         "the-scale-of-the-solar-system",
         "comets-and-the-sun",
-"what-a-telescope-resolves",
-"plan-an-exposure",
-"why-the-period-is-wrong"
+        "what-a-telescope-resolves",
+        "the-saturated-star",
+        "plan-an-exposure",
+        "why-the-period-is-wrong"
       ]
     },
     "pkg": {

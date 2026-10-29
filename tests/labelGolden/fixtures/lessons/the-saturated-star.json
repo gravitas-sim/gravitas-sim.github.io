@@ -1,0 +1,122 @@
+{
+ "id": "the-saturated-star",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.clipped-star.fields.0.unit","%"],
+    ["steps.magnitude-error.fields.0.unit","%"],
+    ["steps.magnitude-error.fields.1.unit","mag"],
+    ["steps.linear-limit.fields.0.unit","electrons"],
+    ["steps.linear-limit.fields.1.unit","electrons"],
+    ["steps.linear-limit.fields.2.unit","%"],
+    ["steps.brightest-measured.fields.0.unit","V"],
+    ["steps.safe-flux.fields.0.unit","%"],
+    ["steps.safe-flux.fields.1.unit","electrons"],
+    ["steps.safe-flux.fields.2.unit","V"],
+    ["steps.trail.fields.0.unit",""],
+    ["steps.trail.fields.1.unit","pixels"],
+    ["steps.phase-dependence.fields.0.unit","%"],
+    ["steps.phase-dependence.fields.1.unit","%"],
+    ["steps.phase-dependence.fields.2.unit","%"],
+    ["steps.phase-dependence.fields.3.unit","%"],
+    ["steps.aperture-scatter.fields.0.unit","%"],
+    ["steps.aperture-scatter.fields.1.unit","%"],
+    ["steps.aperture-scatter.fields.2.unit",""]
+   ],
+   "numbered": [
+    ["steps.clipped-star.fields.0.hint","30"],
+    ["steps.magnitude-error.fields.0.hint","30"],
+    ["steps.linear-limit.fields.0.hint","45330"],
+    ["steps.linear-limit.fields.1.hint","47616"],
+    ["steps.brightest-measured.fields.0.hint","12.5"],
+    ["steps.safe-flux.fields.0.hint","11"],
+    ["steps.safe-flux.fields.2.label","Its magnitude at 60 s"],
+    ["steps.trail.fields.0.label","Faint stars refused (of N1, N2, C)"],
+    ["steps.trail.fields.0.hint","2"],
+    ["steps.trail.fields.1.hint","85"],
+    ["steps.phase-dependence.fields.0.label","Smallest share at 1.2 px"],
+    ["steps.phase-dependence.fields.0.hint","24"],
+    ["steps.phase-dependence.fields.1.label","Largest share at 1.2 px"],
+    ["steps.phase-dependence.fields.1.hint","45"],
+    ["steps.phase-dependence.fields.2.label","Smallest share at 2.8 px"],
+    ["steps.phase-dependence.fields.2.hint","9"],
+    ["steps.phase-dependence.fields.3.label","Largest share at 2.8 px"],
+    ["steps.phase-dependence.fields.3.hint","11"],
+    ["steps.aperture-scatter.fields.0.label","Variation at 1.2 px"],
+    ["steps.aperture-scatter.fields.0.hint","0.27"],
+    ["steps.aperture-scatter.fields.1.label","Variation at 2.8 px"],
+    ["steps.aperture-scatter.fields.1.hint","0.035"],
+    ["steps.aperture-scatter.fields.2.label","Ratio (1.2 over 2.8)"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.safe-flux.fields.2.label","Su magnitud en 60 s"],
+    ["steps.trail.fields.0.label","Estrellas débiles rechazadas (de N1, N2, C)"],
+    ["steps.phase-dependence.fields.0.label","Parte menor con 1,2 px"],
+    ["steps.phase-dependence.fields.1.label","Parte mayor con 1,2 px"],
+    ["steps.phase-dependence.fields.2.label","Parte menor con 2,8 px"],
+    ["steps.phase-dependence.fields.3.label","Parte mayor con 2,8 px"],
+    ["steps.aperture-scatter.fields.0.label","Variación con 1,2 px"],
+    ["steps.aperture-scatter.fields.1.label","Variación con 2,8 px"],
+    ["steps.aperture-scatter.fields.2.label","Cociente (1,2 entre 2,8)"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [],
+  "decimals": [
+   [
+    "magnitude-error.dm",
+    2
+   ],
+   [
+    "linear-limit.pct",
+    1
+   ],
+   [
+    "safe-flux.f",
+    0
+   ],
+   [
+    "safe-flux.m",
+    2
+   ],
+   [
+    "aperture-scatter.ratio",
+    1
+   ]
+  ]
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "clipped-star": {
+    "validate": {"calls":97,"distinct":3,"digest":"09cb7832d49c37fa","samples":[null,{"level":"error","message":"Read the percent in the Star S row (the brightness is 9.5 and the exposure 60 s): the share of the true flux that the clipped sum reads."},{"level":"ok","message":"About 30 percent: the middle of the star was cut off at the full well and 70 percent of its light is missing from the sum. The tool refused to give that number; a star that bright is not measured by adding up what is left."}]}
+   },
+   "magnitude-error": {
+    "validate": {"calls":232,"distinct":2,"digest":"c716392bf48e8043","samples":[null,{"level":"error","message":"Type the share from the previous step (about 30 percent); the magnitude error is 2.5 log10(100 / share)."}]}
+   },
+   "linear-limit": {
+    "validate": {"calls":242,"distinct":2,"digest":"e28c15fc58ce9b79","samples":[null,{"level":"error","message":"Read the “Linear limit” row with the nonlinearity switched on: the limit in electrons and what a full pixel reads."}]}
+   },
+   "brightest-measured": {
+    "validate": {"calls":97,"distinct":2,"digest":"415329e20e08537b","samples":[null,{"level":"error","message":"Set the brightness to 12.5, then 12, and read whether the Star S row is a measurement or a refusal."}]}
+   },
+   "safe-flux": {
+    "validate": {"calls":242,"distinct":2,"digest":"d0a7117bd81a9610","samples":[null,{"level":"error","message":"Read the “Sampling” row and take the larger of the two percentages (about 11), not the smaller."}]}
+   },
+   "trail": {
+    "validate": {"calls":232,"distinct":2,"digest":"5f661d963d9f9f5d","samples":[null,{"level":"error","message":"Switch bleeding on, then read the three faint stars’ rows (refused or measured) and the Bleeding row."}]}
+   },
+   "phase-dependence": {
+    "validate": {"calls":242,"distinct":2,"digest":"55f5b334fceb194c","samples":[null,{"level":"error","message":"Set the width to 1.2, then 2.8, and read the two percentages in the Sampling row each time: about 24 and 45, then 9 and 11."}]}
+   },
+   "aperture-scatter": {
+    "validate": {"calls":242,"distinct":2,"digest":"ba26c7f6a9b98b7f","samples":[null,{"level":"error","message":"Read the last percentage in the Sampling row at each width: about 0.27 at 1.2 px and 0.035 at 2.8 px."}]}
+   }
+  },
+  "es": "same"
+ }
+}

@@ -261,16 +261,17 @@ describe('the document inventory', () => {
     // 803 after the three planetary closeout investigations (Prompt 206): a guide and a key in each language and the Spanish notes, 5 each, 15 more.
     // 814 after Telescopes and Resolution (Prompt 208): a guide, a key and a key for each of three depths in each language, and the Spanish notes, 11 more.
     // 819 after Plan an Exposure (Prompt 210): a guide and a key in each language and the Spanish notes, 5 more.
-    // 834 after Why the Period Is Wrong and the Design the Schedule depth (Prompt 214): 15 more.
-    expect(inv.documents).toBe(834);
-    expect(inv.byLocale).toEqual({ en: 382, es: 452 });
+    // 830 after The Saturated Star (Prompt 211, over Plan an Exposure): eleven more, as for the telescope lesson (a guide, a key and a key for each of three depths in each language, and the Spanish notes).
+    // 845 after Why the Period Is Wrong and the Design the Schedule depth (Prompt 214): 15 more.
+    expect(inv.documents).toBe(845);
+    expect(inv.byLocale).toEqual({ en: 387, es: 458 });
     expect(inv.byKind.notes).toBe(INVESTIGATIONS.length);
     expect(inv.byVariant).toEqual({
       activity: 12,
-      depth: 364,
-      full: 352,
+      depth: 370,
+      full: 356,
       general: 18,
-      notes: 88,
+      notes: 89,
     });
   });
 
@@ -298,7 +299,7 @@ describe('the document inventory', () => {
     const withDepth = INVESTIGATIONS.filter(
       i => withAllDepths(i).steps.length !== i.steps.length
     ).map(i => i.id);
-    expect(withDepth.length).toBe(61);
+    expect(withDepth.length).toBe(62);
     // A key for each depth the lesson offers: three for most, two for Design
     // the Schedule, whose upper depth (Prompt 214) has no quantitative layer.
     let keys = 0;

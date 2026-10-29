@@ -66,6 +66,7 @@ export const EVIDENCE_FROM = Object.freeze({
   'the-gaps-in-the-belt': 'model',
   'the-limit': 'model',
   'the-rotating-disk': 'model',
+  'the-saturated-star': 'model',
   'the-scale-of-the-solar-system': 'engine',
   'the-shape-of-expansion': 'model',
   'the-sun-through-the-year': 'model',

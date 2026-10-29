@@ -982,6 +982,13 @@
       "student": true
     },
     {
+      "file": "DETECTOR_EFFECTS.md",
+      "kind": "feature",
+      "purpose": "Detector effects over the frame model: saturation, a stated nonlinearity, cosmic-ray tracks, charge bleeding and sampling, each flagged in the sidecar; validation and the failed legs (Prompt 211).",
+      "owner": 211,
+      "student": true
+    },
+    {
       "file": "TELESCOPES.md",
       "kind": "feature",
       "purpose": "Telescopes over the existing PSF: the annular Airy pattern, Moffat seeing, the Rayleigh angle against the measured width, light gathering, validation (Prompt 208).",

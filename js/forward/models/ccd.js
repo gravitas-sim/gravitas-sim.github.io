@@ -16,6 +16,9 @@
 //   scene: { sky: electrons/s/pixel, sources: [{ x, y, rate: electrons/s }] }
 //   detector: overrides of DEFAULT_DETECTOR (gain, readNoise, biasLevel, ...)
 //   transparency, flatLevel, label
+//   effects: optional, Prompt 211 (js/kernels/detector/effects.js): { nonlinearity, cosmic, bleed }.
+//     The observation then has a `flags` column (role flag: 1 saturated, 2 bleed, 4 cosmic ray,
+//     8 nonlinear) and the truth names the effects applied.
 // }
 import { syntheticObservation, valueColumns } from '../observation.js';
 import { requireSetup } from './common.js';
@@ -53,6 +56,8 @@ const toKernel = (state, setup) => {
     seed: setup.seed,
     detector,
     scene: { ...(state.scene ?? {}), sources },
+    // Prompt 211: stated effects (nonlinearity, cosmic-ray tracks, bleeding), each flagged in the frame's truth.
+    ...(state.effects ? { effects: state.effects } : {}),
   };
 };
 
@@ -66,6 +71,7 @@ export function run(state, rawSetup, opts = {}) {
     transparency: state.transparency ?? 1,
     flatLevel: state.flatLevel,
     label: state.label,
+    ...(base.effects ? { effects: base.effects } : {}),
   });
   return observationOf(f, setup, state, opts);
 }
@@ -136,6 +142,18 @@ function observationOf(f, setup, state, opts) {
       { id: 'x', name: 'Pixel x', unit: 'pix', role: 'x', values: px },
       { id: 'y', name: 'Pixel y', unit: 'pix', role: 'x', values: py },
       ...valueColumns('counts', 'Counts', 'count', f.values, null),
+      ...(t.effects
+        ? [
+            {
+              id: 'flags',
+              name: 'Effect flags',
+              unit: '',
+              role: 'flag',
+              bits: t.effects.bits.map(b => ({ ...b })),
+              values: Float64Array.from(t.effects.flags),
+            },
+          ]
+        : []),
     ],
     axes: { x: 'x', y: 'y' },
     truth: {
@@ -175,6 +193,38 @@ function observationOf(f, setup, state, opts) {
           : []),
         P('cosmicRays', 'cosmic-ray pixels added', t.cosmic.length, 'count'),
         P('saturated', 'saturated pixels', t.saturated, 'count'),
+        ...(t.effects
+          ? [
+              P(
+                'effectBleedPixels',
+                'pixels that received bled charge',
+                t.effects.bleed.pixels,
+                'count'
+              ),
+              P(
+                'effectBleedLost',
+                'electrons lost by bleeding',
+                t.effects.bleed.lost,
+                'count'
+              ),
+              P(
+                'effectCosmicTracks',
+                'cosmic-ray tracks',
+                t.effects.cosmicTracks.length,
+                'count'
+              ),
+              ...(t.effects.linearLimitElectrons === null
+                ? []
+                : [
+                    P(
+                      'effectLinearLimit',
+                      'electrons at 1 percent below linear',
+                      t.effects.linearLimitElectrons,
+                      'count'
+                    ),
+                  ]),
+            ]
+          : []),
       ],
       injected: {
         whiteSigma: 0,
@@ -191,7 +241,9 @@ function observationOf(f, setup, state, opts) {
       },
       notes: [
         `${f.kind} frame. Counts = bias + electrons / gain, rounded. Electrons: Poisson light and dark, cosmic rays, read noise.`,
-        'No blooming, charge-transfer loss or nonlinearity; Gaussian PSF.',
+        t.effects
+          ? `Effects applied: ${['nonlinearity', 'cosmic ray tracks', 'bleeding'].filter((_, k) => [t.effects.applied.nonlinearity, t.effects.applied.cosmic === 'tracks', t.effects.applied.bleed][k]).join(', ') || 'none'} (stated models, DETECTOR_EFFECTS.md); no charge-transfer loss; Gaussian PSF.`
+          : 'No blooming, charge-transfer loss or nonlinearity; Gaussian PSF.',
         'The flat-field map and the dark map in the truth columns are what a calibration frame estimates.',
       ],
     },

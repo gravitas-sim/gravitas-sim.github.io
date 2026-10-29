@@ -2017,6 +2017,8 @@ export const ES_DEFERRED = {
     'Pon un número a lo que un sondeo pierde y corrígelo.',
   'inv.seq.observing.what-a-telescope-resolves':
     'Qué hacen la apertura y el aire con un par de estrellas.',
+  'inv.seq.observing.the-saturated-star':
+    'Por qué la estrella más brillante tiene la magnitud equivocada, y qué hacen el desbordamiento y los rayos cósmicos.',
   'inv.seq.depth.core': 'Profundidad básica',
   'inv.seq.depth.quantitative': 'Profundidad cuantitativa',
   'inv.seq.depth.advanced': 'Profundidad avanzada',

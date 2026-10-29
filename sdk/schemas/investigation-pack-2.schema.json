@@ -117,9 +117,10 @@
           "moons-of-the-giants",
           "the-scale-of-the-solar-system",
           "comets-and-the-sun",
-"what-a-telescope-resolves",
-"plan-an-exposure",
-"why-the-period-is-wrong"
+          "what-a-telescope-resolves",
+          "the-saturated-star",
+          "plan-an-exposure",
+          "why-the-period-is-wrong"
         ]
       }
     },
@@ -385,9 +386,10 @@
                   "moons-of-the-giants",
                   "the-scale-of-the-solar-system",
                   "comets-and-the-sun",
-"what-a-telescope-resolves",
-"plan-an-exposure",
-"why-the-period-is-wrong"
+                  "what-a-telescope-resolves",
+                  "the-saturated-star",
+                  "plan-an-exposure",
+                  "why-the-period-is-wrong"
                 ]
               }
             }
@@ -1487,6 +1489,7 @@
             "strategy-window",
             "strategy-plan",
             "telescope",
+            "detector-effects",
             "sky-turning",
             "sky-seasons",
             "sky-phases",

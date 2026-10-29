@@ -1,0 +1,182 @@
+[
+ {
+  "depth": "core",
+  "role": "first",
+  "sid": "a-bright-star",
+  "position": [
+   1,
+   9
+  ],
+  "title": "La estrella saturada",
+  "subtitle": "Por qué la estrella más brillante de la imagen tiene la magnitud equivocada, qué hacen el desbordamiento de carga y los rayos cósmicos a sus vecinas y dónde es segura una medida",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 9 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">La estrella más brillante de la imagen</h3><div class=\"inv-step-body\"><p>Un CCD registra la luz acumulando electrones en cada píxel, y un píxel solo puede guardar cierto número: la <strong>capacidad máxima</strong>, 50&nbsp;000 electrones aquí. La imagen muestra una estrella muy brillante, <strong>S</strong>, entre otras más débiles. La herramienta de fotometría mide cada estrella y, cuando no puede fiarse de un número, lo <em>rechaza</em> y dice por qué: las estrellas dibujadas en naranja son las que rechazó.</p><p>La imagen es <strong>sintética</strong>: la hizo un modelo, y los brillos de las estrellas y los electrones que pusieron en la imagen se conocen exactamente. Nadie la observó.</p></div>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "graded",
+  "sid": "bright-star-predict",
+  "position": [
+   2,
+   9
+  ],
+  "title": "La estrella saturada",
+  "subtitle": "Por qué la estrella más brillante de la imagen tiene la magnitud equivocada, qué hacen el desbordamiento de carga y los rayos cósmicos a sus vecinas y dónde es segura una medida",
+  "body": "<p class=\"inv-step-count\">Paso 2 de 9 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">¿Cuál habría sido el número?</h3><div class=\"inv-step-body\"><p>La herramienta rechaza S. Supón que no lo hubiera hecho: suma la luz en un círculo alrededor de la estrella, como en todas las demás. La fila de S dice qué habría leído, como parte de los electrones que puso el modelo.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Sumado de todos modos, el flujo de S sería…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>casi el flujo verdadero, porque una estrella brillante es fácil de medir</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>mucho menor, porque los píxeles más brillantes no pueden guardar más que la capacidad máxima</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>mayor, porque la luz de más se derrama dentro del círculo</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>imposible de decir sin más observaciones</span></button></div><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> Me vendría bien una pista </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "marked",
+  "sid": "bright-star-predict",
+  "position": [
+   2,
+   9
+  ],
+  "title": "La estrella saturada",
+  "subtitle": "Por qué la estrella más brillante de la imagen tiene la magnitud equivocada, qué hacen el desbordamiento de carga y los rayos cósmicos a sus vecinas y dónde es segura una medida",
+  "body": "<p class=\"inv-step-count\">Paso 2 de 9 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">¿Cuál habría sido el número?</h3><div class=\"inv-step-body\"><p>La herramienta rechaza S. Supón que no lo hubiera hecho: suma la luz en un círculo alrededor de la estrella, como en todas las demás. La fila de S dice qué habría leído, como parte de los electrones que puso el modelo.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Sumado de todos modos, el flujo de S sería…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>casi el flujo verdadero, porque una estrella brillante es fácil de medir</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>mucho menor, porque los píxeles más brillantes no pueden guardar más que la capacidad máxima</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>mayor, porque la luz de más se derrama dentro del círculo</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>imposible de decir sin más observaciones</span></button></div><p class=\"inv-held\">Tu respuesta queda registrada. No se corrige hasta que llegues a «Lo que lee la estrella recortada», para que la decida el experimento y no la clave de respuestas.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Cambiar respuesta</button><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> Me vendría bien una pista </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "last",
+  "sid": "what-an-observer-does",
+  "position": [
+   9,
+   9
+  ],
+  "title": "La estrella saturada",
+  "subtitle": "Por qué la estrella más brillante de la imagen tiene la magnitud equivocada, qué hacen el desbordamiento de carga y los rayos cósmicos a sus vecinas y dónde es segura una medida",
+  "body": "<p class=\"inv-step-count\">Paso 9 de 9 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Qué hace un observador</h3><div class=\"inv-step-body\"><p>Lo que viste se reduce a una idea: <strong>un indicador de calidad es una negativa, y la negativa es la respuesta segura</strong>. Una estrella saturada se evita con una exposición más corta o con la estrella desenfocada, y se mide donde no se satura. Una estrella cruzada por un rayo cósmico se recupera combinando varias exposiciones con rechazo. Y un píxel marcado nunca se corrige a mano: se sustituye por una imagen mejor. Las imágenes son sintéticas y los efectos son modelos declarados, no un detector medido.</p></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "quantitative",
+  "role": "first",
+  "sid": "a-bright-star",
+  "position": [
+   1,
+   14
+  ],
+  "title": "La estrella saturada",
+  "subtitle": "Por qué la estrella más brillante de la imagen tiene la magnitud equivocada, qué hacen el desbordamiento de carga y los rayos cósmicos a sus vecinas y dónde es segura una medida",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 14 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">La estrella más brillante de la imagen</h3><div class=\"inv-step-body\"><p>Un CCD registra la luz acumulando electrones en cada píxel, y un píxel solo puede guardar cierto número: la <strong>capacidad máxima</strong>, 50&nbsp;000 electrones aquí. La imagen muestra una estrella muy brillante, <strong>S</strong>, entre otras más débiles. La herramienta de fotometría mide cada estrella y, cuando no puede fiarse de un número, lo <em>rechaza</em> y dice por qué: las estrellas dibujadas en naranja son las que rechazó.</p><p>La imagen es <strong>sintética</strong>: la hizo un modelo, y los brillos de las estrellas y los electrones que pusieron en la imagen se conocen exactamente. Nadie la observó.</p></div>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Cuantitativo"
+ },
+ {
+  "depth": "quantitative",
+  "role": "graded",
+  "sid": "bright-star-predict",
+  "position": [
+   2,
+   14
+  ],
+  "title": "La estrella saturada",
+  "subtitle": "Por qué la estrella más brillante de la imagen tiene la magnitud equivocada, qué hacen el desbordamiento de carga y los rayos cósmicos a sus vecinas y dónde es segura una medida",
+  "body": "<p class=\"inv-step-count\">Paso 2 de 14 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">¿Cuál habría sido el número?</h3><div class=\"inv-step-body\"><p>La herramienta rechaza S. Supón que no lo hubiera hecho: suma la luz en un círculo alrededor de la estrella, como en todas las demás. La fila de S dice qué habría leído, como parte de los electrones que puso el modelo.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Sumado de todos modos, el flujo de S sería…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>casi el flujo verdadero, porque una estrella brillante es fácil de medir</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>mucho menor, porque los píxeles más brillantes no pueden guardar más que la capacidad máxima</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>mayor, porque la luz de más se derrama dentro del círculo</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>imposible de decir sin más observaciones</span></button></div><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> Me vendría bien una pista </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Cuantitativo"
+ },
+ {
+  "depth": "quantitative",
+  "role": "marked",
+  "sid": "bright-star-predict",
+  "position": [
+   2,
+   14
+  ],
+  "title": "La estrella saturada",
+  "subtitle": "Por qué la estrella más brillante de la imagen tiene la magnitud equivocada, qué hacen el desbordamiento de carga y los rayos cósmicos a sus vecinas y dónde es segura una medida",
+  "body": "<p class=\"inv-step-count\">Paso 2 de 14 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">¿Cuál habría sido el número?</h3><div class=\"inv-step-body\"><p>La herramienta rechaza S. Supón que no lo hubiera hecho: suma la luz en un círculo alrededor de la estrella, como en todas las demás. La fila de S dice qué habría leído, como parte de los electrones que puso el modelo.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Sumado de todos modos, el flujo de S sería…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>casi el flujo verdadero, porque una estrella brillante es fácil de medir</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>mucho menor, porque los píxeles más brillantes no pueden guardar más que la capacidad máxima</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>mayor, porque la luz de más se derrama dentro del círculo</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>imposible de decir sin más observaciones</span></button></div><p class=\"inv-held\">Tu respuesta queda registrada. No se corrige hasta que llegues a «Lo que lee la estrella recortada», para que la decida el experimento y no la clave de respuestas.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Cambiar respuesta</button><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> Me vendría bien una pista </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Cuantitativo"
+ },
+ {
+  "depth": "quantitative",
+  "role": "last",
+  "sid": "what-an-observer-does",
+  "position": [
+   14,
+   14
+  ],
+  "title": "La estrella saturada",
+  "subtitle": "Por qué la estrella más brillante de la imagen tiene la magnitud equivocada, qué hacen el desbordamiento de carga y los rayos cósmicos a sus vecinas y dónde es segura una medida",
+  "body": "<p class=\"inv-step-count\">Paso 14 de 14 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Qué hace un observador</h3><div class=\"inv-step-body\"><p>Lo que viste se reduce a una idea: <strong>un indicador de calidad es una negativa, y la negativa es la respuesta segura</strong>. Una estrella saturada se evita con una exposición más corta o con la estrella desenfocada, y se mide donde no se satura. Una estrella cruzada por un rayo cósmico se recupera combinando varias exposiciones con rechazo. Y un píxel marcado nunca se corrige a mano: se sustituye por una imagen mejor. Las imágenes son sintéticas y los efectos son modelos declarados, no un detector medido.</p></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Cuantitativo"
+ },
+ {
+  "depth": "advanced",
+  "role": "first",
+  "sid": "a-bright-star",
+  "position": [
+   1,
+   19
+  ],
+  "title": "La estrella saturada",
+  "subtitle": "Por qué la estrella más brillante de la imagen tiene la magnitud equivocada, qué hacen el desbordamiento de carga y los rayos cósmicos a sus vecinas y dónde es segura una medida",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 19 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">La estrella más brillante de la imagen</h3><div class=\"inv-step-body\"><p>Un CCD registra la luz acumulando electrones en cada píxel, y un píxel solo puede guardar cierto número: la <strong>capacidad máxima</strong>, 50&nbsp;000 electrones aquí. La imagen muestra una estrella muy brillante, <strong>S</strong>, entre otras más débiles. La herramienta de fotometría mide cada estrella y, cuando no puede fiarse de un número, lo <em>rechaza</em> y dice por qué: las estrellas dibujadas en naranja son las que rechazó.</p><p>La imagen es <strong>sintética</strong>: la hizo un modelo, y los brillos de las estrellas y los electrones que pusieron en la imagen se conocen exactamente. Nadie la observó.</p></div>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Avanzado"
+ },
+ {
+  "depth": "advanced",
+  "role": "graded",
+  "sid": "bright-star-predict",
+  "position": [
+   2,
+   19
+  ],
+  "title": "La estrella saturada",
+  "subtitle": "Por qué la estrella más brillante de la imagen tiene la magnitud equivocada, qué hacen el desbordamiento de carga y los rayos cósmicos a sus vecinas y dónde es segura una medida",
+  "body": "<p class=\"inv-step-count\">Paso 2 de 19 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">¿Cuál habría sido el número?</h3><div class=\"inv-step-body\"><p>La herramienta rechaza S. Supón que no lo hubiera hecho: suma la luz en un círculo alrededor de la estrella, como en todas las demás. La fila de S dice qué habría leído, como parte de los electrones que puso el modelo.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Sumado de todos modos, el flujo de S sería…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>casi el flujo verdadero, porque una estrella brillante es fácil de medir</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>mucho menor, porque los píxeles más brillantes no pueden guardar más que la capacidad máxima</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>mayor, porque la luz de más se derrama dentro del círculo</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>imposible de decir sin más observaciones</span></button></div><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> Me vendría bien una pista </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Avanzado"
+ },
+ {
+  "depth": "advanced",
+  "role": "marked",
+  "sid": "bright-star-predict",
+  "position": [
+   2,
+   19
+  ],
+  "title": "La estrella saturada",
+  "subtitle": "Por qué la estrella más brillante de la imagen tiene la magnitud equivocada, qué hacen el desbordamiento de carga y los rayos cósmicos a sus vecinas y dónde es segura una medida",
+  "body": "<p class=\"inv-step-count\">Paso 2 de 19 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">¿Cuál habría sido el número?</h3><div class=\"inv-step-body\"><p>La herramienta rechaza S. Supón que no lo hubiera hecho: suma la luz en un círculo alrededor de la estrella, como en todas las demás. La fila de S dice qué habría leído, como parte de los electrones que puso el modelo.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Sumado de todos modos, el flujo de S sería…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>casi el flujo verdadero, porque una estrella brillante es fácil de medir</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>mucho menor, porque los píxeles más brillantes no pueden guardar más que la capacidad máxima</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>mayor, porque la luz de más se derrama dentro del círculo</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>imposible de decir sin más observaciones</span></button></div><p class=\"inv-held\">Tu respuesta queda registrada. No se corrige hasta que llegues a «Lo que lee la estrella recortada», para que la decida el experimento y no la clave de respuestas.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Cambiar respuesta</button><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> Me vendría bien una pista </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Avanzado"
+ },
+ {
+  "depth": "advanced",
+  "role": "last",
+  "sid": "what-an-observer-does",
+  "position": [
+   19,
+   19
+  ],
+  "title": "La estrella saturada",
+  "subtitle": "Por qué la estrella más brillante de la imagen tiene la magnitud equivocada, qué hacen el desbordamiento de carga y los rayos cósmicos a sus vecinas y dónde es segura una medida",
+  "body": "<p class=\"inv-step-count\">Paso 19 de 19 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Qué hace un observador</h3><div class=\"inv-step-body\"><p>Lo que viste se reduce a una idea: <strong>un indicador de calidad es una negativa, y la negativa es la respuesta segura</strong>. Una estrella saturada se evita con una exposición más corta o con la estrella desenfocada, y se mide donde no se satura. Una estrella cruzada por un rayo cósmico se recupera combinando varias exposiciones con rechazo. Y un píxel marcado nunca se corrige a mano: se sustituye por una imagen mejor. Las imágenes son sintéticas y los efectos son modelos declarados, no un detector medido.</p></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Avanzado"
+ }
+]

@@ -26,9 +26,11 @@
 // rays, clipped at the full well; + read noise; counts = bias + electrons / gain,
 // rounded, clipped to [0, adcMax].
 //
-// Simplifications, stated so a student can look for them: no blooming (a
-// saturated pixel does not spill into its neighbors), no charge-transfer
-// loss, no nonlinearity, a Gaussian point-spread function, stars that fall on
+// Simplifications, stated so a student can look for them: by default no blooming
+// (a saturated pixel does not spill into its neighbors), no charge-transfer
+// loss, no nonlinearity (Prompt 211's `effects` switches on a stated
+// nonlinearity, track-shaped cosmic rays and column bleeding, each flagged in the
+// frame's truth), a Gaussian point-spread function, stars that fall on
 // the flat's structure but not on a color term. Poisson draws above 30 electrons
 // use a Gaussian of the same mean and variance (its third moment is 1/sqrt(N)
 // too small).
@@ -38,6 +40,18 @@
 // =============================================================================
 
 import { stream } from '../../random/streams.js';
+import {
+  FLAG,
+  FLAG_MEANINGS,
+  VERSION as EFFECTS_VERSION,
+  bleedInPlace,
+  drawTrack,
+  linearLimit,
+  normalizeEffects,
+  responseCurve,
+  trackDeposit,
+} from './effects.js';
+import { samplingOf } from './effects.js';
 
 // Free globals are slow under Jest's vm; the local names are not.
 const { Math, Float64Array, Int32Array } = globalThis;
@@ -297,6 +311,10 @@ function lightMap(d, sources, exposure, scale, psf) {
  * @param {number} [spec.flatLevel=20000] - Electrons per pixel a flat holds
  * @param {boolean} [spec.cosmicRays] - Default: science and dark frames only
  * @param {object} [spec.psf] - A radial profile instead of the Gaussian (see lightMapProfile); the truth then records it
+ * @param {object} [spec.effects] - Prompt 211's effects (js/kernels/detector/effects.js normalizeEffects):
+ *   { nonlinearity, cosmic, bleed, fwhmPx }. Absent: the frame is the version before it, bit for bit; an empty
+ *   object too. The truth then carries `effects`: the flag plane, the charge before and after the clip, the
+ *   linear limit, the cosmic-ray tracks, the bleed's lost electrons and the sampling regime.
  * @returns {{kind, width, height, exposure, values: Float64Array, truth: object}}
  *   `values` are counts. `truth` holds what the frame was made of.
  */
@@ -341,21 +359,108 @@ export function simulateFrame(spec) {
   const cosmic = [];
   const wantsCosmic =
     spec.cosmicRays ?? (kind === 'science' || kind === 'dark');
-  if (wantsCosmic && d.cosmicRate > 0 && exposure > 0) {
-    const events = poisson(rng, d.cosmicRate * exposure);
-    for (let k = 0; k < events; k++) {
-      const x = Math.floor(rng() * W);
-      const y = Math.floor(rng() * H);
-      const e = 3000 + 12000 * rng();
-      const dx = rng() < 0.5 ? 1 : -1;
-      const withNeighbor = rng() < 0.5;
-      electrons[y * W + x] += e;
-      cosmic.push({ x, y, electrons: e });
-      if (withNeighbor && x + dx >= 0 && x + dx < W) {
-        electrons[y * W + x + dx] += 0.3 * e;
-        cosmic.push({ x: x + dx, y, electrons: 0.3 * e });
+  const fx = spec.effects === undefined ? null : normalizeEffects(spec.effects);
+  const tracks = [];
+  if (fx && fx.cosmic && fx.cosmic !== 'legacy') {
+    // Tracks (Prompt 211): their own stream, so a toggle never moves another draw.
+    const c = fx.cosmic;
+    const crng = streamOf(seed, `effects:cosmic:${spec.label ?? kind}`);
+    const rate = c.rate ?? d.cosmicRate;
+    if (wantsCosmic && rate > 0 && exposure > 0) {
+      const events = poisson(crng, rate * exposure);
+      for (let k = 0; k < events; k++) {
+        const tr = drawTrack(crng, W, H, c);
+        tracks.push(tr);
+        for (const [i, e] of trackDeposit(tr, W, H, c)) {
+          electrons[i] += e;
+          cosmic.push({ x: i % W, y: Math.floor(i / W), electrons: e });
+        }
       }
     }
+  } else if (!fx || fx.cosmic === 'legacy') {
+    if (wantsCosmic && d.cosmicRate > 0 && exposure > 0) {
+      const events = poisson(rng, d.cosmicRate * exposure);
+      for (let k = 0; k < events; k++) {
+        const x = Math.floor(rng() * W);
+        const y = Math.floor(rng() * H);
+        const e = 3000 + 12000 * rng();
+        const dx = rng() < 0.5 ? 1 : -1;
+        const withNeighbor = rng() < 0.5;
+        electrons[y * W + x] += e;
+        cosmic.push({ x, y, electrons: e });
+        if (withNeighbor && x + dx >= 0 && x + dx < W) {
+          electrons[y * W + x + dx] += 0.3 * e;
+          cosmic.push({ x: x + dx, y, electrons: 0.3 * e });
+        }
+      }
+    }
+  }
+
+  // Prompt 211: the charge before the clip, the bleeding and the flags.
+  let effects = null;
+  let respond = null;
+  if (fx) {
+    const before = Float64Array.from(electrons);
+    const flags = new Uint8Array(n);
+    let lost = 0;
+    let bleedPixels = 0;
+    let satCount = 0;
+    for (let i = 0; i < n; i++)
+      if (before[i] >= d.fullWell) {
+        flags[i] |= FLAG.saturated;
+        satCount++;
+      }
+    for (const q of cosmic) flags[q.y * W + q.x] |= FLAG.cosmic;
+    if (fx.bleed) {
+      const col = new Float64Array(H);
+      const hit = new Uint8Array(H);
+      for (let x = 0; x < W; x++) {
+        let over = false;
+        for (let y = 0; y < H; y++) {
+          col[y] = electrons[y * W + x];
+          if (col[y] > d.fullWell) over = true;
+        }
+        if (!over) continue;
+        hit.fill(0);
+        lost += bleedInPlace(col, d.fullWell, fx.bleed.maxLengthPx, hit);
+        for (let y = 0; y < H; y++) {
+          electrons[y * W + x] = col[y];
+          if (hit[y]) {
+            flags[y * W + x] |= FLAG.bleed;
+            bleedPixels++;
+          }
+        }
+      }
+    }
+    let limit = null;
+    if (fx.nonlinearity) {
+      const { kneeFraction, safeDeviation } = fx.nonlinearity;
+      respond = e => responseCurve(e, d.fullWell, kneeFraction);
+      limit = linearLimit(safeDeviation, d.fullWell, kneeFraction);
+    }
+    const collected = new Float64Array(n);
+    for (let i = 0; i < n; i++) {
+      collected[i] = Math.min(electrons[i], d.fullWell);
+      if (limit !== null && collected[i] > limit) flags[i] |= FLAG.nonlinear;
+    }
+    effects = {
+      version: EFFECTS_VERSION,
+      applied: {
+        nonlinearity: fx.nonlinearity,
+        cosmic: fx.cosmic === 'legacy' ? 'legacy' : fx.cosmic ? 'tracks' : null,
+        bleed: fx.bleed,
+      },
+      flags,
+      bits: FLAG_MEANINGS,
+      electronsBeforeClip: before,
+      electronsCollected: collected,
+      linearLimitElectrons: limit,
+      plateauElectrons: respond ? respond(d.fullWell) : d.fullWell,
+      cosmicTracks: tracks,
+      bleed: { lost, pixels: bleedPixels },
+      sampling: samplingOf(fx.fwhmPx ?? d.fwhm),
+      saturatedPixels: satCount,
+    };
   }
 
   let saturated = 0;
@@ -366,6 +471,7 @@ export function simulateFrame(spec) {
       e = d.fullWell;
       saturated++;
     }
+    if (respond) e = respond(e);
     e += d.readNoise * gaussian(rng);
     const c = d.biasLevel + pat.biasPattern[i % W] + e / d.gain;
     values[i] = clamp(Math.round(c), 0, d.adcMax);
@@ -397,7 +503,8 @@ export function simulateFrame(spec) {
           }
         : {}),
       cosmic,
-      saturated,
+      saturated: effects ? effects.saturatedPixels : saturated,
+      ...(effects ? { effects } : {}),
     },
   };
 }

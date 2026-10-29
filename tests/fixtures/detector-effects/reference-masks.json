@@ -1,0 +1,5 @@
+{
+  "note": "the internal reference of check B1: js/kernels/detector/reduce.js maskCosmicRays (k 5.5, sharpness 0.8) on the pinned frame; the SHA-256 is of the 0/1 bytes",
+  "internalSha256": "100f0923c674f233a0ca7b7c3741b01db076db643af9d164ff540890fd7384c7",
+  "internalCount": 27
+}

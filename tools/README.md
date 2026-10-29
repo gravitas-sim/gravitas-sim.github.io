@@ -73,6 +73,7 @@ current, and the orchestrator checks it.
 | `design-ratchet.mjs` | Four migrations to the design system that may only go one way |  |
 | `detection-synth.mjs` | Synthetic frames for the detection checks (Prompt 183, DETECTION.md) |  |
 | `detection-validate.mjs` | Detection and the PSF against their committed thresholds (Prompt 183) | `npm run detection:validate` |
+| `detector-effects-validate.mjs` | The detector effects against their committed thresholds (Prompt 211) | `npm run detector-effects:validate` |
 | `docs-facts.mjs` | Documentation facts: derive the numbers, then hold the docs to them | `npm run docs:facts`, `npm run docs:sync`, `npm run docs:check`, `npm run docs:check:tests`, `npm run docs:check:build` |
 | `docs-map.mjs` | DOCUMENTS.md, the map of every root document, from a committed table |  |
 | `draw-trace.mjs` | The canvas calls a body makes, recorded and hashed |  |

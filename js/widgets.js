@@ -391,6 +391,12 @@ export const LAZY_FAMILIES = Object.freeze({
     'TIDE_WIDGETS',
     ['tides-roche', 'tides-resonance', 'tides-moon', 'tides-heating']
   ),
+  effects: familyEntry(
+    () => import('./effectsWidgets.js'),
+    './effectsWidgets.js',
+    'EFFECTS_WIDGETS',
+    ['detector-effects']
+  ),
   exposure: familyEntry(
     () => import('./exposureWidgets.js'),
     './exposureWidgets.js',
@@ -599,11 +605,12 @@ export async function whenWidgetsReady() {
   // The crater family reaches the plot component, as the atmosphere family
   // does, and its words (js/i18n/index.js): the same failure, so it too is
   // loaded after the rest. No import is added here either.
+  // The effects family reaches the same measuring layer, and is loaded after the rest for the same reason.
   // The strategy family reaches the same plot component, its observation
   // schema ("request for '../observatory/schema.js' is not linked") and the
   // forward models' setup, so it too is loaded after the rest (Prompt 214).
   const families = Object.keys(LAZY_FAMILIES);
-  const late = ['variables', 'crater', 'telescope', 'strategy'];
+  const late = ['variables', 'crater', 'telescope', 'effects', 'strategy'];
   await Promise.all(families.filter(f => !late.includes(f)).map(loadFamily));
   for (const f of late) await loadFamily(f);
   const results = await Promise.all([...familyReady.values()]);
