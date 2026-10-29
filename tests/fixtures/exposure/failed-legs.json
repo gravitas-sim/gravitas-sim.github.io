@@ -1,0 +1,120 @@
+{
+  "note": "Legs of tests/fixtures/exposure/thresholds.json that crossed their bound, kept failing and labelled (only Carl resets a bound).",
+  "failed": [
+    {
+      "id": "B2.readNoiseLoss",
+      "measured": {
+        "kernel": [0.825, 0.23, 0.117, 0.082, 0.054, 0.048],
+        "published": [0.62, 0.18, 0.1, 0.07, 0.05, 0.04],
+        "difference": [0.205, 0.05, 0.017, 0.012, 0.004, 0.008],
+        "failingBands": ["u", "g"]
+      },
+      "why": "The kernel and the independent implementation (B1) agree to 1e-13, so this is not a defect of the code: the CCD equation, with the table's sky, effective seeing, 0.2 arcsec pixels and two reads of 9 electrons, loses 0.83 mag to the read noise in u and 0.23 mag in g where the paper states 0.62 and 0.18. The paper's detailed throughput and noise model carries something the stated inputs do not (it says only that the constants come from 'current best throughput estimates'); the loss in r, i, z and y agrees to 0.017 mag or better."
+    },
+    {
+      "id": "B3.doubling",
+      "measured": {
+        "difference": {
+          "u@2": 0.047,
+          "u@4": 0.109,
+          "u@10": 0.177,
+          "g@2": 0.029,
+          "g@4": 0.045,
+          "g@10": 0.059,
+          "r@2": 0.01,
+          "r@4": 0.02,
+          "r@10": 0.026,
+          "i@2": 0.014,
+          "i@4": 0.016,
+          "i@10": 0.02,
+          "z@2": 0.01,
+          "z@4": 0.009,
+          "z@10": 0.012,
+          "y@2": 0.007,
+          "y@4": 0.012,
+          "y@10": 0.015
+        },
+        "failing": ["u@2", "u@4", "u@10", "g@4", "g@10"]
+      },
+      "why": "Same cause as B2: the correction for a longer exposure follows from the read-noise share (equation 7 is built on the published dCmInf), so where the share differs (u and g) the correction does. r, i, z and y agree to 0.026 mag."
+    },
+    {
+      "id": "B4.offFiducial",
+      "measured": {
+        "failing": [
+          "u sky-1",
+          "u sky+1",
+          "u 120 s",
+          "u combined",
+          "g sky-1",
+          "g sky+1",
+          "g combined",
+          "r sky-1",
+          "r sky+1",
+          "r combined",
+          "i sky-1",
+          "i sky+1",
+          "z sky+1",
+          "y sky+1"
+        ],
+        "difference": {
+          "u sky-1": 0.348,
+          "u sky+1": -0.438,
+          "u seeing x1.3": -0.002,
+          "u seeing x0.8": -0.015,
+          "u 60 s": 0.043,
+          "u 120 s": 0.101,
+          "u airmass 1.5": -0.002,
+          "u combined": 0.33,
+          "g sky-1": 0.13,
+          "g sky+1": -0.24,
+          "g seeing x1.3": 0.001,
+          "g seeing x0.8": -0.009,
+          "g 60 s": 0.022,
+          "g 120 s": 0.041,
+          "g airmass 1.5": 0,
+          "g combined": 0.106,
+          "r sky-1": 0.068,
+          "r sky+1": -0.152,
+          "r seeing x1.3": -0.002,
+          "r seeing x0.8": -0.009,
+          "r 60 s": 0.007,
+          "r 120 s": 0.015,
+          "r airmass 1.5": -0.002,
+          "r combined": 0.051,
+          "i sky-1": 0.058,
+          "i sky+1": -0.106,
+          "i seeing x1.3": 0.008,
+          "i seeing x0.8": 0.002,
+          "i 60 s": 0.015,
+          "i 120 s": 0.021,
+          "i airmass 1.5": 0.008,
+          "i combined": 0.046,
+          "z sky-1": 0.034,
+          "z sky+1": -0.081,
+          "z seeing x1.3": 0,
+          "z seeing x0.8": -0.005,
+          "z 60 s": 0.003,
+          "z 120 s": 0.006,
+          "z airmass 1.5": 0,
+          "z combined": 0.025,
+          "y sky-1": 0.037,
+          "y sky+1": -0.067,
+          "y seeing x1.3": 0.007,
+          "y seeing x0.8": 0.002,
+          "y 60 s": 0.012,
+          "y 120 s": 0.016,
+          "y airmass 1.5": 0.007,
+          "y combined": 0.031
+        }
+      },
+      "why": "Equation 6 holds the constant Cm fixed. Where the read noise matters (u, g and, at a sky 1 mag brighter or fainter, r to z) the read-noise share changes with the sky and the exposure, so a fixed Cm cannot follow it: the paper quotes its depth predictions as uncertain by 0.1 to 0.2 mag. The seeing, the airmass and the single-factor exposure conditions agree to 0.02 mag in r to y. The kernel agrees with the independent implementation in every condition (B1)."
+    }
+  ],
+  "notMeasured": [
+    {
+      "id": "E1.authentic",
+      "reason": "one real, calibrated exposure of a star of known catalogue magnitude with the exposure time, filter, airmass, sky level and read noise recorded in its header or its instrument's documentation, for example a Las Cumbres Observatory archive frame of a standard field; the decision (product, version, terms, rights basis, size) is Carl's. Nothing was downloaded and nothing is typed from memory."
+    }
+  ]
+}

@@ -311,7 +311,13 @@ export function planExposure(a) {
     nExp,
     extinction: ext,
   };
-  const rates = { source: p.rate, sky: skyRate, dark: darkRate, peak };
+  const rates = {
+    total,
+    source: p.rate,
+    sky: skyRate,
+    dark: darkRate,
+    peak,
+  };
   const base = { geometry, rates, airmass, extinctionMag: ext };
   const seconds = exposureForSnr({ ...p, snr: a.targetSnr });
   const limitSnr = a.limitSnr ?? 5;
