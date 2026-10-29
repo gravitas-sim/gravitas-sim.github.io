@@ -71,6 +71,7 @@ import { INSTRUCTOR as PLANETS } from './investigations/planets-sequence.js';
 import { INSTRUCTOR as EXPOSURE } from './investigations/exposure-sequence.js';
 import { INSTRUCTOR as TELESCOPE } from './investigations/telescope-sequence.js';
 import { INSTRUCTOR as SATURATED_STAR } from './investigations/saturated-star-sequence.js';
+import { INSTRUCTOR as PHOTCAL } from './investigations/photometric-calibration-sequence.js';
 
 export const LESSON_BANDS = Object.freeze({
   ...MEASUREMENT.bands,
@@ -80,6 +81,7 @@ export const LESSON_BANDS = Object.freeze({
   ...EXPOSURE.bands,
   ...TELESCOPE.bands,
   ...SATURATED_STAR.bands,
+  ...PHOTCAL.bands,
   'keplers-laws': { core: 'medium', quantitative: 'long', advanced: 'long' },
   'retrograde-motion': { core: 'medium' },
   'transit-photometry': {

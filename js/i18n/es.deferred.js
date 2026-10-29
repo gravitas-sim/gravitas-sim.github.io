@@ -2017,6 +2017,8 @@ export const ES_DEFERRED = {
     'Qué hacen la apertura y el aire con un par de estrellas.',
   'inv.seq.observing.the-saturated-star':
     'Por qué la estrella más brillante tiene la magnitud equivocada, y qué hacen el desbordamiento y los rayos cósmicos.',
+  'inv.seq.observing.counts-to-magnitudes':
+    'Por qué una estrella se ve más débil cerca del horizonte, y cómo una noche de patrones da magnitudes.',
   'inv.seq.depth.core': 'Profundidad básica',
   'inv.seq.depth.quantitative': 'Profundidad cuantitativa',
   'inv.seq.depth.advanced': 'Profundidad avanzada',

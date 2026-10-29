@@ -1100,6 +1100,19 @@ export const MANIFEST = [
     objectiveCount: 4,
   },
   {
+    id: 'counts-to-magnitudes',
+    title: 'Counts to Magnitudes',
+    subtitle:
+      'Why a star looks fainter low in the sky, how a night of standard stars turns counts into magnitudes, and what the calibration cannot tell you',
+    duration: '10-20 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/counts-to-magnitudes.webp',
+    depths: 3,
+    stepCount: 6,
+    gradedCount: 4,
+    objectiveCount: 4,
+  },
+  {
     id: 'plan-an-exposure',
     title: 'Plan an Exposure',
     subtitle:

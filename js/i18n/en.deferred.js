@@ -1996,6 +1996,8 @@ export const EN_DEFERRED = {
     'What aperture and the air do to a pair of stars.',
   'inv.seq.observing.the-saturated-star':
     'Why the brightest star has the wrong magnitude, and what bleeding and cosmic rays do.',
+  'inv.seq.observing.counts-to-magnitudes':
+    'Why a star looks fainter low in the sky, and how a night of standards makes magnitudes.',
   'inv.seq.depth.core': 'Core depth',
   'inv.seq.depth.quantitative': 'Quantitative depth',
   'inv.seq.depth.advanced': 'Advanced depth',
