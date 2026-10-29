@@ -160,6 +160,8 @@ const DEEPER = {
     import('./data/investigations/depth/how-hot-is-the-day-side.js'),
   'phases-and-albedo': () =>
     import('./data/investigations/depth/phases-and-albedo.js'),
+  'what-a-telescope-resolves': () =>
+    import('./data/investigations/depth/what-a-telescope-resolves.js'),
   'which-surface-is-older': () =>
     import('./data/investigations/depth/which-surface-is-older.js'),
   'craters-by-size': () =>

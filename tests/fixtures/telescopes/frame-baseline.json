@@ -1,0 +1,16 @@
+{
+  "note": "SHA-256 of the Float64 values of simulateFrame(spec) from js/kernels/detector/frame.js at origin/v3 b32076cb, before Prompt 208 touched it. Check F1 requires the default path (no psf supplied) to reproduce it.",
+  "spec": {
+    "seed": "telescopes-208-baseline",
+    "exposure": 30,
+    "detector": { "width": 48, "height": 48 },
+    "scene": {
+      "sky": 3,
+      "sources": [
+        { "x": 20.3, "y": 24.1, "rate": 600 },
+        { "x": 33.7, "y": 10.2, "rate": 2500 }
+      ]
+    }
+  },
+  "sha256": "6c111d7e94ccaa043bb90bdde423948f1c73b2eadad7d8d5fcd222b724025a39"
+}

@@ -149,6 +149,7 @@ catalogue refers to it, so a change to it can reach a student.
 | [SUPPORT.md](SUPPORT.md) | How to get help, and the supported browsers and versions. | policy | P129 | written | yes |
 | [SURFACE_RETIREMENT_GATE.md](SURFACE_RETIREMENT_GATE.md) | The surface-retirement and consolidation gate: the decision function, the link-support policy and the verdict on every surface. | gate | P165 | written | no |
 | [EXPOSURE_PLANNING.md](EXPOSURE_PLANNING.md) | Exposure planning: the CCD equation with several exposures, extended sources, the limiting magnitude and the plan, the facility adapter, the planner, validation and failed legs (Prompt 210). | feature | P210 | written | yes |
+| [TELESCOPES.md](TELESCOPES.md) | Telescopes over the existing PSF: the annular Airy pattern, Moffat seeing, the Rayleigh angle against the measured width, light gathering, validation (Prompt 208). | feature | P208 | written | yes |
 | [TIDAL_KERNEL.md](TIDAL_KERNEL.md) | Rings, Roche limits and analytic tides: the constant-Q kernel, its equations, limits and validation (Prompt 204, part A). | feature | P204 | written | yes |
 | [TIDAL_TORQUE_GATE.md](TIDAL_TORQUE_GATE.md) | The tidal-torque gate: whether an engine scenario may apply a tidal torque as an extra force (Prompt 204, part B). | gate | P204 | written | yes |
 | [TIME_DOMAIN_LADDER.md](TIME_DOMAIN_LADDER.md) | Time-domain astronomy and the first distance-ladder rung. | feature | P96 | written | yes |

@@ -209,8 +209,9 @@ describe('the instructor expectations record', () => {
     // 452 after the two small-body investigations (Prompt 198 part 3): 5 more.
     // 447 after How Hot Is the Day Side? and Phases and Albedo (Prompt 202): 8 more.
     // 462 after the three planetary investigations (Prompt 206): 10 more.
-    // 465 after Plan an Exposure (Prompt 210): 3 more.
-    expect(total).toBe(465);
+    // 464 after What a Telescope Resolves (Prompt 208): 2 more.
+    // 467 after Plan an Exposure (Prompt 210): 3 more.
+    expect(total).toBe(467);
   });
 
   test('a /1 record keyed by step number migrates to the same text', () => {

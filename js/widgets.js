@@ -403,6 +403,12 @@ export const LAZY_FAMILIES = Object.freeze({
     'HABITABILITY_LIMIT_WIDGETS',
     ['hz-limits', 'hz-locking', 'hz-ages']
   ),
+  telescope: familyEntry(
+    () => import('./telescopeWidgets.js'),
+    './telescopeWidgets.js',
+    'TELESCOPE_WIDGETS',
+    ['telescope']
+  ),
 });
 // </generated:lazy-families>
 
@@ -581,11 +587,14 @@ export async function whenWidgetsReady() {
   // loaded machine, jest's linker lost it ("request for '../setup.js' is not in
   // cache"). It is loaded after the rest, so that setup is already linked. This
   // adds no import, so no chunk and no request.
+  // The telescope family reaches the data-kind contract the imaging family
+  // reaches (its measuring layer is the same): the same failure, "request for
+  // './limits.js' is not in cache", so it too is loaded after the rest.
   // The crater family reaches the plot component, as the atmosphere family
   // does, and its words (js/i18n/index.js): the same failure, so it too is
   // loaded after the rest. No import is added here either.
   const families = Object.keys(LAZY_FAMILIES);
-  const late = ['variables', 'crater'];
+  const late = ['variables', 'crater', 'telescope'];
   await Promise.all(families.filter(f => !late.includes(f)).map(loadFamily));
   for (const f of late) await loadFamily(f);
   const results = await Promise.all([...familyReady.values()]);

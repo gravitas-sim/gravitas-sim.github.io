@@ -1992,6 +1992,8 @@ export const EN_DEFERRED = {
     'Turn the CCD equation into a plan: how long, and what limits it.',
   'inv.seq.observing.the-completeness-curve':
     'Put a number on what a survey misses, and correct for it.',
+  'inv.seq.observing.what-a-telescope-resolves':
+    'What aperture and the air do to a pair of stars.',
   'inv.seq.depth.core': 'Core depth',
   'inv.seq.depth.quantitative': 'Quantitative depth',
   'inv.seq.depth.advanced': 'Advanced depth',

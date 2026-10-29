@@ -13,6 +13,7 @@ import { INSTRUCTOR as SATELLITE } from './investigations/depth/satellite-sequen
 import { INSTRUCTOR as ATMOSPHERE } from './investigations/depth/atmosphere-sequence.js';
 import { INSTRUCTOR as PLANETS } from './investigations/planets-sequence.js';
 import { INSTRUCTOR as EXPOSURE } from './investigations/exposure-sequence.js';
+import { INSTRUCTOR as TELESCOPE } from './investigations/telescope-sequence.js';
 
 export const INSTRUCTOR_CONTENT = {
   ...MEASUREMENT.content,
@@ -20,6 +21,7 @@ export const INSTRUCTOR_CONTENT = {
   ...ATMOSPHERE.content,
   ...PLANETS.content,
   ...EXPOSURE.content,
+  ...TELESCOPE.content,
   'extending-an-experiment': {
     topic:
       'Classifying an experiment’s trials, fitting the chance of an outcome with a bootstrap, and extending it to a large synthetic population, in Python, with the limits of what the interval covers',

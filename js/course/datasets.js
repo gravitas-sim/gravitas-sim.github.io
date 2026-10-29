@@ -197,6 +197,7 @@ export const GUIDED = Object.freeze([
   'what-a-ccd-records',
   'what-a-crater-diameter-is-worth',
   'what-a-spectrum-is-made-of',
+  'what-a-telescope-resolves',
   'what-does-plus-minus-claim',
   'what-is-a-gravitational-wave',
   'what-is-a-measurement',

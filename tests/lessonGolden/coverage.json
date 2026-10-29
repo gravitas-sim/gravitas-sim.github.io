@@ -262,7 +262,7 @@
   ],
   "totals": {
     "investigations": 86,
-    "steps": 1501,
+    "steps": 1499,
     "activityCuts": 6,
     "lessonTokens": 142,
     "activityTokens": 29,
@@ -270,8 +270,8 @@
       "read": 284,
       "predict": 166,
       "ellipse": 1,
-      "question": 530,
-      "measure": 375,
+      "question": 524,
+      "measure": 379,
       "explore": 144,
       "wedges": 1
     }

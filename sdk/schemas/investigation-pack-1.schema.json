@@ -117,7 +117,8 @@
           "moons-of-the-giants",
           "the-scale-of-the-solar-system",
           "comets-and-the-sun",
-          "plan-an-exposure"
+"what-a-telescope-resolves",
+"plan-an-exposure"
         ]
       }
     },
@@ -383,7 +384,8 @@
                   "moons-of-the-giants",
                   "the-scale-of-the-solar-system",
                   "comets-and-the-sun",
-                  "plan-an-exposure"
+"what-a-telescope-resolves",
+"plan-an-exposure"
                 ]
               }
             }
@@ -1465,6 +1467,7 @@
             "ccd-frames",
             "ccd-snr",
             "diff-photometry",
+            "telescope",
             "sky-turning",
             "sky-seasons",
             "sky-phases",

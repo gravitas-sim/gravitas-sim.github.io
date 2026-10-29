@@ -1083,15 +1083,16 @@ export const MANIFEST = [
     objectiveCount: 4,
   },
   {
-    id: 'plan-an-exposure',
-    title: 'Planifica una exposición',
+    id: 'what-a-telescope-resolves',
+    title: 'Qué resuelve un telescopio',
     subtitle:
-      'Cuánto exponer una estrella débil para una señal a ruido de 20, qué la limita, qué cuestan dividirla, el aire y la Luna, y qué responde una imagen',
+      'Qué apertura muestra dos estrellas como dos, cuándo aparece la estrella débil y por qué la anchura de una estrella no es el límite del telescopio',
     duration: '15-25 min',
-    level: 'Majors and upper-level astronomy',
-    thumbnail: 'images/investigations/plan-an-exposure.webp',
-    stepCount: 11,
-    gradedCount: 9,
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/what-a-telescope-resolves.webp',
+    depths: 3,
+    stepCount: 7,
+    gradedCount: 5,
     objectiveCount: 4,
   },
 ];

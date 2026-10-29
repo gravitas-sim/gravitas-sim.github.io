@@ -870,14 +870,14 @@ export const DISCOVERY = {
     },
     courseLevel: 'survey',
   },
-  'plan-an-exposure': {
+  'what-a-telescope-resolves': {
     audience: 'intro',
     mathematics: 'algebra',
-    prerequisites: ['signal-noise-and-exposure'],
+    prerequisites: [],
     textbook: {
       chapter: 6,
       section: null,
     },
-    courseLevel: 'majors',
+    courseLevel: 'survey',
   },
 };

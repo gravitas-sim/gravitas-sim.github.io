@@ -8,3 +8,5 @@ export * from './bands.js';
 export * from './lightcurve.js';
 export * from './pipeline.js';
 export * from './lab.js';
+export * from './optics.js';
+export * from './telescope.js';

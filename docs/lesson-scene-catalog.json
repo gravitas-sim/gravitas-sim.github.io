@@ -526,25 +526,6 @@
    "mutates": [],
    "datasets": []
   },
-  "exposure-planner": {
-   "live": false,
-   "controls": [
-    "setup",
-    "kind",
-    "mag",
-    "aperture",
-    "patch",
-    "exposures",
-    "target",
-    "airmass",
-    "moon"
-   ],
-   "presets": 0,
-   "buttons": [],
-   "engineReads": [],
-   "mutates": [],
-   "datasets": []
-  },
   "field-completeness": {
    "live": false,
    "controls": [
@@ -1663,6 +1644,24 @@
      "binding": "HD209458"
     }
    ]
+  },
+  "telescope": {
+   "live": false,
+   "controls": [
+    "aperture",
+    "focal",
+    "wavelength",
+    "seeing",
+    "obstruction",
+    "exposure",
+    "scene",
+    "separation"
+   ],
+   "presets": 0,
+   "buttons": [],
+   "engineReads": [],
+   "mutates": [],
+   "datasets": []
   },
   "tide-balance": {
    "live": false,
@@ -97022,18 +97021,18 @@
    }
   },
   {
-   "id": "plan-an-exposure",
-   "title": "Plan an Exposure",
+   "id": "what-a-telescope-resolves",
+   "title": "What a Telescope Resolves",
    "lock": {
     "placement": true,
     "inspector": true
    },
    "steps": [
     {
-     "sid": "what-a-plan-is",
+     "sid": "a-pair-of-stars",
      "index": 1,
      "type": "read",
-     "title": "A plan from the equation",
+     "title": "A pair of stars",
      "declares": {
       "stage": {
        "objects": 1,
@@ -97088,7 +97087,7 @@
       "eventWatch": null
      },
      "instrument": {
-      "id": "exposure-planner",
+      "id": "telescope",
       "capture": false
      },
      "evidence": [],
@@ -97102,10 +97101,10 @@
      ]
     },
     {
-     "sid": "predict-the-limit",
+     "sid": "smallest-aperture-predict",
      "index": 2,
      "type": "predict",
-     "title": "What limits a faint star",
+     "title": "Which aperture shows two stars?",
      "declares": {
       "stage": {
        "objects": 1,
@@ -97129,7 +97128,7 @@
       "move-an-instrument-control"
      ],
      "requires": [],
-     "reveal": "the-plan",
+     "reveal": "dips",
      "asks": {
       "choice": true,
       "numeric": false,
@@ -97163,7 +97162,7 @@
       "eventWatch": null
      },
      "instrument": {
-      "id": "exposure-planner",
+      "id": "telescope",
       "capture": false
      },
      "evidence": [],
@@ -97176,10 +97175,10 @@
      ]
     },
     {
-     "sid": "the-plan",
+     "sid": "dips",
      "index": 3,
      "type": "measure",
-     "title": "The plan for a signal-to-noise of 20",
+     "title": "The dip between the stars",
      "declares": {
       "stage": {
        "objects": 1,
@@ -97237,7 +97236,7 @@
       "eventWatch": null
      },
      "instrument": {
-      "id": "exposure-planner",
+      "id": "telescope",
       "capture": false
      },
      "evidence": [
@@ -97253,10 +97252,10 @@
      ]
     },
     {
-     "sid": "predict-more-exposures",
+     "sid": "faint-star-predict",
      "index": 4,
      "type": "predict",
-     "title": "Splitting the exposure",
+     "title": "Bringing out a faint star",
      "declares": {
       "stage": {
        "objects": 1,
@@ -97280,7 +97279,7 @@
       "move-an-instrument-control"
      ],
      "requires": [],
-     "reveal": "twenty-exposures",
+     "reveal": "faint-appears",
      "asks": {
       "choice": true,
       "numeric": false,
@@ -97314,7 +97313,7 @@
       "eventWatch": null
      },
      "instrument": {
-      "id": "exposure-planner",
+      "id": "telescope",
       "capture": false
      },
      "evidence": [],
@@ -97327,10 +97326,10 @@
      ]
     },
     {
-     "sid": "twenty-exposures",
+     "sid": "faint-appears",
      "index": 5,
      "type": "measure",
-     "title": "Twenty exposures",
+     "title": "When the faint star appears",
      "declares": {
       "stage": {
        "objects": 1,
@@ -97388,7 +97387,7 @@
       "eventWatch": null
      },
      "instrument": {
-      "id": "exposure-planner",
+      "id": "telescope",
       "capture": false
      },
      "evidence": [
@@ -97404,10 +97403,10 @@
      ]
     },
     {
-     "sid": "airmass-cost",
+     "sid": "magnification",
      "index": 6,
      "type": "question",
-     "title": "What the air costs",
+     "title": "Is magnification what a telescope is for?",
      "declares": {
       "stage": {
        "objects": 1,
@@ -97427,13 +97426,14 @@
       "panel-diagram"
      ],
      "actions": [
+      "choose-an-option",
       "move-an-instrument-control"
      ],
      "requires": [],
      "reveal": null,
      "asks": {
-      "choice": false,
-      "numeric": true,
+      "choice": true,
+      "numeric": false,
       "short": false,
       "rubric": false,
       "validated": false
@@ -97463,7 +97463,7 @@
       "eventWatch": null
      },
      "instrument": {
-      "id": "exposure-planner",
+      "id": "telescope",
       "capture": false
      },
      "evidence": [],
@@ -97476,305 +97476,10 @@
      ]
     },
     {
-     "sid": "the-moon",
+     "sid": "two-widths",
      "index": 7,
-     "type": "question",
-     "title": "What the moon costs",
-     "declares": {
-      "stage": {
-       "objects": 1,
-       "kind": "named",
-       "scale": "display",
-       "fits": true,
-       "anonymous": false
-      },
-      "bound": [],
-      "roles": [
-       "star"
-      ]
-     },
-     "kinds": [
-      "scene-declared",
-      "model-result",
-      "panel-diagram"
-     ],
-     "actions": [
-      "move-an-instrument-control"
-     ],
-     "requires": [],
-     "reveal": null,
-     "asks": {
-      "choice": false,
-      "numeric": true,
-      "short": false,
-      "rubric": false,
-      "validated": false
-     },
-     "worldRunning": "inherited",
-     "affordances": {
-      "inspector": "locked",
-      "placement": "locked",
-      "areaSweep": "locked"
-     },
-     "loop": {
-      "declared": "interpret",
-      "actual": [
-       "experiment",
-       "measure",
-       "interpret"
-      ],
-      "handTranscribed": false,
-      "mismatch": null
-     },
-     "scene": {
-      "nameMatches": [],
-      "readsSelection": false,
-      "importsFromSelection": false,
-      "engineReads": [],
-      "mutates": [],
-      "eventWatch": null
-     },
-     "instrument": {
-      "id": "exposure-planner",
-      "capture": false
-     },
-     "evidence": [],
-     "reset": [
-      "stamps instrument values",
-      "lesson locks: placement, inspector"
-     ],
-     "recovery": [
-      "wrong body: the object list names what the step staged"
-     ]
-    },
-    {
-     "sid": "on-the-frame",
-     "index": 8,
-     "type": "measure",
-     "title": "What the frame says back",
-     "declares": {
-      "stage": {
-       "objects": 1,
-       "kind": "named",
-       "scale": "display",
-       "fits": true,
-       "anonymous": false
-      },
-      "bound": [],
-      "roles": [
-       "star"
-      ]
-     },
-     "kinds": [
-      "scene-declared",
-      "model-result",
-      "panel-diagram",
-      "captured-evidence"
-     ],
-     "actions": [
-      "record-values",
-      "move-an-instrument-control"
-     ],
-     "requires": [],
-     "reveal": null,
-     "asks": {
-      "choice": false,
-      "numeric": false,
-      "short": false,
-      "rubric": false,
-      "validated": true
-     },
-     "worldRunning": "inherited",
-     "affordances": {
-      "inspector": "locked",
-      "placement": "locked",
-      "areaSweep": "locked"
-     },
-     "loop": {
-      "declared": "measure",
-      "actual": [
-       "experiment",
-       "measure",
-       "interpret"
-      ],
-      "handTranscribed": false,
-      "mismatch": null
-     },
-     "scene": {
-      "nameMatches": [],
-      "readsSelection": false,
-      "importsFromSelection": false,
-      "engineReads": [],
-      "mutates": [],
-      "eventWatch": null
-     },
-     "instrument": {
-      "id": "exposure-planner",
-      "capture": false
-     },
-     "evidence": [
-      "notebook-fields"
-     ],
-     "reset": [
-      "stamps instrument values",
-      "lesson locks: placement, inspector"
-     ],
-     "recovery": [
-      "wrong body: the object list names what the step staged",
-      "ambiguous result: the check says in words how close is close enough"
-     ]
-    },
-    {
-     "sid": "cannot-be-reached",
-     "index": 9,
-     "type": "question",
-     "title": "A target the exposure limit forbids",
-     "declares": {
-      "stage": {
-       "objects": 1,
-       "kind": "named",
-       "scale": "display",
-       "fits": true,
-       "anonymous": false
-      },
-      "bound": [],
-      "roles": [
-       "star"
-      ]
-     },
-     "kinds": [
-      "scene-declared",
-      "model-result",
-      "panel-diagram"
-     ],
-     "actions": [
-      "choose-an-option",
-      "move-an-instrument-control"
-     ],
-     "requires": [],
-     "reveal": null,
-     "asks": {
-      "choice": true,
-      "numeric": false,
-      "short": false,
-      "rubric": false,
-      "validated": false
-     },
-     "worldRunning": "inherited",
-     "affordances": {
-      "inspector": "locked",
-      "placement": "locked",
-      "areaSweep": "locked"
-     },
-     "loop": {
-      "declared": "interpret",
-      "actual": [
-       "experiment",
-       "measure",
-       "interpret"
-      ],
-      "handTranscribed": false,
-      "mismatch": null
-     },
-     "scene": {
-      "nameMatches": [],
-      "readsSelection": false,
-      "importsFromSelection": false,
-      "engineReads": [],
-      "mutates": [],
-      "eventWatch": null
-     },
-     "instrument": {
-      "id": "exposure-planner",
-      "capture": false
-     },
-     "evidence": [],
-     "reset": [
-      "stamps instrument values",
-      "lesson locks: placement, inspector"
-     ],
-     "recovery": [
-      "wrong body: the object list names what the step staged"
-     ]
-    },
-    {
-     "sid": "what-the-plan-leaves-out",
-     "index": 10,
-     "type": "question",
-     "title": "What the calculation leaves out",
-     "declares": {
-      "stage": {
-       "objects": 1,
-       "kind": "named",
-       "scale": "display",
-       "fits": true,
-       "anonymous": false
-      },
-      "bound": [],
-      "roles": [
-       "star"
-      ]
-     },
-     "kinds": [
-      "scene-declared",
-      "model-result",
-      "panel-diagram"
-     ],
-     "actions": [
-      "choose-an-option",
-      "move-an-instrument-control"
-     ],
-     "requires": [],
-     "reveal": null,
-     "asks": {
-      "choice": true,
-      "numeric": false,
-      "short": false,
-      "rubric": false,
-      "validated": false
-     },
-     "worldRunning": "inherited",
-     "affordances": {
-      "inspector": "locked",
-      "placement": "locked",
-      "areaSweep": "locked"
-     },
-     "loop": {
-      "declared": "interpret",
-      "actual": [
-       "experiment",
-       "measure",
-       "interpret"
-      ],
-      "handTranscribed": false,
-      "mismatch": null
-     },
-     "scene": {
-      "nameMatches": [],
-      "readsSelection": false,
-      "importsFromSelection": false,
-      "engineReads": [],
-      "mutates": [],
-      "eventWatch": null
-     },
-     "instrument": {
-      "id": "exposure-planner",
-      "capture": false
-     },
-     "evidence": [],
-     "reset": [
-      "stamps instrument values",
-      "lesson locks: placement, inspector"
-     ],
-     "recovery": [
-      "wrong body: the object list names what the step staged"
-     ]
-    },
-    {
-     "sid": "what-you-worked-out",
-     "index": 11,
      "type": "read",
-     "title": "What you worked out",
+     "title": "Two widths, kept apart",
      "declares": {
       "stage": {
        "objects": 1,
@@ -97829,7 +97534,7 @@
       "eventWatch": null
      },
      "instrument": {
-      "id": "exposure-planner",
+      "id": "telescope",
       "capture": false
      },
      "evidence": [],
@@ -97844,19 +97549,19 @@
    ],
    "loops": [
     {
-     "predict": "predict-the-limit",
+     "predict": "smallest-aperture-predict",
      "predictCollects": true,
-     "heldUntil": "the-plan",
+     "heldUntil": "dips",
      "experiment": [
-      "the-plan"
+      "dips"
      ],
      "measure": [
-      "the-plan"
+      "dips"
      ],
      "evidence": [
-      "the-plan"
+      "dips"
      ],
-     "interpret": "the-plan",
+     "interpret": "dips",
      "measuredBeforeAnswering": true,
      "explained": false,
      "answeredByTheExperiment": true,
@@ -97864,32 +97569,23 @@
      "complete": true
     },
     {
-     "predict": "predict-more-exposures",
+     "predict": "faint-star-predict",
      "predictCollects": true,
-     "heldUntil": "twenty-exposures",
+     "heldUntil": "faint-appears",
      "experiment": [
-      "twenty-exposures",
-      "airmass-cost",
-      "the-moon",
-      "on-the-frame",
-      "cannot-be-reached",
-      "what-the-plan-leaves-out",
-      "what-you-worked-out"
+      "faint-appears",
+      "magnification",
+      "two-widths"
      ],
      "measure": [
-      "twenty-exposures",
-      "airmass-cost",
-      "the-moon",
-      "on-the-frame",
-      "cannot-be-reached",
-      "what-the-plan-leaves-out",
-      "what-you-worked-out"
+      "faint-appears",
+      "magnification",
+      "two-widths"
      ],
      "evidence": [
-      "twenty-exposures",
-      "on-the-frame"
+      "faint-appears"
      ],
-     "interpret": "twenty-exposures",
+     "interpret": "faint-appears",
      "measuredBeforeAnswering": true,
      "explained": false,
      "answeredByTheExperiment": true,
@@ -97898,16 +97594,16 @@
     }
    ],
    "totals": {
-    "steps": 11,
-    "declared": 11,
+    "steps": 7,
+    "declared": 7,
     "student": 0,
     "engine": 0,
-    "model": 11,
+    "model": 7,
     "data": 0,
-    "diagram": 11,
-    "evidence": 3,
+    "diagram": 7,
+    "evidence": 2,
     "computation": 0,
-    "declaredButInert": 11,
+    "declaredButInert": 7,
     "prose": 0,
     "mismatched": 0,
     "rebuilds": 0
@@ -97915,16 +97611,16 @@
   }
  ],
  "totals": {
-  "steps": 1253,
-  "declared": 1161,
+  "steps": 1249,
+  "declared": 1157,
   "student": 157,
   "engine": 167,
-  "model": 752,
+  "model": 748,
   "data": 146,
-  "diagram": 631,
-  "evidence": 330,
+  "diagram": 627,
+  "evidence": 329,
   "computation": 14,
-  "declaredButInert": 1004,
+  "declaredButInert": 1000,
   "prose": 58,
   "mismatched": 0,
   "rebuilds": 80,

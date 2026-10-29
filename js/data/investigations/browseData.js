@@ -355,5 +355,8 @@ export const BROWSE_META = {
   'plan-an-exposure': {
     tags: ['observing'],
     numericCount: 2,
+  'what-a-telescope-resolves': {
+    tags: ['observing'],
+    numericCount: 0,
   },
 };

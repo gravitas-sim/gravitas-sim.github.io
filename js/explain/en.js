@@ -196,6 +196,12 @@ export default {
     'Why one frame a night cannot give Io’s period, and why the period the Earth sees is not quite the orbital one.',
     'The frames are synthetic, made from JPL Horizons positions; the mass is the planet’s alone and leaves out its oblateness.',
   ],
+  telescope: [
+    'A synthetic double star or a faint field through a telescope you describe: its aperture, focal ratio, wavelength, central obstruction and exposure, and the blur of the air.',
+    'The Rayleigh separation of the aperture (computed) beside the width fitted to the stars in the frame (measured), the dip between the two stars, whether the faint star is listed, the light gathered and the plate scale.',
+    'Which aperture shows a close pair as two, how aperture and exposure bring out a faint star, why the width of a star is not the telescope’s limit, and why a bigger ground telescope stops resolving finer detail near the seeing.',
+    'The frames are synthetic: an Airy pattern convolved with a Moffat seeing profile of stated width, one wavelength, no aberrations, adaptive optics or spider, a box pixel. The seeing is an input, not a site.',
+  ],
   atmosphere: [
     'The temperature sunlight alone gives a planet beside the temperature measured there, a one-layer and a gray greenhouse side by side for one planet, or how quickly the pressure falls with height. Or four secondary-eclipse depths with the temperature each gives, or a planet’s phase curve with the albedo it fixes.',
     'How far the measured temperature of Venus, Earth, Mars and the giant planets is from their equilibrium temperature, what emissivity or optical depth each greenhouse model needs to close the gap, and the scale height each body implies.',

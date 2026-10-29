@@ -1130,6 +1130,19 @@
         "twenty-exposures"
       ],
       "evidenceFrom": "model"
+    },
+    "what-a-telescope-resolves": {
+      "centralExperimentId": "ce.what-a-telescope-resolves",
+      "object": "panel:telescope",
+      "control": "telescope/aperture",
+      "quantity": "the dip between two stars 1 arcsecond apart, in percent of the light at a star, with 0.6 arcseconds of seeing: 0 at 10 cm and 50.3 at 40 cm",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "smallest-aperture-predict",
+        "dips"
+      ],
+      "evidenceFrom": "model"
     }
   }
 }

@@ -968,10 +968,10 @@
       "student": false
     },
     {
-      "file": "EXPOSURE_PLANNING.md",
+      "file": "TELESCOPES.md",
       "kind": "feature",
-      "purpose": "Exposure planning: the CCD equation with several exposures, extended sources, the limiting magnitude and the plan, the facility adapter, the planner, validation and failed legs (Prompt 210).",
-      "owner": 210,
+      "purpose": "Telescopes over the existing PSF: the annular Airy pattern, Moffat seeing, the Rayleigh angle against the measured width, light gathering, validation (Prompt 208).",
+      "owner": 208,
       "student": true
     },
     {

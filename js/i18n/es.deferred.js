@@ -2013,6 +2013,8 @@ export const ES_DEFERRED = {
     'Convierte la ecuación del CCD en un plan: cuánto exponer y qué lo limita.',
   'inv.seq.observing.the-completeness-curve':
     'Pon un número a lo que un sondeo pierde y corrígelo.',
+  'inv.seq.observing.what-a-telescope-resolves':
+    'Qué hacen la apertura y el aire con un par de estrellas.',
   'inv.seq.depth.core': 'Profundidad básica',
   'inv.seq.depth.quantitative': 'Profundidad cuantitativa',
   'inv.seq.depth.advanced': 'Profundidad avanzada',

@@ -1074,15 +1074,16 @@ export const MANIFEST = [
     objectiveCount: 4,
   },
   {
-    id: 'plan-an-exposure',
-    title: 'Plan an Exposure',
+    id: 'what-a-telescope-resolves',
+    title: 'What a Telescope Resolves',
     subtitle:
-      'How long to expose a faint star for a signal-to-noise of 20, what limits it, what splitting it, the air and the moon cost, and what a frame says back',
+      'Which aperture shows two stars as two, when the faint star appears, and why the width of a star is not the limit of the telescope',
     duration: '15-25 min',
-    level: 'Majors and upper-level astronomy',
-    thumbnail: 'images/investigations/plan-an-exposure.webp',
-    stepCount: 11,
-    gradedCount: 9,
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/what-a-telescope-resolves.webp',
+    depths: 3,
+    stepCount: 7,
+    gradedCount: 5,
     objectiveCount: 4,
   },
 ];

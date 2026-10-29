@@ -472,6 +472,10 @@ export const NEVER_PRECACHED = [
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(plan-an-exposure|exposure-sequence)\.js$/,
   /^(js\/exposureWidgets\.js|js\/exposureField\.js|js\/i18n\/(en|es)\.exposure\.js)$/,
   /^js\/instruments\/(exposure|exposureSky)\.js$/,
+  // Prompt 208: the telescope instrument, its optics and its one lesson file (D-R10-208-02).
+  /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(what-a-telescope-resolves|telescope-sequence)\.js$/,
+  /^(js\/telescopeWidgets\.js|js\/telescopeField\.js|js\/i18n\/(en|es)\.telescope\.js)$/,
+  /^js\/kernels\/detector\/(optics|telescope)\.js$/,
 ];
 
 const ON_DEMAND_ONLY = new Set([
