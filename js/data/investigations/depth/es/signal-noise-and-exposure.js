@@ -95,7 +95,7 @@ export default {
         'Los fotones de la propia estrella son un 69 por ciento del ruido al cuadrado (el cielo 17, el ruido de lectura 13, la corriente oscura 1). Una estrella tan brillante está limitada por su propia luz: solo ayuda más luz.',
       feedback: {
         close:
-          'Casi. Lee la columna de la parte del término mayor en la tabla.',
+          'Casi. Divide el término mayor entre el cuadrado del ruido total.',
         'wrong-order-of-magnitude': 'Una parte entre cero y cien por ciento.',
         off: 'El mayor de los cuatro términos, como porcentaje del ruido al cuadrado.',
       },
@@ -112,7 +112,7 @@ export default {
         'El ruido de lectura es un 77 por ciento del ruido al cuadrado. Una estrella débil en una exposición corta está limitada por la cámara, no por el cielo ni por la estrella: leer los píxeles cuesta lo mismo por larga que fuera la exposición.',
       feedback: {
         close:
-          'Casi. Lee la columna de la parte del término mayor en la tabla.',
+          'Casi. Divide el término mayor entre el cuadrado del ruido total.',
         'wrong-order-of-magnitude': 'Una parte entre cero y cien por ciento.',
         off: 'El mayor de los cuatro términos, como porcentaje del ruido al cuadrado.',
       },
@@ -129,7 +129,7 @@ export default {
         'El cielo es un 97 por ciento del ruido al cuadrado. La luz extra de la Luna añade ruido en cada píxel, y a los 300 segundos el ruido de lectura se ha vuelto un error de redondeo: la estrella está limitada por el cielo, el régimen donde vale la ley de la raíz cuadrada y donde una exposición más larga rinde más.',
       feedback: {
         close:
-          'Casi. Lee la columna de la parte del término mayor en la tabla.',
+          'Casi. Divide el término mayor entre el cuadrado del ruido total.',
         'wrong-order-of-magnitude': 'Una parte entre cero y cien por ciento.',
         off: 'El mayor de los cuatro términos, como porcentaje del ruido al cuadrado.',
       },
