@@ -381,6 +381,11 @@ const PLAN = {
           emphasis: true,
         },
         {
+          label: t('sdW.p.row.dens'),
+          value: t('sdW.p.v.dens', { n: big(r.counts.perDeg2.detected) }),
+          emphasis: true,
+        },
+        {
           label: t('sdW.p.row.false'),
           value:
             t('sdW.p.v.false', {

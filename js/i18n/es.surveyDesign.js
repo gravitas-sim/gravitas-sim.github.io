@@ -75,6 +75,8 @@ export const ES_SURVEYDESIGN = {
   'sdW.p.row.found': 'Fuentes encontradas',
   'sdW.p.v.found':
     '{n} (intervalo del 68 por ciento de {lo} a {hi}) de {s} en la clase hasta esa profundidad',
+  'sdW.p.row.dens': 'Por grado cuadrado',
+  'sdW.p.v.dens': '{n} fuentes encontradas por grado cuadrado',
   'sdW.p.row.false': 'Falsos positivos',
   'sdW.p.v.false': '{n} esperados; fiabilidad {r} por ciento',
   'sdW.p.v.unreliable':
@@ -125,4 +127,27 @@ export const ES_SURVEYDESIGN = {
     'ningún apilado de esta exposición alcanza la profundidad',
   'sdW.c.a':
     'El mismo umbral de detección y la misma exposición por visita en ambas, un rendimiento supuesto de 0,5 cada una, sin solapes ni huecos entre apuntados y la misma fracción despejada. Otra exposición cambiaría la respuesta.',
+  'sdP.badFacility':
+    'La instalación es un número de 1 a {n}: 1 es el LCO 0,35 m, 2 el LCO 1,0 m y 3 Rubin.',
+  'sdP.refused': 'Este plan no se puede evaluar: {code}.',
+  'sdP.code.bad-exposure':
+    'la exposición debe ser un número positivo de segundos',
+  'sdP.code.bad-visits': 'las visitas deben ser un entero de al menos 1',
+  'sdP.code.bad-nights': 'las noches deben ser un número positivo',
+  'sdP.code.bad-threshold': 'el umbral debe ser positivo',
+  'sdP.code.bad-hours': 'las horas deben estar entre 0 y 24',
+  'sdP.code.bad-clear': 'la fracción despejada debe estar entre 0 y 1',
+  'sdP.code.bad-fields': 'los campos deben ser un entero',
+  'sdP.code.bad-setup': 'el montaje de la instalación está incompleto',
+  'sdP.code.unknown-class': 'la clase no se conoce',
+  'sdP.notFeasible':
+    'No es viable para este objetivo: {why}. Este plan alcanza {d} mag en {a} grados cuadrados.',
+  'sdP.inconsistent':
+    'El plan es viable, pero lo que dices que alcanza no coincide con él: compara tu {what} con el panel.',
+  'sdP.what.depth': 'profundidad',
+  'sdP.what.n': 'densidad',
+  'sdP.tooManyNights': 'Este objetivo permite como máximo {n} noches.',
+  'sdP.and': 'y',
+  'sdP.ok':
+    'Viable, y lo que dices coincide: {d} mag en {a} grados cuadrados, con unos {f} falsos positivos (fiabilidad {r} por ciento). Otros planes también pasarían: se comprueba la viabilidad y la coherencia, no una única respuesta.',
 };

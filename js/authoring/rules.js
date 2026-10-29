@@ -851,6 +851,44 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
         }
       }
 
+      // An open-ended plan step (Prompt 215): a measure step whose fields are a plan and what it reaches, judged by
+      // the survey kernel (js/surveyDesignPlan.js). The key states the rule, never one plan.
+      if (step.plan !== undefined) {
+        const p = step.plan;
+        const need = [
+          'facility',
+          'exposure',
+          'visits',
+          'nights',
+          'threshold',
+          'depth',
+          'n',
+        ];
+        const have = new Set((step.fields || []).map(f => f.id));
+        if (step.type !== 'measure')
+          E('ref/field', 'plan belongs to a measure step');
+        else if (!need.every(k => have.has(k)))
+          E('ref/field', `a plan step has the fields ${need.join(', ')}`);
+        if (
+          !p ||
+          typeof p !== 'object' ||
+          typeof p.class !== 'string' ||
+          !Number.isFinite(p.goal?.depth) ||
+          !(p.goal?.areaDeg2 > 0) ||
+          !(p.tolerance?.depth > 0) ||
+          !(p.tolerance?.countsPct > 0)
+        )
+          E(
+            'ref/field',
+            'plan needs a class, a goal (depth, areaDeg2) and a tolerance (depth, countsPct)'
+          );
+        if (step.validate !== undefined)
+          E(
+            'ref/field',
+            'a plan step is judged by the survey kernel: it takes no validate'
+          );
+      }
+
       if (step.validate !== undefined) {
         if (typeof step.validate !== 'function') {
           E('ref/field', 'validate is not a function');

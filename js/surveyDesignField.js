@@ -19,7 +19,6 @@ import {
   compareSetups,
   completeness,
   cumulative,
-  differential,
   evaluate,
   magnitudeAtSnr,
   optimumExposure,
@@ -68,7 +67,7 @@ export function planOf(v = {}) {
 
 /** The whole sky, square degrees: a region cannot be larger, and time beyond it only repeats it. */
 export const SKY_DEG2 = 41253;
-const inSky = (plan, setup) => ({
+export const inSky = (plan, setup) => ({
   ...plan,
   fields: Math.ceil(SKY_DEG2 / setup.fovDeg2),
 });

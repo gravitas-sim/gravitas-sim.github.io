@@ -73,6 +73,8 @@ export const EN_SURVEYDESIGN = {
   'sdW.p.row.found': 'Sources found',
   'sdW.p.v.found':
     '{n} (68 percent interval {lo} to {hi}) of {s} in the class to that depth',
+  'sdW.p.row.dens': 'Per square degree',
+  'sdW.p.v.dens': '{n} sources found per square degree',
   'sdW.p.row.false': 'False positives',
   'sdW.p.v.false': '{n} expected; reliability {r} percent',
   'sdW.p.v.unreliable':
@@ -122,4 +124,26 @@ export const EN_SURVEYDESIGN = {
   'sdW.reason.not-reachable': 'no stack of this exposure reaches the depth',
   'sdW.c.a':
     'The same detection threshold and the same exposure per visit for both, a supplied throughput of 0.5 each, no overlap or gaps between pointings and the same clear fraction. A different exposure would change the answer.',
+  'sdP.badFacility':
+    'The facility is a number from 1 to {n}: 1 is the LCO 0.35 m, 2 the LCO 1.0 m and 3 Rubin.',
+  'sdP.refused': 'This plan cannot be evaluated: {code}.',
+  'sdP.code.bad-exposure': 'the exposure must be a positive number of seconds',
+  'sdP.code.bad-visits': 'the visits must be a whole number of at least 1',
+  'sdP.code.bad-nights': 'the nights must be a positive number',
+  'sdP.code.bad-threshold': 'the threshold must be positive',
+  'sdP.code.bad-hours': 'the hours must be between 0 and 24',
+  'sdP.code.bad-clear': 'the clear fraction must be between 0 and 1',
+  'sdP.code.bad-fields': 'the fields must be a whole number',
+  'sdP.code.bad-setup': "the facility's setup is incomplete",
+  'sdP.code.unknown-class': 'the class is not known',
+  'sdP.notFeasible':
+    'Not feasible for this goal: {why}. This plan reaches {d} mag over {a} square degrees.',
+  'sdP.inconsistent':
+    'The plan is feasible, but what you say it reaches does not match it: check your {what} against the panel.',
+  'sdP.what.depth': 'depth',
+  'sdP.what.n': 'density',
+  'sdP.tooManyNights': 'This goal allows at most {n} nights.',
+  'sdP.and': 'and',
+  'sdP.ok':
+    'Feasible, and what you say matches it: {d} mag over {a} square degrees, with about {f} false positives (reliability {r} percent). Other plans would also pass: the check is feasibility and consistency, not one answer.',
 };
