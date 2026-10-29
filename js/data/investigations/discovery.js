@@ -880,4 +880,14 @@ export const DISCOVERY = {
     },
     courseLevel: 'survey',
   },
+  'plan-an-exposure': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['signal-noise-and-exposure'],
+    textbook: {
+      chapter: 6,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
 };

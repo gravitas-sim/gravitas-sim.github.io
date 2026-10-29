@@ -1086,4 +1086,16 @@ export const MANIFEST = [
     gradedCount: 5,
     objectiveCount: 4,
   },
+  {
+    id: 'plan-an-exposure',
+    title: 'Plan an Exposure',
+    subtitle:
+      'How long to expose a faint star for a signal-to-noise of 20, what limits it, what splitting it, the air and the moon cost, and what a frame says back',
+    duration: '15-25 min',
+    level: 'Majors and upper-level astronomy',
+    thumbnail: 'images/investigations/plan-an-exposure.webp',
+    stepCount: 11,
+    gradedCount: 9,
+    objectiveCount: 4,
+  },
 ];
