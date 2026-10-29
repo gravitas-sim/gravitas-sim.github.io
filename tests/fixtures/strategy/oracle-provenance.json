@@ -1,0 +1,7 @@
+{
+  "script": "tools/strategy-oracle/oracle.py",
+  "run": "2026-10-29, python3 3.9.6, numpy 1.26.4, scipy 1.13.1, astropy 6.0.1",
+  "independent": "Astropy's LombScargle (method slow, standard normalization, fit_mean=True, center_data=True) and a direct numpy window sum; no Gravitas code",
+  "note": "PyYAML is not installed on the machine that pinned this; astropy.table imports it at load although LombScargle never reads YAML, so the script puts an empty module in its place before the import. Nothing was installed or downloaded.",
+  "cites": ["Zechmeister and Kuerster 2009, A&A 496, 577", "VanderPlas 2018, ApJS 236, 16", "Scargle 1982, ApJ 263, 835"]
+}
