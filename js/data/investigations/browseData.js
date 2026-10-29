@@ -352,4 +352,8 @@ export const BROWSE_META = {
     tags: ['orbits', 'solar-system'],
     numericCount: 0,
   },
+  'plan-an-exposure': {
+    tags: ['observing'],
+    numericCount: 2,
+  },
 };

@@ -1082,4 +1082,17 @@ export const MANIFEST = [
     gradedCount: 6,
     objectiveCount: 4,
   },
+  {
+    id: 'plan-an-exposure',
+    title: 'Planifica una exposición',
+    subtitle:
+      'Cuánto exponer una estrella débil para una señal a ruido de 20, qué la limita, qué cuestan dividirla, el aire y la Luna, y qué responde una imagen',
+    duration: '15-25 min',
+    level: 'Majors and upper-level astronomy',
+    thumbnail: 'images/investigations/plan-an-exposure.webp',
+    depths: 1,
+    stepCount: 11,
+    gradedCount: 9,
+    objectiveCount: 4,
+  },
 ];

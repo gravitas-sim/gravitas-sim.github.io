@@ -189,6 +189,7 @@ const LOADERS = {
   'the-scale-of-the-solar-system': () =>
     import('./the-scale-of-the-solar-system.js'),
   'comets-and-the-sun': () => import('./comets-and-the-sun.js'),
+  'plan-an-exposure': () => import('./plan-an-exposure.js'),
 };
 // </generated:loaders>
 
@@ -296,6 +297,7 @@ const TRANSLATIONS = {
     'the-scale-of-the-solar-system': () =>
       import('./es/the-scale-of-the-solar-system.js'),
     'comets-and-the-sun': () => import('./es/comets-and-the-sun.js'),
+    'plan-an-exposure': () => import('./es/plan-an-exposure.js'),
   },
 };
 // </generated:translations>

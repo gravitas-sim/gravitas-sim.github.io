@@ -56,6 +56,7 @@ export const EVIDENCE_FROM = Object.freeze({
   'retrograde-motion': 'engine',
   'sampling-a-posterior': 'computation',
   'scaling-the-main-sequence': 'model',
+  'plan-an-exposure': 'model',
   'signal-noise-and-exposure': 'model',
   'standard-candles': 'model',
   'the-beat-of-a-star': 'model',

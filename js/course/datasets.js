@@ -168,6 +168,7 @@ export const GUIDED = Object.freeze([
   'retrograde-motion',
   'sampling-a-posterior',
   'scaling-the-main-sequence',
+  'plan-an-exposure',
   'signal-noise-and-exposure',
   'standard-candles',
   'the-beat-of-a-star',

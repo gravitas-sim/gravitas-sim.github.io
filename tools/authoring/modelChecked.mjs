@@ -222,6 +222,26 @@ export const MODELS = {
         plx: 100,
       }).fit.elements.a.value / 0.1,
   },
+  'plan-an-exposure/airmass-cost': {
+    via: 'js/exposureWidgets.js exposureView (js/kernels/detector/snr.js planExposure): the total exposure at an airmass of 2 over the zenith exposure, Rubin r, magnitude 24, signal-to-noise 20, two exposures',
+    value: async () => {
+      const W = await import('../../js/exposureWidgets.js');
+      const at = airmass =>
+        W.exposureView({ setup: 3, mag: 24, target: 20, exposures: 2, airmass })
+          .plan.seconds;
+      return at(2) / at(1);
+    },
+  },
+  'plan-an-exposure/the-moon': {
+    via: 'js/exposureWidgets.js exposureView (planExposure): the total exposure with the sky 2 magnitudes brighter over the dark-sky exposure, Las Cumbres 1.0 m in V, magnitude 22, signal-to-noise 20, one exposure',
+    value: async () => {
+      const W = await import('../../js/exposureWidgets.js');
+      const at = moon =>
+        W.exposureView({ setup: 1, mag: 22, target: 20, exposures: 1, moon })
+          .plan.seconds;
+      return at(2) / at(0);
+    },
+  },
   'keplers-laws/use-the-law': {
     via: "js/tidalPhysics.js (G, solar mass, AU): Newton's form of the third law",
     value: () => periodAboutSun(4) / YEAR_S,
