@@ -39,7 +39,12 @@ const SNR_BRIGHT = 4;
 const SNR_FAINT_GAP = 4.75;
 const SNR_FLOOR = 0.05;
 
-const refuse = (code, extra = {}) => ({ ok: false, status: 'refused', code, ...extra });
+const refuse = (code, extra = {}) => ({
+  ok: false,
+  status: 'refused',
+  code,
+  ...extra,
+});
 
 /** Gauss-Legendre nodes and weights on [-1, 1], n points (Newton on the Legendre polynomial). */
 function gaussLegendre(n) {
@@ -74,7 +79,8 @@ export function integrate(f, a, b, panels = 24) {
   let sum = 0;
   for (let p = 0; p < panels; p++) {
     const c = a + (p + 0.5) * h;
-    for (let i = 0; i < GL.x.length; i++) sum += GL.w[i] * f(c + (h / 2) * GL.x[i]);
+    for (let i = 0; i < GL.x.length; i++)
+      sum += GL.w[i] * f(c + (h / 2) * GL.x[i]);
   }
   return (sum * h) / 2;
 }
@@ -103,9 +109,11 @@ export function detectionsPerDeg2(setup, exposure, visits, theta, cls) {
     Math.max(theta - SNR_FAINT_GAP, SNR_FLOOR)
   );
   const mEnd = Math.min(mB, cls.mMax);
-  const C = m => completeness(snrOfMagnitude(setup, exposure, visits, m), theta);
+  const C = m =>
+    completeness(snrOfMagnitude(setup, exposure, visits, m), theta);
   const bright = cumulative(cls, mA);
-  const tail = mEnd > mA ? integrate(m => C(m) * differential(cls, m), mA, mEnd) : 0;
+  const tail =
+    mEnd > mA ? integrate(m => C(m) * differential(cls, m), mA, mEnd) : 0;
   return {
     sharp: cumulative(cls, mSharp),
     detected: bright + tail,
@@ -120,11 +128,16 @@ export function detectionsPerDeg2(setup, exposure, visits, theta, cls) {
 export function normalizePlan(p) {
   if (!p || typeof p !== 'object') return refuse('bad-plan');
   const v = { ...NIGHT, visits: 1, ...p };
-  if (!(v.exposure > 0) || !Number.isFinite(v.exposure)) return refuse('bad-exposure');
-  if (!(Number.isInteger(v.visits) && v.visits >= 1)) return refuse('bad-visits');
-  if (!(v.nights > 0) || !Number.isFinite(v.nights)) return refuse('bad-nights');
-  if (!(v.hoursPerNight > 0 && v.hoursPerNight <= 24)) return refuse('bad-hours');
-  if (!(v.clearFraction > 0 && v.clearFraction <= 1)) return refuse('bad-clear');
+  if (!(v.exposure > 0) || !Number.isFinite(v.exposure))
+    return refuse('bad-exposure');
+  if (!(Number.isInteger(v.visits) && v.visits >= 1))
+    return refuse('bad-visits');
+  if (!(v.nights > 0) || !Number.isFinite(v.nights))
+    return refuse('bad-nights');
+  if (!(v.hoursPerNight > 0 && v.hoursPerNight <= 24))
+    return refuse('bad-hours');
+  if (!(v.clearFraction > 0 && v.clearFraction <= 1))
+    return refuse('bad-clear');
   if (!(v.threshold > 0)) return refuse('bad-threshold');
   if (v.fields !== undefined && !(Number.isInteger(v.fields) && v.fields >= 1))
     return refuse('bad-fields');
@@ -150,7 +163,9 @@ export function evaluate({ setup: rawSetup, plan: rawPlan, cls: rawCls }) {
   const total = plan.nights * plan.hoursPerNight * 3600 * plan.clearFraction;
   const cycle = plan.visits * (plan.exposure + setup.overhead);
   const affordable = Math.floor(total / cycle);
-  const pointings = plan.fields ? Math.min(affordable, plan.fields) : affordable;
+  const pointings = plan.fields
+    ? Math.min(affordable, plan.fields)
+    : affordable;
   const area = pointings * setup.fovDeg2;
   const stack = plan.exposure * plan.visits;
   const depth = depthOf(setup, plan.exposure, plan.visits, plan.threshold);
@@ -187,15 +202,26 @@ export function evaluate({ setup: rawSetup, plan: rawPlan, cls: rawCls }) {
       range: [cls.mMin ?? -Infinity, cls.mMax],
     };
   }
-  const det = detectionsPerDeg2(setup, plan.exposure, plan.visits, plan.threshold, cls);
+  const det = detectionsPerDeg2(
+    setup,
+    plan.exposure,
+    plan.visits,
+    plan.threshold,
+    cls
+  );
   const lambda = det.detected * area;
   const falseDeg2 = falseRate(plan.threshold) * out.elementsPerDeg2;
   const falsePositives = falseDeg2 * area;
-  const reliability = lambda + falsePositives > 0 ? lambda / (lambda + falsePositives) : NaN;
+  const reliability =
+    lambda + falsePositives > 0 ? lambda / (lambda + falsePositives) : NaN;
   return {
     ...out,
     counts: {
-      perDeg2: { sharp: det.sharp, detected: det.detected, falsePositives: falseDeg2 },
+      perDeg2: {
+        sharp: det.sharp,
+        detected: det.detected,
+        falsePositives: falseDeg2,
+      },
       sharp: det.sharp * area,
       detected: lambda,
       falsePositives,
@@ -214,12 +240,16 @@ export function evaluate({ setup: rawSetup, plan: rawPlan, cls: rawCls }) {
  * with every reason that applies: time, depth, area, saturates, reliability, outside-count-model.
  */
 export function assess(result, goal = {}) {
-  if (!result?.ok) return { feasible: false, reasons: [result?.code ?? 'refused'] };
+  if (!result?.ok)
+    return { feasible: false, reasons: [result?.code ?? 'refused'] };
   const reasons = [];
-  if (result.status === 'outside-count-model') reasons.push('outside-count-model');
+  if (result.status === 'outside-count-model')
+    reasons.push('outside-count-model');
   if (result.pointings < 1) reasons.push('time');
-  if (Number.isFinite(goal.depth) && result.depth < goal.depth) reasons.push('depth');
-  if (Number.isFinite(goal.areaDeg2) && result.areaDeg2 < goal.areaDeg2) reasons.push('area');
+  if (Number.isFinite(goal.depth) && result.depth < goal.depth)
+    reasons.push('depth');
+  if (Number.isFinite(goal.areaDeg2) && result.areaDeg2 < goal.areaDeg2)
+    reasons.push('area');
   if (result.saturates) reasons.push('saturates');
   if (
     Number.isFinite(goal.minReliability) &&
@@ -236,18 +266,31 @@ export function assess(result, goal = {}) {
  * seconds and the nights. Reasons: saturates (the frame fills the well), not-reachable (no stack of this
  * frame reaches the depth).
  */
-export function timeToGoal({ setup: rawSetup, goal, exposure, threshold = NIGHT.threshold, hoursPerNight = NIGHT.hoursPerNight, clearFraction = NIGHT.clearFraction }) {
+export function timeToGoal({
+  setup: rawSetup,
+  goal,
+  exposure,
+  threshold = NIGHT.threshold,
+  hoursPerNight = NIGHT.hoursPerNight,
+  clearFraction = NIGHT.clearFraction,
+}) {
   const ns = normalizeSetup(rawSetup);
   if (!ns.ok) return refuse(ns.code, { field: ns.field });
   const { setup } = ns;
   if (!(exposure > 0)) return refuse('bad-exposure');
-  if (!(goal?.areaDeg2 > 0) || !Number.isFinite(goal.depth)) return refuse('bad-goal');
+  if (!(goal?.areaDeg2 > 0) || !Number.isFinite(goal.depth))
+    return refuse('bad-goal');
   const reasons = [];
   if (exposure > wellTime(setup)) reasons.push('saturates');
   let visits = 1;
   const reach = v => depthOf(setup, exposure, v, threshold) >= goal.depth;
   if (!reach(1e5)) {
-    return { ok: true, feasible: false, reasons: [...reasons, 'not-reachable'], visits: null };
+    return {
+      ok: true,
+      feasible: false,
+      reasons: [...reasons, 'not-reachable'],
+      visits: null,
+    };
   }
   let hi = 1;
   while (!reach(hi)) hi *= 2;
@@ -276,9 +319,32 @@ export function timeToGoal({ setup: rawSetup, goal, exposure, threshold = NIGHT.
 }
 
 /** Two setups against one goal: the time each needs, their ratio and the area each surveys per hour to the depth. */
-export function compareSetups({ a, b, goal, exposureA, exposureB, threshold, hoursPerNight, clearFraction }) {
-  const A = timeToGoal({ setup: a, goal, exposure: exposureA, threshold, hoursPerNight, clearFraction });
-  const B = timeToGoal({ setup: b, goal, exposure: exposureB, threshold, hoursPerNight, clearFraction });
+export function compareSetups({
+  a,
+  b,
+  goal,
+  exposureA,
+  exposureB,
+  threshold,
+  hoursPerNight,
+  clearFraction,
+}) {
+  const A = timeToGoal({
+    setup: a,
+    goal,
+    exposure: exposureA,
+    threshold,
+    hoursPerNight,
+    clearFraction,
+  });
+  const B = timeToGoal({
+    setup: b,
+    goal,
+    exposure: exposureB,
+    threshold,
+    hoursPerNight,
+    clearFraction,
+  });
   if (!A.ok || !B.ok) return { ok: false, a: A, b: B };
   const comparable = Number.isFinite(A.seconds) && Number.isFinite(B.seconds);
   return {

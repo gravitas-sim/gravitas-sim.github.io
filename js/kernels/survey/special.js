@@ -28,7 +28,7 @@ export function erfc(x) {
   // erfc(x) = exp(-x^2) / (x sqrt(pi)) * 1 / (1 + (1/(2x^2)) / (1 + (2/(2x^2)) / (1 + ...)))
   const z = 2 * x * x;
   let f = 1;
-  for (let k = 80; k >= 1; k--) f = 1 + (k / z) / f;
+  for (let k = 80; k >= 1; k--) f = 1 + k / z / f;
   return Math.exp(-x * x) / (x * Math.sqrt(Math.PI) * f);
 }
 
@@ -46,12 +46,15 @@ const LANCZOS = [
 
 /** ln Gamma(x) for x > 0 (Lanczos, g = 7), about 1e-15 relative. */
 export function lnGamma(x) {
-  if (x < 0.5) return Math.log(Math.PI / Math.sin(Math.PI * x)) - lnGamma(1 - x);
+  if (x < 0.5)
+    return Math.log(Math.PI / Math.sin(Math.PI * x)) - lnGamma(1 - x);
   const y = x - 1;
   let a = LANCZOS[0];
   const t = y + 7.5;
   for (let i = 1; i < 9; i++) a += LANCZOS[i] / (y + i);
-  return 0.5 * Math.log(2 * Math.PI) + (y + 0.5) * Math.log(t) - t + Math.log(a);
+  return (
+    0.5 * Math.log(2 * Math.PI) + (y + 0.5) * Math.log(t) - t + Math.log(a)
+  );
 }
 
 export const gamma = x => Math.exp(lnGamma(x));
@@ -65,7 +68,7 @@ export function gammaQ(a, x) {
     let ap = a;
     let del = 1 / a;
     let sum = del;
-    for (let n = 0; n < 2000; n++) {
+    for (let n = 0; n < 40000; n++) {
       ap += 1;
       del *= x / ap;
       sum += del;
@@ -78,7 +81,7 @@ export function gammaQ(a, x) {
   let c = 1 / tiny;
   let d = 1 / b;
   let h = d;
-  for (let i = 1; i < 2000; i++) {
+  for (let i = 1; i < 40000; i++) {
     const an = -i * (i - a);
     b += 2;
     d = an * d + b;
@@ -114,13 +117,41 @@ export function poissonQuantile(p, lambda) {
   return lo;
 }
 
+/** The standard normal quantile by bisection on normalCdf (a few hundred operations; used only for large means). */
+function normalQuantile(p) {
+  let lo = -40;
+  let hi = 40;
+  for (let i = 0; i < 100; i++) {
+    const mid = (lo + hi) / 2;
+    if (normalCdf(mid) < p) lo = mid;
+    else hi = mid;
+  }
+  return (lo + hi) / 2;
+}
+
+/** Above this mean the exact sums are replaced by the Cornish-Fisher normal form (relative error below 1e-5 of the width). */
+export const LARGE_MEAN = 2e5;
+
 /**
  * The central prediction interval of a Poisson count at `level`: its exact coverage
- * is never below the level (the discreteness makes it conservative).
- * @returns {{lo:number, hi:number, level:number, coverage:number}}
+ * is never below the level (the discreteness makes it conservative). Above LARGE_MEAN the
+ * quantiles are lambda + z sqrt(lambda) + (z^2 - 1) / 6 rounded outwards and `approximate` is true.
+ * @returns {{lo:number, hi:number, level:number, coverage:number, approximate?:boolean}}
  */
 export function poissonInterval(lambda, level = 0.6827) {
   const tail = (1 - level) / 2;
+  if (lambda > LARGE_MEAN) {
+    const zl = normalQuantile(tail);
+    const zh = normalQuantile(1 - tail);
+    const sd = Math.sqrt(lambda);
+    return {
+      lo: Math.floor(lambda + zl * sd + (zl * zl - 1) / 6),
+      hi: Math.ceil(lambda + zh * sd + (zh * zh - 1) / 6),
+      level,
+      coverage: level,
+      approximate: true,
+    };
+  }
   const lo = poissonQuantile(tail, lambda);
   const hi = poissonQuantile(1 - tail, lambda);
   return {

@@ -200,4 +200,16 @@ for s_, t, th in [('lcoLike', 30, 3), ('lcoLike', 300, 3), ('rubinLike', 30, 3),
                     unreliable=bool(p['reliability'] is not None and p['reliability'] < 0.5), detected=p['detected'], falsePositives=p['falsePositives']))
 res['D4b'] = d4b
 
+# A4b (added by AM6): the exposure that maximises the sharp count at fixed time, one visit, continuous pointings, from the oracle's own depths
+A4 = SET['skyLimited']
+grid = [4 * (20000 / 4) ** (i / 399) for i in range(400)]
+T = 30 * 8 * 3600 * 0.6
+a4b = {}
+for alpha in [0.4, 0.6, 1.0]:
+    C = dict(n0=1000, m0=20, alpha=alpha, mMax=99)
+    vals = [n_cum(C, mag_at(A4, t, 1, 5.0)) * T / (t + A4['overhead']) * A4['fovDeg2'] for t in grid]
+    i = int(np.argmax(vals))
+    a4b[str(alpha)] = dict(best=grid[i], index=i, rising=bool(all(vals[j] >= vals[j - 1] * (1 - 1e-12) for j in range(1, len(vals)))))
+res['A4b'] = a4b
+
 json.dump(res, sys.stdout, indent=1)

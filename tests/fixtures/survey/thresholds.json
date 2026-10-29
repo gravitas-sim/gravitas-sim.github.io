@@ -101,19 +101,9 @@
   },
   "grids": {
     "b1": {
-      "setups": [
-        "skyLimited",
-        "lcoLike",
-        "rubinLike"
-      ],
-      "exposures": [
-        30,
-        300
-      ],
-      "visits": [
-        1,
-        4
-      ],
+      "setups": ["skyLimited", "lcoLike", "rubinLike"],
+      "exposures": [30, 300],
+      "visits": [1, 4],
       "nights": 10,
       "class": "test-power-law",
       "note": "twelve plans; the oracle and the harness build each one in this order: setup, exposure, visits, the last varying fastest"
@@ -125,14 +115,10 @@
       "leg": "a",
       "what": "the class 'galaxies-local': N(<m) per square degree equals the closed form (pi/180)^2 / 3 * phiStar * dStar^3 * Gamma(alphaS + 5/2) with dStar = 10^((m - MStar + 5)/5) parsecs converted to Mpc, against a numerical integral of the Schechter function over luminosity at m = 14, 15, 16; and the cumulative slope d log10 N / dm equals 0.6",
       "limits": {
-        "magnitudes": [
-          14,
-          15,
-          16
-        ],
-        "maxRel": 1e-06,
+        "magnitudes": [14, 15, 16],
+        "maxRel": 1e-6,
         "slope": 0.6,
-        "slopeTol": 1e-09
+        "slopeTol": 1e-9
       }
     },
     {
@@ -140,18 +126,10 @@
       "leg": "a",
       "what": "detections by quadrature for a completeness that is a probit in magnitude, C(m) = Phi((mc - m)/w), against the closed form N(<mc) exp((alpha ln10 w)^2 / 2) per square degree",
       "limits": {
-        "alphas": [
-          0.4,
-          0.6,
-          1.0
-        ],
-        "widths": [
-          0.1,
-          0.3,
-          0.5
-        ],
+        "alphas": [0.4, 0.6, 1.0],
+        "widths": [0.1, 0.3, 0.5],
         "mc": 22,
-        "maxRel": 1e-06
+        "maxRel": 1e-6
       }
     },
     {
@@ -159,11 +137,7 @@
       "leg": "a",
       "what": "in setup 'skyLimited' with a faint limit (sky dominates) the 5 sigma depth gains 1.25 magnitude per decade of exposure: m(10 t) - m(t) for t = 400, 1000, 4000 s",
       "limits": {
-        "times": [
-          400,
-          1000,
-          4000
-        ],
+        "times": [400, 1000, 4000],
         "gain": 1.25,
         "tol": 0.01
       }
@@ -173,11 +147,7 @@
       "leg": "a",
       "what": "the exposure that maximises the sharp-cut count N(<m5) A, at fixed total time, one visit, 'skyLimited' with zero overhead replaced by its stated 20 s, equals beta overhead / (1 - beta) with beta = 1.25 alpha when beta < 1 (alpha 0.4 and 0.6), within the bound; for alpha = 1.0 (beta >= 1) the count grows with exposure across the whole grid (no interior optimum). Exposure grid: 4 to 20000 s, 400 log-spaced points, total time 30 nights x 8 h x 0.6",
       "limits": {
-        "alphas": [
-          0.4,
-          0.6,
-          1.0
-        ],
+        "alphas": [0.4, 0.6, 1.0],
         "maxRel": 0.03
       }
     },
@@ -195,13 +165,8 @@
       "leg": "a",
       "what": "false positives per independent element Q(theta) = 0.5 erfc(theta / sqrt 2) against SciPy's survival function at theta = 3, 4, 5, 6, and the number of elements per square degree 3600^2 / (4 pi sigma^2) arcsec^2 with sigma = fwhm / 2.3548",
       "limits": {
-        "thetas": [
-          3,
-          4,
-          5,
-          6
-        ],
-        "maxRel": 1e-09
+        "thetas": [3, 4, 5, 6],
+        "maxRel": 1e-9
       }
     },
     {
@@ -209,18 +174,8 @@
       "leg": "a",
       "what": "the prediction interval of a count (the Poisson quantiles at 0.15866 and 0.84134, and 0.02275 and 0.97725): its exact coverage summed over the Poisson distribution is never below the nominal level (1e-9) and, averaged over the means 12, 40, 200 and 1000, exceeds the level by at most 0.06 at both levels",
       "limits": {
-        "means": [
-          0.5,
-          3,
-          12,
-          40,
-          200,
-          1000
-        ],
-        "levels": [
-          0.6827,
-          0.9545
-        ],
+        "means": [0.5, 3, 12, 40, 200, 1000],
+        "levels": [0.6827, 0.9545],
         "meanExcess": 0.06
       }
     },
@@ -230,7 +185,7 @@
       "what": "the plan's arithmetic is exact: pointings = floor(nights x hours x 3600 x clear / (visits (exposure + overhead))), area = pointings x field, for 12 designed plans, and the stack's depth with v visits of t equals the single exposure of v t with the read noise of v frames",
       "limits": {
         "exact": true,
-        "depthTol": 1e-09
+        "depthTol": 1e-9
       }
     },
     {
@@ -240,7 +195,7 @@
       "limits": {
         "depthAbs": 0.002,
         "countsRel": 0.001,
-        "falseRel": 1e-06
+        "falseRel": 1e-6
       }
     },
     {
@@ -248,11 +203,7 @@
       "leg": "b",
       "what": "the Euclidean count of the class 'galaxies-local' against Astropy's FlatLambdaCDM(H0 = 70, Om0 = 0.3) with the same Schechter function and no K-correction or evolution, at m = 14, 15 and 16.5: the ratio model / cosmology within the bound (the stated error of the Euclidean approximation, and so the class's mMax)",
       "limits": {
-        "magnitudes": [
-          14,
-          15,
-          16.5
-        ],
+        "magnitudes": [14, 15, 16.5],
         "ratioMin": 0.75,
         "ratioMax": 1.25
       }
@@ -332,7 +283,7 @@
       "leg": "a",
       "what": "added by AM4: the exact time to depth, t = s^2 (F + V) / F^2 with F = zeroPoint 10^(-0.4 m) the source rate and V = 4 pi sigma_pix^2 (sky rate per pixel) the sky variance rate (no read noise or dark), against the oracle's root-finding for the two setups of A5, and the kernel's exposure for the same depth against both",
       "limits": {
-        "maxRel": 1e-06
+        "maxRel": 1e-6
       }
     },
     {
@@ -342,6 +293,14 @@
       "limits": {
         "cases": 6,
         "relTol": 0.001
+      }
+    },
+    {
+      "id": "A4b.optimumOracle",
+      "leg": "b",
+      "what": "added by AM6: the exposure that maximises the sharp count at fixed time (one visit, continuous pointings, 400 log-spaced exposures from 4 to 20000 s, 30 nights of 8 h at 0.6) for alpha 0.4 and 0.6, and the absence of an interior maximum for alpha 1.0, from the oracle's own depths against the kernel's",
+      "limits": {
+        "gridSteps": 1
       }
     }
   ],
@@ -395,6 +354,16 @@
       "was": "the class 'galaxies-local' has mMax 16.5",
       "now": "mMax 15.0, the faintest tested magnitude at which the Euclidean count is within the bound of Astropy's (ratios 1.085 at 14 and 1.134 at 15, 1.266 at 16.5 against 1.25)",
       "reason": "B2 as committed fails at 16.5 and stays failing and labelled; the scope of the class is reduced to what the check supports (section 7.5.3)"
+    },
+    {
+      "id": "AM6",
+      "check": "A4.optimum",
+      "kernelExisted": true,
+      "outputInspected": true,
+      "boundMoved": false,
+      "was": "the maximum of the sharp count times the plan's area, the area being the plan's integer number of pointings",
+      "now": "the area is continuous (the time over the cycle, times the field): the integer floor of the plan's arithmetic (A8) makes the count jitter by a few percent at long exposures and hides the analytic maximum. The bound (3 percent) is unchanged and the leg is judged as committed: the kernel's maximum is 15 and 19 percent above beta overhead / (1 - beta), because the closed form is the sky-limited limit and the source's own shot noise raises the depth's slope above 1.25 at short exposures. A4b is added: the same maximum from the oracle's own depths and the kernel's, within one grid step (2.2 percent), which tests the trade-off itself",
+      "reason": "the committed closed form is a limit; A4 stays failing and labelled, and the lesson states the rule as an estimate that undershoots"
     }
   ]
 }
