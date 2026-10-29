@@ -56,7 +56,6 @@ export const PLAN_AN_EXPOSURE = {
   prerequisites: ['signal-noise-and-exposure'],
   tags: ['observing'],
   lock: { placement: true, inspector: true },
-  depths: ['core'],
   objectives: [
     'Plan the exposure that reaches a target signal-to-noise for a star in a stated band, sky and seeing, and name the term of the noise budget that limits it',
     'Say what splitting an exposure into more frames, a higher airmass and a brighter sky cost, and why',
@@ -614,11 +613,17 @@ const CONTENT = {
         response:
           'It belongs to an exposure, a band, a sky and a seeing; the same telescope reaches a different magnitude on a moonlit night.',
       },
+      {
+        claim: 'A longer exposure can always reach a fainter star.',
+        response:
+          'Only up to a limit: the planner refuses a target the four-hour limit forbids, and a bright star or a bright sky fills the wells before the exposure is long enough; the plan then needs more, shorter frames.',
+      },
     ],
     teachingNotes: [
       'The plan is Prompt 210’s extension of js/kernels/detector/snr.js: the CCD equation with several exposures, a Gaussian point-spread function, extinction by airmass, and a closed-form limiting magnitude. The frame is the detector kernel’s forward model of exactly the plan, measured with the Observatory’s aperture photometry; the prediction for it uses the pixels the photometry used.',
-      'The published Rubin depth model agrees with the kernel in r, i, z and y; in u and g, where the read noise matters, the CCD equation with the library’s inputs predicts a larger read-noise loss than the paper states, and the validation record keeps those legs as failed and labelled (EXPOSURE_PLANNING.md).',
+      'The published Rubin depth model agrees with the kernel in r, i, z and y; in u and g, where the read noise matters, the CCD equation with the library’s inputs predicts a larger read-noise loss than the paper states, and the validation record keeps those legs as failed and labeled (EXPOSURE_PLANNING.md).',
       'Inherited limits: the throughput, dark current and (Las Cumbres) extinction are teaching values; the sky is an input, not a moon model; a Gaussian point-spread function; no flat-field error.',
+      'The frame is one draw of the noise: a measured signal-to-noise within about 3 of the prediction is agreement, and a class that pools its frames sees the scatter close in on the prediction (the validation record holds the coverage of the interval, 0.95 on 1600 frames).',
     ],
     discussion: [
       'Why does a sky-limited exposure grow as the square of the signal-to-noise and a read-limited one as the signal-to-noise?',
@@ -637,9 +642,9 @@ const CONTENT = {
 const FLOW = {
   'plan-an-exposure': [
     {
-      from: 'predict-the-limit',
+      from: 'what-a-plan-is',
       to: 'the-plan',
-      text: 'A prediction of what limits a magnitude-24 star, and the plan: about 455 s in two exposures, sky-limited, reaching 25.5 at 5σ.',
+      text: 'What a plan is, a prediction of what limits a magnitude-24 star, and the plan: about 455 s in two exposures, sky-limited, reaching 25.5 at 5σ.',
     },
     {
       from: 'predict-more-exposures',
@@ -647,9 +652,19 @@ const FLOW = {
       text: 'Splitting the exposure into 20 frames: 512 s, the read noise at 12 percent of the noise squared.',
     },
     {
+      from: 'airmass-cost',
+      to: 'the-moon',
+      text: 'The cost of the air (a factor of 2.8 at an airmass of 2) and of a sky 2 magnitudes brighter (a factor of 5 on a 1 m telescope).',
+    },
+    {
       from: 'on-the-frame',
       to: 'cannot-be-reached',
       text: 'The frame against the prediction (19.8 and 19.6), and a target the four-hour limit refuses.',
+    },
+    {
+      from: 'what-the-plan-leaves-out',
+      to: 'what-you-worked-out',
+      text: 'What the calculation leaves out, and the summary of the plan.',
     },
   ],
 };
@@ -666,7 +681,7 @@ const EXPECTATIONS = {
 };
 
 const BANDS = {
-  'plan-an-exposure': { core: 'medium' },
+  'plan-an-exposure': { core: 'short' },
 };
 
 /** The guides, flows, expectations and time bands of the lesson above. */
