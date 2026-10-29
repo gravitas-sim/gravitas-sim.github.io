@@ -2667,12 +2667,12 @@ test.describe('the central experiment of each investigation', () => {
     {
       id: 'the-saturated-star',
       title:
-        'the-saturated-star: the clipped sum of the brightest star reads 30 percent of its flux at V = 9.5 and 53 at V = 10.5 @accepts:ce.the-saturated-star',
+        'the-saturated-star: the clipped sum of the brightest star reads 30 percent of its flux at V = 9.5 and 55 at V = 10.5 @accepts:ce.the-saturated-star',
       row: /^Star S$/i,
       nth: 1,
       values: [
-        [9.5, 30.2, 2],
-        [10.5, 53, 2],
+        [9.5, 30.2, 1],
+        [10.5, 54.6, 1],
       ],
     },
   ];

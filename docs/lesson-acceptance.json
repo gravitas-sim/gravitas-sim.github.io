@@ -1135,7 +1135,7 @@
       "centralExperimentId": "ce.the-saturated-star",
       "object": "panel:detector-effects",
       "control": "detector-effects/bright",
-      "quantity": "the share of its true flux the clipped sum of the brightest star would read, in percent, with a 60 second exposure: 30 at V = 9.5 and 53 at V = 10.5",
+      "quantity": "the share of its true flux the clipped sum of the brightest star would read, in percent, with a 60 second exposure: 30 at V = 9.5 and 55 at V = 10.5",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": [
