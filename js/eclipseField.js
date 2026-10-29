@@ -4,7 +4,7 @@
 // Pure functions of the panels' control values, shared by js/eclipseWidgets.js
 // and tests/binariesLessons.test.js (which recomputes every number a lesson
 // states from them). Nothing is calculated here that the kernel or the inference
-// core does not: the light curve is js/stellar/binaries.js, the fit, its
+// core does not: the light curve is js/inference/binaries.js, the fit, its
 // uncertainties, its rank analysis and its profile are js/inference/infer.js on
 // the eclipsing-binary model (js/inference/binaryModel.js), and the data are
 // SYNTHETIC with their truth in the preset, which says so.
@@ -20,7 +20,7 @@ import {
   residualsFail,
   secondaryPhase,
   derivedQuantities,
-} from './stellar/binaries.js';
+} from './inference/binaries.js';
 import { fitOnce, profileTask } from './inference/infer.js';
 import { syntheticEclipse } from './inference/synthetic.js';
 

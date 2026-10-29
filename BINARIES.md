@@ -1,6 +1,6 @@
 # Eclipsing binaries: a detached model with identifiability stated
 
-Roadmap III, Prompt 217 (tranche T3, D-R10-207-01). Branch `feat/eclipsing-binaries`. The kernel is `js/stellar/binaries.js`; the model of
+Roadmap III, Prompt 217 (tranche T3, D-R10-207-01). Branch `feat/eclipsing-binaries`. The kernel is `js/inference/binaries.js` (first written in `js/stellar/`, moved beside the occultation it imports so that the architecture check keeps its domain layer free of feature imports); the model of
 the inference core is `js/inference/binaryModel.js` (registered in `js/inference/models.js` as `eclipsing-binary`); the instruments are the
 `eclipse-curve` and `eclipse-fit` panels (`js/eclipseWidgets.js` over `js/eclipseField.js`) and the model in the Observatory's fit panel
 (`js/observatory/fitPanel.js`); the investigation is "Two Stars Eclipsing" (`js/data/investigations/binaries-sequence.js`). The validation
@@ -12,7 +12,7 @@ the model, the validator, the panels or any lesson existed.
 | Existing authority | Missing behaviour | Adopter | Duplication removed |
 |---|---|---|---|
 | `js/inference/transit.js` (a dark disk across one limb-darkened star, circular orbit) and `js/inference/models.js`'s `transit-quadratic` | a second luminous star (the occulted star's light is lost in both eclipses), an eccentric orbit, the secondary eclipse, a surface brightness ratio, the identifiability of the radius ratio | the Observatory's fit panel (`eclipsing-binary` beside `transit-quadratic`), the two panels, the lesson | the occultation quadrature is `transit.js`'s `occultation`, imported, not copied; the Kepler solver is `js/orbital.js`'s `solveKepler` (D-R10-18) |
-| `js/inference/fit.js`: the rank analysis (`rankAt`), the covariance, the profile | a model-specific statement of what the data fix, and the residual test of this prompt | `identifiability()` and `residualsFail()` in `js/stellar/binaries.js`, called from `js/inference/infer.js` through an optional `model.identify` hook | none: it adds to the result, it does not replace `rank` |
+| `js/inference/fit.js`: the rank analysis (`rankAt`), the covariance, the profile | a model-specific statement of what the data fix, and the residual test of this prompt | `identifiability()` and `residualsFail()` in `js/inference/binaries.js`, called from `js/inference/infer.js` through an optional `model.identify` hook | none: it adds to the result, it does not replace `rank` |
 | `js/stellar/*` (structure, tracks, population) | binaries | this model | n/a |
 
 ## Equations, limits, assumptions

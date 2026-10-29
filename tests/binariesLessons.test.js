@@ -2,14 +2,14 @@
 // The eclipsing-binary lesson, in two languages (Roadmap III, Prompt 217)
 // -----------------------------------------------------------------------------
 // Every number a step states is recomputed from the panels the lesson draws
-// (js/eclipseWidgets.js over js/eclipseField.js, js/stellar/binaries.js and the
+// (js/eclipseWidgets.js over js/eclipseField.js, js/inference/binaries.js and the
 // inference core), read in the form the validator takes and fed to the step's own
 // validator; the Spanish carries the same step structure.
 // =============================================================================
 
 import { describe, test, expect } from '@jest/globals';
 // The shared modules first: Jest's VM loses a module several imports link at once.
-import '../js/stellar/binaries.js';
+import '../js/inference/binaries.js';
 import '../js/inference/infer.js';
 import { curveView, fitView, sigmaOf, PRESETS } from '../js/eclipseField.js';
 import { ECLIPSE_WIDGETS } from '../js/eclipseWidgets.js';

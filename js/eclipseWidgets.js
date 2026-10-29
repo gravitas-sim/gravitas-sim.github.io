@@ -10,7 +10,7 @@
 // residual test and, when asked, the profile of the radius ratio.
 //
 // Nothing is calculated here: every number is js/eclipseField.js's, over
-// js/stellar/binaries.js and js/inference/. Every data set is synthetic and says so.
+// js/inference/binaries.js and js/inference/. Every data set is synthetic and says so.
 // =============================================================================
 
 import './instrumentStartup.js';

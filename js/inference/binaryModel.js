@@ -1,7 +1,7 @@
 // =============================================================================
 // The detached eclipsing binary as a model of the inference core (Prompt 217)
 // -----------------------------------------------------------------------------
-// The physics is js/stellar/binaries.js (two spheres, quadratic limb darkening,
+// The physics is js/inference/binaries.js (two spheres, quadratic limb darkening,
 // Kepler orbit); this file says what the fitter needs of it: the parameters
 // with their bounds, the exact solution of the baseline, the derived
 // quantities, a start from the data, and the identifiability of the result.
@@ -21,7 +21,7 @@ import {
   derivedQuantities,
   eclipseFlux,
   identifiability,
-} from '../stellar/binaries.js';
+} from './binaries.js';
 
 const { Math, Float64Array } = globalThis;
 

@@ -49,7 +49,7 @@
 // =============================================================================
 
 import { solveKepler } from '../orbital.js';
-import { occultation } from '../inference/transit.js';
+import { occultation } from './transit.js';
 
 // Bound once: free globals are 8-25x slower in Jest's vm context.
 const { Math, Float64Array, Number } = globalThis;

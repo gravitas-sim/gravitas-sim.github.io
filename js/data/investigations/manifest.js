@@ -1139,19 +1139,6 @@ export const MANIFEST = [
     objectiveCount: 4,
   },
   {
-    id: 'two-stars-eclipsing',
-    title: 'Two Stars Eclipsing',
-    subtitle:
-      'Read two eclipses to tell which star is hotter and which is larger, fit the stars’ sizes as fractions of their orbit, and see what a fit can and cannot fix',
-    duration: '12-24 min',
-    level: 'Introductory astronomy',
-    thumbnail: 'images/investigations/two-stars-eclipsing.webp',
-    depths: 3,
-    stepCount: 6,
-    gradedCount: 4,
-    objectiveCount: 4,
-  },
-  {
     id: 'why-the-period-is-wrong',
     title: 'Why the Period Is Wrong',
     subtitle:
@@ -1162,6 +1149,19 @@ export const MANIFEST = [
     depths: 3,
     stepCount: 8,
     gradedCount: 6,
+    objectiveCount: 4,
+  },
+  {
+    id: 'two-stars-eclipsing',
+    title: 'Two Stars Eclipsing',
+    subtitle:
+      'Read two eclipses to tell which star is hotter and which is larger, fit the stars’ sizes as fractions of their orbit, and see what a fit can and cannot fix',
+    duration: '12-24 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/two-stars-eclipsing.webp',
+    depths: 3,
+    stepCount: 6,
+    gradedCount: 4,
     objectiveCount: 4,
   },
 ];

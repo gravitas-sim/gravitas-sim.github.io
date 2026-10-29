@@ -23,7 +23,7 @@ import {
   identifiability,
   residualsFail,
   secondaryPhase,
-} from '../js/stellar/binaries.js';
+} from '../js/inference/binaries.js';
 import { MODELS } from '../js/inference/models.js';
 import { fitOnce } from '../js/inference/infer.js';
 import { syntheticEclipse } from '../js/inference/synthetic.js';

@@ -19,7 +19,7 @@ the release rather than in the tag.
 - Three image investigations, after them in the same sequence, each in English and Spanish with instructor materials: Measuring the Moon (a scale from a reference pair on a real Galileo picture), How Far Is That Star? (a parallax and its distance from fourteen positions of a synthetic star) and A Binary Star's Orbit (an orbit and a mass sum from twelve positions), with one new instrument family (`js/imagingWidgets.js`) that calls the Observatory's own measuring modules. They open offline only after one online use. "What is in this field?" is not built (D-R10-72, `IMAGE_INVESTIGATIONS.md`).
 - A planetary sequence, Planets and the Sun, ordering the Solar System investigations that exist, with three new connecting investigations, each in English and Spanish with instructor materials: The Scale of the Solar System (sizes, distances, a marble model and light time), Moons of the Giants (the Laplace combination of Io, Europa and Ganymede from fitted periods) and Comets and the Sun (a comet's orbit and the heat at each end of it). A course package, The Solar System and the Sun, and a Solar System unit in the one-semester course. Worlds Compared, Reading a Surface and Space Weather from the Sun are not built: each needs a component or a data pack that is not in the project yet, and DECISION_REGISTER.md (D-R10-206-01) says which.
 - Observing strategy: a kernel for the window function of a sampling pattern (read through the period search, unchanged), the aliases of a period against the sidereal day, the year and the month, a verdict (resolved, ambiguous, not constrained) with its alias list, phase coverage, a multi-night plan from the observing-window planner with its cost in hours and a seeded weather loss, validated against Astropy's `LombScargle` and closed forms with the thresholds committed first; two panels (the window and aliases, the plan of the nights), the investigation Why the Period Is Wrong at three depths and three new advanced steps in Design the Schedule, both languages.
-- Eclipsing binaries: a detached two-sphere model on a circular or eccentric Kepler orbit with quadratic limb darkening (`js/stellar/binaries.js`), fitted through the inference core (`js/inference/binaryModel.js`) with each parameter's uncertainty or the words "not constrained" (a grazing eclipse leaves the radius ratio open), the secondary's phase giving e cos w and the durations only weakly e sin w, validated against batman, a brute-force quadrature, closed forms, seeded ensembles and misspecified systems (`BINARIES.md`); the model in the Observatory's fit panel; one investigation, Two Stars Eclipsing, at three depths in English and Spanish with instructor materials and one new instrument family (`js/eclipseWidgets.js`).
+- Eclipsing binaries: a detached two-sphere model on a circular or eccentric Kepler orbit with quadratic limb darkening (`js/inference/binaries.js`), fitted through the inference core (`js/inference/binaryModel.js`) with each parameter's uncertainty or the words "not constrained" (a grazing eclipse leaves the radius ratio open), the secondary's phase giving e cos w and the durations only weakly e sin w, validated against batman, a brute-force quadrature, closed forms, seeded ensembles and misspecified systems (`BINARIES.md`); the model in the Observatory's fit panel; one investigation, Two Stars Eclipsing, at three depths in English and Spanish with instructor materials and one new instrument family (`js/eclipseWidgets.js`).
 - Exposure planning: the CCD-equation kernel (`js/kernels/detector/snr.js`) extended with several exposures, point-spread-function photometry, extended sources, extinction by airmass, the limiting magnitude of an exposure and refusals for targets the exposure limit or the full well forbids, a facility adapter over the instrument library that fills in nothing the library does not state, an exposure-planner panel with a synthetic frame measured with aperture photometry, four new advanced steps in Signal, Noise and Exposure (the lower depths grade as before), and the majors investigation Plan an Exposure, in English and Spanish with instructor materials. Validated against analytic cases, an independent implementation, the published Rubin depth model and 1600 rendered frames; three legs against the published model (the read-noise loss in u and g, and the equation away from the fiducial sky) stay failing and labelled in `EXPOSURE_PLANNING.md`.
 
 ## [2.1.0] - 2026-10-24
@@ -116,8 +116,8 @@ The Observatory's image measurement train (Prompts 179 to 182, 184, 186 to 189, 
 
 **Gravitas 2.0.0.** Gravitas grows from a gravity sandbox with 22 guided
 investigations into a browser laboratory: <!--fact:scenarios-->61<!--/fact-->
-sandbox scenarios, <!--fact:libraryInvestigations-->108<!--/fact--> guided
-investigations (<!--fact:investigations-->91<!--/fact--> that run in the
+sandbox scenarios, <!--fact:libraryInvestigations-->109<!--/fact--> guided
+investigations (<!--fact:investigations-->92<!--/fact--> that run in the
 simulation and <!--fact:guidedInvestigations-->17<!--/fact--> in the
 Observatory, the 3-D lab and the mission lab), a shared shell, a Library, a
 workspace for each student's own work, an instructor path from adoption page to
@@ -1841,7 +1841,7 @@ listed here because this is the release that first carries it.
   uncertainty, the target and the observing configuration.
 - **Offline support.** A service worker precaches the application shell, the
   <!--fact:scenarios-->61<!--/fact--> scenario thumbnails and all
-  <!--fact:investigations-->91<!--/fact--> English lessons, so a class keeps
+  <!--fact:investigations-->92<!--/fact--> English lessons, so a class keeps
   working when the room's wifi drops. The cache name is a content hash, so a
   build invalidates it. See [OFFLINE_AND_LOW_END.md](OFFLINE_AND_LOW_END.md).
 - **A measured low-end quality tier.** Chosen from the frame rate the machine
@@ -1850,7 +1850,7 @@ listed here because this is the release that first carries it.
   off.
 - **An investigation authoring toolchain.** `npm run author:check` validates
   every lesson and every one of the
-  <!--fact:investigationSteps-->1289<!--/fact--> steps; `npm run author:new`
+  <!--fact:investigationSteps-->1295<!--/fact--> steps; `npm run author:new`
   scaffolds a lesson with its translation shadow and instructor stub;
   `?author=<lesson>&step=<n>` opens any step with diagnostics without touching
   a student's saved progress; and a browser walker exercises every step of

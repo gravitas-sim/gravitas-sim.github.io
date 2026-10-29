@@ -9,7 +9,7 @@
 //   npm run binaries:validate -- --only=A1,B1    run the rows whose id starts with one of these
 //   npm run binaries:validate -- --fits=<path>   the V505 Per light curve for E1 (else NOT RUN)
 //
-// tests/fixtures/binaries/thresholds.json fixed every bound before js/stellar/binaries.js
+// tests/fixtures/binaries/thresholds.json fixed every bound before js/inference/binaries.js
 // existed; this runs the checks against the kernel and the inference model and judges
 // them against the bounds read from that file. The oracle rows read the results pinned
 // in tests/fixtures/binaries/oracle-results.json (tools/binaries-oracle/oracle.py: batman
@@ -31,7 +31,7 @@ import {
   derivedQuantities,
   lightRatio,
   residualsFail,
-} from '../js/stellar/binaries.js';
+} from '../js/inference/binaries.js';
 import { fitOnce, profileTask } from '../js/inference/infer.js';
 import { syntheticEclipse } from '../js/inference/synthetic.js';
 import { readFits } from './data-packs/fits.mjs';

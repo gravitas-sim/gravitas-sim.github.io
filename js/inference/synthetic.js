@@ -11,7 +11,7 @@
 import { gaussian as normals, stream } from '../random/streams.js';
 import { limbDarkening, transitFlux } from './transit.js';
 import { rvCurve } from './rv.js';
-import { eclipseFlux } from '../stellar/binaries.js';
+import { eclipseFlux } from './binaries.js';
 
 /** A seeded standard normal. */
 export const gaussian = seed => normals(stream('noise', String(seed)));
@@ -101,7 +101,7 @@ export function tessLikeTimes(
  * @param {{seed: string, times: ArrayLike<number>, sigma: number,
  *   truth: object, exposure?: number, supersample?: number,
  *   modulation?: {amplitude: number, period: number, phase: number}}} o
- *   truth is the parameter set of js/stellar/binaries.js eclipseFlux()
+ *   truth is the parameter set of js/inference/binaries.js eclipseFlux()
  */
 export function syntheticEclipse(o) {
   const clean = eclipseFlux(o.times, o.truth, {

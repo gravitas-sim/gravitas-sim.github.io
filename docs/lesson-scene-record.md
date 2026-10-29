@@ -11,15 +11,15 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 91 investigations and 1289 steps: 1197 steps
+Across 92 investigations and 1295 steps: 1203 steps
 declare a scene, 157 let a reader change one, 167 read the
-running integration, 788 show a prescribed model result, 146 draw
-on a stored dataset, 667 put a self-contained panel beside the text,
-341 keep something, and 58 are prose.
-Of 173 prediction loops, 173 are returned to,
-173 produce a measurement before they are answered, and
+running integration, 794 show a prescribed model result, 146 draw
+on a stored dataset, 673 put a self-contained panel beside the text,
+342 keep something, and 58 are prose.
+Of 174 prediction loops, 174 are returned to,
+174 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
-173 hold their marking until the experiment settles them.
+174 hold their marking until the experiment settles them.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -1294,4 +1294,18 @@ Of 173 prediction loops, 173 are returned to,
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:strategy-window`, control strategy-window/cadence, measures the phase bins out of 20 that forty nights of visits fill for a 0.8-day period: 13 for one visit a night at the same time and 20 for three visits a night at irregular times, the cadence that breaks the alias, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## Two Stars Eclipsing (`two-stars-eclipsing`)
+
+- **Steps:** 6. Scene declared on 6; a reader can change something on 0; 6 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 6 prescribed model, 0 stored dataset, 6 self-contained panel.
+- **What students do:** move-an-instrument-control, commit-a-prediction, record-values, choose-an-option.
+- **Objects the steps declare:** star.
+- **Instruments:** eclipse-curve.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** which-eclipse-is-deeper → the-two-depths, the-flat-bottom, half-an-orbit, what-eclipses-leave-out → the-two-depths.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:eclipse-curve`, control eclipse-curve/J, measures the depth of the primary eclipse, in percent of the light of the pair, for two stars that eclipse each other nearly edge on: 48.3 at a surface brightness ratio of 0.55 and 40.7 at 1, the deeper eclipse being the one that hides the hotter star, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 

@@ -8,7 +8,7 @@
 // re-export of a named export here, and the instructor modules read INSTRUCTOR. No
 // imports: every number a step states is recomputed in tests/binariesLessons.test.js
 // from the instruments (js/eclipseWidgets.js over js/eclipseField.js, the kernel
-// js/stellar/binaries.js and the inference core). Every step carries a `sid`, an
+// js/inference/binaries.js and the inference core). Every step carries a `sid`, an
 // opaque stable id that student progress is keyed by.
 //
 // Every data set is synthetic and says so, with its truth stated in the panel. The
@@ -799,7 +799,7 @@ const CONTENT = {
       'Move the inclination down from 90 and say at what value the flat bottom disappears.',
     ],
     modelNotes:
-      'js/stellar/binaries.js (the detached two-sphere light curve, the contacts, the identifiability rule), js/inference/binaryModel.js (the fitted model), js/eclipseField.js, js/eclipseWidgets.js, BINARIES.md.',
+      'js/inference/binaries.js (the detached two-sphere light curve, the contacts, the identifiability rule), js/inference/binaryModel.js (the fitted model), js/eclipseField.js, js/eclipseWidgets.js, BINARIES.md.',
   },
 };
 

@@ -475,7 +475,7 @@ export const NEVER_PRECACHED = [
   /^js\/instruments\/spectrograph\.js$/,
   /^js\/observatory\/spectrographPanel\.js$/,
   // Prompt 217: the eclipsing-binary panels, their field module and the lesson's one new file (D-R10-217-04). The kernel
-  // (js/stellar/binaries.js) and the model (js/inference/binaryModel.js) are NOT here: the inference worker imports them.
+  // (js/inference/binaries.js) and the model (js/inference/binaryModel.js) are NOT here: the inference worker imports them.
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(two-stars-eclipsing|binaries-sequence)\.js$/,
   /^(js\/eclipseWidgets\.js|js\/eclipseField\.js|js\/i18n\/(en|es)\.eclipse\.js)$/,
   // Prompt 214: the strategy kernel, planner extension, panels and the strategy lesson's one new file (D-R10-214-06).

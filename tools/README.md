@@ -17,6 +17,7 @@ current, and the orchestrator checks it.
 | `atmospheres-ii-validate.mjs` | The eclipse and phase kernel against its committed thresholds (Prompt 202) | `npm run atmospheres-ii:validate` |
 | `atmospheres-validate.mjs` | The atmospheres kernel against its committed thresholds (Prompt 200) | `npm run atmospheres:validate` |
 | `author-check.mjs` | npm run author:check | `npm run author:check`, `npm run author:strict`, `npm run author:rules` |
+| `binaries-validate.mjs` | The eclipsing-binary model against its committed thresholds (Prompt 217) | `npm run binaries:validate` |
 | `blackhole-profile.mjs` | What a black hole costs to draw |  |
 | `blackhole-shots.mjs` | Captures of the black holes |  |
 | `body-shots.mjs` | Reference captures of the bodies, for a before-and-after on their drawing |  |
@@ -199,7 +200,6 @@ current, and the orchestrator checks it.
 | `storage-matrix.mjs` | npm run storage:matrix | `npm run storage:matrix` |
 | `storage-profile.mjs` | npm run storage:profile -- --capture | `npm run storage:profile` |
 | `strategy-validate.mjs` | The observing-strategy kernel against its committed thresholds (Prompt 214) | `npm run strategy:validate` |
-| `binaries-validate.mjs` | The eclipsing-binary model against its committed thresholds (Prompt 217) | `npm run binaries:validate` |
 | `sun-frames-build.mjs` | The 14-day solar sequence (Prompt 194 part 2, SUN_KERNEL.md Part 2) |  |
 | `sun-validate.mjs` | The solar kernel against its committed thresholds (Prompt 194) | `npm run sun:validate` |
 | `surface-gate.mjs` | The surface gate: one decision function, the same for every surface | `npm run surface:check`, `npm run surface:measure`, `npm run surface:write`, `npm run surface:report` |

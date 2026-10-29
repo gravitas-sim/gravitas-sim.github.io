@@ -391,6 +391,12 @@ export const LAZY_FAMILIES = Object.freeze({
     'TIDE_WIDGETS',
     ['tides-roche', 'tides-resonance', 'tides-moon', 'tides-heating']
   ),
+  eclipse: familyEntry(
+    () => import('./eclipseWidgets.js'),
+    './eclipseWidgets.js',
+    'ECLIPSE_WIDGETS',
+    ['eclipse-curve', 'eclipse-fit']
+  ),
   effects: familyEntry(
     () => import('./effectsWidgets.js'),
     './effectsWidgets.js',
@@ -426,12 +432,6 @@ export const LAZY_FAMILIES = Object.freeze({
     './strategyWidgets.js',
     'STRATEGY_WIDGETS',
     ['strategy-window', 'strategy-plan']
-  ),
-  eclipse: familyEntry(
-    () => import('./eclipseWidgets.js'),
-    './eclipseWidgets.js',
-    'ECLIPSE_WIDGETS',
-    ['eclipse-curve', 'eclipse-fit']
   ),
   telescope: familyEntry(
     () => import('./telescopeWidgets.js'),
