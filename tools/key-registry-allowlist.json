@@ -49,6 +49,9 @@
     "js/imagingField.js": {
       "gravitas.image": 1
     },
+    "js/effectsField.js": {
+      "gravitas.image": 1
+    },
     "js/telescopeField.js": {
       "gravitas.image": 1
     },

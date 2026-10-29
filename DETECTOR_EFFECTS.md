@@ -87,3 +87,57 @@ package on the pinned frame would be a stronger one, and installing it is a down
 `npm run detector-effects:validate` prints the table (`-- --json` for JSON). The oracle is
 `tools/detector-effects-oracle/oracle.py` (numpy 1.26, scipy 1.13; no Gravitas code except the pinned frame it reads);
 its results are pinned in `tests/fixtures/detector-effects/oracle-results.json`.
+
+## What the first run found
+
+The first run of the production kernel against the committed bounds passed 18 of the 23 rows; the table is
+`tests/fixtures/detector-effects/` (failed legs in `failed-legs.json`). Three rows fail, each a finding and none a harness slip:
+
+* **B1 (the internal cosmic-ray detector).** `reduce.js` `maskCosmicRays` flags 27 pixels of the pinned 96 by 96 frame and
+  49 percent (27 of 55) of the cosmic-ray pixels that stand out by 8 sigma, with no false positive, against the bound of 90
+  percent. Its sharpness test requires the excess to be at least 0.8 of the pixel's own value, so a pixel passes only when
+  the deposit is about four times the background under it. Weaker track pixels pass an 8-sigma test and fail this one. The
+  mask is pinned (`reference-masks.json`) as the internal reference, as the contract says. Amendment AM3 records that the
+  first pinned frame (exposure 300 s, a 930-electron sky) had flagged no pixel at all and was replaced by the panel's own
+  60 s exposure before any recall figure existed; the frame was not tuned for recall.
+* **B3 (the two masks agree).** The Jaccard index is 0.375 against 0.75: the independent detector (an own implementation of
+  van Dokkum's L.A.Cosmic, not the astroscrappy package) flags 75 pixels, the internal one 27, and follows from B1. The
+  independent detector itself passes (recall 1.0 on the 55 pixels, 3 false positives against a bound of 3).
+* **D1 (180's refusals), one clause.** The tool refuses the saturated star (`saturated`), refuses the two faint stars on the
+  bleed trail when the mask plane carries the bleed bit (`masked`), measures the clean stars within 3 sigma, and Prompt 183's
+  detector flags the saturated source. The clause that fails is the committed one about an unflagged trail: with the mask
+  plane withheld the trail stars are still refused (`saturated`), because a bleed trail fills its pixels to the full well and
+  the tools refuse a pixel at the limit by its value. The value gate is a backstop for bleeding. The case where only the flag
+  prevents a wrong number is a cosmic-ray track, which amendment AM2 added as check D3 (passes: the star's flux is 6.6 sigma
+  wrong when the mask is withheld, refused as `masked` when it is given).
+
+Two things the work corrected before the table was computed (amendment AM2 and a code fix): the finite-difference step at the
+knee was a specification error (a one-sided difference of a tanh has the truncation error (h/w)^2/3, which exceeds the bound at
+the committed step for a knee of 0.95), and the sidecar's linear limit is expressed in recorded values (the response at the
+limit's charge), because the data are recorded values.
+
+## The panel and the lesson
+
+The panel `detector-effects` (family `effects`, `js/effectsWidgets.js`, lazy, never precached) shows one bright star, two
+faint stars on its column, a faint control and a ladder of five rising brightnesses on a 64 by 64 synthetic frame. Its first
+controls are the bright star's magnitude and the exposure; the toggles (nonlinearity, bleeding, cosmic-ray tracks), the
+profile width and the flag overlay follow, so the "More" fold of a reading step hides them. Each star's row in the readout is
+its marks-table line: the tool's measurement with its error, or its refusal and the reason, beside what the sum would have
+read had the refusal been ignored, and the sidecar flags near the star. The sidecar itself is `effectsSidecar` in
+`js/effectsField.js` (a `gravitas.image` document with the mask plane's four named bits); the forward model `ccd` gains an
+optional `effects` state, a `flags` column and the effect parameters in its truth manifest.
+
+The investigation "The Saturated Star" (`js/data/investigations/saturated-star-sequence.js`, one new instructor-closure file,
+D-R10-211-01) has eight core steps (why the brightest star is too faint, what it would read, the magnitude error, bleeding and
+its trail, a cosmic-ray track), five quantitative steps (the response curve, the linear limit and the plateau, the brightest
+star still measured, where the measurement is safe, whether to correct) and five advanced steps (undersampling, the peak
+pixel by phase, the aperture's scatter, what it costs). Every number a step states is recomputed in
+`tests/saturatedStarLessons.test.js`.
+
+## Where things are
+
+`js/kernels/detector/effects.js` (the response, the tracks, the spill, `normalizeEffects`), `sampling.js` (the regime, the
+peak share and the aperture variation), `frame.js` (the `effects` field), `js/effectsField.js`, `js/effectsWidgets.js`,
+`js/i18n/en.effects.js` and `es.effects.js`, `tools/detector-effects-validate.mjs`, `tools/detector-effects-oracle/oracle.py`,
+`tests/detectorEffects.test.js`, `tests/saturatedStarLessons.test.js`, `e2e/saturatedStarLesson.spec.js`, the register rows
+D-R10-211-01 onward.

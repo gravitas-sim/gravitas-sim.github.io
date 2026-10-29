@@ -198,6 +198,7 @@ current, and the orchestrator checks it.
 | `sun-validate.mjs` | The solar kernel against its committed thresholds (Prompt 194) | `npm run sun:validate` |
 | `surface-gate.mjs` | The surface gate: one decision function, the same for every surface | `npm run surface:check`, `npm run surface:measure`, `npm run surface:write`, `npm run surface:report` |
 | `telescopes-validate.mjs` | The telescope optics against their committed thresholds (Prompt 208) | `npm run telescopes:validate` |
+| `detector-effects-validate.mjs` | The detector effects against their committed thresholds and the independent oracle (Prompt 211) | `npm run detector-effects:validate` |
 | `three-shaders.mjs` | three.js shaders in the bundle: pruned to what the 3-D view can reach, then |  |
 | `thumbnail-config.mjs` | Thumbnail capture settings |  |
 | `tides-scenarios.mjs` | The ring and Roche scenarios, measured (Prompt 204 part 2) |  |
