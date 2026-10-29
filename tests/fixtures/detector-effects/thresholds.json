@@ -1,0 +1,265 @@
+{
+  "format": "gravitas.detector-effects-thresholds/1",
+  "prompt": "Roadmap III, Prompt 211, detector effects II (tranche T3 by D-R10-207-01)",
+  "document": "DETECTOR_EFFECTS.md (\"Validation contract\")",
+  "committed": "before the effects module, the validator, the oracle script, its results, the panel, the investigation and the tests of Prompt 211 existed. The qualitative sampling bounds (A12) and the mask bounds (B1 to B3) were chosen after a scratch evaluation of the stated definitions in numpy and scipy outside the repository (a Gaussian pixel-integrated profile, whole-pixel apertures); no Gravitas code produced any number that fixed a bound.",
+  "rule": "A crossed bound is a failed check, recorded in failed-legs.json and left failing; only Carl resets one. A leg that cannot be measured is NOT RUN and says why. Nothing here was tuned against the kernel: the effects module did not exist when this file was written. An amendment is recorded with when, what and why, and moves no bound.",
+  "seeds": {
+    "oracle": 211,
+    "harness": 2110001,
+    "ensemble": "detector-effects-211"
+  },
+  "scope": {
+    "built": "five effects in the detector kernel's frame model, each behind a flag in the frame's truth and the image sidecar: saturation at the full well (already present, now flagged), a stated nonlinearity near the full well, a seeded cosmic-ray track model, charge bleeding along columns as a bounded effect, and the sampling of the point-spread function against the pixel (a regime flag and the phase dependence of the peak pixel and of a proportional aperture); the sidecar writer and the mask plane; one panel; one investigation at three depths",
+    "notBuilt": "charge-transfer inefficiency, a Landau energy-loss spread for cosmic rays, hot-column defects, amplifier glow, persistence, reciprocity failure, a gain that varies with signal other than by the stated curve, blooming across rows (only columns), antiblooming gates, an intra-pixel sensitivity map, a pixel-response function other than the box, a detector MTF, diffusion of charge between pixels (a stated simplification: the box is exact), authentic frames (request in DETECTOR_EFFECTS.md)"
+  },
+  "constants": {
+    "defaults": {
+      "nonlinearity": {
+        "kneeFraction": 0.8,
+        "curve": "f(e) = e for e <= k; f(e) = k + w tanh((e - k) / w) for e > k; k = kneeFraction x fullWell, w = fullWell - k",
+        "safeDeviation": 0.01
+      },
+      "cosmic": {
+        "dedxPerPixel": 1200,
+        "thicknessPx": 1,
+        "maxLengthPx": 40,
+        "model": "a straight track: entry point uniform on the frame, azimuth uniform, zenith angle theta with cos(theta) = sqrt(1 - u) for u uniform in [0, 1) (a cosine-weighted incidence on a flat detector), two-dimensional length L = thicknessPx x tan(theta) capped at maxLengthPx, total deposit dedxPerPixel x thicknessPx / cos(theta) electrons spread along the track in proportion to the length in each pixel",
+        "source": "about 80 electron-hole pairs per micron for a minimum-ionising particle in silicon (Janesick, Scientific Charge-Coupled Devices, 2001; Groom 2002) times a 15 micron pixel gives 1200 per pixel of path; the thickness of one pixel is an assumed teaching value; both are labelled as assumed in the sidecar"
+      },
+      "bleed": {
+        "maxLengthPx": 64,
+        "model": "per column, per run of pixels above the full well: the run's excess is split equally between the pixel above and the pixel below; each side fills consecutive pixels up to the full well in turn (a pixel already full passes the charge on and counts toward the length), and whatever is left when the length cap or the frame edge is reached is lost; runs are handled in order of increasing row"
+      },
+      "sampling": {
+        "underBelowFwhmPx": 2,
+        "overFromFwhmPx": 4,
+        "apertureFwhmRatio": 1.5,
+        "phaseGrid": 21,
+        "source": "Nyquist sampling of a Gaussian profile needs a full width at half maximum of about two pixels (Howell, Handbook of CCD Astronomy, 2nd ed., section 5.1); the aperture ratio is Prompt 180's"
+      }
+    },
+    "flagBits": {
+      "saturated": 1,
+      "bleed": 2,
+      "cosmic": 4,
+      "nonlinear": 8
+    },
+    "source": "the curve and the cutoffs are stated model choices (DETECTOR_EFFECTS.md), not measurements of a detector; the oracle recomputes them independently"
+  },
+  "checks": [
+    {
+      "id": "A1.response.curve",
+      "group": "a",
+      "bound": "the nonlinearity curve f(e) = e for e <= k, k + w tanh((e - k)/w) above, for fullWell 50000 and knee fractions 0.5, 0.8 and 0.95: the kernel's values at 40 pinned electron counts equal the oracle's (scipy, numpy) to a relative 1e-12; f(k) = k to 1e-9 of the full well; the one-sided slopes at the knee are 1 to 1e-6 (finite difference at 1e-3 of the full well); f is strictly increasing on 2000 points to the full well; f at the full well is k + w tanh(1) to a relative 1e-12; the inverse returns the electrons to a relative 1e-9 on 200 points",
+      "limits": {
+        "relMax": 1e-12,
+        "kneeAbsFraction": 1e-9,
+        "slopeAbsMax": 1e-6,
+        "inverseRelMax": 1e-9,
+        "points": 2000,
+        "fullWell": 50000,
+        "kneeFractions": [0.5, 0.8, 0.95]
+      }
+    },
+    {
+      "id": "A2.response.limit",
+      "group": "a",
+      "bound": "the electrons at which the response falls below the linear one by a stated fraction (0.001, 0.01 and 0.05) for the three knee fractions: the kernel's limit equals the oracle's root (scipy.optimize.brentq) to a relative 1e-9, and the deviation 1 - f(e)/e at the kernel's limit equals the stated fraction to an absolute 1e-9; the limit lies between the knee and the full well",
+      "limits": {
+        "relMax": 1e-9,
+        "deviationAbsMax": 1e-9,
+        "deviations": [0.001, 0.01, 0.05]
+      }
+    },
+    {
+      "id": "A3.saturation.frame",
+      "group": "a",
+      "bound": "a uniform synthetic frame (48 by 48, a flat pattern of exactly 1, no dark, no bias pattern, no cosmic rays, the default read noise and gain, nonlinearity off) at mean charges of 0.5, 0.9, 1.0 and 1.3 times the full well: the mean recorded counts equal the oracle's expectation of bias + (min(X, fullWell) + read noise)/gain for X Poisson (scipy.stats.poisson sums) to within 4 standard errors of the frame mean; the saturated fraction equals the Poisson tail P(X >= fullWell) to within 5 binomial standard errors; with a gain of 0.5 electrons per count the converter's clip holds every pixel of the 1.3 frame at the converter's maximum exactly",
+      "limits": {
+        "levels": [0.5, 0.9, 1.0, 1.3],
+        "meanSe": 4,
+        "fractionSe": 5,
+        "size": 48
+      }
+    },
+    {
+      "id": "A4.nonlinearity.frame",
+      "group": "a",
+      "bound": "the same uniform frame with the nonlinearity on (knee 0.8) at mean charges of 0.3, 0.7, 0.85 and 0.95 times the full well: the mean recorded counts equal the oracle's bias + (E[f(min(X, fullWell))])/gain to within 4 standard errors; at 0.3, where the response is linear, the mean recorded electrons equal the mean charge to within 4 standard errors; every pixel of the same seeded frame whose collected charge is at or below the knee is identical, to the count, to the same frame rendered with the effect off",
+      "limits": {
+        "levels": [0.3, 0.7, 0.85, 0.95],
+        "meanSe": 4,
+        "size": 48
+      }
+    },
+    {
+      "id": "A5.cosmic.track",
+      "group": "a",
+      "bound": "the deposit of a straight track on the pixel grid: for 12 pinned tracks (entry point, azimuth, zenith angle; two start outside the frame, two leave it, two lie along a row or a column, one has length below one pixel), the kernel's electrons in every pixel equal the oracle's (an independent slab-clipping computation in numpy) to an absolute 1e-9 electrons; the electrons summed over the frame equal dedx x thickness / cos(theta) times the fraction of the track's length inside the frame, to a relative 1e-9",
+      "limits": {
+        "absMax": 1e-9,
+        "sumRelMax": 1e-9,
+        "tracks": 12
+      }
+    },
+    {
+      "id": "A6.cosmic.rate",
+      "group": "a",
+      "bound": "events per frame: 400 seeded frames of 32 by 32 pixels, exposure 100 s, a rate of 0.05 events per second per frame (a mean of 5): the mean number of events is within 4 standard errors (sqrt(5/400)) of 5, and the index of dispersion (variance over mean) lies in [0.8, 1.25]",
+      "limits": {
+        "frames": 400,
+        "rate": 0.05,
+        "exposureS": 100,
+        "meanSe": 4,
+        "dispersionRange": [0.8, 1.25]
+      }
+    },
+    {
+      "id": "A7.cosmic.morphology",
+      "group": "a",
+      "bound": "the event distribution of 4000 seeded events: the median total deposit is sqrt(2) x dedx x thickness (the median of 1/cos(theta) for cos(theta) = sqrt(1 - u)) to within 5 percent; the median two-dimensional length is the thickness (the median of tan(theta)) to within 5 percent; the azimuths are uniform: the means of cos(2 phi) and sin(2 phi) are each within 0.045 of zero (four standard errors); no length exceeds the cap",
+      "limits": {
+        "events": 4000,
+        "medianRelMax": 0.05,
+        "azimuthAbsMax": 0.045
+      }
+    },
+    {
+      "id": "A8.bleed.conservation",
+      "group": "a",
+      "bound": "charge bleeding conserves charge: for 60 seeded columns (height 64, one to three saturated stars of random excess, a random sky level of 20 to 3000 electrons) the electrons before equal the electrons after plus the electrons lost to the frame edge and the length cap, to a relative 1e-12; no pixel exceeds the full well after the spill; a pixel the spill did not touch and that was not above the full well is unchanged exactly; rows are untouched (a second frame rendered with the columns transposed, which the kernel does not support, is not tested: the direction is stated)",
+      "limits": {
+        "columns": 60,
+        "relMax": 1e-12,
+        "height": 64
+      }
+    },
+    {
+      "id": "A9.bleed.trail",
+      "group": "a",
+      "bound": "the trail of one isolated saturated run in a uniform background b (100 seeded cases; excess E chosen so that E/2/(fullWell - b) has a fractional part in [0.05, 0.95]; the run far from both edges and the cap not reached): the pixels touched on each side equal ceil(E / 2 / (fullWell - b)) exactly, the two sides are equal, and nothing is lost; with the cap (maxLengthPx = 10) and an E that would need more, each side touches exactly 10 pixels and the lost electrons equal E - 2 x 10 x (fullWell - b) to a relative 1e-12",
+      "limits": {
+        "cases": 100,
+        "fractionRange": [0.05, 0.95],
+        "capPx": 10,
+        "relMax": 1e-12
+      }
+    },
+    {
+      "id": "A10.bleed.frame",
+      "group": "a",
+      "bound": "in a rendered frame with one star far above the full well, bleeding on: the trail's pixels are in the star's column(s) only, extend to both sides, every filled pixel of the trail reads the plateau (the response at the full well) to within 5 read-noise sigma, the sidecar's bleed bit is set on exactly the pixels the spill touched, and with bleeding off the same frame has no pixel touched",
+      "limits": {
+        "readSigma": 5
+      }
+    },
+    {
+      "id": "A11.sampling.phase",
+      "group": "a",
+      "bound": "for a Gaussian profile integrated over square pixels at FWHM 1.0, 1.2, 2.0, 2.8 and 4.0 pixels, on a 21 by 21 grid of cell-centred sub-pixel phases: the largest and smallest peak-pixel fraction, and the mean and the relative standard deviation of the fraction of the flux inside a whole-pixel aperture of radius 1.5 FWHM (a pixel belongs when its centre lies within the radius), equal the oracle's (scipy.special.erf; direct summation) to an absolute 2e-6 (the kernel's error function is accurate to 1.5e-7)",
+      "limits": {
+        "absMax": 2e-6,
+        "fwhms": [1.0, 1.2, 2.0, 2.8, 4.0],
+        "grid": 21,
+        "apertureFwhmRatio": 1.5
+      }
+    },
+    {
+      "id": "A12.sampling.trend",
+      "group": "a",
+      "bound": "what undersampling does, stated before it was computed by the kernel: the ratio of the largest to the smallest peak-pixel fraction over the sub-pixel phase is at least 1.5 at FWHM 1.2 pixels and at most 1.25 at 2.8 pixels; the relative scatter of the proportional aperture's flux over the phase at 1.2 is at least 4 times that at 2.8; both measures fall monotonically over the five FWHMs of A11 (peak ratio from 1.0 to 4.0); the regime of FWHM 1.99, 2.0, 3.99 and 4.0 pixels is under, adequate, adequate, over",
+      "limits": {
+        "peakRatioAt1_2Min": 1.5,
+        "peakRatioAt2_8Max": 1.25,
+        "scatterRatioMin": 4,
+        "regimeProbes": [1.99, 2.0, 3.99, 4.0]
+      }
+    },
+    {
+      "id": "A13.flags",
+      "group": "a",
+      "bound": "the flag plane of a seeded 64 by 64 frame with every effect on equals the stated rules pixel by pixel, recomputed from the frame's truth arrays outside the renderer: saturated where the collected charge before the clip is at or above the full well; bleed where the spill touched; cosmic where an event deposited charge; nonlinear where the collected charge exceeds the linear limit at 1 percent; zero mismatches over all pixels and over three seeds; with an effect off its bit is never set",
+      "limits": {
+        "seeds": 3,
+        "mismatchesMax": 0
+      }
+    },
+    {
+      "id": "B1.cosmic.internal",
+      "group": "b",
+      "bound": "the internal reference: js/kernels/detector/reduce.js maskCosmicRays on the pinned 96 by 96 frame (tests/fixtures/detector-effects/cr-frame.json, rendered by the kernel with seed detector-effects-211-mask, track cosmic rays and stars, bias subtracted and converted to electrons) flags at least 90 percent of the truth cosmic-ray pixels whose deposit is at least 8 sigma of the local noise (the detectable ones), and at most 3 pixels that are neither cosmic-ray pixels nor in their 8-neighbourhood; its mask is pinned (the SHA-256 of the 0/1 bytes), so a change is seen",
+      "limits": {
+        "recallMin": 0.9,
+        "detectableSigma": 8,
+        "falsePositiveMax": 3
+      }
+    },
+    {
+      "id": "B2.cosmic.oracle",
+      "group": "b",
+      "bound": "the independent detector: an implementation of van Dokkum's L.A.Cosmic (2001, PASP 113, 1420: the Laplacian of the 2x block-replicated image, the noise model, the fine-structure image from the 3 by 3 and 7 by 7 medians, sigclip 4.5, sigfrac 0.3, objlim 5, two iterations) in numpy and scipy, run on the same pinned frame, flags at least 90 percent of the detectable truth pixels and at most 3 false positives by the same rule; this is an own implementation of the cited algorithm, not the astroscrappy package (not installed; a download is Carl's to approve), and the leg says so",
+      "limits": {
+        "recallMin": 0.9,
+        "detectableSigma": 8,
+        "falsePositiveMax": 3,
+        "sigclip": 4.5,
+        "sigfrac": 0.3,
+        "objlim": 5,
+        "iterations": 2
+      }
+    },
+    {
+      "id": "B3.cosmic.agreement",
+      "group": "b",
+      "bound": "the two masks agree: the Jaccard index of the internal detector's mask and the oracle's mask, restricted to the detectable truth pixels and their 8-neighbourhoods, is at least 0.75",
+      "limits": {
+        "jaccardMin": 0.75
+      }
+    },
+    {
+      "id": "C1.coverage",
+      "group": "c",
+      "bound": "not applicable, stated: the effects here are deterministic models and seeded draws with exact expectations (checks A3, A4, A6, A7); no estimator reports an uncertainty interval whose coverage could be judged. The measurement of a saturated star's flux is judged by D1.",
+      "limits": {}
+    },
+    {
+      "id": "D1.refusals",
+      "group": "d",
+      "bound": "Prompt 180's tools refuse what the effects spoil, on rendered frames with their sidecars: a star whose aperture holds a pixel at or above the contract's limit is refused with the code saturated (the contract's limit is the one-percent linear limit when the nonlinearity is on, the full well otherwise); a faint star on a bleed trail, with the bleed and cosmic bits in the mask plane, is refused with the code masked; a faint star off every trail is measured, its flux within 3 sigma of the truth; the same trail star measured with no mask plane (the flag withheld) is not refused and its flux error exceeds 5 sigma (what the refusal prevents); Prompt 183's detector lists the saturated star with the flag saturated; a frame carrying neither a limit nor a mask still refuses through the contract's own gate (permits)",
+      "limits": {
+        "sigmaOk": 3,
+        "sigmaSpoiled": 5
+      }
+    },
+    {
+      "id": "D2.sidecar",
+      "group": "d",
+      "bound": "the sidecar the effects write is a valid gravitas.image document (js/dataKinds/contract.js validate) with the mask plane's bits named, the linearity limit and the saturation level in the data's unit, the effect parameters and the regime in the model parameters, and the source stated synthetic; it has no photometry permission when the pixels are display units",
+      "limits": {}
+    },
+    {
+      "id": "F1.frame.identity",
+      "group": "f",
+      "bound": "the frame model without an effects field is bit-identical to the version before this prompt on the fixed seeded frame of frame-baseline.json; with an empty effects object it is bit-identical too (the legacy cosmic rays and the hard clip stay the default); each effect draws from its own stream, so with one effect toggled the other effects' draws and the main frame's draws do not move (the frames agree wherever the toggled effect did nothing)",
+      "limits": {}
+    },
+    {
+      "id": "P1.speed",
+      "group": "p",
+      "bound": "a 128 by 128 frame with every effect on renders in at most 500 ms (median of 5, Node)",
+      "limits": {
+        "maxMs": 500
+      }
+    },
+    {
+      "id": "E1.authentic",
+      "group": "e",
+      "bound": "NOT MEASURED: authentic-data applicability needs one real saturated-star frame, or a published full-well and linearity curve, under a fixed analysis contract whose published values were not used to tune the model. No frame was downloaded; the request is in DETECTOR_EFFECTS.md and the decision is Carl's.",
+      "limits": {}
+    }
+  ],
+  "claimRule": "the pages say the effects are stated models of a synthetic detector; they never say that a real detector's response follows the tanh curve, that its cosmic rays follow the track model, or that a measurement was validated on authentic data",
+  "notBuilt": "see scope.notBuilt",
+  "amendments": []
+}

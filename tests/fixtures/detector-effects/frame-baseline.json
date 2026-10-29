@@ -1,0 +1,17 @@
+{
+  "note": "SHA-256 of the Float64 values of simulateFrame(spec) from js/kernels/detector/frame.js at origin/v3 726a7ddb, before Prompt 211 touched it. The spec has the legacy cosmic rays (31 events) and saturated pixels (46). Check F1 requires the default path (no effects supplied) and the path with an empty effects object to reproduce it.",
+  "spec": {
+    "seed": "detector-effects-211-baseline",
+    "exposure": 120,
+    "detector": { "width": 64, "height": 64, "cosmicRate": 0.2 },
+    "scene": {
+      "sky": 3,
+      "sources": [
+        { "x": 20.3, "y": 24.1, "rate": 600 },
+        { "x": 40.7, "y": 10.2, "rate": 9000 },
+        { "x": 33.1, "y": 50.6, "rate": 200000 }
+      ]
+    }
+  },
+  "sha256": "d323960bda821e892197dd3427e47ff8beeeb93178a887456b75bf4a54cf6039"
+}
