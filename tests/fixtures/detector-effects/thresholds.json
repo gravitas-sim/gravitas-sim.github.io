@@ -261,5 +261,12 @@
   ],
   "claimRule": "the pages say the effects are stated models of a synthetic detector; they never say that a real detector's response follows the tanh curve, that its cosmic rays follow the track model, or that a measurement was validated on authentic data",
   "notBuilt": "see scope.notBuilt",
-  "amendments": []
+  "amendments": [
+    {
+      "id": "AM1",
+      "when": "after the oracle's first run (analytic parts) and before any kernel code existed",
+      "what": "Four clarifications, no bound moved: (1) A2: where the deviation never reaches the stated fraction within the full well (5 percent for knees 0.8 and 0.95), the limit is null in the oracle and in the kernel; (2) A11: the relative standard deviation is the population one (divisor n); (3) A8 additionally compares the kernel with the oracle's independent re-implementation of the bleeding text on 20 pinned columns (cases of cap 4, 10 and 64), after, lost and touched pixels equal to a relative 1e-12; (4) A5: the deposit per pixel is dedx x (projected length in the pixel) / sin(theta) for a track of projected length L = min(thickness x tan(theta), cap), and a track with L below 1e-9 pixel puts dedx x thickness / cos(theta) in its entry pixel",
+      "why": "the committed text left these four points open; the oracle's first run showed the 5 percent root does not exist below the full well for knees 0.8 and 0.95 (the curve at the well is 4.8 and 1.2 percent below linear), and an independent implementation is a stronger check than conservation alone"
+    }
+  ]
 }
