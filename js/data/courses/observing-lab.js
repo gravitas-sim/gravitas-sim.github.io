@@ -567,5 +567,95 @@ export const OBSERVING_LAB = {
         },
       ],
     },
+    {
+      id: 'not-yet',
+      title: {
+        en: 'Not here yet: readings with the reason (optional)',
+        es: 'Aún no está aquí: lecturas con el motivo (opcional)',
+        esOf: '731348df',
+      },
+      summary: {
+        en: 'Topics of this course that Gravitas does not have an investigation for yet, each with the reason.',
+        es: 'Temas de este curso para los que Gravitas aún no tiene una investigación, cada uno con el motivo.',
+        esOf: '042c0c9b',
+      },
+      items: [
+        {
+          id: 'not-yet-a-city-sky',
+          kind: 'reading',
+          path: 'advanced',
+          minutes: 30,
+          title: {
+            en: 'Astronomy 2e, chapter 6: telescopes at a real site',
+            es: 'Astronomy 2e, capítulo 6: telescopios en un sitio real (en inglés)',
+            esOf: 'f9c9e783',
+          },
+          cite: {
+            authors:
+              'Andrew Fraknoi, David Morrison, Sidney C. Wolff and others',
+            year: 2022,
+            source: 'OpenStax, Rice University',
+            url: 'https://openstax.org/details/books/astronomy-2e',
+          },
+          license: 'CC BY 4.0',
+          access: 'open',
+          studentNote: {
+            en: 'There is no investigation of a city sky, twilight or moonlight geometry yet: the instrument library has dark sites only, and the sky background investigation sets the Moon as a number of magnitudes, not as a place in the sky (D-R10-216-02).',
+            es: 'Aún no hay una investigación sobre un cielo de ciudad, el crepúsculo o la geometría de la luz lunar: la biblioteca de instrumentos tiene solo sitios oscuros, y la investigación del fondo de cielo da la Luna como un número de magnitudes, no como un lugar en el cielo (D-R10-216-02).',
+            esOf: '25d56281',
+          },
+        },
+        {
+          id: 'not-yet-colours-on-rubin',
+          kind: 'reading',
+          path: 'advanced',
+          minutes: 30,
+          title: {
+            en: 'Astronomy 2e, chapter 6: detectors and filters',
+            es: 'Astronomy 2e, capítulo 6: detectores y filtros (en inglés)',
+            esOf: '836fa0d0',
+          },
+          cite: {
+            authors:
+              'Andrew Fraknoi, David Morrison, Sidney C. Wolff and others',
+            year: 2022,
+            source: 'OpenStax, Rice University',
+            url: 'https://openstax.org/details/books/astronomy-2e',
+          },
+          license: 'CC BY 4.0',
+          access: 'open',
+          studentNote: {
+            en: 'The exposure planner does not yet work for Rubin in the g and i bands: its table has no seeing for them, so the investigations use the r band and the Las Cumbres telescopes in V (D-R10-216-03).',
+            es: 'El planificador de exposiciones aún no funciona para Rubin en las bandas g e i: su tabla no tiene la calidad de imagen para ellas, así que las investigaciones usan la banda r y los telescopios de Las Cumbres en V (D-R10-216-03).',
+            esOf: '87a1aca4',
+          },
+        },
+        {
+          id: 'not-yet-a-weathered-night',
+          kind: 'reading',
+          path: 'advanced',
+          minutes: 30,
+          title: {
+            en: 'Astronomy 2e, chapter 6: observing under real conditions',
+            es: 'Astronomy 2e, capítulo 6: observar en condiciones reales (en inglés)',
+            esOf: 'b9f7d322',
+          },
+          cite: {
+            authors:
+              'Andrew Fraknoi, David Morrison, Sidney C. Wolff and others',
+            year: 2022,
+            source: 'OpenStax, Rice University',
+            url: 'https://openstax.org/details/books/astronomy-2e',
+          },
+          license: 'CC BY 4.0',
+          access: 'open',
+          studentNote: {
+            en: 'There is no investigation in which a student plans a whole night against weather and a queue of other programs: the night at the telescope follows a prepared plan, and the strategy planner states its weather fraction rather than modelling clouds (D-R10-216-02).',
+            es: 'No hay una investigación en la que un estudiante planifique una noche entera frente al clima y a una cola de otros programas: la noche en el telescopio sigue un plan preparado, y el planificador de estrategia da su fracción de clima en lugar de modelar las nubes (D-R10-216-02).',
+            esOf: '3f4c41f5',
+          },
+        },
+      ],
+    },
   ],
 };
