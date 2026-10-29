@@ -28,6 +28,7 @@ import {
   weatherMask,
 } from './kernels/strategy/index.js';
 import { findPeriod } from './kernels/variables/period.js';
+import { ID_OBSERVING_SETUP } from './names.js';
 import { nightsFor } from './instruments/strategy.js';
 import { julianDate } from './observingWindow.js';
 import { stream } from './random/streams.js';
@@ -102,7 +103,7 @@ export function windowConfig(v = {}) {
 export function seriesAt(times, period, snr, seed = 'strategy-214:series') {
   const t0 = times[0];
   const setup = {
-    format: 'gravitas.observing-setup',
+    format: ID_OBSERVING_SETUP,
     formatVersion: 1,
     seed,
     epochs: { kind: 'listed', list: Array.from(times, t => t - t0), unit: 'd' },

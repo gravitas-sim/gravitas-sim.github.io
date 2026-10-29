@@ -468,9 +468,10 @@ export const NEVER_PRECACHED = [
   // The interiors kernel and its packs (Prompt 203, INTERIORS.md): imported by no
   // shipped page yet, so no page can fetch them and an install has no use for them.
   /^js\/kernels\/interiors\//,
-  // Prompt 214: the strategy kernel, planner extension, panels and the strategy lesson's one new file (D-R10-214-01).
+  // Prompt 214: the strategy kernel, planner extension, panels and the strategy lesson's one new file (D-R10-214-06).
   /^js\/kernels\/strategy\//,
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(why-the-period-is-wrong|strategy-sequence)\.js$/,
+  /^js\/data\/investigations\/depth\/(es\/)?design-the-schedule\.js$/,
   /^(js\/strategyWidgets\.js|js\/strategyField\.js|js\/i18n\/(en|es)\.strategy\.js)$/,
   /^js\/instruments\/strategy\.js$/,
   // Prompt 210: the exposure planner, its field module, the facility adapter and the exposure lesson's one new file (D-R10-210-01).

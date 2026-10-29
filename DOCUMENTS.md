@@ -102,7 +102,6 @@ catalogue refers to it, so a change to it can reach a student.
 | [OBJECT_INSPECTOR.md](OBJECT_INSPECTOR.md) | The object inspector. | feature | unassigned | written | no |
 | [OBSERVATION_DATA_PACK_GATE.md](OBSERVATION_DATA_PACK_GATE.md) | Authentic observation data packs gate. | gate | P10 | written | no |
 | [OBSERVATORY_WORKSPACE_DESIGN.md](OBSERVATORY_WORKSPACE_DESIGN.md) | The observation workspace design. | design | unassigned | written | no |
-| [OBSERVING_STRATEGY.md](OBSERVING_STRATEGY.md) | Observing strategy: the window function of a cadence, the aliases and the verdict, the phase coverage, a multi-night plan with its cost in hours and the weather as a seeded loss, validation (Prompt 214). | feature |
 | [OFFLINE_AND_LOW_END.md](OFFLINE_AND_LOW_END.md) | Offline use and slow machines. | reference | unassigned | regions (docs) | no |
 | [ONBOARDING.md](ONBOARDING.md) | The student first-run path and what-next guidance. | feature | P73 | written | no |
 | [ORBITAL_LAYER.md](ORBITAL_LAYER.md) | The orbital layer: elements and state vectors with units, frames and time scales named. | feature | P148 | written | no |
@@ -149,7 +148,7 @@ catalogue refers to it, so a change to it can reach a student.
 | [SUN_KERNEL.md](SUN_KERNEL.md) | The Sun as a measurement: disc geometry, rotation from tracked spots bounded by a reference law, and the solar constant to luminosity and temperature, with their validation (Prompt 194). | feature | P194 | written | yes |
 | [SUPPORT.md](SUPPORT.md) | How to get help, and the supported browsers and versions. | policy | P129 | written | yes |
 | [SURFACE_RETIREMENT_GATE.md](SURFACE_RETIREMENT_GATE.md) | The surface-retirement and consolidation gate: the decision function, the link-support policy and the verdict on every surface. | gate | P165 | written | no |
-| [OBSERVING_STRATEGY.md](OBSERVING_STRATEGY.md) | Observing strategy: the window function of a cadence, the aliases and the verdict, the phase coverage, a multi-night plan with its cost in hours and the weather as a seeded loss, validation and failed legs (Prompt 214). | feature | P214 | written | yes |
+| [OBSERVING_STRATEGY.md](OBSERVING_STRATEGY.md) | Observing strategy: the window function of a cadence, aliases and the verdict, phase coverage, a multi-night plan with its cost in hours, weather as a seeded loss, validation (Prompt 214). | feature | P214 | written | yes |
 | [EXPOSURE_PLANNING.md](EXPOSURE_PLANNING.md) | Exposure planning: the CCD equation with several exposures, extended sources, the limiting magnitude and the plan, the facility adapter, the planner, validation and failed legs (Prompt 210). | feature | P210 | written | yes |
 | [TELESCOPES.md](TELESCOPES.md) | Telescopes over the existing PSF: the annular Airy pattern, Moffat seeing, the Rayleigh angle against the measured width, light gathering, validation (Prompt 208). | feature | P208 | written | yes |
 | [TIDAL_KERNEL.md](TIDAL_KERNEL.md) | Rings, Roche limits and analytic tides: the constant-Q kernel, its equations, limits and validation (Prompt 204, part A). | feature | P204 | written | yes |

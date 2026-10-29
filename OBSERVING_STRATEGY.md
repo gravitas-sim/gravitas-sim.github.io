@@ -79,14 +79,14 @@ Run with `npm run strategy:validate` (`--json` for the figures). Measured on the
 | A1, A2 | Dirichlet and nested windows 3.8e-13 and 1.7e-13 | 1e-12 |
 | A3 to A5 | comb peaks and nulls exact; equal to `spectralWindow` to 2e-15; alias positions equal to the closed form and `aliasPeriods` (200 cases) | exact or 1e-12 |
 | A6, A7 | exact comb: every alias at power 1 to 2e-16; injected period within 0.016 resolution units, alias heights within 0.003 | 0.25 units, 0.05 |
-| A8 to A11 | rational phases to 1e-15; hand-worked cost 0.625 h requested, 0.375 h executed; no second outside a usable interval; target hours within 0.0002 h of 2H/15 | exact or 1e-3 h |
-| A12 | clear fraction 0.600 (standard error 0.0027), lag-1 autocorrelation 0.508 against 0.5 | 4 standard errors, 0.05 |
-| B1, B2 | Astropy 6.0.1 `LombScargle` 4.9e-11; numpy window 5.0e-11 | 1e-6 |
+| A8 to A11 | rational phases to 1e-15; hand-worked cost 0.625 h requested, 0.375 h executed; no second outside a usable interval; target hours within 0.0002 h of 2H/15 | 1e-12; 0.01 h |
+| A12 | clear fraction 0.600 (standard error 0.0027), lag-1 autocorrelation 0.508 against 0.5 | 4 standard errors; 0.03 |
+| B1, B2 | Astropy 6.0.1 `LombScargle` 4.9e-11; numpy window 5.0e-11 | 1e-8; 1e-9 |
 | B3 | Astropy's three highest peaks at the true frequency or a predicted alias in every pattern, within 0.021 resolution units, heights within 2.3e-11 on the combs | 0.25 units, 0.05 |
 | C1, C2 | 1.96 sigma interval covers 0.936 of 300 series; 'resolved' picks a wrong lobe 0.0034 (298 resolved) | 0.91 to 0.99; 0.03 |
 | C3 | alias list covers 0.986 of the wrong peaks; every near-exact comb called ambiguous | 0.95 |
 | C4 | mean executed fraction 0.598 against a clear fraction of 0.6 | 0.02 |
-| D1 to D6 | perfect comb ambiguous at the 4.044 d alias; broken comb resolved (smallest advantage 370); four refusal codes plus the sixth in D5; baseline under two periods not constrained; never-up and all-lost refused; a visit longer than the window dropped | as written |
+| D1 to D6 | perfect comb ambiguous at the 4.044 d alias; broken comb resolved (smallest advantage 370); four refusal codes; baseline under two periods not constrained; never-up and all-lost refused; a visit longer than the window dropped | as written |
 | E1 | SU Dra TESS sector 15 (the repository's pack): 26 sampled epochs, baseline 25.93 d; the top three peaks within 0.218 resolution units of f0 or a predicted alias | 0.25 units |
 | P1 | window 200 x 4000 in 32 to 59 ms; 30-night plan 148 to 354 ms (the larger figures under load) | 250 ms; 3000 ms |
 

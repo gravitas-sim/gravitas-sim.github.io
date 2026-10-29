@@ -118,7 +118,8 @@
           "the-scale-of-the-solar-system",
           "comets-and-the-sun",
 "what-a-telescope-resolves",
-"plan-an-exposure"
+"plan-an-exposure",
+"why-the-period-is-wrong"
         ]
       }
     },
@@ -385,7 +386,8 @@
                   "the-scale-of-the-solar-system",
                   "comets-and-the-sun",
 "what-a-telescope-resolves",
-"plan-an-exposure"
+"plan-an-exposure",
+"why-the-period-is-wrong"
                 ]
               }
             }
@@ -1468,6 +1470,8 @@
             "ccd-snr",
             "diff-photometry",
             "exposure-planner",
+            "strategy-window",
+            "strategy-plan",
             "telescope",
             "sky-turning",
             "sky-seasons",

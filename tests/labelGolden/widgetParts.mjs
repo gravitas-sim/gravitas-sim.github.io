@@ -59,7 +59,7 @@ export const PARTS = Object.freeze({
   ],
   stellar: ['stellarEvolution', 'stellar'],
   powerLaw: ['powerLaw', 'lensing'],
-  detector: ['detector', 'sky', 'telescope', 'exposure'],
+  detector: ['detector', 'sky', 'telescope', 'exposure', 'strategy'],
   rest: [
     'energy',
     'binary',

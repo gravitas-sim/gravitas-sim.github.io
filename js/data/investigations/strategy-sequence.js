@@ -651,7 +651,7 @@ export const DESIGN_THE_SCHEDULE_DEEPER = {
       title: 'The comb the site imposes',
       body: `The window you read for your own eight nights has teeth because the site
              imposes a comb: a visit a night recurs once a sidereal day. Use the strategy
-             panel for the planet of this lesson (a period of 3.5 days, the nearest
+             panel for the planet of this investigation (a period of 3.5 days, the nearest
              setting) with <em>one visit a night, same time</em> over 24 nights. Read the
              verdict, and the alias period near 1.4 days.`,
       fields: [
@@ -703,7 +703,7 @@ export const DESIGN_THE_SCHEDULE_DEEPER = {
           return {
             level: 'ok',
             message:
-              'About 69 percent and a preference near 280: resolved. Irregular times inside a night do what irregular nights do in the lesson: no alias can be as high as the truth. It also costs three visits instead of one, a cost the plan panel counts in hours.',
+              'About 69 percent and a preference near 280: resolved. Irregular times inside a night do what irregular nights do in the investigation: no alias can be as high as the truth. It also costs three visits instead of one, a cost the plan panel counts in hours.',
           };
         }
         return {
@@ -987,7 +987,7 @@ export const DESIGN_THE_SCHEDULE_DEEPER_ES = {
   steps: [
     {
       title: 'El peine que impone el sitio',
-      body: 'La ventana que leíste para tus ocho noches tiene dientes porque el sitio impone un peine: una visita por noche se repite una vez por día sidéreo. Usa el panel de estrategia para el planeta de esta lección (un período de 3,5 días, el ajuste más cercano) con <em>una visita por noche, a la misma hora</em> durante 24 noches. Lee el veredicto y el período del alias cerca de 1,4 días.',
+      body: 'La ventana que leíste para tus ocho noches tiene dientes porque el sitio impone un peine: una visita por noche se repite una vez por día sidéreo. Usa el panel de estrategia para el planeta de esta investigación (un período de 3,5 días, el ajuste más cercano) con <em>una visita por noche, a la misma hora</em> durante 24 noches. Lee el veredicto y el período del alias cerca de 1,4 días.',
       fields: [
         { label: 'Período del alias cerca de 1,4 días' },
         { label: 'Preferencia en chi cuadrado por la verdad' },
@@ -1033,7 +1033,7 @@ const CONTENT = {
     difficulty:
       'Introductory (a picture and a rule of thumb); majors (design and verify a cadence); advanced (the window, the phase coverage, the cost of a plan and the limits of the verdict)',
     placement:
-      'In a survey course with the unit on variable stars or exoplanet detection, before any period search of real data; in a majors course after the lessons on the period search and the radial-velocity schedule. It supports OpenStax Astronomy 2e chapter 6 (astronomical instruments). It needs no mathematics beyond a frequency as one over a period.',
+      'In a survey course with the unit on variable stars or exoplanet detection, before any period search of real data; in a majors course after the investigations on the period search and the radial-velocity schedule. It supports OpenStax Astronomy 2e chapter 6 (astronomical instruments). It needs no mathematics beyond a frequency as one over a period.',
     overview:
       'Students predict what period a search returns for a star observed once a night at the same time, read the aliases (4.04 days and others) and a chi-square preference of 0, change to three visits a night and read about 67 percent and 490, say what breaks the tie, and see a search return 0.266 days from a series whose true period is 0.8. The deeper steps design a cadence (77 percent and 116), count the cadences that resolve (three of five), verify on a series (0.8004 ± 0.0002 days), then read the width of a peak, the phase coverage (13 and 4 of 20 bins), the cost of a 14-night plan (4.2 hours asked, 2.4 executed in draw 3) and the limits of the verdict.',
     priorKnowledge: [
@@ -1053,7 +1053,7 @@ const CONTENT = {
       },
       {
         heading: 'A verdict is a sinusoid’s',
-        body: 'The panel says resolved when the nearest alias is rejected by a chi-square preference of nine or more for a sinusoid in white noise. A sharp light curve or red noise may do worse, and the lesson says so.',
+        body: 'The panel says resolved when the nearest alias is rejected by a chi-square preference of nine or more for a sinusoid in white noise. A sharp light curve or red noise may do worse, and the investigation says so.',
       },
     ],
     features: [

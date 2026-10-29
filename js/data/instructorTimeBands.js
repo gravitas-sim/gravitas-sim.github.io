@@ -105,7 +105,7 @@ export const LESSON_BANDS = Object.freeze({
   'butterfly-effect': { core: 'long' },
   'when-orbits-lock': { core: 'long' },
   'detect-this-planet': { core: 'medium' },
-  'design-the-schedule': { core: 'medium' },
+  'design-the-schedule': { core: 'medium', advanced: 'long' },
   'binary-star-planets': { core: 'medium' },
   'gravity-assist': { core: 'short' },
   'hohmann-transfer': { core: 'short' },

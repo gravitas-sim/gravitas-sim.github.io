@@ -310,7 +310,7 @@ export const SEQUENCES = [
       ],
       ['transit-photometry', 'quantitative'],
       ['design-the-schedule', 'core'],
-      ['why-the-period-is-wrong', 'core', ['plan-a-night']],
+      ['why-the-period-is-wrong', 'core'],
       ['who-gets-counted', 'core'],
       ['why-the-bright-ones-win', 'quantitative', ['who-gets-counted']],
       ['the-completeness-curve', 'quantitative', ['why-the-bright-ones-win']],
