@@ -341,7 +341,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->17059<!--/fact--> tests across <!--fact:jestSuites-->502<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->17418<!--/fact--> tests across <!--fact:jestSuites-->502<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
@@ -586,7 +586,7 @@ broke Newton's third law, and a scenario that turned out to have no gravity in i
 
 ## Instructor resources
 
-All <!--fact:instructorDocuments-->900<!--/fact--> documents are generated from
+All <!--fact:instructorDocuments-->911<!--/fact--> documents are generated from
 the investigations at build time and live at
 [gravitas-sim.online/instructors/](https://gravitas-sim.online/instructors/):
 
