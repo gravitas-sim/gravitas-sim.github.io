@@ -36,7 +36,9 @@ const near = (x, target, tolerance) =>
 const STAGE = {
   spacing: 150,
   fit: true,
-  stars: [{ role: 'star', name: 'A star to be observed', teffK: 5800, lumSun: 1 }],
+  stars: [
+    { role: 'star', name: 'A star to be observed', teffK: 5800, lumSun: 1 },
+  ],
 };
 
 /** The exposure planner: Las Cumbres 1.0 m in V, a 22nd-magnitude star, a signal-to-noise of 20, one exposure. */
@@ -75,8 +77,7 @@ const CAL = (values = {}) => ({
 // -----------------------------------------------------------------------------
 export const WHICH_INSTRUMENT_FOR_WHICH_QUESTION = {
   id: 'which-instrument-for-which-question',
-  thumbnail:
-    'images/investigations/which-instrument-for-which-question.webp',
+  thumbnail: 'images/investigations/which-instrument-for-which-question.webp',
   title: 'Which Instrument for Which Question?',
   subtitle:
     'Five facilities from the instrument library, the same faint star, and what decides the choice: light, sampling, field and wavelength',
@@ -364,9 +365,6 @@ export const WHICH_INSTRUMENT_FOR_WHICH_QUESTION = {
              planet’s transit, a gas cloud). Do not answer it; choose an instrument for it.`,
       prompt:
         'Which instrument in the library would you start with for your question, and which of its properties (light, pixels, field, wavelength) decides the choice? Name one that would not do, and why.',
-      hints: [
-        'Use the library’s numbers: an area, a pixel scale, a field or a wavelength range.',
-      ],
     },
     {
       sid: 'what-you-worked-out',
@@ -445,7 +443,9 @@ export const WHICH_INSTRUMENT_FOR_WHICH_QUESTION_DEEPER = {
           say: 'Rubin’s pixels are finer (0.2 arcsecond against 0.389), which helps sampling but is not what separates the two ratios; the field is.',
         },
       ],
-      hints: ['One of the two numbers includes the field and the other does not.'],
+      hints: [
+        'One of the two numbers includes the field and the other does not.',
+      ],
       because:
         'One star lights up a small part of any frame, so only the collecting area helps; a survey of a whole region uses every pixel of the field. A question about one object and a question about a population are different questions, and the same instrument is a hundred times better at one than at the other.',
       tool: EXP({ setup: 3 }),
@@ -519,7 +519,8 @@ export const THE_SKY_BACKGROUND = {
       worked:
         '21.2 − 2.5 log₁₀(2.99) = 21.2 − 1.19 = 20.01. The sky in the circle is as bright as a star of magnitude 20.',
       feedback: {
-        close: 'Close. The sky inside the circle is brighter than one square arcsecond of it.',
+        close:
+          'Close. The sky inside the circle is brighter than one square arcsecond of it.',
         'wrong-order-of-magnitude':
           'A magnitude a little below 21.2, not a few magnitudes off.',
         off: '21.2 − 2.5 × log₁₀(area in square arcseconds).',
@@ -543,7 +544,8 @@ export const THE_SKY_BACKGROUND = {
       worked:
         '10^(0.4 × (23 − 20.01)) = 10^1.195 = 15.7. The star is a sixteenth of the light in its own aperture; its signal is a small bump on the sky, and the sky’s noise is what the exposure has to beat.',
       feedback: {
-        close: 'Close. Raise 10 to 0.4 times the difference of the two magnitudes.',
+        close:
+          'Close. Raise 10 to 0.4 times the difference of the two magnitudes.',
         'wrong-order-of-magnitude': 'About sixteen, not a hundred or three.',
         off: '10^(0.4 × (star magnitude − sky magnitude in the aperture)).',
       },
@@ -560,7 +562,12 @@ export const THE_SKY_BACKGROUND = {
              <strong>the sky</strong> has, in percent.`,
       fields: [
         { id: 'total', label: 'Total exposure', unit: 's', hint: '79.8' },
-        { id: 'sky', label: 'Share of the noise squared from the sky', unit: '%', hint: '87' },
+        {
+          id: 'sky',
+          label: 'Share of the noise squared from the sky',
+          unit: '%',
+          hint: '87',
+        },
       ],
       validate: v => {
         if (![v.total, v.sky].every(Number.isFinite)) return null;
@@ -588,7 +595,8 @@ export const THE_SKY_BACKGROUND = {
       body: `A bright Moon makes the sky brighter. Suppose the sky were <strong>2
              magnitudes</strong> brighter, that is 6.3 times as much light. Do not set the
              control yet.`,
-      prompt: 'The exposure for the same star and signal-to-noise will be&hellip;',
+      prompt:
+        'The exposure for the same star and signal-to-noise will be&hellip;',
       options: [
         'The same: the star has not changed',
         'About 2.5 times longer, because 2 magnitudes is a factor of 2.5',
@@ -612,8 +620,18 @@ export const THE_SKY_BACKGROUND = {
              to <strong>2</strong> magnitudes and type the new total exposure. The instrument
              divides the second by the first.`,
       fields: [
-        { id: 'dark', label: 'Total exposure, dark sky', unit: 's', hint: '79.8' },
-        { id: 'moon', label: 'Total exposure, sky 2 mag brighter', unit: 's', hint: '443' },
+        {
+          id: 'dark',
+          label: 'Total exposure, dark sky',
+          unit: 's',
+          hint: '79.8',
+        },
+        {
+          id: 'moon',
+          label: 'Total exposure, sky 2 mag brighter',
+          unit: 's',
+          hint: '443',
+        },
         {
           id: 'ratio',
           label: 'Times longer',
@@ -650,7 +668,7 @@ export const THE_SKY_BACKGROUND = {
       prompt:
         'How many times longer is the exposure than on the dark sky (79.8 seconds)?',
       unit: '',
-      answer: 13.85,
+      answer: 13.84,
       tolerance: 0.5,
       hints: ['Divide the new total exposure by 79.8.'],
       worked:
@@ -703,9 +721,19 @@ export const THE_SKY_BACKGROUND = {
              dark sky and with the sky <strong>3 magnitudes</strong> brighter.`,
       fields: [
         { id: 'f0', label: 'Magnitude 20, dark sky', unit: 's', hint: '43.1' },
-        { id: 'f3', label: 'Magnitude 20, sky 3 mag brighter', unit: 's', hint: '204' },
+        {
+          id: 'f3',
+          label: 'Magnitude 20, sky 3 mag brighter',
+          unit: 's',
+          hint: '204',
+        },
         { id: 'b0', label: 'Magnitude 17, dark sky', unit: 's', hint: '2.3' },
-        { id: 'b3', label: 'Magnitude 17, sky 3 mag brighter', unit: 's', hint: '2.7' },
+        {
+          id: 'b3',
+          label: 'Magnitude 17, sky 3 mag brighter',
+          unit: 's',
+          hint: '2.7',
+        },
       ],
       validate: v => {
         if (![v.f0, v.f3, v.b0, v.b3].every(Number.isFinite)) return null;
@@ -744,7 +772,9 @@ export const THE_SKY_BACKGROUND = {
       unit: '',
       answer: 5.15,
       tolerance: 0.15,
-      hints: ['10 to the power of 0.4 times the difference of the two magnitudes.'],
+      hints: [
+        '10 to the power of 0.4 times the difference of the two magnitudes.',
+      ],
       worked:
         '10^(0.4 × (22.26 − 20.48)) = 10^0.712 = 5.15. The same star costs more exposure in i than in g not only because the filters differ, but because the sky behind it is five times brighter.',
       feedback: {
@@ -767,9 +797,6 @@ export const THE_SKY_BACKGROUND = {
              modelled.`,
       prompt:
         'If your campus sky were three magnitudes brighter than a dark site, what would you change about an observing plan, and what would you have to measure first?',
-      hints: [
-        'Think about the exposure, the choice of target, the filter and the measurement of the sky itself.',
-      ],
     },
     {
       sid: 'what-you-worked-out',
@@ -814,7 +841,8 @@ export const THE_SKY_BACKGROUND_DEEPER = {
         '21.2 − 2.5 log₁₀(8.30) = 21.2 − 2.30 = 18.90. The sky in the circle is 2.8 times brighter than in the first aperture, while the star’s light barely grows: a wider aperture is a worse trade for a faint star.',
       feedback: {
         close: 'Close. 21.2 minus 2.5 log₁₀ of the area.',
-        'wrong-order-of-magnitude': 'About 19, a magnitude and a bit brighter than before.',
+        'wrong-order-of-magnitude':
+          'Brighter than the first aperture, but not by several magnitudes.',
         off: '21.2 − 2.5 × log₁₀(π × 1.625²).',
       },
       tool: EXP({ setup: 3, mag: 23, exposures: 2, aperture: 2.5 }),
@@ -830,8 +858,18 @@ export const THE_SKY_BACKGROUND_DEEPER = {
              dark</strong> for the night of <strong>2025-01-29</strong> (day 28, a new Moon)
              and for <strong>2025-01-13</strong> (day 12, a full Moon).`,
       fields: [
-        { id: 'newMoon', label: 'Hours up, new Moon night', unit: 'h', hint: '0' },
-        { id: 'fullMoon', label: 'Hours up, full Moon night', unit: 'h', hint: '10.8' },
+        {
+          id: 'newMoon',
+          label: 'Hours up, new Moon night',
+          unit: 'h',
+          hint: '0',
+        },
+        {
+          id: 'fullMoon',
+          label: 'Hours up, full Moon night',
+          unit: 'h',
+          hint: '10.8',
+        },
       ],
       validate: v => {
         if (![v.newMoon, v.fullMoon].every(Number.isFinite)) return null;
@@ -905,8 +943,7 @@ export const COORDINATES_AND_TIME = {
       title: 'How much shorter than a day',
       body: `A solar day is 24 hours, or 86,400 seconds. A sidereal day is 23 hours 56
              minutes 4.09 seconds.`,
-      prompt:
-        'By how many seconds is a sidereal day shorter than a solar day?',
+      prompt: 'By how many seconds is a sidereal day shorter than a solar day?',
       unit: 's',
       answer: 235.9,
       tolerance: 2,
@@ -917,8 +954,7 @@ export const COORDINATES_AND_TIME = {
         '23 × 3600 + 56 × 60 + 4.09 = 86,164.09 seconds; 86,400 − 86,164.09 = 235.9 seconds, or 3 minutes 55.9 seconds. A star that crosses the meridian at one clock time crosses 3 minutes 56 seconds earlier the next night.',
       feedback: {
         close: 'Close. 86,400 minus the sidereal day in seconds.',
-        'wrong-order-of-magnitude':
-          'A few minutes, in seconds: a few hundred.',
+        'wrong-order-of-magnitude': 'A few minutes, in seconds: a few hundred.',
         off: '86,400 − (23 × 3600 + 56 × 60 + 4.09).',
       },
       tool: TURN(),
@@ -973,8 +1009,18 @@ export const COORDINATES_AND_TIME = {
              hours before midnight: (6.792 − 6.752) ÷ 1.0027379. Type the two readings from the
              panel; the instrument gives the crossing in minutes after noon (midnight is 720).`,
       fields: [
-        { id: 'lst', label: 'Sidereal time at midnight', unit: 'h', hint: '6.792' },
-        { id: 'ra', label: 'Right ascension of Sirius', unit: 'h', hint: '6.752' },
+        {
+          id: 'lst',
+          label: 'Sidereal time at midnight',
+          unit: 'h',
+          hint: '6.792',
+        },
+        {
+          id: 'ra',
+          label: 'Right ascension of Sirius',
+          unit: 'h',
+          hint: '6.752',
+        },
         {
           id: 'cross',
           label: 'Crossing, minutes after noon',
@@ -1008,7 +1054,8 @@ export const COORDINATES_AND_TIME = {
       title: 'A minute apart',
       body: `Your crossing is 717.6 minutes after noon. The panel’s “Crosses the meridian” row
              says 718.7.`,
-      prompt: 'By how many minutes is the panel’s crossing later than the one you computed?',
+      prompt:
+        'By how many minutes is the panel’s crossing later than the one you computed?',
       unit: 'min',
       answer: 1.1,
       tolerance: 0.3,
@@ -1069,9 +1116,6 @@ export const COORDINATES_AND_TIME = {
              minutes of clock each day.`,
       prompt:
         'Explain, as you would to a friend, why the stars rise earlier each night, and what the sidereal time of a place tells an observer.',
-      hints: [
-        'Think about the Earth’s orbit as well as its spin, and which direction the sky is anchored to.',
-      ],
     },
     {
       sid: 'what-you-worked-out',
@@ -1120,7 +1164,8 @@ export const COORDINATES_AND_TIME_DEEPER = {
         '3.075 + 1.336 × 0.9806 × (−0.3008) = 2.681 seconds a year; × 25 = 67.0 seconds. The kernel’s rigorous precession gives 67.1 seconds (0.2797 degrees): the first-order formula is good to a tenth of a second over this span, at this declination. 67 seconds is 1.1 minutes: the minute of the previous step.',
       feedback: {
         close: 'Close. The yearly rate times 25.',
-        'wrong-order-of-magnitude': 'About a minute, in seconds: tens, not hundreds.',
+        'wrong-order-of-magnitude':
+          'About a minute, in seconds: tens, not hundreds.',
         off: '25 × (3.075 + 1.336 × sin α × tan δ).',
       },
       tool: TURN(),
@@ -1134,16 +1179,18 @@ export const COORDINATES_AND_TIME_DEEPER = {
       title: 'The shift in declination',
       body: `Use the declination formula: 20.04 cos α arcseconds a year, with α = 101.29°
              (cos α = −0.196), over 25 years.`,
-      prompt: 'By how many arcseconds has Sirius’s declination changed (give the signed number)?',
+      prompt:
+        'By how many arcseconds has Sirius’s declination changed (give the signed number)?',
       unit: 'arcsec',
       answer: -99.5,
       tolerance: 3,
-      hints: ['20.04 × cos(101.29°) × 25.'],
+      hints: ['Multiply the yearly rate by cos α and by the number of years.'],
       worked:
         '20.04 × (−0.196) × 25 = −98.4 arcseconds; the rigorous precession gives −99.5. Declination decreases: Sirius sits 1.7 arcminutes further south than the catalogue says.',
       feedback: {
         close: 'Close. The yearly rate times 25, with its sign.',
-        'wrong-order-of-magnitude': 'About a hundred arcseconds, not a few or thousands.',
+        'wrong-order-of-magnitude':
+          'About a hundred arcseconds, not a few or thousands.',
         off: '25 × 20.04 × cos α.',
       },
       tool: TURN(),
@@ -1167,7 +1214,8 @@ export const COORDINATES_AND_TIME_DEEPER = {
         '99.5 ÷ 0.389 = 256 pixels in declination, and a right-ascension shift of 67 seconds of time is 1007 arcseconds, 965 on the sky (× cos δ), another 2500 pixels. The star is not in the frame at all: its field is 26.5 arcminutes wide, 4096 pixels, and the pointing is off by 16 arcminutes. Pointing models always apply precession.',
       feedback: {
         close: 'Close. 99.5 ÷ 0.389.',
-        'wrong-order-of-magnitude': 'Hundreds of pixels, not tens or thousands.',
+        'wrong-order-of-magnitude':
+          'Hundreds of pixels, not tens or thousands.',
         off: 'shift in arcseconds ÷ 0.389.',
       },
       tool: TURN(),
@@ -1235,9 +1283,24 @@ export const A_NIGHT_AT_THE_TELESCOPE = {
              <strong>hours usable</strong> (above an airmass of 2, in the dark) and the
              <strong>best airmass</strong> it reaches.`,
       fields: [
-        { id: 'dark', label: 'Hours of astronomical dark', unit: 'h', hint: '10.5' },
-        { id: 'usable', label: 'Regulus, hours usable', unit: 'h', hint: '8.08' },
-        { id: 'airmass', label: 'Regulus, best airmass', unit: '', hint: '1.05' },
+        {
+          id: 'dark',
+          label: 'Hours of astronomical dark',
+          unit: 'h',
+          hint: '10.5',
+        },
+        {
+          id: 'usable',
+          label: 'Regulus, hours usable',
+          unit: 'h',
+          hint: '8.08',
+        },
+        {
+          id: 'airmass',
+          label: 'Regulus, best airmass',
+          unit: '',
+          hint: '1.05',
+        },
       ],
       validate: v => {
         if (![v.dark, v.usable, v.airmass].every(Number.isFinite)) return null;
@@ -1282,7 +1345,7 @@ export const A_NIGHT_AT_THE_TELESCOPE = {
       feedback: {
         close: 'Close. (planned − executed) ÷ planned, in percent.',
         'wrong-order-of-magnitude': 'Tens of percent, not a few or all.',
-        off: '100 × (42 − 24) ÷ 42.',
+        off: 'visits lost ÷ visits planned, × 100.',
       },
       tool: PLAN14(),
     },
@@ -1322,7 +1385,12 @@ export const A_NIGHT_AT_THE_TELESCOPE = {
              <strong>target’s own photons</strong>.`,
       fields: [
         { id: 'total', label: 'Total exposure', unit: 's', hint: '59.3' },
-        { id: 'source', label: 'Share from the target’s photons', unit: '%', hint: '49' },
+        {
+          id: 'source',
+          label: 'Share from the target’s photons',
+          unit: '%',
+          hint: '49',
+        },
       ],
       validate: v => {
         if (![v.total, v.source].every(Number.isFinite)) return null;
@@ -1355,13 +1423,32 @@ export const A_NIGHT_AT_THE_TELESCOPE = {
              over to the chain is the size of the uncertainty a night of fourteen standards
              leaves.`,
       fields: [
-        { id: 'z', label: 'Zero point at airmass 1', unit: 'mag', hint: '24.803' },
-        { id: 'k', label: 'Extinction of the air, k', unit: 'mag/airmass', hint: '0.213' },
-        { id: 'sigma', label: 'Uncertainty of the calibrated target', unit: 'mag', hint: '0.008' },
+        {
+          id: 'z',
+          label: 'Zero point at airmass 1',
+          unit: 'mag',
+          hint: '24.803',
+        },
+        {
+          id: 'k',
+          label: 'Extinction of the air, k',
+          unit: 'mag/airmass',
+          hint: '0.213',
+        },
+        {
+          id: 'sigma',
+          label: 'Uncertainty of the calibrated target',
+          unit: 'mag',
+          hint: '0.008',
+        },
       ],
       validate: v => {
         if (![v.z, v.k, v.sigma].every(Number.isFinite)) return null;
-        if (near(v.z, 24.803, 0.01) && near(v.k, 0.213, 0.01) && near(v.sigma, 0.008, 0.0015)) {
+        if (
+          near(v.z, 24.803, 0.01) &&
+          near(v.k, 0.213, 0.01) &&
+          near(v.sigma, 0.008, 0.0015)
+        ) {
           return {
             level: 'ok',
             message:
@@ -1386,8 +1473,18 @@ export const A_NIGHT_AT_THE_TELESCOPE = {
              <strong>predicted</strong> for its aperture and the signal-to-noise
              <strong>measured</strong> on it by aperture photometry.`,
       fields: [
-        { id: 'pred', label: 'Predicted signal-to-noise', unit: '', hint: '49.5' },
-        { id: 'meas', label: 'Measured signal-to-noise', unit: '', hint: '49.9' },
+        {
+          id: 'pred',
+          label: 'Predicted signal-to-noise',
+          unit: '',
+          hint: '49.5',
+        },
+        {
+          id: 'meas',
+          label: 'Measured signal-to-noise',
+          unit: '',
+          hint: '49.9',
+        },
       ],
       validate: v => {
         if (![v.pred, v.meas].every(Number.isFinite)) return null;
@@ -1420,13 +1517,13 @@ export const A_NIGHT_AT_THE_TELESCOPE = {
       unit: 'mag',
       answer: 0.0231,
       tolerance: 0.0015,
-      hints: ['√(0.0217² + 0.008²).'],
+      hints: ['Square each of the two uncertainties, add, take the root.'],
       worked:
         '√(0.0217² + 0.008²) = √(0.000471 + 0.000064) = 0.0231 magnitude: the report reads “V = (calibrated value) ± 0.023”. Adding the two as 0.0217 + 0.008 = 0.0297 would overstate it; independent errors do not all fall the same way.',
       feedback: {
         close: 'Close. Square each, add, then take the root.',
         'wrong-order-of-magnitude': 'A couple of hundredths of a magnitude.',
-        off: '√(0.0217² + 0.008²).',
+        off: 'the square root of the sum of the two squares.',
       },
       tool: NIGHT_EXP(),
     },
@@ -1474,9 +1571,6 @@ export const A_NIGHT_AT_THE_TELESCOPE = {
              calibration that holds for the whole night, a frame free of defects.`,
       prompt:
         'Name one assumption at one station that could fail on a real night, say what you would see if it did, and what you would do about it.',
-      hints: [
-        'Think about cloud, a changing extinction, saturation, a cosmic ray or a standard star that is not constant.',
-      ],
     },
     {
       sid: 'what-you-worked-out',
@@ -1676,16 +1770,16 @@ export const FROM_PHOTONS_TO_A_NUMBER = {
       answer: 19.0,
       tolerance: 0.03,
       hints: [
-        'Observed: −2.5 log₁₀(86.0 ÷ 3.50 × 10⁹), about 19.02.',
-        'Then subtract the 0.02 the air added.',
+        'The observed magnitude is −2.5 log₁₀ of the rate over the zero point.',
+        'Then take back the extinction the air added.',
       ],
       worked:
         '−2.5 log₁₀(86.0 ÷ 3.50×10⁹) = 19.02 observed; minus 0.02 for the air is 19.00 above the atmosphere: the magnitude the plan started from. The trace closes the loop: the counts hold the magnitude, to the uncertainty of the previous step.',
       feedback: {
         close: 'Close. Remember the 0.02 magnitude the air added.',
         'wrong-order-of-magnitude':
-          'About nineteen: a magnitude 0 star gives a billion electrons a second, a magnitude 19 one a hundred.',
-        off: '−2.5 log₁₀(86.0 ÷ 3.50×10⁹) − 0.02.',
+          'A faint star: a magnitude 0 star gives a billion electrons a second, and this one gives about a hundred.',
+        off: '−2.5 log₁₀(rate ÷ zero point), minus the extinction.',
       },
       tool: NIGHT_EXP(),
     },
@@ -1700,8 +1794,18 @@ export const FROM_PHOTONS_TO_A_NUMBER = {
              <strong>zero point at airmass 1</strong> with its uncertainty, and the
              uncertainty of the calibrated <strong>target star</strong>.`,
       fields: [
-        { id: 'sigz', label: 'Zero point uncertainty', unit: 'mag', hint: '0.003' },
-        { id: 'sigt', label: 'Calibrated target uncertainty', unit: 'mag', hint: '0.008' },
+        {
+          id: 'sigz',
+          label: 'Zero point uncertainty',
+          unit: 'mag',
+          hint: '0.003',
+        },
+        {
+          id: 'sigt',
+          label: 'Calibrated target uncertainty',
+          unit: 'mag',
+          hint: '0.008',
+        },
       ],
       validate: v => {
         if (![v.sigz, v.sigt].every(Number.isFinite)) return null;
@@ -1728,9 +1832,10 @@ export const FROM_PHOTONS_TO_A_NUMBER = {
       title: 'Step 5: the total',
       body: `Two independent uncertainties: 0.02195 from the star’s photons and 0.008 from
              the calibration.`,
-      prompt: 'What is the total one-sigma uncertainty of the calibrated magnitude?',
+      prompt:
+        'What is the total one-sigma uncertainty of the calibrated magnitude?',
       unit: 'mag',
-      answer: 0.02336,
+      answer: 0.02337,
       tolerance: 0.0012,
       hints: ['The square root of the sum of the squares.'],
       worked:
@@ -1783,8 +1888,18 @@ export const FROM_PHOTONS_TO_A_NUMBER = {
              target signal-to-noise of <strong>50</strong> and of <strong>100</strong> (the
              rest unchanged); the instrument divides.`,
       fields: [
-        { id: 't50', label: 'Total exposure, signal-to-noise 50', unit: 's', hint: '59.3' },
-        { id: 't100', label: 'Total exposure, signal-to-noise 100', unit: 's', hint: '191' },
+        {
+          id: 't50',
+          label: 'Total exposure, signal-to-noise 50',
+          unit: 's',
+          hint: '59.3',
+        },
+        {
+          id: 't100',
+          label: 'Total exposure, signal-to-noise 100',
+          unit: 's',
+          hint: '191',
+        },
         {
           id: 'ratio',
           label: 'Times longer',
@@ -1820,9 +1935,6 @@ export const FROM_PHOTONS_TO_A_NUMBER = {
       body: `The trace ends with a magnitude and an uncertainty: 19.00 ± 0.02.`,
       prompt:
         'Write the result as a sentence for a report: the number with its uncertainty, the band, what it is calibrated to, and one thing it assumes.',
-      hints: [
-        'A number without its uncertainty is not a result; the assumption is something the arithmetic cannot check.',
-      ],
     },
     {
       sid: 'what-you-worked-out',
@@ -1866,7 +1978,8 @@ export const FROM_PHOTONS_TO_A_NUMBER_DEEPER = {
         '√(0.02195² + 0.008² + 0.0109²) = √(0.000482 + 0.000064 + 0.000119) = 0.0258 magnitude: the floor adds 10 percent to the total, still behind the star’s photons.',
       feedback: {
         close: 'Close. Three squares, one root.',
-        'wrong-order-of-magnitude': 'About two and a half hundredths of a magnitude.',
+        'wrong-order-of-magnitude':
+          'About two and a half hundredths of a magnitude.',
         off: '√(0.02195² + 0.008² + 0.0109²).',
       },
       tool: NIGHT_EXP(),
@@ -1891,7 +2004,8 @@ export const FROM_PHOTONS_TO_A_NUMBER_DEEPER = {
       worked:
         'The floor is a fractional error of 0.01; the photon term is a fractional error of 1 ÷ S, so they are equal at S = 100. That is the point where the planner’s warning begins: beyond it, more exposure buys almost nothing, because the floor does not shrink with time.',
       feedback: {
-        close: 'Close. The photon term equals the floor where the fractional error is 1 percent.',
+        close:
+          'Close. The photon term equals the floor where the fractional error is 1 percent.',
         'wrong-order-of-magnitude': 'About a hundred.',
         off: '1 ÷ 0.01.',
       },
@@ -2036,9 +2150,6 @@ export const WHICH_INSTRUMENT_FOR_WHICH_QUESTION_ES = {
       body: 'Elige una pregunta tuya sobre el cielo (el periodo de una estrella, la forma de una galaxia, el tránsito de un planeta, una nube de gas). No la respondas: elige un instrumento para ella.',
       prompt:
         '¿Con qué instrumento de la biblioteca empezarías para tu pregunta, y qué propiedad suya (luz, píxeles, campo, longitud de onda) decide la elección? Nombra uno que no serviría, y por qué.',
-      hints: [
-        'Usa los números de la biblioteca: un área, una escala de píxel, un campo o un rango de longitudes de onda.',
-      ],
     },
     {
       title: 'Lo que averiguaste',
@@ -2207,9 +2318,6 @@ export const THE_SKY_BACKGROUND_ES = {
       body: 'La biblioteca contiene tres sitios oscuros y ninguna ciudad. El control «cielo más brillante en» es un desplazamiento de ejercicio, no una medida: la luz real de una Luna depende de su fase, de su altura y de lo lejos que esté del objetivo, y nada de eso está modelado.',
       prompt:
         'Si el cielo de tu campus fuera tres magnitudes más brillante que el de un sitio oscuro, ¿qué cambiarías en un plan de observación y qué tendrías que medir primero?',
-      hints: [
-        'Piensa en la exposición, la elección del objetivo, el filtro y la medida del propio cielo.',
-      ],
     },
     {
       title: 'Lo que averiguaste',
@@ -2258,11 +2366,8 @@ export const COORDINATES_AND_TIME_ES = {
     {
       title: 'Cuánto más corto que un día',
       body: 'Un día solar son 24 horas, u 86 400 segundos. Un día sidéreo son 23 horas 56 minutos 4,09 segundos.',
-      prompt:
-        '¿Cuántos segundos más corto es un día sidéreo que un día solar?',
-      hints: [
-        'Convierte 23 h 56 min 4,09 s en segundos y réstalo de 86 400.',
-      ],
+      prompt: '¿Cuántos segundos más corto es un día sidéreo que un día solar?',
+      hints: ['Convierte 23 h 56 min 4,09 s en segundos y réstalo de 86 400.'],
       worked:
         '23 × 3600 + 56 × 60 + 4,09 = 86 164,09 segundos; 86 400 − 86 164,09 = 235,9 segundos, o 3 minutos 55,9 segundos. Una estrella que cruza el meridiano a una hora del reloj lo cruza 3 minutos 56 segundos antes la noche siguiente.',
     },
@@ -2322,9 +2427,6 @@ export const COORDINATES_AND_TIME_ES = {
       body: 'Has encontrado lo mismo de dos maneras: una estrella llega 3 minutos 56 segundos antes cada noche, y el tiempo sidéreo a medianoche sube unos 3,9 minutos de reloj cada día.',
       prompt:
         'Explica, como a un amigo, por qué las estrellas salen antes cada noche, y qué le dice a un observador el tiempo sidéreo de un lugar.',
-      hints: [
-        'Piensa en la órbita de la Tierra además de su giro, y en a qué dirección está anclado el cielo.',
-      ],
     },
     {
       title: 'Lo que averiguaste',
@@ -2352,7 +2454,7 @@ export const COORDINATES_AND_TIME_DEEPER_ES = {
       body: 'Usa la fórmula de declinación: 20,04 cos α segundos de arco al año, con α = 101,29° (cos α = −0,196), durante 25 años.',
       prompt:
         '¿Cuántos segundos de arco ha cambiado la declinación de Sirio (da el número con signo)?',
-      hints: ['20,04 × cos(101,29°) × 25.'],
+      hints: ['Multiplica el ritmo anual por cos α y por el número de años.'],
       worked:
         '20,04 × (−0,196) × 25 = −98,4 segundos de arco; la precesión rigurosa da −99,5. La declinación disminuye: Sirio queda 1,7 minutos de arco más al sur de lo que dice el catálogo.',
     },
@@ -2360,7 +2462,9 @@ export const COORDINATES_AND_TIME_DEEPER_ES = {
       title: 'Lo que cuesta una posición sin corregir',
       body: 'Se apunta un telescopio con la posición de catálogo J2000 de Sirio y sin precesión. La cámara del telescopio de 1,0 m tiene píxeles de 0,389 segundos de arco, así que un desplazamiento de 99,5 segundos de arco en declinación es cierto número de píxeles.',
       prompt: '¿Cuántos píxeles son solo el error en declinación?',
-      hints: ['Divide los segundos de arco entre los segundos de arco por píxel.'],
+      hints: [
+        'Divide los segundos de arco entre los segundos de arco por píxel.',
+      ],
       worked:
         '99,5 ÷ 0,389 = 256 píxeles en declinación, y un desplazamiento en ascensión recta de 67 segundos de tiempo son 1007 segundos de arco, 965 en el cielo (× cos δ), otros 2500 píxeles. La estrella ni siquiera está en la imagen: su campo mide 26,5 minutos de arco de ancho, 4096 píxeles, y el apuntado se equivoca en 16 minutos de arco. Los modelos de apuntado siempre aplican la precesión.',
     },
@@ -2396,7 +2500,9 @@ export const A_NIGHT_AT_THE_TELESCOPE_ES = {
       body: 'Un plan para una noche no dice nada de las nubes. El <strong>planificador de estrategia</strong> de las investigaciones de estrategia de observación reparte tres visitas por noche en una quincena y saca el tiempo de una cadena declarada (el 60 por ciento de las noches despejadas, con persistencia). Lee su fila <strong>Visitas</strong>: cuántas visitas se ejecutaron de cuántas planificadas.',
       prompt:
         '¿Qué parte de las visitas planificadas se llevó el tiempo, en por ciento?',
-      hints: ['Visitas perdidas = planificadas − ejecutadas; divide entre las planificadas.'],
+      hints: [
+        'Visitas perdidas = planificadas − ejecutadas; divide entre las planificadas.',
+      ],
       worked:
         '(42 − 24) ÷ 42 = 42,9 por ciento. El planificador saca noches enteras perdidas de una cadena de tiempo con semilla; la fracción real en un sitio real es una estadística climática que la biblioteca no contiene, así que el número es una lección sobre planes, no un pronóstico.',
     },
@@ -2446,7 +2552,7 @@ export const A_NIGHT_AT_THE_TELESCOPE_ES = {
       body: 'Una señal a ruido de 50 es una incertidumbre fotométrica de 1,0857 ÷ 50 = 0,0217 magnitudes (1,0857 es 2,5 ÷ ln 10). La calibración deja 0,008. Dos incertidumbres independientes se combinan como la raíz cuadrada de la suma de sus cuadrados.',
       prompt:
         '¿Cuál es la incertidumbre total de una sigma de la magnitud informada, en magnitudes?',
-      hints: ['√(0,0217² + 0,008²).'],
+      hints: ['Eleva al cuadrado cada incertidumbre, súmalas y toma la raíz.'],
       worked:
         '√(0,0217² + 0,008²) = √(0,000471 + 0,000064) = 0,0231 magnitudes: el informe dice «V = (valor calibrado) ± 0,023». Sumarlas como 0,0217 + 0,008 = 0,0297 la exageraría; los errores independientes no caen todos en el mismo sentido.',
     },
@@ -2477,9 +2583,6 @@ export const A_NIGHT_AT_THE_TELESCOPE_ES = {
       body: 'La cadena dio un número, y cada estación supuso algo: una noche despejada, una calibración válida toda la noche, una imagen sin defectos.',
       prompt:
         'Nombra una suposición de una estación que podría fallar en una noche real, di qué verías si fallara y qué harías.',
-      hints: [
-        'Piensa en nubes, una extinción cambiante, saturación, un rayo cósmico o una estrella patrón que no es constante.',
-      ],
     },
     {
       title: 'Lo que averiguaste',
@@ -2549,8 +2652,8 @@ export const FROM_PHOTONS_TO_A_NUMBER_ES = {
       body: 'La exposición fue de 59,3 segundos, así que la estrella entregó 5101 ÷ 59,3 = 86,0 electrones por segundo. Una estrella de magnitud 0 da, en esta configuración, <strong>3,50 × 10⁹</strong> electrones por segundo en el cenit (la abertura de 1,0 m a través de V con el rendimiento aportado). La magnitud observada es −2,5 log₁₀ del cociente. Con una masa de aire de 1,1 el aire ha atenuado la estrella 0,2 × 0,1 = 0,02 magnitudes, que se restituyen.',
       prompt: '¿Qué magnitud da la traza para la estrella?',
       hints: [
-        'Observada: −2,5 log₁₀(86,0 ÷ 3,50 × 10⁹), unos 19,02.',
-        'Luego resta los 0,02 que añadió el aire.',
+        'La magnitud observada es −2,5 log₁₀ de la tasa entre el punto cero.',
+        'Luego devuelve la extinción que añadió el aire.',
       ],
       worked:
         '−2,5 log₁₀(86,0 ÷ 3,50×10⁹) = 19,02 observada; menos 0,02 del aire son 19,00 por encima de la atmósfera: la magnitud con la que empezó el plan. La traza cierra el círculo: las cuentas contienen la magnitud, con la incertidumbre del paso anterior.',
@@ -2608,9 +2711,6 @@ export const FROM_PHOTONS_TO_A_NUMBER_ES = {
       body: 'La traza termina con una magnitud y una incertidumbre: 19,00 ± 0,02.',
       prompt:
         'Escribe el resultado como una frase de informe: el número con su incertidumbre, la banda, a qué está calibrado y una cosa que supone.',
-      hints: [
-        'Un número sin su incertidumbre no es un resultado; la suposición es algo que la aritmética no puede comprobar.',
-      ],
     },
     {
       title: 'Lo que averiguaste',
@@ -2635,7 +2735,9 @@ export const FROM_PHOTONS_TO_A_NUMBER_DEEPER_ES = {
       body: 'El término de fotones baja al subir la señal a ruido; el suelo no. Un suelo del 1 por ciento del flujo son 0,0109 magnitudes, y el término de fotones es el mismo 1,0857 por el error fraccionario 1 ÷ (señal a ruido). El planificador avisa de esto por encima de una señal a ruido de 100.',
       prompt:
         '¿A qué señal a ruido iguala el término de fotones a un suelo del 1 por ciento?',
-      hints: ['¿Dónde el error fraccionario de fotones, 1 ÷ S, es igual a 0,01?'],
+      hints: [
+        '¿Dónde el error fraccionario de fotones, 1 ÷ S, es igual a 0,01?',
+      ],
       worked:
         'El suelo es un error fraccionario de 0,01; el término de fotones es un error fraccionario de 1 ÷ S, así que son iguales en S = 100. Ese es el punto donde empieza el aviso del planificador: más allá, más exposición no compra casi nada, porque el suelo no disminuye con el tiempo.',
     },
@@ -2718,12 +2820,14 @@ const CONTENT = {
           'Rubin has the widest ground field of the three; the field is set by the optical design, not the aperture alone.',
       },
       {
-        claim: 'An optical telescope can see anything with a long enough exposure.',
+        claim:
+          'An optical telescope can see anything with a long enough exposure.',
         response:
           'The wavelength is a hard limit: no exposure makes an optical detector respond to a 21 cm line.',
       },
       {
-        claim: 'Two pixels across the seeing is the same as sampled well enough.',
+        claim:
+          'Two pixels across the seeing is the same as sampled well enough.',
         response:
           'It is a rule of thumb for adequate sampling; below it a star’s centre is found less well than its signal-to-noise promises.',
       },
@@ -2822,7 +2926,8 @@ const CONTENT = {
         body: 'A sidereal day is 23 h 56 min 4.09 s, 235.9 seconds shorter than a solar day, so a star crosses the meridian 3.93 minutes earlier each night.',
       },
       {
-        heading: 'A star crosses when the sidereal time equals its right ascension',
+        heading:
+          'A star crosses when the sidereal time equals its right ascension',
         body: 'The sidereal time runs 1.0027379 hours per clock hour; the hour angle is the sidereal time minus the right ascension.',
       },
       {
@@ -2847,7 +2952,8 @@ const CONTENT = {
           'It is the right ascension on the meridian now: a clock of the sky, with its own length of day.',
       },
       {
-        claim: 'A telescope can be pointed with the catalogue’s coordinates unchanged.',
+        claim:
+          'A telescope can be pointed with the catalogue’s coordinates unchanged.',
         response:
           'Twenty-five years of precession is 16 arcminutes in right ascension for Sirius: the star would be out of a 26-arcminute frame.',
       },
@@ -2909,7 +3015,8 @@ const CONTENT = {
           'Only when the calibration term is the larger; here the star’s photons are.',
       },
       {
-        claim: 'The measured signal-to-noise should equal the prediction exactly.',
+        claim:
+          'The measured signal-to-noise should equal the prediction exactly.',
         response:
           'A frame is one draw of the noise: a signal-to-noise of 50 varies by about 1 in 50.',
       },
@@ -2956,7 +3063,8 @@ const CONTENT = {
     ],
     [
       {
-        claim: 'Doubling the signal-to-noise always costs four times the exposure.',
+        claim:
+          'Doubling the signal-to-noise always costs four times the exposure.',
         response:
           'Only where the star’s or the sky’s photons dominate; part of the noise here is the camera’s, so it cost 3.2.',
       },
@@ -3128,7 +3236,7 @@ const EXPECTATIONS = {
       'A total exposure of about 79.8 s (within 1.5) with 87 percent of the noise squared from the sky (within 2).',
     'two-magnitudes-brighter':
       'About 79.8 s and 443 s (within 8), a ratio of 5.6.',
-    'three-magnitudes-brighter': 'A ratio of 13.85 (within 0.5).',
+    'three-magnitudes-brighter': 'A ratio of 13.84 (within 0.5).',
     'the-moon-and-a-bright-star':
       'For the 1.0 m telescope: 43 and 204 s at magnitude 20 and 2.3 and 2.7 s at magnitude 17 (dark and 3 magnitudes brighter).',
     'a-redder-sky': 'A ratio of 5.15 (within 0.15).',
@@ -3151,10 +3259,12 @@ const EXPECTATIONS = {
       'A zero point of 24.803 (within 0.01), an extinction of 0.213 (within 0.01) and an uncertainty of 0.008 (within 0.0015).',
     'station-measure':
       'A predicted signal-to-noise of 49.5 (within 0.6) and a measured one of 49.9 (within 3.5).',
-    'station-report': 'A total uncertainty of 0.0231 magnitude (within 0.0015).',
+    'station-report':
+      'A total uncertainty of 0.0231 magnitude (within 0.0015).',
   },
   'from-photons-to-a-number': {
-    'the-counts': 'About 5101 electrons (within 60) and a noise of 103 (within 2).',
+    'the-counts':
+      'About 5101 electrons (within 60) and a noise of 103 (within 2).',
     'the-magnitude-uncertainty': '0.02195 magnitude (within 0.0008).',
     'the-rate-to-a-magnitude': 'A magnitude of 19.00 (within 0.03).',
     'the-calibration-term':
@@ -3186,8 +3296,7 @@ export const INSTRUCTOR = {
 
 /** The Spanish shadows by lesson id (what instructorLocale.js spreads). */
 export const SHADOWS = {
-  'which-instrument-for-which-question':
-    WHICH_INSTRUMENT_FOR_WHICH_QUESTION_ES,
+  'which-instrument-for-which-question': WHICH_INSTRUMENT_FOR_WHICH_QUESTION_ES,
   'the-sky-background': THE_SKY_BACKGROUND_ES,
   'coordinates-and-time': COORDINATES_AND_TIME_ES,
   'a-night-at-the-telescope': A_NIGHT_AT_THE_TELESCOPE_ES,

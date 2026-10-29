@@ -390,22 +390,22 @@ export const BROWSE_META = {
   },
   'which-instrument-for-which-question': {
     tags: ['observing'],
-    numericCount: 0,
+    numericCount: 2,
   },
   'the-sky-background': {
     tags: ['observing'],
-    numericCount: 0,
+    numericCount: 4,
   },
   'coordinates-and-time': {
     tags: ['observing'],
-    numericCount: 0,
+    numericCount: 2,
   },
   'a-night-at-the-telescope': {
     tags: ['observing'],
-    numericCount: 0,
+    numericCount: 2,
   },
   'from-photons-to-a-number': {
     tags: ['observing'],
-    numericCount: 0,
+    numericCount: 3,
   },
 };

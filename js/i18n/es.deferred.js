@@ -2029,6 +2029,47 @@ export const ES_DEFERRED = {
     'Por qué la estrella más brillante tiene la magnitud equivocada, y qué hacen el desbordamiento y los rayos cósmicos.',
   'inv.seq.observing.counts-to-magnitudes':
     'Por qué una estrella se ve más débil cerca del horizonte, y cómo una noche de patrones da magnitudes.',
+  'inv.seq.instruments.title': 'Observación e instrumentos',
+  'inv.seq.instruments.blurb':
+    'La unidad de observación de principio a fin: el telescopio y lo que resuelve, el detector y las imágenes que hace, la exposición, el cielo detrás de la estrella, las coordenadas y el tiempo, la calibración hasta una magnitud, los espectros, la cadencia y el diseño de sondeos, luego una noche trazada del plan al informe y la cadena entera como un solo cálculo. Primero las investigaciones cortas; las de conexión y la final, al final. Mejor después de El cielo.',
+  'inv.seq.instruments.what-a-ccd-records':
+    'Imágenes de sesgo, oscuridad y campo plano: lo que hay que quitar a la luz de una estrella antes de que sea una medida.',
+  'inv.seq.instruments.what-a-telescope-resolves':
+    'Qué puede separar un telescopio: el límite de difracción frente al seeing.',
+  'inv.seq.instruments.deep-or-wide':
+    'Qué encuentra más: las mismas noches como exposiciones largas en poca área o cortas en mucha.',
+  'inv.seq.instruments.two-telescopes-one-question':
+    'Un objetivo, dos telescopios: por qué el grande tarda cerca de 1 de cada 65 del tiempo.',
+  'inv.seq.instruments.signal-noise-and-exposure':
+    'Cuánto exponer para alcanzar una señal a ruido, y por qué cuatro veces la luz no es cuatro veces la calidad.',
+  'inv.seq.instruments.plan-an-exposure':
+    'Convertir la ecuación del CCD en un plan: cuánto tiempo y qué lo limita.',
+  'inv.seq.instruments.which-instrument-for-which-question':
+    'Cinco instalaciones de la biblioteca y la propiedad que decide la elección: luz, píxeles, campo o longitud de onda.',
+  'inv.seq.instruments.the-sky-background':
+    'El cielo como una luz propia: qué cuesta en exposición y cuándo importa la Luna.',
+  'inv.seq.instruments.coordinates-and-time':
+    'Tiempo sidéreo, ángulo horario y precesión: por qué una posición de catálogo tiene una época.',
+  'inv.seq.instruments.the-saturated-star':
+    'Por qué la estrella más brillante de la imagen tiene la magnitud equivocada, y dónde es segura una medida.',
+  'inv.seq.instruments.why-two-lines-become-one':
+    'Por qué un espectrógrafo puede mostrar dos líneas como una, y cómo se calibra una escala de longitudes de onda con un arco.',
+  'inv.seq.instruments.counts-to-magnitudes':
+    'Por qué una estrella se ve más débil cerca del horizonte, y cómo una noche de patrones da magnitudes.',
+  'inv.seq.instruments.why-the-period-is-wrong':
+    'Por qué un periodo de una visita por noche puede ser erróneo, y cómo lo decide la cadencia.',
+  'inv.seq.instruments.design-the-schedule':
+    'Ocho noches en el instrumento real: las horas que eliges deciden la respuesta.',
+  'inv.seq.instruments.a-variable-star-from-frames':
+    'Fotometría diferencial de cuarenta imágenes: por qué una estrella de comparación quita la nube.',
+  'inv.seq.instruments.what-is-in-this-field':
+    'Las fuentes que lista un detector, el ancho de las estrellas y lo débil que puede ver una búsqueda.',
+  'inv.seq.instruments.a-night-at-the-telescope':
+    'Una observación de principio a fin: planificar, exponer, calibrar, medir e informar, con el número que cada estación entrega.',
+  'inv.seq.instruments.propose-an-observation':
+    'Diseñar un sondeo para un objetivo dado, predecir lo que encuentra y justificar el plan: muchos planes son correctos.',
+  'inv.seq.instruments.from-photons-to-a-number':
+    'La cadena entera como un cálculo trazado, con la incertidumbre arrastrada en cada paso.',
   'inv.seq.depth.core': 'Profundidad básica',
   'inv.seq.depth.quantitative': 'Profundidad cuantitativa',
   'inv.seq.depth.advanced': 'Profundidad avanzada',
