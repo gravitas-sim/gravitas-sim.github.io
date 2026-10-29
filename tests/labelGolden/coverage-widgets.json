@@ -59,6 +59,9 @@
   "hz-ages",
   "photometric-calibration",
   "strategy-window",
-  "strategy-plan"
+  "strategy-plan",
+  "survey-design-tradeoff",
+  "survey-design-plan",
+  "survey-design-compare"
  ]
 }

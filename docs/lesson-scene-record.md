@@ -1293,7 +1293,7 @@ Of 174 prediction loops, 174 are returned to,
 - **Prediction loops:** predict-deep-or-wide → euclid-best, steep-class, what-decides-it, the-rule-and-its-limits → steep-class.
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
-- **Accepted central experiment:** not yet reviewed.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:survey-design-tradeoff`, control survey-design-tradeoff/cls, measures the exposure that finds the most sources in ten nights on a one-metre telescope: 335 seconds for a class with the Euclidean slope of 0.6 and 3162 seconds, the longest on the slider, for a class with a slope of 1.0, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Two Telescopes, One Question (`two-telescopes-one-question`)
 
@@ -1307,7 +1307,7 @@ Of 174 prediction loops, 174 are returned to,
 - **Prediction loops:** predict-the-ratio → read-the-hours, why-so-much, two-limits-of-the-comparison → read-the-hours.
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
-- **Accepted central experiment:** not yet reviewed.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:survey-design-compare`, control survey-design-compare/goalDepth, measures the time the 8.4-metre telescope needs as a fraction of the time the one-metre telescope needs for the same depth over ten square degrees: 0.031 for a goal of 22 magnitude and 0.015 for 23, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Propose an Observation (`propose-an-observation`)
 
@@ -1321,5 +1321,5 @@ Of 174 prediction loops, 174 are returned to,
 - **Prediction loops:** none.
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: nothing marks these, they are a record.
 - **Scene rebuilds:** none.
-- **Accepted central experiment:** not yet reviewed.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:survey-design-plan`, control survey-design-plan/logExposure, measures the verdict of a plan on the goal of 22.5 magnitude over 100 square degrees in ten nights: feasible for the one-metre telescope at 63 seconds, not feasible at 4 seconds; many plans pass and the screen judges feasibility and the student's own stated numbers, never one plan, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 

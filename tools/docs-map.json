@@ -991,7 +991,7 @@
     {
       "file": "SURVEY_DESIGN.md",
       "kind": "feature",
-      "purpose": "Survey design: depth from exposure and facility, area, expected counts from a stated count model, completeness and contamination, the depth-against-area trade-off, the validation contract and failed legs (Prompt 215).",
+      "purpose": "Survey design: depth, area, counts, completeness, contamination and the depth-against-area trade-off, the validation contract and its failed legs (Prompt 215).",
       "owner": 215,
       "student": true
     },

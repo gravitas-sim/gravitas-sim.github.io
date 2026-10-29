@@ -19,6 +19,11 @@ import {
 import { SURVEY_DESIGN_WIDGETS } from '../js/surveyDesignWidgets.js';
 import { planVerdict } from '../js/surveyDesignPlan.js';
 import { answerKeyFor } from '../js/answerKey.js';
+import { buildLabReport } from '../js/labReport.js';
+import { EN_REPORT } from '../js/i18n/en.report.js';
+import { decodeEntities } from '../js/lessonMarkup.js';
+import { checkAnswer } from '../js/answerCheck.js';
+import { stepKey } from '../js/investigations/progressSchema.js';
 import { SURVEY_SETUPS } from '../js/instruments/survey.js';
 import { zeroPointOf } from '../js/instruments/exposureSky.js';
 import { areaOf } from '../js/instruments/exposure.js';
@@ -54,8 +59,12 @@ describe('Deep or Wide?: the numbers the steps state', () => {
     const e = tradeoffView({ facility: 1, cls: 0, logExposure: 2, nights: 10 });
     const s = tradeoffView({ facility: 1, cls: 2, logExposure: 2, nights: 10 });
     const f = tradeoffView({ facility: 1, cls: 1, logExposure: 2, nights: 10 });
-    expect(step('euclid-best').validate({ e: e.best.exposure }).level).toBe('ok');
-    expect(step('steep-class').validate({ e: s.best.exposure }).level).toBe('ok');
+    expect(step('euclid-best').validate({ e: e.best.exposure }).level).toBe(
+      'ok'
+    );
+    expect(step('steep-class').validate({ e: s.best.exposure }).level).toBe(
+      'ok'
+    );
     expect(Number.isFinite(s.optimum)).toBe(false);
     expect(
       step('the-rule-undershoots').validate({
@@ -107,7 +116,10 @@ describe('Two Telescopes, One Question: the numbers the steps state', () => {
   });
   test('the field ratio', () => {
     const a = compareView({ facilityA: 1, facilityB: 2 });
-    expect(a.b.fovDeg2 / a.a.fovDeg2).toBeCloseTo(step('the-field-ratio').answer, 0);
+    expect(a.b.fovDeg2 / a.a.fovDeg2).toBeCloseTo(
+      step('the-field-ratio').answer,
+      0
+    );
   });
 });
 
@@ -177,6 +189,78 @@ describe('Propose an Observation: the plan step', () => {
       'reasoning',
       'uncertainty',
     ]);
+  });
+});
+
+describe('the capstone through the report, with two different valid plans', () => {
+  const lines = bytes =>
+    [
+      ...Buffer.from(bytes)
+        .toString('latin1')
+        .matchAll(/\(((?:\\.|[^\\)])*)\) Tj/g),
+    ].map(m => m[1].replace(/\\(.)/g, '$1'));
+  const reportOf = (v, why) => {
+    const responses = { [stepKey(PO.id, 'justify-the-plan')]: why };
+    for (const [k, x] of Object.entries(v))
+      responses[`${stepKey(PO.id, 'propose-a-plan')}:${k}`] = String(x);
+    return lines(
+      buildLabReport({
+        locale: 'en',
+        t: (id, vars) =>
+          String(EN_REPORT[id] ?? id).replace(/\{(\w+)\}/g, (w, k) =>
+            vars && k in vars ? String(vars[k]) : w
+          ),
+        investigation: PO,
+        plot: null,
+        name: 'Ada',
+        submissionToken: '',
+        responses,
+        attempts: {},
+        visited: new Set(PO.steps.map(x => x.sid)),
+        startedAt: '2026-09-01T10:00:00.000Z',
+        links: [],
+        stepIdFor: i => stepKey(PO.id, PO.steps[i]?.sid),
+        assignment: null,
+        binding: null,
+        checkAnswer: (st, value) => checkAnswer(st, value, { locale: 'en' }),
+        decodeEntities,
+      })
+    ).join('\n');
+  };
+  test('each plan is judged by the kernel and appears in the report with its own numbers', () => {
+    const plans = [
+      [2, 63],
+      [3, 32],
+    ].map(([f, t]) => {
+      const m = planView({
+        facility: f - 1,
+        cls: 1,
+        logExposure: Math.log10(t),
+        visits: 1,
+        nights: 10,
+        threshold: 5,
+        goalDepth: 22.5,
+        logGoalArea: 2,
+      });
+      return {
+        facility: f,
+        exposure: t,
+        visits: 1,
+        nights: 10,
+        threshold: 5,
+        depth: m.result.depth,
+        n: m.result.counts.perDeg2.detected,
+      };
+    });
+    const texts = plans.map((v, i) => {
+      expect(planVerdict(step('propose-a-plan'), v).level).toBe('ok');
+      const r = reportOf(v, `Plan ${'AB'[i]}: it spends the nights on depth.`);
+      expect(r).toContain(`Plan ${'AB'[i]}: it spends the nights on depth.`);
+      expect(r).toContain(String(v.exposure));
+      return r;
+    });
+    expect(texts[0]).not.toEqual(texts[1]);
+    expect(plans[0].facility).not.toBe(plans[1].facility);
   });
 });
 

@@ -88,13 +88,13 @@ The browser half takes about seven minutes on the private port.
 | 6 | `butterfly-effect` | 3: `key:explore.rubric`, `key:predict.requires`, `lock:null` |
 | 7 | `binary-star-planets` | 2: `key:explore.requires`, `lock:{"placement":true}` |
 | 8 | `black-holes` | 2: `key:question.checklist`, `key:read.explainView` |
-| 9 | `weighing-stars` | 2: `key:explore.showBarycenter`, `key:read.showBarycenter` |
-| 10 | `a-universe-of-stars` | 1: `key:measure.checklist` |
-| 11 | `counts-to-magnitudes` | 1: `depth-step:quantitative/predict` |
-| 12 | `detect-this-planet` | 1: `key:read.allowInspector` |
-| 13 | `extending-an-experiment` | 1: `key:measure.compute` |
-| 14 | `measuring-the-moon` | 1: `key:question.maxUncertainty` |
-| 15 | `orbital-energy` | 1: `key:question.rubricCriteria` |
+| 9 | `propose-an-observation` | 2: `key:measure.plan`, `key:question.rubricCriteria` |
+| 10 | `weighing-stars` | 2: `key:explore.showBarycenter`, `key:read.showBarycenter` |
+| 11 | `a-universe-of-stars` | 1: `key:measure.checklist` |
+| 12 | `counts-to-magnitudes` | 1: `depth-step:quantitative/predict` |
+| 13 | `detect-this-planet` | 1: `key:read.allowInspector` |
+| 14 | `extending-an-experiment` | 1: `key:measure.compute` |
+| 15 | `measuring-the-moon` | 1: `key:question.maxUncertainty` |
 | 16 | `power-law-gravity` | 1: `key:question.explain` |
 | 17 | `radial-velocity` | 1: `key:measure.setup` |
 | 18 | `retrograde-motion` | 1: `lock:{"placement":true,"inspector":false}` |

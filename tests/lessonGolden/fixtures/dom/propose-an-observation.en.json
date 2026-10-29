@@ -1,0 +1,122 @@
+[
+ {
+  "depth": "core",
+  "role": "first",
+  "sid": "the-brief",
+  "position": [
+   1,
+   4
+  ],
+  "title": "Propose an Observation",
+  "subtitle": "Design a survey for a stated goal, predict what it will find, check it against the model and justify the plan: many plans are right",
+  "body": "<p class=\"inv-step-count\">Step 1 of 4 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">The brief</h3><div class=\"inv-step-body\"><p>You have <strong>ten nights</strong>. Find sources of the <em>flattened class</em> (counts rising by 0.4 dex a magnitude) to a depth of <strong>22.5 magnitude</strong>, over at least <strong>100 square degrees</strong>, with at least <strong>95 percent</strong> of the detections real. Three facilities are on offer: the Las Cumbres 0.35 m and 1.0 m telescopes and Rubin. Use the panel to explore, then propose one plan.</p><p>There is no single right plan. The check is whether your plan meets the goal and whether what you say it reaches matches it.</p></div>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "last",
+  "sid": "two-valid-plans",
+  "position": [
+   4,
+   4
+  ],
+  "title": "Propose an Observation",
+  "subtitle": "Design a survey for a stated goal, predict what it will find, check it against the model and justify the plan: many plans are right",
+  "body": "<p class=\"inv-step-count\">Step 4 of 4 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">Many plans, one goal</h3><div class=\"inv-step-body\"><p>The one-meter telescope with about 60 s a visit for ten nights, Rubin with about 30 s, and the 0.35 m telescope with about 1000 s all meet this goal; a threshold of 3 sigma deepens each but fails the reliability. The screen judges feasibility and consistency, never one answer. The count’s interval is Poisson only: a real survey scatters more, from clustering and from the real population differing from a stated class.</p></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "quantitative",
+  "role": "first",
+  "sid": "the-brief",
+  "position": [
+   1,
+   6
+  ],
+  "title": "Propose an Observation",
+  "subtitle": "Design a survey for a stated goal, predict what it will find, check it against the model and justify the plan: many plans are right",
+  "body": "<p class=\"inv-step-count\">Step 1 of 6 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">The brief</h3><div class=\"inv-step-body\"><p>You have <strong>ten nights</strong>. Find sources of the <em>flattened class</em> (counts rising by 0.4 dex a magnitude) to a depth of <strong>22.5 magnitude</strong>, over at least <strong>100 square degrees</strong>, with at least <strong>95 percent</strong> of the detections real. Three facilities are on offer: the Las Cumbres 0.35 m and 1.0 m telescopes and Rubin. Use the panel to explore, then propose one plan.</p><p>There is no single right plan. The check is whether your plan meets the goal and whether what you say it reaches matches it.</p></div>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": "Depth: Quantitative"
+ },
+ {
+  "depth": "quantitative",
+  "role": "last",
+  "sid": "two-valid-plans",
+  "position": [
+   6,
+   6
+  ],
+  "title": "Propose an Observation",
+  "subtitle": "Design a survey for a stated goal, predict what it will find, check it against the model and justify the plan: many plans are right",
+  "body": "<p class=\"inv-step-count\">Step 6 of 6 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">Many plans, one goal</h3><div class=\"inv-step-body\"><p>The one-meter telescope with about 60 s a visit for ten nights, Rubin with about 30 s, and the 0.35 m telescope with about 1000 s all meet this goal; a threshold of 3 sigma deepens each but fails the reliability. The screen judges feasibility and consistency, never one answer. The count’s interval is Poisson only: a real survey scatters more, from clustering and from the real population differing from a stated class.</p></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Depth: Quantitative"
+ },
+ {
+  "depth": "advanced",
+  "role": "first",
+  "sid": "the-brief",
+  "position": [
+   1,
+   7
+  ],
+  "title": "Propose an Observation",
+  "subtitle": "Design a survey for a stated goal, predict what it will find, check it against the model and justify the plan: many plans are right",
+  "body": "<p class=\"inv-step-count\">Step 1 of 7 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">The brief</h3><div class=\"inv-step-body\"><p>You have <strong>ten nights</strong>. Find sources of the <em>flattened class</em> (counts rising by 0.4 dex a magnitude) to a depth of <strong>22.5 magnitude</strong>, over at least <strong>100 square degrees</strong>, with at least <strong>95 percent</strong> of the detections real. Three facilities are on offer: the Las Cumbres 0.35 m and 1.0 m telescopes and Rubin. Use the panel to explore, then propose one plan.</p><p>There is no single right plan. The check is whether your plan meets the goal and whether what you say it reaches matches it.</p></div>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": "Depth: Advanced"
+ },
+ {
+  "depth": "advanced",
+  "role": "graded",
+  "sid": "what-the-interval-misses",
+  "position": [
+   6,
+   7
+  ],
+  "title": "Propose an Observation",
+  "subtitle": "Design a survey for a stated goal, predict what it will find, check it against the model and justify the plan: many plans are right",
+  "body": "<p class=\"inv-step-count\">Step 6 of 7 <span class=\"inv-step-kind\">question</span></p><h3 class=\"inv-step-title\">What the interval misses</h3><div class=\"inv-step-body\"><p>The panel gives a count with a Poisson interval.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Which effect makes a real survey’s count scatter more than that interval?</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>Clustering and cosmic variance: sources are not scattered independently, so the count in a field varies more than Poisson</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>The telescope’s mirror shape</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>The exposure time</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>The number of visits</span></button></div><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> I could use a hint </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Depth: Advanced"
+ },
+ {
+  "depth": "advanced",
+  "role": "marked",
+  "sid": "what-the-interval-misses",
+  "position": [
+   6,
+   7
+  ],
+  "title": "Propose an Observation",
+  "subtitle": "Design a survey for a stated goal, predict what it will find, check it against the model and justify the plan: many plans are right",
+  "body": "<p class=\"inv-step-count\">Step 6 of 7 <span class=\"inv-step-kind\">question</span></p><h3 class=\"inv-step-title\">What the interval misses</h3><div class=\"inv-step-body\"><p>The panel gives a count with a Poisson interval.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Which effect makes a real survey’s count scatter more than that interval?</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option is-chosen is-correct\" data-option=\"0\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>Clustering and cosmic variance: sources are not scattered independently, so the count in a field varies more than Poisson</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>The telescope’s mirror shape</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>The exposure time</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>The number of visits</span></button></div><p class=\"inv-because\">A Poisson count assumes sources fall independently. Real sources cluster, so the variance between fields is larger, and a survey should state its interval with that included.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Change answer</button><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> I could use a hint </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Depth: Advanced"
+ },
+ {
+  "depth": "advanced",
+  "role": "last",
+  "sid": "two-valid-plans",
+  "position": [
+   7,
+   7
+  ],
+  "title": "Propose an Observation",
+  "subtitle": "Design a survey for a stated goal, predict what it will find, check it against the model and justify the plan: many plans are right",
+  "body": "<p class=\"inv-step-count\">Step 7 of 7 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">Many plans, one goal</h3><div class=\"inv-step-body\"><p>The one-meter telescope with about 60 s a visit for ten nights, Rubin with about 30 s, and the 0.35 m telescope with about 1000 s all meet this goal; a threshold of 3 sigma deepens each but fails the reliability. The screen judges feasibility and consistency, never one answer. The count’s interval is Poisson only: a real survey scatters more, from clustering and from the real population differing from a stated class.</p></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Depth: Advanced"
+ }
+]

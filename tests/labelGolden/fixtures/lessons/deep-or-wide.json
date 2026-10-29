@@ -1,0 +1,57 @@
+{
+ "id": "deep-or-wide",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.euclid-best.fields.0.unit","s"],
+    ["steps.steep-class.fields.0.unit","s"],
+    ["steps.the-exponent.unit",""],
+    ["steps.the-rule-undershoots.fields.0.unit","s"],
+    ["steps.the-rule-undershoots.fields.1.unit","s"],
+    ["steps.a-lower-threshold.fields.0.unit","mag"],
+    ["steps.a-lower-threshold.fields.1.unit","%"]
+   ],
+   "numbered": [
+    ["steps.euclid-best.fields.0.hint","335"],
+    ["steps.steep-class.fields.0.hint","3162"],
+    ["steps.the-rule-undershoots.fields.0.hint","84"],
+    ["steps.the-rule-undershoots.fields.1.hint","33"],
+    ["steps.a-lower-threshold.fields.0.hint","22.59"],
+    ["steps.a-lower-threshold.fields.1.hint","90.5"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": []
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "the-exponent",
+    "answer": "0.25",
+    "tolerance": "0.03",
+    "unit": ""
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "euclid-best": {
+    "validate": {"calls":97,"distinct":2,"digest":"f0c060656bc6004a","samples":[null,{"level":"error","message":"Read the Best exposure row with the Euclidean class: it is a few hundred seconds."}]}
+   },
+   "steep-class": {
+    "validate": {"calls":97,"distinct":2,"digest":"29db4735fb511ae8","samples":[null,{"level":"error","message":"Select the steep class (slope 1.0): the best exposure is the longest the slider offers."}]}
+   },
+   "the-rule-undershoots": {
+    "validate": {"calls":232,"distinct":2,"digest":"79a75b4b49e28559","samples":[null,{"level":"error","message":"Select the flattened class and read the Best exposure row: about 84 s found against 33 s by the rule."}]}
+   },
+   "a-lower-threshold": {
+    "validate": {"calls":232,"distinct":2,"digest":"744fd94e43625943","samples":[null,{"level":"error","message":"Set the threshold to 3 sigma: the depth is about 22.6 and the reliability about 90 percent."}]}
+   }
+  },
+  "es": "same"
+ }
+}

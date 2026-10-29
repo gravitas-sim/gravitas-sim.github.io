@@ -2,7 +2,7 @@
 
 Roadmap III, Prompt 215 (tranche T3, D-R10-207-01). Branch `feat/survey-design`. The kernel is `js/kernels/survey/`; the facility
 adapter is `js/instruments/survey.js` (over the instrument library of Prompt 209 and the exposure calculator of Prompt 210, both read
-unchanged); the instruments are panels in `js/surveyWidgets.js`; the new step kind is `plan` on the investigation format; the
+unchanged); the instruments are three panels in `js/surveyDesignWidgets.js` over `js/surveyDesignField.js`; the open-ended step is a `plan` step on the lesson format (a `measure` step with `plan` metadata, judged by `js/surveyDesignPlan.js`; the pack formats are unchanged, D-R10-215-05); the
 investigations are "Deep or Wide?", "Two Telescopes, One Question" and "Propose an Observation". This file is written in the order the
 work was done: the validation contract first (committed with `tests/fixtures/survey/thresholds.json` before any kernel, adapter, panel,
 oracle script, result or lesson existed), and the rest after the measurements.
@@ -36,7 +36,7 @@ section 7.5.8.
    sharp-cut count by that factor.
 5. *False positives.* One-sided Gaussian tail per independent element, `Q(theta) = Phi(-theta)`; the elements are the noise-equivalent area of
    the matched filter, `4 pi sigma^2` square arcsec, so `3600^2 / (4 pi sigma^2)` per square degree. *Reliability* `R = D / (D + F)`; a plan is
-   *unreliable* when `R < 0.5`. The independence of neighbouring elements and the Gaussianity of the noise are assumptions; a real detector
+   *unreliable* when `R < 0.5`. The independence of neighboring elements and the Gaussianity of the noise are assumptions; a real detector
    adds artefacts (cosmic rays, bad columns, blends) and is worse.
 6. *Uncertainty.* The count a survey returns is Poisson about `D`; the prediction interval is the central Poisson quantile interval at the stated
    level. Clustering, cosmic variance and the uncertainty of the class itself are not in it, so the interval is a lower bound on the spread of a
@@ -75,7 +75,44 @@ half-completeness magnitude with Prompt 184's injection run (an independent meas
 saturating); D2 four requests beyond a class's range, refused; D3 eight malformed inputs, each a refusal with a code; D4 six cases where false
 positives outnumber detections, called unreliable.
 
-**(e) Authentic data.** E1 is NOT RUN: the repository holds no real catalogue with a stated completeness and none is downloaded here. B4 is an
+**(e) Authentic data.** E1 is NOT RUN: the repository holds no real catalog with a stated completeness and none is downloaded here. B4 is an
 order-of-magnitude check of the cited class against a recalled surface density, not an authentic-data validation.
 
 **Synthetic data** (every frame and survey this model renders) is labelled synthetic, with the class and the plan as its truth manifest.
+
+## Results
+
+`npm run survey:validate` runs every committed check against the kernel, the adapter and the oracle's pinned results
+(`tools/survey-validate.mjs`; `tests/surveyDesign.test.js` holds the table). Twenty rows pass, four **failed their committed bounds and
+stay failing** (`tests/fixtures/survey/failed-legs.json`; only Carl resets a bound), and E1 was not run.
+
+| Check | Result | Measured |
+| --- | --- | --- |
+| A1 Euclidean slope and count | pass | worst relative error 9e-16, slope 0.6 |
+| A2 probit completeness closed form | pass | 4e-12 over 9 cases |
+| A3 1.25 magnitude per decade | **FAIL** | 1.263, 1.258, 1.254 at 400, 1000, 4000 s: 0.013 off at 400 s; the gain approaches 1.25 from above as the sky takes over (the source's shot noise is 3 percent of the sky variance at 400 s) |
+| A4 optimum exposure `beta overhead / (1 - beta)` | **FAIL** | the real maximum is 15 percent (alpha 0.4) and 19 percent (alpha 0.6) above the closed form, which is the sky-limited limit (AM6); no interior optimum for alpha 1.0, as predicted |
+| A4b the optimum against the oracle | pass | same grid index for alpha 0.4 and 0.6 |
+| A5 time ratio of two sky-limited setups | **FAIL** | 2.3 percent off the sky-limited closed form (AM4) |
+| A5b the exact time ratio | pass | 1e-14 |
+| A6 false-positive tail and elements | pass | 3e-14 |
+| A7 Poisson interval | pass | never below nominal, equals the oracle |
+| A8 area and stack arithmetic | pass | exact |
+| B1 twelve plans against the independent oracle | pass | depth 1.8e-13 mag, counts 2.6e-13, false positives 4e-15 |
+| B2 Euclidean count against `FlatLambdaCDM` | **FAIL** | the flat-space count is 1.08, 1.13 and 1.27 times the cosmological one at m = 14, 15 and 16.5; the local-galaxy class is cut to magnitude 15 (AM5) |
+| B3 completeness against Prompt 184's injection | pass | half-completeness 0.076 mag apart (bound 0.3) |
+| B4 density against a recalled value | pass | an order-of-magnitude check only |
+| C1 ensemble coverage, 4000 surveys of 4 plans | pass | 68 percent interval 0.67 to 0.68, 95 percent interval 0.95 to 0.955; means within 1.9 standard errors |
+| D1 feasibility against oracle-set goals | pass | 10 of 10 agree |
+| D2 outside the count model | pass | 4 refusals |
+| D3 malformed input | pass | every one a refusal with a code |
+| D4, D4b unreliable when false positives dominate | pass | 1e-14 (12 cases, rare class included) |
+| E1 authentic catalog with a stated completeness | **NOT RUN** | the repository holds no such catalog and none is downloaded here; requested, not claimed |
+
+Amendments AM1 to AM6 (each with `boundMoved` false) are recorded in `tests/fixtures/survey/thresholds.json`.
+
+### What the forward model of a plan is
+
+A plan renders a synthetic patch of the sky as a **catalog** (the sources a class puts in the patch, each kept with its completeness),
+not a rendered frame: the pixel render with the R13 detection tool was not built for this prompt, and the student's measurement of the
+plan is the panel's own detections and false positives. The Spanish text has not been read by a fluent reader.

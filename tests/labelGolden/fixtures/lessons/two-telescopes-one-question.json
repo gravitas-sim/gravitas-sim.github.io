@@ -1,0 +1,39 @@
+{
+ "id": "two-telescopes-one-question",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.read-the-hours.fields.0.unit","h"],
+    ["steps.the-field-ratio.unit",""]
+   ],
+   "numbered": [
+    ["steps.read-the-hours.fields.0.hint","3.84"],
+    ["steps.read-the-hours.fields.1.hint","0.0155"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": []
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "the-field-ratio",
+    "answer": "49.2",
+    "tolerance": "1",
+    "unit": ""
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "read-the-hours": {
+    "validate": {"calls":232,"distinct":2,"digest":"7a1f58a1ae47bdce","samples":[null,{"level":"error","message":"Read the first facility’s hours (about 3.8) and the ratio (about 0.0155) from the panel."}]}
+   }
+  },
+  "es": "same"
+ }
+}

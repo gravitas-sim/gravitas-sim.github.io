@@ -1155,7 +1155,7 @@ export const MANIFEST = [
     id: 'two-telescopes-one-question',
     title: 'Two Telescopes, One Question',
     subtitle:
-      'The same depth over the same area with a one-metre telescope and an 8.4-metre one: how much longer does the small one take, and why',
+      'The same depth over the same area with a one-meter telescope and an 8.4-meter one: how much longer does the small one take, and why',
     duration: '12-22 min',
     level: 'Introductory astronomy',
     thumbnail: 'images/investigations/two-telescopes-one-question.webp',
@@ -1169,7 +1169,7 @@ export const MANIFEST = [
     title: 'Propose an Observation',
     subtitle:
       'Design a survey for a stated goal, predict what it will find, check it against the model and justify the plan: many plans are right',
-    duration: '20-40 min',
+    duration: '10-30 min',
     level: 'Upper-level astronomy',
     thumbnail: 'images/investigations/propose-an-observation.webp',
     depths: 3,

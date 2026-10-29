@@ -65,7 +65,7 @@ const PLAN_FIELDS = [
   { id: 'exposure', label: 'Exposure per visit', unit: 's', hint: '100' },
   { id: 'visits', label: 'Visits stacked', hint: '1' },
   { id: 'nights', label: 'Nights', hint: '10' },
-  { id: 'threshold', label: 'Detection threshold', unit: 'sigma', hint: '5' },
+  { id: 'threshold', label: 'Detection threshold (in sigma)', hint: '5' },
   { id: 'depth', label: 'Depth your plan reaches (half found)', unit: 'mag' },
   { id: 'n', label: 'Sources your plan finds per square degree' },
 ];
@@ -81,7 +81,7 @@ export const DEEP_OR_WIDE = {
   title: 'Deep or Wide?',
   subtitle:
     'The same nights can reach faint sources over a small area or bright ones over a large one: which finds more depends on the class of source',
-  duration: '12-22 min',
+  duration: '8-14 min',
   level: 'Introductory astronomy',
   audience: 'intro',
   textbook: { chapter: 6, section: null },
@@ -102,7 +102,7 @@ export const DEEP_OR_WIDE = {
       stage: STAGE,
       type: 'read',
       title: 'Two ways to spend the nights',
-      body: `Ten nights on a one-metre telescope. You can take long exposures: each pointing
+      body: `Ten nights on a one-meter telescope. You can take long exposures: each pointing
              reaches faint sources, but the nights buy few pointings. Or short exposures:
              each pointing is shallow, but there are many. The panel shows the
              <strong>area surveyed</strong> and the <strong>sources found</strong> against
@@ -304,7 +304,7 @@ export const DEEP_OR_WIDE_DEEPER = {
       type: 'measure',
       title: 'Depth against contamination',
       body: `Lowering the detection threshold finds fainter sources, but noise peaks pass it
-             too. For the steep class on the one-metre telescope, 31.6 s a visit, ten nights, at
+             too. For the steep class on the one-meter telescope, 31.6 s a visit, ten nights, at
              <strong>3 sigma</strong>: read the depth and the share of the detections that are
              real.`,
       fields: [
@@ -376,8 +376,8 @@ export const TWO_TELESCOPES = {
   thumbnail: 'images/investigations/two-telescopes-one-question.webp',
   title: 'Two Telescopes, One Question',
   subtitle:
-    'The same depth over the same area with a one-metre telescope and an 8.4-metre one: how much longer does the small one take, and why',
-  duration: '12-22 min',
+    'The same depth over the same area with a one-meter telescope and an 8.4-meter one: how much longer does the small one take, and why',
+  duration: '5-9 min',
   level: 'Introductory astronomy',
   audience: 'intro',
   textbook: { chapter: 6, section: null },
@@ -388,7 +388,7 @@ export const TWO_TELESCOPES = {
   lock: { placement: true, inspector: true },
   depths: ['core', 'quantitative', 'advanced'],
   objectives: [
-    'Predict how much longer a one-metre telescope takes than an 8.4-metre one to reach the same depth over the same area',
+    'Predict how much longer a one-meter telescope takes than an 8.4-meter one to reach the same depth over the same area',
     'Read from the panel the visits, the pointings and the hours each facility needs, and their ratio',
     'Say that two things set it: the light each pointing gathers (depth) and the field each pointing covers (area)',
   ],
@@ -412,10 +412,10 @@ export const TWO_TELESCOPES = {
       type: 'predict',
       reveal: 'read-the-hours',
       title: 'How much longer?',
-      body: `Rubin collects about 70 times the light of the one-metre telescope and covers
+      body: `Rubin collects about 70 times the light of the one-meter telescope and covers
              about 50 times the sky in each pointing.`,
       prompt:
-        'How does the time Rubin needs for this goal compare with the one-metre telescope’s?',
+        'How does the time Rubin needs for this goal compare with the one-meter telescope’s?',
       options: [
         'About the same: the camera is the same kind of detector',
         'About 10 times less',
@@ -427,19 +427,19 @@ export const TWO_TELESCOPES = {
         'Both advantages help, but the depth is reached in one visit by Rubin and in two by the small telescope.',
       ],
       because:
-        'The one-metre telescope needs two stacked visits in each of 52 pointings (3.8 hours); Rubin reaches the depth in one visit and needs 2 pointings (3.7 minutes): about 60 times less.',
+        'The one-meter telescope needs two stacked visits in each of 52 pointings (3.8 hours); Rubin reaches the depth in one visit and needs 2 pointings (3.7 minutes): about 60 times less.',
     },
     {
       sid: 'read-the-hours',
       stage: STAGE,
       type: 'measure',
       title: 'Read the hours',
-      body: `Read the hours the first facility (the one-metre telescope) needs, and the
+      body: `Read the hours the first facility (the one-meter telescope) needs, and the
              ratio of the second to the first.`,
       fields: [
         {
           id: 'h',
-          label: 'Hours for the one-metre telescope',
+          label: 'Hours for the one-meter telescope',
           unit: 'h',
           hint: '3.84',
         },
@@ -511,7 +511,7 @@ export const TWO_TELESCOPES_DEEPER = {
       type: 'question',
       kind: 'numeric',
       title: 'The field ratio',
-      body: `Each pointing of Rubin covers 9.6 square degrees and each of the one-metre
+      body: `Each pointing of Rubin covers 9.6 square degrees and each of the one-meter
              telescope 0.195.`,
       prompt: 'How many times more sky does a Rubin pointing cover?',
       answer: 49.2,
@@ -535,12 +535,12 @@ export const TWO_TELESCOPES_DEEPER = {
       options: [
         'Each visit costs an overhead the exposure does not change, so a short exposure wastes a larger share on a facility with a long overhead, and an exposure deeper than the goal needs wastes time',
         'The exposure does not matter: only the mirror and the field do',
-        'A longer exposure always favours the larger telescope',
+        'A longer exposure always favors the larger telescope',
         'The detector saturates at 100 s',
       ],
       answer: 0,
       hints: [
-        'Compare the one-metre telescope’s 28 s overhead with its 100 s visit.',
+        'Compare the one-meter telescope’s 28 s overhead with its 100 s visit.',
       ],
       because:
         'The time per pointing is visits times (exposure plus overhead); an exposure far shorter or deeper than the goal needs changes that mix. The comparison is a function of the exposure.',
@@ -555,7 +555,7 @@ export const PROPOSE_AN_OBSERVATION = {
   title: 'Propose an Observation',
   subtitle:
     'Design a survey for a stated goal, predict what it will find, check it against the model and justify the plan: many plans are right',
-  duration: '20-40 min',
+  duration: '6-12 min',
   level: 'Upper-level astronomy',
   audience: 'intro',
   textbook: { chapter: 6, section: null },
@@ -683,7 +683,7 @@ export const PROPOSE_AN_OBSERVATION = {
       stage: STAGE,
       type: 'read',
       title: 'Many plans, one goal',
-      body: `The one-metre telescope with about 60 s a visit for ten nights, Rubin with
+      body: `The one-meter telescope with about 60 s a visit for ten nights, Rubin with
              about 30 s, and the 0.35 m telescope with about 1000 s all meet this goal; a
              threshold of 3 sigma deepens each but fails the reliability. The screen judges
              feasibility and consistency, never one answer. The count&rsquo;s interval is
@@ -974,7 +974,7 @@ export const PROPOSE_AN_OBSERVATION_ES = {
         { label: 'Exposición por visita' },
         { label: 'Visitas apiladas' },
         { label: 'Noches' },
-        { label: 'Umbral de detección' },
+        { label: 'Umbral de detección (en sigma)' },
         { label: 'Profundidad que alcanza tu plan (se encuentra la mitad)' },
         { label: 'Fuentes que encuentra tu plan por grado cuadrado' },
       ],
@@ -1058,7 +1058,7 @@ export const PROPOSE_AN_OBSERVATION_DEEPER_ES = {
         { label: 'Exposición por visita' },
         { label: 'Visitas apiladas' },
         { label: 'Noches' },
-        { label: 'Umbral de detección' },
+        { label: 'Umbral de detección (en sigma)' },
         { label: 'Profundidad que alcanza tu plan (se encuentra la mitad)' },
         { label: 'Fuentes que encuentra tu plan por grado cuadrado' },
       ],
@@ -1171,22 +1171,30 @@ const CONTENT = {
         response:
           'It finds more, and a share of them are noise; the panel reports the share.',
       },
+      {
+        claim: 'The best exposure is the longest one the nights allow.',
+        response:
+          'Too long and the area falls faster than the depth pays; too short and the overhead of each frame is the largest cost. The best exposure is in between, and where depends on the slope.',
+      },
     ],
     [
       'The classes are stated power laws (teaching models): the Euclidean slope 0.6 is derived for sources uniform in a Euclidean volume; the others are stated, with no claim about a real population.',
       'The best exposure is read from a grid of 41 exposures (0.075 dex apart), so it is good to about 20 percent.',
       'Inherited limits: Poisson counts, Gaussian noise, an assumed 0.6 clear fraction, no clustering, no Moon, a supplied throughput.',
+      'The comparison is of the sources found, not of their usefulness: a science case that needs a large area or a faint tail would choose by that, and the panel does not.',
     ],
     [
       'Real faint galaxies have a counts slope that flattens below 0.4: what does the rule say about deep fields?',
       'A time-allocation committee asks for the survey with the most sources: what question do you ask before answering?',
+      'Which science case would choose the wide survey even though the deep one finds more sources?',
     ],
     [
       'Use the plan panel to find the exposure at which the 5 sigma reliability for the steep class first drops below 99 percent at a 3.5 sigma threshold.',
+      'Compare the best exposure for the same class on the 0.35 m telescope and on Rubin: does the slope still decide it?',
     ]
   ),
   'two-telescopes-one-question': GUIDE(
-    'Instrument comparison for one goal: a one-metre telescope and an 8.4-metre one reaching 23rd magnitude over 10 square degrees; the time ratio is about 1 in 65 and has two sources, the depth each pointing reaches and the sky each pointing covers',
+    'Instrument comparison for one goal: a one-meter telescope and an 8.4-meter one reaching 23rd magnitude over 10 square degrees; the time ratio is about 1 in 65 and has two sources, the depth each pointing reaches and the sky each pointing covers',
     'Students predict the time ratio, read the hours and the ratio from the panel, say which two advantages combine, and in the deeper steps compute the field ratio and see that the comparison depends on the exposure chosen.',
     'Introductory (the prediction and the reading); majors (the field ratio); advanced (the fixed-exposure caveat)',
     'In an observing or instrumentation unit, after Deep or Wide?; before the capstone.',
@@ -1215,18 +1223,31 @@ const CONTENT = {
         response:
           'It is a property of the telescopes and the goal and the exposure.',
       },
+      {
+        claim: 'Eight times the diameter means eight times faster.',
+        response:
+          'The collecting area grows as the square of the diameter (64), and the seeing and the pixel scale change the depth too; the panel gives the full ratio.',
+      },
+      {
+        claim: 'The rule of thumb and the panel should agree exactly.',
+        response:
+          'The rule is the sky-limited limit; the panel also pays the source’s noise, the read noise and the whole pointings, so they differ by a few percent.',
+      },
     ],
     [
       'The facilities are from the instrument library (a cited table of the field, pixel scale and cycle time); the throughput (0.5), the dark current and a 5 s slew are supplied.',
       'Pointings do not overlap and are whole numbers, which is why the ratio of pointings (26) differs from the ratio of fields (49).',
       'Inherited limits: one exposure for both, Poisson counts are not used here, a stated clear fraction.',
+      'The time is the telescope time only: access, scheduling and the cost of a night are not in it, and they are what a committee compares.',
     ],
     [
       'When would a small telescope with a wide field be the better choice?',
       'What would you ask of each facility’s time-allocation process before using this ratio?',
+      'Why is the ratio of pointings (26) not the ratio of the fields (49)?',
     ],
     [
-      'Change the exposure for the one-metre telescope to 3 s and read the ratio again.',
+      'Change the exposure for the one-meter telescope to 3 s and read the ratio again.',
+      'Choose a goal that the small telescope reaches in fewer hours and say why.',
     ]
   ),
   'propose-an-observation': GUIDE(
@@ -1241,7 +1262,7 @@ const CONTENT = {
       },
       {
         heading: 'Many plans are right',
-        body: 'The one-metre telescope at about 60 s, Rubin at about 30 s and the 0.35 m telescope at about 1000 s all meet the goal; a 3 sigma threshold fails the reliability for each.',
+        body: 'The one-meter telescope at about 60 s, Rubin at about 30 s and the 0.35 m telescope at about 1000 s all meet the goal; a 3 sigma threshold fails the reliability for each.',
       },
       {
         heading: 'The interval is Poisson only',
@@ -1258,17 +1279,33 @@ const CONTENT = {
         claim: 'The Poisson interval is the whole uncertainty.',
         response: 'It is a lower bound: a real survey scatters more.',
       },
+      {
+        claim:
+          'A plan that meets the goal on paper will meet it at the telescope.',
+        response:
+          'The plan assumes a clear fraction, a supplied throughput and a stated count model; the weather and the real population are the first things to differ.',
+      },
+      {
+        claim: 'Reliability only matters for a rare class.',
+        response:
+          'False positives are set by the noise and the threshold, so every class has them; a rare class makes them a larger share of what is found.',
+      },
     ],
     [
       'The class is a teaching model; every number is the model’s with the limits the panel lists.',
       'Mark the justification with the four criteria (correctness, reasoning, a second plan, uncertainty): the correctness criterion is whether the screen accepted a plan.',
-      'The student’s numbers are checked against the kernel, so a plan copied from a neighbour with different numbers is flagged.',
+      'The student’s numbers are checked against the kernel, so a plan copied from a neighbor with different numbers is flagged.',
+      'Two different valid plans make a good board exercise: ask which uses the nights better and which is more robust to the assumptions.',
     ],
     [
       'Which of the plans on the board would you fund and why?',
       'What would change your plan if the weather were worse than assumed?',
+      'What does the Poisson interval of your plan leave out?',
     ],
-    ['Change the goal to 23 mag and see which plans survive.']
+    [
+      'Change the goal to 23 mag and see which plans survive.',
+      'Write the plan for the same goal on a facility you chose and compare it with a classmate’s.',
+    ]
   ),
 };
 
@@ -1344,25 +1381,25 @@ const FLOW = {
 const EXPECTATIONS = {
   'deep-or-wide': {
     'euclid-best':
-      'A best exposure of about 335 s (within 50) for the Euclidean class on the one-metre telescope in ten nights.',
+      'A best exposure of about 335 s (within 50) for the Euclidean class on the one-meter telescope in ten nights.',
     'steep-class':
       'The longest exposure on the slider, 3162 s (within 300), for the steep class.',
   },
   'two-telescopes-one-question': {
     'read-the-hours':
-      'About 3.84 hours (within 0.15) for the one-metre telescope and a ratio of about 0.0155 (within 0.002).',
+      'About 3.84 hours (within 0.15) for the one-meter telescope and a ratio of about 0.0155 (within 0.002).',
   },
   'propose-an-observation': {
     'propose-a-plan':
-      'Any plan the screen accepts: feasible for 22.5 mag over 100 square degrees in at most ten nights with 95 percent of the detections real, and the stated depth and density within 0.15 mag and 10 percent of the plan’s own. The one-metre telescope at about 63 s, Rubin at about 32 s and the 0.35 m at about 1000 s all pass.',
+      'Any plan the screen accepts: feasible for 22.5 mag over 100 square degrees in at most ten nights with 95 percent of the detections real, and the stated depth and density within 0.15 mag and 10 percent of the plan’s own. The one-meter telescope at about 63 s, Rubin at about 32 s and the 0.35 m at about 1000 s all pass.',
   },
 };
 
 const BANDS = {
-  'deep-or-wide': { core: 'short', quantitative: 'medium', advanced: 'medium' },
+  'deep-or-wide': { core: 'short', quantitative: 'medium', advanced: 'long' },
   'two-telescopes-one-question': {
     core: 'short',
-    quantitative: 'short',
+    quantitative: 'medium',
     advanced: 'medium',
   },
   'propose-an-observation': {

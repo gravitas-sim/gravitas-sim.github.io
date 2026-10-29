@@ -1178,7 +1178,7 @@ export const MANIFEST = [
     title: 'Propón una observación',
     subtitle:
       'Diseña un censo para un objetivo declarado, predice qué encontrará, compruébalo con el modelo y justifica el plan: muchos planes son correctos',
-    duration: '20-40 min',
+    duration: '10-30 min',
     level: 'Upper-level astronomy',
     thumbnail: 'images/investigations/propose-an-observation.webp',
     depths: 3,
