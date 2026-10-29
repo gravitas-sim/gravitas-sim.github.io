@@ -15,6 +15,8 @@
 // =============================================================================
 
 import { listeners } from '../listeners.js';
+import { fixed } from '../format.js';
+import { typedNumber } from '../answerParse.js';
 import { fitLine, radialVelocity } from '../kernels/spectrograph/index.js';
 import { LINES } from '../data/radiation/lines.js';
 import { EN_SPECTROGRAPH } from '../i18n/en.spectrograph.js';
@@ -173,7 +175,7 @@ export function mountSpectrographPanel(root, ctx) {
       lineSel.append(
         el('option', {
           value: l.id,
-          text: `${l.name ?? l.id} (${(d.medium === 'vacuum' ? l.vacuum : l.air).toFixed(3)} nm)`,
+          text: `${l.name ?? l.id} (${fixed(d.medium === 'vacuum' ? l.vacuum : l.air, 3)} nm)`,
         })
       );
     go.disabled = ls.length === 0;
@@ -195,7 +197,7 @@ export function mountSpectrographPanel(root, ctx) {
     const d = prepare();
     if (!d) return;
     const line = LINES.find(l => l.id === lineSel.value);
-    const R = Number(rIn.value);
+    const R = typedNumber(rIn.value);
     if (!line || !(R > 0)) return;
     const r = fitSpectrumLine({ ...d, R, line });
     rows.length = 0;
@@ -209,21 +211,21 @@ export function mountSpectrographPanel(root, ctx) {
       row(
         t('specObs.row.centre'),
         t('specObs.v.centre', {
-          c: r.centreNm.toFixed(4),
-          s: r.sigmaNm.toFixed(4),
+          c: fixed(r.centreNm, 4),
+          s: fixed(r.sigmaNm, 4),
         })
       );
       row(
         t('specObs.row.width'),
         t('specObs.v.width', {
-          w: r.fwhmNm.toFixed(3),
-          i: r.lsfFwhmNm.toFixed(3),
+          w: fixed(r.fwhmNm, 3),
+          i: fixed(r.lsfFwhmNm, 3),
         })
       );
       row(
         t('specObs.row.sampling'),
         t('specW.v.sampling', {
-          s: r.fit.sampling.toFixed(2),
+          s: fixed(r.fit.sampling, 2),
           v: t(`specW.verdict.${r.fit.samplingVerdict}`),
         })
       );
@@ -237,8 +239,8 @@ export function mountSpectrographPanel(root, ctx) {
         t('specObs.row.velocity'),
         v.status === 'ok'
           ? t('specObs.v.velocity', {
-              v: v.velocityKmS.toFixed(1),
-              s: v.sigmaKmS.toFixed(1),
+              v: fixed(v.velocityKmS, 1),
+              s: fixed(v.sigmaKmS, 1),
             })
           : d.medium === 'unknown'
             ? t('specObs.v.unknown')

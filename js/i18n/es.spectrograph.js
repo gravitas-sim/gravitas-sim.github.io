@@ -125,7 +125,7 @@ export const ES_SPECTROGRAPH = {
   'specW.v.light':
     '{a} m² de área colectora, {f}; {p} electrones por nm en {t} s antes de la rendija',
   'specW.tradeA':
-    'una rendija larga y seeing gaussiano, sin error de guía; el poder de resolución inversamente proporcional al ancho de la rendija; el tamaño de píxel siguiendo el ancho de dispersión a 2,5 píxeles por FWHM; sin cielo, 5 electrones de ruido de lectura; un rendimiento de 0,3 para todo salvo la rendija; un flujo de V = 0 de 1,0 x 10^8 fotones por segundo por metro cuadrado por nm (un valor didáctico del orden del de Vega). Todos los números son sintéticos.',
+    'una rendija larga y seeing gaussiano, sin error de seguimiento; el poder de resolución inversamente proporcional al ancho de la rendija; el tamaño de píxel siguiendo el ancho de dispersión a 2,5 píxeles por FWHM; sin cielo, 5 electrones de ruido de lectura; un rendimiento de 0,3 para todo salvo la rendija; un flujo de V = 0 de 1,0 x 10^8 fotones por segundo por metro cuadrado por nm (un valor didáctico del orden del de Vega). Todos los números son sintéticos.',
   'specW.axis.R': 'Poder de resolución R',
   'specW.axis.snr': 'Señal a ruido de la línea',
   'specW.legend.now': 'este ajuste',

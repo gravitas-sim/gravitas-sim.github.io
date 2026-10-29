@@ -1996,6 +1996,8 @@ export const EN_DEFERRED = {
     'Put a number on what a survey misses, and correct for it.',
   'inv.seq.observing.what-a-telescope-resolves':
     'What aperture and the air do to a pair of stars.',
+  'inv.seq.observing.why-two-lines-become-one':
+    'Why a spectrograph can show two lines as one, and what a wavelength scale costs.',
   'inv.seq.observing.the-saturated-star':
     'Why the brightest star has the wrong magnitude, and what bleeding and cosmic rays do.',
   'inv.seq.observing.counts-to-magnitudes':

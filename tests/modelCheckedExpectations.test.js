@@ -214,7 +214,8 @@ describe('the instructor expectations record', () => {
     // 470 after The Saturated Star (Prompt 211): 3 more.
     // 472 after Why the Period Is Wrong and the Design the Schedule depth (Prompt 214): 2 more.
     // 473 after Counts to Magnitudes (Prompt 212): 1 more.
-    expect(total).toBe(473);
+    // 476 after Why Two Lines Become One (Prompt 213): 3 more.
+    expect(total).toBe(476);
   });
 
   test('a /1 record keyed by step number migrates to the same text', () => {

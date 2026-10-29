@@ -59,7 +59,7 @@ export const WHY_TWO_LINES_BECOME_ONE = {
   title: 'Why Two Lines Become One',
   subtitle:
     'Why a spectrograph can show two lines as one, what pixels can and cannot fix, how a wavelength scale is calibrated from an arc and what it costs in light',
-  duration: '15-25 min',
+  duration: '10-20 min',
   level: 'Introductory astronomy',
   audience: 'intro',
   textbook: { chapter: 6, section: null },
@@ -746,9 +746,9 @@ const CONTENT = {
     ],
     teachingNotes: [
       'The spectra are a synthetic model: Gaussian lines through a Gaussian line-spread function of fixed width, integrated over each pixel, with photon and read noise (the Poisson distribution taken as Gaussian above about 20 electrons). SPECTROGRAPH.md holds the validation: analytic checks, the independent numpy, scipy and astropy oracle for the convolution, the line fit and the solution, the coverage ensembles (one-sigma coverage held to a band of 0.60 to 0.76), the refusals, and a leg on SDSS stellar spectra.',
-      'The arc lamp is synthetic: the wavelengths are NIST’s (the line pack, in air and vacuum, with Prompt 125’s correction), the intensities are invented, and the hidden wavelength solution is a cubic. The panel marks lines in a spread-out order; students choose how many and the degree. The two-line solution in the quantitative depth is the teaching point that its stated uncertainty is only as good as the model: with a straight line it says 92 km/s with 3 km/s and the truth is 120.',
-      'The throughput is the long-slit Gaussian-seeing result erf(sqrt(ln 2) R_s / R); no guiding error, no diffraction in the slit, no sky. The star’s flux and the efficiency are teaching values labelled as such; the telescope’s aperture comes from the instrument library.',
-      'Inherited limits: a constant-width line-spread function (a slit-limited grating spectrograph), no echelle orders, no flat field, no cosmic rays, no telluric lines; the lamp’s lines closer than 6 FWHM to a neighbour are left out of the marking.',
+      'The arc lamp is synthetic: the wavelengths are NIST’s (the NIST line list, in air and vacuum, with Prompt 125’s correction), the intensities are invented, and the hidden wavelength solution is a cubic. The panel marks lines in a spread-out order; students choose how many and the degree. The two-line solution in the quantitative depth is the teaching point that its stated uncertainty is only as good as the model: with a straight line it says 92 km/s with 3 km/s and the truth is 120.',
+      'The throughput is the long-slit Gaussian-seeing result erf(sqrt(ln 2) R_s / R); no guiding error, no diffraction in the slit, no sky. The star’s flux and the efficiency are teaching values labeled as such; the telescope’s aperture comes from the instrument library.',
+      'Inherited limits: a constant-width line-spread function (a slit-limited grating spectrograph), no echelle orders, no flat field, no cosmic rays, no telluric lines; the lamp’s lines closer than 6 FWHM to a neighbor are left out of the marking.',
     ],
     discussion: [
       'Why does a pair 0.5 nm apart need R of 1000 to dip, when the pixels at R = 500 can be made arbitrarily fine?',
@@ -803,7 +803,7 @@ const EXPECTATIONS = {
 const BANDS = {
   'why-two-lines-become-one': {
     core: 'short',
-    quantitative: 'medium',
+    quantitative: 'long',
     advanced: 'long',
   },
 };

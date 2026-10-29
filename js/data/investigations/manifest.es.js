@@ -1101,7 +1101,7 @@ export const MANIFEST = [
     title: 'Por qué dos líneas se vuelven una',
     subtitle:
       'Por qué un espectrógrafo puede mostrar dos líneas como una, qué pueden y qué no pueden arreglar los píxeles, cómo se calibra una escala de longitud de onda con un arco y cuánta luz cuesta',
-    duration: '15-25 min',
+    duration: '10-20 min',
     level: 'Introductory astronomy',
     thumbnail: 'images/investigations/why-two-lines-become-one.webp',
     depths: 3,

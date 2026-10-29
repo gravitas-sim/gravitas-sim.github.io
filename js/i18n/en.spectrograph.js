@@ -83,7 +83,7 @@ export const EN_SPECTROGRAPH = {
   'specW.v.ignored':
     '{v} km/s: the rest wavelength in {m} against an observed wavelength in air',
   'specW.arcA':
-    'a hidden cubic wavelength solution; unresolved arc lines; the lamp’s relative intensities are invented; blends (a line with a neighbour closer than 6 FWHM) are left out of the marking; no flat field, no sky; the star is a 6000 K blackbody with Gaussian Balmer lines at a velocity the panel does not tell you. Everything is synthetic.',
+    'a hidden cubic wavelength solution; unresolved arc lines; the lamp’s relative intensities are invented; blends (a line with a neighbor closer than 6 FWHM) are left out of the marking; no flat field, no sky; the star is a 6000 K blackbody with Gaussian Balmer lines at a velocity the panel does not tell you. Everything is synthetic.',
   'specW.axis.pixel': 'Pixel',
   'specW.axis.counts': 'Electrons per pixel',
   'specW.axis.resid': 'Residual (nm)',
@@ -124,7 +124,7 @@ export const EN_SPECTROGRAPH = {
   'specW.v.light':
     '{a} m² of collecting area, {f}; {p} electrons per nm over {t} s before the slit',
   'specW.tradeA':
-    'a long slit and Gaussian seeing, no guiding error; the resolving power inversely proportional to the slit width; the pixel size following the line-spread width at 2.5 pixels per FWHM; no sky, 5 electrons of read noise; a throughput of 0.3 for everything but the slit; a V = 0 flux of 1.0 x 10^8 photons per second per square metre per nm (a teaching value of the order of Vega’s). Every number is synthetic.',
+    'a long slit and Gaussian seeing, no guiding error; the resolving power inversely proportional to the slit width; the pixel size following the line-spread width at 2.5 pixels per FWHM; no sky, 5 electrons of read noise; a throughput of 0.3 for everything but the slit; a V = 0 flux of 1.0 x 10^8 photons per second per square meter per nm (a teaching value of the order of Vega’s). Every number is synthetic.',
   'specW.axis.R': 'Resolving power R',
   'specW.axis.snr': 'Signal to noise of the line',
   'specW.legend.now': 'this setting',
@@ -136,7 +136,7 @@ export const EN_SPECTROGRAPH = {
   'specObs.fit': 'Fit the line',
   'specObs.none': 'No line of the list falls inside this spectrum.',
   'specObs.notSpectrum': 'This panel reads a spectrum with a wavelength axis.',
-  'specObs.row.centre': 'Fitted centre',
+  'specObs.row.centre': 'Fitted center',
   'specObs.row.width': 'Fitted FWHM against the instrument’s',
   'specObs.row.sampling': 'Sampling (pixels per FWHM)',
   'specObs.row.R': 'Resolving power the width implies',

@@ -96,7 +96,8 @@ export function fitLine(
     return {
       status: 'not-constrained',
       reason: 'severely-undersampled',
-      message: `a line only ${lsfFwhmPx.toFixed(2)} pixel wide (FWHM) does not fix its width and its centre separately`,
+      message:
+        'a line under one pixel wide (FWHM) does not fix its width and its centre separately',
       sampling: lsfFwhmPx,
     };
   const half = halfWidth ?? (lsfFwhmPx ? Math.ceil(4 * lsfFwhmPx) : 12);
