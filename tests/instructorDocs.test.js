@@ -259,15 +259,16 @@ describe('the document inventory', () => {
     // 788 after the two small-body investigations (Prompt 198 part 3): 22 more.
     // 803 after the three planetary closeout investigations (Prompt 206): a guide and a key in each language and the Spanish notes, 5 each, 15 more.
     // 814 after Telescopes and Resolution (Prompt 208): a guide, a key and a key for each of three depths in each language, and the Spanish notes, 11 more.
-    expect(inv.documents).toBe(814);
-    expect(inv.byLocale).toEqual({ en: 373, es: 441 });
+    // 825 after The Saturated Star (Prompt 211): the same eleven more as the telescope lesson (a guide, a key and a key for each of three depths in each language, and the Spanish notes).
+    expect(inv.documents).toBe(825);
+    expect(inv.byLocale).toEqual({ en: 378, es: 447 });
     expect(inv.byKind.notes).toBe(INVESTIGATIONS.length);
     expect(inv.byVariant).toEqual({
       activity: 12,
-      depth: 354,
-      full: 344,
+      depth: 360,
+      full: 348,
       general: 18,
-      notes: 86,
+      notes: 87,
     });
   });
 
@@ -295,7 +296,7 @@ describe('the document inventory', () => {
     const withDepth = INVESTIGATIONS.filter(
       i => withAllDepths(i).steps.length !== i.steps.length
     ).map(i => i.id);
-    expect(withDepth.length).toBe(59);
+    expect(withDepth.length).toBe(60);
     for (const id of withDepth)
       for (const d of ['core', 'quantitative', 'advanced'])
         for (const suffix of ['', '-es'])

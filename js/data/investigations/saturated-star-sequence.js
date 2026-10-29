@@ -45,7 +45,7 @@ export const THE_SATURATED_STAR = {
   thumbnail: 'images/investigations/the-saturated-star.webp',
   title: 'The Saturated Star',
   subtitle:
-    'Why the brightest star in the frame has the wrong magnitude, what bleeding and cosmic rays do to its neighbours, and where a measurement is safe',
+    'Why the brightest star in the frame has the wrong magnitude, what bleeding and cosmic rays do to its neighbors, and where a measurement is safe',
   duration: '15-25 min',
   level: 'Introductory astronomy',
   audience: 'intro',
@@ -143,7 +143,7 @@ export const THE_SATURATED_STAR = {
       body: `A star with 30 percent of its flux looks fainter by a number of magnitudes. Type
              the share again and the instrument gives the magnitude error, 2.5 times the
              logarithm of the true flux over the measured flux: how much too faint the
-             star would be catalogued.`,
+             star would be cataloged.`,
       fields: [
         {
           id: 'r',
@@ -165,7 +165,7 @@ export const THE_SATURATED_STAR = {
           return {
             level: 'ok',
             message:
-              'About 1.3 magnitudes too faint. A saturated star is not a little wrong: the catalogue would list a star that is a factor of three brighter than its entry, and any colour or distance built on it inherits the error.',
+              'About 1.3 magnitudes too faint. A saturated star is not a little wrong: the catalog would list a star that is a factor of three brighter than its entry, and any colour or distance built on it inherits the error.',
           };
         }
         return {
@@ -317,6 +317,20 @@ export const THE_SATURATED_STAR = {
       because:
         'Combine several exposures with a rejection (a median or a clipped mean): a track is in one frame at a place the others do not have, and the combination drops it.',
       tool: FX({ cosmic: 1, bright: 13 }),
+    },
+    {
+      sid: 'what-an-observer-does',
+      stage: STAGE,
+      type: 'read',
+      title: 'What an observer does',
+      body: `What you saw comes to one point: <strong>a quality flag is a refusal, and the
+             refusal is the safe answer</strong>. A saturated star is avoided with a shorter
+             exposure or a defocused star, and measured where it does not saturate. A star
+             a cosmic ray crosses is recovered by combining several exposures with
+             rejection. And a flagged pixel is never corrected by hand: it is replaced by a
+             better image. The frames are synthetic and the effects are stated models, not
+             a measured detector.`,
+      tool: FX({}),
     },
   ],
 };
@@ -577,7 +591,7 @@ export const THE_SATURATED_STAR_DEEPER = {
           return {
             level: 'ok',
             message:
-              'At 1.2 pixels the peak holds 24 to 45 percent, a factor of 1.9; at 2.8 it holds 9 to 11, a factor of 1.16. Undersampling makes the brightest pixel a poor guide to how much light a star has, so whether a star saturates depends on its position as well as its brightness.',
+              'At 1.2 pixels the peak holds 24 to 45 percent, a factor of 1.9; at 2.8 it holds 9 to 11, a factor of 1.16. Undersampling makes the brightest pixel a poor measure of how much light a star has, so whether a star saturates depends on its position as well as its brightness.',
           };
         }
         return {
@@ -788,6 +802,16 @@ export const THE_SATURATED_STAR_ES = {
       because:
         'Combina varias exposiciones con un rechazo (una mediana o una media recortada): una traza está en una imagen en un lugar que las otras no tienen, y la combinación la elimina.',
     },
+    {
+      title: 'Qué hace un observador',
+      body: `Lo que viste se reduce a una idea: <strong>un indicador de calidad es una
+             negativa, y la negativa es la respuesta segura</strong>. Una estrella saturada
+             se evita con una exposición más corta o con la estrella desenfocada, y se mide
+             donde no se satura. Una estrella cruzada por un rayo cósmico se recupera
+             combinando varias exposiciones con rechazo. Y un píxel marcado nunca se
+             corrige a mano: se sustituye por una imagen mejor. Las imágenes son sintéticas
+             y los efectos son modelos declarados, no un detector medido.`,
+    },
   ],
 };
 
@@ -987,7 +1011,7 @@ const CONTENT = {
       'Inherited limits: one full well for every pixel; a stated curve; no charge-transfer loss, hot columns or persistence.',
     ],
     discussion: [
-      'Why is a 30 percent flux a bigger problem for a catalogue than a 30 percent error on a faint star?',
+      'Why is a 30 percent flux a bigger problem for a catalog than a 30 percent error on a faint star?',
       'What would an observer do to measure the brightest star in this field?',
       'Why does a shorter exposure help with a saturated star, and what does it do to the chance of a cosmic-ray track?',
     ],
@@ -1009,8 +1033,8 @@ const FLOW = {
     },
     {
       from: 'clipped-star',
-      to: 'magnitude-error',
-      text: 'The clipped star reads 30 percent of its flux, which is 1.3 magnitudes too faint.',
+      to: 'why-too-faint',
+      text: 'The clipped star reads 30 percent of its flux, which is 1.3 magnitudes too faint, and why the error has a floor and not a scatter.',
     },
     {
       from: 'trail-predict',
@@ -1019,8 +1043,8 @@ const FLOW = {
     },
     {
       from: 'a-ray',
-      to: 'a-ray',
-      text: 'A cosmic-ray track through a faint star, and combining exposures.',
+      to: 'what-an-observer-does',
+      text: 'A cosmic-ray track through a faint star, combining exposures, and what an observer does about all three effects.',
     },
   ],
 };
@@ -1031,15 +1055,15 @@ const EXPECTATIONS = {
       'About 30 percent (within 2): the share of the true flux the clipped sum reads for the bright star at V = 9.5 and 60 s.',
     trail:
       'Two of the three faint stars refused with bleeding on, and 85 pixels fed by the spill.',
-    'safe-flux':
-      'The largest peak share about 10.6 percent (within 0.7) and the safe star at V = 12.26 (within 0.12).',
+    'magnitude-error':
+      'About 1.3 magnitudes too faint (within 0.12): the clipped sum is 30 percent of the truth, so the magnitude is 2.5 log10(1/0.302) fainter.',
   },
 };
 
 const BANDS = {
   'the-saturated-star': {
     core: 'short',
-    quantitative: 'medium',
+    quantitative: 'long',
     advanced: 'long',
   },
 };
