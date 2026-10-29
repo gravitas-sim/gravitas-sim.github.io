@@ -117,6 +117,11 @@ export const FAMILY_IDS = Object.freeze({
   detector: ['ccd-frames', 'ccd-snr', 'diff-photometry'],
   exposure: ['exposure-planner'],
   strategy: ['strategy-window', 'strategy-plan'],
+  spectrograph: [
+    'spectrograph-lines',
+    'spectrograph-arc',
+    'spectrograph-trade',
+  ],
   telescope: ['telescope'],
   effects: ['detector-effects'],
   sky: [

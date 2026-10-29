@@ -415,6 +415,12 @@ export const LAZY_FAMILIES = Object.freeze({
     'STRATEGY_WIDGETS',
     ['strategy-window', 'strategy-plan']
   ),
+  spectrograph: familyEntry(
+    () => import('./spectrographWidgets.js'),
+    './spectrographWidgets.js',
+    'SPECTROGRAPH_WIDGETS',
+    ['spectrograph-lines', 'spectrograph-arc', 'spectrograph-trade']
+  ),
   telescope: familyEntry(
     () => import('./telescopeWidgets.js'),
     './telescopeWidgets.js',

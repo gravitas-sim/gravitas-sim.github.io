@@ -154,6 +154,12 @@ export default {
     'How long a given signal-to-noise takes, why it falls off the square-root law when the camera’s read noise matters, what a brighter sky or more exposures cost, and when a target cannot be reached at all.',
     'The calculation leaves out flat-field and sky-subtraction error, crowding and scintillation, so it is a prediction under stated assumptions, not a guarantee; a throughput, a dark current and an extinction coefficient the library does not state are teaching values, labelled as such; the frames are synthetic.',
   ],
+  spectrograph: [
+    'A synthetic spectrograph: two lines through an instrument whose resolving power, pixel size and noise you set; an arc lamp and a star calibrated with the lines you mark; and the trade between resolving power, the slit and the signal to noise of a line.',
+    'The line-spread width, the sampling in pixels per FWHM and its verdict, the dip between two lines, whether one fit calls a line broadened; the wavelength solution with its residuals, its degrees of freedom and its uncertainty; a radial velocity with its uncertainty and the medium it is in; the slit width, the throughput and the signal to noise.',
+    'Why two lines become one (resolving power, not pixel size), how many lines a solution of a given degree needs, what its uncertainty claims and what it does not, why a velocity needs the rest wavelength in the same medium, and where more resolving power stops paying for its lost light.',
+    'Everything is synthetic: a Gaussian line-spread function of fixed width, a hidden polynomial wavelength solution, a lamp whose lines are the NIST list with invented intensities, a blackbody star with Gaussian lines, a long slit and Gaussian seeing. It is not any real instrument.',
+  ],
   strategy: [
     'A cadence, a period to look for and a run of nights: the window function of your epochs, the aliases it predicts and, for a facility from the instrument library, the nights the planner finds usable for a target, your visits placed in them and the weather losing whole nights.',
     'Whether the cadence can tell the true period from its aliases (resolved, ambiguous or not constrained) with the chance-free chi-square preference, how much of the phase the visits cover, what the plan costs in hours of telescope time, and the period the search finds in the synthetic series the plan would produce.',
