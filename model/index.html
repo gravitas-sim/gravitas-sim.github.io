@@ -141,6 +141,7 @@ try {
           <li><span class="gs-en"><a href="#exposure-planning">Exposure planning: what a plan predicts and leaves out</a></span><span class="gs-es" lang="es"><a href="#exposure-planning">Planificación de la exposición: qué predice un plan y qué omite</a></span></li>
           <li><span class="gs-en"><a href="#observing-strategy">Observing strategy: what a cadence can and cannot tell apart</a></span><span class="gs-es" lang="es"><a href="#observing-strategy">Estrategia de observación: qué distingue y qué no una cadencia</a></span></li>
           <li><span class="gs-en"><a href="#telescopes">Telescopes: what a Rayleigh separation and a measured width are</a></span><span class="gs-es" lang="es"><a href="#telescopes">Telescopios: qué son una separación de Rayleigh y una anchura medida</a></span></li>
+          <li><span class="gs-en"><a href="#spectrographs">Spectrographs: what resolving power, sampling and a wavelength solution are</a></span><span class="gs-es" lang="es"><a href="#spectrographs">Espectrógrafos: qué son el poder de resolución, el muestreo y una solución de longitud de onda</a></span></li>
           <li><span class="gs-en"><a href="#detector-effects">Detector effects: what a saturated star, a bleed trail and a cosmic ray do</a></span><span class="gs-es" lang="es"><a href="#detector-effects">Efectos del detector: qué hacen una estrella saturada, una estela de desbordamiento y un rayo cósmico</a></span></li>
           <li><span class="gs-en"><a href="#trust">What should I trust this to show?</a></span><span class="gs-es" lang="es"><a href="#trust">¿Qué puedo esperar que muestre con fiabilidad?</a></span></li>
           <li><span class="gs-en"><a href="#validation">Validation: what has been checked</a></span><span class="gs-es" lang="es"><a href="#validation">Validación: qué se ha comprobado</a></span></li>
@@ -2419,6 +2420,55 @@ try {
         investigation states.</span><span class="gs-es" lang="es">El núcleo es <code>js/kernels/<wbr>detector/<wbr>optics.js</code> y <code>telescope.js</code>, descrito en <code>TELESCOPES.md</code> con sus umbrales (<code>tests/fixtures/<wbr>telescopes/<wbr>thresholds.json</code>), y una prueba recalcula cada número que enuncia la investigación.</span>
       </p>
 
+      <h2 id="spectrographs"><span class="gs-en">Spectrographs: what resolving power, sampling and a wavelength solution are</span><span class="gs-es" lang="es">Espectrógrafos: qué son el poder de resolución, el muestreo y una solución de longitud de onda</span></h2>
+      <p>
+        <span class="gs-en">Why Two Lines Become One puts synthetic spectra through a slit spectrograph whose resolving power, sampling and
+        slit the reader sets. Every spectrum is <strong>synthetic</strong>: the lines are placed by the investigation, the arc lamp
+        carries the NIST wavelengths with invented intensities, the instrument is not a real facility and the star&rsquo;s velocity is
+        withheld. Three numbers are kept apart: the resolving power (a property of the line-spread function), the sampling (how many
+        pixels cover it) and the dispersion (the wavelength per pixel).</span><span class="gs-es" lang="es">Por qué dos líneas se vuelven una pone espectros sintéticos a través de un espectrógrafo de rendija cuyo poder de resolución, muestreo y rendija fija el lector. Todo espectro es <strong>sintético</strong>: las líneas las coloca la investigación, la lámpara de arco lleva las longitudes de onda del NIST con intensidades inventadas, el instrumento no es una instalación real y la velocidad de la estrella está oculta. Se mantienen separados tres números: el poder de resolución (propiedad de la función de dispersión), el muestreo (cuántos píxeles la cubren) y la dispersión (la longitud de onda por píxel).</span>
+      </p>
+      <h3><span class="gs-en">What the numbers are</span><span class="gs-es" lang="es">Qué son los números</span></h3>
+      <ul>
+        <li><span class="gs-en">The resolving power is R = &lambda;/FWHM, with FWHM the width of the Gaussian line-spread function at half maximum. In
+        the reference instrument the FWHM is constant (0.30 nm), so R changes along the detector. Two equal Gaussian lines show two
+        peaks only when they are more than 0.85 of a FWHM apart (two &sigma;); at one FWHM the dip is 7.3 percent. Finer pixels sample
+        the line better and cannot separate lines the line-spread function has merged; a sampling of at least 2 pixels per FWHM is
+        the criterion, and the number of independent measurements across a spectrum is its span over the FWHM, not its number of
+        pixels.</span><span class="gs-es" lang="es">El poder de resolución es R = &lambda;/FWHM, con FWHM el ancho de la función de dispersión gaussiana a media altura. En el instrumento de referencia el FWHM es constante (0,30 nm), de modo que R cambia a lo largo del detector. Dos líneas gaussianas iguales muestran dos picos solo cuando están a más de 0,85 de un FWHM (dos &sigma;); a un FWHM la caída es del 7,3 por ciento. Los píxeles más finos muestrean mejor la línea y no pueden separar líneas que la función de dispersión ha fundido; el criterio es un muestreo de al menos 2 píxeles por FWHM, y el número de medidas independientes a lo largo de un espectro es su extensión entre el FWHM, no su número de píxeles.</span></li>
+        <li><span class="gs-en">A wavelength solution is a polynomial fitted to the pixels of the marked arc lines, with each line&rsquo;s error carried
+        through the local dispersion. It is not constrained with fewer lines than coefficients, exactly determined with as many (it
+        passes through every line and nothing tests it), and constrained with more. A reduced chi-square above its 0.99 quantile is
+        flagged and an extrapolation beyond the marked lines is said to be one. The uncertainty at a pixel is its covariance, not a
+        guarantee of the model.</span><span class="gs-es" lang="es">Una solución de longitud de onda es un polinomio ajustado a los píxeles de las líneas de arco marcadas, con el error de cada línea trasladado por la dispersión local. Está no restringida con menos líneas que coeficientes, exactamente determinada con tantas (pasa por todas las líneas y nada la comprueba) y restringida con más. Una chi cuadrado reducida por encima de su cuantil 0,99 se marca, y una extrapolación más allá de las líneas marcadas se declara como tal. La incertidumbre en un píxel es su covarianza, no una garantía del modelo.</span></li>
+        <li><span class="gs-en">A velocity is c(&lambda;<sub>obs</sub>/&lambda;<sub>rest</sub> &minus; 1) with the relativistic form and a first-order uncertainty, and both
+        wavelengths must be in the same, stated medium: air against vacuum is worth 84 km/s at H&beta;, so the panel refuses the
+        mismatch and never converts it silently.</span><span class="gs-es" lang="es">Una velocidad es c(&lambda;<sub>obs</sub>/&lambda;<sub>rest</sub> &minus; 1) con la forma relativista y una incertidumbre de primer orden, y ambas longitudes de onda deben estar en el mismo medio declarado: aire frente a vacío vale 84 km/s en H&beta;, así que el panel rechaza la mezcla y nunca la convierte en silencio.</span></li>
+      </ul>
+      <h3><span class="gs-en">What is computed, and what it assumes</span><span class="gs-es" lang="es">Qué se calcula y qué supone</span></h3>
+      <ul>
+        <li><span class="gs-en">Each pixel holds the exact integral of the line-spread function over its width (error functions, so flux is conserved at any
+        sampling), with photon and read noise drawn from a named stream. The long slit passes erf(&radic;ln&nbsp;2 &middot; R<sub>s</sub>/R) of a Gaussian seeing disk; for
+        a fixed grating the resolving power is inversely proportional to the slit width. An unresolved line gains little in signal to
+        noise beyond the point where the slit equals the seeing, and a line of its own width has a best resolving power (2355 for
+        &sigma; = 0.1 nm). A constant-width line-spread function, one grating, no echelle orders, no flat field, no sky and no guiding
+        error are modeled.</span><span class="gs-es" lang="es">Cada píxel guarda la integral exacta de la función de dispersión sobre su anchura (funciones de error, de modo que el flujo se conserva con cualquier muestreo), con ruido de fotones y de lectura de una corriente con nombre. La rendija larga deja pasar erf(&radic;ln&nbsp;2 &middot; R<sub>s</sub>/R) de un disco de seeing gaussiano; para una red fija el poder de resolución es inversamente proporcional al ancho de la rendija. Una línea sin resolver gana poco en señal a ruido más allá del punto en que la rendija iguala al seeing, y una línea con ancho propio tiene un mejor poder de resolución (2355 para &sigma; = 0,1 nm). Se modelan una función de dispersión de ancho constante, una red, sin órdenes de echelle, sin campo plano, sin cielo y sin error de guiado.</span></li>
+      </ul>
+      <h3><span class="gs-en">What has been checked</span><span class="gs-es" lang="es">Qué se ha comprobado</span></h3>
+      <ul>
+        <li><span class="gs-en">The kernel agrees with an independent oracle (numpy, scipy and astropy) for the convolution, the line fit and the solution, and the whole chain
+        to 2e-8 in the uncertainty. On 5600 seeded line fits the stated 1&sigma; interval covered the true centre in 0.667 (band 0.60 to 0.76); on 1500
+        solutions 0.693; on 1200 velocities 0.681. A straight line fitted to a curved scale was flagged
+        in every trial and a correct cubic in 2 percent. Blends were flagged at every separation tested and single lines never. Four SDSS
+        stellar spectra gave Balmer velocities within the stated bounds of the pipeline&rsquo;s. Twenty-seven rows pass and none fails. The
+        thresholds were committed first (<code>tests/<wbr>fixtures/<wbr>spectrograph/<wbr>thresholds.json</code>) with six recorded amendments that
+        moved no bound. The cited reduction routine is astropy&rsquo;s linear least-squares fitter with Chebyshev polynomials, since no
+        spectroscopy package was installed.</span><span class="gs-es" lang="es">El núcleo concuerda con un oráculo independiente (numpy, scipy y astropy) en la convolución, el ajuste de línea y la solución, y toda la cadena hasta 2e-8 en la incertidumbre. En 5600 ajustes de línea con semilla el intervalo declarado de 1&sigma; cubrió el centro verdadero en 0,667 (banda de 0,60 a 0,76); en 1500 soluciones 0,693; en 1200 velocidades 0,681. Una recta ajustada a una escala curva se marcó en todas las pruebas y una cúbica correcta en el 2 por ciento. Las mezclas se marcaron con toda separación probada y las líneas simples nunca. Cuatro espectros estelares de SDSS dieron velocidades de Balmer dentro de las cotas declaradas respecto a las de la cadena de reducción. Veintisiete filas pasan y ninguna falla. Los umbrales se fijaron primero (<code>tests/<wbr>fixtures/<wbr>spectrograph/<wbr>thresholds.json</code>) con seis enmiendas registradas que no movieron ninguna cota. La rutina de reducción citada es el ajustador lineal de mínimos cuadrados de astropy con polinomios de Chebyshev, porque no había ningún paquete de espectroscopía instalado.</span></li>
+      </ul>
+      <p>
+        <span class="gs-en">The kernel is <code>js/<wbr>kernels/<wbr>spectrograph/</code> with the adapter <code>js/<wbr>instruments/<wbr>spectrograph.js</code>, described in <code>SPECTROGRAPH.md</code>, and a test recomputes each number the investigation states.</span><span class="gs-es" lang="es">El núcleo es <code>js/<wbr>kernels/<wbr>spectrograph/</code> con el adaptador <code>js/<wbr>instruments/<wbr>spectrograph.js</code>, descrito en <code>SPECTROGRAPH.md</code>, y una prueba recalcula cada número que dice la investigación.</span>
+      </p>
+
       <h2 id="detector-effects"><span class="gs-en">Detector effects: what a saturated star, a bleed trail and a cosmic ray do</span><span class="gs-es" lang="es">Efectos del detector: qué hacen una estrella saturada, una estela de desbordamiento y un rayo cósmico</span></h2>
       <p>
         <span class="gs-en">The Saturated Star puts a synthetic frame of one bright star and some fainter ones through a detector with the
@@ -3788,6 +3838,10 @@ try {
             <tr>
               <td>What a Telescope Resolves</td>
               <td>js/kernels/detector/optics.js (Airy, Moffat, their convolution), telescope.js (the frame), js/telescopeField.js (the PSF tool’s measurement), TELESCOPES.md.</td>
+            </tr>
+            <tr>
+              <td>Why Two Lines Become One</td>
+              <td>js/kernels/spectrograph/ (the line-spread function, the pixel integral, the line fit, the wavelength solution, the velocity and the slit trade), js/spectrographField.js (the panels&rsquo; views), SPECTROGRAPH.md.</td>
             </tr>
             <tr>
               <td>The Saturated Star</td>
