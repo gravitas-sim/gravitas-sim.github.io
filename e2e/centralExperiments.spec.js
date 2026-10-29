@@ -2651,6 +2651,17 @@ test.describe('the central experiment of each investigation', () => {
         [3, 7.1413, 0.002],
       ],
     },
+    // ---- Exposure planning (Roadmap III, Prompt 210) -------------------------------
+    {
+      id: 'plan-an-exposure',
+      title:
+        'plan-an-exposure: twenty exposures cost the same star 12 percent more time than two, the read noise paid per frame @accepts:ce.plan-an-exposure',
+      row: /^Total exposure$/i,
+      values: [
+        [2, 455.3, 8],
+        [20, 512, 8],
+      ],
+    },
     // ---- Telescopes (Roadmap III, Prompt 208) ---------------------------------
     {
       id: 'what-a-telescope-resolves',

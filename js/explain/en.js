@@ -148,6 +148,12 @@ export default {
     'What each calibration frame removes, what limits the signal-to-noise of a bright and of a faint star, and why a comparison star removes thin cloud that a star measured alone cannot.',
     'Everything is synthetic, from a forward model with a known truth, or a calculation for a stated 0.4 m telescope: no blooming, nonlinearity, color terms or seeing, so a real camera adds errors these frames do not show.',
   ],
+  exposure: [
+    'A facility from the instrument library, a target (a star or an extended patch) and a signal-to-noise to reach, in a band, at an airmass and under a sky you set.',
+    'The exposure the CCD equation asks, in how many exposures, what limits it (the target’s photons, the sky, the dark current or the read noise) with the noise budget, the faintest object that exposure reaches, and a synthetic frame of the plan with its measured signal-to-noise beside the predicted one.',
+    'How long a given signal-to-noise takes, why it falls off the square-root law when the camera’s read noise matters, what a brighter sky or more exposures cost, and when a target cannot be reached at all.',
+    'The calculation leaves out flat-field and sky-subtraction error, crowding and scintillation, so it is a prediction under stated assumptions, not a guarantee; a throughput, a dark current and an extinction coefficient the library does not state are teaching values, labelled as such; the frames are synthetic.',
+  ],
   survey: [
     'Synthetic stars of known brightness at known distances: counted and missed stars, the bias by shells of distance, or the luminosity function against its truth.',
     'How the counted share, the bias and the recovered luminosity function change as the magnitude limit, the completeness curve or the parallax cut changes.',

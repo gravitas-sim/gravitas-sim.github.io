@@ -18,6 +18,7 @@ the release rather than in the tag.
 - Three investigations on measurement, uncertainty and claim-limits, first in the Observing-and-measuring sequence, each in English and Spanish with instructor materials: What Is a Measurement? (survey), What Does ± Claim? (majors) and When the Method Must Refuse (upper), on synthetic data with a known truth, with one new instrument family (`js/claimWidgets.js`). They open offline only after one online use (D-R10-67, `MEASUREMENT_CLAIMS.md`).
 - Three image investigations, after them in the same sequence, each in English and Spanish with instructor materials: Measuring the Moon (a scale from a reference pair on a real Galileo picture), How Far Is That Star? (a parallax and its distance from fourteen positions of a synthetic star) and A Binary Star's Orbit (an orbit and a mass sum from twelve positions), with one new instrument family (`js/imagingWidgets.js`) that calls the Observatory's own measuring modules. They open offline only after one online use. "What is in this field?" is not built (D-R10-72, `IMAGE_INVESTIGATIONS.md`).
 - A planetary sequence, Planets and the Sun, ordering the Solar System investigations that exist, with three new connecting investigations, each in English and Spanish with instructor materials: The Scale of the Solar System (sizes, distances, a marble model and light time), Moons of the Giants (the Laplace combination of Io, Europa and Ganymede from fitted periods) and Comets and the Sun (a comet's orbit and the heat at each end of it). A course package, The Solar System and the Sun, and a Solar System unit in the one-semester course. Worlds Compared, Reading a Surface and Space Weather from the Sun are not built: each needs a component or a data pack that is not in the project yet, and DECISION_REGISTER.md (D-R10-206-01) says which.
+- Exposure planning: the CCD-equation kernel (`js/kernels/detector/snr.js`) extended with several exposures, point-spread-function photometry, extended sources, extinction by airmass, the limiting magnitude of an exposure and refusals for targets the exposure limit or the full well forbids, a facility adapter over the instrument library that fills in nothing the library does not state, an exposure-planner panel with a synthetic frame measured with aperture photometry, four new advanced steps in Signal, Noise and Exposure (the lower depths grade as before), and the majors investigation Plan an Exposure, in English and Spanish with instructor materials. Validated against analytic cases, an independent implementation, the published Rubin depth model and 1600 rendered frames; three legs against the published model (the read-noise loss in u and g, and the equation away from the fiducial sky) stay failing and labelled in `EXPOSURE_PLANNING.md`.
 
 ## [2.1.0] - 2026-10-24
 
@@ -110,12 +111,12 @@ The Observatory's image measurement train (Prompts 179 to 182, 184, 186 to 189, 
 
 **Gravitas 2.0.0.** Gravitas grows from a gravity sandbox with 22 guided
 investigations into a browser laboratory: <!--fact:scenarios-->61<!--/fact-->
-sandbox scenarios, <!--fact:libraryInvestigations-->103<!--/fact--> guided
-investigations (<!--fact:investigations-->86<!--/fact--> that run in the
+sandbox scenarios, <!--fact:libraryInvestigations-->104<!--/fact--> guided
+investigations (<!--fact:investigations-->87<!--/fact--> that run in the
 simulation and <!--fact:guidedInvestigations-->17<!--/fact--> in the
 Observatory, the 3-D lab and the mission lab), a shared shell, a Library, a
 workspace for each student's own work, an instructor path from adoption page to
-gradebook file, <!--fact:instructorDocuments-->814<!--/fact--> generated
+gradebook file, <!--fact:instructorDocuments-->819<!--/fact--> generated
 instructor documents, a public validation suite
 of <!--fact:physicsChecks-->348<!--/fact--> checks, and authoring tools
 (Scenario Studio, Investigation Composer, course packs and an extension SDK).
@@ -1768,7 +1769,7 @@ listed here because this is the release that first carries it.
 - **An instructor portal that explains itself.** `/instructors/` states what is
   behind the passphrase before asking for it, says plainly what client-side
   encryption on a static host can and cannot promise, and presents the
-  <!--fact:instructorDocuments-->814<!--/fact--> documents grouped by investigation
+  <!--fact:instructorDocuments-->819<!--/fact--> documents grouped by investigation
   with their kind and size. A wrong passphrase and a missing bundle now report
   as the different problems they are.
 - **Dual licensing.** The code is MIT; the original educational material is
@@ -1835,7 +1836,7 @@ listed here because this is the release that first carries it.
   uncertainty, the target and the observing configuration.
 - **Offline support.** A service worker precaches the application shell, the
   <!--fact:scenarios-->61<!--/fact--> scenario thumbnails and all
-  <!--fact:investigations-->86<!--/fact--> English lessons, so a class keeps
+  <!--fact:investigations-->87<!--/fact--> English lessons, so a class keeps
   working when the room's wifi drops. The cache name is a content hash, so a
   build invalidates it. See [OFFLINE_AND_LOW_END.md](OFFLINE_AND_LOW_END.md).
 - **A measured low-end quality tier.** Chosen from the frame rate the machine
@@ -1844,7 +1845,7 @@ listed here because this is the release that first carries it.
   off.
 - **An investigation authoring toolchain.** `npm run author:check` validates
   every lesson and every one of the
-  <!--fact:investigationSteps-->1249<!--/fact--> steps; `npm run author:new`
+  <!--fact:investigationSteps-->1260<!--/fact--> steps; `npm run author:new`
   scaffolds a lesson with its translation shadow and instructor stub;
   `?author=<lesson>&step=<n>` opens any step with diagnostics without touching
   a student's saved progress; and a browser walker exercises every step of

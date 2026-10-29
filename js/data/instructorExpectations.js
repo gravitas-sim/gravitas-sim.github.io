@@ -13,6 +13,7 @@ import { INSTRUCTOR as MEASUREMENT } from './investigations/depth/measurement-se
 import { INSTRUCTOR as SATELLITE } from './investigations/depth/satellite-sequence.js';
 import { INSTRUCTOR as ATMOSPHERE } from './investigations/depth/atmosphere-sequence.js';
 import { INSTRUCTOR as PLANETS } from './investigations/planets-sequence.js';
+import { INSTRUCTOR as EXPOSURE } from './investigations/exposure-sequence.js';
 import { INSTRUCTOR as TELESCOPE } from './investigations/telescope-sequence.js';
 
 export default {
@@ -23,6 +24,7 @@ export default {
     ...SATELLITE.expectations,
     ...ATMOSPHERE.expectations,
     ...PLANETS.expectations,
+    ...EXPOSURE.expectations,
     ...TELESCOPE.expectations,
     'the-suns-motion': {
       'measure-the-sun':

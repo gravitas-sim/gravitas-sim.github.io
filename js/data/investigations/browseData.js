@@ -356,4 +356,8 @@ export const BROWSE_META = {
     tags: ['observing'],
     numericCount: 0,
   },
+  'plan-an-exposure': {
+    tags: ['observing'],
+    numericCount: 2,
+  },
 };

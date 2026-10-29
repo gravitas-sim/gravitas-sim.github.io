@@ -83,5 +83,72 @@ export default {
         off: '2,5 × log10(2).',
       },
     },
+    {
+      title: 'El presupuesto, una estrella brillante en un sitio oscuro',
+      body: `Pon V = 15, 60 segundos, un radio de 5 píxeles y un sitio oscuro. La tabla da los cuatro términos del ruido al cuadrado y el ruido total.`,
+      prompt:
+        'La parte del término mayor en el ruido al cuadrado, en porcentaje',
+      hints: [
+        'Divide el mayor de los cuatro términos entre el cuadrado del ruido total.',
+      ],
+      worked:
+        'Los fotones de la propia estrella son un 69 por ciento del ruido al cuadrado (el cielo 17, el ruido de lectura 13, la corriente oscura 1). Una estrella tan brillante está limitada por su propia luz: solo ayuda más luz.',
+      feedback: {
+        close:
+          'Casi. Divide el término mayor entre el cuadrado del ruido total.',
+        'wrong-order-of-magnitude': 'Una parte entre cero y cien por ciento.',
+        off: 'El mayor de los cuatro términos, como porcentaje del ruido al cuadrado.',
+      },
+    },
+    {
+      title: 'El presupuesto, una estrella débil en una exposición corta',
+      body: `Pon V = 19, 10 segundos, un radio de 3 píxeles y un sitio oscuro.`,
+      prompt:
+        'La parte del término mayor en el ruido al cuadrado, en porcentaje',
+      hints: [
+        'La estrella da aquí solo unos pocos electrones por segundo; la cámara carga su ruido de lectura a cada píxel de la abertura.',
+      ],
+      worked:
+        'El ruido de lectura es un 77 por ciento del ruido al cuadrado. Una estrella débil en una exposición corta está limitada por la cámara, no por el cielo ni por la estrella: leer los píxeles cuesta lo mismo por larga que fuera la exposición.',
+      feedback: {
+        close:
+          'Casi. Divide el término mayor entre el cuadrado del ruido total.',
+        'wrong-order-of-magnitude': 'Una parte entre cero y cien por ciento.',
+        off: 'El mayor de los cuatro términos, como porcentaje del ruido al cuadrado.',
+      },
+    },
+    {
+      title: 'El presupuesto, la misma estrella bajo una Luna brillante',
+      body: `Deja V = 19 y el radio de 3 píxeles, alarga la exposición a 300 segundos y elige la Luna brillante.`,
+      prompt:
+        'La parte del término mayor en el ruido al cuadrado, en porcentaje',
+      hints: [
+        'Bajo una Luna brillante cada píxel de la abertura recoge el cielo de la Luna durante toda la exposición.',
+      ],
+      worked:
+        'El cielo es un 97 por ciento del ruido al cuadrado. La luz extra de la Luna añade ruido en cada píxel, y a los 300 segundos el ruido de lectura se ha vuelto un error de redondeo: la estrella está limitada por el cielo, el régimen donde vale la ley de la raíz cuadrada y donde una exposición más larga rinde más.',
+      feedback: {
+        close:
+          'Casi. Divide el término mayor entre el cuadrado del ruido total.',
+        'wrong-order-of-magnitude': 'Una parte entre cero y cien por ciento.',
+        off: 'El mayor de los cuatro términos, como porcentaje del ruido al cuadrado.',
+      },
+    },
+    {
+      title: 'Donde el cielo releva a la cámara',
+      body: `El ruido de lectura al cuadrado se paga una vez por exposición; el ruido al cuadrado del cielo y de la corriente oscura crece con la exposición. En un sitio oscuro el cielo da 1,41 electrones por segundo en cada píxel y la corriente oscura 0,10; el ruido de lectura es de 8 electrones.`,
+      prompt:
+        'La exposición en que el ruido al cuadrado del cielo y de la oscuridad en un píxel iguala al ruido de lectura al cuadrado, en segundos',
+      hints: ['Iguala (1,41 + 0,10) × t a 8² y despeja t.'],
+      worked:
+        '64 ÷ (1,408 + 0,100) = 42,4 segundos. Por debajo, el ruido de lectura de la cámara es el término mayor y una exposición más larga rinde más que la raíz cuadrada; por encima lo es el cielo y manda la ley de la raíz cuadrada. Una exposición de 10 segundos de la estrella débil estaba muy dentro del régimen limitado por la lectura; una de 300 segundos está muy fuera de él.',
+      feedback: {
+        close:
+          'Casi. Divide el ruido de lectura al cuadrado entre los electrones por segundo que dan juntos el cielo y la oscuridad en un píxel.',
+        'wrong-order-of-magnitude':
+          'Decenas de segundos: 64 dividido entre cerca de 1,5.',
+        off: '8² ÷ (1,41 + 0,10).',
+      },
+    },
   ],
 };
