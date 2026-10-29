@@ -157,7 +157,10 @@ describe('the numbers the lesson states', () => {
     expect(first.solution.secondOrder.deltaChi2).toBeCloseTo(67.8, 1);
     expect(first.solution.secondOrder.p).toBeLessThan(1e-12);
     expect(first.solution.flags.map(f => f.code)).toEqual(
-      expect.arrayContaining(['lack-of-fit', 'second-order-extinction-suspected'])
+      expect.arrayContaining([
+        'lack-of-fit',
+        'second-order-extinction-suspected',
+      ])
     );
     expect(second.solution.parameters.k2.value).toBeCloseTo(-0.0466, 4);
     expect(second.solution.parameters.k2.sigma).toBeCloseTo(0.0057, 4);

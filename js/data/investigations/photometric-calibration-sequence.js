@@ -184,7 +184,9 @@ export const COUNTS_TO_MAGNITUDES = {
           say: 'The detector sees the same light it would see anywhere; less light reaches it because more of it was taken out above.',
         },
       ],
-      hints: ['What is between the star and the telescope, and how does its amount change with the star’s height?'],
+      hints: [
+        'What is between the star and the telescope, and how does its amount change with the star’s height?',
+      ],
       because:
         'More air, more extinction: the loss is about 0.21 magnitudes for every airmass of it, so a star low in the sky loses more than one overhead.',
       tool: PC({}, PLAIN),
@@ -222,7 +224,9 @@ export const COUNTS_TO_MAGNITUDES = {
           say: 'The slope of the points is the atmosphere dimming starlight: 0.21 magnitudes for every airmass.',
         },
       ],
-      hints: ['Which one would change if the same star were observed from the same place an hour later?'],
+      hints: [
+        'Which one would change if the same star were observed from the same place an hour later?',
+      ],
       because:
         'The air’s extinction depends on airmass and on the night; the interstellar extinction belongs to the line of sight through the galaxy. A calibration removes the first and leaves the second in the magnitude.',
       tool: PC({}, PLAIN),
@@ -258,7 +262,12 @@ export const COUNTS_TO_MAGNITUDES_DEEPER = {
              airmass 1. Read the extinction too; the instrument gives the zero point
              <em>outside</em> the atmosphere, Z1 minus <em>k</em>.`,
       fields: [
-        { id: 'z', label: 'Zero point at airmass 1, Z1', unit: 'mag', hint: '24.80' },
+        {
+          id: 'z',
+          label: 'Zero point at airmass 1, Z1',
+          unit: 'mag',
+          hint: '24.80',
+        },
         { id: 'k', label: 'Extinction, k', unit: 'mag/airmass', hint: '0.21' },
         {
           id: 'z0',
@@ -321,7 +330,14 @@ export const COUNTS_TO_MAGNITUDES_DEEPER = {
             'Read the “Target star” row: the calibrated magnitude (about 13.2) and the number after the plus-minus sign (about 0.008).',
         };
       },
-      tool: PC({ truth: 1 }, ['stars', 'noise', 'reach', 'model', 'prior', 'cindex']),
+      tool: PC({ truth: 1 }, [
+        'stars',
+        'noise',
+        'reach',
+        'model',
+        'prior',
+        'cindex',
+      ]),
     },
     {
       sid: 'the-airmass-limit',
@@ -388,10 +404,19 @@ export const COUNTS_TO_MAGNITUDES_DEEPER = {
           say: 'A refusal says that the data do not support a number; it is the honest answer, not a shortcut.',
         },
       ],
-      hints: ['What does the calibration know about the air at an airmass that none of the standards was observed at?'],
+      hints: [
+        'What does the calibration know about the air at an airmass that none of the standards was observed at?',
+      ],
       because:
         'An extrapolation beyond what was tested is a guess dressed as a measurement. The tool refuses above airmass 2.5 and the observer re-observes the target higher in the sky.',
-      tool: PC({ airmass: 3 }, ['stars', 'noise', 'reach', 'model', 'prior', 'cindex']),
+      tool: PC({ airmass: 3 }, [
+        'stars',
+        'noise',
+        'reach',
+        'model',
+        'prior',
+        'cindex',
+      ]),
     },
     {
       sid: 'narrow-predict',
@@ -416,7 +441,14 @@ export const COUNTS_TO_MAGNITUDES_DEEPER = {
       ],
       because:
         'The slope is a change in magnitude over a change in airmass; if the airmass hardly changes, any slope fits about as well, and the zero point and the extinction trade off against each other.',
-      tool: PC({ night: 1 }, ['stars', 'noise', 'reach', 'model', 'prior', 'cindex']),
+      tool: PC({ night: 1 }, [
+        'stars',
+        'noise',
+        'reach',
+        'model',
+        'prior',
+        'cindex',
+      ]),
     },
     {
       sid: 'narrow-night',
@@ -441,7 +473,11 @@ export const COUNTS_TO_MAGNITUDES_DEEPER = {
       ],
       validate: v => {
         if (![v.lo, v.hi, v.c].every(Number.isFinite)) return null;
-        if (near(v.lo, 1.3, 0.011) && near(v.hi, 1.42, 0.011) && near(v.c, 0.0788, 0.008)) {
+        if (
+          near(v.lo, 1.3, 0.011) &&
+          near(v.hi, 1.42, 0.011) &&
+          near(v.c, 0.0788, 0.008)
+        ) {
           return {
             level: 'ok',
             message:
@@ -454,7 +490,14 @@ export const COUNTS_TO_MAGNITUDES_DEEPER = {
             'Choose the narrow night and read the airmass range in the “Night” row (1.30 to 1.42) and the color term in its row (about 0.079).',
         };
       },
-      tool: PC({ night: 1 }, ['stars', 'noise', 'reach', 'model', 'prior', 'cindex']),
+      tool: PC({ night: 1 }, [
+        'stars',
+        'noise',
+        'reach',
+        'model',
+        'prior',
+        'cindex',
+      ]),
     },
     {
       sid: 'a-cited-coefficient',
@@ -493,7 +536,13 @@ export const COUNTS_TO_MAGNITUDES_DEEPER = {
             'Choose the narrow night, turn the cited coefficient on, then read the “Target star” row: about 13.22 with an uncertainty of about 0.012.',
         };
       },
-      tool: PC({ night: 1, prior: 1, truth: 1 }, ['stars', 'noise', 'reach', 'model', 'cindex']),
+      tool: PC({ night: 1, prior: 1, truth: 1 }, [
+        'stars',
+        'noise',
+        'reach',
+        'model',
+        'cindex',
+      ]),
     },
     {
       sid: 'how-few-standards',
@@ -506,8 +555,18 @@ export const COUNTS_TO_MAGNITUDES_DEEPER = {
              term, so the color term is not constrained and the tool adds a stated
              uncertainty for it. Read the target&rsquo;s uncertainty each time.`,
       fields: [
-        { id: 's2', label: 'Uncertainty with 2 standards', unit: 'mag', hint: '0.081' },
-        { id: 's3', label: 'Uncertainty with 3 standards', unit: 'mag', hint: '0.0088' },
+        {
+          id: 's2',
+          label: 'Uncertainty with 2 standards',
+          unit: 'mag',
+          hint: '0.081',
+        },
+        {
+          id: 's3',
+          label: 'Uncertainty with 3 standards',
+          unit: 'mag',
+          hint: '0.0088',
+        },
         {
           id: 'ratio',
           label: 'Ratio',
@@ -545,7 +604,15 @@ export const COUNTS_TO_MAGNITUDES_DEEPER = {
              and at the residual plots (choose <em>residuals against airmass</em>): the
              standards no longer scatter around the fit as their errors say they should, and
              the tool says so, and says why it suspects a color-dependent extinction.`,
-      tool: PC({ night: 2, view: 1 }, ['stars', 'noise', 'reach', 'model', 'prior', 'cindex', 'airmass']),
+      tool: PC({ night: 2, view: 1 }, [
+        'stars',
+        'noise',
+        'reach',
+        'model',
+        'prior',
+        'cindex',
+        'airmass',
+      ]),
     },
     {
       sid: 'second-order',
@@ -558,7 +625,12 @@ export const COUNTS_TO_MAGNITUDES_DEEPER = {
              <em>with color-dependent extinction</em> and read the new term, <em>k2</em>.`,
       fields: [
         { id: 'dchi', label: 'Drop in chi-square', unit: '', hint: '67.8' },
-        { id: 'k2', label: 'Color-dependent extinction, k2', unit: 'mag/airmass/color', hint: '-0.047' },
+        {
+          id: 'k2',
+          label: 'Color-dependent extinction, k2',
+          unit: 'mag/airmass/color',
+          hint: '-0.047',
+        },
       ],
       validate: v => {
         if (![v.dchi, v.k2].every(Number.isFinite)) return null;
@@ -575,7 +647,14 @@ export const COUNTS_TO_MAGNITUDES_DEEPER = {
             'On the color-dependent night in the first-order model read the “Is there more in the data?” row (about 67.8); then choose the second-order model and read the k2 row (about −0.047).',
         };
       },
-      tool: PC({ night: 2, view: 1 }, ['stars', 'noise', 'reach', 'prior', 'cindex', 'airmass']),
+      tool: PC({ night: 2, view: 1 }, [
+        'stars',
+        'noise',
+        'reach',
+        'prior',
+        'cindex',
+        'airmass',
+      ]),
     },
     {
       sid: 'a-blue-target',
@@ -587,8 +666,18 @@ export const COUNTS_TO_MAGNITUDES_DEEPER = {
              star. Read the calibrated magnitude in the first-order model and again in the
              second-order one. The true magnitude is 13.200.`,
       fields: [
-        { id: 'm1', label: 'Calibrated, first order', unit: 'mag', hint: '13.215' },
-        { id: 'm2', label: 'Calibrated, second order', unit: 'mag', hint: '13.202' },
+        {
+          id: 'm1',
+          label: 'Calibrated, first order',
+          unit: 'mag',
+          hint: '13.215',
+        },
+        {
+          id: 'm2',
+          label: 'Calibrated, second order',
+          unit: 'mag',
+          hint: '13.202',
+        },
         {
           id: 'd',
           label: 'Difference',
@@ -612,7 +701,13 @@ export const COUNTS_TO_MAGNITUDES_DEEPER = {
             'On the color-dependent night set the target color to −0.2 and read the “Target star” row in each model: about 13.215 first order, 13.202 second order.',
         };
       },
-      tool: PC({ night: 2, cindex: -0.2, truth: 1 }, ['stars', 'noise', 'reach', 'prior', 'airmass']),
+      tool: PC({ night: 2, cindex: -0.2, truth: 1 }, [
+        'stars',
+        'noise',
+        'reach',
+        'prior',
+        'airmass',
+      ]),
     },
     {
       sid: 'what-it-costs',
@@ -649,10 +744,19 @@ export const COUNTS_TO_MAGNITUDES_DEEPER = {
           say: 'The term works on blue and red stars alike (its effect is proportional to the color); the blue target here was the bigger test, but it is not the only case.',
         },
       ],
-      hints: ['Compare the uncertainties of the extinction in the two models on the clear night.'],
+      hints: [
+        'Compare the uncertainties of the extinction in the two models on the clear night.',
+      ],
       because:
         'A bigger model is chosen by evidence, not by default: the test of the extra term and the residuals decide, and the extra term is fitted only when the night’s standards can determine it.',
-      tool: PC({ model: 1 }, ['stars', 'noise', 'reach', 'prior', 'airmass', 'cindex']),
+      tool: PC({ model: 1 }, [
+        'stars',
+        'noise',
+        'reach',
+        'prior',
+        'airmass',
+        'cindex',
+      ]),
     },
     {
       sid: 'the-limits',
@@ -670,7 +774,14 @@ export const COUNTS_TO_MAGNITUDES_DEEPER = {
              saying what it does not know. The panel&rsquo;s <em>It assumes</em> row says it
              again. And the extinction is the atmosphere&rsquo;s, in magnitudes per
              airmass: the dust between the stars is another correction entirely.`,
-      tool: PC({ night: 2, model: 1 }, ['stars', 'noise', 'reach', 'prior', 'airmass', 'cindex']),
+      tool: PC({ night: 2, model: 1 }, [
+        'stars',
+        'noise',
+        'reach',
+        'prior',
+        'airmass',
+        'cindex',
+      ]),
     },
   ],
 };
@@ -798,10 +909,7 @@ export const COUNTS_TO_MAGNITUDES_DEEPER_ES = {
     {
       title: 'Dónde se acaba una recta',
       body: 'Sube <em>Mayor masa de aire observada</em> a <strong>3,0</strong>. La noche tiene ahora patrones por encima de la masa de aire 2,5, donde el aire es espeso y ya no se fía una recta en la masa de aire. La herramienta los deja fuera y los marca. Lee cuántas medidas dejó fuera y la extinción que encuentra entonces.',
-      fields: [
-        { label: 'Medidas dejadas fuera' },
-        { label: 'Extinción, k' },
-      ],
+      fields: [{ label: 'Medidas dejadas fuera' }, { label: 'Extinción, k' }],
     },
     {
       title: 'Una estrella problema con masa de aire 3',
@@ -898,7 +1006,8 @@ export const COUNTS_TO_MAGNITUDES_DEEPER_ES = {
     {
       title: '¿Por qué no usar siempre el modelo mayor?',
       body: 'En la noche despejada el modelo de segundo orden encuentra una extinción que depende del color de −0,001, no más que su propio error. Su estrella problema es igual de buena y su extinción es menos segura: 0,0047 en vez de 0,0029.',
-      prompt: '¿Cuándo debe ajustar un observador la extinción que depende del color?',
+      prompt:
+        '¿Cuándo debe ajustar un observador la extinción que depende del color?',
       options: [
         'Cuando los datos lo piden: los residuos del ajuste y la prueba del término extra dicen que hay más en los datos, y los colores y masas de aire de la noche pueden fijarlo',
         'Siempre: un modelo más general es siempre mejor',
@@ -978,7 +1087,8 @@ const CONTENT = {
     ],
     misconceptions: [
       {
-        claim: 'A star looks fainter low in the sky because it is farther away.',
+        claim:
+          'A star looks fainter low in the sky because it is farther away.',
         response:
           'The star is the same distance at any height; its light crosses more air, and about 0.21 magnitudes are lost for every airmass.',
       },
