@@ -26,7 +26,7 @@ export default {
     ...EXPOSURE.flow,
     ...STRATEGY.flow,
     ...SURVEY.flow,
-  ...OBSERVING.flow,
+    ...OBSERVING.flow,
     ...TELESCOPE.flow,
     ...SPECTROGRAPH.flow,
     ...SATURATED_STAR.flow,

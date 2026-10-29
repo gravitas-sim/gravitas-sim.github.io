@@ -344,9 +344,17 @@ export const SEQUENCES = [
       ['design-the-schedule', 'core'],
       ['a-variable-star-from-frames', 'core'],
       ['what-is-in-this-field', 'quantitative', ['signal-noise-and-exposure']],
-      ['a-night-at-the-telescope', 'core', ['plan-an-exposure', 'counts-to-magnitudes']],
+      [
+        'a-night-at-the-telescope',
+        'core',
+        ['plan-an-exposure', 'counts-to-magnitudes'],
+      ],
       ['propose-an-observation', 'advanced', ['deep-or-wide']],
-      ['from-photons-to-a-number', 'quantitative', ['a-night-at-the-telescope']],
+      [
+        'from-photons-to-a-number',
+        'quantitative',
+        ['a-night-at-the-telescope'],
+      ],
     ]
   ),
 ];

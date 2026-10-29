@@ -13,12 +13,7 @@
 
 import AxeBuilder from '@axe-core/playwright';
 import { test, expect } from './fixtures.js';
-import {
-  lessonPlan,
-  openInvestigation,
-  settled,
-  walkToSid,
-} from './centralExperiment.js';
+import { openInvestigation, settled, walkToSid } from './centralExperiment.js';
 
 /** The plan with every depth, in the page's language, as a link at the advanced depth walks it. */
 const deepPlan = (page, id) =>
