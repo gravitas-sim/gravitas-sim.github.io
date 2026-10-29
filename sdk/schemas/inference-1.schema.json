@@ -112,6 +112,7 @@
           "enum": [
             "transit-quadratic",
             "rv-keplerian",
+            "eclipsing-binary",
             "poly-1",
             "poly-2",
             "power-law"
@@ -438,6 +439,113 @@
                 "hi": {
                   "exclusiveMinimum": 0,
                   "maximum": 200
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "properties": {
+        "model": {
+          "properties": {
+            "id": {
+              "const": "eclipsing-binary"
+            },
+            "version": {
+              "const": "1.0.0"
+            }
+          }
+        },
+        "parameters": {
+          "required": [
+            "tc",
+            "P"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "tc": {
+              "$ref": "#/$defs/unbounded"
+            },
+            "P": {
+              "$ref": "#/$defs/unbounded"
+            },
+            "rsum": {
+              "$ref": "#/$defs/parameter",
+              "properties": {
+                "lo": {
+                  "minimum": 0.02,
+                  "exclusiveMaximum": 0.9
+                },
+                "hi": {
+                  "exclusiveMinimum": 0.02,
+                  "maximum": 0.9
+                }
+              }
+            },
+            "k": {
+              "$ref": "#/$defs/parameter",
+              "properties": {
+                "lo": {
+                  "minimum": 0.05,
+                  "exclusiveMaximum": 20
+                },
+                "hi": {
+                  "exclusiveMinimum": 0.05,
+                  "maximum": 20
+                }
+              }
+            },
+            "inc": {
+              "$ref": "#/$defs/parameter",
+              "properties": {
+                "lo": {
+                  "minimum": 45,
+                  "exclusiveMaximum": 90
+                },
+                "hi": {
+                  "exclusiveMinimum": 45,
+                  "maximum": 90
+                }
+              }
+            },
+            "J": {
+              "$ref": "#/$defs/parameter",
+              "properties": {
+                "lo": {
+                  "minimum": 0.01,
+                  "exclusiveMaximum": 1
+                },
+                "hi": {
+                  "exclusiveMinimum": 0.01,
+                  "maximum": 1
+                }
+              }
+            },
+            "ecosw": {
+              "$ref": "#/$defs/parameter",
+              "properties": {
+                "lo": {
+                  "minimum": -0.7,
+                  "exclusiveMaximum": 0.7
+                },
+                "hi": {
+                  "exclusiveMinimum": -0.7,
+                  "maximum": 0.7
+                }
+              }
+            },
+            "esinw": {
+              "$ref": "#/$defs/parameter",
+              "properties": {
+                "lo": {
+                  "minimum": -0.7,
+                  "exclusiveMaximum": 0.7
+                },
+                "hi": {
+                  "exclusiveMinimum": -0.7,
+                  "maximum": 0.7
                 }
               }
             }
