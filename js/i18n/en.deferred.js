@@ -1994,6 +1994,8 @@ export const EN_DEFERRED = {
     'Put a number on what a survey misses, and correct for it.',
   'inv.seq.observing.what-a-telescope-resolves':
     'What aperture and the air do to a pair of stars.',
+  'inv.seq.observing.the-saturated-star':
+    'Why the brightest star has the wrong magnitude, and what bleeding and cosmic rays do.',
   'inv.seq.depth.core': 'Core depth',
   'inv.seq.depth.quantitative': 'Quantitative depth',
   'inv.seq.depth.advanced': 'Advanced depth',

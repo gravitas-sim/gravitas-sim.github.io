@@ -88,6 +88,7 @@ export const WIDGET_FAMILIES = Object.freeze({
   detector: ['ccd-frames', 'ccd-snr', 'diff-photometry'],
   exposure: ['exposure-planner'],
   telescope: ['telescope'],
+  effects: ['detector-effects'],
   sky: [
     'sky-turning',
     'sky-seasons',

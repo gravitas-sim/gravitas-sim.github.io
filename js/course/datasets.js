@@ -178,6 +178,7 @@ export const GUIDED = Object.freeze([
   'the-gaps-in-the-belt',
   'the-limit',
   'the-rotating-disk',
+  'the-saturated-star',
   'the-scale-of-the-solar-system',
   'the-shape-of-expansion',
   'the-sun-through-the-year',

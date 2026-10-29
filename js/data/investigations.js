@@ -94,6 +94,7 @@ import ATMOSPHERE_LESSONS from './investigations/atmosphere-sequence.js';
 import PLANETS_LESSONS from './investigations/planets-sequence.js';
 import EXPOSURE_LESSONS from './investigations/exposure-sequence.js';
 import TELESCOPE_LESSONS from './investigations/telescope-sequence.js';
+import SATURATED_STAR_LESSONS from './investigations/saturated-star-sequence.js';
 import { gradedSteps, positionIn } from './investigations/catalog.js';
 import { SUMMARIES } from './investigations/summaries.js';
 import INSIDE_A_STAR from './investigations/inside-a-star.js';
@@ -201,6 +202,7 @@ export const INVESTIGATIONS = [
   ...ATMOSPHERE_LESSONS,
   ...PLANETS_LESSONS,
   ...TELESCOPE_LESSONS,
+  ...SATURATED_STAR_LESSONS,
   ...EXPOSURE_LESSONS,
 ];
 

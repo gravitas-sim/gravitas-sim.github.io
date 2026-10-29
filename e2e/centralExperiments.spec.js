@@ -2674,6 +2674,18 @@ test.describe('the central experiment of each investigation', () => {
         [4, 50.3, 2],
       ],
     },
+    // ---- Detector effects (Roadmap III, Prompt 211) ----------------------------
+    {
+      id: 'the-saturated-star',
+      title:
+        'the-saturated-star: the clipped sum of the brightest star reads 30 percent of its flux at V = 9.5 and 55 at V = 10.5 @accepts:ce.the-saturated-star',
+      row: /^Star S$/i,
+      nth: 1,
+      values: [
+        [9.5, 30.2, 1],
+        [10.5, 54.6, 1],
+      ],
+    },
   ];
   for (const c of SURVEY) {
     test(c.title, async ({ page, app }) => {

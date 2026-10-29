@@ -2,16 +2,17 @@
   "lessons": [
     "keplers-laws",
     "goldilocks-question",
+    "the-saturated-star",
     "transit-photometry",
     "what-is-a-gravitational-wave",
     "butterfly-effect",
     "binary-star-planets",
     "black-holes",
-    "measuring-the-moon",
     "weighing-stars",
     "a-universe-of-stars",
     "detect-this-planet",
     "extending-an-experiment",
+    "measuring-the-moon",
     "orbital-energy",
     "power-law-gravity",
     "radial-velocity",
@@ -128,6 +129,17 @@
       "math:algebra",
       "prereq:yes"
     ],
+    "the-saturated-star": [
+      "depth-step:advanced/predict",
+      "depth-step:quantitative/read",
+      "key:measure.stage",
+      "key:predict.after",
+      "key:predict.depth",
+      "key:predict.hints",
+      "key:predict.stage",
+      "key:predict.tool",
+      "key:read.stage"
+    ],
     "transit-photometry": [
       "check:numeric/number+tolerance",
       "key:explore.clearLightCurve",
@@ -141,12 +153,8 @@
     ],
     "what-is-a-gravitational-wave": [
       "audience:beginner",
-      "key:measure.stage",
-      "key:predict.stage",
       "key:predict.tip",
-      "key:predict.tool",
       "key:read.checklist",
-      "key:read.stage",
       "lock:{\"placement\":true,\"inspector\":false,\"areaSweep\":false}",
       "math:arithmetic"
     ],
@@ -163,10 +171,6 @@
       "key:question.checklist",
       "key:read.explainView"
     ],
-    "measuring-the-moon": [
-      "key:predict.hints",
-      "key:question.maxUncertainty"
-    ],
     "weighing-stars": [
       "key:explore.showBarycenter",
       "key:read.showBarycenter"
@@ -179,6 +183,9 @@
     ],
     "extending-an-experiment": [
       "key:measure.compute"
+    ],
+    "measuring-the-moon": [
+      "key:question.maxUncertainty"
     ],
     "orbital-energy": [
       "key:question.rubricCriteria"
@@ -261,17 +268,17 @@
     "pin:unpinned"
   ],
   "totals": {
-    "investigations": 87,
-    "steps": 1514,
+    "investigations": 88,
+    "steps": 1533,
     "activityCuts": 6,
-    "lessonTokens": 142,
+    "lessonTokens": 146,
     "activityTokens": 29,
     "stepTypes": {
-      "read": 286,
-      "predict": 168,
+      "read": 290,
+      "predict": 171,
       "ellipse": 1,
-      "question": 532,
-      "measure": 382,
+      "question": 536,
+      "measure": 390,
       "explore": 144,
       "wedges": 1
     }

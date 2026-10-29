@@ -193,6 +193,12 @@ export default {
     'Qué apertura muestra un par cercano como dos, cómo la apertura y la exposición sacan una estrella débil, por qué la anchura de una estrella no es el límite del telescopio y por qué un telescopio terrestre mayor deja de resolver más detalle cerca del seeing.',
     'Las imágenes son sintéticas: un patrón de Airy convolucionado con un perfil de seeing de Moffat de anchura dada, una longitud de onda, sin aberraciones, óptica adaptativa ni araña, un píxel cuadrado. El seeing es una entrada, no un sitio.',
   ],
+  effects: [
+    'Una imagen sintética de una estrella brillante y otras más débiles, hecha con los efectos del detector que actives: una respuesta no lineal cerca de la capacidad máxima, trazas de rayos cósmicos y desbordamiento de carga a lo largo de las columnas, y una anchura de perfil que fijas frente al píxel.',
+    'La respuesta de la herramienta de fotometría para cada estrella: un flujo con su error, o un rechazo con su motivo, junto al número que habría dado sin tener en cuenta las marcas, y las marcas del archivo asociado cerca de la estrella (saturado, desbordamiento, rayo cósmico, no lineal).',
+    'Por qué la magnitud de la estrella brillante sale mal, dónde la respuesta deja de ser lineal y una medida es segura, qué hace una estela de desbordamiento a una estrella de su columna y qué hace el submuestreo al píxel del máximo.',
+    'Las imágenes son sintéticas y los efectos son modelos declarados: una caída tipo tanh, un depósito de trazas y una regla de derrame por columnas, no la respuesta medida de ningún detector.',
+  ],
   atmosphere: [
     'La temperatura que da a un planeta la luz del Sol por sí sola junto a la temperatura medida allí, un efecto invernadero de una capa y uno gris lado a lado para un planeta, o con qué rapidez baja la presión con la altura. O cuatro profundidades de eclipse secundario con la temperatura que da cada una, o la curva de fase de un planeta con el albedo que fija.',
     'Cuánto se aleja la temperatura medida de Venus, la Tierra, Marte y los planetas gigantes de su temperatura de equilibrio, qué emisividad o profundidad óptica necesita cada modelo para cerrar la diferencia, y la altura de escala que implica cada cuerpo.',

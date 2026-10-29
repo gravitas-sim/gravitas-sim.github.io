@@ -10,3 +10,5 @@ export * from './pipeline.js';
 export * from './lab.js';
 export * from './optics.js';
 export * from './telescope.js';
+export * from './effects.js';
+export * from './sampling.js';

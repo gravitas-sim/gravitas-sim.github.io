@@ -70,6 +70,7 @@ import { INSTRUCTOR as ATMOSPHERE } from './investigations/depth/atmosphere-sequ
 import { INSTRUCTOR as PLANETS } from './investigations/planets-sequence.js';
 import { INSTRUCTOR as EXPOSURE } from './investigations/exposure-sequence.js';
 import { INSTRUCTOR as TELESCOPE } from './investigations/telescope-sequence.js';
+import { INSTRUCTOR as SATURATED_STAR } from './investigations/saturated-star-sequence.js';
 
 export const LESSON_BANDS = Object.freeze({
   ...MEASUREMENT.bands,
@@ -78,6 +79,7 @@ export const LESSON_BANDS = Object.freeze({
   ...PLANETS.bands,
   ...EXPOSURE.bands,
   ...TELESCOPE.bands,
+  ...SATURATED_STAR.bands,
   'keplers-laws': { core: 'medium', quantitative: 'long', advanced: 'long' },
   'retrograde-motion': { core: 'medium' },
   'transit-photometry': {

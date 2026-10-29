@@ -1,0 +1,784 @@
+{
+ "id": "the-saturated-star",
+ "locale": "en",
+ "title": "The Saturated Star",
+ "steps": 19,
+ "depths": [
+  [
+   "core",
+   9
+  ],
+  [
+   "quantitative",
+   14
+  ],
+  [
+   "advanced",
+   19
+  ]
+ ],
+ "grading": [
+  {
+   "sid": "bright-star-predict",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "why-too-faint",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     true,
+     "correct"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "can-you-correct-it",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     true,
+     "correct"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "trail-predict",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "a-ray",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     true,
+     "correct"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "phase-predict",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "what-undersampling-costs",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     true,
+     "correct"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  }
+ ],
+ "progress": {
+  "record": {
+   "schema": 2,
+   "lesson": "the-saturated-star",
+   "stepSid": "what-an-observer-does",
+   "responses": {
+    "the-saturated-star:bright-star-predict": 1,
+    "the-saturated-star:why-too-faint": 0,
+    "the-saturated-star:can-you-correct-it": 0,
+    "the-saturated-star:trail-predict": 1,
+    "the-saturated-star:a-ray": 0,
+    "the-saturated-star:phase-predict": 1,
+    "the-saturated-star:what-undersampling-costs": 0
+   },
+   "attempts": {
+    "the-saturated-star:bright-star-predict": 1,
+    "the-saturated-star:why-too-faint": 1,
+    "the-saturated-star:can-you-correct-it": 1,
+    "the-saturated-star:trail-predict": 1,
+    "the-saturated-star:a-ray": 1,
+    "the-saturated-star:phase-predict": 1,
+    "the-saturated-star:what-undersampling-costs": 1
+   },
+   "visited": [
+    "a-bright-star",
+    "bright-star-predict",
+    "clipped-star",
+    "magnitude-error",
+    "why-too-faint",
+    "the-response",
+    "linear-limit",
+    "brightest-measured",
+    "safe-flux",
+    "can-you-correct-it",
+    "trail-predict",
+    "trail",
+    "a-ray",
+    "undersampled",
+    "phase-predict",
+    "phase-dependence",
+    "aperture-scatter",
+    "what-undersampling-costs",
+    "what-an-observer-does"
+   ],
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "depth": "advanced",
+   "deepest": "advanced",
+   "spent": 600
+  },
+  "read": {
+   "responses": {
+    "the-saturated-star:bright-star-predict": 1,
+    "the-saturated-star:why-too-faint": 0,
+    "the-saturated-star:can-you-correct-it": 0,
+    "the-saturated-star:trail-predict": 1,
+    "the-saturated-star:a-ray": 0,
+    "the-saturated-star:phase-predict": 1,
+    "the-saturated-star:what-undersampling-costs": 0
+   },
+   "attempts": {
+    "the-saturated-star:bright-star-predict": 1,
+    "the-saturated-star:why-too-faint": 1,
+    "the-saturated-star:can-you-correct-it": 1,
+    "the-saturated-star:trail-predict": 1,
+    "the-saturated-star:a-ray": 1,
+    "the-saturated-star:phase-predict": 1,
+    "the-saturated-star:what-undersampling-costs": 1
+   },
+   "visited": [
+    "a-bright-star",
+    "a-ray",
+    "aperture-scatter",
+    "bright-star-predict",
+    "brightest-measured",
+    "can-you-correct-it",
+    "clipped-star",
+    "linear-limit",
+    "magnitude-error",
+    "phase-dependence",
+    "phase-predict",
+    "safe-flux",
+    "the-response",
+    "trail",
+    "trail-predict",
+    "undersampled",
+    "what-an-observer-does",
+    "what-undersampling-costs",
+    "why-too-faint"
+   ],
+   "stepSid": "what-an-observer-does",
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "depth": "advanced",
+   "deepest": "advanced",
+   "spent": 600,
+   "schema": 2,
+   "migrated": false,
+   "notes": []
+  }
+ },
+ "backup": {
+  "backup": {
+   "kind": "gravitas.investigation.progress",
+   "version": 2,
+   "savedAt": "2026-01-02T04:05:06.000Z",
+   "lesson": {
+    "id": "the-saturated-star",
+    "title": "The Saturated Star",
+    "stepCount": 19
+   },
+   "student": null,
+   "progress": {
+    "stepSid": "what-an-observer-does",
+    "startedAt": "2026-01-02T03:04:05.000Z",
+    "visited": [
+     "a-bright-star",
+     "bright-star-predict",
+     "clipped-star",
+     "magnitude-error",
+     "why-too-faint",
+     "the-response",
+     "linear-limit",
+     "brightest-measured",
+     "safe-flux",
+     "can-you-correct-it",
+     "trail-predict",
+     "trail",
+     "a-ray",
+     "undersampled",
+     "phase-predict",
+     "phase-dependence",
+     "aperture-scatter",
+     "what-undersampling-costs",
+     "what-an-observer-does"
+    ],
+    "responses": {
+     "the-saturated-star:bright-star-predict": 1,
+     "the-saturated-star:why-too-faint": 0,
+     "the-saturated-star:can-you-correct-it": 0,
+     "the-saturated-star:trail-predict": 1,
+     "the-saturated-star:a-ray": 0,
+     "the-saturated-star:phase-predict": 1,
+     "the-saturated-star:what-undersampling-costs": 0
+    },
+    "attempts": {
+     "the-saturated-star:bright-star-predict": 1,
+     "the-saturated-star:why-too-faint": 1,
+     "the-saturated-star:can-you-correct-it": 1,
+     "the-saturated-star:trail-predict": 1,
+     "the-saturated-star:a-ray": 1,
+     "the-saturated-star:phase-predict": 1,
+     "the-saturated-star:what-undersampling-costs": 1
+    }
+   },
+   "steps": [
+    {
+     "index": 0,
+     "sid": "a-bright-star",
+     "fingerprint": "read|-|detector-effects|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 1,
+     "sid": "bright-star-predict",
+     "fingerprint": "predict|-|detector-effects|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 2,
+     "sid": "clipped-star",
+     "fingerprint": "measure|-|detector-effects|-|r|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 3,
+     "sid": "magnitude-error",
+     "fingerprint": "measure|-|detector-effects|-|r+dm|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 4,
+     "sid": "why-too-faint",
+     "fingerprint": "question|choice|detector-effects|-|-|4|a=0;c=0",
+     "optionCount": 4
+    },
+    {
+     "index": 5,
+     "sid": "the-response",
+     "fingerprint": "read|-|detector-effects|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 6,
+     "sid": "linear-limit",
+     "fingerprint": "measure|-|detector-effects|-|lim+plateau+pct|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 7,
+     "sid": "brightest-measured",
+     "fingerprint": "measure|-|detector-effects|-|m|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 8,
+     "sid": "safe-flux",
+     "fingerprint": "measure|-|detector-effects|-|share+f+m|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 9,
+     "sid": "can-you-correct-it",
+     "fingerprint": "question|choice|detector-effects|-|-|4|a=0;c=0",
+     "optionCount": 4
+    },
+    {
+     "index": 10,
+     "sid": "trail-predict",
+     "fingerprint": "predict|-|detector-effects|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 11,
+     "sid": "trail",
+     "fingerprint": "measure|-|detector-effects|-|k+p|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 12,
+     "sid": "a-ray",
+     "fingerprint": "question|choice|detector-effects|-|-|4|a=0;c=0",
+     "optionCount": 4
+    },
+    {
+     "index": 13,
+     "sid": "undersampled",
+     "fingerprint": "read|-|detector-effects|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 14,
+     "sid": "phase-predict",
+     "fingerprint": "predict|-|detector-effects|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 15,
+     "sid": "phase-dependence",
+     "fingerprint": "measure|-|detector-effects|-|lo12+hi12+lo28+hi28|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 16,
+     "sid": "aperture-scatter",
+     "fingerprint": "measure|-|detector-effects|-|s12+s28+ratio|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 17,
+     "sid": "what-undersampling-costs",
+     "fingerprint": "question|choice|detector-effects|-|-|4|a=0;c=0",
+     "optionCount": 4
+    },
+    {
+     "index": 18,
+     "sid": "what-an-observer-does",
+     "fingerprint": "read|-|detector-effects|-|-|-|-",
+     "optionCount": null
+    }
+   ]
+  },
+  "verdict": {
+   "ok": true
+  },
+  "restored": {
+   "responses": {
+    "the-saturated-star:bright-star-predict": 1,
+    "the-saturated-star:why-too-faint": 0,
+    "the-saturated-star:can-you-correct-it": 0,
+    "the-saturated-star:trail-predict": 1,
+    "the-saturated-star:a-ray": 0,
+    "the-saturated-star:phase-predict": 1,
+    "the-saturated-star:what-undersampling-costs": 0
+   },
+   "attempts": {
+    "the-saturated-star:bright-star-predict": 1,
+    "the-saturated-star:why-too-faint": 1,
+    "the-saturated-star:can-you-correct-it": 1,
+    "the-saturated-star:trail-predict": 1,
+    "the-saturated-star:a-ray": 1,
+    "the-saturated-star:phase-predict": 1,
+    "the-saturated-star:what-undersampling-costs": 1
+   },
+   "visited": [
+    "a-bright-star",
+    "a-ray",
+    "aperture-scatter",
+    "bright-star-predict",
+    "brightest-measured",
+    "can-you-correct-it",
+    "clipped-star",
+    "linear-limit",
+    "magnitude-error",
+    "phase-dependence",
+    "phase-predict",
+    "safe-flux",
+    "the-response",
+    "trail",
+    "trail-predict",
+    "undersampled",
+    "what-an-observer-does",
+    "what-undersampling-costs",
+    "why-too-faint"
+   ],
+   "stepIndex": 18,
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "moved": [],
+   "dropped": [],
+   "quarantined": {},
+   "uncertain": 0,
+   "discardedKeys": 0,
+   "byPosition": false
+  }
+ },
+ "ledger": {
+  "entry": "golden-the-saturated-star",
+  "record": {
+   "ids": [
+    "golden-the-saturated-star"
+   ],
+   "rows": [
+    [
+     "golden-the-saturated-star",
+     "q1",
+     3.5247,
+     "d",
+     0.0012,
+     "measured",
+     "simulation",
+     "rv-fit",
+     null,
+     [
+      "s",
+      "d"
+     ]
+    ]
+   ],
+   "total": 1
+  },
+  "digest": "3d7cd76d8840eb6727d1aa7ed09d1570d863a292a9790f863e6acef961e11989"
+ },
+ "tokens": {
+  "plain": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "a": null,
+    "r": null,
+    "fl": "en"
+   },
+   "answers": [
+    {
+     "sid": "bright-star-predict",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "why-too-faint",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "can-you-correct-it",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "trail-predict",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "a-ray",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "phase-predict",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "what-undersampling-costs",
+     "value": 0,
+     "locale": "en"
+    }
+   ]
+  },
+  "assignment": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "a": "golden-assignment",
+    "r": "roster-1",
+    "fl": "en"
+   },
+   "answers": [
+    {
+     "sid": "bright-star-predict",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "why-too-faint",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "can-you-correct-it",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "trail-predict",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "a-ray",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "phase-predict",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "what-undersampling-costs",
+     "value": 0,
+     "locale": "en"
+    }
+   ]
+  },
+  "evidence": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "ev": {
+     "d": "3d7cd76d8840eb6727d1aa7ed09d1570d863a292a9790f863e6acef961e11989",
+     "i": [
+      "golden-the-saturated-star"
+     ],
+     "n": 1,
+     "r": [
+      [
+       "golden-the-saturated-star",
+       "q1",
+       3.5247,
+       "d",
+       0.0012,
+       "measured",
+       "simulation",
+       "rv-fit",
+       null,
+       [
+        "s",
+        "d"
+       ]
+      ]
+     ]
+    },
+    "a": null,
+    "r": null,
+    "fl": "en"
+   },
+   "answers": [
+    {
+     "sid": "bright-star-predict",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "why-too-faint",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "can-you-correct-it",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "trail-predict",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "a-ray",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "phase-predict",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "what-undersampling-costs",
+     "value": 0,
+     "locale": "en"
+    }
+   ]
+  },
+  "depth": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "dp": "advanced",
+    "a": null,
+    "r": null,
+    "fl": "en"
+   },
+   "answers": [
+    {
+     "sid": "bright-star-predict",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "why-too-faint",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "can-you-correct-it",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "trail-predict",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "a-ray",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "phase-predict",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "what-undersampling-costs",
+     "value": 0,
+     "locale": "en"
+    }
+   ]
+  }
+ }
+}
