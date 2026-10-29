@@ -81,7 +81,7 @@ export function predictAliases(
         offset += vec[j] * combs[j].frequency;
       const f = Math.abs(f0 + offset);
       if (!(f > Math.max(fMin, 1e-9)) || f > fMax) return;
-      const key = f.toPrecision(12);
+      const key = Math.round(f * 1e10);
       if (seen.has(key)) return;
       seen.add(key);
       const kinds = {};

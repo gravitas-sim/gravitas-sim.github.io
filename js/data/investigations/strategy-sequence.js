@@ -458,8 +458,8 @@ export const WHY_THE_PERIOD_IS_WRONG_DEEPER = {
         { id: 'T', label: 'Baseline', unit: 'd', hint: '38.9' },
         {
           id: 'r',
-          label: 'Peak width, one over the baseline',
-          unit: 'cycles/d',
+          label: 'Peak width in cycles per day, one over the baseline',
+          unit: '',
           compute: v => 1 / v.T,
           decimals: 4,
         },
@@ -496,15 +496,15 @@ export const WHY_THE_PERIOD_IS_WRONG_DEEPER = {
         { id: 'c8', label: 'Bins filled at 0.8 d', hint: '13' },
         {
           id: 'g8',
-          label: 'Largest empty arc at 0.8 d',
-          unit: 'cycle',
+          label: 'Largest empty arc at 0.8 d, in cycles',
+          unit: '',
           hint: '0.137',
         },
         { id: 'c1', label: 'Bins filled at 1.0 d', hint: '4' },
         {
           id: 'g1',
-          label: 'Largest empty arc at 1.0 d',
-          unit: 'cycle',
+          label: 'Largest empty arc at 1.0 d, in cycles',
+          unit: '',
           hint: '0.894',
         },
       ],
@@ -928,7 +928,7 @@ export const WHY_THE_PERIOD_IS_WRONG_DEEPER_ES = {
       body: 'Lee la base de las cuarenta noches en la fila <em>Épocas</em> (el intervalo desde la primera visita hasta la última, en días). Un pico de la ventana tiene unos <strong>uno sobre la base</strong> de ancho, en ciclos por día: lo finamente que el plan puede distinguir dos frecuencias.',
       fields: [
         { label: 'Base' },
-        { label: 'Ancho del pico, uno sobre la base' },
+        { label: 'Ancho del pico en ciclos por día, uno sobre la base' },
       ],
     },
     {
@@ -936,9 +936,9 @@ export const WHY_THE_PERIOD_IS_WRONG_DEEPER_ES = {
       body: 'Pliega las visitas sobre el período: cada una cae en una fase entre 0 y 1 de un pulso. Con la cadencia <em>una visita por noche, a la misma hora</em>, lee la fila <em>Cobertura de fase</em> con un período verdadero de <strong>0,8 días</strong> y luego de <strong>1,0 días</strong>: cuántas de las veinte casillas de fase tienen un punto, y el arco vacío más largo.',
       fields: [
         { label: 'Casillas llenas con 0,8 d' },
-        { label: 'Arco vacío más largo con 0,8 d' },
+        { label: 'Arco vacío más largo con 0,8 d, en ciclos' },
         { label: 'Casillas llenas con 1,0 d' },
-        { label: 'Arco vacío más largo con 1,0 d' },
+        { label: 'Arco vacío más largo con 1,0 d, en ciclos' },
       ],
     },
     {
@@ -1116,13 +1116,18 @@ const FLOW = {
   'why-the-period-is-wrong': [
     {
       from: 'a-star-seen-once-a-night',
-      to: 'the-aliases',
-      text: 'Forty nights at one clock time, a period of 0.8 days, the prediction and the alias list: a preference of 0 for the truth.',
+      to: 'predict-the-period',
+      text: 'Forty nights at one clock time, a period of 0.8 days, and the prediction of what the search will find before it is run.',
     },
     {
-      from: 'why-the-comb',
+      from: 'the-aliases',
+      to: 'why-the-comb',
+      text: 'The alias list and a preference of 0 for the truth, then why one visit a night makes a comb of equal peaks.',
+    },
+    {
+      from: 'break-the-tie',
       to: 'what-breaks-it',
-      text: 'Why one visit a night makes aliases, the three visits a night that break them, and what does and does not help.',
+      text: 'Three visits a night break the tie; what does and does not help.',
     },
     {
       from: 'the-wrong-answer',
