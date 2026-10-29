@@ -45,7 +45,9 @@ and clipped to the converter's range.
   regime flag (`under` below 2 pixels of FWHM, `over` from 4) and two measures of what the phase of the star in its pixel does:
   the largest over the smallest peak-pixel fraction, and the relative scatter of a proportional whole-pixel aperture's flux. An
   undersampled star's peak pixel can vary by more than a factor of 1.5 with where the star sits in it, so whether it saturates
-  depends on the phase as well as the brightness.
+  depends on the phase as well as the brightness. The opposite regime, `over` from 4 pixels of FWHM, is flagged and
+  not rendered differently: the light is spread over more pixels, so the read-noise term of the CCD equation grows with the
+  number of pixels in the aperture (about the square of the FWHM); the panel reports the regime and no more.
 
 Assumptions stated where a student can look for them: a Gaussian profile; a box pixel response; no charge diffusion; no
 charge-transfer loss; the same full well for every pixel; bleeding only along columns; cosmic rays that do not saturate their
