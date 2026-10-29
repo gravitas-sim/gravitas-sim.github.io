@@ -82,3 +82,53 @@ Seeds: oracle 212; harness 2120001; ensemble prefix `photometric-calibration-212
 
 A crossed bound is a failed leg, left failing in `tests/fixtures/photometric-calibration/failed-legs.json` and labelled; only
 Carl resets one.
+
+## Results
+
+`npm run photcal:validate` runs every leg live; `tests/photometricCalibration.test.js` runs it in a child process and holds the
+four failed legs to their recorded findings. Thirty rows pass, four fail, and one is a report.
+
+| Leg | Measured |
+|---|---|
+| A1 to A9 | exact to 1e-13 (parameters, covariance, conventions); the calibrated variance equals an independent evaluation and a Monte Carlo of the parameters to 0.2 percent |
+| B1 to B3, B5 | kernel against the oracle's numpy, Astropy and SciPy solvers: parameters 1.7e-13, covariance 5.3e-13, calibrated magnitudes 1.8e-13; the shared-catalog-error model against an explicit block covariance 1e-13 |
+| B4a | the second-order night recovers k2 = -0.0297 (truth -0.03, sigma 0.0048) |
+| P1, P2 | the physical blackbody night: colour term -0.6511 (oracle -0.6511), extinction 0.2741 (oracle 0.2741), k2 -0.0252 |
+| C1, C3 | 2000 nights: 68 percent interval covers 0.6775, 95 percent 0.9515; pull standard deviations 0.97 to 0.99; false alarms 0.012 |
+| D1 to D7 | two standards, the airmass limit, a narrow night, a narrow color span, a misspecified night (first order flagged 0.99, second order 0), bad inputs and an unknown color all refuse or flag as committed |
+| F1 | frames through the detector kernel and the Observatory's aperture photometry recover Z1 and k within their errors |
+| R1, R2 | the record validates (artifact/2, rank deficient with the colour term named); the Rubin coefficients are read as cited, the Las Cumbres sites return nothing |
+
+## Failed legs (kept failing, labelled; only Carl resets a bound)
+
+1. **B4b.firstOrder.lackOfFit.** On the second-order night the first-order fit's chi-square (p 0.133) does not see the
+   colour-dependent extinction: it is absorbed into c and k. The nested test (D5b) does (delta chi-square 38.1, p 7e-10).
+2. **P3.physical.limit.** The errors pass (first order -0.0107 mag, second order +0.0002 mag, as the oracle), but the clause
+   that the first-order interval covers the truth "not less often" is the wrong way round: it covers 0.685 of draws against 0.970.
+3. **C2.coverage.underestimated.** Errors told 2 times too small are flagged in 0.977 of nights against a bound of 0.99;
+   every flagged interval is wider and the rescaled interval covers 0.942.
+4. **E1.authentic.** NGC 2420, SDSS g against Gaia G with BP-RP (547 matched, 531 kept): the colour term is +0.901 (the bound's
+   sign was wrong) and the held-out star's interval covers 0.743 against 0.90, because its catalog error is not scaled by the lack
+   of fit; scaled as the standards' are, it covers 0.962 (report E1.holdout.scaled). The independent oracle reproduces the
+   cross-match exactly (E1.oracle).
+
+## The panel, the lesson and the notebook
+
+* `js/photcalWidgets.js` (lazy family `photcal`, panel `photometric-calibration`): a synthetic night (clear, one narrow airmass
+  range, colour-dependent extinction), the fit with its uncertainties, the Bouguer line and the residuals through the plot
+  component, a target calibrated with its 95 percent interval, a switch for the cited-coefficient prior and the second-order
+  model, a "show the truth" row, and a keep button.
+* `js/photcalKeep.js` keeps a calibration as an `artifact/2` envelope in the notebook (source `photometric-calibration`, digest of
+  the night's observations).
+* The investigation "Counts to Magnitudes" (`js/data/investigations/photometric-calibration-sequence.js`, one closure file)
+  has 6 core, 8 quantitative and 5 advanced steps in English and Spanish; `tests/photometricLessons.test.js` recomputes every
+  number a step states.
+* The extinction everywhere here is the atmosphere's, in magnitudes per airmass. The interstellar extinction of the radiation
+  model is never read, added or confused with it.
+
+## Limits
+
+One straight line in airmass and in colour; constant extinction through the night; the catalog magnitudes taken as right (their
+errors are shared among a star's measurements); no aperture or flat-field error; synthetic nights with a stated truth. The
+authentic leg is one cluster in two catalogs, not a calibration of a real night of an instrument; no authentic night of
+standard-star frames was measured, and one is requested, not claimed.
