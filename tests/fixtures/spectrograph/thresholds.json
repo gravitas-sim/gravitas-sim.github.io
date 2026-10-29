@@ -125,6 +125,16 @@
       }
     },
     {
+      "id": "A9.pair.dip",
+      "group": "a",
+      "bound": "added by amendment AM6 after the kernel existed (the panel and the lesson state the dip between two lines): the dip between two equal Gaussian lines of FWHM 1, 1 - (profile at the midpoint) / (highest value of the profile), agrees with scipy.optimize.minimize_scalar (bounded, xatol 1e-14) of the same profile to an absolute 1e-9 at separations 0.80, 0.84, 0.85, 0.86, 1.0, 1.5 and 2.0 FWHM; it is exactly 0 up to the separation of two sigma, 0.8493 FWHM, where the two peaks first separate (the Gaussian pair's own criterion, which is not Rayleigh's)",
+      "limits": {
+        "absMax": 1e-9,
+        "separationsFwhm": [0.8, 0.84, 0.85, 0.86, 1.0, 1.5, 2.0],
+        "criticalFwhm": 0.8493218002880191
+      }
+    },
+    {
       "id": "B1.convolution",
       "group": "b",
       "bound": "an independent numerical convolution (numpy: a template sampled at 1/20 of the line-spread sigma, scipy.ndimage.gaussian_filter1d, pixel averages by cumulative trapezoid) of a science spectrum (continuum plus four Gaussian absorption lines) at resolving powers 300, 1000 and 3000 on 0.1 nm pixels differs from the kernel's analytic pixel spectrum by at most 1e-4 of the continuum at every pixel; this also bounds the neglected smoothing of the continuum by the line-spread function",
@@ -379,6 +389,13 @@
       "when": "after the kernel and the validator existed, before the first full run's results were read into any document",
       "what": "A7 and SPECTROGRAPH.md state the H-alpha media offset as 82.82 km/s where the committed text said 82.7 km/s",
       "why": "a miscopied numeral: c (656.4603 / 656.279 - 1) is 82.819 km/s and the oracle's independent value is 82.8190032523; the check compares the kernel with the oracle to a relative 1e-12, not with the numeral in the prose, and does not change",
+      "boundMoved": false
+    },
+    {
+      "id": "AM6",
+      "when": "after the kernel and the validator existed and passed, before the panel, the lesson and the instructor materials",
+      "what": "a leg A9.pair.dip is added (the dip between two equal Gaussian lines against scipy), with its oracle block a9 appended to the oracle's results",
+      "why": "the panel and the lesson state a dip between two lines, which the committed contract did not cover. It adds a leg and moves no bound or tolerance; the oracle's other blocks are byte-identical (checked) and no random draw changed",
       "boundMoved": false
     }
   ]

@@ -31,6 +31,7 @@ describe('the committed thresholds', () => {
       'A6.continuum',
       'A7.doppler.media',
       'A8.recovery.noise-free',
+      'A9.pair.dip',
       'B1.convolution',
       'B2.line.fit',
       'B3.solution.pinned',
@@ -56,6 +57,7 @@ describe('the committed thresholds', () => {
       'AM3',
       'AM4',
       'AM5',
+      'AM6',
     ]);
     expect(THR.amendments.every(a => a.boundMoved === false)).toBe(true);
     expect(

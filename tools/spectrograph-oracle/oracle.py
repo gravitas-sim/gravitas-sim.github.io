@@ -345,6 +345,18 @@ def f3():
     return {"Rs": Rs, "lamNm": lam, "cases": out}
 
 
+def a9():
+    """The dip between two equal Gaussian lines of FWHM 1: the profile maximum by scipy minimize_scalar on a bracket."""
+    out = []
+    sig = 1 / FWHM_PER_SIGMA
+    for s in (0.80, 0.84, 0.85, 0.86, 1.0, 1.5, 2.0):
+        f = lambda x: np.exp(-0.5 * ((x - s / 2) / sig) ** 2) + np.exp(-0.5 * ((x + s / 2) / sig) ** 2)
+        res = optimize.minimize_scalar(lambda x: -f(x), bounds=(1e-12, s / 2 + 2 * sig), method="bounded", options={"xatol": 1e-14})
+        top = max(f(0.0), -res.fun)
+        out.append({"separationFwhm": s, "dip": float(1 - f(0.0) / top)})
+    return out
+
+
 def main(path):
     t0 = time.time()
     res = {
@@ -359,6 +371,7 @@ def main(path):
         "f1": f1(),
         "f2": f2(),
         "f3": f3(),
+        "a9": a9(),
         "seconds": time.time() - t0,
     }
     json.dump(r12(res), open(path, "w"), separators=(",", ":"))

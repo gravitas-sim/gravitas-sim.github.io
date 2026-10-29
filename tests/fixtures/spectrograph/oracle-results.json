@@ -6017,5 +6017,14 @@
       }
     ]
   },
-  "seconds": 0.374340772628784
+  "a9": [
+    { "separationFwhm": 0.8, "dip": 2.22044604925031e-16 },
+    { "separationFwhm": 0.84, "dip": 0.0 },
+    { "separationFwhm": 0.85, "dip": 1.91076044631089e-6 },
+    { "separationFwhm": 0.86, "dip": 0.000465896715688308 },
+    { "separationFwhm": 1.0, "dip": 0.072802040646008 },
+    { "separationFwhm": 1.5, "dip": 0.580381576113308 },
+    { "separationFwhm": 2.0, "dip": 0.875001907642396 }
+  ],
+  "seconds": 0.351844072341919
 }

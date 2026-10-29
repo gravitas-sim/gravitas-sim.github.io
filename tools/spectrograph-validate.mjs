@@ -317,6 +317,24 @@ function a7() {
   );
 }
 
+function a9() {
+  const l = lim('A9.pair.dip');
+  let worst = 0;
+  for (const c of ORA.a9)
+    worst = Math.max(worst, Math.abs(K.pairDip(c.separationFwhm) - c.dip));
+  const critical = 2 / K.FWHM_PER_SIGMA;
+  const below = K.pairDip(critical - 1e-6);
+  const above = K.pairDip(critical + 1e-3);
+  row(
+    'A9.pair.dip',
+    worst <= l.absMax &&
+      below === 0 &&
+      above > 0 &&
+      Math.abs(critical - l.criticalFwhm) < 1e-12,
+    { absMax: worst, critical, below, above }
+  );
+}
+
 // ----------------------------------------------------------------------------- the arc, shared
 const XS = Float64Array.from({ length: REF.nPixels }, (_, i) => i);
 const isolatedOf = spec => {
@@ -1131,6 +1149,7 @@ export function runChecks({ only = null } = {}) {
     a6,
     a7,
     a8,
+    a9,
     b1,
     b2,
     b3,

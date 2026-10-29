@@ -144,3 +144,40 @@ export function intrinsicSigma(measured, instrument) {
     ? { sigma: Math.sqrt(d), resolved: true }
     : { sigma: 0, resolved: false };
 }
+
+/**
+ * The profile of two equal Gaussian lines of FWHM 1 whose centres are `separationFwhm` apart, in units of the FWHM, at
+ * a position x (in FWHM) from their midpoint, each line of unit peak.
+ */
+export function pairProfile(separationFwhm, x) {
+  const s = 1 / FWHM_PER_SIGMA;
+  const a = separationFwhm / 2;
+  return (
+    Math.exp((-0.5 * (x - a) ** 2) / (s * s)) +
+    Math.exp((-0.5 * (x + a) ** 2) / (s * s))
+  );
+}
+
+/**
+ * The dip between two equal Gaussian lines: 1 - (the profile at the midpoint) / (its highest value). Zero until the
+ * separation exceeds 2 sigma = 0.8493 FWHM, where the two peaks first separate (the Gaussian pair's own criterion; it is
+ * not Rayleigh's, which belongs to Airy patterns).
+ */
+export function pairDip(separationFwhm) {
+  const sigma = 1 / FWHM_PER_SIGMA;
+  if (!(separationFwhm > 2 * sigma)) return 0;
+  // the maximum lies between the midpoint and one centre: the root of the derivative, by bisection
+  const a = separationFwhm / 2;
+  const d = x =>
+    -(x - a) * Math.exp((-0.5 * (x - a) ** 2) / (sigma * sigma)) -
+    (x + a) * Math.exp((-0.5 * (x + a) ** 2) / (sigma * sigma));
+  let lo = 1e-9;
+  let hi = a + sigma;
+  for (let i = 0; i < 200 && hi - lo > 1e-15; i++) {
+    const m = 0.5 * (lo + hi);
+    if (d(m) > 0) lo = m;
+    else hi = m;
+  }
+  const top = pairProfile(separationFwhm, 0.5 * (lo + hi));
+  return Math.max(0, 1 - pairProfile(separationFwhm, 0) / top);
+}
