@@ -16,6 +16,8 @@ import * as E from '../js/kernels/detector/effects.js';
 import { samplingOf } from '../js/kernels/detector/sampling.js';
 import { simulateFrame } from '../js/kernels/detector/frame.js';
 import { effectsFrame, measureEffects } from '../js/effectsField.js';
+import { runForward } from '../js/forward/index.js';
+import { validateObservation } from '../js/observatory/schema.js';
 
 const read = f => JSON.parse(readFileSync(f, 'utf8'));
 const THR = read('tests/fixtures/detector-effects/thresholds.json');
@@ -141,5 +143,40 @@ describe('the kernel’s public contract', () => {
     expect(s.code).toBe('saturated');
     expect(Math.abs(c.pull)).toBeLessThan(3);
     expect(s.ignored.ratio).toBeLessThan(0.5);
+  });
+});
+
+describe('the ccd forward model carries the effects and their flags', () => {
+  const setup = {
+    format: 'gravitas.observing-setup',
+    formatVersion: 1,
+    seed: 'ccd-effects',
+    instrument: {
+      kind: 'imager',
+      width: 48,
+      height: 48,
+      pixelScale: 1,
+      psfFwhm: 2.8,
+    },
+  };
+  const state = {
+    exposure: 60,
+    scene: { sky: 3, sources: [{ x: 25, y: 25, rate: 2e5 }] },
+    effects: { nonlinearity: true, bleed: true },
+  };
+  test('an observation with a flags column, valid, and a truth manifest naming the effects', () => {
+    const o = runForward('ccd', state, setup);
+    expect(validateObservation(o)).toEqual([]);
+    const flags = o.columns.find(c => c.id === 'flags');
+    expect(flags.role).toBe('flag');
+    expect(flags.bits.map(b => b.value)).toEqual([1, 2, 4, 8]);
+    expect(flags.values.some(v => v & 2)).toBe(true);
+    const ids = o.synthetic.truth.parameters.map(p => p.id);
+    expect(ids).toContain('effectBleedPixels');
+    expect(o.synthetic.truth.notes.join(' ')).toMatch(/bleeding/);
+  });
+  test('without effects the observation is the one before this prompt (no flags column)', () => {
+    const o = runForward('ccd', { ...state, effects: undefined }, setup);
+    expect(o.columns.some(c => c.id === 'flags')).toBe(false);
   });
 });
