@@ -120,7 +120,7 @@ const axeOf = page =>
 
 for (const c of CASES) {
   for (const locale of ['en', 'es']) {
-    test(`${c.id} ${c.sid}: the panel draws, lists its numbers, passes axe and keeps its controls large enough in both themes and sizes (${locale})`, async ({
+    test(`${c.id} ${c.sid}: the panel draws, lists its numbers, passes axe, keeps its controls large enough in both themes and sizes and does not scroll sideways at 320 to 390 px (${locale})`, async ({
       page,
       app,
     }) => {
@@ -169,6 +169,15 @@ for (const c of CASES) {
             `${theme} ${size.width}px controls under 24 px`
           ).toEqual([]);
         }
+      }
+      // A narrow phone does not scroll the page sideways.
+      for (const width of [320, 375, 390]) {
+        await page.setViewportSize({ width, height: 800 });
+        await settled(page);
+        const wide = await page.evaluate(
+          () => document.documentElement.scrollWidth - window.innerWidth
+        );
+        expect(wide, `${width}px scrolls sideways`).toBeLessThanOrEqual(0);
       }
     });
   }
