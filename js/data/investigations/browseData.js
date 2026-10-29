@@ -388,4 +388,24 @@ export const BROWSE_META = {
     tags: ['observing'],
     numericCount: 0,
   },
+  'which-instrument-for-which-question': {
+    tags: ['observing'],
+    numericCount: 0,
+  },
+  'the-sky-background': {
+    tags: ['observing'],
+    numericCount: 0,
+  },
+  'coordinates-and-time': {
+    tags: ['observing'],
+    numericCount: 0,
+  },
+  'a-night-at-the-telescope': {
+    tags: ['observing'],
+    numericCount: 0,
+  },
+  'from-photons-to-a-number': {
+    tags: ['observing'],
+    numericCount: 0,
+  },
 };

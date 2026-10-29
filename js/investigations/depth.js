@@ -159,6 +159,16 @@ const EXTENSIONS = {
     import('../data/investigations/depth/two-telescopes-one-question.js'),
   'propose-an-observation': () =>
     import('../data/investigations/depth/propose-an-observation.js'),
+  'which-instrument-for-which-question': () =>
+    import('../data/investigations/depth/which-instrument-for-which-question.js'),
+  'the-sky-background': () =>
+    import('../data/investigations/depth/the-sky-background.js'),
+  'coordinates-and-time': () =>
+    import('../data/investigations/depth/coordinates-and-time.js'),
+  'a-night-at-the-telescope': () =>
+    import('../data/investigations/depth/a-night-at-the-telescope.js'),
+  'from-photons-to-a-number': () =>
+    import('../data/investigations/depth/from-photons-to-a-number.js'),
   'design-the-schedule': () =>
     import('../data/investigations/depth/design-the-schedule.js'),
   'the-saturated-star': () =>
@@ -283,6 +293,16 @@ const WORDS = {
       import('../data/investigations/depth/es/two-telescopes-one-question.js'),
     'propose-an-observation': () =>
       import('../data/investigations/depth/es/propose-an-observation.js'),
+    'which-instrument-for-which-question': () =>
+      import('../data/investigations/depth/es/which-instrument-for-which-question.js'),
+    'the-sky-background': () =>
+      import('../data/investigations/depth/es/the-sky-background.js'),
+    'coordinates-and-time': () =>
+      import('../data/investigations/depth/es/coordinates-and-time.js'),
+    'a-night-at-the-telescope': () =>
+      import('../data/investigations/depth/es/a-night-at-the-telescope.js'),
+    'from-photons-to-a-number': () =>
+      import('../data/investigations/depth/es/from-photons-to-a-number.js'),
     'design-the-schedule': () =>
       import('../data/investigations/depth/es/design-the-schedule.js'),
     'the-saturated-star': () =>
