@@ -208,7 +208,7 @@ function draw(canvas, v) {
   const view = exposureView(v);
   const colors = palette();
   const side = Math.min(responsiveHeight(220, 170), canvas.clientWidth || 220);
-  const bar = 54;
+  const bar = 96;
   const { ctx: g, w } = surface(canvas, side + bar + 10);
   const ox = Math.max(0, (w - side) / 2);
   g.fillStyle = '#0b0e16';
@@ -259,18 +259,14 @@ function draw(canvas, v) {
   g.strokeStyle = colors.grid;
   g.strokeRect(x0 + 0.5, y0 + 0.5, side - 1, 15);
   budget.forEach((b, i) => {
+    const y = y0 + 24 + i * 15;
     g.fillStyle = palette4[i];
-    g.fillRect(
-      x0 + (i % 2) * (side / 2),
-      y0 + 22 + Math.floor(i / 2) * 14,
-      8,
-      8
-    );
+    g.fillRect(x0, y + 1, 9, 9);
     g.fillStyle = colors.muted;
     g.fillText(
       `${t(`expW.term.${b.term}`)} ${fixed(100 * b.share, 0)}%`,
-      x0 + (i % 2) * (side / 2) + 12,
-      y0 + 20 + Math.floor(i / 2) * 14
+      x0 + 14,
+      y
     );
   });
 }
