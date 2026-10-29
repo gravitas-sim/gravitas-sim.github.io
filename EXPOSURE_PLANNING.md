@@ -99,6 +99,24 @@ The validator's first run against the committed bounds (the oracle and the kerne
   paper's detailed throughput and noise model carries that the stated inputs do not is not known; the roadmap's literal
   "cited public exposure-time calculator" leg was not run.
 
+## Validation results (measured, `npm run exposure:validate`)
+
+| Id | Result | Measured |
+|---|---|---|
+| A1 to A10 | pass | the three limits to 5e-7; the hand-worked example exactly; the inverses to 8e-15 over 200 sets; extended sources, extinction and noise-equivalent area to 1e-12 or better; the lesson's arithmetic to 7e-15 over 60 points |
+| B1 | pass | the independent Python implementation agrees on every zero point to 4.5e-14 (relative) and every depth to 3.6e-14 mag |
+| B2 | **fail** | read-noise loss in u, g, r, i, z, y: kernel 0.825, 0.230, 0.117, 0.082, 0.054, 0.048 mag against the paper's 0.62, 0.18, 0.10, 0.07, 0.05, 0.04 (bound 0.03: u and g fail) |
+| B3 | **fail** | exposure doubling: u differs by 0.047, 0.109 and 0.177 mag at 2, 4 and 10 times; g by 0.029, 0.045 and 0.059; the other bands by 0.026 or less |
+| B4 | **fail** | off-fiducial depths: 14 of the band and condition cases cross 0.05 mag (u, g, r, i and the brighter sky in z and y) |
+| B5 | pass | the loss at airmass 1.2 within 0.012 mag in every band (bound 0.03) |
+| B6 | pass | implied system throughput 0.19 (u), 0.45 (g), 0.51 (r), 0.50 (i), 0.39 (z) on 33.2 m^2 |
+| B7 | pass | the adapter returns exactly the library's stated values |
+| C1 | pass | coverage of the 1.96 sigma interval 0.95 in each of four scenarios (standard deviation 0.98 to 1.01, mean at most 0.07) on 1600 rendered frames |
+| C2 | pass | the limiting magnitude detects 0.60 of 200 frames against a predicted 0.55; one magnitude brighter 1.00; one fainter about 0.01 |
+| D1 to D6 | pass | refusals for an unreachable target (reached signal-to-noise 0.51 of 5.6 million needed), no signal, below the horizon, saturation (three exposures of 21 s suggested), the adapter's gaps, and the flat-field floor |
+| E1 | NOT RUN | needs one real calibrated exposure; a request, not a result |
+| P1 | pass | 1000 plans in 6.3 ms (bound 400 ms) |
+
 ## Reproduce
 
 `npm run exposure:validate` prints the table (exit 0 when only the recorded failed legs fail); with `--write-failed` it rewrites
