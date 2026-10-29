@@ -180,6 +180,7 @@ export const MANIFEST = [
     level: 'Introductory astronomy',
     thumbnail: 'images/scenarios/exoplanet-characterization-lab.webp',
     series: 'Detecting exoplanets',
+    depths: 2,
     stepCount: 15,
     gradedCount: 8,
     objectiveCount: 7,
@@ -1109,6 +1110,19 @@ export const MANIFEST = [
     thumbnail: 'images/investigations/plan-an-exposure.webp',
     stepCount: 11,
     gradedCount: 9,
+    objectiveCount: 4,
+  },
+  {
+    id: 'why-the-period-is-wrong',
+    title: 'Why the Period Is Wrong',
+    subtitle:
+      'Why looking once a night cannot tell a period from its aliases, how to design a cadence that can, and what a plan costs',
+    duration: '12-22 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/why-the-period-is-wrong.webp',
+    depths: 3,
+    stepCount: 8,
+    gradedCount: 6,
     objectiveCount: 4,
   },
 ];

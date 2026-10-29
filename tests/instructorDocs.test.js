@@ -5,6 +5,7 @@
 import { describe, test, expect } from '@jest/globals';
 import { INVESTIGATIONS } from '../js/data/investigations.js';
 import { withAllDepths } from '../js/investigations/depthAll.js';
+import { depthsOf } from '../js/investigations/depthPure.js';
 import { ACTIVITIES } from '../js/data/activities.js';
 import { LABELS, labelsFor } from '../js/data/instructorLabels.js';
 import { readFlow, flowFor, checkFlow } from '../js/instructorFlow.js';
@@ -261,15 +262,16 @@ describe('the document inventory', () => {
     // 814 after Telescopes and Resolution (Prompt 208): a guide, a key and a key for each of three depths in each language, and the Spanish notes, 11 more.
     // 819 after Plan an Exposure (Prompt 210): a guide and a key in each language and the Spanish notes, 5 more.
     // 830 after The Saturated Star (Prompt 211, over Plan an Exposure): eleven more, as for the telescope lesson (a guide, a key and a key for each of three depths in each language, and the Spanish notes).
-    expect(inv.documents).toBe(830);
-    expect(inv.byLocale).toEqual({ en: 380, es: 450 });
+    // 845 after Why the Period Is Wrong and the Design the Schedule depth (Prompt 214): 15 more.
+    expect(inv.documents).toBe(845);
+    expect(inv.byLocale).toEqual({ en: 387, es: 458 });
     expect(inv.byKind.notes).toBe(INVESTIGATIONS.length);
     expect(inv.byVariant).toEqual({
       activity: 12,
-      depth: 360,
-      full: 352,
+      depth: 370,
+      full: 356,
       general: 18,
-      notes: 88,
+      notes: 89,
     });
   });
 
@@ -297,16 +299,24 @@ describe('the document inventory', () => {
     const withDepth = INVESTIGATIONS.filter(
       i => withAllDepths(i).steps.length !== i.steps.length
     ).map(i => i.id);
-    expect(withDepth.length).toBe(60);
-    for (const id of withDepth)
-      for (const d of ['core', 'quantitative', 'advanced'])
-        for (const suffix of ['', '-es'])
+    expect(withDepth.length).toBe(62);
+    // A key for each depth the lesson offers: three for most, two for Design
+    // the Schedule, whose upper depth (Prompt 214) has no quantitative layer.
+    let keys = 0;
+    for (const id of withDepth) {
+      const offered = depthsOf(
+        withAllDepths(INVESTIGATIONS.find(i => i.id === id))
+      );
+      for (const d of offered)
+        for (const suffix of ['', '-es']) {
+          keys++;
           expect(
             files.find(f => f.id === `${id}-key-${d}${suffix}`)
           ).toBeTruthy();
-    expect(files.filter(f => f.variant === 'depth').length).toBe(
-      withDepth.length * 6
-    );
+        }
+    }
+    expect(files.filter(f => f.variant === 'depth').length).toBe(keys);
+    expect(keys).toBe(withDepth.length * 6 - 2);
   });
 
   test('every activity format has a key in each language', () => {

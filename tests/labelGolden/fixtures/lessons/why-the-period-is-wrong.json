@@ -1,0 +1,100 @@
+{
+ "id": "why-the-period-is-wrong",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.the-aliases.fields.0.unit","d"],
+    ["steps.verify-on-a-series.fields.0.unit","d"],
+    ["steps.verify-on-a-series.fields.1.unit","d"],
+    ["steps.window-width.fields.0.unit","d"],
+    ["steps.window-width.fields.1.unit",""],
+    ["steps.phase-coverage.fields.1.unit",""],
+    ["steps.phase-coverage.fields.3.unit",""],
+    ["steps.what-a-plan-costs.fields.0.unit","h"],
+    ["steps.what-a-plan-costs.fields.1.unit","h"],
+    ["steps.what-a-plan-costs.fields.2.unit","h"]
+   ],
+   "numbered": [
+    ["steps.the-aliases.fields.0.label","The alias near 4 days"],
+    ["steps.the-aliases.fields.0.hint","4.04"],
+    ["steps.the-aliases.fields.1.hint","0"],
+    ["steps.break-the-tie.fields.0.hint","67"],
+    ["steps.break-the-tie.fields.1.hint","490"],
+    ["steps.design-a-cadence.fields.0.hint","77"],
+    ["steps.design-a-cadence.fields.1.hint","116"],
+    ["steps.how-many-resolve.fields.0.hint","3"],
+    ["steps.verify-on-a-series.fields.0.hint","0.8004"],
+    ["steps.verify-on-a-series.fields.1.hint","0.0002"],
+    ["steps.window-width.fields.0.hint","38.9"],
+    ["steps.phase-coverage.fields.0.label","Bins filled at 0.8 d"],
+    ["steps.phase-coverage.fields.0.hint","13"],
+    ["steps.phase-coverage.fields.1.label","Largest empty arc at 0.8 d, in cycles"],
+    ["steps.phase-coverage.fields.1.hint","0.137"],
+    ["steps.phase-coverage.fields.2.label","Bins filled at 1.0 d"],
+    ["steps.phase-coverage.fields.2.hint","4"],
+    ["steps.phase-coverage.fields.3.label","Largest empty arc at 1.0 d, in cycles"],
+    ["steps.phase-coverage.fields.3.hint","0.894"],
+    ["steps.what-a-plan-costs.fields.0.hint","4.2"],
+    ["steps.what-a-plan-costs.fields.1.hint","2.4"],
+    ["steps.the-plan-and-the-verdict.fields.0.hint","30"],
+    ["steps.the-plan-and-the-verdict.fields.1.hint","0"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.the-aliases.fields.0.label","El alias cerca de 4 días"],
+    ["steps.phase-coverage.fields.0.label","Casillas llenas con 0,8 d"],
+    ["steps.phase-coverage.fields.1.label","Arco vacío más largo con 0,8 d, en ciclos"],
+    ["steps.phase-coverage.fields.2.label","Casillas llenas con 1,0 d"],
+    ["steps.phase-coverage.fields.3.label","Arco vacío más largo con 1,0 d, en ciclos"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [],
+  "decimals": [
+   [
+    "window-width.r",
+    4
+   ],
+   [
+    "what-a-plan-costs.l",
+    2
+   ]
+  ]
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "the-aliases": {
+    "validate": {"calls":232,"distinct":2,"digest":"2f237f480a755d52","samples":[null,{"level":"error","message":"Use the cadence “nightly, same time”, the true period 0.8 days, and read the alias row that is near 4 days: its period (4.04) and its chi-square preference (0)."}]}
+   },
+   "break-the-tie": {
+    "validate": {"calls":232,"distinct":2,"digest":"fd42855981cdc068","samples":[null,{"level":"error","message":"Set the cadence to “three a night” (period 0.8 days, forty nights) and read the first alias row: about 67 percent and a preference near 490."}]}
+   },
+   "design-a-cadence": {
+    "validate": {"calls":232,"distinct":2,"digest":"3f078da23174140d","samples":[null,{"level":"error","message":"Use the cadence “nightly, time varies”, 0.8 days, forty nights: about 77 percent and a preference near 116."}]}
+   },
+   "how-many-resolve": {
+    "validate": {"calls":97,"distinct":2,"digest":"c3908ce769a60190","samples":[null,{"level":"error","message":"Try cadences 0 to 4 in turn and count the verdicts that say resolved: the comb and the two seasons are ambiguous."}]}
+   },
+   "verify-on-a-series": {
+    "validate": {"calls":232,"distinct":2,"digest":"344ecd678a9fd87d","samples":[null,{"level":"error","message":"Set “three a night” and switch the series on: the panel reports a period near 0.8004 days with an uncertainty near 0.0002."}]}
+   },
+   "window-width": {
+    "validate": {"calls":232,"distinct":2,"digest":"5c82ddf651604980","samples":[null,{"level":"error","message":"With forty nights and one visit a night the Epochs row says 38.9 days; its inverse is 0.0257 cycles a day."}]}
+   },
+   "phase-coverage": {
+    "validate": {"calls":242,"distinct":2,"digest":"f2a1ddabc2f9bb62","samples":[null,{"level":"error","message":"With cadence 0, forty nights, read the Phase coverage row at 0.8 days (13 bins, 0.137) and at 1.0 days (4 bins, 0.894)."}]}
+   },
+   "what-a-plan-costs": {
+    "validate": {"calls":242,"distinct":2,"digest":"82b2a5c6e80a175e","samples":[null,{"level":"error","message":"Use the panel as set (draw 3): 42 visits of 360 seconds are 4.2 hours; 8 nights observed leave 24 visits, 2.4 hours."}]}
+   },
+   "the-plan-and-the-verdict": {
+    "validate": {"calls":232,"distinct":3,"digest":"81225d6633ecc381","samples":[null,{"level":"error","message":"Plan panel with the series on: three visits a night give a preference near 30; one visit a night gives 0."},{"level":"ok","message":"Three visits a night keep a preference of 30 even after the weather has taken six nights; one visit a night at the centre of the window is ambiguous whatever the weather does, because the window centre drifts exactly one sidereal day a night."}]}
+   }
+  },
+  "es": "same"
+ }
+}

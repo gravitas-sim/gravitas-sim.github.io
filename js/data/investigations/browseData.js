@@ -364,4 +364,8 @@ export const BROWSE_META = {
     tags: ['observing'],
     numericCount: 2,
   },
+  'why-the-period-is-wrong': {
+    tags: ['observing'],
+    numericCount: 0,
+  },
 };

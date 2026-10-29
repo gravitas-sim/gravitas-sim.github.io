@@ -119,7 +119,8 @@
           "comets-and-the-sun",
           "what-a-telescope-resolves",
           "the-saturated-star",
-          "plan-an-exposure"
+          "plan-an-exposure",
+          "why-the-period-is-wrong"
         ]
       }
     },
@@ -387,7 +388,8 @@
                   "comets-and-the-sun",
                   "what-a-telescope-resolves",
                   "the-saturated-star",
-                  "plan-an-exposure"
+                  "plan-an-exposure",
+                  "why-the-period-is-wrong"
                 ]
               }
             }
@@ -1484,6 +1486,8 @@
             "ccd-snr",
             "diff-photometry",
             "exposure-planner",
+            "strategy-window",
+            "strategy-plan",
             "telescope",
             "detector-effects",
             "sky-turning",

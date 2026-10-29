@@ -192,6 +192,7 @@ const LOADERS = {
   'what-a-telescope-resolves': () => import('./what-a-telescope-resolves.js'),
   'the-saturated-star': () => import('./the-saturated-star.js'),
   'plan-an-exposure': () => import('./plan-an-exposure.js'),
+  'why-the-period-is-wrong': () => import('./why-the-period-is-wrong.js'),
 };
 // </generated:loaders>
 
@@ -303,6 +304,7 @@ const TRANSLATIONS = {
       import('./es/what-a-telescope-resolves.js'),
     'the-saturated-star': () => import('./es/the-saturated-star.js'),
     'plan-an-exposure': () => import('./es/plan-an-exposure.js'),
+    'why-the-period-is-wrong': () => import('./es/why-the-period-is-wrong.js'),
   },
 };
 // </generated:translations>

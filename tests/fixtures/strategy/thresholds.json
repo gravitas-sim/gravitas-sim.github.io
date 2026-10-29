@@ -1,0 +1,405 @@
+{
+  "format": "gravitas.strategy-thresholds/1",
+  "prompt": "Roadmap III, Prompt 214, observing strategy: cadence, aliasing and window functions (tranche T3 by D-R10-207-01)",
+  "document": "OBSERVING_STRATEGY.md (\"Validation contract\")",
+  "committed": "before js/kernels/strategy/, the planner extension, the panel, the validator, the oracle script, its results, the ensembles or any lesson change of Prompt 214 existed. The patterns and test frequencies below are written out so that the oracle and the harness build identical inputs; nothing was tuned against the kernel, which did not exist.",
+  "rule": "A crossed bound is a failed check, recorded in failed-legs.json and left failing; only Carl resets one. A leg that cannot be measured is NOT RUN and says why.",
+  "seeds": {
+    "oracle": 214,
+    "harness": 2140001,
+    "ensemble": "strategy-214"
+  },
+  "scope": {
+    "built": "the spectral window of a sampling pattern (the classical |W(f)|^2 and the Lomb-Scargle response of a unit sinusoid through js/kernels/variables/period.js, read unchanged); the aliases of a period against named combs (the sidereal day, the solar day, the year, the synodic month) with the window's height at each; a verdict resolved, ambiguous or not constrained from the window, the amplitude to noise ratio and the number of points; the coverage of a phase for a period and a cadence; a multi-night plan from the observing-window planner's nights (js/observingWindow.js, read unchanged) with its cost in hours; a two-state Markov weather loss on the experiments stream of js/random/streams.js.",
+    "notBuilt": "a period search in a Worker (D-KERNEL-06); a weather forecast or a seeing model; red-noise or non-sinusoidal signals in the verdict (the verdict is a sinusoid's, and says so); detrending; a telescope scheduler with several targets or slew time; a lunar sky-brightness model (the planner's moon-separation limit is the only moon constraint)."
+  },
+  "patterns": {
+    "siderealDay": 0.9972695663,
+    "note": "Each pattern is a list of epochs in days. 'n' runs over the stated range; every number is written here.",
+    "nightlySidereal": {
+      "formula": "t_n = n * siderealDay, n = 0..39"
+    },
+    "nightlyThree": {
+      "formula": "t = n * siderealDay + o, n = 0..29, o in {-0.11, 0.0, 0.13}",
+      "offsets": [
+        -0.11,
+        0.0,
+        0.13
+      ]
+    },
+    "seasonGapped": {
+      "formula": "t_n = n * siderealDay + 0.013 * (n mod 5), n in 0..19 and 60..79"
+    },
+    "lcg": {
+      "formula": "t_j = 40 * u_j, j = 0..59; u_0 = 214 / 2^32; u_{j+1} = ((1664525 u_j' + 1013904223) mod 2^32) / 2^32 with u_j' the integer state",
+      "state0": 214,
+      "count": 60,
+      "span": 40
+    },
+    "frequencies": {
+      "nightlySidereal": 1.25,
+      "nightlyThree": 0.37,
+      "seasonGapped": 2.6,
+      "lcg": 0.55
+    },
+    "grid": {
+      "fMin": 0.02,
+      "fMax": 3.0,
+      "step": 0.005,
+      "note": "the oracle's grid and the kernel's compared on it; 597 points"
+    }
+  },
+  "checks": [
+    {
+      "id": "A1.dirichlet",
+      "leg": "a",
+      "what": "the window of N regular samples against the Dirichlet kernel [sin(pi N f D) / (N sin(pi f D))]^2 on 2000 frequencies in [0, 3/D]",
+      "limits": {
+        "cases": [
+          {
+            "n": 12,
+            "spacing": 1.0
+          },
+          {
+            "n": 40,
+            "spacing": 0.9972695663
+          },
+          {
+            "n": 7,
+            "spacing": 0.5
+          }
+        ],
+        "maxAbs": 1e-12
+      }
+    },
+    {
+      "id": "A2.nested",
+      "leg": "a",
+      "what": "M samples spaced d inside each of K nights spaced D: the window is exactly the product of the two Dirichlet kernels",
+      "limits": {
+        "cases": [
+          {
+            "m": 3,
+            "d": 0.1,
+            "k": 10,
+            "spacing": 1.0
+          },
+          {
+            "m": 2,
+            "d": 0.25,
+            "k": 7,
+            "spacing": 0.9972695663
+          }
+        ],
+        "maxAbs": 1e-12
+      }
+    },
+    {
+      "id": "A3.comb",
+      "leg": "a",
+      "what": "for t = n D (n = 0..K-1) the window is exactly 1 at f = k / D (k = 0..4) and exactly 0 at f = 1/(K D); W(0) = 1 for any pattern",
+      "limits": {
+        "k": 25,
+        "spacing": 0.9972695663,
+        "maxAbsPeak": 1e-12,
+        "maxAbsNull": 1e-12,
+        "zeroLagAbs": 1e-14
+      }
+    },
+    {
+      "id": "A4.existingWindow",
+      "leg": "a",
+      "what": "the kernel's classical window equals the existing js/rvSchedule.js spectralWindow on that function's own grid (the existing authority is unchanged and agrees)",
+      "limits": {
+        "maxAbs": 1e-12
+      }
+    },
+    {
+      "id": "A5.aliasPositions",
+      "leg": "a",
+      "what": "predicted alias periods equal 1 / |1/P + k f_s| for 200 random (P, f_s, k), and agree with the existing aliasPeriods of js/kernels/variables/period.js",
+      "limits": {
+        "cases": 200,
+        "maxRel": 1e-13
+      }
+    },
+    {
+      "id": "A6.exactComb",
+      "leg": "a",
+      "what": "for t_n = n / f_s exactly, the Lomb-Scargle response of a sinusoid at f0 has the same power at f0 and at |f0 - k f_s| (k = 1, 2): a tie",
+      "limits": {
+        "f0": [
+          0.37,
+          1.25,
+          2.6
+        ],
+        "fs": 1.0027379093,
+        "n": 40,
+        "tieRel": 1e-09
+      }
+    },
+    {
+      "id": "A7.aliasHeights",
+      "leg": "a",
+      "what": "on the nightlyThree pattern with a noise-free sinusoid at 0.37 c/d, the highest peak of the response is at f0 within 0.25/T and each peak nearest f0 +/- k f_s (k = 1, 2) lies within 0.25/T of the prediction with a height within 0.05 of the classical window at that offset",
+      "limits": {
+        "freqTolOverResolution": 0.25,
+        "heightAbs": 0.05
+      }
+    },
+    {
+      "id": "A8.phaseRational",
+      "leg": "a",
+      "what": "epochs n D with D / P = p / q in lowest terms (3/7, 5/12, 1/3) and at least 2q epochs fill exactly q phases, equally spaced: largest gap 1/q; with D = P a single phase and largest gap 1",
+      "limits": {
+        "ratios": [
+          [
+            3,
+            7
+          ],
+          [
+            5,
+            12
+          ],
+          [
+            1,
+            3
+          ]
+        ],
+        "maxAbsGap": 1e-12
+      }
+    },
+    {
+      "id": "A9.costHandWorked",
+      "leg": "a",
+      "what": "3 visits a night of 120 s plus 30 s overhead for 5 nights, nights 2 and 4 lost to weather: requested 0.625 h, executed 0.375 h, lost 0.25 h, exactly",
+      "limits": {
+        "requestedH": 0.625,
+        "executedH": 0.375,
+        "lostH": 0.25,
+        "abs": 1e-12
+      }
+    },
+    {
+      "id": "A10.planConstraints",
+      "leg": "a",
+      "what": "over three site and target cases every planned visit lies in a usable interval of its night (from the planner's own observingNight) and consecutive visits of a night are exactly the stated spacing apart; the count equals floor((W - d) / s) + 1 for a window of W hours, a visit of d hours and spacing s",
+      "limits": {
+        "sites": [
+          "lco-1m0 (Cerro Tololo) declination -30, RA 180",
+          "lco-0m35 (McDonald) declination +20, RA 90",
+          "lco-0m35 (McDonald) declination +45, RA 300"
+        ],
+        "maxSecondsOutside": 0,
+        "firstNight": "local midnight of 2026-03-14 at the site's longitude, 5 nights; perNight 3, spacing 1.5 h, exposure 300 s, overhead 60 s"
+      }
+    },
+    {
+      "id": "A11.targetHours",
+      "leg": "a",
+      "what": "the hours a target spends above the airmass limit in a night, from the planner through the adapter, equal the closed form 2 H / 15 in sidereal hours (cos H = (sin h - sin phi sin delta) / (cos phi cos delta), h from the Kasten and Young limit) converted to solar hours, for six latitude and declination pairs",
+      "limits": {
+        "maxAbsHours": 0.01
+      }
+    },
+    {
+      "id": "A12.weatherStationary",
+      "leg": "a",
+      "what": "the two-state weather chain of 100000 nights with clear fraction 0.6 and persistence 0.5 has a clear fraction within 4 standard errors (variance p (1 - p) (1 + rho) / (n (1 - rho))) of 0.6, a lag-1 autocorrelation within 0.03 of 0.5, is identical for the same seed, differs for another and a fork never changes its parent",
+      "limits": {
+        "n": 100000,
+        "pClear": 0.6,
+        "rho": 0.5,
+        "sigmas": 4,
+        "acfAbs": 0.03
+      }
+    },
+    {
+      "id": "B1.lombScargle",
+      "leg": "b",
+      "what": "the kernel's Lomb-Scargle response of a unit noise-free cosine on each pattern and frequency (grid above) against Astropy's LombScargle (fit_mean=True, center_data=True, standard normalization, method slow), pinned in oracle-results.json",
+      "limits": {
+        "maxAbs": 1e-08,
+        "oracle": "astropy.timeseries.LombScargle 6.0.1 (Zechmeister and Kuerster 2009; VanderPlas 2018, ApJS 236, 16)"
+      }
+    },
+    {
+      "id": "B2.windowDirect",
+      "leg": "b",
+      "what": "the kernel's classical window on each pattern (grid above) against an independent direct sum in Python (numpy), pinned",
+      "limits": {
+        "maxAbs": 1e-09
+      }
+    },
+    {
+      "id": "B3.aliasPeaks",
+      "leg": "b",
+      "what": "on each pattern, Astropy's three highest peaks (grid step 0.0005) include the true frequency, and every one is within 0.25/T of a frequency the kernel predicts (|f0 + k f_s| for every integer k that puts it in the grid, for the nightly patterns; the window's own peaks for seasonGapped and lcg) , the heights within 0.05 of the kernel's response",
+      "limits": {
+        "freqTolOverResolution": 0.25,
+        "heightAbs": 0.05
+      }
+    },
+    {
+      "id": "C1.periodCoverage",
+      "leg": "c",
+      "what": "300 seeded series of 40 sidereal-spaced epochs with a 0.15 d clock jitter, a sinusoid of amplitude to noise 4 and a period log-uniform in [0.35, 3] d, searched over periods 0.25 to 20 d (oversample 20, then refined): among the series whose recovered frequency is in the right lobe (within 0.5/T), the fraction within 1.96 sigma_f of the truth, sigma_f = sigma / (pi A sqrt(2 sum (t - tbar)^2)), the Cramer-Rao bound for a sinusoid",
+      "limits": {
+        "series": 300,
+        "snr": 4,
+        "jitterDays": 0.15,
+        "coverage": [
+          0.91,
+          0.99
+        ]
+      }
+    },
+    {
+      "id": "C2.verdictReliability",
+      "leg": "c",
+      "what": "in the same ensemble the 'resolved' verdict is wrong (the global peak is outside the right lobe) in at most 3 percent of the series, and the ensemble has at least 200 resolved series",
+      "limits": {
+        "maxWrongRate": 0.03,
+        "minResolved": 200
+      }
+    },
+    {
+      "id": "C3.aliasListCovers",
+      "leg": "c",
+      "what": "300 series on a near-exact comb (sidereal-spaced epochs, jitter 0.002 d, the same amplitude to noise and period distribution): at least 95 percent are called 'ambiguous', and of the series whose global peak is in the wrong lobe at least 95 percent have the peak within 1.5/T of a frequency on the alias list the verdict returned",
+      "limits": {
+        "series": 300,
+        "jitterDays": 0.002,
+        "minAmbiguous": 0.95,
+        "listCoverage": 0.95,
+        "freqTolOverResolution": 1.5
+      }
+    },
+    {
+      "id": "C4.weatherLoss",
+      "leg": "c",
+      "what": "400 plans of 60 nights with clear fraction 0.6 and persistence 0.5: the mean executed fraction of the planned visits is within 0.02 of 0.6",
+      "limits": {
+        "plans": 400,
+        "nights": 60,
+        "pClear": 0.6,
+        "rho": 0.5,
+        "meanAbs": 0.02
+      }
+    },
+    {
+      "id": "D1.ambiguousComb",
+      "leg": "d",
+      "what": "exact sidereal nightly epochs (40) and P = 0.8 d: the verdict is 'ambiguous', the alias list has the period 1 / |1/P - f_s| (k = -1) to 1e-9 in relative terms, and the chi-square advantage of the true period over it is 0 to 1e-6",
+      "limits": {
+        "n": 40,
+        "period": 0.8,
+        "snr": 5,
+        "rel": 1e-09,
+        "dchi2Abs": 1e-06
+      }
+    },
+    {
+      "id": "D2.brokenComb",
+      "leg": "d",
+      "what": "the same period with three visits a night at irregular clock times (nightlyThree) over 30 nights: the verdict is 'resolved' at amplitude to noise 5, and its smallest alias chi-square advantage is at least 9",
+      "limits": {
+        "period": 0.8,
+        "snr": 5,
+        "minDchi2": 9
+      }
+    },
+    {
+      "id": "D3.refusals",
+      "leg": "d",
+      "what": "fewer than 3 distinct times, a non-positive or non-finite period, a non-finite time, and a non-positive amplitude to noise each return verdict 'refused' with a reason code (too-few-times, bad-period, non-finite-time, bad-snr) and no alias list",
+      "limits": {
+        "codes": [
+          "too-few-times",
+          "bad-period",
+          "non-finite-time",
+          "bad-snr"
+        ]
+      }
+    },
+    {
+      "id": "D4.baseline",
+      "leg": "d",
+      "what": "a baseline shorter than two periods returns 'not-constrained' with reason 'baseline' (the peak is wider than half the frequency)",
+      "limits": {
+        "baselineOverPeriod": 1.5,
+        "reason": "baseline"
+      }
+    },
+    {
+      "id": "D5.noWindow",
+      "leg": "d",
+      "what": "a target that never rises above the airmass limit from the site gives an empty plan with reason 'never-up', zero cost and no times; every night lost to weather gives reason 'all-lost'",
+      "limits": {
+        "site": "latitude 50 N, declination -60",
+        "reasons": [
+          "never-up",
+          "all-lost"
+        ]
+      }
+    },
+    {
+      "id": "D6.visitDoesNotFit",
+      "leg": "d",
+      "what": "a visit longer than the window is dropped and reported, never truncated: planned 0, dropped 1 per night, reason 'visit-longer-than-window'",
+      "limits": {
+        "reason": "visit-longer-than-window"
+      }
+    },
+    {
+      "id": "E1.authentic",
+      "leg": "e",
+      "what": "the TESS sector 15 light curve of SU Draconis already in the repository (variables/tess-su-dra-s15.json, a public-domain pack): f0 is the highest peak of its full periodogram (periods 0.3 to 2 d, oversample 20), not a literature value; the series is sampled at one binned point nearest each sidereal-day epoch (within 0.015 d); the three highest peaks of the sampled series' periodogram (0.1 to 3.5 c/d, oversample 20) each lie within 1/T of f0 or of a predicted alias f0 + k f_s, k = -2..2",
+      "limits": {
+        "pack": "tess-su-dra-s15",
+        "maxGapDays": 0.015,
+        "toleranceOverResolution": 1.0,
+        "peaks": 3,
+        "published": "not used"
+      }
+    },
+    {
+      "id": "P1.speed",
+      "leg": "p",
+      "what": "200 times and 4000 frequencies in at most 250 ms; a 30-night plan from the planner in at most 3000 ms (timing legs, machine-dependent)",
+      "limits": {
+        "windowMs": 250,
+        "planMs": 3000
+      }
+    }
+  ],
+  "amendments": [
+    {
+      "id": "AM1",
+      "check": "B3.aliasPeaks",
+      "kernelExisted": false,
+      "boundMoved": false,
+      "was": "every one of Astropy's three highest peaks within 0.25/T of f0 + k f_s with k = -2..2",
+      "now": "the same with every integer k that puts |f0 + k f_s| inside the grid (0.02 to 3.0 c/d)",
+      "reason": "found when the oracle was first run, before js/kernels/strategy/ existed: on an exact sidereal comb every alias has power 1 to within 1e-5, so which three come out highest is decided by the fifth decimal and may be k = -4; restricting k to -2..2 mis-stated the contract. The frequency tolerance (0.25/T) and the height tolerance (0.05) are unchanged; A7 keeps k = 1, 2 on the pattern whose aliases differ in height."
+    },
+    {
+      "id": "AM2",
+      "check": "A10.planConstraints",
+      "kernelExisted": true,
+      "boundMoved": false,
+      "was": "the three cases named La Silla, Mauna Kea and Haleakala",
+      "now": "the three cases above, from the instrument library's sites (Cerro Tololo and McDonald), with the right ascensions, date and cadence written out",
+      "reason": "the library holds no La Silla, Mauna Kea or Haleakala site and nothing may be typed from memory; the kernel's modules existed but had not been run against any check. The constraint (zero seconds outside a usable interval, the exact spacing and count) is unchanged."
+    },
+    {
+      "id": "AM3",
+      "check": "B3.aliasPeaks",
+      "kernelExisted": true,
+      "boundMoved": false,
+      "was": "the first run of the validator took the window's own peaks as its local maxima of at least 0.1 (the convention of js/rvSchedule.js spectralWindow, an unstated choice of the harness)",
+      "now": "every local maximum of the window, whatever its height; the contract text names no height floor, and the frequency and height tolerances (0.25/T, 0.05) are unchanged",
+      "reason": "the first run failed B3 on the lcg pattern: its window has no peak above 0.098, so Astropy's second and third peaks were compared with an almost empty list. The periodogram's sidelobe heights are the coherent sum of the window at f - f0 and at f + f0 (the response of a real sinusoid has both images), up to (|W1| + |W2|)^2, which is why the highest sidelobe there (0.21) is three times the window's (0.074). Recorded as a finding in OBSERVING_STRATEGY.md; with every local maximum admitted the comparison is a weak test on a random pattern (about 30 percent of frequencies fall within the tolerance by chance), and the leg's strength is the three nightly patterns."
+    }
+  ]
+}

@@ -900,4 +900,14 @@ export const DISCOVERY = {
     },
     courseLevel: 'majors',
   },
+  'why-the-period-is-wrong': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: [],
+    textbook: {
+      chapter: 6,
+      section: null,
+    },
+    courseLevel: 'survey',
+  },
 };

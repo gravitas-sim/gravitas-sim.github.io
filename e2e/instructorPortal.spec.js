@@ -62,7 +62,12 @@ const ACTIVITY_KEYS = ACTIVITIES.reduce((n, a) => n + a.formats.length * 2, 0);
 const SPANISH_DOCUMENTS = LESSONS * 2;
 // Prompt 170: one generated Spanish structured-notes page per investigation.
 const NOTES_DOCUMENTS = LESSONS;
-const DEPTH_KEYS = Object.keys(DEEPER).length * 3 * 2;
+// A key per depth the lesson offers, in each language: three for most, two for
+// Design the Schedule, whose upper depth (Prompt 214) has no quantitative layer.
+const DEPTH_KEYS = Object.keys(DEEPER).reduce(
+  (n, id) => n + (MANIFEST.find(m => m.id === id)?.depths ?? 3) * 2,
+  0
+);
 /** What the investigation cards list: both languages and every depth. */
 const DOCUMENTS =
   BASE_DOCUMENTS + SPANISH_DOCUMENTS + NOTES_DOCUMENTS + DEPTH_KEYS;
