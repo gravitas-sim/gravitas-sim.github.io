@@ -370,8 +370,8 @@
     {
       "id": "AM4",
       "when": "after the kernel module existed and was smoke-run on the A2 cases, before any validator or test existed",
-      "what": "the oracle's A2 inputs are rounded to 12 significant digits before their values are computed, where the first version computed the values from full-precision inputs and stored rounded ones",
-      "why": "the smoke run showed an absolute difference of 1.4e-11 on a case with a correct erf (the kernel's erf agrees with scipy's to 1e-16), which is the stored inputs' rounding, not the kernel. The oracle was regenerated: only the a2 block changed, everything else is byte-identical. No bound, tolerance or case count moved",
+      "what": "the oracle's A2 inputs are rounded to the 15 significant digits the file keeps before their values are computed, and the file keeps 15 digits for every number where the first version kept 12 and computed the A2 values from full-precision inputs",
+      "why": "the smoke run showed an absolute difference of 1.4e-11 on an A2 case with a correct erf (the kernel's erf agrees with scipy's to 1e-16): the stored inputs' rounding; and a value near 0.5 stored to 12 digits cannot meet the committed 1e-14 absolute bound at all. The oracle was regenerated with the same seed: the arc's noise and every other draw are unchanged. No bound, tolerance or case count moved",
       "boundMoved": false
     }
   ]
