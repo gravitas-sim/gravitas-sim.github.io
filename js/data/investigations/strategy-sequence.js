@@ -784,7 +784,7 @@ export const WHY_THE_PERIOD_IS_WRONG_ES = {
     },
     {
       title: 'Lee los alias',
-      body: 'En el panel (<em>cada noche, misma hora</em>, período verdadero 0,8 días) lee las tres filas de alias. Una está cerca de 4 días. Escribe su período y la <em>preferencia en chi cuadrado</em> que dan los datos al período verdadero sobre él: cuántas veces peor que la verdad es un ajuste en el alias, en unidades del estadístico. Nueve o más es una preferencia clara.',
+      body: 'En el panel (<em>nocturna, hora fija</em>, período verdadero 0,8 días) lee las tres filas de alias. Una está cerca de 4 días. Escribe su período y la <em>preferencia en chi cuadrado</em> que dan los datos al período verdadero sobre él: cuántas veces peor que la verdad es un ajuste en el alias, en unidades del estadístico. Nueve o más es una preferencia clara.',
       fields: [
         { label: 'El alias cerca de 4 días' },
         { label: 'Preferencia en chi cuadrado por la verdad' },
@@ -837,7 +837,7 @@ export const WHY_THE_PERIOD_IS_WRONG_ES = {
       ],
       misconceptions: [
         {
-          say: 'Más noches a la misma hora dejan cada visita en el mismo peine. Prueba sesenta noches en el panel con la cadencia «cada noche, misma hora»: el alias sigue igual de alto que la verdad.',
+          say: 'Más noches a la misma hora dejan cada visita en el mismo peine. Prueba sesenta noches en el panel con la cadencia «nocturna, hora fija»: el alias sigue igual de alto que la verdad.',
         },
         {
           say: 'Una exposición más larga baja el ruido de cada punto. Los alias están en los tiempos de los puntos, no en su ruido.',
@@ -854,7 +854,7 @@ export const WHY_THE_PERIOD_IS_WRONG_ES = {
     },
     {
       title: 'La búsqueda que sonaba segura',
-      body: 'Vuelve a <em>cada noche, misma hora</em> y activa <strong>Buscar en una serie</strong>. El panel hace la serie que daría el plan (0,8 días, con ruido) y ejecuta en ella la búsqueda de períodos. Devuelve unos <strong>0,266 días</strong>.',
+      body: 'Vuelve a <em>nocturna, hora fija</em> y activa <strong>Buscar en una serie</strong>. El panel hace la serie que daría el plan (0,8 días, con ruido) y ejecuta en ella la búsqueda de períodos. Devuelve unos <strong>0,266 días</strong>.',
       prompt: '¿Qué te dice ese resultado?',
       options: [
         'La estrella pulsa cada 0,266 días',
@@ -885,7 +885,7 @@ export const WHY_THE_PERIOD_IS_WRONG_DEEPER_ES = {
   steps: [
     {
       title: 'Diseña una cadencia',
-      body: 'Tres visitas por noche funcionaron, pero cuestan el triple de tiempo de telescopio. Prueba <em>cada noche, hora varía</em>: una visita cada noche, pero su hora se mueve hasta 3,6 horas a un lado y a otro. Lee la fila del alias más fuerte.',
+      body: 'Tres visitas por noche funcionaron, pero cuestan el triple de tiempo de telescopio. Prueba <em>nocturna, hora varía</em>: una visita cada noche, pero su hora se mueve hasta 3,6 horas a un lado y a otro. Lee la fila del alias más fuerte.',
       fields: [
         { label: 'Alias más fuerte, por ciento del pico verdadero' },
         { label: 'Preferencia en chi cuadrado por la verdad' },
@@ -933,7 +933,7 @@ export const WHY_THE_PERIOD_IS_WRONG_DEEPER_ES = {
     },
     {
       title: 'Cuánto del ciclo ves',
-      body: 'Pliega las visitas sobre el período: cada una cae en una fase entre 0 y 1 de un pulso. Con la cadencia <em>cada noche, misma hora</em>, lee la fila <em>Cobertura de fase</em> con un período verdadero de <strong>0,8 días</strong> y luego de <strong>1,0 días</strong>: cuántas de las veinte casillas de fase tienen un punto, y el arco vacío más largo.',
+      body: 'Pliega las visitas sobre el período: cada una cae en una fase entre 0 y 1 de un pulso. Con la cadencia <em>nocturna, hora fija</em>, lee la fila <em>Cobertura de fase</em> con un período verdadero de <strong>0,8 días</strong> y luego de <strong>1,0 días</strong>: cuántas de las veinte casillas de fase tienen un punto, y el arco vacío más largo.',
       fields: [
         { label: 'Casillas llenas con 0,8 d' },
         { label: 'Arco vacío más largo con 0,8 d, en ciclos' },
@@ -987,7 +987,7 @@ export const DESIGN_THE_SCHEDULE_DEEPER_ES = {
   steps: [
     {
       title: 'El peine que impone el sitio',
-      body: 'La ventana que leíste para tus ocho noches tiene dientes porque el sitio impone un peine: una visita por noche se repite una vez por día sidéreo. Usa el panel de estrategia para el planeta de esta investigación (un período de 3,5 días, el ajuste más cercano) con <em>cada noche, misma hora</em> durante 24 noches. Lee el veredicto y el período del alias cerca de 1,4 días.',
+      body: 'La ventana que leíste para tus ocho noches tiene dientes porque el sitio impone un peine: una visita por noche se repite una vez por día sidéreo. Usa el panel de estrategia para el planeta de esta investigación (un período de 3,5 días, el ajuste más cercano) con <em>nocturna, hora fija</em> durante 24 noches. Lee el veredicto y el período del alias cerca de 1,4 días.',
       fields: [
         { label: 'Período del alias cerca de 1,4 días' },
         { label: 'Preferencia en chi cuadrado por la verdad' },

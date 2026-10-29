@@ -64,8 +64,8 @@
    "controls": {
     "calls": 64,
     "distinct": 35,
-    "digest": "31041bd358d2afda",
-    "samples": [["cada noche, misma hora","0.80 d","40","5.0 a 1","no"],["cada noche, misma hora","0.30 d","10","1.0 a 1","no"],["horas al azar","5.00 d","60","10.0 a 1","sí"],["cada noche, hora varía","2.65 d","35","5.5 a 1","sí"],["cada noche, hora varía","0.95 d","38","9.5 a 1","sí"],["tres por noche","0.80 d","40","5.0 a 1","no"],["tres por noche","3.50 d","25","5.0 a 1","no"],["cada noche, hora varía","0.80 d","40","5.0 a 1","no"],["dos temporadas","0.80 d","40","5.0 a 1","no"],["horas al azar","0.80 d","40","5.0 a 1","no"],["cada noche, misma hora","0.80 d","40","10.0 a 1","no"],["cada noche, misma hora","0.80 d","40","5.0 a 1","sí"],["dos temporadas","1.45 d","32","9.5 a 1","sí"],["tres por noche","2.15 d","56","2.0 a 1","sí"],["tres por noche","3.35 d","15","7.5 a 1","sí"]]
+    "digest": "a56e074a2295e6db",
+    "samples": [["nocturna, hora fija","0.80 d","40","5.0 a 1","no"],["nocturna, hora fija","0.30 d","10","1.0 a 1","no"],["horas al azar","5.00 d","60","10.0 a 1","sí"],["nocturna, hora varía","2.65 d","35","5.5 a 1","sí"],["nocturna, hora varía","0.95 d","38","9.5 a 1","sí"],["tres por noche","0.80 d","40","5.0 a 1","no"],["tres por noche","3.50 d","25","5.0 a 1","no"],["nocturna, hora varía","0.80 d","40","5.0 a 1","no"],["dos temporadas","0.80 d","40","5.0 a 1","no"],["horas al azar","0.80 d","40","5.0 a 1","no"],["nocturna, hora fija","0.80 d","40","10.0 a 1","no"],["nocturna, hora fija","0.80 d","40","5.0 a 1","sí"],["dos temporadas","1.45 d","32","9.5 a 1","sí"],["tres por noche","2.15 d","56","2.0 a 1","sí"],["tres por noche","3.35 d","15","7.5 a 1","sí"]]
    },
    "phases": {
     "calls": 0,
