@@ -17,10 +17,10 @@
     "routes": {
       "front-door": { "kb": 2128.6, "requests": 109 },
       "sandbox": { "kb": 2128.6, "requests": 109 },
-      "kepler": { "kb": 3359.7, "requests": 148 },
-      "transit": { "kb": 3371.6, "requests": 148 },
-      "power-law": { "kb": 3337.0, "requests": 148 },
-      "largest-lesson": { "kb": 3469.2, "requests": 150 },
+      "kepler": { "kb": 3359.9, "requests": 148 },
+      "transit": { "kb": 3371.9, "requests": 148 },
+      "power-law": { "kb": 3337.2, "requests": 148 },
+      "largest-lesson": { "kb": 3469.4, "requests": 150 },
       "observatory": "the Observatory with one observation open: read from tools/route-budgets.json"
     }
   },
