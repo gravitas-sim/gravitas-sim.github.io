@@ -1,0 +1,88 @@
+// Las palabras del planificador de exposición, en español (Prompt 210).
+// Las mismas claves que en.exposure.js; sin revisar por un hablante nativo.
+export const ES_EXPOSURE = {
+  'expW.title': 'Cuánto exponer',
+  'expW.note':
+    'La ecuación del CCD para una instalación de la biblioteca de instrumentos, un objetivo y una señal a ruido: la exposición que pide, el presupuesto de ruido, el objeto más débil que alcanza esa exposición y una imagen sintética de ese plan, medida con la fotometría de abertura del Observatorio para poder comprobar la predicción.',
+  'expW.control.setup': 'Instalación y banda',
+  'expW.control.kind': 'Objetivo',
+  'expW.control.mag':
+    'Brillo (magnitud; magnitud por segundo de arco cuadrado para una mancha)',
+  'expW.control.aperture': 'Radio de la abertura',
+  'expW.control.patch': 'Radio de la mancha',
+  'expW.control.exposures': 'Exposiciones',
+  'expW.control.target': 'Señal a ruido objetivo',
+  'expW.control.airmass': 'Masa de aire',
+  'expW.control.moon': 'Cielo más brillante en',
+  'expW.setup.0': 'Las Cumbres 0,35 m, V',
+  'expW.setup.1': 'Las Cumbres 1,0 m, V',
+  'expW.setup.2': 'Rubin, g',
+  'expW.setup.3': 'Rubin, r',
+  'expW.setup.4': 'Rubin, i',
+  'expW.kind.0': 'una estrella',
+  'expW.kind.1': 'una mancha extensa',
+  'expW.v.aperture': '{r} × FWHM',
+  'expW.v.patch': '{r} × FWHM',
+  'expW.row.model': 'Modelo',
+  'expW.m':
+    'La ecuación del CCD (estrella, cielo, oscuridad y ruido de lectura), un desenfoque gaussiano, una imagen sintética',
+  'expW.row.status': 'Resultado',
+  'expW.s.ok': 'un plan',
+  'expW.s.not-reachable':
+    'no se alcanza dentro del límite de exposición: {t} s no bastan (hacen falta {n} s); la señal a ruido alcanzada es {r}',
+  'expW.s.saturated':
+    'rechazado: el píxel más brillante tendría {p} electrones, más de los {w} que aguanta el detector; como máximo {m} s por exposición. {s}',
+  'expW.s.frame-limit':
+    'rechazado: {m} s por exposición es lo máximo permitido. {s}',
+  'expW.s.no-signal': 'rechazado: el objetivo no da luz',
+  'expW.s.bad-input': 'rechazado: una entrada no es un número válido',
+  'expW.s.below-horizon': 'rechazado: el objetivo está bajo el horizonte',
+  'expW.s.suggest': 'Usa {n} exposiciones de {e} s ({t} s en total).',
+  'expW.s.nosuggest': 'Ningún número de exposiciones lo evita.',
+  'expW.row.exposure': 'Exposición total',
+  'expW.v.exposure': '{t} s en {n} exposiciones de {e} s',
+  'expW.row.snr': 'Señal a ruido que alcanza',
+  'expW.row.dominant': 'Qué lo limita',
+  'expW.term.source': 'los fotones del propio objetivo',
+  'expW.term.sky': 'el cielo',
+  'expW.term.dark': 'la corriente oscura',
+  'expW.term.read': 'el ruido de lectura',
+  'expW.row.budget.source': 'Presupuesto de ruido: los fotones del objetivo',
+  'expW.row.budget.sky': 'Presupuesto de ruido: el cielo',
+  'expW.row.budget.dark': 'Presupuesto de ruido: la corriente oscura',
+  'expW.row.budget.read': 'Presupuesto de ruido: el ruido de lectura',
+  'expW.v.budget': '{v} electrones al cuadrado, {p} por ciento',
+  'expW.row.limit': 'Objeto más débil que alcanza esta exposición (5σ)',
+  'expW.v.limit': 'magnitud {m} en la banda, para este cielo y este seeing',
+  'expW.row.peak': 'Píxel más brillante en una exposición',
+  'expW.v.peak': '{p} electrones',
+  'expW.v.peakWell': '{p} electrones de {w}',
+  'expW.row.pixels': 'Píxeles en la abertura',
+  'expW.v.pixels': '{n}, con un {e} por ciento de la luz de una estrella',
+  'expW.row.frame': 'Predicho para la abertura de la propia imagen',
+  'expW.v.frame': 'señal a ruido {s}, {e} electrones ± {n}',
+  'expW.row.measured': 'Medido en la imagen',
+  'expW.v.measured':
+    'señal a ruido {s}, {e} electrones ± {n} (una realización; varía en torno a 1 en la señal a ruido)',
+  'expW.row.from': 'De la biblioteca de instrumentos',
+  'expW.row.supplied': 'Aportado por Gravitas, no por la biblioteca',
+  'expW.v.supplied':
+    'rendimiento {tp}, corriente oscura {d} electrones por segundo y píxel{k}: valores didácticos',
+  'expW.v.suppliedK': ', extinción {k} mag por masa de aire',
+  'expW.v.from':
+    '{pix} segundos de arco por píxel, ruido de lectura {rn} electrones, cielo {sky} mag por segundo de arco cuadrado, seeing {see} segundos de arco{x}',
+  'expW.v.fromX': ' (escalado a la masa de aire como X^0,6)',
+  'expW.row.warn': 'Avisos',
+  'expW.w.beyond-flat-field-accuracy':
+    'una señal a ruido por encima de 100 supera lo que da el aplanado (cerca del 1 por ciento): el cálculo omite ese error',
+  'expW.w.low-altitude':
+    'la masa de aire supera 5: la extinción y el escalado del seeing no son fiables',
+  'expW.w.perfect-sky-estimate': '',
+  'expW.v.nowarn': 'ninguno',
+  'expW.row.assumes': 'Lo que omite',
+  'expW.a':
+    'El error de aplanado y de resta del cielo, el apiñamiento, el centelleo y la luz cambiante de la Luna: una predicción bajo supuestos declarados, no una garantía',
+  'expW.legend.frame': 'imagen sintética de este plan',
+  'expW.legend.none': 'sin imagen: el plan fue rechazado',
+  'expW.axis.budget': 'parte del ruido al cuadrado',
+};

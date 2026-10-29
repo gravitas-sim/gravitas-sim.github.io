@@ -15,13 +15,15 @@
 //                              target; `from` says for each field where it
 //                              came from (a table source, or `supplied`).
 //   planFor(id, opts)          the setup and the plan together.
-//   zeroPointOf(band, areaM2, throughput, system)  the zero point a throughput
-//                              and a radiation-kernel passband give.
+//
+// The zero point from a throughput and a passband, and the airmass from an
+// altitude, are in js/instruments/exposureSky.js, which reaches the radiation and
+// sky kernels; this module does not, so a panel that takes both as numbers
+// does not load them.
 //
 // The extinction coefficient is the site's when the table states one and the
 // caller's otherwise (Prompt 212's measured site extinction, when it lands,
-// replaces the stated coefficient). The airmass is the caller's, or Kasten and
-// Young's from an altitude through the sky kernel. The seeing scales with
+// replaces the stated coefficient). The airmass is the caller's. The seeing scales with
 // airmass as X^0.6, a stated model, never a measurement.
 //
 // Pure: no DOM. A lazy module: the table import makes it so.
@@ -34,8 +36,6 @@ import {
   pick,
   siteRecord,
 } from './index.js';
-import { airmass as airmassOfAltitude } from '../kernels/sky/moon.js';
-import { photonRate, photonRateVega } from '../kernels/detector/bands.js';
 import { collectingArea, planExposure } from '../kernels/detector/snr.js';
 
 /** Kolmogorov seeing grows with airmass as X^0.6 (the Rubin depth model's note b). */
@@ -66,16 +66,6 @@ export function areaOf(id) {
   };
 }
 
-/** Electrons per second at magnitude 0 from a throughput and a decoded passband. */
-export function zeroPointOf(band, areaM2, throughput, system = 'ab') {
-  return (system === 'vega' ? photonRateVega : photonRate)(
-    band,
-    0,
-    areaM2,
-    throughput
-  );
-}
-
 const bandValue = (rec, band, unit) => {
   if (!rec) return undefined;
   const val = 'v' in rec ? rec : band ? rec[band] : undefined;
@@ -90,7 +80,6 @@ const bandValue = (rec, band, unit) => {
  * @param {string} [opts.band] - the band the sky and the extinction are read for
  * @param {'lo'|'mid'|'hi'} [opts.range] - which end of a table range to take
  * @param {number} [opts.zeroPoint] - electrons per second at magnitude 0 at the zenith
- * @param {{band: object, throughput: number, system?: 'ab'|'vega'}} [opts.fromBand]
  * @param {number} [opts.pixelScale] - arcsec per pixel
  * @param {number} [opts.fwhm] - zenith seeing, arcsec
  * @param {number} [opts.skyMag] - mag per square arcsec
@@ -98,7 +87,6 @@ const bandValue = (rec, band, unit) => {
  * @param {number} [opts.darkRate] - electrons per second per pixel
  * @param {number} [opts.extinction] - magnitudes per airmass
  * @param {number} [opts.airmass]
- * @param {number} [opts.altitudeDeg] - the airmass from Kasten and Young
  */
 export function exposureSetupOf(id, opts = {}) {
   const { instrument, band, range = 'mid' } = opts;
@@ -194,29 +182,14 @@ export function exposureSetupOf(id, opts = {}) {
   if (Number.isFinite(opts.zeroPoint)) {
     setup.zeroPoint = opts.zeroPoint;
     from.zeroPoint = { supplied: true };
-  } else if (opts.fromBand) {
-    const { areaM2, from: af } = areaOf(id);
-    const { band: b, throughput, system } = opts.fromBand;
-    setup.zeroPoint = zeroPointOf(b, areaM2, throughput, system);
-    from.zeroPoint = {
-      supplied: true,
-      throughput,
-      band: b.id,
-      area: af,
-      system: system ?? 'ab',
-    };
   } else {
     throw new InstrumentTableError(
-      `the table states no zero point or throughput for "${id}": supply zeroPoint (electrons per second at magnitude 0 at the zenith) or fromBand with a throughput`,
+      `the table states no zero point or throughput for "${id}": supply zeroPoint (electrons per second at magnitude 0 at the zenith; js/instruments/exposureSky.js zeroPointOf makes one from a throughput and a passband)`,
       { id, field: 'zeroPoint' }
     );
   }
   // Airmass and extinction.
-  const X = Number.isFinite(opts.airmass)
-    ? opts.airmass
-    : Number.isFinite(opts.altitudeDeg)
-      ? airmassOfAltitude(opts.altitudeDeg)
-      : 1;
+  const X = Number.isFinite(opts.airmass) ? opts.airmass : 1;
   setup.airmass = X;
   if (X !== 1 || Number.isFinite(opts.extinction)) {
     const kTab = bandValue(site?.extinction, band, 'mag/airmass');

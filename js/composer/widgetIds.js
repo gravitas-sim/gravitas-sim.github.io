@@ -86,6 +86,7 @@ export const WIDGET_FAMILIES = Object.freeze({
   survey: ['survey-counts', 'malmquist', 'completeness-lf'],
   cosmology: ['hubble-law', 'hubble-diagram', 'redshift-wedge'],
   detector: ['ccd-frames', 'ccd-snr', 'diff-photometry'],
+  exposure: ['exposure-planner'],
   sky: [
     'sky-turning',
     'sky-seasons',

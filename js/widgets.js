@@ -391,6 +391,12 @@ export const LAZY_FAMILIES = Object.freeze({
     'TIDE_WIDGETS',
     ['tides-roche', 'tides-resonance', 'tides-moon', 'tides-heating']
   ),
+  exposure: familyEntry(
+    () => import('./exposureWidgets.js'),
+    './exposureWidgets.js',
+    'EXPOSURE_WIDGETS',
+    ['exposure-planner']
+  ),
   habitabilityLimits: familyEntry(
     () => import('./habitabilityLimitsWidgets.js'),
     './habitabilityLimitsWidgets.js',
