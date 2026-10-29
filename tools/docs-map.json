@@ -996,6 +996,13 @@
       "student": true
     },
     {
+      "file": "SPECTROGRAPH.md",
+      "kind": "feature",
+      "purpose": "The spectrograph model: the line-spread function, an arc-lamp wavelength solution with its uncertainty, a velocity with its medium, the slit trade, validation (Prompt 213).",
+      "owner": 213,
+      "student": true
+    },
+    {
       "file": "TELESCOPES.md",
       "kind": "feature",
       "purpose": "Telescopes over the existing PSF: the annular Airy pattern, Moffat seeing, the Rayleigh angle against the measured width, light gathering, validation (Prompt 208).",

@@ -11,15 +11,15 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 90 investigations and 1283 steps: 1191 steps
+Across 91 investigations and 1289 steps: 1197 steps
 declare a scene, 157 let a reader change one, 167 read the
-running integration, 782 show a prescribed model result, 146 draw
-on a stored dataset, 661 put a self-contained panel beside the text,
-338 keep something, and 58 are prose.
-Of 172 prediction loops, 172 are returned to,
-172 produce a measurement before they are answered, and
+running integration, 788 show a prescribed model result, 146 draw
+on a stored dataset, 667 put a self-contained panel beside the text,
+341 keep something, and 58 are prose.
+Of 173 prediction loops, 173 are returned to,
+173 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
-172 hold their marking until the experiment settles them.
+173 hold their marking until the experiment settles them.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -1224,6 +1224,20 @@ Of 172 prediction loops, 172 are returned to,
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:telescope`, control telescope/aperture, measures the dip between two stars 1 arcsecond apart, in percent of the light at a star, with 0.6 arcseconds of seeing: 0 at 10 cm and 50.3 at 40 cm, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## Why Two Lines Become One (`why-two-lines-become-one`)
+
+- **Steps:** 6. Scene declared on 6; a reader can change something on 0; 6 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 6 prescribed model, 0 stored dataset, 6 self-contained panel.
+- **What students do:** move-an-instrument-control, commit-a-prediction, record-values.
+- **Objects the steps declare:** star.
+- **Instruments:** spectrograph-lines.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** smallest-r-predict → dip-by-r, finer-pixels, a-blend, resolving-power-and-sampling → dip-by-r.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:spectrograph-lines`, control spectrograph-lines/R, measures the dip between two spectral lines 0.5 nm apart at 500 nm, in percent of the lower peak: 7.3 at R = 1000 and 87.5 at R = 2000, none at R = 500, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## The Saturated Star (`the-saturated-star`)
 

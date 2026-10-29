@@ -1,0 +1,5 @@
+{
+  "note": "Legs of tests/fixtures/spectrograph/thresholds.json that crossed their bound, kept failing and labelled (only Carl resets a bound). None crossed on the first run of the kernel against the committed bounds; the harness's own findings are in SPECTROGRAPH.md ('What the first run found').",
+  "failed": [],
+  "notMeasured": []
+}

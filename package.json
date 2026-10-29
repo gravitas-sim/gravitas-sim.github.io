@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "exposure:validate": "node tools/exposure-validate.mjs",
+    "spectrograph:validate": "node tools/spectrograph-validate.mjs",
     "photcal:validate": "node tools/photometric-calibration-validate.mjs",
     "strategy:validate": "node tools/strategy-validate.mjs",
     "test": "NODE_OPTIONS=\"--experimental-vm-modules\" jest",

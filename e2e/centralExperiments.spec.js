@@ -2685,6 +2685,17 @@ test.describe('the central experiment of each investigation', () => {
         [4, 50.3, 2],
       ],
     },
+    // ---- Spectrographs (Roadmap III, Prompt 213) ------------------------------
+    {
+      id: 'why-two-lines-become-one',
+      title:
+        'why-two-lines-become-one: the dip between two lines 0.5 nm apart is 7.3 percent at R = 1000 and 87.5 at R = 2000 @accepts:ce.why-two-lines-become-one',
+      row: /^Dip between the lines/i,
+      values: [
+        [5, 7.3, 0.6],
+        [7, 87.5, 1],
+      ],
+    },
     // ---- Detector effects (Roadmap III, Prompt 211) ----------------------------
     {
       id: 'the-saturated-star',

@@ -15,6 +15,7 @@ import { INSTRUCTOR as PLANETS } from './investigations/planets-sequence.js';
 import { INSTRUCTOR as EXPOSURE } from './investigations/exposure-sequence.js';
 import { INSTRUCTOR as STRATEGY } from './investigations/strategy-sequence.js';
 import { INSTRUCTOR as TELESCOPE } from './investigations/telescope-sequence.js';
+import { INSTRUCTOR as SPECTROGRAPH } from './investigations/spectrograph-sequence.js';
 import { INSTRUCTOR as SATURATED_STAR } from './investigations/saturated-star-sequence.js';
 import { INSTRUCTOR as PHOTCAL } from './investigations/photometric-calibration-sequence.js';
 
@@ -26,6 +27,7 @@ export const INSTRUCTOR_CONTENT = {
   ...EXPOSURE.content,
   ...STRATEGY.content,
   ...TELESCOPE.content,
+  ...SPECTROGRAPH.content,
   ...SATURATED_STAR.content,
   ...PHOTCAL.content,
   'extending-an-experiment': {

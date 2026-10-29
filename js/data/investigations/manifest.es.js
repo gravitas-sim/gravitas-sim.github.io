@@ -1097,6 +1097,19 @@ export const MANIFEST = [
     objectiveCount: 4,
   },
   {
+    id: 'why-two-lines-become-one',
+    title: 'Por qué dos líneas se vuelven una',
+    subtitle:
+      'Por qué un espectrógrafo puede mostrar dos líneas como una, qué pueden y qué no pueden arreglar los píxeles, cómo se calibra una escala de longitud de onda con un arco y cuánta luz cuesta',
+    duration: '10-20 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/why-two-lines-become-one.webp',
+    depths: 3,
+    stepCount: 6,
+    gradedCount: 4,
+    objectiveCount: 4,
+  },
+  {
     id: 'the-saturated-star',
     title: 'La estrella saturada',
     subtitle:

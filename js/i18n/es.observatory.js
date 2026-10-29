@@ -296,6 +296,8 @@ export const ES_OBSERVATORY = {
   'obs.table.next': 'Filas siguientes',
   'obs.export.json': 'Guardar como JSON (todo, con tus cambios)',
   'obs.export.csv': 'Guardar las filas como CSV',
+  'specObs.title':
+    'Espectrógrafo: ajustar una línea con el modelo del instrumento',
   'obs.cmp.title': 'Comparar un modelo con los datos',
   'obs.fit.title': 'Ajustar un modelo (diagnóstico)',
   'obs.sky.title': 'Cielo: mapa galáctico y vectores de movimiento propio',
