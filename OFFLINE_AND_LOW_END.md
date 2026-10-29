@@ -135,11 +135,11 @@ catalog, the course home and the two labs (`model/`, `instructors/`,
 the `/validation/` page runs on demand; and `social-card.png` (only ever
 fetched by a link unfurler).
 
-### Which of the <!--fact:investigations-->87<!--/fact--> lessons
+### Which of the <!--fact:investigations-->88<!--/fact--> lessons
 
 Each lesson is one dynamically imported file, so this is a real decision.
 
-**All but three of the <!--fact:investigations-->87<!--/fact--> English bodies are precached** (the
+**All but three of the <!--fact:investigations-->88<!--/fact--> English bodies are precached** (the
 three are the measurement and claim investigations, D-R10-67), about a tenth of the
 payload. The reasoning: the lesson a class is already in when the wifi dies is
 by definition already fetched, so precaching buys nothing there. What it buys is
