@@ -422,7 +422,7 @@ export const WHY_TWO_LINES_BECOME_ONE_DEEPER = {
     },
     {
       sid: 'light-through-the-slit',
-      after: 'resolving-power-and-sampling',
+      after: 'the-medium',
       depth: 'advanced',
       type: 'read',
       title: 'Resolution costs light',

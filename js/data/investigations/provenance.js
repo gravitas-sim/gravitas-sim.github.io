@@ -87,7 +87,6 @@ export const EVIDENCE_FROM = Object.freeze({
   'what-a-crater-diameter-is-worth': 'model',
   'what-a-spectrum-is-made-of': 'model',
   'what-a-telescope-resolves': 'model',
-  'why-two-lines-become-one': 'model',
   'what-does-plus-minus-claim': 'model',
   'what-is-a-gravitational-wave': 'model',
   'what-is-a-measurement': 'model',
@@ -101,6 +100,7 @@ export const EVIDENCE_FROM = Object.freeze({
   'why-rings': 'model',
   'why-the-bright-ones-win': 'model',
   'why-the-period-is-wrong': 'model',
+  'why-two-lines-become-one': 'model',
   'why-venus-is-hot': 'model',
 });
 

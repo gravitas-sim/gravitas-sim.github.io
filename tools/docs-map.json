@@ -989,6 +989,13 @@
       "student": true
     },
     {
+      "file": "SPECTROGRAPH.md",
+      "kind": "feature",
+      "purpose": "The spectrograph model and wavelength calibration: the line-spread function, the arc-lamp solution with its uncertainty, a velocity with its medium, the slit trade, validation and the amendments (Prompt 213).",
+      "owner": 213,
+      "student": true
+    },
+    {
       "file": "TELESCOPES.md",
       "kind": "feature",
       "purpose": "Telescopes over the existing PSF: the annular Airy pattern, Moffat seeing, the Rayleigh angle against the measured width, light gathering, validation (Prompt 208).",

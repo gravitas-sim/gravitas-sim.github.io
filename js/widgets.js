@@ -409,17 +409,17 @@ export const LAZY_FAMILIES = Object.freeze({
     'HABITABILITY_LIMIT_WIDGETS',
     ['hz-limits', 'hz-locking', 'hz-ages']
   ),
-  strategy: familyEntry(
-    () => import('./strategyWidgets.js'),
-    './strategyWidgets.js',
-    'STRATEGY_WIDGETS',
-    ['strategy-window', 'strategy-plan']
-  ),
   spectrograph: familyEntry(
     () => import('./spectrographWidgets.js'),
     './spectrographWidgets.js',
     'SPECTROGRAPH_WIDGETS',
     ['spectrograph-lines', 'spectrograph-arc', 'spectrograph-trade']
+  ),
+  strategy: familyEntry(
+    () => import('./strategyWidgets.js'),
+    './strategyWidgets.js',
+    'STRATEGY_WIDGETS',
+    ['strategy-window', 'strategy-plan']
   ),
   telescope: familyEntry(
     () => import('./telescopeWidgets.js'),
