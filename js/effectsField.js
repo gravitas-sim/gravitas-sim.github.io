@@ -20,7 +20,11 @@ import { permits } from './dataKinds/contract.js';
 import { adapt, apertureFor, measure } from './measure/photometry.js';
 import { detectIn, DEFAULTS as DETECT } from './measure/detect.js';
 import { simulateFrame } from './kernels/detector/frame.js';
-import { FLAG, FLAG_MEANINGS } from './kernels/detector/effects.js';
+import {
+  FLAG,
+  FLAG_MEANINGS,
+  responseCurve,
+} from './kernels/detector/effects.js';
 import { rateFromMagnitude } from './kernels/detector/lab.js';
 
 const { Math, Float64Array, Uint8Array } = globalThis;
@@ -61,7 +65,7 @@ export const STARS = Object.freeze([
   { id: 'L2', role: 'ladder', x: 41.2, y: 36.4, mag: 13.2 },
   { id: 'L3', role: 'ladder', x: 54.5, y: 52.2, mag: 12.7 },
   { id: 'L4', role: 'ladder', x: 53.6, y: 8.4, mag: 12.4 },
-  { id: 'L5', role: 'ladder', x: 11.4, y: 18.8, mag: 12.1 },
+  { id: 'L5', role: 'ladder', x: 11.4, y: 18.8, mag: 12.25 },
 ]);
 
 export const DEFAULTS = Object.freeze({
@@ -123,7 +127,11 @@ export function effectsSidecar(r, { maskPlane = true } = {}) {
   const nl = fx.applied.nonlinearity;
   const limitE = fx.linearLimitElectrons;
   const level = fx.plateauElectrons / d.gain;
-  const limit = (limitE ?? d.fullWell - 5 * d.readNoise) / d.gain;
+  // The data are recorded values, so the limit is the response at the limit's charge.
+  const limit =
+    (limitE !== null && nl
+      ? responseCurve(limitE, d.fullWell, nl.kneeFraction)
+      : d.fullWell - 5 * d.readNoise) / d.gain;
   return {
     format: 'gravitas.image',
     formatVersion: 1,
@@ -223,8 +231,16 @@ const NAMES = [
 /** The flag names set anywhere within `r` pixels of (x, y). */
 export function flagsNear(flags, W, H, x, y, r) {
   let bits = 0;
-  for (let j = Math.max(0, Math.floor(y - r)); j <= Math.min(H - 1, Math.ceil(y + r)); j++)
-    for (let i = Math.max(0, Math.floor(x - r)); i <= Math.min(W - 1, Math.ceil(x + r)); i++)
+  for (
+    let j = Math.max(0, Math.floor(y - r));
+    j <= Math.min(H - 1, Math.ceil(y + r));
+    j++
+  )
+    for (
+      let i = Math.max(0, Math.floor(x - r));
+      i <= Math.min(W - 1, Math.ceil(x + r));
+      i++
+    )
       if (Math.hypot(i - x, j - y) <= r) bits |= flags[j * W + i];
   return NAMES.filter(([b]) => bits & b).map(([, n]) => n);
 }
@@ -242,12 +258,21 @@ export function measureEffects(config = {}, { withMask = true } = {}) {
   const rAp = RATIOS.r * r.config.fwhmPx;
   const W = r.frame.width;
   const H = r.frame.height;
-  const enc = 1 - Math.exp(-((rAp / (r.config.fwhmPx / 2.3548200450309493)) ** 2) / 2);
+  const enc =
+    1 - Math.exp(-((rAp / (r.config.fwhmPx / 2.3548200450309493)) ** 2) / 2);
   const rows = r.stars.map(s => {
     const truth = s.rate * r.config.exposureS * enc;
     let peak = 0;
-    for (let j = Math.max(0, Math.round(s.y) - 1); j <= Math.min(H - 1, Math.round(s.y) + 1); j++)
-      for (let i = Math.max(0, Math.round(s.x) - 1); i <= Math.min(W - 1, Math.round(s.x) + 1); i++)
+    for (
+      let j = Math.max(0, Math.round(s.y) - 1);
+      j <= Math.min(H - 1, Math.round(s.y) + 1);
+      j++
+    )
+      for (
+        let i = Math.max(0, Math.round(s.x) - 1);
+        i <= Math.min(W - 1, Math.round(s.x) + 1);
+        i++
+      )
         peak = Math.max(peak, a.ok ? a.image.values[j * W + i] : 0);
     const base = {
       peak,
@@ -260,27 +285,38 @@ export function measureEffects(config = {}, { withMask = true } = {}) {
       flags: flagsNear(fx.flags, W, H, s.x, s.y, rAp),
     };
     if (!a.ok) return { ...base, code: a.code };
-    const m = measure(a, {
+    const spec = {
       x: s.x,
       y: s.y,
       r: rAp,
       rIn: RATIOS.rIn * r.config.fwhmPx,
       rOut: RATIOS.rOut * r.config.fwhmPx,
-    });
-    if (!m.ok) return { ...base, code: m.code };
+    };
+    // What the number would be if the flags and the limit were ignored (shown beside the refusal, never as the measurement).
+    const ig = measure({ ...a, limit: Infinity, mask: null }, spec);
+    const ignored = ig.ok
+      ? {
+          net: ig.net,
+          sigma: ig.sigma,
+          ratio: ig.net / truth,
+          pull: (ig.net - truth) / ig.sigma,
+        }
+      : null;
+    const m = measure(a, spec);
+    if (!m.ok) return { ...base, code: m.code, ignored };
     return {
       ...base,
       net: m.net,
       sigma: m.sigma,
       snr: m.snr,
       pull: (m.net - truth) / m.sigma,
+      ignored,
     };
   });
   return {
     config: r.config,
     result: r,
     rows,
-    sidecar: a.ok ? null : null,
     regime: fx.sampling.regime,
     aperture: ap,
     ok: a.ok,

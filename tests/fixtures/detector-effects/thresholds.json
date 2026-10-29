@@ -282,6 +282,12 @@
       "when": "after the kernel module and the field module were written and one hand run of the panel scene had shown that bleed trails fill their pixels to the full well, and before the validator ran or any row was computed",
       "what": "Two changes, no bound moved: (1) A1's finite-difference step at the knee is 1e-6 of the full well, not 1e-3, because a one-sided difference of a tanh has the truncation error (h/w)^2/3 by Taylor series, which at 1e-3 of the full well is 1.3e-4 for a knee of 0.95 and cannot meet the committed 1e-6 for any correct curve; (2) a check D3.cosmic.unflagged is added: a faint star with a cosmic-ray track through its aperture, found by a seeded search over frames, measured with the mask plane withheld is not refused and its flux error exceeds 5 sigma, and with the mask plane it is refused with the code masked",
       "why": "(1) the committed step was a specification error found by working the series; (2) the hand run showed that the unflagged bleed-trail clause of D1 cannot hold as written, because a trail's pixels sit at the full well, and the measuring tools refuse a pixel at the limit by its value whether or not a mask exists: the value gate is a backstop for bleeding. D1's clause stays as committed and is reported as it comes out; D3 states the case where the flag, and only the flag, prevents a wrong number"
+    },
+    {
+      "id": "AM3",
+      "when": "after the pinned cosmic-ray frame was first rendered (exposure 300 s, sky 930 electrons per pixel) and reduce.js's detector flagged none of its pixels, before any recall, false-positive or agreement figure was computed for B1 to B3",
+      "what": "the pinned frame's exposure is 60 s (the panel's), its stars 150 to 1200 electrons per second and its cosmic-ray rate 0.5 per second (30 events); no bound moved",
+      "why": "the first frame was chosen without looking at the internal detector's sharpness test (the excess must be at least 0.8 of the pixel's own value), which a 1200-electron track on a 930-electron sky cannot pass; the frame was changed to the panel's own exposure, not tuned for recall, and the finding that the internal detector needs a deposit of about four times the background belongs in the lesson"
     }
   ]
 }

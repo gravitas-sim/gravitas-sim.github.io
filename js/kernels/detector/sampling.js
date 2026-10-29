@@ -24,7 +24,8 @@ const FWHM_PER_SIGMA = 2 * Math.sqrt(2 * Math.LN2);
 
 /** The regime of a profile of this FWHM in pixels: under, adequate or over. */
 export function samplingOf(fwhmPx) {
-  if (!(fwhmPx > 0)) throw new Error('the profile’s width is a positive number of pixels');
+  if (!(fwhmPx > 0))
+    throw new Error('the profile’s width is a positive number of pixels');
   return {
     fwhmPx,
     nyquistRatio: fwhmPx / SAMPLING.underBelowFwhmPx,
@@ -43,14 +44,18 @@ export function samplingOf(fwhmPx) {
  * @returns {{fwhmPx, peakMin, peakMax, peakRatio, apMean, apRelStd}} apRelStd
  *   is the population standard deviation over the mean
  */
-export function phaseStats(fwhmPx, { grid = SAMPLING.phaseGrid, ratio = SAMPLING.apertureFwhmRatio } = {}) {
+export function phaseStats(
+  fwhmPx,
+  { grid = SAMPLING.phaseGrid, ratio = SAMPLING.apertureFwhmRatio } = {}
+) {
   const sigma = fwhmPx / FWHM_PER_SIGMA;
   const r = ratio * fwhmPx;
   const half = Math.ceil(r) + 3;
   const n = 2 * half + 1;
   const col = c => {
     const v = new Array(n);
-    for (let i = 0; i < n; i++) v[i] = fractionIn(i - half - 0.5, i - half + 0.5, c, sigma);
+    for (let i = 0; i < n; i++)
+      v[i] = fractionIn(i - half - 0.5, i - half + 0.5, c, sigma);
     return v;
   };
   const phases = Array.from({ length: grid }, (_, k) => (k + 0.5) / grid - 0.5);
@@ -70,7 +75,8 @@ export function phaseStats(fwhmPx, { grid = SAMPLING.phaseGrid, ratio = SAMPLING
       let ap = 0;
       for (let j = 0; j < n; j++)
         for (let i = 0; i < n; i++)
-          if (Math.hypot(i - half - phases[a], j - half - phases[b]) <= r) ap += fx[i] * fy[j];
+          if (Math.hypot(i - half - phases[a], j - half - phases[b]) <= r)
+            ap += fx[i] * fy[j];
       sum += ap;
       sum2 += ap * ap;
       count++;

@@ -34,7 +34,10 @@ export const FLAG = Object.freeze({
 /** What each bit means, as the image sidecar's mask plane names them. */
 export const FLAG_MEANINGS = Object.freeze([
   { value: 1, meaning: 'saturated: the charge reached the full well' },
-  { value: 2, meaning: 'bleed: charge spilled into this pixel from a saturated one' },
+  {
+    value: 2,
+    meaning: 'bleed: charge spilled into this pixel from a saturated one',
+  },
   { value: 4, meaning: 'cosmic ray: an event deposited charge in this pixel' },
   { value: 8, meaning: 'nonlinear: the charge is above the linear limit' },
 ]);
@@ -58,7 +61,9 @@ export const DEFAULT_BLEED = Object.freeze({ maxLengthPx: 64 });
 function checkResponse(fullWell, kneeFraction) {
   if (!(fullWell > 0)) throw new Error('the full well is a positive number');
   if (!(kneeFraction > 0 && kneeFraction < 1))
-    throw new Error('the nonlinearity’s knee is a fraction of the full well between 0 and 1');
+    throw new Error(
+      'the nonlinearity’s knee is a fraction of the full well between 0 and 1'
+    );
 }
 
 /**
@@ -114,7 +119,10 @@ export function linearLimit(fraction, fullWell, kneeFraction) {
  * its entry pixel. Returns [[index, electrons], ...] for pixels inside the frame.
  */
 export function trackDeposit(track, W, H, params = {}) {
-  const { dedxPerPixel, thicknessPx, maxLengthPx } = { ...DEFAULT_COSMIC, ...params };
+  const { dedxPerPixel, thicknessPx, maxLengthPx } = {
+    ...DEFAULT_COSMIC,
+    ...params,
+  };
   const { x: x0, y: y0, phi, theta } = track;
   const L = Math.min(thicknessPx * Math.tan(theta), maxLengthPx);
   const out = [];
@@ -163,7 +171,10 @@ export function trackDeposit(track, W, H, params = {}) {
  * azimuth uniform, cos(zenith) = sqrt(1 - u).
  */
 export function drawTrack(rng, W, H, params = {}) {
-  const { dedxPerPixel, thicknessPx, maxLengthPx } = { ...DEFAULT_COSMIC, ...params };
+  const { dedxPerPixel, thicknessPx, maxLengthPx } = {
+    ...DEFAULT_COSMIC,
+    ...params,
+  };
   const x = rng() * W - 0.5;
   const y = rng() * H - 0.5;
   const phi = 2 * Math.PI * rng();
@@ -249,7 +260,8 @@ const on = v => v === true || (v !== null && typeof v === 'object');
 export function normalizeEffects(effects = {}) {
   if (effects === null || typeof effects !== 'object')
     throw new Error('effects is an object of toggles');
-  const merge = (value, defaults) => (value === true ? { ...defaults } : { ...defaults, ...value });
+  const merge = (value, defaults) =>
+    value === true ? { ...defaults } : { ...defaults, ...value };
   const out = {
     nonlinearity: on(effects.nonlinearity)
       ? merge(effects.nonlinearity, DEFAULT_NONLINEARITY)
@@ -266,14 +278,18 @@ export function normalizeEffects(effects = {}) {
   const n = out.nonlinearity;
   if (n) {
     if (!(n.kneeFraction > 0 && n.kneeFraction < 1))
-      throw new Error('the nonlinearity’s knee is a fraction of the full well between 0 and 1');
+      throw new Error(
+        'the nonlinearity’s knee is a fraction of the full well between 0 and 1'
+      );
     if (!(n.safeDeviation > 0 && n.safeDeviation < 1))
       throw new Error('the safe deviation is a fraction between 0 and 1');
   }
   const c = out.cosmic;
   if (c && c !== 'legacy') {
     if (!(c.dedxPerPixel > 0 && c.thicknessPx > 0 && c.maxLengthPx > 0))
-      throw new Error('a cosmic-ray track has a positive deposit, thickness and length');
+      throw new Error(
+        'a cosmic-ray track has a positive deposit, thickness and length'
+      );
     if (c.rate !== undefined && !(c.rate >= 0))
       throw new Error('the cosmic-ray rate is zero or more');
   }

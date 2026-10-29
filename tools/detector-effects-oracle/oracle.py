@@ -266,7 +266,7 @@ def main():
            "bleed": bleed(), "sampling": sampling()}
     if "--frame" in sys.argv:
         fr = json.load(open(sys.argv[sys.argv.index("--frame") + 1]))
-        img = np.array(fr["electrons"], dtype=float).reshape(fr["height"], fr["width"])
+        img = (np.array(fr["counts"], dtype=float).reshape(fr["height"], fr["width"]) - fr["bias"]) * fr["gain"]
         m = lacosmic(img, 1.0, fr["readNoise"])
         res["lacosmic"] = {"mask": m.astype(int).flatten().tolist(), "count": int(m.sum()),
                            "params": {"sigclip": 4.5, "sigfrac": 0.3, "objlim": 5.0, "niter": 2}}

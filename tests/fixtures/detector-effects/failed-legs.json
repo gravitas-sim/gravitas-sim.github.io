@@ -1,0 +1,26 @@
+{
+  "note": "Legs of tests/fixtures/detector-effects/thresholds.json that crossed their bound, kept failing and labelled (only Carl resets a bound). Three rows fail; each is a finding about a tool or a clause, not a harness slip, and no bound was moved (DETECTOR_EFFECTS.md, 'What the first run found').",
+  "failed": [
+    {
+      "id": "B1.cosmic.internal",
+      "measured": "reduce.js maskCosmicRays flags 27 pixels of the pinned frame and 49 percent (27 of 55) of the cosmic-ray pixels whose deposit is at least 8 sigma of the local noise, against the bound of 90 percent; no false positive",
+      "why": "its sharpness test requires the excess to be at least 0.8 of the pixel's own value, so a pixel passes only when the deposit is about four times the background under it (about 700 electrons on this frame's 186-electron sky); weaker track pixels pass an 8-sigma test and fail this one. The mask is pinned (reference-masks.json) as the internal reference, as the contract says"
+    },
+    {
+      "id": "B3.cosmic.agreement",
+      "measured": "Jaccard index 0.375 against the bound of 0.75, over the detectable pixels and their 8-neighbourhoods",
+      "why": "follows from B1: the independent detector flags 75 pixels, the internal one 27"
+    },
+    {
+      "id": "D1.refusals",
+      "measured": "every clause holds except the unflagged-trail clause: with the mask plane withheld, the two stars on the bleed trail are still refused, with the code saturated, not measured with a flux error above 5 sigma",
+      "why": "a bleed trail fills its pixels to the full well, and the measuring tools refuse a pixel at the contract's limit by its value whether or not a mask plane exists; the value gate is a backstop for bleeding. The case where only the flag prevents a wrong number is a cosmic-ray track (D3, added by amendment AM2, passes)"
+    }
+  ],
+  "notMeasured": [
+    {
+      "id": "E1.authentic",
+      "reason": "no authentic saturated-star frame retrieved; a download needs Carl's say and nothing is typed from memory"
+    }
+  ]
+}

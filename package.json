@@ -162,6 +162,7 @@
     "atmospheres:validate": "node tools/atmospheres-validate.mjs",
     "atmospheres-ii:validate": "node tools/atmospheres-ii-validate.mjs",
     "telescopes:validate": "node tools/telescopes-validate.mjs",
+    "detector-effects:validate": "node tools/detector-effects-validate.mjs",
     "tides:validate": "node tools/tides-validate.mjs",
     "interiors:validate": "node tools/interiors-validate.mjs",
     "small-bodies:validate": "node tools/small-bodies-validate.mjs",
