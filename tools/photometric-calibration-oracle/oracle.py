@@ -118,6 +118,23 @@ def solve_astropy(obs, second):
     return np.array(th)
 
 
+def solve_shared(obs, second):
+    """Generalised least squares with the catalogue error shared by every observation of a star (explicit V)."""
+    A, X, C = design(obs, second)
+    y = np.array([o["M"] - o["m"] for o in obs])
+    n = len(obs)
+    V = np.diag([o["sigma"] ** 2 for o in obs])
+    for i in range(n):
+        for j in range(n):
+            if obs[i]["star"] == obs[j]["star"]:
+                V[i, j] += obs[i]["sigmaM"] ** 2
+    Vi = np.linalg.inv(V)
+    cov = np.linalg.inv(A.T @ Vi @ A)
+    theta = cov @ A.T @ Vi @ y
+    r = y - A @ theta
+    return theta, cov, float(r @ Vi @ r), n - A.shape[1]
+
+
 def calibrate(theta, cov, obs, second, targets, chi2, dof):
     out = []
     # the standards' mean colour and spread over the distinct stars, not the observations
@@ -134,7 +151,9 @@ def calibrate(theta, cov, obs, second, targets, chi2, dof):
         a = [1.0, -(X - 1.0), Ct] + ([-Ct * (X - 1.0)] if second else [])
         a = np.array(a)
         M = t["m"] + float(a @ theta)
-        var = t["sigma"] ** 2 + float(a @ cov @ a) + (theta[2] * sC) ** 2
+        # the derivative of the magnitude with respect to the colour: c, and c - k2 (X - 1) in the second-order model
+        dMdC = theta[2] - (theta[3] * (X - 1.0) if second else 0.0)
+        var = t["sigma"] ** 2 + float(a @ cov @ a) + (dMdC * sC) ** 2
         out.append({"id": t["id"], "M": M, "sigma": math.sqrt(var), "colourAssumed": not known})
     return out
 
@@ -155,6 +174,8 @@ def nights():
             th_a = solve_astropy(nt["observations"], second)
             agree = max(float(np.max(np.abs(th - th_s))), float(np.max(np.abs(th - th_a))))
             cal = calibrate(th, cov, nt["observations"], second, nt["targets"], chi2, dof)
+            ths, covs, chi2s, dofs = solve_shared(nt["observations"], second)
+            cals = calibrate(ths, covs, nt["observations"], second, nt["targets"], chi2s, dofs)
             rec["fits"][label] = {
                 "theta": th.tolist(),
                 "sigma": np.sqrt(np.diag(cov)).tolist(),
@@ -167,6 +188,13 @@ def nights():
                 "astropy": th_a.tolist(),
                 "solverAgreement": agree,
                 "calibrated": cal,
+                "shared": {
+                    "theta": ths.tolist(),
+                    "sigma": np.sqrt(np.diag(covs)).tolist(),
+                    "chi2": chi2s,
+                    "dof": dofs,
+                    "calibrated": cals,
+                },
             }
         res[name] = rec
     return res

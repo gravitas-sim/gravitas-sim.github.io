@@ -1,0 +1,57 @@
+{
+  "note": "Legs of tests/fixtures/photometric-calibration/thresholds.json that crossed their bound, kept failing and labelled (only Carl resets a bound).",
+  "failed": [
+    {
+      "id": "B4b.firstOrder.lackOfFit",
+      "measured": {
+        "p": 0.13333142410930748,
+        "nestedTest": {
+          "deltaChi2": 38.12411333834763,
+          "p": 6.638464295979923e-10
+        }
+      },
+      "finding": "On the pinned night N3 (k2 = -0.03, sigma 0.003) the first-order fit's chi-square is 48.9 on 39 degrees of freedom (p 0.133): the first fit absorbs most of the colour-dependent extinction into c (0.08 to 0.096) and k (0.21 to 0.19), so the chi-square alone does not see it. The independent-weights model is held here because the oracle's is; the nested-model test (D5b) does see it (delta chi-square 38.1, p 7e-10). The committed bound assumed the chi-square would."
+    },
+    {
+      "id": "P3.physical.limit",
+      "measured": {
+        "firstOrderError": -0.0106663517515031,
+        "secondOrderError": 0.00018066497959878802,
+        "oracle": [
+          -0.010665878526136652,
+          0.0001815838587111429
+        ],
+        "coverFirst": 0.685,
+        "coverSecond": 0.97
+      },
+      "finding": "The errors are as committed and pass (first order -0.0107 mag, second order +0.0002 mag; the oracle's -0.01067 and +0.00018). The third clause fails: the first-order interval covers the truth in 0.685 of 200 noise draws and the second-order one in 0.970, so the first-order interval does not cover 'not less often': it covers much less often. The clause as written states the opposite of what a biased linear fit does; it is kept failing, not reworded."
+    },
+    {
+      "id": "C2.coverage.underestimated",
+      "measured": {
+        "flagged": 0.977,
+        "cover95": 0.942,
+        "widerEveryFlagged": true
+      },
+      "finding": "Told errors 2 times too small, the lack-of-fit flag is raised in 0.977 of 1000 nights (bound 0.99); the rescaled 95 percent interval covers in 0.942 (bound 0.93) and is wider in every flagged night. With 21 degrees of freedom a chi-square four times its expectation falls below the 1 percent critical value in about 2 percent of nights, so the detection power at this factor is about 0.98: the bound asked for more than the test can give at that size of night."
+    },
+    {
+      "id": "E1.authentic",
+      "measured": {
+        "matched": 547,
+        "kept": 531,
+        "c": [
+          0.9010184143579246,
+          0.004355309072342248
+        ],
+        "significance": 206.8781800308295,
+        "rms": 0.027561394686796702,
+        "scale": 5.747749237860977,
+        "holdout": 0.7433962264150943,
+        "quadraticSignificance": 6.108589245372306
+      },
+      "finding": "NGC 2420, 547 SDSS and Gaia stars matched within 1.0 arcsec, 531 kept: g - G = -0.329 + 0.901 (BP - RP), the colour term +0.901 +/- 0.004 (207 sigma after rescaling by chi-square / dof = 5.7), rms 0.0276 mag. Two clauses cross: the sign (the contract says negative; the instrument's G band is broader than g and g - G rises with BP - RP, so it is positive; the magnitude 0.3 to 1.2 and the significance hold) and the held-out coverage (0.743 against 0.90: the stated errors are 2.4 times too small for the scatter, and a straight line is not enough, the quadratic term is significant at 6.1 sigma). The report E1.holdout.scaled covers 0.962 with the catalogue error scaled like the rest; the contract's own reading is the failing one."
+    }
+  ],
+  "notMeasured": []
+}

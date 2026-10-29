@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "exposure:validate": "node tools/exposure-validate.mjs",
+    "photcal:validate": "node tools/photometric-calibration-validate.mjs",
     "test": "NODE_OPTIONS=\"--experimental-vm-modules\" jest",
     "test:watch": "NODE_OPTIONS=\"--experimental-vm-modules\" jest --watch",
     "test:policy": "node tools/check-test-policy.mjs",
