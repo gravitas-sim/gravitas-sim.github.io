@@ -1,0 +1,402 @@
+{
+  "format": "gravitas.spectrograph-thresholds/1",
+  "prompt": "Roadmap III, Prompt 213, the spectrograph model and wavelength calibration (tranche T3 by D-R10-207-01)",
+  "document": "SPECTROGRAPH.md (\"Validation contract\")",
+  "committed": "before the kernel modules, the validator, the oracle script, its results, the spectrograph field, the panel, the investigation and the tests of Prompt 213 existed; the constants quoted below were computed by scipy 1.13.1 and numpy 1.26.4 outside the repository",
+  "rule": "A crossed bound is a failed check, recorded in failed-legs.json and left failing; only Carl resets one. A leg that cannot be measured is NOT RUN and says why. Nothing here was tuned against the kernel: the kernel did not exist when this file was written.",
+  "seeds": {
+    "oracle": 213,
+    "harness": 2130001,
+    "ensemble": "spectrograph-213"
+  },
+  "scope": {
+    "built": "a slit spectrograph with a constant-width Gaussian line-spread function (resolving power stated at a reference wavelength), a polynomial truth wavelength solution, pixel-integrated spectra of a synthetic template (a blackbody continuum with Gaussian absorption lines, or an emission-line arc lamp) with photon and read noise, a pixel-integrated Gaussian line fit through js/inference/fit.js, a wavelength solution from marked arc lines through js/numeric/polyfit.js (Prompt 152) with residuals, covariance and Prompt 150's not-constrained state, a radial velocity with its uncertainty and the air/vacuum rule from the radiation line table (Prompt 125), a long-slit throughput and a line signal-to-noise with the resolving-power trade, one panel, one investigation at three depths",
+    "notBuilt": "a constant-R (prism) instrument, echelle orders and their overlap, a Voigt or Lorentzian line-spread function, a position-dependent line-spread function, flat fielding and fringing, sky subtraction, cosmic rays, slit tilt and curvature, spectral extraction, fibre fed spectrographs, atmospheric dispersion, telluric absorption, a real arc-lamp atlas (the lamp is synthetic, its lines the radiation line pack's NIST lines in air and vacuum with invented relative intensities), line identification by pattern matching, a facility spectrograph (Prompt 209's library has none and nothing is typed from memory), a measured arc from an archive (E1 uses SDSS stellar spectra already in the repository, no download)"
+  },
+  "reference": {
+    "spectrograph": {
+      "nPixels": 2048,
+      "pixelIndex": "pixel i has its centre at x = i and spans x - 0.5 to x + 0.5",
+      "truthSolutionNm": {
+        "c0": 380.0,
+        "c1": 0.105,
+        "c2": -1e-7,
+        "c3": 4e-12,
+        "form": "wavelength = c0 + c1 x + c2 x^2 + c3 x^3, in the stated medium"
+      },
+      "lsfFwhmNm": 0.3,
+      "readNoiseE": 5,
+      "gain": 1
+    },
+    "arcLamp": {
+      "lines": "the 23 lines of js/data/radiation/lines.js (the pack radiation-lines 1.0.0), in the stated medium, emission, each an intrinsically unresolved line",
+      "totalCountsE": "line k (0-based, the pack's order) has 2.0e4 x (1 + (k mod 4)) electrons in total over the line",
+      "continuumE": 20,
+      "labelled": "synthetic: the lines and their wavelengths are the pack's; the intensities are invented; the truth manifest is the solution coefficients, the line list and the noise seed"
+    },
+    "isolatedRule": "a lamp line is isolated when every other lamp line is farther than 6 FWHM (1.8 nm) away, so that no neighbour reaches the 12-pixel fit window (amendment AM2; it was 2.5 FWHM); a pair closer than 2.5 FWHM (0.75 nm) is a blend (the pack's Ca II H / H-epsilon, the Mg b4 / b2 pair and the Na D pair are such pairs); the lamp's H-alpha (656.279 nm) lies outside the detector's 380 to 595 nm, so 22 of the 23 lamp lines fall on it",
+    "science": {
+      "continuum": "a blackbody of 6000 K (js/kernels/radiation planckLambda), scaled to 1.0e4 electrons per pixel at 500 nm",
+      "absorption": "Gaussian absorption lines at H-beta, H-gamma, H-delta and H-epsilon of the line pack (air), each of intrinsic sigma 0.10 nm and central depth 0.40 before the instrument (amendment AM1: H-alpha was named and lies outside the reference spectrograph's 380 to 595 nm)",
+      "velocityKmS": 120,
+      "form": "relativistic Doppler factor on the rest wavelength in the stated medium"
+    }
+  },
+  "constants": {
+    "fwhmPerSigma": 2.3548200450309493,
+    "slitConstant": 0.8325546111576977,
+    "slitAtUnitRatio": 0.8100254543909556,
+    "source": "2 sqrt(2 ln 2); sqrt(ln 2) = (FWHM per sigma) / (2 sqrt 2), the argument of erf in the slit throughput when the slit equals the seeing FWHM; erf(sqrt ln 2) / (sqrt(ln 2) 2 / sqrt(pi)), the fraction of the high-resolution limit of R times throughput reached when the slit equals the seeing FWHM; numpy 1.26.4, scipy 1.13.1"
+  },
+  "checks": [
+    {
+      "id": "A1.lsf",
+      "group": "a",
+      "bound": "FWHM = 2 sqrt(2 ln 2) sigma and R = lambda / FWHM round-trip (sigma to FWHM to R to FWHM to sigma) to a relative 1e-14 for R of 50, 500, 1500, 50000 at wavelengths 380, 656.279 and 1000 nm, and the line-spread function's density at half the FWHM from its centre is one half of its peak to a relative 1e-12",
+      "limits": {
+        "relMax": 1e-14,
+        "halfRelMax": 1e-12
+      }
+    },
+    {
+      "id": "A2.pixel.integral",
+      "group": "a",
+      "bound": "the pixel-integrated Gaussian (the exact area of a Gaussian over a pixel, no sampling at the centre) against scipy.special.erf and erfc at 300 fixed (centre, sigma, pixel) cases: an absolute 1e-14 where the area is above 1e-12 of the pixel's width, a relative 1e-9 in the far tail (z from 8 to 30, where erf minus erf cancels), and the areas of consecutive pixels over minus 10 to plus 10 sigma sum to 1 to an absolute 1e-12",
+      "limits": {
+        "absMax": 1e-14,
+        "tailRelMax": 1e-9,
+        "sumAbsMax": 1e-12,
+        "cases": 300
+      }
+    },
+    {
+      "id": "A3.sampling",
+      "group": "a",
+      "bound": "sampling per resolution element is the FWHM in pixels, FWHM / (d lambda / dx) with the local dispersion of the polynomial solution, exactly (a relative 1e-12); the sampling criterion is at least 2 pixels per FWHM (the Nyquist rule for the width of the line-spread function): 1.99 is flagged undersampled, 2.0 and 2.01 and 3.0 are not, 0.5 is flagged severely undersampled; on the reference spectrograph the sampling is 2.857 at 380 nm and changes with the local dispersion as the polynomial's derivative says",
+      "limits": {
+        "relMax": 1e-12,
+        "criterionPixels": 2
+      }
+    },
+    {
+      "id": "A4.line.flux",
+      "group": "a",
+      "bound": "an emission line of total flux F on a zero continuum, pixel-integrated, sums over plus and minus 10 sigma to F to a relative 1e-12 at samplings of 0.5, 1, 2 and 5 pixels per FWHM (the convolution and the pixel integral conserve flux), and a pixel containing the line centre has the closed-form area",
+      "limits": {
+        "relMax": 1e-12,
+        "samplings": [0.5, 1, 2, 5]
+      }
+    },
+    {
+      "id": "A5.absorption",
+      "group": "a",
+      "bound": "a Gaussian absorption line of intrinsic sigma s_int and equivalent width EW observed through a Gaussian line-spread function of sigma s_l is a Gaussian of sigma sqrt(s_int^2 + s_l^2) with central depth reduced by s_int / sqrt(s_int^2 + s_l^2) (relative 1e-12 against the kernel's profile function), and the equivalent width of the observed pixels, the sum of (1 - F / C) d lambda over plus and minus 12 sigma, is EW to a relative 1e-6 at resolving powers 500, 1000 and 5000 at 2.5 pixels per FWHM",
+      "limits": {
+        "profileRelMax": 1e-12,
+        "ewRelMax": 1e-6,
+        "resolvingPowers": [500, 1000, 5000]
+      }
+    },
+    {
+      "id": "A6.continuum",
+      "group": "a",
+      "bound": "the blackbody continuum's pixel integral (a fixed Gauss-Legendre rule over the pixel) against scipy.integrate.quad of the Planck function over the same pixel to a relative 1e-9 at 4000, 5800 and 9000 K on 0.1 nm pixels from 380 to 900 nm",
+      "limits": {
+        "relMax": 1e-9,
+        "temperaturesK": [4000, 5800, 9000]
+      }
+    },
+    {
+      "id": "A7.doppler.media",
+      "group": "a",
+      "bound": "a velocity put through the relativistic Doppler factor to an observed wavelength and back returns it to a relative 1e-12 (seven velocities from -300 to 300 km/s); a rest wavelength in the wrong medium shifts the velocity by c (lambda_vacuum / lambda_air - 1), which the kernel reports as the media offset to a relative 1e-12 (82.82 km/s for H-alpha, from the pack's 656.279 and 656.4603 nm); a velocity asked for with the media of the observed and the rest wavelength different, or not stated, is refused and never converted silently",
+      "limits": {
+        "relMax": 1e-12,
+        "velocitiesKmS": [-300, -120, -30, 0, 30, 120, 300]
+      }
+    },
+    {
+      "id": "A8.recovery.noise-free",
+      "group": "a",
+      "bound": "on the reference spectrograph's arc with no noise (the expected counts, every isolated lamp line fitted by the kernel and the cubic solution fitted to their centres), the centre of every isolated line after calibration is the pack's wavelength in the arc's medium to an absolute 0.0003 nm (0.003 pixel), and the resolving power recovered from each line's width, lambda_centre / FWHM, equals the instrument's to a relative 1e-5",
+      "limits": {
+        "centreAbsMaxNm": 0.0003,
+        "resolvingPowerRelMax": 1e-5
+      }
+    },
+    {
+      "id": "A9.pair.dip",
+      "group": "a",
+      "bound": "added by amendment AM6 after the kernel existed (the panel and the lesson state the dip between two lines): the dip between two equal Gaussian lines of FWHM 1, 1 - (profile at the midpoint) / (highest value of the profile), agrees with scipy.optimize.minimize_scalar (bounded, xatol 1e-14) of the same profile to an absolute 1e-9 at separations 0.80, 0.84, 0.85, 0.86, 1.0, 1.5 and 2.0 FWHM; it is exactly 0 up to the separation of two sigma, 0.8493 FWHM, where the two peaks first separate (the Gaussian pair's own criterion, which is not Rayleigh's)",
+      "limits": {
+        "absMax": 1e-9,
+        "separationsFwhm": [0.8, 0.84, 0.85, 0.86, 1.0, 1.5, 2.0],
+        "criticalFwhm": 0.8493218002880191
+      }
+    },
+    {
+      "id": "B1.convolution",
+      "group": "b",
+      "bound": "an independent numerical convolution (numpy: a template sampled at 1/20 of the line-spread sigma, scipy.ndimage.gaussian_filter1d, pixel averages by cumulative trapezoid) of a science spectrum (continuum plus four Gaussian absorption lines) at resolving powers 300, 1000 and 3000 on 0.1 nm pixels differs from the kernel's analytic pixel spectrum by at most 1e-4 of the continuum at every pixel; this also bounds the neglected smoothing of the continuum by the line-spread function",
+      "limits": {
+        "absOfContinuumMax": 0.0001,
+        "resolvingPowers": [300, 1000, 3000]
+      }
+    },
+    {
+      "id": "B2.line.fit",
+      "group": "b",
+      "bound": "on the oracle's pinned noisy arc (numpy PCG64 seed 213, expected-count errors) the kernel's line fit (js/inference/fit.js, a pixel-integrated Gaussian and a linear continuum) against scipy.optimize.curve_fit of the same model with scipy.special.erf: the centres agree to 1e-5 pixel, the centre uncertainties to a relative 1e-4 and the widths to a relative 1e-5 for every isolated line; astropy 6.0.1 modeling.fitting.LevMarLSQFitter of a point-sampled Gaussian1D plus Linear1D gives centres within 0.02 pixel of the kernel's (the models differ only in the pixel integral)",
+      "limits": {
+        "centrePxMax": 1e-5,
+        "centreSigmaRelMax": 0.0001,
+        "widthRelMax": 1e-5,
+        "astropyCentrePxMax": 0.02
+      }
+    },
+    {
+      "id": "B3.solution.pinned",
+      "group": "b",
+      "bound": "the kernel's wavelength solution on the oracle's fixed line list (the same pixel centres, errors and wavelengths) against numpy.linalg.lstsq on the weighted Vandermonde matrix and against astropy 6.0.1 modeling.fitting.LinearLSQFitter with Chebyshev1D, the routine specutils, specreduce and ccdproc call for a dispersion function, at degrees 1, 2 and 3: the wavelength at 50 pixels agrees to 1e-9 nm, its uncertainty to a relative 1e-8, the reduced chi-square to a relative 1e-9 and the residuals to 1e-10 nm",
+      "limits": {
+        "wavelengthNmMax": 1e-9,
+        "sigmaRelMax": 1e-8,
+        "chi2RelMax": 1e-9,
+        "residualNmMax": 1e-10,
+        "degrees": [1, 2, 3],
+        "points": 50
+      }
+    },
+    {
+      "id": "B4.pipeline",
+      "group": "b",
+      "bound": "the whole chain on the oracle's pinned noisy arc (kernel line fits then the cubic solution) against the oracle's chain (curve_fit then numpy lstsq on the same lines): the wavelength at 50 pixels agrees to 1e-5 nm and its uncertainty to a relative 1e-3",
+      "limits": {
+        "wavelengthNmMax": 1e-5,
+        "sigmaRelMax": 0.001
+      }
+    },
+    {
+      "id": "C1.centre.coverage",
+      "group": "c",
+      "bound": "on 400 seeded noisy arcs of the reference spectrograph, the fraction of isolated-line centres within one reported sigma of the truth (the pack's wavelength through the truth solution, in pixels) is between 0.60 and 0.76, within two sigma between 0.92 and 0.98, pooled over every isolated line of every arc",
+      "limits": {
+        "arcs": 400,
+        "oneSigma": [0.6, 0.76],
+        "twoSigma": [0.92, 0.98]
+      }
+    },
+    {
+      "id": "C2.solution.coverage",
+      "group": "c",
+      "bound": "on 300 seeded arcs, the cubic solution's wavelength at five held-out pixels (200, 600, 1000, 1400, 1800) lies within one reported sigma of the truth solution with a fraction between 0.60 and 0.76 and within two sigma between 0.92 and 0.98, pooled; the solution is fitted to the isolated lines and the reported sigma is the covariance's",
+      "limits": {
+        "arcs": 300,
+        "pixels": [200, 600, 1000, 1400, 1800],
+        "oneSigma": [0.6, 0.76],
+        "twoSigma": [0.92, 0.98]
+      }
+    },
+    {
+      "id": "C3.velocity.coverage",
+      "group": "c",
+      "bound": "on 300 seeded pairs of an arc and a science exposure (independent noise), the radial velocity from the four Balmer absorption lines (each line's centre through the arc's cubic solution, rest wavelengths in the arc's medium, the uncertainty from the line fit and the solution together, one velocity per line) lies within one reported sigma of 120 km/s with a fraction between 0.60 and 0.76, within two sigma between 0.92 and 0.98, pooled over the four lines",
+      "limits": {
+        "pairs": 300,
+        "oneSigma": [0.6, 0.76],
+        "twoSigma": [0.92, 0.98]
+      }
+    },
+    {
+      "id": "C4.resolving.power.coverage",
+      "group": "c",
+      "bound": "on the 400 arcs of C1, the resolving power recovered from each isolated line's width, with the width uncertainty of the fit, lies within one reported sigma of the instrument's (at the line's wavelength) with a fraction between 0.60 and 0.76",
+      "limits": {
+        "oneSigma": [0.6, 0.76]
+      }
+    },
+    {
+      "id": "C5.misspecified",
+      "group": "c",
+      "bound": "if the true solution is a cubic whose cubic term moves the line positions by 1 pixel and a student fits a line, the reduced chi-square flag (the fit's scatter exceeds its errors) is raised in at least 95 percent of 100 seeded arcs, and a cubic fitted to a cubic raises it in at most 8 percent; the flag compares the reduced chi-square with the chi-square distribution's 0.99 quantile for the degrees of freedom",
+      "limits": {
+        "arcs": 100,
+        "minFlagged": 0.95,
+        "maxFalseFlag": 0.08,
+        "quantile": 0.99
+      }
+    },
+    {
+      "id": "D1.not.constrained",
+      "group": "d",
+      "bound": "a wavelength solution from fewer lines than the degree plus one returns the state not-constrained and no coefficients (two lines for a cubic, three lines for a cubic, one line for a line); a solution from exactly degree plus one lines returns the state exactly-determined with its uncertainty from the line errors alone and a statement that it has no residual check; degree plus two or more lines returns the state constrained with degrees of freedom of at least 1; two lines at one pixel, a non-finite value, a non-positive error and a degree above 5 are refused with a stated reason; an evaluation outside the span of the marked lines is flagged extrapolated",
+      "limits": {
+        "maxDegree": 5
+      }
+    },
+    {
+      "id": "D2.blend",
+      "group": "d",
+      "bound": "a pair of equal unresolved lines separated by 0.5, 0.7 and 1.0 FWHM at a peak signal-to-noise of 100 (200 seeded trials each), fitted as one line, is flagged as broadened (measured FWHM above the instrument's by more than 3 reported sigma and by more than 10 percent) in at least 95 percent of the trials; a single line at the same signal-to-noise is flagged in at most 3 percent; a pair at 0.15 FWHM is not required to be flagged and the leg records the fraction",
+      "limits": {
+        "trials": 200,
+        "separationsFwhm": [0.5, 0.7, 1.0],
+        "minFlagged": 0.95,
+        "maxFalseFlag": 0.03,
+        "sigmas": 3,
+        "relExcess": 0.1
+      }
+    },
+    {
+      "id": "D3.undersampled",
+      "group": "d",
+      "bound": "a line at 1.5 pixels per FWHM is fitted and flagged undersampled; a line at 0.5 pixels per FWHM is refused as not constrained (its width and centre are not separately fixed by one or two pixels); a line with fewer than 6 usable pixels in its window, a window with a non-positive error, and a window that holds a masked pixel are refused with the reason stated",
+      "limits": {
+        "undersampledAt": 1.5,
+        "refusedAt": 0.5,
+        "minPixels": 6
+      }
+    },
+    {
+      "id": "F1.line.snr",
+      "group": "f",
+      "bound": "the line signal-to-noise: for a Gaussian absorption of known centre and width on a known continuum, the amplitude-only weighted fit has the standard deviation of the equivalent width that the discrete sum 1 / (S_c sqrt(sum g_i^2 / sigma_i^2)) gives, which the kernel returns (a relative 1e-12 against that expression evaluated independently in the oracle); that sum is within 2 percent of the continuous matched-filter form sigma_EW = sqrt(2 sqrt(pi) sigma_obs / S_c) with no read noise at 2.5 pixels per FWHM and above; and on 400 seeded exposures the standard deviation of the fitted equivalent width is within 10 percent of it",
+      "limits": {
+        "discreteRelMax": 1e-12,
+        "continuousRelMax": 0.02,
+        "ensembleRelMax": 0.1,
+        "trials": 400
+      }
+    },
+    {
+      "id": "F2.slit.throughput",
+      "group": "f",
+      "bound": "the long-slit throughput of a Gaussian seeing disk through a slit of width w and the seeing FWHM theta, erf(w / (2 sqrt(2) sigma_seeing)) with sigma_seeing = theta / 2.3548, against a numerical two-dimensional integral of the Gaussian over the slit (scipy.integrate.dblquad over a finite height of plus and minus 12 sigma) to an absolute 1e-8 at w / theta = 0.1, 0.5, 1, 2 and 5; the slit width that keeps a resolving power R, w = R_s theta / R, makes the throughput erf(sqrt(ln 2) R_s / R) and, at R equal to R_s, 0.760968108 to a relative 1e-5",
+      "limits": {
+        "absMax": 1e-8,
+        "ratios": [0.1, 0.5, 1, 2, 5],
+        "atRsRelMax": 1e-5
+      }
+    },
+    {
+      "id": "F3.trade",
+      "group": "f",
+      "bound": "the signal-to-noise of an unresolved line is proportional to the square root of R times the throughput; it is non-decreasing in R to a relative 1e-12 on a grid from R_s / 20 to 40 R_s, and at R equal to R_s it reaches 0.8100254543909556 of its high-resolution limit (relative 1e-9); for a line of intrinsic sigma s_int the objective throughput over sqrt(s_int^2 + s_l^2) has an interior maximum and the kernel's optimum agrees with scipy.optimize.minimize_scalar (bounded, xatol 1e-9) on the same expression, written independently in the oracle, to a relative 1e-4 for s_int of 0.05, 0.10 and 0.30 nm at 500 nm and R_s of 3000",
+      "limits": {
+        "monotoneRelMax": 1e-12,
+        "atRsRelMax": 1e-9,
+        "optimumRelMax": 0.0001,
+        "intrinsicSigmaNm": [0.05, 0.1, 0.3]
+      }
+    },
+    {
+      "id": "E1.authentic.sdss",
+      "group": "e",
+      "bound": "authentic data, with an analysis contract fixed here and no published value used to tune the kernel: the SDSS DR18 A and G stars of the repository's spectrum pack (js/data/spectra/sdssSpectra.js, vacuum wavelengths), H-alpha and H-beta each, the pixel-integrated Gaussian-plus-linear fit of the kernel on a window of plus and minus 6 nm about the rest wavelength (vacuum, the line pack), the pixels' errors taken from the scatter of the fit (the pack carries none, and the fit says so); each line's velocity c (centre / rest - 1) lies within max(3 sigma_fit, 60 km/s) of the pipeline's published c z of the star (zErr is under 1 km/s) for all four measurements; the two stars' published velocities (-243 and -64 km/s) are each far outside the other's 60 km/s window and a wrong medium shifts H-alpha by +83 km/s, so a wrong medium or no velocity fails",
+      "limits": {
+        "stars": ["a", "g"],
+        "lines": ["h-alpha", "h-beta"],
+        "windowNm": 6,
+        "floorKmS": 60,
+        "sigmas": 3,
+        "minPassing": 4
+      }
+    },
+    {
+      "id": "E2.authentic.sampling",
+      "group": "e",
+      "bound": "the SDSS spectrograph's nominal resolving power of 2000 (the pack's reductions: SDSS resolves about 2.2 samples) on the archive's grid of log10 lambda step 1e-4 gives a sampling FWHM / step = 1 / (R x 1e-4 x ln 10) = 2.17 pixels per FWHM to an absolute 0.02, and the repository's thinned step of 3e-4 gives 0.72, which the kernel flags undersampled, as the pack's own text says (it costs resolution the spectrograph did not deliver); a consistency check against the pack's statement, not an independent measurement",
+      "limits": {
+        "resolvingPower": 2000,
+        "logStep": 0.0001,
+        "expected": 2.17,
+        "absMax": 0.02
+      }
+    },
+    {
+      "id": "P1.speed",
+      "group": "p",
+      "bound": "an arc exposure of the reference spectrograph (2048 pixels, 23 lines), eighteen line fits and a cubic solution take at most 1 second of CPU time on a Node 22 build, and a science exposure with a blackbody continuum and four lines at most 50 ms; reported as a CPU measurement, not a student-facing promise",
+      "limits": {
+        "arcSolutionSecondsMax": 1,
+        "scienceMsMax": 50
+      }
+    }
+  ],
+  "claimRule": {
+    "intent": "The resolving power is set by the line-spread function, not by the pixel size or the number of pixels: finer sampling does not separate two lines the line-spread function has merged. A wavelength solution is a fit with an uncertainty, the number of lines limits the degree, and a velocity needs the rest wavelength in the same medium as the observed one. No lesson text says finer pixels raise the resolving power, that two lines become one for lack of pixels alone, or that a velocity is read without the medium.",
+    "forbidden": {
+      "en": [
+        "\\b(smaller|finer|more|extra) pixels? (raise|raises|increase|increases|improve|improves|sets|gives) the (resolving power|resolution)\\b",
+        "\\bthe (resolving power|resolution) (is|equals?) (the|set by the) (number of pixels|pixel size)\\b",
+        "\\ba (cubic|quadratic) (solution|fit) (needs|requires) only (two|three) lines\\b",
+        "\\bthe (air|vacuum) wavelength (can|may) be (used|compared) with (a|the) (vacuum|air) (spectrum|wavelength) (directly|unchanged)\\b"
+      ],
+      "es": [
+        "(?<![\\p{L}])(píxeles más pequeños|más píxeles|píxeles más finos) (aumentan|mejoran|elevan) (el poder|la resolución)(?![\\p{L}])",
+        "(?<![\\p{L}])(el poder de resolución|la resolución) (es|equivale a) (el número de píxeles|el tamaño del píxel)(?![\\p{L}])",
+        "(?<![\\p{L}])una (solución|ajuste) (cúbic[oa]|cuadrátic[oa]) (necesita|requiere) solo (dos|tres) líneas(?![\\p{L}])"
+      ]
+    },
+    "badControls": [
+      "Smaller pixels raise the resolving power.",
+      "The resolving power is the number of pixels.",
+      "A cubic solution needs only three lines.",
+      "The air wavelength can be compared with a vacuum spectrum directly.",
+      "Los píxeles más pequeños aumentan el poder de resolución.",
+      "El poder de resolución es el número de píxeles.",
+      "Una solución cúbica necesita solo tres líneas."
+    ],
+    "permittedControls": [
+      "Finer pixels sample the line better, but they cannot separate two lines the line-spread function has merged.",
+      "A cubic solution has four coefficients, so it needs at least four lines, and at least five to test itself.",
+      "A velocity needs the rest wavelength in the same medium, air or vacuum, as the observed one.",
+      "Los píxeles más finos muestrean mejor la línea, pero no separan dos líneas que la función de dispersión ya fundió."
+    ]
+  },
+  "notBuilt": "see scope.notBuilt",
+  "amendments": [
+    {
+      "id": "AM1",
+      "when": "after the oracle script was written and before it produced results and before any kernel code existed",
+      "what": "the science exposure's four Balmer lines are H-beta, H-gamma, H-delta and H-epsilon, where the committed text named H-alpha, H-beta, H-gamma and H-delta; B1's pixel grid starts at 380 nm instead of 480 nm so that it holds them",
+      "why": "the reference spectrograph's solution (380 + 0.105 x - 1e-7 x^2 + 4e-12 x^3, 2048 pixels) covers 380 to 595 nm and H-alpha (656.279 nm) is outside it; the oracle's own root find failed on it. No bound, tolerance or count moved",
+      "boundMoved": false
+    },
+    {
+      "id": "AM2",
+      "when": "after the oracle's first results and before any kernel code existed",
+      "what": "the isolation rule of the reference arc is a gap of more than 6 FWHM (1.8 nm), where the committed text said 2.5 FWHM (0.75 nm); 16 lines were isolated by the old rule, 14 are by the new",
+      "why": "the oracle's own fits showed two lines (Mg b1, He I 5876) with a reduced chi-square of 1894 and 363, because a neighbour (Mg b2 at 1.09 nm, Na D2 at 1.43 nm) lies inside the 12-pixel (1.26 nm) fit window or its wing does. The harness's isolation rule was too weak for its own window. It only removes lines from the ensembles; no bound, tolerance or count of a check moved",
+      "boundMoved": false
+    },
+    {
+      "id": "AM3",
+      "when": "before any kernel code existed",
+      "what": "F2 states the throughput at R equal to R_s as 0.760968108 (erf(sqrt(ln 2))), where the committed text said 0.76115",
+      "why": "a miscopied numeral: the stated closed form erf(sqrt(ln 2)) is 0.760968108 and the oracle's dblquad agrees to 1e-12; the tolerance (1e-5 relative) and the expression are unchanged",
+      "boundMoved": false
+    },
+    {
+      "id": "AM4",
+      "when": "after the kernel module existed and was smoke-run on the A2 cases, before any validator or test existed",
+      "what": "the oracle's A2 inputs are rounded to the 15 significant digits the file keeps before their values are computed, and the file keeps 15 digits for every number where the first version kept 12 and computed the A2 values from full-precision inputs",
+      "why": "the smoke run showed an absolute difference of 1.4e-11 on an A2 case with a correct erf (the kernel's erf agrees with scipy's to 1e-16): the stored inputs' rounding; and a value near 0.5 stored to 12 digits cannot meet the committed 1e-14 absolute bound at all. The oracle was regenerated with the same seed: the arc's noise and every other draw are unchanged. No bound, tolerance or case count moved",
+      "boundMoved": false
+    },
+    {
+      "id": "AM5",
+      "when": "after the kernel and the validator existed, before the first full run's results were read into any document",
+      "what": "A7 and SPECTROGRAPH.md state the H-alpha media offset as 82.82 km/s where the committed text said 82.7 km/s",
+      "why": "a miscopied numeral: c (656.4603 / 656.279 - 1) is 82.819 km/s and the oracle's independent value is 82.8190032523; the check compares the kernel with the oracle to a relative 1e-12, not with the numeral in the prose, and does not change",
+      "boundMoved": false
+    },
+    {
+      "id": "AM6",
+      "when": "after the kernel and the validator existed and passed, before the panel, the lesson and the instructor materials",
+      "what": "a leg A9.pair.dip is added (the dip between two equal Gaussian lines against scipy), with its oracle block a9 appended to the oracle's results",
+      "why": "the panel and the lesson state a dip between two lines, which the committed contract did not cover. It adds a leg and moves no bound or tolerance; the oracle's other blocks are byte-identical (checked) and no random draw changed",
+      "boundMoved": false
+    }
+  ]
+}

@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "exposure:validate": "node tools/exposure-validate.mjs",
+    "spectrograph:validate": "node tools/spectrograph-validate.mjs",
     "photcal:validate": "node tools/photometric-calibration-validate.mjs",
     "strategy:validate": "node tools/strategy-validate.mjs",
     "survey:validate": "node tools/survey-validate.mjs",

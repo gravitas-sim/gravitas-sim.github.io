@@ -173,8 +173,9 @@ const SHARED = [
   'strategy-sequence.js',
   'survey-sequence.js',
   'photometric-calibration-sequence.js',
+  'spectrograph-sequence.js',
 ];
-/** The shared files that have a sibling under es/: the Spanish of planets-sequence.js, telescope-sequence.js, exposure-sequence.js, saturated-star-sequence.js and strategy-sequence.js and survey-sequence.js lives in the file itself (D-R10-206-02, D-R10-208-02, D-R10-210-01, D-R10-211-01, D-R10-214-02, D-R10-215-02). */
+/** The shared files that have a sibling under es/: the Spanish of planets-sequence.js, telescope-sequence.js, exposure-sequence.js, saturated-star-sequence.js and strategy-sequence.js and spectrograph-sequence.js and survey-sequence.js lives in the file itself (D-R10-206-02, D-R10-208-02, D-R10-210-01, D-R10-211-01, D-R10-214-02, D-R10-213-02, D-R10-215-02). */
 const SHARED_ES = SHARED.filter(
   f =>
     f !== 'planets-sequence.js' &&
@@ -182,8 +183,9 @@ const SHARED_ES = SHARED.filter(
     f !== 'exposure-sequence.js' &&
     f !== 'saturated-star-sequence.js' &&
     f !== 'strategy-sequence.js' &&
-    f !== 'survey-sequence.js' &&
-    f !== 'photometric-calibration-sequence.js'
+    f !== 'photometric-calibration-sequence.js' &&
+    f !== 'spectrograph-sequence.js' &&
+    f !== 'survey-sequence.js'
 );
 
 describe('loading a lesson', () => {

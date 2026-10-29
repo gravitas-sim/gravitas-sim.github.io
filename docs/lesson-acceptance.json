@@ -1210,6 +1210,19 @@
       ],
       "evidenceFrom": "model"
     },
+    "why-two-lines-become-one": {
+      "centralExperimentId": "ce.why-two-lines-become-one",
+      "object": "panel:spectrograph-lines",
+      "control": "spectrograph-lines/R",
+      "quantity": "the dip between two spectral lines 0.5 nm apart at 500 nm, in percent of the lower peak: 7.3 at R = 1000 and 87.5 at R = 2000, none at R = 500",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "smallest-r-predict",
+        "dip-by-r"
+      ],
+      "evidenceFrom": "model"
+    },
     "the-saturated-star": {
       "centralExperimentId": "ce.the-saturated-star",
       "object": "panel:detector-effects",

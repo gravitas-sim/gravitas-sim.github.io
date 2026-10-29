@@ -47,6 +47,7 @@ import WANDERERS_ON_THE_SKY_DEEPER from '../data/investigations/depth/wanderers-
 import PLAN_A_NIGHT_DEEPER from '../data/investigations/depth/plan-a-night.js';
 import GOLDILOCKS_DEEPER from '../data/investigations/depth/goldilocks-question.js';
 import { DEPTH as TELESCOPE_DEPTH } from '../data/investigations/telescope-sequence.js';
+import { DEPTH as SPECTROGRAPH_DEPTH } from '../data/investigations/spectrograph-sequence.js';
 import { DEPTH as STRATEGY_DEPTH } from '../data/investigations/strategy-sequence.js';
 import { DEPTH as SURVEY_DEPTH } from '../data/investigations/survey-sequence.js';
 import { DEPTH as SATURATED_STAR_DEPTH } from '../data/investigations/saturated-star-sequence.js';
@@ -67,6 +68,9 @@ export const DEEPER = Object.freeze({
   [GOLDILOCKS_DEEPER.id]: GOLDILOCKS_DEEPER.steps,
   ...Object.fromEntries(
     Object.entries(TELESCOPE_DEPTH).map(([id, d]) => [id, d.steps])
+  ),
+  ...Object.fromEntries(
+    Object.entries(SPECTROGRAPH_DEPTH).map(([id, d]) => [id, d.steps])
   ),
   ...Object.fromEntries(
     Object.entries(SATURATED_STAR_DEPTH).map(([id, d]) => [id, d.steps])

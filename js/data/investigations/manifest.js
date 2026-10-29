@@ -1088,6 +1088,19 @@ export const MANIFEST = [
     objectiveCount: 4,
   },
   {
+    id: 'why-two-lines-become-one',
+    title: 'Why Two Lines Become One',
+    subtitle:
+      'Why a spectrograph can show two lines as one, what pixels can and cannot fix, how a wavelength scale is calibrated from an arc and what it costs in light',
+    duration: '10-20 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/why-two-lines-become-one.webp',
+    depths: 3,
+    stepCount: 6,
+    gradedCount: 4,
+    objectiveCount: 4,
+  },
+  {
     id: 'the-saturated-star',
     title: 'The Saturated Star',
     subtitle:

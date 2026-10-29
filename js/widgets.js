@@ -415,6 +415,12 @@ export const LAZY_FAMILIES = Object.freeze({
     'PHOTCAL_WIDGETS',
     ['photometric-calibration']
   ),
+  spectrograph: familyEntry(
+    () => import('./spectrographWidgets.js'),
+    './spectrographWidgets.js',
+    'SPECTROGRAPH_WIDGETS',
+    ['spectrograph-lines', 'spectrograph-arc', 'spectrograph-trade']
+  ),
   strategy: familyEntry(
     () => import('./strategyWidgets.js'),
     './strategyWidgets.js',

@@ -342,6 +342,18 @@ $('obsComparePanel').addEventListener('toggle', async () => {
   cmp.loading ??= import('./observatory/comparePanel.js').then(mountCompare);
   await cmp.loading;
 });
+// The spectrograph model (SPECTROGRAPH.md): one line fitted with the instrument's
+// line-spread function, loaded when first opened.
+const spec = { panel: null };
+$('obsSpecPanel').addEventListener('toggle', async () => {
+  if (!$('obsSpecPanel').open || !state.view) return;
+  if (spec.panel) return spec.panel.update(state.view);
+  const m = await import('./observatory/spectrographPanel.js');
+  spec.panel = m.mountSpectrographPanel($('obsSpecBody'), {
+    ...lent,
+    observation: state.view,
+  });
+});
 $('obsFitPanel').addEventListener('toggle', async () => {
   if (!$('obsFitPanel').open || !state.view) return;
   (await fitPanel()).update(state.view);
@@ -365,6 +377,9 @@ function renderFit(o) {
   const compares =
     o.kind === 'time-series' &&
     (dim === 'ratio' || dim === 'velocity' || dim === null);
+  $('obsSpecPanel').hidden = o.kind !== 'spectrum';
+  if (o.kind === 'spectrum' && spec.panel && $('obsSpecPanel').open)
+    spec.panel.update(o);
   $('obsComparePanel').hidden = !compares;
   if (compares && cmp.panel && $('obsComparePanel').open) cmp.panel.update(o);
   if (fit.suits && fit.panel && $('obsFitPanel').open) fit.panel.update(o);

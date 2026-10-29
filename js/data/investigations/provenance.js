@@ -104,6 +104,7 @@ export const EVIDENCE_FROM = Object.freeze({
   'why-rings': 'model',
   'why-the-bright-ones-win': 'model',
   'why-the-period-is-wrong': 'model',
+  'why-two-lines-become-one': 'model',
   'why-venus-is-hot': 'model',
 });
 

@@ -468,6 +468,12 @@ export const NEVER_PRECACHED = [
   // The interiors kernel and its packs (Prompt 203, INTERIORS.md): imported by no
   // shipped page yet, so no page can fetch them and an install has no use for them.
   /^js\/kernels\/interiors\//,
+  // Prompt 213: the spectrograph kernel, field, panels, adapter and the lesson's one new file (D-R10-213-04).
+  /^js\/kernels\/spectrograph\//,
+  /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(why-two-lines-become-one|spectrograph-sequence)\.js$/,
+  /^(js\/spectrographWidgets\.js|js\/spectrographField\.js|js\/i18n\/(en|es)\.spectrograph\.js)$/,
+  /^js\/instruments\/spectrograph\.js$/,
+  /^js\/observatory\/spectrographPanel\.js$/,
   // Prompt 214: the strategy kernel, planner extension, panels and the strategy lesson's one new file (D-R10-214-06).
   /^js\/kernels\/strategy\//,
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(why-the-period-is-wrong|strategy-sequence)\.js$/,

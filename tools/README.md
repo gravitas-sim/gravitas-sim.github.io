@@ -190,6 +190,7 @@ current, and the orchestrator checks it.
 | `small-bodies-validate.mjs` | The small-body kernel against its committed thresholds (Prompt 198) | `npm run small-bodies:validate` |
 | `small-body-sweep.mjs` | Small-body scenario sweep |  |
 | `source-closure.mjs` | Which files a program actually reads |  |
+| `spectrograph-validate.mjs` | The spectrograph kernel against its committed thresholds (Prompt 213) | `npm run spectrograph:validate` |
 | `starfield-probe.mjs` | Starfield phase profile |  |
 | `static-server.mjs` | A static file server with no dependencies | `npm run serve:dist` |
 | `statistics-cases.mjs` | The statistics kernel's validation group (Prompt 154) |  |
