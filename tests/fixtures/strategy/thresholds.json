@@ -186,11 +186,12 @@
       "what": "over three site and target cases every planned visit lies in a usable interval of its night (from the planner's own observingNight) and consecutive visits of a night are exactly the stated spacing apart; the count equals floor((W - d) / s) + 1 for a window of W hours, a visit of d hours and spacing s",
       "limits": {
         "sites": [
-          "La Silla 5 nights at declination -30",
-          "Mauna Kea 5 nights at declination +20",
-          "Las Cumbres Haleakala 5 nights at declination +45"
+          "lco-1m0 (Cerro Tololo) declination -30, RA 180",
+          "lco-0m35 (McDonald) declination +20, RA 90",
+          "lco-0m35 (McDonald) declination +45, RA 300"
         ],
-        "maxSecondsOutside": 0
+        "maxSecondsOutside": 0,
+        "firstNight": "local midnight of 2026-03-14 at the site's longitude, 5 nights; perNight 3, spacing 1.5 h, exposure 300 s, overhead 60 s"
       }
     },
     {
@@ -381,6 +382,15 @@
       "was": "every one of Astropy's three highest peaks within 0.25/T of f0 + k f_s with k = -2..2",
       "now": "the same with every integer k that puts |f0 + k f_s| inside the grid (0.02 to 3.0 c/d)",
       "reason": "found when the oracle was first run, before js/kernels/strategy/ existed: on an exact sidereal comb every alias has power 1 to within 1e-5, so which three come out highest is decided by the fifth decimal and may be k = -4; restricting k to -2..2 mis-stated the contract. The frequency tolerance (0.25/T) and the height tolerance (0.05) are unchanged; A7 keeps k = 1, 2 on the pattern whose aliases differ in height."
+    },
+    {
+      "id": "AM2",
+      "check": "A10.planConstraints",
+      "kernelExisted": true,
+      "boundMoved": false,
+      "was": "the three cases named La Silla, Mauna Kea and Haleakala",
+      "now": "the three cases above, from the instrument library's sites (Cerro Tololo and McDonald), with the right ascensions, date and cadence written out",
+      "reason": "the library holds no La Silla, Mauna Kea or Haleakala site and nothing may be typed from memory; the kernel's modules existed but had not been run against any check. The constraint (zero seconds outside a usable interval, the exact spacing and count) is unchanged."
     }
   ]
 }
