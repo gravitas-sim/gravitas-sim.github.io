@@ -11,15 +11,15 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 87 investigations and 1260 steps: 1168 steps
+Across 88 investigations and 1268 steps: 1176 steps
 declare a scene, 157 let a reader change one, 167 read the
-running integration, 759 show a prescribed model result, 146 draw
-on a stored dataset, 638 put a self-contained panel beside the text,
-332 keep something, and 58 are prose.
-Of 168 prediction loops, 168 are returned to,
-168 produce a measurement before they are answered, and
+running integration, 767 show a prescribed model result, 146 draw
+on a stored dataset, 646 put a self-contained panel beside the text,
+334 keep something, and 58 are prose.
+Of 169 prediction loops, 169 are returned to,
+169 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
-168 hold their marking until the experiment settles them.
+169 hold their marking until the experiment settles them.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -1238,4 +1238,18 @@ Of 168 prediction loops, 168 are returned to,
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:exposure-planner`, control exposure-planner/exposures, measures the total exposure that reaches a signal-to-noise of 20 for a magnitude-24 star in the Rubin r band: 455 seconds in two exposures and 512 seconds in twenty, the read noise paid once per exposure, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## Why the Period Is Wrong (`why-the-period-is-wrong`)
+
+- **Steps:** 8. Scene declared on 8; a reader can change something on 0; 8 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 8 prescribed model, 0 stored dataset, 8 self-contained panel.
+- **What students do:** move-an-instrument-control, commit-a-prediction, record-values, choose-an-option.
+- **Objects the steps declare:** star.
+- **Instruments:** strategy-window.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** predict-the-period → the-aliases, why-the-comb, break-the-tie, what-breaks-it, the-wrong-answer, the-cadence-comes-first → the-aliases.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:strategy-window`, control strategy-window/cadence, measures the phase bins out of 20 that forty nights of visits fill for a 0.8-day period: 13 for one visit a night at the same time and 20 for three visits a night at irregular times, the cadence that breaks the alias, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 

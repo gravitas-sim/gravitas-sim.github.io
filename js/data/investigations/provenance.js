@@ -51,7 +51,6 @@ export const EVIDENCE_FROM = Object.freeze({
   'phases-and-eclipses': 'model',
   'plan-a-night': 'model',
   'plan-an-exposure': 'model',
-  'why-the-period-is-wrong': 'model',
   'power-law-gravity': 'model',
   'radial-velocity': 'model',
   'refitting-a-transit': 'computation',
@@ -99,6 +98,7 @@ export const EVIDENCE_FROM = Object.freeze({
   'who-gets-counted': 'model',
   'why-rings': 'model',
   'why-the-bright-ones-win': 'model',
+  'why-the-period-is-wrong': 'model',
   'why-venus-is-hot': 'model',
 });
 
