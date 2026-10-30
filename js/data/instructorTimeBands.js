@@ -76,6 +76,7 @@ import { INSTRUCTOR as SPECTROGRAPH } from './investigations/spectrograph-sequen
 import { INSTRUCTOR as SATURATED_STAR } from './investigations/saturated-star-sequence.js';
 import { INSTRUCTOR as PHOTCAL } from './investigations/photometric-calibration-sequence.js';
 import { INSTRUCTOR as BINARIES } from './investigations/binaries-sequence.js';
+import { INSTRUCTOR as MASSES } from './investigations/binary-masses-sequence.js';
 
 export const LESSON_BANDS = Object.freeze({
   ...MEASUREMENT.bands,
@@ -90,6 +91,7 @@ export const LESSON_BANDS = Object.freeze({
   ...SATURATED_STAR.bands,
   ...PHOTCAL.bands,
   ...BINARIES.bands,
+  ...MASSES.bands,
   'keplers-laws': { core: 'medium', quantitative: 'long', advanced: 'long' },
   'retrograde-motion': { core: 'medium' },
   'transit-photometry': {

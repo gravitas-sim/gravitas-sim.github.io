@@ -312,6 +312,7 @@ export const SEQUENCES = [
       ['design-the-schedule', 'core'],
       ['why-the-period-is-wrong', 'core'],
       ['two-stars-eclipsing', 'core'],
+      ['weighing-the-stars-for-real', 'core'],
       ['deep-or-wide', 'core'],
       ['two-telescopes-one-question', 'core'],
       ['propose-an-observation', 'advanced', ['deep-or-wide']],

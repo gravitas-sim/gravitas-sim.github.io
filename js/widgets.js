@@ -397,6 +397,12 @@ export const LAZY_FAMILIES = Object.freeze({
     'ECLIPSE_WIDGETS',
     ['eclipse-curve', 'eclipse-fit']
   ),
+  masses: familyEntry(
+    () => import('./massesWidgets.js'),
+    './massesWidgets.js',
+    'MASSES_WIDGETS',
+    ['masses-minimum', 'masses-solve', 'masses-diagram']
+  ),
   effects: familyEntry(
     () => import('./effectsWidgets.js'),
     './effectsWidgets.js',
@@ -643,6 +649,8 @@ export async function whenWidgetsReady() {
     'photcal',
     // The eclipse family reaches the plot component and the inference core: late for the same reason (Prompt 217).
     'eclipse',
+    // The mass family reaches the plot component, the inference core and the MIST tracks: late for the same reason (Prompt 218).
+    'masses',
     'surveyDesign',
   ];
   await Promise.all(families.filter(f => !late.includes(f)).map(loadFamily));

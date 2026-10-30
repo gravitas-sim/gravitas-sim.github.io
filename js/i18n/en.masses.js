@@ -1,0 +1,137 @@
+// The mass panels' words, in English (Prompt 218). The assumption lines are fixed
+// text, so they translate by key.
+export const EN_MASSES = {
+  'masW.on': 'on',
+  'masW.off': 'off',
+  'masW.v.deg': '{x}°',
+  'masW.axis.phase': 'Orbital phase',
+  'masW.axis.flux': 'Relative flux',
+  'masW.axis.rv': 'Radial velocity minus the systemic velocity (km/s)',
+  'masW.axis.logM': 'log10 of the mass (solar masses)',
+  'masW.axis.logR': 'log10 of the radius (solar radii)',
+  'masW.axis.logL': 'log10 of the luminosity (solar luminosities)',
+  'masW.legend.star1': 'Star 1, data',
+  'masW.legend.star2': 'Star 2, data',
+  'masW.legend.model1': 'Star 1, fit',
+  'masW.legend.model2': 'Star 2, fit',
+  'masW.legend.flux': 'Synthetic light curve',
+  'masW.legend.fit': 'Fit',
+  'masW.legend.zams': 'MIST, zero age',
+  'masW.legend.tams': 'MIST, end of the main sequence',
+  'masW.legend.star': 'Solved stars',
+  'masW.m.title': 'Minimum masses from velocities',
+  'masW.m.note':
+    'Two Doppler curves of one orbit give the ratio of the masses and the size of the orbit times sin i, so every mass is a minimum: the true mass is larger by 1 / sin³ i, and without an eclipse or another measurement the inclination is not known. Choose the inclination to see what the masses would be. A single-lined orbit gives only the mass function. Every data set here is synthetic.',
+  'masW.m.control.system': 'System',
+  'masW.m.control.inc': 'Inclination you assume',
+  'masW.m.system.0': 'a double-lined pair that never eclipses',
+  'masW.m.system.1': 'a single-lined orbit',
+  'masW.row.data': 'Data',
+  'masW.v.data':
+    '{n} velocities of each star, {s} km/s per point; orbit fitted',
+  'masW.v.data1':
+    '{n} velocities of one star, {s} km/s per point; orbit fitted',
+  'masW.row.orbit': 'Orbit',
+  'masW.v.orbit': 'period {p} ± {ps} d, e = {e}',
+  'masW.row.K1': 'K1, star 1',
+  'masW.row.K2': 'K2, star 2',
+  'masW.v.K': '{v} ± {s} km/s',
+  'masW.row.q': 'Mass ratio M2 / M1',
+  'masW.v.q': '{v} ± {s}, which is K1 / K2',
+  'masW.row.asini': 'a sin i',
+  'masW.v.asini': '{v} ± {s} solar radii',
+  'masW.row.min1': 'Minimum mass of star 1',
+  'masW.row.min2': 'Minimum mass of star 2',
+  'masW.v.min': 'at least {v} ± {s} solar masses (M sin³ i)',
+  'masW.row.atInc': 'At your inclination',
+  'masW.v.atInc':
+    'i = {i}°: star 1 would be {a}, star 2 {b} solar masses; the true inclination is not in these data',
+  'masW.row.mf': 'Mass function',
+  'masW.v.mf':
+    '{v} ± {s} solar masses: the one number a single line fixes; no mass of either star follows from it',
+  'masW.row.min': 'Minimum companion mass',
+  'masW.v.minCompanion':
+    'at least {v} solar masses, for a primary of {m} solar masses that you were told, and i = 90°',
+  'masW.v.atIncCompanion':
+    'i = {i}°: the companion would be {v} solar masses, for the same primary',
+  'masW.row.assumes': 'Assumes',
+  'masW.a.min':
+    'Two stars on one Kepler orbit, the velocities as given with their error bars, one systemic velocity; the masses are minima until an inclination is known',
+  'masW.a.sb1':
+    'One star’s velocities only; the primary’s mass is a number you were given, not measured, so the companion’s mass is a minimum conditional on it',
+  'masW.row.refused': 'Refused',
+  'masW.s.title': 'Weigh the stars',
+  'masW.s.note':
+    'One fit of the eclipse light curve and both radial-velocity curves, sharing one orbit. The light curve gives the inclination and the radii as fractions of the orbit; the velocities give the size of the orbit and the mass ratio. Together: the masses and radii of both stars, with the uncertainty of the whole fit carried through. Every data set here is synthetic; the truth is shown when asked.',
+  'masW.s.control.system': 'System',
+  'masW.s.control.lines': 'Stars with a velocity curve',
+  'masW.s.control.view': 'Curve shown',
+  'masW.s.control.truth': 'Show what made the data',
+  'masW.s.system.0': 'F-star pair',
+  'masW.s.system.1': 'eccentric pair',
+  'masW.s.system.2': 'low-mass pair',
+  'masW.s.system.3': 'hot pair',
+  'masW.s.view.0': 'light curve',
+  'masW.s.view.1': 'velocities',
+  'masW.s.lines.1': 'one (single-lined)',
+  'masW.s.lines.2': 'both',
+  'masW.row.system': 'Data',
+  'masW.v.system':
+    '{n} light-curve rows ({f} per point), {r} velocities per star ({s} km/s per point), period {p} d',
+  'masW.row.geometry': 'From the eclipses',
+  'masW.v.geometry': 'inclination {i}° ± {si}, R1/a = {r1}, R2/a = {r2}',
+  'masW.row.masses': 'Masses',
+  'masW.v.massesPair': 'M1 = {a} ± {sa}, M2 = {b} ± {sb} solar masses',
+  'masW.v.massesOpen':
+    'M1 = {a}, M2 = {b} solar masses, not constrained ({why})',
+  'masW.row.radii': 'Radii',
+  'masW.v.radiiPair': 'R1 = {a} ± {sa}, R2 = {b} ± {sb} solar radii',
+  'masW.v.radiiOpen': 'R1 = {a}, R2 = {b} solar radii, not constrained ({why})',
+  'masW.row.sep': 'Orbit',
+  'masW.v.sep': 'semi-major axis {a} ± {sa} solar radii, mass ratio {q} ± {sq}',
+  'masW.row.logg': 'Surface gravity',
+  'masW.v.logg': 'log g = {a} and {b} (cgs)',
+  'masW.row.share': 'Inclination in the mass',
+  'masW.v.share':
+    'the inclination carries {x} percent of the variance of M1: the eclipse fixes it so well that the masses’ uncertainty is the velocities’',
+  'masW.row.verdict': 'What the data fix',
+  'masW.verdict.constrained':
+    'constrained: every fitted parameter is fixed to its stated uncertainty',
+  'masW.verdict.open': 'not constrained: {names}',
+  'masW.why.rank': 'the data leave a direction open',
+  'masW.why.bound': 'it sits on its bound',
+  'masW.why.uncertain': 'its uncertainty is over a quarter of its value',
+  'masW.why.derived': 'it follows from a parameter the data leave open',
+  'masW.why.singular': 'the covariance is singular',
+  'masW.row.chi2': 'Goodness of fit',
+  'masW.v.chi2':
+    'reduced chi-square {c} on {d} degrees of freedom; correlated-noise factor {b}',
+  'masW.row.single': 'One line only',
+  'masW.v.single':
+    'no second velocity curve, so no mass ratio: the fit returns the mass function {f} solar masses and, for a primary of {m} solar masses that you were told, a companion of at least {v}. It does not return a mass, with or without the eclipse',
+  'masW.row.truth': 'What made it',
+  'masW.v.truth':
+    'M1 {a}, M2 {b} solar masses; R1 {c}, R2 {d} solar radii; inclination {i}°; K1 {k1}, K2 {k2} km/s',
+  'masW.a.solve':
+    'The detached model of the inference core (two spheres on one Kepler orbit, limb darkening fixed, no third light) and its velocity curves from the same orbit; the masses use the nominal solar GM, the radii the nominal solar radius',
+  'masW.d.title': 'Masses and radii against MIST',
+  'masW.d.note':
+    'The stars you have solved, with their masses and radii (or luminosities) against the MIST tracks at solar composition. The shaded band lies between a star just born on the main sequence and one at its end; a main-sequence star should sit inside it. Temperatures are inputs: star 1’s is given, star 2’s follows from the fitted surface brightness ratio in the 0.8 micrometer band.',
+  'masW.d.control.view': 'Vertical axis',
+  'masW.d.control.systems': 'Systems solved',
+  'masW.d.control.band': 'MIST band',
+  'masW.d.view.0': 'radius',
+  'masW.d.view.1': 'luminosity',
+  'masW.row.star': 'System {id}, star {n}',
+  'masW.v.starR': '{m} ± {sm} solar masses, {r} ± {sr} solar radii; {where}',
+  'masW.v.starL':
+    '{m} ± {sm} solar masses, luminosity {l} ± {sl} solar, temperature {t} ± {st} K; {where}',
+  'masW.where.in': 'inside the MIST band',
+  'masW.where.out': 'outside the MIST band',
+  'masW.row.band': 'The band',
+  'masW.v.band':
+    'MIST v1.2, solar composition, no rotation: zero-age and terminal-age main sequences from 0.2 to 40 solar masses',
+  'masW.row.limits': 'Limits',
+  'masW.a.diagram':
+    'The systems here are synthetic: their radii and temperatures were read from these tracks at a stated fraction of main-sequence life and rounded; they agree with MIST by construction, and a real star may not',
+};

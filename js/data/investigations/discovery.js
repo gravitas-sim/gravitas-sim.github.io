@@ -940,6 +940,16 @@ export const DISCOVERY = {
     },
     courseLevel: 'survey',
   },
+  'weighing-the-stars-for-real': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: [],
+    textbook: {
+      chapter: 18,
+      section: null,
+    },
+    courseLevel: 'survey',
+  },
   'deep-or-wide': {
     audience: 'intro',
     mathematics: 'algebra',

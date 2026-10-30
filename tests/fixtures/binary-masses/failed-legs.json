@@ -1,0 +1,107 @@
+{
+  "note": "Legs of tests/fixtures/binary-masses/thresholds.json that crossed their bound, kept failing and labelled (only Carl resets a bound).",
+  "failed": [
+    {
+      "id": "C1.coverageSb2",
+      "measured": {
+        "coverage": {
+          "K1": {
+            "rate": 0.6666666666666666,
+            "n": 120
+          },
+          "K2": {
+            "rate": 0.725,
+            "n": 120
+          },
+          "ecosw": {
+            "rate": 0.7166666666666667,
+            "n": 120
+          },
+          "esinw": {
+            "rate": 0.7833333333333333,
+            "n": 120
+          },
+          "P": {
+            "rate": 0.7916666666666666,
+            "n": 120
+          },
+          "q": {
+            "rate": 0.6916666666666667,
+            "n": 120
+          },
+          "asini": {
+            "rate": 0.675,
+            "n": 120
+          },
+          "m1sin3i": {
+            "rate": 0.6833333333333333,
+            "n": 120
+          },
+          "m2sin3i": {
+            "rate": 0.7083333333333334,
+            "n": 120
+          }
+        },
+        "failures": 0
+      },
+      "why": "The 1-sigma interval held the true period in 95 of 120 seeds, 0.7917, against the upper bound 0.79 of the committed band; every other quantity is inside [0.57, 0.79] (K1 0.667, K2 0.725, e cos w 0.717, e sin w 0.783, q 0.692, a sin i 0.675, M1 sin^3 i 0.683, M2 sin^3 i 0.708). The excess is 0.0017, two seeds of 120 short of the bound; the bound was fixed before any fit and is not moved here. Only Carl resets a bound."
+    },
+    {
+      "id": "D4.grazing",
+      "measured": {
+        "flagged": 0.8,
+        "controlFlagged": 0,
+        "failures": 0
+      },
+      "why": "The rule of Prompt 217 (unchanged) flagged the radius ratio of the thin-lens system G1 not constrained in 24 of 30 seeds, 0.80, against the bound 0.90, and the radii R1 and R2 with it in the same 24; the control (first 40 seeds of X1) was flagged in 0 of 40. The same rule failed the same leg of Prompt 217 at the same rate (0.80); the model page and the lesson say that a thin eclipse can leave k open without the panel saying so one time in five."
+    },
+    {
+      "id": "E1.authentic",
+      "measured": {
+        "M_A": {
+          "ours": 1.2745044920111956,
+          "ourSigma": 0.0036308074314422988,
+          "paper": 1.2745,
+          "paperSigma": 0.0036,
+          "deltaOverPaperSigma": 0.0012477808876883618
+        },
+        "M_B": {
+          "ours": 1.2577105561735993,
+          "ourSigma": 0.0030397767030196335,
+          "paper": 1.2577,
+          "paperSigma": 0.003,
+          "deltaOverPaperSigma": 0.0035187245330803307
+        },
+        "R_A": {
+          "ours": 1.2928668447727136,
+          "ourSigma": 0.0015183114873149788,
+          "paper": 1.2941,
+          "paperSigma": 0.0016,
+          "deltaOverPaperSigma": 0.7707220170539986
+        },
+        "R_B": {
+          "ours": 1.2678621483739287,
+          "ourSigma": 0.0015359108599478216,
+          "paper": 1.2637,
+          "paperSigma": 0.0017,
+          "deltaOverPaperSigma": 2.4483225728992344
+        },
+        "a": {
+          "ours": 14.983675854738443,
+          "ourSigma": 0.012526065884576797,
+          "paper": 14.984,
+          "paperSigma": 0.013,
+          "deltaOverPaperSigma": 0.02493425088896555
+        },
+        "geometry": {
+          "rsum": 0.17090125400282444,
+          "k": 0.9806594959876316,
+          "inc": 87.90326450857779,
+          "P": 4.222022808497912
+        }
+      },
+      "why": "V505 Persei: M_A, M_B, a and R_A agree with the published values to 0.001, 0.004, 0.02 and 0.77 of the published sigma (the masses nearly by construction, the published K values being inputs); R_B is 1.2679 +- 0.0015 against the published 1.2637 +- 0.0017, 2.45 published sigma against the bound 2. Our radius ratio k = 0.9807 (Prompt 217 measured 0.98 from the same light curve) against the published 0.9788; the published Table II values (rsum 0.170906, k 0.9788) give R_B = 1.2667 with the published a, and the published R_B corresponds to k = 0.9765, so the published numbers are not mutually consistent at the second star by 0.0030 solar radii in the HTML rendering read here. The model has no reflection effect and fits no out-of-eclipse lines, as in 217."
+    }
+  ],
+  "notMeasured": []
+}
