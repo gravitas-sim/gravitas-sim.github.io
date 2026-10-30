@@ -138,7 +138,7 @@ catalogue refers to it, so a change to it can reach a student.
 | [SCIENTIFIC_KERNEL_GATE.md](SCIENTIFIC_KERNEL_GATE.md) | Scientific numerical kernel and WebAssembly gate. | gate | unassigned | written | no |
 | [SECURITY.md](SECURITY.md) | Security posture and how to report a vulnerability. | policy | P127 | written | yes |
 | [SEEDING.md](SEEDING.md) | Seeding: named random streams that keep every old sequence. | feature | P149 | written | no |
-| [SEISMOLOGY_GATE.md](SEISMOLOGY_GATE.md) | Asteroseismology gate: the committed spectrum, background, numax, delta nu and scaling-relation methods and bounds, the measured legs and the verdict (Prompt 221 Part A). | gate | P221 | written | no |
+| [SEISMOLOGY_GATE.md](SEISMOLOGY_GATE.md) | Asteroseismology gate: the committed spectrum, background, numax, delta nu and scaling-relation methods and bounds, the measured legs and the verdict (Prompt 221 Part A). | gate | P221 | written | yes |
 | [SKY_LAB.md](SKY_LAB.md) | The Sky Lab. | feature | P88 | written | yes |
 | [SKY_LAB_GATE.md](SKY_LAB_GATE.md) | Sky Lab gate: sky, time and coordinates. | gate | P87 | written | no |
 | [SMALL_BODIES.md](SMALL_BODIES.md) | The belts from a catalog and the spin from a light curve: gaps as measured depletions, class counts, the survey's selection and a bounded ellipsoid light-curve model, validated (Prompt 198). | feature | P198 | written | yes |

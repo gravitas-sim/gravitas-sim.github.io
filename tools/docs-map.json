@@ -902,7 +902,7 @@
       "kind": "gate",
       "purpose": "Asteroseismology gate: the committed spectrum, background, numax, delta nu and scaling-relation methods and bounds, the measured legs and the verdict (Prompt 221 Part A).",
       "owner": 221,
-      "student": false
+      "student": true
     },
     {
       "file": "SKY_LAB.md",
