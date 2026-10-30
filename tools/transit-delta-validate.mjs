@@ -332,12 +332,12 @@ function compareFits(gfit, ofit, names) {
   return { out, worst };
 }
 
-function groupB(ORA, sfx) {
+function groupB(ORA, sfx, supersample = THR.sampling.fitSupersample) {
   const B1 = lim('B1');
   const B2 = lim('B2');
   const B3 = lim('B3');
   const syn = {};
-  if (wanted('B1' + sfx) || wanted('B3' + sfx)) {
+  if (sfx !== 'c' && (wanted('B1' + sfx) || wanted('B3' + sfx))) {
     for (const name of ['S1', 'S2', 'S3']) {
       const s = ORA.synthetic[name];
       const c = THR.syntheticCases[name];
@@ -359,7 +359,7 @@ function groupB(ORA, sfx) {
       };
     }
   }
-  if (wanted('B1' + sfx)) {
+  if (sfx !== 'c' && wanted('B1' + sfx)) {
     const ok = Object.values(syn).every(
       v =>
         v.worst <= B1.paramSigmas &&
@@ -399,7 +399,7 @@ function groupB(ORA, sfx) {
         parameters: bounds,
         settings: {
           exposure: EXPOSURE,
-          supersample: THR.sampling.fitSupersample,
+          supersample,
           annuli: THR.sampling.annuli,
         },
       },
@@ -437,7 +437,7 @@ function groupB(ORA, sfx) {
         parameters: bounds,
         settings: {
           exposure: EXPOSURE,
-          supersample: THR.sampling.fitSupersample,
+          supersample,
           annuli: THR.sampling.annuli,
           claret: C4,
         },
@@ -457,7 +457,7 @@ function groupB(ORA, sfx) {
       'transit-claret4 on HD 209458 with the labelled test law and b fixed at 0.43, against batman + scipy'
     );
   }
-  if (wanted('B4' + sfx)) {
+  if (sfx !== 'c' && wanted('B4' + sfx)) {
     const L = lim('B4');
     const s = ORA.synthetic.S4;
     const c = THR.syntheticCases.S4;
@@ -766,9 +766,11 @@ function groupE() {
 
 groupA();
 if (wanted('B0')) groupB0();
-if (wanted('B')) {
+if (!only.length || only.some(p => p.startsWith('B') && p !== 'B0')) {
   groupB(ORA_FIRST, '');
   groupB(ORA, 'b');
+  // AM3: the same two real-light-curve fits with the exposure converged at 21 samples.
+  groupB(ORA, 'c', 21);
 }
 if (wanted('C') || wanted('D')) groupC();
 groupE();

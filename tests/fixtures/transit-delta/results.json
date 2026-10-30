@@ -405,6 +405,55 @@
       "note": "the shipped HD 209458 rows; gravitas against batman + scipy"
     },
     {
+      "id": "B2c",
+      "status": "pass",
+      "measured": {
+        "worstSigmas": 0.009893,
+        "dChi2": 0.000369,
+        "sigmaRatio": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "detail": {
+          "t0": {
+            "sigmas": 0.009893,
+            "sigmaRatio": 1
+          },
+          "P": {
+            "sigmas": 0.008236,
+            "sigmaRatio": 1
+          },
+          "k": {
+            "sigmas": 0.0009539,
+            "sigmaRatio": 0.9999
+          },
+          "aRs": {
+            "sigmas": 0.0009383,
+            "sigmaRatio": 0.9999
+          },
+          "b": {
+            "sigmas": 0.001236,
+            "sigmaRatio": 0.9998
+          },
+          "q1": {
+            "sigmas": 0.000501,
+            "sigmaRatio": 0.9999
+          },
+          "q2": {
+            "sigmas": 0.0003372,
+            "sigmaRatio": 1
+          }
+        },
+        "reducedChi2": 7.984
+      },
+      "note": "the shipped HD 209458 rows; gravitas against batman + scipy"
+    },
+    {
       "id": "B3",
       "status": "fail",
       "measured": {
@@ -455,6 +504,33 @@
           }
         },
         "dChi2": 42.88
+      },
+      "note": "transit-claret4 on HD 209458 with the labelled test law and b fixed at 0.43, against batman + scipy"
+    },
+    {
+      "id": "B3c",
+      "status": "pass",
+      "measured": {
+        "worstSigmas": 0.07269,
+        "detail": {
+          "t0": {
+            "sigmas": 0.07269,
+            "sigmaRatio": 1
+          },
+          "P": {
+            "sigmas": 0.06234,
+            "sigmaRatio": 1
+          },
+          "k": {
+            "sigmas": 0.000379,
+            "sigmaRatio": 1
+          },
+          "aRs": {
+            "sigmas": 0.004093,
+            "sigmaRatio": 1
+          }
+        },
+        "dChi2": 0.02345
       },
       "note": "transit-claret4 on HD 209458 with the labelled test law and b fixed at 0.43, against batman + scipy"
     },

@@ -49,7 +49,7 @@ const C4 = THR.law.test;
 
 describe('the committed thresholds and the recorded table', () => {
   test('every check has a row, and the legs of failed-legs.json are exactly the failed rows', () => {
-    // The committed checks, and the legs that amendments added beside them (AM1, AM2).
+    // The committed checks, and the legs that amendments added beside them (AM1 to AM3).
     const ids = [
       ...THR.checks.map(c => c.id),
       ...THR.amendments.flatMap(a => a.legs),
@@ -71,7 +71,7 @@ describe('the committed thresholds and the recorded table', () => {
   test('no bound was reset: the limits are the committed ones (their count and ids)', () => {
     expect(THR.checks).toHaveLength(23);
     // An amendment never changes a bound: it says so, and adds legs beside the committed ones.
-    expect(THR.amendments.map(a => a.id)).toEqual(['AM1', 'AM2']);
+    expect(THR.amendments.map(a => a.id)).toEqual(['AM1', 'AM2', 'AM3']);
     expect(THR.amendments.every(a => a.boundsChanged === false)).toBe(true);
     expect(THR.checks.map(c => c.id)).toEqual(
       expect.arrayContaining(['B0', 'B1', 'B2', 'B3', 'B4', 'D1', 'D3'])
