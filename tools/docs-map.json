@@ -1017,6 +1017,13 @@
       "student": true
     },
     {
+      "file": "CLUSTER_FOUR_PARAMETER_GATE.md",
+      "kind": "gate",
+      "purpose": "The four-parameter cluster-fit gate (Prompt 219 Part B): its committed models and bounds, the measured legs, the verdict C and the spike run-1 defect.",
+      "owner": 219,
+      "student": true
+    },
+    {
       "file": "OBSERVING_STRATEGY.md",
       "kind": "feature",
       "purpose": "Observing strategy: the window function of a cadence, aliases and the verdict, phase coverage, a multi-night plan with its cost in hours, weather as a seeded loss, validation (Prompt 214).",

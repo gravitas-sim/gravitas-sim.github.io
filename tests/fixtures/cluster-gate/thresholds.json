@@ -1,0 +1,133 @@
+{
+  "format": "gravitas.cluster-gate-thresholds/1",
+  "prompt": "Roadmap III, Prompt 219 Part B gate: the four-parameter cluster fit (age, distance, reddening, metallicity) (tranche T3 by D-R10-207-01)",
+  "document": "CLUSTER_FOUR_PARAMETER_GATE.md",
+  "committed": "before any spike code, synthetic dataset, membership fit, binary treatment, selection likelihood, optimiser or result of Part B existed, and after Part A's kernel (js/kernels/clusters/) and its results were measured. Nothing below was tuned against a four-parameter fit, none of which had been run.",
+  "rule": "A crossed bound is a failed leg, recorded in the register row and left failing; only Carl resets one. A leg that cannot be measured fails the gate on that leg. The prototype stays on a spike branch that is never merged; a documentation-only PR and a register row land the verdict.",
+  "seeds": { "ensemble": "cluster-gate-219" },
+  "models": {
+    "membership": "Each star has a radial velocity with error 3 km/s. A two-component mixture on velocity alone, fitted by expectation-maximisation from the starting values (cluster 75 km/s, width 4; field 20 km/s, width 60; cluster share 0.6), gives each star a membership probability p_i; the cluster component's width includes the measurement error. The field's colour-magnitude density is the smoothed histogram of the stars with p_i < 0.2 (Gaussian kernels of 0.5 mag in g and 0.1 in colour); with fewer than 20 such stars the field is uniform in colour. The likelihood of a star is p_i M_i + (1 - p_i) F_i, with M_i the cluster model's probability of its (row, column) bin and F_i the field's.",
+    "binaries": "The model includes binaries at a stated fraction of 0.30: each piece of the isochrone has, beside its single-star weight (1 - 0.30), four companions of mass ratio q = 0.3875, 0.5625, 0.7375, 0.9125 (the midpoints of four equal bins of 0.3 to 1) with weight 0.30 / 4 each, whose flux adds in g and r (the main sequence's mass-magnitude relation of the same isochrone; a companion below its faint end adds nothing).",
+    "selection": "Prompt 154's selection-function object (js/kernels/statistics/selection.js logisticCompleteness) with the stated logistic completeness c(g) = 1 / (1 + exp((g - 19.0) / 0.5)) in the observed g multiplies the model's density, and the model's bin probabilities are normalised over the whole window, so the counts as well as the colours enter (unlike Part A). The synthetic clusters of the well-specified legs are selected by exactly this.",
+    "parameters": {
+      "logAge": [9.0, 9.6],
+      "dm": "truth +- 1.5",
+      "E": [0.0, 0.12],
+      "feh": [-0.5, 0.0]
+    },
+    "intervals": "Prompt 154's profile intervals at 68.27 percent: each parameter's profile is the minimum of the deviance over the other three, found by Nelder-Mead from the best fit's neighbours; an interval that runs into a bound is open.",
+    "threeParameter": "H legs: the same model with [Fe/H] profiled over its stated prior range [-0.5, 0.0] (minimised over, never reported) and age, distance and reddening fitted."
+  },
+  "synthetic": {
+    "how": "drawCluster of Part A with the additions: each star carries a radial velocity (a member N(75, 3^2) plus its own N(0, 3^2) error, a field star N(20, 60^2) plus the error), a binary fraction and the selection as stated per ensemble; truth manifests as in Part A.",
+    "ensembles": {
+      "well": {
+        "what": "G1, G2: every assumption of the model true",
+        "truth": { "logAge": 9.45, "dm": 12.3, "E": 0.042, "feh": -0.25 },
+        "N": 300,
+        "epsTrue": 0.15,
+        "fb": 0.3,
+        "selection": { "g50": 19.0, "width": 0.5 },
+        "n": 40
+      },
+      "interior": {
+        "what": "G3, H1, H2: a truth away from the grid's metallicities and the default reddening",
+        "truth": { "logAge": 9.35, "dm": 12.1, "E": 0.09, "feh": -0.4 },
+        "N": 300,
+        "epsTrue": 0.15,
+        "fb": 0.3,
+        "selection": { "g50": 19.0, "width": 0.5 },
+        "n": 40
+      },
+      "binariesWrong": {
+        "what": "G5 (reported): fb 0.15 true, 0.30 assumed",
+        "truth": { "logAge": 9.45, "dm": 12.3, "E": 0.042, "feh": -0.25 },
+        "N": 300,
+        "epsTrue": 0.15,
+        "fb": 0.15,
+        "n": 20
+      },
+      "selectionWrong": {
+        "what": "G6 (reported): the selection's g50 18.5 true, 19.0 assumed",
+        "truth": { "logAge": 9.45, "dm": 12.3, "E": 0.042, "feh": -0.25 },
+        "N": 300,
+        "epsTrue": 0.15,
+        "fb": 0.3,
+        "selection": { "g50": 18.5, "width": 0.5 },
+        "n": 20
+      }
+    }
+  },
+  "checks": [
+    {
+      "id": "G1.coverage4",
+      "leg": "c",
+      "what": "the 1-sigma profile interval of each of log age, distance modulus, reddening and [Fe/H] holds the truth at the stated rate on the well-specified ensemble (an interval that is open counts as not holding it)",
+      "limits": {
+        "n": 40,
+        "lo": 0.5,
+        "hi": 0.85,
+        "parameters": ["logAge", "dm", "E", "feh"]
+      }
+    },
+    {
+      "id": "G2.closed",
+      "leg": "d",
+      "what": "at least 85 percent of the well-specified seeds return all four intervals closed inside the bounds (the data fix all four)",
+      "limits": { "n": 40, "minClosed": 0.85 }
+    },
+    {
+      "id": "G3.interior",
+      "leg": "c",
+      "what": "on the interior ensemble the coverage of the intervals of reddening and [Fe/H] is each between 0.45 and 0.88",
+      "limits": { "n": 40, "lo": 0.45, "hi": 0.88, "parameters": ["E", "feh"] }
+    },
+    {
+      "id": "G4.authentic",
+      "leg": "e",
+      "what": "NGC 2420, the SEGUE members of Part A's E1 with their velocities, at four parameters: the age interval overlaps 1.74 to 2.2 Gyr, the distance-modulus interval 12.06 to 12.54, the [Fe/H] interval -0.46 to -0.16 (Lee et al. 2008b and WEBDA at -0.44 to -0.46; Souto et al. 2016, APOGEE, -0.16), and all four intervals are closed. The published values were not used to tune anything.",
+      "limits": {
+        "ageRangeGyr": [1.74, 2.2],
+        "dmRange": [12.06, 12.54],
+        "fehRange": [-0.46, -0.16]
+      }
+    },
+    {
+      "id": "G5.binariesWrong",
+      "leg": "d",
+      "what": "REPORTED, no band: coverage and median biases of the four parameters when the assumed binary fraction is twice the true one",
+      "limits": { "n": 20 }
+    },
+    {
+      "id": "G6.selectionWrong",
+      "leg": "d",
+      "what": "REPORTED, no band: the same when the selection's g50 is half a magnitude fainter than assumed",
+      "limits": { "n": 20 }
+    },
+    {
+      "id": "H1.coverage3",
+      "leg": "c",
+      "what": "the three-parameter fit (age, distance, reddening) with [Fe/H] profiled over [-0.5, 0.0]: the 1-sigma profile intervals hold the truth at the stated rate on the interior ensemble",
+      "limits": {
+        "n": 40,
+        "lo": 0.5,
+        "hi": 0.85,
+        "parameters": ["logAge", "dm", "E"]
+      }
+    },
+    {
+      "id": "H2.closed3",
+      "leg": "d",
+      "what": "at least 85 percent of the interior seeds return the three intervals closed",
+      "limits": { "n": 40, "minClosed": 0.85 }
+    },
+    {
+      "id": "H3.authentic",
+      "leg": "e",
+      "what": "NGC 2420 at three parameters: the age interval overlaps 1.74 to 2.2 Gyr and the distance-modulus interval 12.06 to 12.54, both closed",
+      "limits": { "ageRangeGyr": [1.74, 2.2], "dmRange": [12.06, 12.54] }
+    }
+  ],
+  "decision": "A (the four-parameter fit with intervals that cover) when G1, G2, G3 and G4 all pass. Otherwise B (three parameters with [Fe/H] from the stated prior range [-0.5, 0.0]) when H1, H2 and H3 all pass. Otherwise C (Part A stands). A B verdict never authorises the A scope.",
+  "amendments": []
+}

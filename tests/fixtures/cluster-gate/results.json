@@ -1,0 +1,183 @@
+{
+  "node": "v24.4.0",
+  "rows": [
+    {
+      "id": "G1.coverage4",
+      "status": "fail",
+      "measured": {
+        "coverage": {
+          "logAge": 0.325,
+          "dm": 0.375,
+          "E": 0.325,
+          "feh": 0.45
+        },
+        "band": [0.5, 0.85],
+        "medianBias": {
+          "logAge": 0.0005191393695636037,
+          "dm": -0.002406098198333595,
+          "E": 0.005720452103524669,
+          "feh": -0.023098353649667946
+        }
+      }
+    },
+    {
+      "id": "G2.closed",
+      "status": "pass",
+      "measured": {
+        "closed": 0.975,
+        "perParameter": {
+          "logAge": 1,
+          "dm": 1,
+          "E": 0.975,
+          "feh": 1
+        }
+      }
+    },
+    {
+      "id": "G3.interior",
+      "status": "fail",
+      "measured": {
+        "coverage": {
+          "E": 0.275,
+          "feh": 0.35
+        },
+        "band": [0.45, 0.88],
+        "medianBias": {
+          "logAge": -0.00010677986334428624,
+          "dm": -0.003752096495821533,
+          "E": 0.0033349947323333684,
+          "feh": -0.005351106950059525
+        }
+      }
+    },
+    {
+      "id": "H1.coverage3",
+      "status": "fail",
+      "measured": {
+        "coverage": {
+          "logAge": 0.125,
+          "dm": 0.175,
+          "E": 0.25
+        },
+        "band": [0.5, 0.85],
+        "medianBias": {
+          "logAge": -0.003101085356034261,
+          "dm": 0.012166414707765583,
+          "E": 0.003951888394515574
+        }
+      }
+    },
+    {
+      "id": "H2.closed3",
+      "status": "pass",
+      "measured": {
+        "closed": 0.85
+      }
+    },
+    {
+      "id": "G5.binariesWrong",
+      "status": "report",
+      "measured": {
+        "coverage": {
+          "logAge": 0.25,
+          "dm": 0.3,
+          "E": 0.45,
+          "feh": 0.4
+        },
+        "medianBias": {
+          "logAge": 0.001087863856346516,
+          "dm": 0.009151354307784132,
+          "E": 0.007087346313558764,
+          "feh": -0.02368763380065869
+        }
+      }
+    },
+    {
+      "id": "G6.selectionWrong",
+      "status": "report",
+      "measured": {
+        "coverage": {
+          "logAge": 0.35,
+          "dm": 0.3,
+          "E": 0.4,
+          "feh": 0.4
+        },
+        "medianBias": {
+          "logAge": 0.004685081299493632,
+          "dm": -0.0037627708065919308,
+          "E": 0.00016973650226102116,
+          "feh": 0.007759022437507479
+        }
+      }
+    },
+    {
+      "id": "G4.authentic",
+      "status": "fail",
+      "measured": {
+        "stars": 463,
+        "best": {
+          "logAge": 9.478575880429002,
+          "dm": 11.75291264408844,
+          "E": -0.00540102158196955,
+          "feh": -0.2809281525285021
+        },
+        "intervals": {
+          "logAge": {
+            "lo": 9.550969794273144,
+            "hi": null,
+            "closed": false
+          },
+          "dm": {
+            "lo": 11.626710895589731,
+            "hi": 11.687792551248451,
+            "closed": true
+          },
+          "E": {
+            "lo": null,
+            "hi": null,
+            "closed": false,
+            "code": "points"
+          },
+          "feh": {
+            "lo": -0.4258288841232924,
+            "hi": -0.3439466904657254,
+            "closed": true
+          }
+        },
+        "ageGyr": null
+      }
+    },
+    {
+      "id": "H3.authentic",
+      "status": "fail",
+      "measured": {
+        "stars": 463,
+        "best": {
+          "logAge": 9.466321022668302,
+          "dm": 11.796317706535254,
+          "E": 0.0032960432537845986,
+          "feh": -0.24144980583987624
+        },
+        "intervals": {
+          "logAge": {
+            "lo": 9.470813376913647,
+            "hi": 9.488402905771299,
+            "closed": true
+          },
+          "dm": {
+            "lo": 11.781490669825263,
+            "hi": 11.803060712724578,
+            "closed": true
+          },
+          "E": {
+            "lo": null,
+            "hi": 0.006693515615723844,
+            "closed": false
+          }
+        },
+        "ageGyr": [2.956741635704512, 2.9263146577378745, 3.0789519102800313]
+      }
+    }
+  ],
+  "verdict": "C"
+}
