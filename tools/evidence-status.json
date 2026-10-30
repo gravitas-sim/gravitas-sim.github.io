@@ -26,7 +26,11 @@
     }
   },
   "scan": {
-    "files": ["README.md", "ADOPTER_GUIDE.md", "CHANGELOG.md"],
+    "files": [
+      "README.md",
+      "ADOPTER_GUIDE.md",
+      "CHANGELOG.md"
+    ],
     "section": {
       "CHANGELOG.md": "## [2.0.0]"
     },

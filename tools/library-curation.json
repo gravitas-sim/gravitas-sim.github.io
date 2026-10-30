@@ -129,7 +129,9 @@
         "max": 20
       },
       "mathematics": "arithmetic",
-      "prerequisites": ["investigation:what-is-a-gravitational-wave"],
+      "prerequisites": [
+        "investigation:what-is-a-gravitational-wave"
+      ],
       "pack": "gwosc-five-events"
     },
     "ngc2420-photometry": {
@@ -144,7 +146,9 @@
         "max": 30
       },
       "mathematics": "logarithms",
-      "prerequisites": ["investigation:pop-spectra"],
+      "prerequisites": [
+        "investigation:pop-spectra"
+      ],
       "pack": "sdss-dr18-ngc2420-photometry"
     },
     "ngc2420-segue": {
@@ -159,7 +163,9 @@
         "max": 30
       },
       "mathematics": "arithmetic",
-      "prerequisites": ["investigation:pop-cmd"],
+      "prerequisites": [
+        "investigation:pop-cmd"
+      ],
       "pack": "sdss-dr18-ngc2420-segue"
     },
     "gaia-solar-neighbourhood": {
@@ -174,7 +180,9 @@
         "max": 40
       },
       "mathematics": "algebra",
-      "prerequisites": ["investigation:pop-members"],
+      "prerequisites": [
+        "investigation:pop-members"
+      ],
       "pack": "gaia-dr3-solar-neighbourhood"
     },
     "gaia-ngc2420": {
@@ -189,7 +197,9 @@
         "max": 30
       },
       "mathematics": "algebra",
-      "prerequisites": ["investigation:pop-members"],
+      "prerequisites": [
+        "investigation:pop-members"
+      ],
       "pack": "gaia-dr3-ngc2420"
     },
     "milky-way-rotation-curve": {
@@ -204,7 +214,9 @@
         "max": 30
       },
       "mathematics": "algebra",
-      "prerequisites": ["investigation:pop-members"],
+      "prerequisites": [
+        "investigation:pop-members"
+      ],
       "pack": "milky-way-rotation-curve"
     },
     "mist-isochrones": {
@@ -219,7 +231,9 @@
         "max": 40
       },
       "mathematics": "logarithms",
-      "prerequisites": ["investigation:pop-members"],
+      "prerequisites": [
+        "investigation:pop-members"
+      ],
       "pack": "mist-sdss-isochrones"
     },
     "community.kepler-13-tess-s14-pdcsap": {
@@ -234,8 +248,13 @@
         "max": 35
       },
       "mathematics": "algebra",
-      "prerequisites": ["investigation:exo-fit"],
-      "subjects": ["exoplanets", "observing"]
+      "prerequisites": [
+        "investigation:exo-fit"
+      ],
+      "subjects": [
+        "exoplanets",
+        "observing"
+      ]
     },
     "community.kepler-13-tess-s14-sap": {
       "kind": "time-series",
@@ -249,8 +268,13 @@
         "max": 35
       },
       "mathematics": "algebra",
-      "prerequisites": ["investigation:exo-fit"],
-      "subjects": ["exoplanets", "observing"]
+      "prerequisites": [
+        "investigation:exo-fit"
+      ],
+      "subjects": [
+        "exoplanets",
+        "observing"
+      ]
     },
     "community.su-dra-tess-s15": {
       "kind": "time-series",
@@ -265,7 +289,10 @@
       },
       "mathematics": "logarithms",
       "prerequisites": [],
-      "subjects": ["observing", "stars"]
+      "subjects": [
+        "observing",
+        "stars"
+      ]
     }
   },
   "experiments": {
@@ -276,7 +303,9 @@
         "max": 40
       },
       "mathematics": "arithmetic",
-      "prerequisites": ["investigation:binary-star-planets"]
+      "prerequisites": [
+        "investigation:binary-star-planets"
+      ]
     },
     "circumbinary-planet-lab": {
       "level": "intro",
@@ -285,7 +314,9 @@
         "max": 40
       },
       "mathematics": "arithmetic",
-      "prerequisites": ["investigation:binary-star-planets"]
+      "prerequisites": [
+        "investigation:binary-star-planets"
+      ]
     },
     "gravity-assist-lab": {
       "level": "intro",
@@ -294,7 +325,9 @@
         "max": 40
       },
       "mathematics": "arithmetic",
-      "prerequisites": ["investigation:gravity-assist"]
+      "prerequisites": [
+        "investigation:gravity-assist"
+      ]
     },
     "gravity-assist-heliocentric": {
       "level": "intro",
@@ -303,7 +336,9 @@
         "max": 40
       },
       "mathematics": "arithmetic",
-      "prerequisites": ["investigation:gravity-assist"]
+      "prerequisites": [
+        "investigation:gravity-assist"
+      ]
     }
   },
   "guides": {
@@ -318,7 +353,9 @@
     },
     "exo-find": {
       "mathematics": "arithmetic",
-      "prerequisites": ["investigation:exo-star"],
+      "prerequisites": [
+        "investigation:exo-star"
+      ],
       "textbook": {
         "chapter": 21,
         "section": "21.4"
@@ -327,7 +364,9 @@
     },
     "exo-fit": {
       "mathematics": "algebra",
-      "prerequisites": ["investigation:exo-find"],
+      "prerequisites": [
+        "investigation:exo-find"
+      ],
       "textbook": {
         "chapter": 21,
         "section": "21.4"
@@ -336,7 +375,9 @@
     },
     "exo-dilution": {
       "mathematics": "algebra",
-      "prerequisites": ["investigation:exo-fit"],
+      "prerequisites": [
+        "investigation:exo-fit"
+      ],
       "textbook": {
         "chapter": 21,
         "section": "21.5"
@@ -345,7 +386,9 @@
     },
     "exo-planet": {
       "mathematics": "arithmetic",
-      "prerequisites": ["investigation:exo-find"],
+      "prerequisites": [
+        "investigation:exo-find"
+      ],
       "textbook": {
         "chapter": 21,
         "section": "21.5"
@@ -363,7 +406,9 @@
     },
     "pop-cmd": {
       "mathematics": "logarithms",
-      "prerequisites": ["investigation:pop-spectra"],
+      "prerequisites": [
+        "investigation:pop-spectra"
+      ],
       "textbook": {
         "chapter": 18,
         "section": "18.4"
@@ -372,7 +417,9 @@
     },
     "pop-members": {
       "mathematics": "arithmetic",
-      "prerequisites": ["investigation:pop-cmd"],
+      "prerequisites": [
+        "investigation:pop-cmd"
+      ],
       "textbook": {
         "chapter": 22,
         "section": "22.2"
@@ -381,7 +428,9 @@
     },
     "pop-age": {
       "mathematics": "logarithms",
-      "prerequisites": ["investigation:pop-members"],
+      "prerequisites": [
+        "investigation:pop-members"
+      ],
       "textbook": {
         "chapter": 22,
         "section": "22.3"
@@ -408,7 +457,9 @@
     },
     "l3-eclipse": {
       "mathematics": "algebra",
-      "prerequisites": ["investigation:l3-planes"],
+      "prerequisites": [
+        "investigation:l3-planes"
+      ],
       "textbook": {
         "chapter": 21,
         "section": "21.4"
@@ -417,7 +468,9 @@
     },
     "l3-mutual": {
       "mathematics": "algebra",
-      "prerequisites": ["investigation:l3-planes"],
+      "prerequisites": [
+        "investigation:l3-planes"
+      ],
       "textbook": {
         "chapter": 3,
         "section": "3.6"
@@ -426,7 +479,9 @@
     },
     "l3-kozai": {
       "mathematics": "algebra",
-      "prerequisites": ["investigation:l3-mutual"],
+      "prerequisites": [
+        "investigation:l3-mutual"
+      ],
       "textbook": {
         "chapter": 3,
         "section": "3.6"
@@ -444,7 +499,9 @@
     },
     "ml-window": {
       "mathematics": "algebra",
-      "prerequisites": ["investigation:ml-orbit"],
+      "prerequisites": [
+        "investigation:ml-orbit"
+      ],
       "textbook": {
         "chapter": 3,
         "section": "3.5"
@@ -453,7 +510,9 @@
     },
     "ml-cruise": {
       "mathematics": "algebra",
-      "prerequisites": ["investigation:ml-window"],
+      "prerequisites": [
+        "investigation:ml-window"
+      ],
       "textbook": {
         "chapter": 3,
         "section": "3.5"
@@ -494,8 +553,12 @@
     "30": "Life in the Universe"
   },
   "scenarioPacks": {
-    "Exoplanet Characterization Lab": ["exoplanet-systems"],
-    "TRAPPIST-1 System": ["trappist-1-system"]
+    "Exoplanet Characterization Lab": [
+      "exoplanet-systems"
+    ],
+    "TRAPPIST-1 System": [
+      "trappist-1-system"
+    ]
   },
   "scenarioNotes": {
     "Solar System": {
@@ -529,56 +592,72 @@
         "en": "A single orbit with an eccentricity of 0.6, tilted 40 degrees out of the reference plane, run in three dimensions: its plane, its nodes and its pericenter.",
         "es": "Una sola órbita de excentricidad 0,6, inclinada 40 grados respecto del plano de referencia, calculada en tres dimensiones: su plano, sus nodos y su pericentro."
       },
-      "subjects": ["orbits"]
+      "subjects": [
+        "orbits"
+      ]
     },
     "R2": {
       "summary": {
         "en": "Two bodies orbiting each other while the pair drifts through space, so the motion of each is the orbit plus the motion of the center.",
         "es": "Dos cuerpos que se orbitan mientras el par se desplaza por el espacio, de modo que el movimiento de cada uno es la órbita más el movimiento del centro."
       },
-      "subjects": ["stars"]
+      "subjects": [
+        "stars"
+      ]
     },
     "R3": {
       "summary": {
         "en": "A star with a Jupiter-like and a Saturn-like planet on slightly tilted orbits, around the barycenter they share.",
         "es": "Una estrella con un planeta como Júpiter y otro como Saturno en órbitas ligeramente inclinadas, alrededor del baricentro que comparten."
       },
-      "subjects": ["solar-system"]
+      "subjects": [
+        "solar-system"
+      ]
     },
     "R4": {
       "summary": {
         "en": "The restricted three-body problem with a mass ratio of 0.001: a body placed at L4 stays, and one placed at L1 leaves.",
         "es": "El problema restringido de tres cuerpos con una razón de masas de 0,001: un cuerpo colocado en L4 se queda y uno colocado en L1 se va."
       },
-      "subjects": ["gravity"]
+      "subjects": [
+        "gravity"
+      ]
     },
     "R5": {
       "summary": {
         "en": "The figure-eight choreography, three equal masses chasing one another along one curve, rotated into three dimensions.",
         "es": "La coreografía en ocho, tres masas iguales que se persiguen sobre una sola curva, girada a tres dimensiones."
       },
-      "subjects": ["chaos"]
+      "subjects": [
+        "chaos"
+      ]
     },
     "R6": {
       "summary": {
         "en": "A test particle tilted 65 degrees to a distant perturber: its eccentricity and inclination trade off in slow Kozai-Lidov cycles.",
         "es": "Una partícula de prueba inclinada 65 grados respecto de un perturbador lejano: su excentricidad e inclinación se intercambian en ciclos lentos de Kozai-Lidov."
       },
-      "subjects": ["orbits"]
+      "subjects": [
+        "orbits"
+      ]
     },
     "R7": {
       "summary": {
         "en": "A hyperbolic encounter with a small pericenter: the path bends by an angle that depends on how fast the body arrives.",
         "es": "Un encuentro hiperbólico con un pericentro pequeño: la trayectoria se curva un ángulo que depende de la rapidez con que llega el cuerpo."
       },
-      "subjects": ["gravity"]
+      "subjects": [
+        "gravity"
+      ]
     },
     "R8": {
       "summary": {
         "en": "Two bodies that merge, one head-on and one grazing, and what each does with its momentum.",
         "es": "Dos cuerpos que se fusionan, uno de frente y otro de refilón, y qué hace cada uno con su momento."
       },
-      "subjects": ["gravity"]
+      "subjects": [
+        "gravity"
+      ]
     }
   },
   "starts": {
@@ -591,7 +670,10 @@
           "en": "New to astronomy",
           "es": "Nuevo en la astronomía"
         },
-        "entries": ["investigation:the-turning-sky", "scenario:solar-system"]
+        "entries": [
+          "investigation:the-turning-sky",
+          "scenario:solar-system"
+        ]
       },
       {
         "id": "course",
@@ -612,7 +694,10 @@
           "en": "Measure something real",
           "es": "Mide algo real"
         },
-        "entries": ["dataset:tess-light-curve", "investigation:exo-star"]
+        "entries": [
+          "dataset:tess-light-curve",
+          "investigation:exo-star"
+        ]
       },
       {
         "id": "teach",
@@ -621,7 +706,9 @@
           "en": "Teaching a course",
           "es": "Para enseñar un curso"
         },
-        "entries": ["course:intro-astronomy"]
+        "entries": [
+          "course:intro-astronomy"
+        ]
       }
     ]
   },
