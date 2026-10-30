@@ -898,6 +898,13 @@
       "student": false
     },
     {
+      "file": "SEISMOLOGY_GATE.md",
+      "kind": "gate",
+      "purpose": "Asteroseismology gate: the committed power-spectrum, background, numax, Delta nu and scaling-relation methods and bounds, the measured legs on a synthetic ensemble and a real red giant, and the verdict (Prompt 221 Part A).",
+      "owner": 221,
+      "student": false
+    },
+    {
       "file": "SKY_LAB.md",
       "kind": "feature",
       "purpose": "The Sky Lab.",
