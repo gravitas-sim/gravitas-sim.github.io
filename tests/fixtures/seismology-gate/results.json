@@ -1,0 +1,307 @@
+{
+  "verdict": "C",
+  "complete": true,
+  "legs": {
+    "A1.sine": {
+      "id": "A1.sine",
+      "pass": true,
+      "measured": {
+        "fft": 1.6098391067915044e-15,
+        "gapped": 1.9903569797870808e-7
+      }
+    },
+    "A2.parseval": {
+      "id": "A2.parseval",
+      "pass": true,
+      "measured": 5.634179713865416e-15
+    },
+    "A3.whiteLevel": {
+      "id": "A3.whiteLevel",
+      "pass": true,
+      "measured": 0.00487511681027677
+    },
+    "A4.gapsAgree": {
+      "id": "A4.gapsAgree",
+      "pass": true,
+      "measured": 0.004561033933822814
+    },
+    "B1.oracleFFT": {
+      "id": "B1.oracleFFT",
+      "pass": true,
+      "measured": 1.650524460601628e-14
+    },
+    "B2.oraclePeriodogram": {
+      "id": "B2.oraclePeriodogram",
+      "pass": true,
+      "measured": 4.167162797933904e-12
+    },
+    "B3.oracleReal": {
+      "id": "B3.oracleReal",
+      "pass": true,
+      "measured": 8.246130827314344e-11
+    },
+    "C1.background": {
+      "id": "C1.background",
+      "pass": false,
+      "measured": {
+        "median": 0.3526714889856253,
+        "p90": 0.6299932074909227
+      }
+    },
+    "C2.bounds": {
+      "id": "C2.bounds",
+      "pass": false,
+      "measured": 0.095
+    },
+    "F1.numax": {
+      "id": "F1.numax",
+      "pass": false,
+      "measured": {
+        "median": 0.028343027892156925,
+        "p90": 0.06421047497040266
+      }
+    },
+    "F1ratio.numax (committed estimator, reported)": {
+      "id": "F1ratio.numax (committed estimator, reported)",
+      "pass": false,
+      "measured": {
+        "median": 0.034106608237500335,
+        "p90": 0.07561865191151829
+      },
+      "scored": false
+    },
+    "D1.deltaNu": {
+      "id": "D1.deltaNu",
+      "pass": true,
+      "measured": {
+        "median": 0.0007858617590554839,
+        "p90": 0.0027033934642717306
+      }
+    },
+    "D2.comb": {
+      "id": "D2.comb",
+      "pass": true,
+      "measured": 1
+    },
+    "F2.coverageNumax": {
+      "id": "F2.coverageNumax",
+      "pass": true,
+      "measured": 0.7
+    },
+    "D3.coverageDeltaNu": {
+      "id": "D3.coverageDeltaNu",
+      "pass": false,
+      "measured": 0.985
+    },
+    "G1.relations": {
+      "id": "G1.relations",
+      "pass": true,
+      "measured": {
+        "mass": 1.306299194172032,
+        "radius": 5.209825171031227
+      }
+    },
+    "G2.coverageMass": {
+      "id": "G2.coverageMass",
+      "pass": true,
+      "measured": 0.775
+    },
+    "G3.coverageRadius": {
+      "id": "G3.coverageRadius",
+      "pass": true,
+      "measured": 0.75
+    },
+    "N1.falseAlarm": {
+      "id": "N1.falseAlarm",
+      "pass": true,
+      "measured": 0
+    },
+    "N2.dwarfReal": {
+      "id": "N2.dwarfReal",
+      "pass": true,
+      "measured": {
+        "detected": false,
+        "dll2": 17.901485291543395
+      }
+    },
+    "N3.domain": {
+      "id": "N3.domain",
+      "pass": false,
+      "measured": 0.78
+    },
+    "E1.real.subset": {
+      "id": "E1.real.subset",
+      "pass": true,
+      "measured": {
+        "numax": 156.16469842243495,
+        "dnu": 12.964749788832865,
+        "mass": 1.3485064530892776,
+        "radius": 5.270823610020461,
+        "errors": {
+          "numax": 0.008555272684286677,
+          "dnu": 0.001559507983606802,
+          "mass": 0.029394238999448534,
+          "radius": 0.011674397316787117
+        },
+        "detected": true
+      },
+      "fields": {
+        "detected": true,
+        "numax": true,
+        "deltaNu": true,
+        "mass": true,
+        "radius": true
+      }
+    },
+    "E2.real.full": {
+      "id": "E2.real.full",
+      "pass": true,
+      "measured": {
+        "numax": 155.86225119576534,
+        "dnu": 12.97490803925156,
+        "mass": 1.3364929345301655,
+        "radius": 5.252381497532194,
+        "errors": {
+          "numax": 0.006601983956118156,
+          "dnu": 0.0007772014438536764,
+          "mass": 0.020223614145164454,
+          "radius": 0.00813464443996044
+        },
+        "detected": true
+      },
+      "fields": {
+        "detected": true,
+        "numax": true,
+        "deltaNu": true,
+        "mass": true,
+        "radius": true
+      }
+    }
+  },
+  "classes": {
+    "spectrum": [
+      {
+        "leg": "A1.sine",
+        "pass": true
+      },
+      {
+        "leg": "A2.parseval",
+        "pass": true
+      },
+      {
+        "leg": "A3.whiteLevel",
+        "pass": true
+      },
+      {
+        "leg": "A4.gapsAgree",
+        "pass": true
+      },
+      {
+        "leg": "B1.oracleFFT",
+        "pass": true
+      },
+      {
+        "leg": "B2.oraclePeriodogram",
+        "pass": true
+      },
+      {
+        "leg": "B3.oracleReal",
+        "pass": true
+      }
+    ],
+    "background": [
+      {
+        "leg": "C1.background",
+        "pass": false
+      },
+      {
+        "leg": "C2.bounds",
+        "pass": false
+      }
+    ],
+    "negatives": [
+      {
+        "leg": "N1.falseAlarm",
+        "pass": true
+      },
+      {
+        "leg": "N2.dwarfReal",
+        "pass": true
+      },
+      {
+        "leg": "N3.domain",
+        "pass": false
+      }
+    ],
+    "deltaNu": [
+      {
+        "leg": "D1.deltaNu",
+        "pass": true
+      },
+      {
+        "leg": "D2.comb",
+        "pass": true
+      },
+      {
+        "leg": "D3.coverageDeltaNu",
+        "pass": false
+      },
+      {
+        "leg": "E1.real.subset:deltaNu",
+        "pass": true
+      },
+      {
+        "leg": "E2.real.full:deltaNu",
+        "pass": true
+      }
+    ],
+    "numax": [
+      {
+        "leg": "F1.numax",
+        "pass": false
+      },
+      {
+        "leg": "F2.coverageNumax",
+        "pass": true
+      },
+      {
+        "leg": "E1.real.subset:numax",
+        "pass": true
+      },
+      {
+        "leg": "E2.real.full:numax",
+        "pass": true
+      }
+    ],
+    "massRadius": [
+      {
+        "leg": "G1.relations",
+        "pass": true
+      },
+      {
+        "leg": "G2.coverageMass",
+        "pass": true
+      },
+      {
+        "leg": "G3.coverageRadius",
+        "pass": true
+      },
+      {
+        "leg": "E1.real.subset:mass",
+        "pass": true
+      },
+      {
+        "leg": "E1.real.subset:radius",
+        "pass": true
+      },
+      {
+        "leg": "E2.real.full:mass",
+        "pass": true
+      },
+      {
+        "leg": "E2.real.full:radius",
+        "pass": true
+      }
+    ]
+  }
+}
