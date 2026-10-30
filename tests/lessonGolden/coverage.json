@@ -10,6 +10,7 @@
     "black-holes",
     "propose-an-observation",
     "weighing-stars",
+    "a-night-at-the-telescope",
     "a-universe-of-stars",
     "counts-to-magnitudes",
     "detect-this-planet",
@@ -180,6 +181,9 @@
       "key:explore.showBarycenter",
       "key:read.showBarycenter"
     ],
+    "a-night-at-the-telescope": [
+      "key:question.reflect"
+    ],
     "a-universe-of-stars": [
       "key:measure.checklist"
     ],
@@ -273,17 +277,17 @@
     "pin:unpinned"
   ],
   "totals": {
-    "investigations": 96,
-    "steps": 1640,
+    "investigations": 100,
+    "steps": 1687,
     "activityCuts": 6,
-    "lessonTokens": 148,
+    "lessonTokens": 149,
     "activityTokens": 29,
     "stepTypes": {
-      "read": 310,
-      "predict": 180,
+      "read": 318,
+      "predict": 181,
       "ellipse": 1,
-      "question": 566,
-      "measure": 438,
+      "question": 596,
+      "measure": 446,
       "explore": 144,
       "wedges": 1
     }

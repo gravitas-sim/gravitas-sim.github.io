@@ -2763,6 +2763,27 @@ test.describe('the central experiment of each investigation', () => {
         [1, 0.211, 0.003],
       ],
     },
+    // ---- Observing and instruments closeout (Roadmap III, Prompt 216) ----------------
+    {
+      id: 'the-sky-background',
+      title:
+        'the-sky-background: a sky 2 magnitudes brighter lengthens the same exposure from 79.8 s to 443 s, 5.6 times for 6.3 times the sky light @accepts:ce.the-sky-background',
+      row: /^Total exposure$/i,
+      values: [
+        [0, 79.8, 1.5],
+        [2, 443.2, 5],
+      ],
+    },
+    {
+      id: 'a-night-at-the-telescope',
+      title:
+        'a-night-at-the-telescope: the 1.0 m telescope needs 59 s for a magnitude-19 star at a signal-to-noise of 50 and 779 s for magnitude 21 @accepts:ce.a-night-at-the-telescope',
+      row: /^Total exposure$/i,
+      values: [
+        [19, 59.3, 1.5],
+        [21, 779.1, 8],
+      ],
+    },
   ];
   for (const c of SURVEY) {
     test(c.title, async ({ page, app }) => {
@@ -2797,6 +2818,75 @@ test.describe('the central experiment of each investigation', () => {
 
       // 3. and only now is the prediction settled
       await expectVerdictRevealed(page, plan, predict);
+    });
+  }
+  // Three of the observing closeout lessons (Prompt 216) hold no prediction: they
+  // are a read-and-measure ladder on one instrument. Their central experiment is
+  // the control a student moves and the number it returns, checked at two values.
+  const MEASURED = [
+    {
+      id: 'which-instrument-for-which-question',
+      title:
+        'which-instrument-for-which-question: the same magnitude-22 star at a signal-to-noise of 20 takes 12,071 s on the 0.35 m telescope, 602 s on the 1.0 m and 15 s on Rubin @accepts:ce.which-instrument-for-which-question',
+      row: /^Total exposure$/i,
+      values: [
+        [0, 12070.7, 120],
+        [1, 602.2, 6],
+        [3, 15.2, 0.4],
+      ],
+    },
+    {
+      id: 'from-photons-to-a-number',
+      title:
+        'from-photons-to-a-number: doubling the signal-to-noise from 50 to 100 costs 3.2 times the exposure, 59.3 s and 191.4 s @accepts:ce.from-photons-to-a-number',
+      row: /^Total exposure$/i,
+      values: [
+        [50, 59.3, 1.5],
+        [100, 191.4, 4],
+      ],
+    },
+    {
+      id: 'coordinates-and-time',
+      title:
+        'coordinates-and-time: Sirius crosses the meridian at 718.7 minutes after noon on night 0 and 600.8 on night 30, 3.93 minutes earlier a night @accepts:ce.coordinates-and-time',
+      row: /^Crosses the meridian$/i,
+      minutes: true,
+      values: [
+        [0, 718.7, 0.6],
+        [30, 600.8, 0.6],
+      ],
+    },
+  ];
+  for (const c of MEASURED) {
+    test(c.title, async ({ page, app }) => {
+      test.slow();
+      const entry = declared(c.id);
+      const { control } = controlOf(entry);
+      const measureSid = entry.loop[1];
+      await openInvestigation(page, app, c.id);
+      const plan = await lessonPlan(page, c.id);
+      await walkToSid(page, plan, measureSid);
+      const seen = [];
+      for (const [value, want, tol] of c.values) {
+        await setControl(page, control, value);
+        const take = async () => {
+          const rows = await readout(page);
+          if (!c.minutes) return reading(rows, c.row);
+          const m = /([\d.]+) minutes after noon/.exec(row(rows, c.row).text);
+          return m ? Number(m[1]) : NaN;
+        };
+        await expect
+          .poll(
+            async () => {
+              const got = await take();
+              return Number.isNaN(got) ? NaN : Math.abs(got - want);
+            },
+            { timeout: 8000 }
+          )
+          .toBeLessThan(tol);
+        seen.push(await take());
+      }
+      expect(new Set(seen).size).toBe(seen.length);
     });
   }
   // Propose an Observation is open-ended: no prediction is held against one

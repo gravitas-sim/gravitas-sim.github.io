@@ -90,14 +90,15 @@ The browser half takes about seven minutes on the private port.
 | 8 | `black-holes` | 2: `key:question.checklist`, `key:read.explainView` |
 | 9 | `propose-an-observation` | 2: `key:measure.plan`, `key:question.rubricCriteria` |
 | 10 | `weighing-stars` | 2: `key:explore.showBarycenter`, `key:read.showBarycenter` |
-| 11 | `a-universe-of-stars` | 1: `key:measure.checklist` |
-| 12 | `counts-to-magnitudes` | 1: `depth-step:quantitative/predict` |
-| 13 | `detect-this-planet` | 1: `key:read.allowInspector` |
-| 14 | `extending-an-experiment` | 1: `key:measure.compute` |
-| 15 | `measuring-the-moon` | 1: `key:question.maxUncertainty` |
-| 16 | `power-law-gravity` | 1: `key:question.explain` |
-| 17 | `radial-velocity` | 1: `key:measure.setup` |
-| 18 | `retrograde-motion` | 1: `lock:{"placement":true,"inspector":false}` |
+| 11 | `a-night-at-the-telescope` | 1: `key:question.reflect` |
+| 12 | `a-universe-of-stars` | 1: `key:measure.checklist` |
+| 13 | `counts-to-magnitudes` | 1: `depth-step:quantitative/predict` |
+| 14 | `detect-this-planet` | 1: `key:read.allowInspector` |
+| 15 | `extending-an-experiment` | 1: `key:measure.compute` |
+| 16 | `measuring-the-moon` | 1: `key:question.maxUncertainty` |
+| 17 | `power-law-gravity` | 1: `key:question.explain` |
+| 18 | `radial-velocity` | 1: `key:measure.setup` |
+| 19 | `retrograde-motion` | 1: `lock:{"placement":true,"inspector":false}` |
 
 | # | Activity cut | Tokens it adds |
 |---|---|---|

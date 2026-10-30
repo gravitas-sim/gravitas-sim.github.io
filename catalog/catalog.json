@@ -16,6 +16,10 @@
       "en": "A Lens Passing By",
       "es": "Una lente que pasa"
     },
+    "a-night-at-the-telescope": {
+      "en": "A Night at the Telescope, End to End",
+      "es": "Una noche en el telescopio, de principio a fin"
+    },
     "a-universe-of-stars": {
       "en": "A Universe of Stars",
       "es": "Un universo de estrellas"
@@ -52,6 +56,10 @@
       "en": "Comets and the Sun",
       "es": "Los cometas y el Sol"
     },
+    "coordinates-and-time": {
+      "en": "Coordinates and Time at Depth",
+      "es": "Coordenadas y tiempo en profundidad"
+    },
     "counts-to-magnitudes": {
       "en": "Counts to Magnitudes",
       "es": "De cuentas a magnitudes"
@@ -79,6 +87,10 @@
     "extending-an-experiment": {
       "en": "Extending an Experiment",
       "es": "Ampliar un experimento"
+    },
+    "from-photons-to-a-number": {
+      "en": "From Photons to a Number",
+      "es": "De fotones a un número"
     },
     "goldilocks-question": {
       "en": "The Goldilocks Question",
@@ -248,6 +260,10 @@
       "en": "The Shape of Expansion",
       "es": "La forma de la expansión"
     },
+    "the-sky-background": {
+      "en": "The Sky Background",
+      "es": "El fondo de cielo"
+    },
     "the-sun-through-the-year": {
       "en": "The Sun Through the Year",
       "es": "El Sol a lo largo del año"
@@ -359,6 +375,10 @@
     "where-galaxies-live": {
       "en": "Where Galaxies Live",
       "es": "Dónde viven las galaxias"
+    },
+    "which-instrument-for-which-question": {
+      "en": "Which Instrument for Which Question?",
+      "es": "¿Qué instrumento para qué pregunta?"
     },
     "which-kind-of-variable": {
       "en": "Which Kind of Variable",

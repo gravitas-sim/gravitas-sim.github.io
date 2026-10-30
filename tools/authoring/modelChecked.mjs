@@ -65,6 +65,7 @@ import { expectedKeplerSlope } from '../../js/powerLawGravity.js';
 import { forwardModels } from './forwardSources.mjs';
 import { LIGHT_MODELS } from './lightModels.mjs';
 import { SKY_MODELS } from './skyModels.mjs';
+import { OBSERVING_MODELS } from './observingModels.mjs';
 import { allWidgets, whenWidgetsReady } from '../../js/widgets.js';
 
 export const RULE_ID = 'instructor/model-checked';
@@ -212,6 +213,7 @@ const E_BINARY = 0.4;
 export const MODELS = {
   ...LIGHT_MODELS,
   ...SKY_MODELS,
+  ...OBSERVING_MODELS,
   ...forwardModels(),
   'a-binary-stars-orbit/from-arcseconds-to-au': {
     via: 'js/imagingWidgets.js orbitView (js/measure/orbit-fit.js fitOrbit): the fitted semi-major axis in arcseconds over the stated parallax of 0.100 arcsec',

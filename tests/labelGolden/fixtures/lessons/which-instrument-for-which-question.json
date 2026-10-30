@@ -1,0 +1,74 @@
+{
+ "id": "which-instrument-for-which-question",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.the-same-star-three-ways.fields.0.unit","s"],
+    ["steps.the-same-star-three-ways.fields.1.unit","s"],
+    ["steps.the-same-star-three-ways.fields.2.unit","s"],
+    ["steps.how-much-longer.unit",""],
+    ["steps.pixels-across-the-seeing.fields.0.unit","arcsec"],
+    ["steps.pixels-across-the-seeing.fields.1.unit","arcsec"],
+    ["steps.pixels-across-the-seeing.fields.2.unit",""],
+    ["steps.the-field.unit",""],
+    ["steps.survey-speed.unit",""]
+   ],
+   "numbered": [
+    ["steps.the-same-star-three-ways.fields.0.label","Las Cumbres 0.35 m"],
+    ["steps.the-same-star-three-ways.fields.0.hint","12070"],
+    ["steps.the-same-star-three-ways.fields.1.label","Las Cumbres 1.0 m"],
+    ["steps.the-same-star-three-ways.fields.1.hint","602"],
+    ["steps.the-same-star-three-ways.fields.2.hint","15.2"],
+    ["steps.pixels-across-the-seeing.fields.0.hint","0.73"],
+    ["steps.pixels-across-the-seeing.fields.1.hint","1.3"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.the-same-star-three-ways.fields.0.label","Las Cumbres 0,35 m"],
+    ["steps.the-same-star-three-ways.fields.1.label","Las Cumbres 1,0 m"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "how-much-longer",
+    "answer": "20.04",
+    "tolerance": "0.6",
+    "unit": ""
+   },
+   {
+    "sid": "the-field",
+    "answer": "11.7",
+    "tolerance": "0.4",
+    "unit": ""
+   },
+   {
+    "sid": "survey-speed",
+    "answer": "2079",
+    "tolerance": "60",
+    "unit": ""
+   }
+  ],
+  "decimals": [
+   [
+    "pixels-across-the-seeing.across",
+    2
+   ]
+  ]
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "the-same-star-three-ways": {
+    "validate": {"calls":242,"distinct":2,"digest":"28745a2126ef229c","samples":[null,{"level":"error","message":"Set the brightness to 22, the target signal-to-noise to 20 and the exposures to 1, then read “Total exposure” for each of the three facility choices in turn."}]}
+   },
+   "pixels-across-the-seeing": {
+    "validate": {"calls":242,"distinct":2,"digest":"fe17dd220bfaee58","samples":[null,{"level":"error","message":"Read the pixel scale (0.73) and the seeing (1.3) of the 0.35 m telescope in the “From the instrument library” row."}]}
+   }
+  },
+  "es": "same"
+ }
+}

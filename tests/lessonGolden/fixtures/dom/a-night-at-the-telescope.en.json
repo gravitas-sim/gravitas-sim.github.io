@@ -1,0 +1,122 @@
+[
+ {
+  "depth": "core",
+  "role": "first",
+  "sid": "five-stations",
+  "position": [
+   1,
+   11
+  ],
+  "title": "A Night at the Telescope, End to End",
+  "subtitle": "Plan, expose, calibrate, measure and report one star, with a prepared plan: five stations, each with the number it hands to the next",
+  "body": "<p class=\"inv-step-count\">Step 1 of 11 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">Five stations</h3><div class=\"inv-step-body\"><p>An observation is a chain. A <strong>plan</strong> says when a target is up and dark; an <strong>exposure</strong> is long enough to reach a signal-to-noise; a <strong>calibration</strong> turns counts into a magnitude; a <strong>measurement</strong> reads the counts from the frame; and a <strong>report</strong> gives the number with what it is good to. Each station is an instrument you have met, and each hands the next station one number.</p><p>This investigation follows a prepared plan: a star of magnitude 19 on the Las Cumbres 1.0 m telescope, on the night of 2025-01-29 (a new Moon), from a site at latitude 30° north. Every frame and every night of standard stars is <strong>synthetic</strong>, and the facility’s values are the instrument library’s; nobody has observed this. The first station is the night planner.</p></div>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "graded",
+  "sid": "station-weather",
+  "position": [
+   3,
+   11
+  ],
+  "title": "A Night at the Telescope, End to End",
+  "subtitle": "Plan, expose, calibrate, measure and report one star, with a prepared plan: five stations, each with the number it hands to the next",
+  "body": "<p class=\"inv-step-count\">Step 3 of 11 <span class=\"inv-step-kind\">question</span></p><h3 class=\"inv-step-title\">A plan assumes clear nights</h3><div class=\"inv-step-body\"><p>A plan for one night says nothing about clouds. The <strong>strategy planner</strong> of the observing-strategy investigations spreads three visits a night over a fortnight and draws the weather from a stated chain (60 percent of nights clear, with persistence). Read its <strong>Visits</strong> row: how many visits were executed of how many planned.</p></div><p class=\"inv-prompt\">What share of the planned visits did the weather take, in percent?</p><div class=\"inv-numeric\"><input type=\"text\" inputmode=\"decimal\" class=\"inv-answer-num\" data-numeric=\"a-night-at-the-telescope:station-weather\" value=\"\" placeholder=\"Your value in %\"><span class=\"inv-unit\">%</span><button type=\"button\" class=\"ui-button\" data-check-numeric=\"a-night-at-the-telescope:station-weather\">Check</button></div><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> I could use a hint </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "marked",
+  "sid": "station-weather",
+  "position": [
+   3,
+   11
+  ],
+  "title": "A Night at the Telescope, End to End",
+  "subtitle": "Plan, expose, calibrate, measure and report one star, with a prepared plan: five stations, each with the number it hands to the next",
+  "body": "<p class=\"inv-step-count\">Step 3 of 11 <span class=\"inv-step-kind\">question</span></p><h3 class=\"inv-step-title\">A plan assumes clear nights</h3><div class=\"inv-step-body\"><p>A plan for one night says nothing about clouds. The <strong>strategy planner</strong> of the observing-strategy investigations spreads three visits a night over a fortnight and draws the weather from a stated chain (60 percent of nights clear, with persistence). Read its <strong>Visits</strong> row: how many visits were executed of how many planned.</p></div><p class=\"inv-prompt\">What share of the planned visits did the weather take, in percent?</p><div class=\"inv-numeric\"><input type=\"text\" inputmode=\"decimal\" class=\"inv-answer-num\" data-numeric=\"a-night-at-the-telescope:station-weather\" value=\"42.9\" placeholder=\"Your value in %\"><span class=\"inv-unit\">%</span><button type=\"button\" class=\"ui-button\" data-check-numeric=\"a-night-at-the-telescope:station-weather\">Check</button></div><p class=\"inv-feedback is-right\">That matches. </p><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> I could use a hint </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "last",
+  "sid": "what-you-worked-out",
+  "position": [
+   11,
+   11
+  ],
+  "title": "A Night at the Telescope, End to End",
+  "subtitle": "Plan, expose, calibrate, measure and report one star, with a prepared plan: five stations, each with the number it hands to the next",
+  "body": "<p class=\"inv-step-count\">Step 11 of 11 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">What you worked out</h3><div class=\"inv-step-body\"><p>Station 1 found 8.1 usable hours at an airmass of 1.05 on a new-Moon night, and the strategy planner showed that a plan across nights loses 43 percent of its visits to a stated weather chain. Station 2 asked 59 seconds for a signal-to-noise of 50, limited by the star’s own photons. Station 3 calibrated against standards to 0.008 magnitude. Station 4 found the frame’s measured signal-to-noise within a draw of the prediction. Station 5 combined 0.022 and 0.008 into 0.023 magnitude, and the larger term, the star’s photons, is the one to improve.</p><p>Every frame and night here is synthetic and the facility’s values are the library’s; the chain is a prediction under stated assumptions, and it leaves out flat-field and sky-subtraction error, crowding, cloud and a changing atmosphere. The next investigation, <em>From Photons to a Number</em>, traces the arithmetic of stations 2 to 5 in one calculation.</p></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "quantitative",
+  "role": "first",
+  "sid": "five-stations",
+  "position": [
+   1,
+   13
+  ],
+  "title": "A Night at the Telescope, End to End",
+  "subtitle": "Plan, expose, calibrate, measure and report one star, with a prepared plan: five stations, each with the number it hands to the next",
+  "body": "<p class=\"inv-step-count\">Step 1 of 13 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">Five stations</h3><div class=\"inv-step-body\"><p>An observation is a chain. A <strong>plan</strong> says when a target is up and dark; an <strong>exposure</strong> is long enough to reach a signal-to-noise; a <strong>calibration</strong> turns counts into a magnitude; a <strong>measurement</strong> reads the counts from the frame; and a <strong>report</strong> gives the number with what it is good to. Each station is an instrument you have met, and each hands the next station one number.</p><p>This investigation follows a prepared plan: a star of magnitude 19 on the Las Cumbres 1.0 m telescope, on the night of 2025-01-29 (a new Moon), from a site at latitude 30° north. Every frame and every night of standard stars is <strong>synthetic</strong>, and the facility’s values are the instrument library’s; nobody has observed this. The first station is the night planner.</p></div>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": "Depth: Quantitative"
+ },
+ {
+  "depth": "quantitative",
+  "role": "graded",
+  "sid": "station-weather",
+  "position": [
+   3,
+   13
+  ],
+  "title": "A Night at the Telescope, End to End",
+  "subtitle": "Plan, expose, calibrate, measure and report one star, with a prepared plan: five stations, each with the number it hands to the next",
+  "body": "<p class=\"inv-step-count\">Step 3 of 13 <span class=\"inv-step-kind\">question</span></p><h3 class=\"inv-step-title\">A plan assumes clear nights</h3><div class=\"inv-step-body\"><p>A plan for one night says nothing about clouds. The <strong>strategy planner</strong> of the observing-strategy investigations spreads three visits a night over a fortnight and draws the weather from a stated chain (60 percent of nights clear, with persistence). Read its <strong>Visits</strong> row: how many visits were executed of how many planned.</p></div><p class=\"inv-prompt\">What share of the planned visits did the weather take, in percent?</p><div class=\"inv-numeric\"><input type=\"text\" inputmode=\"decimal\" class=\"inv-answer-num\" data-numeric=\"a-night-at-the-telescope:station-weather\" value=\"\" placeholder=\"Your value in %\"><span class=\"inv-unit\">%</span><button type=\"button\" class=\"ui-button\" data-check-numeric=\"a-night-at-the-telescope:station-weather\">Check</button></div><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> I could use a hint </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Depth: Quantitative"
+ },
+ {
+  "depth": "quantitative",
+  "role": "marked",
+  "sid": "station-weather",
+  "position": [
+   3,
+   13
+  ],
+  "title": "A Night at the Telescope, End to End",
+  "subtitle": "Plan, expose, calibrate, measure and report one star, with a prepared plan: five stations, each with the number it hands to the next",
+  "body": "<p class=\"inv-step-count\">Step 3 of 13 <span class=\"inv-step-kind\">question</span></p><h3 class=\"inv-step-title\">A plan assumes clear nights</h3><div class=\"inv-step-body\"><p>A plan for one night says nothing about clouds. The <strong>strategy planner</strong> of the observing-strategy investigations spreads three visits a night over a fortnight and draws the weather from a stated chain (60 percent of nights clear, with persistence). Read its <strong>Visits</strong> row: how many visits were executed of how many planned.</p></div><p class=\"inv-prompt\">What share of the planned visits did the weather take, in percent?</p><div class=\"inv-numeric\"><input type=\"text\" inputmode=\"decimal\" class=\"inv-answer-num\" data-numeric=\"a-night-at-the-telescope:station-weather\" value=\"42.9\" placeholder=\"Your value in %\"><span class=\"inv-unit\">%</span><button type=\"button\" class=\"ui-button\" data-check-numeric=\"a-night-at-the-telescope:station-weather\">Check</button></div><p class=\"inv-feedback is-right\">That matches. </p><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> I could use a hint </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Depth: Quantitative"
+ },
+ {
+  "depth": "quantitative",
+  "role": "last",
+  "sid": "what-you-worked-out",
+  "position": [
+   13,
+   13
+  ],
+  "title": "A Night at the Telescope, End to End",
+  "subtitle": "Plan, expose, calibrate, measure and report one star, with a prepared plan: five stations, each with the number it hands to the next",
+  "body": "<p class=\"inv-step-count\">Step 13 of 13 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">What you worked out</h3><div class=\"inv-step-body\"><p>Station 1 found 8.1 usable hours at an airmass of 1.05 on a new-Moon night, and the strategy planner showed that a plan across nights loses 43 percent of its visits to a stated weather chain. Station 2 asked 59 seconds for a signal-to-noise of 50, limited by the star’s own photons. Station 3 calibrated against standards to 0.008 magnitude. Station 4 found the frame’s measured signal-to-noise within a draw of the prediction. Station 5 combined 0.022 and 0.008 into 0.023 magnitude, and the larger term, the star’s photons, is the one to improve.</p><p>Every frame and night here is synthetic and the facility’s values are the library’s; the chain is a prediction under stated assumptions, and it leaves out flat-field and sky-subtraction error, crowding, cloud and a changing atmosphere. The next investigation, <em>From Photons to a Number</em>, traces the arithmetic of stations 2 to 5 in one calculation.</p></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Depth: Quantitative"
+ }
+]

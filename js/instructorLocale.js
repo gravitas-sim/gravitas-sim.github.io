@@ -123,6 +123,7 @@ import { SHADOWS as STRATEGY_SHADOWS } from './data/investigations/strategy-sequ
 import { SHADOWS as BINARIES_SHADOWS } from './data/investigations/binaries-sequence.js';
 import { SHADOWS as MASSES_SHADOWS } from './data/investigations/binary-masses-sequence.js';
 import { SHADOWS as SURVEY_SHADOWS } from './data/investigations/survey-sequence.js';
+import { SHADOWS as OBSERVING_SHADOWS } from './data/investigations/observing-sequence.js';
 import { SHADOWS as TELESCOPE_SHADOWS } from './data/investigations/telescope-sequence.js';
 import { SHADOWS as SPECTROGRAPH_SHADOWS } from './data/investigations/spectrograph-sequence.js';
 import { SHADOWS as SATURATED_STAR_SHADOWS } from './data/investigations/saturated-star-sequence.js';
@@ -181,6 +182,7 @@ export const SHADOWS = Object.freeze({
   ...BINARIES_SHADOWS,
   ...MASSES_SHADOWS,
   ...SURVEY_SHADOWS,
+  ...OBSERVING_SHADOWS,
   ...TELESCOPE_SHADOWS,
   ...SPECTROGRAPH_SHADOWS,
   ...SATURATED_STAR_SHADOWS,

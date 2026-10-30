@@ -125,6 +125,7 @@
     "js/data/investigations/listening-to-spacetime.js": 4,
     "js/data/investigations/lives-of-stars.js": 2,
     "js/data/investigations/missing-mass.js": 13,
+    "js/data/investigations/observing-sequence.js": 3,
     "js/data/investigations/photometric-calibration-sequence.js": 4,
     "js/data/investigations/power-law-gravity.js": 4,
     "js/data/investigations/retrograde-motion.js": 4,

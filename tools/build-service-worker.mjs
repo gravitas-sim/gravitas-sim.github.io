@@ -493,6 +493,8 @@ export const NEVER_PRECACHED = [
   /^js\/instruments\/survey\.js$/,
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(deep-or-wide|two-telescopes-one-question|propose-an-observation|survey-sequence)\.js$/,
   /^(js\/surveyDesignWidgets\.js|js\/surveyDesignField\.js|js\/surveyDesignPlan\.js|js\/i18n\/(en|es)\.surveyDesign\.js)$/,
+  // Prompt 216: the five connecting observing investigations and their one closure file (D-R10-216-01).
+  /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(which-instrument-for-which-question|the-sky-background|coordinates-and-time|a-night-at-the-telescope|from-photons-to-a-number|observing-sequence)\.js$/,
   // Prompt 210: the exposure planner, its field module, the facility adapter and the exposure lesson's one new file (D-R10-210-01).
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(plan-an-exposure|exposure-sequence)\.js$/,
   /^(js\/exposureWidgets\.js|js\/exposureField\.js|js\/i18n\/(en|es)\.exposure\.js)$/,

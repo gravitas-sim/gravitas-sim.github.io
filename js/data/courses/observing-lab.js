@@ -13,7 +13,7 @@ export const OBSERVING_LAB = {
   format: ID_COURSE_PACK,
   formatVersion: 2,
   id: 'observing-lab',
-  version: '1.0.0',
+  version: '1.1.0',
   gravitas: '1.0.0',
   locales: ['en', 'es'],
   pinning: 'compatible',
@@ -24,9 +24,9 @@ export const OBSERVING_LAB = {
     esOf: '72e1cf0b',
   },
   summary: {
-    en: 'A lab course in how astronomical measurements are made and trusted: plan a night at a telescope, measure spectra, measure a light curve and schedule an observing run, count what a survey misses, and work with real archive data. Detector and noise modeling is not in the investigations yet and is not claimed here.',
-    es: 'Un curso de laboratorio sobre cómo se hacen y se confían las mediciones astronómicas: planear una noche en un telescopio, medir espectros, medir una curva de luz y programar una campaña de observación, contar lo que un sondeo pierde y trabajar con datos reales de archivo. El modelado de detectores y ruido aún no está en las investigaciones y no se afirma aquí.',
-    esOf: '9b75e257',
+    en: 'A lab course in how astronomical measurements are made and trusted: plan a night at a telescope, choose an instrument and an exposure, measure spectra, measure a light curve from frames and schedule an observing run, count what a survey misses, and work with real archive data. The detector and exposure investigations use a prepared plan and a table of two dark sites and one survey telescope; no city or moonlight model is claimed.',
+    es: 'Un curso de laboratorio sobre cómo se hacen y se confían las mediciones astronómicas: planear una noche en un telescopio, elegir un instrumento y una exposición, medir espectros, medir una curva de luz a partir de imágenes y programar una campaña de observación, contar lo que un sondeo pierde y trabajar con datos reales de archivo. Las investigaciones de detector y exposición usan un plan preparado y una tabla de dos sitios oscuros y un telescopio de sondeo; no se afirma ningún modelo de ciudad ni de luz lunar.',
+    esOf: 'b4548343',
   },
   audience: {
     en: 'A second-year or majors observational astronomy lab. Algebra and logarithms; no calculus.',
@@ -34,11 +34,19 @@ export const OBSERVING_LAB = {
     esOf: 'a86c9c96',
   },
   teacherGuide: {
-    en: "Five units, one lab meeting each, with the quantitative depth of each investigation. Students work with the same data a researcher would open: the datasets are real spectra, a TESS light curve and a cluster observed by SDSS, SEGUE and Gaia. Ask for a lab report from the last unit. The instructor notes and answer keys are in the instructors' portal.",
-    es: 'Cinco unidades, una sesión de laboratorio cada una, con la profundidad cuantitativa de cada investigación. Los estudiantes trabajan con los mismos datos que abriría un investigador: espectros reales, una curva de luz de TESS y un cúmulo observado por SDSS, SEGUE y Gaia. Pide un informe de laboratorio de la última unidad. Las notas y las claves están en el portal para docentes.',
-    esOf: 'c4dc39b5',
+    en: "Seven units, one lab meeting each, with the quantitative depth of each investigation. The two instrument units follow the sequence Observing and instruments: the detector and the exposure first, then a facility, the sky and a whole night with a prepared plan, ending on the number a measurement reports. Students work with the same data a researcher would open: the datasets are real spectra, a TESS light curve and a cluster observed by SDSS, SEGUE and Gaia. Ask for a lab report from the last unit. The instructor notes and answer keys are in the instructors' portal.",
+    es: 'Siete unidades, una sesión de laboratorio cada una, con la profundidad cuantitativa de cada investigación. Las dos unidades de instrumentos siguen la secuencia Observación e instrumentos: primero el detector y la exposición, luego una instalación, el cielo y una noche completa con un plan preparado, hasta el número que informa una medición. Los estudiantes trabajan con los mismos datos que abriría un investigador: espectros reales, una curva de luz de TESS y un cúmulo observado por SDSS, SEGUE y Gaia. Pide un informe de laboratorio de la última unidad. Las notas y las claves están en el portal para docentes.',
+    esOf: '41973be7',
   },
   objectives: [
+    {
+      id: 'instruments',
+      text: {
+        en: 'Choose an instrument and an exposure for a question, and say what the sky, the detector and the arithmetic do to the number a measurement reports.',
+        es: 'Elegir un instrumento y una exposición para una pregunta, y decir qué hacen el cielo, el detector y la aritmética con el número que informa una medición.',
+        esOf: '9616c37c',
+      },
+    },
     {
       id: 'plan',
       text: {
@@ -139,6 +147,18 @@ export const OBSERVING_LAB = {
           },
         },
         {
+          id: 'coordinates-and-time',
+          kind: 'lesson',
+          lesson: 'coordinates-and-time',
+          depth: 'quantitative',
+          objectives: ['plan'],
+          needs: ['the-turning-sky'],
+          pin: {
+            fp: '048642ff',
+            n: 8,
+          },
+        },
+        {
           id: 'twelve-nights',
           kind: 'lesson',
           lesson: 'twelve-nights',
@@ -146,6 +166,130 @@ export const OBSERVING_LAB = {
           pin: {
             fp: '40302168',
             n: 13,
+          },
+        },
+      ],
+    },
+    {
+      id: 'instruments',
+      title: {
+        en: 'Instruments and exposure',
+        es: 'Instrumentos y exposición',
+        esOf: '825a4b99',
+      },
+      items: [
+        {
+          id: 'what-a-ccd-records',
+          kind: 'lesson',
+          lesson: 'what-a-ccd-records',
+          objectives: ['instruments'],
+          pin: {
+            fp: 'de636cb4',
+            n: 11,
+          },
+        },
+        {
+          id: 'what-a-telescope-resolves',
+          kind: 'lesson',
+          lesson: 'what-a-telescope-resolves',
+          objectives: ['instruments'],
+          pin: {
+            fp: 'f230d249',
+            n: 7,
+          },
+        },
+        {
+          id: 'signal-noise-and-exposure',
+          kind: 'lesson',
+          lesson: 'signal-noise-and-exposure',
+          depth: 'quantitative',
+          objectives: ['instruments'],
+          needs: ['what-a-ccd-records'],
+          pin: {
+            fp: '146dbc90',
+            n: 10,
+          },
+        },
+        {
+          id: 'plan-an-exposure',
+          kind: 'lesson',
+          lesson: 'plan-an-exposure',
+          objectives: ['instruments'],
+          needs: ['signal-noise-and-exposure'],
+          pin: {
+            fp: 'aa80cd10',
+            n: 11,
+          },
+        },
+      ],
+    },
+    {
+      id: 'the-night',
+      title: {
+        en: 'A night at the telescope',
+        es: 'Una noche en el telescopio',
+        esOf: '60704854',
+      },
+      items: [
+        {
+          id: 'which-instrument-for-which-question',
+          kind: 'lesson',
+          lesson: 'which-instrument-for-which-question',
+          objectives: ['instruments'],
+          needs: ['plan-an-exposure'],
+          pin: {
+            fp: '49d62621',
+            n: 10,
+          },
+        },
+        {
+          id: 'the-sky-background',
+          kind: 'lesson',
+          lesson: 'the-sky-background',
+          objectives: ['instruments'],
+          needs: ['plan-an-exposure'],
+          pin: {
+            fp: 'ea082093',
+            n: 12,
+          },
+        },
+        {
+          id: 'counts-to-magnitudes',
+          kind: 'lesson',
+          lesson: 'counts-to-magnitudes',
+          objectives: ['instruments'],
+          needs: ['what-a-ccd-records'],
+          pin: {
+            fp: '4d8c2633',
+            n: 6,
+          },
+        },
+        {
+          id: 'a-night-at-the-telescope',
+          kind: 'lesson',
+          lesson: 'a-night-at-the-telescope',
+          objectives: ['instruments', 'plan'],
+          needs: ['the-sky-background', 'counts-to-magnitudes'],
+          teacherNote: {
+            en: 'The capstone of the unit: one prepared night, five stations, each handing a number to the next. Run it as a survey would, following the plan; ask students for the five numbers and the assumption most likely to fail on a real night.',
+            es: 'El cierre de la unidad: una noche preparada, cinco estaciones, cada una entrega un número a la siguiente. Hazla como lo haría un sondeo, siguiendo el plan; pide los cinco números y el supuesto con más probabilidad de fallar en una noche real.',
+            esOf: '3563c0ac',
+          },
+          pin: {
+            fp: '74113e4d',
+            n: 11,
+          },
+        },
+        {
+          id: 'from-photons-to-a-number',
+          kind: 'lesson',
+          lesson: 'from-photons-to-a-number',
+          depth: 'quantitative',
+          objectives: ['instruments'],
+          needs: ['a-night-at-the-telescope'],
+          pin: {
+            fp: '9c414f1d',
+            n: 10,
           },
         },
       ],
@@ -296,6 +440,29 @@ export const OBSERVING_LAB = {
             n: 9,
           },
         },
+        {
+          id: 'a-variable-star-from-frames',
+          kind: 'lesson',
+          lesson: 'a-variable-star-from-frames',
+          objectives: ['photometry'],
+          needs: ['transit-photometry'],
+          pin: {
+            fp: '8f28b4c6',
+            n: 8,
+          },
+        },
+        {
+          id: 'what-is-in-this-field',
+          kind: 'lesson',
+          lesson: 'what-is-in-this-field',
+          depth: 'quantitative',
+          objectives: ['photometry'],
+          needs: ['a-variable-star-from-frames'],
+          pin: {
+            fp: '038434fe',
+            n: 10,
+          },
+        },
       ],
     },
     {
@@ -396,6 +563,96 @@ export const OBSERVING_LAB = {
             en: 'Gaia data are licensed for non-commercial use; credit ESA/Gaia/DPAC in a report.',
             es: 'Los datos de Gaia tienen licencia de uso no comercial; en un informe, reconoce a ESA/Gaia/DPAC.',
             esOf: '3e401e89',
+          },
+        },
+      ],
+    },
+    {
+      id: 'not-yet',
+      title: {
+        en: 'Not here yet: readings with the reason (optional)',
+        es: 'Aún no está aquí: lecturas con el motivo (opcional)',
+        esOf: '731348df',
+      },
+      summary: {
+        en: 'Topics of this course that Gravitas does not have an investigation for yet, each with the reason.',
+        es: 'Temas de este curso para los que Gravitas aún no tiene una investigación, cada uno con el motivo.',
+        esOf: '042c0c9b',
+      },
+      items: [
+        {
+          id: 'not-yet-a-city-sky',
+          kind: 'reading',
+          path: 'advanced',
+          minutes: 30,
+          title: {
+            en: 'Astronomy 2e, chapter 6: telescopes at a real site',
+            es: 'Astronomy 2e, capítulo 6: telescopios en un sitio real (en inglés)',
+            esOf: 'f9c9e783',
+          },
+          cite: {
+            authors:
+              'Andrew Fraknoi, David Morrison, Sidney C. Wolff and others',
+            year: 2022,
+            source: 'OpenStax, Rice University',
+            url: 'https://openstax.org/details/books/astronomy-2e',
+          },
+          license: 'CC BY 4.0',
+          access: 'open',
+          studentNote: {
+            en: 'There is no investigation of a city sky, twilight or moonlight geometry yet: the instrument library has dark sites only, and the sky background investigation sets the Moon as a number of magnitudes, not as a place in the sky (D-R10-216-02).',
+            es: 'Aún no hay una investigación sobre un cielo de ciudad, el crepúsculo o la geometría de la luz lunar: la biblioteca de instrumentos tiene solo sitios oscuros, y la investigación del fondo de cielo da la Luna como un número de magnitudes, no como un lugar en el cielo (D-R10-216-02).',
+            esOf: '25d56281',
+          },
+        },
+        {
+          id: 'not-yet-colours-on-rubin',
+          kind: 'reading',
+          path: 'advanced',
+          minutes: 30,
+          title: {
+            en: 'Astronomy 2e, chapter 6: detectors and filters',
+            es: 'Astronomy 2e, capítulo 6: detectores y filtros (en inglés)',
+            esOf: '836fa0d0',
+          },
+          cite: {
+            authors:
+              'Andrew Fraknoi, David Morrison, Sidney C. Wolff and others',
+            year: 2022,
+            source: 'OpenStax, Rice University',
+            url: 'https://openstax.org/details/books/astronomy-2e',
+          },
+          license: 'CC BY 4.0',
+          access: 'open',
+          studentNote: {
+            en: 'The exposure planner does not yet work for Rubin in the g and i bands: its table has no seeing for them, so the investigations use the r band and the Las Cumbres telescopes in V (D-R10-216-03).',
+            es: 'El planificador de exposiciones aún no funciona para Rubin en las bandas g e i: su tabla no tiene la calidad de imagen para ellas, así que las investigaciones usan la banda r y los telescopios de Las Cumbres en V (D-R10-216-03).',
+            esOf: '87a1aca4',
+          },
+        },
+        {
+          id: 'not-yet-a-weathered-night',
+          kind: 'reading',
+          path: 'advanced',
+          minutes: 30,
+          title: {
+            en: 'Astronomy 2e, chapter 6: observing under real conditions',
+            es: 'Astronomy 2e, capítulo 6: observar en condiciones reales (en inglés)',
+            esOf: 'b9f7d322',
+          },
+          cite: {
+            authors:
+              'Andrew Fraknoi, David Morrison, Sidney C. Wolff and others',
+            year: 2022,
+            source: 'OpenStax, Rice University',
+            url: 'https://openstax.org/details/books/astronomy-2e',
+          },
+          license: 'CC BY 4.0',
+          access: 'open',
+          studentNote: {
+            en: 'There is no investigation in which a student plans a whole night against weather and a queue of other programs: the night at the telescope follows a prepared plan, and the strategy planner states its weather fraction rather than modelling clouds (D-R10-216-02).',
+            es: 'No hay una investigación en la que un estudiante planifique una noche entera frente al clima y a una cola de otros programas: la noche en el telescopio sigue un plan preparado, y el planificador de estrategia da su fracción de clima en lugar de modelar las nubes (D-R10-216-02).',
+            esOf: '3f4c41f5',
           },
         },
       ],

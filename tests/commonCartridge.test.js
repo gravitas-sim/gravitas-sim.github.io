@@ -86,9 +86,10 @@ const parse = text => new DOMParser().parseFromString(text, 'application/xml');
 const sha = text => createHash('sha256').update(text).digest('hex');
 const read = p => readFileSync(new URL(`../${p}`, import.meta.url), 'utf8');
 const COURSES = Object.keys(BUILTIN_COURSES);
-/** Built, profile-checked, but not in the recorded schema run (D-R10-206-08). */
+/** Built, profile-checked, but not in the recorded schema run (D-R10-206-08, D-R10-216-06). */
 const UNVALIDATED = [
   'astronomy-semester',
+  'observing-lab', // rebuilt around the observing sequence (Prompt 216, D-R10-216-06)
   'solar-system-and-the-sun',
   'upper-level-modules',
 ];

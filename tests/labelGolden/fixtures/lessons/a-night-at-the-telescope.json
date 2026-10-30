@@ -1,0 +1,89 @@
+{
+ "id": "a-night-at-the-telescope",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.station-when.fields.0.unit","h"],
+    ["steps.station-when.fields.1.unit","h"],
+    ["steps.station-when.fields.2.unit",""],
+    ["steps.station-weather.unit","%"],
+    ["steps.station-expose.fields.0.unit","s"],
+    ["steps.station-expose.fields.1.unit","%"],
+    ["steps.a-moonlit-night.unit",""],
+    ["steps.two-exposures.unit",""],
+    ["steps.station-calibrate.fields.0.unit","mag"],
+    ["steps.station-calibrate.fields.1.unit","mag/airmass"],
+    ["steps.station-calibrate.fields.2.unit","mag"],
+    ["steps.station-measure.fields.0.unit",""],
+    ["steps.station-measure.fields.1.unit",""],
+    ["steps.station-report.unit","mag"]
+   ],
+   "numbered": [
+    ["steps.station-when.fields.0.hint","10.5"],
+    ["steps.station-when.fields.1.hint","8.08"],
+    ["steps.station-when.fields.2.hint","1.05"],
+    ["steps.station-expose.fields.0.hint","59.3"],
+    ["steps.station-expose.fields.1.hint","49"],
+    ["steps.station-calibrate.fields.0.label","Zero point at airmass 1"],
+    ["steps.station-calibrate.fields.0.hint","24.803"],
+    ["steps.station-calibrate.fields.1.hint","0.213"],
+    ["steps.station-calibrate.fields.2.hint","0.008"],
+    ["steps.station-measure.fields.0.hint","49.5"],
+    ["steps.station-measure.fields.1.hint","49.9"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.station-calibrate.fields.0.label","Punto cero a masa de aire 1"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "station-weather",
+    "answer": "42.9",
+    "tolerance": "1",
+    "unit": "%"
+   },
+   {
+    "sid": "a-moonlit-night",
+    "answer": "2.08",
+    "tolerance": "0.08",
+    "unit": ""
+   },
+   {
+    "sid": "two-exposures",
+    "answer": "1.19",
+    "tolerance": "0.04",
+    "unit": ""
+   },
+   {
+    "sid": "station-report",
+    "answer": "0.0231",
+    "tolerance": "0.0015",
+    "unit": "mag"
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "station-when": {
+    "validate": {"calls":242,"distinct":2,"digest":"0985fe58b7230b93","samples":[null,{"level":"error","message":"Set the latitude to 30° and the night to 2025-01-29, then read “Astronomical dark” and the row for Regulus: “hours usable; best airmass”."}]}
+   },
+   "station-expose": {
+    "validate": {"calls":232,"distinct":2,"digest":"35d36a42de0c2bd6","samples":[null,{"level":"error","message":"Choose “Las Cumbres 1.0 m, V”, brightness 19, a target of 50, one exposure and an airmass of 1.1, then read “Total exposure” and “Noise budget: the target’s photons”."}]}
+   },
+   "station-calibrate": {
+    "validate": {"calls":242,"distinct":2,"digest":"c18183caffc882f3","samples":[null,{"level":"error","message":"On the clear night read “Zero point at airmass 1”, “Extinction of the air” and the “±” after the calibrated magnitude in “Target star”."}]}
+   },
+   "station-measure": {
+    "validate": {"calls":232,"distinct":2,"digest":"0c359023d7b1da76","samples":[null,{"level":"error","message":"Read the rows “Predicted for the frame’s own aperture” and “Measured on the frame”: about 49.5 and 49.9 for this plan."}]}
+   }
+  },
+  "es": "same"
+ }
+}

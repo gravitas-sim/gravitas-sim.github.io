@@ -740,8 +740,8 @@
         "es": "Dónde podría durar el agua líquida: la zona habitable, qué desplaza sus bordes y por qué la respuesta es un intervalo y no una línea."
       },
       "observing": {
-        "en": "Turning light into measurements: planning a night, spectra, brightness and its uncertainty, and the real data behind the Observatory.",
-        "es": "Convertir la luz en mediciones: planificar una noche, los espectros, el brillo y su incertidumbre, y los datos reales detrás del Observatorio."
+        "en": "Turning light into measurements: planning a night, choosing an instrument and an exposure, the sky and the detector, spectra, brightness and its uncertainty, and the real data behind the Observatory.",
+        "es": "Convertir la luz en mediciones: planificar una noche, elegir un instrumento y una exposición, el cielo y el detector, los espectros, el brillo y su incertidumbre, y los datos reales detrás del Observatorio."
       },
       "orbits": {
         "en": "How things go round: Kepler's laws, ellipses, periods and energy, from a single planet to a transfer between worlds.",
