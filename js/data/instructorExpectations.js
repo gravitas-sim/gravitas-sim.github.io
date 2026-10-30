@@ -24,6 +24,7 @@ import { INSTRUCTOR as PHOTCAL } from './investigations/photometric-calibration-
 import { INSTRUCTOR as BINARIES } from './investigations/binaries-sequence.js';
 import { INSTRUCTOR as MASSES } from './investigations/binary-masses-sequence.js';
 import { INSTRUCTOR as ACTIVITY } from './investigations/stellar-activity-sequence.js';
+import { INSTRUCTOR as REMNANTS } from './investigations/remnants-sequence.js';
 
 export default {
   format: 'gravitas.instructor-expectations',
@@ -44,6 +45,7 @@ export default {
     ...BINARIES.expectations,
     ...MASSES.expectations,
     ...ACTIVITY.expectations,
+    ...REMNANTS.expectations,
     'the-suns-motion': {
       'measure-the-sun':
         'Within 100 pc against the mean of the stars the Sun reads U about 10.5, V about 21.9 and W about 9.1 km/s (489 stars). The validator accepts 10.5 and 9.1 within 1.5 and 21.9 within 2.',

@@ -145,6 +145,8 @@ export const GUIDED = Object.freeze([
   'einstein-rings-and-arcs',
   'extending-an-experiment',
   'flares',
+  'how-old-is-this-white-dwarf',
+  'from-star-to-remnant',
   'from-photons-to-a-number',
   'goldilocks-question',
   'gravity-assist',

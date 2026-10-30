@@ -434,6 +434,12 @@ export const LAZY_FAMILIES = Object.freeze({
     'PHOTCAL_WIDGETS',
     ['photometric-calibration']
   ),
+  remnants: familyEntry(
+    () => import('./remnantsWidgets.js'),
+    './remnantsWidgets.js',
+    'REMNANTS_WIDGETS',
+    ['remnant-cooling', 'remnant-outcome']
+  ),
   spectrograph: familyEntry(
     () => import('./spectrographWidgets.js'),
     './spectrographWidgets.js',
@@ -660,6 +666,8 @@ export async function whenWidgetsReady() {
     'masses',
     // The activity family reaches the plot component and the kernel, and its curves are sidecars: late for the same reason (Prompt 220).
     'activity',
+    // The remnants family reaches the plot component and the kernel: late for the same reason (Prompt 222).
+    'remnants',
     'surveyDesign',
   ];
   await Promise.all(families.filter(f => !late.includes(f)).map(loadFamily));

@@ -392,6 +392,14 @@ export const BROWSE_META = {
     tags: ['observing', 'stars'],
     numericCount: 0,
   },
+  'how-old-is-this-white-dwarf': {
+    tags: ['compact-objects', 'stars'],
+    numericCount: 0,
+  },
+  'from-star-to-remnant': {
+    tags: ['compact-objects', 'stars'],
+    numericCount: 0,
+  },
   'deep-or-wide': {
     tags: ['observing'],
     numericCount: 0,

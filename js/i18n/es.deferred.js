@@ -1839,6 +1839,10 @@ export const ES_DEFERRED = {
     'Sigue estrellas de distintas masas del nacimiento a la muerte y lee sus edades en el diagrama.',
   'inv.seq.light.the-limit':
     'Donde acaba la muerte de una estrella: el límite de masa de una enana blanca y lo que hay más allá.',
+  'inv.seq.light.how-old-is-this-white-dwarf':
+    'Lee cuánto tiempo lleva enfriándose una enana blanca y mantén el error de la ley de enfriamiento aparte de la incertidumbre de la medida. Necesita antes El límite.',
+  'inv.seq.light.from-star-to-remnant':
+    'De la masa con que nace una estrella a lo que deja: una enana blanca, una estrella de neutrones o un agujero negro, con las probabilidades. Necesita antes El límite y Las vidas de las estrellas.',
   'inv.seq.light.cluster-membership':
     'Datos reales de un cúmulo real: qué estrellas pertenecen a él, según sus movimientos. Usa el diagrama y la idea de población.',
 

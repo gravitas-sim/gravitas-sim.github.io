@@ -2738,6 +2738,27 @@ test.describe('the central experiment of each investigation', () => {
         [3, 100.4, 3],
       ],
     },
+    // ---- Remnants (Roadmap III, Prompt 222) -----------------------------------------
+    {
+      id: 'how-old-is-this-white-dwarf',
+      title:
+        "how-old-is-this-white-dwarf: a 0.6 solar mass white dwarf is 4.09 billion years old at a ten-thousandth of the Sun's luminosity and 0.79 at a thousandth @accepts:ce.how-old-is-this-white-dwarf",
+      row: /^Cooling age$/i,
+      values: [
+        [-4, 4.09, 0.05],
+        [-3, 0.79, 0.03],
+      ],
+    },
+    {
+      id: 'from-star-to-remnant',
+      title:
+        'from-star-to-remnant: a star of 3 solar masses leaves a white dwarf of 0.745 solar masses and a star of 1 leaves 0.569 @accepts:ce.from-star-to-remnant',
+      row: /^Final mass, if a white dwarf$/i,
+      values: [
+        [3, 0.745, 0.01],
+        [1, 0.569, 0.01],
+      ],
+    },
     // ---- Telescopes (Roadmap III, Prompt 208) ---------------------------------
     {
       id: 'what-a-telescope-resolves',

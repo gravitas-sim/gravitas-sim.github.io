@@ -190,6 +190,8 @@ export const SEQUENCES = [
       ['inside-a-star', 'core', ['lives-of-stars']],
       ['scaling-the-main-sequence', 'quantitative', ['inside-a-star']],
       ['the-limit', 'core', ['inside-a-star']],
+      ['how-old-is-this-white-dwarf', 'core', ['the-limit']],
+      ['from-star-to-remnant', 'core', ['the-limit', 'lives-of-stars']],
       ['cluster-membership', 'quantitative', ['lives-of-stars']],
     ]
   ),

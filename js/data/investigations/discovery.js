@@ -970,6 +970,26 @@ export const DISCOVERY = {
     },
     courseLevel: 'survey',
   },
+  'how-old-is-this-white-dwarf': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['the-limit'],
+    textbook: {
+      chapter: 23,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
+  'from-star-to-remnant': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['the-limit', 'lives-of-stars'],
+    textbook: {
+      chapter: 23,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
   'deep-or-wide': {
     audience: 'intro',
     mathematics: 'algebra',

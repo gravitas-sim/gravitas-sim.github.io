@@ -52,6 +52,7 @@ import { DEPTH as STRATEGY_DEPTH } from '../data/investigations/strategy-sequenc
 import { DEPTH as BINARIES_DEPTH } from '../data/investigations/binaries-sequence.js';
 import { DEPTH as MASSES_DEPTH } from '../data/investigations/binary-masses-sequence.js';
 import { DEPTH as ACTIVITY_DEPTH } from '../data/investigations/stellar-activity-sequence.js';
+import { DEPTH as REMNANTS_DEPTH } from '../data/investigations/remnants-sequence.js';
 import { DEPTH as SURVEY_DEPTH } from '../data/investigations/survey-sequence.js';
 import { DEPTH as OBSERVING_DEPTH } from '../data/investigations/observing-sequence.js';
 import { DEPTH as SATURATED_STAR_DEPTH } from '../data/investigations/saturated-star-sequence.js';
@@ -93,6 +94,9 @@ export const DEEPER = Object.freeze({
   ),
   ...Object.fromEntries(
     Object.entries(ACTIVITY_DEPTH).map(([id, d]) => [id, d.steps])
+  ),
+  ...Object.fromEntries(
+    Object.entries(REMNANTS_DEPTH).map(([id, d]) => [id, d.steps])
   ),
   ...Object.fromEntries(
     Object.entries(SURVEY_DEPTH).map(([id, d]) => [id, d.steps])
