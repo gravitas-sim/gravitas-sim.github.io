@@ -219,6 +219,7 @@ current, and the orchestrator checks it.
 | `validate-lab3d.mjs` | The 3-D kernel's permanent validation | `npm run validate:lab3d` |
 | `validate-mission.mjs` | The mission core's validation | `npm run validate:mission` |
 | `validate-physics.mjs` | npm run validate:physics | `npm run validate:physics` |
+| `variables-ii-validate.mjs` | The variables-II kernel against its committed thresholds (Prompt 223 Part A) | `npm run variables-ii:validate` |
 | `variables-sample.mjs` | (no header) |  |
 | `vendor-deps.mjs` | npm run vendor  /  npm run vendor:check | `npm run vendor`, `npm run vendor:check` |
 | `verify-release.mjs` | Is this tree safe to publish? |  |

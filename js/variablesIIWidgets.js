@@ -326,7 +326,7 @@ const FEATURES = {
   ],
   presets: [
     preset('v2W.f.preset.suDra', { star: 0, days: 28 }),
-    preset('v2W.f.preset.short', { star: 0, days: 2 }),
+    preset('v2W.f.preset.short', { star: 0, days: 1 }),
     preset('v2W.f.preset.etaAql', { star: 1, days: 28 }),
   ],
   draw(canvas, v) {

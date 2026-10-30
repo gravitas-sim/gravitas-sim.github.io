@@ -1122,6 +1122,13 @@
       "student": false
     },
     {
+      "file": "VARIABLES_II.md",
+      "kind": "feature",
+      "purpose": "Variables II: light-curve features with their errors, the Cepheid period-luminosity relation with a cited metallicity term, and a classification exercise that can decline to name a star, with twenty validation legs (Prompt 223).",
+      "owner": 223,
+      "student": true
+    },
+    {
       "file": "VO_ARCHIVE_GATE.md",
       "kind": "gate",
       "purpose": "Astronomy archives and the Virtual Observatory gate.",

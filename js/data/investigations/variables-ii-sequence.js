@@ -56,7 +56,7 @@ export const THE_METALLICITY_TERM = {
   courseLevel: 'upper',
   mathematics: 'logarithms',
   prerequisites: ['leavitts-law', 'the-first-rung'],
-  tags: ['observing', 'stars', 'distance'],
+  tags: ['observing', 'stars'],
   lock: { placement: true, inspector: true },
   depths: ['core', 'quantitative', 'advanced'],
   objectives: [
@@ -233,7 +233,7 @@ export const THE_METALLICITY_TERM = {
       type: 'question',
       kind: 'choice',
       title: 'Beyond the calibration',
-      body: `Set the galaxy&rsquo;s metallicity to <strong>my value</strong> and the slider to the lowest value,
+      body: `Set the galaxy&rsquo;s metallicity to <strong>mine</strong> and the slider to the lowest value,
              &minus;0.6 dex below the LMC. The Range row warns.`,
       prompt: 'What does the warning mean?',
       options: [
@@ -488,7 +488,7 @@ export const THE_METALLICITY_TERM_ES = {
     },
     {
       title: 'Más allá de la calibración',
-      body: `Pon la metalicidad de la galaxia en <strong>mi valor</strong> y el deslizador en el valor más bajo, &minus;0,6 dex por debajo de la GNM. La fila Intervalo avisa.`,
+      body: `Pon la metalicidad de la galaxia en <strong>mía</strong> y el deslizador en el valor más bajo, &minus;0,6 dex por debajo de la GNM. La fila Intervalo avisa.`,
       prompt: '¿Qué significa el aviso?',
       options: [
         'El coeficiente se ajustó en un intervalo de [O/H] y esta galaxia queda fuera, así que la corrección es una extrapolación del término citado y no una comprobada',

@@ -405,8 +405,8 @@ export const BROWSE_META = {
     numericCount: 0,
   },
   'the-metallicity-term': {
-    tags: ['distance', 'observing', 'stars'],
-    numericCount: 1,
+    tags: ['observing', 'stars'],
+    numericCount: 0,
   },
   'deep-or-wide': {
     tags: ['observing'],

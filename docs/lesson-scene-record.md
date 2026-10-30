@@ -11,15 +11,15 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 106 investigations and 1402 steps: 1310 steps
+Across 107 investigations and 1409 steps: 1317 steps
 declare a scene, 157 let a reader change one, 167 read the
-running integration, 893 show a prescribed model result, 146 draw
-on a stored dataset, 772 put a self-contained panel beside the text,
-373 keep something, and 58 are prose.
-Of 184 prediction loops, 184 are returned to,
-184 produce a measurement before they are answered, and
+running integration, 900 show a prescribed model result, 146 draw
+on a stored dataset, 779 put a self-contained panel beside the text,
+374 keep something, and 58 are prose.
+Of 185 prediction loops, 185 are returned to,
+185 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
-184 hold their marking until the experiment settles them.
+185 hold their marking until the experiment settles them.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -1392,6 +1392,20 @@ Of 184 prediction loops, 184 are returned to,
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:remnant-outcome`, control remnant-outcome/mi, measures the final mass, in solar masses, of the white dwarf a star leaves by the MIST relation: 0.745 from a star of 3 solar masses and 0.569 from a star of 1, with a scatter of 0.06 solar masses, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## The Metallicity Term (`the-metallicity-term`)
+
+- **Steps:** 7. Scene declared on 7; a reader can change something on 0; 7 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 7 prescribed model, 0 stored dataset, 7 self-contained panel.
+- **What students do:** move-an-instrument-control, press-an-instrument-preset, commit-a-prediction, record-values, choose-an-option.
+- **Objects the steps declare:** rich, poor.
+- **Instruments:** plz-metallicity.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** which-way-does-metal-go → the-distance-twice, what-a-term-this-size-does, what-the-term-adds-to-the-error, beyond-the-calibration, what-the-term-says → the-distance-twice.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:plz-metallicity`, control plz-metallicity/term, measures the distance modulus of NGC 4258 from the LMC's Cepheids, in magnitudes, with the cited metallicity term left out (29.403) and included (29.444): a shift of 0.041 magnitudes, about two percent in distance, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Deep or Wide? (`deep-or-wide`)
 
