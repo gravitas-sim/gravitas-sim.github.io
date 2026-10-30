@@ -823,7 +823,7 @@
     {
       "file": "REMNANTS.md",
       "kind": "feature",
-      "purpose": "Remnants: white-dwarf cooling ages with a model-limited interval, the initial-final mass relation and the odds of a white dwarf, a neutron star or a black hole, with validation and two failed legs left failing (Prompt 222).",
+      "purpose": "Remnants: white-dwarf cooling ages with a two-term interval, the initial-final mass relation and outcome odds, with validation and two failed legs left failing (Prompt 222).",
       "owner": 222,
       "student": true
     },

@@ -15,6 +15,15 @@ the release rather than in the tag.
 
 ### Added
 
+- **Remnants (Prompt 222).** `js/kernels/remnants/`: a white-dwarf cooling age from a Mestel-type law calibrated on
+  one published model sequence, valid for 0.5 to 1.0 solar masses and a stated luminosity range, refused outside it,
+  with an interval that keeps the measurement term apart from the law's own error; the initial-final mass relations
+  of Cummings et al. (2018) with their scatter; and the odds of a white dwarf, a neutron star or a black hole from
+  the cited threshold ranges, named only at nine in ten. 20 of 22 bounded validation legs pass, two stay failing and
+  labelled (`REMNANTS.md`). No observed white-dwarf table is shipped: the law is checked against models and a
+  simulated sample. Two panels (`remnant-cooling`, `remnant-outcome`) and two investigations, How Old Is This White
+  Dwarf? and From Star to Remnant, each at three depths in English and Spanish with instructor materials; a
+  model-page section.
 - **Stellar rotation and flares (Prompt 220).** `js/kernels/activity/`: a spotted rotating
   sphere (circular spots, quadratic limb darkening, an exact azimuthal integral), the rotation period over the
   existing periodogram with a false-alarm probability, a residual-correlation widening and the factor-two alias

@@ -1,0 +1,51 @@
+{
+ "id": "from-star-to-remnant",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.read-the-final-mass.fields.0.unit","M☉"],
+    ["steps.read-the-final-mass.fields.1.unit","percent"],
+    ["steps.read-the-odds.fields.0.unit","percent"],
+    ["steps.read-the-odds.fields.1.unit","percent"],
+    ["steps.the-relation-at-two-masses.fields.0.unit","M☉"],
+    ["steps.the-relation-at-two-masses.fields.1.unit","M☉"]
+   ],
+   "numbered": [
+    ["steps.read-the-final-mass.fields.0.hint","0.745"],
+    ["steps.read-the-final-mass.fields.1.hint","75"],
+    ["steps.read-the-odds.fields.0.hint","75"],
+    ["steps.read-the-odds.fields.1.hint","25"],
+    ["steps.the-relation-at-two-masses.fields.0.label","At 1.0 M☉"],
+    ["steps.the-relation-at-two-masses.fields.0.hint","0.569"],
+    ["steps.the-relation-at-two-masses.fields.1.label","At 6.0 M☉"],
+    ["steps.the-relation-at-two-masses.fields.1.hint","1.113"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.the-relation-at-two-masses.fields.0.label","Con 1,0 M☉"],
+    ["steps.the-relation-at-two-masses.fields.1.label","Con 6,0 M☉"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "read-the-final-mass": {
+    "validate": {"calls":232,"distinct":2,"digest":"8530a58e2636e04c","samples":[null,{"level":"error","message":"Leave the initial mass at 3.0: the final mass is 0.745 solar masses and 75 percent of the star is lost."}]}
+   },
+   "read-the-odds": {
+    "validate": {"calls":232,"distinct":2,"digest":"d902b4e86989f9e3","samples":[null,{"level":"error","message":"Set the initial mass to 25 solar masses: a neutron star with probability 75 percent and a black hole with 25."}]}
+   },
+   "the-relation-at-two-masses": {
+    "validate": {"calls":232,"distinct":2,"digest":"95a183772e232627","samples":[null,{"level":"error","message":"Set the initial mass to 1.0 and then 6.0: the final masses are 0.569 and 1.113 solar masses."}]}
+   }
+  },
+  "es": "same"
+ }
+}

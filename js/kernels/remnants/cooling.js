@@ -65,6 +65,13 @@ const radiusCache = new Map();
  * relation of js/kernels/stellar/whiteDwarf.js, about 3 per cent larger than
  * the best published radii at 0.6 solar masses. Cached by mass.
  */
+
+/** The pin's key for a mass on the 0.1 grid: "0.5", "1.0" (no number formatting call). */
+const massKey = m => {
+  const tenths = Math.round(m * 10);
+  return `${Math.floor(tenths / 10)}.${tenths % 10}`;
+};
+
 export function radiusSunOf(massSun) {
   const key = Math.round(massSun * 1e9) / 1e9;
   let r = radiusCache.get(key);
@@ -164,7 +171,7 @@ export function coolingAge(input = {}) {
       teffK !== undefined
         ? 'teff-luminosity-out-of-domain'
         : 'luminosity-out-of-domain',
-      `log L/Lsun = ${logL.toFixed(2)} is outside ${l0} to ${l1}`
+      `log L/Lsun = ${Math.round(logL * 100) / 100} is outside ${l0} to ${l1}`
     );
 
   const lumNow = 10 ** logL;
@@ -276,7 +283,7 @@ export function calibrate(rowsByMass, options = {}) {
   let num = 0;
   let den = 0;
   for (const m of tauMasses) {
-    const rows = inDomain(rowsByMass[m.toFixed(1)], domain);
+    const rows = inDomain(rowsByMass[massKey(m)], domain);
     const w = trapezoidWeights(rows.map(r => r[1]));
     rows.forEach((r, i) => {
       num += w[i] * Math.log((r[3] * (10 ** r[1]) ** EXP) / m ** EXP);
@@ -287,7 +294,7 @@ export function calibrate(rowsByMass, options = {}) {
   const absR = [];
   const wts = [];
   for (const m of modelMasses) {
-    const rows = inDomain(rowsByMass[m.toFixed(1)], domain);
+    const rows = inDomain(rowsByMass[massKey(m)], domain);
     const w = trapezoidWeights(rows.map(r => r[1]));
     const wsum = w.reduce((a, b) => a + b, 0);
     rows.forEach((r, i) => {
