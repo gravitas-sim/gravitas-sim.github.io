@@ -27,4 +27,8 @@ export function imfWeight(m1, m2) {
 
 /** dN/dm at m, for a numerical check of imfWeight. */
 export const imfDensity = m =>
-  m < IMF.lo ? 0 : m < IMF.break ? m ** -IMF.a1 : IMF.break ** (IMF.a2 - IMF.a1) * m ** -IMF.a2;
+  m < IMF.lo
+    ? 0
+    : m < IMF.break
+      ? m ** -IMF.a1
+      : IMF.break ** (IMF.a2 - IMF.a1) * m ** -IMF.a2;

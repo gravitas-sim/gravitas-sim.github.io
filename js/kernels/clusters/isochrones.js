@@ -48,7 +48,10 @@ export function parseIsochrones(table) {
     const k = `${key(c.feh[i])}|${key(c.logAge[i])}`;
     if (!cur || cur.k !== k) {
       if (cells.has(k))
-        throw new ClusterError('contiguous', 'the rows of one isochrone are not together');
+        throw new ClusterError(
+          'contiguous',
+          'the rows of one isochrone are not together'
+        );
       cur = { k, feh: c.feh[i], logAge: c.logAge[i], rows: [] };
       cells.set(k, cur);
       fehs.add(c.feh[i]);
@@ -154,7 +157,11 @@ export function morph(A, B, t) {
     }
     phases.push({ phase: id, m, g, r });
   }
-  return { feh: A.feh + t * (B.feh - A.feh), logAge: A.logAge + t * (B.logAge - A.logAge), phases };
+  return {
+    feh: A.feh + t * (B.feh - A.feh),
+    logAge: A.logAge + t * (B.logAge - A.logAge),
+    phases,
+  };
 }
 
 const bracket = (list, x) => {
@@ -184,7 +191,10 @@ export function isochroneAt(set, feh, logAge) {
   const at = (f, a) => {
     const iso = set.cells.get(`${key(f)}|${key(a)}`);
     if (!iso)
-      throw new ClusterError('missing', `no isochrone at [Fe/H] ${f}, log age ${a}`);
+      throw new ClusterError(
+        'missing',
+        `no isochrone at [Fe/H] ${f}, log age ${a}`
+      );
     return iso;
   };
   const alongAge = f => {
@@ -257,6 +267,9 @@ export function mainSequenceOf(iso) {
     let i = 0;
     while (i < p.m.length - 2 && p.m[i + 1] < m) i++;
     const t = (m - p.m[i]) / (p.m[i + 1] - p.m[i] || 1);
-    return { g: p.g[i] + t * (p.g[i + 1] - p.g[i]), r: p.r[i] + t * (p.r[i + 1] - p.r[i]) };
+    return {
+      g: p.g[i] + t * (p.g[i + 1] - p.g[i]),
+      r: p.r[i] + t * (p.r[i + 1] - p.r[i]),
+    };
   };
 }

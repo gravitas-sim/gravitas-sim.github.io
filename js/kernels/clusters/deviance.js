@@ -51,7 +51,8 @@ export function binStars(g, colour) {
   }
   const list = [...cells.entries()].sort((a, b) => a[0] - b[0]);
   let saturated = 0;
-  for (const [idx, c] of list) saturated += 2 * c * Math.log(c / rows[Math.floor(idx / COLS)]);
+  for (const [idx, c] of list)
+    saturated += 2 * c * Math.log(c / rows[Math.floor(idx / COLS)]);
   return {
     n,
     dropped,

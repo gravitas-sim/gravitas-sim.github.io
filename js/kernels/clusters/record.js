@@ -17,8 +17,8 @@ export const ASSUMPTIONS = Object.freeze([
   'Fixed reddening E(g - r) with the extinction ratio A_g / E(g - r) = 3.245 (Schlafly and Finkbeiner 2011).',
   'MIST v1.2 isochrones, non-rotating, scaled-solar, in the SDSS bands: a model, not a measurement; between grid ages and metallicities the curve is a morph of its neighbours.',
   'Single stars: no binaries in the model. A binary fraction biases the distance and the age and the intervals do not widen (CLUSTER_FITTING.md reports by how much).',
-  'The members are the reader\'s own cut; a stated share of the stars in it are not cluster members and add a floor to every colour.',
-  'The sample\'s selection in magnitude is unknown and is conditioned on (the statistic compares colours at each magnitude, not counts).',
+  "The members are the reader's own cut; a stated share of the stars in it are not cluster members and add a floor to every colour.",
+  "The sample's selection in magnitude is unknown and is conditioned on (the statistic compares colours at each magnitude, not counts).",
   'Photometric errors follow a stated model of typical SDSS values, independent in g and r.',
   'Intervals are profile intervals of the deviance at 68.27 percent (Delta D = 1): coverage statements about repeated data, not posterior probabilities.',
 ]);
@@ -49,16 +49,30 @@ const intervalOf = (iv, map = x => x) =>
  */
 export function clusterRecord(r, o) {
   if (!r.best)
-    throw new Error('there is no fit to record: ' + (r.why ?? r.reason ?? r.status));
+    throw new Error(
+      'there is no fit to record: ' + (r.why ?? r.reason ?? r.status)
+    );
   const s = r.settings;
   const { logAge, dm } = r.intervals;
   const age = x => 10 ** (x - 9);
   const dist = x => 10 ** (x / 5 + 1);
   const q = [
     quantity('logAge', r.best.logAge, 'dex', 'fitted', intervalOf(logAge)),
-    quantity('age', age(r.best.logAge), 'Gyr', 'derived', intervalOf(logAge, age)),
+    quantity(
+      'age',
+      age(r.best.logAge),
+      'Gyr',
+      'derived',
+      intervalOf(logAge, age)
+    ),
     quantity('dm', r.best.dm, 'mag', 'fitted', intervalOf(dm)),
-    quantity('distance', dist(r.best.dm), 'pc', 'derived', intervalOf(dm, dist)),
+    quantity(
+      'distance',
+      dist(r.best.dm),
+      'pc',
+      'derived',
+      intervalOf(dm, dist)
+    ),
     quantity('feh', s.feh, 'dex', 'fixed', { kind: 'assumed' }),
     quantity('E', s.E, 'mag', 'fixed', { kind: 'assumed' }),
     quantity('R', s.R, '', 'assumed', { kind: 'assumed' }),
@@ -97,7 +111,9 @@ export function clusterRecord(r, o) {
     warnings: [
       ...(r.warnings ?? []),
       ...(r.correlation !== null && r.correlation !== undefined
-        ? [`correlation of log age and distance modulus in the 2.30 region: ${r.correlation.toFixed(2)}`]
+        ? [
+            `correlation of log age and distance modulus in the 2.30 region: ${r.correlation.toFixed(2)}`,
+          ]
         : []),
     ],
   });

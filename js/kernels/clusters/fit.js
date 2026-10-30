@@ -42,7 +42,11 @@ export function evaluator(set, data, o = {}) {
   const cache = new Map();
   const piecesAt = logAge => {
     const k = Math.round(logAge * 1e4);
-    if (!cache.has(k)) cache.set(k, pieces(isochroneAt(set, feh, logAge), +(process.env.PSTEP || 0.01)));
+    if (!cache.has(k))
+      cache.set(
+        k,
+        pieces(isochroneAt(set, feh, logAge), +(process.env.PSTEP || 0.01))
+      );
     return cache.get(k);
   };
   return {
@@ -52,7 +56,11 @@ export function evaluator(set, data, o = {}) {
     eps,
     piecesAt,
     dev: (logAge, dm) =>
-      deviance(hessOf(piecesAt(logAge), { dm, E, R, errorModel: o.errorModel }), data, eps),
+      deviance(
+        hessOf(piecesAt(logAge), { dm, E, R, errorModel: o.errorModel }),
+        data,
+        eps
+      ),
   };
 }
 
@@ -83,7 +91,10 @@ export function fitCluster(set, g, colour, o) {
   const stepAge = GRID.stepAge;
   const stepDm = GRID.stepDm;
   if (!(o.feh >= set.fehs[0] && o.feh <= set.fehs.at(-1)))
-    throw new ClusterError('metallicity', `[Fe/H] ${o.feh} is outside the grid`);
+    throw new ClusterError(
+      'metallicity',
+      `[Fe/H] ${o.feh} is outside the grid`
+    );
   const settings = {
     model: MODEL_ID,
     version: VERSION,
@@ -109,7 +120,13 @@ export function fitCluster(set, g, colour, o) {
         `${data.n} stars in the window at a contamination of ${eps} leave about ${Math.round(members)} members; the fit needs ${minMembers}`
       ),
     };
-  const ev = evaluator(set, data, { feh: o.feh, E, R, eps, errorModel: o.errorModel });
+  const ev = evaluator(set, data, {
+    feh: o.feh,
+    E,
+    R,
+    eps,
+    errorModel: o.errorModel,
+  });
   let evaluations = 0;
   const scan = (aLo, aHi, hA, dLo, dHi, hD) => {
     const nA = Math.max(1, Math.round((aHi - aLo) / hA));
@@ -162,7 +179,13 @@ export function fitCluster(set, g, colour, o) {
     const bD1 = Math.min(dmHi, lat.dms[d1] + padD * lat.hD);
     const hA = Math.max(0.002, Math.min(lat.hA, (bA1 - bA0) / 24));
     const hD = Math.max(0.002, Math.min(lat.hD, (bD1 - bD0) / 24));
-    if (hA === lat.hA && hD === lat.hD && bA0 === lat.ages[0] && bD0 === lat.dms[0]) break;
+    if (
+      hA === lat.hA &&
+      hD === lat.hD &&
+      bA0 === lat.ages[0] &&
+      bD0 === lat.dms[0]
+    )
+      break;
     lat = scan(bA0, bA1, hA, bD0, bD1, hD);
   }
   const best = minOf(lat);
@@ -232,7 +255,10 @@ export function fitCluster(set, g, colour, o) {
   );
   const va = saa / n - (sa / n) ** 2;
   const vd = sdd / n - (sd / n) ** 2;
-  const correlation = n >= 6 && va > 0 && vd > 0 ? (sad / n - (sa / n) * (sd / n)) / Math.sqrt(va * vd) : null;
+  const correlation =
+    n >= 6 && va > 0 && vd > 0
+      ? (sad / n - (sa / n) * (sd / n)) / Math.sqrt(va * vd)
+      : null;
   const result = {
     ...base,
     deviance: dMin,
@@ -257,7 +283,8 @@ export function fitCluster(set, g, colour, o) {
     };
   const bad = key => intervals[key].status !== 'ok';
   const age = intervals.logAge;
-  if (best.ia === 0 && ages[0] <= ageLo + 1e-9) result.warnings.push('ageAtYoungEdge');
+  if (best.ia === 0 && ages[0] <= ageLo + 1e-9)
+    result.warnings.push('ageAtYoungEdge');
   if (best.ia === ages.length - 1 && ages.at(-1) >= ageHi - 1e-9)
     result.warnings.push('ageAtOldEdge');
   if (

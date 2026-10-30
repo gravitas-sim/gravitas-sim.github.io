@@ -28,7 +28,8 @@ export const SELECTION = Object.freeze({ g50: 19.0, width: 0.5 });
 export const keepProbability = (g, s = SELECTION) =>
   s ? 1 / (1 + Math.exp((g - s.g50) / s.width)) : 1;
 
-const fluxSum = (a, b) => -2.5 * Math.log10(10 ** (-0.4 * a) + 10 ** (-0.4 * b));
+const fluxSum = (a, b) =>
+  -2.5 * Math.log10(10 ** (-0.4 * a) + 10 ** (-0.4 * b));
 
 /**
  * @param {object} set - parseIsochrones
@@ -48,7 +49,9 @@ export function drawCluster(set, spec, seed, ...labels) {
   const noise = spec.noise !== false;
   const [qlo, qhi] = spec.binaryQ ?? [0.3, 1];
   const draw = stream('forward', seed, 'cluster', ...labels);
-  const normal = gaussian(stream('forward', seed, 'cluster', ...labels, 'normal'));
+  const normal = gaussian(
+    stream('forward', seed, 'cluster', ...labels, 'normal')
+  );
   const iso = eps < 1 ? isochroneAt(set, spec.feh, spec.logAge) : null;
   const pcs = iso ? pieces(iso, 0.01) : null;
   const ms = iso ? mainSequenceOf(iso) : null;
@@ -64,7 +67,8 @@ export function drawCluster(set, spec, seed, ...labels) {
   const out = { g: [], r: [], colour: [], member: [], mass: [] };
   let tries = 0;
   while (out.g.length < spec.N) {
-    if (++tries > 2000 * spec.N) throw new Error('the selection keeps no stars');
+    if (++tries > 2000 * spec.N)
+      throw new Error('the selection keeps no stars');
     const isField = draw() < eps;
     let gApp;
     let rApp;
@@ -72,7 +76,8 @@ export function drawCluster(set, spec, seed, ...labels) {
     if (isField) {
       gApp = Math.log10(A + draw() * (B - A)) / FIELD.slope;
       const u = draw();
-      const comp = u < FIELD.colour[0].weight ? FIELD.colour[0] : FIELD.colour[1];
+      const comp =
+        u < FIELD.colour[0].weight ? FIELD.colour[0] : FIELD.colour[1];
       const c = comp.mean + comp.sd * normal();
       rApp = gApp - c;
     } else {
