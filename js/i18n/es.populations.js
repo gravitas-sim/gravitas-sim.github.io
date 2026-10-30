@@ -441,6 +441,44 @@ export const ES_POPULATIONS = {
     '{value} pc, cerca de los 2587 pc de Cantat-Gaudin et al., que usan los paralajes de Gaia además de su fotometría. Con [Fe/H] −0,25 las mismas estrellas quedan unos 300 pc más cerca.',
   'gd.pop-age.distance.no':
     'La distancia está entre las cantidades de tu comparación con [Fe/H] 0.',
+  'gd.pop-age.cluster-open.title': 'Ajusta el cúmulo',
+  'gd.pop-age.cluster-open.text':
+    'Tus comparaciones se movieron a ojo, una elección a la vez. El ajuste del cúmulo lo hace por ti, con una metalicidad y un enrojecimiento que indicas: con los miembros abiertos, abre «Cúmulo: ajustar una edad y una distancia» bajo el diagrama y ajusta.',
+  'gd.pop-age.cluster-open.ok':
+    'Los miembros están abiertos en el ajuste del cúmulo.',
+  'gd.pop-age.cluster-fixed.title': 'Lo que el ajuste no ajusta',
+  'gd.pop-age.cluster-fixed.text':
+    'El ajuste da una edad y un módulo de distancia con un intervalo para cada uno. ¿Cuál de estos toma de ti en lugar de ajustarlo?',
+  'gd.pop-age.cluster-fixed.opt.age': 'La edad',
+  'gd.pop-age.cluster-fixed.opt.distance': 'El módulo de distancia',
+  'gd.pop-age.cluster-fixed.opt.metallicity':
+    'La metalicidad (y el enrojecimiento)',
+  'gd.pop-age.cluster-fixed.ok':
+    'La metalicidad y el enrojecimiento son supuestos declarados, listados con el resultado. Cambia la metalicidad y el ajuste da otra edad y otra distancia; el registro lleva lo supuesto.',
+  'gd.pop-age.cluster-fixed.no':
+    'La lista de supuestos del panel dice qué números son tuyos.',
+  'gd.pop-age.cluster-degeneracy.title': 'El valle',
+  'gd.pop-age.cluster-degeneracy.text':
+    'Mira el mapa del estadístico frente a la edad y el módulo de distancia, y el valle de la mejor distancia a cada edad. A lo largo del valle, ¿cómo cambian juntas la edad y la distancia?',
+  'gd.pop-age.cluster-degeneracy.opt.nearer-older':
+    'Más vieja va con más cerca',
+  'gd.pop-age.cluster-degeneracy.opt.nearer-younger':
+    'Más joven va con más cerca',
+  'gd.pop-age.cluster-degeneracy.opt.independent': 'Son independientes',
+  'gd.pop-age.cluster-degeneracy.ok':
+    'Un cúmulo más viejo y más cercano, o más joven y más lejano: el brillo del punto de giro y la altura de la secuencia principal se mueven, y las estrellas acotan la combinación mejor que cada una. La correlación impresa junto a los intervalos es negativa.',
+  'gd.pop-age.cluster-degeneracy.no':
+    'Sigue el valle por el mapa: al subir la edad, ¿hacia dónde va el mejor módulo de distancia?',
+  'gd.pop-age.cluster-interval.title': 'Lo que cubre el intervalo',
+  'gd.pop-age.cluster-interval.text':
+    'El intervalo de la edad es un intervalo de perfil del estadístico, con la metalicidad y el enrojecimiento fijos en tus valores. ¿Incluye la incertidumbre de la metalicidad que supusiste?',
+  'gd.pop-age.cluster-interval.opt.includes':
+    'Sí: el intervalo es la incertidumbre',
+  'gd.pop-age.cluster-interval.opt.excludes': 'No: depende de los supuestos',
+  'gd.pop-age.cluster-interval.ok':
+    'Depende de ellos. Mover la metalicidad 0,25 dex mueve la edad mucho más que el ancho del intervalo, así que el intervalo habla del ruido de estas estrellas dado el modelo, no de la edad del cúmulo. Ajustar también la metalicidad es un paso aparte, con compuerta.',
+  'gd.pop-age.cluster-interval.no':
+    'Ajusta de nuevo con otra metalicidad y compara el cambio de la mejor edad con el ancho del intervalo.',
   'gd.pop-age.wrap.title': 'Lo que puede decir una isócrona',
   'gd.pop-age.wrap.text':
     'Una comparación con isócronas convierte un diagrama en una edad y una distancia, pero solo a través de un modelo, una metalicidad y un enrojecimiento, y estos se compensan entre sí: más azul por la metalicidad o más azul por menos polvo, más vieja y más cercana o más joven y más lejana. El modelo es la lente; las estrellas son los datos.\n\nPor último: una estrella cuya luz cambia, y una distancia a partir de eso.',

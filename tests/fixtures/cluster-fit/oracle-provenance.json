@@ -1,0 +1,9 @@
+{
+  "format": "gravitas.cluster-fit-oracle-provenance/1",
+  "script": "tools/cluster-fit-oracle/oracle.py",
+  "input": "tests/fixtures/cluster-fit/datasets.json (written by tools/cluster-fit-validate.mjs --export-oracle-input)",
+  "output": "tests/fixtures/cluster-fit/oracle-results.json",
+  "run": "2026-10-29, Python 3.9.6, numpy 1.26.4, scipy 1.13.1, emcee 3.1.6, 4e5 Monte Carlo draws per isochrone",
+  "independence": "numpy/scipy written from CLUSTER_FITTING.md: its own isochrone morph, a dense Monte Carlo forward model in place of the kernel's Gauss-Hermite and exact-normal forward model, its own deviance, an unbinned conditional likelihood, and emcee for the posterior widths. MATCH, BASE-9 and ASteCA were not installed and were not downloaded; what is independent is the arithmetic of the forward model and the likelihood, not the idea of the morph or the error model.",
+  "committed": "the thresholds (tests/fixtures/cluster-fit/thresholds.json, 823da5c0) preceded this run; no bound moved"
+}

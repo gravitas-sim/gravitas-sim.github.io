@@ -2705,6 +2705,17 @@ test.describe('the central experiment of each investigation', () => {
         [1, 40.7, 0.6],
       ],
     },
+    // ---- Cluster fitting (Roadmap III, Prompt 219) ----------------------------------
+    {
+      id: 'two-clusters-two-ages',
+      title:
+        'two-clusters-two-ages: the fitted age of cluster B is 3.16 Gyr at an assumed [Fe/H] of -0.25 and 2.24 at 0 @accepts:ce.two-clusters-two-ages',
+      row: /^Age$/i,
+      values: [
+        [-0.25, 3.16, 0.08],
+        [0, 2.24, 0.07],
+      ],
+    },
     // ---- Binary masses (Roadmap III, Prompt 218) ------------------------------------
     {
       id: 'weighing-the-stars-for-real',
