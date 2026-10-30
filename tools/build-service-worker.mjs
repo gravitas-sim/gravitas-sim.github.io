@@ -511,6 +511,12 @@ export const NEVER_PRECACHED = [
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(counts-to-magnitudes|photometric-calibration-sequence)\.js$/,
   /^(js\/photcalWidgets\.js|js\/photcalField\.js|js\/photcalKeep\.js|js\/i18n\/(en|es)\.photcal\.js|js\/instruments\/photcal\.js)$/,
   /^js\/kernels\/detector\/photcal\.js$/,
+  // Prompt 220: the stellar-activity kernel, its light-curve loader and the two pack records. No shipped
+  // module imports them yet (the panels and investigations are a later part), so no page can fetch one
+  // and an install has no use for them; their first adopter deletes this entry (D-R10-220-03).
+  /^js\/kernels\/activity\//,
+  /^js\/activityData\.js$/,
+  /^js\/data\/observations\/(tessAuMicS1|tessEkDraS16)\.js$/,
 ];
 
 const ON_DEMAND_ONLY = new Set([

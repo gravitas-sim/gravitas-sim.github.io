@@ -30,11 +30,36 @@
 // Pure: no DOM, no clock, no random draws.
 // =============================================================================
 
-import { gaussLegendre } from '../../numeric/quadrature.js';
-
 const { Math, Float64Array } = globalThis;
 
 export const VERSION = '1.0.0';
+
+// 16-point Gauss-Legendre on [-1, 1] (the eight positive nodes and weights); the radial integral is
+// done in two panels of it. Kept here, not imported from js/numeric/quadrature.js, whose adopters are
+// the ones proved digit for digit (NUMERICS.md, tests/numericRoutines.test.js).
+const GL_X = [
+  0.0950125098376374, 0.2816035507792589, 0.4580167776572274,
+  0.6178762444026438, 0.755404408355003, 0.8656312023878318, 0.9445750230732326,
+  0.9894009349916499,
+];
+const GL_W = [
+  0.1894506104550685, 0.1826034150449236, 0.1691565193950025,
+  0.1495959888165767, 0.1246289712555339, 0.0951585116824928,
+  0.0622535239386479, 0.0271524594117541,
+];
+function gaussLegendre(f, a, b, panels = 1) {
+  const h = (b - a) / panels;
+  const half = h / 2;
+  let sum = 0;
+  for (let k = 0; k < panels; k++) {
+    const mid = a + (k + 0.5) * h;
+    let s = 0;
+    for (let i = 0; i < 8; i++)
+      s += GL_W[i] * (f(mid - half * GL_X[i]) + f(mid + half * GL_X[i]));
+    sum += s * half;
+  }
+  return sum;
+}
 const DEG = Math.PI / 180;
 
 /** Quadratic limb darkening I(mu) = 1 - u1 (1 - mu) - u2 (1 - mu)^2. */

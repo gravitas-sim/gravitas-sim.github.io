@@ -15,6 +15,15 @@ the release rather than in the tag.
 
 ### Added
 
+- **Stellar rotation and flares, kernel and data (Prompt 220, Part A).** `js/kernels/activity/`: a spotted rotating
+  sphere (circular spots, quadratic limb darkening, an exact azimuthal integral), the rotation period over the
+  existing periodogram with a false-alarm probability, a residual-correlation widening and the factor-two alias
+  always listed as a candidate, flare detection by the form of the Chang et al. criteria with template-fitted
+  equivalent durations and their uncertainty, and the flare-frequency slope with an exact interval. Two TESS
+  light-curve packs (AU Microscopii at 2-minute cadence, EK Draconis in 30-minute bins). 28 of 30 committed
+  validation legs pass, two stay failing and labelled (`STELLAR_ACTIVITY.md`). No panel or lesson yet. Part B
+  (ages and flare energies in erg) was gated: verdict B, no number and no energy (`D-R10-220-90`).
+
 - Three investigations on measurement, uncertainty and claim-limits, first in the Observing-and-measuring sequence, each in English and Spanish with instructor materials: What Is a Measurement? (survey), What Does ± Claim? (majors) and When the Method Must Refuse (upper), on synthetic data with a known truth, with one new instrument family (`js/claimWidgets.js`). They open offline only after one online use (D-R10-67, `MEASUREMENT_CLAIMS.md`).
 - Three image investigations, after them in the same sequence, each in English and Spanish with instructor materials: Measuring the Moon (a scale from a reference pair on a real Galileo picture), How Far Is That Star? (a parallax and its distance from fourteen positions of a synthetic star) and A Binary Star's Orbit (an orbit and a mass sum from twelve positions), with one new instrument family (`js/imagingWidgets.js`) that calls the Observatory's own measuring modules. They open offline only after one online use. "What is in this field?" is not built (D-R10-72, `IMAGE_INVESTIGATIONS.md`).
 - A planetary sequence, Planets and the Sun, ordering the Solar System investigations that exist, with three new connecting investigations, each in English and Spanish with instructor materials: The Scale of the Solar System (sizes, distances, a marble model and light time), Moons of the Giants (the Laplace combination of Io, Europa and Ganymede from fitted periods) and Comets and the Sun (a comet's orbit and the heat at each end of it). A course package, The Solar System and the Sun, and a Solar System unit in the one-semester course. Worlds Compared, Reading a Surface and Space Weather from the Sun are not built: each needs a component or a data pack that is not in the project yet, and DECISION_REGISTER.md (D-R10-206-01) says which.

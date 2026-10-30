@@ -919,6 +919,13 @@
       "student": false
     },
     {
+      "file": "STELLAR_ACTIVITY.md",
+      "kind": "feature",
+      "purpose": "Stellar rotation and flares: the spot model, the period with its factor-two alias, flare detection, equivalent durations and the slope, with validation (Prompt 220).",
+      "owner": 220,
+      "student": false
+    },
+    {
       "file": "STELLAR_POPULATIONS.md",
       "kind": "feature",
       "purpose": "Stellar populations guides in the Observatory.",

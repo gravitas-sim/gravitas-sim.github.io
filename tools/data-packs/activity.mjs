@@ -16,11 +16,31 @@ import { readFits, requireColumns } from './fits.mjs';
 import { binLightCurve } from './tess-light-curve.mjs';
 import { ENCODING, TABLE_VERSION, encodeTable } from './table-columns.mjs';
 import { observationOf } from '../../js/observation.js';
-import { binSeries } from '../../js/kernels/activity/rotation.js';
 import { findPeriod, refinePeriod } from '../../js/kernels/variables/period.js';
 import { asSidecar, col, decodeSidecar, described } from './variables.mjs';
 
 const RETRIEVED = '2026-10-30';
+
+/** Means over bins of `minutes` counted from the first time; a bin with fewer than `minimum` points is dropped. */
+function binSeries(t, y, minutes, minimum) {
+  const w = minutes / 1440;
+  const acc = new Map();
+  for (let i = 0; i < t.length; i++) {
+    const k = Math.floor((t[i] - t[0]) / w);
+    const b = acc.get(k) ?? { n: 0, t: 0, y: 0 };
+    b.n++;
+    b.t += t[i];
+    b.y += y[i];
+    acc.set(k, b);
+  }
+  const keys = [...acc.keys()]
+    .filter(k => acc.get(k).n >= minimum)
+    .sort((a, b) => a - b);
+  return {
+    t: keys.map(k => acc.get(k).t / acc.get(k).n),
+    y: keys.map(k => acc.get(k).y / acc.get(k).n),
+  };
+}
 
 const median = xs => {
   const s = Float64Array.from(xs).sort();
