@@ -240,7 +240,7 @@ describe('the re-baseline command refuses', () => {
       ['ap', 20],
       ['aq', 8.8],
       ['ar', 20],
-      ['as', 9],
+      ['as', 8.8],
     ])
       s = rebaseline(s, request({ kb, release }), clean);
     expect(() =>

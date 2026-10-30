@@ -17,8 +17,7 @@
     "measuring-the-moon",
     "power-law-gravity",
     "radial-velocity",
-    "retrograde-motion",
-    "weighing-the-stars-for-real"
+    "retrograde-motion"
   ],
   "lessonGain": {
     "keplers-laws": [
@@ -204,9 +203,6 @@
     ],
     "retrograde-motion": [
       "lock:{\"placement\":true,\"inspector\":false}"
-    ],
-    "weighing-the-stars-for-real": [
-      "key:predict.misconceptions"
     ]
   },
   "activities": [
@@ -280,7 +276,7 @@
     "investigations": 96,
     "steps": 1640,
     "activityCuts": 6,
-    "lessonTokens": 149,
+    "lessonTokens": 148,
     "activityTokens": 29,
     "stepTypes": {
       "read": 310,

@@ -102,24 +102,7 @@ export const WEIGHING_THE_STARS = {
         'Both stars complete one orbit in the same time. The one with the bigger circle has to move faster.',
       ],
       because:
-        'The two stars circle their center of mass in the same time. The center is nearer the heavier star, so the heavier star travels the smaller circle and the lighter star the larger, which needs a larger speed. Put in numbers, the masses are inversely proportional to the velocity amplitudes: M1 K1 = M2 K2.',
-      misconceptions: [
-        {
-          id: 'energy',
-          option: 1,
-          say: 'The heavier star has more momentum at the same speed, which is why it needs less speed: the momenta are equal and opposite.',
-        },
-        {
-          id: 'mutual',
-          option: 2,
-          say: 'The forces are equal and opposite, but the same force gives the lighter star the larger acceleration. The forces are equal; the speeds are not.',
-        },
-        {
-          id: 'bright',
-          option: 3,
-          say: 'Brightness is a different property; the two stars’ speeds follow from their masses alone.',
-        },
-      ],
+        'The two stars circle their center of mass in the same time. The center is nearer the heavier star, so the heavier star travels the smaller circle and the lighter star the larger, which needs a larger speed. Put in numbers, the masses are inversely proportional to the velocity amplitudes: M1 K1 = M2 K2. The forces are equal and opposite and so are the momenta; the speeds are not equal, because the lighter star needs the larger speed for the same momentum.',
       tool: MIN(),
     },
     {
@@ -642,18 +625,7 @@ export const WEIGHING_THE_STARS_ES = {
         'Las dos estrellas completan una órbita en el mismo tiempo. La que tiene el círculo mayor tiene que ir más deprisa.',
       ],
       because:
-        'Las dos estrellas giran en torno a su centro de masas en el mismo tiempo. El centro está más cerca de la más pesada, que recorre el círculo menor, y la más ligera el mayor, lo que exige más velocidad. En números, las masas son inversamente proporcionales a las amplitudes de velocidad: M1 K1 = M2 K2.',
-      misconceptions: [
-        {
-          say: 'La estrella más pesada tiene más momento a la misma velocidad, por eso necesita menos velocidad: los momentos son iguales y opuestos.',
-        },
-        {
-          say: 'Las fuerzas son iguales y opuestas, pero la misma fuerza da a la estrella más ligera la mayor aceleración. Las fuerzas son iguales; las velocidades no.',
-        },
-        {
-          say: 'El brillo es otra propiedad; las velocidades de las dos estrellas se siguen solo de sus masas.',
-        },
-      ],
+        'Las dos estrellas giran en torno a su centro de masas en el mismo tiempo. El centro está más cerca de la más pesada, que recorre el círculo menor, y la más ligera el mayor, lo que exige más velocidad. En números, las masas son inversamente proporcionales a las amplitudes de velocidad: M1 K1 = M2 K2. Las fuerzas son iguales y opuestas, y también los momentos; las velocidades no son iguales, porque la estrella más ligera necesita más velocidad para el mismo momento.',
     },
     {
       title: 'Lee las amplitudes',
