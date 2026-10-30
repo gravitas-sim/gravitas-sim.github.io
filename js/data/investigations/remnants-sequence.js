@@ -323,7 +323,7 @@ export const HOW_OLD_IS_THIS_WHITE_DWARF_DEEPER = {
     },
     {
       sid: 'what-better-measurements-buy',
-      after: 'a-bound-not-an-age',
+      after: 'heavier-is-older',
       depth: 'advanced',
       type: 'measure',
       title: 'What better measurements buy',
@@ -603,7 +603,7 @@ export const FROM_STAR_TO_REMNANT_DEEPER = {
   steps: [
     {
       sid: 'the-relation-at-two-masses',
-      after: 'a-limit-for-a-white-dwarf',
+      after: 'read-the-odds',
       depth: 'quantitative',
       type: 'measure',
       title: 'The relation at two masses',
