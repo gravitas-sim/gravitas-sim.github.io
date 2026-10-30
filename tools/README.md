@@ -222,4 +222,5 @@ current, and the orchestrator checks it.
 | `variables-sample.mjs` | (no header) |  |
 | `vendor-deps.mjs` | npm run vendor  /  npm run vendor:check | `npm run vendor`, `npm run vendor:check` |
 | `verify-release.mjs` | Is this tree safe to publish? |  |
+| `vetting-validate.mjs` | The vetting kernel against its committed thresholds (Prompt 228) | `npm run vetting:validate` |
 | `worker-probe.mjs` | npm run probe:workers - what the page's Workers hold, and what it keeps | `npm run probe:workers` |

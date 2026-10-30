@@ -16,9 +16,9 @@ export const ES_VETTING = {
   'vetW.cand.5': 'F: una caída débil',
   'vetW.cand.6': 'G: una caída limpia, vecina cercana',
   'vetW.cand.7': 'H: una caída ruidosa',
-  'vetW.view.0': 'tránsitos impares y pares',
-  'vetW.view.1': 'media órbita después',
-  'vetW.view.2': 'dónde baja la luz',
+  'vetW.view.0': 'impar-par',
+  'vetW.view.1': 'secundario',
+  'vetW.view.2': 'centroide',
   'vetW.on': 'activado',
   'vetW.off': 'desactivado',
   'vetW.axis.offset':
@@ -64,7 +64,7 @@ export const ES_VETTING = {
     'el objetivo está demasiado cerca del borde de la imagen',
   'vetW.row.candidate': 'Candidato',
   'vetW.v.candidate':
-    '{n} puntos de la curva de luz cada 3 minutos, {s} por ciento de ruido por punto, con un período de {p} d; {f}',
+    '{c}: {n} puntos de la curva de luz cada 3 minutos, {s} por ciento de ruido por punto, con un período de {p} d; {f}',
   'vetW.v.frames': '{n} imágenes de un recorte de 17 por 17 píxeles',
   'vetW.v.noFrames': 'no se tomaron imágenes',
   'vetW.row.oddEven': 'Prueba 1: profundidades impar y par',

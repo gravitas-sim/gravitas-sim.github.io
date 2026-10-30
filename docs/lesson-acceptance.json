@@ -1174,6 +1174,16 @@
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["bright-star-predict", "clipped-star"],
       "evidenceFrom": "model"
+    },
+    "planet-or-not": {
+      "centralExperimentId": "ce.planet-or-not",
+      "object": "panel:vetting-checklist",
+      "control": "vetting-checklist/candidate",
+      "quantity": "the odd-even z, the secondary depth against its error and the centroid offset against its exclusion radius for each of eight synthetic candidates, and the verdict they add up to (survives, rejected or undecided, never planet)",
+      "evidence": "notebook-fields",
+      "test": "e2e/vettingLesson.spec.js",
+      "loop": ["which-test-catches", "deep-and-shallow"],
+      "evidenceFrom": "model"
     }
   }
 }

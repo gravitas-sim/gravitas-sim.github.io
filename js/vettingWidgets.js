@@ -146,9 +146,10 @@ const CHECKLIST = {
       step: 1,
       value: 0,
       decimals: 0,
+      // One letter: a long value would take the slider's room on a phone.
       format: x =>
-        t(
-          `vetW.cand.${Math.max(0, Math.min(PRESETS.length - 1, Math.round(x)))}`
+        String.fromCharCode(
+          65 + Math.max(0, Math.min(PRESETS.length - 1, Math.round(x)))
         ),
     },
     toggle('plots', 'vetW.control.plots'),
@@ -188,6 +189,7 @@ const CHECKLIST = {
       {
         label: t('vetW.row.candidate'),
         value: t('vetW.v.candidate', {
+          c: t(`vetW.cand.${i}`),
           n: r.series.t.length,
           s: pct(r.preset.sigma),
           p: fixed(r.series.ephemeris.P, 1),
