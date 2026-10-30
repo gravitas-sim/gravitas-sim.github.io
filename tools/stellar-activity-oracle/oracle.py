@@ -138,9 +138,20 @@ def quiescent(t, f, P, window=0.25, K=3, passes=3):
         sigma = mad_sigma(resid[~mask])
         bad = resid > 2.5 * sigma
         mask = bad.copy()
+        # AM2: each seed point is extended backward and forward while resid >= 1 sigma
+        for i in np.where(bad)[0]:
+            a = i
+            while a > 0 and resid[a - 1] >= sigma:
+                a -= 1
+                mask[a] = True
+            b = i
+            while b + 1 < len(resid) and resid[b + 1] >= sigma:
+                b += 1
+                mask[b] = True
+        ext = mask.copy()
         for s in (1, 2):
-            mask[s:] |= bad[:-s]
-            mask[:-s] |= bad[s:]
+            mask[s:] |= ext[:-s]
+            mask[:-s] |= ext[s:]
     return q, sigma
 
 
@@ -162,10 +173,22 @@ def find_flares(t, f, err, P, window=0.25, N1=3, N2=2, N3=3):
             i += 1
     wins = []
     for a, b in runs:
-        while a > 0 and resid[a - 1] >= sigma and (t[a] - t[a - 1]) < 1.5 * cad:
-            a -= 1
-        while b + 1 < n and resid[b + 1] >= sigma and (t[b + 1] - t[b]) < 1.5 * cad:
-            b += 1
+        moved = True
+        while moved:  # AM2: the window runs on until three consecutive points lie below 1 sigma
+            moved = False
+            for k in (1, 2, 3):
+                if a - k >= 0 and (t[a] - t[a - k]) < 1.5 * cad * k and resid[a - k] >= sigma:
+                    a -= k
+                    moved = True
+                    break
+        moved = True
+        while moved:
+            moved = False
+            for k in (1, 2, 3):
+                if b + k < n and (t[b + k] - t[b]) < 1.5 * cad * k and resid[b + k] >= sigma:
+                    b += k
+                    moved = True
+                    break
         wins.append([a, b])
     merged = []
     for w in wins:
@@ -240,6 +263,27 @@ def bin_30(t, f, minimum=8):
     return np.array(tb), np.array(fb)
 
 
+def harmonic_period(t, y, P0, K=4, span=0.03):
+    """AM3: the period at which a K-harmonic series leaves the least scatter (scipy, independent)."""
+    from scipy.optimize import minimize_scalar
+
+    def rss(P):
+        w = 2 * np.pi / P
+        cols = [np.ones_like(t)]
+        for k in range(1, K + 1):
+            cols += [np.cos(k * w * (t - t[0])), np.sin(k * w * (t - t[0]))]
+        A = np.vstack(cols).T
+        c, res, *_ = np.linalg.lstsq(A, y, rcond=None)
+        r = y - A @ c
+        return float(r @ r)
+    grid = np.linspace(P0 * (1 - span), P0 * (1 + span), 241)
+    v = [rss(P) for P in grid]
+    i = int(np.argmin(v))
+    lo, hi = grid[max(0, i - 1)], grid[min(len(grid) - 1, i + 1)]
+    r = minimize_scalar(rss, bounds=(lo, hi), method='bounded', options={'xatol': 1e-9})
+    return float(r.x)
+
+
 def sha(path):
     return hashlib.sha256(open(path, 'rb').read()).hexdigest()
 
@@ -265,7 +309,7 @@ def main():
     for P, spots, k in curves:
         y = spot_flux(t, P, inc, u1, u2, spots, k)
         pk, pw = ls_peak(t, y, 0.5, 12.0)
-        res['curves'].append({'P': P, 'peakPeriod': pk, 'peakPower': pw,
+        res['curves'].append({'P': P, 'peakPeriod': pk, 'peakPower': pw, 'harmonicPeriod': harmonic_period(t, y, pk),
                               'powerAt': dict(zip(map(str, pinned), ls_power(t, y, pinned))),
                               'flux': [round(float(v), 9) for v in y]})
     # B3 flare curve
@@ -293,7 +337,8 @@ def main():
             tb, fb = bin_30(t2, f2)
             pk, pw = ls_peak(tb, fb, pmin, pmax)
             entry = {'file': name, 'nKept': int(len(t2)), 'nBins': int(len(tb)),
-                     'span': float(t2[-1] - t2[0]), 'peakPeriod': pk, 'peakPower': pw}
+                     'span': float(t2[-1] - t2[0]), 'peakPeriod': pk, 'peakPower': pw,
+                     'harmonicPeriod': harmonic_period(tb, fb, pk)}
             fl2, sg2 = find_flares(t2, f2, e2, pk)
             # the rule is applied at the peak period; for a factor-two alias the harmonic series has K = 3 at P
             entry['flares'] = fl2

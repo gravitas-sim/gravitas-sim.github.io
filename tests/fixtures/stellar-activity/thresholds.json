@@ -18,9 +18,9 @@
     "flareTemplate": "Davenport et al. (2014), Eqs. 1 and 4, with t in units of t_1/2 (the full width at half maximum of the flare): rise (-1 <= t <= 0) F = 1 + 1.941 t - 0.175 t^2 - 2.246 t^3 - 1.125 t^4; decay (t > 0) F = 0.6890 exp(-1.600 t) + 0.3030 exp(-0.2783 t); the flux excess is amp times F, amp in units of the quiescent flux; the analytic integral over t is 0.307667 + 1.519379 = 1.827046 in units of amp t_1/2, so ED = 1.827046 amp t_1/2",
     "flareRule": "the form of Chang et al. (2015): a point is a candidate when (f - q) / sigma >= N1 and (f - q - err) / sigma >= N2 and at least N3 consecutive points qualify; the values N1 = 3, N2 = 2, N3 = 3 are this contract's choice (the default values of the AltaiPony implementation as the author recalls them, not a citation), sigma is the robust scatter (1.4826 times the median absolute deviation) of the detrended residuals, q the quiescent model (a harmonic series at the rotation period fitted with upward clipping, then a running median of 0.25 d, three clipped passes), the flare runs from the first qualifying point back while the excess stays above 1 sigma, to the first point after the peak where it falls below 1 sigma; the equivalent duration is the trapezoidal integral of (f - q) / q over that window",
     "flareRuleDetail": {
-      "quiescent": "three passes; each pass fits a K = 3 harmonic series at the given rotation period by least squares to the unmasked points (no harmonic term when no period is given), takes the residual r = f - h, takes at each point the median of r over the unmasked points whose times lie within +-0.125 d (window 0.25 d) of it, sets q = h + that median, the resid = f - q, sigma = 1.4826 times the median absolute deviation of resid over the unmasked points, and masks every point whose resid exceeds 2.5 sigma together with the 2 points on either side; the quiescent model is the last pass",
+      "quiescent": "three passes; each pass fits a K = 3 harmonic series at the given rotation period by least squares to the unmasked points (no harmonic term when no period is given), takes the residual r = f - h, takes at each point the median of r over the unmasked points whose times lie within +-0.125 d (window 0.25 d) of it, sets q = h + that median, the resid = f - q, sigma = 1.4826 times the median absolute deviation of resid over the unmasked points, and masks every point whose resid exceeds 2.5 sigma, extended from it both ways while resid stays at or above 1 sigma (AM2), together with the 2 points on either side; the quiescent model is the last pass",
       "candidates": "point i is a candidate when resid_i / sigma >= 3 and (resid_i - err_i) / sigma >= 2, err_i the point error; a run is at least 3 candidates that are consecutive in index with each gap under 1.5 times the median cadence",
-      "window": "the window starts at the run start and extends backward while the preceding point has resid >= 1 sigma, and extends forward from the run end while the next point has resid >= 1 sigma; windows that overlap or touch (gap under 1.5 cadences) are merged; the peak is the largest resid in the window",
+      "window": "the window starts at the run start and extends backward, and extends forward from the run end, until three consecutive points lie below 1 sigma (AM2; the first version ended at the first such point), its first and last points being the outermost at or above 1 sigma; windows that overlap or touch (gap under 1.5 cadences) are merged; the peak is the largest resid in the window",
       "ed": "ED = sum over adjacent window points of 0.5 (g_i + g_{i+1}) (t_{i+1} - t_i) with g = (f - q) / q, over the points of the window, in days times 86400 for seconds; sigma_ED^2 = sum_i (w_i err_i / q_i)^2 + (T_win 1.2533 sigma / (q sqrt(N_w)))^2 with w_i the trapezoid weight in the same unit, T_win the window length and N_w the number of points in the median window (kernel only: the oracle compares times and EDs)",
       "matching": "two flares match when their peak times differ by at most 3 cadences"
     },
@@ -37,7 +37,7 @@
       "leg": "a",
       "what": "a spot of radius rho at the disc centre (gamma = 0) against the closed form D = 2 pi integral_{cos rho}^{1} I(m) m dm, for rho in {5, 10, 20, 40, 60, 85} deg and (u1, u2) in {(0,0), (0.4,0.22), (0.7,0.1)}",
       "limits": {
-        "maxRelativeError": 0.000001
+        "maxRelativeError": 1e-6
       }
     },
     {
@@ -114,7 +114,7 @@
       "what": "the kernel's spotted flux against an independent brute-force sky-plane integral (tools/stellar-activity-oracle/oracle.py: 4000 x 4000 pixels over the disc, exact mu, the spot's membership by angular distance, no analytic integral, no quadrature in common) at the 24 configurations listed under oracle.spotConfigs, flux deficit compared",
       "limits": {
         "maxRelativeDeficit": 0.01,
-        "orAbsolute": 0.00002
+        "orAbsolute": 2e-5
       }
     },
     {
@@ -265,6 +265,22 @@
         "alphaBand": [1.4, 2.6],
         "minFlares": 15
       }
+    },
+    {
+      "id": "B5.harmonicOracle",
+      "leg": "b",
+      "what": "the kernel's rotation period against the oracle's independent K = 4 harmonic-series period (added by AM3): the three curves, and the two authentic series in E1 and E3",
+      "limits": {
+        "maxRelative": 0.002
+      }
+    },
+    {
+      "id": "D4b.doubleDipSlightlyUnequal",
+      "leg": "d",
+      "what": "two spots 180 deg apart with radii 12 and 10.5 deg (added by AM4; same setting as D4, 100 draws): the peak is at half the period, the factor-two test rejects it, the primary candidate is within 1 per cent of the true P_eq and the half period is listed as excluded",
+      "limits": {
+        "minFraction": 0.95
+      }
     }
   ],
   "oracle": {
@@ -310,6 +326,21 @@
       "id": "AM1",
       "when": "before the oracle was run and before any kernel existed; no bound moved",
       "what": "The flare rule and the authentic preparation are written out so that the oracle and the kernel implement the same rule independently."
+    },
+    {
+      "id": "AM2",
+      "when": "after the first run of C2 (coverage 0.0465 of 301 injected flares, detected fraction 1.0) and B3 (all matched); no bound moved",
+      "what": "The quiescent model masked only the points above 2.5 sigma and two on either side, so a flare's wings (above 1 sigma and below 2.5 sigma) lifted the running median and took about a third of the flare's own light out of its equivalent duration, in the kernel and in the oracle alike (which is why B3 agreed). The rule now extends each seed point both ways while the excess stays at or above 1 sigma before the 2-point dilation. The oracle was changed in the same way and re-run; every other oracle result is unchanged. C2's bound (coverage 0.90) is the original. Second change of AM2, found in the same investigation: the window ended at the first point below 1 sigma, so one noise dip in a flare's 2 sigma tail ended it early (the kernel then returned about two thirds of a flare's equivalent duration and split some flares in two). The window now runs on until three consecutive points lie below 1 sigma, at both ends, and the end point is the last point at or above 1 sigma. Kernel and oracle both follow."
+    },
+    {
+      "id": "AM3",
+      "when": "after the first run of B4; B4 stays as committed",
+      "what": "B4 compares the kernel's refined period (the K-harmonic scatter minimum) with the oracle's Lomb-Scargle sinusoid peak and measured 0.84 per cent against the bound 0.2 per cent on a sheared, non-sinusoidal curve (the kernel recovers the true period of each synthetic curve to 1e-4; the sinusoid peak does not): B4 is left failing and labelled in failed-legs.json. A new leg B5 is added with the same bound 2e-3: the oracle's independent K = 4 harmonic-series period (scipy bounded minimisation of the least-squares scatter, no Gravitas code) against the kernel's, on the three curves and the two authentic series. B5 is an addition; it does not replace B4."
+    },
+    {
+      "id": "AM4",
+      "when": "after the first run of D4; D4 stays as committed",
+      "what": "D4 (radii 16 and 9 deg) measured primaryOk 100 of 100 but excluded 0 of 100: with spots of that unequal size the Lomb-Scargle peak is the rotation period itself, not the half period, so the factor-two test is never asked and the verdict is 'period-with-alias' with the true period as primary (correct, and not what D4's text premised). D4 is left failing and labelled in failed-legs.json. A new leg D4b is added to exercise the 'double-period' verdict where the premise holds: radii 12 and 10.5 deg, every other setting as D4, 100 draws: the peak lies at half the period, the verdict is 'double-period' and the primary candidate is within 1 per cent of the true P_eq, with the half period listed as excluded, in at least 0.95 of the draws."
     }
   ]
 }
