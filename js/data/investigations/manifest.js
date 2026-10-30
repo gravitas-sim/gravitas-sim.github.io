@@ -1165,6 +1165,19 @@ export const MANIFEST = [
     objectiveCount: 4,
   },
   {
+    id: 'two-clusters-two-ages',
+    title: 'Two Clusters, Two Ages',
+    subtitle:
+      'Fit an age and a distance to two star clusters, see how far each moves when you change the metallicity you assume, and learn why the difference of two ages is steadier than either',
+    duration: '15-35 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/two-clusters-two-ages.webp',
+    depths: 3,
+    stepCount: 7,
+    gradedCount: 5,
+    objectiveCount: 4,
+  },
+  {
     id: 'weighing-the-stars-for-real',
     title: 'Weighing the Stars, for Real',
     subtitle:

@@ -298,10 +298,20 @@ $('obsMeasurePanel').addEventListener('toggle', measurePanel);
 
 /** Open the fit or measurement panel and bring it into view, for a guide. */
 async function showPanel(name) {
-  const box = $(name === 'fit' ? 'obsFitPanel' : 'obsMeasurePanel');
+  const box = $(
+    name === 'fit'
+      ? 'obsFitPanel'
+      : name === 'cluster'
+        ? 'obsClusterPanel'
+        : 'obsMeasurePanel'
+  );
   if (box.hidden) return false;
   box.open = true;
-  await (name === 'fit' ? fitPanel() : measurePanel());
+  await (name === 'fit'
+    ? fitPanel()
+    : name === 'cluster'
+      ? clusterPanel().then(p => p.update(state.view))
+      : measurePanel());
   box.scrollIntoView({ block: 'start' });
   box.querySelector('summary')?.focus();
   return true;
@@ -354,6 +364,29 @@ $('obsSpecPanel').addEventListener('toggle', async () => {
     observation: state.view,
   });
 });
+// The cluster fit (CLUSTER_FITTING.md): an age and a distance for the stars in view at an
+// assumed metallicity, loaded when first opened.
+const cluster = { panel: null, loading: null };
+async function clusterPanel() {
+  if (cluster.panel) return cluster.panel;
+  cluster.loading ??= import('./observatory/clusterPanel.js').then(m => {
+    cluster.panel = m.mountClusterPanel($('obsClusterBody'), {
+      ...lent,
+      observation: state.view,
+      model: modelOf,
+      record: d => {
+        state.fits.push(d);
+        guide?.then(p => p.update());
+      },
+    });
+    return cluster.panel;
+  });
+  return cluster.loading;
+}
+$('obsClusterPanel').addEventListener('toggle', async () => {
+  if (!$('obsClusterPanel').open || !state.view) return;
+  (await clusterPanel()).update(state.view);
+});
 $('obsFitPanel').addEventListener('toggle', async () => {
   if (!$('obsFitPanel').open || !state.view) return;
   (await fitPanel()).update(state.view);
@@ -377,6 +410,18 @@ function renderFit(o) {
   const compares =
     o.kind === 'time-series' &&
     (dim === 'ratio' || dim === 'velocity' || dim === null);
+  // A table with g and r magnitudes can be fitted with isochrones.
+  $('obsClusterPanel').hidden = !(
+    hasId('g') &&
+    hasId('r') &&
+    o.kind === 'table'
+  );
+  if (
+    !$('obsClusterPanel').hidden &&
+    cluster.panel &&
+    $('obsClusterPanel').open
+  )
+    cluster.panel.update(o);
   $('obsSpecPanel').hidden = o.kind !== 'spectrum';
   if (o.kind === 'spectrum' && spec.panel && $('obsSpecPanel').open)
     spec.panel.update(o);

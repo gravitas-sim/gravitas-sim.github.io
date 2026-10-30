@@ -181,6 +181,12 @@ export default {
     'Por qué el eclipse más profundo oculta la estrella más caliente, por qué un fondo plano significa que se ocultó la estrella menor, por qué los radios vienen como fracciones de la órbita y no en kilómetros, y por qué un número de un ajuste solo es una medida cuando los datos lo fijan.',
     'El modelo son dos esferas en una órbita kepleriana: sin reflexión, sin luz elipsoidal, sin manchas, sin una tercera estrella, sin masas (esas necesitan velocidades); el oscurecimiento del limbo es fijo, de una tabla; todos los datos son sintéticos, con su verdad indicada.',
   ],
+  clusterFit: [
+    'Un cúmulo estelar sintético de edad y distancia conocidas, generado con isocronas MIST: su diagrama color–magnitud con la mejor isocrona encima, y la edad y el módulo de distancia que da el ajuste, cada uno con un intervalo de un sigma, con la metalicidad que fijes.',
+    'Cuál de dos cúmulos es más viejo según dónde las estrellas dejan la secuencia principal, cómo la edad y la distancia ajustadas se compensan, cuánto se mueve la edad cuando cambia la metalicidad supuesta, y qué hace al ajuste una fracción de binarias que el modelo no tiene.',
+    'Por qué un intervalo de un ajuste depende de sus supuestos, por qué la diferencia entre las edades de dos cúmulos es más estable que cada edad, y por qué una metalicidad fijada es una elección y no un resultado.',
+    'La metalicidad nunca se ajusta y el enrojecimiento se mantiene en 0,042; las estrellas son simples en el modelo; los miembros se dan, con un 15 por ciento de estrellas que no lo son; todos los cúmulos son sintéticos, con su verdad a un interruptor. El mismo ajuste en NGC 2420 queda fuera del rango publicado, y eso es este límite, no una medición del cúmulo.',
+  ],
   surveyDesign: [
     'Una instalación de la biblioteca de instrumentos, una clase de fuente con una pendiente de conteos declarada, una exposición, visitas a apilar, noches y un umbral de detección, con una profundidad y un área objetivo.',
     'La profundidad que alcanza el plan, el área que compran sus noches, las fuentes que encontraría con un intervalo de Poisson, los falsos positivos que deja pasar su umbral y la fiabilidad, un veredicto que nombra cada razón por la que un plan no es viable, y la exposición que encuentra más fuentes a tiempo fijo.',
