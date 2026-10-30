@@ -1,0 +1,40 @@
+{
+  "format": "gravitas.variables-ii-citations/1",
+  "note": "Values read from the papers' text by this session (pdftotext copies fetched by the coordinator on 2026-10-30; the PDFs are not in any repository). Nothing here was tuned: it is what the papers print. The kernel's constants (js/kernels/variables/plzCited.js) are held equal to this file by tests/variablesII.test.js.",
+  "retrieved": "2026-10-30",
+  "riess2022": {
+    "reference": "Riess et al. 2022, ApJ 934, L7 (arXiv:2112.04510), 'A Comprehensive Measurement of H0 from SH0ES'",
+    "where": "Section 6.2 (the primary analysis finds a metallicity dependence on [O/H] of -0.217 +- 0.046 mag/dex); equation (1): m_W = mu0 + M_W + b_W (log P - 1) + Z_W [O/H], [O/H] relative to the Sun",
+    "gamma": -0.217,
+    "sigma": 0.046,
+    "unit": "mag/dex",
+    "zRef": 0,
+    "zRefMeaning": "solar, 12 + log(O/H) = 8.69 (Asplund et al. 2009), Table 3 note a",
+    "band": "HST WFC3 Wesenheit magnitude F160W - 0.386 (F555W - F814W)",
+    "pdfSha256": "572e5d2c0f32bf6e80a118eec13ed0107e1e2830f9ebe90b5bc4e9d1b7fa5df1",
+    "licence": "arXiv non-exclusive distribution licence (the abs page); the paper is open access in ApJL. Used for quoting a few published numbers with credit; nothing is bundled."
+  },
+  "breuval2022": {
+    "reference": "Breuval et al. 2022, ApJ 939, 89 (arXiv:2205.06280), 'An Improved Calibration of the Wavelength Dependence of Metallicity on the Cepheid Leavitt Law'",
+    "where": "Table 4, row W_H (*): gamma = -0.280 +- 0.078 mag/dex (a fit to the Milky Way, LMC and SMC without the HST SMC photometry or the individual metallicities of Riess et al. 2022); its Table 1 lists R22's -0.217 +- 0.046 beside it",
+    "gamma": -0.28,
+    "sigma": 0.078,
+    "unit": "mag/dex",
+    "band": "HST Wesenheit W_H, R = 0.386",
+    "pdfSha256": "ed81ab8dc8c90e7d3ec195bd8eb3b07fbf70846e9fbbdad8f33a722f9ab7d97e",
+    "licence": "arXiv page links CC BY 4.0 (creativecommons.org/licenses/by/4.0/); quoting a few numbers with credit"
+  },
+  "hosts": {
+    "source": "Riess et al. 2022, Table 3 (<[O/H]> by galaxy, dex relative to the Sun) and Section 3.5; the LMC value is the spectroscopic mean of 60 percent of the Cepheids ([O/H] = -0.29 +- 0.02, Section 3.4)",
+    "lmc": { "value": -0.29, "sigma": 0.02 },
+    "n4258": { "value": -0.1, "sigma": 0.05 },
+    "m101": { "value": 0.1, "sigma": 0.05 },
+    "sigmaNote": "The 0.05 dex for the two hosts is the mean difference between the average of nine strong-line calibrations and the PP04 calibration, which R22 (Section 3.5) propagates as the systematic uncertainty of the strong-line scale; Table 3 prints no per-galaxy error."
+  },
+  "range": [-0.72, 0.17],
+  "rangeNote": "The span of the mean [O/H] of the Cepheid samples in R22's Table 3: the SMC (-0.72) to NGC 3147 and NGC 7329 (0.17). A host outside it is an extrapolation of the cited term.",
+  "anchorDistances": {
+    "lmc": "18.477 +- 0.026 mag (Pietrzynski et al. 2019; as R22 adopts it)",
+    "n4258": "29.397 +- 0.032 mag (Reid, Pesce and Riess 2019)"
+  }
+}

@@ -64,7 +64,11 @@ const curve = (t, t0, P, h = HARM, sign = 1) =>
   t.map(x => {
     let y = 0;
     h.forEach((c, k) => {
-      y += c.a * Math.cos((k + 1) * ((TWO_PI * (x - t0)) / P) + (sign * c.phi * Math.PI) / 180);
+      y +=
+        c.a *
+        Math.cos(
+          (k + 1) * ((TWO_PI * (x - t0)) / P) + (sign * c.phi * Math.PI) / 180
+        );
     });
     return y;
   });
@@ -105,7 +109,11 @@ function legA() {
   );
 
   const ts = irregular(draw('A2'), 300, 9 * P);
-  const sin = K.lightCurveFeatures(ts, curve(ts, ts[0], P, [{ a: 0.2, phi: 0 }]), P);
+  const sin = K.lightCurveFeatures(
+    ts,
+    curve(ts, ts[0], P, [{ a: 0.2, phi: 0 }]),
+    P
+  );
   const fwd = K.lightCurveFeatures(t, y, P);
   const rev = K.lightCurveFeatures(t, curve(t, t[0], P, HARM, -1), P);
   const L2 = lim('A2.skewAndRise');
@@ -122,7 +130,12 @@ function legA() {
   );
 
   if (!CITED) {
-    for (const id of ['A3.plAtTheCitedPoints', 'A4.ladderClosedForm', 'A5.distanceFactor', 'A6.propagationAgrees'])
+    for (const id of [
+      'A3.plAtTheCitedPoints',
+      'A4.ladderClosedForm',
+      'A5.distanceFactor',
+      'A6.propagationAgrees',
+    ])
       notRun(id, 'citations.json (the cited gamma) is not in the tree');
     return;
   }
@@ -135,7 +148,11 @@ function legA() {
     slope: Math.abs(M(100, 0.1) - M(10, 0.1) - rel.b),
     shift: Math.abs(M(30, 0.25) - M(30, -0.15) - g.gamma * 0.4),
   };
-  row('A3.plAtTheCitedPoints', Math.max(...Object.values(m3)) <= lim('A3.plAtTheCitedPoints').absMag, m3);
+  row(
+    'A3.plAtTheCitedPoints',
+    Math.max(...Object.values(m3)) <= lim('A3.plAtTheCitedPoints').absMag,
+    m3
+  );
 
   const host = DATA.cepheids.n4258;
   const anchor = DATA.cepheids.lmc;
@@ -162,8 +179,12 @@ function legA() {
   const m4 = {
     mu: Math.abs(withZ.mu - (base.mu - g.gamma * dZ)),
     gammaTerm: Math.abs(term('gamma') - Math.abs(dZ) * g.sigma),
-    hostTerm: Math.abs(term('hostMetallicity') - Math.abs(g.gamma) * meta.sigmaHost),
-    anchorTerm: Math.abs(term('anchorMetallicity') - Math.abs(g.gamma) * meta.sigmaAnchor),
+    hostTerm: Math.abs(
+      term('hostMetallicity') - Math.abs(g.gamma) * meta.sigmaHost
+    ),
+    anchorTerm: Math.abs(
+      term('anchorMetallicity') - Math.abs(g.gamma) * meta.sigmaAnchor
+    ),
     regressionMu: Math.abs(none.mu - base.mu),
     regressionSigma: Math.abs(none.sigma - base.sigma),
   };
@@ -183,7 +204,11 @@ function legA() {
     const truth = 10 ** ((mu0 - g.gamma * d) / 5 + 1);
     return Math.abs(ignored / truth / K.distanceFactor(g.gamma, d) - 1);
   });
-  row('A5.distanceFactor', Math.max(...m5) <= lim('A5.distanceFactor').relative, { worst: Math.max(...m5) });
+  row(
+    'A5.distanceFactor',
+    Math.max(...m5) <= lim('A5.distanceFactor').relative,
+    { worst: Math.max(...m5) }
+  );
 
   const L6 = lim('A6.propagationAgrees');
   const mc = propagate({
@@ -201,9 +226,19 @@ function legA() {
   });
   const s = mc.samples;
   const mean = s.reduce((a, b) => a + b, 0) / s.length;
-  const sd = Math.sqrt(s.reduce((a, b) => a + (b - mean) ** 2, 0) / (s.length - 1));
-  const m6 = { linear: withZ.sigma, monteCarlo: sd, relative: Math.abs(sd - withZ.sigma) / withZ.sigma };
-  row('A6.propagationAgrees', mc.status === 'ok' && m6.relative <= L6.relativeSigma, m6);
+  const sd = Math.sqrt(
+    s.reduce((a, b) => a + (b - mean) ** 2, 0) / (s.length - 1)
+  );
+  const m6 = {
+    linear: withZ.sigma,
+    monteCarlo: sd,
+    relative: Math.abs(sd - withZ.sigma) / withZ.sigma,
+  };
+  row(
+    'A6.propagationAgrees',
+    mc.status === 'ok' && m6.relative <= L6.relativeSigma,
+    m6
+  );
 }
 
 // -- B: the oracle -------------------------------------------------------------
@@ -211,19 +246,39 @@ function legB() {
   const lc = DATA.suDra;
   const t = Array.from(lc.t);
   const y = Array.from(lc.mag);
-  const found = K.findPeriod(t, y, { minPeriod: 0.3, maxPeriod: 1.2, oversample: 4 });
+  const found = K.findPeriod(t, y, {
+    minPeriod: 0.3,
+    maxPeriod: 1.2,
+    oversample: 4,
+  });
   const P = K.refinePeriod(t, y, found.period, 3, 0.3 * found.width).period;
   const o = ORA.atOraclePeriod;
   const fit = K.harmonicFit(t, y, ORA.period, 3, { t0: t[0] });
   const dc = fit.coefficients
     .slice(1)
-    .map((v, i) => Math.abs(v - (i % 2 === 0 ? o.coefficients[i >> 1].cos : o.coefficients[i >> 1].sin)));
+    .map((v, i) =>
+      Math.abs(
+        v -
+          (i % 2 === 0
+            ? o.coefficients[i >> 1].cos
+            : o.coefficients[i >> 1].sin)
+      )
+    );
   const L1 = lim('B1.fixedPeriodCoefficients');
-  row('B1.fixedPeriodCoefficients', Math.max(...dc) <= L1.coefficient, { worst: Math.max(...dc) });
-  const m2 = { kernel: P, oracle: ORA.period, relative: Math.abs(P - ORA.period) / ORA.period };
+  row('B1.fixedPeriodCoefficients', Math.max(...dc) <= L1.coefficient, {
+    worst: Math.max(...dc),
+  });
+  const m2 = {
+    kernel: P,
+    oracle: ORA.period,
+    relative: Math.abs(P - ORA.period) / ORA.period,
+  };
   row('B2.periodAgrees', m2.relative <= lim('B2.periodAgrees').relative, m2);
   if (!ORA.atKernelPeriod || Math.abs(ORA.kernelPeriod - P) > 1e-12) {
-    notRun('B3.featuresAgree', `oracle-results.json holds no run at the kernel's period ${P}; run oracle.py ${P}`);
+    notRun(
+      'B3.featuresAgree',
+      `oracle-results.json holds no run at the kernel's period ${P}; run oracle.py ${P}`
+    );
     return P;
   }
   const f = K.lightCurveFeatures(t, y, P, { K: 3 });
@@ -289,7 +344,10 @@ function legC1C2() {
     const anchor = sample(60, muAnchorTrue, Za);
     const nHost = 8 + Math.floor(r() * 23);
     const host = sample(nHost, muHost, Za + dZ);
-    const quotedAnchor = { mu: muAnchorTrue + ANCHORS.lmc.sigma * z(), sigma: ANCHORS.lmc.sigma };
+    const quotedAnchor = {
+      mu: muAnchorTrue + ANCHORS.lmc.sigma * z(),
+      sigma: ANCHORS.lmc.sigma,
+    };
     const meta = {
       gamma: g.gamma,
       sigmaGamma: g.sigma,
@@ -310,7 +368,10 @@ function legC1C2() {
   const m1 = { n: N, within1: in1 / N, within2: in2 / N };
   row(
     'C1.distanceCoverage',
-    m1.within1 >= L1.within1Min && m1.within1 <= L1.within1Max && m1.within2 >= L1.within2Min && m1.within2 <= L1.within2Max,
+    m1.within1 >= L1.within1Min &&
+      m1.within1 <= L1.within1Max &&
+      m1.within2 >= L1.within2Min &&
+      m1.within2 <= L1.within2Max,
     m1
   );
   const L2 = lim('C2.biasOfIgnoring');
@@ -320,7 +381,12 @@ function legC1C2() {
     ignoringVsAnalytic: Math.abs(sumIgn / N - sumTrueShift / N),
     correctedBias: Math.abs(sumCorr / N),
   };
-  row('C2.biasOfIgnoring', m2.ignoringVsAnalytic <= L2.ignoringVsAnalytic && m2.correctedBias <= L2.correctedBias, m2);
+  row(
+    'C2.biasOfIgnoring',
+    m2.ignoringVsAnalytic <= L2.ignoringVsAnalytic &&
+      m2.correctedBias <= L2.correctedBias,
+    m2
+  );
 }
 
 function legC3() {
@@ -336,13 +402,20 @@ function legC3() {
     const f = K.lightCurveFeatures(t, y, P);
     if (f.status !== 'ok') continue;
     if (Math.abs(f.fourier.r21.value - 0.35) <= 2 * f.fourier.r21.sigma) in21++;
-    if (wrapDiff(f.fourier.phi21.value, (130 * Math.PI) / 180) <= 2 * f.fourier.phi21.sigma) inPhi++;
+    if (
+      wrapDiff(f.fourier.phi21.value, (130 * Math.PI) / 180) <=
+      2 * f.fourier.phi21.sigma
+    )
+      inPhi++;
   }
   const L = lim('C3.fourierCoverage');
   const m = { n: N, r21Within2: in21 / N, phi21Within2: inPhi / N };
   row(
     'C3.fourierCoverage',
-    m.r21Within2 >= L.within2Min && m.r21Within2 <= L.within2Max && m.phi21Within2 >= L.within2Min && m.phi21Within2 <= L.within2Max,
+    m.r21Within2 >= L.within2Min &&
+      m.r21Within2 <= L.within2Max &&
+      m.phi21Within2 >= L.within2Min &&
+      m.phi21Within2 <= L.within2Max,
     m
   );
 }
@@ -359,14 +432,22 @@ function legD() {
     mean: f1.mean !== null,
     cycles: f1.cycles,
   };
-  row('D1.tooFewCycles', m1.status === 'not-constrained' && m1.fourierNull && m1.mean && !!m1.reason, m1);
+  row(
+    'D1.tooFewCycles',
+    m1.status === 'not-constrained' && m1.fourierNull && m1.mean && !!m1.reason,
+    m1
+  );
   const rand = draw('D2');
   const clumped = Array.from({ length: 200 }, () => {
     const cyc = Math.floor(rand() * 6);
     return (cyc + rand() * 0.5) * P;
   }).sort((a, b) => a - b);
   const f2 = K.lightCurveFeatures(clumped, curve(clumped, clumped[0], P), P);
-  row('D2.phaseGap', f2.status === 'not-constrained', { status: f2.status, reason: f2.reason, phaseGap: f2.phaseGap });
+  row('D2.phaseGap', f2.status === 'not-constrained', {
+    status: f2.status,
+    reason: f2.reason,
+    phaseGap: f2.phaseGap,
+  });
   const N = 400;
   let false2 = 0;
   let false3 = 0;
@@ -374,21 +455,56 @@ function legD() {
   for (let i = 0; i < N; i++) {
     const t = irregular(draw('D3', i), 240, 9 * P);
     const z = normal('D3', i);
-    const f = K.lightCurveFeatures(t, t.map(() => 0.01 * z()), P);
+    const f = K.lightCurveFeatures(
+      t,
+      t.map(() => 0.01 * z()),
+      P
+    );
     if (f.status !== 'ok') continue;
     n++;
     if (f.harmonics[1].detected) false2++;
     if (f.harmonics[2].detected) false3++;
   }
   const m3 = { n, falseSecond: false2 / n, falseThird: false3 / n };
-  row('D3.noSignalNoHarmonic', Math.max(m3.falseSecond, m3.falseThird) <= lim('D3.noSignalNoHarmonic').falseRate, m3);
+  row(
+    'D3.noSignalNoHarmonic',
+    Math.max(m3.falseSecond, m3.falseThird) <=
+      lim('D3.noSignalNoHarmonic').falseRate,
+    m3
+  );
   const host = DATA.cepheids.n4258;
   const anchor = DATA.cepheids.lmc;
-  const miss = K.ladderWithMetallicity(host, anchor, ANCHORS.lmc, { gamma: -0.2, host: NaN, anchor: -0.3 }, {});
+  const miss = K.ladderWithMetallicity(
+    host,
+    anchor,
+    ANCHORS.lmc,
+    { gamma: -0.2, host: NaN, anchor: -0.3 },
+    {}
+  );
   const base = K.ladderDistance(host, anchor, ANCHORS.lmc, {});
-  const out = K.ladderWithMetallicity(host, anchor, ANCHORS.lmc, { gamma: -0.2, sigmaGamma: 0.05, host: 0.9, anchor: -0.3, range: [-0.7, 0.3] }, {});
-  const m4 = { missing: miss.metallicity.status, missingMu: miss.mu === base.mu, outside: out.metallicity.status };
-  row('D4.missingMetallicity', m4.missing === 'missing' && m4.missingMu && m4.outside === 'outside-range', m4);
+  const out = K.ladderWithMetallicity(
+    host,
+    anchor,
+    ANCHORS.lmc,
+    {
+      gamma: -0.2,
+      sigmaGamma: 0.05,
+      host: 0.9,
+      anchor: -0.3,
+      range: [-0.7, 0.3],
+    },
+    {}
+  );
+  const m4 = {
+    missing: miss.metallicity.status,
+    missingMu: miss.mu === base.mu,
+    outside: out.metallicity.status,
+  };
+  row(
+    'D4.missingMetallicity',
+    m4.missing === 'missing' && m4.missingMu && m4.outside === 'outside-range',
+    m4
+  );
   const set = K.FEATURE_SETS.periodAmplitude;
   const sample = DATA.sample;
   const amb = K.classifyWithAmbiguity(sample, set);
@@ -404,7 +520,9 @@ function legD() {
   };
   row(
     'D5.ambiguousRule',
-    m5.splitCalled === 0 && m5.strongUnresolved === 0 && m5.calledAccuracy >= lim('D5.ambiguousRule').calledAccuracyMin,
+    m5.splitCalled === 0 &&
+      m5.strongUnresolved === 0 &&
+      m5.calledAccuracy >= lim('D5.ambiguousRule').calledAccuracyMin,
     m5
   );
 }
@@ -412,7 +530,11 @@ function legD() {
 // -- E: authentic --------------------------------------------------------------
 function legE(P) {
   const L1 = lim('E1.suDraPeriod');
-  const m1 = { kernel: P, published: 0.66042001, relative: Math.abs(P - 0.66042001) / 0.66042001 };
+  const m1 = {
+    kernel: P,
+    published: 0.66042001,
+    relative: Math.abs(P - 0.66042001) / 0.66042001,
+  };
   row('E1.suDraPeriod', m1.relative <= L1.relative, m1);
   if (!CITED) {
     notRun('E2.n4258WithTerm', 'citations.json is not in the tree');
@@ -425,7 +547,15 @@ function legE(P) {
     DATA.cepheids.n4258,
     DATA.cepheids.lmc,
     ANCHORS.lmc,
-    { gamma: g.gamma, sigmaGamma: g.sigma, host: Z.n4258.value, anchor: Z.lmc.value, sigmaHost: Z.n4258.sigma, sigmaAnchor: Z.lmc.sigma, range: CITED.range },
+    {
+      gamma: g.gamma,
+      sigmaGamma: g.sigma,
+      host: Z.n4258.value,
+      anchor: Z.lmc.value,
+      sigmaHost: Z.n4258.sigma,
+      sigmaAnchor: Z.lmc.sigma,
+      range: CITED.range,
+    },
     {}
   );
   const L2 = lim('E2.n4258WithTerm');
@@ -438,20 +568,34 @@ function legE(P) {
     status: r.metallicity.status,
     sigmas: diff / Math.hypot(r.sigma, L2.maserSigma),
   };
-  row('E2.n4258WithTerm', Math.abs(m2.sigmas) <= L2.sigmas && r.metallicity.status === 'applied', m2);
+  row(
+    'E2.n4258WithTerm',
+    Math.abs(m2.sigmas) <= L2.sigmas && r.metallicity.status === 'applied',
+    m2
+  );
   if (!CITED.breuval2022) {
-    notRun('E3.citedGammaAgree', 'the second cited coefficient is not in citations.json');
+    notRun(
+      'E3.citedGammaAgree',
+      'the second cited coefficient is not in citations.json'
+    );
     return;
   }
   const b = CITED.breuval2022;
   const s = (g.gamma - b.gamma) / Math.hypot(g.sigma, b.sigma);
-  row('E3.citedGammaAgree', Math.abs(s) <= lim('E3.citedGammaAgree').sigmas, { riess: g.gamma, breuval: b.gamma, sigmas: s });
+  row('E3.citedGammaAgree', Math.abs(s) <= lim('E3.citedGammaAgree').sigmas, {
+    riess: g.gamma,
+    breuval: b.gamma,
+    sigmas: s,
+  });
 }
 
 const argv = process.argv.slice(2);
-const only = argv.includes('--only') ? argv[argv.indexOf('--only') + 1].split(',') : null;
+const only = argv.includes('--only')
+  ? argv[argv.indexOf('--only') + 1].split(',')
+  : null;
 const want = id => !only || only.some(o => id.startsWith(o));
-const on = name => !only || only.some(o => name.startsWith(o) || o.startsWith(name));
+const on = name =>
+  !only || only.some(o => name.startsWith(o) || o.startsWith(name));
 let P = null;
 if (on('A')) legA();
 if (on('B') || on('E')) P = legB();
@@ -463,7 +607,9 @@ const shown = rows.filter(r => want(r.id));
 if (argv.includes('--json')) console.log(JSON.stringify(shown, null, 2));
 else
   for (const r of shown)
-    console.log(`${r.status.padEnd(8)} ${r.id.padEnd(26)} ${JSON.stringify(r.measured).slice(0, 230)}${r.note ? ' ' + r.note : ''}`);
+    console.log(
+      `${r.status.padEnd(8)} ${r.id.padEnd(26)} ${JSON.stringify(r.measured).slice(0, 230)}${r.note ? ' ' + r.note : ''}`
+    );
 const REASONS = {};
 if (argv.includes('--write-results')) {
   writeFileSync(
@@ -471,7 +617,9 @@ if (argv.includes('--write-results')) {
     `${JSON.stringify(
       {
         note: 'Legs of tests/fixtures/variables-ii/thresholds.json that crossed their bound, kept failing and labelled (only Carl resets a bound).',
-        failed: shown.filter(r => r.status === 'fail').map(r => ({ ...r, reason: REASONS[r.id] ?? null })),
+        failed: shown
+          .filter(r => r.status === 'fail')
+          .map(r => ({ ...r, reason: REASONS[r.id] ?? null })),
         notRun: shown.filter(r => r.status === 'not-run'),
       },
       null,
