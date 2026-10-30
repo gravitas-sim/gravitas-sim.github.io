@@ -175,12 +175,19 @@ const RESIDUAL_P = 0.01;
 
 /**
  * Whether the radius ratio and the impact parameter are fixed by the data.
- * 'not-constrained' when ANY of: the fitted b plus its stated sigma reaches
- * 1 - k (a flat-bottomed solution is not excluded, so a V-shape is ambiguous);
- * the rank check names k or b; k and b correlate beyond 0.95. 'fixed' when b
- * was held. Otherwise 'constrained'.
+ * 'not-constrained' when EITHER the fitted b plus its stated sigma reaches
+ * 1 - k (a flat-bottomed solution is not excluded, so a V-shape is ambiguous)
+ * OR the rank check names k or b. 'fixed' when b was held. Otherwise
+ * 'constrained'. The correlation of k and b is reported beside the status and
+ * is not a reason (amendment AM2: the committed rule also flagged a pair
+ * correlated beyond 0.95, and every clean transit of the ensemble is, 0.98 to
+ * 0.99, so it said "not constrained" for all of them). The committed rule is
+ * kept for the validator as `{ committed: true }`, so that its legs D1 and D2
+ * still measure it.
+ * @param {object} fit - a fitOnce() result
+ * @param {{committed?: boolean}} [options]
  */
-export function constraintKB(fit) {
+export function constraintKB(fit, options = {}) {
   const k = fit.parameters.find(p => p.name === 'k');
   const b = fit.parameters.find(p => p.name === 'b');
   if (!k || !b) return null;
@@ -192,16 +199,18 @@ export function constraintKB(fit) {
     reasons.push('rank');
   const ik = fit.free.indexOf('k');
   const ib = fit.free.indexOf('b');
+  const correlation =
+    fit.correlation && ik >= 0 && ib >= 0 ? fit.correlation[ik][ib] : null;
   if (
-    fit.correlation &&
-    ik >= 0 &&
-    ib >= 0 &&
-    Math.abs(fit.correlation[ik][ib]) > GRAZING_CORRELATION
+    options.committed &&
+    correlation !== null &&
+    Math.abs(correlation) > GRAZING_CORRELATION
   )
     reasons.push('correlated');
   return {
     status: reasons.length ? 'not-constrained' : 'constrained',
     reasons,
+    correlation,
     bPlusSigma: b.value + (b.sigma || 0),
     grazingLimit: 1 - k.value,
   };

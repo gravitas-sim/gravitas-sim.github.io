@@ -355,7 +355,6 @@ export const EN_INFERENCE = {
   'obs.fit.transit.reason.grazing':
     'the best-fit impact parameter plus its sigma reaches the grazing limit 1 − k',
   'obs.fit.transit.reason.rank': 'the rank check names one of them',
-  'obs.fit.transit.reason.correlated': 'their correlation is above 0.95',
   'obs.fit.transit.residual.passes':
     'In transit, the residuals look like the noise the error bars promise (chi-square {chi2} for {points} points, p = {p}).',
   'obs.fit.transit.residual.fails':

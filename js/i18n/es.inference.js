@@ -358,7 +358,6 @@ export const ES_INFERENCE = {
     'el parámetro de impacto ajustado más su sigma alcanza el límite rasante 1 − k',
   'obs.fit.transit.reason.rank':
     'la comprobación de rango nombra a uno de los dos',
-  'obs.fit.transit.reason.correlated': 'su correlación supera 0,95',
   'obs.fit.transit.residual.passes':
     'En tránsito, los residuos se parecen al ruido que prometen las barras de error (chi-cuadrado {chi2} para {points} puntos, p = {p}).',
   'obs.fit.transit.residual.fails':

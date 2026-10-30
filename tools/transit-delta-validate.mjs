@@ -30,7 +30,10 @@ import {
   transitFlux,
   uniformOccultation,
 } from '../js/inference/transit.js';
-import { confidenceEllipse } from '../js/inference/transitDelta.js';
+import {
+  confidenceEllipse,
+  constraintKB,
+} from '../js/inference/transitDelta.js';
 import { fitOnce } from '../js/inference/infer.js';
 import { syntheticTransit, tessLikeTimes } from '../js/inference/synthetic.js';
 import { solveKepler } from '../js/orbital.js';
@@ -693,26 +696,42 @@ function groupC() {
     }
     if (wanted('D1')) {
       const L = lim('D1');
-      const share =
-        e.out.filter(f => f.transit.kb.status === 'not-constrained').length / N;
+      const flagged = opts =>
+        e.out.filter(f => constraintKB(f, opts).status === 'not-constrained')
+          .length / N;
+      // D1 and D2 measure the rule as committed (a pair correlated beyond 0.95 is
+      // flagged); D1b and D2b measure the rule the panel uses (amendment AM2).
       row(
         'D1',
-        share >= L.min,
-        { share, failures: e.failures },
-        'share of grazing seeds flagged'
+        flagged({ committed: true }) >= L.min,
+        { share: flagged({ committed: true }), failures: e.failures },
+        'share of grazing seeds flagged, the rule as committed'
+      );
+      row(
+        'D1b',
+        flagged({}) >= L.min,
+        { share: flagged({}), failures: e.failures },
+        'share of grazing seeds flagged, the rule as amended (AM2)'
       );
     }
   }
   if (wanted('D2') || wanted('D4')) {
     const e = ens('E1');
     if (wanted('D2')) {
-      const share =
-        e.out.filter(f => f.transit.kb.status === 'not-constrained').length / N;
+      const flagged = opts =>
+        e.out.filter(f => constraintKB(f, opts).status === 'not-constrained')
+          .length / N;
       row(
         'D2',
-        share <= lim('D2').max,
-        { share },
-        'share of clean seeds wrongly flagged'
+        flagged({ committed: true }) <= lim('D2').max,
+        { share: flagged({ committed: true }) },
+        'share of clean seeds wrongly flagged, the rule as committed'
+      );
+      row(
+        'D2b',
+        flagged({}) <= lim('D2').max,
+        { share: flagged({}) },
+        'share of clean seeds wrongly flagged, the rule as amended (AM2)'
       );
     }
     if (wanted('D4')) {
