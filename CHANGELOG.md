@@ -17,6 +17,15 @@ the release rather than in the tag.
 
 - **The transit model delta (Prompt 225).** A four-coefficient limb-darkening law (Claret 2000, coefficients fixed from a table or typed by the reader, never fitted) as a second transit model beside the quadratic one, which is unchanged to the bit; the star's mean density from P and a/R* with the circular-orbit assumption stated and the eccentric correction (Kipping 2010) as a labelled row; a constraint check that says "not constrained" for a grazing transit; an in-transit residual test; the covariance ellipse of k against b and against q1 through the plot component, with its table; the full parameter set behind a disclosure in the fit panel (English and Spanish), the result as the 150 record; an upper depth of Fit the transit with the lower depths graded identically. Validation against batman and scipy with committed bounds: 18 of 31 legs pass, 11 stay failing and labelled, 2 are not run for want of data (`TRANSIT_DELTA.md`). Fixed on the way: in Spanish the fit panel prefilled "0.005", which the Spanish reader parses as five.
 
+- **Remnants (Prompt 222).** `js/kernels/remnants/`: a white-dwarf cooling age from a Mestel-type law calibrated on
+  one published model sequence, valid for 0.5 to 1.0 solar masses and a stated luminosity range, refused outside it,
+  with an interval that keeps the measurement term apart from the law's own error; the initial-final mass relations
+  of Cummings et al. (2018) with their scatter; and the odds of a white dwarf, a neutron star or a black hole from
+  the cited threshold ranges, named only at nine in ten. 20 of 22 bounded validation legs pass, two stay failing and
+  labelled (`REMNANTS.md`). No observed white-dwarf table is shipped: the law is checked against models and a
+  simulated sample. Two panels (`remnant-cooling`, `remnant-outcome`) and two investigations, How Old Is This White
+  Dwarf? and From Star to Remnant, each at three depths in English and Spanish with instructor materials; a
+  model-page section.
 - **Stellar rotation and flares (Prompt 220).** `js/kernels/activity/`: a spotted rotating
   sphere (circular spots, quadratic limb darkening, an exact azimuthal integral), the rotation period over the
   existing periodogram with a false-alarm probability, a residual-correlation widening and the factor-two alias
@@ -136,12 +145,12 @@ The Observatory's image measurement train (Prompts 179 to 182, 184, 186 to 189, 
 
 **Gravitas 2.0.0.** Gravitas grows from a gravity sandbox with 22 guided
 investigations into a browser laboratory: <!--fact:scenarios-->61<!--/fact-->
-sandbox scenarios, <!--fact:libraryInvestigations-->121<!--/fact--> guided
-investigations (<!--fact:investigations-->104<!--/fact--> that run in the
+sandbox scenarios, <!--fact:libraryInvestigations-->123<!--/fact--> guided
+investigations (<!--fact:investigations-->106<!--/fact--> that run in the
 simulation and <!--fact:guidedInvestigations-->17<!--/fact--> in the
 Observatory, the 3-D lab and the mission lab), a shared shell, a Library, a
 workspace for each student's own work, an instructor path from adoption page to
-gradebook file, <!--fact:instructorDocuments-->1000<!--/fact--> generated
+gradebook file, <!--fact:instructorDocuments-->1022<!--/fact--> generated
 instructor documents, a public validation suite
 of <!--fact:physicsChecks-->352<!--/fact--> checks, and authoring tools
 (Scenario Studio, Investigation Composer, course packs and an extension SDK).
@@ -1794,7 +1803,7 @@ listed here because this is the release that first carries it.
 - **An instructor portal that explains itself.** `/instructors/` states what is
   behind the passphrase before asking for it, says plainly what client-side
   encryption on a static host can and cannot promise, and presents the
-  <!--fact:instructorDocuments-->1000<!--/fact--> documents grouped by investigation
+  <!--fact:instructorDocuments-->1022<!--/fact--> documents grouped by investigation
   with their kind and size. A wrong passphrase and a missing bundle now report
   as the different problems they are.
 - **Dual licensing.** The code is MIT; the original educational material is
@@ -1861,7 +1870,7 @@ listed here because this is the release that first carries it.
   uncertainty, the target and the observing configuration.
 - **Offline support.** A service worker precaches the application shell, the
   <!--fact:scenarios-->61<!--/fact--> scenario thumbnails and all
-  <!--fact:investigations-->104<!--/fact--> English lessons, so a class keeps
+  <!--fact:investigations-->106<!--/fact--> English lessons, so a class keeps
   working when the room's wifi drops. The cache name is a content hash, so a
   build invalidates it. See [OFFLINE_AND_LOW_END.md](OFFLINE_AND_LOW_END.md).
 - **A measured low-end quality tier.** Chosen from the frame rate the machine
@@ -1870,7 +1879,7 @@ listed here because this is the release that first carries it.
   off.
 - **An investigation authoring toolchain.** `npm run author:check` validates
   every lesson and every one of the
-  <!--fact:investigationSteps-->1388<!--/fact--> steps; `npm run author:new`
+  <!--fact:investigationSteps-->1402<!--/fact--> steps; `npm run author:new`
   scaffolds a lesson with its translation shadow and instructor stub;
   `?author=<lesson>&step=<n>` opens any step with diagnostics without touching
   a student's saved progress; and a browser walker exercises every step of

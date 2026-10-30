@@ -214,7 +214,8 @@ describe('the digest the derived closure produces', () => {
     // 294 after Weighing the Stars, for Real (Prompt 218, D-R10-218-02): one file, binary-masses-sequence.js, which holds the lesson, its Spanish, its guide and its deeper steps; approved by the coordinator for the one-new-closure-file-per-sequence term.
     // 295 after How Fast Does the Star Spin? and Flares (Prompt 220, D-R10-220-06): one file, stellar-activity-sequence.js, which holds the two lessons, their Spanish, their guides and their deeper steps; approved by the coordinator for the one new closure file (cap below 297 once Prompt 219 has landed).
     // 295 after Two Clusters, Two Ages (Prompt 219, D-R10-219-01): one file, cluster-sequence.js, which holds the lesson, its Spanish, its guide and its deeper steps; approved by the coordinator for the one-new-closure-file-per-sequence term.
-    expect(current.length).toBeLessThan(297);
+    // 297 after How Old Is This White Dwarf? and From Star to Remnant (Prompt 222, D-R10-222-05) over v3 4e9bd42a (closure 296): one file, remnants-sequence.js, which holds the two lessons, their Spanish, their guides and their deeper steps; the one new closure file per sequence (T3), cap below 298, pending the coordinator's approval.
+    expect(current.length).toBeLessThan(298);
     // 230 after the four variable-star investigations (Prompt 96): their shadows, deeper shadows and depth files;
     // 246 after the four cosmology investigations (Prompt 91).
     // 258 after the three calibration investigations (Prompt 86).

@@ -1820,6 +1820,10 @@ export const EN_DEFERRED = {
     'Where stellar death ends: the mass limit for a white dwarf and what lies beyond it.',
   'inv.seq.light.two-clusters-two-ages':
     'Fit an age and a distance to two synthetic clusters, and see how far the age moves when the assumed metallicity changes.',
+  'inv.seq.light.how-old-is-this-white-dwarf':
+    'Read how long a white dwarf has been cooling, and keep the error of the cooling law apart from the uncertainty of the measurement. Needs the limit first.',
+  'inv.seq.light.from-star-to-remnant':
+    'From the mass a star is born with to what it leaves: a white dwarf, a neutron star or a black hole, with the odds. Needs the limit and the lives of stars first.',
   'inv.seq.light.cluster-membership':
     'Real data from a real cluster: which stars belong, from their motions. Uses the diagram and the idea of a population.',
 

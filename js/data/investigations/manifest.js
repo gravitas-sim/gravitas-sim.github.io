@@ -1217,6 +1217,32 @@ export const MANIFEST = [
     objectiveCount: 4,
   },
   {
+    id: 'how-old-is-this-white-dwarf',
+    title: 'How Old Is This White Dwarf?',
+    subtitle:
+      'Read how long a white dwarf has been cooling from its mass and its light, and keep the uncertainty of the measurement apart from the error of the law',
+    duration: '14-28 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/how-old-is-this-white-dwarf.webp',
+    depths: 3,
+    stepCount: 7,
+    gradedCount: 5,
+    objectiveCount: 4,
+  },
+  {
+    id: 'from-star-to-remnant',
+    title: 'From Star to Remnant',
+    subtitle:
+      'Follow what a star leaves behind from the mass it was born with: a white dwarf of a mass the star largely shed, or a neutron star or a black hole, with the odds and not a verdict',
+    duration: '14-28 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/from-star-to-remnant.webp',
+    depths: 3,
+    stepCount: 7,
+    gradedCount: 5,
+    objectiveCount: 4,
+  },
+  {
     id: 'deep-or-wide',
     title: 'Deep or Wide?',
     subtitle:

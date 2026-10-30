@@ -163,6 +163,10 @@ const EXTENSIONS = {
   'how-fast-does-the-star-spin': () =>
     import('../data/investigations/depth/how-fast-does-the-star-spin.js'),
   flares: () => import('../data/investigations/depth/flares.js'),
+  'how-old-is-this-white-dwarf': () =>
+    import('../data/investigations/depth/how-old-is-this-white-dwarf.js'),
+  'from-star-to-remnant': () =>
+    import('../data/investigations/depth/from-star-to-remnant.js'),
   'deep-or-wide': () => import('../data/investigations/depth/deep-or-wide.js'),
   'two-telescopes-one-question': () =>
     import('../data/investigations/depth/two-telescopes-one-question.js'),
@@ -305,6 +309,10 @@ const WORDS = {
     'how-fast-does-the-star-spin': () =>
       import('../data/investigations/depth/es/how-fast-does-the-star-spin.js'),
     flares: () => import('../data/investigations/depth/es/flares.js'),
+    'how-old-is-this-white-dwarf': () =>
+      import('../data/investigations/depth/es/how-old-is-this-white-dwarf.js'),
+    'from-star-to-remnant': () =>
+      import('../data/investigations/depth/es/from-star-to-remnant.js'),
     'deep-or-wide': () =>
       import('../data/investigations/depth/es/deep-or-wide.js'),
     'two-telescopes-one-question': () =>

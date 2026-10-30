@@ -1119,6 +1119,32 @@
       ],
       "evidenceFrom": "model"
     },
+    "how-old-is-this-white-dwarf": {
+      "centralExperimentId": "ce.how-old-is-this-white-dwarf",
+      "object": "panel:remnant-cooling",
+      "control": "remnant-cooling/logL",
+      "quantity": "the cooling age, in billions of years, of a 0.6 solar mass white dwarf from the cooling law: 4.09 at a luminosity of a ten-thousandth of the Sun's and 0.79 at a thousandth, a ratio of 5.2 for a tenfold step",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "ten-times-fainter",
+        "read-two-ages"
+      ],
+      "evidenceFrom": "model"
+    },
+    "from-star-to-remnant": {
+      "centralExperimentId": "ce.from-star-to-remnant",
+      "object": "panel:remnant-outcome",
+      "control": "remnant-outcome/mi",
+      "quantity": "the final mass, in solar masses, of the white dwarf a star leaves by the MIST relation: 0.745 from a star of 3 solar masses and 0.569 from a star of 1, with a scatter of 0.06 solar masses",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "how-heavy-the-ember",
+        "read-the-final-mass"
+      ],
+      "evidenceFrom": "model"
+    },
     "what-a-telescope-resolves": {
       "centralExperimentId": "ce.what-a-telescope-resolves",
       "object": "panel:telescope",

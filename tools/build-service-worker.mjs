@@ -493,6 +493,11 @@ export const NEVER_PRECACHED = [
   // The kernel, the loader and the two pack records are already here from the data part (D-R10-220-03).
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(how-fast-does-the-star-spin|flares|stellar-activity-sequence)\.js$/,
   /^(js\/activityWidgets\.js|js\/activityField\.js|js\/i18n\/(en|es)\.activity\.js)$/,
+  // Prompt 222: the remnants panels, their field module, their words and the two lessons' one new file (D-R10-222-05).
+  // The kernel (js/kernels/remnants/) is lazy with the family and is not precached.
+  /^images\/investigations\/(how-old-is-this-white-dwarf|from-star-to-remnant)\.webp$/,
+  /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(how-old-is-this-white-dwarf|from-star-to-remnant|remnants-sequence)\.js$/,
+  /^(js\/remnantsWidgets\.js|js\/remnantsField\.js|js\/i18n\/(en|es)\.remnants\.js|js\/kernels\/remnants\/.*)$/,
   // Prompt 214: the strategy kernel, planner extension, panels and the strategy lesson's one new file (D-R10-214-06).
   /^js\/kernels\/strategy\//,
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(why-the-period-is-wrong|strategy-sequence)\.js$/,

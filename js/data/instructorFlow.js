@@ -18,6 +18,7 @@ import { INSTRUCTOR as BINARIES } from './investigations/binaries-sequence.js';
 import { INSTRUCTOR as CLUSTERS } from './investigations/cluster-sequence.js';
 import { INSTRUCTOR as MASSES } from './investigations/binary-masses-sequence.js';
 import { INSTRUCTOR as ACTIVITY } from './investigations/stellar-activity-sequence.js';
+import { INSTRUCTOR as REMNANTS } from './investigations/remnants-sequence.js';
 
 export default {
   format: 'gravitas.instructor-flow',
@@ -39,6 +40,7 @@ export default {
     ...CLUSTERS.flow,
     ...MASSES.flow,
     ...ACTIVITY.flow,
+    ...REMNANTS.flow,
     'the-suns-motion': [
       {
         from: 'from-stars-to-velocities',

@@ -1226,6 +1226,32 @@ export const MANIFEST = [
     objectiveCount: 4,
   },
   {
+    id: 'how-old-is-this-white-dwarf',
+    title: '¿Qué edad tiene esta enana blanca?',
+    subtitle:
+      'Lee cuánto tiempo lleva enfriándose una enana blanca a partir de su masa y de su luz, y mantén separada la incertidumbre de la medida del error de la ley',
+    duration: '14-28 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/how-old-is-this-white-dwarf.webp',
+    depths: 3,
+    stepCount: 7,
+    gradedCount: 5,
+    objectiveCount: 4,
+  },
+  {
+    id: 'from-star-to-remnant',
+    title: 'De estrella a remanente',
+    subtitle:
+      'Sigue lo que deja una estrella a partir de la masa con que nació: una enana blanca de una masa que la estrella perdió en gran parte, o una estrella de neutrones o un agujero negro, con las probabilidades y no un veredicto',
+    duration: '14-28 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/from-star-to-remnant.webp',
+    depths: 3,
+    stepCount: 7,
+    gradedCount: 5,
+    objectiveCount: 4,
+  },
+  {
     id: 'deep-or-wide',
     title: '¿Profundo o ancho?',
     subtitle:

@@ -821,6 +821,13 @@
       "student": false
     },
     {
+      "file": "REMNANTS.md",
+      "kind": "feature",
+      "purpose": "Remnants: white-dwarf cooling ages with a two-term interval, the initial-final mass relation and outcome odds, with validation and two failed legs left failing (Prompt 222).",
+      "owner": 222,
+      "student": true
+    },
+    {
       "file": "RESONANCE_INVESTIGATION.md",
       "kind": "feature",
       "purpose": "The orbital resonance investigation.",
@@ -896,6 +903,13 @@
       "purpose": "Seeding: named random streams that keep every old sequence.",
       "owner": 149,
       "student": false
+    },
+    {
+      "file": "SEISMOLOGY_GATE.md",
+      "kind": "gate",
+      "purpose": "Asteroseismology gate: the committed spectrum, background, numax, delta nu and scaling-relation methods and bounds, the measured legs and the verdict (Prompt 221 Part A).",
+      "owner": 221,
+      "student": true
     },
     {
       "file": "SKY_LAB.md",
@@ -1013,6 +1027,13 @@
       "file": "CLUSTER_FITTING.md",
       "kind": "feature",
       "purpose": "Cluster fitting: an isochrone fit of age and distance at a stated metallicity and reddening, its likelihood, intervals and valley, its validation and failed legs (Prompt 219).",
+      "owner": 219,
+      "student": true
+    },
+    {
+      "file": "CLUSTER_FOUR_PARAMETER_GATE.md",
+      "kind": "gate",
+      "purpose": "The four-parameter cluster-fit gate (Prompt 219 Part B): its committed models and bounds, the measured legs, the verdict C and the spike run-1 defect.",
       "owner": 219,
       "student": true
     },
