@@ -656,7 +656,7 @@ export const FLARES_DEEPER = {
         return {
           level: 'error',
           message:
-            'Use AU Microscopii with the fit above the completeness limit: α about 1.92, interval 1.62 to 2.28, 29 flares.',
+            'Use AU Microscopii with the floor at completeness: α about 1.92, interval 1.62 to 2.28, 29 flares.',
         };
       },
       tool: FFD(),
@@ -668,7 +668,7 @@ export const FLARES_DEEPER = {
       type: 'question',
       kind: 'choice',
       title: 'Move the floor',
-      body: `Set <strong>Fit above</strong> to <em>every flare</em>. The slope falls from 1.92 to 1.27 and the
+      body: `Set <strong>Floor of the fit</strong> to <em>none</em>. The slope falls from 1.92 to 1.27 and the
              line no longer follows the points.`,
       prompt: 'Why is the fit shallower when it includes the smallest flares?',
       options: [
@@ -724,7 +724,7 @@ export const FLARES_DEEPER = {
       type: 'question',
       kind: 'choice',
       title: 'A floor chosen after looking',
-      body: `Set <strong>Fit above</strong> to <em>the best-fitting floor</em> for AU Microscopii: the floor that
+      body: `Set <strong>Floor of the fit</strong> to <em>best fit</em> for AU Microscopii: the floor that
              makes the line follow the points best is 6.1 seconds, and the fit gives 1.98 (1.71 to 2.29) from 44 flares.`,
       prompt:
         'Is that a better measurement than 1.92 from the completeness limit?',
@@ -1052,7 +1052,7 @@ export const FLARES_DEEPER_ES = {
     },
     {
       title: 'Mueve el suelo',
-      body: 'Pon <strong>Ajustar por encima de</strong> en <em>todas las erupciones</em>. La pendiente baja de 1,92 a 1,27 y la recta ya no sigue los puntos.',
+      body: 'Pon <strong>Suelo del ajuste</strong> en <em>ninguno</em>. La pendiente baja de 1,92 a 1,27 y la recta ya no sigue los puntos.',
       prompt:
         '¿Por qué es más plano el ajuste cuando incluye las erupciones más pequeñas?',
       options: [
@@ -1090,7 +1090,7 @@ export const FLARES_DEEPER_ES = {
     },
     {
       title: 'Un suelo elegido tras mirar',
-      body: 'Pon <strong>Ajustar por encima de</strong> en <em>el suelo que mejor ajusta</em> para AU Microscopii: el suelo que hace que la recta siga mejor los puntos es 6,1 segundos, y el ajuste da 1,98 (1,71 a 2,29) con 44 erupciones.',
+      body: 'Pon <strong>Suelo del ajuste</strong> en <em>mejor ajuste</em> para AU Microscopii: el suelo que hace que la recta siga mejor los puntos es 6,1 segundos, y el ajuste da 1,98 (1,71 a 2,29) con 44 erupciones.',
       prompt: '¿Es una medida mejor que 1,92 con el límite de completitud?',
       options: [
         'No: el suelo se eligió tras mirar los datos, lo que hace el intervalo demasiado estrecho, y los dos coinciden dentro de sus intervalos',
@@ -1278,7 +1278,7 @@ const CONTENT = {
       'The rule is the form of Chang and colleagues’ three criteria (three standard deviations, two, three points in a row) after a detrend by a harmonic series at the rotation period and a 0.25-day running median; the equivalent duration is a fit of the standard flare shape of Davenport and colleagues with a free local baseline, and its uncertainty is from a parametric bootstrap, widened by the factor 1.35 the validation found.',
       'On AU Microscopii the kernel finds 76 flares against 69 for an independent routine, 86 percent and 93 percent of the two lists matching within two minutes, with a median difference in equivalent duration of 0.08; the slope above the completeness limit is 1.92 (1.62 to 2.28) from 29 flares. The published rate quoted in the contract is lower (1.86 a day), and the contract allows a factor of two either way because rules differ.',
       'The coverage of the equivalent duration’s uncertainty on injected flares is 0.937 and the completeness limit is from an injection-recovery table (STELLAR_ACTIVITY.md). The panel states no flare energy: the bolometric correction was gated and the verdict is C.',
-      'Inherited limits: flares that overlap count as one, the threshold rule misses faint flares, and complex flares with several peaks are fitted by the standard shape anyway (the largest flare of AU Microscopii has a chi-square of 984 for 234 degrees of freedom).',
+      'Inherited limits: flares that overlap count as one, the threshold rule misses faint flares, and complex flares with several peaks are fitted by the standard shape anyway (the largest flare of AU Microscopii has a chi-square of 984 for 234 degrees of freedom, and the second largest, the one the lesson reads, has 27,026 for 418: a long tail the standard shape does not follow, with the panel showing the quiet level it was measured against below the tail; its equivalent duration is the fit’s, 118 seconds, against 132 seconds for the plain sum of the excess over its 4.2-hour window, a difference the quoted uncertainty of 4 seconds does not cover, which is the model’s limit and not the star’s).',
     ],
     discussion: [
       'A planet around a red dwarf receives flares of a given size a few times a day. What would you want to know about the flares before saying what they do to its atmosphere?',
