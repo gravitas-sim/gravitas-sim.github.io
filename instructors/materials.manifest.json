@@ -24,7 +24,7 @@
     }
   },
   "sourceFiles": 297,
-  "sourceDigest": "b4259be79f44622f6a9b0200ae4b75f12bc218cd5e1aa021dd571fb20a036da8",
+  "sourceDigest": "8884a5d6e08823fc0d433b986b497bd0bbd0c549dfe6ea6a8a2492e1bc015324",
   "sources": {
     "js/activities/activities.js": "39ac98cd99b8b0387c55e41d5d4530bad55a8da8758819ad056be73e7a716b01",
     "js/activities/activityBridge.js": "67a82aff98e0ed935d6b8b0f0f654c6ad4332ee929cb3604e896a7f790a6fdc1",
@@ -41,7 +41,7 @@
     "js/course/review.js": "5da7fa2eeca27a09fdf40e31aaba5bf523845ac6d4cb262ae2e5f236cba2b489",
     "js/data/activities.js": "e044dc2eb8942dfc9b9c9856bc6e30de828d9bc4d6b18829314bc893711a069c",
     "js/data/activityTeaching.js": "7694fc798f8c4130e5aead5357e69bab04d6a5d386013d009430dba9a1c31008",
-    "js/data/exoplanetAnswerKey.js": "b3eed2e93a5f18cc85b0b91c1127b4a977790edacf4288575961963a3673e817",
+    "js/data/exoplanetAnswerKey.js": "27d42bf5b5a42f07cca6ae32f01b24e71cdf57064049ca8cf9a91063a9c63729",
     "js/data/instructorContent.es.js": "471a388f9e2abfbe837cdad387388f52f0a547d2ae5f466e66fa5680866d5d3c",
     "js/data/instructorContent.js": "02c25056c0a7acdfc5eefb22021fe4ee1ce54669529a688e6f41be9f3c87e66b",
     "js/data/instructorExpectations.es.js": "5ec751fabe0ed60f692799c260ab8f383ffae25379c4b426efdd4351e0ae00ee",
@@ -279,7 +279,7 @@
     "js/format.js": "3097674eb75de36c51d1031fa36b811e8aa0900918907b7822c0f05a52b10c5d",
     "js/guideDocs.js": "42e7d3a67604184660e98fd6f72072371a58d911abcff70c806f63a3ee7c7f5e",
     "js/i18n/en.activities.js": "f20cf171d13a956aed5e7f15319f7ef93a918ccbc803fd441e5b08394488d5d5",
-    "js/i18n/en.exoplanet.js": "f7d834d396e30716ea395efee77e99bfc90c6f159c094e5623272ce83ba8704c",
+    "js/i18n/en.exoplanet.js": "8d4e167df57f1f09ab44c42b874c3829a0b082411a1dacb1a9e955da6cb331d3",
     "js/i18n/en.guides.js": "6462bfa9a931d5901393a19fdab9d5f3a27ba0969799f2dfbd7d61e501a43252",
     "js/i18n/en.js": "c4054e58bd326cf538dbbb506745b0b6edc7af984f592aab5933154232f627c1",
     "js/i18n/en.lab3dGuides.js": "e2d4eaa678c6872969f358dffd125dad34953900f83a822de71391ba906e6bc7",
@@ -311,7 +311,7 @@
     "js/measure/tableOps.js": "613e474e791d3e80f966fda0b3180f688513c89fd4c02a17c0933d559ea9ecb8",
     "js/missionLabDocs.js": "fa86c6144f16fa6c1835c40f8cc585dae5c8db54bbcb3ea29fb62324a2981b36",
     "js/observatory/guides/core.js": "5a390c316321c3ea70b30a715bdca20cdd75b3dc2ee67e972b877e2bbea9a04d",
-    "js/observatory/guides/exoplanet.js": "bd3c105d323662218cf51300ffb2bece3f97681896791bc8b9946ef9ef788541",
+    "js/observatory/guides/exoplanet.js": "37de094333f05b252469ecae32efd6fbd56cbdc801b1a3cf7af05d12b63b3913",
     "js/observatory/guides/populations.js": "293e19c5f87aaa9c611a909330264123be27b2bbd3c6e6774c75b8c0f2ee9009",
     "js/observatory/guides/science.js": "da3f8cd1e9642225c1f5671aa0bfa40af731167bdd2c226c7e3ef16fac4094b0",
     "js/pdf.js": "1f2b05451303abf75503e025e2b70abd9ee0a1839958f3525fc5202a482fbb3e",
@@ -324,5 +324,5 @@
     "tools/instructor-freshness.mjs": "96052b2f27080f0243fdd4d5f7608927bd67f0c50808b6eac3345a65c14d1e28",
     "tools/source-closure.mjs": "961828e4d0d40d8a6f8c029fe9b9435ecaf39a74b62640efc0b4145c35c7650a"
   },
-  "contentDigest": "6682fc52e6dc3d9b9004fd6f834eff545d26278983a884ac373296d62848effb"
+  "contentDigest": "144e85e6adb002f65c6244a9ed31cdb75b317c58ae77d2435cc62127ad72731c"
 }

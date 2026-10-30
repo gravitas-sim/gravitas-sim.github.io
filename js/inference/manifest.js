@@ -27,6 +27,7 @@
 
 import { MODELS } from './models.js';
 import { transitFlux } from './transit.js';
+import { claretRefusal } from './transitDelta.js';
 import { rvCurve } from './rv.js';
 import { fnvHex8 } from '../hash.js';
 import { ID_INFERENCE } from '../names.js';
@@ -188,7 +189,7 @@ export function validateInference(m) {
       'settings.x0',
       'is the x the polynomial is centered on'
     );
-  if (model.id === 'transit-quadratic') {
+  if (model.family === 'transit') {
     need(
       s.exposure === undefined || s.exposure >= 0,
       'settings.exposure',
@@ -220,6 +221,30 @@ export function validateInference(m) {
           (s.stellarRadius.sigma === undefined || s.stellarRadius.sigma >= 0)),
       'settings.stellarRadius',
       'is { value, sigma? } in solar radii'
+    );
+    if (model.id === 'transit-claret4') {
+      const why = claretRefusal(s.claret);
+      need(!why, 'settings.claret', why || '');
+      need(
+        s.claretSource === undefined ||
+          (s.claretSource && typeof s.claretSource === 'object'),
+        'settings.claretSource',
+        'is { table, teff, logg, feh } naming where the coefficients came from'
+      );
+    } else {
+      need(
+        s.claret === undefined,
+        'settings.claret',
+        'belongs to transit-claret4: the quadratic model fits q1 and q2'
+      );
+    }
+    need(
+      s.eccentricity === undefined ||
+        (s.eccentricity.e >= 0 &&
+          s.eccentricity.e < 1 &&
+          Number.isFinite(s.eccentricity.omega)),
+      'settings.eccentricity',
+      'is { e, omega } with e in [0, 1) and omega in degrees: a stated assumption, never fitted'
     );
   }
   if (model.id === 'eclipsing-binary' || model.id === 'eclipsing-sb2') {
@@ -303,7 +328,7 @@ export function estimate(
   const free = model.parameters.filter(p => mode(p.name) === 'fitted').length;
   const eclipse =
     model.id === 'eclipsing-binary' || model.id === 'eclipsing-sb2';
-  const transit = model.id === 'transit-quadratic' || eclipse;
+  const transit = model.family === 'transit' || eclipse;
   const starts = eclipse ? 6 : transit && mode('b') === 'fixed' ? 1 : 3;
   const perFit = starts * 25 * (2 * free + 3);
   const jitterTrials = model.nuisance && mode('jitter') === 'fitted' ? 20 : 1;
