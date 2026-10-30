@@ -35,32 +35,36 @@ existed; the prototype is on `spike/activity-ages-gate` and is never merged.
 | G7a band integral against numpy | 1.6e-5 | 1e-3 | pass |
 | G7b ratio of the largest to the smallest bolometric correction over 9000 to 11000 K | 1.41 (C = 5.5 to 7.7) | 1.5 | pass |
 
-G3 was first implemented with a refused draw counted as a miss (0.909, below 0.93). The leg's text is the
-rate at which a **stated** interval contains the true age, and a refused draw states none (5 per cent
-of draws land outside the domain by scatter), so the leg is read as the coverage of the stated intervals,
-0.959; the other reading is recorded here because it flips the verdict between B and C. The decision
-to read it so was taken after seeing both numbers, on the text of the threshold.
+G3 was first implemented with a refused draw counted as a miss: coverage 0.909 against 0.93, a failure. The
+threshold's text, "the interval contains the true age at the stated rate", can also be read as the coverage of
+the *stated* intervals only (a refused draw states none; 5.25 per cent of draws land outside the domain by
+scatter), and on that reading the coverage is 0.959 and passes. The first-implemented reading is the committed
+one (it was chosen before the result was seen), so **G3 fails** here; the alternative reading and its number are
+recorded as the question for Carl's later ruling, and nothing is reinterpreted by the session. The reading flips
+the verdict between B and C.
 
-## Verdict: B
+## Verdict: C
 
-By the rule committed with the thresholds: G1 to G4 pass and G5 fails. The two published calibrations of the
-same relation differ, for the same colour and period, by a median of 0.18 dex (a factor 1.5 in age) and by
-up to 0.64 dex at the red and young corners, against a stated precision of 0.05 dex: a single relation's
-scatter is not the uncertainty of a gyrochronology age, and an interval of ±0.1 dex would be false. The
-agreement at EK Draconis (G6) is a property of one star near the solar-anchored colours, and the two
-relations still give 92 to 103 Myr and 63 to 71 Myr there.
+By the rule committed with the thresholds: G3 fails, so the verdict is C (G1, G2, G4, G6, G7a and G7b pass;
+G5 also fails: the two published calibrations of the same relation differ, for the same colour and period, by a
+median of 0.18 dex (a factor 1.5 in age) and by up to 0.64 dex at the red and young corners, against a stated
+precision of 0.05 dex, so a single relation's scatter is not the uncertainty of a gyrochronology age and an
+interval of 0.1 dex would be false; with the alternative reading of G3 the verdict would be B, because of G5 alone).
+EK Draconis agrees with the published span under both relations (92 to 103 Myr and 63 to 71 Myr), which is a
+property of one star near the solar-anchored colours.
 
-Consequences, within the verdict (Appendix C: B is "ages as a reading step with the relation shown and no
-number"):
+Consequences, within the verdict (Appendix C: C is "no ages or energies; Part A stands"; the only age content is
+a reading step that states why):
 
-- **Built:** a reading step in the rotation investigation that shows the Mamajek & Hillenbrand relation and
+- **Built (in the rotation investigation, later):** a reading step that states why there is no age, showing the Mamajek & Hillenbrand relation and
   the Barnes relation side by side as P(t) curves for a chosen colour, the domain (0.5 to 0.9, the slow
   sequence, 100 to 625 Myr with the Sun the only older datum) and the disagreement between the relations,
-  and asks the student to say what age range the measured period allows under each, with no age printed.
+  and asks the student why a period alone does not give an age; no age and no age range is printed.
 - **Not built:** the upper depth "an age from the spin, with its scatter" as a computed number; any flare
   energy in erg or any bolometric correction in the interface. The equivalent duration stays in seconds,
   in the band, as Part A measures it. (G7a and G7b passed, so the correction is available to a later
   prompt: 5.5 to 7.7 for a flare blackbody of 9000 to 11000 K in the TESS band; the verdict rule names no
   energy under B.)
-- **Reversal:** a third calibration set that brings the relations within 0.1 dex over the domain (for
-  example a cluster-calibrated relation with a published covariance of its coefficients) would reopen A.
+- **Reversal:** Carl's ruling on the reading of G3 (B), or a third calibration set that brings the relations
+  within 0.1 dex over the domain (for example a cluster-calibrated relation with a published covariance of its
+  coefficients), which would reopen A.
