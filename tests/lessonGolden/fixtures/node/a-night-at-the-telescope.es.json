@@ -1,0 +1,856 @@
+{
+ "id": "a-night-at-the-telescope",
+ "locale": "es",
+ "title": "Una noche en el telescopio, de principio a fin",
+ "steps": 13,
+ "depths": [
+  [
+   "core",
+   11
+  ],
+  [
+   "quantitative",
+   13
+  ]
+ ],
+ "grading": [
+  {
+   "sid": "station-weather",
+   "type": "question",
+   "kind": "numeric",
+   "tolerance": 1,
+   "grades": [
+    [
+     "42,9",
+     true,
+     "correct",
+     42.9,
+     null,
+     false,
+     null
+    ],
+    [
+     "43,4",
+     true,
+     "correct",
+     43.4,
+     null,
+     false,
+     null
+    ],
+    [
+     "45,9",
+     false,
+     "incorrect",
+     45.9,
+     null,
+     false,
+     null
+    ],
+    [
+     "42,9 %",
+     true,
+     "correct",
+     42.9,
+     "%",
+     false,
+     null
+    ],
+    [
+     "not a number",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "notANumber"
+    ],
+    [
+     "",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "blank"
+    ]
+   ]
+  },
+  {
+   "sid": "predict-the-limit",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     true,
+     "correct"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "a-moonlit-night",
+   "type": "question",
+   "kind": "numeric",
+   "tolerance": 0.08,
+   "grades": [
+    [
+     "2,08",
+     true,
+     "correct",
+     2.08,
+     null,
+     false,
+     null
+    ],
+    [
+     "2,12",
+     true,
+     "correct",
+     2.12,
+     null,
+     false,
+     null
+    ],
+    [
+     "2,32",
+     false,
+     "incorrect",
+     2.32,
+     null,
+     false,
+     null
+    ],
+    [
+     "2,08",
+     true,
+     "correct",
+     2.08,
+     null,
+     false,
+     null
+    ],
+    [
+     "not a number",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "notANumber"
+    ],
+    [
+     "",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "blank"
+    ]
+   ]
+  },
+  {
+   "sid": "two-exposures",
+   "type": "question",
+   "kind": "numeric",
+   "tolerance": 0.04,
+   "grades": [
+    [
+     "1,19",
+     true,
+     "correct",
+     1.19,
+     null,
+     false,
+     null
+    ],
+    [
+     "1,21",
+     true,
+     "correct",
+     1.21,
+     null,
+     false,
+     null
+    ],
+    [
+     "1,31",
+     false,
+     "incorrect",
+     1.31,
+     null,
+     false,
+     null
+    ],
+    [
+     "1,19",
+     true,
+     "correct",
+     1.19,
+     null,
+     false,
+     null
+    ],
+    [
+     "not a number",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "notANumber"
+    ],
+    [
+     "",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "blank"
+    ]
+   ]
+  },
+  {
+   "sid": "station-report",
+   "type": "question",
+   "kind": "numeric",
+   "tolerance": 0.0015,
+   "grades": [
+    [
+     "0,0231",
+     true,
+     "correct",
+     0.0231,
+     null,
+     false,
+     null
+    ],
+    [
+     "0,02385",
+     true,
+     "correct",
+     0.02385,
+     null,
+     false,
+     null
+    ],
+    [
+     "0,0276",
+     false,
+     "incorrect",
+     0.0276,
+     null,
+     false,
+     null
+    ],
+    [
+     "0,0231 mag",
+     true,
+     "correct",
+     0.0231,
+     "mag",
+     false,
+     null
+    ],
+    [
+     "not a number",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "notANumber"
+    ],
+    [
+     "",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "blank"
+    ]
+   ]
+  },
+  {
+   "sid": "which-term-dominates",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "what-could-go-wrong",
+   "type": "question",
+   "kind": "short",
+   "grades": [
+    [
+     "ungraded",
+     null
+    ]
+   ]
+  }
+ ],
+ "progress": {
+  "record": {
+   "schema": 2,
+   "lesson": "a-night-at-the-telescope",
+   "stepSid": "what-you-worked-out",
+   "responses": {
+    "a-night-at-the-telescope:station-weather": "42,9",
+    "a-night-at-the-telescope:station-weather:locale": "es",
+    "a-night-at-the-telescope:predict-the-limit": 0,
+    "a-night-at-the-telescope:a-moonlit-night": "2,08",
+    "a-night-at-the-telescope:a-moonlit-night:locale": "es",
+    "a-night-at-the-telescope:two-exposures": "1,19",
+    "a-night-at-the-telescope:two-exposures:locale": "es",
+    "a-night-at-the-telescope:station-report": "0,0231",
+    "a-night-at-the-telescope:station-report:locale": "es",
+    "a-night-at-the-telescope:which-term-dominates": 1,
+    "a-night-at-the-telescope:what-could-go-wrong": "A fixed sentence for the golden."
+   },
+   "attempts": {
+    "a-night-at-the-telescope:station-weather": 1,
+    "a-night-at-the-telescope:predict-the-limit": 1,
+    "a-night-at-the-telescope:a-moonlit-night": 1,
+    "a-night-at-the-telescope:two-exposures": 1,
+    "a-night-at-the-telescope:station-report": 1,
+    "a-night-at-the-telescope:which-term-dominates": 1
+   },
+   "visited": [
+    "five-stations",
+    "station-when",
+    "station-weather",
+    "predict-the-limit",
+    "station-expose",
+    "a-moonlit-night",
+    "two-exposures",
+    "station-calibrate",
+    "station-measure",
+    "station-report",
+    "which-term-dominates",
+    "what-could-go-wrong",
+    "what-you-worked-out"
+   ],
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "depth": "quantitative",
+   "deepest": "quantitative",
+   "spent": 600
+  },
+  "read": {
+   "responses": {
+    "a-night-at-the-telescope:station-weather": "42,9",
+    "a-night-at-the-telescope:station-weather:locale": "es",
+    "a-night-at-the-telescope:predict-the-limit": 0,
+    "a-night-at-the-telescope:a-moonlit-night": "2,08",
+    "a-night-at-the-telescope:a-moonlit-night:locale": "es",
+    "a-night-at-the-telescope:two-exposures": "1,19",
+    "a-night-at-the-telescope:two-exposures:locale": "es",
+    "a-night-at-the-telescope:station-report": "0,0231",
+    "a-night-at-the-telescope:station-report:locale": "es",
+    "a-night-at-the-telescope:which-term-dominates": 1,
+    "a-night-at-the-telescope:what-could-go-wrong": "A fixed sentence for the golden."
+   },
+   "attempts": {
+    "a-night-at-the-telescope:station-weather": 1,
+    "a-night-at-the-telescope:predict-the-limit": 1,
+    "a-night-at-the-telescope:a-moonlit-night": 1,
+    "a-night-at-the-telescope:two-exposures": 1,
+    "a-night-at-the-telescope:station-report": 1,
+    "a-night-at-the-telescope:which-term-dominates": 1
+   },
+   "visited": [
+    "a-moonlit-night",
+    "five-stations",
+    "predict-the-limit",
+    "station-calibrate",
+    "station-expose",
+    "station-measure",
+    "station-report",
+    "station-weather",
+    "station-when",
+    "two-exposures",
+    "what-could-go-wrong",
+    "what-you-worked-out",
+    "which-term-dominates"
+   ],
+   "stepSid": "what-you-worked-out",
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "depth": "quantitative",
+   "deepest": "quantitative",
+   "spent": 600,
+   "schema": 2,
+   "migrated": false,
+   "notes": []
+  }
+ },
+ "backup": {
+  "backup": {
+   "kind": "gravitas.investigation.progress",
+   "version": 2,
+   "savedAt": "2026-01-02T04:05:06.000Z",
+   "lesson": {
+    "id": "a-night-at-the-telescope",
+    "title": "Una noche en el telescopio, de principio a fin",
+    "stepCount": 13
+   },
+   "student": null,
+   "progress": {
+    "stepSid": "what-you-worked-out",
+    "startedAt": "2026-01-02T03:04:05.000Z",
+    "visited": [
+     "five-stations",
+     "station-when",
+     "station-weather",
+     "predict-the-limit",
+     "station-expose",
+     "a-moonlit-night",
+     "two-exposures",
+     "station-calibrate",
+     "station-measure",
+     "station-report",
+     "which-term-dominates",
+     "what-could-go-wrong",
+     "what-you-worked-out"
+    ],
+    "responses": {
+     "a-night-at-the-telescope:station-weather": "42,9",
+     "a-night-at-the-telescope:station-weather:locale": "es",
+     "a-night-at-the-telescope:predict-the-limit": 0,
+     "a-night-at-the-telescope:a-moonlit-night": "2,08",
+     "a-night-at-the-telescope:a-moonlit-night:locale": "es",
+     "a-night-at-the-telescope:two-exposures": "1,19",
+     "a-night-at-the-telescope:two-exposures:locale": "es",
+     "a-night-at-the-telescope:station-report": "0,0231",
+     "a-night-at-the-telescope:station-report:locale": "es",
+     "a-night-at-the-telescope:which-term-dominates": 1,
+     "a-night-at-the-telescope:what-could-go-wrong": "A fixed sentence for the golden."
+    },
+    "attempts": {
+     "a-night-at-the-telescope:station-weather": 1,
+     "a-night-at-the-telescope:predict-the-limit": 1,
+     "a-night-at-the-telescope:a-moonlit-night": 1,
+     "a-night-at-the-telescope:two-exposures": 1,
+     "a-night-at-the-telescope:station-report": 1,
+     "a-night-at-the-telescope:which-term-dominates": 1
+    }
+   },
+   "steps": [
+    {
+     "index": 0,
+     "sid": "five-stations",
+     "fingerprint": "read|-|sky-plan|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 1,
+     "sid": "station-when",
+     "fingerprint": "measure|-|sky-plan|-|dark+usable+airmass|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 2,
+     "sid": "station-weather",
+     "fingerprint": "question|numeric|strategy-plan|-|-|-|a=42.9;t=1;u=%",
+     "optionCount": null
+    },
+    {
+     "index": 3,
+     "sid": "predict-the-limit",
+     "fingerprint": "predict|-|exposure-planner|-|-|4|a=0;c=0",
+     "optionCount": 4
+    },
+    {
+     "index": 4,
+     "sid": "station-expose",
+     "fingerprint": "measure|-|exposure-planner|-|total+source|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 5,
+     "sid": "a-moonlit-night",
+     "fingerprint": "question|numeric|exposure-planner|-|-|-|a=2.08;t=0.08",
+     "optionCount": null
+    },
+    {
+     "index": 6,
+     "sid": "two-exposures",
+     "fingerprint": "question|numeric|exposure-planner|-|-|-|a=1.19;t=0.04",
+     "optionCount": null
+    },
+    {
+     "index": 7,
+     "sid": "station-calibrate",
+     "fingerprint": "measure|-|photometric-calibration|-|z+k+sigma|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 8,
+     "sid": "station-measure",
+     "fingerprint": "measure|-|exposure-planner|-|pred+meas|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 9,
+     "sid": "station-report",
+     "fingerprint": "question|numeric|exposure-planner|-|-|-|a=0.0231;t=0.0015;u=mag",
+     "optionCount": null
+    },
+    {
+     "index": 10,
+     "sid": "which-term-dominates",
+     "fingerprint": "question|choice|exposure-planner|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 11,
+     "sid": "what-could-go-wrong",
+     "fingerprint": "question|short|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 12,
+     "sid": "what-you-worked-out",
+     "fingerprint": "read|-|exposure-planner|-|-|-|-",
+     "optionCount": null
+    }
+   ]
+  },
+  "verdict": {
+   "ok": true
+  },
+  "restored": {
+   "responses": {
+    "a-night-at-the-telescope:station-weather": "42,9",
+    "a-night-at-the-telescope:station-weather:locale": "es",
+    "a-night-at-the-telescope:predict-the-limit": 0,
+    "a-night-at-the-telescope:a-moonlit-night": "2,08",
+    "a-night-at-the-telescope:a-moonlit-night:locale": "es",
+    "a-night-at-the-telescope:two-exposures": "1,19",
+    "a-night-at-the-telescope:two-exposures:locale": "es",
+    "a-night-at-the-telescope:station-report": "0,0231",
+    "a-night-at-the-telescope:station-report:locale": "es",
+    "a-night-at-the-telescope:which-term-dominates": 1,
+    "a-night-at-the-telescope:what-could-go-wrong": "A fixed sentence for the golden."
+   },
+   "attempts": {
+    "a-night-at-the-telescope:station-weather": 1,
+    "a-night-at-the-telescope:predict-the-limit": 1,
+    "a-night-at-the-telescope:a-moonlit-night": 1,
+    "a-night-at-the-telescope:two-exposures": 1,
+    "a-night-at-the-telescope:station-report": 1,
+    "a-night-at-the-telescope:which-term-dominates": 1
+   },
+   "visited": [
+    "a-moonlit-night",
+    "five-stations",
+    "predict-the-limit",
+    "station-calibrate",
+    "station-expose",
+    "station-measure",
+    "station-report",
+    "station-weather",
+    "station-when",
+    "two-exposures",
+    "what-could-go-wrong",
+    "what-you-worked-out",
+    "which-term-dominates"
+   ],
+   "stepIndex": 12,
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "moved": [],
+   "dropped": [],
+   "quarantined": {},
+   "uncertain": 0,
+   "discardedKeys": 0,
+   "byPosition": false
+  }
+ },
+ "ledger": {
+  "entry": "golden-a-night-at-the-telescope",
+  "record": {
+   "ids": [
+    "golden-a-night-at-the-telescope"
+   ],
+   "rows": [
+    [
+     "golden-a-night-at-the-telescope",
+     "q1",
+     3.5247,
+     "d",
+     0.0012,
+     "measured",
+     "simulation",
+     "rv-fit",
+     null,
+     [
+      "s",
+      "d"
+     ]
+    ]
+   ],
+   "total": 1
+  },
+  "digest": "293d613fe99a9a38f60aae711cbdca07173637ee6c5925082db81ae38cc31f41"
+ },
+ "tokens": {
+  "plain": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "a": null,
+    "r": null,
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "station-weather",
+     "value": "42,9",
+     "locale": "es"
+    },
+    {
+     "sid": "predict-the-limit",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "a-moonlit-night",
+     "value": "2,08",
+     "locale": "es"
+    },
+    {
+     "sid": "two-exposures",
+     "value": "1,19",
+     "locale": "es"
+    },
+    {
+     "sid": "station-report",
+     "value": "0,0231",
+     "locale": "es"
+    },
+    {
+     "sid": "which-term-dominates",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "what-could-go-wrong",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    }
+   ]
+  },
+  "assignment": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "a": "golden-assignment",
+    "r": "roster-1",
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "station-weather",
+     "value": "42,9",
+     "locale": "es"
+    },
+    {
+     "sid": "predict-the-limit",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "a-moonlit-night",
+     "value": "2,08",
+     "locale": "es"
+    },
+    {
+     "sid": "two-exposures",
+     "value": "1,19",
+     "locale": "es"
+    },
+    {
+     "sid": "station-report",
+     "value": "0,0231",
+     "locale": "es"
+    },
+    {
+     "sid": "which-term-dominates",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "what-could-go-wrong",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    }
+   ]
+  },
+  "evidence": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "ev": {
+     "d": "293d613fe99a9a38f60aae711cbdca07173637ee6c5925082db81ae38cc31f41",
+     "i": [
+      "golden-a-night-at-the-telescope"
+     ],
+     "n": 1,
+     "r": [
+      [
+       "golden-a-night-at-the-telescope",
+       "q1",
+       3.5247,
+       "d",
+       0.0012,
+       "measured",
+       "simulation",
+       "rv-fit",
+       null,
+       [
+        "s",
+        "d"
+       ]
+      ]
+     ]
+    },
+    "a": null,
+    "r": null,
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "station-weather",
+     "value": "42,9",
+     "locale": "es"
+    },
+    {
+     "sid": "predict-the-limit",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "a-moonlit-night",
+     "value": "2,08",
+     "locale": "es"
+    },
+    {
+     "sid": "two-exposures",
+     "value": "1,19",
+     "locale": "es"
+    },
+    {
+     "sid": "station-report",
+     "value": "0,0231",
+     "locale": "es"
+    },
+    {
+     "sid": "which-term-dominates",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "what-could-go-wrong",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    }
+   ]
+  },
+  "depth": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "dp": "quantitative",
+    "a": null,
+    "r": null,
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "station-weather",
+     "value": "42,9",
+     "locale": "es"
+    },
+    {
+     "sid": "predict-the-limit",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "a-moonlit-night",
+     "value": "2,08",
+     "locale": "es"
+    },
+    {
+     "sid": "two-exposures",
+     "value": "1,19",
+     "locale": "es"
+    },
+    {
+     "sid": "station-report",
+     "value": "0,0231",
+     "locale": "es"
+    },
+    {
+     "sid": "which-term-dominates",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "what-could-go-wrong",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    }
+   ]
+  }
+ }
+}

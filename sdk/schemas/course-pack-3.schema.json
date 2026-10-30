@@ -435,7 +435,12 @@
         "two-stars-eclipsing",
         "deep-or-wide",
         "two-telescopes-one-question",
-        "propose-an-observation"
+        "propose-an-observation",
+        "which-instrument-for-which-question",
+        "the-sky-background",
+        "coordinates-and-time",
+        "a-night-at-the-telescope",
+        "from-photons-to-a-number"
       ]
     },
     "pkg": {

@@ -1,0 +1,91 @@
+{
+ "id": "coordinates-and-time",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.a-day-that-is-short.unit","s"],
+    ["steps.earlier-each-night.fields.0.unit","min"],
+    ["steps.earlier-each-night.fields.1.unit","min"],
+    ["steps.earlier-each-night.fields.2.unit","min"],
+    ["steps.from-sidereal-time-to-crossing.fields.0.unit","h"],
+    ["steps.from-sidereal-time-to-crossing.fields.1.unit","h"],
+    ["steps.from-sidereal-time-to-crossing.fields.2.unit","min"],
+    ["steps.the-panel-is-later.unit","min"],
+    ["steps.ra-shift.unit","s"],
+    ["steps.dec-shift.unit","arcsec"],
+    ["steps.pointing-in-pixels.unit","px"]
+   ],
+   "numbered": [
+    ["steps.earlier-each-night.fields.0.label","Crossing, night 0"],
+    ["steps.earlier-each-night.fields.0.hint","718.7"],
+    ["steps.earlier-each-night.fields.1.label","Crossing, night 30"],
+    ["steps.earlier-each-night.fields.1.hint","600.8"],
+    ["steps.from-sidereal-time-to-crossing.fields.0.hint","6.792"],
+    ["steps.from-sidereal-time-to-crossing.fields.1.hint","6.752"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.earlier-each-night.fields.0.label","Cruce, noche 0"],
+    ["steps.earlier-each-night.fields.1.label","Cruce, noche 30"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "a-day-that-is-short",
+    "answer": "235.9",
+    "tolerance": "2",
+    "unit": "s"
+   },
+   {
+    "sid": "the-panel-is-later",
+    "answer": "1.1",
+    "tolerance": "0.3",
+    "unit": "min"
+   },
+   {
+    "sid": "ra-shift",
+    "answer": "67.1",
+    "tolerance": "1.5",
+    "unit": "s"
+   },
+   {
+    "sid": "dec-shift",
+    "answer": "-99.5",
+    "tolerance": "3",
+    "unit": "arcsec"
+   },
+   {
+    "sid": "pointing-in-pixels",
+    "answer": "256",
+    "tolerance": "10",
+    "unit": "px"
+   }
+  ],
+  "decimals": [
+   [
+    "earlier-each-night.gain",
+    2
+   ],
+   [
+    "from-sidereal-time-to-crossing.cross",
+    1
+   ]
+  ]
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "earlier-each-night": {
+    "validate": {"calls":242,"distinct":2,"digest":"3ba945540d2dc2be","samples":[null,{"level":"error","message":"Set the star to Sirius and the latitude to 40, then read “Crosses the meridian” (minutes after noon) at 0 and at 30 nights."}]}
+   },
+   "from-sidereal-time-to-crossing": {
+    "validate": {"calls":242,"distinct":2,"digest":"92d03e8a984b99a0","samples":[null,{"level":"error","message":"Read “Sidereal time at midnight” (6.792 h) and the right ascension in the “Star” row (6.752 h)."}]}
+   }
+  },
+  "es": "same"
+ }
+}

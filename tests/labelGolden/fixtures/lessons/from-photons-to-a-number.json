@@ -1,0 +1,98 @@
+{
+ "id": "from-photons-to-a-number",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.the-counts.fields.0.unit","electrons"],
+    ["steps.the-counts.fields.1.unit","electrons"],
+    ["steps.the-counts.fields.2.unit",""],
+    ["steps.the-magnitude-uncertainty.unit","mag"],
+    ["steps.the-rate-to-a-magnitude.unit","mag"],
+    ["steps.the-calibration-term.fields.0.unit","mag"],
+    ["steps.the-calibration-term.fields.1.unit","mag"],
+    ["steps.adding-in-quadrature.unit","mag"],
+    ["steps.a-flat-field-floor.unit","mag"],
+    ["steps.where-the-floor-wins.unit",""],
+    ["steps.halve-it.fields.0.unit","s"],
+    ["steps.halve-it.fields.1.unit","s"],
+    ["steps.halve-it.fields.2.unit",""]
+   ],
+   "numbered": [
+    ["steps.the-counts.fields.0.hint","5101"],
+    ["steps.the-counts.fields.1.hint","103"],
+    ["steps.the-calibration-term.fields.0.hint","0.003"],
+    ["steps.the-calibration-term.fields.1.hint","0.008"],
+    ["steps.halve-it.fields.0.label","Total exposure, signal-to-noise 50"],
+    ["steps.halve-it.fields.0.hint","59.3"],
+    ["steps.halve-it.fields.1.label","Total exposure, signal-to-noise 100"],
+    ["steps.halve-it.fields.1.hint","191"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.halve-it.fields.0.label","Exposición total, señal a ruido 50"],
+    ["steps.halve-it.fields.1.label","Exposición total, señal a ruido 100"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "the-magnitude-uncertainty",
+    "answer": "0.02195",
+    "tolerance": "0.0008",
+    "unit": "mag"
+   },
+   {
+    "sid": "the-rate-to-a-magnitude",
+    "answer": "19",
+    "tolerance": "0.03",
+    "unit": "mag"
+   },
+   {
+    "sid": "adding-in-quadrature",
+    "answer": "0.0234",
+    "tolerance": "0.0012",
+    "unit": "mag"
+   },
+   {
+    "sid": "a-flat-field-floor",
+    "answer": "0.0258",
+    "tolerance": "0.0012",
+    "unit": "mag"
+   },
+   {
+    "sid": "where-the-floor-wins",
+    "answer": "100",
+    "tolerance": "3",
+    "unit": ""
+   }
+  ],
+  "decimals": [
+   [
+    "the-counts.snr",
+    1
+   ],
+   [
+    "halve-it.ratio",
+    2
+   ]
+  ]
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "the-counts": {
+    "validate": {"calls":242,"distinct":2,"digest":"0f0d21ebef7b6fba","samples":[null,{"level":"error","message":"Read the row “Predicted for the frame’s own aperture”: signal-to-noise, then the electrons “±” the noise (about 5101 ± 103)."}]}
+   },
+   "the-calibration-term": {
+    "validate": {"calls":232,"distinct":2,"digest":"4f90e76e06bc09f9","samples":[null,{"level":"error","message":"On the clear night read the “±” after “Zero point at airmass 1” and after the calibrated magnitude in “Target star”."}]}
+   },
+   "halve-it": {
+    "validate": {"calls":242,"distinct":2,"digest":"d2a14a51d8d676b7","samples":[null,{"level":"error","message":"Keep the facility, brightness 19, one exposure and airmass 1.1; set the target to 50, then to 100, and read “Total exposure”."}]}
+   }
+  },
+  "es": "same"
+ }
+}

@@ -267,15 +267,16 @@ describe('the document inventory', () => {
     // 867 after Why Two Lines Become One (Prompt 213): eleven more, the same set as for that lesson.
     // 911 after Two Stars Eclipsing (Prompt 217, stacked over Prompt 215): eleven more, the same set as for any lesson with three depths.
     // 900 after the three survey-design investigations (Prompt 215): eleven for each lesson, 33 more.
-    expect(inv.documents).toBe(911);
-    expect(inv.byLocale).toEqual({ en: 417, es: 494 });
+    // 956 after the five observing closeout investigations (Prompt 216): nine for each lesson (two depths), 45 more over Two Stars Eclipsing (911).
+    expect(inv.documents).toBe(956);
+    expect(inv.byLocale).toEqual({ en: 437, es: 519 });
     expect(inv.byKind.notes).toBe(INVESTIGATIONS.length);
     expect(inv.byVariant).toEqual({
       activity: 12,
-      depth: 406,
-      full: 380,
+      depth: 426,
+      full: 400,
       general: 18,
-      notes: 95,
+      notes: 100,
     });
   });
 
@@ -303,7 +304,7 @@ describe('the document inventory', () => {
     const withDepth = INVESTIGATIONS.filter(
       i => withAllDepths(i).steps.length !== i.steps.length
     ).map(i => i.id);
-    expect(withDepth.length).toBe(68);
+    expect(withDepth.length).toBe(73);
     // A key for each depth the lesson offers: three for most, two for Design
     // the Schedule, whose upper depth (Prompt 214) has no quantitative layer.
     let keys = 0;
@@ -320,7 +321,9 @@ describe('the document inventory', () => {
         }
     }
     expect(files.filter(f => f.variant === 'depth').length).toBe(keys);
-    expect(keys).toBe(withDepth.length * 6 - 2);
+    // The five observing closeout investigations (Prompt 216) offer two depths, as
+    // Design the Schedule does: two keys fewer in each language than three would give.
+    expect(keys).toBe(withDepth.length * 6 - 2 - 5 * 2);
   });
 
   test('every activity format has a key in each language', () => {

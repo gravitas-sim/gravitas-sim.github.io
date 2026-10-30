@@ -2010,6 +2010,47 @@ export const EN_DEFERRED = {
     'Why the brightest star has the wrong magnitude, and what bleeding and cosmic rays do.',
   'inv.seq.observing.counts-to-magnitudes':
     'Why a star looks fainter low in the sky, and how a night of standards makes magnitudes.',
+  'inv.seq.instruments.title': 'Observing and instruments',
+  'inv.seq.instruments.blurb':
+    'The observing unit end to end: the telescope and what it resolves, the detector and the frames it makes, exposure, the sky behind the star, coordinates and time, calibration to a magnitude, spectra, cadence and survey design, then one night traced from plan to report and the whole chain as a single calculation. Short investigations first; the connecting and capstone ones last. Better after The sky.',
+  'inv.seq.instruments.what-a-ccd-records':
+    'Bias, dark and flat frames: what a star’s light needs taken out before it is a measurement.',
+  'inv.seq.instruments.what-a-telescope-resolves':
+    'What a telescope can separate: the diffraction limit against the seeing.',
+  'inv.seq.instruments.deep-or-wide':
+    'Which finds more: the same nights as long exposures over a small area or short ones over a large one.',
+  'inv.seq.instruments.two-telescopes-one-question':
+    'One goal, two telescopes: why the large one takes about 1 in 65 of the time.',
+  'inv.seq.instruments.signal-noise-and-exposure':
+    'How long to expose to reach a signal-to-noise, and why four times the light is not four times the quality.',
+  'inv.seq.instruments.plan-an-exposure':
+    'Turn the CCD equation into a plan: how long, and what limits it.',
+  'inv.seq.instruments.which-instrument-for-which-question':
+    'Five facilities from the library and the property that decides the choice: light, pixels, field or wavelength.',
+  'inv.seq.instruments.the-sky-background':
+    'The sky as a light of its own: what it costs in exposure, and when the Moon matters.',
+  'inv.seq.instruments.coordinates-and-time':
+    'Sidereal time, the hour angle and precession: why a catalog position has an epoch.',
+  'inv.seq.instruments.the-saturated-star':
+    'Why the brightest star in the frame has the wrong magnitude, and where a measurement is safe.',
+  'inv.seq.instruments.why-two-lines-become-one':
+    'Why a spectrograph can show two lines as one, and how a wavelength scale is calibrated from an arc.',
+  'inv.seq.instruments.counts-to-magnitudes':
+    'Why a star looks fainter low in the sky, and how a night of standards makes magnitudes.',
+  'inv.seq.instruments.why-the-period-is-wrong':
+    'Why a period from one night a visit can be wrong, and how the cadence decides.',
+  'inv.seq.instruments.design-the-schedule':
+    'Eight nights on the real instrument: the times you choose decide the answer.',
+  'inv.seq.instruments.a-variable-star-from-frames':
+    'Differential photometry of forty frames: why a comparison star removes the cloud.',
+  'inv.seq.instruments.what-is-in-this-field':
+    'The sources a detector lists, the width of the stars, and how faint a search can see.',
+  'inv.seq.instruments.a-night-at-the-telescope':
+    'One observation end to end: plan, expose, calibrate, measure and report, with the number each station hands on.',
+  'inv.seq.instruments.propose-an-observation':
+    'Design a survey for a stated goal, predict what it finds and justify the plan: many plans are right.',
+  'inv.seq.instruments.from-photons-to-a-number':
+    'The whole chain as one traced calculation, with the uncertainty carried at every step.',
   'inv.seq.depth.core': 'Core depth',
   'inv.seq.depth.quantitative': 'Quantitative depth',
   'inv.seq.depth.advanced': 'Advanced depth',

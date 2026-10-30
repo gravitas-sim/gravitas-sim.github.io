@@ -1,0 +1,110 @@
+{
+ "id": "the-sky-background",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.sky-in-the-aperture.unit","mag"],
+    ["steps.sky-over-the-star.unit",""],
+    ["steps.a-wider-aperture.unit","mag"],
+    ["steps.a-sky-limited-plan.fields.0.unit","s"],
+    ["steps.a-sky-limited-plan.fields.1.unit","%"],
+    ["steps.two-magnitudes-brighter.fields.0.unit","s"],
+    ["steps.two-magnitudes-brighter.fields.1.unit","s"],
+    ["steps.two-magnitudes-brighter.fields.2.unit",""],
+    ["steps.three-magnitudes-brighter.unit",""],
+    ["steps.the-moon-up-hours.fields.0.unit","h"],
+    ["steps.the-moon-up-hours.fields.1.unit","h"],
+    ["steps.the-moon-and-a-bright-star.fields.0.unit","s"],
+    ["steps.the-moon-and-a-bright-star.fields.1.unit","s"],
+    ["steps.the-moon-and-a-bright-star.fields.2.unit","s"],
+    ["steps.the-moon-and-a-bright-star.fields.3.unit","s"],
+    ["steps.a-redder-sky.unit",""]
+   ],
+   "numbered": [
+    ["steps.a-sky-limited-plan.fields.0.hint","79.8"],
+    ["steps.a-sky-limited-plan.fields.1.hint","87"],
+    ["steps.two-magnitudes-brighter.fields.0.hint","79.8"],
+    ["steps.two-magnitudes-brighter.fields.1.label","Total exposure, sky 2 mag brighter"],
+    ["steps.two-magnitudes-brighter.fields.1.hint","443"],
+    ["steps.the-moon-up-hours.fields.0.hint","0"],
+    ["steps.the-moon-up-hours.fields.1.hint","10.8"],
+    ["steps.the-moon-and-a-bright-star.fields.0.label","Magnitude 20, dark sky"],
+    ["steps.the-moon-and-a-bright-star.fields.0.hint","43.1"],
+    ["steps.the-moon-and-a-bright-star.fields.1.label","Magnitude 20, sky 3 mag brighter"],
+    ["steps.the-moon-and-a-bright-star.fields.1.hint","204"],
+    ["steps.the-moon-and-a-bright-star.fields.2.label","Magnitude 17, dark sky"],
+    ["steps.the-moon-and-a-bright-star.fields.2.hint","2.3"],
+    ["steps.the-moon-and-a-bright-star.fields.3.label","Magnitude 17, sky 3 mag brighter"],
+    ["steps.the-moon-and-a-bright-star.fields.3.hint","2.7"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.two-magnitudes-brighter.fields.1.label","Exposición total, cielo 2 mag más brillante"],
+    ["steps.the-moon-and-a-bright-star.fields.0.label","Magnitud 20, cielo oscuro"],
+    ["steps.the-moon-and-a-bright-star.fields.1.label","Magnitud 20, cielo 3 mag más brillante"],
+    ["steps.the-moon-and-a-bright-star.fields.2.label","Magnitud 17, cielo oscuro"],
+    ["steps.the-moon-and-a-bright-star.fields.3.label","Magnitud 17, cielo 3 mag más brillante"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "sky-in-the-aperture",
+    "answer": "20.01",
+    "tolerance": "0.1",
+    "unit": "mag"
+   },
+   {
+    "sid": "sky-over-the-star",
+    "answer": "15.7",
+    "tolerance": "0.8",
+    "unit": ""
+   },
+   {
+    "sid": "a-wider-aperture",
+    "answer": "18.9",
+    "tolerance": "0.1",
+    "unit": "mag"
+   },
+   {
+    "sid": "three-magnitudes-brighter",
+    "answer": "13.84",
+    "tolerance": "0.5",
+    "unit": ""
+   },
+   {
+    "sid": "a-redder-sky",
+    "answer": "5.15",
+    "tolerance": "0.15",
+    "unit": ""
+   }
+  ],
+  "decimals": [
+   [
+    "two-magnitudes-brighter.ratio",
+    2
+   ]
+  ]
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "a-sky-limited-plan": {
+    "validate": {"calls":232,"distinct":2,"digest":"69c47e0d5fd11700","samples":[null,{"level":"error","message":"Set the facility to “Rubin, r”, brightness 23, two exposures, a target of 20 and a sky brighter by 0, then read “Total exposure” and the row “Noise budget: the sky” (its percent)."}]}
+   },
+   "two-magnitudes-brighter": {
+    "validate": {"calls":242,"distinct":2,"digest":"ed9d681dab6922d4","samples":[null,{"level":"error","message":"Set the sky brighter by 2 magnitudes with the rest unchanged, then read “Total exposure”: about 443 seconds."}]}
+   },
+   "the-moon-up-hours": {
+    "validate": {"calls":232,"distinct":2,"digest":"9da02765528fa59c","samples":[null,{"level":"error","message":"Set the latitude to 30, the night to 2025-01-29 and then 2025-01-13, and read “Hours the Moon is up in the dark”."}]}
+   },
+   "the-moon-and-a-bright-star": {
+    "validate": {"calls":242,"distinct":2,"digest":"ab57649b43db1884","samples":[null,{"level":"error","message":"Choose “Las Cumbres 1.0 m, V”, one exposure, a target of 20 and read “Total exposure” for each of the four cases (magnitude 20 and 17; sky brighter by 0 and 3)."}]}
+   }
+  },
+  "es": "same"
+ }
+}

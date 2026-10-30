@@ -132,7 +132,7 @@ const sequence = (id, key, after, rows) => ({
  *
  * Message ids rather than prose, because the browser is translated and these
  * lines are read by students. They live with the rest of the inv.* family in
- * the deferred catalog. Six sequences (Roadmap II, Prompt 97) and a seventh, Planets and the Sun (Prompt 206), each ordered (Observing and measuring gained What a Telescope Resolves in Prompt 208 and The Saturated Star in Prompt 211); a
+ * the deferred catalog. Six sequences (Roadmap II, Prompt 97), a seventh, Planets and the Sun (Prompt 206), and an eighth, Observing and instruments (Prompt 216), each ordered (Observing and measuring gained What a Telescope Resolves in Prompt 208 and The Saturated Star in Prompt 211); a
  * lesson that belongs to two (Transit Photometry, Lines and Motion) is in
  * both, with its own reason in each. tests/investigationRegistry.test.js holds
  * every `needs` to an earlier item, every depth to what the lesson offers, and
@@ -322,6 +322,40 @@ export const SEQUENCES = [
       ['why-two-lines-become-one', 'core'],
       ['the-saturated-star', 'core'],
       ['counts-to-magnitudes', 'core'],
+    ]
+  ),
+  sequence(
+    'observing-and-instruments',
+    'instruments',
+    ['the-sky'],
+    [
+      ['what-a-ccd-records', 'core'],
+      ['what-a-telescope-resolves', 'core'],
+      ['deep-or-wide', 'core'],
+      ['two-telescopes-one-question', 'core'],
+      ['signal-noise-and-exposure', 'quantitative', ['what-a-ccd-records']],
+      ['plan-an-exposure', 'core', ['signal-noise-and-exposure']],
+      ['which-instrument-for-which-question', 'core', ['plan-an-exposure']],
+      ['the-sky-background', 'core', ['plan-an-exposure']],
+      ['coordinates-and-time', 'core'],
+      ['the-saturated-star', 'core'],
+      ['why-two-lines-become-one', 'core'],
+      ['counts-to-magnitudes', 'core'],
+      ['why-the-period-is-wrong', 'core'],
+      ['design-the-schedule', 'core'],
+      ['a-variable-star-from-frames', 'core'],
+      ['what-is-in-this-field', 'quantitative', ['signal-noise-and-exposure']],
+      [
+        'a-night-at-the-telescope',
+        'core',
+        ['plan-an-exposure', 'counts-to-magnitudes'],
+      ],
+      ['propose-an-observation', 'advanced', ['deep-or-wide']],
+      [
+        'from-photons-to-a-number',
+        'quantitative',
+        ['a-night-at-the-telescope'],
+      ],
     ]
   ),
 ];

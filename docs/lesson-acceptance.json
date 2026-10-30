@@ -1144,6 +1144,71 @@
       ],
       "evidenceFrom": "model"
     },
+    "which-instrument-for-which-question": {
+      "centralExperimentId": "ce.which-instrument-for-which-question",
+      "object": "panel:exposure-planner",
+      "control": "exposure-planner/setup",
+      "quantity": "the total exposure that reaches a signal-to-noise of 20 for a magnitude-22 star in one exposure: 12,071 seconds on the Las Cumbres 0.35 m telescope, 602 seconds on the 1.0 m and 15 seconds on Rubin, the same star at the same quality",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "a-question-first",
+        "the-same-star-three-ways"
+      ],
+      "evidenceFrom": "model"
+    },
+    "the-sky-background": {
+      "centralExperimentId": "ce.the-sky-background",
+      "object": "panel:exposure-planner",
+      "control": "exposure-planner/moon",
+      "quantity": "the total exposure for a magnitude-23 star at a signal-to-noise of 20 in two exposures on Rubin in r: 79.8 seconds under a dark sky and 443.2 with the sky 2 magnitudes brighter, 5.6 times longer for 6.3 times the sky light",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "predict-the-moon",
+        "two-magnitudes-brighter"
+      ],
+      "evidenceFrom": "model"
+    },
+    "coordinates-and-time": {
+      "centralExperimentId": "ce.coordinates-and-time",
+      "object": "panel:sky-turning",
+      "control": "sky-turning/nights",
+      "quantity": "the minutes after noon at which Sirius crosses the meridian at latitude 40 degrees: 718.7 on the first night and 600.8 thirty nights later, 3.93 minutes earlier each night",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "earlier-each-night",
+        "from-sidereal-time-to-crossing"
+      ],
+      "evidenceFrom": "model"
+    },
+    "a-night-at-the-telescope": {
+      "centralExperimentId": "ce.a-night-at-the-telescope",
+      "object": "panel:exposure-planner",
+      "control": "exposure-planner/mag",
+      "quantity": "the total exposure on the Las Cumbres 1.0 m telescope for a signal-to-noise of 50 in one exposure at an airmass of 1.1: 59.3 seconds for a magnitude-19 star and 779.1 for magnitude 21, the dominant noise term moving from the star to the sky",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "predict-the-limit",
+        "station-expose"
+      ],
+      "evidenceFrom": "model"
+    },
+    "from-photons-to-a-number": {
+      "centralExperimentId": "ce.from-photons-to-a-number",
+      "object": "panel:exposure-planner",
+      "control": "exposure-planner/target",
+      "quantity": "the total exposure on the Las Cumbres 1.0 m telescope for a magnitude-19 star in one exposure at an airmass of 1.1: 59.3 seconds for a signal-to-noise of 50 and 191.4 for 100, 3.2 times longer for twice the quality",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "a-number-from-photons",
+        "halve-it"
+      ],
+      "evidenceFrom": "model"
+    },
     "why-the-period-is-wrong": {
       "centralExperimentId": "ce.why-the-period-is-wrong",
       "object": "panel:strategy-window",

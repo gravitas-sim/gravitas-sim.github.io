@@ -200,6 +200,12 @@ const LOADERS = {
   'two-telescopes-one-question': () =>
     import('./two-telescopes-one-question.js'),
   'propose-an-observation': () => import('./propose-an-observation.js'),
+  'which-instrument-for-which-question': () =>
+    import('./which-instrument-for-which-question.js'),
+  'the-sky-background': () => import('./the-sky-background.js'),
+  'coordinates-and-time': () => import('./coordinates-and-time.js'),
+  'a-night-at-the-telescope': () => import('./a-night-at-the-telescope.js'),
+  'from-photons-to-a-number': () => import('./from-photons-to-a-number.js'),
 };
 // </generated:loaders>
 
@@ -320,6 +326,14 @@ const TRANSLATIONS = {
     'two-telescopes-one-question': () =>
       import('./es/two-telescopes-one-question.js'),
     'propose-an-observation': () => import('./es/propose-an-observation.js'),
+    'which-instrument-for-which-question': () =>
+      import('./es/which-instrument-for-which-question.js'),
+    'the-sky-background': () => import('./es/the-sky-background.js'),
+    'coordinates-and-time': () => import('./es/coordinates-and-time.js'),
+    'a-night-at-the-telescope': () =>
+      import('./es/a-night-at-the-telescope.js'),
+    'from-photons-to-a-number': () =>
+      import('./es/from-photons-to-a-number.js'),
   },
 };
 // </generated:translations>

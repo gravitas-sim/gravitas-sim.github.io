@@ -332,7 +332,7 @@
     {
       "id": "cartridge-profile-valid",
       "claim": "A course exported as a Thin Common Cartridge validates against the Common Cartridge v1.3 schemas and the Thin Common Cartridge profile's rules.",
-      "scope": "the built-in courses in English and Spanish, with and without the notes for instructors, as built by the course builder's and the kit's export; the recorded schema run covers the introductory course and the observing lab (8 cartridges as built now); the one-semester course, the upper-level modules and The Solar System and the Sun are checked by the profile checker only and are NOT in the recorded run",
+      "scope": "the built-in courses in English and Spanish, with and without the notes for instructors, as built by the course builder's and the kit's export; the recorded schema run covers the introductory course (4 cartridges as built now); the observing lab (rebuilt by Prompt 216), the one-semester course, the upper-level modules and The Solar System and the Sun are checked by the profile checker only and are NOT in the recorded run",
       "version": "2.1.0",
       "class": "S",
       "status": "partial",
@@ -387,6 +387,25 @@
         {
           "file": "CHANGELOG.md",
           "text": "A planetary sequence, Planets and the Sun"
+        }
+      ]
+    },
+    {
+      "id": "observing-sequence-recomputed",
+      "claim": "The numbers the five connecting observing investigations ask a student for are recomputed from the project's own exposure, sky, calibration and instrument-library code, and each step's grader accepts the recomputed value and refuses a wrong one.",
+      "scope": "Which Instrument for Which Question?, The Sky Background, Coordinates and Time at Depth, A Night at the Telescope and From Photons to a Number, in the English text; the Spanish follows the English step for step by a machine check; the library has dark sites and no city or moonlight model",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "established",
+      "method": "tests/observingCloseout.test.js recomputes every literal answer through exposureView, planFacts, turningFacts, calibrationView and the rigorous precession of the sky kernel over the instrument library; the central-experiment walks run each lesson's own panel in a browser",
+      "evaluator": "the project",
+      "artifact": "tests/observingCloseout.test.js",
+      "limitations": "Internal validation against the project's own models, which are teaching models with a supplied throughput and dark current; the Spanish has not been read by a fluent reader; no student has used the investigations; the items the roadmap named and the project did not build are recorded in D-R10-216-02.",
+      "date": "2026-10-29",
+      "anchors": [
+        {
+          "file": "CHANGELOG.md",
+          "text": "An observing sequence, Observing and instruments"
         }
       ]
     }

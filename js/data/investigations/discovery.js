@@ -970,4 +970,54 @@ export const DISCOVERY = {
     },
     courseLevel: 'upper',
   },
+  'which-instrument-for-which-question': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['plan-an-exposure'],
+    textbook: {
+      chapter: 6,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
+  'the-sky-background': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['plan-an-exposure'],
+    textbook: {
+      chapter: 6,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
+  'coordinates-and-time': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['the-turning-sky'],
+    textbook: {
+      chapter: 2,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
+  'a-night-at-the-telescope': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['plan-an-exposure', 'counts-to-magnitudes'],
+    textbook: {
+      chapter: 6,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
+  'from-photons-to-a-number': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['a-night-at-the-telescope'],
+    textbook: {
+      chapter: 6,
+      section: null,
+    },
+    courseLevel: 'upper',
+  },
 };
