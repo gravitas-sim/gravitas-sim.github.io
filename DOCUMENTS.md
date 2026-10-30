@@ -127,6 +127,7 @@ catalogue refers to it, so a change to it can reach a student.
 | [RELEASE.md](RELEASE.md) | Release and instructor-materials passphrase procedure. | process | unassigned | written | no |
 | [RELEASING.md](RELEASING.md) | The release procedure and its smoke list. | process | unassigned | regions (docs) | no |
 | [REMIX.md](REMIX.md) | Remixing investigations and sharing them by link. | feature | P78 | written | no |
+| [REMNANTS.md](REMNANTS.md) | Remnants: white-dwarf cooling ages with a model-limited interval, the initial-final mass relation and the odds of a white dwarf, a neutron star or a black hole, with validation and two failed legs left failing (Prompt 222). | feature | P222 | written | yes |
 | [RESONANCE_INVESTIGATION.md](RESONANCE_INVESTIGATION.md) | The orbital resonance investigation. | feature | unassigned | written | no |
 | [SAMPLER_GATE.md](SAMPLER_GATE.md) | Posterior-sampling gate. | gate | unassigned | written | yes |
 | [SANDBOX_INSTRUMENTS.md](SANDBOX_INSTRUMENTS.md) | Instruments in the sandbox. | feature | unassigned | regions (docs) | no |
