@@ -211,15 +211,19 @@ export function mountClusterPanel(root, ctx) {
     const iv = result.intervals;
     const fmt = (v, digits) => fixed(v, digits);
     const withInterval = (value, i, digits, unitKey, map = x => x) =>
-      i.status === 'ok'
-        ? t('clusterObs.v.interval', {
+      i.withheld
+        ? t('clusterObs.v.withheld', {
             v: t(unitKey, { v: fmt(map(value), digits) }),
-            lo: fmt(map(i.lo), digits),
-            hi: fmt(map(i.hi), digits),
           })
-        : t('clusterObs.v.open', {
-            v: t(unitKey, { v: fmt(map(value), digits) }),
-          });
+        : i.status === 'ok'
+          ? t('clusterObs.v.interval', {
+              v: t(unitKey, { v: fmt(map(value), digits) }),
+              lo: fmt(map(i.lo), digits),
+              hi: fmt(map(i.hi), digits),
+            })
+          : t('clusterObs.v.open', {
+              v: t(unitKey, { v: fmt(map(value), digits) }),
+            });
     const age = x => 10 ** (x - 9);
     const dist = x => 10 ** (x / 5 + 1);
     const rows = [

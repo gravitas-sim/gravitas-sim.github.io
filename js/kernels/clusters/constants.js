@@ -54,3 +54,10 @@ export const CURVE_SCALE = Object.freeze([0.03, 0.15]);
 
 /** Kroupa (2001): the IMF's slopes and its break, in solar masses. */
 export const IMF = Object.freeze({ lo: 0.08, break: 0.5, a1: 1.3, a2: 2.3 });
+
+/**
+ * Which parameters' intervals may be presented. An interval whose coverage leg
+ * (C1 for log age, C2 for the distance modulus; tests/fixtures/cluster-fit)
+ * failed is never shown: tests/clusterFit.test.js holds this to results.json.
+ */
+export const PRESENTED = Object.freeze({ logAge: true, dm: true });

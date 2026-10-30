@@ -21,6 +21,8 @@ export const ES_CLUSTER = {
   'clusterObs.row.valley': 'Edad frente a distancia',
   'clusterObs.row.assumed': 'Supuesto, no ajustado',
   'clusterObs.v.interval': '{v} ({lo} a {hi}, una sigma)',
+  'clusterObs.v.withheld':
+    '{v}: El intervalo se retiene: no pasó su prueba de cobertura (CLUSTER_FITTING.md).',
   'clusterObs.v.open':
     '{v}: los datos lo dejan abierto dentro de la malla de los modelos',
   'clusterObs.v.age': '{v} Ga',

@@ -22,6 +22,8 @@ export const EN_CLUSTER = {
   'clusterObs.row.valley': 'Age against distance',
   'clusterObs.row.assumed': 'Assumed, not fitted',
   'clusterObs.v.interval': '{v} ({lo} to {hi}, one sigma)',
+  'clusterObs.v.withheld':
+    '{v}: The interval is withheld: it failed its coverage test (CLUSTER_FITTING.md).',
   'clusterObs.v.open': '{v}: the data leave this open inside the models’ grid',
   'clusterObs.v.age': '{v} Gyr',
   'clusterObs.v.dm': '{v} mag',

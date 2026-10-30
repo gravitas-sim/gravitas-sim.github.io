@@ -32,7 +32,7 @@ const quantity = (id, value, unit, origin, uncertainty) => ({
 });
 
 const intervalOf = (iv, map = x => x) =>
-  iv && iv.status === 'ok'
+  iv && iv.status === 'ok' && !iv.withheld
     ? {
         kind: 'interval',
         lo: map(iv.lo),

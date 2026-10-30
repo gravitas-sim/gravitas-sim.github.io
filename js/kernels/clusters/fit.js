@@ -24,6 +24,7 @@ import {
   MINIMUM_MEMBERS,
   MODEL_ID,
   ONE_SIGMA,
+  PRESENTED,
   VERSION,
 } from './constants.js';
 import { binStars, deviance, floorDeviance } from './deviance.js';
@@ -230,8 +231,8 @@ export function fitCluster(set, g, colour, o) {
     };
   };
   const intervals = {
-    logAge: interval(profA, ageLo, ageHi),
-    dm: interval(profDm, dmLo, dmHi),
+    logAge: { ...interval(profA, ageLo, ageHi), withheld: !PRESENTED.logAge },
+    dm: { ...interval(profDm, dmLo, dmHi), withheld: !PRESENTED.dm },
   };
   // correlation of age and distance in the 2.30 region (two parameters at 68.27 percent)
   let n = 0;
