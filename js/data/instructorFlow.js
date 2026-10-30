@@ -15,6 +15,7 @@ import { INSTRUCTOR as SPECTROGRAPH } from './investigations/spectrograph-sequen
 import { INSTRUCTOR as SATURATED_STAR } from './investigations/saturated-star-sequence.js';
 import { INSTRUCTOR as PHOTCAL } from './investigations/photometric-calibration-sequence.js';
 import { INSTRUCTOR as BINARIES } from './investigations/binaries-sequence.js';
+import { INSTRUCTOR as CLUSTERS } from './investigations/cluster-sequence.js';
 import { INSTRUCTOR as MASSES } from './investigations/binary-masses-sequence.js';
 import { INSTRUCTOR as ACTIVITY } from './investigations/stellar-activity-sequence.js';
 
@@ -35,6 +36,7 @@ export default {
     ...SATURATED_STAR.flow,
     ...PHOTCAL.flow,
     ...BINARIES.flow,
+    ...CLUSTERS.flow,
     ...MASSES.flow,
     ...ACTIVITY.flow,
     'the-suns-motion': [

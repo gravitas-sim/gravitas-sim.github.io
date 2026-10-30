@@ -121,6 +121,7 @@ import { SHADOWS as PLANETS_SHADOWS } from './data/investigations/planets-sequen
 import { SHADOWS as EXPOSURE_SHADOWS } from './data/investigations/exposure-sequence.js';
 import { SHADOWS as STRATEGY_SHADOWS } from './data/investigations/strategy-sequence.js';
 import { SHADOWS as BINARIES_SHADOWS } from './data/investigations/binaries-sequence.js';
+import { SHADOWS as CLUSTERS_SHADOWS } from './data/investigations/cluster-sequence.js';
 import { SHADOWS as MASSES_SHADOWS } from './data/investigations/binary-masses-sequence.js';
 import { SHADOWS as ACTIVITY_SHADOWS } from './data/investigations/stellar-activity-sequence.js';
 import { SHADOWS as SURVEY_SHADOWS } from './data/investigations/survey-sequence.js';
@@ -181,6 +182,7 @@ export const SHADOWS = Object.freeze({
   ...EXPOSURE_SHADOWS,
   ...STRATEGY_SHADOWS,
   ...BINARIES_SHADOWS,
+  ...CLUSTERS_SHADOWS,
   ...MASSES_SHADOWS,
   ...ACTIVITY_SHADOWS,
   ...SURVEY_SHADOWS,

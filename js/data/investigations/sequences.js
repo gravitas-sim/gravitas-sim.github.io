@@ -191,6 +191,7 @@ export const SEQUENCES = [
       ['scaling-the-main-sequence', 'quantitative', ['inside-a-star']],
       ['the-limit', 'core', ['inside-a-star']],
       ['cluster-membership', 'quantitative', ['lives-of-stars']],
+      ['two-clusters-two-ages', 'core', ['lives-of-stars']],
     ]
   ),
   sequence(
