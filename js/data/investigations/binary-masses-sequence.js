@@ -67,12 +67,12 @@ export const WEIGHING_THE_STARS = {
   ],
   steps: [
     {
-      sid: 'two-stars-one-centre',
+      sid: 'two-stars-one-center',
       stage: STAGE,
       type: 'read',
-      title: 'Two stars, one centre',
+      title: 'Two stars, one center',
       body: `Two stars circle the point between them that stays still, their
-             <strong>centre of mass</strong>. Each star&rsquo;s light is shifted by the
+             <strong>center of mass</strong>. Each star&rsquo;s light is shifted by the
              Doppler effect as it moves toward us and away: the curves in the panel are the
              two stars&rsquo; velocities along our line of sight against the orbit&rsquo;s
              phase, from a double-lined spectrum, one measured velocity of each star at
@@ -88,11 +88,11 @@ export const WEIGHING_THE_STARS = {
       type: 'predict',
       reveal: 'read-the-amplitudes',
       title: 'Who moves faster?',
-      body: `The centre of mass sits between the stars, nearer one of them. Before you
+      body: `The center of mass sits between the stars, nearer one of them. Before you
              read the curves, decide which star swings through the larger velocity.`,
       prompt: 'The star with the larger velocity amplitude is&hellip;',
       options: [
-        'The lighter one, because the centre of mass is nearer the heavier star and the lighter one has farther to go in the same time',
+        'The lighter one, because the center of mass is nearer the heavier star and the lighter one has farther to go in the same time',
         'The heavier one, because it has more energy to move with',
         'Neither: gravity is mutual, so the two always move equally fast',
         'The brighter one, because brightness measures speed',
@@ -102,7 +102,7 @@ export const WEIGHING_THE_STARS = {
         'Both stars complete one orbit in the same time. The one with the bigger circle has to move faster.',
       ],
       because:
-        'The two stars circle their centre of mass in the same time. The centre is nearer the heavier star, so the heavier star travels the smaller circle and the lighter star the larger, which needs a larger speed. Put in numbers, the masses are inversely proportional to the velocity amplitudes: M1 K1 = M2 K2.',
+        'The two stars circle their center of mass in the same time. The center is nearer the heavier star, so the heavier star travels the smaller circle and the lighter star the larger, which needs a larger speed. Put in numbers, the masses are inversely proportional to the velocity amplitudes: M1 K1 = M2 K2.',
       misconceptions: [
         {
           id: 'energy',
@@ -131,8 +131,8 @@ export const WEIGHING_THE_STARS = {
              <strong>semi-amplitude</strong> of each curve, K1 for star 1 and K2 for star 2,
              in km/s: half the distance from the highest to the lowest velocity.`,
       fields: [
-        { id: 'a', label: 'K1', unit: 'km/s', hint: '45.2' },
-        { id: 'b', label: 'K2', unit: 'km/s', hint: '61.0' },
+        { id: 'a', label: 'K1 (star 1)', unit: 'km/s', hint: '45.2' },
+        { id: 'b', label: 'K2 (star 2)', unit: 'km/s', hint: '61.0' },
       ],
       validate: v => {
         if (![v.a, v.b].every(Number.isFinite)) return null;
@@ -168,7 +168,7 @@ export const WEIGHING_THE_STARS = {
       answer: 0,
       hints: ['Equal momenta: M1 K1 = M2 K2. Solve for M2 / M1.'],
       because:
-        'The centre of mass does not move, so the stars’ momenta are equal and opposite: M1 K1 = M2 K2, and M2 / M1 = K1 / K2 = 0.74. The tilt of the orbit shrinks both amplitudes by the same factor, sin i, so it cancels in the ratio: the mass ratio of a double-lined pair needs no inclination.',
+        'The center of mass does not move, so the stars’ momenta are equal and opposite: M1 K1 = M2 K2, and M2 / M1 = K1 / K2 = 0.74. The tilt of the orbit shrinks both amplitudes by the same factor, sin i, so it cancels in the ratio: the mass ratio of a double-lined pair needs no inclination.',
       misconceptions: [
         {
           id: 'inverted',
@@ -195,7 +195,7 @@ export const WEIGHING_THE_STARS = {
       title: 'A mass, or only a limit',
       body: `The two amplitudes and the period give the size of the orbit times
              <strong>sin i</strong> and, with Kepler&rsquo;s third law, the masses times
-             <strong>sin&sup3; i</strong>: at i = 90&deg;, edge on, 0.582 and 0.432 solar
+             <strong>sin³ i</strong>: at i = 90&deg;, edge on, 0.582 and 0.432 solar
              masses. The tilt <em>i</em> of the orbit is not in the velocities. Set the
              inclination you assume to <strong>60&deg;</strong> and read what the masses
              would be.`,
@@ -356,7 +356,7 @@ export const WEIGHING_THE_STARS_DEEPER = {
       title: 'One line only',
       body: `Set <em>Stars with a velocity curve</em> to <em>one (single-lined)</em>: only
              the brighter star&rsquo;s lines were measured. The fit now returns the
-             <strong>mass function</strong>, f = M2&sup3; sin&sup3; i / (M1 + M2)&sup2;, and, for the
+             <strong>mass function</strong>, f = M2³ sin³ i / (M1 + M2)², and, for the
              primary mass of 1.30 solar masses that you are told, the smallest companion
              that could produce it. Read both.`,
       fields: [
@@ -470,7 +470,7 @@ export const WEIGHING_THE_STARS_DEEPER = {
              <strong>52&deg;</strong> to the line of sight (the truth, which the data do not
              contain). Set the inclination you assume to 52&deg; and read M1 and M2, then
              compute how many times the true mass is the minimum:
-             <strong>1 / sin&sup3; i</strong>.`,
+             <strong>1 / sin³ i</strong>.`,
       fields: [
         {
           id: 'a',
@@ -644,7 +644,7 @@ export const WEIGHING_THE_STARS_ES = {
     {
       title: 'Lee las amplitudes',
       body: 'El panel ajusta una órbita a las velocidades de las dos estrellas. Lee la <strong>semiamplitud</strong> de cada curva, K1 para la estrella 1 y K2 para la estrella 2, en km/s: la mitad de la distancia entre la velocidad más alta y la más baja.',
-      fields: [{ label: 'K1' }, { label: 'K2' }],
+      fields: [{ label: 'K1 (estrella 1)' }, { label: 'K2 (estrella 2)' }],
     },
     {
       title: 'El cociente de masas',
@@ -673,7 +673,7 @@ export const WEIGHING_THE_STARS_ES = {
     },
     {
       title: 'Una masa, o solo un límite',
-      body: 'Las dos amplitudes y el periodo dan el tamaño de la órbita por <strong>sen i</strong> y, con la tercera ley de Kepler, las masas por <strong>sen&sup3; i</strong>: con i = 90&deg;, de canto, 0,582 y 0,432 masas solares. La inclinación <em>i</em> de la órbita no está en las velocidades. Pon la inclinación que supones en <strong>60&deg;</strong> y lee qué serían las masas.',
+      body: 'Las dos amplitudes y el periodo dan el tamaño de la órbita por <strong>sen i</strong> y, con la tercera ley de Kepler, las masas por <strong>sen³ i</strong>: con i = 90&deg;, de canto, 0,582 y 0,432 masas solares. La inclinación <em>i</em> de la órbita no está en las velocidades. Pon la inclinación que supones en <strong>60&deg;</strong> y lee qué serían las masas.',
       fields: [
         { label: 'Masa de la estrella 1 a 60 grados' },
         { label: 'Masa de la estrella 2 a 60 grados' },
@@ -740,7 +740,7 @@ export const WEIGHING_THE_STARS_DEEPER_ES = {
     },
     {
       title: 'Una sola línea',
-      body: 'Pon <em>Estrellas con curva de velocidad</em> en <em>una (de una sola línea)</em>: solo se midieron las líneas de la estrella más brillante. El ajuste devuelve ahora la <strong>función de masa</strong>, f = M2&sup3; sen&sup3; i / (M1 + M2)&sup2;, y, para la masa primaria de 1,30 masas solares que te dan, el menor compañero que podría producirla. Lee ambas.',
+      body: 'Pon <em>Estrellas con curva de velocidad</em> en <em>una (de una sola línea)</em>: solo se midieron las líneas de la estrella más brillante. El ajuste devuelve ahora la <strong>función de masa</strong>, f = M2³ sen³ i / (M1 + M2)², y, para la masa primaria de 1,30 masas solares que te dan, el menor compañero que podría producirla. Lee ambas.',
       fields: [
         { label: 'Función de masa' },
         { label: 'Masa mínima del compañero' },
@@ -762,7 +762,7 @@ export const WEIGHING_THE_STARS_DEEPER_ES = {
     },
     {
       title: 'La inclinación que no mediste',
-      body: 'De vuelta en el panel de masas mínimas, el par que nunca se eclipsa está en realidad inclinado <strong>52&deg;</strong> respecto de la visual (la verdad, que los datos no contienen). Pon la inclinación que supones en 52&deg; y lee M1 y M2, y calcula cuántas veces es la masa verdadera la mínima: <strong>1 / sen&sup3; i</strong>.',
+      body: 'De vuelta en el panel de masas mínimas, el par que nunca se eclipsa está en realidad inclinado <strong>52&deg;</strong> respecto de la visual (la verdad, que los datos no contienen). Pon la inclinación que supones en 52&deg; y lee M1 y M2, y calcula cuántas veces es la masa verdadera la mínima: <strong>1 / sen³ i</strong>.',
       fields: [
         { label: 'M1 a 52 grados' },
         { label: 'M2 a 52 grados' },
@@ -838,13 +838,13 @@ const CONTENT = {
       'Students predict which star of a binary moves faster and read K1 = 45.2 and K2 = 61.0 km/s, say that the mass ratio is K1 / K2 = 0.74 with no inclination, see the minimum masses (0.582 and 0.432) become 0.90 and 0.66 at 60 degrees, and say that an eclipse fixes the tilt; at depth they read the joint solution of an eclipsing pair (1.303 and 1.104 solar masses, the first to 0.6 percent), say that the inclination carries almost none of the uncertainty, see that one velocity curve gives a mass function of 0.232 and no mass, place four pairs on the mass–radius and mass–luminosity diagrams against MIST (a slope near 4.1), and meet a pair tilted at 52 degrees whose masses are twice the minimum.',
     priorKnowledge: [
       'A velocity along the line of sight from the Doppler shift of a line, and the sign (positive away from us)',
-      'The idea of a centre of mass and Kepler’s third law at the level of a ratio',
+      'The idea of a center of mass and Kepler’s third law at the level of a ratio',
       'What an eclipsing binary’s light curve shows (the investigation Two Stars Eclipsing)',
     ],
     keyConcepts: [
       {
         heading: 'The mass ratio comes from two velocities',
-        body: 'The centre of mass does not move, so M1 K1 = M2 K2. The tilt of the orbit scales both amplitudes by sin i and cancels in the ratio.',
+        body: 'The center of mass does not move, so M1 K1 = M2 K2. The tilt of the orbit scales both amplitudes by sin i and cancels in the ratio.',
       },
       {
         heading: 'Velocities alone give a minimum mass',
@@ -873,7 +873,7 @@ const CONTENT = {
       {
         claim: 'The heavier star moves faster.',
         response:
-          'The lighter star is on the larger circle about the centre of mass and so has the larger amplitude: M1 K1 = M2 K2.',
+          'The lighter star is on the larger circle about the center of mass and so has the larger amplitude: M1 K1 = M2 K2.',
       },
       {
         claim: 'Two velocity curves give the masses.',
@@ -914,9 +914,9 @@ const CONTENT = {
 const FLOW = {
   'weighing-the-stars-for-real': [
     {
-      from: 'two-stars-one-centre',
+      from: 'two-stars-one-center',
       to: 'who-moves-faster',
-      text: 'Two stars about one centre, and the prediction of which swings faster before the panel shows it.',
+      text: 'Two stars about one center, and the prediction of which swings faster before the panel shows it.',
     },
     {
       from: 'read-the-amplitudes',
