@@ -104,7 +104,6 @@ const toggle = (id, label, value = 0) => ({
 const f3 = x => fixed(x, 3);
 const f2 = x => fixed(x, 2);
 const f4 = x => fixed(x, 4);
-const pm = (q, d) => `${fixed(q.value, d)} ± ${fixed(sigmaOf(q), d)}`;
 
 // ----------------------------------------------------------------------------
 // masses-minimum
