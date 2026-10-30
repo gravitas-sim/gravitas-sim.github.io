@@ -313,6 +313,8 @@ export const SEQUENCES = [
       ['why-the-period-is-wrong', 'core'],
       ['two-stars-eclipsing', 'core'],
       ['weighing-the-stars-for-real', 'core'],
+      ['how-fast-does-the-star-spin', 'core'],
+      ['flares', 'core'],
       ['deep-or-wide', 'core'],
       ['two-telescopes-one-question', 'core'],
       ['propose-an-observation', 'advanced', ['deep-or-wide']],

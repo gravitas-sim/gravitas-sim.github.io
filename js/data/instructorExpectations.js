@@ -23,6 +23,7 @@ import { INSTRUCTOR as SATURATED_STAR } from './investigations/saturated-star-se
 import { INSTRUCTOR as PHOTCAL } from './investigations/photometric-calibration-sequence.js';
 import { INSTRUCTOR as BINARIES } from './investigations/binaries-sequence.js';
 import { INSTRUCTOR as MASSES } from './investigations/binary-masses-sequence.js';
+import { INSTRUCTOR as ACTIVITY } from './investigations/stellar-activity-sequence.js';
 
 export default {
   format: 'gravitas.instructor-expectations',
@@ -42,6 +43,7 @@ export default {
     ...PHOTCAL.expectations,
     ...BINARIES.expectations,
     ...MASSES.expectations,
+    ...ACTIVITY.expectations,
     'the-suns-motion': {
       'measure-the-sun':
         'Within 100 pc against the mean of the stars the Sun reads U about 10.5, V about 21.9 and W about 9.1 km/s (489 stars). The validator accepts 10.5 and 9.1 within 1.5 and 21.9 within 2.',

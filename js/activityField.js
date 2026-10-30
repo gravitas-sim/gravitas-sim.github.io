@@ -125,7 +125,7 @@ export function spotsView(v) {
 
 /** Phase of each time against a period, in [0, 1). */
 export const foldPhase = (t, period, t0 = 0) =>
-  Float64Array.from(t, x => (((((x - t0) / period) % 1) + 1) % 1));
+  Float64Array.from(t, x => ((((x - t0) / period) % 1) + 1) % 1);
 
 // ---- the authentic rotation panel ----------------------------------------------------
 
@@ -261,7 +261,8 @@ export function ffdView(v) {
   const cum = cumulativeFrequency(eds, run.days);
   let edMin;
   if (floorMode === 0) edMin = completenessEd(run.sigma);
-  else if (floorMode === 1) edMin = scanEdMin(eds)?.edMin ?? completenessEd(run.sigma);
+  else if (floorMode === 1)
+    edMin = scanEdMin(eds)?.edMin ?? completenessEd(run.sigma);
   else edMin = Math.min(...eds);
   const fit = powerLawSlope(eds, edMin);
   return {

@@ -26,12 +26,14 @@ export const EN_ACTIVITY = {
     '{p} d (95 percent interval {a} to {b} d), with the double period still possible',
   'actW.verdict.double-period':
     '{p} d (95 percent interval {a} to {b} d): the odd and even dips differ, so the peak is the half period',
-  'actW.verdict.no-signal': 'no rotation signal: the peak is no stronger than noise',
+  'actW.verdict.no-signal':
+    'no rotation signal: the peak is no stronger than noise',
   'actW.verdict.not-constrained':
     'not constrained: fewer than two cycles in the data',
   'actW.cand.primary': 'the period reported',
   'actW.cand.not-excluded': 'not excluded by the data',
-  'actW.cand.untestable': 'cannot be tested: the data hold fewer than two cycles of it',
+  'actW.cand.untestable':
+    'cannot be tested: the data hold fewer than two cycles of it',
   'actW.cand.excluded': 'excluded: the odd and even dips differ',
   'actW.v.cand': '{p} d, {s}',
 

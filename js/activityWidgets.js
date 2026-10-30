@@ -129,7 +129,8 @@ const choice = (id, label, prefix, count, value = 0) => ({
 
 const pct = (x, d = 2) => fixed(100 * x, d);
 const every = (n, k) => Math.max(1, Math.floor(n / k));
-const thin = (a, k) => Array.from(a).filter((_, i) => i % every(a.length, k) === 0);
+const thin = (a, k) =>
+  Array.from(a).filter((_, i) => i % every(a.length, k) === 0);
 
 /** The rows both rotation panels share: the period reported and the other period it could be. */
 function periodRows(rot, labels) {
@@ -226,9 +227,7 @@ const SPOTS = {
       t('actW.v.deg', { x: fixed(x, 0) })
     ),
     toggle('second', 'actW.s.control.second'),
-    numeric('shear', 'actW.s.control.shear', 0, 0.4, 0.05, 0, x =>
-      fixed(x, 2)
-    ),
+    numeric('shear', 'actW.s.control.shear', 0, 0.4, 0.05, 0, x => fixed(x, 2)),
     choice('view', 'actW.s.control.view', 'actW.s.view', 4),
   ],
   draw(canvas, v) {
@@ -537,8 +536,7 @@ const FLARES = {
       },
     ];
     const list = m.view === 1 ? [m.one] : m.flares;
-    if (!list.length)
-      rows.push({ label: t('actW.f.row.none'), value: '' });
+    if (!list.length) rows.push({ label: t('actW.f.row.none'), value: '' });
     for (const f of list) {
       rows.push({
         label: t('actW.f.row.ed'),
@@ -616,10 +614,7 @@ const FFD = {
         id: 'law',
         label: t('actW.legend.law'),
         x: [lo, hi],
-        y: [
-          Math.log10(lawRate(m, m.edMin)),
-          Math.log10(lawRate(m, 10 ** hi)),
-        ],
+        y: [Math.log10(lawRate(m, m.edMin)), Math.log10(lawRate(m, 10 ** hi))],
         color: COLOR.orange,
         width: 2,
         mode: 'line',

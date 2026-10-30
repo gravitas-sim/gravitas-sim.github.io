@@ -1187,6 +1187,32 @@ export const MANIFEST = [
     objectiveCount: 4,
   },
   {
+    id: 'how-fast-does-the-star-spin',
+    title: '¿Con qué rapidez gira la estrella?',
+    subtitle:
+      'Lee el periodo de rotación de una estrella a partir de la atenuación de sus manchas, mira por qué la luz sola puede dejar abierta una segunda respuesta y mide dos estrellas reales',
+    duration: '12-24 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/how-fast-does-the-star-spin.webp',
+    depths: 3,
+    stepCount: 7,
+    gradedCount: 5,
+    objectiveCount: 4,
+  },
+  {
+    id: 'flares',
+    title: 'Erupciones',
+    subtitle:
+      'Halla las erupciones en la luz de una enana roja, mide cuánta luz da cada una como duración equivalente y cuenta las erupciones por tamaño',
+    duration: '12-24 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/flares.webp',
+    depths: 3,
+    stepCount: 6,
+    gradedCount: 4,
+    objectiveCount: 4,
+  },
+  {
     id: 'deep-or-wide',
     title: '¿Profundo o ancho?',
     subtitle:

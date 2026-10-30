@@ -142,7 +142,8 @@ export const ES_ACTIVITY = {
   'actW.d.v.alpha': '{a} (intervalo del 95 por ciento de {lo} a {hi})',
   'actW.d.row.truth': 'La pendiente con que se hizo la estrella sintética',
   'actW.d.v.truth': '{a}, con {n} erupciones inyectadas',
-  'actW.d.row.none': 'Hay muy pocas erupciones sobre el suelo para ajustar una pendiente',
+  'actW.d.row.none':
+    'Hay muy pocas erupciones sobre el suelo para ajustar una pendiente',
   'actW.d.row.assumes': 'Qué supone esto',
   'actW.d.a.law':
     'Una sola ley de potencias por encima del suelo; la pendiente es el valor de máxima verosimilitud de las erupciones por encima de él, así que se mueve si el suelo se mueve, y un suelo elegido para que el ajuste sea el mejor se elige después de ver los datos. La distribución es de duraciones equivalentes en la banda, no de energías.',

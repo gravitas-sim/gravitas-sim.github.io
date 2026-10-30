@@ -950,6 +950,26 @@ export const DISCOVERY = {
     },
     courseLevel: 'survey',
   },
+  'how-fast-does-the-star-spin': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: [],
+    textbook: {
+      chapter: 16,
+      section: null,
+    },
+    courseLevel: 'survey',
+  },
+  flares: {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: [],
+    textbook: {
+      chapter: 16,
+      section: null,
+    },
+    courseLevel: 'survey',
+  },
   'deep-or-wide': {
     audience: 'intro',
     mathematics: 'algebra',
