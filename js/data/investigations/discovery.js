@@ -940,6 +940,16 @@ export const DISCOVERY = {
     },
     courseLevel: 'survey',
   },
+  'two-clusters-two-ages': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['lives-of-stars'],
+    textbook: {
+      chapter: 21,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
   'weighing-the-stars-for-real': {
     audience: 'intro',
     mathematics: 'algebra',

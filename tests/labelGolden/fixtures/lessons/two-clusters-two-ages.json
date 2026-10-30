@@ -1,0 +1,74 @@
+{
+ "id": "two-clusters-two-ages",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.fit-a.fields.0.unit","Gyr"],
+    ["steps.fit-a.fields.1.unit","mag"],
+    ["steps.fit-b.fields.0.unit","Gyr"],
+    ["steps.fit-b.fields.1.unit","mag"],
+    ["steps.how-much-older.fields.0.unit","Gyr"],
+    ["steps.change-the-metallicity.fields.0.unit","Gyr"],
+    ["steps.change-the-metallicity.fields.1.unit","Gyr"],
+    ["steps.the-difference-holds.fields.0.unit","Gyr"],
+    ["steps.the-difference-holds.fields.1.unit","Gyr"],
+    ["steps.add-binaries.fields.0.unit","mag"],
+    ["steps.add-binaries.fields.1.unit","mag"]
+   ],
+   "numbered": [
+    ["steps.fit-a.fields.0.hint","2.02"],
+    ["steps.fit-a.fields.1.hint","12.10"],
+    ["steps.fit-b.fields.0.hint","3.16"],
+    ["steps.fit-b.fields.1.hint","12.09"],
+    ["steps.how-much-older.fields.0.hint","1.14"],
+    ["steps.change-the-metallicity.fields.0.label","Age at [Fe/H] −0.50"],
+    ["steps.change-the-metallicity.fields.0.hint","3.35"],
+    ["steps.change-the-metallicity.fields.1.label","Age at [Fe/H] 0"],
+    ["steps.change-the-metallicity.fields.1.hint","1.47"],
+    ["steps.the-difference-holds.fields.0.label","Age of B at [Fe/H] 0"],
+    ["steps.the-difference-holds.fields.0.hint","2.24"],
+    ["steps.the-difference-holds.fields.1.label","Age of B minus age of A at 0"],
+    ["steps.the-difference-holds.fields.1.hint","0.78"],
+    ["steps.add-binaries.fields.0.hint","12.04"],
+    ["steps.add-binaries.fields.1.hint","0.06"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.change-the-metallicity.fields.0.label","Edad con [Fe/H] −0,50"],
+    ["steps.change-the-metallicity.fields.1.label","Edad con [Fe/H] 0"],
+    ["steps.the-difference-holds.fields.0.label","Edad de B con [Fe/H] 0"],
+    ["steps.the-difference-holds.fields.1.label","Edad de B menos edad de A con 0"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "fit-a": {
+    "validate": {"calls":232,"distinct":2,"digest":"2a149ab2e6ee2be1","samples":[null,{"level":"error","message":"Choose cluster A, [Fe/H] −0.25, no binaries, and read the age and the distance modulus from the readout: about 2.02 Gyr and 12.10."}]}
+   },
+   "fit-b": {
+    "validate": {"calls":232,"distinct":2,"digest":"f16df58fb07c4500","samples":[null,{"level":"error","message":"Choose cluster B, [Fe/H] −0.25, no binaries: about 3.16 Gyr and a distance modulus of 12.09."}]}
+   },
+   "how-much-older": {
+    "validate": {"calls":97,"distinct":3,"digest":"bd3b3918a3cb87bf","samples":[null,{"level":"error","message":"Subtract the two ages you read: 3.16 − 2.02 is about 1.14 Gyr."},{"level":"ok","message":"About 1.1 Gyr, 3.16 minus 2.02. Each age has an interval of a few hundredths of a gigayear, so on these assumptions B is older than A by a great many of them."}]}
+   },
+   "change-the-metallicity": {
+    "validate": {"calls":232,"distinct":2,"digest":"5a388a15956f4d30","samples":[null,{"level":"error","message":"Choose cluster A and set the assumed metallicity to −0.50, then 0: about 3.35 and 1.47 Gyr."}]}
+   },
+   "the-difference-holds": {
+    "validate": {"calls":232,"distinct":2,"digest":"58cd450924e220ab","samples":[null,{"level":"error","message":"Choose cluster B and set [Fe/H] to 0: about 2.24 Gyr, and 2.24 − 1.47 is about 0.78."}]}
+   },
+   "add-binaries": {
+    "validate": {"calls":232,"distinct":2,"digest":"7dae2aee7ae22131","samples":[null,{"level":"error","message":"Choose cluster A, [Fe/H] −0.25, binaries 30 percent: the distance modulus reads about 12.04, against 12.10 drawn."}]}
+   }
+  },
+  "es": "same"
+ }
+}

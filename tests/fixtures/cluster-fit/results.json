@@ -1,0 +1,417 @@
+{
+  "note": "The validation table of tools/cluster-fit-validate.mjs as last measured; tests/clusterFit.test.js holds the quick legs and failed-legs.json to it.",
+  "node": "v24.4.0",
+  "date": "2026-10-29",
+  "rows": [
+    {
+      "id": "A1.imf",
+      "status": "pass",
+      "measured": {
+        "maxRel": 0,
+        "additivity": 2.220446049250313e-16,
+        "simpsonRel": 3.6583545082180535e-9
+      },
+      "note": ""
+    },
+    {
+      "id": "A2.colourRow",
+      "status": "pass",
+      "measured": {
+        "maxAbsProbability": 0.0007867860689934891
+      },
+      "note": ""
+    },
+    {
+      "id": "A3.normalisation",
+      "status": "pass",
+      "measured": {
+        "rowSumMaxAbs": 1.1102230246251565e-15,
+        "minProbability": 0.0033333333333333335,
+        "floor": 0.003333333333333333,
+        "penaltyRel": 0
+      },
+      "note": ""
+    },
+    {
+      "id": "A4.deviance",
+      "status": "pass",
+      "measured": {
+        "own": -8.881784197001252e-16,
+        "handDifference": 3.552713678800501e-15,
+        "otherProbabilities": 40.5127101446879
+      },
+      "note": ""
+    },
+    {
+      "id": "A5.shiftLaws",
+      "status": "pass",
+      "measured": {
+        "distanceModulus": 0,
+        "reddening": 1.6046192152785466e-17
+      },
+      "note": ""
+    },
+    {
+      "id": "A6.interpolationExact",
+      "status": "pass",
+      "measured": {
+        "gridMaxAbs": 0,
+        "morphAtZeroScaled": 0.04454531587057719,
+        "morphAtOneScaled": 0.05037369769327225,
+        "note": "the morph resamples each phase at equal arc length, so at weight 0 or 1 it lies within the resampling chord of its parent (scaled units), reported not bounded"
+      },
+      "note": ""
+    },
+    {
+      "id": "A7.interpolationLOO",
+      "status": "pass",
+      "measured": {
+        "medianScaled": 0.0413990384828102,
+        "p95Scaled": 0.6860077013708034,
+        "worstCase": {
+          "feh": -0.25,
+          "logAge": 9.1,
+          "median": 0.07210688170879732,
+          "p95": 3.1906908651516814
+        },
+        "cases": 15
+      },
+      "note": ""
+    },
+    {
+      "id": "A8.syntheticTruth",
+      "status": "pass",
+      "measured": {
+        "maxDistanceMag": 2.1764947639208336e-14,
+        "ks": 0.007456044481559232,
+        "stars": 5000
+      },
+      "note": ""
+    },
+    {
+      "id": "B1.binnedAgreement",
+      "status": "pass",
+      "measured": {
+        "S1": {
+          "diffs": [
+            {
+              "kernel": 409.66,
+              "oracle": 407.24,
+              "within": true
+            },
+            {
+              "kernel": 481.79,
+              "oracle": 480.46,
+              "within": true
+            },
+            {
+              "kernel": 539.56,
+              "oracle": 538.42,
+              "within": true
+            },
+            {
+              "kernel": 530.79,
+              "oracle": 531.95,
+              "within": true
+            },
+            {
+              "kernel": 467.25,
+              "oracle": 467.26,
+              "within": true
+            }
+          ],
+          "bestLogAgeDiff": 0.00284611870948126,
+          "bestDmDiff": 0.0033358919431663026
+        },
+        "S2": {
+          "diffs": [
+            {
+              "kernel": 370.33,
+              "oracle": 371.44,
+              "within": true
+            },
+            {
+              "kernel": 491.22,
+              "oracle": 493.38,
+              "within": true
+            },
+            {
+              "kernel": 482.38,
+              "oracle": 483.16,
+              "within": true
+            },
+            {
+              "kernel": 460.11,
+              "oracle": 461.88,
+              "within": true
+            },
+            {
+              "kernel": 437.83,
+              "oracle": 438.56,
+              "within": true
+            }
+          ],
+          "bestLogAgeDiff": 0.002672245979317367,
+          "bestDmDiff": 0.007363661351030615
+        },
+        "S3": {
+          "diffs": [
+            {
+              "kernel": 526.64,
+              "oracle": 526.6,
+              "within": true
+            },
+            {
+              "kernel": 657.44,
+              "oracle": 658.24,
+              "within": true
+            },
+            {
+              "kernel": 626.39,
+              "oracle": 626.88,
+              "within": true
+            },
+            {
+              "kernel": 647.12,
+              "oracle": 645.65,
+              "within": true
+            },
+            {
+              "kernel": 681.42,
+              "oracle": 683.35,
+              "within": true
+            }
+          ],
+          "bestLogAgeDiff": 0.017425345414213922,
+          "bestDmDiff": 0.0016698156793868435
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "B2.unbinned",
+      "status": "pass",
+      "measured": {
+        "S1": {
+          "logAgeDiff": 0.0018809253960476724,
+          "dmDiff": 0.004280890245246027
+        },
+        "S2": {
+          "logAgeDiff": 0.00047832298279715246,
+          "dmDiff": 0.020116164507690826
+        },
+        "S3": {
+          "logAgeDiff": 0.002749365799955328,
+          "dmDiff": 0.003254059453798419
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "B3.posteriorWidth",
+      "status": "pass",
+      "measured": {
+        "S1": {
+          "logAgeRatio": 1.2279419589298917,
+          "dmRatio": 0.9801533942977645
+        },
+        "S2": {
+          "logAgeRatio": 0.8324415613680345,
+          "dmRatio": 1.2051526903116598
+        },
+        "S3": {
+          "logAgeRatio": 0.7989863500259288,
+          "dmRatio": 0.7992236230800176
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "C1.coverageAge",
+      "status": "pass",
+      "measured": {
+        "n": 100,
+        "coverage": 0.67,
+        "band": [0.56, 0.8]
+      },
+      "note": ""
+    },
+    {
+      "id": "C2.coverageDm",
+      "status": "pass",
+      "measured": {
+        "n": 100,
+        "coverage": 0.6,
+        "band": [0.56, 0.8]
+      },
+      "note": ""
+    },
+    {
+      "id": "C3.coverageBinaries",
+      "status": "report",
+      "measured": {
+        "n": 100,
+        "coverageAge": 0.29,
+        "coverageDm": 0.08,
+        "medianBiasLogAge": 0.01058449074074197,
+        "medianBiasDm": -0.03895037615740904,
+        "notConstrained": 0
+      },
+      "note": ""
+    },
+    {
+      "id": "C4.recovery",
+      "status": "pass",
+      "measured": {
+        "medianBiasLogAge": 0.0006915509259250996,
+        "limitLogAge": 0.0017333475507042451,
+        "medianBiasDm": 0.0008300781250003553,
+        "limitDm": 0.003394889850941851,
+        "medianHalfWidths": [0.00577782516901415, 0.011316299503139504],
+        "n": 100
+      },
+      "note": ""
+    },
+    {
+      "id": "C5.valley",
+      "status": "pass",
+      "measured": {
+        "negativeShare": 0.96,
+        "medianCorrelation": -0.402166229704683,
+        "n": 100
+      },
+      "note": ""
+    },
+    {
+      "id": "D1.tooFew",
+      "status": "pass",
+      "measured": {
+        "flagged": 1,
+        "controlFlagged": 0
+      },
+      "note": ""
+    },
+    {
+      "id": "D2.fieldOnly",
+      "status": "pass",
+      "measured": {
+        "flagged": 1,
+        "gaveAnAge": 0,
+        "reasons": ["no-cluster"]
+      },
+      "note": ""
+    },
+    {
+      "id": "D3.wrongMetallicity",
+      "status": "pass",
+      "measured": {
+        "excluded": 1,
+        "medianBiasLogAge": -0.12656249999999858,
+        "medianBiasDm": 0.2739669234664337
+      },
+      "note": ""
+    },
+    {
+      "id": "D4.wrongReddening",
+      "status": "report",
+      "measured": {
+        "n": 20,
+        "medianBiasLogAge": 0.13109375000000156,
+        "medianBiasDm": -0.1486979166666682,
+        "excluded": 1
+      },
+      "note": ""
+    },
+    {
+      "id": "D5.wrongContamination",
+      "status": "report",
+      "measured": {
+        "0.3": {
+          "coverageAge": 0.5,
+          "coverageDm": 0.65,
+          "medianBiasLogAge": -0.0009722222222219301,
+          "medianBiasDm": 0.007841435185184764
+        },
+        "0.02": {
+          "coverageAge": 0.7,
+          "coverageDm": 0.65,
+          "medianBiasLogAge": -0.0012500000000006395,
+          "medianBiasDm": 0
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "D6.edge",
+      "status": "fail",
+      "measured": {
+        "n": 20,
+        "violations": 5,
+        "flaggedAtEdge": 15,
+        "closedAcrossEdge": 0,
+        "closedNearEdge": 5
+      },
+      "note": ""
+    },
+    {
+      "id": "E1.ngc2420",
+      "status": "fail",
+      "measured": {
+        "stars": 197,
+        "status": "ok",
+        "reason": null,
+        "best": {
+          "logAge": 9.370104166666668,
+          "dm": 11.820084635416668
+        },
+        "ageGyr": [2.300217597377473, 2.3447911521650373, 2.418905734097817],
+        "dm": [11.811783171419854, 11.820084635416668, 11.836051465469305],
+        "ageOverlap": false,
+        "dmOverlap": false,
+        "distancePc": 2312.1549070840747,
+        "correlation": -0.007189705599862972,
+        "intervalStatus": ["ok", "ok"],
+        "warnings": []
+      },
+      "note": ""
+    },
+    {
+      "id": "E2.errorModel",
+      "status": "pass",
+      "measured": {
+        "bins": [
+          {
+            "bin": [15, 17],
+            "n": 309,
+            "ratio": 0.7322882287739721
+          },
+          {
+            "bin": [17, 19],
+            "n": 509,
+            "ratio": 0.7705319108219403
+          },
+          {
+            "bin": [19, 20],
+            "n": 336,
+            "ratio": 0.7529880853806844
+          },
+          {
+            "bin": [20, 21],
+            "n": 360,
+            "ratio": 0.6071262164730175
+          }
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "P1.speed",
+      "status": "pass",
+      "measured": {
+        "cpuSeconds": 1.431102,
+        "evaluations": 2996
+      },
+      "note": ""
+    }
+  ]
+}

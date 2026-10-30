@@ -432,6 +432,43 @@ export const EN_POPULATIONS = {
     '{value} pc, close to Cantat-Gaudin et al.’s 2587 pc, which uses Gaia’s parallaxes as well as its photometry. At [Fe/H] −0.25 the same stars sit about 300 pc nearer.',
   'gd.pop-age.distance.no':
     'The distance is among the quantities of your comparison at [Fe/H] 0.',
+  'gd.pop-age.cluster-open.title': 'Fit the cluster',
+  'gd.pop-age.cluster-open.text':
+    'Your comparisons moved by eye along one choice at a time. The cluster fit does it for you, at a metallicity and a reddening you state: with the members open, open “Cluster: fit an age and a distance” under the diagram and fit.',
+  'gd.pop-age.cluster-open.ok': 'The members are open in the cluster fit.',
+  'gd.pop-age.cluster-fixed.title': 'What the fit does not fit',
+  'gd.pop-age.cluster-fixed.text':
+    'The fit gives an age and a distance modulus with an interval for each. Which of these does it take from you instead of fitting?',
+  'gd.pop-age.cluster-fixed.opt.age': 'The age',
+  'gd.pop-age.cluster-fixed.opt.distance': 'The distance modulus',
+  'gd.pop-age.cluster-fixed.opt.metallicity':
+    'The metallicity (and the reddening)',
+  'gd.pop-age.cluster-fixed.ok':
+    'The metallicity and the reddening are stated assumptions, listed with the result. Change the metallicity and the fit gives another age and distance; the record carries what was assumed.',
+  'gd.pop-age.cluster-fixed.no':
+    'The panel’s list of assumptions says which numbers are yours.',
+  'gd.pop-age.cluster-degeneracy.title': 'The valley',
+  'gd.pop-age.cluster-degeneracy.text':
+    'Look at the map of the statistic against age and distance modulus, and at the valley of best distance at each age. Along the valley, how do age and distance change together?',
+  'gd.pop-age.cluster-degeneracy.opt.nearer-older': 'Older goes with nearer',
+  'gd.pop-age.cluster-degeneracy.opt.nearer-younger':
+    'Younger goes with nearer',
+  'gd.pop-age.cluster-degeneracy.opt.independent': 'They are independent',
+  'gd.pop-age.cluster-degeneracy.ok':
+    'An older cluster with a nearer distance, or a younger one farther: the turnoff’s brightness and the main sequence’s height both move, and the stars constrain the combination better than either. The correlation printed beside the intervals is negative.',
+  'gd.pop-age.cluster-degeneracy.no':
+    'Follow the valley across the map: as age rises, which way does the best distance modulus go?',
+  'gd.pop-age.cluster-interval.title': 'What the interval covers',
+  'gd.pop-age.cluster-interval.text':
+    'The age interval is a profile interval from the statistic, with the metallicity and the reddening held at your values. Does it include the uncertainty in the metallicity you assumed?',
+  'gd.pop-age.cluster-interval.opt.includes':
+    'Yes: the interval is the uncertainty',
+  'gd.pop-age.cluster-interval.opt.excludes':
+    'No: it is conditional on the assumptions',
+  'gd.pop-age.cluster-interval.ok':
+    'It is conditional on them. Moving the metallicity by 0.25 dex moves the age by far more than the interval is wide, so the interval is a statement about the noise in these stars given the model, not about the cluster’s age. Fitting the metallicity as well is a separate, gated step.',
+  'gd.pop-age.cluster-interval.no':
+    'Fit again at another metallicity and compare the shift of the best age with the interval’s width.',
   'gd.pop-age.wrap.title': 'What an isochrone can tell',
   'gd.pop-age.wrap.text':
     'An isochrone comparison turns a diagram into an age and a distance, but only through a model, a metallicity and a reddening, and those trade against one another: bluer by metallicity or bluer by less dust, older and nearer or younger and farther. The model is the lens; the stars are the data.\n\nLast: a star whose light changes, and a distance from that.',

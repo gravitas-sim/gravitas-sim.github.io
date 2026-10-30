@@ -298,6 +298,7 @@ export const ES_OBSERVATORY = {
   'obs.export.csv': 'Guardar las filas como CSV',
   'specObs.title':
     'Espectrógrafo: ajustar una línea con el modelo del instrumento',
+  'clusterObs.title': 'Cúmulo: ajustar una edad y una distancia',
   'obs.cmp.title': 'Comparar un modelo con los datos',
   'obs.fit.title': 'Ajustar un modelo (diagnóstico)',
   'obs.sky.title': 'Cielo: mapa galáctico y vectores de movimiento propio',
