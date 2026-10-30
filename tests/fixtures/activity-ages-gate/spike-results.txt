@@ -1,0 +1,9 @@
+pass G1.roundTrip {"maxRelative":1.2942336498561152e-15}
+pass G2.oracle {"maxRelative":1.136868377216161e-15,"points":40}
+pass G3.coverage {"coverageOfStated":0.9593667546174143,"answered":1895,"n":2000,"coverageRefusalsAsMisses":0.909,"refusedFraction":0.05249999999999999}
+pass G4.refusal {"refused":1,"n":1000}
+FAIL G5.relationsAgree {"p95Dex":0.6104457788912561,"max":0.6377699507852115,"median":0.1797576028443375,"n":25}
+pass G6.authentic {"ages":[{"P":2.6,"rel":"mamajek2008","ageMyr":91.68175835165026},{"P":2.6,"rel":"barnes2007","ageMyr":63.208125549932255},{"P":2.77,"rel":"mamajek2008","ageMyr":102.53705767551772},{"P":2.77,"rel":"barnes2007","ageMyr":71.41377809105144}],"gyroAgeMamajek":{"age":102.53705767551772,"interval":[81.82402727315323,128.493408930534]}}
+pass G7a.bandFraction {"maxRelative":0.000016326436333787392,"note":"the repository integral is on the band refined to 1 nm, the oracle on the 5 nm table"}
+pass G7b.correctionRange {"factor":1.410464077653485,"C":[5.479833019496862,5.975629030852153,6.515204552698228,7.099369975780912,7.729107625539752],"T":[9000,9500,10000,10500,11000]}
+verdict B
