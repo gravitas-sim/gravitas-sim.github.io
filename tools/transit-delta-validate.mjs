@@ -40,6 +40,10 @@ const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DIR = 'tests/fixtures/transit-delta';
 const read = rel => JSON.parse(readFileSync(path.join(ROOT, rel), 'utf8'));
 const THR = read(`${DIR}/thresholds.json`);
+// The oracle as first run, kept as committed (its exposure window was too long by one sample
+// in 21, which the first judgement of B1 to B4 did not know; see AM1 in thresholds.json), and
+// the oracle as amended, against which B1b to B4b are judged with the same bounds.
+const ORA_FIRST = read(`${DIR}/oracle-results-first.json`);
 const ORA = read(`${DIR}/oracle-results.json`);
 const HD = read(`${DIR}/hd209458-s56.json`);
 export const THRESHOLDS = THR;
@@ -325,12 +329,12 @@ function compareFits(gfit, ofit, names) {
   return { out, worst };
 }
 
-function groupB() {
+function groupB(ORA, sfx) {
   const B1 = lim('B1');
   const B2 = lim('B2');
   const B3 = lim('B3');
   const syn = {};
-  if (wanted('B1') || wanted('B3')) {
+  if (wanted('B1' + sfx) || wanted('B3' + sfx)) {
     for (const name of ['S1', 'S2', 'S3']) {
       const s = ORA.synthetic[name];
       const c = THR.syntheticCases[name];
@@ -352,7 +356,7 @@ function groupB() {
       };
     }
   }
-  if (wanted('B1')) {
+  if (wanted('B1' + sfx)) {
     const ok = Object.values(syn).every(
       v =>
         v.worst <= B1.paramSigmas &&
@@ -360,7 +364,7 @@ function groupB() {
         v.ratios.every(r => r >= B1.sigmaRatio[0] && r <= B1.sigmaRatio[1])
     );
     row(
-      'B1',
+      'B1' + sfx,
       ok,
       Object.fromEntries(
         Object.entries(syn).map(([k, v]) => [
@@ -378,10 +382,10 @@ function groupB() {
   }
   const hd = ORA.hd209458;
   let hdData;
-  if (wanted('B2') || wanted('B3')) {
+  if (wanted('B2' + sfx) || wanted('B3' + sfx)) {
     hdData = frame(HD.time, HD.flux, Float64Array.from(HD.error));
   }
-  if (wanted('B2')) {
+  if (wanted('B2' + sfx)) {
     const bounds = {
       t0: { lo: hdData.x[0], hi: hdData.x[0] + 3.65 },
       P: { lo: 3.4, hi: 3.65 },
@@ -404,7 +408,7 @@ function groupB() {
     delete cmp.out.__ratio;
     const dChi2 = Math.abs(g.chi2 - hd.quadratic.chi2);
     row(
-      'B2',
+      'B2' + sfx,
       cmp.worst <= B2.paramSigmas &&
         dChi2 <= B2.chi2 &&
         ratios.every(r => r >= B2.sigmaRatio[0] && r <= B2.sigmaRatio[1]),
@@ -418,7 +422,7 @@ function groupB() {
       'the shipped HD 209458 rows; gravitas against batman + scipy'
     );
   }
-  if (wanted('B3')) {
+  if (wanted('B3' + sfx)) {
     const bounds = {
       t0: { lo: hdData.x[0], hi: hdData.x[0] + 3.65 },
       P: { lo: 3.4, hi: 3.65 },
@@ -440,7 +444,7 @@ function groupB() {
     const cmp = compareFits(g, hd.claret4FixedB, ['t0', 'P', 'k', 'aRs']);
     delete cmp.out.__ratio;
     row(
-      'B3',
+      'B3' + sfx,
       cmp.worst <= B3.paramSigmas,
       {
         worstSigmas: sig(cmp.worst),
@@ -450,7 +454,7 @@ function groupB() {
       'transit-claret4 on HD 209458 with the labelled test law and b fixed at 0.43, against batman + scipy'
     );
   }
-  if (wanted('B4')) {
+  if (wanted('B4' + sfx)) {
     const L = lim('B4');
     const s = ORA.synthetic.S4;
     const c = THR.syntheticCases.S4;
@@ -472,7 +476,7 @@ function groupB() {
     const d = n => g.derived.find(q => q.name === n).value;
     const corrected = Math.abs(d('rhoStarEcc') / s.rhoTrue_gcm3 - 1);
     row(
-      'B4',
+      'B4' + sfx,
       corrected <= L.relative,
       {
         rhoTrue: sig(s.rhoTrue_gcm3),
@@ -743,7 +747,10 @@ function groupE() {
 
 groupA();
 if (wanted('B0')) groupB0();
-if (wanted('B')) groupB();
+if (wanted('B')) {
+  groupB(ORA_FIRST, '');
+  groupB(ORA, 'b');
+}
 if (wanted('C') || wanted('D')) groupC();
 groupE();
 

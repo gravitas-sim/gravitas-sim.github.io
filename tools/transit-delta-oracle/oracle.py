@@ -42,7 +42,12 @@ def flux_model(t, t0, P, k, aRs, b, law, u, exposure=0.0, inc=None, ecc=0.0, w=9
     p.limb_dark = 'nonlinear' if law == 'claret4' else 'quadratic'
     p.u = list(u)
     if exposure > 0:
-        m = batman.TransitModel(p, t, supersample_factor=ss or SS, exp_time=exposure, max_err=max_err)
+        # batman averages `ss` samples spaced exp_time/(ss-1) over [-exp_time/2, +exp_time/2], both ends included,
+        # which is an exposure ss/(ss-1) times as long as exp_time (Amendment AM1: the first run passed `exposure`
+        # itself and so integrated 5 percent too long at 21 samples). Passing exposure*(ss-1)/ss makes the ss samples
+        # the midpoints of ss equal sub-exposures of the stated exposure, the same integral as Gravitas's rule.
+        n_ss = ss or SS
+        m = batman.TransitModel(p, t, supersample_factor=n_ss, exp_time=exposure * (n_ss - 1) / n_ss, max_err=max_err)
     else:
         m = batman.TransitModel(p, t, max_err=max_err)
     return m.light_curve(p)
