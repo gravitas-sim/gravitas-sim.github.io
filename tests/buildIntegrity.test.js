@@ -314,7 +314,7 @@ describe('the service worker manifest is current', () => {
     );
     // The twenty-five measurement, claim, image, Jupiter, atmosphere, crater, field, ring and tide, Sun, eclipse and phase, small-body and planetary closeout lessons are never precached
     // (D-R10-67, D-R10-72, D-R10-74, D-R10-81, D-R10-85, D-R10-88, D-R10-93, D-R10-96, D-R10-202-01, D-R10-198-04, D-R10-206-05, D-R10-208-05, D-R10-210-01, D-R10-211-01, D-R10-214-06, D-R10-212-01, D-R10-213-01, D-R10-215-06, D-R10-216-07): they open offline after one online use, like the other lazy families.
-    const NEVER_PRECACHED_LESSONS = 41;
+    const NEVER_PRECACHED_LESSONS = 43;
     expect(bodies.length + NEVER_PRECACHED_LESSONS).toBe(MANIFEST.length);
   });
 

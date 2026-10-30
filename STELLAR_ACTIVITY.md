@@ -128,7 +128,25 @@ hold (the peak was the period and the verdict correct). Five amendments (AM1 to 
 the flare rule's quiescent mask and window end (found when C2 first measured coverage 0.05), the added legs B5 and D4b, and a second quiescent
 stage in the oracle. C2's first run, before AM2, is in the file's history.
 
-## Not built in this part
+## Instruments and investigations
 
-The panels, the investigations "How fast does the star spin?" and "Flares", their Spanish, instructor materials and the model-page section;
-the sunspot and solar-rotation link (194's authentic leg e1.authentic.G2 fails, 12.4 against 13.9 deg/day, and no sunspot-number series ships).
+Four panels in one lazy family (`js/activityWidgets.js` over `js/activityField.js`, words in `js/i18n/{en,es}.activity.js`):
+`activity-spots` (the synthetic spotted star: spot latitude, size and brightness, axis tilt, an optional second spot on the
+opposite side, a differential rotation; the light curve, the periodogram and two folds), `activity-period` (AU Microscopii and
+EK Draconis from the sidecars: the period, its interval, the other periods it could be, the false-alarm probability, the
+published value), `activity-flares` (a day of AU Microscopii with each flare marked, or one flare close up with its equivalent
+duration and uncertainty) and `activity-ffd` (the counts by size on logarithmic axes with the power-law fit above the
+completeness limit, the best-fitting floor, or every flare; the AU Microscopii flares or a synthetic star made with slope 1.80).
+Every number is the kernel's; the AU Microscopii flare count (76), the period (4.856 d) and the slope (1.92, 1.62 to 2.28, 29
+flares above 8.95 s) equal the validation's E1, E2 and E4.
+
+Two investigations, in `js/data/investigations/stellar-activity-sequence.js` (the one closure file, with the Spanish, the
+deeper steps and the instructor content): How Fast Does the Star Spin? and Flares, each at core, quantitative and advanced
+depth. `tests/stellarActivityLessons.test.js` recomputes every number a step states from the panels. They state no age and no
+energy: the gate verdict is C, and one reading step in each says why.
+
+## Not built
+
+A sunspot-number series and a link through data to Prompt 194's Sun (194's authentic leg e1.authentic.G2 fails, 12.4 against
+13.9 deg/day, and no series ships): the spin investigation names The Turning Sun in prose and lets the model star turn
+differentially, nothing more. No age from the spin and no flare energy (Part B, verdict C).

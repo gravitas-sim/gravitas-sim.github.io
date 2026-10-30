@@ -482,6 +482,10 @@ export const NEVER_PRECACHED = [
   // (js/inference/binaryMasses.js) and the models (js/inference/binaryJoint.js) are NOT here: the inference worker imports them.
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(weighing-the-stars-for-real|binary-masses-sequence)\.js$/,
   /^(js\/massesWidgets\.js|js\/massesField\.js|js\/i18n\/(en|es)\.masses\.js)$/,
+  // Prompt 220: the activity panels, their field module, their words and the two lessons' one new file (D-R10-220-07).
+  // The kernel, the loader and the two pack records are already here from the data part (D-R10-220-03).
+  /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(how-fast-does-the-star-spin|flares|stellar-activity-sequence)\.js$/,
+  /^(js\/activityWidgets\.js|js\/activityField\.js|js\/i18n\/(en|es)\.activity\.js)$/,
   // Prompt 214: the strategy kernel, planner extension, panels and the strategy lesson's one new file (D-R10-214-06).
   /^js\/kernels\/strategy\//,
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(why-the-period-is-wrong|strategy-sequence)\.js$/,

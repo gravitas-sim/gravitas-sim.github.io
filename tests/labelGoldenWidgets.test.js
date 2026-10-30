@@ -88,7 +88,7 @@ describe('the parts of the recording', () => {
   test('every instrument is in exactly one family, and each family has its own module', () => {
     const ids = Object.values(recorded.ids).flat();
     expect(new Set(ids).size).toBe(ids.length);
-    expect(ids.length).toBe(148);
+    expect(ids.length).toBe(152);
     const paths = Object.values(modules);
     expect(new Set(paths).size).toBe(paths.length);
   });
@@ -117,12 +117,12 @@ describe('the parts of the recording', () => {
 describe('the committed recording', () => {
   test('has a fixture for every family and none for a family that is gone', () => {
     expect(Object.keys(files).sort()).toEqual(Object.keys(modules).sort());
-    expect(Object.keys(modules).length).toBe(45);
+    expect(Object.keys(modules).length).toBe(46);
   });
 
   test('has every widget in both locales', () => {
     const widgets = widgetsOf(recorded);
-    expect(widgets.length).toBe(148);
+    expect(widgets.length).toBe(152);
     for (const [, rec] of widgets) {
       expect(rec.en.frames).toBeGreaterThan(0);
       // Spanish is either the same recording or its own.
