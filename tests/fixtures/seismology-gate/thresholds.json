@@ -97,11 +97,11 @@
     { "id": "F1.numax", "what": "numax recovery on the ensemble: |numax_hat/numax - 1|", "limit": { "maxMedian": 0.02, "maxP90": 0.05 } },
     { "id": "D1.deltaNu", "what": "Delta nu recovery on the ensemble: |dnu_hat/dnu - 1|", "limit": { "maxMedian": 0.01, "maxP90": 0.03 } },
     { "id": "D2.comb", "what": "the share of the 200 ensemble spectra detected (envelope and comb significant)", "limit": { "minFraction": 0.95 } },
-    { "id": "F2.coverageNumax", "what": "coverage of the stated 68 per cent interval of numax on the ensemble (a test of the interval's construction, stated as such: the generator is independent of the kernel but the likelihood is the generator's own statistic)", "limit": { "min": 0.6, "max": 0.85 } },
-    { "id": "D3.coverageDeltaNu", "what": "coverage of the stated 68 per cent interval of Delta nu on the ensemble", "limit": { "min": 0.6, "max": 0.85 } },
+    { "id": "F2.coverageNumax", "what": "coverage of the 68 per cent interval of numax on the ensemble, the interval being the formal one (the standard deviation over the 200 perturbations, without the systematic floors) (a test of the interval's construction, stated as such: the generator is independent of the kernel but the likelihood is the generator's own statistic)", "limit": { "min": 0.6, "max": 0.9 } },
+    { "id": "D3.coverageDeltaNu", "what": "coverage of the 68 per cent interval of Delta nu on the ensemble, the formal interval as in F2", "limit": { "min": 0.6, "max": 0.9 } },
     { "id": "G1.relations", "what": "the scaling relations with the published numax, Delta nu and Teff and the solar references give the published uncorrected mass and radius", "limit": { "massAbs": 0.01, "radiusAbs": 0.01 } },
-    { "id": "G2.coverageMass", "what": "coverage of the stated 68 per cent mass interval on the ensemble, the truth being the relation value of the true numax and Delta nu times (1 + 0.10 z) with z a seeded standard normal, and Teff = 4800 K +- 150 K assumed known to its stated sigma", "limit": { "min": 0.6, "max": 0.85 } },
-    { "id": "G3.coverageRadius", "what": "the same for the radius with the relation scatter 0.05", "limit": { "min": 0.6, "max": 0.85 } },
+    { "id": "G2.coverageMass", "what": "coverage of the stated 68 per cent mass interval on the ensemble, the truth being the relation value of the true numax and Delta nu times (1 + 0.10 z) with z a seeded standard normal, and Teff = 4800 K +- 150 K assumed known to its stated sigma", "limit": { "min": 0.6, "max": 0.95 } },
+    { "id": "G3.coverageRadius", "what": "the same for the radius with the relation scatter 0.05", "limit": { "min": 0.6, "max": 0.95 } },
     { "id": "N1.falseAlarm", "what": "200 seeded spectra of a non-oscillating dwarf (granulation and white only, the solar numax lying above the Nyquist frequency, same masks and levels): none may be reported as detected beyond 2 per cent", "limit": { "maxDetectedFraction": 0.02 } },
     { "id": "N2.dwarfReal", "what": "the real EK Draconis 30-minute TESS series (dwarf) returns not detected", "limit": { "detected": false } },
     { "id": "N3.domain", "what": "100 seeded ensemble spectra with true numax of 8 to 18 uHz or 240 to 270 uHz: no mass and no radius is returned for any", "limit": { "minRefusedFraction": 1 } },
@@ -123,5 +123,12 @@
     "C": "any leg of the classes spectrum, background, negatives or deltaNu fails: no inference; a reading step on what the oscillations show; no FFT added to js/numeric/"
   },
   "bytes": "measured and reported (the kernel's gzipped size and the real-data sidecar); T3 has no deferred allocation, so the measured overrun is raised exactly under the standing approval of 2026-10-10 and is not a verdict leg",
-  "amendments": []
+  "amendments": [
+    {
+      "id": "AM1",
+      "when": "2026-10-30, on this branch, before the spike's first line was written and before any spectrum was computed",
+      "what": "the coverage legs F2 and D3 score the formal interval (the perturbation standard deviation, no systematic floors) and their upper bound moves from 0.85 to 0.90; G2 and G3, whose stated interval includes the systematic floors and the relation scatter, have their upper bound moved from 0.85 to 0.95; no lower bound and no other leg moves",
+      "why": "the 200 perturbations multiply an already scattered spectrum by a second chi-squared(2)/2 draw, which doubles the variance of the logarithm of every bin, so a correct implementation has a formal interval about 1.4 sigma wide and a coverage near 0.84 at the nominal 0.68, and the floors (0.5 per cent in Delta nu, a quantity the self-consistent ensemble measures to better than that) widen it further; an upper bound of 0.85 would fail a correct implementation by construction. The upper bounds guard only against intervals so wide that coverage is meaningless; the lower bounds (0.60) are the test against over-confidence and are unchanged."
+    }
+  ]
 }
