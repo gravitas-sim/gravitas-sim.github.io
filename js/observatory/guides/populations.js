@@ -798,6 +798,37 @@ export const GUIDES = [
         path: 'advanced',
         expect: { answer: 'distanceSolar', tolerance: 10 },
       },
+      // Prompt 219: the cluster fit, for the majors and upper depths. They
+      // add steps to the advanced path and touch no earlier one, so the
+      // survey path and its answers are what they were.
+      {
+        id: 'cluster-open',
+        kind: 'do',
+        path: 'advanced',
+        go: { open: 'segue', panel: 'cluster' },
+        check: { kind: 'opened', target: 'segue' },
+      },
+      {
+        id: 'cluster-fixed',
+        kind: 'choose',
+        path: 'advanced',
+        options: ['age', 'distance', 'metallicity'],
+        correct: 'metallicity',
+      },
+      {
+        id: 'cluster-degeneracy',
+        kind: 'choose',
+        path: 'advanced',
+        options: ['nearer-older', 'nearer-younger', 'independent'],
+        correct: 'nearer-older',
+      },
+      {
+        id: 'cluster-interval',
+        kind: 'choose',
+        path: 'advanced',
+        options: ['includes', 'excludes'],
+        correct: 'excludes',
+      },
       { id: 'wrap', kind: 'read', path: 'both' },
     ],
   },

@@ -146,6 +146,7 @@ try {
           <li><span class="gs-en"><a href="#detector-effects">Detector effects: what a saturated star, a bleed trail and a cosmic ray do</a></span><span class="gs-es" lang="es"><a href="#detector-effects">Efectos del detector: qué hacen una estrella saturada, una estela de desbordamiento y un rayo cósmico</a></span></li>
           <li><span class="gs-en"><a href="#photometric-calibration">Photometric calibration: counts to magnitudes, and atmospheric extinction</a></span><span class="gs-es" lang="es"><a href="#photometric-calibration">Calibración fotométrica: de cuentas a magnitudes, y la extinción atmosférica</a></span></li>
           <li><span class="gs-en"><a href="#eclipsing-binaries">Eclipsing binaries: what a light curve fixes and what it leaves open</a></span><span class="gs-es" lang="es"><a href="#eclipsing-binaries">Binarias eclipsantes: qu&eacute; fija una curva de luz y qu&eacute; deja abierto</a></span></li>
+          <li><span class="gs-en"><a href="#cluster-fitting">Cluster fitting: what an isochrone age and distance assume</a></span><span class="gs-es" lang="es"><a href="#cluster-fitting">Ajuste de c&uacute;mulos: qu&eacute; suponen una edad y una distancia por isocronas</a></span></li>
           <li><span class="gs-en"><a href="#trust">What should I trust this to show?</a></span><span class="gs-es" lang="es"><a href="#trust">¿Qué puedo esperar que muestre con fiabilidad?</a></span></li>
           <li><span class="gs-en"><a href="#validation">Validation: what has been checked</a></span><span class="gs-es" lang="es"><a href="#validation">Validación: qué se ha comprobado</a></span></li>
           <li><span class="gs-en"><a href="#data">Where the data comes from</a></span><span class="gs-es" lang="es"><a href="#data">De dónde provienen los datos</a></span></li>
@@ -2595,6 +2596,18 @@ try {
       </ul>
       <p>
         <span class="gs-en">The kernel is <code>js/<wbr>inference/<wbr>binaryMasses.js</code> with the models <code>js/<wbr>inference/<wbr>binaryJoint.js</code>, described in <code>BINARY_<wbr>MASSES.md</code>, and a test recomputes each number the investigation states. The visual-binary branch is not built.</span><span class="gs-es" lang="es">El n&uacute;cleo es <code>js/<wbr>inference/<wbr>binaryMasses.js</code> con los modelos <code>js/<wbr>inference/<wbr>binaryJoint.js</code>, descrito en <code>BINARY_<wbr>MASSES.md</code>, y una prueba recalcula cada n&uacute;mero que afirma la investigaci&oacute;n. La rama de binarias visuales no est&aacute; construida.</span>
+      <h2 id="cluster-fitting"><span class="gs-en">Cluster fitting: what an isochrone age and distance assume</span><span class="gs-es" lang="es">Ajuste de c&uacute;mulos: qu&eacute; suponen una edad y una distancia por isocronas</span></h2>
+      <p>
+        <span class="gs-en">The Observatory&rsquo;s cluster panel fits <strong>MIST isochrones</strong> to a cluster&rsquo;s color&ndash;magnitude diagram over two parameters, the age and the distance modulus, and holds everything else at values you state: the <strong>metallicity</strong>, the reddening (with the extinction ratio 3.245, Schlafly and Finkbeiner 2011) and the share of the stars that are not members. The statistic is a binned deviance of the colors at each magnitude, so the sample&rsquo;s selection in magnitude does not enter; the intervals are profile intervals of that statistic at 68.27 percent, and the age&ndash;distance valley is drawn, not hidden.</span><span class="gs-es" lang="es">El panel de c&uacute;mulos del Observatorio ajusta <strong>isocronas MIST</strong> al diagrama color&ndash;magnitud de un c&uacute;mulo en dos par&aacute;metros, la edad y el m&oacute;dulo de distancia, y mantiene todo lo dem&aacute;s en valores que t&uacute; indicas: la <strong>metalicidad</strong>, el enrojecimiento (con la raz&oacute;n de extinci&oacute;n 3,245, Schlafly y Finkbeiner 2011) y la proporci&oacute;n de estrellas que no son miembros. El estad&iacute;stico es una desviaci&oacute;n agrupada de los colores en cada magnitud, de modo que la selecci&oacute;n en magnitud de la muestra no interviene; los intervalos son intervalos de perfil de ese estad&iacute;stico al 68,27 por ciento, y el valle edad&ndash;distancia se dibuja, no se oculta.</span>
+      </p>
+      <h3><span class="gs-en">What the fit does not tell you</span><span class="gs-es" lang="es">Lo que el ajuste no te dice</span></h3>
+      <ul>
+        <li><span class="gs-en">The result is <strong>conditional on the metallicity</strong> you set. Fitted at [Fe/H] &minus;0.25, NGC 2420&rsquo;s SEGUE members give an age and a distance outside the published ranges, and the intervals are about twenty times narrower than the shift a 0.25 dex change of metallicity makes. The leg that tests this (E1) <strong>fails</strong> its committed range and stays failing; the interval is the noise given the model, not the uncertainty of the cluster&rsquo;s age.</span><span class="gs-es" lang="es">El resultado es <strong>condicional a la metalicidad</strong> que fijas. Con [Fe/H] &minus;0,25, los miembros de SEGUE de NGC 2420 dan una edad y una distancia fuera de los rangos publicados, y los intervalos son unas veinte veces m&aacute;s estrechos que el cambio que produce una variaci&oacute;n de 0,25 dex en la metalicidad. La prueba de esto (E1) <strong>falla</strong> su rango comprometido y sigue fallando; el intervalo es el ruido dado el modelo, no la incertidumbre de la edad del c&uacute;mulo.</span></li>
+        <li><span class="gs-en">The model has <strong>single stars</strong>. On synthetic clusters with a binary fraction of 0.30 the 1-sigma intervals held the true age 29 percent of the time and the true distance 8 percent: a reported misspecification, not a bound.</span><span class="gs-es" lang="es">El modelo tiene <strong>estrellas simples</strong>. En c&uacute;mulos sint&eacute;ticos con una fracci&oacute;n de binarias de 0,30, los intervalos de 1 sigma contuvieron la edad verdadera el 29 por ciento de las veces y la distancia verdadera el 8 por ciento: una mala especificaci&oacute;n declarada, no un l&iacute;mite.</span></li>
+        <li><span class="gs-en">With every assumption true, the intervals held the truth 67 percent (age) and 60 percent (distance) of 100 seeds, in the committed band of 56 to 80 percent. Below 60 members, or when the cluster does not beat the field alone, the result is &ldquo;not constrained&rdquo;.</span><span class="gs-es" lang="es">Con todos los supuestos ciertos, los intervalos contuvieron la verdad el 67 por ciento (edad) y el 60 por ciento (distancia) de 100 semillas, dentro de la banda comprometida de 56 a 80 por ciento. Con menos de 60 miembros, o cuando el c&uacute;mulo no supera al campo solo, el resultado es &laquo;no acotado&raquo;.</span></li>
+      </ul>
+      <p>
+        <span class="gs-en">The kernel is <code>js/<wbr>kernels/<wbr>clusters/</code>, described in <code>CLUSTER_FITTING.md</code> with its validation, its independent numpy/scipy/emcee oracle and its failed legs.</span><span class="gs-es" lang="es">El n&uacute;cleo es <code>js/<wbr>kernels/<wbr>clusters/</code>, descrito en <code>CLUSTER_FITTING.md</code> con su validaci&oacute;n, su or&aacute;culo independiente en numpy/scipy/emcee y sus pruebas fallidas.</span>
       </p>
 
       <h2 id="stellar-activity"><span class="gs-en">Stellar rotation and flares: periods, aliases and equivalent durations</span><span class="gs-es" lang="es">Rotaci&oacute;n estelar y erupciones: per&iacute;odos, alias y duraciones equivalentes</span></h2>
@@ -2926,9 +2939,9 @@ try {
       </p>
       <p>
         <span class="gs-en">The repository carries an automated validation suite. It runs
-        <!--fact:physicsChecks-->348<!--/fact-->
+        <!--fact:physicsChecks-->352<!--/fact-->
         deterministic checks and prints a table of measured value, expected
-        value, error and tolerance:</span><span class="gs-es" lang="es">El repositorio incluye una batería automática de validación. Ejecuta <!--fact:physicsChecks-->348<!--/fact--> comprobaciones deterministas e imprime una tabla con el valor medido, el valor esperado, el error y la tolerancia:</span>
+        value, error and tolerance:</span><span class="gs-es" lang="es">El repositorio incluye una batería automática de validación. Ejecuta <!--fact:physicsChecks-->352<!--/fact--> comprobaciones deterministas e imprime una tabla con el valor medido, el valor esperado, el error y la tolerancia:</span>
       </p>
       <p class="doc-eq-block">npm run validate:physics</p>
       <p>
@@ -3082,7 +3095,7 @@ try {
               <td>Left unvalidated against general relativity by decision (DECISION_REGISTER.md, D-R10-13): the model is a constant fractional velocity decay, not the power-law inspiral of the quadrupole formula. The suite checks that the code does what the model page says it does, and measures how far that is from the equation it does not use, so the departure is a number; it does not check the physics of an inspiral, which is not claimed. <small>(PHYSICS_VALIDATION.md, What is not validated)</small></td>
               <td>Velocity damping matches the stated constant fractional decay: passes<br />Separation decays exponentially at -2 * decay rate: passes<br />Decay is exponential in time, not the GR power law: passes<br />GR would give a late/early rate ratio of 3.4 over this window: passes</td>
             </tr>
-            <tr><td colspan="4">Checks failing in the report with no row above: none (348 checks, 348 pass).</td></tr>
+            <tr><td colspan="4">Checks failing in the report with no row above: none (352 checks, 352 pass).</td></tr>
           <!--/fact-block-->
           </tbody>
         </table>
@@ -3614,9 +3627,9 @@ try {
         <span class="gs-en">Each guided investigation relies on a different part of the model. This
         table is generated from the same <code>modelNotes</code> field that the
         instructor guide prints, so it covers every one of the
-        <!--fact:investigations-->103<!--/fact-->
+        <!--fact:investigations-->104<!--/fact-->
         investigations and cannot fall behind them. It listed six of the twelve when it
-        was maintained by hand.</span><span class="gs-es" lang="es">Cada investigación guiada se apoya en una parte distinta del modelo. Esta tabla se genera a partir del mismo campo <code>modelNotes</code> que imprime la guía docente, de modo que cubre cada una de las <!--fact:investigations-->103<!--/fact--> investigaciones y no puede quedar rezagada respecto a ellas. Cuando se mantenía a mano, enumeraba seis de las doce.</span>
+        was maintained by hand.</span><span class="gs-es" lang="es">Cada investigación guiada se apoya en una parte distinta del modelo. Esta tabla se genera a partir del mismo campo <code>modelNotes</code> que imprime la guía docente, de modo que cubre cada una de las <!--fact:investigations-->104<!--/fact--> investigaciones y no puede quedar rezagada respecto a ellas. Cuando se mantenía a mano, enumeraba seis de las doce.</span>
       </p>
       <div class="doc-table-wrap">
         <table class="doc-table">
@@ -3995,6 +4008,10 @@ try {
             <tr>
               <td>Two Stars Eclipsing</td>
               <td>js/inference/binaries.js (the detached two-sphere light curve, the contacts, the identifiability rule), js/inference/binaryModel.js (the fitted model), js/eclipseField.js, js/eclipseWidgets.js, BINARIES.md.</td>
+            </tr>
+            <tr>
+              <td>Two Clusters, Two Ages</td>
+              <td>js/kernels/clusters/ (the isochrone morph, the forward model, the binned deviance, the profile intervals), js/clusterFitField.js, js/clusterFitWidgets.js, CLUSTER_FITTING.md.</td>
             </tr>
             <tr>
               <td>Weighing the Stars, for Real</td>
