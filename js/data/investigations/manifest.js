@@ -1243,6 +1243,19 @@ export const MANIFEST = [
     objectiveCount: 4,
   },
   {
+    id: 'the-metallicity-term',
+    title: 'The Metallicity Term',
+    subtitle:
+      'Add the metal content of a galaxy to the Cepheid period-luminosity relation, see what it does to a distance and to its error, and see where the cited term stops being tested',
+    duration: '14-30 min',
+    level: 'Upper-level astronomy',
+    thumbnail: 'images/investigations/the-metallicity-term.webp',
+    depths: 3,
+    stepCount: 7,
+    gradedCount: 5,
+    objectiveCount: 4,
+  },
+  {
     id: 'deep-or-wide',
     title: 'Deep or Wide?',
     subtitle:

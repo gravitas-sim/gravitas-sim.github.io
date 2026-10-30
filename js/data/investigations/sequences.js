@@ -273,6 +273,7 @@ export const SEQUENCES = [
       ['which-kind-of-variable', 'core', ['the-beat-of-a-star']],
       ['leavitts-law', 'core', ['the-beat-of-a-star']],
       ['the-first-rung', 'core', ['leavitts-law']],
+      ['the-metallicity-term', 'core', ['leavitts-law', 'the-first-rung']],
       ['the-expanding-universe', 'core'],
       ['standard-candles', 'core', ['the-expanding-universe']],
       ['the-shape-of-expansion', 'quantitative', ['standard-candles']],

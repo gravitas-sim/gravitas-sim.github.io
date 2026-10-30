@@ -404,6 +404,10 @@ export const BROWSE_META = {
     tags: ['compact-objects', 'stars'],
     numericCount: 0,
   },
+  'the-metallicity-term': {
+    tags: ['distance', 'observing', 'stars'],
+    numericCount: 1,
+  },
   'deep-or-wide': {
     tags: ['observing'],
     numericCount: 0,

@@ -187,6 +187,7 @@ export const GUIDED = Object.freeze([
   'the-first-rung',
   'the-gaps-in-the-belt',
   'the-limit',
+  'the-metallicity-term',
   'the-rotating-disk',
   'the-saturated-star',
   'the-scale-of-the-solar-system',
