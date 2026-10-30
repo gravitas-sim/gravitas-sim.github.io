@@ -184,7 +184,7 @@ test.describe('the Exoplanet Observatory guides', () => {
     page,
   }) => {
     await openGuide(page, 'guide=exo-fit&path=advanced');
-    await expect(title(page)).toContainText('Step 1 of 9');
+    await expect(title(page)).toContainText('Step 1 of 14');
     const axe = async () =>
       (
         await new AxeBuilder({ page })
@@ -195,7 +195,7 @@ test.describe('the Exoplanet Observatory guides', () => {
     expect(await axe()).toEqual([]);
     await page.locator('[data-gs-lang]').selectOption('es');
     await expect(title(page)).toHaveText(
-      'Paso 1 de 9: Un modelo de un tránsito'
+      'Paso 1 de 14: Un modelo de un tránsito'
     );
     await expect(page.locator('#obsGuidePanel > summary')).toHaveText(
       /Investigaciones guiadas/

@@ -40,6 +40,9 @@ const { ES_EXOPLANET } = await import('../js/i18n/es.exoplanet.js');
 const EN_GUIDES = { ...EN_RUNNER, ...EN_EXOPLANET };
 const ES_GUIDES = { ...ES_RUNNER, ...ES_EXOPLANET };
 const { HD209458 } = await import('../js/data/exoplanetSystems.js');
+const { transitFlux, eccentricityFactor } =
+  await import('../js/inference/transit.js');
+const { kippingToQuadratic } = await import('../js/limbDarkening.js');
 const R = await import('../tools/exoplanet-reference.mjs');
 // A check against the exoplanet suite's targets.
 const evaluate = (check, w) => C.evaluateCheck(check, w, G.TARGETS);
@@ -56,6 +59,7 @@ const SHOWS = [
   'secondary',
   'count',
   'simulation',
+  'vshape',
 ];
 
 /** A seeded uniform stream (mulberry32), and normal deviates from it. */
@@ -110,6 +114,38 @@ function synthetic({
 }
 
 // --- The guides as data ------------------------------------------------------------
+
+/** The two grazing planets' light curves at the sampled times, from the kernel. */
+function vshape(over = {}) {
+  const V = G.VSHAPE;
+  const planets = { a: V.a, b: V.b, ...over };
+  const { u1, u2 } = kippingToQuadratic(V.q.q1, V.q.q2);
+  const t = Array.from(
+    { length: V.points },
+    (_, i) => (i - (V.points - 1) / 2) * V.exposure
+  );
+  const curve = p =>
+    transitFlux(
+      t,
+      { t0: 0, P: V.period, k: p.k, aRs: p.aRs, b: p.b, u1, u2 },
+      { exposure: V.exposure, supersample: 5, annuli: 32 }
+    );
+  const a = curve(planets.a);
+  const b = curve(planets.b);
+  let maxDiff = 0;
+  let chi2 = 0;
+  for (let i = 0; i < t.length; i++) {
+    maxDiff = Math.max(maxDiff, Math.abs(a[i] - b[i]));
+    chi2 += ((a[i] - b[i]) / (V.sigmaPpm * 1e-6)) ** 2;
+  }
+  return {
+    depthA: 1 - Math.min(...a),
+    depthB: 1 - Math.min(...b),
+    maxDiffPpm: maxDiff * 1e6,
+    chi2One: chi2,
+    chi2All: chi2 * V.transits,
+  };
+}
 
 describe('the guides as data', () => {
   test('five guides, each id unique, each step id unique within its guide', () => {
@@ -166,6 +202,72 @@ describe('the guides as data', () => {
       expect(advanced.length).toBeGreaterThan(intro.length);
       expect(intro.length).toBeGreaterThanOrEqual(6);
     }
+  });
+
+  test('Fit the transit gained an upper depth in Prompt 225 and no lower step changed (tests/fixtures/transit-delta/exo-fit-steps-v3.json)', () => {
+    const gold = JSON.parse(
+      readFileSync(
+        path.join(REPO, 'tests/fixtures/transit-delta/exo-fit-steps-v3.json'),
+        'utf8'
+      )
+    );
+    const g = G.GUIDES.find(x => x.id === 'exo-fit');
+    // Every step it had is as it was, in the same order.
+    const kept = g.steps.filter(s => gold.steps.some(o => o.id === s.id));
+    expect(kept).toEqual(gold.steps);
+    // The introductory path is exactly what it was, and so are its minutes.
+    expect(G.stepsOn(g, 'intro')).toEqual(
+      gold.steps.filter(s => s.path === 'both')
+    );
+    expect(g.minutes.intro).toBe(gold.minutes.intro);
+    // What was added is advanced only, and the answers and choices the old
+    // steps use are all still there.
+    const added = g.steps.filter(s => !gold.steps.some(o => o.id === s.id));
+    expect(added.length).toBeGreaterThanOrEqual(5);
+    for (const s of added) expect(s.path).toBe('advanced');
+    for (const name of gold.answers) expect(G.ANSWERS).toHaveProperty(name);
+    for (const name of gold.correct) expect(G.CORRECT).toHaveProperty(name);
+  });
+
+  test('the two grazing planets of the V-shape step cannot be told apart, and the constants are the closest curve a search finds', () => {
+    const v = vshape();
+    expect(v.chi2All).toBeLessThan(G.VSHAPE.chi2Limit);
+    // The numbers the guide keeps (it does not import the kernel) are the kernel's.
+    for (const [name, value] of Object.entries(G.VSHAPE_RESULT))
+      expect(v[name]).toBeCloseTo(value, 12);
+    // And the density factor it writes out is the kernel's.
+    for (const [e, omega] of [
+      [0.2, 90],
+      [0.5, 20],
+      [0.1, 200],
+    ])
+      expect(G.eccentricFactor({ e, omega })).toBeCloseTo(
+        eccentricityFactor(e, omega),
+        12
+      );
+    // Both are grazing (b + k above 1), the second 40 percent larger.
+    for (const p of [G.VSHAPE.a, G.VSHAPE.b])
+      expect(p.b + p.k).toBeGreaterThan(1);
+    expect(G.VSHAPE.b.k / G.VSHAPE.a.k).toBeCloseTo(1.4, 10);
+    // A search around the second planet's b and a/R* finds nothing closer to
+    // the first's curve (coarse: the step's constants are rounded).
+    const best = (() => {
+      let min = Infinity;
+      for (let db = -0.02; db <= 0.0201; db += 0.01)
+        for (let da = -0.3; da <= 0.301; da += 0.15) {
+          const w = vshape({
+            b: {
+              ...G.VSHAPE.b,
+              b: G.VSHAPE.b.b + db,
+              aRs: G.VSHAPE.b.aRs + da,
+            },
+          });
+          min = Math.min(min, w.maxDiffPpm);
+        }
+      return min;
+    })();
+    expect(best).toBeGreaterThan(v.maxDiffPpm * 0.5);
+    expect(v.maxDiffPpm).toBeLessThan(40);
   });
 
   test('every word a step shows exists in English and in Spanish', () => {

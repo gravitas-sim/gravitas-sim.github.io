@@ -15,6 +15,8 @@ the release rather than in the tag.
 
 ### Added
 
+- **The transit model delta (Prompt 225).** A four-coefficient limb-darkening law (Claret 2000, coefficients fixed from a table or typed by the reader, never fitted) as a second transit model beside the quadratic one, which is unchanged to the bit; the star's mean density from P and a/R* with the circular-orbit assumption stated and the eccentric correction (Kipping 2010) as a labelled row; a constraint check that says "not constrained" for a grazing transit; an in-transit residual test; the covariance ellipse of k against b and against q1 through the plot component, with its table; the full parameter set behind a disclosure in the fit panel (English and Spanish), the result as the 150 record; an upper depth of Fit the transit with the lower depths graded identically. Validation against batman and scipy with committed bounds: 18 of 31 legs pass, 11 stay failing and labelled, 2 are not run for want of data (`TRANSIT_DELTA.md`). Fixed on the way: in Spanish the fit panel prefilled "0.005", which the Spanish reader parses as five.
+
 - **Remnants (Prompt 222).** `js/kernels/remnants/`: a white-dwarf cooling age from a Mestel-type law calibrated on
   one published model sequence, valid for 0.5 to 1.0 solar masses and a stated luminosity range, refused outside it,
   with an interval that keeps the measurement term apart from the law's own error; the initial-final mass relations
