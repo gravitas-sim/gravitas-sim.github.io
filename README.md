@@ -28,7 +28,7 @@ the week they are teaching.
 
 **<!--fact:libraryInvestigations-->123<!--/fact--> guided
 investigations**: <!--fact:investigations-->106<!--/fact--> that run in the
-simulation, <!--fact:investigationSteps-->1400<!--/fact--> steps between them
+simulation, <!--fact:investigationSteps-->1402<!--/fact--> steps between them
 (the table below), and <!--fact:guidedInvestigations-->17<!--/fact--> in the
 Observatory, the 3-D lab and the mission lab (the Library lists all of them):
 
@@ -341,7 +341,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->18045<!--/fact--> tests across <!--fact:jestSuites-->511<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->18032<!--/fact--> tests across <!--fact:jestSuites-->511<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
