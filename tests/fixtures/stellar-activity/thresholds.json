@@ -16,7 +16,20 @@
   "contract": {
     "spotModel": "a spot is (lat deg, lon0 deg, radius deg, contrast c) with c the spot's intensity over the photosphere's at the same mu (0 black, 1 invisible); the star has quadratic limb darkening I(mu) = 1 - u1 (1 - mu) - u2 (1 - mu)^2, mu the cosine of the angle to the line of sight, and a rotation axis at inclination inc deg to the line of sight; the observer's direction in the star's frame is (sin inc, 0, cos inc), the spin axis is z, a spot at latitude lat and longitude lam is at (cos lat cos lam, cos lat sin lam, sin lat) with lam = lon0 + 360 (t - t0) / P_lat, and cos gamma = sin inc cos lat cos lam + cos inc sin lat; the normalised flux is 1 - sum_j (1 - c_j) D(gamma_j, rho_j) / [pi (1 - u1/3 - u2/6)] where D is the integral of I(mu) mu over the visible part of the spot's disc; differential rotation is P_lat = P_eq / (1 - k sin^2 lat)",
     "flareTemplate": "Davenport et al. (2014), Eqs. 1 and 4, with t in units of t_1/2 (the full width at half maximum of the flare): rise (-1 <= t <= 0) F = 1 + 1.941 t - 0.175 t^2 - 2.246 t^3 - 1.125 t^4; decay (t > 0) F = 0.6890 exp(-1.600 t) + 0.3030 exp(-0.2783 t); the flux excess is amp times F, amp in units of the quiescent flux; the analytic integral over t is 0.307667 + 1.519379 = 1.827046 in units of amp t_1/2, so ED = 1.827046 amp t_1/2",
-    "flareRule": "the form of Chang et al. (2015): a point is a candidate when (f - q) / sigma >= N1 and (f - q - err) / sigma >= N2 and at least N3 consecutive points qualify; the values N1 = 3, N2 = 2, N3 = 3 are this contract's choice (the default values of the AltaiPony implementation as the author recalls them, not a citation), sigma is the robust scatter (1.4826 times the median absolute deviation) of the detrended residuals, q the quiescent model (a harmonic series at the rotation period fitted with upward clipping, then a running median of 0.25 d, three clipped passes), the flare runs from the first qualifying point back while the excess stays above 1 sigma, to the first point after the peak where it falls below 1 sigma; the equivalent duration is the trapezoidal integral of (f - q) / q over that window"
+    "flareRule": "the form of Chang et al. (2015): a point is a candidate when (f - q) / sigma >= N1 and (f - q - err) / sigma >= N2 and at least N3 consecutive points qualify; the values N1 = 3, N2 = 2, N3 = 3 are this contract's choice (the default values of the AltaiPony implementation as the author recalls them, not a citation), sigma is the robust scatter (1.4826 times the median absolute deviation) of the detrended residuals, q the quiescent model (a harmonic series at the rotation period fitted with upward clipping, then a running median of 0.25 d, three clipped passes), the flare runs from the first qualifying point back while the excess stays above 1 sigma, to the first point after the peak where it falls below 1 sigma; the equivalent duration is the trapezoidal integral of (f - q) / q over that window",
+    "flareRuleDetail": {
+      "quiescent": "three passes; each pass fits a K = 3 harmonic series at the given rotation period by least squares to the unmasked points (no harmonic term when no period is given), takes the residual r = f - h, takes at each point the median of r over the unmasked points whose times lie within +-0.125 d (window 0.25 d) of it, sets q = h + that median, the resid = f - q, sigma = 1.4826 times the median absolute deviation of resid over the unmasked points, and masks every point whose resid exceeds 2.5 sigma together with the 2 points on either side; the quiescent model is the last pass",
+      "candidates": "point i is a candidate when resid_i / sigma >= 3 and (resid_i - err_i) / sigma >= 2, err_i the point error; a run is at least 3 candidates that are consecutive in index with each gap under 1.5 times the median cadence",
+      "window": "the window starts at the run start and extends backward while the preceding point has resid >= 1 sigma, and extends forward from the run end while the next point has resid >= 1 sigma; windows that overlap or touch (gap under 1.5 cadences) are merged; the peak is the largest resid in the window",
+      "ed": "ED = sum over adjacent window points of 0.5 (g_i + g_{i+1}) (t_{i+1} - t_i) with g = (f - q) / q, over the points of the window, in days times 86400 for seconds; sigma_ED^2 = sum_i (w_i err_i / q_i)^2 + (T_win 1.2533 sigma / (q sqrt(N_w)))^2 with w_i the trapezoid weight in the same unit, T_win the window length and N_w the number of points in the median window (kernel only: the oracle compares times and EDs)",
+      "matching": "two flares match when their peak times differ by at most 3 cadences"
+    },
+    "authenticPreparation": {
+      "file": "SPOC light-curve FITS, LIGHTCURVE extension: TIME, PDCSAP_FLUX, PDCSAP_FLUX_ERR, QUALITY; kept where QUALITY == 0 and time, flux and error are finite; flux and error divided by the median flux of the kept cadences",
+      "flares": "the 2-minute kept cadences, no binning, flare rule as above with the rotation period of the same star from the rotation search",
+      "rotation": "bins of 30 minutes counted from the first kept time (bin k holds the cadences with floor((t - t_first) / 30 min) = k; a bin with fewer than 8 cadences is dropped; the bin time and flux are the means), search range 0.5 to 13 d (AU Mic) and 0.5 to 13 d (EK Dra), 8 times oversampled, the periodogram of js/kernels/variables/period.js",
+      "pack": "the repository packs carry flux in steps of 100 ppm (binned-relative-flux/2) and the error in steps of errStepPpm, so the kernel reads quantised values; the oracle reads the FITS at full precision and the two are compared with the tolerances above"
+    }
   },
   "checks": [
     {
@@ -125,7 +138,7 @@
     {
       "id": "B4.periodOracle",
       "leg": "b",
-      "what": "the rotation period of the same spotted curves against the oracle's Lomb-Scargle peak refined on a 5000-point grid: the rotation_period primary candidate (or the first candidate when the verdict is a pair) in relative difference",
+      "what": "the rotation period of the same spotted curves against the oracle's Lomb-Scargle peak refined on a 5000-point grid: the rotation_period primary candidate (or the first candidate when the verdict is a pair) in relative difference; also the two authentic curves of E1 and E3 (the oracle reads the FITS, the kernel the pack), same bound",
       "limits": {
         "maxRelative": 0.002
       }
@@ -291,5 +304,12 @@
     "flareCurve": {
       "note": "2-minute cadence, 3000 points from t = 0, baseline 1 + 0.02 sin(2 pi t / 1.7 d), Gaussian noise sigma 1e-3 (numpy default_rng(220)), twenty flares with t_peak = (4 + 4.5 k) hours after the start for k = 0..19 plus 0.37 h times (k mod 3), amp = 0.006 + 0.004 (k mod 5), t_1/2 = (8 + 3 (k mod 4)) minutes, the template of the contract, exposure-integrated over 5 sub-samples"
     }
-  }
+  },
+  "amendments": [
+    {
+      "id": "AM1",
+      "when": "before the oracle was run and before any kernel existed; no bound moved",
+      "what": "The flare rule and the authentic preparation are written out so that the oracle and the kernel implement the same rule independently."
+    }
+  ]
 }
