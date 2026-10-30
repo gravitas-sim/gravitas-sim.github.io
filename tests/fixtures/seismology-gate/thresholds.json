@@ -85,7 +85,7 @@
     "seedBase": 221000
   },
   "legs": [
-    { "id": "A1.sine", "what": "an FFT spectrum of a bin-centred noise-free sine (A = 100 ppm, N = 4096) peaks at N dt A^2/2 (x1e-6); a periodogram of the same sine with 10 per cent seeded gaps at an off-grid frequency peaks at N_valid dt A^2/2", "limit": { "maxRelativeFFT": 1e-9, "maxRelativeGapped": 1e-6 } },
+    { "id": "A1.sine", "what": "an FFT spectrum of a bin-centred noise-free sine (A = 100 ppm, N = 4096) peaks at N dt A^2/2 (x1e-6); a periodogram of the same sine with 10 per cent seeded gaps at an off-grid frequency peaks at N_valid dt A^2/2", "limit": { "maxRelativeFFT": 1e-9, "maxRelativeGapped": 1e-2 } },
     { "id": "A2.parseval", "what": "Parseval on the FFT spectrum of seeded white and coloured series, 30 seeds: the integral of the spectrum equals the variance", "limit": { "maxRelative": 1e-10 } },
     { "id": "A3.whiteLevel", "what": "the mean FFT power density of 20 seeded white series (N = 8000) over 5 to 270 uHz equals 2 sigma^2 dt", "limit": { "maxRelative": 0.01 } },
     { "id": "A4.gapsAgree", "what": "FFT (zero-filled, duty-corrected) and the periodogram on the same gapped white series (20 seeds, 10 per cent gaps in 12-cadence runs): the mean power density over 5 to 270 uHz agrees", "limit": { "maxRelative": 0.02 } },
@@ -129,6 +129,12 @@
       "when": "2026-10-30, on this branch, before the spike's first line was written and before any spectrum was computed",
       "what": "the coverage legs F2 and D3 score the formal interval (the perturbation standard deviation, no systematic floors) and their upper bound moves from 0.85 to 0.90; G2 and G3, whose stated interval includes the systematic floors and the relation scatter, have their upper bound moved from 0.85 to 0.95; no lower bound and no other leg moves",
       "why": "the 200 perturbations multiply an already scattered spectrum by a second chi-squared(2)/2 draw, which doubles the variance of the logarithm of every bin, so a correct implementation has a formal interval about 1.4 sigma wide and a coverage near 0.84 at the nominal 0.68, and the floors (0.5 per cent in Delta nu, a quantity the self-consistent ensemble measures to better than that) widen it further; an upper bound of 0.85 would fail a correct implementation by construction. The upper bounds guard only against intervals so wide that coverage is meaningless; the lower bounds (0.60) are the test against over-confidence and are unchanged."
+    },
+    {
+      "id": "AM2",
+      "when": "2026-10-30, on this branch, before any spectrum was computed (the oracle's reference fixtures for the sine legs had been generated, no kernel output compared)",
+      "what": "A1.sine: the bound of the gapped sine moves from 1e-6 to 1e-2 against the analytic N_valid dt A^2/2; the exact comparison of the gap periodogram with an independent least-squares fit stays in B2 and B3 at 1e-6",
+      "why": "the committed definition subtracts the mean of the valid points before the sinusoid fit; for a pure sine on a gapped grid that mean is not zero, so the fitted amplitude differs from A by a relative amount of order 1e-3 (the constant's projection on the cosine and sine columns), and the analytic peak can not be reached to 1e-6 by the definition itself. The leg's purpose is the units and the N_valid dt normalisation, which 1e-2 tests; no other leg moves."
     }
   ]
 }
