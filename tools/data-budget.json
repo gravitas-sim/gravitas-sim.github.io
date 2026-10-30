@@ -19,14 +19,14 @@
     {
       "key": "precacheFirstVisitGzipBytes",
       "label": "First-visit precache tier (sw-manifest CORE and OPTIONAL: what the install fetches), gzip level 6",
-      "ceiling": 5313600,
+      "ceiling": 5319800,
       "unit": "bytes",
       "measuredBy": "tools/data-budget.mjs"
     },
     {
       "key": "precacheIdleGzipBytes",
       "label": "Idle precache tier (sw-manifest IDLE: fetched after activation, on idle), gzip level 6",
-      "ceiling": 1568200,
+      "ceiling": 1568800,
       "unit": "bytes",
       "measuredBy": "tools/data-budget.mjs"
     },

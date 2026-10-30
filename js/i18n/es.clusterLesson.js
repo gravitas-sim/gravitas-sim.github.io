@@ -1,5 +1,5 @@
 // Las palabras del panel de ajuste de cúmulos, en español (Prompt 219).
-export const ES_CLUSTER_LESSON = {
+export const ES_CLUSTERLESSON = {
   'clW.title': 'Ajusta un cúmulo sintético',
   'clW.note':
     'Dos cúmulos sintéticos, generados con isocronas MIST de una edad conocida a una misma distancia, cada uno con un 15 por ciento de sus estrellas del campo. El panel ajusta una edad y un módulo de distancia al cúmulo elegido con la metalicidad que fijes, con el enrojecimiento en 0,042; la metalicidad nunca se ajusta. Todos los cúmulos de aquí son sintéticos: los hizo un modelo, y la verdad está a un interruptor.',

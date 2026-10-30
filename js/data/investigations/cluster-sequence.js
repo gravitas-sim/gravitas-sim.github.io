@@ -37,7 +37,7 @@ const CL = (values = {}) => ({
 
 export const TWO_CLUSTERS_TWO_AGES = {
   id: 'two-clusters-two-ages',
-  thumbnail: 'images/investigations/cluster-membership.webp',
+  thumbnail: 'images/investigations/two-clusters-two-ages.webp',
   title: 'Two Clusters, Two Ages',
   subtitle:
     'Fit an age and a distance to two star clusters, see how far each moves when you change the metallicity you assume, and learn why the difference of two ages is steadier than either',
@@ -668,7 +668,7 @@ export const TWO_CLUSTERS_TWO_AGES_DEEPER_ES = {
 const CONTENT = {
   'two-clusters-two-ages': {
     topic:
-      'What a fit of isochrones to a cluster’s color–magnitude diagram gives and what it assumes: the turnoff reads an age (the older cluster’s is fainter and redder); an age and a distance modulus come with one-sigma intervals that hold the truth about two times in three when every assumption is true; the intervals are conditional on the metallicity (never fitted here), the reddening and single stars; a change of 0.25 dex of metallicity moves the age by ten to twenty-four interval widths, while which of two clusters is older, and roughly by how much, is steadier; binaries that the model lacks bias the distance without widening the interval; and the real cluster NGC 2420 falls outside the published range at the stated metallicity, a labelled limit.',
+      'What a fit of isochrones to a cluster’s color–magnitude diagram gives and what it assumes: the turnoff reads an age (the older cluster’s is fainter and redder); an age and a distance modulus come with one-sigma intervals that hold the truth about two times in three when every assumption is true; the intervals are conditional on the metallicity (never fitted here), the reddening and single stars; a change of 0.25 dex of metallicity moves the age by ten to twenty-four interval widths, while which of two clusters is older, and roughly by how much, is steadier; binaries that the model lacks bias the distance without widening the interval; and the real cluster NGC 2420 falls outside the published range at the stated metallicity, a labeled limit.',
     difficulty:
       'Majors (read an age and a distance from a fit and say what it assumes); the deeper steps add the metallicity shift, the steadier difference and the binary limit',
     placement:
@@ -701,7 +701,7 @@ const CONTENT = {
       },
       {
         name: 'Depth',
-        text: 'Quantitative: change the metallicity, compare a shift with an interval, find the difference steadier. Advanced: binaries that the model lacks, NGC 2420 as a labelled limit, what an age is.',
+        text: 'Quantitative: change the metallicity, compare a shift with an interval, find the difference steadier. Advanced: binaries that the model lacks, NGC 2420 as a labeled limit, what an age is.',
       },
       {
         name: 'Synthetic data, stated',
@@ -727,13 +727,13 @@ const CONTENT = {
       {
         claim: 'The panel agrees with the published age of NGC 2420.',
         response:
-          'At the stated metallicity it does not (2.34 Gyr against 1.7 to 2.2). The lesson says so; it is the metallicity assumption showing, not a measurement.',
+          'At the stated metallicity it does not (2.34 Gyr against 1.7 to 2.2). The investigation says so; it is the metallicity assumption showing, not a measurement.',
       },
     ],
     teachingNotes: [
       'The clusters are drawn from MIST v1.2 isochrones: A at log age 9.30 (2.00 Gyr), B at 9.50 (3.16 Gyr), both at distance modulus 12.10, [Fe/H] −0.25, E(g − r) 0.042, 260 stars each with 15 percent from the field; the fit returns 2.02 and 3.16 Gyr.',
-      'The method was validated before the lesson: coverage 0.67 and 0.60, recovery within three half-widths over the square root of the ensemble size, and agreement with an independent numpy implementation and emcee (CLUSTER_FITTING.md). Two legs failed and stay failing: NGC 2420 at the stated metallicity and the edge of the grid. The lesson shows only the first, as a limit.',
-      'Fitting the metallicity as well was tested in a separate gate (CLUSTER_FOUR_PARAMETER_GATE.md) and the intervals did not cover the truth; the lesson says so and does not offer it.',
+      'The method was validated before the investigation: coverage 0.67 and 0.60, recovery within three half-widths over the square root of the ensemble size, and agreement with an independent numpy implementation and emcee (CLUSTER_FITTING.md). Two legs failed and stay failing: NGC 2420 at the stated metallicity and the edge of the grid. The investigation shows only the first, as a limit.',
+      'Fitting the metallicity as well was tested in a separate gate (CLUSTER_FOUR_PARAMETER_GATE.md) and the intervals did not cover the truth; the investigation says so and does not offer it.',
       'The one-sigma interval of A just misses the drawn age (2.00 against a lower end of 2.00): that is the third of one-sigma intervals that miss, and a useful moment to discuss what one sigma means.',
     ],
     discussion: [
@@ -759,8 +759,13 @@ const FLOW = {
     },
     {
       from: 'fit-a',
+      to: 'fit-b',
+      text: 'The two fits at one metallicity: 2.02 and 3.16 Gyr at one distance.',
+    },
+    {
+      from: 'how-much-older',
       to: 'how-much-older',
-      text: 'The two fits at one metallicity: 2.02 and 3.16 Gyr at one distance, and their difference.',
+      text: 'The subtraction of the two ages, 1.14 Gyr, and what it will be tested against in the deeper steps.',
     },
     {
       from: 'what-the-interval-says',
@@ -781,7 +786,7 @@ const EXPECTATIONS = {
 
 const BANDS = {
   'two-clusters-two-ages': {
-    core: 'short',
+    core: 'medium',
     quantitative: 'long',
     advanced: 'long',
   },

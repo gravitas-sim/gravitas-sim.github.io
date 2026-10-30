@@ -11,14 +11,14 @@
 
 import './instrumentStartup.js';
 import { t, registerMessages } from './i18n/index.js';
-import { EN_CLUSTER_LESSON } from './i18n/en.clusterLesson.js';
-import { ES_CLUSTER_LESSON } from './i18n/es.clusterLesson.js';
+import { EN_CLUSTERLESSON } from './i18n/en.clusterLesson.js';
+import { ES_CLUSTERLESSON } from './i18n/es.clusterLesson.js';
 import { fixed } from './format.js';
 import { createChart } from './plot/mount.js';
 import { clusterView, gyr } from './clusterFitField.js';
 
-registerMessages('en', EN_CLUSTER_LESSON);
-registerMessages('es', ES_CLUSTER_LESSON);
+registerMessages('en', EN_CLUSTERLESSON);
+registerMessages('es', ES_CLUSTERLESSON);
 
 const hosts = new WeakMap();
 /** The plot component's host, mounted beside the tool canvas (which it hides). */

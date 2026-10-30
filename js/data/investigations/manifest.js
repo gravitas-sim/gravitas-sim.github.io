@@ -1171,7 +1171,7 @@ export const MANIFEST = [
       'Fit an age and a distance to two star clusters, see how far each moves when you change the metallicity you assume, and learn why the difference of two ages is steadier than either',
     duration: '15-35 min',
     level: 'Introductory astronomy',
-    thumbnail: 'images/investigations/cluster-membership.webp',
+    thumbnail: 'images/investigations/two-clusters-two-ages.webp',
     depths: 3,
     stepCount: 7,
     gradedCount: 5,

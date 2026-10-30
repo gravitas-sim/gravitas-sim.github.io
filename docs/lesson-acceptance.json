@@ -26,11 +26,7 @@
       "quantity": "the dates and elongations of one retrograde loop",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "before-you-look",
-        "catch-the-reversal",
-        "say-it-in-your-own"
-      ],
+      "loop": ["before-you-look", "catch-the-reversal", "say-it-in-your-own"],
       "evidenceFrom": "engine"
     },
     "transit-photometry": {
@@ -272,11 +268,7 @@
       "quantity": "whether each of three sources emits, and the ring's change in length",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "a-sphere-that-breathes",
-        "change-the-shape",
-        "the-chirp"
-      ],
+      "loop": ["a-sphere-that-breathes", "change-the-shape", "the-chirp"],
       "evidenceFrom": "model"
     },
     "listening-to-spacetime": {
@@ -315,11 +307,7 @@
       "quantity": "radius and luminosity at a stated model age",
       "evidence": "instrument-capture",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "predict-direction",
-        "measure-the-giant",
-        "why-iron-stops-it"
-      ],
+      "loop": ["predict-direction", "measure-the-giant", "why-iron-stops-it"],
       "evidenceFrom": "data"
     },
     "twelve-nights": {
@@ -358,10 +346,7 @@
       "quantity": "the peak wavelength at three temperatures, and its product with the temperature",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "predict-the-peak",
-        "three-peaks"
-      ],
+      "loop": ["predict-the-peak", "three-peaks"],
       "evidenceFrom": "model"
     },
     "the-turning-sky": {
@@ -371,10 +356,7 @@
       "quantity": "the time a star rises on night 0 and night 30, and the sidereal time at midnight",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "predict-tomorrow",
-        "rise-shift"
-      ],
+      "loop": ["predict-tomorrow", "rise-shift"],
       "evidenceFrom": "model"
     },
     "the-sun-through-the-year": {
@@ -384,10 +366,7 @@
       "quantity": "the Sun’s altitude at noon at the equinox and the two solstices",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "predict-noon-height",
-        "three-noons"
-      ],
+      "loop": ["predict-noon-height", "three-noons"],
       "evidenceFrom": "model"
     },
     "phases-and-eclipses": {
@@ -397,10 +376,7 @@
       "quantity": "the lit fraction of the Moon at four ages",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "predict-the-quarter",
-        "four-phases"
-      ],
+      "loop": ["predict-the-quarter", "four-phases"],
       "evidenceFrom": "model"
     },
     "wanderers-on-the-sky": {
@@ -410,10 +386,7 @@
       "quantity": "the first days of retrograde and of direct motion for Mars",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "predict-the-loop",
-        "retrograde-window"
-      ],
+      "loop": ["predict-the-loop", "retrograde-window"],
       "evidenceFrom": "model"
     },
     "plan-a-night": {
@@ -423,10 +396,7 @@
       "quantity": "the hours of astronomical dark on two nights",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "predict-the-dark",
-        "dark-hours"
-      ],
+      "loop": ["predict-the-dark", "dark-hours"],
       "evidenceFrom": "model"
     },
     "lines-and-motion": {
@@ -436,10 +406,7 @@
       "quantity": "the Doppler velocity of two synthetic stars from their H-alpha lines, one receding and one approaching",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "predict-the-shift",
-        "measure-one-shift"
-      ],
+      "loop": ["predict-the-shift", "measure-one-shift"],
       "evidenceFrom": "model"
     },
     "what-a-spectrum-is-made-of": {
@@ -449,10 +416,7 @@
       "quantity": "the brightness at the H-alpha center against the source's, with the same cloud cooler than the source (a dark line) and hotter (a bright line)",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "predict-the-cloud",
-        "measure-two-clouds"
-      ],
+      "loop": ["predict-the-cloud", "measure-two-clouds"],
       "evidenceFrom": "model"
     },
     "the-suns-motion": {
@@ -462,10 +426,7 @@
       "quantity": "the Sun's U, V and W against the mean of the stars within the distance limit, with their uncertainties",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "predict-the-mean",
-        "measure-the-sun"
-      ],
+      "loop": ["predict-the-mean", "measure-the-sun"],
       "evidenceFrom": "model"
     },
     "the-rotating-disk": {
@@ -475,10 +436,7 @@
       "quantity": "the Oort constants A and B from Gaia proper motions, with the stars weighted by distance and all alike",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "predict-the-shape",
-        "measure-a-and-b"
-      ],
+      "loop": ["predict-the-shape", "measure-a-and-b"],
       "evidenceFrom": "model"
     },
     "cluster-membership": {
@@ -488,10 +446,7 @@
       "quantity": "the number of stars above a membership-probability threshold, and the cluster's proper motion",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "predict-the-clump",
-        "measure-the-cluster"
-      ],
+      "loop": ["predict-the-clump", "measure-the-cluster"],
       "evidenceFrom": "model"
     },
     "who-gets-counted": {
@@ -501,10 +456,7 @@
       "quantity": "the number of stars a survey counts, and the share of the population, at a magnitude limit",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "predict-what-is-missed",
-        "count-a-shallow-survey"
-      ],
+      "loop": ["predict-what-is-missed", "count-a-shallow-survey"],
       "evidenceFrom": "model"
     },
     "why-the-bright-ones-win": {
@@ -514,10 +466,7 @@
       "quantity": "the Malmquist bias: how much brighter the counted stars are than the stars there are, in shells of distance",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "predict-the-shells",
-        "measure-the-shells"
-      ],
+      "loop": ["predict-the-shells", "measure-the-shells"],
       "evidenceFrom": "model"
     },
     "the-completeness-curve": {
@@ -527,10 +476,7 @@
       "quantity": "the share of the true luminosity function a raw count recovers, and the corrected value",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "predict-the-raw-count",
-        "raw-against-truth"
-      ],
+      "loop": ["predict-the-raw-count", "raw-against-truth"],
       "evidenceFrom": "model"
     },
     "bending-light": {
@@ -540,10 +486,7 @@
       "quantity": "the bending of a ray of light, in arcseconds, as the closest approach changes",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "predict-the-far-ray",
-        "the-far-ray"
-      ],
+      "loop": ["predict-the-far-ray", "the-far-ray"],
       "evidenceFrom": "model"
     },
     "einstein-rings-and-arcs": {
@@ -553,10 +496,7 @@
       "quantity": "the Einstein radius of a lens, in milliarcseconds, as the mass inside it changes",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "predict-the-ring",
-        "a-star-ring"
-      ],
+      "loop": ["predict-the-ring", "a-star-ring"],
       "evidenceFrom": "model"
     },
     "a-lens-passing-by": {
@@ -566,10 +506,7 @@
       "quantity": "the peak brightening of a star as a lens passes, as the closest approach changes",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "predict-the-peak",
-        "the-peak"
-      ],
+      "loop": ["predict-the-peak", "the-peak"],
       "evidenceFrom": "model"
     },
     "inside-a-star": {
@@ -579,10 +516,7 @@
       "quantity": "the mean density of a star, as its mass changes at a fixed radius",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "predict-the-center",
-        "the-suns-center"
-      ],
+      "loop": ["predict-the-center", "the-suns-center"],
       "evidenceFrom": "model"
     },
     "scaling-the-main-sequence": {
@@ -592,10 +526,7 @@
       "quantity": "the luminosity exponent a scaling argument predicts, as the opacity law changes",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "predict-the-slope",
-        "the-prediction"
-      ],
+      "loop": ["predict-the-slope", "the-prediction"],
       "evidenceFrom": "model"
     },
     "the-limit": {
@@ -605,10 +536,7 @@
       "quantity": "the radius of a white dwarf in kilometers, as its central density changes",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "predict-the-squeeze",
-        "a-dense-dwarf"
-      ],
+      "loop": ["predict-the-squeeze", "a-dense-dwarf"],
       "evidenceFrom": "model"
     },
     "the-beat-of-a-star": {
@@ -618,10 +546,7 @@
       "quantity": "the highest period-search peak of a variable star, whole run against seen once a night",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "predict-once-a-night",
-        "once-a-night"
-      ],
+      "loop": ["predict-once-a-night", "once-a-night"],
       "evidenceFrom": "model"
     },
     "leavitts-law": {
@@ -631,10 +556,7 @@
       "quantity": "the slope and zero point of the Cepheid relation, and the distance a galaxy’s Cepheids give",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "predict-the-trend",
-        "the-calibration"
-      ],
+      "loop": ["predict-the-trend", "the-calibration"],
       "evidenceFrom": "model"
     },
     "the-first-rung": {
@@ -644,10 +566,7 @@
       "quantity": "the distance modulus of a galaxy from sliding the Cepheid relation onto its Cepheids",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "predict-the-maser-check",
-        "a-maser-galaxy"
-      ],
+      "loop": ["predict-the-maser-check", "a-maser-galaxy"],
       "evidenceFrom": "model"
     },
     "which-kind-of-variable": {
@@ -657,10 +576,7 @@
       "quantity": "the share of variable stars classified correctly as the classifier is given more measurements",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "predict-the-amplitude",
-        "add-the-amplitude"
-      ],
+      "loop": ["predict-the-amplitude", "add-the-amplitude"],
       "evidenceFrom": "model"
     },
     "the-expanding-universe": {
@@ -670,10 +586,7 @@
       "quantity": "the slope through the origin of velocity against distance for the supernovae, out to z = 0.1 against out to z = 0.5",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "predict-further-out",
-        "a-modern-sample"
-      ],
+      "loop": ["predict-further-out", "a-modern-sample"],
       "evidenceFrom": "model"
     },
     "standard-candles": {
@@ -683,10 +596,7 @@
       "quantity": "the Hubble constant implied by an error in the supernovae’s absolute magnitude",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "predict-a-calibration-error",
-        "a-calibration-error"
-      ],
+      "loop": ["predict-a-calibration-error", "a-calibration-error"],
       "evidenceFrom": "model"
     },
     "the-shape-of-expansion": {
@@ -696,10 +606,7 @@
       "quantity": "the chi-square of the flat Lambda-CDM curve above the best fit, for a matter density you set",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "predict-matter-only",
-        "a-matter-only-universe"
-      ],
+      "loop": ["predict-matter-only", "a-matter-only-universe"],
       "evidenceFrom": "model"
     },
     "where-galaxies-live": {
@@ -709,10 +616,7 @@
       "quantity": "the variance over mean of the galaxy counts in cells, and the galaxies shown, for the range you set",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "predict-the-clumping",
-        "the-clumping"
-      ],
+      "loop": ["predict-the-clumping", "the-clumping"],
       "evidenceFrom": "model"
     },
     "what-a-ccd-records": {
@@ -722,10 +626,7 @@
       "quantity": "the net light of star B in electrons, raw and after dividing by the flat, for the frame shown",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "predict-the-flat",
-        "what-the-flat-does"
-      ],
+      "loop": ["predict-the-flat", "what-the-flat-does"],
       "evidenceFrom": "model"
     },
     "signal-noise-and-exposure": {
@@ -735,10 +636,7 @@
       "quantity": "the signal-to-noise of a V = 15 star for the exposure you set",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "predict-four-times",
-        "four-times-longer"
-      ],
+      "loop": ["predict-four-times", "four-times-longer"],
       "evidenceFrom": "model"
     },
     "a-variable-star-from-frames": {
@@ -748,10 +646,7 @@
       "quantity": "the scatter of the check star and the mean of the variable against the comparison, for the calibration applied",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "predict-the-curve",
-        "the-sine"
-      ],
+      "loop": ["predict-the-curve", "the-sine"],
       "evidenceFrom": "model"
     },
     "integrators-in-practice": {
@@ -815,10 +710,7 @@
       "quantity": "the standard error of the mean of the marks of one star, which falls as the number of marks grows",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "predict-more-marks",
-        "twenty-marks"
-      ],
+      "loop": ["predict-more-marks", "twenty-marks"],
       "evidenceFrom": "model"
     },
     "what-does-plus-minus-claim": {
@@ -828,10 +720,7 @@
       "quantity": "the share of seeded repeats whose stated interval holds the true value, at one and at two sigma",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "predict-one-sigma",
-        "coverage-at-one-sigma"
-      ],
+      "loop": ["predict-one-sigma", "coverage-at-one-sigma"],
       "evidenceFrom": "model"
     },
     "when-the-method-must-refuse": {
@@ -841,10 +730,7 @@
       "quantity": "the chi-square of the best fit at a trial mass, which is zero above the product and rises below it",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "predict-the-mass",
-        "try-a-mass"
-      ],
+      "loop": ["predict-the-mass", "try-a-mass"],
       "evidenceFrom": "model"
     },
     "measuring-the-moon": {
@@ -854,10 +740,7 @@
       "quantity": "the diameter in kilometers of a circle drawn on the Galileo picture of the Moon, from the scale a reference pair of known length sets",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "predict-the-plain",
-        "measure-the-plain"
-      ],
+      "loop": ["predict-the-plain", "measure-the-plain"],
       "evidenceFrom": "model"
     },
     "how-far-is-that-star": {
@@ -867,10 +750,7 @@
       "quantity": "the chi-square of a fit to fourteen positions of one star: enormous for a straight line that leaves the parallax out, near its degrees of freedom once the parallax is in",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "predict-a-straight-line",
-        "a-straight-line-fails"
-      ],
+      "loop": ["predict-a-straight-line", "a-straight-line-fails"],
       "evidenceFrom": "model"
     },
     "a-binary-stars-orbit": {
@@ -880,10 +760,7 @@
       "quantity": "the mass sum of a visual binary from its fitted orbit, which goes as the cube of the distance and so as the inverse cube of the parallax",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "predict-the-shape",
-        "the-mass-sum"
-      ],
+      "loop": ["predict-the-shape", "the-mass-sum"],
       "evidenceFrom": "model"
     },
     "weighing-jupiter": {
@@ -893,10 +770,7 @@
       "quantity": "the period a sinusoid fitted to one moon's measured distances from Jupiter gives when the frames are taken once a night, which for Io is the alias near 2.30 days and not its own 1.77",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "once-a-night",
-        "try-once-a-night"
-      ],
+      "loop": ["once-a-night", "try-once-a-night"],
       "evidenceFrom": "model"
     },
     "why-venus-is-hot": {
@@ -906,10 +780,7 @@
       "quantity": "the equilibrium temperature a planet's distance and Bond albedo give, beside the temperature measured at its surface: Venus 229 K against 737 K, cooler than Earth's 254 K",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "venus-predict",
-        "venus-sunlight-alone"
-      ],
+      "loop": ["venus-predict", "venus-sunlight-alone"],
       "evidenceFrom": "model"
     },
     "two-greenhouse-models": {
@@ -919,10 +790,7 @@
       "quantity": "the ground temperature a single absorbing layer gives Venus as its emissivity rises, which tops out at 2^(1/4) times its equilibrium temperature, 272 K, against a measured 737 K",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "venus-both",
-        "venus-both-try"
-      ],
+      "loop": ["venus-both", "venus-both-try"],
       "evidenceFrom": "model"
     },
     "how-hot-is-the-day-side": {
@@ -932,10 +800,7 @@
       "quantity": "the brightness temperature one band of a synthetic hot Jupiter gives, 2094 K for a planet with no absorbing band and 1780 K where one band absorbs, from an eclipse depth with the reflected light assumed none",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "planet-y-predict",
-        "planet-y"
-      ],
+      "loop": ["planet-y-predict", "planet-y"],
       "evidenceFrom": "model"
     },
     "phases-and-albedo": {
@@ -945,10 +810,7 @@
       "quantity": "how well a Lambert sphere describes a synthetic phase curve: a chi-square near 31 for 23 degrees of freedom for a Lambert planet and near 82 for a Lommel-Seeliger planet, for which no albedo is returned",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "planet-q-predict",
-        "planet-q"
-      ],
+      "loop": ["planet-q-predict", "planet-q"],
       "evidenceFrom": "model"
     },
     "which-surface-is-older": {
@@ -958,10 +820,7 @@
       "quantity": "the craters at least a chosen diameter across in a lunar highland and a lunar mare, per area, and the density ratio with its interval: 40 and 7 above 30 km, a ratio of 6.4 from 2.8 to 16.9",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "which-is-older-predict",
-        "count-the-moon"
-      ],
+      "loop": ["which-is-older-predict", "count-the-moon"],
       "evidenceFrom": "model"
     },
     "counts-to-magnitudes": {
@@ -971,10 +830,7 @@
       "quantity": "the extinction of the air the standards of a synthetic night give, in magnitudes per airmass: 0.213 at 5 mmag of noise per measurement and 0.211 at 1 mmag, the night made with 0.210",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "low-in-the-sky-predict",
-        "bouguer"
-      ],
+      "loop": ["low-in-the-sky-predict", "bouguer"],
       "evidenceFrom": "model"
     },
     "craters-by-size": {
@@ -984,10 +840,7 @@
       "quantity": "the number of craters in a power-law fit of the cumulative size-frequency plot, and its index with an interval, as the smallest diameter fitted rises: the Martian highland has 91 craters above 20 km and 31 above 40 km",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "narrower-predict",
-        "mars-slope"
-      ],
+      "loop": ["narrower-predict", "mars-slope"],
       "evidenceFrom": "model"
     },
     "what-a-crater-diameter-is-worth": {
@@ -997,10 +850,7 @@
       "quantity": "the uncertainty of a crater diameter from where its rim is, a fraction of the diameter that the reader sets, which dominates the quadrature sum with the scale, the circle's placement and the view: 5.0 percent of 5.3",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "largest-term-predict",
-        "the-budget"
-      ],
+      "loop": ["largest-term-predict", "the-budget"],
       "evidenceFrom": "model"
     },
     "the-turning-sun": {
@@ -1010,10 +860,7 @@
       "quantity": "the sidereal rotation rate of the spot group G1 from the marks of the first day chosen to the ninth, with its uncertainty: 14.13 from six days (the first day 1) and 14.04 from five (the first day 2), degrees a day",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "longer-or-shorter",
-        "the-sidereal-period"
-      ],
+      "loop": ["longer-or-shorter", "the-sidereal-period"],
       "evidenceFrom": "model"
     },
     "the-suns-power": {
@@ -1023,10 +870,7 @@
       "quantity": "the Sun's luminosity from the first days of the TSIS-1 TIM series corrected to one astronomical unit, in units of 1e26 W: 3.829 from two days and 3.828 from six",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "power-predict",
-        "luminosity"
-      ],
+      "loop": ["power-predict", "luminosity"],
       "evidenceFrom": "model"
     },
     "the-gaps-in-the-belt": {
@@ -1086,10 +930,7 @@
       "quantity": "the sources a detector lists in one synthetic frame of forty stars as its threshold falls: 30 at 4 sigma, none of them noise, and 44 at 2.5 sigma, seven of them only noise",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "predict-the-list",
-        "how-many-sources"
-      ],
+      "loop": ["predict-the-list", "how-many-sources"],
       "evidenceFrom": "model"
     },
     "why-rings": {
@@ -1099,10 +940,7 @@
       "quantity": "the rigid Roche limit of a pair from its two densities: Phobos about Mars 5,466 km, Shoemaker-Levy 9 about Jupiter 117,327 km, and Phobos's orbit at 9,376 km lying between the rigid and the fluid limit",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "phobos-predict",
-        "phobos-where"
-      ],
+      "loop": ["phobos-predict", "phobos-where"],
       "evidenceFrom": "model"
     },
     "tides-that-move-the-moon": {
@@ -1112,10 +950,7 @@
       "quantity": "the Moon's distance in a constant-Q model a given time on: 62.9 Earth radii in half a billion years and 65.1 in one billion, against the 60.3 of today",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "forward-predict",
-        "forward-one-billion"
-      ],
+      "loop": ["forward-predict", "forward-one-billion"],
       "evidenceFrom": "model"
     },
     "ios-fire": {
@@ -1125,10 +960,7 @@
       "quantity": "the tidal heating of Io at k2 = 1.5 and Q = 100, 9.33 x 10^13 W at its eccentricity of 0.0041 and four times that when the eccentricity is doubled",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "double-predict",
-        "double-the-eccentricity"
-      ],
+      "loop": ["double-predict", "double-the-eccentricity"],
       "evidenceFrom": "model"
     },
     "plan-an-exposure": {
@@ -1138,10 +970,7 @@
       "quantity": "the total exposure that reaches a signal-to-noise of 20 for a magnitude-24 star in the Rubin r band: 455 seconds in two exposures and 512 seconds in twenty, the read noise paid once per exposure",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "predict-more-exposures",
-        "twenty-exposures"
-      ],
+      "loop": ["predict-more-exposures", "twenty-exposures"],
       "evidenceFrom": "model"
     },
     "which-instrument-for-which-question": {
@@ -1151,10 +980,7 @@
       "quantity": "the total exposure that reaches a signal-to-noise of 20 for a magnitude-22 star in one exposure: 12,071 seconds on the Las Cumbres 0.35 m telescope, 602 seconds on the 1.0 m and 15 seconds on Rubin, the same star at the same quality",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "a-question-first",
-        "the-same-star-three-ways"
-      ],
+      "loop": ["a-question-first", "the-same-star-three-ways"],
       "evidenceFrom": "model"
     },
     "the-sky-background": {
@@ -1164,10 +990,7 @@
       "quantity": "the total exposure for a magnitude-23 star at a signal-to-noise of 20 in two exposures on Rubin in r: 79.8 seconds under a dark sky and 443.2 with the sky 2 magnitudes brighter, 5.6 times longer for 6.3 times the sky light",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "predict-the-moon",
-        "two-magnitudes-brighter"
-      ],
+      "loop": ["predict-the-moon", "two-magnitudes-brighter"],
       "evidenceFrom": "model"
     },
     "coordinates-and-time": {
@@ -1177,10 +1000,7 @@
       "quantity": "the minutes after noon at which Sirius crosses the meridian at latitude 40 degrees: 718.7 on the first night and 600.8 thirty nights later, 3.93 minutes earlier each night",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "earlier-each-night",
-        "from-sidereal-time-to-crossing"
-      ],
+      "loop": ["earlier-each-night", "from-sidereal-time-to-crossing"],
       "evidenceFrom": "model"
     },
     "a-night-at-the-telescope": {
@@ -1190,10 +1010,7 @@
       "quantity": "the total exposure on the Las Cumbres 1.0 m telescope for a signal-to-noise of 50 in one exposure at an airmass of 1.1: 59.3 seconds for a magnitude-19 star and 779.1 for magnitude 21, the dominant noise term moving from the star to the sky",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "predict-the-limit",
-        "station-expose"
-      ],
+      "loop": ["predict-the-limit", "station-expose"],
       "evidenceFrom": "model"
     },
     "from-photons-to-a-number": {
@@ -1203,10 +1020,7 @@
       "quantity": "the total exposure on the Las Cumbres 1.0 m telescope for a magnitude-19 star in one exposure at an airmass of 1.1: 59.3 seconds for a signal-to-noise of 50 and 191.4 for 100, 3.2 times longer for twice the quality",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "a-number-from-photons",
-        "halve-it"
-      ],
+      "loop": ["a-number-from-photons", "halve-it"],
       "evidenceFrom": "model"
     },
     "why-the-period-is-wrong": {
@@ -1216,10 +1030,7 @@
       "quantity": "the phase bins out of 20 that forty nights of visits fill for a 0.8-day period: 13 for one visit a night at the same time and 20 for three visits a night at irregular times, the cadence that breaks the alias",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "predict-the-period",
-        "the-aliases"
-      ],
+      "loop": ["predict-the-period", "the-aliases"],
       "evidenceFrom": "model"
     },
     "deep-or-wide": {
@@ -1229,10 +1040,7 @@
       "quantity": "the exposure that finds the most sources in ten nights on a one-metre telescope: 335 seconds for a class with the Euclidean slope of 0.6 and 3162 seconds, the longest on the slider, for a class with a slope of 1.0",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "predict-deep-or-wide",
-        "euclid-best"
-      ],
+      "loop": ["predict-deep-or-wide", "euclid-best"],
       "evidenceFrom": "model"
     },
     "two-telescopes-one-question": {
@@ -1242,10 +1050,7 @@
       "quantity": "the time the 8.4-metre telescope needs as a fraction of the time the one-metre telescope needs for the same depth over ten square degrees: 0.031 for a goal of 22 magnitude and 0.015 for 23",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "predict-the-ratio",
-        "read-the-hours"
-      ],
+      "loop": ["predict-the-ratio", "read-the-hours"],
       "evidenceFrom": "model"
     },
     "propose-an-observation": {
@@ -1255,11 +1060,17 @@
       "quantity": "the verdict of a plan on the goal of 22.5 magnitude over 100 square degrees in ten nights: feasible for the one-metre telescope at 63 seconds, not feasible at 4 seconds; many plans pass and the screen judges feasibility and the student's own stated numbers, never one plan",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "the-brief",
-        "propose-a-plan",
-        "justify-the-plan"
-      ],
+      "loop": ["the-brief", "propose-a-plan", "justify-the-plan"],
+      "evidenceFrom": "model"
+    },
+    "two-clusters-two-ages": {
+      "centralExperimentId": "ce.two-clusters-two-ages",
+      "object": "panel:cluster-fit",
+      "control": "cluster-fit/feh",
+      "quantity": "the age of cluster B in gigayears from a fit of isochrones at the assumed metallicity: 3.16 at [Fe/H] -0.25 and 2.24 at 0, the metallicity being stated and never fitted",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": ["which-is-older", "fit-b"],
       "evidenceFrom": "model"
     },
     "two-stars-eclipsing": {
@@ -1269,10 +1080,7 @@
       "quantity": "the depth of the primary eclipse, in percent of the light of the pair, for two stars that eclipse each other nearly edge on: 48.3 at a surface brightness ratio of 0.55 and 40.7 at 1, the deeper eclipse being the one that hides the hotter star",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "which-eclipse-is-deeper",
-        "the-two-depths"
-      ],
+      "loop": ["which-eclipse-is-deeper", "the-two-depths"],
       "evidenceFrom": "model"
     },
     "weighing-the-stars-for-real": {
@@ -1282,10 +1090,7 @@
       "quantity": "the mass that star 1 would have at the tilt you choose, for a pair whose velocities give a minimum of 0.58 solar masses: 0.58 at 90 degrees (edge on) and 1.19 at 52 degrees, the velocities alone fixing only the minimum",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "who-moves-faster",
-        "read-the-amplitudes"
-      ],
+      "loop": ["who-moves-faster", "read-the-amplitudes"],
       "evidenceFrom": "model"
     },
     "what-a-telescope-resolves": {
@@ -1295,10 +1100,7 @@
       "quantity": "the dip between two stars 1 arcsecond apart, in percent of the light at a star, with 0.6 arcseconds of seeing: 0 at 10 cm and 50.3 at 40 cm",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "smallest-aperture-predict",
-        "dips"
-      ],
+      "loop": ["smallest-aperture-predict", "dips"],
       "evidenceFrom": "model"
     },
     "why-two-lines-become-one": {
@@ -1308,10 +1110,7 @@
       "quantity": "the dip between two spectral lines 0.5 nm apart at 500 nm, in percent of the lower peak: 7.3 at R = 1000 and 87.5 at R = 2000, none at R = 500",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "smallest-r-predict",
-        "dip-by-r"
-      ],
+      "loop": ["smallest-r-predict", "dip-by-r"],
       "evidenceFrom": "model"
     },
     "the-saturated-star": {
@@ -1321,10 +1120,7 @@
       "quantity": "the share of its true flux the clipped sum of the brightest star would read, in percent, with a 60 second exposure: 30 at V = 9.5 and 55 at V = 10.5",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "bright-star-predict",
-        "clipped-star"
-      ],
+      "loop": ["bright-star-predict", "clipped-star"],
       "evidenceFrom": "model"
     }
   }

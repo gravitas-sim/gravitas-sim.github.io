@@ -1,5 +1,5 @@
 // The cluster-fit panel's words, in English (Prompt 219). Fixed text translates by key.
-export const EN_CLUSTER_LESSON = {
+export const EN_CLUSTERLESSON = {
   'clW.title': 'Fit a synthetic cluster',
   'clW.note':
     'Two synthetic clusters, drawn from MIST isochrones of a known age at one distance, each with 15 percent of its stars from the field. The panel fits an age and a distance modulus to the chosen cluster at the metallicity you set, with the reddening held at 0.042; metallicity is never fitted. Every cluster here is synthetic: a model made it, and the truth is one switch away.',
