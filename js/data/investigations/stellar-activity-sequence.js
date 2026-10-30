@@ -61,7 +61,7 @@ export const HOW_FAST_DOES_THE_STAR_SPIN = {
   title: 'How Fast Does the Star Spin?',
   subtitle:
     'Read a star’s rotation period from the dimming of its starspots, see why the light alone can leave a second answer open, and measure two real stars',
-  duration: '12-24 min',
+  duration: '14-28 min',
   level: 'Introductory astronomy',
   audience: 'intro',
   textbook: { chapter: 16, section: null },
@@ -258,7 +258,7 @@ export const HOW_FAST_DOES_THE_STAR_SPIN = {
       stage: STAGE,
       type: 'read',
       title: 'What the period does not give',
-      body: `A young star turns fast and slows down as it ages, so a spin period and a colour have been used to
+      body: `A young star turns fast and slows down as it ages, so a spin period and a color have been used to
              estimate a star&rsquo;s age, a method called <strong>gyrochronology</strong>. This investigation stops
              at the period, on purpose. The published relations hold only for the stars and ages they were
              calibrated on, they scatter widely, and two of the best known disagree on one star by more than the
@@ -449,7 +449,7 @@ export const FLARES = {
   title: 'Flares',
   subtitle:
     'Find the flares in a red dwarf’s light, measure how much light each gives out as an equivalent duration, and count flares by size',
-  duration: '12-24 min',
+  duration: '14-28 min',
   level: 'Introductory astronomy',
   audience: 'intro',
   textbook: { chapter: 16, section: null },
@@ -585,7 +585,7 @@ export const FLARES = {
              found</strong> and work out how many there are <strong>a day</strong> on average.`,
       fields: [
         { id: 'a', label: 'Flares found', unit: '', hint: '76' },
-        { id: 'b', label: 'Flares a day', unit: 'per day', hint: '3.1' },
+        { id: 'b', label: 'Flares a day', unit: '', hint: '3.1' },
       ],
       validate: v => {
         if (![v.a, v.b].every(Number.isFinite)) return null;
@@ -609,7 +609,7 @@ export const FLARES = {
       stage: STAGE,
       type: 'read',
       title: 'A time, not an energy',
-      body: `Every number here is in the telescope&rsquo;s band, which covers roughly 600 to 1000 nanometres. A
+      body: `Every number here is in the telescope&rsquo;s band, which covers roughly 600 to 1000 nanometers. A
              flare&rsquo;s energy would need the star&rsquo;s luminosity in that band and a correction for the rest
              of the spectrum, which depends on how hot the flare is. Gravitas checked a correction of that kind
              and found it depends too strongly on the temperature it assumes, so it states no flare energy:
@@ -630,8 +630,8 @@ export const FLARES_DEEPER = {
       type: 'measure',
       title: 'The slope',
       body: `Above a floor, the counts of flares of at least each size fall on a straight line on these
-             logarithmic axes: a <strong>power law</strong> with slope &alpha;. The panel fits it above the
-             size the telescope finds completely. Read &alpha;, its 95 percent interval, and the number of flares
+             logarithmic axes: a <strong>power law</strong> with slope α. The panel fits it above the
+             size the telescope finds completely. Read α, its 95 percent interval, and the number of flares
              above the floor.`,
       fields: [
         { id: 'a', label: 'Slope α', unit: '', hint: '1.92' },
@@ -1042,7 +1042,7 @@ export const FLARES_DEEPER_ES = {
   steps: [
     {
       title: 'La pendiente',
-      body: 'Por encima de un suelo, los recuentos de erupciones de al menos cada tamaño caen en una recta en estos ejes logarítmicos: una <strong>ley de potencias</strong> de pendiente &alpha;. El panel la ajusta por encima del tamaño que el telescopio halla por completo. Lee &alpha;, su intervalo del 95 por ciento y el número de erupciones por encima del suelo.',
+      body: 'Por encima de un suelo, los recuentos de erupciones de al menos cada tamaño caen en una recta en estos ejes logarítmicos: una <strong>ley de potencias</strong> de pendiente α. El panel la ajusta por encima del tamaño que el telescopio halla por completo. Lee α, su intervalo del 95 por ciento y el número de erupciones por encima del suelo.',
       fields: [
         { label: 'Pendiente α' },
         { label: 'Extremo inferior del intervalo' },
@@ -1138,6 +1138,7 @@ const CONTENT = {
     priorKnowledge: [
       'A light curve as brightness against time, and a period as the time for a pattern to repeat',
       'That sunspots are cooler and darker than the Sun’s surface, and that the Sun turns',
+      'The idea of a rotation period and of a ratio, such as half or double a period',
     ],
     keyConcepts: [
       {
@@ -1182,7 +1183,12 @@ const CONTENT = {
       {
         claim: 'A spin period gives a star’s age.',
         response:
-          'A period and a colour have been used to estimate the age of young stars, but the relations hold only for the stars and ages they were calibrated on and scatter widely. Gravitas states no age.',
+          'A period and a color have been used to estimate the age of young stars, but the relations hold only for the stars and ages they were calibrated on and scatter widely. Gravitas states no age.',
+      },
+      {
+        claim: 'If the periodogram has a strong peak, the period is certain.',
+        response:
+          'A strong peak says there is a repeating signal, not which of its multiples is the rotation period, and the interval states only how well the peak’s position is known.',
       },
     ],
     teachingNotes: [
@@ -1215,6 +1221,7 @@ const CONTENT = {
     priorKnowledge: [
       'A light curve as brightness against time',
       'That solar flares are sudden releases of magnetic energy',
+      'Reading a value off a logarithmic axis, where equal steps are equal factors',
     ],
     keyConcepts: [
       {
@@ -1259,6 +1266,12 @@ const CONTENT = {
         claim: 'A best-fitting floor gives the best slope.',
         response:
           'A floor chosen by how well it fits uses the data it is then applied to, so the interval understates the uncertainty; the completeness limit comes from an injection test and does not depend on this light curve.',
+      },
+      {
+        claim:
+          'The more flares a star has, the more active it is, whatever the telescope.',
+        response:
+          'The count depends on the telescope’s noise, its cadence and the rule: faint and short flares are found only in part, so counts from different instruments are compared above a size they both find completely.',
       },
     ],
     teachingNotes: [

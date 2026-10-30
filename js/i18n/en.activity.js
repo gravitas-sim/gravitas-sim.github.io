@@ -80,7 +80,7 @@ export const EN_ACTIVITY = {
   'actW.r.view.3': 'folded at twice it',
   'actW.r.row.data': 'Data',
   'actW.r.v.data':
-    '{n} points over {d} days; the flux is the mean-normalised PDCSAP flux of the TESS pipeline (a model of the instrument’s systematics removed), in 30-minute averages for the fit',
+    '{n} points over {d} days; the flux is the mean-normalized PDCSAP flux of the TESS pipeline (a model of the instrument’s systematics removed), in 30-minute averages for the fit',
   'actW.r.row.period': 'Rotation period',
   'actW.r.row.alias': 'Other period it could be',
   'actW.r.row.cycles': 'Cycles in the data',

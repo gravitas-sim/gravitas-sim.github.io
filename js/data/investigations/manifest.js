@@ -1182,7 +1182,7 @@ export const MANIFEST = [
     title: 'How Fast Does the Star Spin?',
     subtitle:
       'Read a star’s rotation period from the dimming of its starspots, see why the light alone can leave a second answer open, and measure two real stars',
-    duration: '12-24 min',
+    duration: '14-28 min',
     level: 'Introductory astronomy',
     thumbnail: 'images/investigations/how-fast-does-the-star-spin.webp',
     depths: 3,
@@ -1195,7 +1195,7 @@ export const MANIFEST = [
     title: 'Flares',
     subtitle:
       'Find the flares in a red dwarf’s light, measure how much light each gives out as an equivalent duration, and count flares by size',
-    duration: '12-24 min',
+    duration: '14-28 min',
     level: 'Introductory astronomy',
     thumbnail: 'images/investigations/flares.webp',
     depths: 3,
