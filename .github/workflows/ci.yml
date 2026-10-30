@@ -475,7 +475,16 @@ jobs:
   e2e:
     name: Browser smoke tests (sources) ${{ matrix.shard }}/${{ strategy.job-total }}
     runs-on: ubuntu-24.04
-    # Twelve shards of equal DURATION, planned by tools/e2e-shards.mjs.
+    # Sixteen shards of equal DURATION, planned by tools/e2e-shards.mjs.
+    #
+    # 2026-10-30: twelve went to sixteen (D-CI-05). Twelve balanced shards were
+    # predicted at 20.4 minutes and ran about 24, so shards 2, 3, 6 and 7 hit the
+    # step's 24-minute stop with no failing test on #482, #484, #485 and #487;
+    # sixteen are predicted at 15.2. Carl, merge-queue chat 2026-10-30, chose
+    # "16 shards (Recommended)": "Raise the source suite's matrix from 12 to 16
+    # shards (~18 min each, ~6 min margin), keeping the 24-min step limit as a
+    # hang guard. ... Your words quoted in the commit and a register row
+    # (D-CI-05)."
     #
     # Playwright's own `--shard=k/n` gives each shard an equal number of tests
     # in listing order. The listing is alphabetical and the heavy files sort
@@ -487,7 +496,7 @@ jobs:
     # and a half: tools/e2e-timings.json, each test's median passing duration.
     #
     # Each shard plans the whole split for itself, from `--list` and the timings
-    # file, so the twelve agree without a job handing a plan to the others. The
+    # file, so the sixteen agree without a job handing a plan to the others. The
     # listing decides what runs and the timings only where: a test the file has
     # never seen is still planned, at its file's median. The plan step refuses
     # to run a list Playwright does not read back as exactly the planned tests,
@@ -507,7 +516,7 @@ jobs:
       # splitting the suite is to find out what is broken in one run.
       fail-fast: false
       matrix:
-        shard: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+        shard: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
     steps:
       - uses: actions/checkout@v7
 
@@ -603,7 +612,7 @@ jobs:
   e2e-coverage:
     name: Browser smoke tests (sources) coverage
     runs-on: ubuntu-24.04
-    # What makes twelve green shards mean the suite passed: the merged results
+    # What makes sixteen green shards mean the suite passed: the merged results
     # have to contain every test `--list` names, exactly once. A shard that
     # crashed before uploading, a plan two shards computed differently, a list
     # line Playwright matched to nothing - each leaves a test missing or
