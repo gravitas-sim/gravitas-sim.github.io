@@ -142,6 +142,8 @@ export default {
       hints: [
         'Look at the cycles row: how much of one cycle does the run cover?',
       ],
+      worked:
+        'The cycles row reads 0.83: six days against a 7.2-day period. Below three cycles the panel gives the reason and no numbers; with the whole run the same star returns R21 and R31 with their errors.',
       because:
         'Six days is 0.83 of a cycle. Fitting three harmonics to less than a cycle would return a curve and numbers, but a different arrangement of the same noise would return different ones. The panel refuses below three cycles, or when the phases leave a gap of more than a third of a cycle, and says why. With the whole run, 3.7 cycles, the numbers return with their errors.',
       misconceptions: [
@@ -164,7 +166,7 @@ export default {
              star a class only if at least <strong>4 of its 5 nearest neighbours</strong> agree, and leaves the others
              open. It uses the period and the amplitude. Read how many of the 120 stars are left open.`,
       prompt: 'Stars left open',
-      unit: 'stars',
+      unit: '',
       answer: 11,
       tolerance: 0.5,
       hints: [

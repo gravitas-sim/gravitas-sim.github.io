@@ -49,7 +49,7 @@ export const THE_METALLICITY_TERM = {
   title: 'The Metallicity Term',
   subtitle:
     'Add the metal content of a galaxy to the Cepheid period-luminosity relation, see what it does to a distance and to its error, and see where the cited term stops being tested',
-  duration: '14-30 min',
+  duration: '8-12 min',
   level: 'Upper-level astronomy',
   audience: 'intro',
   textbook: { chapter: 19, section: null },
@@ -285,7 +285,7 @@ export const THE_METALLICITY_TERM_DEEPER = {
       kind: 'numeric',
       title: 'M101 by hand',
       body: `Switch the galaxy to <strong>M101</strong>. Its cited [O/H] is +0.10 and the LMC&rsquo;s is &minus;0.29.
-             The term adds <em>&minus;&gamma; &times; &Delta;[O/H]</em> to the modulus with &gamma; = &minus;0.217.
+             The term adds <em>&minus;&#947; &times; &#916;[O/H]</em> to the modulus with &#947; = &minus;0.217.
              Work out the shift and compare it with the panel&rsquo;s.`,
       prompt: 'The shift of the distance modulus, in magnitudes',
       unit: 'mag',
@@ -337,7 +337,7 @@ export const THE_METALLICITY_TERM_DEEPER = {
       body: `The panel uses &minus;0.217 &plusmn; 0.046 (Riess et al. 2022). Another fit to the Cepheids of the Milky
              Way and the Magellanic Clouds (Breuval et al. 2022, Table 4, the same Wesenheit magnitude) gives
              &minus;0.280 &plusmn; 0.078. The two agree within 0.7 of their combined error. For NGC 4258, with
-             &Delta;[O/H] = 0.19 dex, work out how much the modulus differs between the two coefficients.`,
+             &#916;[O/H] = 0.19 dex, work out how much the modulus differs between the two coefficients.`,
       prompt: 'The difference of the two shifts, in magnitudes',
       unit: 'mag',
       answer: 0.012,
@@ -518,7 +518,7 @@ export const THE_METALLICITY_TERM_DEEPER_ES = {
   steps: [
     {
       title: 'M101 a mano',
-      body: `Cambia la galaxia a <strong>M101</strong>. Su [O/H] citado es +0,10 y el de la GNM &minus;0,29. El término suma <em>&minus;&gamma; &times; &Delta;[O/H]</em> al módulo con &gamma; = &minus;0,217. Calcula el cambio y compáralo con el del panel.`,
+      body: `Cambia la galaxia a <strong>M101</strong>. Su [O/H] citado es +0,10 y el de la GNM &minus;0,29. El término suma <em>&minus;&#947; &times; &#916;[O/H]</em> al módulo con &#947; = &minus;0,217. Calcula el cambio y compáralo con el del panel.`,
       prompt: 'El cambio del módulo de distancia, en magnitudes',
       hints: ['Δ[O/H] = 0,10 − (−0,29) = 0,39 dex.'],
       worked:
@@ -547,7 +547,7 @@ export const THE_METALLICITY_TERM_DEEPER_ES = {
     },
     {
       title: 'Dos coeficientes publicados',
-      body: `El panel usa &minus;0,217 &plusmn; 0,046 (Riess et al. 2022). Otro ajuste a las cefeidas de la Vía Láctea y las Nubes de Magallanes (Breuval et al. 2022, tabla 4, la misma magnitud Wesenheit) da &minus;0,280 &plusmn; 0,078. Los dos coinciden dentro de 0,7 de su error combinado. Para NGC 4258, con &Delta;[O/H] = 0,19 dex, calcula cuánto difiere el módulo entre los dos coeficientes.`,
+      body: `El panel usa &minus;0,217 &plusmn; 0,046 (Riess et al. 2022). Otro ajuste a las cefeidas de la Vía Láctea y las Nubes de Magallanes (Breuval et al. 2022, tabla 4, la misma magnitud Wesenheit) da &minus;0,280 &plusmn; 0,078. Los dos coinciden dentro de 0,7 de su error combinado. Para NGC 4258, con &#916;[O/H] = 0,19 dex, calcula cuánto difiere el módulo entre los dos coeficientes.`,
       prompt: 'La diferencia de los dos cambios, en magnitudes',
       hints: ['(0,280 − 0,217) × 0,19.'],
       worked:
@@ -646,6 +646,11 @@ const CONTENT = {
         response:
           'With the term left out the LMC calibration is 0.1 combined errors from the masers and with it 0.8: both agree. One galaxy cannot decide; the cited coefficient comes from the combined fit of many hosts.',
       },
+      {
+        claim: 'The metallicity of a galaxy is one number for all its Cepheids.',
+        response:
+          'The panel uses an average over the Cepheid fields; a gradient across a disk spreads the true values around it, and that spread is one reason the abundances carry an error of their own.',
+      },
     ],
     teachingNotes: [
       'The coefficient is Riess et al. 2022’s, −0.217 ± 0.046 mag/dex, defined against [O/H] relative to the Sun (their equation 1); the galaxies’ values are their Table 3 means (LMC −0.29 from spectra, NGC 4258 −0.10 and M101 +0.10 from H II regions), and the 0.05 dex given to the two hosts is the systematic of the strong-line scale they propagate. None is measured here, and the panel says so.',
@@ -663,7 +668,7 @@ const CONTENT = {
       'Use the effect picture to read the shift and its coefficient error at −0.3 dex and +0.3 dex, and say which side is better constrained by the cited calibration.',
     ],
     modelNotes:
-      'js/kernels/variables/plz.js (ladderWithMetallicity) and plzCited.js (the cited numbers, held equal to tests/fixtures/variables-ii/citations.json), js/variablesIIField.js, js/variablesIIWidgets.js, VARIABLES_II.md. The validation (20 legs, thresholds committed first, an astropy oracle for the features) is tools/variables-ii-validate.mjs. One linear term in [O/H], the same at every period; crowding and blending are not modelled; the galaxies’ [O/H] are averages over their Cepheid fields.',
+      'js/kernels/variables/plz.js (ladderWithMetallicity) and plzCited.js (the cited numbers, held equal to tests/fixtures/variables-ii/citations.json), js/variablesIIField.js, js/variablesIIWidgets.js, VARIABLES_II.md. The validation (20 legs, thresholds committed first, an astropy oracle for the features) is tools/variables-ii-validate.mjs. One linear term in [O/H], the same at every period; crowding and blending are not modeled; the galaxies’ [O/H] are averages over their Cepheid fields.',
   },
 };
 

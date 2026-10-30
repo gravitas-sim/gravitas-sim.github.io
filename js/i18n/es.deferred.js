@@ -1959,6 +1959,8 @@ export const ES_DEFERRED = {
     'Período y luminosidad unidos: la relación que convirtió a las cefeidas en reglas.',
   'inv.seq.galaxies.the-first-rung':
     'Calibra el peldaño con una cefeida cercana y úsalo para llegar a otra galaxia.',
+  'inv.seq.galaxies.the-metallicity-term':
+    'El peldaño con un segundo mando: cómo el contenido de metales de una cefeida mueve una distancia y cuánta certeza tenemos.',
   'inv.seq.galaxies.standard-candles':
     'Las supernovas como velas estándar: hasta dónde se ve una explosión brillante y uniforme, y lo que dice de la expansión.',
   'inv.seq.galaxies.the-expanding-universe':

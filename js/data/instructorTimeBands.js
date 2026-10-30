@@ -245,7 +245,7 @@ export const LESSON_BANDS = Object.freeze({
   'which-kind-of-variable': {
     core: 'short',
     quantitative: 'medium',
-    advanced: 'medium',
+    advanced: 'long',
   },
   'bending-light': {
     core: 'medium',

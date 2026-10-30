@@ -4,7 +4,7 @@
 // Las mismas claves que en.variablesII.js; las registra js/variablesIIWidgets.js.
 // =============================================================================
 
-export const ES_VARIABLES_II = {
+export const ES_VARIABLESII = {
   'v2W.loading': 'Cargando los datos',
   'v2W.row.state': 'Estado',
   'v2W.row.assumes': 'Supone',

@@ -5,7 +5,7 @@
 // same keys are in es.variablesII.js.
 // =============================================================================
 
-export const EN_VARIABLES_II = {
+export const EN_VARIABLESII = {
   'v2W.loading': 'Loading the data',
   'v2W.row.state': 'State',
   'v2W.row.assumes': 'Assumes',

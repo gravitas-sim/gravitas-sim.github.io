@@ -71,6 +71,8 @@ export default {
         'R21 solo está definido para estrellas RR Lyrae',
       ],
       hints: ['Mira la fila de ciclos: ¿cuánto de un ciclo cubre la serie?'],
+      worked:
+        'La fila de ciclos marca 0,83: seis días frente a un período de 7,2. Por debajo de tres ciclos el panel da la razón y ningún número; con toda la serie la misma estrella devuelve R21 y R31 con sus errores.',
       because:
         'Seis días son 0,83 de un ciclo. Ajustar tres armónicos a menos de un ciclo devolvería una curva y números, pero otra disposición del mismo ruido devolvería otros. El panel rechaza por debajo de tres ciclos, o cuando las fases dejan un hueco de más de un tercio de ciclo, y dice por qué. Con toda la serie, 3,7 ciclos, los números vuelven con sus errores.',
       misconceptions: [

@@ -17,8 +17,8 @@
 
 import './instrumentStartup.js';
 import { t, registerMessages } from './i18n/index.js';
-import { EN_VARIABLES_II } from './i18n/en.variablesII.js';
-import { ES_VARIABLES_II } from './i18n/es.variablesII.js';
+import { EN_VARIABLESII } from './i18n/en.variablesII.js';
+import { ES_VARIABLESII } from './i18n/es.variablesII.js';
 import { fixed } from './format.js';
 import { createChart } from './plot/mount.js';
 import { loadVariablesData } from './variablesData.js';
@@ -30,8 +30,8 @@ import {
   ambiguityView,
 } from './variablesIIField.js';
 
-registerMessages('en', EN_VARIABLES_II);
-registerMessages('es', ES_VARIABLES_II);
+registerMessages('en', EN_VARIABLESII);
+registerMessages('es', ES_VARIABLESII);
 
 let data = null;
 /** Resolves true once the data have been tried; a missing file is logged, never thrown. */
