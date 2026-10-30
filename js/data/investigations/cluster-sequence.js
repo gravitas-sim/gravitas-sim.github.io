@@ -781,6 +781,8 @@ const EXPECTATIONS = {
       'The age of cluster A at [Fe/H] −0.25 about 2.02 Gyr (within 0.06) and its distance modulus about 12.10 (within 0.03).',
     'fit-b':
       'The age of cluster B about 3.16 Gyr (within 0.08) and its distance modulus about 12.09 (within 0.03).',
+    'how-much-older':
+      'The age of cluster B minus the age of cluster A, about 1.14 Gyr (within 0.1).',
   },
 };
 
