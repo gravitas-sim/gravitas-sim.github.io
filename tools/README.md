@@ -197,6 +197,7 @@ current, and the orchestrator checks it.
 | `static-server.mjs` | A static file server with no dependencies | `npm run serve:dist` |
 | `statistics-cases.mjs` | The statistics kernel's validation group (Prompt 154) |  |
 | `statistics-validate.mjs` | npm run validate:statistics - the statistics kernel's validation group | `npm run validate:statistics` |
+| `stellar-activity-validate.mjs` | The stellar activity kernel against its committed thresholds (Prompt 220) | `npm run activity:validate` |
 | `stellar-shots.mjs` | Captures of the Stellar Lab |  |
 | `storage-matrix.mjs` | npm run storage:matrix | `npm run storage:matrix` |
 | `storage-profile.mjs` | npm run storage:profile -- --capture | `npm run storage:profile` |

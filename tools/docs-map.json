@@ -923,7 +923,7 @@
       "kind": "feature",
       "purpose": "Stellar rotation and flares: the spot model, the period with its factor-two alias, flare detection, equivalent durations and the slope, with validation (Prompt 220).",
       "owner": 220,
-      "student": false
+      "student": true
     },
     {
       "file": "STELLAR_POPULATIONS.md",

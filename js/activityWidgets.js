@@ -43,7 +43,11 @@ const COLOR = { blue: '#1c7ed6', orange: '#e8590c', grey: '#495057' };
 let failed = false;
 let last = null;
 
-/** Resolves true when both curves are in; never rejects. */
+/**
+ * Resolves true once the loading has finished, whether or not it succeeded: a failure is
+ * said by the panels themselves (the readout), not by a family that never becomes ready.
+ * Never rejects.
+ */
 export const activityReady = (async () => {
   try {
     const [auMic, ekDra] = await Promise.all([
@@ -51,14 +55,12 @@ export const activityReady = (async () => {
       loadActivityCurve('ekDra'),
     ]);
     provideCurves({ auMic, ekDra });
-    return true;
   } catch (err) {
     failed = true;
     console.warn('The stellar-activity light curves could not be loaded:', err);
-    return false;
-  } finally {
-    if (last) last.redraw();
   }
+  if (last) last.redraw();
+  return true;
 })();
 
 const waitingRow = () => ({
