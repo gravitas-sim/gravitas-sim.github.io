@@ -1,0 +1,200 @@
+{
+  "format": "gravitas.observation-data-pack",
+  "formatVersion": 1,
+  "id": "tess-ek-dra-s16",
+  "version": "1.0.0",
+  "title": "EK Draconis: TESS sector 16 light curve (a young Sun-like star)",
+  "object": {
+    "name": "EK Draconis",
+    "identifiers": [
+      "TIC 159613900"
+    ],
+    "ra": 219.750878957174,
+    "dec": 64.2916603809589,
+    "frame": "ICRS, epoch J2000",
+    "tessMagnitude": 7.03950024
+  },
+  "facility": {
+    "observatory": "TESS",
+    "instrument": "camera 4, CCD 2, 2-minute cadence",
+    "pipeline": "SPOC spoc-5.0.96-20230729"
+  },
+  "dataType": "light-curve",
+  "origin": "observed",
+  "credit": "TESS, sector 16 (NASA; SPOC light curve from MAST)",
+  "license": {
+    "status": "public-domain",
+    "statement": "NASA mission data, released through MAST without restriction on reuse. MAST asks that work using its data acknowledge the mission and the archive."
+  },
+  "retrieved": "2026-10-30",
+  "time": {
+    "scale": "TDB",
+    "reference": "BTJD = BJD - 2457000",
+    "unit": "d"
+  },
+  "columns": [
+    {
+      "id": "time",
+      "name": "time",
+      "unit": "d",
+      "description": "bin centre, BTJD = BJD - 2457000"
+    },
+    {
+      "id": "flux",
+      "name": "flux",
+      "unit": "",
+      "description": "PDCSAP flux over its median"
+    },
+    {
+      "id": "flux_err",
+      "name": "flux error",
+      "unit": "",
+      "uncertaintyOf": "flux",
+      "description": "propagated PDCSAP error over the median, one sigma, per bin"
+    }
+  ],
+  "masks": [
+    {
+      "column": "QUALITY",
+      "rule": "any nonzero flag drops the cadence",
+      "dropped": 2083
+    }
+  ],
+  "reductions": [
+    "30-minute bins average 15 two-minute cadences each; the bin error is the quadrature sum over the count.",
+    "Flux is stored to 20 ppm, its error to 1 ppm and time to 0.0001 d (8.6 s); the manifest records the largest rounding.",
+    "EK Dra is a young (about 100 Myr) G1.5 dwarf whose rotation period is given as about 2.77 d (Audard et al. 1999; Ayres 2015; Namekata et al. 2022) and about 2.6 d (Gorgei et al. 2026); the difference is attributed to differential rotation. The band 2.5 to 2.9 d is the span of those values with 0.1 d of margin."
+  ],
+  "source": {
+    "archive": "MAST (Barbara A. Mikulski Archive for Space Telescopes)",
+    "urls": [
+      "https://mast.stsci.edu/api/v0.1/Download/file?uri=mast:TESS/product/tess2019253231442-s0016-0000000159613900-0152-s_lc.fits"
+    ],
+    "citations": [
+      {
+        "text": "TESS Light Curves - All Sectors, STScI/MAST",
+        "doi": "10.17909/t9-nmc8-f686"
+      },
+      {
+        "text": "Ricker et al. 2015, JATIS 1, 014003 (TESS)",
+        "doi": "10.1117/1.JATIS.1.1.014003"
+      },
+      {
+        "text": "Jenkins et al. 2016, Proc. SPIE 9913, 99133E (SPOC)",
+        "doi": "10.1117/12.2233418"
+      }
+    ]
+  },
+  "raw": [
+    {
+      "file": "tess2019253231442-s0016-0000000159613900-0152-s_lc.fits",
+      "url": "https://mast.stsci.edu/api/v0.1/Download/file?uri=mast:TESS/product/tess2019253231442-s0016-0000000159613900-0152-s_lc.fits",
+      "bytes": 1805760,
+      "sha256": "3f3c139f46afab814e1587a7e8a03e73c18b2a8a514d67d72e944972988cd6ef"
+    }
+  ],
+  "transformation": {
+    "script": "tools/data-packs/activity.mjs",
+    "version": "1.0.0",
+    "options": {
+      "binMinutes": 30,
+      "minPerBin": 3,
+      "errStepPpm": 5,
+      "fluxStepPpm": 20,
+      "columns": [
+        {
+          "id": "time",
+          "step": 0.0001
+        },
+        {
+          "id": "flux",
+          "step": 0.00002
+        },
+        {
+          "id": "flux_err",
+          "step": 0.000001
+        }
+      ]
+    },
+    "steps": [
+      "Read TIME, PDCSAP_FLUX, PDCSAP_FLUX_ERR and QUALITY from the LIGHTCURVE binary table.",
+      "Keep cadences with QUALITY 0 and a finite time, flux and error.",
+      "Divide flux and error by the median kept flux.",
+      "Average into 30-minute bins from t0, keeping bins with at least 3 cadences.",
+      "Store time, flux and error as table-columns/1."
+    ],
+    "record": {
+      "cadences": 17765,
+      "flagged": 2083,
+      "notFinite": 0,
+      "kept": 15682,
+      "binsDropped": 0,
+      "bins": 1055,
+      "medianFlux": 247152.53125,
+      "fluxUnit": "e-/s",
+      "rows": 1055,
+      "columns": [
+        {
+          "id": "time",
+          "type": "int32",
+          "step": 0.0001,
+          "missing": 0,
+          "maxRounding": 0.00005
+        },
+        {
+          "id": "flux",
+          "type": "int16",
+          "step": 0.00002,
+          "missing": 0,
+          "maxRounding": 2.22e-16
+        },
+        {
+          "id": "flux_err",
+          "type": "int16",
+          "step": 0.000001,
+          "missing": 0,
+          "maxRounding": 1.36e-20
+        }
+      ]
+    }
+  },
+  "assumptions": [
+    "PDCSAP flux has had instrumental systematics and crowding removed by SPOC; that correction is used as published.",
+    "Times are barycentric dynamical time for the target, as SPOC corrects them.",
+    "The light is the TESS band, not V; the run covers nine rotations, and spots evolve within it."
+  ],
+  "compatible": {
+    "widgets": [],
+    "investigations": []
+  },
+  "offline": "none",
+  "derived": {
+    "file": "js/data/observations/tessEkDraS16.js",
+    "bytes": 3649,
+    "sha256": "42e43581a5e7787b1b5e7edc2b4e2156ed8a7b5ee2064b5f29475544bac0ee60",
+    "sidecar": {
+      "file": "variables/tess-ek-dra-s16.json",
+      "bytes": 11492,
+      "sha256": "162506923f8e631cf186e99ddd85f6ffb0633df93b9482ed2e46764729dd7f22"
+    }
+  },
+  "validation": {
+    "check": "a period search and a four-harmonic refinement find a period inside the span of the cited literature values (2.5 to 2.9 d)",
+    "against": [
+      {
+        "quantity": "period",
+        "value": [
+          2.5,
+          2.9
+        ],
+        "unit": "d",
+        "ref": "EK Dra is a young (about 100 Myr) G1.5 dwarf whose rotation period is given as about 2.77 d (Audard et al. 1999; Ayres 2015; Namekata et al. 2022) and about 2.6 d (Gorgei et al. 2026); the difference is attributed to differential rotation. The band 2.5 to 2.9 d is the span of those values with 0.1 d of margin."
+      }
+    ],
+    "result": {
+      "foundPeriod": 2.5551,
+      "peakPeriod": 2.5498,
+      "points": 1055
+    }
+  }
+}

@@ -65,7 +65,8 @@ function ring(r, cosG, sinG, c0, c1, c2) {
   // mu = a + b c: the first, second and third powers integrated over the arc.
   const i1 = a * m0 + b * m1;
   const i2 = a * a * m0 + 2 * a * b * m1 + b * b * m2;
-  const i3 = a * a * a * m0 + 3 * a * a * b * m1 + 3 * a * b * b * m2 + b * b * b * m3;
+  const i3 =
+    a * a * a * m0 + 3 * a * a * b * m1 + 3 * a * b * b * m2 + b * b * b * m3;
   return c0 * i1 + c1 * i2 + c2 * i3;
 }
 
@@ -156,7 +157,10 @@ export function spottedFlux(t, spec) {
     let lost = 0;
     for (const p of prep) {
       const lam = (p.lon + (360 * (t[i] - t0)) / p.Plat) * DEG;
-      const cg = Math.max(-1, Math.min(1, si * p.cl * Math.cos(lam) + ci * p.sl));
+      const cg = Math.max(
+        -1,
+        Math.min(1, si * p.cl * Math.cos(lam) + ci * p.sl)
+      );
       lost += p.w * spotDeficit(Math.acos(cg), p.rho, u1, u2);
     }
     out[i] = 1 - lost;

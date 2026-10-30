@@ -111,11 +111,18 @@ export function foldedHalves(t, y, P, K = 4, widening = 1) {
   const t0 = t[0];
   const full = harmonicFit(t, y, 2 * P, 2 * K, { t0 });
   const half = harmonicFit(t, y, P, K, { t0 });
-  if (!full || !half) return { statistic: NaN, df: 2 * K, p: 1, rssFull: NaN, rssHalf: NaN };
+  if (!full || !half)
+    return { statistic: NaN, df: 2 * K, p: 1, rssFull: NaN, rssHalf: NaN };
   const dof = Math.max(1, t.length - (4 * K + 1));
   const s2 = (full.chi2 / dof) * widening * widening;
   const stat = Math.max(0, half.chi2 - full.chi2) / s2;
-  return { statistic: stat, df: 2 * K, p: chiSquareSf(stat, 2 * K), rssFull: full.chi2, rssHalf: half.chi2 };
+  return {
+    statistic: stat,
+    df: 2 * K,
+    p: chiSquareSf(stat, 2 * K),
+    rssFull: full.chi2,
+    rssHalf: half.chi2,
+  };
 }
 
 /**
@@ -153,10 +160,19 @@ export function rotationPeriod(t, y, opts = {}) {
   const minP = opts.minPeriod ?? Math.max(0.05, 4 * (T / n));
   const maxP = opts.maxPeriod ?? T;
   const oversample = opts.oversample ?? 8;
-  const found = findPeriod(t, y, { minPeriod: minP, maxPeriod: maxP, oversample });
+  const found = findPeriod(t, y, {
+    minPeriod: minP,
+    maxPeriod: maxP,
+    oversample,
+  });
   const independent = Math.max(1, T * (1 / minP - 1 / maxP));
   const fap = falseAlarm(found.power, n, independent);
-  out.peak = { period: found.period, power: found.power, fap, width: found.width };
+  out.peak = {
+    period: found.period,
+    power: found.power,
+    fap,
+    width: found.width,
+  };
   if (!(fap <= fapLimit)) {
     out.verdict = 'no-signal';
     return out;
@@ -183,8 +199,18 @@ export function rotationPeriod(t, y, opts = {}) {
   out.amplitude = curveStats(fit).amplitude;
   const interval = profileInterval(t, y, best, K, t0, T, sigma2, widening);
   const alias = foldedHalves(t, y, best, K, widening);
-  out.alias = { p: alias.p, statistic: alias.statistic, df: alias.df, level: aliasLevel };
-  const cand = (period, role, status, ivl) => ({ period, interval: ivl, role, status });
+  out.alias = {
+    p: alias.p,
+    statistic: alias.statistic,
+    df: alias.df,
+    level: aliasLevel,
+  };
+  const cand = (period, role, status, ivl) => ({
+    period,
+    interval: ivl,
+    role,
+    status,
+  });
   if (alias.p < aliasLevel) {
     // The odd and even dips differ: the peak is the half period.
     const P2 = refine(t, y, 2 * best, 2 * K, T);
@@ -205,7 +231,12 @@ export function rotationPeriod(t, y, opts = {}) {
     const testable = T / (2 * best) >= 2;
     out.candidates = [
       cand(best, 'peak', 'primary', interval),
-      cand(2 * best, 'double-period', testable ? 'not-excluded' : 'untestable', null),
+      cand(
+        2 * best,
+        'double-period',
+        testable ? 'not-excluded' : 'untestable',
+        null
+      ),
     ];
     if (!testable) out.notes.push('alias-baseline-short');
   }
@@ -216,7 +247,7 @@ export function rotationPeriod(t, y, opts = {}) {
 /** The K-harmonic scatter minimum near P0 (a scan, then golden section). */
 function refine(t, y, P0, K, T) {
   const t0 = t[0];
-  const hw = 0.5 * (P0 * P0) / T;
+  const hw = (0.5 * (P0 * P0)) / T;
   const rss = P => rssAt(t, y, P, K, t0);
   let bestP = P0;
   let bestR = Infinity;
@@ -267,7 +298,9 @@ export function binSeries(t, y, minutes = 30, minimum = 8) {
     sumY.set(k, (sumY.get(k) ?? 0) + y[i]);
     cnt.set(k, (cnt.get(k) ?? 0) + 1);
   }
-  const keys = [...cnt.keys()].filter(k => cnt.get(k) >= minimum).sort((a, b) => a - b);
+  const keys = [...cnt.keys()]
+    .filter(k => cnt.get(k) >= minimum)
+    .sort((a, b) => a - b);
   return {
     t: Float64Array.from(keys, k => sumT.get(k) / cnt.get(k)),
     y: Float64Array.from(keys, k => sumY.get(k) / cnt.get(k)),

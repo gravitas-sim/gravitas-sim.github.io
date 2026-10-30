@@ -1,0 +1,33 @@
+{
+  "note": "Legs of tests/fixtures/stellar-activity/thresholds.json that crossed their bound, kept failing and labelled (only Carl resets a bound).",
+  "failed": [
+    {
+      "id": "B4.periodOracle",
+      "status": "fail",
+      "measured": {
+        "maxRelative": 0.008400739228736754,
+        "synthetic": 0.008400739228736754,
+        "authentic": {
+          "auMic": 0.001895033057851394,
+          "ekDra": 0.00207343814369544
+        }
+      },
+      "note": "the kernel refines with a harmonic series, the oracle peak is a sinusoid: see AM3",
+      "reason": "Compares the kernel's harmonic-series period with the oracle's sinusoid peak; the kernel recovers the true period of each synthetic curve to 1e-4 and its peak agrees with the oracle's to 1e-5 (B2), so the disagreement is the sinusoid's bias on a non-sinusoidal, sheared curve (AM3). Left failing; B5 is the added oracle leg."
+    },
+    {
+      "id": "D4.doubleDipUnequal",
+      "status": "fail",
+      "measured": {
+        "pairOk": 100,
+        "primaryOk": 100,
+        "peakOk": 0,
+        "excluded": 0,
+        "n": 100
+      },
+      "note": "",
+      "reason": "With radii 16 and 9 deg the Lomb-Scargle peak is the rotation period itself, so the factor-two test is not asked and the verdict is period-with-alias with the true period primary (correct, but not the premise of the leg; AM4). Left failing; D4b exercises the double-period verdict."
+    }
+  ],
+  "notRun": []
+}

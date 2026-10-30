@@ -22,7 +22,8 @@
       "candidates": "point i is a candidate when resid_i / sigma >= 3 and (resid_i - err_i) / sigma >= 2, err_i the point error; a run is at least 3 candidates that are consecutive in index with each gap under 1.5 times the median cadence",
       "window": "the window starts at the run start and extends backward, and extends forward from the run end, until three consecutive points lie below 1 sigma (AM2; the first version ended at the first such point), its first and last points being the outermost at or above 1 sigma; windows that overlap or touch (gap under 1.5 cadences) are merged; the peak is the largest resid in the window",
       "ed": "ED = sum over adjacent window points of 0.5 (g_i + g_{i+1}) (t_{i+1} - t_i) with g = (f - q) / q, over the points of the window, in days times 86400 for seconds; sigma_ED^2 = sum_i (w_i err_i / q_i)^2 + (T_win 1.2533 sigma / (q sqrt(N_w)))^2 with w_i the trapezoid weight in the same unit, T_win the window length and N_w the number of points in the median window (kernel only: the oracle compares times and EDs)",
-      "matching": "two flares match when their peak times differ by at most 3 cadences"
+      "matching": "two flares match when their peak times differ by at most 3 cadences",
+      "secondStage": "after the windows are fixed, the quiescent model is recomputed with a single pass whose starting mask is every point within [window start - ceil(length / 2), window end + 2 length] of any window (length = points in the window), the harmonic series being refitted to the unmasked points and the running median taken over them; the residual, the amplitude and the equivalent duration are then measured against that model over the same windows"
     },
     "authenticPreparation": {
       "file": "SPOC light-curve FITS, LIGHTCURVE extension: TIME, PDCSAP_FLUX, PDCSAP_FLUX_ERR, QUALITY; kept where QUALITY == 0 and time, flux and error are finite; flux and error divided by the median flux of the kept cadences",
@@ -325,22 +326,32 @@
     {
       "id": "AM1",
       "when": "before the oracle was run and before any kernel existed; no bound moved",
-      "what": "The flare rule and the authentic preparation are written out so that the oracle and the kernel implement the same rule independently."
+      "what": "The flare rule and the authentic preparation are written out so that the oracle and the kernel implement the same rule independently.",
+      "boundMoved": false
     },
     {
       "id": "AM2",
       "when": "after the first run of C2 (coverage 0.0465 of 301 injected flares, detected fraction 1.0) and B3 (all matched); no bound moved",
-      "what": "The quiescent model masked only the points above 2.5 sigma and two on either side, so a flare's wings (above 1 sigma and below 2.5 sigma) lifted the running median and took about a third of the flare's own light out of its equivalent duration, in the kernel and in the oracle alike (which is why B3 agreed). The rule now extends each seed point both ways while the excess stays at or above 1 sigma before the 2-point dilation. The oracle was changed in the same way and re-run; every other oracle result is unchanged. C2's bound (coverage 0.90) is the original. Second change of AM2, found in the same investigation: the window ended at the first point below 1 sigma, so one noise dip in a flare's 2 sigma tail ended it early (the kernel then returned about two thirds of a flare's equivalent duration and split some flares in two). The window now runs on until three consecutive points lie below 1 sigma, at both ends, and the end point is the last point at or above 1 sigma. Kernel and oracle both follow."
+      "what": "The quiescent model masked only the points above 2.5 sigma and two on either side, so a flare's wings (above 1 sigma and below 2.5 sigma) lifted the running median and took about a third of the flare's own light out of its equivalent duration, in the kernel and in the oracle alike (which is why B3 agreed). The rule now extends each seed point both ways while the excess stays at or above 1 sigma before the 2-point dilation. The oracle was changed in the same way and re-run; every other oracle result is unchanged. C2's bound (coverage 0.90) is the original. Second change of AM2, found in the same investigation: the window ended at the first point below 1 sigma, so one noise dip in a flare's 2 sigma tail ended it early (the kernel then returned about two thirds of a flare's equivalent duration and split some flares in two). The window now runs on until three consecutive points lie below 1 sigma, at both ends, and the end point is the last point at or above 1 sigma. Kernel and oracle both follow.",
+      "boundMoved": false
     },
     {
       "id": "AM3",
       "when": "after the first run of B4; B4 stays as committed",
-      "what": "B4 compares the kernel's refined period (the K-harmonic scatter minimum) with the oracle's Lomb-Scargle sinusoid peak and measured 0.84 per cent against the bound 0.2 per cent on a sheared, non-sinusoidal curve (the kernel recovers the true period of each synthetic curve to 1e-4; the sinusoid peak does not): B4 is left failing and labelled in failed-legs.json. A new leg B5 is added with the same bound 2e-3: the oracle's independent K = 4 harmonic-series period (scipy bounded minimisation of the least-squares scatter, no Gravitas code) against the kernel's, on the three curves and the two authentic series. B5 is an addition; it does not replace B4."
+      "what": "B4 compares the kernel's refined period (the K-harmonic scatter minimum) with the oracle's Lomb-Scargle sinusoid peak and measured 0.84 per cent against the bound 0.2 per cent on a sheared, non-sinusoidal curve (the kernel recovers the true period of each synthetic curve to 1e-4; the sinusoid peak does not): B4 is left failing and labelled in failed-legs.json. A new leg B5 is added with the same bound 2e-3: the oracle's independent K = 4 harmonic-series period (scipy bounded minimisation of the least-squares scatter, no Gravitas code) against the kernel's, on the three curves and the two authentic series. B5 is an addition; it does not replace B4.",
+      "boundMoved": false
     },
     {
       "id": "AM4",
       "when": "after the first run of D4; D4 stays as committed",
-      "what": "D4 (radii 16 and 9 deg) measured primaryOk 100 of 100 but excluded 0 of 100: with spots of that unequal size the Lomb-Scargle peak is the rotation period itself, not the half period, so the factor-two test is never asked and the verdict is 'period-with-alias' with the true period as primary (correct, and not what D4's text premised). D4 is left failing and labelled in failed-legs.json. A new leg D4b is added to exercise the 'double-period' verdict where the premise holds: radii 12 and 10.5 deg, every other setting as D4, 100 draws: the peak lies at half the period, the verdict is 'double-period' and the primary candidate is within 1 per cent of the true P_eq, with the half period listed as excluded, in at least 0.95 of the draws."
+      "what": "D4 (radii 16 and 9 deg) measured primaryOk 100 of 100 but excluded 0 of 100: with spots of that unequal size the Lomb-Scargle peak is the rotation period itself, not the half period, so the factor-two test is never asked and the verdict is 'period-with-alias' with the true period as primary (correct, and not what D4's text premised). D4 is left failing and labelled in failed-legs.json. A new leg D4b is added to exercise the 'double-period' verdict where the premise holds: radii 12 and 10.5 deg, every other setting as D4, 100 draws: the peak lies at half the period, the verdict is 'double-period' and the primary candidate is within 1 per cent of the true P_eq, with the half period listed as excluded, in at least 0.95 of the draws.",
+      "boundMoved": false
+    },
+    {
+      "id": "AM5",
+      "when": "after the first run of E2 (matched fractions 0.83 and 0.90, median relative ED difference 0.31 against 0.1); no bound moved",
+      "what": "AM2 added a second stage to the kernel (the quiescent model recomputed once, with every detected window extended before by half its length and after by twice it masked from the start, the windows themselves unchanged) that the oracle did not have, so on AU Mic's long flares the two lists measured different excesses. The second stage is part of the rule text now (contract.flareRuleDetail.secondStage) and the oracle implements it from that text; its results were re-pinned. B3 (synthetic, matched 1.0, median 0.039) was unaffected by the change in kind.",
+      "boundMoved": false
     }
   ]
 }

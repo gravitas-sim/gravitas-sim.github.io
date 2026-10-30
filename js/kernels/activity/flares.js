@@ -46,7 +46,8 @@ export const TEMPLATE_INTEGRAL = (() => {
   const c = TEMPLATE.rise;
   // the integral from -1 to 0 of c0 + c1 t + c2 t^2 + c3 t^3 + c4 t^4
   let rise = 0;
-  for (let k = 0; k < c.length; k++) rise += (c[k] / (k + 1)) * (0 - (-1) ** (k + 1));
+  for (let k = 0; k < c.length; k++)
+    rise += (c[k] / (k + 1)) * (0 - (-1) ** (k + 1));
   const decay = TEMPLATE.decay.reduce((s, [a, b]) => s + a / b, 0);
   return rise + decay;
 })();
@@ -78,7 +79,9 @@ export function flareProfile(t, flare, cadence, sub = 5) {
       continue;
     let s = 0;
     for (let j = 0; j < sub; j++)
-      s += flareTemplate((t[i] + ((j + 0.5) / sub - 0.5) * cadence - tPeak) / tHalf);
+      s += flareTemplate(
+        (t[i] + ((j + 0.5) / sub - 0.5) * cadence - tPeak) / tHalf
+      );
     out[i] = (amp * s) / sub;
   }
   return out;
@@ -144,7 +147,9 @@ export function quiescentModel(
       }
     const h = new Float64Array(n);
     const fit = period
-      ? harmonicFit(Float64Array.from(tu), Float64Array.from(fu), period, K, { t0 })
+      ? harmonicFit(Float64Array.from(tu), Float64Array.from(fu), period, K, {
+          t0,
+        })
       : null;
     if (fit) for (let i = 0; i < n; i++) h[i] = fit.at(t[i]);
     else h.fill(median(fu));
@@ -192,7 +197,10 @@ export function detectFlares(t, f, err, opts = {}) {
   const window = opts.window ?? 0.25;
   const n = t.length;
   const e = typeof err === 'number' ? new Float64Array(n).fill(err) : err;
-  const { q, sigma } = quiescentModel(t, f, { period: opts.period ?? null, window });
+  const { q, sigma } = quiescentModel(t, f, {
+    period: opts.period ?? null,
+    window,
+  });
   const resid = Float64Array.from(f, (v, i) => v - q[i]);
   const diffs = [];
   for (let i = 1; i < n; i++) diffs.push(t[i] - t[i - 1]);
@@ -202,7 +210,7 @@ export function detectFlares(t, f, err, opts = {}) {
     r / sigma >= N1 && (r - e[i]) / sigma >= N2 ? 1 : 0
   );
   const wins = [];
-  for (let i = 0; i < n; ) {
+  for (let i = 0; i < n;) {
     if (!cand[i]) {
       i++;
       continue;
@@ -214,7 +222,7 @@ export function detectFlares(t, f, err, opts = {}) {
       let b = j;
       // The window runs on until three consecutive points lie below 1 sigma, so that one
       // noise dip in a flare's tail does not end it.
-      for (let moved = true; moved; ) {
+      for (let moved = true; moved;) {
         moved = false;
         for (let k = 1; k <= 3 && a - k >= 0 && t[a] - t[a - k] < gap * k; k++)
           if (resid[a - k] >= sigma) {
@@ -223,7 +231,7 @@ export function detectFlares(t, f, err, opts = {}) {
             break;
           }
       }
-      for (let moved = true; moved; ) {
+      for (let moved = true; moved;) {
         moved = false;
         for (let k = 1; k <= 3 && b + k < n && t[b + k] - t[b] < gap * k; k++)
           if (resid[b + k] >= sigma) {
@@ -247,9 +255,19 @@ export function detectFlares(t, f, err, opts = {}) {
     const m0 = new Uint8Array(n);
     for (const [a, b] of wins) {
       const len = b - a + 1;
-      for (let i = Math.max(0, a - Math.ceil(len / 2)); i <= Math.min(n - 1, b + 2 * len); i++) m0[i] = 1;
+      for (
+        let i = Math.max(0, a - Math.ceil(len / 2));
+        i <= Math.min(n - 1, b + 2 * len);
+        i++
+      )
+        m0[i] = 1;
     }
-    q2 = quiescentModel(t, f, { period: opts.period ?? null, window, passes: 1, mask: m0 }).q;
+    q2 = quiescentModel(t, f, {
+      period: opts.period ?? null,
+      window,
+      passes: 1,
+      mask: m0,
+    }).q;
   }
   const resid2 = Float64Array.from(f, (v, i) => v - q2[i]);
   const flares = wins.map(([a, b], k) =>
@@ -270,7 +288,8 @@ function describe(t, resid, q, e, sigma, a, b, nWin, cadence, around) {
   let v = 0;
   let qBar = 0;
   for (let i = a; i <= b; i++) {
-    const w = (i > a ? (t[i] - t[i - 1]) / 2 : 0) + (i < b ? (t[i + 1] - t[i]) / 2 : 0);
+    const w =
+      (i > a ? (t[i] - t[i - 1]) / 2 : 0) + (i < b ? (t[i + 1] - t[i]) / 2 : 0);
     ed += (w * resid[i]) / q[i];
     v += ((w * e[i]) / q[i]) ** 2;
     qBar += q[i];
@@ -282,13 +301,17 @@ function describe(t, resid, q, e, sigma, a, b, nWin, cadence, around) {
   let tl = t[a];
   for (let i = pk; i > a; i--)
     if (resid[i - 1] < half) {
-      tl = t[i - 1] + ((half - resid[i - 1]) / (resid[i] - resid[i - 1])) * (t[i] - t[i - 1]);
+      tl =
+        t[i - 1] +
+        ((half - resid[i - 1]) / (resid[i] - resid[i - 1])) * (t[i] - t[i - 1]);
       break;
     }
   let tr = t[b];
   for (let i = pk; i < b; i++)
     if (resid[i + 1] < half) {
-      tr = t[i] + ((resid[i] - half) / (resid[i] - resid[i + 1])) * (t[i + 1] - t[i]);
+      tr =
+        t[i] +
+        ((resid[i] - half) / (resid[i] - resid[i + 1])) * (t[i + 1] - t[i]);
       break;
     }
   const fwhm = Math.max(cadence, tr - tl);
@@ -328,7 +351,9 @@ function templateAt(t, tPeak, tHalf, cadence, out) {
   for (let i = 0; i < t.length; i++) {
     let sum = 0;
     for (let j = 0; j < 3; j++)
-      sum += flareTemplate((t[i] + ((j + 0.5) / 3 - 0.5) * cadence - tPeak) / tHalf);
+      sum += flareTemplate(
+        (t[i] + ((j + 0.5) / 3 - 0.5) * cadence - tPeak) / tHalf
+      );
     out[i] = sum / 3;
   }
 }
@@ -399,18 +424,31 @@ function fitTemplate(t, resid, q, e, a, b, pk, cadence, { lo, hi }) {
     for (const tp of tps)
       for (const th of ths) {
         const r = solve(y, tp, th);
-        if (r && (!best || r.rss < best.rss)) best = { ...r, tPeak: tp, tHalf: th };
+        if (r && (!best || r.rss < best.rss))
+          best = { ...r, tPeak: tp, tHalf: th };
       }
     return best;
   };
   const th0 = 0.5 * cadence;
   const th1 = Math.max(4 * cadence, 3 * dur);
-  const coarseTp = Array.from({ length: 6 }, (_, k) => t[pk] + (k - 3) * 0.5 * cadence);
-  const coarseTh = Array.from({ length: 60 }, (_, j) => th0 * (th1 / th0) ** (j / 59));
+  const coarseTp = Array.from(
+    { length: 6 },
+    (_, k) => t[pk] + (k - 3) * 0.5 * cadence
+  );
+  const coarseTh = Array.from(
+    { length: 60 },
+    (_, j) => th0 * (th1 / th0) ** (j / 59)
+  );
   const c0 = search(g, coarseTp, coarseTh);
   if (!c0) return null;
-  const fineTp = Array.from({ length: 5 }, (_, k) => c0.tPeak + (k - 2) * 0.25 * cadence);
-  const fineTh = Array.from({ length: 17 }, (_, j) => c0.tHalf * 1.25 ** ((j - 8) / 8));
+  const fineTp = Array.from(
+    { length: 5 },
+    (_, k) => c0.tPeak + (k - 2) * 0.25 * cadence
+  );
+  const fineTh = Array.from(
+    { length: 17 },
+    (_, j) => c0.tHalf * 1.25 ** ((j - 8) / 8)
+  );
   const best = search(g, fineTp, fineTh);
   const D = 86400;
   const edOf = r => TEMPLATE_INTEGRAL * r.A * r.tHalf * D;
@@ -421,14 +459,21 @@ function fitTemplate(t, resid, q, e, a, b, pk, cadence, { lo, hi }) {
   const noise = gaussian(stream('noise', 'flare-fit', pk));
   templateAt(tt, best.tPeak, best.tHalf, cadence, F);
   const model = Float64Array.from(F, v => best.c + best.A * v);
-  const localTp = Array.from({ length: 5 }, (_, k) => best.tPeak + (k - 2) * 0.25 * cadence);
-  const localTh = Array.from({ length: 13 }, (_, j) => best.tHalf * 1.08 ** (j - 6));
+  const localTp = Array.from(
+    { length: 5 },
+    (_, k) => best.tPeak + (k - 2) * 0.25 * cadence
+  );
+  const localTh = Array.from(
+    { length: 13 },
+    (_, j) => best.tHalf * 1.08 ** (j - 6)
+  );
   let sum = 0;
   let sum2 = 0;
   let nb = 0;
   const y = new Float64Array(m);
   for (let k = 0; k < BOOT; k++) {
-    for (let i = 0; i < m; i++) y[i] = model[i] + Math.sqrt(scale) * sg[i] * noise();
+    for (let i = 0; i < m; i++)
+      y[i] = model[i] + Math.sqrt(scale) * sg[i] * noise();
     const r = search(y, localTp, localTh);
     if (!r) continue;
     const v = edOf(r);
@@ -439,7 +484,8 @@ function fitTemplate(t, resid, q, e, a, b, pk, cadence, { lo, hi }) {
   const mean = nb ? sum / nb : ed;
   const edSigma =
     nb > 3
-      ? ED_INFLATION * Math.sqrt(Math.max(0, (sum2 - nb * mean * mean) / (nb - 1)))
+      ? ED_INFLATION *
+        Math.sqrt(Math.max(0, (sum2 - nb * mean * mean) / (nb - 1)))
       : NaN;
   return {
     ed,
@@ -458,7 +504,9 @@ export function equivalentDuration(t, f, q, a, b) {
   let ed = 0;
   for (let i = a; i < b; i++)
     ed +=
-      0.5 * ((f[i] - q[i]) / q[i] + (f[i + 1] - q[i + 1]) / q[i + 1]) * (t[i + 1] - t[i]);
+      0.5 *
+      ((f[i] - q[i]) / q[i] + (f[i + 1] - q[i + 1]) / q[i + 1]) *
+      (t[i + 1] - t[i]);
   return ed * 86400;
 }
 
@@ -496,7 +544,13 @@ export function powerLawSlope(eds, edMin, level = 0.95) {
   const a = 1 + n / S;
   const lo = 1 + chiQuantile((1 - level) / 2, 2 * n) / (2 * S);
   const hi = 1 + chiQuantile(1 - (1 - level) / 2, 2 * n) / (2 * S);
-  return { n, alpha: a, sigma: (a - 1) / Math.sqrt(n), interval: [lo, hi], edMin };
+  return {
+    n,
+    alpha: a,
+    sigma: (a - 1) / Math.sqrt(n),
+    interval: [lo, hi],
+    edMin,
+  };
 }
 
 /**
@@ -521,3 +575,13 @@ export function scanEdMin(eds, minCount = 10) {
   }
   return best;
 }
+
+/**
+ * The equivalent duration (seconds) of the faintest, shortest flare the rule recovers
+ * completely, from the injection-recovery table of the validation (C4): a flare of peak
+ * 8 sigma and t_1/2 of 30 minutes. Fainter or shorter flares are found only in part, so a
+ * frequency distribution is fitted above this value and not below it.
+ * @param {number} sigma - the detrended scatter of the light curve, in relative flux
+ */
+export const completenessEd = (sigma, ampSigma = 8, tHalfMin = 30) =>
+  TEMPLATE_INTEGRAL * ampSigma * sigma * tHalfMin * 60;

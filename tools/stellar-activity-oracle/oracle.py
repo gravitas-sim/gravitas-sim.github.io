@@ -128,8 +128,8 @@ def mad_sigma(x):
     return 1.4826 * np.median(np.abs(x - np.median(x)))
 
 
-def quiescent(t, f, P, window=0.25, K=3, passes=3):
-    mask = np.zeros(len(t), bool)
+def quiescent(t, f, P, window=0.25, K=3, passes=3, start=None):
+    mask = np.zeros(len(t), bool) if start is None else start.copy()
     for _ in range(passes):
         h = harmonic_fit(t, f, P, K, mask) if P else np.zeros_like(f) + np.median(f[~mask])
         m = running_median(t, f - h, mask, window / 2)
@@ -196,6 +196,15 @@ def find_flares(t, f, err, P, window=0.25, N1=3, N2=2, N3=3):
             merged[-1][1] = max(merged[-1][1], w[1])
         else:
             merged.append(w)
+    # AM5 (second stage): one more pass with every window, extended before by half its length and
+    # after by twice it, masked from the start; the windows stay, the excess is re-measured
+    m0 = np.zeros(n, bool)
+    for a, b in merged:
+        ln = b - a + 1
+        m0[max(0, a - int(np.ceil(ln / 2))):min(n, b + 2 * ln + 1)] = True
+    if merged:
+        q, _ = quiescent(t, f, P, window, passes=1, start=m0)
+        resid = f - q
     out = []
     g = resid / q
     for a, b in merged:

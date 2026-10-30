@@ -23,6 +23,7 @@ import { fileURLToPath } from 'node:url';
 import * as K from '../js/kernels/activity/index.js';
 import { findPeriod, periodogram } from '../js/kernels/variables/period.js';
 import { gaussian, stream } from '../js/random/streams.js';
+import { activityCurveOf } from '../js/activityData.js';
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const FIX = 'tests/fixtures/stellar-activity';
@@ -43,8 +44,12 @@ const draw = (tag, i) => stream('injection', SEED, tag, i);
 const noiseOf = (tag, i) => gaussian(stream('noise', SEED, tag, i));
 const uni = (r, a, b) => a + (b - a) * r();
 const grid = (T, minutes, t0 = 0) =>
-  Float64Array.from({ length: Math.floor((T * 1440) / minutes) }, (_, i) => t0 + (i * minutes) / 1440);
-const withNoise = (flux, sigma, noise) => Float64Array.from(flux, v => v + sigma * noise());
+  Float64Array.from(
+    { length: Math.floor((T * 1440) / minutes) },
+    (_, i) => t0 + (i * minutes) / 1440
+  );
+const withNoise = (flux, sigma, noise) =>
+  Float64Array.from(flux, v => v + sigma * noise());
 const rel = (a, b) => Math.abs(a - b) / Math.abs(b);
 
 // ---- (a) analytic ----------------------------------------------------------------
@@ -53,23 +58,38 @@ function legA() {
   // A1: the centre of the disc, closed form
   {
     let worst = 0;
-    for (const [u1, u2] of [[0, 0], [0.4, 0.22], [0.7, 0.1]])
+    for (const [u1, u2] of [
+      [0, 0],
+      [0.4, 0.22],
+      [0.7, 0.1],
+    ])
       for (const rho of [5, 10, 20, 40, 60, 85]) {
         const c0 = 1 - u1 - u2;
         const c1 = u1 + 2 * u2;
         const c2 = -u2;
         const G = x => (c0 * x * x) / 2 + (c1 * x ** 3) / 3 + (c2 * x ** 4) / 4;
-        const exact = (2 * Math.PI * (G(1) - G(Math.cos(rho * DEG)))) / K.discLight(u1, u2);
-        worst = Math.max(worst, rel(K.spotDeficit(0, rho * DEG, u1, u2), exact));
+        const exact =
+          (2 * Math.PI * (G(1) - G(Math.cos(rho * DEG)))) / K.discLight(u1, u2);
+        worst = Math.max(
+          worst,
+          rel(K.spotDeficit(0, rho * DEG, u1, u2), exact)
+        );
       }
-    row('A1.centre', worst <= lim('A1.centre').maxRelativeError, { maxRelativeError: worst });
+    row('A1.centre', worst <= lim('A1.centre').maxRelativeError, {
+      maxRelativeError: worst,
+    });
   }
   // A2: a hemisphere-sized spot
   {
     let worst = 0;
     for (const [u] of [[[0, 0]], [[0.4, 0.22]]])
       for (const c of [0, 0.3, 0.8]) {
-        const f = K.spottedFlux([0], { period: 3, inc: 90, u, spots: [{ lat: 0, lon: 0, radius: 90, contrast: c }] });
+        const f = K.spottedFlux([0], {
+          period: 3,
+          inc: 90,
+          u,
+          spots: [{ lat: 0, lon: 0, radius: 90, contrast: c }],
+        });
         worst = Math.max(worst, Math.abs(f[0] - c));
       }
     row('A2.full', worst <= lim('A2.full').maxAbsError, { maxAbsError: worst });
@@ -86,21 +106,36 @@ function legA() {
       prev = d;
     }
     const L = lim('A3.hidden');
-    row('A3.hidden', hidden === L.hiddenAbsError && jump / centre <= L.maxStepRelative, {
-      hidden,
-      maxStepRelative: jump / centre,
-    });
+    row(
+      'A3.hidden',
+      hidden === L.hiddenAbsError && jump / centre <= L.maxStepRelative,
+      {
+        hidden,
+        maxStepRelative: jump / centre,
+      }
+    );
   }
   // A4: periodic and mirror-symmetric
   {
     const P = 3.7;
-    const spec = { period: P, inc: 90, spots: [{ lat: 0, lon: 0, radius: 15, contrast: 0.4 }] };
+    const spec = {
+      period: P,
+      inc: 90,
+      spots: [{ lat: 0, lon: 0, radius: 15, contrast: 0.4 }],
+    };
     const t = Float64Array.from({ length: 200 }, (_, i) => (i * 0.37) % P);
     const a = K.spottedFlux(t, spec);
-    const b = K.spottedFlux(Float64Array.from(t, v => v + P), spec);
-    const c = K.spottedFlux(Float64Array.from(t, v => P - v), spec);
+    const b = K.spottedFlux(
+      Float64Array.from(t, v => v + P),
+      spec
+    );
+    const c = K.spottedFlux(
+      Float64Array.from(t, v => P - v),
+      spec
+    );
     let w = 0;
-    for (let i = 0; i < t.length; i++) w = Math.max(w, Math.abs(a[i] - b[i]), Math.abs(a[i] - c[i]));
+    for (let i = 0; i < t.length; i++)
+      w = Math.max(w, Math.abs(a[i] - b[i]), Math.abs(a[i] - c[i]));
     row('A4.periodic', w <= lim('A4.periodic').maxAbsError, { maxAbsError: w });
   }
   // A5: antipodal spots
@@ -116,27 +151,42 @@ function legA() {
     };
     const t = Float64Array.from({ length: 200 }, (_, i) => i * 0.0917);
     const a = K.spottedFlux(t, spec);
-    const b = K.spottedFlux(Float64Array.from(t, v => v + P / 2), spec);
+    const b = K.spottedFlux(
+      Float64Array.from(t, v => v + P / 2),
+      spec
+    );
     let w = 0;
     for (let i = 0; i < t.length; i++) w = Math.max(w, Math.abs(a[i] - b[i]));
     const tt = Float64Array.from({ length: 400 }, (_, i) => (8 * P * i) / 400);
     const ff = K.spottedFlux(tt, spec);
     const pk = findPeriod(tt, ff, { minPeriod: 0.5, maxPeriod: 6 });
     const L = lim('A5.antipodal');
-    row('A5.antipodal', w <= L.maxAbsError && rel(pk.period, P / 2) <= L.peakRelativeError, {
-      maxAbsError: w,
-      peakRelativeError: rel(pk.period, P / 2),
-    });
+    row(
+      'A5.antipodal',
+      w <= L.maxAbsError && rel(pk.period, P / 2) <= L.peakRelativeError,
+      {
+        maxAbsError: w,
+        peakRelativeError: rel(pk.period, P / 2),
+      }
+    );
   }
   // A6: shear
   {
     const Peq = 3;
     const k = 0.2;
     const Plat = Peq / (1 - k * Math.sin(50 * DEG) ** 2);
-    const spec = { period: Peq, shear: k, inc: 70, spots: [{ lat: 50, lon: 10, radius: 14, contrast: 0.5 }] };
+    const spec = {
+      period: Peq,
+      shear: k,
+      inc: 70,
+      spots: [{ lat: 50, lon: 10, radius: 14, contrast: 0.5 }],
+    };
     const t = Float64Array.from({ length: 200 }, (_, i) => i * 0.0431);
     const a = K.spottedFlux(t, spec);
-    const b = K.spottedFlux(Float64Array.from(t, v => v + Plat), spec);
+    const b = K.spottedFlux(
+      Float64Array.from(t, v => v + Plat),
+      spec
+    );
     let w = 0;
     for (let i = 0; i < t.length; i++) w = Math.max(w, Math.abs(a[i] - b[i]));
     row('A6.shear', w <= lim('A6.shear').maxAbsError, { maxAbsError: w, Plat });
@@ -153,18 +203,31 @@ function legA() {
     for (const th of [10, 30, 90]) {
       const cadence = 2 / 1440;
       const lead = Math.ceil((1.5 * th) / 2);
-      const t = Float64Array.from({ length: Math.ceil((60 * th) / 2) + lead + 20 }, (_, i) => (i - lead) * cadence);
-      const prof = K.flareProfile(t, { tPeak: 0, tHalf: th / 1440, amp: 1 }, cadence, 30);
+      const t = Float64Array.from(
+        { length: Math.ceil((60 * th) / 2) + lead + 20 },
+        (_, i) => (i - lead) * cadence
+      );
+      const prof = K.flareProfile(
+        t,
+        { tPeak: 0, tHalf: th / 1440, amp: 1 },
+        cadence,
+        30
+      );
       let sum = 0;
       for (const v of prof) sum += v;
       const ed = sum * cadence;
       worst = Math.max(worst, rel(ed / (th / 1440), 1.827046));
     }
-    row('A7.template', Math.max(analytic, numeric) <= L.analyticRelative && worst <= L.sampledRelative, {
-      analyticRelative: analytic,
-      numericRelative: numeric,
-      sampledRelative: worst,
-    });
+    row(
+      'A7.template',
+      Math.max(analytic, numeric) <= L.analyticRelative &&
+        worst <= L.sampledRelative,
+      {
+        analyticRelative: analytic,
+        numericRelative: numeric,
+        sampledRelative: worst,
+      }
+    );
   }
   // A8: a boxcar
   {
@@ -178,7 +241,11 @@ function legA() {
     const q = new Float64Array(n).fill(1);
     const ed = K.equivalentDuration(t, f, q, a, b);
     const truth = 0.02 * 20 * 60;
-    row('A8.edBox', rel(ed, truth) <= lim('A8.edBox').maxRelative, { ed, truth, relative: rel(ed, truth) });
+    row('A8.edBox', rel(ed, truth) <= lim('A8.edBox').maxRelative, {
+      ed,
+      truth,
+      relative: rel(ed, truth),
+    });
   }
   // A9: the slope
   {
@@ -189,8 +256,15 @@ function legA() {
     const S = 21 * Math.log(2);
     const lo = 1 + 5.629 / (2 * S);
     const hi = 1 + 26.119 / (2 * S);
-    const iv = Math.max(Math.abs(s7.interval[0] - lo), Math.abs(s7.interval[1] - hi));
-    row('A9.slope', a <= L.alphaAbsError && iv <= L.intervalAbsError, { alphaAbsError: a, intervalAbsError: iv, interval: s7.interval });
+    const iv = Math.max(
+      Math.abs(s7.interval[0] - lo),
+      Math.abs(s7.interval[1] - hi)
+    );
+    row('A9.slope', a <= L.alphaAbsError && iv <= L.intervalAbsError, {
+      alphaAbsError: a,
+      intervalAbsError: iv,
+      interval: s7.interval,
+    });
   }
 }
 
@@ -202,7 +276,10 @@ function legB() {
     let worst = 0;
     let worstAbs = 0;
     let fails = 0;
-    for (const { config: [g, r, u1, u2], deficit } of ORA.spotDeficits) {
+    for (const {
+      config: [g, r, u1, u2],
+      deficit,
+    } of ORA.spotDeficits) {
       const k = K.spotDeficit(g * DEG, r * DEG, u1, u2);
       const d = Math.abs(k - deficit);
       const ok = d <= L.orAbsolute || d <= L.maxRelativeDeficit * deficit;
@@ -210,7 +287,12 @@ function legB() {
       worst = Math.max(worst, deficit > 0 ? d / deficit : 0);
       worstAbs = Math.max(worstAbs, d);
     }
-    row('B1.spotOracle', fails === 0, { configs: ORA.spotDeficits.length, failures: fails, maxRelative: worst, maxAbsolute: worstAbs });
+    row('B1.spotOracle', fails === 0, {
+      configs: ORA.spotDeficits.length,
+      failures: fails,
+      maxRelative: worst,
+      maxAbsolute: worstAbs,
+    });
   }
   const t = Float64Array.from({ length: 600 }, (_, i) => (24 * i) / 600);
   const pinned = THRESHOLDS.oracle.curves.pinnedPeriods;
@@ -220,46 +302,97 @@ function legB() {
     let pw = 0;
     for (const c of ORA.curves) {
       const y = Float64Array.from(c.flux);
-      const found = findPeriod(t, y, { minPeriod: 0.5, maxPeriod: 12, oversample: 8 });
+      const found = findPeriod(t, y, {
+        minPeriod: 0.5,
+        maxPeriod: 12,
+        oversample: 8,
+      });
       peak = Math.max(peak, rel(found.period, c.peakPeriod));
       const p = periodogram(t, y, pinned);
       pinned.forEach((P, j) => {
         pw = Math.max(pw, Math.abs(p[j] - c.powerAt[String(P)]));
       });
     }
-    row('B2.periodogram', peak <= L.peakRelative && pw <= L.powerAbs, { peakRelative: peak, maxPowerDifference: pw });
+    row('B2.periodogram', peak <= L.peakRelative && pw <= L.powerAbs, {
+      peakRelative: peak,
+      maxPowerDifference: pw,
+    });
   }
   {
     const L = lim('B3.flareOracle');
     const fc = read(`${FIX}/flare-curve.json`);
     const n = fc.flux.length;
-    const tt = Float64Array.from({ length: n }, (_, i) => fc.t0 + i * fc.cadenceDays);
-    const kern = K.detectFlares(tt, Float64Array.from(fc.flux), 1e-3, { period: fc.period });
-    const cmp = compareFlares(kern.flares, ORA.flareCurve.flares, fc.cadenceDays);
-    row('B3.flareOracle', cmp.fracKernel >= L.minMatchedFraction && cmp.fracOracle >= L.minMatchedFraction && cmp.medianEd <= L.maxMedianEdDifference, {
-      kernel: kern.flares.length,
-      oracle: ORA.flareCurve.flares.length,
-      ...cmp,
+    const tt = Float64Array.from(
+      { length: n },
+      (_, i) => fc.t0 + i * fc.cadenceDays
+    );
+    const kern = K.detectFlares(tt, Float64Array.from(fc.flux), 1e-3, {
+      period: fc.period,
     });
+    const cmp = compareFlares(
+      kern.flares,
+      ORA.flareCurve.flares,
+      fc.cadenceDays
+    );
+    row(
+      'B3.flareOracle',
+      cmp.fracKernel >= L.minMatchedFraction &&
+        cmp.fracOracle >= L.minMatchedFraction &&
+        cmp.medianEd <= L.maxMedianEdDifference,
+      {
+        kernel: kern.flares.length,
+        oracle: ORA.flareCurve.flares.length,
+        ...cmp,
+      }
+    );
   }
   {
     const L = lim('B4.periodOracle');
     let worst = 0;
     ORA.curves.forEach(c => {
-      const r = K.rotationPeriod(t, Float64Array.from(c.flux), { minPeriod: 0.5, maxPeriod: 12 });
+      const r = K.rotationPeriod(t, Float64Array.from(c.flux), {
+        minPeriod: 0.5,
+        maxPeriod: 12,
+      });
       const p = r.period ?? r.peak?.period;
       worst = Math.max(worst, rel(p, c.peakPeriod));
     });
-    row('B4.periodOracle', worst <= L.maxRelative, { maxRelative: worst });
+    const synthetic = worst;
+    const authenticDiff = {};
+    for (const [key, file, binned] of [
+      ['auMic', 'tess-au-mic-s1.json', true],
+      ['ekDra', 'tess-ek-dra-s16.json', false],
+    ]) {
+      const cur = loadAuthentic(key, file);
+      if (!cur) continue;
+      const b = binned
+        ? K.binSeries(cur.t, cur.flux, 30, 8)
+        : { t: cur.t, y: cur.flux };
+      const r = K.rotationPeriod(b.t, b.y, { minPeriod: 0.5, maxPeriod: 13 });
+      authenticDiff[key] = rel(r.period, ORA.authentic[key].peakPeriod);
+      worst = Math.max(worst, authenticDiff[key]);
+    }
+    row(
+      'B4.periodOracle',
+      worst <= L.maxRelative,
+      { maxRelative: worst, synthetic, authentic: authenticDiff },
+      'the kernel refines with a harmonic series, the oracle peak is a sinusoid: see AM3'
+    );
   }
   {
     const L = lim('B5.harmonicOracle');
     let worst = 0;
     ORA.curves.forEach(c => {
-      const r = K.rotationPeriod(t, Float64Array.from(c.flux), { minPeriod: 0.5, maxPeriod: 12 });
+      const r = K.rotationPeriod(t, Float64Array.from(c.flux), {
+        minPeriod: 0.5,
+        maxPeriod: 12,
+      });
       worst = Math.max(worst, rel(r.period, c.harmonicPeriod));
     });
-    row('B5.harmonicOracle', worst <= L.maxRelative, { maxRelative: worst, scope: 'the three curves (the authentic series are in E1 and E3)' });
+    row('B5.harmonicOracle', worst <= L.maxRelative, {
+      maxRelative: worst,
+      scope: 'the three curves (the authentic series are in E1 and E3)',
+    });
   }
 }
 
@@ -290,10 +423,17 @@ const spotStar = (r, twoSpots) => {
   const P = uni(r, 0.8, 12);
   const inc = uni(r, 50, 90);
   const lat1 = uni(r, -60, 60);
-  const spots = [{ lat: lat1, lon: uni(r, 0, 360), radius: uni(r, 6, 15), contrast: 0.6 }];
+  const spots = [
+    { lat: lat1, lon: uni(r, 0, 360), radius: uni(r, 6, 15), contrast: 0.6 },
+  ];
   if (twoSpots) {
     const sep = uni(r, 60, 120);
-    spots.push({ lat: uni(r, -60, 60), lon: spots[0].lon + sep, radius: uni(r, 6, 15), contrast: 0.6 });
+    spots.push({
+      lat: uni(r, -60, 60),
+      lon: spots[0].lon + sep,
+      radius: uni(r, 6, 15),
+      contrast: 0.6,
+    });
   }
   return { P, inc, spots };
 };
@@ -308,7 +448,11 @@ function legC1() {
     const { P, inc, spots } = spotStar(r, i % 3 === 1);
     const sigma = i % 2 ? 3e-3 : 1e-3;
     const t = grid(27, 30);
-    const y = withNoise(K.spottedFlux(t, { period: P, inc, spots }), sigma, noiseOf('C1', i));
+    const y = withNoise(
+      K.spottedFlux(t, { period: P, inc, spots }),
+      sigma,
+      noiseOf('C1', i)
+    );
     const res = K.rotationPeriod(t, y, { minPeriod: 0.5, maxPeriod: 14 });
     verdicts[res.verdict] = (verdicts[res.verdict] ?? 0) + 1;
     if (res.period !== null && res.interval) {
@@ -317,7 +461,12 @@ function legC1() {
     }
   }
   const cov = answered ? covered / answered : 0;
-  row('C1.periodCoverage', cov >= lim('C1.periodCoverage').minCoverage, { coverage: cov, answered, n, verdicts });
+  row('C1.periodCoverage', cov >= lim('C1.periodCoverage').minCoverage, {
+    coverage: cov,
+    answered,
+    n,
+    verdicts,
+  });
 }
 
 const flareCurve = (r, noise, nFlares, T = 3, sigma = 1e-3) => {
@@ -332,7 +481,12 @@ const flareCurve = (r, noise, nFlares, T = 3, sigma = 1e-3) => {
     const tHalf = uni(r, 8, 40) / 1440;
     const prof = K.flareProfile(t, { tPeak, tHalf, amp }, cad);
     for (let i = 0; i < n; i++) f[i] += prof[i];
-    truth.push({ tPeak, amp, tHalf, ed: amp * tHalf * K.TEMPLATE_INTEGRAL * 86400 });
+    truth.push({
+      tPeak,
+      amp,
+      tHalf,
+      ed: amp * tHalf * K.TEMPLATE_INTEGRAL * 86400,
+    });
   }
   for (let i = 0; i < n; i++) f[i] += sigma * noise();
   return { t, f, truth, cad };
@@ -358,7 +512,11 @@ function legC2() {
     }
   }
   const cov = detected ? covered / detected : 0;
-  row('C2.edCoverage', cov >= L.minCoverage && detected / injected >= L.minDetectedFraction, { coverage: cov, detectedFraction: detected / injected, injected });
+  row(
+    'C2.edCoverage',
+    cov >= L.minCoverage && detected / injected >= L.minDetectedFraction,
+    { coverage: cov, detectedFraction: detected / injected, injected }
+  );
 }
 
 function legC3() {
@@ -370,7 +528,10 @@ function legC3() {
     const s = K.powerLawSlope(xs, 1);
     if (s.interval[0] <= 1.8 && 1.8 <= s.interval[1]) hit++;
   }
-  row('C3.slopeCoverage', hit / L.n >= L.minCoverage, { coverage: hit / L.n, n: L.n });
+  row('C3.slopeCoverage', hit / L.n >= L.minCoverage, {
+    coverage: hit / L.n,
+    n: L.n,
+  });
 }
 
 function legC4() {
@@ -398,8 +559,12 @@ function legC4() {
         const f = new Float64Array(n).fill(1);
         const truth = [];
         for (let k = 0; k < 10; k++) {
-          const tPeak = 0.4 + k * (n * cad - 0.8) / 10 + 0.1 * r();
-          const prof = K.flareProfile(t, { tPeak, tHalf: h / 1440, amp: a * sigma }, cad);
+          const tPeak = 0.4 + (k * (n * cad - 0.8)) / 10 + 0.1 * r();
+          const prof = K.flareProfile(
+            t,
+            { tPeak, tHalf: h / 1440, amp: a * sigma },
+            cad
+          );
           for (let i = 0; i < n; i++) f[i] += prof[i];
           truth.push(tPeak);
         }
@@ -412,7 +577,11 @@ function legC4() {
       }
       const c = rec / inj;
       table.push({ ampSigma: a, tHalfMin: h, completeness: c, n: inj });
-      if (graded.some(([ga, gh]) => ga === a && gh === h) && c < L.minCompletenessGraded) allOk = false;
+      if (
+        graded.some(([ga, gh]) => ga === a && gh === h) &&
+        c < L.minCompletenessGraded
+      )
+        allOk = false;
     }
   let fp = 0;
   for (let c = 0; c < 40; c++) {
@@ -422,7 +591,11 @@ function legC4() {
     fp += K.detectFlares(t, f, sigma, {}).flares.length;
   }
   const fpRate = (fp / (40 * n)) * 1000;
-  row('C4.completeness', allOk && fpRate <= L.maxFalsePerThousandPoints, { table, falsePerThousandPoints: fpRate, falseTotal: fp });
+  row('C4.completeness', allOk && fpRate <= L.maxFalsePerThousandPoints, {
+    table,
+    falsePerThousandPoints: fpRate,
+    falseTotal: fp,
+  });
 }
 
 // ---- (d) misspecified and negative -----------------------------------------------------
@@ -435,9 +608,15 @@ function legD() {
       const noise = noiseOf('D1', i);
       const t = Float64Array.from({ length: 400 }, (_, j) => (27 * j) / 400);
       const y = Float64Array.from(t, () => 1 + 1e-3 * noise());
-      if (K.rotationPeriod(t, y, { minPeriod: 0.5, maxPeriod: 13.5 }).verdict === 'no-signal') none++;
+      if (
+        K.rotationPeriod(t, y, { minPeriod: 0.5, maxPeriod: 13.5 }).verdict ===
+        'no-signal'
+      )
+        none++;
     }
-    row('D1.noise', none / 200 >= L.minNoSignalFraction, { fraction: none / 200 });
+    row('D1.noise', none / 200 >= L.minNoSignalFraction, {
+      fraction: none / 200,
+    });
   }
   {
     let ok = 0;
@@ -445,14 +624,27 @@ function legD() {
       const r = draw('D2', i);
       const t = grid(15, 30);
       const y = withNoise(
-        K.spottedFlux(t, { period: 12, inc: 70, spots: [{ lat: uni(r, 10, 50), lon: uni(r, 0, 360), radius: 12, contrast: 0.6 }] }),
+        K.spottedFlux(t, {
+          period: 12,
+          inc: 70,
+          spots: [
+            {
+              lat: uni(r, 10, 50),
+              lon: uni(r, 0, 360),
+              radius: 12,
+              contrast: 0.6,
+            },
+          ],
+        }),
         1e-3,
         noiseOf('D2', i)
       );
       const res = K.rotationPeriod(t, y, { minPeriod: 0.5, maxPeriod: 15 });
       if (res.verdict === 'not-constrained' && res.period === null) ok++;
     }
-    row('D2.shortBaseline', ok / 50 >= lim('D2.shortBaseline').minFraction, { fraction: ok / 50 });
+    row('D2.shortBaseline', ok / 50 >= lim('D2.shortBaseline').minFraction, {
+      fraction: ok / 50,
+    });
   }
   const antipodal = (tag, radii, n) => {
     let pairOk = 0;
@@ -477,7 +669,11 @@ function legD() {
       );
       const res = K.rotationPeriod(t, y, { minPeriod: 0.5, maxPeriod: 13.5 });
       if (res.peak && rel(res.peak.period, P / 2) < 0.02) peakOk++;
-      if (res.candidates.some(c => rel(c.period, P) < 0.01) && res.candidates.length >= 2) pairOk++;
+      if (
+        res.candidates.some(c => rel(c.period, P) < 0.01) &&
+        res.candidates.length >= 2
+      )
+        pairOk++;
       if (res.period !== null && rel(res.period, P) < 0.01) primaryOk++;
       if (res.verdict === 'double-period') excluded++;
     }
@@ -485,14 +681,30 @@ function legD() {
   };
   {
     const m = antipodal('D3', [12, 12], 100);
-    row('D3.doubleDipEqual', m.pairOk / m.n >= lim('D3.doubleDipEqual').minFraction && m.peakOk === m.n, m);
+    row(
+      'D3.doubleDipEqual',
+      m.pairOk / m.n >= lim('D3.doubleDipEqual').minFraction &&
+        m.peakOk === m.n,
+      m
+    );
   }
   {
     const m = antipodal('D4', [16, 9], 100);
-    row('D4.doubleDipUnequal', m.primaryOk / m.n >= lim('D4.doubleDipUnequal').minFraction && m.excluded / m.n >= 0.95, m);
+    row(
+      'D4.doubleDipUnequal',
+      m.primaryOk / m.n >= lim('D4.doubleDipUnequal').minFraction &&
+        m.excluded / m.n >= 0.95,
+      m
+    );
     const m2 = antipodal('D4b', [12, 10.5], 100);
     const f = lim('D4b.doubleDipSlightlyUnequal').minFraction;
-    row('D4b.doubleDipSlightlyUnequal', m2.primaryOk / m2.n >= f && m2.excluded / m2.n >= f && m2.peakOk / m2.n >= f, m2);
+    row(
+      'D4b.doubleDipSlightlyUnequal',
+      m2.primaryOk / m2.n >= f &&
+        m2.excluded / m2.n >= f &&
+        m2.peakOk / m2.n >= f,
+      m2
+    );
   }
   {
     const L = lim('D5.evolving');
@@ -502,14 +714,25 @@ function legD() {
         const r = draw(evolving ? 'D5e' : 'D5s', i);
         const P = uni(r, 2, 8);
         const t = grid(27, 30);
-        const spot = { lat: uni(r, 10, 50), lon: uni(r, 0, 360), radius: uni(r, 10, 16), contrast: 0 };
-        const D = K.spottedFlux(t, { period: P, inc: uni(r, 60, 90), spots: [spot] }).map(v => 1 - v);
+        const spot = {
+          lat: uni(r, 10, 50),
+          lon: uni(r, 0, 360),
+          radius: uni(r, 10, 16),
+          contrast: 0,
+        };
+        const D = K.spottedFlux(t, {
+          period: P,
+          inc: uni(r, 60, 90),
+          spots: [spot],
+        }).map(v => 1 - v);
         const y = Float64Array.from(t, (tt, j) => {
           const c = evolving ? 0.55 + 0.4 * (tt / 27) : 0.75;
           return 1 - (1 - c) * D[j];
         });
         const noisy = withNoise(y, 3e-3, noiseOf(evolving ? 'D5e' : 'D5s', i));
-        w.push(K.rotationPeriod(t, noisy, { minPeriod: 0.5, maxPeriod: 14 }).widening);
+        w.push(
+          K.rotationPeriod(t, noisy, { minPeriod: 0.5, maxPeriod: 14 }).widening
+        );
       }
       return w.sort((a, b) => a - b);
     };
@@ -517,7 +740,11 @@ function legD() {
     const s = widen(false);
     const med = e[e.length >> 1];
     const p95 = s[Math.floor(0.95 * s.length)];
-    row('D5.evolving', med >= L.minMedianWideningEvolving && p95 <= L.maxP95WideningStationary, { medianEvolving: med, p95Stationary: p95 });
+    row(
+      'D5.evolving',
+      med >= L.minMedianWideningEvolving && p95 <= L.maxP95WideningStationary,
+      { medianEvolving: med, p95Stationary: p95 }
+    );
   }
   {
     const L = lim('D6.spotsNotFlares');
@@ -527,7 +754,12 @@ function legD() {
     for (let i = 0; counted < 50; i++) {
       const r = draw('D6', i);
       const P = uni(r, 0.6, 3);
-      const spot = { lat: uni(r, 0, 50), lon: uni(r, 0, 360), radius: uni(r, 10, 22), contrast: 0.5 };
+      const spot = {
+        lat: uni(r, 0, 50),
+        lon: uni(r, 0, 360),
+        radius: uni(r, 10, 22),
+        contrast: 0.5,
+      };
       const inc = uni(r, 60, 90);
       const t = grid(8, 2);
       const f0 = K.spottedFlux(t, { period: P, inc, spots: [spot] });
@@ -541,33 +773,171 @@ function legD() {
       if (amp < 0.03 || amp > 0.06) continue;
       counted++;
       const y = withNoise(f0, 1e-3, noiseOf('D6', i));
-      const { rotation } = K.rotationFromLightCurve(t, y, { minPeriod: 0.3, maxPeriod: 8 });
+      const { rotation } = K.rotationFromLightCurve(t, y, {
+        minPeriod: 0.3,
+        maxPeriod: 8,
+      });
       const res = K.detectFlares(t, y, 1e-3, { period: rotation.period });
       found.push(res.flares.length);
       if (res.flares.length === 0) clean++;
     }
-    row('D6.spotsNotFlares', clean / 50 >= L.minFractionWithNoFlare, { fraction: clean / 50, flaresFound: found.filter(v => v).length });
+    row('D6.spotsNotFlares', clean / 50 >= L.minFractionWithNoFlare, {
+      fraction: clean / 50,
+      flaresFound: found.filter(v => v).length,
+    });
   }
 }
 
 // ---- (e) authentic data -----------------------------------------------------------------
 
-function loadPack(id) {
-  const p = path.join(ROOT, 'data-packs', `${id}.json`);
+const authentic = {};
+function loadAuthentic(key, file) {
+  const p = path.join(ROOT, 'variables', file);
   if (!existsSync(p)) return null;
-  return null;
+  if (!authentic[key]) {
+    const mod = key === 'auMic' ? 'tessAuMicS1' : 'tessEkDraS16';
+    const pack = read(
+      `data-packs/${key === 'auMic' ? 'tess-au-mic-s1' : 'tess-ek-dra-s16'}.json`
+    );
+    authentic[key] = activityCurveOf({
+      PACK: pack,
+      SERIES: read(`variables/${file}`),
+    });
+    void mod;
+  }
+  return authentic[key];
 }
 
 function legE() {
-  const why = 'the authentic packs are not built yet (tools/data-packs/activity.mjs)';
-  for (const id of ['E1.auMicPeriod', 'E2.auMicFlares', 'E3.ekDraPeriod', 'E4.auMicFfd']) notRun(id, why);
-  void loadPack;
+  const au = loadAuthentic('auMic', 'tess-au-mic-s1.json');
+  const ek = loadAuthentic('ekDra', 'tess-ek-dra-s16.json');
+  if (!au || !ek) {
+    for (const id of [
+      'E1.auMicPeriod',
+      'E2.auMicFlares',
+      'E3.ekDraPeriod',
+      'E4.auMicFfd',
+    ])
+      notRun(
+        id,
+        'the authentic packs are not built (tools/data-packs/activity.mjs)'
+      );
+    return;
+  }
+  const rot = (curve, binned) => {
+    const b = binned
+      ? K.binSeries(curve.t, curve.flux, 30, 8)
+      : { t: curve.t, y: curve.flux };
+    return K.rotationPeriod(b.t, b.y, { minPeriod: 0.5, maxPeriod: 13 });
+  };
+  const L1 = lim('E1.auMicPeriod');
+  const rAu = rot(au, true);
+  const hasAlias = rAu.candidates.some(
+    c => rel(c.period, 2 * rAu.period) < 0.01
+  );
+  row(
+    'E1.auMicPeriod',
+    rAu.period !== null &&
+      Math.abs(rAu.period - L1.published) <= L1.maxAbsDifference &&
+      hasAlias &&
+      rAu.verdict !== 'no-signal',
+    {
+      verdict: rAu.verdict,
+      period: rAu.period,
+      interval: rAu.interval,
+      widening: rAu.widening,
+      candidates: rAu.candidates.map(c => [c.period, c.status]),
+      fap: rAu.peak.fap,
+      published: L1.published,
+    }
+  );
+  const L3 = lim('E3.ekDraPeriod');
+  const rEk = rot(ek, false);
+  row(
+    'E3.ekDraPeriod',
+    rEk.period !== null &&
+      rEk.period >= L3.band[0] &&
+      rEk.period <= L3.band[1] &&
+      rEk.candidates.some(c => rel(c.period, 2 * rEk.period) < 0.01),
+    {
+      verdict: rEk.verdict,
+      period: rEk.period,
+      interval: rEk.interval,
+      widening: rEk.widening,
+      candidates: rEk.candidates.map(c => [c.period, c.status]),
+    }
+  );
+  // the flares of AU Mic, with the rotation period of the same star
+  const L2 = lim('E2.auMicFlares');
+  const t0 = Date.now();
+  const det = K.detectFlares(au.t, au.flux, au.err, { period: rAu.period });
+  const kept = au.t.length * (2 / 1440);
+  const rate = det.flares.length / kept;
+  const ora = ORA.authentic.auMic;
+  const cmp = compareFlares(det.flares, ora.flares, 2 / 1440);
+  const lo = L2.publishedPerDay * L2.rateBandFactor[0];
+  const hi = L2.publishedPerDay * L2.rateBandFactor[1];
+  row(
+    'E2.auMicFlares',
+    rate >= lo &&
+      rate <= hi &&
+      cmp.fracKernel >= L2.minMatchedFraction &&
+      cmp.fracOracle >= L2.minMatchedFraction &&
+      cmp.medianEd <= L2.maxMedianEdDifference,
+    {
+      flares: det.flares.length,
+      oracleFlares: ora.flares.length,
+      keptDays: kept,
+      perDay: rate,
+      published: L2.publishedPerDay,
+      sigma: det.sigma,
+      ...cmp,
+      seconds: (Date.now() - t0) / 1000,
+    }
+  );
+  const L4 = lim('E4.auMicFfd');
+  const edMin = K.completenessEd(det.sigma);
+  const fit = K.powerLawSlope(
+    det.flares.map(f => f.ed),
+    edMin
+  );
+  row(
+    'E4.auMicFfd',
+    !!fit &&
+      fit.n >= L4.minFlares &&
+      fit.alpha >= L4.alphaBand[0] &&
+      fit.alpha <= L4.alphaBand[1],
+    {
+      edMin,
+      n: fit?.n,
+      alpha: fit?.alpha,
+      interval: fit?.interval,
+      flaresAbove: fit?.n,
+    }
+  );
+  // the oracle's harmonic period and sinusoid peak on the two authentic series
+  const bAu = K.binSeries(au.t, au.flux, 30, 8);
+  row(
+    'B5.authentic',
+    rel(rAu.period, ORA.authentic.auMic.harmonicPeriod) <=
+      lim('B5.harmonicOracle').maxRelative &&
+      rel(rEk.period, ORA.authentic.ekDra.harmonicPeriod) <=
+        lim('B5.harmonicOracle').maxRelative,
+    {
+      auMic: [rAu.period, ORA.authentic.auMic.harmonicPeriod],
+      ekDra: [rEk.period, ORA.authentic.ekDra.harmonicPeriod],
+      binsAuMic: bAu.t.length,
+    },
+    'the authentic half of B5 (AM3)'
+  );
 }
 
 // ---- run ------------------------------------------------------------------------------------
 
 const argv = process.argv.slice(2);
-const only = argv.includes('--only') ? argv[argv.indexOf('--only') + 1].split(',') : null;
+const only = argv.includes('--only')
+  ? argv[argv.indexOf('--only') + 1].split(',')
+  : null;
 const want = id => !only || only.some(o => id.startsWith(o));
 
 const legs = [
@@ -581,21 +951,52 @@ const legs = [
   ['E', legE],
 ];
 for (const [name, fn] of legs) {
-  if (only && !only.some(o => name.startsWith(o) || o.startsWith(name))) continue;
+  if (only && !only.some(o => name.startsWith(o) || o.startsWith(name)))
+    continue;
   const t0 = Date.now();
   fn();
-  if (!argv.includes('--json')) process.stderr.write(`leg ${name}: ${((Date.now() - t0) / 1000).toFixed(1)} s\n`);
+  if (!argv.includes('--json'))
+    process.stderr.write(
+      `leg ${name}: ${((Date.now() - t0) / 1000).toFixed(1)} s\n`
+    );
 }
 const shown = rows.filter(r => want(r.id));
 if (argv.includes('--json')) console.log(JSON.stringify(shown, null, 2));
 else
   for (const r of shown)
-    console.log(`${r.status.padEnd(8)} ${r.id.padEnd(22)} ${JSON.stringify(r.measured)}${r.note ? ' ' + r.note : ''}`);
-if (argv.includes('--write-failed')) {
-  const failed = shown.filter(r => r.status === 'fail');
+    console.log(
+      `${r.status.padEnd(8)} ${r.id.padEnd(22)} ${JSON.stringify(r.measured)}${r.note ? ' ' + r.note : ''}`
+    );
+const REASONS = {
+  'B4.periodOracle':
+    "Compares the kernel's harmonic-series period with the oracle's sinusoid peak; the kernel recovers the true period of each synthetic curve to 1e-4 and its peak agrees with the oracle's to 1e-5 (B2), so the disagreement is the sinusoid's bias on a non-sinusoidal, sheared curve (AM3). Left failing; B5 is the added oracle leg.",
+  'D4.doubleDipUnequal':
+    'With radii 16 and 9 deg the Lomb-Scargle peak is the rotation period itself, so the factor-two test is not asked and the verdict is period-with-alias with the true period primary (correct, but not the premise of the leg; AM4). Left failing; D4b exercises the double-period verdict.',
+};
+if (argv.includes('--write-failed') || argv.includes('--write-results')) {
+  const failed = shown
+    .filter(r => r.status === 'fail')
+    .map(r => ({ ...r, reason: REASONS[r.id] ?? null }));
   writeFileSync(
     path.join(ROOT, FIX, 'failed-legs.json'),
-    JSON.stringify({ format: 'gravitas.stellar-activity-failed-legs/1', failed }, null, 2) + '\n'
+    JSON.stringify(
+      {
+        note: 'Legs of tests/fixtures/stellar-activity/thresholds.json that crossed their bound, kept failing and labelled (only Carl resets a bound).',
+        failed,
+        notRun: shown.filter(r => r.status === 'not-run'),
+      },
+      null,
+      2
+    ) + '\n'
   );
 }
+if (argv.includes('--write-results'))
+  writeFileSync(
+    path.join(ROOT, FIX, 'results.json'),
+    JSON.stringify(
+      { format: 'gravitas.stellar-activity-results/1', rows: shown },
+      null,
+      2
+    ) + '\n'
+  );
 process.exitCode = shown.some(r => r.status === 'fail') ? 1 : 0;

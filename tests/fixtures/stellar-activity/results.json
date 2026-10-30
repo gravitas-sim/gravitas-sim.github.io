@@ -1,0 +1,427 @@
+{
+  "format": "gravitas.stellar-activity-results/1",
+  "rows": [
+    {
+      "id": "A1.centre",
+      "status": "pass",
+      "measured": {
+        "maxRelativeError": 1.2519904248926223e-14
+      },
+      "note": ""
+    },
+    {
+      "id": "A2.full",
+      "status": "pass",
+      "measured": {
+        "maxAbsError": 5.551115123125783e-17
+      },
+      "note": ""
+    },
+    {
+      "id": "A3.hidden",
+      "status": "pass",
+      "measured": {
+        "hidden": 0,
+        "maxStepRelative": 0.00015662522966348617
+      },
+      "note": ""
+    },
+    {
+      "id": "A4.periodic",
+      "status": "pass",
+      "measured": {
+        "maxAbsError": 1.1102230246251565e-16
+      },
+      "note": ""
+    },
+    {
+      "id": "A5.antipodal",
+      "status": "pass",
+      "measured": {
+        "maxAbsError": 2.220446049250313e-16,
+        "peakRelativeError": 0.00007048812758689849
+      },
+      "note": ""
+    },
+    {
+      "id": "A6.shear",
+      "status": "pass",
+      "measured": {
+        "maxAbsError": 1.1102230246251565e-16,
+        "Plat": 3.398912778900547
+      },
+      "note": ""
+    },
+    {
+      "id": "A7.template",
+      "status": "pass",
+      "measured": {
+        "analyticRelative": 6.509109355212395e-7,
+        "numericRelative": 8.286496551829841e-10,
+        "sampledRelative": 0.000011790739595591707
+      },
+      "note": ""
+    },
+    {
+      "id": "A8.edBox",
+      "status": "pass",
+      "measured": {
+        "ed": 23.400000000000023,
+        "truth": 24,
+        "relative": 0.024999999999999023
+      },
+      "note": ""
+    },
+    {
+      "id": "A9.slope",
+      "status": "pass",
+      "measured": {
+        "alphaAbsError": 0,
+        "intervalAbsError": 0.000009408328245141817,
+        "interval": [
+          1.193346077032802,
+          1.8971827813764732
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "B1.spotOracle",
+      "status": "pass",
+      "measured": {
+        "configs": 24,
+        "failures": 0,
+        "maxRelative": 0.00266047409381066,
+        "maxAbsolute": 0.000005860390034917451
+      },
+      "note": ""
+    },
+    {
+      "id": "B2.periodogram",
+      "status": "pass",
+      "measured": {
+        "peakRelative": 0.000019013940959479184,
+        "maxPowerDifference": 4.445450896284342e-9
+      },
+      "note": ""
+    },
+    {
+      "id": "B3.flareOracle",
+      "status": "pass",
+      "measured": {
+        "kernel": 20,
+        "oracle": 20,
+        "fracKernel": 1,
+        "fracOracle": 1,
+        "medianEd": 0.000004543854121522649
+      },
+      "note": ""
+    },
+    {
+      "id": "B4.periodOracle",
+      "status": "fail",
+      "measured": {
+        "maxRelative": 0.008400739228736754,
+        "synthetic": 0.008400739228736754,
+        "authentic": {
+          "auMic": 0.001895033057851394,
+          "ekDra": 0.00207343814369544
+        }
+      },
+      "note": "the kernel refines with a harmonic series, the oracle peak is a sinusoid: see AM3"
+    },
+    {
+      "id": "B5.harmonicOracle",
+      "status": "pass",
+      "measured": {
+        "maxRelative": 2.2142763675347165e-9,
+        "scope": "the three curves (the authentic series are in E1 and E3)"
+      },
+      "note": ""
+    },
+    {
+      "id": "C1.periodCoverage",
+      "status": "pass",
+      "measured": {
+        "coverage": 0.9587628865979382,
+        "answered": 194,
+        "n": 200,
+        "verdicts": {
+          "period-with-alias": 194,
+          "no-signal": 6
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "C2.edCoverage",
+      "status": "pass",
+      "measured": {
+        "coverage": 0.9366666666666666,
+        "detectedFraction": 0.9966777408637874,
+        "injected": 301
+      },
+      "note": ""
+    },
+    {
+      "id": "C3.slopeCoverage",
+      "status": "pass",
+      "measured": {
+        "coverage": 0.948,
+        "n": 500
+      },
+      "note": ""
+    },
+    {
+      "id": "C4.completeness",
+      "status": "pass",
+      "measured": {
+        "table": [
+          {
+            "ampSigma": 5,
+            "tHalfMin": 4,
+            "completeness": 0.08,
+            "n": 200
+          },
+          {
+            "ampSigma": 5,
+            "tHalfMin": 10,
+            "completeness": 0.675,
+            "n": 200
+          },
+          {
+            "ampSigma": 5,
+            "tHalfMin": 30,
+            "completeness": 0.8,
+            "n": 200
+          },
+          {
+            "ampSigma": 8,
+            "tHalfMin": 4,
+            "completeness": 0.585,
+            "n": 200
+          },
+          {
+            "ampSigma": 8,
+            "tHalfMin": 10,
+            "completeness": 0.99,
+            "n": 200
+          },
+          {
+            "ampSigma": 8,
+            "tHalfMin": 30,
+            "completeness": 0.96,
+            "n": 200
+          },
+          {
+            "ampSigma": 12,
+            "tHalfMin": 4,
+            "completeness": 0.96,
+            "n": 200
+          },
+          {
+            "ampSigma": 12,
+            "tHalfMin": 10,
+            "completeness": 1,
+            "n": 200
+          },
+          {
+            "ampSigma": 12,
+            "tHalfMin": 30,
+            "completeness": 0.995,
+            "n": 200
+          },
+          {
+            "ampSigma": 20,
+            "tHalfMin": 4,
+            "completeness": 1,
+            "n": 200
+          },
+          {
+            "ampSigma": 20,
+            "tHalfMin": 10,
+            "completeness": 1,
+            "n": 200
+          },
+          {
+            "ampSigma": 20,
+            "tHalfMin": 30,
+            "completeness": 1,
+            "n": 200
+          }
+        ],
+        "falsePerThousandPoints": 0,
+        "falseTotal": 0
+      },
+      "note": ""
+    },
+    {
+      "id": "D1.noise",
+      "status": "pass",
+      "measured": {
+        "fraction": 0.985
+      },
+      "note": ""
+    },
+    {
+      "id": "D2.shortBaseline",
+      "status": "pass",
+      "measured": {
+        "fraction": 1
+      },
+      "note": ""
+    },
+    {
+      "id": "D3.doubleDipEqual",
+      "status": "pass",
+      "measured": {
+        "pairOk": 100,
+        "primaryOk": 0,
+        "peakOk": 100,
+        "excluded": 0,
+        "n": 100
+      },
+      "note": ""
+    },
+    {
+      "id": "D4.doubleDipUnequal",
+      "status": "fail",
+      "measured": {
+        "pairOk": 100,
+        "primaryOk": 100,
+        "peakOk": 0,
+        "excluded": 0,
+        "n": 100
+      },
+      "note": ""
+    },
+    {
+      "id": "D4b.doubleDipSlightlyUnequal",
+      "status": "pass",
+      "measured": {
+        "pairOk": 100,
+        "primaryOk": 100,
+        "peakOk": 100,
+        "excluded": 100,
+        "n": 100
+      },
+      "note": ""
+    },
+    {
+      "id": "D5.evolving",
+      "status": "pass",
+      "measured": {
+        "medianEvolving": 1.7108439665991644,
+        "p95Stationary": 1.034470309302196
+      },
+      "note": ""
+    },
+    {
+      "id": "D6.spotsNotFlares",
+      "status": "pass",
+      "measured": {
+        "fraction": 1,
+        "flaresFound": 0
+      },
+      "note": ""
+    },
+    {
+      "id": "E1.auMicPeriod",
+      "status": "pass",
+      "measured": {
+        "verdict": "period-with-alias",
+        "period": 4.856314477909049,
+        "interval": [
+          4.849217368505929,
+          4.86341054558703
+        ],
+        "widening": 2.94650755486832,
+        "candidates": [
+          [
+            4.856314477909049,
+            "primary"
+          ],
+          [
+            9.712628955818097,
+            "not-excluded"
+          ]
+        ],
+        "fap": 1.154367249655245e-273,
+        "published": 4.85
+      },
+      "note": ""
+    },
+    {
+      "id": "E3.ekDraPeriod",
+      "status": "pass",
+      "measured": {
+        "verdict": "period-with-alias",
+        "period": 2.555118973372504,
+        "interval": [
+          2.5320302137594344,
+          2.5785946524383867
+        ],
+        "widening": 6.244997998398396,
+        "candidates": [
+          [
+            2.555118973372504,
+            "primary"
+          ],
+          [
+            5.110237946745008,
+            "not-excluded"
+          ]
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "E2.auMicFlares",
+      "status": "pass",
+      "measured": {
+        "flares": 76,
+        "oracleFlares": 69,
+        "keptDays": 24.56527777777778,
+        "perDay": 3.0937977045287495,
+        "published": 1.855,
+        "sigma": 0.00034028106882310954,
+        "fracKernel": 0.8552631578947368,
+        "fracOracle": 0.927536231884058,
+        "medianEd": 0.08434055726074204,
+        "seconds": 1.67
+      },
+      "note": ""
+    },
+    {
+      "id": "E4.auMicFfd",
+      "status": "pass",
+      "measured": {
+        "edMin": 8.95260615828037,
+        "n": 29,
+        "alpha": 1.9195311335382335,
+        "interval": [
+          1.6158244316183263,
+          2.2831516646726673
+        ],
+        "flaresAbove": 29
+      },
+      "note": ""
+    },
+    {
+      "id": "B5.authentic",
+      "status": "pass",
+      "measured": {
+        "auMic": [
+          4.856314477909049,
+          4.8563146455711115
+        ],
+        "ekDra": [
+          2.555118973372504,
+          2.5551636408773115
+        ],
+        "binsAuMic": 1199
+      },
+      "note": "the authentic half of B5 (AM3)"
+    }
+  ]
+}

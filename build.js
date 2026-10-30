@@ -73,6 +73,10 @@ const STATIC_FILES = [
   'variables/tess-su-dra-s15.json',
   'variables/tess-eta-aql-s81.json',
   'variables/shoes-r22-cepheids.json',
+  // The stellar-activity light curves (Prompt 220): AU Mic at 2-minute cadence and EK Dra
+  // binned; fetched on demand by the activity instruments, in no precache tier.
+  'variables/tess-au-mic-s1.json',
+  'variables/tess-ek-dra-s16.json',
   // The synthetic labelled sample of the classification instrument.
   'variables/class-sample.json',
   // The cosmology tables' rows (data-packs/hubble-1929-table1.json and three
