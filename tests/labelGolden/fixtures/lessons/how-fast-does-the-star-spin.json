@@ -1,0 +1,55 @@
+{
+ "id": "how-fast-does-the-star-spin",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.read-the-period.fields.0.unit","days"],
+    ["steps.read-the-period.fields.1.unit","percent"],
+    ["steps.a-real-star.fields.0.unit","days"],
+    ["steps.a-real-star.fields.1.unit","days"],
+    ["steps.a-second-star.fields.0.unit","days"],
+    ["steps.a-second-star.fields.1.unit","days"],
+    ["steps.a-second-star.fields.2.unit","days"],
+    ["steps.the-sun-turns-unevenly.fields.0.unit","days"],
+    ["steps.the-sun-turns-unevenly.fields.1.unit","days"]
+   ],
+   "numbered": [
+    ["steps.read-the-period.fields.0.hint","4.00"],
+    ["steps.read-the-period.fields.1.hint","2.7"],
+    ["steps.a-real-star.fields.0.hint","4.86"],
+    ["steps.a-real-star.fields.1.hint","9.71"],
+    ["steps.a-second-star.fields.0.hint","2.555"],
+    ["steps.a-second-star.fields.1.hint","2.532"],
+    ["steps.a-second-star.fields.2.hint","2.579"],
+    ["steps.the-sun-turns-unevenly.fields.0.hint","4.00"],
+    ["steps.the-sun-turns-unevenly.fields.1.hint","4.71"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": []
+  }
+ },
+ "numeric": {
+  "answers": [],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "read-the-period": {
+    "validate": {"calls":232,"distinct":2,"digest":"e85ceddd3f0e2967","samples":[null,{"level":"error","message":"Read the readout of the first panel without changing it: a period of 4.00 days and a dimming of about 2.7 percent."}]}
+   },
+   "a-real-star": {
+    "validate": {"calls":232,"distinct":2,"digest":"e498cf5eb98e95f8","samples":[null,{"level":"error","message":"Choose AU Microscopii and the periodogram: the period is about 4.86 days and the other period it could be, twice that, about 9.71 days."}]}
+   },
+   "a-second-star": {
+    "validate": {"calls":242,"distinct":2,"digest":"5fcda3f176357acb","samples":[null,{"level":"error","message":"Choose EK Draconis and the periodogram: 2.555 days, with an interval of 2.532 to 2.579 days."}]}
+   },
+   "the-sun-turns-unevenly": {
+    "validate": {"calls":232,"distinct":2,"digest":"3b3686ad168203b8","samples":[null,{"level":"error","message":"Set “Spot latitude” to 60 degrees and “Differential rotation, k” to 0.20: the equator’s period stays 4.00 days and the spot’s is about 4.71."}]}
+   }
+  },
+  "es": "same"
+ }
+}

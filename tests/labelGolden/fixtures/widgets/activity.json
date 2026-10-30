@@ -1,0 +1,306 @@
+{
+ "activity-spots": {
+  "en": {
+   "static": {
+    "title": "A spotted star turning",
+    "note": "A star with one or two dark spots, turning once every 4.00 days at its equator, seen at the tilt you choose; the light curve is the star’s light against time, 16 days of it, with a little noise. A spot facing us dims the star; as it turns away the star brightens, and the pattern repeats once a turn. The periodogram finds the period; the panel says what the period it finds could also be. The star, the spots and the noise are a model, and the data are synthetic.",
+    "controls": [{"id":"lat","label":"Spot latitude","unit":null,"min":0,"max":80,"step":5,"value":30,"decimals":0},{"id":"size","label":"Spot radius","unit":null,"min":5,"max":30,"step":1,"value":15,"decimals":0},{"id":"contrast","label":"Spot brightness, against the star","unit":null,"min":0.3,"max":0.95,"step":0.05,"value":0.65,"decimals":2},{"id":"inc","label":"Tilt of the spin axis","unit":null,"min":20,"max":90,"step":5,"value":70,"decimals":0},{"id":"second","label":"Second spot, opposite side","unit":null,"min":0,"max":1,"step":1,"value":0,"decimals":0},{"id":"shear","label":"Differential rotation, k","unit":null,"min":0,"max":0.4,"step":0.05,"value":0,"decimals":2},{"id":"view","label":"Show","unit":null,"min":0,"max":3,"step":1,"value":0,"decimals":0}],
+    "presets": [],
+    "actions": [],
+    "defaults": {"lat":"30","size":"15","contrast":"0.65","inc":"70","second":"0","shear":"0","view":"0"}
+   },
+   "precision": [],
+   "specs": 4,
+   "frames": 51,
+   "readout": {
+    "calls": 51,
+    "distinct": 35,
+    "digest": "d280b27bee1f68f9",
+    "samples": [[{"label":"Model","value":"A sphere with round dark spots, quadratic limb darkening and one rotation axis; no spot growth or decay, no flares, no planets"},{"label":"Dimming from the spots","value":"2.7 percent from peak to trough"},{"label":"Period found","value":"4.000 d (95 percent interval 3.999 to 4.002 d), with the double period still possible","emphasis":true},{"label":"Other period it could be","value":"8.001 d, cannot be tested: the data hold fewer than two cycles of it","emphasis":true},{"label":"Period of the spot’s latitude","value":"4.00 d for the spot, 4.00 d at the equator, 4.00 d at latitude 60 degrees"},{"label":"What this assumes","value":"The period it reports is that of the spots’ latitude, which is not the equator’s when the star turns differentially; spots that grow, decay and drift would smear the pattern, and the alias test is only as good as the two dips being alike or not."}],[{"label":"Model","value":"A sphere with round dark spots, quadratic limb darkening and one rotation axis; no spot growth or decay, no flares, no planets"},{"label":"Dimming from the spots","value":"0.1 percent from peak to trough"},{"label":"Period found","value":"4.006 d (95 percent interval 3.982 to 4.030 d), with the double period still possible","emphasis":true},{"label":"Other period it could be","value":"8.013 d, cannot be tested: the data hold fewer than two cycles of it","emphasis":true},{"label":"Period of the spot’s latitude","value":"4.00 d for the spot, 4.00 d at the equator, 4.00 d at latitude 60 degrees"},{"label":"What this assumes","value":"The period it reports is that of the spots’ latitude, which is not the equator’s when the star turns differentially; spots that grow, decay and drift would smear the pattern, and the alias test is only as good as the two dips being alike or not."}],[{"label":"Model","value":"A sphere with round dark spots, quadratic limb darkening and one rotation axis; no spot growth or decay, no flares, no planets"},{"label":"Dimming from the spots","value":"0.0 percent from peak to trough"},{"label":"Period found","value":"3.253 d (95 percent interval 3.192 to 3.308 d), with the double period still possible","emphasis":true},{"label":"Other period it could be","value":"6.507 d, not excluded by the data","emphasis":true},{"label":"Period of the spot’s latitude","value":"6.54 d for the spot, 4.00 d at the equator, 5.71 d at latitude 60 degrees"},{"label":"What this assumes","value":"The period it reports is that of the spots’ latitude, which is not the equator’s when the star turns differentially; spots that grow, decay and drift would smear the pattern, and the alias test is only as good as the two dips being alike or not."}],[{"label":"Model","value":"A sphere with round dark spots, quadratic limb darkening and one rotation axis; no spot growth or decay, no flares, no planets"},{"label":"Dimming from the spots","value":"1.9 percent from peak to trough"},{"label":"Period found","value":"2.180 d (95 percent interval 2.179 to 2.181 d), with the double period still possible","emphasis":true},{"label":"Other period it could be","value":"4.360 d, not excluded by the data","emphasis":true},{"label":"Period of the spot’s latitude","value":"4.36 d for the spot, 4.00 d at the equator, 4.71 d at latitude 60 degrees"},{"label":"What this assumes","value":"The period it reports is that of the spots’ latitude, which is not the equator’s when the star turns differentially; spots that grow, decay and drift would smear the pattern, and the alias test is only as good as the two dips being alike or not."}],[{"label":"Model","value":"A sphere with round dark spots, quadratic limb darkening and one rotation axis; no spot growth or decay, no flares, no planets"},{"label":"Dimming from the spots","value":"10.0 percent from peak to trough"},{"label":"Period found","value":"4.000 d (95 percent interval 4.000 to 4.001 d), with the double period still possible","emphasis":true},{"label":"Other period it could be","value":"8.000 d, cannot be tested: the data hold fewer than two cycles of it","emphasis":true},{"label":"Period of the spot’s latitude","value":"4.00 d for the spot, 4.00 d at the equator, 4.00 d at latitude 60 degrees"},{"label":"What this assumes","value":"The period it reports is that of the spots’ latitude, which is not the equator’s when the star turns differentially; spots that grow, decay and drift would smear the pattern, and the alias test is only as good as the two dips being alike or not."}]]
+   },
+   "canvas": {
+    "calls": 51,
+    "distinct": 1,
+    "digest": "e610688fcc6117ea",
+    "samples": [{"drew":{"threw":"TypeError: canvas.after is not a function"},"texts":[]}]
+   },
+   "controls": {
+    "calls": 51,
+    "distinct": 40,
+    "digest": "1ded7e800fccd102",
+    "samples": [["30°","15°","0.65","70°","off","0.00","the light curve"],["20°","15°","0.65","70°","off","0.00","the light curve"],["0°","5°","0.30","20°","off","0.00","the light curve"],["80°","30°","0.95","90°","on","0.40","folded at twice it"],["20°","11°","0.55","85°","on","0.40","folded at twice it"],["40°","18°","0.65","55°","on","0.20","folded at the period found"],["0°","15°","0.65","70°","off","0.00","the light curve"],["30°","5°","0.65","70°","off","0.00","the light curve"],["30°","15°","0.65","70°","on","0.00","the light curve"],["35°","19°","0.50","60°","on","0.25","the light curve"],["30°","15°","0.65","70°","off","0.00","the periodogram"],["10°","28°","0.65","90°","off","0.10","the periodogram"],["30°","15°","0.65","70°","off","0.00","folded at the period found"],["30°","15°","0.65","70°","off","0.00","folded at twice it"],["40°","21°","0.70","65°","on","0.10","the periodogram"],["75°","6°","0.70","75°","on","0.25","folded at twice it"],["0°","8°","0.75","45°","on","0.20","folded at twice it"],["5°","19°","0.75","20°","on","0.10","folded at the period found"]]
+   },
+   "phases": {
+    "calls": 0,
+    "distinct": 0,
+    "digest": "4f53cda18c2baa0c",
+    "samples": []
+   }
+  },
+  "es": {
+   "static": {
+    "title": "Una estrella con manchas girando",
+    "note": "Una estrella con una o dos manchas oscuras, que gira una vez cada 4,00 días en su ecuador, vista con la inclinación que elijas; la curva de luz es la luz de la estrella frente al tiempo, 16 días, con un poco de ruido. Una mancha que nos mira atenúa la estrella; al girar se aleja y la estrella se aviva, y el patrón se repite una vez por vuelta. El periodograma halla el periodo; el panel dice qué otro periodo podría ser. La estrella, las manchas y el ruido son un modelo, y los datos son sintéticos.",
+    "controls": [{"id":"lat","label":"Latitud de la mancha","unit":null,"min":0,"max":80,"step":5,"value":30,"decimals":0},{"id":"size","label":"Radio de la mancha","unit":null,"min":5,"max":30,"step":1,"value":15,"decimals":0},{"id":"contrast","label":"Brillo de la mancha, frente a la estrella","unit":null,"min":0.3,"max":0.95,"step":0.05,"value":0.65,"decimals":2},{"id":"inc","label":"Inclinación del eje de giro","unit":null,"min":20,"max":90,"step":5,"value":70,"decimals":0},{"id":"second","label":"Segunda mancha, en el lado opuesto","unit":null,"min":0,"max":1,"step":1,"value":0,"decimals":0},{"id":"shear","label":"Rotación diferencial, k","unit":null,"min":0,"max":0.4,"step":0.05,"value":0,"decimals":2},{"id":"view","label":"Mostrar","unit":null,"min":0,"max":3,"step":1,"value":0,"decimals":0}],
+    "presets": [],
+    "actions": [],
+    "defaults": {"lat":"30","size":"15","contrast":"0.65","inc":"70","second":"0","shear":"0","view":"0"}
+   },
+   "precision": [],
+   "specs": 4,
+   "frames": 51,
+   "readout": {
+    "calls": 51,
+    "distinct": 35,
+    "digest": "a50bdd2ee96ba34d",
+    "samples": [[{"label":"Modelo","value":"Una esfera con manchas oscuras redondas, oscurecimiento del limbo cuadrático y un solo eje de rotación; sin crecimiento ni desaparición de manchas, sin erupciones, sin planetas"},{"label":"Atenuación por las manchas","value":"2.7 por ciento de pico a valle"},{"label":"Periodo hallado","value":"4.000 d (intervalo del 95 por ciento de 3.999 a 4.002 d), con el periodo doble todavía posible","emphasis":true},{"label":"Otro periodo que podría ser","value":"8.001 d, no se puede probar: los datos tienen menos de dos ciclos de él","emphasis":true},{"label":"Periodo de la latitud de la mancha","value":"4.00 d para la mancha, 4.00 d en el ecuador, 4.00 d a 60 grados de latitud"},{"label":"Qué supone esto","value":"El periodo que da es el de la latitud de las manchas, que no es el del ecuador cuando la estrella gira de forma diferencial; manchas que crecen, desaparecen y derivan emborronarían el patrón, y la prueba del alias vale lo que valga que los dos mínimos sean o no parecidos."}],[{"label":"Modelo","value":"Una esfera con manchas oscuras redondas, oscurecimiento del limbo cuadrático y un solo eje de rotación; sin crecimiento ni desaparición de manchas, sin erupciones, sin planetas"},{"label":"Atenuación por las manchas","value":"0.1 por ciento de pico a valle"},{"label":"Periodo hallado","value":"4.006 d (intervalo del 95 por ciento de 3.982 a 4.030 d), con el periodo doble todavía posible","emphasis":true},{"label":"Otro periodo que podría ser","value":"8.013 d, no se puede probar: los datos tienen menos de dos ciclos de él","emphasis":true},{"label":"Periodo de la latitud de la mancha","value":"4.00 d para la mancha, 4.00 d en el ecuador, 4.00 d a 60 grados de latitud"},{"label":"Qué supone esto","value":"El periodo que da es el de la latitud de las manchas, que no es el del ecuador cuando la estrella gira de forma diferencial; manchas que crecen, desaparecen y derivan emborronarían el patrón, y la prueba del alias vale lo que valga que los dos mínimos sean o no parecidos."}],[{"label":"Modelo","value":"Una esfera con manchas oscuras redondas, oscurecimiento del limbo cuadrático y un solo eje de rotación; sin crecimiento ni desaparición de manchas, sin erupciones, sin planetas"},{"label":"Atenuación por las manchas","value":"0.0 por ciento de pico a valle"},{"label":"Periodo hallado","value":"3.253 d (intervalo del 95 por ciento de 3.192 a 3.308 d), con el periodo doble todavía posible","emphasis":true},{"label":"Otro periodo que podría ser","value":"6.507 d, no excluido por los datos","emphasis":true},{"label":"Periodo de la latitud de la mancha","value":"6.54 d para la mancha, 4.00 d en el ecuador, 5.71 d a 60 grados de latitud"},{"label":"Qué supone esto","value":"El periodo que da es el de la latitud de las manchas, que no es el del ecuador cuando la estrella gira de forma diferencial; manchas que crecen, desaparecen y derivan emborronarían el patrón, y la prueba del alias vale lo que valga que los dos mínimos sean o no parecidos."}],[{"label":"Modelo","value":"Una esfera con manchas oscuras redondas, oscurecimiento del limbo cuadrático y un solo eje de rotación; sin crecimiento ni desaparición de manchas, sin erupciones, sin planetas"},{"label":"Atenuación por las manchas","value":"1.9 por ciento de pico a valle"},{"label":"Periodo hallado","value":"2.180 d (intervalo del 95 por ciento de 2.179 a 2.181 d), con el periodo doble todavía posible","emphasis":true},{"label":"Otro periodo que podría ser","value":"4.360 d, no excluido por los datos","emphasis":true},{"label":"Periodo de la latitud de la mancha","value":"4.36 d para la mancha, 4.00 d en el ecuador, 4.71 d a 60 grados de latitud"},{"label":"Qué supone esto","value":"El periodo que da es el de la latitud de las manchas, que no es el del ecuador cuando la estrella gira de forma diferencial; manchas que crecen, desaparecen y derivan emborronarían el patrón, y la prueba del alias vale lo que valga que los dos mínimos sean o no parecidos."}],[{"label":"Modelo","value":"Una esfera con manchas oscuras redondas, oscurecimiento del limbo cuadrático y un solo eje de rotación; sin crecimiento ni desaparición de manchas, sin erupciones, sin planetas"},{"label":"Atenuación por las manchas","value":"10.0 por ciento de pico a valle"},{"label":"Periodo hallado","value":"4.000 d (intervalo del 95 por ciento de 4.000 a 4.001 d), con el periodo doble todavía posible","emphasis":true},{"label":"Otro periodo que podría ser","value":"8.000 d, no se puede probar: los datos tienen menos de dos ciclos de él","emphasis":true},{"label":"Periodo de la latitud de la mancha","value":"4.00 d para la mancha, 4.00 d en el ecuador, 4.00 d a 60 grados de latitud"},{"label":"Qué supone esto","value":"El periodo que da es el de la latitud de las manchas, que no es el del ecuador cuando la estrella gira de forma diferencial; manchas que crecen, desaparecen y derivan emborronarían el patrón, y la prueba del alias vale lo que valga que los dos mínimos sean o no parecidos."}]]
+   },
+   "canvas": {
+    "calls": 51,
+    "distinct": 1,
+    "digest": "e610688fcc6117ea",
+    "samples": [{"drew":{"threw":"TypeError: canvas.after is not a function"},"texts":[]}]
+   },
+   "controls": {
+    "calls": 51,
+    "distinct": 40,
+    "digest": "67c81246760a06a9",
+    "samples": [["30°","15°","0.65","70°","no","0.00","la curva de luz"],["20°","15°","0.65","70°","no","0.00","la curva de luz"],["0°","5°","0.30","20°","no","0.00","la curva de luz"],["80°","30°","0.95","90°","sí","0.40","plegada al doble"],["20°","11°","0.55","85°","sí","0.40","plegada al doble"],["40°","18°","0.65","55°","sí","0.20","plegada al periodo hallado"],["0°","15°","0.65","70°","no","0.00","la curva de luz"],["30°","5°","0.65","70°","no","0.00","la curva de luz"],["30°","15°","0.65","70°","sí","0.00","la curva de luz"],["35°","19°","0.50","60°","sí","0.25","la curva de luz"],["30°","15°","0.65","70°","no","0.00","el periodograma"],["10°","28°","0.65","90°","no","0.10","el periodograma"],["30°","15°","0.65","70°","no","0.00","plegada al periodo hallado"],["30°","15°","0.65","70°","no","0.00","plegada al doble"],["40°","21°","0.70","65°","sí","0.10","el periodograma"],["75°","6°","0.70","75°","sí","0.25","plegada al doble"],["0°","8°","0.75","45°","sí","0.20","plegada al doble"],["5°","19°","0.75","20°","sí","0.10","plegada al periodo hallado"]]
+   },
+   "phases": {
+    "calls": 0,
+    "distinct": 0,
+    "digest": "4f53cda18c2baa0c",
+    "samples": []
+   }
+  }
+ },
+ "activity-period": {
+  "en": {
+   "static": {
+    "title": "The spin of a real star",
+    "note": "A real light curve from the TESS space telescope, one sector of 27 days: AU Microscopii, a young red dwarf, and EK Draconis, a young Sun-like star. The periodogram of the whole sector gives the rotation period; the panel states it with its interval and the longer period the data could also fit.",
+    "controls": [{"id":"star","label":"Star","unit":null,"min":0,"max":1,"step":1,"value":0,"decimals":0},{"id":"view","label":"Show","unit":null,"min":0,"max":3,"step":1,"value":0,"decimals":0}],
+    "presets": [],
+    "actions": [],
+    "defaults": {"star":"0","view":"0"}
+   },
+   "precision": [],
+   "specs": 5,
+   "frames": 24,
+   "readout": {
+    "calls": 24,
+    "distinct": 2,
+    "digest": "d874737f9e8448b2",
+    "samples": [[{"label":"Data","value":"1199 points over 27.1 days; the flux is the mean-normalised PDCSAP flux of the TESS pipeline (a model of the instrument’s systematics removed), in 30-minute averages for the fit"},{"label":"Rotation period","value":"4.856 d (95 percent interval 4.849 to 4.863 d), with the double period still possible","emphasis":true},{"label":"Other period it could be","value":"9.713 d, not excluded by the data","emphasis":true},{"label":"Cycles in the data","value":"5.6"},{"label":"Dimming from the spots","value":"4.7 percent from peak to trough"},{"label":"Chance of a peak this strong from noise","value":"1.2 × 10⁻²⁷³"},{"label":"Published","value":"4.85 ± 0.03 d (Gilbert et al. 2022, from all TESS sectors)"},{"label":"What this assumes","value":"A period of the dimming, not a direct reading of the star’s turn: it is the spots’ own period, the star could turn at twice this if two spots sit opposite, and the interval is widened for the correlation of the residuals but not for spots that change. No age follows from it."}],[{"label":"Data","value":"1055 points over 24.0 days; the flux is the mean-normalised PDCSAP flux of the TESS pipeline (a model of the instrument’s systematics removed), in 30-minute averages for the fit"},{"label":"Rotation period","value":"2.555 d (95 percent interval 2.532 to 2.579 d), with the double period still possible","emphasis":true},{"label":"Other period it could be","value":"5.110 d, not excluded by the data","emphasis":true},{"label":"Cycles in the data","value":"9.4"},{"label":"Dimming from the spots","value":"1.5 percent from peak to trough"},{"label":"Chance of a peak this strong from noise","value":"below 1e-300"},{"label":"Published","value":"not stated here"},{"label":"What this assumes","value":"A period of the dimming, not a direct reading of the star’s turn: it is the spots’ own period, the star could turn at twice this if two spots sit opposite, and the interval is widened for the correlation of the residuals but not for spots that change. No age follows from it."}]]
+   },
+   "canvas": {
+    "calls": 24,
+    "distinct": 1,
+    "digest": "e610688fcc6117ea",
+    "samples": [{"drew":{"threw":"TypeError: canvas.after is not a function"},"texts":[]}]
+   },
+   "controls": {
+    "calls": 24,
+    "distinct": 8,
+    "digest": "6f6fc3f0c4053d11",
+    "samples": [["AU Microscopii (TESS sector 1)","the light curve"],["EK Draconis (TESS sector 16)","folded at twice it"],["EK Draconis (TESS sector 16)","folded at the period found"],["EK Draconis (TESS sector 16)","the light curve"],["AU Microscopii (TESS sector 1)","the periodogram"],["AU Microscopii (TESS sector 1)","folded at the period found"],["AU Microscopii (TESS sector 1)","folded at twice it"],["EK Draconis (TESS sector 16)","the periodogram"]]
+   },
+   "phases": {
+    "calls": 0,
+    "distinct": 0,
+    "digest": "4f53cda18c2baa0c",
+    "samples": []
+   }
+  },
+  "es": {
+   "static": {
+    "title": "El giro de una estrella real",
+    "note": "Una curva de luz real del telescopio espacial TESS, un sector de 27 días: AU Microscopii, una enana roja joven, y EK Draconis, una estrella joven parecida al Sol. El periodograma de todo el sector da el periodo de rotación; el panel lo da con su intervalo y el periodo más largo que los datos también podrían ajustar.",
+    "controls": [{"id":"star","label":"Estrella","unit":null,"min":0,"max":1,"step":1,"value":0,"decimals":0},{"id":"view","label":"Mostrar","unit":null,"min":0,"max":3,"step":1,"value":0,"decimals":0}],
+    "presets": [],
+    "actions": [],
+    "defaults": {"star":"0","view":"0"}
+   },
+   "precision": [],
+   "specs": 5,
+   "frames": 24,
+   "readout": {
+    "calls": 24,
+    "distinct": 2,
+    "digest": "5b06f0ee148cc399",
+    "samples": [[{"label":"Datos","value":"1199 puntos en 27.1 días; el flujo es el flujo PDCSAP del procesado de TESS normalizado a su media (con un modelo de los sistemáticos del instrumento retirado), en promedios de 30 minutos para el ajuste"},{"label":"Periodo de rotación","value":"4.856 d (intervalo del 95 por ciento de 4.849 a 4.863 d), con el periodo doble todavía posible","emphasis":true},{"label":"Otro periodo que podría ser","value":"9.713 d, no excluido por los datos","emphasis":true},{"label":"Ciclos en los datos","value":"5.6"},{"label":"Atenuación por las manchas","value":"4.7 por ciento de pico a valle"},{"label":"Probabilidad de un pico así de fuerte por el ruido","value":"1.2 × 10⁻²⁷³"},{"label":"Publicado","value":"4.85 ± 0.03 d (Gilbert et al. 2022, con todos los sectores de TESS)"},{"label":"Qué supone esto","value":"Un periodo de la atenuación, no una lectura directa del giro de la estrella: es el periodo de las propias manchas, la estrella podría girar al doble si hay dos manchas opuestas, y el intervalo se ensancha por la correlación de los residuos pero no por manchas que cambian. De él no se deduce ninguna edad."}],[{"label":"Datos","value":"1055 puntos en 24.0 días; el flujo es el flujo PDCSAP del procesado de TESS normalizado a su media (con un modelo de los sistemáticos del instrumento retirado), en promedios de 30 minutos para el ajuste"},{"label":"Periodo de rotación","value":"2.555 d (intervalo del 95 por ciento de 2.532 a 2.579 d), con el periodo doble todavía posible","emphasis":true},{"label":"Otro periodo que podría ser","value":"5.110 d, no excluido por los datos","emphasis":true},{"label":"Ciclos en los datos","value":"9.4"},{"label":"Atenuación por las manchas","value":"1.5 por ciento de pico a valle"},{"label":"Probabilidad de un pico así de fuerte por el ruido","value":"menos de 1e-300"},{"label":"Publicado","value":"no se da aquí"},{"label":"Qué supone esto","value":"Un periodo de la atenuación, no una lectura directa del giro de la estrella: es el periodo de las propias manchas, la estrella podría girar al doble si hay dos manchas opuestas, y el intervalo se ensancha por la correlación de los residuos pero no por manchas que cambian. De él no se deduce ninguna edad."}]]
+   },
+   "canvas": {
+    "calls": 24,
+    "distinct": 1,
+    "digest": "e610688fcc6117ea",
+    "samples": [{"drew":{"threw":"TypeError: canvas.after is not a function"},"texts":[]}]
+   },
+   "controls": {
+    "calls": 24,
+    "distinct": 8,
+    "digest": "51d454f90d9ddbde",
+    "samples": [["AU Microscopii (TESS, sector 1)","la curva de luz"],["EK Draconis (TESS, sector 16)","plegada al doble"],["EK Draconis (TESS, sector 16)","plegada al periodo hallado"],["EK Draconis (TESS, sector 16)","la curva de luz"],["AU Microscopii (TESS, sector 1)","el periodograma"],["AU Microscopii (TESS, sector 1)","plegada al periodo hallado"],["AU Microscopii (TESS, sector 1)","plegada al doble"],["EK Draconis (TESS, sector 16)","el periodograma"]]
+   },
+   "phases": {
+    "calls": 0,
+    "distinct": 0,
+    "digest": "4f53cda18c2baa0c",
+    "samples": []
+   }
+  }
+ },
+ "activity-flares": {
+  "en": {
+   "static": {
+    "title": "Flares on a red dwarf",
+    "note": "AU Microscopii again, at the telescope’s two-minute cadence. A flare is a sudden brightening that rises in minutes and fades over longer: the panel marks every brightening the rule finds, a point three standard deviations above the star’s quiet level with at least two more following, and states for each its equivalent duration, the time the star at its quiet level would take to give out the same light, in seconds, with its uncertainty.",
+    "controls": [{"id":"view","label":"Show","unit":null,"min":0,"max":1,"step":1,"value":0,"decimals":0},{"id":"day","label":"Day of the sector","unit":null,"min":0,"max":27,"step":1,"value":9,"decimals":0},{"id":"flare","label":"Flare, largest first","unit":null,"min":1,"max":76,"step":1,"value":1,"decimals":0}],
+    "presets": [],
+    "actions": [],
+    "defaults": {"view":"0","day":"9","flare":"1"}
+   },
+   "precision": [],
+   "specs": 3,
+   "frames": 29,
+   "readout": {
+    "calls": 29,
+    "distinct": 15,
+    "digest": "359b3ec86f68ec92",
+    "samples": [[{"label":"Rule","value":"76 flares in 24.6 days of good data; a point is a candidate when it is 3 standard deviations (the quiet scatter of 0.034 percent) above the quiet level, and at least three in a row qualify"},{"label":"In this view","value":"3 flares marked"},{"label":"Equivalent duration","value":"118.3 ± 4.4 s","emphasis":true},{"label":"Equivalent duration","value":"30.9 ± 1.7 s","emphasis":true},{"label":"Equivalent duration","value":"6.2 ± 0.4 s","emphasis":true},{"label":"What this assumes","value":"A flare is whatever the rule finds: faint and short ones are found only in part, flares that overlap are one, and the star’s own variations are taken out by a model of its quiet light. The equivalent duration is in the telescope’s band; it is not an energy."}],[{"label":"Rule","value":"76 flares in 24.6 days of good data; a point is a candidate when it is 3 standard deviations (the quiet scatter of 0.034 percent) above the quiet level, and at least three in a row qualify"},{"label":"In this view","value":"4 flares marked"},{"label":"Equivalent duration","value":"8.7 ± 1.5 s","emphasis":true},{"label":"Equivalent duration","value":"3.1 ± 1.1 s","emphasis":true},{"label":"Equivalent duration","value":"14.9 ± 10.5 s","emphasis":true},{"label":"Equivalent duration","value":"47.5 ± 6.8 s","emphasis":true},{"label":"What this assumes","value":"A flare is whatever the rule finds: faint and short ones are found only in part, flares that overlap are one, and the star’s own variations are taken out by a model of its quiet light. The equivalent duration is in the telescope’s band; it is not an energy."}],[{"label":"Rule","value":"76 flares in 24.6 days of good data; a point is a candidate when it is 3 standard deviations (the quiet scatter of 0.034 percent) above the quiet level, and at least three in a row qualify"},{"label":"In this view","value":"1 flares marked"},{"label":"Equivalent duration","value":"0.2 ± 0.3 s","emphasis":true},{"label":"Peak above the quiet level","value":"0.07 percent"},{"label":"Width at half the peak","value":"4 minutes"},{"label":"Fit to the standard flare shape","value":"chi-square 1523 for 91 degrees of freedom"},{"label":"What this assumes","value":"A flare is whatever the rule finds: faint and short ones are found only in part, flares that overlap are one, and the star’s own variations are taken out by a model of its quiet light. The equivalent duration is in the telescope’s band; it is not an energy."}],[{"label":"Rule","value":"76 flares in 24.6 days of good data; a point is a candidate when it is 3 standard deviations (the quiet scatter of 0.034 percent) above the quiet level, and at least three in a row qualify"},{"label":"In this view","value":"2 flares marked"},{"label":"Equivalent duration","value":"6.5 ± 0.8 s","emphasis":true},{"label":"Peak above the quiet level","value":"0.33 percent"},{"label":"Width at half the peak","value":"29 minutes"},{"label":"Fit to the standard flare shape","value":"chi-square 469 for 139 degrees of freedom"},{"label":"What this assumes","value":"A flare is whatever the rule finds: faint and short ones are found only in part, flares that overlap are one, and the star’s own variations are taken out by a model of its quiet light. The equivalent duration is in the telescope’s band; it is not an energy."}],[{"label":"Rule","value":"76 flares in 24.6 days of good data; a point is a candidate when it is 3 standard deviations (the quiet scatter of 0.034 percent) above the quiet level, and at least three in a row qualify"},{"label":"In this view","value":"1 flares marked"},{"label":"Equivalent duration","value":"9.9 ± 1.0 s","emphasis":true},{"label":"Peak above the quiet level","value":"0.22 percent"},{"label":"Width at half the peak","value":"38 minutes"},{"label":"Fit to the standard flare shape","value":"chi-square 974 for 273 degrees of freedom"},{"label":"What this assumes","value":"A flare is whatever the rule finds: faint and short ones are found only in part, flares that overlap are one, and the star’s own variations are taken out by a model of its quiet light. The equivalent duration is in the telescope’s band; it is not an energy."}],[{"label":"Rule","value":"76 flares in 24.6 days of good data; a point is a candidate when it is 3 standard deviations (the quiet scatter of 0.034 percent) above the quiet level, and at least three in a row qualify"},{"label":"In this view","value":"1 flares marked"},{"label":"Equivalent duration","value":"123.8 ± 5.5 s","emphasis":true},{"label":"Peak above the quiet level","value":"0.47 percent"},{"label":"Width at half the peak","value":"60 minutes"},{"label":"Fit to the standard flare shape","value":"chi-square 984 for 234 degrees of freedom"},{"label":"What this assumes","value":"A flare is whatever the rule finds: faint and short ones are found only in part, flares that overlap are one, and the star’s own variations are taken out by a model of its quiet light. The equivalent duration is in the telescope’s band; it is not an energy."}],[{"label":"Rule","value":"76 flares in 24.6 days of good data; a point is a candidate when it is 3 standard deviations (the quiet scatter of 0.034 percent) above the quiet level, and at least three in a row qualify"},{"label":"In this view","value":"2 flares marked"},{"label":"Equivalent duration","value":"3.1 ± 0.7 s","emphasis":true},{"label":"Equivalent duration","value":"47.2 ± 1.1 s","emphasis":true},{"label":"What this assumes","value":"A flare is whatever the rule finds: faint and short ones are found only in part, flares that overlap are one, and the star’s own variations are taken out by a model of its quiet light. The equivalent duration is in the telescope’s band; it is not an energy."}],[{"label":"Rule","value":"76 flares in 24.6 days of good data; a point is a candidate when it is 3 standard deviations (the quiet scatter of 0.034 percent) above the quiet level, and at least three in a row qualify"},{"label":"In this view","value":"2 flares marked"},{"label":"Equivalent duration","value":"7.2 ± 0.9 s","emphasis":true},{"label":"Equivalent duration","value":"18.7 ± 7.7 s","emphasis":true},{"label":"What this assumes","value":"A flare is whatever the rule finds: faint and short ones are found only in part, flares that overlap are one, and the star’s own variations are taken out by a model of its quiet light. The equivalent duration is in the telescope’s band; it is not an energy."}],[{"label":"Rule","value":"76 flares in 24.6 days of good data; a point is a candidate when it is 3 standard deviations (the quiet scatter of 0.034 percent) above the quiet level, and at least three in a row qualify"},{"label":"In this view","value":"5 flares marked"},{"label":"Equivalent duration","value":"4.4 ± 1.0 s","emphasis":true},{"label":"Equivalent duration","value":"2.0 ± 0.8 s","emphasis":true},{"label":"Equivalent duration","value":"16.1 ± 1.0 s","emphasis":true},{"label":"Equivalent duration","value":"18.7 ± 1.0 s","emphasis":true},{"label":"Equivalent duration","value":"8.2 ± 0.5 s","emphasis":true},{"label":"What this assumes","value":"A flare is whatever the rule finds: faint and short ones are found only in part, flares that overlap are one, and the star’s own variations are taken out by a model of its quiet light. The equivalent duration is in the telescope’s band; it is not an energy."}],[{"label":"Rule","value":"76 flares in 24.6 days of good data; a point is a candidate when it is 3 standard deviations (the quiet scatter of 0.034 percent) above the quiet level, and at least three in a row qualify"},{"label":"In this view","value":"1 flares marked"},{"label":"Equivalent duration","value":"123.8 ± 5.5 s","emphasis":true},{"label":"What this assumes","value":"A flare is whatever the rule finds: faint and short ones are found only in part, flares that overlap are one, and the star’s own variations are taken out by a model of its quiet light. The equivalent duration is in the telescope’s band; it is not an energy."}],[{"label":"Rule","value":"76 flares in 24.6 days of good data; a point is a candidate when it is 3 standard deviations (the quiet scatter of 0.034 percent) above the quiet level, and at least three in a row qualify"},{"label":"In this view","value":"5 flares marked"},{"label":"Equivalent duration","value":"8.2 ± 6.5 s","emphasis":true},{"label":"Equivalent duration","value":"1.6 ± 1.1 s","emphasis":true},{"label":"Equivalent duration","value":"2.8 ± 1.1 s","emphasis":true},{"label":"Equivalent duration","value":"1.3 ± 0.9 s","emphasis":true},{"label":"Equivalent duration","value":"35.7 ± 13.4 s","emphasis":true},{"label":"What this assumes","value":"A flare is whatever the rule finds: faint and short ones are found only in part, flares that overlap are one, and the star’s own variations are taken out by a model of its quiet light. The equivalent duration is in the telescope’s band; it is not an energy."}],[{"label":"Rule","value":"76 flares in 24.6 days of good data; a point is a candidate when it is 3 standard deviations (the quiet scatter of 0.034 percent) above the quiet level, and at least three in a row qualify"},{"label":"In this view","value":"1 flares marked"},{"label":"Equivalent duration","value":"41.7 ± 14.5 s","emphasis":true},{"label":"Peak above the quiet level","value":"0.22 percent"},{"label":"Width at half the peak","value":"19 minutes"},{"label":"Fit to the standard flare shape","value":"chi-square 944 for 242 degrees of freedom"},{"label":"What this assumes","value":"A flare is whatever the rule finds: faint and short ones are found only in part, flares that overlap are one, and the star’s own variations are taken out by a model of its quiet light. The equivalent duration is in the telescope’s band; it is not an energy."}],[{"label":"Rule","value":"76 flares in 24.6 days of good data; a point is a candidate when it is 3 standard deviations (the quiet scatter of 0.034 percent) above the quiet level, and at least three in a row qualify"},{"label":"In this view","value":"2 flares marked"},{"label":"Equivalent duration","value":"10.5 ± 0.8 s","emphasis":true},{"label":"Equivalent duration","value":"2.8 ± 0.5 s","emphasis":true},{"label":"What this assumes","value":"A flare is whatever the rule finds: faint and short ones are found only in part, flares that overlap are one, and the star’s own variations are taken out by a model of its quiet light. The equivalent duration is in the telescope’s band; it is not an energy."}],[{"label":"Rule","value":"76 flares in 24.6 days of good data; a point is a candidate when it is 3 standard deviations (the quiet scatter of 0.034 percent) above the quiet level, and at least three in a row qualify"},{"label":"In this view","value":"2 flares marked"},{"label":"Equivalent duration","value":"118.3 ± 4.4 s","emphasis":true},{"label":"Peak above the quiet level","value":"3.48 percent"},{"label":"Width at half the peak","value":"29 minutes"},{"label":"Fit to the standard flare shape","value":"chi-square 27026 for 418 degrees of freedom"},{"label":"What this assumes","value":"A flare is whatever the rule finds: faint and short ones are found only in part, flares that overlap are one, and the star’s own variations are taken out by a model of its quiet light. The equivalent duration is in the telescope’s band; it is not an energy."}]]
+   },
+   "canvas": {
+    "calls": 29,
+    "distinct": 1,
+    "digest": "e610688fcc6117ea",
+    "samples": [{"drew":{"threw":"TypeError: canvas.after is not a function"},"texts":[]}]
+   },
+   "controls": {
+    "calls": 29,
+    "distinct": 22,
+    "digest": "cad3eab22f657bc7",
+    "samples": [["a day with its flares marked","9","1"],["a day with its flares marked","0","1"],["one flare close up","27","76"],["one flare close up","14","39"],["one flare close up","9","1"],["one flare close up","9","2"],["a day with its flares marked","14","1"],["a day with its flares marked","20","1"],["a day with its flares marked","9","20"],["a day with its flares marked","9","39"],["a day with its flares marked","22","30"],["a day with its flares marked","27","62"],["one flare close up","10","8"]]
+   },
+   "phases": {
+    "calls": 0,
+    "distinct": 0,
+    "digest": "4f53cda18c2baa0c",
+    "samples": []
+   }
+  },
+  "es": {
+   "static": {
+    "title": "Erupciones en una enana roja",
+    "note": "De nuevo AU Microscopii, con la cadencia de dos minutos del telescopio. Una erupción es un brillo repentino que sube en minutos y se apaga en más tiempo: el panel marca cada brillo que halla la regla, un punto tres desviaciones típicas por encima del nivel en calma de la estrella con al menos dos más a continuación, y da para cada una su duración equivalente, el tiempo que tardaría la estrella en su nivel en calma en emitir la misma luz, en segundos, con su incertidumbre.",
+    "controls": [{"id":"view","label":"Mostrar","unit":null,"min":0,"max":1,"step":1,"value":0,"decimals":0},{"id":"day","label":"Día del sector","unit":null,"min":0,"max":27,"step":1,"value":9,"decimals":0},{"id":"flare","label":"Erupción, de la mayor a la menor","unit":null,"min":1,"max":76,"step":1,"value":1,"decimals":0}],
+    "presets": [],
+    "actions": [],
+    "defaults": {"view":"0","day":"9","flare":"1"}
+   },
+   "precision": [],
+   "specs": 3,
+   "frames": 29,
+   "readout": {
+    "calls": 29,
+    "distinct": 15,
+    "digest": "bb78208ebd2753fc",
+    "samples": [[{"label":"Regla","value":"76 erupciones en 24.6 días de buenos datos; un punto es candidato cuando está 3 desviaciones típicas (la dispersión en calma de 0.034 por ciento) por encima del nivel en calma, y al menos tres seguidos lo cumplen"},{"label":"En esta vista","value":"3 erupciones marcadas"},{"label":"Duración equivalente","value":"118.3 ± 4.4 s","emphasis":true},{"label":"Duración equivalente","value":"30.9 ± 1.7 s","emphasis":true},{"label":"Duración equivalente","value":"6.2 ± 0.4 s","emphasis":true},{"label":"Qué supone esto","value":"Una erupción es lo que halla la regla: las débiles y breves se hallan solo en parte, las que se solapan cuentan como una, y las variaciones propias de la estrella se quitan con un modelo de su luz en calma. La duración equivalente es en la banda del telescopio; no es una energía."}],[{"label":"Regla","value":"76 erupciones en 24.6 días de buenos datos; un punto es candidato cuando está 3 desviaciones típicas (la dispersión en calma de 0.034 por ciento) por encima del nivel en calma, y al menos tres seguidos lo cumplen"},{"label":"En esta vista","value":"4 erupciones marcadas"},{"label":"Duración equivalente","value":"8.7 ± 1.5 s","emphasis":true},{"label":"Duración equivalente","value":"3.1 ± 1.1 s","emphasis":true},{"label":"Duración equivalente","value":"14.9 ± 10.5 s","emphasis":true},{"label":"Duración equivalente","value":"47.5 ± 6.8 s","emphasis":true},{"label":"Qué supone esto","value":"Una erupción es lo que halla la regla: las débiles y breves se hallan solo en parte, las que se solapan cuentan como una, y las variaciones propias de la estrella se quitan con un modelo de su luz en calma. La duración equivalente es en la banda del telescopio; no es una energía."}],[{"label":"Regla","value":"76 erupciones en 24.6 días de buenos datos; un punto es candidato cuando está 3 desviaciones típicas (la dispersión en calma de 0.034 por ciento) por encima del nivel en calma, y al menos tres seguidos lo cumplen"},{"label":"En esta vista","value":"1 erupciones marcadas"},{"label":"Duración equivalente","value":"0.2 ± 0.3 s","emphasis":true},{"label":"Pico sobre el nivel en calma","value":"0.07 por ciento"},{"label":"Anchura a la mitad del pico","value":"4 minutos"},{"label":"Ajuste a la forma de erupción estándar","value":"chi cuadrado 1523 con 91 grados de libertad"},{"label":"Qué supone esto","value":"Una erupción es lo que halla la regla: las débiles y breves se hallan solo en parte, las que se solapan cuentan como una, y las variaciones propias de la estrella se quitan con un modelo de su luz en calma. La duración equivalente es en la banda del telescopio; no es una energía."}],[{"label":"Regla","value":"76 erupciones en 24.6 días de buenos datos; un punto es candidato cuando está 3 desviaciones típicas (la dispersión en calma de 0.034 por ciento) por encima del nivel en calma, y al menos tres seguidos lo cumplen"},{"label":"En esta vista","value":"2 erupciones marcadas"},{"label":"Duración equivalente","value":"6.5 ± 0.8 s","emphasis":true},{"label":"Pico sobre el nivel en calma","value":"0.33 por ciento"},{"label":"Anchura a la mitad del pico","value":"29 minutos"},{"label":"Ajuste a la forma de erupción estándar","value":"chi cuadrado 469 con 139 grados de libertad"},{"label":"Qué supone esto","value":"Una erupción es lo que halla la regla: las débiles y breves se hallan solo en parte, las que se solapan cuentan como una, y las variaciones propias de la estrella se quitan con un modelo de su luz en calma. La duración equivalente es en la banda del telescopio; no es una energía."}],[{"label":"Regla","value":"76 erupciones en 24.6 días de buenos datos; un punto es candidato cuando está 3 desviaciones típicas (la dispersión en calma de 0.034 por ciento) por encima del nivel en calma, y al menos tres seguidos lo cumplen"},{"label":"En esta vista","value":"1 erupciones marcadas"},{"label":"Duración equivalente","value":"9.9 ± 1.0 s","emphasis":true},{"label":"Pico sobre el nivel en calma","value":"0.22 por ciento"},{"label":"Anchura a la mitad del pico","value":"38 minutos"},{"label":"Ajuste a la forma de erupción estándar","value":"chi cuadrado 974 con 273 grados de libertad"},{"label":"Qué supone esto","value":"Una erupción es lo que halla la regla: las débiles y breves se hallan solo en parte, las que se solapan cuentan como una, y las variaciones propias de la estrella se quitan con un modelo de su luz en calma. La duración equivalente es en la banda del telescopio; no es una energía."}],[{"label":"Regla","value":"76 erupciones en 24.6 días de buenos datos; un punto es candidato cuando está 3 desviaciones típicas (la dispersión en calma de 0.034 por ciento) por encima del nivel en calma, y al menos tres seguidos lo cumplen"},{"label":"En esta vista","value":"1 erupciones marcadas"},{"label":"Duración equivalente","value":"123.8 ± 5.5 s","emphasis":true},{"label":"Pico sobre el nivel en calma","value":"0.47 por ciento"},{"label":"Anchura a la mitad del pico","value":"60 minutos"},{"label":"Ajuste a la forma de erupción estándar","value":"chi cuadrado 984 con 234 grados de libertad"},{"label":"Qué supone esto","value":"Una erupción es lo que halla la regla: las débiles y breves se hallan solo en parte, las que se solapan cuentan como una, y las variaciones propias de la estrella se quitan con un modelo de su luz en calma. La duración equivalente es en la banda del telescopio; no es una energía."}],[{"label":"Regla","value":"76 erupciones en 24.6 días de buenos datos; un punto es candidato cuando está 3 desviaciones típicas (la dispersión en calma de 0.034 por ciento) por encima del nivel en calma, y al menos tres seguidos lo cumplen"},{"label":"En esta vista","value":"2 erupciones marcadas"},{"label":"Duración equivalente","value":"3.1 ± 0.7 s","emphasis":true},{"label":"Duración equivalente","value":"47.2 ± 1.1 s","emphasis":true},{"label":"Qué supone esto","value":"Una erupción es lo que halla la regla: las débiles y breves se hallan solo en parte, las que se solapan cuentan como una, y las variaciones propias de la estrella se quitan con un modelo de su luz en calma. La duración equivalente es en la banda del telescopio; no es una energía."}],[{"label":"Regla","value":"76 erupciones en 24.6 días de buenos datos; un punto es candidato cuando está 3 desviaciones típicas (la dispersión en calma de 0.034 por ciento) por encima del nivel en calma, y al menos tres seguidos lo cumplen"},{"label":"En esta vista","value":"2 erupciones marcadas"},{"label":"Duración equivalente","value":"7.2 ± 0.9 s","emphasis":true},{"label":"Duración equivalente","value":"18.7 ± 7.7 s","emphasis":true},{"label":"Qué supone esto","value":"Una erupción es lo que halla la regla: las débiles y breves se hallan solo en parte, las que se solapan cuentan como una, y las variaciones propias de la estrella se quitan con un modelo de su luz en calma. La duración equivalente es en la banda del telescopio; no es una energía."}],[{"label":"Regla","value":"76 erupciones en 24.6 días de buenos datos; un punto es candidato cuando está 3 desviaciones típicas (la dispersión en calma de 0.034 por ciento) por encima del nivel en calma, y al menos tres seguidos lo cumplen"},{"label":"En esta vista","value":"5 erupciones marcadas"},{"label":"Duración equivalente","value":"4.4 ± 1.0 s","emphasis":true},{"label":"Duración equivalente","value":"2.0 ± 0.8 s","emphasis":true},{"label":"Duración equivalente","value":"16.1 ± 1.0 s","emphasis":true},{"label":"Duración equivalente","value":"18.7 ± 1.0 s","emphasis":true},{"label":"Duración equivalente","value":"8.2 ± 0.5 s","emphasis":true},{"label":"Qué supone esto","value":"Una erupción es lo que halla la regla: las débiles y breves se hallan solo en parte, las que se solapan cuentan como una, y las variaciones propias de la estrella se quitan con un modelo de su luz en calma. La duración equivalente es en la banda del telescopio; no es una energía."}],[{"label":"Regla","value":"76 erupciones en 24.6 días de buenos datos; un punto es candidato cuando está 3 desviaciones típicas (la dispersión en calma de 0.034 por ciento) por encima del nivel en calma, y al menos tres seguidos lo cumplen"},{"label":"En esta vista","value":"1 erupciones marcadas"},{"label":"Duración equivalente","value":"123.8 ± 5.5 s","emphasis":true},{"label":"Qué supone esto","value":"Una erupción es lo que halla la regla: las débiles y breves se hallan solo en parte, las que se solapan cuentan como una, y las variaciones propias de la estrella se quitan con un modelo de su luz en calma. La duración equivalente es en la banda del telescopio; no es una energía."}],[{"label":"Regla","value":"76 erupciones en 24.6 días de buenos datos; un punto es candidato cuando está 3 desviaciones típicas (la dispersión en calma de 0.034 por ciento) por encima del nivel en calma, y al menos tres seguidos lo cumplen"},{"label":"En esta vista","value":"5 erupciones marcadas"},{"label":"Duración equivalente","value":"8.2 ± 6.5 s","emphasis":true},{"label":"Duración equivalente","value":"1.6 ± 1.1 s","emphasis":true},{"label":"Duración equivalente","value":"2.8 ± 1.1 s","emphasis":true},{"label":"Duración equivalente","value":"1.3 ± 0.9 s","emphasis":true},{"label":"Duración equivalente","value":"35.7 ± 13.4 s","emphasis":true},{"label":"Qué supone esto","value":"Una erupción es lo que halla la regla: las débiles y breves se hallan solo en parte, las que se solapan cuentan como una, y las variaciones propias de la estrella se quitan con un modelo de su luz en calma. La duración equivalente es en la banda del telescopio; no es una energía."}],[{"label":"Regla","value":"76 erupciones en 24.6 días de buenos datos; un punto es candidato cuando está 3 desviaciones típicas (la dispersión en calma de 0.034 por ciento) por encima del nivel en calma, y al menos tres seguidos lo cumplen"},{"label":"En esta vista","value":"1 erupciones marcadas"},{"label":"Duración equivalente","value":"41.7 ± 14.5 s","emphasis":true},{"label":"Pico sobre el nivel en calma","value":"0.22 por ciento"},{"label":"Anchura a la mitad del pico","value":"19 minutos"},{"label":"Ajuste a la forma de erupción estándar","value":"chi cuadrado 944 con 242 grados de libertad"},{"label":"Qué supone esto","value":"Una erupción es lo que halla la regla: las débiles y breves se hallan solo en parte, las que se solapan cuentan como una, y las variaciones propias de la estrella se quitan con un modelo de su luz en calma. La duración equivalente es en la banda del telescopio; no es una energía."}],[{"label":"Regla","value":"76 erupciones en 24.6 días de buenos datos; un punto es candidato cuando está 3 desviaciones típicas (la dispersión en calma de 0.034 por ciento) por encima del nivel en calma, y al menos tres seguidos lo cumplen"},{"label":"En esta vista","value":"2 erupciones marcadas"},{"label":"Duración equivalente","value":"10.5 ± 0.8 s","emphasis":true},{"label":"Duración equivalente","value":"2.8 ± 0.5 s","emphasis":true},{"label":"Qué supone esto","value":"Una erupción es lo que halla la regla: las débiles y breves se hallan solo en parte, las que se solapan cuentan como una, y las variaciones propias de la estrella se quitan con un modelo de su luz en calma. La duración equivalente es en la banda del telescopio; no es una energía."}],[{"label":"Regla","value":"76 erupciones en 24.6 días de buenos datos; un punto es candidato cuando está 3 desviaciones típicas (la dispersión en calma de 0.034 por ciento) por encima del nivel en calma, y al menos tres seguidos lo cumplen"},{"label":"En esta vista","value":"2 erupciones marcadas"},{"label":"Duración equivalente","value":"118.3 ± 4.4 s","emphasis":true},{"label":"Pico sobre el nivel en calma","value":"3.48 por ciento"},{"label":"Anchura a la mitad del pico","value":"29 minutos"},{"label":"Ajuste a la forma de erupción estándar","value":"chi cuadrado 27026 con 418 grados de libertad"},{"label":"Qué supone esto","value":"Una erupción es lo que halla la regla: las débiles y breves se hallan solo en parte, las que se solapan cuentan como una, y las variaciones propias de la estrella se quitan con un modelo de su luz en calma. La duración equivalente es en la banda del telescopio; no es una energía."}]]
+   },
+   "canvas": {
+    "calls": 29,
+    "distinct": 1,
+    "digest": "e610688fcc6117ea",
+    "samples": [{"drew":{"threw":"TypeError: canvas.after is not a function"},"texts":[]}]
+   },
+   "controls": {
+    "calls": 29,
+    "distinct": 22,
+    "digest": "265b8d4ecbfb9abd",
+    "samples": [["un día con sus erupciones marcadas","9","1"],["un día con sus erupciones marcadas","0","1"],["una erupción de cerca","27","76"],["una erupción de cerca","14","39"],["una erupción de cerca","9","1"],["una erupción de cerca","9","2"],["un día con sus erupciones marcadas","14","1"],["un día con sus erupciones marcadas","20","1"],["un día con sus erupciones marcadas","9","20"],["un día con sus erupciones marcadas","9","39"],["un día con sus erupciones marcadas","22","30"],["un día con sus erupciones marcadas","27","62"],["una erupción de cerca","10","8"]]
+   },
+   "phases": {
+    "calls": 0,
+    "distinct": 0,
+    "digest": "4f53cda18c2baa0c",
+    "samples": []
+   }
+  }
+ },
+ "activity-ffd": {
+  "en": {
+   "static": {
+    "title": "How often flares of each size occur",
+    "note": "The flares of the last panel, counted from the largest down: how many a day are at least this large, in equivalent duration, on logarithmic axes. Above a floor the counts fall on a straight line, a power law of slope alpha, and the panel fits it. Below the floor the telescope misses flares and the counts bend. The synthetic star is made with a known slope, to show what the fit returns when the truth is known.",
+    "controls": [{"id":"source","label":"Flares from","unit":null,"min":0,"max":1,"step":1,"value":0,"decimals":0},{"id":"floor","label":"Fit above","unit":null,"min":0,"max":2,"step":1,"value":0,"decimals":0}],
+    "presets": [],
+    "actions": [],
+    "defaults": {"source":"0","floor":"0"}
+   },
+   "precision": [],
+   "specs": 5,
+   "frames": 21,
+   "readout": {
+    "calls": 21,
+    "distinct": 6,
+    "digest": "e165c6ac342375f5",
+    "samples": [[{"label":"Flares found","value":"76 in 24.6 days"},{"label":"Floor","value":"9.0 s, leaving 29 flares"},{"label":"Slope alpha of the power law","value":"1.92 (95 percent interval 1.62 to 2.28)","emphasis":true},{"label":"What this assumes","value":"A single power law above the floor; the slope is the maximum-likelihood value for the flares above it, so it moves if the floor moves, and a floor chosen to make the fit best is chosen after seeing the data. The distribution is of the band’s equivalent durations, not of energies."}],[{"label":"Flares found","value":"76 in 24.6 days"},{"label":"Floor","value":"6.1 s, leaving 44 flares"},{"label":"Slope alpha of the power law","value":"1.98 (95 percent interval 1.71 to 2.29)","emphasis":true},{"label":"What this assumes","value":"A single power law above the floor; the slope is the maximum-likelihood value for the flares above it, so it moves if the floor moves, and a floor chosen to make the fit best is chosen after seeing the data. The distribution is of the band’s equivalent durations, not of energies."}],[{"label":"Flares found","value":"69 in 27.0 days"},{"label":"Floor","value":"4.8 s, leaving 69 flares"},{"label":"Slope alpha of the power law","value":"1.67 (95 percent interval 1.52 to 1.84)","emphasis":true},{"label":"The slope the synthetic star was made with","value":"1.80, from 81 injected flares"},{"label":"What this assumes","value":"A single power law above the floor; the slope is the maximum-likelihood value for the flares above it, so it moves if the floor moves, and a floor chosen to make the fit best is chosen after seeing the data. The distribution is of the band’s equivalent durations, not of energies."}],[{"label":"Flares found","value":"69 in 27.0 days"},{"label":"Floor","value":"7.5 s, leaving 56 flares"},{"label":"Slope alpha of the power law","value":"1.74 (95 percent interval 1.56 to 1.94)","emphasis":true},{"label":"The slope the synthetic star was made with","value":"1.80, from 81 injected flares"},{"label":"What this assumes","value":"A single power law above the floor; the slope is the maximum-likelihood value for the flares above it, so it moves if the floor moves, and a floor chosen to make the fit best is chosen after seeing the data. The distribution is of the band’s equivalent durations, not of energies."}]]
+   },
+   "canvas": {
+    "calls": 21,
+    "distinct": 1,
+    "digest": "e610688fcc6117ea",
+    "samples": [{"drew":{"threw":"TypeError: canvas.after is not a function"},"texts":[]}]
+   },
+   "controls": {
+    "calls": 21,
+    "distinct": 6,
+    "digest": "b0b87e2ebd7f0606",
+    "samples": [["AU Microscopii","the completeness limit"],["a synthetic star, true slope 1.80","every flare"],["a synthetic star, true slope 1.80","the best-fitting floor"],["a synthetic star, true slope 1.80","the completeness limit"],["AU Microscopii","the best-fitting floor"],["AU Microscopii","every flare"]]
+   },
+   "phases": {
+    "calls": 0,
+    "distinct": 0,
+    "digest": "4f53cda18c2baa0c",
+    "samples": []
+   }
+  },
+  "es": {
+   "static": {
+    "title": "Cuántas erupciones hay de cada tamaño",
+    "note": "Las erupciones del panel anterior, contadas desde la mayor: cuántas al día son al menos así de grandes, en duración equivalente, en ejes logarítmicos. Por encima de un suelo los recuentos caen en una recta, una ley de potencias de pendiente alfa, y el panel la ajusta. Por debajo del suelo el telescopio pierde erupciones y los recuentos se curvan. La estrella sintética se hizo con una pendiente conocida, para ver qué devuelve el ajuste cuando se conoce la verdad.",
+    "controls": [{"id":"source","label":"Erupciones de","unit":null,"min":0,"max":1,"step":1,"value":0,"decimals":0},{"id":"floor","label":"Ajustar por encima de","unit":null,"min":0,"max":2,"step":1,"value":0,"decimals":0}],
+    "presets": [],
+    "actions": [],
+    "defaults": {"source":"0","floor":"0"}
+   },
+   "precision": [],
+   "specs": 5,
+   "frames": 21,
+   "readout": {
+    "calls": 21,
+    "distinct": 6,
+    "digest": "8b73dcaabfdcc1b4",
+    "samples": [[{"label":"Erupciones halladas","value":"76 en 24.6 días"},{"label":"Suelo","value":"9.0 s, con 29 erupciones por encima"},{"label":"Pendiente alfa de la ley de potencias","value":"1.92 (intervalo del 95 por ciento de 1.62 a 2.28)","emphasis":true},{"label":"Qué supone esto","value":"Una sola ley de potencias por encima del suelo; la pendiente es el valor de máxima verosimilitud de las erupciones por encima de él, así que se mueve si el suelo se mueve, y un suelo elegido para que el ajuste sea el mejor se elige después de ver los datos. La distribución es de duraciones equivalentes en la banda, no de energías."}],[{"label":"Erupciones halladas","value":"76 en 24.6 días"},{"label":"Suelo","value":"6.1 s, con 44 erupciones por encima"},{"label":"Pendiente alfa de la ley de potencias","value":"1.98 (intervalo del 95 por ciento de 1.71 a 2.29)","emphasis":true},{"label":"Qué supone esto","value":"Una sola ley de potencias por encima del suelo; la pendiente es el valor de máxima verosimilitud de las erupciones por encima de él, así que se mueve si el suelo se mueve, y un suelo elegido para que el ajuste sea el mejor se elige después de ver los datos. La distribución es de duraciones equivalentes en la banda, no de energías."}],[{"label":"Erupciones halladas","value":"69 en 27.0 días"},{"label":"Suelo","value":"4.8 s, con 69 erupciones por encima"},{"label":"Pendiente alfa de la ley de potencias","value":"1.67 (intervalo del 95 por ciento de 1.52 a 1.84)","emphasis":true},{"label":"La pendiente con que se hizo la estrella sintética","value":"1.80, con 81 erupciones inyectadas"},{"label":"Qué supone esto","value":"Una sola ley de potencias por encima del suelo; la pendiente es el valor de máxima verosimilitud de las erupciones por encima de él, así que se mueve si el suelo se mueve, y un suelo elegido para que el ajuste sea el mejor se elige después de ver los datos. La distribución es de duraciones equivalentes en la banda, no de energías."}],[{"label":"Erupciones halladas","value":"69 en 27.0 días"},{"label":"Suelo","value":"7.5 s, con 56 erupciones por encima"},{"label":"Pendiente alfa de la ley de potencias","value":"1.74 (intervalo del 95 por ciento de 1.56 a 1.94)","emphasis":true},{"label":"La pendiente con que se hizo la estrella sintética","value":"1.80, con 81 erupciones inyectadas"},{"label":"Qué supone esto","value":"Una sola ley de potencias por encima del suelo; la pendiente es el valor de máxima verosimilitud de las erupciones por encima de él, así que se mueve si el suelo se mueve, y un suelo elegido para que el ajuste sea el mejor se elige después de ver los datos. La distribución es de duraciones equivalentes en la banda, no de energías."}]]
+   },
+   "canvas": {
+    "calls": 21,
+    "distinct": 1,
+    "digest": "e610688fcc6117ea",
+    "samples": [{"drew":{"threw":"TypeError: canvas.after is not a function"},"texts":[]}]
+   },
+   "controls": {
+    "calls": 21,
+    "distinct": 6,
+    "digest": "e30c041893bf4935",
+    "samples": [["AU Microscopii","el límite de completitud"],["una estrella sintética, pendiente verdadera 1,80","todas las erupciones"],["una estrella sintética, pendiente verdadera 1,80","el suelo que mejor ajusta"],["una estrella sintética, pendiente verdadera 1,80","el límite de completitud"],["AU Microscopii","el suelo que mejor ajusta"],["AU Microscopii","todas las erupciones"]]
+   },
+   "phases": {
+    "calls": 0,
+    "distinct": 0,
+    "digest": "4f53cda18c2baa0c",
+    "samples": []
+   }
+  }
+ }
+}

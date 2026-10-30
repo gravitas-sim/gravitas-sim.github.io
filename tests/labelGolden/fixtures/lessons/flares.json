@@ -1,0 +1,52 @@
+{
+ "id": "flares",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.read-a-flare.fields.0.unit","s"],
+    ["steps.read-a-flare.fields.1.unit","percent"],
+    ["steps.read-a-flare.fields.2.unit","minutes"],
+    ["steps.count-the-flares.fields.0.unit",""],
+    ["steps.count-the-flares.fields.1.unit","per day"],
+    ["steps.the-slope.fields.0.unit",""],
+    ["steps.the-slope.fields.1.unit",""],
+    ["steps.the-slope.fields.2.unit",""],
+    ["steps.the-slope.fields.3.unit",""]
+   ],
+   "numbered": [
+    ["steps.read-a-flare.fields.0.hint","118"],
+    ["steps.read-a-flare.fields.1.hint","3.5"],
+    ["steps.read-a-flare.fields.2.hint","29"],
+    ["steps.count-the-flares.fields.0.hint","76"],
+    ["steps.count-the-flares.fields.1.hint","3.1"],
+    ["steps.the-slope.fields.0.hint","1.92"],
+    ["steps.the-slope.fields.1.hint","1.62"],
+    ["steps.the-slope.fields.2.hint","2.28"],
+    ["steps.the-slope.fields.3.hint","29"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": []
+  }
+ },
+ "numeric": {
+  "answers": [],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "read-a-flare": {
+    "validate": {"calls":242,"distinct":2,"digest":"09830c5be5ec8293","samples":[null,{"level":"error","message":"Choose the close-up view and “Flare, largest first” 2: about 118 seconds, a peak of 3.5 percent and about 29 minutes."}]}
+   },
+   "count-the-flares": {
+    "validate": {"calls":232,"distinct":2,"digest":"0c18b5dc87bf1693","samples":[null,{"level":"error","message":"Read the readout of the second panel: 76 flares in 24.6 days, 76 / 24.6 = 3.1 a day."}]}
+   },
+   "the-slope": {
+    "validate": {"calls":242,"distinct":2,"digest":"aa58f69157490d53","samples":[null,{"level":"error","message":"Use AU Microscopii with the fit above the completeness limit: α about 1.92, interval 1.62 to 2.28, 29 flares."}]}
+   }
+  },
+  "es": "same"
+ }
+}
