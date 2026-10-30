@@ -1405,7 +1405,7 @@ Of 185 prediction loops, 185 are returned to,
 - **Prediction loops:** which-test-catches → deep-and-shallow, a-dip-on-the-target, no-frames, inconclusive-is-an-answer, what-the-checklist-says → deep-and-shallow.
 - **Recovery:** wrong body: the object list names what the step staged.
 - **Scene rebuilds:** none.
-- **Accepted central experiment:** not yet reviewed.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:vetting-checklist`, control vetting-checklist/candidate, measures the odd-even z, the secondary depth against its error and the centroid offset against its exclusion radius for each of eight synthetic candidates, and the verdict they add up to (survives, rejected or undecided, never planet), evidence `notebook-fields`, covered by `e2e/vettingLesson.spec.js`.
 
 ## Deep or Wide? (`deep-or-wide`)
 
