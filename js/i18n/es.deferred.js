@@ -2011,6 +2011,8 @@ export const ES_DEFERRED = {
     'El sesgo de brillo, hecho cuantitativo: por qué la muestra no es la población.',
   'inv.seq.observing.two-stars-eclipsing':
     'Qué estrella es más caliente y cuál es menor por dos eclipses, y qué puede y qué no puede fijar un ajuste del par.',
+  'inv.seq.observing.weighing-the-stars-for-real':
+    'Pesar dos estrellas con su efecto Doppler y un eclipse, y por qué las velocidades solas dan solo un mínimo.',
   'inv.seq.observing.why-the-period-is-wrong':
     'Por qué un período con una visita por noche puede salir mal, y cómo decide la cadencia.',
   'inv.seq.observing.deep-or-wide':

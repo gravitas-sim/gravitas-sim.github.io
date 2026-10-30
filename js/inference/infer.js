@@ -460,6 +460,8 @@ function jitterSearch(model, data, request, starts, hooks) {
 export function fitOnce(request, data, hooks = {}) {
   const model = MODELS[request.model.id];
   if (!model) throw new Error(`there is no model "${request.model.id}"`);
+  // A model whose rows belong to several data sets names their roles here.
+  if (model.prepare) request = model.prepare(request, data);
   if (data.x.length < 5) throw new Error('fewer than five rows to fit');
   const refusal = model.requires?.(data);
   if (refusal) throw new Error(refusal);
@@ -557,7 +559,9 @@ export function fitOnce(request, data, hooks = {}) {
   // The beta factor is about noise correlated in time: a table's x is not.
   const redNoise = model.tabular
     ? null
-    : timeCorrelated(fit.data, residuals, request);
+    : model.redNoiseRows
+      ? redNoiseOfRows(model, fit.data, residuals, request)
+      : timeCorrelated(fit.data, residuals, request);
   const out = {
     status: 'ok',
     model: { id: model.id, version: model.version },
@@ -608,6 +612,9 @@ export function fitOnce(request, data, hooks = {}) {
       .map(([n]) => n);
     for (const q of out.parameters)
       if (extra.includes(q.name)) q.notConstrained = true;
+    // What depends on an open parameter is open too (a radius on k).
+    for (const d of out.derived)
+      if (out.identifiability.derived?.[d.name]) d.notConstrained = true;
     if (extra.length)
       out.warnings.push({
         code: 'notConstrained',
@@ -641,7 +648,8 @@ function timeCorrelated(data, residuals, request) {
   const scale =
     request.algorithm?.redNoiseTimescale ??
     (request.model.id === 'transit-quadratic' ||
-    request.model.id === 'eclipsing-binary'
+    request.model.id === 'eclipsing-binary' ||
+    request.model.id === 'eclipsing-sb2'
       ? 30 / 1440
       : (request.parameters?.P?.lo ?? 1) / 10);
   const sizes = [];
@@ -679,6 +687,17 @@ function timeCorrelated(data, residuals, request) {
     threshold,
     correlated: beta > threshold,
   };
+}
+
+/** The beta factor over the rows a model names (its light curve), not over its velocities. */
+function redNoiseOfRows(model, data, residuals, request) {
+  const rows = model.redNoiseRows(data, request);
+  if (!rows || rows.length < 30) return null;
+  return timeCorrelated(
+    { x: Float64Array.from(rows, i => data.x[i]) },
+    Float64Array.from(rows, i => residuals[i]),
+    request
+  );
 }
 
 function median(v) {
@@ -836,6 +855,7 @@ function bracketsToRefine(points, minimum, level, far) {
  */
 export function profileTask(request, data, fit, name, hooks = {}) {
   const model = MODELS[request.model.id];
+  if (model.prepare) request = model.prepare(request, data);
   const d =
     fit.nuisance?.jitter?.value > 0 && data.sigma
       ? {

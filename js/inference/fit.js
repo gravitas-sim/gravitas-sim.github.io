@@ -85,7 +85,7 @@ export function createProblem(model, data, parameters, settings = {}) {
   const evaluate = theta => {
     evaluations++;
     const values = full(theta);
-    const shape = model.predict(values, data.x, settings);
+    const shape = model.predict(values, data.x, settings, data);
     const { fit, linear } = model.solveLinear(data, w, shape, values);
     const r = new Float64Array(data.y.length);
     let chi2 = 0;

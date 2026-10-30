@@ -20,6 +20,7 @@ import { halfDuration, limbDarkening, transitFlux } from './transit.js';
 import { eccentricity, rvCurve } from './rv.js';
 import { solveSpd } from './fit.js';
 import { ECLIPSING_BINARY } from './binaryModel.js';
+import { ECLIPSING_SB2, SB2_ORBIT } from './binaryJoint.js';
 
 /**
  * A transit: circular orbit, quadratic limb darkening, a baseline flux.
@@ -413,6 +414,8 @@ export const MODELS = Object.freeze({
   [TRANSIT.id]: TRANSIT,
   [RV.id]: RV,
   [ECLIPSING_BINARY.id]: ECLIPSING_BINARY,
+  [SB2_ORBIT.id]: SB2_ORBIT,
+  [ECLIPSING_SB2.id]: ECLIPSING_SB2,
   [POLY_1.id]: POLY_1,
   [POLY_2.id]: POLY_2,
   [POWER_LAW.id]: POWER_LAW,

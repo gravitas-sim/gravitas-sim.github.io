@@ -482,6 +482,10 @@ export const NEVER_PRECACHED = [
   // (js/inference/binaries.js) and the model (js/inference/binaryModel.js) are NOT here: the inference worker imports them.
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(two-stars-eclipsing|binaries-sequence)\.js$/,
   /^(js\/eclipseWidgets\.js|js\/eclipseField\.js|js\/i18n\/(en|es)\.eclipse\.js)$/,
+  // Prompt 218: the mass panels, their field module, their words and the lesson's one new file (D-R10-218-04). The kernel
+  // (js/inference/binaryMasses.js) and the models (js/inference/binaryJoint.js) are NOT here: the inference worker imports them.
+  /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(weighing-the-stars-for-real|binary-masses-sequence)\.js$/,
+  /^(js\/massesWidgets\.js|js\/massesField\.js|js\/i18n\/(en|es)\.masses\.js)$/,
   // Prompt 214: the strategy kernel, planner extension, panels and the strategy lesson's one new file (D-R10-214-06).
   /^js\/kernels\/strategy\//,
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(why-the-period-is-wrong|strategy-sequence)\.js$/,

@@ -12,6 +12,7 @@ import { gaussian as normals, stream } from '../random/streams.js';
 import { limbDarkening, transitFlux } from './transit.js';
 import { rvCurve } from './rv.js';
 import { eclipseFlux } from './binaries.js';
+import { rvPair } from './binaryMasses.js';
 
 /** A seeded standard normal. */
 export const gaussian = seed => normals(stream('noise', String(seed)));
@@ -131,6 +132,94 @@ export function syntheticEclipse(o) {
       withoutUncertainty: 0,
     },
     columns: { x: 'time', y: 'flux', sigma: 'flux-error' },
+    units: { x: 'd', y: '' },
+    perDay: 1,
+  };
+}
+
+/**
+ * A double-lined spectroscopic orbit, with or without its eclipse light curve,
+ * as one table whose rows are told apart by the groups column (flux rows, then
+ * star 1's velocities, then star 2's): the input of js/inference/binaryJoint.js.
+ * The velocities are measured at the same epochs for both stars; the epochs
+ * are drawn uniformly over the span by a stream of the seed.
+ * @param {{seed: string, truth: object, fluxTimes?: ArrayLike<number>|null,
+ *   sigmaFlux?: number, rvTimes?: ArrayLike<number>, nRv?: number,
+ *   span?: [number, number], sigmaRv: number, gamma?: number, dgamma?: number,
+ *   singleLined?: boolean, swap?: boolean, modulation?: object}} o
+ *   truth: binaries.js eclipseFlux()'s set plus K1 and K2 (km/s)
+ */
+export function syntheticSb2(o) {
+  const t = o.truth;
+  const noise = gaussian(o.seed);
+  const draw = stream('noise', String(o.seed), 'epochs');
+  const rvTimes =
+    o.rvTimes ??
+    Float64Array.from(
+      { length: o.nRv ?? 20 },
+      () => o.span[0] + (o.span[1] - o.span[0]) * draw()
+    ).sort();
+  const fluxTimes = o.fluxTimes ? Float64Array.from(o.fluxTimes) : null;
+  const x = [];
+  const y = [];
+  const sigma = [];
+  const groups = [];
+  const roles = [];
+  if (fluxTimes) {
+    const clean = eclipseFlux(fluxTimes, t, {
+      exposure: o.exposure ?? 0,
+      supersample: o.supersample ?? 1,
+    });
+    const m = o.modulation;
+    roles.push('flux');
+    fluxTimes.forEach((time, i) => {
+      const spot = m
+        ? 1 + m.amplitude * Math.sin((2 * Math.PI * time) / m.period + m.phase)
+        : 1;
+      x.push(time);
+      y.push(clean[i] * spot + o.sigmaFlux * noise());
+      sigma.push(o.sigmaFlux);
+      groups.push(0);
+    });
+  }
+  const v = rvPair(rvTimes, t);
+  const sets = o.singleLined
+    ? [['rv1', v.v1]]
+    : [
+        ['rv1', v.v1],
+        ['rv2', v.v2],
+      ];
+  for (const [role, vel] of sets) {
+    roles.push(role);
+    const g = roles.length - 1;
+    const which = o.swap ? (role === 'rv1' ? v.v2 : v.v1) : vel;
+    rvTimes.forEach((time, i) => {
+      x.push(time);
+      y.push(
+        which[i] +
+          (o.gamma ?? 0) +
+          (role === 'rv2' ? (o.dgamma ?? 0) : 0) +
+          o.sigmaRv * noise()
+      );
+      sigma.push(o.sigmaRv);
+      groups.push(g);
+    });
+  }
+  return {
+    x: Float64Array.from(x),
+    y: Float64Array.from(y),
+    sigma: Float64Array.from(sigma),
+    groups: Int32Array.from(groups),
+    roles,
+    rows: Array.from(x, (_, i) => i),
+    counts: {
+      total: x.length,
+      used: x.length,
+      masked: 0,
+      missing: 0,
+      withoutUncertainty: 0,
+    },
+    columns: { x: 'time', y: 'value', sigma: 'error' },
     units: { x: 'd', y: '' },
     perDay: 1,
   };

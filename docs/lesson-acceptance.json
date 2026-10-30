@@ -1275,6 +1275,19 @@
       ],
       "evidenceFrom": "model"
     },
+    "weighing-the-stars-for-real": {
+      "centralExperimentId": "ce.weighing-the-stars-for-real",
+      "object": "panel:masses-minimum",
+      "control": "masses-minimum/inc",
+      "quantity": "the mass that star 1 would have at the tilt you choose, for a pair whose velocities give a minimum of 0.58 solar masses: 0.58 at 90 degrees (edge on) and 1.19 at 52 degrees, the velocities alone fixing only the minimum",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "who-moves-faster",
+        "read-the-amplitudes"
+      ],
+      "evidenceFrom": "model"
+    },
     "what-a-telescope-resolves": {
       "centralExperimentId": "ce.what-a-telescope-resolves",
       "object": "panel:telescope",
