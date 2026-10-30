@@ -198,5 +198,21 @@
       "limits": { "failMax": 0 }
     }
   ],
-  "amendments": []
+  "amendments": [
+    {
+      "id": "AM1",
+      "when": "after the first run of the validator on the kernel (C8 is a report row with no bound); no bound moved",
+      "what": "The scenario `blendTwin` (k = 1, J = 1) keeps the blend's two limb-darkening laws (ldA and ldB), so its two eclipses are not equal and its odd-even test fails on 316 of 400 curves (79 per cent), not 'passes by construction' as scope.isNot says. The blind spot the scope describes needs equal eclipses: C8 now also reports `twinEqualLimbDarkening` (ldB = ldA), the version the sentence is true of, beside the original twin; C8 also reports the power ladder (odd-even verdicts against the noise per point, for equal depths and for a 20 per cent difference), which is what the panel shows. The original twin row stays in the output."
+    },
+    {
+      "id": "AM2",
+      "when": "after the first run of D3 reported FAIL; the committed bound is unchanged",
+      "what": "D3's frame series with too few in-transit frames was built with five in-transit frames (the frame at 6.9 d is a transit centre), so the kernel correctly returned a verdict, and the row failed. The leg's own input was corrected to four in-transit frames; the bound (fewer than minFramesPerSide frames in transit gives inconclusive with reason too-few-frames) is the committed one. The first run's failing row is recorded here: D3.frameRefusals, few = 'on-target'."
+    },
+    {
+      "id": "AM3",
+      "when": "while writing the validator, before the ensembles ran",
+      "what": "A5 and A6 draw frames at 10000 times the stated rates; the frame forward model saturates at 50000 electrons and 65535 counts, so those two legs also set fullWell and adcMax to 1e15 (a detector override of the legs, not of the contract's frames). The committed detector, noise and every bound of the other legs are unchanged."
+    }
+  ]
 }
