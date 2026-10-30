@@ -27,8 +27,8 @@
    "controls": {
     "calls": 27,
     "distinct": 17,
-    "digest": "7626ba43ceab74a5",
-    "samples": [["a double-lined pair that never eclipses","90°"],["a double-lined pair that never eclipses","20°"],["a single-lined orbit","90°"],["a single-lined orbit","55°"]]
+    "digest": "5cb55b7066dc04ee",
+    "samples": [["two lines, no eclipse","90°"],["two lines, no eclipse","20°"],["one line","90°"],["one line","55°"]]
    },
    "phases": {
     "calls": 0,
@@ -64,8 +64,8 @@
    "controls": {
     "calls": 27,
     "distinct": 17,
-    "digest": "7a7d401a5fb308d4",
-    "samples": [["un par de dos líneas que nunca se eclipsa","90°"],["un par de dos líneas que nunca se eclipsa","20°"],["una órbita de una sola línea","90°"],["una órbita de una sola línea","55°"]]
+    "digest": "661913ba47e4c1dc",
+    "samples": [["dos líneas, sin eclipse","90°"],["dos líneas, sin eclipse","20°"],["una línea","90°"],["una línea","55°"]]
    },
    "phases": {
     "calls": 0,
@@ -155,7 +155,7 @@
   "en": {
    "static": {
     "title": "Masses and radii against MIST",
-    "note": "The stars you have solved, with their masses and radii (or luminosities) against the MIST tracks at solar composition. The shaded band lies between a star just born on the main sequence and one at its end; a main-sequence star should sit inside it. Temperatures are inputs: star 1’s is given, star 2’s follows from the fitted surface brightness ratio in the 0.8 micrometer band.",
+    "note": "The stars you have solved, with their masses and radii (or luminosities) against the MIST tracks at solar composition. The lower line is a star just born on the main sequence and the upper one a star at its end; a main-sequence star should sit between them. Temperatures are inputs: star 1’s is given, star 2’s follows from the fitted surface brightness ratio in the 0.8 micrometer band.",
     "controls": [{"id":"view","label":"Vertical axis","unit":null,"min":0,"max":1,"step":1,"value":0,"decimals":0},{"id":"systems","label":"Systems solved","unit":null,"min":1,"max":4,"step":1,"value":4,"decimals":0},{"id":"band","label":"MIST band","unit":null,"min":0,"max":1,"step":1,"value":1,"decimals":0}],
     "presets": [],
     "actions": [],
@@ -192,7 +192,7 @@
   "es": {
    "static": {
     "title": "Masas y radios frente a MIST",
-    "note": "Las estrellas que has resuelto, con sus masas y radios (o luminosidades) frente a las trayectorias MIST de composición solar. La banda sombreada queda entre una estrella recién nacida en la secuencia principal y una en su final; una estrella de la secuencia principal debería estar dentro. Las temperaturas son datos de entrada: la de la estrella 1 se da, la de la 2 sale del cociente de brillo superficial ajustado en la banda de 0,8 micrómetros.",
+    "note": "Las estrellas que has resuelto, con sus masas y radios (o luminosidades) frente a las trayectorias MIST de composición solar. La línea inferior es una estrella recién nacida en la secuencia principal y la superior una en su final; una estrella de la secuencia principal debería quedar entre ambas. Las temperaturas son datos de entrada: la de la estrella 1 se da, la de la 2 sale del cociente de brillo superficial ajustado en la banda de 0,8 micrómetros.",
     "controls": [{"id":"view","label":"Eje vertical","unit":null,"min":0,"max":1,"step":1,"value":0,"decimals":0},{"id":"systems","label":"Sistemas resueltos","unit":null,"min":1,"max":4,"step":1,"value":4,"decimals":0},{"id":"band","label":"Banda MIST","unit":null,"min":0,"max":1,"step":1,"value":1,"decimals":0}],
     "presets": [],
     "actions": [],

@@ -12,9 +12,9 @@
     ["steps.one-line-only.fields.0.unit","solar masses"],
     ["steps.one-line-only.fields.1.unit","solar masses"],
     ["steps.on-the-diagram.fields.0.unit","solar masses"],
-    ["steps.on-the-diagram.fields.1.unit","solar radii"],
-    ["steps.the-mass-luminosity-slope.fields.0.unit","solar"],
-    ["steps.the-mass-luminosity-slope.fields.1.unit","solar"],
+    ["steps.on-the-diagram.fields.1.unit","R☉"],
+    ["steps.the-mass-luminosity-slope.fields.0.unit","L☉"],
+    ["steps.the-mass-luminosity-slope.fields.1.unit","L☉"],
     ["steps.the-tilt-you-did-not-measure.fields.0.unit","solar masses"],
     ["steps.the-tilt-you-did-not-measure.fields.1.unit","solar masses"]
    ],
