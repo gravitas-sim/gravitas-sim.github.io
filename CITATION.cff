@@ -18,7 +18,7 @@ url: "https://gravitas-sim.online"
 abstract: >-
   Gravitas is a browser-based N-body gravity sandbox and astronomy
   teaching tool. It ships 61 configurable scenarios drawn from real and
-  idealized systems, 120 guided investigations (103 that run in the
+  idealized systems, 121 guided investigations (104 that run in the
   simulation and 17 in the Observatory, the 3-D lab and the mission lab)
   in which undergraduate students predict, measure and plot their own
   data, instructor materials with answer keys, and a public account of
@@ -39,7 +39,7 @@ abstract: >-
   axe-core run over 48 surfaces in 2 languages and up to 4 themes on every
   build, and is published in English and Spanish.
 
-  The physics is checked in public: 348 checks of the engine against
+  The physics is checked in public: 352 checks of the engine against
   analytic results, published values and independent integrations, each
   with its measured error and the kind of evidence it rests on, at
   gravitas-sim.online/validation/. A companion page states what the model
