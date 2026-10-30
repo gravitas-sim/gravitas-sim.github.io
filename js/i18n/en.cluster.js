@@ -60,7 +60,7 @@ export const EN_CLUSTER = {
   'clusterObs.a.interval':
     'An interval is where the statistic rises by 1 from its minimum: it says how a repeated measurement would scatter if every assumption were true, not how sure anyone can be of the age.',
   'clusterObs.cmd': 'The stars and the best isochrone',
-  'clusterObs.cmd.color': 'g − r',
+  'clusterObs.cmd.colour': 'g − r',
   'clusterObs.cmd.g': 'g',
   'clusterObs.cmd.label':
     'Color–magnitude diagram of {n} stars with the best isochrone drawn over them',
