@@ -1,0 +1,202 @@
+{
+  "format": "gravitas.vetting-thresholds/1",
+  "prompt": "Roadmap III, Prompt 228: vetting with ambiguity (odd-even depths, a secondary-eclipse search, a difference-image centroid test on forward-model frames, blend light curves from Prompt 217's model, a summary with inconclusive as a state; tranche T3 by D-R10-207-01)",
+  "document": "VETTING.md (\"Validation contract\")",
+  "committed": "before js/kernels/vetting/, the oracle script, the validator, any panel, lesson or guide step of Prompt 228 existed, and before any output of the kernel or the oracle was inspected. Read before committing: the existing odd-even and secondary estimators of js/observatory/guides/science.js (to state what the kernel adds), the signatures of js/inference/transit.js, js/inference/binaries.js, js/measure/photometry.js centroid() and js/kernels/detector/frame.js simulateFrame(); no result of any of them was computed for this prompt.",
+  "rule": "A crossed bound is a failed check, recorded in failed-legs.json and left failing; only Carl resets one. A leg that cannot be measured is NOT RUN and says why. A leg marked report has no bound and is only printed. Amendments are appended below with their reason and never replace the original.",
+  "seeds": {
+    "oracle": 228,
+    "ensemble": "vetting-228",
+    "stream": "noise draws use stream 'noise'; a check forks the seed by its id and the draw index"
+  },
+  "scope": {
+    "built": "three tests of a candidate planet and a summary: (1) odd and even transit depths with their uncertainties; (2) a secondary-eclipse search at the expected phase; (3) a difference-image centroid test on a frame series (the centroid of the out-of-transit minus in-transit image against the target's position, through js/measure/photometry.js centroid()), with the plain flux-weighted centroid shift in the aperture reported beside it and its analytic prediction; blend light curves (a diluted eclipsing binary from js/inference/binaries.js, at the period or at twice it) and blend frames (a neighbour at a stated separation and brightness); each test returns pass, fail or inconclusive with a reason and its uncertainty; the summary says rejected, undecided or survives and never says planet.",
+    "notBuilt": "a centroid test on authentic frames (none ship); a statistical blend probability (TRICERATOPS-style priors); a model-shift test; a ghost or momentum-dump test; an eccentric-orbit search over phases (the secondary is searched at the phase given, 0.5 by default); crowding from a catalogue; a period-doubling search; instrumental systematics other than white noise and the red-noise factor; reflection and ellipsoidal light in the baseline.",
+    "isNot": "a validation of a planet. A candidate that no test rejects is not validated, and the summary and the panel say so; the tests reject some false positives and leave others (a blend of two equal stars at twice the period passes the odd-even and secondary tests by construction, and only the centroid test or a velocity can tell)."
+  },
+  "contract": {
+    "ephemeris": "P (days), t0 (days) and duration T14 (first to fourth contact, days), given. Cycle n of a time t is round((t - t0) / P); the offset is dt = t - t0 - n P. Odd means |n| odd, even means n even (n = 0 is even).",
+    "boxDepth": "The depth of a parity (or of the secondary window): the weighted mean flux in the local baseline minus the weighted mean flux in the box, as a fraction of the baseline. The box is |dt| < T14 / 4 (the central half of the transit, about the centre of the transit for the primary and about t0 + (phase) P for the secondary). The local baseline is T14 < |dt| < 3 T14 about the same centre, pooled over the cycles of the parity (all cycles for the secondary). Weights are 1 / sigma_i^2 with the supplied per-point sigma, or the robust (1.4826 MAD) scatter of the baseline when none is supplied.",
+    "depthUncertainty": "sigma_D = beta sqrt(1 / sum w_box + 1 / sum w_base) / base. beta >= 1 is the red-noise factor of Pont, Zucker and Queloz (2006): the root mean square of the means of consecutive blocks of n points of the baseline residuals (n = the number of points in one cycle's box, at least 2), divided by the white-noise expectation sigma / sqrt(n) sqrt(M / (M - 1)) for M blocks; beta = 1 when fewer than 10 blocks exist.",
+    "oddEven": "diff = D_odd - D_even, sigma_diff = sqrt(sigma_odd^2 + sigma_even^2), z = |diff| / sigma_diff. Verdict, in this order: inconclusive (reason 'too-few-transits') when either parity has fewer than minTransitsPerParity cycles with at least 3 points in the box; inconclusive ('no-signal') when the mean depth is below minDepthSnr times its uncertainty; fail when z >= zFail; inconclusive ('low-power') when zFail * sigma_diff > detectFraction * mean depth (the test could not have seen a difference of detectFraction of the depth); otherwise pass. The minimum detectable difference, zFail * sigma_diff, is reported with every verdict.",
+    "secondary": "The box and baseline are those of boxDepth about t0 + phase P (phase 0.5 unless given). depth_s and sigma_s as above; ratio = depth_s / depth_primary. Verdict, in this order: inconclusive ('no-coverage') when fewer than minTransitsPerParity cycles have 3 or more points in the secondary box; fail when depth_s >= zDetect sigma_s and ratio > binaryRatio (a secondary that deep is not a planet's own light); pass when depth_s >= zDetect sigma_s and ratio <= binaryRatio ('detected-below-limit': the planet's light can account for it); inconclusive ('low-power') when zDetect sigma_s > binaryRatio depth_primary (an eclipse as deep as binaryRatio of the primary could be there); otherwise pass ('not-detected'). The upper limit zDetect sigma_s is reported.",
+    "frames": {
+      "stamp": "17 by 17 pixels, the target at (8, 8) (pixel centres at integers, 0-based), the neighbour at the stated separation d (pixels) and angle, its rate q times the target's. The detector is js/kernels/detector/frame.js with fwhm 2.8 pixels, qeScatter 0, vignette 0, dustCount 0, hotFraction 0, biasColumnSigma 0, cosmic rays off, gain 1.5, readNoise 8, biasLevel 500, darkRate 0.1; exposure 60 s; sky 3 electrons per second per pixel. Frames are converted to electrons ((counts - biasLevel) gain). Only the geometry and the noise of the blend are modelled: the detector effects are the calibration lab's (Prompt 211).",
+      "times": "three transits (cycles 0, 1, 2 of P = 3.2 d, t0 = 0.5, T14 = 0.12 d), each sampled at T14 / 12 from -1.5 T14 to +1.5 T14 (37 frames), 111 frames. In transit: |dt| < T14 / 4 (15 frames). Out of transit: |dt| > T14 (36 frames).",
+      "light": "The eclipsed star's rate is multiplied by 1 - s (1 - T(t)), T the unit transit shape of js/inference/transit.js (k = 0.1, aRs = 8.6, b = 0.3, q1 = 0.4, q2 = 0.3), s the scale that gives the stated observed fractional depth of the summed light.",
+      "differenceImage": "D = mean(out of transit) - mean(in transit), in electrons, with the per-pixel variance var_i = s2_out_i / n_out + s2_in_i / n_in (s2 the sample variances of the frames). The difference-image centroid (DIC) is centroid(D, {x: 8, y: 8, half: 4, sky: 0, variance}) of js/measure/photometry.js (Prompt 180): the window recentres on the rounded centroid until it stops. The offset is the DIC minus the target position; its uncertainty is the centroid's sigmaX and sigmaY.",
+      "statistic": "r = sqrt((dx / sigmaX)^2 + (dy / sigmaY)^2), compared with rFail = 3.44 (the Rayleigh tail exp(-r^2 / 2) = 0.0027). The exclusion radius is rFail * max(sigmaX, sigmaY): a source farther from the target than this would have been seen.",
+      "verdict": "inconclusive when fewer than minFramesPerSide frames are in or out of transit ('too-few-frames'); inconclusive ('no-difference-signal') when the difference image's summed signal inside the window is below minDifferenceSnr times its uncertainty (sqrt of the summed variance) or the centroid refuses; fail when r >= rFail; inconclusive ('low-power') when the exclusion radius exceeds requiredExclusionPx; otherwise pass."
+    },
+    "defaults": {
+      "zFail": 3,
+      "detectFraction": 0.5,
+      "minTransitsPerParity": 2,
+      "minDepthSnr": 3,
+      "zDetect": 3,
+      "binaryRatio": 0.1,
+      "rFail": 3.44,
+      "requiredExclusionPx": 1.0,
+      "minDifferenceSnr": 5,
+      "minFramesPerSide": 5
+    },
+    "summary": "overall is 'rejected' when any test is fail; 'survives' when every test that ran passed and none is inconclusive; otherwise 'undecided'. Never 'planet', never 'validated'. The summary carries each test's verdict, reason, value and uncertainty as a gravitas.artifact/1 record in Prompt 150's uncertainty kinds (sigma, limit, not-constrained, failed).",
+    "scenarios": {
+      "light": "P = 3.2 d, t0 = 0.5 d, 10 cycles, cadence 3 min (0.0020833 d), white noise sigma_pt per point. planet: js/inference/transit.js k = 0.1, aRs = 8.6, b = 0.3, q1 = 0.4, q2 = 0.3, depth about 0.0105, T14 = 2 halfDuration. Well powered: sigma_pt = 0.0004. Low power: sigma_pt = 0.032. blendAlternating: js/inference/binaries.js at the true period 6.4 d, tc = 0.5, rsum = 0.06, k = 0.9, inc = 90, J = 0.5, ecosw = esinw = 0, ldA = [0.4, 0.22], ldB = [0.5, 0.18], thirdLight = 0.98 (the target supplies 98 per cent of the light), analysed at the candidate period 3.2 d with T14 = the primary's contacts. blendTwin: the same with k = 1, J = 1 (two equal stars). ebSecondary: the same system at its true period 3.2 d (secondary at phase 0.5).",
+      "frames": "target rate 3000 electrons per second (low power: 200), neighbour q = 0.3 at d = 1.6 pixels, angle 40 degrees, observed fractional depth of the summed light 0.0105 (both cases); onTarget: the target eclipses; blend: the neighbour eclipses (a scale s of about 4.3 on its own light); blendClose: the neighbour at d = 0.15 pixels."
+    }
+  },
+  "checks": [
+    {
+      "id": "A1.boxDepth",
+      "leg": "a",
+      "what": "noise-free: the kernel's box depth of a limb-darkened planet transit (cadence 1/1440 d, 12 cycles) against the mean of the model over the central half of the transit computed by 20000-point quadrature, for 20 seeded (k in 0.05..0.15, b in 0..0.6)",
+      "limits": { "maxRelativeError": 0.002 }
+    },
+    {
+      "id": "A2.oddEvenRecovery",
+      "leg": "a",
+      "what": "noise-free: with the odd transits scaled to depth (1 + e) and the even to (1 - e) for 20 seeded e in -0.4..0.4, the kernel's difference equals the model's box-depth difference computed by the same quadrature, and the verdict is fail when |difference| / mean depth exceeds detectFraction and pass for e = 0",
+      "limits": { "maxAbsErrorInMeanDepths": 0.001 }
+    },
+    {
+      "id": "A3.secondaryRecovery",
+      "leg": "a",
+      "what": "noise-free: a box secondary of depth d_s in 0.0002..0.01 at phase 0.5 over a flat baseline is recovered, and one placed at phase 0.5 + (2/pi) ecosw (js/inference/binaries.js ecoswFromPhase) is recovered when the search is given that phase and not seen at 0.5",
+      "limits": { "maxRelativeError": 0.002 }
+    },
+    {
+      "id": "A4.dilution",
+      "leg": "a",
+      "what": "the blend light curve at thirdLight l3 has depth (1 - l3) times the undiluted binary's at every point: 20 seeded (J, k, l3), over a grid of 400 times",
+      "limits": { "maxRelativeError": 1e-12 }
+    },
+    {
+      "id": "A5.centroidLocation",
+      "leg": "a",
+      "what": "frames at 10000 times the stated rates (negligible noise): the difference-image centroid is at the eclipsed star's position, for the target eclipsing and for the neighbour eclipsing at separations 0.8, 1.6, 2.4 and 3.2 pixels at angles 0 and 1.1 radians",
+      "limits": { "maxPositionErrorPx": 0.02 }
+    },
+    {
+      "id": "A6.centroidShiftAnalytic",
+      "leg": "a",
+      "what": "frames at 10000 times the rates: the flux-weighted centroid of the mean in-transit image minus that of the out-of-transit image (centroid() with the true sky, half 5) equals +delta f_n d toward the neighbour when the target eclipses and -delta f_t d toward the target when the neighbour eclipses (delta the observed fractional depth of the summed light, f_n and f_t the neighbour's and target's share of the stamp's light), at the stated geometry",
+      "limits": { "maxRelativeError": 0.05 }
+    },
+    {
+      "id": "A7.verdictLogic",
+      "leg": "a",
+      "what": "the summary's table: rejected when any test fails; survives only when all three pass; undecided otherwise; no input gives 'planet'; checked over all 27 combinations of pass, fail and inconclusive",
+      "limits": { "mismatches": 0 }
+    },
+    {
+      "id": "B1.oracleBlendLightCurve",
+      "leg": "b",
+      "what": "tools/vetting-oracle/oracle.py (numpy, scipy and batman; no Gravitas code; no cited vetting package is installed and none was downloaded, so the oracle is an independent implementation of the contract above, which is Coughlin et al. 2016 and Twicken et al. 2018 in form) generated a diluted eclipsing-binary light curve at twice the candidate period (batman for each star's eclipse, brute-force polar quadrature) and analysed it; the kernel analyses the same pinned rows: odd and even depths, their uncertainties, z, the secondary depth and its sigma, the verdicts",
+      "limits": { "maxAbsDepthDifference": 1e-6, "maxRelativeSigmaDifference": 0.001, "verdictsEqual": true }
+    },
+    {
+      "id": "B2.oracleCleanLightCurve",
+      "leg": "b",
+      "what": "the same for a batman planet transit with white noise (well powered): every quantity and verdict equal",
+      "limits": { "maxAbsDepthDifference": 1e-6, "maxRelativeSigmaDifference": 0.001, "verdictsEqual": true }
+    },
+    {
+      "id": "B3.oracleFrames",
+      "leg": "b",
+      "what": "the oracle rendered a frame series with its own point-spread function (a Gaussian of fwhm 2.8 pixels integrated over each pixel by erf, Poisson noise from numpy) for the on-target and the blend cases, and computed the difference-image centroid with its own implementation of the same window rule; the kernel analyses the pinned frames: the offset, its uncertainty, r and the verdict",
+      "limits": { "maxPositionDifferencePx": 0.0001, "maxRelativeSigmaDifference": 0.001, "verdictsEqual": true }
+    },
+    {
+      "id": "C1.oddEvenFalseRejection",
+      "leg": "c",
+      "what": "400 seeded well-powered planet light curves (same depth for odd and even): the fraction whose odd-even verdict is fail, and the fraction pass",
+      "limits": { "failMax": 0.02, "passMin": 0.97 }
+    },
+    {
+      "id": "C2.oddEvenFalseAcceptance",
+      "leg": "c",
+      "what": "400 seeded well-powered blendAlternating light curves (the odd transits are the primary eclipses and the even the secondaries, a 67 per cent depth difference): the fraction whose odd-even verdict is pass, and the fraction fail",
+      "limits": { "passMax": 0.02, "failMin": 0.95 }
+    },
+    {
+      "id": "C3.lowPowerNeverPasses",
+      "leg": "c",
+      "what": "400 seeded low-power planet light curves (sigma_pt 0.032): no odd-even verdict is pass, no secondary verdict is pass, and the fraction that is inconclusive is reported; the fraction that fail (a false rejection) stays small",
+      "limits": { "passMax": 0, "failMax": 0.02 }
+    },
+    {
+      "id": "C4.secondaryRates",
+      "leg": "c",
+      "what": "400 seeded well-powered ebSecondary curves (a secondary at phase 0.5, ratio 0.5): the fraction whose secondary verdict is fail; and 400 well-powered planets: the fraction fail and the fraction pass",
+      "limits": { "ebFailMin": 0.95, "planetFailMax": 0.02, "planetPassMin": 0.97 }
+    },
+    {
+      "id": "C5.differenceCoverage",
+      "leg": "c",
+      "what": "800 seeded well-powered planet light curves with the odd transits scaled by (1 + 0.15) and the even by (1 - 0.15): the fraction in which the stated difference is within one stated sigma of the model's box-depth difference (the noise-free value of the same estimator)",
+      "limits": { "coverageMin": 0.62, "coverageMax": 0.76 }
+    },
+    {
+      "id": "C6.centroidRates",
+      "leg": "c",
+      "what": "60 seeded frame series each of onTarget, blend (d = 1.6 pixels) and low power (rate 200, on target): the fraction fail for onTarget (a false rejection) and the fraction pass; the fraction fail and pass for the blend; for low power the fraction pass and the fraction inconclusive",
+      "limits": { "onTargetFailMax": 0.05, "onTargetPassMin": 0.9, "blendFailMin": 0.95, "blendPassMax": 0.02, "lowPowerPassMax": 0, "lowPowerInconclusiveMin": 0.9 }
+    },
+    {
+      "id": "C7.centroidCoverage",
+      "leg": "c",
+      "what": "60 seeded onTarget series and 60 blend series (120 series, 240 axis values): the fraction of axis offsets from the eclipsed star's true position within one stated sigma of it",
+      "limits": { "coverageMin": 0.55, "coverageMax": 0.8 }
+    },
+    {
+      "id": "C8.blindSpotsReported",
+      "leg": "c",
+      "what": "report only, no bound: the odd-even pass fraction and the secondary pass fraction on 400 blendTwin curves (equal stars at twice the period); the odd-even pass fraction when the difference is 20 per cent of the depth (the test excludes only differences above detectFraction of the depth); the centroid verdicts of a blendClose series (d = 0.15 pixels); the secondary pass fraction on an eccentric ebSecondary at phase 0.595 searched at phase 0.5",
+      "limits": { "report": true }
+    },
+    {
+      "id": "D1.tooFewTransits",
+      "leg": "d",
+      "what": "a series with one odd cycle: odd-even verdict inconclusive with reason too-few-transits; with an observing gap over every secondary box: secondary inconclusive with reason no-coverage",
+      "limits": { "mustBeInconclusive": true }
+    },
+    {
+      "id": "D2.noSignal",
+      "leg": "d",
+      "what": "pure noise at a given ephemeris (no transit): odd-even inconclusive with reason no-signal (never pass), 200 seeded series, at most 5 verdicts of fail",
+      "limits": { "passMax": 0, "failMax": 5 }
+    },
+    {
+      "id": "D3.frameRefusals",
+      "leg": "d",
+      "what": "frames with fewer than minFramesPerSide in transit: inconclusive too-few-frames; frames with no eclipse (the same star's light constant): inconclusive no-difference-signal or pass with exclusion radius reported never fail more than 5 per cent over 60 series and never a pass whose exclusion radius exceeds the required one; a target whose window leaves the frame: inconclusive with the centroid's refusal code",
+      "limits": { "falseRejectionMax": 0.05, "passWithLargeExclusion": 0 }
+    },
+    {
+      "id": "D4.invalidInputs",
+      "leg": "d",
+      "what": "an ephemeris with duration >= P / 2, a non-positive period, a missing time array or unequal array lengths: the call throws a TypeError or RangeError that names the input; it never returns a verdict",
+      "limits": { "mustThrow": true }
+    },
+    {
+      "id": "D5.summaryNeverPlanet",
+      "leg": "d",
+      "what": "over every summary produced by the ensembles: overall is one of rejected, undecided, survives; survives only when no test is inconclusive; the text and the record never contain the words planet confirmed or validated as a verdict",
+      "limits": { "violations": 0 }
+    },
+    {
+      "id": "E1.authenticHd209458",
+      "leg": "e",
+      "what": "the built-in TESS Sector 56 light curve of HD 209458 (a confirmed planet; js/data/observations/tessHd209458S56.js) with the ephemeris and duration fixed before the run as the Observatory guide states them (P = 3.52474859 d, Stassun et al. 2017, js/observatory/guides/exoplanet.js ADOPTED; T14 = 3.1 h, the guide's own statement of this transit; the epoch from the guide's bestEpoch at that period and a 0.14 d box): no light-curve test returns fail (a fail on a confirmed planet is a false rejection). Inconclusive is allowed and its reason is reported. The published values were not used to choose a threshold",
+      "limits": { "failMax": 0 }
+    },
+    {
+      "id": "E2.authenticKepler13",
+      "leg": "e",
+      "what": "the Kepler-13 TESS Sector 14 SAP pack (a confirmed planet, strongly diluted, with a phase curve), P = 1.763588 d (Esteves et al. 2015, as the guide adopts it) and T14 = 3.3 h (the guide's statement), the epoch from bestEpoch, fixed before the run: no light-curve test returns fail; reported, with the odd-even and secondary values. An applicability check, not an independent validation: the planet is confirmed by other means",
+      "limits": { "failMax": 0 }
+    }
+  ],
+  "amendments": []
+}
