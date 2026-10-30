@@ -984,7 +984,7 @@
     {
       "file": "CLUSTER_FITTING.md",
       "kind": "feature",
-      "purpose": "Cluster fitting: an isochrone fit of age and distance at a stated metallicity and reddening, its binned likelihood, profile intervals and age-distance valley, its validation and failed legs (Prompt 219).",
+      "purpose": "Cluster fitting: an isochrone fit of age and distance at a stated metallicity and reddening, its likelihood, intervals and valley, its validation and failed legs (Prompt 219).",
       "owner": 219,
       "student": true
     },

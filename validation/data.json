@@ -1,9 +1,9 @@
 {
- "generatedAt": "2026-10-29",
+ "generatedAt": "2026-10-30",
  "version": "2.1.0",
- "passed": 348,
+ "passed": 352,
  "failed": 0,
- "elapsedMs": 128841,
+ "elapsedMs": 105234,
  "checks": [
   {
    "group": "Unit system",
@@ -4546,6 +4546,60 @@
    "why": "Uncorrelated first-order propagation of a product of powers; the constant’s error is the larger term for Earth.",
    "toleranceKind": "relative",
    "error": 0,
+   "pass": true
+  },
+  {
+   "group": "Cluster fitting",
+   "kind": "analytic",
+   "name": "The initial mass function’s weights of adjacent mass intervals add to the weight of their union, across the break at 0.5 solar masses",
+   "measured": 0.9999999999999998,
+   "expected": 1,
+   "unit": "",
+   "tolerance": 1e-12,
+   "why": "The weight is the integral of dN/dm, so it is additive; the two power laws meet continuously at the break.",
+   "toleranceKind": "relative",
+   "error": 2.220446049250313e-16,
+   "pass": true
+  },
+  {
+   "group": "Cluster fitting",
+   "kind": "analytic",
+   "name": "A vertical isochrone seen through equal errors in g and r gives a normal distribution of colour of width sqrt 2 times the error in each row",
+   "measured": 0.21467599713736588,
+   "expected": 0.21419621123364224,
+   "unit": "",
+   "tolerance": 0.01,
+   "why": "The colour error is the difference of two independent normal errors; the model spreads each piece exactly over the colour columns.",
+   "toleranceKind": "relative",
+   "error": 0.002239936462742986,
+   "pass": true
+  },
+  {
+   "group": "Cluster fitting",
+   "kind": "data",
+   "name": "A synthetic cluster of log age 9.30 at distance modulus 12.06 (200 stars, 15 percent field, a magnitude selection the fit does not know) is recovered in age",
+   "measured": 9.297777777777778,
+   "expected": 9.3,
+   "unit": "dex",
+   "tolerance": 0.04,
+   "source": "A synthetic cluster with its truth (CLUSTER_FITTING.md)",
+   "why": "Recovery of a self-generated truth does not validate the model for real data; it shows the likelihood is built the way the stars were made. The ensemble coverage and the independent oracle are in the validation script.",
+   "toleranceKind": "relative",
+   "error": 0.00023894862604543758,
+   "pass": true
+  },
+  {
+   "group": "Cluster fitting",
+   "kind": "data",
+   "name": "The same synthetic cluster is recovered in distance modulus",
+   "measured": 12.051302083333335,
+   "expected": 12.06,
+   "unit": "mag",
+   "tolerance": 0.08,
+   "source": "A synthetic cluster with its truth (CLUSTER_FITTING.md)",
+   "why": "The distance modulus is fixed by where the main sequence and its turnoff sit once the age is set; the age and the distance trade against each other, which the fit reports as a negative correlation.",
+   "toleranceKind": "relative",
+   "error": 0.0007212202874515639,
    "pass": true
   }
  ]

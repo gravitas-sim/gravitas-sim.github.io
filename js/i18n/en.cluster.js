@@ -52,18 +52,18 @@ export const EN_CLUSTER = {
   'clusterObs.a.single':
     'The stars are single: no binaries are in the model, and a binary fraction biases the fit without widening the intervals.',
   'clusterObs.a.members':
-    'The members are the stars in the table, as you cropped them; the assumed share of them that are not members is spread evenly over colour.',
+    'The members are the stars in the table, as you cropped them; the assumed share of them that are not members is spread evenly over color.',
   'clusterObs.a.selection':
-    'The survey’s selection in magnitude is unknown and is not used: the fit compares colours at each magnitude, not counts.',
+    'The survey’s selection in magnitude is unknown and is not used: the fit compares colors at each magnitude, not counts.',
   'clusterObs.a.model':
     'The isochrones are MIST v1.2’s: a model, not a measurement. Between its ages and metallicities the curve is a blend of its neighbours.',
   'clusterObs.a.interval':
     'An interval is where the statistic rises by 1 from its minimum: it says how a repeated measurement would scatter if every assumption were true, not how sure anyone can be of the age.',
   'clusterObs.cmd': 'The stars and the best isochrone',
-  'clusterObs.cmd.colour': 'g − r',
+  'clusterObs.cmd.color': 'g − r',
   'clusterObs.cmd.g': 'g',
   'clusterObs.cmd.label':
-    'Colour–magnitude diagram of {n} stars with the best isochrone drawn over them',
+    'Color–magnitude diagram of {n} stars with the best isochrone drawn over them',
   'clusterObs.profileAge': 'The statistic against age',
   'clusterObs.profileDm': 'The statistic against distance modulus',
   'clusterObs.profile.label':

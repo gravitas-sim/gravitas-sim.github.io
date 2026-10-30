@@ -18,7 +18,6 @@ current, and the orchestrator checks it.
 | `atmospheres-validate.mjs` | The atmospheres kernel against its committed thresholds (Prompt 200) | `npm run atmospheres:validate` |
 | `author-check.mjs` | npm run author:check | `npm run author:check`, `npm run author:strict`, `npm run author:rules` |
 | `binaries-validate.mjs` | The eclipsing-binary model against its committed thresholds (Prompt 217) | `npm run binaries:validate` |
-| `cluster-fit-validate.mjs` | The cluster isochrone fit against its committed thresholds, with the independent oracle in `cluster-fit-oracle/` (Prompt 219) | `npm run cluster:validate` |
 | `blackhole-profile.mjs` | What a black hole costs to draw |  |
 | `blackhole-shots.mjs` | Captures of the black holes |  |
 | `body-shots.mjs` | Reference captures of the bodies, for a before-and-after on their drawing |  |
@@ -59,6 +58,7 @@ current, and the orchestrator checks it.
 | `check-test-policy.mjs` | A skip has to be a capability, and it has to be on the record | `npm run test:policy` |
 | `checks.mjs` | One list of what has to pass |  |
 | `ci-cost.mjs` | What one CI run cost |  |
+| `cluster-fit-validate.mjs` | The cluster fit against its committed thresholds (Prompt 219 Part A) | `npm run cluster:validate` |
 | `compute-answers.mjs` | The answers the reviewed notebooks gave, as fixtures for the tests |  |
 | `compute-examples.mjs` | The compute page's two Gravitas-made example inputs |  |
 | `compute.mjs` | The compute page's generated files: the frame, its pin, the catalogue's hashes |  |

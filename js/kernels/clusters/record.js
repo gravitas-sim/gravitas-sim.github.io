@@ -112,7 +112,7 @@ export function clusterRecord(r, o) {
       ...(r.warnings ?? []),
       ...(r.correlation !== null && r.correlation !== undefined
         ? [
-            `correlation of log age and distance modulus in the 2.30 region: ${r.correlation.toFixed(2)}`,
+            `correlation of log age and distance modulus in the 2.30 region: ${Math.round(r.correlation * 100) / 100}`,
           ]
         : []),
     ],

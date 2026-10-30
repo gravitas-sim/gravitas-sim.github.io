@@ -280,7 +280,7 @@ export function fitCluster(set, g, colour, o) {
       ...result,
       ...notConstrained(
         'no-cluster',
-        `the model of a cluster beats the model of field stars alone by ${(d0 - dMin).toFixed(1)}; it needs ${DETECTION_DEVIANCE}`
+        `the model of a cluster beats the model of field stars alone by ${Math.round((d0 - dMin) * 10) / 10}; it needs ${DETECTION_DEVIANCE}`
       ),
     };
   const bad = key => intervals[key].status !== 'ok';
