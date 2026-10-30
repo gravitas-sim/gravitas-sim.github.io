@@ -44,10 +44,7 @@ export function evaluator(set, data, o = {}) {
   const piecesAt = logAge => {
     const k = Math.round(logAge * 1e4);
     if (!cache.has(k))
-      cache.set(
-        k,
-        pieces(isochroneAt(set, feh, logAge), +(process.env.PSTEP || 0.01))
-      );
+      cache.set(k, pieces(isochroneAt(set, feh, logAge), 0.01));
     return cache.get(k);
   };
   return {
@@ -132,8 +129,12 @@ export function fitCluster(set, g, colour, o) {
   const scan = (aLo, aHi, hA, dLo, dHi, hD) => {
     const nA = Math.max(1, Math.round((aHi - aLo) / hA));
     const nD = Math.max(1, Math.round((dHi - dLo) / hD));
-    const ages = Array.from({ length: nA + 1 }, (_, i) => aLo + i * hA);
-    const dms = Array.from({ length: nD + 1 }, (_, i) => dLo + i * hD);
+    const ages = Array.from({ length: nA + 1 }, (_, i) =>
+      Math.min(aHi, aLo + i * hA)
+    );
+    const dms = Array.from({ length: nD + 1 }, (_, i) =>
+      Math.min(dHi, dLo + i * hD)
+    );
     const dev = new Float64Array((nA + 1) * (nD + 1));
     for (let i = 0; i <= nA; i++)
       for (let j = 0; j <= nD; j++) {
@@ -293,6 +294,12 @@ export function fitCluster(set, g, colour, o) {
     (best.id === dms.length - 1 && dms.at(-1) >= dmHi - 1e-9)
   )
     result.warnings.push('dmAtEdge');
+  // An age interval that runs into the grid's edge says so: open on that
+  // side, "older than the models reach" (D6), never closed across the edge.
+  if (age.open?.[1] && !result.warnings.includes('ageAtOldEdge'))
+    result.warnings.push('ageAtOldEdge');
+  if (age.open?.[0] && !result.warnings.includes('ageAtYoungEdge'))
+    result.warnings.push('ageAtYoungEdge');
   if (bad('logAge') || bad('dm'))
     return {
       ...result,

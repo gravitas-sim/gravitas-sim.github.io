@@ -742,6 +742,14 @@ if (wanted('D6')) {
     n: e.length,
     violations: bad,
     flaggedAtEdge: e.filter(r => r.warnings.includes('ageAtOldEdge')).length,
+    // for the record: how the violations split. A closed interval whose upper
+    // end is inside the grid is not across the edge, but the committed
+    // predicate asks the best age to be below 9.58 for it to count.
+    closedAcrossEdge: e.filter(r => r.status === 'ok' && r.age?.[1] > 9.6)
+      .length,
+    closedNearEdge: e.filter(
+      r => r.status === 'ok' && r.best.logAge >= 9.58 && r.age[1] <= 9.6
+    ).length,
   });
 }
 
