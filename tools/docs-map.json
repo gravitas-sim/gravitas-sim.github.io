@@ -27,7 +27,7 @@
       "kind": "gate",
       "purpose": "Activity ages gate: the committed relations, domain and bounds for gyrochronology ages and flare energies in erg, the measured legs and the verdict (Prompt 220 Part B).",
       "owner": 220,
-      "student": false
+      "student": true
     },
     {
       "file": "ADOPTER_GUIDE.md",
@@ -924,6 +924,13 @@
       "purpose": "The statistics kernel: labelled intervals, resampling, residual diagnostics, comparison of estimates, the F-test and the selection function, with their limits and validation.",
       "owner": 154,
       "student": false
+    },
+    {
+      "file": "STELLAR_ACTIVITY.md",
+      "kind": "feature",
+      "purpose": "Stellar rotation and flares: the spot model, the period with its factor-two alias, flare detection, equivalent durations and the slope, with validation (Prompt 220).",
+      "owner": 220,
+      "student": true
     },
     {
       "file": "STELLAR_POPULATIONS.md",

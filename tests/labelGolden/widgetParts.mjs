@@ -73,6 +73,7 @@ export const PARTS = Object.freeze({
   rest: [
     'eclipse',
     'masses',
+    'activity',
     'energy',
     'binary',
     'blackHole',

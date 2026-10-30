@@ -1178,6 +1178,32 @@ export const MANIFEST = [
     objectiveCount: 4,
   },
   {
+    id: 'how-fast-does-the-star-spin',
+    title: 'How Fast Does the Star Spin?',
+    subtitle:
+      'Read a star’s rotation period from the dimming of its starspots, see why the light alone can leave a second answer open, and measure two real stars',
+    duration: '14-28 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/how-fast-does-the-star-spin.webp',
+    depths: 3,
+    stepCount: 7,
+    gradedCount: 5,
+    objectiveCount: 4,
+  },
+  {
+    id: 'flares',
+    title: 'Flares',
+    subtitle:
+      'Find the flares in a red dwarf’s light, measure how much light each gives out as an equivalent duration, and count flares by size',
+    duration: '14-28 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/flares.webp',
+    depths: 3,
+    stepCount: 6,
+    gradedCount: 4,
+    objectiveCount: 4,
+  },
+  {
     id: 'deep-or-wide',
     title: 'Deep or Wide?',
     subtitle:

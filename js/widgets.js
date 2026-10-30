@@ -104,7 +104,7 @@ const familyEntry = (load, path, exportName, ids, ready) => ({
 });
 
 // <generated:lazy-families>
-// tidal, darkMatter, spectra, light, variables, galactic, cosmology, sky, gwEvents, imaging, jovian, crater, sun, smallBodies wait on their own readiness (prose or data behind a second import); whenWidgetsReady() waits for it.
+// tidal, darkMatter, spectra, light, variables, galactic, cosmology, sky, gwEvents, imaging, jovian, crater, sun, smallBodies, activity wait on their own readiness (prose or data behind a second import); whenWidgetsReady() waits for it.
 export const LAZY_FAMILIES = Object.freeze({
   energy: familyEntry(
     () => import('./energyWidgets.js'),
@@ -391,6 +391,13 @@ export const LAZY_FAMILIES = Object.freeze({
     'TIDE_WIDGETS',
     ['tides-roche', 'tides-resonance', 'tides-moon', 'tides-heating']
   ),
+  activity: familyEntry(
+    () => import('./activityWidgets.js'),
+    './activityWidgets.js',
+    'ACTIVITY_WIDGETS',
+    ['activity-spots', 'activity-period', 'activity-flares', 'activity-ffd'],
+    'activityReady'
+  ),
   eclipse: familyEntry(
     () => import('./eclipseWidgets.js'),
     './eclipseWidgets.js',
@@ -651,6 +658,8 @@ export async function whenWidgetsReady() {
     'eclipse',
     // The mass family reaches the plot component, the inference core and the MIST tracks: late for the same reason (Prompt 218).
     'masses',
+    // The activity family reaches the plot component and the kernel, and its curves are sidecars: late for the same reason (Prompt 220).
+    'activity',
     'surveyDesign',
   ];
   await Promise.all(families.filter(f => !late.includes(f)).map(loadFamily));

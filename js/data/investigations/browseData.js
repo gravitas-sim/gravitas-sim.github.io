@@ -384,6 +384,14 @@ export const BROWSE_META = {
     tags: ['observing', 'stars'],
     numericCount: 0,
   },
+  'how-fast-does-the-star-spin': {
+    tags: ['observing', 'stars'],
+    numericCount: 0,
+  },
+  flares: {
+    tags: ['observing', 'stars'],
+    numericCount: 0,
+  },
   'deep-or-wide': {
     tags: ['observing'],
     numericCount: 0,

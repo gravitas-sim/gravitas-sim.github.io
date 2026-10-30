@@ -219,7 +219,8 @@ describe('the instructor expectations record', () => {
     // 480 after the three survey-design investigations (Prompt 215): 4 more.
     // 481 after Two Stars Eclipsing (Prompt 217): 1 more.
     // 510 after Weighing the Stars, for Real (Prompt 218): 2 more; 508 after the five observing closeout investigations (Prompt 216): 27 more.
-    expect(total).toBe(510);
+    // 515 after How Fast Does the Star Spin? and Flares (Prompt 220): 5 more.
+    expect(total).toBe(515);
   });
 
   test('a /1 record keyed by step number migrates to the same text', () => {
