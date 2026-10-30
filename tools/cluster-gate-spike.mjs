@@ -293,21 +293,26 @@ function fitGate(data, { threeParameter = false, dmCentre = 12.2 }) {
   }
   const free = threeParameter ? [0, 1, 2] : [0, 1, 2, 3];
   const intervals = {};
-  const grids = {
-    logAge: Array.from({ length: 13 }, (_, i) => best.x[0] - 0.12 + i * 0.02),
-    dm: Array.from({ length: 13 }, (_, i) => best.x[1] - 0.3 + i * 0.05),
-    E: Array.from({ length: 13 }, (_, i) => i * 0.01),
-    feh: Array.from({ length: 11 }, (_, i) => -0.5 + i * 0.05),
-  };
+  // Run 2 (the grid fix, see CLUSTER_FOUR_PARAMETER_GATE.md): run 1 used fixed
+  // grids of 0.02 in log age and 0.05 in distance modulus, far coarser than
+  // the profile's own width (Part A's age interval is about 0.012 wide), so
+  // every profile of log age and distance was refused. Each profile is now
+  // walked outward from the best fit in geometric steps until it has risen by
+  // 6 or reached the parameter's bound. No bound of the thresholds moved.
+  const STEP = { logAge: 0.004, dm: 0.008, E: 0.004, feh: 0.02 };
+  const RANGE = { logAge: [9.0, 9.6], E: [0, 0.12], feh: [-0.5, 0] };
+  const MULT = [1, 2, 3, 4, 6, 8, 12, 16, 24];
   for (const k of free) {
     const name = NAMES[k];
     const pts = [];
     let warm = best.x;
-    const lo = grids[name].filter(v => v <= best.x[k]).reverse();
-    const hi = grids[name].filter(v => v > best.x[k]);
-    const run = list => {
+    const side = sign => {
       warm = best.x;
-      for (const v of list) {
+      let over = 0;
+      for (const m of MULT) {
+        const v = best.x[k] + sign * m * STEP[name];
+        const rg = RANGE[name];
+        if (rg && (v < rg[0] || v > rg[1])) break;
         const others = free.filter(j => j !== k);
         const g = y => {
           const th = [...warm];
@@ -324,10 +329,11 @@ function fitGate(data, { threeParameter = false, dmCentre = 12.2 }) {
         evals += r.evals;
         warm = g(r.x);
         pts.push({ value: v, chi2: r.f });
+        if (r.f - best.f > 6 && ++over >= 1) break;
       }
     };
-    run(lo);
-    run(hi);
+    side(-1);
+    side(1);
     pts.push({ value: best.x[k], chi2: best.f });
     pts.sort((a, b) => a.value - b.value);
     const dMin = Math.min(best.f, ...pts.map(p => p.chi2));
@@ -335,7 +341,7 @@ function fitGate(data, { threeParameter = false, dmCentre = 12.2 }) {
     intervals[name] =
       iv.status === 'ok'
         ? { lo: iv.lo, hi: iv.hi, closed: iv.lo !== null && iv.hi !== null }
-        : { lo: null, hi: null, closed: false };
+        : { lo: null, hi: null, closed: false, code: iv.code };
   }
   return {
     best: Object.fromEntries(NAMES.map((n, i) => [n, best.x[i]])),
