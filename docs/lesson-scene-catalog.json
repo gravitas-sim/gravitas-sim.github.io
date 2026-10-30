@@ -104387,6 +104387,78 @@
      "recovery": [
       "wrong body: the object list names what the step staged"
      ]
+    },
+    {
+     "sid": "what-the-age-says",
+     "index": 7,
+     "type": "read",
+     "title": "What the age says",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "dwarf",
+       "sun"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram"
+     ],
+     "actions": [
+      "move-an-instrument-control"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "experiment",
+       "measure"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "remnant-cooling",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
     }
    ],
    "loops": [
@@ -104398,13 +104470,15 @@
       "read-two-ages",
       "two-uncertainties",
       "beyond-the-edge",
-      "a-bound-not-an-age"
+      "a-bound-not-an-age",
+      "what-the-age-says"
      ],
      "measure": [
       "read-two-ages",
       "two-uncertainties",
       "beyond-the-edge",
-      "a-bound-not-an-age"
+      "a-bound-not-an-age",
+      "what-the-age-says"
      ],
      "evidence": [
       "read-two-ages"
@@ -104418,16 +104492,16 @@
     }
    ],
    "totals": {
-    "steps": 6,
-    "declared": 6,
+    "steps": 7,
+    "declared": 7,
     "student": 0,
     "engine": 0,
-    "model": 6,
+    "model": 7,
     "data": 0,
-    "diagram": 6,
+    "diagram": 7,
     "evidence": 1,
     "computation": 0,
-    "declaredButInert": 6,
+    "declaredButInert": 7,
     "prose": 0,
     "mismatched": 0,
     "rebuilds": 0
@@ -104892,6 +104966,78 @@
      "recovery": [
       "wrong body: the object list names what the step staged"
      ]
+    },
+    {
+     "sid": "what-the-odds-say",
+     "index": 7,
+     "type": "read",
+     "title": "What the odds say",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "dwarf",
+       "sun"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram"
+     ],
+     "actions": [
+      "move-an-instrument-control"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "experiment",
+       "measure"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "remnant-outcome",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
     }
    ],
    "loops": [
@@ -104903,13 +105049,15 @@
       "read-the-final-mass",
       "a-star-near-a-threshold",
       "read-the-odds",
-      "a-limit-for-a-white-dwarf"
+      "a-limit-for-a-white-dwarf",
+      "what-the-odds-say"
      ],
      "measure": [
       "read-the-final-mass",
       "a-star-near-a-threshold",
       "read-the-odds",
-      "a-limit-for-a-white-dwarf"
+      "a-limit-for-a-white-dwarf",
+      "what-the-odds-say"
      ],
      "evidence": [
       "read-the-final-mass",
@@ -104924,16 +105072,16 @@
     }
    ],
    "totals": {
-    "steps": 6,
-    "declared": 6,
+    "steps": 7,
+    "declared": 7,
     "student": 0,
     "engine": 0,
-    "model": 6,
+    "model": 7,
     "data": 0,
-    "diagram": 6,
+    "diagram": 7,
     "evidence": 2,
     "computation": 0,
-    "declaredButInert": 6,
+    "declaredButInert": 7,
     "prose": 0,
     "mismatched": 0,
     "rebuilds": 0
@@ -110060,16 +110208,16 @@
   }
  ],
  "totals": {
-  "steps": 1400,
-  "declared": 1308,
+  "steps": 1402,
+  "declared": 1310,
   "student": 157,
   "engine": 167,
-  "model": 891,
+  "model": 893,
   "data": 146,
-  "diagram": 770,
+  "diagram": 772,
   "evidence": 373,
   "computation": 14,
-  "declaredButInert": 1151,
+  "declaredButInert": 1153,
   "prose": 58,
   "mismatched": 5,
   "rebuilds": 80,

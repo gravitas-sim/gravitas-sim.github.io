@@ -245,6 +245,19 @@ export const HOW_OLD_IS_THIS_WHITE_DWARF = {
       ],
       tool: COOL({ logL: -4 }),
     },
+    {
+      sid: 'what-the-age-says',
+      stage: STAGE,
+      type: 'read',
+      title: 'What the age says',
+      body: `The cooling age of a white dwarf comes from its mass and its light through a law checked for 0.5 to
+             1.0 solar masses and for luminosities from a ten-thousandth to a thirtieth of the Sun’s. An age carries
+             two uncertainties, one from the measurements and one from the law itself; with exact measurements only
+             the second is left, about 19 percent. Beyond the edge the panel gives a bound and not an age, and the
+             law is a model checked against published model sequences: no table of observed white dwarfs is part
+             of this investigation.`,
+      tool: COOL(),
+    },
   ],
 };
 
@@ -323,7 +336,7 @@ export const HOW_OLD_IS_THIS_WHITE_DWARF_DEEPER = {
     },
     {
       sid: 'what-better-measurements-buy',
-      after: 'heavier-is-older',
+      after: 'a-bound-not-an-age',
       depth: 'advanced',
       type: 'measure',
       title: 'What better measurements buy',
@@ -594,6 +607,19 @@ export const FROM_STAR_TO_REMNANT = {
       ],
       tool: OUT({ view: 2 }),
     },
+    {
+      sid: 'what-the-odds-say',
+      stage: STAGE,
+      type: 'read',
+      title: 'What the odds say',
+      body: `The mass a star is born with fixes what it leaves only as odds. The initial-final mass relation gives
+             the white dwarf’s mass with a scatter of 0.06 solar masses that is real and not a measurement error.
+             A star of about 8 solar masses may leave a white dwarf or a neutron star, and one of 20 to 40 a
+             neutron star or a black hole, because the thresholds are known only as ranges; so the panel names an
+             outcome only when its odds are nine in ten or better. A neutron star can be heavier than the limit of a
+             white dwarf, because that limit belongs to electrons and not to neutrons.`,
+      tool: OUT({ mi: 25, view: 1 }),
+    },
   ],
 };
 
@@ -603,7 +629,7 @@ export const FROM_STAR_TO_REMNANT_DEEPER = {
   steps: [
     {
       sid: 'the-relation-at-two-masses',
-      after: 'read-the-odds',
+      after: 'a-limit-for-a-white-dwarf',
       depth: 'quantitative',
       type: 'measure',
       title: 'The relation at two masses',
@@ -838,6 +864,10 @@ export const HOW_OLD_IS_THIS_WHITE_DWARF_ES = {
         },
       ],
     },
+    {
+      title: 'Lo que dice la edad',
+      body: `La edad de enfriamiento de una enana blanca sale de su masa y de su luz con una ley comprobada de 0,5 a 1,0 masas solares y de una diezmilésima a un treintavo de la luminosidad del Sol. La edad lleva dos incertidumbres, la de las medidas y la de la propia ley; con medidas exactas queda solo la segunda, cerca del 19 por ciento. Más allá del borde el panel da una cota y no una edad, y la ley es un modelo comprobado con secuencias de modelos publicadas: esta investigación no incluye ninguna tabla de enanas blancas observadas.`,
+    },
   ],
 };
 
@@ -1003,6 +1033,10 @@ export const FROM_STAR_TO_REMNANT_ES = {
         },
       ],
     },
+    {
+      title: 'Lo que dicen las probabilidades',
+      body: `La masa con que nace una estrella solo fija lo que deja como probabilidades. La relación entre masa inicial y masa final da la masa de la enana blanca con una dispersión de 0,06 masas solares que es real y no un error de medida. Una estrella de unas 8 masas solares puede dejar una enana blanca o una estrella de neutrones, y una de 20 a 40 una estrella de neutrones o un agujero negro, porque los umbrales solo se conocen como rangos; por eso el panel nombra un desenlace solo cuando sus probabilidades son de nueve de cada diez o más. Una estrella de neutrones puede ser más pesada que el límite de una enana blanca, porque ese límite es de los electrones y no de los neutrones.`,
+    },
   ],
 };
 
@@ -1121,7 +1155,7 @@ const CONTENT = {
       },
       {
         name: 'A model, checked against a table',
-        text: 'The law’s coefficient comes from the published cooling sequences of the Montreal group (Bédard et al. 2020) at 0.6 solar masses, and its error is measured on the other masses. No observed white dwarf is shown: the compilations that exist are under non-commercial terms, and the lesson says so.',
+        text: 'The law’s coefficient comes from the published cooling sequences of the Montreal group (Bédard et al. 2020) at 0.6 solar masses, and its error is measured on the other masses. No observed white dwarf is shown: the compilations that exist are under non-commercial terms, and the investigation says so.',
       },
     ],
     misconceptions: [
@@ -1150,7 +1184,7 @@ const CONTENT = {
       'The law is t = tau (M/Msun)^(5/7) (L/Lsun)^(−5/7) with tau = 8.19 million years for a carbon-oxygen core, fitted to the 0.6 solar-mass sequence of Bédard et al. (2020) over log L from −4.0 to −1.5 and checked on 0.5, 0.7, 0.8, 0.9 and 1.0: the median error is 7.5 percent and the largest 32, and the 95th percentile of the error over 0.5, 0.6 and 1.0, 0.185 in ln t, is the law’s own term (REMNANTS.md).',
       'The interval was tested on 1,166 simulated white dwarfs at 0.7, 0.8 and 0.9 solar masses, which neither the coefficient nor the law’s own term used, with measurement noise of 0.03 solar masses and 0.04 in log L: 96.5 percent with both terms and 85.6 percent with the measurements alone. Two legs of the committed contract fail and are recorded, neither about the cooling law: the PARSEC relation’s printed coefficients are discontinuous by 0.004 solar masses at 2.80, and a neutron-star leg premised a wrong limit (REMNANTS.md).',
       'The temperature route uses the cold degenerate radius of The Limit, about 3 percent larger than the best published radii at 0.6 solar masses; against the table it recovers the luminosity within 3 percent at the median and 17 at worst. The model term was measured with the luminosity taken from the table, so this radius approximation (about 2 percent in the age at the median and 12 at worst) is not in it, and the panel says the radius is the cold one.',
-      'No observed white dwarfs are shown (the open compilations are non-commercial). The lesson does not claim a real white dwarf’s age; the oldest white dwarfs of the disk are a bound, not a measurement here, and the progenitor’s lifetime adds to the cooling age.',
+      'No observed white dwarfs are shown (the open compilations are non-commercial). The investigation does not claim a real white dwarf’s age; the oldest white dwarfs of the disk are a bound, not a measurement here, and the progenitor’s lifetime adds to the cooling age.',
     ],
     discussion: [
       'A white dwarf’s cooling age is a lower limit on the age of its population. What would you add to turn it into the age of the population, and which of the two terms would you expect to be the larger for a star that began as three solar masses?',
@@ -1203,7 +1237,7 @@ const CONTENT = {
       },
       {
         name: 'Cited, and said to be',
-        text: 'The relations are equations 4 to 6 (MIST) and 1 to 3 (PARSEC) of Cummings et al. (2018); the ranges are from Smartt (2009), Heger et al. (2003) and Sukhbold et al. (2016); the neutron-star masses are from Özel and Freire (2016). Each was read in its paper for this lesson.',
+        text: 'The relations are equations 4 to 6 (MIST) and 1 to 3 (PARSEC) of Cummings et al. (2018); the ranges are from Smartt (2009), Heger et al. (2003) and Sukhbold et al. (2016); the neutron-star masses are from Özel and Freire (2016). Each was read in its paper for this investigation.',
       },
     ],
     misconceptions: [
@@ -1271,6 +1305,11 @@ const FLOW = {
       to: 'a-bound-not-an-age',
       text: 'What can still be said below the edge: a lower bound on the age.',
     },
+    {
+      from: 'what-the-age-says',
+      to: 'what-the-age-says',
+      text: 'The summary: an age from a mass and a luminosity, its two uncertainties, and the edge of the law.',
+    },
   ],
   'from-star-to-remnant': [
     {
@@ -1293,6 +1332,11 @@ const FLOW = {
       to: 'a-limit-for-a-white-dwarf',
       text: 'Why a neutron star can be heavier than the limit of a white dwarf.',
     },
+    {
+      from: 'what-the-odds-say',
+      to: 'what-the-odds-say',
+      text: 'The summary: a final mass with its scatter, the thresholds as ranges, and an outcome named only at nine in ten.',
+    },
   ],
 };
 
@@ -1312,12 +1356,12 @@ const EXPECTATIONS = {
 const BANDS = {
   'how-old-is-this-white-dwarf': {
     core: 'medium',
-    quantitative: 'long',
+    quantitative: 'medium',
     advanced: 'long',
   },
   'from-star-to-remnant': {
     core: 'medium',
-    quantitative: 'long',
+    quantitative: 'medium',
     advanced: 'long',
   },
 };
