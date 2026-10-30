@@ -1,0 +1,295 @@
+{
+  "format": "gravitas.stellar-activity-thresholds/1",
+  "prompt": "Roadmap III, Prompt 220, Part A: stellar rotation and flares (tranche T3 by D-R10-207-01)",
+  "document": "STELLAR_ACTIVITY.md (\"Validation contract\")",
+  "committed": "before js/kernels/activity/, the oracle script, the validator, any pack, panel or lesson of Prompt 220 existed, and before any output of the kernel or the oracle was inspected. Of the two authentic light curves only the file headers were read (cadence, number of rows, sector), to know that the files are what the coordinator said; no period, amplitude or flare list was computed from them.",
+  "rule": "A crossed bound is a failed check, recorded in failed-legs.json and left failing; only Carl resets one. A leg that cannot be measured is NOT RUN and says why.",
+  "seeds": {
+    "oracle": 220,
+    "ensemble": "stellar-activity-220",
+    "stream": "injection (noise draws use stream 'noise'), forked by the check id and the draw index"
+  },
+  "scope": {
+    "built": "a spotted rotating sphere (circular spots of stated angular radius and contrast, quadratic limb darkening, one rotation axis inclination, a rigid rotation or a stated one-parameter differential rotation, no spot evolution); the rotation period from the repository's existing Lomb-Scargle periodogram (js/kernels/variables/period.js, read unchanged) with a false-alarm probability, a K-harmonic refinement, a profile interval widened by the residual's lag-1 correlation, and the factor-two alias of the peak always reported as a candidate; flare detection by the form of the Chang et al. (2015) criteria after a stated detrend; the equivalent duration in the band with its uncertainty; the flare-frequency distribution in equivalent duration with an exact maximum-likelihood power-law slope; the Davenport et al. (2014) flare template as the seeded injection shape.",
+    "notBuilt": "any age (gyrochronology) or bolometric flare energy (Part B, gated; nothing in Part A converts an equivalent duration to an energy); spot evolution; spot maps or inversion; faculae; the star's rotation from the light curve as an inference of latitude; a flare classifier; 20-second cadence; the frame branch (Prompt 185 is not on the base)."
+  },
+  "contract": {
+    "spotModel": "a spot is (lat deg, lon0 deg, radius deg, contrast c) with c the spot's intensity over the photosphere's at the same mu (0 black, 1 invisible); the star has quadratic limb darkening I(mu) = 1 - u1 (1 - mu) - u2 (1 - mu)^2, mu the cosine of the angle to the line of sight, and a rotation axis at inclination inc deg to the line of sight; the observer's direction in the star's frame is (sin inc, 0, cos inc), the spin axis is z, a spot at latitude lat and longitude lam is at (cos lat cos lam, cos lat sin lam, sin lat) with lam = lon0 + 360 (t - t0) / P_lat, and cos gamma = sin inc cos lat cos lam + cos inc sin lat; the normalised flux is 1 - sum_j (1 - c_j) D(gamma_j, rho_j) / [pi (1 - u1/3 - u2/6)] where D is the integral of I(mu) mu over the visible part of the spot's disc; differential rotation is P_lat = P_eq / (1 - k sin^2 lat)",
+    "flareTemplate": "Davenport et al. (2014), Eqs. 1 and 4, with t in units of t_1/2 (the full width at half maximum of the flare): rise (-1 <= t <= 0) F = 1 + 1.941 t - 0.175 t^2 - 2.246 t^3 - 1.125 t^4; decay (t > 0) F = 0.6890 exp(-1.600 t) + 0.3030 exp(-0.2783 t); the flux excess is amp times F, amp in units of the quiescent flux; the analytic integral over t is 0.307667 + 1.519379 = 1.827046 in units of amp t_1/2, so ED = 1.827046 amp t_1/2",
+    "flareRule": "the form of Chang et al. (2015): a point is a candidate when (f - q) / sigma >= N1 and (f - q - err) / sigma >= N2 and at least N3 consecutive points qualify; the values N1 = 3, N2 = 2, N3 = 3 are this contract's choice (the default values of the AltaiPony implementation as the author recalls them, not a citation), sigma is the robust scatter (1.4826 times the median absolute deviation) of the detrended residuals, q the quiescent model (a harmonic series at the rotation period fitted with upward clipping, then a running median of 0.25 d, three clipped passes), the flare runs from the first qualifying point back while the excess stays above 1 sigma, to the first point after the peak where it falls below 1 sigma; the equivalent duration is the trapezoidal integral of (f - q) / q over that window"
+  },
+  "checks": [
+    {
+      "id": "A1.centre",
+      "leg": "a",
+      "what": "a spot of radius rho at the disc centre (gamma = 0) against the closed form D = 2 pi integral_{cos rho}^{1} I(m) m dm, for rho in {5, 10, 20, 40, 60, 85} deg and (u1, u2) in {(0,0), (0.4,0.22), (0.7,0.1)}",
+      "limits": {
+        "maxRelativeError": 0.000001
+      }
+    },
+    {
+      "id": "A2.full",
+      "leg": "a",
+      "what": "a spot of radius 90 deg at gamma = 0 covers the visible hemisphere: the normalised flux equals the contrast c exactly for c in {0, 0.3, 0.8} at both limb-darkening settings",
+      "limits": {
+        "maxAbsError": 1e-9
+      }
+    },
+    {
+      "id": "A3.hidden",
+      "leg": "a",
+      "what": "a spot wholly behind the limb (gamma > 90 deg + rho) changes the flux by exactly zero, and the deficit is continuous through the limb: for rho = 15 deg the largest change of D between gamma steps of 0.01 deg over [60, 120] deg stays under 2e-4 of the central-disc deficit of the same spot",
+      "limits": {
+        "hiddenAbsError": 0,
+        "maxStepRelative": 0.0002
+      }
+    },
+    {
+      "id": "A4.periodic",
+      "leg": "a",
+      "what": "a rigidly rotating star is periodic: |F(t + P) - F(t)| and the mirror symmetry |F(t) - F(P - t)| for one equatorial spot at inc = 90 deg, lon0 = 0, over 200 times",
+      "limits": {
+        "maxAbsError": 1e-9
+      }
+    },
+    {
+      "id": "A5.antipodal",
+      "leg": "a",
+      "what": "two equal spots 180 deg apart on the equator at inc = 90 deg: |F(t + P/2) - F(t)| over 200 times, and the Lomb-Scargle peak of 400 noiseless samples over 8 periods lies at P/2 within 0.5 per cent",
+      "limits": {
+        "maxAbsError": 1e-9,
+        "peakRelativeError": 0.005
+      }
+    },
+    {
+      "id": "A6.shear",
+      "leg": "a",
+      "what": "differential rotation: one spot at latitude 50 deg with k = 0.2 and P_eq = 3 d is exactly periodic with P_lat = P_eq / (1 - k sin^2 50 deg): |F(t + P_lat) - F(t)| over 200 times",
+      "limits": {
+        "maxAbsError": 1e-9
+      }
+    },
+    {
+      "id": "A7.template",
+      "leg": "a",
+      "what": "the flare template's integral: 1.827046 amp t_1/2 against numerical quadrature of the template (relative), and the exposure-integrated 2-minute samples (30 sub-samples a cadence) of a flare with t_1/2 = 10, 30 and 90 min summed times the cadence over amp t_1/2 (ED conserved by integration over the exposure)",
+      "limits": {
+        "analyticRelative": 0.001,
+        "sampledRelative": 0.005
+      }
+    },
+    {
+      "id": "A8.edBox",
+      "leg": "a",
+      "what": "the equivalent duration of a boxcar excess h over a width w on a flat baseline (finely sampled, the baseline given) is h w / q within one sample's worth: |ED - h w / q| / (h w / q), h = 0.02 q, w = 20 min, 0.5-min sampling",
+      "limits": {
+        "maxRelative": 0.03
+      }
+    },
+    {
+      "id": "A9.slope",
+      "leg": "a",
+      "what": "the maximum-likelihood power-law slope alpha-hat = 1 + n / sum ln(x / x_min) for the list {1, 2, 4} with x_min = 1 (alpha-hat = 1 + 3 / ln 8 = 2.4427) and its exact interval from 2 (alpha - 1) S ~ chi-square with 2n degrees of freedom, S = sum ln(x / x_min): the interval for {1, 2, 4, 8, 16, 32, 64} against the chi-square quantiles of 14 degrees of freedom (2.5 and 97.5 per cent: 5.629 and 26.119), alpha-hat = 1 + 7 / (21 ln 2)",
+      "limits": {
+        "alphaAbsError": 1e-9,
+        "intervalAbsError": 0.0005
+      }
+    },
+    {
+      "id": "B1.spotOracle",
+      "leg": "b",
+      "what": "the kernel's spotted flux against an independent brute-force sky-plane integral (tools/stellar-activity-oracle/oracle.py: 4000 x 4000 pixels over the disc, exact mu, the spot's membership by angular distance, no analytic integral, no quadrature in common) at the 24 configurations listed under oracle.spotConfigs, flux deficit compared",
+      "limits": {
+        "maxRelativeDeficit": 0.01,
+        "orAbsolute": 0.00002
+      }
+    },
+    {
+      "id": "B2.periodogram",
+      "leg": "b",
+      "what": "the period search against Astropy's LombScargle (standard normalisation, fit_mean true, center_data true) and numpy on three deterministic light curves written out under oracle.curves: the peak period (relative) and the power at 5 pinned trial periods (absolute)",
+      "limits": {
+        "peakRelative": 0.001,
+        "powerAbs": 0.0001
+      }
+    },
+    {
+      "id": "B3.flareOracle",
+      "leg": "b",
+      "what": "the flare finder against an independent implementation of the contract's rule (scipy.signal.medfilt and numpy, written from the rule text and not from the kernel) on the seeded synthetic light curve oracle.flareCurve (written out below, 20 injected flares): matched flares (peak times within 3 cadences) as a fraction of each list, and the median relative difference of the matched equivalent durations",
+      "limits": {
+        "minMatchedFraction": 0.9,
+        "maxMedianEdDifference": 0.1
+      }
+    },
+    {
+      "id": "B4.periodOracle",
+      "leg": "b",
+      "what": "the rotation period of the same spotted curves against the oracle's Lomb-Scargle peak refined on a 5000-point grid: the rotation_period primary candidate (or the first candidate when the verdict is a pair) in relative difference",
+      "limits": {
+        "maxRelative": 0.002
+      }
+    },
+    {
+      "id": "C1.periodCoverage",
+      "leg": "c",
+      "what": "ensemble of 200 seeded spotted stars (P_eq uniform 0.8 to 12 d, baseline 27 d, 30-minute cadence, noise sigma 1e-3 or 3e-3 by draw parity, inc uniform 50 to 90 deg, u = (0.4, 0.22), one or two spots by draw parity, radii 6 to 15 deg, latitudes within +-60 deg, contrast 0.6, two-spot longitude separation 60 to 120 deg so that the factor-two alias is not the truth): the stated 95 per cent interval of the primary period contains the true P_eq",
+      "limits": {
+        "minCoverage": 0.9,
+        "n": 200
+      }
+    },
+    {
+      "id": "C2.edCoverage",
+      "leg": "c",
+      "what": "ensemble of 300 template flares injected on a white-noise baseline (2-minute cadence, sigma 1e-3, amp uniform 12 to 40 sigma, t_1/2 uniform 8 to 40 min, 1 to 3 per curve) and detected with the contract's rule: the stated 95 per cent interval (1.96 sigma_ED) of each matched detected flare contains the injected ED",
+      "limits": {
+        "minCoverage": 0.9,
+        "minDetectedFraction": 0.95
+      }
+    },
+    {
+      "id": "C3.slopeCoverage",
+      "leg": "c",
+      "what": "500 seeded draws of n = 50 equivalent durations from a power law with alpha = 1.8 above x_min = 1: the exact 95 per cent interval contains alpha",
+      "limits": {
+        "minCoverage": 0.92,
+        "n": 500
+      }
+    },
+    {
+      "id": "C4.completeness",
+      "leg": "c",
+      "what": "injection-recovery on a white-noise baseline (2-minute cadence, sigma 1e-3, 200 injections per cell, a flare counted as recovered when a detected peak lies within 3 cadences): completeness by amp/sigma in {5, 8, 12, 20} and t_1/2 in {4, 10, 30} min is printed for every cell; the stated completeness is graded where the rule can reach it: amp >= 12 sigma and t_1/2 >= 10 min, and amp >= 8 sigma and t_1/2 >= 30 min; the false-positive rate is graded on 40 pure-noise curves of 3000 points",
+      "limits": {
+        "minCompletenessGraded": 0.9,
+        "maxFalsePerThousandPoints": 0.05
+      }
+    },
+    {
+      "id": "D1.noise",
+      "leg": "d",
+      "what": "200 seeded white-noise light curves (400 points over 27 d, sigma 1e-3): the verdict is 'no-signal' (false-alarm probability above 0.01 for the best peak) for at least this fraction",
+      "limits": {
+        "minNoSignalFraction": 0.97
+      }
+    },
+    {
+      "id": "D2.shortBaseline",
+      "leg": "d",
+      "what": "a clean single-spot light curve whose period 12 d exceeds half the 15 d baseline: the verdict is 'not-constrained' and no period is reported as a number in 100 per cent of 50 draws",
+      "limits": {
+        "minFraction": 1
+      }
+    },
+    {
+      "id": "D3.doubleDipEqual",
+      "leg": "d",
+      "what": "two equal spots 180 deg apart (equator, inc 90 deg, radius 12 deg, noise 1e-3, P_eq 2 to 9 d, 27 d baseline), 100 draws: the Lomb-Scargle peak is near P/2, the reported verdict is the pair ('period-with-alias' with the factor-two alias listed, never a bare single period), and a listed candidate is within 1 per cent of the true P_eq",
+      "limits": {
+        "minFraction": 1
+      }
+    },
+    {
+      "id": "D4.doubleDipUnequal",
+      "leg": "d",
+      "what": "two spots 180 deg apart with radii 16 and 9 deg (same setting): the odd and even dips differ, the test of the factor-two alias rejects the peak period as the rotation period, and the primary candidate is within 1 per cent of the true P_eq with the half period listed as excluded",
+      "limits": {
+        "minFraction": 0.95
+      }
+    },
+    {
+      "id": "D5.evolving",
+      "leg": "d",
+      "what": "100 draws of a single spot whose contrast evolves (contrast rising linearly from 0.55 to 0.95 across the run, a misspecified rigid model): the interval is widened by the residual correlation, the median widening factor is at least this, and on 100 stationary draws of the same star the 95th percentile of the widening factor stays below the second limit",
+      "limits": {
+        "minMedianWideningEvolving": 1.5,
+        "maxP95WideningStationary": 1.3
+      }
+    },
+    {
+      "id": "D6.spotsNotFlares",
+      "leg": "d",
+      "what": "50 spotted stars with no flares (P_eq 0.6 to 3 d, one spot, spot amplitude 3 to 6 per cent, noise 1e-3, 2-minute cadence over 8 d): the finder, run with the rotation period from the kernel's own search, returns no flare in at least this fraction of the curves",
+      "limits": {
+        "minFractionWithNoFlare": 0.95
+      }
+    },
+    {
+      "id": "E1.auMicPeriod",
+      "leg": "e",
+      "what": "AU Mic, TESS sector 1, SPOC 2-minute PDCSAP light curve (file and SHA-256 in D-R10-220-01; the repository's FITS reader), quality-flagged points removed, 30-minute bins, the kernel's rotation period over 0.5 to 13 d: Gilbert et al. (2022, AJ 163, 147; arXiv:2109.03924) report P = 4.85 +- 0.03 d from all TESS sectors (the older literature value they quote is 4.865 d, Torres et al. 1972). Contract: the kernel's primary period lies within 0.03 d of 4.85 d; the factor-two alias (9.7 d) is among the candidates and is not the primary; the verdict is not 'no-signal'",
+      "limits": {
+        "published": 4.85,
+        "publishedSigma": 0.03,
+        "maxAbsDifference": 0.03
+      }
+    },
+    {
+      "id": "E2.auMicFlares",
+      "leg": "e",
+      "what": "AU Mic sector 1 flares: Gilbert et al. (2022) find 48 flares in 25.07 d at 2-minute cadence (1.855 per day) with their own pipeline and thresholds. Contract (applicability, not a reproduction: another detector and another threshold): the contract's rule returns a rate within the band, and the oracle's independent implementation of the same rule on the same light curve agrees with the kernel as in B3 on the real data",
+      "limits": {
+        "publishedPerDay": 1.855,
+        "rateBandFactor": [0.5, 2],
+        "minMatchedFraction": 0.85,
+        "maxMedianEdDifference": 0.1
+      }
+    },
+    {
+      "id": "E3.ekDraPeriod",
+      "leg": "e",
+      "what": "EK Draconis (a young Sun-like star), TESS sector 16, SPOC 2-minute PDCSAP (file and SHA-256 in D-R10-220-01): the literature gives about 2.77 d (Audard et al. 1999; Ayres 2015; Namekata et al. 2022) and about 2.6 d (Gorgei et al. 2026) and attributes the difference to differential rotation; no single published period with an uncertainty for this sector is claimed. Contract: the kernel's primary period lies in [2.50, 2.90] d, the span of the cited values with 0.1 d of margin, and the factor-two alias is among the candidates and not the primary",
+      "limits": {
+        "band": [2.5, 2.9]
+      }
+    },
+    {
+      "id": "E4.auMicFfd",
+      "leg": "e",
+      "what": "the AU Mic sector-1 flare-frequency distribution of the contract's detections above the completeness limit read off C4 (the smallest equivalent duration at which the graded cells are complete, rounded up to the next table cell): the maximum-likelihood slope alpha lies in [1.4, 2.6], the range of published flare-frequency slopes of active M dwarfs; the interval is printed (an applicability check: no published slope for this sector is claimed)",
+      "limits": {
+        "alphaBand": [1.4, 2.6],
+        "minFlares": 15
+      }
+    }
+  ],
+  "oracle": {
+    "spotConfigs": {
+      "note": "24 configurations, each [gamma deg, rho deg, u1, u2, contrast]: five gammas by three radii at (0.4, 0.22) and contrast 0.5; six at gamma 60, rho 30 with other limb darkening and contrast; three behind-the-limb-centre spots",
+      "configs": [
+        [0, 8, 0.4, 0.22, 0.5],
+        [0, 25, 0.4, 0.22, 0.5],
+        [0, 60, 0.4, 0.22, 0.5],
+        [35, 8, 0.4, 0.22, 0.5],
+        [35, 25, 0.4, 0.22, 0.5],
+        [35, 60, 0.4, 0.22, 0.5],
+        [70, 8, 0.4, 0.22, 0.5],
+        [70, 25, 0.4, 0.22, 0.5],
+        [70, 60, 0.4, 0.22, 0.5],
+        [88, 8, 0.4, 0.22, 0.5],
+        [88, 25, 0.4, 0.22, 0.5],
+        [88, 60, 0.4, 0.22, 0.5],
+        [100, 8, 0.4, 0.22, 0.5],
+        [100, 25, 0.4, 0.22, 0.5],
+        [100, 60, 0.4, 0.22, 0.5],
+        [60, 30, 0, 0, 0.5],
+        [60, 30, 0.7, 0.1, 0.5],
+        [60, 30, 0.4, 0.22, 0],
+        [60, 30, 0.4, 0.22, 0.8],
+        [60, 30, 0, 0, 0],
+        [60, 30, 0.7, 0.1, 0.8],
+        [130, 50, 0.4, 0.22, 0.2],
+        [150, 70, 0.4, 0.22, 0.2],
+        [120, 40, 0.4, 0.22, 0.2]
+      ]
+    },
+    "curves": {
+      "note": "three deterministic noiseless spotted curves, 600 samples uniform over 24 d (t = 24 i / 600), u = (0.4, 0.22), inc 70 deg, contrast 0.6: (1) P 4.2 d, one spot lat 20 lon0 30 radius 12; (2) P 2.9 d, two spots (lat 25, lon0 0, radius 10) and (lat -30, lon0 110, radius 8); (3) P 7.5 d, one spot lat 45 lon0 200 radius 15 with k = 0.15. Trial periods for the power: 1.5, 2.9, 4.2, 5.0 and 7.5 d.",
+      "pinnedPeriods": [1.5, 2.9, 4.2, 5, 7.5]
+    },
+    "flareCurve": {
+      "note": "2-minute cadence, 3000 points from t = 0, baseline 1 + 0.02 sin(2 pi t / 1.7 d), Gaussian noise sigma 1e-3 (numpy default_rng(220)), twenty flares with t_peak = (4 + 4.5 k) hours after the start for k = 0..19 plus 0.37 h times (k mod 3), amp = 0.006 + 0.004 (k mod 5), t_1/2 = (8 + 3 (k mod 4)) minutes, the template of the contract, exposure-integrated over 5 sub-samples"
+    }
+  }
+}
