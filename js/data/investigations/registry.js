@@ -199,6 +199,9 @@ const LOADERS = {
   'two-clusters-two-ages': () => import('./two-clusters-two-ages.js'),
   'weighing-the-stars-for-real': () =>
     import('./weighing-the-stars-for-real.js'),
+  'how-fast-does-the-star-spin': () =>
+    import('./how-fast-does-the-star-spin.js'),
+  flares: () => import('./flares.js'),
   'deep-or-wide': () => import('./deep-or-wide.js'),
   'two-telescopes-one-question': () =>
     import('./two-telescopes-one-question.js'),
@@ -328,6 +331,9 @@ const TRANSLATIONS = {
     'two-clusters-two-ages': () => import('./es/two-clusters-two-ages.js'),
     'weighing-the-stars-for-real': () =>
       import('./es/weighing-the-stars-for-real.js'),
+    'how-fast-does-the-star-spin': () =>
+      import('./es/how-fast-does-the-star-spin.js'),
+    flares: () => import('./es/flares.js'),
     'deep-or-wide': () => import('./es/deep-or-wide.js'),
     'two-telescopes-one-question': () =>
       import('./es/two-telescopes-one-question.js'),

@@ -17,6 +17,7 @@ import { INSTRUCTOR as PHOTCAL } from './investigations/photometric-calibration-
 import { INSTRUCTOR as BINARIES } from './investigations/binaries-sequence.js';
 import { INSTRUCTOR as CLUSTERS } from './investigations/cluster-sequence.js';
 import { INSTRUCTOR as MASSES } from './investigations/binary-masses-sequence.js';
+import { INSTRUCTOR as ACTIVITY } from './investigations/stellar-activity-sequence.js';
 
 export default {
   format: 'gravitas.instructor-flow',
@@ -37,6 +38,7 @@ export default {
     ...BINARIES.flow,
     ...CLUSTERS.flow,
     ...MASSES.flow,
+    ...ACTIVITY.flow,
     'the-suns-motion': [
       {
         from: 'from-stars-to-velocities',

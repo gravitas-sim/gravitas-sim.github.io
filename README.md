@@ -26,9 +26,9 @@ tides, and a dense cluster relaxing over time. Each is tagged by curriculum
 concept, so the scenario gallery doubles as an index an instructor can scan for
 the week they are teaching.
 
-**<!--fact:libraryInvestigations-->119<!--/fact--> guided
-investigations**: <!--fact:investigations-->102<!--/fact--> that run in the
-simulation, <!--fact:investigationSteps-->1375<!--/fact--> steps between them
+**<!--fact:libraryInvestigations-->120<!--/fact--> guided
+investigations**: <!--fact:investigations-->103<!--/fact--> that run in the
+simulation, <!--fact:investigationSteps-->1381<!--/fact--> steps between them
 (the table below), and <!--fact:guidedInvestigations-->17<!--/fact--> in the
 Observatory, the 3-D lab and the mission lab (the Library lists all of them):
 
@@ -51,7 +51,7 @@ locally, and exports a lab report as a PDF that they submit through whatever LMS
 the course already uses.
 
 **Instructor materials.** An instructor guide and a generated answer key for each of
-the <!--fact:investigations-->102<!--/fact--> investigations that run in the simulation — learning
+the <!--fact:investigations-->103<!--/fact--> investigations that run in the simulation — learning
 objectives, expected observations, the numbers a student should get and the
 common wrong turns — plus an adopter's guide and a curriculum map, all rebuilt
 from the investigations themselves on every release so a key cannot disagree with the
@@ -94,7 +94,7 @@ model page sets out the four different radii a body has under _Displayed
 sizes_.
 
 **A validation suite.** `npm run validate:physics` prints a PASS/FAIL table
-of <!--fact:physicsChecks-->352<!--/fact--> checks with measured error against a
+of <!--fact:physicsChecks-->348<!--/fact--> checks with measured error against a
 stated tolerance: orbital periods and Kepler's laws, conservation of momentum,
 angular momentum and energy, the convergence order of each selectable
 integrator, escape velocity, transit depth, radial-velocity semi-amplitude,
@@ -306,8 +306,8 @@ service and works offline ([MISSION_LAB.md](MISSION_LAB.md)).
 
 **Spanish.** The interface ships in <!--fact:locales-->2<!--/fact--> languages
 — <!--fact:localeNames-->English, Español<!--/fact--> — from a catalog
-of <!--fact:uiStrings-->12880<!--/fact--> strings, and
-all <!--fact:investigations-->102<!--/fact--> investigations are translated. A
+of <!--fact:uiStrings-->12894<!--/fact--> strings, and
+all <!--fact:investigations-->103<!--/fact--> investigations are translated. A
 translation carries only words: no scenario name, no seed, no widget id and no
 numeric answer can be reached from a locale file, so a mistranslation cannot
 change what an investigation measures.
@@ -341,7 +341,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->17816<!--/fact--> tests across <!--fact:jestSuites-->507<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->17862<!--/fact--> tests across <!--fact:jestSuites-->507<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
@@ -367,7 +367,7 @@ reports what the browser downloads at start-up separately from what is deferred:
 | ---------------------- | ------------------------------------------------------ | --------------------------------------------- |
 | CSS                    | <!--fact:buildCss-->209<!--/fact--> KB                 | 1                                             |
 | JavaScript at start-up | <!--fact:buildStartupJs-->593<!--/fact--> KB           | <!--fact:buildStartupFiles-->53<!--/fact-->   |
-| JavaScript on demand   | <!--fact:buildDeferredJs-->7584<!--/fact--> KB         | <!--fact:buildDeferredChunks-->680<!--/fact--> |
+| JavaScript on demand   | <!--fact:buildDeferredJs-->7600<!--/fact--> KB         | <!--fact:buildDeferredChunks-->684<!--/fact--> |
 | **Initial download**   | **<!--fact:buildInitialDownload-->802<!--/fact--> KB** |                                               |
 
 Those figures are the last build's, to the nearest kilobyte, and are written
@@ -486,8 +486,8 @@ npm run e2e:ui                    # the Playwright inspector
 npm run e2e:report                # open the last HTML report
 ```
 
-The suite is <!--fact:e2eTests-->3141<!--/fact--> tests
-in <!--fact:e2eFiles-->221<!--/fact--> files and takes several minutes in
+The suite is <!--fact:e2eTests-->3142<!--/fact--> tests
+in <!--fact:e2eFiles-->220<!--/fact--> files and takes several minutes in
 Chromium.
 
 Some notes on how it is put together, because two of the choices are not
@@ -558,7 +558,7 @@ and against what.
 npm run validate:physics
 ```
 
-That is <!--fact:physicsChecks-->352<!--/fact--> deterministic checks, about
+That is <!--fact:physicsChecks-->348<!--/fact--> deterministic checks, about
 two minutes, printed as a table of measured value, expected value, error and
 tolerance. Five kinds, and the table labels each: closed-form arithmetic,
 quantities measured by running the N-body engine, literature values with their
@@ -586,12 +586,12 @@ broke Newton's third law, and a scenario that turned out to have no gravity in i
 
 ## Instructor resources
 
-All <!--fact:instructorDocuments-->967<!--/fact--> documents are generated from
+All <!--fact:instructorDocuments-->989<!--/fact--> documents are generated from
 the investigations at build time and live at
 [gravitas-sim.online/instructors/](https://gravitas-sim.online/instructors/):
 
-- <!--fact:investigations-->102<!--/fact--> instructor guides
-- <!--fact:investigations-->102<!--/fact--> answer keys
+- <!--fact:investigations-->103<!--/fact--> instructor guides
+- <!--fact:investigations-->103<!--/fact--> answer keys
 - <!--fact:activityDocuments-->8<!--/fact--> classroom-activity instructor guides and
   student worksheets, across <!--fact:activities-->3<!--/fact--> activities
 - an adopter's guide and a curriculum map
@@ -654,7 +654,7 @@ part was built:
 | [`DESIGN_SYSTEM.md`](DESIGN_SYSTEM.md)                             | The shared controls: field, input, select, textarea, file, range, toolbar, buttons; their states, tokens and accessibility                     |
 | [`NUMBER_TYPOGRAPHY.md`](NUMBER_TYPOGRAPHY.md)                     | How numbers are formatted, and why                                                                                                             |
 | [`SCENARIO_GALLERY.md`](SCENARIO_GALLERY.md)                       | The gallery, its concept tags and its thumbnails                                                                                               |
-| [`OFFLINE_AND_LOW_END.md`](OFFLINE_AND_LOW_END.md)                 | Offline support and the low-end quality tier: what is precached and why, which of the <!--fact:investigations-->102<!--/fact--> investigations, and what a 2019 Chromebook actually gets |
+| [`OFFLINE_AND_LOW_END.md`](OFFLINE_AND_LOW_END.md)                 | Offline support and the low-end quality tier: what is precached and why, which of the <!--fact:investigations-->103<!--/fact--> investigations, and what a 2019 Chromebook actually gets |
 | [`PERFORMANCE_PROFILING_GUIDE.md`](PERFORMANCE_PROFILING_GUIDE.md) | How to profile a change                                                                                                                        |
 
 Three documents are records of finished work rather than descriptions of the

@@ -79,6 +79,7 @@ import { INSTRUCTOR as PHOTCAL } from './investigations/photometric-calibration-
 import { INSTRUCTOR as BINARIES } from './investigations/binaries-sequence.js';
 import { INSTRUCTOR as CLUSTERS } from './investigations/cluster-sequence.js';
 import { INSTRUCTOR as MASSES } from './investigations/binary-masses-sequence.js';
+import { INSTRUCTOR as ACTIVITY } from './investigations/stellar-activity-sequence.js';
 
 export const LESSON_BANDS = Object.freeze({
   ...MEASUREMENT.bands,
@@ -96,6 +97,7 @@ export const LESSON_BANDS = Object.freeze({
   ...BINARIES.bands,
   ...CLUSTERS.bands,
   ...MASSES.bands,
+  ...ACTIVITY.bands,
   'keplers-laws': { core: 'medium', quantitative: 'long', advanced: 'long' },
   'retrograde-motion': { core: 'medium' },
   'transit-photometry': {

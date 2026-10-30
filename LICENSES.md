@@ -123,6 +123,8 @@ say something different from them; NOTICE lists what each one cites.
 | `js/data/spectra/sdssSpectra.js` | Four observed stellar spectra: SDSS DR18, one each of A, G, K and M (`sdss-dr18-stellar-spectra`) | observed | public domain; see NOTICE |
 | `js/data/observations/shoesR22Cepheids.js` | Cepheids in the LMC, NGC 4258 and M101: periods and Wesenheit magnitudes (Riess et al. 2022) (`shoes-r22-cepheids`) | compilation | CC BY 4.0; see NOTICE |
 | `js/data/sky/brightStars.js` | Bright stars to V 4.5 for the Sky Lab: the Yale Bright Star Catalogue (5th revised edition) (`sky-bright-stars`) | compilation | no license stated; see NOTICE |
+| `js/data/observations/tessAuMicS1.js` | AU Microscopii: TESS sector 1 light curve (a spotted, flaring M dwarf) (`tess-au-mic-s1`) | observed | public domain; see NOTICE |
+| `js/data/observations/tessEkDraS16.js` | EK Draconis: TESS sector 16 light curve (a young Sun-like star) (`tess-ek-dra-s16`) | observed | public domain; see NOTICE |
 | `js/data/observations/tessEtaAqlS81.js` | Eta Aquilae: TESS sector 81 light curve (a classical Cepheid) (`tess-eta-aql-s81`) | observed | public domain; see NOTICE |
 | `js/data/observations/tessHd209458S56Aperture.js` | HD 209458: TESS sector 56 aperture mask (`tess-hd209458-s56-aperture`) | observed | public domain; see NOTICE |
 | `js/data/observations/tessHd209458S56Frame.js` | HD 209458, TESS sector 56, one 2-minute cadence: calibrated flux and its error (`tess-hd209458-s56-frame`) | observed | public domain; see NOTICE |

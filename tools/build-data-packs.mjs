@@ -61,6 +61,7 @@ import { RADIATION_PACKS } from './data-packs/radiation.mjs';
 import { SKY_PACKS } from './data-packs/sky.mjs';
 import { GALACTIC_PACKS } from './data-packs/gaia-dynamics.mjs';
 import { VARIABLES_PACKS } from './data-packs/variables.mjs';
+import { ACTIVITY_PACKS } from './data-packs/activity.mjs';
 import { COSMOLOGY_PACKS } from './data-packs/cosmology.mjs';
 import { IMAGE_PACKS } from './data-packs/image-packs.mjs';
 
@@ -445,6 +446,8 @@ export const PACKS = [
   ...GALACTIC_PACKS,
   // Variable stars and the distance ladder (Roadmap II Prompt 96).
   ...VARIABLES_PACKS,
+  // Stellar rotation and flares (Roadmap III Prompt 220).
+  ...ACTIVITY_PACKS,
   // Cosmology and extragalactic data (Roadmap II Prompt 91).
   ...COSMOLOGY_PACKS,
   // Image packs for the first slice (Roadmap III Prompt 189).

@@ -171,8 +171,8 @@ their ceilings:
 | Module | Lines | Ceiling |
 | --- | ---: | ---: |
 | `js/data/instructorContent.js` | 6,739 | 6,739 |
-| `js/i18n/es.deferred.js` | 4,195 | 4,195 |
-| `js/i18n/en.deferred.js` | 3,948 | 3,948 |
+| `js/i18n/es.deferred.js` | 4,197 | 4,197 |
+| `js/i18n/en.deferred.js` | 3,950 | 3,950 |
 | `js/data/investigations/observing-sequence.js` | 3,341 | 3,341 |
 | `js/investigations.js` | 3,298 | 3,298 |
 | `js/data/investigations/measurement-sequence.js` | 3,270 | 3,270 |
@@ -485,8 +485,8 @@ npm run author:check -- --json            # for an editor
 **`author:walk`** is the part that cannot be done as data. The checker can see
 that a step names a widget and that the widget has a control called `mass`; it
 cannot see that the widget painted, that the scenario built, that a probe
-produced rows against a live world, or that Next moved. The walker opens all <!--fact:investigations-->102<!--/fact--> investigations in
-a browser and takes all <!--fact:investigationSteps-->1375<!--/fact--> steps,
+produced rows against a live world, or that Next moved. The walker opens all <!--fact:investigations-->103<!--/fact--> investigations in
+a browser and takes all <!--fact:investigationSteps-->1381<!--/fact--> steps,
 sharded one lesson per test so contexts are reused and a failure names its lesson. It takes about two
 minutes and runs as part of `npm run e2e`.
 

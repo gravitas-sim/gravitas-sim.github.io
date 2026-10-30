@@ -89,6 +89,7 @@
     "instruments:validate": "node tools/instruments-validate.mjs",
     "guides:populations-key": "node tools/populations-reference.mjs",
     "measure:validate": "node tools/measure-validate.mjs",
+    "activity:validate": "node tools/stellar-activity-validate.mjs",
     "packs:check": "node tools/build-data-packs.mjs --check",
     "sdk": "node sdk/cli.mjs",
     "sdk:check": "node sdk/cli.mjs validate --all && node sdk/cli.mjs test --all",

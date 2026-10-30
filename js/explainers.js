@@ -120,6 +120,12 @@ export const FAMILY_IDS = Object.freeze({
   eclipse: ['eclipse-curve', 'eclipse-fit'],
   clusterFit: ['cluster-fit'],
   masses: ['masses-minimum', 'masses-solve', 'masses-diagram'],
+  activity: [
+    'activity-spots',
+    'activity-period',
+    'activity-flares',
+    'activity-ffd',
+  ],
   spectrograph: [
     'spectrograph-lines',
     'spectrograph-arc',

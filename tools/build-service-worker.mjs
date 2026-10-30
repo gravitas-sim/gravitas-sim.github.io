@@ -489,6 +489,10 @@ export const NEVER_PRECACHED = [
   // (js/inference/binaryMasses.js) and the models (js/inference/binaryJoint.js) are NOT here: the inference worker imports them.
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(weighing-the-stars-for-real|binary-masses-sequence)\.js$/,
   /^(js\/massesWidgets\.js|js\/massesField\.js|js\/i18n\/(en|es)\.masses\.js)$/,
+  // Prompt 220: the activity panels, their field module, their words and the two lessons' one new file (D-R10-220-07).
+  // The kernel, the loader and the two pack records are already here from the data part (D-R10-220-03).
+  /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(how-fast-does-the-star-spin|flares|stellar-activity-sequence)\.js$/,
+  /^(js\/activityWidgets\.js|js\/activityField\.js|js\/i18n\/(en|es)\.activity\.js)$/,
   // Prompt 214: the strategy kernel, planner extension, panels and the strategy lesson's one new file (D-R10-214-06).
   /^js\/kernels\/strategy\//,
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(why-the-period-is-wrong|strategy-sequence)\.js$/,
@@ -518,6 +522,12 @@ export const NEVER_PRECACHED = [
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(counts-to-magnitudes|photometric-calibration-sequence)\.js$/,
   /^(js\/photcalWidgets\.js|js\/photcalField\.js|js\/photcalKeep\.js|js\/i18n\/(en|es)\.photcal\.js|js\/instruments\/photcal\.js)$/,
   /^js\/kernels\/detector\/photcal\.js$/,
+  // Prompt 220: the stellar-activity kernel, its light-curve loader and the two pack records. No shipped
+  // module imports them yet (the panels and investigations are a later part), so no page can fetch one
+  // and an install has no use for them; their first adopter deletes this entry (D-R10-220-03).
+  /^js\/kernels\/activity\//,
+  /^js\/activityData\.js$/,
+  /^js\/data\/observations\/(tessAuMicS1|tessEkDraS16)\.js$/,
 ];
 
 const ON_DEMAND_ONLY = new Set([

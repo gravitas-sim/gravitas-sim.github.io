@@ -15,6 +15,20 @@ the release rather than in the tag.
 
 ### Added
 
+- **Stellar rotation and flares (Prompt 220).** `js/kernels/activity/`: a spotted rotating
+  sphere (circular spots, quadratic limb darkening, an exact azimuthal integral), the rotation period over the
+  existing periodogram with a false-alarm probability, a residual-correlation widening and the factor-two alias
+  always listed as a candidate, flare detection by the form of the Chang et al. criteria with template-fitted
+  equivalent durations and their uncertainty, and the flare-frequency slope with an exact interval. Two TESS
+  light-curve packs (AU Microscopii at 2-minute cadence, EK Draconis in 30-minute bins). 28 of 30 committed
+  validation legs pass, two stay failing and labelled (`STELLAR_ACTIVITY.md`). Four panels (`activity-spots`,
+  `activity-period`, `activity-flares`, `activity-ffd`) and two investigations, How Fast Does the Star Spin? and
+  Flares, each at three depths in English and Spanish with instructor materials: the period of a spotted star with
+  the factor-two alias kept in view, the real period of AU Microscopii and EK Draconis, the flares of AU Microscopii
+  with their equivalent durations, and the power-law slope by size with its interval; a model-page section. Part B
+  (ages and flare energies in erg) was gated: verdict C, no age and no energy (`D-R10-220-90`), and each lesson has
+  a reading step that says why.
+
 - Three investigations on measurement, uncertainty and claim-limits, first in the Observing-and-measuring sequence, each in English and Spanish with instructor materials: What Is a Measurement? (survey), What Does ± Claim? (majors) and When the Method Must Refuse (upper), on synthetic data with a known truth, with one new instrument family (`js/claimWidgets.js`). They open offline only after one online use (D-R10-67, `MEASUREMENT_CLAIMS.md`).
 - Three image investigations, after them in the same sequence, each in English and Spanish with instructor materials: Measuring the Moon (a scale from a reference pair on a real Galileo picture), How Far Is That Star? (a parallax and its distance from fourteen positions of a synthetic star) and A Binary Star's Orbit (an orbit and a mass sum from twelve positions), with one new instrument family (`js/imagingWidgets.js`) that calls the Observatory's own measuring modules. They open offline only after one online use. "What is in this field?" is not built (D-R10-72, `IMAGE_INVESTIGATIONS.md`).
 - A planetary sequence, Planets and the Sun, ordering the Solar System investigations that exist, with three new connecting investigations, each in English and Spanish with instructor materials: The Scale of the Solar System (sizes, distances, a marble model and light time), Moons of the Giants (the Laplace combination of Io, Europa and Ganymede from fitted periods) and Comets and the Sun (a comet's orbit and the heat at each end of it). A course package, The Solar System and the Sun, and a Solar System unit in the one-semester course. Worlds Compared, Reading a Surface and Space Weather from the Sun are not built: each needs a component or a data pack that is not in the project yet, and DECISION_REGISTER.md (D-R10-206-01) says which.
@@ -120,12 +134,12 @@ The Observatory's image measurement train (Prompts 179 to 182, 184, 186 to 189, 
 
 **Gravitas 2.0.0.** Gravitas grows from a gravity sandbox with 22 guided
 investigations into a browser laboratory: <!--fact:scenarios-->61<!--/fact-->
-sandbox scenarios, <!--fact:libraryInvestigations-->119<!--/fact--> guided
-investigations (<!--fact:investigations-->102<!--/fact--> that run in the
+sandbox scenarios, <!--fact:libraryInvestigations-->120<!--/fact--> guided
+investigations (<!--fact:investigations-->103<!--/fact--> that run in the
 simulation and <!--fact:guidedInvestigations-->17<!--/fact--> in the
 Observatory, the 3-D lab and the mission lab), a shared shell, a Library, a
 workspace for each student's own work, an instructor path from adoption page to
-gradebook file, <!--fact:instructorDocuments-->967<!--/fact--> generated
+gradebook file, <!--fact:instructorDocuments-->989<!--/fact--> generated
 instructor documents, a public validation suite
 of <!--fact:physicsChecks-->352<!--/fact--> checks, and authoring tools
 (Scenario Studio, Investigation Composer, course packs and an extension SDK).
@@ -1778,7 +1792,7 @@ listed here because this is the release that first carries it.
 - **An instructor portal that explains itself.** `/instructors/` states what is
   behind the passphrase before asking for it, says plainly what client-side
   encryption on a static host can and cannot promise, and presents the
-  <!--fact:instructorDocuments-->967<!--/fact--> documents grouped by investigation
+  <!--fact:instructorDocuments-->989<!--/fact--> documents grouped by investigation
   with their kind and size. A wrong passphrase and a missing bundle now report
   as the different problems they are.
 - **Dual licensing.** The code is MIT; the original educational material is
@@ -1845,7 +1859,7 @@ listed here because this is the release that first carries it.
   uncertainty, the target and the observing configuration.
 - **Offline support.** A service worker precaches the application shell, the
   <!--fact:scenarios-->61<!--/fact--> scenario thumbnails and all
-  <!--fact:investigations-->102<!--/fact--> English lessons, so a class keeps
+  <!--fact:investigations-->103<!--/fact--> English lessons, so a class keeps
   working when the room's wifi drops. The cache name is a content hash, so a
   build invalidates it. See [OFFLINE_AND_LOW_END.md](OFFLINE_AND_LOW_END.md).
 - **A measured low-end quality tier.** Chosen from the frame rate the machine
@@ -1854,7 +1868,7 @@ listed here because this is the release that first carries it.
   off.
 - **An investigation authoring toolchain.** `npm run author:check` validates
   every lesson and every one of the
-  <!--fact:investigationSteps-->1375<!--/fact--> steps; `npm run author:new`
+  <!--fact:investigationSteps-->1381<!--/fact--> steps; `npm run author:new`
   scaffolds a lesson with its translation shadow and instructor stub;
   `?author=<lesson>&step=<n>` opens any step with diagnostics without touching
   a student's saved progress; and a browser walker exercises every step of

@@ -1093,6 +1093,32 @@
       "loop": ["who-moves-faster", "read-the-amplitudes"],
       "evidenceFrom": "model"
     },
+    "how-fast-does-the-star-spin": {
+      "centralExperimentId": "ce.how-fast-does-the-star-spin",
+      "object": "panel:activity-spots",
+      "control": "activity-spots/second",
+      "quantity": "the period the periodogram finds for a star that turns once in 4.00 days: 4.00 days with one dark spot and 2.00 days with a second like spot on the opposite side, the light repeating twice a turn so that 4.00 days is left as a period it could also be",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "how-many-dips",
+        "read-the-period"
+      ],
+      "evidenceFrom": "model"
+    },
+    "flares": {
+      "centralExperimentId": "ce.flares",
+      "object": "panel:activity-flares",
+      "control": "activity-flares/flare",
+      "quantity": "the equivalent duration, in seconds, of a flare of the red dwarf AU Microscopii: 118 for the second largest and 100 for the third largest, the time the quiet star would take to give out the light the flare added",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "rise-or-fall",
+        "read-a-flare"
+      ],
+      "evidenceFrom": "model"
+    },
     "what-a-telescope-resolves": {
       "centralExperimentId": "ce.what-a-telescope-resolves",
       "object": "panel:telescope",

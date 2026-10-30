@@ -97,6 +97,7 @@ import STRATEGY_LESSONS from './investigations/strategy-sequence.js';
 import BINARIES_LESSONS from './investigations/binaries-sequence.js';
 import CLUSTER_LESSONS from './investigations/cluster-sequence.js';
 import MASSES_LESSONS from './investigations/binary-masses-sequence.js';
+import ACTIVITY_LESSONS from './investigations/stellar-activity-sequence.js';
 import SURVEY_LESSONS from './investigations/survey-sequence.js';
 import OBSERVING_LESSONS from './investigations/observing-sequence.js';
 import TELESCOPE_LESSONS from './investigations/telescope-sequence.js';
@@ -218,6 +219,7 @@ export const INVESTIGATIONS = [
   ...BINARIES_LESSONS,
   ...CLUSTER_LESSONS,
   ...MASSES_LESSONS,
+  ...ACTIVITY_LESSONS,
   ...SURVEY_LESSONS,
   ...OBSERVING_LESSONS,
 ];

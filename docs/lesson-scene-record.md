@@ -11,15 +11,15 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 102 investigations and 1375 steps: 1283 steps
+Across 103 investigations and 1381 steps: 1289 steps
 declare a scene, 157 let a reader change one, 167 read the
-running integration, 866 show a prescribed model result, 146 draw
-on a stored dataset, 745 put a self-contained panel beside the text,
-365 keep something, and 58 are prose.
-Of 180 prediction loops, 180 are returned to,
-180 produce a measurement before they are answered, and
+running integration, 872 show a prescribed model result, 146 draw
+on a stored dataset, 751 put a self-contained panel beside the text,
+367 keep something, and 58 are prose.
+Of 181 prediction loops, 181 are returned to,
+181 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
-180 hold their marking until the experiment settles them.
+181 hold their marking until the experiment settles them.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -1309,20 +1309,6 @@ Of 180 prediction loops, 180 are returned to,
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:eclipse-curve`, control eclipse-curve/J, measures the depth of the primary eclipse, in percent of the light of the pair, for two stars that eclipse each other nearly edge on: 48.3 at a surface brightness ratio of 0.55 and 40.7 at 1, the deeper eclipse being the one that hides the hotter star, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
-## Two Clusters, Two Ages (`two-clusters-two-ages`)
-
-- **Steps:** 7. Scene declared on 7; a reader can change something on 0; 7 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 0 live engine, 7 prescribed model, 0 stored dataset, 7 self-contained panel.
-- **What students do:** move-an-instrument-control, commit-a-prediction, record-values, choose-an-option.
-- **Objects the steps declare:** star.
-- **Instruments:** cluster-fit.
-- **Stored data:** none.
-- **Evidence kept:** notebook-fields.
-- **Prediction loops:** which-is-older → fit-a, fit-b, how-much-older, what-the-interval-says, what-a-fit-gives → fit-b.
-- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
-- **Scene rebuilds:** none.
-- **Accepted central experiment** (reviewed 2026-09-11): object `panel:cluster-fit`, control cluster-fit/feh, measures the age of cluster B in gigayears from a fit of isochrones at the assumed metallicity: 3.16 at [Fe/H] -0.25 and 2.24 at 0, the metallicity being stated and never fitted, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
-
 ## Weighing the Stars, for Real (`weighing-the-stars-for-real`)
 
 - **Steps:** 7. Scene declared on 7; a reader can change something on 0; 7 declare a scene nobody on that step can touch.
@@ -1336,6 +1322,34 @@ Of 180 prediction loops, 180 are returned to,
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:masses-minimum`, control masses-minimum/inc, measures the mass that star 1 would have at the tilt you choose, for a pair whose velocities give a minimum of 0.58 solar masses: 0.58 at 90 degrees (edge on) and 1.19 at 52 degrees, the velocities alone fixing only the minimum, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## How Fast Does the Star Spin? (`how-fast-does-the-star-spin`)
+
+- **Steps:** 7. Scene declared on 7; a reader can change something on 0; 7 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 7 prescribed model, 0 stored dataset, 7 self-contained panel.
+- **What students do:** move-an-instrument-control, commit-a-prediction, record-values, choose-an-option.
+- **Objects the steps declare:** star.
+- **Instruments:** activity-spots, activity-period.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** how-many-dips → read-the-period, two-spots, a-real-star, the-sun-turns-unevenly, why-no-age → read-the-period.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:activity-spots`, control activity-spots/second, measures the period the periodogram finds for a star that turns once in 4.00 days: 4.00 days with one dark spot and 2.00 days with a second like spot on the opposite side, the light repeating twice a turn so that 4.00 days is left as a period it could also be, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## Flares (`flares`)
+
+- **Steps:** 6. Scene declared on 6; a reader can change something on 0; 6 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 6 prescribed model, 0 stored dataset, 6 self-contained panel.
+- **What students do:** move-an-instrument-control, commit-a-prediction, record-values, choose-an-option.
+- **Objects the steps declare:** star.
+- **Instruments:** activity-flares, activity-ffd.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** rise-or-fall → read-a-flare, what-is-an-equivalent-duration, count-the-flares, a-time-not-an-energy → read-a-flare.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:activity-flares`, control activity-flares/flare, measures the equivalent duration, in seconds, of a flare of the red dwarf AU Microscopii: 118 for the second largest and 100 for the third largest, the time the quiet star would take to give out the light the flare added, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Deep or Wide? (`deep-or-wide`)
 
