@@ -15,6 +15,7 @@ import { INSTRUCTOR as PLANETS } from './investigations/planets-sequence.js';
 import { INSTRUCTOR as EXPOSURE } from './investigations/exposure-sequence.js';
 import { INSTRUCTOR as STRATEGY } from './investigations/strategy-sequence.js';
 import { INSTRUCTOR as BINARIES } from './investigations/binaries-sequence.js';
+import { INSTRUCTOR as CLUSTERS } from './investigations/cluster-sequence.js';
 import { INSTRUCTOR as MASSES } from './investigations/binary-masses-sequence.js';
 import { INSTRUCTOR as SURVEY } from './investigations/survey-sequence.js';
 import { INSTRUCTOR as OBSERVING } from './investigations/observing-sequence.js';
@@ -31,6 +32,7 @@ export const INSTRUCTOR_CONTENT = {
   ...EXPOSURE.content,
   ...STRATEGY.content,
   ...BINARIES.content,
+  ...CLUSTERS.content,
   ...MASSES.content,
   ...SURVEY.content,
   ...OBSERVING.content,

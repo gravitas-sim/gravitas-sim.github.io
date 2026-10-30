@@ -1174,6 +1174,19 @@ export const MANIFEST = [
     objectiveCount: 4,
   },
   {
+    id: 'two-clusters-two-ages',
+    title: 'Dos cúmulos, dos edades',
+    subtitle:
+      'Ajusta una edad y una distancia a dos cúmulos de estrellas, mira cuánto se mueve cada una al cambiar la metalicidad que supones y aprende por qué la diferencia de dos edades es más estable que cada una',
+    duration: '15-35 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/cluster-membership.webp',
+    depths: 3,
+    stepCount: 7,
+    gradedCount: 5,
+    objectiveCount: 4,
+  },
+  {
     id: 'weighing-the-stars-for-real',
     title: 'Pesar las estrellas, de verdad',
     subtitle:

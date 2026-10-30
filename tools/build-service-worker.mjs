@@ -478,6 +478,9 @@ export const NEVER_PRECACHED = [
   /^js\/kernels\/clusters\//,
   /^js\/observatory\/clusterPanel\.js$/,
   /^js\/i18n\/(en|es)\.cluster\.js$/,
+  // Prompt 219: the lesson's panel, its field module, its words and the lesson's one new file (D-R10-219-01).
+  /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(two-clusters-two-ages|cluster-sequence)\.js$/,
+  /^(js\/clusterFitWidgets\.js|js\/clusterFitField\.js|js\/i18n\/(en|es)\.clusterLesson\.js)$/,
   // Prompt 217: the eclipsing-binary panels, their field module and the lesson's one new file (D-R10-217-04). The kernel
   // (js/inference/binaries.js) and the model (js/inference/binaryModel.js) are NOT here: the inference worker imports them.
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(two-stars-eclipsing|binaries-sequence)\.js$/,

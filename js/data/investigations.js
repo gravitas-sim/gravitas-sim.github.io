@@ -95,6 +95,7 @@ import PLANETS_LESSONS from './investigations/planets-sequence.js';
 import EXPOSURE_LESSONS from './investigations/exposure-sequence.js';
 import STRATEGY_LESSONS from './investigations/strategy-sequence.js';
 import BINARIES_LESSONS from './investigations/binaries-sequence.js';
+import CLUSTER_LESSONS from './investigations/cluster-sequence.js';
 import MASSES_LESSONS from './investigations/binary-masses-sequence.js';
 import SURVEY_LESSONS from './investigations/survey-sequence.js';
 import OBSERVING_LESSONS from './investigations/observing-sequence.js';
@@ -215,6 +216,7 @@ export const INVESTIGATIONS = [
   ...EXPOSURE_LESSONS,
   ...STRATEGY_LESSONS,
   ...BINARIES_LESSONS,
+  ...CLUSTER_LESSONS,
   ...MASSES_LESSONS,
   ...SURVEY_LESSONS,
   ...OBSERVING_LESSONS,

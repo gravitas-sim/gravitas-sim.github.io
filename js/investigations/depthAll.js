@@ -50,6 +50,7 @@ import { DEPTH as TELESCOPE_DEPTH } from '../data/investigations/telescope-seque
 import { DEPTH as SPECTROGRAPH_DEPTH } from '../data/investigations/spectrograph-sequence.js';
 import { DEPTH as STRATEGY_DEPTH } from '../data/investigations/strategy-sequence.js';
 import { DEPTH as BINARIES_DEPTH } from '../data/investigations/binaries-sequence.js';
+import { DEPTH as CLUSTERS_DEPTH } from '../data/investigations/cluster-sequence.js';
 import { DEPTH as MASSES_DEPTH } from '../data/investigations/binary-masses-sequence.js';
 import { DEPTH as SURVEY_DEPTH } from '../data/investigations/survey-sequence.js';
 import { DEPTH as OBSERVING_DEPTH } from '../data/investigations/observing-sequence.js';
@@ -86,6 +87,9 @@ export const DEEPER = Object.freeze({
   ),
   ...Object.fromEntries(
     Object.entries(BINARIES_DEPTH).map(([id, d]) => [id, d.steps])
+  ),
+  ...Object.fromEntries(
+    Object.entries(CLUSTERS_DEPTH).map(([id, d]) => [id, d.steps])
   ),
   ...Object.fromEntries(
     Object.entries(MASSES_DEPTH).map(([id, d]) => [id, d.steps])

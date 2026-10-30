@@ -200,6 +200,7 @@ export const GUIDED = Object.freeze([
   'two-greenhouse-models',
   'two-periodograms',
   'two-stars-eclipsing',
+  'two-clusters-two-ages',
   'two-telescopes-one-question',
   'wanderers-on-the-sky',
   'weighing-jupiter',

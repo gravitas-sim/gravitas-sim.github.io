@@ -178,6 +178,12 @@ export default {
     'Why the deeper eclipse hides the hotter star, why a flat bottom means the smaller star was hidden, why radii come as fractions of the orbit and not in kilometres, and why a number from a fit is only a measurement when the data fix it.',
     'The model is two spheres on a Kepler orbit: no reflection, no ellipsoidal light, no spots, no third star, no masses (those need velocities); limb darkening is fixed from a table; every data set is synthetic, with its truth stated.',
   ],
+  clusterFit: [
+    'A synthetic star cluster of a known age and distance, drawn from MIST isochrones: its color–magnitude diagram with the best isochrone over it, and the age and distance modulus the fit gives, each with a one-sigma interval, at the metallicity you set.',
+    'Which of two clusters is older from where the stars leave the main sequence, how the fitted age and distance trade against each other, how far the age moves when the assumed metallicity changes, and what a binary fraction that the model does not have does to a fit.',
+    'Why an interval from a fit is conditional on its assumptions, why the difference between two clusters’ ages is steadier than either age, and why a stated metallicity is a choice and not a result.',
+    'The metallicity is never fitted and the reddening is held at 0.042; the stars are single in the model; the members are given, with 15 percent of the stars not members; every cluster is synthetic, with its truth one switch away. The same fit on NGC 2420 falls outside the published range, which is this limit, not a measurement of the cluster.',
+  ],
   surveyDesign: [
     'A facility from the instrument library, a class of source with a stated counts slope, an exposure, visits to stack, nights and a detection threshold, with a goal depth and area to meet.',
     'The depth the plan reaches, the area its nights buy, the sources it would find with a Poisson interval, the false positives its threshold lets through and the reliability, a verdict that names every reason a plan is not feasible, and the exposure that finds most sources at fixed time.',
