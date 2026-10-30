@@ -15,6 +15,12 @@ the release rather than in the tag.
 
 ### Added
 
+- **Variable-star classifier gate (Prompt 223 Part B).** `VARIABLE_CLASSIFIER_GATE.md`: the shipped nearest-neighbour
+  classifier measured on 350 Gaia DR3 Cepheid and RR Lyrae rows (Gaia's own labels, CC BY-NC 3.0 IGO, a derived
+  fixture) against bounds committed first. Two legs fail and stay failing (accuracy among the stars called 0.772
+  against 0.90; the bootstrap lower end 0.718 against 0.85); the verdict is B: the classifier may be offered only as a
+  suggestion with its confusion matrix and the ambiguous cases left unresolved. Documentation, fixtures and register
+  rows only; nothing student-facing changes.
 - **Remnants (Prompt 222).** `js/kernels/remnants/`: a white-dwarf cooling age from a Mestel-type law calibrated on
   one published model sequence, valid for 0.5 to 1.0 solar masses and a stated luminosity range, refused outside it,
   with an interval that keeps the measurement term apart from the law's own error; the initial-final mass relations
