@@ -166,6 +166,12 @@ export default {
     'Why one visit a night at the same time cannot tell a period from its aliases, how irregular times or more nights break the tie, why more nights from one site do not remove the sidereal-day alias, and what weather costs.',
     'The verdict is a sinusoid in white noise, not an eclipse or a flare; the weather is a seeded draw that loses whole nights, not a forecast; the Moon enters only through the planner’s separation limit; the series are synthetic, with the period you set as their truth.',
   ],
+  eclipse: [
+    'Two stars on one orbit: the light of both against the orbit’s phase for the radii, the radius ratio, the inclination, the surface brightness ratio and the eccentricity you set, with the depth, duration and bottom of each eclipse, and, fitted by the inference core to a synthetic data set, every parameter with its uncertainty or the words “not constrained”.',
+    'Which star is hotter and which is larger from the two eclipses, how the secondary’s phase gives e cos w, how the eclipse durations give e sin w only weakly, why a grazing eclipse leaves the radius ratio open, and what a residual test says when something the model leaves out is in the data.',
+    'Why the deeper eclipse hides the hotter star, why a flat bottom means the smaller star was hidden, why radii come as fractions of the orbit and not in kilometres, and why a number from a fit is only a measurement when the data fix it.',
+    'The model is two spheres on a Kepler orbit: no reflection, no ellipsoidal light, no spots, no third star, no masses (those need velocities); limb darkening is fixed from a table; every data set is synthetic, with its truth stated.',
+  ],
   surveyDesign: [
     'A facility from the instrument library, a class of source with a stated counts slope, an exposure, visits to stack, nights and a detection threshold, with a goal depth and area to meet.',
     'The depth the plan reaches, the area its nights buy, the sources it would find with a Poisson interval, the false positives its threshold lets through and the reliability, a verdict that names every reason a plan is not feasible, and the exposure that finds most sources at fixed time.',

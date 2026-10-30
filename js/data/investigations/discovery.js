@@ -930,6 +930,16 @@ export const DISCOVERY = {
     },
     courseLevel: 'survey',
   },
+  'two-stars-eclipsing': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: [],
+    textbook: {
+      chapter: 18,
+      section: null,
+    },
+    courseLevel: 'survey',
+  },
   'deep-or-wide': {
     audience: 'intro',
     mathematics: 'algebra',

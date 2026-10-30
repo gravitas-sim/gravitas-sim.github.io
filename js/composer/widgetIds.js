@@ -88,6 +88,7 @@ export const WIDGET_FAMILIES = Object.freeze({
   detector: ['ccd-frames', 'ccd-snr', 'diff-photometry'],
   exposure: ['exposure-planner'],
   strategy: ['strategy-window', 'strategy-plan'],
+  eclipse: ['eclipse-curve', 'eclipse-fit'],
   spectrograph: [
     'spectrograph-lines',
     'spectrograph-arc',

@@ -53,6 +53,8 @@
   "tides-resonance",
   "tides-moon",
   "tides-heating",
+  "eclipse-curve",
+  "eclipse-fit",
   "exposure-planner",
   "hz-limits",
   "hz-locking",

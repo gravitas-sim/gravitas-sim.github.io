@@ -11,15 +11,15 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 99 investigations and 1355 steps: 1263 steps
+Across 95 investigations and 1310 steps: 1218 steps
 declare a scene, 157 let a reader change one, 167 read the
-running integration, 846 show a prescribed model result, 146 draw
-on a stored dataset, 725 put a self-contained panel beside the text,
-359 keep something, and 58 are prose.
-Of 177 prediction loops, 177 are returned to,
-177 produce a measurement before they are answered, and
+running integration, 806 show a prescribed model result, 146 draw
+on a stored dataset, 685 put a self-contained panel beside the text,
+346 keep something, and 58 are prose.
+Of 176 prediction loops, 176 are returned to,
+176 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
-177 hold their marking until the experiment settles them.
+176 hold their marking until the experiment settles them.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -1295,6 +1295,20 @@ Of 177 prediction loops, 177 are returned to,
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:strategy-window`, control strategy-window/cadence, measures the phase bins out of 20 that forty nights of visits fill for a 0.8-day period: 13 for one visit a night at the same time and 20 for three visits a night at irregular times, the cadence that breaks the alias, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
+## Two Stars Eclipsing (`two-stars-eclipsing`)
+
+- **Steps:** 6. Scene declared on 6; a reader can change something on 0; 6 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 6 prescribed model, 0 stored dataset, 6 self-contained panel.
+- **What students do:** move-an-instrument-control, commit-a-prediction, record-values, choose-an-option.
+- **Objects the steps declare:** star.
+- **Instruments:** eclipse-curve.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** which-eclipse-is-deeper → the-two-depths, the-flat-bottom, half-an-orbit, what-eclipses-leave-out → the-two-depths.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:eclipse-curve`, control eclipse-curve/J, measures the depth of the primary eclipse, in percent of the light of the pair, for two stars that eclipse each other nearly edge on: 48.3 at a surface brightness ratio of 0.55 and 40.7 at 1, the deeper eclipse being the one that hides the hotter star, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
 ## Deep or Wide? (`deep-or-wide`)
 
 - **Steps:** 6. Scene declared on 6; a reader can change something on 0; 6 declare a scene nobody on that step can touch.
@@ -1336,74 +1350,4 @@ Of 177 prediction loops, 177 are returned to,
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: nothing marks these, they are a record.
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:survey-design-plan`, control survey-design-plan/logExposure, measures the verdict of a plan on the goal of 22.5 magnitude over 100 square degrees in ten nights: feasible for the one-metre telescope at 63 seconds, not feasible at 4 seconds; many plans pass and the screen judges feasibility and the student's own stated numbers, never one plan, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
-
-## Which Instrument for Which Question? (`which-instrument-for-which-question`)
-
-- **Steps:** 10. Scene declared on 10; a reader can change something on 0; 10 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 0 live engine, 9 prescribed model, 0 stored dataset, 9 self-contained panel.
-- **What students do:** move-an-instrument-control, record-values, choose-an-option, answer-in-words.
-- **Objects the steps declare:** star.
-- **Instruments:** exposure-planner.
-- **Stored data:** none.
-- **Evidence kept:** notebook-fields.
-- **Prediction loops:** none.
-- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
-- **Scene rebuilds:** none.
-- **Accepted central experiment** (reviewed 2026-09-11): object `panel:exposure-planner`, control exposure-planner/setup, measures the total exposure that reaches a signal-to-noise of 20 for a magnitude-22 star in one exposure: 12,071 seconds on the Las Cumbres 0.35 m telescope, 602 seconds on the 1.0 m and 15 seconds on Rubin, the same star at the same quality, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
-
-## The Sky Background (`the-sky-background`)
-
-- **Steps:** 12. Scene declared on 12; a reader can change something on 0; 12 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 0 live engine, 11 prescribed model, 0 stored dataset, 11 self-contained panel.
-- **What students do:** move-an-instrument-control, record-values, commit-a-prediction, choose-an-option, answer-in-words.
-- **Objects the steps declare:** star.
-- **Instruments:** exposure-planner.
-- **Stored data:** none.
-- **Evidence kept:** notebook-fields.
-- **Prediction loops:** predict-the-moon → two-magnitudes-brighter, three-magnitudes-brighter, time-follows-the-sky, the-moon-and-a-bright-star, a-redder-sky, what-you-worked-out → two-magnitudes-brighter.
-- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
-- **Scene rebuilds:** none.
-- **Accepted central experiment** (reviewed 2026-09-11): object `panel:exposure-planner`, control exposure-planner/moon, measures the total exposure for a magnitude-23 star at a signal-to-noise of 20 in two exposures on Rubin in r: 79.8 seconds under a dark sky and 443.2 with the sky 2 magnitudes brighter, 5.6 times longer for 6.3 times the sky light, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
-
-## Coordinates and Time at Depth (`coordinates-and-time`)
-
-- **Steps:** 8. Scene declared on 8; a reader can change something on 0; 8 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 0 live engine, 7 prescribed model, 0 stored dataset, 7 self-contained panel.
-- **What students do:** move-an-instrument-control, press-an-instrument-preset, record-values, choose-an-option, answer-in-words.
-- **Objects the steps declare:** star.
-- **Instruments:** sky-turning.
-- **Stored data:** none.
-- **Evidence kept:** notebook-fields.
-- **Prediction loops:** none.
-- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
-- **Scene rebuilds:** none.
-- **Accepted central experiment** (reviewed 2026-09-11): object `panel:sky-turning`, control sky-turning/nights, measures the minutes after noon at which Sirius crosses the meridian at latitude 40 degrees: 718.7 on the first night and 600.8 thirty nights later, 3.93 minutes earlier each night, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
-
-## A Night at the Telescope, End to End (`a-night-at-the-telescope`)
-
-- **Steps:** 11. Scene declared on 11; a reader can change something on 0; 11 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 0 live engine, 10 prescribed model, 0 stored dataset, 10 self-contained panel.
-- **What students do:** move-an-instrument-control, record-values, commit-a-prediction, press-an-instrument-button, choose-an-option, answer-in-words.
-- **Objects the steps declare:** star.
-- **Instruments:** sky-plan, strategy-plan, exposure-planner, photometric-calibration.
-- **Stored data:** none.
-- **Evidence kept:** notebook-fields.
-- **Prediction loops:** predict-the-limit → station-expose, station-calibrate, station-measure, station-report, which-term-dominates, what-you-worked-out → station-expose.
-- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
-- **Scene rebuilds:** none.
-- **Accepted central experiment** (reviewed 2026-09-11): object `panel:exposure-planner`, control exposure-planner/mag, measures the total exposure on the Las Cumbres 1.0 m telescope for a signal-to-noise of 50 in one exposure at an airmass of 1.1: 59.3 seconds for a magnitude-19 star and 779.1 for magnitude 21, the dominant noise term moving from the star to the sky, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
-
-## From Photons to a Number (`from-photons-to-a-number`)
-
-- **Steps:** 10. Scene declared on 10; a reader can change something on 0; 10 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 0 live engine, 9 prescribed model, 0 stored dataset, 9 self-contained panel.
-- **What students do:** move-an-instrument-control, record-values, press-an-instrument-button, choose-an-option, answer-in-words.
-- **Objects the steps declare:** star.
-- **Instruments:** exposure-planner, photometric-calibration.
-- **Stored data:** none.
-- **Evidence kept:** notebook-fields.
-- **Prediction loops:** none.
-- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
-- **Scene rebuilds:** none.
-- **Accepted central experiment** (reviewed 2026-09-11): object `panel:exposure-planner`, control exposure-planner/target, measures the total exposure on the Las Cumbres 1.0 m telescope for a magnitude-19 star in one exposure at an airmass of 1.1: 59.3 seconds for a signal-to-noise of 50 and 191.4 for 100, 3.2 times longer for twice the quality, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 

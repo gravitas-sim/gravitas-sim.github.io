@@ -83,7 +83,8 @@ export function modelsFor(o, dimensionOfText) {
   const y = o.columns.find(c => c.id === o.axes.y);
   const dim = dimensionOfText(y?.unit ?? null);
   const out = [];
-  if (dim === 'ratio' || dim === null) out.push('transit-quadratic');
+  if (dim === 'ratio' || dim === null)
+    out.push('transit-quadratic', 'eclipsing-binary');
   if (dim === 'velocity') out.push('rv-keplerian');
   return out;
 }
@@ -119,6 +120,13 @@ function defaults(modelId, data) {
   }
   const x0 = data.x[0];
   const span = data.x[data.x.length - 1] - x0;
+  if (modelId === 'eclipsing-binary') {
+    // The period search reads a wide range; the epoch is any time within the first half of the data.
+    return {
+      tc: { lo: x0, hi: x0 + Math.max(1, span / 2) },
+      P: { lo: Math.max(0.2, spacing(data.x) * 20), hi: Math.max(1, span / 2) },
+    };
+  }
   if (modelId === 'transit-quadratic') {
     const Phi = Math.min(10, Math.max(1.2, span / 2));
     return { t0: { lo: x0, hi: x0 + Phi }, P: { lo: 1, hi: Phi } };
@@ -206,6 +214,22 @@ export function mountFitPanel(root, ctx) {
     type: 'text',
     inputmode: 'decimal',
   });
+  // The limb darkening of an eclipsing binary's two stars, one pair for both:
+  // from a table for the stars' temperatures, never fitted (BINARIES.md).
+  const ld1 = el('input', {
+    id: 'fitLd1',
+    class: 'ui-input',
+    type: 'text',
+    inputmode: 'decimal',
+    value: '0.4',
+  });
+  const ld2 = el('input', {
+    id: 'fitLd2',
+    class: 'ui-input',
+    type: 'text',
+    inputmode: 'decimal',
+    value: '0.22',
+  });
   const profiles = el('input', { id: 'fitProfiles', type: 'checkbox' });
   profiles.checked = true;
   const run = el('button', {
@@ -263,7 +287,10 @@ export function mountFitPanel(root, ctx) {
 
   // A parameter's name in the reader's language, and its unit in the data's:
   // a model's times are the time column's, its velocities the value column's.
-  const nameOf = p => t(`obs.fit.param.${p.name}`);
+  const nameOf = p =>
+    t(
+      `obs.fit.${modelSelect.value === 'eclipsing-binary' ? 'eb' : 'param'}.${p.name}`
+    );
   const unitOf = (p, units) => modelUnit(p.unit, units);
   const labelOf = (p, units) => {
     const u = unitOf(p, units);
@@ -283,6 +310,8 @@ export function mountFitPanel(root, ctx) {
       label(t('obs.fit.dilution'), dilution),
       label(t('obs.fit.stellarRadius'), stellarRadius),
       label(t('obs.fit.stellarRadiusSigma'), stellarRadiusSigma),
+      label(t('obs.fit.ld1'), ld1),
+      label(t('obs.fit.ld2'), ld2),
       el(
         'label',
         { class: 'ui-field' },
@@ -366,8 +395,11 @@ export function mountFitPanel(root, ctx) {
       el('thead', {}, head),
       el('tbody', {}, ...rows)
     );
+    const eclipse = id === 'eclipsing-binary';
     exposure.value =
-      id === 'transit-quadratic' ? String(roundSig(spacing(d.x), 6)) : '';
+      id === 'transit-quadratic' || eclipse
+        ? String(roundSig(spacing(d.x), 6))
+        : '';
     exposure.previousElementSibling.textContent = t('obs.fit.exposure', {
       unit: d.units.x || '—',
     });
@@ -385,7 +417,11 @@ export function mountFitPanel(root, ctx) {
       stellarRadius,
       stellarRadiusSigma,
     ])
-      c.closest('label').hidden = id !== 'transit-quadratic';
+      c.closest('label').hidden =
+        id !== 'transit-quadratic' &&
+        !(eclipse && c === exposure) &&
+        !(eclipse && c === supersample);
+    for (const c of [ld1, ld2]) c.closest('label').hidden = !eclipse;
     price();
   }
 
@@ -421,24 +457,33 @@ export function mountFitPanel(root, ctx) {
     }
     const settings = model.centered
       ? { x0: read(center) }
-      : id === 'transit-quadratic'
+      : id === 'eclipsing-binary'
         ? {
             exposure: read(exposure) || 0,
             supersample: Math.round(read(supersample)) || 5,
             annuli: 32,
-            dilution: read(dilution) || 0,
-            ...(read(stellarRadius) > 0
-              ? {
-                  stellarRadius: {
-                    value: read(stellarRadius),
-                    ...(read(stellarRadiusSigma) >= 0
-                      ? { sigma: read(stellarRadiusSigma) }
-                      : {}),
-                  },
-                }
-              : {}),
+            ldA: [read(ld1) ?? 0.4, read(ld2) ?? 0.22],
+            ldB: [read(ld1) ?? 0.4, read(ld2) ?? 0.22],
+            thirdLight: 0,
           }
-        : {};
+        : id === 'transit-quadratic'
+          ? {
+              exposure: read(exposure) || 0,
+              supersample: Math.round(read(supersample)) || 5,
+              annuli: 32,
+              dilution: read(dilution) || 0,
+              ...(read(stellarRadius) > 0
+                ? {
+                    stellarRadius: {
+                      value: read(stellarRadius),
+                      ...(read(stellarRadiusSigma) >= 0
+                        ? { sigma: read(stellarRadiusSigma) }
+                        : {}),
+                    },
+                  }
+                : {}),
+            }
+          : {};
     return {
       model: { id },
       parameters,

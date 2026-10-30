@@ -265,17 +265,18 @@ describe('the document inventory', () => {
     // 845 after Why the Period Is Wrong and the Design the Schedule depth (Prompt 214): 15 more.
     // 856 after Counts to Magnitudes (Prompt 212, over Prompt 214): eleven more, the same set as for that lesson.
     // 867 after Why Two Lines Become One (Prompt 213): eleven more, the same set as for that lesson.
+    // 911 after Two Stars Eclipsing (Prompt 217, stacked over Prompt 215): eleven more, the same set as for any lesson with three depths.
     // 900 after the three survey-design investigations (Prompt 215): eleven for each lesson, 33 more.
-    // 945 after the five observing closeout investigations (Prompt 216): nine for each lesson (two depths), 45 more.
-    expect(inv.documents).toBe(945);
-    expect(inv.byLocale).toEqual({ en: 432, es: 513 });
+    // 956 after the five observing closeout investigations (Prompt 216): nine for each lesson (two depths), 45 more over Two Stars Eclipsing (911).
+    expect(inv.documents).toBe(956);
+    expect(inv.byLocale).toEqual({ en: 437, es: 519 });
     expect(inv.byKind.notes).toBe(INVESTIGATIONS.length);
     expect(inv.byVariant).toEqual({
       activity: 12,
-      depth: 420,
-      full: 396,
+      depth: 426,
+      full: 400,
       general: 18,
-      notes: 99,
+      notes: 100,
     });
   });
 
@@ -303,7 +304,7 @@ describe('the document inventory', () => {
     const withDepth = INVESTIGATIONS.filter(
       i => withAllDepths(i).steps.length !== i.steps.length
     ).map(i => i.id);
-    expect(withDepth.length).toBe(72);
+    expect(withDepth.length).toBe(73);
     // A key for each depth the lesson offers: three for most, two for Design
     // the Schedule, whose upper depth (Prompt 214) has no quantitative layer.
     let keys = 0;

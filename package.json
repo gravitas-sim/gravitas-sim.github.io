@@ -8,6 +8,7 @@
     "spectrograph:validate": "node tools/spectrograph-validate.mjs",
     "photcal:validate": "node tools/photometric-calibration-validate.mjs",
     "strategy:validate": "node tools/strategy-validate.mjs",
+    "binaries:validate": "node tools/binaries-validate.mjs",
     "survey:validate": "node tools/survey-validate.mjs",
     "test": "NODE_OPTIONS=\"--experimental-vm-modules\" jest",
     "test:watch": "NODE_OPTIONS=\"--experimental-vm-modules\" jest --watch",

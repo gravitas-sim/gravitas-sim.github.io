@@ -2694,6 +2694,17 @@ test.describe('the central experiment of each investigation', () => {
         [23, 0.015, 0.002],
       ],
     },
+    // ---- Eclipsing binaries (Roadmap III, Prompt 217) -------------------------------
+    {
+      id: 'two-stars-eclipsing',
+      title:
+        'two-stars-eclipsing: the deeper eclipse hides the hotter star, 48 percent at a surface brightness ratio of 0.55 and 41 percent at 1 @accepts:ce.two-stars-eclipsing',
+      row: /^Primary eclipse$/i,
+      values: [
+        [0.55, 48.3, 0.6],
+        [1, 40.7, 0.6],
+      ],
+    },
     // ---- Telescopes (Roadmap III, Prompt 208) ---------------------------------
     {
       id: 'what-a-telescope-resolves',
