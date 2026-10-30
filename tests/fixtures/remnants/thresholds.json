@@ -223,5 +223,12 @@
       }
     }
   ],
-  "amendments": []
+  "amendments": [
+    {
+      "id": "AM1",
+      "when": "after the coordinator fetched the sequences and before the oracle, the kernel's calibration or any residual was computed; no bound moved",
+      "what": "(1) The pin (tests/fixtures/remnants/cooling-pin.json, tools/remnants-pin.mjs) keeps, for each mass, the model nearest to each log L/Lsun = -4.0 + 0.05 k inside the domain (51 rows), so the committed fixture is a small derived sample, not the sequences; tau, delta and every statistic of the checks are computed on the pin rows (the oracle also reads the raw sequences and reports the effect of the thinning, which is a report, not a bound). (2) The weights and the percentile are defined: the weight of a row is the trapezoid width of log L (interior rows half the distance between their two neighbours, end rows half the distance to their one neighbour); a weighted p-quantile is the smallest value, the values in increasing order, whose cumulative normalised weight reaches p; a statistic pooled over masses weights each mass equally and the rows of a mass by their trapezoid widths; the maximum is over rows. (3) The Cummings et al. (2018) table pinned for E1 is TABLE 1 of the paper (the reanalysed parameters of 80 white dwarfs and Sirius B among them, two marked as the outliers the paper excludes from its scatter), approved as a fixture by the coordinator (D-R10-222-02); the sequences at 0.7 and 0.9 solar masses were fetched with the others.",
+      "boundMoved": false
+    }
+  ]
 }
