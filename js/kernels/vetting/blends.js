@@ -19,7 +19,11 @@
 
 import { eclipseFlux, contacts } from '../../inference/binaries.js';
 import { gaussian } from '../../inference/synthetic.js';
-import { limbDarkening, transitFlux, halfDuration } from '../../inference/transit.js';
+import {
+  limbDarkening,
+  transitFlux,
+  halfDuration,
+} from '../../inference/transit.js';
 import { SHAPE } from './frames.js';
 import { boxDepth } from './depth.js';
 
@@ -64,7 +68,14 @@ const cache = new Map();
  *   even by 1 - eps (a planet's, to test the odd-even difference)
  */
 export function cleanCandidate(kind, o = {}) {
-  const key = JSON.stringify([kind, o.thirdLight, o.binary, o.eps, o.cadence, o.span]);
+  const key = JSON.stringify([
+    kind,
+    o.thirdLight,
+    o.binary,
+    o.eps,
+    o.cadence,
+    o.span,
+  ]);
   if (!o.times && cache.has(key)) return cache.get(key);
   const times = o.times ?? candidateTimes(o);
   const { P, t0 } = CANDIDATE;
@@ -80,7 +91,8 @@ export function cleanCandidate(kind, o = {}) {
     if (eps !== 0)
       for (let i = 0; i < flux.length; i++) {
         const n = Math.round((times[i] - t0) / P);
-        flux[i] = 1 - (1 - flux[i]) * (1 + (Math.abs(n) % 2 === 1 ? eps : -eps));
+        flux[i] =
+          1 - (1 - flux[i]) * (1 + (Math.abs(n) % 2 === 1 ? eps : -eps));
       }
     truth = { kind, ...SHAPE, eps };
   } else {

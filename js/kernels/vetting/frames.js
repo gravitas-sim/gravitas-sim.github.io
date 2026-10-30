@@ -30,15 +30,29 @@ import { checkEphemeris } from './depth.js';
 const { Math, Float64Array } = globalThis;
 
 /** The transit shape every frame eclipse follows (VETTING.md, "light"). */
-export const SHAPE = Object.freeze({ k: 0.1, aRs: 8.6, b: 0.3, q1: 0.4, q2: 0.3 });
+export const SHAPE = Object.freeze({
+  k: 0.1,
+  aRs: 8.6,
+  b: 0.3,
+  q1: 0.4,
+  q2: 0.3,
+});
 
 const shapeAt = (times, eph) => {
   const { u1, u2 } = limbDarkening(SHAPE.q1, SHAPE.q2);
-  return transitFlux(times, { t0: eph.t0, P: eph.P, ...SHAPE, u1, u2 }, { annuli: 96 });
+  return transitFlux(
+    times,
+    { t0: eph.t0, P: eph.P, ...SHAPE, u1, u2 },
+    { annuli: 96 }
+  );
 };
 
 /** The ephemeris the frame scenarios use. */
-export const FRAME_EPHEMERIS = Object.freeze({ P: 3.2, t0: 0.5, duration: 0.12 });
+export const FRAME_EPHEMERIS = Object.freeze({
+  P: 3.2,
+  t0: 0.5,
+  duration: 0.12,
+});
 
 /** The frame times of a scenario: three transits, each from -1.5 to +1.5 durations in twelfths. */
 export function frameTimes(eph = FRAME_EPHEMERIS, cycles = 3) {
@@ -235,7 +249,8 @@ export function differenceCentroid(fr, eph, target, options) {
   );
   out.apertureShift = apertureShift(a, b, W, H, target, options);
   if (!c.ok) {
-    out.reason = c.code === 'no-flux' ? 'no-difference-signal' : `centroid-${c.code}`;
+    out.reason =
+      c.code === 'no-flux' ? 'no-difference-signal' : `centroid-${c.code}`;
     return out;
   }
   // The difference image's summed signal in the window the centroid settled on.
@@ -294,4 +309,3 @@ function apertureShift(a, b, W, H, target, options) {
     sigmaY: Math.hypot(cin.sigmaY, cout.sigmaY),
   };
 }
-

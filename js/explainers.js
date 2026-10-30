@@ -118,6 +118,7 @@ export const FAMILY_IDS = Object.freeze({
   exposure: ['exposure-planner'],
   strategy: ['strategy-window', 'strategy-plan'],
   eclipse: ['eclipse-curve', 'eclipse-fit'],
+  vetting: ['vetting-checklist'],
   clusterFit: ['cluster-fit'],
   masses: ['masses-minimum', 'masses-solve', 'masses-diagram'],
   activity: [

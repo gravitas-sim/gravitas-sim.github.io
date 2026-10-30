@@ -172,6 +172,7 @@ export const GUIDED = Object.freeze([
   'phases-and-eclipses',
   'plan-a-night',
   'plan-an-exposure',
+  'planet-or-not',
   'power-law-gravity',
   'propose-an-observation',
   'radial-velocity',

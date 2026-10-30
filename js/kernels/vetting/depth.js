@@ -28,10 +28,12 @@ export const cycleOf = (t, P, t0) => Math.round((t - t0) / P);
  * duration shorter than half of it. Throws, naming the input.
  */
 export function checkSeries(s, eph) {
-  if (!s || !s.t || !s.y) throw new TypeError('the series needs t and y arrays');
+  if (!s || !s.t || !s.y)
+    throw new TypeError('the series needs t and y arrays');
   if (s.t.length !== s.y.length || (s.dy && s.dy.length !== s.t.length))
     throw new RangeError('the series t, y and dy arrays differ in length');
-  if (!(s.t.length >= 3)) throw new RangeError('the series has fewer than 3 points');
+  if (!(s.t.length >= 3))
+    throw new RangeError('the series has fewer than 3 points');
   checkEphemeris(eph);
 }
 
@@ -40,7 +42,8 @@ export function checkEphemeris(eph) {
   const { P, t0, duration } = eph;
   if (!(Number.isFinite(P) && P > 0))
     throw new RangeError('the period must be a positive number');
-  if (!Number.isFinite(t0)) throw new RangeError('the epoch t0 must be a number');
+  if (!Number.isFinite(t0))
+    throw new RangeError('the epoch t0 must be a number');
   if (!(Number.isFinite(duration) && duration > 0 && duration < P / 2))
     throw new RangeError(
       'the duration must be positive and shorter than half the period'

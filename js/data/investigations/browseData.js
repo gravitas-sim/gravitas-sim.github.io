@@ -404,6 +404,10 @@ export const BROWSE_META = {
     tags: ['compact-objects', 'stars'],
     numericCount: 0,
   },
+  'planet-or-not': {
+    tags: ['exoplanets', 'observing'],
+    numericCount: 0,
+  },
   'deep-or-wide': {
     tags: ['observing'],
     numericCount: 0,

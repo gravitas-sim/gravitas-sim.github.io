@@ -26,7 +26,8 @@ const { Number } = globalThis;
 /** The overall of a list of verdicts (VETTING.md, "summary"). */
 export function overallOf(verdicts) {
   if (verdicts.includes('fail')) return 'rejected';
-  if (verdicts.length > 0 && verdicts.every(v => v === 'pass')) return 'survives';
+  if (verdicts.length > 0 && verdicts.every(v => v === 'pass'))
+    return 'survives';
   return 'undecided';
 }
 
@@ -89,13 +90,24 @@ export function vettingRecord(s, o = {}) {
   const t = s.tests;
   if (t.oddEven)
     quantities.push(
-      q('oddEvenDifference', t.oddEven.difference, '', t.oddEven.sigma, origin, {
-        reason: t.oddEven.reason,
-      })
+      q(
+        'oddEvenDifference',
+        t.oddEven.difference,
+        '',
+        t.oddEven.sigma,
+        origin,
+        {
+          reason: t.oddEven.reason,
+        }
+      )
     );
   if (t.secondary) {
     const sec = t.secondary;
-    if (finite(sec.depth) && sec.verdict !== 'fail' && sec.reason !== 'detected-below-limit')
+    if (
+      finite(sec.depth) &&
+      sec.verdict !== 'fail' &&
+      sec.reason !== 'detected-below-limit'
+    )
       quantities.push({
         id: 'secondaryDepth',
         value: sec.upperLimit,
@@ -104,13 +116,21 @@ export function vettingRecord(s, o = {}) {
         origin,
       });
     else
-      quantities.push(q('secondaryDepth', sec.depth, '', sec.sigma, origin, { reason: sec.reason }));
+      quantities.push(
+        q('secondaryDepth', sec.depth, '', sec.sigma, origin, {
+          reason: sec.reason,
+        })
+      );
   }
   if (t.centroid) {
     const c = t.centroid;
     quantities.push(
-      q('centroidOffsetX', c.offset?.dx, 'pix', c.sigma?.x, origin, { reason: c.reason }),
-      q('centroidOffsetY', c.offset?.dy, 'pix', c.sigma?.y, origin, { reason: c.reason })
+      q('centroidOffsetX', c.offset?.dx, 'pix', c.sigma?.x, origin, {
+        reason: c.reason,
+      }),
+      q('centroidOffsetY', c.offset?.dy, 'pix', c.sigma?.y, origin, {
+        reason: c.reason,
+      })
     );
   }
   return artifact({
@@ -120,7 +140,10 @@ export function vettingRecord(s, o = {}) {
       vetting: {
         overall: s.overall,
         tests: Object.fromEntries(
-          Object.entries(t).map(([k, v]) => [k, { verdict: v.verdict, reason: v.reason }])
+          Object.entries(t).map(([k, v]) => [
+            k,
+            { verdict: v.verdict, reason: v.reason },
+          ])
         ),
       },
     },

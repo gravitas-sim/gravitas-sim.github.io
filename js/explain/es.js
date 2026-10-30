@@ -187,6 +187,12 @@ export default {
     'Por qué el eclipse más profundo oculta la estrella más caliente, por qué un fondo plano significa que se ocultó la estrella menor, por qué los radios vienen como fracciones de la órbita y no en kilómetros, y por qué un número de un ajuste solo es una medida cuando los datos lo fijan.',
     'El modelo son dos esferas en una órbita kepleriana: sin reflexión, sin luz elipsoidal, sin manchas, sin una tercera estrella, sin masas (esas necesitan velocidades); el oscurecimiento del limbo es fijo, de una tabla; todos los datos son sintéticos, con su verdad indicada.',
   ],
+  vetting: [
+    'Un tránsito candidato, verificado con tres pruebas: si los tránsitos impares y pares tienen la misma profundidad, si hay un segundo eclipse media órbita después y, en imágenes de la estrella y de una vecina, si la luz que baja está en la posición del objetivo. Cada prueba dice aprobada, suspendida o no concluyente, con su motivo y su incertidumbre.',
+    'Qué prueba atrapa qué falso positivo: las estrellas desiguales con el doble del período las atrapa la comparación de impares y pares, una binaria en el objetivo el segundo eclipse, la binaria de una vecina las imágenes; qué puede y qué no puede decir un candidato débil; y por qué un candidato que pasa todas las pruebas sigue sin ser un planeta validado.',
+    'Por qué no concluyente es un resultado y no un fallo del estudiante, por qué aprobar solo descarta lo que la prueba podía ver, y por qué dos estrellas iguales con el doble del período parecen un planeta solo en la curva de luz.',
+    'Todos los candidatos son sintéticos, con ruido blanco, órbita circular, una vecina y sin efectos del detector; los umbrales están fijados de antemano y se muestran las tasas que dan en conjuntos con semilla; las curvas de luz reales de dos planetas confirmados se comprueban en la validación, no aquí.',
+  ],
   clusterFit: [
     'Un cúmulo estelar sintético de edad y distancia conocidas, generado con isocronas MIST: su diagrama color–magnitud con la mejor isocrona encima, y la edad y el módulo de distancia que da el ajuste, cada uno con un intervalo de un sigma, con la metalicidad que fijes.',
     'Cuál de dos cúmulos es más viejo según dónde las estrellas dejan la secuencia principal, cómo la edad y la distancia ajustadas se compensan, cuánto se mueve la edad cuando cambia la metalicidad supuesta, y qué hace al ajuste una fracción de binarias que el modelo no tiene.',

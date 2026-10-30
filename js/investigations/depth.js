@@ -167,6 +167,8 @@ const EXTENSIONS = {
     import('../data/investigations/depth/how-old-is-this-white-dwarf.js'),
   'from-star-to-remnant': () =>
     import('../data/investigations/depth/from-star-to-remnant.js'),
+  'planet-or-not': () =>
+    import('../data/investigations/depth/planet-or-not.js'),
   'deep-or-wide': () => import('../data/investigations/depth/deep-or-wide.js'),
   'two-telescopes-one-question': () =>
     import('../data/investigations/depth/two-telescopes-one-question.js'),
@@ -313,6 +315,8 @@ const WORDS = {
       import('../data/investigations/depth/es/how-old-is-this-white-dwarf.js'),
     'from-star-to-remnant': () =>
       import('../data/investigations/depth/es/from-star-to-remnant.js'),
+    'planet-or-not': () =>
+      import('../data/investigations/depth/es/planet-or-not.js'),
     'deep-or-wide': () =>
       import('../data/investigations/depth/es/deep-or-wide.js'),
     'two-telescopes-one-question': () =>
