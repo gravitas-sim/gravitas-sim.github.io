@@ -415,6 +415,12 @@ export const LAZY_FAMILIES = Object.freeze({
     'HABITABILITY_LIMIT_WIDGETS',
     ['hz-limits', 'hz-locking', 'hz-ages']
   ),
+  masses: familyEntry(
+    () => import('./massesWidgets.js'),
+    './massesWidgets.js',
+    'MASSES_WIDGETS',
+    ['masses-minimum', 'masses-solve', 'masses-diagram']
+  ),
   photcal: familyEntry(
     () => import('./photcalWidgets.js'),
     './photcalWidgets.js',
@@ -643,6 +649,8 @@ export async function whenWidgetsReady() {
     'photcal',
     // The eclipse family reaches the plot component and the inference core: late for the same reason (Prompt 217).
     'eclipse',
+    // The mass family reaches the plot component, the inference core and the MIST tracks: late for the same reason (Prompt 218).
+    'masses',
     'surveyDesign',
   ];
   await Promise.all(families.filter(f => !late.includes(f)).map(loadFamily));

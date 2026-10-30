@@ -2705,6 +2705,18 @@ test.describe('the central experiment of each investigation', () => {
         [1, 40.7, 0.6],
       ],
     },
+    // ---- Binary masses (Roadmap III, Prompt 218) ------------------------------------
+    {
+      id: 'weighing-the-stars-for-real',
+      title:
+        'weighing-the-stars-for-real: the velocities fix a minimum of 0.58 solar masses for star 1, which is 0.58 edge on and 1.19 at 52 degrees @accepts:ce.weighing-the-stars-for-real',
+      row: /^At your inclination$/i,
+      nth: 2,
+      values: [
+        [90, 0.58, 0.02],
+        [52, 1.19, 0.03],
+      ],
+    },
     // ---- Telescopes (Roadmap III, Prompt 208) ---------------------------------
     {
       id: 'what-a-telescope-resolves',

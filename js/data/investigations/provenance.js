@@ -92,6 +92,7 @@ export const EVIDENCE_FROM = Object.freeze({
   'wanderers-on-the-sky': 'model',
   'weighing-jupiter': 'model',
   'weighing-stars': 'engine',
+  'weighing-the-stars-for-real': 'model',
   'what-a-ccd-records': 'model',
   'what-a-crater-diameter-is-worth': 'model',
   'what-a-spectrum-is-made-of': 'model',

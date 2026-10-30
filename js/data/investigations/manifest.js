@@ -1165,6 +1165,19 @@ export const MANIFEST = [
     objectiveCount: 4,
   },
   {
+    id: 'weighing-the-stars-for-real',
+    title: 'Weighing the Stars, for Real',
+    subtitle:
+      'Weigh two stars from the Doppler shifts of their light and an eclipse, see why velocities alone give only a minimum, and put the stars you weighed on the mass–radius diagram',
+    duration: '14-28 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/weighing-the-stars-for-real.webp',
+    depths: 3,
+    stepCount: 7,
+    gradedCount: 5,
+    objectiveCount: 4,
+  },
+  {
     id: 'deep-or-wide',
     title: 'Deep or Wide?',
     subtitle:

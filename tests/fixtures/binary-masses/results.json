@@ -1,0 +1,428 @@
+{
+  "note": "The validation table of tools/binary-masses-validate.mjs as last measured (Node 22.23.4); the Jest group reruns the quick legs and holds these against failed-legs.json.",
+  "rows": [
+    {
+      "id": "A1.massChain",
+      "status": "pass",
+      "measured": {
+        "closedRelative": 0,
+        "roundTripRelative": 4.11193712824132e-16,
+        "perSystem": {
+          "X1": 3.4160708450004814e-16,
+          "X2": 1.7643293999711553e-16,
+          "X3": 4.11193712824132e-16
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "A2.inclinationScaling",
+      "status": "pass",
+      "measured": {
+        "maxRelative": 5.124106267500722e-16
+      },
+      "note": ""
+    },
+    {
+      "id": "A3.massFunction",
+      "status": "pass",
+      "measured": {
+        "maxRelative": 5.955701056964214e-16,
+        "equationRelative": 3.616108303047176e-16,
+        "minimumAtMostTrue": true
+      },
+      "note": ""
+    },
+    {
+      "id": "A4.rvExtrema",
+      "status": "pass",
+      "measured": {
+        "extremaRelative": 1.2415995881562249e-8,
+        "ratioRelative": 1.998401444325282e-16
+      },
+      "note": ""
+    },
+    {
+      "id": "A5.conjunctionSign",
+      "status": "pass",
+      "measured": {
+        "crossing": 6.112230502025499e-15,
+        "star1Before": 5.303496383541749,
+        "star1After": -5.303496383541738
+      },
+      "note": ""
+    },
+    {
+      "id": "A6.surfaceGravity",
+      "status": "pass",
+      "measured": {
+        "loggSun": 4.438067627303133,
+        "scalingAbs": 1.1102230246251565e-16
+      },
+      "note": ""
+    },
+    {
+      "id": "B1.twoBodyRv",
+      "status": "pass",
+      "measured": {
+        "maxAbsKmS": 1.708514218989876e-9,
+        "perSystem": {
+          "X1": 6.430163068671391e-10,
+          "X2": 1.708514218989876e-9,
+          "X3": 6.934790519608214e-10
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "B2.jointOracle",
+      "status": "pass",
+      "measured": {
+        "X1": {
+          "M1": {
+            "valueSigma": 0.0004194564522873037,
+            "sigmaRatio": 1.0451044545015586
+          },
+          "M2": {
+            "valueSigma": 0.00038888335283427186,
+            "sigmaRatio": 1.0451044363049051
+          },
+          "R1": {
+            "valueSigma": 0.0043400505344388446,
+            "sigmaRatio": 1.045110787709999
+          },
+          "R2": {
+            "valueSigma": 0.000497702105367777,
+            "sigmaRatio": 1.0450986761208663
+          },
+          "a": {
+            "valueSigma": 0.0004256555811630574,
+            "sigmaRatio": 1.045102628975182
+          },
+          "K1": {
+            "valueSigma": 0.00017912672021641742,
+            "sigmaRatio": 1.045102346821934
+          },
+          "K2": {
+            "valueSigma": 0.0002216580394244706,
+            "sigmaRatio": 1.045102346823077
+          },
+          "inc": {
+            "valueSigma": 0.12748032822372468,
+            "sigmaRatio": 1.0434514653859746
+          }
+        },
+        "X2": {
+          "M1": {
+            "valueSigma": 0.0007453231750929919,
+            "sigmaRatio": 1.00000470543749
+          },
+          "M2": {
+            "valueSigma": 0.0007115567785451307,
+            "sigmaRatio": 1.0000046833487088
+          },
+          "R1": {
+            "valueSigma": 0.03564743055356157,
+            "sigmaRatio": 1.0007904715707185
+          },
+          "R2": {
+            "valueSigma": 0.046328352985607536,
+            "sigmaRatio": 1.001033159460467
+          },
+          "a": {
+            "valueSigma": 0.0007690391154946411,
+            "sigmaRatio": 1.0000017145661186
+          },
+          "K1": {
+            "valueSigma": 0.0007453828155313927,
+            "sigmaRatio": 1.0000025483851906
+          },
+          "K2": {
+            "valueSigma": 0.0008361023973404024,
+            "sigmaRatio": 1.0000026403082312
+          },
+          "inc": {
+            "valueSigma": 0.08395380762328987,
+            "sigmaRatio": 0.9997511664147648
+          }
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "B3.oracleSelf",
+      "status": "pass",
+      "measured": {
+        "X1": {
+          "M1": 1.2058256204974647,
+          "M2": 0.11127330235530161,
+          "R1": 0.4393792249193567,
+          "R2": 0.3090912880523903
+        },
+        "X2": {
+          "M1": 0.3548771656962141,
+          "M2": 1.2869144401344124,
+          "R1": 1.3680948820873604,
+          "R2": 0.40687154741448384
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "C1.coverageSb2",
+      "status": "fail",
+      "measured": {
+        "coverage": {
+          "K1": {
+            "rate": 0.6666666666666666,
+            "n": 120
+          },
+          "K2": {
+            "rate": 0.725,
+            "n": 120
+          },
+          "ecosw": {
+            "rate": 0.7166666666666667,
+            "n": 120
+          },
+          "esinw": {
+            "rate": 0.7833333333333333,
+            "n": 120
+          },
+          "P": {
+            "rate": 0.7916666666666666,
+            "n": 120
+          },
+          "q": {
+            "rate": 0.6916666666666667,
+            "n": 120
+          },
+          "asini": {
+            "rate": 0.675,
+            "n": 120
+          },
+          "m1sin3i": {
+            "rate": 0.6833333333333333,
+            "n": 120
+          },
+          "m2sin3i": {
+            "rate": 0.7083333333333334,
+            "n": 120
+          }
+        },
+        "failures": 0
+      },
+      "note": ""
+    },
+    {
+      "id": "C2.coverageJointCircular",
+      "status": "pass",
+      "measured": {
+        "coverage": {
+          "M1": {
+            "rate": 0.71,
+            "n": 100
+          },
+          "M2": {
+            "rate": 0.68,
+            "n": 100
+          },
+          "R1": {
+            "rate": 0.73,
+            "n": 100
+          },
+          "R2": {
+            "rate": 0.68,
+            "n": 100
+          },
+          "a": {
+            "rate": 0.72,
+            "n": 100
+          },
+          "inc": {
+            "rate": 0.59,
+            "n": 100
+          },
+          "K1": {
+            "rate": 0.66,
+            "n": 100
+          },
+          "K2": {
+            "rate": 0.75,
+            "n": 100
+          }
+        },
+        "failures": 0
+      },
+      "note": ""
+    },
+    {
+      "id": "C3.coverageJointEccentric",
+      "status": "pass",
+      "measured": {
+        "coverage": {
+          "M1": {
+            "rate": 0.75,
+            "n": 60
+          },
+          "M2": {
+            "rate": 0.7666666666666667,
+            "n": 60
+          },
+          "R1": {
+            "rate": 0.6833333333333333,
+            "n": 60
+          },
+          "R2": {
+            "rate": 0.6666666666666666,
+            "n": 60
+          },
+          "a": {
+            "rate": 0.8,
+            "n": 60
+          },
+          "inc": {
+            "rate": 0.6,
+            "n": 60
+          },
+          "K1": {
+            "rate": 0.7,
+            "n": 60
+          },
+          "K2": {
+            "rate": 0.7166666666666667,
+            "n": 60
+          }
+        },
+        "failures": 0
+      },
+      "note": ""
+    },
+    {
+      "id": "C4.recovery",
+      "status": "pass",
+      "measured": {
+        "M1": {
+          "bias": -0.0003224517559818896,
+          "bound": 0.0023762175608775062
+        },
+        "M2": {
+          "bias": 0.00031635658476480977,
+          "bound": 0.0021534779162709307
+        },
+        "R1": {
+          "bias": 0.000271118124268499,
+          "bound": 0.0008718024074190107
+        },
+        "R2": {
+          "bias": 0.00010879166410826535,
+          "bound": 0.00063609227675931
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "D1.singleLined",
+      "status": "pass",
+      "measured": {
+        "labelled": 1,
+        "seedsWithAnAbsoluteQuantity": 0
+      },
+      "note": ""
+    },
+    {
+      "id": "D2.nonEclipsing",
+      "status": "pass",
+      "measured": {
+        "fluxDeviation": 0,
+        "labelled": 1,
+        "refused": 1
+      },
+      "note": ""
+    },
+    {
+      "id": "D3.circularAssumed",
+      "status": "pass",
+      "measured": {
+        "failRate": 1,
+        "controlRate": 0.03333333333333333
+      },
+      "note": ""
+    },
+    {
+      "id": "D4.grazing",
+      "status": "fail",
+      "measured": {
+        "flagged": 0.8,
+        "controlFlagged": 0,
+        "failures": 0
+      },
+      "note": ""
+    },
+    {
+      "id": "D5.swappedStars",
+      "status": "pass",
+      "measured": {
+        "failRate": 1
+      },
+      "note": ""
+    },
+    {
+      "id": "E1.authentic",
+      "status": "fail",
+      "measured": {
+        "M_A": {
+          "ours": 1.2745044920111748,
+          "ourSigma": 0.003630807431777554,
+          "paper": 1.2745,
+          "paperSigma": 0.0036,
+          "deltaOverPaperSigma": 0.0012477808818905306
+        },
+        "M_B": {
+          "ours": 1.2577105561735784,
+          "ourSigma": 0.0030397767036146094,
+          "paper": 1.2577,
+          "paperSigma": 0.003,
+          "deltaOverPaperSigma": 0.003518724526122933
+        },
+        "R_A": {
+          "ours": 1.29286684481794,
+          "ourSigma": 0.0015183114873754697,
+          "paper": 1.2941,
+          "paperSigma": 0.0016,
+          "deltaOverPaperSigma": 0.7707219887875816
+        },
+        "R_B": {
+          "ours": 1.267862148335613,
+          "ourSigma": 0.0015359108600797261,
+          "paper": 1.2637,
+          "paperSigma": 0.0017,
+          "deltaOverPaperSigma": 2.4483225503605315
+        },
+        "a": {
+          "ours": 14.98367585473821,
+          "ourSigma": 0.012526065886059116,
+          "paper": 14.984,
+          "paperSigma": 0.013,
+          "deltaOverPaperSigma": 0.024934250906865758
+        },
+        "geometry": {
+          "rsum": 0.1709012540032883,
+          "k": 0.9806594959236904,
+          "inc": 87.90326450857867,
+          "P": 4.222022808497849
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "P1.speed",
+      "status": "pass",
+      "measured": {
+        "cpuSeconds": 1.189582,
+        "rows": 750
+      },
+      "note": ""
+    }
+  ]
+}

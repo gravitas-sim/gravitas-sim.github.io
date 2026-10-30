@@ -1174,6 +1174,19 @@ export const MANIFEST = [
     objectiveCount: 4,
   },
   {
+    id: 'weighing-the-stars-for-real',
+    title: 'Pesar las estrellas, de verdad',
+    subtitle:
+      'Pesa dos estrellas con el efecto Doppler de su luz y un eclipse, mira por qué las velocidades solas dan solo un mínimo y coloca las estrellas que pesaste en el diagrama masa-radio',
+    duration: '14-28 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/weighing-the-stars-for-real.webp',
+    depths: 3,
+    stepCount: 7,
+    gradedCount: 5,
+    objectiveCount: 4,
+  },
+  {
     id: 'deep-or-wide',
     title: '¿Profundo o ancho?',
     subtitle:

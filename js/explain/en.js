@@ -166,6 +166,12 @@ export default {
     'Why one visit a night at the same time cannot tell a period from its aliases, how irregular times or more nights break the tie, why more nights from one site do not remove the sidereal-day alias, and what weather costs.',
     'The verdict is a sinusoid in white noise, not an eclipse or a flare; the weather is a seeded draw that loses whole nights, not a forecast; the Moon enters only through the planner’s separation limit; the series are synthetic, with the period you set as their truth.',
   ],
+  masses: [
+    'Two Doppler curves of one orbit, and what they fix: the mass ratio, the size of the orbit times sin i and the masses times sin³ i, every one a minimum until an inclination is known; a single line gives only the mass function. With an eclipse, the joint fit of the light curve and both velocity curves gives the masses and radii of both stars with the uncertainty of the whole fit, or the words “not constrained”.',
+    'Which star moves faster (the lighter), why the mass ratio needs no inclination, what the masses become at a tilt you choose, what an eclipse adds, where the uncertainty of a mass comes from, and where the weighed stars sit against the MIST tracks in mass and radius or mass and luminosity.',
+    'The inclination is the missing measurement for a system that never eclipses, which can be off by a factor of 2 or more with nothing to say so; an eclipsing double-lined binary needs no distance to be weighed; one velocity curve gives a mass function, not a mass.',
+    'The model is two spheres on one Kepler orbit with the velocities as given, no template mismatch, no third body and no gravitational redshift; the temperatures are inputs (star 1’s stated, star 2’s from a Planck ratio in one band); every system is synthetic, made from the MIST tracks at a stated point in each star’s life.',
+  ],
   eclipse: [
     'Two stars on one orbit: the light of both against the orbit’s phase for the radii, the radius ratio, the inclination, the surface brightness ratio and the eccentricity you set, with the depth, duration and bottom of each eclipse, and, fitted by the inference core to a synthetic data set, every parameter with its uncertainty or the words “not constrained”.',
     'Which star is hotter and which is larger from the two eclipses, how the secondary’s phase gives e cos w, how the eclipse durations give e sin w only weakly, why a grazing eclipse leaves the radius ratio open, and what a residual test says when something the model leaves out is in the data.',

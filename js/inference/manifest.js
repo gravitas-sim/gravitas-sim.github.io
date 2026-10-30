@@ -222,7 +222,7 @@ export function validateInference(m) {
       'is { value, sigma? } in solar radii'
     );
   }
-  if (model.id === 'eclipsing-binary') {
+  if (model.id === 'eclipsing-binary' || model.id === 'eclipsing-sb2') {
     for (const k of ['ldA', 'ldB'])
       need(
         s[k] === undefined ||
@@ -246,6 +246,23 @@ export function validateInference(m) {
       s.exposure === undefined || s.exposure >= 0,
       'settings.exposure',
       'is a duration'
+    );
+  }
+  if (model.id === 'eclipsing-sb2' || model.id === 'sb2-orbit') {
+    need(
+      s.roles === undefined ||
+        (Array.isArray(s.roles) &&
+          s.roles.length > 0 &&
+          s.roles.every(r => ['flux', 'rv1', 'rv2'].includes(r)) &&
+          new Set(s.roles).size === s.roles.length),
+      'settings.roles',
+      "names each data group once as 'flux', 'rv1' or 'rv2', in the order the groups appear"
+    );
+    need(
+      s.assumedM1 === undefined ||
+        (Number.isFinite(s.assumedM1) && s.assumedM1 > 0),
+      'settings.assumedM1',
+      "is the primary's mass in solar masses that you were told, above 0"
     );
   }
   return out;
@@ -284,7 +301,8 @@ export function estimate(
   const model = MODELS[m.model.id];
   const mode = name => m.parameters?.[name]?.mode ?? 'fitted';
   const free = model.parameters.filter(p => mode(p.name) === 'fitted').length;
-  const eclipse = model.id === 'eclipsing-binary';
+  const eclipse =
+    model.id === 'eclipsing-binary' || model.id === 'eclipsing-sb2';
   const transit = model.id === 'transit-quadratic' || eclipse;
   const starts = eclipse ? 6 : transit && mode('b') === 'fixed' ? 1 : 3;
   const perFit = starts * 25 * (2 * free + 3);
