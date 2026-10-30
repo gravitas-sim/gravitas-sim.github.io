@@ -123,8 +123,8 @@ out-of-eclipse lines, as in Prompt 217. The leg stays failing.
 The data of the lessons are synthetic and the velocities are given, not measured from spectra. A mass from a double-lined eclipsing pair
 is the best a mass can be, and it is only as good as the two models behind it: the eclipse model (BINARIES.md limits), and the Keplerian
 orbit with no third body, no tidal distortion and a single systemic velocity. The uncertainty returned is the statistical one of the fit
-(its coverage is measured in C2 and C3), not a systematic one, and a real star adds both. The synthetic lesson system of the first
-investigation step was re-drawn once (a draw suffix) because its first noise realisation was a 2.7 sigma draw; all six lesson systems are
+(its coverage is measured in C2 and C3), not a systematic one, and a real star adds both. The synthetic lesson
+system A was drawn twice (an earlier seed string gave a 2.7 sigma draw, the committed one is the second); all six lesson systems are
 now within 2 sigma of their truth, and the register says so.
 
 **Not built:** the visual-binary branch (Part B: the photocentre contract, the parallax requirement, the gate), a real radial-velocity
