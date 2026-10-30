@@ -947,9 +947,9 @@ const EXPECTATIONS = {
 
 const BANDS = {
   'weighing-the-stars-for-real': {
-    core: 'short',
+    core: 'medium',
     quantitative: 'long',
-    advanced: 'short',
+    advanced: 'long',
   },
 };
 

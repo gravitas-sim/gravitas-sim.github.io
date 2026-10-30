@@ -217,7 +217,8 @@ describe('the instructor expectations record', () => {
     // 476 after Why Two Lines Become One (Prompt 213): 3 more.
     // 480 after the three survey-design investigations (Prompt 215): 4 more.
     // 481 after Two Stars Eclipsing (Prompt 217): 1 more.
-    expect(total).toBe(481);
+    // 483 after Weighing the Stars, for Real (Prompt 218): 2 more.
+    expect(total).toBe(483);
   });
 
   test('a /1 record keyed by step number migrates to the same text', () => {

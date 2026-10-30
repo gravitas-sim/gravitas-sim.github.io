@@ -101580,10 +101580,10 @@
    },
    "steps": [
     {
-     "sid": "two-stars-one-centre",
+     "sid": "two-stars-one-center",
      "index": 1,
      "type": "read",
-     "title": "Two stars, one centre",
+     "title": "Two stars, one center",
      "declares": {
       "stage": {
        "objects": 2,

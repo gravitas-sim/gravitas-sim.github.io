@@ -113,6 +113,8 @@
             "transit-quadratic",
             "rv-keplerian",
             "eclipsing-binary",
+            "sb2-orbit",
+            "eclipsing-sb2",
             "poly-1",
             "poly-2",
             "power-law"
@@ -546,6 +548,246 @@
                 "hi": {
                   "exclusiveMinimum": -0.7,
                   "maximum": 0.7
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "properties": {
+        "model": {
+          "properties": {
+            "id": {
+              "const": "sb2-orbit"
+            },
+            "version": {
+              "const": "1.0.0"
+            }
+          }
+        },
+        "parameters": {
+          "required": [
+            "tc",
+            "P"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "tc": {
+              "$ref": "#/$defs/unbounded"
+            },
+            "P": {
+              "$ref": "#/$defs/unbounded"
+            },
+            "ecosw": {
+              "$ref": "#/$defs/parameter",
+              "properties": {
+                "lo": {
+                  "minimum": -0.7,
+                  "exclusiveMaximum": 0.7
+                },
+                "hi": {
+                  "exclusiveMinimum": -0.7,
+                  "maximum": 0.7
+                }
+              }
+            },
+            "esinw": {
+              "$ref": "#/$defs/parameter",
+              "properties": {
+                "lo": {
+                  "minimum": -0.7,
+                  "exclusiveMaximum": 0.7
+                },
+                "hi": {
+                  "exclusiveMinimum": -0.7,
+                  "maximum": 0.7
+                }
+              }
+            },
+            "K1": {
+              "$ref": "#/$defs/parameter",
+              "properties": {
+                "lo": {
+                  "minimum": 1,
+                  "exclusiveMaximum": 400
+                },
+                "hi": {
+                  "exclusiveMinimum": 1,
+                  "maximum": 400
+                }
+              }
+            },
+            "K2": {
+              "$ref": "#/$defs/parameter",
+              "properties": {
+                "lo": {
+                  "minimum": 1,
+                  "exclusiveMaximum": 400
+                },
+                "hi": {
+                  "exclusiveMinimum": 1,
+                  "maximum": 400
+                }
+              }
+            },
+            "dgamma": {
+              "$ref": "#/$defs/parameter",
+              "properties": {
+                "lo": {
+                  "minimum": -50,
+                  "exclusiveMaximum": 50
+                },
+                "hi": {
+                  "exclusiveMinimum": -50,
+                  "maximum": 50
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "properties": {
+        "model": {
+          "properties": {
+            "id": {
+              "const": "eclipsing-sb2"
+            },
+            "version": {
+              "const": "1.0.0"
+            }
+          }
+        },
+        "parameters": {
+          "required": [
+            "tc",
+            "P"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "tc": {
+              "$ref": "#/$defs/unbounded"
+            },
+            "P": {
+              "$ref": "#/$defs/unbounded"
+            },
+            "rsum": {
+              "$ref": "#/$defs/parameter",
+              "properties": {
+                "lo": {
+                  "minimum": 0.02,
+                  "exclusiveMaximum": 0.9
+                },
+                "hi": {
+                  "exclusiveMinimum": 0.02,
+                  "maximum": 0.9
+                }
+              }
+            },
+            "k": {
+              "$ref": "#/$defs/parameter",
+              "properties": {
+                "lo": {
+                  "minimum": 0.05,
+                  "exclusiveMaximum": 20
+                },
+                "hi": {
+                  "exclusiveMinimum": 0.05,
+                  "maximum": 20
+                }
+              }
+            },
+            "inc": {
+              "$ref": "#/$defs/parameter",
+              "properties": {
+                "lo": {
+                  "minimum": 45,
+                  "exclusiveMaximum": 90
+                },
+                "hi": {
+                  "exclusiveMinimum": 45,
+                  "maximum": 90
+                }
+              }
+            },
+            "J": {
+              "$ref": "#/$defs/parameter",
+              "properties": {
+                "lo": {
+                  "minimum": 0.01,
+                  "exclusiveMaximum": 1
+                },
+                "hi": {
+                  "exclusiveMinimum": 0.01,
+                  "maximum": 1
+                }
+              }
+            },
+            "ecosw": {
+              "$ref": "#/$defs/parameter",
+              "properties": {
+                "lo": {
+                  "minimum": -0.7,
+                  "exclusiveMaximum": 0.7
+                },
+                "hi": {
+                  "exclusiveMinimum": -0.7,
+                  "maximum": 0.7
+                }
+              }
+            },
+            "esinw": {
+              "$ref": "#/$defs/parameter",
+              "properties": {
+                "lo": {
+                  "minimum": -0.7,
+                  "exclusiveMaximum": 0.7
+                },
+                "hi": {
+                  "exclusiveMinimum": -0.7,
+                  "maximum": 0.7
+                }
+              }
+            },
+            "K1": {
+              "$ref": "#/$defs/parameter",
+              "properties": {
+                "lo": {
+                  "minimum": 1,
+                  "exclusiveMaximum": 400
+                },
+                "hi": {
+                  "exclusiveMinimum": 1,
+                  "maximum": 400
+                }
+              }
+            },
+            "K2": {
+              "$ref": "#/$defs/parameter",
+              "properties": {
+                "lo": {
+                  "minimum": 1,
+                  "exclusiveMaximum": 400
+                },
+                "hi": {
+                  "exclusiveMinimum": 1,
+                  "maximum": 400
+                }
+              }
+            },
+            "dgamma": {
+              "$ref": "#/$defs/parameter",
+              "properties": {
+                "lo": {
+                  "minimum": -50,
+                  "exclusiveMaximum": 50
+                },
+                "hi": {
+                  "exclusiveMinimum": -50,
+                  "maximum": 50
                 }
               }
             }
