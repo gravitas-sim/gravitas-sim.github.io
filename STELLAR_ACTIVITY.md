@@ -74,8 +74,8 @@ resets one. The legs follow section 7.5 rule 8:
   on EK Draconis 6.2.
 - The false-alarm probability assumes white noise; a star with correlated noise has a larger real one.
 - A double-dip light curve cannot be told from a single dip at half the period unless the dips differ; photometry alone cannot, and the kernel says so.
-- The equivalent duration is in the band (TESS, 600 to 1000 nm). Nothing here converts it to an energy: Part B was gated and its verdict is B
-  (ACTIVITY_AGES_GATE.md, on the branch docs/activity-ages-gate; register row D-R10-220-90).
+- The equivalent duration is in the band (TESS, 600 to 1000 nm). Nothing here converts it to an energy: Part B was gated and its verdict is C
+  (ACTIVITY_AGES_GATE.md, PR #484; register row D-R10-220-90): no age and no energy in erg.
 - A flare whose shape is not the template (several peaks) is fitted anyway; `fit.chi2` and `fit.dof` are how far from it.
 - No spot evolution, no faculae, no penumbra; no 20-second cadence; the frame branch (Prompt 185) is not built.
 

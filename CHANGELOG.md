@@ -22,7 +22,7 @@ the release rather than in the tag.
   equivalent durations and their uncertainty, and the flare-frequency slope with an exact interval. Two TESS
   light-curve packs (AU Microscopii at 2-minute cadence, EK Draconis in 30-minute bins). 28 of 30 committed
   validation legs pass, two stay failing and labelled (`STELLAR_ACTIVITY.md`). No panel or lesson yet. Part B
-  (ages and flare energies in erg) was gated: verdict B, no number and no energy (`D-R10-220-90`).
+  (ages and flare energies in erg) was gated: verdict C, no age and no energy (`D-R10-220-90`).
 
 - Three investigations on measurement, uncertainty and claim-limits, first in the Observing-and-measuring sequence, each in English and Spanish with instructor materials: What Is a Measurement? (survey), What Does ± Claim? (majors) and When the Method Must Refuse (upper), on synthetic data with a known truth, with one new instrument family (`js/claimWidgets.js`). They open offline only after one online use (D-R10-67, `MEASUREMENT_CLAIMS.md`).
 - Three image investigations, after them in the same sequence, each in English and Spanish with instructor materials: Measuring the Moon (a scale from a reference pair on a real Galileo picture), How Far Is That Star? (a parallax and its distance from fourteen positions of a synthetic star) and A Binary Star's Orbit (an orbit and a mass sum from twelve positions), with one new instrument family (`js/imagingWidgets.js`) that calls the Observatory's own measuring modules. They open offline only after one online use. "What is in this field?" is not built (D-R10-72, `IMAGE_INVESTIGATIONS.md`).
