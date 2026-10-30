@@ -41,7 +41,7 @@ beforeAll(async () => {
 
 /** The calls no recording reaches, and why each one cannot be reached here. */
 const UNREACHED = {
-  'js/observatory/fitPanel.js:602':
+  'js/observatory/fitPanel.js:711':
     'the seconds a fit took, read from the clock when the run ends',
   'js/observatory/guidePanel.js:330':
     'a rounding inside the guide panel, which needs a mounted observation',

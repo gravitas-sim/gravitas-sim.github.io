@@ -1,0 +1,100 @@
+{
+  "format": "gravitas.transit-delta-thresholds/1",
+  "prompt": "Roadmap III, Prompt 225: the transit model delta with an independent comparison (tranche T3 by D-R10-207-01)",
+  "document": "TRANSIT_DELTA.md (\"Validation contract\")",
+  "committed": "before any of the delta existed in js/inference: the four-coefficient law, the density derivation, the covariance ellipse, the constraint and residual checks, the model variant, the validator, the ensembles, any panel or guide step. The cases, seeds, cadences and noise below are written out so that the oracle (numpy, scipy and batman: no Gravitas code) builds its own data and the harness builds the same systems. Nothing was tuned against code that did not exist.",
+  "rule": "A crossed bound is a failed check, recorded in failed-legs.json and left failing; only Carl resets one. A leg that cannot be measured, or whose data was never supplied, is NOT RUN and says why.",
+  "seeds": { "oracle": 225, "ensemble": "transit-delta-225" },
+  "revision": {
+    "note": "Revised before any Gravitas code had been run on these cases. The first oracle run (batman and scipy only) found S1 and S4 ill-posed: with 250 ppm and a small b the best-fit impact parameter went to 0, where the Jacobian is singular and the oracle's sigma for b is undefined; so S1 got b 0.45 and 150 ppm, S4 an inclination of 87.3 degrees (b about 0.40) and 150 ppm. The HD 209458 fit under the test law alone also went to b = 0, so B3 holds b fixed. The oracle's own optimiser was also made more thorough (more starts, including limb-darkening starts) after it stopped at a bound on the real light curve at a chi-square higher than the literature value; no tolerance, limit or leg was changed. A third revision, also before any Gravitas result: batman's supersampling includes both ends of the exposure, so at 5 samples the oracle's exposure average differs from Gravitas's midpoint rule by an amount that is a convention and not an error (chi-square 15,403 against 14,957 for the same parameters on the real light curve). The oracle now averages 21 samples (converged); Gravitas keeps the fit panel's default of 5, so the comparison also measures that default."
+  },
+  "supply": {
+    "note": "Two public data items are fetched only by the coordinator. At commit time neither exists: the Claret (2017) TESS table (VizieR J/A+A/600/A30) could not be reached from the machine, and no published TESS solution has been supplied. Legs A8 and E1 are therefore NOT RUN until a file lands; nothing is typed from memory, and no table ships in the application. The four-coefficient law ships with its lookup code and a reader-supplied coefficient entry."
+  },
+  "constants": {
+    "G_m3kg1s2": 6.6743e-11,
+    "GM_sun_m3s2": 1.3271244e20,
+    "R_sun_m": 6.957e8,
+    "day_s": 86400,
+    "note": "CODATA 2018 G; IAU 2015 B3 nominal solar GM and radius. The solar density is 3 GM_sun / (4 pi G R_sun^3), 1.4098 g/cm^3."
+  },
+  "scope": {
+    "built": "a second limb-darkening law beside the quadratic one, the four-coefficient law of Claret (2000), I(mu) = 1 - sum_n c_n (1 - mu^(n/2)), with its coefficients FIXED from a cited table by the star's Teff, logg and [Fe/H] and never fitted; the stellar mean density from P and a/R* with the circular-orbit assumption stated, and the eccentricity term as a labelled correction (Kipping 2010); a constraint check on the radius-ratio and impact-parameter direction that says not constrained for a grazing transit; an in-transit residual test that fails a light curve with a spot crossing; the covariance ellipse (Rp/R* against b, Rp/R* against limb darkening) and the result as a 150 record.",
+    "notBuilt": "fitted four-coefficient laws (the coefficients are degenerate with each other and with b), an eccentric-orbit model (the correction is first order and labelled), a mass or a planet density, spot modelling, a new light-curve fitter, a fit of the star's temperature."
+  },
+  "law": {
+    "name": "claret4",
+    "formula": "I(mu)/I(1) = 1 - c1 (1 - mu^(1/2)) - c2 (1 - mu) - c3 (1 - mu^(3/2)) - c4 (1 - mu^2), mu = cos of the angle from the disc centre; batman's 'nonlinear' law with u = [c1, c2, c3, c4]",
+    "test": [0.6, -0.1, 0.55, -0.25],
+    "testNote": "Illustrative coefficients that keep I positive and rising to the centre (checked in the oracle). They are inputs of the synthetic cases, not rows of any table."
+  },
+  "sampling": {
+    "oracleGrid": { "start": 1.0, "step_d": 0.013888888888888888, "n": 1008, "exposure_d": 0.013888888888888888, "supersample": 21 },
+    "ensembleTimes": "tessLikeTimes() of js/inference/synthetic.js: start 2825.27, 27.9 days, 20-minute bins, the downlink gap",
+    "sigmaEnsemble": 213e-6,
+    "exposure_d": 0.013888888888888888,
+    "annuli": 64,
+    "fitSupersample": 5
+  },
+  "forwardCases": {
+    "window_d": 0.2,
+    "points": 801,
+    "cases": {
+      "F1": { "what": "quadratic law, mid impact", "law": "quadratic", "u": [0.36, 0.26], "P": 3.3, "t0": 2.0, "k": 0.1, "aRs": 9.0, "b": 0.3 },
+      "F2": { "what": "four-coefficient law, mid impact", "law": "claret4", "k": 0.1, "aRs": 9.0, "b": 0.3, "P": 3.3, "t0": 2.0 },
+      "F3": { "what": "four-coefficient law, small planet near the limb", "law": "claret4", "k": 0.05, "aRs": 8.0, "b": 0.9, "P": 3.3, "t0": 2.0 },
+      "F4": { "what": "four-coefficient law, grazing (b + k > 1)", "law": "claret4", "k": 0.12, "aRs": 9.0, "b": 1.05, "P": 3.3, "t0": 2.0 },
+      "F5": { "what": "four-coefficient law, large planet", "law": "claret4", "k": 0.3, "aRs": 5.0, "b": 0.2, "P": 3.3, "t0": 2.0 },
+      "F6": { "what": "quadratic law, large planet", "law": "quadratic", "u": [0.36, 0.26], "k": 0.3, "aRs": 5.0, "b": 0.2, "P": 3.3, "t0": 2.0 }
+    }
+  },
+  "syntheticCases": {
+    "S1": { "what": "quadratic law, mid impact, three transits", "law": "quadratic", "u": [0.36, 0.26], "P": 3.3, "t0": 2.0, "k": 0.1, "aRs": 9.0, "b": 0.45, "f0": 1.0002, "sigma": 150e-6 },
+    "S2": { "what": "four-coefficient law (coefficients held at the truth), mid impact", "law": "claret4", "P": 4.2, "t0": 2.5, "k": 0.08, "aRs": 7.5, "b": 0.6, "f0": 1.0002, "sigma": 250e-6 },
+    "S3": { "what": "four-coefficient law, high impact parameter (b + k = 0.97)", "law": "claret4", "P": 2.7, "t0": 1.7, "k": 0.12, "aRs": 6.0, "b": 0.85, "f0": 0.9998, "sigma": 300e-6 },
+    "S4": { "what": "an eccentric orbit fitted with the circular model: e 0.25, omega 60 degrees, inclination 87.3 degrees (batman's ecc and w; b about 0.40), four-coefficient law", "law": "claret4", "P": 5.0, "t0": 2.2, "k": 0.09, "aRs": 11.0, "inc": 87.3, "ecc": 0.25, "w": 60.0, "f0": 1.0, "sigma": 150e-6 }
+  },
+  "ensembles": {
+    "N": 30,
+    "recovery": { "perCell": 10, "impactParameters": [0.0, 0.3, 0.6, 0.8], "laws": ["quadratic", "claret4"], "k": 0.1, "aRs": 8.5, "P": 3.6, "t0offset": 0.9 },
+    "E1": { "what": "four-coefficient law, k 0.10, b 0.40, a/R* 8.5, P 3.6", "law": "claret4", "k": 0.1, "b": 0.4, "aRs": 8.5, "P": 3.6, "t0": 2826.1 },
+    "E2": { "what": "the same planet under the quadratic law, q1 and q2 fitted", "law": "quadratic", "k": 0.1, "b": 0.4, "aRs": 8.5, "P": 3.6, "t0": 2826.1 },
+    "E3": { "what": "a grazing transit: k 0.10, b 0.95 (b + k = 1.05)", "law": "claret4", "k": 0.1, "b": 0.95, "aRs": 8.5, "P": 3.6, "t0": 2826.1 },
+    "E5": { "what": "E1 with one spot crossing: a Gaussian bump of +800 ppm, sigma 0.02 d, 0.025 d after mid-transit in the third transit", "law": "claret4", "k": 0.1, "b": 0.4, "aRs": 8.5, "P": 3.6, "t0": 2826.1, "bump": { "transit": 3, "amplitude": 800e-6, "sigma_d": 0.02, "offset_d": 0.025 } },
+    "starTruth": { "note": "The density of the generating star is 3 pi (a/R*)^3 / (G P^2) of each case's own truth." }
+  },
+  "definitions": {
+    "constraint": "result.transit.kb.status is 'not-constrained' when ANY of: (i) the fitted b plus its stated sigma reaches 1 - k (a flat-bottomed solution is not excluded, so the V-shape ambiguity is open); (ii) the 150 rank check names k or b; (iii) the correlation of k and b exceeds 0.95 in magnitude. Otherwise 'constrained'.",
+    "residualTest": "result.transit.residual.fails is true when EITHER the chi-square of the residuals within T14/2 + exposure of every mid-transit, against its degrees of freedom (the count of those points), has a one-sided p below 0.01, OR the existing correlatedNoise warning is present.",
+    "density": "rhoCirc = 3 pi (a/R*)^3 / (G P^2) in g/cm^3 and in solar units, the star's mean density when the orbit is circular and the planet's mass is neglected; the labelled correction is rhoTrue = rhoCirc / Psi with Psi = ((1 + e sin w) / sqrt(1 - e^2))^3 for a stated e and w (Kipping 2010; Dawson and Johnson 2012), first order in the transit's duration."
+  },
+  "checks": [
+    { "id": "A1", "group": "analytic", "what": "the four-coefficient law with all coefficients 0 is the uniform star's occultation (closed form), every separation, k in 0.01 0.05 0.12 0.3", "limits": { "maxAbsOverK2": 1e-4 } },
+    { "id": "A2", "group": "analytic", "what": "the four-coefficient law with c = [0, u, 0, 0] is the quadratic law with u1 = u, u2 = 0, to the arithmetic", "limits": { "maxAbsFlux": 1e-12, "u": 0.45 } },
+    { "id": "A3", "group": "analytic", "what": "the four-coefficient total light 2 pi F(1) equals an independent numerical integral of I(mu) mu dmu over mu in [0, 1] (4,000,001 node trapezoid with the mu^(1/2) end handled by the substitution mu = s^4), relative", "limits": { "relative": 1e-9 } },
+    { "id": "A4", "group": "analytic", "what": "a small planet's depth at mid-transit is k^2 I(mu_c) / <I>, with mu_c the planet centre's cosine, for k = 0.01, b = 0.5 and the test law, relative to the depth", "limits": { "relative": 2e-3 } },
+    { "id": "A5", "group": "analytic", "what": "the Sun's mean density from the Earth's orbit: P = 365.256363 d, a/R* = 149597870.7 km / 695700 km, g/cm^3 against 1.4098 (3 GM / 4 pi G R^3)", "limits": { "relative": 1e-3 } },
+    { "id": "A6", "group": "analytic", "what": "Psi equals the ratio of the planet's sky-plane speed at the transit to the circular speed at the same period, from a numerical Kepler orbit, e in 0 0.1 0.3 0.5 and w in 0 60 90 200 degrees, relative; the factor cubed is checked at e 0.3, w 90", "limits": { "relative": 1e-6 } },
+    { "id": "A7", "group": "analytic", "what": "the covariance ellipse of [[4, 0], [0, 1]] at probability 0.6827: semi-axes 2s and 1s with s^2 = -2 ln(1 - 0.6827); rotated by 30 degrees the same axes; a seeded 20,000 draw puts 0.6827 inside within 0.01", "limits": { "relativeAxes": 1e-9, "inside": 0.01 } },
+    { "id": "A8", "group": "analytic", "what": "the table lookup returns every node's coefficients exactly, the multilinear mean at the centre of a cell, and refuses a star outside the table's Teff, logg or [Fe/H] range instead of extrapolating (measured on the supplied table; NOT RUN until the data exists)", "limits": { "absolute": 1e-12 } },
+    { "id": "B0", "group": "oracle-forward", "what": "transitFlux (no exposure, annuli 64) against batman 2.5.1 (max_err 0.01 ppm) on the six forward cases, maximum absolute difference of the relative flux", "limits": { "maxAbsFlux": 1e-5 } },
+    { "id": "B1", "group": "oracle-fit", "what": "S1, S2, S3: the fitted t0, P, k, aRs, b (and q1, q2 for S1) of the independent least-squares fit (batman + scipy least_squares, f0 free, the same bounds, multi-start) against Gravitas's, in units of the oracle's sigma", "limits": { "paramSigmas": 0.25, "chi2": 2.0, "sigmaRatio": [0.8, 1.25] } },
+    { "id": "B2", "group": "oracle-fit", "what": "HD 209458 TESS sector 56 (the shipped 1,882 points): the same comparison, quadratic law with q1 and q2 fitted, t0 in [x0, x0 + 3.65], P in [3.4, 3.65], supersample 5", "limits": { "paramSigmas": 0.25, "chi2": 2.0, "sigmaRatio": [0.8, 1.25] } },
+    { "id": "B3", "group": "oracle-fit", "what": "the four-coefficient variant on the shipped HD 209458 rows with the labelled test law held fixed (a stand-in, never a table row) and b held fixed at 0.43 (the fixed-parameter mode), against the oracle's batman nonlinear fit with the same fixed values: t0, P, k, aRs in oracle sigmas", "limits": { "paramSigmas": 0.25 } },
+    { "id": "B4", "group": "oracle-density", "what": "S4 (eccentric, oracle data) fitted with the circular model: rhoCirc / Psi(e, w) against the generating star's density", "limits": { "relative": 0.1 } },
+    { "id": "C1", "group": "recovery", "what": "both laws at b = 0, 0.3, 0.6, 0.8, ten seeds each: the median of |fitted - truth| / stated sigma for k, a/R* and b", "limits": { "medianAbsPull": 1.0 } },
+    { "id": "C2", "group": "recovery", "what": "the same cells: the median relative error of the circular-orbit density", "limits": { "medianRelative_bLE0.6": 0.05, "medianRelative_b0.8": 0.12 } },
+    { "id": "C3", "group": "coverage", "what": "E1 (30 seeds): the stated 1 sigma interval holds the truth of k, a/R*, b and the density", "limits": { "within1sigma": [0.5, 0.85], "within1.96sigma": [0.85, 1.0] } },
+    { "id": "C4", "group": "coverage", "what": "E2 (30 seeds, quadratic law, q1 and q2 fitted): the same four quantities", "limits": { "within1sigma": [0.5, 0.85], "within1.96sigma": [0.85, 1.0] } },
+    { "id": "C5", "group": "coverage", "what": "E3 (30 seeds, grazing): the 1.96 sigma interval holds the truth of k and of the density", "limits": { "within1.96sigma": [0.85, 1.0] } },
+    { "id": "D1", "group": "refusal", "what": "E3: the share of seeds whose result says kb 'not-constrained'", "limits": { "min": 0.9 } },
+    { "id": "D2", "group": "refusal", "what": "E1: the share of seeds that wrongly say kb 'not-constrained'", "limits": { "max": 0.1 } },
+    { "id": "D3", "group": "refusal", "what": "E5 (a spot crossing): the share of seeds whose residual test fails", "limits": { "min": 0.9 } },
+    { "id": "D4", "group": "refusal", "what": "E1 (clean): the share of seeds whose residual test fails", "limits": { "max": 0.1 } },
+    { "id": "E1", "group": "authentic", "what": "a published TESS solution of a transiting planet reproduced within its uncertainties under a fixed contract: the fit settings are the guide's (exposure, supersample 5, quadratic law with q1 and q2 fitted, dilution 0), the quantities Rp/R*, a/R* and b (or the inclination) and T14, each within 2 sqrt(honest sigma^2 + published sigma^2), the honest sigma being the stated one scaled by sqrt(reduced chi-square) and by beta when the residuals are correlated. The period is excluded for a stated reason: one sector's baseline cannot compete with a long-baseline ephemeris. NOT RUN until the published table is supplied under a recorded rights decision.", "limits": { "sigmas": 2.0 } }
+  ],
+  "amendments": [{"id": "AM1", "note": "Made after the first judgement of B1 to B4 (all four failed as committed and stay recorded as failed, with the oracle as first run in oracle-results-first.json). Diagnosis: at the oracle's own HD 209458 parameters Gravitas's model gives chi-square 15,866.6 for the claret4 fixed-b fit and batman's gives 16,009.2 at 21 samples, 15,895.4 at 101 and 16,795.6 at 5: batman's supersampling averages its samples at spacing exp_time/(ss-1) with both ends included, which integrates an exposure ss/(ss-1) times as long as the one passed. Passing exp_time*(ss-1)/ss gives 15,866.6 (batman, 21), 15,869.2 (101) and 15,824.3 (5), the Gravitas values to 0.01. The oracle was therefore wrong in its exposure window and not the kernel. The oracle is corrected in tools/transit-delta-oracle/oracle.py and rerun (same seed, so the same noise draws); the legs are re-judged as B1b to B4b with exactly the same bounds, beside the first judgement and not in place of it. No bound in this file was changed.", "boundsChanged": false, "legs": ["B1b", "B2b", "B3b", "B4b"]},
+    {"id": "AM2", "note": "Made after the first run of D1 and D2. D2 failed at 1.0 (the committed rule said not constrained for all 30 clean seeds): rule (iii), a k-b correlation beyond 0.95 in magnitude, holds for every clean transit of E1 (0.981 to 0.992 in the seeds looked at), so it cannot tell a grazing transit from a clean one. D1 passed only because of it. The committed rule stays measured, unchanged, as D1 and D2 (constraintKB with committed: true) and both stay recorded as they came out. The panel and the 150 record use the rule without (iii), reported as D1b and D2b with the same limits; the correlation itself is reported beside the status. The residual test (D3, 0.23 of spot-crossing seeds against 0.9) is not amended: an 800 ppm bump 0.02 d wide is about three 20-minute points at 3.8 sigma each, so the test has little power on it, which is a fact about this case and the contract keeps it failing.", "boundsChanged": false, "legs": ["D1b", "D2b"]},
+    {"id": "AM3", "note": "Made after B2b and B3b failed. They fail because the contract fixes Gravitas at the fit panel's default of 5 samples per exposure and the oracle is converged at 21: at 21 samples Gravitas gives chi-square 14,962.45 (quadratic) and 15,865.67 (four-coefficient, b fixed) against the amended oracle's 14,962.45 and 15,865.65, and every parameter within 0.001 of an oracle sigma, except t0 and P at 0.01 and 0.07. B2b and B3b stay recorded as failed. B2c and B3c repeat the same two fits with the same bounds and the supersampling at 21, so the comparison of the kernel and the fitter is on record apart from the panel's default.", "boundsChanged": false, "legs": ["B2c", "B3c"]}
+  ]
+}

@@ -111,6 +111,7 @@
         "id": {
           "enum": [
             "transit-quadratic",
+            "transit-claret4",
             "rv-keplerian",
             "eclipsing-binary",
             "sb2-orbit",
@@ -362,8 +363,170 @@
                   "minimum": 0
                 }
               }
+            },
+            "eccentricity": {
+              "description": "An assumed eccentricity and argument of periastron (degrees), used only to correct the star's density; the fit stays circular and they are never fitted.",
+              "type": "object",
+              "required": [
+                "e",
+                "omega"
+              ],
+              "properties": {
+                "e": {
+                  "type": "number",
+                  "minimum": 0,
+                  "exclusiveMaximum": 1
+                },
+                "omega": {
+                  "type": "number"
+                }
+              }
             }
           }
+        }
+      }
+    },
+    {
+      "properties": {
+        "model": {
+          "properties": {
+            "id": {
+              "const": "transit-claret4"
+            },
+            "version": {
+              "const": "1.0.0"
+            }
+          }
+        },
+        "parameters": {
+          "required": [
+            "t0",
+            "P"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "t0": {
+              "$ref": "#/$defs/unbounded"
+            },
+            "P": {
+              "$ref": "#/$defs/unbounded"
+            },
+            "k": {
+              "$ref": "#/$defs/parameter",
+              "properties": {
+                "lo": {
+                  "minimum": 0.005,
+                  "exclusiveMaximum": 0.5
+                },
+                "hi": {
+                  "exclusiveMinimum": 0.005,
+                  "maximum": 0.5
+                }
+              }
+            },
+            "aRs": {
+              "$ref": "#/$defs/parameter",
+              "properties": {
+                "lo": {
+                  "minimum": 1.5,
+                  "exclusiveMaximum": 200
+                },
+                "hi": {
+                  "exclusiveMinimum": 1.5,
+                  "maximum": 200
+                }
+              }
+            },
+            "b": {
+              "$ref": "#/$defs/parameter",
+              "properties": {
+                "lo": {
+                  "minimum": 0,
+                  "exclusiveMaximum": 1.5
+                },
+                "hi": {
+                  "exclusiveMinimum": 0,
+                  "maximum": 1.5
+                }
+              }
+            }
+          }
+        },
+        "settings": {
+          "properties": {
+            "exposure": {
+              "description": "The exposure each point integrates over, in the time column's unit.",
+              "type": "number",
+              "minimum": 0
+            },
+            "supersample": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 31
+            },
+            "annuli": {
+              "type": "integer",
+              "minimum": 8,
+              "maximum": 512
+            },
+            "dilution": {
+              "description": "The other stars' fraction of the light.",
+              "type": "number",
+              "minimum": 0,
+              "exclusiveMaximum": 1
+            },
+            "stellarRadius": {
+              "description": "The star's radius, in solar radii, for the planet's.",
+              "type": "object",
+              "required": [
+                "value"
+              ],
+              "properties": {
+                "value": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "sigma": {
+                  "type": "number",
+                  "minimum": 0
+                }
+              }
+            },
+            "claret": {
+              "description": "The four coefficients c1 to c4 of the four-coefficient limb-darkening law (Claret 2000), held fixed: I(mu) = 1 - sum c_n (1 - mu^(n/2)). They must describe a star (positive, brightest at the centre); the reader refuses any that do not.",
+              "type": "array",
+              "minItems": 4,
+              "maxItems": 4,
+              "items": {
+                "type": "number"
+              }
+            },
+            "claretSource": {
+              "description": "Where the coefficients came from: the table and the star's Teff, logg and [Fe/H], or a note.",
+              "type": "object"
+            },
+            "eccentricity": {
+              "description": "An assumed eccentricity and argument of periastron (degrees), used only to correct the star's density; the fit stays circular and they are never fitted.",
+              "type": "object",
+              "required": [
+                "e",
+                "omega"
+              ],
+              "properties": {
+                "e": {
+                  "type": "number",
+                  "minimum": 0,
+                  "exclusiveMaximum": 1
+                },
+                "omega": {
+                  "type": "number"
+                }
+              }
+            }
+          },
+          "required": [
+            "claret"
+          ]
         }
       }
     },
