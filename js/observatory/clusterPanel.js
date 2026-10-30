@@ -84,10 +84,6 @@ export function mountClusterPanel(root, ctx) {
   const { t, number, registerMessages, createPlot } = ctx;
   registerMessages({ en: EN_CLUSTER, es: ES_CLUSTER });
   let obs = ctx.observation ?? null;
-  const input = (id, label, value, attrs = {}) => [
-    el('label', { for: id, text: label }),
-    el('input', { id, type: 'number', value, step: 'any', ...attrs }),
-  ];
   const feh = el('select', { id: 'obsClFeh' });
   for (const v of [-0.5, -0.25, 0])
     feh.append(
