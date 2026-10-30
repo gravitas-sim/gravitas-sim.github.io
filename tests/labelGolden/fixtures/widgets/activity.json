@@ -27,8 +27,8 @@
    "controls": {
     "calls": 51,
     "distinct": 40,
-    "digest": "1ded7e800fccd102",
-    "samples": [["30°","15°","0.65","70°","off","0.00","the light curve"],["20°","15°","0.65","70°","off","0.00","the light curve"],["0°","5°","0.30","20°","off","0.00","the light curve"],["80°","30°","0.95","90°","on","0.40","folded at twice it"],["20°","11°","0.55","85°","on","0.40","folded at twice it"],["40°","18°","0.65","55°","on","0.20","folded at the period found"],["0°","15°","0.65","70°","off","0.00","the light curve"],["30°","5°","0.65","70°","off","0.00","the light curve"],["30°","15°","0.65","70°","on","0.00","the light curve"],["35°","19°","0.50","60°","on","0.25","the light curve"],["30°","15°","0.65","70°","off","0.00","the periodogram"],["10°","28°","0.65","90°","off","0.10","the periodogram"],["30°","15°","0.65","70°","off","0.00","folded at the period found"],["30°","15°","0.65","70°","off","0.00","folded at twice it"],["40°","21°","0.70","65°","on","0.10","the periodogram"],["75°","6°","0.70","75°","on","0.25","folded at twice it"],["0°","8°","0.75","45°","on","0.20","folded at twice it"],["5°","19°","0.75","20°","on","0.10","folded at the period found"]]
+    "digest": "ae2e88f5d2ac1b0e",
+    "samples": [["30°","15°","0.65","70°","off","0.00","light curve"],["20°","15°","0.65","70°","off","0.00","light curve"],["0°","5°","0.30","20°","off","0.00","light curve"],["80°","30°","0.95","90°","on","0.40","fold at 2P"],["20°","11°","0.55","85°","on","0.40","fold at 2P"],["40°","18°","0.65","55°","on","0.20","fold at P"],["0°","15°","0.65","70°","off","0.00","light curve"],["30°","5°","0.65","70°","off","0.00","light curve"],["30°","15°","0.65","70°","on","0.00","light curve"],["35°","19°","0.50","60°","on","0.25","light curve"],["30°","15°","0.65","70°","off","0.00","periodogram"],["10°","28°","0.65","90°","off","0.10","periodogram"],["30°","15°","0.65","70°","off","0.00","fold at P"],["30°","15°","0.65","70°","off","0.00","fold at 2P"],["40°","21°","0.70","65°","on","0.10","periodogram"],["75°","6°","0.70","75°","on","0.25","fold at 2P"],["0°","8°","0.75","45°","on","0.20","fold at 2P"],["5°","19°","0.75","20°","on","0.10","fold at P"]]
    },
    "phases": {
     "calls": 0,
@@ -64,8 +64,8 @@
    "controls": {
     "calls": 51,
     "distinct": 40,
-    "digest": "67c81246760a06a9",
-    "samples": [["30°","15°","0.65","70°","no","0.00","la curva de luz"],["20°","15°","0.65","70°","no","0.00","la curva de luz"],["0°","5°","0.30","20°","no","0.00","la curva de luz"],["80°","30°","0.95","90°","sí","0.40","plegada al doble"],["20°","11°","0.55","85°","sí","0.40","plegada al doble"],["40°","18°","0.65","55°","sí","0.20","plegada al periodo hallado"],["0°","15°","0.65","70°","no","0.00","la curva de luz"],["30°","5°","0.65","70°","no","0.00","la curva de luz"],["30°","15°","0.65","70°","sí","0.00","la curva de luz"],["35°","19°","0.50","60°","sí","0.25","la curva de luz"],["30°","15°","0.65","70°","no","0.00","el periodograma"],["10°","28°","0.65","90°","no","0.10","el periodograma"],["30°","15°","0.65","70°","no","0.00","plegada al periodo hallado"],["30°","15°","0.65","70°","no","0.00","plegada al doble"],["40°","21°","0.70","65°","sí","0.10","el periodograma"],["75°","6°","0.70","75°","sí","0.25","plegada al doble"],["0°","8°","0.75","45°","sí","0.20","plegada al doble"],["5°","19°","0.75","20°","sí","0.10","plegada al periodo hallado"]]
+    "digest": "adf5f984a85e95cc",
+    "samples": [["30°","15°","0.65","70°","no","0.00","curva de luz"],["20°","15°","0.65","70°","no","0.00","curva de luz"],["0°","5°","0.30","20°","no","0.00","curva de luz"],["80°","30°","0.95","90°","sí","0.40","plegada a 2P"],["20°","11°","0.55","85°","sí","0.40","plegada a 2P"],["40°","18°","0.65","55°","sí","0.20","plegada a P"],["0°","15°","0.65","70°","no","0.00","curva de luz"],["30°","5°","0.65","70°","no","0.00","curva de luz"],["30°","15°","0.65","70°","sí","0.00","curva de luz"],["35°","19°","0.50","60°","sí","0.25","curva de luz"],["30°","15°","0.65","70°","no","0.00","periodograma"],["10°","28°","0.65","90°","no","0.10","periodograma"],["30°","15°","0.65","70°","no","0.00","plegada a P"],["30°","15°","0.65","70°","no","0.00","plegada a 2P"],["40°","21°","0.70","65°","sí","0.10","periodograma"],["75°","6°","0.70","75°","sí","0.25","plegada a 2P"],["0°","8°","0.75","45°","sí","0.20","plegada a 2P"],["5°","19°","0.75","20°","sí","0.10","plegada a P"]]
    },
    "phases": {
     "calls": 0,
@@ -91,8 +91,8 @@
    "readout": {
     "calls": 24,
     "distinct": 2,
-    "digest": "d874737f9e8448b2",
-    "samples": [[{"label":"Data","value":"1199 points over 27.1 days; the flux is the mean-normalised PDCSAP flux of the TESS pipeline (a model of the instrument’s systematics removed), in 30-minute averages for the fit"},{"label":"Rotation period","value":"4.856 d (95 percent interval 4.849 to 4.863 d), with the double period still possible","emphasis":true},{"label":"Other period it could be","value":"9.713 d, not excluded by the data","emphasis":true},{"label":"Cycles in the data","value":"5.6"},{"label":"Dimming from the spots","value":"4.7 percent from peak to trough"},{"label":"Chance of a peak this strong from noise","value":"1.2 × 10⁻²⁷³"},{"label":"Published","value":"4.85 ± 0.03 d (Gilbert et al. 2022, from all TESS sectors)"},{"label":"What this assumes","value":"A period of the dimming, not a direct reading of the star’s turn: it is the spots’ own period, the star could turn at twice this if two spots sit opposite, and the interval is widened for the correlation of the residuals but not for spots that change. No age follows from it."}],[{"label":"Data","value":"1055 points over 24.0 days; the flux is the mean-normalised PDCSAP flux of the TESS pipeline (a model of the instrument’s systematics removed), in 30-minute averages for the fit"},{"label":"Rotation period","value":"2.555 d (95 percent interval 2.532 to 2.579 d), with the double period still possible","emphasis":true},{"label":"Other period it could be","value":"5.110 d, not excluded by the data","emphasis":true},{"label":"Cycles in the data","value":"9.4"},{"label":"Dimming from the spots","value":"1.5 percent from peak to trough"},{"label":"Chance of a peak this strong from noise","value":"below 1e-300"},{"label":"Published","value":"not stated here"},{"label":"What this assumes","value":"A period of the dimming, not a direct reading of the star’s turn: it is the spots’ own period, the star could turn at twice this if two spots sit opposite, and the interval is widened for the correlation of the residuals but not for spots that change. No age follows from it."}]]
+    "digest": "a56e1b8d8e9f77df",
+    "samples": [[{"label":"Data","value":"1199 points over 27.1 days; the flux is the mean-normalized PDCSAP flux of the TESS pipeline (a model of the instrument’s systematics removed), in 30-minute averages for the fit"},{"label":"Rotation period","value":"4.856 d (95 percent interval 4.849 to 4.863 d), with the double period still possible","emphasis":true},{"label":"Other period it could be","value":"9.713 d, not excluded by the data","emphasis":true},{"label":"Cycles in the data","value":"5.6"},{"label":"Dimming from the spots","value":"4.7 percent from peak to trough"},{"label":"Chance of a peak this strong from noise","value":"1.2 × 10⁻²⁷³"},{"label":"Published","value":"4.85 ± 0.03 d (Gilbert et al. 2022, from all TESS sectors)"},{"label":"What this assumes","value":"A period of the dimming, not a direct reading of the star’s turn: it is the spots’ own period, the star could turn at twice this if two spots sit opposite, and the interval is widened for the correlation of the residuals but not for spots that change. No age follows from it."}],[{"label":"Data","value":"1055 points over 24.0 days; the flux is the mean-normalized PDCSAP flux of the TESS pipeline (a model of the instrument’s systematics removed), in 30-minute averages for the fit"},{"label":"Rotation period","value":"2.555 d (95 percent interval 2.532 to 2.579 d), with the double period still possible","emphasis":true},{"label":"Other period it could be","value":"5.110 d, not excluded by the data","emphasis":true},{"label":"Cycles in the data","value":"9.4"},{"label":"Dimming from the spots","value":"1.5 percent from peak to trough"},{"label":"Chance of a peak this strong from noise","value":"below 1e-300"},{"label":"Published","value":"not stated here"},{"label":"What this assumes","value":"A period of the dimming, not a direct reading of the star’s turn: it is the spots’ own period, the star could turn at twice this if two spots sit opposite, and the interval is widened for the correlation of the residuals but not for spots that change. No age follows from it."}]]
    },
    "canvas": {
     "calls": 24,
@@ -103,8 +103,8 @@
    "controls": {
     "calls": 24,
     "distinct": 8,
-    "digest": "6f6fc3f0c4053d11",
-    "samples": [["AU Microscopii (TESS sector 1)","the light curve"],["EK Draconis (TESS sector 16)","folded at twice it"],["EK Draconis (TESS sector 16)","folded at the period found"],["EK Draconis (TESS sector 16)","the light curve"],["AU Microscopii (TESS sector 1)","the periodogram"],["AU Microscopii (TESS sector 1)","folded at the period found"],["AU Microscopii (TESS sector 1)","folded at twice it"],["EK Draconis (TESS sector 16)","the periodogram"]]
+    "digest": "72533e018a3050e0",
+    "samples": [["AU Microscopii","light curve"],["EK Draconis","fold at 2P"],["EK Draconis","fold at P"],["EK Draconis","light curve"],["AU Microscopii","periodogram"],["AU Microscopii","fold at P"],["AU Microscopii","fold at 2P"],["EK Draconis","periodogram"]]
    },
    "phases": {
     "calls": 0,
@@ -140,8 +140,8 @@
    "controls": {
     "calls": 24,
     "distinct": 8,
-    "digest": "51d454f90d9ddbde",
-    "samples": [["AU Microscopii (TESS, sector 1)","la curva de luz"],["EK Draconis (TESS, sector 16)","plegada al doble"],["EK Draconis (TESS, sector 16)","plegada al periodo hallado"],["EK Draconis (TESS, sector 16)","la curva de luz"],["AU Microscopii (TESS, sector 1)","el periodograma"],["AU Microscopii (TESS, sector 1)","plegada al periodo hallado"],["AU Microscopii (TESS, sector 1)","plegada al doble"],["EK Draconis (TESS, sector 16)","el periodograma"]]
+    "digest": "65f86ed88d2c4003",
+    "samples": [["AU Microscopii","curva de luz"],["EK Draconis","plegada a 2P"],["EK Draconis","plegada a P"],["EK Draconis","curva de luz"],["AU Microscopii","periodograma"],["AU Microscopii","plegada a P"],["AU Microscopii","plegada a 2P"],["EK Draconis","periodograma"]]
    },
    "phases": {
     "calls": 0,
@@ -179,8 +179,8 @@
    "controls": {
     "calls": 29,
     "distinct": 22,
-    "digest": "cad3eab22f657bc7",
-    "samples": [["a day with its flares marked","9","1"],["a day with its flares marked","0","1"],["one flare close up","27","76"],["one flare close up","14","39"],["one flare close up","9","1"],["one flare close up","9","2"],["a day with its flares marked","14","1"],["a day with its flares marked","20","1"],["a day with its flares marked","9","20"],["a day with its flares marked","9","39"],["a day with its flares marked","22","30"],["a day with its flares marked","27","62"],["one flare close up","10","8"]]
+    "digest": "43728eadb6c3091e",
+    "samples": [["a day","9","1"],["a day","0","1"],["one flare","27","76"],["one flare","14","39"],["one flare","9","1"],["one flare","9","2"],["a day","14","1"],["a day","20","1"],["a day","9","20"],["a day","9","39"],["a day","22","30"],["a day","27","62"],["one flare","10","8"]]
    },
    "phases": {
     "calls": 0,
@@ -216,8 +216,8 @@
    "controls": {
     "calls": 29,
     "distinct": 22,
-    "digest": "265b8d4ecbfb9abd",
-    "samples": [["un día con sus erupciones marcadas","9","1"],["un día con sus erupciones marcadas","0","1"],["una erupción de cerca","27","76"],["una erupción de cerca","14","39"],["una erupción de cerca","9","1"],["una erupción de cerca","9","2"],["un día con sus erupciones marcadas","14","1"],["un día con sus erupciones marcadas","20","1"],["un día con sus erupciones marcadas","9","20"],["un día con sus erupciones marcadas","9","39"],["un día con sus erupciones marcadas","22","30"],["un día con sus erupciones marcadas","27","62"],["una erupción de cerca","10","8"]]
+    "digest": "a5c130262bee3995",
+    "samples": [["un día","9","1"],["un día","0","1"],["una erupción","27","76"],["una erupción","14","39"],["una erupción","9","1"],["una erupción","9","2"],["un día","14","1"],["un día","20","1"],["un día","9","20"],["un día","9","39"],["un día","22","30"],["un día","27","62"],["una erupción","10","8"]]
    },
    "phases": {
     "calls": 0,
@@ -232,7 +232,7 @@
    "static": {
     "title": "How often flares of each size occur",
     "note": "The flares of the last panel, counted from the largest down: how many a day are at least this large, in equivalent duration, on logarithmic axes. Above a floor the counts fall on a straight line, a power law of slope alpha, and the panel fits it. Below the floor the telescope misses flares and the counts bend. The synthetic star is made with a known slope, to show what the fit returns when the truth is known.",
-    "controls": [{"id":"source","label":"Flares from","unit":null,"min":0,"max":1,"step":1,"value":0,"decimals":0},{"id":"floor","label":"Fit above","unit":null,"min":0,"max":2,"step":1,"value":0,"decimals":0}],
+    "controls": [{"id":"source","label":"Flares from","unit":null,"min":0,"max":1,"step":1,"value":0,"decimals":0},{"id":"floor","label":"Floor of the fit","unit":null,"min":0,"max":2,"step":1,"value":0,"decimals":0}],
     "presets": [],
     "actions": [],
     "defaults": {"source":"0","floor":"0"}
@@ -255,8 +255,8 @@
    "controls": {
     "calls": 21,
     "distinct": 6,
-    "digest": "b0b87e2ebd7f0606",
-    "samples": [["AU Microscopii","the completeness limit"],["a synthetic star, true slope 1.80","every flare"],["a synthetic star, true slope 1.80","the best-fitting floor"],["a synthetic star, true slope 1.80","the completeness limit"],["AU Microscopii","the best-fitting floor"],["AU Microscopii","every flare"]]
+    "digest": "daef1879257a12a0",
+    "samples": [["AU Microscopii","completeness"],["synthetic star","none"],["synthetic star","best fit"],["synthetic star","completeness"],["AU Microscopii","best fit"],["AU Microscopii","none"]]
    },
    "phases": {
     "calls": 0,
@@ -269,7 +269,7 @@
    "static": {
     "title": "Cuántas erupciones hay de cada tamaño",
     "note": "Las erupciones del panel anterior, contadas desde la mayor: cuántas al día son al menos así de grandes, en duración equivalente, en ejes logarítmicos. Por encima de un suelo los recuentos caen en una recta, una ley de potencias de pendiente alfa, y el panel la ajusta. Por debajo del suelo el telescopio pierde erupciones y los recuentos se curvan. La estrella sintética se hizo con una pendiente conocida, para ver qué devuelve el ajuste cuando se conoce la verdad.",
-    "controls": [{"id":"source","label":"Erupciones de","unit":null,"min":0,"max":1,"step":1,"value":0,"decimals":0},{"id":"floor","label":"Ajustar por encima de","unit":null,"min":0,"max":2,"step":1,"value":0,"decimals":0}],
+    "controls": [{"id":"source","label":"Erupciones de","unit":null,"min":0,"max":1,"step":1,"value":0,"decimals":0},{"id":"floor","label":"Suelo del ajuste","unit":null,"min":0,"max":2,"step":1,"value":0,"decimals":0}],
     "presets": [],
     "actions": [],
     "defaults": {"source":"0","floor":"0"}
@@ -292,8 +292,8 @@
    "controls": {
     "calls": 21,
     "distinct": 6,
-    "digest": "e30c041893bf4935",
-    "samples": [["AU Microscopii","el límite de completitud"],["una estrella sintética, pendiente verdadera 1,80","todas las erupciones"],["una estrella sintética, pendiente verdadera 1,80","el suelo que mejor ajusta"],["una estrella sintética, pendiente verdadera 1,80","el límite de completitud"],["AU Microscopii","el suelo que mejor ajusta"],["AU Microscopii","todas las erupciones"]]
+    "digest": "76580428a0c27695",
+    "samples": [["AU Microscopii","completitud"],["estrella sintética","ninguno"],["estrella sintética","mejor ajuste"],["estrella sintética","completitud"],["AU Microscopii","mejor ajuste"],["AU Microscopii","ninguno"]]
    },
    "phases": {
     "calls": 0,

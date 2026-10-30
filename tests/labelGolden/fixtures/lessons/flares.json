@@ -7,7 +7,7 @@
     ["steps.read-a-flare.fields.1.unit","percent"],
     ["steps.read-a-flare.fields.2.unit","minutes"],
     ["steps.count-the-flares.fields.0.unit",""],
-    ["steps.count-the-flares.fields.1.unit","per day"],
+    ["steps.count-the-flares.fields.1.unit",""],
     ["steps.the-slope.fields.0.unit",""],
     ["steps.the-slope.fields.1.unit",""],
     ["steps.the-slope.fields.2.unit",""],
@@ -44,7 +44,7 @@
     "validate": {"calls":232,"distinct":2,"digest":"0c18b5dc87bf1693","samples":[null,{"level":"error","message":"Read the readout of the second panel: 76 flares in 24.6 days, 76 / 24.6 = 3.1 a day."}]}
    },
    "the-slope": {
-    "validate": {"calls":242,"distinct":2,"digest":"aa58f69157490d53","samples":[null,{"level":"error","message":"Use AU Microscopii with the fit above the completeness limit: α about 1.92, interval 1.62 to 2.28, 29 flares."}]}
+    "validate": {"calls":242,"distinct":2,"digest":"54e52867ecdaceeb","samples":[null,{"level":"error","message":"Use AU Microscopii with the floor at completeness: α about 1.92, interval 1.62 to 2.28, 29 flares."}]}
    }
   },
   "es": "same"
