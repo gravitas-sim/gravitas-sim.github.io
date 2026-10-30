@@ -212,7 +212,9 @@ describe('the digest the derived closure produces', () => {
     // 292 after the survey-design investigations (Prompt 215, D-R10-215-02) over Counts to Magnitudes (Prompt 212) stacked over Prompt 213 (v3 3165d8a4): one file, survey-sequence.js, which holds three lessons, their Spanish, their deeper steps and their guides; approved by the coordinator under Carl's delegation of 2026-10-28. Stacked over Prompt 213 the closure is 291 files and the cap below 292 (re-checked after the merge).
     // 293 after the observing closeout investigations (Prompt 216, D-R10-216-01) over Two Stars Eclipsing (Prompt 217, closure 292): one file, observing-sequence.js, which holds the five lessons, their Spanish, their guides and their deeper steps; approved by the coordinator (cap below 293 on this base; whichever of 216 and 217 merges second restacks to 294).
     // 294 after Weighing the Stars, for Real (Prompt 218, D-R10-218-02): one file, binary-masses-sequence.js, which holds the lesson, its Spanish, its guide and its deeper steps; approved by the coordinator for the one-new-closure-file-per-sequence term.
-    expect(current.length).toBeLessThan(295);
+    // 295 after How Fast Does the Star Spin? and Flares (Prompt 220, D-R10-220-06): one file, stellar-activity-sequence.js, which holds the two lessons, their Spanish, their guides and their deeper steps; approved by the coordinator for the one new closure file (cap below 297 once Prompt 219 has landed).
+    // 295 after Two Clusters, Two Ages (Prompt 219, D-R10-219-01): one file, cluster-sequence.js, which holds the lesson, its Spanish, its guide and its deeper steps; approved by the coordinator for the one-new-closure-file-per-sequence term.
+    expect(current.length).toBeLessThan(297);
     // 230 after the four variable-star investigations (Prompt 96): their shadows, deeper shadows and depth files;
     // 246 after the four cosmology investigations (Prompt 91).
     // 258 after the three calibration investigations (Prompt 86).

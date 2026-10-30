@@ -2705,6 +2705,17 @@ test.describe('the central experiment of each investigation', () => {
         [1, 40.7, 0.6],
       ],
     },
+    // ---- Cluster fitting (Roadmap III, Prompt 219) ----------------------------------
+    {
+      id: 'two-clusters-two-ages',
+      title:
+        'two-clusters-two-ages: the fitted age of cluster B is 3.16 Gyr at an assumed [Fe/H] of -0.25 and 2.24 at 0 @accepts:ce.two-clusters-two-ages',
+      row: /^Age$/i,
+      values: [
+        [-0.25, 3.16, 0.08],
+        [0, 2.24, 0.07],
+      ],
+    },
     // ---- Binary masses (Roadmap III, Prompt 218) ------------------------------------
     {
       id: 'weighing-the-stars-for-real',
@@ -2715,6 +2726,27 @@ test.describe('the central experiment of each investigation', () => {
       values: [
         [90, 0.58, 0.02],
         [52, 1.19, 0.03],
+      ],
+    },
+    // ---- Stellar rotation and flares (Roadmap III, Prompt 220) ----------------------
+    {
+      id: 'how-fast-does-the-star-spin',
+      title:
+        'how-fast-does-the-star-spin: a star that turns once in 4.00 days shows a period of 4.00 days with one spot and 2.00 with a second on the other side @accepts:ce.how-fast-does-the-star-spin',
+      row: /^Period found$/i,
+      values: [
+        [0, 4.0, 0.05],
+        [1, 2.0, 0.05],
+      ],
+    },
+    {
+      id: 'flares',
+      title:
+        'flares: the second largest flare of AU Microscopii has an equivalent duration of 118 seconds and the third largest 100 @accepts:ce.flares',
+      row: /^Equivalent duration$/i,
+      values: [
+        [2, 118.3, 3],
+        [3, 100.4, 3],
       ],
     },
     // ---- Telescopes (Roadmap III, Prompt 208) ---------------------------------

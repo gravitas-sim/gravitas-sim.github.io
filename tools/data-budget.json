@@ -5,28 +5,28 @@
     {
       "key": "packBytes",
       "label": "Observation packs, raw (data-packs/*.json)",
-      "ceiling": 325632,
+      "ceiling": 333355,
       "unit": "bytes",
       "measuredBy": "tools/data-budget.mjs"
     },
     {
       "key": "packGzipBytes",
       "label": "Observation packs, gzip level 6",
-      "ceiling": 101376,
+      "ceiling": 105402,
       "unit": "bytes",
       "measuredBy": "tools/data-budget.mjs"
     },
     {
       "key": "precacheFirstVisitGzipBytes",
       "label": "First-visit precache tier (sw-manifest CORE and OPTIONAL: what the install fetches), gzip level 6",
-      "ceiling": 5311355,
+      "ceiling": 5329885,
       "unit": "bytes",
       "measuredBy": "tools/data-budget.mjs"
     },
     {
       "key": "precacheIdleGzipBytes",
       "label": "Idle precache tier (sw-manifest IDLE: fetched after activation, on idle), gzip level 6",
-      "ceiling": 1568120,
+      "ceiling": 1569940,
       "unit": "bytes",
       "measuredBy": "tools/data-budget.mjs"
     },

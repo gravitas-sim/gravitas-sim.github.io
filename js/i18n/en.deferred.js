@@ -1818,6 +1818,8 @@ export const EN_DEFERRED = {
     'Follow stars of different masses from birth to death and read their ages off the diagram.',
   'inv.seq.light.the-limit':
     'Where stellar death ends: the mass limit for a white dwarf and what lies beyond it.',
+  'inv.seq.light.two-clusters-two-ages':
+    'Fit an age and a distance to two synthetic clusters, and see how far the age moves when the assumed metallicity changes.',
   'inv.seq.light.cluster-membership':
     'Real data from a real cluster: which stars belong, from their motions. Uses the diagram and the idea of a population.',
 
@@ -1992,6 +1994,10 @@ export const EN_DEFERRED = {
     'Which star is hotter and which is smaller from two eclipses, and what a fit of the pair can and cannot fix.',
   'inv.seq.observing.weighing-the-stars-for-real':
     'Weighing two stars from their Doppler shifts and an eclipse, and why velocities alone give only a minimum.',
+  'inv.seq.observing.how-fast-does-the-star-spin':
+    'Reading a star’s rotation period from its spots, and why the light alone can leave a second period open.',
+  'inv.seq.observing.flares':
+    'Finding flares in a red dwarf’s light, their equivalent durations, and how often flares of each size occur.',
   'inv.seq.observing.why-the-period-is-wrong':
     'Why a period from one night a visit can be wrong, and how the cadence decides.',
   'inv.seq.observing.deep-or-wide':

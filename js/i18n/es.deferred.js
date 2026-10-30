@@ -1839,6 +1839,8 @@ export const ES_DEFERRED = {
     'Sigue estrellas de distintas masas del nacimiento a la muerte y lee sus edades en el diagrama.',
   'inv.seq.light.the-limit':
     'Donde acaba la muerte de una estrella: el límite de masa de una enana blanca y lo que hay más allá.',
+  'inv.seq.light.two-clusters-two-ages':
+    'Ajusta una edad y una distancia a dos cúmulos sintéticos, y mira cuánto se mueve la edad al cambiar la metalicidad supuesta.',
   'inv.seq.light.cluster-membership':
     'Datos reales de un cúmulo real: qué estrellas pertenecen a él, según sus movimientos. Usa el diagrama y la idea de población.',
 
@@ -2013,6 +2015,10 @@ export const ES_DEFERRED = {
     'Qué estrella es más caliente y cuál es menor por dos eclipses, y qué puede y qué no puede fijar un ajuste del par.',
   'inv.seq.observing.weighing-the-stars-for-real':
     'Pesar dos estrellas con su efecto Doppler y un eclipse, y por qué las velocidades solas dan solo un mínimo.',
+  'inv.seq.observing.how-fast-does-the-star-spin':
+    'Leer el período de rotación de una estrella a partir de sus manchas, y por qué la luz sola puede dejar abierto un segundo período.',
+  'inv.seq.observing.flares':
+    'Hallar erupciones en la luz de una enana roja, sus duraciones equivalentes y con qué frecuencia ocurre cada tamaño.',
   'inv.seq.observing.why-the-period-is-wrong':
     'Por qué un período con una visita por noche puede salir mal, y cómo decide la cadencia.',
   'inv.seq.observing.deep-or-wide':

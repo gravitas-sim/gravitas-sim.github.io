@@ -380,7 +380,19 @@ export const BROWSE_META = {
     tags: ['observing', 'stars'],
     numericCount: 0,
   },
+  'two-clusters-two-ages': {
+    tags: ['stars', 'stellar-evolution'],
+    numericCount: 0,
+  },
   'weighing-the-stars-for-real': {
+    tags: ['observing', 'stars'],
+    numericCount: 0,
+  },
+  'how-fast-does-the-star-spin': {
+    tags: ['observing', 'stars'],
+    numericCount: 0,
+  },
+  flares: {
     tags: ['observing', 'stars'],
     numericCount: 0,
   },

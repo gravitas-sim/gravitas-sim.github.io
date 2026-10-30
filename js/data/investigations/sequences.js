@@ -191,6 +191,7 @@ export const SEQUENCES = [
       ['scaling-the-main-sequence', 'quantitative', ['inside-a-star']],
       ['the-limit', 'core', ['inside-a-star']],
       ['cluster-membership', 'quantitative', ['lives-of-stars']],
+      ['two-clusters-two-ages', 'core', ['lives-of-stars']],
     ]
   ),
   sequence(
@@ -313,6 +314,8 @@ export const SEQUENCES = [
       ['why-the-period-is-wrong', 'core'],
       ['two-stars-eclipsing', 'core'],
       ['weighing-the-stars-for-real', 'core'],
+      ['how-fast-does-the-star-spin', 'core'],
+      ['flares', 'core'],
       ['deep-or-wide', 'core'],
       ['two-telescopes-one-question', 'core'],
       ['propose-an-observation', 'advanced', ['deep-or-wide']],

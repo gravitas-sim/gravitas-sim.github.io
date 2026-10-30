@@ -88,6 +88,10 @@
       "en": "Extending an Experiment",
       "es": "Ampliar un experimento"
     },
+    "flares": {
+      "en": "Flares",
+      "es": "Erupciones"
+    },
     "from-photons-to-a-number": {
       "en": "From Photons to a Number",
       "es": "De fotones a un número"
@@ -111,6 +115,10 @@
     "how-fast-does-it-spin": {
       "en": "How Fast Does It Spin?",
       "es": "¿Qué tan rápido gira?"
+    },
+    "how-fast-does-the-star-spin": {
+      "en": "How Fast Does the Star Spin?",
+      "es": "¿Con qué rapidez gira la estrella?"
     },
     "how-hot-is-the-day-side": {
       "en": "How Hot Is the Day Side?",
@@ -299,6 +307,10 @@
     "twelve-nights": {
       "en": "Twelve Nights",
       "es": "Doce noches"
+    },
+    "two-clusters-two-ages": {
+      "en": "Two Clusters, Two Ages",
+      "es": "Dos cúmulos, dos edades"
     },
     "two-greenhouse-models": {
       "en": "Two Greenhouse Models",

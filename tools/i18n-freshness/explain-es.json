@@ -6,6 +6,10 @@
     "note": "Every translation present on this date was taken as written against the English it stood beside. That records no review."
   },
   "rows": {
+    "explain/activity[0]": "23d8d31a:4d6f943f",
+    "explain/activity[1]": "a6d607f2:5bd1431f",
+    "explain/activity[2]": "f78f5b5f:fae12463",
+    "explain/activity[3]": "fee66600:f7ad18ed",
     "explain/analysis-models[0]": "9477e743:b3d88a58",
     "explain/analysis-models[1]": "732d76d1:52117916",
     "explain/analysis-models[2]": "d622c987:a1deecf7",
@@ -34,6 +38,10 @@
     "explain/claim[1]": "9899e6cc:591b4b67",
     "explain/claim[2]": "83d7219c:371a9d43",
     "explain/claim[3]": "9a2d9129:ac919c7a",
+    "explain/clusterFit[0]": "228b7097:dc201c2f",
+    "explain/clusterFit[1]": "625c050d:69e6ff99",
+    "explain/clusterFit[2]": "5e510d8e:5dec3503",
+    "explain/clusterFit[3]": "a5454201:90099bcf",
     "explain/compare[0]": "36deb375:b87350b9",
     "explain/compare[1]": "20f69cd3:b7b8a787",
     "explain/compare[2]": "997930ed:6407aada",

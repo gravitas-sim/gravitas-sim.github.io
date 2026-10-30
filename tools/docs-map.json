@@ -23,6 +23,13 @@
       "student": true
     },
     {
+      "file": "ACTIVITY_AGES_GATE.md",
+      "kind": "gate",
+      "purpose": "Activity ages gate: the committed relations, domain and bounds for gyrochronology ages and flare energies in erg, the measured legs and the verdict (Prompt 220 Part B).",
+      "owner": 220,
+      "student": true
+    },
+    {
       "file": "ADOPTER_GUIDE.md",
       "kind": "guide",
       "purpose": "The instructor adopter's guide and the newcomer docs test.",
@@ -919,6 +926,13 @@
       "student": false
     },
     {
+      "file": "STELLAR_ACTIVITY.md",
+      "kind": "feature",
+      "purpose": "Stellar rotation and flares: the spot model, the period with its factor-two alias, flare detection, equivalent durations and the slope, with validation (Prompt 220).",
+      "owner": 220,
+      "student": true
+    },
+    {
       "file": "STELLAR_POPULATIONS.md",
       "kind": "feature",
       "purpose": "Stellar populations guides in the Observatory.",
@@ -986,6 +1000,13 @@
       "kind": "feature",
       "purpose": "Binary masses and radii: the double-lined orbit, the joint eclipse and velocity solution, its validation and failed legs (Prompt 218, Part A).",
       "owner": 218,
+      "student": true
+    },
+    {
+      "file": "CLUSTER_FITTING.md",
+      "kind": "feature",
+      "purpose": "Cluster fitting: an isochrone fit of age and distance at a stated metallicity and reddening, its likelihood, intervals and valley, its validation and failed legs (Prompt 219).",
+      "owner": 219,
       "student": true
     },
     {

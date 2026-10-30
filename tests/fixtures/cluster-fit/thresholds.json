@@ -1,0 +1,292 @@
+{
+  "format": "gravitas.cluster-fit-thresholds/1",
+  "prompt": "Roadmap III, Prompt 219 Part A, cluster fitting: fixed metallicity now (tranche T3 by D-R10-207-01)",
+  "document": "CLUSTER_FITTING.md (\"Validation contract\")",
+  "committed": "before js/kernels/clusters/, the validator, the oracle script, its pinned results, the synthetic datasets, the ensembles, the panel or any lesson of Prompt 219 existed. Systems, seeds, sample sizes, selections and noise below are written out so the oracle and the harness build identical inputs; nothing was tuned against the kernel, which did not exist.",
+  "rule": "A crossed bound is a failed check, recorded in failed-legs.json and left failing; only Carl resets one. A leg that cannot be measured is NOT RUN and says why. An interval that the well-specified coverage legs (C1, C2) failed is never presented by the panel or the lesson.",
+  "seeds": {
+    "datasets": [219001, 219002, 219003],
+    "ensemble": "cluster-219",
+    "design": "cluster-219-design (used only to build and debug; never in a leg)"
+  },
+  "scope": {
+    "built": "a fit of MIST v1.2 isochrones in SDSS g and r (the 157 grid over [Fe/H] and log age, js/data/observations/mistSdssIsochrones.js) to the colour-magnitude diagram of a cluster's members over two parameters, log age and distance modulus, at a fixed, stated [Fe/H] (a value of the grid) and a fixed, stated reddening E(g - r) with the extinction ratio A_g / E(g - r) = 3.245 (Schlafly and Finkbeiner 2011, the ratio the Observatory adopts, D-R9-05). The members are the reader's own (a velocity crop, say); the statistic is a magnitude-conditional binned multinomial deviance with a contamination floor; intervals are 154's profile intervals; the age-distance degeneracy is returned as the valley of the two-parameter deviance surface and the correlation of its 2.30 region.",
+    "notBuilt": "any fit of [Fe/H] or reddening (Part B's gate), binary stars in the model (a stated misspecification the ensemble measures), membership from astrometry, a colour-dependent selection function, rotating or alpha-enhanced models, differential reddening, blue stragglers, the horizontal branch as a separate population, an age from the clump when the clump is saturated."
+  },
+  "statistic": "Stars are binned by g into rows of 0.1 mag from 14.5 to 20.5 and by g - r into columns of 0.04 from -0.3 to 1.5. The model gives, per row j, the probability of each colour column k: p_jk = (1 - eps) m_jk / M_j + eps u_k, where m_jk is the isochrone's IMF-weighted density after the photometric errors, M_j = sum_k m_jk, u_k = 1/45 (a uniform floor for the contamination the reader's membership cut lets in) and a row with M_j below 1e-6 of the largest row sum has p_jk = u_k. D = -2 sum n_jk ln p_jk + 2 sum n_jk ln(n_jk / n_j). The row totals n_j are conditioned on: the selection of the sample in magnitude is unknown and is not modelled, which is a stated assumption; a star's penalty is at most -2 ln(eps / 45) so one unmodelled star cannot dominate (the statistic is bounded).",
+  "constants": {
+    "imf": "Kroupa (2001): dN/dm proportional to m^-1.3 for 0.08 to 0.5 Msun and m^-2.3 above, continuous at 0.5",
+    "errorModel": "sigma(m) = sqrt(0.015^2 + (0.1 * 10^(0.4 (m - 21.45)))^2) in each band at that band's apparent magnitude, errors in g and r independent (typical SDSS values; the floor is calibration, the second term photon-limited with sigma 0.1 at 21.45)",
+    "window": { "g": [14.5, 20.5], "colour": [-0.3, 1.5] },
+    "bins": { "rowMag": 0.1, "colourWidth": 0.04 },
+    "contaminationFloor": 0.15,
+    "minimumMembers": 60,
+    "grid": {
+      "logAge": [9.0, 9.6, 0.02],
+      "dm": "[lo, hi] given by the caller (default 10.5 to 13.5) in steps of 0.02",
+      "level": 0.6827
+    },
+    "extinction": {
+      "R": 3.245,
+      "defaultE": 0.042,
+      "source": "Schlafly and Finkbeiner 2011, ApJ 737, 103, Table 6; E from Schlegel et al. 1998 as the guides adopt it"
+    }
+  },
+  "synthetic": {
+    "how": "N stars in the window; each is a field star with probability epsTrue, else a member. A member is drawn from the isochrone at the truth (a point on it with probability proportional to the IMF weight, a binary with probability fb: a secondary of mass ratio q uniform on 0.3 to 1 whose flux adds in g and r, the main sequence's mass-magnitude relation from the same isochrone), shifted by the distance modulus and the reddening, given independent Gaussian errors in g and r from the error model, then kept with probability c(g) = 1 / (1 + exp((g - 19.0) / 0.5)) of the noisy g (a selection in magnitude that the model does not know); draws repeat until N stars are kept. A field star: g from a density proportional to 10^(0.3 g) on the window, colour from 0.6 N(0.55, 0.15^2) + 0.4 N(1.2, 0.2^2), then the same errors, window and c(g). Streams: js/random/streams.js `forward`, keyed by the seed.",
+    "systems": {
+      "S1": {
+        "what": "on a grid age",
+        "logAge": 9.3,
+        "dm": 12.06,
+        "feh": -0.25,
+        "E": 0.042,
+        "N": 200,
+        "epsTrue": 0.15,
+        "fb": 0
+      },
+      "S2": {
+        "what": "off a grid age (between 9.4 and 9.5)",
+        "logAge": 9.45,
+        "dm": 12.3,
+        "feh": -0.25,
+        "E": 0.042,
+        "N": 200,
+        "epsTrue": 0.15,
+        "fb": 0
+      },
+      "S3": {
+        "what": "a young cluster",
+        "logAge": 9.08,
+        "dm": 11.6,
+        "feh": -0.25,
+        "E": 0.042,
+        "N": 300,
+        "epsTrue": 0.15,
+        "fb": 0
+      }
+    },
+    "ensembles": {
+      "wellSpecified": {
+        "what": "C1, C2, C5: S2's truth, the model's assumptions all true except the unknown magnitude selection",
+        "system": "S2",
+        "n": 100
+      },
+      "binaries": {
+        "what": "C3 (reported): S2 with a binary fraction 0.30",
+        "system": "S2",
+        "fb": 0.3,
+        "n": 100
+      },
+      "tooFew": {
+        "what": "D1: N = 30 stars (about 25 members)",
+        "system": "S2",
+        "N": 30,
+        "n": 20
+      },
+      "fieldOnly": {
+        "what": "D2: epsTrue = 1, no cluster",
+        "system": "S2",
+        "epsTrue": 1.0,
+        "n": 20
+      },
+      "wrongMetallicity": {
+        "what": "D3: the truth at [Fe/H] -0.50 fitted at the stated -0.25",
+        "system": "S2",
+        "feh": -0.5,
+        "n": 20
+      },
+      "wrongReddening": {
+        "what": "D4 (reported): the truth at E 0.10 fitted at the stated 0.042",
+        "system": "S2",
+        "E": 0.1,
+        "n": 20
+      },
+      "wrongContamination": {
+        "what": "D5 (reported): epsTrue 0.30 and 0.02 fitted at the model's 0.15",
+        "system": "S2",
+        "epsTrue": [0.3, 0.02],
+        "n": 20
+      }
+    }
+  },
+  "checks": [
+    {
+      "id": "A1.imf",
+      "leg": "a",
+      "what": "the IMF's integrated weight of a mass interval against the closed form of each power-law piece and across the break, and the weights of adjacent intervals summing to the weight of their union",
+      "limits": {
+        "cases": [
+          [0.1, 0.3],
+          [0.3, 0.9],
+          [0.9, 2.0],
+          [0.2, 3.0]
+        ],
+        "maxRel": 1e-12
+      }
+    },
+    {
+      "id": "A2.colourRow",
+      "leg": "a",
+      "what": "a vertical isochrone (colour 0.50 from g 16.0 to 19.0, equal weight per unit magnitude, constant errors 0.05 in g and in r): each interior row's colour distribution against the exact normal with sigma sqrt(0.05^2 + 0.05^2) and mean 0.50, in the kernel's colour bins",
+      "limits": { "maxAbsProbability": 0.01 }
+    },
+    {
+      "id": "A3.normalisation",
+      "leg": "a",
+      "what": "the model's row probabilities p_jk sum to 1 in every row, are at least eps u_k, and the largest per-star penalty is -2 ln(eps / 45)",
+      "limits": { "rowSumMaxAbs": 1e-12, "penaltyMaxRel": 1e-12 }
+    },
+    {
+      "id": "A4.deviance",
+      "leg": "a",
+      "what": "the deviance of counts against their own row fractions is 0, against any other probabilities is at least 0, and equals a hand evaluation on a 2-row, 3-column example",
+      "limits": { "maxAbs": 1e-12 }
+    },
+    {
+      "id": "A5.shiftLaws",
+      "leg": "a",
+      "what": "with constant errors, shifting the distance modulus by whole rows moves every row's colour distribution by the same number of rows, and the reddening shifts the isochrone by E in colour and R E in magnitude",
+      "limits": { "maxAbs": 1e-9 }
+    },
+    {
+      "id": "A6.interpolationExact",
+      "leg": "a",
+      "what": "the interpolated isochrone at a grid age equals the grid isochrone",
+      "limits": { "maxAbsMag": 1e-9 }
+    },
+    {
+      "id": "A7.interpolationLOO",
+      "leg": "a",
+      "what": "leave one out: the isochrone at each interior grid age (9.1 to 9.5, three metallicities) interpolated from its neighbours 0.1 dex each side, against the grid isochrone, as the distance of the grid curve's points (resampled every 0.01 mag) from the interpolated polyline in the scaled units of the curve comparison (0.03 in colour, 0.15 in magnitude)",
+      "limits": { "medianScaled": 0.5, "p95Scaled": 2.0 }
+    },
+    {
+      "id": "A8.syntheticTruth",
+      "leg": "a",
+      "what": "a synthetic dataset drawn at fb = 0 and no errors lies on the isochrone it was drawn from (maximum distance from the polyline 1e-9 mag), its members' mass weights follow the IMF (a Kolmogorov-Smirnov distance of the drawn initial masses from the IMF's cumulative on 5000 draws below 0.03)",
+      "limits": { "maxDistance": 1e-9, "ksMax": 0.03 }
+    },
+    {
+      "id": "B1.binnedAgreement",
+      "leg": "b",
+      "what": "the independent implementation (numpy/scipy, written from the document: its own morph, its own forward model by dense Monte Carlo of 4e5 draws per isochrone, its own deviance) against the kernel on S1, S2, S3: the deviance at the truth and at four other (log age, dm) points, each agreeing within the larger of 3 and 3 percent; and the best-fit log age and dm",
+      "limits": {
+        "deviance": { "abs": 3, "rel": 0.03 },
+        "bestLogAge": 0.03,
+        "bestDm": 0.06
+      }
+    },
+    {
+      "id": "B2.unbinned",
+      "leg": "b",
+      "what": "the oracle's unbinned conditional likelihood (each star's colour density at its own magnitude, summed over isochrone points with exact normal kernels) places the best fit within 0.06 dex and 0.12 mag of the kernel's on S1, S2, S3",
+      "limits": { "bestLogAge": 0.06, "bestDm": 0.12 }
+    },
+    {
+      "id": "B3.posteriorWidth",
+      "leg": "b",
+      "what": "emcee (Foreman-Mackey et al. 2013) on the oracle's unbinned likelihood, flat in the grid's box: the standard deviation of each marginal against half the kernel's profile interval width",
+      "limits": { "ratioLo": 0.5, "ratioHi": 2.0 }
+    },
+    {
+      "id": "C1.coverageAge",
+      "leg": "c",
+      "what": "the 1-sigma profile interval of log age holds the truth at the stated rate on 100 seeds of the well-specified ensemble (an interval that fails to close counts as not holding it)",
+      "limits": { "n": 100, "lo": 0.56, "hi": 0.8 }
+    },
+    {
+      "id": "C2.coverageDm",
+      "leg": "c",
+      "what": "the same for the distance modulus",
+      "limits": { "n": 100, "lo": 0.56, "hi": 0.8 }
+    },
+    {
+      "id": "C3.coverageBinaries",
+      "leg": "c",
+      "what": "REPORTED, no band: the same two coverages and the median biases of log age and dm on the ensemble with a binary fraction of 0.30, which the model does not have; the lesson and the panel say what this measured",
+      "limits": { "n": 100 }
+    },
+    {
+      "id": "C4.recovery",
+      "leg": "c",
+      "what": "the median fitted log age and dm over the well-specified ensemble are within 3 median half-widths / sqrt(n) of the truth",
+      "limits": { "nSigma": 3 }
+    },
+    {
+      "id": "C5.valley",
+      "leg": "c",
+      "what": "the age-distance degeneracy: on the well-specified ensemble the correlation of log age and dm in the 2.30 region of the deviance surface is negative on at least 90 percent of seeds, and its median lies between -0.98 and -0.20",
+      "limits": { "minNegative": 0.9, "medianLo": -0.98, "medianHi": -0.2 }
+    },
+    {
+      "id": "D1.tooFew",
+      "leg": "d",
+      "what": "N = 30 stars: at least 95 percent of 20 seeds return 'not constrained' with the member count named; the well-specified ensemble's first 60 seeds return it on at most 5 percent",
+      "limits": {
+        "n": 20,
+        "minFlagged": 0.95,
+        "controlN": 60,
+        "maxControlFlagged": 0.05
+      }
+    },
+    {
+      "id": "D2.fieldOnly",
+      "leg": "d",
+      "what": "a field with no cluster: at least 95 percent of 20 seeds return 'not constrained' and never an age",
+      "limits": { "n": 20, "minFlagged": 0.95 }
+    },
+    {
+      "id": "D3.wrongMetallicity",
+      "leg": "d",
+      "what": "the truth at [Fe/H] -0.50 fitted at -0.25: in at least 90 percent of 20 seeds the 1-sigma interval of log age or of dm excludes the truth, so the stated assumption carries the result and the record says so",
+      "limits": { "n": 20, "minExcluded": 0.9 }
+    },
+    {
+      "id": "D4.wrongReddening",
+      "leg": "d",
+      "what": "REPORTED, no band: the median bias of log age and dm with the reddening wrong by 0.058, and the share of seeds whose intervals exclude the truth",
+      "limits": { "n": 20 }
+    },
+    {
+      "id": "D5.wrongContamination",
+      "leg": "d",
+      "what": "REPORTED, no band: the same coverages with the true contamination 0.30 and 0.02 against the model's 0.15",
+      "limits": { "n": 20 }
+    },
+    {
+      "id": "D6.edge",
+      "leg": "d",
+      "what": "a cluster at the oldest age of the grid (log age 9.6, 20 seeds): an interval that runs into the grid's edge is reported open on that side and the result says 'older than the models reach', never a closed interval across the edge",
+      "limits": { "n": 20, "minOpenOrClosedInside": 1.0 }
+    },
+    {
+      "id": "E1.ngc2420",
+      "leg": "e",
+      "what": "NGC 2420's SEGUE members (velocity 65 to 85 km/s, g 14.5 to 20.5, both colours present) at [Fe/H] -0.25, E(g - r) 0.042, contamination 0.20 (the neighbouring velocity windows hold 43 stars on average against 197 in the window): the 1-sigma interval of the age overlaps the published range 1.74 to 2.2 Gyr (Cantat-Gaudin et al. 2020, PARSEC, log age 9.24; WEBDA through Lee et al. 2008b, 2.2 Gyr) and the interval of the distance modulus overlaps 12.06 to 12.54 (the pack-recorded 2587 pc of Cantat-Gaudin et al. 2020 and WEBDA's 12.54). The published values were not used to tune anything. 233 adds the parallax distance when it lands.",
+      "limits": { "ageRangeGyr": [1.74, 2.2], "dmRange": [12.06, 12.54] }
+    },
+    {
+      "id": "E2.errorModel",
+      "leg": "e",
+      "what": "the error model against the SDSS photometry pack's own per-star errors: in each of the magnitude bins 15 to 17, 17 to 19, 19 to 20, 20 to 21 the median catalogued g error divided by the model's sigma lies within 0.5 to 2.0",
+      "limits": {
+        "bins": [
+          [15, 17],
+          [17, 19],
+          [19, 20],
+          [20, 21]
+        ],
+        "lo": 0.5,
+        "hi": 2.0
+      }
+    },
+    {
+      "id": "P1.speed",
+      "leg": "p",
+      "what": "one fit of S2 (31 ages by 151 distance moduli) runs in at most 20 s of CPU, recorded and not a physics bound",
+      "limits": { "maxSeconds": 20 }
+    }
+  ],
+  "amendments": []
+}

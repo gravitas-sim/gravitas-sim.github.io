@@ -940,12 +940,42 @@ export const DISCOVERY = {
     },
     courseLevel: 'survey',
   },
+  'two-clusters-two-ages': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['lives-of-stars'],
+    textbook: {
+      chapter: 21,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
   'weighing-the-stars-for-real': {
     audience: 'intro',
     mathematics: 'algebra',
     prerequisites: [],
     textbook: {
       chapter: 18,
+      section: null,
+    },
+    courseLevel: 'survey',
+  },
+  'how-fast-does-the-star-spin': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: [],
+    textbook: {
+      chapter: 16,
+      section: null,
+    },
+    courseLevel: 'survey',
+  },
+  flares: {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: [],
+    textbook: {
+      chapter: 16,
       section: null,
     },
     courseLevel: 'survey',

@@ -474,6 +474,13 @@ export const NEVER_PRECACHED = [
   /^(js\/spectrographWidgets\.js|js\/spectrographField\.js|js\/i18n\/(en|es)\.spectrograph\.js)$/,
   /^js\/instruments\/spectrograph\.js$/,
   /^js\/observatory\/spectrographPanel\.js$/,
+  // Prompt 219: the cluster-fit kernel, panel and words (D-R10-219-01): imported by no startup path, fetched when the panel opens.
+  /^js\/kernels\/clusters\//,
+  /^js\/observatory\/clusterPanel\.js$/,
+  /^js\/i18n\/(en|es)\.cluster\.js$/,
+  // Prompt 219: the lesson's panel, its field module, its words and the lesson's one new file (D-R10-219-01).
+  /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(two-clusters-two-ages|cluster-sequence)\.js$/,
+  /^(js\/clusterFitWidgets\.js|js\/clusterFitField\.js|js\/i18n\/(en|es)\.clusterLesson\.js)$/,
   // Prompt 217: the eclipsing-binary panels, their field module and the lesson's one new file (D-R10-217-04). The kernel
   // (js/inference/binaries.js) and the model (js/inference/binaryModel.js) are NOT here: the inference worker imports them.
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(two-stars-eclipsing|binaries-sequence)\.js$/,
@@ -482,6 +489,10 @@ export const NEVER_PRECACHED = [
   // (js/inference/binaryMasses.js) and the models (js/inference/binaryJoint.js) are NOT here: the inference worker imports them.
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(weighing-the-stars-for-real|binary-masses-sequence)\.js$/,
   /^(js\/massesWidgets\.js|js\/massesField\.js|js\/i18n\/(en|es)\.masses\.js)$/,
+  // Prompt 220: the activity panels, their field module, their words and the two lessons' one new file (D-R10-220-07).
+  // The kernel, the loader and the two pack records are already here from the data part (D-R10-220-03).
+  /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(how-fast-does-the-star-spin|flares|stellar-activity-sequence)\.js$/,
+  /^(js\/activityWidgets\.js|js\/activityField\.js|js\/i18n\/(en|es)\.activity\.js)$/,
   // Prompt 214: the strategy kernel, planner extension, panels and the strategy lesson's one new file (D-R10-214-06).
   /^js\/kernels\/strategy\//,
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(why-the-period-is-wrong|strategy-sequence)\.js$/,
@@ -511,6 +522,12 @@ export const NEVER_PRECACHED = [
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(counts-to-magnitudes|photometric-calibration-sequence)\.js$/,
   /^(js\/photcalWidgets\.js|js\/photcalField\.js|js\/photcalKeep\.js|js\/i18n\/(en|es)\.photcal\.js|js\/instruments\/photcal\.js)$/,
   /^js\/kernels\/detector\/photcal\.js$/,
+  // Prompt 220: the stellar-activity kernel, its light-curve loader and the two pack records. No shipped
+  // module imports them yet (the panels and investigations are a later part), so no page can fetch one
+  // and an install has no use for them; their first adopter deletes this entry (D-R10-220-03).
+  /^js\/kernels\/activity\//,
+  /^js\/activityData\.js$/,
+  /^js\/data\/observations\/(tessAuMicS1|tessEkDraS16)\.js$/,
 ];
 
 const ON_DEMAND_ONLY = new Set([

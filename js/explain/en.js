@@ -166,6 +166,12 @@ export default {
     'Why one visit a night at the same time cannot tell a period from its aliases, how irregular times or more nights break the tie, why more nights from one site do not remove the sidereal-day alias, and what weather costs.',
     'The verdict is a sinusoid in white noise, not an eclipse or a flare; the weather is a seeded draw that loses whole nights, not a forecast; the Moon enters only through the planner’s separation limit; the series are synthetic, with the period you set as their truth.',
   ],
+  activity: [
+    'The light of a star against time, or its periodogram, or the light folded on a trial period: a spotted star, synthetic with its truth known, or a real TESS light curve of AU Microscopii or EK Draconis; and, for flares, a day of AU Microscopii with each flare the rule finds marked, one flare close up with its equivalent duration and uncertainty, and the count of flares by size with a power-law fit.',
+    'Fold the light on the period found and on twice it and see whether the dips match; add a second spot on the other side and watch the period the search returns halve; tilt the spin axis, change the spot or turn on differential rotation and see which numbers move; for flares, step through the day, open the largest flares, and move the floor of the fit to see the slope change.',
+    'The period of the dimming, with its interval and the other period it could be, which the light alone cannot always exclude; that a flare is a fast rise and a slow fall whose equivalent duration is a time, not an energy; and that a slope fitted above a floor depends on where the floor is. No age follows from a period here, and no energy from a duration.',
+    'The model is a round dark spot or two on a sphere with limb darkening, a flare is the standard shape of Davenport and colleagues, the rule is a threshold of three standard deviations with three points in a row, and the synthetic data are seeded draws; spot growth, flares that overlap, the star’s tilt when unknown and the band’s conversion to energy are left out.',
+  ],
   masses: [
     'Two Doppler curves of one orbit, and what they fix: the mass ratio, the size of the orbit times sin i and the masses times sin³ i, every one a minimum until an inclination is known; a single line gives only the mass function. With an eclipse, the joint fit of the light curve and both velocity curves gives the masses and radii of both stars with the uncertainty of the whole fit, or the words “not constrained”.',
     'Which star moves faster (the lighter), why the mass ratio needs no inclination, what the masses become at a tilt you choose, what an eclipse adds, where the uncertainty of a mass comes from, and where the weighed stars sit against the MIST tracks in mass and radius or mass and luminosity.',
@@ -177,6 +183,12 @@ export default {
     'Which star is hotter and which is larger from the two eclipses, how the secondary’s phase gives e cos w, how the eclipse durations give e sin w only weakly, why a grazing eclipse leaves the radius ratio open, and what a residual test says when something the model leaves out is in the data.',
     'Why the deeper eclipse hides the hotter star, why a flat bottom means the smaller star was hidden, why radii come as fractions of the orbit and not in kilometres, and why a number from a fit is only a measurement when the data fix it.',
     'The model is two spheres on a Kepler orbit: no reflection, no ellipsoidal light, no spots, no third star, no masses (those need velocities); limb darkening is fixed from a table; every data set is synthetic, with its truth stated.',
+  ],
+  clusterFit: [
+    'A synthetic star cluster of a known age and distance, drawn from MIST isochrones: its color–magnitude diagram with the best isochrone over it, and the age and distance modulus the fit gives, each with a one-sigma interval, at the metallicity you set.',
+    'Which of two clusters is older from where the stars leave the main sequence, how the fitted age and distance trade against each other, how far the age moves when the assumed metallicity changes, and what a binary fraction that the model does not have does to a fit.',
+    'Why an interval from a fit is conditional on its assumptions, why the difference between two clusters’ ages is steadier than either age, and why a stated metallicity is a choice and not a result.',
+    'The metallicity is never fitted and the reddening is held at 0.042; the stars are single in the model; the members are given, with 15 percent of the stars not members; every cluster is synthetic, with its truth one switch away. The same fit on NGC 2420 falls outside the published range, which is this limit, not a measurement of the cluster.',
   ],
   surveyDesign: [
     'A facility from the instrument library, a class of source with a stated counts slope, an exposure, visits to stack, nights and a detection threshold, with a goal depth and area to meet.',

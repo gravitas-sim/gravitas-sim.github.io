@@ -268,15 +268,16 @@ describe('the document inventory', () => {
     // 911 after Two Stars Eclipsing (Prompt 217, stacked over Prompt 215): eleven more, the same set as for any lesson with three depths.
     // 900 after the three survey-design investigations (Prompt 215): eleven for each lesson, 33 more.
     // 967 after Weighing the Stars, for Real (Prompt 218, eleven more); 956 after the five observing closeout investigations (Prompt 216): nine for each lesson (two depths), 45 more over Two Stars Eclipsing (911).
-    expect(inv.documents).toBe(967);
-    expect(inv.byLocale).toEqual({ en: 442, es: 525 });
+    // 1000 after Two Clusters, Two Ages (Prompt 219): eleven more over 989.
+    expect(inv.documents).toBe(1000);
+    expect(inv.byLocale).toEqual({ en: 457, es: 543 });
     expect(inv.byKind.notes).toBe(INVESTIGATIONS.length);
     expect(inv.byVariant).toEqual({
       activity: 12,
-      depth: 432,
-      full: 404,
+      depth: 450,
+      full: 416,
       general: 18,
-      notes: 101,
+      notes: 104,
     });
   });
 
@@ -304,7 +305,7 @@ describe('the document inventory', () => {
     const withDepth = INVESTIGATIONS.filter(
       i => withAllDepths(i).steps.length !== i.steps.length
     ).map(i => i.id);
-    expect(withDepth.length).toBe(74);
+    expect(withDepth.length).toBe(77);
     // A key for each depth the lesson offers: three for most, two for Design
     // the Schedule, whose upper depth (Prompt 214) has no quantitative layer.
     let keys = 0;

@@ -1,0 +1,152 @@
+// The stellar-activity panels' words, in English (Prompt 220). The model and
+// what-it-leaves-out lines are fixed text, so they translate by key.
+export const EN_ACTIVITY = {
+  'actW.on': 'on',
+  'actW.off': 'off',
+  'actW.axis.time': 'Time (days)',
+  'actW.axis.flux': 'Relative flux',
+  'actW.axis.period': 'Trial period (days)',
+  'actW.axis.power': 'Periodogram power',
+  'actW.axis.phase': 'Rotation phase',
+  'actW.axis.logEd': 'log10 of the equivalent duration (s)',
+  'actW.axis.logRate': 'log10 of flares per day at least this long',
+  'actW.legend.data': 'Data',
+  'actW.legend.model': 'Star without spots',
+  'actW.legend.power': 'Power',
+  'actW.legend.peak': 'Peak',
+  'actW.legend.double': 'Twice the peak',
+  'actW.legend.flares': 'Flare peaks',
+  'actW.legend.quiet': 'Quiet level',
+  'actW.legend.cum': 'Flares',
+  'actW.legend.law': 'Power-law fit',
+  'actW.legend.floor': 'Fit starts here',
+  'actW.v.deg': '{x}°',
+  'actW.v.d': '{x} d',
+  'actW.verdict.period-with-alias':
+    '{p} d (95 percent interval {a} to {b} d), with the double period still possible',
+  'actW.verdict.double-period':
+    '{p} d (95 percent interval {a} to {b} d): the odd and even dips differ, so the peak is the half period',
+  'actW.verdict.no-signal':
+    'no rotation signal: the peak is no stronger than noise',
+  'actW.verdict.not-constrained':
+    'not constrained: fewer than two cycles in the data',
+  'actW.cand.primary': 'the period reported',
+  'actW.cand.not-excluded': 'not excluded by the data',
+  'actW.cand.untestable':
+    'cannot be tested: the data hold fewer than two cycles of it',
+  'actW.cand.excluded': 'excluded: the odd and even dips differ',
+  'actW.v.cand': '{p} d, {s}',
+
+  // ---- the spot panel
+  'actW.s.title': 'A spotted star turning',
+  'actW.s.note':
+    'A star with one or two dark spots, turning once every 4.00 days at its equator, seen at the tilt you choose; the light curve is the star’s light against time, 16 days of it, with a little noise. A spot facing us dims the star; as it turns away the star brightens, and the pattern repeats once a turn. The periodogram finds the period; the panel says what the period it finds could also be. The star, the spots and the noise are a model, and the data are synthetic.',
+  'actW.s.control.lat': 'Spot latitude',
+  'actW.s.control.size': 'Spot radius',
+  'actW.s.control.contrast': 'Spot brightness, against the star',
+  'actW.s.control.inc': 'Tilt of the spin axis',
+  'actW.s.control.second': 'Second spot, opposite side',
+  'actW.s.control.shear': 'Differential rotation, k',
+  'actW.s.control.view': 'Show',
+  'actW.s.view.0': 'light curve',
+  'actW.s.view.1': 'periodogram',
+  'actW.s.view.2': 'fold at P',
+  'actW.s.view.3': 'fold at 2P',
+  'actW.s.row.model': 'Model',
+  'actW.s.m.spots':
+    'A sphere with round dark spots, quadratic limb darkening and one rotation axis; no spot growth or decay, no flares, no planets',
+  'actW.s.row.amp': 'Dimming from the spots',
+  'actW.s.v.amp': '{a} percent from peak to trough',
+  'actW.s.row.period': 'Period found',
+  'actW.s.row.alias': 'Other period it could be',
+  'actW.s.row.spot': 'Period of the spot’s latitude',
+  'actW.s.v.spot':
+    '{p} d for the spot, {e} d at the equator, {q} d at latitude 60 degrees',
+  'actW.s.row.assumes': 'What this assumes',
+  'actW.s.a.spots':
+    'The period it reports is that of the spots’ latitude, which is not the equator’s when the star turns differentially; spots that grow, decay and drift would smear the pattern, and the alias test is only as good as the two dips being alike or not.',
+
+  // ---- the authentic rotation panel
+  'actW.r.title': 'The spin of a real star',
+  'actW.r.note':
+    'A real light curve from the TESS space telescope, one sector of 27 days: AU Microscopii, a young red dwarf, and EK Draconis, a young Sun-like star. The periodogram of the whole sector gives the rotation period; the panel states it with its interval and the longer period the data could also fit.',
+  'actW.r.control.star': 'Star',
+  'actW.r.control.view': 'Show',
+  'actW.r.star.0': 'AU Microscopii',
+  'actW.r.star.1': 'EK Draconis',
+  'actW.r.view.0': 'light curve',
+  'actW.r.view.1': 'periodogram',
+  'actW.r.view.2': 'fold at P',
+  'actW.r.view.3': 'fold at 2P',
+  'actW.r.row.data': 'Data',
+  'actW.r.v.data':
+    '{n} points over {d} days; the flux is the mean-normalized PDCSAP flux of the TESS pipeline (a model of the instrument’s systematics removed), in 30-minute averages for the fit',
+  'actW.r.row.period': 'Rotation period',
+  'actW.r.row.alias': 'Other period it could be',
+  'actW.r.row.cycles': 'Cycles in the data',
+  'actW.r.v.cycles': '{c}',
+  'actW.r.row.amp': 'Dimming from the spots',
+  'actW.r.v.amp': '{a} percent from peak to trough',
+  'actW.r.row.fap': 'Chance of a peak this strong from noise',
+  'actW.r.v.fap': '{x}',
+  'actW.r.v.fapBelow': 'below 1e-300',
+  'actW.r.row.paper': 'Published',
+  'actW.r.v.paper': '{p} ± {s} d (Gilbert et al. 2022, from all TESS sectors)',
+  'actW.r.v.nopaper': 'not stated here',
+  'actW.r.row.assumes': 'What this assumes',
+  'actW.r.a.curve':
+    'A period of the dimming, not a direct reading of the star’s turn: it is the spots’ own period, the star could turn at twice this if two spots sit opposite, and the interval is widened for the correlation of the residuals but not for spots that change. No age follows from it.',
+  'actW.r.loading': 'The light curve is loading.',
+  'actW.r.failed': 'The light curve could not be loaded.',
+
+  // ---- the flare panel
+  'actW.f.title': 'Flares on a red dwarf',
+  'actW.f.note':
+    'AU Microscopii again, at the telescope’s two-minute cadence. A flare is a sudden brightening that rises in minutes and fades over longer: the panel marks every brightening the rule finds, a point three standard deviations above the star’s quiet level with at least two more following, and states for each its equivalent duration, the time the star at its quiet level would take to give out the same light, in seconds, with its uncertainty.',
+  'actW.f.control.view': 'Show',
+  'actW.f.control.day': 'Day of the sector',
+  'actW.f.control.flare': 'Flare, largest first',
+  'actW.f.view.0': 'a day',
+  'actW.f.view.1': 'one flare',
+  'actW.f.row.rule': 'Rule',
+  'actW.f.v.rule':
+    '{n} flares in {d} days of good data; a point is a candidate when it is {s} standard deviations (the quiet scatter of {sig} percent) above the quiet level, and at least three in a row qualify',
+  'actW.f.row.window': 'In this view',
+  'actW.f.v.window': '{n} flares marked',
+  'actW.f.row.ed': 'Equivalent duration',
+  'actW.f.v.ed': '{e} ± {s} s',
+  'actW.f.row.amp': 'Peak above the quiet level',
+  'actW.f.v.amp': '{a} percent',
+  'actW.f.row.half': 'Width at half the peak',
+  'actW.f.v.half': '{h} minutes',
+  'actW.f.row.fit': 'Fit to the standard flare shape',
+  'actW.f.v.fit': 'chi-square {c} for {d} degrees of freedom',
+  'actW.f.row.none': 'No flare marked in this view',
+  'actW.f.row.assumes': 'What this assumes',
+  'actW.f.a.rule':
+    'A flare is whatever the rule finds: faint and short ones are found only in part, flares that overlap are one, and the star’s own variations are taken out by a model of its quiet light. The equivalent duration is in the telescope’s band; it is not an energy.',
+
+  // ---- the frequency distribution
+  'actW.d.title': 'How often flares of each size occur',
+  'actW.d.note':
+    'The flares of the last panel, counted from the largest down: how many a day are at least this large, in equivalent duration, on logarithmic axes. Above a floor the counts fall on a straight line, a power law of slope alpha, and the panel fits it. Below the floor the telescope misses flares and the counts bend. The synthetic star is made with a known slope, to show what the fit returns when the truth is known.',
+  'actW.d.control.source': 'Flares from',
+  'actW.d.control.floor': 'Floor of the fit',
+  'actW.d.source.0': 'AU Microscopii',
+  'actW.d.source.1': 'synthetic star',
+  'actW.d.floor.0': 'completeness',
+  'actW.d.floor.1': 'best fit',
+  'actW.d.floor.2': 'none',
+  'actW.d.row.found': 'Flares found',
+  'actW.d.v.found': '{n} in {d} days',
+  'actW.d.row.floor': 'Floor',
+  'actW.d.v.floor': '{e} s, leaving {n} flares',
+  'actW.d.row.alpha': 'Slope alpha of the power law',
+  'actW.d.v.alpha': '{a} (95 percent interval {lo} to {hi})',
+  'actW.d.row.truth': 'The slope the synthetic star was made with',
+  'actW.d.v.truth': '{a}, from {n} injected flares',
+  'actW.d.row.none': 'Too few flares above the floor to fit a slope',
+  'actW.d.row.assumes': 'What this assumes',
+  'actW.d.a.law':
+    'A single power law above the floor; the slope is the maximum-likelihood value for the flares above it, so it moves if the floor moves, and a floor chosen to make the fit best is chosen after seeing the data. The distribution is of the band’s equivalent durations, not of energies.',
+};

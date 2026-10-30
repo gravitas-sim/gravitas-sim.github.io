@@ -1174,6 +1174,19 @@ export const MANIFEST = [
     objectiveCount: 4,
   },
   {
+    id: 'two-clusters-two-ages',
+    title: 'Dos cúmulos, dos edades',
+    subtitle:
+      'Ajusta una edad y una distancia a dos cúmulos de estrellas, mira cuánto se mueve cada una al cambiar la metalicidad que supones y aprende por qué la diferencia de dos edades es más estable que cada una',
+    duration: '15-35 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/two-clusters-two-ages.webp',
+    depths: 3,
+    stepCount: 7,
+    gradedCount: 5,
+    objectiveCount: 4,
+  },
+  {
     id: 'weighing-the-stars-for-real',
     title: 'Pesar las estrellas, de verdad',
     subtitle:
@@ -1184,6 +1197,32 @@ export const MANIFEST = [
     depths: 3,
     stepCount: 7,
     gradedCount: 5,
+    objectiveCount: 4,
+  },
+  {
+    id: 'how-fast-does-the-star-spin',
+    title: '¿Con qué rapidez gira la estrella?',
+    subtitle:
+      'Lee el periodo de rotación de una estrella a partir de la atenuación de sus manchas, mira por qué la luz sola puede dejar abierta una segunda respuesta y mide dos estrellas reales',
+    duration: '14-28 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/how-fast-does-the-star-spin.webp',
+    depths: 3,
+    stepCount: 7,
+    gradedCount: 5,
+    objectiveCount: 4,
+  },
+  {
+    id: 'flares',
+    title: 'Erupciones',
+    subtitle:
+      'Halla las erupciones en la luz de una enana roja, mide cuánta luz da cada una como duración equivalente y cuenta las erupciones por tamaño',
+    duration: '14-28 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/flares.webp',
+    depths: 3,
+    stepCount: 6,
+    gradedCount: 4,
     objectiveCount: 4,
   },
   {
