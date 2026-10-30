@@ -1,0 +1,127 @@
+{
+  "format": "gravitas.seismology-gate-thresholds/1",
+  "prompt": "Roadmap III, Prompt 221, Part A gate (docs/seismology-gate): power spectrum, background, numax and Delta nu, and a mass and radius through the scaling relations",
+  "document": "SEISMOLOGY_GATE.md",
+  "committed": "before any prototype, before any oracle output and before any spectrum of any light curve was computed or looked at, on this branch (docs/seismology-gate); the prototype is on spike/seismology-gate and is never merged. The Kepler files were fetched (SHA-256 below) and their headers listed; no flux was plotted, binned or transformed before this file was committed.",
+  "rule": "A threshold that proves unmeasurable fails the gate on that threshold; only Carl resets one. A threshold is never re-read after a result is seen: an alternative reading is recorded as a question for Carl. Verdicts are by the rule under verdict, not by judgement afterwards.",
+  "published": {
+    "star": "KIC 10318430 (Kp 12.03; a low-luminosity red giant on the red-giant branch, observed in all of Kepler quarters 0 to 17)",
+    "source": "Yu et al. 2018, ApJS 236, 42 (arXiv:1802.04455), Tables 1 and 2 as printed in the paper, read 2026-10-30",
+    "numaxMicroHz": { "value": 154.84, "sigma": 0.91 },
+    "deltaNuMicroHz": { "value": 12.985, "sigma": 0.032 },
+    "teffK": { "value": 5329, "sigma": 151, "origin": "Mathur et al. 2017 through Yu et al. Table 2" },
+    "massSolar_noDeltaNuCorrection": { "value": 1.31, "sigma": 0.08 },
+    "radiusSolar_noDeltaNuCorrection": { "value": 5.21, "sigma": 0.11 },
+    "analysis": "the SYD pipeline on the 17 to 18 quarter long-cadence series (1318.2 d in the paper's length column); formal uncertainties by 200 chi-squared perturbations; 1.0 and 0.5 per cent added in quadrature to numax and Delta nu only when propagating to mass and radius",
+    "scalingRelations": "M/Msun = (numax/numax_sun)^3 (Dnu/Dnu_sun)^-4 (Teff/Teff_sun)^1.5; R/Rsun = (numax/numax_sun) (Dnu/Dnu_sun)^-2 (Teff/Teff_sun)^0.5",
+    "solarReferences": { "numaxSunMicroHz": 3090, "numaxSunSigma": 30, "deltaNuSunMicroHz": 135.1, "deltaNuSunSigma": 0.1, "teffSunK": 5777, "origin": "Yu et al. 2018 Sec. 3.3 (SOHO/VIRGO analysed like the Kepler data)" }
+  },
+  "relationScatter": {
+    "citations": "Huber et al. 2017, ApJ 844, 102 (arXiv:1705.04697): seismic radii accurate to about 5 per cent or better for 0.8 to 8 Rsun and no significant offset for low-luminosity RGB stars (about 3 to 8 Rsun); Gaulme et al. 2016, ApJ 832, 121: against ten red giants in eclipsing binaries the relations overestimate radii by about 5 per cent and masses by about 15 per cent on average",
+    "contractChoice": "the stated interval of a mass adds an independent relation scatter of 10 per cent (fractional, in quadrature) and of a radius 5 per cent: this is the contract's choice between the two citations, not a citation; the 15 per cent mean mass excess of Gaulme et al. is a bias the interface states in words and does not subtract",
+    "systematicFloors": { "numax": 0.01, "deltaNu": 0.005, "origin": "Yu et al. 2018 Sec. 3.5, added in quadrature to the formal uncertainties" }
+  },
+  "data": {
+    "source": "Kepler long-cadence light curves (PDCSAP_FLUX, SAP_QUALITY, TIME, CADENCENO), MAST, https://archive.stsci.edu/missions/kepler/lightcurves/0103/010318430/ , retrieved 2026-10-30, HTTP 200 for every file, 7.2 MB in 18 files, fetched by the coordinator; NASA mission data public at MAST, acknowledgement requested",
+    "files": [
+      ["Q0", "kplr010318430-2009131105131_llc.fits", "2feb3e122b8849e9336149eca2026222abe9e2b79d26c33b8d48c23877868f52"],
+      ["Q1", "kplr010318430-2009166043257_llc.fits", "f6fce5c6456db1b23e10110a6a9f906b545d5da68533ee4730404e84062ff65b"],
+      ["Q2", "kplr010318430-2009259160929_llc.fits", "0a1315a05abee25251ffabf37a7ae0377e8182ca92fe66dff4057ba7f626cf13"],
+      ["Q3", "kplr010318430-2009350155506_llc.fits", "ce9276c7f2ec8694c6ed021337d026db037a667cdcee85c7610a87cbc9ecc6a9"],
+      ["Q4", "kplr010318430-2010078095331_llc.fits", "12582a799391da9d21f7984531bb8c6cc5f7caa7ac25eb780295b14876ead54d"],
+      ["Q5", "kplr010318430-2010174085026_llc.fits", "c7dc80ed46d589f173dd2cf7f9bee96faef234cdba87e25d5b78ae75f2bfb9ee"],
+      ["Q6", "kplr010318430-2010265121752_llc.fits", "2e798e04b90b386b02e98f7c8b9a729b00dc76c090668756a984c9975148e78a"],
+      ["Q7", "kplr010318430-2010355172524_llc.fits", "7769c259a7f0fa5c028e4adfa91c97ec9a8f729e4c3c4bad35b9e8795b544a44"],
+      ["Q8", "kplr010318430-2011073133259_llc.fits", "fb7bbbd734d4960a71b8f32f4399c3cbbc81abd3ab1d5d1c0b3e45e2c28ddef3"],
+      ["Q9", "kplr010318430-2011177032512_llc.fits", "052b7cc1168a3a7b1ef61a09d0dc450b8c1e3f35554f9256ee6f7f2df3230181"],
+      ["Q10", "kplr010318430-2011271113734_llc.fits", "7000d8af527c9e9f045089c2df4c7cc97a3621b81c0c862d27e2b49ee76e84b4"],
+      ["Q11", "kplr010318430-2012004120508_llc.fits", "6098cba15e500a78ac7af5835c12f5bec48c2c701e99f5128f1a52983ff42f28"],
+      ["Q12", "kplr010318430-2012088054726_llc.fits", "7ed32017cf7da34083d23b287065cba9c5bae6cf2ff1a7b7aaa70324c06cf2a1"],
+      ["Q13", "kplr010318430-2012179063303_llc.fits", "3367418c756b1c2ab602c4d8672ea0efd1fac68aea310b5f85517b367c7fcfa7"],
+      ["Q14", "kplr010318430-2012277125453_llc.fits", "83c6c4dc298d214e036e1d599d2b80846b71c6c112f0605d6699407fbeb3520b"],
+      ["Q15", "kplr010318430-2013011073258_llc.fits", "e17ee59de5a9dfe1772b7aa60740c7ecd1ea7be0dc0ad22db0c77cf5ae1397c7"],
+      ["Q16", "kplr010318430-2013098041711_llc.fits", "2a83876c7c0a14a0f57472ca3826ef6bdfef2a4971109b6da8b14c62f5714861"],
+      ["Q17", "kplr010318430-2013131215648_llc.fits", "6626ee4f9a2fc83407c7ab59af0c2fe9c6d5c6696141db78719760eb2663f362"]
+    ],
+    "subset": "Q9 to Q12 (four consecutive quarters, about one year: the series a student receives, chosen here by file number, before any spectrum existed); the full series is Q0 to Q17 (the published solution's data)",
+    "negativeReal": "the 30-minute-bin EK Draconis TESS sector 16 pack of Prompt 220 (a young active dwarf; 1,055 rows, one sector): the same cadence as Kepler long cadence, a dwarf whose solar-like numax lies far above the Nyquist frequency"
+  },
+  "preprocessing": {
+    "selection": "SAP_QUALITY == 0 and finite PDCSAP_FLUX and finite TIME; per quarter, flux divided by its median and turned into ppm (1e6 (F/median - 1)); quarters joined with no jump correction",
+    "highPass": "a running median over 99 consecutive valid cadences (about 2.0 d, cutoff near 5.7 uHz) within each quarter, subtracted; a 4.5-sigma clip on the MAD-based sigma, applied once",
+    "grid": "the cadence number (CADENCENO) places every point on the even cadence grid dt = 1765.5 s (29.4244 min); a missing cadence is set to zero after the mean is removed (zero-filled) and the spectrum is divided by the duty cycle N_valid/N",
+    "domain": "numax from 20 uHz to 0.8 of the Nyquist frequency (about 226 uHz): outside it no mass and no radius are returned (the high-pass removes the signal below, the sinc attenuation and the unresolved aliasing above)"
+  },
+  "powerSpectrum": {
+    "definition": "single-sided power spectral density in ppm^2 per uHz normalised so that Parseval holds: the sum of PSD x delta_nu over 0 to Nyquist equals the variance (ppm^2) of the series. FFT of an evenly sampled series x_n of N points spaced dt seconds: P_k = 2 dt |X_k|^2 / N x 1e-6 (X_k the unnormalised DFT; k = 1 to N/2 - 1; the k = 0 and Nyquist bins halved), divided by the duty cycle for zero-filled gaps. A white series of variance sigma^2 has the level 2 sigma^2 dt x 1e-6 ppm^2/uHz; a sine of amplitude A on a full grid peaks at N dt A^2 / 2 x 1e-6",
+    "gaps": "the periodogram for gaps is the least-squares sinusoid fit (a cos + b sin on the mean-subtracted data) at each frequency, with power density (a^2 + b^2) / 2 x N_valid dt x 1e-6: it has the same white level and the same sine peak, with the same units, so an FFT and a periodogram of the same series are comparable"
+  },
+  "backgroundModel": {
+    "form": "B(nu) = eta(nu)^2 sum_{i=1,2} [2 sqrt(2)/pi] a_i^2 / b_i / (1 + (nu/b_i)^4) + W, eta = sinc(pi nu / (2 nu_Nyq)); the envelope adds eta^2 H exp(-(nu - numax)^2 / (2 s^2)) on top (Kallinger et al. 2014 form; the white term W is not attenuated)",
+    "statistic": "the Whittle likelihood: -ln L = sum_k [ ln M_k + P_k / M_k ] over 10 uHz to the Nyquist frequency (the spectrum of a Gaussian series scatters as chi-squared with two degrees of freedom about its model)",
+    "bounds": { "a_i_ppm": [1, 10000], "b1_microHz": [1, 150], "b2_microHz": [10, 600], "orderingNote": "b1 < b2 enforced", "W_ppm2PerMicroHz": [0.1, 500], "H_ppm2PerMicroHz": [0, 100000], "numax_microHz": [5, "0.9 nu_Nyq"], "s_microHz": [1.5, 40] },
+    "optimiser": "Nelder-Mead on the log of each parameter from a fixed grid of starts, the best likelihood kept; a parameter reported on a bound is a flag, and the share of such fits is leg C2"
+  },
+  "numaxMethod": {
+    "snr": "the spectrum divided by the background-only part of the fitted model",
+    "smoothing": "Gaussian with FWHM = 2 Dnu_emp(nu), Dnu_emp(nu) = 0.263 nu^0.772 uHz (Stello et al. 2009, ApJ 700, 1589; the same empirical relation sets the Delta nu search window), iterated to a fixed point from the envelope fit's numax",
+    "estimate": "the location of the maximum of the smoothed SNR spectrum, refined by a parabola through three points",
+    "detection": "the envelope fit improves 2 (ln L1 - ln L0) by at least 40 over the background-only model (three extra parameters; chosen as a trial-adjusted p of order 1e-6) with numax inside the domain, AND the comb is significant (below)"
+  },
+  "deltaNuMethod": {
+    "window": "numax +- one FWHM of the fitted envelope (FWHM = 2.355 s)",
+    "acf": "the autocorrelation of the mean-subtracted SNR spectrum inside the window, as a function of lag; Delta nu is the lag of the highest peak of the lightly smoothed ACF (Gaussian sigma = 0.02 Dnu_emp) inside 0.6 to 1.4 Dnu_emp(numax), refined by a parabola",
+    "combSignificance": "400 seeded shuffles of the SNR bins inside the window (the same ACF peak search on each): the comb is significant when fewer than 1 per cent of the shuffles reach the observed peak height",
+    "uncertainty": "the standard deviation of numax and Delta nu over 200 seeded chi-squared (2 dof)/2 perturbations of the spectrum with the background held fixed, in quadrature with the systematic floors above"
+  },
+  "massRadius": {
+    "propagation": "Monte Carlo, 4000 seeded draws through the scaling relations (Prompt 154's propagation), with independent Gaussian numax, Delta nu, Teff, numax_sun and Dnu_sun; the interval is the 16th to 84th percentile of the draws, widened by the relation scatter above; correlations between numax and Delta nu are neglected (stated)"
+  },
+  "ensemble": {
+    "generator": "an independent Python generator written for the oracle, never the kernel: a stochastic spectrum drawn as complex Gaussian Fourier coefficients with variance equal to the model power density (so the periodogram scatters exactly as chi-squared with two degrees of freedom), inverse-transformed to a time series of N = 16000 cadences, and masked with the valid-cadence pattern of the real Q9 to Q12 series",
+    "model": "granulation: a1 = a2 = 3382 numax^-0.609 ppm, b1 = 0.317 numax^0.970, b2 = 0.948 numax^0.992 uHz (Kallinger et al. 2014 relations as the generator's design values, labelled); white W in {2, 6, 20} ppm^2/uHz; envelope: radial orders n with nu_n0 = Dnu (n + eps), eps = 0.634 + 0.63 log10 Dnu, quadrupole at nu_n0 - 0.121 Dnu, dipole at nu_n0 + Dnu/2 (no mixed modes: stated limit of the generator and of the method), Lorentzian linewidth 0.15 uHz, visibilities V0 = 1, V1 = 1.5, V2 = 0.6 (squared in height), Gaussian envelope FWHM 0.66 numax^0.88 uHz (Mosser et al. 2012), radial-mode amplitude A = 39 (numax/155)^-0.84 ppm so that the power per order is of the order of the published value; Dnu = 0.263 numax^0.772 (1 + 0.03 z), z standard normal; sinc attenuation applied",
+    "numaxGrid": [40, 70, 110, 160],
+    "seedsPerGrid": 50,
+    "seedBase": 221000
+  },
+  "legs": [
+    { "id": "A1.sine", "what": "an FFT spectrum of a bin-centred noise-free sine (A = 100 ppm, N = 4096) peaks at N dt A^2/2 (x1e-6); a periodogram of the same sine with 10 per cent seeded gaps at an off-grid frequency peaks at N_valid dt A^2/2", "limit": { "maxRelativeFFT": 1e-9, "maxRelativeGapped": 1e-6 } },
+    { "id": "A2.parseval", "what": "Parseval on the FFT spectrum of seeded white and coloured series, 30 seeds: the integral of the spectrum equals the variance", "limit": { "maxRelative": 1e-10 } },
+    { "id": "A3.whiteLevel", "what": "the mean FFT power density of 20 seeded white series (N = 8000) over 5 to 270 uHz equals 2 sigma^2 dt", "limit": { "maxRelative": 0.01 } },
+    { "id": "A4.gapsAgree", "what": "FFT (zero-filled, duty-corrected) and the periodogram on the same gapped white series (20 seeds, 10 per cent gaps in 12-cadence runs): the mean power density over 5 to 270 uHz agrees", "limit": { "maxRelative": 0.02 } },
+    { "id": "B1.oracleFFT", "what": "the kernel's FFT spectrum of 3 seeded series against an independent numpy rfft implementation of the normalisation above", "limit": { "maxRelative": 1e-9 } },
+    { "id": "B2.oraclePeriodogram", "what": "the kernel's gap periodogram against astropy.timeseries.LombScargle (version recorded; fit_mean False, center_data True, normalization psd, converted to the density above) on a seeded gapped series at 500 frequencies", "limit": { "maxRelative": 1e-6 } },
+    { "id": "B3.oracleReal", "what": "the same comparison on the real Q9 to Q12 series after pre-processing, 400 frequencies between 5 and 270 uHz; the astropy values are pinned as a fixture", "limit": { "maxRelative": 1e-6 } },
+    { "id": "C1.background", "what": "on the 200-spectrum ensemble the fitted background-only part at the true numax against the true background: the median and 90th percentile of |ratio - 1|", "limit": { "maxMedian": 0.05, "maxP90": 0.15 } },
+    { "id": "C2.bounds", "what": "the share of ensemble fits with any parameter on a bound", "limit": { "maxFraction": 0.05 } },
+    { "id": "F1.numax", "what": "numax recovery on the ensemble: |numax_hat/numax - 1|", "limit": { "maxMedian": 0.02, "maxP90": 0.05 } },
+    { "id": "D1.deltaNu", "what": "Delta nu recovery on the ensemble: |dnu_hat/dnu - 1|", "limit": { "maxMedian": 0.01, "maxP90": 0.03 } },
+    { "id": "D2.comb", "what": "the share of the 200 ensemble spectra detected (envelope and comb significant)", "limit": { "minFraction": 0.95 } },
+    { "id": "F2.coverageNumax", "what": "coverage of the stated 68 per cent interval of numax on the ensemble (a test of the interval's construction, stated as such: the generator is independent of the kernel but the likelihood is the generator's own statistic)", "limit": { "min": 0.6, "max": 0.85 } },
+    { "id": "D3.coverageDeltaNu", "what": "coverage of the stated 68 per cent interval of Delta nu on the ensemble", "limit": { "min": 0.6, "max": 0.85 } },
+    { "id": "G1.relations", "what": "the scaling relations with the published numax, Delta nu and Teff and the solar references give the published uncorrected mass and radius", "limit": { "massAbs": 0.01, "radiusAbs": 0.01 } },
+    { "id": "G2.coverageMass", "what": "coverage of the stated 68 per cent mass interval on the ensemble, the truth being the relation value of the true numax and Delta nu times (1 + 0.10 z) with z a seeded standard normal, and Teff = 4800 K +- 150 K assumed known to its stated sigma", "limit": { "min": 0.6, "max": 0.85 } },
+    { "id": "G3.coverageRadius", "what": "the same for the radius with the relation scatter 0.05", "limit": { "min": 0.6, "max": 0.85 } },
+    { "id": "N1.falseAlarm", "what": "200 seeded spectra of a non-oscillating dwarf (granulation and white only, the solar numax lying above the Nyquist frequency, same masks and levels): none may be reported as detected beyond 2 per cent", "limit": { "maxDetectedFraction": 0.02 } },
+    { "id": "N2.dwarfReal", "what": "the real EK Draconis 30-minute TESS series (dwarf) returns not detected", "limit": { "detected": false } },
+    { "id": "N3.domain", "what": "100 seeded ensemble spectra with true numax of 8 to 18 uHz or 240 to 270 uHz: no mass and no radius is returned for any", "limit": { "minRefusedFraction": 1 } },
+    { "id": "E1.real.subset", "what": "KIC 10318430, Q9 to Q12, pre-processed as committed, against the published solution: numax, Delta nu, mass and radius (published Teff and solar references)", "limit": { "numaxRelative": 0.05, "deltaNuRelative": 0.03, "massRelative": 0.15, "radiusRelative": 0.08, "detected": true } },
+    { "id": "E2.real.full", "what": "KIC 10318430, Q0 to Q17: the same comparison with the same limits", "limit": { "numaxRelative": 0.05, "deltaNuRelative": 0.03, "massRelative": 0.15, "radiusRelative": 0.08, "detected": true } }
+  ],
+  "classes": {
+    "spectrum": ["A1.sine", "A2.parseval", "A3.whiteLevel", "A4.gapsAgree", "B1.oracleFFT", "B2.oraclePeriodogram", "B3.oracleReal"],
+    "background": ["C1.background", "C2.bounds"],
+    "negatives": ["N1.falseAlarm", "N2.dwarfReal", "N3.domain"],
+    "deltaNu": ["D1.deltaNu", "D2.comb", "D3.coverageDeltaNu", "E1.real.subset:deltaNu", "E2.real.full:deltaNu"],
+    "numax": ["F1.numax", "F2.coverageNumax", "E1.real.subset:numax", "E2.real.full:numax"],
+    "massRadius": ["G1.relations", "G2.coverageMass", "G3.coverageRadius", "E1.real.subset:mass", "E1.real.subset:radius", "E2.real.full:mass", "E2.real.full:radius"],
+    "note": "E1 and E2 are scored by field: detected counts with deltaNu; mass and radius are scored in massRadius"
+  },
+  "verdict": {
+    "A": "every leg passes: numax, Delta nu, mass and radius through the scaling relations with their intervals, the FFT added to js/numeric/",
+    "B": "every leg of the classes spectrum, background, negatives and deltaNu passes and at least one leg of numax or massRadius fails: Delta nu and the comb only, no mass and no radius (the FFT is added with its validation)",
+    "C": "any leg of the classes spectrum, background, negatives or deltaNu fails: no inference; a reading step on what the oscillations show; no FFT added to js/numeric/"
+  },
+  "bytes": "measured and reported (the kernel's gzipped size and the real-data sidecar); T3 has no deferred allocation, so the measured overrun is raised exactly under the standing approval of 2026-10-10 and is not a verdict leg",
+  "amendments": []
+}
