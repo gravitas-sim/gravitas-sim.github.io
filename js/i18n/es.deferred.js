@@ -1839,6 +1839,8 @@ export const ES_DEFERRED = {
     'Sigue estrellas de distintas masas del nacimiento a la muerte y lee sus edades en el diagrama.',
   'inv.seq.light.the-limit':
     'Donde acaba la muerte de una estrella: el límite de masa de una enana blanca y lo que hay más allá.',
+  'inv.seq.light.two-clusters-two-ages':
+    'Ajusta una edad y una distancia a dos cúmulos sintéticos, y mira cuánto se mueve la edad al cambiar la metalicidad supuesta.',
   'inv.seq.light.how-old-is-this-white-dwarf':
     'Lee cuánto tiempo lleva enfriándose una enana blanca y mantén el error de la ley de enfriamiento aparte de la incertidumbre de la medida. Necesita antes El límite.',
   'inv.seq.light.from-star-to-remnant':

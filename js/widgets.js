@@ -398,6 +398,12 @@ export const LAZY_FAMILIES = Object.freeze({
     ['activity-spots', 'activity-period', 'activity-flares', 'activity-ffd'],
     'activityReady'
   ),
+  clusterFit: familyEntry(
+    () => import('./clusterFitWidgets.js'),
+    './clusterFitWidgets.js',
+    'CLUSTER_WIDGETS',
+    ['cluster-fit']
+  ),
   eclipse: familyEntry(
     () => import('./eclipseWidgets.js'),
     './eclipseWidgets.js',
@@ -662,6 +668,8 @@ export async function whenWidgetsReady() {
     'photcal',
     // The eclipse family reaches the plot component and the inference core: late for the same reason (Prompt 217).
     'eclipse',
+    // The cluster family reaches the plot component, the kernels and the MIST isochrones: late (Prompt 219).
+    'clusterFit',
     // The mass family reaches the plot component, the inference core and the MIST tracks: late for the same reason (Prompt 218).
     'masses',
     // The activity family reaches the plot component and the kernel, and its curves are sidecars: late for the same reason (Prompt 220).

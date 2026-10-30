@@ -23,9 +23,9 @@ bibliography: paper.bib
 
 Gravitas is a browser-based gravitational sandbox and a suite of guided
 investigations for introductory and general-education astronomy. It ships 61
-configurable scenarios drawn from real and idealized systems, and 120 guided
-investigations (103 that run in the simulation and 17 in the Observatory, the
-3-D lab and the mission lab). The 60 that run in the simulation have 1381 steps
+configurable scenarios drawn from real and idealized systems, and 121 guided
+investigations (104 that run in the simulation and 17 in the Observatory, the
+3-D lab and the mission lab). The 60 that run in the simulation have 1388 steps
 in which a student predicts an outcome, changes one thing, measures the result,
 and revises the prediction against what they measured. It runs entirely
 client-side as a static site, requires no account and no installation, works
@@ -33,7 +33,7 @@ offline after a first visit, and encodes any simulation state into a shareable
 URL.
 
 The distinguishing commitment is that the software says what it is doing. A
-public validation page reports 348 checks of the physics engine against
+public validation page reports 352 checks of the physics engine against
 analytic results, published values and independent integrations, each with its
 measured error and each labelled by the kind of evidence it rests on; a public
 model page states what the simulation represents and, at equal length, what it
@@ -194,7 +194,7 @@ has never been raised.
 
 Gravitas is tested at three levels. A unit suite covers the modules. A browser
 suite runs in full in Chromium, against both the sources and the production
-build; a tagged cross-engine subset of it runs in Firefox and WebKit. A physics validation suite runs 348 checks and publishes the
+build; a tagged cross-engine subset of it runs in Firefox and WebKit. A physics validation suite runs 352 checks and publishes the
 result: each check names what it compares, the kind of evidence it rests on —
 analytic, integrated, published, approximation or empirical — and its measured
 error. The public validation page is generated from the suite that ran, not

@@ -1,0 +1,37 @@
+{
+  "note": "Legs of tests/fixtures/cluster-fit/thresholds.json that crossed their bound, kept failing and labelled (only Carl resets a bound).",
+  "failed": [
+    {
+      "id": "D6.edge",
+      "measured": {
+        "n": 20,
+        "violations": 5,
+        "flaggedAtEdge": 15,
+        "closedAcrossEdge": 0,
+        "closedNearEdge": 5
+      },
+      "why": ""
+    },
+    {
+      "id": "E1.ngc2420",
+      "measured": {
+        "stars": 197,
+        "status": "ok",
+        "reason": null,
+        "best": {
+          "logAge": 9.370104166666668,
+          "dm": 11.820084635416668
+        },
+        "ageGyr": [2.300217597377473, 2.3447911521650373, 2.418905734097817],
+        "dm": [11.811783171419854, 11.820084635416668, 11.836051465469305],
+        "ageOverlap": false,
+        "dmOverlap": false,
+        "distancePc": 2312.1549070840747,
+        "correlation": -0.007189705599862972,
+        "intervalStatus": ["ok", "ok"],
+        "warnings": []
+      },
+      "why": ""
+    }
+  ]
+}

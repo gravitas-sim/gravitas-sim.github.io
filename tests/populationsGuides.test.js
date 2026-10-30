@@ -103,7 +103,8 @@ describe('the guides as data', () => {
         if (s.check?.kind === 'measured')
           expect(TOOLS).toHaveProperty([s.check.tool]);
         if (s.go?.open) expect(G.TARGETS).toHaveProperty([s.go.open]);
-        if (s.go?.panel) expect(['fit', 'measure']).toContain(s.go.panel);
+        if (s.go?.panel)
+          expect(['fit', 'measure', 'cluster']).toContain(s.go.panel);
         if (s.kind === 'answer') {
           expect(typeof G.ANSWERS[s.expect.answer]).toBe('function');
           expect(s.expect.tolerance).toBeGreaterThanOrEqual(0);

@@ -201,6 +201,7 @@ export const GUIDED = Object.freeze([
   'tides-that-move-the-moon',
   'transit-photometry',
   'twelve-nights',
+  'two-clusters-two-ages',
   'two-greenhouse-models',
   'two-periodograms',
   'two-stars-eclipsing',

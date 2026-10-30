@@ -193,6 +193,7 @@ export const SEQUENCES = [
       ['how-old-is-this-white-dwarf', 'core', ['the-limit']],
       ['from-star-to-remnant', 'core', ['the-limit', 'lives-of-stars']],
       ['cluster-membership', 'quantitative', ['lives-of-stars']],
+      ['two-clusters-two-ages', 'core', ['lives-of-stars']],
     ]
   ),
   sequence(

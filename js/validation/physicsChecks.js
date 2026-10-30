@@ -92,6 +92,7 @@ const GROUPS = [
   () => import('./groups/long-term-regression.js'),
   () => import('./groups/atmospheres.js'),
   () => import('./groups/interiors.js'),
+  () => import('./groups/clusters.js'),
 ];
 
 /**

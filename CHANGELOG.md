@@ -38,6 +38,7 @@ the release rather than in the tag.
 - Exposure planning: the CCD-equation kernel (`js/kernels/detector/snr.js`) extended with several exposures, point-spread-function photometry, extended sources, extinction by airmass, the limiting magnitude of an exposure and refusals for targets the exposure limit or the full well forbids, a facility adapter over the instrument library that fills in nothing the library does not state, an exposure-planner panel with a synthetic frame measured with aperture photometry, four new advanced steps in Signal, Noise and Exposure (the lower depths grade as before), and the majors investigation Plan an Exposure, in English and Spanish with instructor materials. Validated against analytic cases, an independent implementation, the published Rubin depth model and 1600 rendered frames; three legs against the published model (the read-noise loss in u and g, and the equation away from the fiducial sky) stay failing and labelled in `EXPOSURE_PLANNING.md`.
 - Survey design: a kernel for the depth an exposure and a facility reach (the CCD equation of the exposure planner, with optimal photometry), the area a plan covers, the expected counts from a stated count model, completeness and contamination, the depth-against-area trade-off at fixed time and the time two facilities need for one goal (`js/kernels/survey/`, `SURVEY_DESIGN.md`), validated against an independent Python oracle and an ensemble; four validation legs failed their committed bounds and are recorded and labelled, and a leg against an authentic catalogue was not run. An open-ended `plan` step on the lesson format (feasibility and the student's own stated numbers, never one correct plan), and three investigations, each in English and Spanish with instructor materials: Deep or Wide? (survey, majors, upper), Two Telescopes, One Question and the capstone Propose an Observation.
 - An observing sequence, Observing and instruments, ordering the detector, telescope, exposure, calibration, strategy and survey investigations that exist, with five new connecting investigations, each in English and Spanish with instructor materials and a deeper step layer: Which Instrument for Which Question? (one star and one field on three facilities), The Sky Background (the sky in the aperture, the Moon and a redder sky), Coordinates and Time at Depth (sidereal time, meridian crossings and precession), A Night at the Telescope, End to End (five stations on a prepared plan) and From Photons to a Number (a magnitude and its uncertainty from counts). The Observational astronomy lab course (1.1.0) is rebuilt around the sequence with the two image investigations, and the numbers every step asks for are recomputed from the project's own kernels and instrument library (`tests/observingCloseout.test.js`).
+- Cluster fitting: a kernel that fits MIST isochrones (interpolated between the grid) to a cluster's colour-magnitude diagram over age and distance modulus at a stated metallicity and reddening (`js/kernels/clusters/`), with a stated magnitude-conditional binned likelihood, profile intervals, the age-distance valley and a "not constrained" verdict below a committed member count, checked against an independent numpy/scipy/emcee oracle, an ensemble coverage test (with a binary fraction as a reported misspecification) and NGC 2420 (`CLUSTER_FITTING.md`, `tools/cluster-fit-validate.mjs`); the Observatory's cluster panel with the fitted isochrone over the data, the profile plots and the record; four advanced steps in the populations guide "Ages from models"; the four-parameter gate's verdict (`CLUSTER_FOUR_PARAMETER_GATE.md`). Metallicity is not fitted.
 
 ## [2.1.0] - 2026-10-24
 
@@ -133,14 +134,14 @@ The Observatory's image measurement train (Prompts 179 to 182, 184, 186 to 189, 
 
 **Gravitas 2.0.0.** Gravitas grows from a gravity sandbox with 22 guided
 investigations into a browser laboratory: <!--fact:scenarios-->61<!--/fact-->
-sandbox scenarios, <!--fact:libraryInvestigations-->120<!--/fact--> guided
-investigations (<!--fact:investigations-->103<!--/fact--> that run in the
+sandbox scenarios, <!--fact:libraryInvestigations-->121<!--/fact--> guided
+investigations (<!--fact:investigations-->104<!--/fact--> that run in the
 simulation and <!--fact:guidedInvestigations-->17<!--/fact--> in the
 Observatory, the 3-D lab and the mission lab), a shared shell, a Library, a
 workspace for each student's own work, an instructor path from adoption page to
-gradebook file, <!--fact:instructorDocuments-->989<!--/fact--> generated
+gradebook file, <!--fact:instructorDocuments-->1000<!--/fact--> generated
 instructor documents, a public validation suite
-of <!--fact:physicsChecks-->348<!--/fact--> checks, and authoring tools
+of <!--fact:physicsChecks-->352<!--/fact--> checks, and authoring tools
 (Scenario Studio, Investigation Composer, course packs and an extension SDK).
 The Library lists <!--fact:libraryScenarios-->69<!--/fact--> ready-made
 scenarios: the 59 in the sandbox and <!--fact:systems3dScenarios-->8<!--/fact-->
@@ -1791,7 +1792,7 @@ listed here because this is the release that first carries it.
 - **An instructor portal that explains itself.** `/instructors/` states what is
   behind the passphrase before asking for it, says plainly what client-side
   encryption on a static host can and cannot promise, and presents the
-  <!--fact:instructorDocuments-->989<!--/fact--> documents grouped by investigation
+  <!--fact:instructorDocuments-->1000<!--/fact--> documents grouped by investigation
   with their kind and size. A wrong passphrase and a missing bundle now report
   as the different problems they are.
 - **Dual licensing.** The code is MIT; the original educational material is
@@ -1858,7 +1859,7 @@ listed here because this is the release that first carries it.
   uncertainty, the target and the observing configuration.
 - **Offline support.** A service worker precaches the application shell, the
   <!--fact:scenarios-->61<!--/fact--> scenario thumbnails and all
-  <!--fact:investigations-->103<!--/fact--> English lessons, so a class keeps
+  <!--fact:investigations-->104<!--/fact--> English lessons, so a class keeps
   working when the room's wifi drops. The cache name is a content hash, so a
   build invalidates it. See [OFFLINE_AND_LOW_END.md](OFFLINE_AND_LOW_END.md).
 - **A measured low-end quality tier.** Chosen from the frame rate the machine
@@ -1867,7 +1868,7 @@ listed here because this is the release that first carries it.
   off.
 - **An investigation authoring toolchain.** `npm run author:check` validates
   every lesson and every one of the
-  <!--fact:investigationSteps-->1381<!--/fact--> steps; `npm run author:new`
+  <!--fact:investigationSteps-->1388<!--/fact--> steps; `npm run author:new`
   scaffolds a lesson with its translation shadow and instructor stub;
   `?author=<lesson>&step=<n>` opens any step with diagnostics without touching
   a student's saved progress; and a browser walker exercises every step of
@@ -1924,7 +1925,7 @@ listed here because this is the release that first carries it.
   the share dialog and the scenario gallery keyboard traps in practice.
 - Three modal dialogs declared `aria-modal="true"` without trapping focus.
 - Stale counts across the documentation: `/model/` claimed 135 physics checks
-  against a suite of <!--fact:physicsChecks-->348<!--/fact-->, and 48 scenarios
+  against a suite of <!--fact:physicsChecks-->352<!--/fact-->, and 48 scenarios
   against a catalog of <!--fact:scenarios-->61<!--/fact-->.
 
 ### Removed

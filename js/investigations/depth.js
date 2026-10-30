@@ -156,6 +156,8 @@ const EXTENSIONS = {
     import('../data/investigations/depth/why-the-period-is-wrong.js'),
   'two-stars-eclipsing': () =>
     import('../data/investigations/depth/two-stars-eclipsing.js'),
+  'two-clusters-two-ages': () =>
+    import('../data/investigations/depth/two-clusters-two-ages.js'),
   'weighing-the-stars-for-real': () =>
     import('../data/investigations/depth/weighing-the-stars-for-real.js'),
   'how-fast-does-the-star-spin': () =>
@@ -300,6 +302,8 @@ const WORDS = {
       import('../data/investigations/depth/es/why-the-period-is-wrong.js'),
     'two-stars-eclipsing': () =>
       import('../data/investigations/depth/es/two-stars-eclipsing.js'),
+    'two-clusters-two-ages': () =>
+      import('../data/investigations/depth/es/two-clusters-two-ages.js'),
     'weighing-the-stars-for-real': () =>
       import('../data/investigations/depth/es/weighing-the-stars-for-real.js'),
     'how-fast-does-the-star-spin': () =>

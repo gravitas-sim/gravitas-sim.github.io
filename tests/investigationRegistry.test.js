@@ -177,6 +177,7 @@ const SHARED = [
   'binaries-sequence.js',
   'observing-sequence.js',
   'binary-masses-sequence.js',
+  'cluster-sequence.js',
   'stellar-activity-sequence.js',
   'remnants-sequence.js',
 ];
@@ -195,6 +196,7 @@ const SHARED_ES = SHARED.filter(
     f !== 'observing-sequence.js' &&
     f !== 'binary-masses-sequence.js' &&
     f !== 'stellar-activity-sequence.js' &&
+    f !== 'cluster-sequence.js' &&
     f !== 'remnants-sequence.js'
 );
 

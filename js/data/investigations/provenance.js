@@ -89,6 +89,7 @@ export const EVIDENCE_FROM = Object.freeze({
   'tides-that-move-the-moon': 'model',
   'transit-photometry': 'engine',
   'twelve-nights': 'model',
+  'two-clusters-two-ages': 'model',
   'two-greenhouse-models': 'model',
   'two-periodograms': 'computation',
   'two-stars-eclipsing': 'model',
