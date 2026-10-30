@@ -152,10 +152,16 @@ jobs:
   # smallest value that clears (about 20), as #420 did for the apt mirror; keeps
   # every committed ensemble asserted in CI. A workflow change, with your words
   # quoted in the commit." (D-R10-63).
+  # 2026-10-30: 20 goes to 30 minutes (D-CI-04). Jest grew to about 17 minutes
+  # with Roadmap III's suites, and on v3 7ade64ab (#483) every step passed but
+  # the job ran 19:59 and was cancelled, twice. Carl, merge-queue chat
+  # 2026-10-30, chose "Raise to 30 (Recommended)": "Edit ci.yml timeout-minutes
+  # for 'Lint, tests and physics validation' from 20 to 30, your words quoted
+  # in the commit and a register row, as D-R10-63 did."
   checks:
     name: Lint, tests and physics validation
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
       # The whole history, without old file contents: tests/decisionRegister.test.js
       # checks that every decision's source commit is in history, and a

@@ -13,6 +13,7 @@ catalogue refers to it, so a change to it can reach a student.
 | [AB_EXPERIMENT_BENCH.md](AB_EXPERIMENT_BENCH.md) | The A/B experiment bench. | feature | unassigned | written | no |
 | [ACCESSIBILITY.md](ACCESSIBILITY.md) | Accessibility target, what has been done and what has not. | policy | P127 | regions (docs) | yes |
 | [ACCESSIBILITY_CONFORMANCE.md](ACCESSIBILITY_CONFORMANCE.md) | The accessibility conformance report against WCAG 2.2, written by tools/conformance.mjs from tools/conformance/*.json (not yet a node of the generation graph; Prompt 289 decides). | policy | P127 | written | yes |
+| [ACTIVITY_AGES_GATE.md](ACTIVITY_AGES_GATE.md) | Activity ages gate: the committed relations, domain and bounds for gyrochronology ages and flare energies in erg, the measured legs and the verdict (Prompt 220 Part B). | gate | P220 | written | no |
 | [ADOPTER_GUIDE.md](ADOPTER_GUIDE.md) | The instructor adopter's guide and the newcomer docs test. | guide | P114 | regions (docs) | no |
 | [ADOPTION.md](ADOPTION.md) | The instructor path and the adoption pages. | guide | P76 | regions (docs) | yes |
 | [AI_ASSISTANCE_GATE.md](AI_ASSISTANCE_GATE.md) | Instructor-side AI assistance gate. | gate | unassigned | written | no |

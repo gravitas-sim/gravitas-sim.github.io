@@ -23,6 +23,13 @@
       "student": true
     },
     {
+      "file": "ACTIVITY_AGES_GATE.md",
+      "kind": "gate",
+      "purpose": "Activity ages gate: the committed relations, domain and bounds for gyrochronology ages and flare energies in erg, the measured legs and the verdict (Prompt 220 Part B).",
+      "owner": 220,
+      "student": false
+    },
+    {
       "file": "ADOPTER_GUIDE.md",
       "kind": "guide",
       "purpose": "The instructor adopter's guide and the newcomer docs test.",
