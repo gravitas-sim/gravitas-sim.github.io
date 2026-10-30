@@ -1,0 +1,14 @@
+{
+  "python": "3.9.6",
+  "numpy": "1.26.4",
+  "scipy": "1.13.1",
+  "astropy": "6.0.1",
+  "files": {
+    "tess2018206045859-s0001-0000000441420236-0120-s_lc.fits": "fe601f0f82b7d89c4d303e3c3acaa43efb61e38976b47482efce577e0029c9c3",
+    "tess2019253231442-s0016-0000000159613900-0152-s_lc.fits": "3f3c139f46afab814e1587a7e8a03e73c18b2a8a514d67d72e944972988cd6ef"
+  },
+  "script": "tools/stellar-activity-oracle/oracle.py",
+  "run": "2026-10-30, python3 3.9.6, numpy 1.26.4, scipy 1.13.1, astropy 6.0.1",
+  "independent": "a brute-force sky-plane pixel sum for spots, Astropy's LombScargle (method cython, standard normalization, fit_mean=True, center_data=True), numpy implementation of the flare rule text; no Gravitas code",
+  "note": "PyYAML is not installed; an empty module stands in for it as in Prompt 214's oracle. Nothing was installed or downloaded. The two SPOC files were fetched by the coordinator (D-R10-220-01) and are not in the repository."
+}
