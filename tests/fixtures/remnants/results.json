@@ -1,0 +1,390 @@
+{
+  "format": "gravitas.remnants-results/1",
+  "rows": [
+    {
+      "id": "A1.scaling",
+      "status": "pass",
+      "measured": {
+        "maxRelativeError": 4.060131078690772e-16,
+        "monotone": true
+      },
+      "note": ""
+    },
+    {
+      "id": "A2.inverse",
+      "status": "pass",
+      "measured": {
+        "maxRelativeError": 6.336463788361214e-16
+      },
+      "note": ""
+    },
+    {
+      "id": "A3.ode",
+      "status": "pass",
+      "measured": {
+        "maxRelativeError": 2.411213398000544e-15
+      },
+      "note": ""
+    },
+    {
+      "id": "A4.stefan",
+      "status": "pass",
+      "measured": {
+        "maxRelativeError": 6.907702506820581e-16
+      },
+      "note": ""
+    },
+    {
+      "id": "A5.radius",
+      "status": "pass",
+      "measured": {
+        "maxRelativeError": 0,
+        "radii": [
+          0.014098907140667721,
+          0.012705614450993514,
+          0.010346726318802782,
+          0.008213607285858484
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "A6.ifmrContinuity",
+      "status": "fail",
+      "measured": {
+        "maxAbsError": 0.0036400000000000876,
+        "joins": {
+          "mist@2.85": 0.00004999999999999449,
+          "mist@3.60": 0.0010000000000000009,
+          "parsec@2.80": 0.0036400000000000876,
+          "parsec@3.65": 0.0008749999999999591
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "A7.ifmrPublished",
+      "status": "pass",
+      "measured": {
+        "lossFractionAbsError": 0.0008433734939758408,
+        "loss083": 0.33084337349397586,
+        "loss75": 0.8301999999999999,
+        "monotoneBelowInitial": true
+      },
+      "note": ""
+    },
+    {
+      "id": "A8.outcomeSum",
+      "status": "pass",
+      "measured": {
+        "maxAbsError": 0,
+        "orderAndRange": true
+      },
+      "note": ""
+    },
+    {
+      "id": "A9b.neutronStarRange",
+      "status": "pass",
+      "measured": {
+        "min": 1.174,
+        "max": 1.559
+      },
+      "note": ""
+    },
+    {
+      "id": "A9.neutronStars",
+      "status": "fail",
+      "measured": {
+        "n": 14,
+        "mean": 1.33735,
+        "min": 1.174,
+        "max": 1.559,
+        "checks": [
+          true,
+          false,
+          true,
+          true,
+          true,
+          true
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "B1.tableLaw",
+      "status": "pass",
+      "measured": {
+        "median": 0.07485240455265078,
+        "p90": 0.14271883464214713,
+        "max": 0.321796951682907,
+        "perMass": {
+          "0.5": {
+            "median": 0.0846588307783278,
+            "max": 0.321796951682907
+          },
+          "0.7": {
+            "median": 0.05032934175628624,
+            "max": 0.2546019155809385
+          },
+          "0.8": {
+            "median": 0.06012855069622852,
+            "max": 0.1375945850316247
+          },
+          "0.9": {
+            "median": 0.07485240455265078,
+            "max": 0.14341984232278465
+          },
+          "1.0": {
+            "median": 0.10414394679970124,
+            "max": 0.1851102587627846
+          }
+        },
+        "calibrationMass": {
+          "median": 0.07409598910735846,
+          "p90": 0.11707210152586879,
+          "max": 0.33522505635310507
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "B2.teffEntry",
+      "status": "pass",
+      "measured": {
+        "median": 0.029414473898342945,
+        "max": 0.17269642499380183,
+        "perMass": {
+          "0.5": {
+            "median": 0.04644859401895912,
+            "max": 0.17269642499380183
+          },
+          "0.6": {
+            "median": 0.0344361459452114,
+            "max": 0.12426874279072837
+          },
+          "0.7": {
+            "median": 0.026694167582913323,
+            "max": 0.09161007709131523
+          },
+          "0.8": {
+            "median": 0.026013314660015344,
+            "max": 0.06545407812779395
+          },
+          "0.9": {
+            "median": 0.024551122007746003,
+            "max": 0.05027201222022724
+          },
+          "1.0": {
+            "median": 0.029202106100148666,
+            "max": 0.05871530214889168
+          }
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "B3.oracleCooling",
+      "status": "pass",
+      "measured": {
+        "tau": 8192398.854866501,
+        "tauRelative": 1.7052195415185076e-15,
+        "delta": 0.1851102587627846,
+        "deltaRelative": 9.446268810122541e-15,
+        "ageRelative": 0,
+        "pinResolution": {
+          "tauRawOverPin": -0.0001231415520460688,
+          "deltaRawOverPin": -0.00598755699538378
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "B4.oracleRelations",
+      "status": "pass",
+      "measured": {
+        "maxAbsError": 5.551115123125783e-17
+      },
+      "note": ""
+    },
+    {
+      "id": "B5.outsideDomain",
+      "status": "report",
+      "measured": {
+        "median": 0.20797935397119438,
+        "max": 0.4866551275860055
+      },
+      "note": "the law at 1.2 solar masses, where the kernel refuses"
+    },
+    {
+      "id": "C1.coolingCoverage",
+      "status": "pass",
+      "measured": {
+        "coverage": 0.9648370497427101,
+        "observationalTermAloneCoverage": 0.855917667238422,
+        "answered": 1166,
+        "refusedBecauseObservedOutside": 23,
+        "perMass": {
+          "0.7": {
+            "answered": 387,
+            "coverage": 0.9664082687338501
+          },
+          "0.8": {
+            "answered": 387,
+            "coverage": 0.9689922480620154
+          },
+          "0.9": {
+            "answered": 392,
+            "coverage": 0.9591836734693877
+          }
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "C2.ifmrCoverage",
+      "status": "pass",
+      "measured": {
+        "coverage": 0.9415,
+        "n": 2000
+      },
+      "note": ""
+    },
+    {
+      "id": "C3.outcomeFrequencies",
+      "status": "pass",
+      "measured": {
+        "maxAbsError": 0.01100000000000001,
+        "table": [
+          {
+            "m": 6,
+            "maxDifference": 0
+          },
+          {
+            "m": 7.5,
+            "maxDifference": 0.0044999999999999485
+          },
+          {
+            "m": 8.25,
+            "maxDifference": 0.01100000000000001
+          },
+          {
+            "m": 9,
+            "maxDifference": 0.0017000000000000348
+          },
+          {
+            "m": 10,
+            "maxDifference": 0
+          },
+          {
+            "m": 15,
+            "maxDifference": 0
+          },
+          {
+            "m": 22,
+            "maxDifference": 0.0032000000000000084
+          },
+          {
+            "m": 30,
+            "maxDifference": 0.0031999999999999806
+          },
+          {
+            "m": 38,
+            "maxDifference": 0.0007000000000000339
+          },
+          {
+            "m": 50,
+            "maxDifference": 0
+          }
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "D1.refusals",
+      "status": "pass",
+      "measured": {
+        "fraction": 1,
+        "reasons": [
+          "luminosity-out-of-domain",
+          "luminosity-out-of-domain",
+          "mass-out-of-domain",
+          "mass-out-of-domain",
+          "above-chandrasekhar",
+          "teff-luminosity-out-of-domain",
+          "teff-luminosity-out-of-domain",
+          "invalid-input",
+          "invalid-input",
+          "invalid-input",
+          "invalid-input",
+          "invalid-input",
+          "invalid-input",
+          "invalid-input",
+          "invalid-input",
+          "invalid-input"
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "D2.nearThreshold",
+      "status": "pass",
+      "measured": {
+        "fraction": 1,
+        "at825": {
+          "whiteDwarf": 0.5,
+          "neutronStar": 0.5,
+          "blackHole": 0
+        },
+        "at30": {
+          "whiteDwarf": 0,
+          "neutronStar": 0.5,
+          "blackHole": 0.5
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "D3.modelTermAlwaysThere",
+      "status": "pass",
+      "measured": {
+        "fraction": 1,
+        "maxRelativeError": 0,
+        "recordsValidate": true
+      },
+      "note": ""
+    },
+    {
+      "id": "D4.ifmrRefusals",
+      "status": "pass",
+      "measured": {
+        "checks": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "E1.clusterWhiteDwarfs",
+      "status": "pass",
+      "measured": {
+        "n": 78,
+        "rms": 0.06088042517288104,
+        "insideFraction": 0.9871794871794872,
+        "oracle": {
+          "n": 78,
+          "rms": 0.06088042517288105,
+          "insideFraction": 0.9871794871794872,
+          "nAll": 80
+        }
+      },
+      "note": "the relation was fitted to these white dwarfs: an applicability check, not an independent validation"
+    }
+  ]
+}

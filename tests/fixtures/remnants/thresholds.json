@@ -18,15 +18,33 @@
       "coolingTable": "Bedard, Bergeron, Brassard and Fontaine (2020, ApJ 901, 93), the evolutionary sequences of the Montreal group (https://www.astro.umontreal.ca/~bergeron/CoolingModels/), thick hydrogen (q_H = 1e-4), q_He = 1e-2, C/O core with Log(C/*) = Log(O/*) = -0.3054 (mass fractions 0.495 each), files seq_050, 060, 070, 080, 090, 100 and 120 of the 'thick' set. Each record is three lines: Teff (K), log g, R (cm), Age (years since the start of the sequence at Teff about 1e5 K), L (photon luminosity, erg/s), then Log Tc, Log Pc, Log rho_c, Mx/M, Log qx, then Lnu (erg/s) and the composition. Rights (7.5.4): no licence stated, credited, a Carl-recorded decision for this source only (D-R10-222-01); the five raw files fetched by the coordinator on 2026-10-30 are not in any repository; only the derived pin (Teff, log L/Lsun, R/Rsun, age) at the domain rows may be committed.",
       "solarLuminosity": "3.828e33 erg/s (the nominal solar luminosity, IAU 2015 B3, as the application's L_SUN_W) to turn the table's L into L/Lsun",
       "masses": {
-        "calibrateTau": [0.6],
-        "calibrateModelTerm": [0.5, 0.6, 1.0],
-        "heldOut": [0.7, 0.8, 0.9],
-        "outsideDomainReport": [1.2]
+        "calibrateTau": [
+          0.6
+        ],
+        "calibrateModelTerm": [
+          0.5,
+          0.6,
+          1.0
+        ],
+        "heldOut": [
+          0.7,
+          0.8,
+          0.9
+        ],
+        "outsideDomainReport": [
+          1.2
+        ]
       }
     },
     "coolingDomain": {
-      "massSun": [0.5, 1.0],
-      "logLSun": [-4.0, -1.5],
+      "massSun": [
+        0.5,
+        1.0
+      ],
+      "logLSun": [
+        -4.0,
+        -1.5
+      ],
       "why": "Mestel's law has one energy reservoir (the ions' heat) and one loss (photons through a radiative envelope). Above log L about -1.5 the neutrino luminosity is comparable to the photon luminosity; below about log L -4 the Debye cooling of the ions and, at all masses, the latent heat of crystallization and the convective coupling of the envelope to the degenerate core change the cooling rate; above 1.0 solar masses crystallization happens at luminosities inside the range; below 0.5 the cores are not C/O. The domain is where the one-reservoir picture is the leading effect, and the error inside it is measured (B1), not assumed.",
       "teffEntry": "the age may also be asked for from an effective temperature and a mass; L = 4 pi R^2 sigma Teff^4 with R from the cold degenerate mass-radius relation of js/kernels/stellar/whiteDwarf.js (about 3 per cent larger than the best published radii at 0.6 solar masses); the luminosity so found must be inside the domain, and the radius approximation is measured against the table (B2)",
       "refusal": "outside the domain, or for a mass at or above the Chandrasekhar mass of the kernel, or for a non-finite or non-positive input, the result is {status: 'refused', reason} with no age field"
@@ -59,7 +77,7 @@
       "leg": "a",
       "what": "the closed form against a fourth-order Runge-Kutta integration in ln L of dt/dlnL = -(5/7) t_L(L) at ten (M, L0, L1) triples with 4000 steps each",
       "limits": {
-        "maxRelativeError": 1e-9
+        "maxRelativeError": 1e-09
       }
     },
     {
@@ -111,6 +129,16 @@
       }
     },
     {
+      "id": "A9b.neutronStarRange",
+      "leg": "a",
+      "added": "AM2",
+      "what": "the neutron-star table's component masses all lie between 1.1 and 2.1 solar masses (the paper's text: three pulsars firmly in the 1.9 to 2.0 range; none of the seven systems' masses is above 1.6)",
+      "limits": {
+        "minMass": 1.1,
+        "maxMass": 2.1
+      }
+    },
+    {
       "id": "B1.tableLaw",
       "leg": "b",
       "what": "the law (L from the table) against the Montreal sequences at the domain rows of the masses that did not set tau, 0.5, 0.7, 0.8, 0.9 and 1.0: the weighted median, the weighted 90th percentile and the maximum of |ln(t_law / t_table)|; the 0.6 sequence that set tau is reported beside it, not in the bound",
@@ -134,9 +162,9 @@
       "leg": "b",
       "what": "tools/remnants-oracle/oracle.py (numpy and scipy, its own table parser and its own weights, no Gravitas code): tau, delta, the per-row ages of the law and the residual statistics against the kernel on the pinned domain rows",
       "limits": {
-        "tauRelative": 1e-6,
-        "deltaRelative": 1e-6,
-        "ageRelative": 1e-9
+        "tauRelative": 1e-06,
+        "deltaRelative": 1e-06,
+        "ageRelative": 1e-09
       }
     },
     {
@@ -228,6 +256,12 @@
       "id": "AM1",
       "when": "after the coordinator fetched the sequences and before the oracle, the kernel's calibration or any residual was computed; no bound moved",
       "what": "(1) The pin (tests/fixtures/remnants/cooling-pin.json, tools/remnants-pin.mjs) keeps, for each mass, the model nearest to each log L/Lsun = -4.0 + 0.05 k inside the domain (51 rows), so the committed fixture is a small derived sample, not the sequences; tau, delta and every statistic of the checks are computed on the pin rows (the oracle also reads the raw sequences and reports the effect of the thinning, which is a report, not a bound). (2) The weights and the percentile are defined: the weight of a row is the trapezoid width of log L (interior rows half the distance between their two neighbours, end rows half the distance to their one neighbour); a weighted p-quantile is the smallest value, the values in increasing order, whose cumulative normalised weight reaches p; a statistic pooled over masses weights each mass equally and the rows of a mass by their trapezoid widths; the maximum is over rows. (3) The Cummings et al. (2018) table pinned for E1 is TABLE 1 of the paper (the reanalysed parameters of 80 white dwarfs and Sirius B among them, two marked as the outliers the paper excludes from its scatter), approved as a fixture by the coordinator (D-R10-222-02); the sequences at 0.7 and 0.9 solar masses were fetched with the others.",
+      "boundMoved": false
+    },
+    {
+      "id": "AM2",
+      "when": "after the first full run of the validator; A6 and A9 stay as committed and fail",
+      "what": "A6 measured the PARSEC relation's two pieces meeting at 2.80 solar masses with a gap of 0.00364 (0.7204 against 0.7168) against the bound 0.002: the cited coefficients, printed to three figures, are not continuous there (the MIST joins close to 0.00005 and 0.001; PARSEC at 3.65 to 0.0009). The kernel states the published coefficients as printed, so A6 is left failing and labelled; nothing in the kernel smooths the join. A9 premised that every neutron-star component mass is below the Chandrasekhar mass of the white-dwarf model (1.4569); that is wrong physics, since the limit is a white dwarf's and the table's J0453+1559 pulsar (1.559) is above it, so A9 is left failing and labelled; the added leg A9b (the masses lie between 1.1 and 2.1, the range the paper's text gives for measured neutron stars) holds the meaningful half of the premise. The mean of the 14 masses (1.337) is within the bound of the double-neutron-star population mean. No bound moved.",
       "boundMoved": false
     }
   ]

@@ -1,0 +1,41 @@
+{
+  "note": "Legs of tests/fixtures/remnants/thresholds.json that crossed their bound, kept failing and labelled (only Carl resets a bound).",
+  "failed": [
+    {
+      "id": "A6.ifmrContinuity",
+      "status": "fail",
+      "measured": {
+        "maxAbsError": 0.0036400000000000876,
+        "joins": {
+          "mist@2.85": 0.00004999999999999449,
+          "mist@3.60": 0.0010000000000000009,
+          "parsec@2.80": 0.0036400000000000876,
+          "parsec@3.65": 0.0008749999999999591
+        }
+      },
+      "note": "",
+      "reason": "The PARSEC relation's pieces, as printed to three figures, meet at 2.80 solar masses with a gap of 0.00364 (0.7204 against 0.7168); the kernel states the published coefficients and does not smooth them (AM2). The MIST joins close."
+    },
+    {
+      "id": "A9.neutronStars",
+      "status": "fail",
+      "measured": {
+        "n": 14,
+        "mean": 1.33735,
+        "min": 1.174,
+        "max": 1.559,
+        "checks": [
+          true,
+          false,
+          true,
+          true,
+          true,
+          true
+        ]
+      },
+      "note": "",
+      "reason": "Premised that every neutron-star component mass is below the white-dwarf model's Chandrasekhar mass; the limit is a white dwarf's, and the pulsar of J0453+1559 (1.559) is above it (AM2). A9b holds the meaningful half; the mean and the printed populations pass."
+    }
+  ],
+  "notRun": []
+}
