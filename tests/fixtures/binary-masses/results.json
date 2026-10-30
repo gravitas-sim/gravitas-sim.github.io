@@ -1,5 +1,5 @@
 {
-  "note": "The validation table of tools/binary-masses-validate.mjs as last measured (Node 24.4.0 on the Mac for the tables of this commit; re-measured on Node 22.23.4 before the PR); the Jest group reruns the quick legs and holds these against failed-legs.json.",
+  "note": "The validation table of tools/binary-masses-validate.mjs as last measured (Node 22.23.4); the Jest group reruns the quick legs and holds these against failed-legs.json.",
   "rows": [
     {
       "id": "A1.massChain",
@@ -27,7 +27,7 @@
       "id": "A3.massFunction",
       "status": "pass",
       "measured": {
-        "maxRelative": 8.337981479749902e-16,
+        "maxRelative": 5.955701056964214e-16,
         "equationRelative": 3.616108303047176e-16,
         "minimumAtMostTrue": true
       },
@@ -80,70 +80,70 @@
       "measured": {
         "X1": {
           "M1": {
-            "valueSigma": 0.00041944415581702345,
-            "sigmaRatio": 1.0451044544412478
+            "valueSigma": 0.0004194564522873037,
+            "sigmaRatio": 1.0451044545015586
           },
           "M2": {
-            "valueSigma": 0.0003888831375219064,
-            "sigmaRatio": 1.0451044362799409
+            "valueSigma": 0.00038888335283427186,
+            "sigmaRatio": 1.0451044363049051
           },
           "R1": {
-            "valueSigma": 0.004340072773501011,
-            "sigmaRatio": 1.045110787680969
+            "valueSigma": 0.0043400505344388446,
+            "sigmaRatio": 1.045110787709999
           },
           "R2": {
-            "valueSigma": 0.0004977200229250941,
-            "sigmaRatio": 1.045098676118696
+            "valueSigma": 0.000497702105367777,
+            "sigmaRatio": 1.0450986761208663
           },
           "a": {
-            "valueSigma": 0.00042564877273490497,
-            "sigmaRatio": 1.0451026289101282
+            "valueSigma": 0.0004256555811630574,
+            "sigmaRatio": 1.045102628975182
           },
           "K1": {
-            "valueSigma": 0.00017913518221726696,
-            "sigmaRatio": 1.0451023468226295
+            "valueSigma": 0.00017912672021641742,
+            "sigmaRatio": 1.045102346821934
           },
           "K2": {
-            "valueSigma": 0.00022163970098502693,
-            "sigmaRatio": 1.0451023468259035
+            "valueSigma": 0.0002216580394244706,
+            "sigmaRatio": 1.045102346823077
           },
           "inc": {
-            "valueSigma": 0.12748036434370563,
-            "sigmaRatio": 1.0434514595574387
+            "valueSigma": 0.12748032822372468,
+            "sigmaRatio": 1.0434514653859746
           }
         },
         "X2": {
           "M1": {
-            "valueSigma": 0.0007453240021996737,
-            "sigmaRatio": 1.0000047053746481
+            "valueSigma": 0.0007453231750929919,
+            "sigmaRatio": 1.00000470543749
           },
           "M2": {
-            "valueSigma": 0.0007115575797430975,
-            "sigmaRatio": 1.0000046833000367
+            "valueSigma": 0.0007115567785451307,
+            "sigmaRatio": 1.0000046833487088
           },
           "R1": {
-            "valueSigma": 0.035647468636347227,
-            "sigmaRatio": 1.0007904716192506
+            "valueSigma": 0.03564743055356157,
+            "sigmaRatio": 1.0007904715707185
           },
           "R2": {
-            "valueSigma": 0.04632840342739127,
-            "sigmaRatio": 1.0010331590446437
+            "valueSigma": 0.046328352985607536,
+            "sigmaRatio": 1.001033159460467
           },
           "a": {
-            "valueSigma": 0.0007690399738666649,
-            "sigmaRatio": 1.0000017145336937
+            "valueSigma": 0.0007690391154946411,
+            "sigmaRatio": 1.0000017145661186
           },
           "K1": {
-            "valueSigma": 0.0007453838872668935,
-            "sigmaRatio": 1.0000025483904371
+            "valueSigma": 0.0007453828155313927,
+            "sigmaRatio": 1.0000025483851906
           },
           "K2": {
-            "valueSigma": 0.0008361035706547672,
-            "sigmaRatio": 1.0000026403111881
+            "valueSigma": 0.0008361023973404024,
+            "sigmaRatio": 1.0000026403082312
           },
           "inc": {
-            "valueSigma": 0.08395387094857716,
-            "sigmaRatio": 0.9997511616651487
+            "valueSigma": 0.08395380762328987,
+            "sigmaRatio": 0.9997511664147648
           }
         }
       },
@@ -303,20 +303,20 @@
       "status": "pass",
       "measured": {
         "M1": {
-          "bias": -0.00032245175321699016,
-          "bound": 0.002376217560729638
+          "bias": -0.0003224517559818896,
+          "bound": 0.0023762175608775062
         },
         "M2": {
-          "bias": 0.0003163565852712935,
-          "bound": 0.0021534779161975263
+          "bias": 0.00031635658476480977,
+          "bound": 0.0021534779162709307
         },
         "R1": {
-          "bias": 0.00027111814730096384,
-          "bound": 0.0008718024073820386
+          "bias": 0.000271118124268499,
+          "bound": 0.0008718024074190107
         },
         "R2": {
-          "bias": 0.000108791668666397,
-          "bound": 0.0006360922767320922
+          "bias": 0.00010879166410826535,
+          "bound": 0.00063609227675931
         }
       },
       "note": ""
@@ -372,45 +372,45 @@
       "status": "fail",
       "measured": {
         "M_A": {
-          "ours": 1.2745044920111956,
-          "ourSigma": 0.0036308074314422988,
+          "ours": 1.2745044920111748,
+          "ourSigma": 0.003630807431777554,
           "paper": 1.2745,
           "paperSigma": 0.0036,
-          "deltaOverPaperSigma": 0.0012477808876883618
+          "deltaOverPaperSigma": 0.0012477808818905306
         },
         "M_B": {
-          "ours": 1.2577105561735993,
-          "ourSigma": 0.0030397767030196335,
+          "ours": 1.2577105561735784,
+          "ourSigma": 0.0030397767036146094,
           "paper": 1.2577,
           "paperSigma": 0.003,
-          "deltaOverPaperSigma": 0.0035187245330803307
+          "deltaOverPaperSigma": 0.003518724526122933
         },
         "R_A": {
-          "ours": 1.2928668447727136,
-          "ourSigma": 0.0015183114873149788,
+          "ours": 1.29286684481794,
+          "ourSigma": 0.0015183114873754697,
           "paper": 1.2941,
           "paperSigma": 0.0016,
-          "deltaOverPaperSigma": 0.7707220170539986
+          "deltaOverPaperSigma": 0.7707219887875816
         },
         "R_B": {
-          "ours": 1.2678621483739287,
-          "ourSigma": 0.0015359108599478216,
+          "ours": 1.267862148335613,
+          "ourSigma": 0.0015359108600797261,
           "paper": 1.2637,
           "paperSigma": 0.0017,
-          "deltaOverPaperSigma": 2.4483225728992344
+          "deltaOverPaperSigma": 2.4483225503605315
         },
         "a": {
-          "ours": 14.983675854738443,
-          "ourSigma": 0.012526065884576797,
+          "ours": 14.98367585473821,
+          "ourSigma": 0.012526065886059116,
           "paper": 14.984,
           "paperSigma": 0.013,
-          "deltaOverPaperSigma": 0.02493425088896555
+          "deltaOverPaperSigma": 0.024934250906865758
         },
         "geometry": {
-          "rsum": 0.17090125400282444,
-          "k": 0.9806594959876316,
-          "inc": 87.90326450857779,
-          "P": 4.222022808497912
+          "rsum": 0.1709012540032883,
+          "k": 0.9806594959236904,
+          "inc": 87.90326450857867,
+          "P": 4.222022808497849
         }
       },
       "note": ""
@@ -419,7 +419,7 @@
       "id": "P1.speed",
       "status": "pass",
       "measured": {
-        "cpuSeconds": 1.341025,
+        "cpuSeconds": 1.189582,
         "rows": 750
       },
       "note": ""

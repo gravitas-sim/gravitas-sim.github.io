@@ -59,45 +59,45 @@
       "id": "E1.authentic",
       "measured": {
         "M_A": {
-          "ours": 1.2745044920111956,
-          "ourSigma": 0.0036308074314422988,
+          "ours": 1.2745044920111748,
+          "ourSigma": 0.003630807431777554,
           "paper": 1.2745,
           "paperSigma": 0.0036,
-          "deltaOverPaperSigma": 0.0012477808876883618
+          "deltaOverPaperSigma": 0.0012477808818905306
         },
         "M_B": {
-          "ours": 1.2577105561735993,
-          "ourSigma": 0.0030397767030196335,
+          "ours": 1.2577105561735784,
+          "ourSigma": 0.0030397767036146094,
           "paper": 1.2577,
           "paperSigma": 0.003,
-          "deltaOverPaperSigma": 0.0035187245330803307
+          "deltaOverPaperSigma": 0.003518724526122933
         },
         "R_A": {
-          "ours": 1.2928668447727136,
-          "ourSigma": 0.0015183114873149788,
+          "ours": 1.29286684481794,
+          "ourSigma": 0.0015183114873754697,
           "paper": 1.2941,
           "paperSigma": 0.0016,
-          "deltaOverPaperSigma": 0.7707220170539986
+          "deltaOverPaperSigma": 0.7707219887875816
         },
         "R_B": {
-          "ours": 1.2678621483739287,
-          "ourSigma": 0.0015359108599478216,
+          "ours": 1.267862148335613,
+          "ourSigma": 0.0015359108600797261,
           "paper": 1.2637,
           "paperSigma": 0.0017,
-          "deltaOverPaperSigma": 2.4483225728992344
+          "deltaOverPaperSigma": 2.4483225503605315
         },
         "a": {
-          "ours": 14.983675854738443,
-          "ourSigma": 0.012526065884576797,
+          "ours": 14.98367585473821,
+          "ourSigma": 0.012526065886059116,
           "paper": 14.984,
           "paperSigma": 0.013,
-          "deltaOverPaperSigma": 0.02493425088896555
+          "deltaOverPaperSigma": 0.024934250906865758
         },
         "geometry": {
-          "rsum": 0.17090125400282444,
-          "k": 0.9806594959876316,
-          "inc": 87.90326450857779,
-          "P": 4.222022808497912
+          "rsum": 0.1709012540032883,
+          "k": 0.9806594959236904,
+          "inc": 87.90326450857867,
+          "P": 4.222022808497849
         }
       },
       "why": "V505 Persei: M_A, M_B, a and R_A agree with the published values to 0.001, 0.004, 0.02 and 0.77 of the published sigma (the masses nearly by construction, the published K values being inputs); R_B is 1.2679 +- 0.0015 against the published 1.2637 +- 0.0017, 2.45 published sigma against the bound 2. Our radius ratio k = 0.9807 (Prompt 217 measured 0.98 from the same light curve) against the published 0.9788; the published Table II values (rsum 0.170906, k 0.9788) give R_B = 1.2667 with the published a, and the published R_B corresponds to k = 0.9765, so the published numbers are not mutually consistent at the second star by 0.0030 solar radii in the HTML rendering read here. The model has no reflection effect and fits no out-of-eclipse lines, as in 217."
