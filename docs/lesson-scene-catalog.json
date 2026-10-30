@@ -1255,6 +1255,35 @@
    "mutates": [],
    "datasets": []
   },
+  "remnant-cooling": {
+   "live": false,
+   "controls": [
+    "mass",
+    "entry",
+    "logL",
+    "teff",
+    "precision",
+    "view"
+   ],
+   "presets": 0,
+   "buttons": [],
+   "engineReads": [],
+   "mutates": [],
+   "datasets": []
+  },
+  "remnant-outcome": {
+   "live": false,
+   "controls": [
+    "mi",
+    "relation",
+    "view"
+   ],
+   "presets": 0,
+   "buttons": [],
+   "engineReads": [],
+   "mutates": [],
+   "datasets": []
+  },
   "resolve": {
    "live": false,
    "controls": [
@@ -103904,6 +103933,1161 @@
    }
   },
   {
+   "id": "how-old-is-this-white-dwarf",
+   "title": "How Old Is This White Dwarf?",
+   "lock": {
+    "placement": true,
+    "inspector": true
+   },
+   "steps": [
+    {
+     "sid": "an-ember-cooling",
+     "index": 1,
+     "type": "read",
+     "title": "An ember cooling",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "dwarf",
+       "sun"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram"
+     ],
+     "actions": [
+      "move-an-instrument-control"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "experiment",
+       "measure"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "remnant-cooling",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "inherits the world already on screen",
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "ten-times-fainter",
+     "index": 2,
+     "type": "predict",
+     "title": "Ten times fainter",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "dwarf",
+       "sun"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram"
+     ],
+     "actions": [
+      "commit-a-prediction",
+      "move-an-instrument-control"
+     ],
+     "requires": [],
+     "reveal": "read-two-ages",
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "predict",
+      "actual": [
+       "predict",
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "remnant-cooling",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "read-two-ages",
+     "index": 3,
+     "type": "measure",
+     "title": "Read two ages",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "dwarf",
+       "sun"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values",
+      "move-an-instrument-control"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "remnant-cooling",
+      "capture": false
+     },
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "two-uncertainties",
+     "index": 4,
+     "type": "question",
+     "title": "Two uncertainties",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "dwarf",
+       "sun"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram"
+     ],
+     "actions": [
+      "choose-an-option",
+      "move-an-instrument-control"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "remnant-cooling",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "beyond-the-edge",
+     "index": 5,
+     "type": "question",
+     "title": "Beyond the edge",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "dwarf",
+       "sun"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram"
+     ],
+     "actions": [
+      "choose-an-option",
+      "move-an-instrument-control"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "remnant-cooling",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "a-bound-not-an-age",
+     "index": 6,
+     "type": "question",
+     "title": "A bound, not an age",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "dwarf",
+       "sun"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram"
+     ],
+     "actions": [
+      "choose-an-option",
+      "move-an-instrument-control"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "remnant-cooling",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "what-the-age-says",
+     "index": 7,
+     "type": "read",
+     "title": "What the age says",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "dwarf",
+       "sun"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram"
+     ],
+     "actions": [
+      "move-an-instrument-control"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "experiment",
+       "measure"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "remnant-cooling",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    }
+   ],
+   "loops": [
+    {
+     "predict": "ten-times-fainter",
+     "predictCollects": true,
+     "heldUntil": "read-two-ages",
+     "experiment": [
+      "read-two-ages",
+      "two-uncertainties",
+      "beyond-the-edge",
+      "a-bound-not-an-age",
+      "what-the-age-says"
+     ],
+     "measure": [
+      "read-two-ages",
+      "two-uncertainties",
+      "beyond-the-edge",
+      "a-bound-not-an-age",
+      "what-the-age-says"
+     ],
+     "evidence": [
+      "read-two-ages"
+     ],
+     "interpret": "read-two-ages",
+     "measuredBeforeAnswering": true,
+     "explained": false,
+     "answeredByTheExperiment": true,
+     "closed": true,
+     "complete": true
+    }
+   ],
+   "totals": {
+    "steps": 7,
+    "declared": 7,
+    "student": 0,
+    "engine": 0,
+    "model": 7,
+    "data": 0,
+    "diagram": 7,
+    "evidence": 1,
+    "computation": 0,
+    "declaredButInert": 7,
+    "prose": 0,
+    "mismatched": 0,
+    "rebuilds": 0
+   }
+  },
+  {
+   "id": "from-star-to-remnant",
+   "title": "From Star to Remnant",
+   "lock": {
+    "placement": true,
+    "inspector": true
+   },
+   "steps": [
+    {
+     "sid": "three-ends",
+     "index": 1,
+     "type": "read",
+     "title": "Three ends",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "dwarf",
+       "sun"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram"
+     ],
+     "actions": [
+      "move-an-instrument-control"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "experiment",
+       "measure"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "remnant-outcome",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "inherits the world already on screen",
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "how-heavy-the-ember",
+     "index": 2,
+     "type": "predict",
+     "title": "How heavy the ember",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "dwarf",
+       "sun"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram"
+     ],
+     "actions": [
+      "commit-a-prediction",
+      "move-an-instrument-control"
+     ],
+     "requires": [],
+     "reveal": "read-the-final-mass",
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "predict",
+      "actual": [
+       "predict",
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "remnant-outcome",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "read-the-final-mass",
+     "index": 3,
+     "type": "measure",
+     "title": "Read the final mass",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "dwarf",
+       "sun"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values",
+      "move-an-instrument-control"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "remnant-outcome",
+      "capture": false
+     },
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "a-star-near-a-threshold",
+     "index": 4,
+     "type": "question",
+     "title": "A star near a threshold",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "dwarf",
+       "sun"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram"
+     ],
+     "actions": [
+      "choose-an-option",
+      "move-an-instrument-control"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "remnant-outcome",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "read-the-odds",
+     "index": 5,
+     "type": "measure",
+     "title": "Read the odds",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "dwarf",
+       "sun"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values",
+      "move-an-instrument-control"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "remnant-outcome",
+      "capture": false
+     },
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "a-limit-for-a-white-dwarf",
+     "index": 6,
+     "type": "question",
+     "title": "A limit for a white dwarf",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "dwarf",
+       "sun"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram"
+     ],
+     "actions": [
+      "choose-an-option",
+      "move-an-instrument-control"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "remnant-outcome",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "what-the-odds-say",
+     "index": 7,
+     "type": "read",
+     "title": "What the odds say",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "dwarf",
+       "sun"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram"
+     ],
+     "actions": [
+      "move-an-instrument-control"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "experiment",
+       "measure"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "remnant-outcome",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    }
+   ],
+   "loops": [
+    {
+     "predict": "how-heavy-the-ember",
+     "predictCollects": true,
+     "heldUntil": "read-the-final-mass",
+     "experiment": [
+      "read-the-final-mass",
+      "a-star-near-a-threshold",
+      "read-the-odds",
+      "a-limit-for-a-white-dwarf",
+      "what-the-odds-say"
+     ],
+     "measure": [
+      "read-the-final-mass",
+      "a-star-near-a-threshold",
+      "read-the-odds",
+      "a-limit-for-a-white-dwarf",
+      "what-the-odds-say"
+     ],
+     "evidence": [
+      "read-the-final-mass",
+      "read-the-odds"
+     ],
+     "interpret": "read-the-final-mass",
+     "measuredBeforeAnswering": true,
+     "explained": false,
+     "answeredByTheExperiment": true,
+     "closed": true,
+     "complete": true
+    }
+   ],
+   "totals": {
+    "steps": 7,
+    "declared": 7,
+    "student": 0,
+    "engine": 0,
+    "model": 7,
+    "data": 0,
+    "diagram": 7,
+    "evidence": 2,
+    "computation": 0,
+    "declaredButInert": 7,
+    "prose": 0,
+    "mismatched": 0,
+    "rebuilds": 0
+   }
+  },
+  {
    "id": "deep-or-wide",
    "title": "Deep or Wide?",
    "lock": {
@@ -109024,24 +110208,24 @@
   }
  ],
  "totals": {
-  "steps": 1388,
-  "declared": 1296,
+  "steps": 1402,
+  "declared": 1310,
   "student": 157,
   "engine": 167,
-  "model": 879,
+  "model": 893,
   "data": 146,
-  "diagram": 758,
-  "evidence": 370,
+  "diagram": 772,
+  "evidence": 373,
   "computation": 14,
-  "declaredButInert": 1139,
+  "declaredButInert": 1153,
   "prose": 58,
   "mismatched": 5,
   "rebuilds": 80,
-  "lessons": 104,
-  "loops": 182,
-  "closedLoops": 182,
+  "lessons": 106,
+  "loops": 184,
+  "closedLoops": 184,
   "explainedLoops": 0,
-  "heldLoops": 182,
-  "completeLoops": 182
+  "heldLoops": 184,
+  "completeLoops": 184
  }
 }

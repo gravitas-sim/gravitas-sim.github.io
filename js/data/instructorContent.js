@@ -18,6 +18,7 @@ import { INSTRUCTOR as BINARIES } from './investigations/binaries-sequence.js';
 import { INSTRUCTOR as CLUSTERS } from './investigations/cluster-sequence.js';
 import { INSTRUCTOR as MASSES } from './investigations/binary-masses-sequence.js';
 import { INSTRUCTOR as ACTIVITY } from './investigations/stellar-activity-sequence.js';
+import { INSTRUCTOR as REMNANTS } from './investigations/remnants-sequence.js';
 import { INSTRUCTOR as SURVEY } from './investigations/survey-sequence.js';
 import { INSTRUCTOR as OBSERVING } from './investigations/observing-sequence.js';
 import { INSTRUCTOR as TELESCOPE } from './investigations/telescope-sequence.js';
@@ -36,6 +37,7 @@ export const INSTRUCTOR_CONTENT = {
   ...CLUSTERS.content,
   ...MASSES.content,
   ...ACTIVITY.content,
+  ...REMNANTS.content,
   ...SURVEY.content,
   ...OBSERVING.content,
   ...TELESCOPE.content,

@@ -562,6 +562,16 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://gravitas-sim.online/teaching/investigation/how-old-is-this-white-dwarf/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://gravitas-sim.online/teaching/investigation/from-star-to-remnant/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://gravitas-sim.online/teaching/investigation/deep-or-wide/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>

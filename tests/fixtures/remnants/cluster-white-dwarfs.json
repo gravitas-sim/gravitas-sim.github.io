@@ -1,0 +1,574 @@
+{
+ "format": "gravitas.remnants-cluster-white-dwarfs/1",
+ "prompt": "Roadmap III, Prompt 222",
+ "source": "Cummings, Kalirai, Tremblay, Ramirez-Ruiz and Choi (2018, ApJ 866, 21), arXiv:1809.01673v1, TABLE 1 (Reanalyzed White Dwarf and Progenitor Parameters): Teff, final mass Mf and its one-sigma, the MIST initial mass Mi (central value)",
+ "retrieved": "2026-10-30, arXiv PDF read as text (pdftotext); the pdf SHA-256 585ee9310ae7d7976432dc4c1abd554e4de05a6d5838a21215027464d1abf4f1",
+ "rights": "published numbers, credited; basis no licence stated, credited (a delegated decision of the coordinator, not reviewed by Carl: D-R10-222-02); a test fixture, shipped to no student",
+ "fitted": "The initial-final mass relation of the same paper was fitted to these white dwarfs, so a comparison of the relation with them is an applicability check, not an independent validation.",
+ "outliers": "NGC 2099-WD33 and NGC 2168-LAWDS11 are the two the paper excludes when it states the scatter of 0.06 solar masses; they are marked and kept",
+ "transcription": "typed from the text layer of the table by reading each row; the MIST initial mass is the central value of the last-but-one column; asymmetric uncertainties of Mi and the S/N and cooling ages are not kept; 80 rows",
+ "rows": [
+  {
+   "id": "NGC 2099-WD10",
+   "teffK": 19250,
+   "finalMass": 0.717,
+   "sigmaFinal": 0.049,
+   "initialMassMist": 3.03
+  },
+  {
+   "id": "NGC 2099-WD13",
+   "teffK": 20250,
+   "finalMass": 0.949,
+   "sigmaFinal": 0.078,
+   "initialMassMist": 3.25
+  },
+  {
+   "id": "NGC 2099-WD16",
+   "teffK": 17150,
+   "finalMass": 0.823,
+   "sigmaFinal": 0.092,
+   "initialMassMist": 3.35
+  },
+  {
+   "id": "NGC 2099-WD17",
+   "teffK": 18000,
+   "finalMass": 0.974,
+   "sigmaFinal": 0.092,
+   "initialMassMist": 3.64
+  },
+  {
+   "id": "Prae WD0833+194",
+   "teffK": 14500,
+   "finalMass": 0.813,
+   "sigmaFinal": 0.027,
+   "initialMassMist": 3.46
+  },
+  {
+   "id": "Prae WD0836+199",
+   "teffK": 14900,
+   "finalMass": 0.83,
+   "sigmaFinal": 0.028,
+   "initialMassMist": 3.41
+  },
+  {
+   "id": "Prae WD0837+185",
+   "teffK": 14750,
+   "finalMass": 0.87,
+   "sigmaFinal": 0.029,
+   "initialMassMist": 3.59
+  },
+  {
+   "id": "Prae WD0837+199",
+   "teffK": 17200,
+   "finalMass": 0.757,
+   "sigmaFinal": 0.025,
+   "initialMassMist": 2.99
+  },
+  {
+   "id": "Prae WD0840+190",
+   "teffK": 14800,
+   "finalMass": 0.895,
+   "sigmaFinal": 0.03,
+   "initialMassMist": 3.68
+  },
+  {
+   "id": "Prae WD0840+200",
+   "teffK": 16050,
+   "finalMass": 0.752,
+   "sigmaFinal": 0.027,
+   "initialMassMist": 3.09
+  },
+  {
+   "id": "Prae WD0843+184",
+   "teffK": 14850,
+   "finalMass": 0.898,
+   "sigmaFinal": 0.028,
+   "initialMassMist": 3.68
+  },
+  {
+   "id": "NGC 6121 WD00",
+   "teffK": 20900,
+   "finalMass": 0.507,
+   "sigmaFinal": 0.036,
+   "initialMassMist": 0.83
+  },
+  {
+   "id": "NGC 6121 WD04",
+   "teffK": 25450,
+   "finalMass": 0.522,
+   "sigmaFinal": 0.034,
+   "initialMassMist": 0.83
+  },
+  {
+   "id": "NGC 6121 WD05",
+   "teffK": 28850,
+   "finalMass": 0.527,
+   "sigmaFinal": 0.032,
+   "initialMassMist": 0.83
+  },
+  {
+   "id": "NGC 6121 WD06",
+   "teffK": 26350,
+   "finalMass": 0.587,
+   "sigmaFinal": 0.035,
+   "initialMassMist": 0.83
+  },
+  {
+   "id": "NGC 6121 WD15",
+   "teffK": 24600,
+   "finalMass": 0.574,
+   "sigmaFinal": 0.041,
+   "initialMassMist": 0.83
+  },
+  {
+   "id": "NGC 6121 WD20",
+   "teffK": 21050,
+   "finalMass": 0.517,
+   "sigmaFinal": 0.04,
+   "initialMassMist": 0.83
+  },
+  {
+   "id": "NGC 6121 WD24",
+   "teffK": 26250,
+   "finalMass": 0.53,
+   "sigmaFinal": 0.032,
+   "initialMassMist": 0.83
+  },
+  {
+   "id": "NGC 6819-6",
+   "teffK": 21700,
+   "finalMass": 0.597,
+   "sigmaFinal": 0.028,
+   "initialMassMist": 1.58
+  },
+  {
+   "id": "NGC 7789-5",
+   "teffK": 31700,
+   "finalMass": 0.714,
+   "sigmaFinal": 0.036,
+   "initialMassMist": 1.79
+  },
+  {
+   "id": "NGC 7789-8",
+   "teffK": 24800,
+   "finalMass": 0.7,
+   "sigmaFinal": 0.044,
+   "initialMassMist": 1.81
+  },
+  {
+   "id": "NGC 7789-11",
+   "teffK": 20500,
+   "finalMass": 0.787,
+   "sigmaFinal": 0.06,
+   "initialMassMist": 1.85
+  },
+  {
+   "id": "NGC 7789-14",
+   "teffK": 21100,
+   "finalMass": 0.619,
+   "sigmaFinal": 0.08,
+   "initialMassMist": 1.82
+  },
+  {
+   "id": "NGC 1039-WD15",
+   "teffK": 25900,
+   "finalMass": 0.99,
+   "sigmaFinal": 0.044,
+   "initialMassMist": 5.42
+  },
+  {
+   "id": "NGC 1039-WD17",
+   "teffK": 26050,
+   "finalMass": 1.005,
+   "sigmaFinal": 0.028,
+   "initialMassMist": 5.53
+  },
+  {
+   "id": "NGC 1039-WDS2",
+   "teffK": 31600,
+   "finalMass": 0.921,
+   "sigmaFinal": 0.027,
+   "initialMassMist": 4.32
+  },
+  {
+   "id": "NGC 2099-WD2",
+   "teffK": 22200,
+   "finalMass": 0.77,
+   "sigmaFinal": 0.045,
+   "initialMassMist": 2.95
+  },
+  {
+   "id": "NGC 2099-WD5",
+   "teffK": 18100,
+   "finalMass": 0.74,
+   "sigmaFinal": 0.062,
+   "initialMassMist": 3.13
+  },
+  {
+   "id": "NGC 2099-WD6",
+   "teffK": 16700,
+   "finalMass": 0.89,
+   "sigmaFinal": 0.069,
+   "initialMassMist": 3.63
+  },
+  {
+   "id": "NGC 2099-WD9",
+   "teffK": 16200,
+   "finalMass": 0.59,
+   "sigmaFinal": 0.078,
+   "initialMassMist": 3.08
+  },
+  {
+   "id": "NGC 2099-WD18",
+   "teffK": 24900,
+   "finalMass": 0.76,
+   "sigmaFinal": 0.036,
+   "initialMassMist": 2.87
+  },
+  {
+   "id": "NGC 2099-WD21",
+   "teffK": 16900,
+   "finalMass": 0.85,
+   "sigmaFinal": 0.069,
+   "initialMassMist": 3.45
+  },
+  {
+   "id": "NGC 2099-WD24",
+   "teffK": 18700,
+   "finalMass": 0.8,
+   "sigmaFinal": 0.068,
+   "initialMassMist": 3.14
+  },
+  {
+   "id": "NGC 2099-WD25",
+   "teffK": 27500,
+   "finalMass": 0.7,
+   "sigmaFinal": 0.03,
+   "initialMassMist": 2.82
+  },
+  {
+   "id": "NGC 2099-WD28",
+   "teffK": 22000,
+   "finalMass": 0.75,
+   "sigmaFinal": 0.03,
+   "initialMassMist": 2.94
+  },
+  {
+   "id": "NGC 2099-WD33",
+   "teffK": 32900,
+   "finalMass": 1.28,
+   "sigmaFinal": 0.065,
+   "initialMassMist": 3.36,
+   "outlier": true
+  },
+  {
+   "id": "NGC 2168-LAWDS1",
+   "teffK": 33500,
+   "finalMass": 0.911,
+   "sigmaFinal": 0.039,
+   "initialMassMist": 4.35
+  },
+  {
+   "id": "NGC 2168-LAWDS2",
+   "teffK": 33400,
+   "finalMass": 0.94,
+   "sigmaFinal": 0.061,
+   "initialMassMist": 4.42
+  },
+  {
+   "id": "NGC 2168-LAWDS5",
+   "teffK": 52700,
+   "finalMass": 0.801,
+   "sigmaFinal": 0.031,
+   "initialMassMist": 4.16
+  },
+  {
+   "id": "NGC 2168-LAWDS6",
+   "teffK": 57300,
+   "finalMass": 0.731,
+   "sigmaFinal": 0.029,
+   "initialMassMist": 4.17
+  },
+  {
+   "id": "NGC 2168-LAWDS11",
+   "teffK": 19900,
+   "finalMass": 0.834,
+   "sigmaFinal": 0.035,
+   "initialMassMist": 9.13,
+   "outlier": true
+  },
+  {
+   "id": "NGC 2168-LAWDS12",
+   "teffK": 34200,
+   "finalMass": 1.009,
+   "sigmaFinal": 0.037,
+   "initialMassMist": 4.54
+  },
+  {
+   "id": "NGC 2168-LAWDS14",
+   "teffK": 30500,
+   "finalMass": 0.988,
+   "sigmaFinal": 0.038,
+   "initialMassMist": 4.78
+  },
+  {
+   "id": "NGC 2168-LAWDS15",
+   "teffK": 30100,
+   "finalMass": 1.009,
+   "sigmaFinal": 0.032,
+   "initialMassMist": 4.93
+  },
+  {
+   "id": "NGC 2168-LAWDS22",
+   "teffK": 53000,
+   "finalMass": 0.807,
+   "sigmaFinal": 0.035,
+   "initialMassMist": 4.17
+  },
+  {
+   "id": "NGC 2168-LAWDS27",
+   "teffK": 30700,
+   "finalMass": 1.071,
+   "sigmaFinal": 0.031,
+   "initialMassMist": 5.24
+  },
+  {
+   "id": "NGC 2168-LAWDS29",
+   "teffK": 33500,
+   "finalMass": 0.984,
+   "sigmaFinal": 0.034,
+   "initialMassMist": 4.52
+  },
+  {
+   "id": "NGC 2168-LAWDS30",
+   "teffK": 29700,
+   "finalMass": 0.878,
+   "sigmaFinal": 0.048,
+   "initialMassMist": 4.51
+  },
+  {
+   "id": "NGC 2287-2",
+   "teffK": 25900,
+   "finalMass": 0.909,
+   "sigmaFinal": 0.028,
+   "initialMassMist": 4.83
+  },
+  {
+   "id": "NGC 2287-4",
+   "teffK": 26500,
+   "finalMass": 1.065,
+   "sigmaFinal": 0.027,
+   "initialMassMist": 6.06
+  },
+  {
+   "id": "NGC 2287-5",
+   "teffK": 25600,
+   "finalMass": 0.901,
+   "sigmaFinal": 0.028,
+   "initialMassMist": 4.86
+  },
+  {
+   "id": "NGC 2323-WD10",
+   "teffK": 52800,
+   "finalMass": 1.068,
+   "sigmaFinal": 0.045,
+   "initialMassMist": 4.9
+  },
+  {
+   "id": "NGC 2323-WD11",
+   "teffK": 54100,
+   "finalMass": 1.075,
+   "sigmaFinal": 0.032,
+   "initialMassMist": 4.89
+  },
+  {
+   "id": "NGC 2516-1",
+   "teffK": 30100,
+   "finalMass": 0.925,
+   "sigmaFinal": 0.027,
+   "initialMassMist": 4.29
+  },
+  {
+   "id": "NGC 2516-2",
+   "teffK": 35500,
+   "finalMass": 0.981,
+   "sigmaFinal": 0.04,
+   "initialMassMist": 4.44
+  },
+  {
+   "id": "NGC 2516-3",
+   "teffK": 29100,
+   "finalMass": 0.918,
+   "sigmaFinal": 0.027,
+   "initialMassMist": 4.49
+  },
+  {
+   "id": "NGC 2516-5",
+   "teffK": 32200,
+   "finalMass": 0.97,
+   "sigmaFinal": 0.027,
+   "initialMassMist": 4.55
+  },
+  {
+   "id": "NGC 3532-1",
+   "teffK": 23100,
+   "finalMass": 0.95,
+   "sigmaFinal": 0.026,
+   "initialMassMist": 3.86
+  },
+  {
+   "id": "NGC 3532-5",
+   "teffK": 27700,
+   "finalMass": 0.804,
+   "sigmaFinal": 0.028,
+   "initialMassMist": 3.39
+  },
+  {
+   "id": "NGC 3532-9",
+   "teffK": 31900,
+   "finalMass": 0.752,
+   "sigmaFinal": 0.026,
+   "initialMassMist": 3.31
+  },
+  {
+   "id": "NGC 3532-10",
+   "teffK": 26300,
+   "finalMass": 0.838,
+   "sigmaFinal": 0.027,
+   "initialMassMist": 3.46
+  },
+  {
+   "id": "NGC 3532-J1106-584",
+   "teffK": 20200,
+   "finalMass": 0.945,
+   "sigmaFinal": 0.029,
+   "initialMassMist": 4.38
+  },
+  {
+   "id": "NGC 3532-J1106-590",
+   "teffK": 21100,
+   "finalMass": 0.922,
+   "sigmaFinal": 0.031,
+   "initialMassMist": 4.07
+  },
+  {
+   "id": "NGC 3532-J1107-584",
+   "teffK": 20700,
+   "finalMass": 0.99,
+   "sigmaFinal": 0.028,
+   "initialMassMist": 4.54
+  },
+  {
+   "id": "VPHASJ1103-5837",
+   "teffK": 23900,
+   "finalMass": 1.11,
+   "sigmaFinal": 0.03,
+   "initialMassMist": 4.69
+  },
+  {
+   "id": "Sirius B",
+   "teffK": 26000,
+   "finalMass": 0.982,
+   "sigmaFinal": 0.024,
+   "initialMassMist": 4.88
+  },
+  {
+   "id": "Pleiades-LB 1497",
+   "teffK": 32700,
+   "finalMass": 1.046,
+   "sigmaFinal": 0.028,
+   "initialMassMist": 5.86
+  },
+  {
+   "id": "GD50",
+   "teffK": 42700,
+   "finalMass": 1.26,
+   "sigmaFinal": 0.02,
+   "initialMassMist": 6.74
+  },
+  {
+   "id": "PG 0136+251",
+   "teffK": 41400,
+   "finalMass": 1.2,
+   "sigmaFinal": 0.03,
+   "initialMassMist": 5.78
+  },
+  {
+   "id": "Hyades HS0400+1451",
+   "teffK": 14620,
+   "finalMass": 0.765,
+   "sigmaFinal": 0.006,
+   "initialMassMist": 3.36
+  },
+  {
+   "id": "Hyades WD0348+339",
+   "teffK": 14820,
+   "finalMass": 0.804,
+   "sigmaFinal": 0.032,
+   "initialMassMist": 3.42
+  },
+  {
+   "id": "Hyades WD0352+096",
+   "teffK": 14670,
+   "finalMass": 0.797,
+   "sigmaFinal": 0.032,
+   "initialMassMist": 3.44
+  },
+  {
+   "id": "Hyades WD0406+169",
+   "teffK": 15810,
+   "finalMass": 0.85,
+   "sigmaFinal": 0.032,
+   "initialMassMist": 3.36
+  },
+  {
+   "id": "Hyades WD0421+162",
+   "teffK": 20010,
+   "finalMass": 0.7,
+   "sigmaFinal": 0.03,
+   "initialMassMist": 2.84
+  },
+  {
+   "id": "Hyades WD0425+168",
+   "teffK": 25130,
+   "finalMass": 0.704,
+   "sigmaFinal": 0.029,
+   "initialMassMist": 2.74
+  },
+  {
+   "id": "Hyades WD0431+126",
+   "teffK": 21890,
+   "finalMass": 0.691,
+   "sigmaFinal": 0.03,
+   "initialMassMist": 2.79
+  },
+  {
+   "id": "Hyades WD0437+138",
+   "teffK": 15120,
+   "finalMass": 0.766,
+   "sigmaFinal": 0.057,
+   "initialMassMist": 3.28
+  },
+  {
+   "id": "Hyades WD0438+108",
+   "teffK": 27540,
+   "finalMass": 0.726,
+   "sigmaFinal": 0.03,
+   "initialMassMist": 2.73
+  },
+  {
+   "id": "Hyades WD0625+415",
+   "teffK": 17610,
+   "finalMass": 0.659,
+   "sigmaFinal": 0.03,
+   "initialMassMist": 2.91
+  },
+  {
+   "id": "Hyades WD0637+477",
+   "teffK": 14650,
+   "finalMass": 0.797,
+   "sigmaFinal": 0.039,
+   "initialMassMist": 3.44
+  }
+ ]
+}

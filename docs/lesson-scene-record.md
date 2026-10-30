@@ -11,15 +11,15 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 104 investigations and 1388 steps: 1296 steps
+Across 106 investigations and 1402 steps: 1310 steps
 declare a scene, 157 let a reader change one, 167 read the
-running integration, 879 show a prescribed model result, 146 draw
-on a stored dataset, 758 put a self-contained panel beside the text,
-370 keep something, and 58 are prose.
-Of 182 prediction loops, 182 are returned to,
-182 produce a measurement before they are answered, and
+running integration, 893 show a prescribed model result, 146 draw
+on a stored dataset, 772 put a self-contained panel beside the text,
+373 keep something, and 58 are prose.
+Of 184 prediction loops, 184 are returned to,
+184 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
-182 hold their marking until the experiment settles them.
+184 hold their marking until the experiment settles them.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -1364,6 +1364,34 @@ Of 182 prediction loops, 182 are returned to,
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:activity-flares`, control activity-flares/flare, measures the equivalent duration, in seconds, of a flare of the red dwarf AU Microscopii: 118 for the second largest and 100 for the third largest, the time the quiet star would take to give out the light the flare added, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## How Old Is This White Dwarf? (`how-old-is-this-white-dwarf`)
+
+- **Steps:** 7. Scene declared on 7; a reader can change something on 0; 7 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 7 prescribed model, 0 stored dataset, 7 self-contained panel.
+- **What students do:** move-an-instrument-control, commit-a-prediction, record-values, choose-an-option.
+- **Objects the steps declare:** dwarf, sun.
+- **Instruments:** remnant-cooling.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** ten-times-fainter → read-two-ages, two-uncertainties, beyond-the-edge, a-bound-not-an-age, what-the-age-says → read-two-ages.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:remnant-cooling`, control remnant-cooling/logL, measures the cooling age, in billions of years, of a 0.6 solar mass white dwarf from the cooling law: 4.09 at a luminosity of a ten-thousandth of the Sun's and 0.79 at a thousandth, a ratio of 5.2 for a tenfold step, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## From Star to Remnant (`from-star-to-remnant`)
+
+- **Steps:** 7. Scene declared on 7; a reader can change something on 0; 7 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 7 prescribed model, 0 stored dataset, 7 self-contained panel.
+- **What students do:** move-an-instrument-control, commit-a-prediction, record-values, choose-an-option.
+- **Objects the steps declare:** dwarf, sun.
+- **Instruments:** remnant-outcome.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** how-heavy-the-ember → read-the-final-mass, a-star-near-a-threshold, read-the-odds, a-limit-for-a-white-dwarf, what-the-odds-say → read-the-final-mass.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:remnant-outcome`, control remnant-outcome/mi, measures the final mass, in solar masses, of the white dwarf a star leaves by the MIST relation: 0.745 from a star of 3 solar masses and 0.569 from a star of 1, with a scatter of 0.06 solar masses, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Deep or Wide? (`deep-or-wide`)
 

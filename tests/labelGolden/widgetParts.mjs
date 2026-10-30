@@ -75,6 +75,7 @@ export const PARTS = Object.freeze({
     'clusterFit',
     'masses',
     'activity',
+    'remnants',
     'energy',
     'binary',
     'blackHole',

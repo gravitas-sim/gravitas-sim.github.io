@@ -821,6 +821,13 @@
       "student": false
     },
     {
+      "file": "REMNANTS.md",
+      "kind": "feature",
+      "purpose": "Remnants: white-dwarf cooling ages with a two-term interval, the initial-final mass relation and outcome odds, with validation and two failed legs left failing (Prompt 222).",
+      "owner": 222,
+      "student": true
+    },
+    {
       "file": "RESONANCE_INVESTIGATION.md",
       "kind": "feature",
       "purpose": "The orbital resonance investigation.",

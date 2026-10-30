@@ -126,6 +126,7 @@ export const FAMILY_IDS = Object.freeze({
     'activity-flares',
     'activity-ffd',
   ],
+  remnants: ['remnant-cooling', 'remnant-outcome'],
   spectrograph: [
     'spectrograph-lines',
     'spectrograph-arc',

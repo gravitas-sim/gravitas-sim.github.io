@@ -1,0 +1,48 @@
+{
+ "id": "how-old-is-this-white-dwarf",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.read-two-ages.fields.0.unit","Gyr"],
+    ["steps.read-two-ages.fields.1.unit","Gyr"],
+    ["steps.from-a-temperature.fields.0.unit","Gyr"],
+    ["steps.from-a-temperature.fields.1.unit","percent"],
+    ["steps.from-a-temperature.fields.2.unit","percent"],
+    ["steps.what-better-measurements-buy.fields.0.unit","Gyr"],
+    ["steps.what-better-measurements-buy.fields.1.unit","Gyr"]
+   ],
+   "numbered": [
+    ["steps.read-two-ages.fields.0.hint","4.09"],
+    ["steps.read-two-ages.fields.1.hint","0.79"],
+    ["steps.from-a-temperature.fields.0.hint","2.60"],
+    ["steps.from-a-temperature.fields.1.hint","14"],
+    ["steps.from-a-temperature.fields.2.hint","19"],
+    ["steps.what-better-measurements-buy.fields.0.hint","0.66"],
+    ["steps.what-better-measurements-buy.fields.1.hint","0.95"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": []
+  }
+ },
+ "numeric": {
+  "answers": [],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "read-two-ages": {
+    "validate": {"calls":232,"distinct":2,"digest":"65a05c7e9d6264f8","samples":[null,{"level":"error","message":"Leave the mass at 0.6 solar masses and set the luminosity to −4.0, then −3.0: the ages are about 4.09 and 0.79 billion years."}]}
+   },
+   "from-a-temperature": {
+    "validate": {"calls":242,"distinct":2,"digest":"a42b4ca4aa605e5f","samples":[null,{"level":"error","message":"Set Enter to temperature, 6000 K, the mass to 0.6 and the measurement to good: the age is about 2.6 billion years, ± 14 percent from the measurements and ± 19 from the law."}]}
+   },
+   "what-better-measurements-buy": {
+    "validate": {"calls":232,"distinct":2,"digest":"aacdeeacaf803a8c","samples":[null,{"level":"error","message":"Set the measurement to exact, the mass to 0.6 and the luminosity to −3.0: the interval is 0.66 to 0.95 billion years."}]}
+   }
+  },
+  "es": "same"
+ }
+}
