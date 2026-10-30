@@ -265,6 +265,20 @@ export const WEIGHING_THE_STARS = {
       ],
       tool: SOLVE(),
     },
+    {
+      sid: 'what-the-pair-gives',
+      stage: STAGE,
+      type: 'read',
+      title: 'What the pair gives, and what it leaves open',
+      body: `The two amplitudes gave the <strong>mass ratio</strong> and the velocities
+             alone gave only <strong>minimum masses</strong>. The eclipse added the tilt,
+             and with it the masses themselves and the radii, each with the uncertainty the
+             whole fit carries. Take away the eclipse, or one of the two lines, and the
+             answer shrinks back to a minimum or to a mass function.
+             \n\nThe deeper levels weigh the pair with its uncertainties, put the stars on
+             the mass&ndash;radius and mass&ndash;luminosity diagrams, and look at a real star.`,
+      tool: SOLVE(),
+    },
   ],
 };
 
@@ -397,13 +411,13 @@ export const WEIGHING_THE_STARS_DEEPER = {
       type: 'measure',
       title: 'On the diagram',
       body: `The mass–radius diagram holds the eight stars of four eclipsing pairs you can
-             solve in the previous panel, against the MIST tracks: the shaded band lies
-             between a star at birth on the main sequence and one at its end. Read the mass
+             solve in the previous panel, against the MIST tracks: the lower line is a star at birth on the
+             main sequence and the upper one a star at its end. Read the mass
              and the radius of the <strong>lighter star of the hot pair</strong> (system D,
              star 2).`,
       fields: [
         { id: 'm', label: 'Mass', unit: 'solar masses', hint: '2.01' },
-        { id: 'r', label: 'Radius', unit: 'solar radii', hint: '1.63' },
+        { id: 'r', label: 'Radius', unit: 'R☉', hint: '1.63' },
       ],
       validate: v => {
         if (![v.m, v.r].every(Number.isFinite)) return null;
@@ -431,11 +445,11 @@ export const WEIGHING_THE_STARS_DEEPER = {
       body: `Switch the vertical axis to <em>luminosity</em>. Read the luminosity of the
              heavier star of the hot pair (D1, 2.6 solar masses) and of the heavier star of
              the F-star pair (A1, 1.3), then compute the exponent
-             <strong>n</strong> in L &prop; M<sup>n</sup> between them:
+             <strong>n</strong> in L ∝ M<sup>n</sup> between them:
              n = log(L<sub>D1</sub>/L<sub>A1</sub>) / log(M<sub>D1</sub>/M<sub>A1</sub>).`,
       fields: [
-        { id: 'a', label: 'Luminosity of D1', unit: 'solar', hint: '54' },
-        { id: 'b', label: 'Luminosity of A1', unit: 'solar', hint: '3.4' },
+        { id: 'a', label: 'Luminosity of D1', unit: 'L☉', hint: '54' },
+        { id: 'b', label: 'Luminosity of A1', unit: 'L☉', hint: '3.4' },
         { id: 'n', label: 'Exponent n', hint: '4.1' },
       ],
       validate: v => {
@@ -700,6 +714,10 @@ export const WEIGHING_THE_STARS_ES = {
         },
       ],
     },
+    {
+      title: 'Lo que da el par y lo que deja abierto',
+      body: 'Las dos amplitudes dieron la <strong>razón de masas</strong> y las velocidades solas dieron solo <strong>masas mínimas</strong>. El eclipse añadió la inclinación y, con ella, las masas mismas y los radios, cada uno con la incertidumbre que arrastra todo el ajuste. Quita el eclipse, o una de las dos líneas, y la respuesta vuelve a ser un mínimo o una función de masa. \n\nLos niveles más profundos pesan el par con sus incertidumbres, sitúan las estrellas en los diagramas masa-radio y masa-luminosidad, y miran una estrella real.',
+    },
   ],
 };
 
@@ -748,12 +766,12 @@ export const WEIGHING_THE_STARS_DEEPER_ES = {
     },
     {
       title: 'En el diagrama',
-      body: 'El diagrama masa-radio contiene las ocho estrellas de los cuatro pares eclipsantes que puedes resolver en el panel anterior, frente a las trayectorias MIST: la banda sombreada queda entre una estrella recién nacida en la secuencia principal y una en su final. Lee la masa y el radio de la <strong>estrella más ligera del par caliente</strong> (sistema D, estrella 2).',
+      body: 'El diagrama masa-radio contiene las ocho estrellas de los cuatro pares eclipsantes que puedes resolver en el panel anterior, frente a las trayectorias MIST: la línea inferior es una estrella recién nacida en la secuencia principal y la superior una en su final. Lee la masa y el radio de la <strong>estrella más ligera del par caliente</strong> (sistema D, estrella 2).',
       fields: [{ label: 'Masa' }, { label: 'Radio' }],
     },
     {
       title: 'La pendiente masa-luminosidad',
-      body: 'Cambia el eje vertical a <em>luminosidad</em>. Lee la luminosidad de la estrella más pesada del par caliente (D1, 2,6 masas solares) y de la más pesada del par de estrellas F (A1, 1,3), y calcula el exponente <strong>n</strong> de L &prop; M<sup>n</sup> entre ellas: n = log(L<sub>D1</sub>/L<sub>A1</sub>) / log(M<sub>D1</sub>/M<sub>A1</sub>).',
+      body: 'Cambia el eje vertical a <em>luminosidad</em>. Lee la luminosidad de la estrella más pesada del par caliente (D1, 2,6 masas solares) y de la más pesada del par de estrellas F (A1, 1,3), y calcula el exponente <strong>n</strong> de L ∝ M<sup>n</sup> entre ellas: n = log(L<sub>D1</sub>/L<sub>A1</sub>) / log(M<sub>D1</sub>/M<sub>A1</sub>).',
       fields: [
         { label: 'Luminosidad de D1' },
         { label: 'Luminosidad de A1' },
@@ -930,8 +948,8 @@ const FLOW = {
     },
     {
       from: 'what-fixes-the-tilt',
-      to: 'what-fixes-the-tilt',
-      text: 'What an eclipse adds: the inclination, and with it the masses and the radii.',
+      to: 'what-the-pair-gives',
+      text: 'What an eclipse adds: the inclination, and with it the masses and the radii; and what the pair still leaves open.',
     },
   ],
 };

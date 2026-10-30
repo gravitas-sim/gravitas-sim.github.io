@@ -98,6 +98,7 @@ The browser half takes about seven minutes on the private port.
 | 16 | `power-law-gravity` | 1: `key:question.explain` |
 | 17 | `radial-velocity` | 1: `key:measure.setup` |
 | 18 | `retrograde-motion` | 1: `lock:{"placement":true,"inspector":false}` |
+| 19 | `weighing-the-stars-for-real` | 1: `key:predict.misconceptions` |
 
 | # | Activity cut | Tokens it adds |
 |---|---|---|

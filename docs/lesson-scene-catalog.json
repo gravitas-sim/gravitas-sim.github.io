@@ -102030,6 +102030,78 @@
      "recovery": [
       "wrong body: the object list names what the step staged"
      ]
+    },
+    {
+     "sid": "what-the-pair-gives",
+     "index": 7,
+     "type": "read",
+     "title": "What the pair gives, and what it leaves open",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "star",
+       "star"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram"
+     ],
+     "actions": [
+      "move-an-instrument-control"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "experiment",
+       "measure"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "masses-solve",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
     }
    ],
    "loops": [
@@ -102041,13 +102113,15 @@
       "read-the-amplitudes",
       "the-mass-ratio",
       "a-mass-or-a-limit",
-      "what-fixes-the-tilt"
+      "what-fixes-the-tilt",
+      "what-the-pair-gives"
      ],
      "measure": [
       "read-the-amplitudes",
       "the-mass-ratio",
       "a-mass-or-a-limit",
-      "what-fixes-the-tilt"
+      "what-fixes-the-tilt",
+      "what-the-pair-gives"
      ],
      "evidence": [
       "read-the-amplitudes",
@@ -102062,16 +102136,16 @@
     }
    ],
    "totals": {
-    "steps": 6,
-    "declared": 6,
+    "steps": 7,
+    "declared": 7,
     "student": 0,
     "engine": 0,
-    "model": 6,
+    "model": 7,
     "data": 0,
-    "diagram": 6,
+    "diagram": 7,
     "evidence": 2,
     "computation": 0,
-    "declaredButInert": 6,
+    "declaredButInert": 7,
     "prose": 0,
     "mismatched": 0,
     "rebuilds": 0
@@ -103286,16 +103360,16 @@
   }
  ],
  "totals": {
-  "steps": 1316,
-  "declared": 1224,
+  "steps": 1317,
+  "declared": 1225,
   "student": 157,
   "engine": 167,
-  "model": 812,
+  "model": 813,
   "data": 146,
-  "diagram": 691,
+  "diagram": 692,
   "evidence": 348,
   "computation": 14,
-  "declaredButInert": 1067,
+  "declaredButInert": 1068,
   "prose": 58,
   "mismatched": 0,
   "rebuilds": 80,

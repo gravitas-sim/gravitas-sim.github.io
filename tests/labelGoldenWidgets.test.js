@@ -117,12 +117,12 @@ describe('the parts of the recording', () => {
 describe('the committed recording', () => {
   test('has a fixture for every family and none for a family that is gone', () => {
     expect(Object.keys(files).sort()).toEqual(Object.keys(modules).sort());
-    expect(Object.keys(modules).length).toBe(44);
+    expect(Object.keys(modules).length).toBe(45);
   });
 
   test('has every widget in both locales', () => {
     const widgets = widgetsOf(recorded);
-    expect(widgets.length).toBe(145);
+    expect(widgets.length).toBe(148);
     for (const [, rec] of widgets) {
       expect(rec.en.frames).toBeGreaterThan(0);
       // Spanish is either the same recording or its own.

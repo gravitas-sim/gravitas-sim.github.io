@@ -24,8 +24,8 @@ export const ES_MASSES = {
     'Dos curvas Doppler de una misma órbita dan el cociente de las masas y el tamaño de la órbita por sen i, así que toda masa es un mínimo: la masa verdadera es mayor en un factor 1 / sen³ i, y sin un eclipse u otra medida la inclinación no se conoce. Elige la inclinación para ver qué serían las masas. Una órbita de una sola línea da solo la función de masa. Todos los datos de aquí son sintéticos.',
   'masW.m.control.system': 'Sistema',
   'masW.m.control.inc': 'Inclinación que supones',
-  'masW.m.system.0': 'un par de dos líneas que nunca se eclipsa',
-  'masW.m.system.1': 'una órbita de una sola línea',
+  'masW.m.system.0': 'dos líneas, sin eclipse',
+  'masW.m.system.1': 'una línea',
   'masW.row.data': 'Datos',
   'masW.v.data':
     '{n} velocidades de cada estrella, {s} km/s por punto; órbita ajustada',
@@ -118,7 +118,7 @@ export const ES_MASSES = {
     'El modelo separado del núcleo de inferencia (dos esferas en una órbita kepleriana, oscurecimiento del limbo fijo, sin tercera luz) y sus curvas de velocidad de la misma órbita; las masas usan el GM solar nominal, los radios el radio solar nominal',
   'masW.d.title': 'Masas y radios frente a MIST',
   'masW.d.note':
-    'Las estrellas que has resuelto, con sus masas y radios (o luminosidades) frente a las trayectorias MIST de composición solar. La banda sombreada queda entre una estrella recién nacida en la secuencia principal y una en su final; una estrella de la secuencia principal debería estar dentro. Las temperaturas son datos de entrada: la de la estrella 1 se da, la de la 2 sale del cociente de brillo superficial ajustado en la banda de 0,8 micrómetros.',
+    'Las estrellas que has resuelto, con sus masas y radios (o luminosidades) frente a las trayectorias MIST de composición solar. La línea inferior es una estrella recién nacida en la secuencia principal y la superior una en su final; una estrella de la secuencia principal debería quedar entre ambas. Las temperaturas son datos de entrada: la de la estrella 1 se da, la de la 2 sale del cociente de brillo superficial ajustado en la banda de 0,8 micrómetros.',
   'masW.d.control.view': 'Eje vertical',
   'masW.d.control.systems': 'Sistemas resueltos',
   'masW.d.control.band': 'Banda MIST',

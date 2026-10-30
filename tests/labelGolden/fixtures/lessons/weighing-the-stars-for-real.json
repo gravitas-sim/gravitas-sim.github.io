@@ -1,0 +1,98 @@
+{
+ "id": "weighing-the-stars-for-real",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.read-the-amplitudes.fields.0.unit","km/s"],
+    ["steps.read-the-amplitudes.fields.1.unit","km/s"],
+    ["steps.a-mass-or-a-limit.fields.0.unit","solar masses"],
+    ["steps.a-mass-or-a-limit.fields.1.unit","solar masses"],
+    ["steps.weigh-the-pair.fields.0.unit","solar masses"],
+    ["steps.weigh-the-pair.fields.1.unit","solar masses"],
+    ["steps.one-line-only.fields.0.unit","solar masses"],
+    ["steps.one-line-only.fields.1.unit","solar masses"],
+    ["steps.on-the-diagram.fields.0.unit","solar masses"],
+    ["steps.on-the-diagram.fields.1.unit","solar radii"],
+    ["steps.the-mass-luminosity-slope.fields.0.unit","solar"],
+    ["steps.the-mass-luminosity-slope.fields.1.unit","solar"],
+    ["steps.the-tilt-you-did-not-measure.fields.0.unit","solar masses"],
+    ["steps.the-tilt-you-did-not-measure.fields.1.unit","solar masses"]
+   ],
+   "numbered": [
+    ["steps.read-the-amplitudes.fields.0.label","K1 (star 1)"],
+    ["steps.read-the-amplitudes.fields.0.hint","45.2"],
+    ["steps.read-the-amplitudes.fields.1.label","K2 (star 2)"],
+    ["steps.read-the-amplitudes.fields.1.hint","61.0"],
+    ["steps.a-mass-or-a-limit.fields.0.label","Mass of star 1 at 60 degrees"],
+    ["steps.a-mass-or-a-limit.fields.0.hint","0.90"],
+    ["steps.a-mass-or-a-limit.fields.1.label","Mass of star 2 at 60 degrees"],
+    ["steps.a-mass-or-a-limit.fields.1.hint","0.66"],
+    ["steps.weigh-the-pair.fields.0.label","M1"],
+    ["steps.weigh-the-pair.fields.0.hint","1.303"],
+    ["steps.weigh-the-pair.fields.1.label","M2"],
+    ["steps.weigh-the-pair.fields.1.hint","1.104"],
+    ["steps.weigh-the-pair.fields.2.label","Uncertainty of M1 (in units of 0.001)"],
+    ["steps.weigh-the-pair.fields.2.hint","7.6"],
+    ["steps.one-line-only.fields.0.hint","0.232"],
+    ["steps.one-line-only.fields.1.hint","1.10"],
+    ["steps.on-the-diagram.fields.0.hint","2.01"],
+    ["steps.on-the-diagram.fields.1.hint","1.63"],
+    ["steps.the-mass-luminosity-slope.fields.0.label","Luminosity of D1"],
+    ["steps.the-mass-luminosity-slope.fields.0.hint","54"],
+    ["steps.the-mass-luminosity-slope.fields.1.label","Luminosity of A1"],
+    ["steps.the-mass-luminosity-slope.fields.1.hint","3.4"],
+    ["steps.the-mass-luminosity-slope.fields.2.hint","4.1"],
+    ["steps.the-tilt-you-did-not-measure.fields.0.label","M1 at 52 degrees"],
+    ["steps.the-tilt-you-did-not-measure.fields.0.hint","1.19"],
+    ["steps.the-tilt-you-did-not-measure.fields.1.label","M2 at 52 degrees"],
+    ["steps.the-tilt-you-did-not-measure.fields.1.hint","0.88"],
+    ["steps.the-tilt-you-did-not-measure.fields.2.hint","2.04"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.read-the-amplitudes.fields.0.label","K1 (estrella 1)"],
+    ["steps.read-the-amplitudes.fields.1.label","K2 (estrella 2)"],
+    ["steps.a-mass-or-a-limit.fields.0.label","Masa de la estrella 1 a 60 grados"],
+    ["steps.a-mass-or-a-limit.fields.1.label","Masa de la estrella 2 a 60 grados"],
+    ["steps.weigh-the-pair.fields.2.label","Incertidumbre de M1 (en unidades de 0,001)"],
+    ["steps.the-mass-luminosity-slope.fields.0.label","Luminosidad de D1"],
+    ["steps.the-mass-luminosity-slope.fields.1.label","Luminosidad de A1"],
+    ["steps.the-tilt-you-did-not-measure.fields.0.label","M1 a 52 grados"],
+    ["steps.the-tilt-you-did-not-measure.fields.1.label","M2 a 52 grados"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "read-the-amplitudes": {
+    "validate": {"calls":232,"distinct":2,"digest":"4ef797e0f70b1464","samples":[null,{"level":"error","message":"Read the two amplitudes the panel gives for the double-lined pair that never eclipses: K1 about 45.2 and K2 about 61.0 km/s."}]}
+   },
+   "a-mass-or-a-limit": {
+    "validate": {"calls":232,"distinct":2,"digest":"6de11279ec19a70a","samples":[null,{"level":"error","message":"Move “Inclination you assume” to 60 degrees: the panel gives about 0.90 and 0.66 solar masses."}]}
+   },
+   "weigh-the-pair": {
+    "validate": {"calls":254,"distinct":2,"digest":"eb5961d3e3a6db44","samples":[null,{"level":"error","message":"Choose “F-star pair” with both velocity curves: M1 is about 1.303, M2 about 1.104 and the uncertainty of M1 about 0.008 solar masses."}]}
+   },
+   "one-line-only": {
+    "validate": {"calls":232,"distinct":2,"digest":"09ca20dfd72d6b6c","samples":[null,{"level":"error","message":"Choose the F-star pair and switch “Stars with a velocity curve” to one: the mass function is about 0.232 and the minimum companion about 1.10 solar masses."}]}
+   },
+   "on-the-diagram": {
+    "validate": {"calls":232,"distinct":2,"digest":"6e09a0c737a014c5","samples":[null,{"level":"error","message":"In the diagram (radius, four systems solved) read system D, star 2: about 2.01 solar masses and 1.63 solar radii."}]}
+   },
+   "the-mass-luminosity-slope": {
+    "validate": {"calls":242,"distinct":2,"digest":"4b9155517864ec3d","samples":[null,{"level":"error","message":"Read D1 and A1 on the luminosity axis (about 54 and 3.4 solar) and compute the exponent from them: about 4.1."}]}
+   },
+   "the-tilt-you-did-not-measure": {
+    "validate": {"calls":242,"distinct":2,"digest":"96b2c74915bcf170","samples":[null,{"level":"error","message":"Set the inclination to 52 degrees: M1 is about 1.19 and M2 about 0.88 solar masses, and 1 / sin³ 52° is about 2.04."}]}
+   }
+  },
+  "es": "same"
+ }
+}

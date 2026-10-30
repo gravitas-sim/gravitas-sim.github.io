@@ -2711,7 +2711,7 @@ test.describe('the central experiment of each investigation', () => {
       title:
         'weighing-the-stars-for-real: the velocities fix a minimum of 0.58 solar masses for star 1, which is 0.58 edge on and 1.19 at 52 degrees @accepts:ce.weighing-the-stars-for-real',
       row: /^At your inclination$/i,
-      nth: 1,
+      nth: 2,
       values: [
         [90, 0.58, 0.02],
         [52, 1.19, 0.03],

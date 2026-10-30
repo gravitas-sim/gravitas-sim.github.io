@@ -11,10 +11,10 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 96 investigations and 1316 steps: 1224 steps
+Across 96 investigations and 1317 steps: 1225 steps
 declare a scene, 157 let a reader change one, 167 read the
-running integration, 812 show a prescribed model result, 146 draw
-on a stored dataset, 691 put a self-contained panel beside the text,
+running integration, 813 show a prescribed model result, 146 draw
+on a stored dataset, 692 put a self-contained panel beside the text,
 348 keep something, and 58 are prose.
 Of 177 prediction loops, 177 are returned to,
 177 produce a measurement before they are answered, and
@@ -1311,14 +1311,14 @@ Of 177 prediction loops, 177 are returned to,
 
 ## Weighing the Stars, for Real (`weighing-the-stars-for-real`)
 
-- **Steps:** 6. Scene declared on 6; a reader can change something on 0; 6 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 0 live engine, 6 prescribed model, 0 stored dataset, 6 self-contained panel.
+- **Steps:** 7. Scene declared on 7; a reader can change something on 0; 7 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 7 prescribed model, 0 stored dataset, 7 self-contained panel.
 - **What students do:** move-an-instrument-control, commit-a-prediction, record-values, choose-an-option.
 - **Objects the steps declare:** star.
 - **Instruments:** masses-minimum, masses-solve.
 - **Stored data:** none.
 - **Evidence kept:** notebook-fields.
-- **Prediction loops:** who-moves-faster → read-the-amplitudes, the-mass-ratio, a-mass-or-a-limit, what-fixes-the-tilt → read-the-amplitudes.
+- **Prediction loops:** who-moves-faster → read-the-amplitudes, the-mass-ratio, a-mass-or-a-limit, what-fixes-the-tilt, what-the-pair-gives → read-the-amplitudes.
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:masses-minimum`, control masses-minimum/inc, measures the mass that star 1 would have at the tilt you choose, for a pair whose velocities give a minimum of 0.58 solar masses: 0.58 at 90 degrees (edge on) and 1.19 at 52 degrees, the velocities alone fixing only the minimum, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.

@@ -24,8 +24,8 @@ export const EN_MASSES = {
     'Two Doppler curves of one orbit give the ratio of the masses and the size of the orbit times sin i, so every mass is a minimum: the true mass is larger by 1 / sin³ i, and without an eclipse or another measurement the inclination is not known. Choose the inclination to see what the masses would be. A single-lined orbit gives only the mass function. Every data set here is synthetic.',
   'masW.m.control.system': 'System',
   'masW.m.control.inc': 'Inclination you assume',
-  'masW.m.system.0': 'a double-lined pair that never eclipses',
-  'masW.m.system.1': 'a single-lined orbit',
+  'masW.m.system.0': 'two lines, no eclipse',
+  'masW.m.system.1': 'one line',
   'masW.row.data': 'Data',
   'masW.v.data':
     '{n} velocities of each star, {s} km/s per point; orbit fitted',
@@ -116,7 +116,7 @@ export const EN_MASSES = {
     'The detached model of the inference core (two spheres on one Kepler orbit, limb darkening fixed, no third light) and its velocity curves from the same orbit; the masses use the nominal solar GM, the radii the nominal solar radius',
   'masW.d.title': 'Masses and radii against MIST',
   'masW.d.note':
-    'The stars you have solved, with their masses and radii (or luminosities) against the MIST tracks at solar composition. The shaded band lies between a star just born on the main sequence and one at its end; a main-sequence star should sit inside it. Temperatures are inputs: star 1’s is given, star 2’s follows from the fitted surface brightness ratio in the 0.8 micrometer band.',
+    'The stars you have solved, with their masses and radii (or luminosities) against the MIST tracks at solar composition. The lower line is a star just born on the main sequence and the upper one a star at its end; a main-sequence star should sit between them. Temperatures are inputs: star 1’s is given, star 2’s follows from the fitted surface brightness ratio in the 0.8 micrometer band.',
   'masW.d.control.view': 'Vertical axis',
   'masW.d.control.systems': 'Systems solved',
   'masW.d.control.band': 'MIST band',

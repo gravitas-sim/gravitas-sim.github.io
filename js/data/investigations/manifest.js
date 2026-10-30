@@ -1173,7 +1173,7 @@ export const MANIFEST = [
     level: 'Introductory astronomy',
     thumbnail: 'images/investigations/weighing-the-stars-for-real.webp',
     depths: 3,
-    stepCount: 6,
+    stepCount: 7,
     gradedCount: 5,
     objectiveCount: 4,
   },
