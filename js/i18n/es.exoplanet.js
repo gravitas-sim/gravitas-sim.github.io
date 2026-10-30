@@ -292,6 +292,35 @@ export const ES_EXOPLANET = {
     'Exacto. Las dos estrellas están dentro de un mismo píxel, y cualquiera de ellas podría tener un planeta que produjera esta caída: un planeta distinto para cada una. Decidirlo requiere pruebas que no puede dar una curva de luz de las dos estrellas juntas. Los valores publicados de arriba difieren donde esta investigación dice que tienen que diferir: el cociente va de 0,065 a 0,087 y el radio de 1,41 a 2,30 radios de Júpiter, porque cada análisis eligió su propia dilución y su propio radio de la estrella.',
   'gd.exo-dilution.which-star.no':
     '¿Qué parte de la curva de luz podría distinguir el tránsito de A del de B, si las dos estrellas caen dentro de un mismo píxel?',
+  'gd.exo-dilution.vet-tests.title': '¿Pasan las pruebas de la curva de luz?',
+  'gd.exo-dilution.vet-tests.text':
+    'Dos pruebas que una curva de luz puede hacer por sí sola: si los tránsitos impares y pares tienen la misma profundidad, y si hay una caída media órbita después del tránsito. El panel muestra la segunda en esta curva. Hazlas como las hace el panel de verificación (una profundidad es una caja en medio del tránsito frente a una línea base a su alrededor, con los errores ensanchados por el ruido rojo). Una prueba que el ruido impide decidir es no concluyente, no un aprobado.\n\nEn la curva SAP, ¿qué dicen las dos pruebas juntas?',
+  'gd.exo-dilution.vet-tests.opt.pass': 'Las dos pasan',
+  'gd.exo-dilution.vet-tests.opt.fail': 'Al menos una falla',
+  'gd.exo-dilution.vet-tests.opt.inconclusive': 'Al menos una no puede decidir',
+  'gd.exo-dilution.vet-tests.ok':
+    'Las dos pasan: las profundidades impares y pares coinciden dentro de sus errores y no destaca ningún eclipse secundario. Aprobar descarta una binaria eclipsante a este período. Todavía no dice de quién es la luz de la caída.',
+  'gd.exo-dilution.vet-tests.no':
+    'Compara las profundidades impares y pares con su error combinado, y la caída en la fase un medio con su propio error. El secundario de un planeta es demasiado pequeño para verse aquí.',
+  'gd.exo-dilution.vet-upper.title': 'Lo que permite un secundario ausente',
+  'gd.exo-dilution.vet-upper.text':
+    'No se vio ningún secundario, así que los datos solo lo acotan: una caída mayor que tres errores estándar se habría visto. Toma tres veces el error de la profundidad en la fase un medio, como fracción del flujo.',
+  'gd.exo-dilution.vet-upper.ok':
+    '{value}: un secundario menos profundo que esto podría esconderse en el ruido. Un límite superior es la forma honesta de decir «no se vio».',
+  'gd.exo-dilution.vet-upper.no':
+    'Multiplica por tres el error junto a la profundidad del secundario y dalo como fracción del flujo (no en partes por millón).',
+  'gd.exo-dilution.vet-blind.title': 'Lo que los aprobados dejan abierto',
+  'gd.exo-dilution.vet-blind.text':
+    'Las dos pruebas pasaron. ¿Qué resuelve eso sobre el tránsito diluido?',
+  'gd.exo-dilution.vet-blind.opt.planet': 'Es un planeta de la estrella A',
+  'gd.exo-dilution.vet-blind.opt.blend':
+    'Es una mezcla, así que no es un planeta',
+  'gd.exo-dilution.vet-blind.opt.open':
+    'De quién es el planeta sigue abierto: la prueba que separaría A de B necesita fotogramas',
+  'gd.exo-dilution.vet-blind.ok':
+    'Sí. Una lista aprobada descarta algunos falsos positivos y deja otros. El tránsito de una vecina hace una caída con forma de planeta, con profundidades impares y pares iguales y sin secundario; solo un desplazamiento del centroide en los fotogramas, o una imagen de alta resolución, puede distinguir las estrellas, y este paquete no tiene fotogramas.',
+  'gd.exo-dilution.vet-blind.no':
+    '¿Qué falsos positivos detectan las pruebas de impares y pares y del secundario, y es un planeta alrededor de la vecina uno de ellos?',
   'gd.exo-dilution.wrap.title': 'Un radio es un conjunto de elecciones',
   'gd.exo-dilution.wrap.text':
     'Un mismo planeta tiene cocientes de radios publicados de 0,065 a 0,087 y radios de 1,41 a 2,30 radios de Júpiter. Tus ajustes muestran de dónde sale buena parte de ese intervalo: qué luz se quita, y el radio de qué estrella multiplica k. Un ajuste sin diluir de la luz recogida da un cociente cercano al menor publicado. Cuando un resultado depende de una elección que los datos no pueden hacer, la elección forma parte del resultado.',

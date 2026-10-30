@@ -32,6 +32,10 @@
 // =============================================================================
 
 import {
+  oddEvenTest,
+  secondaryTest,
+} from '../../kernels/vetting/lightcurve.js';
+import {
   bestEpoch,
   boxDepth,
   lightFraction,
@@ -258,6 +262,12 @@ export const ANSWERS = {
   // The deepest dip every other catalogued star in HD 209458's aperture could
   // make, were all its light to vanish: 1 - CROWDSAP, from the header.
   blendLimit: () => 1 - ADOPTED.hd209458.crowdsap.value,
+  // The most a secondary eclipse could hold and still be missed: three
+  // standard errors of the depth at phase one half, as the panel shows it.
+  secondaryUpper: (c, step) => {
+    const d = transitOf(c, step.target, periodOf(step.target))?.secondary;
+    return d ? SIGNIFICANT * d.error : null;
+  },
   simulationRadiusRatio: () =>
     ADOPTED.simulation.planetRadius /
     ADOPTED.simulation.stellarRadius /
@@ -288,6 +298,21 @@ export const CORRECT = {
     const d = transitOf(c, step.target, periodOf(step.target))?.secondary;
     if (!d) return null;
     return d.depth < SIGNIFICANT * d.error ? 'none' : 'dip';
+  },
+  // The two light-curve tests of js/kernels/vetting (VETTING.md), the way
+  // the vetting panel runs them: a verdict of `pass` needs both to pass, a
+  // `fail` is either failing, and anything the data cannot decide is
+  // `inconclusive`, never a pass.
+  vetLightCurve: (c, step) => {
+    const r = transitOf(c, step.target, periodOf(step.target));
+    const s = c.series(step.target);
+    if (!r || !s) return null;
+    const eph = { P: r.period, t0: r.epoch, duration: DURATION };
+    const verdicts = [oddEvenTest(s, eph), secondaryTest(s, eph)].map(
+      t => t.verdict
+    );
+    if (verdicts.includes('fail')) return 'fail';
+    return verdicts.every(v => v === 'pass') ? 'pass' : 'inconclusive';
   },
 };
 
@@ -498,7 +523,7 @@ export const GUIDES = [
   },
   {
     id: 'exo-dilution',
-    minutes: { intro: 20, advanced: 35 },
+    minutes: { intro: 20, advanced: 45 },
     level: 'intro',
     tags: ['exoplanets', 'observing'],
     steps: [
@@ -583,6 +608,30 @@ export const GUIDES = [
         show: 'published',
         options: ['a', 'b', 'cannot'],
         correct: 'cannot',
+      },
+      {
+        id: 'vet-tests',
+        kind: 'choose',
+        path: 'advanced',
+        show: 'secondary',
+        target: 'kepler13-sap',
+        options: ['pass', 'fail', 'inconclusive'],
+        correct: { answer: 'vetLightCurve' },
+      },
+      {
+        id: 'vet-upper',
+        kind: 'answer',
+        path: 'advanced',
+        show: 'secondary',
+        target: 'kepler13-sap',
+        expect: { answer: 'secondaryUpper', tolerance: 0.00002 },
+      },
+      {
+        id: 'vet-blind',
+        kind: 'choose',
+        path: 'advanced',
+        options: ['planet', 'blend', 'open'],
+        correct: 'open',
       },
       { id: 'wrap', kind: 'read', path: 'both' },
     ],

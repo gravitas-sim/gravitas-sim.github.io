@@ -288,6 +288,34 @@ export const EN_EXOPLANET = {
     'Right. Both stars sit inside one pixel, and either could host a planet that makes this dip: a different planet for each. Deciding needs evidence that a light curve of both stars together cannot give. The published values above differ where this investigation says they must: the ratio runs from 0.065 to 0.087 and the radius from 1.41 to 2.30 Jupiter radii, because each analysis made its own choice of dilution and of the star’s radius.',
   'gd.exo-dilution.which-star.no':
     'What in the light curve could tell A’s transit from B’s, when both stars fall inside one pixel?',
+  'gd.exo-dilution.vet-tests.title': 'Do the light-curve tests pass?',
+  'gd.exo-dilution.vet-tests.text':
+    'Two tests a light curve can run on its own: do odd and even transits have the same depth, and is there a dip half an orbit after the transit? The panel shows the second on this curve. Run both the way the vetting panel does (a depth is a box in the middle of the transit against a baseline around it, errors widened for red noise). A test that the data are too noisy to decide is inconclusive, not a pass.\n\nOn the SAP curve, what do the two tests say together?',
+  'gd.exo-dilution.vet-tests.opt.pass': 'Both pass',
+  'gd.exo-dilution.vet-tests.opt.fail': 'At least one fails',
+  'gd.exo-dilution.vet-tests.opt.inconclusive': 'At least one cannot decide',
+  'gd.exo-dilution.vet-tests.ok':
+    'Both pass: odd and even depths agree within their errors, and no secondary eclipse stands out. A pass rules out an eclipsing binary at this period. It says nothing yet about whose light the dip is.',
+  'gd.exo-dilution.vet-tests.no':
+    'Compare the odd and even depths against their combined error, and the dip at phase one half against its own error. A planet’s secondary is far too small to see here.',
+  'gd.exo-dilution.vet-upper.title': 'What a missing secondary allows',
+  'gd.exo-dilution.vet-upper.text':
+    'No secondary was seen, so the data only bound it: a dip deeper than three standard errors would have shown. Take three times the error of the depth at phase one half, as a fraction of the flux.',
+  'gd.exo-dilution.vet-upper.ok':
+    '{value}: a secondary shallower than this could hide in the noise. An upper limit is the honest form of “not seen”.',
+  'gd.exo-dilution.vet-upper.no':
+    'Multiply the error beside the secondary depth by three, and give it as a fraction of the flux (not in parts per million).',
+  'gd.exo-dilution.vet-blind.title': 'What the passes leave open',
+  'gd.exo-dilution.vet-blind.text':
+    'Both tests passed. What does that settle about the diluted transit?',
+  'gd.exo-dilution.vet-blind.opt.planet': 'It is a planet of star A',
+  'gd.exo-dilution.vet-blind.opt.blend': 'It is a blend, so not a planet',
+  'gd.exo-dilution.vet-blind.opt.open':
+    'Whose planet it is stays open: the test that could split A from B needs frames',
+  'gd.exo-dilution.vet-blind.ok':
+    'Yes. A passed checklist rules out some false positives and leaves others. A neighbour’s transit makes a planet-shaped dip with equal odd and even depths and no secondary; only a centroid shift in the frames, or a high-resolution image, can tell the stars apart, and this pack has no frames.',
+  'gd.exo-dilution.vet-blind.no':
+    'Which false positives do the odd-even and secondary tests catch, and is a planet around the neighbour one of them?',
   'gd.exo-dilution.wrap.title': 'A radius is a set of choices',
   'gd.exo-dilution.wrap.text':
     'One planet has published radius ratios from 0.065 to 0.087 and radii from 1.41 to 2.30 Jupiter radii. Your fits show where much of that range comes from: whose light is taken out, and whose star’s radius multiplies k. An undiluted fit to the collected light gives a ratio close to the smallest published one. When a result depends on a choice the data cannot make, the choice belongs in the result.',
