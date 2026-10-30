@@ -464,7 +464,7 @@ export function mountClusterPanel(root, ctx) {
     out.replaceChildren(el('p', { text: t('clusterObs.busy') }));
     await new Promise(r => setTimeout(r, 30));
     const settings = {
-      feh: Number(feh.value),
+      feh: typedNumber(feh.value),
       E: typedNumber(E.value),
       R: K.EXTINCTION_RATIO,
       eps: typedNumber(eps.value),

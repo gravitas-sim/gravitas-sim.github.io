@@ -56,7 +56,7 @@ export const EN_CLUSTER = {
   'clusterObs.a.selection':
     'The survey’s selection in magnitude is unknown and is not used: the fit compares colors at each magnitude, not counts.',
   'clusterObs.a.model':
-    'The isochrones are MIST v1.2’s: a model, not a measurement. Between its ages and metallicities the curve is a blend of its neighbours.',
+    'The isochrones are MIST v1.2’s: a model, not a measurement. Between its ages and metallicities the curve is a blend of its neighbors.',
   'clusterObs.a.interval':
     'An interval is where the statistic rises by 1 from its minimum: it says how a repeated measurement would scatter if every assumption were true, not how sure anyone can be of the age.',
   'clusterObs.cmd': 'The stars and the best isochrone',
