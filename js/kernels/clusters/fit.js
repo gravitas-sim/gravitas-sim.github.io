@@ -294,6 +294,12 @@ export function fitCluster(set, g, colour, o) {
     (best.id === dms.length - 1 && dms.at(-1) >= dmHi - 1e-9)
   )
     result.warnings.push('dmAtEdge');
+  // An age interval that runs into the grid's edge says so: open on that
+  // side, "older than the models reach" (D6), never closed across the edge.
+  if (age.open?.[1] && !result.warnings.includes('ageAtOldEdge'))
+    result.warnings.push('ageAtOldEdge');
+  if (age.open?.[0] && !result.warnings.includes('ageAtYoungEdge'))
+    result.warnings.push('ageAtYoungEdge');
   if (bad('logAge') || bad('dm'))
     return {
       ...result,
