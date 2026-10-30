@@ -59,14 +59,14 @@ function loadQuarter(file) {
   ]);
   const cad = [];
   const flux = [];
-  for (let i = 0; i < c.TIME.length; i++)
+  for (let i = 0; i < c.TIME.values.length; i++)
     if (
-      c.SAP_QUALITY[i] === 0 &&
-      Number.isFinite(c.PDCSAP_FLUX[i]) &&
-      Number.isFinite(c.TIME[i])
+      c.SAP_QUALITY.values[i] === 0 &&
+      Number.isFinite(c.PDCSAP_FLUX.values[i]) &&
+      Number.isFinite(c.TIME.values[i])
     ) {
-      cad.push(c.CADENCENO[i]);
-      flux.push(c.PDCSAP_FLUX[i]);
+      cad.push(c.CADENCENO.values[i]);
+      flux.push(c.PDCSAP_FLUX.values[i]);
     }
   return { cadence: cad, flux };
 }
