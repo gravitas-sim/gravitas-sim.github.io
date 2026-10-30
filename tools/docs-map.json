@@ -1014,7 +1014,7 @@
       "kind": "gate",
       "purpose": "The four-parameter cluster-fit gate (Prompt 219 Part B): its committed models and bounds, the measured legs, the verdict C and the spike run-1 defect.",
       "owner": 219,
-      "student": false
+      "student": true
     },
     {
       "file": "OBSERVING_STRATEGY.md",
