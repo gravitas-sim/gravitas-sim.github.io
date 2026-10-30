@@ -325,4 +325,54 @@ export const EN_INFERENCE = {
     'Run a fit in the Fit panel first; its result is then a model source here.',
   'obs.cmp.cite':
     'The comparison cites the data by a digest of its rows, the model by its identity and values, and says which numbers were fitted, fixed, derived or assumed.',
+  // Prompt 225: the four-coefficient law, the star's density, the checks.
+  'obs.fit.model.transit-claret4':
+    'A transit (circular orbit, four-coefficient limb darkening with fixed coefficients)',
+  'obs.fit.more': 'Limb-darkening coefficients and orbit assumptions',
+  'obs.fit.moreHint':
+    'Everything here is stated, never fitted. The four coefficients come from a table of limb darkening for the star’s temperature, surface gravity and metallicity, which you supply; no table ships with Gravitas. The eccentricity and argument of periastron only correct the star’s density; the fit itself stays circular.',
+  'obs.fit.claret': 'Four-coefficient law (Claret 2000), fixed',
+  'obs.fit.claretOf': 'Limb-darkening coefficient c{n}',
+  'obs.fit.claretSource': 'Where the coefficients are from (a note)',
+  'obs.fit.eccentricity': 'Assumed eccentricity e, for the density only',
+  'obs.fit.omega': 'Assumed argument of periastron, degrees',
+  'obs.fit.declared.quadratic':
+    'Limb darkening: the quadratic law, q1 and q2 as set below.',
+  'obs.fit.declared.claret':
+    'Limb darkening: the four-coefficient law, fixed at c = {c}.',
+  'obs.fit.declared.circular': 'Orbit: circular.',
+  'obs.fit.declared.ecc':
+    'Orbit: circular in the fit; the density is also given for e = {e}, ω = {omega} degrees.',
+  'obs.fit.param.rhoStar': 'Star’s mean density, circular orbit',
+  'obs.fit.param.rhoStarEcc': 'Star’s mean density, for the assumed e and ω',
+  'obs.fit.transit.title': 'What the transit does and does not fix',
+  'obs.fit.transit.kb.constrained':
+    'The radius ratio and the impact parameter are fixed by the data: the transit has a flat bottom they can be told apart by.',
+  'obs.fit.transit.kb.not-constrained':
+    'The radius ratio and the impact parameter are not constrained by these data ({reasons}). A V-shaped transit fits a small planet crossing the middle of the star and a larger one grazing its edge about equally well, so quote neither number alone.',
+  'obs.fit.transit.kb.fixed':
+    'The radius ratio or the impact parameter was held fixed, so the data are not asked to separate them.',
+  'obs.fit.transit.reason.grazing':
+    'the best-fit impact parameter plus its sigma reaches the grazing limit 1 − k',
+  'obs.fit.transit.reason.rank': 'the rank check names one of them',
+  'obs.fit.transit.reason.correlated': 'their correlation is above 0.95',
+  'obs.fit.transit.residual.passes':
+    'In transit, the residuals look like the noise the error bars promise (chi-square {chi2} for {points} points, p = {p}).',
+  'obs.fit.transit.residual.fails':
+    'In transit, the residuals do not look like noise (chi-square {chi2} for {points} points, p = {p}, or correlated in time): the model is missing something, such as a spot the planet crossed. Do not quote the uncertainties.',
+  'obs.fit.transit.dchi2': 'Change in chi-square',
+  'obs.fit.transit.profileLabel':
+    'Profile of {name}: change in chi-square against its value, {n} points',
+  'obs.fit.transit.profileCaption':
+    '{name} with every other parameter re-fitted; the interval where the change is 1 is {lo} to {hi}.',
+  'obs.fit.transit.ellipseLabel':
+    'The one-sigma covariance ellipse of {a} against {b}',
+  'obs.fit.transit.ellipseCaption':
+    'The one-sigma (68%) ellipse of {a} against {b} from the fit’s covariance: a long, thin, tilted ellipse is a degeneracy. The table gives the same numbers.',
+  'obs.fit.transit.ellipseTable': 'Ellipse of {a} against {b}',
+  'obs.fit.transit.ellipse.center': 'Center (best fit)',
+  'obs.fit.transit.ellipse.semiMajor': 'Semi-major axis',
+  'obs.fit.transit.ellipse.semiMinor': 'Semi-minor axis',
+  'obs.fit.transit.ellipse.angle': 'Angle of the major axis, degrees',
+  'obs.fit.transit.ellipse.correlation': 'Correlation',
 };

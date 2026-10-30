@@ -1,0 +1,149 @@
+{
+ "note": "The steps of the exo-fit guide (Fit the transit) as origin/v3 66b36361 had them, before Prompt 225 added its upper depth. tests/exoplanetGuides.test.js holds every one to its definition and the introductory path to its list: the lower depths grade identically.",
+ "minutes": {
+  "intro": 20,
+  "advanced": 35
+ },
+ "level": "intro",
+ "tags": [
+  "exoplanets",
+  "observing"
+ ],
+ "steps": [
+  {
+   "id": "intro",
+   "kind": "read",
+   "path": "both"
+  },
+  {
+   "id": "fit",
+   "kind": "do",
+   "path": "both",
+   "go": {
+    "open": "hd209458",
+    "panel": "fit"
+   },
+   "check": {
+    "kind": "fitted",
+    "target": "hd209458",
+    "parameter": "k",
+    "within": [
+     0.11,
+     0.13
+    ],
+    "settings": {
+     "dilution": [
+      0,
+      0
+     ]
+    }
+   }
+  },
+  {
+   "id": "ratio",
+   "kind": "answer",
+   "path": "both",
+   "expect": {
+    "answer": "radiusRatio",
+    "tolerance": 0.001
+   }
+  },
+  {
+   "id": "pair",
+   "kind": "choose",
+   "path": "advanced",
+   "from": "fit",
+   "options": [
+    "b-aRs",
+    "k-t0",
+    "P-t0",
+    "q1-P"
+   ],
+   "correct": {
+    "answer": "strongestPair"
+   }
+  },
+  {
+   "id": "residuals",
+   "kind": "answer",
+   "path": "advanced",
+   "expect": {
+    "answer": "beta",
+    "tolerance": 0.05
+   }
+  },
+  {
+   "id": "radius",
+   "kind": "do",
+   "path": "both",
+   "go": {
+    "panel": "fit"
+   },
+   "show": "stellarRadius",
+   "check": {
+    "kind": "fitted",
+    "target": "hd209458",
+    "parameter": "Rp",
+    "within": [
+     1.2,
+     1.6
+    ],
+    "settings": {
+     "stellarRadius.value": [
+      1.19,
+      1.19
+     ],
+     "stellarRadius.sigma": [
+      0.02,
+      0.02
+     ]
+    }
+   }
+  },
+  {
+   "id": "planet-radius",
+   "kind": "answer",
+   "path": "both",
+   "expect": {
+    "answer": "planetRadius",
+    "tolerance": 0.01
+   }
+  },
+  {
+   "id": "torres",
+   "kind": "answer",
+   "path": "advanced",
+   "expect": {
+    "answer": "radiusIfTorres",
+    "tolerance": 0.01
+   }
+  },
+  {
+   "id": "wrap",
+   "kind": "read",
+   "path": "both"
+  }
+ ],
+ "answers": [
+  "qualityDropped",
+  "targetShare",
+  "crowdsap",
+  "boxPeriod",
+  "periodMinutesOff",
+  "radiusRatio",
+  "beta",
+  "planetRadius",
+  "radiusIfTorres",
+  "depthRatio",
+  "rawRatio",
+  "dilution",
+  "radiusRatioIfB",
+  "blendLimit",
+  "simulationRadiusRatio"
+ ],
+ "correct": [
+  "strongestPair",
+  "oddEven",
+  "secondary"
+ ]
+}

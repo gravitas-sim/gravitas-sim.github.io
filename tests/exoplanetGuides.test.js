@@ -56,6 +56,7 @@ const SHOWS = [
   'secondary',
   'count',
   'simulation',
+  'vshape',
 ];
 
 /** A seeded uniform stream (mulberry32), and normal deviates from it. */
@@ -166,6 +167,59 @@ describe('the guides as data', () => {
       expect(advanced.length).toBeGreaterThan(intro.length);
       expect(intro.length).toBeGreaterThanOrEqual(6);
     }
+  });
+
+  test('Fit the transit gained an upper depth in Prompt 225 and no lower step changed (tests/fixtures/transit-delta/exo-fit-steps-v3.json)', () => {
+    const gold = JSON.parse(
+      readFileSync(
+        path.join(REPO, 'tests/fixtures/transit-delta/exo-fit-steps-v3.json'),
+        'utf8'
+      )
+    );
+    const g = G.GUIDES.find(x => x.id === 'exo-fit');
+    // Every step it had is as it was, in the same order.
+    const kept = g.steps.filter(s => gold.steps.some(o => o.id === s.id));
+    expect(kept).toEqual(gold.steps);
+    // The introductory path is exactly what it was, and so are its minutes.
+    expect(G.stepsOn(g, 'intro')).toEqual(
+      gold.steps.filter(s => s.path === 'both')
+    );
+    expect(g.minutes.intro).toBe(gold.minutes.intro);
+    // What was added is advanced only, and the answers and choices the old
+    // steps use are all still there.
+    const added = g.steps.filter(s => !gold.steps.some(o => o.id === s.id));
+    expect(added.length).toBeGreaterThanOrEqual(5);
+    for (const s of added) expect(s.path).toBe('advanced');
+    for (const name of gold.answers) expect(G.ANSWERS).toHaveProperty(name);
+    for (const name of gold.correct) expect(G.CORRECT).toHaveProperty(name);
+  });
+
+  test('the two grazing planets of the V-shape step cannot be told apart, and the constants are the closest curve a search finds', () => {
+    const v = G.vshape();
+    expect(v.chi2All).toBeLessThan(G.VSHAPE.chi2Limit);
+    // Both are grazing (b + k above 1), the second 40 percent larger.
+    for (const p of [G.VSHAPE.a, G.VSHAPE.b])
+      expect(p.b + p.k).toBeGreaterThan(1);
+    expect(G.VSHAPE.b.k / G.VSHAPE.a.k).toBeCloseTo(1.4, 10);
+    // A search around the second planet's b and a/R* finds nothing closer to
+    // the first's curve (coarse: the step's constants are rounded).
+    const best = (() => {
+      let min = Infinity;
+      for (let db = -0.02; db <= 0.0201; db += 0.01)
+        for (let da = -0.3; da <= 0.301; da += 0.15) {
+          const w = G.vshape({
+            b: {
+              ...G.VSHAPE.b,
+              b: G.VSHAPE.b.b + db,
+              aRs: G.VSHAPE.b.aRs + da,
+            },
+          });
+          min = Math.min(min, w.maxDiffPpm);
+        }
+      return min;
+    })();
+    expect(best).toBeGreaterThan(v.maxDiffPpm * 0.5);
+    expect(v.maxDiffPpm).toBeLessThan(40);
   });
 
   test('every word a step shows exists in English and in Spanish', () => {

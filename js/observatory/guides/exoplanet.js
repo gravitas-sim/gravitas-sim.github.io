@@ -31,6 +31,8 @@
 // step against these rules and every answer against the data.
 // =============================================================================
 
+import { eccentricityFactor, transitFlux } from '../../inference/transit.js';
+import { kippingToQuadratic } from '../../limbDarkening.js';
 import {
   bestEpoch,
   boxDepth,
@@ -173,6 +175,62 @@ export const DURATION = 0.14;
 export const SIGNIFICANT = 3;
 
 /**
+ * Prompt 225, "The grazing transit". Two planets that both graze their star,
+ * the second 40 percent larger and on a different orbit (found by a grid
+ * search for the closest light curve to the first, tests/exoplanetGuides.test.js
+ * holds them): HD 209458's period and quadratic limb darkening, a 20-minute
+ * exposure, and the per-point scatter of the shipped light curve.
+ */
+export const VSHAPE = {
+  a: { k: 0.1, b: 1.0, aRs: 8.76 },
+  b: { k: 0.14, b: 1.052, aRs: 8.36 },
+  period: 3.5247,
+  q: { q1: 0.36, q2: 0.3 },
+  exposure: 20 / 1440,
+  // 17 exposures across a transit, centred on the middle.
+  points: 17,
+  sigmaPpm: 213,
+  // Sector 56's transits of HD 209458.
+  transits: 8,
+  // A chi-square difference below this is not a difference.
+  chi2Limit: 4,
+};
+
+/** The two grazing planets' light curves at the sampled times, and what separates them. */
+export function vshape(over = {}) {
+  const planets = { a: VSHAPE.a, b: VSHAPE.b, ...over };
+  const { u1, u2 } = kippingToQuadratic(VSHAPE.q.q1, VSHAPE.q.q2);
+  const t = Array.from(
+    { length: VSHAPE.points },
+    (_, i) => (i - (VSHAPE.points - 1) / 2) * VSHAPE.exposure
+  );
+  const curve = p =>
+    transitFlux(
+      t,
+      { t0: 0, P: VSHAPE.period, k: p.k, aRs: p.aRs, b: p.b, u1, u2 },
+      { exposure: VSHAPE.exposure, supersample: 5, annuli: 32 }
+    );
+  const a = curve(planets.a);
+  const b = curve(planets.b);
+  let maxDiff = 0;
+  let chi2 = 0;
+  for (let i = 0; i < t.length; i++) {
+    maxDiff = Math.max(maxDiff, Math.abs(a[i] - b[i]));
+    chi2 += ((a[i] - b[i]) / (VSHAPE.sigmaPpm * 1e-6)) ** 2;
+  }
+  return {
+    depthA: 1 - Math.min(...a),
+    depthB: 1 - Math.min(...b),
+    maxDiffPpm: maxDiff * 1e6,
+    chi2One: chi2,
+    chi2All: chi2 * VSHAPE.transits,
+  };
+}
+
+/** The eccentric orbit the density step asks about. */
+export const ECCENTRIC_EXAMPLE = { e: 0.2, omega: 90 };
+
+/**
  * What science.js makes of a target's light curve, at a period: the epoch of
  * its deepest box, and the depths there. `c.series(target)` is the light
  * curve, or null when the target has not been opened yet.
@@ -227,6 +285,18 @@ export const ANSWERS = {
       : Math.abs(p - ADOPTED.hd209458.period.value) * 1440;
   },
   radiusRatio: c => c.quantity('fit', 'k'),
+  // The star's mean density from the fit's P and a/R*, circular orbit.
+  stellarDensity: c => c.quantity('fit', 'rhoStar'),
+  // How much too high a circular fit's density is for an eccentric orbit.
+  densityFactor: () =>
+    eccentricityFactor(ECCENTRIC_EXAMPLE.e, ECCENTRIC_EXAMPLE.omega),
+  // The correlation of k and b in the fit's covariance.
+  kbCorrelation: c => {
+    const fit = c.evidence('fit')?.results?.fit;
+    const i = fit?.free?.indexOf('k');
+    const j = fit?.free?.indexOf('b');
+    return fit?.correlation && i >= 0 && j >= 0 ? fit.correlation[i][j] : null;
+  },
   beta: c => c.evidence('fit')?.results?.fit?.redNoise?.beta ?? null,
   planetRadius: c => c.quantity('radius', 'Rp'),
   radiusIfTorres: c => {
@@ -279,6 +349,8 @@ export const CORRECT = {
     }
     return best?.pair ?? null;
   },
+  // Could the transits of the sector tell the two grazing planets apart?
+  vshape: () => (vshape().chi2All < VSHAPE.chi2Limit ? 'cannot' : 'can'),
   oddEven: (c, step) => {
     const oe = transitOf(c, step.target, periodOf(step.target))?.oddEven;
     if (!oe || oe.sigmas === null) return null;
@@ -426,7 +498,7 @@ export const GUIDES = [
   },
   {
     id: 'exo-fit',
-    minutes: { intro: 20, advanced: 35 },
+    minutes: { intro: 20, advanced: 50 },
     level: 'intro',
     tags: ['exoplanets', 'observing'],
     steps: [
@@ -492,6 +564,35 @@ export const GUIDES = [
         kind: 'answer',
         path: 'advanced',
         expect: { answer: 'radiusIfTorres', tolerance: 0.01 },
+      },
+      // Prompt 225: the upper depth. Steps are only added; every step above
+      // is as it was (tests/exoplanetGuides.test.js).
+      {
+        id: 'density',
+        kind: 'answer',
+        path: 'advanced',
+        expect: { answer: 'stellarDensity', tolerance: 0.005 },
+      },
+      {
+        id: 'eccentric',
+        kind: 'answer',
+        path: 'advanced',
+        expect: { answer: 'densityFactor', tolerance: 0.01 },
+      },
+      {
+        id: 'ellipse',
+        kind: 'answer',
+        path: 'advanced',
+        expect: { answer: 'kbCorrelation', tolerance: 0.02 },
+      },
+      { id: 'laws', kind: 'read', path: 'advanced' },
+      {
+        id: 'vshape',
+        kind: 'choose',
+        path: 'advanced',
+        show: 'vshape',
+        options: ['can', 'cannot'],
+        correct: { answer: 'vshape' },
       },
       { id: 'wrap', kind: 'read', path: 'both' },
     ],
@@ -689,6 +790,33 @@ export const SHOWS = {
           h.t('gd.show.adoptedRadius'),
           `${h.fmt(r.value)} ± ${h.fmt(r.sigma)} R☉ (${r.ref})`,
         ],
+      ];
+    },
+  },
+  vshape: {
+    rows: (c, step, h) => {
+      const v = vshape();
+      const planet = p =>
+        h.t('gd.show.vPlanet', {
+          k: h.fmt(p.k),
+          b: h.fmt(p.b),
+          aRs: h.fmt(p.aRs),
+        });
+      return [
+        [h.t('gd.show.vA'), planet(VSHAPE.a)],
+        [h.t('gd.show.vB'), planet(VSHAPE.b)],
+        [
+          h.t('gd.show.vDepth'),
+          h.t('gd.show.vDepthIs', {
+            a: h.ppm(v.depthA),
+            b: h.ppm(v.depthB),
+          }),
+        ],
+        [
+          h.t('gd.show.vMax'),
+          h.t('gd.show.vMaxPpm', { value: h.ppm(v.maxDiffPpm * 1e-6) }),
+        ],
+        [h.t('gd.show.vChi'), h.fmt(v.chi2All)],
       ];
     },
   },

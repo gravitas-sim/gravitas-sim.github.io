@@ -8,7 +8,7 @@ or link straight to one: `/observatory/?guide=exo-fit&path=advanced`.
 |---|---|---|---|---|---|---|
 | 1 | `exo-star`, Whose light is it? | What a light curve records: quality flags, the summed pixels, and a second star in them | HD 209458 light curve and aperture; Kepler-13 SAP | aperture tool, computed panels | 9 steps, ~15 min | 10, ~20 |
 | 2 | `exo-find`, Find the transit | A box search, a period, an epoch and a fold | HD 209458 | box search, fold | 6, ~15 | 8, ~25 |
-| 3 | `exo-fit`, Fit the transit | The radius ratio, what the data cannot separate, the planet's radius from an adopted star's | HD 209458 | transit fit | 6, ~20 | 9, ~35 |
+| 3 | `exo-fit`, Fit the transit | The radius ratio, what the data cannot separate, the planet's radius from an adopted star's; at the upper depth the star's density and its circular-orbit caveat, the k-b ellipse, two limb-darkening laws, and why a V-shaped (grazing) transit is ambiguous | HD 209458 | transit fit | 6, ~20 | 14, ~50 |
 | 4 | `exo-dilution`, A star that is not alone | How a companion's light hides a transit, and why the light curve cannot say whose planet it is | Kepler-13 SAP and PDCSAP | transit fit, computed panels | 11, ~20 | 12, ~35 |
 | 5 | `exo-planet`, Is it a planet? | Odd and even transits, a secondary eclipse, a blend, the simulation's version, what a transit cannot weigh | HD 209458 | computed panels | 8, ~20 | 9, ~25 |
 
@@ -21,7 +21,7 @@ a class.
 |---|---|
 | Target context and contamination | 1: quality flags, the aperture's 23 pixels, CROWDSAP, and a share of light from catalog magnitudes |
 | Transit detection; period and epoch | 2: the measurement panel's box search at its default range, the period against Stassun et al. 2017, the fold |
-| Transit fitting | 3: the fit panel's transit model, k, and which parameters trade (b with a/R*) |
+| Transit fitting | 3: the fit panel's transit model, k, and which parameters trade (b with a/R*); at the upper depth (Prompt 225, TRANSIT_DELTA.md) the density from P and a/R* with its eccentricity caveat, the covariance ellipse of k against b, the four-coefficient law, and the grazing transit |
 | Stellar-radius dependence | 3: Rp with R* = 1.19 +/- 0.02 (Stassun et al. 2017) carried through; the same k with Torres et al. 2008's 1.155 |
 | Residuals | 3, advanced: the correlated-noise factor beta, and which uncertainty to quote |
 | False-positive reasoning | 5: odd and even depths, a dip half an orbit later, and (advanced) the deepest dip any cataloged neighbor could make |

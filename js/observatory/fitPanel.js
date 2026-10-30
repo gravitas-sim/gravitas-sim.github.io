@@ -22,6 +22,7 @@
 import { parseNumber } from '../answerParse.js';
 import { listeners } from '../listeners.js';
 import { dataFrom } from '../inference/infer.js';
+import { ellipseOfFit } from '../inference/transitDelta.js';
 import { fitArtifact, modelUnit, rowsDigest } from '../analysis/seams.js';
 import { observationDigest } from './identity.js';
 import { compareWithTruth } from '../forward/observation.js';
@@ -68,6 +69,9 @@ const el = (tag, attrs = {}, ...children) => {
   return node;
 };
 
+/** The transit family: the quadratic law, or the four-coefficient one. */
+const isTransit = id => MODELS[id]?.family === 'transit';
+
 /**
  * Which models suit an observation: a transit for a flux, an orbit for a
  * velocity, and for a table of x against y - an experiment's means, say -
@@ -84,7 +88,7 @@ export function modelsFor(o, dimensionOfText) {
   const dim = dimensionOfText(y?.unit ?? null);
   const out = [];
   if (dim === 'ratio' || dim === null)
-    out.push('transit-quadratic', 'eclipsing-binary');
+    out.push('transit-quadratic', 'transit-claret4', 'eclipsing-binary');
   if (dim === 'velocity') out.push('rv-keplerian');
   return out;
 }
@@ -127,7 +131,7 @@ function defaults(modelId, data) {
       P: { lo: Math.max(0.2, spacing(data.x) * 20), hi: Math.max(1, span / 2) },
     };
   }
-  if (modelId === 'transit-quadratic') {
+  if (isTransit(modelId)) {
     const Phi = Math.min(10, Math.max(1.2, span / 2));
     return { t0: { lo: x0, hi: x0 + Phi }, P: { lo: 1, hi: Phi } };
   }
@@ -156,6 +160,13 @@ function spacing(x) {
 export function mountFitPanel(root, ctx) {
   const { t, number, language, createPlot, dimensionOfText } = ctx;
   ctx.registerMessages({ en: EN_INFERENCE, es: ES_INFERENCE });
+  // A number written into a field as the reader's language reads it back:
+  // the fields are read by js/answerParse.js in that language, where "0.005"
+  // is five thousandths in English and five in Spanish.
+  const decimal = v => {
+    const s = String(v);
+    return (language?.() ?? 'en').startsWith('es') ? s.replace('.', ',') : s;
+  };
   let o = ctx.observation;
   let job = null;
   let last = null;
@@ -221,14 +232,50 @@ export function mountFitPanel(root, ctx) {
     class: 'ui-input',
     type: 'text',
     inputmode: 'decimal',
-    value: '0.4',
+    value: decimal(0.4),
   });
   const ld2 = el('input', {
     id: 'fitLd2',
     class: 'ui-input',
     type: 'text',
     inputmode: 'decimal',
-    value: '0.22',
+    value: decimal(0.22),
+  });
+  // Prompt 225: the four-coefficient law's coefficients (fixed, from a table
+  // the reader supplies), where they came from, and an eccentricity and
+  // argument of periastron to correct the star's density for: all stated
+  // assumptions, none fitted, behind one disclosure whose summary line keeps
+  // them visible (TRANSIT_DELTA.md).
+  const claretInputs = [1, 2, 3, 4].map(n =>
+    el('input', {
+      id: `fitClaret${n}`,
+      class: 'ui-input',
+      type: 'text',
+      inputmode: 'decimal',
+      'aria-label': t('obs.fit.claretOf', { n }),
+    })
+  );
+  const claretSource = el('input', {
+    id: 'fitClaretSource',
+    class: 'ui-input',
+    type: 'text',
+  });
+  const eccentricity = el('input', {
+    id: 'fitEccentricity',
+    class: 'ui-input',
+    type: 'text',
+    inputmode: 'decimal',
+  });
+  const omega = el('input', {
+    id: 'fitOmega',
+    class: 'ui-input',
+    type: 'text',
+    inputmode: 'decimal',
+  });
+  const declared = el('p', {
+    id: 'fitDeclared',
+    class: 'ui-hint',
+    'aria-live': 'polite',
   });
   const profiles = el('input', { id: 'fitProfiles', type: 'checkbox' });
   profiles.checked = true;
@@ -298,6 +345,28 @@ export function mountFitPanel(root, ctx) {
   };
   const label = (text, control) =>
     el('label', { class: 'ui-field' }, el('span', { text }), control);
+  const claretSet = el(
+    'fieldset',
+    { id: 'fitClaretSet' },
+    el('legend', { text: t('obs.fit.claret') }),
+    ...claretInputs.map((c, i) =>
+      el('label', { class: 'ui-field' }, el('span', { text: `c${i + 1}` }), c)
+    )
+  );
+  const more = el(
+    'details',
+    { id: 'fitMore', class: 'ui-disclosure' },
+    el('summary', { text: t('obs.fit.more') }),
+    el('p', { class: 'ui-hint', text: t('obs.fit.moreHint') }),
+    el(
+      'div',
+      { class: 'ui-grid is-end' },
+      claretSet,
+      label(t('obs.fit.claretSource'), claretSource),
+      label(t('obs.fit.eccentricity'), eccentricity),
+      label(t('obs.fit.omega'), omega)
+    )
+  );
   root.replaceChildren(
     el('p', { class: 'ui-hint', text: t('obs.fit.intro') }),
     el(
@@ -318,6 +387,8 @@ export function mountFitPanel(root, ctx) {
         el('span', {}, profiles, ` ${t('obs.fit.profiles')}`)
       )
     ),
+    declared,
+    more,
     el('p', {
       class: 'ui-hint',
       text: t('obs.fit.device', {
@@ -377,7 +448,7 @@ export function mountFitPanel(root, ctx) {
           class: 'ui-input',
           type: 'text',
           inputmode: 'decimal',
-          value: Number.isFinite(v) ? String(v) : '',
+          value: Number.isFinite(v) ? decimal(v) : '',
           'aria-label': t(`obs.fit.${k}Of`, { name: nameOf(p) }),
         });
       return el(
@@ -397,9 +468,7 @@ export function mountFitPanel(root, ctx) {
     );
     const eclipse = id === 'eclipsing-binary';
     exposure.value =
-      id === 'transit-quadratic' || eclipse
-        ? String(roundSig(spacing(d.x), 6))
-        : '';
+      isTransit(id) || eclipse ? decimal(roundSig(spacing(d.x), 6)) : '';
     exposure.previousElementSibling.textContent = t('obs.fit.exposure', {
       unit: d.units.x || '—',
     });
@@ -407,7 +476,7 @@ export function mountFitPanel(root, ctx) {
       unit: d.units.x || '—',
     });
     center.value = model.centered
-      ? String(roundSig(d.x.reduce((a, b) => a + b, 0) / (d.x.length || 1), 6))
+      ? decimal(roundSig(d.x.reduce((a, b) => a + b, 0) / (d.x.length || 1), 6))
       : '';
     center.closest('label').hidden = !model.centered;
     for (const c of [
@@ -418,10 +487,14 @@ export function mountFitPanel(root, ctx) {
       stellarRadiusSigma,
     ])
       c.closest('label').hidden =
-        id !== 'transit-quadratic' &&
+        !isTransit(id) &&
         !(eclipse && c === exposure) &&
         !(eclipse && c === supersample);
     for (const c of [ld1, ld2]) c.closest('label').hidden = !eclipse;
+    more.hidden = !isTransit(id);
+    declared.hidden = !isTransit(id);
+    claretSet.hidden = id !== 'transit-claret4';
+    claretSource.closest('label').hidden = id !== 'transit-claret4';
     price();
   }
 
@@ -466,12 +539,28 @@ export function mountFitPanel(root, ctx) {
             ldB: [read(ld1) ?? 0.4, read(ld2) ?? 0.22],
             thirdLight: 0,
           }
-        : id === 'transit-quadratic'
+        : isTransit(id)
           ? {
               exposure: read(exposure) || 0,
               supersample: Math.round(read(supersample)) || 5,
               annuli: 32,
               dilution: read(dilution) || 0,
+              ...(id === 'transit-claret4'
+                ? {
+                    claret: claretInputs.map(c => read(c) ?? NaN),
+                    ...(claretSource.value.trim()
+                      ? { claretSource: { table: claretSource.value.trim() } }
+                      : {}),
+                  }
+                : {}),
+              ...(read(eccentricity) !== undefined && read(omega) !== undefined
+                ? {
+                    eccentricity: {
+                      e: read(eccentricity),
+                      omega: read(omega),
+                    },
+                  }
+                : {}),
               ...(read(stellarRadius) > 0
                 ? {
                     stellarRadius: {
@@ -502,9 +591,29 @@ export function mountFitPanel(root, ctx) {
     });
   }
 
+  /** What the transit fit takes as given, in a line that stays visible. */
+  function declaredLine(m) {
+    if (!isTransit(m.model.id)) return '';
+    const s = m.settings;
+    const law =
+      m.model.id === 'transit-claret4'
+        ? t('obs.fit.declared.claret', {
+            c: (s.claret ?? []).map(c => number(c)).join(', '),
+          })
+        : t('obs.fit.declared.quadratic');
+    const orbit = s.eccentricity
+      ? t('obs.fit.declared.ecc', {
+          e: number(s.eccentricity.e),
+          omega: number(s.eccentricity.omega),
+        })
+      : t('obs.fit.declared.circular');
+    return `${law} ${orbit}`;
+  }
+
   /** Price the request and say why it will not run, if it will not. */
   function price() {
     const m = manifest();
+    declared.textContent = declaredLine(m);
     const problems = validateInference(m);
     const e = problems.length
       ? null
@@ -1011,6 +1120,176 @@ export function mountFitPanel(root, ctx) {
     ];
   }
 
+  /** A line of x against y drawn by the observatory's own plot, with its words. */
+  function plotOf(xs, ys, names, label) {
+    const obs = {
+      columns: [
+        { id: 'x', name: names[0], unit: '', role: 'x', values: xs },
+        { id: 'y', name: names[1], unit: '', role: 'value', values: ys },
+      ],
+      axes: { x: 'x', y: 'y' },
+      masks: [],
+    };
+    const g = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    g.setAttribute('class', 'ow-plot');
+    g.setAttribute('role', 'img');
+    g.setAttribute('aria-label', label);
+    createPlot(g, {
+      number,
+      explain: 'observatory-fit',
+      labels: { notStated: t('obs.unit.notStated') },
+    }).draw(obs, { xColumn: 'x', yColumn: 'y' });
+    return g;
+  }
+
+  /**
+   * What the transit family adds to a result (Prompt 225): whether the data
+   * fix the radius ratio and impact parameter, whether the residuals in
+   * transit look like noise, the likelihood profiles of k and b, and the
+   * covariance ellipses with their tables. Everything is also in the fit's
+   * document: results.fit.transit.
+   */
+  function transitSections(out) {
+    const fit = out.fit;
+    if (!fit.transit) return [];
+    const fmt = v => (Number.isFinite(v) ? number(v) : '—');
+    const kids = [el('h3', { text: t('obs.fit.transit.title') })];
+    const kb = fit.transit.kb;
+    const res = fit.transit.residual;
+    kids.push(
+      el(
+        'ul',
+        { id: 'fitTransitChecks' },
+        ...(kb
+          ? [
+              el('li', {
+                id: 'fitKb',
+                text: t(`obs.fit.transit.kb.${kb.status}`, {
+                  reasons: (kb.reasons ?? [])
+                    .map(r => t(`obs.fit.transit.reason.${r}`))
+                    .join('; '),
+                }),
+              }),
+            ]
+          : []),
+        ...(res
+          ? [
+              el('li', {
+                id: 'fitResidualTest',
+                text: t(
+                  `obs.fit.transit.residual.${res.fails ? 'fails' : 'passes'}`,
+                  {
+                    chi2: fmt(res.chi2),
+                    points: res.points,
+                    p: fmt(res.p),
+                  }
+                ),
+              }),
+            ]
+          : [])
+      )
+    );
+    for (const name of ['k', 'b']) {
+      const pr = out.profiles.find(p => p.parameter === name);
+      if (!pr?.points?.length) continue;
+      const figure = el(
+        'figure',
+        { id: `fitProfilePlot-${name}` },
+        plotOf(
+          pr.points.map(q => q.value),
+          pr.points.map(q => q.dchi2),
+          [nameOf({ name }), t('obs.fit.transit.dchi2')],
+          t('obs.fit.transit.profileLabel', {
+            name: nameOf({ name }),
+            n: pr.points.length,
+          })
+        ),
+        el('figcaption', {
+          class: 'ui-hint',
+          text: t('obs.fit.transit.profileCaption', {
+            name: nameOf({ name }),
+            lo: fmt(pr.interval[0]),
+            hi: fmt(pr.interval[1]),
+          }),
+        })
+      );
+      kids.push(figure);
+    }
+    const pairs = [
+      ['k', 'b'],
+      ['k', 'q1'],
+    ].filter(([a, b]) => fit.free.includes(a) && fit.free.includes(b));
+    for (const [a, b] of pairs) {
+      const ell = ellipseOfFit(fit, a, b);
+      if (!ell) continue;
+      const E = ell.ellipse;
+      const names = [nameOf({ name: a }), nameOf({ name: b })];
+      kids.push(
+        el(
+          'figure',
+          { id: `fitEllipse-${a}-${b}` },
+          plotOf(
+            E.points.map(p => ell.center[0] + p[0]),
+            E.points.map(p => ell.center[1] + p[1]),
+            names,
+            t('obs.fit.transit.ellipseLabel', { a: names[0], b: names[1] })
+          ),
+          el('figcaption', {
+            class: 'ui-hint',
+            text: t('obs.fit.transit.ellipseCaption', {
+              a: names[0],
+              b: names[1],
+            }),
+          })
+        ),
+        el(
+          'div',
+          {
+            class: 'ui-table-wrap is-numeric',
+            tabindex: '0',
+            role: 'region',
+            'aria-label': t('obs.fit.transit.ellipseTable', {
+              a: names[0],
+              b: names[1],
+            }),
+          },
+          el(
+            'table',
+            { id: `fitEllipseTable-${a}-${b}` },
+            el('caption', {
+              text: t('obs.fit.transit.ellipseTable', {
+                a: names[0],
+                b: names[1],
+              }),
+            }),
+            el(
+              'tbody',
+              {},
+              ...[
+                ['center', `${fmt(ell.center[0])}, ${fmt(ell.center[1])}`],
+                ['semiMajor', fmt(E.semiMajor)],
+                ['semiMinor', fmt(E.semiMinor)],
+                ['angle', fmt((E.angle * 180) / Math.PI)],
+                ['correlation', fmt(ell.correlation)],
+              ].map(([k, v]) =>
+                el(
+                  'tr',
+                  {},
+                  el('th', {
+                    scope: 'row',
+                    text: t(`obs.fit.transit.ellipse.${k}`),
+                  }),
+                  el('td', { text: v })
+                )
+              )
+            )
+          )
+        )
+      );
+    }
+    return kids;
+  }
+
   function render(out, d) {
     const fit = out.fit;
     const profileOf = name => out.profiles.find(p => p.parameter === name);
@@ -1225,6 +1504,7 @@ export function mountFitPanel(root, ctx) {
           ]
         : []),
       ...truthSection(fit),
+      ...transitSections(out),
       el('h3', { text: t('obs.fit.warnTitle') }),
       warnings,
       el('h3', { text: t('obs.fit.notClaimed') }),

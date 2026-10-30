@@ -16,11 +16,98 @@
 // carries it.
 // =============================================================================
 
-import { halfDuration, limbDarkening, transitFlux } from './transit.js';
+import {
+  halfDuration,
+  limbDarkening,
+  stellarDensity,
+  eccentricityFactor,
+  transitFlux,
+} from './transit.js';
+import { claretRefusal } from './transitDelta.js';
 import { eccentricity, rvCurve } from './rv.js';
 import { solveSpd } from './fit.js';
 import { ECLIPSING_BINARY } from './binaryModel.js';
 import { ECLIPSING_SB2, SB2_ORBIT } from './binaryJoint.js';
+
+/**
+ * Light from other stars in the aperture, as a fraction of the total: it fills
+ * the transit in by that fraction. Fixed, never fitted - a light curve alone
+ * cannot tell it from a smaller planet.
+ */
+function diluted(shape, settings) {
+  const dilution = settings.dilution || 0;
+  if (dilution > 0) {
+    for (let i = 0; i < shape.length; i++)
+      shape[i] = 1 - (1 - shape[i]) * (1 - dilution);
+  }
+  return shape;
+}
+
+/**
+ * The star's mean density from P and a/R*, g/cm^3, and with the eccentricity
+ * correction when the reader states e and omega (a labelled assumption, never
+ * a fitted one). P is in the time column's own unit: settings.perDay (set by
+ * the fitter from the column) says how many of them make a day.
+ */
+function densities(v, settings) {
+  const days = v.P / (settings.perDay || 1);
+  const rho = stellarDensity(v.aRs, days) / 1000;
+  const out = {
+    rhoStar: {
+      value: rho,
+      unit: 'g/cm3',
+      label: "star's mean density, circular orbit",
+    },
+  };
+  const ecc = settings.eccentricity;
+  if (ecc && Number.isFinite(ecc.e) && Number.isFinite(ecc.omega)) {
+    out.rhoStarEcc = {
+      value: rho / eccentricityFactor(ecc.e, ecc.omega),
+      unit: 'g/cm3',
+      label: "star's mean density, corrected for the stated e and omega",
+      external: { eccentricity: ecc },
+    };
+  }
+  return out;
+}
+
+function transitDerived(v, settings, claret) {
+  const law = claret ? { c: settings.claret } : limbDarkening(v.q1, v.q2);
+  const cosi = v.b / v.aRs;
+  const half = halfDuration(v);
+  const center = transitFlux([v.t0], { ...v, ...law })[0];
+  const out = {
+    // The planet's own depth, before any dilution the data carries.
+    depth: { value: 1 - center, unit: '', label: 'depth at mid-transit' },
+    // In the time column's own unit, like t0 and P: a light curve counted
+    // in hours has its duration in hours.
+    T14: {
+      value: Number.isFinite(half) ? 2 * half : NaN,
+      unit: 'd',
+      label: 'total duration',
+    },
+    inclination: {
+      value: (Math.acos(Math.min(1, cosi)) * 180) / Math.PI,
+      unit: 'deg',
+      label: 'inclination',
+    },
+  };
+  if (!claret) {
+    out.u1 = { value: law.u1, unit: '', label: 'limb darkening u1' };
+    out.u2 = { value: law.u2, unit: '', label: 'limb darkening u2' };
+  }
+  if (settings.stellarRadius) {
+    // R_sun / R_Jup (IAU 2015 nominal, equatorial): 695700 / 71492 km.
+    const rj = (v.k * settings.stellarRadius.value * 695700) / 71492;
+    out.Rp = {
+      value: rj,
+      unit: 'RJup',
+      label: 'planet radius',
+      external: { stellarRadius: settings.stellarRadius },
+    };
+  }
+  return { ...out, ...densities(v, settings) };
+}
 
 /**
  * A transit: circular orbit, quadratic limb darkening, a baseline flux.
@@ -29,6 +116,7 @@ import { ECLIPSING_SB2, SB2_ORBIT } from './binaryJoint.js';
 export const TRANSIT = {
   id: 'transit-quadratic',
   version: '1.0.0',
+  family: 'transit',
   quantity: 'relative flux against time',
   parameters: [
     { name: 't0', unit: 'd', label: 'mid-transit time' },
@@ -56,7 +144,7 @@ export const TRANSIT = {
   linear: [{ name: 'f0', unit: '', label: 'baseline flux' }],
   notClaimed: [
     "The planet's mass and density: a transit alone does not measure them, and no radial-velocity data for this star is paired with it.",
-    "The star's density from a/R* and P: it assumes a circular orbit, and density claims wait for a joint fit.",
+    "The star's density as anything but the circular-orbit value: it needs P and a/R* only, neglects the planet's mass and is wrong by the cube of (1 + e sin w) / sqrt(1 - e^2) when the orbit is not circular; the correction is offered for a stated e and w, never fitted.",
     'Eccentricity: the orbit is taken as circular, which changes the duration if it is not.',
     "Dilution by other stars' light as a result: it is a fixed setting (default 0, for data already corrected, as TESS PDCSAP is), because a light curve alone cannot tell it from a smaller planet.",
   ],
@@ -68,20 +156,14 @@ export const TRANSIT = {
 
   predict(v, x, settings) {
     const { u1, u2 } = limbDarkening(v.q1, v.q2);
-    const shape = transitFlux(
-      x,
-      { t0: v.t0, P: v.P, k: v.k, aRs: v.aRs, b: v.b, u1, u2 },
+    return diluted(
+      transitFlux(
+        x,
+        { t0: v.t0, P: v.P, k: v.k, aRs: v.aRs, b: v.b, u1, u2 },
+        settings
+      ),
       settings
     );
-    // Light from other stars in the aperture, as a fraction of the total:
-    // it fills the transit in by that fraction. Fixed, never fitted - a
-    // light curve alone cannot tell it from a smaller planet.
-    const dilution = settings.dilution || 0;
-    if (dilution > 0) {
-      for (let i = 0; i < shape.length; i++)
-        shape[i] = 1 - (1 - shape[i]) * (1 - dilution);
-    }
-    return shape;
   },
 
   /** y = f0 * shape: f0 is the weighted mean ratio, exactly. */
@@ -108,39 +190,56 @@ export const TRANSIT = {
   },
 
   derived(v, settings) {
-    const { u1, u2 } = limbDarkening(v.q1, v.q2);
-    const cosi = v.b / v.aRs;
-    const half = halfDuration(v);
-    const center = transitFlux([v.t0], { ...v, u1, u2 })[0];
-    const out = {
-      // The planet's own depth, before any dilution the data carries.
-      depth: { value: 1 - center, unit: '', label: 'depth at mid-transit' },
-      // In the time column's own unit, like t0 and P: a light curve counted
-      // in hours has its duration in hours.
-      T14: {
-        value: Number.isFinite(half) ? 2 * half : NaN,
-        unit: 'd',
-        label: 'total duration',
-      },
-      inclination: {
-        value: (Math.acos(Math.min(1, cosi)) * 180) / Math.PI,
-        unit: 'deg',
-        label: 'inclination',
-      },
-      u1: { value: u1, unit: '', label: 'limb darkening u1' },
-      u2: { value: u2, unit: '', label: 'limb darkening u2' },
-    };
-    if (settings.stellarRadius) {
-      // R_sun / R_Jup (IAU 2015 nominal, equatorial): 695700 / 71492 km.
-      const rj = (v.k * settings.stellarRadius.value * 695700) / 71492;
-      out.Rp = {
-        value: rj,
-        unit: 'RJup',
-        label: 'planet radius',
-        external: { stellarRadius: settings.stellarRadius },
-      };
-    }
-    return out;
+    return transitDerived(v, settings, false);
+  },
+};
+
+/**
+ * The same transit under the four-coefficient limb-darkening law of Claret
+ * (2000), I(mu) = 1 - sum_n c_n (1 - mu^(n/2)), n = 1..4. The coefficients are
+ * FIXED, never fitted: they are degenerate with one another and with b, and a
+ * table by the star's Teff, logg and [Fe/H] gives them (settings.claret, with
+ * settings.claretSource naming the table and the star). It is a variant of the
+ * model above, not a second model: one prediction, one fitter, the same
+ * derived quantities but the two limb-darkening ones. Its own id and version so
+ * that a build without it refuses its manifests instead of fitting the
+ * quadratic law in silence.
+ */
+export const TRANSIT_CLARET4 = {
+  ...TRANSIT,
+  id: 'transit-claret4',
+  version: '1.0.0',
+  quantity: 'relative flux against time',
+  parameters: TRANSIT.parameters.filter(
+    p => p.name !== 'q1' && p.name !== 'q2'
+  ),
+  assumptions: [
+    'A circular orbit.',
+    "The four-coefficient limb-darkening law with the coefficients the settings give, held fixed (from a table by the star's Teff, logg and [Fe/H], or the reader's own); they are not fitted.",
+    'Each point is the mean over its exposure, sampled at `supersample` instants.',
+  ],
+  notClaimed: [
+    ...TRANSIT.notClaimed,
+    'The limb darkening itself: the coefficients are an input, and a transit this shallow cannot fit four of them.',
+  ],
+  /** The coefficients must be a star, or the request is refused. */
+  prepare(request) {
+    const why = claretRefusal(request.settings?.claret);
+    if (why) throw new Error(why);
+    return request;
+  },
+  predict(v, x, settings) {
+    return diluted(
+      transitFlux(
+        x,
+        { t0: v.t0, P: v.P, k: v.k, aRs: v.aRs, b: v.b, c: settings.claret },
+        settings
+      ),
+      settings
+    );
+  },
+  derived(v, settings) {
+    return transitDerived(v, settings, true);
   },
 };
 
@@ -412,6 +511,7 @@ export const POLY_2 = polynomial(2, 'a quadratic');
 
 export const MODELS = Object.freeze({
   [TRANSIT.id]: TRANSIT,
+  [TRANSIT_CLARET4.id]: TRANSIT_CLARET4,
   [RV.id]: RV,
   [ECLIPSING_BINARY.id]: ECLIPSING_BINARY,
   [SB2_ORBIT.id]: SB2_ORBIT,
