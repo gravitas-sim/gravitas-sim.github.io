@@ -11,6 +11,7 @@
 import { gaussian as normals, stream } from '../random/streams.js';
 import { limbDarkening, transitFlux } from './transit.js';
 import { rvCurve } from './rv.js';
+import { eclipseFlux } from './binaries.js';
 
 /** A seeded standard normal. */
 export const gaussian = seed => normals(stream('noise', String(seed)));
@@ -92,4 +93,45 @@ export function tessLikeTimes(
     out.push(t);
   }
   return out;
+}
+
+/**
+ * An eclipsing-binary light curve at given times, with white noise and, for a
+ * misspecification test, an out-of-eclipse modulation the model does not have.
+ * @param {{seed: string, times: ArrayLike<number>, sigma: number,
+ *   truth: object, exposure?: number, supersample?: number,
+ *   modulation?: {amplitude: number, period: number, phase: number}}} o
+ *   truth is the parameter set of js/inference/binaries.js eclipseFlux()
+ */
+export function syntheticEclipse(o) {
+  const clean = eclipseFlux(o.times, o.truth, {
+    exposure: o.exposure ?? 0,
+    supersample: o.supersample ?? 5,
+  });
+  const n = gaussian(o.seed);
+  const m = o.modulation;
+  return {
+    x: Float64Array.from(o.times),
+    y: Float64Array.from(clean, (v, i) => {
+      const spot = m
+        ? 1 +
+          m.amplitude *
+            Math.sin((2 * Math.PI * o.times[i]) / m.period + m.phase)
+        : 1;
+      return v * spot + o.sigma * n();
+    }),
+    sigma: new Float64Array(o.times.length).fill(o.sigma),
+    groups: null,
+    rows: Array.from(o.times, (_, i) => i),
+    counts: {
+      total: o.times.length,
+      used: o.times.length,
+      masked: 0,
+      missing: 0,
+      withoutUncertainty: 0,
+    },
+    columns: { x: 'time', y: 'flux', sigma: 'flux-error' },
+    units: { x: 'd', y: '' },
+    perDay: 1,
+  };
 }

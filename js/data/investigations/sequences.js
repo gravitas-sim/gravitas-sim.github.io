@@ -311,6 +311,7 @@ export const SEQUENCES = [
       ['transit-photometry', 'quantitative'],
       ['design-the-schedule', 'core'],
       ['why-the-period-is-wrong', 'core'],
+      ['two-stars-eclipsing', 'core'],
       ['deep-or-wide', 'core'],
       ['two-telescopes-one-question', 'core'],
       ['propose-an-observation', 'advanced', ['deep-or-wide']],

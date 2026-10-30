@@ -2009,6 +2009,8 @@ export const ES_DEFERRED = {
     'Comienzo del grupo de efectos de selección: un sondeo cuenta solo lo que puede ver.',
   'inv.seq.observing.why-the-bright-ones-win':
     'El sesgo de brillo, hecho cuantitativo: por qué la muestra no es la población.',
+  'inv.seq.observing.two-stars-eclipsing':
+    'Qué estrella es más caliente y cuál es menor por dos eclipses, y qué puede y qué no puede fijar un ajuste del par.',
   'inv.seq.observing.why-the-period-is-wrong':
     'Por qué un período con una visita por noche puede salir mal, y cómo decide la cadencia.',
   'inv.seq.observing.deep-or-wide':

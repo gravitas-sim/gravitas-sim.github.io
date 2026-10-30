@@ -83,6 +83,7 @@ export const EVIDENCE_FROM = Object.freeze({
   'twelve-nights': 'model',
   'two-greenhouse-models': 'model',
   'two-periodograms': 'computation',
+  'two-stars-eclipsing': 'model',
   'two-telescopes-one-question': 'model',
   'wanderers-on-the-sky': 'model',
   'weighing-jupiter': 'model',

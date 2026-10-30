@@ -1,0 +1,53 @@
+{
+  "note": "Legs of tests/fixtures/binaries/thresholds.json that crossed their bound, kept failing and labelled (only Carl resets a bound).",
+  "failed": [
+    {
+      "id": "D1.grazing",
+      "measured": {
+        "grazingFlagged": 0.8,
+        "controlFlagged": 0,
+        "errors": 0
+      },
+      "why": "The identifiability rule (fixed in thresholds D1: not constrained when the rank analysis lists the parameter, its uncertainty exceeds 25 percent of its value, or it sits on a bound) flagged the radius ratio in 32 of 40 grazing fits (0.80 against the bound 0.90); the control ensemble was never flagged (0 of 60, bound 0.05). In the other 8 the fit located the valley well enough for the stated rule to call k constrained. The rule was not tuned after the measurement and the bound was not moved."
+    },
+    {
+      "id": "E1.authentic",
+      "measured": {
+        "rsum": {
+          "ours": 0.17090125400282444,
+          "ourSigma": 1.1782661449773124e-5,
+          "paper": 0.170906,
+          "paperSigma": 3.5e-5,
+          "deltaOverPaperSigma": 0.13559991930185106
+        },
+        "k": {
+          "ours": 0.9806594959876316,
+          "ourSigma": 0.001663459567860438,
+          "paper": 0.9788,
+          "paperSigma": 0.0019,
+          "deltaOverPaperSigma": 0.9786820987534612
+        },
+        "inc": {
+          "ours": 87.90326450857779,
+          "ourSigma": 0.000714248061991271,
+          "paper": 87.9166,
+          "paperSigma": 0.003,
+          "deltaOverPaperSigma": 4.445163807403674
+        },
+        "J": {
+          "ours": 0.9777696506081005,
+          "ourSigma": 0.00010791423194892788,
+          "paper": 0.97775,
+          "paperSigma": 0.0005,
+          "deltaOverPaperSigma": 0.03930121620099314
+        },
+        "rows": 3150,
+        "rms": 0.0003923269228574469,
+        "reducedChi2": 1.1095730387525693,
+        "identifiability": "constrained"
+      },
+      "why": "Radius sum, radius ratio and surface brightness ratio of V505 Per from TESS Sector 18 agree with the published JKTEBOP solution within 0.14, 0.98 and 0.04 of the paper uncertainty, but the inclination is 87.903 against 87.917 degrees, 4.4 paper sigma (bound 2). The model has no reflection effect and fits no out-of-eclipse lines the way JKTEBOP does, and the single limb-darkening pair is a table value; the 0.013 degree difference is of the size of what those omissions move, which is a statement of the kind of leg this is, not a proof. Our own uncertainty (0.0007) is smaller than the paper (0.003), so the formal intervals are too narrow for a real star."
+    }
+  ],
+  "notMeasured": []
+}

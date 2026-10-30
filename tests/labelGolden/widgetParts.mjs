@@ -71,6 +71,7 @@ export const PARTS = Object.freeze({
     'spectrograph',
   ],
   rest: [
+    'eclipse',
     'energy',
     'binary',
     'blackHole',

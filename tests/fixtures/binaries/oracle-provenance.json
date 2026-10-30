@@ -1,0 +1,20 @@
+{
+  "script": "tools/binaries-oracle/oracle.py",
+  "run": "2026-10-29, python3 3.9.6, numpy 1.26.4, batman 2.5.1",
+  "independent": "batman (Kreidberg 2015, PASP 127, 1161; quadratic limb darkening, Mandel and Agol 2002) for each star's eclipse, and a brute-force polar quadrature of the occulted disk; no Gravitas code. batman is a transit code, not an eclipsing-binary code: the second star's eclipse is computed in the swapped frame (radius 1/k, a/R2, w + 180, t0 at the secondary conjunction), so the two-sphere light curve is built by this script, and the geometry of the orbit (Kepler, projection) is batman's.",
+  "limits": "ellc, PHOEBE and JKTEBOP are not installed and were not downloaded, so no code written for eclipsing binaries checks the model. What is independent: the occultation integral, the Kepler solution, the conjunction times and the weighting. What is not: the idea that two spheres add their light by the luminosity ratio (stated in the validation record), and the convention for w (batman's, Winn 2010, the same).",
+  "cites": [
+    "Kreidberg 2015, PASP 127, 1161",
+    "Mandel and Agol 2002, ApJ 580, L171",
+    "Winn 2010, arXiv:1001.2010"
+  ],
+  "authentic": {
+    "file": "tess2019306063752-s0018-0000000348517784-0162-s_lc.fits",
+    "sha256": "4351efe790cf3a4c718c9fdb1a9cf1ecd21d078374e90e6440b437c034618f1d",
+    "bytes": 1785600,
+    "source": "https://archive.stsci.edu/missions/tess/tid/s0018/0000/0003/4851/7784/tess2019306063752-s0018-0000000348517784-0162-s_lc.fits",
+    "retrieved": "2026-10-29",
+    "relativePath": "../../scratch-data/binaries/tess2019306063752-s0018-0000000348517784-0162-s_lc.fits",
+    "note": "MAST/TESS public data, retrieved by the coordinator; not committed. relativePath (from the repository root) is where a maintainer keeps it; --fits or BINARIES_FITS override."
+  }
+}

@@ -1,0 +1,91 @@
+// The eclipsing-binary panels' words, in English (Prompt 217). The model and
+// what-it-leaves-out lines are fixed text, so they translate by key.
+export const EN_ECLIPSE = {
+  'eclW.c.title': 'Two stars eclipsing',
+  'eclW.c.note':
+    'Two stars on one orbit, seen edge on enough that each passes in front of the other. The curve is the light of both against the orbit’s phase: the primary eclipse is when star 1 is hidden (star 2 in front), the secondary when star 2 is. Move the sliders to change the stars and the orbit; switch a data set on to compare. Every data set here is synthetic: a model made it.',
+  'eclW.c.control.rsum': 'Radii sum, (R1+R2)/a',
+  'eclW.c.control.k': 'Radius ratio, R2/R1',
+  'eclW.c.control.inc': 'Inclination',
+  'eclW.c.control.J': 'Surface brightness, S2/S1',
+  'eclW.c.control.ecosw': 'e cos w',
+  'eclW.c.control.esinw': 'e sin w',
+  'eclW.c.control.data': 'Compare with data',
+  'eclW.data.0': 'none',
+  'eclW.data.1': 'the unequal pair',
+  'eclW.data.2': 'the eccentric pair',
+  'eclW.data.3': 'the grazing pair',
+  'eclW.data.4': 'the spotted pair',
+  'eclW.v.deg': '{x}°',
+  'eclW.axis.phase': 'Orbital phase',
+  'eclW.axis.flux': 'Relative flux',
+  'eclW.legend.model': 'Model',
+  'eclW.legend.data': 'Synthetic data',
+  'eclW.legend.fit': 'Best fit',
+  'eclW.row.model': 'Model',
+  'eclW.m.binary':
+    'Two spheres with quadratic limb darkening on a Kepler orbit; nothing else (no reflection, no ellipsoidal light, no spots)',
+  'eclW.row.primary': 'Primary eclipse',
+  'eclW.row.secondary': 'Secondary eclipse',
+  'eclW.v.eclipse':
+    'depth {d} percent, {w} d from first to last contact, {b} bottom',
+  'eclW.v.none': 'no eclipse: the stars never overlap on the sky',
+  'eclW.bottom.flat': 'flat',
+  'eclW.bottom.curved': 'curved',
+  'eclW.row.phase': 'Secondary at phase',
+  'eclW.v.phase': '{p} (half is {h}); e cos w from it, to first order, {e}',
+  'eclW.row.orbit': 'Orbit',
+  'eclW.v.orbit': 'the eclipses of this data set repeat every {p} d',
+  'eclW.row.light': 'Light ratio L2/L1',
+  'eclW.v.light': '{l}',
+  'eclW.row.radii': 'Fractional radii',
+  'eclW.v.radii': 'R1/a = {a}, R2/a = {b}',
+  'eclW.row.compare': 'Against the data',
+  'eclW.v.compare':
+    '{n} rows, chi-square {c}, reduced {r}; the baseline is solved exactly',
+  'eclW.row.assumes': 'Assumes',
+  'eclW.a.curve':
+    'A circular or eccentric Kepler orbit, spherical stars, the limb darkening of the preset (0.40 and 0.22 for star 1, 0.50 and 0.18 for star 2), no third light',
+  'eclW.f.title': 'Fit the eclipses',
+  'eclW.f.note':
+    'The inference core fits the eclipsing-binary model to a synthetic light curve, then says for each parameter whether the data fix it. A parameter marked not constrained is one the data leave open: the fit gives a number, and the number is not a measurement. The residual test compares the scatter with the error bars.',
+  'eclW.f.control.dataset': 'Data set',
+  'eclW.f.control.profile': 'Profile of the radius ratio',
+  'eclW.f.control.truth': 'Show what made the data',
+  'eclW.on': 'on',
+  'eclW.off': 'off',
+  'eclW.row.system': 'Data',
+  'eclW.v.system': '{n} synthetic rows, noise {s} per point, {p} d orbit',
+  'eclW.row.param': '{name}',
+  'eclW.v.param': '{v} ± {s}',
+  'eclW.v.paramOpen': '{v}, not constrained ({why})',
+  'eclW.why.rank': 'the data leave a direction open',
+  'eclW.why.bound': 'it sits on its bound',
+  'eclW.why.uncertain': 'its uncertainty is over a quarter of its value',
+  'eclW.why.derived': 'it follows from a radius ratio the data leave open',
+  'eclW.why.singular': 'the covariance is singular',
+  'eclW.row.verdict': 'What the data fix',
+  'eclW.verdict.constrained':
+    'constrained: every fitted parameter is fixed to its stated uncertainty',
+  'eclW.verdict.open': 'not constrained: {names}',
+  'eclW.row.chi2': 'Goodness of fit',
+  'eclW.v.chi2':
+    'reduced chi-square {c} on {d} degrees of freedom; correlated-noise factor {b}',
+  'eclW.row.residual': 'Residual test',
+  'eclW.resid.pass': 'passed: the scatter is what the error bars say',
+  'eclW.resid.fail':
+    'failed: the scatter is more than the error bars say, so something the model leaves out is in the light curve',
+  'eclW.row.ecc': 'Eccentricity',
+  'eclW.v.ecc': 'e = {e} ± {s}, w = {w}°',
+  'eclW.row.profile': 'Radius ratio, profile',
+  'eclW.v.profile':
+    'the chi-square rises by 1 at k = {a} and {b}; the fit says {k}',
+  'eclW.v.profileOpen':
+    'open on one side or both: k = {a} to {b}, the fit says {k}',
+  'eclW.row.truth': 'What made it',
+  'eclW.v.truth':
+    'rsum {r}, k {k}, inclination {i}°, J {j}, e cos w {c}, e sin w {s}',
+  'eclW.row.refused': 'Refused',
+  'eclW.a.fit':
+    'The detached model of the inference core, fitted by weighted least squares from several starts; limb darkening fixed, third light zero',
+};
