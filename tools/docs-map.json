@@ -1005,7 +1005,7 @@
     {
       "file": "TRANSIT_DELTA.md",
       "kind": "feature",
-      "purpose": "The transit model delta: a four-coefficient limb-darkening law beside the quadratic one, the star's density from P and a/R*, the covariance ellipse, the constraint and residual checks, its validation, amendments and failed legs (Prompt 225).",
+      "purpose": "The transit model delta: a four-coefficient limb-darkening law, the star's density, the covariance ellipse, two checks, and the validation with its failed legs (Prompt 225).",
       "owner": 225,
       "student": true
     },

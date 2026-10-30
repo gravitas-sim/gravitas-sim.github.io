@@ -40,6 +40,9 @@ const { ES_EXOPLANET } = await import('../js/i18n/es.exoplanet.js');
 const EN_GUIDES = { ...EN_RUNNER, ...EN_EXOPLANET };
 const ES_GUIDES = { ...ES_RUNNER, ...ES_EXOPLANET };
 const { HD209458 } = await import('../js/data/exoplanetSystems.js');
+const { transitFlux, eccentricityFactor } =
+  await import('../js/inference/transit.js');
+const { kippingToQuadratic } = await import('../js/limbDarkening.js');
 const R = await import('../tools/exoplanet-reference.mjs');
 // A check against the exoplanet suite's targets.
 const evaluate = (check, w) => C.evaluateCheck(check, w, G.TARGETS);
@@ -111,6 +114,38 @@ function synthetic({
 }
 
 // --- The guides as data ------------------------------------------------------------
+
+/** The two grazing planets' light curves at the sampled times, from the kernel. */
+function vshape(over = {}) {
+  const V = G.VSHAPE;
+  const planets = { a: V.a, b: V.b, ...over };
+  const { u1, u2 } = kippingToQuadratic(V.q.q1, V.q.q2);
+  const t = Array.from(
+    { length: V.points },
+    (_, i) => (i - (V.points - 1) / 2) * V.exposure
+  );
+  const curve = p =>
+    transitFlux(
+      t,
+      { t0: 0, P: V.period, k: p.k, aRs: p.aRs, b: p.b, u1, u2 },
+      { exposure: V.exposure, supersample: 5, annuli: 32 }
+    );
+  const a = curve(planets.a);
+  const b = curve(planets.b);
+  let maxDiff = 0;
+  let chi2 = 0;
+  for (let i = 0; i < t.length; i++) {
+    maxDiff = Math.max(maxDiff, Math.abs(a[i] - b[i]));
+    chi2 += ((a[i] - b[i]) / (V.sigmaPpm * 1e-6)) ** 2;
+  }
+  return {
+    depthA: 1 - Math.min(...a),
+    depthB: 1 - Math.min(...b),
+    maxDiffPpm: maxDiff * 1e6,
+    chi2One: chi2,
+    chi2All: chi2 * V.transits,
+  };
+}
 
 describe('the guides as data', () => {
   test('five guides, each id unique, each step id unique within its guide', () => {
@@ -195,8 +230,21 @@ describe('the guides as data', () => {
   });
 
   test('the two grazing planets of the V-shape step cannot be told apart, and the constants are the closest curve a search finds', () => {
-    const v = G.vshape();
+    const v = vshape();
     expect(v.chi2All).toBeLessThan(G.VSHAPE.chi2Limit);
+    // The numbers the guide keeps (it does not import the kernel) are the kernel's.
+    for (const [name, value] of Object.entries(G.VSHAPE_RESULT))
+      expect(v[name]).toBeCloseTo(value, 12);
+    // And the density factor it writes out is the kernel's.
+    for (const [e, omega] of [
+      [0.2, 90],
+      [0.5, 20],
+      [0.1, 200],
+    ])
+      expect(G.eccentricFactor({ e, omega })).toBeCloseTo(
+        eccentricityFactor(e, omega),
+        12
+      );
     // Both are grazing (b + k above 1), the second 40 percent larger.
     for (const p of [G.VSHAPE.a, G.VSHAPE.b])
       expect(p.b + p.k).toBeGreaterThan(1);
@@ -207,7 +255,7 @@ describe('the guides as data', () => {
       let min = Infinity;
       for (let db = -0.02; db <= 0.0201; db += 0.01)
         for (let da = -0.3; da <= 0.301; da += 0.15) {
-          const w = G.vshape({
+          const w = vshape({
             b: {
               ...G.VSHAPE.b,
               b: G.VSHAPE.b.b + db,

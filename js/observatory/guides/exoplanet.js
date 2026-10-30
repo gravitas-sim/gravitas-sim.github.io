@@ -31,8 +31,6 @@
 // step against these rules and every answer against the data.
 // =============================================================================
 
-import { eccentricityFactor, transitFlux } from '../../inference/transit.js';
-import { kippingToQuadratic } from '../../limbDarkening.js';
 import {
   bestEpoch,
   boxDepth,
@@ -196,39 +194,32 @@ export const VSHAPE = {
   chi2Limit: 4,
 };
 
-/** The two grazing planets' light curves at the sampled times, and what separates them. */
-export function vshape(over = {}) {
-  const planets = { a: VSHAPE.a, b: VSHAPE.b, ...over };
-  const { u1, u2 } = kippingToQuadratic(VSHAPE.q.q1, VSHAPE.q.q2);
-  const t = Array.from(
-    { length: VSHAPE.points },
-    (_, i) => (i - (VSHAPE.points - 1) / 2) * VSHAPE.exposure
-  );
-  const curve = p =>
-    transitFlux(
-      t,
-      { t0: 0, P: VSHAPE.period, k: p.k, aRs: p.aRs, b: p.b, u1, u2 },
-      { exposure: VSHAPE.exposure, supersample: 5, annuli: 32 }
-    );
-  const a = curve(planets.a);
-  const b = curve(planets.b);
-  let maxDiff = 0;
-  let chi2 = 0;
-  for (let i = 0; i < t.length; i++) {
-    maxDiff = Math.max(maxDiff, Math.abs(a[i] - b[i]));
-    chi2 += ((a[i] - b[i]) / (VSHAPE.sigmaPpm * 1e-6)) ** 2;
-  }
-  return {
-    depthA: 1 - Math.min(...a),
-    depthB: 1 - Math.min(...b),
-    maxDiffPpm: maxDiff * 1e6,
-    chi2One: chi2,
-    chi2All: chi2 * VSHAPE.transits,
-  };
-}
+/**
+ * What separates the two grazing planets' light curves at the sampled times.
+ * Computed once with the transit kernel (js/inference/transit.js: quadratic
+ * law, 5 samples per exposure, 32 annuli) and kept as numbers, so that this
+ * file, which the instructor build reads, does not import the kernel;
+ * tests/exoplanetGuides.test.js recomputes them and fails if they drift.
+ */
+export const VSHAPE_RESULT = {
+  depthA: 0.0034329414059728336,
+  depthB: 0.0034562601958179062,
+  maxDiffPpm: 23.31878984507263,
+  chi2One: 0.012863962690654663,
+  chi2All: 0.1029117015252373,
+};
 
 /** The eccentric orbit the density step asks about. */
 export const ECCENTRIC_EXAMPLE = { e: 0.2, omega: 90 };
+
+/**
+ * The factor a circular fit's density is too high by for an eccentric orbit,
+ * ((1 + e sin omega) / sqrt(1 - e^2))^3 (Kipping 2010). The same formula as
+ * eccentricityFactor in js/inference/transit.js, which a test compares; it is
+ * written out here so that the instructor build does not read the kernel.
+ */
+export const eccentricFactor = ({ e, omega }) =>
+  ((1 + e * Math.sin((omega * Math.PI) / 180)) / Math.sqrt(1 - e * e)) ** 3;
 
 /**
  * What science.js makes of a target's light curve, at a period: the epoch of
@@ -288,8 +279,7 @@ export const ANSWERS = {
   // The star's mean density from the fit's P and a/R*, circular orbit.
   stellarDensity: c => c.quantity('fit', 'rhoStar'),
   // How much too high a circular fit's density is for an eccentric orbit.
-  densityFactor: () =>
-    eccentricityFactor(ECCENTRIC_EXAMPLE.e, ECCENTRIC_EXAMPLE.omega),
+  densityFactor: () => eccentricFactor(ECCENTRIC_EXAMPLE),
   // The correlation of k and b in the fit's covariance.
   kbCorrelation: c => {
     const fit = c.evidence('fit')?.results?.fit;
@@ -350,7 +340,7 @@ export const CORRECT = {
     return best?.pair ?? null;
   },
   // Could the transits of the sector tell the two grazing planets apart?
-  vshape: () => (vshape().chi2All < VSHAPE.chi2Limit ? 'cannot' : 'can'),
+  vshape: () => (VSHAPE_RESULT.chi2All < VSHAPE.chi2Limit ? 'cannot' : 'can'),
   oddEven: (c, step) => {
     const oe = transitOf(c, step.target, periodOf(step.target))?.oddEven;
     if (!oe || oe.sigmas === null) return null;
@@ -795,7 +785,7 @@ export const SHOWS = {
   },
   vshape: {
     rows: (c, step, h) => {
-      const v = vshape();
+      const v = VSHAPE_RESULT;
       const planet = p =>
         h.t('gd.show.vPlanet', {
           k: h.fmt(p.k),

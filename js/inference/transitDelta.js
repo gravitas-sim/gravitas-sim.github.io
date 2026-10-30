@@ -17,7 +17,7 @@
 // tools/transit-delta-validate.mjs against tests/fixtures/transit-delta/.
 // =============================================================================
 
-import { chi2Sf } from '../kernels/statistics/special.js';
+import { chiSquareSf } from '../analysis/stats.js';
 import { claretIntensity, halfDuration } from './transit.js';
 
 const { Math, Number } = globalThis;
@@ -241,7 +241,7 @@ export function residualTest(fit, data, exposure = 0) {
     m++;
   }
   if (m < 5) return null;
-  const p = chi2Sf(chi2, m);
+  const p = chiSquareSf(chi2, m);
   const correlated = fit.warnings?.some(w => w.code === 'correlatedNoise');
   return {
     chi2,
