@@ -18,6 +18,7 @@ current, and the orchestrator checks it.
 | `atmospheres-validate.mjs` | The atmospheres kernel against its committed thresholds (Prompt 200) | `npm run atmospheres:validate` |
 | `author-check.mjs` | npm run author:check | `npm run author:check`, `npm run author:strict`, `npm run author:rules` |
 | `binaries-validate.mjs` | The eclipsing-binary model against its committed thresholds (Prompt 217) | `npm run binaries:validate` |
+| `binary-masses-validate.mjs` | Binary masses and radii against their committed thresholds (Prompt 218) |  |
 | `blackhole-profile.mjs` | What a black hole costs to draw |  |
 | `blackhole-shots.mjs` | Captures of the black holes |  |
 | `body-shots.mjs` | Reference captures of the bodies, for a before-and-after on their drawing |  |

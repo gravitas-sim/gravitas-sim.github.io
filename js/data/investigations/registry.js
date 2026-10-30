@@ -196,7 +196,8 @@ const LOADERS = {
   'plan-an-exposure': () => import('./plan-an-exposure.js'),
   'why-the-period-is-wrong': () => import('./why-the-period-is-wrong.js'),
   'two-stars-eclipsing': () => import('./two-stars-eclipsing.js'),
-  'weighing-the-stars-for-real': () => import('./weighing-the-stars-for-real.js'),
+  'weighing-the-stars-for-real': () =>
+    import('./weighing-the-stars-for-real.js'),
   'deep-or-wide': () => import('./deep-or-wide.js'),
   'two-telescopes-one-question': () =>
     import('./two-telescopes-one-question.js'),
@@ -317,7 +318,8 @@ const TRANSLATIONS = {
     'plan-an-exposure': () => import('./es/plan-an-exposure.js'),
     'why-the-period-is-wrong': () => import('./es/why-the-period-is-wrong.js'),
     'two-stars-eclipsing': () => import('./es/two-stars-eclipsing.js'),
-    'weighing-the-stars-for-real': () => import('./es/weighing-the-stars-for-real.js'),
+    'weighing-the-stars-for-real': () =>
+      import('./es/weighing-the-stars-for-real.js'),
     'deep-or-wide': () => import('./es/deep-or-wide.js'),
     'two-telescopes-one-question': () =>
       import('./es/two-telescopes-one-question.js'),
