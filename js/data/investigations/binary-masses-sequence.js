@@ -508,8 +508,56 @@ export const WEIGHING_THE_STARS_DEEPER = {
       tool: MIN({ inc: 52 }),
     },
     {
-      sid: 'what-the-chain-leaves-out',
+      sid: 'the-real-star',
       after: 'the-tilt-you-did-not-measure',
+      depth: 'advanced',
+      type: 'question',
+      kind: 'choice',
+      title: 'A real star: V505 Persei',
+      body: `V505 Persei is a real pair of F5 stars that eclipse every 4.22 days. Southworth
+             (2021, <em>The Observatory</em> 141, 122) took their velocity amplitudes,
+             <strong>89.12</strong> and <strong>90.31 km/s</strong>, from published
+             spectra. We ran this chain on the TESS light curve of Sector 18 with those two
+             amplitudes: masses of 1.2745 and 1.2577 solar masses, the published
+             1.2745 &plusmn; 0.0036 and 1.2577 &plusmn; 0.0030, and radii of
+             1.2929 &plusmn; 0.0015 and 1.2679 &plusmn; 0.0015 against the published
+             1.2941 &plusmn; 0.0016 and 1.2637 &plusmn; 0.0017. The second star&rsquo;s radius is
+             2.4 published standard deviations away; the check allowed 2.`,
+      prompt: 'What should you conclude?',
+      options: [
+        'The chain works on a real star for what it shares with the published analysis, the masses follow from the same amplitudes; the one radius that differs is at the edge of what a simpler light-curve model can claim, and the check is recorded as failed and not adjusted',
+        'The method is wrong, because one number is outside two standard deviations',
+        'The published radius is wrong, because ours is closer to the data',
+        'The masses agree, so the radii must be right as well',
+      ],
+      answer: 0,
+      misconceptions: [
+        {
+          id: 'wrong',
+          option: 1,
+          say: 'One number at 2.4 standard deviations among five that agree is a result to record, not a verdict on the method; the model here has no reflection effect and fits no out-of-eclipse lines, which the published analysis does.',
+        },
+        {
+          id: 'better',
+          option: 2,
+          say: 'Neither analysis is known to be closer to the truth: the two use different models of the same light curve, and the published one is the more complete.',
+        },
+        {
+          id: 'transfer',
+          option: 3,
+          say: 'The masses follow from the same velocity amplitudes and the period, so they agree whatever the light curve says; they say nothing about the radii, which come from the eclipses.',
+        },
+      ],
+      hints: [
+        'Which of the five numbers depend on the light curve, and which only on the velocities?',
+      ],
+      because:
+        'The masses and the size of the orbit come from the velocity amplitudes and the period, which are the same in both analyses, so their agreement tests the chain’s arithmetic and constants and not the light curve. The radii come from the eclipses, and the simple two-sphere model used here, with no reflection effect and no fitted out-of-eclipse lines, agrees for one star and falls 2.4 standard deviations from the published value for the other. The validation records this as a failed leg and keeps it failing.',
+      tool: SOLVE(),
+    },
+    {
+      sid: 'what-the-chain-leaves-out',
+      after: 'the-real-star',
       depth: 'advanced',
       type: 'question',
       kind: 'choice',
@@ -720,6 +768,33 @@ export const WEIGHING_THE_STARS_DEEPER_ES = {
         { label: 'M2 a 52 grados' },
         { label: 'Masa verdadera sobre masa mínima' },
       ],
+    },
+    {
+      title: 'Una estrella real: V505 Persei',
+      body: 'V505 Persei es un par real de estrellas F5 que se eclipsan cada 4,22 días. Southworth (2021, <em>The Observatory</em> 141, 122) tomó sus amplitudes de velocidad, <strong>89,12</strong> y <strong>90,31 km/s</strong>, de espectros publicados. Hicimos correr esta cadena sobre la curva de luz de TESS del sector 18 con esas dos amplitudes: masas de 1,2745 y 1,2577 masas solares, las publicadas 1,2745 &plusmn; 0,0036 y 1,2577 &plusmn; 0,0030, y radios de 1,2929 &plusmn; 0,0015 y 1,2679 &plusmn; 0,0015 frente a los publicados 1,2941 &plusmn; 0,0016 y 1,2637 &plusmn; 0,0017. El radio de la segunda estrella está a 2,4 desviaciones típicas publicadas; la prueba admitía 2.',
+      prompt: '¿Qué debes concluir?',
+      options: [
+        'La cadena funciona en una estrella real en lo que comparte con el análisis publicado, las masas salen de las mismas amplitudes; el único radio que difiere está en el borde de lo que un modelo de curva de luz más simple puede afirmar, y la prueba se registra como fallida y no se ajusta',
+        'El método es erróneo, porque un número queda fuera de dos desviaciones típicas',
+        'El radio publicado es erróneo, porque el nuestro está más cerca de los datos',
+        'Las masas coinciden, así que los radios también deben ser correctos',
+      ],
+      misconceptions: [
+        {
+          say: 'Un número a 2,4 desviaciones típicas entre cinco que coinciden es un resultado que registrar, no un veredicto sobre el método; el modelo de aquí no tiene efecto de reflexión ni ajusta líneas fuera del eclipse, que el análisis publicado sí.',
+        },
+        {
+          say: 'No se sabe que ninguno de los dos análisis esté más cerca de la verdad: usan modelos distintos de la misma curva de luz, y el publicado es el más completo.',
+        },
+        {
+          say: 'Las masas salen de las mismas amplitudes de velocidad y del periodo, así que coinciden diga lo que diga la curva de luz; no dicen nada de los radios, que salen de los eclipses.',
+        },
+      ],
+      hints: [
+        '¿Cuáles de los cinco números dependen de la curva de luz y cuáles solo de las velocidades?',
+      ],
+      because:
+        'Las masas y el tamaño de la órbita salen de las amplitudes de velocidad y del periodo, que son los mismos en los dos análisis, así que su coincidencia comprueba la aritmética y las constantes de la cadena y no la curva de luz. Los radios salen de los eclipses, y el modelo simple de dos esferas usado aquí, sin efecto de reflexión ni líneas ajustadas fuera del eclipse, coincide para una estrella y queda a 2,4 desviaciones típicas del valor publicado para la otra. La validación lo registra como una prueba fallida y la mantiene fallida.',
     },
     {
       title: 'Lo que una prueba superada no dice',

@@ -9,6 +9,7 @@
 // =============================================================================
 
 import { describe, test, expect } from '@jest/globals';
+import { readFileSync } from 'node:fs';
 // The shared modules first: Jest's VM loses a module several imports link at once.
 import '../js/inference/binaryMasses.js';
 import '../js/inference/infer.js';
@@ -124,6 +125,24 @@ describe('Weighing the Stars: the numbers the steps state', () => {
     ).toBe('ok');
     expect(d.stars).toHaveLength(8);
     for (const s of d.stars) expect(insideBand(s.M, s.R)).toBe(true);
+  });
+  test('the real star: the numbers the step states are the pinned E1 row of the validation table', () => {
+    const rows = JSON.parse(
+      readFileSync('tests/fixtures/binary-masses/results.json', 'utf8')
+    ).rows;
+    const e1 = rows.find(r => r.id === 'E1.authentic').measured;
+    const body = step('the-real-star').body;
+    const fmt = (v, d) => v.toFixed(d).replace(/0+$/, '');
+    for (const [k, d] of [
+      ['M_A', 4],
+      ['M_B', 4],
+      ['R_A', 4],
+      ['R_B', 4],
+    ])
+      expect(body).toContain(fmt(e1[k].ours, d).slice(0, 6));
+    expect(e1.R_B.deltaOverPaperSigma).toBeGreaterThan(2.4);
+    expect(e1.R_B.deltaOverPaperSigma).toBeLessThan(2.5);
+    expect(body).toContain('2.4 published standard deviations');
   });
   test('the table of solved systems equals a fresh fit', () => {
     for (const s of ECLIPSING) {
