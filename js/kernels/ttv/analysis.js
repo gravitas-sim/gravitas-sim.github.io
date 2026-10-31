@@ -23,7 +23,7 @@ const { Math } = globalThis;
 export const MIN_CYCLES = 1.5;
 
 /** The chi-square of the line plus one sinusoid at trial period Pt; null when singular. */
-function sinusoidAt(epochs, times, sigmas, Pt) {
+export function fitSinusoidAt(epochs, times, sigmas, Pt) {
   const w = (2 * Math.PI) / Pt;
   const A = Array.from({ length: 4 }, () => new Array(4).fill(0));
   const b = new Array(4).fill(0);
@@ -50,7 +50,32 @@ function sinusoidAt(epochs, times, sigmas, Pt) {
         x[3] * rows[i][3]);
     chi2 += wt * r * r;
   }
-  return { chi2, A: x[2], B: x[3], period: Pt };
+  // the covariance of the cos and sin terms, for the amplitude's one-sigma
+  let sigmaAmplitude = NaN;
+  if (sigmas) {
+    const col = k =>
+      solveSmall(
+        A,
+        [0, 1, 2, 3].map(i => (i === k ? 1 : 0))
+      );
+    const c2 = col(2);
+    const c3 = col(3);
+    if (c2 && c3) {
+      const amp = Math.hypot(x[2], x[3]);
+      const v =
+        (x[2] * x[2] * c2[2] + 2 * x[2] * x[3] * c2[3] + x[3] * x[3] * c3[3]) /
+        (amp * amp);
+      sigmaAmplitude = Math.sqrt(Math.max(0, v));
+    }
+  }
+  return {
+    chi2,
+    A: x[2],
+    B: x[3],
+    period: Pt,
+    amplitude: Math.hypot(x[2], x[3]),
+    sigmaAmplitude,
+  };
 }
 
 /**
@@ -70,7 +95,7 @@ export function scanSuperPeriod(
   const profile = [];
   let best = null;
   for (let f = f0; f <= f1; f += df) {
-    const r = sinusoidAt(epochs, times, sigmas, 1 / f);
+    const r = fitSinusoidAt(epochs, times, sigmas, 1 / f);
     if (!r) continue;
     profile.push([1 / f, r.chi2]);
     if (!best || r.chi2 < best.chi2) best = r;
