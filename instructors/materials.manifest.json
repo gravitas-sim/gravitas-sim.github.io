@@ -24,7 +24,7 @@
     }
   },
   "sourceFiles": 298,
-  "sourceDigest": "51358f0fbcb9b8793507bc2182139dc3252a5a8ae746ad93f558a21f7a74e3df",
+  "sourceDigest": "b157172b5030246c734b582c9baf9f1014d3786c9e69df448b0b96c37d7016d2",
   "sources": {
     "js/activities/activities.js": "39ac98cd99b8b0387c55e41d5d4530bad55a8da8758819ad056be73e7a716b01",
     "js/activities/activityBridge.js": "67a82aff98e0ed935d6b8b0f0f654c6ad4332ee929cb3604e896a7f790a6fdc1",
@@ -262,7 +262,7 @@
     "js/data/investigations/transit-photometry.js": "cfbc5479e3ab8b6bc1c48fc5e7206ff9532e9152260ef6d315a9ead851fa2034",
     "js/data/investigations/twelve-nights.js": "bd1d848b94247745f6e775037f5c8d9b40f62af570df459bae5f82548612adf3",
     "js/data/investigations/two-periodograms.js": "be0f1f8019a424fa4b11d20296c4becfa73b674a9c77125a18db0432e263f781",
-    "js/data/investigations/vetting-sequence.js": "54b2146b13f9b4e8e6a481aa01c7b8327b7c8e23b0cf96eb58bb8e53e33d93fc",
+    "js/data/investigations/vetting-sequence.js": "29eec0bb8a67e7fb50f2262194c42dfa09691b56155a4285b4e4aeffb5295fa6",
     "js/data/investigations/wanderers-on-the-sky.js": "2a7223648b45c70d4c77ccbfea633868a8d475609bdfc0d78ae99f202c1c6e3c",
     "js/data/investigations/weighing-stars.js": "c3b0bbddef8c13643f92affd916ed25ae23fec0762329eeb7cae5ff29ebbe4af",
     "js/data/investigations/what-a-ccd-records.js": "e10b57918171f6c8228226f6caf18d0dfd3cad2819d92d1538bdb0d0e5dfce84",
