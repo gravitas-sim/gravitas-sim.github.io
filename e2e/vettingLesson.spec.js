@@ -14,7 +14,16 @@
 
 import AxeBuilder from '@axe-core/playwright';
 import { test, expect } from './fixtures.js';
-import { openInvestigation, settled, walkToSid } from './centralExperiment.js';
+import {
+  commitPredictionHeld,
+  expectVerdictRevealed,
+  openInvestigation,
+  readout,
+  setControl,
+  settled,
+  step,
+  walkToSid,
+} from './centralExperiment.js';
 
 /** The plan with every depth, in the page's language, as a link at the advanced depth walks it. */
 const deepPlan = (page, id) =>
@@ -160,3 +169,30 @@ for (const c of CASES) {
     });
   }
 }
+
+test('planet-or-not: moving the candidate moves the checklist and its overall verdict, and the prediction is held until the step that settles it @accepts:ce.planet-or-not', async ({
+  page,
+  app,
+}) => {
+  test.slow();
+  await open(page, app, 'planet-or-not', null, 'advanced');
+  const plan = await deepPlan(page, 'planet-or-not');
+  const predict = step(plan, 'which-test-catches');
+  await walkToSid(page, plan, predict.sid);
+  // The wrong option on purpose: nothing on the screen may say whether it is right yet.
+  await commitPredictionHeld(page, predict);
+  await expectVerdictRevealed(page, plan, predict);
+
+  // Candidate B alternates in depth: the checklist rejects it.
+  const rejected = await readout(page);
+  expect(rejected.Overall).toMatch(/reject/i);
+  // Candidate A is clean: nothing rejects it, and it is still not called a planet.
+  const { before, after } = await setControl(page, 'candidate', 0);
+  expect(after.Overall).not.toBe(before.Overall);
+  expect(after.Overall).toMatch(/survive|not rejected/i);
+  expect(after.Overall).not.toMatch(/\bis a planet\b/i);
+  // The tests behind it moved too.
+  expect(after['Test 1: odd and even depths']).not.toBe(
+    before['Test 1: odd and even depths']
+  );
+});
