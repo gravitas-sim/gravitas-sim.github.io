@@ -470,17 +470,18 @@ export const LAZY_FAMILIES = Object.freeze({
     'TELESCOPE_WIDGETS',
     ['telescope']
   ),
-  vetting: familyEntry(
-    () => import('./vettingWidgets.js'),
-    './vettingWidgets.js',
-    'VETTING_WIDGETS',
-    ['vetting-checklist']
   variablesII: familyEntry(
     () => import('./variablesIIWidgets.js'),
     './variablesIIWidgets.js',
     'VARIABLES_II_WIDGETS',
     ['plz-metallicity', 'variable-features', 'variable-ambiguity'],
     'variablesIIReady'
+  ),
+  vetting: familyEntry(
+    () => import('./vettingWidgets.js'),
+    './vettingWidgets.js',
+    'VETTING_WIDGETS',
+    ['vetting-checklist']
   ),
 });
 // </generated:lazy-families>

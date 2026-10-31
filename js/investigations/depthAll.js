@@ -106,6 +106,8 @@ export const DEEPER = Object.freeze({
   ),
   ...Object.fromEntries(
     Object.entries(VETTING_DEPTH).map(([id, d]) => [id, d.steps])
+  ),
+  ...Object.fromEntries(
     Object.entries(VARIABLES_II_DEPTH).map(([id, d]) => [id, d.steps])
   ),
   ...Object.fromEntries(

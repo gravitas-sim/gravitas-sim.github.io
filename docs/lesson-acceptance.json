@@ -1171,6 +1171,8 @@
       "evidence": "none",
       "test": "e2e/vettingLesson.spec.js",
       "loop": ["which-test-catches", "deep-and-shallow"],
+      "evidenceFrom": "model"
+    },
     "the-metallicity-term": {
       "centralExperimentId": "ce.the-metallicity-term",
       "object": "panel:plz-metallicity",

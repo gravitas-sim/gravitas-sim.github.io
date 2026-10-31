@@ -222,7 +222,8 @@ describe('the instructor expectations record', () => {
     // 518 after Two Clusters, Two Ages (Prompt 219): 3 more over 515.
     // 521 after How Old Is This White Dwarf? and From Star to Remnant (Prompt 222): 3 more over 518.
     // 523 after Planet or Not? (Prompt 228): 2 more over 521.
-    expect(total).toBe(523);
+    // 524 after The Metallicity Term (Prompt 223): 1 more over 523.
+    expect(total).toBe(524);
   });
 
   test('a /1 record keyed by step number migrates to the same text', () => {

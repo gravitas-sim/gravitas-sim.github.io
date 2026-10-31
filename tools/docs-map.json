@@ -1133,6 +1133,9 @@
       "kind": "feature",
       "purpose": "Candidate vetting: odd-even depths, secondary-eclipse search, difference-image centroid test, the validation contract, what a pass does not mean.",
       "owner": 228,
+      "student": true
+    },
+    {
       "file": "VARIABLES_II.md",
       "kind": "feature",
       "purpose": "Variables II: light-curve features with errors, the Cepheid PL relation with a cited metallicity term, a classifier that can decline; 20 validation legs (Prompt 223).",
