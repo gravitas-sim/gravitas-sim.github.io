@@ -24,19 +24,19 @@
         "requests": 109
       },
       "kepler": {
-        "kb": 3406.8,
+        "kb": 3409.7,
         "requests": 148
       },
       "transit": {
-        "kb": 3418.7,
+        "kb": 3421.6,
         "requests": 148
       },
       "power-law": {
-        "kb": 3384,
+        "kb": 3386.9,
         "requests": 148
       },
       "largest-lesson": {
-        "kb": 3516.3,
+        "kb": 3519.2,
         "requests": 150
       },
       "observatory": "the Observatory with one observation open: read from tools/route-budgets.json"
