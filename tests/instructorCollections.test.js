@@ -36,6 +36,26 @@ const press = async (host, selector) => {
   host.querySelector(selector).click();
   await new Promise(r => setTimeout(r, 20));
 };
+/**
+ * Press 'Make the link' and wait until the link is in the field. The link is
+ * made after an await on the platform's compression stream, which runs on the
+ * thread pool, so how long it takes is the machine's: a fixed 20 ms pause
+ * sometimes read the field before it was written, and decodeTagged threw
+ * 'wrongKind' on the empty fragment. A refusal never sets the field, so this
+ * is for the cases that do make a link; those that refuse use press().
+ */
+const makeLink = async host => {
+  host.querySelector('#coll-link-make').click();
+  const field = host.querySelector('#coll-link');
+  const status = host.querySelector('[data-role="status"]');
+  const deadline = Date.now() + 10000;
+  while (!field.value) {
+    if (Date.now() > deadline)
+      throw new Error(`no link after 10 s; status: ${status.textContent}`);
+    await new Promise(r => setTimeout(r, 2));
+  }
+  return field.value;
+};
 const SET = [
   'investigation:tides',
   'scenario:solar-system',
@@ -83,8 +103,7 @@ describe('with items saved', () => {
     depth.value = 'quantitative';
     depth.dispatchEvent(new Event('change', { bubbles: true }));
     await press(host, '[data-item="dataset-tess-light-curve"] [data-act="up"]');
-    await press(host, '#coll-link-make');
-    const url = host.querySelector('#coll-link').value;
+    const url = await makeLink(host);
     expect(url).toMatch(/\/course\/#c3z/);
     const made = await readCourseFragment(url.split('#')[1]);
     expect(validateCoursePack(made, courseApi())).toEqual([]);
@@ -133,10 +152,7 @@ describe('with items saved', () => {
     );
     expect(host.querySelector('#coll-link').value).toBe('');
     type(host, '#coll-note-es-0', 'Empieza aquí.');
-    await press(host, '#coll-link-make');
-    const made = await readCourseFragment(
-      host.querySelector('#coll-link').value.split('#')[1]
-    );
+    const made = await readCourseFragment((await makeLink(host)).split('#')[1]);
     expect(made.locales).toEqual(['en', 'es']);
     expect(made.title.es).toBe('Mareas');
     expect(made.title.esOf).toMatch(/^[0-9a-f]{8}$/);
@@ -146,10 +162,28 @@ describe('with items saved', () => {
   test('never uses the id of the student’s own collection', async () => {
     const host = await open(SET);
     type(host, '[data-f="title.en"]', 'Saved items');
-    await press(host, '#coll-link-make');
-    const made = await readCourseFragment(
-      host.querySelector('#coll-link').value.split('#')[1]
-    );
+    const made = await readCourseFragment((await makeLink(host)).split('#')[1]);
     expect(made.id).toBe('saved-items-shared');
+  });
+
+  test('reads the language and base of the document it is mounted in, not the global one', async () => {
+    // A click that finishes after Jest has removed the window's globals
+    // (a late onclick once threw reading 'documentElement' of undefined) has
+    // only the host's own document to go on. The global one is English here.
+    for (const id of SET) toggleSaved(byId.get(id));
+    const other = document.implementation.createHTMLDocument('x');
+    other.head.append(
+      Object.assign(other.createElement('base'), {
+        href: 'http://localhost/',
+      })
+    );
+    other.documentElement.lang = 'es';
+    const host = other.createElement('div');
+    other.body.append(host);
+    await mountMaker(host);
+    expect(document.documentElement.lang).toBe('en');
+    expect(host.querySelector('#coll-link-make').textContent).toBe(
+      'Crear el enlace'
+    );
   });
 });

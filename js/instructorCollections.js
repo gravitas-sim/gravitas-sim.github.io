@@ -69,11 +69,15 @@ export async function mountMaker(host) {
     import('./course/pack.js'),
     import('./course/api.js'),
   ]);
-  library ??= await fetch(new URL('/library/library.json', document.baseURI))
+  // The host's own document, not the global one: a handler that finishes
+  // after the page (or a test's jsdom) has gone still reads the document it
+  // was mounted in.
+  const doc = host.ownerDocument;
+  library ??= await fetch(new URL('/library/library.json', doc.baseURI))
     .then(r => (r.ok ? r.json() : { entries: [] }))
     .catch(() => ({ entries: [] }));
   const byId = new Map(library.entries.map(e => [e.id, e]));
-  const lang = () => (document.documentElement.lang === 'es' ? 1 : 0);
+  const lang = () => (doc.documentElement.lang === 'es' ? 1 : 0);
   const L = (en, es) => [en, es][lang()];
   const have = readCollections().saved;
   const state = {
@@ -452,7 +456,7 @@ export async function mountMaker(host) {
         new Blob([JSON.stringify(made, null, 2)], { type: 'application/json' })
       );
       const a = el('a', { href: url, download: `${made.id}.collection.json` });
-      document.body.append(a);
+      doc.body.append(a);
       a.click();
       a.remove();
       setTimeout(() => URL.revokeObjectURL(url), 0);
@@ -460,7 +464,7 @@ export async function mountMaker(host) {
       return;
     }
     const link = await courseLink(made, {
-      root: new URL('/', document.baseURI).href,
+      root: new URL('/', doc.baseURI).href,
     });
     state.link = link.url;
     host.querySelector('#coll-link').value = link.url;
@@ -490,7 +494,7 @@ export async function mountMaker(host) {
     if (host.querySelector('[data-f="title.en"]')) readForm();
     draw();
   });
-  watch.observe(document.documentElement, {
+  watch.observe(doc.documentElement, {
     attributes: true,
     attributeFilter: ['lang'],
   });
