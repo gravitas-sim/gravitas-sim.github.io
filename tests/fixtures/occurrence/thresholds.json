@@ -103,5 +103,13 @@
     "B": "every analytic, oracle and negative leg passes, C1, C2 and C4 pass in rich bins and C3 fails: rates only in bins with at least n_min = 10 listed detections (and E at least the floor); every other bin carried as an upper limit or as not constrained",
     "C": "an oracle leg (B1, B2, B4) fails, or a rich-bin coverage or recovery leg (C1, C2, C4) fails: completeness maps only, no rates, 231's occurrence item becomes a reading step and 264's planet case is removed"
   },
-  "amendments": []
+  "amendments": [
+    {
+      "id": "AM1",
+      "date": "2026-10-31",
+      "what": "Leg D4 as committed (the pooled coverage of the rich bins at 32 days or more with the reliability misstated falls below 0.5) is unmeasurable: no bin at 32 days or more holds 10 expected listings in this survey (the bins there are sparse). D4 is recorded as failed for that reason and stays failing. D4b measures the same demonstration over the bins at 32 days or more with at least 3 expected listings and not under the floor, with the bound (0.5) unchanged.",
+      "after": "the first full run of the validator; no rate had been judged against D4b",
+      "result": "D4b fails too: 3 bins, pooled coverage 0.79 with the reliability misstated against 0.82 stated: with few listings the Garwood interval is wide enough that a misstated reliability barely changes its coverage. The failure is recorded and left; the lesson claims only that a stated reliability scales the rate."
+    }
+  ]
 }

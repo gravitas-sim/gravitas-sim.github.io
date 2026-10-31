@@ -1270,6 +1270,19 @@ export const MANIFEST = [
     objectiveCount: 4,
   },
   {
+    id: 'how-many-earths',
+    title: 'How Many Earths?',
+    subtitle:
+      'From the planets a survey found to how many there are: what it could have seen, what a count becomes, and what a bin cannot say',
+    duration: '8-12 min',
+    level: 'Introductory to upper-level astronomy',
+    thumbnail: 'images/investigations/how-many-earths.webp',
+    depths: 3,
+    stepCount: 7,
+    gradedCount: 5,
+    objectiveCount: 4,
+  },
+  {
     id: 'the-metallicity-term',
     title: 'The Metallicity Term',
     subtitle:

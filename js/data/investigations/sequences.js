@@ -229,6 +229,7 @@ export const SEQUENCES = [
       ['two-periodograms', 'core', ['transit-photometry']],
       ['sampling-a-posterior', 'core', ['refitting-a-transit']],
       ['the-clock-that-drifts', 'core', ['transit-photometry']],
+      ['how-many-earths', 'core', ['transit-photometry']],
     ]
   ),
   sequence(

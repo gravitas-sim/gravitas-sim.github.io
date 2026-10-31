@@ -152,6 +152,7 @@ export const GUIDED = Object.freeze([
   'gravity-assist',
   'hohmann-transfer',
   'how-far-is-that-star',
+  'how-many-earths',
   'how-fast-does-it-spin',
   'how-fast-does-the-star-spin',
   'how-hot-is-the-day-side',

@@ -1279,6 +1279,19 @@ export const MANIFEST = [
     objectiveCount: 4,
   },
   {
+    id: 'how-many-earths',
+    title: '¿Cuántas Tierras?',
+    subtitle:
+      'De los planetas que encontró un sondeo a cuántos hay: qué podía haber visto, en qué se convierte una cuenta y qué no puede decir una casilla',
+    duration: '8-12 min',
+    level: 'Introductory to upper-level astronomy',
+    thumbnail: 'images/investigations/how-many-earths.webp',
+    depths: 3,
+    stepCount: 7,
+    gradedCount: 5,
+    objectiveCount: 4,
+  },
+  {
     id: 'the-metallicity-term',
     title: 'El término de metalicidad',
     subtitle:

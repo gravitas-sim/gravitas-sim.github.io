@@ -434,17 +434,17 @@ export const LAZY_FAMILIES = Object.freeze({
     'JOINT_WIDGETS',
     ['joint-fit', 'mass-radius']
   ),
-  occurrence: familyEntry(
-    () => import('./occurrenceWidgets.js'),
-    './occurrenceWidgets.js',
-    'OCCURRENCE_WIDGETS',
-    ['occurrence-efficiency', 'occurrence-grid']
-  ),
   masses: familyEntry(
     () => import('./massesWidgets.js'),
     './massesWidgets.js',
     'MASSES_WIDGETS',
     ['masses-minimum', 'masses-solve', 'masses-diagram']
+  ),
+  occurrence: familyEntry(
+    () => import('./occurrenceWidgets.js'),
+    './occurrenceWidgets.js',
+    'OCCURRENCE_WIDGETS',
+    ['occurrence-efficiency', 'occurrence-grid']
   ),
   photcal: familyEntry(
     () => import('./photcalWidgets.js'),

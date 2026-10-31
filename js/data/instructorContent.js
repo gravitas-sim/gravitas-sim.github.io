@@ -21,6 +21,7 @@ import { INSTRUCTOR as ACTIVITY } from './investigations/stellar-activity-sequen
 import { INSTRUCTOR as REMNANTS } from './investigations/remnants-sequence.js';
 import { INSTRUCTOR as VETTING } from './investigations/vetting-sequence.js';
 import { INSTRUCTOR as JOINT } from './investigations/joint-sequence.js';
+import { INSTRUCTOR as OCCURRENCE } from './investigations/occurrence-sequence.js';
 import { INSTRUCTOR as VARIABLES_II } from './investigations/variables-ii-sequence.js';
 import { INSTRUCTOR as STELLAR } from './investigations/stellar-sequence.js';
 import { INSTRUCTOR as TTV } from './investigations/ttv-sequence.js';
@@ -45,6 +46,7 @@ export const INSTRUCTOR_CONTENT = {
   ...REMNANTS.content,
   ...VETTING.content,
   ...JOINT.content,
+  ...OCCURRENCE.content,
   ...VARIABLES_II.content,
   ...STELLAR.content,
   ...TTV.content,

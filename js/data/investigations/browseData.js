@@ -412,6 +412,10 @@ export const BROWSE_META = {
     tags: ['exoplanets', 'stars'],
     numericCount: 0,
   },
+  'how-many-earths': {
+    tags: ['exoplanets', 'observing'],
+    numericCount: 0,
+  },
   'the-metallicity-term': {
     tags: ['observing', 'stars'],
     numericCount: 0,

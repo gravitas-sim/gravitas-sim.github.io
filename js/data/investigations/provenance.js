@@ -40,6 +40,7 @@ export const EVIDENCE_FROM = Object.freeze({
   'gravity-assist': 'engine',
   'hohmann-transfer': 'engine',
   'how-far-is-that-star': 'model',
+  'how-many-earths': 'model',
   'how-fast-does-it-spin': 'model',
   'how-fast-does-the-star-spin': 'model',
   'how-hot-is-the-day-side': 'model',
