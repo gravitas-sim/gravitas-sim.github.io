@@ -185,12 +185,14 @@ for (const c of CASES) {
 const LOOPS = [
   {
     id: 'why-we-cannot-see-earth',
+    tag: '@accepts:ce.why-we-cannot-see-earth',
     predict: 'how-far-apart',
     control: 'system',
     value: 1,
   },
   {
     id: 'architectures',
+    tag: '@accepts:ce.architectures',
     predict: 'where-do-they-sit',
     control: 'telescope',
     value: 0,
@@ -198,7 +200,7 @@ const LOOPS = [
 ];
 
 for (const c of LOOPS) {
-  test(`${c.id}: the prediction is held until the step that settles it, and a control moves the readout @accepts:ce.${c.id}`, async ({
+  test(`${c.id}: the prediction is held until the step that settles it, and a control moves the readout ${c.tag}`, async ({
     page,
     app,
   }) => {
