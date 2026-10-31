@@ -452,4 +452,24 @@ export const BROWSE_META = {
     tags: ['observing'],
     numericCount: 3,
   },
+  'reading-the-hr-diagram': {
+    tags: ['stars'],
+    numericCount: 0,
+  },
+  'a-stars-life-in-numbers': {
+    tags: ['stars', 'stellar-evolution'],
+    numericCount: 0,
+  },
+  'when-a-star-explodes': {
+    tags: ['compact-objects', 'stars'],
+    numericCount: 0,
+  },
+  'populations-i-and-ii': {
+    tags: ['stars', 'stellar-evolution'],
+    numericCount: 0,
+  },
+  'spectra-tell-temperature-and-gravity': {
+    tags: ['observing', 'stars'],
+    numericCount: 0,
+  },
 };

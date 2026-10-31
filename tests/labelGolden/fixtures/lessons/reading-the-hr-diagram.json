@@ -1,0 +1,52 @@
+{
+ "id": "reading-the-hr-diagram",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.the-size-of-a-white-dwarf.unit","R☉"],
+    ["steps.distance-puts-it-there.fields.0.unit","mag"],
+    ["steps.the-distance-in-parsecs.unit","pc"],
+    ["steps.what-binaries-do-to-the-fit.unit","%"]
+   ],
+   "numbered": [
+    ["steps.distance-puts-it-there.fields.0.hint","12.10"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": []
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "the-size-of-a-white-dwarf",
+    "answer": "0.0053",
+    "tolerance": "0.0003",
+    "unit": "R☉"
+   },
+   {
+    "sid": "the-distance-in-parsecs",
+    "answer": "2630",
+    "tolerance": "60",
+    "unit": "pc"
+   },
+   {
+    "sid": "what-binaries-do-to-the-fit",
+    "answer": "2.6",
+    "tolerance": "0.3",
+    "unit": "%"
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "distance-puts-it-there": {
+    "validate": {"calls":97,"distinct":2,"digest":"21e73465093de47a","samples":[null,{"level":"error","message":"Choose cluster A, [Fe/H] −0.25, no binaries, and read the distance modulus from the readout: about 12.10."}]}
+   }
+  },
+  "es": "same"
+ }
+}

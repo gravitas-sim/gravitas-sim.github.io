@@ -3735,9 +3735,9 @@ try {
         <span class="gs-en">Each guided investigation relies on a different part of the model. This
         table is generated from the same <code>modelNotes</code> field that the
         instructor guide prints, so it covers every one of the
-        <!--fact:investigations-->109<!--/fact-->
+        <!--fact:investigations-->115<!--/fact-->
         investigations and cannot fall behind them. It listed six of the twelve when it
-        was maintained by hand.</span><span class="gs-es" lang="es">Cada investigación guiada se apoya en una parte distinta del modelo. Esta tabla se genera a partir del mismo campo <code>modelNotes</code> que imprime la guía docente, de modo que cubre cada una de las <!--fact:investigations-->109<!--/fact--> investigaciones y no puede quedar rezagada respecto a ellas. Cuando se mantenía a mano, enumeraba seis de las doce.</span>
+        was maintained by hand.</span><span class="gs-es" lang="es">Cada investigación guiada se apoya en una parte distinta del modelo. Esta tabla se genera a partir del mismo campo <code>modelNotes</code> que imprime la guía docente, de modo que cubre cada una de las <!--fact:investigations-->115<!--/fact--> investigaciones y no puede quedar rezagada respecto a ellas. Cuando se mantenía a mano, enumeraba seis de las doce.</span>
       </p>
       <div class="doc-table-wrap">
         <table class="doc-table">
@@ -4146,12 +4146,12 @@ try {
               <td>js/kernels/vetting/ (depth.js, lightcurve.js, frames.js, blends.js, summary.js), js/vettingField.js, js/vettingWidgets.js, VETTING.md. The thresholds are tests/fixtures/vetting/thresholds.json, committed before the kernel; the oracle is tools/vetting-oracle/oracle.py (numpy, scipy, batman).</td>
             </tr>
             <tr>
-              <td>The Metallicity Term</td>
-              <td>js/kernels/variables/plz.js (ladderWithMetallicity) and plzCited.js (the cited numbers, held equal to tests/fixtures/variables-ii/citations.json), js/variablesIIField.js, js/variablesIIWidgets.js, VARIABLES_II.md. The validation (20 legs, thresholds committed first, an astropy oracle for the features) is tools/variables-ii-validate.mjs. One linear term in [O/H], the same at every period; crowding and blending are not modeled; the galaxies’ [O/H] are averages over their Cepheid fields.</td>
+              <td>What Is It Made Of?</td>
+              <td>js/inference/jointPlanet.js, js/inference/jointModel.js, js/jointField.js, js/jointWidgets.js, JOINT_INFERENCE.md. The thresholds are tests/fixtures/joint-inference/thresholds.json, committed before the model; the oracle is tools/joint-inference-oracle/oracle.py (numpy, scipy, batman).</td>
             </tr>
             <tr>
-              <td>What Is It Made Of?</td>
-              <td>js/inference/jointPlanet.js (the mass, radius and density and the star&rsquo;s share), js/inference/jointModel.js (the joint model, the refusals and the warnings), js/jointField.js, js/jointWidgets.js, JOINT_INFERENCE.md. The thresholds are tests/fixtures/joint-inference/thresholds.json, committed before the model; the oracle is tools/joint-inference-oracle/oracle.py (numpy, scipy, batman).</td>
+              <td>The Metallicity Term</td>
+              <td>js/kernels/variables/plz.js (ladderWithMetallicity) and plzCited.js (the cited numbers, held equal to tests/fixtures/variables-ii/citations.json), js/variablesIIField.js, js/variablesIIWidgets.js, VARIABLES_II.md. The validation (20 legs, thresholds committed first, an astropy oracle for the features) is tools/variables-ii-validate.mjs. One linear term in [O/H], the same at every period; crowding and blending are not modeled; the galaxies’ [O/H] are averages over their Cepheid fields.</td>
             </tr>
             <tr>
               <td>The Clock That Drifts</td>
@@ -4188,6 +4188,26 @@ try {
             <tr>
               <td>From Photons to a Number</td>
               <td>js/kernels/detector/snr.js (planExposure) through js/exposureWidgets.js and js/instruments/exposure.js over the instrument library (INSTRUMENTS.md); the night and turning-sky panels are js/skyWidgets.js over js/kernels/sky/; the calibration panel is js/photcalWidgets.js over js/kernels/detector/photcal.js; the strategy planner is js/strategyWidgets.js over js/kernels/strategy/.</td>
+            </tr>
+            <tr>
+              <td>Reading the HR Diagram</td>
+              <td>The cluster panel is js/clusterFitWidgets.js over js/clusterFitField.js and js/kernels/clusters/ (CLUSTER_FITTING.md); the evolution playback is js/stellarEvolutionWidgets.js over js/stellar/tracks.js and js/data/stellar/mistTracks.js; the remnant panel is js/remnantsWidgets.js over js/remnantsField.js and js/kernels/remnants/ (REMNANTS.md); the spectra panel is js/stellarSpectraWidgets.js over js/data/spectra/sdssSpectra.js; the diagram is js/stellarWidgets.js.</td>
+            </tr>
+            <tr>
+              <td>A Star’s Life in Numbers</td>
+              <td>The cluster panel is js/clusterFitWidgets.js over js/clusterFitField.js and js/kernels/clusters/ (CLUSTER_FITTING.md); the evolution playback is js/stellarEvolutionWidgets.js over js/stellar/tracks.js and js/data/stellar/mistTracks.js; the remnant panel is js/remnantsWidgets.js over js/remnantsField.js and js/kernels/remnants/ (REMNANTS.md); the spectra panel is js/stellarSpectraWidgets.js over js/data/spectra/sdssSpectra.js; the diagram is js/stellarWidgets.js.</td>
+            </tr>
+            <tr>
+              <td>When a Star Explodes</td>
+              <td>The cluster panel is js/clusterFitWidgets.js over js/clusterFitField.js and js/kernels/clusters/ (CLUSTER_FITTING.md); the evolution playback is js/stellarEvolutionWidgets.js over js/stellar/tracks.js and js/data/stellar/mistTracks.js; the remnant panel is js/remnantsWidgets.js over js/remnantsField.js and js/kernels/remnants/ (REMNANTS.md); the spectra panel is js/stellarSpectraWidgets.js over js/data/spectra/sdssSpectra.js; the diagram is js/stellarWidgets.js.</td>
+            </tr>
+            <tr>
+              <td>Populations I and II</td>
+              <td>The cluster panel is js/clusterFitWidgets.js over js/clusterFitField.js and js/kernels/clusters/ (CLUSTER_FITTING.md); the evolution playback is js/stellarEvolutionWidgets.js over js/stellar/tracks.js and js/data/stellar/mistTracks.js; the remnant panel is js/remnantsWidgets.js over js/remnantsField.js and js/kernels/remnants/ (REMNANTS.md); the spectra panel is js/stellarSpectraWidgets.js over js/data/spectra/sdssSpectra.js; the diagram is js/stellarWidgets.js.</td>
+            </tr>
+            <tr>
+              <td>Spectra Tell Temperature and Gravity</td>
+              <td>The cluster panel is js/clusterFitWidgets.js over js/clusterFitField.js and js/kernels/clusters/ (CLUSTER_FITTING.md); the evolution playback is js/stellarEvolutionWidgets.js over js/stellar/tracks.js and js/data/stellar/mistTracks.js; the remnant panel is js/remnantsWidgets.js over js/remnantsField.js and js/kernels/remnants/ (REMNANTS.md); the spectra panel is js/stellarSpectraWidgets.js over js/data/spectra/sdssSpectra.js; the diagram is js/stellarWidgets.js.</td>
             </tr>
           <!--/fact-block-->
           </tbody>

@@ -1,0 +1,45 @@
+{
+ "id": "when-a-star-explodes",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.compute-the-bound.unit",""],
+    ["steps.the-share-in-the-blast.fields.0.unit","%"],
+    ["steps.compared-with-a-sun.unit",""]
+   ],
+   "numbered": [
+    ["steps.the-share-in-the-blast.fields.0.hint","0.39"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": []
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "compute-the-bound",
+    "answer": "2.6",
+    "tolerance": "0.1",
+    "unit": ""
+   },
+   {
+    "sid": "compared-with-a-sun",
+    "answer": "207",
+    "tolerance": "5",
+    "unit": ""
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "the-share-in-the-blast": {
+    "validate": {"calls":97,"distinct":3,"digest":"3f97165c789a99d5","samples":[null,{"level":"error","message":"Divide 1 × 10^44 by 2.6 × 10^46 and multiply by 100: about 0.39 percent."},{"level":"ok","message":"About 0.39 percent: the blast carries less than half of one percent of what the collapse releases. The energy you see is a small part of the energy there is, and the rest is in a form the sky shows far less easily."}]}
+   }
+  },
+  "es": "same"
+ }
+}

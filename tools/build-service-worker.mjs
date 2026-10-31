@@ -360,6 +360,7 @@ export const NEVER_PRECACHED = [
   // service worker keeps each after its first online use.
   /^js\/data\/investigations\/(es\/)?(planets-sequence|the-scale-of-the-solar-system|moons-of-the-giants|comets-and-the-sun)\.js$/,
   /^js\/data\/courses\/solar-system-and-the-sun\.js$/,
+  /^js\/data\/courses\/stellar-astrophysics\.js$/,
   /^images\/investigations\/moons-of-the-giants\.webp$/,
   // Orbit fitting and moving-object tracks (Prompt 187, ASTROMETRY.md): the two
   // kernels, the panel and its words, fetched when a reader opens the orbit
@@ -506,6 +507,9 @@ export const NEVER_PRECACHED = [
   // The lesson is NEVER_PRECACHED (the T3 terms); the kernel files are lazy with the family.
   /^images\/investigations\/the-metallicity-term\.webp$/,
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(the-metallicity-term|variables-ii-sequence)\.js$/,
+  // Prompt 224: the five stellar closeout investigations and their one closure file (D-R10-224-01).
+  /^images\/investigations\/(reading-the-hr-diagram|a-stars-life-in-numbers|when-a-star-explodes|populations-i-and-ii|spectra-tell-temperature-and-gravity)\.webp$/,
+  /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(reading-the-hr-diagram|a-stars-life-in-numbers|when-a-star-explodes|populations-i-and-ii|spectra-tell-temperature-and-gravity|stellar-sequence)\.js$/,
   /^(js\/variablesIIWidgets\.js|js\/variablesIIField\.js|js\/i18n\/(en|es)\.variablesII\.js|js\/kernels\/variables\/(features|plz|plzCited)\.js)$/,
   // Prompt 226: the timing panels, their field module, the engine's data pack, their words and the lesson's one new file (D-R10-226-05).
   // The kernel (js/kernels/ttv/) is lazy with the family and is not precached.

@@ -22,6 +22,7 @@ import { INSTRUCTOR as REMNANTS } from './investigations/remnants-sequence.js';
 import { INSTRUCTOR as VETTING } from './investigations/vetting-sequence.js';
 import { INSTRUCTOR as JOINT } from './investigations/joint-sequence.js';
 import { INSTRUCTOR as VARIABLES_II } from './investigations/variables-ii-sequence.js';
+import { INSTRUCTOR as STELLAR } from './investigations/stellar-sequence.js';
 import { INSTRUCTOR as TTV } from './investigations/ttv-sequence.js';
 import { INSTRUCTOR as SURVEY } from './investigations/survey-sequence.js';
 import { INSTRUCTOR as OBSERVING } from './investigations/observing-sequence.js';
@@ -45,6 +46,7 @@ export const INSTRUCTOR_CONTENT = {
   ...VETTING.content,
   ...JOINT.content,
   ...VARIABLES_II.content,
+  ...STELLAR.content,
   ...TTV.content,
   ...SURVEY.content,
   ...OBSERVING.content,

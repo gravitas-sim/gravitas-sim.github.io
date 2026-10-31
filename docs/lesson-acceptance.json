@@ -1205,6 +1205,56 @@
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["which-way-does-metal-go", "the-distance-twice"],
       "evidenceFrom": "model"
+    },
+    "reading-the-hr-diagram": {
+      "centralExperimentId": "ce.reading-the-hr-diagram",
+      "object": "panel:cluster-fit",
+      "control": "cluster-fit/feh",
+      "quantity": "the distance modulus of cluster A from a fit of isochrones at the assumed metallicity, in magnitudes: 12.10 at [Fe/H] -0.25 (2.6 kiloparsecs) and 12.43 at 0, the metallicity being stated and never fitted",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": ["which-region", "distance-puts-it-there"],
+      "evidenceFrom": "model"
+    },
+    "a-stars-life-in-numbers": {
+      "centralExperimentId": "ce.a-stars-life-in-numbers",
+      "object": "panel:stellar-evolution",
+      "control": "stellar-evolution/track",
+      "quantity": "how long the main-sequence phase of a model star lasts, from the MIST tracks: 9.88 billion years for a star of 1 solar mass and 8.65 million for 20, a ratio of about 1,140",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": ["which-lives-longer", "a-heavy-life"],
+      "evidenceFrom": "model"
+    },
+    "when-a-star-explodes": {
+      "centralExperimentId": "ce.when-a-star-explodes",
+      "object": "panel:remnant-outcome",
+      "control": "remnant-outcome/mi",
+      "quantity": "the probability that a star of a given initial mass ends as a neutron star, from the cited threshold ranges: 0.8 at 9 solar masses and 1 at 15, against a white dwarf with no supernova at 5",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": ["where-the-energy-goes", "the-share-in-the-blast"],
+      "evidenceFrom": "model"
+    },
+    "populations-i-and-ii": {
+      "centralExperimentId": "ce.populations-i-and-ii",
+      "object": "panel:cluster-fit",
+      "control": "cluster-fit/feh",
+      "quantity": "the age of cluster A in gigayears from a fit of isochrones at the assumed metallicity: 3.35 at [Fe/H] -0.5 and 1.47 at 0, the metallicity being stated and never fitted",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": ["what-minus-half-means", "the-same-stars-three-ways"],
+      "evidenceFrom": "model"
+    },
+    "spectra-tell-temperature-and-gravity": {
+      "centralExperimentId": "ce.spectra-tell-temperature-and-gravity",
+      "object": "panel:spectra-compare",
+      "control": "spectra-compare/named",
+      "quantity": "the depth of a line in each of four observed SDSS spectra: H-beta deepest in the A star and the sodium doublet deepest in the M star, so one line is not a thermometer",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": ["the-deepest-balmer", "the-opposite-orderings"],
+      "evidenceFrom": "model"
     }
   }
 }
