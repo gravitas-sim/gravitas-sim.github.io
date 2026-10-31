@@ -206,7 +206,7 @@ test('how-many-earths: a bin the survey cannot see gives no rate and no limit, a
   await expect(readout).not.toContainText(/upper limit|NaN|undefined/i);
   // The step with none: an upper limit, not a rate of zero.
   await walkToSid(page, plan, 'a-bin-with-none');
-  await expect(readout).toContainText(/fewer than 0\.031 planets per star/i, {
+  await expect(readout).toContainText(/fewer than 0\.0311 planets per star/i, {
     useInnerText: true,
   });
 });
