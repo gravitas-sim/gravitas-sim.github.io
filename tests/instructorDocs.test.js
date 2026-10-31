@@ -281,10 +281,10 @@ describe('the document inventory', () => {
     expect(inv.byKind.notes).toBe(INVESTIGATIONS.length);
     expect(inv.byVariant).toEqual({
       activity: 12,
-      depth: 518,
-      full: 460,
+      depth: 530,
+      full: 468,
       general: 18,
-      notes: 115,
+      notes: 117,
     });
   });
 
