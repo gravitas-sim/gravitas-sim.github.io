@@ -1136,6 +1136,13 @@
       "student": true
     },
     {
+      "file": "VARIABLES_II.md",
+      "kind": "feature",
+      "purpose": "Variables II: light-curve features with errors, the Cepheid PL relation with a cited metallicity term, a classifier that can decline; 20 validation legs (Prompt 223).",
+      "owner": 223,
+      "student": true
+    },
+    {
       "file": "VO_ARCHIVE_GATE.md",
       "kind": "gate",
       "purpose": "Astronomy archives and the Virtual Observatory gate.",

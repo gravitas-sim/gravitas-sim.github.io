@@ -408,6 +408,10 @@ export const BROWSE_META = {
     tags: ['exoplanets', 'observing'],
     numericCount: 0,
   },
+  'the-metallicity-term': {
+    tags: ['observing', 'stars'],
+    numericCount: 0,
+  },
   'deep-or-wide': {
     tags: ['observing'],
     numericCount: 0,

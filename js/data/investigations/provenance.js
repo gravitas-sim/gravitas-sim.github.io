@@ -76,6 +76,7 @@ export const EVIDENCE_FROM = Object.freeze({
   'the-first-rung': 'model',
   'the-gaps-in-the-belt': 'model',
   'the-limit': 'model',
+  'the-metallicity-term': 'model',
   'the-rotating-disk': 'model',
   'the-saturated-star': 'model',
   'the-scale-of-the-solar-system': 'engine',

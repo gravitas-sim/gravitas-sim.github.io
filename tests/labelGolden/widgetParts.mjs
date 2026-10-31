@@ -93,6 +93,7 @@ export const PARTS = Object.freeze({
     'light',
     'interiors',
     'variables',
+    'variablesII',
     'galactic',
     'cosmology',
     'compare',

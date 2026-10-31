@@ -82,6 +82,7 @@ import { INSTRUCTOR as MASSES } from './investigations/binary-masses-sequence.js
 import { INSTRUCTOR as ACTIVITY } from './investigations/stellar-activity-sequence.js';
 import { INSTRUCTOR as REMNANTS } from './investigations/remnants-sequence.js';
 import { INSTRUCTOR as VETTING } from './investigations/vetting-sequence.js';
+import { INSTRUCTOR as VARIABLES_II } from './investigations/variables-ii-sequence.js';
 
 export const LESSON_BANDS = Object.freeze({
   ...MEASUREMENT.bands,
@@ -102,6 +103,7 @@ export const LESSON_BANDS = Object.freeze({
   ...ACTIVITY.bands,
   ...REMNANTS.bands,
   ...VETTING.bands,
+  ...VARIABLES_II.bands,
   'keplers-laws': { core: 'medium', quantitative: 'long', advanced: 'long' },
   'retrograde-motion': { core: 'medium' },
   'transit-photometry': {
@@ -245,7 +247,7 @@ export const LESSON_BANDS = Object.freeze({
   'which-kind-of-variable': {
     core: 'short',
     quantitative: 'medium',
-    advanced: 'medium',
+    advanced: 'long',
   },
   'bending-light': {
     core: 'medium',

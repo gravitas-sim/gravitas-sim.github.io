@@ -502,6 +502,11 @@ export const NEVER_PRECACHED = [
   /^images\/investigations\/planet-or-not\.webp$/,
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(planet-or-not|vetting-sequence)\.js$/,
   /^(js\/vettingWidgets\.js|js\/vettingField\.js|js\/i18n\/(en|es)\.vetting\.js|js\/kernels\/vetting\/.*)$/,
+  // Prompt 223: the variables-II panels, their field module, their words, the new kernel files and the lesson's one new file.
+  // The lesson is NEVER_PRECACHED (the T3 terms); the kernel files are lazy with the family.
+  /^images\/investigations\/the-metallicity-term\.webp$/,
+  /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(the-metallicity-term|variables-ii-sequence)\.js$/,
+  /^(js\/variablesIIWidgets\.js|js\/variablesIIField\.js|js\/i18n\/(en|es)\.variablesII\.js|js\/kernels\/variables\/(features|plz|plzCited)\.js)$/,
   // Prompt 214: the strategy kernel, planner extension, panels and the strategy lesson's one new file (D-R10-214-06).
   /^js\/kernels\/strategy\//,
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(why-the-period-is-wrong|strategy-sequence)\.js$/,

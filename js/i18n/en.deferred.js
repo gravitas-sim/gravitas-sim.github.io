@@ -1940,6 +1940,8 @@ export const EN_DEFERRED = {
     'Period and luminosity tied together: the relation that turned Cepheids into rulers.',
   'inv.seq.galaxies.the-first-rung':
     'Calibrate the rung with a nearby Cepheid, then use it to reach another galaxy.',
+  'inv.seq.galaxies.the-metallicity-term':
+    'The rung with a second dial: how a Cepheid’s metal content moves a distance, and by how much we are sure.',
   'inv.seq.galaxies.standard-candles':
     'Supernovae as standard candles: how far a bright, standard explosion can be seen, and what it says about the expansion.',
   'inv.seq.galaxies.the-expanding-universe':

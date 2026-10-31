@@ -198,12 +198,10 @@ export function makeSample({ perClass = 24, seed = 'variables-sample' } = {}) {
 }
 
 /**
- * Leave-one-out k nearest neighbours on standardised features.
- * @param {Array<object>} rows - from makeSample
- * @param {string[]} features - keys of a row
- * @returns {string[]} the predicted class of each row
+ * The k nearest neighbours' votes for every row, leave one out, on standardised features.
+ * @returns {Array<Array<[string, number]>>} per row, the classes and their votes, most first
  */
-export function classifyLeaveOneOut(rows, features, k = 5) {
+export function neighbourVotes(rows, features, k = 5) {
   const n = rows.length;
   const mean = features.map(f => rows.reduce((s, r) => s + r[f], 0) / n);
   const sd = features.map(
@@ -227,8 +225,36 @@ export function classifyLeaveOneOut(rows, features, k = 5) {
       votes.set(cls, (votes.get(cls) ?? 0) + 1);
     return [...votes.entries()].sort(
       (a, b) => b[1] - a[1] || (a[0] < b[0] ? -1 : 1)
-    )[0][0];
+    );
   });
+}
+
+/**
+ * Leave-one-out k nearest neighbours on standardised features.
+ * @param {Array<object>} rows - from makeSample
+ * @param {string[]} features - keys of a row
+ * @returns {string[]} the predicted class of each row
+ */
+export function classifyLeaveOneOut(rows, features, k = 5) {
+  return neighbourVotes(rows, features, k).map(v => v[0][0]);
+}
+
+/**
+ * The same vote, with a refusal: a star whose leading class holds fewer than
+ * `minVotes` of the k votes is given no automatic class and the classes that
+ * hold votes are listed as candidates (Prompt 223). The exercise is synthetic.
+ * @returns {Array<{cls: string|null, votes: number, candidates: string[]}>}
+ */
+export function classifyWithAmbiguity(
+  rows,
+  features,
+  { k = 5, minVotes = 4 } = {}
+) {
+  return neighbourVotes(rows, features, k).map(v => ({
+    cls: v[0][1] >= minVotes ? v[0][0] : null,
+    votes: v[0][1],
+    candidates: v.map(x => x[0]),
+  }));
 }
 
 /**
