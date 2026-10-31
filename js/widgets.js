@@ -470,6 +470,12 @@ export const LAZY_FAMILIES = Object.freeze({
     'TELESCOPE_WIDGETS',
     ['telescope']
   ),
+  ttv: familyEntry(
+    () => import('./ttvWidgets.js'),
+    './ttvWidgets.js',
+    'TTV_WIDGETS',
+    ['ttv-transit', 'ttv-timing']
+  ),
   variablesII: familyEntry(
     () => import('./variablesIIWidgets.js'),
     './variablesIIWidgets.js',
