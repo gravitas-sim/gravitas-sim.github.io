@@ -102,13 +102,7 @@ for (const c of CASES) {
       app,
     }) => {
       test.slow();
-      await open(
-        page,
-        app,
-        c.id,
-        locale === 'es' ? 'es' : null,
-        'advanced'
-      );
+      await open(page, app, c.id, locale === 'es' ? 'es' : null, 'advanced');
       const plan = await deepPlan(page, c.id);
       expect(plan.length).toBeGreaterThan(8);
       if (locale === 'es')

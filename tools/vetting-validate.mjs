@@ -919,7 +919,10 @@ if (args.includes('--write-results')) {
 // kind of candidate (VETTING.md). Counts, not rates: n is the ensemble size.
 export const RATES = ${JSON.stringify(RATES, null, 2)};
 `;
-    const config = (await prettier.resolveConfig(path.join(ROOT, 'js/kernels/vetting/rates.js'))) ?? {};
+    const config =
+      (await prettier.resolveConfig(
+        path.join(ROOT, 'js/kernels/vetting/rates.js')
+      )) ?? {};
     writeFileSync(
       path.join(ROOT, 'js/kernels/vetting/rates.js'),
       await prettier.format(source, { ...config, parser: 'babel' })
