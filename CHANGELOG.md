@@ -20,6 +20,12 @@ the release rather than in the tag.
 
 - **The transit model delta (Prompt 225).** A four-coefficient limb-darkening law (Claret 2000, coefficients fixed from a table or typed by the reader, never fitted) as a second transit model beside the quadratic one, which is unchanged to the bit; the star's mean density from P and a/R* with the circular-orbit assumption stated and the eccentric correction (Kipping 2010) as a labelled row; a constraint check that says "not constrained" for a grazing transit; an in-transit residual test; the covariance ellipse of k against b and against q1 through the plot component, with its table; the full parameter set behind a disclosure in the fit panel (English and Spanish), the result as the 150 record; an upper depth of Fit the transit with the lower depths graded identically. Validation against batman and scipy with committed bounds: 18 of 31 legs pass, 11 stay failing and labelled, 2 are not run for want of data (`TRANSIT_DELTA.md`). Fixed on the way: in Spanish the fit panel prefilled "0.005", which the Spanish reader parses as five.
 
+- **Variable-star classifier gate (Prompt 223 Part B).** `VARIABLE_CLASSIFIER_GATE.md`: the shipped nearest-neighbour
+  classifier measured on 350 Gaia DR3 Cepheid and RR Lyrae rows (Gaia's own labels, CC BY-NC 3.0 IGO, a derived
+  fixture) against bounds committed first. Two legs fail and stay failing (accuracy among the stars called 0.772
+  against 0.90; the bootstrap lower end 0.718 against 0.85); the verdict is B: the classifier may be offered only as a
+  suggestion with its confusion matrix and the ambiguous cases left unresolved. Documentation, fixtures and register
+  rows only; nothing student-facing changes.
 - **Remnants (Prompt 222).** `js/kernels/remnants/`: a white-dwarf cooling age from a Mestel-type law calibrated on
   one published model sequence, valid for 0.5 to 1.0 solar masses and a stated luminosity range, refused outside it,
   with an interval that keeps the measurement term apart from the law's own error; the initial-final mass relations

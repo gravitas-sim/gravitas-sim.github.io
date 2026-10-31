@@ -1136,6 +1136,13 @@
       "student": false
     },
     {
+      "file": "VARIABLE_CLASSIFIER_GATE.md",
+      "kind": "gate",
+      "purpose": "Variable-star classifier gate: the labelled Gaia set, the committed bounds, the measured confusion matrix, two failed legs left failing and the verdict B (Prompt 223 Part B).",
+      "owner": 223,
+      "student": false
+    },
+    {
       "file": "VETTING.md",
       "kind": "feature",
       "purpose": "Candidate vetting: odd-even depths, secondary-eclipse search, difference-image centroid test, the validation contract, what a pass does not mean.",
