@@ -1871,6 +1871,8 @@ export const ES_DEFERRED = {
     'Un periodograma de Lomb-Scargle y uno de m\u00ednimos cuadrados de caja de una curva de luz, y qu\u00e9 puede afirmar un per\u00edodo de un periodograma. Necesita la p\u00e1gina de c\u00e1lculo y conexi\u00f3n.',
   'inv.seq.planets.sampling-a-posterior':
     'La posterior de un tr\u00e1nsito muestreada en Python, con las comprobaciones de convergencia que deciden cu\u00e1ndo puede citarse su intervalo. Necesita la p\u00e1gina de c\u00e1lculo y conexi\u00f3n.',
+  'inv.seq.planets.the-clock-that-drifts':
+    'Mide cuándo transita un planeta y lee la onda que un segundo planeta escribe en los instantes. Necesita antes la fotometría de tránsitos.',
   'inv.seq.gravity.integrators-in-practice':
     'Cuatro integradores comparados por la energ\u00eda que pierden en un sistema real, en Python. Necesita la p\u00e1gina de c\u00e1lculo y conexi\u00f3n.',
   'inv.seq.planets.why-venus-is-hot':

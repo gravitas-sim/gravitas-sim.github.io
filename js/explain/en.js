@@ -190,6 +190,12 @@ export default {
     'That a cooling age has an error of its own that better measurements cannot remove; that the age since the white dwarf formed is only part of a star’s age; that a remnant’s class near a threshold is a probability, and the thresholds are ranges; and that a white dwarf and a neutron star have different limits.',
     'The law has one heat reservoir and photon losses only, with a coefficient taken from a published cooling table; crystallization, neutrino losses, helium or thin hydrogen layers and other core compositions are left out; the relation is fitted to cluster white dwarfs and the thresholds are uniform over cited ranges, a stated simplification; no observed white dwarf is shown.',
   ],
+  ttv: [
+    'One transit’s window of light curve and the fit that measures its mid-time, or a planet’s O-C diagram: each measured transit time minus the straight-line clock fitted to all of them, in minutes, against the transit number.',
+    'A flat O-C is a planet alone on a steady clock; a slow wave means something is tugging on it, and the length of the wave is the super-period of the pair, not the period of either planet.',
+    'The time of one transit with its error bar and whether the template fits; the period of the wave, its amplitude and the period the cited relation gives from the two planets’ periods; whether the O-C is more than noise, and whether the record is long enough to give a period at all.',
+    'The systems are synthetic, made by the engine with white noise; the relation holds for two planets near but outside a first-order resonance, and the amplitude depends on the planets’ eccentricities as well as their masses, so an amplitude alone is not a mass.',
+  ],
   masses: [
     'Two Doppler curves of one orbit, and what they fix: the mass ratio, the size of the orbit times sin i and the masses times sin³ i, every one a minimum until an inclination is known; a single line gives only the mass function. With an eclipse, the joint fit of the light curve and both velocity curves gives the masses and radii of both stars with the uncertainty of the whole fit, or the words “not constrained”.',
     'Which star moves faster (the lighter), why the mass ratio needs no inclination, what the masses become at a tilt you choose, what an eclipse adds, where the uncertainty of a mass comes from, and where the weighed stars sit against the MIST tracks in mass and radius or mass and luminosity.',

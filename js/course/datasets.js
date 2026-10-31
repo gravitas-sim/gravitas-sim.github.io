@@ -183,6 +183,7 @@ export const GUIDED = Object.freeze([
   'signal-noise-and-exposure',
   'standard-candles',
   'the-beat-of-a-star',
+  'the-clock-that-drifts',
   'the-completeness-curve',
   'the-expanding-universe',
   'the-first-rung',

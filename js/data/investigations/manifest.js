@@ -1269,6 +1269,19 @@ export const MANIFEST = [
     objectiveCount: 4,
   },
   {
+    id: 'the-clock-that-drifts',
+    title: 'The Clock That Drifts',
+    subtitle:
+      'Measure when a planet transits, plot how far each transit is from a steady clock, and read the slow wave a second planet writes',
+    duration: '10-14 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/the-clock-that-drifts.webp',
+    depths: 3,
+    stepCount: 8,
+    gradedCount: 5,
+    objectiveCount: 4,
+  },
+  {
     id: 'deep-or-wide',
     title: 'Deep or Wide?',
     subtitle:

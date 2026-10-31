@@ -11,15 +11,15 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 108 investigations and 1417 steps: 1325 steps
+Across 109 investigations and 1425 steps: 1333 steps
 declare a scene, 157 let a reader change one, 167 read the
-running integration, 908 show a prescribed model result, 146 draw
-on a stored dataset, 787 put a self-contained panel beside the text,
-374 keep something, and 58 are prose.
-Of 186 prediction loops, 186 are returned to,
-186 produce a measurement before they are answered, and
+running integration, 916 show a prescribed model result, 146 draw
+on a stored dataset, 795 put a self-contained panel beside the text,
+376 keep something, and 58 are prose.
+Of 187 prediction loops, 187 are returned to,
+187 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
-186 hold their marking until the experiment settles them.
+187 hold their marking until the experiment settles them.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -1420,6 +1420,20 @@ Of 186 prediction loops, 186 are returned to,
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:plz-metallicity`, control plz-metallicity/term, measures the distance modulus of NGC 4258 from the LMC's Cepheids, in magnitudes, with the cited metallicity term left out (29.403) and included (29.444): a shift of 0.041 magnitudes, about two percent in distance, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## The Clock That Drifts (`the-clock-that-drifts`)
+
+- **Steps:** 8. Scene declared on 8; a reader can change something on 0; 8 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 8 prescribed model, 0 stored dataset, 8 self-contained panel.
+- **What students do:** move-an-instrument-control, record-values, choose-an-option, commit-a-prediction.
+- **Objects the steps declare:** sun.
+- **Instruments:** ttv-transit, ttv-timing.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** a-wave → read-the-wave, the-pair-sets-it, what-the-wave-says → read-the-wave.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:ttv-timing`, control ttv-timing/span, measures the super-period, in days, of the wave in the O-C diagram of the inner planet of the near two-to-one pair, fitted to the engine-made transit times: 345 days over the whole record (the relation gives 346) and 347 over the first 60 percent, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Deep or Wide? (`deep-or-wide`)
 

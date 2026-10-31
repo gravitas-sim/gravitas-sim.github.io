@@ -71,6 +71,7 @@ export const EVIDENCE_FROM = Object.freeze({
   'signal-noise-and-exposure': 'model',
   'standard-candles': 'model',
   'the-beat-of-a-star': 'model',
+  'the-clock-that-drifts': 'model',
   'the-completeness-curve': 'model',
   'the-expanding-universe': 'model',
   'the-first-rung': 'model',

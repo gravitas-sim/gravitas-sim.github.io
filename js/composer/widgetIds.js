@@ -100,6 +100,7 @@ export const WIDGET_FAMILIES = Object.freeze({
   ],
   remnants: ['remnant-cooling', 'remnant-outcome'],
   variablesII: ['plz-metallicity', 'variable-features', 'variable-ambiguity'],
+  ttv: ['ttv-transit', 'ttv-timing'],
   spectrograph: [
     'spectrograph-lines',
     'spectrograph-arc',

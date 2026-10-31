@@ -272,15 +272,16 @@ describe('the document inventory', () => {
     // 1022 after How Old Is This White Dwarf? and From Star to Remnant (Prompt 222): eleven more for each lesson, as for the two activity lessons of Prompt 220.
     // 1033 after Planet or Not? (Prompt 228): eleven more.
     // 1044 after The Metallicity Term (Prompt 223): eleven more over 1033.
-    expect(inv.documents).toBe(1044);
-    expect(inv.byLocale).toEqual({ en: 477, es: 567 });
+    // 1055 after The Clock That Drifts (Prompt 226): eleven more over 1044.
+    expect(inv.documents).toBe(1055);
+    expect(inv.byLocale).toEqual({ en: 482, es: 573 });
     expect(inv.byKind.notes).toBe(INVESTIGATIONS.length);
     expect(inv.byVariant).toEqual({
       activity: 12,
-      depth: 474,
-      full: 432,
+      depth: 480,
+      full: 436,
       general: 18,
-      notes: 108,
+      notes: 109,
     });
   });
 
@@ -308,7 +309,7 @@ describe('the document inventory', () => {
     const withDepth = INVESTIGATIONS.filter(
       i => withAllDepths(i).steps.length !== i.steps.length
     ).map(i => i.id);
-    expect(withDepth.length).toBe(81);
+    expect(withDepth.length).toBe(82);
     // A key for each depth the lesson offers: three for most, two for Design
     // the Schedule, whose upper depth (Prompt 214) has no quantitative layer.
     let keys = 0;

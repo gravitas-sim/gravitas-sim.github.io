@@ -217,7 +217,8 @@ describe('the digest the derived closure produces', () => {
     // 297 after How Old Is This White Dwarf? and From Star to Remnant (Prompt 222, D-R10-222-05) over v3 4e9bd42a (closure 296): one file, remnants-sequence.js, which holds the two lessons, their Spanish, their guides and their deeper steps; the one new closure file per sequence (T3), cap below 298, pending the coordinator's approval.
     // 298 after Planet or Not? (Prompt 228, D-R10-228-01): one file, vetting-sequence.js, which holds the lesson, its Spanish, its guide and its deeper steps; the one new closure file per sequence, pending the coordinator's approval of the cap.
     // 299 after The Metallicity Term (Prompt 223, D-R10-223-04) over v3 94ee7cd7 (closure 298): one file, variables-ii-sequence.js, which holds the lesson, its Spanish, its guide and its deeper steps; the one new closure file per sequence (T3), cap below 300, pending the coordinator's approval.
-    expect(current.length).toBeLessThan(300);
+    // 300 after The Clock That Drifts (Prompt 226, D-R10-226-05) over v3 b513a0ea (closure 299): one file, ttv-sequence.js, which holds the lesson, its deeper steps, their Spanish shadows and the instructor materials, with one-line stubs at the usual four paths.
+    expect(current.length).toBeLessThan(301);
     // 230 after the four variable-star investigations (Prompt 96): their shadows, deeper shadows and depth files;
     // 246 after the four cosmology investigations (Prompt 91).
     // 258 after the three calibration investigations (Prompt 86).

@@ -21,6 +21,7 @@ import { INSTRUCTOR as ACTIVITY } from './investigations/stellar-activity-sequen
 import { INSTRUCTOR as REMNANTS } from './investigations/remnants-sequence.js';
 import { INSTRUCTOR as VETTING } from './investigations/vetting-sequence.js';
 import { INSTRUCTOR as VARIABLES_II } from './investigations/variables-ii-sequence.js';
+import { INSTRUCTOR as TTV } from './investigations/ttv-sequence.js';
 
 export default {
   format: 'gravitas.instructor-flow',
@@ -45,6 +46,7 @@ export default {
     ...REMNANTS.flow,
     ...VETTING.flow,
     ...VARIABLES_II.flow,
+    ...TTV.flow,
     'the-suns-motion': [
       {
         from: 'from-stars-to-velocities',

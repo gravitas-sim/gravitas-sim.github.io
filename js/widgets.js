@@ -470,6 +470,12 @@ export const LAZY_FAMILIES = Object.freeze({
     'TELESCOPE_WIDGETS',
     ['telescope']
   ),
+  ttv: familyEntry(
+    () => import('./ttvWidgets.js'),
+    './ttvWidgets.js',
+    'TTV_WIDGETS',
+    ['ttv-transit', 'ttv-timing']
+  ),
   variablesII: familyEntry(
     () => import('./variablesIIWidgets.js'),
     './variablesIIWidgets.js',
@@ -693,6 +699,8 @@ export async function whenWidgetsReady() {
     'vetting',
     // The variables-II family reaches the plot component, the kernel and the variable-star data: late for the same reason (Prompt 223).
     'variablesII',
+    // The timing family reaches the plot component, the inference core and the engine's data pack: late (Prompt 226).
+    'ttv',
     'surveyDesign',
   ];
   await Promise.all(families.filter(f => !late.includes(f)).map(loadFamily));

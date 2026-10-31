@@ -101,6 +101,7 @@ import ACTIVITY_LESSONS from './investigations/stellar-activity-sequence.js';
 import REMNANTS_LESSONS from './investigations/remnants-sequence.js';
 import VETTING_LESSONS from './investigations/vetting-sequence.js';
 import VARIABLES_II_LESSONS from './investigations/variables-ii-sequence.js';
+import TTV_LESSONS from './investigations/ttv-sequence.js';
 import SURVEY_LESSONS from './investigations/survey-sequence.js';
 import OBSERVING_LESSONS from './investigations/observing-sequence.js';
 import TELESCOPE_LESSONS from './investigations/telescope-sequence.js';
@@ -226,6 +227,7 @@ export const INVESTIGATIONS = [
   ...REMNANTS_LESSONS,
   ...VETTING_LESSONS,
   ...VARIABLES_II_LESSONS,
+  ...TTV_LESSONS,
   ...SURVEY_LESSONS,
   ...OBSERVING_LESSONS,
 ];

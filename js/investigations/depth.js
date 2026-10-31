@@ -171,6 +171,8 @@ const EXTENSIONS = {
     import('../data/investigations/depth/from-star-to-remnant.js'),
   'planet-or-not': () =>
     import('../data/investigations/depth/planet-or-not.js'),
+  'the-clock-that-drifts': () =>
+    import('../data/investigations/depth/the-clock-that-drifts.js'),
   'deep-or-wide': () => import('../data/investigations/depth/deep-or-wide.js'),
   'two-telescopes-one-question': () =>
     import('../data/investigations/depth/two-telescopes-one-question.js'),
@@ -321,6 +323,8 @@ const WORDS = {
       import('../data/investigations/depth/es/from-star-to-remnant.js'),
     'planet-or-not': () =>
       import('../data/investigations/depth/es/planet-or-not.js'),
+    'the-clock-that-drifts': () =>
+      import('../data/investigations/depth/es/the-clock-that-drifts.js'),
     'deep-or-wide': () =>
       import('../data/investigations/depth/es/deep-or-wide.js'),
     'two-telescopes-one-question': () =>

@@ -507,6 +507,11 @@ export const NEVER_PRECACHED = [
   /^images\/investigations\/the-metallicity-term\.webp$/,
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(the-metallicity-term|variables-ii-sequence)\.js$/,
   /^(js\/variablesIIWidgets\.js|js\/variablesIIField\.js|js\/i18n\/(en|es)\.variablesII\.js|js\/kernels\/variables\/(features|plz|plzCited)\.js)$/,
+  // Prompt 226: the timing panels, their field module, the engine's data pack, their words and the lesson's one new file (D-R10-226-05).
+  // The kernel (js/kernels/ttv/) is lazy with the family and is not precached.
+  /^images\/investigations\/the-clock-that-drifts\.webp$/,
+  /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(the-clock-that-drifts|ttv-sequence)\.js$/,
+  /^(js\/ttvWidgets\.js|js\/ttvField\.js|js\/data\/ttvPack\.js|js\/i18n\/(en|es)\.ttv\.js|js\/kernels\/ttv\/.*)$/,
   // Prompt 214: the strategy kernel, planner extension, panels and the strategy lesson's one new file (D-R10-214-06).
   /^js\/kernels\/strategy\//,
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(why-the-period-is-wrong|strategy-sequence)\.js$/,

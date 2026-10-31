@@ -264,7 +264,9 @@ test.describe('filtering', () => {
 
     // A tag nobody prints on a card is still searchable. The Gaps in the Belt
     // is a third match: its summary says "resonance" (Prompt 198 part 3), and
-    // Moons of the Giants a fourth (Prompt 206, D-R10-206-09).
+    // Moons of the Giants a fourth (Prompt 206, D-R10-206-09). The Clock That
+    // Drifts is a fifth (Prompt 226): its summary says a second planet near a
+    // resonance makes a transit time run early and late.
     await search.fill('resonance');
     await expect
       .poll(() => shownIds(page))
@@ -273,6 +275,7 @@ test.describe('filtering', () => {
         'why-rings',
         'the-gaps-in-the-belt',
         'moons-of-the-giants',
+        'the-clock-that-drifts',
       ]);
 
     // The titles are plain language - this lesson is called "Getting There

@@ -1020,6 +1020,16 @@ export const DISCOVERY = {
     },
     courseLevel: 'upper',
   },
+  'the-clock-that-drifts': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['transit-photometry', 'when-orbits-lock'],
+    textbook: {
+      chapter: 20,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
   'deep-or-wide': {
     audience: 'intro',
     mathematics: 'algebra',

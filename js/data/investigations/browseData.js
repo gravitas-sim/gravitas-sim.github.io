@@ -412,6 +412,10 @@ export const BROWSE_META = {
     tags: ['observing', 'stars'],
     numericCount: 0,
   },
+  'the-clock-that-drifts': {
+    tags: ['exoplanets', 'orbits', 'resonance'],
+    numericCount: 0,
+  },
   'deep-or-wide': {
     tags: ['observing'],
     numericCount: 0,
