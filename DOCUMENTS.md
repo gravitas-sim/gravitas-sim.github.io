@@ -156,6 +156,7 @@ catalogue refers to it, so a change to it can reach a student.
 | [BINARIES.md](BINARIES.md) | Eclipsing binaries: the detached two-sphere model, what the eclipses fix (e cos w) and leave open (grazing, e sin w), its validation and failed legs (Prompt 217). | feature | P217 | written | yes |
 | [BINARY_MASSES.md](BINARY_MASSES.md) | Binary masses and radii: the double-lined orbit, the joint eclipse and velocity solution, its validation and failed legs (Prompt 218, Part A). | feature | P218 | written | yes |
 | [TRANSIT_DELTA.md](TRANSIT_DELTA.md) | The transit model delta: a four-coefficient limb-darkening law, the star's density, the covariance ellipse, two checks, and the validation with its failed legs (Prompt 225). | feature | P225 | written | yes |
+| [TTV.md](TTV.md) | Transit timing variations: the O-C diagram, the super-period and first-order amplitude relations with their domain, the engine forward model, the validation with its failed legs and the circular-mass-only verdict (Prompt 226). | feature | P226 | written | yes |
 | [CLUSTER_FITTING.md](CLUSTER_FITTING.md) | Cluster fitting: an isochrone fit of age and distance at a stated metallicity and reddening, its likelihood, intervals and valley, its validation and failed legs (Prompt 219). | feature | P219 | written | yes |
 | [CLUSTER_FOUR_PARAMETER_GATE.md](CLUSTER_FOUR_PARAMETER_GATE.md) | The four-parameter cluster-fit gate (Prompt 219 Part B): its committed models and bounds, the measured legs, the verdict C and the spike run-1 defect. | gate | P219 | written | yes |
 | [OBSERVING_STRATEGY.md](OBSERVING_STRATEGY.md) | Observing strategy: the window function of a cadence, aliases and the verdict, phase coverage, a multi-night plan with its cost in hours, weather as a seeded loss, validation (Prompt 214). | feature | P214 | written | yes |
@@ -169,7 +170,6 @@ catalogue refers to it, so a change to it can reach a student.
 | [TIME_DOMAIN_LADDER.md](TIME_DOMAIN_LADDER.md) | Time-domain astronomy and the first distance-ladder rung. | feature | P96 | written | yes |
 | [TOOLCHAIN.md](TOOLCHAIN.md) | How versions of the build, test and runtime tools are picked and moved. | process | P126 | written | no |
 | [TRANSLATION.md](TRANSLATION.md) | Translation freshness (the ledger and the packs' esOf), the glossary's labels, the English-only surfaces and the rule for new vocabulary. | policy | P156 | written | no |
-| [TTV.md](TTV.md) | Transit timing variations: the O-C diagram, the super-period and first-order amplitude relations with their domain, the engine forward model, the validation with its failed legs and the circular-mass-only verdict (Prompt 226). | feature | P226 | written | yes |
 | [UI_PERFORMANCE_AUDIT.md](UI_PERFORMANCE_AUDIT.md) | Historical UI, performance and quality audit. | record | unassigned | regions (docs) | no |
 | [VALIDATED_3D_LAB_GATE.md](VALIDATED_3D_LAB_GATE.md) | Validated 3-D lab specification and feasibility gate. | gate | unassigned | written | no |
 | [VO_ARCHIVE_GATE.md](VO_ARCHIVE_GATE.md) | Astronomy archives and the Virtual Observatory gate. | gate | unassigned | written | no |

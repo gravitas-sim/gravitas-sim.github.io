@@ -215,6 +215,8 @@ current, and the orchestrator checks it.
 | `tides-scenarios.mjs` | The ring and Roche scenarios, measured (Prompt 204 part 2) |  |
 | `tides-validate.mjs` | The tides kernel against its committed thresholds (Prompt 204, part A) | `npm run tides:validate` |
 | `transit-delta-validate.mjs` | The transit model delta against its committed thresholds (Prompt 225) | `npm run transit-delta:validate` |
+| `ttv-pack.mjs` | The lesson's three engine-made systems (Prompt 226, TTV.md) | `npm run ttv:pack` |
+| `ttv-validate.mjs` | The TTV kernel against its committed thresholds (Prompt 226) | `npm run ttv:validate` |
 | `ui-shots.mjs` | The interface, at every size and in both languages |  |
 | `validate-citation.mjs` | Validating CITATION.cff and .zenodo.json |  |
 | `validate-lab3d.mjs` | The 3-D kernel's permanent validation | `npm run validate:lab3d` |
