@@ -1,0 +1,63 @@
+{
+  "format": "gravitas.ttv-thresholds/1",
+  "prompt": "Roadmap III, Prompt 226 Part A: transit timing variations, the O-C diagram and the super-period (tranche T3 by D-R10-207-01)",
+  "document": "TTV.md (\"Validation contract\")",
+  "committed": "before any file of js/kernels/ttv, the validator, the oracle, the panels or the lesson existed. The cases, the definitions and every bound below were fixed here first.",
+  "rule": "A crossed bound is a failed leg, recorded in failed-legs.json and left failing; only Carl resets one. A leg that cannot be measured, or whose data was never supplied, is NOT RUN and says why. An amendment is recorded in 'amendments' with its reason; the original bound stays in 'checks' and keeps failing.",
+  "disclosure": "One exploratory probe was run before this file was committed, on a system like S1 (P 10 and 20 d, 3e-5 each, circular start, ratio 2.02 and 2.06): the engine and a scipy DOP853 integration agreed on the first transit times to 3e-5 d at P/2000 steps, and the first-order amplitude formula agreed with the integrated amplitude to about 4 percent (inner) and 16 percent (outer, whose g coefficient is small so the free-eccentricity term matters more). The bounds below were chosen from the physics (the integrator's second-order phase error, the formula's neglect of free eccentricity, the coverage of a binomial count) and are not tuned to pass.",
+  "seeds": { "oracle": 226, "ensemble": "ttv-226" },
+  "constants": {
+    "G_code": 1,
+    "M_star_code": 1000,
+    "timeUnit": "1 code time unit is 1 day. Newtonian scale invariance: only the period ratio, the mass ratio mu = m / M* and the phases matter, so the engine (G = 1, star 1000 mass units) and the oracle (same units) are compared in these units; a stated physical star (1 solar mass) turns mu = 3e-5 into 10 Earth masses.",
+    "observer": "along +y of the orbital plane: a transit is the moment the planet's x equals the star's x with the planet at larger y (the plane is seen edge-on; the impact parameter of the light-curve template is a separate input)."
+  },
+  "systems": {
+    "S1": { "what": "near 2:1, outside the resonance width", "P1": 10, "P2": 20.6, "mu1": 3e-5, "mu2": 4.5e-5, "lambda1_rad": 1.5707963267948966, "lambda2_offset_rad": 0.7, "baseline_d": 1100, "j": 2 },
+    "S2": { "what": "near 3:2", "P1": 10, "P2": 15.45, "mu1": 3e-5, "mu2": 4.5e-5, "lambda1_rad": 1.5707963267948966, "lambda2_offset_rad": 0.7, "baseline_d": 700, "j": 3 },
+    "S3": { "what": "far from any first-order resonance (ratio 2.7)", "P1": 10, "P2": 27, "mu1": 3e-5, "mu2": 3e-5, "lambda1_rad": 1.5707963267948966, "lambda2_offset_rad": 0.7, "baseline_d": 1100, "j": 2 },
+    "S4": { "what": "S1 observed for 250 d, less than one super-period", "P1": 10, "P2": 20.6, "mu1": 3e-5, "mu2": 4.5e-5, "lambda1_rad": 1.5707963267948966, "lambda2_offset_rad": 0.7, "baseline_d": 250, "j": 2 },
+    "start": "Both planets start on circular astrocentric orbits (period from Kepler's third law with M* + m), the star at rest at the origin; the free eccentricity this leaves is part of what the amplitude relation neglects (see A4)."
+  },
+  "engine": { "integrator": "Velocity Verlet", "stepsPerInnerPeriod": 2000, "note": "the second-order phase error of this step is part of B1's budget" },
+  "oracle": { "file": "tools/ttv-oracle/oracle.py", "method": "scipy solve_ivp DOP853, rtol 1e-12, atol 1e-14, event on the sky-plane x separation with the planet in front; no Gravitas code", "selfCheck": { "rtol": 1e-10, "atol": 1e-12 } },
+  "lightCurve": {
+    "k": 0.025, "aRs": 21.5, "b": 0.3, "q1": 0.36, "q2": 0.3, "cadence_d": 0.001388888888888889, "window_halfwidth_d": 0.3, "sigma_ppm": 400, "exposure_d": 0,
+    "note": "A 2-minute cadence, 400 ppm per point, a planet of 2.5 percent of the star's radius (6.3e-4 depth). The template is the quadratic-law transit of js/inference/transit.js with these shape values known; mid-time and a baseline are fitted (js/inference core, 150 uncertainties)."
+  },
+  "definitions": {
+    "O-C": "O - C = T_n - (T0 + n P) with T0 and P the weighted least-squares linear ephemeris of the same transit times.",
+    "superPeriod": "P_super = 1 / | j / P2 - (j - 1) / P1 | (Lithwick, Xie & Wu 2012, ApJ 761, 122, eq. 1) with P1, P2 the MEAN periods of the linear ephemerides.",
+    "amplitude": "|V| = P1 mu2 / (pi j^(2/3) (j-1)^(1/3) |Delta|) |f| for the inner planet and |V'| = P2 mu1 / (pi j |Delta|) |g| for the outer one, Z_free = 0, with f and g from the Laplace coefficients (Murray & Dermott 1999, eqs 8.?? f27, f31; the 2:1 values -1.1905 and 0.4284, the 3:2 values -2.0252 and 2.4840), Delta = (P2 / P1)(j - 1)/j - 1.",
+    "measuredAmplitude": "the amplitude of cos and sin terms fitted together with a straight line to the transit times at the period P_super, in days",
+    "signal": "kernel verdict 'signal' when the chi-square of the O-C about zero (n - 2 degrees of freedom) has a one-sided p below 0.01; otherwise 'no TTV signal above noise'. 'unresolved' when the baseline is shorter than 1.5 super-periods, in which case no super-period is reported.",
+    "coverage": "|t_measured - t_true| / sigma_stated, t_true the engine's transit time, over every measured transit of every ensemble member"
+  },
+  "checks": [
+    { "id": "A1", "what": "the engine's O-C period of S1's inner planet, fitted on a grid, against the cited super-period of the measured mean periods", "limits": { "relativeError": 0.03 } },
+    { "id": "A2", "what": "the same for S2 (3:2)", "limits": { "relativeError": 0.03 } },
+    { "id": "A3", "what": "S1's inner and outer O-C periods agree with each other", "limits": { "relativeError": 0.03 } },
+    { "id": "A4", "what": "first-order amplitude formula (Z_free = 0) against the engine's measured amplitude, S1 inner and outer, S2 inner and outer", "limits": { "inner": 0.15, "outer": 0.25, "note": "the neglected free eccentricity enters the outer planet at order (3/2) Z / (Delta g), larger than for the inner one" } },
+    { "id": "A5", "what": "the Laplace-coefficient f and g against the published values for 2:1 and 3:2", "limits": { "relativeError": 0.001, "values": { "2:1": [-1.190454, 0.428383], "3:2": [-2.025222, 2.484005] } } },
+    { "id": "B1", "what": "engine O-C against the oracle's O-C, maximum absolute difference after each removes its own linear ephemeris (S1 and S2, both planets)", "limits": { "maxAbsDiff_d": 2.5e-4 } },
+    { "id": "B2", "what": "oracle self-check: its O-C at rtol 1e-10 against rtol 1e-12", "limits": { "maxAbsDiff_d": 1e-6 } },
+    { "id": "B3", "what": "the kernel's super-period and amplitudes against the oracle's own implementation of the same two relations (S1, S2)", "limits": { "relativeError": 1e-6 } },
+    { "id": "B4", "what": "the kernel's linear ephemeris against the oracle's numpy weighted least squares on the oracle's transit times", "limits": { "maxAbsDiff_d": 1e-9 } },
+    { "id": "C1", "what": "coverage of the stated 1-sigma transit-time intervals, S1 (both planets, 20 noise realisations)", "limits": { "level": 0.6827, "tolerance": 0.05 } },
+    { "id": "C2", "what": "coverage of the 2-sigma intervals", "limits": { "level": 0.9545, "tolerance": 0.03 } },
+    { "id": "C3", "what": "mean and standard deviation of the normalised time error", "limits": { "meanAbs": 0.08, "sdLo": 0.93, "sdHi": 1.07 } },
+    { "id": "D1", "what": "S3 (far from resonance): verdict 'no TTV signal above noise' in at least this fraction of 40 noise realisations, both planets", "limits": { "fraction": 0.95 } },
+    { "id": "D2", "what": "S1: verdict 'signal' in at least this fraction of the same 40 realisations", "limits": { "fraction": 0.95 } },
+    { "id": "D3", "what": "stated sigma understated by 2: the per-transit fit-quality flag is raised for at least this fraction of transits", "limits": { "fraction": 0.9, "flagP": 0.01 } },
+    { "id": "D4", "what": "S4 (baseline under 1.5 super-periods): status 'unresolved', no super-period", "limits": { "status": "unresolved" } },
+    { "id": "D5", "what": "a pair not near a first-order resonance (ratio 2.7, Delta to 2:1 above 0.1): the relation refuses and names why", "limits": { "refuses": true, "deltaMax": 0.1 } },
+    { "id": "D6", "what": "a pair inside the resonance width (|Delta| below (mu1 + mu2)^(2/3)): the sinusoid relation refuses and says to use the engine", "limits": { "refuses": true } },
+    { "id": "E1", "what": "a published Kepler system's O-C from its published transit times (Kepler-9 b and c, Holczer et al. 2016): the super-period fitted to the O-C against the cited relation from the data's own mean periods", "limits": { "relativeError": 0.1 }, "supply": "needs the published times, supplied by the coordinator under a recorded rights decision; NOT RUN if never supplied" }
+  ],
+  "notClaimed": [
+    "A planet mass from a TTV amplitude: Part B (docs/ttv-mass-gate) decides whether any mass bound ships, and with what degeneracy.",
+    "TTVs inside the resonance width, from three or more planets, from a third body, from light-travel time or from apsidal precession: the sinusoid relation is stated for two planets outside the width.",
+    "A three-dimensional geometry: the engine is planar, so the light curve's impact parameter is an input of the template, not a result of the orbit."
+  ],
+  "amendments": []
+}
