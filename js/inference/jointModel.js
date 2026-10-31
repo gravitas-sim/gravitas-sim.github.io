@@ -251,13 +251,26 @@ function startsFor(data, request, tools) {
       search
     );
     base = t.map(x => ({ ...x }));
+    // A grazing solution (b near 1, a larger k) is a separate minimum the box
+    // search's start does not lead to: one start of its own, unless b is held.
+    if (request.parameters?.b?.mode !== 'fixed' && base.length)
+      base.push({
+        ...base[base.length - 1],
+        b: 0.95,
+        k: Math.min(0.45, base[base.length - 1].k * 1.5),
+      });
     for (const x of base) {
       x.q1 = 0.36;
       x.q2 = 0.3;
       x.K = rvRows.length ? amplitudeStart(data, rvRows, x.P, x.t0) : 1;
     }
   } else {
-    const r = tools.rvStarts(request, subset(data, rvRows), tools.hooks, search);
+    const r = tools.rvStarts(
+      { ...request, parameters: { ...request.parameters, tc: request.parameters.t0 } },
+      subset(data, rvRows),
+      tools.hooks,
+      search
+    );
     base = r.map(x => ({
       t0: x.tc,
       P: x.P,
@@ -617,16 +630,23 @@ export const TRANSIT_RV_JOINT = {
    * inclination with them; the mass only when the sine of the inclination is
    * itself uncertain by more than a tenth.
    */
-  identify(out) {
+  identify(out, options = {}) {
     const kb = constraintKB(out);
     const derived = {};
     const reasons = [];
     const flag = (names, why) => {
       for (const n of names) derived[n] = { status: 'not constrained', why };
     };
-    if (kb && kb.status === 'not-constrained') {
-      flag(['Rp', 'rhoP', 'inclination', 'sini'], 'k-b');
-      reasons.push('k-b');
+    // A fit that rests with b on a bound has a one-sided covariance in the
+    // very direction the k-b valley runs along (a grazing transit looks like a
+    // smaller planet on a central one): the committed rule of Prompt 225
+    // reads b + sigma and misses it; this one is added after the first
+    // judgement of D6 (AM4) and `bBound: false` restores the first rule.
+    const b = out.parameters.find(p => p.name === 'b');
+    const bOnBound = options.bBound !== false && b?.mode === 'fitted' && b.atBound;
+    if ((kb && kb.status === 'not-constrained') || bOnBound) {
+      flag(['Rp', 'rhoP', 'inclination', 'sini'], bOnBound ? 'k-b (b at its bound)' : 'k-b');
+      reasons.push(bOnBound ? 'b-bound' : 'k-b');
     }
     const sini = out.derived.find(d => d.name === 'sini');
     if (sini && Num.isFinite(sini.sigma) && sini.sigma > 0.1 * sini.value) {

@@ -421,6 +421,19 @@
       }
     },
     {
+      "id": "D6b",
+      "group": "negative",
+      "what": "D6 again with the same bounds under the extended rule of AM4 (a fit that rests with b on a bound reads as not constrained in the k-b direction); D6 itself stays as first judged",
+      "limits": {
+        "notConstrained": [
+          "Rp",
+          "rhoP",
+          "inclination"
+        ],
+        "massFlaggedOnlyIfSinIRelSigmaAbove": 0.1
+      }
+    },
+    {
       "id": "D7",
       "group": "negative",
       "what": "S1's velocities with an unmodelled second planet (amplitude 20 m/s, period 11.6 d): the fit's jitter is larger than the stated error of the velocities and the result says the velocities are not described by one planet",
@@ -453,6 +466,11 @@
       "note": "Recorded before any Gravitas joint code was run on S3. R2 as first committed asked the planet mass of the Neptune-mass system to carry a sigma of at least 20 percent of its value. The amplitude the system gives is K = 6.6 m/s (the closed formula, no fit); thirty velocities of 3.6 m/s total scatter (3.0 stated and 2.0 jitter) with two free zero points give a sigma of K near 3.6 sqrt(2/30) = 0.93 m/s, 14 percent, so no honest fit can reach 20: the committed bound was an arithmetic slip, not a physical statement. The bound is now 10 percent, which still catches a fit that reports a mass of a few percent from a 2 sigma signal. The worstSigmas bound is unchanged.",
       "boundMoved": true,
       "movedBefore": "any Gravitas result on S3"
+    },
+    {
+      "id": "AM4",
+      "note": "Recorded after the first judgement of D6, which FAILED as committed and stays recorded as failed (failed-legs.json). Diagnosis: on the grazing system the best fit is not the grazing solution; it is a small planet on a central, short transit (k 0.051, b 0 at its bound, a/R* 33, both limb-darkening coefficients at their bounds) whose chi-square is 18 lower than the truth's with the same jitter (978.5 against 996.1), so the rule of Prompt 225 (b plus its sigma against 1 - k) reads a well-placed solution and flags nothing. The extension: a fit that rests with b on a bound has a one-sided covariance in the very direction of the k-b valley and is read as not constrained there. D6b re-judges the same system and the same bounds under that rule. The extension is a change of the model's rule after the result, recorded here; D6 stays failing. The stellar-density tension, which that solution also raises against the stated star (a/R* 33 implies a density many times the star's), is reported by the model and is not part of D6.",
+      "boundMoved": false
     }
   ]
 }
