@@ -1,0 +1,44 @@
+{
+  "format": "gravitas.ttv-mass-gate-thresholds/1",
+  "prompt": "Roadmap III, Prompt 226 Part B: does a TTV amplitude give a planet mass with an honest interval? (tranche T3 by D-R10-207-01)",
+  "document": "TTV_MASS_GATE.md",
+  "committed": "before any prototype, ensemble system or interval existed; the prototype lives on spike/ttv-mass-gate and is never merged.",
+  "rule": "A crossed bound is a failed leg, recorded and left failing. Only Carl resets a threshold; a threshold that proves unmeasurable fails the gate on that threshold. A gate names its A deliverables and its B slice before the prototype and may not expand its tested scope.",
+  "seeds": { "ensemble": "ttv-mass-gate-226" },
+  "relation": {
+    "text": "Lithwick, Xie & Wu 2012 (ApJ 761, 122) eq. 8-9, planar, two planets, first-order resonance j:(j-1), outside the resonance width. The inner planet's complex TTV amplitude V = P1 mu2 / (pi j^(2/3) (j-1)^(1/3) Delta) * ( -f - (3/2) conj(Z_free) / Delta ), mu2 the OUTER planet's mass over the star's, Z_free = f z + g z' the free-eccentricity combination of the two planets. The outer planet's V' = P2 mu1 / (pi j Delta) * ( -g + (3/2) conj(Z_free) / Delta ) has mu1 the INNER planet's mass.",
+    "degeneracy": "|V| ranges over (P1 mu2 / (pi j^(2/3) (j-1)^(1/3) |Delta|)) * [ | |f| - (3/2) |Z| / |Delta| | , |f| + (3/2) |Z| / |Delta| ]: the amplitude alone fixes mu only together with |Z| and Delta. The mass whose amplitude is observed is therefore bounded, for a declared |Z| <= Zmax, by mu_c |f| / (|f| + 1.5 Zmax / |Delta|) <= mu <= mu_c |f| / max(0, |f| - 1.5 Zmax / |Delta|), where mu_c is the Z = 0 mass, and is unbounded above when 1.5 Zmax / |Delta| >= |f|.",
+    "measurement": "The amplitude is the cos-sin amplitude fitted with the straight line at P_super (js/kernels/ttv fitSinusoidAt), from transit times each with one-sigma sigma_t; its one-sigma comes from the fit's covariance. Delta comes from the measured mean periods. The stated interval is widened by the measurement (2 sigma of the amplitude) and by the formula's own committed accuracy: Part A leg A4 (15 percent inner, 25 percent outer)."
+  },
+  "ensemble": {
+    "star": "1000 mass units, G = 1, 1 time unit = 1 day (js/kernels/ttv forward model: the engine, Velocity Verlet, 2000 steps per inner period)",
+    "common": { "P1": 10, "j": 2, "baselineSuperPeriods": 3.2, "sigma_t_d": 0.0008, "lambda2_offset_rad": 0.7 },
+    "draws": { "Delta": "uniform 0.02 to 0.06", "mu1": "log-uniform 1e-5 to 1e-4", "mu2": "log-uniform 1e-5 to 1e-4", "P2": "P1 * (j / (j - 1)) * (1 + Delta)", "stream": "stream('injection', 'ttv-mass-gate-226', ensemble, index)" },
+    "Zmax": 0.01,
+    "E_prior": { "N": 60, "what": "eccentric, inside the declared prior: e1 and e2 uniform 0 to 0.006, periapsis directions uniform; |Z| = |f z + g z'| then stays below Zmax = 0.01 for 2:1", "initial": "astrocentric Keplerian state from the osculating elements at the first transit of the inner planet" },
+    "E_circular": { "N": 60, "what": "both planets start circular (the astrocentric circular start of Part A)" },
+    "E_beyond": { "N": 30, "what": "misspecified: e1 and e2 uniform 0.02 to 0.04, outside the declared Zmax; reported, not gated, to show what a too-small prior does" },
+    "truth": "the input mass ratio of each planet"
+  },
+  "deliverables": {
+    "A": "a mass bound with the degeneracy's interval: for a declared Zmax, the interval above for the mass of the planet whose perturbation is observed; 'not constrained above' (no upper bound) when 1.5 Zmax / |Delta| >= |f| (outer planet: |g|)",
+    "B": "a mass bound only with an assumed circular pair, labelled as such: the Z = 0 mass with the measurement and formula accuracy, stated to hold for free eccentricity small against Delta and for nothing else",
+    "C": "no mass from an amplitude: the upper depth stays at the degeneracy (what the amplitude does and does not fix)"
+  },
+  "checks": [
+    { "id": "G1", "what": "coverage of the A interval for the outer planet's mass from the inner planet's amplitude, E_prior, among systems for which the interval is bounded above", "limits": { "coverage": 0.9 } },
+    { "id": "G2", "what": "the A interval for the inner planet's mass from the outer planet's amplitude, E_prior, among systems for which it is bounded above", "limits": { "coverage": 0.9 } },
+    { "id": "G3", "what": "informativeness: the median ratio of the interval's upper to its lower edge for the outer planet's mass, E_prior, over systems bounded above", "limits": { "medianRatioMax": 4 } },
+    { "id": "G4", "what": "refusal: every system whose 1.5 Zmax / |Delta| reaches |f| (|g| for the inner planet's mass) is reported 'not constrained above', and none is given an upper bound", "limits": { "fraction": 1.0 } },
+    { "id": "G5", "what": "the B bound (Z = 0, measurement and formula accuracy) covers the outer planet's mass on E_circular", "limits": { "coverage": 0.9 } },
+    { "id": "G6", "what": "the same B bound on E_prior: reported against the 0.9 line to say whether a circular assumption survives an eccentricity the A prior allows; a failure here is what the label on B says", "limits": { "coverage": 0.9, "gated": false } },
+    { "id": "G7", "what": "E_beyond: the A interval's coverage, reported only (an interval is as honest as its prior)", "limits": { "gated": false } }
+  ],
+  "verdict": {
+    "A": "G1, G2 (where it has systems), G3 and G4 all pass",
+    "B": "A fails and G5 passes",
+    "C": "otherwise",
+    "note": "G6 and G7 are reported and never decide the verdict. A G2 with fewer than 10 bounded systems is NOT RUN for that leg and does not pass or fail A; if no system is bounded the inner planet's mass from the outer amplitude is 'not constrained' in the build, by G4."
+  },
+  "amendments": []
+}
