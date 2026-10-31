@@ -181,6 +181,9 @@ const EXTENSIONS = {
     import('../data/investigations/depth/from-star-to-remnant.js'),
   'planet-or-not': () =>
     import('../data/investigations/depth/planet-or-not.js'),
+  'why-we-cannot-see-earth': () =>
+    import('../data/investigations/depth/why-we-cannot-see-earth.js'),
+  architectures: () => import('../data/investigations/depth/architectures.js'),
   'what-is-it-made-of': () =>
     import('../data/investigations/depth/what-is-it-made-of.js'),
   'radial-velocity': () =>
@@ -347,6 +350,10 @@ const WORDS = {
       import('../data/investigations/depth/es/from-star-to-remnant.js'),
     'planet-or-not': () =>
       import('../data/investigations/depth/es/planet-or-not.js'),
+    'why-we-cannot-see-earth': () =>
+      import('../data/investigations/depth/es/why-we-cannot-see-earth.js'),
+    architectures: () =>
+      import('../data/investigations/depth/es/architectures.js'),
     'what-is-it-made-of': () =>
       import('../data/investigations/depth/es/what-is-it-made-of.js'),
     'radial-velocity': () =>

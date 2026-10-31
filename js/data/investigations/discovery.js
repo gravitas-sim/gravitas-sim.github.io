@@ -1010,6 +1010,26 @@ export const DISCOVERY = {
     },
     courseLevel: 'majors',
   },
+  'why-we-cannot-see-earth': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['what-a-telescope-resolves'],
+    textbook: {
+      chapter: 21,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
+  architectures: {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['why-we-cannot-see-earth'],
+    textbook: {
+      chapter: 21,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
   'what-is-it-made-of': {
     audience: 'intro',
     mathematics: 'algebra',

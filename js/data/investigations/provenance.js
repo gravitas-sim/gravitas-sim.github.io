@@ -62,6 +62,8 @@ export const EVIDENCE_FROM = Object.freeze({
   'plan-a-night': 'model',
   'plan-an-exposure': 'model',
   'planet-or-not': 'model',
+  'why-we-cannot-see-earth': 'model',
+  architectures: 'model',
   'populations-i-and-ii': 'model',
   'power-law-gravity': 'model',
   'propose-an-observation': 'model',
