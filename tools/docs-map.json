@@ -1031,6 +1031,13 @@
       "student": true
     },
     {
+      "file": "TTV_MASS_GATE.md",
+      "kind": "gate",
+      "purpose": "TTV mass gate: whether a transit-timing amplitude gives a planet mass, the degeneracy with eccentricity, the committed bounds, the measured legs and the verdict (Prompt 226 Part B).",
+      "owner": 226,
+      "student": true
+    },
+    {
       "file": "CLUSTER_FITTING.md",
       "kind": "feature",
       "purpose": "Cluster fitting: an isochrone fit of age and distance at a stated metallicity and reddening, its likelihood, intervals and valley, its validation and failed legs (Prompt 219).",
