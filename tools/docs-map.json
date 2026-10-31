@@ -1159,7 +1159,7 @@
     {
       "file": "OCCURRENCE_RATES.md",
       "kind": "feature",
-      "purpose": "Occurrence rates on a searched population: completeness by injection and recovery, the selected-population Poisson likelihood, limits and floors, the validation contract, two failed legs, data not supplied (Prompt 229).",
+      "purpose": "Occurrence rates on a searched population: completeness by injection, the Poisson likelihood, limits, the validation contract, two failed legs (Prompt 229).",
       "owner": 229,
       "student": true
     },

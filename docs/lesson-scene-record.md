@@ -1433,7 +1433,7 @@ Of 191 prediction loops, 191 are returned to,
 - **Prediction loops:** what-is-easy-prediction → who-the-survey-sees, how-many-it-lists, the-next-population, a-bin-it-cannot-see, what-you-can-now-say → who-the-survey-sees.
 - **Recovery:** wrong body: the object list names what the step staged.
 - **Scene rebuilds:** none.
-- **Accepted central experiment:** not yet reviewed.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:occurrence-efficiency`, control occurrence-efficiency/radius, measures the share of transiting planets the search recovers in a synthetic survey of 2000 stars, by planet radius and orbital period: a third of the smallest at 8 to 16 days, most of them above one Earth radius, and the rate a count of listings becomes when it is divided by that completeness, evidence `none`, covered by `e2e/occurrenceLesson.spec.js`.
 
 ## The Metallicity Term (`the-metallicity-term`)
 

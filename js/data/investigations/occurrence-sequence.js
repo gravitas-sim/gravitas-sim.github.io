@@ -235,14 +235,14 @@ export const HOW_MANY_EARTHS_DEEPER = {
       fields: [
         {
           id: 'a',
-          label: 'Rate',
-          unit: 'planets per star',
+          label: 'Rate, in planets per star',
+          unit: '',
           hint: '0.116',
         },
         {
           id: 'b',
-          label: 'Upper end of the 68 percent interval',
-          unit: 'planets per star',
+          label: 'Upper end of the 68 percent interval, in planets per star',
+          unit: '',
           hint: '0.166',
         },
       ],
@@ -273,8 +273,8 @@ export const HOW_MANY_EARTHS_DEEPER = {
       fields: [
         {
           id: 'a',
-          label: 'Upper limit at 95 percent',
-          unit: 'planets per star',
+          label: 'Upper limit at 95 percent, in planets per star',
+          unit: '',
           hint: '0.031',
         },
         {
@@ -484,15 +484,18 @@ export const HOW_MANY_EARTHS_DEEPER_ES = {
       title: 'Lee una tasa',
       body: `Con la semilla 1, 1 a 2 radios terrestres y 8 a 16 días, lee la tasa y el extremo superior de su intervalo del 68 por ciento.`,
       fields: [
-        { label: 'Tasa' },
-        { label: 'Extremo superior del intervalo del 68 por ciento' },
+        { label: 'Tasa, en planetas por estrella' },
+        {
+          label:
+            'Extremo superior del intervalo del 68 por ciento, en planetas por estrella',
+        },
       ],
     },
     {
       title: 'Una casilla sin listados',
       body: `Pon la semilla en 1, la <strong>casilla de radio</strong> en 8 a 16 y la <strong>casilla de período</strong> en 8 a 16. El sondeo no vio ningún planeta tan grande. Lee el límite, y cuántos planetas lista el sondeo por cada planeta por estrella aquí.`,
       fields: [
-        { label: 'Límite superior al 95 por ciento' },
+        { label: 'Límite superior al 95 por ciento, en planetas por estrella' },
         { label: 'Planetas listados por cada planeta por estrella' },
       ],
     },
@@ -608,7 +611,7 @@ const CONTENT = {
       'Ask for the prediction before the panel is touched; the held answer is revealed at the step that tests it.',
       'The survey is synthetic: 2000 stars with log-normal radius and noise and three spans, circular orbits, the matched filter at the known period and phase, and a population whose rates are stated (OCCURRENCE_RATES.md). Nothing here is a statement about a real survey.',
       'The completeness is measured once by injection (eight transits per star and bin) and stored; the panel draws only the population (the listings) for the seed a student picks.',
-      'The thresholds were committed before the code (tests/fixtures/occurrence/thresholds.json); legs that failed stay labelled in failed-legs.json; the authentic leg E1 was not run.',
+      'The thresholds were committed before the code (tests/fixtures/occurrence/thresholds.json); legs that failed stay labeled in failed-legs.json; the authentic leg E1 was not run.',
     ],
     discussion: [
       'A survey doubles its observing time. Which bins gain the most completeness, and which gain nothing?',
@@ -643,6 +646,11 @@ const FLOW = {
       to: 'a-bin-it-cannot-see',
       text: 'Another population moves the bin within its interval, and a bin the survey cannot see gives no rate and no limit.',
     },
+    {
+      from: 'what-you-can-now-say',
+      to: 'what-you-can-now-say',
+      text: 'The summary: a rate is the listings over the completeness with the reliability taken off, and what a bin that could not be seen gives.',
+    },
   ],
 };
 
@@ -659,9 +667,9 @@ const EXPECTATIONS = {
 
 const BANDS = {
   'how-many-earths': {
-    core: 'medium',
-    quantitative: 'medium',
-    advanced: 'long',
+    core: 'short',
+    quantitative: 'short',
+    advanced: 'medium',
   },
 };
 

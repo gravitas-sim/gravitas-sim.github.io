@@ -272,7 +272,7 @@ export function rateOf({
       status: 'not-constrained',
       ...base,
       floor,
-      why: `the searched population holds ${completeness.toPrecision(2)} planets of unit rate, below ${floor}: it cannot constrain this bin`,
+      why: `the searched population lists fewer than ${floor} planets for every planet per star in this bin: it cannot constrain it`,
     };
   const limit = -Math.log(1 - limitLevel) / completeness;
   if (n === 0)
@@ -353,7 +353,7 @@ export function efficiencyAt(result, S, { minTrials = 20 } = {}) {
   if (!(S >= 0) || !c || c.hi === Infinity || c.n < minTrials)
     return refused(
       'range',
-      `no injection at a signal to noise of ${Number.isFinite(S) ? S.toFixed(1) : S}: the curve is not extrapolated`
+      'no injection at this signal to noise: the curve is not extrapolated'
     );
   return { status: 'ok', S, p: c.p, low: c.low, high: c.high, n: c.n };
 }
