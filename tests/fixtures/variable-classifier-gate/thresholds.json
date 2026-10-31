@@ -1,0 +1,73 @@
+{
+  "format": "gravitas.variable-classifier-gate-thresholds/1",
+  "prompt": "Roadmap III, Prompt 223 Part B: the variable-star classifier gate (tranche T3 by D-R10-207-01)",
+  "document": "VARIABLE_CLASSIFIER_GATE.md",
+  "committed": "before any classifier was run on the labelled set, before the spike branch existed, and before any relation between the labelled rows' periods, amplitudes or R21 and their classes was inspected. Only the file headers, the column definitions (cols.csv) and the counts of empty cells per column were read, to know what could be measured. The classifier under test is the shipped nearest-neighbour classifier of js/kernels/variables/classify.js with the refusal rule of Part A, unchanged and not trained on the labelled set.",
+  "rule": "A crossed bound is a failed check, recorded in failed-legs.json and left failing; only Carl resets one. A leg that cannot be measured is NOT RUN and says why. A threshold that proves unmeasurable fails the gate on that threshold. The verdict follows the rule below and nothing else. A bound is never reset after a result.",
+  "labelledSet": {
+    "product": "Gaia DR3 specific object study Cepheids and RR Lyrae, tables gaiadr3.vari_rrlyrae and gaiadr3.vari_cepheid (ESA Gaia archive TAP, https://gea.esac.esa.int/tap-server/tap/sync, ADQL, CSV)",
+    "retrieved": "2026-10-30 by the coordinator; this session fetched nothing",
+    "selection": "the first rows by ascending source_id of each class, no other filter: 100 RRab (best_classification = 'RRab'), 100 RRc ('RRc'), 100 DCEP (type_best_classification = 'DCEP', fundamental and first-overtone modes both) and 50 T2CEP; the selection is deterministic, is not a random sample of the sky and is not stratified; each file's query is stored beside it",
+    "sha256": {
+      "rrab.csv": "0442c47b2d5c4c9cac4872e1697f71238db6f6b2ca6f87ecc89cc2867cc6999a",
+      "rrc.csv": "ff293a6a261da034a0383607e006444e3391809c71e5ded86d1eb282595e9d1e",
+      "dcep.csv": "d44ea06ee73660677d8e3e1a89a40523f1e1ba4efbaac85b33103e67fe399729",
+      "t2cep.csv": "1cdb3d109b97445c33af55cca1964d52efce6c6f6ab7580bda06a42b9c370785",
+      "cols.csv": "657f0b28c6488e52525ea4be66febea421e5a02873879564d5b1f8292e7787b7",
+      "license.html": "deecdbb626122f6d5b9f8adc0d5c097722a85daa26bb3162dddf4712a65128af"
+    },
+    "labels": "Gaia's own classification (its Cepheid and RR Lyrae pipeline), not an independent spectroscopic or literature truth. The pipeline reads light-curve features of the same family as the ones the classifier reads, so agreement with these labels is an upper bound on agreement with the truth and partly measures agreement between two feature-based methods; it is independent of Gravitas (not generated here, not tuned to it) and is the only labelled set on terms this project can use",
+    "rights": "Gaia data are distributed under CC BY-NC 3.0 IGO (ESA licence page, verbatim, retrieved 2026-10-30); the existing accepted status of D-GAIA-01 for derived subsets with credit, non-commercial; a NEW product, so a new register row; a small derived fixture in the tests, never bundled raw to students",
+    "limits": "the first 100 of each class by source_id sit in one region of the sky; the Gaia epochs are sparse (the first RRab row has 22 clean epochs); first-overtone Cepheids (65 of the 100 DCEP rows have p1_o and no pf) have periods that overlap the RR Lyrae stars'; R21 is empty in 1, 21, 1 and 11 rows and phi31 in 29, 83, 35 and 34 of RRab, RRc, DCEP and T2CEP; Delta Scuti, eclipsing binaries and other classes are outside the gate, not measured"
+  },
+  "classifier": {
+    "under": "the nearest-neighbour vote of js/kernels/variables/classify.js (k = 5, features standardised on the synthetic sample of makeSample(), seed 'variables-sample') with the refusal of Part A: a star is given a class only if at least 4 of 5 neighbours agree",
+    "features": "logP (log10 of the star's listed period in days: pf if present, else p1_o) and logAmp (log10 of peak_to_peak_g in mag); the shape set adds R21 where present (report only)",
+    "mapping": { "RRab": "rrab", "RRc": "rrc", "DCEP": "cepheid", "T2CEP": "none of the five synthetic classes" },
+    "featureRangeSources": "the synthetic classes' period, amplitude and shape ranges are the kernel's own templates, stylised from Soszynski et al. (2008, AcA 58, 163; 2009) and Graham et al. (2013, ApJ 777, 68) as cited in js/kernels/variables/classify.js. They were not re-read in this session and the gate does not rely on them: it measures what the shipped classifier does on rows labelled elsewhere. The synthetic amplitude is a TESS-like band's; Gaia's is the G band's: a stated passband difference, not corrected",
+    "notDone": "no training, tuning or threshold choice on the labelled set; no relabelling; no row dropped but those with an empty period or amplitude"
+  },
+  "seeds": { "bootstrap": "variable-classifier-gate", "resamples": 2000 },
+  "verdictRule": {
+    "A": "all of G1, G2, G3, G4, G6 pass: the classifier ships with its measured confusion matrix shown to the student (the refusal included)",
+    "B": "not A, and the point accuracy among the stars called (G2's quantity) is at least 0.75 and G4 passes: the classifier ships only as a suggestion with the ambiguous cases left unresolved, and the matrix is shown",
+    "C": "otherwise, or if the labelled set cannot be measured: no classifier ships; the student classifies by features and the key lists the catalogue's class"
+  },
+  "checks": [
+    {
+      "id": "G1.coverage",
+      "description": "Of the 300 RRab, RRc and DCEP rows with a period and an amplitude, the fraction the classifier gives a class (the rest are left open)",
+      "limits": { "min": 0.6 }
+    },
+    {
+      "id": "G2.accuracyCalled",
+      "description": "Of the rows given a class, the fraction whose class equals the label's mapped class",
+      "limits": { "min": 0.9 }
+    },
+    {
+      "id": "G3.perClass",
+      "description": "Per class among RRab, RRc and DCEP: precision among the rows called that class, and recall over all rows of that label (a refusal counts as a miss)",
+      "limits": { "precisionMin": 0.8, "recallMin": 0.5 }
+    },
+    {
+      "id": "G4.t2cepNotRRLyrae",
+      "description": "Of the 50 T2CEP rows, the fraction confidently called an RR Lyrae class (rrab or rrc), a gross error for stars of 1 to 60 days; the fraction called cepheid is reported with no bound (a Type II Cepheid sits on the classical one's period-amplitude plane)",
+      "limits": { "max": 0.1 }
+    },
+    {
+      "id": "G5.shapeSet",
+      "description": "Report only: the same measures with R21 added where the row has it, and the number of rows that have it",
+      "limits": { "report": true }
+    },
+    {
+      "id": "G6.bootstrap",
+      "description": "The lower end of the 95 percent bootstrap interval (2,000 resamples of the called rows, seeded) of G2's accuracy",
+      "limits": { "min": 0.85 }
+    },
+    {
+      "id": "O1.independentRecomputation",
+      "description": "An independent numpy routine (tools/variable-classifier-gate/oracle.py in the spike, no Gravitas code) recomputes the vote, the refusal and the confusion matrix from the pinned rows and the synthetic sample's pinned features; the matrices are equal",
+      "limits": { "cellsDiffering": 0 }
+    }
+  ]
+}
