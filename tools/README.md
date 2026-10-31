@@ -162,6 +162,7 @@ current, and the orchestrator checks it.
 | `numeric-cases.mjs` | The numerical routines' validation group (Prompt 152) |  |
 | `numeric-validate.mjs` | npm run validate:numeric - the numerical routines' validation group | `npm run validate:numeric` |
 | `observatory-bench.mjs` | npm run bench:observatory - what the observatory costs a reader | `npm run bench:observatory` |
+| `occurrence-validate.mjs` | The occurrence kernel against its committed thresholds (Prompt 229) | `npm run occurrence:validate` |
 | `orbit-fit-synth.mjs` | Synthetic visual-binary series with a truth manifest (Prompt 187, ORBIT_FIT_GATE.md) |  |
 | `orbit-fit-validate.mjs` | Orbit fitting and moving-object tracks against their committed thresholds (Prompt 187) | `npm run orbit-fit:validate` |
 | `orbital-cases.mjs` | The orbital layer's validation group (Prompt 148) |  |
