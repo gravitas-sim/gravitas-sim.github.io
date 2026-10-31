@@ -120,6 +120,7 @@ export const FAMILY_IDS = Object.freeze({
   eclipse: ['eclipse-curve', 'eclipse-fit'],
   vetting: ['vetting-checklist'],
   joint: ['joint-fit', 'mass-radius'],
+  occurrence: ['occurrence-efficiency', 'occurrence-grid'],
   clusterFit: ['cluster-fit'],
   masses: ['masses-minimum', 'masses-solve', 'masses-diagram'],
   activity: [

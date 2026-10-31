@@ -434,6 +434,12 @@ export const LAZY_FAMILIES = Object.freeze({
     'JOINT_WIDGETS',
     ['joint-fit', 'mass-radius']
   ),
+  occurrence: familyEntry(
+    () => import('./occurrenceWidgets.js'),
+    './occurrenceWidgets.js',
+    'OCCURRENCE_WIDGETS',
+    ['occurrence-efficiency', 'occurrence-grid']
+  ),
   masses: familyEntry(
     () => import('./massesWidgets.js'),
     './massesWidgets.js',
@@ -709,6 +715,8 @@ export async function whenWidgetsReady() {
     'ttv',
     // The joint family reaches the plot component, the joint kernel and the statistics kernel: late for the same reason (Prompt 227).
     'joint',
+    // The occurrence family reaches the plot component, the occurrence kernel and the statistics kernel: late (Prompt 229).
+    'occurrence',
     'surveyDesign',
   ];
   await Promise.all(families.filter(f => !late.includes(f)).map(loadFamily));
