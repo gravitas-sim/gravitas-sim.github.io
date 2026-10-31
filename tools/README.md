@@ -120,6 +120,8 @@ current, and the orchestrator checks it.
 | `image-packs-authentic.mjs` | The authentic legs of Prompts 181, 182, 185 and 186 on the new data (Prompt 189, contract part 3) |  |
 | `image-packs-hostile.mjs` | Hostile PNGs made from an authentic frame (Prompt 189, leg import.hostilePng) |  |
 | `image-packs-validate.mjs` | The authentic-frame legs of Prompts 180 and 183, and the pack's own check | `npm run imagepacks:validate` |
+| `imaging-table.mjs` | Rebuild js/data/imagedPlanets.js from the pinned NASA Exoplanet Archive CSV |  |
+| `imaging-validate.mjs` | The imaging kernel against its committed thresholds (Prompt 230 Part A) | `npm run imaging:validate` |
 | `import-cancel-probe.mjs` | npm run probe:import-cancel - what a cancelled decode leaves behind | `npm run probe:import-cancel` |
 | `index-fragments.mjs` | The panels index.html no longer carries, and where each one went |  |
 | `inference-bench.mjs` | npm run bench:inference - how long a fit takes in its Workers, and what the | `npm run bench:inference` |

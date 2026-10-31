@@ -181,6 +181,7 @@ const SHARED = [
   'stellar-activity-sequence.js',
   'remnants-sequence.js',
   'vetting-sequence.js',
+  'imaging-sequence.js',
   'variables-ii-sequence.js',
   'ttv-sequence.js',
   'stellar-sequence.js',
@@ -204,6 +205,7 @@ const SHARED_ES = SHARED.filter(
     f !== 'cluster-sequence.js' &&
     f !== 'remnants-sequence.js' &&
     f !== 'vetting-sequence.js' &&
+    f !== 'imaging-sequence.js' &&
     f !== 'variables-ii-sequence.js' &&
     f !== 'ttv-sequence.js' &&
     f !== 'stellar-sequence.js' &&

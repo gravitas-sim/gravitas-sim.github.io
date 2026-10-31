@@ -503,6 +503,10 @@ export const NEVER_PRECACHED = [
   /^images\/investigations\/planet-or-not\.webp$/,
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(planet-or-not|vetting-sequence)\.js$/,
   /^(js\/vettingWidgets\.js|js\/vettingField\.js|js\/i18n\/(en|es)\.vetting\.js|js\/kernels\/vetting\/.*)$/,
+  // Prompt 230: the direct-imaging panels, their field module, their words, the kernel, the archive table and the two lessons' one new file (D-R10-230-05).
+  /^images\/investigations\/(why-we-cannot-see-earth|architectures)\.webp$/,
+  /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(why-we-cannot-see-earth|architectures|imaging-sequence)\.js$/,
+  /^(js\/directImagingWidgets\.js|js\/directImagingField\.js|js\/data\/imagedPlanets\.js|js\/i18n\/(en|es)\.directImaging\.js|js\/kernels\/imaging\/.*)$/,
   // Prompt 223: the variables-II panels, their field module, their words, the new kernel files and the lesson's one new file.
   // The lesson is NEVER_PRECACHED (the T3 terms); the kernel files are lazy with the family.
   /^images\/investigations\/the-metallicity-term\.webp$/,

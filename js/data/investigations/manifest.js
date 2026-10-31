@@ -1257,6 +1257,32 @@ export const MANIFEST = [
     objectiveCount: 4,
   },
   {
+    id: 'why-we-cannot-see-earth',
+    title: 'Why We Cannot See Earth From Here',
+    subtitle:
+      'Two separate problems stand between a telescope and a planet, an angle and a contrast: see why a planet like Earth at ten parsecs is out of reach, and why λ/D is not a coronagraph’s inner working angle',
+    duration: '6-10 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/why-we-cannot-see-earth.webp',
+    depths: 3,
+    stepCount: 6,
+    gradedCount: 4,
+    objectiveCount: 4,
+  },
+  {
+    id: 'architectures',
+    title: 'Architectures',
+    subtitle:
+      'The planets we have imaged and the planets of the Solar System on one log diagram: see what direct imaging can find, and why that is not a picture of the planets that exist',
+    duration: '6-10 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/architectures.webp',
+    depths: 3,
+    stepCount: 6,
+    gradedCount: 4,
+    objectiveCount: 4,
+  },
+  {
     id: 'what-is-it-made-of',
     title: 'What Is It Made Of?',
     subtitle:

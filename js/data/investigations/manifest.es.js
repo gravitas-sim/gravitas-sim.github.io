@@ -1266,6 +1266,32 @@ export const MANIFEST = [
     objectiveCount: 4,
   },
   {
+    id: 'why-we-cannot-see-earth',
+    title: 'Por qué no podemos ver la Tierra desde aquí',
+    subtitle:
+      'Dos problemas distintos separan a un telescopio de un planeta, un ángulo y un contraste: mira por qué un planeta como la Tierra a diez pársecs está fuera de alcance, y por qué λ/D no es el ángulo de trabajo interno de un coronógrafo',
+    duration: '6-10 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/why-we-cannot-see-earth.webp',
+    depths: 3,
+    stepCount: 6,
+    gradedCount: 4,
+    objectiveCount: 4,
+  },
+  {
+    id: 'architectures',
+    title: 'Arquitecturas',
+    subtitle:
+      'Los planetas con imagen directa y los planetas del sistema solar en un diagrama logarítmico: mira qué puede encontrar la imagen directa, y por qué eso no es un retrato de los planetas que existen',
+    duration: '6-10 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/architectures.webp',
+    depths: 3,
+    stepCount: 6,
+    gradedCount: 4,
+    objectiveCount: 4,
+  },
+  {
     id: 'what-is-it-made-of',
     title: '¿De qué está hecho?',
     subtitle:

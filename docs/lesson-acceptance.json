@@ -1255,6 +1255,26 @@
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["the-deepest-balmer", "the-opposite-orderings"],
       "evidenceFrom": "model"
+    },
+    "why-we-cannot-see-earth": {
+      "centralExperimentId": "ce.why-we-cannot-see-earth",
+      "object": "panel:imaging-contrast",
+      "control": "imaging-contrast/system",
+      "quantity": "the separation on the sky, the separation in diffraction scales and the contrast (reflected, thermal and total) of Earth, Jupiter, a young giant and a hot Jupiter at a stated distance, and whether an example instrument could see each: Earth at ten parsecs is 0.1 arcsecond and about 1.2e-10 of its star's light",
+      "evidence": "none",
+      "test": "e2e/imagingLesson.spec.js",
+      "loop": ["how-far-apart", "the-angle"],
+      "evidenceFrom": "model"
+    },
+    "architectures": {
+      "centralExperimentId": "ce.architectures",
+      "object": "panel:imaging-architectures",
+      "control": "imaging-architectures/telescope",
+      "quantity": "how many of the imaged planets of the archive table, and how many of the Solar System's planets, lie outside an example instrument's inner working angle (separation only), and the median semi-major axis and mass of the imaged planets (about 170 AU and 12 Jupiter masses)",
+      "evidence": "none",
+      "test": "e2e/imagingLesson.spec.js",
+      "loop": ["where-do-they-sit", "the-median-planet"],
+      "evidenceFrom": "model"
     }
   }
 }

@@ -27,6 +27,7 @@ import { INSTRUCTOR as MASSES } from './investigations/binary-masses-sequence.js
 import { INSTRUCTOR as ACTIVITY } from './investigations/stellar-activity-sequence.js';
 import { INSTRUCTOR as REMNANTS } from './investigations/remnants-sequence.js';
 import { INSTRUCTOR as VETTING } from './investigations/vetting-sequence.js';
+import { INSTRUCTOR as IMAGING } from './investigations/imaging-sequence.js';
 import { INSTRUCTOR as JOINT } from './investigations/joint-sequence.js';
 import { INSTRUCTOR as VARIABLES_II } from './investigations/variables-ii-sequence.js';
 import { INSTRUCTOR as STELLAR } from './investigations/stellar-sequence.js';
@@ -54,6 +55,7 @@ export default {
     ...ACTIVITY.expectations,
     ...REMNANTS.expectations,
     ...VETTING.expectations,
+    ...IMAGING.expectations,
     ...JOINT.expectations,
     ...VARIABLES_II.expectations,
     ...STELLAR.expectations,
