@@ -13,15 +13,15 @@ import { entryIdOfItem } from './library/format.js';
 // puts them in order, says in a sentence what each is for, picks a depth where
 // an item has one, and names the set. The result is a collection, a course
 // package with profile `collection` (js/course/pack.js), delivered by the
-// course home link or as a file, like a course. Nothing is sent anywhere: the
-// link holds the whole package. A student who opens it can keep it (the
-// course home) and finds it in the Library and My work.
+// course home link or as a file, like a course. Nothing is sent anywhere. A
+// student who opens it can keep it (the course home) and finds it in the
+// Library and My work.
 //
 // The order, notes and depths are kept on the saved collection as they change;
 // the title, summary and the two languages are written for the one being
 // shared. Texts are the page's own: a Spanish text is written, never made up,
 // and a collection with any Spanish needs every text in both languages.
-// Written once: the controls have one handler each, set by assignment.
+// One handler per control, set by assignment.
 // Lazy: Teach loads this when the section is opened.
 // =============================================================================
 
@@ -73,7 +73,7 @@ export async function mountMaker(host) {
     .then(r => (r.ok ? r.json() : { entries: [] }))
     .catch(() => ({ entries: [] }));
   const byId = new Map(library.entries.map(e => [e.id, e]));
-  const lang = () => (document.documentElement.lang === 'es' ? 1 : 0);
+  const lang = () => (host.closest('html')?.lang === 'es' ? 1 : 0);
   const L = (en, es) => [en, es][lang()];
   const have = readCollections().saved;
   const state = {
