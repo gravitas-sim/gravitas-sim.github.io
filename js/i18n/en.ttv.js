@@ -88,6 +88,32 @@ export const EN_TTV = {
     '{p} days: 1 over the difference of j over the outer period and j minus 1 over the inner one, j = {j}, distance from the resonance {d}',
   'ttvW.o.v.formula':
     '{a} minutes, if both orbits were circular (and what that leaves out is the eccentricity: an amplitude is not a mass)',
+  'ttvW.o.control.view': 'Show',
+  'ttvW.o.view.0': 'The O-C diagram',
+  'ttvW.o.view.1': 'What the amplitude says about the mass',
+  'ttvW.o.control.z': 'Free eccentricity |Z| (an illustration)',
+  'ttvW.axis.z': 'Free-eccentricity combination |Z|',
+  'ttvW.axis.amp': 'TTV amplitude for these masses (minutes)',
+  'ttvW.legend.maxAmp': 'Largest amplitude, for the best direction of Z',
+  'ttvW.legend.minAmp': 'Smallest amplitude, for the worst direction',
+  'ttvW.legend.measuredAmp': 'The amplitude measured',
+  'ttvW.legend.here': 'The |Z| set above',
+  'ttvW.o.who.outer': 'outer planet',
+  'ttvW.o.who.inner': 'inner planet',
+  'ttvW.o.who.other': 'other planet',
+  'ttvW.o.row.mass': 'Mass of the {who}, if the pair is circular',
+  'ttvW.o.row.truthMass': 'The engine’s mass',
+  'ttvW.o.row.assumption': 'Assumption',
+  'ttvW.o.row.spread': 'What an eccentricity does',
+  'ttvW.o.v.mass':
+    '{c} Earth masses (from {a} to {b}), for a star of one solar mass',
+  'ttvW.o.v.truthMass': '{m} Earth masses',
+  'ttvW.o.v.assumption':
+    'Circular orbits. The amplitude also depends on the planets’ eccentricities, which it cannot give, so this is the mass only if they are small compared with the distance from resonance',
+  'ttvW.o.v.spread':
+    'For the same masses and a free eccentricity combination of {z}, the amplitude could be anywhere from {lo} to +{hi} percent of the circular one, so the mass read from it would be off by that much',
+  'ttvW.o.v.noMass':
+    'No mass: the amplitude is not measured, or the pair is outside the range of the relation',
   'ttvW.o.refuse.far-from-resonance':
     'No relation: the pair is {d} from the nearest first-order resonance, too far for a slow swing to be expected; the engine is what to use',
   'ttvW.o.refuse.inside-resonance-width':

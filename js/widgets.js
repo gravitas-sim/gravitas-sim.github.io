@@ -470,6 +470,12 @@ export const LAZY_FAMILIES = Object.freeze({
     'TELESCOPE_WIDGETS',
     ['telescope']
   ),
+  ttv: familyEntry(
+    () => import('./ttvWidgets.js'),
+    './ttvWidgets.js',
+    'TTV_WIDGETS',
+    ['ttv-transit', 'ttv-timing']
+  ),
 });
 // </generated:lazy-families>
 
@@ -676,6 +682,8 @@ export async function whenWidgetsReady() {
     'activity',
     // The remnants family reaches the plot component and the kernel: late for the same reason (Prompt 222).
     'remnants',
+    // The timing family reaches the plot component, the inference core and the engine's data pack: late (Prompt 226).
+    'ttv',
     'surveyDesign',
   ];
   await Promise.all(families.filter(f => !late.includes(f)).map(loadFamily));

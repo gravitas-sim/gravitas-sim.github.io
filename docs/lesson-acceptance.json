@@ -1145,6 +1145,19 @@
       ],
       "evidenceFrom": "model"
     },
+    "the-clock-that-drifts": {
+      "centralExperimentId": "ce.the-clock-that-drifts",
+      "object": "panel:ttv-timing",
+      "control": "ttv-timing/span",
+      "quantity": "the super-period, in days, of the wave in the O-C diagram of the inner planet of the near two-to-one pair, fitted to the engine-made transit times: 345 days over the whole record (the relation gives 346) and 347 over the first 60 percent",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "a-wave",
+        "read-the-wave"
+      ],
+      "evidenceFrom": "model"
+    },
     "what-a-telescope-resolves": {
       "centralExperimentId": "ce.what-a-telescope-resolves",
       "object": "panel:telescope",

@@ -1870,6 +1870,8 @@ export const EN_DEFERRED = {
     'A Lomb-Scargle and a box least squares periodogram of one light curve, and what a period from a periodogram can claim. Needs the compute page and a connection.',
   'inv.seq.planets.sampling-a-posterior':
     'A transit’s posterior sampled in Python, with the convergence checks that decide when its interval may be quoted. Needs the compute page and a connection.',
+  'inv.seq.planets.the-clock-that-drifts':
+    'Measure when a planet transits and read the wave a second planet writes in the times. Needs transit photometry first.',
   'inv.seq.gravity.integrators-in-practice':
     'Four integrators compared by the energy they lose on a real system, in Python. Needs the compute page and a connection.',
 

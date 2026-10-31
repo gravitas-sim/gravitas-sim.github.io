@@ -2770,6 +2770,17 @@ test.describe('the central experiment of each investigation', () => {
         [1, 0.569, 0.01],
       ],
     },
+    // ---- Transit timing variations (Roadmap III, Prompt 226) -------------------------
+    {
+      id: 'the-clock-that-drifts',
+      title:
+        'the-clock-that-drifts: the O-C wave of the inner planet of the near two-to-one pair has a super-period of 345 days over the whole record and 347 over its first 60 percent @accepts:ce.the-clock-that-drifts',
+      row: /^Super-period fitted$/i,
+      values: [
+        [100, 345, 4],
+        [60, 347, 4],
+      ],
+    },
     // ---- Telescopes (Roadmap III, Prompt 208) ---------------------------------
     {
       id: 'what-a-telescope-resolves',

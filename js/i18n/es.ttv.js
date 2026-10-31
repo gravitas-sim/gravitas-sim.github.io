@@ -87,6 +87,32 @@ export const ES_TTV = {
     '{p} días: 1 entre la diferencia de j entre el periodo exterior y j menos 1 entre el interior, j = {j}, distancia a la resonancia {d}',
   'ttvW.o.v.formula':
     '{a} minutos, si ambas órbitas fueran circulares (y lo que esto deja fuera es la excentricidad: una amplitud no es una masa)',
+  'ttvW.o.control.view': 'Mostrar',
+  'ttvW.o.view.0': 'El diagrama O-C',
+  'ttvW.o.view.1': 'Qué dice la amplitud sobre la masa',
+  'ttvW.o.control.z': 'Excentricidad libre |Z| (una ilustración)',
+  'ttvW.axis.z': 'Combinación de excentricidades libres |Z|',
+  'ttvW.axis.amp': 'Amplitud de las TTV con estas masas (minutos)',
+  'ttvW.legend.maxAmp': 'Amplitud mayor, con la mejor dirección de Z',
+  'ttvW.legend.minAmp': 'Amplitud menor, con la peor dirección',
+  'ttvW.legend.measuredAmp': 'La amplitud medida',
+  'ttvW.legend.here': 'El |Z| fijado arriba',
+  'ttvW.o.who.outer': 'planeta exterior',
+  'ttvW.o.who.inner': 'planeta interior',
+  'ttvW.o.who.other': 'otro planeta',
+  'ttvW.o.row.mass': 'Masa del {who}, si el par es circular',
+  'ttvW.o.row.truthMass': 'La masa del motor',
+  'ttvW.o.row.assumption': 'Suposición',
+  'ttvW.o.row.spread': 'Qué hace una excentricidad',
+  'ttvW.o.v.mass':
+    '{c} masas terrestres (de {a} a {b}), para una estrella de una masa solar',
+  'ttvW.o.v.truthMass': '{m} masas terrestres',
+  'ttvW.o.v.assumption':
+    'Órbitas circulares. La amplitud depende también de las excentricidades de los planetas, que no puede dar, así que esta es la masa solo si son pequeñas frente a la distancia a la resonancia',
+  'ttvW.o.v.spread':
+    'Con las mismas masas y una combinación de excentricidades libres de {z}, la amplitud podría estar entre {lo} y +{hi} por ciento de la circular, y la masa leída de ella se equivocaría en esa medida',
+  'ttvW.o.v.noMass':
+    'Sin masa: la amplitud no está medida, o el par queda fuera del intervalo de la relación',
   'ttvW.o.refuse.far-from-resonance':
     'Sin relación: el par está a {d} de la resonancia de primer orden más cercana, demasiado lejos para esperar una oscilación lenta; hay que usar el motor',
   'ttvW.o.refuse.inside-resonance-width':

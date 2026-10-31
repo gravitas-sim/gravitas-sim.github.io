@@ -25,6 +25,8 @@ import {
   transitWindow,
   ttvAmplitudes,
   relationDomain,
+  amplitudeSpread,
+  massFromAmplitude,
   MIN_CYCLES,
 } from './kernels/ttv/index.js';
 
@@ -42,7 +44,7 @@ const MIN_PER_DAY = 1440;
 export const SYSTEM_IDS = Object.freeze(['S1', 'S2', 'S3']);
 /** The noise of a window the transit panel makes, in ppm per 2-minute point. */
 export const NOISES_PPM = Object.freeze([100, 400, 1600]);
-/** The mass ratio of one Earth to the Sun, to turn a ratio into Earth masses. */
+/** Earth masses in one solar mass, to turn a mass ratio into Earth masses (the star is stated as one solar mass). */
 export const EARTH_PER_SUN = 332946.0487;
 
 const systemOf = v => {
@@ -169,15 +171,17 @@ export function transitView(v) {
 
 /**
  * The O-C diagram of a system's pinned measured times and its analysis.
- * @param {{system?: number, planet?: number, span?: number, view?: number}} v
- *   span: the percentage of the record shown (the earliest transits); view 0 the O-C,
- *   1 the chi-square against trial period
+ * @param {{system?: number, planet?: number, span?: number, view?: number, zfree?: number}} v
+ *   span: the percentage of the record shown (the earliest transits); view 0 the O-C, 1 what the
+ *   amplitude says about the mass (Part B, verdict B: a circular assumption, and the spread a free
+ *   eccentricity |Z| allows)
  */
 export function timingView(v) {
   const { index, id, data } = systemOf(v);
   const planet = Math.round(v.planet ?? 0) === 1 ? 1 : 0;
   const span = clamp(Math.round(v.span ?? 100), 20, 100);
-  return memo(`timing:${index}:${planet}:${span}`, () => {
+  const zfree = clamp(Math.round((v.zfree ?? 0.01) * 1000) / 1000, 0, 0.03);
+  return memo(`timing:${index}:${planet}:${span}:${zfree}`, () => {
     const pair = pairOf(index);
     const p = data.planets[planet];
     const cut =
@@ -219,10 +223,59 @@ export function timingView(v) {
       const fr = fitSinusoidAt(n, t, s, pair.superPeriod);
       if (fr) amplitudeAtRelation = Math.hypot(fr.A, fr.B);
     }
+    // Part B, verdict B: a mass only for a pair assumed circular, labeled, and the spread an eccentricity allows
+    let mass = { status: 'refused', reason: 'no-relation' };
+    let spread = { status: 'refused', reason: 'no-relation' };
+    const curve = { z: [], min: [], max: [] };
+    if (pair.relation.status === 'ok' && an.status === 'ok') {
+      const fr = fitSinusoidAt(n, t, s, pair.superPeriod);
+      const who = planet === 0 ? 'outer' : 'inner';
+      mass = massFromAmplitude({
+        amplitude: fr.amplitude,
+        sigmaAmplitude: fr.sigmaAmplitude,
+        P1: pair.eph[0].P,
+        P2: pair.eph[1].P,
+        j: data.j,
+        who,
+      });
+      if (mass.status === 'ok') {
+        const truthMu = data.planets[planet === 0 ? 1 : 0].mu;
+        mass = {
+          ...mass,
+          earth: {
+            central: mass.ratio.central * EARTH_PER_SUN,
+            lo: mass.ratio.lo * EARTH_PER_SUN,
+            hi: mass.ratio.hi * EARTH_PER_SUN,
+          },
+          truthEarth: truthMu * EARTH_PER_SUN,
+          measuredMinutes: fr.amplitude * MIN_PER_DAY,
+        };
+      }
+      const sp = {
+        P1: pair.eph[0].P,
+        P2: pair.eph[1].P,
+        j: data.j,
+        planet: planet === 0 ? 'inner' : 'outer',
+      };
+      spread = amplitudeSpread({ ...sp, Z: zfree });
+      const base =
+        pair.relation[planet === 0 ? 'inner' : 'outer'].amplitude * MIN_PER_DAY;
+      for (let k = 0; k <= 30; k++) {
+        const z = k / 1000;
+        const a = amplitudeSpread({ ...sp, Z: z });
+        curve.z.push(z);
+        curve.min.push(base * a.min);
+        curve.max.push(base * a.max);
+      }
+    }
     return {
       system: id,
       planet,
       span,
+      zfree,
+      mass,
+      spread,
+      curve,
       count: n.length,
       analysis: an,
       oc,

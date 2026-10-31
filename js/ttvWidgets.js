@@ -245,10 +245,65 @@ const TIMING = {
     numeric('span', 'ttvW.o.control.span', 20, 100, 5, 100, x =>
       t('ttvW.v.percent', { x: fixed(x, 0) })
     ),
+    choice('view', 'ttvW.o.control.view', 'ttvW.o.view', 2),
+    numeric('zfree', 'ttvW.o.control.z', 0, 0.03, 0.002, 0.01, x =>
+      fixed(x, 3)
+    ),
   ],
   draw(canvas, v) {
     const m = timingView(v);
     const label = t('ttvW.o.title');
+    if (m.view === 1) {
+      const spec = {
+        xTitle: t('ttvW.axis.z'),
+        yTitle: t('ttvW.axis.amp'),
+        label,
+        series: [
+          {
+            id: 'max',
+            label: t('ttvW.legend.maxAmp'),
+            x: m.curve.z,
+            y: m.curve.max,
+            color: COLOR.orange,
+            width: 2,
+            mode: 'line',
+          },
+          {
+            id: 'min',
+            label: t('ttvW.legend.minAmp'),
+            x: m.curve.z,
+            y: m.curve.min,
+            color: COLOR.green,
+            width: 2,
+            mode: 'line',
+          },
+          ...(m.mass.status === 'ok'
+            ? [
+                {
+                  id: 'measured',
+                  label: t('ttvW.legend.measuredAmp'),
+                  x: [0, 0.03],
+                  y: [m.mass.measuredMinutes, m.mass.measuredMinutes],
+                  color: COLOR.blue,
+                  width: 2,
+                  mode: 'line',
+                },
+              ]
+            : []),
+          {
+            id: 'here',
+            label: t('ttvW.legend.here'),
+            x: [m.zfree, m.zfree],
+            y: [0, Math.max(...m.curve.max, 1)],
+            color: COLOR.grey,
+            width: 1,
+            mode: 'line',
+          },
+        ],
+      };
+      hostOf(canvas, label).chart.draw(spec);
+      return spec;
+    }
     const spec = {
       xTitle: t('ttvW.axis.transit'),
       yTitle: t('ttvW.axis.oc'),
@@ -355,6 +410,43 @@ const TIMING = {
         label: t('ttvW.o.row.amp'),
         value: t('ttvW.o.v.amp', { a: min1(a.amplitude * 1440) }),
       });
+    }
+    if (m.view === 1) {
+      if (m.mass.status === 'ok') {
+        const e = m.mass.earth;
+        rows.push({
+          label: t('ttvW.o.row.mass', { who: t(`ttvW.o.who.${m.mass.who}`) }),
+          value: t('ttvW.o.v.mass', {
+            c: fixed(e.central, 1),
+            a: fixed(e.lo, 1),
+            b: fixed(e.hi, 1),
+          }),
+          emphasis: true,
+        });
+        rows.push({
+          label: t('ttvW.o.row.truthMass'),
+          value: t('ttvW.o.v.truthMass', { m: fixed(m.mass.truthEarth, 1) }),
+        });
+        rows.push({
+          label: t('ttvW.o.row.assumption'),
+          value: t('ttvW.o.v.assumption'),
+          emphasis: true,
+        });
+        if (m.spread.status === 'ok')
+          rows.push({
+            label: t('ttvW.o.row.spread'),
+            value: t('ttvW.o.v.spread', {
+              z: fixed(m.zfree, 3),
+              lo: fixed(100 * (m.spread.min - 1), 0),
+              hi: fixed(100 * (m.spread.max - 1), 0),
+            }),
+          });
+      } else
+        rows.push({
+          label: t('ttvW.o.row.mass', { who: t('ttvW.o.who.other') }),
+          value: t('ttvW.o.v.noMass'),
+          emphasis: true,
+        });
     }
     if (m.pair.relation.status === 'ok') {
       rows.push({

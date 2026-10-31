@@ -98,6 +98,7 @@ export const WIDGET_FAMILIES = Object.freeze({
     'activity-ffd',
   ],
   remnants: ['remnant-cooling', 'remnant-outcome'],
+  ttv: ['ttv-transit', 'ttv-timing'],
   spectrograph: [
     'spectrograph-lines',
     'spectrograph-arc',

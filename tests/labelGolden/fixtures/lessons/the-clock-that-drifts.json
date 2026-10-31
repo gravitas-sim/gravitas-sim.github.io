@@ -1,0 +1,64 @@
+{
+ "id": "the-clock-that-drifts",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.one-transit-time.fields.0.unit","minutes"],
+    ["steps.one-transit-time.fields.1.unit","minutes"],
+    ["steps.read-the-wave.fields.0.unit","days"],
+    ["steps.read-the-wave.fields.1.unit","minutes"],
+    ["steps.the-beat.fields.0.unit","days"],
+    ["steps.the-beat.fields.1.unit","days"],
+    ["steps.the-beat.fields.2.unit","days"],
+    ["steps.a-different-pair.fields.0.unit","days"],
+    ["steps.a-different-pair.fields.1.unit","days"],
+    ["steps.a-mass-if-circular.fields.0.unit","Earth masses"],
+    ["steps.a-mass-if-circular.fields.1.unit","Earth masses"],
+    ["steps.a-mass-if-circular.fields.2.unit","Earth masses"]
+   ],
+   "numbered": [
+    ["steps.one-transit-time.fields.0.hint","1.53"],
+    ["steps.one-transit-time.fields.1.hint","0.52"],
+    ["steps.read-the-wave.fields.0.hint","345"],
+    ["steps.read-the-wave.fields.1.hint","4.7"],
+    ["steps.the-beat.fields.0.hint","10.0003"],
+    ["steps.the-beat.fields.1.hint","20.5955"],
+    ["steps.the-beat.fields.2.hint","346.2"],
+    ["steps.a-different-pair.fields.0.hint","173.7"],
+    ["steps.a-different-pair.fields.1.hint","173.8"],
+    ["steps.a-mass-if-circular.fields.0.hint","14.4"],
+    ["steps.a-mass-if-circular.fields.1.hint","12.1"],
+    ["steps.a-mass-if-circular.fields.2.hint","17.4"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": []
+  }
+ },
+ "numeric": {
+  "answers": [],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "one-transit-time": {
+    "validate": {"calls":232,"distinct":2,"digest":"cf6503b6232f67eb","samples":[null,{"level":"error","message":"Leave transit 40, the inner planet and the low noise: the time is about 1.5 minutes from the prediction, with an error bar of about 0.5 minutes."}]}
+   },
+   "read-the-wave": {
+    "validate": {"calls":232,"distinct":2,"digest":"9d54e1bb0281811e","samples":[null,{"level":"error","message":"Leave the system on the near two-to-one pair, the inner planet and the whole record: the wave is about 345 days long and 4.7 minutes in amplitude."}]}
+   },
+   "the-beat": {
+    "validate": {"calls":242,"distinct":2,"digest":"6026892ffabb8a46","samples":[null,{"level":"error","message":"The periods are about 10.0003 and 20.5955 days (the panel’s clock row for each planet); then 1 / |2 / 20.5955 − 1 / 10.0003| is about 346 days."}]}
+   },
+   "a-different-pair": {
+    "validate": {"calls":232,"distinct":2,"digest":"9b1d8fb7c7ebe548","samples":[null,{"level":"error","message":"Choose the near three to two system and the inner planet: the fit and the relation both give about 174 days."}]}
+   },
+   "a-mass-if-circular": {
+    "validate": {"calls":242,"distinct":2,"digest":"8b4bfc85c9cad09c","samples":[null,{"level":"error","message":"Choose the inner planet of the near two-to-one pair and the mass view: about 14.4 Earth masses, from 12.1 to 17.4."}]}
+   }
+  },
+  "es": "same"
+ }
+}
