@@ -1024,11 +1024,18 @@
       "student": true
     },
     {
+      "file": "TTV.md",
+      "kind": "feature",
+      "purpose": "Transit timing variations: the O-C diagram, the super-period and amplitude relations and their domain, the validation with its failed legs, and why only a circular mass ships (Prompt 226).",
+      "owner": 226,
+      "student": true
+    },
+    {
       "file": "TTV_MASS_GATE.md",
       "kind": "gate",
       "purpose": "TTV mass gate: whether a transit-timing amplitude gives a planet mass, the degeneracy with eccentricity, the committed bounds, the measured legs and the verdict (Prompt 226 Part B).",
       "owner": 226,
-      "student": false
+      "student": true
     },
     {
       "file": "CLUSTER_FITTING.md",
@@ -1134,6 +1141,27 @@
       "purpose": "Validated 3-D lab specification and feasibility gate.",
       "owner": null,
       "student": false
+    },
+    {
+      "file": "VARIABLE_CLASSIFIER_GATE.md",
+      "kind": "gate",
+      "purpose": "Variable-star classifier gate: the labelled Gaia set, the committed bounds, the measured confusion matrix, two failed legs left failing and the verdict B (Prompt 223 Part B).",
+      "owner": 223,
+      "student": false
+    },
+    {
+      "file": "VETTING.md",
+      "kind": "feature",
+      "purpose": "Candidate vetting: odd-even depths, secondary-eclipse search, difference-image centroid test, the validation contract, what a pass does not mean.",
+      "owner": 228,
+      "student": true
+    },
+    {
+      "file": "VARIABLES_II.md",
+      "kind": "feature",
+      "purpose": "Variables II: light-curve features with errors, the Cepheid PL relation with a cited metallicity term, a classifier that can decline; 20 validation legs (Prompt 223).",
+      "owner": 223,
+      "student": true
     },
     {
       "file": "VO_ARCHIVE_GATE.md",

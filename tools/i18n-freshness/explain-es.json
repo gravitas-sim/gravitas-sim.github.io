@@ -262,9 +262,21 @@
     "explain/transit[1]": "a1b2b026:67774912",
     "explain/transit[2]": "3b239a90:93350446",
     "explain/transit[3]": "be4a0832:070b28fb",
+    "explain/ttv[0]": "780c3c0b:382ab840",
+    "explain/ttv[1]": "7fa74b93:ebf3e717",
+    "explain/ttv[2]": "54ce84c4:12b0332b",
+    "explain/ttv[3]": "2d1cff9e:bf919faa",
+    "explain/variablesII[0]": "386991e3:7ce3cd23",
+    "explain/variablesII[1]": "2257f860:f32f008b",
+    "explain/variablesII[2]": "1a674379:0819c2e7",
+    "explain/variablesII[3]": "f8c7f127:06c60d09",
     "explain/variables[0]": "6036b5a0:198a85c9",
     "explain/variables[1]": "5a6a51c2:dfab28d8",
     "explain/variables[2]": "e0817982:a2a865b6",
-    "explain/variables[3]": "9ab11306:c5fe5cbc"
+    "explain/variables[3]": "9ab11306:c5fe5cbc",
+    "explain/vetting[0]": "7fa07e2f:1f6c6667",
+    "explain/vetting[1]": "2f6d2149:15326cf2",
+    "explain/vetting[2]": "55d2a56d:39748280",
+    "explain/vetting[3]": "ce59a7e7:26703796"
   }
 }

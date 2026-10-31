@@ -1865,10 +1865,14 @@ export const ES_DEFERRED = {
     'Un experimento de veinte planetas ampliado en Python a una poblaci\u00f3n, con lo que cubre su intervalo y lo que no. Necesita la p\u00e1gina de c\u00e1lculo y conexi\u00f3n.',
   'inv.seq.planets.refitting-a-transit':
     'El modelo de tr\u00e1nsito del panel de ajuste, ajustado de nuevo por otro camino en Python, y qu\u00e9 cambia el camino. Necesita la p\u00e1gina de c\u00e1lculo y conexi\u00f3n.',
+  'inv.seq.planets.planet-or-not':
+    'Ocho candidatos sint\u00e9ticos verificados con profundidades impares y pares, una b\u00fasqueda de segundo eclipse y una prueba del centroide, y lo que no significa una lista aprobada. Algunos no se pueden decidir.',
   'inv.seq.planets.two-periodograms':
     'Un periodograma de Lomb-Scargle y uno de m\u00ednimos cuadrados de caja de una curva de luz, y qu\u00e9 puede afirmar un per\u00edodo de un periodograma. Necesita la p\u00e1gina de c\u00e1lculo y conexi\u00f3n.',
   'inv.seq.planets.sampling-a-posterior':
     'La posterior de un tr\u00e1nsito muestreada en Python, con las comprobaciones de convergencia que deciden cu\u00e1ndo puede citarse su intervalo. Necesita la p\u00e1gina de c\u00e1lculo y conexi\u00f3n.',
+  'inv.seq.planets.the-clock-that-drifts':
+    'Mide cuándo transita un planeta y lee la onda que un segundo planeta escribe en los instantes. Necesita antes la fotometría de tránsitos.',
   'inv.seq.gravity.integrators-in-practice':
     'Cuatro integradores comparados por la energ\u00eda que pierden en un sistema real, en Python. Necesita la p\u00e1gina de c\u00e1lculo y conexi\u00f3n.',
   'inv.seq.planets.why-venus-is-hot':
@@ -1959,6 +1963,8 @@ export const ES_DEFERRED = {
     'Período y luminosidad unidos: la relación que convirtió a las cefeidas en reglas.',
   'inv.seq.galaxies.the-first-rung':
     'Calibra el peldaño con una cefeida cercana y úsalo para llegar a otra galaxia.',
+  'inv.seq.galaxies.the-metallicity-term':
+    'El peldaño con un segundo mando: cómo el contenido de metales de una cefeida mueve una distancia y cuánta certeza tenemos.',
   'inv.seq.galaxies.standard-candles':
     'Las supernovas como velas estándar: hasta dónde se ve una explosión brillante y uniforme, y lo que dice de la expansión.',
   'inv.seq.galaxies.the-expanding-universe':

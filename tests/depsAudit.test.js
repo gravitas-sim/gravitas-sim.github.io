@@ -27,12 +27,20 @@ const report = (...vias) => ({
   ),
 });
 
+// The list ships empty when every advisory has a patched release; these cases
+// inject an exception the way a future one would be written, so the judging
+// logic stays covered. SPRINTF is the advisory that once held the only entry.
 const SPRINTF = 'GHSA-hp3w-g68c-fv3c';
+const WITH_SPRINTF = {
+  ignored: new Map([[SPRINTF, 'no patched release (test fixture)']]),
+};
 
 describe('the dependency audit', () => {
-  test('names the sprintf-js advisory, and only that one, with a reason', () => {
-    expect([...IGNORED.keys()]).toEqual([SPRINTF]);
-    expect(IGNORED.get(SPRINTF)).toMatch(/no patched release/i);
+  test('every exception on the list carries a reason', () => {
+    for (const [id, reason] of IGNORED) {
+      expect(id).toMatch(/^GHSA-/);
+      expect(reason.length).toBeGreaterThan(10);
+    }
   });
 
   test('collects advisories once, and skips names of other packages', () => {
@@ -51,7 +59,8 @@ describe('the dependency audit', () => {
       report(
         ['sprintf-js', [advisory(SPRINTF, 'sprintf-js', 'moderate')]],
         ['argparse', ['sprintf-js']]
-      )
+      ),
+      WITH_SPRINTF
     );
     expect(result.failing).toEqual([]);
     expect(result.ignored.map(a => a.id)).toEqual([SPRINTF]);
@@ -65,7 +74,8 @@ describe('the dependency audit', () => {
           'brace-expansion',
           [advisory('GHSA-q2hr-2g5m-vwhr', 'brace-expansion', 'high')],
         ]
-      )
+      ),
+      WITH_SPRINTF
     );
     expect(result.failing.map(a => a.id)).toEqual(['GHSA-q2hr-2g5m-vwhr']);
   });
@@ -88,7 +98,8 @@ describe('the dependency audit', () => {
   });
 
   test('an ignored advisory that is no longer reported is pointed out', () => {
-    expect(judge(report()).unreported).toEqual([SPRINTF]);
+    expect(judge(report(), WITH_SPRINTF).unreported).toEqual([SPRINTF]);
+    expect(judge(report()).unreported).toEqual([...IGNORED.keys()]);
   });
 
   test('every exception has a basis and an expiry date, and none has lapsed', () => {

@@ -74,6 +74,12 @@
   "strategy-plan",
   "survey-design-tradeoff",
   "survey-design-plan",
-  "survey-design-compare"
+  "survey-design-compare",
+  "ttv-transit",
+  "ttv-timing",
+  "plz-metallicity",
+  "variable-features",
+  "variable-ambiguity",
+  "vetting-checklist"
  ]
 }

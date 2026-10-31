@@ -1,0 +1,280 @@
+{
+  "format": "gravitas.ttv-results/1",
+  "rows": [
+    {
+      "id": "A1",
+      "status": "pass",
+      "measured": {
+        "fitted": 346.3,
+        "cited": 346.2,
+        "relativeError": 0.0001232,
+        "status": "ok"
+      },
+      "note": ""
+    },
+    {
+      "id": "A2",
+      "status": "pass",
+      "measured": {
+        "fitted": 174,
+        "cited": 173.8,
+        "relativeError": 0.0007951,
+        "status": "ok"
+      },
+      "note": ""
+    },
+    {
+      "id": "A3",
+      "status": "pass",
+      "measured": {
+        "inner": 346.3,
+        "outer": 346.8,
+        "relativeError": 0.001595
+      },
+      "note": ""
+    },
+    {
+      "id": "A4",
+      "status": "pass",
+      "measured": {
+        "S1": {
+          "innerFormula_d": 0.003424,
+          "innerMeasured_d": 0.003267,
+          "innerError": 0.04805,
+          "outerFormula_d": 0.001308,
+          "outerMeasured_d": 0.001124,
+          "outerError": 0.1639
+        },
+        "S2": {
+          "innerFormula_d": 0.003423,
+          "innerMeasured_d": 0.003461,
+          "innerError": 0.01103,
+          "outerFormula_d": 0.003849,
+          "outerMeasured_d": 0.003615,
+          "outerError": 0.06482
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "A5",
+      "status": "pass",
+      "measured": {
+        "2:1": {
+          "f": -1.19049,
+          "g": 0.42839,
+          "relativeError": 0.00003335
+        },
+        "3:2": {
+          "f": -2.02522,
+          "g": 2.48401,
+          "relativeError": 3.407e-7
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "B1",
+      "status": "pass",
+      "measured": {
+        "maxAbsDiff_d": 0.000006111,
+        "perPlanet": {
+          "S1.inner": 0.000005321,
+          "S1.outer": 0.000001931,
+          "S2.inner": 0.000006087,
+          "S2.outer": 0.000006111
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "B2",
+      "status": "pass",
+      "measured": {
+        "maxAbsDiff_d": 9.382e-8
+      },
+      "note": ""
+    },
+    {
+      "id": "B3",
+      "status": "pass",
+      "measured": {
+        "worstRelative": 6.861e-14,
+        "perSystem": {
+          "S1": {
+            "superPeriod": 4.774e-15,
+            "inner": 4.33e-15,
+            "outer": 4.441e-15
+          },
+          "S2": {
+            "superPeriod": 5.795e-14,
+            "inner": 6.506e-14,
+            "outer": 6.861e-14
+          }
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "B4",
+      "status": "pass",
+      "measured": {
+        "maxAbsDiff": 7.648e-13
+      },
+      "note": ""
+    },
+    {
+      "id": "C1",
+      "status": "pass",
+      "measured": {
+        "n": 3240,
+        "coverage1": 0.633
+      },
+      "note": ""
+    },
+    {
+      "id": "C1b",
+      "status": "pass",
+      "measured": {
+        "n": 3240,
+        "coverage1": 0.6846
+      },
+      "note": ""
+    },
+    {
+      "id": "C2",
+      "status": "fail",
+      "measured": {
+        "n": 3240,
+        "coverage2": 0.8759
+      },
+      "note": ""
+    },
+    {
+      "id": "C2b",
+      "status": "pass",
+      "measured": {
+        "n": 3240,
+        "coverage2": 0.9472
+      },
+      "note": ""
+    },
+    {
+      "id": "C3",
+      "status": "fail",
+      "measured": {
+        "mean": 0.03481,
+        "sd": 1.397
+      },
+      "note": ""
+    },
+    {
+      "id": "C3b",
+      "status": "pass",
+      "measured": {
+        "mean": 0.01501,
+        "sd": 1.023
+      },
+      "note": ""
+    },
+    {
+      "id": "D1",
+      "status": "fail",
+      "measured": {
+        "noSignal": 24,
+        "of": 80
+      },
+      "note": ""
+    },
+    {
+      "id": "D1b",
+      "status": "pass",
+      "measured": {
+        "noSignal": 76,
+        "of": 80
+      },
+      "note": ""
+    },
+    {
+      "id": "D2",
+      "status": "fail",
+      "measured": {
+        "signal": 68,
+        "of": 80
+      },
+      "note": ""
+    },
+    {
+      "id": "D2b",
+      "status": "pass",
+      "measured": {
+        "signal": 80,
+        "of": 80
+      },
+      "note": ""
+    },
+    {
+      "id": "D3",
+      "status": "pass",
+      "measured": {
+        "flaggedFraction": 1,
+        "n": 100
+      },
+      "note": ""
+    },
+    {
+      "id": "D4",
+      "status": "pass",
+      "measured": {
+        "status": "unresolved",
+        "cycles": 0.6651,
+        "baseline_d": 230
+      },
+      "note": ""
+    },
+    {
+      "id": "D5",
+      "status": "pass",
+      "measured": {
+        "status": "refused",
+        "reason": "far-from-resonance",
+        "delta": 0.3497
+      },
+      "note": ""
+    },
+    {
+      "id": "D6",
+      "status": "pass",
+      "measured": {
+        "reason": "inside-resonance-width",
+        "delta": 0.0005,
+        "width": 0.001533
+      },
+      "note": ""
+    },
+    {
+      "id": "E1",
+      "status": "not-run",
+      "measured": null,
+      "note": "Kepler-9 transit times (Holczer et al. 2016, VizieR J/ApJS/225/9) were requested of the coordinator, whose fetch failed (VizieR hosts unreachable); no published times were supplied, so no published system was compared. Nothing was simulated in its place."
+    },
+    {
+      "id": "R1",
+      "status": "pass",
+      "measured": {
+        "n": 6480,
+        "lowSnrFraction": 1
+      },
+      "note": ""
+    },
+    {
+      "id": "R1b",
+      "status": "pass",
+      "measured": {
+        "n": 6480,
+        "lowSnrFraction": 0
+      },
+      "note": ""
+    }
+  ]
+}

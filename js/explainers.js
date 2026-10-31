@@ -118,6 +118,7 @@ export const FAMILY_IDS = Object.freeze({
   exposure: ['exposure-planner'],
   strategy: ['strategy-window', 'strategy-plan'],
   eclipse: ['eclipse-curve', 'eclipse-fit'],
+  vetting: ['vetting-checklist'],
   clusterFit: ['cluster-fit'],
   masses: ['masses-minimum', 'masses-solve', 'masses-diagram'],
   activity: [
@@ -127,6 +128,8 @@ export const FAMILY_IDS = Object.freeze({
     'activity-ffd',
   ],
   remnants: ['remnant-cooling', 'remnant-outcome'],
+  variablesII: ['plz-metallicity', 'variable-features', 'variable-ambiguity'],
+  ttv: ['ttv-transit', 'ttv-timing'],
   spectrograph: [
     'spectrograph-lines',
     'spectrograph-arc',

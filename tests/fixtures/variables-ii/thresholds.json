@@ -1,0 +1,146 @@
+{
+  "format": "gravitas.variables-ii-thresholds/1",
+  "prompt": "Roadmap III, Prompt 223 Part A: light-curve features with uncertainties, the Cepheid period-luminosity relation with a metallicity term, its effect on a distance (tranche T3 by D-R10-207-01)",
+  "document": "VARIABLES_II.md (\"Validation contract\")",
+  "committed": "before js/kernels/variables/features.js, js/kernels/variables/plz.js, the oracle script, the validator, any instrument or lesson of Prompt 223 existed, and before any output of the new kernel or the oracle was inspected. The existing kernel (fit.js, period.js, ladder.js) and its documented results in TIME_DOMAIN_LADDER.md were read; the cited metallicity coefficients are inputs read from the papers (by the coordinator, into the scratchpad), not tuned, and are pinned in citations.json when they arrive.",
+  "rule": "A crossed bound is a failed check, recorded in failed-legs.json and left failing; only Carl resets one. A leg that cannot be measured is NOT RUN and says why. An amendment is recorded in the document with its reason and the original stays failing. A leg marked report has no bound and is only printed.",
+  "seeds": {
+    "ensemble": "variables-ii-223",
+    "stream": "injection for the generated curves and hosts, noise for the draws, forked by the check id and the draw index"
+  },
+  "scope": {
+    "built": "the Fourier features of a folded light curve (period, number of cycles, amplitude peak to peak of the fitted curve, skewness of the fitted magnitudes, the rise fraction, R21, R31, phi21 and phi31 with one-sigma errors from the fit's covariance), refused as 'not constrained' when the run holds too few cycles or the phase coverage has a gap; the Wesenheit period-luminosity relation M_W = M0 + b (log P - 1) + gamma ([O/H] - [O/H]_ref) with the cited gamma, its effect on a ladder distance and its error budget (the term carries the error of gamma, of the host and of the anchor metallicity), checked against a Monte Carlo propagation; the Hertzsprung progression as a described feature (no template, no number beyond 'about 10 days' in prose); an ambiguity rule for the synthetic classification exercise.",
+    "notBuilt": "a metallicity term for any band but the Wesenheit magnitude; a period-dependent or non-linear metallicity effect; crowding and blending; a metallicity measured for a Cepheid (the hosts' mean values are cited, not measured); the frame branch (185 is optional and is not used); a classifier (Part B, its own gate)."
+  },
+  "contract": {
+    "relation": "m_W - M_W(P, Z) = mu with M_W(P, Z) = M0 + b (log10 P - 1) + gamma (Z - Zref), Z = [O/H] in dex",
+    "ladder": "mu_host = (<m>_host - <m>_anchor) - b (<x>_host - <x>_anchor) + mu_anchor - gamma (Z_host - Z_anchor)",
+    "budget": "the existing four terms (host, anchor, slope, anchor distance) plus gamma |dZ| sigma_gamma, gamma sigma_Zhost and gamma sigma_Zanchor, in quadrature",
+    "features": "K-harmonic least squares at the given period, K = 3 unless stated; cos convention A_k cos(k w (t - t0) + phi_k) as fit.js; R21 = A2/A1, R31 = A3/A1, phi21 = phi2 - 2 phi1, phi31 = phi3 - 3 phi1 (mod 2 pi); errors by first-order propagation of the coefficient covariance",
+    "notConstrained": "fewer than 3 cycles in the run, or the largest gap in phase over 0.35 of a cycle, or fewer than 4 K + 1 points: every Fourier-shape number is null with the status 'not-constrained' and the reason",
+    "oracle": "astropy 6.0.1 LombScargle(nterms=3) (Astropy Collaboration 2022, ApJ 935, 167; VanderPlas and Ivezic 2015, ApJ 812, 18) on the pinned binned TESS light curve of SU Dra (sector 15); no Gravitas code",
+    "ambiguity": "the leave-one-out nearest-neighbour vote has no automatic class when the leading class holds fewer than 4 of 5 votes"
+  },
+  "checks": [
+    {
+      "id": "A1.noiseFreeFeatures",
+      "group": "a",
+      "description": "A noise-free three-harmonic curve (P 7.3 d, A1 0.2, A2 0.07, A3 0.02, phases 10, 150, 60 degrees; 9 cycles; 240 irregular times), fitted at the true period: every feature equals its generating value",
+      "limits": { "amplitude": 0.0001, "ratio": 1e-9, "phaseRad": 1e-9, "unit": "mag, ratio, rad" }
+    },
+    {
+      "id": "A2.skewAndRise",
+      "group": "a",
+      "description": "A pure sinusoid has skewness 0 and rise fraction 0.5; the time-reversed three-harmonic curve has rise fraction 1 minus the original",
+      "limits": { "skew": 1e-6, "rise": 0.002, "reversed": 0.002 }
+    },
+    {
+      "id": "A3.plAtTheCitedPoints",
+      "group": "a",
+      "description": "M_W(P = 10 d, Z = Zref) equals M0; the slope between P = 10 d and 100 d is b; at fixed P the shift in M_W for dZ is gamma dZ; all with the cited gamma and the fitted slope of the LMC pack; M0, b, gamma are the relation's own constants",
+      "limits": { "absMag": 1e-12 }
+    },
+    {
+      "id": "A4.ladderClosedForm",
+      "group": "a",
+      "description": "ladderDistance with the metallicity option equals the closed form mu = dm - b dx + mu_anchor - gamma dZ, its budget holds the three metallicity terms as stated, and with dZ = 0 and no metallicity error it equals the existing ladderDistance to the last digit (goldens identical)",
+      "limits": { "mu": 1e-12, "budget": 1e-12, "regression": 0 }
+    },
+    {
+      "id": "A5.distanceFactor",
+      "group": "a",
+      "description": "Ignoring the term changes the distance by the factor 10^(gamma dZ / 5), checked for dZ in {-0.4, -0.1, 0.2} with the cited gamma",
+      "limits": { "relative": 1e-12 }
+    },
+    {
+      "id": "A6.propagationAgrees",
+      "group": "a",
+      "description": "The linear budget's total sigma on the NGC 4258 distance equals the standard deviation of a Monte Carlo propagation (4000 draws, the statistics kernel's propagate, seed from the file) within a relative difference",
+      "limits": { "relativeSigma": 0.05, "draws": 4000 }
+    },
+    {
+      "id": "B1.fixedPeriodCoefficients",
+      "group": "b",
+      "description": "At the oracle's period on the pinned SU Dra sector 15 curve, the three-harmonic cosine and sine coefficients of the kernel equal the oracle's (both linear least squares)",
+      "limits": { "coefficient": 1e-6, "unit": "mag" }
+    },
+    {
+      "id": "B2.periodAgrees",
+      "group": "b",
+      "description": "The kernel's refined period equals the oracle's three-term periodogram peak",
+      "limits": { "relative": 0.0003 }
+    },
+    {
+      "id": "B3.featuresAgree",
+      "group": "b",
+      "description": "Amplitude, R21, R31, phi21 and phi31 from the kernel's own period agree with the oracle's at its period",
+      "limits": { "amplitude": 0.005, "r21": 0.01, "r31": 0.02, "phaseRad": 0.05 }
+    },
+    {
+      "id": "C1.distanceCoverage",
+      "group": "c",
+      "description": "400 simulated hosts (LMC-like anchor of 60 Cepheids, host of 8 to 30, truth slope, scatter 0.08 mag, the cited gamma, host-anchor metallicity difference drawn in [-0.5, 0.2] dex with stated errors): the fraction whose true modulus lies within 1 sigma and within 2 sigma of the corrected estimate",
+      "limits": { "within1Min": 0.6, "within1Max": 0.76, "within2Min": 0.9, "within2Max": 0.99 }
+    },
+    {
+      "id": "C2.biasOfIgnoring",
+      "group": "c",
+      "description": "On the same ensemble the estimate that ignores the term is biased by gamma dZ on average (the mean of the error equals the mean of gamma dZ within the bound), and the corrected estimate has no mean bias beyond the bound",
+      "limits": { "ignoringVsAnalytic": 0.01, "correctedBias": 0.01, "unit": "mag" }
+    },
+    {
+      "id": "C3.fourierCoverage",
+      "group": "c",
+      "description": "400 noisy curves (sigma 0.01 mag per point, 9 cycles, 240 times, three harmonics): the true R21 and the true phi21 lie within 2 sigma of the estimate",
+      "limits": { "within2Min": 0.9, "within2Max": 0.99 }
+    },
+    {
+      "id": "D1.tooFewCycles",
+      "group": "d",
+      "description": "A curve covering 1.5 cycles returns status 'not-constrained' with a reason and null R21, R31, phi21, phi31 and no error; its period and mean still read",
+      "limits": { "status": "not-constrained", "fourierNull": true }
+    },
+    {
+      "id": "D2.phaseGap",
+      "group": "d",
+      "description": "A run of 6 cycles whose times all fall in a window of 0.5 of the phase returns 'not-constrained'",
+      "limits": { "status": "not-constrained" }
+    },
+    {
+      "id": "D3.noSignalNoHarmonic",
+      "group": "d",
+      "description": "On 400 noise-only curves (9 cycles at a trial period, sigma 0.01) a second or third harmonic is declared detected (amplitude over 3 sigma) at no more than this rate per term",
+      "limits": { "falseRate": 0.03 }
+    },
+    {
+      "id": "D4.missingMetallicity",
+      "group": "d",
+      "description": "A host with no metallicity (NaN) returns the uncorrected modulus with metallicity.status 'missing' and does not return a corrected one; a host outside the calibrated range of [O/H] is flagged 'outside-range'",
+      "limits": { "status": ["missing", "outside-range"] }
+    },
+    {
+      "id": "D5.ambiguousRule",
+      "group": "d",
+      "description": "On the synthetic exercise (period and amplitude only, 120 stars, seed 'variables-sample') the stars given no automatic class include every star the vote splits, none that is called with 4 or 5 votes of 5, and the stars that are called have accuracy at least that of the unresolved rule",
+      "limits": { "calledAccuracyMin": 0.833 }
+    },
+    {
+      "id": "E1.suDraPeriod",
+      "group": "e",
+      "description": "Authentic: the TESS SU Dra sector 15 period, from the kernel, against the published 0.66042001 d (Monson et al. 2017); not tuned on",
+      "limits": { "relative": 0.00003 }
+    },
+    {
+      "id": "E2.n4258WithTerm",
+      "group": "e",
+      "description": "Authentic: the NGC 4258 modulus from the LMC anchor with the cited metallicity term and the cited hosts' [O/H] against the maser 29.397 +- 0.032 (Reid et al. 2019); the published values were not used to tune the model",
+      "limits": { "sigmas": 2, "maserMu": 29.397, "maserSigma": 0.032 }
+    },
+    {
+      "id": "E3.citedGammaAgree",
+      "group": "e",
+      "description": "Report and bound: the two cited Wesenheit metallicity coefficients (Riess et al. 2022 and Breuval et al. 2022) agree within the combined error",
+      "limits": { "sigmas": 1 }
+    }
+  ]
+}

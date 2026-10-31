@@ -2770,6 +2770,28 @@ test.describe('the central experiment of each investigation', () => {
         [1, 0.569, 0.01],
       ],
     },
+    // ---- Variables II (Roadmap III, Prompt 223) -----------------------------------------
+    {
+      id: 'the-metallicity-term',
+      title:
+        'the-metallicity-term: the NGC 4258 distance modulus is 29.403 with the metallicity term left out and 29.444 with it included @accepts:ce.the-metallicity-term',
+      row: /^Distance modulus shown$/i,
+      values: [
+        [0, 29.403, 0.005],
+        [1, 29.444, 0.005],
+      ],
+    },
+    // ---- Transit timing variations (Roadmap III, Prompt 226) -------------------------
+    {
+      id: 'the-clock-that-drifts',
+      title:
+        'the-clock-that-drifts: the O-C wave of the inner planet of the near two-to-one pair has a super-period of 345 days over the whole record and 347 over its first 60 percent @accepts:ce.the-clock-that-drifts',
+      row: /^Super-period fitted$/i,
+      values: [
+        [100, 345, 4],
+        [60, 347, 4],
+      ],
+    },
     // ---- Telescopes (Roadmap III, Prompt 208) ---------------------------------
     {
       id: 'what-a-telescope-resolves',

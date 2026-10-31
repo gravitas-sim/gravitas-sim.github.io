@@ -221,7 +221,10 @@ describe('the instructor expectations record', () => {
     // 510 after Weighing the Stars, for Real (Prompt 218): 2 more; 508 after the five observing closeout investigations (Prompt 216): 27 more.
     // 518 after Two Clusters, Two Ages (Prompt 219): 3 more over 515.
     // 521 after How Old Is This White Dwarf? and From Star to Remnant (Prompt 222): 3 more over 518.
-    expect(total).toBe(521);
+    // 523 after Planet or Not? (Prompt 228): 2 more over 521.
+    // 524 after The Metallicity Term (Prompt 223): 1 more over 523.
+    // 526 after The Clock That Drifts (Prompt 226): 2 more over 524.
+    expect(total).toBe(526);
   });
 
   test('a /1 record keyed by step number migrates to the same text', () => {

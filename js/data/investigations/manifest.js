@@ -1243,6 +1243,45 @@ export const MANIFEST = [
     objectiveCount: 4,
   },
   {
+    id: 'planet-or-not',
+    title: 'Planet or Not?',
+    subtitle:
+      'Three tests try to reject a transit candidate, and some candidates cannot be decided: learn what a passed checklist means and what it does not',
+    duration: '6-10 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/planet-or-not.webp',
+    depths: 3,
+    stepCount: 8,
+    gradedCount: 6,
+    objectiveCount: 4,
+  },
+  {
+    id: 'the-metallicity-term',
+    title: 'The Metallicity Term',
+    subtitle:
+      'Add the metal content of a galaxy to the Cepheid period-luminosity relation, see what it does to a distance and to its error, and see where the cited term stops being tested',
+    duration: '8-12 min',
+    level: 'Upper-level astronomy',
+    thumbnail: 'images/investigations/the-metallicity-term.webp',
+    depths: 3,
+    stepCount: 7,
+    gradedCount: 5,
+    objectiveCount: 4,
+  },
+  {
+    id: 'the-clock-that-drifts',
+    title: 'The Clock That Drifts',
+    subtitle:
+      'Measure when a planet transits, plot how far each transit is from a steady clock, and read the slow wave a second planet writes',
+    duration: '10-14 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/the-clock-that-drifts.webp',
+    depths: 3,
+    stepCount: 8,
+    gradedCount: 5,
+    objectiveCount: 4,
+  },
+  {
     id: 'deep-or-wide',
     title: 'Deep or Wide?',
     subtitle:

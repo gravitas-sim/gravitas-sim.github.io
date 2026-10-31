@@ -1252,6 +1252,45 @@ export const MANIFEST = [
     objectiveCount: 4,
   },
   {
+    id: 'planet-or-not',
+    title: '¿Planeta o no?',
+    subtitle:
+      'Tres pruebas intentan rechazar un candidato a tránsito, y algunos candidatos no se pueden decidir: aprende qué significa una lista superada y qué no significa',
+    duration: '6-10 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/planet-or-not.webp',
+    depths: 3,
+    stepCount: 8,
+    gradedCount: 6,
+    objectiveCount: 4,
+  },
+  {
+    id: 'the-metallicity-term',
+    title: 'El término de metalicidad',
+    subtitle:
+      'Añade el contenido de metales de una galaxia a la relación período-luminosidad de las cefeidas, mira qué hace a una distancia y a su error, y mira dónde deja de estar comprobado el término citado',
+    duration: '8-12 min',
+    level: 'Upper-level astronomy',
+    thumbnail: 'images/investigations/the-metallicity-term.webp',
+    depths: 3,
+    stepCount: 7,
+    gradedCount: 5,
+    objectiveCount: 4,
+  },
+  {
+    id: 'the-clock-that-drifts',
+    title: 'El reloj que se desajusta',
+    subtitle:
+      'Mide cuándo transita un planeta, dibuja a qué distancia cae cada tránsito de un reloj constante y lee la onda lenta que escribe un segundo planeta',
+    duration: '10-14 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/the-clock-that-drifts.webp',
+    depths: 3,
+    stepCount: 8,
+    gradedCount: 5,
+    objectiveCount: 4,
+  },
+  {
     id: 'deep-or-wide',
     title: '¿Profundo o ancho?',
     subtitle:

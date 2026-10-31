@@ -11,15 +11,15 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 106 investigations and 1402 steps: 1310 steps
+Across 109 investigations and 1425 steps: 1333 steps
 declare a scene, 157 let a reader change one, 167 read the
-running integration, 893 show a prescribed model result, 146 draw
-on a stored dataset, 772 put a self-contained panel beside the text,
-373 keep something, and 58 are prose.
-Of 184 prediction loops, 184 are returned to,
-184 produce a measurement before they are answered, and
+running integration, 916 show a prescribed model result, 146 draw
+on a stored dataset, 795 put a self-contained panel beside the text,
+376 keep something, and 58 are prose.
+Of 187 prediction loops, 187 are returned to,
+187 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
-184 hold their marking until the experiment settles them.
+187 hold their marking until the experiment settles them.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -1392,6 +1392,48 @@ Of 184 prediction loops, 184 are returned to,
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:remnant-outcome`, control remnant-outcome/mi, measures the final mass, in solar masses, of the white dwarf a star leaves by the MIST relation: 0.745 from a star of 3 solar masses and 0.569 from a star of 1, with a scatter of 0.06 solar masses, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## Planet or Not? (`planet-or-not`)
+
+- **Steps:** 8. Scene declared on 8; a reader can change something on 0; 8 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 8 prescribed model, 0 stored dataset, 8 self-contained panel.
+- **What students do:** move-an-instrument-control, choose-an-option, commit-a-prediction.
+- **Objects the steps declare:** star.
+- **Instruments:** vetting-checklist.
+- **Stored data:** none.
+- **Evidence kept:** nothing — this lesson keeps nothing.
+- **Prediction loops:** which-test-catches → deep-and-shallow, a-dip-on-the-target, no-frames, inconclusive-is-an-answer, what-the-checklist-says → deep-and-shallow.
+- **Recovery:** wrong body: the object list names what the step staged.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:vetting-checklist`, control vetting-checklist/candidate, measures the odd-even z, the secondary depth against its error and the centroid offset against its exclusion radius for each of eight synthetic candidates, and the verdict they add up to (survives, rejected or undecided, never planet), evidence `none`, covered by `e2e/vettingLesson.spec.js`.
+
+## The Metallicity Term (`the-metallicity-term`)
+
+- **Steps:** 7. Scene declared on 7; a reader can change something on 0; 7 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 7 prescribed model, 0 stored dataset, 7 self-contained panel.
+- **What students do:** move-an-instrument-control, press-an-instrument-preset, commit-a-prediction, record-values, choose-an-option.
+- **Objects the steps declare:** rich, poor.
+- **Instruments:** plz-metallicity.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** which-way-does-metal-go → the-distance-twice, what-a-term-this-size-does, what-the-term-adds-to-the-error, beyond-the-calibration, what-the-term-says → the-distance-twice.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:plz-metallicity`, control plz-metallicity/term, measures the distance modulus of NGC 4258 from the LMC's Cepheids, in magnitudes, with the cited metallicity term left out (29.403) and included (29.444): a shift of 0.041 magnitudes, about two percent in distance, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## The Clock That Drifts (`the-clock-that-drifts`)
+
+- **Steps:** 8. Scene declared on 8; a reader can change something on 0; 8 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 8 prescribed model, 0 stored dataset, 8 self-contained panel.
+- **What students do:** move-an-instrument-control, record-values, choose-an-option, commit-a-prediction.
+- **Objects the steps declare:** sun.
+- **Instruments:** ttv-transit, ttv-timing.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** a-wave → read-the-wave, the-pair-sets-it, what-the-wave-says → read-the-wave.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:ttv-timing`, control ttv-timing/span, measures the super-period, in days, of the wave in the O-C diagram of the inner planet of the near two-to-one pair, fitted to the engine-made transit times: 345 days over the whole record (the relation gives 346) and 347 over the first 60 percent, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Deep or Wide? (`deep-or-wide`)
 

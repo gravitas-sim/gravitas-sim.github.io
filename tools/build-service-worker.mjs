@@ -498,6 +498,20 @@ export const NEVER_PRECACHED = [
   /^images\/investigations\/(how-old-is-this-white-dwarf|from-star-to-remnant)\.webp$/,
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(how-old-is-this-white-dwarf|from-star-to-remnant|remnants-sequence)\.js$/,
   /^(js\/remnantsWidgets\.js|js\/remnantsField\.js|js\/i18n\/(en|es)\.remnants\.js|js\/kernels\/remnants\/.*)$/,
+  // Prompt 228: the vetting panel, its field module, its words, the kernel and the lesson's one new file (D-R10-228-01).
+  /^images\/investigations\/planet-or-not\.webp$/,
+  /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(planet-or-not|vetting-sequence)\.js$/,
+  /^(js\/vettingWidgets\.js|js\/vettingField\.js|js\/i18n\/(en|es)\.vetting\.js|js\/kernels\/vetting\/.*)$/,
+  // Prompt 223: the variables-II panels, their field module, their words, the new kernel files and the lesson's one new file.
+  // The lesson is NEVER_PRECACHED (the T3 terms); the kernel files are lazy with the family.
+  /^images\/investigations\/the-metallicity-term\.webp$/,
+  /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(the-metallicity-term|variables-ii-sequence)\.js$/,
+  /^(js\/variablesIIWidgets\.js|js\/variablesIIField\.js|js\/i18n\/(en|es)\.variablesII\.js|js\/kernels\/variables\/(features|plz|plzCited)\.js)$/,
+  // Prompt 226: the timing panels, their field module, the engine's data pack, their words and the lesson's one new file (D-R10-226-05).
+  // The kernel (js/kernels/ttv/) is lazy with the family and is not precached.
+  /^images\/investigations\/the-clock-that-drifts\.webp$/,
+  /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(the-clock-that-drifts|ttv-sequence)\.js$/,
+  /^(js\/ttvWidgets\.js|js\/ttvField\.js|js\/data\/ttvPack\.js|js\/i18n\/(en|es)\.ttv\.js|js\/kernels\/ttv\/.*)$/,
   // Prompt 214: the strategy kernel, planner extension, panels and the strategy lesson's one new file (D-R10-214-06).
   /^js\/kernels\/strategy\//,
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(why-the-period-is-wrong|strategy-sequence)\.js$/,

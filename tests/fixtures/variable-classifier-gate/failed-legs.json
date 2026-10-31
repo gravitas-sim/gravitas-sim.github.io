@@ -1,0 +1,25 @@
+{
+ "note": "Legs of thresholds.json that crossed their bound, kept failing and labelled (only Carl resets a bound).",
+ "failed": [
+  {
+   "id": "G2.accuracyCalled",
+   "status": "fail",
+   "measured": {
+    "called": 259,
+    "correct": 200,
+    "accuracy": 0.7722007722007722
+   }
+  },
+  {
+   "id": "G6.bootstrap",
+   "status": "fail",
+   "measured": {
+    "interval95": [
+     0.7181467181467182,
+     0.8223938223938224
+    ],
+    "resamples": 2000
+   }
+  }
+ ]
+}
