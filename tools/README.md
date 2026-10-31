@@ -214,12 +214,15 @@ current, and the orchestrator checks it.
 | `thumbnail-config.mjs` | Thumbnail capture settings |  |
 | `tides-scenarios.mjs` | The ring and Roche scenarios, measured (Prompt 204 part 2) |  |
 | `tides-validate.mjs` | The tides kernel against its committed thresholds (Prompt 204, part A) | `npm run tides:validate` |
+| `transit-delta-validate.mjs` | The transit model delta against its committed thresholds (Prompt 225) | `npm run transit-delta:validate` |
 | `ui-shots.mjs` | The interface, at every size and in both languages |  |
 | `validate-citation.mjs` | Validating CITATION.cff and .zenodo.json |  |
 | `validate-lab3d.mjs` | The 3-D kernel's permanent validation | `npm run validate:lab3d` |
 | `validate-mission.mjs` | The mission core's validation | `npm run validate:mission` |
 | `validate-physics.mjs` | npm run validate:physics | `npm run validate:physics` |
+| `variables-ii-validate.mjs` | The variables-II kernel against its committed thresholds (Prompt 223 Part A) | `npm run variables-ii:validate` |
 | `variables-sample.mjs` | (no header) |  |
 | `vendor-deps.mjs` | npm run vendor  /  npm run vendor:check | `npm run vendor`, `npm run vendor:check` |
 | `verify-release.mjs` | Is this tree safe to publish? |  |
+| `vetting-validate.mjs` | The vetting kernel against its committed thresholds (Prompt 228) | `npm run vetting:validate` |
 | `worker-probe.mjs` | npm run probe:workers - what the page's Workers hold, and what it keeps | `npm run probe:workers` |

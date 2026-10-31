@@ -31,6 +31,7 @@ import {
   refine,
 } from './fit.js';
 import { halfDuration } from './transit.js';
+import { transitChecks } from './transitDelta.js';
 
 // Bound once, not read as globals: in Jest's vm context every free global read
 // goes through the context, which made these loops 8-25x slower than in Node.
@@ -468,7 +469,7 @@ export function fitOnce(request, data, hooks = {}) {
   const search = {};
   const starts = model.starts
     ? model.starts(data, request)
-    : model === MODELS['transit-quadratic']
+    : model.family === 'transit'
       ? transitStarts(request, data, hooks, search)
       : rvStarts(request, data, hooks, search);
   hooks.onProgress?.(0.35);
@@ -547,7 +548,7 @@ export function fitOnce(request, data, hooks = {}) {
     problem,
     theta,
     cov,
-    request.settings || {},
+    { ...(request.settings || {}), perDay: data.perDay ?? 1 },
     scale
   );
   const residuals = new Float64Array(n);
@@ -601,6 +602,11 @@ export function fitOnce(request, data, hooks = {}) {
     }
   }
   out.warnings = warningsFor(out, model, data, values, request);
+  // What the transit family says beyond the numbers: whether the data fix the
+  // radius ratio and the impact parameter, and whether the residuals in
+  // transit look like the noise the error bars promise (js/inference/transitDelta.js).
+  if (model.family === 'transit')
+    out.transit = transitChecks(out, fit.data, request);
   // A model that can say more than the rank analysis does about what its data
   // fix (the eclipsing binary's radius ratio) adds it, and the warning the
   // rank analysis would have given if it listed the same parameters.
@@ -647,7 +653,7 @@ function timeCorrelated(data, residuals, request) {
   );
   const scale =
     request.algorithm?.redNoiseTimescale ??
-    (request.model.id === 'transit-quadratic' ||
+    (MODELS[request.model.id].family === 'transit' ||
     request.model.id === 'eclipsing-binary' ||
     request.model.id === 'eclipsing-sb2'
       ? 30 / 1440
@@ -790,7 +796,7 @@ function warningsFor(out, model, data, values, request) {
       code: 'droppedNoUncertainty',
       rows: data.counts.withoutUncertainty,
     });
-  if (model.id === 'transit-quadratic') {
+  if (model.family === 'transit') {
     // Detected at all? The depth against the noise of the points in transit.
     const half = halfDuration(values);
     let inTransit = 0;

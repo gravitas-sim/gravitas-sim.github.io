@@ -37,6 +37,17 @@ export const ES_EXOPLANET = {
     'El valor de HD 209458 viene de la cabecera del archivo de SPOC del que se hizo su conjunto de datos; el de Kepler-13, de su conjunto de datos; la parte de A, de las magnitudes del TESS Input Catalog.',
   'gd.show.how.stellarRadius':
     'Adoptado, no medido aquí: una curva de luz da k, y el radio tiene que venir de la estrella.',
+  'gd.show.vA': 'Planeta A (rasante)',
+  'gd.show.vB': 'Planeta B (rasante, un 40 por ciento mayor)',
+  'gd.show.vPlanet': 'k {k}, b {b}, a/R* {aRs}',
+  'gd.show.vDepth': 'Sus profundidades en el centro del tránsito',
+  'gd.show.vDepthIs': 'A {a} ppm; B {b} ppm',
+  'gd.show.vMax': 'La mayor diferencia entre sus curvas de luz',
+  'gd.show.vMaxPpm': '{value} partes por millón',
+  'gd.show.vChi':
+    'Diferencia de chi-cuadrado en ocho tránsitos (hacen falta 4 para que cuente)',
+  'gd.show.how.vshape':
+    'Calculado en esta página con el modelo de tránsito: las curvas de luz de 20 minutos de ambos planetas a lo largo de un tránsito, con el período y el oscurecimiento al limbo de HD 209458, frente a la dispersión de la curva de luz incluida, 213 partes por millón por punto, para los ocho tránsitos del sector.',
   'gd.show.how.depths':
     'Calculado en esta página: el flujo medio ponderado a menos de un cuarto de la duración del tránsito de su centro, frente a la media a más de una duración de él y de media órbita después, con el periodo adoptado y la época en la que la caída es más profunda. La incertidumbre incluye el ruido correlacionado en el tiempo, medido en la luz fuera de los tránsitos.',
   'gd.show.how.published':
@@ -220,6 +231,40 @@ export const ES_EXOPLANET = {
   'gd.exo-fit.torres.ok':
     '{value} radios de Júpiter: una estrella un 3 por ciento menor da un planeta un 3 por ciento menor. El radio de un planeta es tan bueno como el de su estrella, y ninguna curva de luz puede comprobar el de la estrella.',
   'gd.exo-fit.torres.no': 'Multiplica tu k por 1,155 y por 9,7312.',
+  'gd.exo-fit.density.title': 'La densidad de la estrella',
+  'gd.exo-fit.density.text':
+    'La órbita sola da la densidad media de la estrella: la tercera ley de Kepler con el período y el tamaño de la órbita en radios estelares, ρ = 3π (a/R*)³ / (G P²). La tabla de resultados la muestra entre los valores derivados, para una órbita circular y sin contar la masa del planeta. ¿Qué densidad media, en g/cm³, derivó tu ajuste?',
+  'gd.exo-fit.density.ok':
+    '{value} g/cm³. Un tránsito da la densidad de una estrella sin conocer su distancia ni su masa, por lo que puede compararse con la masa y el radio de la estrella obtenidos por otra vía. La del Sol es 1,41.',
+  'gd.exo-fit.density.no':
+    'Copia la densidad media de la estrella, órbita circular, de las filas derivadas de la tabla de resultados.',
+  'gd.exo-fit.eccentric.title': 'Lo que supone una órbita circular',
+  'gd.exo-fit.eccentric.text':
+    'El ajuste toma la órbita como circular. La velocidad con que el planeta cruza la estrella fija la duración del tránsito, y una órbita excéntrica lo cruza más deprisa o más despacio que una circular del mismo período. Supón que la órbita fuera excéntrica, e = 0,2, con el tránsito al otro lado del periastro (ω = 90 grados). ¿Por qué factor es demasiado alta tu densidad circular? La corrección es ((1 + e sen ω) / √(1 − e²))³. Abre «Coeficientes de oscurecimiento al limbo y supuestos de la órbita» para verla aplicada a tu ajuste.',
+  'gd.exo-fit.eccentric.ok':
+    '{value}. Un tránsito por sí solo no distingue una órbita circular de una excéntrica, así que la densidad que da solo es una densidad si la órbita es circular; por eso el ajuste lo dice y ofrece la corrección como un supuesto, nunca como un resultado.',
+  'gd.exo-fit.eccentric.no':
+    'Calcula (1 + 0,2 × sen 90°) / √(1 − 0,2²) y elévalo al cubo.',
+  'gd.exo-fit.ellipse.title': 'La elipse de k y b',
+  'gd.exo-fit.ellipse.text':
+    'Bajo los resultados el panel dibuja la elipse de covarianza del cociente de radios k frente al parámetro de impacto b, con una tabla. Una elipse larga, delgada e inclinada es una degeneración; una redonda son dos parámetros que los datos fijan por separado. ¿Cuál es la correlación entre k y b en la tabla de la elipse?',
+  'gd.exo-fit.ellipse.ok':
+    '{value}. Una k mayor con una b mayor da casi el mismo tránsito: el planeta es más grande pero cruza más cerca del borde, donde la estrella es más tenue. Los datos deciden mejor una combinación que cada uno por separado.',
+  'gd.exo-fit.ellipse.no':
+    'Copia la fila «Correlación» de la tabla bajo la elipse de k frente a b.',
+  'gd.exo-fit.laws.title': 'Dos leyes de oscurecimiento al limbo',
+  'gd.exo-fit.laws.text':
+    'La ley por defecto del ajuste tiene dos coeficientes, q1 y q2, que se ajustan. El segundo modelo de la lista, un tránsito con oscurecimiento al limbo de cuatro coeficientes, usa la ley de Claret (2000), I(μ) = 1 − Σ cₙ (1 − μ^(n/2)) para n = 1 a 4, con los cuatro coeficientes fijos tomados de una tabla de oscurecimiento al limbo para la temperatura, la gravedad superficial y la metalicidad de la estrella. Son fijos y no se ajustan, porque cuatro no se distinguen entre sí en un tránsito y porque una fila de tabla describe una estrella, no una curva de luz. Gravitas no incluye esa tabla: introduces tú los cuatro números de una y el panel anota de dónde salen. Nada en esta investigación los califica.',
+  'gd.exo-fit.vshape.title': 'El tránsito rasante',
+  'gd.exo-fit.vshape.text':
+    'Un planeta que cruza el centro de la estrella hace un tránsito de fondo plano, cuya entrada y salida distinguen su tamaño y su trayectoria. Uno que solo roza el borde hace una V: la luz nunca se estabiliza. La tabla muestra dos planetas que rozan una estrella como HD 209458: el segundo es un 40 por ciento mayor y cruza algo más lejos del centro. Sus curvas de luz difieren en la cantidad indicada, frente a una dispersión de 213 partes por millón en cada punto de 20 minutos. ¿Podrían distinguirlos los ocho tránsitos de un sector de TESS?',
+  'gd.exo-fit.vshape.opt.can':
+    'Sí: la diferencia es mayor de lo que permite el ruido',
+  'gd.exo-fit.vshape.opt.cannot': 'No: el ruido oculta la diferencia',
+  'gd.exo-fit.vshape.ok':
+    'La diferencia de chi-cuadrado en los ocho tránsitos está muy por debajo de 4, así que la curva de luz no puede elegir. Por eso un tránsito en V deja sin determinar el cociente de radios y el parámetro de impacto, y por eso el ajuste lo dice: «no restringido» es la respuesta honesta, y el radio de un planeta obtenido así es un intervalo, no un número.',
+  'gd.exo-fit.vshape.no':
+    'Compara la diferencia de chi-cuadrado de la tabla con 4: por debajo, los datos no pueden elegir.',
   'gd.exo-fit.wrap.title': 'Lo que decidió el ajuste, y lo que supuso',
   'gd.exo-fit.wrap.text':
     'La curva de luz decidió k y la forma del tránsito, y decidió a/R* y b solo juntos. El radio del planeta necesitó un número más, el de la estrella, adoptado de la bibliografía y arrastrado con su incertidumbre. El panel de ajuste nombra cada parámetro como ajustado, fijo o derivado: esa lista es la declaración honesta de lo que decidieron los datos.',
@@ -292,6 +337,35 @@ export const ES_EXOPLANET = {
     'Exacto. Las dos estrellas están dentro de un mismo píxel, y cualquiera de ellas podría tener un planeta que produjera esta caída: un planeta distinto para cada una. Decidirlo requiere pruebas que no puede dar una curva de luz de las dos estrellas juntas. Los valores publicados de arriba difieren donde esta investigación dice que tienen que diferir: el cociente va de 0,065 a 0,087 y el radio de 1,41 a 2,30 radios de Júpiter, porque cada análisis eligió su propia dilución y su propio radio de la estrella.',
   'gd.exo-dilution.which-star.no':
     '¿Qué parte de la curva de luz podría distinguir el tránsito de A del de B, si las dos estrellas caen dentro de un mismo píxel?',
+  'gd.exo-dilution.vet-tests.title': '¿Pasan las pruebas de la curva de luz?',
+  'gd.exo-dilution.vet-tests.text':
+    'Dos pruebas que una curva de luz puede hacer por sí sola: si los tránsitos impares y pares tienen la misma profundidad, y si hay una caída media órbita después del tránsito. El panel muestra la segunda en esta curva. Hazlas como las hace el panel de verificación (una profundidad es una caja en medio del tránsito frente a una línea base a su alrededor, con los errores ensanchados por el ruido rojo). Una prueba que el ruido impide decidir es no concluyente, no un aprobado.\n\nEn la curva SAP, ¿qué dicen las dos pruebas juntas?',
+  'gd.exo-dilution.vet-tests.opt.pass': 'Las dos pasan',
+  'gd.exo-dilution.vet-tests.opt.fail': 'Al menos una falla',
+  'gd.exo-dilution.vet-tests.opt.inconclusive': 'Al menos una no puede decidir',
+  'gd.exo-dilution.vet-tests.ok':
+    'Las dos pasan: las profundidades impares y pares coinciden dentro de sus errores y no destaca ningún eclipse secundario. Aprobar descarta una binaria eclipsante a este período. Todavía no dice de quién es la luz de la caída.',
+  'gd.exo-dilution.vet-tests.no':
+    'Compara las profundidades impares y pares con su error combinado, y la caída en la fase un medio con su propio error. El secundario de un planeta es demasiado pequeño para verse aquí.',
+  'gd.exo-dilution.vet-upper.title': 'Lo que permite un secundario ausente',
+  'gd.exo-dilution.vet-upper.text':
+    'No se vio ningún secundario, así que los datos solo lo acotan: una caída mayor que tres errores estándar se habría visto. Toma tres veces el error de la profundidad en la fase un medio, como fracción del flujo.',
+  'gd.exo-dilution.vet-upper.ok':
+    '{value}: un secundario menos profundo que esto podría esconderse en el ruido. Un límite superior es la forma honesta de decir «no se vio».',
+  'gd.exo-dilution.vet-upper.no':
+    'Multiplica por tres el error junto a la profundidad del secundario y dalo como fracción del flujo (no en partes por millón).',
+  'gd.exo-dilution.vet-blind.title': 'Lo que los aprobados dejan abierto',
+  'gd.exo-dilution.vet-blind.text':
+    'Las dos pruebas pasaron. ¿Qué resuelve eso sobre el tránsito diluido?',
+  'gd.exo-dilution.vet-blind.opt.planet': 'Es un planeta de la estrella A',
+  'gd.exo-dilution.vet-blind.opt.blend':
+    'Es una mezcla, así que no es un planeta',
+  'gd.exo-dilution.vet-blind.opt.open':
+    'De quién es el planeta sigue abierto: la prueba que separaría A de B necesita fotogramas',
+  'gd.exo-dilution.vet-blind.ok':
+    'Sí. Una lista aprobada descarta algunos falsos positivos y deja otros. El tránsito de una vecina hace una caída con forma de planeta, con profundidades impares y pares iguales y sin secundario; solo un desplazamiento del centroide en los fotogramas, o una imagen de alta resolución, puede distinguir las estrellas, y esta observación no tiene fotogramas.',
+  'gd.exo-dilution.vet-blind.no':
+    '¿Qué falsos positivos detectan las pruebas de impares y pares y del secundario, y es un planeta alrededor de la vecina uno de ellos?',
   'gd.exo-dilution.wrap.title': 'Un radio es un conjunto de elecciones',
   'gd.exo-dilution.wrap.text':
     'Un mismo planeta tiene cocientes de radios publicados de 0,065 a 0,087 y radios de 1,41 a 2,30 radios de Júpiter. Tus ajustes muestran de dónde sale buena parte de ese intervalo: qué luz se quita, y el radio de qué estrella multiplica k. Un ajuste sin diluir de la luz recogida da un cociente cercano al menor publicado. Cuando un resultado depende de una elección que los datos no pueden hacer, la elección forma parte del resultado.',

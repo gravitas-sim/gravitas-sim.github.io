@@ -15,6 +15,9 @@ the release rather than in the tag.
 
 ### Added
 
+- **Vetting with ambiguity (Prompt 228).** `js/kernels/vetting/`: odd-even depths with red-noise-widened errors, a secondary-eclipse search at the expected phase, a difference-image centroid test on detector frames of a blended neighbor, blend light curves from the eclipsing-binary model at a stated dilution, and a summary of rejected, undecided or survives that never says planet; a candidate whose signal cannot decide a test is inconclusive, never a pass. Validated against an independent implementation and an ensemble at committed thresholds (24 bounded legs pass, none failed). The vetting panel, the investigation Planet or Not? (English and Spanish, three depths), the advanced steps of A Star That Is Not Alone, and the model-page section on what a passed checklist does and does not mean. See VETTING.md.
+- **The transit model delta (Prompt 225).** A four-coefficient limb-darkening law (Claret 2000, coefficients fixed from a table or typed by the reader, never fitted) as a second transit model beside the quadratic one, which is unchanged to the bit; the star's mean density from P and a/R* with the circular-orbit assumption stated and the eccentric correction (Kipping 2010) as a labelled row; a constraint check that says "not constrained" for a grazing transit; an in-transit residual test; the covariance ellipse of k against b and against q1 through the plot component, with its table; the full parameter set behind a disclosure in the fit panel (English and Spanish), the result as the 150 record; an upper depth of Fit the transit with the lower depths graded identically. Validation against batman and scipy with committed bounds: 18 of 31 legs pass, 11 stay failing and labelled, 2 are not run for want of data (`TRANSIT_DELTA.md`). Fixed on the way: in Spanish the fit panel prefilled "0.005", which the Spanish reader parses as five.
+
 - **Variable-star classifier gate (Prompt 223 Part B).** `VARIABLE_CLASSIFIER_GATE.md`: the shipped nearest-neighbour
   classifier measured on 350 Gaia DR3 Cepheid and RR Lyrae rows (Gaia's own labels, CC BY-NC 3.0 IGO, a derived
   fixture) against bounds committed first. Two legs fail and stay failing (accuracy among the stars called 0.772
@@ -149,12 +152,12 @@ The Observatory's image measurement train (Prompts 179 to 182, 184, 186 to 189, 
 
 **Gravitas 2.0.0.** Gravitas grows from a gravity sandbox with 22 guided
 investigations into a browser laboratory: <!--fact:scenarios-->61<!--/fact-->
-sandbox scenarios, <!--fact:libraryInvestigations-->123<!--/fact--> guided
-investigations (<!--fact:investigations-->106<!--/fact--> that run in the
+sandbox scenarios, <!--fact:libraryInvestigations-->125<!--/fact--> guided
+investigations (<!--fact:investigations-->108<!--/fact--> that run in the
 simulation and <!--fact:guidedInvestigations-->17<!--/fact--> in the
 Observatory, the 3-D lab and the mission lab), a shared shell, a Library, a
 workspace for each student's own work, an instructor path from adoption page to
-gradebook file, <!--fact:instructorDocuments-->1022<!--/fact--> generated
+gradebook file, <!--fact:instructorDocuments-->1044<!--/fact--> generated
 instructor documents, a public validation suite
 of <!--fact:physicsChecks-->352<!--/fact--> checks, and authoring tools
 (Scenario Studio, Investigation Composer, course packs and an extension SDK).
@@ -1807,7 +1810,7 @@ listed here because this is the release that first carries it.
 - **An instructor portal that explains itself.** `/instructors/` states what is
   behind the passphrase before asking for it, says plainly what client-side
   encryption on a static host can and cannot promise, and presents the
-  <!--fact:instructorDocuments-->1022<!--/fact--> documents grouped by investigation
+  <!--fact:instructorDocuments-->1044<!--/fact--> documents grouped by investigation
   with their kind and size. A wrong passphrase and a missing bundle now report
   as the different problems they are.
 - **Dual licensing.** The code is MIT; the original educational material is
@@ -1874,7 +1877,7 @@ listed here because this is the release that first carries it.
   uncertainty, the target and the observing configuration.
 - **Offline support.** A service worker precaches the application shell, the
   <!--fact:scenarios-->61<!--/fact--> scenario thumbnails and all
-  <!--fact:investigations-->106<!--/fact--> English lessons, so a class keeps
+  <!--fact:investigations-->108<!--/fact--> English lessons, so a class keeps
   working when the room's wifi drops. The cache name is a content hash, so a
   build invalidates it. See [OFFLINE_AND_LOW_END.md](OFFLINE_AND_LOW_END.md).
 - **A measured low-end quality tier.** Chosen from the frame rate the machine
@@ -1883,7 +1886,8 @@ listed here because this is the release that first carries it.
   off.
 - **An investigation authoring toolchain.** `npm run author:check` validates
   every lesson and every one of the
-  <!--fact:investigationSteps-->1402<!--/fact--> steps; `npm run author:new`
+  <!--fact:investigationSteps-->1417<!--/fact--> steps; `npm run author:new`
+  <!--fact:investigationSteps-->1417<!--/fact--> steps; `npm run author:new`
   scaffolds a lesson with its translation shadow and instructor stub;
   `?author=<lesson>&step=<n>` opens any step with diagnostics without touching
   a student's saved progress; and a browser walker exercises every step of

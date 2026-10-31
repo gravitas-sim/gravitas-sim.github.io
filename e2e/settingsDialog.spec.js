@@ -207,6 +207,12 @@ test.describe('the settings dialog, open', () => {
     app,
   }) => {
     await app.boot({ url: '/?author=tides&step=10' });
+    // The lesson's panel is open before the dialog is: it opens a moment after
+    // boot, and one that opens after the dialog un-inerts itself behind it. The
+    // count below passes on the header's own language menu, so on its own it
+    // waited for nothing.
+    await expect(page.locator('#investigationPanel')).toBeVisible();
+    await expect(page.locator('.inv-step-title')).not.toBeEmpty();
     // Polled, because on dist/ the lesson's family arrives as a lazy chunk.
     await expect
       .poll(

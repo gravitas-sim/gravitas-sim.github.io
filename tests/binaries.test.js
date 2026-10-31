@@ -202,6 +202,7 @@ describe('the Observatory fit panel', () => {
     const dim = u => (u === 'm/s' ? 'velocity' : 'ratio');
     expect(modelsFor(o('1'), dim)).toEqual([
       'transit-quadratic',
+      'transit-claret4',
       'eclipsing-binary',
     ]);
     expect(modelsFor(o('m/s'), dim)).toEqual(['rv-keplerian']);

@@ -224,6 +224,7 @@ export const SEQUENCES = [
       ['binary-star-planets', 'core'],
       ['extending-an-experiment', 'core'],
       ['refitting-a-transit', 'core', ['transit-photometry']],
+      ['planet-or-not', 'core', ['transit-photometry']],
       ['two-periodograms', 'core', ['transit-photometry']],
       ['sampling-a-posterior', 'core', ['refitting-a-transit']],
     ]
@@ -273,6 +274,7 @@ export const SEQUENCES = [
       ['which-kind-of-variable', 'core', ['the-beat-of-a-star']],
       ['leavitts-law', 'core', ['the-beat-of-a-star']],
       ['the-first-rung', 'core', ['leavitts-law']],
+      ['the-metallicity-term', 'core', ['leavitts-law', 'the-first-rung']],
       ['the-expanding-universe', 'core'],
       ['standard-candles', 'core', ['the-expanding-universe']],
       ['the-shape-of-expansion', 'quantitative', ['standard-candles']],

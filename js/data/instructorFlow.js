@@ -19,6 +19,8 @@ import { INSTRUCTOR as CLUSTERS } from './investigations/cluster-sequence.js';
 import { INSTRUCTOR as MASSES } from './investigations/binary-masses-sequence.js';
 import { INSTRUCTOR as ACTIVITY } from './investigations/stellar-activity-sequence.js';
 import { INSTRUCTOR as REMNANTS } from './investigations/remnants-sequence.js';
+import { INSTRUCTOR as VETTING } from './investigations/vetting-sequence.js';
+import { INSTRUCTOR as VARIABLES_II } from './investigations/variables-ii-sequence.js';
 
 export default {
   format: 'gravitas.instructor-flow',
@@ -41,6 +43,8 @@ export default {
     ...MASSES.flow,
     ...ACTIVITY.flow,
     ...REMNANTS.flow,
+    ...VETTING.flow,
+    ...VARIABLES_II.flow,
     'the-suns-motion': [
       {
         from: 'from-stars-to-velocities',

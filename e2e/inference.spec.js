@@ -88,7 +88,9 @@ test.describe('the inference core', () => {
     await expect(results).toContainText('mass and density');
     // The residuals (PLOT_COMPONENT.md, D2): drawn, labeled with how many,
     // and only shown - nothing to select or focus.
-    const residuals = results.locator('svg.ow-plot');
+    // (The transit family also draws profiles and ellipses here, Prompt 225:
+    // this is the one labeled with the residuals' count.)
+    const residuals = results.locator('svg.ow-plot[aria-label*="1882 points"]');
     await expect(residuals).toHaveAttribute('aria-label', /1882 points/);
     expect(
       await residuals.locator('.ow-points .ow-pt').count()

@@ -1,0 +1,762 @@
+{
+  "note": "The validation table of tools/transit-delta-validate.mjs as last measured (Node 22.23.4).",
+  "rows": [
+    {
+      "id": "A1",
+      "status": "pass",
+      "measured": 0.00005012,
+      "note": "max |difference| / k^2"
+    },
+    {
+      "id": "A2",
+      "status": "pass",
+      "measured": 0,
+      "note": "max |difference|"
+    },
+    {
+      "id": "A3",
+      "status": "pass",
+      "measured": {
+        "total": 2.875e-14,
+        "innerLight": 4.663e-15
+      },
+      "note": "relative; total light, and the light within r = 0.3"
+    },
+    {
+      "id": "A4",
+      "status": "pass",
+      "measured": 0.00002132,
+      "note": "relative to k^2 I(mu_c) / <I>"
+    },
+    {
+      "id": "A5",
+      "status": "pass",
+      "measured": {
+        "rho": 1.4098,
+        "RHO_SUN": 1.4098
+      },
+      "note": "g/cm^3 against 1.4098"
+    },
+    {
+      "id": "A6",
+      "status": "pass",
+      "measured": 1.329e-10,
+      "note": "relative, worst of 16 orbits and the cube"
+    },
+    {
+      "id": "A7",
+      "status": "pass",
+      "measured": {
+        "axes": 0,
+        "inside": 0.6858
+      },
+      "note": "semi-axes and angle; the seeded draw"
+    },
+    {
+      "id": "A8",
+      "status": "not-run",
+      "measured": null,
+      "note": "the Claret (2017) TESS table was not supplied (VizieR unreachable from the machine); the lookup code is tested on a labelled miniature grid in tests/transitDelta.test.js, which is not this leg"
+    },
+    {
+      "id": "B0",
+      "status": "pass",
+      "measured": {
+        "worst": 0.000004989,
+        "per": {
+          "F1": 1.964e-7,
+          "F2": 7.011e-8,
+          "F3": 1.687e-8,
+          "F4": 2.149e-8,
+          "F5": 0.000004989,
+          "F6": 0.000004787
+        }
+      },
+      "note": "max |flux difference|"
+    },
+    {
+      "id": "B1",
+      "status": "fail",
+      "measured": {
+        "S1": {
+          "worstSigmas": 0.5896,
+          "dChi2": 0.6153,
+          "sigmaRatio": [
+            1.01,
+            1,
+            0.873,
+            0.782,
+            0.689,
+            0.924,
+            0.981
+          ],
+          "detail": {
+            "t0": {
+              "sigmas": 0.08997,
+              "sigmaRatio": 1.008
+            },
+            "P": {
+              "sigmas": 0.07889,
+              "sigmaRatio": 1.001
+            },
+            "k": {
+              "sigmas": 0.2919,
+              "sigmaRatio": 0.873
+            },
+            "aRs": {
+              "sigmas": 0.5896,
+              "sigmaRatio": 0.782
+            },
+            "b": {
+              "sigmas": 0.4516,
+              "sigmaRatio": 0.6894
+            },
+            "q1": {
+              "sigmas": 0.0727,
+              "sigmaRatio": 0.9236
+            },
+            "q2": {
+              "sigmas": 0.03277,
+              "sigmaRatio": 0.9809
+            }
+          }
+        },
+        "S2": {
+          "worstSigmas": 0.2466,
+          "dChi2": 0.04235,
+          "sigmaRatio": [
+            1.01,
+            1.01,
+            0.959,
+            0.936,
+            0.912
+          ],
+          "detail": {
+            "t0": {
+              "sigmas": 0.001588,
+              "sigmaRatio": 1.008
+            },
+            "P": {
+              "sigmas": 0.01044,
+              "sigmaRatio": 1.009
+            },
+            "k": {
+              "sigmas": 0.2194,
+              "sigmaRatio": 0.9589
+            },
+            "aRs": {
+              "sigmas": 0.2466,
+              "sigmaRatio": 0.936
+            },
+            "b": {
+              "sigmas": 0.2395,
+              "sigmaRatio": 0.9116
+            }
+          }
+        },
+        "S3": {
+          "worstSigmas": 0.3209,
+          "dChi2": 0.09417,
+          "sigmaRatio": [
+            0.998,
+            0.999,
+            0.991,
+            0.96,
+            0.961
+          ],
+          "detail": {
+            "t0": {
+              "sigmas": 0.005803,
+              "sigmaRatio": 0.9981
+            },
+            "P": {
+              "sigmas": 0.004627,
+              "sigmaRatio": 0.9987
+            },
+            "k": {
+              "sigmas": 0.1496,
+              "sigmaRatio": 0.9915
+            },
+            "aRs": {
+              "sigmas": 0.3209,
+              "sigmaRatio": 0.9596
+            },
+            "b": {
+              "sigmas": 0.2675,
+              "sigmaRatio": 0.9613
+            }
+          }
+        }
+      },
+      "note": "gravitas against batman + scipy, in oracle sigmas"
+    },
+    {
+      "id": "B1b",
+      "status": "pass",
+      "measured": {
+        "S1": {
+          "worstSigmas": 0.2307,
+          "dChi2": 0.2079,
+          "sigmaRatio": [
+            1.01,
+            1,
+            0.919,
+            0.905,
+            0.854,
+            0.905,
+            0.994
+          ],
+          "detail": {
+            "t0": {
+              "sigmas": 0.06038,
+              "sigmaRatio": 1.014
+            },
+            "P": {
+              "sigmas": 0.0522,
+              "sigmaRatio": 1.005
+            },
+            "k": {
+              "sigmas": 0.1457,
+              "sigmaRatio": 0.9188
+            },
+            "aRs": {
+              "sigmas": 0.2307,
+              "sigmaRatio": 0.9046
+            },
+            "b": {
+              "sigmas": 0.1957,
+              "sigmaRatio": 0.854
+            },
+            "q1": {
+              "sigmas": 0.03975,
+              "sigmaRatio": 0.9046
+            },
+            "q2": {
+              "sigmas": 0.05371,
+              "sigmaRatio": 0.9935
+            }
+          }
+        },
+        "S2": {
+          "worstSigmas": 0.04099,
+          "dChi2": 0.01197,
+          "sigmaRatio": [
+            1,
+            1,
+            1,
+            1,
+            0.996
+          ],
+          "detail": {
+            "t0": {
+              "sigmas": 0.006108,
+              "sigmaRatio": 1.002
+            },
+            "P": {
+              "sigmas": 0.003402,
+              "sigmaRatio": 1.002
+            },
+            "k": {
+              "sigmas": 0.03472,
+              "sigmaRatio": 1.003
+            },
+            "aRs": {
+              "sigmas": 0.04099,
+              "sigmaRatio": 1.001
+            },
+            "b": {
+              "sigmas": 0.04033,
+              "sigmaRatio": 0.9964
+            }
+          }
+        },
+        "S3": {
+          "worstSigmas": 0.09079,
+          "dChi2": 0.03931,
+          "sigmaRatio": [
+            0.999,
+            0.999,
+            0.999,
+            0.987,
+            0.988
+          ],
+          "detail": {
+            "t0": {
+              "sigmas": 0.004552,
+              "sigmaRatio": 0.9992
+            },
+            "P": {
+              "sigmas": 0.003729,
+              "sigmaRatio": 0.9994
+            },
+            "k": {
+              "sigmas": 0.03945,
+              "sigmaRatio": 0.9986
+            },
+            "aRs": {
+              "sigmas": 0.09079,
+              "sigmaRatio": 0.9873
+            },
+            "b": {
+              "sigmas": 0.07348,
+              "sigmaRatio": 0.9881
+            }
+          }
+        }
+      },
+      "note": "gravitas against batman + scipy, in oracle sigmas"
+    },
+    {
+      "id": "B2",
+      "status": "fail",
+      "measured": {
+        "worstSigmas": 2.202,
+        "dChi2": 10.75,
+        "sigmaRatio": [
+          1,
+          1,
+          1.02,
+          0.947,
+          0.961,
+          1.22,
+          0.689
+        ],
+        "detail": {
+          "t0": {
+            "sigmas": 0.4933,
+            "sigmaRatio": 1.002
+          },
+          "P": {
+            "sigmas": 0.5771,
+            "sigmaRatio": 1.004
+          },
+          "k": {
+            "sigmas": 1.093,
+            "sigmaRatio": 1.017
+          },
+          "aRs": {
+            "sigmas": 0.7547,
+            "sigmaRatio": 0.9472
+          },
+          "b": {
+            "sigmas": 0.1117,
+            "sigmaRatio": 0.9608
+          },
+          "q1": {
+            "sigmas": 2.202,
+            "sigmaRatio": 1.22
+          },
+          "q2": {
+            "sigmas": 1.504,
+            "sigmaRatio": 0.6887
+          }
+        },
+        "reducedChi2": 7.981
+      },
+      "note": "the shipped HD 209458 rows; gravitas against batman + scipy"
+    },
+    {
+      "id": "B2b",
+      "status": "fail",
+      "measured": {
+        "worstSigmas": 0.6128,
+        "dChi2": 5.315,
+        "sigmaRatio": [
+          0.998,
+          1,
+          0.982,
+          0.975,
+          0.983,
+          1.03,
+          0.872
+        ],
+        "detail": {
+          "t0": {
+            "sigmas": 0.2862,
+            "sigmaRatio": 0.9982
+          },
+          "P": {
+            "sigmas": 0.322,
+            "sigmaRatio": 1
+          },
+          "k": {
+            "sigmas": 0.3949,
+            "sigmaRatio": 0.9817
+          },
+          "aRs": {
+            "sigmas": 0.07088,
+            "sigmaRatio": 0.9752
+          },
+          "b": {
+            "sigmas": 0.1012,
+            "sigmaRatio": 0.9832
+          },
+          "q1": {
+            "sigmas": 0.6128,
+            "sigmaRatio": 1.034
+          },
+          "q2": {
+            "sigmas": 0.5151,
+            "sigmaRatio": 0.8719
+          }
+        },
+        "reducedChi2": 7.981
+      },
+      "note": "the shipped HD 209458 rows; gravitas against batman + scipy"
+    },
+    {
+      "id": "B2c",
+      "status": "pass",
+      "measured": {
+        "worstSigmas": 0.009893,
+        "dChi2": 0.000369,
+        "sigmaRatio": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "detail": {
+          "t0": {
+            "sigmas": 0.009893,
+            "sigmaRatio": 1
+          },
+          "P": {
+            "sigmas": 0.008236,
+            "sigmaRatio": 1
+          },
+          "k": {
+            "sigmas": 0.0009539,
+            "sigmaRatio": 0.9999
+          },
+          "aRs": {
+            "sigmas": 0.0009383,
+            "sigmaRatio": 0.9999
+          },
+          "b": {
+            "sigmas": 0.001236,
+            "sigmaRatio": 0.9998
+          },
+          "q1": {
+            "sigmas": 0.000501,
+            "sigmaRatio": 0.9999
+          },
+          "q2": {
+            "sigmas": 0.0003372,
+            "sigmaRatio": 1
+          }
+        },
+        "reducedChi2": 7.984
+      },
+      "note": "the shipped HD 209458 rows; gravitas against batman + scipy"
+    },
+    {
+      "id": "B3",
+      "status": "fail",
+      "measured": {
+        "worstSigmas": 1.157,
+        "detail": {
+          "t0": {
+            "sigmas": 0.2597,
+            "sigmaRatio": 0.9947
+          },
+          "P": {
+            "sigmas": 0.3299,
+            "sigmaRatio": 0.9957
+          },
+          "k": {
+            "sigmas": 1.157,
+            "sigmaRatio": 0.9981
+          },
+          "aRs": {
+            "sigmas": 0.319,
+            "sigmaRatio": 0.9891
+          }
+        },
+        "dChi2": 186.4
+      },
+      "note": "transit-claret4 on HD 209458 with the labelled test law and b fixed at 0.43, against batman + scipy"
+    },
+    {
+      "id": "B3b",
+      "status": "fail",
+      "measured": {
+        "worstSigmas": 0.2685,
+        "detail": {
+          "t0": {
+            "sigmas": 0.04597,
+            "sigmaRatio": 1
+          },
+          "P": {
+            "sigmas": 0.06255,
+            "sigmaRatio": 1.003
+          },
+          "k": {
+            "sigmas": 0.2685,
+            "sigmaRatio": 0.9997
+          },
+          "aRs": {
+            "sigmas": 0.01814,
+            "sigmaRatio": 0.9984
+          }
+        },
+        "dChi2": 42.88
+      },
+      "note": "transit-claret4 on HD 209458 with the labelled test law and b fixed at 0.43, against batman + scipy"
+    },
+    {
+      "id": "B3c",
+      "status": "pass",
+      "measured": {
+        "worstSigmas": 0.07269,
+        "detail": {
+          "t0": {
+            "sigmas": 0.07269,
+            "sigmaRatio": 1
+          },
+          "P": {
+            "sigmas": 0.06234,
+            "sigmaRatio": 1
+          },
+          "k": {
+            "sigmas": 0.000379,
+            "sigmaRatio": 1
+          },
+          "aRs": {
+            "sigmas": 0.004093,
+            "sigmaRatio": 1
+          }
+        },
+        "dChi2": 0.02345
+      },
+      "note": "transit-claret4 on HD 209458 with the labelled test law and b fixed at 0.43, against batman + scipy"
+    },
+    {
+      "id": "B4",
+      "status": "fail",
+      "measured": {
+        "rhoTrue": 1.007,
+        "rhoCirc": 1.75,
+        "rhoCorrected": 0.8822,
+        "errorUncorrected": 0.7372,
+        "errorCorrected": 0.1241
+      },
+      "note": "relative error of the corrected density; the uncorrected one beside it"
+    },
+    {
+      "id": "B4b",
+      "status": "pass",
+      "measured": {
+        "rhoTrue": 1.007,
+        "rhoCirc": 1.89,
+        "rhoCorrected": 0.9531,
+        "errorUncorrected": 0.8769,
+        "errorCorrected": 0.05364
+      },
+      "note": "relative error of the corrected density; the uncorrected one beside it"
+    },
+    {
+      "id": "C1",
+      "status": "fail",
+      "measured": {
+        "worst": 1.982,
+        "cells": {
+          "quadratic b=0": {
+            "k": 1.229,
+            "aRs": 1.121,
+            "b": 1.982,
+            "fits": 10
+          },
+          "quadratic b=0.3": {
+            "k": 0.7895,
+            "aRs": 0.8768,
+            "b": 0.7907,
+            "fits": 10
+          },
+          "quadratic b=0.6": {
+            "k": 0.6589,
+            "aRs": 0.9752,
+            "b": 0.8327,
+            "fits": 10
+          },
+          "quadratic b=0.8": {
+            "k": 0.1313,
+            "aRs": 0.7075,
+            "b": 0.6054,
+            "fits": 10
+          },
+          "claret4 b=0": {
+            "k": 0.2539,
+            "aRs": 0.3057,
+            "b": 0.5774,
+            "fits": 10
+          },
+          "claret4 b=0.3": {
+            "k": 0.6808,
+            "aRs": 0.5499,
+            "b": 0.5255,
+            "fits": 10
+          },
+          "claret4 b=0.6": {
+            "k": 1.094,
+            "aRs": 0.7147,
+            "b": 0.8155,
+            "fits": 10
+          },
+          "claret4 b=0.8": {
+            "k": 1.129,
+            "aRs": 0.7894,
+            "b": 0.7616,
+            "fits": 10
+          }
+        }
+      },
+      "note": "median |pull| per cell, worst cell"
+    },
+    {
+      "id": "C2",
+      "status": "fail",
+      "measured": {
+        "quadratic b=0": 0.1322,
+        "quadratic b=0.3": 0.112,
+        "quadratic b=0.6": 0.127,
+        "quadratic b=0.8": 0.1325,
+        "claret4 b=0": 0.02221,
+        "claret4 b=0.3": 0.0556,
+        "claret4 b=0.6": 0.05588,
+        "claret4 b=0.8": 0.03977
+      },
+      "note": "median relative error of the circular density per cell"
+    },
+    {
+      "id": "C3",
+      "status": "fail",
+      "measured": {
+        "failures": 0,
+        "coverage": {
+          "k": {
+            "within1": 0.6666666666666666,
+            "within196": 0.9333333333333333
+          },
+          "aRs": {
+            "within1": 0.7,
+            "within196": 0.8333333333333334
+          },
+          "b": {
+            "within1": 0.7333333333333333,
+            "within196": 0.8666666666666667
+          },
+          "rhoStar": {
+            "within1": 0.7,
+            "within196": 0.8333333333333334
+          }
+        }
+      },
+      "note": "30 seeds"
+    },
+    {
+      "id": "C4",
+      "status": "pass",
+      "measured": {
+        "failures": 0,
+        "coverage": {
+          "k": {
+            "within1": 0.7666666666666667,
+            "within196": 0.9
+          },
+          "aRs": {
+            "within1": 0.7666666666666667,
+            "within196": 0.9
+          },
+          "b": {
+            "within1": 0.8,
+            "within196": 0.9333333333333333
+          },
+          "rhoStar": {
+            "within1": 0.7666666666666667,
+            "within196": 0.9
+          }
+        }
+      },
+      "note": "30 seeds"
+    },
+    {
+      "id": "C5",
+      "status": "pass",
+      "measured": {
+        "failures": 0,
+        "coverage": {
+          "k": {
+            "within1": 0.8,
+            "within196": 0.9
+          },
+          "rhoStar": {
+            "within1": 0.8,
+            "within196": 0.9666666666666667
+          }
+        }
+      },
+      "note": "30 seeds, grazing"
+    },
+    {
+      "id": "D1",
+      "status": "pass",
+      "measured": {
+        "share": 1,
+        "failures": 0
+      },
+      "note": "share of grazing seeds flagged, the rule as committed"
+    },
+    {
+      "id": "D1b",
+      "status": "pass",
+      "measured": {
+        "share": 1,
+        "failures": 0
+      },
+      "note": "share of grazing seeds flagged, the rule as amended (AM2)"
+    },
+    {
+      "id": "D2",
+      "status": "fail",
+      "measured": {
+        "share": 1
+      },
+      "note": "share of clean seeds wrongly flagged, the rule as committed"
+    },
+    {
+      "id": "D2b",
+      "status": "pass",
+      "measured": {
+        "share": 0.03333333333333333
+      },
+      "note": "share of clean seeds wrongly flagged, the rule as amended (AM2)"
+    },
+    {
+      "id": "D3",
+      "status": "fail",
+      "measured": {
+        "share": 0.23333333333333334,
+        "failures": 0
+      },
+      "note": "share of spot-crossing seeds failing the residual test"
+    },
+    {
+      "id": "D4",
+      "status": "pass",
+      "measured": {
+        "share": 0
+      },
+      "note": "share of clean seeds failing the residual test"
+    },
+    {
+      "id": "E1",
+      "status": "not-run",
+      "measured": null,
+      "note": "no published TESS solution was supplied under a recorded rights decision. The NASA Exoplanet Archive parameter sets for HD 209458 b were fetched (public archive, credited, terms page not read; 23 sets, SHA-256 b3afd5a0...), and none cites TESS data or carries uncertainties for Rp/R*, a/R* or b, so no TESS-era comparison with a published sigma can be made; the existing literature comparison in INFERENCE_CORE.md (Stassun 2017, Knutson 2007) is not this leg"
+    }
+  ]
+}

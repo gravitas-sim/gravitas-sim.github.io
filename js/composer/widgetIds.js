@@ -89,6 +89,7 @@ export const WIDGET_FAMILIES = Object.freeze({
   exposure: ['exposure-planner'],
   strategy: ['strategy-window', 'strategy-plan'],
   eclipse: ['eclipse-curve', 'eclipse-fit'],
+  vetting: ['vetting-checklist'],
   clusterFit: ['cluster-fit'],
   masses: ['masses-minimum', 'masses-solve', 'masses-diagram'],
   activity: [
@@ -98,6 +99,7 @@ export const WIDGET_FAMILIES = Object.freeze({
     'activity-ffd',
   ],
   remnants: ['remnant-cooling', 'remnant-outcome'],
+  variablesII: ['plz-metallicity', 'variable-features', 'variable-ambiguity'],
   spectrograph: [
     'spectrograph-lines',
     'spectrograph-arc',

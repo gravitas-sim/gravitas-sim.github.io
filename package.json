@@ -10,6 +10,7 @@
     "strategy:validate": "node tools/strategy-validate.mjs",
     "binaries:validate": "node tools/binaries-validate.mjs",
     "binary-masses:validate": "node tools/binary-masses-validate.mjs",
+    "transit-delta:validate": "node tools/transit-delta-validate.mjs",
     "cluster:validate": "node tools/cluster-fit-validate.mjs",
     "survey:validate": "node tools/survey-validate.mjs",
     "test": "NODE_OPTIONS=\"--experimental-vm-modules\" jest",
@@ -91,6 +92,8 @@
     "measure:validate": "node tools/measure-validate.mjs",
     "activity:validate": "node tools/stellar-activity-validate.mjs",
     "remnants:validate": "node tools/remnants-validate.mjs",
+    "vetting:validate": "node tools/vetting-validate.mjs",
+    "variables-ii:validate": "node tools/variables-ii-validate.mjs",
     "packs:check": "node tools/build-data-packs.mjs --check",
     "sdk": "node sdk/cli.mjs",
     "sdk:check": "node sdk/cli.mjs validate --all && node sdk/cli.mjs test --all",
@@ -231,6 +234,10 @@
     "js-yaml": "4.3.2",
     "playwright": "1.64.0",
     "prettier": "^3.6.2"
+  },
+  "overrides": {
+    "glob": "^14.0.3",
+    "minimatch": "^11.0.3"
   },
   "engines": {
     "node": ">=22"

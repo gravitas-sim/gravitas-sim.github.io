@@ -3,7 +3,7 @@
  "calls": 12,
  "reached": 8,
  "unreached": [
-  "js/observatory/fitPanel.js:602:62",
+  "js/observatory/fitPanel.js:711:62",
   "js/observatory/guidePanel.js:330:53",
   "js/observatory/measurePanel.js:491:29",
   "js/observatoryPage.js:542:50"

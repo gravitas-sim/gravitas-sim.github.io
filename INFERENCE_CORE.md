@@ -585,6 +585,10 @@ were set from this run and the CPU-time run together.
   - an oversized request is refused before any realm starts;
   - a change to the data clears a stale result;
   - no axe violations.
+- `tests/transitDelta.test.js` and `e2e/transitDelta.spec.js`, the transit model
+  delta of Prompt 225 (the four-coefficient law, the density, the covariance
+  ellipse, the constraint and residual checks, the validation table); see
+  `TRANSIT_DELTA.md`.
 - `npm run validate:inference` and `npm run bench:inference`, the manual
   instruments behind the tables above.
 

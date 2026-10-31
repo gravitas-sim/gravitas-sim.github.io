@@ -39,6 +39,17 @@ export const EN_EXOPLANET = {
     'HD 209458’s value is from the header of the SPOC file its dataset was made from; Kepler-13’s is from its dataset; A’s share is from the TESS Input Catalog’s magnitudes.',
   'gd.show.how.stellarRadius':
     'Adopted, not measured here: a light curve gives k, and the radius has to come from the star.',
+  'gd.show.vA': 'Planet A (grazing)',
+  'gd.show.vB': 'Planet B (grazing, 40 percent larger)',
+  'gd.show.vPlanet': 'k {k}, b {b}, a/R* {aRs}',
+  'gd.show.vDepth': 'Their depths at mid-transit',
+  'gd.show.vDepthIs': 'A {a} ppm; B {b} ppm',
+  'gd.show.vMax': 'The largest difference between their light curves',
+  'gd.show.vMaxPpm': '{value} parts per million',
+  'gd.show.vChi':
+    'Chi-square difference over eight transits (it takes 4 to count)',
+  'gd.show.how.vshape':
+    'Computed in this page from the transit model: both planets’ 20-minute light curves across one transit, at HD 209458’s period and limb darkening, against the scatter of the shipped light curve, 213 parts per million a point, for the eight transits of the sector.',
   'gd.show.how.depths':
     'Computed in this page: the weighted mean flux within a quarter of a transit’s length of mid-transit, against the mean more than one transit’s length from it and from half an orbit later, at the adopted period and the epoch where the dip is deepest. The uncertainty includes noise correlated in time, measured from the light outside the transits.',
   'gd.show.how.published':
@@ -219,6 +230,40 @@ export const EN_EXOPLANET = {
   'gd.exo-fit.torres.ok':
     '{value} Jupiter radii: a star 3 percent smaller makes the planet 3 percent smaller. A planet’s radius is only as good as its star’s, and no light curve can check the star’s.',
   'gd.exo-fit.torres.no': 'Multiply your k by 1.155 and by 9.7312.',
+  'gd.exo-fit.density.title': 'The star’s density',
+  'gd.exo-fit.density.text':
+    'The orbit alone gives the star’s mean density: Kepler’s third law with the period and the orbit’s size in stellar radii, ρ = 3π (a/R*)³ / (G P²). The results table lists it under derived values, for a circular orbit and neglecting the planet’s mass. What mean density, in g/cm³, did your fit derive?',
+  'gd.exo-fit.density.ok':
+    '{value} g/cm³. A transit gives a star’s density without knowing its distance or its mass, which is why a transit can be compared with a star’s mass and radius from elsewhere. The sun’s is 1.41.',
+  'gd.exo-fit.density.no':
+    'Copy the star’s mean density, circular orbit, from the derived rows of the results table.',
+  'gd.exo-fit.eccentric.title': 'What a circular orbit assumes',
+  'gd.exo-fit.eccentric.text':
+    'The fit takes the orbit as circular. The speed with which the planet crosses the star sets the transit’s length, and an eccentric orbit crosses faster or slower than a circular one of the same period. Suppose the orbit were eccentric, e = 0.2, with the transit at periastron’s far side (ω = 90 degrees). By what factor is your circular density too high? The correction is ((1 + e sin ω) / √(1 − e²))³. Open “Limb-darkening coefficients and orbit assumptions” to see it applied to your fit.',
+  'gd.exo-fit.eccentric.ok':
+    '{value}. A transit alone cannot tell a circular orbit from an eccentric one, so the density it gives is a density only if the orbit is circular, which is why the fit says so and offers the correction as an assumption, never as a result.',
+  'gd.exo-fit.eccentric.no':
+    'Compute (1 + 0.2 × sin 90°) / √(1 − 0.2²), then cube it.',
+  'gd.exo-fit.ellipse.title': 'The ellipse of k and b',
+  'gd.exo-fit.ellipse.text':
+    'Under the results the panel draws the covariance ellipse of the radius ratio k against the impact parameter b, with a table. A long, thin, tilted ellipse is a degeneracy; a round one is two parameters the data fix separately. What is the correlation between k and b in the ellipse’s table?',
+  'gd.exo-fit.ellipse.ok':
+    '{value}. A larger k with a larger b gives nearly the same transit: the planet is bigger but crosses nearer the edge, where the star is dimmer. The data decide a combination better than either.',
+  'gd.exo-fit.ellipse.no':
+    'Copy the row “Correlation” from the table under the k against b ellipse.',
+  'gd.exo-fit.laws.title': 'Two limb-darkening laws',
+  'gd.exo-fit.laws.text':
+    'The fit’s default law has two coefficients, q1 and q2, fitted. The second model in the list, a transit with four-coefficient limb darkening, uses the law of Claret (2000), I(μ) = 1 − Σ cₙ (1 − μ^(n/2)) for n = 1 to 4, with the four coefficients fixed from a table of limb darkening for the star’s temperature, surface gravity and metallicity. They are fixed, not fitted, because four of them cannot be told apart in a transit, and because one table row is a statement about a star, not about a light curve. Gravitas does not ship such a table: you enter the four numbers from one, and the panel records where they came from. Nothing in this investigation grades them.',
+  'gd.exo-fit.vshape.title': 'The grazing transit',
+  'gd.exo-fit.vshape.text':
+    'A planet that crosses the star’s middle makes a transit with a flat bottom whose ingress and egress tell its size and path apart. One that only grazes the edge makes a V: the light never settles. The table shows two planets that both graze a star like HD 209458: the second is 40 percent larger and crosses a little farther out. Their light curves differ by the amount shown, against a scatter of 213 parts per million in each 20-minute point. Could the eight transits of one TESS sector tell them apart?',
+  'gd.exo-fit.vshape.opt.can':
+    'Yes: the difference is larger than the noise allows',
+  'gd.exo-fit.vshape.opt.cannot': 'No: the noise hides the difference',
+  'gd.exo-fit.vshape.ok':
+    'The chi-square difference over all eight transits is far below 4, so the light curve cannot choose. That is why a V-shaped transit leaves the radius ratio and the impact parameter undetermined, and why the fit says so: “not constrained” is the honest answer, and a planet’s radius from it is a range, not a number.',
+  'gd.exo-fit.vshape.no':
+    'Compare the chi-square difference in the table with 4: below it, the data cannot choose.',
   'gd.exo-fit.wrap.title': 'What the fit decided, and what it assumed',
   'gd.exo-fit.wrap.text':
     'The light curve decided k and the transit’s shape, and decided a/R* and b only together. The planet’s radius took one more number, the star’s, adopted from the literature and carried with its uncertainty. The fit panel names every parameter as fitted, fixed or derived: that list is the honest statement of what the data decided.',
@@ -288,6 +333,34 @@ export const EN_EXOPLANET = {
     'Right. Both stars sit inside one pixel, and either could host a planet that makes this dip: a different planet for each. Deciding needs evidence that a light curve of both stars together cannot give. The published values above differ where this investigation says they must: the ratio runs from 0.065 to 0.087 and the radius from 1.41 to 2.30 Jupiter radii, because each analysis made its own choice of dilution and of the star’s radius.',
   'gd.exo-dilution.which-star.no':
     'What in the light curve could tell A’s transit from B’s, when both stars fall inside one pixel?',
+  'gd.exo-dilution.vet-tests.title': 'Do the light-curve tests pass?',
+  'gd.exo-dilution.vet-tests.text':
+    'Two tests a light curve can run on its own: do odd and even transits have the same depth, and is there a dip half an orbit after the transit? The panel shows the second on this curve. Run both the way the vetting panel does (a depth is a box in the middle of the transit against a baseline around it, errors widened for red noise). A test that the data are too noisy to decide is inconclusive, not a pass.\n\nOn the SAP curve, what do the two tests say together?',
+  'gd.exo-dilution.vet-tests.opt.pass': 'Both pass',
+  'gd.exo-dilution.vet-tests.opt.fail': 'At least one fails',
+  'gd.exo-dilution.vet-tests.opt.inconclusive': 'At least one cannot decide',
+  'gd.exo-dilution.vet-tests.ok':
+    'Both pass: odd and even depths agree within their errors, and no secondary eclipse stands out. A pass rules out an eclipsing binary at this period. It says nothing yet about whose light the dip is.',
+  'gd.exo-dilution.vet-tests.no':
+    'Compare the odd and even depths against their combined error, and the dip at phase one half against its own error. A planet’s secondary is far too small to see here.',
+  'gd.exo-dilution.vet-upper.title': 'What a missing secondary allows',
+  'gd.exo-dilution.vet-upper.text':
+    'No secondary was seen, so the data only bound it: a dip deeper than three standard errors would have shown. Take three times the error of the depth at phase one half, as a fraction of the flux.',
+  'gd.exo-dilution.vet-upper.ok':
+    '{value}: a secondary shallower than this could hide in the noise. An upper limit is the honest form of “not seen”.',
+  'gd.exo-dilution.vet-upper.no':
+    'Multiply the error beside the secondary depth by three, and give it as a fraction of the flux (not in parts per million).',
+  'gd.exo-dilution.vet-blind.title': 'What the passes leave open',
+  'gd.exo-dilution.vet-blind.text':
+    'Both tests passed. What does that settle about the diluted transit?',
+  'gd.exo-dilution.vet-blind.opt.planet': 'It is a planet of star A',
+  'gd.exo-dilution.vet-blind.opt.blend': 'It is a blend, so not a planet',
+  'gd.exo-dilution.vet-blind.opt.open':
+    'Whose planet it is stays open: the test that could split A from B needs frames',
+  'gd.exo-dilution.vet-blind.ok':
+    'Yes. A passed checklist rules out some false positives and leaves others. A neighbor’s transit makes a planet-shaped dip with equal odd and even depths and no secondary; only a centroid shift in the frames, or a high-resolution image, can tell the stars apart, and this observation has no frames.',
+  'gd.exo-dilution.vet-blind.no':
+    'Which false positives do the odd-even and secondary tests catch, and is a planet around the neighbor one of them?',
   'gd.exo-dilution.wrap.title': 'A radius is a set of choices',
   'gd.exo-dilution.wrap.text':
     'One planet has published radius ratios from 0.065 to 0.087 and radii from 1.41 to 2.30 Jupiter radii. Your fits show where much of that range comes from: whose light is taken out, and whose star’s radius multiplies k. An undiluted fit to the collected light gives a ratio close to the smallest published one. When a result depends on a choice the data cannot make, the choice belongs in the result.',

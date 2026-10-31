@@ -20,16 +20,24 @@ export const gaussian = seed => normals(stream('noise', String(seed)));
 /**
  * A transit light curve at given times, with white noise.
  * @param {{seed: string, times: ArrayLike<number>, sigma: number,
- *   truth: {t0, P, k, aRs, b, q1, q2}, f0?: number, exposure?: number,
- *   supersample?: number, dilution?: number}} o
+ *   truth: {t0, P, k, aRs, b, q1, q2} or {t0, P, k, aRs, b, c: [c1..c4]}
+ *   (the four-coefficient law), f0?: number, exposure?: number,
+ *   supersample?: number, dilution?: number, bumps?: Array<{t: number,
+ *   amplitude: number, sigma: number}>}} o - bumps are Gaussian excesses in
+ *   the flux, a spot the planet crosses (a model the fit does not have)
  */
 export function syntheticTransit(o) {
-  const { u1, u2 } = limbDarkening(o.truth.q1, o.truth.q2);
+  const law = o.truth.c ? {} : limbDarkening(o.truth.q1, o.truth.q2);
   const clean = transitFlux(
     o.times,
-    { ...o.truth, u1, u2 },
+    { ...o.truth, ...law },
     { exposure: o.exposure ?? 0, supersample: o.supersample ?? 11, annuli: 96 }
   );
+  for (const bump of o.bumps ?? [])
+    for (let i = 0; i < clean.length; i++)
+      clean[i] +=
+        bump.amplitude *
+        Math.exp(-0.5 * ((o.times[i] - bump.t) / bump.sigma) ** 2);
   const n = gaussian(o.seed);
   const f0 = o.f0 ?? 1;
   const keep = 1 - (o.dilution ?? 0);

@@ -325,4 +325,56 @@ export const ES_INFERENCE = {
     'Primero haz un ajuste en el panel de ajuste; su resultado será entonces un origen de modelo aquí.',
   'obs.cmp.cite':
     'La comparación cita los datos por un resumen de sus filas y el modelo por su identidad y valores, e indica qué números fueron ajustados, fijos, derivados o supuestos.',
+  // Prompt 225: la ley de cuatro coeficientes, la densidad de la estrella, las comprobaciones.
+  'obs.fit.model.transit-claret4':
+    'Un tránsito (órbita circular, oscurecimiento al limbo de cuatro coeficientes fijos)',
+  'obs.fit.more':
+    'Coeficientes de oscurecimiento al limbo y supuestos de la órbita',
+  'obs.fit.moreHint':
+    'Todo lo de aquí se declara y nunca se ajusta. Los cuatro coeficientes salen de una tabla de oscurecimiento al limbo para la temperatura, la gravedad superficial y la metalicidad de la estrella, que aportas tú; Gravitas no incluye ninguna tabla. La excentricidad y el argumento del periastro solo corrigen la densidad de la estrella; el ajuste sigue siendo circular.',
+  'obs.fit.claret': 'Ley de cuatro coeficientes (Claret 2000), fija',
+  'obs.fit.claretOf': 'Coeficiente de oscurecimiento al limbo c{n}',
+  'obs.fit.claretSource': 'De dónde salen los coeficientes (una nota)',
+  'obs.fit.eccentricity': 'Excentricidad supuesta e, solo para la densidad',
+  'obs.fit.omega': 'Argumento del periastro supuesto, en grados',
+  'obs.fit.declared.quadratic':
+    'Oscurecimiento al limbo: la ley cuadrática, con q1 y q2 como se indica abajo.',
+  'obs.fit.declared.claret':
+    'Oscurecimiento al limbo: la ley de cuatro coeficientes, fija en c = {c}.',
+  'obs.fit.declared.circular': 'Órbita: circular.',
+  'obs.fit.declared.ecc':
+    'Órbita: circular en el ajuste; la densidad se da también para e = {e}, ω = {omega} grados.',
+  'obs.fit.param.rhoStar': 'Densidad media de la estrella, órbita circular',
+  'obs.fit.param.rhoStarEcc':
+    'Densidad media de la estrella, para la e y la ω supuestas',
+  'obs.fit.transit.title': 'Lo que el tránsito fija y lo que no',
+  'obs.fit.transit.kb.constrained':
+    'Los datos fijan el cociente de radios y el parámetro de impacto: el tránsito tiene un fondo plano que permite distinguirlos.',
+  'obs.fit.transit.kb.not-constrained':
+    'Estos datos no restringen el cociente de radios ni el parámetro de impacto ({reasons}). Un tránsito en forma de V encaja casi igual con un planeta pequeño que cruza el centro de la estrella y con uno mayor que solo roza su borde, así que no cites ninguno de los dos números por separado.',
+  'obs.fit.transit.kb.fixed':
+    'El cociente de radios o el parámetro de impacto se dejó fijo, así que no se pide a los datos que los separen.',
+  'obs.fit.transit.reason.grazing':
+    'el parámetro de impacto ajustado más su sigma alcanza el límite rasante 1 − k',
+  'obs.fit.transit.reason.rank':
+    'la comprobación de rango nombra a uno de los dos',
+  'obs.fit.transit.residual.passes':
+    'En tránsito, los residuos se parecen al ruido que prometen las barras de error (chi-cuadrado {chi2} para {points} puntos, p = {p}).',
+  'obs.fit.transit.residual.fails':
+    'En tránsito, los residuos no se parecen al ruido (chi-cuadrado {chi2} para {points} puntos, p = {p}, o están correlacionados en el tiempo): al modelo le falta algo, por ejemplo una mancha que el planeta cruzó. No cites las incertidumbres.',
+  'obs.fit.transit.dchi2': 'Cambio del chi-cuadrado',
+  'obs.fit.transit.profileLabel':
+    'Perfil de {name}: cambio del chi-cuadrado frente a su valor, {n} puntos',
+  'obs.fit.transit.profileCaption':
+    '{name} con todos los demás parámetros reajustados; el intervalo donde el cambio es 1 va de {lo} a {hi}.',
+  'obs.fit.transit.ellipseLabel':
+    'La elipse de covarianza de un sigma de {a} frente a {b}',
+  'obs.fit.transit.ellipseCaption':
+    'La elipse de un sigma (68 %) de {a} frente a {b}, a partir de la covarianza del ajuste: una elipse larga, delgada e inclinada es una degeneración. La tabla da los mismos números.',
+  'obs.fit.transit.ellipseTable': 'Elipse de {a} frente a {b}',
+  'obs.fit.transit.ellipse.center': 'Centro (mejor ajuste)',
+  'obs.fit.transit.ellipse.semiMajor': 'Semieje mayor',
+  'obs.fit.transit.ellipse.semiMinor': 'Semieje menor',
+  'obs.fit.transit.ellipse.angle': 'Ángulo del eje mayor, en grados',
+  'obs.fit.transit.ellipse.correlation': 'Correlación',
 };
