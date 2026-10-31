@@ -42,7 +42,7 @@ export default {
     ...MASSES.flow,
     ...ACTIVITY.flow,
     ...REMNANTS.flow,
-  ...VARIABLES_II.flow,
+    ...VARIABLES_II.flow,
     'the-suns-motion': [
       {
         from: 'from-stars-to-velocities',

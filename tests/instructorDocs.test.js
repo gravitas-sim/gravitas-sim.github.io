@@ -272,14 +272,14 @@ describe('the document inventory', () => {
     // 1022 after How Old Is This White Dwarf? and From Star to Remnant (Prompt 222): eleven more for each lesson, as for the two activity lessons of Prompt 220.
     // 1033 after The Metallicity Term (Prompt 223): eleven more, as for each lesson of Prompt 222.
     expect(inv.documents).toBe(1033);
-    expect(inv.byLocale).toEqual({ en: 467, es: 555 });
+    expect(inv.byLocale).toEqual({ en: 472, es: 561 });
     expect(inv.byKind.notes).toBe(INVESTIGATIONS.length);
     expect(inv.byVariant).toEqual({
       activity: 12,
-      depth: 462,
-      full: 424,
+      depth: 468,
+      full: 428,
       general: 18,
-      notes: 106,
+      notes: 107,
     });
   });
 

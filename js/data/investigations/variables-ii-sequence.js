@@ -635,7 +635,8 @@ const CONTENT = {
           'With the term left out the LMC calibration is 0.1 combined errors from the masers and with it 0.8: both agree. One galaxy cannot decide; the cited coefficient comes from the combined fit of many hosts.',
       },
       {
-        claim: 'The metallicity of a galaxy is one number for all its Cepheids.',
+        claim:
+          'The metallicity of a galaxy is one number for all its Cepheids.',
         response:
           'The panel uses an average over the Cepheid fields; a gradient across a disk spreads the true values around it, and that spread is one reason the abundances carry an error of their own.',
       },

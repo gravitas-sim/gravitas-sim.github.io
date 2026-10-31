@@ -49,7 +49,7 @@ export default {
     ...MASSES.expectations,
     ...ACTIVITY.expectations,
     ...REMNANTS.expectations,
-  ...VARIABLES_II.expectations,
+    ...VARIABLES_II.expectations,
     'the-suns-motion': {
       'measure-the-sun':
         'Within 100 pc against the mean of the stars the Sun reads U about 10.5, V about 21.9 and W about 9.1 km/s (489 stars). The validator accepts 10.5 and 9.1 within 1.5 and 21.9 within 2.',
