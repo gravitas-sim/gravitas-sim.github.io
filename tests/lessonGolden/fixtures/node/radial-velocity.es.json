@@ -2,11 +2,15 @@
  "id": "radial-velocity",
  "locale": "es",
  "title": "Encontrar planetas por su tirón",
- "steps": 38,
+ "steps": 42,
  "depths": [
   [
    "core",
    38
+  ],
+  [
+   "advanced",
+   42
   ]
  ],
  "grading": [
@@ -459,6 +463,60 @@
    ]
   },
   {
+   "sid": "whose-share-is-the-mass",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "jitter-and-the-model",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
    "sid": "where-does-hd-209458-b",
    "type": "question",
    "kind": "choice",
@@ -573,6 +631,8 @@
     "radial-velocity:different-methods-different-planets": 0,
     "radial-velocity:how-dense-is-it": "0,33",
     "radial-velocity:how-dense-is-it:locale": "es",
+    "radial-velocity:whose-share-is-the-mass": 2,
+    "radial-velocity:jitter-and-the-model": 1,
     "radial-velocity:where-does-hd-209458-b": 1,
     "radial-velocity:which-is-the-strongest-candidate": 0,
     "radial-velocity:what-would-you-still-want": "A fixed sentence for the golden.",
@@ -593,6 +653,8 @@
     "radial-velocity:move-the-system-further-away": 1,
     "radial-velocity:different-methods-different-planets": 1,
     "radial-velocity:how-dense-is-it": 1,
+    "radial-velocity:whose-share-is-the-mass": 1,
+    "radial-velocity:jitter-and-the-model": 1,
     "radial-velocity:where-does-hd-209458-b": 1,
     "radial-velocity:which-is-the-strongest-candidate": 1,
     "radial-velocity:the-point-of-all-this": 1
@@ -630,6 +692,10 @@
     "bring-the-transit-back",
     "characterize-the-planet",
     "how-dense-is-it",
+    "the-star-in-the-density",
+    "whose-share-is-the-mass",
+    "jitter-and-the-model",
+    "a-star-that-does-not-fit-tug",
     "where-does-hd-209458-b",
     "three-candidates",
     "which-is-the-strongest-candidate",
@@ -638,7 +704,8 @@
     "what-you-can-now-say"
    ],
    "startedAt": "2026-01-02T03:04:05.000Z",
-   "depth": "core",
+   "depth": "advanced",
+   "deepest": "advanced",
    "spent": 600
   },
   "read": {
@@ -659,6 +726,8 @@
     "radial-velocity:different-methods-different-planets": 0,
     "radial-velocity:how-dense-is-it": "0,33",
     "radial-velocity:how-dense-is-it:locale": "es",
+    "radial-velocity:whose-share-is-the-mass": 2,
+    "radial-velocity:jitter-and-the-model": 1,
     "radial-velocity:where-does-hd-209458-b": 1,
     "radial-velocity:which-is-the-strongest-candidate": 0,
     "radial-velocity:what-would-you-still-want": "A fixed sentence for the golden.",
@@ -679,12 +748,15 @@
     "radial-velocity:move-the-system-further-away": 1,
     "radial-velocity:different-methods-different-planets": 1,
     "radial-velocity:how-dense-is-it": 1,
+    "radial-velocity:whose-share-is-the-mass": 1,
+    "radial-velocity:jitter-and-the-model": 1,
     "radial-velocity:where-does-hd-209458-b": 1,
     "radial-velocity:which-is-the-strongest-candidate": 1,
     "radial-velocity:the-point-of-all-this": 1
    },
    "visited": [
     "a-face-on-system",
+    "a-star-that-does-not-fit-tug",
     "all-three-at-once",
     "astrometry",
     "both-of-them-go-round",
@@ -694,6 +766,7 @@
     "distance-and-orbit-size",
     "how-dense-is-it",
     "how-does-an-invisible-planet",
+    "jitter-and-the-model",
     "light-carries-the-answer",
     "m-sin-i",
     "make-the-planet-heavier",
@@ -708,6 +781,7 @@
     "the-point-of-all-this",
     "the-same-planet-four-viewing",
     "the-semi-amplitude-k",
+    "the-star-in-the-density",
     "three-candidates",
     "tilt-it-again-and-watch",
     "toward-away-toward-again",
@@ -721,12 +795,13 @@
     "where-does-hd-209458-b",
     "which-is-the-strongest-candidate",
     "which-one-moves",
-    "which-way-is-it-going"
+    "which-way-is-it-going",
+    "whose-share-is-the-mass"
    ],
    "stepSid": "what-you-can-now-say",
    "startedAt": "2026-01-02T03:04:05.000Z",
-   "depth": "core",
-   "deepest": null,
+   "depth": "advanced",
+   "deepest": "advanced",
    "spent": 600,
    "schema": 2,
    "migrated": false,
@@ -741,7 +816,7 @@
    "lesson": {
     "id": "radial-velocity",
     "title": "Encontrar planetas por su tirón",
-    "stepCount": 38
+    "stepCount": 42
    },
    "student": null,
    "progress": {
@@ -780,6 +855,10 @@
      "bring-the-transit-back",
      "characterize-the-planet",
      "how-dense-is-it",
+     "the-star-in-the-density",
+     "whose-share-is-the-mass",
+     "jitter-and-the-model",
+     "a-star-that-does-not-fit-tug",
      "where-does-hd-209458-b",
      "three-candidates",
      "which-is-the-strongest-candidate",
@@ -804,6 +883,8 @@
      "radial-velocity:different-methods-different-planets": 0,
      "radial-velocity:how-dense-is-it": "0,33",
      "radial-velocity:how-dense-is-it:locale": "es",
+     "radial-velocity:whose-share-is-the-mass": 2,
+     "radial-velocity:jitter-and-the-model": 1,
      "radial-velocity:where-does-hd-209458-b": 1,
      "radial-velocity:which-is-the-strongest-candidate": 0,
      "radial-velocity:what-would-you-still-want": "A fixed sentence for the golden.",
@@ -824,6 +905,8 @@
      "radial-velocity:move-the-system-further-away": 1,
      "radial-velocity:different-methods-different-planets": 1,
      "radial-velocity:how-dense-is-it": 1,
+     "radial-velocity:whose-share-is-the-mass": 1,
+     "radial-velocity:jitter-and-the-model": 1,
      "radial-velocity:where-does-hd-209458-b": 1,
      "radial-velocity:which-is-the-strongest-candidate": 1,
      "radial-velocity:the-point-of-all-this": 1
@@ -1024,36 +1107,60 @@
     },
     {
      "index": 32,
+     "sid": "the-star-in-the-density",
+     "fingerprint": "read|-|joint-fit|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 33,
+     "sid": "whose-share-is-the-mass",
+     "fingerprint": "question|choice|joint-fit|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 34,
+     "sid": "jitter-and-the-model",
+     "fingerprint": "question|choice|joint-fit|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 35,
+     "sid": "a-star-that-does-not-fit-tug",
+     "fingerprint": "measure|-|joint-fit|-|a+b|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 36,
      "sid": "where-does-hd-209458-b",
      "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
      "optionCount": 4
     },
     {
-     "index": 33,
+     "index": 37,
      "sid": "three-candidates",
      "fingerprint": "read|-|planet-characterization|-|-|-|-",
      "optionCount": null
     },
     {
-     "index": 34,
+     "index": 38,
      "sid": "which-is-the-strongest-candidate",
      "fingerprint": "question|choice|-|-|-|4|a=0;c=0",
      "optionCount": 4
     },
     {
-     "index": 35,
+     "index": 39,
      "sid": "what-would-you-still-want",
      "fingerprint": "question|short|-|-|-|-|-",
      "optionCount": null
     },
     {
-     "index": 36,
+     "index": 40,
      "sid": "the-point-of-all-this",
      "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
      "optionCount": 4
     },
     {
-     "index": 37,
+     "index": 41,
      "sid": "what-you-can-now-say",
      "fingerprint": "read|-|-|-|-|-|-",
      "optionCount": null
@@ -1081,6 +1188,8 @@
     "radial-velocity:different-methods-different-planets": 0,
     "radial-velocity:how-dense-is-it": "0,33",
     "radial-velocity:how-dense-is-it:locale": "es",
+    "radial-velocity:whose-share-is-the-mass": 2,
+    "radial-velocity:jitter-and-the-model": 1,
     "radial-velocity:where-does-hd-209458-b": 1,
     "radial-velocity:which-is-the-strongest-candidate": 0,
     "radial-velocity:what-would-you-still-want": "A fixed sentence for the golden.",
@@ -1101,12 +1210,15 @@
     "radial-velocity:move-the-system-further-away": 1,
     "radial-velocity:different-methods-different-planets": 1,
     "radial-velocity:how-dense-is-it": 1,
+    "radial-velocity:whose-share-is-the-mass": 1,
+    "radial-velocity:jitter-and-the-model": 1,
     "radial-velocity:where-does-hd-209458-b": 1,
     "radial-velocity:which-is-the-strongest-candidate": 1,
     "radial-velocity:the-point-of-all-this": 1
    },
    "visited": [
     "a-face-on-system",
+    "a-star-that-does-not-fit-tug",
     "all-three-at-once",
     "astrometry",
     "both-of-them-go-round",
@@ -1116,6 +1228,7 @@
     "distance-and-orbit-size",
     "how-dense-is-it",
     "how-does-an-invisible-planet",
+    "jitter-and-the-model",
     "light-carries-the-answer",
     "m-sin-i",
     "make-the-planet-heavier",
@@ -1130,6 +1243,7 @@
     "the-point-of-all-this",
     "the-same-planet-four-viewing",
     "the-semi-amplitude-k",
+    "the-star-in-the-density",
     "three-candidates",
     "tilt-it-again-and-watch",
     "toward-away-toward-again",
@@ -1143,9 +1257,10 @@
     "where-does-hd-209458-b",
     "which-is-the-strongest-candidate",
     "which-one-moves",
-    "which-way-is-it-going"
+    "which-way-is-it-going",
+    "whose-share-is-the-mass"
    ],
-   "stepIndex": 37,
+   "stepIndex": 41,
    "startedAt": "2026-01-02T03:04:05.000Z",
    "moved": [],
    "dropped": [],
@@ -1266,6 +1381,16 @@
      "locale": "es"
     },
     {
+     "sid": "whose-share-is-the-mass",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "jitter-and-the-model",
+     "value": 1,
+     "locale": "es"
+    },
+    {
      "sid": "where-does-hd-209458-b",
      "value": 1,
      "locale": "es"
@@ -1367,6 +1492,16 @@
     {
      "sid": "how-dense-is-it",
      "value": "0,33",
+     "locale": "es"
+    },
+    {
+     "sid": "whose-share-is-the-mass",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "jitter-and-the-model",
+     "value": 1,
      "locale": "es"
     },
     {
@@ -1498,6 +1633,16 @@
      "locale": "es"
     },
     {
+     "sid": "whose-share-is-the-mass",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "jitter-and-the-model",
+     "value": 1,
+     "locale": "es"
+    },
+    {
      "sid": "where-does-hd-209458-b",
      "value": 1,
      "locale": "es"
@@ -1526,7 +1671,7 @@
    "backupIntact": true,
    "payload": {
     "v": 2,
-    "dp": "core",
+    "dp": "advanced",
     "a": null,
     "r": null,
     "fl": "es"
@@ -1600,6 +1745,16 @@
     {
      "sid": "how-dense-is-it",
      "value": "0,33",
+     "locale": "es"
+    },
+    {
+     "sid": "whose-share-is-the-mass",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "jitter-and-the-model",
+     "value": 1,
      "locale": "es"
     },
     {

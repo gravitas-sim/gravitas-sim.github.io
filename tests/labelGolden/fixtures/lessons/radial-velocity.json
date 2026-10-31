@@ -8,11 +8,15 @@
     ["steps.weigh-hd-209458-b.unit","M_J"],
     ["steps.weigh-hd-209458-b.expect.unit","M_jup"],
     ["steps.how-dense-is-it.unit","g/cm³"],
-    ["steps.how-dense-is-it.expect.unit","g/cm³"]
+    ["steps.how-dense-is-it.expect.unit","g/cm³"],
+    ["steps.a-star-that-does-not-fit-tug.fields.0.unit",""],
+    ["steps.a-star-that-does-not-fit-tug.fields.1.unit","g/cm3"]
    ],
    "numbered": [
     ["steps.measure-the-period.fields.0.hint","3.5"],
-    ["steps.read-k-off-the-panel.fields.0.hint","84"]
+    ["steps.read-k-off-the-panel.fields.0.hint","84"],
+    ["steps.a-star-that-does-not-fit-tug.fields.0.hint","3.2"],
+    ["steps.a-star-that-does-not-fit-tug.fields.1.hint","0.135"]
    ]
   },
   "es": {
@@ -53,6 +57,9 @@
    },
    "the-same-planet-four-viewing": {
     "probe": [[{"label":"Spectrograph","value":"no star to point it at"}],[{"label":"Star","value":"HD 209458"},{"label":"Where it is in its orbit","value":"212°"},{"label":"Line-of-sight velocity","value":"-57.1 m/s — towards us"},{"label":"We are looking from","value":"90°"}],[{"label":"Star","value":"Star A"},{"label":"Where it is in its orbit","value":"12°"},{"label":"Line-of-sight velocity","value":"12.0 m/s — away from us"},{"label":"We are looking from","value":"0°"}],[{"label":"Spectrograph","value":"this scenario pins its star, so there is no reflex motion to report"}]]
+   },
+   "a-star-that-does-not-fit-tug": {
+    "validate": {"calls":232,"distinct":2,"digest":"8e49c4e5aaded630","samples":[null,{"level":"error","message":"Set the stated radius to 1.60: the stated star is 3.2 sigma from the transit and the planet’s density around it is 0.135 g/cm³."}]}
    }
   },
   "es": "same"

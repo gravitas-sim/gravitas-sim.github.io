@@ -225,6 +225,7 @@ export const GUIDED = Object.freeze([
   'what-is-a-gravitational-wave',
   'what-is-a-measurement',
   'what-is-in-this-field',
+  'what-is-it-made-of',
   'when-a-star-explodes',
   'when-orbits-lock',
   'when-the-method-must-refuse',

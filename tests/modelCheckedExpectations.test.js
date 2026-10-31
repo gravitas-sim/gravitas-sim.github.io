@@ -225,7 +225,8 @@ describe('the instructor expectations record', () => {
     // 524 after The Metallicity Term (Prompt 223): 1 more over 523.
     // 526 after The Clock That Drifts (Prompt 226): 2 more over 524.
     // 533 after the five stellar investigations (Prompt 224): 7 more over 526.
-    expect(total).toBe(533);
+    // 535 after What Is It Made Of? (Prompt 227): 2 more over 533.
+    expect(total).toBe(535);
   });
 
   test('a /1 record keyed by step number migrates to the same text', () => {

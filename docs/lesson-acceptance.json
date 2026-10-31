@@ -1186,6 +1186,16 @@
       "loop": ["which-test-catches", "deep-and-shallow"],
       "evidenceFrom": "model"
     },
+    "what-is-it-made-of": {
+      "centralExperimentId": "ce.what-is-it-made-of",
+      "object": "panel:joint-fit",
+      "control": "joint-fit/starRadius",
+      "quantity": "the planet's radius, mass and bulk density from the stored joint fit of a synthetic hot Jupiter when the star's stated radius changes: radius and density move with the star, the mass does not, and the density's uncertainty carries the star's share",
+      "evidence": "none",
+      "test": "e2e/jointLesson.spec.js",
+      "loop": ["bigger-star-prediction", "a-bigger-star"],
+      "evidenceFrom": "model"
+    },
     "the-metallicity-term": {
       "centralExperimentId": "ce.the-metallicity-term",
       "object": "panel:plz-metallicity",

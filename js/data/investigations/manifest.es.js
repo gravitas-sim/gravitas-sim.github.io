@@ -96,6 +96,7 @@ export const MANIFEST = [
     level: 'Astronomía introductoria',
     thumbnail: 'images/scenarios/exoplanet-characterization-lab.webp',
     series: 'Detección de exoplanetas',
+    depths: 2,
     stepCount: 38,
     gradedCount: 20,
     objectiveCount: 7,
@@ -1262,6 +1263,19 @@ export const MANIFEST = [
     depths: 3,
     stepCount: 8,
     gradedCount: 6,
+    objectiveCount: 4,
+  },
+  {
+    id: 'what-is-it-made-of',
+    title: '¿De qué está hecho?',
+    subtitle:
+      'La densidad de un planeta vale lo que valga su estrella: mira cuánto de la incertidumbre es de la estrella, y qué puede y qué no puede decir una densidad',
+    duration: '6-10 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/what-is-it-made-of.webp',
+    depths: 2,
+    stepCount: 7,
+    gradedCount: 5,
     objectiveCount: 4,
   },
   {

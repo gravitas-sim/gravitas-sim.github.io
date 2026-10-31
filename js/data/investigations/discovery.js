@@ -1010,6 +1010,16 @@ export const DISCOVERY = {
     },
     courseLevel: 'majors',
   },
+  'what-is-it-made-of': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['radial-velocity'],
+    textbook: {
+      chapter: 21,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
   'the-metallicity-term': {
     audience: 'intro',
     mathematics: 'logarithms',

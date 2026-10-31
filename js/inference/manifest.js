@@ -189,7 +189,7 @@ export function validateInference(m) {
       'settings.x0',
       'is the x the polynomial is centered on'
     );
-  if (model.family === 'transit') {
+  if (model.family === 'transit' || model.id === 'transit-rv-joint') {
     need(
       s.exposure === undefined || s.exposure >= 0,
       'settings.exposure',
@@ -273,6 +273,41 @@ export function validateInference(m) {
       'is a duration'
     );
   }
+  if (model.id === 'transit-rv-joint') {
+    need(
+      s.roles === undefined ||
+        (Array.isArray(s.roles) &&
+          s.roles.length > 0 &&
+          s.roles.every(r => r === 'flux' || r === 'rv') &&
+          s.roles.filter(r => r === 'flux').length <= 1),
+      'settings.roles',
+      "names each data group as 'flux' (once, at most) or 'rv' (one instrument each), in the order the groups appear"
+    );
+    const star = s.stellar;
+    need(
+      star === undefined || (star && typeof star === 'object'),
+      'settings.stellar',
+      'is { mass, radius, correlation? }, each { value, sigma, source }'
+    );
+    for (const k of ['mass', 'radius']) {
+      const v = star?.[k];
+      need(
+        v === undefined ||
+          (v.value > 0 &&
+            (v.sigma === undefined || v.sigma >= 0) &&
+            typeof v.source === 'string' &&
+            v.source.length > 0),
+        `settings.stellar.${k}`,
+        'is { value above 0, sigma, source }: the source is a catalog or a fit, never left out; a value without its sigma is accepted and the planet quantities that need it are refused'
+      );
+    }
+    need(
+      star?.correlation === undefined ||
+        (star.correlation > -1 && star.correlation < 1),
+      'settings.stellar.correlation',
+      'is the correlation of the mass and radius uncertainties, between -1 and 1'
+    );
+  }
   if (model.id === 'eclipsing-sb2' || model.id === 'sb2-orbit') {
     need(
       s.roles === undefined ||
@@ -328,8 +363,16 @@ export function estimate(
   const free = model.parameters.filter(p => mode(p.name) === 'fitted').length;
   const eclipse =
     model.id === 'eclipsing-binary' || model.id === 'eclipsing-sb2';
-  const transit = model.family === 'transit' || eclipse;
-  const starts = eclipse ? 6 : transit && mode('b') === 'fixed' ? 1 : 3;
+  const joint = model.id === 'transit-rv-joint';
+  const transit = model.family === 'transit' || eclipse || joint;
+  const eFixed = mode('sqrtEcosw') === 'fixed' && mode('sqrtEsinw') === 'fixed';
+  const starts = eclipse
+    ? 6
+    : joint
+      ? (mode('b') === 'fixed' ? 1 : 3) * (eFixed ? 1 : 3)
+      : transit && mode('b') === 'fixed'
+        ? 1
+        : 3;
   const perFit = starts * 25 * (2 * free + 3);
   const jitterTrials = model.nuisance && mode('jitter') === 'fitted' ? 20 : 1;
   const points = m.algorithm?.profile?.points ?? 11;

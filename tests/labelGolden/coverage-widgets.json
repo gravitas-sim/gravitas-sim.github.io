@@ -64,6 +64,8 @@
   "hz-limits",
   "hz-locking",
   "hz-ages",
+  "joint-fit",
+  "mass-radius",
   "masses-minimum",
   "masses-solve",
   "masses-diagram",

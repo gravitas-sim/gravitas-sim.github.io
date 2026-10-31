@@ -184,6 +184,7 @@ const SHARED = [
   'variables-ii-sequence.js',
   'ttv-sequence.js',
   'stellar-sequence.js',
+  'joint-sequence.js',
 ];
 /** The shared files that have a sibling under es/: the Spanish of planets-sequence.js, telescope-sequence.js, exposure-sequence.js, saturated-star-sequence.js and strategy-sequence.js and spectrograph-sequence.js and survey-sequence.js and observing-sequence.js lives in the file itself (D-R10-206-02, D-R10-208-02, D-R10-210-01, D-R10-211-01, D-R10-214-02, D-R10-213-02, D-R10-215-02, D-R10-216-01). */
 const SHARED_ES = SHARED.filter(
@@ -205,7 +206,8 @@ const SHARED_ES = SHARED.filter(
     f !== 'vetting-sequence.js' &&
     f !== 'variables-ii-sequence.js' &&
     f !== 'ttv-sequence.js' &&
-    f !== 'stellar-sequence.js'
+    f !== 'stellar-sequence.js' &&
+    f !== 'joint-sequence.js'
 );
 
 describe('loading a lesson', () => {

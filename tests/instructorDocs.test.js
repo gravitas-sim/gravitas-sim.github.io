@@ -274,15 +274,16 @@ describe('the document inventory', () => {
     // 1044 after The Metallicity Term (Prompt 223): eleven more over 1033.
     // 1055 after The Clock That Drifts (Prompt 226): eleven more over 1044.
     // 1110 after the five stellar investigations (Prompt 224): eleven more for each, as for any lesson with three depths.
-    expect(inv.documents).toBe(1110);
-    expect(inv.byLocale).toEqual({ en: 507, es: 603 });
+    // 1123 after What Is It Made Of? and the upper depth of Finding Planets by Their Tug (Prompt 227): eleven more for the lesson and two for the new depth key of the other.
+    expect(inv.documents).toBe(1123);
+    expect(inv.byLocale).toEqual({ en: 513, es: 610 });
     expect(inv.byKind.notes).toBe(INVESTIGATIONS.length);
     expect(inv.byVariant).toEqual({
       activity: 12,
-      depth: 510,
-      full: 456,
+      depth: 518,
+      full: 460,
       general: 18,
-      notes: 114,
+      notes: 115,
     });
   });
 
@@ -310,7 +311,7 @@ describe('the document inventory', () => {
     const withDepth = INVESTIGATIONS.filter(
       i => withAllDepths(i).steps.length !== i.steps.length
     ).map(i => i.id);
-    expect(withDepth.length).toBe(87);
+    expect(withDepth.length).toBe(89);
     // A key for each depth the lesson offers: three for most, two for Design
     // the Schedule, whose upper depth (Prompt 214) has no quantitative layer.
     let keys = 0;
@@ -329,7 +330,8 @@ describe('the document inventory', () => {
     expect(files.filter(f => f.variant === 'depth').length).toBe(keys);
     // The five observing closeout investigations (Prompt 216) offer two depths, as
     // Design the Schedule does: two keys fewer in each language than three would give.
-    expect(keys).toBe(withDepth.length * 6 - 2 - 5 * 2);
+    // What Is It Made Of? and Finding Planets by Their Tug (Prompt 227) offer two depths each: four keys fewer.
+    expect(keys).toBe(withDepth.length * 6 - 2 - 5 * 2 - 2 * 2);
   });
 
   test('every activity format has a key in each language', () => {

@@ -1,30 +1,30 @@
 {
   "version": "October 2026",
   "generated": "2026-10-31",
-  "documents": 1110,
+  "documents": 1123,
   "inventory": {
-    "documents": 1110,
+    "documents": 1123,
     "byLocale": {
-      "en": 507,
-      "es": 603
+      "en": 513,
+      "es": 610
     },
     "byKind": {
       "general": 2,
-      "guide": 235,
-      "key": 754,
-      "notes": 114,
+      "guide": 237,
+      "key": 764,
+      "notes": 115,
       "worksheet": 5
     },
     "byVariant": {
       "activity": 12,
-      "depth": 510,
-      "full": 456,
+      "depth": 518,
+      "full": 460,
       "general": 18,
-      "notes": 114
+      "notes": 115
     }
   },
-  "sourceFiles": 301,
-  "sourceDigest": "66dee721fe98fdfd5135ab1820e27af5adf93e75da6928f3f8a053d2bf13f113",
+  "sourceFiles": 302,
+  "sourceDigest": "4558bc0603e6dc565f2c87683faa27ec32a282f5f61e26d683835640635dea33",
   "sources": {
     "js/activities/activities.js": "39ac98cd99b8b0387c55e41d5d4530bad55a8da8758819ad056be73e7a716b01",
     "js/activities/activityBridge.js": "67a82aff98e0ed935d6b8b0f0f654c6ad4332ee929cb3604e896a7f790a6fdc1",
@@ -43,13 +43,13 @@
     "js/data/activityTeaching.js": "7694fc798f8c4130e5aead5357e69bab04d6a5d386013d009430dba9a1c31008",
     "js/data/exoplanetAnswerKey.js": "d00f17b6b41e8585a21ab7118b24c7ed43e008263693ac48e3e1df57f8233570",
     "js/data/instructorContent.es.js": "471a388f9e2abfbe837cdad387388f52f0a547d2ae5f466e66fa5680866d5d3c",
-    "js/data/instructorContent.js": "32a56cbd2447a4d99003bdc0001c4470e0a58ddc30f545a22b13982294a2fcfb",
+    "js/data/instructorContent.js": "bf12b999a8e5f47fa742125b16e3eac1d9d176fadb0bf20cff393ff52a4f5617",
     "js/data/instructorExpectations.es.js": "5ec751fabe0ed60f692799c260ab8f383ffae25379c4b426efdd4351e0ae00ee",
-    "js/data/instructorExpectations.js": "35460a560733fc48e4eac56002c8cf16f1c423a07c8c9232551e176d0a6e3f75",
+    "js/data/instructorExpectations.js": "65b4bbc20eebb25d677da3201269b8da683330161b1e8a5c737909ba98ac725c",
     "js/data/instructorFlow.es.js": "f1c087e5240114351245f6a7fa7ad9b3efd269ec6d415183fd945ac95534fd86",
-    "js/data/instructorFlow.js": "6d1cb25fbb4008e1a153f1f645e67b7dd00d3d9af26f67b06473686fb1e45239",
+    "js/data/instructorFlow.js": "f123c6d81e3b789e725d9ce23bfe95d15ed5c8ccb9c7cd27cb0229f0f92bcb0e",
     "js/data/instructorLabels.js": "382bb5d24bd9f59e7bf6cbf68b645a340f7c6271897cecc2d0dc407753180265",
-    "js/data/investigations.js": "8d74de7c5e9774800613f8a0b2de66053329bc9d09cee14853827aafd8836d0e",
+    "js/data/investigations.js": "5c26da9b83ece0230146417bd83c0854fb03e7b86b1963959cffb43ccd66cd73",
     "js/data/investigations/a-lens-passing-by.js": "b0516c2bdb40f085f5dd2ab1ade0e006771d9507e3809c89e8de3ba35376e030",
     "js/data/investigations/a-universe-of-stars.js": "8a5cf66239f97a96d71b262a24b178cbe327a86500f252f6e65a405455f1dd65",
     "js/data/investigations/a-variable-star-from-frames.js": "9e516c56e4623154492a535a3fda58c4f80b1179a248565c05bd81421e3f42b1",
@@ -144,7 +144,7 @@
     "js/data/investigations/depth/why-the-bright-ones-win.js": "2efd2f0f8f383755a667f7452f9931d527faeed4d3b4d40a536b7a4725918fa1",
     "js/data/investigations/design-the-schedule.js": "acfb29b82f4014cf5827e3ee4c4776a021691ee5eb66e22a7001e081e19aaadc",
     "js/data/investigations/detect-this-planet.js": "e7ff6bbdac10bb95b29b2e7aef91b015d8c69a37a014db1fb014dc531124ce43",
-    "js/data/investigations/discovery.js": "017e90339224c401318627f7fe896e7ffdd2eb1c33ab98052dc2c1dd378f3845",
+    "js/data/investigations/discovery.js": "cf8b8bc019b0f3763857b38027664523993fa48795b44dc8b58c1d83f55374f4",
     "js/data/investigations/einstein-rings-and-arcs.js": "94e991a437d84d63e2f9df1dddb3c74d4b5c99ff88c8a523c76ac9391b013f6e",
     "js/data/investigations/es/a-lens-passing-by.js": "9f341a46e06db9cf8c17467a8bde8eb392425d6eeba94f1f131ff1e7babcec36",
     "js/data/investigations/es/a-universe-of-stars.js": "e978b7bb1a4297064769e4a005c48a4f3399d8851ea1c321568aff8627265bbe",
@@ -217,6 +217,7 @@
     "js/data/investigations/i18n.js": "b58ba59ef1fd8bc1f6b3a68bb57b90268da79b040087afe90d143cf04b14d511",
     "js/data/investigations/inside-a-star.js": "520e8decc19cc4f1382126658e04aaa0a475bc90fb4f3b8f9570d479bf5bd6bb",
     "js/data/investigations/integrators-in-practice.js": "c195949ed4ff4935768585b8985b6e7a1be5b0c8712e6c34f75ccee621086447",
+    "js/data/investigations/joint-sequence.js": "ddf8874343c91d1d4008db761cc0365c95253b5619ec864dc6823f62e5d1f966",
     "js/data/investigations/keplers-laws.js": "5f8df63a3abc93cb1c76e1fa3e5f2d43e6166084e4cf8199e4edce7da0c87eb8",
     "js/data/investigations/lagrange-points.js": "f183b7317b3af7ee1b39b53746b477e5841ba5baf168fd2f0062f85642fe1239",
     "js/data/investigations/leavitts-law.js": "d7a23d6485913911238cb543f4dbd8c3ddf73e668f481ad6b1b167bbb78e93ca",
@@ -232,7 +233,7 @@
     "js/data/investigations/plan-a-night.js": "fc4eeb1f8dea6a1997ef2a03568658c567accc79da32fb2a08e7f841b0f43e65",
     "js/data/investigations/planets-sequence.js": "3e2fe39151144021a641601160033dd9ca0d3b7384355c07e9d34a597cc946e0",
     "js/data/investigations/power-law-gravity.js": "f635c19e964a1b847b0c196d46d6ed389eb017e494e9031dd5fd31fd2bd876c0",
-    "js/data/investigations/radial-velocity.js": "c4068814583be55b15acac5ff774c956bde6879eed8fd0a00db3ad73ceedf864",
+    "js/data/investigations/radial-velocity.js": "13824a0278b312e2dcfbc4b4fe8b3d14c576384fffeb1fef7658a0e8393cfa6c",
     "js/data/investigations/refitting-a-transit.js": "8b3758b9a4b3911dde363a615273722f68f9bc902136a57721a0fa4f1b4b4cd8",
     "js/data/investigations/remnants-sequence.js": "10ebf38b389c96eda606597932dc2720ca949f45fdc18eb3b6c8ff99cab0d8bc",
     "js/data/investigations/retrograde-motion.js": "354cbfda5e7ba343bd6604910842b9ff25af525a2d7ceb15c68cfdc7e5a5638c",
@@ -246,7 +247,7 @@
     "js/data/investigations/stellar-activity-sequence.js": "e7af903fb5b136efdc39450677abe765c3005b8563b3d7d52cc99db6e3e6e518",
     "js/data/investigations/stellar-sequence.js": "fe46a181992da2ff1822e8732dd031bfa42d717fb07a6b62e4ab46a058fc8bd6",
     "js/data/investigations/strategy-sequence.js": "f48f527890aeceb0308c643683afa3e80e3017c65f85476bd995305e076c5af5",
-    "js/data/investigations/summaries.js": "1c8f2c23e2c9daba96362469036c770724f036bbad6df7ee1e76312323708016",
+    "js/data/investigations/summaries.js": "0eb363fa41385cbdcab3b069ca984b3ccb07b93f8e7d0d8e2f9f50268d5e5c5a",
     "js/data/investigations/survey-sequence.js": "c80b75253eec2cd98bb540d5c68fcdadc52e161aa3c393637adfbb61aaf1924a",
     "js/data/investigations/telescope-sequence.js": "85d081bfd0eb364db25a5f661fe5f18755196243bd6a04f173abc7114191b523",
     "js/data/investigations/the-beat-of-a-star.js": "4005037e9b5c1a37777bf8e90f4c657a667aff3c6aae3e46633a3f4e3da9a3e4",
@@ -297,10 +298,10 @@
     "js/instructorExpectations.js": "09b1aeac6b3fa134374f0286029cdda1cbe68c9e3d7885afdc75387a4f5d6282",
     "js/instructorFacts.js": "a8939d4e55ea32df76d53d4ae9222ccb98554a0251603aafe523f4f37f658a41",
     "js/instructorFlow.js": "d06edcc3404196951515250e971b81ddb53cd00315704c7f65b2616de0084122",
-    "js/instructorLocale.js": "b011794e73e5bfa387579e4a61cd28d85d157aef721e07cfd5b1f25cca6f26e9",
+    "js/instructorLocale.js": "000bbf7d89e7c20aaf0d426f6d4fb63570265813b72c79ee7fec697910d1dc96",
     "js/instructorNotes.js": "f970bb0bb06431eab37b4d409a780166932f44c17bd73b0548bc5480fe30728f",
     "js/instructorSource.js": "da3fb5a0d4387db76d3117b0c7cac81919de0186041cf4161c328d5802f5890a",
-    "js/investigations/depthAll.js": "3269a9def3b2806b7f51542630ef145b7991058869263b70706aef55ccf64ecb",
+    "js/investigations/depthAll.js": "04c2954c3eebde75fd93e15e1ea07f023d9beda59f71d707166b01ec0d6bdb2b",
     "js/investigations/depthPure.js": "61ea6369eef1b8b9c39c2395f2be1a1ebaf83772180520f6ec7fbe3c8ea085f6",
     "js/investigations/progressBackup.js": "36f9c5642612fd62c91e3e483eb1083684e297157c8d1fd12b3fb3aaa0eae44d",
     "js/lab3d/elements.js": "6a951db87df0d36795285e1ea6abb6ab473c48cda372ea985279bc498a34d043",
@@ -328,5 +329,5 @@
     "tools/instructor-freshness.mjs": "96052b2f27080f0243fdd4d5f7608927bd67f0c50808b6eac3345a65c14d1e28",
     "tools/source-closure.mjs": "961828e4d0d40d8a6f8c029fe9b9435ecaf39a74b62640efc0b4145c35c7650a"
   },
-  "contentDigest": "31d25d67f5e6dd27f3a3bd30aeb0993bceab47d4d7bc03eaa39efb1b2f009d81"
+  "contentDigest": "429081189c6a0d1d3f241b5b83e3399110876462f366d0095049d3082a2913a4"
 }

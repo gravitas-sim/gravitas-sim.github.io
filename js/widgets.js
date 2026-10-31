@@ -428,6 +428,12 @@ export const LAZY_FAMILIES = Object.freeze({
     'HABITABILITY_LIMIT_WIDGETS',
     ['hz-limits', 'hz-locking', 'hz-ages']
   ),
+  joint: familyEntry(
+    () => import('./jointWidgets.js'),
+    './jointWidgets.js',
+    'JOINT_WIDGETS',
+    ['joint-fit', 'mass-radius']
+  ),
   masses: familyEntry(
     () => import('./massesWidgets.js'),
     './massesWidgets.js',
@@ -701,6 +707,8 @@ export async function whenWidgetsReady() {
     'variablesII',
     // The timing family reaches the plot component, the inference core and the engine's data pack: late (Prompt 226).
     'ttv',
+    // The joint family reaches the plot component, the joint kernel and the statistics kernel: late for the same reason (Prompt 227).
+    'joint',
     'surveyDesign',
   ];
   await Promise.all(families.filter(f => !late.includes(f)).map(loadFamily));

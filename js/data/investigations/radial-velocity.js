@@ -91,6 +91,8 @@ const RADIAL_VELOCITY = {
   courseLevel: 'majors',
   mathematics: 'algebra',
   prerequisites: ['transit-photometry'],
+  // Upper depth (Prompt 227): the joint fit and the star's share of the uncertainty; the core steps are unchanged.
+  depths: ['core', 'advanced'],
   // Subject tags, for the browser's filters. A fixed vocabulary
   // shared across the catalog rather than free text, so a filter can offer
   // the whole set without a second list to keep in step.

@@ -28,6 +28,7 @@ import { eccentricity, rvCurve } from './rv.js';
 import { solveSpd } from './fit.js';
 import { ECLIPSING_BINARY } from './binaryModel.js';
 import { ECLIPSING_SB2, SB2_ORBIT } from './binaryJoint.js';
+import { TRANSIT_RV_JOINT } from './jointModel.js';
 
 /**
  * Light from other stars in the aperture, as a fraction of the total: it fills
@@ -516,6 +517,7 @@ export const MODELS = Object.freeze({
   [ECLIPSING_BINARY.id]: ECLIPSING_BINARY,
   [SB2_ORBIT.id]: SB2_ORBIT,
   [ECLIPSING_SB2.id]: ECLIPSING_SB2,
+  [TRANSIT_RV_JOINT.id]: TRANSIT_RV_JOINT,
   [POLY_1.id]: POLY_1,
   [POLY_2.id]: POLY_2,
   [POWER_LAW.id]: POWER_LAW,
