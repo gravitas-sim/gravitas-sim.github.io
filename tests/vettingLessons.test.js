@@ -262,6 +262,6 @@ describe('the instructor content', () => {
       expect(core.has(f.from)).toBe(true);
       expect(core.has(f.to)).toBe(true);
     }
-    expect(INSTRUCTOR.bands['planet-or-not'].advanced).toBe('long');
+    expect(INSTRUCTOR.bands['planet-or-not'].advanced).toBe('medium');
   });
 });

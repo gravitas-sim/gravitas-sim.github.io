@@ -1057,9 +1057,9 @@ const EXPECTATIONS = {
 
 const BANDS = {
   'planet-or-not': {
-    core: 'medium',
-    quantitative: 'long',
-    advanced: 'long',
+    core: 'short',
+    quantitative: 'short',
+    advanced: 'medium',
   },
 };
 
