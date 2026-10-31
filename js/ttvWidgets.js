@@ -90,7 +90,7 @@ const TRANSIT = {
   },
   animated: false,
   controls: [
-    choice('system', 'ttvW.control.system', 'ttvW.system', 3),
+    choice('system', 'ttvW.control.system', 'ttvW.sys', 3),
     choice('planet', 'ttvW.control.planet', 'ttvW.planet', 2),
     numeric('transit', 'ttvW.t.control.transit', 0, 109, 1, 0, x =>
       fixed(x, 0)
@@ -240,7 +240,7 @@ const TIMING = {
   },
   animated: false,
   controls: [
-    choice('system', 'ttvW.control.system', 'ttvW.system', 3),
+    choice('system', 'ttvW.control.system', 'ttvW.sys', 3),
     choice('planet', 'ttvW.control.planet', 'ttvW.planet', 2),
     numeric('span', 'ttvW.o.control.span', 20, 100, 5, 100, x =>
       t('ttvW.v.percent', { x: fixed(x, 0) })

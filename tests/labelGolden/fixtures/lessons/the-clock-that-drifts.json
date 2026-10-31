@@ -12,9 +12,9 @@
     ["steps.the-beat.fields.2.unit","days"],
     ["steps.a-different-pair.fields.0.unit","days"],
     ["steps.a-different-pair.fields.1.unit","days"],
-    ["steps.a-mass-if-circular.fields.0.unit","Earth masses"],
-    ["steps.a-mass-if-circular.fields.1.unit","Earth masses"],
-    ["steps.a-mass-if-circular.fields.2.unit","Earth masses"]
+    ["steps.a-mass-if-circular.fields.0.unit","M⊕"],
+    ["steps.a-mass-if-circular.fields.1.unit","M⊕"],
+    ["steps.a-mass-if-circular.fields.2.unit","M⊕"]
    ],
    "numbered": [
     ["steps.one-transit-time.fields.0.hint","1.53"],

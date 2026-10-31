@@ -1026,7 +1026,7 @@
     {
       "file": "TTV.md",
       "kind": "feature",
-      "purpose": "Transit timing variations: the O-C diagram, the super-period and first-order amplitude relations with their domain, the engine forward model, the validation with its failed legs and the circular-mass-only verdict (Prompt 226).",
+      "purpose": "Transit timing variations: the O-C diagram, the super-period and amplitude relations and their domain, the validation with its failed legs, and why only a circular mass ships (Prompt 226).",
       "owner": 226,
       "student": true
     },

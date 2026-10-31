@@ -84,56 +84,41 @@ export function transitView(v) {
   const k = clamp(Math.round(v.transit ?? 0), 0, p.n.length - 1);
   const noiseIndex = clamp(Math.round(v.noise ?? 0), 0, NOISES_PPM.length - 1);
   const sigmaPpm = NOISES_PPM[noiseIndex];
-  return memo(`transit:${index}:${planet}:${k}:${noiseIndex}`, () => {
-    const lc = TTV_PACK.lightCurve;
-    const template = {
-      P: p.P,
-      k: lc.k,
-      aRs: lc.aRs,
-      b: lc.b,
-      q1: lc.q1,
-      q2: lc.q2,
-    };
-    const eph = pairOf(index).eph[planet];
-    const guess = eph.T0 + p.n[k] * eph.P;
-    const w = transitWindow({
-      trueTime: p.truth[k],
-      center: guess,
-      template,
-      sigma: sigmaPpm * 1e-6,
-      cadence: lc.cadence_d,
-      halfWidth: lc.window_halfwidth_d,
-      seed: 'ttv-panel-226',
-      labels: [id, planet, p.n[k], noiseIndex],
-    });
-    const m = measureTransitTime({
-      t: w.t,
-      flux: w.flux,
-      sigma: w.sigma,
-      template,
-      guess,
-    });
-    const curve = [];
-    if (m.status === 'ok') {
-      const model = transitWindow({
-        trueTime: m.time,
+  return memo(
+    `transit:${index}:${planet}:${k}:${noiseIndex}:${Math.round(v.view ?? 0) === 1 ? 1 : 0}`,
+    () => {
+      const lc = TTV_PACK.lightCurve;
+      const template = {
+        P: p.P,
+        k: lc.k,
+        aRs: lc.aRs,
+        b: lc.b,
+        q1: lc.q1,
+        q2: lc.q2,
+      };
+      const eph = pairOf(index).eph[planet];
+      const guess = eph.T0 + p.n[k] * eph.P;
+      const w = transitWindow({
+        trueTime: p.truth[k],
         center: guess,
         template,
-        sigma: 0,
+        sigma: sigmaPpm * 1e-6,
         cadence: lc.cadence_d,
         halfWidth: lc.window_halfwidth_d,
-        seed: 'x',
+        seed: 'ttv-panel-226',
+        labels: [id, planet, p.n[k], noiseIndex],
       });
-      for (let i = 0; i < model.t.length; i++)
-        curve.push([model.t[i], model.flux[i] * m.baseline]);
-    }
-    // chi-square as the mid-time is moved, in minutes about the fit
-    const profile = [];
-    if (m.status === 'ok') {
-      for (let s = -12; s <= 12; s++) {
-        const dt = s * m.sigma * 0.5;
-        const trial = transitWindow({
-          trueTime: m.time + dt,
+      const m = measureTransitTime({
+        t: w.t,
+        flux: w.flux,
+        sigma: w.sigma,
+        template,
+        guess,
+      });
+      const curve = [];
+      if (m.status === 'ok') {
+        const model = transitWindow({
+          trueTime: m.time,
           center: guess,
           template,
           sigma: 0,
@@ -141,30 +126,48 @@ export function transitView(v) {
           halfWidth: lc.window_halfwidth_d,
           seed: 'x',
         });
-        let chi2 = 0;
-        for (let i = 0; i < trial.t.length; i++)
-          chi2 += ((w.flux[i] - trial.flux[i] * m.baseline) / w.sigma) ** 2;
-        profile.push([dt * MIN_PER_DAY, chi2 - m.chi2]);
+        for (let i = 0; i < model.t.length; i++)
+          curve.push([model.t[i], model.flux[i] * m.baseline]);
       }
+      // chi-square as the mid-time is moved, in minutes about the fit
+      const profile = [];
+      if (m.status === 'ok') {
+        for (let s = -12; s <= 12; s++) {
+          const dt = s * m.sigma * 0.5;
+          const trial = transitWindow({
+            trueTime: m.time + dt,
+            center: guess,
+            template,
+            sigma: 0,
+            cadence: lc.cadence_d,
+            halfWidth: lc.window_halfwidth_d,
+            seed: 'x',
+          });
+          let chi2 = 0;
+          for (let i = 0; i < trial.t.length; i++)
+            chi2 += ((w.flux[i] - trial.flux[i] * m.baseline) / w.sigma) ** 2;
+          profile.push([dt * MIN_PER_DAY, chi2 - m.chi2]);
+        }
+      }
+      return {
+        system: id,
+        planet,
+        transit: p.n[k],
+        count: p.n.length,
+        sigmaPpm,
+        window: w,
+        fit: m,
+        guess,
+        curve,
+        profile,
+        trueTime: p.truth[k],
+        errorMinutes:
+          m.status === 'ok' ? (m.time - p.truth[k]) * MIN_PER_DAY : NaN,
+        sigmaMinutes: m.status === 'ok' ? m.sigma * MIN_PER_DAY : NaN,
+        view: Math.round(v.view ?? 0) === 1 ? 1 : 0,
+      };
     }
-    return {
-      system: id,
-      planet,
-      transit: p.n[k],
-      count: p.n.length,
-      sigmaPpm,
-      window: w,
-      fit: m,
-      guess,
-      curve,
-      profile,
-      trueTime: p.truth[k],
-      errorMinutes:
-        m.status === 'ok' ? (m.time - p.truth[k]) * MIN_PER_DAY : NaN,
-      sigmaMinutes: m.status === 'ok' ? m.sigma * MIN_PER_DAY : NaN,
-      view: Math.round(v.view ?? 0) === 1 ? 1 : 0,
-    };
-  });
+  );
 }
 
 // ---- the timing panel -------------------------------------------------------------
@@ -181,122 +184,128 @@ export function timingView(v) {
   const planet = Math.round(v.planet ?? 0) === 1 ? 1 : 0;
   const span = clamp(Math.round(v.span ?? 100), 20, 100);
   const zfree = clamp(Math.round((v.zfree ?? 0.01) * 1000) / 1000, 0, 0.03);
-  return memo(`timing:${index}:${planet}:${span}:${zfree}`, () => {
-    const pair = pairOf(index);
-    const p = data.planets[planet];
-    const cut =
-      p.time[0] + (span / 100) * (p.time[p.time.length - 1] - p.time[0]);
-    const keep = p.time.map((t, i) => (t <= cut ? i : -1)).filter(i => i >= 0);
-    const n = keep.map(i => p.n[i]);
-    const t = keep.map(i => p.time[i]);
-    const s = keep.map(i => p.sigma[i]);
-    const an = analyseTransitTimes({
-      epochs: n,
-      times: t,
-      sigmas: s,
-      expectedPeriod: pair.superPeriod,
-    });
-    const eph = an.ephemeris;
-    const oc =
-      eph.status === 'ok'
-        ? Array.from(eph.oc, (x, i) => [
-            n[i],
-            x * MIN_PER_DAY,
-            s[i] * MIN_PER_DAY,
-          ])
-        : [];
-    let model = [];
-    let amplitudeAtRelation = NaN;
-    if (an.superPeriod) {
-      const fit = fitSinusoidAt(n, t, s, an.superPeriod.value);
-      model = n.map((q, i) => [
-        q,
-        (fit.coef[0] +
-          fit.coef[1] * q +
-          fit.coef[2] * Math.cos((2 * Math.PI * t[i]) / fit.period) +
-          fit.coef[3] * Math.sin((2 * Math.PI * t[i]) / fit.period) -
-          (eph.T0 + q * eph.P)) *
-          MIN_PER_DAY,
-      ]);
-    }
-    if (pair.relation.status === 'ok') {
-      const fr = fitSinusoidAt(n, t, s, pair.superPeriod);
-      if (fr) amplitudeAtRelation = Math.hypot(fr.A, fr.B);
-    }
-    // Part B, verdict B: a mass only for a pair assumed circular, labeled, and the spread an eccentricity allows
-    let mass = { status: 'refused', reason: 'no-relation' };
-    let spread = { status: 'refused', reason: 'no-relation' };
-    const curve = { z: [], min: [], max: [] };
-    if (pair.relation.status === 'ok' && an.status === 'ok') {
-      const fr = fitSinusoidAt(n, t, s, pair.superPeriod);
-      const who = planet === 0 ? 'outer' : 'inner';
-      mass = massFromAmplitude({
-        amplitude: fr.amplitude,
-        sigmaAmplitude: fr.sigmaAmplitude,
-        P1: pair.eph[0].P,
-        P2: pair.eph[1].P,
-        j: data.j,
-        who,
+  return memo(
+    `timing:${index}:${planet}:${span}:${zfree}:${Math.round(v.view ?? 0) === 1 ? 1 : 0}`,
+    () => {
+      const pair = pairOf(index);
+      const p = data.planets[planet];
+      const cut =
+        p.time[0] + (span / 100) * (p.time[p.time.length - 1] - p.time[0]);
+      const keep = p.time
+        .map((t, i) => (t <= cut ? i : -1))
+        .filter(i => i >= 0);
+      const n = keep.map(i => p.n[i]);
+      const t = keep.map(i => p.time[i]);
+      const s = keep.map(i => p.sigma[i]);
+      const an = analyseTransitTimes({
+        epochs: n,
+        times: t,
+        sigmas: s,
+        expectedPeriod: pair.superPeriod,
       });
-      if (mass.status === 'ok') {
-        const truthMu = data.planets[planet === 0 ? 1 : 0].mu;
-        mass = {
-          ...mass,
-          earth: {
-            central: mass.ratio.central * EARTH_PER_SUN,
-            lo: mass.ratio.lo * EARTH_PER_SUN,
-            hi: mass.ratio.hi * EARTH_PER_SUN,
-          },
-          truthEarth: truthMu * EARTH_PER_SUN,
-          measuredMinutes: fr.amplitude * MIN_PER_DAY,
+      const eph = an.ephemeris;
+      const oc =
+        eph.status === 'ok'
+          ? Array.from(eph.oc, (x, i) => [
+              n[i],
+              x * MIN_PER_DAY,
+              s[i] * MIN_PER_DAY,
+            ])
+          : [];
+      let model = [];
+      let amplitudeAtRelation = NaN;
+      if (an.superPeriod) {
+        const fit = fitSinusoidAt(n, t, s, an.superPeriod.value);
+        model = n.map((q, i) => [
+          q,
+          (fit.coef[0] +
+            fit.coef[1] * q +
+            fit.coef[2] * Math.cos((2 * Math.PI * t[i]) / fit.period) +
+            fit.coef[3] * Math.sin((2 * Math.PI * t[i]) / fit.period) -
+            (eph.T0 + q * eph.P)) *
+            MIN_PER_DAY,
+        ]);
+      }
+      if (pair.relation.status === 'ok') {
+        const fr = fitSinusoidAt(n, t, s, pair.superPeriod);
+        if (fr) amplitudeAtRelation = Math.hypot(fr.A, fr.B);
+      }
+      // Part B, verdict B: a mass only for a pair assumed circular, labeled, and the spread an eccentricity allows
+      let mass = { status: 'refused', reason: 'no-relation' };
+      let spread = { status: 'refused', reason: 'no-relation' };
+      const curve = { z: [], min: [], max: [] };
+      if (pair.relation.status === 'ok' && an.status === 'ok') {
+        const fr = fitSinusoidAt(n, t, s, pair.superPeriod);
+        const who = planet === 0 ? 'outer' : 'inner';
+        mass = massFromAmplitude({
+          amplitude: fr.amplitude,
+          sigmaAmplitude: fr.sigmaAmplitude,
+          P1: pair.eph[0].P,
+          P2: pair.eph[1].P,
+          j: data.j,
+          who,
+        });
+        if (mass.status === 'ok') {
+          const truthMu = data.planets[planet === 0 ? 1 : 0].mu;
+          mass = {
+            ...mass,
+            earth: {
+              central: mass.ratio.central * EARTH_PER_SUN,
+              lo: mass.ratio.lo * EARTH_PER_SUN,
+              hi: mass.ratio.hi * EARTH_PER_SUN,
+            },
+            truthEarth: truthMu * EARTH_PER_SUN,
+            measuredMinutes: fr.amplitude * MIN_PER_DAY,
+          };
+        }
+        const sp = {
+          P1: pair.eph[0].P,
+          P2: pair.eph[1].P,
+          j: data.j,
+          planet: planet === 0 ? 'inner' : 'outer',
         };
+        spread = amplitudeSpread({ ...sp, Z: zfree });
+        const base =
+          pair.relation[planet === 0 ? 'inner' : 'outer'].amplitude *
+          MIN_PER_DAY;
+        for (let k = 0; k <= 30; k++) {
+          const z = k / 1000;
+          const a = amplitudeSpread({ ...sp, Z: z });
+          curve.z.push(z);
+          curve.min.push(base * a.min);
+          curve.max.push(base * a.max);
+        }
       }
-      const sp = {
-        P1: pair.eph[0].P,
-        P2: pair.eph[1].P,
-        j: data.j,
-        planet: planet === 0 ? 'inner' : 'outer',
+      return {
+        system: id,
+        planet,
+        span,
+        zfree,
+        mass,
+        spread,
+        curve,
+        count: n.length,
+        analysis: an,
+        oc,
+        model,
+        pair,
+        amplitudeAtRelationMinutes: amplitudeAtRelation * MIN_PER_DAY,
+        relationAmplitudeMinutes:
+          pair.relation.status === 'ok'
+            ? (planet
+                ? pair.relation.outer.amplitude
+                : pair.relation.inner.amplitude) * MIN_PER_DAY
+            : NaN,
+        view: Math.round(v.view ?? 0) === 1 ? 1 : 0,
+        minCycles: MIN_CYCLES,
+        domain: relationDomain({
+          P1: pair.eph[0].P,
+          P2: pair.eph[1].P,
+          mu1: data.planets[0].mu,
+          mu2: data.planets[1].mu,
+          j: data.j,
+        }),
       };
-      spread = amplitudeSpread({ ...sp, Z: zfree });
-      const base =
-        pair.relation[planet === 0 ? 'inner' : 'outer'].amplitude * MIN_PER_DAY;
-      for (let k = 0; k <= 30; k++) {
-        const z = k / 1000;
-        const a = amplitudeSpread({ ...sp, Z: z });
-        curve.z.push(z);
-        curve.min.push(base * a.min);
-        curve.max.push(base * a.max);
-      }
     }
-    return {
-      system: id,
-      planet,
-      span,
-      zfree,
-      mass,
-      spread,
-      curve,
-      count: n.length,
-      analysis: an,
-      oc,
-      model,
-      pair,
-      amplitudeAtRelationMinutes: amplitudeAtRelation * MIN_PER_DAY,
-      relationAmplitudeMinutes:
-        pair.relation.status === 'ok'
-          ? (planet
-              ? pair.relation.outer.amplitude
-              : pair.relation.inner.amplitude) * MIN_PER_DAY
-          : NaN,
-      view: Math.round(v.view ?? 0) === 1 ? 1 : 0,
-      minCycles: MIN_CYCLES,
-      domain: relationDomain({
-        P1: pair.eph[0].P,
-        P2: pair.eph[1].P,
-        mu1: data.planets[0].mu,
-        mu2: data.planets[1].mu,
-        j: data.j,
-      }),
-    };
-  });
+  );
 }

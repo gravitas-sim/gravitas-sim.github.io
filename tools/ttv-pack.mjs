@@ -30,7 +30,9 @@ const THR = JSON.parse(
   readFileSync(path.join(ROOT, 'tests/fixtures/ttv/thresholds.json'), 'utf8')
 );
 const OUT = path.join(ROOT, 'js/data/ttvPack.js');
-const AM1_PPM = THR.amendments.find(a => a.id === 'AM1').added.find(a => a.id === 'C1b').sigma_ppm;
+const AM1_PPM = THR.amendments
+  .find(a => a.id === 'AM1')
+  .added.find(a => a.id === 'C1b').sigma_ppm;
 // AM1: the curvature sigma is calibrated when the timing precision is a fraction of the cadence, so the pinned set uses the amended noise.
 const LC = { ...THR.lightCurve, sigma_ppm: AM1_PPM };
 const SEED = 'ttv-pack-226';
