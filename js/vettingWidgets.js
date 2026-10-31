@@ -6,7 +6,7 @@
 // where the light dips on the frames), each with its verdict, its reason and its numbers,
 // the overall in three words that never include "planet", the rates the committed
 // thresholds give on seeded ensembles, and the record the summary makes. The plots sit behind
-// a control. "Inconclusive" is an answer of its own, shown as one.
+// a control that opens with the panel. "Inconclusive" is an answer of its own, shown as one.
 //
 // Nothing is calculated here: every number is js/vettingField.js's, over js/kernels/vetting/.
 // Every candidate is synthetic and says so.
@@ -152,7 +152,7 @@ const CHECKLIST = {
           65 + Math.max(0, Math.min(PRESETS.length - 1, Math.round(x)))
         ),
     },
-    toggle('plots', 'vetW.control.plots'),
+    toggle('plots', 'vetW.control.plots', 1),
     {
       id: 'view',
       get label() {

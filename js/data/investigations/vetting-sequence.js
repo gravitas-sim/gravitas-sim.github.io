@@ -26,10 +26,10 @@ const STAGE = {
     { role: 'star', name: 'A neighbor', teffK: 5200, lumSun: 0.4 },
   ],
 };
-/** The vetting panel: candidate 0 to 7 (A to H); plots 0 hidden, 1 shown; view 0 odd and even, 1 half an orbit later, 2 where the light dips; truth 0 hidden, 1 shown. */
+/** The vetting panel: candidate 0 to 7 (A to H); plots 1 shown (the disclosure open), 0 hidden; view 0 odd and even, 1 half an orbit later, 2 where the light dips; truth 0 hidden, 1 shown. */
 const VET = (values = {}) => ({
   id: 'vetting-checklist',
-  values: { candidate: 0, plots: 0, view: 0, truth: 0, ...values },
+  values: { candidate: 0, plots: 1, view: 0, truth: 0, ...values },
 });
 
 export const PLANET_OR_NOT = {

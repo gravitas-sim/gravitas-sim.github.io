@@ -4,8 +4,8 @@
 // Roadmap III, Prompt 228. Checked here: the lesson walks from its first step
 // to its last at the advanced depth (every question answered by the walker's
 // own rules), the vetting panel lists its tests, the overall verdict and the
-// rates behind the thresholds, none of NaN or undefined, the plots stay behind
-// their disclosure until asked for, the Spanish lesson shows its own words, and
+// rates behind the thresholds, none of NaN or undefined, the plots open with the panel and
+// fold away on request, the Spanish lesson shows its own words, and
 // the panel passes axe, keeps every control at least 24 px square at 1280 and
 // 390 px, in the dark and the light theme, and the page does not scroll
 // sideways at 320, 375 and 390 px. The numbers themselves are held by
@@ -131,8 +131,17 @@ for (const c of CASES) {
         locale === 'es' ? /En conjunto/i : /Overall/i,
         { useInnerText: true }
       );
-      // The plots are behind a disclosure: nothing is drawn until it is asked for.
-      await expect(page.locator('#investigationToolCanvas')).toBeHidden();
+      // The plots are a disclosure that opens with the panel: a labelled chart
+      // with content, which the reader can fold away and open again.
+      const chart = page.locator('#investigationTool svg[aria-label]:visible');
+      await expect(chart.first()).toBeVisible();
+      expect(await chart.first().locator('path').count()).toBeGreaterThan(0);
+      await setControl(page, 'plots', 0);
+      await expect(
+        page.locator('#investigationTool svg[aria-label]:visible')
+      ).toHaveCount(0);
+      await setControl(page, 'plots', 1);
+      await expect(chart.first()).toBeVisible();
 
       for (const theme of THEMES) {
         await page.evaluate(async id => {
