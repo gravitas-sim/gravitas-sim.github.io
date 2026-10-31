@@ -30,11 +30,13 @@ export const FORWARD = Object.freeze({
   stepsPerInnerPeriod: 2000,
 });
 
-/** The astrocentric circular start of both planets, in code units. */
+/** The astrocentric circular start of both planets, in code units (or `system.states`, if given). */
 export function initialState(
   system,
   { G = FORWARD.G, M = FORWARD.starMass } = {}
 ) {
+  // an explicit pair of states (an eccentric start, say) wins over the circular default
+  if (system.states) return system.states;
   const lam1 = system.lambda1_rad ?? Math.PI / 2;
   const planets = [];
   for (const [period, mu, lam] of [
