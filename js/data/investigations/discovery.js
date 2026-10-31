@@ -1110,4 +1110,54 @@ export const DISCOVERY = {
     },
     courseLevel: 'upper',
   },
+  'reading-the-hr-diagram': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['a-universe-of-stars'],
+    textbook: {
+      chapter: 18,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
+  'a-stars-life-in-numbers': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['lives-of-stars'],
+    textbook: {
+      chapter: 22,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
+  'when-a-star-explodes': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['from-star-to-remnant'],
+    textbook: {
+      chapter: 23,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
+  'populations-i-and-ii': {
+    audience: 'intro',
+    mathematics: 'logarithms',
+    prerequisites: ['two-clusters-two-ages'],
+    textbook: {
+      chapter: 22,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
+  'spectra-tell-temperature-and-gravity': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['what-a-spectrum-is-made-of'],
+    textbook: {
+      chapter: 17,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
 };

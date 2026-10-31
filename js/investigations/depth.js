@@ -167,6 +167,16 @@ const EXTENSIONS = {
     import('../data/investigations/depth/how-old-is-this-white-dwarf.js'),
   'the-metallicity-term': () =>
     import('../data/investigations/depth/the-metallicity-term.js'),
+  'reading-the-hr-diagram': () =>
+    import('../data/investigations/depth/reading-the-hr-diagram.js'),
+  'a-stars-life-in-numbers': () =>
+    import('../data/investigations/depth/a-stars-life-in-numbers.js'),
+  'when-a-star-explodes': () =>
+    import('../data/investigations/depth/when-a-star-explodes.js'),
+  'populations-i-and-ii': () =>
+    import('../data/investigations/depth/populations-i-and-ii.js'),
+  'spectra-tell-temperature-and-gravity': () =>
+    import('../data/investigations/depth/spectra-tell-temperature-and-gravity.js'),
   'from-star-to-remnant': () =>
     import('../data/investigations/depth/from-star-to-remnant.js'),
   'planet-or-not': () =>
@@ -319,6 +329,16 @@ const WORDS = {
       import('../data/investigations/depth/es/how-old-is-this-white-dwarf.js'),
     'the-metallicity-term': () =>
       import('../data/investigations/depth/es/the-metallicity-term.js'),
+    'reading-the-hr-diagram': () =>
+      import('../data/investigations/depth/es/reading-the-hr-diagram.js'),
+    'a-stars-life-in-numbers': () =>
+      import('../data/investigations/depth/es/a-stars-life-in-numbers.js'),
+    'when-a-star-explodes': () =>
+      import('../data/investigations/depth/es/when-a-star-explodes.js'),
+    'populations-i-and-ii': () =>
+      import('../data/investigations/depth/es/populations-i-and-ii.js'),
+    'spectra-tell-temperature-and-gravity': () =>
+      import('../data/investigations/depth/es/spectra-tell-temperature-and-gravity.js'),
     'from-star-to-remnant': () =>
       import('../data/investigations/depth/es/from-star-to-remnant.js'),
     'planet-or-not': () =>

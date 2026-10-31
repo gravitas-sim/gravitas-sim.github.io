@@ -13,7 +13,7 @@ export const UPPER_LEVEL_MODULES = {
   format: ID_COURSE_PACK,
   formatVersion: 2,
   id: 'upper-level-modules',
-  version: '1.0.0',
+  version: '1.1.0',
   gravitas: '1.0.0',
   locales: ['en', 'es'],
   pinning: 'compatible',
@@ -354,6 +354,41 @@ export const UPPER_LEVEL_MODULES = {
           pin: {
             fp: 'bc570fde',
             n: 9,
+          },
+        },
+        {
+          id: 'a-stars-life-in-numbers',
+          kind: 'lesson',
+          lesson: 'a-stars-life-in-numbers',
+          depth: 'advanced',
+          objectives: ['stellar'],
+          needs: ['lives-of-stars'],
+          pin: {
+            fp: '7b5ba5a2',
+            n: 6,
+          },
+        },
+        {
+          id: 'spectra-tell-temperature-and-gravity',
+          kind: 'lesson',
+          lesson: 'spectra-tell-temperature-and-gravity',
+          depth: 'advanced',
+          objectives: ['stellar'],
+          pin: {
+            fp: 'e9290483',
+            n: 6,
+          },
+        },
+        {
+          id: 'when-a-star-explodes',
+          kind: 'lesson',
+          lesson: 'when-a-star-explodes',
+          depth: 'advanced',
+          objectives: ['stellar'],
+          needs: ['the-limit'],
+          pin: {
+            fp: 'fdb2ac9c',
+            n: 6,
           },
         },
         {

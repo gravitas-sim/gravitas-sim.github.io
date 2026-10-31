@@ -408,6 +408,25 @@
           "text": "An observing sequence, Observing and instruments"
         }
       ]
+    },
+    {
+      "id": "stellar-closeout-recomputed",
+      "claim": "The numbers the five connecting stellar investigations ask a student for are recomputed from the project's own cluster-fit field, MIST tracks, remnant field and the SDSS spectrum pack's own grid, temperatures and band depths, and each step's grader accepts the recomputed value and refuses a wrong one.",
+      "scope": "Reading the HR Diagram, A Star's Life in Numbers, When a Star Explodes, Populations I and II and Spectra Tell Temperature and Gravity, in the English text; the Spanish follows the English step for step by a machine check; the tracks are solar-composition models and the clusters are synthetic",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "established",
+      "method": "tests/stellarCloseout.test.js recomputes every literal answer through clusterView, the track segments, outcomeView and the spectrum pack; the central-experiment walks run each lesson's own panel in a browser",
+      "evaluator": "the project",
+      "artifact": "tests/stellarCloseout.test.js",
+      "limitations": "Internal validation against the project's own models; the spectra pack holds no giant, so the gravity half is worked from model tracks; the binding energy is a uniform-density estimate and the blast energy a cited typical value; no supernova light curve and no kinematic population split ship; the Spanish has not been read by a fluent reader; no student has used the investigations (D-R10-224-02).",
+      "date": "2026-10-31",
+      "anchors": [
+        {
+          "file": "CHANGELOG.md",
+          "text": "A sequence, Stars, in depth"
+        }
+      ]
     }
   ]
 }

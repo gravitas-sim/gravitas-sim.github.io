@@ -2090,6 +2090,57 @@ export const ES_DEFERRED = {
     'Diseñar un sondeo para un objetivo dado, predecir lo que encuentra y justificar el plan: muchos planes son correctos.',
   'inv.seq.instruments.from-photons-to-a-number':
     'La cadena entera como un cálculo trazado, con la incertidumbre arrastrada en cada paso.',
+  'inv.seq.stars.title': 'Las estrellas, en profundidad',
+  'inv.seq.stars.blurb':
+    'La unidad estelar de principio a fin: color y espectros, el diagrama HR, las vidas de las estrellas en números, masas y radios, cúmulos y poblaciones, rotación y erupciones, remanentes y explosiones, y las variables que miden distancias. Cada investigación dice lo que deja fuera.',
+  'inv.seq.stars.color-and-temperature':
+    'Por qué el color de una estrella es su temperatura: el primer peldaño para leer una estrella.',
+  'inv.seq.stars.what-a-spectrum-is-made-of':
+    'Por qué un gas hace líneas oscuras, brillantes o ninguna: qué contiene un espectro.',
+  'inv.seq.stars.spectra-tell-temperature-and-gravity':
+    'Cuatro espectros reales: por qué una línea no es un termómetro y qué hace la gravedad a una línea.',
+  'inv.seq.stars.a-universe-of-stars':
+    'Tamaño, color y diagrama HR con estrellas modelo: la imagen que lee la unidad.',
+  'inv.seq.stars.reading-the-hr-diagram':
+    'Las regiones del diagrama, cómo una distancia pone una estrella en él y por qué la secuencia principal es una banda.',
+  'inv.seq.stars.lives-of-stars':
+    'La vida entera de una estrella a lo largo de trayectorias publicadas, de la nube al remanente.',
+  'inv.seq.stars.a-stars-life-in-numbers':
+    'Las vidas en la secuencia principal en números, por qué mueren primero las más pesadas y el punto de giro como reloj.',
+  'inv.seq.stars.inside-a-star':
+    'Equilibrio hidrostático y un politropo: por qué el centro de una estrella está caliente.',
+  'inv.seq.stars.scaling-the-main-sequence':
+    'Cómo escalan la luminosidad y el radio con la masa, y dónde deja de valer.',
+  'inv.seq.stars.weighing-stars':
+    'Masas a partir de órbitas: la única forma de pesar una estrella directamente.',
+  'inv.seq.stars.two-stars-eclipsing':
+    'Un par eclipsante: los radios y los límites de lo que identifica la curva de luz.',
+  'inv.seq.stars.weighing-the-stars-for-real':
+    'Masas y radios a partir de velocidades y eclipses juntos, con sus intervalos.',
+  'inv.seq.stars.cluster-membership':
+    'Hallar las estrellas de un cúmulo por su movimiento, como probabilidades.',
+  'inv.seq.stars.two-clusters-two-ages':
+    'Ajustar una edad y una distancia a dos cúmulos y ver lo que cuesta la metalicidad supuesta.',
+  'inv.seq.stars.populations-i-and-ii':
+    'Estrellas ricas y pobres en metales: lo que hace a una edad la metalicidad supuesta y qué estrellas viejas sobreviven.',
+  'inv.seq.stars.how-fast-does-the-star-spin':
+    'El período de rotación de una estrella a partir de sus manchas, con los alias que engañan.',
+  'inv.seq.stars.flares':
+    'Las erupciones como energía liberada: tasas, duraciones y lo que puede ver un sondeo.',
+  'inv.seq.stars.the-limit':
+    'Por qué una enana blanca no puede superar una masa: degeneración y el límite de Chandrasekhar.',
+  'inv.seq.stars.how-old-is-this-white-dwarf':
+    'El enfriamiento como reloj: la edad de una enana blanca dentro de un dominio declarado.',
+  'inv.seq.stars.from-star-to-remnant':
+    'De la masa inicial al remanente: un límite incierto y probabilidades, no una tabla.',
+  'inv.seq.stars.when-a-star-explodes':
+    'Qué estrellas colapsan, y qué libera un colapso frente a la explosión que vemos.',
+  'inv.seq.stars.leavitts-law':
+    'Las cefeidas: el período da la luminosidad, y con ella una distancia.',
+  'inv.seq.stars.the-metallicity-term':
+    'Un término de contenido de metales en la relación de las cefeidas, y dónde se detiene su calibración.',
+  'inv.seq.stars.which-kind-of-variable':
+    'Distinguir estrellas variables por período, amplitud y forma, conservando la ambigüedad.',
   'inv.seq.depth.core': 'Profundidad básica',
   'inv.seq.depth.quantitative': 'Profundidad cuantitativa',
   'inv.seq.depth.advanced': 'Profundidad avanzada',

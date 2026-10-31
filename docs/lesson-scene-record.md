@@ -11,15 +11,15 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 109 investigations and 1425 steps: 1333 steps
-declare a scene, 157 let a reader change one, 167 read the
-running integration, 916 show a prescribed model result, 146 draw
-on a stored dataset, 795 put a self-contained panel beside the text,
-376 keep something, and 58 are prose.
-Of 187 prediction loops, 187 are returned to,
-187 produce a measurement before they are answered, and
+Across 114 investigations and 1454 steps: 1362 steps
+declare a scene, 167 let a reader change one, 177 read the
+running integration, 945 show a prescribed model result, 161 draw
+on a stored dataset, 814 put a self-contained panel beside the text,
+382 keep something, and 58 are prose.
+Of 189 prediction loops, 189 are returned to,
+189 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
-187 hold their marking until the experiment settles them.
+189 hold their marking until the experiment settles them.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -1546,4 +1546,74 @@ Of 187 prediction loops, 187 are returned to,
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:exposure-planner`, control exposure-planner/target, measures the total exposure on the Las Cumbres 1.0 m telescope for a magnitude-19 star in one exposure at an airmass of 1.1: 59.3 seconds for a signal-to-noise of 50 and 191.4 for 100, 3.2 times longer for twice the quality, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## Reading the HR Diagram (`reading-the-hr-diagram`)
+
+- **Steps:** 5. Scene declared on 5; a reader can change something on 2; 3 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 2 live engine, 5 prescribed model, 2 stored dataset, 3 self-contained panel.
+- **What students do:** change-a-scene-object, move-an-instrument-control, press-an-instrument-preset, press-an-instrument-button, choose-an-option, record-values.
+- **Objects the steps declare:** m020, m050, m100, m200, m500, m1000, m2000, m4000, main, giant, supergiant, wd, star.
+- **Instruments:** stellar-lab, cluster-fit.
+- **Stored data:** MIST v1.2 evolutionary tracks (computed-grid).
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** none.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:cluster-fit`, control cluster-fit/feh, measures the distance modulus of cluster A from a fit of isochrones at the assumed metallicity, in magnitudes: 12.10 at [Fe/H] -0.25 (2.6 kiloparsecs) and 12.43 at 0, the metallicity being stated and never fitted, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## A Star’s Life in Numbers (`a-stars-life-in-numbers`)
+
+- **Steps:** 6. Scene declared on 6; a reader can change something on 6; 0 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 6 live engine, 6 prescribed model, 6 stored dataset, 0 self-contained panel.
+- **What students do:** change-a-scene-object, move-an-instrument-control, press-an-instrument-preset, press-an-instrument-button, commit-a-prediction, record-values, choose-an-option.
+- **Objects the steps declare:** star.
+- **Instruments:** stellar-evolution.
+- **Stored data:** MIST v1.2 evolutionary tracks (computed-grid).
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** which-lives-longer → a-sun-like-life, a-heavy-life, why-the-heavy-one-is-short, what-the-lifetimes-say → a-heavy-life.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:stellar-evolution`, control stellar-evolution/track, measures how long the main-sequence phase of a model star lasts, from the MIST tracks: 9.88 billion years for a star of 1 solar mass and 8.65 million for 20, a ratio of about 1,140, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## When a Star Explodes (`when-a-star-explodes`)
+
+- **Steps:** 6. Scene declared on 6; a reader can change something on 0; 6 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 6 prescribed model, 0 stored dataset, 6 self-contained panel.
+- **What students do:** move-an-instrument-control, choose-an-option, commit-a-prediction, record-values.
+- **Objects the steps declare:** star.
+- **Instruments:** remnant-outcome.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** where-the-energy-goes → the-share-in-the-blast, what-a-light-curve-would-add → the-share-in-the-blast.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:remnant-outcome`, control remnant-outcome/mi, measures the probability that a star of a given initial mass ends as a neutron star, from the cited threshold ranges: 0.8 at 9 solar masses and 1 at 15, against a white dwarf with no supernova at 5, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## Populations I and II (`populations-i-and-ii`)
+
+- **Steps:** 6. Scene declared on 6; a reader can change something on 1; 5 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 1 live engine, 6 prescribed model, 1 stored dataset, 5 self-contained panel.
+- **What students do:** move-an-instrument-control, choose-an-option, record-values, change-a-scene-object, press-an-instrument-preset, press-an-instrument-button.
+- **Objects the steps declare:** star.
+- **Instruments:** cluster-fit, stellar-evolution.
+- **Stored data:** MIST v1.2 evolutionary tracks (computed-grid).
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** none.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:cluster-fit`, control cluster-fit/feh, measures the age of cluster A in gigayears from a fit of isochrones at the assumed metallicity: 3.35 at [Fe/H] -0.5 and 1.47 at 0, the metallicity being stated and never fitted, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## Spectra Tell Temperature and Gravity (`spectra-tell-temperature-and-gravity`)
+
+- **Steps:** 6. Scene declared on 6; a reader can change something on 1; 5 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 1 live engine, 6 prescribed model, 6 stored dataset, 5 self-contained panel.
+- **What students do:** move-an-instrument-control, choose-an-option, record-values, change-a-scene-object, press-an-instrument-preset, press-an-instrument-button.
+- **Objects the steps declare:** a, m.
+- **Instruments:** spectra-compare, stellar-evolution.
+- **Stored data:** Four observed stellar spectra, SDSS DR18 (observation); MIST v1.2 evolutionary tracks (computed-grid).
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** none.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:spectra-compare`, control spectra-compare/named, measures the depth of a line in each of four observed SDSS spectra: H-beta deepest in the A star and the sodium doublet deepest in the M star, so one line is not a thermometer, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
