@@ -205,6 +205,12 @@ export default {
     'Por qué no concluyente es un resultado y no un fallo del estudiante, por qué aprobar solo descarta lo que la prueba podía ver, y por qué dos estrellas iguales con el doble del período parecen un planeta solo en la curva de luz.',
     'Todos los candidatos son sintéticos, con ruido blanco, órbita circular, una vecina y sin efectos del detector; los umbrales están fijados de antemano y se muestran las tasas que dan en conjuntos con semilla; las curvas de luz reales de dos planetas confirmados se comprueban en la validación, no aquí.',
   ],
+  joint: [
+    'La masa, el radio y la densidad de un planeta a partir de un tránsito y un conjunto de velocidades ajustados juntos, con la masa y el radio de la estrella declarados al lado y su incertidumbre incluida. El panel muestra cuánto de cada incertidumbre es de la estrella, y si la estrella que declaras concuerda con la densidad que mide el tránsito.',
+    'Cambia la incertidumbre declarada de la estrella y lee cómo se ensanchan los intervalos de masa, radio y densidad, qué parte de cada uno tiene la estrella, y dónde cae el planeta entre los del Sistema Solar en un diagrama de radio contra masa con líneas de densidad constante.',
+    'Por qué la densidad de un planeta vale lo que valga su estrella: el radio es el cociente de radios por el radio de la estrella, la masa necesita la masa de la estrella y la densidad necesita ambas; un ajuste que deja fuera la estrella da un intervalo demasiado estrecho, y el conjunto muestra cuánto.',
+    'Un planeta sintético en órbita circular, con la masa y el radio de la estrella como datos gaussianos independientes con una correlación y una fuente declaradas, la covarianza del propio ajuste linealizada; una clase de densidad es una convención y no distingue hidrógeno y helio del hielo de agua; no se dibuja ninguna curva de composición.',
+  ],
   clusterFit: [
     'Un cúmulo estelar sintético de edad y distancia conocidas, generado con isocronas MIST: su diagrama color–magnitud con la mejor isocrona encima, y la edad y el módulo de distancia que da el ajuste, cada uno con un intervalo de un sigma, con la metalicidad que fijes.',
     'Cuál de dos cúmulos es más viejo según dónde las estrellas dejan la secuencia principal, cómo la edad y la distancia ajustadas se compensan, cuánto se mueve la edad cuando cambia la metalicidad supuesta, y qué hace al ajuste una fracción de binarias que el modelo no tiene.',

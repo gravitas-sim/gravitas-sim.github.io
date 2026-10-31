@@ -134,6 +134,7 @@ current, and the orchestrator checks it.
 | `interaction-contract.mjs` | Is a surface keeping the interaction contract? |  |
 | `interiors-validate.mjs` | The interiors kernel's Part A against its committed thresholds (Prompt 203) | `npm run interiors:validate` |
 | `jest-sequencer.mjs` | Start the slowest suites first |  |
+| `joint-inference-validate.mjs` | The joint transit and radial-velocity model against its committed thresholds (Prompt 227) |  |
 | `key-groups-check.mjs` | Key groups: does the rewritten catalog equal its source? |  |
 | `key-groups.mjs` | Key groups: write a shared key prefix once, in the bundle only |  |
 | `key-registry-codemod.mjs` | Move allowlisted 'gravitas*' literals into js/names.js (Prompt 141) |  |

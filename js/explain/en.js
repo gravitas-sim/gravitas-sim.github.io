@@ -178,6 +178,12 @@ export default {
     'Why inconclusive is a result and not a failure of the student, why a pass only rules out what the test could see, and why two equal stars at twice the period look like a planet in the light curve alone.',
     'Every candidate is synthetic, with white noise, a circular orbit, one neighbor and no detector effects; the thresholds are committed and the rates they give on seeded ensembles are shown; the real light curves of two confirmed planets are checked in the validation, not here.',
   ],
+  joint: [
+    'A planet’s mass, radius and density from a transit and a set of velocities fitted together, with the star’s mass and radius stated beside them and their uncertainty carried through. The panel shows how much of each uncertainty is the star’s, and whether the star you state agrees with the density the transit measures.',
+    'Change the star’s stated uncertainty and read how the mass, radius and density intervals widen, how large a share of each the star holds, and where the planet falls among the planets of the Solar System on a diagram of radius against mass with lines of constant density.',
+    'Why a planet’s density is only as good as its star: the radius is the radius ratio times the star’s radius, the mass needs the star’s mass, and the density needs both; a fit that leaves the star out reports an interval that is too narrow, and the ensemble shows by how much.',
+    'One synthetic planet on a circular orbit, with the star’s mass and radius as independent Gaussian inputs with a stated correlation and a stated source, the fit’s own covariance linearized; a density class is a convention and cannot tell hydrogen and helium from water ice; no composition curve is drawn.',
+  ],
   variablesII: [
     'Cepheids of the LMC against those of NGC 4258 or M101, with the metallicity term left out or included, the distance modulus and distance each gives and every term of the error; the features of a real TESS light curve (period, amplitude, skewness, the Fourier numbers R21, R31, phi21, phi31) with their errors, withdrawn when the run is too short; and the nearest-neighbour exercise on the labelled synthetic sample with stars left open when the neighbours disagree.',
     'Switch the term on and off and read the shift; give the galaxy a metallicity of your own and push it outside the cited span; use only the first days of a run and see the shape numbers withdrawn below three cycles; ask for four, then five, neighbours to agree and see how many stars are left open.',

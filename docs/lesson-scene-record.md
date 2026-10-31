@@ -11,15 +11,15 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 109 investigations and 1425 steps: 1333 steps
+Across 110 investigations and 1432 steps: 1340 steps
 declare a scene, 157 let a reader change one, 167 read the
-running integration, 916 show a prescribed model result, 146 draw
-on a stored dataset, 795 put a self-contained panel beside the text,
+running integration, 923 show a prescribed model result, 146 draw
+on a stored dataset, 802 put a self-contained panel beside the text,
 376 keep something, and 58 are prose.
-Of 187 prediction loops, 187 are returned to,
-187 produce a measurement before they are answered, and
+Of 188 prediction loops, 188 are returned to,
+188 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
-187 hold their marking until the experiment settles them.
+188 hold their marking until the experiment settles them.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -1406,6 +1406,20 @@ Of 187 prediction loops, 187 are returned to,
 - **Recovery:** wrong body: the object list names what the step staged.
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:vetting-checklist`, control vetting-checklist/candidate, measures the odd-even z, the secondary depth against its error and the centroid offset against its exclusion radius for each of eight synthetic candidates, and the verdict they add up to (survives, rejected or undecided, never planet), evidence `none`, covered by `e2e/vettingLesson.spec.js`.
+
+## What Is It Made Of? (`what-is-it-made-of`)
+
+- **Steps:** 7. Scene declared on 7; a reader can change something on 0; 7 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 7 prescribed model, 0 stored dataset, 7 self-contained panel.
+- **What students do:** move-an-instrument-control, commit-a-prediction, choose-an-option.
+- **Objects the steps declare:** star.
+- **Instruments:** joint-fit, mass-radius.
+- **Stored data:** none.
+- **Evidence kept:** nothing — this lesson keeps nothing.
+- **Prediction loops:** bigger-star-prediction → a-bigger-star, whose-uncertainty, where-on-the-diagram, what-the-density-says, what-you-can-now-say → a-bigger-star.
+- **Recovery:** wrong body: the object list names what the step staged.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:joint-fit`, control joint-fit/starRadius, measures the planet's radius, mass and bulk density from the stored joint fit of a synthetic hot Jupiter when the star's stated radius changes: radius and density move with the star, the mass does not, and the density's uncertainty carries the star's share, evidence `none`, covered by `e2e/jointLesson.spec.js`.
 
 ## The Metallicity Term (`the-metallicity-term`)
 

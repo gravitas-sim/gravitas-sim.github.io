@@ -290,6 +290,83 @@ export function systemFromMass({ P, Mp, Ms, Rs, b, e = 0, w = Math.PI / 2 }) {
   return { aRs, sini, K: amplitude({ Mp, P, e, sini, Ms }), a_m: a };
 }
 
+/**
+ * The planet's mass, radius and density with the first-order uncertainty of
+ * the fit (its covariance) and of the star (its two sigmas and their
+ * correlation) kept apart, and the share of the variance the star holds. The
+ * same linearization as the fit's own derived quantities
+ * (js/inference/infer.js), for a stored fit or a lesson.
+ * @param {{names: string[], mean: number[], covariance: number[][],
+ *   star: {mass: object, radius: object, correlation?: number},
+ *   fixed?: object}} o - names of the fit's P, k, aRs (TRUE), b, K, and
+ *   sqrtEcosw, sqrtEsinw when fitted; `fixed` holds the ones that are not
+ * @returns {Object<string, {value: number, sigmaFit: number, sigmaStar: number,
+ *   sigma: number, share: number}>} keys Mp, Rp, rhoP, MpSini
+ */
+export function linearPlanet({ names, mean, covariance, star, fixed = {} }) {
+  const pick = (theta, n, d) => {
+    const i = names.indexOf(n);
+    return i >= 0 ? theta[i] : (fixed[n] ?? d);
+  };
+  const f = (theta, Ms, Rs) => {
+    const sx = pick(theta, 'sqrtEcosw', 0);
+    const sy = pick(theta, 'sqrtEsinw', 0);
+    const e = sx * sx + sy * sy;
+    const p = planetOf(
+      {
+        K: pick(theta, 'K'),
+        P: pick(theta, 'P'),
+        e,
+        w: e > 0 ? Math.atan2(sy, sx) : Math.PI / 2,
+        aRs: pick(theta, 'aRs'),
+        b: pick(theta, 'b'),
+        k: pick(theta, 'k'),
+      },
+      { Ms, Rs },
+      true
+    );
+    return [p.Mp, p.Rp, p.rhoP, p.MpSini];
+  };
+  const Ms = star.mass.value;
+  const Rs = star.radius.value;
+  const base = f(mean, Ms, Rs);
+  const sm = star.mass.sigma ?? 0;
+  const sr = star.radius.sigma ?? 0;
+  const out = {};
+  ['Mp', 'Rp', 'rhoP', 'MpSini'].forEach((name, j) => {
+    const g = mean.map((v, i) => {
+      const h = 1e-6 * (Math.abs(v) || 1);
+      const up = mean.slice();
+      const dn = mean.slice();
+      up[i] += h;
+      dn[i] -= h;
+      return (f(up, Ms, Rs)[j] - f(dn, Ms, Rs)[j]) / (2 * h);
+    });
+    let vf = 0;
+    for (let a = 0; a < g.length; a++)
+      for (let b = 0; b < g.length; b++) vf += g[a] * covariance[a][b] * g[b];
+    const hM = 1e-4 * Ms;
+    const hR = 1e-4 * Rs;
+    const gs = {
+      Ms: (f(mean, Ms + hM, Rs)[j] - f(mean, Ms - hM, Rs)[j]) / (2 * hM),
+      Rs: (f(mean, Ms, Rs + hR)[j] - f(mean, Ms, Rs - hR)[j]) / (2 * hR),
+    };
+    const vs = stellarVariance(gs, {
+      sigmaMs: sm,
+      sigmaRs: sr,
+      correlation: star.correlation ?? 0,
+    });
+    out[name] = {
+      value: base[j],
+      sigmaFit: Math.sqrt(Math.max(0, vf)),
+      sigmaStar: Math.sqrt(Math.max(0, vs)),
+      sigma: Math.sqrt(Math.max(0, vf + vs)),
+      share: vf + vs > 0 ? vs / (vf + vs) : 0,
+    };
+  });
+  return out;
+}
+
 export const CONSTANTS = Object.freeze({
   G: G_SI,
   GM,

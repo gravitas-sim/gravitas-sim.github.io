@@ -93,6 +93,7 @@ export const MANIFEST = [
     level: 'Introductory astronomy',
     thumbnail: 'images/scenarios/exoplanet-characterization-lab.webp',
     series: 'Detecting exoplanets',
+    depths: 2,
     stepCount: 38,
     gradedCount: 20,
     objectiveCount: 7,
@@ -1253,6 +1254,19 @@ export const MANIFEST = [
     depths: 3,
     stepCount: 8,
     gradedCount: 6,
+    objectiveCount: 4,
+  },
+  {
+    id: 'what-is-it-made-of',
+    title: 'What Is It Made Of?',
+    subtitle:
+      'A planet’s density is only as good as its star: see how much of the uncertainty is the star’s, and what a density can and cannot say',
+    duration: '6-10 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/what-is-it-made-of.webp',
+    depths: 2,
+    stepCount: 7,
+    gradedCount: 5,
     objectiveCount: 4,
   },
   {

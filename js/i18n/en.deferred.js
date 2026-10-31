@@ -1866,6 +1866,8 @@ export const EN_DEFERRED = {
     'An experiment of twenty planets extended in Python to a population, with what its interval covers and what it does not. Needs the compute page and a connection.',
   'inv.seq.planets.refitting-a-transit':
     'The fit panel’s transit model fitted again by a different route in Python, and what the route changes. Needs the compute page and a connection.',
+  'inv.seq.planets.what-is-it-made-of':
+    'A planet’s radius, mass and density with the star’s stated uncertainty inside them: how much of each is the star’s, what a mis-stated star does, and what a density can and cannot say.',
   'inv.seq.planets.planet-or-not':
     'Eight synthetic candidates vetted with odd-even depths, a second-eclipse search and a centroid test, and what a passed checklist does not mean. Some cannot be decided.',
   'inv.seq.planets.two-periodograms':
