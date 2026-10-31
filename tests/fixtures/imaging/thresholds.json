@@ -1,0 +1,57 @@
+{
+  "format": "gravitas.imaging-thresholds/1",
+  "prompt": "Roadmap III, Prompt 230 Part A: direct imaging, contrast and separation (tranche T3 by D-R10-207-01)",
+  "document": "IMAGING.md (\"Validation contract\")",
+  "committed": "before js/kernels/imaging/, the oracle script, the validator, any panel, lesson or guide step of Prompt 230 existed, and before any output of the kernel or the oracle was inspected. Read before committing: the signatures of js/kernels/radiation/planck.js (planckLambda, bandRadiance), js/kernels/atmospheres/phase.js (lambertPhase) and equilibrium.js (equilibriumFromStar), and js/kernels/detector/optics.js (lambdaOverD, rayleighAngle); no result of any of them was computed for this prompt.",
+  "rule": "A crossed bound is a failed check, recorded in failed-legs.json and left failing; only Carl resets one. A leg that cannot be measured is NOT RUN and says why. A leg marked report has no bound and is only printed. Amendments are appended below with their reason and never replace the original.",
+  "seeds": {
+    "oracle": 230,
+    "ensemble": "imaging-230"
+  },
+  "scope": {
+    "built": "the contrast of a planet and its star at a wavelength or in a band, as the sum of a thermal term ((Rp/R*)^2 B(Tp)/B(T*), both bodies blackbodies) and a reflected term (A_g (Rp/a)^2 Phi(alpha), the Lambert-sphere phase function of js/kernels/atmospheres/phase.js); the irradiation equilibrium temperature (js/kernels/atmospheres/equilibrium.js) beside the temperature a caller states, with a self-luminous flag; the angular separation at a distance; the diffraction scale lambda/D and the Rayleigh angle from js/kernels/detector/optics.js, with the statement that neither is a coronagraph's inner working angle; an observability verdict against a stated instrument (aperture, wavelength, inner working angle in arcseconds, contrast floor) that returns not observable inside the inner working angle and below the contrast floor, and refuses when no inner working angle is stated.",
+    "notBuilt": "a coronagraph or starlight-suppression model; speckle or adaptive-optics residuals; PSF subtraction, its throughput and any orbit (Part B, the gate docs/imaging-subtraction-gate, not run in this part); a contrast number typed from a paper; a planet's own-heat contrast from an evolutionary model (an imaged planet is drawn at the temperature the archive tabulates, as a blackbody, and the lesson says so); a non-Lambert phase function; eccentric-orbit phase and separation (circular orbits only).",
+    "assumptions": "both bodies radiate as blackbodies; the planet's thermal term is the disk-integrated emission of one temperature (no day-night contrast); reflection is a Lambert sphere with a stated geometric albedo; circular orbit; the star is a point at distance d and the separation is the projected angle atan(r/d); lambda/D is a scale and not an inner working angle."
+  },
+  "legs": {
+    "a": "analytic closed forms",
+    "b": "an independent implementation (numpy, scipy, astropy) pinned as oracle-results.json",
+    "c": "not applicable: the kernel returns point values and no interval, estimator or coverage claim, so there is no ensemble coverage to state; C1 below is an invariant ensemble, not coverage",
+    "d": "refusals: a planet inside the stated inner working angle, below the contrast floor, or with no stated inner working angle is not observable or refused",
+    "e": "authentic applicability: the pinned NASA Exoplanet Archive table of imaged planets (separations and angular sizes computed, no contrast compared with a paper)"
+  },
+  "checks": [
+    {"id": "A1", "name": "reflected contrast at full phase is A_g (Rp/a)^2", "kind": "bound", "limits": {"maxRelErr": 1e-12, "cases": 20}},
+    {"id": "A2", "name": "Lambert phase function: Phi(0)=1, Phi(pi/2)=1/pi, Phi(pi)=0, non-increasing on [0, pi]", "kind": "bound", "limits": {"maxAbsErr": 1e-12}},
+    {"id": "A3", "name": "thermal contrast in the Rayleigh-Jeans limit (lambda = 0.1 m) is (Rp/R*)^2 Tp/T*", "kind": "bound", "limits": {"maxRelErr": 1e-3}},
+    {"id": "A4", "name": "thermal contrast integrated over 1 nm to 1 m is (Rp/R*)^2 (Tp/T*)^4", "kind": "bound", "limits": {"maxRelErr": 1e-4}},
+    {"id": "A5", "name": "equilibrium temperature is T*(R*/2a)^(1/2)((1-A_B) f)^(1/4)... with f = 1/4 for uniform redistribution; doubling a divides it by sqrt 2", "kind": "bound", "limits": {"maxRelErr": 1e-9}},
+    {"id": "A6", "name": "angular separation: 1 AU at 1 pc is 1 arcsecond; Earth at 10 pc is 0.1 arcsecond; atan(r/d) agrees with r/d below 1e-6 rad", "kind": "bound", "limits": {"maxRelErr": 1e-9}},
+    {"id": "A7", "name": "lambda/D is lambda over D, the Rayleigh angle is 1.2197 lambda/D for an unobstructed aperture, and the diffraction-scale record states it is not an inner working angle", "kind": "bound", "limits": {"maxRelErr": 1e-9, "rayleighRatio": 1.2197, "rayleighTol": 1e-3}},
+    {"id": "A8", "name": "Earth around the Sun at ten parsecs: separation, lambda/D for five apertures, visible reflected and 10 micron thermal contrast", "kind": "report"},
+    {"id": "B1", "name": "monochromatic thermal contrast against the oracle, 60 cases", "kind": "bound", "limits": {"maxRelErr": 1e-9}},
+    {"id": "B2", "name": "band thermal contrast against the oracle, 40 cases", "kind": "bound", "limits": {"maxRelErr": 1e-6}},
+    {"id": "B3", "name": "reflected contrast with phase against the oracle, 60 cases", "kind": "bound", "limits": {"maxRelErr": 1e-12}},
+    {"id": "B4", "name": "equilibrium temperature against the oracle, 40 cases", "kind": "bound", "limits": {"maxRelErr": 1e-9}},
+    {"id": "B5", "name": "pinned contrast curves (Earth-Sun, Jupiter-Sun, a 1500 K companion of a 4000 K star), 0.3 to 30 micron, total contrast", "kind": "bound", "limits": {"maxRelErr": 1e-6, "pointsPerCurve": 61}},
+    {"id": "B6", "name": "observability verdict agrees with the oracle's own rule in 100 percent of 200 cases", "kind": "bound", "limits": {"agreement": 1.0}},
+    {"id": "C1", "name": "invariants on 500 seeded systems: total = thermal + reflected; reflected non-increasing in phase angle; thermal increasing in planet temperature; contrast in [0, inf); separation increasing in a, decreasing in d", "kind": "bound", "limits": {"holds": 1.0}},
+    {"id": "D1", "name": "a planet whose separation is inside the stated inner working angle returns observable false, code inside-inner-working-angle, and the sentence 'not observable with this instrument'", "kind": "bound", "limits": {"rate": 1.0, "cases": 200}},
+    {"id": "D2", "name": "outside the inner working angle and below the stated contrast floor returns observable false, code below-contrast-floor", "kind": "bound", "limits": {"rate": 1.0, "cases": 200}},
+    {"id": "D3", "name": "a call with no inner working angle stated is refused (code no-inner-working-angle) and is not given a default from lambda/D", "kind": "bound", "limits": {"rate": 1.0, "cases": 50}},
+    {"id": "D4", "name": "non-physical input (negative or non-finite radius, distance, wavelength, temperature, albedo outside [0,1], a below the star's radius) throws a coded error", "kind": "bound", "limits": {"rate": 1.0, "cases": 40}},
+    {"id": "D5", "name": "a stated planet temperature more than 2 times the irradiation equilibrium temperature is flagged self-luminous, and one within 1.1 times is not", "kind": "bound", "limits": {"selfLuminousFactor": 2, "irradiatedFactor": 1.1, "rate": 1.0, "cases": 100}},
+    {"id": "E1", "name": "the pinned table's imaged planets (rows with a distance and a semi-major axis): the kernel's separation recomputed from the rows, every one finite and positive, and the count of rows judged against the example instruments' working angles", "kind": "report"},
+    {"id": "E2", "name": "published contrasts for the imaged planets (and a cited coronagraph working-angle value) were not supplied: the comparison is NOT RUN", "kind": "not-run"}
+  ],
+  "instruments": {
+    "note": "Illustrative instruments for the panel and the lesson. Their inner working angles (in lambda/D) and contrast floors are teaching values chosen by this prompt and are NOT cited values: no published coronagraph specification was supplied, and nothing was typed from memory. The lesson says so beside each number.",
+    "list": [
+      {"id": "small-visible", "apertureM": 0.25, "wavelengthM": 5.5e-7, "innerWorkingLambdaOverD": 3, "contrastFloor": 1e-4},
+      {"id": "space-2m-visible", "apertureM": 2.4, "wavelengthM": 5.5e-7, "innerWorkingLambdaOverD": 3, "contrastFloor": 1e-9},
+      {"id": "ground-8m-nir", "apertureM": 8.0, "wavelengthM": 1.65e-6, "innerWorkingLambdaOverD": 2, "contrastFloor": 1e-5},
+      {"id": "space-6m-visible", "apertureM": 6.0, "wavelengthM": 5.5e-7, "innerWorkingLambdaOverD": 3, "contrastFloor": 1e-10}
+    ]
+  },
+  "amendments": []
+}
