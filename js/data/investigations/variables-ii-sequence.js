@@ -105,14 +105,7 @@ export const THE_METALLICITY_TERM = {
         'A negative coefficient times a larger [O/H] makes the magnitude smaller. Is a smaller magnitude brighter or fainter?',
       ],
       because:
-        'A little brighter: &minus;0.217 mag per dex times a galaxy 0.2 dex richer is &minus;0.04 mag. A galaxy that is richer than the one the law was calibrated in has Cepheids that are brighter than that law says, so if you leave the term out you take them for nearer than they are. The next step measures it.',
-      misconceptions: [
-        {
-          id: 'dimmer',
-          option: 1,
-          say: 'It is not dust: the Wesenheit magnitude already removes that. The term is about how the star itself shines, and the cited sign is that more metals make a Cepheid a little brighter at the same period.',
-        },
-      ],
+        'A little brighter: &minus;0.217 mag per dex times a galaxy 0.2 dex richer is &minus;0.04 mag. A galaxy that is richer than the one the law was calibrated in has Cepheids that are brighter than that law says, so if you leave the term out you take them for nearer than they are. It is not dust: the Wesenheit magnitude already removes that. The next step measures it.',
       tool: PLZ({ term: 0 }),
     },
     {
@@ -424,12 +417,7 @@ export const THE_METALLICITY_TERM_ES = {
         'Un coeficiente negativo por un [O/H] mayor hace menor la magnitud. ¿Una magnitud menor es más brillante o más débil?',
       ],
       because:
-        'Un poco más brillante: &minus;0,217 mag por dex por una galaxia 0,2 dex más rica son &minus;0,04 mag. Una galaxia más rica que aquella en que se calibró la ley tiene cefeidas más brillantes de lo que dice esa ley, así que si omites el término las tomas por más cercanas de lo que están. El paso siguiente lo mide.',
-      misconceptions: [
-        {
-          say: 'No es polvo: la magnitud Wesenheit ya lo quita. El término trata de cómo brilla la propia estrella, y el signo citado es que más metales hacen a una cefeida algo más brillante con el mismo período.',
-        },
-      ],
+        'Un poco más brillante: &minus;0,217 mag por dex por una galaxia 0,2 dex más rica son &minus;0,04 mag. Una galaxia más rica que aquella en que se calibró la ley tiene cefeidas más brillantes de lo que dice esa ley, así que si omites el término las tomas por más cercanas de lo que están. No es polvo: la magnitud Wesenheit ya lo quita. El paso siguiente lo mide.',
     },
     {
       title: 'La distancia dos veces',
@@ -711,9 +699,9 @@ const EXPECTATIONS = {
 
 const BANDS = {
   'the-metallicity-term': {
-    core: 'medium',
-    quantitative: 'medium',
-    advanced: 'long',
+    core: 'short',
+    quantitative: 'short',
+    advanced: 'medium',
   },
 };
 

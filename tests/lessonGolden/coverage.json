@@ -277,17 +277,17 @@
     "pin:unpinned"
   ],
   "totals": {
-    "investigations": 106,
-    "steps": 1763,
+    "investigations": 107,
+    "steps": 1777,
     "activityCuts": 6,
     "lessonTokens": 149,
     "activityTokens": 29,
     "stepTypes": {
-      "read": 332,
-      "predict": 187,
+      "read": 334,
+      "predict": 188,
       "ellipse": 1,
-      "question": 626,
-      "measure": 472,
+      "question": 636,
+      "measure": 473,
       "explore": 144,
       "wedges": 1
     }

@@ -270,7 +270,8 @@ describe('the document inventory', () => {
     // 967 after Weighing the Stars, for Real (Prompt 218, eleven more); 956 after the five observing closeout investigations (Prompt 216): nine for each lesson (two depths), 45 more over Two Stars Eclipsing (911).
     // 1000 after Two Clusters, Two Ages (Prompt 219): eleven more over 989.
     // 1022 after How Old Is This White Dwarf? and From Star to Remnant (Prompt 222): eleven more for each lesson, as for the two activity lessons of Prompt 220.
-    expect(inv.documents).toBe(1022);
+    // 1033 after The Metallicity Term (Prompt 223): eleven more, as for each lesson of Prompt 222.
+    expect(inv.documents).toBe(1033);
     expect(inv.byLocale).toEqual({ en: 467, es: 555 });
     expect(inv.byKind.notes).toBe(INVESTIGATIONS.length);
     expect(inv.byVariant).toEqual({
@@ -306,7 +307,7 @@ describe('the document inventory', () => {
     const withDepth = INVESTIGATIONS.filter(
       i => withAllDepths(i).steps.length !== i.steps.length
     ).map(i => i.id);
-    expect(withDepth.length).toBe(79);
+    expect(withDepth.length).toBe(80);
     // A key for each depth the lesson offers: three for most, two for Design
     // the Schedule, whose upper depth (Prompt 214) has no quantitative layer.
     let keys = 0;

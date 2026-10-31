@@ -13,7 +13,9 @@
     ["steps.add-the-amplitude.fields.1.unit","%"],
     ["steps.the-shape.fields.0.unit","%"],
     ["steps.the-shape.fields.1.unit","%"],
-    ["steps.a-skewed-sky.unit","%"]
+    ["steps.features-with-their-errors.unit",""],
+    ["steps.a-skewed-sky.unit","%"],
+    ["steps.when-not-to-say.unit",""]
    ],
    "numbered": [
     ["steps.period-alone.fields.0.hint","83.3"],
@@ -46,10 +48,22 @@
     "unit": "%"
    },
    {
+    "sid": "features-with-their-errors",
+    "answer": "0.539",
+    "tolerance": "0.01",
+    "unit": ""
+   },
+   {
     "sid": "a-skewed-sky",
     "answer": "48.5",
     "tolerance": "1",
     "unit": "%"
+   },
+   {
+    "sid": "when-not-to-say",
+    "answer": "11",
+    "tolerance": "0.5",
+    "unit": ""
    }
   ],
   "decimals": []

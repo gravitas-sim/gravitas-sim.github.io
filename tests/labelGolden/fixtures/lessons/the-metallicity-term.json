@@ -1,0 +1,54 @@
+{
+ "id": "the-metallicity-term",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.the-distance-twice.fields.0.unit","mag"],
+    ["steps.the-distance-twice.fields.1.unit","mag"],
+    ["steps.the-shift-for-m101.unit","mag"],
+    ["steps.the-distance-for-m101.unit","%"],
+    ["steps.two-published-coefficients.unit","mag"]
+   ],
+   "numbered": [
+    ["steps.the-distance-twice.fields.0.hint","29.40"],
+    ["steps.the-distance-twice.fields.1.hint","29.44"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": []
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "the-shift-for-m101",
+    "answer": "0.085",
+    "tolerance": "0.003",
+    "unit": "mag"
+   },
+   {
+    "sid": "the-distance-for-m101",
+    "answer": "4",
+    "tolerance": "0.2",
+    "unit": "%"
+   },
+   {
+    "sid": "two-published-coefficients",
+    "answer": "0.012",
+    "tolerance": "0.001",
+    "unit": "mag"
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "the-distance-twice": {
+    "validate": {"calls":232,"distinct":2,"digest":"f1d9bf770041b87c","samples":[null,{"level":"error","message":"Keep the galaxy on NGC 4258 and the metallicity on the cited value: 29.403 with the term left out and 29.444 with it included."}]}
+   }
+  },
+  "es": "same"
+ }
+}

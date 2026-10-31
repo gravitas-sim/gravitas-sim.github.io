@@ -1131,7 +1131,7 @@
     {
       "file": "VARIABLES_II.md",
       "kind": "feature",
-      "purpose": "Variables II: light-curve features with their errors, the Cepheid period-luminosity relation with a cited metallicity term, and a classification exercise that can decline to name a star, with twenty validation legs (Prompt 223).",
+      "purpose": "Variables II: light-curve features with errors, the Cepheid PL relation with a cited metallicity term, a classifier that can decline; 20 validation legs (Prompt 223).",
       "owner": 223,
       "student": true
     },

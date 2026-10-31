@@ -68,7 +68,7 @@ export const EN_VARIABLESII = {
     'outside the range of [O/H] the cited calibration spans: the correction is an extrapolation',
   'v2W.p.status.missing': 'no metallicity: no correction',
   'v2W.p.a.model':
-    'One linear term in [O/H], the same at every period; the galaxies’ values are means for their Cepheid fields; crowding and blending are not modelled',
+    'One linear term in [O/H], the same at every period; the galaxies’ values are means for their Cepheid fields; crowding and blending are not modeled',
   // ---- features
   'v2W.f.title': 'The features of a light curve',
   'v2W.f.note':
@@ -113,12 +113,12 @@ export const EN_VARIABLESII = {
   // ---- ambiguity
   'v2W.a.title': 'Which kind of variable: and when not to say',
   'v2W.a.note':
-    'A labelled SYNTHETIC sample of 120 stars, 24 of each kind, measured the way a real light curve is. A star is given a class only if enough of its five nearest neighbours agree; the others are left open.',
+    'A labeled SYNTHETIC sample of 120 stars, 24 of each kind, measured the way a real light curve is. A star is given a class only if enough of its five nearest neighbors agree; the others are left open.',
   'v2W.a.control.features': 'Measurements used',
   'v2W.a.features.0': 'period',
   'v2W.a.features.1': 'P + amp.',
   'v2W.a.features.2': 'P + amp. + R21',
-  'v2W.a.control.votes': 'Neighbours that must agree (of 5)',
+  'v2W.a.control.votes': 'Neighbors that must agree (of 5)',
   'v2W.a.preset.default': 'Period and amplitude, 4 of 5',
   'v2W.a.preset.strict': 'Period only, 5 of 5',
   'v2W.a.axisP': 'log10 of the period, days',
@@ -131,7 +131,7 @@ export const EN_VARIABLESII = {
   'v2W.a.class.eclipsing': 'Eclipsing binary',
   'v2W.a.row.source': 'What this is',
   'v2W.a.v.source':
-    'Synthetic and labelled: stylised templates through the periodic forward model, not survey data',
+    'Synthetic and labeled: stylized templates through the periodic forward model, not survey data',
   'v2W.a.row.called': 'Stars given a class',
   'v2W.a.row.open': 'Stars left open',
   'v2W.a.row.calledAccuracy': 'Accuracy of the stars given a class',
@@ -140,5 +140,5 @@ export const EN_VARIABLESII = {
   'v2W.a.v.openBy':
     'RRab {a}, RRc {b}, Cepheid {c}, delta Scuti {d}, eclipsing {e}',
   'v2W.a.a.model':
-    'Leave-one-out nearest neighbours on standardised features; a balanced sample, so the accuracy is not a survey’s',
+    'Leave-one-out nearest neighbors on standardized features; a balanced sample, so the accuracy is not a survey’s',
 };

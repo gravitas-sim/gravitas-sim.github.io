@@ -1256,7 +1256,7 @@ export const MANIFEST = [
     title: 'El término de metalicidad',
     subtitle:
       'Añade el contenido de metales de una galaxia a la relación período-luminosidad de las cefeidas, mira qué hace a una distancia y a su error, y mira dónde deja de estar comprobado el término citado',
-    duration: '14-30 min',
+    duration: '8-12 min',
     level: 'Upper-level astronomy',
     thumbnail: 'images/investigations/the-metallicity-term.webp',
     depths: 3,
