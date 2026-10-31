@@ -28,7 +28,7 @@
   "definitions": {
     "O-C": "O - C = T_n - (T0 + n P) with T0 and P the weighted least-squares linear ephemeris of the same transit times.",
     "superPeriod": "P_super = 1 / | j / P2 - (j - 1) / P1 | (Lithwick, Xie & Wu 2012, ApJ 761, 122, eq. 1) with P1, P2 the MEAN periods of the linear ephemerides.",
-    "amplitude": "|V| = P1 mu2 / (pi j^(2/3) (j-1)^(1/3) |Delta|) |f| for the inner planet and |V'| = P2 mu1 / (pi j |Delta|) |g| for the outer one, Z_free = 0, with f and g from the Laplace coefficients (Murray & Dermott 1999, eqs 8.?? f27, f31; the 2:1 values -1.1905 and 0.4284, the 3:2 values -2.0252 and 2.4840), Delta = (P2 / P1)(j - 1)/j - 1.",
+    "amplitude": "|V| = P1 mu2 / (pi j^(2/3) (j-1)^(1/3) |Delta|) |f| for the inner planet and |V'| = P2 mu1 / (pi j |Delta|) |g| for the outer one, Z_free = 0, with f and g from the Laplace coefficients (Murray & Dermott 1999, Appendix B, f27 and f31; the 2:1 values -1.1905 and 0.4284, the 3:2 values -2.0252 and 2.4840), Delta = (P2 / P1)(j - 1)/j - 1.",
     "measuredAmplitude": "the amplitude of cos and sin terms fitted together with a straight line to the transit times at the period P_super, in days",
     "signal": "kernel verdict 'signal' when the chi-square of the O-C about zero (n - 2 degrees of freedom) has a one-sided p below 0.01; otherwise 'no TTV signal above noise'. 'unresolved' when the baseline is shorter than 1.5 super-periods, in which case no super-period is reported.",
     "coverage": "|t_measured - t_true| / sigma_stated, t_true the engine's transit time, over every measured transit of every ensemble member"
