@@ -292,7 +292,7 @@
       "what": "S3 (Neptune mass): K and the planet's mass within 4 sigma of the truth, and the mass is reported with a sigma at least 20 percent of its value (a small signal is not given a small error bar)",
       "limits": {
         "worstSigmas": 4,
-        "sigmaOverValueMin": 0.2
+        "sigmaOverValueMin": 0.1
       }
     },
     {
@@ -447,6 +447,12 @@
       "id": "AM2",
       "note": "Recorded before any Gravitas joint code existed. D6 as first committed required the grazing system's MASS to be flagged not constrained. Working out the geometry for the joint model (sin i = sqrt(1 - (b (1 + e sin w) / (a/R* (1 - e^2)))^2), about 1 across the k-b valley at a/R* near 9) shows the mass is constrained there and it is the RADIUS and so the density that the valley opens: the committed sentence named the wrong quantity. D6 now requires the flag on the radius, the density and the inclination and forbids an unwarranted flag on the mass. This is a correction of the quantity named, not a change of any numerical bound.",
       "boundMoved": false
+    },
+    {
+      "id": "AM3",
+      "note": "Recorded before any Gravitas joint code was run on S3. R2 as first committed asked the planet mass of the Neptune-mass system to carry a sigma of at least 20 percent of its value. The amplitude the system gives is K = 6.6 m/s (the closed formula, no fit); thirty velocities of 3.6 m/s total scatter (3.0 stated and 2.0 jitter) with two free zero points give a sigma of K near 3.6 sqrt(2/30) = 0.93 m/s, 14 percent, so no honest fit can reach 20: the committed bound was an arithmetic slip, not a physical statement. The bound is now 10 percent, which still catches a fit that reports a mass of a few percent from a 2 sigma signal. The worstSigmas bound is unchanged.",
+      "boundMoved": true,
+      "movedBefore": "any Gravitas result on S3"
     }
   ]
 }

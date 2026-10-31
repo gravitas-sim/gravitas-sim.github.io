@@ -360,17 +360,24 @@ function rvStarts(request, data, hooks, search) {
   ];
 }
 
+/**
+ * The data with a jitter added in quadrature to the errors: of every row, or of
+ * the rows the model names (the joint model's velocities, not its light curve).
+ */
+function withJitter(model, data, request, jitter) {
+  if (!(jitter > 0 && data.sigma)) return data;
+  const rows = model.jitterRows?.(data, request);
+  return {
+    ...data,
+    sigma: Float64Array.from(data.sigma, (s, i) =>
+      !rows || rows[i] ? Math.sqrt(s * s + jitter * jitter) : s
+    ),
+  };
+}
+
 /** The fit at one jitter: every start refined, the best kept. */
 function fitAt(model, data, request, starts, jitter, hooks) {
-  const d =
-    jitter > 0 && data.sigma
-      ? {
-          ...data,
-          sigma: Float64Array.from(data.sigma, s =>
-            Math.sqrt(s * s + jitter * jitter)
-          ),
-        }
-      : data;
+  const d = withJitter(model, data, request, jitter);
   let best = null;
   let evaluations = 0;
   for (const s of starts) {
@@ -468,7 +475,7 @@ export function fitOnce(request, data, hooks = {}) {
   if (refusal) throw new Error(refusal);
   const search = {};
   const starts = model.starts
-    ? model.starts(data, request)
+    ? model.starts(data, request, { transitStarts, rvStarts, hooks })
     : model.family === 'transit'
       ? transitStarts(request, data, hooks, search)
       : rvStarts(request, data, hooks, search);
@@ -602,6 +609,11 @@ export function fitOnce(request, data, hooks = {}) {
     }
   }
   out.warnings = warningsFor(out, model, data, values, request);
+  // What a model refuses to report and why (the joint model's planet without
+  // the star it needs), and the warnings only it can give.
+  if (model.refusals)
+    out.refusals = model.refusals(request.settings || {}, request.settings?.roles);
+  if (model.warnings) out.warnings.push(...model.warnings(out, data, request));
   // What the transit family says beyond the numbers: whether the data fix the
   // radius ratio and the impact parameter, and whether the residuals in
   // transit look like the noise the error bars promise (js/inference/transitDelta.js).
@@ -736,11 +748,16 @@ function derivedWithErrors(model, problem, theta, cov, settings, scale) {
     // bars as given (or from the scatter, unweighted), `sigmaScaled` when a
     // reduced chi-square above 1 says they were too small. An external input's
     // own uncertainty adds in quadrature to both.
-    const external = d.external?.stellarRadius?.sigma
-      ? (d.value *
-          (d.external.stellarRadius.sigma / d.external.stellarRadius.value)) **
-        2
-      : 0;
+    // A model that depends on more than one external input (the joint model's
+    // star: mass, radius and their correlation) states the variance itself.
+    const external =
+      d.externalVariance ??
+      (d.external?.stellarRadius?.sigma
+        ? (d.value *
+            (d.external.stellarRadius.sigma /
+              d.external.stellarRadius.value)) **
+          2
+        : 0);
     const weighted = problem.weighted;
     out.push({
       name,
@@ -755,6 +772,21 @@ function derivedWithErrors(model, problem, theta, cov, settings, scale) {
         weighted && scale > 1 && Number.isFinite(variance)
           ? Math.sqrt(Math.max(0, variance * scale + external))
           : null,
+      // What the star holds of it: the fit alone against the whole.
+      ...(d.externalVariance !== undefined
+        ? {
+            stellar: {
+              sigmaFitOnly: Math.sqrt(
+                Math.max(0, variance * (weighted ? 1 : scale))
+              ),
+              share:
+                variance * (weighted ? 1 : scale) + external > 0
+                  ? external / (variance * (weighted ? 1 : scale) + external)
+                  : 0,
+              ...(d.external ? { inputs: d.external } : {}),
+            },
+          }
+        : {}),
     });
   }
   return out;
@@ -862,15 +894,7 @@ function bracketsToRefine(points, minimum, level, far) {
 export function profileTask(request, data, fit, name, hooks = {}) {
   const model = MODELS[request.model.id];
   if (model.prepare) request = model.prepare(request, data);
-  const d =
-    fit.nuisance?.jitter?.value > 0 && data.sigma
-      ? {
-          ...data,
-          sigma: Float64Array.from(data.sigma, s =>
-            Math.sqrt(s * s + fit.nuisance.jitter.value ** 2)
-          ),
-        }
-      : data;
+  const d = withJitter(model, data, request, fit.nuisance?.jitter?.value);
   const parameters = fit.parameters.map(p => ({
     name: p.name,
     mode: p.mode,

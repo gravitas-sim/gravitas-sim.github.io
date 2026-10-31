@@ -13,6 +13,7 @@ import { limbDarkening, transitFlux } from './transit.js';
 import { rvCurve } from './rv.js';
 import { eclipseFlux } from './binaries.js';
 import { rvPair } from './binaryMasses.js';
+import { circularEquivalent } from './jointPlanet.js';
 
 /** A seeded standard normal. */
 export const gaussian = seed => normals(stream('noise', String(seed)));
@@ -227,6 +228,69 @@ export function syntheticSb2(o) {
       missing: 0,
       withoutUncertainty: 0,
     },
+    columns: { x: 'time', y: 'value', sigma: 'error' },
+    units: { x: 'd', y: '' },
+    perDay: 1,
+  };
+}
+
+/**
+ * A joint transit and velocity table (the model `transit-rv-joint`): the
+ * light curve of one group and the velocities of one or more instruments, in
+ * one table with a groups column, white noise and a jitter on the velocities.
+ * The truth is the model's own parameter set with a/R* the TRUE ratio.
+ * @param {{seed: string, lc: {times: ArrayLike<number>, sigma: number,
+ *   exposure?: number, supersample?: number}, rv: {times: ArrayLike<number>,
+ *   groups: ArrayLike<number>, sigma: number, jitter?: number,
+ *   zeroPoints: number[]}, truth: {t0, P, k, aRs, b, q1, q2, K, sqrtEcosw,
+ *   sqrtEsinw}}} o - velocity groups are numbered from 0; the table's group
+ *   of instrument j is j + 1 and the light curve is group 0
+ */
+export function syntheticJoint(o) {
+  const t = o.truth;
+  const e = t.sqrtEcosw ** 2 + t.sqrtEsinw ** 2;
+  const w = e > 0 ? Math.atan2(t.sqrtEsinw, t.sqrtEcosw) : Math.PI / 2;
+  const { u1, u2 } = limbDarkening(t.q1, t.q2);
+  const clean = transitFlux(
+    o.lc.times,
+    {
+      t0: t.t0,
+      P: t.P,
+      k: t.k,
+      aRs: circularEquivalent(t.aRs, e, w),
+      b: t.b,
+      u1,
+      u2,
+    },
+    { exposure: o.lc.exposure ?? 0, supersample: o.lc.supersample ?? 11, annuli: 96 }
+  );
+  const curve = rvCurve(o.rv.times, { ...t, tc: t.t0 });
+  const n = gaussian(o.seed);
+  const spread = Math.sqrt(o.rv.sigma ** 2 + (o.rv.jitter ?? 0) ** 2);
+  const nf = o.lc.times.length;
+  const nr = o.rv.times.length;
+  const x = new Float64Array(nf + nr);
+  const y = new Float64Array(nf + nr);
+  const sigma = new Float64Array(nf + nr);
+  const groups = new Int32Array(nf + nr);
+  for (let i = 0; i < nf; i++) {
+    x[i] = o.lc.times[i];
+    y[i] = clean[i] + o.lc.sigma * n();
+    sigma[i] = o.lc.sigma;
+  }
+  for (let j = 0; j < nr; j++) {
+    x[nf + j] = o.rv.times[j];
+    y[nf + j] = curve[j] + o.rv.zeroPoints[o.rv.groups[j]] + spread * n();
+    sigma[nf + j] = o.rv.sigma;
+    groups[nf + j] = 1 + o.rv.groups[j];
+  }
+  return {
+    x,
+    y,
+    sigma,
+    groups,
+    rows: Array.from(x, (_, i) => i),
+    counts: { total: nf + nr, used: nf + nr, masked: 0, missing: 0, withoutUncertainty: 0 },
     columns: { x: 'time', y: 'value', sigma: 'error' },
     units: { x: 'd', y: '' },
     perDay: 1,

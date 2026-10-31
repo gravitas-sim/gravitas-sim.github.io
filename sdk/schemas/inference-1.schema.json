@@ -116,6 +116,7 @@
             "eclipsing-binary",
             "sb2-orbit",
             "eclipsing-sb2",
+            "transit-rv-joint",
             "poly-1",
             "poly-2",
             "power-law"
@@ -951,6 +952,235 @@
                 "hi": {
                   "exclusiveMinimum": -50,
                   "maximum": 50
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "properties": {
+        "model": {
+          "properties": {
+            "id": {
+              "const": "transit-rv-joint"
+            },
+            "version": {
+              "const": "1.0.0"
+            }
+          }
+        },
+        "parameters": {
+          "required": [
+            "t0",
+            "P"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "t0": {
+              "$ref": "#/$defs/unbounded"
+            },
+            "P": {
+              "$ref": "#/$defs/unbounded"
+            },
+            "k": {
+              "$ref": "#/$defs/parameter",
+              "properties": {
+                "lo": {
+                  "minimum": 0.005,
+                  "exclusiveMaximum": 0.5
+                },
+                "hi": {
+                  "exclusiveMinimum": 0.005,
+                  "maximum": 0.5
+                }
+              }
+            },
+            "aRs": {
+              "$ref": "#/$defs/parameter",
+              "properties": {
+                "lo": {
+                  "minimum": 1.5,
+                  "exclusiveMaximum": 200
+                },
+                "hi": {
+                  "exclusiveMinimum": 1.5,
+                  "maximum": 200
+                }
+              }
+            },
+            "b": {
+              "$ref": "#/$defs/parameter",
+              "properties": {
+                "lo": {
+                  "minimum": 0,
+                  "exclusiveMaximum": 1.5
+                },
+                "hi": {
+                  "exclusiveMinimum": 0,
+                  "maximum": 1.5
+                }
+              }
+            },
+            "q1": {
+              "$ref": "#/$defs/parameter",
+              "properties": {
+                "lo": {
+                  "minimum": 0,
+                  "exclusiveMaximum": 1
+                },
+                "hi": {
+                  "exclusiveMinimum": 0,
+                  "maximum": 1
+                }
+              }
+            },
+            "q2": {
+              "$ref": "#/$defs/parameter",
+              "properties": {
+                "lo": {
+                  "minimum": 0,
+                  "exclusiveMaximum": 1
+                },
+                "hi": {
+                  "exclusiveMinimum": 0,
+                  "maximum": 1
+                }
+              }
+            },
+            "K": {
+              "$ref": "#/$defs/parameter",
+              "properties": {
+                "lo": {
+                  "minimum": 0,
+                  "exclusiveMaximum": 2000
+                },
+                "hi": {
+                  "exclusiveMinimum": 0,
+                  "maximum": 2000
+                }
+              }
+            },
+            "sqrtEcosw": {
+              "$ref": "#/$defs/parameter",
+              "properties": {
+                "lo": {
+                  "minimum": -0.95,
+                  "exclusiveMaximum": 0.95
+                },
+                "hi": {
+                  "exclusiveMinimum": -0.95,
+                  "maximum": 0.95
+                }
+              }
+            },
+            "sqrtEsinw": {
+              "$ref": "#/$defs/parameter",
+              "properties": {
+                "lo": {
+                  "minimum": -0.95,
+                  "exclusiveMaximum": 0.95
+                },
+                "hi": {
+                  "exclusiveMinimum": -0.95,
+                  "maximum": 0.95
+                }
+              }
+            },
+            "jitter": {
+              "$ref": "#/$defs/parameter",
+              "properties": {
+                "lo": {
+                  "minimum": 0,
+                  "exclusiveMaximum": 200
+                },
+                "hi": {
+                  "exclusiveMinimum": 0,
+                  "maximum": 200
+                }
+              }
+            }
+          }
+        },
+        "settings": {
+          "properties": {
+            "exposure": {
+              "type": "number",
+              "minimum": 0
+            },
+            "supersample": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 31
+            },
+            "annuli": {
+              "type": "integer",
+              "minimum": 8,
+              "maximum": 512
+            },
+            "dilution": {
+              "type": "number",
+              "minimum": 0,
+              "exclusiveMaximum": 1
+            },
+            "roles": {
+              "description": "The role of each data group in the order the groups appear: the transit light curve, or one instrument's velocities in m/s.",
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "enum": [
+                  "flux",
+                  "rv"
+                ]
+              }
+            },
+            "stellar": {
+              "description": "The star's inputs, with the uncertainty and the provenance a planet's mass, radius and density depend on: never fitted here.",
+              "type": "object",
+              "properties": {
+                "mass": {
+                  "type": "object",
+                  "required": [
+                    "value"
+                  ],
+                  "properties": {
+                    "value": {
+                      "type": "number",
+                      "exclusiveMinimum": 0
+                    },
+                    "sigma": {
+                      "type": "number",
+                      "minimum": 0
+                    },
+                    "source": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "radius": {
+                  "type": "object",
+                  "required": [
+                    "value"
+                  ],
+                  "properties": {
+                    "value": {
+                      "type": "number",
+                      "exclusiveMinimum": 0
+                    },
+                    "sigma": {
+                      "type": "number",
+                      "minimum": 0
+                    },
+                    "source": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "correlation": {
+                  "type": "number",
+                  "exclusiveMinimum": -1,
+                  "exclusiveMaximum": 1
                 }
               }
             }
