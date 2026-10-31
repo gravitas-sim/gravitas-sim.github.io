@@ -134,7 +134,7 @@ export const READING_THE_HR_DIAGRAM = {
   title: 'Reading the HR Diagram',
   subtitle:
     'What the regions of the diagram are, how a distance puts a star on it, and why the main sequence is a band and not a line',
-  duration: '10-15 min',
+  duration: '6-8 min',
   level: 'Introductory to upper-level astronomy',
   audience: 'intro',
   textbook: { chapter: 18, section: null },
@@ -388,7 +388,7 @@ export const A_STARS_LIFE_IN_NUMBERS = {
   title: 'A Star’s Life in Numbers',
   subtitle:
     'How long a star lives on the main sequence, read from the MIST tracks, why the heaviest die first, and how a cluster’s turnoff is a clock',
-  duration: '10-15 min',
+  duration: '8-12 min',
   level: 'Introductory to upper-level astronomy',
   audience: 'intro',
   textbook: { chapter: 22, section: null },
@@ -563,7 +563,7 @@ export const A_STARS_LIFE_IN_NUMBERS_DEEPER = {
       title: 'The ratio',
       body: `You read 9.88 billion years for 1 solar mass and 8.65 million for 20. Divide.`,
       prompt: 'How many times longer is the Sun-like star’s main sequence?',
-      unit: '×',
+      unit: '',
       answer: 1140,
       tolerance: 30,
       hints: ['9.88 Gyr is 9,880 Myr.'],
@@ -642,7 +642,7 @@ export const WHEN_A_STAR_EXPLODES = {
   title: 'When a Star Explodes',
   subtitle:
     'Which stars end in a collapse, how uncertain the edge is, and how much energy the collapse releases compared with the blast we see',
-  duration: '10-15 min',
+  duration: '6-10 min',
   level: 'Introductory to upper-level astronomy',
   audience: 'intro',
   textbook: { chapter: 23, section: null },
@@ -833,7 +833,7 @@ export const WHEN_A_STAR_EXPLODES_DEEPER = {
              (2.79 &times; 10<sup>30</sup> kg) and <em>R</em> = 12 km, with <em>G</em> =
              6.674 &times; 10<sup>&minus;11</sup> in SI units.`,
       prompt: 'The binding energy, in units of 10^46 joules',
-      unit: '×10⁴⁶ J',
+      unit: '',
       answer: 2.6,
       tolerance: 0.1,
       hints: ['0.6 × 6.674e−11 × (2.785e30)² / 1.2e4.'],
@@ -860,7 +860,7 @@ export const WHEN_A_STAR_EXPLODES_DEEPER = {
              0.007 &times; 0.1 &times; <em>M c</em><sup>2</sup> for <em>M</em> = 1.989 &times; 10<sup>30</sup> kg.`,
       prompt:
         'How many times the Sun’s main-sequence energy output is the collapse’s binding energy?',
-      unit: '×',
+      unit: '',
       answer: 207,
       tolerance: 5,
       hints: ['The Sun’s main-sequence energy is about 1.25 × 10^44 J.'],
@@ -886,7 +886,7 @@ export const POPULATIONS_I_AND_II = {
   title: 'Populations I and II',
   subtitle:
     'Metal-rich and metal-poor stars, what the metallicity you assume does to a cluster’s age and distance, and why the old stars that are left are light',
-  duration: '10-15 min',
+  duration: '6-8 min',
   level: 'Introductory to upper-level astronomy',
   audience: 'intro',
   textbook: { chapter: 22, section: null },
@@ -1092,7 +1092,7 @@ export const POPULATIONS_I_AND_II_DEEPER = {
       title: 'How much older',
       body: `You read 3.35 Gyr at [Fe/H] &minus;0.5 and 1.47 Gyr at 0. Divide.`,
       prompt: 'The age assuming −0.5 over the age assuming 0',
-      unit: '×',
+      unit: '',
       answer: 2.29,
       tolerance: 0.08,
       hints: ['3.35 / 1.47.'],
@@ -1169,7 +1169,7 @@ export const SPECTRA_TELL_TEMPERATURE_AND_GRAVITY = {
   title: 'Spectra Tell Temperature and Gravity',
   subtitle:
     'Four real SDSS spectra, what the depth of a line says about temperature, what a spectrum would say about gravity, and what the spectrograph can resolve',
-  duration: '10-15 min',
+  duration: '6-8 min',
   level: 'Introductory to upper-level astronomy',
   audience: 'intro',
   textbook: { chapter: 17, section: null },
@@ -1390,7 +1390,7 @@ export const SPECTRA_TELL_TEMPERATURE_AND_GRAVITY_DEEPER = {
              The dataset&rsquo;s samples are spaced 0.0003 in log<sub>10</sub> of the wavelength, so at
              5894.6 angstroms each is 5894.6 &times; ln(10) &times; 0.0003 apart.`,
       prompt: 'How many of the dataset’s samples fit between the two lines?',
-      unit: 'samples',
+      unit: '',
       answer: 1.47,
       tolerance: 0.05,
       hints: ['The spacing is 4.07 angstroms.'],
@@ -1442,7 +1442,7 @@ export const SPECTRA_TELL_TEMPERATURE_AND_GRAVITY_DEEPER = {
              SEGUE dataset). The resolution element at 5894.6 angstroms is the wavelength divided by 1,800. Divide
              the 5.975 angstrom separation of the doublet by it.`,
       prompt: 'How many resolution elements apart are the two sodium lines?',
-      unit: '×',
+      unit: '',
       answer: 1.82,
       tolerance: 0.05,
       hints: ['The resolution element is 5894.6 / 1800 = 3.27 angstroms.'],
@@ -2402,7 +2402,7 @@ const CONTENT = {
     [
       {
         heading: 'A logarithmic composition scale',
-        body: '[Fe/H] = −0.5 is a factor of 3.2 below the Sun in iron to hydrogen, not half.',
+        body: '[Fe/H] = −0.5 is a factor of 3.2 below the Sun in iron to hydrogen, not half, because the scale is a base-ten logarithm.',
       },
       {
         heading: 'The age is conditional on the metallicity',
@@ -2681,7 +2681,7 @@ const BANDS = {
   'spectra-tell-temperature-and-gravity': {
     core: 'short',
     quantitative: 'short',
-    advanced: 'medium',
+    advanced: 'short',
   },
 };
 

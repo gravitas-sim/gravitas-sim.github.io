@@ -369,14 +369,61 @@ export const UPPER_LEVEL_MODULES = {
           },
         },
         {
+          id: 'color-and-temperature',
+          kind: 'lesson',
+          lesson: 'color-and-temperature',
+          depth: 'core',
+          objectives: ['stellar'],
+          pin: {
+            fp: '7be525cf',
+            n: 11,
+          },
+        },
+        {
+          id: 'lines-and-motion',
+          kind: 'lesson',
+          lesson: 'lines-and-motion',
+          depth: 'core',
+          objectives: ['stellar'],
+          needs: ['color-and-temperature'],
+          pin: {
+            fp: '26286db2',
+            n: 11,
+          },
+        },
+        {
+          id: 'what-a-spectrum-is-made-of',
+          kind: 'lesson',
+          lesson: 'what-a-spectrum-is-made-of',
+          depth: 'core',
+          objectives: ['stellar'],
+          needs: ['lines-and-motion'],
+          pin: {
+            fp: '0bfb78da',
+            n: 10,
+          },
+        },
+        {
           id: 'spectra-tell-temperature-and-gravity',
           kind: 'lesson',
           lesson: 'spectra-tell-temperature-and-gravity',
           depth: 'advanced',
           objectives: ['stellar'],
+          needs: ['what-a-spectrum-is-made-of'],
           pin: {
             fp: 'e9290483',
             n: 6,
+          },
+        },
+        {
+          id: 'from-star-to-remnant',
+          kind: 'lesson',
+          lesson: 'from-star-to-remnant',
+          depth: 'core',
+          objectives: ['stellar'],
+          pin: {
+            fp: '8c0289af',
+            n: 7,
           },
         },
         {
@@ -385,7 +432,7 @@ export const UPPER_LEVEL_MODULES = {
           lesson: 'when-a-star-explodes',
           depth: 'advanced',
           objectives: ['stellar'],
-          needs: ['the-limit'],
+          needs: ['from-star-to-remnant'],
           pin: {
             fp: 'fdb2ac9c',
             n: 6,

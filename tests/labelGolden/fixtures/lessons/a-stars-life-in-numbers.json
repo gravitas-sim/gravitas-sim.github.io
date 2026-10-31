@@ -1,0 +1,62 @@
+{
+ "id": "a-stars-life-in-numbers",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.a-sun-like-life.fields.0.unit","Gyr"],
+    ["steps.a-heavy-life.fields.0.unit","Myr"],
+    ["steps.the-ratio.unit",""],
+    ["steps.the-slope-changes.unit",""],
+    ["steps.the-turnoff-as-a-clock.unit","M☉"]
+   ],
+   "numbered": [
+    ["steps.a-sun-like-life.fields.0.label","Main sequence of 1 M☉"],
+    ["steps.a-sun-like-life.fields.0.hint","9.9"],
+    ["steps.a-heavy-life.fields.0.label","Main sequence of 20 M☉"],
+    ["steps.a-heavy-life.fields.0.hint","8.7"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.a-sun-like-life.fields.0.label","Secuencia principal de 1 M☉"],
+    ["steps.a-heavy-life.fields.0.label","Secuencia principal de 20 M☉"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "the-ratio",
+    "answer": "1140",
+    "tolerance": "30",
+    "unit": ""
+   },
+   {
+    "sid": "the-slope-changes",
+    "answer": "3.23",
+    "tolerance": "0.1",
+    "unit": ""
+   },
+   {
+    "sid": "the-turnoff-as-a-clock",
+    "answer": "1.63",
+    "tolerance": "0.06",
+    "unit": "M☉"
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "a-sun-like-life": {
+    "validate": {"calls":97,"distinct":2,"digest":"f47c70f05c5ad076","samples":[null,{"level":"error","message":"Read the This phase row with the star on the main-sequence phase: about 9.9 billion years, in Gyr."}]}
+   },
+   "a-heavy-life": {
+    "validate": {"calls":97,"distinct":2,"digest":"33cc7436947986f0","samples":[null,{"level":"error","message":"Read the This phase row on the main-sequence phase of the 20 solar-mass star: about 8.7 million years, so in Myr, not Gyr."}]}
+   }
+  },
+  "es": "same"
+ }
+}

@@ -20,6 +20,10 @@
       "en": "A Night at the Telescope, End to End",
       "es": "Una noche en el telescopio, de principio a fin"
     },
+    "a-stars-life-in-numbers": {
+      "en": "A Star’s Life in Numbers",
+      "es": "La vida de una estrella en números"
+    },
     "a-universe-of-stars": {
       "en": "A Universe of Stars",
       "es": "Un universo de estrellas"
@@ -204,6 +208,10 @@
       "en": "Planet or Not?",
       "es": "¿Planeta o no?"
     },
+    "populations-i-and-ii": {
+      "en": "Populations I and II",
+      "es": "Poblaciones I y II"
+    },
     "power-law-gravity": {
       "en": "What If Gravity Were Not Inverse Square?",
       "es": "¿Y si la gravedad no fuera inversa al cuadrado?"
@@ -215,6 +223,10 @@
     "radial-velocity": {
       "en": "Finding Planets by Their Tug",
       "es": "Encontrar planetas por su tirón"
+    },
+    "reading-the-hr-diagram": {
+      "en": "Reading the HR Diagram",
+      "es": "Leer el diagrama HR"
     },
     "refitting-a-transit": {
       "en": "Refitting a Transit",
@@ -235,6 +247,10 @@
     "signal-noise-and-exposure": {
       "en": "Signal, Noise and Exposure",
       "es": "Señal, ruido y exposición"
+    },
+    "spectra-tell-temperature-and-gravity": {
+      "en": "Spectra Tell Temperature and Gravity",
+      "es": "Los espectros dicen temperatura y gravedad"
     },
     "standard-candles": {
       "en": "Standard Candles",
@@ -395,6 +411,10 @@
     "what-is-in-this-field": {
       "en": "What Is in This Field?",
       "es": "¿Qué hay en este campo?"
+    },
+    "when-a-star-explodes": {
+      "en": "When a Star Explodes",
+      "es": "Cuando una estrella explota"
     },
     "when-orbits-lock": {
       "en": "When Orbits Lock",

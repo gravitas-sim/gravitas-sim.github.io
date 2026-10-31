@@ -1399,7 +1399,7 @@ export const MANIFEST = [
     title: 'Leer el diagrama HR',
     subtitle:
       'Qué son las regiones del diagrama, cómo una distancia pone una estrella en él y por qué la secuencia principal es una banda y no una línea',
-    duration: '10-15 min',
+    duration: '6-8 min',
     level: 'Introductory to upper-level astronomy',
     thumbnail: 'images/investigations/reading-the-hr-diagram.webp',
     depths: 3,
@@ -1412,7 +1412,7 @@ export const MANIFEST = [
     title: 'La vida de una estrella en números',
     subtitle:
       'Cuánto vive una estrella en la secuencia principal, leído de las trayectorias MIST, por qué mueren primero las más pesadas y cómo el punto de giro de un cúmulo es un reloj',
-    duration: '10-15 min',
+    duration: '8-12 min',
     level: 'Introductory to upper-level astronomy',
     thumbnail: 'images/investigations/a-stars-life-in-numbers.webp',
     depths: 3,
@@ -1425,7 +1425,7 @@ export const MANIFEST = [
     title: 'Cuando una estrella explota',
     subtitle:
       'Qué estrellas acaban en un colapso, lo incierto que es el límite y cuánta energía libera el colapso comparada con la explosión que vemos',
-    duration: '10-15 min',
+    duration: '6-10 min',
     level: 'Introductory to upper-level astronomy',
     thumbnail: 'images/investigations/when-a-star-explodes.webp',
     depths: 3,
@@ -1438,7 +1438,7 @@ export const MANIFEST = [
     title: 'Poblaciones I y II',
     subtitle:
       'Estrellas ricas y pobres en metales, lo que hace a la edad y la distancia de un cúmulo la metalicidad que se supone, y por qué las estrellas viejas que quedan son ligeras',
-    duration: '10-15 min',
+    duration: '6-8 min',
     level: 'Introductory to upper-level astronomy',
     thumbnail: 'images/investigations/populations-i-and-ii.webp',
     depths: 3,
@@ -1451,7 +1451,7 @@ export const MANIFEST = [
     title: 'Los espectros dicen temperatura y gravedad',
     subtitle:
       'Cuatro espectros reales de SDSS, qué dice la profundidad de una línea sobre la temperatura, qué diría un espectro sobre la gravedad y qué puede resolver el espectrógrafo',
-    duration: '10-15 min',
+    duration: '6-8 min',
     level: 'Introductory to upper-level astronomy',
     thumbnail:
       'images/investigations/spectra-tell-temperature-and-gravity.webp',

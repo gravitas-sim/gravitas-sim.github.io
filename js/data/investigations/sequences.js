@@ -387,7 +387,7 @@ export const SEQUENCES = [
       ['scaling-the-main-sequence', 'quantitative', ['inside-a-star']],
       ['weighing-stars', 'quantitative'],
       ['two-stars-eclipsing', 'core'],
-      ['weighing-the-stars-for-real', 'core', ['two-stars-eclipsing']],
+      ['weighing-the-stars-for-real', 'core'],
       ['cluster-membership', 'quantitative', ['lives-of-stars']],
       ['two-clusters-two-ages', 'core', ['lives-of-stars']],
       ['populations-i-and-ii', 'quantitative', ['two-clusters-two-ages']],

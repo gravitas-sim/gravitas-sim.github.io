@@ -142,11 +142,22 @@ export const STELLAR_ASTROPHYSICS = {
           },
         },
         {
+          id: 'lines-and-motion',
+          kind: 'lesson',
+          lesson: 'lines-and-motion',
+          objectives: ['light'],
+          needs: ['color-and-temperature'],
+          pin: {
+            fp: '26286db2',
+            n: 11,
+          },
+        },
+        {
           id: 'what-a-spectrum-is-made-of',
           kind: 'lesson',
           lesson: 'what-a-spectrum-is-made-of',
           objectives: ['light'],
-          needs: ['color-and-temperature'],
+          needs: ['lines-and-motion'],
           pin: {
             fp: '0bfb78da',
             n: 10,
@@ -318,10 +329,21 @@ export const STELLAR_ASTROPHYSICS = {
           },
         },
         {
+          id: 'the-beat-of-a-star',
+          kind: 'lesson',
+          lesson: 'the-beat-of-a-star',
+          objectives: ['distance'],
+          pin: {
+            fp: 'c665c968',
+            n: 13,
+          },
+        },
+        {
           id: 'leavitts-law',
           kind: 'lesson',
           lesson: 'leavitts-law',
           objectives: ['distance'],
+          needs: ['the-beat-of-a-star'],
           pin: {
             fp: '4cb80430',
             n: 8,
@@ -332,9 +354,21 @@ export const STELLAR_ASTROPHYSICS = {
           kind: 'lesson',
           lesson: 'which-kind-of-variable',
           objectives: ['distance'],
+          needs: ['the-beat-of-a-star'],
           pin: {
             fp: 'dbb6d7e8',
             n: 9,
+          },
+        },
+        {
+          id: 'the-first-rung',
+          kind: 'lesson',
+          lesson: 'the-first-rung',
+          objectives: ['distance'],
+          needs: ['leavitts-law'],
+          pin: {
+            fp: '363c7fb8',
+            n: 8,
           },
         },
         {
@@ -342,7 +376,7 @@ export const STELLAR_ASTROPHYSICS = {
           kind: 'lesson',
           lesson: 'the-metallicity-term',
           objectives: ['distance'],
-          needs: ['leavitts-law'],
+          needs: ['leavitts-law', 'the-first-rung'],
           pin: {
             fp: '46b4bb34',
             n: 7,

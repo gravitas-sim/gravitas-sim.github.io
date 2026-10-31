@@ -45,7 +45,6 @@ import {
   expectVerdictRevealed,
   keepCapture,
   lessonPlan,
-  numbersIn,
   openInvestigation,
   pausePlayback,
   powerLawExponent,

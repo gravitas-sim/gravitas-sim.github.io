@@ -1390,7 +1390,7 @@ export const MANIFEST = [
     title: 'Reading the HR Diagram',
     subtitle:
       'What the regions of the diagram are, how a distance puts a star on it, and why the main sequence is a band and not a line',
-    duration: '10-15 min',
+    duration: '6-8 min',
     level: 'Introductory to upper-level astronomy',
     thumbnail: 'images/investigations/reading-the-hr-diagram.webp',
     depths: 3,
@@ -1403,7 +1403,7 @@ export const MANIFEST = [
     title: 'A Star’s Life in Numbers',
     subtitle:
       'How long a star lives on the main sequence, read from the MIST tracks, why the heaviest die first, and how a cluster’s turnoff is a clock',
-    duration: '10-15 min',
+    duration: '8-12 min',
     level: 'Introductory to upper-level astronomy',
     thumbnail: 'images/investigations/a-stars-life-in-numbers.webp',
     depths: 3,
@@ -1416,7 +1416,7 @@ export const MANIFEST = [
     title: 'When a Star Explodes',
     subtitle:
       'Which stars end in a collapse, how uncertain the edge is, and how much energy the collapse releases compared with the blast we see',
-    duration: '10-15 min',
+    duration: '6-10 min',
     level: 'Introductory to upper-level astronomy',
     thumbnail: 'images/investigations/when-a-star-explodes.webp',
     depths: 3,
@@ -1429,7 +1429,7 @@ export const MANIFEST = [
     title: 'Populations I and II',
     subtitle:
       'Metal-rich and metal-poor stars, what the metallicity you assume does to a cluster’s age and distance, and why the old stars that are left are light',
-    duration: '10-15 min',
+    duration: '6-8 min',
     level: 'Introductory to upper-level astronomy',
     thumbnail: 'images/investigations/populations-i-and-ii.webp',
     depths: 3,
@@ -1442,7 +1442,7 @@ export const MANIFEST = [
     title: 'Spectra Tell Temperature and Gravity',
     subtitle:
       'Four real SDSS spectra, what the depth of a line says about temperature, what a spectrum would say about gravity, and what the spectrograph can resolve',
-    duration: '10-15 min',
+    duration: '6-8 min',
     level: 'Introductory to upper-level astronomy',
     thumbnail:
       'images/investigations/spectra-tell-temperature-and-gravity.webp',

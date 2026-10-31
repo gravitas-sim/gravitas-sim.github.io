@@ -207,11 +207,6 @@ const LOADERS = {
   'from-star-to-remnant': () => import('./from-star-to-remnant.js'),
   'planet-or-not': () => import('./planet-or-not.js'),
   'the-metallicity-term': () => import('./the-metallicity-term.js'),
-  'reading-the-hr-diagram': () => import('./reading-the-hr-diagram.js'),
-  'a-stars-life-in-numbers': () => import('./a-stars-life-in-numbers.js'),
-  'when-a-star-explodes': () => import('./when-a-star-explodes.js'),
-  'populations-i-and-ii': () => import('./populations-i-and-ii.js'),
-  'spectra-tell-temperature-and-gravity': () => import('./spectra-tell-temperature-and-gravity.js'),
   'the-clock-that-drifts': () => import('./the-clock-that-drifts.js'),
   'deep-or-wide': () => import('./deep-or-wide.js'),
   'two-telescopes-one-question': () =>
@@ -223,6 +218,12 @@ const LOADERS = {
   'coordinates-and-time': () => import('./coordinates-and-time.js'),
   'a-night-at-the-telescope': () => import('./a-night-at-the-telescope.js'),
   'from-photons-to-a-number': () => import('./from-photons-to-a-number.js'),
+  'reading-the-hr-diagram': () => import('./reading-the-hr-diagram.js'),
+  'a-stars-life-in-numbers': () => import('./a-stars-life-in-numbers.js'),
+  'when-a-star-explodes': () => import('./when-a-star-explodes.js'),
+  'populations-i-and-ii': () => import('./populations-i-and-ii.js'),
+  'spectra-tell-temperature-and-gravity': () =>
+    import('./spectra-tell-temperature-and-gravity.js'),
 };
 // </generated:loaders>
 
@@ -350,11 +351,6 @@ const TRANSLATIONS = {
     'from-star-to-remnant': () => import('./es/from-star-to-remnant.js'),
     'planet-or-not': () => import('./es/planet-or-not.js'),
     'the-metallicity-term': () => import('./es/the-metallicity-term.js'),
-    'reading-the-hr-diagram': () => import('./es/reading-the-hr-diagram.js'),
-    'a-stars-life-in-numbers': () => import('./es/a-stars-life-in-numbers.js'),
-    'when-a-star-explodes': () => import('./es/when-a-star-explodes.js'),
-    'populations-i-and-ii': () => import('./es/populations-i-and-ii.js'),
-    'spectra-tell-temperature-and-gravity': () => import('./es/spectra-tell-temperature-and-gravity.js'),
     'the-clock-that-drifts': () => import('./es/the-clock-that-drifts.js'),
     'deep-or-wide': () => import('./es/deep-or-wide.js'),
     'two-telescopes-one-question': () =>
@@ -368,6 +364,12 @@ const TRANSLATIONS = {
       import('./es/a-night-at-the-telescope.js'),
     'from-photons-to-a-number': () =>
       import('./es/from-photons-to-a-number.js'),
+    'reading-the-hr-diagram': () => import('./es/reading-the-hr-diagram.js'),
+    'a-stars-life-in-numbers': () => import('./es/a-stars-life-in-numbers.js'),
+    'when-a-star-explodes': () => import('./es/when-a-star-explodes.js'),
+    'populations-i-and-ii': () => import('./es/populations-i-and-ii.js'),
+    'spectra-tell-temperature-and-gravity': () =>
+      import('./es/spectra-tell-temperature-and-gravity.js'),
   },
 };
 // </generated:translations>

@@ -89,11 +89,11 @@ Prompt 76 starts from.
 <!-- library:coverage -->
 | Kind | Entries | summary | level | duration | mathematics | calculation | subjects | prerequisites | textbook | courseLevel | thumbnail |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| investigation | 126 | all | all | all | all | all | all | all | all | all | 109 |
+| investigation | 131 | all | all | all | all | all | all | all | all | all | 114 |
 | activity | 6 | all | all | all | all | all | all | all | all | all | all |
 | scenario | 69 | all | all | all | all | all | all | all | **none** | **none** | 61 |
 | dataset | 16 | all | all | all | all | all | all | all | **none** | **none** | **none** |
-| course | 6 | all | all | all | all | all | all | all | **none** | all | **none** |
+| course | 7 | all | all | all | all | all | all | all | **none** | all | **none** |
 | experiment | 4 | all | all | all | all | all | all | all | **none** | **none** | all |
 <!-- /library:coverage -->
 
