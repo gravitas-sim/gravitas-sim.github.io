@@ -38,6 +38,7 @@ import { syntheticJoint } from '../js/inference/synthetic.js';
 import { rvCurve } from '../js/inference/rv.js';
 import { percentile } from '../js/inference/rvMonteCarlo.js';
 import { percentileInterval } from '../js/kernels/statistics/intervals.js';
+import { propagate } from '../js/kernels/statistics/resample.js';
 import { gaussian, stream } from '../js/random/streams.js';
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -387,6 +388,7 @@ function planetIntervals(f, star, seed, extra = {}) {
   ];
   const idx = names.map(n => f.free.indexOf(n));
   return propagatePlanet({
+    kernel: { propagate, percentileInterval },
     names,
     mean: names.map(n => param(f, n).value),
     covariance: idx.map(i => idx.map(j => f.covariance[i][j])),

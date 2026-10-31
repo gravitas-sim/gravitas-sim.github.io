@@ -31,8 +31,6 @@
 // =============================================================================
 
 import { G_SI, stellarDensity } from './transit.js';
-import { propagate } from '../kernels/statistics/resample.js';
-import { percentileInterval } from '../kernels/statistics/intervals.js';
 
 const { Math, Float64Array, Number: Num } = globalThis;
 
@@ -184,7 +182,10 @@ export function stellarVariance(g, star) {
 
 /**
  * The central interval of a planetary quantity from draws of the fit and of
- * the star together (the statistics kernel's propagation, Prompt 154).
+ * the star together (the statistics kernel's propagation, Prompt 154). The
+ * kernel is INJECTED (`kernel: {propagate, percentileInterval}`, from
+ * js/kernels/statistics/): no module the install carries imports it, so the
+ * model that the inference Worker loads does not pull it in (tests/statisticsKernel.test.js).
  * @param {{names: string[], mean: number[], covariance: number[][],
  *   star: {mass: {value, sigma}, radius: {value, sigma}, correlation?: number},
  *   transit?: boolean, draws?: number, seed: string, level?: number,
@@ -193,6 +194,7 @@ export function stellarVariance(g, star) {
  * @returns {{status: string, Mp?: object, Rp?: object, rhoP?: object}}
  */
 export function propagatePlanet({
+  kernel,
   names,
   mean,
   covariance,
@@ -226,6 +228,7 @@ export function propagatePlanet({
     const i = idx(n);
     return i >= 0 ? theta[i] : (fixed[n] ?? fallback);
   };
+  const { propagate, percentileInterval } = kernel;
   const res = propagate({
     mean: m,
     covariance: cov,

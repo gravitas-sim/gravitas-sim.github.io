@@ -1152,7 +1152,7 @@
     {
       "file": "JOINT_INFERENCE.md",
       "kind": "feature",
-      "purpose": "Joint transit and radial-velocity fit with the star inside: a planet's mass, radius and density with the stellar mass and radius uncertainty carried through, the validation contract, one failed leg left failing, data not supplied (Prompt 227).",
+      "purpose": "Joint transit and velocity fit with the star inside: mass, radius and density with the star's uncertainty carried through, the validation contract, two failed legs, data not supplied (Prompt 227).",
       "owner": 227,
       "student": true
     },

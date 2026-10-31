@@ -512,6 +512,14 @@ export const NEVER_PRECACHED = [
   /^images\/investigations\/the-clock-that-drifts\.webp$/,
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(the-clock-that-drifts|ttv-sequence)\.js$/,
   /^(js\/ttvWidgets\.js|js\/ttvField\.js|js\/data\/ttvPack\.js|js\/i18n\/(en|es)\.ttv\.js|js\/kernels\/ttv\/.*)$/,
+  // Prompt 227: the joint-fit panels, their field module, their words, the lesson's one new file and the upper depth of
+  // Finding Planets by Their Tug (its two new depth files only; the lesson itself stays installed). The lesson is
+  // NEVER_PRECACHED (the T3 terms). The model and its formulas (js/inference/jointModel.js, jointPlanet.js) are NOT here:
+  // the inference worker imports them through models.js (D-R10-227-05).
+  /^images\/investigations\/what-is-it-made-of\.webp$/,
+  /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(what-is-it-made-of|joint-sequence)\.js$/,
+  /^js\/data\/investigations\/depth\/(es\/)?radial-velocity\.js$/,
+  /^(js\/jointWidgets\.js|js\/jointField\.js|js\/i18n\/(en|es)\.joint\.js)$/,
   // Prompt 214: the strategy kernel, planner extension, panels and the strategy lesson's one new file (D-R10-214-06).
   /^js\/kernels\/strategy\//,
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(why-the-period-is-wrong|strategy-sequence)\.js$/,

@@ -41,7 +41,7 @@ export const EN_JOINT = {
   'jointW.v.system':
     'Synthetic: a light curve of four transits and 30 velocities from two instruments, fitted together with one period and one epoch (jitter {j} m/s, chi-square {c} for {d} degrees of freedom). Not a real star.',
   'jointW.v.star':
-    'Mass {m} solar masses plus or minus {sm} percent, radius {r} solar radii plus or minus {sr} percent, correlation {rho}. Source: stated for this lesson (a catalog-like entry for a synthetic star).',
+    'Mass {m} solar masses plus or minus {sm} percent, radius {r} solar radii plus or minus {sr} percent, correlation {rho}. Source: stated for this investigation (a catalog-like entry for a synthetic star).',
   'jointW.v.mass':
     '{v} plus or minus {s} Jupiter masses ({e} Earth masses). The data alone give plus or minus {a}, the star adds {b}; the star holds {p} percent of the variance.',
   'jointW.v.radius':

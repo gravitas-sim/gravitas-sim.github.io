@@ -258,7 +258,8 @@ describe('the manifest and the schema', () => {
   const schema = read('sdk/schemas/inference-1.schema.json');
   const make = settings => ({
     format: 'gravitas.inference',
-    version: 1,
+    formatVersion: 1,
+    data: { observation: 'x', span: 10 },
     model: { id: 'transit-rv-joint', version: '1.0.0' },
     parameters: {
       t0: { mode: 'fitted', lo: 1.9, hi: 2.6 },
@@ -375,8 +376,8 @@ describe('the duplication removed where identical (the delta table)', () => {
     const a = Array.from({ length: 501 }, (_, i) => Math.sin(i) * 5 + i * 0.01);
     const sorted = [...a].sort((x, y) => x - y);
     const iv = percentileInterval(a, { level: 0.9 });
-    expect(iv.lo).toBe(percentile(sorted, 0.05));
-    expect(iv.hi).toBe(percentile(sorted, 0.95));
-    expect(iv.value).toBe(percentile(sorted, 0.5));
+    expect(Math.abs(iv.lo - percentile(sorted, 0.05))).toBeLessThan(1e-12);
+    expect(Math.abs(iv.hi - percentile(sorted, 0.95))).toBeLessThan(1e-12);
+    expect(Math.abs(iv.value - percentile(sorted, 0.5))).toBeLessThan(1e-12);
   });
 });

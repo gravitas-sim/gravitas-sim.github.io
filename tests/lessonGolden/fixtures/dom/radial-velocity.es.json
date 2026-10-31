@@ -58,5 +58,65 @@
   "previousDisabled": false,
   "nextDisabled": false,
   "depthState": ""
+ },
+ {
+  "depth": "advanced",
+  "role": "first",
+  "sid": "the-planet-you-already-measured",
+  "position": [
+   1,
+   42
+  ],
+  "title": "Encontrar planetas por su tirón",
+  "subtitle": "Observa el bamboleo de una estrella, pesa su planeta y combina las pistas",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 42 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">El planeta que ya mediste</h3><div class=\"inv-step-body\"><p>En <em>Encontrar planetas por sus sombras</em> observaste cómo HD 209458 b cruzaba su estrella y usaste la profundidad de la caída para deducir el tamaño del planeta. Aquí tienes el mismo sistema otra vez.</p><p>Hay algo que aquella investigación no mencionó. Cuando se vio el tránsito por primera vez en 1999, los astrónomos ya sabían que el planeta estaba ahí. Llevaban meses observando la estrella, y la estrella se lo había estado diciendo.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> La estrella es el disco brillante del centro. El planeta es el punto pequeño que traza el anillo a su alrededor.</p>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Avanzado"
+ },
+ {
+  "depth": "advanced",
+  "role": "graded",
+  "sid": "how-does-an-invisible-planet",
+  "position": [
+   2,
+   42
+  ],
+  "title": "Encontrar planetas por su tirón",
+  "subtitle": "Observa el bamboleo de una estrella, pesa su planeta y combina las pistas",
+  "body": "<p class=\"inv-step-count\">Paso 2 de 42 <span class=\"inv-step-kind\">pregunta</span></p><h3 class=\"inv-step-title\">¿Cómo se delata un planeta invisible?</h3><div class=\"inv-step-body\"><p>El planeta es demasiado tenue para verse junto a su estrella y, en este punto de la historia, nadie lo ha visto transitar. Aun así, la estrella por sí sola bastó para afirmar que había un planeta.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">¿Qué podría estar haciendo la estrella que revele el planeta?</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>El planeta bloquea parte de la luz de la estrella</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>El planeta tira de la estrella, así que la estrella se mueve</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>El planeta calienta la estrella</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>La estrella no se mueve; solo se mueve el planeta</span></button></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Avanzado"
+ },
+ {
+  "depth": "advanced",
+  "role": "marked",
+  "sid": "how-does-an-invisible-planet",
+  "position": [
+   2,
+   42
+  ],
+  "title": "Encontrar planetas por su tirón",
+  "subtitle": "Observa el bamboleo de una estrella, pesa su planeta y combina las pistas",
+  "body": "<p class=\"inv-step-count\">Paso 2 de 42 <span class=\"inv-step-kind\">pregunta</span></p><h3 class=\"inv-step-title\">¿Cómo se delata un planeta invisible?</h3><div class=\"inv-step-body\"><p>El planeta es demasiado tenue para verse junto a su estrella y, en este punto de la historia, nadie lo ha visto transitar. Aun así, la estrella por sí sola bastó para afirmar que había un planeta.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">¿Qué podría estar haciendo la estrella que revele el planeta?</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>El planeta bloquea parte de la luz de la estrella</span></button><button type=\"button\" class=\"inv-option is-chosen is-correct\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>El planeta tira de la estrella, así que la estrella se mueve</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>El planeta calienta la estrella</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>La estrella no se mueve; solo se mueve el planeta</span></button></div><p class=\"inv-because\">La gravedad funciona en ambos sentidos. La estrella atrae al planeta a su órbita, y el planeta tira de vuelta con la misma fuerza. La estrella es mucho más pesada, así que se mueve mucho menos, pero se mueve, y ese movimiento es medible.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Cambiar respuesta</button>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Avanzado"
+ },
+ {
+  "depth": "advanced",
+  "role": "last",
+  "sid": "what-you-can-now-say",
+  "position": [
+   42,
+   42
+  ],
+  "title": "Encontrar planetas por su tirón",
+  "subtitle": "Observa el bamboleo de una estrella, pesa su planeta y combina las pistas",
+  "body": "<p class=\"inv-step-count\">Paso 42 de 42 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Lo que ya puedes decir de una estrella que no puedes resolver</h3><div class=\"inv-step-body\"><p>Empezaste con un punto de luz y ningún planeta. Terminas con un mundo que tiene periodo, masa, radio, densidad y un lugar en un diagrama, y nada de eso vino de verlo.</p><p><strong>La estrella se mueve porque el planeta se mueve.</strong> Ninguno orbita al otro: los dos giran alrededor del punto que hay entre ambos, y la parte del movimiento de la estrella a lo largo de tu línea de visión es un desplazamiento en su espectro. El periodo de ese vaivén es el periodo orbital, y su semiamplitud K lleva dentro la masa del planeta.</p><p><strong>K sola da un límite inferior.</strong> Una órbita inclinada respecto al canto produce el mismo vaivén que produciría de canto un planeta más ligero, así que lo que mide una velocidad radial es M sin i. Desde la curva no se distinguen.</p><p><strong>Un tránsito deshace el empate.</strong> Un planeta que cruza el disco está casi de canto por construcción, así que sin i vale casi 1 y el límite inferior se convierte en una masa. El tránsito da además un radio, que la velocidad radial nunca puede dar, y una masa con un radio son una densidad: el primer número de la investigación que dice algo sobre de qué está hecho el planeta.</p><p><strong>La astrometría mira ese mismo movimiento de retroceso de lado</strong>, y prefiere los sistemas contrarios: planetas pesados y lejanos alrededor de estrellas cercanas, mientras que la velocidad radial prefiere planetas pesados y próximos.</p><p><strong>Y el último paso es el que hay que dar con más cuidado.</strong> Poner un planeta dentro de una zona habitable modelada dice que un cálculo climático sitúa el agua líquida al alcance a esa distancia, con supuestos que no has comprobado. No dice nada sobre la atmósfera de ese planeta, ni sobre su superficie, ni sobre si vive algo en él.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Todos los métodos de aquí tienen un punto ciego y los puntos ciegos no coinciden, que es la razón de que los sondeos se hagan combinados y no en competencia.</p>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Avanzado"
  }
 ]

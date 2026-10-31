@@ -213,7 +213,7 @@ export const WHAT_IS_IT_MADE_OF = {
       body: `A planet&rsquo;s radius, mass and density are each measured <em>against its star</em>, and the star&rsquo;s mass and radius are
              stated, not fitted, with an uncertainty that goes into every one of them. The star holds most of the mass&rsquo;s
              uncertainty here and about half the radius&rsquo;s and the density&rsquo;s. A star stated wrongly moves the planet, and the
-             transit&rsquo;s own measure of the star&rsquo;s density can say so. A bulk density below 1.8 g/cm&sup3; is volatile-rich,
+             transit&rsquo;s own measure of the star&rsquo;s density can say so. A bulk density below 1.8 g/cm³ is volatile-rich,
              which is a hint of what a planet is made of and not the answer.`,
       tool: MR(),
     },
@@ -421,7 +421,7 @@ export const WHAT_IS_IT_MADE_OF_ES = {
       body: `El radio, la masa y la densidad de un planeta se miden cada uno <em>frente a su estrella</em>, y la masa y el radio de la estrella se
              declaran, no se ajustan, con una incertidumbre que entra en cada uno de ellos. Aquí la estrella tiene la mayor parte de la incertidumbre
              de la masa y cerca de la mitad de la del radio y la de la densidad. Una estrella mal declarada mueve al planeta, y la medida que el
-             propio tránsito hace de la densidad de la estrella puede decirlo. Una densidad media por debajo de 1,8 g/cm&sup3; es rica en
+             propio tránsito hace de la densidad de la estrella puede decirlo. Una densidad media por debajo de 1,8 g/cm³ es rica en
              volátiles, que es una pista de qué está hecho un planeta y no la respuesta.`,
     },
   ],
@@ -623,7 +623,7 @@ const CONTENT = {
     difficulty:
       'Introductory (the radius is a ratio times the star’s radius, the mass needs the star’s mass, the density needs both; the star’s share of the uncertainty; a density below 1.8 g/cm³ is volatile-rich and cannot tell hydrogen and helium from water ice); majors (read the star’s share of the density at 8 percent stated uncertainty, and a star 3.2 sigma from the transit).',
     placement:
-      'After Finding Planets by Their Tug, whose last steps combine a transit radius and a velocity mass into a density; before a unit on planetary interiors or on occurrence. It pairs with the upper depth of that lesson, which carries the same panel.',
+      'After Finding Planets by Their Tug, whose last steps combine a transit radius and a velocity mass into a density; before a unit on planetary interiors or on occurrence. It pairs with the upper depth of that investigation, which carries the same panel.',
     overview:
       'Students predict what a bigger star does to the planet’s radius and density, try it in the panel, read whose uncertainty the mass is, place the planet on a diagram of radius against mass with lines of constant density, and learn what a low bulk density can and cannot tell. The quantitative steps read the star’s share of the density and a stated star that does not fit the transit.',
     priorKnowledge: [
@@ -684,10 +684,10 @@ const CONTENT = {
       },
     ],
     teachingNotes: [
-      'Ask for the prediction in the student’s own words before the panel is touched; the held answer is revealed at the step that tests it, and a wrong prediction is the lesson.',
+      'Ask for the prediction in the student’s own words before the panel is touched; the held answer is revealed at the step that tests it, and a wrong prediction is the point.',
       'The system is synthetic: the oracle’s data (tools/joint-inference-oracle/oracle.py) for a planet of 0.7 Jupiter masses and a radius ratio of 0.12 around a 1.10 solar-mass, 1.15 solar-radius star, fitted with the joint model; the panel does not refit, it re-derives the planet from the stored covariance and the star that is stated.',
       'The star’s mass and radius are inputs with a stated uncertainty, correlation and source, never fitted; a planet quantity is not reported when the star’s uncertainty it needs was not stated (JOINT_INFERENCE.md).',
-      'The ensemble the panel quotes (a hundred systems whose stars were drawn from their stated uncertainty) is the validation leg C of tests/fixtures/joint-inference; the stated bound was crossed or held as that file says, and failed legs stay labelled.',
+      'The ensemble the panel quotes (a hundred systems whose stars were drawn from their stated uncertainty) is the validation leg C of tests/fixtures/joint-inference; the stated bound was crossed or held as that file says, and failed legs stay labeled.',
     ],
     discussion: [
       'A catalog star changes its radius in a later release. Which of this planet’s published numbers must change, and which need not?',

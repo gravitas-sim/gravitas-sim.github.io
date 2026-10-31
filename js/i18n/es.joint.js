@@ -41,7 +41,7 @@ export const ES_JOINT = {
   'jointW.v.system':
     'Sintético: una curva de luz de cuatro tránsitos y 30 velocidades de dos instrumentos, ajustadas juntas con un período y una época (fluctuación {j} m/s, ji cuadrado {c} con {d} grados de libertad). No es una estrella real.',
   'jointW.v.star':
-    'Masa {m} masas solares más o menos {sm} por ciento, radio {r} radios solares más o menos {sr} por ciento, correlación {rho}. Fuente: declarada para esta lección (una entrada tipo catálogo para una estrella sintética).',
+    'Masa {m} masas solares más o menos {sm} por ciento, radio {r} radios solares más o menos {sr} por ciento, correlación {rho}. Fuente: declarada para esta investigación (una entrada tipo catálogo para una estrella sintética).',
   'jointW.v.mass':
     '{v} más o menos {s} masas de Júpiter ({e} masas terrestres). Los datos solos dan más o menos {a}, la estrella añade {b}; la estrella tiene el {p} por ciento de la varianza.',
   'jointW.v.radius':
