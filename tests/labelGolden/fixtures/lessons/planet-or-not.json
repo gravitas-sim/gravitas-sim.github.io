@@ -1,0 +1,37 @@
+{
+ "id": "planet-or-not",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.read-the-power.fields.0.unit","percent"],
+    ["steps.the-exclusion-radius.fields.0.unit","pixels"],
+    ["steps.the-exclusion-radius.fields.1.unit","pixels"]
+   ],
+   "numbered": [
+    ["steps.read-the-power.fields.0.hint","37"],
+    ["steps.the-exclusion-radius.fields.0.hint","0.17"],
+    ["steps.the-exclusion-radius.fields.1.hint","0.30"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": []
+  }
+ },
+ "numeric": {
+  "answers": [],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "read-the-power": {
+    "validate": {"calls":97,"distinct":3,"digest":"f68d39167b819bb1","samples":[null,{"level":"error","message":"Choose candidate H and read the odd and even depths line: it could see a difference of 0.43 percent, about 37 percent of the depth."},{"level":"ok","message":"About 37 percent of the depth. A 20 percent difference is below it, so the test could not have seen it: its pass for H only rules out differences larger than that."}]}
+   },
+   "the-exclusion-radius": {
+    "validate": {"calls":232,"distinct":2,"digest":"1a7eb096920bce90","samples":[null,{"level":"error","message":"Choose candidate G and read the third line: the dip is 0.17 pixels from the target and the exclusion radius is 0.30 pixels."}]}
+   }
+  },
+  "es": "same"
+ }
+}

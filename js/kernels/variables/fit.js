@@ -124,6 +124,11 @@ export function harmonicFit(t, y, P, K, { t0, dy = null } = {}) {
     mean: coef[0],
     meanError: Math.sqrt(Math.max(0, inv[0][0] * scale)),
     harmonics,
+    // The cosine/sine coefficients (m0, then cos and sin of each harmonic) and their
+    // covariance, (A^T A)^-1 times chi^2 per degree of freedom: the features of
+    // features.js propagate errors from these.
+    coefficients: Array.from(coef),
+    covariance: inv.map(r => Array.from(r, v => v * scale)),
     rms,
     chi2: ss,
     n,

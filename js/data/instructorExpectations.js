@@ -26,6 +26,8 @@ import { INSTRUCTOR as CLUSTERS } from './investigations/cluster-sequence.js';
 import { INSTRUCTOR as MASSES } from './investigations/binary-masses-sequence.js';
 import { INSTRUCTOR as ACTIVITY } from './investigations/stellar-activity-sequence.js';
 import { INSTRUCTOR as REMNANTS } from './investigations/remnants-sequence.js';
+import { INSTRUCTOR as VETTING } from './investigations/vetting-sequence.js';
+import { INSTRUCTOR as VARIABLES_II } from './investigations/variables-ii-sequence.js';
 import { INSTRUCTOR as TTV } from './investigations/ttv-sequence.js';
 
 export default {
@@ -49,6 +51,8 @@ export default {
     ...MASSES.expectations,
     ...ACTIVITY.expectations,
     ...REMNANTS.expectations,
+    ...VETTING.expectations,
+    ...VARIABLES_II.expectations,
     ...TTV.expectations,
     'the-suns-motion': {
       'measure-the-sun':

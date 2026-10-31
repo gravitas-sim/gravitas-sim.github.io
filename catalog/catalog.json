@@ -200,6 +200,10 @@
       "en": "Plan an Exposure",
       "es": "Planifica una exposición"
     },
+    "planet-or-not": {
+      "en": "Planet or Not?",
+      "es": "¿Planeta o no?"
+    },
     "power-law-gravity": {
       "en": "What If Gravity Were Not Inverse Square?",
       "es": "¿Y si la gravedad no fuera inversa al cuadrado?"
@@ -263,6 +267,10 @@
     "the-limit": {
       "en": "The Limit",
       "es": "El límite"
+    },
+    "the-metallicity-term": {
+      "en": "The Metallicity Term",
+      "es": "El término de metalicidad"
     },
     "the-rotating-disk": {
       "en": "The Rotating Disk",

@@ -165,8 +165,12 @@ const EXTENSIONS = {
   flares: () => import('../data/investigations/depth/flares.js'),
   'how-old-is-this-white-dwarf': () =>
     import('../data/investigations/depth/how-old-is-this-white-dwarf.js'),
+  'the-metallicity-term': () =>
+    import('../data/investigations/depth/the-metallicity-term.js'),
   'from-star-to-remnant': () =>
     import('../data/investigations/depth/from-star-to-remnant.js'),
+  'planet-or-not': () =>
+    import('../data/investigations/depth/planet-or-not.js'),
   'the-clock-that-drifts': () =>
     import('../data/investigations/depth/the-clock-that-drifts.js'),
   'deep-or-wide': () => import('../data/investigations/depth/deep-or-wide.js'),
@@ -313,8 +317,12 @@ const WORDS = {
     flares: () => import('../data/investigations/depth/es/flares.js'),
     'how-old-is-this-white-dwarf': () =>
       import('../data/investigations/depth/es/how-old-is-this-white-dwarf.js'),
+    'the-metallicity-term': () =>
+      import('../data/investigations/depth/es/the-metallicity-term.js'),
     'from-star-to-remnant': () =>
       import('../data/investigations/depth/es/from-star-to-remnant.js'),
+    'planet-or-not': () =>
+      import('../data/investigations/depth/es/planet-or-not.js'),
     'the-clock-that-drifts': () =>
       import('../data/investigations/depth/es/the-clock-that-drifts.js'),
     'deep-or-wide': () =>

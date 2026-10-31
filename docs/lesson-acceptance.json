@@ -1100,10 +1100,7 @@
       "quantity": "the period the periodogram finds for a star that turns once in 4.00 days: 4.00 days with one dark spot and 2.00 days with a second like spot on the opposite side, the light repeating twice a turn so that 4.00 days is left as a period it could also be",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "how-many-dips",
-        "read-the-period"
-      ],
+      "loop": ["how-many-dips", "read-the-period"],
       "evidenceFrom": "model"
     },
     "flares": {
@@ -1113,10 +1110,7 @@
       "quantity": "the equivalent duration, in seconds, of a flare of the red dwarf AU Microscopii: 118 for the second largest and 100 for the third largest, the time the quiet star would take to give out the light the flare added",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "rise-or-fall",
-        "read-a-flare"
-      ],
+      "loop": ["rise-or-fall", "read-a-flare"],
       "evidenceFrom": "model"
     },
     "how-old-is-this-white-dwarf": {
@@ -1126,10 +1120,7 @@
       "quantity": "the cooling age, in billions of years, of a 0.6 solar mass white dwarf from the cooling law: 4.09 at a luminosity of a ten-thousandth of the Sun's and 0.79 at a thousandth, a ratio of 5.2 for a tenfold step",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "ten-times-fainter",
-        "read-two-ages"
-      ],
+      "loop": ["ten-times-fainter", "read-two-ages"],
       "evidenceFrom": "model"
     },
     "from-star-to-remnant": {
@@ -1139,10 +1130,7 @@
       "quantity": "the final mass, in solar masses, of the white dwarf a star leaves by the MIST relation: 0.745 from a star of 3 solar masses and 0.569 from a star of 1, with a scatter of 0.06 solar masses",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "how-heavy-the-ember",
-        "read-the-final-mass"
-      ],
+      "loop": ["how-heavy-the-ember", "read-the-final-mass"],
       "evidenceFrom": "model"
     },
     "the-clock-that-drifts": {
@@ -1186,6 +1174,26 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["bright-star-predict", "clipped-star"],
+      "evidenceFrom": "model"
+    },
+    "planet-or-not": {
+      "centralExperimentId": "ce.planet-or-not",
+      "object": "panel:vetting-checklist",
+      "control": "vetting-checklist/candidate",
+      "quantity": "the odd-even z, the secondary depth against its error and the centroid offset against its exclusion radius for each of eight synthetic candidates, and the verdict they add up to (survives, rejected or undecided, never planet)",
+      "evidence": "none",
+      "test": "e2e/vettingLesson.spec.js",
+      "loop": ["which-test-catches", "deep-and-shallow"],
+      "evidenceFrom": "model"
+    },
+    "the-metallicity-term": {
+      "centralExperimentId": "ce.the-metallicity-term",
+      "object": "panel:plz-metallicity",
+      "control": "plz-metallicity/term",
+      "quantity": "the distance modulus of NGC 4258 from the LMC's Cepheids, in magnitudes, with the cited metallicity term left out (29.403) and included (29.444): a shift of 0.041 magnitudes, about two percent in distance",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": ["which-way-does-metal-go", "the-distance-twice"],
       "evidenceFrom": "model"
     }
   }

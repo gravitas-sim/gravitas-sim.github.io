@@ -318,6 +318,12 @@ export const ANSWERS = {
   // The deepest dip every other catalogued star in HD 209458's aperture could
   // make, were all its light to vanish: 1 - CROWDSAP, from the header.
   blendLimit: () => 1 - ADOPTED.hd209458.crowdsap.value,
+  // The most a secondary eclipse could hold and still be missed: three
+  // standard errors of the depth at phase one half, as the panel shows it.
+  secondaryUpper: (c, step) => {
+    const d = transitOf(c, step.target, periodOf(step.target))?.secondary;
+    return d ? SIGNIFICANT * d.error : null;
+  },
   simulationRadiusRatio: () =>
     ADOPTED.simulation.planetRadius /
     ADOPTED.simulation.stellarRadius /
@@ -350,6 +356,33 @@ export const CORRECT = {
     const d = transitOf(c, step.target, periodOf(step.target))?.secondary;
     if (!d) return null;
     return d.depth < SIGNIFICANT * d.error ? 'none' : 'dip';
+  },
+  // The two light-curve tests of the vetting panel (VETTING.md), as this
+  // guide's own box depths read them: `pass` needs both to pass, a `fail` is
+  // either failing, and a test the noise cannot decide (it could not see an
+  // odd-even difference of half the depth) is `inconclusive`, never a pass.
+  // The kernel of js/kernels/vetting does the full job on the vetting panel;
+  // this is its rule on science.js's numbers, so the guide stays small.
+  vetLightCurve: (c, step) => {
+    const r = transitOf(c, step.target, periodOf(step.target));
+    if (!r?.oddEven || !r.secondary || !r.depth) return null;
+    const oe = r.oddEven;
+    const mean = (oe.odd.depth + oe.even.depth) / 2;
+    let odd = 'pass';
+    if (oe.sigmas === null || !(mean >= SIGNIFICANT * (oe.error / 2)))
+      odd = 'inconclusive';
+    else if (oe.sigmas >= SIGNIFICANT) odd = 'fail';
+    else if (SIGNIFICANT * oe.error > 0.5 * mean) odd = 'inconclusive';
+    const sec = r.secondary;
+    let second = 'pass';
+    if (r.depth.depth < SIGNIFICANT * r.depth.error) second = 'inconclusive';
+    else if (
+      sec.depth >= SIGNIFICANT * sec.error &&
+      sec.depth / r.depth.depth > 0.1
+    )
+      second = 'fail';
+    if (odd === 'fail' || second === 'fail') return 'fail';
+    return odd === 'pass' && second === 'pass' ? 'pass' : 'inconclusive';
   },
 };
 
@@ -589,7 +622,7 @@ export const GUIDES = [
   },
   {
     id: 'exo-dilution',
-    minutes: { intro: 20, advanced: 35 },
+    minutes: { intro: 20, advanced: 45 },
     level: 'intro',
     tags: ['exoplanets', 'observing'],
     steps: [
@@ -674,6 +707,30 @@ export const GUIDES = [
         show: 'published',
         options: ['a', 'b', 'cannot'],
         correct: 'cannot',
+      },
+      {
+        id: 'vet-tests',
+        kind: 'choose',
+        path: 'advanced',
+        show: 'secondary',
+        target: 'kepler13-sap',
+        options: ['pass', 'fail', 'inconclusive'],
+        correct: { answer: 'vetLightCurve' },
+      },
+      {
+        id: 'vet-upper',
+        kind: 'answer',
+        path: 'advanced',
+        show: 'secondary',
+        target: 'kepler13-sap',
+        expect: { answer: 'secondaryUpper', tolerance: 0.00002 },
+      },
+      {
+        id: 'vet-blind',
+        kind: 'choose',
+        path: 'advanced',
+        options: ['planet', 'blend', 'open'],
+        correct: 'open',
       },
       { id: 'wrap', kind: 'read', path: 'both' },
     ],

@@ -2770,6 +2770,17 @@ test.describe('the central experiment of each investigation', () => {
         [1, 0.569, 0.01],
       ],
     },
+    // ---- Variables II (Roadmap III, Prompt 223) -----------------------------------------
+    {
+      id: 'the-metallicity-term',
+      title:
+        'the-metallicity-term: the NGC 4258 distance modulus is 29.403 with the metallicity term left out and 29.444 with it included @accepts:ce.the-metallicity-term',
+      row: /^Distance modulus shown$/i,
+      values: [
+        [0, 29.403, 0.005],
+        [1, 29.444, 0.005],
+      ],
+    },
     // ---- Transit timing variations (Roadmap III, Prompt 226) -------------------------
     {
       id: 'the-clock-that-drifts',

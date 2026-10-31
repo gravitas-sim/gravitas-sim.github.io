@@ -572,7 +572,12 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://gravitas-sim.online/teaching/investigation/the-clock-that-drifts/</loc>
+    <loc>https://gravitas-sim.online/teaching/investigation/planet-or-not/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://gravitas-sim.online/teaching/investigation/the-metallicity-term/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>

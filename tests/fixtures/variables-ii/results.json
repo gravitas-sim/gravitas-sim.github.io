@@ -1,0 +1,220 @@
+{
+  "format": "gravitas.variables-ii-results/1",
+  "rows": [
+    {
+      "id": "A1.noiseFreeFeatures",
+      "status": "pass",
+      "measured": {
+        "status": "ok",
+        "amplitude": 0.000006746554547465422,
+        "r21": 6.106226635438361e-16,
+        "r31": 4.163336342344337e-17,
+        "phi21": 4.440892098500626e-15,
+        "phi31": 5.329070518200751e-15
+      },
+      "note": ""
+    },
+    {
+      "id": "A2.skewAndRise",
+      "status": "pass",
+      "measured": {
+        "skew": 3.2113978782757244e-16,
+        "rise": 0,
+        "reversed": 0,
+        "forwardRise": 0.5958333333333333
+      },
+      "note": ""
+    },
+    {
+      "id": "A3.plAtTheCitedPoints",
+      "status": "pass",
+      "measured": {
+        "atTen": 0,
+        "slope": 4.440892098500626e-16,
+        "shift": 2.0816681711721685e-16
+      },
+      "note": ""
+    },
+    {
+      "id": "A4.ladderClosedForm",
+      "status": "pass",
+      "measured": {
+        "mu": 0,
+        "gammaTerm": 0,
+        "hostTerm": 0,
+        "anchorTerm": 0,
+        "regressionMu": 0,
+        "regressionSigma": 0
+      },
+      "note": ""
+    },
+    {
+      "id": "A5.distanceFactor",
+      "status": "pass",
+      "measured": {
+        "worst": 2.220446049250313e-16
+      },
+      "note": ""
+    },
+    {
+      "id": "A6.propagationAgrees",
+      "status": "pass",
+      "measured": {
+        "linear": 0.052674341831067194,
+        "monteCarlo": 0.05251001025019899,
+        "relative": 0.0031197652434886633
+      },
+      "note": ""
+    },
+    {
+      "id": "B1.fixedPeriodCoefficients",
+      "status": "pass",
+      "measured": {
+        "worst": 4.191091917959966e-15
+      },
+      "note": ""
+    },
+    {
+      "id": "B2.periodAgrees",
+      "status": "pass",
+      "measured": {
+        "kernel": 0.6604102904997026,
+        "oracle": 0.6604102138052959,
+        "relative": 1.1613146664162349e-7
+      },
+      "note": ""
+    },
+    {
+      "id": "B3.featuresAgree",
+      "status": "pass",
+      "measured": {
+        "status": "ok",
+        "amplitude": 0.000009310765291759004,
+        "r21": 5.551115123125783e-16,
+        "r31": 6.661338147750939e-16,
+        "phi21": 3.552713678800501e-15,
+        "phi31": 4.263256414560601e-14
+      },
+      "note": ""
+    },
+    {
+      "id": "C1.distanceCoverage",
+      "status": "pass",
+      "measured": {
+        "n": 400,
+        "within1": 0.6675,
+        "within2": 0.9525
+      },
+      "note": ""
+    },
+    {
+      "id": "C2.biasOfIgnoring",
+      "status": "pass",
+      "measured": {
+        "meanIgnoring": 0.031378024724272334,
+        "meanGammaDZ": 0.0339113076311133,
+        "ignoringVsAnalytic": 0.002533282906840968,
+        "correctedBias": 0.00412917028258903
+      },
+      "note": ""
+    },
+    {
+      "id": "C3.fourierCoverage",
+      "status": "pass",
+      "measured": {
+        "n": 400,
+        "r21Within2": 0.945,
+        "phi21Within2": 0.95
+      },
+      "note": ""
+    },
+    {
+      "id": "D1.tooFewCycles",
+      "status": "pass",
+      "measured": {
+        "status": "not-constrained",
+        "reason": "cycles",
+        "fourierNull": true,
+        "mean": true,
+        "cycles": 1.4888295256532729
+      },
+      "note": ""
+    },
+    {
+      "id": "D2.phaseGap",
+      "status": "pass",
+      "measured": {
+        "status": "not-constrained",
+        "reason": "phase-gap",
+        "phaseGap": 0.503966171760112
+      },
+      "note": ""
+    },
+    {
+      "id": "D3.noSignalNoHarmonic",
+      "status": "pass",
+      "measured": {
+        "n": 400,
+        "falseSecond": 0.0175,
+        "falseThird": 0.0125
+      },
+      "note": ""
+    },
+    {
+      "id": "D4.missingMetallicity",
+      "status": "pass",
+      "measured": {
+        "missing": "missing",
+        "missingMu": true,
+        "outside": "outside-range"
+      },
+      "note": ""
+    },
+    {
+      "id": "D5.ambiguousRule",
+      "status": "pass",
+      "measured": {
+        "stars": 120,
+        "called": 109,
+        "unresolved": 11,
+        "calledAccuracy": 0.944954128440367,
+        "splitCalled": 0,
+        "strongUnresolved": 0
+      },
+      "note": ""
+    },
+    {
+      "id": "E1.suDraPeriod",
+      "status": "pass",
+      "measured": {
+        "kernel": 0.6604102904997026,
+        "published": 0.66042001,
+        "relative": 0.000014717149920061063
+      },
+      "note": ""
+    },
+    {
+      "id": "E2.n4258WithTerm",
+      "status": "pass",
+      "measured": {
+        "mu": 29.443817548748218,
+        "sigma": 0.052674341831067194,
+        "uncorrectedMu": 29.40258754874822,
+        "shift": 0.041229999999999996,
+        "status": "applied",
+        "sigmas": 0.7596222433220189
+      },
+      "note": ""
+    },
+    {
+      "id": "E3.citedGammaAgree",
+      "status": "pass",
+      "measured": {
+        "riess": -0.217,
+        "breuval": -0.28,
+        "sigmas": 0.6957186142715336
+      },
+      "note": ""
+    }
+  ]
+}

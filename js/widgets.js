@@ -104,7 +104,7 @@ const familyEntry = (load, path, exportName, ids, ready) => ({
 });
 
 // <generated:lazy-families>
-// tidal, darkMatter, spectra, light, variables, galactic, cosmology, sky, gwEvents, imaging, jovian, crater, sun, smallBodies, activity wait on their own readiness (prose or data behind a second import); whenWidgetsReady() waits for it.
+// tidal, darkMatter, spectra, light, variables, galactic, cosmology, sky, gwEvents, imaging, jovian, crater, sun, smallBodies, activity, variablesII wait on their own readiness (prose or data behind a second import); whenWidgetsReady() waits for it.
 export const LAZY_FAMILIES = Object.freeze({
   energy: familyEntry(
     () => import('./energyWidgets.js'),
@@ -470,11 +470,18 @@ export const LAZY_FAMILIES = Object.freeze({
     'TELESCOPE_WIDGETS',
     ['telescope']
   ),
-  ttv: familyEntry(
-    () => import('./ttvWidgets.js'),
-    './ttvWidgets.js',
-    'TTV_WIDGETS',
-    ['ttv-transit', 'ttv-timing']
+  variablesII: familyEntry(
+    () => import('./variablesIIWidgets.js'),
+    './variablesIIWidgets.js',
+    'VARIABLES_II_WIDGETS',
+    ['plz-metallicity', 'variable-features', 'variable-ambiguity'],
+    'variablesIIReady'
+  ),
+  vetting: familyEntry(
+    () => import('./vettingWidgets.js'),
+    './vettingWidgets.js',
+    'VETTING_WIDGETS',
+    ['vetting-checklist']
   ),
 });
 // </generated:lazy-families>
@@ -682,6 +689,10 @@ export async function whenWidgetsReady() {
     'activity',
     // The remnants family reaches the plot component and the kernel: late for the same reason (Prompt 222).
     'remnants',
+    // The vetting family reaches the plot component, the frame forward model and the measurement kernel: late for the same reason (Prompt 228).
+    'vetting',
+    // The variables-II family reaches the plot component, the kernel and the variable-star data: late for the same reason (Prompt 223).
+    'variablesII',
     // The timing family reaches the plot component, the inference core and the engine's data pack: late (Prompt 226).
     'ttv',
     'surveyDesign',

@@ -54,6 +54,8 @@ import { DEPTH as CLUSTERS_DEPTH } from '../data/investigations/cluster-sequence
 import { DEPTH as MASSES_DEPTH } from '../data/investigations/binary-masses-sequence.js';
 import { DEPTH as ACTIVITY_DEPTH } from '../data/investigations/stellar-activity-sequence.js';
 import { DEPTH as REMNANTS_DEPTH } from '../data/investigations/remnants-sequence.js';
+import { DEPTH as VETTING_DEPTH } from '../data/investigations/vetting-sequence.js';
+import { DEPTH as VARIABLES_II_DEPTH } from '../data/investigations/variables-ii-sequence.js';
 import { DEPTH as TTV_DEPTH } from '../data/investigations/ttv-sequence.js';
 import { DEPTH as SURVEY_DEPTH } from '../data/investigations/survey-sequence.js';
 import { DEPTH as OBSERVING_DEPTH } from '../data/investigations/observing-sequence.js';
@@ -102,6 +104,12 @@ export const DEEPER = Object.freeze({
   ),
   ...Object.fromEntries(
     Object.entries(REMNANTS_DEPTH).map(([id, d]) => [id, d.steps])
+  ),
+  ...Object.fromEntries(
+    Object.entries(VETTING_DEPTH).map(([id, d]) => [id, d.steps])
+  ),
+  ...Object.fromEntries(
+    Object.entries(VARIABLES_II_DEPTH).map(([id, d]) => [id, d.steps])
   ),
   ...Object.fromEntries(
     Object.entries(TTV_DEPTH).map(([id, d]) => [id, d.steps])

@@ -234,6 +234,12 @@ test.describe('a system can be built without a pointer', () => {
     app,
   }) => {
     await app.boot({ url: '/?author=tides&step=10' });
+    // The lesson's panel is open before the form is: it opens a moment after
+    // boot, and one that opens after the form un-inerts itself behind it (on a
+    // loaded machine this was the whole failure; the count below passes on the
+    // header's own language menu and so waited for nothing).
+    await expect(page.locator('#investigationPanel')).toBeVisible();
+    await expect(page.locator('.inv-step-title')).not.toBeEmpty();
     // Polled, because on dist/ the lesson's family arrives as a lazy chunk
     // after boot returns, and a count taken at once reads zero.
     await expect
