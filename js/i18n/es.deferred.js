@@ -1865,6 +1865,8 @@ export const ES_DEFERRED = {
     'Un experimento de veinte planetas ampliado en Python a una poblaci\u00f3n, con lo que cubre su intervalo y lo que no. Necesita la p\u00e1gina de c\u00e1lculo y conexi\u00f3n.',
   'inv.seq.planets.refitting-a-transit':
     'El modelo de tr\u00e1nsito del panel de ajuste, ajustado de nuevo por otro camino en Python, y qu\u00e9 cambia el camino. Necesita la p\u00e1gina de c\u00e1lculo y conexi\u00f3n.',
+  'inv.seq.planets.planet-or-not':
+    'Ocho candidatos sint\u00e9ticos verificados con profundidades impares y pares, una b\u00fasqueda de segundo eclipse y una prueba del centroide, y lo que no significa una lista aprobada. Algunos no se pueden decidir.',
   'inv.seq.planets.two-periodograms':
     'Un periodograma de Lomb-Scargle y uno de m\u00ednimos cuadrados de caja de una curva de luz, y qu\u00e9 puede afirmar un per\u00edodo de un periodograma. Necesita la p\u00e1gina de c\u00e1lculo y conexi\u00f3n.',
   'inv.seq.planets.sampling-a-posterior':

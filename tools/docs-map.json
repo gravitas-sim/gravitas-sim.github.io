@@ -1129,6 +1129,13 @@
       "student": false
     },
     {
+      "file": "VETTING.md",
+      "kind": "feature",
+      "purpose": "Candidate vetting: odd-even depths, secondary-eclipse search, difference-image centroid test, the validation contract, what a pass does not mean.",
+      "owner": 228,
+      "student": true
+    },
+    {
       "file": "VO_ARCHIVE_GATE.md",
       "kind": "gate",
       "purpose": "Astronomy archives and the Virtual Observatory gate.",

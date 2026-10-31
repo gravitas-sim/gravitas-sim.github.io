@@ -1252,6 +1252,19 @@ export const MANIFEST = [
     objectiveCount: 4,
   },
   {
+    id: 'planet-or-not',
+    title: '¿Planeta o no?',
+    subtitle:
+      'Tres pruebas intentan rechazar un candidato a tránsito, y algunos candidatos no se pueden decidir: aprende qué significa una lista superada y qué no significa',
+    duration: '6-10 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/planet-or-not.webp',
+    depths: 3,
+    stepCount: 8,
+    gradedCount: 6,
+    objectiveCount: 4,
+  },
+  {
     id: 'deep-or-wide',
     title: '¿Profundo o ancho?',
     subtitle:

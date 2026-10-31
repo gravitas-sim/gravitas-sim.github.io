@@ -1000,6 +1000,16 @@ export const DISCOVERY = {
     },
     courseLevel: 'majors',
   },
+  'planet-or-not': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['transit-photometry'],
+    textbook: {
+      chapter: 21,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
   'deep-or-wide': {
     audience: 'intro',
     mathematics: 'algebra',

@@ -1243,6 +1243,19 @@ export const MANIFEST = [
     objectiveCount: 4,
   },
   {
+    id: 'planet-or-not',
+    title: 'Planet or Not?',
+    subtitle:
+      'Three tests try to reject a transit candidate, and some candidates cannot be decided: learn what a passed checklist means and what it does not',
+    duration: '6-10 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/planet-or-not.webp',
+    depths: 3,
+    stepCount: 8,
+    gradedCount: 6,
+    objectiveCount: 4,
+  },
+  {
     id: 'deep-or-wide',
     title: 'Deep or Wide?',
     subtitle:

@@ -1,0 +1,512 @@
+{
+  "rows": [
+    {
+      "id": "A1.boxDepth",
+      "status": "pass",
+      "measured": {
+        "maxRelativeError": 0.0007205248589108528
+      },
+      "note": ""
+    },
+    {
+      "id": "A2.oddEvenRecovery",
+      "status": "pass",
+      "measured": {
+        "maxAbsErrorInMeanDepths": 0.00021276807409692524,
+        "verdictLogic": true
+      },
+      "note": ""
+    },
+    {
+      "id": "A3.secondaryRecovery",
+      "status": "pass",
+      "measured": {
+        "maxRelativeError": 7.1147532090072125e-12,
+        "notSeenAtHalfPhase": true,
+        "ecoswRoundTrip": 0.15000000000000002
+      },
+      "note": ""
+    },
+    {
+      "id": "A4.dilution",
+      "status": "pass",
+      "measured": {
+        "maxRelativeError": 5.246508203508635e-16
+      },
+      "note": ""
+    },
+    {
+      "id": "A5.centroidLocation",
+      "status": "pass",
+      "measured": {
+        "maxPositionErrorPx": 0.0033864012010232174,
+        "cases": 10
+      },
+      "note": ""
+    },
+    {
+      "id": "A6.centroidShiftAnalytic",
+      "status": "pass",
+      "measured": {
+        "maxRelativeError": 0.011570396304932852,
+        "cases": [
+          {
+            "eclipsed": "target",
+            "separation": 1.6,
+            "angleDeg": 40,
+            "predicted": 0.0038257456600025333,
+            "along": 0.0038539240006931564,
+            "across": -0.000008010481506630926
+          },
+          {
+            "eclipsed": "neighbour",
+            "separation": 1.6,
+            "angleDeg": 40,
+            "predicted": -0.012752485533341738,
+            "along": -0.012868729270449894,
+            "across": -9.89901947070701e-8
+          },
+          {
+            "eclipsed": "target",
+            "separation": 2.4,
+            "angleDeg": 0,
+            "predicted": 0.0057386184900038,
+            "along": 0.005805016580175959,
+            "across": 0.000004733734161987968
+          },
+          {
+            "eclipsed": "neighbour",
+            "separation": 2.4,
+            "angleDeg": 0,
+            "predicted": -0.019128728300012606,
+            "along": -0.01932296048570592,
+            "across": -0.0000012834216374102425
+          }
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "A7.verdictLogic",
+      "status": "pass",
+      "measured": {
+        "mismatches": 0
+      },
+      "note": ""
+    },
+    {
+      "id": "B1.oracleBlendLightCurve",
+      "status": "pass",
+      "measured": {
+        "maxAbsDepthDifference": 0,
+        "maxRelativeSigmaDifference": 0,
+        "verdicts": {
+          "kernel": [
+            "fail",
+            "pass"
+          ],
+          "oracle": [
+            "fail",
+            "pass"
+          ]
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "B2.oracleCleanLightCurve",
+      "status": "pass",
+      "measured": {
+        "maxAbsDepthDifference": 0,
+        "maxRelativeSigmaDifference": 2.8217633499906776e-16,
+        "verdicts": {
+          "kernel": [
+            "pass",
+            "pass"
+          ],
+          "oracle": [
+            "pass",
+            "pass"
+          ]
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "B3.oracleFrames",
+      "status": "pass",
+      "measured": {
+        "maxPositionDifferencePx": 5.329070518200751e-15,
+        "maxRelativeSigmaDifference": 1.1897781898606173e-15,
+        "cases": {
+          "onTarget": {
+            "kernel": "pass",
+            "oracle": "pass",
+            "r": [
+              0.43808702910242114,
+              0.4380870291024077
+            ]
+          },
+          "blend": {
+            "kernel": "fail",
+            "oracle": "fail",
+            "r": [
+              15.990914527695695,
+              15.990914527695704
+            ]
+          }
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "C1.oddEvenFalseRejection",
+      "status": "pass",
+      "measured": {
+        "fail": 0.005,
+        "pass": 0.995,
+        "n": 400
+      },
+      "note": ""
+    },
+    {
+      "id": "C2.oddEvenFalseAcceptance",
+      "status": "pass",
+      "measured": {
+        "pass": 0,
+        "fail": 1,
+        "n": 400
+      },
+      "note": ""
+    },
+    {
+      "id": "C3.lowPowerNeverPasses",
+      "status": "pass",
+      "measured": {
+        "oddEven": {
+          "pass": 0,
+          "fail": 1,
+          "inconclusive": 399,
+          "n": 400
+        },
+        "secondary": {
+          "pass": 0,
+          "fail": 0,
+          "inconclusive": 400,
+          "n": 400
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "C4.secondaryRates",
+      "status": "pass",
+      "measured": {
+        "eb": {
+          "pass": 0,
+          "fail": 400,
+          "inconclusive": 0,
+          "n": 400
+        },
+        "planet": {
+          "pass": 400,
+          "fail": 0,
+          "inconclusive": 0,
+          "n": 400
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "C5.differenceCoverage",
+      "status": "pass",
+      "measured": {
+        "coverage": 0.69375,
+        "truth": 0.003453603332101318,
+        "n": 800
+      },
+      "note": ""
+    },
+    {
+      "id": "C6.centroidRates",
+      "status": "pass",
+      "measured": {
+        "onTarget": {
+          "pass": 60,
+          "fail": 0,
+          "inconclusive": 0,
+          "n": 60
+        },
+        "blend": {
+          "pass": 0,
+          "fail": 60,
+          "inconclusive": 0,
+          "n": 60
+        },
+        "lowPower": {
+          "pass": 0,
+          "fail": 0,
+          "inconclusive": 60,
+          "n": 60
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "C7.centroidCoverage",
+      "status": "pass",
+      "measured": {
+        "coverage": 0.6833333333333333,
+        "values": 240
+      },
+      "note": ""
+    },
+    {
+      "id": "C8.blindSpotsReported",
+      "status": "report",
+      "measured": {
+        "twinOddEven": {
+          "pass": 84,
+          "fail": 316,
+          "inconclusive": 0,
+          "n": 400
+        },
+        "twinSecondary": {
+          "pass": 400,
+          "fail": 0,
+          "inconclusive": 0,
+          "n": 400
+        },
+        "differenceTwentyPercentOddEven": {
+          "pass": 0,
+          "fail": 400,
+          "inconclusive": 0,
+          "n": 400
+        },
+        "centroidBlendClose": {
+          "pass": 57,
+          "fail": 3,
+          "inconclusive": 0,
+          "n": 60
+        },
+        "eccentricSecondaryAtHalfPhase": {
+          "pass": 200,
+          "fail": 0,
+          "inconclusive": 0,
+          "n": 200
+        },
+        "twinEqualLimbDarkeningOddEven": {
+          "pass": 399,
+          "fail": 1,
+          "inconclusive": 0,
+          "n": 400
+        },
+        "twinEqualLimbDarkeningSecondary": {
+          "pass": 400,
+          "fail": 0,
+          "inconclusive": 0,
+          "n": 400
+        },
+        "powerLadder": [
+          {
+            "sigmaPoint": 0.0004,
+            "equalDepths": {
+              "pass": 200,
+              "fail": 0,
+              "inconclusive": 0,
+              "n": 200
+            },
+            "twentyPercent": {
+              "pass": 0,
+              "fail": 200,
+              "inconclusive": 0,
+              "n": 200
+            },
+            "minDetectableShareOfDepth": 0.0132352474551695
+          },
+          {
+            "sigmaPoint": 0.002,
+            "equalDepths": {
+              "pass": 200,
+              "fail": 0,
+              "inconclusive": 0,
+              "n": 200
+            },
+            "twentyPercent": {
+              "pass": 0,
+              "fail": 200,
+              "inconclusive": 0,
+              "n": 200
+            },
+            "minDetectableShareOfDepth": 0.06625217400906942
+          },
+          {
+            "sigmaPoint": 0.006,
+            "equalDepths": {
+              "pass": 200,
+              "fail": 0,
+              "inconclusive": 0,
+              "n": 200
+            },
+            "twentyPercent": {
+              "pass": 99,
+              "fail": 101,
+              "inconclusive": 0,
+              "n": 200
+            },
+            "minDetectableShareOfDepth": 0.1994530364865324
+          },
+          {
+            "sigmaPoint": 0.012,
+            "equalDepths": {
+              "pass": 200,
+              "fail": 0,
+              "inconclusive": 0,
+              "n": 200
+            },
+            "twentyPercent": {
+              "pass": 187,
+              "fail": 13,
+              "inconclusive": 0,
+              "n": 200
+            },
+            "minDetectableShareOfDepth": 0.4016877627207026
+          },
+          {
+            "sigmaPoint": 0.032,
+            "equalDepths": {
+              "pass": 0,
+              "fail": 0,
+              "inconclusive": 200,
+              "n": 200
+            },
+            "twentyPercent": {
+              "pass": 0,
+              "fail": 3,
+              "inconclusive": 197,
+              "n": 200
+            },
+            "minDetectableShareOfDepth": 1.113664155787329
+          }
+        ]
+      },
+      "note": "twins pass by construction; a difference of 20 per cent of the depth is below what the test excludes; a neighbour 0.15 px away is inside the exclusion radius; a secondary away from phase 0.5 is not searched"
+    },
+    {
+      "id": "D1.tooFewTransits",
+      "status": "pass",
+      "measured": {
+        "oddEven": [
+          "inconclusive",
+          "too-few-transits"
+        ],
+        "secondary": [
+          "inconclusive",
+          "no-coverage"
+        ],
+        "unused": true
+      },
+      "note": ""
+    },
+    {
+      "id": "D2.noSignal",
+      "status": "pass",
+      "measured": {
+        "pass": 0,
+        "fail": 0,
+        "n": 200
+      },
+      "note": ""
+    },
+    {
+      "id": "D3.frameRefusals",
+      "status": "pass",
+      "measured": {
+        "few": "too-few-frames",
+        "falseRejections": 0,
+        "largeExclusionPasses": 0,
+        "edge": [
+          "inconclusive",
+          "centroid-edge"
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "D4.invalidInputs",
+      "status": "pass",
+      "measured": {
+        "threw": 5,
+        "of": 5
+      },
+      "note": ""
+    },
+    {
+      "id": "D5.summaryNeverPlanet",
+      "status": "pass",
+      "measured": {
+        "violations": 0,
+        "summaries": 160
+      },
+      "note": ""
+    },
+    {
+      "id": "E1.authenticHd209458",
+      "status": "pass",
+      "measured": {
+        "data": "HD 209458, TESS sector 56",
+        "ephemeris": {
+          "P": 3.52474859,
+          "t0": 2826.780208333327,
+          "duration": 0.12916666666666668
+        },
+        "oddEven": {
+          "verdict": "pass",
+          "reason": "depths-agree",
+          "difference": -0.00009408106351234402,
+          "sigma": 0.00011516161804652656,
+          "z": 0.8169480865954335,
+          "power": 0.00034548485413957966,
+          "depth": 0.015727025953235912
+        },
+        "secondary": {
+          "verdict": "pass",
+          "reason": "not-detected",
+          "depth": 0.00007311812210328033,
+          "sigma": 0.0000750985845597801,
+          "ratio": 0.004649419496612394
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "E2.authenticKepler13",
+      "status": "pass",
+      "measured": {
+        "data": "Kepler-13, TESS sector 14, SAP",
+        "ephemeris": {
+          "P": 1.763588,
+          "t0": 1683.5641666666656,
+          "duration": 0.13749999999999998
+        },
+        "oddEven": {
+          "verdict": "pass",
+          "reason": "depths-agree",
+          "difference": 8.604599619280173e-8,
+          "sigma": 0.0002464483128294825,
+          "z": 0.00034914418851119067,
+          "power": 0.0007393449384884475,
+          "depth": 0.0043102040643681165
+        },
+        "secondary": {
+          "verdict": "pass",
+          "reason": "not-detected",
+          "depth": 0.00010878536049271937,
+          "sigma": 0.00009651855745421643,
+          "ratio": 0.025231821737294463
+        }
+      },
+      "note": ""
+    }
+  ]
+}

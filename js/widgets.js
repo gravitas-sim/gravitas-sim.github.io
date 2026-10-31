@@ -470,6 +470,12 @@ export const LAZY_FAMILIES = Object.freeze({
     'TELESCOPE_WIDGETS',
     ['telescope']
   ),
+  vetting: familyEntry(
+    () => import('./vettingWidgets.js'),
+    './vettingWidgets.js',
+    'VETTING_WIDGETS',
+    ['vetting-checklist']
+  ),
 });
 // </generated:lazy-families>
 
@@ -676,6 +682,8 @@ export async function whenWidgetsReady() {
     'activity',
     // The remnants family reaches the plot component and the kernel: late for the same reason (Prompt 222).
     'remnants',
+    // The vetting family reaches the plot component, the frame forward model and the measurement kernel: late for the same reason (Prompt 228).
+    'vetting',
     'surveyDesign',
   ];
   await Promise.all(families.filter(f => !late.includes(f)).map(loadFamily));
