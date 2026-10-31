@@ -53,5 +53,8 @@
       {"id": "space-6m-visible", "apertureM": 6.0, "wavelengthM": 5.5e-7, "innerWorkingLambdaOverD": 3, "contrastFloor": 1e-10}
     ]
   },
-  "amendments": []
+  "amendments": [
+    {"id": "AM1", "date": "2026-10-31", "before": "no kernel output had been inspected for A5's wording", "change": "wording only: A5's name wrote the redistribution factor twice (T*(R*/2a)^(1/2)((1-A_B) f)^(1/4) with f = 1/4); the quantity checked is T_eq = T* (R*/a)^(1/2) ((1 - A_B) f)^(1/4), which for f = 1/4 equals T* (R*/2a)^(1/2) (1 - A_B)^(1/4). The bound (1e-9) and the check are unchanged.", "boundMoved": false},
+    {"id": "AM2", "date": "2026-10-31", "before": "the validator had run against the kernel once; every committed bound passed", "change": "the oracle's Planck function is written from astropy's constants rather than taken from astropy.modeling's BlackBody, which does not import in this environment (no PyYAML); the contract's wording 'independent implementation (numpy, scipy, astropy)' is unchanged and the oracle docstring says which parts are independent. No bound moved.", "boundMoved": false}
+  ]
 }

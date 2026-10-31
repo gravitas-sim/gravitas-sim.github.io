@@ -96,6 +96,7 @@
     "activity:validate": "node tools/stellar-activity-validate.mjs",
     "remnants:validate": "node tools/remnants-validate.mjs",
     "vetting:validate": "node tools/vetting-validate.mjs",
+    "imaging:validate": "node tools/imaging-validate.mjs",
     "variables-ii:validate": "node tools/variables-ii-validate.mjs",
     "packs:check": "node tools/build-data-packs.mjs --check",
     "sdk": "node sdk/cli.mjs",

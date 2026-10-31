@@ -1,0 +1,4148 @@
+{
+ "format": "gravitas.imaging-oracle/1",
+ "versions": {
+  "python": "3.9.6",
+  "numpy": "1.26.4",
+  "scipy": "1.13.1",
+  "astropy": "6.0.1"
+ },
+ "seed": 230,
+ "mono": [
+  {
+   "starTeffK": 6529.217279144224,
+   "starRadiusM": 690923014.6581666,
+   "planetTeffK": 591.2481552163059,
+   "planetRadiusM": 38921258.6429593,
+   "semiMajorM": 4803394713221.255,
+   "wavelengthM": 8.710046528048348e-06,
+   "contrast": 5.953703791709694e-05
+  },
+  {
+   "starTeffK": 3079.064604298325,
+   "starRadiusM": 211320932.02926514,
+   "planetTeffK": 1404.3870944915298,
+   "planetRadiusM": 131452949.05404119,
+   "semiMajorM": 238981910390.33096,
+   "wavelengthM": 5.5338789519027136e-06,
+   "contrast": 0.09562344875158435
+  },
+  {
+   "starTeffK": 6384.469179383483,
+   "starRadiusM": 1096613945.580388,
+   "planetTeffK": 1498.1887077694792,
+   "planetRadiusM": 74742074.37543145,
+   "semiMajorM": 542573303942.85913,
+   "wavelengthM": 2.2817328194317245e-06,
+   "contrast": 0.00011809499238193386
+  },
+  {
+   "starTeffK": 3022.6313214824186,
+   "starRadiusM": 431681161.1264093,
+   "planetTeffK": 1728.922171903886,
+   "planetRadiusM": 78933397.56226629,
+   "semiMajorM": 5100577594637.164,
+   "wavelengthM": 4.40408662388799e-06,
+   "contrast": 0.011590851322282528
+  },
+  {
+   "starTeffK": 4043.65220560197,
+   "starRadiusM": 240735845.22027853,
+   "planetTeffK": 1007.9434546761689,
+   "planetRadiusM": 47655749.03780634,
+   "semiMajorM": 260692462635.57175,
+   "wavelengthM": 2.8034024378921815e-06,
+   "contrast": 0.0006200010429828302
+  },
+  {
+   "starTeffK": 3835.450878149246,
+   "starRadiusM": 273973933.3974152,
+   "planetTeffK": 100.26634489789184,
+   "planetRadiusM": 23830860.423506655,
+   "semiMajorM": 1022325278749.5925,
+   "wavelengthM": 4.469908888982799e-07,
+   "contrast": 1.2701238843163314e-138
+  },
+  {
+   "starTeffK": 5733.194072043665,
+   "starRadiusM": 779861117.9604369,
+   "planetTeffK": 1447.3995621709707,
+   "planetRadiusM": 57244848.889870726,
+   "semiMajorM": 1280201787883.0376,
+   "wavelengthM": 5.997166465503373e-07,
+   "contrast": 2.2059145764879062e-08
+  },
+  {
+   "starTeffK": 5103.680232566604,
+   "starRadiusM": 1142536917.2876577,
+   "planetTeffK": 1047.7444131701159,
+   "planetRadiusM": 52936624.96375287,
+   "semiMajorM": 128348996503.20721,
+   "wavelengthM": 1.2312350221153114e-06,
+   "contrast": 2.7291492694703064e-07
+  },
+  {
+   "starTeffK": 4518.525487441615,
+   "starRadiusM": 737461784.4894665,
+   "planetTeffK": 1834.8049350661124,
+   "planetRadiusM": 91872324.03524075,
+   "semiMajorM": 525779555278.41724,
+   "wavelengthM": 1.7779647820010387e-05,
+   "contrast": 0.005491202629066886
+  },
+  {
+   "starTeffK": 5181.674977613615,
+   "starRadiusM": 679405088.3688147,
+   "planetTeffK": 1160.2451664079372,
+   "planetRadiusM": 26152383.753345616,
+   "semiMajorM": 965377023183.3453,
+   "wavelengthM": 5.059352652221971e-07,
+   "contrast": 8.086506026828909e-12
+  },
+  {
+   "starTeffK": 3711.4407651070974,
+   "starRadiusM": 268756129.4603521,
+   "planetTeffK": 631.322253849422,
+   "planetRadiusM": 65356533.735716715,
+   "semiMajorM": 893986838864.6279,
+   "wavelengthM": 7.3259499004114765e-06,
+   "contrast": 0.0019239075069085328
+  },
+  {
+   "starTeffK": 3637.2011897709317,
+   "starRadiusM": 455023334.23107654,
+   "planetTeffK": 213.25434840661694,
+   "planetRadiusM": 47937652.60633242,
+   "semiMajorM": 54719364361.29032,
+   "wavelengthM": 6.086872261257324e-07,
+   "contrast": 5.361410373197129e-48
+  },
+  {
+   "starTeffK": 3484.727217425952,
+   "starRadiusM": 465571923.45442736,
+   "planetTeffK": 1676.218041523713,
+   "planetRadiusM": 24661516.673096113,
+   "semiMajorM": 13055531605.423912,
+   "wavelengthM": 9.774447103663173e-07,
+   "contrast": 2.9003428597381408e-05
+  },
+  {
+   "starTeffK": 3602.6700933062766,
+   "starRadiusM": 743515802.0300987,
+   "planetTeffK": 228.5254802273261,
+   "planetRadiusM": 25824240.082367826,
+   "semiMajorM": 1202498268304.751,
+   "wavelengthM": 1.0319651856071308e-06,
+   "contrast": 1.807790300577313e-28
+  },
+  {
+   "starTeffK": 4505.777571964538,
+   "starRadiusM": 1089143056.0164785,
+   "planetTeffK": 1659.502627506743,
+   "planetRadiusM": 140495827.74063993,
+   "semiMajorM": 1316631071328.0417,
+   "wavelengthM": 1.4012322070299055e-05,
+   "contrast": 0.004971945971317917
+  },
+  {
+   "starTeffK": 6132.952824783948,
+   "starRadiusM": 383227104.8119914,
+   "planetTeffK": 1730.6599595501962,
+   "planetRadiusM": 66215166.984695524,
+   "semiMajorM": 529161096369.9922,
+   "wavelengthM": 1.4833076488545529e-05,
+   "contrast": 0.0068071832873841985
+  },
+  {
+   "starTeffK": 5115.453606778023,
+   "starRadiusM": 389775280.43777996,
+   "planetTeffK": 1371.544044481574,
+   "planetRadiusM": 36747343.03382461,
+   "semiMajorM": 21325325994.771152,
+   "wavelengthM": 5.603291662354191e-07,
+   "contrast": 9.891741904376926e-09
+  },
+  {
+   "starTeffK": 6714.336354133577,
+   "starRadiusM": 991733991.189963,
+   "planetTeffK": 842.4921482142505,
+   "planetRadiusM": 74941038.24840562,
+   "semiMajorM": 4942868939191.494,
+   "wavelengthM": 2.5948698830343176e-06,
+   "contrast": 1.0174024774506153e-05
+  },
+  {
+   "starTeffK": 3692.486607953169,
+   "starRadiusM": 944132299.0364363,
+   "planetTeffK": 702.8889537331783,
+   "planetRadiusM": 84285618.98837335,
+   "semiMajorM": 277525482415.82526,
+   "wavelengthM": 9.765113106270062e-07,
+   "contrast": 3.3316020050413533e-10
+  },
+  {
+   "starTeffK": 5782.5716820730695,
+   "starRadiusM": 1131503144.5484674,
+   "planetTeffK": 1364.237370865485,
+   "planetRadiusM": 125319328.94342159,
+   "semiMajorM": 32345628230.37484,
+   "wavelengthM": 9.61879355108071e-07,
+   "contrast": 2.6085356613029203e-06
+  },
+  {
+   "starTeffK": 4713.8310709549905,
+   "starRadiusM": 433427315.1273149,
+   "planetTeffK": 418.2933945914522,
+   "planetRadiusM": 55698218.01415631,
+   "semiMajorM": 218662348555.88818,
+   "wavelengthM": 9.853059354242173e-07,
+   "contrast": 2.4110351683139164e-16
+  },
+  {
+   "starTeffK": 6123.056520580756,
+   "starRadiusM": 381218741.4278363,
+   "planetTeffK": 1753.999579620879,
+   "planetRadiusM": 43206105.15953018,
+   "semiMajorM": 33575602896.890354,
+   "wavelengthM": 1.6712907628397672e-06,
+   "contrast": 0.0002943610125404231
+  },
+  {
+   "starTeffK": 6903.672789432553,
+   "starRadiusM": 701483811.2347594,
+   "planetTeffK": 222.76513626222498,
+   "planetRadiusM": 37362755.681127034,
+   "semiMajorM": 82533307514.32166,
+   "wavelengthM": 6.70321409105909e-07,
+   "contrast": 8.667340249157073e-44
+  },
+  {
+   "starTeffK": 6908.313795597963,
+   "starRadiusM": 1199577298.157436,
+   "planetTeffK": 892.6764098984278,
+   "planetRadiusM": 42152217.67050481,
+   "semiMajorM": 4903000668869.3955,
+   "wavelengthM": 2.9416374013517893e-06,
+   "contrast": 5.329140456452663e-06
+  },
+  {
+   "starTeffK": 3426.7988018458827,
+   "starRadiusM": 370735715.40996844,
+   "planetTeffK": 1091.359741168028,
+   "planetRadiusM": 22451641.88761819,
+   "semiMajorM": 1903343347472.8315,
+   "wavelengthM": 8.594157908775551e-06,
+   "contrast": 0.0006352797711857487
+  },
+  {
+   "starTeffK": 5263.700514008338,
+   "starRadiusM": 344361113.4041988,
+   "planetTeffK": 1534.0749217822554,
+   "planetRadiusM": 58324417.05530149,
+   "semiMajorM": 6680661192704.054,
+   "wavelengthM": 8.687448917097147e-06,
+   "contrast": 0.005457876105826766
+  },
+  {
+   "starTeffK": 6858.490262921874,
+   "starRadiusM": 694804873.780774,
+   "planetTeffK": 881.0156507881225,
+   "planetRadiusM": 76578599.6520167,
+   "semiMajorM": 19045696461.675476,
+   "wavelengthM": 1.1434665646573452e-05,
+   "contrast": 0.0007713666213711825
+  },
+  {
+   "starTeffK": 4621.933374025655,
+   "starRadiusM": 432232998.4801387,
+   "planetTeffK": 1827.290871617568,
+   "planetRadiusM": 26402565.36127325,
+   "semiMajorM": 1733703495945.8137,
+   "wavelengthM": 8.820057851806316e-06,
+   "contrast": 0.0010953521460308902
+  },
+  {
+   "starTeffK": 3100.606271802551,
+   "starRadiusM": 1016233402.342167,
+   "planetTeffK": 814.1930529588251,
+   "planetRadiusM": 66482286.27291346,
+   "semiMajorM": 623237719179.4357,
+   "wavelengthM": 3.328602476524767e-06,
+   "contrast": 6.450208549869115e-05
+  },
+  {
+   "starTeffK": 3402.4841676731926,
+   "starRadiusM": 820065663.3810579,
+   "planetTeffK": 1451.8339073122345,
+   "planetRadiusM": 39107867.51162076,
+   "semiMajorM": 203330958613.5047,
+   "wavelengthM": 1.3122075547944741e-06,
+   "contrast": 2.8776201487637007e-05
+  },
+  {
+   "starTeffK": 4484.208486706788,
+   "starRadiusM": 704899064.5027043,
+   "planetTeffK": 840.7406982660613,
+   "planetRadiusM": 73220643.40542485,
+   "semiMajorM": 1436288970181.2305,
+   "wavelengthM": 9.384163976229951e-07,
+   "contrast": 3.833058284797367e-09
+  },
+  {
+   "starTeffK": 5805.973013480076,
+   "starRadiusM": 209061835.30887085,
+   "planetTeffK": 1128.3894269458165,
+   "planetRadiusM": 139734499.4362672,
+   "semiMajorM": 1453972432554.3381,
+   "wavelengthM": 1.5649388846647532e-06,
+   "contrast": 0.0005007311432968621
+  },
+  {
+   "starTeffK": 4713.154980791514,
+   "starRadiusM": 946972817.3221753,
+   "planetTeffK": 1983.1988698352832,
+   "planetRadiusM": 32892697.430125676,
+   "semiMajorM": 1477764473171.3035,
+   "wavelengthM": 6.433995756117617e-07,
+   "contrast": 1.74296348475858e-06
+  },
+  {
+   "starTeffK": 6289.597086500749,
+   "starRadiusM": 799747421.3007096,
+   "planetTeffK": 465.2371100133416,
+   "planetRadiusM": 65131855.57879718,
+   "semiMajorM": 138236752921.00082,
+   "wavelengthM": 1.3580494142483285e-06,
+   "contrast": 3.752156911860386e-12
+  },
+  {
+   "starTeffK": 6670.38780873894,
+   "starRadiusM": 674677736.9937395,
+   "planetTeffK": 657.996491941397,
+   "planetRadiusM": 56369708.02889827,
+   "semiMajorM": 127451192997.71162,
+   "wavelengthM": 1.6151160078395975e-05,
+   "contrast": 0.00034724599713538
+  },
+  {
+   "starTeffK": 4619.7239742440215,
+   "starRadiusM": 319459084.62962085,
+   "planetTeffK": 1276.3587225860736,
+   "planetRadiusM": 27854628.10026664,
+   "semiMajorM": 47190494041.52027,
+   "wavelengthM": 6.925713000472664e-06,
+   "contrast": 0.0010550292808873402
+  },
+  {
+   "starTeffK": 4884.568317631937,
+   "starRadiusM": 1143856801.5317018,
+   "planetTeffK": 1151.8640505948606,
+   "planetRadiusM": 39528264.78715439,
+   "semiMajorM": 4291149136662.97,
+   "wavelengthM": 1.0516964596147505e-06,
+   "contrast": 1.282775326751198e-07
+  },
+  {
+   "starTeffK": 4852.079996936538,
+   "starRadiusM": 812856815.8671032,
+   "planetTeffK": 945.6324620861394,
+   "planetRadiusM": 90153930.33638076,
+   "semiMajorM": 15874699906.419147,
+   "wavelengthM": 2.9777401553265807e-06,
+   "contrast": 0.00012756446961853643
+  },
+  {
+   "starTeffK": 4429.812660301914,
+   "starRadiusM": 267961143.8082071,
+   "planetTeffK": 934.4215475787706,
+   "planetRadiusM": 52967484.4230938,
+   "semiMajorM": 1413236197362.0085,
+   "wavelengthM": 1.1556653667300979e-06,
+   "contrast": 9.980672073193348e-07
+  },
+  {
+   "starTeffK": 5774.089339859098,
+   "starRadiusM": 1337583473.46802,
+   "planetTeffK": 1553.884872754755,
+   "planetRadiusM": 62937126.7968641,
+   "semiMajorM": 9178370163821.607,
+   "wavelengthM": 2.2833487464919883e-06,
+   "contrast": 7.725067407783377e-05
+  },
+  {
+   "starTeffK": 6024.311163651404,
+   "starRadiusM": 277336371.29379857,
+   "planetTeffK": 600.7237621129129,
+   "planetRadiusM": 74107445.02185307,
+   "semiMajorM": 2266660340318.472,
+   "wavelengthM": 2.360002908405685e-06,
+   "contrast": 4.892666922457152e-06
+  },
+  {
+   "starTeffK": 4446.236431013498,
+   "starRadiusM": 795323146.7029148,
+   "planetTeffK": 1292.9035170508005,
+   "planetRadiusM": 93743449.07893562,
+   "semiMajorM": 12153294206.284872,
+   "wavelengthM": 7.492154211189612e-06,
+   "contrast": 0.0021967488153028128
+  },
+  {
+   "starTeffK": 4937.3577264274645,
+   "starRadiusM": 1171035904.6543193,
+   "planetTeffK": 1648.983427665264,
+   "planetRadiusM": 29462089.34487074,
+   "semiMajorM": 213559555172.82123,
+   "wavelengthM": 7.626120938258573e-06,
+   "contrast": 0.00013767173655647818
+  },
+  {
+   "starTeffK": 4570.927256058963,
+   "starRadiusM": 333460304.14766735,
+   "planetTeffK": 156.0940554270177,
+   "planetRadiusM": 130027424.34246212,
+   "semiMajorM": 4578733625968.441,
+   "wavelengthM": 1.159609024081094e-06,
+   "contrast": 6.46185477124179e-35
+  },
+  {
+   "starTeffK": 3507.3827729881395,
+   "starRadiusM": 1047256544.0181603,
+   "planetTeffK": 1788.7878079518725,
+   "planetRadiusM": 49668948.23250262,
+   "semiMajorM": 203939614487.98917,
+   "wavelengthM": 1.4303815477024882e-06,
+   "contrast": 0.00013539638342425163
+  },
+  {
+   "starTeffK": 3862.4412636490306,
+   "starRadiusM": 485860078.1491685,
+   "planetTeffK": 583.3853142618179,
+   "planetRadiusM": 84119638.3138951,
+   "semiMajorM": 15130372212.691198,
+   "wavelengthM": 8.883954360102137e-06,
+   "contrast": 0.0010370911283771476
+  },
+  {
+   "starTeffK": 3999.2548440175024,
+   "starRadiusM": 310725904.5789621,
+   "planetTeffK": 1077.7993500187868,
+   "planetRadiusM": 23517861.48310343,
+   "semiMajorM": 117416534681.31068,
+   "wavelengthM": 8.399104122089467e-06,
+   "contrast": 0.0007852629117966855
+  },
+  {
+   "starTeffK": 5715.286505160993,
+   "starRadiusM": 302394905.613961,
+   "planetTeffK": 1589.6013128816999,
+   "planetRadiusM": 26650110.846091326,
+   "semiMajorM": 3167463547172.744,
+   "wavelengthM": 7.209398711260501e-06,
+   "contrast": 0.0012934498701014448
+  },
+  {
+   "starTeffK": 6200.022769579904,
+   "starRadiusM": 1054516900.6344447,
+   "planetTeffK": 782.7795762317495,
+   "planetRadiusM": 33499799.739995636,
+   "semiMajorM": 4149774288028.003,
+   "wavelengthM": 1.073293097030001e-06,
+   "contrast": 2.834674762038305e-10
+  },
+  {
+   "starTeffK": 5640.319252788759,
+   "starRadiusM": 299038676.94581735,
+   "planetTeffK": 174.26740461421758,
+   "planetRadiusM": 41996946.51897687,
+   "semiMajorM": 8101079982.45326,
+   "wavelengthM": 4.437085632384187e-07,
+   "contrast": 9.563068618371544e-81
+  },
+  {
+   "starTeffK": 4326.12880834964,
+   "starRadiusM": 519968126.4478797,
+   "planetTeffK": 680.5714120986288,
+   "planetRadiusM": 22733286.14173517,
+   "semiMajorM": 72332839229.48523,
+   "wavelengthM": 4.720363071225078e-07,
+   "contrast": 7.770639060242946e-20
+  },
+  {
+   "starTeffK": 3993.266861173494,
+   "starRadiusM": 900239140.488058,
+   "planetTeffK": 464.759500613122,
+   "planetRadiusM": 24851235.921336927,
+   "semiMajorM": 116903419327.92142,
+   "wavelengthM": 7.701560506681384e-06,
+   "contrast": 8.313300628812797e-06
+  },
+  {
+   "starTeffK": 6231.212428809924,
+   "starRadiusM": 649526051.2556503,
+   "planetTeffK": 375.1429022208631,
+   "planetRadiusM": 59418317.9144361,
+   "semiMajorM": 2114383797336.7498,
+   "wavelengthM": 2.4145250291975556e-06,
+   "contrast": 1.693952660408082e-09
+  },
+  {
+   "starTeffK": 3097.219089942286,
+   "starRadiusM": 1036667441.9412855,
+   "planetTeffK": 1898.3501513654958,
+   "planetRadiusM": 39652264.36328413,
+   "semiMajorM": 235997218109.82996,
+   "wavelengthM": 1.6337689958775734e-05,
+   "contrast": 0.0008151615399147864
+  },
+  {
+   "starTeffK": 6341.506307627662,
+   "starRadiusM": 236710012.24425304,
+   "planetTeffK": 706.4583254177564,
+   "planetRadiusM": 104766444.88117877,
+   "semiMajorM": 425999601065.584,
+   "wavelengthM": 1.3241262171316815e-06,
+   "contrast": 1.8623608070686297e-07
+  },
+  {
+   "starTeffK": 6687.187054568785,
+   "starRadiusM": 1021251093.4208951,
+   "planetTeffK": 726.445223770024,
+   "planetRadiusM": 96135772.01663125,
+   "semiMajorM": 43377384093.57001,
+   "wavelengthM": 9.657109808241835e-07,
+   "contrast": 9.091768368441188e-11
+  },
+  {
+   "starTeffK": 5965.146791493126,
+   "starRadiusM": 297823410.3231975,
+   "planetTeffK": 1573.4136971221048,
+   "planetRadiusM": 62879751.55704334,
+   "semiMajorM": 144341848307.1216,
+   "wavelengthM": 2.36613485256535e-06,
+   "contrast": 0.0016913696095440136
+  },
+  {
+   "starTeffK": 6755.00478655143,
+   "starRadiusM": 220474697.69769835,
+   "planetTeffK": 347.7746463495754,
+   "planetRadiusM": 68420136.80434155,
+   "semiMajorM": 16055967447.270157,
+   "wavelengthM": 1.4882623565479349e-06,
+   "contrast": 2.5940304300823354e-13
+  },
+  {
+   "starTeffK": 5967.477024269483,
+   "starRadiusM": 771902104.391205,
+   "planetTeffK": 1204.7910024211599,
+   "planetRadiusM": 89922535.43425621,
+   "semiMajorM": 8400646462.614596,
+   "wavelengthM": 5.541549403729338e-07,
+   "contrast": 4.543578743878445e-10
+  },
+  {
+   "starTeffK": 4229.096429797211,
+   "starRadiusM": 824261432.9731632,
+   "planetTeffK": 946.2547213452902,
+   "planetRadiusM": 56553994.53402929,
+   "semiMajorM": 100993923821.27956,
+   "wavelengthM": 3.0783509204836358e-06,
+   "contrast": 6.856302121332794e-05
+  }
+ ],
+ "band": [
+  {
+   "starTeffK": 4476.0823046620835,
+   "starRadiusM": 1037377244.1835091,
+   "planetTeffK": 201.62510772053815,
+   "planetRadiusM": 30158924.04852493,
+   "semiMajorM": 24929218299.27802,
+   "lambdaMinM": 9.407782777818707e-07,
+   "lambdaMaxM": 2.1859529589455883e-06,
+   "contrast": 3.4730392835608505e-19
+  },
+  {
+   "starTeffK": 4405.847673649774,
+   "starRadiusM": 381859693.5029073,
+   "planetTeffK": 1081.7394281885397,
+   "planetRadiusM": 55320140.478998445,
+   "semiMajorM": 1571660673733.5835,
+   "lambdaMinM": 1.1360078962045981e-06,
+   "lambdaMaxM": 2.1646414382134017e-06,
+   "contrast": 3.555480738524758e-05
+  },
+  {
+   "starTeffK": 4773.199935277988,
+   "starRadiusM": 220416654.69096756,
+   "planetTeffK": 974.9279331151083,
+   "planetRadiusM": 103240644.85844256,
+   "semiMajorM": 775462253301.1146,
+   "lambdaMinM": 2.7972369951255817e-06,
+   "lambdaMaxM": 3.2486541446656095e-06,
+   "contrast": 0.002816610663396879
+  },
+  {
+   "starTeffK": 3405.6450237191057,
+   "starRadiusM": 1268625411.2553804,
+   "planetTeffK": 130.81837011939888,
+   "planetRadiusM": 31639736.500633616,
+   "semiMajorM": 4243004492452.3145,
+   "lambdaMinM": 1.3582670272114214e-06,
+   "lambdaMaxM": 3.2870095733169215e-06,
+   "contrast": 7.155627073726505e-20
+  },
+  {
+   "starTeffK": 6468.028276379639,
+   "starRadiusM": 245325372.69820988,
+   "planetTeffK": 1560.1794502303517,
+   "planetRadiusM": 22738853.326948445,
+   "semiMajorM": 609275051436.6893,
+   "lambdaMinM": 4.948961650602706e-06,
+   "lambdaMaxM": 1.034920227129116e-05,
+   "contrast": 0.001093827565835707
+  },
+  {
+   "starTeffK": 5084.41338309424,
+   "starRadiusM": 858849503.1553068,
+   "planetTeffK": 836.2855618990313,
+   "planetRadiusM": 126254227.52079612,
+   "semiMajorM": 65969305384.08988,
+   "lambdaMinM": 4.144105659353333e-06,
+   "lambdaMaxM": 9.08390530601124e-06,
+   "contrast": 0.0006565610980968942
+  },
+  {
+   "starTeffK": 6552.7158430032605,
+   "starRadiusM": 655613502.1086317,
+   "planetTeffK": 1254.6885680128448,
+   "planetRadiusM": 103923062.02896328,
+   "semiMajorM": 13624780734.319662,
+   "lambdaMinM": 5.054350710324791e-06,
+   "lambdaMaxM": 1.4843541570602408e-05,
+   "contrast": 0.002157994841909478
+  },
+  {
+   "starTeffK": 5605.797215944675,
+   "starRadiusM": 289202526.43293,
+   "planetTeffK": 843.7433799584977,
+   "planetRadiusM": 46055811.81236932,
+   "semiMajorM": 30799651405.292114,
+   "lambdaMinM": 3.393868249455537e-06,
+   "lambdaMaxM": 9.133511198440216e-06,
+   "contrast": 0.0005047844872943061
+  },
+  {
+   "starTeffK": 3307.39942861165,
+   "starRadiusM": 942248095.5648588,
+   "planetTeffK": 1700.2258685522315,
+   "planetRadiusM": 31267066.457043763,
+   "semiMajorM": 258007668697.73724,
+   "lambdaMinM": 6.369254417380673e-07,
+   "lambdaMaxM": 1.6269978281351303e-06,
+   "contrast": 2.840979588255978e-05
+  },
+  {
+   "starTeffK": 4260.01895490638,
+   "starRadiusM": 209423007.10547122,
+   "planetTeffK": 1314.8442297213587,
+   "planetRadiusM": 25230057.75690048,
+   "semiMajorM": 54715653425.11386,
+   "lambdaMinM": 4.722767155280607e-06,
+   "lambdaMaxM": 1.1921165708412358e-05,
+   "contrast": 0.002175069405388674
+  },
+  {
+   "starTeffK": 5534.685782420285,
+   "starRadiusM": 304830425.651355,
+   "planetTeffK": 1562.056244785089,
+   "planetRadiusM": 28217884.56882513,
+   "semiMajorM": 788112959397.4097,
+   "lambdaMinM": 4.0820562535383206e-07,
+   "lambdaMaxM": 1.0231729228216607e-06,
+   "contrast": 1.7890451547094585e-06
+  },
+  {
+   "starTeffK": 3993.5125882076945,
+   "starRadiusM": 989821598.8427943,
+   "planetTeffK": 127.200693037729,
+   "planetRadiusM": 113222103.46438016,
+   "semiMajorM": 16807014294.267107,
+   "lambdaMinM": 7.433611822505648e-06,
+   "lambdaMaxM": 1.6641384493030207e-05,
+   "contrast": 2.643577164294691e-07
+  },
+  {
+   "starTeffK": 6295.437940151562,
+   "starRadiusM": 1279301300.3224645,
+   "planetTeffK": 967.3681741250331,
+   "planetRadiusM": 48700503.00319079,
+   "semiMajorM": 39514607712.72577,
+   "lambdaMinM": 1.8427838174162813e-06,
+   "lambdaMaxM": 2.433964902501752e-06,
+   "contrast": 2.489066289236527e-06
+  },
+  {
+   "starTeffK": 6480.730589020679,
+   "starRadiusM": 304547722.0481561,
+   "planetTeffK": 819.7817063277749,
+   "planetRadiusM": 102635893.46942846,
+   "semiMajorM": 2051689017163.0383,
+   "lambdaMinM": 6.331404491362684e-07,
+   "lambdaMaxM": 1.4441806869710734e-06,
+   "contrast": 1.3668692944991467e-07
+  },
+  {
+   "starTeffK": 5757.00942504446,
+   "starRadiusM": 593819286.6483586,
+   "planetTeffK": 1005.7735250530632,
+   "planetRadiusM": 35027987.30231609,
+   "semiMajorM": 21232671510.128452,
+   "lambdaMinM": 5.7527490802610455e-06,
+   "lambdaMaxM": 8.173921342313858e-06,
+   "contrast": 0.00020956799022364098
+  },
+  {
+   "starTeffK": 6357.4106729698915,
+   "starRadiusM": 1213712943.7208865,
+   "planetTeffK": 1378.5689500552282,
+   "planetRadiusM": 48502256.78784995,
+   "semiMajorM": 9758499555552.402,
+   "lambdaMinM": 4.825110388143153e-06,
+   "lambdaMaxM": 9.084152897253933e-06,
+   "contrast": 0.00015648976720768215
+  },
+  {
+   "starTeffK": 6120.400618738793,
+   "starRadiusM": 267738491.97115865,
+   "planetTeffK": 1718.6171577600528,
+   "planetRadiusM": 52292581.88936953,
+   "semiMajorM": 4732842344513.698,
+   "lambdaMinM": 6.488080317082221e-07,
+   "lambdaMaxM": 1.510770800039319e-06,
+   "contrast": 0.00010209730472291771
+  },
+  {
+   "starTeffK": 4157.136568199796,
+   "starRadiusM": 1272959314.108851,
+   "planetTeffK": 885.5689517548309,
+   "planetRadiusM": 72085482.32061921,
+   "semiMajorM": 59564405433.53818,
+   "lambdaMinM": 4.542469884984032e-06,
+   "lambdaMaxM": 1.3125326589035682e-05,
+   "contrast": 0.0001877810497594296
+  },
+  {
+   "starTeffK": 6480.14482631594,
+   "starRadiusM": 1153914267.96764,
+   "planetTeffK": 526.2250308591516,
+   "planetRadiusM": 84501560.5213997,
+   "semiMajorM": 57325571996.71196,
+   "lambdaMinM": 1.2111490061977771e-06,
+   "lambdaMaxM": 2.4874131401642095e-06,
+   "contrast": 8.576401434289067e-09
+  },
+  {
+   "starTeffK": 5373.804189823884,
+   "starRadiusM": 401397015.15903765,
+   "planetTeffK": 956.3749726053435,
+   "planetRadiusM": 87815691.38737722,
+   "semiMajorM": 22934698487.809284,
+   "lambdaMinM": 4.122520111020583e-06,
+   "lambdaMaxM": 1.0944035374524958e-05,
+   "contrast": 0.0021214087759904654
+  },
+  {
+   "starTeffK": 5634.4726342396625,
+   "starRadiusM": 355695618.9544932,
+   "planetTeffK": 291.21358370790256,
+   "planetRadiusM": 89642829.1286705,
+   "semiMajorM": 502513299399.7982,
+   "lambdaMinM": 4.983444914813347e-07,
+   "lambdaMaxM": 8.767909737165102e-07,
+   "contrast": 1.120907177081474e-26
+  },
+  {
+   "starTeffK": 4270.59483531457,
+   "starRadiusM": 324989215.34237474,
+   "planetTeffK": 1353.0598199218166,
+   "planetRadiusM": 83490070.22006674,
+   "semiMajorM": 2271376361771.739,
+   "lambdaMinM": 7.277974789207253e-07,
+   "lambdaMaxM": 1.1467237964080216e-06,
+   "contrast": 3.272262280054838e-05
+  },
+  {
+   "starTeffK": 3477.9573072286303,
+   "starRadiusM": 1093463879.6545684,
+   "planetTeffK": 137.90238363551492,
+   "planetRadiusM": 121660963.68557653,
+   "semiMajorM": 622659306169.198,
+   "lambdaMinM": 2.696304979306249e-06,
+   "lambdaMaxM": 5.372806103236247e-06,
+   "contrast": 1.8032034322811358e-12
+  },
+  {
+   "starTeffK": 4428.5609631307525,
+   "starRadiusM": 876894562.9110004,
+   "planetTeffK": 542.1843853125548,
+   "planetRadiusM": 34450163.86288542,
+   "semiMajorM": 2001287452727.7837,
+   "lambdaMinM": 5.1690918447011974e-06,
+   "lambdaMaxM": 1.55047558094912e-05,
+   "contrast": 2.3331251806113427e-05
+  },
+  {
+   "starTeffK": 3348.7000671482215,
+   "starRadiusM": 761764888.8433665,
+   "planetTeffK": 1880.737399668096,
+   "planetRadiusM": 54734670.24635236,
+   "semiMajorM": 2412878944472.0024,
+   "lambdaMinM": 5.382833186838624e-07,
+   "lambdaMaxM": 9.874365188351217e-07,
+   "contrast": 7.83147345665382e-05
+  },
+  {
+   "starTeffK": 3315.6843829082413,
+   "starRadiusM": 463270769.76546377,
+   "planetTeffK": 1976.1345172354233,
+   "planetRadiusM": 40149632.20389949,
+   "semiMajorM": 883651438426.9329,
+   "lambdaMinM": 7.74342967080931e-06,
+   "lambdaMaxM": 1.5319179245782588e-05,
+   "contrast": 0.0037884402792858827
+  },
+  {
+   "starTeffK": 4208.525662003678,
+   "starRadiusM": 415624839.8075755,
+   "planetTeffK": 1905.6017779141685,
+   "planetRadiusM": 34972894.394952685,
+   "semiMajorM": 12379756479.098198,
+   "lambdaMinM": 7.992836937085393e-07,
+   "lambdaMaxM": 1.943229320218048e-06,
+   "contrast": 0.00023969799779928775
+  },
+  {
+   "starTeffK": 4367.248848351753,
+   "starRadiusM": 476011430.1303995,
+   "planetTeffK": 1500.6256522209121,
+   "planetRadiusM": 30437392.496788792,
+   "semiMajorM": 271600504598.3004,
+   "lambdaMinM": 4.947996321197002e-06,
+   "lambdaMaxM": 1.1712060351901035e-05,
+   "contrast": 0.0007945048233327319
+  },
+  {
+   "starTeffK": 6529.29767666832,
+   "starRadiusM": 625592874.6892831,
+   "planetTeffK": 1519.848598086358,
+   "planetRadiusM": 26194244.997747216,
+   "semiMajorM": 2916512917880.257,
+   "lambdaMinM": 2.1096282484682246e-06,
+   "lambdaMaxM": 5.569647473250192e-06,
+   "contrast": 7.918780226784549e-05
+  },
+  {
+   "starTeffK": 3095.8415678313468,
+   "starRadiusM": 1163822919.1789832,
+   "planetTeffK": 630.2219180513488,
+   "planetRadiusM": 114125651.61101922,
+   "semiMajorM": 658991598082.6777,
+   "lambdaMinM": 4.492549246984839e-07,
+   "lambdaMaxM": 9.582662467544245e-07,
+   "contrast": 6.814686471296179e-12
+  },
+  {
+   "starTeffK": 6580.686889695042,
+   "starRadiusM": 415687370.6515596,
+   "planetTeffK": 1889.7234380491816,
+   "planetRadiusM": 28957744.375322655,
+   "semiMajorM": 11507597136.905014,
+   "lambdaMinM": 4.769237157712691e-07,
+   "lambdaMaxM": 1.057380963966514e-06,
+   "contrast": 4.368446444860501e-06
+  },
+  {
+   "starTeffK": 6506.803705809958,
+   "starRadiusM": 1237772322.496275,
+   "planetTeffK": 306.25711781370455,
+   "planetRadiusM": 22237158.32747104,
+   "semiMajorM": 202871800862.28052,
+   "lambdaMinM": 1.5602846912011733e-06,
+   "lambdaMaxM": 2.272215612479078e-06,
+   "contrast": 5.188689027856962e-14
+  },
+  {
+   "starTeffK": 5846.887083044443,
+   "starRadiusM": 382084655.16211784,
+   "planetTeffK": 184.45741735708316,
+   "planetRadiusM": 33783082.00460157,
+   "semiMajorM": 541727147269.7645,
+   "lambdaMinM": 5.58810505923132e-07,
+   "lambdaMaxM": 7.503932832507892e-07,
+   "contrast": 4.635941944109227e-48
+  },
+  {
+   "starTeffK": 3656.2468523089065,
+   "starRadiusM": 1230547662.432043,
+   "planetTeffK": 1135.1209944378966,
+   "planetRadiusM": 25021010.569245268,
+   "semiMajorM": 7248499193436.302,
+   "lambdaMinM": 1.853914351901409e-06,
+   "lambdaMaxM": 2.803737270838023e-06,
+   "contrast": 7.1160349005184664e-06
+  },
+  {
+   "starTeffK": 3128.1947600245053,
+   "starRadiusM": 784046886.6081487,
+   "planetTeffK": 1841.3182415750623,
+   "planetRadiusM": 29609311.234542914,
+   "semiMajorM": 2104574731661.3835,
+   "lambdaMinM": 2.4385943836331104e-06,
+   "lambdaMaxM": 5.464323511394878e-06,
+   "contrast": 0.0004386835241163784
+  },
+  {
+   "starTeffK": 3105.181076007026,
+   "starRadiusM": 742369664.2463621,
+   "planetTeffK": 298.9441012315576,
+   "planetRadiusM": 60339482.39128118,
+   "semiMajorM": 60236865693.7331,
+   "lambdaMinM": 2.985658233605633e-06,
+   "lambdaMaxM": 5.693374796498011e-06,
+   "contrast": 1.970135361873805e-07
+  },
+  {
+   "starTeffK": 4781.266049264414,
+   "starRadiusM": 568777775.4802109,
+   "planetTeffK": 565.7461854967321,
+   "planetRadiusM": 111966128.36104134,
+   "semiMajorM": 164378362679.81308,
+   "lambdaMinM": 4.736299932344035e-06,
+   "lambdaMaxM": 1.284523677646665e-05,
+   "contrast": 0.00048763498008876045
+  },
+  {
+   "starTeffK": 4460.187163745861,
+   "starRadiusM": 792656926.8861169,
+   "planetTeffK": 118.10983546718884,
+   "planetRadiusM": 42408832.17272531,
+   "semiMajorM": 342841594831.0158,
+   "lambdaMinM": 9.987598126096613e-07,
+   "lambdaMaxM": 2.770583081762854e-06,
+   "contrast": 4.049768415752878e-24
+  },
+  {
+   "starTeffK": 5494.319124836522,
+   "starRadiusM": 876662728.7227191,
+   "planetTeffK": 1806.6952417188431,
+   "planetRadiusM": 25807391.106109437,
+   "semiMajorM": 8076391021269.501,
+   "lambdaMinM": 2.952030642149252e-06,
+   "lambdaMaxM": 3.6391445371110665e-06,
+   "contrast": 0.00010121042349227514
+  },
+  {
+   "starTeffK": 5796.976321234081,
+   "starRadiusM": 315078126.2798455,
+   "planetTeffK": 1241.3332143208027,
+   "planetRadiusM": 42076294.77861671,
+   "semiMajorM": 41543928945.396454,
+   "lambdaMinM": 3.613531475577774e-06,
+   "lambdaMaxM": 9.404099068406744e-06,
+   "contrast": 0.0011958472377302932
+  }
+ ],
+ "reflected": [
+  {
+   "starTeffK": 4082.5941308151723,
+   "starRadiusM": 266878886.07139966,
+   "planetTeffK": 1803.7727252098243,
+   "planetRadiusM": 61053455.72327519,
+   "semiMajorM": 8432688270.146402,
+   "geometricAlbedo": 0.062260247555813386,
+   "phaseAngleRad": 1.2344561905316482,
+   "contrast": 1.6345028715060561e-06
+  },
+  {
+   "starTeffK": 3738.0659805797604,
+   "starRadiusM": 576230140.6350591,
+   "planetTeffK": 1981.1422248688236,
+   "planetRadiusM": 100655579.43965244,
+   "semiMajorM": 2735578614343.5635,
+   "geometricAlbedo": 0.9758228779048043,
+   "phaseAngleRad": 0.4925862793256692,
+   "contrast": 1.1804230349942384e-09
+  },
+  {
+   "starTeffK": 3686.470323226767,
+   "starRadiusM": 1033991949.9160398,
+   "planetTeffK": 919.2772215450192,
+   "planetRadiusM": 44717854.538568616,
+   "semiMajorM": 7059924395092.836,
+   "geometricAlbedo": 0.5549877620768515,
+   "phaseAngleRad": 1.2968640217134113,
+   "contrast": 1.0360201144445621e-11
+  },
+  {
+   "starTeffK": 5377.741623556349,
+   "starRadiusM": 458851136.64605075,
+   "planetTeffK": 1557.5261045611232,
+   "planetRadiusM": 73484630.48999594,
+   "semiMajorM": 52135171432.59544,
+   "geometricAlbedo": 0.22735712354233095,
+   "phaseAngleRad": 1.1293187365668946,
+   "contrast": 2.5361115171040267e-07
+  },
+  {
+   "starTeffK": 3256.405220800167,
+   "starRadiusM": 212566714.94098458,
+   "planetTeffK": 1155.7617519728485,
+   "planetRadiusM": 51795720.251698375,
+   "semiMajorM": 123347415859.78491,
+   "geometricAlbedo": 0.8926521544291314,
+   "phaseAngleRad": 0.8064660621062354,
+   "contrast": 1.1713375406090166e-07
+  },
+  {
+   "starTeffK": 4575.3212686360785,
+   "starRadiusM": 336145868.2425463,
+   "planetTeffK": 245.22875059673765,
+   "planetRadiusM": 106825482.96154201,
+   "semiMajorM": 3694502871336.092,
+   "geometricAlbedo": 0.9177112494815896,
+   "phaseAngleRad": 1.7616151173640888,
+   "contrast": 1.7587253047984e-10
+  },
+  {
+   "starTeffK": 6975.905622975746,
+   "starRadiusM": 436843059.2951111,
+   "planetTeffK": 129.245332877695,
+   "planetRadiusM": 86380660.7266156,
+   "semiMajorM": 82678836246.15617,
+   "geometricAlbedo": 0.6771618226024126,
+   "phaseAngleRad": 3.009803605988972,
+   "contrast": 1.7920459623142663e-10
+  },
+  {
+   "starTeffK": 4733.962717856721,
+   "starRadiusM": 377787934.4386438,
+   "planetTeffK": 1156.2938479424593,
+   "planetRadiusM": 30080907.553570602,
+   "semiMajorM": 6561348170744.946,
+   "geometricAlbedo": 0.593156410694998,
+   "phaseAngleRad": 1.4350483078575604,
+   "contrast": 4.848386683987967e-12
+  },
+  {
+   "starTeffK": 5334.63977134732,
+   "starRadiusM": 601197394.549194,
+   "planetTeffK": 275.5211380844788,
+   "planetRadiusM": 111371544.65120567,
+   "semiMajorM": 17550847558.876724,
+   "geometricAlbedo": 0.5318987491267491,
+   "phaseAngleRad": 2.0038501113589913,
+   "contrast": 2.9332096701306547e-06
+  },
+  {
+   "starTeffK": 4097.76558189807,
+   "starRadiusM": 357537224.72768307,
+   "planetTeffK": 378.2035947985404,
+   "planetRadiusM": 55591755.525936455,
+   "semiMajorM": 15876003587.21221,
+   "geometricAlbedo": 0.8870063202883673,
+   "phaseAngleRad": 0.23615674160613498,
+   "contrast": 1.0589143847748496e-05
+  },
+  {
+   "starTeffK": 4373.847460969766,
+   "starRadiusM": 225909937.88431925,
+   "planetTeffK": 983.7108761889731,
+   "planetRadiusM": 28574350.838223744,
+   "semiMajorM": 177057636877.8593,
+   "geometricAlbedo": 0.6626056914154415,
+   "phaseAngleRad": 2.275532311275572,
+   "contrast": 1.1026055630127426e-09
+  },
+  {
+   "starTeffK": 5487.078644732168,
+   "starRadiusM": 741692646.2307395,
+   "planetTeffK": 1043.1673983376813,
+   "planetRadiusM": 116399210.19425999,
+   "semiMajorM": 33516502459.44378,
+   "geometricAlbedo": 0.5743408033225093,
+   "phaseAngleRad": 1.529788187058308,
+   "contrast": 2.3488164251362965e-06
+  },
+  {
+   "starTeffK": 5792.836311448589,
+   "starRadiusM": 334843422.1079511,
+   "planetTeffK": 1526.0628246646575,
+   "planetRadiusM": 34003744.957883805,
+   "semiMajorM": 142806404962.80804,
+   "geometricAlbedo": 0.4039986720427069,
+   "phaseAngleRad": 2.548952022060529,
+   "contrast": 4.883266773223184e-10
+  },
+  {
+   "starTeffK": 6095.323712877163,
+   "starRadiusM": 1366452261.218928,
+   "planetTeffK": 1413.1454820163178,
+   "planetRadiusM": 69662369.25972207,
+   "semiMajorM": 29510591091.167973,
+   "geometricAlbedo": 0.6212893924239267,
+   "phaseAngleRad": 2.474359616174252,
+   "contrast": 1.0433660402394363e-07
+  },
+  {
+   "starTeffK": 5352.8450044455185,
+   "starRadiusM": 1118224359.8453655,
+   "planetTeffK": 1437.0939511316842,
+   "planetRadiusM": 46830902.281057686,
+   "semiMajorM": 118307683185.69563,
+   "geometricAlbedo": 0.29784716689368207,
+   "phaseAngleRad": 1.472840595071835,
+   "contrast": 1.7208561454005714e-08
+  },
+  {
+   "starTeffK": 3595.170153624464,
+   "starRadiusM": 961193967.0941172,
+   "planetTeffK": 1181.2170404474427,
+   "planetRadiusM": 30868800.555394597,
+   "semiMajorM": 2945898456669.9165,
+   "geometricAlbedo": 0.8144562080742728,
+   "phaseAngleRad": 0.4455910705620805,
+   "contrast": 8.151849085001642e-11
+  },
+  {
+   "starTeffK": 3232.093093376448,
+   "starRadiusM": 760345668.4287529,
+   "planetTeffK": 1749.7050311864753,
+   "planetRadiusM": 42450616.50379663,
+   "semiMajorM": 115632349186.28992,
+   "geometricAlbedo": 0.22954513748305838,
+   "phaseAngleRad": 2.2222180730360184,
+   "contrast": 2.3416410270264363e-09
+  },
+  {
+   "starTeffK": 6801.7561138982655,
+   "starRadiusM": 248121135.60207507,
+   "planetTeffK": 1553.9880301051933,
+   "planetRadiusM": 129127687.2929286,
+   "semiMajorM": 2207447561188.426,
+   "geometricAlbedo": 0.973733024697085,
+   "phaseAngleRad": 0.6021112071987725,
+   "contrast": 2.8204047135866584e-09
+  },
+  {
+   "starTeffK": 3027.5530985102578,
+   "starRadiusM": 407601553.21365255,
+   "planetTeffK": 1566.5155114584084,
+   "planetRadiusM": 21736867.321519185,
+   "semiMajorM": 1711203192973.086,
+   "geometricAlbedo": 0.04329582970176693,
+   "phaseAngleRad": 1.437754109442783,
+   "contrast": 2.706704023471577e-12
+  },
+  {
+   "starTeffK": 3896.6893083546956,
+   "starRadiusM": 742477328.5812904,
+   "planetTeffK": 275.19390232785656,
+   "planetRadiusM": 66673053.23639066,
+   "semiMajorM": 116561886009.84444,
+   "geometricAlbedo": 0.6730919517827324,
+   "phaseAngleRad": 0.223816730250002,
+   "contrast": 2.1499038377143182e-07
+  },
+  {
+   "starTeffK": 4948.5893547566175,
+   "starRadiusM": 409976008.94743484,
+   "planetTeffK": 514.5288193327474,
+   "planetRadiusM": 47104336.663698815,
+   "semiMajorM": 9620337506.57666,
+   "geometricAlbedo": 0.46586528761914536,
+   "phaseAngleRad": 0.6546400757319434,
+   "contrast": 9.178167743106271e-06
+  },
+  {
+   "starTeffK": 4632.361555748979,
+   "starRadiusM": 221895530.09712812,
+   "planetTeffK": 1249.8211543190343,
+   "planetRadiusM": 57238382.13104024,
+   "semiMajorM": 884684544318.5098,
+   "geometricAlbedo": 0.2733865005466911,
+   "phaseAngleRad": 3.066210601820263,
+   "contrast": 5.198293708990478e-14
+  },
+  {
+   "starTeffK": 5255.558222078206,
+   "starRadiusM": 630348358.8129168,
+   "planetTeffK": 1715.6021360816426,
+   "planetRadiusM": 58691948.279745616,
+   "semiMajorM": 4056286842868.6724,
+   "geometricAlbedo": 0.9398997032117289,
+   "phaseAngleRad": 1.4572401453479842,
+   "contrast": 7.418841645782303e-11
+  },
+  {
+   "starTeffK": 6358.855828708503,
+   "starRadiusM": 319093184.70993584,
+   "planetTeffK": 385.69302857683687,
+   "planetRadiusM": 41405749.57475853,
+   "semiMajorM": 8465199639.689322,
+   "geometricAlbedo": 0.13973182042826426,
+   "phaseAngleRad": 2.3808502219745526,
+   "contrast": 1.4731218979636925e-07
+  },
+  {
+   "starTeffK": 5833.916045488631,
+   "starRadiusM": 488066418.3902605,
+   "planetTeffK": 134.79563990686148,
+   "planetRadiusM": 90859684.78121841,
+   "semiMajorM": 153705655991.56818,
+   "geometricAlbedo": 0.8664435883202481,
+   "phaseAngleRad": 0.44787393272756876,
+   "contrast": 2.7573013129747865e-07
+  },
+  {
+   "starTeffK": 3767.5172415526513,
+   "starRadiusM": 1230874484.1754963,
+   "planetTeffK": 632.039231817281,
+   "planetRadiusM": 27315823.61038896,
+   "semiMajorM": 8732013215066.482,
+   "geometricAlbedo": 0.7816190482695347,
+   "phaseAngleRad": 1.6720767240664656,
+   "contrast": 2.0604768134776785e-12
+  },
+  {
+   "starTeffK": 6634.978904719411,
+   "starRadiusM": 478417056.2247037,
+   "planetTeffK": 1539.053711067903,
+   "planetRadiusM": 53546661.77884994,
+   "semiMajorM": 48302585537.56686,
+   "geometricAlbedo": 0.34285450727549827,
+   "phaseAngleRad": 1.3842312275355702,
+   "contrast": 1.755070391883798e-07
+  },
+  {
+   "starTeffK": 5896.4553397891,
+   "starRadiusM": 415656345.5444217,
+   "planetTeffK": 1678.5575159431369,
+   "planetRadiusM": 24234967.28283134,
+   "semiMajorM": 3307355564878.955,
+   "geometricAlbedo": 0.17564607226269657,
+   "phaseAngleRad": 1.9540554899116878,
+   "contrast": 1.451101147674293e-12
+  },
+  {
+   "starTeffK": 3477.5387852087333,
+   "starRadiusM": 821342288.1905401,
+   "planetTeffK": 1243.42388413663,
+   "planetRadiusM": 48555975.66985614,
+   "semiMajorM": 868461432160.009,
+   "geometricAlbedo": 0.48012054813255,
+   "phaseAngleRad": 0.40759299189932474,
+   "contrast": 1.3884932511377318e-09
+  },
+  {
+   "starTeffK": 5932.695255100634,
+   "starRadiusM": 277905759.7468746,
+   "planetTeffK": 1638.5851129328678,
+   "planetRadiusM": 104981001.16298544,
+   "semiMajorM": 169843849813.37735,
+   "geometricAlbedo": 0.3211928004688418,
+   "phaseAngleRad": 2.570173556978175,
+   "contrast": 2.3508955132650497e-09
+  },
+  {
+   "starTeffK": 6521.13583900106,
+   "starRadiusM": 330045799.483611,
+   "planetTeffK": 145.7060439678735,
+   "planetRadiusM": 34736708.960291386,
+   "semiMajorM": 444944053842.69507,
+   "geometricAlbedo": 0.18892877873864544,
+   "phaseAngleRad": 0.6064788405814994,
+   "contrast": 9.724083693760334e-10
+  },
+  {
+   "starTeffK": 6450.210117657964,
+   "starRadiusM": 1157505802.7854207,
+   "planetTeffK": 1941.0920263013104,
+   "planetRadiusM": 28767014.62267827,
+   "semiMajorM": 242191911571.47107,
+   "geometricAlbedo": 0.9750168786934592,
+   "phaseAngleRad": 0.8581442367436962,
+   "contrast": 9.850241575067613e-09
+  },
+  {
+   "starTeffK": 6704.458339228918,
+   "starRadiusM": 337129994.64611155,
+   "planetTeffK": 243.6897352183676,
+   "planetRadiusM": 50641205.576774806,
+   "semiMajorM": 4916068578129.918,
+   "geometricAlbedo": 0.07030429956276585,
+   "phaseAngleRad": 0.25235996146347883,
+   "contrast": 7.23660567326462e-12
+  },
+  {
+   "starTeffK": 5804.715842912081,
+   "starRadiusM": 320149302.5400019,
+   "planetTeffK": 1881.9396874425388,
+   "planetRadiusM": 34007016.39874557,
+   "semiMajorM": 31470163926.76234,
+   "geometricAlbedo": 0.06325574540399259,
+   "phaseAngleRad": 1.55796079328408,
+   "contrast": 2.3987949860170034e-08
+  },
+  {
+   "starTeffK": 4146.252205384601,
+   "starRadiusM": 217938412.77238917,
+   "planetTeffK": 1580.1815505622533,
+   "planetRadiusM": 64184806.330358006,
+   "semiMajorM": 5291252569322.494,
+   "geometricAlbedo": 0.22864131591730674,
+   "phaseAngleRad": 2.757870245000234,
+   "contrast": 1.987350036949242e-13
+  },
+  {
+   "starTeffK": 5380.085733115033,
+   "starRadiusM": 262757724.91112617,
+   "planetTeffK": 155.51637834424722,
+   "planetRadiusM": 111845518.03845246,
+   "semiMajorM": 5356928101716.025,
+   "geometricAlbedo": 0.5593084808042394,
+   "phaseAngleRad": 2.8403953530453356,
+   "contrast": 7.004772054294857e-13
+  },
+  {
+   "starTeffK": 6620.9735969184185,
+   "starRadiusM": 1047123421.6100152,
+   "planetTeffK": 1712.3744625182044,
+   "planetRadiusM": 84345914.27826013,
+   "semiMajorM": 49444789217.97456,
+   "geometricAlbedo": 0.18466188836146857,
+   "phaseAngleRad": 1.3872364178202223,
+   "contrast": 2.2294627889735392e-07
+  },
+  {
+   "starTeffK": 3277.04409064715,
+   "starRadiusM": 626141428.4392926,
+   "planetTeffK": 1770.7667395677695,
+   "planetRadiusM": 86469803.09429173,
+   "semiMajorM": 110840737318.90413,
+   "geometricAlbedo": 0.9634620300850018,
+   "phaseAngleRad": 2.6732173896902816,
+   "contrast": 6.25342651798288e-09
+  },
+  {
+   "starTeffK": 4892.648730663272,
+   "starRadiusM": 453062258.95841545,
+   "planetTeffK": 619.2285064260745,
+   "planetRadiusM": 28448096.737081647,
+   "semiMajorM": 76343356837.95758,
+   "geometricAlbedo": 0.07704378263014755,
+   "phaseAngleRad": 2.2989439380164023,
+   "contrast": 6.321398242849394e-10
+  },
+  {
+   "starTeffK": 5145.249581441938,
+   "starRadiusM": 432151546.61635786,
+   "planetTeffK": 1471.156499714321,
+   "planetRadiusM": 75511359.85737148,
+   "semiMajorM": 30720776557.00752,
+   "geometricAlbedo": 0.5338612856159567,
+   "phaseAngleRad": 1.3118034002387562,
+   "contrast": 1.4735760094704765e-06
+  },
+  {
+   "starTeffK": 3554.6018972939237,
+   "starRadiusM": 330532639.56446964,
+   "planetTeffK": 275.98774800953254,
+   "planetRadiusM": 132698408.99266236,
+   "semiMajorM": 232249638102.62286,
+   "geometricAlbedo": 0.47635112219152265,
+   "phaseAngleRad": 2.132956437505175,
+   "contrast": 1.5269894322233452e-08
+  },
+  {
+   "starTeffK": 6652.579740411331,
+   "starRadiusM": 327559921.36039525,
+   "planetTeffK": 774.4203529041755,
+   "planetRadiusM": 123494287.42967473,
+   "semiMajorM": 2865001859727.6777,
+   "geometricAlbedo": 0.9467745944672905,
+   "phaseAngleRad": 2.0310513129404493,
+   "contrast": 2.2546657871442902e-10
+  },
+  {
+   "starTeffK": 4370.548563321033,
+   "starRadiusM": 405478604.24109346,
+   "planetTeffK": 1393.6482985421053,
+   "planetRadiusM": 69594722.31859055,
+   "semiMajorM": 3564615893697.4224,
+   "geometricAlbedo": 0.6395792495483898,
+   "phaseAngleRad": 3.097094659647217,
+   "contrast": 2.2786922428558784e-15
+  },
+  {
+   "starTeffK": 4044.8629405375914,
+   "starRadiusM": 338642794.2316461,
+   "planetTeffK": 657.1045688605342,
+   "planetRadiusM": 37422271.72520907,
+   "semiMajorM": 1357875917802.832,
+   "geometricAlbedo": 0.5627776143694136,
+   "phaseAngleRad": 2.0135986892253084,
+   "contrast": 5.717730541449114e-11
+  },
+  {
+   "starTeffK": 3626.2215713937676,
+   "starRadiusM": 424920514.6649503,
+   "planetTeffK": 270.3825729097658,
+   "planetRadiusM": 128162485.36139335,
+   "semiMajorM": 745557549260.2548,
+   "geometricAlbedo": 0.7769740177991433,
+   "phaseAngleRad": 2.8549324367390416,
+   "contrast": 5.6914662739825264e-11
+  },
+  {
+   "starTeffK": 5687.00760119989,
+   "starRadiusM": 1127208171.8565745,
+   "planetTeffK": 1454.4809162375175,
+   "planetRadiusM": 24976613.323178053,
+   "semiMajorM": 1405711485792.3298,
+   "geometricAlbedo": 0.34173970642195517,
+   "phaseAngleRad": 0.6782939814119441,
+   "contrast": 8.741646225026442e-11
+  },
+  {
+   "starTeffK": 4301.451327205114,
+   "starRadiusM": 377741710.1436257,
+   "planetTeffK": 1856.186691622086,
+   "planetRadiusM": 30727938.872450467,
+   "semiMajorM": 32449621824.70282,
+   "geometricAlbedo": 0.958754201527889,
+   "phaseAngleRad": 1.5281432437998281,
+   "contrast": 2.9223402842756827e-07
+  },
+  {
+   "starTeffK": 6563.087244472995,
+   "starRadiusM": 1112906682.5225713,
+   "planetTeffK": 1375.5551048842342,
+   "planetRadiusM": 21485875.760691054,
+   "semiMajorM": 226830846514.71243,
+   "geometricAlbedo": 0.6169805151738523,
+   "phaseAngleRad": 1.614508526752155,
+   "contrast": 1.6428033989258915e-09
+  },
+  {
+   "starTeffK": 3124.258934980554,
+   "starRadiusM": 1269139383.3506713,
+   "planetTeffK": 945.2739552703166,
+   "planetRadiusM": 45652965.17637448,
+   "semiMajorM": 64751871685.17897,
+   "geometricAlbedo": 0.28718735892147096,
+   "phaseAngleRad": 0.6476471527721457,
+   "contrast": 1.1779453564073762e-07
+  },
+  {
+   "starTeffK": 3094.9689912732397,
+   "starRadiusM": 1122645537.2332368,
+   "planetTeffK": 1484.4737627574216,
+   "planetRadiusM": 24404983.303038634,
+   "semiMajorM": 2492605857920.0835,
+   "geometricAlbedo": 0.5419307499694279,
+   "phaseAngleRad": 1.349390956462786,
+   "contrast": 2.2641103202053065e-11
+  },
+  {
+   "starTeffK": 5061.698190256535,
+   "starRadiusM": 1035287949.7664742,
+   "planetTeffK": 681.08305177781,
+   "planetRadiusM": 23423083.265527885,
+   "semiMajorM": 202875151769.8772,
+   "geometricAlbedo": 0.10705927392584591,
+   "phaseAngleRad": 0.563323976320909,
+   "contrast": 1.2328110045809845e-09
+  },
+  {
+   "starTeffK": 4066.222968946875,
+   "starRadiusM": 774398390.6344233,
+   "planetTeffK": 613.7717860875019,
+   "planetRadiusM": 138367884.02341247,
+   "semiMajorM": 249247698296.43375,
+   "geometricAlbedo": 0.24984646715352665,
+   "phaseAngleRad": 0.07495719505050102,
+   "contrast": 7.67855935249021e-08
+  },
+  {
+   "starTeffK": 6902.651457101652,
+   "starRadiusM": 346577116.1184763,
+   "planetTeffK": 1720.9065705988528,
+   "planetRadiusM": 41324940.51635731,
+   "semiMajorM": 717227377125.7979,
+   "geometricAlbedo": 0.1401532089031603,
+   "phaseAngleRad": 0.32138384930626224,
+   "contrast": 4.4307859249400715e-10
+  },
+  {
+   "starTeffK": 4549.372341480823,
+   "starRadiusM": 262120760.2664868,
+   "planetTeffK": 1674.1382431281966,
+   "planetRadiusM": 99103320.63540064,
+   "semiMajorM": 20896533778.4014,
+   "geometricAlbedo": 0.7771557178040714,
+   "phaseAngleRad": 0.599741670256666,
+   "contrast": 1.4815116481958327e-05
+  },
+  {
+   "starTeffK": 3144.543127498347,
+   "starRadiusM": 1120209774.8211355,
+   "planetTeffK": 577.4939182489778,
+   "planetRadiusM": 28312345.19948041,
+   "semiMajorM": 334037476231.3706,
+   "geometricAlbedo": 0.1424464087880548,
+   "phaseAngleRad": 1.602247785429006,
+   "contrast": 3.0980509827145197e-10
+  },
+  {
+   "starTeffK": 3915.927077466337,
+   "starRadiusM": 407956216.58190024,
+   "planetTeffK": 1535.7808423638103,
+   "planetRadiusM": 63674427.11565616,
+   "semiMajorM": 1616761639001.9636,
+   "geometricAlbedo": 0.2122331612178212,
+   "phaseAngleRad": 0.17275479195819937,
+   "contrast": 3.2447305726808874e-10
+  },
+  {
+   "starTeffK": 3361.323310166468,
+   "starRadiusM": 236790959.90302044,
+   "planetTeffK": 489.64445941526924,
+   "planetRadiusM": 121075135.27520923,
+   "semiMajorM": 8040010862.974958,
+   "geometricAlbedo": 0.15819324362714737,
+   "phaseAngleRad": 1.808172873784799,
+   "contrast": 7.518382678401328e-06
+  },
+  {
+   "starTeffK": 6304.165471372047,
+   "starRadiusM": 1041846717.638771,
+   "planetTeffK": 1249.6692078506007,
+   "planetRadiusM": 76182600.05249076,
+   "semiMajorM": 36925856225.556816,
+   "geometricAlbedo": 0.9841028493185369,
+   "phaseAngleRad": 1.4622687962900742,
+   "contrast": 1.5680243204070063e-06
+  },
+  {
+   "starTeffK": 5479.653335442081,
+   "starRadiusM": 1182610974.2979293,
+   "planetTeffK": 1129.4740690982353,
+   "planetRadiusM": 42589842.228785574,
+   "semiMajorM": 2506237652375.1685,
+   "geometricAlbedo": 0.8049539663151638,
+   "phaseAngleRad": 2.8079740740852905,
+   "contrast": 9.056840053785191e-13
+  },
+  {
+   "starTeffK": 6061.928064209659,
+   "starRadiusM": 422811805.23256594,
+   "planetTeffK": 1233.5300473711932,
+   "planetRadiusM": 30686781.107521877,
+   "semiMajorM": 8697986738.858412,
+   "geometricAlbedo": 0.8585288926716056,
+   "phaseAngleRad": 2.2855661448304767,
+   "contrast": 6.604588291628898e-07
+  }
+ ],
+ "teq": [
+  {
+   "starTeffK": 5587.30701276014,
+   "starRadiusM": 576890800.9952102,
+   "planetTeffK": 1695.1320552111047,
+   "planetRadiusM": 52531597.992148034,
+   "semiMajorM": 6302488170565.431,
+   "bondAlbedo": 0.6842879548975196,
+   "redistribution": 0.6119348768400388,
+   "teq": 32.09664900005243
+  },
+  {
+   "starTeffK": 4640.696680066092,
+   "starRadiusM": 516750014.40545607,
+   "planetTeffK": 811.166777587752,
+   "planetRadiusM": 40965968.61057656,
+   "semiMajorM": 916715537918.2592,
+   "bondAlbedo": 0.6522570707021428,
+   "redistribution": 0.6281262937685016,
+   "teq": 67.49480713540812
+  },
+  {
+   "starTeffK": 3987.083827821005,
+   "starRadiusM": 501360665.15981495,
+   "planetTeffK": 1462.3795399021215,
+   "planetRadiusM": 124965332.60695955,
+   "semiMajorM": 404266637005.2688,
+   "bondAlbedo": 0.8455070160394003,
+   "redistribution": 0.21665623306152526,
+   "teq": 76.70142880990693
+  },
+  {
+   "starTeffK": 6524.04185977811,
+   "starRadiusM": 511525133.78442013,
+   "planetTeffK": 599.7554492478432,
+   "planetRadiusM": 32101021.379348595,
+   "semiMajorM": 93055773044.72021,
+   "bondAlbedo": 0.17129178547402588,
+   "redistribution": 0.4478000414816643,
+   "teq": 384.1564517729978
+  },
+  {
+   "starTeffK": 6334.703763278518,
+   "starRadiusM": 1035014769.2063727,
+   "planetTeffK": 1572.2183839907432,
+   "planetRadiusM": 60961120.57830526,
+   "semiMajorM": 69942234296.69127,
+   "bondAlbedo": 0.5640769918997649,
+   "redistribution": 0.8662780307789472,
+   "teq": 465.5993348749071
+  },
+  {
+   "starTeffK": 3709.1241701709437,
+   "starRadiusM": 506462423.6897149,
+   "planetTeffK": 1639.3524492843396,
+   "planetRadiusM": 126188944.21305071,
+   "semiMajorM": 53641087023.11978,
+   "bondAlbedo": 0.094039363572834,
+   "redistribution": 0.35552111015599897,
+   "teq": 298.37855540017307
+  },
+  {
+   "starTeffK": 3864.9562225652926,
+   "starRadiusM": 447479878.12401384,
+   "planetTeffK": 1613.417623469995,
+   "planetRadiusM": 109662115.52917363,
+   "semiMajorM": 11410988714.442974,
+   "bondAlbedo": 0.16416000121335783,
+   "redistribution": 0.9012926666662509,
+   "teq": 537.5532591191064
+  },
+  {
+   "starTeffK": 3448.105792820979,
+   "starRadiusM": 270227431.6291031,
+   "planetTeffK": 754.7228843636252,
+   "planetRadiusM": 47018590.68202482,
+   "semiMajorM": 2251163905662.734,
+   "bondAlbedo": 0.006824995827821046,
+   "redistribution": 0.4673237993616902,
+   "teq": 31.258765258540418
+  },
+  {
+   "starTeffK": 4164.332580093098,
+   "starRadiusM": 707641764.5611011,
+   "planetTeffK": 1839.0450494122122,
+   "planetRadiusM": 95969650.04331104,
+   "semiMajorM": 85109602129.0408,
+   "bondAlbedo": 0.49385984509551406,
+   "redistribution": 0.06006186465757968,
+   "teq": 286.65106618777224
+  },
+  {
+   "starTeffK": 3607.7898610474995,
+   "starRadiusM": 487426705.86477757,
+   "planetTeffK": 482.6063672755426,
+   "planetRadiusM": 56009927.8351875,
+   "semiMajorM": 3683000890499.802,
+   "bondAlbedo": 0.20404182405595386,
+   "redistribution": 0.6264482225902362,
+   "teq": 31.286321011246887
+  },
+  {
+   "starTeffK": 6615.96678375432,
+   "starRadiusM": 950280069.8149487,
+   "planetTeffK": 539.8806425514961,
+   "planetRadiusM": 34555351.29004328,
+   "semiMajorM": 18537167001.6745,
+   "bondAlbedo": 0.4140209422850396,
+   "redistribution": 0.764996682790442,
+   "teq": 1006.5543008646863
+  },
+  {
+   "starTeffK": 4181.657387349629,
+   "starRadiusM": 1051032462.5091548,
+   "planetTeffK": 167.45798059134125,
+   "planetRadiusM": 78205467.34857748,
+   "semiMajorM": 43044425196.642334,
+   "bondAlbedo": 0.26154195605113506,
+   "redistribution": 0.3259870238343424,
+   "teq": 517.0352637904986
+  },
+  {
+   "starTeffK": 5550.7708040174375,
+   "starRadiusM": 296572069.73587614,
+   "planetTeffK": 1093.930404689222,
+   "planetRadiusM": 58436566.86740831,
+   "semiMajorM": 222941997108.57184,
+   "bondAlbedo": 0.08284913322835005,
+   "redistribution": 0.825044296248149,
+   "teq": 149.3478862396161
+  },
+  {
+   "starTeffK": 3256.098827110798,
+   "starRadiusM": 357301085.5476107,
+   "planetTeffK": 703.3027636591728,
+   "planetRadiusM": 35355737.15033123,
+   "semiMajorM": 52983748400.85526,
+   "bondAlbedo": 0.08185146933242478,
+   "redistribution": 0.8196377076669054,
+   "teq": 197.6482166979794
+  },
+  {
+   "starTeffK": 6986.682095005834,
+   "starRadiusM": 297498754.7417677,
+   "planetTeffK": 201.37713759094916,
+   "planetRadiusM": 102467444.58729555,
+   "semiMajorM": 378048309998.9915,
+   "bondAlbedo": 0.5264713094489311,
+   "redistribution": 0.7635429842601529,
+   "teq": 124.9207489224221
+  },
+  {
+   "starTeffK": 6227.109827234893,
+   "starRadiusM": 326381803.9492561,
+   "planetTeffK": 118.16740190529615,
+   "planetRadiusM": 37980449.32233379,
+   "semiMajorM": 291149416362.83826,
+   "bondAlbedo": 0.27519102869275136,
+   "redistribution": 0.6980698844657477,
+   "teq": 150.62180038439732
+  },
+  {
+   "starTeffK": 4059.605654290253,
+   "starRadiusM": 214355177.08885527,
+   "planetTeffK": 654.5712472142834,
+   "planetRadiusM": 92461377.77570571,
+   "semiMajorM": 4045259858382.7686,
+   "bondAlbedo": 0.1969366195692698,
+   "redistribution": 0.1804985173716741,
+   "teq": 24.532749966395556
+  },
+  {
+   "starTeffK": 6148.805245189773,
+   "starRadiusM": 355380090.9572706,
+   "planetTeffK": 1957.9643571287036,
+   "planetRadiusM": 99004698.22940065,
+   "semiMajorM": 110757376144.28535,
+   "bondAlbedo": 0.3628984853460387,
+   "redistribution": 0.3675952455848366,
+   "teq": 263.41387403819215
+  },
+  {
+   "starTeffK": 6600.793132959584,
+   "starRadiusM": 613959998.2386788,
+   "planetTeffK": 1954.3711333202107,
+   "planetRadiusM": 139886788.2306729,
+   "semiMajorM": 3976953621402.3916,
+   "bondAlbedo": 0.4052671132062636,
+   "redistribution": 0.5433051639724377,
+   "teq": 58.66863333648466
+  },
+  {
+   "starTeffK": 6053.6404348949945,
+   "starRadiusM": 813946322.5736376,
+   "planetTeffK": 1137.9777193777427,
+   "planetRadiusM": 39507510.92242413,
+   "semiMajorM": 6734704629279.205,
+   "bondAlbedo": 0.042987947837851946,
+   "redistribution": 0.3120819108029469,
+   "teq": 56.33831192571402
+  },
+  {
+   "starTeffK": 6530.592363773353,
+   "starRadiusM": 404950092.637141,
+   "planetTeffK": 1929.659269675424,
+   "planetRadiusM": 61896778.53859342,
+   "semiMajorM": 49843319508.701164,
+   "bondAlbedo": 0.3602377391882448,
+   "redistribution": 0.9808243724785873,
+   "teq": 375.19337023225347
+  },
+  {
+   "starTeffK": 6890.21096398076,
+   "starRadiusM": 662353860.8488021,
+   "planetTeffK": 140.22511439320385,
+   "planetRadiusM": 77446298.64275202,
+   "semiMajorM": 6307884304486.647,
+   "bondAlbedo": 0.16404052898248203,
+   "redistribution": 0.8280970234038177,
+   "teq": 50.84167731603522
+  },
+  {
+   "starTeffK": 4038.87656132569,
+   "starRadiusM": 291085862.2938044,
+   "planetTeffK": 1897.2220753191841,
+   "planetRadiusM": 121532580.95909199,
+   "semiMajorM": 29840764393.954845,
+   "bondAlbedo": 0.6733019653631763,
+   "redistribution": 0.4365193911805959,
+   "teq": 251.64584968960844
+  },
+  {
+   "starTeffK": 6900.90130969804,
+   "starRadiusM": 466092579.93454546,
+   "planetTeffK": 1478.5126765415584,
+   "planetRadiusM": 40254782.14444685,
+   "semiMajorM": 293738450942.655,
+   "bondAlbedo": 0.8257795941646205,
+   "redistribution": 0.9552207362941442,
+   "teq": 127.86044787098531
+  },
+  {
+   "starTeffK": 3569.268453501245,
+   "starRadiusM": 764895483.09284,
+   "planetTeffK": 374.3049453113617,
+   "planetRadiusM": 61638004.929047,
+   "semiMajorM": 87157364744.55475,
+   "bondAlbedo": 0.24800193370394366,
+   "redistribution": 0.3104776123915761,
+   "teq": 266.58567479210166
+  },
+  {
+   "starTeffK": 6036.894132866861,
+   "starRadiusM": 271325031.56880045,
+   "planetTeffK": 634.2632941999813,
+   "planetRadiusM": 39289864.61741456,
+   "semiMajorM": 515979123682.2826,
+   "bondAlbedo": 0.3903713471661157,
+   "redistribution": 0.01198356752317642,
+   "teq": 110.32392540523183
+  },
+  {
+   "starTeffK": 6687.881851957655,
+   "starRadiusM": 590525172.1981422,
+   "planetTeffK": 328.3433907185889,
+   "planetRadiusM": 27458866.637350515,
+   "semiMajorM": 22032401376.97572,
+   "bondAlbedo": 0.797493984331761,
+   "redistribution": 0.2343578917954,
+   "teq": 637.9222924028204
+  },
+  {
+   "starTeffK": 3127.422454980573,
+   "starRadiusM": 601713336.20167,
+   "planetTeffK": 1277.0998308874837,
+   "planetRadiusM": 123379443.04044667,
+   "semiMajorM": 26692168350.403976,
+   "bondAlbedo": 0.6308316041587794,
+   "redistribution": 0.6957517357446452,
+   "teq": 286.7574304401509
+  },
+  {
+   "starTeffK": 4179.036346382296,
+   "starRadiusM": 615239286.2485996,
+   "planetTeffK": 1765.5882714427419,
+   "planetRadiusM": 92354527.5480815,
+   "semiMajorM": 258324818517.49652,
+   "bondAlbedo": 0.2990232297074912,
+   "redistribution": 0.3087592189768136,
+   "teq": 159.82327152027239
+  },
+  {
+   "starTeffK": 6797.404101335724,
+   "starRadiusM": 704007166.7686471,
+   "planetTeffK": 1357.7372286378773,
+   "planetRadiusM": 23501713.870804533,
+   "semiMajorM": 35409608086.446205,
+   "bondAlbedo": 0.2520418605569603,
+   "redistribution": 0.4085575096195575,
+   "teq": 748.1795839290735
+  },
+  {
+   "starTeffK": 4088.7790429025385,
+   "starRadiusM": 262117102.05006707,
+   "planetTeffK": 615.643495624269,
+   "planetRadiusM": 41756550.71793652,
+   "semiMajorM": 2315520118709.4404,
+   "bondAlbedo": 0.0702817387444573,
+   "redistribution": 0.31163090752243794,
+   "teq": 36.56471105080173
+  },
+  {
+   "starTeffK": 5577.34081452242,
+   "starRadiusM": 805974344.4035146,
+   "planetTeffK": 1758.658510772175,
+   "planetRadiusM": 110789362.60016432,
+   "semiMajorM": 821574145732.2885,
+   "bondAlbedo": 0.1409701829536601,
+   "redistribution": 0.5940009668598534,
+   "teq": 135.32033075550672
+  },
+  {
+   "starTeffK": 6941.889984706536,
+   "starRadiusM": 461975633.21546715,
+   "planetTeffK": 875.5767315097339,
+   "planetRadiusM": 112519479.1111109,
+   "semiMajorM": 665846802944.8457,
+   "bondAlbedo": 0.29731062918095424,
+   "redistribution": 0.5081753334984715,
+   "teq": 137.4916624026611
+  },
+  {
+   "starTeffK": 6725.828785191035,
+   "starRadiusM": 1187928426.5413668,
+   "planetTeffK": 658.713367000382,
+   "planetRadiusM": 117555630.67268261,
+   "semiMajorM": 7721129679099.061,
+   "bondAlbedo": 0.7584927945857878,
+   "redistribution": 0.5425445150660637,
+   "teq": 47.64811869922847
+  },
+  {
+   "starTeffK": 5733.899904682317,
+   "starRadiusM": 951830119.9278634,
+   "planetTeffK": 1293.46892584058,
+   "planetRadiusM": 53794652.78448541,
+   "semiMajorM": 10554234930.309322,
+   "bondAlbedo": 0.12749249730988746,
+   "redistribution": 0.9167751021192583,
+   "teq": 1215.6172487351039
+  },
+  {
+   "starTeffK": 5230.16170631363,
+   "starRadiusM": 463762404.268381,
+   "planetTeffK": 906.3664398783474,
+   "planetRadiusM": 31645244.648342416,
+   "semiMajorM": 1706652890210.7717,
+   "bondAlbedo": 0.641805016632912,
+   "redistribution": 0.1031316126772428,
+   "teq": 59.27386603241111
+  },
+  {
+   "starTeffK": 3027.866943369034,
+   "starRadiusM": 1315064868.751204,
+   "planetTeffK": 732.2179312010156,
+   "planetRadiusM": 32349271.846236173,
+   "semiMajorM": 1284891823445.2358,
+   "bondAlbedo": 0.15352483193825875,
+   "redistribution": 0.9718820816970372,
+   "teq": 66.4566021745698
+  },
+  {
+   "starTeffK": 5520.596335457309,
+   "starRadiusM": 692370857.4286611,
+   "planetTeffK": 1597.5355128349606,
+   "planetRadiusM": 25488827.081857502,
+   "semiMajorM": 952376442939.9518,
+   "bondAlbedo": 0.5703615360805377,
+   "redistribution": 0.9468331169161459,
+   "teq": 87.04224382351057
+  },
+  {
+   "starTeffK": 3047.6583615358722,
+   "starRadiusM": 278060550.2551345,
+   "planetTeffK": 1667.2738314988535,
+   "planetRadiusM": 107576256.01814832,
+   "semiMajorM": 105117763197.38887,
+   "bondAlbedo": 0.4557494856631244,
+   "redistribution": 0.4773795408354301,
+   "teq": 111.34047116550727
+  },
+  {
+   "starTeffK": 6378.1542373284365,
+   "starRadiusM": 1059686500.8174298,
+   "planetTeffK": 507.5508737119538,
+   "planetRadiusM": 26735863.694034398,
+   "semiMajorM": 2625580076662.3853,
+   "bondAlbedo": 0.3583975922368036,
+   "redistribution": 0.10872959512347047,
+   "teq": 101.81783769428536
+  }
+ ],
+ "curves": [
+  {
+   "name": "earth-sun",
+   "starTeffK": 5772.0,
+   "starRadiusM": 695700000.0,
+   "planetTeffK": 255.0,
+   "planetRadiusM": 6378100.0,
+   "semiMajorM": 149597870700.0,
+   "geometricAlbedo": 0.3,
+   "phaseAngleRad": 0.0,
+   "wavelengthsM": [
+    3.0000000000000015e-07,
+    3.2393254869831317e-07,
+    3.497743203539499e-07,
+    3.7767762353825004e-07,
+    4.078069172635576e-07,
+    4.4033978028662095e-07,
+    4.754679577383343e-07,
+    5.133984912485346e-07,
+    5.543549392266878e-07,
+    5.985786944906647e-07,
+    6.463304070095649e-07,
+    6.978915201460878e-07,
+    7.535659294528743e-07,
+    8.136817737996089e-07,
+    8.785933693875717e-07,
+    9.486832980505132e-07,
+    1.02436466215008e-06,
+    1.1060835193558726e-06,
+    1.1943215116604919e-06,
+    1.2895987041246835e-06,
+    1.3924766500838347e-06,
+    1.5035617008818183e-06,
+    1.6235085796393901e-06,
+    1.7530242401205523e-06,
+    1.8928720334405797e-06,
+    2.0438762071738847e-06,
+    2.206926763378925e-06,
+    2.3829847041728425e-06,
+    2.5730876957726854e-06,
+    2.7783561843863794e-06,
+    2.9999999999999997e-06,
+    3.2393254869831295e-06,
+    3.4977432035394966e-06,
+    3.7767762353825043e-06,
+    4.078069172635574e-06,
+    4.403397802866207e-06,
+    4.7546795773833395e-06,
+    5.133984912485343e-06,
+    5.543549392266875e-06,
+    5.9857869449066315e-06,
+    6.4633040700956564e-06,
+    6.978915201460874e-06,
+    7.535659294528738e-06,
+    8.136817737996085e-06,
+    8.785933693875711e-06,
+    9.486832980505143e-06,
+    1.0243646621500795e-05,
+    1.1060835193558717e-05,
+    1.194321511660491e-05,
+    1.2895987041246828e-05,
+    1.3924766500838337e-05,
+    1.5035617008818174e-05,
+    1.623508579639392e-05,
+    1.7530242401205512e-05,
+    1.8928720334405784e-05,
+    2.043876207173883e-05,
+    2.2069267633789237e-05,
+    2.382984704172845e-05,
+    2.573087695772679e-05,
+    2.7783561843863824e-05,
+    2.9999999999999977e-05
+   ],
+   "thermal": [
+    7.12604060778432e-83,
+    4.1762402352214494e-77,
+    9.173027600084704e-72,
+    8.118661948253428e-67,
+    3.0961352660034837e-62,
+    5.4134513529573416e-58,
+    4.596187230830316e-54,
+    1.9984075057493629e-50,
+    4.674211800550653e-47,
+    6.155393443508355e-44,
+    4.760373585945442e-41,
+    2.2481200199465353e-38,
+    6.721875978737989e-36,
+    1.3158084088826029e-33,
+    1.739370425540204e-31,
+    1.5979518632296268e-29,
+    1.047770496346584e-27,
+    5.0258658475773004e-26,
+    1.8043693721980747e-24,
+    4.9523575244745926e-23,
+    1.0597441975851573e-21,
+    1.8005328850189857e-20,
+    2.470267986962657e-19,
+    2.7798920038683695e-18,
+    2.6034858589288303e-17,
+    2.0566925486053702e-16,
+    1.3876755891967665e-15,
+    8.089721494903674e-15,
+    4.1187226694457517e-14,
+    1.8496579617415408e-13,
+    7.394717453071746e-13,
+    2.654373910785228e-12,
+    8.62285209732872e-12,
+    2.5537279794311262e-11,
+    6.942031923127534e-11,
+    1.7431075076027302e-10,
+    4.066534583469525e-10,
+    8.862155280982443e-10,
+    1.8132156938618853e-09,
+    3.4992708624846613e-09,
+    6.397365740735802e-09,
+    1.1124097525955408e-08,
+    1.846678295872615e-08,
+    2.9369233584589312e-08,
+    4.489315313420134e-08,
+    6.615658168255537e-08,
+    9.425549629857138e-08,
+    1.3017832730652504e-07,
+    1.7472479529539794e-07,
+    2.2843974520339193e-07,
+    2.915698590939991e-07,
+    3.6404709745496245e-07,
+    4.454984835081738e-07,
+    5.352783147491479e-07,
+    6.325166210211682e-07,
+    7.361768358844041e-07,
+    8.451160144666022e-07,
+    9.581421286812929e-07,
+    1.0740645681841338e-06,
+    1.1917356066325578e-06,
+    1.3100820099891484e-06
+   ],
+   "reflected": [
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10
+   ],
+   "total": [
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512321e-10,
+    5.453220753512339e-10,
+    5.453220753512817e-10,
+    5.453220753522919e-10,
+    5.453220753692375e-10,
+    5.45322075598259e-10,
+    5.453220781311242e-10,
+    5.453221013860907e-10,
+    5.45322281020487e-10,
+    5.453234630268213e-10,
+    5.45330165072727e-10,
+    5.453632625779266e-10,
+    5.455070411474063e-10,
+    5.460615470965393e-10,
+    5.479764492620174e-10,
+    5.539449274485609e-10,
+    5.708593551455434e-10,
+    6.147423945825075e-10,
+    7.196328261115051e-10,
+    9.519755336981847e-10,
+    1.4315376034494764e-09,
+    2.3585377692131173e-09,
+    4.044592937835893e-09,
+    6.9426878160870345e-09,
+    1.166941960130664e-08,
+    1.9012105034077382e-08,
+    2.991455565994054e-08,
+    4.543847520955257e-08,
+    6.67019037579066e-08,
+    9.48008183739226e-08,
+    1.3072364938187628e-07,
+    1.752701173707492e-07,
+    2.2898506727874318e-07,
+    2.921151811693503e-07,
+    3.6459241953031367e-07,
+    4.46043805583525e-07,
+    5.358236368244991e-07,
+    6.330619430965194e-07,
+    7.367221579597553e-07,
+    8.456613365419534e-07,
+    9.586874507566442e-07,
+    1.074609890259485e-06,
+    1.1922809287079091e-06,
+    1.3106273320644997e-06
+   ]
+  },
+  {
+   "name": "jupiter-sun",
+   "starTeffK": 5772.0,
+   "starRadiusM": 695700000.0,
+   "planetTeffK": 125.0,
+   "planetRadiusM": 71492000.0,
+   "semiMajorM": 777908927640.0,
+   "geometricAlbedo": 0.5,
+   "phaseAngleRad": 0.0,
+   "wavelengthsM": [
+    3.0000000000000015e-07,
+    3.2393254869831317e-07,
+    3.497743203539499e-07,
+    3.7767762353825004e-07,
+    4.078069172635576e-07,
+    4.4033978028662095e-07,
+    4.754679577383343e-07,
+    5.133984912485346e-07,
+    5.543549392266878e-07,
+    5.985786944906647e-07,
+    6.463304070095649e-07,
+    6.978915201460878e-07,
+    7.535659294528743e-07,
+    8.136817737996089e-07,
+    8.785933693875717e-07,
+    9.486832980505132e-07,
+    1.02436466215008e-06,
+    1.1060835193558726e-06,
+    1.1943215116604919e-06,
+    1.2895987041246835e-06,
+    1.3924766500838347e-06,
+    1.5035617008818183e-06,
+    1.6235085796393901e-06,
+    1.7530242401205523e-06,
+    1.8928720334405797e-06,
+    2.0438762071738847e-06,
+    2.206926763378925e-06,
+    2.3829847041728425e-06,
+    2.5730876957726854e-06,
+    2.7783561843863794e-06,
+    2.9999999999999997e-06,
+    3.2393254869831295e-06,
+    3.4977432035394966e-06,
+    3.7767762353825043e-06,
+    4.078069172635574e-06,
+    4.403397802866207e-06,
+    4.7546795773833395e-06,
+    5.133984912485343e-06,
+    5.543549392266875e-06,
+    5.9857869449066315e-06,
+    6.4633040700956564e-06,
+    6.978915201460874e-06,
+    7.535659294528738e-06,
+    8.136817737996085e-06,
+    8.785933693875711e-06,
+    9.486832980505143e-06,
+    1.0243646621500795e-05,
+    1.1060835193558717e-05,
+    1.194321511660491e-05,
+    1.2895987041246828e-05,
+    1.3924766500838337e-05,
+    1.5035617008818174e-05,
+    1.623508579639392e-05,
+    1.7530242401205512e-05,
+    1.8928720334405784e-05,
+    2.043876207173883e-05,
+    2.2069267633789237e-05,
+    2.382984704172845e-05,
+    2.573087695772679e-05,
+    2.7783561843863824e-05,
+    2.9999999999999977e-05
+   ],
+   "thermal": [
+    1.0107966983426973e-165,
+    1.1184505736010792e-153,
+    1.5947029421487434e-142,
+    3.4085099491644737e-132,
+    1.2563671911371366e-122,
+    9.092290691996916e-114,
+    1.4567887418104897e-105,
+    5.775388196629121e-98,
+    6.279737065870996e-91,
+    2.060048239086637e-84,
+    2.2270071278834886e-78,
+    8.609314041503662e-73,
+    1.2837688502484886e-67,
+    7.919830536479042e-63,
+    2.1569886575300212e-58,
+    2.754201694089948e-54,
+    1.7432058321299395e-50,
+    5.758579323581869e-47,
+    1.0414932624335152e-43,
+    1.0779705639561597e-40,
+    6.652558390821714e-38,
+    2.542818259384004e-35,
+    6.235741674128883e-33,
+    1.0136439260865519e-30,
+    1.125758070303299e-28,
+    8.784978288123797e-27,
+    4.943703389175299e-25,
+    2.0550966289724216e-23,
+    6.453046642710551e-22,
+    1.5625121399629223e-20,
+    2.973871195777948e-19,
+    4.5286029097740625e-18,
+    5.609015295031612e-17,
+    5.737220281876868e-16,
+    4.915128399184391e-15,
+    3.5732377905627e-14,
+    2.2312093873518025e-13,
+    1.2101543402641758e-12,
+    5.760700496970162e-12,
+    2.4300977195160155e-11,
+    9.165539411371915e-11,
+    3.116483766470702e-10,
+    9.626461742001881e-10,
+    2.7204523200284526e-09,
+    7.0800947005716934e-09,
+    1.707267455262534e-08,
+    3.835972538663286e-08,
+    8.072877752852349e-08,
+    1.5990511389213156e-07,
+    2.9945213739505423e-07,
+    5.323951021783599e-07,
+    9.021218662355191e-07,
+    1.4621354324872105e-06,
+    2.274375412221553e-06,
+    3.4060692428633823e-06,
+    4.9253625496228215e-06,
+    6.896235840012955e-06,
+    9.373372578712706e-06,
+    1.2397662062761517e-05,
+    1.5992901008790352e-05,
+    2.0164039202456862e-05
+   ],
+   "reflected": [
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09
+   ],
+   "total": [
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486301e-09,
+    4.223061308486302e-09,
+    4.223061308486322e-09,
+    4.223061308486946e-09,
+    4.223061308501927e-09,
+    4.223061308783688e-09,
+    4.223061313014904e-09,
+    4.223061364576454e-09,
+    4.223061882208329e-09,
+    4.2230662236147e-09,
+    4.2230970408642065e-09,
+    4.223284429425037e-09,
+    4.224271462826565e-09,
+    4.228822008983271e-09,
+    4.247362285681461e-09,
+    4.3147167026000205e-09,
+    4.534709685133371e-09,
+    5.18570748268649e-09,
+    6.943513628514753e-09,
+    1.1303156009057994e-08,
+    2.129573586111164e-08,
+    4.2582786695119166e-08,
+    8.495183883700978e-08,
+    1.6412817520061787e-07,
+    3.036751987035405e-07,
+    5.366181634868463e-07,
+    9.063449275440055e-07,
+    1.4663584937956968e-06,
+    2.2785984735300393e-06,
+    3.4102923041718687e-06,
+    4.929585610931308e-06,
+    6.9004589013214415e-06,
+    9.377595640021191e-06,
+    1.2401885124070003e-05,
+    1.599712407009884e-05,
+    2.016826226376535e-05
+   ]
+  },
+  {
+   "name": "hot-companion",
+   "starTeffK": 4000.0,
+   "starRadiusM": 486989999.99999994,
+   "planetTeffK": 1500.0,
+   "planetRadiusM": 71492000.0,
+   "semiMajorM": 4487936121000.0,
+   "geometricAlbedo": 0.0,
+   "phaseAngleRad": 0.0,
+   "wavelengthsM": [
+    3.0000000000000015e-07,
+    3.2393254869831317e-07,
+    3.497743203539499e-07,
+    3.7767762353825004e-07,
+    4.078069172635576e-07,
+    4.4033978028662095e-07,
+    4.754679577383343e-07,
+    5.133984912485346e-07,
+    5.543549392266878e-07,
+    5.985786944906647e-07,
+    6.463304070095649e-07,
+    6.978915201460878e-07,
+    7.535659294528743e-07,
+    8.136817737996089e-07,
+    8.785933693875717e-07,
+    9.486832980505132e-07,
+    1.02436466215008e-06,
+    1.1060835193558726e-06,
+    1.1943215116604919e-06,
+    1.2895987041246835e-06,
+    1.3924766500838347e-06,
+    1.5035617008818183e-06,
+    1.6235085796393901e-06,
+    1.7530242401205523e-06,
+    1.8928720334405797e-06,
+    2.0438762071738847e-06,
+    2.206926763378925e-06,
+    2.3829847041728425e-06,
+    2.5730876957726854e-06,
+    2.7783561843863794e-06,
+    2.9999999999999997e-06,
+    3.2393254869831295e-06,
+    3.4977432035394966e-06,
+    3.7767762353825043e-06,
+    4.078069172635574e-06,
+    4.403397802866207e-06,
+    4.7546795773833395e-06,
+    5.133984912485343e-06,
+    5.543549392266875e-06,
+    5.9857869449066315e-06,
+    6.4633040700956564e-06,
+    6.978915201460874e-06,
+    7.535659294528738e-06,
+    8.136817737996085e-06,
+    8.785933693875711e-06,
+    9.486832980505143e-06,
+    1.0243646621500795e-05,
+    1.1060835193558717e-05,
+    1.194321511660491e-05,
+    1.2895987041246828e-05,
+    1.3924766500838337e-05,
+    1.5035617008818174e-05,
+    1.623508579639392e-05,
+    1.7530242401205512e-05,
+    1.8928720334405784e-05,
+    2.043876207173883e-05,
+    2.2069267633789237e-05,
+    2.382984704172845e-05,
+    2.573087695772679e-05,
+    2.7783561843863824e-05,
+    2.9999999999999977e-05
+   ],
+   "thermal": [
+    4.5181452236431106e-11,
+    1.977588116006041e-10,
+    7.761325087695222e-10,
+    2.753315669094542e-09,
+    8.894684976737421e-09,
+    2.6348163728823664e-08,
+    7.202426561061658e-08,
+    1.827540905953147e-07,
+    4.327804681480999e-07,
+    9.612745465573623e-07,
+    2.011872678187484e-06,
+    3.984374890970897e-06,
+    7.495688867298861e-06,
+    1.3443222203829923e-05,
+    2.3060060296611328e-05,
+    3.794857365040364e-05,
+    6.007874339079928e-05,
+    9.17402653040408e-05,
+    0.00013544345530344022,
+    0.00019377230365435013,
+    0.00026920208196553957,
+    0.00036390163231066956,
+    0.00047954492059964197,
+    0.0006171563784087305,
+    0.0007770098593275497,
+    0.0009585927456387857,
+    0.0011606367742939554,
+    0.0013812077080621453,
+    0.00161783890845856,
+    0.001867690214097585,
+    0.002127713384303368,
+    0.0023948080432450608,
+    0.002665956435850038,
+    0.0029383302158042593,
+    0.003209366993092382,
+    0.0034768179022928183,
+    0.003738769801517414,
+    0.003993646936675804,
+    0.00424019722644291,
+    0.0044774680163290215,
+    0.004704775477818376,
+    0.004921671001129494,
+    0.005127907095052758,
+    0.005323404553497707,
+    0.005508222018923917,
+    0.0056825285790488385,
+    0.00584657966710355,
+    0.006000696279566766,
+    0.006145247357451465,
+    0.006280635077024394,
+    0.006407282744975765,
+    0.006525624976472934,
+    0.00663609984049529,
+    0.006739142676604676,
+    0.006835181314581199,
+    0.006924632458830531,
+    0.007007899030309079,
+    0.007085368288162179,
+    0.007157410580336921,
+    0.0072243785966439955,
+    0.007286607018972023
+   ],
+   "reflected": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "total": [
+    4.5181452236431106e-11,
+    1.977588116006041e-10,
+    7.761325087695222e-10,
+    2.753315669094542e-09,
+    8.894684976737421e-09,
+    2.6348163728823664e-08,
+    7.202426561061658e-08,
+    1.827540905953147e-07,
+    4.327804681480999e-07,
+    9.612745465573623e-07,
+    2.011872678187484e-06,
+    3.984374890970897e-06,
+    7.495688867298861e-06,
+    1.3443222203829923e-05,
+    2.3060060296611328e-05,
+    3.794857365040364e-05,
+    6.007874339079928e-05,
+    9.17402653040408e-05,
+    0.00013544345530344022,
+    0.00019377230365435013,
+    0.00026920208196553957,
+    0.00036390163231066956,
+    0.00047954492059964197,
+    0.0006171563784087305,
+    0.0007770098593275497,
+    0.0009585927456387857,
+    0.0011606367742939554,
+    0.0013812077080621453,
+    0.00161783890845856,
+    0.001867690214097585,
+    0.002127713384303368,
+    0.0023948080432450608,
+    0.002665956435850038,
+    0.0029383302158042593,
+    0.003209366993092382,
+    0.0034768179022928183,
+    0.003738769801517414,
+    0.003993646936675804,
+    0.00424019722644291,
+    0.0044774680163290215,
+    0.004704775477818376,
+    0.004921671001129494,
+    0.005127907095052758,
+    0.005323404553497707,
+    0.005508222018923917,
+    0.0056825285790488385,
+    0.00584657966710355,
+    0.006000696279566766,
+    0.006145247357451465,
+    0.006280635077024394,
+    0.006407282744975765,
+    0.006525624976472934,
+    0.00663609984049529,
+    0.006739142676604676,
+    0.006835181314581199,
+    0.006924632458830531,
+    0.007007899030309079,
+    0.007085368288162179,
+    0.007157410580336921,
+    0.0072243785966439955,
+    0.007286607018972023
+   ]
+  }
+ ],
+ "observability": [
+  {
+   "separationArcsec": 0.011352196760539378,
+   "innerWorkingArcsec": 0.11544643283722446,
+   "contrast": 0.0008362944227665298,
+   "contrastFloor": 4.484176277151674e-07,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.8827308807996939,
+   "innerWorkingArcsec": 0.19171939869537946,
+   "contrast": 1.0518938346839871e-10,
+   "contrastFloor": 1.1307821615307204e-08,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 0.9088027308022716,
+   "innerWorkingArcsec": 0.262934677921076,
+   "contrast": 1.0966390125995709e-06,
+   "contrastFloor": 1.6083319714737132e-05,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 0.023425316933553524,
+   "innerWorkingArcsec": 0.0749154655371476,
+   "contrast": 0.0007493085670990465,
+   "contrastFloor": 6.302135095246668e-05,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.611629544885877,
+   "innerWorkingArcsec": 0.1892463816078145,
+   "contrast": 8.399383726074581e-05,
+   "contrastFloor": 1.0001307776559677e-09,
+   "expected": "observable"
+  },
+  {
+   "separationArcsec": 0.019153304605589033,
+   "innerWorkingArcsec": 0.1984159844122023,
+   "contrast": 2.070813349274671e-09,
+   "contrastFloor": 3.469428650735146e-10,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.17936812536472943,
+   "innerWorkingArcsec": 0.410329824252239,
+   "contrast": 1.2225713466414297e-11,
+   "contrastFloor": 3.8928735149489216e-06,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.7859605779374393,
+   "innerWorkingArcsec": 0.3401645278136525,
+   "contrast": 5.02882340423732e-09,
+   "contrastFloor": 8.217125168232918e-07,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 0.04965804271912491,
+   "innerWorkingArcsec": 0.16772347688643144,
+   "contrast": 2.7405770391714737e-09,
+   "contrastFloor": 5.869817389314997e-07,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.17865914856559062,
+   "innerWorkingArcsec": 0.2613412890020943,
+   "contrast": 7.731980079820618e-11,
+   "contrastFloor": 2.1187321878354415e-07,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.7257146878971993,
+   "innerWorkingArcsec": 0.10646517497078901,
+   "contrast": 2.822622527430814e-09,
+   "contrastFloor": 1.5050593554099928e-09,
+   "expected": "observable"
+  },
+  {
+   "separationArcsec": 0.08529725951405144,
+   "innerWorkingArcsec": 0.20599998386606727,
+   "contrast": 9.14339594395352e-06,
+   "contrastFloor": 2.3486932961943417e-08,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.05042528723947152,
+   "innerWorkingArcsec": 0.086621090379674,
+   "contrast": 1.7863721921907617e-07,
+   "contrastFloor": 1.9693549297297205e-10,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.06390671433629505,
+   "innerWorkingArcsec": 0.4315460946630176,
+   "contrast": 1.394267151885082e-10,
+   "contrastFloor": 9.095881791031949e-10,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.18873047832165743,
+   "innerWorkingArcsec": 0.1849531594136594,
+   "contrast": 2.627353416303972e-09,
+   "contrastFloor": 5.0102950934568355e-05,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 1.1560152927859777,
+   "innerWorkingArcsec": 0.1633312734913698,
+   "contrast": 1.938861107336079e-06,
+   "contrastFloor": 1.6164873569188788e-05,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 0.051539676087986215,
+   "innerWorkingArcsec": 0.09634471631253692,
+   "contrast": 1.3036184664560525e-09,
+   "contrastFloor": 1.8729596191923273e-08,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.013549212129813365,
+   "innerWorkingArcsec": 0.21158098153466515,
+   "contrast": 2.47836131219202e-08,
+   "contrastFloor": 1.7872553077667594e-06,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.6604849843558567,
+   "innerWorkingArcsec": 0.05107595245222136,
+   "contrast": 5.015584022127405e-08,
+   "contrastFloor": 5.989083181612919e-08,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 0.44990945479227346,
+   "innerWorkingArcsec": 0.37199029393286365,
+   "contrast": 4.503101071808318e-07,
+   "contrastFloor": 2.8763406618929342e-09,
+   "expected": "observable"
+  },
+  {
+   "separationArcsec": 0.8117711262316121,
+   "innerWorkingArcsec": 0.20712257956478441,
+   "contrast": 6.993784754039412e-08,
+   "contrastFloor": 8.576927406629113e-07,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 0.11754416962717339,
+   "innerWorkingArcsec": 0.06700196943511391,
+   "contrast": 1.9028970411766611e-07,
+   "contrastFloor": 2.8331162831680457e-06,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 0.5253853819344552,
+   "innerWorkingArcsec": 0.1676075068889714,
+   "contrast": 2.396241104185271e-08,
+   "contrastFloor": 7.809040557301711e-10,
+   "expected": "observable"
+  },
+  {
+   "separationArcsec": 0.20060549843614275,
+   "innerWorkingArcsec": 0.1768890003050444,
+   "contrast": 1.836915588309144e-11,
+   "contrastFloor": 3.650894756686318e-07,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 0.42605606108145316,
+   "innerWorkingArcsec": 0.21443611254144354,
+   "contrast": 3.0168941396073102e-09,
+   "contrastFloor": 1.9112787077416457e-06,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 1.1728224818494566,
+   "innerWorkingArcsec": 0.32232886504191455,
+   "contrast": 2.834031856785459e-06,
+   "contrastFloor": 9.471325794862198e-08,
+   "expected": "observable"
+  },
+  {
+   "separationArcsec": 0.07358502019495348,
+   "innerWorkingArcsec": 0.38948720674591,
+   "contrast": 7.969951759798353e-08,
+   "contrastFloor": 1.7987087585365346e-09,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.092714141357267,
+   "innerWorkingArcsec": 0.39306051905303296,
+   "contrast": 0.0001974063451647991,
+   "contrastFloor": 3.072700671391322e-10,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.18854771082226537,
+   "innerWorkingArcsec": 0.35911487724468,
+   "contrast": 5.291061524496443e-09,
+   "contrastFloor": 1.7066323336828415e-09,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.3674657617564961,
+   "innerWorkingArcsec": 0.38025069778102544,
+   "contrast": 7.748615060131364e-08,
+   "contrastFloor": 2.0272921445380365e-06,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.01362910132657128,
+   "innerWorkingArcsec": 0.35322567455394865,
+   "contrast": 1.9132709037249083e-09,
+   "contrastFloor": 2.332645682602568e-09,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 1.5490147797817442,
+   "innerWorkingArcsec": 0.05106624759562578,
+   "contrast": 3.160903449077345e-09,
+   "contrastFloor": 4.2185574136892844e-05,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 0.03755050385579136,
+   "innerWorkingArcsec": 0.07136030434246914,
+   "contrast": 0.0002938747216391354,
+   "contrastFloor": 1.158873067833719e-07,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 1.5829435523084714,
+   "innerWorkingArcsec": 0.2593835880091497,
+   "contrast": 4.745155330310559e-09,
+   "contrastFloor": 3.3241203796088345e-05,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 1.9767281265777863,
+   "innerWorkingArcsec": 0.09861639362952686,
+   "contrast": 1.53975425777139e-09,
+   "contrastFloor": 4.08316824707073e-09,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 0.24834694985457015,
+   "innerWorkingArcsec": 0.4118643574624134,
+   "contrast": 1.9208507609376585e-11,
+   "contrastFloor": 4.830416237341084e-10,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.014617605159803856,
+   "innerWorkingArcsec": 0.184559898040639,
+   "contrast": 2.8524144367664685e-06,
+   "contrastFloor": 2.491969363763944e-07,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.016423320499959,
+   "innerWorkingArcsec": 0.2671228314395959,
+   "contrast": 1.8553119205725472e-07,
+   "contrastFloor": 1.630269212782112e-08,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.028846101679790646,
+   "innerWorkingArcsec": 0.15112755478916598,
+   "contrast": 2.084805819502431e-10,
+   "contrastFloor": 1.7529361377264842e-08,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.010823445088412577,
+   "innerWorkingArcsec": 0.20898223899435361,
+   "contrast": 6.114089239903868e-10,
+   "contrastFloor": 4.887861728406793e-10,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.4563899568564237,
+   "innerWorkingArcsec": 0.3861973877072352,
+   "contrast": 0.00028987498196577803,
+   "contrastFloor": 1.3628637453429487e-10,
+   "expected": "observable"
+  },
+  {
+   "separationArcsec": 0.028275548435869022,
+   "innerWorkingArcsec": 0.4228276911338622,
+   "contrast": 0.0006814436727939467,
+   "contrastFloor": 1.664462861457909e-08,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.03269307421981925,
+   "innerWorkingArcsec": 0.4346215777291326,
+   "contrast": 1.7063388542708897e-07,
+   "contrastFloor": 1.1480947207867086e-09,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.022836023779777035,
+   "innerWorkingArcsec": 0.2587470021280488,
+   "contrast": 7.564916791129006e-05,
+   "contrastFloor": 9.78455475336146e-07,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.46085029062390126,
+   "innerWorkingArcsec": 0.1311075951275926,
+   "contrast": 1.0102923661421257e-10,
+   "contrastFloor": 2.5330197652697966e-09,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 0.027799374972643443,
+   "innerWorkingArcsec": 0.26450561406218714,
+   "contrast": 4.976853205130734e-07,
+   "contrastFloor": 6.013795471751257e-06,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.824226169675537,
+   "innerWorkingArcsec": 0.19686862922672083,
+   "contrast": 5.126762905978163e-06,
+   "contrastFloor": 2.2484712063265038e-06,
+   "expected": "observable"
+  },
+  {
+   "separationArcsec": 1.4716831908777592,
+   "innerWorkingArcsec": 0.09953457576914161,
+   "contrast": 0.0009176131370250378,
+   "contrastFloor": 1.8852709825924711e-06,
+   "expected": "observable"
+  },
+  {
+   "separationArcsec": 0.09802575707518148,
+   "innerWorkingArcsec": 0.056070899173254835,
+   "contrast": 2.4396782046976367e-05,
+   "contrastFloor": 1.8317054116627072e-09,
+   "expected": "observable"
+  },
+  {
+   "separationArcsec": 0.10664617353774085,
+   "innerWorkingArcsec": 0.3571133104760455,
+   "contrast": 4.387347089458025e-10,
+   "contrastFloor": 4.678147516820726e-08,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 1.2031159302132273,
+   "innerWorkingArcsec": 0.401221061822113,
+   "contrast": 8.105229577184765e-11,
+   "contrastFloor": 1.3489688238113107e-07,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 0.02081358962889647,
+   "innerWorkingArcsec": 0.1835375546141455,
+   "contrast": 3.65811725935762e-11,
+   "contrastFloor": 3.826404840431433e-10,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.10123321741063775,
+   "innerWorkingArcsec": 0.07554580440954674,
+   "contrast": 8.6370304082881e-08,
+   "contrastFloor": 1.1253961133169562e-06,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 0.06834546562439558,
+   "innerWorkingArcsec": 0.2656901445355822,
+   "contrast": 0.00011895553210587046,
+   "contrastFloor": 7.652120090235448e-07,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.19350577042445938,
+   "innerWorkingArcsec": 0.056078135134285584,
+   "contrast": 4.832102654534887e-06,
+   "contrastFloor": 1.1809141654051726e-05,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 1.477490394786624,
+   "innerWorkingArcsec": 0.09394737401457913,
+   "contrast": 3.517057261727774e-10,
+   "contrastFloor": 7.386834479138181e-05,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 0.019666945357339694,
+   "innerWorkingArcsec": 0.07323274164694385,
+   "contrast": 4.3344103287273583e-11,
+   "contrastFloor": 1.1554549093926227e-09,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.15748084164352197,
+   "innerWorkingArcsec": 0.3854855234972482,
+   "contrast": 2.861247583629373e-06,
+   "contrastFloor": 1.7815894955341512e-05,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.935822423321353,
+   "innerWorkingArcsec": 0.09445120389729612,
+   "contrast": 1.0219243503119099e-10,
+   "contrastFloor": 6.944955513710699e-07,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 0.05845950987896467,
+   "innerWorkingArcsec": 0.0700570254516674,
+   "contrast": 0.0006086402517675273,
+   "contrastFloor": 6.714839967864745e-06,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.018516828404484886,
+   "innerWorkingArcsec": 0.15829999928087782,
+   "contrast": 2.412868383849793e-05,
+   "contrastFloor": 2.8318536026596426e-08,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.062214096103297874,
+   "innerWorkingArcsec": 0.09188919363049373,
+   "contrast": 8.384736323411944e-10,
+   "contrastFloor": 3.649191046259579e-08,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.028850707630262967,
+   "innerWorkingArcsec": 0.11073111549563275,
+   "contrast": 1.1192557884863623e-05,
+   "contrastFloor": 1.2466615859665446e-07,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.012327852942636046,
+   "innerWorkingArcsec": 0.17456604063951056,
+   "contrast": 1.8729007109633885e-06,
+   "contrastFloor": 7.713389191034782e-07,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.01567308292362495,
+   "innerWorkingArcsec": 0.25404523768515375,
+   "contrast": 1.5586157684089956e-10,
+   "contrastFloor": 4.281965181659572e-05,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.6987661594239146,
+   "innerWorkingArcsec": 0.4105279619053371,
+   "contrast": 2.3161384256469075e-05,
+   "contrastFloor": 1.3622717937588326e-06,
+   "expected": "observable"
+  },
+  {
+   "separationArcsec": 0.0300973467521862,
+   "innerWorkingArcsec": 0.43644169813387573,
+   "contrast": 2.0307609338876198e-09,
+   "contrastFloor": 4.989535760742677e-08,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.42963419491821286,
+   "innerWorkingArcsec": 0.3605751858850547,
+   "contrast": 1.203041517926732e-10,
+   "contrastFloor": 2.2328151062097602e-08,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 0.24214771469828555,
+   "innerWorkingArcsec": 0.2923499576866201,
+   "contrast": 2.2656848581018224e-09,
+   "contrastFloor": 2.5892552002812418e-09,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.02272484537541522,
+   "innerWorkingArcsec": 0.22396107372494398,
+   "contrast": 8.00455684342482e-06,
+   "contrastFloor": 1.8228590279243475e-07,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.0672402451860302,
+   "innerWorkingArcsec": 0.35177643274826315,
+   "contrast": 1.4930214704143086e-08,
+   "contrastFloor": 1.0854821476362828e-05,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 1.0105260221023218,
+   "innerWorkingArcsec": 0.2447075672374966,
+   "contrast": 0.0007108060437393136,
+   "contrastFloor": 5.822255976990995e-10,
+   "expected": "observable"
+  },
+  {
+   "separationArcsec": 0.10949582120827547,
+   "innerWorkingArcsec": 0.24228310072146925,
+   "contrast": 1.7645709166994575e-06,
+   "contrastFloor": 8.798026608470747e-07,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.29444880157129605,
+   "innerWorkingArcsec": 0.06960919482234884,
+   "contrast": 6.986733943178959e-10,
+   "contrastFloor": 1.3864488904384246e-10,
+   "expected": "observable"
+  },
+  {
+   "separationArcsec": 0.15780029161893364,
+   "innerWorkingArcsec": 0.061499435337552505,
+   "contrast": 0.0009158751378673728,
+   "contrastFloor": 1.2179951436917934e-08,
+   "expected": "observable"
+  },
+  {
+   "separationArcsec": 0.5694360424596074,
+   "innerWorkingArcsec": 0.2701416597317273,
+   "contrast": 6.8390255643170775e-06,
+   "contrastFloor": 3.798753692874543e-08,
+   "expected": "observable"
+  },
+  {
+   "separationArcsec": 0.13479215550580062,
+   "innerWorkingArcsec": 0.0867652225271721,
+   "contrast": 1.7850371322746337e-09,
+   "contrastFloor": 2.942167074793621e-05,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 1.5798523265623519,
+   "innerWorkingArcsec": 0.46376623808779077,
+   "contrast": 0.00041664284642186326,
+   "contrastFloor": 2.4009085054646737e-10,
+   "expected": "observable"
+  },
+  {
+   "separationArcsec": 1.6399105723001597,
+   "innerWorkingArcsec": 0.20024619059565135,
+   "contrast": 1.8423527480027057e-05,
+   "contrastFloor": 4.02318652026656e-09,
+   "expected": "observable"
+  },
+  {
+   "separationArcsec": 0.10521134462745015,
+   "innerWorkingArcsec": 0.11153303501485648,
+   "contrast": 1.1667995102281298e-10,
+   "contrastFloor": 4.400293489539986e-10,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.16707981271764707,
+   "innerWorkingArcsec": 0.10478550671092815,
+   "contrast": 2.3134450923849013e-06,
+   "contrastFloor": 3.873884922611934e-06,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 0.1018182695092263,
+   "innerWorkingArcsec": 0.41504442307280454,
+   "contrast": 3.3832559399326617e-10,
+   "contrastFloor": 3.0296324294731964e-05,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 1.8427609246444436,
+   "innerWorkingArcsec": 0.15981457676406785,
+   "contrast": 0.0008720292395504608,
+   "contrastFloor": 2.0039981586806186e-09,
+   "expected": "observable"
+  },
+  {
+   "separationArcsec": 0.21001439264933325,
+   "innerWorkingArcsec": 0.1570206485372445,
+   "contrast": 3.5907968588849436e-11,
+   "contrastFloor": 1.3607345233849025e-06,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 0.06250078797165215,
+   "innerWorkingArcsec": 0.321313909302505,
+   "contrast": 2.2668104940790085e-10,
+   "contrastFloor": 2.2718831205476845e-05,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 1.2737555601657697,
+   "innerWorkingArcsec": 0.12943049564271525,
+   "contrast": 1.1562465423446185e-07,
+   "contrastFloor": 3.688009619656707e-05,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 1.3784483028328254,
+   "innerWorkingArcsec": 0.2624566958903165,
+   "contrast": 1.1738344360349473e-11,
+   "contrastFloor": 5.726822772484293e-07,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 0.012383052137710944,
+   "innerWorkingArcsec": 0.15377561785798338,
+   "contrast": 8.014245398819761e-08,
+   "contrastFloor": 5.237810812050571e-07,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.04334362955607958,
+   "innerWorkingArcsec": 0.3698219569229173,
+   "contrast": 1.2260753692539942e-08,
+   "contrastFloor": 9.598179050519071e-05,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.6627543451610117,
+   "innerWorkingArcsec": 0.155479039952202,
+   "contrast": 5.288044898545185e-07,
+   "contrastFloor": 2.084470661256227e-07,
+   "expected": "observable"
+  },
+  {
+   "separationArcsec": 0.04557370135692679,
+   "innerWorkingArcsec": 0.23663783769469163,
+   "contrast": 8.611025540078529e-11,
+   "contrastFloor": 1.0383726411117364e-06,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.026020445214195526,
+   "innerWorkingArcsec": 0.0605504157282211,
+   "contrast": 0.0002577931725881002,
+   "contrastFloor": 4.022946262979748e-08,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.09250616613957474,
+   "innerWorkingArcsec": 0.13299705674465154,
+   "contrast": 7.55981404757204e-05,
+   "contrastFloor": 2.838910438320892e-10,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 1.1136301091755791,
+   "innerWorkingArcsec": 0.06920856940167351,
+   "contrast": 2.3414433630266128e-08,
+   "contrastFloor": 1.3520360852905168e-05,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 0.5084980293134183,
+   "innerWorkingArcsec": 0.07627372153984463,
+   "contrast": 2.1086517648046806e-07,
+   "contrastFloor": 3.175293822978708e-06,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 0.1077856912628143,
+   "innerWorkingArcsec": 0.1400014472576946,
+   "contrast": 6.260087428108015e-09,
+   "contrastFloor": 4.959203682193115e-07,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.28434428030999354,
+   "innerWorkingArcsec": 0.09879525244775315,
+   "contrast": 0.00018522242947539445,
+   "contrastFloor": 1.587573135614257e-10,
+   "expected": "observable"
+  },
+  {
+   "separationArcsec": 0.03479299404818,
+   "innerWorkingArcsec": 0.1701760895493941,
+   "contrast": 2.104711622840179e-06,
+   "contrastFloor": 4.806926315431306e-07,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 1.79037221990894,
+   "innerWorkingArcsec": 0.18002033072464846,
+   "contrast": 5.456219267484175e-05,
+   "contrastFloor": 2.5360902362967965e-05,
+   "expected": "observable"
+  },
+  {
+   "separationArcsec": 0.04998303958312656,
+   "innerWorkingArcsec": 0.06853054116540462,
+   "contrast": 4.097628630219074e-05,
+   "contrastFloor": 2.292435164270331e-06,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.014295574308767321,
+   "innerWorkingArcsec": 0.14272245351112942,
+   "contrast": 4.609165077703528e-06,
+   "contrastFloor": 1.0177099701716182e-05,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.175950883816333,
+   "innerWorkingArcsec": 0.49818649946104415,
+   "contrast": 0.00013383037869941093,
+   "contrastFloor": 4.876177876494594e-08,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 1.4116694443595283,
+   "innerWorkingArcsec": 0.08085084897449178,
+   "contrast": 7.75295204614031e-07,
+   "contrastFloor": 1.5995706522059892e-09,
+   "expected": "observable"
+  },
+  {
+   "separationArcsec": 0.0644868486111379,
+   "innerWorkingArcsec": 0.49510813715725616,
+   "contrast": 1.1893347387083619e-11,
+   "contrastFloor": 6.014493808988399e-09,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.1488409768039825,
+   "innerWorkingArcsec": 0.4486700488815127,
+   "contrast": 1.4585257582537203e-09,
+   "contrastFloor": 1.0677733225532444e-09,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 1.031507904894581,
+   "innerWorkingArcsec": 0.1155610805924315,
+   "contrast": 1.7355549210814663e-10,
+   "contrastFloor": 9.13562725279908e-07,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 1.0266920927218877,
+   "innerWorkingArcsec": 0.06820323178376084,
+   "contrast": 7.343256086616749e-05,
+   "contrastFloor": 4.227509240793684e-09,
+   "expected": "observable"
+  },
+  {
+   "separationArcsec": 0.05187546156964951,
+   "innerWorkingArcsec": 0.05542941766423507,
+   "contrast": 3.972852605307645e-10,
+   "contrastFloor": 5.268391465177433e-10,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.7731043306219132,
+   "innerWorkingArcsec": 0.10964101050414801,
+   "contrast": 4.8010197953730626e-05,
+   "contrastFloor": 2.043806011201969e-07,
+   "expected": "observable"
+  },
+  {
+   "separationArcsec": 0.8622340905663658,
+   "innerWorkingArcsec": 0.24627019493971483,
+   "contrast": 2.3710257373856724e-07,
+   "contrastFloor": 5.719582207343179e-06,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 1.4870461953497638,
+   "innerWorkingArcsec": 0.29002158030367103,
+   "contrast": 1.0881086644998935e-06,
+   "contrastFloor": 1.0380210736246407e-10,
+   "expected": "observable"
+  },
+  {
+   "separationArcsec": 0.15430351198470024,
+   "innerWorkingArcsec": 0.10372567217799304,
+   "contrast": 1.3202745283196722e-05,
+   "contrastFloor": 3.1691051520057125e-10,
+   "expected": "observable"
+  },
+  {
+   "separationArcsec": 0.22303292822913112,
+   "innerWorkingArcsec": 0.1491583520725393,
+   "contrast": 4.1720271347180477e-10,
+   "contrastFloor": 2.2521520435765914e-08,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 0.04461525698426942,
+   "innerWorkingArcsec": 0.23431260798366402,
+   "contrast": 1.4530136056794403e-06,
+   "contrastFloor": 1.3673818577441154e-05,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.027617352431245062,
+   "innerWorkingArcsec": 0.07046047075613263,
+   "contrast": 2.325644865504214e-10,
+   "contrastFloor": 1.1474840729867718e-06,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 1.1352102002389468,
+   "innerWorkingArcsec": 0.48731834034093535,
+   "contrast": 3.69166978167914e-11,
+   "contrastFloor": 1.5640355260510281e-06,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 0.4931755140632778,
+   "innerWorkingArcsec": 0.15595958964279327,
+   "contrast": 3.273996877852415e-06,
+   "contrastFloor": 7.540825909858024e-10,
+   "expected": "observable"
+  },
+  {
+   "separationArcsec": 0.012330910415640226,
+   "innerWorkingArcsec": 0.2263395485234638,
+   "contrast": 1.8839027556490414e-07,
+   "contrastFloor": 2.355662074563229e-08,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.5612798653075542,
+   "innerWorkingArcsec": 0.12294374480126903,
+   "contrast": 3.871821770112975e-09,
+   "contrastFloor": 4.076801435589954e-10,
+   "expected": "observable"
+  },
+  {
+   "separationArcsec": 0.4656339779231129,
+   "innerWorkingArcsec": 0.20208955491935543,
+   "contrast": 2.0979729088913067e-07,
+   "contrastFloor": 7.431314206705523e-07,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 0.018204230319473092,
+   "innerWorkingArcsec": 0.05406990976434248,
+   "contrast": 7.258591663934039e-08,
+   "contrastFloor": 6.470348401938195e-09,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.050971140662618195,
+   "innerWorkingArcsec": 0.24864853700536801,
+   "contrast": 1.8025973775504875e-09,
+   "contrastFloor": 1.267755030569898e-07,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.3906246809022699,
+   "innerWorkingArcsec": 0.29191621122250794,
+   "contrast": 1.9087442153901303e-06,
+   "contrastFloor": 2.288708766459048e-08,
+   "expected": "observable"
+  },
+  {
+   "separationArcsec": 0.4450504699663293,
+   "innerWorkingArcsec": 0.09392818883389556,
+   "contrast": 3.3168874034577437e-09,
+   "contrastFloor": 1.1688085363908785e-05,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 1.5918544663071164,
+   "innerWorkingArcsec": 0.27184051626592726,
+   "contrast": 1.1632370082524974e-05,
+   "contrastFloor": 6.380683808078936e-09,
+   "expected": "observable"
+  },
+  {
+   "separationArcsec": 0.36046043153280066,
+   "innerWorkingArcsec": 0.16090890879783903,
+   "contrast": 9.2130505871944e-09,
+   "contrastFloor": 2.7199137584284e-05,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 0.08730898944319525,
+   "innerWorkingArcsec": 0.08094327860995251,
+   "contrast": 1.0565168213356603e-11,
+   "contrastFloor": 1.1098381456536957e-09,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 1.3270464834369333,
+   "innerWorkingArcsec": 0.12419366493318482,
+   "contrast": 6.197154658800602e-06,
+   "contrastFloor": 1.7761104573509036e-09,
+   "expected": "observable"
+  },
+  {
+   "separationArcsec": 0.06317098013734039,
+   "innerWorkingArcsec": 0.06775205929132436,
+   "contrast": 0.0004700997075903744,
+   "contrastFloor": 2.1230302429448397e-10,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.0951142529375661,
+   "innerWorkingArcsec": 0.05197401890380118,
+   "contrast": 6.953524588907545e-06,
+   "contrastFloor": 3.2801896477680904e-09,
+   "expected": "observable"
+  },
+  {
+   "separationArcsec": 0.7706210330198148,
+   "innerWorkingArcsec": 0.19570410190281343,
+   "contrast": 4.188483248783905e-07,
+   "contrastFloor": 6.51938627429973e-07,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 0.39025336339619077,
+   "innerWorkingArcsec": 0.2194557213024448,
+   "contrast": 3.332839568567726e-05,
+   "contrastFloor": 3.1593647918574946e-09,
+   "expected": "observable"
+  },
+  {
+   "separationArcsec": 0.37488083915467724,
+   "innerWorkingArcsec": 0.16988657521400793,
+   "contrast": 0.0008758470298199654,
+   "contrastFloor": 8.432402300781484e-05,
+   "expected": "observable"
+  },
+  {
+   "separationArcsec": 0.23168014617170696,
+   "innerWorkingArcsec": 0.4442566951442666,
+   "contrast": 3.1239078381640047e-10,
+   "contrastFloor": 1.0523550262493562e-09,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 1.4426215803871252,
+   "innerWorkingArcsec": 0.277579991046384,
+   "contrast": 4.120869907411146e-06,
+   "contrastFloor": 1.310401593864822e-10,
+   "expected": "observable"
+  },
+  {
+   "separationArcsec": 0.08379749602353984,
+   "innerWorkingArcsec": 0.058778748584741664,
+   "contrast": 1.1813979802567751e-05,
+   "contrastFloor": 9.69105562696463e-05,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 0.013083753424600294,
+   "innerWorkingArcsec": 0.06307536392261161,
+   "contrast": 1.918702583188122e-06,
+   "contrastFloor": 3.6037474079144276e-06,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.39755975514179354,
+   "innerWorkingArcsec": 0.06679517841281644,
+   "contrast": 2.2510659131104402e-10,
+   "contrastFloor": 7.792633914827679e-10,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 1.1290944422196856,
+   "innerWorkingArcsec": 0.06277598234830908,
+   "contrast": 3.87095632862508e-11,
+   "contrastFloor": 1.2161671556678428e-06,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 0.023728514893122325,
+   "innerWorkingArcsec": 0.050302173224448334,
+   "contrast": 0.00011683253962264149,
+   "contrastFloor": 2.6223240852585085e-07,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.4690028782772412,
+   "innerWorkingArcsec": 0.21269080577394958,
+   "contrast": 8.855513852385133e-05,
+   "contrastFloor": 1.453700967321129e-09,
+   "expected": "observable"
+  },
+  {
+   "separationArcsec": 0.02275623517382122,
+   "innerWorkingArcsec": 0.07590253311089108,
+   "contrast": 3.996629156281654e-06,
+   "contrastFloor": 1.1363561326496252e-08,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.06146860394180923,
+   "innerWorkingArcsec": 0.18319044175877605,
+   "contrast": 7.574091530306515e-11,
+   "contrastFloor": 3.850144640488256e-05,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 1.2484330994567432,
+   "innerWorkingArcsec": 0.0595062678179923,
+   "contrast": 7.631721817943648e-06,
+   "contrastFloor": 7.703594376210802e-08,
+   "expected": "observable"
+  },
+  {
+   "separationArcsec": 0.03314316301326983,
+   "innerWorkingArcsec": 0.3107097292295509,
+   "contrast": 4.704691234083072e-09,
+   "contrastFloor": 3.64713254364781e-07,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.15687278136880115,
+   "innerWorkingArcsec": 0.1048704105834555,
+   "contrast": 1.71054725897306e-11,
+   "contrastFloor": 9.434629698709178e-06,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 0.8075408463444476,
+   "innerWorkingArcsec": 0.11231180244796052,
+   "contrast": 1.8498094013374142e-10,
+   "contrastFloor": 2.874129338961494e-09,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 0.1006353787142383,
+   "innerWorkingArcsec": 0.07025860483613161,
+   "contrast": 4.683579380325327e-10,
+   "contrastFloor": 3.315645680383534e-05,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 0.020648710936783065,
+   "innerWorkingArcsec": 0.10384776878406385,
+   "contrast": 5.1857086392492734e-08,
+   "contrastFloor": 6.881594318245675e-10,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.08184007719445306,
+   "innerWorkingArcsec": 0.0619141810617726,
+   "contrast": 3.906314788150359e-11,
+   "contrastFloor": 2.1377786748402116e-05,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 1.3358912547071584,
+   "innerWorkingArcsec": 0.19180413943339075,
+   "contrast": 5.2811825312091656e-08,
+   "contrastFloor": 7.064146870024733e-09,
+   "expected": "observable"
+  },
+  {
+   "separationArcsec": 1.0978632193255617,
+   "innerWorkingArcsec": 0.22040085590947864,
+   "contrast": 0.000981002460158787,
+   "contrastFloor": 1.1507027339264437e-09,
+   "expected": "observable"
+  },
+  {
+   "separationArcsec": 0.23458456782977902,
+   "innerWorkingArcsec": 0.08852162873015806,
+   "contrast": 0.0006216463331796688,
+   "contrastFloor": 4.987074356102108e-10,
+   "expected": "observable"
+  },
+  {
+   "separationArcsec": 1.5644953001027697,
+   "innerWorkingArcsec": 0.09983560436673647,
+   "contrast": 4.928306715479743e-06,
+   "contrastFloor": 2.8800091636586904e-09,
+   "expected": "observable"
+  },
+  {
+   "separationArcsec": 0.010746062676279023,
+   "innerWorkingArcsec": 0.05879556193842205,
+   "contrast": 5.2731384910645085e-05,
+   "contrastFloor": 4.9166337517928235e-05,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 1.6939653347338528,
+   "innerWorkingArcsec": 0.29548642881036896,
+   "contrast": 8.979794101376114e-11,
+   "contrastFloor": 4.220741261761654e-08,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 0.025150551561106505,
+   "innerWorkingArcsec": 0.30237288030537524,
+   "contrast": 6.981080303472657e-09,
+   "contrastFloor": 1.371665909390368e-09,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 1.1512214359499815,
+   "innerWorkingArcsec": 0.06670114553714378,
+   "contrast": 5.575430753237241e-07,
+   "contrastFloor": 1.4490778989399763e-10,
+   "expected": "observable"
+  },
+  {
+   "separationArcsec": 0.2914742634559599,
+   "innerWorkingArcsec": 0.06220319698433881,
+   "contrast": 2.8733650835252687e-07,
+   "contrastFloor": 1.2911851708970022e-08,
+   "expected": "observable"
+  },
+  {
+   "separationArcsec": 0.04578998855555056,
+   "innerWorkingArcsec": 0.2545878698974697,
+   "contrast": 1.1161234567713881e-11,
+   "contrastFloor": 3.7595821116198786e-07,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.1905795318235406,
+   "innerWorkingArcsec": 0.051781046965533685,
+   "contrast": 2.4566138666725533e-07,
+   "contrastFloor": 2.853672687977056e-05,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 0.032042707134108735,
+   "innerWorkingArcsec": 0.1754246608508069,
+   "contrast": 1.3918241851025064e-11,
+   "contrastFloor": 2.852632189768611e-09,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.717817365306199,
+   "innerWorkingArcsec": 0.08266679529438581,
+   "contrast": 1.426518171546495e-10,
+   "contrastFloor": 4.27539422065813e-09,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 1.2843191002968573,
+   "innerWorkingArcsec": 0.28047804768799756,
+   "contrast": 3.186485532126201e-11,
+   "contrastFloor": 2.3084330229873575e-05,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 0.04670885283578954,
+   "innerWorkingArcsec": 0.21497076720706265,
+   "contrast": 2.2186718511624888e-11,
+   "contrastFloor": 1.0386685529162887e-07,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 1.1764986329373355,
+   "innerWorkingArcsec": 0.4429619363530841,
+   "contrast": 0.00013712172064944222,
+   "contrastFloor": 5.095525759840517e-07,
+   "expected": "observable"
+  },
+  {
+   "separationArcsec": 0.13146131807906195,
+   "innerWorkingArcsec": 0.2281108581116427,
+   "contrast": 1.4950266735043452e-10,
+   "contrastFloor": 2.697149221434417e-08,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.5803683322071493,
+   "innerWorkingArcsec": 0.12570210201587417,
+   "contrast": 3.016227553075872e-07,
+   "contrastFloor": 1.266162219623506e-10,
+   "expected": "observable"
+  },
+  {
+   "separationArcsec": 0.3685241720415735,
+   "innerWorkingArcsec": 0.25775563930521894,
+   "contrast": 1.026551453630482e-09,
+   "contrastFloor": 2.2733890976086594e-05,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 0.3351901776492295,
+   "innerWorkingArcsec": 0.40781436298235874,
+   "contrast": 5.219390744311502e-10,
+   "contrastFloor": 6.510530463577337e-05,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 1.156652761204534,
+   "innerWorkingArcsec": 0.08988787437579297,
+   "contrast": 2.2428228661825215e-05,
+   "contrastFloor": 5.465269768294484e-07,
+   "expected": "observable"
+  },
+  {
+   "separationArcsec": 0.07119414550591498,
+   "innerWorkingArcsec": 0.11210797695074504,
+   "contrast": 1.6029122964257688e-05,
+   "contrastFloor": 1.0173291069959762e-09,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 1.3578143985375875,
+   "innerWorkingArcsec": 0.0874959258590881,
+   "contrast": 2.3412625794941305e-06,
+   "contrastFloor": 3.4777393816443223e-09,
+   "expected": "observable"
+  },
+  {
+   "separationArcsec": 0.03927613113743989,
+   "innerWorkingArcsec": 0.17000858183034065,
+   "contrast": 9.92308584108516e-11,
+   "contrastFloor": 2.473397559660138e-10,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.029971557521707368,
+   "innerWorkingArcsec": 0.4218084616153753,
+   "contrast": 0.000346792306813506,
+   "contrastFloor": 3.052499113499002e-10,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.2096933256028495,
+   "innerWorkingArcsec": 0.2016870359777449,
+   "contrast": 9.459004467692637e-05,
+   "contrastFloor": 2.7217049840057026e-05,
+   "expected": "observable"
+  },
+  {
+   "separationArcsec": 0.08141710507514044,
+   "innerWorkingArcsec": 0.17255795207533603,
+   "contrast": 5.803069605164222e-09,
+   "contrastFloor": 1.0131426119637093e-10,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.4084749609955238,
+   "innerWorkingArcsec": 0.1866774936480034,
+   "contrast": 1.4771246138349517e-10,
+   "contrastFloor": 4.721880623002903e-10,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 0.03786576660056928,
+   "innerWorkingArcsec": 0.05604182056979632,
+   "contrast": 0.00016211235844753642,
+   "contrastFloor": 5.892812204893893e-06,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.05724386970495767,
+   "innerWorkingArcsec": 0.3255789046462079,
+   "contrast": 1.8915481856500604e-09,
+   "contrastFloor": 9.87228783271592e-05,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.02303949794502314,
+   "innerWorkingArcsec": 0.3594927435708812,
+   "contrast": 1.3771436402690778e-07,
+   "contrastFloor": 1.2763996843319047e-06,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 1.7661287801375045,
+   "innerWorkingArcsec": 0.4510431433509149,
+   "contrast": 4.0714327200816094e-05,
+   "contrastFloor": 1.7772572421697682e-10,
+   "expected": "observable"
+  },
+  {
+   "separationArcsec": 0.01438177398705857,
+   "innerWorkingArcsec": 0.1485454835254191,
+   "contrast": 0.0003970728467257172,
+   "contrastFloor": 3.4827422047767934e-10,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.017262131205541546,
+   "innerWorkingArcsec": 0.43575335709570356,
+   "contrast": 0.00036301681973541027,
+   "contrastFloor": 3.998466178612462e-09,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.47314788742902786,
+   "innerWorkingArcsec": 0.08946166388490874,
+   "contrast": 0.0003137425213782562,
+   "contrastFloor": 1.539488579954688e-08,
+   "expected": "observable"
+  },
+  {
+   "separationArcsec": 0.18515584027975898,
+   "innerWorkingArcsec": 0.20204327587697202,
+   "contrast": 5.32620874609001e-06,
+   "contrastFloor": 4.812338072214997e-10,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 1.0806285522277088,
+   "innerWorkingArcsec": 0.0818284902937195,
+   "contrast": 1.7553729145625493e-10,
+   "contrastFloor": 5.28509862021449e-09,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 0.22164488702833132,
+   "innerWorkingArcsec": 0.06836340726393159,
+   "contrast": 4.47012236621081e-07,
+   "contrastFloor": 1.632083111874794e-05,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 0.7765123316770819,
+   "innerWorkingArcsec": 0.21746085890377873,
+   "contrast": 3.5627115259958853e-10,
+   "contrastFloor": 6.960870265627656e-10,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 0.7360242492540156,
+   "innerWorkingArcsec": 0.20668023232171326,
+   "contrast": 5.087257475952867e-09,
+   "contrastFloor": 6.806126443323484e-09,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 0.09524405007090478,
+   "innerWorkingArcsec": 0.11925753203212008,
+   "contrast": 2.3196022303298457e-09,
+   "contrastFloor": 2.8450123650064483e-07,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.040430286852129904,
+   "innerWorkingArcsec": 0.11499025214252764,
+   "contrast": 0.0004147727882074338,
+   "contrastFloor": 2.7401446530060293e-05,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.6632747839221197,
+   "innerWorkingArcsec": 0.22259341714610698,
+   "contrast": 9.236117514428586e-09,
+   "contrastFloor": 1.4149339819417761e-07,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 0.3304141007023936,
+   "innerWorkingArcsec": 0.07113070461674,
+   "contrast": 9.816014909337738e-10,
+   "contrastFloor": 6.113529147816996e-05,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 0.013662989957541382,
+   "innerWorkingArcsec": 0.1298376469623042,
+   "contrast": 1.2901405954267192e-06,
+   "contrastFloor": 1.9860513157971825e-06,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.06315508896628814,
+   "innerWorkingArcsec": 0.12649514362874856,
+   "contrast": 4.822692327918744e-06,
+   "contrastFloor": 4.3232432581803346e-06,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 1.7184845343776358,
+   "innerWorkingArcsec": 0.20367036566435673,
+   "contrast": 1.2362863491853108e-09,
+   "contrastFloor": 1.9001608075373293e-09,
+   "expected": "below-contrast-floor"
+  },
+  {
+   "separationArcsec": 0.10483322112852293,
+   "innerWorkingArcsec": 0.33595075920738304,
+   "contrast": 4.82377997190038e-10,
+   "contrastFloor": 2.6995028282778457e-07,
+   "expected": "inside-inner-working-angle"
+  },
+  {
+   "separationArcsec": 0.21576471143259576,
+   "innerWorkingArcsec": 0.07079516030249224,
+   "contrast": 5.015022657465765e-05,
+   "contrastFloor": 1.649406163115212e-08,
+   "expected": "observable"
+  },
+  {
+   "separationArcsec": 0.2648459589457824,
+   "innerWorkingArcsec": 0.11429183667424529,
+   "contrast": 6.272972281824359e-10,
+   "contrastFloor": 6.208521407546515e-06,
+   "expected": "below-contrast-floor"
+  }
+ ]
+}
