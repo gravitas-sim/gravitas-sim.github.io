@@ -72,6 +72,7 @@ export function fitSinusoidAt(epochs, times, sigmas, Pt) {
     chi2,
     A: x[2],
     B: x[3],
+    coef: x,
     period: Pt,
     amplitude: Math.hypot(x[2], x[3]),
     sigmaAmplitude,
@@ -100,12 +101,24 @@ export function scanSuperPeriod(
     profile.push([1 / f, r.chi2]);
     if (!best || r.chi2 < best.chi2) best = r;
   }
-  return { best, profile, span };
+  if (!best) return { best: null, profile, span };
+  // a fine scan about the coarse minimum, fine enough to cross delta chi-square 1
+  const fb = 1 / best.period;
+  const fine = [];
+  for (let k = -150; k <= 150; k++) {
+    const f = fb + (k * df) / 75;
+    if (!(f > 0)) continue;
+    const r = fitSinusoidAt(epochs, times, sigmas, 1 / f);
+    if (!r) continue;
+    fine.push([1 / f, r.chi2]);
+    if (r.chi2 < best.chi2) best = r;
+  }
+  return { best, profile: fine, span };
 }
 
 /** The period span within delta chi-square 1 of the minimum (a frequency-space crossing). */
-function periodInterval(profile, best) {
-  const level = best.chi2 + 1;
+function periodInterval(profile, best, scale) {
+  const level = best.chi2 + scale;
   let lo = best.period;
   let hi = best.period;
   const k = profile.findIndex(p => p[0] === best.period);
@@ -155,7 +168,8 @@ export function analyseTransitTimes({
   });
   if (!scan.best) return { status: 'refused', reason: 'singular', ...base };
   const { best, profile } = scan;
-  const iv = periodInterval(profile, best);
+  const reduced = sigmas ? best.chi2 / Math.max(1, times.length - 4) : 1;
+  const iv = periodInterval(profile, best, Math.max(1, reduced));
   const cycles = baseline / best.period;
   const out = {
     ...base,
@@ -163,6 +177,7 @@ export function analyseTransitTimes({
     amplitude: Math.hypot(best.A, best.B),
     phase: Math.atan2(best.B, best.A),
     cycles,
+    reducedChi2: reduced,
     deltaChi2: sigmas ? eph.chi2 - best.chi2 : null,
     pFit: sigmas ? chi2Sf(best.chi2, times.length - 4) : null,
   };

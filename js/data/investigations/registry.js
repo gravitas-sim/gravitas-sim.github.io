@@ -205,6 +205,7 @@ const LOADERS = {
   'how-old-is-this-white-dwarf': () =>
     import('./how-old-is-this-white-dwarf.js'),
   'from-star-to-remnant': () => import('./from-star-to-remnant.js'),
+  'the-clock-that-drifts': () => import('./the-clock-that-drifts.js'),
   'deep-or-wide': () => import('./deep-or-wide.js'),
   'two-telescopes-one-question': () =>
     import('./two-telescopes-one-question.js'),
@@ -340,6 +341,7 @@ const TRANSLATIONS = {
     'how-old-is-this-white-dwarf': () =>
       import('./es/how-old-is-this-white-dwarf.js'),
     'from-star-to-remnant': () => import('./es/from-star-to-remnant.js'),
+    'the-clock-that-drifts': () => import('./es/the-clock-that-drifts.js'),
     'deep-or-wide': () => import('./es/deep-or-wide.js'),
     'two-telescopes-one-question': () =>
       import('./es/two-telescopes-one-question.js'),

@@ -35,6 +35,7 @@ export const EVIDENCE_FROM = Object.freeze({
   flares: 'model',
   'from-photons-to-a-number': 'model',
   'from-star-to-remnant': 'model',
+  'the-clock-that-drifts': 'model',
   'goldilocks-question': 'model',
   'gravity-assist': 'engine',
   'hohmann-transfer': 'engine',

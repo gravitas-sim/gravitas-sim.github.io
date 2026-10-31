@@ -76,6 +76,7 @@ export const PARTS = Object.freeze({
     'masses',
     'activity',
     'remnants',
+    'ttv',
     'energy',
     'binary',
     'blackHole',

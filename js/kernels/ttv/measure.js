@@ -23,6 +23,13 @@ import { chi2Sf } from './ephemeris.js';
 
 const { Float64Array } = globalThis;
 
+/**
+ * A fitted sigma above this many cadences is a lower bound, not an interval (AM1 of
+ * tests/fixtures/ttv/thresholds.json): the curvature sigma is calibrated only when the timing
+ * precision is a fraction of the sampling.
+ */
+export const LOW_SNR_CADENCES = 0.5;
+
 /** The p below which a transit's own fit is flagged. */
 export const FIT_FLAG_P = 0.01;
 
@@ -32,7 +39,8 @@ export const FIT_FLAG_P = 0.01;
  *   guess: number, scan?: number, exposure?: number}} w
  *   `scan`: half-width of the coarse search about `guess` (default 0.5 half-durations)
  * @returns {{status: 'ok'|'refused', reason?: string, time: number, sigma: number,
- *   chi2: number, dof: number, p: number, flagged: boolean, baseline: number}}
+ *   chi2: number, dof: number, p: number, flagged: boolean, cadence: number,
+ *   regime: 'reliable'|'low-snr', baseline: number}}
  */
 export function measureTransitTime({
   t,
@@ -41,6 +49,7 @@ export function measureTransitTime({
   template,
   guess,
   scan,
+  scanSteps = 41,
   exposure = 0,
 }) {
   const n = t.length;
@@ -82,7 +91,7 @@ export function measureTransitTime({
   // coarse scan
   let start = guess;
   let low = Infinity;
-  const steps = 41;
+  const steps = scanSteps;
   for (let i = 0; i < steps; i++) {
     const c = guess - reach + (2 * reach * i) / (steps - 1);
     const e = problem.evaluate([c]);
@@ -96,6 +105,10 @@ export function measureTransitTime({
   const sigmaT = cov.sigma[0];
   if (!Number.isFinite(sigmaT) || !(sigmaT > 0))
     return { status: 'refused', reason: 'no-covariance' };
+  const gaps = [];
+  for (let i = 1; i < n; i++) gaps.push(t[i] - t[i - 1]);
+  gaps.sort((a, b) => a - b);
+  const cadence = gaps[gaps.length >> 1];
   const dof = n - 2;
   const chi2 = fit.best.chi2;
   const p = chi2Sf(chi2, dof);
@@ -107,6 +120,8 @@ export function measureTransitTime({
     dof,
     p,
     flagged: p < FIT_FLAG_P,
+    cadence,
+    regime: sigmaT <= LOW_SNR_CADENCES * cadence ? 'reliable' : 'low-snr',
     baseline: fit.best.linear.f0,
   };
 }
