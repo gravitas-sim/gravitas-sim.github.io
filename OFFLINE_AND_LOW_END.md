@@ -51,14 +51,14 @@ Measured from the committed `sw-manifest.js` and the files it lists, by
 <!--fact-block:precache-->
 | | Files | Raw |
 | --- | ---: | ---: |
-| JavaScript | 960 | 15.5 MB |
+| JavaScript | 960 | 15.6 MB |
 | Images | 121 | 950 KB |
 | Stylesheets | 10 | 500 KB |
 | Fonts | 9 | 140 KB |
 | Panel markup | 10 | 60 KB |
 | Pages | 12 | 320 KB |
 | Other | 16 | 790 KB |
-| **Total** | **1138** | **18.2 MB** |
+| **Total** | **1138** | **18.3 MB** |
 
 Of those, 811 are core (the install fails without them), 129 optional (installed with them; a missing one is reported and costs nothing) and 198 idle (installed after activation, when the browser is idle; a missing one costs that page its offline copy and is fetched again on the next open). The first-visit install is the core and the optional files: 940 files.
 
@@ -135,11 +135,11 @@ catalog, the course home and the two labs (`model/`, `instructors/`,
 the `/validation/` page runs on demand; and `social-card.png` (only ever
 fetched by a link unfurler).
 
-### Which of the <!--fact:investigations-->106<!--/fact--> lessons
+### Which of the <!--fact:investigations-->107<!--/fact--> lessons
 
 Each lesson is one dynamically imported file, so this is a real decision.
 
-**All but three of the <!--fact:investigations-->106<!--/fact--> English bodies are precached** (the
+**All but three of the <!--fact:investigations-->107<!--/fact--> English bodies are precached** (the
 three are the measurement and claim investigations, D-R10-67), about a tenth of the
 payload. The reasoning: the lesson a class is already in when the wifi dies is
 by definition already fetched, so precaching buys nothing there. What it buys is
@@ -148,7 +148,7 @@ runtime cache has nothing. A tenth of the payload to remove that cliff is worth
 it, and picking a favorite subset would be guessing which lesson a class is
 about to want.
 
-**The <!--fact:spanishShadows-->109<!--/fact--> Spanish shadows are not**: they are only ever fetched
+**The <!--fact:spanishShadows-->110<!--/fact--> Spanish shadows are not**: they are only ever fetched
 when the interface is in Spanish. They are runtime-cached on first use, and
 `js/offline.js` asks the worker to warm all of them the moment the language is
 switched. A Spanish classroom is therefore covered from when it chooses
