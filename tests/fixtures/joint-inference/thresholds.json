@@ -410,12 +410,14 @@
     {
       "id": "D6",
       "group": "negative",
-      "what": "S4 (grazing): the inclination, hence the planet's mass and density, is not constrained and the result says so",
+      "what": "S4 (grazing, b + k > 1): the radius ratio and the inclination are not constrained (the k-b valley of Prompt 225's check) and so the planet's radius and bulk density are flagged not constrained, and the result says so; the mass is flagged only if the transit leaves the sine of the inclination uncertain by more than 10 percent of itself (it does not, a/R* being about 9: the mass depends on sin i, which is within 1 percent of 1 over the whole valley), so a flag on the mass is not required and an unwarranted one is a failure",
       "limits": {
         "notConstrained": [
-          "Mp",
-          "rhoP"
-        ]
+          "Rp",
+          "rhoP",
+          "inclination"
+        ],
+        "massFlaggedOnlyIfSinIRelSigmaAbove": 0.1
       }
     },
     {
@@ -439,6 +441,11 @@
     {
       "id": "AM1",
       "note": "Recorded after the oracle ran and before any Gravitas joint code existed. For S1, S3 and S4 and the ensemble, e cos w and e sin w are HELD at 0 in the fit of both the oracle and the joint model (an analyst's circular assumption for a hot Jupiter, stated in the result): sqrt(e) cos w and sqrt(e) sin w are singular at the origin, so freeing them would leave the circular truth rank-deficient. B1 therefore compares t0, P, k, a/R*, b and K for S1; the eccentricity is compared in B3 (S2, where it is free). The oracle's Monte Carlo sigma is the half-width of the 15.865 to 84.135 percentile interval (a draw with b close to a/R* has an unbounded mass, so a standard deviation is not a stable statistic); the joint model's propagated sigma is read the same way for the comparison in B2, B4. No bound was changed.",
+      "boundMoved": false
+    },
+    {
+      "id": "AM2",
+      "note": "Recorded before any Gravitas joint code existed. D6 as first committed required the grazing system's MASS to be flagged not constrained. Working out the geometry for the joint model (sin i = sqrt(1 - (b (1 + e sin w) / (a/R* (1 - e^2)))^2), about 1 across the k-b valley at a/R* near 9) shows the mass is constrained there and it is the RADIUS and so the density that the valley opens: the committed sentence named the wrong quantity. D6 now requires the flag on the radius, the density and the inclination and forbids an unwarranted flag on the mass. This is a correction of the quantity named, not a change of any numerical bound.",
       "boundMoved": false
     }
   ]
