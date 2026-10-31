@@ -60,6 +60,7 @@ export const EVIDENCE_FROM = Object.freeze({
   'phases-and-eclipses': 'model',
   'plan-a-night': 'model',
   'plan-an-exposure': 'model',
+  'planet-or-not': 'model',
   'power-law-gravity': 'model',
   'propose-an-observation': 'model',
   'radial-velocity': 'model',

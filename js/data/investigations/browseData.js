@@ -404,8 +404,8 @@ export const BROWSE_META = {
     tags: ['compact-objects', 'stars'],
     numericCount: 0,
   },
-  'the-metallicity-term': {
-    tags: ['observing', 'stars'],
+  'planet-or-not': {
+    tags: ['exoplanets', 'observing'],
     numericCount: 0,
   },
   'deep-or-wide': {

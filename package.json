@@ -92,6 +92,7 @@
     "measure:validate": "node tools/measure-validate.mjs",
     "activity:validate": "node tools/stellar-activity-validate.mjs",
     "remnants:validate": "node tools/remnants-validate.mjs",
+    "vetting:validate": "node tools/vetting-validate.mjs",
     "variables-ii:validate": "node tools/variables-ii-validate.mjs",
     "packs:check": "node tools/build-data-packs.mjs --check",
     "sdk": "node sdk/cli.mjs",
@@ -233,6 +234,10 @@
     "js-yaml": "4.3.2",
     "playwright": "1.64.0",
     "prettier": "^3.6.2"
+  },
+  "overrides": {
+    "glob": "^14.0.3",
+    "minimatch": "^11.0.3"
   },
   "engines": {
     "node": ">=22"

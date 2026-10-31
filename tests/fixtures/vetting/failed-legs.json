@@ -1,0 +1,5 @@
+{
+  "note": "Legs of tests/fixtures/vetting/thresholds.json that crossed their bound, kept failing and labelled (only Carl resets a bound).",
+  "failed": [],
+  "notRun": []
+}

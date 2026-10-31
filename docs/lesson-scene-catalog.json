@@ -1159,21 +1159,6 @@
    "mutates": [],
    "datasets": []
   },
-  "plz-metallicity": {
-   "live": false,
-   "controls": [
-    "host",
-    "term",
-    "metal",
-    "dz",
-    "view"
-   ],
-   "presets": 3,
-   "buttons": [],
-   "engineReads": [],
-   "mutates": [],
-   "datasets": []
-  },
   "polytrope": {
    "live": false,
    "controls": [
@@ -2122,6 +2107,20 @@
     "offset"
    ],
    "presets": 3,
+   "buttons": [],
+   "engineReads": [],
+   "mutates": [],
+   "datasets": []
+  },
+  "vetting-checklist": {
+   "live": false,
+   "controls": [
+    "candidate",
+    "plots",
+    "view",
+    "truth"
+   ],
+   "presets": 0,
    "buttons": [],
    "engineReads": [],
    "mutates": [],
@@ -105103,18 +105102,18 @@
    }
   },
   {
-   "id": "the-metallicity-term",
-   "title": "The Metallicity Term",
+   "id": "planet-or-not",
+   "title": "Planet or Not?",
    "lock": {
     "placement": true,
     "inspector": true
    },
    "steps": [
     {
-     "sid": "a-term-for-the-gas",
+     "sid": "a-dip-is-a-candidate",
      "index": 1,
      "type": "read",
-     "title": "A term for the gas",
+     "title": "A dip is a candidate",
      "declares": {
       "stage": {
        "objects": 2,
@@ -105125,8 +105124,8 @@
       },
       "bound": [],
       "roles": [
-       "rich",
-       "poor"
+       "star",
+       "star"
       ]
      },
      "kinds": [
@@ -105135,8 +105134,7 @@
       "panel-diagram"
      ],
      "actions": [
-      "move-an-instrument-control",
-      "press-an-instrument-preset"
+      "move-an-instrument-control"
      ],
      "requires": [],
      "reveal": null,
@@ -105171,7 +105169,7 @@
       "eventWatch": null
      },
      "instrument": {
-      "id": "plz-metallicity",
+      "id": "vetting-checklist",
       "capture": false
      },
      "evidence": [],
@@ -105185,10 +105183,10 @@
      ]
     },
     {
-     "sid": "which-way-does-metal-go",
+     "sid": "read-the-checklist",
      "index": 2,
-     "type": "predict",
-     "title": "Which way does metal go",
+     "type": "question",
+     "title": "A clean candidate",
      "declares": {
       "stage": {
        "objects": 2,
@@ -105199,8 +105197,82 @@
       },
       "bound": [],
       "roles": [
-       "rich",
-       "poor"
+       "star",
+       "star"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram"
+     ],
+     "actions": [
+      "choose-an-option",
+      "move-an-instrument-control"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "vetting-checklist",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "which-test-catches",
+     "index": 3,
+     "type": "predict",
+     "title": "Deep dips and shallow dips",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "star",
+       "star"
       ]
      },
      "kinds": [
@@ -105210,11 +105282,10 @@
      ],
      "actions": [
       "commit-a-prediction",
-      "move-an-instrument-control",
-      "press-an-instrument-preset"
+      "move-an-instrument-control"
      ],
      "requires": [],
-     "reveal": "the-distance-twice",
+     "reveal": "deep-and-shallow",
      "asks": {
       "choice": true,
       "numeric": false,
@@ -105248,7 +105319,7 @@
       "eventWatch": null
      },
      "instrument": {
-      "id": "plz-metallicity",
+      "id": "vetting-checklist",
       "capture": false
      },
      "evidence": [],
@@ -105261,89 +105332,10 @@
      ]
     },
     {
-     "sid": "the-distance-twice",
-     "index": 3,
-     "type": "measure",
-     "title": "The distance twice",
-     "declares": {
-      "stage": {
-       "objects": 2,
-       "kind": "named",
-       "scale": "display",
-       "fits": true,
-       "anonymous": false
-      },
-      "bound": [],
-      "roles": [
-       "rich",
-       "poor"
-      ]
-     },
-     "kinds": [
-      "scene-declared",
-      "model-result",
-      "panel-diagram",
-      "captured-evidence"
-     ],
-     "actions": [
-      "record-values",
-      "move-an-instrument-control",
-      "press-an-instrument-preset"
-     ],
-     "requires": [],
-     "reveal": null,
-     "asks": {
-      "choice": false,
-      "numeric": false,
-      "short": false,
-      "rubric": false,
-      "validated": true
-     },
-     "worldRunning": "inherited",
-     "affordances": {
-      "inspector": "locked",
-      "placement": "locked",
-      "areaSweep": "locked"
-     },
-     "loop": {
-      "declared": "measure",
-      "actual": [
-       "experiment",
-       "measure",
-       "interpret"
-      ],
-      "handTranscribed": false,
-      "mismatch": null
-     },
-     "scene": {
-      "nameMatches": [],
-      "readsSelection": false,
-      "importsFromSelection": false,
-      "engineReads": [],
-      "mutates": [],
-      "eventWatch": null
-     },
-     "instrument": {
-      "id": "plz-metallicity",
-      "capture": false
-     },
-     "evidence": [
-      "notebook-fields"
-     ],
-     "reset": [
-      "stamps instrument values",
-      "lesson locks: placement, inspector"
-     ],
-     "recovery": [
-      "wrong body: the object list names what the step staged",
-      "ambiguous result: the check says in words how close is close enough"
-     ]
-    },
-    {
-     "sid": "what-a-term-this-size-does",
+     "sid": "deep-and-shallow",
      "index": 4,
      "type": "question",
-     "title": "What a term this size does",
+     "title": "Rejected twice",
      "declares": {
       "stage": {
        "objects": 2,
@@ -105354,8 +105346,8 @@
       },
       "bound": [],
       "roles": [
-       "rich",
-       "poor"
+       "star",
+       "star"
       ]
      },
      "kinds": [
@@ -105365,8 +105357,7 @@
      ],
      "actions": [
       "choose-an-option",
-      "move-an-instrument-control",
-      "press-an-instrument-preset"
+      "move-an-instrument-control"
      ],
      "requires": [],
      "reveal": null,
@@ -105402,7 +105393,7 @@
       "eventWatch": null
      },
      "instrument": {
-      "id": "plz-metallicity",
+      "id": "vetting-checklist",
       "capture": false
      },
      "evidence": [],
@@ -105415,10 +105406,10 @@
      ]
     },
     {
-     "sid": "what-the-term-adds-to-the-error",
+     "sid": "a-dip-on-the-target",
      "index": 5,
      "type": "question",
-     "title": "What the term adds to the error",
+     "title": "A binary on the target",
      "declares": {
       "stage": {
        "objects": 2,
@@ -105429,8 +105420,8 @@
       },
       "bound": [],
       "roles": [
-       "rich",
-       "poor"
+       "star",
+       "star"
       ]
      },
      "kinds": [
@@ -105440,8 +105431,7 @@
      ],
      "actions": [
       "choose-an-option",
-      "move-an-instrument-control",
-      "press-an-instrument-preset"
+      "move-an-instrument-control"
      ],
      "requires": [],
      "reveal": null,
@@ -105477,7 +105467,7 @@
       "eventWatch": null
      },
      "instrument": {
-      "id": "plz-metallicity",
+      "id": "vetting-checklist",
       "capture": false
      },
      "evidence": [],
@@ -105490,10 +105480,10 @@
      ]
     },
     {
-     "sid": "beyond-the-calibration",
+     "sid": "no-frames",
      "index": 6,
      "type": "question",
-     "title": "Beyond the calibration",
+     "title": "A clean one with no frames",
      "declares": {
       "stage": {
        "objects": 2,
@@ -105504,8 +105494,8 @@
       },
       "bound": [],
       "roles": [
-       "rich",
-       "poor"
+       "star",
+       "star"
       ]
      },
      "kinds": [
@@ -105515,8 +105505,7 @@
      ],
      "actions": [
       "choose-an-option",
-      "move-an-instrument-control",
-      "press-an-instrument-preset"
+      "move-an-instrument-control"
      ],
      "requires": [],
      "reveal": null,
@@ -105552,7 +105541,7 @@
       "eventWatch": null
      },
      "instrument": {
-      "id": "plz-metallicity",
+      "id": "vetting-checklist",
       "capture": false
      },
      "evidence": [],
@@ -105565,10 +105554,10 @@
      ]
     },
     {
-     "sid": "what-the-term-says",
+     "sid": "inconclusive-is-an-answer",
      "index": 7,
-     "type": "read",
-     "title": "What the term says",
+     "type": "question",
+     "title": "Inconclusive is an answer",
      "declares": {
       "stage": {
        "objects": 2,
@@ -105579,8 +105568,8 @@
       },
       "bound": [],
       "roles": [
-       "rich",
-       "poor"
+       "star",
+       "star"
       ]
      },
      "kinds": [
@@ -105589,8 +105578,81 @@
       "panel-diagram"
      ],
      "actions": [
-      "move-an-instrument-control",
-      "press-an-instrument-preset"
+      "choose-an-option",
+      "move-an-instrument-control"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "vetting-checklist",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "what-the-checklist-says",
+     "index": 8,
+     "type": "read",
+     "title": "What the checklist says",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "star",
+       "star"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram"
+     ],
+     "actions": [
+      "move-an-instrument-control"
      ],
      "requires": [],
      "reveal": null,
@@ -105625,7 +105687,7 @@
       "eventWatch": null
      },
      "instrument": {
-      "id": "plz-metallicity",
+      "id": "vetting-checklist",
       "capture": false
      },
      "evidence": [],
@@ -105640,27 +105702,25 @@
    ],
    "loops": [
     {
-     "predict": "which-way-does-metal-go",
+     "predict": "which-test-catches",
      "predictCollects": true,
-     "heldUntil": "the-distance-twice",
+     "heldUntil": "deep-and-shallow",
      "experiment": [
-      "the-distance-twice",
-      "what-a-term-this-size-does",
-      "what-the-term-adds-to-the-error",
-      "beyond-the-calibration",
-      "what-the-term-says"
+      "deep-and-shallow",
+      "a-dip-on-the-target",
+      "no-frames",
+      "inconclusive-is-an-answer",
+      "what-the-checklist-says"
      ],
      "measure": [
-      "the-distance-twice",
-      "what-a-term-this-size-does",
-      "what-the-term-adds-to-the-error",
-      "beyond-the-calibration",
-      "what-the-term-says"
+      "deep-and-shallow",
+      "a-dip-on-the-target",
+      "no-frames",
+      "inconclusive-is-an-answer",
+      "what-the-checklist-says"
      ],
-     "evidence": [
-      "the-distance-twice"
-     ],
-     "interpret": "the-distance-twice",
+     "evidence": [],
+     "interpret": "deep-and-shallow",
      "measuredBeforeAnswering": true,
      "explained": false,
      "answeredByTheExperiment": true,
@@ -105669,16 +105729,16 @@
     }
    ],
    "totals": {
-    "steps": 7,
-    "declared": 7,
+    "steps": 8,
+    "declared": 8,
     "student": 0,
     "engine": 0,
-    "model": 7,
+    "model": 8,
     "data": 0,
-    "diagram": 7,
-    "evidence": 1,
+    "diagram": 8,
+    "evidence": 0,
     "computation": 0,
-    "declaredButInert": 7,
+    "declaredButInert": 8,
     "prose": 0,
     "mismatched": 0,
     "rebuilds": 0
@@ -110805,16 +110865,16 @@
   }
  ],
  "totals": {
-  "steps": 1409,
-  "declared": 1317,
+  "steps": 1410,
+  "declared": 1318,
   "student": 157,
   "engine": 167,
-  "model": 900,
+  "model": 901,
   "data": 146,
-  "diagram": 779,
-  "evidence": 374,
+  "diagram": 780,
+  "evidence": 373,
   "computation": 14,
-  "declaredButInert": 1160,
+  "declaredButInert": 1161,
   "prose": 58,
   "mismatched": 5,
   "rebuilds": 80,

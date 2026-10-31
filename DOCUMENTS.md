@@ -171,7 +171,7 @@ catalogue refers to it, so a change to it can reach a student.
 | [TRANSLATION.md](TRANSLATION.md) | Translation freshness (the ledger and the packs' esOf), the glossary's labels, the English-only surfaces and the rule for new vocabulary. | policy | P156 | written | no |
 | [UI_PERFORMANCE_AUDIT.md](UI_PERFORMANCE_AUDIT.md) | Historical UI, performance and quality audit. | record | unassigned | regions (docs) | no |
 | [VALIDATED_3D_LAB_GATE.md](VALIDATED_3D_LAB_GATE.md) | Validated 3-D lab specification and feasibility gate. | gate | unassigned | written | no |
-| [VARIABLES_II.md](VARIABLES_II.md) | Variables II: light-curve features with errors, the Cepheid PL relation with a cited metallicity term, a classifier that can decline; 20 validation legs (Prompt 223). | feature | P223 | written | yes |
+| [VETTING.md](VETTING.md) | Candidate vetting: odd-even depths, secondary-eclipse search, difference-image centroid test, the validation contract, what a pass does not mean. | feature | P228 | written | yes |
 | [VO_ARCHIVE_GATE.md](VO_ARCHIVE_GATE.md) | Astronomy archives and the Virtual Observatory gate. | gate | unassigned | written | no |
 | [WORKER_POOL.md](WORKER_POOL.md) | The Worker pool contract: typed jobs, generations, memory and concurrency caps, transfer, deterministic scheduling and per-job random streams. | feature | P153 | written | no |
 | [paper.md](paper.md) | The JOSS-style summary paper. | front-door | unassigned | regions (docs) | no |

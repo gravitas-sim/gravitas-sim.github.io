@@ -270,7 +270,7 @@ describe('the document inventory', () => {
     // 967 after Weighing the Stars, for Real (Prompt 218, eleven more); 956 after the five observing closeout investigations (Prompt 216): nine for each lesson (two depths), 45 more over Two Stars Eclipsing (911).
     // 1000 after Two Clusters, Two Ages (Prompt 219): eleven more over 989.
     // 1022 after How Old Is This White Dwarf? and From Star to Remnant (Prompt 222): eleven more for each lesson, as for the two activity lessons of Prompt 220.
-    // 1033 after The Metallicity Term (Prompt 223): eleven more, as for each lesson of Prompt 222.
+    // 1033 after Planet or Not? (Prompt 228): eleven more.
     expect(inv.documents).toBe(1033);
     expect(inv.byLocale).toEqual({ en: 472, es: 561 });
     expect(inv.byKind.notes).toBe(INVESTIGATIONS.length);

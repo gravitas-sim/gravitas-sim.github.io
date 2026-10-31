@@ -1000,15 +1000,15 @@ export const DISCOVERY = {
     },
     courseLevel: 'majors',
   },
-  'the-metallicity-term': {
+  'planet-or-not': {
     audience: 'intro',
-    mathematics: 'logarithms',
-    prerequisites: ['leavitts-law', 'the-first-rung'],
+    mathematics: 'algebra',
+    prerequisites: ['transit-photometry'],
     textbook: {
-      chapter: 19,
+      chapter: 21,
       section: null,
     },
-    courseLevel: 'upper',
+    courseLevel: 'majors',
   },
   'deep-or-wide': {
     audience: 'intro',

@@ -224,6 +224,7 @@ export const SEQUENCES = [
       ['binary-star-planets', 'core'],
       ['extending-an-experiment', 'core'],
       ['refitting-a-transit', 'core', ['transit-photometry']],
+      ['planet-or-not', 'core', ['transit-photometry']],
       ['two-periodograms', 'core', ['transit-photometry']],
       ['sampling-a-posterior', 'core', ['refitting-a-transit']],
     ]
