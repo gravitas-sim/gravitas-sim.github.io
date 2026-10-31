@@ -15,8 +15,8 @@
 // instructor modules, three.js, the 3-D lab, the mission lab, the Sky Lab, the
 // Library and the data tables. A missing one costs that surface its offline
 // copy, and the next open fetches only what is missing.
-self.__GRAVITAS_CACHE_VERSION = 'gravitas-fd53f59899a8';
-self.__GRAVITAS_PRECACHE_BYTES = 19135429;
+self.__GRAVITAS_CACHE_VERSION = 'gravitas-6d03eb722bd5';
+self.__GRAVITAS_PRECACHE_BYTES = 19135427;
 self.__GRAVITAS_PRECACHE_CORE = [
   './css/chrome.css',
   './css/components.css',
