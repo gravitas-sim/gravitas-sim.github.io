@@ -32,10 +32,6 @@
 // =============================================================================
 
 import {
-  oddEvenTest,
-  secondaryTest,
-} from '../../kernels/vetting/lightcurve.js';
-import {
   bestEpoch,
   boxDepth,
   lightFraction,
@@ -361,20 +357,32 @@ export const CORRECT = {
     if (!d) return null;
     return d.depth < SIGNIFICANT * d.error ? 'none' : 'dip';
   },
-  // The two light-curve tests of js/kernels/vetting (VETTING.md), the way
-  // the vetting panel runs them: a verdict of `pass` needs both to pass, a
-  // `fail` is either failing, and anything the data cannot decide is
-  // `inconclusive`, never a pass.
+  // The two light-curve tests of the vetting panel (VETTING.md), as this
+  // guide's own box depths read them: `pass` needs both to pass, a `fail` is
+  // either failing, and a test the noise cannot decide (it could not see an
+  // odd-even difference of half the depth) is `inconclusive`, never a pass.
+  // The kernel of js/kernels/vetting does the full job on the vetting panel;
+  // this is its rule on science.js's numbers, so the guide stays small.
   vetLightCurve: (c, step) => {
     const r = transitOf(c, step.target, periodOf(step.target));
-    const s = c.series(step.target);
-    if (!r || !s) return null;
-    const eph = { P: r.period, t0: r.epoch, duration: DURATION };
-    const verdicts = [oddEvenTest(s, eph), secondaryTest(s, eph)].map(
-      t => t.verdict
-    );
-    if (verdicts.includes('fail')) return 'fail';
-    return verdicts.every(v => v === 'pass') ? 'pass' : 'inconclusive';
+    if (!r?.oddEven || !r.secondary || !r.depth) return null;
+    const oe = r.oddEven;
+    const mean = (oe.odd.depth + oe.even.depth) / 2;
+    let odd = 'pass';
+    if (oe.sigmas === null || !(mean >= SIGNIFICANT * (oe.error / 2)))
+      odd = 'inconclusive';
+    else if (oe.sigmas >= SIGNIFICANT) odd = 'fail';
+    else if (SIGNIFICANT * oe.error > 0.5 * mean) odd = 'inconclusive';
+    const sec = r.secondary;
+    let second = 'pass';
+    if (r.depth.depth < SIGNIFICANT * r.depth.error) second = 'inconclusive';
+    else if (
+      sec.depth >= SIGNIFICANT * sec.error &&
+      sec.depth / r.depth.depth > 0.1
+    )
+      second = 'fail';
+    if (odd === 'fail' || second === 'fail') return 'fail';
+    return odd === 'pass' && second === 'pass' ? 'pass' : 'inconclusive';
   },
 };
 

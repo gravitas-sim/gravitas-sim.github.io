@@ -30,20 +30,63 @@ const T = i => runOf(i).summary.tests;
 describe('the panel: what each candidate says', () => {
   test('the verdicts of the eight candidates, A to H', () => {
     const by = i => verdictsOf(i);
-    expect(by(0)).toEqual({ oddEven: 'pass', secondary: 'pass', centroid: 'pass', overall: 'survives' });
-    expect(by(1)).toEqual({ oddEven: 'fail', secondary: 'pass', centroid: 'fail', overall: 'rejected' });
-    expect(by(2)).toEqual({ oddEven: 'pass', secondary: 'fail', centroid: 'pass', overall: 'rejected' });
-    expect(by(3)).toEqual({ oddEven: 'pass', secondary: 'pass', centroid: 'not-run', overall: 'survives' });
-    expect(by(4)).toEqual({ oddEven: 'pass', secondary: 'pass', centroid: 'fail', overall: 'rejected' });
-    expect(by(5)).toEqual({ oddEven: 'inconclusive', secondary: 'inconclusive', centroid: 'inconclusive', overall: 'undecided' });
-    expect(by(6)).toEqual({ oddEven: 'pass', secondary: 'pass', centroid: 'pass', overall: 'survives' });
-    expect(by(7)).toEqual({ oddEven: 'pass', secondary: 'inconclusive', centroid: 'pass', overall: 'undecided' });
+    expect(by(0)).toEqual({
+      oddEven: 'pass',
+      secondary: 'pass',
+      centroid: 'pass',
+      overall: 'survives',
+    });
+    expect(by(1)).toEqual({
+      oddEven: 'fail',
+      secondary: 'pass',
+      centroid: 'fail',
+      overall: 'rejected',
+    });
+    expect(by(2)).toEqual({
+      oddEven: 'pass',
+      secondary: 'fail',
+      centroid: 'pass',
+      overall: 'rejected',
+    });
+    expect(by(3)).toEqual({
+      oddEven: 'pass',
+      secondary: 'pass',
+      centroid: 'not-run',
+      overall: 'survives',
+    });
+    expect(by(4)).toEqual({
+      oddEven: 'pass',
+      secondary: 'pass',
+      centroid: 'fail',
+      overall: 'rejected',
+    });
+    expect(by(5)).toEqual({
+      oddEven: 'inconclusive',
+      secondary: 'inconclusive',
+      centroid: 'inconclusive',
+      overall: 'undecided',
+    });
+    expect(by(6)).toEqual({
+      oddEven: 'pass',
+      secondary: 'pass',
+      centroid: 'pass',
+      overall: 'survives',
+    });
+    expect(by(7)).toEqual({
+      oddEven: 'pass',
+      secondary: 'inconclusive',
+      centroid: 'pass',
+      overall: 'undecided',
+    });
   });
 
   test('the numbers the steps quote', () => {
     // B: the frames place the dip 1.5 pixels from the target; odd and even differ by far more than their sigma
     const b = T(1);
-    expect(Math.hypot(b.centroid.offset.dx, b.centroid.offset.dy)).toBeCloseTo(1.52, 1);
+    expect(Math.hypot(b.centroid.offset.dx, b.centroid.offset.dy)).toBeCloseTo(
+      1.52,
+      1
+    );
     expect(b.oddEven.z).toBeGreaterThan(50);
     // C: the second eclipse is about half as deep as the primary
     expect(T(2).secondary.ratio).toBeGreaterThan(0.45);
@@ -62,7 +105,10 @@ describe('the panel: what each candidate says', () => {
     expect(truthOf(6).separation).toBe(0.15);
     // H: the odd-even test could have seen 37 percent of the depth, the truth is 20 percent
     const h = T(7).oddEven;
-    expect((100 * h.minDetectableDifference) / h.meanDepth).toBeCloseTo(36.9, 0);
+    expect((100 * h.minDetectableDifference) / h.meanDepth).toBeCloseTo(
+      36.9,
+      0
+    );
     expect(truthOf(7).eps * 2).toBeCloseTo(0.2, 12);
   });
 
@@ -79,7 +125,9 @@ describe('the panel: what each candidate says', () => {
       expect(labels.length).toBeGreaterThanOrEqual(8);
       const overall = rows.find(r => /Overall/.test(r.label)).value;
       expect(overall).not.toMatch(/\bis a planet\b/);
-      expect(panel.readout({ candidate: i, truth: 1 }).length).toBe(rows.length + 1);
+      expect(panel.readout({ candidate: i, truth: 1 }).length).toBe(
+        rows.length + 1
+      );
     }
   });
 });
@@ -87,7 +135,9 @@ describe('the panel: what each candidate says', () => {
 describe('the steps', () => {
   test('the validators accept the readings the panel gives and refuse others', () => {
     const h = T(7).oddEven;
-    ok('read-the-power', { a: (100 * h.minDetectableDifference) / h.meanDepth });
+    ok('read-the-power', {
+      a: (100 * h.minDetectableDifference) / h.meanDepth,
+    });
     bad('read-the-power', { a: 20 });
     bad('read-the-power', { a: 1.4 });
     const g = T(6).centroid;
@@ -106,12 +156,15 @@ describe('the steps', () => {
         expect(s.options[s.answer]).toBeTruthy();
         expect(s.options[s.answer]).not.toMatch(/^(It is a planet|A planet)/);
         expect(s.options[s.answer]).not.toMatch(/validated planet/i);
-        for (const m of s.misconceptions ?? []) expect(m.option).not.toBe(s.answer);
+        for (const m of s.misconceptions ?? [])
+          expect(m.option).not.toBe(s.answer);
       }
     }
     // The answers are spread over the positions.
     const positions = new Set(
-      all.filter(s => s.kind === 'choice' || s.type === 'predict').map(s => s.answer)
+      all
+        .filter(s => s.kind === 'choice' || s.type === 'predict')
+        .map(s => s.answer)
     );
     expect(positions.size).toBeGreaterThanOrEqual(3);
   });
@@ -126,7 +179,12 @@ describe('the steps', () => {
         expect(c.levels.length).toBeGreaterThanOrEqual(2);
       }
     }
-    expect([...kinds].sort()).toEqual(['completion', 'correctness', 'reasoning', 'uncertainty']);
+    expect([...kinds].sort()).toEqual([
+      'completion',
+      'correctness',
+      'reasoning',
+      'uncertainty',
+    ]);
   });
 
   test('the deeper steps hang on core steps and the lesson closes on a core step', () => {
@@ -145,12 +203,16 @@ describe('the Spanish', () => {
   test('carries the same step structure as the English', () => {
     expect(LESSON_ES.steps.length).toBe(LESSON.steps.length);
     expect(DEEP_ES.steps.length).toBe(DEEP.steps.length);
-    for (const [en, es] of [...LESSON.steps.map((s, i) => [s, LESSON_ES.steps[i]]), ...DEEP.steps.map((s, i) => [s, DEEP_ES.steps[i]])]) {
+    for (const [en, es] of [
+      ...LESSON.steps.map((s, i) => [s, LESSON_ES.steps[i]]),
+      ...DEEP.steps.map((s, i) => [s, DEEP_ES.steps[i]]),
+    ]) {
       expect(es.title).toBeTruthy();
       expect(es.body).toBeTruthy();
       if (en.options) expect(es.options.length).toBe(en.options.length);
       if (en.hints) expect(es.hints.length).toBe(en.hints.length);
-      if (en.misconceptions) expect(es.misconceptions.length).toBe(en.misconceptions.length);
+      if (en.misconceptions)
+        expect(es.misconceptions.length).toBe(en.misconceptions.length);
       if (en.fields) expect(es.fields.length).toBe(en.fields.length);
       if (en.rubricCriteria) {
         expect(es.rubricCriteria.length).toBe(en.rubricCriteria.length);
@@ -168,13 +230,18 @@ describe('the Spanish', () => {
     const pairs = {
       'read-the-checklist': ['No está rechazado', 'It is not rejected'],
       'a-dip-on-the-target': ['Rechazado', 'Rejected'],
-      'inconclusive-is-an-answer': ['Nada sobre su naturaleza', 'Nothing about its nature'],
+      'inconclusive-is-an-answer': [
+        'Nada sobre su naturaleza',
+        'Nothing about its nature',
+      ],
       'decide-e': ['Rechazado', 'Rejected'],
     };
     for (const [sid, [es, en]] of Object.entries(pairs)) {
       const i = [...LESSON.steps, ...DEEP.steps].findIndex(s => s.sid === sid);
       const stepEn = step(sid);
-      const stepEs = sid.startsWith('decide') ? DEEP_ES.steps[DEEP.steps.findIndex(s => s.sid === sid)] : LESSON_ES.steps[LESSON.steps.findIndex(s => s.sid === sid)];
+      const stepEs = sid.startsWith('decide')
+        ? DEEP_ES.steps[DEEP.steps.findIndex(s => s.sid === sid)]
+        : LESSON_ES.steps[LESSON.steps.findIndex(s => s.sid === sid)];
       expect(stepEn.options[stepEn.answer].startsWith(en)).toBe(true);
       expect(stepEs.options[stepEn.answer].startsWith(es)).toBe(true);
       void i;
@@ -189,7 +256,8 @@ describe('the instructor content', () => {
     expect(c.discussion.length).toBeGreaterThan(0);
     expect(c.extensions.length).toBeGreaterThan(0);
     const core = new Set(LESSON.steps.map(s => s.sid));
-    for (const sid of Object.keys(INSTRUCTOR.expectations['planet-or-not'])) expect(core.has(sid)).toBe(true);
+    for (const sid of Object.keys(INSTRUCTOR.expectations['planet-or-not']))
+      expect(core.has(sid)).toBe(true);
     for (const f of INSTRUCTOR.flow['planet-or-not']) {
       expect(core.has(f.from)).toBe(true);
       expect(core.has(f.to)).toBe(true);

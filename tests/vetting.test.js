@@ -56,7 +56,9 @@ describe('the committed thresholds', () => {
     expect({ ...K.DEFAULTS }).toEqual(THR.contract.defaults);
     // The three amendments are recorded and the originals were not replaced.
     expect(THR.amendments.map(a => a.id)).toEqual(['AM1', 'AM2', 'AM3']);
-    expect(THR.checks.find(c => c.id === 'C1.oddEvenFalseRejection').limits).toEqual({
+    expect(
+      THR.checks.find(c => c.id === 'C1.oddEvenFalseRejection').limits
+    ).toEqual({
       failMax: 0.02,
       passMin: 0.97,
     });
@@ -75,10 +77,16 @@ describe('the committed thresholds', () => {
 
   test('the rates the student is shown are the pinned ensembles', () => {
     const c = id => PINNED.find(r => r.id === id).measured;
-    expect(RATES.oddEven.planet).toEqual(c('C8.blindSpotsReported') && RATES.oddEven.planet);
+    expect(RATES.oddEven.planet).toEqual(
+      c('C8.blindSpotsReported') && RATES.oddEven.planet
+    );
     expect(RATES.oddEven.planet.n).toBe(400);
-    expect(RATES.oddEven.planet.fail / 400).toBe(c('C1.oddEvenFalseRejection').fail);
-    expect(RATES.oddEven.blendAlternating.pass / 400).toBe(c('C2.oddEvenFalseAcceptance').pass);
+    expect(RATES.oddEven.planet.fail / 400).toBe(
+      c('C1.oddEvenFalseRejection').fail
+    );
+    expect(RATES.oddEven.blendAlternating.pass / 400).toBe(
+      c('C2.oddEvenFalseAcceptance').pass
+    );
     expect(RATES.secondary.binary.fail).toBe(c('C4.secondaryRates').eb.fail);
     expect(RATES.frames.blend.pass).toBe(c('C6.centroidRates').blend.pass);
   });
@@ -86,7 +94,10 @@ describe('the committed thresholds', () => {
 
 describe('the light-curve tests', () => {
   const planet = K.candidate({ kind: 'planet', seed: 'vetting-test-planet' });
-  const blend = K.candidate({ kind: 'blend-alternating', seed: 'vetting-test-blend' });
+  const blend = K.candidate({
+    kind: 'blend-alternating',
+    seed: 'vetting-test-blend',
+  });
 
   test('a clean planet passes both, and the blend of unequal stars is rejected by odd-even', () => {
     const o = K.oddEvenTest(planet, planet.ephemeris);
@@ -103,7 +114,11 @@ describe('the light-curve tests', () => {
   });
 
   test('inconclusive is never a pass: noisy data, one odd cycle, no coverage', () => {
-    const faint = K.candidate({ kind: 'planet', sigma: K.CANDIDATE.sigmaLow, seed: 'vetting-test-faint' });
+    const faint = K.candidate({
+      kind: 'planet',
+      sigma: K.CANDIDATE.sigmaLow,
+      seed: 'vetting-test-faint',
+    });
     const o = K.oddEvenTest(faint, faint.ephemeris);
     expect(o.verdict).toBe('inconclusive');
     expect(o.reason).toBe('low-power');
@@ -117,7 +132,9 @@ describe('the light-curve tests', () => {
       y: keep.map(i => planet.y[i]),
       dy: keep.map(i => planet.dy[i]),
     };
-    expect(K.oddEvenTest(one, planet.ephemeris).reason).toBe('too-few-transits');
+    expect(K.oddEvenTest(one, planet.ephemeris).reason).toBe(
+      'too-few-transits'
+    );
   });
 
   test('the box depth equals the guide estimator on a flat baseline', () => {
@@ -130,22 +147,34 @@ describe('the light-curve tests', () => {
     });
     const dy = new Float64Array(t.length).fill(0.001);
     const a = K.boxDepth({ t, y, dy }, eph);
-    const g = guideBoxDepth({ t, y, dy }, { period: 3.2, epoch: 0.5, duration: 0.12 });
+    const g = guideBoxDepth(
+      { t, y, dy },
+      { period: 3.2, epoch: 0.5, duration: 0.12 }
+    );
     expect(a.depth).toBeCloseTo(0.01, 6);
     expect(Math.abs(g.depth - a.depth)).toBeLessThan(5e-4);
     expect(a.sigmaWhite).toBeGreaterThan(0);
   });
 
   test('invalid inputs throw and name the input', () => {
-    expect(() => K.oddEvenTest(planet, { P: 3.2, t0: 0.5, duration: 1.7 })).toThrow(/duration/);
-    expect(() => K.secondaryTest(planet, { P: -1, t0: 0, duration: 0.1 })).toThrow(/period/);
-    expect(() => K.oddEvenTest({ t: [1, 2, 3], y: [1, 1] }, planet.ephemeris)).toThrow(/length/);
+    expect(() =>
+      K.oddEvenTest(planet, { P: 3.2, t0: 0.5, duration: 1.7 })
+    ).toThrow(/duration/);
+    expect(() =>
+      K.secondaryTest(planet, { P: -1, t0: 0, duration: 0.1 })
+    ).toThrow(/period/);
+    expect(() =>
+      K.oddEvenTest({ t: [1, 2, 3], y: [1, 1] }, planet.ephemeris)
+    ).toThrow(/length/);
   });
 });
 
 describe('the frames and the summary', () => {
   test('a neighbor that eclipses is placed off the target, the target that eclipses is not', () => {
-    const a = K.transitFrames({ seed: 'vetting-test-a', eclipsed: 'neighbour' });
+    const a = K.transitFrames({
+      seed: 'vetting-test-a',
+      eclipsed: 'neighbour',
+    });
     const da = K.differenceCentroid(a, a.ephemeris, a.target);
     expect(da.verdict).toBe('fail');
     expect(da.reason).toBe('off-target');
@@ -161,11 +190,21 @@ describe('the frames and the summary', () => {
   });
 
   test('the aperture centroid moves toward the neighbor when the target eclipses, away when it does', () => {
-    const a = K.transitFrames({ seed: 'vetting-test-c', eclipsed: 'target', separation: 1.6, angleDeg: 0 });
+    const a = K.transitFrames({
+      seed: 'vetting-test-c',
+      eclipsed: 'target',
+      separation: 1.6,
+      angleDeg: 0,
+    });
     const sa = K.differenceCentroid(a, a.ephemeris, a.target).apertureShift;
     expect(sa.dx).toBeGreaterThan(0);
     expect(sa.dx).toBeCloseTo(0.0038, 2);
-    const b = K.transitFrames({ seed: 'vetting-test-d', eclipsed: 'neighbour', separation: 1.6, angleDeg: 0 });
+    const b = K.transitFrames({
+      seed: 'vetting-test-d',
+      eclipsed: 'neighbour',
+      separation: 1.6,
+      angleDeg: 0,
+    });
     const sb = K.differenceCentroid(b, b.ephemeris, b.target).apertureShift;
     expect(sb.dx).toBeLessThan(0);
   });
@@ -173,8 +212,15 @@ describe('the frames and the summary', () => {
   test('the oracle cases: the kernel agrees with the independent implementation', () => {
     for (const name of ['clean', 'blend']) {
       const c = ORACLE.lightCurves[name];
-      const t = Float64Array.from({ length: c.y.length }, (_, i) => i * c.cadence);
-      const s = { t, y: Float64Array.from(c.y), dy: new Float64Array(c.y.length).fill(c.sigma) };
+      const t = Float64Array.from(
+        { length: c.y.length },
+        (_, i) => i * c.cadence
+      );
+      const s = {
+        t,
+        y: Float64Array.from(c.y),
+        dy: new Float64Array(c.y.length).fill(c.sigma),
+      };
       const o = K.oddEvenTest(s, c.ephemeris);
       expect(o.verdict).toBe(c.oddEven.verdict);
       expect(o.odd.depth).toBeCloseTo(c.oddEven.odd.depth, 9);
@@ -186,7 +232,11 @@ describe('the frames and the summary', () => {
   });
 
   test('the summary says rejected, undecided or survives, never planet, and the record validates', () => {
-    const c = K.candidate({ kind: 'blend-twin', binary: { ldB: K.BINARY.ldA }, seed: 'vetting-test-twin' });
+    const c = K.candidate({
+      kind: 'blend-twin',
+      binary: { ldB: K.BINARY.ldA },
+      seed: 'vetting-test-twin',
+    });
     const s = K.vet({ series: c, ephemeris: c.ephemeris });
     // Two equal stars pass both light-curve tests; no frames were taken.
     expect(s.tests.oddEven.verdict).toBe('pass');
@@ -198,7 +248,10 @@ describe('the frames and the summary', () => {
     expect(K.overallOf([])).toBe('undecided');
     const rec = K.vettingRecord(s);
     expect(validateArtifact(rec)).toEqual([]);
-    expect(rec.quantities.map(q => q.id)).toEqual(['oddEvenDifference', 'secondaryDepth']);
+    expect(rec.quantities.map(q => q.id)).toEqual([
+      'oddEvenDifference',
+      'secondaryDepth',
+    ]);
     expect(rec.quantities[1].uncertainty.kind).toBe('limit');
     expect(JSON.stringify(rec)).not.toMatch(/"overall":"planet"/);
     expect(rec.warnings[0]).toMatch(/not validation/);

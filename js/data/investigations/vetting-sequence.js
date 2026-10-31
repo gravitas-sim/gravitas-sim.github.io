@@ -38,7 +38,7 @@ export const PLANET_OR_NOT = {
   title: 'Planet or Not?',
   subtitle:
     'Three tests try to reject a transit candidate, and some candidates cannot be decided: learn what a passed checklist means and what it does not',
-  duration: '15-30 min',
+  duration: '6-10 min',
   level: 'Introductory astronomy',
   audience: 'intro',
   textbook: { chapter: 21, section: null },
@@ -295,7 +295,7 @@ export const PLANET_OR_NOT_DEEPER = {
         {
           id: 'planet',
           option: 3,
-          say: 'No step in this lesson grades planet as the answer. A candidate is rejected, not rejected or undecided.',
+          say: 'No step in this investigation grades planet as the answer. A candidate is rejected, not rejected or undecided.',
         },
       ],
       tool: VET({ candidate: 4 }),
@@ -380,7 +380,7 @@ export const PLANET_OR_NOT_DEEPER = {
         {
           id: 'a',
           label: 'Smallest difference it could see',
-          unit: 'percent of the depth',
+          unit: 'percent',
           hint: '37',
         },
       ],
@@ -756,7 +756,7 @@ export const PLANET_OR_NOT_DEEPER_ES = {
         'Rechazado por las imágenes. Las pruebas impar-par y del segundo eclipse se aprueban, porque dos estrellas iguales parecen un planeta en la curva de luz; la imagen diferencia pone la caída a 1,8 píxeles del objetivo, a 15 sigma, así que la luz que baja es de una vecina. La única prueba que podía ver este falso positivo lo encontró.',
       misconceptions: [
         {
-          say: 'Ningún paso de esta lección califica planeta como respuesta. Un candidato está rechazado, no rechazado o sin decidir.',
+          say: 'Ningún paso de esta investigación califica planeta como respuesta. Un candidato está rechazado, no rechazado o sin decidir.',
         },
       ],
     },
@@ -940,7 +940,7 @@ const CONTENT = {
     difficulty:
       'Introductory (what each test rejects, what inconclusive means, why a clean candidate is not a planet); majors (decide four unseen candidates from their checklists, one rejected by the frames, one undecidable because it is too noisy, one that passes with a neighbor inside the frames’ exclusion radius, one that passes odd-even without being able to see its true 20 percent difference; justify the set); upper-level (the exclusion radius as 3.44 times the position’s uncertainty, what the committed thresholds do on ensembles, and what a validated planet needs beyond a checklist)',
     placement:
-      'In a unit on exoplanets after Transit Photometry (and beside Two Stars Eclipsing, whose eclipses are the false positives it vets); before a unit on occurrence rates or on statistical validation. It pairs with the Exoplanet Observatory’s guides A Star That Is Not Alone and Is It a Planet?, which use real TESS light curves, while this one uses synthetic candidates whose truth can be shown.',
+      'In a unit on exoplanets after Transit Photometry (and beside Two Stars Eclipsing, whose eclipses are the false positives it vets); before a unit on occurrence rates or on statistical validation. It pairs with the Exoplanet Observatory investigations A Star That Is Not Alone and Is It a Planet?, which use real TESS light curves, while this one uses synthetic candidates whose truth can be shown.',
     overview:
       'Students meet a clean candidate and learn that passing every test is not validation, predict which test catches a pair of unequal stars at twice the period, see a candidate rejected by two tests and another by the second eclipse alone, meet a clean-looking candidate with no frames that is a blend, and learn that a noisy candidate is undecided and that saying so is the result. At the deeper depths they decide a set of candidates, justify the decisions with the panel’s numbers, read what a test could and could not see, and say what a validated planet needs beyond a checklist.',
     priorKnowledge: [
@@ -991,6 +991,11 @@ const CONTENT = {
         claim: 'Inconclusive means the student did not get an answer.',
         response:
           'It is the answer: with these data the test could not have seen what it looks for, so passing would have claimed too much. Naming what would decide it is part of the report.',
+      },
+      {
+        claim: 'A candidate with no frames passes the centroid test.',
+        response:
+          'It has not been tested. A test that was not run is not a pass: the summary says so, and a neighbor’s eclipses can look exactly like a planet in the light curve alone.',
       },
     ],
     teachingNotes: [

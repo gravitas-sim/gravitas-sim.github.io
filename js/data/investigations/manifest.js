@@ -1247,7 +1247,7 @@ export const MANIFEST = [
     title: 'Planet or Not?',
     subtitle:
       'Three tests try to reject a transit candidate, and some candidates cannot be decided: learn what a passed checklist means and what it does not',
-    duration: '15-30 min',
+    duration: '6-10 min',
     level: 'Introductory astronomy',
     thumbnail: 'images/investigations/planet-or-not.webp',
     depths: 3,

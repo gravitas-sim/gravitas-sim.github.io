@@ -358,9 +358,9 @@ export const EN_EXOPLANET = {
   'gd.exo-dilution.vet-blind.opt.open':
     'Whose planet it is stays open: the test that could split A from B needs frames',
   'gd.exo-dilution.vet-blind.ok':
-    'Yes. A passed checklist rules out some false positives and leaves others. A neighbour’s transit makes a planet-shaped dip with equal odd and even depths and no secondary; only a centroid shift in the frames, or a high-resolution image, can tell the stars apart, and this pack has no frames.',
+    'Yes. A passed checklist rules out some false positives and leaves others. A neighbor’s transit makes a planet-shaped dip with equal odd and even depths and no secondary; only a centroid shift in the frames, or a high-resolution image, can tell the stars apart, and this observation has no frames.',
   'gd.exo-dilution.vet-blind.no':
-    'Which false positives do the odd-even and secondary tests catch, and is a planet around the neighbour one of them?',
+    'Which false positives do the odd-even and secondary tests catch, and is a planet around the neighbor one of them?',
   'gd.exo-dilution.wrap.title': 'A radius is a set of choices',
   'gd.exo-dilution.wrap.text':
     'One planet has published radius ratios from 0.065 to 0.087 and radii from 1.41 to 2.30 Jupiter radii. Your fits show where much of that range comes from: whose light is taken out, and whose star’s radius multiplies k. An undiluted fit to the collected light gives a ratio close to the smallest published one. When a result depends on a choice the data cannot make, the choice belongs in the result.',

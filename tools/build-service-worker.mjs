@@ -498,6 +498,10 @@ export const NEVER_PRECACHED = [
   /^images\/investigations\/(how-old-is-this-white-dwarf|from-star-to-remnant)\.webp$/,
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(how-old-is-this-white-dwarf|from-star-to-remnant|remnants-sequence)\.js$/,
   /^(js\/remnantsWidgets\.js|js\/remnantsField\.js|js\/i18n\/(en|es)\.remnants\.js|js\/kernels\/remnants\/.*)$/,
+  // Prompt 228: the vetting panel, its field module, its words, the kernel and the lesson's one new file (D-R10-228-01).
+  /^images\/investigations\/planet-or-not\.webp$/,
+  /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(planet-or-not|vetting-sequence)\.js$/,
+  /^(js\/vettingWidgets\.js|js\/vettingField\.js|js\/i18n\/(en|es)\.vetting\.js|js\/kernels\/vetting\/.*)$/,
   // Prompt 214: the strategy kernel, planner extension, panels and the strategy lesson's one new file (D-R10-214-06).
   /^js\/kernels\/strategy\//,
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(why-the-period-is-wrong|strategy-sequence)\.js$/,

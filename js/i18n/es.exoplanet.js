@@ -363,7 +363,7 @@ export const ES_EXOPLANET = {
   'gd.exo-dilution.vet-blind.opt.open':
     'De quién es el planeta sigue abierto: la prueba que separaría A de B necesita fotogramas',
   'gd.exo-dilution.vet-blind.ok':
-    'Sí. Una lista aprobada descarta algunos falsos positivos y deja otros. El tránsito de una vecina hace una caída con forma de planeta, con profundidades impares y pares iguales y sin secundario; solo un desplazamiento del centroide en los fotogramas, o una imagen de alta resolución, puede distinguir las estrellas, y este paquete no tiene fotogramas.',
+    'Sí. Una lista aprobada descarta algunos falsos positivos y deja otros. El tránsito de una vecina hace una caída con forma de planeta, con profundidades impares y pares iguales y sin secundario; solo un desplazamiento del centroide en los fotogramas, o una imagen de alta resolución, puede distinguir las estrellas, y esta observación no tiene fotogramas.',
   'gd.exo-dilution.vet-blind.no':
     '¿Qué falsos positivos detectan las pruebas de impares y pares y del secundario, y es un planeta alrededor de la vecina uno de ellos?',
   'gd.exo-dilution.wrap.title': 'Un radio es un conjunto de elecciones',
