@@ -354,7 +354,7 @@ function legC() {
 
 function legD() {
   const r = lcg(`${SEED}:D`);
-  const obsCase = (kind, i) => {
+  const obsCase = kind => {
     const iwa = logu(r, 0.05, 0.5);
     const floor = logu(r, 1e-10, 1e-4);
     const inst = { innerWorkingArcsec: iwa, contrastFloor: floor };
@@ -373,7 +373,7 @@ function legD() {
   {
     let ok = 0;
     for (let i = 0; i < lim('D1').cases; i++) {
-      const v = obsCase('inside', i);
+      const v = obsCase('inside');
       if (
         v.observable === false &&
         v.code === 'inside-inner-working-angle' &&
@@ -388,7 +388,7 @@ function legD() {
   {
     let ok = 0;
     for (let i = 0; i < lim('D2').cases; i++) {
-      const v = obsCase('faint', i);
+      const v = obsCase('faint');
       if (v.observable === false && v.code === 'below-contrast-floor') ok++;
     }
     row('D2', ok / lim('D2').cases >= lim('D2').rate, {

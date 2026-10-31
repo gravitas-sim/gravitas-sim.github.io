@@ -1,6 +1,6 @@
 // The direct-imaging panels' words, in English (Prompt 230). The instruments are teaching
 // examples and the panels say so; the verdict words are fixed text, so they translate by key.
-export const EN_DIRECT_IMAGING = {
+export const EN_DIRECTIMAGING = {
   'dirW.contrast.title': 'Seeing a planet beside its star',
   'dirW.contrast.note':
     'Two different problems stand between a telescope and a planet. The planet must be far enough from its star on the sky (an angle), and it must be bright enough against the star’s glare (a flux ratio, the contrast). The diffraction scale λ/D belongs to the telescope; a coronagraph’s inner working angle is a separate number that belongs to the instrument. The four instruments here are teaching examples: their working angles and contrast floors are not the specifications of any real instrument.',
@@ -19,9 +19,9 @@ export const EN_DIRECT_IMAGING = {
   'dirW.systemName.0': 'Earth around the Sun',
   'dirW.systemName.1': 'Jupiter around the Sun',
   'dirW.systemName.2':
-    'a young giant around a cool star (a stand-in, not a catalogue planet)',
+    'a young giant around a cool star (a stand-in, not a catalog planet)',
   'dirW.systemName.3':
-    'a hot Jupiter around the Sun (a stand-in, not a catalogue planet)',
+    'a hot Jupiter around the Sun (a stand-in, not a catalog planet)',
   'dirW.tel.0': '0.25 m, visible',
   'dirW.tel.1': '2.4 m, visible',
   'dirW.tel.2': '8 m, near-IR',

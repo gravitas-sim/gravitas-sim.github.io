@@ -1,6 +1,6 @@
 // Las palabras de los paneles de imagen directa, en español (Prompt 230). Los instrumentos son
 // ejemplos didácticos y los paneles lo dicen.
-export const ES_DIRECT_IMAGING = {
+export const ES_DIRECTIMAGING = {
   'dirW.contrast.title': 'Ver un planeta junto a su estrella',
   'dirW.contrast.note':
     'Dos problemas distintos separan a un telescopio de un planeta. El planeta debe estar lo bastante lejos de su estrella en el cielo (un ángulo) y debe ser lo bastante brillante frente al resplandor de la estrella (un cociente de flujos, el contraste). La escala de difracción λ/D es del telescopio; el ángulo de trabajo interno de un coronógrafo es otro número, propio del instrumento. Los cuatro instrumentos de aquí son ejemplos didácticos: sus ángulos de trabajo y sus pisos de contraste no son las especificaciones de ningún instrumento real.',

@@ -58,6 +58,8 @@
   "activity-flares",
   "activity-ffd",
   "cluster-fit",
+  "imaging-contrast",
+  "imaging-architectures",
   "eclipse-curve",
   "eclipse-fit",
   "exposure-planner",

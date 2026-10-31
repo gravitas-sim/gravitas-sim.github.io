@@ -1013,7 +1013,7 @@ export const DISCOVERY = {
   'why-we-cannot-see-earth': {
     audience: 'intro',
     mathematics: 'algebra',
-    prerequisites: ['what-a-telescope-resolves'],
+    prerequisites: ['transit-photometry'],
     textbook: {
       chapter: 21,
       section: null,

@@ -225,7 +225,7 @@ export const SEQUENCES = [
       ['extending-an-experiment', 'core'],
       ['refitting-a-transit', 'core', ['transit-photometry']],
       ['planet-or-not', 'core', ['transit-photometry']],
-      ['why-we-cannot-see-earth', 'core', ['what-a-telescope-resolves']],
+      ['why-we-cannot-see-earth', 'core', ['transit-photometry']],
       ['architectures', 'core', ['why-we-cannot-see-earth']],
       ['what-is-it-made-of', 'core', ['radial-velocity']],
       ['two-periodograms', 'core', ['transit-photometry']],

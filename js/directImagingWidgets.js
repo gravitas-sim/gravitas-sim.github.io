@@ -16,8 +16,8 @@
 
 import './instrumentStartup.js';
 import { t, registerMessages } from './i18n/index.js';
-import { EN_DIRECT_IMAGING } from './i18n/en.directImaging.js';
-import { ES_DIRECT_IMAGING } from './i18n/es.directImaging.js';
+import { EN_DIRECTIMAGING } from './i18n/en.directImaging.js';
+import { ES_DIRECTIMAGING } from './i18n/es.directImaging.js';
 import { fixed, scientific } from './format.js';
 import { createChart } from './plot/mount.js';
 import {
@@ -29,8 +29,8 @@ import {
   architecturesView,
 } from './directImagingField.js';
 
-registerMessages('en', EN_DIRECT_IMAGING);
-registerMessages('es', ES_DIRECT_IMAGING);
+registerMessages('en', EN_DIRECTIMAGING);
+registerMessages('es', ES_DIRECTIMAGING);
 
 const COLOR = {
   blue: '#1c7ed6',

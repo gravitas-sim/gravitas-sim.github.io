@@ -56,7 +56,7 @@ export const WHY_NOT_EARTH = {
   textbook: { chapter: 21, section: null },
   courseLevel: 'majors',
   mathematics: 'algebra',
-  prerequisites: ['what-a-telescope-resolves'],
+  prerequisites: ['transit-photometry'],
   tags: ['exoplanets', 'observing'],
   lock: { placement: true, inspector: true },
   depths: ['core', 'quantitative', 'advanced'],
@@ -213,7 +213,7 @@ export const WHY_NOT_EARTH_DEEPER = {
   steps: [
     {
       sid: 'read-the-contrast',
-      after: 'what-it-would-take',
+      after: 'the-infrared',
       depth: 'quantitative',
       type: 'measure',
       title: 'Earth’s contrast',
@@ -523,7 +523,7 @@ export const ARCHITECTURES_DEEPER = {
   steps: [
     {
       sid: 'count-the-seen',
-      after: 'what-the-diagram-says',
+      after: 'our-system-from-afar',
       depth: 'quantitative',
       type: 'measure',
       title: 'How many are outside?',
@@ -1056,8 +1056,8 @@ const CONTENT = {
     teachingNotes: [
       'The contrast is the planet’s flux over the star’s: a thermal term (Rp over R*)² B(Tp)/B(T*), both bodies blackbodies, and a reflected term A_g (Rp over a)² Φ(α) with a Lambert-sphere phase function. IMAGING.md states the equations and the validation: closed forms, an independent implementation (numpy, scipy, astropy constants), and refusals; thresholds were committed before the kernel.',
       'The separation of a planet on a circular orbit at phase angle α is a sin α, so a planet at full phase (α 0) is behind its star. Reflected light is brightest there and the separation zero; quadrature (90 degrees) is the greatest elongation and the Lambert phase function is 1/π.',
-      'The four instruments are teaching examples. Their inner working angles (3, 3, 2 and 3 λ/D) and contrast floors are chosen for the lesson; no published coronagraph specification was supplied. The 6 m example’s floor of 10⁻¹⁰ is set just below Earth’s contrast so that it is a thought experiment about what a telescope would have to do, not a statement about any mission.',
-      'The young giant and the hot Jupiter are stand-ins, not catalogue planets. The young giant is drawn as a blackbody at the stated 1500 K (starlight alone would give 25 K); that is a crude spectrum: no molecular bands, clouds or cooling with age. Subtraction of the star’s point-spread function, its throughput and orbit fitting are Part B of Prompt 230 and are not here.',
+      'The four instruments are teaching examples. Their inner working angles (3, 3, 2 and 3 λ/D) and contrast floors are chosen for the investigation; no published coronagraph specification was supplied. The 6 m example’s floor of 10⁻¹⁰ is set just below Earth’s contrast so that it is a thought experiment about what a telescope would have to do, not a statement about any mission.',
+      'The young giant and the hot Jupiter are stand-ins, not catalog planets. The young giant is drawn as a blackbody at the stated 1500 K (starlight alone would give 25 K); that is a crude spectrum: no molecular bands, clouds or cooling with age. Subtraction of the star’s point-spread function, its throughput and orbit fitting are Part B of Prompt 230 and are not here.',
     ],
     discussion: [
       'The 6 m example sees Earth only because its floor sits just below Earth’s contrast. What would you want to know about a real instrument before believing the same sentence about it?',
@@ -1128,6 +1128,12 @@ const CONTENT = {
           'They are common among the planets that were imaged, which is a different statement. How many stars were searched, and with what sensitivity, is what a rate needs.',
       },
       {
+        claim:
+          'Every planet in the table is as well measured as a Solar System planet.',
+        response:
+          'The archive’s imaged planets have masses that are often model-dependent estimates and semi-major axes that are projected or assumed; the diagram draws them as points without their uncertainties, which the archive gives for some and not for others.',
+      },
+      {
         claim: 'A log plot hides nothing.',
         response:
           'A log plot gives a factor of ten the same room everywhere, which is why Mercury and a planet at 500 AU fit; it also makes a difference of a factor of two look small. Read the numbers, not only the picture.',
@@ -1137,7 +1143,7 @@ const CONTENT = {
       'The semi-major axis and mass come from the archive’s composite table as retrieved; masses are in Jupiter masses as the archive lists them (some are model-dependent estimates for young objects near the planet/brown-dwarf boundary, which the panel does not discuss). The angle is the semi-major axis over the distance, not any epoch’s projected separation; 88 of the 94 have a distance.',
       'The panel judges separation only: the example working angles are 3, 3, 2 and 3 λ/D for instruments of 0.25 m, 2.4 m, 8 m and 6 m, teaching values and not specifications. Contrast is Why We Cannot See Earth From Here’s subject; here every planet is given a contrast of one so that only the angle decides.',
       'The Solar System values are those of the world builder’s planet table (masses in Earth masses over 317.8 per Jupiter mass; axes in AU). A test holds them equal to it. No per-planet reference for the imaged planets is given: the reference columns could not be retrieved, and the terms page was not read.',
-      'Occurrence rates (Prompt 229) were not available when this was built; the lesson says what a rate needs and does not give one.',
+      'Occurrence rates (Prompt 229) were not available when this was built; the investigation says what a rate needs and does not give one.',
     ],
     discussion: [
       'If you could only image planets beyond 30 AU, what would you conclude about planets from the sample, and what would you not?',
@@ -1159,35 +1165,45 @@ const FLOW = {
   'why-we-cannot-see-earth': [
     {
       from: 'two-problems',
+      to: 'how-far-apart',
+      text: 'A seeing problem has two parts, an angle and a contrast, and the prediction of Earth’s angle at ten parsecs (0.1 arcsecond) is settled by the panel.',
+    },
+    {
+      from: 'the-angle',
       to: 'the-angle',
-      text: 'Earth’s angle at ten parsecs (0.1 arcsecond) and the contrast as the obstacle: the telescope can separate it in angle but the planet is about eight and a half billion times fainter.',
+      text: 'For the 6 m telescope the contrast is the obstacle: Earth is 5.3 λ/D from its star but about eight and a half billion times fainter.',
     },
     {
       from: 'two-numbers',
-      to: 'the-infrared',
-      text: 'λ/D against an instrument’s inner working angle, a separate number, and the infrared as a trade of one problem for the other.',
+      to: 'two-numbers',
+      text: 'λ/D against an instrument’s inner working angle: a separate number that belongs to the instrument, here excluding Earth for the 2.4 m example.',
     },
     {
-      from: 'what-it-would-take',
+      from: 'the-infrared',
       to: 'what-it-would-take',
-      text: 'A thought experiment about what a telescope would have to do: a working angle under 0.1 arcsecond and a suppression that reaches the planet’s contrast.',
+      text: 'The infrared trades one problem for the other, and a thought experiment about what a telescope would have to do: a working angle under 0.1 arcsecond and a suppression that reaches the planet’s contrast.',
     },
   ],
   architectures: [
     {
       from: 'two-kinds-of-system',
+      to: 'where-do-they-sit',
+      text: 'The Solar System and the imaged planets on one log diagram, and the prediction of where the imaged planets sit.',
+    },
+    {
+      from: 'the-median-planet',
       to: 'the-median-planet',
-      text: 'Where the imaged planets sit against the Solar System, and the median imaged planet (about 170 AU and 12 Jupiter masses).',
+      text: 'The median imaged planet is about 170 AU out and about 12 Jupiter masses.',
     },
     {
       from: 'why-so-wide',
-      to: 'our-system-from-afar',
-      text: 'The sample is selected by what an instrument can see, and the Solar System seen from ten parsecs is mostly inside a 2.4 m example’s working angle.',
+      to: 'why-so-wide',
+      text: 'The sample is selected by what an instrument can see: wide, massive and young planets.',
     },
     {
-      from: 'what-the-diagram-says',
+      from: 'our-system-from-afar',
       to: 'what-the-diagram-says',
-      text: 'A method’s sample is not a population: a rate needs the stars searched and the planets that could have been found.',
+      text: 'The Solar System seen from ten parsecs is mostly inside a 2.4 m example’s working angle, and a method’s sample is not a population: a rate needs the stars searched and the planets that could have been found.',
     },
   ],
 };
@@ -1212,12 +1228,12 @@ const BANDS = {
   'why-we-cannot-see-earth': {
     core: 'short',
     quantitative: 'short',
-    advanced: 'medium',
+    advanced: 'short',
   },
   architectures: {
     core: 'short',
     quantitative: 'short',
-    advanced: 'medium',
+    advanced: 'short',
   },
 };
 
