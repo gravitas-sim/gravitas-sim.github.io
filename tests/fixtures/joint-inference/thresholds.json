@@ -4,18 +4,21 @@
   "document": "JOINT_INFERENCE.md (\"Validation contract\")",
   "committed": "before any of the joint model existed in js/inference: the shared-phase model, the planet's mass, radius and density, the stellar inputs and their propagation, the validator, the oracle's results, the ensembles, any panel, diagram or lesson step. The systems, seeds, cadences and noise below are written out so that the oracle (numpy, scipy and batman: no Gravitas code) builds its own data and the harness builds the same kind of systems. Nothing was tuned against code that did not exist.",
   "rule": "A crossed bound is a failed check, recorded in failed-legs.json and left failing; only Carl resets one. A leg that cannot be measured, or whose data was never supplied, is NOT RUN and says why. An amendment is recorded with its reason and never changes a bound already judged.",
-  "seeds": { "oracle": 227, "ensemble": "joint-227" },
+  "seeds": {
+    "oracle": 227,
+    "ensemble": "joint-227"
+  },
   "supply": {
     "note": "Two public items are fetched only by the coordinator and none exists at commit time. (1) A public radial-velocity series for a transiting planet, with its citation and a rights row, for leg E1 (a published joint solution reproduced under a fixed contract). (2) A published table of mass-radius composition curves (Zeng et al. 2019) for the diagram. Without (1) the leg E1 is NOT RUN; without (2) the diagram draws the constant-density lines (analytic) and the bulk density classes of Prompt 203, and says that no composition curve is shipped. Nothing is typed from memory, and no table ships in the application unless it was supplied."
   },
   "constants": {
     "G_m3kg1s2": 6.6743e-11,
-    "GM_sun_m3s2": 1.3271244e20,
-    "GM_jup_m3s2": 1.26686534e17,
-    "GM_earth_m3s2": 3.986004e14,
-    "R_sun_m": 6.957e8,
-    "R_jup_eq_m": 7.1492e7,
-    "R_earth_eq_m": 6.3781e6,
+    "GM_sun_m3s2": 1.3271244e+20,
+    "GM_jup_m3s2": 1.26686534e+17,
+    "GM_earth_m3s2": 398600400000000.0,
+    "R_sun_m": 695700000.0,
+    "R_jup_eq_m": 71492000.0,
+    "R_earth_eq_m": 6378100.0,
     "day_s": 86400,
     "note": "CODATA 2018 G; IAU 2015 B3 nominal GM of the Sun, Jupiter and the Earth and the nominal solar and equatorial radii of the Sun, Jupiter and the Earth. Masses in solar or Jupiter units are ratios of the nominal GMs, so G cancels in the planet's mass from the amplitude; G enters only the densities."
   },
@@ -83,19 +86,33 @@
     },
     "stellar": {
       "note": "The stated stellar inputs of every leg, a catalog-like entry: the analyst is given these, never the truth. Mass and radius are positively correlated, as an isochrone fit leaves them.",
-      "Ms": { "sigma_rel": 0.045 },
-      "Rs": { "sigma_rel": 0.035 },
+      "Ms": {
+        "sigma_rel": 0.045
+      },
+      "Rs": {
+        "sigma_rel": 0.035
+      },
       "correlation": 0.5
     }
   },
   "sampling": {
     "oracleGrid": {
-      "lightCurve": { "start": 1.0, "step_d": 0.013888888888888888, "n": 1008, "exposure_d": 0.013888888888888888, "supersample": 21, "sigma": 0.00035 },
+      "lightCurve": {
+        "start": 1.0,
+        "step_d": 0.013888888888888888,
+        "n": 1008,
+        "exposure_d": 0.013888888888888888,
+        "supersample": 21,
+        "sigma": 0.00035
+      },
       "rv": {
         "n": 30,
         "span_d": 40,
         "instruments": 2,
-        "zeroPoints_ms": [12, -25],
+        "zeroPoints_ms": [
+          12,
+          -25
+        ],
         "sigma_ms": 3.0,
         "jitter_ms": 2.0,
         "timesDrawn": "uniform over the span, numpy default_rng(227), sorted; the first 15 are instrument 0"
@@ -112,14 +129,22 @@
       "fitSupersample": 5
     },
     "ensembleRv": "30 epochs uniform over 40 days (seeded), two instruments of 15, zero points 12 and -25 m/s, stated error 3.0 m/s, true jitter 2.0 m/s",
-    "fit": { "jitterBounds_ms": [0, 20], "note": "Every fit leaves the zero points per instrument linear, the baseline linear and the jitter searched, as the core does." }
+    "fit": {
+      "jitterBounds_ms": [
+        0,
+        20
+      ],
+      "note": "Every fit leaves the zero points per instrument linear, the baseline linear and the jitter searched, as the core does."
+    }
   },
   "ensembles": {
     "N": 100,
     "coverage": {
       "system": "S1",
       "truthStar": "for each replicate the TRUE star is drawn from the stated mass and radius with the stated sigmas and correlation (a catalog value is a draw from its own error distribution); the data are made for that true star and the true planet mass, radius ratio and geometry; the analyst is handed the stated (central) mass, radius and sigmas and never the draw",
-      "levels": [0.683],
+      "levels": [
+        0.683
+      ],
       "target": "the one-sigma interval (the fit's value plus and minus its propagated sigma, the 68.3 percent normal interval) holds each replicate's own true Mp, Rp and rho_p at a rate in the stated bound"
     },
     "falsePositiveFlag": "the stellar-density tension flag, over the same replicates"
@@ -137,188 +162,284 @@
       "id": "A1",
       "group": "analytic",
       "what": "the planet's mass from K, P, e, sin i and the stellar mass equals the oracle's root find of the full relation (scipy brentq, astropy constants for the ratios), relative, over 12 cases from 0.1 to 8 Jupiter masses and e up to 0.6",
-      "limits": { "relative": 1e-9 }
+      "limits": {
+        "relative": 1e-09
+      }
     },
     {
       "id": "A2",
       "group": "analytic",
       "what": "Jupiter around the Sun (P 4332.589 d, e 0 and i 90) produces K between the stated bounds, and the inversion returns one Jupiter mass: an anchor to the published 12.4 m/s",
-      "limits": { "Kmin_ms": 12.2, "Kmax_ms": 12.7, "massRelative": 1e-9 }
+      "limits": {
+        "Kmin_ms": 12.2,
+        "Kmax_ms": 12.7,
+        "massRelative": 1e-09
+      }
     },
     {
       "id": "A3",
       "group": "analytic",
       "what": "the Earth around the Sun (P 365.25636 d) produces K between the stated bounds (the published 9 cm/s)",
-      "limits": { "Kmin_ms": 0.088, "Kmax_ms": 0.092 }
+      "limits": {
+        "Kmin_ms": 0.088,
+        "Kmax_ms": 0.092
+      }
     },
     {
       "id": "A4",
       "group": "analytic",
       "what": "the bulk density of a planet of one Jupiter mass and one equatorial Jupiter radius equals the oracle's value from the nominal GM and G, relative",
-      "limits": { "relative": 1e-9 }
+      "limits": {
+        "relative": 1e-09
+      }
     },
     {
       "id": "A5",
       "group": "analytic",
       "what": "rv.js's velocity curve (the same w as batman) equals the line-of-sight velocity of the star in a three-dimensional two-body orbit differentiated numerically (the oracle), over e in 0, 0.2, 0.5 and w in 0, 40, 120, 250 degrees, as a fraction of K, and the star is receding after the transit when the planet is in front",
-      "limits": { "maxAbsOverK": 0.0005 }
+      "limits": {
+        "maxAbsOverK": 0.0005
+      }
     },
     {
       "id": "A6",
       "group": "analytic",
       "what": "the total transit duration of the eccentric-orbit mapping (the circular-equivalent a/R*) against batman's exact eccentric light curve, relative, for e 0.1 and 0.2 at w 40, 90 and 250 degrees (the stated first-order approximation)",
-      "limits": { "relative": 0.02 }
+      "limits": {
+        "relative": 0.02
+      }
     },
     {
       "id": "A7",
       "group": "analytic",
       "what": "the joint model with an infinite stellar-mass and radius uncertainty removed (sigma 0) returns the same derived planet quantities as the closed formulas for the fit's own values, and its linearized sigma equals the quadrature of the fit-only sigma and the star's, for uncorrelated inputs, relative",
-      "limits": { "relative": 1e-6 }
+      "limits": {
+        "relative": 1e-06
+      }
     },
     {
       "id": "A8",
       "group": "analytic",
       "what": "the statistics kernel's propagation of the planet's mass, radius and density (20,000 draws, a fixed seed) against the linearized sigma, relative, on S1's fit",
-      "limits": { "mass": 0.05, "radius": 0.05, "density": 0.08 }
+      "limits": {
+        "mass": 0.05,
+        "radius": 0.05,
+        "density": 0.08
+      }
     },
     {
       "id": "A9",
       "group": "analytic",
       "what": "rvMonteCarlo.js's percentile and the kernel's percentile interval agree on one fixed array (the duplication removed where identical)",
-      "limits": { "absolute": 1e-12 }
+      "limits": {
+        "absolute": 1e-12
+      }
     },
     {
       "id": "B1",
       "group": "oracle",
       "what": "S1 (the oracle's own data: batman light curve, 30 velocities, two instruments, numpy noise): the joint fit's t0, P, k, a/R*, b, K, e cos w, e sin w against the oracle's joint least-squares solution (batman, scipy, the same quadratic law in q1, q2, the jitter by the same -2 ln L search), in the oracle's sigma",
-      "limits": { "worstSigmas": 0.5, "sigmaRatioMin": 0.8, "sigmaRatioMax": 1.25 }
+      "limits": {
+        "worstSigmas": 0.5,
+        "sigmaRatioMin": 0.8,
+        "sigmaRatioMax": 1.25
+      }
     },
     {
       "id": "B2",
       "group": "oracle",
       "what": "S1: the derived Mp, Rp and rho_p (with the stated star) against the oracle's, relative, and their sigma against the oracle's Monte Carlo of 400,000 draws from its covariance and the stated star, relative",
-      "limits": { "valueRelative": 0.01, "sigmaRelative": 0.1 }
+      "limits": {
+        "valueRelative": 0.01,
+        "sigmaRelative": 0.1
+      }
     },
     {
       "id": "B3",
       "group": "oracle",
       "what": "S2 (eccentric): the same comparison, with the oracle using batman's exact eccentric orbit and the joint model its first-order mapping; the amplitude, e cos w, e sin w and P, t0 in the oracle's sigma",
-      "limits": { "worstSigmas": 1.0 }
+      "limits": {
+        "worstSigmas": 1.0
+      }
     },
     {
       "id": "B4",
       "group": "oracle",
       "what": "S2: derived Mp, Rp and rho_p against the oracle's, relative",
-      "limits": { "valueRelative": 0.03 }
+      "limits": {
+        "valueRelative": 0.03
+      }
     },
     {
       "id": "B5",
       "group": "oracle",
       "what": "S1: the jitter the joint fit finds against the oracle's, absolute, in m/s",
-      "limits": { "absolute_ms": 1.0 }
+      "limits": {
+        "absolute_ms": 1.0
+      }
     },
     {
       "id": "R1",
       "group": "recovery",
       "what": "S1 recovered from the harness's own forward model (one seeded realization): t0, P, k, a/R*, b, K within 4 of their own sigma of the truth; the derived Mp, Rp, rho_p within 4 of their propagated sigma of the truth of THAT realization's star",
-      "limits": { "worstSigmas": 4 }
+      "limits": {
+        "worstSigmas": 4
+      }
     },
     {
       "id": "R2",
       "group": "recovery",
       "what": "S3 (Neptune mass): K and the planet's mass within 4 sigma of the truth, and the mass is reported with a sigma at least 20 percent of its value (a small signal is not given a small error bar)",
-      "limits": { "worstSigmas": 4, "sigmaOverValueMin": 0.2 }
+      "limits": {
+        "worstSigmas": 4,
+        "sigmaOverValueMin": 0.2
+      }
     },
     {
       "id": "R3",
       "group": "recovery",
       "what": "S2 recovered (the eccentric orbit): e cos w and e sin w within 4 sigma and the derived mass within 4 sigma of the truth",
-      "limits": { "worstSigmas": 4 }
+      "limits": {
+        "worstSigmas": 4
+      }
     },
     {
       "id": "C1",
       "group": "coverage",
       "what": "the one-sigma interval of the planet's mass, with the star's mass inside it, holds each replicate's true mass",
-      "limits": { "min": 0.58, "max": 0.79 }
+      "limits": {
+        "min": 0.58,
+        "max": 0.79
+      }
     },
     {
       "id": "C2",
       "group": "coverage",
       "what": "the same for the planet's radius",
-      "limits": { "min": 0.58, "max": 0.79 }
+      "limits": {
+        "min": 0.58,
+        "max": 0.79
+      }
     },
     {
       "id": "C3",
       "group": "coverage",
       "what": "the same for the planet's bulk density",
-      "limits": { "min": 0.58, "max": 0.79 }
+      "limits": {
+        "min": 0.58,
+        "max": 0.79
+      }
     },
     {
       "id": "C4",
       "group": "coverage",
       "what": "CONTROL: the planet's radius and density intervals from the fit alone, the star's uncertainty left out, hold the truth at a rate BELOW the bound (the review's correction: the planet's density is only as good as the star's); the omission must be visible",
-      "limits": { "radiusMax": 0.55, "densityMax": 0.55 }
+      "limits": {
+        "radiusMax": 0.55,
+        "densityMax": 0.55
+      }
     },
     {
       "id": "C5",
       "group": "coverage",
       "what": "the amplitude K's own one-sigma interval holds the truth",
-      "limits": { "min": 0.58, "max": 0.79 }
+      "limits": {
+        "min": 0.58,
+        "max": 0.79
+      }
     },
     {
       "id": "C6",
       "group": "coverage",
       "what": "the stellar-density tension flag is raised on at most this fraction of the replicates, whose star is consistent by construction",
-      "limits": { "max": 0.05 }
+      "limits": {
+        "max": 0.05
+      }
     },
     {
       "id": "D1",
       "group": "negative",
       "what": "S1's velocities with no transit: the result is the minimum mass Mp sin i, labelled as such, with the mass function; no planet radius, no density, no inclination, and no value named Mp",
-      "limits": { "mustHave": ["MpSini"], "mustNotHave": ["Mp", "Rp", "rhoP", "inclination"] }
+      "limits": {
+        "mustHave": [
+          "MpSini"
+        ],
+        "mustNotHave": [
+          "Mp",
+          "Rp",
+          "rhoP",
+          "inclination"
+        ]
+      }
     },
     {
       "id": "D2",
       "group": "negative",
       "what": "velocities with a true jitter of 40 m/s against a jitter bound of 20 m/s: the fit says the jitter is at its bound (a warning and a flag on the result), and no mass is reported without the flag",
-      "limits": { "flag": "jitterAtBound" }
+      "limits": {
+        "flag": "jitterAtBound"
+      }
     },
     {
       "id": "D3",
       "group": "negative",
       "what": "S1 with no stellar mass: no mass and no density, only the amplitude and the mass function; with a radius and no mass: the radius and no density; with neither: no planet radius in Jupiter units",
-      "limits": { "mustNotHaveWithoutMass": ["Mp", "rhoP"] }
+      "limits": {
+        "mustNotHaveWithoutMass": [
+          "Mp",
+          "rhoP"
+        ]
+      }
     },
     {
       "id": "D4",
       "group": "negative",
       "what": "a stellar mass and radius stated without their uncertainty: the planet's mass, radius and density are REFUSED with the named reason (the stellar uncertainty is required), never reported with the star taken as exact",
-      "limits": { "refusal": "stellarUncertaintyMissing" }
+      "limits": {
+        "refusal": "stellarUncertaintyMissing"
+      }
     },
     {
       "id": "D5",
       "group": "negative",
       "what": "S1 with a stated star whose density is 5 sigma from the transit's: the tension is flagged (|z| > 3) and the result says the planet's density is as good as that star",
-      "limits": { "minAbsZ": 3 }
+      "limits": {
+        "minAbsZ": 3
+      }
     },
     {
       "id": "D6",
       "group": "negative",
       "what": "S4 (grazing): the inclination, hence the planet's mass and density, is not constrained and the result says so",
-      "limits": { "notConstrained": ["Mp", "rhoP"] }
+      "limits": {
+        "notConstrained": [
+          "Mp",
+          "rhoP"
+        ]
+      }
     },
     {
       "id": "D7",
       "group": "negative",
       "what": "S1's velocities with an unmodelled second planet (amplitude 20 m/s, period 11.6 d): the fit's jitter is larger than the stated error of the velocities and the result says the velocities are not described by one planet",
-      "limits": { "flag": "jitterExceedsErrors" }
+      "limits": {
+        "flag": "jitterExceedsErrors"
+      }
     },
     {
       "id": "E1",
       "group": "authentic",
       "what": "a published joint transit and radial-velocity solution reproduced within its stated uncertainties under a fixed contract (the contract is written when the data arrive and before any fit); NOT RUN until the public velocity series is supplied",
-      "limits": { "withinSigmas": 2 }
+      "limits": {
+        "withinSigmas": 2
+      }
     }
   ],
-  "amendments": []
+  "amendments": [
+    {
+      "id": "AM1",
+      "note": "Recorded after the oracle ran and before any Gravitas joint code existed. For S1, S3 and S4 and the ensemble, e cos w and e sin w are HELD at 0 in the fit of both the oracle and the joint model (an analyst's circular assumption for a hot Jupiter, stated in the result): sqrt(e) cos w and sqrt(e) sin w are singular at the origin, so freeing them would leave the circular truth rank-deficient. B1 therefore compares t0, P, k, a/R*, b and K for S1; the eccentricity is compared in B3 (S2, where it is free). The oracle's Monte Carlo sigma is the half-width of the 15.865 to 84.135 percentile interval (a draw with b close to a/R* has an unbounded mass, so a standard deviation is not a stable statistic); the joint model's propagated sigma is read the same way for the comparison in B2, B4. No bound was changed.",
+      "boundMoved": false
+    }
+  ]
 }
