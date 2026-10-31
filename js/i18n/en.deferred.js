@@ -2069,6 +2069,57 @@ export const EN_DEFERRED = {
     'Design a survey for a stated goal, predict what it finds and justify the plan: many plans are right.',
   'inv.seq.instruments.from-photons-to-a-number':
     'The whole chain as one traced calculation, with the uncertainty carried at every step.',
+  'inv.seq.stars.title': 'Stars, in depth',
+  'inv.seq.stars.blurb':
+    'The stellar unit end to end: color and spectra, the HR diagram, the lives of stars in numbers, masses and radii, clusters and populations, rotation and flares, remnants and explosions, and the variables that measure distance. Each investigation says what it leaves out.',
+  'inv.seq.stars.color-and-temperature':
+    'Why a star’s color is its temperature: the first rung of reading a star.',
+  'inv.seq.stars.what-a-spectrum-is-made-of':
+    'Why one gas makes dark lines, bright lines or none: what a spectrum holds.',
+  'inv.seq.stars.spectra-tell-temperature-and-gravity':
+    'Four real spectra: why one line is not a thermometer, and what gravity does to a line.',
+  'inv.seq.stars.a-universe-of-stars':
+    'Size, color and the HR diagram from modeled stars: the picture the unit reads.',
+  'inv.seq.stars.reading-the-hr-diagram':
+    'The regions of the diagram, how a distance puts a star on it and why the main sequence is a band.',
+  'inv.seq.stars.lives-of-stars':
+    'A star’s whole life along published tracks, from the cloud to the remnant.',
+  'inv.seq.stars.a-stars-life-in-numbers':
+    'The main-sequence lifetimes in numbers, why the heaviest die first and the turnoff as a clock.',
+  'inv.seq.stars.inside-a-star':
+    'Hydrostatic equilibrium and a polytrope: why the center of a star is hot.',
+  'inv.seq.stars.scaling-the-main-sequence':
+    'How luminosity and radius scale with mass, and where the scaling stops.',
+  'inv.seq.stars.weighing-stars':
+    'Masses from orbits: the one way to weigh a star directly.',
+  'inv.seq.stars.two-stars-eclipsing':
+    'An eclipsing pair: radii and the limits of what the light curve identifies.',
+  'inv.seq.stars.weighing-the-stars-for-real':
+    'Masses and radii from velocities and eclipses together, with their intervals.',
+  'inv.seq.stars.cluster-membership':
+    'Finding a cluster’s stars by their motion, as probabilities.',
+  'inv.seq.stars.two-clusters-two-ages':
+    'Fit an age and a distance to two clusters and see what the assumed metallicity costs.',
+  'inv.seq.stars.populations-i-and-ii':
+    'Metal-rich and metal-poor stars: what the assumed metallicity does to an age and which old stars survive.',
+  'inv.seq.stars.how-fast-does-the-star-spin':
+    'A star’s rotation period from its spots, with the aliases that mislead.',
+  'inv.seq.stars.flares':
+    'Flares as energy released: rates, durations and what a survey can see.',
+  'inv.seq.stars.the-limit':
+    'Why a white dwarf cannot exceed a mass: degeneracy and the Chandrasekhar limit.',
+  'inv.seq.stars.how-old-is-this-white-dwarf':
+    'Cooling as a clock: a white dwarf’s age within a stated domain.',
+  'inv.seq.stars.from-star-to-remnant':
+    'From initial mass to remnant: an uncertain edge and probabilities, not a table.',
+  'inv.seq.stars.when-a-star-explodes':
+    'Which stars collapse, and what a collapse releases against the blast we see.',
+  'inv.seq.stars.leavitts-law':
+    'Cepheids: period gives luminosity, and so a distance.',
+  'inv.seq.stars.the-metallicity-term':
+    'A term for metal content in the Cepheid relation, and where its calibration stops.',
+  'inv.seq.stars.which-kind-of-variable':
+    'Telling variable stars apart by period, amplitude and shape, with ambiguity kept.',
   'inv.seq.depth.core': 'Core depth',
   'inv.seq.depth.quantitative': 'Quantitative depth',
   'inv.seq.depth.advanced': 'Advanced depth',

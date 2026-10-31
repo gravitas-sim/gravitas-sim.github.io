@@ -91,6 +91,7 @@ const UNVALIDATED = [
   'astronomy-semester',
   'observing-lab', // rebuilt around the observing sequence (Prompt 216, D-R10-216-06)
   'solar-system-and-the-sun',
+  'stellar-astrophysics', // built around the stellar closeout (Prompt 224, D-R10-224-04)
   'upper-level-modules',
 ];
 const LOCALES = ['en', 'es'];
@@ -160,15 +161,16 @@ describe('the profile', () => {
 });
 
 describe('every built-in course', () => {
-  test('there are five courses, each built in two languages with and without notes', () => {
+  test('there are six courses, each built in two languages with and without notes', () => {
     expect(COURSES.sort()).toEqual([
       'astronomy-semester',
       'intro-astronomy',
       'observing-lab',
       'solar-system-and-the-sun',
+      'stellar-astrophysics',
       'upper-level-modules',
     ]);
-    expect(built).toHaveLength(20);
+    expect(built).toHaveLength(24);
   });
 
   test('every cartridge conforms to the profile', () => {

@@ -2859,6 +2859,17 @@ test.describe('the central experiment of each investigation', () => {
         [21, 779.1, 8],
       ],
     },
+    // ---- Stellar closeout (Roadmap III, Prompt 224) -----------------------------------
+    {
+      id: 'when-a-star-explodes',
+      title:
+        'when-a-star-explodes: the neutron-star probability is 80 percent at 9 solar masses and 100 at 15 @accepts:ce.when-a-star-explodes',
+      row: /^Neutron star$/i,
+      values: [
+        [9, 80, 3],
+        [15, 100, 3],
+      ],
+    },
   ];
   for (const c of SURVEY) {
     test(c.title, async ({ page, app }) => {
@@ -2931,6 +2942,26 @@ test.describe('the central experiment of each investigation', () => {
         [30, 600.8, 0.6],
       ],
     },
+    {
+      id: 'reading-the-hr-diagram',
+      title:
+        'reading-the-hr-diagram: the distance modulus of cluster A is 12.10 at an assumed [Fe/H] of -0.25 and 12.43 at 0 @accepts:ce.reading-the-hr-diagram',
+      row: /^Distance modulus$/i,
+      values: [
+        [-0.25, 12.1, 0.04],
+        [0, 12.43, 0.04],
+      ],
+    },
+    {
+      id: 'populations-i-and-ii',
+      title:
+        'populations-i-and-ii: the fitted age of cluster A is 3.35 Gyr at an assumed [Fe/H] of -0.5 and 1.47 at 0 @accepts:ce.populations-i-and-ii',
+      row: /^Age$/i,
+      values: [
+        [-0.5, 3.35, 0.09],
+        [0, 1.47, 0.06],
+      ],
+    },
   ];
   for (const c of MEASURED) {
     test(c.title, async ({ page, app }) => {
@@ -2964,6 +2995,68 @@ test.describe('the central experiment of each investigation', () => {
       expect(new Set(seen).size).toBe(seen.length);
     });
   }
+  // The evolution playback parks each step on the start of a phase and a change of track
+  // moves the playhead, so the central experiment is the number two steps return: the
+  // main-sequence phase of a 1 and of a 20 solar-mass model, each on its own step.
+  test('a-stars-life-in-numbers: the main-sequence phase lasts 9.9 billion years for 1 solar mass and 8.7 million for 20 @accepts:ce.a-stars-life-in-numbers', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    const entry = declared('a-stars-life-in-numbers');
+    controlOf(entry);
+    await openInvestigation(page, app, 'a-stars-life-in-numbers');
+    const plan = await lessonPlan(page, 'a-stars-life-in-numbers');
+    const predict = await walkToSid(page, plan, entry.loop[0]);
+    await commitPredictionHeld(page, predict);
+    const seen = [];
+    for (const [sid, want] of [
+      ['a-sun-like-life', 9.9],
+      ['a-heavy-life', 8.7],
+    ]) {
+      await walkToSid(page, plan, sid);
+      await expect
+        .poll(async () => reading(await readout(page), /^This phase$/i), {
+          timeout: 8000,
+        })
+        .toBeLessThan(want + 0.3);
+      const got = reading(await readout(page), /^This phase$/i);
+      expect(Math.abs(got - want)).toBeLessThan(0.3);
+      seen.push(got);
+    }
+    expect(seen[0]).not.toEqual(seen[1]);
+    await expectVerdictRevealed(page, plan, predict);
+  });
+  // Four observed spectra, no number is fitted: the panel lists every band depth of every
+  // star, and the central experiment is which star holds the deepest H-beta and which the
+  // deepest sodium doublet once the names are on: not the same star.
+  test('spectra-tell-temperature-and-gravity: H-beta is deepest in the A star and the sodium doublet in the M star @accepts:ce.spectra-tell-temperature-and-gravity', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    const entry = declared('spectra-tell-temperature-and-gravity');
+    const { control } = controlOf(entry);
+    await openInvestigation(page, app, 'spectra-tell-temperature-and-gravity');
+    const plan = await lessonPlan(page, 'spectra-tell-temperature-and-gravity');
+    await walkToSid(page, plan, entry.loop[1]);
+    await setControl(page, control, 1);
+    const deepest = async feature => {
+      const rows = await readout(page);
+      const stars = Object.entries(rows)
+        .map(([label, text]) => {
+          const m = new RegExp(`${feature}\\s+([\\d.]+)%`).exec(text);
+          return [label, m ? Number(m[1]) : NaN];
+        })
+        .filter(([, n]) => Number.isFinite(n));
+      if (stars.length !== 4) return 'none';
+      return stars.sort((a, b) => b[1] - a[1])[0][0];
+    };
+    await expect.poll(() => deepest('Hβ'), { timeout: 10000 }).toMatch(/^A\b/);
+    await expect
+      .poll(() => deepest('Na I D'), { timeout: 10000 })
+      .toMatch(/^M\b/);
+  });
   // Propose an Observation is open-ended: no prediction is held against one
   // number. The panel's verdict on a plan is what the screen judges, and a plan
   // that reaches the goal and one that does not read differently.

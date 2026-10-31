@@ -14,6 +14,8 @@ export const BUILTIN_COURSES = Object.freeze({
     import('./solar-system-and-the-sun.js').then(
       m => m.SOLAR_SYSTEM_AND_THE_SUN
     ),
+  'stellar-astrophysics': () =>
+    import('./stellar-astrophysics.js').then(m => m.STELLAR_ASTROPHYSICS),
   'observing-lab': () =>
     import('./observing-lab.js').then(m => m.OBSERVING_LAB),
   'upper-level-modules': () =>

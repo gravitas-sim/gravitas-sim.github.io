@@ -2879,5 +2879,10 @@
   "[chromium] › atmosphereLessons.spec.js › why-venus-is-hot how-thick-is-venus: the instrument paints, lists its numbers, passes axe and keeps its controls large enough in both themes and sizes (en)": 16.0,
   "[chromium] › atmosphereLessons.spec.js › why-venus-is-hot how-thick-is-venus: the instrument paints, lists its numbers, passes axe and keeps its controls large enough in both themes and sizes (es)": 16.0,
   "[chromium] › centralExperiments.spec.js › the central experiment of each investigation › why-venus-is-hot: Venus gets a cooler equilibrium temperature than Earth, 229 K against 254 K, and a hotter surface @accepts:ce.why-venus-is-hot": 11.0,
-  "[chromium] › centralExperiments.spec.js › the central experiment of each investigation › two-greenhouse-models: one layer warms Venus by at most 2^(1/4), to 272 K, however high its emissivity @accepts:ce.two-greenhouse-models": 11.0
+  "[chromium] › centralExperiments.spec.js › the central experiment of each investigation › two-greenhouse-models: one layer warms Venus by at most 2^(1/4), to 272 K, however high its emissivity @accepts:ce.two-greenhouse-models": 11.0,
+  "[chromium] › centralExperiments.spec.js › the central experiment of each investigation › a-stars-life-in-numbers: the main-sequence phase lasts 9.9 billion years for 1 solar mass and 8.7 million for 20 @accepts:ce.a-stars-life-in-numbers": 29.1,
+  "[chromium] › centralExperiments.spec.js › the central experiment of each investigation › populations-i-and-ii: the fitted age of cluster A is 3.35 Gyr at an assumed [Fe/H] of -0.5 and 1.47 at 0 @accepts:ce.populations-i-and-ii": 29.6,
+  "[chromium] › centralExperiments.spec.js › the central experiment of each investigation › reading-the-hr-diagram: the distance modulus of cluster A is 12.10 at an assumed [Fe/H] of -0.25 and 12.43 at 0 @accepts:ce.reading-the-hr-diagram": 28.2,
+  "[chromium] › centralExperiments.spec.js › the central experiment of each investigation › spectra-tell-temperature-and-gravity: H-beta is deepest in the A star and the sodium doublet in the M star @accepts:ce.spectra-tell-temperature-and-gravity": 23.7,
+  "[chromium] › centralExperiments.spec.js › the central experiment of each investigation › when-a-star-explodes: the neutron-star probability is 80 percent at 9 solar masses and 100 at 15 @accepts:ce.when-a-star-explodes": 27.9
 }

@@ -1,0 +1,61 @@
+{
+ "id": "spectra-tell-temperature-and-gravity",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.the-peak-of-the-a-star.unit","nm"],
+    ["steps.read-the-depths.fields.0.unit","%"],
+    ["steps.read-the-depths.fields.1.unit","%"],
+    ["steps.samples-across-the-doublet.unit",""],
+    ["steps.resolved-or-not.unit",""],
+    ["steps.gravity-in-numbers.unit","dex"]
+   ],
+   "numbered": [
+    ["steps.read-the-depths.fields.0.hint","36.6"],
+    ["steps.read-the-depths.fields.1.hint","4.8"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": []
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "the-peak-of-the-a-star",
+    "answer": "369",
+    "tolerance": "3",
+    "unit": "nm"
+   },
+   {
+    "sid": "samples-across-the-doublet",
+    "answer": "1.47",
+    "tolerance": "0.05",
+    "unit": ""
+   },
+   {
+    "sid": "resolved-or-not",
+    "answer": "1.82",
+    "tolerance": "0.05",
+    "unit": ""
+   },
+   {
+    "sid": "gravity-in-numbers",
+    "answer": "4.6",
+    "tolerance": "0.1",
+    "unit": "dex"
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "read-the-depths": {
+    "validate": {"calls":232,"distinct":2,"digest":"20eb10d85dbce38b","samples":[null,{"level":"error","message":"Choose the H-beta window, names on, and read the A and the M rows: about 36.6 and 4.8 percent."}]}
+   }
+  },
+  "es": "same"
+ }
+}

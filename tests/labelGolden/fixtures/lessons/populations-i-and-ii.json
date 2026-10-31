@@ -1,0 +1,59 @@
+{
+ "id": "populations-i-and-ii",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.the-same-stars-three-ways.fields.0.unit","Gyr"],
+    ["steps.the-same-stars-three-ways.fields.1.unit","Gyr"],
+    ["steps.the-age-ratio.unit",""],
+    ["steps.the-distance-moves-too.unit","%"],
+    ["steps.the-turnoff-of-an-old-population.unit","M☉"]
+   ],
+   "numbered": [
+    ["steps.the-same-stars-three-ways.fields.0.label","Age assuming [Fe/H] = −0.5"],
+    ["steps.the-same-stars-three-ways.fields.0.hint","3.35"],
+    ["steps.the-same-stars-three-ways.fields.1.label","Age assuming [Fe/H] = 0"],
+    ["steps.the-same-stars-three-ways.fields.1.hint","1.47"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.the-same-stars-three-ways.fields.0.label","Edad suponiendo [Fe/H] = −0,5"],
+    ["steps.the-same-stars-three-ways.fields.1.label","Edad suponiendo [Fe/H] = 0"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "the-age-ratio",
+    "answer": "2.29",
+    "tolerance": "0.08",
+    "unit": ""
+   },
+   {
+    "sid": "the-distance-moves-too",
+    "answer": "29.6",
+    "tolerance": "1",
+    "unit": "%"
+   },
+   {
+    "sid": "the-turnoff-of-an-old-population",
+    "answer": "0.94",
+    "tolerance": "0.03",
+    "unit": "M☉"
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "the-same-stars-three-ways": {
+    "validate": {"calls":232,"distinct":2,"digest":"997ecd05612897f2","samples":[null,{"level":"error","message":"Cluster A, no binaries: about 3.35 Gyr at [Fe/H] −0.5 and 1.47 at 0. The age falls as the assumed metallicity rises."}]}
+   }
+  },
+  "es": "same"
+ }
+}
