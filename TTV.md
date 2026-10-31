@@ -88,16 +88,59 @@ integrated the same three systems and pinned its transit times and its own imple
 relations in `oracle-results.json` **before the kernel existed**. Every bound was committed first. One
 exploratory probe preceded the contract and is disclosed in it.
 
-@@TABLE@@
+| Leg | Verdict | Measured |
+| --- | --- | --- |
+| A1 | PASS | `{"fitted":346.3,"cited":346.2,"relativeError":0.0001232,"status":"ok"}` |
+| A2 | PASS | `{"fitted":174,"cited":173.8,"relativeError":0.0007951,"status":"ok"}` |
+| A3 | PASS | `{"inner":346.3,"outer":346.8,"relativeError":0.001595}` |
+| A4 | PASS | `{"S1":{"innerFormula_d":0.003424,"innerMeasured_d":0.003267,"innerError":0.04805,"outerFormula_d":0.001308,"outerMeasured_d":0.001124,"outerError":...` |
+| A5 | PASS | `{"2:1":{"f":-1.19049,"g":0.42839,"relativeError":3.335e-05},"3:2":{"f":-2.02522,"g":2.48401,"relativeError":3.407e-07}}` |
+| B1 | PASS | `{"maxAbsDiff_d":6.111e-06,"perPlanet":{"S1.inner":5.321e-06,"S1.outer":1.931e-06,"S2.inner":6.087e-06,"S2.outer":6.111e-06}}` |
+| B2 | PASS | `{"maxAbsDiff_d":9.382e-08}` |
+| B3 | PASS | `{"worstRelative":6.861e-14,"perSystem":{"S1":{"superPeriod":4.774e-15,"inner":4.33e-15,"outer":4.441e-15},"S2":{"superPeriod":5.795e-14,"inner":6.5...` |
+| B4 | PASS | `{"maxAbsDiff":7.648e-13}` |
+| C1 | PASS | `{"n":3240,"coverage1":0.633}` |
+| C1b | PASS | `{"n":3240,"coverage1":0.6846}` |
+| C2 | FAIL | `{"n":3240,"coverage2":0.8759}` |
+| C2b | PASS | `{"n":3240,"coverage2":0.9472}` |
+| C3 | FAIL | `{"mean":0.03481,"sd":1.397}` |
+| C3b | PASS | `{"mean":0.01501,"sd":1.023}` |
+| D1 | FAIL | `{"noSignal":24,"of":80}` |
+| D1b | PASS | `{"noSignal":76,"of":80}` |
+| D2 | FAIL | `{"signal":68,"of":80}` |
+| D2b | PASS | `{"signal":80,"of":80}` |
+| D3 | PASS | `{"flaggedFraction":1,"n":100}` |
+| D4 | PASS | `{"status":"unresolved","cycles":0.6651,"baseline_d":230}` |
+| D5 | PASS | `{"status":"refused","reason":"far-from-resonance","delta":0.3497}` |
+| D6 | PASS | `{"reason":"inside-resonance-width","delta":0.0005,"width":0.001533}` |
+| E1 | NOT-RUN | Kepler-9 transit times (Holczer et al. 2016, VizieR J/ApJS/225/9) were requested of the coordinator, whose fetch failed (VizieR hosts unreachable);... |
+| R1 | PASS | `{"n":6480,"lowSnrFraction":1}` |
+| R1b | PASS | `{"n":6480,"lowSnrFraction":0}` |
+
+21 pass, 4 fail, 1 not run.
 
 ## Failed legs, and the amendment
 
-@@FAILED@@
+Four legs crossed a committed bound and **stay failing and labelled** in `tests/fixtures/ttv/failed-legs.json`
+(only Carl resets a bound): C2 (two-sigma coverage 0.876 against 0.9545 +/- 0.03), C3 (normalized-error
+sd 1.397 against 1 +/- 0.1), D1 (the flat O-C called a signal in 56 of 80 trials at 400 ppm, bound 0.95 clean) and D2
+(signal found in 68 of 80, bound 0.95). The cause is one: at 400 ppm the template fit's curvature error bar is
+as long as the 2-minute spacing, and the estimator scatters 1.4 times wider than it says, with heavy tails
+(C1 passed narrowly, 0.633).
+
+**Amendment AM1**, committed to `thresholds.json` before any 100 ppm run, adds the legs C1b, C2b, C3b, D1b, D2b
+at 100 ppm with the same bounds, and R1, a regime flag (`low-snr` when sigma exceeds half the cadence). It
+does not move any bound and does not replace an original, which stays failing. All six amended legs pass (C1b 0.685, C2b 0.947,
+C3b sd 1.023, D1b 76 of 80, D2b 80 of 80, R1 1.00 and R1b 0.00 low-snr fractions). The lesson's pack and panels
+default to 100 ppm and the panel says when a bar is only a lower bound. **E1** (the published Kepler-9
+O-C, bound 10 percent) is **NOT RUN**: Holczer et al. (2016, VizieR J/ApJS/225/9) was requested and could not be
+supplied, so the kernel is validated against the engine and an independent integrator only, never against a
+star.
 
 ## What the numbers say
 
 - **The engine and the relations agree.** The engine's O-C periods agree with the cited super-period to
-  1 percent (S1) and 0.1 percent (S2); the first-order amplitudes agree with the engine's to 5 and 16
+  0.01 percent (S1) and 0.08 percent (S2); the first-order amplitudes agree with the engine's to 5 and 16
   percent (S1 inner and outer) and to 1 and 6 percent (S2), the outer planet's worse because its g
   coefficient is small and the free eccentricity that a circular start leaves matters more.
 - **The engine and the oracle agree** to 6 microdays on the O-C (the budget was 250), so the forward

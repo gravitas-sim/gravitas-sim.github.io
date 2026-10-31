@@ -1,0 +1,34 @@
+{
+  "format": "gravitas.ttv-failed-legs/1",
+  "label": "These legs crossed a committed bound and stay failing; only Carl resets one.",
+  "legs": [
+    {
+      "id": "C2",
+      "measured": {
+        "n": 3240,
+        "coverage2": 0.8759
+      }
+    },
+    {
+      "id": "C3",
+      "measured": {
+        "mean": 0.03481,
+        "sd": 1.397
+      }
+    },
+    {
+      "id": "D1",
+      "measured": {
+        "noSignal": 24,
+        "of": 80
+      }
+    },
+    {
+      "id": "D2",
+      "measured": {
+        "signal": 68,
+        "of": 80
+      }
+    }
+  ]
+}
