@@ -1,0 +1,10 @@
+{
+  "note": "Legs of tests/fixtures/imaging/thresholds.json that crossed their bound, kept failing and labelled (only Carl resets a bound).",
+  "failed": [],
+  "notRun": [
+    {
+      "id": "E2",
+      "why": "no published contrast table for the imaged planets and no cited coronagraph working-angle value was supplied; nothing was typed from memory"
+    }
+  ]
+}

@@ -18,6 +18,7 @@ the release rather than in the tag.
 - **How many planets? Occurrence rates on a searched population (Prompt 229).** `js/kernels/occurrence/`: a synthetic survey of 2000 stars with their own noise and span, completeness by injection and recovery (the geometric probability times the recovery of an injected transit at the injected ephemeris, with the number of transits the span holds), the occurrence rate of a bin from its listings on the selected-population Poisson likelihood of the statistics kernel (a rate may exceed one planet per star), a one-sided limit for a bin with no listing, a refusal for a bin the survey could hardly see and for a rate without a stated reliability, and a population whose rates are known. Two panels (the efficiency, the grid of rates), a new investigation, How Many Earths?, in English and Spanish with instructor materials and a deeper layer, and two advanced steps added to Who Gets Counted. Gate verdict A against an independent oracle (numpy, scipy, batman) and a 400-population coverage test; two demonstration legs of the reliability term failed and stay labelled, and the authentic leg was not run. `OCCURRENCE_RATES.md`.
 - **A planet's density is only as good as its star (Prompt 227).** The model `transit-rv-joint`: one light curve and the velocities of any number of instruments fitted with one period, epoch and orbit, and the planet's mass (the full relation, the sum of the masses), radius and bulk density derived with the star's stated mass, radius, uncertainty, correlation and source carried through, the star's share of each variance printed, a minimum mass and no mass without a transit, a named refusal for every quantity the inputs do not give, and a flag when the stated star's density disagrees with the transit's by more than 3 sigma. The panels `joint-fit` and `mass-radius` (lines of constant density only; no composition curve was supplied), the investigation What Is It Made Of? at two depths in English and Spanish with instructor materials, the upper depth of Finding Planets by Their Tug, and a model-page section. Validated against an independent numpy, scipy and batman implementation at thresholds committed first: 29 legs pass, two (D6, C4) stay failing and labelled, and the authentic leg (E1) is NOT RUN because no velocity series was supplied (`JOINT_INFERENCE.md`).
 - **Stellar investigations, a sequence and a course (Prompt 224).** A sequence, Stars, in depth, ordering the stellar investigations that exist, with five new connecting investigations in English and Spanish with instructor materials and a deeper step layer: Reading the HR Diagram (the regions, how a distance puts a star on the diagram, why the main sequence is a band), A Star's Life in Numbers (main-sequence lifetimes from the MIST tracks, the changing slope, the turnoff as a clock), When a Star Explodes (which stars collapse, an uncertain edge, the binding energy against the blast), Populations I and II (what an assumed metallicity does to a cluster's age and distance) and Spectra Tell Temperature and Gravity (four SDSS spectra, line depth against temperature, what gravity does to a line, what the spectrograph resolves). They use the panels that exist: no instrument and no data pack was added. A course package, Stellar astrophysics (majors, OpenStax Astronomy 2e chapters 17 to 23, with readings and the reason for what has no investigation or did not pass its gate), and the upper-level modules package (1.1.0) gains three advanced items. No supernova light curve ships (no rights decision), and the disc-halo kinematic split and the Gaia nearby-star diagram are not drawn (no panel carries them): see D-R10-224-02.
+- **Direct imaging, an angle and a contrast (Prompt 230, Part A).** `js/kernels/imaging/`: the contrast of a planet and its star as a thermal term (two blackbodies) plus a reflected term (a Lambert sphere with a stated geometric albedo and phase), the irradiation equilibrium beside a stated temperature with a self-luminous flag, the angular separation (a sin of the phase angle over the distance), the diffraction scale λ/D with the statement that it is not a coronagraph's inner working angle, and an observability verdict that returns not observable with this instrument inside a stated working angle or below a stated contrast floor and refuses when none is stated. Two investigations, Why We Cannot See Earth From Here and Architectures (three depths, English and Spanish, one new closure file), two panels, and a model-page section; the imaged planets are the NASA Exoplanet Archive's rows retrieved 2026-10-31 (per-planet references not retrieved, terms page not read). The four instruments are teaching examples, not specifications. Thresholds were committed before the code; an independent numpy, scipy and astropy implementation agrees with the kernel; 19 bounded legs pass, one is not run (no published contrast or cited working angle was supplied). Subtraction, throughput and orbits are Part B and are not built (IMAGING.md).
 - **Vetting with ambiguity (Prompt 228).** `js/kernels/vetting/`: odd-even depths with red-noise-widened errors, a secondary-eclipse search at the expected phase, a difference-image centroid test on detector frames of a blended neighbor, blend light curves from the eclipsing-binary model at a stated dilution, and a summary of rejected, undecided or survives that never says planet; a candidate whose signal cannot decide a test is inconclusive, never a pass. Validated against an independent implementation and an ensemble at committed thresholds (24 bounded legs pass, none failed). The vetting panel, the investigation Planet or Not? (English and Spanish, three depths), the advanced steps of A Star That Is Not Alone, and the model-page section on what a passed checklist does and does not mean. See VETTING.md.
 - **Transit timing variations (Prompt 226).** `js/kernels/ttv/`: the linear ephemeris and the O-C diagram, a sinusoid fit with a super-period interval and an honest no-signal and too-short-a-record verdict (1.5 cycles needed), the first-order Lithwick, Xie and Wu (2012) super-period and amplitude relations from Laplace coefficients with their domain and a refusal outside it, a per-transit template-fit time with an error bar flagged `low-snr` when it is longer than half the cadence, and an engine forward model (`js/physics.js`, headless). An independent scipy oracle was pinned before the kernel. 21 of 26 validation legs pass, four stay failing and labelled (C2, C3, D1, D2: the 400 ppm error bars understate the scatter by 1.4), amended by legs at 100 ppm that all pass (AM1), and the published Kepler-9 leg (E1) is NOT RUN because the data were not supplied (`TTV.md`). Two panels (`ttv-transit`, `ttv-timing`) and one investigation, The Clock That Drifts, at three depths in English and Spanish with instructor materials, on engine-made synthetic systems; a model-page section. Part B (a mass from an amplitude) was gated: verdict B, a mass only for a pair assumed circular and labeled as that (`TTV_MASS_GATE.md`, `D-R10-226-90`).
 
@@ -157,12 +158,12 @@ The Observatory's image measurement train (Prompts 179 to 182, 184, 186 to 189, 
 
 **Gravitas 2.0.0.** Gravitas grows from a gravity sandbox with 22 guided
 investigations into a browser laboratory: <!--fact:scenarios-->61<!--/fact-->
-sandbox scenarios, <!--fact:libraryInvestigations-->132<!--/fact--> guided
-investigations (<!--fact:investigations-->115<!--/fact--> that run in the
+sandbox scenarios, <!--fact:libraryInvestigations-->134<!--/fact--> guided
+investigations (<!--fact:investigations-->117<!--/fact--> that run in the
 simulation and <!--fact:guidedInvestigations-->17<!--/fact--> in the
 Observatory, the 3-D lab and the mission lab), a shared shell, a Library, a
 workspace for each student's own work, an instructor path from adoption page to
-gradebook file, <!--fact:instructorDocuments-->1123<!--/fact--> generated
+gradebook file, <!--fact:instructorDocuments-->1145<!--/fact--> generated
 instructor documents, a public validation suite
 of <!--fact:physicsChecks-->352<!--/fact--> checks, and authoring tools
 (Scenario Studio, Investigation Composer, course packs and an extension SDK).
@@ -1815,7 +1816,7 @@ listed here because this is the release that first carries it.
 - **An instructor portal that explains itself.** `/instructors/` states what is
   behind the passphrase before asking for it, says plainly what client-side
   encryption on a static host can and cannot promise, and presents the
-  <!--fact:instructorDocuments-->1123<!--/fact--> documents grouped by investigation
+  <!--fact:instructorDocuments-->1145<!--/fact--> documents grouped by investigation
   with their kind and size. A wrong passphrase and a missing bundle now report
   as the different problems they are.
 - **Dual licensing.** The code is MIT; the original educational material is
@@ -1882,7 +1883,7 @@ listed here because this is the release that first carries it.
   uncertainty, the target and the observing configuration.
 - **Offline support.** A service worker precaches the application shell, the
   <!--fact:scenarios-->61<!--/fact--> scenario thumbnails and all
-  <!--fact:investigations-->115<!--/fact--> English lessons, so a class keeps
+  <!--fact:investigations-->117<!--/fact--> English lessons, so a class keeps
   working when the room's wifi drops. The cache name is a content hash, so a
   build invalidates it. See [OFFLINE_AND_LOW_END.md](OFFLINE_AND_LOW_END.md).
 - **A measured low-end quality tier.** Chosen from the frame rate the machine
@@ -1891,8 +1892,8 @@ listed here because this is the release that first carries it.
   off.
 - **An investigation authoring toolchain.** `npm run author:check` validates
   every lesson and every one of the
-  <!--fact:investigationSteps-->1461<!--/fact--> steps; `npm run author:new`
-  <!--fact:investigationSteps-->1461<!--/fact--> steps; `npm run author:new`
+  <!--fact:investigationSteps-->1473<!--/fact--> steps; `npm run author:new`
+  <!--fact:investigationSteps-->1473<!--/fact--> steps; `npm run author:new`
   scaffolds a lesson with its translation shadow and instructor stub;
   `?author=<lesson>&step=<n>` opens any step with diagnostics without touching
   a student's saved progress; and a browser walker exercises every step of

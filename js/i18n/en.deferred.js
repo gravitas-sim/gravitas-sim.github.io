@@ -1872,6 +1872,10 @@ export const EN_DEFERRED = {
     'A survey lists planets it could see. How many could it have seen, what does a count of what was found become a rate, and what does a bin with none, or one the survey could hardly see, say?',
   'inv.seq.planets.planet-or-not':
     'Eight synthetic candidates vetted with odd-even depths, a second-eclipse search and a centroid test, and what a passed checklist does not mean. Some cannot be decided.',
+  'inv.seq.planets.why-we-cannot-see-earth':
+    'Two separate problems, an angle and a contrast: where Earth is on the sky at ten parsecs, how much fainter than its star it is, and why λ/D is not a coronagraph’s inner working angle.',
+  'inv.seq.planets.architectures':
+    'The planets found by direct imaging and the planets of the Solar System on one log diagram: what imaging can find, and why a method’s sample is not a population.',
   'inv.seq.planets.two-periodograms':
     'A Lomb-Scargle and a box least squares periodogram of one light curve, and what a period from a periodogram can claim. Needs the compute page and a connection.',
   'inv.seq.planets.sampling-a-posterior':

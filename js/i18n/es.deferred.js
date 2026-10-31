@@ -1871,6 +1871,10 @@ export const ES_DEFERRED = {
     'Un sondeo lista los planetas que podía ver. ¿Cuántos podía haber visto, en qué se convierte una cuenta de lo encontrado para ser una tasa y qué dice una casilla sin ninguno, o una que el sondeo apenas podía ver?',
   'inv.seq.planets.planet-or-not':
     'Ocho candidatos sint\u00e9ticos verificados con profundidades impares y pares, una b\u00fasqueda de segundo eclipse y una prueba del centroide, y lo que no significa una lista aprobada. Algunos no se pueden decidir.',
+  'inv.seq.planets.why-we-cannot-see-earth':
+    'Dos problemas distintos, un ángulo y un contraste: dónde está la Tierra en el cielo a diez pársecs, cuánto más débil que su estrella es, y por qué λ/D no es el ángulo de trabajo interno de un coronógrafo.',
+  'inv.seq.planets.architectures':
+    'Los planetas hallados por imagen directa y los planetas del sistema solar en un diagrama logarítmico: qué puede encontrar la imagen directa, y por qué la muestra de un método no es una población.',
   'inv.seq.planets.two-periodograms':
     'Un periodograma de Lomb-Scargle y uno de m\u00ednimos cuadrados de caja de una curva de luz, y qu\u00e9 puede afirmar un per\u00edodo de un periodograma. Necesita la p\u00e1gina de c\u00e1lculo y conexi\u00f3n.',
   'inv.seq.planets.sampling-a-posterior':

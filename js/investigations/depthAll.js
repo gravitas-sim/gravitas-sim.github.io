@@ -55,6 +55,7 @@ import { DEPTH as MASSES_DEPTH } from '../data/investigations/binary-masses-sequ
 import { DEPTH as ACTIVITY_DEPTH } from '../data/investigations/stellar-activity-sequence.js';
 import { DEPTH as REMNANTS_DEPTH } from '../data/investigations/remnants-sequence.js';
 import { DEPTH as VETTING_DEPTH } from '../data/investigations/vetting-sequence.js';
+import { DEPTH as IMAGING_DEPTH } from '../data/investigations/imaging-sequence.js';
 import { DEPTH as JOINT_DEPTH } from '../data/investigations/joint-sequence.js';
 import { DEPTH as OCCURRENCE_DEPTH } from '../data/investigations/occurrence-sequence.js';
 import { DEPTH as VARIABLES_II_DEPTH } from '../data/investigations/variables-ii-sequence.js';
@@ -110,6 +111,9 @@ export const DEEPER = Object.freeze({
   ),
   ...Object.fromEntries(
     Object.entries(VETTING_DEPTH).map(([id, d]) => [id, d.steps])
+  ),
+  ...Object.fromEntries(
+    Object.entries(IMAGING_DEPTH).map(([id, d]) => [id, d.steps])
   ),
   ...Object.fromEntries(
     Object.entries(JOINT_DEPTH).map(([id, d]) => [id, d.steps])

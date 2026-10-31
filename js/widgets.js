@@ -404,6 +404,12 @@ export const LAZY_FAMILIES = Object.freeze({
     'CLUSTER_WIDGETS',
     ['cluster-fit']
   ),
+  directImaging: familyEntry(
+    () => import('./directImagingWidgets.js'),
+    './directImagingWidgets.js',
+    'DIRECT_IMAGING_WIDGETS',
+    ['imaging-contrast', 'imaging-architectures']
+  ),
   eclipse: familyEntry(
     () => import('./eclipseWidgets.js'),
     './eclipseWidgets.js',
@@ -709,6 +715,8 @@ export async function whenWidgetsReady() {
     'remnants',
     // The vetting family reaches the plot component, the frame forward model and the measurement kernel: late for the same reason (Prompt 228).
     'vetting',
+    // The directImaging family reaches the plot component, the imaging kernel, the atmospheres table and the archive's imaged planets: late for the same reason (Prompt 230).
+    'directImaging',
     // The variables-II family reaches the plot component, the kernel and the variable-star data: late for the same reason (Prompt 223).
     'variablesII',
     // The timing family reaches the plot component, the inference core and the engine's data pack: late (Prompt 226).

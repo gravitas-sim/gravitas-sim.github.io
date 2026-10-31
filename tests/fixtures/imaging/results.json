@@ -1,0 +1,239 @@
+{
+  "rows": [
+    {
+      "id": "A1",
+      "status": "pass",
+      "measured": {
+        "maxRelErr": 0
+      },
+      "note": ""
+    },
+    {
+      "id": "A2",
+      "status": "pass",
+      "measured": {
+        "maxAbsErr": 3.8981718325193755e-17,
+        "monotone": true
+      },
+      "note": ""
+    },
+    {
+      "id": "A3",
+      "status": "pass",
+      "measured": {
+        "relErr": 0.00026962657903517595
+      },
+      "note": ""
+    },
+    {
+      "id": "A4",
+      "status": "pass",
+      "measured": {
+        "relErr": 1.9376152178244583e-15
+      },
+      "note": ""
+    },
+    {
+      "id": "A5",
+      "status": "pass",
+      "measured": {
+        "maxRelErr": 2.232780653987058e-16,
+        "T_eq_K": 254.58577294327225
+      },
+      "note": ""
+    },
+    {
+      "id": "A6",
+      "status": "pass",
+      "measured": {
+        "oneAuAtOnePc": 0.9999999999921652,
+        "earthAtTenPc": 0.09999999999999218,
+        "maxRelErr": 7.83484388477973e-12
+      },
+      "note": ""
+    },
+    {
+      "id": "A7",
+      "status": "pass",
+      "measured": {
+        "relErr": 0,
+        "rayleighRatio": 1.219669891266505,
+        "isInnerWorkingAngle": false
+      },
+      "note": ""
+    },
+    {
+      "id": "A8",
+      "status": "report",
+      "measured": {
+        "separationArcsec": 0.09999999999999218,
+        "apertures": [
+          {
+            "apertureM": 0.25,
+            "lambdaOverDArcsecAt550nm": 0.453782573743612
+          },
+          {
+            "apertureM": 2.4,
+            "lambdaOverDArcsecAt550nm": 0.04726901809829292
+          },
+          {
+            "apertureM": 6,
+            "lambdaOverDArcsecAt550nm": 0.018907607239317167
+          },
+          {
+            "apertureM": 8,
+            "lambdaOverDArcsecAt550nm": 0.014180705429487876
+          },
+          {
+            "apertureM": 30,
+            "lambdaOverDArcsecAt550nm": 0.0037815214478634338
+          }
+        ],
+        "visible550nm": {
+          "reflected": 5.453220753512321e-10,
+          "thermal": 3.0875225240492397e-50,
+          "total": 5.453220753512321e-10
+        },
+        "thermal10um": {
+          "reflected": 5.453220753512321e-10,
+          "thermal": 5.896765889635376e-8,
+          "total": 5.951298097170499e-8
+        },
+        "irradiationTeqK": 239.69020818728796
+      },
+      "note": ""
+    },
+    {
+      "id": "B1",
+      "status": "pass",
+      "measured": {
+        "maxRelErr": 4.963462915298973e-16,
+        "cases": 60
+      },
+      "note": ""
+    },
+    {
+      "id": "B2",
+      "status": "pass",
+      "measured": {
+        "maxRelErr": 9.051688035993848e-10,
+        "cases": 40
+      },
+      "note": ""
+    },
+    {
+      "id": "B3",
+      "status": "pass",
+      "measured": {
+        "maxRelErr": 1.7195929195403714e-15,
+        "cases": 60
+      },
+      "note": ""
+    },
+    {
+      "id": "B4",
+      "status": "pass",
+      "measured": {
+        "maxRelErr": 2.5762054174566363e-16,
+        "cases": 40
+      },
+      "note": ""
+    },
+    {
+      "id": "B5",
+      "status": "pass",
+      "measured": {
+        "maxRelErr": 5.419510371972402e-16,
+        "points": 183,
+        "perCurve": {
+          "earth-sun": 3.5743243876082907e-16,
+          "jupiter-sun": 5.419510371972402e-16,
+          "hot-companion": 5.405188872791753e-16
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "B6",
+      "status": "pass",
+      "measured": {
+        "agreement": 1,
+        "cases": 200
+      },
+      "note": ""
+    },
+    {
+      "id": "C1",
+      "status": "pass",
+      "measured": {
+        "holds": 1,
+        "systems": 500
+      },
+      "note": ""
+    },
+    {
+      "id": "D1",
+      "status": "pass",
+      "measured": {
+        "rate": 1
+      },
+      "note": ""
+    },
+    {
+      "id": "D2",
+      "status": "pass",
+      "measured": {
+        "rate": 1
+      },
+      "note": ""
+    },
+    {
+      "id": "D3",
+      "status": "pass",
+      "measured": {
+        "rate": 1
+      },
+      "note": ""
+    },
+    {
+      "id": "D4",
+      "status": "pass",
+      "measured": {
+        "rate": 1
+      },
+      "note": ""
+    },
+    {
+      "id": "D5",
+      "status": "pass",
+      "measured": {
+        "rate": 1
+      },
+      "note": ""
+    },
+    {
+      "id": "E1",
+      "status": "report",
+      "measured": {
+        "tableRows": 98,
+        "rowsWithDistanceAndAxis": 91,
+        "separationsFinitePositive": 91,
+        "outsideInnerWorkingAngle": {
+          "small-visible": 49,
+          "space-2m-visible": 84,
+          "ground-8m-nir": 91,
+          "space-6m-visible": 91
+        },
+        "rowsWithTemperatureAndStar": 75,
+        "temperatureOverTwiceIrradiationEquilibrium": 52
+      },
+      "note": "separations from the archive columns; contrast ignored here (1)"
+    },
+    {
+      "id": "E2",
+      "status": "not-run",
+      "measured": null,
+      "note": "no published contrast table for the imaged planets and no cited coronagraph working-angle value was supplied; nothing was typed from memory"
+    }
+  ]
+}

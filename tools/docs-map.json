@@ -1164,6 +1164,13 @@
       "student": true
     },
     {
+      "file": "IMAGING.md",
+      "kind": "feature",
+      "purpose": "Direct imaging, Part A: contrast, angular separation, lambda/D against an inner working angle, an observability verdict, the imaged planets' table; subtraction and orbits are Part B (Prompt 230).",
+      "owner": 230,
+      "student": true
+    },
+    {
       "file": "VETTING.md",
       "kind": "feature",
       "purpose": "Candidate vetting: odd-even depths, secondary-eclipse search, difference-image centroid test, the validation contract, what a pass does not mean.",

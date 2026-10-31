@@ -126,6 +126,7 @@ import { SHADOWS as MASSES_SHADOWS } from './data/investigations/binary-masses-s
 import { SHADOWS as ACTIVITY_SHADOWS } from './data/investigations/stellar-activity-sequence.js';
 import { SHADOWS as REMNANTS_SHADOWS } from './data/investigations/remnants-sequence.js';
 import { SHADOWS as VETTING_SHADOWS } from './data/investigations/vetting-sequence.js';
+import { SHADOWS as IMAGING_SHADOWS } from './data/investigations/imaging-sequence.js';
 import { SHADOWS as JOINT_SHADOWS } from './data/investigations/joint-sequence.js';
 import { SHADOWS as OCCURRENCE_SHADOWS } from './data/investigations/occurrence-sequence.js';
 import { SHADOWS as VARIABLES_II_SHADOWS } from './data/investigations/variables-ii-sequence.js';
@@ -194,6 +195,7 @@ export const SHADOWS = Object.freeze({
   ...ACTIVITY_SHADOWS,
   ...REMNANTS_SHADOWS,
   ...VETTING_SHADOWS,
+  ...IMAGING_SHADOWS,
   ...JOINT_SHADOWS,
   ...OCCURRENCE_SHADOWS,
   ...VARIABLES_II_SHADOWS,
