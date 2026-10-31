@@ -279,10 +279,10 @@ describe('the document inventory', () => {
     expect(inv.byKind.notes).toBe(INVESTIGATIONS.length);
     expect(inv.byVariant).toEqual({
       activity: 12,
-      depth: 480,
-      full: 436,
+      depth: 488,
+      full: 440,
       general: 18,
-      notes: 109,
+      notes: 110,
     });
   });
 
@@ -329,7 +329,8 @@ describe('the document inventory', () => {
     expect(files.filter(f => f.variant === 'depth').length).toBe(keys);
     // The five observing closeout investigations (Prompt 216) offer two depths, as
     // Design the Schedule does: two keys fewer in each language than three would give.
-    expect(keys).toBe(withDepth.length * 6 - 2 - 5 * 2);
+    // What Is It Made Of? and Finding Planets by Their Tug (Prompt 227) offer two depths each: four keys fewer.
+    expect(keys).toBe(withDepth.length * 6 - 2 - 5 * 2 - 2 * 2);
   });
 
   test('every activity format has a key in each language', () => {
