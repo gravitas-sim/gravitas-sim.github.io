@@ -1247,7 +1247,7 @@ export const MANIFEST = [
     title: 'The Clock That Drifts',
     subtitle:
       'Measure when a planet transits, plot how far each transit is from a steady clock, and read the slow wave a second planet writes',
-    duration: '14-30 min',
+    duration: '10-14 min',
     level: 'Introductory astronomy',
     thumbnail: 'images/investigations/the-clock-that-drifts.webp',
     depths: 3,

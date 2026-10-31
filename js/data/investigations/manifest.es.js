@@ -1256,7 +1256,7 @@ export const MANIFEST = [
     title: 'El reloj que se desajusta',
     subtitle:
       'Mide cuándo transita un planeta, dibuja a qué distancia cae cada tránsito de un reloj constante y lee la onda lenta que escribe un segundo planeta',
-    duration: '14-30 min',
+    duration: '10-14 min',
     level: 'Introductory astronomy',
     thumbnail: 'images/investigations/the-clock-that-drifts.webp',
     depths: 3,

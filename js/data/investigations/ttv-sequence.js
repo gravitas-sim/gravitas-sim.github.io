@@ -40,7 +40,7 @@ export const THE_CLOCK_THAT_DRIFTS = {
   title: 'The Clock That Drifts',
   subtitle:
     'Measure when a planet transits, plot how far each transit is from a steady clock, and read the slow wave a second planet writes',
-  duration: '14-30 min',
+  duration: '10-14 min',
   level: 'Introductory astronomy',
   audience: 'intro',
   textbook: { chapter: 20, section: null },
@@ -855,9 +855,9 @@ const EXPECTATIONS = {
 
 const BANDS = {
   'the-clock-that-drifts': {
-    core: 'medium',
-    quantitative: 'long',
-    advanced: 'long',
+    core: 'short',
+    quantitative: 'medium',
+    advanced: 'medium',
   },
 };
 
