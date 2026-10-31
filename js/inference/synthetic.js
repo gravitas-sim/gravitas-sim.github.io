@@ -262,7 +262,11 @@ export function syntheticJoint(o) {
       u1,
       u2,
     },
-    { exposure: o.lc.exposure ?? 0, supersample: o.lc.supersample ?? 11, annuli: 96 }
+    {
+      exposure: o.lc.exposure ?? 0,
+      supersample: o.lc.supersample ?? 11,
+      annuli: 96,
+    }
   );
   const curve = rvCurve(o.rv.times, { ...t, tc: t.t0 });
   const n = gaussian(o.seed);
@@ -290,7 +294,13 @@ export function syntheticJoint(o) {
     sigma,
     groups,
     rows: Array.from(x, (_, i) => i),
-    counts: { total: nf + nr, used: nf + nr, masked: 0, missing: 0, withoutUncertainty: 0 },
+    counts: {
+      total: nf + nr,
+      used: nf + nr,
+      masked: 0,
+      missing: 0,
+      withoutUncertainty: 0,
+    },
     columns: { x: 'time', y: 'value', sigma: 'error' },
     units: { x: 'd', y: '' },
     perDay: 1,

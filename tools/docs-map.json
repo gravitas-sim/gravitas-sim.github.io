@@ -1143,6 +1143,13 @@
       "student": false
     },
     {
+      "file": "JOINT_INFERENCE.md",
+      "kind": "feature",
+      "purpose": "Joint transit and radial-velocity fit with the star inside: a planet's mass, radius and density with the stellar mass and radius uncertainty carried through, the validation contract, one failed leg left failing, data not supplied (Prompt 227).",
+      "owner": 227,
+      "student": true
+    },
+    {
       "file": "VETTING.md",
       "kind": "feature",
       "purpose": "Candidate vetting: odd-even depths, secondary-eclipse search, difference-image centroid test, the validation contract, what a pass does not mean.",

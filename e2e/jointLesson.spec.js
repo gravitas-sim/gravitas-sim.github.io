@@ -20,7 +20,6 @@ import {
   commitPredictionHeld,
   expectVerdictRevealed,
   openInvestigation,
-  readout,
   setControl,
   settled,
   step,
@@ -113,7 +112,13 @@ for (const c of CASES) {
       app,
     }) => {
       test.slow();
-      await open(page, app, c.id, locale === 'es' ? 'es' : null, 'quantitative');
+      await open(
+        page,
+        app,
+        c.id,
+        locale === 'es' ? 'es' : null,
+        'quantitative'
+      );
       const plan = await deepPlan(page, c.id);
       expect(plan.length).toBeGreaterThan(8);
       if (locale === 'es')

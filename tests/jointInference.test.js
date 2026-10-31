@@ -20,10 +20,7 @@ import process from 'node:process';
 import { MODELS } from '../js/inference/models.js';
 import { fitOnce } from '../js/inference/infer.js';
 import { validateInference } from '../js/inference/manifest.js';
-import {
-  TRANSIT_RV_JOINT,
-  refusalsFor,
-} from '../js/inference/jointModel.js';
+import { TRANSIT_RV_JOINT, refusalsFor } from '../js/inference/jointModel.js';
 import {
   amplitude,
   bulkDensity,
@@ -75,6 +72,8 @@ describe('the committed thresholds and the recorded table', () => {
   test('the panel quotes the coverage the ensemble measured', () => {
     const rate = id => PINNED.find(r => r.id === id).measured;
     expect(COVERAGE.n).toBe(rate('C2').N);
+    expect(COVERAGE.Mp).toBeCloseTo(rate('C1').rate, 9);
+    expect(COVERAGE.MpAlone).toBeCloseTo(rate('C1').fitOnly, 9);
     expect(COVERAGE.Rp).toBeCloseTo(rate('C2').rate, 9);
     expect(COVERAGE.rhoP).toBeCloseTo(rate('C3').rate, 9);
     expect(COVERAGE.RpAlone).toBeCloseTo(rate('C4').radiusFitOnly, 9);
@@ -92,7 +91,11 @@ describe('the quick legs (tools/joint-inference-validate.mjs, in a child process
         '--json',
         '--only=A1,A2,A3,A4,A5,A6,A9',
       ],
-      { encoding: 'utf8', maxBuffer: 1 << 26, stdio: ['ignore', 'pipe', 'pipe'] }
+      {
+        encoding: 'utf8',
+        maxBuffer: 1 << 26,
+        stdio: ['ignore', 'pipe', 'pipe'],
+      }
     );
     rows = JSON.parse(out);
   }, 120_000);
@@ -161,13 +164,19 @@ describe('the formulas', () => {
     expect(p.Rp.sigmaStar / p.Rp.value).toBeCloseTo(0.035, 6);
     const zero = linearPlanet({
       ...STORED,
-      star: { mass: { value: 1.1, sigma: 0 }, radius: { value: 1.15, sigma: 0 } },
+      star: {
+        mass: { value: 1.1, sigma: 0 },
+        radius: { value: 1.15, sigma: 0 },
+      },
     });
     expect(zero.rhoP.sigmaStar).toBe(0);
     expect(zero.rhoP.sigma).toBeCloseTo(zero.rhoP.sigmaFit, 14);
   });
   test('stellar inputs without a sigma are read as not ok', () => {
-    const s = stellarInputs({ mass: { value: 1 }, radius: { value: 1, sigma: 0.1 } });
+    const s = stellarInputs({
+      mass: { value: 1 },
+      radius: { value: 1, sigma: 0.1 },
+    });
     expect(s.massOk).toBe(false);
     expect(s.radiusOk).toBe(true);
   });
@@ -198,7 +207,10 @@ describe('the model is registered and its refusals are named', () => {
     );
     expect(refusalsFor({ stellar: star }, ['flux', 'rv'])).toEqual([]);
     expect(names(refusalsFor({}, ['flux', 'rv']))).toEqual(
-      expect.arrayContaining(['Mp:stellarMassMissing', 'Rp:stellarRadiusMissing'])
+      expect.arrayContaining([
+        'Mp:stellarMassMissing',
+        'Rp:stellarRadiusMissing',
+      ])
     );
     const bare = {
       mass: { value: 1.1, source: 's' },
@@ -236,7 +248,8 @@ describe('the model is registered and its refusals are named', () => {
     expect(Object.keys(d)).toEqual(
       expect.arrayContaining(['MpSini', 'massFunction'])
     );
-    for (const n of ['Mp', 'Rp', 'rhoP', 'inclination']) expect(d).not.toHaveProperty(n);
+    for (const n of ['Mp', 'Rp', 'rhoP', 'inclination'])
+      expect(d).not.toHaveProperty(n);
     expect(d.MpSini.label).toMatch(/MINIMUM/);
   });
 });
@@ -255,8 +268,12 @@ describe('the manifest and the schema', () => {
   });
   test('the validator refuses a stellar input with no source and a role it does not know', () => {
     const star = { mass: { value: 1.1, sigma: 0.05, source: 'x' } };
-    const ok = validateInference(make({ roles: ['flux', 'rv'], stellar: star }));
-    expect(ok.filter(e => /settings\.(stellar|roles)/.test(e.path))).toEqual([]);
+    const ok = validateInference(
+      make({ roles: ['flux', 'rv'], stellar: star })
+    );
+    expect(ok.filter(e => /settings\.(stellar|roles)/.test(e.path))).toEqual(
+      []
+    );
     const bad = validateInference(
       make({ roles: ['flux', 'banana'], stellar: { mass: { value: 1 } } })
     );
@@ -266,7 +283,9 @@ describe('the manifest and the schema', () => {
   });
   test('the schema accepts the manifest and refuses an unknown role', () => {
     const star = { mass: { value: 1.1, sigma: 0.05, source: 'x' } };
-    expect(valid(schema, make({ roles: ['flux', 'rv'], stellar: star }))).toBe(true);
+    expect(valid(schema, make({ roles: ['flux', 'rv'], stellar: star }))).toBe(
+      true
+    );
     expect(valid(schema, make({ roles: ['flux', 'banana'] }))).toBe(false);
   });
 });
@@ -316,7 +335,13 @@ describe('the fit through the core (one seeded joint table)', () => {
           sqrtEcosw: { mode: 'fixed', value: 0 },
           sqrtEsinw: { mode: 'fixed', value: 0 },
         },
-        settings: { exposure: 1 / 36, supersample: 5, annuli: 48, roles: ['flux', 'rv', 'rv'], stellar: star },
+        settings: {
+          exposure: 1 / 36,
+          supersample: 5,
+          annuli: 48,
+          roles: ['flux', 'rv', 'rv'],
+          stellar: star,
+        },
       },
       data
     );

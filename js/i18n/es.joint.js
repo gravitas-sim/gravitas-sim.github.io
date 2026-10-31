@@ -16,7 +16,8 @@ export const ES_JOINT = {
   'jointW.control.lines': 'Mostrar líneas de densidad constante',
   'jointW.on': 'sí',
   'jointW.off': 'no',
-  'jointW.axis.pct': 'Incertidumbre de la masa y el radio estelares, porcentaje de cada uno',
+  'jointW.axis.pct':
+    'Incertidumbre de la masa y el radio estelares, porcentaje de cada uno',
   'jointW.axis.rho': 'Incertidumbre de la densidad del planeta, porcentaje',
   'jointW.axis.logM': 'log10 de la masa, en masas terrestres',
   'jointW.axis.logR': 'log10 del radio, en radios terrestres',
@@ -49,15 +50,17 @@ export const ES_JOINT = {
     '{v} más o menos {s} g/cm3, con la masa y el radio de la estrella dentro. Los datos solos dan más o menos {a}, la estrella añade {b}; la estrella tiene el {p} por ciento de la varianza.',
   'jointW.v.tension':
     'El tránsito da a la estrella una densidad de {t} más o menos {st} g/cm3; la masa y el radio declarados dan {s} más o menos {ss}. La diferencia es de {z} sigmas{flag}.',
-  'jointW.v.tensionFlag': ' (más de 3: la estrella declarada y el tránsito no concuerdan, y la densidad del planeta vale lo que valga esa estrella)',
+  'jointW.v.tensionFlag':
+    ' (más de 3: la estrella declarada y el tránsito no concuerdan, y la densidad del planeta vale lo que valga esa estrella)',
   'jointW.v.rates':
-    'En un conjunto sembrado de {n} sistemas cuyas estrellas se sortearon de su incertidumbre declarada, el intervalo de una sigma del radio del planeta contuvo la verdad el {a} por ciento de las veces con la estrella dentro y el {b} por ciento con la estrella tomada como exacta; para la densidad, {c} y {d} por ciento. Una sigma debería contenerla cerca del 68 por ciento de las veces.',
+    'En un conjunto sembrado de {n} sistemas cuyas estrellas se sortearon de su incertidumbre declarada, el intervalo de una sigma contuvo la verdad, con la estrella dentro y con la estrella tomada como exacta, el {m} y el {n2} por ciento de las veces para la masa, el {a} y el {b} por ciento para el radio y el {c} y el {d} por ciento para la densidad. Una sigma debería contenerla cerca del 68 por ciento de las veces; la estrella importa más para la masa.',
   'jointW.v.class':
     '{c}: una convención sobre la densidad media (por debajo de 1,8 g/cm3 rica en volátiles, de 1,8 a 3 roca y hielo, por encima de 3 rocosa). No distingue hidrógeno y helio del hielo de agua, y la densidad de un planeta grande es menor que la de su material por su propio peso.',
   'jointW.class.rocky': 'Rocoso',
   'jointW.class.rock-ice': 'Roca y hielo',
   'jointW.class.volatile-rich': 'Rico en volátiles',
-  'jointW.v.ambiguous': ' La densidad está a menos de 2 sigmas de un límite, así que la clase es ambigua.',
+  'jointW.v.ambiguous':
+    ' La densidad está a menos de 2 sigmas de un límite, así que la clase es ambigua.',
   'jointW.a':
     'Un planeta en una órbita, circular aquí; la masa y el radio de la estrella son datos independientes con la incertidumbre y la correlación declaradas; la covarianza es la del ajuste, linealizada. Los números son de primer orden; un Monte Carlo concuerda en unos pocos por ciento.',
 };

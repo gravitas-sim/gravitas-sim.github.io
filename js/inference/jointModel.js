@@ -52,8 +52,14 @@ import {
 } from './jointPlanet.js';
 import { constraintKB } from './transitDelta.js';
 
-const { Math, Float64Array, Int8Array, Int32Array, WeakMap, Number: Num } =
-  globalThis;
+const {
+  Math,
+  Float64Array,
+  Int8Array,
+  Int32Array,
+  WeakMap,
+  Number: Num,
+} = globalThis;
 
 const FLUX = 0;
 const RV = 1;
@@ -80,9 +86,6 @@ function rowCodes(data, settings) {
     out[i] = roles[data.groups ? data.groups[i] : 0] === 'flux' ? FLUX : RV;
   return out;
 }
-
-const hasRole = (settings, data, role) =>
-  rolesOf(settings, data).includes(role);
 
 // ---- the star ------------------------------------------------------------------
 
@@ -266,7 +269,10 @@ function startsFor(data, request, tools) {
     }
   } else {
     const r = tools.rvStarts(
-      { ...request, parameters: { ...request.parameters, tc: request.parameters.t0 } },
+      {
+        ...request,
+        parameters: { ...request.parameters, tc: request.parameters.t0 },
+      },
       subset(data, rvRows),
       tools.hooks,
       search
@@ -311,7 +317,13 @@ const PARAMETERS = [
   PERIOD,
   { name: 'k', unit: '', label: 'Rp/R*', lo: 0.005, hi: 0.5 },
   { name: 'aRs', unit: '', label: 'a/R* (true)', lo: 1.5, hi: 200 },
-  { name: 'b', unit: '', label: 'impact parameter at conjunction', lo: 0, hi: 1.5 },
+  {
+    name: 'b',
+    unit: '',
+    label: 'impact parameter at conjunction',
+    lo: 0,
+    hi: 1.5,
+  },
   {
     name: 'q1',
     unit: '',
@@ -346,8 +358,6 @@ const PARAMETERS = [
     start: 0,
   },
 ];
-
-const TRANSIT_ONLY = ['k', 'aRs', 'b', 'q1', 'q2'];
 
 /** Fixed values for the parameters no row depends on, so no parameter is free without data. */
 function prepare(request, data) {
@@ -472,9 +482,9 @@ export const TRANSIT_RV_JOINT = {
   notClaimed: [
     "A planet's mass from velocities alone: they fix Mp sin i, and a mass needs the transit's inclination; without a transit the result is the minimum mass and is labelled so.",
     "A planet's radius, mass or density without the star's uncertainty: the stellar mass and radius are inputs with a stated uncertainty and are never taken as exact, and no planetary quantity is reported without the ones it needs.",
-    "The stellar parameters themselves: they are stated by the reader with a source (a catalog or an isochrone fit); this model does not fit them, and a density is only as good as they are.",
+    'The stellar parameters themselves: they are stated by the reader with a source (a catalog or an isochrone fit); this model does not fit them, and a density is only as good as they are.',
     'A second planet, a trend, stellar activity or a transit-timing variation: one planet on one Keplerian orbit; a velocity scatter beyond the errors is the jitter, one value for all instruments, and a large one says the model is not describing the velocities.',
-    "An exact eccentric transit: the light curve is the circular-orbit model with the first-order scaling of the duration by e and w (Winn 2010), whose error is under 2 percent of the duration for e up to 0.2.",
+    'An exact eccentric transit: the light curve is the circular-orbit model with the first-order scaling of the duration by e and w (Winn 2010), whose error is under 2 percent of the duration for e up to 0.2.',
     'The Rossiter-McLaughlin effect and the planet’s atmosphere: not in the model.',
   ],
   assumptions: [
@@ -561,7 +571,8 @@ export const TRANSIT_RV_JOINT = {
     if (rv) {
       // f(m) = P K^3 (1 - e^2)^(3/2) / (2 pi G), in solar masses: G cancels against the Sun's GM.
       out.massFunction = {
-        value: (Pd * 86400 * v.K ** 3 * (1 - e * e) ** 1.5) / (2 * Math.PI * GM.sun),
+        value:
+          (Pd * 86400 * v.K ** 3 * (1 - e * e) ** 1.5) / (2 * Math.PI * GM.sun),
         unit: 'Msun',
         label: 'mass function f(m) = Mp^3 sin^3 i / (Ms + Mp)^2',
       };
@@ -576,7 +587,11 @@ export const TRANSIT_RV_JOINT = {
         { t0: v.t0, P: v.P, k: v.k, aRs: aC, b: v.b, u1, u2 },
         {}
       )[0];
-      out.depth = { value: 1 - center, unit: '', label: 'depth at mid-transit' };
+      out.depth = {
+        value: 1 - center,
+        unit: '',
+        label: 'depth at mid-transit',
+      };
       out.T14 = {
         value: Num.isFinite(half) ? 2 * half : NaN,
         unit: 'd',
@@ -614,8 +629,12 @@ export const TRANSIT_RV_JOINT = {
         label: "star's mean density from its stated mass and radius",
         externalVariance: stellarVariance(
           {
-            Ms: (starDensityOf(Ms + hM, Rs) - starDensityOf(Ms - hM, Rs)) / (2 * hM),
-            Rs: (starDensityOf(Ms, Rs + hR) - starDensityOf(Ms, Rs - hR)) / (2 * hR),
+            Ms:
+              (starDensityOf(Ms + hM, Rs) - starDensityOf(Ms - hM, Rs)) /
+              (2 * hM),
+            Rs:
+              (starDensityOf(Ms, Rs + hR) - starDensityOf(Ms, Rs - hR)) /
+              (2 * hR),
           },
           star
         ),
@@ -643,9 +662,13 @@ export const TRANSIT_RV_JOINT = {
     // reads b + sigma and misses it; this one is added after the first
     // judgement of D6 (AM4) and `bBound: false` restores the first rule.
     const b = out.parameters.find(p => p.name === 'b');
-    const bOnBound = options.bBound !== false && b?.mode === 'fitted' && b.atBound;
+    const bOnBound =
+      options.bBound !== false && b?.mode === 'fitted' && b.atBound;
     if ((kb && kb.status === 'not-constrained') || bOnBound) {
-      flag(['Rp', 'rhoP', 'inclination', 'sini'], bOnBound ? 'k-b (b at its bound)' : 'k-b');
+      flag(
+        ['Rp', 'rhoP', 'inclination', 'sini'],
+        bOnBound ? 'k-b (b at its bound)' : 'k-b'
+      );
       reasons.push(bOnBound ? 'b-bound' : 'k-b');
     }
     const sini = out.derived.find(d => d.name === 'sini');

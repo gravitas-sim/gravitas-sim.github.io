@@ -16,7 +16,8 @@ export const EN_JOINT = {
   'jointW.control.lines': 'Show lines of constant density',
   'jointW.on': 'on',
   'jointW.off': 'off',
-  'jointW.axis.pct': 'Uncertainty of the stellar mass and radius, percent of each',
+  'jointW.axis.pct':
+    'Uncertainty of the stellar mass and radius, percent of each',
   'jointW.axis.rho': 'Uncertainty of the planet’s density, percent',
   'jointW.axis.logM': 'log10 of the mass, in Earth masses',
   'jointW.axis.logR': 'log10 of the radius, in Earth radii',
@@ -49,15 +50,17 @@ export const EN_JOINT = {
     '{v} plus or minus {s} g/cm3, with the star’s mass and radius inside it. The data alone give plus or minus {a}, the star adds {b}; the star holds {p} percent of the variance.',
   'jointW.v.tension':
     'The transit gives the star a density of {t} plus or minus {st} g/cm3; the stated mass and radius give {s} plus or minus {ss}. The difference is {z} sigma{flag}.',
-  'jointW.v.tensionFlag': ' (more than 3: the stated star and the transit disagree, and the planet’s density is only as good as that star)',
+  'jointW.v.tensionFlag':
+    ' (more than 3: the stated star and the transit disagree, and the planet’s density is only as good as that star)',
   'jointW.v.rates':
-    'On a seeded ensemble of {n} systems whose stars were drawn from their stated uncertainty, the one-sigma interval of the planet’s radius held the truth {a} percent of the time with the star inside it and {b} percent of the time with the star taken as exact; for the density {c} and {d} percent. One sigma should hold it about 68 percent of the time.',
+    'On a seeded ensemble of {n} systems whose stars were drawn from their stated uncertainty, the one-sigma interval held the truth, with the star inside it and with the star taken as exact, {m} and {n2} percent of the time for the mass, {a} and {b} percent for the radius and {c} and {d} percent for the density. One sigma should hold it about 68 percent of the time; the star matters most for the mass.',
   'jointW.v.class':
     '{c}: a convention on bulk density (below 1.8 g/cm3 volatile-rich, 1.8 to 3 rock and ice, above 3 rocky). It cannot tell hydrogen and helium from water ice, and a large planet’s density is lower than its material’s because of its own weight.',
   'jointW.class.rocky': 'Rocky',
   'jointW.class.rock-ice': 'Rock and ice',
   'jointW.class.volatile-rich': 'Volatile-rich',
-  'jointW.v.ambiguous': ' The density is within 2 sigma of a boundary, so the class is ambiguous.',
+  'jointW.v.ambiguous':
+    ' The density is within 2 sigma of a boundary, so the class is ambiguous.',
   'jointW.a':
     'One planet on one orbit, circular here; the star’s mass and radius are independent inputs with the stated uncertainty and correlation; the covariance is the fit’s, linearized. The numbers are first order; a Monte Carlo agrees to a few percent.',
 };

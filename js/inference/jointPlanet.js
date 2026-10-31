@@ -86,11 +86,11 @@ export function massFromAmplitude({ K, P, e = 0, sini = 1, Ms }) {
 
 /** Bulk density, g/cm^3, of Mp Jupiter masses in Rp equatorial Jupiter radii. */
 export const bulkDensity = (Mp, Rp) =>
-  ((GM.jup * Mp) / G_SI / ((4 / 3) * Math.PI * (R_JUP_M * Rp) ** 3)) / 1000;
+  (GM.jup * Mp) / G_SI / ((4 / 3) * Math.PI * (R_JUP_M * Rp) ** 3) / 1000;
 
 /** A star's mean density, g/cm^3, from its mass (solar masses) and radius (solar radii). */
 export const starDensityOf = (Ms, Rs) =>
-  ((GM.sun * Ms) / G_SI / ((4 / 3) * Math.PI * (R_SUN_M * Rs) ** 3)) / 1000;
+  (GM.sun * Ms) / G_SI / ((4 / 3) * Math.PI * (R_SUN_M * Rs) ** 3) / 1000;
 
 /** The circular-equivalent a/R* of an orbit of eccentricity e and periastron w (radians). */
 export const circularEquivalent = (aRs, e, w) =>
@@ -160,7 +160,7 @@ export function planetOf(o, star, transit = true) {
   const Mp = transit
     ? massFromAmplitude({ K: o.K, P: o.P, e: o.e, sini, Ms: star.Ms })
     : NaN;
-  const Rp = transit ? (o.k * star.Rs) * RSUN_PER_RJUP : NaN;
+  const Rp = transit ? o.k * star.Rs * RSUN_PER_RJUP : NaN;
   return {
     sini,
     MpSini,
@@ -176,7 +176,9 @@ export function stellarVariance(g, star) {
   const sr = star.sigmaRs ?? 0;
   const r = star.correlation ?? 0;
   return (
-    g.Ms * g.Ms * sm * sm + g.Rs * g.Rs * sr * sr + 2 * r * g.Ms * g.Rs * sm * sr
+    g.Ms * g.Ms * sm * sm +
+    g.Rs * g.Rs * sr * sr +
+    2 * r * g.Ms * g.Rs * sm * sr
   );
 }
 
@@ -284,7 +286,8 @@ export function propagatePlanet({
  */
 export function systemFromMass({ P, Mp, Ms, Rs, b, e = 0, w = Math.PI / 2 }) {
   const Ps = P * DAY;
-  const a = ((GM.sun * Ms + GM.jup * Mp) * Ps * Ps / (4 * Math.PI ** 2)) ** (1 / 3);
+  const a =
+    (((GM.sun * Ms + GM.jup * Mp) * Ps * Ps) / (4 * Math.PI ** 2)) ** (1 / 3);
   const aRs = a / (Rs * R_SUN_M);
   const sini = sinInclination(b, aRs, e, w);
   return { aRs, sini, K: amplitude({ Mp, P, e, sini, Ms }), a_m: a };

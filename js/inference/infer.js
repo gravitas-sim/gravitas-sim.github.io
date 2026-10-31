@@ -612,7 +612,10 @@ export function fitOnce(request, data, hooks = {}) {
   // What a model refuses to report and why (the joint model's planet without
   // the star it needs), and the warnings only it can give.
   if (model.refusals)
-    out.refusals = model.refusals(request.settings || {}, request.settings?.roles);
+    out.refusals = model.refusals(
+      request.settings || {},
+      request.settings?.roles
+    );
   if (model.warnings) out.warnings.push(...model.warnings(out, data, request));
   // What the transit family says beyond the numbers: whether the data fix the
   // radius ratio and the impact parameter, and whether the residuals in

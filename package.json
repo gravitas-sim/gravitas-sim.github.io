@@ -12,6 +12,7 @@
     "binary-masses:validate": "node tools/binary-masses-validate.mjs",
     "transit-delta:validate": "node tools/transit-delta-validate.mjs",
     "ttv:validate": "node tools/ttv-validate.mjs",
+    "joint-inference:validate": "node tools/joint-inference-validate.mjs",
     "ttv:pack": "node tools/ttv-pack.mjs",
     "cluster:validate": "node tools/cluster-fit-validate.mjs",
     "survey:validate": "node tools/survey-validate.mjs",

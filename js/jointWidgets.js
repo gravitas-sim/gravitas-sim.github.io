@@ -186,9 +186,7 @@ const FIT = {
           id: 'now',
           label: t('jointW.legend.now'),
           x: [(s.massPct + s.radiusPct) / 2],
-          y: [
-            (100 * planetFrom(s).rhoP.sigma) / planetFrom(s).rhoP.value,
-          ],
+          y: [(100 * planetFrom(s).rhoP.sigma) / planetFrom(s).rhoP.value],
           color: COLOR.orange,
           mode: 'points',
           radius: 5,
@@ -272,6 +270,8 @@ const FIT = {
         label: t('jointW.row.rates'),
         value: t('jointW.v.rates', {
           n: COVERAGE.n,
+          m: fixed(100 * COVERAGE.Mp, 0),
+          n2: fixed(100 * COVERAGE.MpAlone, 0),
           a: fixed(100 * COVERAGE.Rp, 0),
           b: fixed(100 * COVERAGE.RpAlone, 0),
           c: fixed(100 * COVERAGE.rhoP, 0),
@@ -292,7 +292,10 @@ const box = (m, r) => {
   return { x: [x0, x1, x1, x0, x0], y: [y0, y0, y1, y1, y0] };
 };
 
-const MASSES = Array.from({ length: 41 }, (_, i) => 10 ** (-1.5 + (4.3 * i) / 40));
+const MASSES = Array.from(
+  { length: 41 },
+  (_, i) => 10 ** (-1.5 + (4.3 * i) / 40)
+);
 
 const MASS_RADIUS = {
   id: 'mass-radius',

@@ -32,11 +32,20 @@ export const STORED = Object.freeze({
   names: ['P', 'k', 'aRs', 'b', 'K'],
   mean: [3.5244169, 0.11840057, 9.0350808, 0.4309577, 85.595632],
   covariance: [
-    [1.9539455e-8, 2.9450851e-8, -0.0000076557086, 0.0000018115969, -0.0000020397369],
-    [2.9450851e-8, 0.000016036015, -0.0021754803, 0.00063478066, -0.0000028369924],
+    [
+      1.9539455e-8, 2.9450851e-8, -0.0000076557086, 0.0000018115969,
+      -0.0000020397369,
+    ],
+    [
+      2.9450851e-8, 0.000016036015, -0.0021754803, 0.00063478066,
+      -0.0000028369924,
+    ],
     [-0.0000076557086, -0.0021754803, 0.36986493, -0.099002062, 0.00076257401],
     [0.0000018115969, 0.00063478066, -0.099002062, 0.027380328, -0.00017902597],
-    [-0.0000020397369, -0.0000028369924, 0.00076257401, -0.00017902597, 1.2232968],
+    [
+      -0.0000020397369, -0.0000028369924, 0.00076257401, -0.00017902597,
+      1.2232968,
+    ],
   ],
   jitter: 2.3296,
   chi2: 978.08,
@@ -50,7 +59,15 @@ export const STORED = Object.freeze({
  * whose one-sigma interval held the truth, with the star's uncertainty inside it and with the
  * star taken as exact. Pinned here by tests/jointInference.test.js against that file.
  */
-export const COVERAGE = Object.freeze({ n: 100, Rp: 0.68, RpAlone: 0.5, rhoP: 0.68, rhoPAlone: 0.5 });
+export const COVERAGE = Object.freeze({
+  n: 100,
+  Mp: 0.61,
+  MpAlone: 0.23,
+  Rp: 0.78,
+  RpAlone: 0.63,
+  rhoP: 0.79,
+  rhoPAlone: 0.67,
+});
 
 /** The stated star's central values: a catalog-like entry for the synthetic star. */
 export const STAR = Object.freeze({ mass: 1.1, radius: 1.15 });
@@ -98,23 +115,35 @@ export function densityTension(s) {
   const G = 6.6743e-11;
   const GMSUN = 1.3271244e20;
   const RSUN = 6.957e8;
-  const rho = (aRs, P) => ((3 * Math.PI * aRs ** 3) / (G * (P * 86400) ** 2)) / 1000;
+  const rho = (aRs, P) =>
+    (3 * Math.PI * aRs ** 3) / (G * (P * 86400) ** 2) / 1000;
   const [P, , aRs] = STORED.mean;
   const cov = STORED.covariance;
   const gA = (3 * rho(aRs, P)) / aRs;
   const gP = (-2 * rho(aRs, P)) / P;
-  const vt = gA * gA * cov[2][2] + gP * gP * cov[0][0] + 2 * gA * gP * cov[0][2];
+  const vt =
+    gA * gA * cov[2][2] + gP * gP * cov[0][0] + 2 * gA * gP * cov[0][2];
   const Ms = p.star.mass.value;
   const Rs = p.star.radius.value;
-  const stated = ((GMSUN * Ms) / G / ((4 / 3) * Math.PI * (RSUN * Rs) ** 3)) / 1000;
+  const stated =
+    (GMSUN * Ms) / G / ((4 / 3) * Math.PI * (RSUN * Rs) ** 3) / 1000;
   const gM = stated / Ms;
   const gR = (-3 * stated) / Rs;
   const sm = p.star.mass.sigma;
   const sr = p.star.radius.sigma;
-  const vs = gM * gM * sm * sm + gR * gR * sr * sr + 2 * p.star.correlation * gM * gR * sm * sr;
+  const vs =
+    gM * gM * sm * sm +
+    gR * gR * sr * sr +
+    2 * p.star.correlation * gM * gR * sm * sr;
   const t = rho(aRs, P);
   const z = (t - stated) / Math.sqrt(vt + vs);
-  return { transit: t, sigmaTransit: Math.sqrt(vt), stated, sigmaStated: Math.sqrt(vs), z };
+  return {
+    transit: t,
+    sigmaTransit: Math.sqrt(vt),
+    stated,
+    sigmaStated: Math.sqrt(vs),
+    z,
+  };
 }
 
 /** Constant-density lines of the diagram: radius in Earth radii against mass in Earth masses. */
@@ -125,11 +154,13 @@ const EARTH_GM = 398600.4418;
 
 /** The Solar System's planets as points of the diagram, from the Prompt 203 table (typed, not rechecked). */
 export function solarSystemPoints() {
-  return Object.values(PLANETS).filter(p => p.name !== 'Moon').map(p => ({
-    name: p.name,
-    mass: p.gm[0] / EARTH_GM,
-    radius: p.radius.mean[0] / EARTH_RADIUS_KM,
-  }));
+  return Object.values(PLANETS)
+    .filter(p => p.name !== 'Moon')
+    .map(p => ({
+      name: p.name,
+      mass: p.gm[0] / EARTH_GM,
+      radius: p.radius.mean[0] / EARTH_RADIUS_KM,
+    }));
 }
 
 /**

@@ -19,7 +19,9 @@ const near = (x, target, tolerance) =>
 const STAGE = {
   spacing: 150,
   fit: true,
-  stars: [{ role: 'star', name: 'A star with a planet', teffK: 5900, lumSun: 1.4 }],
+  stars: [
+    { role: 'star', name: 'A star with a planet', teffK: 5900, lumSun: 1.4 },
+  ],
 };
 
 /** The joint-fit panel: stellar mass and radius uncertainty by step index (4 is 5 percent, 3 is 3.5, 5 is 8), correlation, stated mass and radius. */
@@ -143,7 +145,9 @@ export const WHAT_IS_IT_MADE_OF = {
         'The star adds nothing to the mass: only the radius needs the star',
       ],
       answer: 1,
-      hints: ['Compare the two numbers in the row: what the data alone give, and what the star adds.'],
+      hints: [
+        'Compare the two numbers in the row: what the data alone give, and what the star adds.',
+      ],
       because:
         'The star’s. The data alone fix the mass to about 0.009 Jupiter masses, and a star mass stated to 5 percent adds 0.023, so the star holds about 87 percent of the variance. The mass needs the star’s mass: it is proportional to its two thirds power.',
       misconceptions: [
@@ -178,7 +182,8 @@ export const WHAT_IS_IT_MADE_OF = {
       kind: 'choice',
       title: 'What the density says',
       body: `Read the line <em>What the density says</em>.`,
-      prompt: 'What can the bulk density tell you about what the planet is made of?',
+      prompt:
+        'What can the bulk density tell you about what the planet is made of?',
       options: [
         'That it is a gas giant of hydrogen and helium: nothing else is this light',
         'That it is volatile-rich, below 1.8 g/cm³; it cannot tell hydrogen and helium from water ice, and other evidence would be needed',
@@ -186,7 +191,9 @@ export const WHAT_IS_IT_MADE_OF = {
         'Nothing at all',
       ],
       answer: 1,
-      hints: ['The line says what class a density below 1.8 belongs to, and what it cannot tell apart.'],
+      hints: [
+        'The line says what class a density below 1.8 belongs to, and what it cannot tell apart.',
+      ],
       because:
         'A density below 1.8 g/cm³ is volatile-rich by convention, and the class cannot tell hydrogen and helium from water ice. A large planet is also less dense than its material would be in a small one, because of its own weight. It says something and not everything.',
       misconceptions: [
@@ -265,8 +272,18 @@ export const WHAT_IS_IT_MADE_OF_DEEPER = {
              to 1.60 solar radii (back to a 5 percent mass and a 3.5 percent radius). Read how far the stated star&rsquo;s density is
              from the transit&rsquo;s, in sigma, and the planet&rsquo;s density around that star.`,
       fields: [
-        { id: 'a', label: 'Disagreement of the stated star with the transit', unit: '', hint: '3.2' },
-        { id: 'b', label: 'Density of the planet around that star', unit: 'g/cm3', hint: '0.135' },
+        {
+          id: 'a',
+          label: 'Disagreement of the stated star with the transit',
+          unit: '',
+          hint: '3.2',
+        },
+        {
+          id: 'b',
+          label: 'Density of the planet around that star',
+          unit: 'g/cm3',
+          hint: '0.135',
+        },
       ],
       validate: v => {
         if (![v.a, v.b].every(Number.isFinite)) return null;
@@ -355,7 +372,9 @@ export const WHAT_IS_IT_MADE_OF_ES = {
         'Son casi iguales',
         'La estrella no añade nada a la masa: solo el radio necesita la estrella',
       ],
-      hints: ['Compara los dos números de la fila: lo que dan los datos solos y lo que añade la estrella.'],
+      hints: [
+        'Compara los dos números de la fila: lo que dan los datos solos y lo que añade la estrella.',
+      ],
       because:
         'La de la estrella. Los datos solos fijan la masa en unas 0,009 masas de Júpiter, y una masa estelar declarada al 5 por ciento añade 0,023, así que la estrella tiene cerca del 87 por ciento de la varianza. La masa necesita la masa de la estrella: es proporcional a su potencia dos tercios.',
       misconceptions: [
@@ -369,21 +388,26 @@ export const WHAT_IS_IT_MADE_OF_ES = {
       body: `El segundo panel pone el planeta en un diagrama de radio contra masa, ambos en logaritmos, con los planetas del Sistema Solar y líneas de densidad constante.`,
       prompt: '¿A qué línea de densidad constante está más cerca el planeta?',
       options: ['0,3 g/cm³', '1 g/cm³', '5,5 g/cm³', '12 g/cm³'],
-      hints: ['La fila de la densidad da el número. Busca la línea más cercana.'],
+      hints: [
+        'La fila de la densidad da el número. Busca la línea más cercana.',
+      ],
       because:
         'La densidad media del planeta es 0,36 g/cm³, la más cercana a la línea de 0,3, muy por debajo de la de Saturno. Es ligero para su tamaño: un planeta grande de poca masa.',
     },
     {
       title: 'Lo que dice la densidad',
       body: `Lee la línea <em>Lo que dice la densidad</em>.`,
-      prompt: '¿Qué puede decir la densidad media sobre de qué está hecho el planeta?',
+      prompt:
+        '¿Qué puede decir la densidad media sobre de qué está hecho el planeta?',
       options: [
         'Que es un gigante gaseoso de hidrógeno y helio: nada más es tan ligero',
         'Que es rico en volátiles, por debajo de 1,8 g/cm³; no distingue hidrógeno y helio del hielo de agua, y haría falta otra evidencia',
         'Que es rocoso',
         'Nada en absoluto',
       ],
-      hints: ['La línea dice a qué clase pertenece una densidad por debajo de 1,8, y qué no distingue.'],
+      hints: [
+        'La línea dice a qué clase pertenece una densidad por debajo de 1,8, y qué no distingue.',
+      ],
       because:
         'Una densidad por debajo de 1,8 g/cm³ es rica en volátiles por convención, y la clase no distingue hidrógeno y helio del hielo de agua. Un planeta grande es además menos denso que su material en uno pequeño, por su propio peso. Dice algo y no todo.',
       misconceptions: [
@@ -484,7 +508,9 @@ export const RADIAL_VELOCITY_DEEPER = {
         'Nothing: jitter is always present',
       ],
       answer: 1,
-      hints: ['The jitter is whatever scatter is left once the one-planet orbit is taken out.'],
+      hints: [
+        'The jitter is whatever scatter is left once the one-planet orbit is taken out.',
+      ],
       because:
         'The model of one planet explains the velocities only down to that scatter; a large one says something is not in the model, and the panel flags a jitter larger than the errors. The mass is conditional on the one-planet model.',
       tool: JOINT(),
@@ -498,8 +524,18 @@ export const RADIAL_VELOCITY_DEEPER = {
       body: `The transit measures the star&rsquo;s density from the orbit. Set the stated stellar radius to 1.60 solar radii. Read how far
              the stated star&rsquo;s density is from the transit&rsquo;s, in sigma, and the planet&rsquo;s density around that star.`,
       fields: [
-        { id: 'a', label: 'Disagreement of the stated star with the transit', unit: '', hint: '3.2' },
-        { id: 'b', label: 'Density of the planet around that star', unit: 'g/cm3', hint: '0.135' },
+        {
+          id: 'a',
+          label: 'Disagreement of the stated star with the transit',
+          unit: '',
+          hint: '3.2',
+        },
+        {
+          id: 'b',
+          label: 'Density of the planet around that star',
+          unit: 'g/cm3',
+          hint: '0.135',
+        },
       ],
       validate: v => {
         if (![v.a, v.b].every(Number.isFinite)) return null;
@@ -536,14 +572,17 @@ export const RADIAL_VELOCITY_DEEPER_ES = {
     {
       title: 'La parte de la estrella',
       body: `Lee la fila de la masa del panel: lo que dan los datos solos, lo que añade la estrella y la parte.`,
-      prompt: '¿Cuánto de la varianza de la masa del planeta es de la estrella?',
+      prompt:
+        '¿Cuánto de la varianza de la masa del planeta es de la estrella?',
       options: [
         'Cerca del 10 por ciento: la estrella es bien conocida',
         'Cerca de la mitad',
         'Cerca del 87 por ciento: la masa de la estrella, declarada al 5 por ciento, domina',
         'Nada: las velocidades fijan la masa',
       ],
-      hints: ['El panel imprime la parte como porcentaje en la fila de la masa.'],
+      hints: [
+        'El panel imprime la parte como porcentaje en la fila de la masa.',
+      ],
       because:
         'Cerca del 87 por ciento. Las velocidades fijan la amplitud a menos del 2 por ciento; la masa va con la masa de la estrella a la dos tercios, y una masa estelar declarada al 5 por ciento añade más que los datos.',
     },
@@ -557,7 +596,9 @@ export const RADIAL_VELOCITY_DEEPER_ES = {
         'Que el planeta es más masivo',
         'Nada: la fluctuación siempre está presente',
       ],
-      hints: ['La fluctuación es la dispersión que queda al quitar la órbita de un planeta.'],
+      hints: [
+        'La fluctuación es la dispersión que queda al quitar la órbita de un planeta.',
+      ],
       because:
         'El modelo de un planeta explica las velocidades solo hasta esa dispersión; una grande dice que algo no está en el modelo, y el panel avisa de una fluctuación mayor que los errores. La masa depende del modelo de un planeta.',
     },
@@ -620,12 +661,14 @@ const CONTENT = {
     ],
     misconceptions: [
       {
-        claim: 'A fit that includes the star’s uncertainty has made the planet’s mass better known.',
+        claim:
+          'A fit that includes the star’s uncertainty has made the planet’s mass better known.',
         response:
           'Including it makes the interval honest, not smaller: the star’s share of the mass variance is about 87 percent, and no more data of the planet’s own can reduce it.',
       },
       {
-        claim: 'The transit measures the planet’s radius, so the star does not matter.',
+        claim:
+          'The transit measures the planet’s radius, so the star does not matter.',
         response:
           'The transit measures a ratio. The radius is that ratio times the star’s radius, so a star 13 percent larger makes the planet 13 percent larger and a third less dense.',
       },

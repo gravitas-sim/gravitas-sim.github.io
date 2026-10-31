@@ -1,0 +1,29 @@
+{
+  "note": "Legs of tests/fixtures/joint-inference/thresholds.json that crossed their bound, kept failing. Only Carl resets a bound.",
+  "failed": [
+    {
+      "id": "C4",
+      "status": "fail",
+      "measured": {
+        "radiusFitOnly": 0.63,
+        "densityFitOnly": 0.67,
+        "N": 100
+      },
+      "note": ""
+    },
+    {
+      "id": "D6",
+      "status": "fail",
+      "measured": {
+        "flagged": [],
+        "massFlagged": false,
+        "sinIRelSigma": null,
+        "b": 0,
+        "k": 0.05114,
+        "bAtBound": true,
+        "chi2": 978.531
+      },
+      "note": "the rule as first committed (Prompt 225’s k-b check)"
+    }
+  ]
+}

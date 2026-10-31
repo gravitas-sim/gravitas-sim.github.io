@@ -1,0 +1,470 @@
+{
+  "rows": [
+    {
+      "id": "A1",
+      "status": "pass",
+      "measured": {
+        "worstRelative": 3.661737579818691e-12,
+        "cases": 12
+      },
+      "note": ""
+    },
+    {
+      "id": "A2",
+      "status": "pass",
+      "measured": {
+        "K": 12.4591,
+        "oracleK": 12.4590805,
+        "back": 1
+      },
+      "note": ""
+    },
+    {
+      "id": "A3",
+      "status": "pass",
+      "measured": {
+        "K": 0.0894579,
+        "oracleK": 0.0894578695
+      },
+      "note": ""
+    },
+    {
+      "id": "A4",
+      "status": "pass",
+      "measured": {
+        "value": 1.240120199,
+        "oracle": 1.24012019942,
+        "relative": 2.374393633204256e-12
+      },
+      "note": ""
+    },
+    {
+      "id": "A5",
+      "status": "pass",
+      "measured": {
+        "maxAbsOverK": 1.412633299224808e-8,
+        "signAfterTransit": -1
+      },
+      "note": ""
+    },
+    {
+      "id": "A6",
+      "status": "pass",
+      "measured": {
+        "worstRelative": 0.001761,
+        "per": {
+          "e0.1w40": 0.0005823,
+          "e0.1w90": 0.0008395,
+          "e0.1w250": 0.0007941,
+          "e0.2w40": 0.001292,
+          "e0.2w90": 0.001761,
+          "e0.2w250": 0.001615
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "A7",
+      "status": "pass",
+      "measured": {
+        "closedFormRelative": 0,
+        "zeroSigmaExternalVariance": 0,
+        "uncorrelatedRadiusRelative": 3.084256574878605e-12,
+        "quadratureRelative": 0
+      },
+      "note": ""
+    },
+    {
+      "id": "A8",
+      "status": "pass",
+      "measured": {
+        "relative": {
+          "mass": 0.0103,
+          "radius": 0.001725,
+          "density": 0.009128
+        },
+        "linearized": {
+          "mass": 0.02235130034108064,
+          "radius": 0.06448910424789539,
+          "density": 0.05031872625693071
+        },
+        "propagated": {
+          "Mp": 0.02258,
+          "Rp": 0.0646,
+          "rhoP": 0.05078
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "A9",
+      "status": "pass",
+      "measured": {
+        "maxAbsDifference": 0
+      },
+      "note": ""
+    },
+    {
+      "id": "B1",
+      "status": "pass",
+      "measured": {
+        "worstSigmas": 0.06669,
+        "sigmaRatio": [
+          1,
+          0.997,
+          0.942,
+          0.92,
+          0.911,
+          0.999
+        ],
+        "detail": {
+          "t0": {
+            "sigmas": 0.01701,
+            "sigmaRatio": 1.002
+          },
+          "P": {
+            "sigmas": 0.0005664,
+            "sigmaRatio": 0.9972
+          },
+          "k": {
+            "sigmas": 0.03737,
+            "sigmaRatio": 0.9424
+          },
+          "aRs": {
+            "sigmas": 0.06669,
+            "sigmaRatio": 0.9195
+          },
+          "b": {
+            "sigmas": 0.02735,
+            "sigmaRatio": 0.9114
+          },
+          "K": {
+            "sigmas": 0.00007426,
+            "sigmaRatio": 0.9987
+          }
+        },
+        "ms": 20496
+      },
+      "note": "joint fit against batman + scipy on the oracle’s own data (e held at 0 in both, AM1)"
+    },
+    {
+      "id": "B2",
+      "status": "pass",
+      "measured": {
+        "valueRelative": {
+          "Mp": 0.00003597,
+          "Rp": 0.001339,
+          "rho": 0.004065
+        },
+        "sigmaRelative": {
+          "Mp": 0.00495,
+          "Rp": 0.02525,
+          "rho": 0.03423
+        },
+        "gravitas": {
+          "Mp": 0.6840126985766725,
+          "Rp": 1.325002137716646,
+          "rho": 0.3646516718145208,
+          "sigma": {
+            "Mp": 0.02257,
+            "Rp": 0.06475,
+            "rho": 0.05022
+          }
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "B3",
+      "status": "pass",
+      "measured": {
+        "worstSigmas": 0.4062,
+        "detail": {
+          "t0": {
+            "sigmas": 0.4062,
+            "sigmaRatio": 0.6718
+          },
+          "P": {
+            "sigmas": 0.0008723,
+            "sigmaRatio": 1.014
+          },
+          "k": {
+            "sigmas": 0.01303,
+            "sigmaRatio": 0.9823
+          },
+          "aRs": {
+            "sigmas": 0.04059,
+            "sigmaRatio": 0.9388
+          },
+          "b": {
+            "sigmas": 0.02572,
+            "sigmaRatio": 0.9319
+          },
+          "K": {
+            "sigmas": 0.003379,
+            "sigmaRatio": 1.002
+          },
+          "sqrtEcosw": {
+            "sigmas": 0.02925,
+            "sigmaRatio": 1
+          },
+          "sqrtEsinw": {
+            "sigmas": 0.004858,
+            "sigmaRatio": 1.001
+          }
+        },
+        "ms": 27882
+      },
+      "note": "eccentric: batman exact orbit against the first-order mapping"
+    },
+    {
+      "id": "B4",
+      "status": "pass",
+      "measured": {
+        "relative": {
+          "Mp": 0.00007504,
+          "Rp": 0.00157,
+          "rho": 0.004622
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "B5",
+      "status": "pass",
+      "measured": {
+        "gravitas": 2.33,
+        "oracle": 2.33785
+      },
+      "note": ""
+    },
+    {
+      "id": "C1",
+      "status": "pass",
+      "measured": {
+        "rate": 0.61,
+        "N": 100,
+        "fitOnly": 0.23
+      },
+      "note": ""
+    },
+    {
+      "id": "C2",
+      "status": "pass",
+      "measured": {
+        "rate": 0.78,
+        "N": 100
+      },
+      "note": ""
+    },
+    {
+      "id": "C3",
+      "status": "pass",
+      "measured": {
+        "rate": 0.79,
+        "N": 100
+      },
+      "note": ""
+    },
+    {
+      "id": "C4",
+      "status": "fail",
+      "measured": {
+        "radiusFitOnly": 0.63,
+        "densityFitOnly": 0.67,
+        "N": 100
+      },
+      "note": ""
+    },
+    {
+      "id": "C5",
+      "status": "pass",
+      "measured": {
+        "rate": 0.62,
+        "N": 100
+      },
+      "note": ""
+    },
+    {
+      "id": "C6",
+      "status": "pass",
+      "measured": {
+        "flagged": 0,
+        "N": 100
+      },
+      "note": ""
+    },
+    {
+      "id": "D1",
+      "status": "pass",
+      "measured": {
+        "derived": [
+          "e",
+          "omega",
+          "massFunction",
+          "MpSini"
+        ],
+        "label": "MINIMUM mass Mp sin i: the velocities alone fix this and nothing more",
+        "MpSini": 0.7022,
+        "sigma": 0.02199,
+        "refusals": [
+          "Mp",
+          "Rp",
+          "rhoP",
+          "inclination",
+          "rhoStar"
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "D2",
+      "status": "pass",
+      "measured": {
+        "jitter": 20,
+        "warnings": [
+          "scaled",
+          "jitterAtBound",
+          "jitterExceedsErrors"
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "D3",
+      "status": "pass",
+      "measured": {
+        "none": [
+          "massFunction"
+        ],
+        "radiusOnly": [
+          "Rp"
+        ],
+        "massOnly": [
+          "MpSini",
+          "Mp"
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "D4",
+      "status": "pass",
+      "measured": {
+        "reported": [],
+        "refused": [
+          "Mp",
+          "MpSini",
+          "rhoP",
+          "Rp",
+          "rhoStarStated"
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "D5",
+      "status": "pass",
+      "measured": {
+        "z": -4.023,
+        "transit": 1.123,
+        "stated": 2.389
+      },
+      "note": ""
+    },
+    {
+      "id": "D6",
+      "status": "fail",
+      "measured": {
+        "flagged": [],
+        "massFlagged": false,
+        "sinIRelSigma": null,
+        "b": 0,
+        "k": 0.05114,
+        "bAtBound": true,
+        "chi2": 978.531
+      },
+      "note": "the rule as first committed (Prompt 225’s k-b check)"
+    },
+    {
+      "id": "D6b",
+      "status": "pass",
+      "measured": {
+        "flagged": [
+          "Rp",
+          "rhoP",
+          "inclination",
+          "sini"
+        ],
+        "massFlagged": false,
+        "sinIRelSigma": null,
+        "b": 0,
+        "k": 0.05114,
+        "bAtBound": true,
+        "chi2": 978.531
+      },
+      "note": "with b on a bound read as not constrained (AM4)"
+    },
+    {
+      "id": "D7",
+      "status": "pass",
+      "measured": {
+        "jitter": 15.34,
+        "medianError": 3
+      },
+      "note": ""
+    },
+    {
+      "id": "E1",
+      "status": "not-run",
+      "measured": null,
+      "note": "no public radial-velocity series for a transiting planet was supplied (the coordinator could not locate one by a verified identifier); the archive values for HD 209458 b (0.73 +/- 0.04 MJup, 1.39 +/- 0.02 RJup; the paper behind the archive default is not recorded) are not a velocity series and were not used to tune anything"
+    },
+    {
+      "id": "R1",
+      "status": "pass",
+      "measured": {
+        "worstSigmas": 1.023,
+        "parameters": {
+          "t0": 0.02838,
+          "P": 0.1656,
+          "k": 0.8955,
+          "aRs": 0.7817,
+          "b": 1.023,
+          "K": 0.2067
+        },
+        "derived": {
+          "Mp": 0.07804,
+          "Rp": 0.5289,
+          "rhoP": 0.5738
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "R2",
+      "status": "pass",
+      "measured": {
+        "zK": 0.8217,
+        "zMp": 0.7887,
+        "sigmaOverValue": 0.1131,
+        "K": 7.298,
+        "Ktrue": 6.644
+      },
+      "note": ""
+    },
+    {
+      "id": "R3",
+      "status": "pass",
+      "measured": {
+        "parameters": {
+          "sqrtEcosw": 0.9958,
+          "sqrtEsinw": 1.528,
+          "K": 1.503
+        },
+        "zMp": 0.5243
+      },
+      "note": ""
+    }
+  ]
+}
