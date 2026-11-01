@@ -1186,6 +1186,16 @@
       "loop": ["which-test-catches", "deep-and-shallow"],
       "evidenceFrom": "model"
     },
+    "how-many-earths": {
+      "centralExperimentId": "ce.how-many-earths",
+      "object": "panel:occurrence-efficiency",
+      "control": "occurrence-efficiency/radius",
+      "quantity": "the share of transiting planets the search recovers in a synthetic survey of 2000 stars, by planet radius and orbital period: a third of the smallest at 8 to 16 days, most of them above one Earth radius, and the rate a count of listings becomes when it is divided by that completeness",
+      "evidence": "none",
+      "test": "e2e/occurrenceLesson.spec.js",
+      "loop": ["what-is-easy-prediction", "who-the-survey-sees"],
+      "evidenceFrom": "model"
+    },
     "what-is-it-made-of": {
       "centralExperimentId": "ce.what-is-it-made-of",
       "object": "panel:joint-fit",

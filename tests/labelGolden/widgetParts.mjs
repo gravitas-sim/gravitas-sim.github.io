@@ -79,6 +79,7 @@ export const PARTS = Object.freeze({
     'vetting',
     'directImaging',
     'ttv',
+    'occurrence',
     'joint',
     'energy',
     'binary',

@@ -1157,6 +1157,13 @@
       "student": true
     },
     {
+      "file": "OCCURRENCE_RATES.md",
+      "kind": "feature",
+      "purpose": "Occurrence rates on a searched population: completeness by injection, the Poisson likelihood, limits, the validation contract, two failed legs (Prompt 229).",
+      "owner": 229,
+      "student": true
+    },
+    {
       "file": "IMAGING.md",
       "kind": "feature",
       "purpose": "Direct imaging, Part A: contrast, angular separation, lambda/D against an inner working angle, an observability verdict, the imaged planets' table; subtraction and orbits are Part B (Prompt 230).",

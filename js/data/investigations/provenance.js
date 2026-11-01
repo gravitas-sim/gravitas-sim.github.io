@@ -44,6 +44,7 @@ export const EVIDENCE_FROM = Object.freeze({
   'how-fast-does-it-spin': 'model',
   'how-fast-does-the-star-spin': 'model',
   'how-hot-is-the-day-side': 'model',
+  'how-many-earths': 'model',
   'how-old-is-this-white-dwarf': 'model',
   'inside-a-star': 'model',
   'integrators-in-practice': 'computation',

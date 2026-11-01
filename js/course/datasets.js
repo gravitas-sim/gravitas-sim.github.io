@@ -156,6 +156,7 @@ export const GUIDED = Object.freeze([
   'how-fast-does-it-spin',
   'how-fast-does-the-star-spin',
   'how-hot-is-the-day-side',
+  'how-many-earths',
   'how-old-is-this-white-dwarf',
   'inside-a-star',
   'integrators-in-practice',

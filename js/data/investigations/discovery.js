@@ -1040,6 +1040,16 @@ export const DISCOVERY = {
     },
     courseLevel: 'majors',
   },
+  'how-many-earths': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['transit-photometry'],
+    textbook: {
+      chapter: 21,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
   'the-metallicity-term': {
     audience: 'intro',
     mathematics: 'logarithms',

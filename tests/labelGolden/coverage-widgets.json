@@ -71,6 +71,8 @@
   "masses-minimum",
   "masses-solve",
   "masses-diagram",
+  "occurrence-efficiency",
+  "occurrence-grid",
   "photometric-calibration",
   "remnant-cooling",
   "remnant-outcome",

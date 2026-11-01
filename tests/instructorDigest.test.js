@@ -221,7 +221,8 @@ describe('the digest the derived closure produces', () => {
     // 301 after the five stellar investigations (Prompt 224, D-R10-224-03) over v3 c3854e16 (closure 300): one file, stellar-sequence.js, which holds the five lessons, their Spanish, their guides and their deeper steps; the cap raised by one, delegated to the coordinator (pending its approval).
     // 302 after What Is It Made Of? (Prompt 227, D-R10-227-05) over v3 6235822a (closure 301): one file, joint-sequence.js, which holds the lesson, its Spanish, its guide, the deeper steps of two lessons and their shadows; the cap rises by one.
     // 303 after Why We Cannot See Earth From Here and Architectures (Prompt 230, D-R10-230-05) over v3 81479fb6 (closure 302): one file, imaging-sequence.js, which holds the two lessons, their Spanish, their guides and their deeper steps.
-    expect(current.length).toBeLessThan(304);
+    // 304 after How Many Earths? (Prompt 229, D-R10-229-06) over v3 ad72f039 (closure 303 after Prompt 230): one file, occurrence-sequence.js, which holds the lesson, its Spanish, its guide and the deeper steps of one lesson; the cap raised by one, delegated to the coordinator (pending its approval).
+    expect(current.length).toBeLessThan(305);
     // 230 after the four variable-star investigations (Prompt 96): their shadows, deeper shadows and depth files;
     // 246 after the four cosmology investigations (Prompt 91).
     // 258 after the three calibration investigations (Prompt 86).

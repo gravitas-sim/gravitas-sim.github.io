@@ -528,6 +528,11 @@ export const NEVER_PRECACHED = [
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(what-is-it-made-of|joint-sequence)\.js$/,
   /^js\/data\/investigations\/depth\/(es\/)?radial-velocity\.js$/,
   /^(js\/jointWidgets\.js|js\/jointField\.js|js\/i18n\/(en|es)\.joint\.js)$/,
+  // Prompt 229: the occurrence panels, their field module, the stored survey, their words, the kernel and the lesson's one new
+  // file. The lesson is NEVER_PRECACHED (the T3 terms); the kernel is lazy with the family.
+  /^images\/investigations\/how-many-earths\.webp$/,
+  /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(how-many-earths|occurrence-sequence)\.js$/,
+  /^(js\/occurrenceWidgets\.js|js\/occurrenceField\.js|js\/data\/occurrenceSurvey\.js|js\/i18n\/(en|es)\.occurrence\.js|js\/kernels\/occurrence\/.*)$/,
   // Prompt 214: the strategy kernel, planner extension, panels and the strategy lesson's one new file (D-R10-214-06).
   /^js\/kernels\/strategy\//,
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(why-the-period-is-wrong|strategy-sequence)\.js$/,

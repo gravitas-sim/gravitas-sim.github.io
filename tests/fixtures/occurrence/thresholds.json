@@ -1,0 +1,115 @@
+{
+  "format": "gravitas.occurrence-thresholds/1",
+  "prompt": "Roadmap III, Prompt 229: occurrence rates on a searched population (tranche T3 by D-R10-207-01)",
+  "document": "OCCURRENCE_RATES.md (\"Validation contract\") and OCCURRENCE_GATE.md",
+  "committed": "before any occurrence module existed in js/: the survey, the injection and recovery, the per-target completeness, the likelihood, the intervals, the validator, the oracle's results, the ensembles, any panel or lesson step. The population, the definitions and the coverage test are written out so that the oracle (numpy, scipy and batman: no Gravitas code) builds its own stars, planets and detections, and the harness builds the same kind of survey. No rate had been read and nothing was tuned against code that did not exist.",
+  "rule": "A crossed bound is a failed check, recorded in failed-legs.json and left failing; only Carl resets one. A leg that cannot be measured, or whose data was never supplied, is NOT RUN and says why. An amendment is recorded with its reason and never changes a bound already judged.",
+  "seeds": { "oracle": 229, "survey": "occ-229", "ensemble": "occ-229-cov" },
+  "supply": {
+    "note": "No public item is needed to build the kernel and none exists at commit time. Leg E1 (an authentic survey: a real stellar sample with its noise and observing span, its published injection-recovery completeness, its candidate list and a published occurrence calculation) needs exact public products fetched by the coordinator with a rights row; without them E1 is NOT RUN. Nothing is typed from memory and no published rate ships."
+  },
+  "constants": {
+    "GM_sun_m3s2": 1.3271244e20,
+    "R_sun_m": 695700000.0,
+    "R_earth_eq_m": 6378100.0,
+    "day_s": 86400,
+    "note": "IAU 2015 B3 nominal GM of the Sun and nominal solar and equatorial Earth radii. The stellar mass enters Kepler's third law only through GM_sun times a ratio, so G does not appear."
+  },
+  "scope": {
+    "built": "the expected number of planets per star in a bin of orbital period and planet radius (a rate that may exceed one) from the detections of a searched population: the per-target completeness (the geometric probability of a transit, R*/a for a circular orbit, times the probability the search recovers an injected transit, with the number of transits the target's span holds), measured by injection and recovery on the survey's own stars; the selected-population Poisson likelihood in each bin with the completeness summed over the targets and a stated reliability; a bin with no detections carried as a one-sided upper limit; a bin whose summed completeness is below a floor refused as not constrained; the interval of Prompt 154's Poisson procedure.",
+    "notBuilt": "eccentric orbits, a distribution of stellar properties beyond the survey's own stars, planets in the habitable zone as a separate quantity, multiplicity or the dependence of the rate on the star (metallicity, mass), a detection pipeline with a period search (the recovery is the matched filter at the injected ephemeris, a stated simplification that makes completeness optimistic), red-noise pipelines beyond the stated AR(1) leg, candidate vetting (reliability is a stated input, not computed), a smoothing of the grid (none is offered; any smoothing would be a regularisation and would not be a posterior), and any claim about a real survey's rates."
+  },
+  "systems": {
+    "stars": {
+      "N_gate": 2000,
+      "radius_Rsun": { "law": "lognormal", "median": 1.0, "sigma_ln": 0.2, "clip": [0.6, 1.6] },
+      "mass_Msun": "radius_Rsun ** 0.9 (a stated main-sequence relation; the mass enters only the semi-major axis)",
+      "noise_ppm_per_cadence": { "law": "lognormal", "median": 130, "sigma_ln": 0.4, "clip": [40, 800] },
+      "span_days": { "values": [90, 365, 1460], "weights": [0.25, 0.25, 0.5] },
+      "cadence_days": 0.020833333333333332,
+      "limb_darkening_quadratic": [0.4, 0.25],
+      "note": "Independent draws per star; a span is the length of the continuous series from time 0."
+    },
+    "bins": {
+      "period_edges_days": [1, 2, 4, 8, 16, 32, 64, 128, 256],
+      "radius_edges_earth": [0.5, 1, 2, 4, 8, 16],
+      "within_bin": "period and radius log-uniform; the impact parameter b uniform on [0, 1) given a transit; the epoch of the first transit uniform on [0, P)",
+      "geometry": "a transit occurs when b < 1; the probability is R*/a for a circular orbit with a from Kepler's third law (GM_sun times the star's mass in solar masses); the planet's own radius is not added"
+    },
+    "detection": {
+      "threshold_sigma": 7.1,
+      "min_transits": 3,
+      "statistic": "the amplitude signal to noise of the injected transit's own shape at the injected ephemeris: S_true = sqrt(sum over the points of the transit at every epoch of s_t^2) / sigma, with s_t the exposure-integrated, limb-darkened deficit of the injected planet at the cadence's times; the measured statistic is S_true + noise, the noise N(0, 1) for white noise; a transit is recovered when the measured statistic reaches the threshold and the target holds at least min_transits epochs",
+      "analytic_form": "P(recovered | S_true, N >= min_transits) = Phi(S_true - threshold)",
+      "reduction": "the statistic's noise is one N(0, 1) draw (white noise sums to N(0,1) exactly); leg A5 compares it with a draw at every point; at most 24 epochs are integrated, spread evenly over the epochs of the span, and the sum scaled by N / 24",
+      "red_noise": { "model": "AR(1) with unit-variance marginal per cadence", "rho_leg": 0.7 }
+    },
+    "reliability": {
+      "stated_false_fraction_by_period_bin": [0.02, 0.02, 0.03, 0.05, 0.08, 0.12, 0.2, 0.3],
+      "definition": "the probability that a listed detection is not a planet; the expected detections in a bin are Gamma * E / (1 - f) and the rate is n (1 - f) / E",
+      "note": "a stated input for the population, never computed from the data"
+    },
+    "truth": {
+      "radius_bin_totals_per_star": [1.6, 1.0, 0.6, 0.1, 0.03],
+      "period_weights": "proportional to the geometric mid-period of the bin to the power 0.4, normalised to sum to 1 over the eight period bins",
+      "rate": "Gamma[j][k] = radius_bin_totals_per_star[k] * period_weight[j]; the numbers of planets of a bin on a star are Poisson with this mean, so a bin of the smallest radius may exceed one per star over the periods and a single-bin population of 1.5 is tested in A8",
+      "dense_single_bin": { "period_bin": [2, 4], "radius_bin": [2, 4], "rate": 1.5 }
+    },
+    "injection": { "gate": { "trials_per_star_and_bin": 4 }, "ensemble": { "trials_per_star_and_bin": 8 } }
+  },
+  "ensembles": {
+    "coverage": {
+      "stars": 2000,
+      "populations": 400,
+      "levels": [0.6827, 0.95],
+      "note": "the completeness is measured once on the survey's stars with the ensemble's injection; each population draws its planets (Poisson numbers per bin and star), applies the geometry and the injected-recovery process with independent draws, adds false listings with the stated fractions, and is analysed with the completeness measured once"
+    }
+  },
+  "definitions": {
+    "completeness_per_target": "c[i][j][k] = mean over the draws of the bin of p_geo(P) * recovered, the expected number of detected planets per unit rate; E[j][k] = sum over the stars of c",
+    "rate": "Gamma_hat[j][k] = n (1 - f) / E, n the listed detections of the bin",
+    "interval": "Prompt 154's poissonInterval (auto: Garwood below 100 detections, the deviance interval from there) on the detections with exposure E / (1 - f), scaled by (1 - f) -> equivalently the interval of Gamma",
+    "zero_bin": "n = 0 -> the one-sided upper limit -ln(1 - 0.95) / E at 0.95 and no rate",
+    "floor": "E[j][k] < 5 -> status not-constrained: no rate, no limit",
+    "count_floor": "n_min = 10: the committed detection count of a B verdict",
+    "coverage_bins": "bins with expected detections Gamma E / (1 - f) >= 10 ('rich') and from 1 to below 10 ('sparse'); a bin with E below the floor is excluded"
+  },
+  "checks": [
+    { "id": "A1", "group": "analytic", "what": "the geometric probability R*/a for stated (star, period) pairs equals the oracle's value (the Earth around the Sun at 365.25 d, and 20 pairs from the survey's stars)", "limits": { "relative": 1e-9 } },
+    { "id": "A2", "group": "analytic", "what": "the number of epochs in a span (N = ceil((span - t0) / P) for t0 < span, 0 otherwise) equals the oracle's for 40 (P, span, t0) cases, and its mean over 20000 uniform epochs equals span / P", "limits": { "integerEqual": true, "meanRelative": 0.01 } },
+    { "id": "A3", "group": "analytic", "what": "S_true of injected planets (an Earth and a 4 Earth-radius planet, three periods, three b) equals the oracle's batman light curve integrated over the same cadence times, relative", "limits": { "relative": 0.02 } },
+    { "id": "A4", "group": "analytic", "what": "the injection and recovery efficiency at S_true set to threshold + {-2, -1, 0, 1, 2} (the noise level solved so S_true is exact; 4000 trials each, white noise) equals Phi(S_true - threshold), absolute", "limits": { "absolute": 0.03 } },
+    { "id": "A5", "group": "analytic", "what": "the efficiency from the one-draw reduction equals the efficiency with a noise draw at every point (2000 trials, four cases spanning S_true - threshold from -1.5 to +1.5), absolute", "limits": { "absolute": 0.06 } },
+    { "id": "A6", "group": "analytic", "what": "with AR(1) noise (rho 0.7) the standard deviation of the statistic over 20000 point-by-point draws equals the closed form sqrt(s' C s) / sqrt(s's) over the epoch (relative) and the efficiency equals Phi((S_true - threshold) / s_eff) (absolute)", "limits": { "relative": 0.03, "absolute": 0.03 } },
+    { "id": "A7", "group": "analytic", "what": "the Poisson rate and its interval equal the oracle's (scipy chi-square Garwood below 100 detections, the deviance root above) for n in {1, 5, 20, 99, 100, 400} with reliability 0.9 and E = 37.5", "limits": { "relative": 1e-6 } },
+    { "id": "A8", "group": "analytic", "what": "a population of one bin at 1.5 planets per star (the dense bin) is recovered: the mean of the maximum-likelihood rates over 100 populations of 2000 stars equals 1.5 and the rate exceeds one in every population", "limits": { "meanRelative": 0.05, "allExceedOne": true } },
+    { "id": "B1", "group": "oracle", "what": "on the oracle's own 2000 stars (numpy, seed 229) the completeness sum E[j][k] measured by injection (4 trials per star and bin) equals the oracle's analytic sum (Gauss-Legendre over b, log period and log radius, the batman light curve, the exact distribution of the epoch count, Phi(S - threshold)); bins with the oracle's E at least 20, relative; bins from 3 to 20, relative", "limits": { "rich": 0.05, "sparse": 0.1 } },
+    { "id": "B2", "group": "oracle", "what": "on the oracle's own detections (its planets and its detection draws) the rate of every bin with at least 5 detections equals the oracle's n (1 - f) / E_oracle, relative", "limits": { "relative": 0.1 } },
+    { "id": "B3", "group": "oracle", "what": "the rate of every rich bin of the oracle's population is within this many standard deviations of the oracle's truth (the interval's half width as the standard deviation, the larger side)", "limits": { "sigmas": 4 } },
+    { "id": "B4", "group": "oracle", "what": "the kernel's 0.6827 interval of every bin with at least 5 detections equals the oracle's from the same counts and its own E (the same rule: Garwood below 100 detections), relative on each side", "limits": { "relative": 0.1 } },
+    { "id": "C1", "group": "coverage", "what": "the 0.6827 interval of every rich bin covers the truth in at least this share of the 400 populations", "limits": { "perBinMin": 0.6 } },
+    { "id": "C2", "group": "coverage", "what": "the pooled coverage of the rich bins at 0.6827 and at 0.95", "limits": { "pooled6827": [0.64, 0.9], "pooled95": [0.92, 0.995] } },
+    { "id": "C3", "group": "coverage", "what": "the 0.6827 interval of every sparse bin covers the truth in at least this share", "limits": { "perBinMin": 0.55 } },
+    { "id": "C4", "group": "coverage", "what": "the rate itself: the mean of the maximum-likelihood rates over the populations equals the truth in every rich bin, relative to the standard deviation of the mean", "limits": { "sigmasOfMean": 4 } },
+    { "id": "D1", "group": "negative", "what": "a bin with no detections returns status upper-limit equal to -ln(0.05) / E and no rate", "limits": { "relative": 1e-12 } },
+    { "id": "D2", "group": "negative", "what": "a bin whose E is below 5 returns not-constrained with no rate and no limit (checked on the survey's smallest-completeness bins)", "limits": { "statusEqual": "not-constrained" } },
+    { "id": "D3", "group": "negative", "what": "a bin without a stated reliability is refused (code reliability), a non-whole count (code count), a reliability outside (0, 1] (code reliability), a completeness asked at a signal to noise outside the injected range (code range)", "limits": { "codes": ["reliability", "count", "reliability", "range"] } },
+    { "id": "D4", "group": "negative", "what": "a misstated reliability (0 stated, 0.3 true false fraction in the high-period bins) leaves the interval short of coverage and the result says the reliability is as stated: the pooled coverage in those bins falls below 0.5, and the record carries reliability 'stated' (a demonstration of what the term does, kept as measured, not a bound on the method)", "limits": { "pooledBelow": 0.5 } },
+    { "id": "R1", "group": "reproducibility", "what": "the same seed gives identical injection rows, completeness and detections; a different seed differs", "limits": { "identical": true } },
+    { "id": "E1", "group": "authentic", "what": "an authentic survey's occurrence reproduced under a fixed analysis contract", "limits": { "status": "NOT RUN until the public products are supplied" } }
+  ],
+  "verdict": {
+    "A": "every analytic, oracle and negative leg passes and the coverage legs C1 to C4 pass in rich and sparse bins: rates with intervals, floors and limits",
+    "B": "every analytic, oracle and negative leg passes, C1, C2 and C4 pass in rich bins and C3 fails: rates only in bins with at least n_min = 10 listed detections (and E at least the floor); every other bin carried as an upper limit or as not constrained",
+    "C": "an oracle leg (B1, B2, B4) fails, or a rich-bin coverage or recovery leg (C1, C2, C4) fails: completeness maps only, no rates, 231's occurrence item becomes a reading step and 264's planet case is removed"
+  },
+  "amendments": [
+    {
+      "id": "AM1",
+      "date": "2026-10-31",
+      "what": "Leg D4 as committed (the pooled coverage of the rich bins at 32 days or more with the reliability misstated falls below 0.5) is unmeasurable: no bin at 32 days or more holds 10 expected listings in this survey (the bins there are sparse). D4 is recorded as failed for that reason and stays failing. D4b measures the same demonstration over the bins at 32 days or more with at least 3 expected listings and not under the floor, with the bound (0.5) unchanged.",
+      "after": "the first full run of the validator; no rate had been judged against D4b",
+      "result": "D4b fails too: 3 bins, pooled coverage 0.79 with the reliability misstated against 0.82 stated: with few listings the Garwood interval is wide enough that a misstated reliability barely changes its coverage. The failure is recorded and left; the lesson claims only that a stated reliability scales the rate."
+    }
+  ]
+}

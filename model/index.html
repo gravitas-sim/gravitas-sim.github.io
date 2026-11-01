@@ -2774,6 +2774,24 @@ try {
         <span class="gs-en">The model is <code>js/<wbr>inference/<wbr>jointModel.js</code> with the formulas in <code>js/<wbr>inference/<wbr>jointPlanet.js</code>, described in <code>JOINT_INFERENCE.md</code>.</span><span class="gs-es" lang="es">El modelo es <code>js/<wbr>inference/<wbr>jointModel.js</code> con las f&oacute;rmulas en <code>js/<wbr>inference/<wbr>jointPlanet.js</code>, descrito en <code>JOINT_INFERENCE.md</code>.</span>
       </p>
 
+      <h2 id="occurrence"><span class="gs-en">How many planets? Occurrence rates on a searched population</span><span class="gs-es" lang="es">&iquest;Cu&aacute;ntos planetas? Tasas de ocurrencia en una poblaci&oacute;n buscada</span></h2>
+      <p>
+        <span class="gs-en">A count of the planets a survey found is not how many there are: a planet is listed only if its orbit crosses the line of sight and the search picks its dip out of the star&rsquo;s noise. The rate of a bin of period and radius, the expected number of planets per star (which may exceed one), is the listings divided by the completeness of the bin, the chance of a transit times the chance the search recovers it, added over the stars, with the stated reliability of the listings taken off.</span><span class="gs-es" lang="es">Una cuenta de los planetas que encontr&oacute; un sondeo no es cu&aacute;ntos hay: un planeta solo se lista si su &oacute;rbita cruza la l&iacute;nea de visi&oacute;n y la b&uacute;squeda saca su ca&iacute;da del ruido de la estrella. La tasa de una casilla de per&iacute;odo y radio, el n&uacute;mero esperado de planetas por estrella (que puede pasar de uno), es los listados divididos entre la completitud de la casilla, la probabilidad de un tr&aacute;nsito por la de que la b&uacute;squeda lo recupere, sumada sobre las estrellas, quitando la fiabilidad declarada de los listados.</span>
+      </p>
+      <h3><span class="gs-en">What the investigation does and what it assumes</span><span class="gs-es" lang="es">Qu&eacute; hace la investigaci&oacute;n y qu&eacute; supone</span></h3>
+      <ul>
+        <li><span class="gs-en"><strong>The survey is synthetic.</strong> 2000 stars with their own noise and span, circular orbits, and a population whose rates are known, so every estimate can be judged against its truth. Nothing here is a statement about a real survey, and no published rate is used.</span><span class="gs-es" lang="es"><strong>El sondeo es sint&eacute;tico.</strong> 2000 estrellas con su ruido y su duraci&oacute;n, &oacute;rbitas circulares y una poblaci&oacute;n de tasas conocidas, de modo que cada estimaci&oacute;n se juzga contra su verdad. Nada de esto es una afirmaci&oacute;n sobre un sondeo real, y no se usa ninguna tasa publicada.</span></li>
+        <li><span class="gs-en"><strong>Completeness by injection.</strong> Planets of every size and period are injected into every star&rsquo;s own series and recovered by the matched filter at the injected ephemeris: a transit is found when its signal to noise reaches 7.1 and the span holds three transits. The search is better than a real one (the period and phase are known), so the completeness is optimistic.</span><span class="gs-es" lang="es"><strong>Completitud por inyecci&oacute;n.</strong> Se inyectan planetas de todos los tama&ntilde;os y per&iacute;odos en la serie propia de cada estrella y se recuperan con el filtro adaptado a la efem&eacute;ride inyectada: un tr&aacute;nsito se encuentra cuando su se&ntilde;al a ruido llega a 7,1 y la duraci&oacute;n contiene tres tr&aacute;nsitos. La b&uacute;squeda es mejor que una real (se conocen el per&iacute;odo y la fase), as&iacute; que la completitud es optimista.</span></li>
+        <li><span class="gs-en"><strong>Limits and refusals.</strong> A bin with no listings gives the one-sided limit 3.0 over the completeness at 95 percent, not a zero; a bin whose completeness is below 5 gives neither a rate nor a limit; a rate is refused without a stated reliability. The interval is Prompt 154&rsquo;s Poisson procedure and carries the counting error only; no smoothing of the grid is offered.</span><span class="gs-es" lang="es"><strong>L&iacute;mites y negativas.</strong> Una casilla sin listados da el l&iacute;mite unilateral 3,0 entre la completitud al 95 por ciento, no un cero; una casilla con completitud menor de 5 no da ni tasa ni l&iacute;mite; una tasa se rechaza sin una fiabilidad declarada. El intervalo es el procedimiento de Poisson del Prompt 154 y lleva solo el error de cuenta; no se ofrece ning&uacute;n suavizado de la rejilla.</span></li>
+      </ul>
+      <h3><span class="gs-en">What has been checked</span><span class="gs-es" lang="es">Qu&eacute; se ha comprobado</span></h3>
+      <ul>
+        <li><span class="gs-en">Against an independent implementation (numpy, scipy, batman), with the bounds committed before any code: the geometric probability to 1e-12, the signal to noise of injected transits within 1.7 percent, the efficiency against the normal curve of the signal to noise within 0.009, the completeness of 39 bins within 1.3 percent where the sum is at least 20, and the Poisson intervals to 3e-13; over 400 populations the 0.6827 interval of the four rich bins covered the truth at least 0.75 of the time (pooled 0.766, and 0.959 at 0.95) and the 21 sparse bins at least 0.65. Two demonstration legs of the reliability term failed and are kept; the authentic leg was not run, because no authentic survey was supplied.</span><span class="gs-es" lang="es">Contra una implementaci&oacute;n independiente (numpy, scipy, batman), con los l&iacute;mites fijados antes de cualquier c&oacute;digo: la probabilidad geom&eacute;trica a 1e-12, la se&ntilde;al a ruido de los tr&aacute;nsitos inyectados al 1,7 por ciento, la eficiencia frente a la curva normal de la se&ntilde;al a ruido a 0,009, la completitud de 39 casillas al 1,3 por ciento donde la suma es al menos 20, y los intervalos de Poisson a 3e-13; en 400 poblaciones el intervalo 0,6827 de las cuatro casillas ricas cubri&oacute; la verdad al menos 0,75 de las veces (conjunto 0,766, y 0,959 con 0,95) y el de las 21 casillas escasas al menos 0,65. Dos pruebas de demostraci&oacute;n del t&eacute;rmino de fiabilidad fallaron y se conservan; la prueba aut&eacute;ntica no se ejecut&oacute;, porque no se aport&oacute; ning&uacute;n sondeo aut&eacute;ntico.</span></li>
+      </ul>
+      <p>
+        <span class="gs-en">The kernel is <code>js/<wbr>kernels/<wbr>occurrence/</code>, described in <code>OCCURRENCE_RATES.md</code>.</span><span class="gs-es" lang="es">El n&uacute;cleo es <code>js/<wbr>kernels/<wbr>occurrence/</code>, descrito en <code>OCCURRENCE_RATES.md</code>.</span>
+      </p>
+
       <h2 id="trust"><span class="gs-en">What should I trust this to show?</span><span class="gs-es" lang="es">¿Qué puedo esperar que muestre con fiabilidad?</span></h2>
       <div class="doc-table-wrap">
         <table class="doc-table">
@@ -3753,9 +3771,9 @@ try {
         <span class="gs-en">Each guided investigation relies on a different part of the model. This
         table is generated from the same <code>modelNotes</code> field that the
         instructor guide prints, so it covers every one of the
-        <!--fact:investigations-->117<!--/fact-->
+        <!--fact:investigations-->118<!--/fact-->
         investigations and cannot fall behind them. It listed six of the twelve when it
-        was maintained by hand.</span><span class="gs-es" lang="es">Cada investigación guiada se apoya en una parte distinta del modelo. Esta tabla se genera a partir del mismo campo <code>modelNotes</code> que imprime la guía docente, de modo que cubre cada una de las <!--fact:investigations-->117<!--/fact--> investigaciones y no puede quedar rezagada respecto a ellas. Cuando se mantenía a mano, enumeraba seis de las doce.</span>
+        was maintained by hand.</span><span class="gs-es" lang="es">Cada investigación guiada se apoya en una parte distinta del modelo. Esta tabla se genera a partir del mismo campo <code>modelNotes</code> que imprime la guía docente, de modo que cubre cada una de las <!--fact:investigations-->118<!--/fact--> investigaciones y no puede quedar rezagada respecto a ellas. Cuando se mantenía a mano, enumeraba seis de las doce.</span>
       </p>
       <div class="doc-table-wrap">
         <table class="doc-table">
@@ -4174,6 +4192,10 @@ try {
             <tr>
               <td>What Is It Made Of?</td>
               <td>js/inference/jointPlanet.js, js/inference/jointModel.js, js/jointField.js, js/jointWidgets.js, JOINT_INFERENCE.md. The thresholds are tests/fixtures/joint-inference/thresholds.json, committed before the model; the oracle is tools/joint-inference-oracle/oracle.py (numpy, scipy, batman).</td>
+            </tr>
+            <tr>
+              <td>How Many Earths?</td>
+              <td>js/kernels/occurrence/, js/occurrenceField.js, js/occurrenceWidgets.js, js/data/occurrenceSurvey.js, OCCURRENCE_RATES.md. The thresholds are tests/fixtures/occurrence/thresholds.json, committed before the code; the oracle is tools/occurrence-oracle/oracle.py (numpy, scipy, batman).</td>
             </tr>
             <tr>
               <td>The Metallicity Term</td>

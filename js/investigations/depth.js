@@ -186,6 +186,8 @@ const EXTENSIONS = {
   architectures: () => import('../data/investigations/depth/architectures.js'),
   'what-is-it-made-of': () =>
     import('../data/investigations/depth/what-is-it-made-of.js'),
+  'how-many-earths': () =>
+    import('../data/investigations/depth/how-many-earths.js'),
   'radial-velocity': () =>
     import('../data/investigations/depth/radial-velocity.js'),
   'the-clock-that-drifts': () =>
@@ -356,6 +358,8 @@ const WORDS = {
       import('../data/investigations/depth/es/architectures.js'),
     'what-is-it-made-of': () =>
       import('../data/investigations/depth/es/what-is-it-made-of.js'),
+    'how-many-earths': () =>
+      import('../data/investigations/depth/es/how-many-earths.js'),
     'radial-velocity': () =>
       import('../data/investigations/depth/es/radial-velocity.js'),
     'the-clock-that-drifts': () =>

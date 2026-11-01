@@ -11,15 +11,15 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 117 investigations and 1473 steps: 1381 steps
+Across 118 investigations and 1480 steps: 1388 steps
 declare a scene, 167 let a reader change one, 177 read the
-running integration, 964 show a prescribed model result, 161 draw
-on a stored dataset, 833 put a self-contained panel beside the text,
+running integration, 971 show a prescribed model result, 161 draw
+on a stored dataset, 840 put a self-contained panel beside the text,
 382 keep something, and 58 are prose.
-Of 192 prediction loops, 192 are returned to,
-192 produce a measurement before they are answered, and
+Of 193 prediction loops, 193 are returned to,
+193 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
-192 hold their marking until the experiment settles them.
+193 hold their marking until the experiment settles them.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -1448,6 +1448,20 @@ Of 192 prediction loops, 192 are returned to,
 - **Recovery:** wrong body: the object list names what the step staged.
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:joint-fit`, control joint-fit/starRadius, measures the planet's radius, mass and bulk density from the stored joint fit of a synthetic hot Jupiter when the star's stated radius changes: radius and density move with the star, the mass does not, and the density's uncertainty carries the star's share, evidence `none`, covered by `e2e/jointLesson.spec.js`.
+
+## How Many Earths? (`how-many-earths`)
+
+- **Steps:** 7. Scene declared on 7; a reader can change something on 0; 7 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 7 prescribed model, 0 stored dataset, 7 self-contained panel.
+- **What students do:** move-an-instrument-control, commit-a-prediction, choose-an-option.
+- **Objects the steps declare:** star.
+- **Instruments:** occurrence-efficiency, occurrence-grid.
+- **Stored data:** none.
+- **Evidence kept:** nothing — this lesson keeps nothing.
+- **Prediction loops:** what-is-easy-prediction → who-the-survey-sees, how-many-it-lists, the-next-population, a-bin-it-cannot-see, what-you-can-now-say → who-the-survey-sees.
+- **Recovery:** wrong body: the object list names what the step staged.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:occurrence-efficiency`, control occurrence-efficiency/radius, measures the share of transiting planets the search recovers in a synthetic survey of 2000 stars, by planet radius and orbital period: a third of the smallest at 8 to 16 days, most of them above one Earth radius, and the rate a count of listings becomes when it is divided by that completeness, evidence `none`, covered by `e2e/occurrenceLesson.spec.js`.
 
 ## The Metallicity Term (`the-metallicity-term`)
 

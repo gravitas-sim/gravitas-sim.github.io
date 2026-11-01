@@ -1867,6 +1867,8 @@ export const ES_DEFERRED = {
     'El modelo de tr\u00e1nsito del panel de ajuste, ajustado de nuevo por otro camino en Python, y qu\u00e9 cambia el camino. Necesita la p\u00e1gina de c\u00e1lculo y conexi\u00f3n.',
   'inv.seq.planets.what-is-it-made-of':
     'El radio, la masa y la densidad de un planeta con la incertidumbre declarada de la estrella dentro: cuánto de cada uno es de la estrella, qué hace una estrella mal declarada y qué puede y qué no puede decir una densidad.',
+  'inv.seq.planets.how-many-earths':
+    'Un sondeo lista los planetas que podía ver. ¿Cuántos podía haber visto, en qué se convierte una cuenta de lo encontrado para ser una tasa y qué dice una casilla sin ninguno, o una que el sondeo apenas podía ver?',
   'inv.seq.planets.planet-or-not':
     'Ocho candidatos sint\u00e9ticos verificados con profundidades impares y pares, una b\u00fasqueda de segundo eclipse y una prueba del centroide, y lo que no significa una lista aprobada. Algunos no se pueden decidir.',
   'inv.seq.planets.why-we-cannot-see-earth':

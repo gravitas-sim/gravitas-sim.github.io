@@ -1868,6 +1868,8 @@ export const EN_DEFERRED = {
     'The fit panel’s transit model fitted again by a different route in Python, and what the route changes. Needs the compute page and a connection.',
   'inv.seq.planets.what-is-it-made-of':
     'A planet’s radius, mass and density with the star’s stated uncertainty inside them: how much of each is the star’s, what a mis-stated star does, and what a density can and cannot say.',
+  'inv.seq.planets.how-many-earths':
+    'A survey lists planets it could see. How many could it have seen, what does a count of what was found become a rate, and what does a bin with none, or one the survey could hardly see, say?',
   'inv.seq.planets.planet-or-not':
     'Eight synthetic candidates vetted with odd-even depths, a second-eclipse search and a centroid test, and what a passed checklist does not mean. Some cannot be decided.',
   'inv.seq.planets.why-we-cannot-see-earth':

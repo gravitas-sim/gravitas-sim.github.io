@@ -121,6 +121,7 @@ export const FAMILY_IDS = Object.freeze({
   vetting: ['vetting-checklist'],
   directImaging: ['imaging-contrast', 'imaging-architectures'],
   joint: ['joint-fit', 'mass-radius'],
+  occurrence: ['occurrence-efficiency', 'occurrence-grid'],
   clusterFit: ['cluster-fit'],
   masses: ['masses-minimum', 'masses-solve', 'masses-diagram'],
   activity: [

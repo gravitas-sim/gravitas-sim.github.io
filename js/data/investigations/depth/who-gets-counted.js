@@ -8,6 +8,7 @@
 // =============================================================================
 
 const SC = (values = {}) => ({ id: 'survey-counts', values });
+const OC = (values = {}) => ({ id: 'occurrence-grid', values });
 
 export default {
   id: 'who-gets-counted',
@@ -118,6 +119,45 @@ export default {
       because:
         'The missed stars. With a real catalog the denominator is unknown, so a correction needs a model of the selection (its limit and completeness) and a stated assumption about what is there. That is the work of the third investigation, and the reason the synthetic surveys exist: to test the correction where the answer is known.',
       tool: SC({ limit: 16, view: 0 }),
+    },
+    {
+      sid: 'the-same-question-for-planets',
+      after: 'what-the-real-sample-cannot-say',
+      depth: 'advanced',
+      type: 'read',
+      title: 'The same question for planets',
+      body: `A survey of planets has the same problem with two more causes of a miss. A planet is only seen if its orbit crosses our line of
+             sight, which is a matter of geometry and is rarer the wider the orbit, and only if the search can pick its dip out of the
+             star&rsquo;s noise, which depends on the star and on how many transits its span holds. The completeness of a bin is
+             the two chances multiplied and added over the stars, and a rate is the listings divided by it, which is the correction of
+             the second investigation done for planets. The panel below holds one synthetic survey of 2000 stars.`,
+      tool: OC({ seed: 1, radius: 1, period: 3 }),
+    },
+    {
+      sid: 'what-the-count-becomes',
+      after: 'the-same-question-for-planets',
+      depth: 'advanced',
+      type: 'question',
+      kind: 'choice',
+      title: 'What the count becomes',
+      body: `The bin of 1 to 2 Earth radii and 8 to 16 days lists 10 planets, and the survey lists 82 planets for every planet per star
+             there. Set the <strong>radius bin</strong> to 0.5 to 1 and the <strong>period bin</strong> to 128 to 256 to see a bin the
+             survey could hardly see.`,
+      prompt:
+        'What does a survey of planets need that a survey of stars did not?',
+      options: [
+        'Nothing: divide the count by the completeness',
+        'The chance of a transit as well as the chance of a detection, and a refusal for bins it could hardly see',
+        'More stars',
+        'A brighter limit',
+      ],
+      answer: 1,
+      hints: [
+        'Read the completeness row of the two bins, and the rate row of the second.',
+      ],
+      because:
+        'The count is divided by a completeness that has two parts, the geometry and the search, and where it falls below 5 planets listed for every planet per star the survey cannot constrain the bin at all: the panel gives neither a rate nor a limit. A count of what was found is not a census of what is there, for planets as for stars.',
+      tool: OC({ seed: 1, radius: 0, period: 7 }),
     },
   ],
 };
