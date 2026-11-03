@@ -75,7 +75,6 @@ export function measureEpoch({
     sy: r.sigmaX * scale,
     snr: r.snr,
     truthPx: { x: px, y: py },
-    reduction: r.reduction,
   };
 }
 
