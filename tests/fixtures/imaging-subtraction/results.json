@@ -1,0 +1,571 @@
+{
+ "format": "gravitas.imaging-subtraction-results/1",
+ "stream": "imaging-subtraction-230b",
+ "node": "v24.4.0",
+ "verdict": "C",
+ "rows": [
+  {
+   "id": "A1",
+   "status": "pass",
+   "measured": {
+    "relErrK": 1.3322676295501878e-15,
+    "residualOverPeak": 1.5319172868285178e-15
+   },
+   "note": ""
+  },
+  {
+   "id": "A2",
+   "status": "pass",
+   "measured": {
+    "maxThroughputError": 7.105427357601002e-15,
+    "maxRelFluxError": 2.7385704090887586e-05,
+    "maxPositionErrorPx": 0.00010106290226909912,
+    "cells": [
+     {
+      "sepFwhm": 2,
+      "insideWorkingRadius": true,
+      "throughput": 0.9972495751707651,
+      "closedForm": 0.9972495751707325,
+      "relFluxError": 0.0006678972604229338,
+      "positionErrorPx": 0.002463635155289265
+     },
+     {
+      "sepFwhm": 2.5,
+      "throughput": 0.9998847943641176,
+      "closedForm": 0.9998847943641105,
+      "relFluxError": 2.7385704090887586e-05,
+      "positionErrorPx": 0.00010106290226909912
+     },
+     {
+      "sepFwhm": 3,
+      "throughput": 0.9999955068649987,
+      "closedForm": 0.9999955068649956,
+      "relFluxError": 1.049708742373312e-06,
+      "positionErrorPx": 3.5716867472905903e-06
+     },
+     {
+      "sepFwhm": 5,
+      "throughput": 0.9999993006616427,
+      "closedForm": 0.999999300661642,
+      "relFluxError": 2.755450210223387e-07,
+      "positionErrorPx": 2.3090882310291013e-09
+     },
+     {
+      "sepFwhm": 8,
+      "throughput": 0.999997283384852,
+      "closedForm": 0.9999972833848505,
+      "relFluxError": 1.1470214075215424e-06,
+      "positionErrorPx": 6.125166784041393e-09
+     }
+    ]
+   },
+   "note": ""
+  },
+  {
+   "id": "A3",
+   "status": "pass",
+   "measured": {
+    "varianceRatio": 1.0025034853563048,
+    "pairs": 200
+   },
+   "note": ""
+  },
+  {
+   "id": "B1",
+   "status": "pass",
+   "measured": {
+    "maxRelErr": 0,
+    "pairs": 8
+   },
+   "note": ""
+  },
+  {
+   "id": "B2",
+   "status": "pass",
+   "measured": {
+    "maxAbsErr": 0
+   },
+   "note": ""
+  },
+  {
+   "id": "B3",
+   "status": "pass",
+   "measured": {
+    "maxSigma": 3.9579679054915315e-07
+   },
+   "note": ""
+  },
+  {
+   "id": "B4",
+   "status": "pass",
+   "measured": {
+    "maxRelErr": 5.019573487899377e-09
+   },
+   "note": ""
+  },
+  {
+   "id": "C1",
+   "status": "fail",
+   "measured": {
+    "flux": 0.5384615384615384,
+    "x": 0.539827036868457,
+    "y": 0.5480200273099681,
+    "injections": 2197
+   },
+   "note": ""
+  },
+  {
+   "id": "C2",
+   "status": "fail",
+   "measured": {
+    "flux": 0.8270368684569868,
+    "x": 0.8502503413746018,
+    "y": 0.837960855712335,
+    "injections": 2197
+   },
+   "note": ""
+  },
+  {
+   "id": "D1",
+   "status": "fail",
+   "measured": {
+    "rate": 0.855,
+    "cases": 200
+   },
+   "note": ""
+  },
+  {
+   "id": "D2",
+   "status": "pass",
+   "measured": {
+    "refuseRate": 1,
+    "acceptRate": 1,
+    "cases": 200
+   },
+   "note": ""
+  },
+  {
+   "id": "D3",
+   "status": "pass",
+   "measured": {
+    "rate": 1,
+    "cases": 200
+   },
+   "note": ""
+  },
+  {
+   "id": "D4",
+   "status": "pass",
+   "measured": {
+    "falseAlarmRate": 0.006666666666666667,
+    "cases": 300
+   },
+   "note": ""
+  },
+  {
+   "id": "D5",
+   "status": "pass",
+   "measured": {
+    "rate": 1
+   },
+   "note": ""
+  },
+  {
+   "id": "E1",
+   "status": "not-run",
+   "measured": null,
+   "note": "no authentic reference-star pair or published astrometry was supplied; nothing was fetched"
+  },
+  {
+   "id": "N1",
+   "status": "pass",
+   "measured": {
+    "robustRmsRatio": 1.0014212853375697,
+    "pairs": 200
+   },
+   "note": ""
+  },
+  {
+   "id": "N2",
+   "status": "pass",
+   "measured": {
+    "separations": [
+     {
+      "sepFwhm": 3,
+      "noise": 18.5625316755503,
+      "flux5Sigma": 494.05446755421343,
+      "contrast5Sigma": 0.0016468482251807113,
+      "rate": 0.535
+     },
+     {
+      "sepFwhm": 5,
+      "noise": 18.477246378088907,
+      "flux5Sigma": 491.78454107198735,
+      "contrast5Sigma": 0.0016392818035732913,
+      "rate": 0.6
+     },
+     {
+      "sepFwhm": 8,
+      "noise": 18.082999456642863,
+      "flux5Sigma": 481.2913898001451,
+      "contrast5Sigma": 0.0016043046326671504,
+      "rate": 0.515
+     }
+    ]
+   },
+   "note": ""
+  },
+  {
+   "id": "O1",
+   "status": "pass",
+   "measured": {
+    "refuse10": 1,
+    "refuse30": 0.9933333333333333,
+    "codes10": {
+     "coverage": 134,
+     "inconsistent": 5,
+     "epochs": 9,
+     "conditioning": 2
+    },
+    "codes30": {
+     "coverage": 140,
+     "inconsistent": 7,
+     "accepted": 1,
+     "epochs": 1,
+     "conditioning": 1
+    },
+    "meanLostEpochs": {
+     "0.1": 0.5933333333333334,
+     "0.3": 0.7533333333333333
+    }
+   },
+   "note": ""
+  },
+  {
+   "id": "O2",
+   "status": "fail",
+   "measured": {
+    "accept110": 0.7533333333333333,
+    "accept60": 0.7,
+    "codes60": {
+     "accepted": 105,
+     "inconsistent": 22,
+     "coverage": 23
+    },
+    "codes110": {
+     "inconsistent": 37,
+     "accepted": 113
+    },
+    "meanLostEpochs110": 0.6866666666666666
+   },
+   "note": ""
+  },
+  {
+   "id": "O3",
+   "status": "fail",
+   "measured": {
+    "0.6": {
+     "accepted": 105,
+     "P68": 0.6095238095238096,
+     "P95": 0.8666666666666667,
+     "a68": 0.6476190476190476,
+     "a95": 0.8761904761904762
+    },
+    "1.1": {
+     "accepted": 113,
+     "P68": 0.6283185840707964,
+     "P95": 0.911504424778761,
+     "a68": 0.6106194690265486,
+     "a95": 0.911504424778761
+    }
+   },
+   "note": ""
+  },
+  {
+   "id": "O4",
+   "status": "pass",
+   "measured": {
+    "accepted": 219,
+    "belowCriterion": 0
+   },
+   "note": ""
+  },
+  {
+   "id": "O5",
+   "status": "pass",
+   "measured": {
+    "inside": 1,
+    "trials": 100
+   },
+   "note": ""
+  },
+  {
+   "id": "O6",
+   "status": "fail",
+   "measured": {
+    "share": 0.84,
+    "trials": 100,
+    "medianSpanFactor": 5.0143943324956775
+   },
+   "note": ""
+  },
+  {
+   "id": "O7",
+   "status": "report",
+   "measured": {
+    "arcs": {
+     "0.1": {
+      "accepted": 0,
+      "refused": 1,
+      "codes": {
+       "coverage": 134,
+       "inconsistent": 5,
+       "epochs": 9,
+       "conditioning": 2
+      },
+      "meanLostEpochs": 0.5933333333333334
+     },
+     "0.3": {
+      "accepted": 0.006666666666666667,
+      "refused": 0.9933333333333333,
+      "codes": {
+       "coverage": 140,
+       "inconsistent": 7,
+       "accepted": 1,
+       "epochs": 1,
+       "conditioning": 1
+      },
+      "meanLostEpochs": 0.7533333333333333
+     },
+     "0.6": {
+      "accepted": 0.7,
+      "refused": 0.3,
+      "codes": {
+       "accepted": 105,
+       "inconsistent": 22,
+       "coverage": 23
+      },
+      "meanLostEpochs": 0.7266666666666667
+     },
+     "1.1": {
+      "accepted": 0.7533333333333333,
+      "refused": 0.24666666666666667,
+      "codes": {
+       "inconsistent": 37,
+       "accepted": 113
+      },
+      "meanLostEpochs": 0.6866666666666666
+     }
+    }
+   },
+   "note": "every arc: the acceptance, the refusal codes and the epochs the pipeline lost"
+  },
+  {
+   "id": "T1",
+   "status": "pass",
+   "measured": {
+    "cells": [
+     {
+      "sepFwhm": 3,
+      "contrast": 0.003,
+      "detected": 1,
+      "median": 1.006245612127639,
+      "p16": 0.8958002891678234,
+      "p84": 1.1435029819006615
+     },
+     {
+      "sepFwhm": 3,
+      "contrast": 0.01,
+      "detected": 1,
+      "median": 1.0028197088258255,
+      "p16": 0.9646831667926635,
+      "p84": 1.048093594774819
+     },
+     {
+      "sepFwhm": 3,
+      "contrast": 0.03,
+      "detected": 1,
+      "median": 0.9988111467510961,
+      "p16": 0.9830967951652092,
+      "p84": 1.0164120497378586
+     },
+     {
+      "sepFwhm": 5,
+      "contrast": 0.003,
+      "detected": 0.99,
+      "median": 1.0100994803500385,
+      "p16": 0.8906644491268985,
+      "p84": 1.1198705216082652
+     },
+     {
+      "sepFwhm": 5,
+      "contrast": 0.01,
+      "detected": 1,
+      "median": 1.0073491915459762,
+      "p16": 0.9721872261920393,
+      "p84": 1.0421948498193
+     },
+     {
+      "sepFwhm": 5,
+      "contrast": 0.03,
+      "detected": 1,
+      "median": 0.9985906943170005,
+      "p16": 0.9833563943606983,
+      "p84": 1.0151744089849262
+     },
+     {
+      "sepFwhm": 8,
+      "contrast": 0.003,
+      "detected": 0.995,
+      "median": 1.0088680541181532,
+      "p16": 0.9002869232154209,
+      "p84": 1.1133532651245561
+     },
+     {
+      "sepFwhm": 8,
+      "contrast": 0.01,
+      "detected": 1,
+      "median": 1.0010357090732456,
+      "p16": 0.964116654397542,
+      "p84": 1.0439241213298616
+     },
+     {
+      "sepFwhm": 8,
+      "contrast": 0.03,
+      "detected": 1,
+      "median": 1.0007148057599826,
+      "p16": 0.9806022554717931,
+      "p84": 1.0153176806286535
+     }
+    ]
+   },
+   "note": ""
+  },
+  {
+   "id": "T2",
+   "status": "pass",
+   "measured": {
+    "cells": [
+     {
+      "sepFwhm": 2.5,
+      "contrast": 0.01,
+      "detected": 1,
+      "median": 1.0018415719072888
+     },
+     {
+      "sepFwhm": 2.5,
+      "contrast": 0.03,
+      "detected": 1,
+      "median": 0.9983723927563377
+     }
+    ]
+   },
+   "note": ""
+  },
+  {
+   "id": "T3",
+   "status": "report",
+   "measured": {
+    "cells": [
+     {
+      "sepFwhm": 1,
+      "contrast": 0.003,
+      "n": 200,
+      "median": 2.27290555641763,
+      "p16": -4.2378793154901055,
+      "p84": 5.843513517623117
+     },
+     {
+      "sepFwhm": 1,
+      "contrast": 0.01,
+      "n": 200,
+      "median": 0.9596804822592779,
+      "p16": 0.15594351765986167,
+      "p84": 2.1210843967271735
+     },
+     {
+      "sepFwhm": 1,
+      "contrast": 0.03,
+      "n": 200,
+      "median": 0.9256397611549709,
+      "p16": 0.6338297744999352,
+      "p84": 1.1895399663800457
+     },
+     {
+      "sepFwhm": 1,
+      "contrast": 0.1,
+      "n": 149,
+      "median": 0.8661115244371884,
+      "p16": 0.7925790497714613,
+      "p84": 0.9197855014768417
+     },
+     {
+      "sepFwhm": 1.5,
+      "contrast": 0.003,
+      "n": 200,
+      "median": 1.5151034065120093,
+      "p16": -4.146239007230963,
+      "p84": 6.259330062319551
+     },
+     {
+      "sepFwhm": 1.5,
+      "contrast": 0.01,
+      "n": 200,
+      "median": 1.0576289238947827,
+      "p16": 0.6659505858089011,
+      "p84": 1.9876955788180897
+     },
+     {
+      "sepFwhm": 1.5,
+      "contrast": 0.03,
+      "n": 200,
+      "median": 0.9991588087892498,
+      "p16": 0.8456651471340015,
+      "p84": 1.1784405262729738
+     },
+     {
+      "sepFwhm": 1.5,
+      "contrast": 0.1,
+      "n": 132,
+      "median": 0.9640621049309441,
+      "p16": 0.9285355994551225,
+      "p84": 1.0018189922727068
+     },
+     {
+      "sepFwhm": 2,
+      "contrast": 0.003,
+      "n": 200,
+      "median": 1.0382663644918808,
+      "p16": 0.5472212818014726,
+      "p84": 6.517619704786874
+     },
+     {
+      "sepFwhm": 2,
+      "contrast": 0.01,
+      "n": 200,
+      "median": 0.9928977979631055,
+      "p16": 0.8571841439168028,
+      "p84": 1.1922343118977445
+     },
+     {
+      "sepFwhm": 2,
+      "contrast": 0.03,
+      "n": 200,
+      "median": 0.9963537253653155,
+      "p16": 0.9429969633241241,
+      "p84": 1.0586522700598697
+     },
+     {
+      "sepFwhm": 2,
+      "contrast": 0.1,
+      "n": 200,
+      "median": 0.9963800815187683,
+      "p16": 0.9779871926368343,
+      "p84": 1.0182975003830195
+     }
+    ]
+   },
+   "note": "forced inside the working radius, started at the truth: what a user would get by overriding the refusal"
+  }
+ ]
+}
