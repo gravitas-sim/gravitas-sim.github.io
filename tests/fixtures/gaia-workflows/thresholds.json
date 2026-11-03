@@ -1,0 +1,235 @@
+{
+  "format": "gravitas.gaia-workflows-thresholds/1",
+  "prompt": "Roadmap III, Prompt 233, Gaia parallax workflows and sample selection (tranche T4 by D-R10-232-01)",
+  "document": "GAIA_WORKFLOWS.md (\"Validation contract\"), written after this file",
+  "committed": "before js/kernels/galactic/astrometry.js, the validator, the oracle script and its pinned results, the synthetic ensembles, the astrometry panel, any lesson, and before any new Gaia file, published distance or oracle output of Prompt 233 existed. Phase 1 of the session (inspection and a data request) preceded it; the existing packs' own recorded validation (membership mixture parallax 0.389 mas, zero point not applied, against an approximate literature 0.3 mas) was already in the manifest and moved nothing here. Every bound below is fixed before any result of the new kernel is seen.",
+  "rule": "A crossed bound is a failed check, recorded in failed-legs.json and left failing; only Carl resets one. A leg that cannot be measured (a file not supplied, a code not run) is NOT RUN and says why. A distance interval whose coverage leg (C1 to C3) failed is never presented by the panel or a lesson as a probability statement. Every number a lesson or the model page quotes comes from results.json, never from memory; no published value is typed anywhere except from a source file Carl supplied, with its citation. No universal correction is applied to any sample.",
+  "seeds": {
+    "ensemble": "gaia-233",
+    "synthetic": [233001, 233002, 233003, 233004],
+    "design": "gaia-233-design (used only to build and debug; never in a leg)"
+  },
+  "scope": {
+    "built": "parallax to distance as a likelihood in 1/r with an optional, named distance prior (exponentially decreasing space density with a stated scale length; uniform space density to a stated radius), a stated parallax zero-point correction with its own uncertainty, proper motion to tangential velocity with the distance's asymmetric interval carried as an asymmetric uncertainty (150's envelope), and the sample-selection cuts (a magnitude limit, a parallax-over-error cut, RUWE, the radial-velocity requirement) applied through 154's selection-function object with what each removes counted.",
+    "notBuilt": "a Lutz-Kelker or any other blanket correction applied to a sample; a distance from the rounded neighbourhood pack; a cross-match on the neighbourhood pack's rounded positions; a model of Gaia's real selection function beyond the cuts the packs' rows carry.",
+    "distanceRule": "A point distance is reported only when the corrected parallax-over-error is at least 5 (a stated choice, not tuned: the inversion's bias is shown below it); from 0 up to 5 the status is 'low-signal' and the result is a relative likelihood plus an interval that may be open at the far end; at or below 0 the status is 'likelihood-only' and the distance is null. With a prior the status below 5 is 'prior-dominated' and says so.",
+    "statistic": "Corrected parallax w = p_obs - z (z the zero-point offset, negative for Gaia); total error s^2 = s_p^2 + s_z^2 for a single star, s_z kept as a shared systematic for a cluster (never reduced by averaging). Likelihood in distance L(r) = N(w | 1/r, s^2). Relative likelihood curve L(r) / L_max on the stated grid; likelihood interval Delta ln L = 0.5 (maps exactly to [1/(w+s), 1/(w-s)], open at the far end when w <= s). Posterior p(r) proportional to L(r) P(r) on [r_min, r_max] with P one of: none (likelihood only, no posterior and no quantile), edsd (P = r^2 exp(-r/L), Astraatmadja and Bailer-Jones 2016), uniform-density (P = r^2 up to r_max, Lutz and Kelker 1973's assumption, stated). Posterior interval equal-tailed at the stated level. Tangential velocity v = k mu r, k = 4.740470446 km/s per (mas/yr kpc)."
+  },
+  "synthetic": {
+    "how": "Every synthetic star is a true distance, a true parallax 1/r (mas, r in kpc), an error s_p in mas and a draw p_obs = 1/r + s_p g with g standard normal from the seeded stream; a zero point is added to p_obs only where a check says so. Truth manifests are written next to each ensemble. Populations are uniform in space (counts) or drawn from the stated prior (calibration legs).",
+    "labelled": "synthetic data, with the truth manifest in tests/fixtures/gaia-workflows/ensembles.json"
+  },
+  "checks": [
+    {
+      "id": "A1.inversionBias",
+      "leg": "a",
+      "what": "the bias of d = 1/p_obs on a synthetic sample, against the analytic expectation. The sample keeps draws with p_obs >= 2 s_p (the expectation of 1/p over all draws does not exist: the density of p is finite at 0). At true p/s of 5, 10 and 20 the Monte Carlo mean of p_true / p_obs over 400000 draws equals the expectation by quadrature of the exact truncated density, and at p/s = 20 it also agrees with the asymptotic series 1 + (s/p)^2 + 3 (s/p)^4.",
+      "limits": {
+        "levels": [5, 10, 20],
+        "draws": 400000,
+        "cutSigma": 2,
+        "maxSigmasFromQuadrature": 4,
+        "seriesLevel": 20,
+        "maxRelFromSeries": 0.002
+      }
+    },
+    {
+      "id": "A1b.inversionMedian",
+      "leg": "a",
+      "what": "the median of 1/p_obs over all draws at true p/s = 20 equals the true distance within 4 standard errors of a median (1.2533 sd / sqrt(n)): a monotone transform keeps the median, so the inversion is median-unbiased where it is mean-biased",
+      "limits": { "level": 20, "draws": 400000, "maxSigmas": 4 }
+    },
+    {
+      "id": "A2.edsdMode",
+      "leg": "a",
+      "what": "the posterior mode under the EDSD prior against the closed form: the positive real root of r^3 - 2 L r^2 + (L p / s^2) r - L / s^2 = 0 that maximises the posterior (Bailer-Jones 2015), five cases",
+      "limits": {
+        "cases": [
+          { "p": 2.0, "s": 0.02, "L": 1.0 },
+          { "p": 1.0, "s": 0.1, "L": 1.0 },
+          { "p": 0.5, "s": 0.1, "L": 1.0 },
+          { "p": 0.3, "s": 0.1, "L": 2.0 },
+          { "p": 0.2, "s": 0.1, "L": 1.0 }
+        ],
+        "maxRel": 1e-8
+      }
+    },
+    {
+      "id": "A3.likelihoodInterval",
+      "leg": "a",
+      "what": "the no-prior likelihood interval against its closed form [1/(w+s), 1/(w-s)] for w > s, and open at the far end (upper = null) for 0 < w <= s; the point value is 1/w",
+      "limits": {
+        "cases": [
+          { "p": 2.0, "s": 0.02 },
+          { "p": 0.5, "s": 0.1 },
+          { "p": 0.3, "s": 0.1 },
+          { "p": 0.1, "s": 0.1 },
+          { "p": 0.05, "s": 0.1 }
+        ],
+        "maxRel": 1e-6
+      }
+    },
+    {
+      "id": "A4.zeroPointAlgebra",
+      "leg": "a",
+      "what": "the correction as stated: w = p_obs - z exactly, and the total error s^2 = s_p^2 + s_z^2 for a single star; the cluster mean keeps s_z unreduced (the mean of N stars with common z has error sqrt(s_stat^2 + s_z^2), never sqrt(s_stat^2 + s_z^2 / N))",
+      "limits": { "maxRel": 1e-12, "clusterN": [1, 10, 1000] }
+    },
+    {
+      "id": "A5.tangentialVelocityLinear",
+      "leg": "a",
+      "what": "at fixed proper motion the velocity interval is the distance interval scaled by k mu (every quantile), against the closed form",
+      "limits": { "maxRel": 1e-12 }
+    },
+    {
+      "id": "A6.tangentialVelocitySecondMoment",
+      "leg": "a",
+      "what": "with the distance posterior (edsd, L = 1 kpc) at p/s of 10 and 20 and independent proper-motion errors, the sampled E[v^2] equals k^2 E[r^2] (mu0^2 + s_a^2 + s_d^2) with E[r^2] by quadrature, and the sampled Var(v) equals the product-variance closed form for independent factors, over 400000 draws",
+      "limits": { "levels": [10, 20], "draws": 400000, "maxRelSecondMoment": 0.01, "maxRelVariance": 0.03 }
+    },
+    {
+      "id": "A7.correlationPropagation",
+      "leg": "a",
+      "what": "with a parallax-proper-motion correlation of -0.5 and 0.5 at p/s = 50 (the delta method is exact to second order there), the sampled variance of v equals the linearised variance including the covariance term within 3 percent over 400000 draws",
+      "limits": { "rho": [-0.5, 0.5], "level": 50, "draws": 400000, "maxRel": 0.03 }
+    },
+    {
+      "id": "S1.euclideanCounts",
+      "leg": "a",
+      "what": "a magnitude-limited sample of identical stars (M_G = 5) uniform in space out to a radius beyond every limit: the slope of log10 N against the limiting G is 0.6 (Euclidean counts) within 0.02 over G_lim 8 to 12 in steps of 0.5, 500000 stars; and the slope is below 0.6 by at least 0.1 once the population edge lies inside the sample (G_lim reaching the edge), which is what a limit that stops selecting by volume looks like",
+      "limits": { "slope": 0.6, "tolerance": 0.02, "edgeDrop": 0.1, "stars": 500000 }
+    },
+    {
+      "id": "S2.parallaxCutThroughSelection",
+      "leg": "a",
+      "what": "the parallax-over-error cut applied through 154's selection object (probability Phi(p_true / s - k) on the true parallax, k = 5 and 10) includes the analytic fraction of a uniform-density population (closed form by quadrature in distance) within 4 standard errors, over 200000 stars, and the same fraction when the cut is made on the observed parallax of the draws",
+      "limits": { "k": [5, 10], "stars": 200000, "maxSigmas": 4 }
+    },
+    {
+      "id": "S3.removedBookkeeping",
+      "leg": "a",
+      "what": "what each cut removes: for two cuts the count removed by the first plus the count the second removes from the rest equals the count removed by the second plus the count the first removes from the rest equals the stars outside both, in either order, exactly",
+      "limits": { "exact": true }
+    },
+    {
+      "id": "B1.oracleTenStars",
+      "leg": "b",
+      "what": "an independent implementation (tools/gaia-oracle/oracle.py: numpy and scipy only, adaptive quadrature and Brent root finding, written from the equations in GAIA_WORKFLOWS.md and sharing no code with the kernel) run offline on the ten cases below, its results pinned in tests/fixtures/gaia-workflows/oracle-results.json with versions. Compared: for prior none the point distance and the Delta ln L = 0.5 interval ends; for a prior the mode and the 16th, 50th and 84th percentiles of the posterior. Bounds: percentiles and interval ends 1e-4 relative, modes and point distances 1e-5 relative.",
+      "limits": {
+        "cases": [
+          { "id": 1, "p": 2.0, "s": 0.02, "z": 0, "sz": 0, "prior": "none" },
+          { "id": 2, "p": 1.0, "s": 0.05, "z": -0.02, "sz": 0.01, "prior": "none" },
+          { "id": 3, "p": 0.5, "s": 0.1, "z": 0, "sz": 0, "prior": "none" },
+          { "id": 4, "p": 0.3, "s": 0.1, "z": 0, "sz": 0, "prior": "none" },
+          { "id": 5, "p": 0.2, "s": 0.1, "z": 0, "sz": 0, "prior": "none" },
+          { "id": 6, "p": 0.5, "s": 0.1, "z": 0, "sz": 0, "prior": { "edsd": { "L": 1.0 } } },
+          { "id": 7, "p": 1.0, "s": 0.05, "z": -0.02, "sz": 0.01, "prior": { "edsd": { "L": 1.0 } } },
+          { "id": 8, "p": 0.2, "s": 0.1, "z": 0, "sz": 0, "prior": { "edsd": { "L": 1.0 } } },
+          { "id": 9, "p": 0.1, "s": 0.1, "z": 0, "sz": 0, "prior": { "edsd": { "L": 1.0 } } },
+          { "id": 10, "p": 0.3, "s": 0.1, "z": 0, "sz": 0, "prior": { "uniformDensity": { "rMax": 5.0 } } }
+        ],
+        "grid": { "rMin": 0.001, "rMax": 100.0, "note": "the posterior's support; the prior's own radius where it has one" },
+        "maxRelQuantile": 1e-4,
+        "maxRelMode": 1e-5,
+        "zeroPointValuesAreTestValues": "z = -0.02 mas and s_z = 0.01 mas in cases 2 and 7 are test inputs, not claims about Gaia"
+      }
+    },
+    {
+      "id": "B2.zeroPointOracle",
+      "leg": "b",
+      "what": "the per-star zero-point function (Lindegren et al. 2021) against the output of the authors' published code, pinned on the stars of the NGC 2420 pack and run offline by the coordinator, not by a test; coefficients enter the repository only from the source file Carl supplies. NOT RUN until that file and that output exist",
+      "limits": { "maxAbsMas": 1e-4 }
+    },
+    {
+      "id": "C1.coverageLikelihood68",
+      "leg": "c",
+      "what": "no-prior likelihood intervals (Delta ln L = 0.5, an open interval counts as covering) cover the true distance at the 0.6827 level at true p/s of 3, 10 and 30, 4000 stars per level, fixed true distance 1 kpc: the coverage lies within 3 binomial standard errors of 0.6827 (0.6606 to 0.7048)",
+      "limits": { "levels": [3, 10, 30], "stars": 4000, "nominal": 0.6827, "maxSigmas": 3 }
+    },
+    {
+      "id": "C2.coverageLikelihood95",
+      "leg": "c",
+      "what": "the same at the 0.9545 level (two sigma): within 3 binomial standard errors (0.9446 to 0.9644)",
+      "limits": { "levels": [3, 10, 30], "stars": 4000, "nominal": 0.9545, "maxSigmas": 3 }
+    },
+    {
+      "id": "C3.coveragePriorMatched",
+      "leg": "c",
+      "what": "posterior equal-tailed intervals under the EDSD prior (L = 1 kpc) cover the truth at 0.6827 and 0.9545 when the true distances are drawn from that prior (gamma, shape 3, scale L), at s_p of 0.3, 0.1 and 0.03 mas (typical p/s about 1, 3 and 10), 4000 stars per level: within 3 binomial standard errors of each nominal level. A calibration statement about the population the prior describes, not about any one star",
+      "limits": { "sigmas": [0.3, 0.1, 0.03], "L": 1.0, "stars": 4000, "levels": [0.6827, 0.9545], "maxSigmas": 3 }
+    },
+    {
+      "id": "C4.coveragePriorWrong",
+      "leg": "c",
+      "what": "REPORTED, no band: the same intervals when the truth is drawn with scale 3 kpc and the prior says 1 kpc (and with the scale reversed), at the same three levels: the coverage and the share of stars whose interval excludes the truth, so the lesson can show what a wrong prior costs",
+      "limits": { "reported": true, "truthScales": [3.0, 0.3], "priorL": 1.0 }
+    },
+    {
+      "id": "C5.zeroPointUnmodelled",
+      "leg": "c",
+      "what": "REPORTED, no band: with an unmodelled offset of -0.02 mas added to every p_obs (test value) and no correction applied, the median bias of 1/p in percent and the 0.6827 coverage at p/s of 3, 10 and 30",
+      "limits": { "reported": true, "offsetMas": -0.02, "levels": [3, 10, 30] }
+    },
+    {
+      "id": "D1.negativeParallax",
+      "leg": "d",
+      "what": "a star with p_obs = -0.10 mas, s = 0.05 mas (negative corrected parallax) returns status 'likelihood-only', a finite relative-likelihood curve and no distance (distance === null, no interval, no velocity), with and without a prior's result separately labelled; the same for p_obs = 0 exactly",
+      "limits": { "cases": [{ "p": -0.1, "s": 0.05 }, { "p": 0.0, "s": 0.05 }] }
+    },
+    {
+      "id": "D2.statusLadder",
+      "leg": "d",
+      "what": "the statuses at the stated threshold: w/s of 20 and 5 give 'ok' and a point distance; w/s of 4.9 and 1 give 'low-signal' (point distance present, flagged, interval possibly open); w/s of 0 and below give 'likelihood-only'",
+      "limits": { "threshold": 5, "cases": [20, 5, 4.9, 1, 0, -2] }
+    },
+    {
+      "id": "D3.priorDominated",
+      "leg": "d",
+      "what": "under the EDSD prior, doubling the scale length L from 1 to 2 kpc moves the upper end of the 0.6827 interval by a factor of at least 1.4 for stars at w/s of 1 and 0.5, and by no more than 2 percent at w/s of 20: the result says 'prior-dominated' exactly where the answer follows the prior",
+      "limits": { "lowLevels": [1, 0.5], "minFactor": 1.4, "highLevel": 20, "maxRelChange": 0.02, "s": 0.1 }
+    },
+    {
+      "id": "D4.refusals",
+      "leg": "d",
+      "what": "a parallax error that is zero, negative or not finite; a parallax that is not finite; an unknown prior name; a prior scale that is not positive; a zero-point error that is negative: each is refused with a named reason and no number",
+      "limits": { "refusals": 6 }
+    },
+    {
+      "id": "D5.noBlanketCorrection",
+      "leg": "d",
+      "what": "no universal correction: with prior none the point distance is exactly 1/(p_obs - z) for any z, the module exports no function named for the Lutz-Kelker or any other sample-wide bias correction, and a result under a prior carries the prior's name and its stated sample assumptions",
+      "limits": { "maxRel": 1e-12 }
+    },
+    {
+      "id": "E1.ngc2420",
+      "leg": "e",
+      "what": "NGC 2420 from the precise cluster pack (gaia-dr3-ngc2420, parallaxes to 0.001 mas), analysed under one contract fixed here and not changed after any result: (1) members from proper motion and position alone through js/kernels/galactic/membership.js, a membership probability of at least 0.9, never using the parallax or the colour to select; (2) a weighted mean parallax with the zero-point correction per star from the source file Carl supplies, an iterative 3-sigma clip of (p_i - mean) / s_i recorded with and without; (3) the error of the mean from the statistical error and the zero-point source's stated systematic floor added in quadrature, the floor never reduced by averaging; (4) the distance and 0.6827 interval from the kernel's likelihood at that parallax. PASS when the distance (the clipped, zero-point-corrected value) lies inside the published range, which is [lowest quoted distance - its quoted error, highest quoted distance + its quoted error] over the sources Carl supplies (two or more, at least one DR3-based and one not derived from Gaia parallaxes), each quoted as its source states it. Reported beside it, not part of the verdict: the distance without the zero point, with the 3-sigma clip off, and with the membership threshold at 0.5 and 0.99. NOT RUN until the files exist. A failing result stays failing and is recorded in the register; the 'unverified' parallax distance is replaced either way by what was measured.",
+      "limits": {
+        "membershipThreshold": 0.9,
+        "clipSigma": 3,
+        "level": 0.6827,
+        "publishedSources": "none yet: supplied by Carl with citation, retrieval date and quoted uncertainty before the leg runs",
+        "reportedVariants": ["no zero point", "no clip", "threshold 0.5", "threshold 0.99"]
+      }
+    },
+    {
+      "id": "E2.packAlignment",
+      "leg": "e",
+      "what": "each re-queried product (same WHERE clause and ORDER BY source_id as the pack's manifest, new columns added) has exactly the pack's row count (993 and 1570) and every pack column equals the product's column rounded to the pack's step, in every row; a product that does not align is not used",
+      "limits": { "rows": { "gaia-dr3-ngc2420": 993, "gaia-dr3-solar-neighbourhood": 1570 }, "maxRowsDiffering": 0 }
+    },
+    {
+      "id": "E3.neighbourhoodRounding",
+      "leg": "e",
+      "what": "REPORTED, no band: for the neighbourhood pack, the largest rounding of its parallax against the unrounded value (expected at most half its 0.02 mas step) and the share of stars whose rounding exceeds a tenth of the star's parallax error, so the rule 'no distance from the rounded pack' states its reason as a measurement",
+      "limits": { "reported": true, "halfStepMas": 0.01 }
+    },
+    {
+      "id": "P1.speed",
+      "leg": "-",
+      "what": "1000 stars through the distance kernel with a prior run in at most 5 s of CPU, recorded and not a physics bound",
+      "limits": { "stars": 1000, "maxCpuSeconds": 5, "recordedNotBound": true }
+    }
+  ],
+  "amendments": []
+}
