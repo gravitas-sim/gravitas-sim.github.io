@@ -5,7 +5,7 @@ Documentation only. The prototype is the production code of the build the verdic
 are what the branch ships under verdict A). The thresholds, the contract, the systems, the seeds and the verdict rule were
 committed before any code (`tests/fixtures/visual-binary/thresholds.json`, commit e7d6b69a), the oracle script
 (`tools/visual-binary-oracle/oracle.py`, numpy 2.2.6, scipy 1.15.3, Python 3.10.12, no Gravitas code) was committed
-with two amendments recorded before any measurement (AM1 wording of the semi-major axis, AM2 the operationalisation of D8),
+with three amendments recorded before the legs they touch ran (AM1 wording of the semi-major axis, AM2 the operationalisation of D8, AM3 the contract of E1),
 and the oracle's results were pinned (commit ca251c21) before the kernel was run.
 
 ## What was committed
