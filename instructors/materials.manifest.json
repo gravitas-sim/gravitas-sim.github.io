@@ -1,30 +1,30 @@
 {
   "version": "November 2026",
   "generated": "2026-11-03",
-  "documents": 1156,
+  "documents": 1200,
   "inventory": {
-    "documents": 1156,
+    "documents": 1200,
     "byLocale": {
-      "en": 528,
-      "es": 628
+      "en": 548,
+      "es": 652
     },
     "byKind": {
       "general": 2,
-      "guide": 243,
-      "key": 788,
-      "notes": 118,
+      "guide": 251,
+      "key": 820,
+      "notes": 122,
       "worksheet": 5
     },
     "byVariant": {
       "activity": 12,
-      "depth": 536,
-      "full": 472,
+      "depth": 560,
+      "full": 488,
       "general": 18,
-      "notes": 118
+      "notes": 122
     }
   },
-  "sourceFiles": 304,
-  "sourceDigest": "1d797b8ab8dbbb7b9d4f9842f630b69d44eba40da597017d5ff7518335fc876b",
+  "sourceFiles": 305,
+  "sourceDigest": "946ffd17db290c1f9ac4e1aeeb712fac664af44bbd246077969860348441a55a",
   "sources": {
     "js/activities/activities.js": "39ac98cd99b8b0387c55e41d5d4530bad55a8da8758819ad056be73e7a716b01",
     "js/activities/activityBridge.js": "67a82aff98e0ed935d6b8b0f0f654c6ad4332ee929cb3604e896a7f790a6fdc1",
@@ -43,13 +43,13 @@
     "js/data/activityTeaching.js": "7694fc798f8c4130e5aead5357e69bab04d6a5d386013d009430dba9a1c31008",
     "js/data/exoplanetAnswerKey.js": "d00f17b6b41e8585a21ab7118b24c7ed43e008263693ac48e3e1df57f8233570",
     "js/data/instructorContent.es.js": "471a388f9e2abfbe837cdad387388f52f0a547d2ae5f466e66fa5680866d5d3c",
-    "js/data/instructorContent.js": "758b74b8bc8c35981ba0c5d53be054bd71911d78e0df5bef9791f4f949cfc7f1",
+    "js/data/instructorContent.js": "778404bbf95fefa408b0fda136fd363fd5c8b6e83d2bc3e8cb3bcab7f909bbd1",
     "js/data/instructorExpectations.es.js": "5ec751fabe0ed60f692799c260ab8f383ffae25379c4b426efdd4351e0ae00ee",
-    "js/data/instructorExpectations.js": "5e01eecf7c9422e8ec9f541011ace982f8f5d512896c40e8397dc3297163bcc6",
+    "js/data/instructorExpectations.js": "5800d22eac3452c55f61cb0dbd6b4e448745cab05935b22011a57a75a79028ca",
     "js/data/instructorFlow.es.js": "f1c087e5240114351245f6a7fa7ad9b3efd269ec6d415183fd945ac95534fd86",
-    "js/data/instructorFlow.js": "9693448fc8b72db302f7164f033c1b8c77d870380ccfc7002c65791a9fb97e55",
+    "js/data/instructorFlow.js": "5e30a11109fef8798f9bf97c1de996a77f2262d6c7eb591cb1e8e52d7e8b2d08",
     "js/data/instructorLabels.js": "382bb5d24bd9f59e7bf6cbf68b645a340f7c6271897cecc2d0dc407753180265",
-    "js/data/investigations.js": "1b494a41a5cef50a7dc51279123365f5753219be95d24e2f4d3aef9030d906db",
+    "js/data/investigations.js": "927114d28ae47895dc9aa9c00682dc3a75b5c4071f6d53cb62d80e972f471970",
     "js/data/investigations/a-lens-passing-by.js": "b0516c2bdb40f085f5dd2ab1ade0e006771d9507e3809c89e8de3ba35376e030",
     "js/data/investigations/a-universe-of-stars.js": "8a5cf66239f97a96d71b262a24b178cbe327a86500f252f6e65a405455f1dd65",
     "js/data/investigations/a-variable-star-from-frames.js": "9e516c56e4623154492a535a3fda58c4f80b1179a248565c05bd81421e3f42b1",
@@ -144,7 +144,7 @@
     "js/data/investigations/depth/why-the-bright-ones-win.js": "2efd2f0f8f383755a667f7452f9931d527faeed4d3b4d40a536b7a4725918fa1",
     "js/data/investigations/design-the-schedule.js": "acfb29b82f4014cf5827e3ee4c4776a021691ee5eb66e22a7001e081e19aaadc",
     "js/data/investigations/detect-this-planet.js": "e7ff6bbdac10bb95b29b2e7aef91b015d8c69a37a014db1fb014dc531124ce43",
-    "js/data/investigations/discovery.js": "2ac5e14250aca9f638b45578313373ab14354a18a9c2ee5e0c12799317cdb67f",
+    "js/data/investigations/discovery.js": "920fe9ea6f891173c950b9647c335b49b196d65b856cd3c60f4a4c996ffa1f15",
     "js/data/investigations/einstein-rings-and-arcs.js": "94e991a437d84d63e2f9df1dddb3c74d4b5c99ff88c8a523c76ac9391b013f6e",
     "js/data/investigations/es/a-lens-passing-by.js": "9f341a46e06db9cf8c17467a8bde8eb392425d6eeba94f1f131ff1e7babcec36",
     "js/data/investigations/es/a-universe-of-stars.js": "e978b7bb1a4297064769e4a005c48a4f3399d8851ea1c321568aff8627265bbe",
@@ -209,6 +209,7 @@
     "js/data/investigations/es/which-kind-of-variable.js": "dbde70ce696047343800c127907d06366608224c8d56edbb23b559a1b50a028d",
     "js/data/investigations/es/who-gets-counted.js": "9a8c6eb0edf2c5eeaae0b2cfa448b2784795dd5882f7caf059e3c50cd8b84634",
     "js/data/investigations/es/why-the-bright-ones-win.js": "e44b8549ae8ad24107e75558487552ed4fc01eb59c206c8a9b8907a704192f99",
+    "js/data/investigations/exoplanet-sequence.js": "1f6c690eedddeb7e81686ddb5aabe0856ab4ab39c0c4ad1303b4480408d6b288",
     "js/data/investigations/exposure-sequence.js": "58711454b04bf64e142de4e5ffbbfd3ed55cb20d26285238bd43357d50764f7f",
     "js/data/investigations/extending-an-experiment.js": "5c35594bba4ba6e785215a36a48aaf4038bbee6ead8f77dd1b2ee3f60dd7ec69",
     "js/data/investigations/goldilocks-question.js": "1b8d7b5e35626f285de049a108045d84160f2bb3e7d9d0f338f9360580350328",
@@ -249,7 +250,7 @@
     "js/data/investigations/stellar-activity-sequence.js": "e7af903fb5b136efdc39450677abe765c3005b8563b3d7d52cc99db6e3e6e518",
     "js/data/investigations/stellar-sequence.js": "fe46a181992da2ff1822e8732dd031bfa42d717fb07a6b62e4ab46a058fc8bd6",
     "js/data/investigations/strategy-sequence.js": "f48f527890aeceb0308c643683afa3e80e3017c65f85476bd995305e076c5af5",
-    "js/data/investigations/summaries.js": "34bc6f3d1770bb0808d9e4c1c319335825ebe8a928b0f72a3bb268f94e9e0618",
+    "js/data/investigations/summaries.js": "c21924d256ae7c9b08cf8ae59a6bd57718c85a738578aa4a60101c3639128616",
     "js/data/investigations/survey-sequence.js": "c80b75253eec2cd98bb540d5c68fcdadc52e161aa3c393637adfbb61aaf1924a",
     "js/data/investigations/telescope-sequence.js": "85d081bfd0eb364db25a5f661fe5f18755196243bd6a04f173abc7114191b523",
     "js/data/investigations/the-beat-of-a-star.js": "4005037e9b5c1a37777bf8e90f4c657a667aff3c6aae3e46633a3f4e3da9a3e4",
@@ -300,10 +301,10 @@
     "js/instructorExpectations.js": "09b1aeac6b3fa134374f0286029cdda1cbe68c9e3d7885afdc75387a4f5d6282",
     "js/instructorFacts.js": "a8939d4e55ea32df76d53d4ae9222ccb98554a0251603aafe523f4f37f658a41",
     "js/instructorFlow.js": "d06edcc3404196951515250e971b81ddb53cd00315704c7f65b2616de0084122",
-    "js/instructorLocale.js": "995d83cbfd5909a0f11761aa14c12e844de6039faa7e51e763630f222aff9578",
+    "js/instructorLocale.js": "dba4a1161b6c4c74ff2a885b235a64414ae28f7e50dc648262ea7f6b1fc26d05",
     "js/instructorNotes.js": "f970bb0bb06431eab37b4d409a780166932f44c17bd73b0548bc5480fe30728f",
     "js/instructorSource.js": "da3fb5a0d4387db76d3117b0c7cac81919de0186041cf4161c328d5802f5890a",
-    "js/investigations/depthAll.js": "1a2bf9637150caffdf23e5f197dafd6af78b46d48a86dbb6894903270b499715",
+    "js/investigations/depthAll.js": "52bc4171803c0c90543376525c0b90607246cd73e0cad6c9ddcaba29351f4c1b",
     "js/investigations/depthPure.js": "61ea6369eef1b8b9c39c2395f2be1a1ebaf83772180520f6ec7fbe3c8ea085f6",
     "js/investigations/progressBackup.js": "36f9c5642612fd62c91e3e483eb1083684e297157c8d1fd12b3fb3aaa0eae44d",
     "js/lab3d/elements.js": "6a951db87df0d36795285e1ea6abb6ab473c48cda372ea985279bc498a34d043",
@@ -331,5 +332,5 @@
     "tools/instructor-freshness.mjs": "96052b2f27080f0243fdd4d5f7608927bd67f0c50808b6eac3345a65c14d1e28",
     "tools/source-closure.mjs": "961828e4d0d40d8a6f8c029fe9b9435ecaf39a74b62640efc0b4145c35c7650a"
   },
-  "contentDigest": "17f3f7cabeb00a9a4ba60f649f303faece02274587341e987f6956e6fcc63b4c"
+  "contentDigest": "799ea7f4b1082731bf8653d472a41e46869287f4a4df37a12933ec81681a1d8f"
 }
