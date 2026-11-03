@@ -5,8 +5,8 @@ models of the inference core are `sb2-orbit` and `eclipsing-sb2` in `js/inferenc
 the instruments are the `masses-minimum`, `masses-solve` and `masses-diagram` panels (`js/massesWidgets.js` over `js/massesField.js`); the
 investigation is "Weighing the Stars, for Real" (`js/data/investigations/binary-masses-sequence.js`). The validation contract below was
 committed (with `tests/fixtures/binary-masses/thresholds.json`, the oracle script `tools/binary-masses-oracle/oracle.py` and its pinned
-results) before the kernel, the models, the validator, the panels or any lesson existed. **Part B, the visual-binary gate, is a separate
-part and is not started.**
+results) before the kernel, the models, the validator, the panels or any lesson existed. **Part B, the visual-binary branch (its gate and its
+build), is described in the last section of this document; its contract, oracle and results are in `tests/fixtures/visual-binary/`.**
 
 ## What this adds, and what already existed (the delta table)
 
@@ -127,6 +127,72 @@ orbit with no third body, no tidal distortion and a single systemic velocity. Th
 system A was drawn twice (an earlier seed string gave a 2.7 sigma draw, the committed one is the second); all six lesson systems are
 now within 2 sigma of their truth, and the register says so.
 
-**Not built:** the visual-binary branch (Part B: the photocentre contract, the parallax requirement, the gate), a real radial-velocity
-data pack, an offering of the new models in the Observatory's fit panel, the frame branch (photometry from frames, Prompt 185's pipeline), an
+**Not built:** a real radial-velocity data pack, an offering of the new models in the Observatory's fit panel, the frame branch (photometry from frames, Prompt 185's pipeline), an
 absolute mass from a single-lined system, gravitational redshift and light-travel time.
+
+## Part B: the visual-binary branch (the photocentre contract, the parallax requirement and the gate)
+
+Roadmap III, Prompt 218, Part B (run condition: Prompt 187's verdict A, D-R10-66). Branch `feat/visual-binary`. The kernel is
+`js/measure/visualBinary.js` over Prompt 187's fitter (`js/measure/orbit-fit.js`); the panel is `masses-visual` in the masses family
+(`js/massesWidgets.js` over `js/visualBinaryField.js`); the lesson gains three advanced steps in `weighing-the-stars-for-real`
+(`js/data/investigations/binary-masses-sequence.js`, no new closure file). The contract, the systems, the seeds, the bands and the verdict rule were
+committed in `tests/fixtures/visual-binary/thresholds.json` (e7d6b69a), and the oracle script (`tools/visual-binary-oracle/oracle.py`) and its
+pinned results before the kernel was run. **Gate verdict A**; the gate document is `VISUAL_BINARY_GATE.md` (on the documentation branch).
+
+### The contract
+
+1. **Conventions.** Star 1 is the primary; the relative orbit is star 2 minus star 1 (x north, y east); `B = M2/(M1 + M2)` is the mass fraction of
+   star 2; `l = L2/(L1 + L2)` is its fraction of the light in the band of the measurement. Exchanging the labels turns `B` into `1 - B`.
+2. **What a photocentre measures.** The barycentre is at `x1 = -B r`, `x2 = (1 - B) r` for the relative vector `r`. The light-weighted centre is at
+   `(l - B) r`: the relative ellipse scaled by `l - B`, turned half a turn when `l` is above `B`. Its semi-major axis is `|B - l| a`. A dark companion
+   (`l = 0`) gives the primary's own orbit `-B r`.
+3. **The mass function, not a mass.** With a parallax the photocentre orbit gives `f_ph = (a_ph/parallax)^3/P^2 = (M1 + M2)|B - l|^3`; at `l = 0` it
+   is the astrometric mass function `M2^3/(M1 + M2)^2`. Read as the mass sum it is low by `|B - l|^3` (a median of 0.015 of the truth on the gate's
+   ensemble, mass ratio 0.4 to 0.8 on the main sequence).
+4. **A companion's mass** needs a stated light fraction (with its uncertainty) and a stated primary mass, and solves `M1 (B - l)^3/(1 - B) = f_ph`
+   for `B`: one root with `B` above `l`, and a second with `B` below `l` when `f_ph < M1 l^3`. The photocentre orbit does not choose (the half turn is
+   the node ambiguity), so both roots are returned and the second is flagged `ambiguous-root`. A missing light fraction is refused (code
+   `light-fraction`): a dark companion is never assumed.
+5. **The resolved pair.** From both components' offsets the relative series (positions subtracted, uncertainties added in quadrature) goes to
+   Prompt 187's fitter; the mass sum is its `massSum` (a parallax with its uncertainty and frame statement, relative or absolute; an absolute one needs the
+   source of its correction, a literature value its citation); the mass fraction is the weighted regression of star 1's offsets, and of star 2's offsets
+   minus `r`, on the fitted `-r(t)` with a constant offset and a proper motion fitted alongside (5 parameters), the uncertainty scaled by
+   `sqrt(chi2/dof)` when above 1. The two masses come from a seeded Monte Carlo of the sum and `B` together. A relative series gives the sum only
+   (`needs-each-component`); one component's series alone gives nothing.
+6. **The distance requirement.** A mass sum is refused without a parallax and its uncertainty (`parallax`), without a frame statement or a source
+   (`frame`), and below a signal-to-noise of 3 (`parallax-weak`). A relative parallax is smaller than the absolute one by the reference stars' mean
+   parallax: the sum reads high by `(absolute/relative)^3`, and the result says so.
+7. **What is not modelled:** the parallax ellipse and proper motion inside the orbit fit (Prompt 186's route stands upstream; a photocentre series
+   or published elements must be barycentre-referenced), common-mode frame errors, a third body, radial-velocity coupling, a mass-luminosity relation
+   chosen by the kernel (the light fraction is an input; the gate's ensemble uses `l = q^4/(1 + q^4)` as a labelled teaching relation).
+
+### Validation (gate verdict A, Node 22.23.4; re-run on Node 24.4.0 gives the same rows)
+
+| Leg | What it checks | Measured | Bound |
+|---|---|---|---|
+| A1 to A4 | closed Kepler case (1.0000378 from the nominal constants); photocentre identities; the mass function round trip with both roots; the relative-parallax factor | 0 to 4e-15 | 1e-12 to 1e-15 |
+| B1 | photocentre of V1 to V3 against a direct two-body integration (DOP853, rtol 1e-12) | 1.4e-12 arcsec | 1e-7 |
+| B2, B3 | the oracle's Thiele-Innes least squares and its regression for `B`; the oracle recovers its own truth | 2e-8 and 4e-9 of a sigma; sigma ratio 1e-10; oracle within 2.5 sigma of truth | 0.1, 0.05, 5 percent; 3 sigma |
+| C1 | coverage of the mass sum (200 systems, parallax S/N 10) | 0.665 and 0.945 | 0.60 to 0.76; 0.90 to 0.99 |
+| C2 | coverage of `B` | 0.625 and 0.945 | the same |
+| C3 | coverage of `M1` and `M2` | 0.655, 0.675 and 0.945, 0.945 | the same |
+| C4 | coverage of the photocentre companion mass (149 of 150 returned) | 0.644 and 0.960 | the same |
+| C5 | median log ratio of the sum | 0.031 against a bound of 0.080 | 3 median sigma / sqrt(n) |
+| D1 to D9 | refusals and misspecification (20 seeds each) | all 1.0; relative-parallax factor within 4 percent of the predicted 1.204 | rate 1.0; 10 percent |
+| D10 | the photocentre read as the sum | median 0.015 of the truth | below 0.2 |
+| E1 | alpha Cen AB, Akeson et al. 2021, Table 8: the sum from a, P and the parallax against the published masses (AM3; circular, an arithmetic and units check) | sum 1.98805 against 1.9880 (0.01 published sigma); K16 column 2.0431 against 2.0428 | 2 published sigma |
+
+The oracle (numpy 2.2.6, scipy 1.15.3, Python 3.10.12, no Gravitas code) is independent for the photocentre (a two-body integration of both stars
+in the barycentre frame, its own rotation to the sky) and for the least-squares solution; it is not independent for the **model** of the
+regression for `B` (the same linear model, which is the contract) or for the Thiele-Innes conventions beyond what B1 checks. The coverage of `B`
+(0.625 at 68 percent) is low in its band because the regression takes the fitted relative orbit as exact; the band was committed before it was
+measured and is met. Two amendments before any measurement: AM1 (wording of the semi-major axis, `K = 1.0000378`) and AM2 (D8: the truth within
+three standard deviations of a root, because a literal 20 of 20 at 95 percent would fail by chance). No bound was moved.
+
+### Limits to carry into every claim
+
+The data are synthetic and the stars are the gate's V1 to V3; the parallax is given with a stated signal-to-noise and an absolute frame. A real
+visual pair adds common-mode errors of the frame, a parallax that is relative or whose correction is uncertain, and a photocentre whose light
+fraction depends on the band and on the detector; the mass fraction is as good as the regression's model (a constant offset and a proper motion for
+the barycentre) and the sum as good as the cube of the parallax. **The authentic leg is only an arithmetic check (AM3):** alpha Cen AB's published elements (Akeson et al. 2021, arXiv:2104.10086, Table 8, numbers read by hand, credited; the paper is not stored) give the published mass sum, but the paper's parallax is its own orbital parallax, so the agreement is circular and says nothing about the regression for `B` or the photocentre route (no absolute component positions or unresolved orbit were read). A real independent leg needs positions or a Gaia two-body orbit with independent masses; see `VISUAL_BINARY_GATE.md`.
+

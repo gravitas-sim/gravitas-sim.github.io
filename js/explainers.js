@@ -123,7 +123,7 @@ export const FAMILY_IDS = Object.freeze({
   joint: ['joint-fit', 'mass-radius'],
   occurrence: ['occurrence-efficiency', 'occurrence-grid'],
   clusterFit: ['cluster-fit'],
-  masses: ['masses-minimum', 'masses-solve', 'masses-diagram'],
+  masses: ['masses-minimum', 'masses-solve', 'masses-diagram', 'masses-visual'],
   activity: [
     'activity-spots',
     'activity-period',

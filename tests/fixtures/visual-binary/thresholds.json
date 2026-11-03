@@ -1,0 +1,405 @@
+{
+  "format": "gravitas.visual-binary-thresholds/1",
+  "prompt": "Roadmap III, Prompt 218, Part B: the visual-binary branch (tranche T3 by D-R10-207-01; run condition 187 verdict A, D-R10-66)",
+  "document": "VISUAL_BINARY_GATE.md",
+  "committed": "before js/measure/visualBinary.js, the oracle script, the validator, any panel or any lesson step of Part B existed. Seeds, systems, cadences, noise and bands are fixed here so that the oracle and the harness build identical inputs.",
+  "rule": "A crossed bound is a failed check, recorded in failed-legs.json and left failing; only Carl resets one; an amendment is a dated entry below and the original stays failing. A leg that cannot be measured is NOT RUN and says why.",
+  "seeds": {
+    "oracle": 2182,
+    "ensemble": "visual-binary-218b"
+  },
+  "constants": {
+    "GM_sun_m3s2": 1.3271244e+20,
+    "au_m": 149597870700,
+    "julianYear_s": 31557600,
+    "note": "IAU 2012 B2 (au), IAU 2015 B3 (nominal solar GM). A mass sum is (a / parallax)^3 / P^2 in solar masses with a and the parallax in one unit and P in Julian years: no value of G enters."
+  },
+  "contract": {
+    "photocentre": "With both stars shining, the photocentre of the pair in one band is the light-weighted centroid. Let B = M2 / (M1 + M2) be the mass fraction of the secondary and l = L2 / (L1 + L2) its fraction of the light in the band of the measurement. The barycentre is at x1 = -B r, x2 = (1 - B) r for the relative vector r from star 1 to star 2, so the photocentre is at (l - B) r from the barycentre: the same Keplerian ellipse as the relative orbit, scaled by (l - B), turned by half a turn when l is above B. Its semi-major axis is a_ph = |B - l| a. A dark companion (l = 0) gives -B r, the primary's own orbit.",
+    "consequences": [
+      "The photocentre orbit with a parallax fixes the photocentre mass function f_ph = (a_ph / parallax)^3 / P^2 = (M1 + M2) |B - l|^3, which is NOT a mass; for l = 0 it is the astrometric mass function M2^3 / (M1 + M2)^2.",
+      "A mass of the companion follows only from a stated light fraction l (with its uncertainty) and a stated mass of the primary, by solving M1 (B - l)^3 / (1 - B) = f_ph for B; the equation has one root with B above l and, when f_ph < M1 l^3, a second with B below l (the companion lighter than its share of the light): the photocentre orbit does not choose between them (the half turn is the node ambiguity), so both are returned, the second flagged.",
+      "An unresolved orbit taken as the relative orbit gives the mass function, low by the factor |B - l|^3 (a factor 20 to 50 for a mass ratio of 0.4 to 0.8 on the main sequence).",
+      "A resolved pair measured in one frame gives the relative orbit (the mass sum with the parallax) and, from each component's own motion about the moving barycentre, the mass fraction B: the component's offset is c + mu (t - t0) - B r(t), the second's c + mu (t - t0) + (1 - B) r(t); B is the regression of the first on the relative orbit.",
+      "The distance requirement: a mass sum needs a parallax with its uncertainty and a frame statement, relative (to the reference stars of its frame, smaller than the absolute parallax by their mean parallax, so the sum reads high by (absolute / relative)^3) or absolute with the source of its correction; a literature value is a parallax with a citation string. Without any of these the sum is refused. A parallax below a signal-to-noise of 3 is refused (Part B of Prompt 187's rule, unchanged).",
+      "What the kernel takes as input: component series already referenced to the field (a constant offset and a proper motion are fitted and removed; the parallax ellipse is removed upstream by Prompt 186's route); a photocentre series or published elements already referenced to the barycentre. Common-mode frame errors are not modelled."
+    ]
+  },
+  "scope": {
+    "built": "the photocentre contract; the mass sum of a resolved pair through 187's elements with the parallax contract; the mass fraction and the two masses from the two components' series; the photocentre mass function and, with a stated light fraction and primary mass, the companion's mass with both roots; the refusals",
+    "notBuilt": "a fit of the parallax ellipse and proper motion inside the orbit (Prompt 186's route stands upstream), common-mode frame errors, a third body, radial-velocity coupling, a mass-luminosity relation chosen by the kernel (the light fraction is an input), a real catalogue pack"
+  },
+  "verdictRule": {
+    "A": "every leg of the groups A, B, C1 to C3 and D1 to D7 passes (the mass sum and, from the series of each component, the mass fraction and the two masses). The photocentre-only companion mass is a further slice: if C4 or D8 fail it is not offered and only f_ph is returned (the visual branch is then A without the photocentre mass).",
+    "B": "the mass-sum legs (A1, A4, B1, B2 sum part, C1, C5, D1 to D4, D9) pass and a leg of the mass-fraction group (A2, B2 fraction part, C2, C3, D6) fails: the mass sum only; no mass fraction or individual mass is built.",
+    "C": "a mass-sum leg fails (A1, A4, B1, B2 sum part, C1, C5, D1 to D4, D9): the visual branch is a reading step.",
+    "note": "Evaluated mechanically by the validator from the legs below; amendments never move this rule."
+  },
+  "systems": {
+    "V1": {
+      "what": "eccentric, tilted, a faint companion",
+      "MA": 0.9,
+      "MB": 0.6,
+      "P": 12.0,
+      "parallaxMas": 50,
+      "e": 0.35,
+      "i": 62,
+      "Omega": 140,
+      "omega": 70,
+      "T": 2003.1,
+      "lB": 0.1,
+      "start": 2000.0
+    },
+    "V2": {
+      "what": "near circular pair of nearly equal mass whose light fraction is close to its mass fraction (a nearly invisible photocentre orbit)",
+      "MA": 1.1,
+      "MB": 1.0,
+      "P": 8.0,
+      "parallaxMas": 80,
+      "e": 0.05,
+      "i": 40,
+      "Omega": 25,
+      "omega": 200,
+      "T": 2001.7,
+      "lB": 0.4,
+      "start": 2000.0
+    },
+    "V3": {
+      "what": "eccentric low-mass companion at high inclination",
+      "MA": 0.8,
+      "MB": 0.3,
+      "P": 20.0,
+      "parallaxMas": 100,
+      "e": 0.6,
+      "i": 75,
+      "Omega": 310,
+      "omega": 15,
+      "T": 2008.4,
+      "lB": 0.02,
+      "start": 2000.0
+    },
+    "note": "The relative semi-major axis is a = (M P^2 / K)^(1/3) au with M = MA + MB in solar masses, P in Julian years and K = 4 pi^2 au^3 / (GM_sun yr^2) = 1.0000378 from the nominal constants (see amendment AM1), in arcseconds a times the parallax in arcseconds."
+  },
+  "sampling": {
+    "relative": "16 epochs from start to start + 1.1 P, the interior ones jittered by +-0.3 of the spacing (a regular cadence aliases the period, Prompt 187 A1), seeded",
+    "noise": "white, per axis, 0.01 of the semi-major axis of the quantity measured (a for each component's series, a_ph for a photocentre series), the same sigma stated in the series; the relative series has sigma sqrt(sA^2 + sB^2)",
+    "barycentreNuisance": {
+      "offsetArcsec": [
+        0.02,
+        -0.015
+      ],
+      "properMotionArcsecPerYear": [
+        0.005,
+        -0.008
+      ],
+      "applies": "the component series only; a photocentre series is barycentre-referenced"
+    },
+    "parallax": "observed = true * (1 + g / snr) with the stated sigma true / snr; snr 10 in the ensembles",
+    "lightFractionGiven": "l * (1 + 0.05 g) with sigma 0.05 l; primary mass given M1 * (1 + 0.05 g) with sigma 0.05 M1"
+  },
+  "ensembles": {
+    "resolved": {
+      "n": 200,
+      "use": "C1, C2, C3, C5",
+      "draw": "M1 uniform 0.6 to 1.4, q = M2 / M1 uniform 0.4 to 0.95, P uniform 6 to 25 yr, parallax uniform 40 to 120 mas, e uniform 0.1 to 0.7, cos i uniform -0.85 to 0.85, Omega and omega uniform 0 to 360, T uniform over one period from start"
+    },
+    "photocentre": {
+      "n": 150,
+      "use": "C4, D-naive",
+      "draw": "as resolved with q uniform 0.4 to 0.8 and the light fraction l = q^4 / (1 + q^4) (L proportional to M^4, a teaching relation, labelled), the series is the photocentre's about the barycentre"
+    },
+    "refusal": {
+      "n": 20,
+      "use": "D1 to D9: the V1 to V3 draws under seeds 1 to 20"
+    }
+  },
+  "checks": [
+    {
+      "id": "A1.keplerClosed",
+      "leg": "a",
+      "group": "sum",
+      "what": "the closed case: a = 0.1 arcsec, parallax 0.1 arcsec, P = 1 yr gives (1 au)^3 / (1 yr)^2 in solar masses by 4 pi^2 au^3 / (GM_sun yr^2) with the nominal values, to a relative 1e-12; and that value is within 2e-3 of 1 (a statement about the units, not a bound on the code)",
+      "limits": {
+        "rel": 1e-12,
+        "nearOne": 0.002
+      }
+    },
+    {
+      "id": "A2.photocentreIdentities",
+      "leg": "a",
+      "group": "fraction",
+      "what": "the signed photocentre factor is l - B: -B at l = 0, 1 - B at l = 1, 0 at l = B, to 1e-15; and for V1, V2, V3 at 40 epochs the photocentre built as the light-weighted mean of the two barycentric positions equals (l - B) r to a relative 1e-13",
+      "limits": {
+        "factor": 1e-15,
+        "rel": 1e-13
+      }
+    },
+    {
+      "id": "A3.massFunctionRoundTrip",
+      "leg": "a",
+      "group": "photocentre",
+      "what": "f_ph = (M1 + M2) |B - l|^3; at l = 0 it equals M2^3 / (M1 + M2)^2 to 1e-12 relative; and for 200 seeded (M1, B, l) the companion roots from (f_ph, M1, l) contain B to a relative 1e-9 (the root above l always; the root below l when f_ph < M1 l^3)",
+      "limits": {
+        "rel": 1e-12,
+        "root": 1e-09,
+        "n": 200
+      }
+    },
+    {
+      "id": "A4.frameFactor",
+      "leg": "a",
+      "group": "sum",
+      "what": "the same orbit with a relative parallax (the absolute minus 3 mas of reference stars) gives a plug-in mass sum above the absolute-parallax one by exactly (absolute / relative)^3, to 1e-12 relative, and the result carries the frame statement",
+      "limits": {
+        "rel": 1e-12,
+        "referenceMas": 3
+      }
+    },
+    {
+      "id": "B1.twoBodyPhotocentre",
+      "leg": "b",
+      "group": "sum",
+      "what": "the photocentre positions of V1, V2, V3 at 400 epochs over 1.2 P against the oracle's direct three-dimensional integration of the two-body problem (scipy DOP853, relative tolerance 1e-12) rotated by Omega, omega, i, the two stars' barycentric positions weighted by their light, projected on (north, east) and scaled by the parallax",
+      "limits": {
+        "maxAbsArcsec": 1e-07
+      }
+    },
+    {
+      "id": "B2.oracleSolution",
+      "leg": "b",
+      "group": "sum-and-fraction",
+      "what": "on the component series of V1, V2, V3 (seed 1): the pinned solution of the oracle (scipy least_squares of the Thiele-Innes orbit from the truth, then the weighted regression for B in numpy) against the kernel: ln(a^3 / P^2) within 0.1 of the kernel's own sigma; B within 0.05 of its sigma; the sigma of B within 5 percent",
+      "limits": {
+        "sumSigmas": 0.1,
+        "fractionSigmas": 0.05,
+        "sigmaRatio": 0.05
+      }
+    },
+    {
+      "id": "B3.oracleSelf",
+      "leg": "b",
+      "group": "sum-and-fraction",
+      "what": "the oracle's own solution recovers ln(a^3 / P^2) and B of its data within 3 of its standard deviations (a check on the oracle, not on Gravitas)",
+      "limits": {
+        "nSigma": 3
+      }
+    },
+    {
+      "id": "C1.coverageSum",
+      "leg": "c",
+      "group": "sum",
+      "what": "resolved ensemble, parallax signal-to-noise 10: the 0.6827 and the 0.95 interval of the mass sum hold the truth at the stated rate",
+      "limits": {
+        "n": 200,
+        "level68": [
+          0.6,
+          0.76
+        ],
+        "level95": [
+          0.9,
+          0.99
+        ],
+        "minReturned": 0.9
+      }
+    },
+    {
+      "id": "C2.coverageFraction",
+      "leg": "c",
+      "group": "fraction",
+      "what": "resolved ensemble: the 0.6827 and 0.95 intervals of the mass fraction B (from the regression, sigma scaled by sqrt(chi2 / dof) when above 1) hold the truth at the stated rate",
+      "limits": {
+        "n": 200,
+        "level68": [
+          0.6,
+          0.76
+        ],
+        "level95": [
+          0.9,
+          0.99
+        ]
+      }
+    },
+    {
+      "id": "C3.coverageMasses",
+      "leg": "c",
+      "group": "fraction",
+      "what": "resolved ensemble: the 0.6827 and 0.95 intervals of M1 and M2 (Monte Carlo of the sum and B together) hold the truth at the stated rate",
+      "limits": {
+        "n": 200,
+        "level68": [
+          0.6,
+          0.76
+        ],
+        "level95": [
+          0.9,
+          0.99
+        ]
+      }
+    },
+    {
+      "id": "C4.coveragePhotocentreCompanion",
+      "leg": "c",
+      "group": "photocentre",
+      "what": "photocentre ensemble (a light fraction and a primary mass given with 5 percent uncertainty, parallax signal-to-noise 10): the 0.6827 and 0.95 intervals of the companion mass (the root above l) hold the truth at the stated rate, and at least 0.9 of the fits return a companion mass",
+      "limits": {
+        "n": 150,
+        "level68": [
+          0.6,
+          0.76
+        ],
+        "level95": [
+          0.9,
+          0.99
+        ],
+        "minReturned": 0.9
+      }
+    },
+    {
+      "id": "C5.sumBias",
+      "leg": "c",
+      "group": "sum",
+      "what": "the median of ln(fitted mass sum / true) over the resolved ensemble is within 3 median sigma(ln M) / sqrt(n) of 0 times 1.2533 (the median's standard error), no bias beyond the statistical",
+      "limits": {
+        "nSigma": 3,
+        "medianFactor": 1.2533
+      }
+    },
+    {
+      "id": "D1.noParallax",
+      "leg": "d",
+      "group": "sum",
+      "what": "no parallax, or a zero or negative one, or no uncertainty: the mass sum is refused with the code 'parallax' on every seed (20)",
+      "limits": {
+        "n": 20,
+        "rate": 1.0
+      }
+    },
+    {
+      "id": "D2.noFrame",
+      "leg": "d",
+      "group": "sum",
+      "what": "a parallax without its frame statement is refused (code 'frame'); an absolute parallax without the source of its correction is refused; a literature value without a citation string is refused (20 seeds)",
+      "limits": {
+        "n": 20,
+        "rate": 1.0
+      }
+    },
+    {
+      "id": "D3.weakParallax",
+      "leg": "d",
+      "group": "sum",
+      "what": "a parallax at signal-to-noise 2.5 is refused (code 'parallax-weak') on every seed (20); at 3.5 a sum is returned",
+      "limits": {
+        "n": 20,
+        "rate": 1.0
+      }
+    },
+    {
+      "id": "D4.shortArc",
+      "leg": "d",
+      "group": "sum",
+      "what": "an arc of 0.1 P (V1, 20 seeds) returns neither a mass sum nor a mass fraction nor a companion mass: the 187 refusal is passed through",
+      "limits": {
+        "n": 20,
+        "rate": 1.0,
+        "arcFraction": 0.1
+      }
+    },
+    {
+      "id": "D5.oneComponent",
+      "leg": "d",
+      "group": "fraction",
+      "what": "a series of the secondary's offsets from the primary only (a relative series) returns the mass sum and a mass fraction of null with the reason 'needs each component'; one component's series alone (no relative orbit) returns neither (20 seeds each)",
+      "limits": {
+        "n": 20,
+        "rate": 1.0
+      }
+    },
+    {
+      "id": "D6.badFraction",
+      "leg": "d",
+      "group": "fraction",
+      "what": "the two components' labels exchanged (the primary's series given as the secondary's): the fitted B is 1 - B within 3 sigma on at least 95 percent of 20 seeds of V1, so the kernel states the convention and a swap is a visible, not a silent, error",
+      "limits": {
+        "n": 20,
+        "rate": 0.95,
+        "nSigma": 3
+      }
+    },
+    {
+      "id": "D7.noLight",
+      "leg": "d",
+      "group": "photocentre",
+      "what": "a photocentre series with no light fraction given is refused (code 'light-fraction'): a dark companion is never assumed; and a photocentre orbit whose amplitude is consistent with 0 (V2 with l = B exactly, 20 seeds) is refused as not constrained or returns f_ph consistent with 0 at 3 sigma, and in neither case a companion mass",
+      "limits": {
+        "n": 20,
+        "rate": 0.95
+      }
+    },
+    {
+      "id": "D8.bothRoots",
+      "leg": "d",
+      "group": "photocentre",
+      "what": "a pair whose companion is lighter than its light share (M1 = 1.0, M2 = 0.5, l = 0.6, so B = 0.333 below l: the brighter star is the lighter): the result lists both roots, the second flagged 'ambiguous-root', and the truth is one of them on every one of 20 seeds; and a companion whose f_ph is above M1 l^3 lists one root",
+      "limits": {
+        "n": 20,
+        "rate": 1.0
+      }
+    },
+    {
+      "id": "D9.relativeParallax",
+      "leg": "d",
+      "group": "sum",
+      "what": "a relative parallax (the truth minus 3 mas) over 20 seeds of V1 at signal-to-noise 20: the median of the fitted sum over the truth equals (absolute / relative)^3 within 10 percent, and every result carries the frame statement",
+      "limits": {
+        "n": 20,
+        "tolerance": 0.1
+      }
+    },
+    {
+      "id": "D10.naivePhotocentre",
+      "leg": "d",
+      "group": "photocentre",
+      "what": "the photocentre ensemble read as if it were the relative orbit (the mass function taken for the mass sum): the median of that value over the truth is below 0.2, and the contract's companion masses (C4) are the cure",
+      "limits": {
+        "medianBelow": 0.2
+      }
+    },
+    {
+      "id": "E1.authentic",
+      "leg": "e",
+      "group": "authentic",
+      "what": "an authentic visual pair or an astrometric photocentre orbit with a published mass sum or published masses, analysed under this contract with the published values not used to tune anything. NOT RUN unless a published table of orbital elements and parallax (or positions) is supplied by Carl; the source and terms are named in VISUAL_BINARY_GATE.md",
+      "limits": {}
+    },
+    {
+      "id": "P1.speed",
+      "leg": "p",
+      "group": "record",
+      "what": "one resolved fit with its masses on V1 (16 epochs) runs in CPU seconds recorded, not a physics bound",
+      "limits": {
+        "recordedOnly": true
+      }
+    }
+  ],
+  "amendments": [
+    {
+      "id": "AM1",
+      "date": "2026-11-03",
+      "before": "any code, oracle result or measurement",
+      "what": "wording only: the relative semi-major axis of the systems is a = (M P^2 / K)^(1/3) au with K = 4 pi^2 au^3 / (GM_sun yr^2) = 1.0000378 (the nominal constants), not (M P^2)^(1/3); the sentence in systems.note said the second. No bound, system, seed or rule moved."
+    },
+    {
+      "id": "AM2",
+      "date": "2026-11-03",
+      "before": "any code of the kernel, the validator or any measurement",
+      "what": "operationalisation of D8 only, written down before it is measured: 'the truth is one of the roots on every one of 20 seeds' is judged as the truth lying within three standard deviations of one of the listed roots (the standard deviation of a root is half the width of its 0.6827 interval), because a 0.95 interval would fail a literal 20 of 20 about two times in three by chance. The rate 1.0 and the 20 seeds are unchanged."
+    },
+    {
+      "id": "AM3",
+      "date": "2026-11-03",
+      "before": "E1 was run (it was NOT RUN until the coordinator supplied the paper)",
+      "what": "the contract of E1, fixed before it ran. Source: Akeson et al. (2021), arXiv:2104.10086, Table 8 ('Orbital elements, masses, parallax ... of alpha Cen AB', epoch 2019.5), read by hand from the paper's text by this session on 2026-11-03 (PDF SHA-256 81787ec85c25e0c45c8ad10a0abca1c7f42c745ee77f9964aeda3274b59275cd, held by the coordinator outside every repository; arXiv's non-exclusive distribution licence, not CC BY: numbers only, credited, on the 'published, credited' basis the coordinator ruled; the paper is not stored or reproduced). Two columns, 'present work' and K16 (Kervella et al. 2016, as tabulated there): the semi-major axis, period, parallax with their uncertainties go through orbitFromElements and the mass sum (frame absolute, source stated); the sum must lie within 2 published standard deviations of the published m_A + m_B (the standard deviation is the root of the sum of squares of the two published ones, their covariance unknown). THIS IS AN ARITHMETIC AND UNITS CHECK ON A REAL SYSTEM AND IS CIRCULAR: the paper's parallax is its own orbital (dynamical) parallax and its masses follow from the same elements, so agreement is not independent validation of the sum, and it says nothing about the mass-fraction regression (no absolute component positions were read) or the photocentre route (no unresolved orbit). E1 stays outside the verdict rule."
+    }
+  ]
+}

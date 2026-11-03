@@ -1038,6 +1038,13 @@
       "student": true
     },
     {
+      "file": "IMAGING_SUBTRACTION_GATE.md",
+      "kind": "gate",
+      "purpose": "Subtraction and orbit gate: reference-star subtraction, its throughput by injection and an imaged planet's orbit; the committed bounds, the measured and failed legs, verdict C (Prompt 230 Part B).",
+      "owner": 230,
+      "student": false
+    },
+    {
       "file": "CLUSTER_FITTING.md",
       "kind": "feature",
       "purpose": "Cluster fitting: an isochrone fit of age and distance at a stated metallicity and reddening, its likelihood, intervals and valley, its validation and failed legs (Prompt 219).",
@@ -1180,7 +1187,7 @@
     {
       "file": "IMAGING.md",
       "kind": "feature",
-      "purpose": "Direct imaging, Part A: contrast, angular separation, lambda/D against an inner working angle, an observability verdict, the imaged planets' table; subtraction and orbits are Part B (Prompt 230).",
+      "purpose": "Direct imaging, Part A: contrast, angular separation, lambda/D against an inner working angle, an observability verdict, the imaged planets' table; Part B was gated, verdict C (Prompt 230).",
       "owner": 230,
       "student": true
     },

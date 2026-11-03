@@ -213,11 +213,12 @@ describe('the two languages agree', () => {
 });
 
 describe('the panels', () => {
-  test('three widgets, each with controls and a readout that states what it assumes', () => {
+  test('four widgets, each with controls and a readout that states what it assumes', () => {
     expect(MASSES_WIDGETS.map(w => w.id)).toEqual([
       'masses-minimum',
       'masses-solve',
       'masses-diagram',
+      'masses-visual',
     ]);
     for (const w of MASSES_WIDGETS) {
       expect(w.controls.length).toBeGreaterThan(1);

@@ -134,4 +134,70 @@ export const EN_MASSES = {
   'masW.row.limits': 'Limits',
   'masW.a.diagram':
     'The systems here are synthetic: their radii and temperatures were read from these tracks at a stated fraction of main-sequence life and rounded; they agree with MIST by construction, and a real star may not',
+  'masW.vb.title': 'Weighing a visual pair',
+  'masW.vb.note':
+    'Two stars on the sky, seen as one orbit. When both are resolved, each star’s own motion about the moving center of mass gives the mass fraction, and the orbit with a parallax gives the mass sum: together, both masses. When the pair is not resolved, the photocenter (the center of the light) traces the same ellipse scaled by (l − B), the light fraction minus the mass fraction, so the orbit with a parallax gives only a mass function, and a companion’s mass needs a light fraction and a primary mass you state, and has a second root. Every data set here is synthetic.',
+  'masW.vb.control.system': 'System',
+  'masW.vb.control.view': 'What is seen',
+  'masW.vb.control.arc': 'Arc observed (periods)',
+  'masW.vb.control.snr': 'Parallax signal-to-noise',
+  'masW.vb.system.0': 'A, a faint companion',
+  'masW.vb.system.1': 'B, nearly equal stars',
+  'masW.vb.system.2': 'C, a low-mass companion',
+  'masW.vb.view.0': 'both stars resolved',
+  'masW.vb.view.1': 'one photocenter',
+  'masW.vb.axis.east': 'East offset (arcseconds)',
+  'masW.vb.axis.north': 'North offset (arcseconds)',
+  'masW.vb.legend.star1': 'Star 1 about the center of mass',
+  'masW.vb.legend.star2': 'Star 2 about the center of mass',
+  'masW.vb.legend.fit1': 'Star 1, fitted',
+  'masW.vb.legend.fit2': 'Star 2, fitted',
+  'masW.vb.legend.photocentre': 'Photocenter, data',
+  'masW.vb.legend.photocentreFit': 'Photocenter, fitted',
+  'masW.vb.legend.relative': 'Relative orbit of the pair (the truth)',
+  'masW.vb.row.data': 'Data',
+  'masW.vb.v.dataBoth':
+    '{n} epochs of both stars over {a} periods, {s} milliarcseconds per axis for each; parallax {p} ± {sp} milliarcseconds ({frame})',
+  'masW.vb.v.dataPhot':
+    '{n} epochs of the photocenter over {a} periods, {s} milliarcseconds per axis; parallax {p} ± {sp} milliarcseconds ({frame})',
+  'masW.vb.row.orbit': 'Orbit',
+  'masW.vb.v.orbit':
+    'period {p} ± {ps} years, semi-major axis {a} ± {as} milliarcseconds, eccentricity {e}',
+  'masW.vb.row.sum': 'Mass sum',
+  'masW.vb.v.sum':
+    '{v} solar masses; 68 percent between {lo} and {hi}, 95 percent between {lo2} and {hi2}',
+  'masW.vb.row.frame': 'Parallax frame',
+  'masW.vb.row.fraction': 'Mass fraction of star 2',
+  'masW.vb.v.fraction':
+    'B = {v} ± {s}; the stars’ own ellipses are in the ratio {r} : 1',
+  'masW.vb.row.masses': 'Masses',
+  'masW.vb.v.masses':
+    'M1 {a} solar masses (68 percent {alo} to {ahi}), M2 {b} solar masses (68 percent {blo} to {bhi})',
+  'masW.vb.row.function': 'Photocenter mass function',
+  'masW.vb.v.function':
+    '{v} solar masses, 68 percent between {lo} and {hi}: a mass function, not a mass',
+  'masW.vb.row.naive': 'If it were read as the mass sum',
+  'masW.vb.v.naive':
+    'the number above is {x} of the true sum {t}: the photocenter’s ellipse is smaller than the pair’s by the factor |l − B| = {f}, and the mass by its cube',
+  'masW.vb.row.given': 'What you state',
+  'masW.vb.v.given':
+    'the companion’s light fraction l = {l} ± {sl} and the primary’s mass {m} ± {sm} solar masses',
+  'masW.vb.row.root': 'Companion, root {n}',
+  'masW.vb.v.rootAbove':
+    'M2 = {m} solar masses (68 percent {lo} to {hi}), B = {b}: the companion carries a larger share of the mass than of the light',
+  'masW.vb.v.rootBelow':
+    'M2 = {m} solar masses (68 percent {lo} to {hi}), B = {b}: ambiguous root, the companion would be lighter than its share of the light; the orbit alone does not choose',
+  'masW.vb.row.truth': 'What made it',
+  'masW.vb.v.truth':
+    'M1 {a}, M2 {b} solar masses (sum {c}, B {bb}); light fraction l {l}; parallax {p} milliarcseconds; the photocenter’s axis is {f} of the pair’s',
+  'masW.vb.row.refused': 'Refused',
+  'masW.vb.row.companion': 'Companion',
+  'masW.vb.a':
+    'Prompt 187’s apparent-orbit fit of the relative offsets (or of the photocenter about the barycenter); a parallax with its frame statement; a constant offset and a proper motion fitted with the mass fraction. Common-mode frame errors, a third body and radial-velocity coupling are not modeled; the data are synthetic',
+  'masW.vb.frame.absolute': 'absolute',
+  'masW.vb.frame.absolute.long':
+    'the parallax is absolute (corrected to the stated source); the correction and its uncertainty are in the parallax given',
+  'masW.vb.frame.relative': 'relative to the reference stars',
+  'masW.vb.frame.relative.long':
+    'the parallax is relative to the reference stars of its frame, which is smaller than the absolute parallax by their mean parallax: the distance and the mass sum read high by that much',
 };

@@ -16,7 +16,8 @@
     ["steps.the-mass-luminosity-slope.fields.0.unit","L☉"],
     ["steps.the-mass-luminosity-slope.fields.1.unit","L☉"],
     ["steps.the-tilt-you-did-not-measure.fields.0.unit","solar masses"],
-    ["steps.the-tilt-you-did-not-measure.fields.1.unit","solar masses"]
+    ["steps.the-tilt-you-did-not-measure.fields.1.unit","solar masses"],
+    ["steps.weigh-a-visual-pair.fields.1.unit","solar masses"]
    ],
    "numbered": [
     ["steps.read-the-amplitudes.fields.0.label","K1 (star 1)"],
@@ -46,7 +47,10 @@
     ["steps.the-tilt-you-did-not-measure.fields.0.hint","1.19"],
     ["steps.the-tilt-you-did-not-measure.fields.1.label","M2 at 52 degrees"],
     ["steps.the-tilt-you-did-not-measure.fields.1.hint","0.88"],
-    ["steps.the-tilt-you-did-not-measure.fields.2.hint","2.04"]
+    ["steps.the-tilt-you-did-not-measure.fields.2.hint","2.04"],
+    ["steps.weigh-a-visual-pair.fields.0.label","Mass fraction of star 2"],
+    ["steps.weigh-a-visual-pair.fields.0.hint","0.400"],
+    ["steps.weigh-a-visual-pair.fields.1.hint","1.31"]
    ]
   },
   "es": {
@@ -60,7 +64,8 @@
     ["steps.the-mass-luminosity-slope.fields.0.label","Luminosidad de D1"],
     ["steps.the-mass-luminosity-slope.fields.1.label","Luminosidad de A1"],
     ["steps.the-tilt-you-did-not-measure.fields.0.label","M1 a 52 grados"],
-    ["steps.the-tilt-you-did-not-measure.fields.1.label","M2 a 52 grados"]
+    ["steps.the-tilt-you-did-not-measure.fields.1.label","M2 a 52 grados"],
+    ["steps.weigh-a-visual-pair.fields.0.label","Fracción de masa de la estrella 2"]
    ]
   }
  },
@@ -91,6 +96,9 @@
    },
    "the-tilt-you-did-not-measure": {
     "validate": {"calls":242,"distinct":2,"digest":"96b2c74915bcf170","samples":[null,{"level":"error","message":"Set the inclination to 52 degrees: M1 is about 1.19 and M2 about 0.88 solar masses, and 1 / sin³ 52° is about 2.04."}]}
+   },
+   "weigh-a-visual-pair": {
+    "validate": {"calls":232,"distinct":2,"digest":"72ff5b44a5c54478","samples":[null,{"level":"error","message":"Choose system A with both stars resolved and a signal-to-noise of 20: B is about 0.400 and the mass sum about 1.31 solar masses."}]}
    }
   },
   "es": "same"

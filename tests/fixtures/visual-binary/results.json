@@ -1,0 +1,503 @@
+{
+ "format": "gravitas.visual-binary-results/1",
+ "node": "v22.23.4",
+ "verdict": {
+  "verdict": "A",
+  "massSumLegsPass": true,
+  "massFractionLegsPass": true,
+  "allRequiredPass": true,
+  "photocentreCompanionOffered": true,
+  "reading": "the mass sum and, from the series of each component, the mass fraction and the two masses, and the photocentre companion mass"
+ },
+ "rows": [
+  {
+   "id": "A1.keplerClosed",
+   "leg": "a",
+   "group": "sum",
+   "pass": true,
+   "measured": {
+    "rel": 0,
+    "nearOne": 0.00003777384906711312,
+    "value": 1.0000377738490671
+   },
+   "bound": {
+    "rel": 1e-12,
+    "nearOne": 0.002
+   },
+   "note": ""
+  },
+  {
+   "id": "A2.photocentreIdentities",
+   "leg": "a",
+   "group": "fraction",
+   "pass": true,
+   "measured": {
+    "factor": 0,
+    "rel": 8.87436242988858e-17
+   },
+   "bound": {
+    "factor": 1e-15,
+    "rel": 1e-13
+   },
+   "note": ""
+  },
+  {
+   "id": "A3.massFunctionRoundTrip",
+   "leg": "a",
+   "group": "photocentre",
+   "pass": true,
+   "measured": {
+    "relDark": 1.1102230246251565e-16,
+    "root": 3.9968028886505635e-15,
+    "missing": 0
+   },
+   "bound": {
+    "rel": 1e-12,
+    "root": 1e-9,
+    "n": 200
+   },
+   "note": ""
+  },
+  {
+   "id": "A4.frameFactor",
+   "leg": "a",
+   "group": "sum",
+   "pass": true,
+   "measured": {
+    "diff": 4.440892098500626e-16,
+    "ratio": 1.203972144900456,
+    "want": 1.2039721449004555
+   },
+   "bound": {
+    "rel": 1e-12,
+    "referenceMas": 3
+   },
+   "note": ""
+  },
+  {
+   "id": "B1.twoBodyPhotocentre",
+   "leg": "b",
+   "group": "sum",
+   "pass": true,
+   "measured": {
+    "perSystem": {
+     "V1": 1.0726072807720755e-12,
+     "V2": 1.3538128951218198e-13,
+     "V3": 1.4414303084464564e-12
+    },
+    "maxAbsArcsec": 1.4414303084464564e-12
+   },
+   "bound": {
+    "maxAbsArcsec": 1e-7
+   },
+   "note": ""
+  },
+  {
+   "id": "B2.sum",
+   "leg": "b",
+   "group": "sum",
+   "pass": true,
+   "measured": {
+    "V1": {
+     "dSum": 1.929218550859734e-8,
+     "dFrac": 4.181453012447125e-9,
+     "sigmaRatio": 1.115052494782276e-10,
+     "zOracleLnK3": 0.26500554930034326,
+     "zOracleB": 0.9570046016836502
+    },
+    "V2": {
+     "dSum": 4.4477784050651723e-8,
+     "dFrac": 1.7532873585521914e-9,
+     "sigmaRatio": 1.921254266790129e-10,
+     "zOracleLnK3": 0.5591039794789491,
+     "zOracleB": 0.6823626129421708
+    },
+    "V3": {
+     "dSum": 7.39200227077727e-8,
+     "dFrac": 1.4848565335381519e-8,
+     "sigmaRatio": 2.029265644409861e-10,
+     "zOracleLnK3": 2.4364014791883872,
+     "zOracleB": 0.19156557163984822
+    }
+   },
+   "bound": {
+    "sumSigmas": 0.1
+   },
+   "note": ""
+  },
+  {
+   "id": "B2.fraction",
+   "leg": "b",
+   "group": "fraction",
+   "pass": true,
+   "measured": {
+    "V1": {
+     "dSum": 1.929218550859734e-8,
+     "dFrac": 4.181453012447125e-9,
+     "sigmaRatio": 1.115052494782276e-10,
+     "zOracleLnK3": 0.26500554930034326,
+     "zOracleB": 0.9570046016836502
+    },
+    "V2": {
+     "dSum": 4.4477784050651723e-8,
+     "dFrac": 1.7532873585521914e-9,
+     "sigmaRatio": 1.921254266790129e-10,
+     "zOracleLnK3": 0.5591039794789491,
+     "zOracleB": 0.6823626129421708
+    },
+    "V3": {
+     "dSum": 7.39200227077727e-8,
+     "dFrac": 1.4848565335381519e-8,
+     "sigmaRatio": 2.029265644409861e-10,
+     "zOracleLnK3": 2.4364014791883872,
+     "zOracleB": 0.19156557163984822
+    }
+   },
+   "bound": {
+    "fractionSigmas": 0.05,
+    "sigmaRatio": 0.05
+   },
+   "note": ""
+  },
+  {
+   "id": "B3.oracleSelf",
+   "leg": "b",
+   "group": "sum-and-fraction",
+   "pass": true,
+   "measured": {
+    "V1": {
+     "dSum": 1.929218550859734e-8,
+     "dFrac": 4.181453012447125e-9,
+     "sigmaRatio": 1.115052494782276e-10,
+     "zOracleLnK3": 0.26500554930034326,
+     "zOracleB": 0.9570046016836502
+    },
+    "V2": {
+     "dSum": 4.4477784050651723e-8,
+     "dFrac": 1.7532873585521914e-9,
+     "sigmaRatio": 1.921254266790129e-10,
+     "zOracleLnK3": 0.5591039794789491,
+     "zOracleB": 0.6823626129421708
+    },
+    "V3": {
+     "dSum": 7.39200227077727e-8,
+     "dFrac": 1.4848565335381519e-8,
+     "sigmaRatio": 2.029265644409861e-10,
+     "zOracleLnK3": 2.4364014791883872,
+     "zOracleB": 0.19156557163984822
+    }
+   },
+   "bound": {
+    "nSigma": 3
+   },
+   "note": ""
+  },
+  {
+   "id": "C1.coverageSum",
+   "leg": "c",
+   "group": "sum",
+   "pass": true,
+   "measured": {
+    "returned": 200,
+    "returnedRate": 1,
+    "sum68": 0.665,
+    "sum95": 0.945
+   },
+   "bound": {
+    "n": 200,
+    "level68": [
+     0.6,
+     0.76
+    ],
+    "level95": [
+     0.9,
+     0.99
+    ],
+    "minReturned": 0.9
+   },
+   "note": ""
+  },
+  {
+   "id": "C2.coverageFraction",
+   "leg": "c",
+   "group": "fraction",
+   "pass": true,
+   "measured": {
+    "returned": 200,
+    "B68": 0.625,
+    "B95": 0.945
+   },
+   "bound": {
+    "n": 200,
+    "level68": [
+     0.6,
+     0.76
+    ],
+    "level95": [
+     0.9,
+     0.99
+    ]
+   },
+   "note": ""
+  },
+  {
+   "id": "C3.coverageMasses",
+   "leg": "c",
+   "group": "fraction",
+   "pass": true,
+   "measured": {
+    "returned": 200,
+    "M1_68": 0.655,
+    "M1_95": 0.945,
+    "M2_68": 0.675,
+    "M2_95": 0.945
+   },
+   "bound": {
+    "n": 200,
+    "level68": [
+     0.6,
+     0.76
+    ],
+    "level95": [
+     0.9,
+     0.99
+    ]
+   },
+   "note": ""
+  },
+  {
+   "id": "C5.sumBias",
+   "leg": "c",
+   "group": "sum",
+   "pass": true,
+   "measured": {
+    "medianLogRatio": 0.03146579255437041,
+    "bound": 0.07992443138161,
+    "medianSigmaLn": 0.3006202686902063,
+    "n": 200
+   },
+   "bound": {
+    "nSigma": 3,
+    "medianFactor": 1.2533
+   },
+   "note": ""
+  },
+  {
+   "id": "C4.coveragePhotocentreCompanion",
+   "leg": "c",
+   "group": "photocentre",
+   "pass": true,
+   "measured": {
+    "returned": 149,
+    "returnedRate": 0.9933333333333333,
+    "rate68": 0.6442953020134228,
+    "rate95": 0.959731543624161
+   },
+   "bound": {
+    "n": 150,
+    "level68": [
+     0.6,
+     0.76
+    ],
+    "level95": [
+     0.9,
+     0.99
+    ],
+    "minReturned": 0.9
+   },
+   "note": ""
+  },
+  {
+   "id": "D10.naivePhotocentre",
+   "leg": "d",
+   "group": "photocentre",
+   "pass": true,
+   "measured": {
+    "medianNaiveOverTrue": 0.014735889455768,
+    "n": 149
+   },
+   "bound": {
+    "medianBelow": 0.2
+   },
+   "note": ""
+  },
+  {
+   "id": "D1.noParallax",
+   "leg": "d",
+   "group": "sum",
+   "pass": true,
+   "measured": {
+    "rate": 1,
+    "n": 20
+   },
+   "bound": {
+    "n": 20,
+    "rate": 1
+   },
+   "note": ""
+  },
+  {
+   "id": "D2.noFrame",
+   "leg": "d",
+   "group": "sum",
+   "pass": true,
+   "measured": {
+    "rate": 1,
+    "n": 20
+   },
+   "bound": {
+    "n": 20,
+    "rate": 1
+   },
+   "note": ""
+  },
+  {
+   "id": "D3.weakParallax",
+   "leg": "d",
+   "group": "sum",
+   "pass": true,
+   "measured": {
+    "weakRefused": 1,
+    "at35Returned": 1
+   },
+   "bound": {
+    "n": 20,
+    "rate": 1
+   },
+   "note": ""
+  },
+  {
+   "id": "D4.shortArc",
+   "leg": "d",
+   "group": "sum",
+   "pass": true,
+   "measured": {
+    "rate": 1,
+    "n": 20
+   },
+   "bound": {
+    "n": 20,
+    "rate": 1,
+    "arcFraction": 0.1
+   },
+   "note": ""
+  },
+  {
+   "id": "D5.oneComponent",
+   "leg": "d",
+   "group": "fraction",
+   "pass": true,
+   "measured": {
+    "rate": 1,
+    "n": 20
+   },
+   "bound": {
+    "n": 20,
+    "rate": 1
+   },
+   "note": ""
+  },
+  {
+   "id": "D6.badFraction",
+   "leg": "d",
+   "group": "fraction",
+   "pass": true,
+   "measured": {
+    "rate": 1,
+    "n": 20
+   },
+   "bound": {
+    "n": 20,
+    "rate": 0.95,
+    "nSigma": 3
+   },
+   "note": ""
+  },
+  {
+   "id": "D7.noLight",
+   "leg": "d",
+   "group": "photocentre",
+   "pass": true,
+   "measured": {
+    "rate": 1,
+    "n": 20
+   },
+   "bound": {
+    "n": 20,
+    "rate": 0.95
+   },
+   "note": ""
+  },
+  {
+   "id": "D8.bothRoots",
+   "leg": "d",
+   "group": "photocentre",
+   "pass": true,
+   "measured": {
+    "bothListed": 1,
+    "truthWithin3Sigma": 1,
+    "singleRootCase": 1,
+    "n": 20
+   },
+   "bound": {
+    "n": 20,
+    "rate": 1
+   },
+   "note": ""
+  },
+  {
+   "id": "D9.relativeParallax",
+   "leg": "d",
+   "group": "sum",
+   "pass": true,
+   "measured": {
+    "medianRatio": 1.2529696260627707,
+    "predicted": 1.2039721449004555,
+    "statements": 20,
+    "n": 20
+   },
+   "bound": {
+    "n": 20,
+    "tolerance": 0.1
+   },
+   "note": ""
+  },
+  {
+   "id": "E1.authentic",
+   "leg": "e",
+   "group": "authentic",
+   "pass": true,
+   "measured": {
+    "present work": {
+     "sum": 1.9880489694018848,
+     "published": 1.988,
+     "sigmaPublished": 0.003828837943815329,
+     "zPublished": 0.012789625103854983
+    },
+    "K16": {
+     "sum": 2.0431253707678088,
+     "published": 2.0427999999999997,
+     "sigmaPublished": 0.005108815909777921,
+     "zPublished": 0.06368809789882875
+    }
+   },
+   "bound": {
+    "nSigma": 2
+   },
+   "note": "AM3: an arithmetic and units check on alpha Cen AB, circular (the paper's parallax is its own orbital parallax); not validation of the regression or the photocentre route"
+  },
+  {
+   "id": "P1.speed",
+   "leg": "p",
+   "group": "record",
+   "pass": true,
+   "measured": {
+    "cpuSeconds": 0.09105
+   },
+   "bound": {
+    "recordedOnly": true
+   },
+   "note": "recorded, not a physics bound"
+  }
+ ]
+}

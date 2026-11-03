@@ -37,6 +37,11 @@ const SOLVE = (values = {}) => ({
   id: 'masses-solve',
   values: { system: 0, lines: 2, view: 0, truth: 0, ...values },
 });
+/** The visual-pair panel (Part B): system 0 is A, view 0 both stars resolved, 1 one photocentre. */
+const VISUAL = (values = {}) => ({
+  id: 'masses-visual',
+  values: { system: 0, view: 0, arc: 1.1, snr: 20, ...values },
+});
 /** The diagram: view 0 radius, 1 luminosity; systems solved so far. */
 const DIAGRAM = (values = {}) => ({
   id: 'masses-diagram',
@@ -593,6 +598,126 @@ export const WEIGHING_THE_STARS_DEEPER = {
         'A velocity offset between the two stars’ lines (a template mismatch, or the gravitational redshift of a compact star) moves K2 and so both masses, and the panel’s fit can absorb part of it in the systemic velocity. The error bars are the measurers’ and the model has the stars as two spheres on one orbit, so anything it leaves out is in the notes of the model, not in the test. The masses of real double-lined eclipsing binaries are quoted with a few tenths of a percent for these reasons, and only when more than one analysis agrees.',
       tool: SOLVE(),
     },
+    {
+      sid: 'how-small-is-the-photocentre',
+      after: 'what-the-chain-leaves-out',
+      depth: 'advanced',
+      type: 'question',
+      kind: 'choice',
+      title: 'The ellipse of the light',
+      body: `System A is a visual pair whose two stars the telescope cannot separate, so
+             all it sees is one point, the <strong>photocentre</strong>, the centre of the
+             light. Set <em>What is seen</em> to <em>one photocentre</em>. The fitted orbit of
+             that point has a semi-major axis of 0.090 arcseconds; the pair&rsquo;s own orbit,
+             drawn in grey from the truth, has 0.300. The companion carries 10 percent of the
+             light and 40 percent of the mass.`,
+      prompt: 'Why is the photocentre’s ellipse 0.30 of the pair’s?',
+      options: [
+        'The photocentre sits (l − B) times the separation from the centre of mass, the light fraction minus the mass fraction: 0.10 − 0.40 = −0.30, the same ellipse scaled by 0.30 and turned half a turn',
+        'The fit is poor, because the stars are not resolved',
+        'The parallax shrinks every orbit by the same factor',
+        'The companion is dark, so the photocentre follows only the primary’s own orbit',
+      ],
+      answer: 0,
+      misconceptions: [
+        {
+          id: 'poor',
+          option: 1,
+          say: 'The fit is good: the orbit is closed and the residuals are at the noise. The ellipse is small because of where the light centre sits, not because of the fit.',
+        },
+        {
+          id: 'parallax',
+          option: 2,
+          say: 'The parallax converts the angle to a distance; it does not change the shape of the orbit on the sky, and the grey orbit is drawn in the same arcseconds.',
+        },
+        {
+          id: 'dark',
+          option: 3,
+          say: 'A dark companion would put the photocentre on the primary and give 0.40 of the pair’s orbit, the primary’s own. Here the companion carries a tenth of the light, which moves the centre of light a little way toward it.',
+        },
+      ],
+      hints: [
+        'The centre of mass sits 0.40 of the way from the primary to the companion. Where does the centre of light sit?',
+      ],
+      because:
+        'The centre of mass is 0.40 of the way from star 1 to star 2, and the centre of light 0.10 of the way. The photocentre is therefore 0.40 − 0.10 = 0.30 of the separation from the centre of mass, on the primary’s side, and as the pair turns it traces the same ellipse scaled by 0.30. That is the whole contract: the photocentre orbit’s axis is |B − l| times the pair’s, and its mass function is the pair’s mass times |B − l| cubed, not a mass.',
+      tool: VISUAL({ view: 1 }),
+    },
+    {
+      sid: 'weigh-a-visual-pair',
+      after: 'how-small-is-the-photocentre',
+      depth: 'advanced',
+      type: 'measure',
+      title: 'Weigh a resolved pair',
+      body: `Set <em>What is seen</em> to <em>both stars resolved</em> (system A, a parallax
+             signal-to-noise of 20). Each star&rsquo;s own motion about the moving centre of
+             mass gives the <strong>mass fraction</strong> of star 2, and the orbit with the
+             parallax gives the <strong>mass sum</strong>. Read both.`,
+      fields: [
+        { id: 'b', label: 'Mass fraction of star 2', hint: '0.400' },
+        { id: 's', label: 'Mass sum', unit: 'solar masses', hint: '1.31' },
+      ],
+      validate: v => {
+        if (![v.b, v.s].every(Number.isFinite)) return null;
+        if (near(v.b, 0.4004, 0.012) && near(v.s, 1.309, 0.1)) {
+          return {
+            level: 'ok',
+            message:
+              'B = 0.400 and a sum of 1.31 solar masses, so M1 = 0.79 and M2 = 0.52. The pair was made with 0.90 and 0.60 (sum 1.50, B 0.400): the fraction is known to a few thousandths because it comes from the shapes of the two ellipses, and the sum to about 15 percent because it carries the cube of the parallax, 5 percent here.',
+          };
+        }
+        return {
+          level: 'error',
+          message:
+            'Choose system A with both stars resolved and a signal-to-noise of 20: B is about 0.400 and the mass sum about 1.31 solar masses.',
+        };
+      },
+      tool: VISUAL(),
+    },
+    {
+      sid: 'two-roots-for-the-companion',
+      after: 'weigh-a-visual-pair',
+      depth: 'advanced',
+      type: 'question',
+      kind: 'choice',
+      title: 'Two companions fit one orbit',
+      body: `System B has two nearly equal stars, and the telescope sees one photocentre.
+             The panel&rsquo;s photocentre orbit is tiny, 0.031 arcseconds against the
+             pair&rsquo;s 0.410, and with the light fraction (0.40) and the primary&rsquo;s mass
+             (1.10) you state, it lists <strong>two</strong> companion masses, 0.98 and 0.53
+             solar masses.`,
+      prompt: 'Why two, and what would choose between them?',
+      options: [
+        'The orbit fixes |B − l| and not its sign: the companion may carry more of the mass than of the light (0.98) or less (0.53); a resolved orbit, a mass ratio from radial velocities, or knowing that the fainter star is also the lighter one would choose',
+        'A longer arc of the same photocentre orbit would choose',
+        'A more precise parallax would choose',
+        'One root is a rounding error of the solver',
+      ],
+      answer: 0,
+      misconceptions: [
+        {
+          id: 'arc',
+          option: 1,
+          say: 'A longer arc sharpens the same ellipse; both roots stay, because the half turn the other sign would add is the node ambiguity every sky orbit has.',
+        },
+        {
+          id: 'parallax',
+          option: 2,
+          say: 'A better parallax narrows each root’s interval and leaves both roots in place: the ambiguity is in the sign of l − B, not in the size of the orbit.',
+        },
+        {
+          id: 'solver',
+          option: 3,
+          say: 'Both roots solve the same equation, M1 |B − l|³ / (1 − B) = f, one with B above l and one with B below; the module returns both and flags the second as ambiguous.',
+        },
+      ],
+      hints: [
+        'The photocentre ellipse is scaled by l − B. What happens to the orbit when that number changes sign?',
+      ],
+      because:
+        'The photocentre orbit with a parallax fixes the mass function f = (M1 + M2) |B − l|³ and the sign of l − B only turns the ellipse by half a turn, which a sky orbit cannot tell from the orbit’s own node. For this pair the true companion (1.00 solar masses, B = 0.476) is the first root; a companion lighter than its share of the light would be the second. Which one holds is an extra fact, and the panel does not guess it.',
+      tool: VISUAL({ system: 1, view: 1 }),
+    },
   ]),
 };
 
@@ -813,6 +938,68 @@ export const WEIGHING_THE_STARS_DEEPER_ES = {
       because:
         'Un desplazamiento de velocidad entre las líneas de las dos estrellas (un desajuste de plantilla, o el corrimiento al rojo gravitacional de una estrella compacta) mueve K2 y con ella las dos masas, y el ajuste puede absorber parte en la velocidad sistémica. Las barras de error son de quien midió y el modelo tiene las estrellas como dos esferas en una órbita, así que lo que omite está en las notas del modelo, no en la prueba. Las masas de las binarias eclipsantes de dos líneas reales se dan con unas pocas décimas por ciento por estos motivos, y solo cuando coinciden varios análisis.',
     },
+    {
+      title: 'La elipse de la luz',
+      body: 'El sistema A es un par visual cuyas dos estrellas el telescopio no puede separar, así que solo ve un punto, el <strong>fotocentro</strong>, el centro de la luz. Pon <em>Lo que se ve</em> en <em>un fotocentro</em>. La órbita ajustada de ese punto tiene un semieje mayor de 0,090 segundos de arco; la órbita propia del par, dibujada en gris desde la verdad, tiene 0,300. El compañero lleva el 10 por ciento de la luz y el 40 por ciento de la masa.',
+      prompt: '¿Por qué la elipse del fotocentro es 0,30 de la del par?',
+      options: [
+        'El fotocentro está a (l − B) veces la separación del centro de masas, la fracción de luz menos la fracción de masa: 0,10 − 0,40 = −0,30, la misma elipse reducida por 0,30 y girada media vuelta',
+        'El ajuste es malo, porque las estrellas no están resueltas',
+        'El paralaje reduce todas las órbitas en el mismo factor',
+        'El compañero es oscuro, así que el fotocentro sigue solo la órbita propia de la primaria',
+      ],
+      misconceptions: [
+        {
+          say: 'El ajuste es bueno: la órbita es cerrada y los residuos están al nivel del ruido. La elipse es pequeña por dónde está el centro de la luz, no por el ajuste.',
+        },
+        {
+          say: 'El paralaje convierte el ángulo en una distancia; no cambia la forma de la órbita en el cielo, y la órbita gris está dibujada en los mismos segundos de arco.',
+        },
+        {
+          say: 'Un compañero oscuro pondría el fotocentro sobre la primaria y daría 0,40 de la órbita del par, la propia de la primaria. Aquí el compañero lleva una décima de la luz, que mueve un poco el centro de la luz hacia él.',
+        },
+      ],
+      hints: [
+        'El centro de masas está a 0,40 del camino de la primaria al compañero. ¿Dónde está el centro de la luz?',
+      ],
+      because:
+        'El centro de masas está a 0,40 del camino de la estrella 1 a la estrella 2, y el centro de la luz a 0,10. El fotocentro está pues a 0,40 − 0,10 = 0,30 de la separación del centro de masas, del lado de la primaria, y al girar el par traza la misma elipse reducida por 0,30. Ese es todo el contrato: el eje de la órbita del fotocentro es |B − l| veces el del par, y su función de masa es la masa del par por |B − l| al cubo, no una masa.',
+    },
+    {
+      title: 'Pesa un par resuelto',
+      body: 'Pon <em>Lo que se ve</em> en <em>dos resueltas</em> (sistema A, una señal a ruido del paralaje de 20). El movimiento propio de cada estrella alrededor del centro de masas en movimiento da la <strong>fracción de masa</strong> de la estrella 2, y la órbita con el paralaje da la <strong>suma de masas</strong>. Lee las dos.',
+      fields: [
+        { label: 'Fracción de masa de la estrella 2' },
+        { label: 'Suma de masas' },
+      ],
+    },
+    {
+      title: 'Dos compañeros ajustan una órbita',
+      body: 'El sistema B tiene dos estrellas casi iguales, y el telescopio ve un solo fotocentro. La órbita del fotocentro en el panel es diminuta, 0,031 segundos de arco frente a los 0,410 del par, y con la fracción de luz (0,40) y la masa de la primaria (1,10) que usted declara, lista <strong>dos</strong> masas del compañero, 0,98 y 0,53 masas solares.',
+      prompt: '¿Por qué dos, y qué elegiría entre ellas?',
+      options: [
+        'La órbita fija |B − l| y no su signo: el compañero puede llevar más de la masa que de la luz (0,98) o menos (0,53); elegiría una órbita resuelta, una razón de masas de las velocidades radiales, o saber que la estrella más débil es también la más ligera',
+        'Un arco más largo de la misma órbita del fotocentro elegiría',
+        'Un paralaje más preciso elegiría',
+        'Una raíz es un error de redondeo del solucionador',
+      ],
+      misconceptions: [
+        {
+          say: 'Un arco más largo afina la misma elipse; las dos raíces siguen, porque la media vuelta que añadiría el otro signo es la ambigüedad del nodo que tiene toda órbita en el cielo.',
+        },
+        {
+          say: 'Un mejor paralaje estrecha el intervalo de cada raíz y deja las dos raíces: la ambigüedad está en el signo de l − B, no en el tamaño de la órbita.',
+        },
+        {
+          say: 'Las dos raíces resuelven la misma ecuación, M1 |B − l|³ / (1 − B) = f, una con B por encima de l y otra con B por debajo; el módulo devuelve las dos y marca la segunda como ambigua.',
+        },
+      ],
+      hints: [
+        'La elipse del fotocentro se reduce por l − B. ¿Qué le pasa a la órbita cuando ese número cambia de signo?',
+      ],
+      because:
+        'La órbita del fotocentro con un paralaje fija la función de masa f = (M1 + M2) |B − l|³ y el signo de l − B solo gira la elipse media vuelta, que una órbita en el cielo no distingue del nodo de la propia órbita. En este par el compañero verdadero (1,00 masas solares, B = 0,476) es la primera raíz; un compañero más ligero que su parte de la luz sería la segunda. Cuál vale es un dato más, y el panel no lo adivina.',
+    },
   ],
 };
 
@@ -821,7 +1008,7 @@ const CONTENT = {
     topic:
       'How two Doppler curves and an eclipse weigh two stars: the star with the smaller amplitude is the heavier (M1 K1 = M2 K2), the mass ratio needs no inclination, the masses of a pair that never eclipses are only minima (0.582 and 0.432 solar masses at 90 degrees, twice that at 52), an eclipse fixes the inclination and with it the masses and radii (1.303 and 1.104 solar masses, 1.296 and 1.036 solar radii for the synthetic F-star pair), a single line gives a mass function and not a mass, and the stars solved so far sit in the MIST main-sequence band, with luminosity rising about as the fourth power of the mass.',
     difficulty:
-      'Introductory (mass ratio from two amplitudes, minimum masses, what an eclipse adds); majors (the joint solution, where the uncertainty comes from, one line only, the diagram); advanced (the factor 1 / sin³ i without an eclipse, what a passed test leaves open)',
+      'Introductory (mass ratio from two amplitudes, minimum masses, what an eclipse adds); majors (the joint solution, where the uncertainty comes from, one line only, the diagram); advanced (the factor 1 / sin³ i without an eclipse, what a passed test leaves open, and the visual pair: the photocentre’s ellipse, a resolved pair’s mass fraction and sum, and the two roots of a companion’s mass)',
     placement:
       'In a survey course after the unit on binary stars and Kepler’s third law, or beside the investigation Two Stars Eclipsing, which supplies the light curve half; in a majors course after the exoplanet radial-velocity investigations, since the velocity fit is the same orbit with a second star. It supports OpenStax Astronomy 2e chapter 18 (the stars: a celestial census). It needs no mathematics beyond a ratio at the survey depth.',
     overview:
@@ -852,7 +1039,11 @@ const CONTENT = {
       },
       {
         name: 'Depth',
-        text: 'Quantitative: the joint solution, where the uncertainty comes from, one line only, the diagram and the mass–luminosity slope. Advanced: the factor 1 / sin³ i of a pair that never eclipses and what a passed residual test does not say.',
+        text: 'Quantitative: the joint solution, where the uncertainty comes from, one line only, the diagram and the mass–luminosity slope. Advanced: the factor 1 / sin³ i of a pair that never eclipses, what a passed residual test does not say, and the visual pair (the photocentre’s ellipse, the mass fraction and sum of a resolved pair, the two roots of a companion’s mass).',
+      },
+      {
+        name: 'The visual pair (masses-visual, advanced depth)',
+        text: 'A visual pair weighed from its orbit on the sky: with both stars resolved, the mass fraction from each star’s own motion and the mass sum from the parallax; with one photocentre, only a mass function, because the photocentre traces the pair’s ellipse scaled by (l − B), and a companion’s mass from a light fraction and a primary mass you state, with two roots.',
       },
       {
         name: 'Synthetic data, stated',
@@ -885,7 +1076,7 @@ const CONTENT = {
       'The data are synthetic and the truth is stated: the F-star pair was made with 1.30 and 1.10 solar masses, 1.296 and 1.035 solar radii, inclination 89.2 degrees; the fit returns 1.303 and 1.104 solar masses, 1.296 and 1.036 solar radii.',
       'The chain is validated against a direct integration of the two-body problem, an independent joint fit and ensembles for coverage, and the model refuses to call a minimum a mass (BINARY_MASSES.md). Two legs of its committed contract are recorded as failing there, and the model page says so.',
       'The temperature of star 1 is an input stated in the panel and star 2’s follows from the fitted surface brightness ratio in the 0.8 micrometer band by a Planck ratio; the luminosities are as good as that approximation, and no temperature is fitted.',
-      'Inherited limits: the stars are two spheres with fixed limb darkening and no third light, the velocities are taken as given, and the visual-binary branch (an astrometric orbit plus a parallax) is not part of this investigation.',
+      'Inherited limits: the stars are two spheres with fixed limb darkening and no third light, the velocities are taken as given, and the visual-binary steps of the advanced depth use synthetic sky orbits with a stated parallax and frame, no common-mode frame error and no third body (BINARY_MASSES.md, Part B).',
     ],
     discussion: [
       'A radial-velocity survey finds a single-lined binary with a mass function of 0.036 solar masses. What can you say about the companion, and what must you assume to say more?',

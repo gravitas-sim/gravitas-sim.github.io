@@ -137,4 +137,70 @@ export const ES_MASSES = {
   'masW.row.limits': 'Límites',
   'masW.a.diagram':
     'Los sistemas de aquí son sintéticos: sus radios y temperaturas se leyeron de estas trayectorias a una fracción declarada de la vida en la secuencia principal y se redondearon; coinciden con MIST por construcción, y una estrella real puede no hacerlo',
+  'masW.vb.title': 'Pesar un par visual',
+  'masW.vb.note':
+    'Dos estrellas en el cielo, vistas como una sola órbita. Cuando las dos están resueltas, el movimiento propio de cada estrella alrededor del centro de masas en movimiento da la fracción de masa, y la órbita con un paralaje da la suma de masas: juntas, las dos masas. Cuando el par no está resuelto, el fotocentro (el centro de la luz) describe la misma elipse reducida por (l − B), la fracción de luz menos la fracción de masa, así que la órbita con un paralaje da solo una función de masa, y la masa de un compañero necesita una fracción de luz y una masa de la primaria que usted declara, y tiene una segunda raíz. Todos los datos de aquí son sintéticos.',
+  'masW.vb.control.system': 'Sistema',
+  'masW.vb.control.view': 'Lo que se ve',
+  'masW.vb.control.arc': 'Arco observado (periodos)',
+  'masW.vb.control.snr': 'Señal a ruido del paralaje',
+  'masW.vb.system.0': 'A, compañero débil',
+  'masW.vb.system.1': 'B, casi iguales',
+  'masW.vb.system.2': 'C, poca masa',
+  'masW.vb.view.0': 'dos resueltas',
+  'masW.vb.view.1': 'un fotocentro',
+  'masW.vb.axis.east': 'Desplazamiento al este (segundos de arco)',
+  'masW.vb.axis.north': 'Desplazamiento al norte (segundos de arco)',
+  'masW.vb.legend.star1': 'Estrella 1 en torno al centro de masas',
+  'masW.vb.legend.star2': 'Estrella 2 en torno al centro de masas',
+  'masW.vb.legend.fit1': 'Estrella 1, ajustada',
+  'masW.vb.legend.fit2': 'Estrella 2, ajustada',
+  'masW.vb.legend.photocentre': 'Fotocentro, datos',
+  'masW.vb.legend.photocentreFit': 'Fotocentro, ajustado',
+  'masW.vb.legend.relative': 'Órbita relativa del par (la verdad)',
+  'masW.vb.row.data': 'Datos',
+  'masW.vb.v.dataBoth':
+    '{n} épocas de las dos estrellas en {a} periodos, {s} milisegundos de arco por eje para cada una; paralaje {p} ± {sp} milisegundos de arco ({frame})',
+  'masW.vb.v.dataPhot':
+    '{n} épocas del fotocentro en {a} periodos, {s} milisegundos de arco por eje; paralaje {p} ± {sp} milisegundos de arco ({frame})',
+  'masW.vb.row.orbit': 'Órbita',
+  'masW.vb.v.orbit':
+    'periodo {p} ± {ps} años, semieje mayor {a} ± {as} milisegundos de arco, excentricidad {e}',
+  'masW.vb.row.sum': 'Suma de masas',
+  'masW.vb.v.sum':
+    '{v} masas solares; 68 por ciento entre {lo} y {hi}, 95 por ciento entre {lo2} y {hi2}',
+  'masW.vb.row.frame': 'Referencia del paralaje',
+  'masW.vb.row.fraction': 'Fracción de masa de la estrella 2',
+  'masW.vb.v.fraction':
+    'B = {v} ± {s}; las elipses propias de las estrellas están en la razón {r} : 1',
+  'masW.vb.row.masses': 'Masas',
+  'masW.vb.v.masses':
+    'M1 {a} masas solares (68 por ciento {alo} a {ahi}), M2 {b} masas solares (68 por ciento {blo} a {bhi})',
+  'masW.vb.row.function': 'Función de masa del fotocentro',
+  'masW.vb.v.function':
+    '{v} masas solares, 68 por ciento entre {lo} y {hi}: una función de masa, no una masa',
+  'masW.vb.row.naive': 'Si se leyera como la suma de masas',
+  'masW.vb.v.naive':
+    'el número de arriba es {x} de la suma verdadera {t}: la elipse del fotocentro es menor que la del par por el factor |l − B| = {f}, y la masa por su cubo',
+  'masW.vb.row.given': 'Lo que usted declara',
+  'masW.vb.v.given':
+    'la fracción de luz del compañero l = {l} ± {sl} y la masa de la primaria {m} ± {sm} masas solares',
+  'masW.vb.row.root': 'Compañero, raíz {n}',
+  'masW.vb.v.rootAbove':
+    'M2 = {m} masas solares (68 por ciento {lo} a {hi}), B = {b}: el compañero lleva una parte mayor de la masa que de la luz',
+  'masW.vb.v.rootBelow':
+    'M2 = {m} masas solares (68 por ciento {lo} a {hi}), B = {b}: raíz ambigua, el compañero sería más ligero que su parte de la luz; la órbita sola no elige',
+  'masW.vb.row.truth': 'Lo que lo hizo',
+  'masW.vb.v.truth':
+    'M1 {a}, M2 {b} masas solares (suma {c}, B {bb}); fracción de luz l {l}; paralaje {p} milisegundos de arco; el eje del fotocentro es {f} del del par',
+  'masW.vb.row.refused': 'Rechazado',
+  'masW.vb.row.companion': 'Compañero',
+  'masW.vb.a':
+    'El ajuste de órbita aparente de la Prompt 187 a los desplazamientos relativos (o al fotocentro en torno al baricentro); un paralaje con su declaración de referencia; un desplazamiento constante y un movimiento propio ajustados junto con la fracción de masa. No se modelan los errores comunes del marco, un tercer cuerpo ni el acoplamiento con las velocidades radiales; los datos son sintéticos',
+  'masW.vb.frame.absolute': 'absoluto',
+  'masW.vb.frame.absolute.long':
+    'el paralaje es absoluto (corregido a la fuente declarada); la corrección y su incertidumbre están en el paralaje dado',
+  'masW.vb.frame.relative': 'relativo a las estrellas de referencia',
+  'masW.vb.frame.relative.long':
+    'el paralaje es relativo a las estrellas de referencia de su marco, que es menor que el paralaje absoluto en su paralaje medio: la distancia y la suma de masas salen más altas en esa proporción',
 };

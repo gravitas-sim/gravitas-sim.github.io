@@ -22,6 +22,8 @@ import { EN_MASSES } from './i18n/en.masses.js';
 import { ES_MASSES } from './i18n/es.masses.js';
 import { fixed } from './format.js';
 import { createChart } from './plot/mount.js';
+import { visualView, trueCurves } from './visualBinaryField.js';
+import { orbitCurve } from './measure/orbit-fit.js';
 import {
   ECLIPSING,
   SYSTEMS,
@@ -645,4 +647,296 @@ const DIAGRAM = {
   },
 };
 
-export const MASSES_WIDGETS = [MINIMUM, SOLVE, DIAGRAM];
+// ----------------------------------------------------------------------------
+// masses-visual (Part B: the visual binary, the photocentre contract)
+// ----------------------------------------------------------------------------
+const mas = x => fixed(x * 1000, x * 1000 >= 100 ? 0 : 1);
+const intervalOf = (list, level) => list.find(i => i.level === level);
+const FRAME = f =>
+  f === 'relative' ? 'masW.vb.frame.relative' : 'masW.vb.frame.absolute';
+
+const VISUAL = {
+  id: 'masses-visual',
+  get title() {
+    return t('masW.vb.title');
+  },
+  get note() {
+    return t('masW.vb.note');
+  },
+  animated: false,
+  controls: [
+    choice('system', 'masW.vb.control.system', 3, 'masW.vb.system'),
+    choice('view', 'masW.vb.control.view', 2, 'masW.vb.view'),
+    numeric('arc', 'masW.vb.control.arc', 0.2, 1.2, 0.05, 1.1, x =>
+      fixed(x, 2)
+    ),
+    numeric('snr', 'masW.vb.control.snr', 3, 40, 1, 20, x => fixed(x, 0)),
+  ],
+  draw(canvas, v) {
+    const m = visualView(v);
+    const r = m.result;
+    const series = [];
+    const east = list => list.map(p => p.y);
+    const north = list => list.map(p => p.x);
+    if (m.view === 0) {
+      const bary = r.ok && r.fraction?.ok ? r.fraction.barycentre : null;
+      const tMid = bary?.tRef ?? 0;
+      const sub = (e, k) => {
+        const tau = e.time.value - tMid;
+        return bary
+          ? {
+              x: k.x - bary.offset[0] - bary.properMotion[0] * tau,
+              y: k.y - bary.offset[1] - bary.properMotion[1] * tau,
+            }
+          : k;
+      };
+      series.push({
+        id: 'a',
+        label: t('masW.vb.legend.star1'),
+        x: east(m.epochs.map(e => sub(e, e.A))),
+        y: north(m.epochs.map(e => sub(e, e.A))),
+        color: COLOR.blue,
+        mode: 'points',
+        radius: 3,
+      });
+      series.push({
+        id: 'b',
+        label: t('masW.vb.legend.star2'),
+        x: east(m.epochs.map(e => sub(e, e.B))),
+        y: north(m.epochs.map(e => sub(e, e.B))),
+        color: COLOR.orange,
+        mode: 'points',
+        radius: 3,
+      });
+      if (r.ok && r.fraction?.ok) {
+        const curve = orbitCurve(r.orbit);
+        const B = r.fraction.value;
+        series.push({
+          id: 'fa',
+          label: t('masW.vb.legend.fit1'),
+          x: east(curve.map(p => ({ x: -B * p.x, y: -B * p.y }))),
+          y: north(curve.map(p => ({ x: -B * p.x, y: -B * p.y }))),
+          color: COLOR.blue,
+          width: 2,
+          mode: 'line',
+        });
+        series.push({
+          id: 'fb',
+          label: t('masW.vb.legend.fit2'),
+          x: east(curve.map(p => ({ x: (1 - B) * p.x, y: (1 - B) * p.y }))),
+          y: north(curve.map(p => ({ x: (1 - B) * p.x, y: (1 - B) * p.y }))),
+          color: COLOR.orange,
+          width: 2,
+          mode: 'line',
+        });
+      }
+    } else {
+      series.push({
+        id: 'ph',
+        label: t('masW.vb.legend.photocentre'),
+        x: east(m.epochs),
+        y: north(m.epochs),
+        color: COLOR.violet,
+        mode: 'points',
+        radius: 3,
+      });
+      if (r.ok) {
+        const curve = orbitCurve(r.orbit);
+        series.push({
+          id: 'phf',
+          label: t('masW.vb.legend.photocentreFit'),
+          x: east(curve),
+          y: north(curve),
+          color: COLOR.violet,
+          width: 2,
+          mode: 'line',
+        });
+      }
+      const rel = trueCurves(m.system).relative;
+      series.push({
+        id: 'rel',
+        label: t('masW.vb.legend.relative'),
+        x: east(rel),
+        y: north(rel),
+        color: COLOR.grey,
+        width: 1,
+        mode: 'line',
+      });
+    }
+    const spec = {
+      label: t('masW.vb.title'),
+      xTitle: t('masW.vb.axis.east'),
+      yTitle: t('masW.vb.axis.north'),
+      series,
+    };
+    hostOf(canvas, t('masW.vb.title')).chart.draw(spec);
+    return spec;
+  },
+  readout(v) {
+    const m = visualView(v);
+    const r = m.result;
+    const tr = m.truth;
+    const rows = [];
+    if (!r.ok)
+      return [
+        { label: t('masW.vb.row.refused'), value: r.message, emphasis: true },
+        { label: t('masW.row.limits'), value: t('masW.vb.a') },
+      ];
+    const p = m.parallax;
+    rows.push({
+      label: t('masW.vb.row.data'),
+      value: t(m.view === 0 ? 'masW.vb.v.dataBoth' : 'masW.vb.v.dataPhot', {
+        n: m.epochs.length,
+        a: fixed(m.arc, 2),
+        s: fixed(m.sigma * 1000, 1),
+        p: fixed(p.value, 1),
+        sp: fixed(p.sigma, 1),
+        frame: t(FRAME(p.frame)),
+      }),
+    });
+    const el = r.orbit.elements;
+    rows.push({
+      label: t('masW.vb.row.orbit'),
+      value: t('masW.vb.v.orbit', {
+        p: fixed(el.P.value, 3),
+        ps: fixed(el.P.sigma, 3),
+        a: mas(el.a.value),
+        as: fixed(el.a.sigma * 1000, 1),
+        e: fixed(el.e.value, 3),
+      }),
+    });
+    if (m.view === 0) {
+      if (r.sum.ok) {
+        const a = intervalOf(r.sum.intervals, 0.6827);
+        const b = intervalOf(r.sum.intervals, 0.95);
+        rows.push({
+          label: t('masW.vb.row.sum'),
+          value: t('masW.vb.v.sum', {
+            v: f2(r.sum.value),
+            lo: f2(a.lo),
+            hi: f2(a.hi),
+            lo2: f2(b.lo),
+            hi2: f2(b.hi),
+          }),
+          emphasis: true,
+        });
+        rows.push({
+          label: t('masW.vb.row.frame'),
+          value: t(FRAME(p.frame) + '.long'),
+        });
+      } else
+        rows.push({
+          label: t('masW.vb.row.refused'),
+          value: r.sum.message,
+          emphasis: true,
+        });
+      if (r.fraction.ok) {
+        rows.push({
+          label: t('masW.vb.row.fraction'),
+          value: t('masW.vb.v.fraction', {
+            v: f3(r.fraction.value),
+            s: f3(r.fraction.sigma),
+            r: f2((1 - r.fraction.value) / r.fraction.value),
+          }),
+          emphasis: true,
+        });
+      }
+      if (r.masses) {
+        const a = intervalOf(r.masses.M1.intervals, 0.6827);
+        const b = intervalOf(r.masses.M2.intervals, 0.6827);
+        rows.push({
+          label: t('masW.vb.row.masses'),
+          value: t('masW.vb.v.masses', {
+            a: f2(r.masses.M1.value),
+            alo: f2(a.lo),
+            ahi: f2(a.hi),
+            b: f2(r.masses.M2.value),
+            blo: f2(b.lo),
+            bhi: f2(b.hi),
+          }),
+          emphasis: true,
+        });
+      }
+    } else {
+      const f = r.massFunction;
+      if (f.ok) {
+        const a = intervalOf(f.intervals, 0.6827);
+        rows.push({
+          label: t('masW.vb.row.function'),
+          value: t('masW.vb.v.function', {
+            v: f4(f.value),
+            lo: f4(a.lo),
+            hi: f4(a.hi),
+          }),
+          emphasis: true,
+        });
+        rows.push({
+          label: t('masW.vb.row.naive'),
+          value: t('masW.vb.v.naive', {
+            x: fixed(f.value / tr.sum, 4),
+            t: f2(tr.sum),
+            f: f3(Math.abs(tr.factor)),
+          }),
+        });
+        rows.push({
+          label: t('masW.vb.row.frame'),
+          value: t(FRAME(p.frame) + '.long'),
+        });
+      } else
+        rows.push({
+          label: t('masW.vb.row.refused'),
+          value: f.message,
+          emphasis: true,
+        });
+      rows.push({
+        label: t('masW.vb.row.given'),
+        value: t('masW.vb.v.given', {
+          l: f2(m.given.lightFraction.value),
+          sl: f3(m.given.lightFraction.sigma),
+          m: f2(m.given.primaryMass.value),
+          sm: f3(m.given.primaryMass.sigma),
+        }),
+      });
+      const c = r.companion;
+      if (c?.ok)
+        c.roots.forEach((root, i) => {
+          const a = intervalOf(root.intervals, 0.6827);
+          rows.push({
+            label: t('masW.vb.row.root', { n: i + 1 }),
+            value: t(
+              root.flag ? 'masW.vb.v.rootBelow' : 'masW.vb.v.rootAbove',
+              {
+                m: f3(root.M2),
+                lo: f3(a.lo),
+                hi: f3(a.hi),
+                b: f3(root.B),
+              }
+            ),
+            emphasis: true,
+          });
+        });
+      else if (c)
+        rows.push({
+          label: t('masW.vb.row.companion'),
+          value: c.message,
+          emphasis: true,
+        });
+    }
+    rows.push({
+      label: t('masW.vb.row.truth'),
+      value: t('masW.vb.v.truth', {
+        a: f2(tr.MA),
+        b: f2(tr.MB),
+        c: f2(tr.sum),
+        bb: f3(tr.B),
+        l: f2(tr.lB),
+        p: fixed(tr.parallaxMas, 0),
+        f: f3(Math.abs(tr.factor)),
+      }),
+    });
+    rows.push({ label: t('masW.row.limits'), value: t('masW.vb.a') });
+    return rows;
+  },
+};
+
+export const MASSES_WIDGETS = [MINIMUM, SOLVE, DIAGRAM, VISUAL];
