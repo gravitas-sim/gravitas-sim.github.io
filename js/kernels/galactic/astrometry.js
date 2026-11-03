@@ -34,7 +34,6 @@
 import { K_PM } from './coords.js';
 import { normalQuantile } from '../statistics/special.js';
 import { stream, gaussian } from '../../random/streams.js';
-import { brent } from '../../numeric/roots.js';
 
 const { Math, Number, Float64Array } = globalThis;
 
@@ -216,10 +215,17 @@ export function posterior({
   const edge = k === 0 || k === m - 1;
   if (!edge) {
     const g = x => dLnLikelihood(x, c.w, c.s) + dLogPrior(pr, x);
-    try {
-      mode = brent(g, r[k - 1], r[k + 1], { xTol: 1e-13 }).x;
-    } catch {
-      mode = r[k];
+    // Bisection on the sign of d ln p / dr between the neighbours of the grid's maximum.
+    let a = r[k - 1];
+    let b = r[k + 1];
+    const ga = g(a);
+    if (ga * g(b) <= 0) {
+      for (let i = 0; i < 100; i++) {
+        const m = 0.5 * (a + b);
+        if (g(m) * ga > 0) a = m;
+        else b = m;
+      }
+      mode = 0.5 * (a + b);
     }
   }
   const quantile = q => {
@@ -363,7 +369,7 @@ export function distanceFromParallax({
   const out = { ...base, status, distance, interval, mode: distance };
   if (pr.name === 'none') {
     out.posterior = null;
-    out.method = 'likelihood (Delta ln L = ' + (0.5 * k * k).toFixed(2) + ')';
+    out.method = 'likelihood (Delta ln L = k^2 / 2 at the stated level)';
     return out;
   }
   const post = posterior({ parallax, error, zeroPoint, prior: pr, rMin, rMax });

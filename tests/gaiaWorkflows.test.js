@@ -16,7 +16,10 @@ import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import process from 'node:process';
 import { URL } from 'node:url';
-import * as K from '../js/kernels/galactic/index.js';
+import * as Base from '../js/kernels/galactic/index.js';
+import * as Gaia from '../js/kernels/galactic/gaia.js';
+
+const K = { ...Base, ...Gaia };
 import { PACK as NGC } from '../js/data/observations/gaiaNgc2420.js';
 import { PACK as SOLAR } from '../js/data/observations/gaiaSolarNeighbourhood.js';
 import { tableOf } from '../js/tableObservation.js';

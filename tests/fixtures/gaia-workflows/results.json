@@ -48,7 +48,7 @@
           "p": 2,
           "s": 0.02,
           "L": 1,
-          "rel": 0
+          "rel": 2.22e-16
         },
         {
           "p": 1,
@@ -60,7 +60,7 @@
           "p": 0.5,
           "s": 0.1,
           "L": 1,
-          "rel": 2.22e-16
+          "rel": 0
         },
         {
           "p": 0.3,
@@ -72,7 +72,7 @@
           "p": 0.2,
           "s": 0.1,
           "L": 1,
-          "rel": 0
+          "rel": 1.18e-16
         }
       ],
       "note": ""
@@ -692,7 +692,7 @@
       "id": "P1.speed",
       "status": "pass",
       "measured": {
-        "cpuSeconds": 0.548
+        "cpuSeconds": 0.553
       },
       "note": "recorded, not a physics bound"
     },
