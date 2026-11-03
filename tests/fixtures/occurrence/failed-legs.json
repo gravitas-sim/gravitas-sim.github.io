@@ -1,0 +1,24 @@
+{
+  "note": "Legs of tests/fixtures/occurrence/thresholds.json that crossed their bound, kept failing. Only Carl resets a bound.",
+  "failed": [
+    {
+      "id": "D4",
+      "status": "fail",
+      "measured": {
+        "bins": 0,
+        "pooledCoverageMisstated": null
+      },
+      "note": "unmeasurable as committed: no bin at 32 d or more holds 10 expected listings; amendment AM1 measures it as D4b"
+    },
+    {
+      "id": "D4b",
+      "status": "fail",
+      "measured": {
+        "bins": 3,
+        "pooledCoverageMisstated": 0.79,
+        "pooledCoverageStated": 0.8175
+      },
+      "note": "AM1: D4 as committed was unmeasurable; same bound, bins with at least 3 expected listings"
+    }
+  ]
+}

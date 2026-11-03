@@ -1010,10 +1010,40 @@ export const DISCOVERY = {
     },
     courseLevel: 'majors',
   },
+  'why-we-cannot-see-earth': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['transit-photometry'],
+    textbook: {
+      chapter: 21,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
+  architectures: {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['why-we-cannot-see-earth'],
+    textbook: {
+      chapter: 21,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
   'what-is-it-made-of': {
     audience: 'intro',
     mathematics: 'algebra',
     prerequisites: ['radial-velocity'],
+    textbook: {
+      chapter: 21,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
+  'how-many-earths': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['transit-photometry'],
     textbook: {
       chapter: 21,
       section: null,

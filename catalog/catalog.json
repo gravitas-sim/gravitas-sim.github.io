@@ -32,6 +32,10 @@
       "en": "A Variable Star From Frames",
       "es": "Una estrella variable a partir de imágenes"
     },
+    "architectures": {
+      "en": "Architectures",
+      "es": "Arquitecturas"
+    },
     "bending-light": {
       "en": "Bending Light",
       "es": "La luz que se curva"
@@ -131,6 +135,10 @@
     "how-hot-is-the-day-side": {
       "en": "How Hot Is the Day Side?",
       "es": "¿Qué tan caliente está el lado diurno?"
+    },
+    "how-many-earths": {
+      "en": "How Many Earths?",
+      "es": "¿Cuántas Tierras?"
     },
     "how-old-is-this-white-dwarf": {
       "en": "How Old Is This White Dwarf?",
@@ -467,6 +475,10 @@
     "why-venus-is-hot": {
       "en": "Why Venus Is Hot",
       "es": "Por qué Venus es caliente"
+    },
+    "why-we-cannot-see-earth": {
+      "en": "Why We Cannot See Earth From Here",
+      "es": "Por qué no podemos ver la Tierra desde aquí"
     }
   },
   "entries": [

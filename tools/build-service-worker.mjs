@@ -503,6 +503,10 @@ export const NEVER_PRECACHED = [
   /^images\/investigations\/planet-or-not\.webp$/,
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(planet-or-not|vetting-sequence)\.js$/,
   /^(js\/vettingWidgets\.js|js\/vettingField\.js|js\/i18n\/(en|es)\.vetting\.js|js\/kernels\/vetting\/.*)$/,
+  // Prompt 230: the direct-imaging panels, their field module, their words, the kernel, the archive table and the two lessons' one new file (D-R10-230-05).
+  /^images\/investigations\/(why-we-cannot-see-earth|architectures)\.webp$/,
+  /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(why-we-cannot-see-earth|architectures|imaging-sequence)\.js$/,
+  /^(js\/directImagingWidgets\.js|js\/directImagingField\.js|js\/data\/imagedPlanets\.js|js\/i18n\/(en|es)\.directImaging\.js|js\/kernels\/imaging\/.*)$/,
   // Prompt 223: the variables-II panels, their field module, their words, the new kernel files and the lesson's one new file.
   // The lesson is NEVER_PRECACHED (the T3 terms); the kernel files are lazy with the family.
   /^images\/investigations\/the-metallicity-term\.webp$/,
@@ -524,6 +528,11 @@ export const NEVER_PRECACHED = [
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(what-is-it-made-of|joint-sequence)\.js$/,
   /^js\/data\/investigations\/depth\/(es\/)?radial-velocity\.js$/,
   /^(js\/jointWidgets\.js|js\/jointField\.js|js\/i18n\/(en|es)\.joint\.js)$/,
+  // Prompt 229: the occurrence panels, their field module, the stored survey, their words, the kernel and the lesson's one new
+  // file. The lesson is NEVER_PRECACHED (the T3 terms); the kernel is lazy with the family.
+  /^images\/investigations\/how-many-earths\.webp$/,
+  /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(how-many-earths|occurrence-sequence)\.js$/,
+  /^(js\/occurrenceWidgets\.js|js\/occurrenceField\.js|js\/data\/occurrenceSurvey\.js|js\/i18n\/(en|es)\.occurrence\.js|js\/kernels\/occurrence\/.*)$/,
   // Prompt 214: the strategy kernel, planner extension, panels and the strategy lesson's one new file (D-R10-214-06).
   /^js\/kernels\/strategy\//,
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(why-the-period-is-wrong|strategy-sequence)\.js$/,

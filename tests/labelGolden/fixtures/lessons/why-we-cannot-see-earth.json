@@ -1,0 +1,38 @@
+{
+ "id": "why-we-cannot-see-earth",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.read-the-contrast.fields.0.unit",""],
+    ["steps.young-giant-angle.fields.0.unit",""]
+   ],
+   "numbered": [
+    ["steps.read-the-contrast.fields.0.label","Reflected contrast, in units of 10⁻¹⁰"],
+    ["steps.read-the-contrast.fields.0.hint","1.18"],
+    ["steps.young-giant-angle.fields.0.hint","70.5"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.read-the-contrast.fields.0.label","Contraste reflejado, en unidades de 10⁻¹⁰"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "read-the-contrast": {
+    "validate": {"calls":97,"distinct":3,"digest":"a464f550fd2f7d7e","samples":[null,{"level":"error","message":"Choose Earth, 10 parsecs, a phase angle of 90 degrees and the 6 m instrument, and read the reflected value in the contrast line: 1.18 × 10⁻¹⁰."},{"level":"ok","message":"About 1.2 × 10⁻¹⁰. It is the geometric albedo times the square of the planet’s radius over its orbit, times the phase function: 0.2 × (6378 km over 1 AU)² × 0.32 at 90 degrees."}]}
+   },
+   "young-giant-angle": {
+    "validate": {"calls":97,"distinct":2,"digest":"e1a66ea01967bea3","samples":[null,{"level":"error","message":"Choose the young giant, 10 parsecs, 90 degrees and the 8 m near-infrared instrument and read the separation in λ/D in the diffraction-scale line: 70.5."}]}
+   }
+  },
+  "es": "same"
+ }
+}

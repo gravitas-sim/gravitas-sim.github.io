@@ -1,0 +1,413 @@
+{
+  "verdict": "A",
+  "rows": [
+    {
+      "id": "A1",
+      "status": "pass",
+      "measured": {
+        "cases": 21,
+        "worstRelative": 9.076480379538728e-13
+      },
+      "note": ""
+    },
+    {
+      "id": "A2",
+      "status": "pass",
+      "measured": {
+        "mismatches": 0,
+        "cases": 40,
+        "means": [
+          50,
+          29.2,
+          0.4524
+        ],
+        "worstMeanRelative": 0.005333333333333363
+      },
+      "note": ""
+    },
+    {
+      "id": "A3",
+      "status": "pass",
+      "measured": {
+        "cases": 18,
+        "worstRelative": 0.01661638585512484
+      },
+      "note": ""
+    },
+    {
+      "id": "A4",
+      "status": "pass",
+      "measured": {
+        "p": [
+          0.02725,
+          0.152,
+          0.5088,
+          0.8413,
+          0.9798
+        ],
+        "N": 37,
+        "worstAbsolute": 0.008750000000000036
+      },
+      "note": ""
+    },
+    {
+      "id": "A5",
+      "status": "pass",
+      "measured": {
+        "N": 18,
+        "used": 18,
+        "pairs": [
+          [
+            0.065,
+            0.066
+          ],
+          [
+            0.292,
+            0.317
+          ],
+          [
+            0.6885,
+            0.686
+          ],
+          [
+            0.9275,
+            0.9295
+          ]
+        ],
+        "worstAbsolute": 0.025
+      },
+      "note": ""
+    },
+    {
+      "id": "A6",
+      "status": "pass",
+      "measured": {
+        "cases": [
+          {
+            "closedOneEpoch": 1.89,
+            "oracle": 1.88342179063,
+            "threeEpochStd": 1.904,
+            "threeEpochClosed": 1.89,
+            "efficiency": 0.6975,
+            "expected": 0.7016
+          },
+          {
+            "closedOneEpoch": 1.988,
+            "oracle": 1.989448481614,
+            "threeEpochStd": 1.976,
+            "threeEpochClosed": 1.988,
+            "efficiency": 0.6909,
+            "expected": 0.6925
+          },
+          {
+            "closedOneEpoch": 2.153,
+            "oracle": 2.15499620833,
+            "threeEpochStd": 2.168,
+            "threeEpochClosed": 2.153,
+            "efficiency": 0.6756,
+            "expected": 0.6788
+          }
+        ],
+        "worstRelative": 0.007077408079193604,
+        "worstAbsolute": 0.004102888281731332
+      },
+      "note": ""
+    },
+    {
+      "id": "A7",
+      "status": "pass",
+      "measured": {
+        "cases": 12,
+        "worstRelative": 3.058117860220121e-13
+      },
+      "note": ""
+    },
+    {
+      "id": "A8",
+      "status": "pass",
+      "measured": {
+        "E": 241.8,
+        "mean": 1.498,
+        "min": 1.311,
+        "max": 1.696
+      },
+      "note": ""
+    },
+    {
+      "id": "B1",
+      "status": "pass",
+      "measured": {
+        "richBins": 28,
+        "worstRich": 0.013115797323614632,
+        "sparseBins": 11,
+        "worstSparse": 0.03644809583567919,
+        "skipped": 0
+      },
+      "note": ""
+    },
+    {
+      "id": "B2",
+      "status": "pass",
+      "measured": {
+        "bins": 15,
+        "worstRelative": 0.009091097113625523
+      },
+      "note": ""
+    },
+    {
+      "id": "B3",
+      "status": "pass",
+      "measured": {
+        "bins": 4,
+        "worstSigmas": 2.5812335132811266
+      },
+      "note": ""
+    },
+    {
+      "id": "B4",
+      "status": "pass",
+      "measured": {
+        "bins": 15,
+        "worstRelative": 0.009091097113678505
+      },
+      "note": ""
+    },
+    {
+      "id": "C1",
+      "status": "pass",
+      "measured": {
+        "richBins": 4,
+        "worstCoverage": 0.7475,
+        "populations": 400
+      },
+      "note": ""
+    },
+    {
+      "id": "C2",
+      "status": "pass",
+      "measured": {
+        "pooled6827": 0.7656,
+        "pooled95": 0.9594,
+        "richBins": 4
+      },
+      "note": ""
+    },
+    {
+      "id": "C3",
+      "status": "pass",
+      "measured": {
+        "sparseBins": 21,
+        "worstCoverage": 0.65,
+        "bins": [
+          [
+            0,
+            2,
+            9.186,
+            0.7225
+          ],
+          [
+            0,
+            3,
+            1.533,
+            0.93
+          ],
+          [
+            1,
+            2,
+            7.608,
+            0.74
+          ],
+          [
+            1,
+            3,
+            1.273,
+            0.8475
+          ],
+          [
+            2,
+            0,
+            7.97,
+            0.8
+          ],
+          [
+            2,
+            1,
+            9.612,
+            0.745
+          ],
+          [
+            2,
+            2,
+            6.402,
+            0.76
+          ],
+          [
+            2,
+            3,
+            1.071,
+            0.9125
+          ],
+          [
+            3,
+            0,
+            5.234,
+            0.84
+          ],
+          [
+            3,
+            1,
+            7.719,
+            0.7025
+          ],
+          [
+            3,
+            2,
+            5.398,
+            0.82
+          ],
+          [
+            4,
+            0,
+            3.566,
+            0.7
+          ],
+          [
+            4,
+            1,
+            6.217,
+            0.7875
+          ],
+          [
+            4,
+            2,
+            4.597,
+            0.8875
+          ],
+          [
+            5,
+            0,
+            2.159,
+            0.82
+          ],
+          [
+            5,
+            1,
+            4.473,
+            0.875
+          ],
+          [
+            5,
+            2,
+            3.256,
+            0.8225
+          ],
+          [
+            6,
+            1,
+            3.639,
+            0.755
+          ],
+          [
+            6,
+            2,
+            2.758,
+            0.7825
+          ],
+          [
+            7,
+            1,
+            2.562,
+            0.81
+          ],
+          [
+            7,
+            2,
+            1.967,
+            0.65
+          ]
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "C4",
+      "status": "pass",
+      "measured": {
+        "richBins": 4,
+        "worstSigmasOfMean": 1.083315846106407
+      },
+      "note": ""
+    },
+    {
+      "id": "D1",
+      "status": "pass",
+      "measured": {
+        "status": "upper-limit",
+        "upperLimit": 0.07988619396143973
+      },
+      "note": ""
+    },
+    {
+      "id": "D2",
+      "status": "pass",
+      "measured": {
+        "bins": 2,
+        "wrong": 0,
+        "E": [
+          3.328,
+          1.281
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "D3",
+      "status": "pass",
+      "measured": {
+        "codes": [
+          "reliability",
+          "count",
+          "reliability",
+          "range"
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "D4",
+      "status": "fail",
+      "measured": {
+        "bins": 0,
+        "pooledCoverageMisstated": null
+      },
+      "note": "unmeasurable as committed: no bin at 32 d or more holds 10 expected listings; amendment AM1 measures it as D4b"
+    },
+    {
+      "id": "D4b",
+      "status": "fail",
+      "measured": {
+        "bins": 3,
+        "pooledCoverageMisstated": 0.79,
+        "pooledCoverageStated": 0.8175
+      },
+      "note": "AM1: D4 as committed was unmeasurable; same bound, bins with at least 3 expected listings"
+    },
+    {
+      "id": "R1",
+      "status": "pass",
+      "measured": {
+        "injectionSame": true,
+        "injectionDiffers": true,
+        "populationSame": true,
+        "populationDiffers": true
+      },
+      "note": ""
+    },
+    {
+      "id": "E1",
+      "status": "not-run",
+      "measured": null,
+      "note": "no authentic survey was supplied: needs a real stellar sample with its noise and span, a published injection-recovery completeness, its candidate list and a published occurrence calculation, each with a rights row"
+    }
+  ]
+}

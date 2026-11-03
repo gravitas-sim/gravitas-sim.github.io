@@ -404,6 +404,12 @@ export const LAZY_FAMILIES = Object.freeze({
     'CLUSTER_WIDGETS',
     ['cluster-fit']
   ),
+  directImaging: familyEntry(
+    () => import('./directImagingWidgets.js'),
+    './directImagingWidgets.js',
+    'DIRECT_IMAGING_WIDGETS',
+    ['imaging-contrast', 'imaging-architectures']
+  ),
   eclipse: familyEntry(
     () => import('./eclipseWidgets.js'),
     './eclipseWidgets.js',
@@ -439,6 +445,12 @@ export const LAZY_FAMILIES = Object.freeze({
     './massesWidgets.js',
     'MASSES_WIDGETS',
     ['masses-minimum', 'masses-solve', 'masses-diagram']
+  ),
+  occurrence: familyEntry(
+    () => import('./occurrenceWidgets.js'),
+    './occurrenceWidgets.js',
+    'OCCURRENCE_WIDGETS',
+    ['occurrence-efficiency', 'occurrence-grid']
   ),
   photcal: familyEntry(
     () => import('./photcalWidgets.js'),
@@ -703,12 +715,16 @@ export async function whenWidgetsReady() {
     'remnants',
     // The vetting family reaches the plot component, the frame forward model and the measurement kernel: late for the same reason (Prompt 228).
     'vetting',
+    // The directImaging family reaches the plot component, the imaging kernel, the atmospheres table and the archive's imaged planets: late for the same reason (Prompt 230).
+    'directImaging',
     // The variables-II family reaches the plot component, the kernel and the variable-star data: late for the same reason (Prompt 223).
     'variablesII',
     // The timing family reaches the plot component, the inference core and the engine's data pack: late (Prompt 226).
     'ttv',
     // The joint family reaches the plot component, the joint kernel and the statistics kernel: late for the same reason (Prompt 227).
     'joint',
+    // The occurrence family reaches the plot component, the occurrence kernel and the statistics kernel: late (Prompt 229).
+    'occurrence',
     'surveyDesign',
   ];
   await Promise.all(families.filter(f => !late.includes(f)).map(loadFamily));

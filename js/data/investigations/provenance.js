@@ -18,6 +18,7 @@ export const EVIDENCE_FROM = Object.freeze({
   'a-stars-life-in-numbers': 'model',
   'a-universe-of-stars': 'data',
   'a-variable-star-from-frames': 'model',
+  architectures: 'model',
   'bending-light': 'model',
   'binary-star-planets': 'engine',
   'black-holes': 'model',
@@ -43,6 +44,7 @@ export const EVIDENCE_FROM = Object.freeze({
   'how-fast-does-it-spin': 'model',
   'how-fast-does-the-star-spin': 'model',
   'how-hot-is-the-day-side': 'model',
+  'how-many-earths': 'model',
   'how-old-is-this-white-dwarf': 'model',
   'inside-a-star': 'model',
   'integrators-in-practice': 'computation',
@@ -127,6 +129,7 @@ export const EVIDENCE_FROM = Object.freeze({
   'why-the-period-is-wrong': 'model',
   'why-two-lines-become-one': 'model',
   'why-venus-is-hot': 'model',
+  'why-we-cannot-see-earth': 'model',
 });
 
 /** @param {string} id - An investigation id @returns {?string} engine|model|data|illustration */

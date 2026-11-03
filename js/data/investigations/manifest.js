@@ -1257,6 +1257,32 @@ export const MANIFEST = [
     objectiveCount: 4,
   },
   {
+    id: 'why-we-cannot-see-earth',
+    title: 'Why We Cannot See Earth From Here',
+    subtitle:
+      'Two separate problems stand between a telescope and a planet, an angle and a contrast: see why a planet like Earth at ten parsecs is out of reach, and why λ/D is not a coronagraph’s inner working angle',
+    duration: '6-10 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/why-we-cannot-see-earth.webp',
+    depths: 3,
+    stepCount: 6,
+    gradedCount: 4,
+    objectiveCount: 4,
+  },
+  {
+    id: 'architectures',
+    title: 'Architectures',
+    subtitle:
+      'The planets we have imaged and the planets of the Solar System on one log diagram: see what direct imaging can find, and why that is not a picture of the planets that exist',
+    duration: '6-10 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/architectures.webp',
+    depths: 3,
+    stepCount: 6,
+    gradedCount: 4,
+    objectiveCount: 4,
+  },
+  {
     id: 'what-is-it-made-of',
     title: 'What Is It Made Of?',
     subtitle:
@@ -1265,6 +1291,19 @@ export const MANIFEST = [
     level: 'Introductory astronomy',
     thumbnail: 'images/investigations/what-is-it-made-of.webp',
     depths: 2,
+    stepCount: 7,
+    gradedCount: 5,
+    objectiveCount: 4,
+  },
+  {
+    id: 'how-many-earths',
+    title: 'How Many Earths?',
+    subtitle:
+      'From the planets a survey found to how many there are: what it could have seen, what a count becomes, and what a bin cannot say',
+    duration: '8-12 min',
+    level: 'Introductory to upper-level astronomy',
+    thumbnail: 'images/investigations/how-many-earths.webp',
+    depths: 3,
     stepCount: 7,
     gradedCount: 5,
     objectiveCount: 4,

@@ -1,0 +1,44 @@
+{
+ "id": "how-many-earths",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.read-a-rate.fields.0.unit",""],
+    ["steps.read-a-rate.fields.1.unit",""],
+    ["steps.a-bin-with-none.fields.0.unit",""],
+    ["steps.a-bin-with-none.fields.1.unit",""]
+   ],
+   "numbered": [
+    ["steps.read-a-rate.fields.0.hint","0.116"],
+    ["steps.read-a-rate.fields.1.label","Upper end of the 68 percent interval, in planets per star"],
+    ["steps.read-a-rate.fields.1.hint","0.166"],
+    ["steps.a-bin-with-none.fields.0.label","Upper limit at 95 percent, in planets per star"],
+    ["steps.a-bin-with-none.fields.0.hint","0.031"],
+    ["steps.a-bin-with-none.fields.1.hint","96"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.read-a-rate.fields.1.label","Extremo superior del intervalo del 68 por ciento, en planetas por estrella"],
+    ["steps.a-bin-with-none.fields.0.label","Límite superior al 95 por ciento, en planetas por estrella"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "read-a-rate": {
+    "validate": {"calls":232,"distinct":2,"digest":"258d037a84265046","samples":[null,{"level":"error","message":"Read the rate row for seed 1, 1 to 2 Earth radii and 8 to 16 days: 0.116 planets per star, up to 0.166 at 68 percent."}]}
+   },
+   "a-bin-with-none": {
+    "validate": {"calls":232,"distinct":2,"digest":"b513ce37469fc9e5","samples":[null,{"level":"error","message":"Read the rate row: the limit is 0.031 planets per star, and the completeness row says 96 planets listed for every planet per star."}]}
+   }
+  },
+  "es": "same"
+ }
+}

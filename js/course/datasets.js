@@ -130,6 +130,7 @@ export const GUIDED = Object.freeze([
   'a-stars-life-in-numbers',
   'a-universe-of-stars',
   'a-variable-star-from-frames',
+  'architectures',
   'bending-light',
   'binary-star-planets',
   'black-holes',
@@ -155,6 +156,7 @@ export const GUIDED = Object.freeze([
   'how-fast-does-it-spin',
   'how-fast-does-the-star-spin',
   'how-hot-is-the-day-side',
+  'how-many-earths',
   'how-old-is-this-white-dwarf',
   'inside-a-star',
   'integrators-in-practice',
@@ -239,4 +241,5 @@ export const GUIDED = Object.freeze([
   'why-the-period-is-wrong',
   'why-two-lines-become-one',
   'why-venus-is-hot',
+  'why-we-cannot-see-earth',
 ]);
