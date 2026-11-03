@@ -609,8 +609,8 @@ export const WHAT_KINDS_OF_PLANETS_EXIST = {
         },
         {
           id: 'rate',
-          label: 'The rate',
-          unit: 'planets per star',
+          label: 'The rate, in planets per star',
+          unit: '',
           hint: '0.35',
         },
       ],
@@ -1620,7 +1620,7 @@ export const WHAT_KINDS_OF_PLANETS_EXIST_ES = {
       body: `En la cuadrícula, el intervalo de <strong>0,5 a 1 radios terrestres</strong> y <strong>32 a 64 días</strong> lista solo unos pocos planetas, porque el sondeo apenas podía verlos. Lee cuántos lista y la tasa por estrella en que la completitud del sondeo convierte ese recuento (la primera semilla, fiabilidad como se declara).`,
       fields: [
         { label: 'Planetas listados en el intervalo' },
-        { label: 'La tasa' },
+        { label: 'La tasa, en planetas por estrella' },
       ],
     },
     {
@@ -2456,17 +2456,17 @@ const BANDS = {
   'one-planet-every-method': {
     core: 'short',
     quantitative: 'short',
-    advanced: 'short',
+    advanced: 'medium',
   },
   'what-kinds-of-planets-exist': {
     core: 'short',
     quantitative: 'short',
-    advanced: 'short',
+    advanced: 'medium',
   },
   'the-transit-that-was-a-star': {
     core: 'short',
     quantitative: 'short',
-    advanced: 'short',
+    advanced: 'medium',
   },
   'planning-a-transit-campaign': {
     core: 'short',

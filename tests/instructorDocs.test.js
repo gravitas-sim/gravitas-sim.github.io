@@ -277,15 +277,16 @@ describe('the document inventory', () => {
     // 1123 after What Is It Made Of? and the upper depth of Finding Planets by Their Tug (Prompt 227): eleven more for the lesson and two for the new depth key of the other.
     // 1156 after How Many Earths? (Prompt 229): eleven more over 1145.
     // 1145 after Why We Cannot See Earth From Here and Architectures (Prompt 230): eleven more for each, as for any lesson with three depths.
-    expect(inv.documents).toBe(1156);
-    expect(inv.byLocale).toEqual({ en: 528, es: 628 });
+    // 1200 after the four exoplanet closeout investigations (Prompt 231): eleven more for each, as for any lesson with three depths.
+    expect(inv.documents).toBe(1200);
+    expect(inv.byLocale).toEqual({ en: 548, es: 652 });
     expect(inv.byKind.notes).toBe(INVESTIGATIONS.length);
     expect(inv.byVariant).toEqual({
       activity: 12,
-      depth: 536,
-      full: 472,
+      depth: 560,
+      full: 488,
       general: 18,
-      notes: 118,
+      notes: 122,
     });
   });
 
@@ -313,7 +314,7 @@ describe('the document inventory', () => {
     const withDepth = INVESTIGATIONS.filter(
       i => withAllDepths(i).steps.length !== i.steps.length
     ).map(i => i.id);
-    expect(withDepth.length).toBe(92);
+    expect(withDepth.length).toBe(96);
     // A key for each depth the lesson offers: three for most, two for Design
     // the Schedule, whose upper depth (Prompt 214) has no quantitative layer.
     let keys = 0;
