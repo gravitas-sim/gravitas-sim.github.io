@@ -60,7 +60,7 @@ describe('the committed thresholds', () => {
       'E1.authentic',
       'P1.speed',
     ]);
-    expect(THR.amendments.map(a => a.id)).toEqual(['AM1', 'AM2']);
+    expect(THR.amendments.map(a => a.id)).toEqual(['AM1', 'AM2', 'AM3']);
     expect(RULES.draws).toBe(20000);
   });
 
@@ -86,11 +86,11 @@ describe('the committed thresholds', () => {
 });
 
 describe('the pinned validation table', () => {
-  test('verdict A, every judged row passes, only E1 is not run', () => {
+  test('verdict A, every row passes, E1 is the circular arithmetic check of AM3', () => {
     expect(PINNED.verdict.verdict).toBe('A');
     expect(PINNED.verdict.photocentreCompanionOffered).toBe(true);
     expect(FAILED.failed).toEqual([]);
-    expect(FAILED.notRun.map(r => r.id)).toEqual(['E1.authentic']);
+    expect(FAILED.notRun).toEqual([]);
     const judged = PINNED.rows.filter(r => r.pass !== null);
     expect(judged.every(r => r.pass === true)).toBe(true);
     expect(PINNED.rows.map(r => r.id)).toEqual(

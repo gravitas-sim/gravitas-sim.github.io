@@ -180,7 +180,7 @@ pinned results before the kernel was run. **Gate verdict A**; the gate document 
 | C5 | median log ratio of the sum | 0.031 against a bound of 0.080 | 3 median sigma / sqrt(n) |
 | D1 to D9 | refusals and misspecification (20 seeds each) | all 1.0; relative-parallax factor within 4 percent of the predicted 1.204 | rate 1.0; 10 percent |
 | D10 | the photocentre read as the sum | median 0.015 of the truth | below 0.2 |
-| E1 | an authentic pair or astrometric orbit | NOT RUN (no published table supplied) | |
+| E1 | alpha Cen AB, Akeson et al. 2021, Table 8: the sum from a, P and the parallax against the published masses (AM3; circular, an arithmetic and units check) | sum 1.98805 against 1.9880 (0.01 published sigma); K16 column 2.0431 against 2.0428 | 2 published sigma |
 
 The oracle (numpy 2.2.6, scipy 1.15.3, Python 3.10.12, no Gravitas code) is independent for the photocentre (a two-body integration of both stars
 in the barycentre frame, its own rotation to the sky) and for the least-squares solution; it is not independent for the **model** of the
@@ -194,6 +194,5 @@ three standard deviations of a root, because a literal 20 of 20 at 95 percent wo
 The data are synthetic and the stars are the gate's V1 to V3; the parallax is given with a stated signal-to-noise and an absolute frame. A real
 visual pair adds common-mode errors of the frame, a parallax that is relative or whose correction is uncertain, and a photocentre whose light
 fraction depends on the band and on the detector; the mass fraction is as good as the regression's model (a constant offset and a proper motion for
-the barycentre) and the sum as good as the cube of the parallax. **The authentic leg is not run:** it needs a published table of orbital elements
-and a parallax (or positions) with their terms, to be fetched by Carl; see `VISUAL_BINARY_GATE.md`.
+the barycentre) and the sum as good as the cube of the parallax. **The authentic leg is only an arithmetic check (AM3):** alpha Cen AB's published elements (Akeson et al. 2021, arXiv:2104.10086, Table 8, numbers read by hand, credited; the paper is not stored) give the published mass sum, but the paper's parallax is its own orbital parallax, so the agreement is circular and says nothing about the regression for `B` or the photocentre route (no absolute component positions or unresolved orbit were read). A real independent leg needs positions or a Gaia two-body orbit with independent masses; see `VISUAL_BINARY_GATE.md`.
 

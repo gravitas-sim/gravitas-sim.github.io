@@ -394,6 +394,12 @@
       "date": "2026-11-03",
       "before": "any code of the kernel, the validator or any measurement",
       "what": "operationalisation of D8 only, written down before it is measured: 'the truth is one of the roots on every one of 20 seeds' is judged as the truth lying within three standard deviations of one of the listed roots (the standard deviation of a root is half the width of its 0.6827 interval), because a 0.95 interval would fail a literal 20 of 20 about two times in three by chance. The rate 1.0 and the 20 seeds are unchanged."
+    },
+    {
+      "id": "AM3",
+      "date": "2026-11-03",
+      "before": "E1 was run (it was NOT RUN until the coordinator supplied the paper)",
+      "what": "the contract of E1, fixed before it ran. Source: Akeson et al. (2021), arXiv:2104.10086, Table 8 ('Orbital elements, masses, parallax ... of alpha Cen AB', epoch 2019.5), read by hand from the paper's text by this session on 2026-11-03 (PDF SHA-256 81787ec85c25e0c45c8ad10a0abca1c7f42c745ee77f9964aeda3274b59275cd, held by the coordinator outside every repository; arXiv's non-exclusive distribution licence, not CC BY: numbers only, credited, on the 'published, credited' basis the coordinator ruled; the paper is not stored or reproduced). Two columns, 'present work' and K16 (Kervella et al. 2016, as tabulated there): the semi-major axis, period, parallax with their uncertainties go through orbitFromElements and the mass sum (frame absolute, source stated); the sum must lie within 2 published standard deviations of the published m_A + m_B (the standard deviation is the root of the sum of squares of the two published ones, their covariance unknown). THIS IS AN ARITHMETIC AND UNITS CHECK ON A REAL SYSTEM AND IS CIRCULAR: the paper's parallax is its own orbital (dynamical) parallax and its masses follow from the same elements, so agreement is not independent validation of the sum, and it says nothing about the mass-fraction regression (no absolute component positions were read) or the photocentre route (no unresolved orbit). E1 stays outside the verdict rule."
     }
   ]
 }

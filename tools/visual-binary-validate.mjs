@@ -24,6 +24,7 @@ import { KEPLER_K, thieleInnesOf } from '../js/measure/orbit-fit.js';
 import {
   companionRoots,
   massSumOf,
+  orbitFromElements,
   photocentreFactor,
   photocentreFunction,
   photocentreOffsets,
@@ -925,13 +926,59 @@ function groupD() {
 // ---- E and P ------------------------------------------------------------------------
 
 function groupEP() {
-  if (wanted('E1'))
-    notRun(
+  if (wanted('E1')) {
+    // AM3: Akeson et al. (2021), arXiv:2104.10086, Table 8, numbers read by hand on 2026-11-03 (published, credited).
+    const columns = {
+      'present work': {
+        a: [17.493, 0.0096],
+        P: [79.762, 0.019],
+        plx: [750.81, 0.38],
+        mA: [1.0788, 0.0029],
+        mB: [0.9092, 0.0025],
+      },
+      K16: {
+        a: [17.592, 0.013],
+        P: [79.929, 0.013],
+        plx: [747.17, 0.61],
+        mA: [1.1055, 0.0039],
+        mB: [0.9373, 0.0033],
+      },
+    };
+    const per = {};
+    let ok = true;
+    for (const [name, c] of Object.entries(columns)) {
+      const orbit = orbitFromElements({
+        a: { value: c.a[0], sigma: c.a[1] },
+        P: { value: c.P[0], sigma: c.P[1] },
+      });
+      const sum = massSumOf(orbit, {
+        value: c.plx[0],
+        sigma: c.plx[1],
+        unit: 'mas',
+        frame: 'absolute',
+        source: 'Akeson et al. 2021, Table 8 (orbital parallax)',
+      });
+      const pub = c.mA[0] + c.mB[0];
+      const sigPub = Math.hypot(c.mA[1], c.mB[1]);
+      const z = sum.ok ? (sum.value - pub) / sigPub : NaN;
+      per[name] = {
+        sum: sum.ok ? sum.value : null,
+        published: pub,
+        sigmaPublished: sigPub,
+        zPublished: z,
+      };
+      if (!(Math.abs(z) <= 2)) ok = false;
+    }
+    add(
       'E1.authentic',
       'e',
       'authentic',
-      'no published table of orbital elements and parallax (or of positions) was supplied; the source and terms are named in VISUAL_BINARY_GATE.md'
+      ok,
+      per,
+      { nSigma: 2 },
+      "AM3: an arithmetic and units check on alpha Cen AB, circular (the paper's parallax is its own orbital parallax); not validation of the regression or the photocentre route"
     );
+  }
   if (wanted('P1')) {
     const s = V.V1;
     const ser = series(s, 1, { kind: 'components' });

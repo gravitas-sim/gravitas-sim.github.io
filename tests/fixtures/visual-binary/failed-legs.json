@@ -1,10 +1,5 @@
 {
   "note": "Legs of tests/fixtures/visual-binary/thresholds.json that crossed their bound, kept failing and labelled (only Carl resets a bound); NOT RUN legs say why.",
   "failed": [],
-  "notRun": [
-    {
-      "id": "E1.authentic",
-      "why": "no published table of orbital elements and parallax (or of positions) was supplied; the source and terms are named in VISUAL_BINARY_GATE.md"
-    }
-  ]
+  "notRun": []
 }

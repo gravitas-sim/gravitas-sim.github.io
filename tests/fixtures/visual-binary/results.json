@@ -466,10 +466,25 @@
    "id": "E1.authentic",
    "leg": "e",
    "group": "authentic",
-   "pass": null,
-   "measured": null,
-   "bound": null,
-   "note": "no published table of orbital elements and parallax (or of positions) was supplied; the source and terms are named in VISUAL_BINARY_GATE.md"
+   "pass": true,
+   "measured": {
+    "present work": {
+     "sum": 1.9880489694018848,
+     "published": 1.988,
+     "sigmaPublished": 0.003828837943815329,
+     "zPublished": 0.012789625103854983
+    },
+    "K16": {
+     "sum": 2.0431253707678088,
+     "published": 2.0427999999999997,
+     "sigmaPublished": 0.005108815909777921,
+     "zPublished": 0.06368809789882875
+    }
+   },
+   "bound": {
+    "nSigma": 2
+   },
+   "note": "AM3: an arithmetic and units check on alpha Cen AB, circular (the paper's parallax is its own orbital parallax); not validation of the regression or the photocentre route"
   },
   {
    "id": "P1.speed",
@@ -477,7 +492,7 @@
    "group": "record",
    "pass": true,
    "measured": {
-    "cpuSeconds": 0.085303
+    "cpuSeconds": 0.09105
    },
    "bound": {
     "recordedOnly": true
