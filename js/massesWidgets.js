@@ -873,7 +873,7 @@ const VISUAL = {
         rows.push({
           label: t('masW.vb.row.naive'),
           value: t('masW.vb.v.naive', {
-            x: fixed(f.value / tr.sum, 3),
+            x: fixed(f.value / tr.sum, 4),
             t: f2(tr.sum),
             f: f3(Math.abs(tr.factor)),
           }),

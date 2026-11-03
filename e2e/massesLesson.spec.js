@@ -84,7 +84,7 @@ const CASES = [
     id: 'weighing-the-stars-for-real',
     depth: 'advanced',
     sid: 'two-roots-for-the-companion',
-    row: /Photocentre mass function/i,
+    row: /Photocenter mass function/i,
     rowEs: /Función de masa del fotocentro/i,
     title: /^Weighing a visual pair/i,
     titleEs: /^Pesar un par visual/i,
