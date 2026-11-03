@@ -41,7 +41,6 @@ const DIR = 'tests/fixtures/gaia-workflows';
 const read = rel => JSON.parse(readFileSync(path.join(ROOT, rel), 'utf8'));
 export const THRESHOLDS = read(`${DIR}/thresholds.json`);
 const lim = id => THRESHOLDS.checks.find(c => c.id === id).limits;
-const ORACLE_PATH = path.join(ROOT, DIR, 'oracle-results.json');
 const SEED = THRESHOLDS.seeds.synthetic;
 
 const rows = [];

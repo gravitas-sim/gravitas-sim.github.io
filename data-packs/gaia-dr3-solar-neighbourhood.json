@@ -297,7 +297,7 @@
         },
         {
           "id": "ecl_lat",
-          "step": 0.0001
+          "step": 0.005
         }
       ]
     },
@@ -444,10 +444,10 @@
         },
         {
           "id": "ecl_lat",
-          "type": "int32",
-          "step": 0.0001,
+          "type": "int16",
+          "step": 0.005,
           "missing": 0,
-          "maxRounding": 0.0000499
+          "maxRounding": 0.0025
         }
       ]
     }
@@ -464,11 +464,11 @@
   "derived": {
     "file": "js/data/observations/gaiaSolarNeighbourhood.js",
     "bytes": 10260,
-    "sha256": "edee824df0d503ec728f89b6ffd74b8ca8e3205dfe10544a5cc16a3fd7a7f40e",
+    "sha256": "35438256713daf697572d2e744d40d354e9e7852531c58232bd8768eb6b92b83",
     "sidecar": {
       "file": "gaia/solar-neighbourhood.json",
-      "bytes": 97477,
-      "sha256": "0d1efe626b3f57ef341290a7a776b6426d71b87786f0d6d65eaf9d97c769a52e"
+      "bytes": 93287,
+      "sha256": "30d7f62d245c3eab7b09e34ad354599e83cae474016b721b3045161ad79c4699"
     }
   },
   "validation": {

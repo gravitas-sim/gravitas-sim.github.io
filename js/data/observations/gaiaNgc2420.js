@@ -203,6 +203,6 @@ export const PACK = {
 /** The sidecar: where the rows are, and what they must be. */
 export const SIDECAR = {
   file: 'gaia/ngc2420.json',
-  bytes: 54014,
-  sha256: '855b17b4b6816711ff33df3950ab59e154b3f829da34e243189e9bccf877a25a',
+  bytes: 54011,
+  sha256: 'bb118bf154c30aa4df53fa649d321048a033ba84eb4300bf99c4a356a3700a71',
 };

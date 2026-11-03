@@ -284,14 +284,14 @@
       "measured": {
         "gaia-dr3-ngc2420": {
           "stars": 993,
-          "maxAbsMas": 0.0000028040992035571755,
-          "rawInputsMaxAbsMas": 0.0000294,
+          "maxAbsMas": 0.0000028046385785254757,
+          "rawInputsMaxAbsMas": 0.0000293,
           "outOfRange": 0
         },
         "gaia-dr3-solar-neighbourhood": {
           "stars": 1570,
-          "maxAbsMas": 0.0000021011115269274627,
-          "rawInputsMaxAbsMas": 0.0000733,
+          "maxAbsMas": 0.000002100420021768773,
+          "rawInputsMaxAbsMas": 0.000073,
           "outOfRange": 5
         }
       },
@@ -692,7 +692,7 @@
       "id": "P1.speed",
       "status": "pass",
       "measured": {
-        "cpuSeconds": 0.555
+        "cpuSeconds": 0.548
       },
       "note": "recorded, not a physics bound"
     },

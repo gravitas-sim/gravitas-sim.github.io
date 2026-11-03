@@ -468,7 +468,7 @@ export function clusterParallax({
     mean = swx / sw;
     stat = Math.sqrt(1 / sw);
     if (!(clipSigma > 0)) break;
-    const next = rows.map((r, i) => Math.abs(r.w - mean) / r.s <= clipSigma);
+    const next = rows.map(r => Math.abs(r.w - mean) / r.s <= clipSigma);
     if (next.every((v, i) => v === keep[i])) break;
     keep = next;
   }

@@ -48,4 +48,4 @@ const target = path.join(
   '../../js/kernels/galactic/zeropointTables.js'
 );
 writeFileSync(target, out);
-console.log('wrote', target);
+process.stdout.write(`wrote ${target}\n`);

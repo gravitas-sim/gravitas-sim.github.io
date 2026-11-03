@@ -348,7 +348,7 @@ export const GAIA_SOLAR = {
       'ecl_lat',
       'ecliptic latitude',
       'deg',
-      0.0001,
+      0.005,
       'ecliptic latitude (ecl_lat), which the parallax zero point depends on'
     ),
   ],
@@ -646,7 +646,7 @@ export const GAIA_NGC2420 = {
       'ecl_lat',
       'ecliptic latitude',
       'deg',
-      0.0001,
+      0.005,
       'ecliptic latitude (ecl_lat), which the parallax zero point depends on'
     ),
   ],

@@ -11,8 +11,8 @@ not run (execution of downloaded code was not allowed), so there is no
 package-output oracle. Written offline by the coordinator's data, never by a test.
 
 For each row it gives the offset from the inputs as the Gaia archive wrote them
-and from the inputs rounded to the packs' steps (G 0.001; nu_eff, pseudocolour and
-ecl_lat 0.0001), so the kernel can be compared on exactly what a pack stores. Only
+and from the inputs rounded to the packs' steps (G 0.001; nu_eff and pseudocolour
+0.0001, ecl_lat 0.005), so the kernel can be compared on exactly what a pack stores. Only
 row positions and values are written: no source id leaves the data folder.
 """
 import csv
@@ -55,7 +55,7 @@ def run(path, t5, t6):
         col = float(r["nu_eff_used_in_astrometry"] if p == 31 else r["pseudocolour"])
         tab = t5 if p == 31 else t6
         out["raw"].append(round(zpt(tab, g, col, el), 9))
-        out["rounded"].append(round(zpt(tab, rnd(g, 0.001), rnd(col, 0.0001), rnd(el, 0.0001)), 9))
+        out["rounded"].append(round(zpt(tab, rnd(g, 0.001), rnd(col, 0.0001), rnd(el, 0.005)), 9))
     return out
 
 

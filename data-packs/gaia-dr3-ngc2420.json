@@ -282,7 +282,7 @@
         },
         {
           "id": "ecl_lat",
-          "step": 0.0001
+          "step": 0.005
         }
       ]
     },
@@ -416,9 +416,9 @@
         {
           "id": "ecl_lat",
           "type": "int16",
-          "step": 0.0001,
+          "step": 0.005,
           "missing": 0,
-          "maxRounding": 0.0000499
+          "maxRounding": 0.0025
         }
       ]
     }
@@ -434,11 +434,11 @@
   "derived": {
     "file": "js/data/observations/gaiaNgc2420.js",
     "bytes": 8651,
-    "sha256": "8f7190a89c04ee4151ab763e438ae1ffc04c1583ca82b1eb1de26e638eedfd37",
+    "sha256": "61fbe20689cef79b925e5422be39b53c8050ef2399847f699886e9fc485bd04b",
     "sidecar": {
       "file": "gaia/ngc2420.json",
-      "bytes": 54014,
-      "sha256": "855b17b4b6816711ff33df3950ab59e154b3f829da34e243189e9bccf877a25a"
+      "bytes": 54011,
+      "sha256": "bb118bf154c30aa4df53fa649d321048a033ba84eb4300bf99c4a356a3700a71"
     }
   },
   "validation": {

@@ -213,6 +213,6 @@ export const PACK = {
 /** The sidecar: where the rows are, and what they must be. */
 export const SIDECAR = {
   file: 'gaia/solar-neighbourhood.json',
-  bytes: 97477,
-  sha256: '0d1efe626b3f57ef341290a7a776b6426d71b87786f0d6d65eaf9d97c769a52e',
+  bytes: 93287,
+  sha256: '30d7f62d245c3eab7b09e34ad354599e83cae474016b721b3045161ad79c4699',
 };
