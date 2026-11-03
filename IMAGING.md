@@ -8,9 +8,12 @@ leaves out, and how it was checked. The investigations are **Why We Cannot See E
 `imaging-contrast` and `imaging-architectures` (`js/directImagingWidgets.js` over `js/directImagingField.js`).
 
 Part A is this document's subject. **Part B** (reference-star subtraction on the forward models' frames, its
-throughput by injection, the residual noise, the short-arc orbit criterion of Prompt 187 and the lesson
-"Following a planet") is the gate `docs/imaging-subtraction-gate` and has not been run. Nothing here
-subtracts a point-spread function or fits an orbit.
+throughput by injection, the residual noise, the short-arc orbit criterion of Prompt 187 and the lesson "Following a
+planet") was gated by `IMAGING_SUBTRACTION_GATE.md` and the verdict is **C**: two core legs failed (the stated
+interval of a measured planet covers the truth in 54 percent of injections against 68.27, and the refusal inside
+the working radius carried the committed code in 85.5 percent of cases), so no subtraction, throughput, orbit
+panel or lesson ships (register row D-R10-230-90). Nothing here subtracts a point-spread function or fits an orbit;
+the Prompt 187 fit and its Observatory panel are the place for an orbit, with their refusal.
 
 ## What is new, and what already existed (the delta table)
 
