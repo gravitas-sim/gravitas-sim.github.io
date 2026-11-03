@@ -1164,6 +1164,13 @@
       "student": true
     },
     {
+      "file": "OCCURRENCE_GATE.md",
+      "kind": "gate",
+      "purpose": "Occurrence rates gate: committed thresholds, the independent oracle, the verdict, the failed legs D4 and D4b and the data not supplied (Prompt 229 Part A).",
+      "owner": 229,
+      "student": false
+    },
+    {
       "file": "OCCURRENCE_RATES.md",
       "kind": "feature",
       "purpose": "Occurrence rates on a searched population: completeness by injection, the Poisson likelihood, limits, the validation contract, two failed legs (Prompt 229).",
