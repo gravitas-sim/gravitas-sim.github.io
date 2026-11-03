@@ -444,7 +444,7 @@ export const LAZY_FAMILIES = Object.freeze({
     () => import('./massesWidgets.js'),
     './massesWidgets.js',
     'MASSES_WIDGETS',
-    ['masses-minimum', 'masses-solve', 'masses-diagram']
+    ['masses-minimum', 'masses-solve', 'masses-diagram', 'masses-visual']
   ),
   occurrence: familyEntry(
     () => import('./occurrenceWidgets.js'),

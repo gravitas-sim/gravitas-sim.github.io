@@ -1,6 +1,6 @@
 {
-  "version": "October 2026",
-  "generated": "2026-11-01",
+  "version": "November 2026",
+  "generated": "2026-11-03",
   "documents": 1156,
   "inventory": {
     "documents": 1156,
@@ -24,7 +24,7 @@
     }
   },
   "sourceFiles": 304,
-  "sourceDigest": "d71707c44d1889fa94c0603b264b448d3d7c0b627c576702450c2bef60e5eb7e",
+  "sourceDigest": "1d797b8ab8dbbb7b9d4f9842f630b69d44eba40da597017d5ff7518335fc876b",
   "sources": {
     "js/activities/activities.js": "39ac98cd99b8b0387c55e41d5d4530bad55a8da8758819ad056be73e7a716b01",
     "js/activities/activityBridge.js": "67a82aff98e0ed935d6b8b0f0f654c6ad4332ee929cb3604e896a7f790a6fdc1",
@@ -56,7 +56,7 @@
     "js/data/investigations/atmosphere-sequence.js": "4d07fc1f13fa0f6453842ec93eb4bb19a436282045740ff3f8eed95fdfcde016",
     "js/data/investigations/bending-light.js": "67958eae861937ba76ae8cfc9fcf632dd06f100f5f615c26b95870d2e9c60e0e",
     "js/data/investigations/binaries-sequence.js": "ace5a388ecf957dae90d8291f55aa920450e4d29e0b163135f009ca8d992f0ac",
-    "js/data/investigations/binary-masses-sequence.js": "5e4980c04d560621de842d6007e39e7d636b60a465cee0245bb9638ffa0314e2",
+    "js/data/investigations/binary-masses-sequence.js": "907e18d223e0a098e098e7e9db6cc4e63cbb48bae59b38e1507e2aa32ace55e4",
     "js/data/investigations/binary-star-planets.js": "dae7b75bc10cd1f6e40dfac40dd8bddfd82e30af12e8bd9674021cac1dd7024b",
     "js/data/investigations/black-holes.js": "3e666dd2ad06285545ee0749124d0654f9f66783f51a60ac97182a58ff23fd89",
     "js/data/investigations/butterfly-effect.js": "95bd72067161d58dfed994f485c1bea8dcd2224bc1286334688312ff4db8a262",
@@ -331,5 +331,5 @@
     "tools/instructor-freshness.mjs": "96052b2f27080f0243fdd4d5f7608927bd67f0c50808b6eac3345a65c14d1e28",
     "tools/source-closure.mjs": "961828e4d0d40d8a6f8c029fe9b9435ecaf39a74b62640efc0b4145c35c7650a"
   },
-  "contentDigest": "c08f0dcc2cbbf172b83d6f1cf74fd2dc01750b42f40d63b2d2b4f28f658f7057"
+  "contentDigest": "17f3f7cabeb00a9a4ba60f649f303faece02274587341e987f6956e6fcc63b4c"
 }
