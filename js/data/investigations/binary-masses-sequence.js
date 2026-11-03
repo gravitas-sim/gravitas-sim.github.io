@@ -940,7 +940,7 @@ export const WEIGHING_THE_STARS_DEEPER_ES = {
     },
     {
       title: 'La elipse de la luz',
-      body: 'El sistema A es un par visual cuyas dos estrellas el telescopio no puede separar, así que solo ve un punto, el <strong>fotocentro</strong>, el centro de la luz. Pon <em>Lo que se ve</em> en <em>un solo fotocentro</em>. La órbita ajustada de ese punto tiene un semieje mayor de 0,090 segundos de arco; la órbita propia del par, dibujada en gris desde la verdad, tiene 0,300. El compañero lleva el 10 por ciento de la luz y el 40 por ciento de la masa.',
+      body: 'El sistema A es un par visual cuyas dos estrellas el telescopio no puede separar, así que solo ve un punto, el <strong>fotocentro</strong>, el centro de la luz. Pon <em>Lo que se ve</em> en <em>un fotocentro</em>. La órbita ajustada de ese punto tiene un semieje mayor de 0,090 segundos de arco; la órbita propia del par, dibujada en gris desde la verdad, tiene 0,300. El compañero lleva el 10 por ciento de la luz y el 40 por ciento de la masa.',
       prompt: '¿Por qué la elipse del fotocentro es 0,30 de la del par?',
       options: [
         'El fotocentro está a (l − B) veces la separación del centro de masas, la fracción de luz menos la fracción de masa: 0,10 − 0,40 = −0,30, la misma elipse reducida por 0,30 y girada media vuelta',
@@ -967,7 +967,7 @@ export const WEIGHING_THE_STARS_DEEPER_ES = {
     },
     {
       title: 'Pesa un par resuelto',
-      body: 'Pon <em>Lo que se ve</em> en <em>las dos estrellas resueltas</em> (sistema A, una señal a ruido del paralaje de 20). El movimiento propio de cada estrella alrededor del centro de masas en movimiento da la <strong>fracción de masa</strong> de la estrella 2, y la órbita con el paralaje da la <strong>suma de masas</strong>. Lee las dos.',
+      body: 'Pon <em>Lo que se ve</em> en <em>dos resueltas</em> (sistema A, una señal a ruido del paralaje de 20). El movimiento propio de cada estrella alrededor del centro de masas en movimiento da la <strong>fracción de masa</strong> de la estrella 2, y la órbita con el paralaje da la <strong>suma de masas</strong>. Lee las dos.',
       fields: [
         { label: 'Fracción de masa de la estrella 2' },
         { label: 'Suma de masas' },

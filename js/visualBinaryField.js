@@ -22,6 +22,7 @@ import {
   solveResolved,
 } from './measure/visualBinary.js';
 import { gaussian, stream } from './random/streams.js';
+import { fixed } from './format.js';
 
 const { Math, Map } = globalThis;
 
@@ -128,7 +129,7 @@ export function visualView(v = {}) {
   const view = Math.round(v.view ?? 0) === 1 ? 1 : 0;
   const arc = Math.max(0.2, Math.min(1.2, v.arc ?? 1.1));
   const snr = Math.max(3, Math.min(40, v.snr ?? 20));
-  const key = `${system}:${view}:${arc.toFixed(3)}:${snr.toFixed(2)}`;
+  const key = `${system}:${view}:${fixed(arc, 3)}:${fixed(snr, 2)}`;
   if (cache.has(key)) return cache.get(key);
   const truth = truthOf(system);
   const s = PAIRS[system];

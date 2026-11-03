@@ -36,8 +36,8 @@ import {
   massSum,
   predict,
 } from './orbit-fit.js';
-import { invertSpd } from '../numeric/linalg.js';
 import { stream, gaussian } from '../random/streams.js';
+import { fixed } from '../format.js';
 
 const { Math, Number } = globalThis;
 const finite = Number.isFinite;
@@ -198,6 +198,30 @@ export function massSumOf(fit, parallax) {
   return massSum(fit, parallax);
 }
 
+/** The inverse of a small symmetric positive-definite matrix by Gauss-Jordan with partial pivoting; null when singular. */
+function invert(A) {
+  const n = A.length;
+  const M = A.map((row, i) => [
+    ...row,
+    ...Array.from({ length: n }, (_, j) => (i === j ? 1 : 0)),
+  ]);
+  for (let c = 0; c < n; c++) {
+    let p = c;
+    for (let r = c + 1; r < n; r++)
+      if (Math.abs(M[r][c]) > Math.abs(M[p][c])) p = r;
+    if (!(Math.abs(M[p][c]) > 1e-300)) return null;
+    [M[c], M[p]] = [M[p], M[c]];
+    const d = M[c][c];
+    for (let j = 0; j < 2 * n; j++) M[c][j] /= d;
+    for (let r = 0; r < n; r++) {
+      if (r === c) continue;
+      const f = M[r][c];
+      if (f !== 0) for (let j = 0; j < 2 * n; j++) M[r][j] -= f * M[c][j];
+    }
+  }
+  return M.map(row => row.slice(n));
+}
+
 // ---- the mass fraction --------------------------------------------------------------
 
 /**
@@ -244,7 +268,7 @@ export function massFraction(fit, epochs) {
       for (let j = 0; j < 5; j++) N[i][j] += w * w * row[i] * row[j];
     }
   }
-  const cov0 = invertSpd(N.map(r => Array.from(r)));
+  const cov0 = invert(N.map(r => Array.from(r)));
   if (!cov0)
     return refuse(
       'conditioning',
@@ -414,7 +438,7 @@ export function solvePhotocentre(
   if (!(snr >= RULES.amplitudeSnr))
     return refuse(
       'amplitude',
-      `the photocentre’s orbit is only ${snr.toFixed(1)} times its uncertainty; it needs ${RULES.amplitudeSnr}`,
+      `the photocentre’s orbit is only ${fixed(snr, 1)} times its uncertainty; it needs ${RULES.amplitudeSnr}`,
       { snr, need: RULES.amplitudeSnr }
     );
   const sum = massSumOf(fit, parallax);

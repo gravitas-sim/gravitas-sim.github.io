@@ -489,7 +489,7 @@ export const NEVER_PRECACHED = [
   // Prompt 218: the mass panels, their field module, their words and the lesson's one new file (D-R10-218-04). The kernel
   // (js/inference/binaryMasses.js) and the models (js/inference/binaryJoint.js) are NOT here: the inference worker imports them.
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(weighing-the-stars-for-real|binary-masses-sequence)\.js$/,
-  /^(js\/massesWidgets\.js|js\/massesField\.js|js\/i18n\/(en|es)\.masses\.js)$/,
+  /^(js\/massesWidgets\.js|js\/massesField\.js|js\/visualBinaryField\.js|js\/measure\/visualBinary\.js|js\/i18n\/(en|es)\.masses\.js)$/,
   // Prompt 220: the activity panels, their field module, their words and the two lessons' one new file (D-R10-220-07).
   // The kernel, the loader and the two pack records are already here from the data part (D-R10-220-03).
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(how-fast-does-the-star-spin|flares|stellar-activity-sequence)\.js$/,

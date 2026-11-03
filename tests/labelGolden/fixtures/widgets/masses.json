@@ -292,8 +292,8 @@
    "controls": {
     "calls": 37,
     "distinct": 26,
-    "digest": "865be4c025e74126",
-    "samples": [["A, un compañero débil","las dos estrellas resueltas","1.10","20"],["A, un compañero débil","las dos estrellas resueltas","0.20","20"],["A, un compañero débil","las dos estrellas resueltas","0.20","3"],["A, un compañero débil","las dos estrellas resueltas","1.10","3"],["C, un compañero de poca masa","un solo fotocentro","1.20","40"],["B, estrellas casi iguales","un solo fotocentro","0.70","22"],["B, estrellas casi iguales","un solo fotocentro","1.10","20"],["B, estrellas casi iguales","las dos estrellas resueltas","1.10","20"],["B, estrellas casi iguales","las dos estrellas resueltas","0.65","16"],["C, un compañero de poca masa","las dos estrellas resueltas","1.10","20"],["C, un compañero de poca masa","las dos estrellas resueltas","0.20","16"],["A, un compañero débil","un solo fotocentro","1.10","20"],["A, un compañero débil","un solo fotocentro","1.05","24"],["C, un compañero de poca masa","las dos estrellas resueltas","0.85","9"],["C, un compañero de poca masa","las dos estrellas resueltas","0.30","8"]]
+    "digest": "817849b4c365f76f",
+    "samples": [["A, un compañero débil","dos resueltas","1.10","20"],["A, un compañero débil","dos resueltas","0.20","20"],["A, un compañero débil","dos resueltas","0.20","3"],["A, un compañero débil","dos resueltas","1.10","3"],["C, un compañero de poca masa","un fotocentro","1.20","40"],["B, estrellas casi iguales","un fotocentro","0.70","22"],["B, estrellas casi iguales","un fotocentro","1.10","20"],["B, estrellas casi iguales","dos resueltas","1.10","20"],["B, estrellas casi iguales","dos resueltas","0.65","16"],["C, un compañero de poca masa","dos resueltas","1.10","20"],["C, un compañero de poca masa","dos resueltas","0.20","16"],["A, un compañero débil","un fotocentro","1.10","20"],["A, un compañero débil","un fotocentro","1.05","24"],["C, un compañero de poca masa","dos resueltas","0.85","9"],["C, un compañero de poca masa","dos resueltas","0.30","8"]]
    },
    "phases": {
     "calls": 0,
