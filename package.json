@@ -10,6 +10,7 @@
     "strategy:validate": "node tools/strategy-validate.mjs",
     "binaries:validate": "node tools/binaries-validate.mjs",
     "binary-masses:validate": "node tools/binary-masses-validate.mjs",
+    "visual-binary:validate": "node tools/visual-binary-validate.mjs",
     "transit-delta:validate": "node tools/transit-delta-validate.mjs",
     "ttv:validate": "node tools/ttv-validate.mjs",
     "joint-inference:validate": "node tools/joint-inference-validate.mjs",

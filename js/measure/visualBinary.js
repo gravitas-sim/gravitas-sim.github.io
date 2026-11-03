@@ -133,9 +133,13 @@ function relativeOf(epochs) {
     const a = e?.A;
     const b = e?.B;
     if (![a?.x, a?.y, b?.x, b?.y].every(finite))
-      return refuse('series', `epoch ${i + 1} lacks a position of a component`, {
-        index: i,
-      });
+      return refuse(
+        'series',
+        `epoch ${i + 1} lacks a position of a component`,
+        {
+          index: i,
+        }
+      );
     if (!(a.sigma > 0) || !(b.sigma > 0))
       return refuse(
         'series',
@@ -242,7 +246,11 @@ export function massFraction(fit, epochs) {
   }
   const cov0 = invertSpd(N.map(r => Array.from(r)));
   if (!cov0)
-    return refuse('conditioning', 'the offsets cannot fix the mass fraction', {});
+    return refuse(
+      'conditioning',
+      'the offsets cannot fix the mass fraction',
+      {}
+    );
   const theta = cov0.map(r => r.reduce((s, v, j) => s + v * b[j], 0));
   let chi2 = 0;
   for (const { row, y, w } of rows) {
@@ -348,7 +356,9 @@ export function solveResolved(series, parallax, opts = {}) {
     sum,
     fraction,
     masses,
-    frameStatement: sum.ok ? sum.frameStatement : FRAME_STATEMENT[parallax?.frame] ?? null,
+    frameStatement: sum.ok
+      ? sum.frameStatement
+      : (FRAME_STATEMENT[parallax?.frame] ?? null),
     convention: CONTRACT.convention,
   };
 }
@@ -360,8 +370,16 @@ export function orbitFromElements({ a, P }) {
   const scale = a?.unit === 'mas' ? 1e-3 : 1;
   const va = a?.value * scale;
   const sa = a?.sigma * scale;
-  if (![va, sa, P?.value, P?.sigma].every(finite) || !(va > 0) || !(P.value > 0))
-    return refuse('elements', 'the elements need a, P and their uncertainties', {});
+  if (
+    ![va, sa, P?.value, P?.sigma].every(finite) ||
+    !(va > 0) ||
+    !(P.value > 0)
+  )
+    return refuse(
+      'elements',
+      'the elements need a, P and their uncertainties',
+      {}
+    );
   return {
     ok: true,
     kind: 'published-elements',
@@ -384,7 +402,12 @@ export function orbitFromElements({ a, P }) {
  * @param {object} parallax - as for solveResolved
  * @param {{lightFraction?: {value, sigma}, primaryMass?: {value, sigma}}} [given]
  */
-export function solvePhotocentre(orbitOrSeries, parallax, given = {}, opts = {}) {
+export function solvePhotocentre(
+  orbitOrSeries,
+  parallax,
+  given = {},
+  opts = {}
+) {
   const fit = orbitOrSeries?.ok ? orbitOrSeries : fitOrbit(orbitOrSeries, opts);
   if (!fit.ok) return fit;
   const snr = fit.elements.a.value / fit.elements.a.sigma;
@@ -475,7 +498,8 @@ export function solvePhotocentre(orbitOrSeries, parallax, given = {}, opts = {})
     lightFraction: l,
     primaryMass: m,
     what: CONTRACT.roots,
-    method: 'seeded Monte Carlo, 20,000 draws of the function, the light fraction and the primary’s mass',
+    method:
+      'seeded Monte Carlo, 20,000 draws of the function, the light fraction and the primary’s mass',
   };
   return result;
 }

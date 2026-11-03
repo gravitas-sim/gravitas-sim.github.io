@@ -72,14 +72,19 @@ const timeOf = y => ({ value: y, format: 'year' });
 const BARY = THR.sampling.barycentreNuisance;
 
 /** A system's series. `kind`: components, relative or photocentre. */
-function series(s, seed, { kind, spanFraction = 1.1, n = 16, swap = false } = {}) {
+function series(
+  s,
+  seed,
+  { kind, spanFraction = 1.1, n = 16, swap = false } = {}
+) {
   const el = elementsOf(s);
   const B = fractionOf(s);
   const u = stream('experiments', PREFIX, 'epochs', s.name ?? 'sys', seed);
   const years = jitteredYears(s.start, spanFraction * s.P, n, u, 0.3);
   const rel = truePositions(el, years);
   const g = noiseOf(`${kind}-${s.name ?? 'sys'}`, seed);
-  const sigma = 0.01 * (kind === 'photocentre' ? Math.abs(s.lB - B) * el.a : el.a);
+  const sigma =
+    0.01 * (kind === 'photocentre' ? Math.abs(s.lB - B) * el.a : el.a);
   const sig = kind === 'photocentre' && !(sigma > 0) ? 0.01 * el.a : sigma;
   const epochs = years.map((y, k) => {
     const time = timeOf(y);
@@ -165,7 +170,15 @@ const rows = [];
 const add = (id, leg, group, pass, measured, bound, note = '') =>
   rows.push({ id, leg, group, pass, measured, bound, note });
 const notRun = (id, leg, group, why) =>
-  rows.push({ id, leg, group, pass: null, measured: null, bound: null, note: why });
+  rows.push({
+    id,
+    leg,
+    group,
+    pass: null,
+    measured: null,
+    bound: null,
+    note: why,
+  });
 
 const maxAbs = a => a.reduce((m, v) => Math.max(m, Math.abs(v)), 0);
 const median = a => {
@@ -188,10 +201,19 @@ function groupA() {
     const got = plugInSum(0.1, 1, 0.1);
     const rel = Math.abs(got / expect - 1);
     const near = Math.abs(got - 1);
-    add('A1.keplerClosed', 'a', 'sum', rel <= lim.rel && near <= lim.nearOne, { rel, nearOne: near, value: got }, lim);
+    add(
+      'A1.keplerClosed',
+      'a',
+      'sum',
+      rel <= lim.rel && near <= lim.nearOne,
+      { rel, nearOne: near, value: got },
+      lim
+    );
   }
   if (wanted('A2')) {
-    const lim = THR.checks.find(c => c.id === 'A2.photocentreIdentities').limits;
+    const lim = THR.checks.find(
+      c => c.id === 'A2.photocentreIdentities'
+    ).limits;
     const f = Math.max(
       Math.abs(photocentreFactor(0.3, 0) + 0.3),
       Math.abs(photocentreFactor(0.3, 1) - 0.7),
@@ -213,10 +235,19 @@ function groupA() {
         worst = Math.max(worst, Math.hypot(wx - ph[k].x, wy - ph[k].y) / scale);
       });
     }
-    add('A2.photocentreIdentities', 'a', 'fraction', f <= lim.factor && worst <= lim.rel, { factor: f, rel: worst }, lim);
+    add(
+      'A2.photocentreIdentities',
+      'a',
+      'fraction',
+      f <= lim.factor && worst <= lim.rel,
+      { factor: f, rel: worst },
+      lim
+    );
   }
   if (wanted('A3')) {
-    const lim = THR.checks.find(c => c.id === 'A3.massFunctionRoundTrip').limits;
+    const lim = THR.checks.find(
+      c => c.id === 'A3.massFunctionRoundTrip'
+    ).limits;
     const u = stream('experiments', PREFIX, 'a3');
     // l = 0 equals the astrometric mass function
     const m1 = 0.9;
@@ -238,19 +269,47 @@ function groupA() {
       }
       worst = Math.max(worst, Math.abs(hit.B / B - 1));
     }
-    add('A3.massFunctionRoundTrip', 'a', 'photocentre', relDark <= lim.rel && worst <= lim.root && missing === 0, { relDark, root: worst, missing }, lim);
+    add(
+      'A3.massFunctionRoundTrip',
+      'a',
+      'photocentre',
+      relDark <= lim.rel && worst <= lim.root && missing === 0,
+      { relDark, root: worst, missing },
+      lim
+    );
   }
   if (wanted('A4')) {
     const lim = THR.checks.find(c => c.id === 'A4.frameFactor').limits;
     const s = V.V1;
     const ser = series(s, 1, { kind: 'relative' });
     const fit = fitOrbit(ser);
-    const abs = massSumOf(fit, { value: 50, sigma: 2, unit: 'mas', frame: 'absolute', source: 'test' });
-    const rel = massSumOf(fit, { value: 50 - lim.referenceMas, sigma: 2, unit: 'mas', frame: 'relative' });
+    const abs = massSumOf(fit, {
+      value: 50,
+      sigma: 2,
+      unit: 'mas',
+      frame: 'absolute',
+      source: 'test',
+    });
+    const rel = massSumOf(fit, {
+      value: 50 - lim.referenceMas,
+      sigma: 2,
+      unit: 'mas',
+      frame: 'relative',
+    });
     const ratio = rel.ok && abs.ok ? rel.value / abs.value : NaN;
     const want = (50 / (50 - lim.referenceMas)) ** 3;
     const diff = Math.abs(ratio / want - 1);
-    add('A4.frameFactor', 'a', 'sum', fit.ok && diff <= lim.rel && typeof rel.frameStatement === 'string' && rel.frameStatement.length > 20, { diff, ratio, want }, lim);
+    add(
+      'A4.frameFactor',
+      'a',
+      'sum',
+      fit.ok &&
+        diff <= lim.rel &&
+        typeof rel.frameStatement === 'string' &&
+        rel.frameStatement.length > 20,
+      { diff, ratio, want },
+      lim
+    );
   }
 }
 
@@ -288,9 +347,19 @@ function oracleInputs() {
 function groupB() {
   const file = path.join(FIX, 'oracle-results.json');
   if (!existsSync(file)) {
-    for (const id of ['B1.twoBodyPhotocentre', 'B2.sum', 'B2.fraction', 'B3.oracleSelf'])
+    for (const id of [
+      'B1.twoBodyPhotocentre',
+      'B2.sum',
+      'B2.fraction',
+      'B3.oracleSelf',
+    ])
       if (wanted(id.slice(0, 2)))
-        notRun(id, 'b', id.startsWith('B2.f') ? 'fraction' : 'sum', 'oracle-results.json is missing: run the oracle first');
+        notRun(
+          id,
+          'b',
+          id.startsWith('B2.f') ? 'fraction' : 'sum',
+          'oracle-results.json is missing: run the oracle first'
+        );
     return;
   }
   const oracle = JSON.parse(readFileSync(file, 'utf8'));
@@ -300,11 +369,22 @@ function groupB() {
     for (const [name, s] of Object.entries(V)) {
       const o = oracle.b1[name];
       const el = elementsOf(s);
-      const ph = photocentreOffsets(truePositions(el, o.years), fractionOf(s), s.lB);
+      const ph = photocentreOffsets(
+        truePositions(el, o.years),
+        fractionOf(s),
+        s.lB
+      );
       per[name] = maxAbs(ph.flatMap((p, k) => [p.x - o.x[k], p.y - o.y[k]]));
     }
     const worst = maxAbs(Object.values(per));
-    add('B1.twoBodyPhotocentre', 'b', 'sum', worst <= lim.maxAbsArcsec, { perSystem: per, maxAbsArcsec: worst }, lim);
+    add(
+      'B1.twoBodyPhotocentre',
+      'b',
+      'sum',
+      worst <= lim.maxAbsArcsec,
+      { perSystem: per, maxAbsArcsec: worst },
+      lim
+    );
   }
   if (wanted('B2') || wanted('B3')) {
     const lim = THR.checks.find(c => c.id === 'B2.oracleSolution').limits;
@@ -322,21 +402,35 @@ function groupB() {
         passSum = passFrac = false;
         continue;
       }
-      const lnK3 = 3 * Math.log(res.orbit.elements.a.value) - 2 * Math.log(res.orbit.elements.P.value);
+      const lnK3 =
+        3 * Math.log(res.orbit.elements.a.value) -
+        2 * Math.log(res.orbit.elements.P.value);
       const sLn = res.orbit.gradients.sigmaLnK3;
       const dSum = Math.abs(lnK3 - o.lnK3) / sLn;
       const dFrac = Math.abs(res.fraction.value - o.B) / res.fraction.sigma;
       const sRatio = Math.abs(res.fraction.sigma / o.sigmaB - 1);
-      per[name] = { dSum, dFrac, sigmaRatio: sRatio, zOracleLnK3: o.zLnK3, zOracleB: o.zB };
+      per[name] = {
+        dSum,
+        dFrac,
+        sigmaRatio: sRatio,
+        zOracleLnK3: o.zLnK3,
+        zOracleB: o.zB,
+      };
       if (!(dSum <= lim.sumSigmas)) passSum = false;
-      if (!(dFrac <= lim.fractionSigmas && sRatio <= lim.sigmaRatio)) passFrac = false;
-      if (!(Math.abs(o.zLnK3) <= lim3.nSigma && Math.abs(o.zB) <= lim3.nSigma)) self = false;
+      if (!(dFrac <= lim.fractionSigmas && sRatio <= lim.sigmaRatio))
+        passFrac = false;
+      if (!(Math.abs(o.zLnK3) <= lim3.nSigma && Math.abs(o.zB) <= lim3.nSigma))
+        self = false;
     }
     if (wanted('B2')) {
       add('B2.sum', 'b', 'sum', passSum, per, { sumSigmas: lim.sumSigmas });
-      add('B2.fraction', 'b', 'fraction', passFrac, per, { fractionSigmas: lim.fractionSigmas, sigmaRatio: lim.sigmaRatio });
+      add('B2.fraction', 'b', 'fraction', passFrac, per, {
+        fractionSigmas: lim.fractionSigmas,
+        sigmaRatio: lim.sigmaRatio,
+      });
     }
-    if (wanted('B3')) add('B3.oracleSelf', 'b', 'sum-and-fraction', self, per, lim3);
+    if (wanted('B3'))
+      add('B3.oracleSelf', 'b', 'sum-and-fraction', self, per, lim3);
   }
 }
 
@@ -347,7 +441,16 @@ function groupC() {
   if (need) {
     const L = THR.checks.find(c => c.id === 'C1.coverageSum').limits;
     const n = L.n;
-    const hit = { sum68: 0, sum95: 0, B68: 0, B95: 0, m1_68: 0, m1_95: 0, m2_68: 0, m2_95: 0 };
+    const hit = {
+      sum68: 0,
+      sum95: 0,
+      B68: 0,
+      B95: 0,
+      m1_68: 0,
+      m1_95: 0,
+      m2_68: 0,
+      m2_95: 0,
+    };
     let returned = 0;
     const logRatios = [];
     const sigmas = [];
@@ -374,39 +477,83 @@ function groupC() {
     }
     const r = v => (returned ? v / returned : NaN);
     const rate = {
-      sum68: r(hit.sum68), sum95: r(hit.sum95), B68: r(hit.B68), B95: r(hit.B95),
-      m1_68: r(hit.m1_68), m1_95: r(hit.m1_95), m2_68: r(hit.m2_68), m2_95: r(hit.m2_95),
+      sum68: r(hit.sum68),
+      sum95: r(hit.sum95),
+      B68: r(hit.B68),
+      B95: r(hit.B95),
+      m1_68: r(hit.m1_68),
+      m1_95: r(hit.m1_95),
+      m2_68: r(hit.m2_68),
+      m2_95: r(hit.m2_95),
     };
     const returnedRate = returned / n;
     const meas = { n, returned, returnedRate, ...rate };
     if (wanted('C1'))
-      add('C1.coverageSum', 'c', 'sum',
-        returnedRate >= L.minReturned && inRange(rate.sum68, L.level68) && inRange(rate.sum95, L.level95),
-        { returned, returnedRate, sum68: rate.sum68, sum95: rate.sum95 }, L);
+      add(
+        'C1.coverageSum',
+        'c',
+        'sum',
+        returnedRate >= L.minReturned &&
+          inRange(rate.sum68, L.level68) &&
+          inRange(rate.sum95, L.level95),
+        { returned, returnedRate, sum68: rate.sum68, sum95: rate.sum95 },
+        L
+      );
     if (wanted('C2')) {
       const l2 = THR.checks.find(c => c.id === 'C2.coverageFraction').limits;
-      add('C2.coverageFraction', 'c', 'fraction',
+      add(
+        'C2.coverageFraction',
+        'c',
+        'fraction',
         inRange(rate.B68, l2.level68) && inRange(rate.B95, l2.level95),
-        { returned, B68: rate.B68, B95: rate.B95 }, l2);
+        { returned, B68: rate.B68, B95: rate.B95 },
+        l2
+      );
     }
     if (wanted('C3')) {
       const l3 = THR.checks.find(c => c.id === 'C3.coverageMasses').limits;
-      add('C3.coverageMasses', 'c', 'fraction',
+      add(
+        'C3.coverageMasses',
+        'c',
+        'fraction',
         [rate.m1_68, rate.m2_68].every(v => inRange(v, l3.level68)) &&
           [rate.m1_95, rate.m2_95].every(v => inRange(v, l3.level95)),
-        { returned, M1_68: rate.m1_68, M1_95: rate.m1_95, M2_68: rate.m2_68, M2_95: rate.m2_95 }, l3);
+        {
+          returned,
+          M1_68: rate.m1_68,
+          M1_95: rate.m1_95,
+          M2_68: rate.m2_68,
+          M2_95: rate.m2_95,
+        },
+        l3
+      );
     }
     if (wanted('C5')) {
       const l5 = THR.checks.find(c => c.id === 'C5.sumBias').limits;
       const med = median(logRatios);
-      const bound = (l5.nSigma * median(sigmas) * l5.medianFactor) / Math.sqrt(logRatios.length);
-      add('C5.sumBias', 'c', 'sum', Math.abs(med) <= bound,
-        { medianLogRatio: med, bound, medianSigmaLn: median(sigmas), n: logRatios.length }, l5);
+      const bound =
+        (l5.nSigma * median(sigmas) * l5.medianFactor) /
+        Math.sqrt(logRatios.length);
+      add(
+        'C5.sumBias',
+        'c',
+        'sum',
+        Math.abs(med) <= bound,
+        {
+          medianLogRatio: med,
+          bound,
+          medianSigmaLn: median(sigmas),
+          n: logRatios.length,
+        },
+        l5
+      );
     }
     rows.meas = meas;
   }
   if (wanted('C4') || wanted('D10')) {
-    const L = THR.checks.find(c => c.id === 'C4.coveragePhotocentreCompanion').limits;
+    const L = THR.checks.find(
+      c => c.id === 'C4.coveragePhotocentreCompanion'
+    ).limits;
     const n = L.n;
     let returned = 0;
     let h68 = 0;
@@ -418,7 +565,10 @@ function groupC() {
       const g = noiseOf(`given${k}`, 1);
       const l = { value: s.lB * (1 + 0.05 * g()), sigma: 0.05 * s.lB };
       const m1 = { value: s.MA * (1 + 0.05 * g()), sigma: 0.05 * s.MA };
-      const res = solvePhotocentre(ser, parallaxOf(s, 10, `p${k}`, 1), { lightFraction: l, primaryMass: m1 });
+      const res = solvePhotocentre(ser, parallaxOf(s, 10, `p${k}`, 1), {
+        lightFraction: l,
+        primaryMass: m1,
+      });
       if (!res.ok || !res.massFunction.ok) continue;
       naive.push(res.massFunction.value / (s.MA + s.MB));
       if (!res.companion?.ok) continue;
@@ -432,13 +582,27 @@ function groupC() {
     const rate68 = returned ? h68 / returned : NaN;
     const rate95 = returned ? h95 / returned : NaN;
     if (wanted('C4'))
-      add('C4.coveragePhotocentreCompanion', 'c', 'photocentre',
-        returned / n >= L.minReturned && inRange(rate68, L.level68) && inRange(rate95, L.level95),
-        { returned, returnedRate: returned / n, rate68, rate95 }, L);
+      add(
+        'C4.coveragePhotocentreCompanion',
+        'c',
+        'photocentre',
+        returned / n >= L.minReturned &&
+          inRange(rate68, L.level68) &&
+          inRange(rate95, L.level95),
+        { returned, returnedRate: returned / n, rate68, rate95 },
+        L
+      );
     if (wanted('D10')) {
       const l10 = THR.checks.find(c => c.id === 'D10.naivePhotocentre').limits;
       const med = median(naive);
-      add('D10.naivePhotocentre', 'd', 'photocentre', med < l10.medianBelow, { medianNaiveOverTrue: med, n: naive.length }, l10);
+      add(
+        'D10.naivePhotocentre',
+        'd',
+        'photocentre',
+        med < l10.medianBelow,
+        { medianNaiveOverTrue: med, n: naive.length },
+        l10
+      );
     }
   }
 }
@@ -464,7 +628,14 @@ function groupD() {
       const codes = bad.map(p => solveResolved(ser, p).sum?.code);
       if (codes.every(c => c === 'parallax')) ok++;
     }
-    add('D1.noParallax', 'd', 'sum', ok / lim.n >= lim.rate, { rate: ok / lim.n, n: lim.n }, lim);
+    add(
+      'D1.noParallax',
+      'd',
+      'sum',
+      ok / lim.n >= lim.rate,
+      { rate: ok / lim.n, n: lim.n },
+      lim
+    );
   }
   if (wanted('D2')) {
     const lim = cnt('D2.noFrame');
@@ -475,11 +646,24 @@ function groupD() {
       const codes = [
         { value: 50, sigma: 2, unit: 'mas' },
         { value: 50, sigma: 2, unit: 'mas', frame: 'absolute' },
-        { value: 50, sigma: 2, unit: 'mas', frame: 'absolute', literature: true },
+        {
+          value: 50,
+          sigma: 2,
+          unit: 'mas',
+          frame: 'absolute',
+          literature: true,
+        },
       ].map(p => solveResolved(ser, p).sum?.code);
       if (codes.every(c => c === 'frame')) ok++;
     }
-    add('D2.noFrame', 'd', 'sum', ok / lim.n >= lim.rate, { rate: ok / lim.n, n: lim.n }, lim);
+    add(
+      'D2.noFrame',
+      'd',
+      'sum',
+      ok / lim.n >= lim.rate,
+      { rate: ok / lim.n, n: lim.n },
+      lim
+    );
   }
   if (wanted('D3')) {
     const lim = cnt('D3.weakParallax');
@@ -488,22 +672,51 @@ function groupD() {
     for (const k of seeds(lim.n)) {
       const s = V.V1;
       const ser = series(s, k, { kind: 'components' });
-      const w = solveResolved(ser, { value: 50, sigma: 50 / 2.5, unit: 'mas', frame: 'absolute', source: 'x' });
-      const g = solveResolved(ser, { value: 50, sigma: 50 / 3.5, unit: 'mas', frame: 'absolute', source: 'x' });
+      const w = solveResolved(ser, {
+        value: 50,
+        sigma: 50 / 2.5,
+        unit: 'mas',
+        frame: 'absolute',
+        source: 'x',
+      });
+      const g = solveResolved(ser, {
+        value: 50,
+        sigma: 50 / 3.5,
+        unit: 'mas',
+        frame: 'absolute',
+        source: 'x',
+      });
       if (w.sum?.code === 'parallax-weak') weak++;
       if (g.sum?.ok) strong++;
     }
-    add('D3.weakParallax', 'd', 'sum', weak / lim.n >= lim.rate && strong === lim.n, { weakRefused: weak / lim.n, at35Returned: strong / lim.n }, lim);
+    add(
+      'D3.weakParallax',
+      'd',
+      'sum',
+      weak / lim.n >= lim.rate && strong === lim.n,
+      { weakRefused: weak / lim.n, at35Returned: strong / lim.n },
+      lim
+    );
   }
   if (wanted('D4')) {
     const lim = cnt('D4.shortArc');
     let ok = 0;
     for (const k of seeds(lim.n)) {
-      const ser = series(V.V1, k, { kind: 'components', spanFraction: lim.arcFraction });
+      const ser = series(V.V1, k, {
+        kind: 'components',
+        spanFraction: lim.arcFraction,
+      });
       const res = solveResolved(ser, parallaxOf(V.V1, 10, `d4${k}`, k));
       if (!res.ok && !res.sum && !res.fraction && !res.masses) ok++;
     }
-    add('D4.shortArc', 'd', 'sum', ok / lim.n >= lim.rate, { rate: ok / lim.n, n: lim.n }, lim);
+    add(
+      'D4.shortArc',
+      'd',
+      'sum',
+      ok / lim.n >= lim.rate,
+      { rate: ok / lim.n, n: lim.n },
+      lim
+    );
   }
   if (wanted('D5')) {
     const lim = cnt('D5.oneComponent');
@@ -514,9 +727,24 @@ function groupD() {
       const comp = series(V.V1, k, { kind: 'components' });
       const one = { epochs: comp.epochs.map(e => ({ time: e.time, A: e.A })) };
       const o = solveResolved(one, parallaxOf(V.V1, 10, `d5b${k}`, k));
-      if (r.ok && r.sum?.ok && r.fraction?.code === 'needs-each-component' && !r.masses && !o.ok && o.code === 'needs-each-component') ok++;
+      if (
+        r.ok &&
+        r.sum?.ok &&
+        r.fraction?.code === 'needs-each-component' &&
+        !r.masses &&
+        !o.ok &&
+        o.code === 'needs-each-component'
+      )
+        ok++;
     }
-    add('D5.oneComponent', 'd', 'fraction', ok / lim.n >= lim.rate, { rate: ok / lim.n, n: lim.n }, lim);
+    add(
+      'D5.oneComponent',
+      'd',
+      'fraction',
+      ok / lim.n >= lim.rate,
+      { rate: ok / lim.n, n: lim.n },
+      lim
+    );
   }
   if (wanted('D6')) {
     const lim = cnt('D6.badFraction');
@@ -527,9 +755,22 @@ function groupD() {
       const ser = series(s, k, { kind: 'components', swap: true });
       const res = solveResolved(ser, parallaxOf(s, 10, `d6${k}`, k));
       counted++;
-      if (res.ok && res.fraction.ok && Math.abs(res.fraction.value - (1 - fractionOf(s))) <= lim.nSigma * res.fraction.sigma) ok++;
+      if (
+        res.ok &&
+        res.fraction.ok &&
+        Math.abs(res.fraction.value - (1 - fractionOf(s))) <=
+          lim.nSigma * res.fraction.sigma
+      )
+        ok++;
     }
-    add('D6.badFraction', 'd', 'fraction', ok / counted >= lim.rate, { rate: ok / counted, n: counted }, lim);
+    add(
+      'D6.badFraction',
+      'd',
+      'fraction',
+      ok / counted >= lim.rate,
+      { rate: ok / counted, n: counted },
+      lim
+    );
   }
   if (wanted('D7')) {
     const lim = cnt('D7.noLight');
@@ -537,7 +778,9 @@ function groupD() {
     for (const k of seeds(lim.n)) {
       const s = V.V1;
       const ser = series(s, k, { kind: 'photocentre' });
-      const noL = solvePhotocentre(ser, parallaxOf(s, 10, `d7${k}`, k), { primaryMass: { value: s.MA, sigma: 0.05 * s.MA } });
+      const noL = solvePhotocentre(ser, parallaxOf(s, 10, `d7${k}`, k), {
+        primaryMass: { value: s.MA, sigma: 0.05 * s.MA },
+      });
       const a = noL.ok && noL.companion?.code === 'light-fraction';
       // l = B exactly: the photocentre does not move; the series is noise with the relative axis's 1 percent
       const v2 = { ...V.V2, lB: fractionOf(V.V2) };
@@ -545,18 +788,50 @@ function groupD() {
       const noise = gaussian(stream('noise', PREFIX, 'd7flat', k));
       const el = elementsOf(v2);
       const flatSeries = {
-        epochs: flat.epochs.map(e => ({ time: e.time, x: 0.01 * el.a * noise(), y: 0.01 * el.a * noise(), sigma: 0.01 * el.a })),
+        epochs: flat.epochs.map(e => ({
+          time: e.time,
+          x: 0.01 * el.a * noise(),
+          y: 0.01 * el.a * noise(),
+          sigma: 0.01 * el.a,
+        })),
       };
-      const given = { lightFraction: { value: v2.lB, sigma: 0.05 * v2.lB }, primaryMass: { value: v2.MA, sigma: 0.05 * v2.MA } };
-      const f = solvePhotocentre(flatSeries, parallaxOf(v2, 10, `d7f${k}`, k), given);
+      const given = {
+        lightFraction: { value: v2.lB, sigma: 0.05 * v2.lB },
+        primaryMass: { value: v2.MA, sigma: 0.05 * v2.MA },
+      };
+      const f = solvePhotocentre(
+        flatSeries,
+        parallaxOf(v2, 10, `d7f${k}`, k),
+        given
+      );
       const b = !f.ok || !f.companion?.ok;
       if (a && b) ok++;
     }
-    add('D7.noLight', 'd', 'photocentre', ok / lim.n >= lim.rate, { rate: ok / lim.n, n: lim.n }, lim);
+    add(
+      'D7.noLight',
+      'd',
+      'photocentre',
+      ok / lim.n >= lim.rate,
+      { rate: ok / lim.n, n: lim.n },
+      lim
+    );
   }
   if (wanted('D8')) {
     const lim = cnt('D8.bothRoots');
-    const heavy = { name: 'D8', MA: 1.0, MB: 0.5, P: 10, parallaxMas: 60, e: 0.3, i: 55, Omega: 80, omega: 120, T: 2002.5, start: 2000, lB: 0.6 };
+    const heavy = {
+      name: 'D8',
+      MA: 1.0,
+      MB: 0.5,
+      P: 10,
+      parallaxMas: 60,
+      e: 0.3,
+      i: 55,
+      Omega: 80,
+      omega: 120,
+      T: 2002.5,
+      start: 2000,
+      lB: 0.6,
+    };
     let both = 0;
     let truthHit = 0;
     let oneRoot = 0;
@@ -566,7 +841,12 @@ function groupD() {
         lightFraction: { value: 0.6, sigma: 0.03 },
         primaryMass: { value: 1.0, sigma: 0.05 },
       });
-      if (res.ok && res.companion?.ok && res.companion.roots.length === 2 && res.companion.roots[1].flag === 'ambiguous-root') {
+      if (
+        res.ok &&
+        res.companion?.ok &&
+        res.companion.roots.length === 2 &&
+        res.companion.roots[1].flag === 'ambiguous-root'
+      ) {
         both++;
         const hit = res.companion.roots.some(r => {
           const iv = ci(r.intervals, Z68);
@@ -579,10 +859,24 @@ function groupD() {
         lightFraction: { value: V.V3.lB, sigma: 0.05 * V.V3.lB },
         primaryMass: { value: V.V3.MA, sigma: 0.05 * V.V3.MA },
       });
-      if (r1.ok && r1.companion?.ok && r1.companion.roots.length === 1) oneRoot++;
+      if (r1.ok && r1.companion?.ok && r1.companion.roots.length === 1)
+        oneRoot++;
     }
-    add('D8.bothRoots', 'd', 'photocentre', both / lim.n >= lim.rate && truthHit / lim.n >= lim.rate && oneRoot / lim.n >= lim.rate,
-      { bothListed: both / lim.n, truthWithin3Sigma: truthHit / lim.n, singleRootCase: oneRoot / lim.n, n: lim.n }, lim);
+    add(
+      'D8.bothRoots',
+      'd',
+      'photocentre',
+      both / lim.n >= lim.rate &&
+        truthHit / lim.n >= lim.rate &&
+        oneRoot / lim.n >= lim.rate,
+      {
+        bothListed: both / lim.n,
+        truthWithin3Sigma: truthHit / lim.n,
+        singleRootCase: oneRoot / lim.n,
+        n: lim.n,
+      },
+      lim
+    );
   }
   if (wanted('D9')) {
     const lim = cnt('D9.relativeParallax');
@@ -592,17 +886,39 @@ function groupD() {
       const s = V.V1;
       const ser = series(s, k, { kind: 'components' });
       const g = noiseOf(`d9${k}`, k);
-      const rel = { value: (s.parallaxMas - 3) * (1 + g() / 20), sigma: (s.parallaxMas - 3) / 20, unit: 'mas', frame: 'relative' };
+      const rel = {
+        value: (s.parallaxMas - 3) * (1 + g() / 20),
+        sigma: (s.parallaxMas - 3) / 20,
+        unit: 'mas',
+        frame: 'relative',
+      };
       const res = solveResolved(ser, rel);
       if (res.ok && res.sum.ok) {
         ratios.push(res.sum.value / (s.MA + s.MB));
-        if (typeof res.frameStatement === 'string' && res.frameStatement.includes('relative')) stated++;
+        if (
+          typeof res.frameStatement === 'string' &&
+          res.frameStatement.includes('relative')
+        )
+          stated++;
       }
     }
     const want = (50 / 47) ** 3;
     const med = median(ratios);
-    add('D9.relativeParallax', 'd', 'sum', Math.abs(med / want - 1) <= lim.tolerance && stated === ratios.length && ratios.length === lim.n,
-      { medianRatio: med, predicted: want, statements: stated, n: ratios.length }, lim);
+    add(
+      'D9.relativeParallax',
+      'd',
+      'sum',
+      Math.abs(med / want - 1) <= lim.tolerance &&
+        stated === ratios.length &&
+        ratios.length === lim.n,
+      {
+        medianRatio: med,
+        predicted: want,
+        statements: stated,
+        n: ratios.length,
+      },
+      lim
+    );
   }
 }
 
@@ -610,27 +926,74 @@ function groupD() {
 
 function groupEP() {
   if (wanted('E1'))
-    notRun('E1.authentic', 'e', 'authentic', 'no published table of orbital elements and parallax (or of positions) was supplied; the source and terms are named in VISUAL_BINARY_GATE.md');
+    notRun(
+      'E1.authentic',
+      'e',
+      'authentic',
+      'no published table of orbital elements and parallax (or of positions) was supplied; the source and terms are named in VISUAL_BINARY_GATE.md'
+    );
   if (wanted('P1')) {
     const s = V.V1;
     const ser = series(s, 1, { kind: 'components' });
     const t0 = process.cpuUsage();
     const res = solveResolved(ser, parallaxOf(s, 10, 'p1', 1));
     const t = process.cpuUsage(t0);
-    add('P1.speed', 'p', 'record', res.ok, { cpuSeconds: (t.user + t.system) / 1e6 }, THR.checks.find(c => c.id === 'P1.speed').limits, 'recorded, not a physics bound');
+    add(
+      'P1.speed',
+      'p',
+      'record',
+      res.ok,
+      { cpuSeconds: (t.user + t.system) / 1e6 },
+      THR.checks.find(c => c.id === 'P1.speed').limits,
+      'recorded, not a physics bound'
+    );
   }
 }
 
 // ---- verdict ------------------------------------------------------------------------
 
-const SUM_LEGS = ['A1', 'A4', 'B1', 'B2.sum', 'C1', 'C5', 'D1', 'D2', 'D3', 'D4', 'D9'];
+const SUM_LEGS = [
+  'A1',
+  'A4',
+  'B1',
+  'B2.sum',
+  'C1',
+  'C5',
+  'D1',
+  'D2',
+  'D3',
+  'D4',
+  'D9',
+];
 const FRACTION_LEGS = ['A2', 'B2.fraction', 'C2', 'C3', 'D6'];
-const A_REQUIRED = ['A1', 'A2', 'A3', 'A4', 'B1', 'B2.sum', 'B2.fraction', 'B3', 'C1', 'C2', 'C3', 'C5', 'D1', 'D2', 'D3', 'D4', 'D5', 'D6', 'D7'];
+const A_REQUIRED = [
+  'A1',
+  'A2',
+  'A3',
+  'A4',
+  'B1',
+  'B2.sum',
+  'B2.fraction',
+  'B3',
+  'C1',
+  'C2',
+  'C3',
+  'C5',
+  'D1',
+  'D2',
+  'D3',
+  'D4',
+  'D5',
+  'D6',
+  'D7',
+];
 const PHOTOCENTRE_LEGS = ['A3', 'C4', 'D7', 'D8'];
 
 function verdictOf() {
   const pass = id => {
-    const r = rows.find(x => x.id === id || (!id.includes('.') && x.id.startsWith(`${id}.`)));
+    const r = rows.find(
+      x => x.id === id || (!id.includes('.') && x.id.startsWith(`${id}.`))
+    );
     return r ? r.pass === true : false;
   };
   const sum = SUM_LEGS.every(pass);
@@ -646,7 +1009,10 @@ function verdictOf() {
     photocentreCompanionOffered: phot && letter !== 'C',
     reading:
       letter === 'A'
-        ? 'the mass sum and, from the series of each component, the mass fraction and the two masses' + (phot ? ', and the photocentre companion mass' : '; the photocentre companion mass is not offered (f_ph only)')
+        ? 'the mass sum and, from the series of each component, the mass fraction and the two masses' +
+          (phot
+            ? ', and the photocentre companion mass'
+            : '; the photocentre companion mass is not offered (f_ph only)')
         : letter === 'B'
           ? 'the mass sum only'
           : 'the visual branch is a reading step',
@@ -656,7 +1022,10 @@ function verdictOf() {
 // ---- run ----------------------------------------------------------------------------
 
 if (flag('write-oracle-inputs')) {
-  writeFileSync(path.join(ROOT, 'tools/visual-binary-oracle/oracle-inputs.json'), `${JSON.stringify(oracleInputs())}\n`);
+  writeFileSync(
+    path.join(ROOT, 'tools/visual-binary-oracle/oracle-inputs.json'),
+    `${JSON.stringify(oracleInputs())}\n`
+  );
   console.log('wrote tools/visual-binary-oracle/oracle-inputs.json');
   process.exit(0);
 }
@@ -673,21 +1042,38 @@ if (flag('json')) console.log(JSON.stringify({ rows, verdict }, null, 1));
 else {
   for (const r of rows) {
     const s = r.pass === null ? 'NOT RUN' : r.pass ? 'pass' : 'FAIL';
-    console.log(`${s.padEnd(8)} ${r.id.padEnd(34)} ${JSON.stringify(r.measured)?.slice(0, 160) ?? ''}`);
+    console.log(
+      `${s.padEnd(8)} ${r.id.padEnd(34)} ${JSON.stringify(r.measured)?.slice(0, 160) ?? ''}`
+    );
   }
-  if (verdict) console.log(`\nVerdict ${verdict.verdict}: ${verdict.reading}\n${JSON.stringify(verdict)}`);
-  console.log(`\n${rows.filter(r => r.pass).length} pass, ${failed.length} fail, ${rows.filter(r => r.pass === null).length} not run`);
+  if (verdict)
+    console.log(
+      `\nVerdict ${verdict.verdict}: ${verdict.reading}\n${JSON.stringify(verdict)}`
+    );
+  console.log(
+    `\n${rows.filter(r => r.pass).length} pass, ${failed.length} fail, ${rows.filter(r => r.pass === null).length} not run`
+  );
 }
 if (flag('write-results') && !only.length)
-  writeFileSync(path.join(FIX, 'results.json'), `${JSON.stringify({ format: 'gravitas.visual-binary-results/1', node: process.version, verdict, rows }, null, 1)}\n`);
+  writeFileSync(
+    path.join(FIX, 'results.json'),
+    `${JSON.stringify({ format: 'gravitas.visual-binary-results/1', node: process.version, verdict, rows }, null, 1)}\n`
+  );
 if (flag('write-failed') && !only.length)
   writeFileSync(
     path.join(FIX, 'failed-legs.json'),
     `${JSON.stringify(
       {
         note: 'Legs of tests/fixtures/visual-binary/thresholds.json that crossed their bound, kept failing and labelled (only Carl resets a bound); NOT RUN legs say why.',
-        failed: failed.map(r => ({ id: r.id, measured: r.measured, bound: r.bound, why: r.note })),
-        notRun: rows.filter(r => r.pass === null).map(r => ({ id: r.id, why: r.note })),
+        failed: failed.map(r => ({
+          id: r.id,
+          measured: r.measured,
+          bound: r.bound,
+          why: r.note,
+        })),
+        notRun: rows
+          .filter(r => r.pass === null)
+          .map(r => ({ id: r.id, why: r.note })),
       },
       null,
       2
