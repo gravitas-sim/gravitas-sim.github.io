@@ -43,7 +43,7 @@ and the oracle's results were pinned (commit ca251c21) before the kernel was run
 | C5 | median bias of the sum | **pass** (0.031 against 0.080) |
 | D1 to D9 | no parallax, no frame, weak parallax, short arc, one component, swapped labels, no light fraction or no signal, both roots, relative parallax | **pass** (all 1.0; the relative-parallax factor within 4 percent of 1.204) |
 | D10 | the photocentre read as the sum | **pass** (median 0.015 of the truth; the demonstration of the factor) |
-| E1 | an authentic visual pair or astrometric orbit | **NOT RUN**: no published table of elements and parallax (or positions) was supplied |
+| E1 | alpha Cen AB, Akeson et al. 2021 Table 8 (AM3): the sum from a, P and the parallax against the published masses | **pass, circular**: 1.98805 against 1.9880 (0.01 published sigma); the K16 column 2.0431 against 2.0428; an arithmetic and units check, since the paper's parallax is its own orbital parallax |
 | P1 | one resolved fit with masses | recorded: 0.09 CPU seconds |
 
 No leg failed, so `failed-legs.json` lists none. The coverage of `B` is at 0.625, near the low edge of its band, because the regression takes the
@@ -54,7 +54,7 @@ fitted relative orbit as exact; the band was committed first and is met.
 The mass sum and, from the series of each component, the mass fraction and the two masses; and the photocentre companion mass (with both
 roots), under these stated limits: every leg is on synthetic data with the gate's three systems and a stated parallax; the oracle is independent
 for the photocentre and the least squares but not for the regression's model; common-mode frame errors, a third body and radial-velocity coupling
-are not modelled; the photocentre route needs a barycentre-referenced series or published elements; **the authentic leg is not run**. What it
+are not modelled; the photocentre route needs a barycentre-referenced series or published elements; **no independent authentic leg was run** (E1 is circular, amendment AM3 fixed it before it ran, the numbers are read by hand from Table 8, credited, the paper not stored). What an independent one
 needs: a published table of the orbital elements of a visual pair (or an astrometric photocentre orbit) with a parallax and masses published
 independently, fetched by Carl with its terms read and recorded (data-rights decision per source), for example the Gaia DR3 two-body-orbit table
 (`gaiadr3.nss_two_body_orbit` in the ESA Gaia archive, whose columns include `period`, `eccentricity`, `a_thiele_innes`, `b_thiele_innes`,
