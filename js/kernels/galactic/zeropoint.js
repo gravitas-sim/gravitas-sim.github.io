@@ -15,9 +15,12 @@
 // b_2 = sin^2 b - 1/3. The corrected parallax is p - Z.
 //
 // This is an independent reimplementation from the tabulated coefficients and the
-// basis functions the package's source states. It is not that package: no output
-// of the package was available to compare with (the check in tools/gaia-validate.mjs
-// is against a second reimplementation in numpy, tools/gaia-oracle/zeropoint.py).
+// basis functions the package's source states. It is not that package's code; its
+// output on the 993 NGC 2420 stars (run with Carl's permission) is pinned in
+// tests/fixtures/gaia-workflows/zero-point-package.json and tools/gaia-validate.mjs
+// (leg B2) compares with it at the committed 1e-4 mas. A second reimplementation in
+// numpy (tools/gaia-oracle/zeropoint.py) covers the neighbourhood pack, which has
+// no package output.
 // The paper's own statement of the offset's remaining systematic error is not in
 // the material supplied, so none is built in: ZERO_POINT_SOURCE.sigma is null and
 // a caller that wants a systematic floor states it and its source.
@@ -35,7 +38,7 @@ export const ZERO_POINT_SOURCE = Object.freeze({
   name: 'Lindegren et al. (2021), A&A 649, A4: the parallax bias as a function of G, colour and ecliptic latitude',
   tables: TABLE_FILES,
   implementation:
-    'an independent reimplementation from the tabulated coefficients (not the authors’ package, whose output was not available to compare with)',
+    'an independent reimplementation from the tabulated coefficients, compared with the output of the authors’ package on 993 stars (not its code)',
   sigma: null,
   sigmaNote:
     'the residual systematic error of the correction is not in the material this release was built from, so no floor is assumed: a caller supplies one with its source, or states that it has none',

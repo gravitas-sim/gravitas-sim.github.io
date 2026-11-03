@@ -46,16 +46,20 @@ Validation: `npm run gaia:validate` (`tools/gaia-validate.mjs`) against the boun
 the tabulated coefficients (`zeropointTables.js`, generated from `z5_200720.txt` and `z6_200720.txt`, sha256 in the file) and
 the basis functions the package's source states. Three honest limits:
 
-1. It is an **independent reimplementation, not the authors' package.** The package (`gaiadr3_zeropoint` 0.0.5, LGPL-3.0) was
-   downloaded for reading but **not run**: executing downloaded code was not allowed. Leg B2 compares the kernel with a second
-   implementation (`tools/gaia-oracle/zeropoint.py`, numpy, reading the text tables) written by the same hand from the same
-   source text. It checks the arithmetic and the table's transcription, not the reading of the formula; **there is no
-   package-output oracle**, and the package-comparison part of the committed B2 is NOT RUN (only Carl can allow executing it).
+1. It is an **independent reimplementation; none of the authors' code is in the tree.** Carl allowed the package
+   (`gaiadr3_zeropoint` 0.0.5, LGPL-3.0, wheel sha256 `a11555ce...77f6`) to be run, and the coordinator ran it on the 993 NGC 2420
+   stars (2026-11-03, numpy 1.26.4; 978 five- and 15 six-parameter solutions; median -0.033724 mas; no NaN). Its per-star output
+   is pinned in `zero-point-package.json` (licence and provenance inside). Leg B2 compares the kernel, reading the pack's rounded
+   columns, with that output at the committed bound of 1e-4 mas: **it passes, largest difference 2.9e-5 mas, mean difference
+   -1.7e-7 mas** (the largest difference is what rounding G, the colour and the latitude to the pack's steps does; the second
+   implementation on the unrounded inputs differs by the same amount). The neighbourhood pack has no package output: it is
+   compared with a second implementation (`tools/gaia-oracle/zeropoint.py`, numpy, reading the text tables), largest difference
+   2.1e-6 mas on the same rounded inputs, and its five out-of-range stars are flagged.
 2. **The zero point's own uncertainty is not built in.** The paper's statement of the correction's residual systematic error
    was not in the material supplied, so `ZERO_POINT_SOURCE.sigma` is null and every caller states a floor with its source or
    says it has none. The mean zero point of NGC 2420's members is -0.037 mas, larger than the -0.017 mas "on average" the packs'
    text quotes: the offset depends on G, colour and latitude, and these stars are G 12 to 17.5.
-3. The paper itself was not in the folder; its reference is the package's own, and its numbers are those of the tables.
+3. The paper itself was not in the folder; its reference is the package's own, and its numbers are those of the tables. The package comparison covers G 12 to 17.5 near the ecliptic (NGC 2420's stars), not the whole range of the fit.
 
 ## What a sample's cuts remove
 
@@ -91,7 +95,7 @@ Bounds fixed first; seeds in `thresholds.json`; synthetic data with truth manife
 | **A6** with the distance posterior | analytic | second moment 0.000426 and 0.000246, variance 0.00117 and 0.00201 (relative) | PASS |
 | **A7** with a parallax-proper-motion correlation of -0.5 and 0.5 at p/s = 50 | analytic | relative 0.00405 (rho -0.5), 0.00209 (rho 0.5) | PASS |
 | **B1** an independent implementation | oracle | ten cases agree: largest relative difference 8.5e-9 on a point, 8.3e-7 on a quantile | PASS |
-| **B2** the per-star zero-point function | oracle | against a second implementation, largest difference 2.8e-06 mas (NGC 2420), 2.1e-06 mas (neighbourhood); NOT the authors' package | PASS |
+| **B2** the per-star zero-point function | oracle | against the authors' package on 993 NGC 2420 stars: largest difference 2.9e-05 mas (bound 1e-4), mean -1.7e-7; against a second implementation 2.1e-06 mas on the neighbourhood pack | PASS |
 | **C1** no-prior likelihood intervals | coverage | coverage 0.6797, 0.6805, 0.6765 at p/s 3, 10, 30 | PASS |
 | **C2** the same at the 0.9545 level | coverage | coverage 0.9543, 0.9583, 0.9537 at p/s 3, 10, 30 | PASS |
 | **C3** posterior equal-tailed intervals under the EDSD prior | coverage | 68%: 0.686, 0.6747, 0.6807; 95%: 0.95, 0.9535, 0.9515 at s 0.3, 0.1, 0.03 mas | PASS |
@@ -132,14 +136,14 @@ table; CDS was unreachable), and the zero point has no systematic floor. **Not j
 
 The corrected distance, 2.32 kpc, is below every distance from the literature in the table, including the lower end of the printed
 DR3 parallax's range (2.38). That is what the data gave under a contract that was fixed before it was seen; it is not an agreement with the literature and the
-lesson says so. The 2.6 kpc "about" statement of the earlier Cluster Membership lesson is not confirmed by it either. Whether to
-re-gate against a different source, or to allow the package to be run, is a question for Carl (register, D-R10-233-06).
+lesson says so. The 2.6 kpc "about" statement of the earlier Cluster Membership lesson is not confirmed by it either. Carl chose to wait for the CDS table (Hunt and Reffert 2023, DR3) rather
+to re-gate against another source: the leg stays NOT RUN against the committed contract until it can be fetched (register, D-R10-233-06).
 
 ## What is not built
 
 A universal or sample-wide parallax correction; a distance from the rounded neighbourhood pack; a third Gaia sample (the
 magnitude and parallax-over-error cuts show on NGC 2420's colour-magnitude diagram, and the neighbourhood pack's strata are in its
-manifest); the zero point's uncertainty; a comparison with the authors' package; a model of Gaia's real selection function.
+manifest); the zero point's uncertainty; a model of Gaia's real selection function.
 
 ## References
 

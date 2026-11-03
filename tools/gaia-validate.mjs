@@ -596,6 +596,7 @@ function packZeroPoints(t) {
 if (wanted('B2')) {
   const L = lim('B2.zeroPointOracle');
   const ORA = read(`${DIR}/zero-point-oracle.json`);
+  const PKG = read(`${DIR}/zero-point-package.json`);
   const out = {};
   let ok = true;
   for (const [id, load] of Object.entries(PACKS)) {
@@ -610,19 +611,37 @@ if (wanted('B2')) {
       rawWorst = Math.max(rawWorst, Math.abs(z.value - raw[i]));
       if (!z.inRange) outOfRange++;
     });
-    if (!(worst <= L.maxAbsMas && zp.length === rounded.length)) ok = false;
     out[id] = {
+      secondImplementationMaxAbsMas: sig(worst, 3),
+      secondImplementationOnRawInputsMaxAbsMas: sig(rawWorst, 3),
       stars: zp.length,
-      maxAbsMas: worst,
-      rawInputsMaxAbsMas: sig(rawWorst, 3),
       outOfRange,
     };
+    if (id === 'gaia-dr3-ngc2420') {
+      // The committed leg: the authors' package, pinned on the NGC 2420 stars.
+      let pk = 0;
+      let sum = 0;
+      zp.forEach((z, i) => {
+        const d = Math.abs(z.value - PKG.zpt[i]);
+        pk = Math.max(pk, d);
+        sum += z.value - PKG.zpt[i];
+      });
+      out[id].package = {
+        version: PKG.package.version,
+        stars: PKG.zpt.length,
+        maxAbsMas: sig(pk, 4),
+        meanDifferenceMas: sig(sum / zp.length, 3),
+        bound: L.maxAbsMas,
+      };
+      if (!(pk <= L.maxAbsMas && PKG.zpt.length === zp.length)) ok = false;
+    }
+    if (!(worst <= L.maxAbsMas && zp.length === rounded.length)) ok = false;
   }
   row(
     'B2.zeroPointOracle',
     ok,
     out,
-    "against a second implementation (numpy) of the same published coefficients, NOT the authors' package (never run): the package-comparison part of the committed leg is NOT RUN, so this row does not say the correction matches the package"
+    "the committed bound against the output of the authors' gaiadr3_zeropoint 0.0.5 on the 993 NGC 2420 stars (run by the coordinator with Carl's permission, pinned in zero-point-package.json); the kernel reads the pack's rounded columns, the package the archive's unrounded ones. The neighbourhood pack has no package output: it is compared with the second implementation only"
   );
 }
 

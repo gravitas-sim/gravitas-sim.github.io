@@ -283,19 +283,26 @@
       "status": "pass",
       "measured": {
         "gaia-dr3-ngc2420": {
+          "secondImplementationMaxAbsMas": 0.0000028,
+          "secondImplementationOnRawInputsMaxAbsMas": 0.0000293,
           "stars": 993,
-          "maxAbsMas": 0.0000028046385785254757,
-          "rawInputsMaxAbsMas": 0.0000293,
-          "outOfRange": 0
+          "outOfRange": 0,
+          "package": {
+            "version": "0.0.5",
+            "stars": 993,
+            "maxAbsMas": 0.00002934,
+            "meanDifferenceMas": -1.7e-7,
+            "bound": 0.0001
+          }
         },
         "gaia-dr3-solar-neighbourhood": {
+          "secondImplementationMaxAbsMas": 0.0000021,
+          "secondImplementationOnRawInputsMaxAbsMas": 0.000073,
           "stars": 1570,
-          "maxAbsMas": 0.000002100420021768773,
-          "rawInputsMaxAbsMas": 0.000073,
           "outOfRange": 5
         }
       },
-      "note": "against a second implementation (numpy) of the same published coefficients, NOT the authors' package (never run): the package-comparison part of the committed leg is NOT RUN, so this row does not say the correction matches the package"
+      "note": "the committed bound against the output of the authors' gaiadr3_zeropoint 0.0.5 on the 993 NGC 2420 stars (run by the coordinator with Carl's permission, pinned in zero-point-package.json); the kernel reads the pack's rounded columns, the package the archive's unrounded ones. The neighbourhood pack has no package output: it is compared with the second implementation only"
     },
     {
       "id": "C1.coverageLikelihood68",
@@ -692,7 +699,7 @@
       "id": "P1.speed",
       "status": "pass",
       "measured": {
-        "cpuSeconds": 0.553
+        "cpuSeconds": 0.552
       },
       "note": "recorded, not a physics bound"
     },

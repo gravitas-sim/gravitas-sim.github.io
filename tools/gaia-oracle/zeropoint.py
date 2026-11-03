@@ -6,9 +6,9 @@
 Written with numpy only, from the coefficient text files and the formula as
 described in js/kernels/galactic/zeropoint.js's header, reading the tables from
 the text files (not from the generated JavaScript). It is an independent
-reimplementation, NOT the authors' gaiadr3_zeropoint package: that package was
-not run (execution of downloaded code was not allowed), so there is no
-package-output oracle. Written offline by the coordinator's data, never by a test.
+reimplementation, not the authors' gaiadr3_zeropoint package (whose output on
+the NGC 2420 stars is pinned separately in zero-point-package.json); it covers the
+neighbourhood pack as well, which has no package output. Run offline, never by a test.
 
 For each row it gives the offset from the inputs as the Gaia archive wrote them
 and from the inputs rounded to the packs' steps (G 0.001; nu_eff and pseudocolour
@@ -63,7 +63,7 @@ def main():
     t5, t6 = table(sys.argv[1]), table(sys.argv[2])
     res = {
         "format": "gravitas.gaia-workflows-zeropoint-oracle/1",
-        "what": "a second implementation (numpy) of the Lindegren et al. 2021 zero point from the coefficient files; NOT the authors' package, which was not run: there is no package-output oracle",
+        "what": "a second implementation (numpy) of the Lindegren et al. 2021 zero point from the coefficient files, not the authors' package (its output on the NGC 2420 stars is in zero-point-package.json)",
         "run": "Python %s, numpy %s" % (sys.version.split()[0], np.__version__),
         "units": "mas",
         "gaia-dr3-ngc2420": run(sys.argv[3], t5, t6),

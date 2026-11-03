@@ -231,5 +231,5 @@
       "limits": { "stars": 1000, "maxCpuSeconds": 5, "recordedNotBound": true }
     }
   ],
-  "amendments": []
+  "amendments": [{"date": "2026-11-03", "change": "None to any bound or limit. B2's package output (gaiadr3_zeropoint 0.0.5 on the 993 NGC 2420 stars, run with Carl's permission) arrived after the legs were first run; the 'what' text of B2 above, which says the leg is NOT RUN until that output exists, describes the state when it was committed. The bound of 1e-4 mas is unchanged and B2 is now judged against it."}]
 }

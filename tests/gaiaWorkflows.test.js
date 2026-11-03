@@ -68,10 +68,21 @@ describe('the committed legs and their results', () => {
     ]);
     expect(e1.measured.measured.distanceKpc).toBeGreaterThan(0);
   });
-  test('the zero-point leg says it is not a comparison with the authors’ package', () => {
-    expect(resultOf('B2.zeroPointOracle').note).toMatch(
-      /NOT the authors' package/
+  test('the zero-point leg is judged against the authors\u2019 package output at the committed bound', () => {
+    const b2 = resultOf('B2.zeroPointOracle');
+    expect(b2.status).toBe('pass');
+    expect(b2.note).toMatch(/gaiadr3_zeropoint 0\.0\.5/);
+    const pkg = b2.measured['gaia-dr3-ngc2420'].package;
+    expect(pkg.stars).toBe(993);
+    expect(pkg.bound).toBe(
+      THR.checks.find(c => c.id === 'B2.zeroPointOracle').limits.maxAbsMas
     );
+    expect(pkg.maxAbsMas).toBeLessThanOrEqual(pkg.bound);
+    const fixture = read(
+      'tests/fixtures/gaia-workflows/zero-point-package.json'
+    );
+    expect(fixture.package.licence).toMatch(/LGPL-3\.0/);
+    expect(fixture.zpt).toHaveLength(993);
   });
   test('the quick legs hold their bounds when run now', () => {
     const out = execFileSync(
@@ -227,7 +238,7 @@ describe('the zero point', () => {
   test('it states that its remaining systematic error is unknown to this build, and where its numbers come from', () => {
     expect(K.ZERO_POINT_SOURCE.sigma).toBeNull();
     expect(K.ZERO_POINT_SOURCE.tables.z5.sha256).toMatch(/^[0-9a-f]{64}$/);
-    expect(K.ZERO_POINT_SOURCE.implementation).toMatch(/not the authors/);
+    expect(K.ZERO_POINT_SOURCE.implementation).toMatch(/not its code/);
   });
 });
 
