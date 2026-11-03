@@ -1,0 +1,59 @@
+{
+ "id": "the-transit-that-was-a-star",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.the-two-depths.unit",""],
+    ["steps.the-frames.fields.0.unit","pixels"],
+    ["steps.the-diluted-radius.unit","R⊕"],
+    ["steps.the-share-of-the-light.unit","%"],
+    ["steps.how-faint-is-harmless.unit","mag"]
+   ],
+   "numbered": [
+    ["steps.the-frames.fields.0.hint","1.8"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": []
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "the-two-depths",
+    "answer": "0.47",
+    "tolerance": "0.02",
+    "unit": ""
+   },
+   {
+    "sid": "the-diluted-radius",
+    "answer": "2.37",
+    "tolerance": "0.03",
+    "unit": "R⊕"
+   },
+   {
+    "sid": "the-share-of-the-light",
+    "answer": "38.7",
+    "tolerance": "0.5",
+    "unit": "%"
+   },
+   {
+    "sid": "how-faint-is-harmless",
+    "answer": "4.2",
+    "tolerance": "0.1",
+    "unit": "mag"
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "the-frames": {
+    "validate": {"calls":97,"distinct":3,"digest":"92885421d6136f53","samples":[null,{"level":"error","message":"Choose candidate E and read the centroid test: the offset is about 1.8 pixels."},{"level":"ok","message":"About 1.8 pixels, about fifteen times its own uncertainty and several times the test’s 0.41 pixel exclusion radius: the light that vanished is not at the target. The dip is on the neighbor, and the candidate is rejected."}]}
+   }
+  },
+  "es": "same"
+ }
+}

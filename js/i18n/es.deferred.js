@@ -1869,6 +1869,14 @@ export const ES_DEFERRED = {
     'El radio, la masa y la densidad de un planeta con la incertidumbre declarada de la estrella dentro: cuánto de cada uno es de la estrella, qué hace una estrella mal declarada y qué puede y qué no puede decir una densidad.',
   'inv.seq.planets.how-many-earths':
     'Un sondeo lista los planetas que podía ver. ¿Cuántos podía haber visto, en qué se convierte una cuenta de lo encontrado para ser una tasa y qué dice una casilla sin ninguno, o una que el sondeo apenas podía ver?',
+  'inv.seq.planets.what-kinds-of-planets-exist':
+    'Planetas ordenados por densidad media en un diagrama masa-radio, y la cuadrícula de tamaños y periodos de un sondeo leída frente a lo que podía ver: qué dice y qué no dice una densidad, en qué convierten una tasa unos pocos listados y por qué un diagrama no puede decir si un planeta conserva una atmósfera.',
+  'inv.seq.planets.the-transit-that-was-a-star':
+    'Cuatro candidatos cuyas caídas eran una estrella: qué significan las profundidades alternas, por qué un par igual supera dos pruebas, cómo una imagen diferencia rechaza una mezcla y por qué una demasiado cercana la supera, y qué hace una vecina al radio de un planeta real.',
+  'inv.seq.planets.planning-a-transit-campaign':
+    'Un planeta con una efeméride conocida, un telescopio y dos semanas de noches: qué tránsitos caben enteros en la ventana, qué deja el tiempo y por qué una cadencia de búsqueda de periodo y un objetivo que está arriba demasiado poco hacen fracasar una campaña.',
+  'inv.seq.planets.one-planet-every-method':
+    'Un planeta sintético por el tránsito, la curva de velocidades, el ajuste conjunto y la lista de comprobación: una densidad con la parte de su incertidumbre que es de la estrella, un candidato que superó las pruebas pero no se validó y qué debe llevar un informe por cada registro.',
   'inv.seq.planets.planet-or-not':
     'Ocho candidatos sint\u00e9ticos verificados con profundidades impares y pares, una b\u00fasqueda de segundo eclipse y una prueba del centroide, y lo que no significa una lista aprobada. Algunos no se pueden decidir.',
   'inv.seq.planets.why-we-cannot-see-earth':

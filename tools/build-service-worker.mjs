@@ -515,6 +515,9 @@ export const NEVER_PRECACHED = [
   /^images\/investigations\/(reading-the-hr-diagram|a-stars-life-in-numbers|when-a-star-explodes|populations-i-and-ii|spectra-tell-temperature-and-gravity)\.webp$/,
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(reading-the-hr-diagram|a-stars-life-in-numbers|when-a-star-explodes|populations-i-and-ii|spectra-tell-temperature-and-gravity|stellar-sequence)\.js$/,
   /^(js\/variablesIIWidgets\.js|js\/variablesIIField\.js|js\/i18n\/(en|es)\.variablesII\.js|js\/kernels\/variables\/(features|plz|plzCited)\.js)$/,
+  // Prompt 231: the four exoplanet closeout investigations and their one closure file (D-R10-231-01).
+  /^images\/investigations\/(one-planet-every-method|what-kinds-of-planets-exist|the-transit-that-was-a-star|planning-a-transit-campaign)\.webp$/,
+  /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(one-planet-every-method|what-kinds-of-planets-exist|the-transit-that-was-a-star|planning-a-transit-campaign|exoplanet-sequence)\.js$/,
   // Prompt 226: the timing panels, their field module, the engine's data pack, their words and the lesson's one new file (D-R10-226-05).
   // The kernel (js/kernels/ttv/) is lazy with the family and is not precached.
   /^images\/investigations\/the-clock-that-drifts\.webp$/,

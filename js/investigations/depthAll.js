@@ -60,6 +60,7 @@ import { DEPTH as JOINT_DEPTH } from '../data/investigations/joint-sequence.js';
 import { DEPTH as OCCURRENCE_DEPTH } from '../data/investigations/occurrence-sequence.js';
 import { DEPTH as VARIABLES_II_DEPTH } from '../data/investigations/variables-ii-sequence.js';
 import { DEPTH as STELLAR_DEPTH } from '../data/investigations/stellar-sequence.js';
+import { DEPTH as EXOPLANET_DEPTH } from '../data/investigations/exoplanet-sequence.js';
 import { DEPTH as TTV_DEPTH } from '../data/investigations/ttv-sequence.js';
 import { DEPTH as SURVEY_DEPTH } from '../data/investigations/survey-sequence.js';
 import { DEPTH as OBSERVING_DEPTH } from '../data/investigations/observing-sequence.js';
@@ -126,6 +127,9 @@ export const DEEPER = Object.freeze({
   ),
   ...Object.fromEntries(
     Object.entries(STELLAR_DEPTH).map(([id, d]) => [id, d.steps])
+  ),
+  ...Object.fromEntries(
+    Object.entries(EXOPLANET_DEPTH).map(([id, d]) => [id, d.steps])
   ),
   ...Object.fromEntries(
     Object.entries(TTV_DEPTH).map(([id, d]) => [id, d.steps])

@@ -1285,6 +1285,46 @@
       "test": "e2e/imagingLesson.spec.js",
       "loop": ["where-do-they-sit", "the-median-planet"],
       "evidenceFrom": "model"
+    },
+    "one-planet-every-method": {
+      "centralExperimentId": "ce.one-planet-every-method",
+      "object": "panel:joint-fit",
+      "control": "joint-fit/massPct",
+      "quantity": "the uncertainty of a synthetic hot Jupiter's mass from a joint fit of its transit and velocity curve, in Jupiter masses, as the uncertainty stated for the star's mass moves from none to twelve percent: 0.009 with the star exact and 0.024 at five percent, the star carrying most of the variance",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": ["what-needs-both", "read-the-record"],
+      "evidenceFrom": "model"
+    },
+    "what-kinds-of-planets-exist": {
+      "centralExperimentId": "ce.what-kinds-of-planets-exist",
+      "object": "panel:occurrence-efficiency",
+      "control": "occurrence-efficiency/period",
+      "quantity": "the share of transiting planets of 0.5 to 1 Earth radii that a synthetic survey of 2000 stars recovers, by orbital period: 20 percent at 32 to 64 days and 64 percent at 1 to 2 days, the rate a count of listings becomes being the count over that completeness",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": ["what-the-survey-sees", "larger-is-easier"],
+      "evidenceFrom": "model"
+    },
+    "the-transit-that-was-a-star": {
+      "centralExperimentId": "ce.the-transit-that-was-a-star",
+      "object": "panel:dilution",
+      "control": "dilution/dm",
+      "quantity": "the radius of a planet whose blended light curve gave 2 Earth radii, as the companion's contrast moves from 0 to 1 magnitude: 2.83 for an equal twin and 2.37 at one magnitude, a neighbor only ever making a planet look smaller",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": ["odd-and-even", "the-whole-story"],
+      "evidenceFrom": "model"
+    },
+    "planning-a-transit-campaign": {
+      "centralExperimentId": "ce.planning-a-transit-campaign",
+      "object": "panel:strategy-plan",
+      "control": "strategy-plan/nights",
+      "quantity": "the nights of a synthetic weather draw that the planner marks observed out of the nights asked, for a southern target from Cerro Tololo: 2 of 5 and 4 of 10, the weather taking nights at random",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": ["which-nights", "what-the-weather-left"],
+      "evidenceFrom": "model"
     }
   }
 }

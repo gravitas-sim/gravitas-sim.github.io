@@ -11,11 +11,11 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 118 investigations and 1480 steps: 1388 steps
+Across 122 investigations and 1505 steps: 1413 steps
 declare a scene, 167 let a reader change one, 177 read the
-running integration, 971 show a prescribed model result, 161 draw
-on a stored dataset, 840 put a self-contained panel beside the text,
-382 keep something, and 58 are prose.
+running integration, 996 show a prescribed model result, 161 draw
+on a stored dataset, 865 put a self-contained panel beside the text,
+387 keep something, and 58 are prose.
 Of 193 prediction loops, 193 are returned to,
 193 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
@@ -1672,4 +1672,60 @@ Of 193 prediction loops, 193 are returned to,
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:spectra-compare`, control spectra-compare/named, measures the depth of a line in each of four observed SDSS spectra: H-beta deepest in the A star and the sodium doublet deepest in the M star, so one line is not a thermometer, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## One Planet, Every Method (`one-planet-every-method`)
+
+- **Steps:** 6. Scene declared on 6; a reader can change something on 0; 6 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 6 prescribed model, 0 stored dataset, 6 self-contained panel.
+- **What students do:** move-an-instrument-control, choose-an-option, record-values.
+- **Objects the steps declare:** star.
+- **Instruments:** joint-fit, vetting-checklist.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** none.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:joint-fit`, control joint-fit/massPct, measures the uncertainty of a synthetic hot Jupiter's mass from a joint fit of its transit and velocity curve, in Jupiter masses, as the uncertainty stated for the star's mass moves from none to twelve percent: 0.009 with the star exact and 0.024 at five percent, the star carrying most of the variance, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## What Kinds of Planets Exist? (`what-kinds-of-planets-exist`)
+
+- **Steps:** 7. Scene declared on 7; a reader can change something on 0; 7 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 7 prescribed model, 0 stored dataset, 7 self-contained panel.
+- **What students do:** move-an-instrument-control, choose-an-option, record-values.
+- **Objects the steps declare:** star.
+- **Instruments:** mass-radius, occurrence-efficiency, occurrence-grid.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** none.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:occurrence-efficiency`, control occurrence-efficiency/period, measures the share of transiting planets of 0.5 to 1 Earth radii that a synthetic survey of 2000 stars recovers, by orbital period: 20 percent at 32 to 64 days and 64 percent at 1 to 2 days, the rate a count of listings becomes being the count over that completeness, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## The Transit That Was a Star (`the-transit-that-was-a-star`)
+
+- **Steps:** 6. Scene declared on 6; a reader can change something on 0; 6 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 6 prescribed model, 0 stored dataset, 6 self-contained panel.
+- **What students do:** move-an-instrument-control, choose-an-option, record-values, press-an-instrument-preset.
+- **Objects the steps declare:** star.
+- **Instruments:** vetting-checklist, dilution.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** none.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:dilution`, control dilution/dm, measures the radius of a planet whose blended light curve gave 2 Earth radii, as the companion's contrast moves from 0 to 1 magnitude: 2.83 for an equal twin and 2.37 at one magnitude, a neighbor only ever making a planet look smaller, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## Planning a Transit Campaign (`planning-a-transit-campaign`)
+
+- **Steps:** 6. Scene declared on 6; a reader can change something on 0; 6 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 6 prescribed model, 0 stored dataset, 6 self-contained panel.
+- **What students do:** move-an-instrument-control, record-values, choose-an-option.
+- **Objects the steps declare:** star.
+- **Instruments:** strategy-plan.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** none.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:strategy-plan`, control strategy-plan/nights, measures the nights of a synthetic weather draw that the planner marks observed out of the nights asked, for a southern target from Cerro Tololo: 2 of 5 and 4 of 10, the weather taking nights at random, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 

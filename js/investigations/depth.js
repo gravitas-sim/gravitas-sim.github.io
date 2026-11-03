@@ -177,6 +177,14 @@ const EXTENSIONS = {
     import('../data/investigations/depth/populations-i-and-ii.js'),
   'spectra-tell-temperature-and-gravity': () =>
     import('../data/investigations/depth/spectra-tell-temperature-and-gravity.js'),
+  'one-planet-every-method': () =>
+    import('../data/investigations/depth/one-planet-every-method.js'),
+  'what-kinds-of-planets-exist': () =>
+    import('../data/investigations/depth/what-kinds-of-planets-exist.js'),
+  'the-transit-that-was-a-star': () =>
+    import('../data/investigations/depth/the-transit-that-was-a-star.js'),
+  'planning-a-transit-campaign': () =>
+    import('../data/investigations/depth/planning-a-transit-campaign.js'),
   'from-star-to-remnant': () =>
     import('../data/investigations/depth/from-star-to-remnant.js'),
   'planet-or-not': () =>
@@ -348,6 +356,14 @@ const WORDS = {
       import('../data/investigations/depth/es/populations-i-and-ii.js'),
     'spectra-tell-temperature-and-gravity': () =>
       import('../data/investigations/depth/es/spectra-tell-temperature-and-gravity.js'),
+    'one-planet-every-method': () =>
+      import('../data/investigations/depth/es/one-planet-every-method.js'),
+    'what-kinds-of-planets-exist': () =>
+      import('../data/investigations/depth/es/what-kinds-of-planets-exist.js'),
+    'the-transit-that-was-a-star': () =>
+      import('../data/investigations/depth/es/the-transit-that-was-a-star.js'),
+    'planning-a-transit-campaign': () =>
+      import('../data/investigations/depth/es/planning-a-transit-campaign.js'),
     'from-star-to-remnant': () =>
       import('../data/investigations/depth/es/from-star-to-remnant.js'),
     'planet-or-not': () =>

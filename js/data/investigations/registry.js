@@ -228,6 +228,13 @@ const LOADERS = {
   'populations-i-and-ii': () => import('./populations-i-and-ii.js'),
   'spectra-tell-temperature-and-gravity': () =>
     import('./spectra-tell-temperature-and-gravity.js'),
+  'one-planet-every-method': () => import('./one-planet-every-method.js'),
+  'what-kinds-of-planets-exist': () =>
+    import('./what-kinds-of-planets-exist.js'),
+  'the-transit-that-was-a-star': () =>
+    import('./the-transit-that-was-a-star.js'),
+  'planning-a-transit-campaign': () =>
+    import('./planning-a-transit-campaign.js'),
 };
 // </generated:loaders>
 
@@ -378,6 +385,13 @@ const TRANSLATIONS = {
     'populations-i-and-ii': () => import('./es/populations-i-and-ii.js'),
     'spectra-tell-temperature-and-gravity': () =>
       import('./es/spectra-tell-temperature-and-gravity.js'),
+    'one-planet-every-method': () => import('./es/one-planet-every-method.js'),
+    'what-kinds-of-planets-exist': () =>
+      import('./es/what-kinds-of-planets-exist.js'),
+    'the-transit-that-was-a-star': () =>
+      import('./es/the-transit-that-was-a-star.js'),
+    'planning-a-transit-campaign': () =>
+      import('./es/planning-a-transit-campaign.js'),
   },
 };
 // </generated:translations>

@@ -1,0 +1,47 @@
+{
+ "id": "what-kinds-of-planets-exist",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.jupiters-density.unit","g/cm³"],
+    ["steps.efficiency-ratio.unit",""],
+    ["steps.a-rate-from-few.fields.0.unit",""],
+    ["steps.a-rate-from-few.fields.1.unit","planets per star"]
+   ],
+   "numbered": [
+    ["steps.a-rate-from-few.fields.0.hint","3"],
+    ["steps.a-rate-from-few.fields.1.hint","0.35"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": []
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "jupiters-density",
+    "answer": "1.33",
+    "tolerance": "0.03",
+    "unit": "g/cm³"
+   },
+   {
+    "sid": "efficiency-ratio",
+    "answer": "4",
+    "tolerance": "0.1",
+    "unit": ""
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "a-rate-from-few": {
+    "validate": {"calls":232,"distinct":2,"digest":"bd7055ab7c1e3349","samples":[null,{"level":"error","message":"Choose radius 0.5 to 1, period 32 to 64 days, the first seed, and read the number listed and the rate: 3 planets and about 0.35 per star."}]}
+   }
+  },
+  "es": "same"
+ }
+}
