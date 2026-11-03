@@ -19,7 +19,6 @@ current, and the orchestrator checks it.
 | `author-check.mjs` | npm run author:check | `npm run author:check`, `npm run author:strict`, `npm run author:rules` |
 | `binaries-validate.mjs` | The eclipsing-binary model against its committed thresholds (Prompt 217) | `npm run binaries:validate` |
 | `binary-masses-validate.mjs` | Binary masses and radii against their committed thresholds (Prompt 218) | `npm run binary-masses:validate` |
-| `visual-binary-validate.mjs` | The visual-binary gate (photocentre contract, mass sum and fraction) against its committed thresholds (Prompt 218 Part B) | `npm run visual-binary:validate` |
 | `blackhole-profile.mjs` | What a black hole costs to draw |  |
 | `blackhole-shots.mjs` | Captures of the black holes |  |
 | `body-shots.mjs` | Reference captures of the bodies, for a before-and-after on their drawing |  |
@@ -232,4 +231,5 @@ current, and the orchestrator checks it.
 | `vendor-deps.mjs` | npm run vendor  /  npm run vendor:check | `npm run vendor`, `npm run vendor:check` |
 | `verify-release.mjs` | Is this tree safe to publish? |  |
 | `vetting-validate.mjs` | The vetting kernel against its committed thresholds (Prompt 228) | `npm run vetting:validate` |
+| `visual-binary-validate.mjs` | The visual-binary gate against its committed thresholds (Prompt 218 Part B) | `npm run visual-binary:validate` |
 | `worker-probe.mjs` | npm run probe:workers - what the page's Workers hold, and what it keeps | `npm run probe:workers` |

@@ -1,8 +1,8 @@
 // =============================================================================
 // Weighing the Stars for Real, in two languages
 // -----------------------------------------------------------------------------
-// Roadmap III, Prompt 218. Checked here: each of the three binary-masses panels (the
-// velocities, the solution, the diagram) draws through the plot component (a
+// Roadmap III, Prompt 218. Checked here: each of the binary-masses panels (the
+// velocities, the solution, the diagram, the visual pair) draws through the plot component (a
 // labelled svg with its paths) and lists its numbers (the readout is the text
 // equivalent), the Spanish lesson shows its own words, and the panel passes axe
 // and keeps every control and link at least 24 px square at 1280 and 390 px
@@ -70,6 +70,24 @@ const CASES = [
     rowEs: /^Sistema/i,
     title: /^Masses and radii against MIST/i,
     titleEs: /^Masas y radios frente a MIST/i,
+  },
+  {
+    id: 'weighing-the-stars-for-real',
+    depth: 'advanced',
+    sid: 'weigh-a-visual-pair',
+    row: /Mass fraction of star 2/i,
+    rowEs: /Fracción de masa de la estrella 2/i,
+    title: /^Weighing a visual pair/i,
+    titleEs: /^Pesar un par visual/i,
+  },
+  {
+    id: 'weighing-the-stars-for-real',
+    depth: 'advanced',
+    sid: 'two-roots-for-the-companion',
+    row: /Photocentre mass function/i,
+    rowEs: /Función de masa del fotocentro/i,
+    title: /^Weighing a visual pair/i,
+    titleEs: /^Pesar un par visual/i,
   },
 ];
 
