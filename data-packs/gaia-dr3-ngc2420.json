@@ -2,7 +2,7 @@
   "format": "gravitas.observation-data-pack",
   "formatVersion": 1,
   "id": "gaia-dr3-ngc2420",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "title": "NGC 2420: Gaia DR3 astrometry",
   "object": {
     "name": "NGC 2420",
@@ -27,7 +27,7 @@
     "basis": "CC BY-NC 3.0 IGO permits copying, redistribution and adaptation, which includes a derived subset of the catalogue, with attribution and for non-commercial purposes; Gravitas is a free educational tool. It is the same licence, and so the same mechanism, as radiation-gaia-bandpasses (D-RAD-01), which the project owner shipped by explicit instruction; extending it to these Gaia samples is a delegated decision awaiting his review (DECISION_REGISTER.md D-GAIA-01), not a standing licence. Each sample is a pack of its own so that no other data is covered by the NC terms, and none may be bundled into a commercial redistribution of Gravitas (DATA_PACKS.md); removing the pack is removing its module, manifest and service-worker entry.",
     "nonCommercial": true
   },
-  "retrieved": "2026-10-10",
+  "retrieved": "2026-11-03",
   "columns": [
     {
       "id": "ra",
@@ -91,6 +91,54 @@
       "name": "BP-RP",
       "unit": "mag",
       "description": "Gaia BP minus RP colour, not corrected for extinction"
+    },
+    {
+      "id": "plx_pmra_corr",
+      "name": "parallax-pm ra correlation",
+      "unit": "",
+      "description": "correlation coefficient of the parallax and pm ra errors (parallax_pmra_corr)"
+    },
+    {
+      "id": "plx_pmdec_corr",
+      "name": "parallax-pm dec correlation",
+      "unit": "",
+      "description": "correlation coefficient of the parallax and pm dec errors (parallax_pmdec_corr)"
+    },
+    {
+      "id": "pm_corr",
+      "name": "pm ra-pm dec correlation",
+      "unit": "",
+      "description": "correlation coefficient of the pm ra and pm dec errors (pmra_pmdec_corr)"
+    },
+    {
+      "id": "ruwe",
+      "name": "RUWE",
+      "unit": "",
+      "description": "renormalised unit weight error of the astrometric solution (ruwe)"
+    },
+    {
+      "id": "params",
+      "name": "astrometric parameters solved",
+      "unit": "",
+      "description": "astrometric_params_solved: 31 is a five-parameter solution, 95 a six-parameter one"
+    },
+    {
+      "id": "nu_eff",
+      "name": "effective wavenumber",
+      "unit": "",
+      "description": "in inverse micrometres: nu_eff_used_in_astrometry, the colour a five-parameter solution used; empty for a six-parameter solution"
+    },
+    {
+      "id": "pseudocolour",
+      "name": "pseudocolour",
+      "unit": "",
+      "description": "in inverse micrometres: pseudocolour, the colour a six-parameter solution estimated; empty for a five-parameter solution"
+    },
+    {
+      "id": "ecl_lat",
+      "name": "ecliptic latitude",
+      "unit": "deg",
+      "description": "ecliptic latitude (ecl_lat), which the parallax zero point depends on"
     }
   ],
   "masks": [
@@ -105,17 +153,18 @@
     "Stars fainter than G = 17.5 are left out: their proper-motion errors approach the cluster's own spread.",
     "Gaia is not blind in the cluster's core, as SDSS is: its crowding limit is far higher, so the core is in this table.",
     "Positions are rounded to 0.00001 degree (0.04 arcsec), parallaxes, proper motions, errors and magnitudes to 0.001.",
-    "The Gaia source ids are left out; the query in the pack's manifest returns them."
+    "The Gaia source ids are left out (a 64-bit id does not fit the table encoding); the query in the pack's manifest returns them, and the rows are in its order.",
+    "Version 1.1.0 (Prompt 233) adds eight columns to the same 993 rows, all stored to the step shown: the three error correlations, RUWE, the solution type, the effective wavenumber or pseudocolour (each empty for the other solution type), and the ecliptic latitude. Every earlier column is identical to version 1.0.0 (tests/fixtures/gaia-workflows/alignment.json holds its checksum)."
   ],
   "source": {
     "archive": "ESA Gaia archive, Gaia DR3",
     "urls": [
-      "https://gea.esac.esa.int/tap-server/tap/sync?REQUEST=doQuery&LANG=ADQL&FORMAT=csv&QUERY=SELECT+ra%2C+dec%2C+parallax%2C+parallax_error%2C+pmra%2C+pmra_error%2C+pmdec%2C+pmdec_error%2C+phot_g_mean_mag%2C+bp_rp+FROM+gaiadr3.gaia_source+WHERE+ruwe%3C1.4+AND+phot_g_mean_mag%3C17.5+AND+parallax+IS+NOT+NULL+AND+pmra+IS+NOT+NULL+AND+1%3DCONTAINS%28POINT%28%27ICRS%27%2Cra%2Cdec%29%2CCIRCLE%28%27ICRS%27%2C114.602%2C21.575%2C0.2357023%29%29+ORDER+BY+source_id",
+      "https://gea.esac.esa.int/tap-server/tap/sync?REQUEST=doQuery&LANG=ADQL&FORMAT=csv&QUERY=SELECT+source_id%2C+ra%2C+dec%2C+parallax%2C+parallax_error%2C+pmra%2C+pmra_error%2C+pmdec%2C+pmdec_error%2C+phot_g_mean_mag%2C+bp_rp%2C+parallax_pmra_corr%2C+parallax_pmdec_corr%2C+pmra_pmdec_corr%2C+ruwe%2C+astrometric_params_solved%2C+nu_eff_used_in_astrometry%2C+pseudocolour%2C+ecl_lat+FROM+gaiadr3.gaia_source+WHERE+ruwe%3C1.4+AND+phot_g_mean_mag%3C17.5+AND+parallax+IS+NOT+NULL+AND+pmra+IS+NOT+NULL+AND+1%3DCONTAINS%28POINT%28%27ICRS%27%2Cra%2Cdec%29%2CCIRCLE%28%27ICRS%27%2C114.602%2C21.575%2C0.2357023%29%29+ORDER+BY+source_id",
       "https://gea.esac.esa.int/tap-server/tap/sync?REQUEST=doQuery&LANG=ADQL&FORMAT=csv&QUERY=SELECT+COUNT%28*%29+AS+n+FROM+gaiadr3.gaia_source+WHERE+phot_g_mean_mag%3C17.5+AND+1%3DCONTAINS%28POINT%28%27ICRS%27%2Cra%2Cdec%29%2CCIRCLE%28%27ICRS%27%2C114.602%2C21.575%2C0.2357023%29%29",
       "https://gea.esac.esa.int/tap-server/tap/sync?REQUEST=doQuery&LANG=ADQL&FORMAT=csv&QUERY=SELECT+COUNT%28*%29+AS+n+FROM+gaiadr3.gaia_source+WHERE+ruwe%3C1.4+AND+phot_g_mean_mag%3C17.5+AND+1%3DCONTAINS%28POINT%28%27ICRS%27%2Cra%2Cdec%29%2CCIRCLE%28%27ICRS%27%2C114.602%2C21.575%2C0.2357023%29%29"
     ],
     "queries": [
-      "SELECT ra, dec, parallax, parallax_error, pmra, pmra_error, pmdec, pmdec_error, phot_g_mean_mag, bp_rp FROM gaiadr3.gaia_source WHERE ruwe<1.4 AND phot_g_mean_mag<17.5 AND parallax IS NOT NULL AND pmra IS NOT NULL AND 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',114.602,21.575,0.2357023)) ORDER BY source_id",
+      "SELECT source_id, ra, dec, parallax, parallax_error, pmra, pmra_error, pmdec, pmdec_error, phot_g_mean_mag, bp_rp, parallax_pmra_corr, parallax_pmdec_corr, pmra_pmdec_corr, ruwe, astrometric_params_solved, nu_eff_used_in_astrometry, pseudocolour, ecl_lat FROM gaiadr3.gaia_source WHERE ruwe<1.4 AND phot_g_mean_mag<17.5 AND parallax IS NOT NULL AND pmra IS NOT NULL AND 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',114.602,21.575,0.2357023)) ORDER BY source_id",
       "SELECT COUNT(*) AS n FROM gaiadr3.gaia_source WHERE phot_g_mean_mag<17.5 AND 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',114.602,21.575,0.2357023))",
       "SELECT COUNT(*) AS n FROM gaiadr3.gaia_source WHERE ruwe<1.4 AND phot_g_mean_mag<17.5 AND 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',114.602,21.575,0.2357023))"
     ],
@@ -140,10 +189,10 @@
   },
   "raw": [
     {
-      "file": "gaia-dr3-ngc2420.csv",
-      "url": "https://gea.esac.esa.int/tap-server/tap/sync?REQUEST=doQuery&LANG=ADQL&FORMAT=csv&QUERY=SELECT+ra%2C+dec%2C+parallax%2C+parallax_error%2C+pmra%2C+pmra_error%2C+pmdec%2C+pmdec_error%2C+phot_g_mean_mag%2C+bp_rp+FROM+gaiadr3.gaia_source+WHERE+ruwe%3C1.4+AND+phot_g_mean_mag%3C17.5+AND+parallax+IS+NOT+NULL+AND+pmra+IS+NOT+NULL+AND+1%3DCONTAINS%28POINT%28%27ICRS%27%2Cra%2Cdec%29%2CCIRCLE%28%27ICRS%27%2C114.602%2C21.575%2C0.2357023%29%29+ORDER+BY+source_id",
-      "sha256": "62e9aa5b9d9d755c02a2c6a2a83a3f128d748bceb43d31d9199f842e0945f39c",
-      "bytes": 149370
+      "file": "gaia-dr3-ngc2420-astrometry.csv",
+      "url": "https://gea.esac.esa.int/tap-server/tap/sync?REQUEST=doQuery&LANG=ADQL&FORMAT=csv&QUERY=SELECT+source_id%2C+ra%2C+dec%2C+parallax%2C+parallax_error%2C+pmra%2C+pmra_error%2C+pmdec%2C+pmdec_error%2C+phot_g_mean_mag%2C+bp_rp%2C+parallax_pmra_corr%2C+parallax_pmdec_corr%2C+pmra_pmdec_corr%2C+ruwe%2C+astrometric_params_solved%2C+nu_eff_used_in_astrometry%2C+pseudocolour%2C+ecl_lat+FROM+gaiadr3.gaia_source+WHERE+ruwe%3C1.4+AND+phot_g_mean_mag%3C17.5+AND+parallax+IS+NOT+NULL+AND+pmra+IS+NOT+NULL+AND+1%3DCONTAINS%28POINT%28%27ICRS%27%2Cra%2Cdec%29%2CCIRCLE%28%27ICRS%27%2C114.602%2C21.575%2C0.2357023%29%29+ORDER+BY+source_id",
+      "sha256": "46587315f277a4c3a18a6ae306b07fbba8c58567225cdebaffcb92c184bcd270",
+      "bytes": 246701
     },
     {
       "file": "gaia-dr3-ngc2420-cone.csv",
@@ -202,11 +251,43 @@
         {
           "id": "bp_rp",
           "step": 0.001
+        },
+        {
+          "id": "plx_pmra_corr",
+          "step": 0.001
+        },
+        {
+          "id": "plx_pmdec_corr",
+          "step": 0.001
+        },
+        {
+          "id": "pm_corr",
+          "step": 0.001
+        },
+        {
+          "id": "ruwe",
+          "step": 0.001
+        },
+        {
+          "id": "params",
+          "step": 1
+        },
+        {
+          "id": "nu_eff",
+          "step": 0.0001
+        },
+        {
+          "id": "pseudocolour",
+          "step": 0.0001
+        },
+        {
+          "id": "ecl_lat",
+          "step": 0.0001
         }
       ]
     },
     "steps": [
-      "Query Gaia DR3 for every star within 0.2357023 degree of the adopted center with RUWE below 1.4, G below 17.5 and a five-parameter astrometric solution, ordered by source id.",
+      "Query Gaia DR3 for every star within 0.2357023 degree of the adopted center with RUWE below 1.4, G below 17.5 and a parallax and proper motion (978 five-parameter and 15 six-parameter solutions), ordered by source id. Version 1.1.0 re-queries the same rows with the correlations, RUWE, the solution type and the colour and latitude the zero point needs.",
       "Count, in two further queries, the stars in the same circle with and without the RUWE cut, for the mask.",
       "Encode as table-columns/1: each column a whole number of its step from an offset, int16 where the range fits."
     ],
@@ -282,12 +363,68 @@
           "step": 0.001,
           "missing": 4,
           "maxRounding": 0.0005
+        },
+        {
+          "id": "plx_pmra_corr",
+          "type": "int16",
+          "step": 0.001,
+          "missing": 0,
+          "maxRounding": 0.0005
+        },
+        {
+          "id": "plx_pmdec_corr",
+          "type": "int16",
+          "step": 0.001,
+          "missing": 0,
+          "maxRounding": 0.0005
+        },
+        {
+          "id": "pm_corr",
+          "type": "int16",
+          "step": 0.001,
+          "missing": 0,
+          "maxRounding": 0.0005
+        },
+        {
+          "id": "ruwe",
+          "type": "int16",
+          "step": 0.001,
+          "missing": 0,
+          "maxRounding": 0.0005
+        },
+        {
+          "id": "params",
+          "type": "int16",
+          "step": 1,
+          "missing": 0,
+          "maxRounding": 0
+        },
+        {
+          "id": "nu_eff",
+          "type": "int16",
+          "step": 0.0001,
+          "missing": 15,
+          "maxRounding": 0.0000499
+        },
+        {
+          "id": "pseudocolour",
+          "type": "int16",
+          "step": 0.0001,
+          "missing": 978,
+          "maxRounding": 0.0000493
+        },
+        {
+          "id": "ecl_lat",
+          "type": "int16",
+          "step": 0.0001,
+          "missing": 0,
+          "maxRounding": 0.0000499
         }
       ]
     }
   },
   "assumptions": [
-    "Parallaxes are not corrected for the zero point (about -0.017 mas on average, Lindegren et al. 2021); at the cluster's 0.3 mas that is a 6 percent effect on its distance, which a lesson that quotes a distance says."
+    "Parallaxes are not corrected for the zero point (about -0.017 mas on average, Lindegren et al. 2021); at the cluster's 0.3 mas that is a 6 percent effect on its distance, which a lesson that quotes a distance says. The kernel's per-star zero point (js/kernels/galactic/zeropoint.js) needs the added columns; the stored parallax is still the catalogue's."
   ],
   "compatible": {
     "widgets": [],
@@ -296,12 +433,12 @@
   "offline": "idle",
   "derived": {
     "file": "js/data/observations/gaiaNgc2420.js",
-    "bytes": 6532,
-    "sha256": "52b0254932db79b281ff084af53115736c6cbb5b188c6d79cef6cbd5b02d9075",
+    "bytes": 8651,
+    "sha256": "8f7190a89c04ee4151ab763e438ae1ffc04c1583ca82b1eb1de26e638eedfd37",
     "sidecar": {
       "file": "gaia/ngc2420.json",
-      "bytes": 32390,
-      "sha256": "6709a0a33b43602e7e7bc62cc342502fb361ff2ff4595fb1ff1a5b019dbb42ef"
+      "bytes": 54014,
+      "sha256": "855b17b4b6816711ff33df3950ab59e154b3f829da34e243189e9bccf877a25a"
     }
   },
   "validation": {

@@ -142,7 +142,7 @@ const lnLikelihood = (r, w, s) => {
   const d = w - 1 / r;
   return (-d * d) / (2 * s * s);
 };
-const dLnLikelihood = (r, w, s) => (-(w - 1 / r) / (r * r)) / (s * s);
+const dLnLikelihood = (r, w, s) => -(w - 1 / r) / (r * r) / (s * s);
 
 /**
  * The grid for a posterior: log-spaced over [rMin, rMax] merged with a fine
@@ -155,10 +155,12 @@ function gridFor(w, s, rMin, rMax, n) {
   const uLo = Math.max(w - 6 * s, 1 / rMax);
   const uHi = Math.min(w + 6 * s, 1 / rMin);
   if (uHi > uLo)
-    for (let i = 0; i < n; i++) pts.push(1 / (uLo + ((uHi - uLo) * i) / (n - 1)));
+    for (let i = 0; i < n; i++)
+      pts.push(1 / (uLo + ((uHi - uLo) * i) / (n - 1)));
   pts.sort((a, b) => a - b);
   const out = [pts[0]];
-  for (let i = 1; i < pts.length; i++) if (pts[i] > out[out.length - 1]) out.push(pts[i]);
+  for (let i = 1; i < pts.length; i++)
+    if (pts[i] > out[out.length - 1]) out.push(pts[i]);
   return Float64Array.from(out);
 }
 
@@ -252,14 +254,23 @@ export function posteriorMean(post, g) {
   let s = 0;
   for (let i = 1; i < r.length; i++)
     s +=
-      0.5 * (g(r[i]) * density[i] + g(r[i - 1]) * density[i - 1]) * (r[i] - r[i - 1]);
+      0.5 *
+      (g(r[i]) * density[i] + g(r[i - 1]) * density[i - 1]) *
+      (r[i] - r[i - 1]);
   return s;
 }
 
 // ---- the distance ---------------------------------------------------------------
 
 /** The relative likelihood L(r) / L_max as arrays, for drawing; n points between rLo and rHi. */
-export function likelihoodCurve({ parallax, error, zeroPoint, rMin, rMax, n = 200 }) {
+export function likelihoodCurve({
+  parallax,
+  error,
+  zeroPoint,
+  rMin,
+  rMax,
+  n = 200,
+}) {
   const c = correctParallax({ parallax, error, zeroPoint });
   if (c.status === 'refused') return c;
   const rLo = rMin ?? 0.02;
@@ -323,7 +334,14 @@ export function distanceFromParallax({
     correction: 'none beyond the stated zero point',
   };
   if (curve > 0) {
-    const cv = likelihoodCurve({ parallax, error, zeroPoint, rMin, rMax, n: curve });
+    const cv = likelihoodCurve({
+      parallax,
+      error,
+      zeroPoint,
+      rMin,
+      rMax,
+      n: curve,
+    });
     base.curve = { r: cv.r, relative: cv.relative };
   }
   // The likelihood's own result.
@@ -408,16 +426,30 @@ export function distanceQuantity(record) {
  * @param {{stars: Array<{parallax: number, error: number, zeroPoint?: number}>,
  *   systematic?: number, clipSigma?: number|null}} args
  */
-export function clusterParallax({ stars, systematic = 0, clipSigma = null } = {}) {
+export function clusterParallax({
+  stars,
+  systematic = 0,
+  clipSigma = null,
+} = {}) {
   if (!Array.isArray(stars) || !stars.length)
     return refused('stars', 'a cluster needs at least one star');
   if (!(systematic >= 0) || !isNum(systematic))
-    return refused('systematic', 'the systematic error must be zero or positive');
+    return refused(
+      'systematic',
+      'the systematic error must be zero or positive'
+    );
   const rows = [];
   for (const st of stars) {
     if (!isNum(st.parallax) || !(st.error > 0) || !isNum(st.error))
-      return refused('star', 'a star has a parallax or an error that is not usable');
-    rows.push({ w: st.parallax - (st.zeroPoint ?? 0), s: st.error, z: st.zeroPoint ?? 0 });
+      return refused(
+        'star',
+        'a star has a parallax or an error that is not usable'
+      );
+    rows.push({
+      w: st.parallax - (st.zeroPoint ?? 0),
+      s: st.error,
+      z: st.zeroPoint ?? 0,
+    });
   }
   let keep = rows.map(() => true);
   let mean = 0;
@@ -472,7 +504,11 @@ export function velocityAtFixedMotion(record, mu) {
   return {
     value: f * record.distance,
     interval: iv
-      ? { lo: f * iv.lo, hi: iv.hi === null ? null : f * iv.hi, level: iv.level }
+      ? {
+          lo: f * iv.lo,
+          hi: iv.hi === null ? null : f * iv.hi,
+          level: iv.level,
+        }
       : null,
   };
 }
@@ -481,7 +517,9 @@ function percentile(sorted, q) {
   const pos = q * (sorted.length - 1);
   const i = Math.floor(pos);
   const t = pos - i;
-  return i + 1 < sorted.length ? sorted[i] * (1 - t) + sorted[i + 1] * t : sorted[i];
+  return i + 1 < sorted.length
+    ? sorted[i] * (1 - t) + sorted[i + 1] * t
+    : sorted[i];
 }
 
 /**
@@ -517,12 +555,24 @@ export function tangentialVelocity({
   if (![pmra, pmdec].every(isNum))
     return refused('proper-motion', 'the proper motion is not finite');
   if (!(pmraError > 0 && pmdecError > 0))
-    return refused('proper-motion-error', 'the proper-motion errors must be positive');
+    return refused(
+      'proper-motion-error',
+      'the proper-motion errors must be positive'
+    );
   if (!(draws >= 100) || !Number.isInteger(draws))
-    return refused('draws', 'the number of draws must be a whole number of at least 100');
+    return refused(
+      'draws',
+      'the number of draws must be a whole number of at least 100'
+    );
   if (seed === undefined || seed === null || seed === '')
     return refused('seed', 'a seed is required');
-  const rec = distanceFromParallax({ parallax, error, zeroPoint, prior, level });
+  const rec = distanceFromParallax({
+    parallax,
+    error,
+    zeroPoint,
+    prior,
+    level,
+  });
   if (rec.status === 'refused') return rec;
   const pr = priorOf(prior);
   const noDistance = rec.distance === null;
@@ -556,12 +606,16 @@ export function tangentialVelocity({
   const l21 = cad / l11;
   const l22sq = cdd - l21 * l21;
   if (!(caa > 0) || !(l22sq > 0))
-    return refused('covariance', 'the proper-motion covariance is not positive definite');
+    return refused(
+      'covariance',
+      'the proper-motion covariance is not positive definite'
+    );
   const l22 = Math.sqrt(l22sq);
   const u = stream('noise', seed, label);
   const z = gaussian(u);
   let post = null;
-  if (pr.name !== 'none') post = posterior({ parallax, error, zeroPoint, prior: pr });
+  if (pr.name !== 'none')
+    post = posterior({ parallax, error, zeroPoint, prior: pr });
   const v = new Float64Array(draws);
   for (let i = 0; i < draws; i++) {
     let r;

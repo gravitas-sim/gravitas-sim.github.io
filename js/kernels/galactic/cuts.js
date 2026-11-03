@@ -18,9 +18,17 @@ import { selection, all } from '../statistics/selection.js';
 /** The cuts, in the order a student meets them. */
 export const CUTS = Object.freeze({
   magnitude: { observable: 'g', label: 'magnitude limit', bound: 'max' },
-  parallaxOverError: { observable: 'poe', label: 'parallax over error', bound: 'min' },
+  parallaxOverError: {
+    observable: 'poe',
+    label: 'parallax over error',
+    bound: 'min',
+  },
   ruwe: { observable: 'ruwe', label: 'RUWE', bound: 'max' },
-  radialVelocity: { observable: 'rv', label: 'has a radial velocity', bound: null },
+  radialVelocity: {
+    observable: 'rv',
+    label: 'has a radial velocity',
+    bound: null,
+  },
 });
 
 /**
@@ -35,12 +43,20 @@ export function cutSelections(on = {}) {
     const v = on[id];
     if (v === undefined || v === false || v === null) continue;
     const cut =
-      def.bound === 'max' ? { max: v } : def.bound === 'min' ? { min: v } : null;
+      def.bound === 'max'
+        ? { max: v }
+        : def.bound === 'min'
+          ? { min: v }
+          : null;
     out.push({
       id,
       label: def.label,
       limit: def.bound ? v : true,
-      selection: selection({ name: def.label, observable: def.observable, cut }),
+      selection: selection({
+        name: def.label,
+        observable: def.observable,
+        cut,
+      }),
     });
   }
   return out;

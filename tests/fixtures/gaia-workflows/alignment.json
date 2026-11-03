@@ -1,0 +1,170 @@
+{
+  "format": "gravitas.gaia-workflows-alignment/1",
+  "label": "The existing columns of the two packs at the base commit (v3 7e8ccb16), per column: type, offset, step and the sha256 of its encoded data. A re-queried product aligns when its own encoding of the same columns is identical, which holds only if every one of the rows is the same row at the pack's rounding (leg E2).",
+  "packs": {
+    "gaia-dr3-ngc2420": {
+      "rows": 993,
+      "columns": [
+        {
+          "id": "ra",
+          "type": "int16",
+          "offset": 114.6009,
+          "step": 1e-05,
+          "dataSha256": "11f53f66b0ce1ea50f486cce4b19e64ccff541851e366bef041646e8095c9636"
+        },
+        {
+          "id": "dec",
+          "type": "int16",
+          "offset": 21.57473,
+          "step": 1e-05,
+          "dataSha256": "0ab871efa07250204cae8d0f55422d62e388fd1256575f99f68b327d00eccba3"
+        },
+        {
+          "id": "parallax",
+          "type": "int16",
+          "offset": 5.664,
+          "step": 0.001,
+          "dataSha256": "8cdef6dfd4575bbd4388f419c751af05b946ebdb61af57f44b8643993e0045b1"
+        },
+        {
+          "id": "parallax_err",
+          "type": "int16",
+          "offset": 0.065,
+          "step": 0.001,
+          "dataSha256": "e8b81a7149afe0e2f597d9d45d30f3d5bb5b43c014142bb35057bd4dac447f21"
+        },
+        {
+          "id": "pmra",
+          "type": "int32",
+          "offset": 25.75,
+          "step": 0.001,
+          "dataSha256": "4de124a63fece001459ae53946e5c097e83302e43403461678a2d01bf550551c"
+        },
+        {
+          "id": "pmra_err",
+          "type": "int16",
+          "offset": 0.079,
+          "step": 0.001,
+          "dataSha256": "bdf09cff4c1ffeb31261e71b92ffb80898cc3cbe4cf41036f30b161bf5270018"
+        },
+        {
+          "id": "pmdec",
+          "type": "int32",
+          "offset": -54.677,
+          "step": 0.001,
+          "dataSha256": "0e0c3dd717ab40bd3c9056a03c13b7afc797caf2cc97dde79717d7d8aa41f048"
+        },
+        {
+          "id": "pmdec_err",
+          "type": "int16",
+          "offset": 0.058,
+          "step": 0.001,
+          "dataSha256": "b2159fca5956a2c4fd0cc847e2246f490255aade092f965e84db7d82abb28cf5"
+        },
+        {
+          "id": "g",
+          "type": "int16",
+          "offset": 13.184,
+          "step": 0.001,
+          "dataSha256": "54d263eb7775cb270e186fff18ed0720cc3c29e1a72d5a092472a2aa353eafd1"
+        },
+        {
+          "id": "bp_rp",
+          "type": "int16",
+          "offset": 1.553,
+          "step": 0.001,
+          "dataSha256": "f2c2f1e68d941e863782978023d428f0e776f1e422bc6001ef1ec3f35d3022c1"
+        }
+      ]
+    },
+    "gaia-dr3-solar-neighbourhood": {
+      "rows": 1570,
+      "columns": [
+        {
+          "id": "ra",
+          "type": "int16",
+          "offset": 179.892,
+          "step": 0.006,
+          "dataSha256": "04a905198120386d3fadc2c8f842ff4e63f9ab8f701ffaf1ab472775307bf255"
+        },
+        {
+          "id": "dec",
+          "type": "int16",
+          "offset": 0.92,
+          "step": 0.004,
+          "dataSha256": "d9422a4b95dfcf1cf01d9c3f1b22271c38504e9a7d041c6e0f67bf492a630569"
+        },
+        {
+          "id": "parallax",
+          "type": "int16",
+          "offset": 38.28,
+          "step": 0.02,
+          "dataSha256": "4c448b0362e191552d8d3ef9d812470c1fd9aa79aeb5d9a1e05b54fddc718ac0"
+        },
+        {
+          "id": "parallax_err",
+          "type": "int16",
+          "offset": 0.044,
+          "step": 0.001,
+          "dataSha256": "9db431bd6d11458590286bf2f0951ea731b5798aaca9650597398205eaf3e8ca"
+        },
+        {
+          "id": "pmra",
+          "type": "int32",
+          "offset": -19.82,
+          "step": 0.01,
+          "dataSha256": "0876ab30530a2b714a6428258964e34a6e8dd83aa678e1696bc6584b281d10f4"
+        },
+        {
+          "id": "pmra_err",
+          "type": "int16",
+          "offset": 0.045,
+          "step": 0.001,
+          "dataSha256": "924a678691ab318dc2f18b0eb73300cf1e26a56883b30a5088b27052faeccd1e"
+        },
+        {
+          "id": "pmdec",
+          "type": "int32",
+          "offset": -126.45,
+          "step": 0.01,
+          "dataSha256": "b4799b25b1faed3f7dca302df33747a78ddab0892fb5436557444fca9a3b1123"
+        },
+        {
+          "id": "pmdec_err",
+          "type": "int16",
+          "offset": 0.046,
+          "step": 0.001,
+          "dataSha256": "4f1ea079333a12e5de5061b3aa622203f9839d02b130e97e29b85aa3deacb3aa"
+        },
+        {
+          "id": "rv",
+          "type": "int16",
+          "offset": 116.02,
+          "step": 0.02,
+          "dataSha256": "25a1069e47042c79c445e44043c6f6e0796ad4af048754267adeca0d7d2d7a33"
+        },
+        {
+          "id": "rv_err",
+          "type": "int16",
+          "offset": 17.42,
+          "step": 0.01,
+          "dataSha256": "6bcd102214bdb8d3a41b897ed9bb6e2bc0817d3f10275decaab391b556988605"
+        },
+        {
+          "id": "g",
+          "type": "int16",
+          "offset": 10.803,
+          "step": 0.001,
+          "dataSha256": "e095bcb7f83deb1deabc4da85092914e5b4b374b2a920aa18ea02adfd05219ed"
+        },
+        {
+          "id": "bp_rp",
+          "type": "int16",
+          "offset": 1.723,
+          "step": 0.001,
+          "dataSha256": "814b42310efe5c00c3f987de8ae13c6cbdda7243d4c41a696fc03d486379693a"
+        }
+      ]
+    }
+  }
+}

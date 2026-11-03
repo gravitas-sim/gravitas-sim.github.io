@@ -9,3 +9,4 @@ export * from './rotation.js';
 export * from './membership.js';
 export * from './astrometry.js';
 export * from './cuts.js';
+export * from './zeropoint.js';

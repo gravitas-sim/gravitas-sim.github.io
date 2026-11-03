@@ -2,7 +2,7 @@
 // The solar neighbourhood: 1,570 Gaia DR3 stars with radial velocities
 // -----------------------------------------------------------------------------
 // GENERATED FILE. Do not edit. Written by tools/build-data-packs.mjs
-// (tools/data-packs/gaia-dynamics.mjs) from gaia-dr3-solar-neighbourhood.csv, gaia-dr3-solar-near-pool.csv, gaia-dr3-solar-far-pool.csv;
+// (tools/data-packs/gaia-dynamics.mjs) from gaia-dr3-solar-neighbourhood-astrometry.csv, gaia-dr3-solar-near-pool.csv, gaia-dr3-solar-far-pool.csv;
 // `npm run packs:check` verifies it offline and `npm run packs:provenance`
 // rebuilds it from the pinned raw product and compares byte for byte. The full
 // record is data-packs/gaia-dr3-solar-neighbourhood.json.
@@ -15,7 +15,7 @@
 /** What the data is and who to credit, as an interface shows it. */
 export const PACK = {
   id: 'gaia-dr3-solar-neighbourhood',
-  version: '1.0.0',
+  version: '1.1.0',
   title: 'The solar neighbourhood: 1,570 Gaia DR3 stars with radial velocities',
   object: {
     name: 'the solar neighbourhood (stars within 1 kpc of the Sun)',
@@ -41,7 +41,7 @@ export const PACK = {
       'CC BY-NC 3.0 IGO permits copying, redistribution and adaptation, which includes a derived subset of the catalogue, with attribution and for non-commercial purposes; Gravitas is a free educational tool. It is the same licence, and so the same mechanism, as radiation-gaia-bandpasses (D-RAD-01), which the project owner shipped by explicit instruction; extending it to these Gaia samples is a delegated decision awaiting his review (DECISION_REGISTER.md D-GAIA-01), not a standing licence. Each sample is a pack of its own so that no other data is covered by the NC terms, and none may be bundled into a commercial redistribution of Gravitas (DATA_PACKS.md); removing the pack is removing its module, manifest and service-worker entry.',
     nonCommercial: true,
   },
-  retrieved: '2026-10-10',
+  retrieved: '2026-11-03',
   columns: [
     {
       id: 'ra',
@@ -122,6 +122,62 @@ export const PACK = {
       description:
         'Gaia BP minus RP colour (bp_rp), not corrected for extinction',
     },
+    {
+      id: 'plx_pmra_corr',
+      name: 'parallax-pm ra correlation',
+      unit: '',
+      description:
+        'correlation coefficient of the parallax and pm ra errors (parallax_pmra_corr)',
+    },
+    {
+      id: 'plx_pmdec_corr',
+      name: 'parallax-pm dec correlation',
+      unit: '',
+      description:
+        'correlation coefficient of the parallax and pm dec errors (parallax_pmdec_corr)',
+    },
+    {
+      id: 'pm_corr',
+      name: 'pm ra-pm dec correlation',
+      unit: '',
+      description:
+        'correlation coefficient of the pm ra and pm dec errors (pmra_pmdec_corr)',
+    },
+    {
+      id: 'ruwe',
+      name: 'RUWE',
+      unit: '',
+      description:
+        'renormalised unit weight error of the astrometric solution (ruwe)',
+    },
+    {
+      id: 'params',
+      name: 'astrometric parameters solved',
+      unit: '',
+      description:
+        'astrometric_params_solved: 31 is a five-parameter solution, 95 a six-parameter one',
+    },
+    {
+      id: 'nu_eff',
+      name: 'effective wavenumber',
+      unit: '',
+      description:
+        'in inverse micrometres: nu_eff_used_in_astrometry, the colour a five-parameter solution used; empty for a six-parameter solution',
+    },
+    {
+      id: 'pseudocolour',
+      name: 'pseudocolour',
+      unit: '',
+      description:
+        'in inverse micrometres: pseudocolour, the colour a six-parameter solution estimated; empty for a five-parameter solution',
+    },
+    {
+      id: 'ecl_lat',
+      name: 'ecliptic latitude',
+      unit: 'deg',
+      description:
+        'ecliptic latitude (ecl_lat), which the parallax zero point depends on',
+    },
   ],
   masks: [],
   reductions: [
@@ -131,7 +187,8 @@ export const PACK = {
     'No parallax zero-point correction is applied (Lindegren et al. 2021 give about -0.017 mas on average: 1.7 percent at 100 pc, 1.7 percent at 1 kpc to the distance).',
     'Positions are rounded to 0.006 degree in right ascension and 0.004 degree in declination (22 and 14 arcsec), parallaxes to 0.02 mas, proper motions to 0.01 mas/yr, radial velocities to 0.02 km/s: good for Galactic coordinates to 0.01 degree and for velocities to under 0.1 km/s, not for a cross-match.',
     "Galactic longitude and latitude are not stored: the galactic kernel computes them from the position, and its transformation is tested against the values Gaia's archive gives.",
-    "The Gaia source ids are left out; the query in the pack's manifest returns them.",
+    "The Gaia source ids are left out (a 64-bit id does not fit the table encoding); the query in the pack's manifest returns them, and the rows are in its order.",
+    'Version 1.1.0 (Prompt 233) adds eight columns to the same 1,570 rows, all stored to the step shown: the three error correlations, RUWE, the solution type, the effective wavenumber or pseudocolour (each empty for the other solution type), and the ecliptic latitude. Every earlier column is identical to version 1.0.0 (tests/fixtures/gaia-workflows/alignment.json holds its checksum). The parallax is still rounded to 0.02 mas: this pack is not used for a distance, because that rounding is as large as the parallax error of its far stratum.',
   ],
   citations: [
     {
@@ -156,6 +213,6 @@ export const PACK = {
 /** The sidecar: where the rows are, and what they must be. */
 export const SIDECAR = {
   file: 'gaia/solar-neighbourhood.json',
-  bytes: 59345,
-  sha256: '8e0a738c697822aa7204c6dcc1118bc1755380a6a7c635c6da4c5f5e6f8d3c23',
+  bytes: 97477,
+  sha256: '0d1efe626b3f57ef341290a7a776b6426d71b87786f0d6d65eaf9d97c769a52e',
 };

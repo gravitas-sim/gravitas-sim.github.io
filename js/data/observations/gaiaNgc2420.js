@@ -2,7 +2,7 @@
 // NGC 2420: Gaia DR3 astrometry
 // -----------------------------------------------------------------------------
 // GENERATED FILE. Do not edit. Written by tools/build-data-packs.mjs
-// (tools/data-packs/gaia-dynamics.mjs) from gaia-dr3-ngc2420.csv, gaia-dr3-ngc2420-cone.csv, gaia-dr3-ngc2420-ruwe.csv;
+// (tools/data-packs/gaia-dynamics.mjs) from gaia-dr3-ngc2420-astrometry.csv, gaia-dr3-ngc2420-cone.csv, gaia-dr3-ngc2420-ruwe.csv;
 // `npm run packs:check` verifies it offline and `npm run packs:provenance`
 // rebuilds it from the pinned raw product and compares byte for byte. The full
 // record is data-packs/gaia-dr3-ngc2420.json.
@@ -15,7 +15,7 @@
 /** What the data is and who to credit, as an interface shows it. */
 export const PACK = {
   id: 'gaia-dr3-ngc2420',
-  version: '1.0.0',
+  version: '1.1.0',
   title: 'NGC 2420: Gaia DR3 astrometry',
   object: {
     name: 'NGC 2420',
@@ -43,7 +43,7 @@ export const PACK = {
       'CC BY-NC 3.0 IGO permits copying, redistribution and adaptation, which includes a derived subset of the catalogue, with attribution and for non-commercial purposes; Gravitas is a free educational tool. It is the same licence, and so the same mechanism, as radiation-gaia-bandpasses (D-RAD-01), which the project owner shipped by explicit instruction; extending it to these Gaia samples is a delegated decision awaiting his review (DECISION_REGISTER.md D-GAIA-01), not a standing licence. Each sample is a pack of its own so that no other data is covered by the NC terms, and none may be bundled into a commercial redistribution of Gravitas (DATA_PACKS.md); removing the pack is removing its module, manifest and service-worker entry.',
     nonCommercial: true,
   },
-  retrieved: '2026-10-10',
+  retrieved: '2026-11-03',
   columns: [
     {
       id: 'ra',
@@ -108,6 +108,62 @@ export const PACK = {
       unit: 'mag',
       description: 'Gaia BP minus RP colour, not corrected for extinction',
     },
+    {
+      id: 'plx_pmra_corr',
+      name: 'parallax-pm ra correlation',
+      unit: '',
+      description:
+        'correlation coefficient of the parallax and pm ra errors (parallax_pmra_corr)',
+    },
+    {
+      id: 'plx_pmdec_corr',
+      name: 'parallax-pm dec correlation',
+      unit: '',
+      description:
+        'correlation coefficient of the parallax and pm dec errors (parallax_pmdec_corr)',
+    },
+    {
+      id: 'pm_corr',
+      name: 'pm ra-pm dec correlation',
+      unit: '',
+      description:
+        'correlation coefficient of the pm ra and pm dec errors (pmra_pmdec_corr)',
+    },
+    {
+      id: 'ruwe',
+      name: 'RUWE',
+      unit: '',
+      description:
+        'renormalised unit weight error of the astrometric solution (ruwe)',
+    },
+    {
+      id: 'params',
+      name: 'astrometric parameters solved',
+      unit: '',
+      description:
+        'astrometric_params_solved: 31 is a five-parameter solution, 95 a six-parameter one',
+    },
+    {
+      id: 'nu_eff',
+      name: 'effective wavenumber',
+      unit: '',
+      description:
+        'in inverse micrometres: nu_eff_used_in_astrometry, the colour a five-parameter solution used; empty for a six-parameter solution',
+    },
+    {
+      id: 'pseudocolour',
+      name: 'pseudocolour',
+      unit: '',
+      description:
+        'in inverse micrometres: pseudocolour, the colour a six-parameter solution estimated; empty for a five-parameter solution',
+    },
+    {
+      id: 'ecl_lat',
+      name: 'ecliptic latitude',
+      unit: 'deg',
+      description:
+        'ecliptic latitude (ecl_lat), which the parallax zero point depends on',
+    },
   ],
   masks: [
     {
@@ -121,7 +177,8 @@ export const PACK = {
     "Stars fainter than G = 17.5 are left out: their proper-motion errors approach the cluster's own spread.",
     "Gaia is not blind in the cluster's core, as SDSS is: its crowding limit is far higher, so the core is in this table.",
     'Positions are rounded to 0.00001 degree (0.04 arcsec), parallaxes, proper motions, errors and magnitudes to 0.001.',
-    "The Gaia source ids are left out; the query in the pack's manifest returns them.",
+    "The Gaia source ids are left out (a 64-bit id does not fit the table encoding); the query in the pack's manifest returns them, and the rows are in its order.",
+    'Version 1.1.0 (Prompt 233) adds eight columns to the same 993 rows, all stored to the step shown: the three error correlations, RUWE, the solution type, the effective wavenumber or pseudocolour (each empty for the other solution type), and the ecliptic latitude. Every earlier column is identical to version 1.0.0 (tests/fixtures/gaia-workflows/alignment.json holds its checksum).',
   ],
   citations: [
     {
@@ -146,6 +203,6 @@ export const PACK = {
 /** The sidecar: where the rows are, and what they must be. */
 export const SIDECAR = {
   file: 'gaia/ngc2420.json',
-  bytes: 32390,
-  sha256: '6709a0a33b43602e7e7bc62cc342502fb361ff2ff4595fb1ff1a5b019dbb42ef',
+  bytes: 54014,
+  sha256: '855b17b4b6816711ff33df3950ab59e154b3f829da34e243189e9bccf877a25a',
 };

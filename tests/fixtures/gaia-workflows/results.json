@@ -1,0 +1,754 @@
+{
+  "format": "gravitas.gaia-workflows-results/1",
+  "rows": [
+    {
+      "id": "A1.inversionBias",
+      "status": "pass",
+      "measured": [
+        {
+          "level": 5,
+          "mc": 1.04308,
+          "quadrature": 1.0435482,
+          "sigmas": 1.26,
+          "kept": 399434
+        },
+        {
+          "level": 10,
+          "mc": 1.01025,
+          "quadrature": 1.0103162,
+          "sigmas": 0.384,
+          "kept": 400000
+        },
+        {
+          "level": 20,
+          "mc": 1.00255,
+          "quadrature": 1.002519,
+          "sigmas": 0.409,
+          "kept": 400000,
+          "series": 1.0025187,
+          "relFromSeries": 0.0000329
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "A1b.inversionMedian",
+      "status": "pass",
+      "measured": {
+        "median": 1.00007,
+        "sigmas": 0.687
+      },
+      "note": ""
+    },
+    {
+      "id": "A2.edsdMode",
+      "status": "pass",
+      "measured": [
+        {
+          "p": 2,
+          "s": 0.02,
+          "L": 1,
+          "rel": 0
+        },
+        {
+          "p": 1,
+          "s": 0.1,
+          "L": 1,
+          "rel": 0
+        },
+        {
+          "p": 0.5,
+          "s": 0.1,
+          "L": 1,
+          "rel": 2.22e-16
+        },
+        {
+          "p": 0.3,
+          "s": 0.1,
+          "L": 2,
+          "rel": 1.29e-16
+        },
+        {
+          "p": 0.2,
+          "s": 0.1,
+          "L": 1,
+          "rel": 0
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "A3.likelihoodInterval",
+      "status": "pass",
+      "measured": [
+        {
+          "p": 2,
+          "s": 0.02,
+          "ok": true,
+          "lo": 0.4950495,
+          "hi": 0.50505051
+        },
+        {
+          "p": 0.5,
+          "s": 0.1,
+          "ok": true,
+          "lo": 1.6666667,
+          "hi": 2.5
+        },
+        {
+          "p": 0.3,
+          "s": 0.1,
+          "ok": true,
+          "lo": 2.5,
+          "hi": 5
+        },
+        {
+          "p": 0.1,
+          "s": 0.1,
+          "ok": true,
+          "lo": 5,
+          "hi": null
+        },
+        {
+          "p": 0.05,
+          "s": 0.1,
+          "ok": true,
+          "lo": 6.6666667,
+          "hi": null
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "A4.zeroPointAlgebra",
+      "status": "pass",
+      "measured": {
+        "w": 0.454,
+        "s": 0.0316227766,
+        "clusters": [
+          {
+            "n": 1,
+            "error": 0.031622777,
+            "right": 0.031622777,
+            "wrongIfDividedByN": 0.031622777
+          },
+          {
+            "n": 10,
+            "error": 0.013784049,
+            "right": 0.013784049,
+            "wrongIfDividedByN": 0.01
+          },
+          {
+            "n": 1000,
+            "error": 0.010044899,
+            "right": 0.010044899,
+            "wrongIfDividedByN": 0.001
+          }
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "A5.tangentialVelocityLinear",
+      "status": "pass",
+      "measured": {
+        "worstRel": 0
+      },
+      "note": ""
+    },
+    {
+      "id": "A6.tangentialVelocitySecondMoment",
+      "status": "pass",
+      "measured": [
+        {
+          "level": 10,
+          "relSecond": 0.000426,
+          "relVariance": 0.00117,
+          "sampledVar": 7.36737,
+          "closedVar": 7.37598
+        },
+        {
+          "level": 20,
+          "relSecond": 0.000246,
+          "relVariance": 0.00201,
+          "sampledVar": 0.432973,
+          "closedVar": 0.432103
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "A7.correlationPropagation",
+      "status": "pass",
+      "measured": [
+        {
+          "rho": -0.5,
+          "rel": 0.00405,
+          "sampled": 0.407579,
+          "linear": 0.405935
+        },
+        {
+          "rho": 0.5,
+          "rel": 0.00209,
+          "sampled": 0.56892,
+          "linear": 0.567734
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "B1.oracleTenStars",
+      "status": "pass",
+      "measured": [
+        {
+          "id": 1,
+          "point": 3.13e-11,
+          "lo": 0,
+          "hi": 1.98e-15,
+          "ok": true
+        },
+        {
+          "id": 2,
+          "point": 8.68e-11,
+          "lo": 1.19e-16,
+          "hi": 1.94e-15,
+          "ok": true
+        },
+        {
+          "id": 3,
+          "point": 4.85e-10,
+          "lo": 1.33e-16,
+          "hi": 1.78e-16,
+          "ok": true
+        },
+        {
+          "id": 4,
+          "point": 8.5e-9,
+          "lo": 3.55e-16,
+          "hi": 7.11e-16,
+          "ok": true
+        },
+        {
+          "id": 5,
+          "point": 2.29e-9,
+          "lo": 4e-16,
+          "hi": 1.24e-15,
+          "ok": true
+        },
+        {
+          "id": 6,
+          "mode": 4.63e-10,
+          "q16": 1.09e-7,
+          "q50": 4e-7,
+          "q84": 8.31e-7,
+          "ok": true
+        },
+        {
+          "id": 7,
+          "mode": 2.93e-10,
+          "q16": 7.93e-8,
+          "q50": 2.99e-8,
+          "q84": 9.98e-8,
+          "ok": true
+        },
+        {
+          "id": 8,
+          "mode": 3.95e-10,
+          "q16": 1.48e-7,
+          "q50": 7.21e-7,
+          "q84": 0.00000195,
+          "ok": true
+        },
+        {
+          "id": 9,
+          "mode": 3.09e-10,
+          "q16": 1.85e-7,
+          "q50": 8.51e-7,
+          "q84": 0.00000278,
+          "ok": true
+        },
+        {
+          "id": 10,
+          "mode": 1.64e-8,
+          "q16": 1.9e-7,
+          "q50": 1.67e-8,
+          "q84": 1.24e-8,
+          "ok": true
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "B2.zeroPointOracle",
+      "status": "pass",
+      "measured": {
+        "gaia-dr3-ngc2420": {
+          "stars": 993,
+          "maxAbsMas": 0.0000028040992035571755,
+          "rawInputsMaxAbsMas": 0.0000294,
+          "outOfRange": 0
+        },
+        "gaia-dr3-solar-neighbourhood": {
+          "stars": 1570,
+          "maxAbsMas": 0.0000021011115269274627,
+          "rawInputsMaxAbsMas": 0.0000733,
+          "outOfRange": 5
+        }
+      },
+      "note": "against a second implementation (numpy) of the same published coefficients, NOT the authors' package (never run): the package-comparison part of the committed leg is NOT RUN, so this row does not say the correction matches the package"
+    },
+    {
+      "id": "C1.coverageLikelihood68",
+      "status": "pass",
+      "measured": [
+        {
+          "poe": 3,
+          "coverage": 0.6797,
+          "band": [
+            0.6606,
+            0.7048
+          ],
+          "openShare": 0.0175,
+          "noDistanceShare": 0.0015,
+          "ok": true
+        },
+        {
+          "poe": 10,
+          "coverage": 0.6805,
+          "band": [
+            0.6606,
+            0.7048
+          ],
+          "openShare": 0,
+          "noDistanceShare": 0,
+          "ok": true
+        },
+        {
+          "poe": 30,
+          "coverage": 0.6765,
+          "band": [
+            0.6606,
+            0.7048
+          ],
+          "openShare": 0,
+          "noDistanceShare": 0,
+          "ok": true
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "C2.coverageLikelihood95",
+      "status": "pass",
+      "measured": [
+        {
+          "poe": 3,
+          "coverage": 0.9543,
+          "band": [
+            0.9446,
+            0.9644
+          ],
+          "openShare": 0.166,
+          "noDistanceShare": 0.001,
+          "ok": true
+        },
+        {
+          "poe": 10,
+          "coverage": 0.9583,
+          "band": [
+            0.9446,
+            0.9644
+          ],
+          "openShare": 0,
+          "noDistanceShare": 0,
+          "ok": true
+        },
+        {
+          "poe": 30,
+          "coverage": 0.9537,
+          "band": [
+            0.9446,
+            0.9644
+          ],
+          "openShare": 0,
+          "noDistanceShare": 0,
+          "ok": true
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "C3.coveragePriorMatched",
+      "status": "pass",
+      "measured": [
+        {
+          "sigma": 0.3,
+          "coverage": [
+            0.686,
+            0.95
+          ],
+          "ok": true
+        },
+        {
+          "sigma": 0.1,
+          "coverage": [
+            0.6747,
+            0.9535
+          ],
+          "ok": true
+        },
+        {
+          "sigma": 0.03,
+          "coverage": [
+            0.6807,
+            0.9515
+          ],
+          "ok": true
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "C4.coveragePriorWrong",
+      "status": "reported",
+      "measured": [
+        {
+          "truthScale": 3,
+          "priorL": 1,
+          "sigma": 0.3,
+          "coverage68": 0.2195,
+          "coverage95": 0.4765
+        },
+        {
+          "truthScale": 3,
+          "priorL": 1,
+          "sigma": 0.1,
+          "coverage68": 0.2855,
+          "coverage95": 0.5695
+        },
+        {
+          "truthScale": 3,
+          "priorL": 1,
+          "sigma": 0.03,
+          "coverage68": 0.421,
+          "coverage95": 0.7295
+        },
+        {
+          "truthScale": 0.3,
+          "priorL": 1,
+          "sigma": 0.3,
+          "coverage68": 0.587,
+          "coverage95": 0.9085
+        },
+        {
+          "truthScale": 0.3,
+          "priorL": 1,
+          "sigma": 0.1,
+          "coverage68": 0.6575,
+          "coverage95": 0.952
+        },
+        {
+          "truthScale": 0.3,
+          "priorL": 1,
+          "sigma": 0.03,
+          "coverage68": 0.691,
+          "coverage95": 0.9635
+        }
+      ],
+      "note": "the prior says L = 1 kpc; stars drawn at the scales shown; 2000 stars per row"
+    },
+    {
+      "id": "C5.zeroPointUnmodelled",
+      "status": "reported",
+      "measured": [
+        {
+          "poe": 3,
+          "medianBiasPercent": 0.8402,
+          "coverage68": 0.6783
+        },
+        {
+          "poe": 10,
+          "medianBiasPercent": 1.858,
+          "coverage68": 0.6743
+        },
+        {
+          "poe": 30,
+          "medianBiasPercent": 2.181,
+          "coverage68": 0.5942
+        }
+      ],
+      "note": "offset -0.02 mas added to every observed parallax, no correction applied; true distance 1 kpc"
+    },
+    {
+      "id": "D1.negativeParallax",
+      "status": "pass",
+      "measured": [
+        {
+          "p": -0.1,
+          "status": "likelihood-only",
+          "withPrior": "prior-dominated",
+          "ok": true
+        },
+        {
+          "p": 0,
+          "status": "likelihood-only",
+          "withPrior": "prior-dominated",
+          "ok": true
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "D2.statusLadder",
+      "status": "pass",
+      "measured": {
+        "got": [
+          "ok",
+          "ok",
+          "low-signal",
+          "low-signal",
+          "likelihood-only",
+          "likelihood-only"
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "D3.priorDominated",
+      "status": "pass",
+      "measured": {
+        "low": [
+          {
+            "level": 1,
+            "factor": 1.56,
+            "status": "prior-dominated"
+          },
+          {
+            "level": 0.5,
+            "factor": 1.571,
+            "status": "prior-dominated"
+          }
+        ],
+        "highChange": 0.000723
+      },
+      "note": ""
+    },
+    {
+      "id": "D4.refusals",
+      "status": "pass",
+      "measured": {
+        "refused": [
+          "error",
+          "error",
+          "error",
+          "parallax",
+          "prior",
+          "prior-scale",
+          "zero-point"
+        ]
+      },
+      "note": "the list holds seven inputs; the committed count is a minimum of six"
+    },
+    {
+      "id": "D5.noBlanketCorrection",
+      "status": "pass",
+      "measured": {
+        "worstRel": 0,
+        "bannedExports": []
+      },
+      "note": ""
+    },
+    {
+      "id": "E1.ngc2420",
+      "status": "not-run",
+      "measured": {
+        "measured": {
+          "members": 499,
+          "kept": 493,
+          "meanParallaxMas": 0.43028,
+          "statErrorMas": 0.0015,
+          "meanZeroPointMas": -0.0368,
+          "distanceKpc": 2.3241,
+          "intervalKpc": [
+            2.316,
+            2.3322
+          ],
+          "converged": true
+        },
+        "variants": {
+          "noZeroPoint": {
+            "members": 499,
+            "kept": 492,
+            "meanParallaxMas": 0.39135,
+            "statErrorMas": 0.00151,
+            "meanZeroPointMas": 0,
+            "distanceKpc": 2.5552,
+            "intervalKpc": [
+              2.5454,
+              2.5651
+            ],
+            "converged": true
+          },
+          "noClip": {
+            "members": 499,
+            "kept": 499,
+            "meanParallaxMas": 0.43016,
+            "statErrorMas": 0.0015,
+            "meanZeroPointMas": -0.0367,
+            "distanceKpc": 2.3247,
+            "intervalKpc": [
+              2.3167,
+              2.3328
+            ],
+            "converged": true
+          },
+          "threshold05": {
+            "members": 505,
+            "kept": 499,
+            "meanParallaxMas": 0.4303,
+            "statErrorMas": 0.0015,
+            "meanZeroPointMas": -0.0368,
+            "distanceKpc": 2.324,
+            "intervalKpc": [
+              2.3159,
+              2.3321
+            ],
+            "converged": true
+          },
+          "threshold099": {
+            "members": 485,
+            "kept": 480,
+            "meanParallaxMas": 0.43049,
+            "statErrorMas": 0.00152,
+            "meanZeroPointMas": -0.0367,
+            "distanceKpc": 2.323,
+            "intervalKpc": [
+              2.3148,
+              2.3312
+            ],
+            "converged": true
+          }
+        },
+        "sources": {
+          "P1": {
+            "what": "Richer et al. 2000, (m-M)V 12.10 with E(B-V) 0.04, R_V 3.1",
+            "modulus0": 11.976,
+            "distanceKpc": 2.4843
+          },
+          "P2": {
+            "what": "Anthony-Twarog et al. 2006, apparent 12.15; E(B-V) 0.04 ASSUMED from P1 (the line read does not restate it)",
+            "modulus0": 12.026,
+            "distanceKpc": 2.5421
+          },
+          "P3": {
+            "what": "DR3 mean parallax 0.36 +- 0.06 mas as printed (no zero-point correction stated): 1/p",
+            "distanceKpc": 2.778,
+            "intervalKpc": [
+              2.381,
+              3.333
+            ]
+          },
+          "P4": {
+            "what": "Cantat-Gaudin et al. 2020 through the 2404.12523 Table 1, Gaia DR2",
+            "distanceKpc": 2.587
+          },
+          "P5": {
+            "what": "about 3 kpc (rounded, no method read)",
+            "distanceKpc": 3
+          }
+        }
+      },
+      "note": "NOT RUN against the committed contract: it needs a published range with at least one DR3-based and one non-Gaia source, and no DR3-catalogue distance was obtained (Hunt and Reffert 2023 is a CDS-only table, CDS unreachable). Not judged. The measured corrected distance is reported beside the sources that exist, and the zero point has no systematic floor (its paper was not in the material supplied). Whether to re-gate against a different source is a question for Carl (register)."
+    },
+    {
+      "id": "E2.packAlignment",
+      "status": "pass",
+      "measured": {
+        "gaia-dr3-ngc2420": {
+          "rows": 993,
+          "earlierColumnsIdentical": true,
+          "rowsDiffering": 0
+        },
+        "gaia-dr3-solar-neighbourhood": {
+          "rows": 1570,
+          "earlierColumnsIdentical": true,
+          "rowsDiffering": 0
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "E3.neighbourhoodRounding",
+      "status": "reported",
+      "measured": {
+        "stars": 1570,
+        "largestRoundingMas": 0.00999,
+        "shareOverTenthOfError": 0.802,
+        "halfStepMas": 0.01
+      },
+      "note": "the pack parallax against the unrounded product; the reason no distance is taken from this pack"
+    },
+    {
+      "id": "P1.speed",
+      "status": "pass",
+      "measured": {
+        "cpuSeconds": 0.555
+      },
+      "note": "recorded, not a physics bound"
+    },
+    {
+      "id": "S1.euclideanCounts",
+      "status": "pass",
+      "measured": {
+        "slope": 0.60035,
+        "edgeSlope": 0.2314,
+        "counts": [
+          1160,
+          293478,
+          500000
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "S2.parallaxCutThroughSelection",
+      "status": "pass",
+      "measured": [
+        {
+          "k": 5,
+          "exact": 0.0109219,
+          "drawn": 0.010795,
+          "observedCut": 0.010825,
+          "sigmas": [
+            0.546,
+            0.417,
+            0.26
+          ]
+        },
+        {
+          "k": 10,
+          "exact": 0.00106497,
+          "drawn": 0.001,
+          "observedCut": 0.00099,
+          "sigmas": [
+            0.891,
+            1.03,
+            0.675
+          ]
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "S3.removedBookkeeping",
+      "status": "pass",
+      "measured": {
+        "outside": 2853,
+        "kept": 2147,
+        "aloneMagnitude": 1530,
+        "aloneParallax": 1906
+      },
+      "note": ""
+    }
+  ]
+}
