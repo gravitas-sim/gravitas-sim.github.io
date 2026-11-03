@@ -1171,6 +1171,13 @@
       "student": false
     },
     {
+      "file": "VISUAL_BINARY_GATE.md",
+      "kind": "gate",
+      "purpose": "Visual-binary gate: the photocentre contract, committed thresholds, the independent oracle, the verdict A and the circular real-star check (Prompt 218 Part B).",
+      "owner": 218,
+      "student": false
+    },
+    {
       "file": "OCCURRENCE_RATES.md",
       "kind": "feature",
       "purpose": "Occurrence rates on a searched population: completeness by injection, the Poisson likelihood, limits, the validation contract, two failed legs (Prompt 229).",
