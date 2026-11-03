@@ -130,6 +130,7 @@ export const GUIDED = Object.freeze([
   'a-stars-life-in-numbers',
   'a-universe-of-stars',
   'a-variable-star-from-frames',
+  'following-a-planet',
   'architectures',
   'bending-light',
   'binary-star-planets',

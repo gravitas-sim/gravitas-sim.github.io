@@ -184,6 +184,8 @@ const EXTENSIONS = {
   'why-we-cannot-see-earth': () =>
     import('../data/investigations/depth/why-we-cannot-see-earth.js'),
   architectures: () => import('../data/investigations/depth/architectures.js'),
+  'following-a-planet': () =>
+    import('../data/investigations/depth/following-a-planet.js'),
   'what-is-it-made-of': () =>
     import('../data/investigations/depth/what-is-it-made-of.js'),
   'how-many-earths': () =>
@@ -356,6 +358,8 @@ const WORDS = {
       import('../data/investigations/depth/es/why-we-cannot-see-earth.js'),
     architectures: () =>
       import('../data/investigations/depth/es/architectures.js'),
+    'following-a-planet': () =>
+      import('../data/investigations/depth/es/following-a-planet.js'),
     'what-is-it-made-of': () =>
       import('../data/investigations/depth/es/what-is-it-made-of.js'),
     'how-many-earths': () =>

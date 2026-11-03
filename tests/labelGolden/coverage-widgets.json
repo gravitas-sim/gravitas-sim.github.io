@@ -60,6 +60,8 @@
   "cluster-fit",
   "imaging-contrast",
   "imaging-architectures",
+  "imaging-subtraction",
+  "imaging-orbit",
   "eclipse-curve",
   "eclipse-fit",
   "exposure-planner",

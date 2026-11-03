@@ -1283,6 +1283,19 @@ export const MANIFEST = [
     objectiveCount: 4,
   },
   {
+    id: 'following-a-planet',
+    title: 'Following a Planet',
+    subtitle:
+      'Subtract a star to find its planet, then follow the planet round its orbit: see what a short arc can and cannot tell you, and why the fitter says not constrained',
+    duration: '6-10 min',
+    level: 'Introductory to upper-level astronomy',
+    thumbnail: 'images/investigations/following-a-planet.webp',
+    depths: 3,
+    stepCount: 8,
+    gradedCount: 6,
+    objectiveCount: 4,
+  },
+  {
     id: 'what-is-it-made-of',
     title: 'What Is It Made Of?',
     subtitle:

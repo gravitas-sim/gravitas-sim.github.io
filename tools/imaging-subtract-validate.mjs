@@ -835,6 +835,17 @@ if (args.includes('--write-oracle-inputs')) {
   process.exit(0);
 }
 
+/** The committed verdict function: A when every core and orbit leg passed, B when only an orbit leg failed, C when a core leg failed. */
+export function verdictOf(list) {
+  const st = id => list.find(r => r.id === id)?.status;
+  const pass = ids => ids.every(i => st(i) === 'pass');
+  return pass(THRESHOLDS.verdict.core)
+    ? pass(THRESHOLDS.verdict.orbit)
+      ? 'A'
+      : 'B'
+    : 'C';
+}
+
 const t0 = Date.now();
 legA();
 legB();
@@ -854,6 +865,7 @@ else
     console.log(
       `${r.id.padEnd(4)} ${r.status.padEnd(7)} ${JSON.stringify(r.measured)}${r.note ? ` (${r.note})` : ''}`
     );
+if (!only) console.log(`verdict ${verdictOf(rows)}`);
 console.log(`seconds ${((Date.now() - t0) / 1000).toFixed(0)} stream ${SEED}`);
 
 if (args.includes('--write-results')) {
@@ -871,6 +883,7 @@ if (args.includes('--write-results')) {
         format: 'gravitas.imaging-subtraction-results/1',
         stream: SEED,
         node: process.version,
+        verdict: verdictOf(rows),
         rows,
       },
       null,

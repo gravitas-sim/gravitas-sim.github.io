@@ -416,6 +416,10 @@ export const BROWSE_META = {
     tags: ['exoplanets', 'observing'],
     numericCount: 0,
   },
+  'following-a-planet': {
+    tags: ['exoplanets', 'observing'],
+    numericCount: 0,
+  },
   'what-is-it-made-of': {
     tags: ['exoplanets', 'stars'],
     numericCount: 0,

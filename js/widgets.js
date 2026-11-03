@@ -408,7 +408,12 @@ export const LAZY_FAMILIES = Object.freeze({
     () => import('./directImagingWidgets.js'),
     './directImagingWidgets.js',
     'DIRECT_IMAGING_WIDGETS',
-    ['imaging-contrast', 'imaging-architectures']
+    [
+      'imaging-contrast',
+      'imaging-architectures',
+      'imaging-subtraction',
+      'imaging-orbit',
+    ]
   ),
   eclipse: familyEntry(
     () => import('./eclipseWidgets.js'),

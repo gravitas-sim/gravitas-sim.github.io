@@ -93,4 +93,95 @@ export const ES_DIRECTIMAGING = {
   'dirW.row.source': 'Fuente',
   'dirW.v.source':
     'Archivo de Exoplanetas de la NASA, Planetary Systems Composite Parameters, método de descubrimiento Imaging, consultado el 2026-10-31 (se pide dar crédito; no se recuperaron las referencias de cada planeta). El ángulo es el semieje mayor entre la distancia, no la separación proyectada de una época.',
+  // Parte B: sustracción y órbita (Prompt 230)
+  'dirW.sub.title': 'Restar una estrella para encontrar un planeta',
+  'dirW.sub.note':
+    'Un cuadro objetivo contiene una estrella y, en su resplandor, un planeta añadido por inyección. Un cuadro de referencia contiene otra estrella. La referencia se escala al objetivo por mínimos cuadrados y se resta. La función de dispersión del punto es un perfil de Moffat sin anillos de difracción ni motas, así que lo único que puede salir mal es que las dos estrellas no coincidan: sus anchuras y centros difieren un poco, y eso deja un residuo. Es solo sustracción con estrella de referencia; la obtención de imágenes diferencial angular o espectral, con su autosustracción, no se modela. Los cuadros son sintéticos.',
+  'dirW.control.sep': 'Separación del planeta',
+  'dirW.control.contrast': 'Contraste del planeta',
+  'dirW.control.mismatch': 'Estrella de referencia',
+  'dirW.control.scene': 'Escena',
+  'dirW.cn.0': '1 × 10⁻³',
+  'dirW.cn.1': '3 × 10⁻³',
+  'dirW.cn.2': '1 × 10⁻²',
+  'dirW.cn.3': '3 × 10⁻²',
+  'dirW.cn.4': '1 × 10⁻¹',
+  'dirW.mm.0': 'misma anchura y mismo centro',
+  'dirW.mm.1': 'un poco distinta (3 por ciento, 0,03 píxel)',
+  'dirW.mm.2': '20 por ciento más ancha',
+  'dirW.sub.target': 'Objetivo (con el planeta)',
+  'dirW.sub.residual': 'Tras la sustracción',
+  'dirW.sub.key':
+    'Anillo naranja: dónde está el planeta. Anillo verde discontinuo: el radio de trabajo de este método.',
+  'dirW.sub.refused.reference-mismatch': 'rechazado: la referencia no coincide',
+  'dirW.sub.refused.saturated': 'rechazado: saturado',
+  'dirW.row.subtraction': 'Sustracción',
+  'dirW.v.subtraction':
+    'La referencia se escala por {k}, y lo que queda de la estrella a menos de dos FWHM es el {d} por ciento de su luz.',
+  'dirW.v.refused.reference-mismatch':
+    'Rechazado: la referencia no coincide con la estrella objetivo. Dejaría {d} de la luz de la estrella y el límite es {l}. Elige otra referencia.',
+  'dirW.v.refused.saturated':
+    'Rechazado: un píxel de uno de los cuadros supera 0,9 del pozo completo, así que el núcleo de la estrella no se puede restar.',
+  'dirW.row.noise': 'Ruido',
+  'dirW.v.noise':
+    'Alrededor del planeta el ruido del residuo, medido en el propio residuo, es de {n} electrones por píxel.',
+  'dirW.row.planet': 'El planeta',
+  'dirW.v.measured':
+    'Señal a ruido {snr}. Flujo medido {f} ± {sf} electrones frente a {inj} inyectados, un rendimiento de {tp}; la posición está a {de} píxel de la verdadera.',
+  'dirW.v.inside':
+    'No medible detrás del residuo de la estrella con esta sustracción: el planeta está a {s} FWHM y el radio de trabajo de este método es de {w} FWHM. Ese radio pertenece a este método sobre estos cuadros; no es λ/D ni el ángulo de trabajo interno de un instrumento.',
+  'dirW.row.search': 'Una búsqueda a ciegas',
+  'dirW.v.search.found': 'encuentra el planeta (señal a ruido {snr}).',
+  'dirW.v.search.elsewhere':
+    'encuentra otra cosa, a {d} píxeles, con señal a ruido {snr}: un candidato falso.',
+  'dirW.v.search.none':
+    'no encuentra nada con señal a ruido 5 o más (lo mejor es {snr}).',
+  'dirW.row.limit': 'El límite de 5σ aquí',
+  'dirW.v.limit':
+    'Un planeta más débil que un contraste de {c} ({f} electrones) no se detecta a esta separación; con ese contraste se encuentra cerca de la mitad.',
+  'dirW.v.subassumes':
+    'Cuadros sintéticos; un perfil de Moffat sin anillos ni motas; un detector limpio; solo sustracción con estrella de referencia. La luz de la propia estrella es {star} electrones.',
+  'dirW.orb.title': 'Seguir a un planeta',
+  'dirW.orb.note':
+    'Cada punto es una época: un par de cuadros de la estrella y de una estrella de referencia, restados, y la posición del planeta medida con su incertidumbre. La órbita la ajusta el ajustador de binarias visuales del Observatorio (Prompt 187), sin cambios: devuelve elementos solo si el arco cubre bastante del período y los parámetros no son degenerados, y si no dice que no está restringida. El mapa muestra qué tan bien cada período y excentricidad ajusta los mismos puntos (azul oscuro dentro de la región del 68 por ciento, azul claro dentro del 95 por ciento). Los planetas son inventados y los cuadros sintéticos.',
+  'dirW.control.orbsys': 'Planeta',
+  'dirW.orbsys.0': 'circular',
+  'dirW.orbsys.1': 'excéntrica',
+  'dirW.orbsys.2': 'más excéntrica',
+  'dirW.control.orbarc': 'Tiempo seguido',
+  'dirW.orbarc.0': '10 % del período',
+  'dirW.orbarc.1': '30 % del período',
+  'dirW.orbarc.2': '60 % del período',
+  'dirW.orbarc.3': '110 % del período',
+  'dirW.control.reveal': 'Mostrar la órbita verdadera',
+  'dirW.orb.sky': 'El cielo (norte arriba, este a la derecha)',
+  'dirW.orb.map': 'El mapa: excentricidad frente a período',
+  'dirW.orb.axis': 'período, años (escala logarítmica)',
+  'dirW.row.epochs': 'Épocas',
+  'dirW.v.epochs':
+    '{k} de 12 medidas ({l} perdidas: no detectadas o dentro del radio de trabajo).',
+  'dirW.row.orbit': 'La órbita',
+  'dirW.v.orbit.ok':
+    'Período {p} años (68 por ciento: de {lo} a {hi}), excentricidad {e}{circ}, semieje mayor {a} ± {sa} segundos de arco.',
+  'dirW.v.orbit.circ': ' (no detectada: la órbita circular)',
+  'dirW.v.orbit.no': 'No restringida ({code}): {why}. No se da ninguna órbita.',
+  'dirW.orb.code.coverage': 'el arco cubre muy poco del período',
+  'dirW.orb.code.conditioning':
+    'los parámetros son casi degenerados en este arco',
+  'dirW.orb.code.period-unbounded':
+    'los datos no acotan el período por ambos lados',
+  'dirW.orb.code.period-ambiguous': 'otro período ajusta igual de bien',
+  'dirW.orb.code.inconsistent':
+    'el modelo no describe los puntos dentro de sus incertidumbres',
+  'dirW.orb.code.epochs': 'se midieron muy pocas épocas',
+  'dirW.orb.code.bad-series': 'la serie no se puede usar',
+  'dirW.row.map': 'Lo que permiten los puntos',
+  'dirW.v.map':
+    'Al 95 por ciento los mismos puntos permiten un período de {lo} a {hi} años (un factor de {f}) y una excentricidad de {elo} a {ehi}.',
+  'dirW.row.truth': 'La órbita verdadera (inventada)',
+  'dirW.v.truth':
+    'período {p} años, excentricidad {e}, semieje mayor {a} segundos de arco.',
+  'dirW.v.hidden': 'oculta hasta que la pidas.',
+  'dirW.v.orbassumes':
+    'Cuadros sintéticos y planetas inventados; una escala de 0,05 segundos de arco por píxel; un planeta de 3 × 10⁻³ de la luz de su estrella; el criterio del ajustador sin cambios.',
 };

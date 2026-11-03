@@ -1285,6 +1285,19 @@
       "test": "e2e/imagingLesson.spec.js",
       "loop": ["where-do-they-sit", "the-median-planet"],
       "evidenceFrom": "model"
+    },
+    "following-a-planet": {
+      "centralExperimentId": "ce.following-a-planet",
+      "object": "panel:imaging-orbit",
+      "control": "imaging-orbit/arc",
+      "quantity": "whether Prompt 187's fitter returns an orbit for 10, 30, 60 or 110 percent of a planet's period followed through twelve measured epochs (it refuses below its criterion), the period range the same dots allow at 95 percent (about 4.6 to 37 years for 30 percent of the circular orbit) and a whole orbit's fitted period and eccentricity against the true ones",
+      "evidence": "none",
+      "test": "e2e/imagingLesson.spec.js",
+      "loop": [
+        "short-arc",
+        "the-map"
+      ],
+      "evidenceFrom": "model"
     }
   }
 }

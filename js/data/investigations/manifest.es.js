@@ -1292,6 +1292,19 @@ export const MANIFEST = [
     objectiveCount: 4,
   },
   {
+    id: 'following-a-planet',
+    title: 'Seguir a un planeta',
+    subtitle:
+      'Resta una estrella para encontrar su planeta y luego síguelo en su órbita: mira qué puede y qué no puede decir un arco corto, y por qué el ajustador dice no restringido',
+    duration: '6-10 min',
+    level: 'Introductory to upper-level astronomy',
+    thumbnail: 'images/investigations/following-a-planet.webp',
+    depths: 3,
+    stepCount: 8,
+    gradedCount: 6,
+    objectiveCount: 4,
+  },
+  {
     id: 'what-is-it-made-of',
     title: '¿De qué está hecho?',
     subtitle:

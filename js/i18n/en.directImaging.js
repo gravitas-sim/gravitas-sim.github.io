@@ -93,4 +93,95 @@ export const EN_DIRECTIMAGING = {
   'dirW.row.source': 'Source',
   'dirW.v.source':
     'NASA Exoplanet Archive, Planetary Systems Composite Parameters, discovery method Imaging, retrieved 2026-10-31 (credit requested; the per-planet references were not retrieved). The angle is the semi-major axis over the distance, not one epoch’s projected separation.',
+  // Part B: subtraction and orbit (Prompt 230)
+  'dirW.sub.title': 'Subtracting a star to find a planet',
+  'dirW.sub.note':
+    'A target frame holds a star and, in its glare, a planet put in by injection. A reference frame holds another star. The reference is scaled to the target by least squares and subtracted. The point-spread function is a Moffat profile with no diffraction rings and no speckle, so the one thing that can go wrong is the two stars not matching: their widths and centres differ a little, and that leaves a residual. This is reference-star subtraction only; angular or spectral differential imaging, with their self-subtraction, are not modeled. The frames are synthetic.',
+  'dirW.control.sep': 'Planet’s separation',
+  'dirW.control.contrast': 'Planet’s contrast',
+  'dirW.control.mismatch': 'Reference star',
+  'dirW.control.scene': 'Scene',
+  'dirW.cn.0': '1 × 10⁻³',
+  'dirW.cn.1': '3 × 10⁻³',
+  'dirW.cn.2': '1 × 10⁻²',
+  'dirW.cn.3': '3 × 10⁻²',
+  'dirW.cn.4': '1 × 10⁻¹',
+  'dirW.mm.0': 'identical width and centre',
+  'dirW.mm.1': 'a little different (3 percent, 0.03 pixel)',
+  'dirW.mm.2': '20 percent wider',
+  'dirW.sub.target': 'Target (planet put in)',
+  'dirW.sub.residual': 'After subtraction',
+  'dirW.sub.key':
+    'Orange ring: where the planet is. Dashed green ring: this method’s working radius.',
+  'dirW.sub.refused.reference-mismatch': 'refused: reference does not match',
+  'dirW.sub.refused.saturated': 'refused: saturated',
+  'dirW.row.subtraction': 'Subtraction',
+  'dirW.v.subtraction':
+    'The reference is scaled by {k}, and what is left of the star within two FWHM is {d} percent of its light.',
+  'dirW.v.refused.reference-mismatch':
+    'Refused: the reference does not match the target star. It would leave {d} of the star’s light and the limit is {l}. Choose another reference.',
+  'dirW.v.refused.saturated':
+    'Refused: a pixel of one frame is above 0.9 of the full well, so the star’s core cannot be subtracted.',
+  'dirW.row.noise': 'Noise',
+  'dirW.v.noise':
+    'Around the planet the residual’s noise, measured in the residual itself, is {n} electrons a pixel.',
+  'dirW.row.planet': 'The planet',
+  'dirW.v.measured':
+    'Signal to noise {snr}. Measured flux {f} ± {sf} electrons against {inj} injected, a throughput of {tp}; the position is {de} pixel from the truth.',
+  'dirW.v.inside':
+    'Not measurable behind the star’s residual with this subtraction: the planet is {s} FWHM out and this method’s working radius is {w} FWHM. That radius belongs to this method on these frames; it is not λ/D and not an instrument’s inner working angle.',
+  'dirW.row.search': 'A blind search',
+  'dirW.v.search.found': 'finds the planet (signal to noise {snr}).',
+  'dirW.v.search.elsewhere':
+    'finds something else, {d} pixels away, at signal to noise {snr}: a false candidate.',
+  'dirW.v.search.none':
+    'finds nothing at signal to noise 5 or more (the best is {snr}).',
+  'dirW.row.limit': 'The 5σ limit here',
+  'dirW.v.limit':
+    'A planet fainter than a contrast of {c} ({f} electrons) is not detected at this separation; at that contrast about half are found.',
+  'dirW.v.subassumes':
+    'Synthetic frames; a Moffat profile with no rings or speckle; a clean detector; reference-star subtraction only. The star’s own light is {star} electrons.',
+  'dirW.orb.title': 'Following a planet',
+  'dirW.orb.note':
+    'Each dot is one epoch: a frame pair of the star and a reference star, subtracted, and the planet’s position measured with its uncertainty. The orbit is fitted by the Observatory’s visual-binary fitter (Prompt 187), unchanged: it returns elements only if the arc covers enough of the period and the parameters are not degenerate, and otherwise says not constrained. The map shows how well each period and eccentricity fits the same dots (dark blue within the 68 percent region, lighter blue within 95 percent). The planets are invented and the frames synthetic.',
+  'dirW.control.orbsys': 'Planet',
+  'dirW.orbsys.0': 'circular',
+  'dirW.orbsys.1': 'eccentric',
+  'dirW.orbsys.2': 'more eccentric',
+  'dirW.control.orbarc': 'Time followed',
+  'dirW.orbarc.0': '10 % of a period',
+  'dirW.orbarc.1': '30 % of a period',
+  'dirW.orbarc.2': '60 % of a period',
+  'dirW.orbarc.3': '110 % of a period',
+  'dirW.control.reveal': 'Show the true orbit',
+  'dirW.orb.sky': 'The sky (north up, east right)',
+  'dirW.orb.map': 'The map: eccentricity against period',
+  'dirW.orb.axis': 'period, years (log scale)',
+  'dirW.row.epochs': 'Epochs',
+  'dirW.v.epochs':
+    '{k} of 12 measured ({l} lost: not detected, or inside the working radius).',
+  'dirW.row.orbit': 'The orbit',
+  'dirW.v.orbit.ok':
+    'Period {p} years (68 percent: {lo} to {hi}), eccentricity {e}{circ}, semi-major axis {a} ± {sa} arcsecond.',
+  'dirW.v.orbit.circ': ' (not detected: the circular orbit)',
+  'dirW.v.orbit.no': 'Not constrained ({code}): {why}. No orbit is reported.',
+  'dirW.orb.code.coverage': 'the arc covers too little of the period',
+  'dirW.orb.code.conditioning':
+    'the parameters are nearly degenerate over this arc',
+  'dirW.orb.code.period-unbounded':
+    'the period is not bounded on both sides by the data',
+  'dirW.orb.code.period-ambiguous': 'another period fits as well',
+  'dirW.orb.code.inconsistent':
+    'the model does not describe the dots within their uncertainties',
+  'dirW.orb.code.epochs': 'too few epochs were measured',
+  'dirW.orb.code.bad-series': 'the series cannot be used',
+  'dirW.row.map': 'What the dots allow',
+  'dirW.v.map':
+    'At 95 percent the same dots allow a period from {lo} to {hi} years (a factor of {f}) and an eccentricity from {elo} to {ehi}.',
+  'dirW.row.truth': 'The true orbit (invented)',
+  'dirW.v.truth':
+    'period {p} years, eccentricity {e}, semi-major axis {a} arcsecond.',
+  'dirW.v.hidden': 'hidden until you ask.',
+  'dirW.v.orbassumes':
+    'Synthetic frames and invented planets; a plate scale of 0.05 arcsecond a pixel; a planet 3 × 10⁻³ of its star’s light; the fitter’s criterion unchanged.',
 };

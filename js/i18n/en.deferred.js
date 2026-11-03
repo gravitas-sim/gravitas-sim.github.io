@@ -1876,6 +1876,8 @@ export const EN_DEFERRED = {
     'Two separate problems, an angle and a contrast: where Earth is on the sky at ten parsecs, how much fainter than its star it is, and why λ/D is not a coronagraph’s inner working angle.',
   'inv.seq.planets.architectures':
     'The planets found by direct imaging and the planets of the Solar System on one log diagram: what imaging can find, and why a method’s sample is not a population.',
+  'inv.seq.planets.following-a-planet':
+    'Subtracting a reference star, measuring a planet with a throughput by injection, and following it through twelve epochs: an orbit only when the arc covers enough of the period, and the band of periods a short arc allows.',
   'inv.seq.planets.two-periodograms':
     'A Lomb-Scargle and a box least squares periodogram of one light curve, and what a period from a periodogram can claim. Needs the compute page and a connection.',
   'inv.seq.planets.sampling-a-posterior':

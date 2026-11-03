@@ -1,6 +1,6 @@
 // =============================================================================
-// "Why We Cannot See Earth From Here" and "Architectures", the direct-imaging
-// investigations, in two languages
+// "Why We Cannot See Earth From Here", "Architectures" and "Following a Planet" (Part B), the
+// direct-imaging investigations, in two languages
 // -----------------------------------------------------------------------------
 // Roadmap III, Prompt 230 Part A. Checked here: each lesson walks from its first
 // step to its last at the advanced depth, the panel lists its numbers (none of NaN
@@ -66,6 +66,16 @@ const CASES = [
     titleEs: /^Arquitecturas/,
     verdict: /With this instrument/i,
     verdictEs: /Con este instrumento/i,
+  },
+  {
+    id: 'following-a-planet',
+    sid: 'one-orbit-or-two',
+    row: /The orbit/i,
+    rowEs: /La órbita/i,
+    titleEs: /^Seguir a un planeta/,
+    verdict: /What the dots allow/i,
+    verdictEs: /Lo que permiten los puntos/i,
+    canvas: true,
   },
 ];
 
@@ -141,10 +151,29 @@ for (const c of CASES) {
         locale === 'es' ? c.verdictEs : c.verdict,
         { useInnerText: true }
       );
-      // The chart opens with the panel: a labelled chart with content.
-      const chart = page.locator('#investigationTool svg[aria-label]:visible');
-      await expect(chart.first()).toBeVisible();
-      expect(await chart.first().locator('path').count()).toBeGreaterThan(0);
+      // The picture opens with the panel: a labelled chart with content, or (the frame and map panels) a painted canvas.
+      if (c.canvas) {
+        const canvas = page
+          .locator('#investigationTool canvas:visible')
+          .first();
+        await expect(canvas).toBeVisible();
+        const painted = await canvas.evaluate(el => {
+          const d = el
+            .getContext('2d')
+            .getImageData(0, 0, el.width, el.height).data;
+          const seen = new Set();
+          for (let i = 0; i < d.length; i += 4 * 37)
+            seen.add(`${d[i]},${d[i + 1]},${d[i + 2]},${d[i + 3]}`);
+          return seen.size;
+        });
+        expect(painted).toBeGreaterThan(3);
+      } else {
+        const chart = page.locator(
+          '#investigationTool svg[aria-label]:visible'
+        );
+        await expect(chart.first()).toBeVisible();
+        expect(await chart.first().locator('path').count()).toBeGreaterThan(0);
+      }
 
       for (const theme of THEMES) {
         await page.evaluate(async id => {
@@ -196,6 +225,13 @@ const LOOPS = [
     predict: 'where-do-they-sit',
     control: 'telescope',
     value: 0,
+  },
+  {
+    id: 'following-a-planet',
+    tag: '@accepts:ce.following-a-planet',
+    predict: 'short-arc',
+    control: 'arc',
+    value: 3,
   },
 ];
 

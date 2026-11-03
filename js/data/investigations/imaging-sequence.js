@@ -1,5 +1,5 @@
 // =============================================================================
-// Why We Cannot See Earth From Here, and Architectures (Prompt 230 Part A)
+// Why We Cannot See Earth From Here, Architectures (Prompt 230 Part A) and Following a Planet (Part B)
 // -----------------------------------------------------------------------------
 // Two investigations at three depths, in one module that also carries their Spanish words, their
 // deeper steps and their instructor content: this is the one closure file the prompt adds
@@ -652,6 +652,382 @@ export const ARCHITECTURES_DEEPER = {
   ],
 };
 
+/** The subtraction panel: separation in FWHM, contrast index 0 to 4 (1e-3 to 1e-1), reference 0 identical, 1 a little different, 2 twenty percent wider, scene 0 to 5. */
+const SUBT = (values = {}) => ({
+  id: 'imaging-subtraction',
+  values: { sep: 4, contrast: 1, mismatch: 1, scene: 0, ...values },
+});
+/** The orbit panel: planet 0 circular, 1 eccentric, 2 more eccentric; arc 0 to 3 for 10, 30, 60 and 110 percent of a period; reveal the true orbit. */
+const ORBT = (values = {}) => ({
+  id: 'imaging-orbit',
+  values: { system: 0, arc: 1, reveal: 0, ...values },
+});
+
+export const FOLLOWING = {
+  id: 'following-a-planet',
+  thumbnail: 'images/investigations/following-a-planet.webp',
+  title: 'Following a Planet',
+  subtitle:
+    'Subtract a star to find its planet, then follow the planet round its orbit: see what a short arc can and cannot tell you, and why the fitter says not constrained',
+  duration: '6-10 min',
+  level: 'Introductory to upper-level astronomy',
+  audience: 'intro',
+  textbook: { chapter: 21, section: null },
+  courseLevel: 'majors',
+  mathematics: 'algebra',
+  prerequisites: ['architectures'],
+  tags: ['exoplanets', 'observing'],
+  lock: { placement: true, inspector: true },
+  depths: ['core', 'quantitative', 'advanced'],
+  objectives: [
+    'Say what reference-star subtraction does, what a mismatch between the two stars leaves behind, and why the pipeline refuses a planet inside its working radius and a reference that does not match',
+    'Read a measured flux against the injected flux as a throughput, and say what this method’s throughput is and is not evidence for',
+    'Say why an orbit fitted to a short arc is refused rather than reported, and read a map of period against eccentricity as the degeneracy it is',
+    'Compare a fitted orbit with the true one and say what the stated interval did and did not promise',
+  ],
+  steps: [
+    {
+      sid: 'subtract-a-star',
+      stage: STAGE,
+      type: 'read',
+      title: 'Subtracting a star',
+      body: `The left frame holds a star and, a few pixels from it, a planet three thousandths as bright. The right frame
+             is what is left after a second star, the reference, is scaled to the first by least squares and
+             subtracted. The two stars are not identical: their widths differ by a few percent and their centres by a
+             few hundredths of a pixel, and that leaves a residual. Here it is 2.7 percent of the star&rsquo;s light
+             within two FWHM.\n\nThe frames are synthetic and the star&rsquo;s profile has no diffraction rings and no
+             speckle, so this is reference-star subtraction and nothing else. The panel measures the planet in the
+             residual: a flux, a position, a signal to noise.`,
+      tool: SUBT(),
+    },
+    {
+      sid: 'too-close',
+      stage: STAGE,
+      type: 'question',
+      kind: 'choice',
+      title: 'A planet too close to the star',
+      body: `Set the separation to 2 FWHM and the contrast to 3 &times; 10<sup>&minus;2</sup>. The panel will not measure
+             this planet, and says why in the last row but one.`,
+      prompt: 'Why does the panel refuse to measure the planet at 2 FWHM?',
+      options: [
+        'The planet is too faint to detect',
+        'The star’s own residual from the imperfect match is brighter than the planet there, so nothing can be measured behind it',
+        'The planet is inside the telescope’s inner working angle λ/D',
+        'The reference star was saturated',
+      ],
+      answer: 1,
+      hints: [
+        'Look at the right-hand frame near the star. What does the dashed ring mark, and whose number is it?',
+      ],
+      because:
+        'The residual of the imperfect match is brighter than the planet at 2 FWHM: the star leaves 3.5 percent of its light inside two FWHM, far above a planet at that radius. The dashed ring, 2.5 FWHM, is this method’s working radius on these frames. It is not λ/D and not any instrument’s inner working angle, which is a different number that belongs to the instrument.',
+      misconceptions: [
+        {
+          id: 'working-radius-is-iwa',
+          option: 2,
+          say: 'λ/D is the blur scale of the telescope and a coronagraph’s inner working angle is a property of the instrument. The refusal here is neither: it is where this subtraction’s own residual from a mismatched reference rises above a planet, and it would move with a better reference.',
+        },
+      ],
+      tool: SUBT({ sep: 2, contrast: 3 }),
+    },
+    {
+      sid: 'wrong-reference',
+      stage: STAGE,
+      type: 'question',
+      kind: 'choice',
+      title: 'A reference that does not match',
+      body: `Put the separation back to 4 FWHM and the contrast to 3 &times; 10<sup>&minus;3</sup>, then set the
+             reference star to 20 percent wider than the target.`,
+      prompt: 'What does the pipeline do with a reference 20 percent wider?',
+      options: [
+        'It subtracts anyway and shows the residual',
+        'It refuses: the subtraction would leave 16 percent of the star’s light, and its limit is 10 percent',
+        'It widens the target to match',
+        'It finds the planet more easily',
+      ],
+      answer: 1,
+      hints: ['Read the first row of the panel.'],
+      because:
+        'It refuses. The subtraction would leave 0.16 of the star’s light within two FWHM and the pipeline’s limit is 0.10, so it returns a refusal and no frame. A residual that large would be taken for planets, so it is better to return nothing than to return it. The limit of 0.10 was set between the nominal pairs (at most 0.056) and a 20 percent mismatch (0.15 and above) on a development run, which the gate document says.',
+      tool: SUBT({ mismatch: 2 }),
+    },
+    {
+      sid: 'throughput',
+      stage: STAGE,
+      type: 'question',
+      kind: 'choice',
+      title: 'How much of the planet comes through?',
+      body: `Set the separation to 5 FWHM and the contrast to 1 &times; 10<sup>&minus;2</sup>, the reference to a little
+             different. The panel put 3,090 electrons of planet into the target by injection, then measured the planet
+             in the residual. Read both.`,
+      prompt:
+        'The measured flux over the injected flux, the throughput, is closest to which?',
+      options: [
+        'About 0.5: half the planet is subtracted with the star',
+        'About 0.97, consistent with 1 within its error',
+        'About 2: the planet is brighter after subtraction',
+        'It cannot be said without knowing the planet',
+      ],
+      answer: 1,
+      hints: [
+        'Divide the measured flux by the injected flux, and compare the difference with the stated uncertainty.',
+      ],
+      because:
+        'About 0.97: 2,992 ± 92 electrons against 3,090 injected, one error bar below 1. Reference-star subtraction takes out only what the reference holds, and the planet is not in the reference, so the planet comes through whole; the gate measured throughputs of 1 within a few percent at 3, 5 and 8 FWHM. That is this method’s throughput. Angular or spectral differential imaging subtract part of the planet with the star, and none of that is modeled here, so nothing in this panel says what their throughput would be.',
+      tool: SUBT({ sep: 5, contrast: 2 }),
+    },
+    {
+      sid: 'short-arc',
+      stage: STAGE,
+      type: 'predict',
+      reveal: 'the-map',
+      title: 'A short arc',
+      body: `Each dot is one epoch: a frame pair, subtracted, and the planet&rsquo;s position measured. Here the planet
+             has been followed for 30 percent of its period. The fitter of the Observatory, unchanged, is asked for an
+             orbit.`,
+      prompt: 'What will it return?',
+      options: [
+        'An orbit with a small error bar, because twelve positions were measured',
+        'Not constrained: it reports no orbit',
+        'A circular orbit, because there are too few epochs to see an eccentricity',
+        'An orbit with a very large error bar',
+      ],
+      answer: 1,
+      hints: [
+        'The fitter has a criterion on the share of the period the arc covers.',
+      ],
+      because:
+        'Not constrained: the arc covers too little of the period (the period’s upper two-sigma value leaves 0.25 of a period covered and the fitter needs 0.50 for an orbit it may find eccentric). Twelve precise positions do not help: on a short arc a longer period with a larger orbit, or a shorter one, fits just as well. A very large error bar would still be a number; the fitter reports none.',
+      tool: ORBT(),
+    },
+    {
+      sid: 'the-map',
+      stage: STAGE,
+      type: 'question',
+      kind: 'choice',
+      title: 'What the dots allow',
+      body: `The map on the right gives each period (across, on a log scale) and eccentricity (up) the chi-squared of the
+             best orbit with those two values. Dark blue is the 68 percent region, lighter blue the 95 percent region.
+             The last row but one reads the 95 percent region off for you.`,
+      prompt: 'At 95 percent, what range of period do these twelve dots allow?',
+      options: [
+        'From 9 to 11 years',
+        'From about 5 to about 37 years, a factor of 8',
+        'Exactly 10 years',
+        'From 0.5 to 100 years',
+      ],
+      answer: 1,
+      hints: ['Read the row “What the dots allow”.'],
+      because:
+        'From about 4.6 to 37 years, a factor of 8, with the eccentricity anywhere from 0 to 0.8: the long band in the map. A period and an eccentricity trade against each other along it, and the data on 30 percent of an orbit cannot choose. The true period (10 years) is inside the band, but so is nearly everything else of that size.',
+      tool: ORBT(),
+    },
+    {
+      sid: 'a-whole-orbit',
+      stage: STAGE,
+      type: 'question',
+      kind: 'choice',
+      title: 'A whole orbit and a little more',
+      body: `Choose the eccentric orbit and follow it for 110 percent of its period, then turn on &ldquo;Show the true
+             orbit&rdquo;. The fitter now returns an orbit, and the green marks are the truth, which the fitter never
+             saw.`,
+      prompt: 'How does the fitted orbit compare with the true one?',
+      options: [
+        'The 68 percent interval of the period contains the true 10 years and the eccentricity matches the true 0.35 to within its uncertainty',
+        'The fitted orbit is exactly the true one',
+        'The fitted period is 5 years too long',
+        'The fitter cannot say',
+      ],
+      answer: 0,
+      hints: [
+        'Read the period and its 68 percent interval, and the true values in the last rows.',
+      ],
+      because:
+        'The fit gives a period of 10.02 years (68 percent: 9.99 to 10.05) and an eccentricity of 0.35, and the truth is 10 years and 0.35. A 68 percent interval is meant to contain the truth about two times in three, not every time; the gate measured how often it did on 150 trials (IMAGING_SUBTRACTION_GATE.md). It is a statement about many orbits, not a promise about this one.',
+      tool: ORBT({ system: 1, arc: 3, reveal: 1 }),
+    },
+    {
+      sid: 'what-it-says',
+      stage: STAGE,
+      type: 'read',
+      title: 'What following a planet says',
+      body: `Subtraction found the planet outside its working radius, and the pipeline refused the cases it could not
+             judge: a planet behind the star&rsquo;s residual, and a reference that did not match. The planet came
+             through whole because this method takes out only what the reference holds; a method that subtracts part
+             of the planet would need its own throughput measured by injection, as this one was.\n\nThe fitter
+             returned an orbit only when the arc covered enough of the period. On 30 percent of an orbit the dots
+             allowed a period from 5 to 37 years, and an orbit reported from them would have been an artefact of the
+             fit. The frames and the planets were invented; nothing here is a measurement of a real planet.`,
+      tool: ORBT({ system: 1, arc: 1, reveal: 1 }),
+    },
+  ],
+};
+
+export const FOLLOWING_DEEPER = {
+  id: 'following-a-planet',
+  steps: [
+    {
+      sid: 'read-the-snr',
+      after: 'throughput',
+      depth: 'quantitative',
+      type: 'measure',
+      title: 'The signal to noise',
+      body: `With the separation at 5 FWHM, the contrast at 1 &times; 10<sup>&minus;2</sup> and the reference a little
+             different, read the signal to noise of the planet in the subtracted frame.`,
+      fields: [
+        {
+          id: 'a',
+          label: 'Signal to noise of the planet',
+          unit: '',
+          hint: '33',
+        },
+      ],
+      validate: v => {
+        if (!Number.isFinite(v.a)) return null;
+        if (near(v.a, 32.7, 1.5)) {
+          return {
+            level: 'ok',
+            message:
+              'About 33: a flux of 2,992 electrons over its uncertainty of 92, from the noise of the residual itself (17 electrons a pixel). Signal to noise 5 is the detection threshold of the search.',
+          };
+        }
+        return {
+          level: 'error',
+          message:
+            'Read the row “The planet”: the measured flux over its uncertainty, about 33 here.',
+        };
+      },
+      tool: SUBT({ sep: 5, contrast: 2 }),
+    },
+    {
+      sid: 'read-the-limit',
+      after: 'read-the-snr',
+      depth: 'quantitative',
+      type: 'measure',
+      title: 'The faintest planet at this separation',
+      body: `Read the contrast of the faintest planet that this subtraction would detect at 5 FWHM, the 5σ limit, in
+             units of 10<sup>&minus;3</sup>.`,
+      fields: [
+        {
+          id: 'a',
+          label: 'The 5σ limit',
+          unit: '× 10⁻³',
+          hint: '1.5',
+        },
+      ],
+      validate: v => {
+        if (!Number.isFinite(v.a)) return null;
+        if (near(v.a, 1.53, 0.12)) {
+          return {
+            level: 'ok',
+            message:
+              'About 1.5 thousandths of the star’s light, 458 electrons. At that contrast about half the planets are found and half are missed, which is what a 5σ limit is; the gate checked that rate by injection.',
+          };
+        }
+        return {
+          level: 'error',
+          message: 'Read the row “The 5σ limit here”: about 1.5 × 10⁻³.',
+        };
+      },
+      tool: SUBT({ sep: 5, contrast: 2 }),
+    },
+    {
+      sid: 'read-the-band',
+      after: 'the-map',
+      depth: 'quantitative',
+      type: 'measure',
+      title: 'The band of periods',
+      body: `For the circular orbit followed for 30 percent of its period, read the shortest and the longest period
+             that the dots allow at 95 percent.`,
+      fields: [
+        { id: 'a', label: 'Shortest period', unit: 'years', hint: '4.6' },
+        { id: 'b', label: 'Longest period', unit: 'years', hint: '37' },
+      ],
+      validate: v => {
+        if (![v.a, v.b].every(Number.isFinite)) return null;
+        if (near(v.a, 4.59, 0.3) && near(v.b, 37.1, 1.5)) {
+          return {
+            level: 'ok',
+            message:
+              'From 4.6 to 37 years, a factor of 8, on a grid of 12 periods a decade. The edges are the map’s cells, not a fitted interval: the fitter reports none, because the arc is below its criterion.',
+          };
+        }
+        return {
+          level: 'error',
+          message:
+            'Choose the circular orbit and 30 percent of a period, then read the row “What the dots allow”: about 4.6 to 37 years.',
+        };
+      },
+      tool: ORBT(),
+    },
+    {
+      sid: 'one-orbit-or-two',
+      after: 'a-whole-orbit',
+      depth: 'advanced',
+      type: 'question',
+      kind: 'short',
+      title: 'An orbit from a short arc',
+      body: `A colleague fits an orbit to 30 percent of a planet&rsquo;s period with a least-squares routine, reports a
+             period of 10 years with a small formal error bar, and says the planet is on a circular orbit.`,
+      prompt:
+        'Say what is wrong with the report, what the Observatory’s fitter would have said, and what the data on that arc do support.',
+      rubric:
+        'Credit for saying that on a short arc the period, the eccentricity and the orientation trade against each other so the formal error bar of one fit does not describe the allowed range (the map: 5 to 37 years, eccentricity 0 to 0.8), that the fitter refuses below its criterion on the share of the period covered and says not constrained, and that the data support a statement about the motion (a direction, a rate, a curvature at best) and a band of orbits, not an orbit.',
+      rubricCriteria: [
+        {
+          name: 'Says why the error bar is wrong',
+          kind: 'correctness',
+          levels: [
+            {
+              label: 'Full',
+              points: 2,
+              text: 'Says the parameters are degenerate on a short arc, so a formal error bar from one fit understates the allowed range.',
+            },
+            {
+              label: 'Not yet',
+              points: 0,
+              text: 'Calls the fit wrong without the degeneracy, or says more epochs alone would fix it.',
+            },
+          ],
+        },
+        {
+          name: 'States the refusal',
+          kind: 'reasoning',
+          levels: [
+            {
+              label: 'Full',
+              points: 2,
+              text: 'Says the fitter returns not constrained below its coverage criterion and reports no orbit.',
+            },
+            {
+              label: 'Not yet',
+              points: 0,
+              text: 'Does not say what the fitter would have done.',
+            },
+          ],
+        },
+        {
+          name: 'Says what the data support',
+          kind: 'uncertainty',
+          levels: [
+            {
+              label: 'Full',
+              points: 1,
+              text: 'Names the motion or a band of orbits, not a single orbit.',
+            },
+            {
+              label: 'Not yet',
+              points: 0,
+              text: 'Offers an orbit.',
+            },
+          ],
+        },
+      ],
+      tool: ORBT({ system: 1, arc: 1 }),
+    },
+  ],
+};
+
 // ---- Spanish ----------------------------------------------------------------------------------
 
 /** The Spanish shadow of why-we-cannot-see-earth: the core steps in order, nothing else (the loaders align by index). */
@@ -985,6 +1361,198 @@ export const ARCHITECTURES_DEEPER_ES = {
   ],
 };
 
+/** The Spanish shadow of following-a-planet: the core steps in order, nothing else (the loaders align by index). */
+export const FOLLOWING_ES = {
+  title: 'Seguir a un planeta',
+  subtitle:
+    'Resta una estrella para encontrar su planeta y luego síguelo en su órbita: mira qué puede y qué no puede decir un arco corto, y por qué el ajustador dice no restringido',
+  objectives: [
+    'Decir qué hace la sustracción con estrella de referencia, qué deja una diferencia entre las dos estrellas y por qué la cadena rechaza un planeta dentro de su radio de trabajo y una referencia que no coincide',
+    'Leer un flujo medido frente al flujo inyectado como un rendimiento, y decir de qué es y de qué no es prueba el rendimiento de este método',
+    'Decir por qué una órbita ajustada a un arco corto se rechaza en lugar de darse, y leer un mapa de período frente a excentricidad como la degeneración que es',
+    'Comparar una órbita ajustada con la verdadera y decir qué prometió y qué no prometió el intervalo indicado',
+  ],
+  steps: [
+    {
+      title: 'Restar una estrella',
+      body: `El cuadro de la izquierda contiene una estrella y, a unos píxeles de ella, un planeta tres milésimas tan brillante. El cuadro de la derecha es lo que queda después de escalar una segunda estrella, la referencia, a la primera por mínimos cuadrados y restarla. Las dos estrellas no son idénticas: sus anchuras difieren en unos pocos por ciento y sus centros en unas centésimas de píxel, y eso deja un residuo. Aquí es el 2,7 por ciento de la luz de la estrella a menos de dos FWHM.\n\nLos cuadros son sintéticos y el perfil de la estrella no tiene anillos de difracción ni motas, así que esto es sustracción con estrella de referencia y nada más. El panel mide el planeta en el residuo: un flujo, una posición, una señal a ruido.`,
+    },
+    {
+      title: 'Un planeta demasiado cerca de la estrella',
+      body: `Pon la separación en 2 FWHM y el contraste en 3 &times; 10<sup>&minus;2</sup>. El panel no medirá este planeta, y dice por qué en la penúltima fila.`,
+      prompt: '¿Por qué se niega el panel a medir el planeta a 2 FWHM?',
+      options: [
+        'El planeta es demasiado débil para detectarlo',
+        'El residuo de la propia estrella por el ajuste imperfecto es más brillante que el planeta allí, así que no se puede medir nada detrás de él',
+        'El planeta está dentro del ángulo de trabajo interno λ/D del telescopio',
+        'La estrella de referencia estaba saturada',
+      ],
+      hints: [
+        'Mira el cuadro de la derecha cerca de la estrella. ¿Qué marca el anillo discontinuo y de quién es ese número?',
+      ],
+      because:
+        'El residuo del ajuste imperfecto es más brillante que el planeta a 2 FWHM: la estrella deja el 3,5 por ciento de su luz dentro de dos FWHM, muy por encima de un planeta a ese radio. El anillo discontinuo, 2,5 FWHM, es el radio de trabajo de este método sobre estos cuadros. No es λ/D ni el ángulo de trabajo interno de ningún instrumento, que es otro número que pertenece al instrumento.',
+      misconceptions: [
+        {
+          say: 'λ/D es la escala de desenfoque del telescopio y el ángulo de trabajo interno de un coronógrafo es una propiedad del instrumento. El rechazo de aquí no es ninguno de los dos: es donde el residuo propio de esta sustracción, por una referencia que no coincide, supera a un planeta, y se movería con una mejor referencia.',
+        },
+      ],
+    },
+    {
+      title: 'Una referencia que no coincide',
+      body: `Vuelve a poner la separación en 4 FWHM y el contraste en 3 &times; 10<sup>&minus;3</sup>, y luego pon la estrella de referencia un 20 por ciento más ancha que la objetivo.`,
+      prompt:
+        '¿Qué hace la cadena con una referencia un 20 por ciento más ancha?',
+      options: [
+        'Resta de todos modos y muestra el residuo',
+        'Se niega: la sustracción dejaría el 16 por ciento de la luz de la estrella, y su límite es el 10 por ciento',
+        'Ensancha el objetivo para que coincida',
+        'Encuentra el planeta con más facilidad',
+      ],
+      hints: ['Lee la primera fila del panel.'],
+      because:
+        'Se niega. La sustracción dejaría 0,16 de la luz de la estrella a menos de dos FWHM y el límite de la cadena es 0,10, así que devuelve un rechazo y ningún cuadro. Un residuo tan grande se tomaría por planetas, así que es mejor no devolver nada que devolverlo. El límite de 0,10 se fijó entre los pares nominales (como mucho 0,056) y un desajuste del 20 por ciento (0,15 o más) en una ejecución de desarrollo, lo que dice el documento de la puerta.',
+    },
+    {
+      title: '¿Cuánto del planeta pasa?',
+      body: `Pon la separación en 5 FWHM, el contraste en 1 &times; 10<sup>&minus;2</sup> y la referencia un poco distinta. El panel puso 3090 electrones de planeta en el objetivo por inyección y luego midió el planeta en el residuo. Lee ambos.`,
+      prompt:
+        'El flujo medido sobre el flujo inyectado, el rendimiento, se parece más a ¿cuál?',
+      options: [
+        'Cerca de 0,5: la mitad del planeta se resta con la estrella',
+        'Cerca de 0,97, compatible con 1 dentro de su error',
+        'Cerca de 2: el planeta es más brillante tras la sustracción',
+        'No se puede decir sin conocer el planeta',
+      ],
+      hints: [
+        'Divide el flujo medido entre el flujo inyectado y compara la diferencia con la incertidumbre indicada.',
+      ],
+      because:
+        'Cerca de 0,97: 2992 ± 92 electrones frente a 3090 inyectados, una barra de error por debajo de 1. La sustracción con estrella de referencia quita solo lo que la referencia contiene, y el planeta no está en la referencia, así que el planeta pasa entero; la puerta midió rendimientos de 1 con unos pocos por ciento a 3, 5 y 8 FWHM. Ese es el rendimiento de este método. La obtención de imágenes diferencial angular o espectral resta parte del planeta con la estrella, y nada de eso se modela aquí, así que nada en este panel dice cuál sería su rendimiento.',
+    },
+    {
+      title: 'Un arco corto',
+      body: `Cada punto es una época: un par de cuadros, restados, y la posición del planeta medida. Aquí el planeta se ha seguido durante el 30 por ciento de su período. Al ajustador del Observatorio, sin cambios, se le pide una órbita.`,
+      prompt: '¿Qué devolverá?',
+      options: [
+        'Una órbita con una barra de error pequeña, porque se midieron doce posiciones',
+        'No restringida: no da ninguna órbita',
+        'Una órbita circular, porque hay muy pocas épocas para ver una excentricidad',
+        'Una órbita con una barra de error muy grande',
+      ],
+      hints: [
+        'El ajustador tiene un criterio sobre la parte del período que cubre el arco.',
+      ],
+      because:
+        'No restringida: el arco cubre muy poco del período (el valor superior de dos sigmas del período deja cubierto 0,25 de un período y el ajustador necesita 0,50 para una órbita que puede resultar excéntrica). Doce posiciones precisas no ayudan: en un arco corto un período más largo con una órbita mayor, o uno más corto, ajusta igual de bien. Una barra de error muy grande seguiría siendo un número; el ajustador no da ninguno.',
+    },
+    {
+      title: 'Lo que permiten los puntos',
+      body: `El mapa de la derecha da a cada período (a lo ancho, en escala logarítmica) y excentricidad (hacia arriba) el chi cuadrado de la mejor órbita con esos dos valores. El azul oscuro es la región del 68 por ciento, el azul más claro la del 95 por ciento. La penúltima fila lee por ti la región del 95 por ciento.`,
+      prompt:
+        'Al 95 por ciento, ¿qué intervalo de período permiten estos doce puntos?',
+      options: [
+        'De 9 a 11 años',
+        'De unos 5 a unos 37 años, un factor de 8',
+        'Exactamente 10 años',
+        'De 0,5 a 100 años',
+      ],
+      hints: ['Lee la fila «Lo que permiten los puntos».'],
+      because:
+        'De unos 4,6 a 37 años, un factor de 8, con la excentricidad en cualquier valor de 0 a 0,8: la banda larga del mapa. Un período y una excentricidad se compensan entre sí a lo largo de ella, y los datos del 30 por ciento de una órbita no pueden elegir. El período verdadero (10 años) está dentro de la banda, pero también casi todo lo demás de ese tamaño.',
+    },
+    {
+      title: 'Una órbita entera y un poco más',
+      body: `Elige la órbita excéntrica y síguela durante el 110 por ciento de su período, y luego activa «Mostrar la órbita verdadera». El ajustador ahora devuelve una órbita, y las marcas verdes son la verdad, que el ajustador nunca vio.`,
+      prompt: '¿Cómo se compara la órbita ajustada con la verdadera?',
+      options: [
+        'El intervalo del 68 por ciento del período contiene los 10 años verdaderos y la excentricidad coincide con la verdadera, 0,35, dentro de su incertidumbre',
+        'La órbita ajustada es exactamente la verdadera',
+        'El período ajustado es 5 años demasiado largo',
+        'El ajustador no puede decirlo',
+      ],
+      hints: [
+        'Lee el período y su intervalo del 68 por ciento, y los valores verdaderos en las últimas filas.',
+      ],
+      because:
+        'El ajuste da un período de 10,02 años (68 por ciento: de 9,99 a 10,05) y una excentricidad de 0,35, y la verdad es 10 años y 0,35. Un intervalo del 68 por ciento debe contener la verdad unas dos veces de cada tres, no siempre; la puerta midió con qué frecuencia lo hizo en 150 ensayos (IMAGING_SUBTRACTION_GATE.md). Es una afirmación sobre muchas órbitas, no una promesa sobre esta.',
+    },
+    {
+      title: 'Lo que dice seguir a un planeta',
+      body: `La sustracción encontró el planeta fuera de su radio de trabajo, y la cadena rechazó los casos que no podía juzgar: un planeta detrás del residuo de la estrella y una referencia que no coincidía. El planeta pasó entero porque este método quita solo lo que la referencia contiene; un método que resta parte del planeta necesitaría que su propio rendimiento se midiera por inyección, como se hizo con este.\n\nEl ajustador devolvió una órbita solo cuando el arco cubría bastante del período. Con el 30 por ciento de una órbita los puntos permitían un período de 5 a 37 años, y una órbita dada a partir de ellos habría sido un artefacto del ajuste. Los cuadros y los planetas eran inventados; nada de esto es una medida de un planeta real.`,
+    },
+  ],
+};
+
+export const FOLLOWING_DEEPER_ES = {
+  steps: [
+    {
+      title: 'La señal a ruido',
+      body: `Con la separación en 5 FWHM, el contraste en 1 &times; 10<sup>&minus;2</sup> y la referencia un poco distinta, lee la señal a ruido del planeta en el cuadro restado.`,
+      fields: [{ label: 'Señal a ruido del planeta' }],
+    },
+    {
+      title: 'El planeta más débil a esta separación',
+      body: `Lee el contraste del planeta más débil que esta sustracción detectaría a 5 FWHM, el límite de 5σ, en unidades de 10<sup>&minus;3</sup>.`,
+      fields: [{ label: 'El límite de 5σ' }],
+    },
+    {
+      title: 'La banda de períodos',
+      body: `Para la órbita circular seguida durante el 30 por ciento de su período, lee el período más corto y el más largo que los puntos permiten al 95 por ciento.`,
+      fields: [{ label: 'Período más corto' }, { label: 'Período más largo' }],
+    },
+    {
+      title: 'Una órbita a partir de un arco corto',
+      body: `Un colega ajusta una órbita al 30 por ciento del período de un planeta con una rutina de mínimos cuadrados, da un período de 10 años con una barra de error formal pequeña y dice que el planeta está en una órbita circular.`,
+      prompt:
+        'Di qué tiene de malo el informe, qué habría dicho el ajustador del Observatorio y qué respaldan los datos de ese arco.',
+      rubric:
+        'Crédito por decir que en un arco corto el período, la excentricidad y la orientación se compensan entre sí, de modo que la barra de error formal de un ajuste no describe el intervalo permitido (el mapa: de 5 a 37 años, excentricidad de 0 a 0,8), que el ajustador se niega por debajo de su criterio sobre la parte del período cubierta y dice no restringido, y que los datos respaldan una afirmación sobre el movimiento (una dirección, una tasa, a lo sumo una curvatura) y una banda de órbitas, no una órbita.',
+      rubricCriteria: [
+        {
+          name: 'Dice por qué la barra de error está mal',
+          levels: [
+            {
+              label: 'Completo',
+              text: 'Dice que los parámetros son degenerados en un arco corto, así que una barra de error formal de un ajuste subestima el intervalo permitido.',
+            },
+            {
+              label: 'Aún no',
+              text: 'Llama erróneo al ajuste sin la degeneración, o dice que bastarían más épocas.',
+            },
+          ],
+        },
+        {
+          name: 'Enuncia el rechazo',
+          levels: [
+            {
+              label: 'Completo',
+              text: 'Dice que el ajustador devuelve no restringido por debajo de su criterio de cobertura y no da ninguna órbita.',
+            },
+            {
+              label: 'Aún no',
+              text: 'No dice qué habría hecho el ajustador.',
+            },
+          ],
+        },
+        {
+          name: 'Dice qué respaldan los datos',
+          levels: [
+            {
+              label: 'Completo',
+              text: 'Nombra el movimiento o una banda de órbitas, no una sola órbita.',
+            },
+            {
+              label: 'Aún no',
+              text: 'Ofrece una órbita.',
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};
+
 // ---- Instructor content -----------------------------------------------------------------------
 
 const CONTENT = {
@@ -1159,6 +1727,95 @@ const CONTENT = {
     modelNotes:
       'js/directImagingField.js, js/directImagingWidgets.js, js/data/imagedPlanets.js (generated by tools/imaging-table.mjs from the pinned CSV, SHA-256 in the file), js/kernels/imaging/, IMAGING.md.',
   },
+  'following-a-planet': {
+    topic:
+      'Reference-star subtraction on synthetic frames (a star, a reference star, a planet put in by injection; a Moffat profile with no rings or speckle), its working radius, its refusals, its throughput measured by injection, and the orbit of the planet followed through twelve epochs: Prompt 187’s fitter returns an orbit only above its criterion on the share of the period covered, and a map of the chi-squared against period and eccentricity shows the degeneracy a short arc leaves.',
+    difficulty:
+      'Majors (read a subtraction, the working radius, a refused reference, a throughput, a refused short arc, the map, a whole orbit against the truth); quantitative: the signal to noise, the 5σ limit and the band of periods; advanced: say what is wrong with an orbit reported from 30 percent of a period.',
+    placement:
+      'After Architectures in a unit on exoplanets, as the step from finding a planet by imaging to following one; before occurrence rates. It pairs with the visual-binary orbit fit in the Observatory (the same fitter) and with the transit and radial-velocity investigations.',
+    overview:
+      'Students read a subtracted frame, find why a planet at 2 FWHM is not measured (the star’s own residual) and why a reference 20 percent too wide is refused, read a throughput of about 1 and say what that does and does not show, predict what the fitter returns for 30 percent of an orbit (not constrained), read the band of periods the dots allow (4.6 to 37 years), and compare a fit of 110 percent of an orbit with the true orbit.',
+    priorKnowledge: [
+      'A point source blurred by a profile, a signal to noise, a flux and a position',
+      'Why a planet beside its star is hard to see (Why We Cannot See Earth From Here)',
+      'An apparent orbit, a period and an eccentricity (the visual-binary investigation)',
+    ],
+    keyConcepts: [
+      {
+        heading: 'Subtraction leaves a residual',
+        body: 'Two stars never match exactly. The residual of a few percent of the star’s light is brighter than a planet near the star, which is why the pipeline has a working radius (2.5 FWHM on these frames) and refuses a reference that leaves more than 10 percent. The working radius belongs to this method on these frames; it is not λ/D and not an instrument’s inner working angle.',
+      },
+      {
+        heading: 'A throughput is measured, not assumed',
+        body: 'The planet’s flux in the subtracted frame over the flux injected is the throughput. For reference-star subtraction it is about 1 (the planet is not in the reference). Methods that subtract part of the planet with the star would need their own measurement; none is modeled here.',
+      },
+      {
+        heading: 'A short arc is refused',
+        body: 'On 30 percent of an orbit a period and an eccentricity trade against each other and the fit cannot choose. The fitter returns not constrained, and the map shows why: a long band of period and eccentricity that fit the same dots. An orbit above its criterion carries an interval that holds the truth about as often as it says, which the gate measured.',
+      },
+    ],
+    features: [
+      {
+        name: 'The subtraction panel (imaging-subtraction)',
+        text: 'A target frame with a planet put in by injection, the reference scaled and subtracted, the planet measured (flux, position, signal to noise, throughput), a blind search, the 5σ limit and the refusals. Synthetic frames, a Moffat profile, a clean detector.',
+      },
+      {
+        name: 'The orbit panel (imaging-orbit)',
+        text: 'Twelve epochs of the same pipeline for an invented planet, Prompt 187’s fitter unchanged, a map of the chi-squared against period and eccentricity, and the true orbit shown only when asked.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: the signal to noise, the 5σ limit and the band of periods. Advanced: an orbit from 30 percent of a period (a rubric with three criteria).',
+      },
+      {
+        name: 'A gate, with failures kept',
+        text: 'IMAGING_SUBTRACTION_GATE.md commits every threshold before any module existed, measures the pipeline against closed forms, an independent numpy and scipy implementation and seeded ensembles, and keeps every failed leg failing and labelled.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim:
+          'The refusal near the star is the telescope’s inner working angle.',
+        response:
+          'It is this subtraction’s own limit: the residual of a mismatched reference rises above a planet at about 2 FWHM here. A better reference would move it. A coronagraph’s inner working angle is a property of the instrument, and λ/D is the telescope’s blur scale.',
+      },
+      {
+        claim:
+          'A planet that comes through at throughput 1 shows that imaging methods do not lose planet light.',
+        response:
+          'Only reference-star subtraction on these frames. Angular, spectral and principal-component methods subtract part of the planet with the star, and each needs its own throughput measured by injection.',
+      },
+      {
+        claim: 'Twelve precise positions are enough for an orbit.',
+        response:
+          'The share of the period the arc covers decides it, not the number of points: on 30 percent of an orbit the dots allow periods from 4.6 to 37 years. The fitter refuses.',
+      },
+      {
+        claim: 'A 68 percent interval contains the truth for this planet.',
+        response:
+          'It is a statement about many planets: about two in three. The whole-orbit step shows one case where it does; the gate counted how often it does over 150 trials.',
+      },
+    ],
+    teachingNotes: [
+      'Every frame is synthetic and every planet invented; the true orbit is shown only on request. No published astrometry, no published contrast and no real frame pair is used (the gate’s authentic leg was not run).',
+      'The profile has no diffraction rings and no speckle, so the star’s light falls off fast and, beyond about 3 FWHM, the frame is limited by sky and read noise rather than by the star. The panel’s subtraction matters inside that radius, where the pipeline refuses. Say so if a student asks why subtraction hardly changes a frame at 5 FWHM.',
+      'The refusal limit of 0.10 on the subtraction depth, the working radius of 2.5 FWHM and the search radius were set on a development stream before the gate was run, as IMAGING_SUBTRACTION_GATE.md records (amendments AM1 to AM6).',
+    ],
+    discussion: [
+      'Why does the pipeline refuse rather than return the best subtraction it can?',
+      'What would you have to measure before trusting a method that subtracts part of the planet?',
+      'If you could follow a planet for only 30 percent of its period, what would you report?',
+    ],
+    extensions: [
+      'Find the contrast at which a planet at 3 FWHM is detected about half the time, using the 5σ limit row.',
+      'Follow the more eccentric planet for 60 percent of its period and say what the fitter returns and why.',
+    ],
+    assessment:
+      'Core: why the pipeline refuses a planet at 2 FWHM and a reference 20 percent too wide, the throughput of about 0.97 at 5 FWHM, a refused 30 percent arc, the band of periods the dots allow (4.6 to 37 years), and a whole orbit against the truth. Quantitative: a signal to noise of about 33, a 5σ limit of about 1.5 × 10⁻³ and the band of periods. Advanced: the report from a short arc, graded on the degeneracy, the refusal and what the data support.',
+    modelNotes:
+      'js/directImagingSubtractField.js, js/directImagingWidgets.js, js/kernels/imaging/subtract.js and orbit.js, js/measure/orbit-fit.js (Prompt 187, unchanged), tools/imaging-subtract-validate.mjs, tools/imaging-subtract-oracle/, IMAGING_SUBTRACTION_GATE.md.',
+  },
 };
 
 const FLOW = {
@@ -1206,6 +1863,28 @@ const FLOW = {
       text: 'The Solar System seen from ten parsecs is mostly inside a 2.4 m example’s working angle, and a method’s sample is not a population: a rate needs the stars searched and the planets that could have been found.',
     },
   ],
+  'following-a-planet': [
+    {
+      from: 'subtract-a-star',
+      to: 'too-close',
+      text: 'A subtraction leaves a residual of about 2.7 percent of the star, and a planet inside 2.5 FWHM is not measured behind it.',
+    },
+    {
+      from: 'wrong-reference',
+      to: 'throughput',
+      text: 'A reference 20 percent too wide is refused, and for a good reference the planet comes through whole (a throughput near 1) because the reference holds none of it.',
+    },
+    {
+      from: 'short-arc',
+      to: 'the-map',
+      text: 'On 30 percent of an orbit the fitter returns not constrained, and the map of period against eccentricity shows the band of 4.6 to 37 years that fits the same dots.',
+    },
+    {
+      from: 'a-whole-orbit',
+      to: 'what-it-says',
+      text: 'On 110 percent of an orbit the fitter returns an orbit with an interval, to be compared with the truth, which is a statement about many planets and not a promise about this one.',
+    },
+  ],
 };
 
 // The expectations are the core steps' checked numbers; the deeper steps' are in `assessment`.
@@ -1222,6 +1901,14 @@ const EXPECTATIONS = {
     'our-system-from-afar':
       'Five of the eight Solar System planets lie outside the 2.4 m example’s 0.142 arcsecond working angle at ten parsecs; Mercury, Venus and Earth do not.',
   },
+  'following-a-planet': {
+    throughput:
+      'At 5 FWHM and a contrast of 1 × 10⁻² the measured flux is 2,992 ± 92 electrons against 3,090 injected, a throughput of 0.97, consistent with 1.',
+    'short-arc':
+      'On 30 percent of the circular orbit the fitter returns not constrained (coverage), and the map allows periods from 4.6 to 37 years at 95 percent.',
+    'a-whole-orbit':
+      'On 110 percent of the eccentric orbit the fitter returns 10.02 years (68 percent: 9.99 to 10.05) and an eccentricity of 0.35; the truth is 10 years and 0.35.',
+  },
 };
 
 const BANDS = {
@@ -1232,6 +1919,11 @@ const BANDS = {
   },
   architectures: {
     core: 'short',
+    quantitative: 'short',
+    advanced: 'short',
+  },
+  'following-a-planet': {
+    core: 'medium',
     quantitative: 'short',
     advanced: 'short',
   },
@@ -1249,17 +1941,20 @@ export const INSTRUCTOR = {
 export const SHADOWS = {
   'why-we-cannot-see-earth': WHY_NOT_EARTH_ES,
   architectures: ARCHITECTURES_ES,
+  'following-a-planet': FOLLOWING_ES,
 };
 
 /** The deeper steps by lesson id (what js/investigations/depth*.js read). */
 export const DEPTH = {
   'why-we-cannot-see-earth': WHY_NOT_EARTH_DEEPER,
   architectures: ARCHITECTURES_DEEPER,
+  'following-a-planet': FOLLOWING_DEEPER,
 };
 export const DEPTH_ES = {
   'why-we-cannot-see-earth': WHY_NOT_EARTH_DEEPER_ES,
   architectures: ARCHITECTURES_DEEPER_ES,
+  'following-a-planet': FOLLOWING_DEEPER_ES,
 };
 
 /** The lessons, in catalog order (what js/data/investigations.js spreads). */
-export default [WHY_NOT_EARTH, ARCHITECTURES];
+export default [WHY_NOT_EARTH, ARCHITECTURES, FOLLOWING];

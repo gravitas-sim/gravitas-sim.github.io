@@ -1030,6 +1030,16 @@ export const DISCOVERY = {
     },
     courseLevel: 'majors',
   },
+  'following-a-planet': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['architectures'],
+    textbook: {
+      chapter: 21,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
   'what-is-it-made-of': {
     audience: 'intro',
     mathematics: 'algebra',

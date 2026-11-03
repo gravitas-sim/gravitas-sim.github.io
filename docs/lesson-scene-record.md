@@ -11,15 +11,15 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 118 investigations and 1480 steps: 1388 steps
+Across 119 investigations and 1488 steps: 1396 steps
 declare a scene, 167 let a reader change one, 177 read the
-running integration, 971 show a prescribed model result, 161 draw
-on a stored dataset, 840 put a self-contained panel beside the text,
+running integration, 979 show a prescribed model result, 161 draw
+on a stored dataset, 848 put a self-contained panel beside the text,
 382 keep something, and 58 are prose.
-Of 193 prediction loops, 193 are returned to,
-193 produce a measurement before they are answered, and
+Of 194 prediction loops, 194 are returned to,
+194 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
-193 hold their marking until the experiment settles them.
+194 hold their marking until the experiment settles them.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -1434,6 +1434,20 @@ Of 193 prediction loops, 193 are returned to,
 - **Recovery:** wrong body: the object list names what the step staged.
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:imaging-architectures`, control imaging-architectures/telescope, measures how many of the imaged planets of the archive table, and how many of the Solar System's planets, lie outside an example instrument's inner working angle (separation only), and the median semi-major axis and mass of the imaged planets (about 170 AU and 12 Jupiter masses), evidence `none`, covered by `e2e/imagingLesson.spec.js`.
+
+## Following a Planet (`following-a-planet`)
+
+- **Steps:** 8. Scene declared on 8; a reader can change something on 0; 8 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 8 prescribed model, 0 stored dataset, 8 self-contained panel.
+- **What students do:** move-an-instrument-control, choose-an-option, commit-a-prediction.
+- **Objects the steps declare:** star.
+- **Instruments:** imaging-subtraction, imaging-orbit.
+- **Stored data:** none.
+- **Evidence kept:** nothing — this lesson keeps nothing.
+- **Prediction loops:** short-arc → the-map, a-whole-orbit, what-it-says → the-map.
+- **Recovery:** wrong body: the object list names what the step staged.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:imaging-orbit`, control imaging-orbit/arc, measures whether Prompt 187's fitter returns an orbit for 10, 30, 60 or 110 percent of a planet's period followed through twelve measured epochs (it refuses below its criterion), the period range the same dots allow at 95 percent (about 4.6 to 37 years for 30 percent of the circular orbit) and a whole orbit's fitted period and eccentricity against the true ones, evidence `none`, covered by `e2e/imagingLesson.spec.js`.
 
 ## What Is It Made Of? (`what-is-it-made-of`)
 

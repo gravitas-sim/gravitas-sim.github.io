@@ -35,6 +35,7 @@ export const EVIDENCE_FROM = Object.freeze({
   'einstein-rings-and-arcs': 'model',
   'extending-an-experiment': 'computation',
   flares: 'model',
+  'following-a-planet': 'model',
   'from-photons-to-a-number': 'model',
   'from-star-to-remnant': 'model',
   'goldilocks-question': 'model',
