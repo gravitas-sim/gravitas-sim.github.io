@@ -88,8 +88,8 @@ describe('the parts of the recording', () => {
   test('every instrument is in exactly one family, and each family has its own module', () => {
     const ids = Object.values(recorded.ids).flat();
     expect(new Set(ids).size).toBe(ids.length);
-    // 165 with the two direct-imaging panels (Prompt 230).
-    expect(ids.length).toBe(167);
+    // 165 with the two direct-imaging panels (Prompt 230); 168 with the visual-pair panel (Prompt 218 Part B).
+    expect(ids.length).toBe(168);
     const paths = Object.values(modules);
     expect(new Set(paths).size).toBe(paths.length);
   });
@@ -124,8 +124,8 @@ describe('the committed recording', () => {
 
   test('has every widget in both locales', () => {
     const widgets = widgetsOf(recorded);
-    // 165 with the two direct-imaging panels (Prompt 230).
-    expect(widgets.length).toBe(167);
+    // 165 with the two direct-imaging panels (Prompt 230); 168 with the visual-pair panel (Prompt 218 Part B).
+    expect(widgets.length).toBe(168);
     for (const [, rec] of widgets) {
       expect(rec.en.frames).toBeGreaterThan(0);
       // Spanish is either the same recording or its own.
