@@ -1024,6 +1024,13 @@
       "student": true
     },
     {
+      "file": "GAIA_WORKFLOWS.md",
+      "kind": "feature",
+      "purpose": "Gaia parallax workflows: a parallax as a distance by likelihood with a stated prior and zero point, the status ladder, velocity propagation, what a sample's cuts remove, the packs' version 1.1.0, the validation table and NGC 2420's NOT RUN leg (Prompt 233).",
+      "owner": 233,
+      "student": false
+    },
+    {
       "file": "TTV.md",
       "kind": "feature",
       "purpose": "Transit timing variations: the O-C diagram, the super-period and amplitude relations and their domain, the validation with its failed legs, and why only a circular mass ships (Prompt 226).",

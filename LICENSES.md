@@ -83,6 +83,8 @@ Not mine to license. Each keeps its own, and the license text ships with it.
 | `tests/fixtures/archive/sesame-su-dra.xml` | one CDS Sesame answer, kept for tests | a position and names from SIMBAD; acknowledge CDS, see NOTICE |
 | `tests/fixtures/imagePacks/authentic/ffi-cutout-s56-1-2.f32` | an 81 by 81 pixel cutout of 84 TESS calibrated full-frame images (sector 56, camera 1, CCD 2) about HD 209458, served by MAST, kept for tests | public domain (NASA); acknowledge TESS and MAST, see NOTICE |
 | `tests/fixtures/imagePacks/authentic/gaia-dr3-window.csv` | 222 Gaia DR3 sources (G 16 or brighter) in the field of HD 209458 from CDS VizieR, kept for tests | CC BY-NC 3.0 IGO; credit ESA/Gaia/DPAC, see NOTICE |
+| `tests/fixtures/gaia-workflows/zero-point-oracle.json` | 2,563 parallax zero-point offsets computed from the inputs of the two Gaia packs, no source id and no Gaia column (Prompt 233) | CC BY-NC 3.0 IGO (derived values); credit ESA/Gaia/DPAC, see NOTICE |
+| `js/kernels/galactic/zeropointTables.js` | the coefficient tables z5_200720 and z6_200720 of Lindegren et al. (2021) as shipped with the gaiadr3_zeropoint 0.0.5 package (LGPL-3.0), the tabulated numbers only; the code is written independently (Prompt 233) | tabulated numbers of a published fit, cite Lindegren et al. (2021); the package's licence is LGPL-3.0 |
 | `tests/fixtures/imagePacks/authentic/hip2-hd209458.csv` | the Hipparcos new reduction row of HD 209458 from CDS VizieR, kept for tests | CC BY-NC 3.0 IGO (ESA space science archives terms); credit ESA, see NOTICE |
 
 ### Data packs
