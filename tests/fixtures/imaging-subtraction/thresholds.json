@@ -89,5 +89,8 @@
     "C": "a core leg fails: neither; reading steps",
     "secondaryRule": "a failing secondary leg is recorded and stated in the lesson wherever the claim it holds would otherwise appear; it does not change the verdict letter"
   },
-  "amendments": []
+  "amendments": [
+    {"id": "AM1", "beforeGateRun": true, "reason": "A development stream (dev230b; 60 planet-free pairs, nominal mismatch) showed, before the gate stream was run once, that the committed working radius of 1.5 FWHM was inside the star's own residual: the root-mean-square residual was 48.3 electrons at 1.5 FWHM and 22.8 at 2 FWHM against a photon floor of 18.1, and 27 of 60 planet-free frames produced a candidate of S/N 5 or more (at 1.7 FWHM). The residual is within 5 percent of the floor from 2.5 FWHM. The working radius is a number of this method on these frames, so it is amended to 2.5 FWHM before any gate leg ran; the original value 1.5 stays in the method text above and the amended one is what the module (DESIGN.workingFwhm) and the validator read.", "changes": {"method.workingRadius.fwhm": 2.5, "M7 search annulus inner radius": "2.5 FWHM", "D1 separations": "0.5 to 2.49 FWHM", "T2 cell separation": "2.5 FWHM (was 2, now inside the working radius)", "C1 and C2 pool separations": "2.5, 3, 5 and 8 FWHM", "T3 report separations": "1, 1.5 and 2 FWHM, forced"}},
+    {"id": "AM2", "beforeGateRun": true, "reason": "Clarification of M8 and of 'detected' in T1, T2, C1, C2, N2: Prompt 184's pattern counts an injection as recovered only when the detector lists a source within 2 pixels of it, so an injection is detected when rule M7's best candidate has S/N 5 or more and lies within 2 pixels of the injected position. No bound changed. The orbit ensemble keeps its committed rule (no use of the truth: the best candidate outside the working radius with S/N 5 or more enters the series, right or wrong)."}
+  ]
 }
