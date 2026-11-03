@@ -1,0 +1,80 @@
+{
+ "format": "gravitas.imaging-subtraction-failed-legs/1",
+ "failed": [
+  {
+   "id": "C1",
+   "label": "failed leg, kept failing",
+   "measured": {
+    "flux": 0.5384615384615384,
+    "x": 0.539827036868457,
+    "y": 0.5480200273099681,
+    "injections": 2197
+   }
+  },
+  {
+   "id": "C2",
+   "label": "failed leg, kept failing",
+   "measured": {
+    "flux": 0.8270368684569868,
+    "x": 0.8502503413746018,
+    "y": 0.837960855712335,
+    "injections": 2197
+   }
+  },
+  {
+   "id": "D1",
+   "label": "failed leg, kept failing",
+   "measured": {
+    "rate": 0.855,
+    "cases": 200
+   }
+  },
+  {
+   "id": "O2",
+   "label": "failed leg, kept failing",
+   "measured": {
+    "accept110": 0.7533333333333333,
+    "accept60": 0.7,
+    "codes60": {
+     "accepted": 105,
+     "inconsistent": 22,
+     "coverage": 23
+    },
+    "codes110": {
+     "inconsistent": 37,
+     "accepted": 113
+    },
+    "meanLostEpochs110": 0.6866666666666666
+   }
+  },
+  {
+   "id": "O3",
+   "label": "failed leg, kept failing",
+   "measured": {
+    "0.6": {
+     "accepted": 105,
+     "P68": 0.6095238095238096,
+     "P95": 0.8666666666666667,
+     "a68": 0.6476190476190476,
+     "a95": 0.8761904761904762
+    },
+    "1.1": {
+     "accepted": 113,
+     "P68": 0.6283185840707964,
+     "P95": 0.911504424778761,
+     "a68": 0.6106194690265486,
+     "a95": 0.911504424778761
+    }
+   }
+  },
+  {
+   "id": "O6",
+   "label": "failed leg, kept failing",
+   "measured": {
+    "share": 0.84,
+    "trials": 100,
+    "medianSpanFactor": 5.0143943324956775
+   }
+  }
+ ]
+}
