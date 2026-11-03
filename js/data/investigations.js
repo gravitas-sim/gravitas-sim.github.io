@@ -105,6 +105,7 @@ import JOINT_LESSONS from './investigations/joint-sequence.js';
 import OCCURRENCE_LESSONS from './investigations/occurrence-sequence.js';
 import VARIABLES_II_LESSONS from './investigations/variables-ii-sequence.js';
 import STELLAR_LESSONS from './investigations/stellar-sequence.js';
+import EXOPLANET_LESSONS from './investigations/exoplanet-sequence.js';
 import TTV_LESSONS from './investigations/ttv-sequence.js';
 import SURVEY_LESSONS from './investigations/survey-sequence.js';
 import OBSERVING_LESSONS from './investigations/observing-sequence.js';
@@ -238,6 +239,7 @@ export const INVESTIGATIONS = [
   ...SURVEY_LESSONS,
   ...OBSERVING_LESSONS,
   ...STELLAR_LESSONS,
+  ...EXOPLANET_LESSONS,
 ];
 
 // The lessons carry no card summary; it is written once in summaries.js and

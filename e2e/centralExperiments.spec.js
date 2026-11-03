@@ -2962,6 +2962,49 @@ test.describe('the central experiment of each investigation', () => {
         [0, 1.47, 0.06],
       ],
     },
+    // ---- Exoplanet closeout (Roadmap III, Prompt 231) ---------------------------------
+    {
+      id: 'one-planet-every-method',
+      title:
+        'one-planet-every-method: the mass uncertainty of the synthetic hot Jupiter is 0.009 Jupiter masses with the star exact, 0.024 at five percent and 0.055 at twelve @accepts:ce.one-planet-every-method',
+      row: /^Mass$/i,
+      nth: 1,
+      values: [
+        [0, 0.009, 0.0011],
+        [4, 0.024, 0.0011],
+        [6, 0.055, 0.0011],
+      ],
+    },
+    {
+      id: 'what-kinds-of-planets-exist',
+      title:
+        'what-kinds-of-planets-exist: the survey recovers 20 percent of the smallest planets at 32 to 64 days and 64 percent at 1 to 2 days @accepts:ce.what-kinds-of-planets-exist',
+      row: /^Efficiency$/i,
+      values: [
+        [5, 20, 1],
+        [0, 64, 1],
+      ],
+    },
+    {
+      id: 'the-transit-that-was-a-star',
+      title:
+        'the-transit-that-was-a-star: a measured 2 Earth radii is 2.83 behind an equal twin and 2.37 behind a companion one magnitude fainter @accepts:ce.the-transit-that-was-a-star',
+      row: /^True planet radius$/i,
+      values: [
+        [1, 2.37, 0.03],
+        [0, 2.83, 0.03],
+      ],
+    },
+    {
+      id: 'planning-a-transit-campaign',
+      title:
+        'planning-a-transit-campaign: the planner marks 4 of 10 nights observed and 2 of 5 under the same weather draw @accepts:ce.planning-a-transit-campaign',
+      row: /^Nights$/i,
+      values: [
+        [10, 4, 0.1],
+        [5, 2, 0.1],
+      ],
+    },
   ];
   for (const c of MEASURED) {
     test(c.title, async ({ page, app }) => {
@@ -2977,7 +3020,7 @@ test.describe('the central experiment of each investigation', () => {
         await setControl(page, control, value);
         const take = async () => {
           const rows = await readout(page);
-          if (!c.minutes) return reading(rows, c.row);
+          if (!c.minutes) return reading(rows, c.row, c.nth ?? 0);
           const m = /([\d.]+) minutes after noon/.exec(row(rows, c.row).text);
           return m ? Number(m[1]) : NaN;
         };

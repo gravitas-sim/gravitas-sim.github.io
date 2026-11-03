@@ -232,6 +232,14 @@ export const SEQUENCES = [
       ['sampling-a-posterior', 'core', ['refitting-a-transit']],
       ['the-clock-that-drifts', 'core', ['transit-photometry']],
       ['how-many-earths', 'core', ['transit-photometry']],
+      ['what-kinds-of-planets-exist', 'core', ['how-many-earths']],
+      ['the-transit-that-was-a-star', 'quantitative', ['planet-or-not']],
+      ['planning-a-transit-campaign', 'quantitative', ['design-the-schedule']],
+      [
+        'one-planet-every-method',
+        'advanced',
+        ['what-is-it-made-of', 'planet-or-not'],
+      ],
     ]
   ),
   sequence(

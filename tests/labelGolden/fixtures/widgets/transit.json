@@ -238,24 +238,24 @@
     "defaults": {"dm":"0.5","rp":"1.5"}
    },
    "precision": [],
-   "specs": 2,
-   "frames": 30,
+   "specs": 5,
+   "frames": 42,
    "readout": {
-    "calls": 30,
-    "distinct": 22,
-    "digest": "f392f012c3c4d866",
+    "calls": 42,
+    "distinct": 24,
+    "digest": "3d983b919096d7a6",
     "samples": [[{"label":"Flux ratio F<sub>2</sub> / F<sub>1</sub>","value":"0.6310"},{"label":"Share of the light from the neighbor","value":"38.7%"},{"label":"Radius correction √(1 + F<sub>2</sub>/F<sub>1</sub>)","value":"×1.277","emphasis":true},{"label":"True planet radius","value":"1.92 R⊕"},{"label":"Was it rocky?","value":"it was, until you corrected it"}],[{"label":"Flux ratio F<sub>2</sub> / F<sub>1</sub>","value":"1.0000"},{"label":"Share of the light from the neighbor","value":"50.0%"},{"label":"Radius correction √(1 + F<sub>2</sub>/F<sub>1</sub>)","value":"×1.414","emphasis":true},{"label":"True planet radius","value":"2.12 R⊕"},{"label":"Was it rocky?","value":"it was, until you corrected it"}],[{"label":"Flux ratio F<sub>2</sub> / F<sub>1</sub>","value":"1.0000"},{"label":"Share of the light from the neighbor","value":"50.0%"},{"label":"Radius correction √(1 + F<sub>2</sub>/F<sub>1</sub>)","value":"×1.414","emphasis":true},{"label":"True planet radius","value":"0.71 R⊕"},{"label":"Was it rocky?","value":"still below 1.6 R⊕"}],[{"label":"Flux ratio F<sub>2</sub> / F<sub>1</sub>","value":"0.6310"},{"label":"Share of the light from the neighbor","value":"38.7%"},{"label":"Radius correction √(1 + F<sub>2</sub>/F<sub>1</sub>)","value":"×1.277","emphasis":true},{"label":"True planet radius","value":"0.64 R⊕"},{"label":"Was it rocky?","value":"still below 1.6 R⊕"}],[{"label":"Flux ratio F<sub>2</sub> / F<sub>1</sub>","value":"0.0040"},{"label":"Share of the light from the neighbor","value":"0.4%"},{"label":"Radius correction √(1 + F<sub>2</sub>/F<sub>1</sub>)","value":"×1.002","emphasis":true},{"label":"True planet radius","value":"15.03 R⊕"},{"label":"Was it rocky?","value":"no, above 1.6 R⊕ either way"}],[{"label":"Flux ratio F<sub>2</sub> / F<sub>1</sub>","value":"0.0229"},{"label":"Share of the light from the neighbor","value":"2.2%"},{"label":"Radius correction √(1 + F<sub>2</sub>/F<sub>1</sub>)","value":"×1.011","emphasis":true},{"label":"True planet radius","value":"11.63 R⊕"},{"label":"Was it rocky?","value":"no, above 1.6 R⊕ either way"}],[{"label":"Flux ratio F<sub>2</sub> / F<sub>1</sub>","value":"0.0631"},{"label":"Share of the light from the neighbor","value":"5.9%"},{"label":"Radius correction √(1 + F<sub>2</sub>/F<sub>1</sub>)","value":"×1.031","emphasis":true},{"label":"True planet radius","value":"8.04 R⊕"},{"label":"Was it rocky?","value":"no, above 1.6 R⊕ either way"}],[{"label":"Flux ratio F<sub>2</sub> / F<sub>1</sub>","value":"0.0040"},{"label":"Share of the light from the neighbor","value":"0.4%"},{"label":"Radius correction √(1 + F<sub>2</sub>/F<sub>1</sub>)","value":"×1.002","emphasis":true},{"label":"True planet radius","value":"6.81 R⊕"},{"label":"Was it rocky?","value":"no, above 1.6 R⊕ either way"}],[{"label":"Flux ratio F<sub>2</sub> / F<sub>1</sub>","value":"0.0631"},{"label":"Share of the light from the neighbor","value":"5.9%"},{"label":"Radius correction √(1 + F<sub>2</sub>/F<sub>1</sub>)","value":"×1.031","emphasis":true},{"label":"True planet radius","value":"1.55 R⊕"},{"label":"Was it rocky?","value":"still below 1.6 R⊕"}],[{"label":"Flux ratio F<sub>2</sub> / F<sub>1</sub>","value":"0.0158"},{"label":"Share of the light from the neighbor","value":"1.6%"},{"label":"Radius correction √(1 + F<sub>2</sub>/F<sub>1</sub>)","value":"×1.008","emphasis":true},{"label":"True planet radius","value":"1.51 R⊕"},{"label":"Was it rocky?","value":"still below 1.6 R⊕"}],[{"label":"Flux ratio F<sub>2</sub> / F<sub>1</sub>","value":"0.6310"},{"label":"Share of the light from the neighbor","value":"38.7%"},{"label":"Radius correction √(1 + F<sub>2</sub>/F<sub>1</sub>)","value":"×1.277","emphasis":true},{"label":"True planet radius","value":"5.24 R⊕"},{"label":"Was it rocky?","value":"no, above 1.6 R⊕ either way"}],[{"label":"Flux ratio F<sub>2</sub> / F<sub>1</sub>","value":"0.6310"},{"label":"Share of the light from the neighbor","value":"38.7%"},{"label":"Radius correction √(1 + F<sub>2</sub>/F<sub>1</sub>)","value":"×1.277","emphasis":true},{"label":"True planet radius","value":"9.96 R⊕"},{"label":"Was it rocky?","value":"no, above 1.6 R⊕ either way"}],[{"label":"Flux ratio F<sub>2</sub> / F<sub>1</sub>","value":"0.6310"},{"label":"Share of the light from the neighbor","value":"38.7%"},{"label":"Radius correction √(1 + F<sub>2</sub>/F<sub>1</sub>)","value":"×1.277","emphasis":true},{"label":"True planet radius","value":"14.56 R⊕"},{"label":"Was it rocky?","value":"no, above 1.6 R⊕ either way"}],[{"label":"Flux ratio F<sub>2</sub> / F<sub>1</sub>","value":"0.6310"},{"label":"Share of the light from the neighbor","value":"38.7%"},{"label":"Radius correction √(1 + F<sub>2</sub>/F<sub>1</sub>)","value":"×1.277","emphasis":true},{"label":"True planet radius","value":"19.16 R⊕"},{"label":"Was it rocky?","value":"no, above 1.6 R⊕ either way"}]]
    },
    "canvas": {
-    "calls": 30,
-    "distinct": 22,
-    "digest": "604af83504aeb369",
+    "calls": 42,
+    "distinct": 24,
+    "digest": "c87d61f3fdfd171e",
     "samples": [["one photometric aperture","Δm = 0.5","- - true transit","what the survey records","measured 1.5 R⊕  →  actually 1.92 R⊕"],["one photometric aperture","Δm = 0.0","- - true transit","what the survey records","measured 0.5 R⊕  →  actually 0.71 R⊕"],["one photometric aperture","Δm = 6.0","- - true transit","what the survey records","measured 15.0 R⊕  →  actually 15.03 R⊕"],["one photometric aperture","Δm = 0.5","- - true transit","what the survey records","measured 11.4 R⊕  →  actually 14.56 R⊕"],["one photometric aperture","Δm = 1.9","- - true transit","what the survey records","measured 9.4 R⊕  →  actually 10.18 R⊕"]]
    },
    "controls": {
-    "calls": 30,
-    "distinct": 22,
-    "digest": "1ce11d2951dae98f",
+    "calls": 42,
+    "distinct": 24,
+    "digest": "96f67047a9f80e92",
     "samples": [["0.5 mag","1.5 R⊕"],["0.0 mag","0.5 R⊕"],["6.0 mag","15.0 R⊕"],["0.5 mag","11.4 R⊕"]]
    },
    "phases": {
@@ -275,24 +275,24 @@
     "defaults": {"dm":"0.5","rp":"1.5"}
    },
    "precision": [],
-   "specs": 2,
-   "frames": 30,
+   "specs": 5,
+   "frames": 42,
    "readout": {
-    "calls": 30,
-    "distinct": 22,
-    "digest": "fbc5dec5284ee3fc",
+    "calls": 42,
+    "distinct": 24,
+    "digest": "5374074dd110db73",
     "samples": [[{"label":"Cociente de flujos F<sub>2</sub> / F<sub>1</sub>","value":"0.6310"},{"label":"Parte de la luz que viene de la vecina","value":"38.7%"},{"label":"Corrección del radio √(1 + F<sub>2</sub>/F<sub>1</sub>)","value":"×1.277","emphasis":true},{"label":"Radio real del planeta","value":"1.92 R⊕"},{"label":"¿Era rocoso?","value":"it was, until you corrected it"}],[{"label":"Cociente de flujos F<sub>2</sub> / F<sub>1</sub>","value":"1.0000"},{"label":"Parte de la luz que viene de la vecina","value":"50.0%"},{"label":"Corrección del radio √(1 + F<sub>2</sub>/F<sub>1</sub>)","value":"×1.414","emphasis":true},{"label":"Radio real del planeta","value":"2.12 R⊕"},{"label":"¿Era rocoso?","value":"it was, until you corrected it"}],[{"label":"Cociente de flujos F<sub>2</sub> / F<sub>1</sub>","value":"1.0000"},{"label":"Parte de la luz que viene de la vecina","value":"50.0%"},{"label":"Corrección del radio √(1 + F<sub>2</sub>/F<sub>1</sub>)","value":"×1.414","emphasis":true},{"label":"Radio real del planeta","value":"0.71 R⊕"},{"label":"¿Era rocoso?","value":"still below 1.6 R⊕"}],[{"label":"Cociente de flujos F<sub>2</sub> / F<sub>1</sub>","value":"0.6310"},{"label":"Parte de la luz que viene de la vecina","value":"38.7%"},{"label":"Corrección del radio √(1 + F<sub>2</sub>/F<sub>1</sub>)","value":"×1.277","emphasis":true},{"label":"Radio real del planeta","value":"0.64 R⊕"},{"label":"¿Era rocoso?","value":"still below 1.6 R⊕"}],[{"label":"Cociente de flujos F<sub>2</sub> / F<sub>1</sub>","value":"0.0040"},{"label":"Parte de la luz que viene de la vecina","value":"0.4%"},{"label":"Corrección del radio √(1 + F<sub>2</sub>/F<sub>1</sub>)","value":"×1.002","emphasis":true},{"label":"Radio real del planeta","value":"15.03 R⊕"},{"label":"¿Era rocoso?","value":"no, above 1.6 R⊕ either way"}],[{"label":"Cociente de flujos F<sub>2</sub> / F<sub>1</sub>","value":"0.0229"},{"label":"Parte de la luz que viene de la vecina","value":"2.2%"},{"label":"Corrección del radio √(1 + F<sub>2</sub>/F<sub>1</sub>)","value":"×1.011","emphasis":true},{"label":"Radio real del planeta","value":"11.63 R⊕"},{"label":"¿Era rocoso?","value":"no, above 1.6 R⊕ either way"}],[{"label":"Cociente de flujos F<sub>2</sub> / F<sub>1</sub>","value":"0.0631"},{"label":"Parte de la luz que viene de la vecina","value":"5.9%"},{"label":"Corrección del radio √(1 + F<sub>2</sub>/F<sub>1</sub>)","value":"×1.031","emphasis":true},{"label":"Radio real del planeta","value":"8.04 R⊕"},{"label":"¿Era rocoso?","value":"no, above 1.6 R⊕ either way"}],[{"label":"Cociente de flujos F<sub>2</sub> / F<sub>1</sub>","value":"0.0040"},{"label":"Parte de la luz que viene de la vecina","value":"0.4%"},{"label":"Corrección del radio √(1 + F<sub>2</sub>/F<sub>1</sub>)","value":"×1.002","emphasis":true},{"label":"Radio real del planeta","value":"6.81 R⊕"},{"label":"¿Era rocoso?","value":"no, above 1.6 R⊕ either way"}],[{"label":"Cociente de flujos F<sub>2</sub> / F<sub>1</sub>","value":"0.0631"},{"label":"Parte de la luz que viene de la vecina","value":"5.9%"},{"label":"Corrección del radio √(1 + F<sub>2</sub>/F<sub>1</sub>)","value":"×1.031","emphasis":true},{"label":"Radio real del planeta","value":"1.55 R⊕"},{"label":"¿Era rocoso?","value":"still below 1.6 R⊕"}],[{"label":"Cociente de flujos F<sub>2</sub> / F<sub>1</sub>","value":"0.0158"},{"label":"Parte de la luz que viene de la vecina","value":"1.6%"},{"label":"Corrección del radio √(1 + F<sub>2</sub>/F<sub>1</sub>)","value":"×1.008","emphasis":true},{"label":"Radio real del planeta","value":"1.51 R⊕"},{"label":"¿Era rocoso?","value":"still below 1.6 R⊕"}],[{"label":"Cociente de flujos F<sub>2</sub> / F<sub>1</sub>","value":"0.6310"},{"label":"Parte de la luz que viene de la vecina","value":"38.7%"},{"label":"Corrección del radio √(1 + F<sub>2</sub>/F<sub>1</sub>)","value":"×1.277","emphasis":true},{"label":"Radio real del planeta","value":"5.24 R⊕"},{"label":"¿Era rocoso?","value":"no, above 1.6 R⊕ either way"}],[{"label":"Cociente de flujos F<sub>2</sub> / F<sub>1</sub>","value":"0.6310"},{"label":"Parte de la luz que viene de la vecina","value":"38.7%"},{"label":"Corrección del radio √(1 + F<sub>2</sub>/F<sub>1</sub>)","value":"×1.277","emphasis":true},{"label":"Radio real del planeta","value":"9.96 R⊕"},{"label":"¿Era rocoso?","value":"no, above 1.6 R⊕ either way"}],[{"label":"Cociente de flujos F<sub>2</sub> / F<sub>1</sub>","value":"0.6310"},{"label":"Parte de la luz que viene de la vecina","value":"38.7%"},{"label":"Corrección del radio √(1 + F<sub>2</sub>/F<sub>1</sub>)","value":"×1.277","emphasis":true},{"label":"Radio real del planeta","value":"14.56 R⊕"},{"label":"¿Era rocoso?","value":"no, above 1.6 R⊕ either way"}],[{"label":"Cociente de flujos F<sub>2</sub> / F<sub>1</sub>","value":"0.6310"},{"label":"Parte de la luz que viene de la vecina","value":"38.7%"},{"label":"Corrección del radio √(1 + F<sub>2</sub>/F<sub>1</sub>)","value":"×1.277","emphasis":true},{"label":"Radio real del planeta","value":"19.16 R⊕"},{"label":"¿Era rocoso?","value":"no, above 1.6 R⊕ either way"}]]
    },
    "canvas": {
-    "calls": 30,
-    "distinct": 22,
-    "digest": "604af83504aeb369",
+    "calls": 42,
+    "distinct": 24,
+    "digest": "c87d61f3fdfd171e",
     "samples": [["one photometric aperture","Δm = 0.5","- - true transit","what the survey records","measured 1.5 R⊕  →  actually 1.92 R⊕"],["one photometric aperture","Δm = 0.0","- - true transit","what the survey records","measured 0.5 R⊕  →  actually 0.71 R⊕"],["one photometric aperture","Δm = 6.0","- - true transit","what the survey records","measured 15.0 R⊕  →  actually 15.03 R⊕"],["one photometric aperture","Δm = 0.5","- - true transit","what the survey records","measured 11.4 R⊕  →  actually 14.56 R⊕"],["one photometric aperture","Δm = 1.9","- - true transit","what the survey records","measured 9.4 R⊕  →  actually 10.18 R⊕"]]
    },
    "controls": {
-    "calls": 30,
-    "distinct": 22,
-    "digest": "1ce11d2951dae98f",
+    "calls": 42,
+    "distinct": 24,
+    "digest": "96f67047a9f80e92",
     "samples": [["0.5 mag","1.5 R⊕"],["0.0 mag","0.5 R⊕"],["6.0 mag","15.0 R⊕"],["0.5 mag","11.4 R⊕"]]
    },
    "phases": {

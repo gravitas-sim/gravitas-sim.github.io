@@ -25,6 +25,7 @@ import { INSTRUCTOR as JOINT } from './investigations/joint-sequence.js';
 import { INSTRUCTOR as OCCURRENCE } from './investigations/occurrence-sequence.js';
 import { INSTRUCTOR as VARIABLES_II } from './investigations/variables-ii-sequence.js';
 import { INSTRUCTOR as STELLAR } from './investigations/stellar-sequence.js';
+import { INSTRUCTOR as EXOPLANET } from './investigations/exoplanet-sequence.js';
 import { INSTRUCTOR as TTV } from './investigations/ttv-sequence.js';
 
 export default {
@@ -54,6 +55,7 @@ export default {
     ...OCCURRENCE.flow,
     ...VARIABLES_II.flow,
     ...STELLAR.flow,
+    ...EXOPLANET.flow,
     ...TTV.flow,
     'the-suns-motion': [
       {

@@ -1,0 +1,61 @@
+{
+ "id": "one-planet-every-method",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.the-depth.unit","%"],
+    ["steps.read-the-record.fields.0.unit","g/cm³"],
+    ["steps.read-the-record.fields.1.unit","g/cm³"],
+    ["steps.what-the-star-costs.unit","%"],
+    ["steps.a-worse-star.unit","%"],
+    ["steps.the-eclipse.unit","K"]
+   ],
+   "numbered": [
+    ["steps.read-the-record.fields.0.hint","0.365"],
+    ["steps.read-the-record.fields.1.hint","0.050"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": []
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "the-depth",
+    "answer": "1.4",
+    "tolerance": "0.03",
+    "unit": "%"
+   },
+   {
+    "sid": "what-the-star-costs",
+    "answer": "10.1",
+    "tolerance": "0.3",
+    "unit": "%"
+   },
+   {
+    "sid": "a-worse-star",
+    "answer": "24.1",
+    "tolerance": "0.8",
+    "unit": "%"
+   },
+   {
+    "sid": "the-eclipse",
+    "answer": "2094",
+    "tolerance": "15",
+    "unit": "K"
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "read-the-record": {
+    "validate": {"calls":232,"distinct":2,"digest":"2f2fff382a707a81","samples":[null,{"level":"error","message":"Leave the controls at their opening values and read the bulk density and its uncertainty from the readout: about 0.365 g/cm³, plus or minus about 0.050."}]}
+   }
+  },
+  "es": "same"
+ }
+}

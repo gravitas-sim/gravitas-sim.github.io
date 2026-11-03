@@ -427,6 +427,25 @@
           "text": "A sequence, Stars, in depth"
         }
       ]
+    },
+    {
+      "id": "exoplanet-closeout-recomputed",
+      "claim": "The numbers the four connecting exoplanet investigations ask a student for are recomputed from the project's own joint-fit, vetting, occurrence, mass-radius, dilution, observing-window and eclipse panels, and each step's grader accepts the recomputed value and refuses a wrong one.",
+      "scope": "One Planet, Every Method, What Kinds of Planets Exist?, The Transit That Was a Star and Planning a Transit Campaign, in the English text; the Spanish follows the English step for step by a machine check; every system is synthetic with its truth known.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "established",
+      "method": "tests/exoplanetCloseout.test.js recomputes every literal answer through the panels' own fields in a child process; the central-experiment walks run each lesson's own panel in a browser",
+      "evaluator": "the project",
+      "artifact": "tests/exoplanetCloseout.test.js",
+      "limitations": "Internal validation against the project's own models and synthetic systems; no panel joins the four methods on one star; no public catalog subset ships; no escape panel (Prompt 199) and no imaged-orbit lesson (Prompt 230 Part B, gate C); the Spanish has not been read by a fluent reader; no student has used the investigations (D-R10-231-02).",
+      "date": "2026-11-03",
+      "anchors": [
+        {
+          "file": "CHANGELOG.md",
+          "text": "Exoplanet investigations, a sequence and a course"
+        }
+      ]
     }
   ]
 }

@@ -1200,4 +1200,44 @@ export const DISCOVERY = {
     },
     courseLevel: 'majors',
   },
+  'one-planet-every-method': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['what-is-it-made-of', 'planet-or-not'],
+    textbook: {
+      chapter: 21,
+      section: null,
+    },
+    courseLevel: 'upper',
+  },
+  'what-kinds-of-planets-exist': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['how-many-earths'],
+    textbook: {
+      chapter: 21,
+      section: null,
+    },
+    courseLevel: 'survey',
+  },
+  'the-transit-that-was-a-star': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['planet-or-not'],
+    textbook: {
+      chapter: 21,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
+  'planning-a-transit-campaign': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['design-the-schedule'],
+    textbook: {
+      chapter: 21,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
 };

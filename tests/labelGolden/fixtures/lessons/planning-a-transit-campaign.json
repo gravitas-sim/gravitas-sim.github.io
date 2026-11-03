@@ -1,0 +1,57 @@
+{
+ "id": "planning-a-transit-campaign",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.which-nights.fields.0.unit",""],
+    ["steps.the-share-of-the-night.unit","%"],
+    ["steps.what-the-weather-left.fields.0.unit",""],
+    ["steps.the-expected-count.unit",""],
+    ["steps.the-ephemeris-grows-old.unit","h"]
+   ],
+   "numbered": [
+    ["steps.which-nights.fields.0.hint","5"],
+    ["steps.what-the-weather-left.fields.0.hint","2"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": []
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "the-share-of-the-night",
+    "answer": "54",
+    "tolerance": "1",
+    "unit": "%"
+   },
+   {
+    "sid": "the-expected-count",
+    "answer": "3",
+    "tolerance": "0.05",
+    "unit": ""
+   },
+   {
+    "sid": "the-ephemeris-grows-old",
+    "answer": "0.72",
+    "tolerance": "0.02",
+    "unit": "h"
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "which-nights": {
+    "validate": {"calls":97,"distinct":2,"digest":"2093653001f9f68b","samples":[null,{"level":"error","message":"The transit returns to the same hour every 2 days, so it is in the window on nights 1, 3, 5, 7 and 9."}]}
+   },
+   "what-the-weather-left": {
+    "validate": {"calls":97,"distinct":2,"digest":"23bcdc5e647bf19f","samples":[null,{"level":"error","message":"Check nights 1, 3, 5, 7 and 9 in the panel: the first and the ninth are clear, the others are lost to weather."}]}
+   }
+  },
+  "es": "same"
+ }
+}

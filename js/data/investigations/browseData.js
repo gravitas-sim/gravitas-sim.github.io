@@ -484,4 +484,20 @@ export const BROWSE_META = {
     tags: ['observing', 'stars'],
     numericCount: 0,
   },
+  'one-planet-every-method': {
+    tags: ['exoplanets', 'observing'],
+    numericCount: 0,
+  },
+  'what-kinds-of-planets-exist': {
+    tags: ['exoplanets', 'observing'],
+    numericCount: 0,
+  },
+  'the-transit-that-was-a-star': {
+    tags: ['exoplanets', 'stars'],
+    numericCount: 0,
+  },
+  'planning-a-transit-campaign': {
+    tags: ['exoplanets', 'observing'],
+    numericCount: 0,
+  },
 };

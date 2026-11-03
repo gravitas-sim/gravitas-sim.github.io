@@ -1870,6 +1870,14 @@ export const EN_DEFERRED = {
     'A planet’s radius, mass and density with the star’s stated uncertainty inside them: how much of each is the star’s, what a mis-stated star does, and what a density can and cannot say.',
   'inv.seq.planets.how-many-earths':
     'A survey lists planets it could see. How many could it have seen, what does a count of what was found become a rate, and what does a bin with none, or one the survey could hardly see, say?',
+  'inv.seq.planets.what-kinds-of-planets-exist':
+    'Planets sorted by bulk density on a mass-radius diagram, and a survey’s grid of sizes and periods read against what it could see: what a density does and does not say, what a few listings make of a rate, and why a diagram cannot say whether a planet keeps an atmosphere.',
+  'inv.seq.planets.the-transit-that-was-a-star':
+    'Four candidates whose dips were a star: what alternating depths mean, why an equal pair passes two tests, how a difference image rejects a blend and why one too close survives, and what a neighbor does to a real planet’s radius.',
+  'inv.seq.planets.planning-a-transit-campaign':
+    'A planet with a known ephemeris, a telescope and two weeks of nights: which transits fit the window whole, what the weather leaves, and why a period-search cadence and a target that is up too briefly both fail a campaign.',
+  'inv.seq.planets.one-planet-every-method':
+    'One synthetic planet through the transit, the velocity curve, the joint fit and the checklist: a density with the star’s share of its uncertainty, a candidate that survived but was not validated, and what a report must carry for every record.',
   'inv.seq.planets.planet-or-not':
     'Eight synthetic candidates vetted with odd-even depths, a second-eclipse search and a centroid test, and what a passed checklist does not mean. Some cannot be decided.',
   'inv.seq.planets.why-we-cannot-see-earth':

@@ -15,6 +15,7 @@ the release rather than in the tag.
 
 ### Added
 
+- **Exoplanet investigations, a sequence and a course (Prompt 231).** Four connecting investigations in English and Spanish with instructor materials and a deeper step layer, placed in the exoplanet sequence: One Planet, Every Method (what each of four methods fixes, and what the density of a planet owes to its star), What Kinds of Planets Exist? (the mass-radius diagram, the synthetic survey's occurrence grid, and a reading step on what an atmosphere needs that the diagram cannot say), The Transit That Was a Star (a vetting candidate, the odd-even test, a centroid offset and a diluted radius) and Planning a Transit Campaign (which of ten nights qualify, the window, and an ephemeris that grows old). They use the panels that exist: no instrument and no data pack was added, and every system is synthetic with its truth known. The upper-level modules package (1.2.0) gains seven exoplanet items. Not built, and said so: the escape-velocity investigation (Prompt 199, verdict B: no escape panel), an imaged planet's orbit (Prompt 230 Part B, gate C) and a public catalog subset (no rights decision): see D-R10-231-02.
 - **Weighing a visual pair (Prompt 218, Part B).** `js/measure/visualBinary.js` over Prompt 187's orbit fit: the photocentre contract (the light-weighted centre of an unresolved pair traces the relative ellipse scaled by l − B, so its orbit with a parallax is a mass function, not a mass), the mass sum of a resolved pair from a parallax with its frame statement, the mass fraction and the two masses from each star's own motion about the moving centre of mass, and a companion's mass from a stated light fraction and primary mass with both roots returned; refusals without a parallax, a frame, a light fraction or both components. The panel `masses-visual` and three advanced steps in Weighing the Stars, for Real (English and Spanish, no new closure file). Gate verdict A on thresholds committed first (25 legs pass against an independent two-body and least-squares oracle, coverage on 200 and 150 seeded systems; the real-star leg, alpha Centauri AB from published elements, is only a circular arithmetic check); `tools/visual-binary-validate.mjs`, `VISUAL_BINARY_GATE.md`, `BINARY_MASSES.md`.
 - **How many planets? Occurrence rates on a searched population (Prompt 229).** `js/kernels/occurrence/`: a synthetic survey of 2000 stars with their own noise and span, completeness by injection and recovery (the geometric probability times the recovery of an injected transit at the injected ephemeris, with the number of transits the span holds), the occurrence rate of a bin from its listings on the selected-population Poisson likelihood of the statistics kernel (a rate may exceed one planet per star), a one-sided limit for a bin with no listing, a refusal for a bin the survey could hardly see and for a rate without a stated reliability, and a population whose rates are known. Two panels (the efficiency, the grid of rates), a new investigation, How Many Earths?, in English and Spanish with instructor materials and a deeper layer, and two advanced steps added to Who Gets Counted. Gate verdict A against an independent oracle (numpy, scipy, batman) and a 400-population coverage test; two demonstration legs of the reliability term failed and stay labelled, and the authentic leg was not run. `OCCURRENCE_RATES.md`.
 - **A planet's density is only as good as its star (Prompt 227).** The model `transit-rv-joint`: one light curve and the velocities of any number of instruments fitted with one period, epoch and orbit, and the planet's mass (the full relation, the sum of the masses), radius and bulk density derived with the star's stated mass, radius, uncertainty, correlation and source carried through, the star's share of each variance printed, a minimum mass and no mass without a transit, a named refusal for every quantity the inputs do not give, and a flag when the stated star's density disagrees with the transit's by more than 3 sigma. The panels `joint-fit` and `mass-radius` (lines of constant density only; no composition curve was supplied), the investigation What Is It Made Of? at two depths in English and Spanish with instructor materials, the upper depth of Finding Planets by Their Tug, and a model-page section. Validated against an independent numpy, scipy and batman implementation at thresholds committed first: 29 legs pass, two (D6, C4) stay failing and labelled, and the authentic leg (E1) is NOT RUN because no velocity series was supplied (`JOINT_INFERENCE.md`).
@@ -159,12 +160,12 @@ The Observatory's image measurement train (Prompts 179 to 182, 184, 186 to 189, 
 
 **Gravitas 2.0.0.** Gravitas grows from a gravity sandbox with 22 guided
 investigations into a browser laboratory: <!--fact:scenarios-->61<!--/fact-->
-sandbox scenarios, <!--fact:libraryInvestigations-->135<!--/fact--> guided
-investigations (<!--fact:investigations-->118<!--/fact--> that run in the
+sandbox scenarios, <!--fact:libraryInvestigations-->139<!--/fact--> guided
+investigations (<!--fact:investigations-->122<!--/fact--> that run in the
 simulation and <!--fact:guidedInvestigations-->17<!--/fact--> in the
 Observatory, the 3-D lab and the mission lab), a shared shell, a Library, a
 workspace for each student's own work, an instructor path from adoption page to
-gradebook file, <!--fact:instructorDocuments-->1156<!--/fact--> generated
+gradebook file, <!--fact:instructorDocuments-->1200<!--/fact--> generated
 instructor documents, a public validation suite
 of <!--fact:physicsChecks-->352<!--/fact--> checks, and authoring tools
 (Scenario Studio, Investigation Composer, course packs and an extension SDK).
@@ -1817,7 +1818,7 @@ listed here because this is the release that first carries it.
 - **An instructor portal that explains itself.** `/instructors/` states what is
   behind the passphrase before asking for it, says plainly what client-side
   encryption on a static host can and cannot promise, and presents the
-  <!--fact:instructorDocuments-->1156<!--/fact--> documents grouped by investigation
+  <!--fact:instructorDocuments-->1200<!--/fact--> documents grouped by investigation
   with their kind and size. A wrong passphrase and a missing bundle now report
   as the different problems they are.
 - **Dual licensing.** The code is MIT; the original educational material is
@@ -1884,7 +1885,7 @@ listed here because this is the release that first carries it.
   uncertainty, the target and the observing configuration.
 - **Offline support.** A service worker precaches the application shell, the
   <!--fact:scenarios-->61<!--/fact--> scenario thumbnails and all
-  <!--fact:investigations-->118<!--/fact--> English lessons, so a class keeps
+  <!--fact:investigations-->122<!--/fact--> English lessons, so a class keeps
   working when the room's wifi drops. The cache name is a content hash, so a
   build invalidates it. See [OFFLINE_AND_LOW_END.md](OFFLINE_AND_LOW_END.md).
 - **A measured low-end quality tier.** Chosen from the frame rate the machine
@@ -1893,8 +1894,8 @@ listed here because this is the release that first carries it.
   off.
 - **An investigation authoring toolchain.** `npm run author:check` validates
   every lesson and every one of the
-  <!--fact:investigationSteps-->1480<!--/fact--> steps; `npm run author:new`
-  <!--fact:investigationSteps-->1480<!--/fact--> steps; `npm run author:new`
+  <!--fact:investigationSteps-->1505<!--/fact--> steps; `npm run author:new`
+  <!--fact:investigationSteps-->1505<!--/fact--> steps; `npm run author:new`
   scaffolds a lesson with its translation shadow and instructor stub;
   `?author=<lesson>&step=<n>` opens any step with diagnostics without touching
   a student's saved progress; and a browser walker exercises every step of
