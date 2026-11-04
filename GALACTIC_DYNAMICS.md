@@ -37,7 +37,7 @@ cross-match); the near stratum is over-sampled on purpose.
 | `rotation.js` | bulge + disk + halo rotation curve (js/darkMatter.js's model, reused), chi-square, deterministic Nelder-Mead fit with physical disk bounds |
 | `membership.js` | two-component mixture over proper motion and parallax; membership is a probability |
 
-## Measured against published values (tests/galacticKernel.test.js, 19 tests)
+## Measured against published values (tests/galacticKernel.test.js, 21 tests)
 
 - l and b of eight Gaia archive positions: agree to 1e-6 degree.
 - The Galactic pole and centre, and Sgr A* (Reid and Brunthaler 2004): l = 359.9442, b = -0.0462, proper
@@ -45,16 +45,24 @@ cross-match); the near stratum is over-sampled on purpose.
 - The Sun's U and W from stars within 100 pc: U = 10.5, W = 9.1 km/s against Schonrich et al. 2010's 11.1 and
   7.25 (both within the 3 km/s the pack check allows; W is 1.9 km/s above the published value, and the
   tolerance was fixed before the number was seen, not tuned to it).
-- Oort constants from all 1,570 stars, weighted by 1/parallax^2: A = 13.5 +/- 2.4, B = -13.7 +/- 1.7
-  km/s/kpc against Bovy 2017's 15.3 and -11.9, each inside 3 sigma. An unweighted fit fails (A = -2.4 +/- 11.5),
-  because the nearest stars carry the largest scatter in proper-motion units; the kernel defaults to the
-  weighted fit and says why.
-  Correction (Prompt 235, `KINEMATICS_GATE.md`): this fit is the in-plane form and leaves out the factor cos b
-  that the velocity along l of a rotating disk carries, so on a sample that covers the whole sky its A and B are
-  low in magnitude by about 15 percent (a noise-free test returns A 12.6 and B -10.5 for a disk of 14.75 and
-  -12.75). With the factor the same stars give A 14.5 +/- 2.6 and B -15.2 +/- 1.8. The kernel and the lesson
-  text above are not changed by that prompt; the gate also found that this sample cannot recover the circular-orbit
-  constants within its own interval, because the asymmetric drift of its older stars shifts A by about 2 km/s/kpc.
+- Oort constants from all 1,570 stars, weighted by 1/parallax^2 and fitted with the factor cos b (the velocity
+  along l of a rotating disk is d cos b (A cos 2l + B), d cos b the distance within the plane): A = 14.5 +/- 2.6,
+  B = -15.2 +/- 1.8 km/s/kpc, a circular speed (A - B) x 8.3 kpc of 247 +/- 26 km/s. Against Bovy 2017's 15.3 and
+  -11.9, A is 0.3 and B 1.8 of its errors away; the sample does not recover B inside its interval and is not
+  claimed to (see the correction below). An unweighted fit fails (A = -1.9 +/- 13.2, B = -7.9 +/- 9.3), because
+  the nearest stars carry the largest scatter in proper-motion units; the kernel defaults to the weighted fit
+  and says why.
+  Correction (found in Prompt 235, `KINEMATICS_GATE.md`, which recorded the defect and left the kernel and the
+  lesson unchanged; corrected by the change that followed, D-R10-235-05): the fit had been the in-plane form and
+  left out cos b, so its A and B were low in magnitude by about the sample's mean cos b (0.85; 15 percent for a
+  noise-free disk, A 12.6 and B -10.5 for a disk of 14.75 and -12.75). On these stars the planar form read
+  A = 13.5 +/- 2.4 and B = -13.7 +/- 1.7 and a speed of 226 km/s: A 7, B 10 and the speed 8 percent low. The
+  kernel keeps that form as the option `planar: true`, only to show the difference. The gate also found that
+  this sample cannot recover the circular-orbit constants within its own interval, because the asymmetric
+  drift of its older stars shifts A by about 2 km/s/kpc (a synthetic diagnostic, not a leg); the constants are
+  those of the sample's own mean streaming. The independent check is `tools/oort-oracle/oracle.py` (numpy
+  lstsq on astropy proper motions), pinned in `tests/fixtures/oort-cosb/oracle-results.json`: the kernel
+  agrees to 1e-5 km/s/kpc, absolute.
 - The solar V relative to the sample is 21.9 km/s; after the Stromberg lag (sigma_U^2 / 80 = 18.1) the LSR
   value is 3.8 km/s, the old Dehnen and Binney 1998 value (5.2), not Schonrich et al. 2010's 12.2, which
   needs the metallicity-gradient argument. The drift fit across colour bins gives 12.3 +/- 6.7: too noisy to

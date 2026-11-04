@@ -3,16 +3,16 @@ export default {
   steps: [
     {
       title: 'La rapidez a mano',
-      body: 'Una órbita circular tiene rapidez V = R × Ω, con R la distancia al centro y Ω la velocidad angular. A − B de Oort es Ω en el Sol: 27,24&nbsp;km/s/kpc. Usa R = 8,3&nbsp;kpc.',
+      body: 'Una órbita circular tiene rapidez V = R × Ω, con R la distancia al centro y Ω la velocidad angular. A − B de Oort es Ω en el Sol: 29,71&nbsp;km/s/kpc. Usa R = 8,3&nbsp;kpc.',
       prompt: 'La rapidez circular en el Sol',
-      hints: ['Multiplica 27,24 por 8,3.'],
+      hints: ['Multiplica 29,71 por 8,3.'],
       worked:
-        '27,24 km/s/kpc × 8,3 kpc = 226 km/s. Su incertidumbre es 8,3 veces la de A − B (2,8 km/s/kpc), unos 24 km/s, así que los 244 km/s de la curva concuerdan.',
+        '29,71 km/s/kpc × 8,3 kpc = 247 km/s. Su incertidumbre es 8,3 veces la de A − B (3,1 km/s/kpc), unos 26 km/s, así que los 244 km/s de la curva concuerdan.',
       feedback: {
-        close: 'Casi. Revisa la multiplicación: 27,24 × 8,3.',
+        close: 'Casi. Revisa la multiplicación: 29,71 × 8,3.',
         'wrong-order-of-magnitude':
           'Se pasa una potencia de diez. Una rapidez en una galaxia es del orden de 100 a 300 km/s.',
-        off: 'V = (A − B) × R, con A − B = 27,24 km/s/kpc y R = 8,3 kpc.',
+        off: 'V = (A − B) × R, con A − B = 29,71 km/s/kpc y R = 8,3 kpc.',
       },
     },
     {
