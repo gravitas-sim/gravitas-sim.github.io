@@ -370,6 +370,37 @@ export const GRAPH = Object.freeze([
       "**Conflicts on every merge, by design.** Fresh salt and IV per build, so the ciphertext differs in every byte even when the content is identical. Check `materials.manifest.json`'s digest to see whether anything actually changed.",
   },
   {
+    // Prompt 237 (DYNAMICS_REFERENCE_GATE.md): the engine's precomputed cluster runs, two gravitas.grid
+    // documents (Prompt 157's kind) measured by the written specification, in a fixture the gate reads. The
+    // check is the staleness of the inputs, not a re-run: a re-run is about ten minutes of the engine.
+    id: 'dynamics-runs',
+    generate: 'node tools/dynamics-runs.mjs --write',
+    check: 'node tools/dynamics-runs.mjs --check',
+    inputs: [
+      'js/engine',
+      'js/physics.js',
+      'js/constants.js',
+      'js/units.js',
+      'js/utils.js',
+      'js/rng.js',
+      'js/referenceFrame.js',
+      'js/darkMatter.js',
+      'js/mond.js',
+      'js/orbital.js',
+      'js/stellar',
+      'js/habitability.js',
+      'js/quality.js',
+      'js/validation/harness.js',
+      'tests/fixtures/dynamics/initial-conditions.json',
+      'tools/dynamics-runs.mjs',
+      'tools/dynamics-measure.mjs',
+    ],
+    outputs: ['tests/fixtures/dynamics/engine-runs.json'],
+    after: [],
+    notes:
+      'About ten minutes of the engine (16 runs of 128 bodies for 30 crossing times and 16 of 129 for 15). A stale table means the engine or its inputs changed: regenerate it and judge the gate again with `node tools/dynamics-validate.mjs`; never regenerate to make a leg pass.',
+  },
+  {
     id: 'world-golden',
     generate: null,
     needs:

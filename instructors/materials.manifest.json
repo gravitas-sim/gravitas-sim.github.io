@@ -24,7 +24,7 @@
     }
   },
   "sourceFiles": 306,
-  "sourceDigest": "a793113c149bc6e2172f9b79a48c95b36906d30eac1230dde7e4de1e3ecc26e8",
+  "sourceDigest": "bf4ef456f4b01f581b6cdc6c70a69a2e4084390e4446fc6ce7cd81369bce9cd4",
   "sources": {
     "js/activities/activities.js": "39ac98cd99b8b0387c55e41d5d4530bad55a8da8758819ad056be73e7a716b01",
     "js/activities/activityBridge.js": "67a82aff98e0ed935d6b8b0f0f654c6ad4332ee929cb3604e896a7f790a6fdc1",
@@ -290,7 +290,7 @@
     "js/i18n/en.activities.js": "f20cf171d13a956aed5e7f15319f7ef93a918ccbc803fd441e5b08394488d5d5",
     "js/i18n/en.exoplanet.js": "fece6ff72d20a8174c8968afba74f31745f54adb57410d53cd67fb751497b5c0",
     "js/i18n/en.guides.js": "6462bfa9a931d5901393a19fdab9d5f3a27ba0969799f2dfbd7d61e501a43252",
-    "js/i18n/en.js": "c4054e58bd326cf538dbbb506745b0b6edc7af984f592aab5933154232f627c1",
+    "js/i18n/en.js": "3212fc4c5fd43d43f1b9f0fea21212b9d7d6f8098c3768c1da59c0d0139131b8",
     "js/i18n/en.lab3dGuides.js": "e2d4eaa678c6872969f358dffd125dad34953900f83a822de71391ba906e6bc7",
     "js/i18n/en.missionLabGuides.js": "6c859aefad385c14245218a4d53514fb35ce1443c1fcb3b055575137a6a6d086",
     "js/i18n/en.populations.js": "eaa01b4655a6c8bd59ee9a60da0dcbbab605f586944bb0642fab26679b557cf4",

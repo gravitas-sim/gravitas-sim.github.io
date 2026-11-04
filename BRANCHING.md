@@ -77,6 +77,7 @@ The table is written from `tools/generate-graph.mjs`, the list that
 | `manual/facts.tex`, `CITATION.cff`, `.zenodo.json` | `node tools/docs-facts.mjs --sync --full` |  |
 | `Gravitas_User_Manual.pdf`, `manual/scenarios.tex`, `manual/investigations.tex` | needs a LaTeX engine (npm run manual) |  |
 | `instructors/materials.enc.json`, `instructors/materials.manifest.json` | needs the instructor passphrase (npm run build:instructors) | **Conflicts on every merge, by design.** Fresh salt and IV per build, so the ciphertext differs in every byte even when the content is identical. Check `materials.manifest.json`'s digest to see whether anything actually changed. |
+| `tests/fixtures/dynamics/engine-runs.json` | `node tools/dynamics-runs.mjs --write` | About ten minutes of the engine (16 runs of 128 bodies for 30 crossing times and 16 of 129 for 15). A stale table means the engine or its inputs changed: regenerate it and judge the gate again with `node tools/dynamics-validate.mjs`; never regenerate to make a leg pass. |
 | `e2e/golden/world-construction.json` | needs a deliberate decision (GRAVITAS_UPDATE_WORLD_GOLDEN=1, e2e/README.md) | Regenerate only deliberately — a change here means behaviour moved, not that a file went stale. |
 <!--/fact-block-->
 
