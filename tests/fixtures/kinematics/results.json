@@ -3,10 +3,10 @@
  "thresholdsSha256": "4abb971f6bd55b66c6a635ac1a6d88dafb052a0421a8081388257d6283ba1747",
  "design": false,
  "counts": {
-  "pass": 37,
-  "fail": 22,
+  "pass": 39,
+  "fail": 23,
   "reported": 4,
-  "notRun": 3
+  "notRun": 0
  },
  "verdicts": {
   "O": {
@@ -114,16 +114,10 @@
    "method": "T",
    "verdict": "C",
    "failedS": [
-    "T.T1.coordinates",
     "T.T2.classification"
    ],
-   "failedR": [
-    "T.T3.real"
-   ],
-   "notRun": [
-    "T.T1.coordinates",
-    "T.T2.classification"
-   ]
+   "failedR": [],
+   "notRun": []
   },
   "S": {
    "binding": {
@@ -1059,21 +1053,255 @@
   },
   {
    "id": "T.T1.coordinates",
-   "status": "not-run",
-   "measured": null,
-   "note": "tests/fixtures/kinematics/disk-halo-source.json (the cited thresholds) was not supplied: no threshold is typed from memory"
+   "status": "pass",
+   "measured": {
+    "stars": 1570,
+    "maxAbs": 8.526512829121202e-14,
+    "bound": 1e-9,
+    "worst": "lsr V"
+   },
+   "note": ""
   },
   {
    "id": "T.T2.classification",
-   "status": "not-run",
-   "measured": null,
-   "note": "tests/fixtures/kinematics/disk-halo-source.json (the cited thresholds) was not supplied: no threshold is typed from memory"
+   "status": "fail",
+   "measured": {
+    "venn2004": {
+     "frame": "rest",
+     "sun": [
+      9,
+      232,
+      7
+     ],
+     "haloRecall": 0.9213,
+     "haloPurity": 0.2996,
+     "meetsBounds": false,
+     "pooled": {
+      "truePositive": 1451,
+      "falseNegative": 124,
+      "falsePositive": 3392
+     },
+     "medianRealizationRecall": 1,
+     "medianRealizationPurity": 0.308,
+     "confusion": {
+      "thin disk": {
+       "thin disk": 205315,
+       "thick disk": 61781,
+       "halo": 2
+      },
+      "thick disk": {
+       "thin disk": 10580,
+       "thick disk": 31357,
+       "halo": 3390
+      },
+      "halo": {
+       "thin disk": 9,
+       "thick disk": 115,
+       "halo": 1451
+      }
+     }
+    },
+    "bensby2014": {
+     "frame": "lsr",
+     "sun": [
+      11.1,
+      12.24,
+      7.25
+     ],
+     "haloRecall": 0.7968,
+     "haloPurity": 0.8584,
+     "meetsBounds": false,
+     "pooled": {
+      "truePositive": 1255,
+      "falseNegative": 320,
+      "falsePositive": 207
+     },
+     "medianRealizationRecall": 0.8,
+     "medianRealizationPurity": 0.875,
+     "confusion": {
+      "thin disk": {
+       "thin disk": 253137,
+       "thick disk": 4490,
+       "halo": 0,
+       "between": 9471
+      },
+      "thick disk": {
+       "thin disk": 15945,
+       "thick disk": 23814,
+       "halo": 207,
+       "between": 5361
+      },
+      "halo": {
+       "thin disk": 14,
+       "thick disk": 297,
+       "halo": 1255,
+       "between": 9
+      }
+     },
+     "starsWhereNestedHaloDiffers": 0
+    },
+    "bounds": {
+     "minHaloRecall": 0.8,
+     "minHaloPurity": 0.5
+    },
+    "realizations": 200
+   },
+   "note": "every cited rule must meet both bounds (KINEMATICS_GATE.md addendum); per-rule numbers are in measured"
   },
   {
    "id": "T.T3.real",
-   "status": "not-run",
-   "measured": null,
-   "note": "tests/fixtures/kinematics/disk-halo-source.json (the cited thresholds) was not supplied: no threshold is typed from memory"
+   "status": "pass",
+   "measured": {
+    "stars": 1570,
+    "venn2004": {
+     "frame": "rest",
+     "sun": [
+      9,
+      232,
+      7
+     ],
+     "classes": {
+      "thin disk": {
+       "count": 1213,
+       "oneSigma": [
+        1178,
+        1249
+       ],
+       "ci95": [
+        1146,
+        1283
+       ]
+      },
+      "thick disk": {
+       "count": 351,
+       "oneSigma": [
+        332.3,
+        370.8
+       ],
+       "ci95": [
+        315.2,
+        389.7
+       ]
+      },
+      "halo": {
+       "count": 6,
+       "oneSigma": [
+        3.62,
+        9.584
+       ],
+       "ci95": [
+        2.202,
+        13.06
+       ]
+      }
+     }
+    },
+    "bensby2014": {
+     "frame": "lsr",
+     "sunPaper": [
+      11.1,
+      12.24,
+      7.25
+     ],
+     "classesWithPaperSun": {
+      "thin disk": {
+       "count": 1392,
+       "oneSigma": [
+        1355,
+        1430
+       ],
+       "ci95": [
+        1320,
+        1467
+       ]
+      },
+      "thick disk": {
+       "count": 95,
+       "oneSigma": [
+        85.27,
+        105.8
+       ],
+       "ci95": [
+        76.86,
+        116.1
+       ]
+      },
+      "between": {
+       "count": 80,
+       "oneSigma": [
+        71.07,
+        89.98
+       ],
+       "ci95": [
+        63.44,
+        99.57
+       ]
+      },
+      "halo": {
+       "count": 3,
+       "oneSigma": [
+        1.367,
+        5.918
+       ],
+       "ci95": [
+        0.6187,
+        8.767
+       ]
+      }
+     },
+     "classesWithSampleStrombergV": {
+      "vSun": 2.6375,
+      "classes": {
+       "thin disk": {
+        "count": 1365,
+        "oneSigma": [
+         1328,
+         1403
+        ],
+        "ci95": [
+         1294,
+         1439
+        ]
+       },
+       "thick disk": {
+        "count": 125,
+        "oneSigma": [
+         113.8,
+         137.2
+        ],
+        "ci95": [
+         104,
+         148.9
+        ]
+       },
+       "between": {
+        "count": 76,
+        "oneSigma": [
+         67.3,
+         85.76
+        ],
+        "ci95": [
+         59.88,
+         95.13
+        ]
+       },
+       "halo": {
+        "count": 4,
+        "oneSigma": [
+         2.086,
+         7.163
+        ],
+        "ci95": [
+         1.09,
+         10.24
+        ]
+       }
+      }
+     },
+     "note": "both candidates for the Sun V are shown and neither is chosen (D-GAIA-03)"
+    }
+   },
+   "note": "no bound is committed for this leg: it passes when it runs and the counts account for every star"
   },
   {
    "id": "S.A1.exactLine",

@@ -214,16 +214,18 @@ for the record of what a gate would commit:
 
 ## Questions for Carl
 
-1. **The four failures** (A3, A5, C3, D4): leave them failing and keep the panel and the lesson depth unbuilt (the
-   consumers rule), or reset a bound (A3 judged on `log1p`, A5 at 2e-3, C3 at 0.55 to 0.80) or the D4 diagnostic. Each
-   alternative is described above and none is applied.
+1. **The four failures** (A3, A5, C3, D4). Ruled by the coordinator under Carl's delegation: they stay failing and
+   labelled, no bound moves, the consumers rule stays unmet and nothing is built on it. The alternatives, one per leg,
+   each a question for Carl and none applied: A3 judged on the `log1p` evaluation of m(x); A5 at a bound of 2e-3 or at
+   x = 1e-4; C3 with a band of 0.55 to 0.80; D4 replaced by a residual diagnostic with power against a localized
+   feature (the runs test of the statistics kernel).
 2. **The cited forms** are written from the papers by this kernel's author and flagged for verification; the closed
    forms are checked against their own densities (A8) and the oracle, so a wrong speed law would have to be wrong in
    the density too. The comment in `js/kernels/galactic/rotation.js` that cites Bland-Hawthorn and Gerhard 2016 for a
    disk of 8e10 and scale lengths of 1.5 to 4.5 kpc as "physical bounds" was written the same way and is unverified;
    it is not changed here.
-3. **`js/darkMatter.js`'s Bessel functions** are good to 2.3e-4 in speed at 120 kpc. Replace them with the kernel's
-   exact ones in a separate PR? Nothing visible would change below 40 kpc.
+3. **Follow-up for Carl: `js/darkMatter.js`'s Bessel functions** are good to 2.3e-4 in speed at 120 kpc. Ruled: left
+   alone here. Replacing them with the kernel's exact ones would be a separate PR; nothing visible would change below 40 kpc.
 
 ## Reproduction
 

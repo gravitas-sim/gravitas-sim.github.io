@@ -1,0 +1,113 @@
+{
+  "retrieved": "2026-11-04",
+  "retrievedBy": "Carl's overnight session, from arXiv; transcribed from the papers, not from memory",
+  "note": "Values are copied as printed. Where a paper's own frame is ambiguous it is said here and not resolved.",
+  "sources": [
+    {
+      "paper": "Venn, Irwin, Shetrone, Tout, Hill, Tolstoy 2004, AJ 128, 1177: Stellar Chemical Signatures and Hierarchical Galaxy Formation",
+      "identifier": "arXiv:astro-ph/0406120v1",
+      "url": "https://arxiv.org/pdf/astro-ph/0406120",
+      "sha256": "4b2228f22d7a55e86cfd6db7efc53fa13fa5606a3f5f312347443285d11554c9",
+      "location": "Table 3, Velocity Ellipsoids (membership probabilities TN/TK/HL from Gaussian ellipsoids)",
+      "criterion": "Kinematic probability from Gaussian velocity ellipsoids; columns sigmaU, sigmaV, sigmaW, U, V, W in km/s.",
+      "rows": {
+        "thin disk": {
+          "sigmaU": 44,
+          "sigmaV": 25,
+          "sigmaW": 20,
+          "U": 0,
+          "V": 220,
+          "W": 0,
+          "ref": "Dehnen & Binney 1998; Gilmore, Wyse & Norris 2002"
+        },
+        "thick disk": {
+          "sigmaU": 63,
+          "sigmaV": 39,
+          "sigmaW": 39,
+          "U": 0,
+          "V": 180,
+          "W": 0,
+          "ref": "Soubiran et al. 2003"
+        },
+        "halo": {
+          "sigmaU": 141,
+          "sigmaV": 106,
+          "sigmaW": 94,
+          "U": 0,
+          "V": 0,
+          "W": 0,
+          "ref": "Chiba & Beers 2000"
+        }
+      },
+      "frameNote": "V of 220 and 180 for the disks and 0 for the halo is a Galactic-rest-frame V (rotation), not LSR-relative; the paper's Toomre axis is T = sqrt(U^2 + W^2) with extreme-component flags: the text says retrograde V < -200 km/s (Section 2) and, in a later passage, V <= -420 km/s (the two thresholds are printed differently and are not reconciled here), and Toomre T > 340 km/s in both passages. The table is the criterion here, not the flags.",
+      "solarMotion": {
+        "U": 9,
+        "V": 232,
+        "W": 7,
+        "unit": "km/s",
+        "frame": "Galactic reference frame (rest frame): the Sun as the paper places it, so V of a disk star is near 220",
+        "location": "footnote 3 to Section 2: velocities corrected to the Galactic reference frame throughout, (U,V,W)_sun = (9, 232, 7)"
+      }
+    },
+    {
+      "paper": "Bensby, Feltzing & Oey 2014, A&A 562, A71: Exploring the Milky Way stellar disk",
+      "identifier": "arXiv:1309.2631v2",
+      "url": "https://arxiv.org/pdf/1309.2631",
+      "sha256": "fcea82d7e24559d713157cfe3d0e77cf7b0d0840d08d455f3c25018605635d42",
+      "location": "Section 2 (candidate selection) and Table A.1",
+      "criterion": {
+        "thick disk candidate": "TD/D > 2 (thick-to-thin disk probability ratio)",
+        "thin disk candidate": "TD/D < 0.5",
+        "halo": "TD/H < 1 (thick-disk to halo probability ratio) for halo kinematics",
+        "between": "0.5 <= TD/D <= 2: kinematics in between the two disks",
+        "total space velocity guide": "vtot = sqrt(U_LSR^2 + V_LSR^2 + W_LSR^2): vtot < 50 km/s mainly thin disk; 70 < vtot < 180 km/s likely thick disk; vtot > 200 km/s likely halo (Toomre-diagram guide, citing Nissen 2004)"
+      },
+      "tableA1_velocity_dispersions_and_asymmetric_drift_km_s": {
+        "thin disk": {
+          "sigmaU": 35,
+          "sigmaV": 20,
+          "sigmaW": 16,
+          "Uasym": 0,
+          "Vasym": -15,
+          "X": 0.85
+        },
+        "thick disk": {
+          "sigmaU": 67,
+          "sigmaV": 38,
+          "sigmaW": 35,
+          "Uasym": 0,
+          "Vasym": -46,
+          "X": 0.09
+        },
+        "halo": {
+          "sigmaU": 160,
+          "sigmaV": 90,
+          "sigmaW": 90,
+          "Uasym": 0,
+          "Vasym": -220,
+          "X": 0.0015
+        }
+      },
+      "frameNote": "Asymmetric drifts are relative to the LSR, so V is LSR-relative here (halo -220), unlike Venn Table 3. The paper's sample counts under these criteria: 387 thin, 203 thick, 36 halo, 89 in between (714 stars).",
+      "solarMotion": {
+        "U": 11.1,
+        "V": 12.24,
+        "W": 7.25,
+        "unit": "km/s",
+        "frame": "relative to the local standard of rest (the Sun relative to the LSR, added to the heliocentric velocities)",
+        "location": "Section 3: (U_sun, V_sun, W_sun) = (11.10, 12.24, 7.25) km/s from Schonrich et al. (2010)"
+      },
+      "countsNote": "text of Section 2: 387 thin, 203 thick, 36 halo, 89 in between (sum 715); caption of Fig. 2: 239 potential thick disk stars with TD/D > 2 (203 + 36), 88 in between; the sample is 714 stars"
+    }
+  ],
+  "verification": {
+    "verifiedOn": "2026-11-04",
+    "by": "a delegated session, against the extracted text of the two PDFs named in sources (sha256 given there)",
+    "result": "every number of Venn et al. 2004 Table 3 (18 values, 3 rows) and of Bensby et al. 2014 Table A.1 (thin, thick, halo: sigmaU, sigmaV, sigmaW, Uasym, Vasym, X) and every criterion value of Bensby Section 2 (TD/D > 2, TD/D < 0.5, TD/H < 1, vtot < 50, 70 to 180, > 200 km/s, the 387, 203, 36 and 89 counts) matches the paper text; no value was changed",
+    "added": [
+      "sources[0].solarMotion and sources[1].solarMotion: each paper states the solar motion it used to put velocities in its frame (Venn footnote 3 to Section 2; Bensby Section 3). The file as supplied did not carry them; they are copied from the paper text, with the frame each fixes. Needed to apply each criterion in its own frame.",
+      "sources[1].countsNote: the paper prints 89 stars in between in the text of Section 2 and 88 in the caption of its Fig. 2; the four text counts sum to 715 for a sample the paper calls 714 stars. The paper is internally inconsistent by one star; neither number is used by any threshold.",
+      "sources[0].frameNote is unchanged and still correct: the Table 2 note says UVW are Galactocentric velocities, and the -200 and -420 km/s flags (Section 2, then the conclusions and Section 6 where the second is a V_LSR) are not used by the committed legs."
+    ]
+  }
+}
